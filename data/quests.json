@@ -1,0 +1,667 @@
+[
+  {
+    "id": "quest_echoes_dam",
+    "name": "Echoes of the Dam",
+    "type": "main",
+    "poIs": [ "Hoover Dam", "Lucky 38", "Helios One" ],
+    "description": "Restore power to the Mojave by reactivating Hoover Dam�s turbines.",
+    "objectives": [
+      "Secure Hoover Dam control room",
+      "Retrieve missing turbine parts from Helios One",
+      "Negotiate with factions at Lucky 38"
+    ],
+    "endings": [
+      {
+        "id": "ending_settlers",
+        "description": "You hand control of the Dam to Mojave settlers.",
+        "reward": "Advanced Combat Armor",
+        "consequence": "Settlers thrive, factions lose influence."
+      },
+      {
+        "id": "ending_faction",
+        "description": "You give control to a militarized faction.",
+        "reward": "Prototype Energy Rifle",
+        "consequence": "Faction gains dominance, settlers are oppressed."
+      },
+      {
+        "id": "ending_sabotage",
+        "description": "You sabotage the turbines, leaving the Dam offline.",
+        "reward": "Caps payout",
+        "consequence": "No one controls the power, chaos spreads across the Mojave."
+      }
+    ]
+  },
+  {
+    "id": "quest_vault_experiment",
+    "name": "The Vault Experiment",
+    "type": "main",
+    "poIs": [ "Vault 3", "Vault 19", "Vault 22", "Vault 87" ],
+    "description": "Investigate Mojave Vaults to uncover the truth about Vault-Tec�s experiments.",
+    "objectives": [
+      "Search Vault 3 for experiment logs",
+      "Recover data from Vault 19",
+      "Defeat mutated creatures in Vault 22",
+      "Confront overseer AI in Vault 87"
+    ],
+    "endings": [
+      {
+        "id": "ending_expose",
+        "description": "You expose Vault-Tec�s crimes to the Mojave.",
+        "reward": "Vault-Tec Experimental Device",
+        "consequence": "Public outrage weakens corporate remnants."
+      },
+      {
+        "id": "ending_coverup",
+        "description": "You sell the data to a Mojave faction.",
+        "reward": "Caps + faction favor",
+        "consequence": "Vault-Tec secrets remain hidden."
+      },
+      {
+        "id": "ending_destroy",
+        "description": "You destroy all records.",
+        "reward": "Prototype Armor",
+        "consequence": "No one learns the truth, history erased."
+      }
+    ]
+  },
+  {
+    "id": "quest_nuclear_trail",
+    "name": "The Nuclear Trail",
+    "type": "main",
+    "poIs": [ "Nevada Test Site", "Yucca Mountain", "Helios One", "Trinity Site" ],
+    "description": "Track down missing nuclear prototypes scattered across Mojave test facilities.",
+    "objectives": [
+      "Recover prototype armor at Yucca Mountain",
+      "Secure Tesla Cannon at Nevada Test Site",
+      "Investigate experimental serum at Helios One",
+      "Retrieve relic at Trinity Site"
+    ],
+    "endings": [
+      {
+        "id": "ending_destroy",
+        "description": "You destroy the prototypes.",
+        "reward": "Caps payout",
+        "consequence": "The Mojave is spared from nuclear escalation."
+      },
+      {
+        "id": "ending_sell",
+        "description": "You sell them to a faction.",
+        "reward": "Faction favor + rare loot",
+        "consequence": "Faction gains dangerous technology."
+      },
+      {
+        "id": "ending_keep",
+        "description": "You keep the prototypes for yourself.",
+        "reward": "Prototype X-01 Power Armor",
+        "consequence": "You become a feared figure in the Mojave."
+      }
+    ]
+  },
+  {
+    "id": "quest_strip_shadows",
+    "name": "Shadows of the Strip",
+    "type": "main",
+    "poIs": [ "Ultra-Luxe Casino", "Gomorrah Casino", "Lucky 38" ],
+    "description": "Uncover corruption and secrets hidden within the Strip casinos.",
+    "objectives": [
+      "Investigate Ultra-Luxe backrooms",
+      "Retrieve smuggled weapons from Gomorrah",
+      "Confront casino bosses at Lucky 38"
+    ],
+    "endings": [
+      {
+        "id": "ending_clean",
+        "description": "You clean up the Strip.",
+        "reward": "Casino Guard Uniform",
+        "consequence": "Casinos run legitimately, profits shrink."
+      },
+      {
+        "id": "ending_join",
+        "description": "You join the corruption.",
+        "reward": "Caps + rare weapon",
+        "consequence": "You gain power in the underworld."
+      },
+      {
+        "id": "ending_destroy",
+        "description": "You burn the Strip down.",
+        "reward": "Legendary artifact",
+        "consequence": "Chaos reigns in New Vegas."
+      }
+    ]
+  },
+  {
+    "id": "quest_glow_relic",
+    "name": "Relic of the Glow",
+    "type": "main",
+    "poIs": [ "The Glow", "Hanford Site", "Chernobyl Pripyat" ],
+    "description": "Recover irradiated relics from the most dangerous zones.",
+    "objectives": [
+      "Survive the Glow ruins",
+      "Retrieve prototype from Hanford Site",
+      "Collect relic from Chernobyl"
+    ],
+    "endings": [
+      {
+        "id": "ending_research",
+        "description": "You deliver relics to scientists.",
+        "reward": "Caps + lore items",
+        "consequence": "Knowledge spreads, danger remains."
+      },
+      {
+        "id": "ending_weaponize",
+        "description": "You weaponize the relics.",
+        "reward": "Glow Irradiated Blade",
+        "consequence": "You unleash new horrors."
+      },
+      {
+        "id": "ending_hide",
+        "description": "You hide the relics away.",
+        "reward": "Artifact trophy",
+        "consequence": "Relics vanish from history."
+      }
+    ]
+  },
+  {
+    "id": "quest_gecko_hunt",
+    "name": "The Gecko Hunt",
+    "type": "side",
+    "poIs": [ "Red Rock Canyon" ],
+    "description": "Collect Gecko Skulls and Hides for a hunter NPC.",
+    "objectives": [ "Defeat geckos", "Collect 5 Gecko Skulls", "Return to hunter" ],
+    "endings": [
+      {
+        "id": "ending_reward",
+        "description": "Deliver skulls.",
+        "reward": "Gecko Hide Armor",
+        "consequence": "Hunter becomes ally."
+      },
+      {
+        "id": "ending_refuse",
+        "description": "Keep skulls.",
+        "reward": "Caps payout",
+        "consequence": "Hunter becomes hostile."
+      }
+    ]
+  },
+  {
+    "id": "quest_casino_memorabilia",
+    "name": "Casino Secrets",
+    "type": "side",
+    "poIs": [ "Ultra-Luxe Casino", "Gomorrah Casino" ],
+    "description": "Find hidden memorabilia in Strip casinos.",
+    "objectives": [ "Search Ultra-Luxe", "Search Gomorrah" ],
+    "endings": [
+      {
+        "id": "ending_collect",
+        "description": "Deliver memorabilia.",
+        "reward": "Caps + lore item",
+        "consequence": "NPC rewards you."
+      },
+      {
+        "id": "ending_keep",
+        "description": "Keep memorabilia.",
+        "reward": "Cosmetic item",
+        "consequence": "NPC distrusts you."
+      }
+    ]
+  },
+  {
+    "id": "quest_raider_ledger",
+    "name": "The Raider�s Ledger",
+    "type": "side",
+    "poIs": [ "Cottonwood Cove" ],
+    "description": "Recover a raider�s journal detailing smuggling routes.",
+    "objectives": [ "Defeat raiders", "Retrieve ledger" ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "Return ledger.",
+        "reward": "Raider Spike Armor",
+        "consequence": "Faction gains intel."
+      },
+      {
+        "id": "ending_sell",
+        "description": "Sell ledger.",
+        "reward": "Caps payout",
+        "consequence": "Faction loses intel."
+      }
+    ]
+  },
+  {
+    "id": "quest_farharbor_notes",
+    "name": "Far Harbor�s Lost",
+    "type": "side",
+    "poIs": [ "Far Harbor" ],
+    "description": "Retrieve sea shells and notes for a historian.",
+    "objectives": [ "Collect shells", "Find notes" ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "Deliver items.",
+        "reward": "Far Harbor Raincoat",
+        "consequence": "Historian publishes findings."
+      },
+      {
+        "id": "ending_keep",
+        "description": "Keep items.",
+        "reward": "Caps payout",
+        "consequence": "Historian loses trust."
+      }
+    ]
+  },
+  {
+    "id": "quest_diamondcity_dreams",
+    "name": "Diamond City Dreams",
+    "type": "side",
+    "poIs": [ "Diamond City" ],
+    "description": "Collect baseball tickets and memorabilia for a fan NPC.",
+    "objectives": [
+      "Find tickets",
+      "Return to fan"
+    ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "Deliver memorabilia.",
+        "reward": "Diamond City Baseball Armor",
+        "consequence": "Fan becomes ally and spreads your fame."
+      },
+      {
+        "id": "ending_keep",
+        "description": "Keep memorabilia.",
+        "reward": "Caps payout",
+        "consequence": "Fan resents you and refuses future help."
+      }
+    ]
+  },
+  {
+    "id": "quest_newreno_gamble",
+    "name": "New Reno Gamble",
+    "type": "side",
+    "poIs": [ "New Reno Casino" ],
+    "description": "Test your luck at the tables and uncover a hidden smuggling ring.",
+    "objectives": [
+      "Win 500 caps at blackjack",
+      "Investigate suspicious dealer",
+      "Expose smuggling operation"
+    ],
+    "endings": [
+      {
+        "id": "ending_expose",
+        "description": "You expose the ring.",
+        "reward": "Caps + faction favor",
+        "consequence": "Casino cleans up its act."
+      },
+      {
+        "id": "ending_join",
+        "description": "You join the ring.",
+        "reward": "Smuggler�s Armor",
+        "consequence": "You gain steady income but risk betrayal."
+      }
+    ]
+  },
+  {
+    "id": "quest_trinity_shards",
+    "name": "Shards of Trinity",
+    "type": "side",
+    "poIs": [ "Trinity Site" ],
+    "description": "Collect irradiated glass shards from the original nuclear blast zone.",
+    "objectives": [
+      "Survive radiation storm",
+      "Collect 10 shards",
+      "Return to collector"
+    ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "Deliver shards.",
+        "reward": "Caps + lore item",
+        "consequence": "Collector gains prestige."
+      },
+      {
+        "id": "ending_keep",
+        "description": "Keep shards.",
+        "reward": "Irradiated Trinket",
+        "consequence": "Collector loses trust."
+      }
+    ]
+  },
+  {
+    "id": "quest_dunwich_tome",
+    "name": "The Dunwich Tome",
+    "type": "side",
+    "poIs": [ "Dunwich Building" ],
+    "description": "Retrieve a cursed tome from the haunted ruins.",
+    "objectives": [
+      "Defeat feral ghouls",
+      "Recover the tome",
+      "Decide its fate"
+    ],
+    "endings": [
+      {
+        "id": "ending_destroy",
+        "description": "You destroy the tome.",
+        "reward": "Caps payout",
+        "consequence": "Dark whispers fade."
+      },
+      {
+        "id": "ending_keep",
+        "description": "You keep the tome.",
+        "reward": "Occult Artifact",
+        "consequence": "You gain strange powers but risk corruption."
+      }
+    ]
+  },
+  {
+    "id": "quest_chernobyl_relic",
+    "name": "Chernobyl Relic",
+    "type": "side",
+    "poIs": [ "Pripyat" ],
+    "description": "Retrieve a relic from the irradiated ruins of Chernobyl.",
+    "objectives": [
+      "Navigate Pripyat streets",
+      "Recover relic",
+      "Escape radiation zone"
+    ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "Deliver relic.",
+        "reward": "Caps + lore item",
+        "consequence": "Relic studied by scientists."
+      },
+      {
+        "id": "ending_keep",
+        "description": "Keep relic.",
+        "reward": "Irradiated Weapon",
+        "consequence": "You wield dangerous power."
+      }
+    ]
+  },
+  {
+    "id": "quest_raider_revenge",
+    "name": "Raider�s Revenge",
+    "type": "side",
+    "poIs": [ "Fiend Territory" ],
+    "description": "Hunt down raiders who ambushed a caravan.",
+    "objectives": [
+      "Track raider camp",
+      "Defeat raider leader",
+      "Recover stolen goods"
+    ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "Return goods to caravan.",
+        "reward": "Caps + Caravan Armor",
+        "consequence": "Caravan thrives."
+      },
+      {
+        "id": "ending_keep",
+        "description": "Keep goods.",
+        "reward": "Caps payout",
+        "consequence": "Caravan collapses."
+      }
+    ]
+  },
+  {
+    "id": "quest_newreno_gamble",
+    "name": "New Reno Gamble",
+    "type": "side",
+    "poIs": [ "New Reno Casino" ],
+    "description": "Test your luck at the tables and uncover a hidden smuggling ring.",
+    "objectives": [
+      "Win 500 caps at blackjack",
+      "Investigate suspicious dealer",
+      "Expose smuggling operation"
+    ],
+    "endings": [
+      {
+        "id": "ending_expose",
+        "description": "You expose the ring.",
+        "reward": "Caps + faction favor",
+        "consequence": "Casino cleans up its act."
+      },
+      {
+        "id": "ending_join",
+        "description": "You join the ring.",
+        "reward": "Smuggler�s Armor",
+        "consequence": "You gain steady income but risk betrayal."
+      }
+    ]
+  },
+  {
+    "id": "quest_trinity_shards",
+    "name": "Shards of Trinity",
+    "type": "side",
+    "poIs": [ "Trinity Site" ],
+    "description": "Collect irradiated glass shards from the original nuclear blast zone.",
+    "objectives": [
+      "Survive radiation storm",
+      "Collect 10 shards",
+      "Return to collector"
+    ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "Deliver shards.",
+        "reward": "Caps + lore item",
+        "consequence": "Collector gains prestige."
+      },
+      {
+        "id": "ending_keep",
+        "description": "Keep shards.",
+        "reward": "Irradiated Trinket",
+        "consequence": "Collector loses trust."
+      }
+    ]
+  },
+  {
+    "id": "quest_dunwich_tome",
+    "name": "The Dunwich Tome",
+    "type": "side",
+    "poIs": [ "Dunwich Building" ],
+    "description": "Retrieve a cursed tome from the haunted ruins.",
+    "objectives": [
+      "Defeat feral ghouls",
+      "Recover the tome",
+      "Decide its fate"
+    ],
+    "endings": [
+      {
+        "id": "ending_destroy",
+        "description": "You destroy the tome.",
+        "reward": "Caps payout",
+        "consequence": "Dark whispers fade."
+      },
+      {
+        "id": "ending_keep",
+        "description": "You keep the tome.",
+        "reward": "Occult Artifact",
+        "consequence": "You gain strange powers but risk corruption."
+      }
+    ]
+  },
+  {
+    "id": "quest_chernobyl_relic",
+    "name": "Chernobyl Relic",
+    "type": "side",
+    "poIs": [ "Pripyat" ],
+    "description": "Retrieve a relic from the irradiated ruins of Chernobyl.",
+    "objectives": [
+      "Navigate Pripyat streets",
+      "Recover relic",
+      "Escape radiation zone"
+    ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "Deliver relic.",
+        "reward": "Caps + lore item",
+        "consequence": "Relic studied by scientists."
+      },
+      {
+        "id": "ending_keep",
+        "description": "Keep relic.",
+        "reward": "Irradiated Weapon",
+        "consequence": "You wield dangerous power."
+      }
+    ]
+  },
+  {
+    "id": "quest_raider_revenge",
+    "name": "Raider�s Revenge",
+    "type": "side",
+    "poIs": [ "Fiend Territory" ],
+    "description": "Hunt down raiders who ambushed a caravan.",
+    "objectives": [
+      "Track raider camp",
+      "Defeat raider leader",
+      "Recover stolen goods"
+    ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "Return goods to caravan.",
+        "reward": "Caps + Caravan Armor",
+        "consequence": "Caravan thrives."
+      },
+      {
+        "id": "ending_keep",
+        "description": "Keep goods.",
+        "reward": "Caps payout",
+        "consequence": "Caravan collapses."
+      }
+    ]
+  },
+  {
+    "id": "quest_brotherhood_secrets",
+    "name": "Brotherhood Secrets",
+    "type": "side",
+    "poIs": [ "Hidden Brotherhood Bunker" ],
+    "description": "Uncover hidden technology caches guarded by the Brotherhood of Steel.",
+    "objectives": [
+      "Infiltrate bunker",
+      "Retrieve schematics",
+      "Decide whether to share or keep"
+    ],
+    "endings": [
+      {
+        "id": "ending_share",
+        "description": "You share the schematics with Mojave settlers.",
+        "reward": "Energy Weapon Prototype",
+        "consequence": "Settlers gain tech, Brotherhood weakens."
+      },
+      {
+        "id": "ending_keep",
+        "description": "You keep the schematics.",
+        "reward": "Brotherhood Power Armor",
+        "consequence": "Brotherhood hunts you down."
+      }
+    ]
+  },
+  {
+    "id": "quest_mutant_cure",
+    "name": "Mutant Cure",
+    "type": "side",
+    "poIs": [ "Jacobstown", "Vault 22" ],
+    "description": "Search for a cure to reverse super mutant transformations.",
+    "objectives": [
+      "Collect samples from Vault 22",
+      "Test cure on Jacobstown mutant",
+      "Deliver results to scientist"
+    ],
+    "endings": [
+      {
+        "id": "ending_success",
+        "description": "The cure works.",
+        "reward": "Caps + Scientist Ally",
+        "consequence": "Mutants begin to reintegrate into Mojave society."
+      },
+      {
+        "id": "ending_fail",
+        "description": "The cure fails.",
+        "reward": "Mutant Weapon",
+        "consequence": "Mutants distrust humans further."
+      }
+    ]
+  },
+  {
+    "id": "quest_wasteland_brew",
+    "name": "Wasteland Brew",
+    "type": "side",
+    "poIs": [ "Freeside", "New Vegas Strip" ],
+    "description": "Gather rare ingredients to craft a legendary wasteland drink.",
+    "objectives": [
+      "Collect irradiated cactus fruit",
+      "Find purified water",
+      "Deliver to bartender in Freeside"
+    ],
+    "endings": [
+      {
+        "id": "ending_deliver",
+        "description": "You deliver the brew.",
+        "reward": "Caps + Lore Item",
+        "consequence": "The drink becomes famous across the Mojave."
+      },
+      {
+        "id": "ending_keep",
+        "description": "You keep the recipe.",
+        "reward": "Unique Consumable",
+        "consequence": "You gain buffs, but Mojave misses out."
+      }
+    ]
+  },
+  {
+    "id": "quest_artifact_hunt",
+    "name": "Artifact Hunt",
+    "type": "side",
+    "poIs": [ "Black Mountain", "Sierra Madre Ruins" ],
+    "description": "Recover ancient artifacts scattered across dangerous ruins.",
+    "objectives": [
+      "Search Black Mountain caves",
+      "Retrieve relic from Sierra Madre",
+      "Return artifacts to collector"
+    ],
+    "endings": [
+      {
+        "id": "ending_return",
+        "description": "You return artifacts.",
+        "reward": "Caps + Lore Collectibles",
+        "consequence": "Collector publishes findings."
+      },
+      {
+        "id": "ending_keep",
+        "description": "You keep artifacts.",
+        "reward": "Legendary Weapon",
+        "consequence": "Collector loses trust, but you gain power."
+      }
+    ]
+  },
+  {
+    "id": "quest_fizzcaps_legacy",
+    "name": "Fizz Caps Legacy",
+    "type": "side",
+    "poIs": [ "Atomic Fizz Factory" ],
+    "description": "Uncover the origins of Atomic Fizz Caps and their strange link to Mojave history.",
+    "objectives": [
+      "Explore abandoned factory",
+      "Recover production logs",
+      "Decide fate of the brand"
+    ],
+    "endings": [
+      {
+        "id": "ending_relaunch",
+        "description": "You relaunch Atomic Fizz Caps.",
+        "reward": "Caps payout + Consumables",
+        "consequence": "Fizz Caps flood the Mojave market."
+      },
+      {
+        "id": "ending_destroy",
+        "description": "You destroy the factory.",
+        "reward": "Artifact Trophy",
+        "consequence": "Fizz Caps vanish from history."
+      }
+    ]
+  }
+]
