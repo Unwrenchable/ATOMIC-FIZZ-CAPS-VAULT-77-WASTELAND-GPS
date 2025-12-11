@@ -1,5 +1,3 @@
-/* ATOMIC FIZZ — FINAL WORKING VERSION — DEC 2025 */
-
 const API_BASE = window.location.origin;
 let map, playerMarker = null, wallet = null;
 let player = {
@@ -256,3 +254,4 @@ navigator.geolocation?.watchPosition( p => { const { latitude: lat, longitude: l
 // Controls
 document.getElementById("centerBtn").onclick = () = > playerLatLng && map.flyTo([playerLatLng.lat, playerLatLng.lng], 16, { duration: 0.6 });
 document.getElementById("recenterMojave").onclick = () = > map.flyTo([36.17, -115.14], 8,
+
