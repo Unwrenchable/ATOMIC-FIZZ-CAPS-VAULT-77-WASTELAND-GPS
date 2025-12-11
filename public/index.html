@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ATOMIC FIZZ • VAULT 77 • WASTELAND GPS</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;font-family:VT323,monospace;color:#00ff41}
+  body{background:radial-gradient(circle at center,#002200,#000)}
+  .pipboy{position:fixed;inset:0;padding:12px;background:#001100;box-shadow:0 0 160px #00ff41}
+  .panel{position:absolute;inset:12px;background:#000;border-radius:14px;padding:14px;overflow:hidden;box-shadow:inset 0 0 80px #003300,0 0 80px rgba(0,255,65,0.18)}
+  h1{font-size:2.6rem;letter-spacing:8px;background:linear-gradient(90deg,#00ff41,#66ff99);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+  .sub{opacity:0.6;letter-spacing:6px;margin-bottom:12px}
+  .header-row{display:flex;justify-content:space-between;gap:12px}
+  .controls{display:flex;gap:8px;align-items:center}
+  .btn,.wallet-btn{background:#001100;color:#00ff41;border:2px solid #00ff41;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:bold}
+  .wallet-btn{background:#002200}
+  #status{color:#ff66aa;font-size:0.95rem;min-width:220px;text-align:right}
+  .statbar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:12px 0}
+  .stat{background:#000;border-radius:8px;padding:10px;border:2px solid rgba(0,255,65,0.06);text-align:center}
+  .val{font-size:1.6rem;color:#ffff66}
+  #mapWrap{height:56vh;border-radius:10px;overflow:hidden;border:2px solid rgba(0,255,65,0.06);box-shadow:inset 0 0 60px rgba(0,255,65,0.04);position:relative}
+  #map{width:100%;height:100%}
+  .tabs{display:flex;gap:8px;margin-top:12px}
+  .tab{padding:8px 12px;border-radius:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(0,255,65,0.06);cursor:pointer}
+  .tab.active{background:#002200;border-color:#00ff41}
+  .drawer{position:absolute;right:18px;top:86px;width:360px;max-height:56%;background:rgba(0,17,0,0.96);border:2px solid #00ff41;border-radius:10px;padding:12px;overflow:auto;z-index:1400;display:none}
+  .drawer.open{display:block}
+  .list-item{padding:8px 10px;border-bottom:1px dashed rgba(0,255,65,0.06);display:flex;flex-direction:column;align-items:flex-start}
+  .muted{opacity:0.7}
+  .muted-small{font-size:0.85rem;opacity:0.8}
+  .gps-badge{position:absolute;left:18px;bottom:18px;background:rgba(0,0,0,0.8);border:2px solid #00ff41;padding:8px 12px;border-radius:10px;display:flex;gap:8px;align-items:center;z-index:1200}
+  .acc-dot{width:12px;height:12px;border-radius:50%;background:#ff6666;box-shadow:0 0 8px rgba(255,102,102,0.2)}
+  .acc-green{background:#66ff99;box-shadow:0 0 8px rgba(102,255,153,0.12)}
+  .acc-amber{background:#ffcc66;box-shadow:0 0 8px rgba(255,204,102,0.12)}
+  .mint-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#001100;border:2px solid #00ff41;padding:12px;border-radius:10px;z-index:2000;display:none}
+  .mint-modal.open{display:block}
+  @media (max-width:900px){.drawer{width:300px}}
+  @media (max-width:640px){.drawer{width:260px;top:72px}.statbar{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+  <div class="pipboy">
+    <div class="panel">
+      <div class="header-row">
+        <div><h1>ATOMIC FIZZ</h1><div class="sub">VAULT 77 • WASTELAND GPS</div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+          <div class="controls">
+            <button class="btn" id="centerBtn">Center on Player</button>
+            <button class="btn" id="recenterMojave">Recenter Mojave</button>
+            <button class="wallet-btn" id="connectPhantom">Connect Phantom</button>
+          </div>
+          <div id="status">Status: ready</div>
+        </div>
+      </div>
+      <div class="statbar">
+        <div class="stat"><div class="val" id="lvl">1</div><div class="muted-small">LEVEL</div></div>
+        <div class="stat"><div class="val" id="hp">100/100</div><div class="muted-small">HP</div></div>
+        <div class="stat"><div class="val" id="caps">0</div><div class="muted-small">CAPS</div></div>
+        <div class="stat"><div class="val" id="claimed">0</div><div class="muted-small">CLAIMED</div></div>
+      </div>
+      <div id="mapWrap"><div id="map"></div>
+        <div class="gps-badge" id="gpsBadge"><div id="accDot" class="acc-dot"></div><div id="accText">GPS: —</div></div>
+      </div>
+      <div class="tabs">
+        <div class="tab active" data-panel="map">MAP</div>
+        <div class="tab" data-panel="stat">STAT</div>
+        <div class="tab" data-panel="items">ITEMS</div>
+        <div class="tab" data-panel="quests">QUESTS</div>
+      </div>
+      <div class="drawer" id="sidePanel">
+        <button class="btn" id="panelClose" style="float:right">X</button>
+        <h4 id="panelTitle">Panel</h4>
+        <div id="panelBody"></div>
+      </div>
+
+      <!-- Mint modal (stubbed) -->
+      <div id="mintModal" class="mint-modal">
+        <div id="mintTitle">Minting NFT</div>
+        <div id="mintMsg" class="muted-small">Preparing...</div>
+        <div id="mintProgress" style="height:8px;background:#002200;border-radius:6px;overflow:hidden;margin-top:8px">
+          <i style="display:block;height:100%;background:linear-gradient(90deg,#00ff41,#66ff99);width:0%"></i>
+        </div>
+        <div style="margin-top:10px;text-align:right"><button class="btn" id="mintCloseBtn">Close</button></div>
+      </div>
+    </div>
+  </div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // Map init
+  const map = L.map('map').setView([36.17,-115.14], 8);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // State
+  let playerLatLng = null;
+  const statusEl = document.getElementById('status');
+  const accDot = document.getElementById('accDot');
+  const accText = document.getElementById('accText');
+  const sidePanel = document.getElementById('sidePanel');
+  const panelTitle = document.getElementById('panelTitle');
+  const panelBody = document.getElementById('panelBody');
+
+  // Utility
+  async function loadJSON(path) {
+    const res = await fetch(path);
+    if (!res.ok) throw new Error(\`Failed to load \${path}: \${res.status}\`);
+    return res.json();
+  }
+
+  // GPS
+  function pushGpsSample(lat, lng, accuracy) {
+    playerLatLng = { lat, lng };
+    accText.textContent = \`GPS: ±\${Math.round(accuracy)}m\`;
+    accDot.className = 'acc-dot ' + (accuracy < 20 ? 'acc-green' : accuracy < 100 ? 'acc-amber' : '');
+    if (!window.playerMarker) {
+      window.playerMarker = L.circleMarker([lat, lng], { radius:6, color:'#00ff41', fillColor:'#00ff41', fillOpacity:0.8 }).addTo(map).bindPopup('Player');
+    } else {
+      window.playerMarker.setLatLng([lat, lng]);
+    }
+  }
+  navigator.geolocation?.watchPosition(
+    p => { const { latitude:lat, longitude:lng, accuracy } = p.coords; pushGpsSample(lat, lng, accuracy); },
+    err => { statusEl.textContent = 'Status: GPS unavailable'; console.warn(err); },
+    { enableHighAccuracy:true }
+  );
+
+  document.getElementById('centerBtn').onclick = () => {
+    if (playerLatLng) map.flyTo([playerLatLng.lat, playerLatLng.lng], 16, { duration:0.6 });
+  };
+  document.getElementById('recenterMojave').onclick = () => map.flyTo([36.17,-115.14], 8, { duration:0.6 });
+
+  // Locations on map
+  (async function initLocations(){
+    try {
+      const locations = await loadJSON('locations.json'); // works locally and when served from /public
+      locations.forEach(loc => {
+        if (typeof loc.lat === 'number' && typeof loc.lng === 'number') {
+          const name = loc.n ?? 'Unknown';
+          const lvl = loc.lvl ?? '?';
+          const rarity = loc.rarity ?? 'common';
+          const marker = L.marker([loc.lat, loc.lng]).addTo(map);
+          marker.bindPopup(\`<b>\${name}</b><br>Level \${lvl}<br>\${rarity}\`);
+        }
+      });
+      statusEl.textContent = 'Status: map loaded';
+    } catch (e) {
+      statusEl.textContent = 'Status: failed to load locations';
+      console.error(e);
+    }
+  })();
+
+  // Drawer helpers
+  function openPanel(title) {
+    panelTitle.textContent = title;
+    sidePanel.classList.add('open');
+    panelBody.innerHTML = '';
+  }
+  function closePanel() { sidePanel.classList.remove('open'); }
+  document.getElementById('panelClose').onclick = closePanel;
+
+  // Tabs
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', async () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const key = tab.dataset.panel;
+
+      if (key === 'map') {
+        closePanel();
+        return;
+      }
+
+      if (key === 'stat') {
+        openPanel('STAT');
+        const stats = [
+          { k: 'LEVEL', v: document.getElementById('lvl').textContent },
+          { k: 'HP', v: document.getElementById('hp').textContent },
+          { k: 'CAPS', v: document.getElementById('caps').textContent },
+          { k: 'CLAIMED', v: document.getElementById('claimed').textContent }
+        ];
+        stats.forEach(s => {
+          const div = document.createElement('div');
+          div.className = 'list-item';
+          div.innerHTML = \`<span>\${s.k}</span><span class="muted-small">\${s.v}</span>\`;
+          panelBody.appendChild(div);
+        });
+        return;
+      }
+
+      if (key === 'items') {
+        openPanel('ITEMS');
+        try {
+          const items = await loadJSON('mintables.json');
+          items.forEach(it => {
+            const name = it.name ?? 'Item';
+            const rarity = it.rarity ?? 'common';
+            const desc = it.desc ?? '';
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            div.innerHTML = \`<span>\${name}</span><span class="muted-small">\${rarity}</span>\`;
+            if (desc) {
+              const d = document.createElement('div');
+              d.className = 'muted-small';
+              d.style.marginTop = '4px';
+              d.textContent = desc;
+              div.appendChild(d);
+            }
+            panelBody.appendChild(div);
+          });
+          statusEl.textContent = 'Status: items loaded';
+        } catch (e) {
+          statusEl.textContent = 'Status: failed to load items';
+          panelBody.innerHTML = '<div class="muted-small">Could not load mintables.json</div>';
+          console.error(e);
+        }
+        return;
+      }
+
+      if (key === 'quests') {
+        openPanel('QUESTS');
+        try {
+          const quests = await loadJSON('quests.json');
+          quests.forEach(q => {
+            const title = q.title ?? 'Quest';
+            const level = q.level ? \`L\${q.level}\` : '';
+            const desc = q.desc ?? '';
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            div.innerHTML = \`<span>\${title}</span><span class="muted-small">\${level}</span>\`;
+            if (desc) {
+              const d = document.createElement('div');
+              d.className = 'muted-small';
+              d.style.marginTop = '4px';
+              d.textContent = desc;
+              div.appendChild(d);
+            }
+            panelBody.appendChild(div);
+          });
+          statusEl.textContent = 'Status: quests loaded';
+        } catch (e) {
+          statusEl.textContent = 'Status: failed to load quests';
+          panelBody.innerHTML = '<div class="muted-small">Could not load quests.json</div>';
+          console.error(e);
+        }
+        return;
+      }
+    });
+  });
+
+  // Wallet + Mint stubs
+  document.getElementById('connectPhantom').onclick = () => {
+    statusEl.textContent = 'Status: Phantom connect (stub)';
+    alert('Phantom connection is a placeholder. Integrate real wallet code later.');
+  };
+  document.getElementById('mintCloseBtn').onclick = () => {
+    document.getElementById('mintModal').classList.remove('open');
+  };
+
+  // Save + UI update stubs
+  function saveState() {
+    try {
+      const state = { playerLatLng };
+      localStorage.setItem('af_state', JSON.stringify(state));
+    } catch (e) { console.warn('Save failed', e); }
+  }
+  function updateUI() {
+    statusEl.textContent = statusEl.textContent || 'Status: ready';
+  }
+  setInterval(saveState, 5000);
+  updateUI();
+</script>
+</body>
+</html>
