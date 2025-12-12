@@ -1,10 +1,17 @@
 {
   "name": "atomicfizzcaps-live",
   "version": "1.0.0",
+  "description": "Atomic Fizz Caps - Wasteland GPS Geo-Game",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "build": "echo No build needed"
   },
+  "keywords": [ "solana", "geo-game", "nft", "fallout" ],
+  "author": "Unwrenchable",
+  "license": "MIT",
   "dependencies": {
+    "@metaplex-foundation/js": "^0.20.1",
     "@solana/spl-token": "^0.4.14",
     "@solana/web3.js": "^1.98.4",
     "bs58": "^6.0.0",
@@ -15,6 +22,7 @@
     "express-validator": "^7.3.1",
     "helmet": "^8.1.0",
     "ioredis": "^5.8.2",
+    "morgan": "^1.10.0",
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
