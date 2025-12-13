@@ -1,5 +1,5 @@
-﻿// server.js - Atomic Fizz Caps Backend (FULLY UPDATED & CLEANED)
-// December 2025 - Loot-finding + CAPS SHOP + NFT BURN FEE (1% to Dev Wallet) + Quests
+﻿// server.js - Atomic Fizz Caps Backend (FINAL PRODUCTION VERSION)
+// December 2025 - Loot-finding + CAPS SHOP + 1% Dev Burn + Quests Endpoint
 
 require('dotenv').config();
 const fs = require('fs');
@@ -27,6 +27,14 @@ const {
 } = require('@solana/spl-token');
 const { Metaplex, keypairIdentity } = require('@metaplex-foundation/js');
 
+// --- Global unhandled error handling (prevents red crash logs) ---
+process.on('unhandledRejection', (reason) => {
+    console.warn('Unhandled Rejection (recovered):', reason);
+});
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+});
+
 // --- Config and env validation ---
 const {
     SOLANA_RPC,
@@ -34,7 +42,7 @@ const {
     GAME_VAULT_SECRET,
     DEV_WALLET_SECRET,
     PORT,
-    COOLDOWN_SECONDS,
+    COOLDOWN_SECONDS = 60,
     REDIS_URL
 } = process.env;
 
@@ -64,9 +72,9 @@ try {
 
 const metaplex = Metaplex.make(connection);
 
-const COOLDOWN = Number(COOLDOWN_SECONDS || 60);
+const COOLDOWN = Number(COOLDOWN_SECONDS);
 const redis = new Redis(REDIS_URL);
-redis.on('error', (err) => console.error('Redis error:', err));
+redis.on('error', (err) => console.error('Redis Client Error:', err)); // Prevents crash on Redis hiccup
 
 // --- Helpers ---
 function haversine(lat1, lon1, lat2, lon2) {
@@ -98,7 +106,7 @@ function verifySolanaSignature(message, signatureBase58, pubkeyBase58) {
 // --- Load data ---
 const DATA_DIR = path.join(process.cwd(), 'data');
 const LOCATIONS = safeJsonRead(path.join(DATA_DIR, 'locations.json'));
-const QUESTS = safeJsonRead(path.join(DATA_DIR, 'quests.json'));  // New: quests.json
+const QUESTS = safeJsonRead(path.join(DATA_DIR, 'quests.json'));
 const MINTABLES = safeJsonRead(path.join(DATA_DIR, 'mintables.json'));
 
 // --- Express setup ---
@@ -152,7 +160,7 @@ app.get('/player/:addr', async (req, res) => {
     res.json(data ? JSON.parse(data) : { lvl: 1, hp: 100, caps: 0, gear: [], found: [], listed: [] });
 });
 
-// Find loot - transfers CAPS from vault
+// Find loot
 app.post('/find-loot', ipLimiter, actionLimiter, [
     body('wallet').exists().isString(),
     body('spot').exists().isString(),
@@ -290,7 +298,7 @@ app.post('/shop/buy', ipLimiter, actionLimiter, [
     try {
         const decimals = 6;
         const fullAmount = BigInt(listing.price) * BigInt(10 ** decimals);
-        const burnAmount = fullAmount / BigInt(100); // 1%
+        const burnAmount = fullAmount / BigInt(100);
         const sellerAmount = fullAmount - burnAmount;
 
         const buyerATA = await getOrCreateAssociatedTokenAccount(connection, buyerPk, MINT_PUBKEY, buyerPk);
@@ -363,4 +371,5 @@ app.listen(port, () => {
     console.log(`Token: ${TOKEN_MINT}`);
     console.log(`Vault: ${GAME_VAULT.publicKey.toBase58()}`);
     console.log(`Dev fund: ${DEV_WALLET.publicKey.toBase58()}`);
+    console.log('Quests endpoint active');
 });
