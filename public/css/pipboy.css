@@ -1,6 +1,6 @@
-/* === ULTIMATE RETRO PIP-BOY STYLE – COOL MAP RESTORED (NO DARK HALO) === */
+/* === ULTIMATE COOL PIP-BOY CSS – BRIGHT GREEN MAP, NO DARK HALO === */
 
-* { box-sizing:border-box; margin:0; padding:0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
   height: 100%;
@@ -32,20 +32,33 @@ body {
   box-shadow: inset 0 0 80px #003300, 0 0 80px rgba(0,255,65,0.18);
 }
 
-/* Your existing styles for buttons, tabs, HP bars, modals, terminal, scrollbars, mobile tweaks, etc. go here unchanged */
+h1 {
+  font-size: 2.6rem;
+  letter-spacing: 8px;
+  background: linear-gradient(90deg, #00ff41, #66ff99);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 6px;
+}
 
-/* COOL MAP RESTORED – Full Retro CRT Without Dark Halo */
+.sub {
+  opacity: 0.6;
+  letter-spacing: 6px;
+  margin-bottom: 12px;
+}
+
+/* Your existing styles for .header-row, .controls, .btn, #status, .pip-status, HP bars, .pip-claimed, .tabs, .terminal, modals, .gps-badge, .acc-dot, #requestGpsBtn, scrollbars, etc. — keep them all unchanged */
+
+/* COOL MAP – Bright Monochrome Green + CRT Effects (NO DARK HALO) */
 #mapWrap {
   position: relative;
   height: 42vh;
   overflow: hidden;
   border-radius: 16px;
-  box-shadow:
-    inset 0 0 80px #003300,
-    0 0 60px rgba(0, 255, 65, 0.4);
+  border: 2px solid rgba(0,255,65,0.06);
+  box-shadow: inset 0 0 80px #003300, 0 0 60px rgba(0,255,65,0.4);
   background: #000;
   animation: gentle-glow 8s ease-in-out infinite alternate;
-  border: 2px solid rgba(0,255,65,0.06);
 }
 
 #map {
@@ -54,15 +67,9 @@ body {
   background: #001100 !important;
 }
 
-/* Cool Monochrome Green Filter (brighter & crisper) */
+/* Crisp Bright Green Filter (replaces weak invert) */
 .leaflet-tile-pane {
-  filter:
-    brightness(1.5)
-    contrast(2.1)
-    sepia(0.2)
-    hue-rotate(90deg)
-    saturate(3.5)
-    grayscale(0.1);
+  filter: brightness(1.5) contrast(2.1) sepia(0.2) hue-rotate(90deg) saturate(3.5) grayscale(0.1);
   opacity: 0.97;
 }
 
@@ -71,13 +78,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.12) 2px,
-    rgba(0, 0, 0, 0.12) 4px
-  );
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px);
   pointer-events: none;
   z-index: 1001;
   opacity: 0.45;
@@ -90,14 +91,13 @@ body {
   100% { background-position: 0 4px; }
 }
 
-/* Subtle Grid Overlay */
+/* Subtle Grid */
 #mapWrap::after {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+  background: linear-gradient(90deg, rgba(0,255,65,0.05) 1px, transparent 1px),
+              linear-gradient(0deg, rgba(0,255,65,0.05) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
   z-index: 1002;
@@ -105,7 +105,7 @@ body {
   border-radius: 16px;
 }
 
-/* Static Noise (make sure <div class="static-noise"></div> is inside #mapWrap in index.html) */
+/* Static Noise (uses your HTML div) */
 .static-noise {
   position: absolute;
   inset: 0;
@@ -123,11 +123,11 @@ body {
 }
 
 @keyframes gentle-glow {
-  0% { box-shadow: inset 0 0 80px #003300, 0 0 50px rgba(0, 255, 65, 0.35); }
-  100% { box-shadow: inset 0 0 100px #004400, 0 0 75px rgba(0, 255, 65, 0.5); }
+  0% { box-shadow: inset 0 0 80px #003300, 0 0 50px rgba(0,255,65,0.35); }
+  100% { box-shadow: inset 0 0 100px #004400, 0 0 75px rgba(0,255,65,0.5); }
 }
 
-/* Rounded Barrel Screen */
+/* Rounded Screen Edges */
 .leaflet-container {
   border-radius: 16px;
   overflow: hidden;
@@ -135,11 +135,7 @@ body {
   -webkit-mask-image: radial-gradient(circle at center, black 88%, transparent 100%);
 }
 
-/* Shop buttons & other styles unchanged */
-.shop-buy-btn { /* your existing styles */ }
-
-/* Mobile tweaks */
 @media (max-width: 768px) {
-  /* your existing mobile rules */
+  /* Your existing mobile rules + boost filter */
   .leaflet-tile-pane { filter: brightness(1.6) contrast(2.3) sepia(0.2) hue-rotate(90deg) saturate(4); }
 }
