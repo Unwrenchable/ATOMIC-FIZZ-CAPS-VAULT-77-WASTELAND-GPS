@@ -1,3 +1,4 @@
+<!-- index.html – Clean structure, no inline styles/script -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,66 +8,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="/css/pipboy.css" />
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <style>
-        /* Terminal side panel slide-in (fixes tabs) */
-        #terminal {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            max-width: 400px;
-            height: 100%;
-            background: rgba(0, 20, 0, 0.98);
-            transform: translateX(100%);
-            transition: transform 0.4s ease-in-out;
-            z-index: 20;
-            padding: 20px;
-            box-sizing: border-box;
-            overflow-y: auto;
-        }
-        #terminal.open {
-            transform: translateX(0);
-        }
-        #panelBody {
-            margin-top: 30px;
-            line-height: 1.6;
-        }
-        .list-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #003300;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .muted-small {
-            font-size: 0.85em;
-            opacity: 0.7;
-        }
-        /* Tutorial & loot modals */
-        .mint-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 30;
-            align-items: center;
-            justify-content: center;
-        }
-        .mint-modal.open,
-        #tutorialModal.open {
-            display: flex;
-        }
-        .mint-modal > div {
-            background: #000;
-            border: 3px solid #00ff41;
-            padding: 20px;
-            text-align: center;
-            max-width: 90%;
-        }
-        #tutorialModal {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <a href="/overseer.html" class="overseer-btn">ACCESS OVERSEER TERMINAL</a>
@@ -121,30 +62,25 @@
 
             <div id="mintModal" class="mint-modal">
                 <div>
-                    <div id="mintTitle">LOOT FOUND</div>
-                    <div id="mintMsg" class="muted-small">Claiming CAPS...</div>
-                    <div id="mintProgress">
-                        <div class="progress-bar"></div>
-                    </div>
+                    <div id="mintTitle">LOOT CLAIMED</div>
+                    <div id="mintMsg" class="muted-small">+0 CAPS</div>
                     <button class="btn" id="mintCloseBtn">Close</button>
                 </div>
             </div>
 
-            <!-- First-time tutorial modal -->
             <div id="tutorialModal" class="mint-modal">
                 <div>
-                    <div id="mintTitle" style="font-size:1.4em;">WELCOME TO THE WASTELAND</div>
-                    <div style="padding:20px; text-align:left; line-height:1.8;">
-                        <p>→ Connect your Phantom wallet</p>
-                        <p>→ Allow GPS location access</p>
-                        <p>→ Hunt the glowing markers on the map</p>
-                        <p>→ Get within 50 meters and tap a marker to CLAIM</p>
-                        <p>→ Beware of RADS – high radiation will drain your HP over time!</p>
-                        <p>→ Use RadAway from the shop when needed</p>
-                        <br>
-                        <p>Good luck out there, wanderer ☢️</p>
+                    <div class="modal-title">WELCOME TO THE WASTELAND</div>
+                    <div class="modal-content">
+                        <p>→ Connect Phantom wallet</p>
+                        <p>→ Allow GPS</p>
+                        <p>→ Hunt markers – get within 50m to claim</p>
+                        <p>→ Claims award CAPS, RADS, XP, quest progress & chance for legendary gear NFTs</p>
+                        <p>→ Equip gear in INVENTORY for powerful Fallout bonuses</p>
+                        <p>→ Complete dynamic QUESTS for epic rewards</p>
+                        <br><p>Survive the atomic fizz ☢️</p>
                     </div>
-                    <button class="btn" id="tutorialClose">GOT IT – ENTER WASTELAND</button>
+                    <button class="btn" id="tutorialClose">ENTER WASTELAND</button>
                 </div>
             </div>
         </div>
