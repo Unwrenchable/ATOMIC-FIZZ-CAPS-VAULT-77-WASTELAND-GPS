@@ -1,4 +1,4 @@
-<!-- index.html – Clean structure, no inline styles/script -->
+<!-- index.html – Updated drop-in replacement with static-noise div added -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,6 +40,9 @@
 
             <div id="mapWrap">
                 <div id="map"></div>
+                <!-- Static noise overlay element (required for the new CSS) -->
+                <div class="static-noise"></div>
+
                 <div class="gps-badge">
                     <div id="accDot" class="acc-dot"></div>
                     <div id="accText">GPS: waiting...</div>
