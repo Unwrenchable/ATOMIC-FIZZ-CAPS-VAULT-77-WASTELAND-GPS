@@ -1,103 +1,126 @@
-<!-- index.html – Complete drop-in (no changes needed from your last version, just confirming it's perfect with audio + static-noise) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>ATOMIC FIZZ • VAULT 77 • WASTELAND GPS</title>
+    <title>Atomic Fizz Caps • Vault 77 Wasteland GPS Game </title>
+    <meta name="description" content="Hunt real-world Mojave hotspots, claim CAPS & NFTs on Solana. Walk the wasteland, survive the radiation. War never changes. ">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="/css/pipboy.css" />
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-</head>
+
+<!-- Favicon (replace with your own hosted files for best results) -->
+<link rel="icon" href="https://pbs.twimg.com/profile_images/2002853135044562944/3KxGLLJ-.jpg" sizes="any">
+<link rel="apple-touch-icon" href="https://pbs.twimg.com/profile_images/2002853135044562944/3KxGLLJ-.jpg">
+
+<!-- Open Graph / Social Preview Tags (fixes Google & X share thumbnails) -->
+<meta property="og:title" content="Atomic Fizz Caps • Vault 77 Wasteland GPS Game ">
+<meta property="og:description" content="Connect wallet, lock GPS, hunt red hotspots in the real Mojave. Claim CAPS, gear NFTs & survive rising RADS. Fallout geo-hunt on Solana.">
+<meta property="og:image" content="https://www.corrosionhour.com/wp-content/uploads/2022/10/fallout-4-pip-boy-status.png">
+<meta property="og:image:width" content="1918">
+<meta property="og:image:height" content="1080">
+<meta property="og:image:alt" content="Fallout Pip-Boy screen showing status, HP, map markers and green terminal aesthetic">
+<meta property="og:url" content="https://www.atomicfizzcaps.xyz">
+<meta property="og:type" content="website">
+
+<!-- Twitter/X Card (ensures perfect previews when shared on X) -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Atomic Fizz Caps • Vault 77 Wasteland GPS Game ">
+<meta name="twitter:description" content="Real-world Fallout GPS hunt on Solana. Claim hotspots, earn CAPS & NFTs.">
+<meta name="twitter:image" content="https://www.corrosionhour.com/wp-content/uploads/2022/10/fallout-4-pip-boy-status.png">
+<meta name="twitter:image:alt" content="Pip-Boy interface with map, status bars and wasteland hotspots">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="/css/pipboy.css" />
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"></head>
 <body>
     <a href="/overseer.html" class="overseer-btn">ACCESS OVERSEER TERMINAL</a>
+    <a href="https://x.com/AtomicFizzCaps" class="overseer-btn">TWITTER</a>
 
-    <div class="pipboy">
-        <div class="panel">
-            <h1>ATOMIC FIZZ CAPS</h1>
-            <div class="sub">VAULT 77 • WASTELAND GPS</div>
+<div class="pipboy">
+    <div class="panel">
+        <h1>ATOMIC FIZZ CAPS</h1>
+        <div class="sub">VAULT 77 • WASTELAND GPS</div>
 
-            <div class="header-row">
-                <div class="controls">
-                    <button class="btn wallet-btn" id="connectWallet">CONNECT WALLET</button>
-                    <button class="btn" id="requestGpsBtn">REQUEST GPS LOCK</button>
+        <div class="header-row">
+            <div class="controls">
+                <button class="btn wallet-btn" id="connectWallet">CONNECT WALLET</button>
+                <button class="btn" id="requestGpsBtn">REQUEST GPS LOCK</button>
+            </div>
+        </div>
+
+        <div id="status" class="status-good">Status: ready – tap REQUEST GPS if needed</div>
+
+        <div class="pip-status">
+            <div class="pip-lvl">LVL <span id="lvl">1</span></div>
+            <div class="pip-hp-container">
+                <div class="pip-hp-fill" id="hpFill"></div>
+                <div class="pip-rad-fill" id="radFill"></div>
+                <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
+            </div>
+            <div class="pip-caps"><span id="caps">0</span> CAPS</div>
+        </div>
+
+        <div class="pip-claimed">CLAIMED <span id="claimed">0</span></div>
+
+        <div id="mapWrap">
+            <div id="map"></div>
+            <div class="static-noise"></div>
+            <div class="gps-badge">
+                <div id="accDot" class="acc-dot"></div>
+                <div id="accText">GPS: waiting...</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-panel="map">MAP</div>
+            <div class="tab" data-panel="stat">STATUS</div>
+            <div class="tab" data-panel="items">INVENTORY</div>
+            <div class="tab" data-panel="quests">QUESTS</div>
+            <div class="tab" data-panel="shop">SCAVENGER'S EXCHANGE</div>
+        </div>
+
+        <div class="terminal" id="terminal">
+            <button class="btn" id="panelClose">X</button>
+            <h4 id="panelTitle">TERMINAL</h4>
+            <div id="panelBody">Loading...</div>
+        </div>
+
+        <div id="mintModal" class="mint-modal">
+            <div>
+                <div id="mintTitle">LOOT CLAIMED</div>
+                <div id="mintMsg" class="muted-small">+0 CAPS</div>
+                <button class="btn" id="mintCloseBtn">Close</button>
+            </div>
+        </div>
+
+        <div id="tutorialModal" class="mint-modal">
+            <div>
+                <div class="modal-title">WELCOME TO THE WASTELAND</div>
+                <div class="modal-content">
+                    <p>→ Connect Phantom wallet</p>
+                    <p>→ Allow GPS</p>
+                    <p>→ Hunt markers – get within 50m to claim</p>
+                    <p>→ Claims award CAPS, RADS, XP, quest progress & chance for legendary gear NFTs</p>
+                    <p>→ Equip gear in INVENTORY for powerful Fallout bonuses</p>
+                    <p>→ Complete dynamic QUESTS for epic rewards</p>
+                    
+<p>Survive the atomic fizz </p>
                 </div>
-            </div>
-
-            <div id="status" class="status-good">Status: ready – tap REQUEST GPS if needed</div>
-
-            <div class="pip-status">
-                <div class="pip-lvl">LVL <span id="lvl">1</span></div>
-                <div class="pip-hp-container">
-                    <div class="pip-hp-fill" id="hpFill"></div>
-                    <div class="pip-rad-fill" id="radFill"></div>
-                    <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
-                </div>
-                <div class="pip-caps"><span id="caps">0</span> CAPS</div>
-            </div>
-
-            <div class="pip-claimed">CLAIMED <span id="claimed">0</span></div>
-
-            <div id="mapWrap">
-                <div id="map"></div>
-                <div class="static-noise"></div>
-                <div class="gps-badge">
-                    <div id="accDot" class="acc-dot"></div>
-                    <div id="accText">GPS: waiting...</div>
-                </div>
-            </div>
-
-            <div class="tabs">
-                <div class="tab active" data-panel="map">MAP</div>
-                <div class="tab" data-panel="stat">STATUS</div>
-                <div class="tab" data-panel="items">INVENTORY</div>
-                <div class="tab" data-panel="quests">QUESTS</div>
-                <div class="tab" data-panel="shop">SCAVENGER'S EXCHANGE</div>
-            </div>
-
-            <div class="terminal" id="terminal">
-                <button class="btn" id="panelClose">X</button>
-                <h4 id="panelTitle">TERMINAL</h4>
-                <div id="panelBody">Loading...</div>
-            </div>
-
-            <div id="mintModal" class="mint-modal">
-                <div>
-                    <div id="mintTitle">LOOT CLAIMED</div>
-                    <div id="mintMsg" class="muted-small">+0 CAPS</div>
-                    <button class="btn" id="mintCloseBtn">Close</button>
-                </div>
-            </div>
-
-            <div id="tutorialModal" class="mint-modal">
-                <div>
-                    <div class="modal-title">WELCOME TO THE WASTELAND</div>
-                    <div class="modal-content">
-                        <p>→ Connect Phantom wallet</p>
-                        <p>→ Allow GPS</p>
-                        <p>→ Hunt markers – get within 50m to claim</p>
-                        <p>→ Claims award CAPS, RADS, XP, quest progress & chance for legendary gear NFTs</p>
-                        <p>→ Equip gear in INVENTORY for powerful Fallout bonuses</p>
-                        <p>→ Complete dynamic QUESTS for epic rewards</p>
-                        <br><p>Survive the atomic fizz ☢️</p>
-                    </div>
-                    <button class="btn" id="tutorialClose">ENTER WASTELAND</button>
-                </div>
+                <button class="btn" id="tutorialClose">ENTER WASTELAND</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
-    <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
-    <script src="/js/script.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+<script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
+<script src="/js/script.js"></script>
 
-    <!-- Sound Effects -->
-    <audio id="sfxClaim" preload="auto"><source src="https://assets.codepen.io/605876/fallout-terminal-beep.mp3" type="audio/mpeg"></audio>
-    <audio id="sfxRadTick" preload="auto"><source src="https://assets.codepen.io/605876/geiger-counter.mp3" type="audio/mpeg"></audio>
-    <audio id="sfxEquip" preload="auto"><source src="https://assets.codepen.io/605876/fallout-inventory-click.mp3" type="audio/mpeg"></audio>
-    <audio id="sfxLevelUp" preload="auto"><source src="https://assets.codepen.io/605876/fallout-level-up.mp3" type="audio/mpeg"></audio>
-    <audio id="sfxGearDrop" preload="auto"><source src="https://assets.codepen.io/605876/fallout-epic-loot.mp3" type="audio/mpeg"></audio>
-    <audio id="sfxButton" preload="auto"><source src="https://assets.codepen.io/605876/pipboy-button-click.mp3" type="audio/mpeg"></audio>
-</body>
+<!-- Sound Effects -->
+<audio id="sfxClaim" preload="auto"><source src="https://assets.codepen.io/605876/fallout-terminal-beep.mp3" type="audio/mpeg"></audio>
+<audio id="sfxRadTick" preload="auto"><source src="https://assets.codepen.io/605876/geiger-counter.mp3" type="audio/mpeg"></audio>
+<audio id="sfxEquip" preload="auto"><source src="https://assets.codepen.io/605876/fallout-inventory-click.mp3" type="audio/mpeg"></audio>
+<audio id="sfxLevelUp" preload="auto"><source src="https://assets.codepen.io/605876/fallout-level-up.mp3" type="audio/mpeg"></audio>
+<audio id="sfxGearDrop" preload="auto"><source src="https://assets.codepen.io/605876/fallout-epic-loot.mp3" type="audio/mpeg"></audio>
+<audio id="sfxButton" preload="auto"><source src="https://assets.codepen.io/605876/pipboy-button-click.mp3" type="audio/mpeg"></audio></body>
 </html>
+
