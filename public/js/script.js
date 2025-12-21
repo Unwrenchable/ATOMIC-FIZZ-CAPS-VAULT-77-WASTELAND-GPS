@@ -1,4 +1,4 @@
-// /js/script.js – Complete drop-in replacement (100% functional v1.1 – map + GPS + all features)
+// /js/script.js – Complete drop-in replacement (FULL v1.1 – every feature, no omissions)
 
 let map, playerMarker = null, playerLatLng = null, lastAccuracy = 999, watchId = null, firstLock = true;
 let wallet = null;
@@ -162,7 +162,7 @@ document.getElementById('connectWallet').onclick = async () => {
   }
   const provider = window.solana;
   if (!provider || !provider.isPhantom) {
-    setStatus("Phantom wallet not detected", false);
+    setStatus("Phantom wallet not detected – install from phantom.app", false);
     return;
   }
   try {
@@ -170,9 +170,8 @@ document.getElementById('connectWallet').onclick = async () => {
     wallet = provider;
     const addr = wallet.publicKey.toBase58();
     document.getElementById('connectWallet').textContent = `${addr.slice(0,4)}...${addr.slice(-4)}`;
-    setStatus("Wallet connected", true);
+    setStatus("Wallet connected – loading progress...", true);
 
-    // Load player data
     const res = await fetch(`${API_BASE}/player/${addr}`);
     if (res.ok) {
       const data = await res.json();
@@ -183,11 +182,16 @@ document.getElementById('connectWallet').onclick = async () => {
       player.equipped = data.equipped || {};
       applyGearBonuses();
       updateHPBar();
+      renderStats();
+      renderItems();
+      renderQuests();
       checkTerminalAccess();
       if (player.claimed.size === 0) document.getElementById('tutorialModal').classList.add('open');
+    } else {
+      setStatus("New wanderer – welcome to the wasteland!", true);
     }
   } catch (err) {
-    setStatus("Wallet connection failed", false);
+    setStatus("Wallet connection failed or rejected", false);
   }
 };
 
@@ -348,6 +352,19 @@ setInterval(() => {
     playSfx('sfxRadTick', 0.3 + (effectiveRads / 1000));
   }
 }, 30000);
+
+// Terminal unlock
+function checkTerminalAccess() {
+  if (player.claimed.size >= 10 && !terminalSignal) {
+    terminalSignal = document.createElement('a');
+    terminalSignal.href = 'terminal.html';
+    terminalSignal.className = 'hidden-signal';
+    terminalSignal.textContent = '[RESTRICTED SIGNAL ACQUIRED]';
+    document.querySelector('.pipboy').appendChild(terminalSignal);
+    setTimeout(() => terminalSignal.classList.add('visible'), 100);
+    setStatus('Restricted signal detected...', true, 10000);
+  }
+}
 
 // attemptClaim
 async function attemptClaim(loc) {
