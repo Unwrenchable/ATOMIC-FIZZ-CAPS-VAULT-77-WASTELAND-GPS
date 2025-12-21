@@ -14,11 +14,13 @@ const {
     Connection,
     Keypair,
     PublicKey,
+    Transaction,
 } = require('@solana/web3.js');
 const {
     getOrCreateAssociatedTokenAccount,
     createTransferInstruction
 } = require('@solana/spl-token');
+const { Metaplex } = require("@metaplex-foundation/js");
 
 process.on('unhandledRejection', (r) => console.warn('Unhandled Rejection:', r));
 process.on('uncaughtException', (e) => console.error('Uncaught Exception:', e));
@@ -44,6 +46,8 @@ const GAME_VAULT = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(GAME_VAULT_S
 const COOLDOWN = Number(COOLDOWN_SECONDS);
 const redis = new Redis(REDIS_URL);
 redis.on('error', (err) => console.error('Redis error:', err));
+
+const metaplex = Metaplex.make(connection);
 
 function haversine(lat1, lon1, lat2, lon2) {
     const toRad = x => x * Math.PI / 180;
@@ -80,23 +84,21 @@ const app = express();
 
 app.use(morgan('combined'));
 
-// FIXED: Secure Helmet configuration
+// Secure Helmet with web3 allowances
 app.use(
     helmet({
-        // Keep most defaults, but relax CSP a bit for typical web3/SPA needs
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"],
-                scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // needed for many web3 wallets & dynamic scripts
-                styleSrc: ["'self'", "'unsafe-inline'"],
+                scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://unpkg.com"],
+                styleSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com", "https://fonts.googleapis.com"],
                 imgSrc: ["'self'", "data:", "https:"],
-                connectSrc: ["'self'", SOLANA_RPC, "wss:"], // allow Solana RPC & websockets
-                fontSrc: ["'self'", "data:"],
+                connectSrc: ["'self'", SOLANA_RPC, "wss:", "https://api.mainnet-beta.solana.com"],
+                fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
                 objectSrc: ["'none'"],
                 upgradeInsecureRequests: [],
             },
         },
-        referrerPolicy: { policy: "strict-origin-when-cross-origin" },
     })
 );
 
@@ -105,30 +107,50 @@ app.use(express.json({ limit: '100kb' }));
 
 const globalLimiter = rateLimit({ windowMs: 60_000, max: 200 });
 const actionLimiter = rateLimit({ windowMs: 60_000, max: 20 });
-
 app.use(globalLimiter);
 app.use('/find-loot', actionLimiter);
 app.use('/shop/', actionLimiter);
 app.use('/select-gear-drop', actionLimiter);
+app.use('/battle', actionLimiter);
 
-// FIXED: Only serve public assets safely
-// Create a folder called "public" in your project root and put index.html, css, js, images there
 const PUBLIC_DIR = path.join(__dirname, 'public');
 app.use(express.static(PUBLIC_DIR));
 
-// Optional: if you still have some old assets in root, you can selectively serve them
-// app.use('/some-specific-file.js', express.static(path.join(__dirname, 'some-specific-file.js')));
-
-// API routes (must come before catch-all)
+// API routes
 app.get('/locations', (req, res) => res.json(LOCATIONS));
 app.get('/quests', (req, res) => res.json(QUESTS.length ? QUESTS : []));
 app.get('/mintables', (req, res) => res.json(MINTABLES.length ? MINTABLES : []));
 
+// Player GET with Metaplex NFT gear fetch
 app.get('/player/:addr', async (req, res) => {
     const { addr } = req.params;
     try { new PublicKey(addr); } catch { return res.status(400).json({ error: 'Invalid address' }); }
-    const data = await redis.get(`player:${addr}`);
-    res.json(data ? JSON.parse(data) : { lvl: 1, hp: 100, caps: 0, gear: [], found: [], xp: 0, xpToNext: 100 });
+
+    let playerData = { lvl: 1, hp: 100, caps: 0, gear: [], found: [], xp: 0, xpToNext: 100, rads: 0 };
+
+    const redisData = await redis.get(`player:${addr}`);
+    if (redisData) playerData = JSON.parse(redisData);
+
+    // Fetch NFT gear power from on-chain metadata
+    try {
+        const nfts = await metaplex.nfts().findAllByOwner({ owner: new PublicKey(addr) });
+        const gear = nfts
+            .filter(nft => nft.json?.attributes)
+            .map(nft => {
+                const powerAttr = nft.json.attributes.find(a => a.trait_type === 'Power');
+                const rarityAttr = nft.json.attributes.find(a => a.trait_type === 'Rarity');
+                return {
+                    name: nft.name || 'Unknown Gear',
+                    power: powerAttr ? Number(powerAttr.value) : 10,
+                    rarity: rarityAttr ? rarityAttr.value : 'common'
+                };
+            });
+        playerData.gear = gear.length ? gear : playerData.gear || [];
+    } catch (e) {
+        console.warn("NFT gear fetch failed:", e.message);
+    }
+
+    res.json(playerData);
 });
 
 app.post('/player/:addr', async (req, res) => {
@@ -138,59 +160,79 @@ app.post('/player/:addr', async (req, res) => {
     res.json({ success: true });
 });
 
-app.post('/find-loot', [
-    body('wallet').notEmpty(),
-    body('spot').notEmpty(),
-    body('lat').isFloat(),
-    body('lng').isFloat(),
-    body('signature').notEmpty(),
-    body('message').notEmpty()
-], async (req, res) => {
-    // ... (your existing /find-loot implementation) ...
-});
+// Existing /find-loot, /select-gear-drop, /shop routes (keep yours)
 
-app.post('/select-gear-drop', [
+// Battle endpoint — random encounter
+app.post('/battle', [
     body('wallet').notEmpty(),
-    body('rarity').isIn(['common', 'rare', 'epic', 'legendary']),
-    body('lvl').isInt({ min: 1 }),
+    body('gearPower').isInt({ min: 1 }),
     body('signature').notEmpty(),
     body('message').notEmpty()
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-    const { wallet, rarity, lvl, signature, message } = req.body;
+    const { wallet, gearPower, signature, message } = req.body;
+
     if (!verifySolanaSignature(message, signature, wallet)) {
         return res.status(400).json({ error: 'Bad signature' });
     }
 
-    const candidates = MINTABLES.filter(i => i.rarity === rarity && i.levelRequirement <= lvl);
-    if (!candidates.length) return res.status(400).json({ error: 'No item available' });
+    const redisData = await redis.get(`player:${wallet}`);
+    const playerData = redisData ? JSON.parse(redisData) : { lvl: 1, hp: 100, caps: 0, xp: 0, rads: 0 };
 
-    const item = candidates[Math.floor(Math.random() * candidates.length)];
-    const powerBoost = Math.floor(lvl * 3);
-    const power = item.priceCAPS + powerBoost;
+    const enemyPower = Math.floor(playerData.lvl * 8 + Math.random() * 40 + 20);
+    let winChance = 0.5 + (gearPower - enemyPower) / 200;
+    winChance = Math.max(0.1, Math.min(0.9, winChance));
 
-    res.json({ 
-        success: true, 
-        item: { 
-            ...item, 
-            power,
-            image: rarityImages?.[rarity] || "https://arweave.net/default.png"
+    const isWin = Math.random() < winChance;
+    let capsReward = 0;
+    let txSignature = null;
+
+    if (isWin) {
+        capsReward = Math.floor(gearPower * 1.2 + Math.random() * 30 + 10);
+
+        try {
+            const playerATA = await getOrCreateAssociatedTokenAccount(connection, GAME_VAULT, MINT_PUBKEY, new PublicKey(wallet));
+            const vaultATA = await getOrCreateAssociatedTokenAccount(connection, GAME_VAULT, MINT_PUBKEY, GAME_VAULT.publicKey);
+
+            const tx = new Transaction().add(
+                createTransferInstruction(
+                    vaultATA.address,
+                    playerATA.address,
+                    GAME_VAULT.publicKey,
+                    capsReward * 1_000_000
+                )
+            );
+
+            txSignature = await sendAndConfirmRawTransaction(connection, tx.serialize({ requireAllSignatures: false }), { commitment: 'confirmed' });
+
+            playerData.caps += capsReward;
+            playerData.xp += Math.floor(capsReward / 2);
+            playerData.hp = Math.max(0, playerData.hp - 5);
+        } catch (e) {
+            console.error("CAPS transfer failed:", e);
+            return res.status(500).json({ error: 'Reward transfer failed' });
         }
+    } else {
+        playerData.hp = Math.max(0, playerData.hp - 20);
+        playerData.rads += 50;
+    }
+
+    await redis.set(`player:${wallet}`, JSON.stringify(playerData));
+
+    res.json({
+        success: true,
+        win: isWin,
+        capsReward,
+        enemyPower,
+        gearPower,
+        txSignature,
+        player: playerData
     });
 });
 
-// Shop endpoints (unchanged)
-app.get('/shop/listings', async (req, res) => {
-    const raw = await redis.hgetall('caps_shop_listings');
-    const listings = Object.values(raw).map(JSON.parse).sort((a, b) => a.price - b.price);
-    res.json(listings);
-});
-
-// ... (other shop routes)
-
-// SPA catch-all: serve index.html for client-side routing
+// SPA catch-all
 app.get('*', (req, res) => {
     res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
