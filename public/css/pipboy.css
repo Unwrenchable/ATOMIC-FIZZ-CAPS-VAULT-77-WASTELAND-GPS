@@ -1,365 +1,143 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* === ULTIMATE RETRO PIP-BOY MAP STYLE === */
 
-html, body {
-  height: 100%;
-  background: #000;
-  font-family: 'VT323', monospace;
-  color: #00ff41;
-  overflow: hidden;
-}
-
-body {
-  background: radial-gradient(circle at center, #002200, #000);
-}
-
-.pipboy {
-  position: fixed;
-  inset: 0;
-  padding: 16px;
-  background: #001100;
-  box-shadow: 0 0 160px #00ff41 inset;
-}
-
-.panel {
-  position: absolute;
-  inset: 16px;
-  background: #000;
-  border-radius: 16px;
-  padding: 20px;
-  overflow: hidden;
-  box-shadow: 
-    inset 0 0 80px #003300,
-    0 0 100px rgba(0, 255, 65, 0.2);
-  display: flex;
-  flex-direction: column;
-}
-
-h1 {
-  font-size: clamp(2.2rem, 8vw, 3rem);
-  letter-spacing: 8px;
-  background: linear-gradient(90deg, #00ff41, #66ff99);
-  -webkit-background-clip: text;
-  color: transparent;
-  margin-bottom: 6px;
-  text-align: center;
-}
-
-.sub {
-  text-align: center;
-  opacity: 0.7;
-  letter-spacing: 6px;
-  font-size: clamp(1rem, 4vw, 1.4rem);
-  margin-bottom: 16px;
-}
-
-.header-row {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.btn, .wallet-btn {
-  background: #001100;
-  color: #00ff41;
-  border: 2px solid #00ff41;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: clamp(0.95rem, 3vw, 1.1rem);
-  transition: all 0.3s ease;
-  min-width: 140px;
-}
-
-.btn:hover, .wallet-btn:hover {
-  background: #003300;
-  box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
-}
-
-.wallet-btn {
-  background: #002200;
-}
-
-#status {
-  text-align: center;
-  font-size: clamp(0.95rem, 3vw, 1.1rem);
-  margin: 12px 0;
-  padding: 8px;
-  border-radius: 8px;
-  background: rgba(0, 20, 0, 0.4);
-  transition: color 0.5s;
-}
-
-.status-good { color: #66ff99; }
-.status-bad { color: #ff6666; }
-
-.pip-status {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 16px 0;
-  padding: 10px 16px;
-  background: #001100;
-  border: 2px solid #00ff41;
-  border-radius: 10px;
-}
-
-.pip-lvl, .pip-caps, .pip-claimed {
-  font-size: clamp(1.1rem, 4vw, 1.4rem);
-  opacity: 0.9;
-}
-
-.pip-hp-container {
-  position: relative;
-  flex: 1;
-  height: 32px;
-  background: #000;
-  border: 2px solid #00ff41;
-  border-radius: 10px;
-  overflow: hidden;
-  margin: 0 16px;
-  box-shadow: inset 0 0 15px #003300;
-}
-
-.pip-hp-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  background: #00ff41;
-  transition: width 0.8s ease;
-}
-
-.pip-rad-fill {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: 0%;
-  background: #ff0033;
-  opacity: 0.8;
-  transition: width 0.8s ease;
-}
-
-.pip-hp-text {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  line-height: 32px;
-  font-size: clamp(1rem, 3vw, 1.2rem);
-  color: #fff;
-  text-shadow: 0 0 10px #000;
-  z-index: 1;
-}
-
-.xp-bar {
-  height: 10px;
-  background: #001100;
-  border: 1px solid #00ff41;
-  border-radius: 6px;
-  margin: 12px 0;
-  overflow: hidden;
-}
-
-.xp-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #00ffff, #66ffff);
-  transition: width 1s ease;
-}
-
-.pip-claimed {
-  text-align: center;
-  font-size: clamp(0.95rem, 3vw, 1.1rem);
-  margin-top: 8px;
-  opacity: 0.8;
-}
-
+/* Container glow and rounded screen */
 #mapWrap {
-  flex: 1;
-  min-height: 280px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid rgba(0, 255, 65, 0.1);
-  box-shadow: inset 0 0 60px rgba(0, 255, 65, 0.08);
   position: relative;
-  margin: 16px 0;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow:
+    inset 0 0 80px #003300,
+    0 0 60px rgba(0, 255, 65, 0.4);
+  background: #000;
 }
 
-#map {
-  width: 100%;
-  height: 100%;
-  background: #001100 !important;
+/* Monochrome green filter on map tiles */
+.leaflet-tile-pane {
+  filter:
+    brightness(1.4)
+    contrast(2)
+    sepia(0.3)
+    hue-rotate(90deg)
+    saturate(3)
+    grayscale(0.2);
+  opacity: 0.96;
 }
 
-.gps-badge {
+/* Dark green tint overlay */
+#map::after {
+  content: '';
   position: absolute;
-  left: 16px;
-  bottom: 16px;
-  background: rgba(0, 0, 0, 0.85);
-  border: 2px solid #00ff41;
-  padding: 8px 14px;
-  border-radius: 10px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  z-index: 1200;
-  font-size: clamp(0.9rem, 3vw, 1rem);
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 40%, rgba(0, 30, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 1000;
+  border-radius: 16px;
 }
 
-.acc-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #ff6666;
-  box-shadow: 0 0 10px rgba(255, 102, 102, 0.4);
-  animation: pulseRed 2s infinite;
-}
-
-.acc-green {
-  background: #66ff99;
-  box-shadow: 0 0 15px rgba(102, 255, 153, 0.8);
-  animation: none;
-}
-
-.acc-amber {
-  background: #ffcc66;
-  box-shadow: 0 0 15px rgba(255, 204, 102, 0.7);
-  animation: none;
-}
-
-@keyframes pulseRed {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; box-shadow: 0 0 20px rgba(255, 102, 102, 0.8); }
-}
-
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin-top: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.tab {
-  padding: 10px 16px;
-  border-radius: 10px;
-  background: rgba(0, 30, 0, 0.4);
-  border: 1px solid rgba(0, 255, 65, 0.2);
-  cursor: pointer;
-  font-size: clamp(1rem, 3vw, 1.1rem);
-  transition: all 0.3s;
-}
-
-.tab.active, .tab:hover {
-  background: #003300;
-  border-color: #00ff41;
-  box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
-}
-
-/* Hidden Signal Button (for terminal access) */
-.hidden-signal {
+/* Soft CRT scanlines */
+#map::before {
+  content: '';
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(0, 20, 0, 0.9);
-  color: #00ff41;
-  border: 2px solid #00ff41;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  text-decoration: none;
-  opacity: 0;
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0);
-  transition: opacity 1.5s ease, box-shadow 0.4s;
-  z-index: 9999;
-  animation: glowPulse 4s infinite;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 1001;
+  opacity: 0.5;
+  animation: slow-scan 12s linear infinite;
+  border-radius: 16px;
 }
 
-.hidden-signal.visible {
-  opacity: 0.9;
+@keyframes slow-scan {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 4px; }
 }
 
-.hidden-signal:hover {
-  opacity: 1;
-  box-shadow: 0 0 30px rgba(0, 255, 65, 0.8);
+/* Clean terminal grid */
+#mapWrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 255, 65, 0.06) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(0, 255, 65, 0.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 1002;
+  opacity: 0.35;
+  border-radius: 16px;
 }
 
-@keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 65, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(0, 255, 65, 0.7); }
+/* Subtle static noise */
+#mapWrap > .static-noise {
+  position: absolute;
+  inset: 0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"/></filter><rect width="100" height="100" filter="url(#noise)" opacity="0.15"/></svg>') repeat;
+  pointer-events: none;
+  z-index: 1003;
+  opacity: 0.3;
+  animation: noise-flicker 0.1s steps(4) infinite;
+  border-radius: 16px;
 }
 
-/* Modal */
-.mint-modal {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: #001100;
-  border: 3px solid #00ff41;
-  padding: 24px;
-  border-radius: 12px;
-  z-index: 2000;
-  display: none;
-  width: 90%;
-  max-width: 420px;
-  text-align: center;
-  box-shadow: 0 0 40px rgba(0, 255, 65, 0.6);
+@keyframes noise-flicker {
+  0% { opacity: 0.25; }
+  100% { opacity: 0.35; }
 }
 
-.mint-modal.open {
-  display: block;
+/* Rounded screen + slight barrel effect */
+.leaflet-container {
+  border-radius: 16px;
+  overflow: hidden;
+  mask-image: radial-gradient(circle at center, black 85%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at center, black 85%, transparent 100%);
 }
 
-/* Scrollbars */
-::-webkit-scrollbar {
-  width: 10px;
+/* Gentle glow pulse */
+#mapWrap {
+  animation: gentle-glow 8s ease-in-out infinite alternate;
 }
 
-::-webkit-scrollbar-track {
-  background: #001100;
-  border-radius: 10px;
+@keyframes gentle-glow {
+  0% {
+    box-shadow:
+      inset 0 0 80px #003300,
+      0 0 50px rgba(0, 255, 65, 0.3);
+  }
+  100% {
+    box-shadow:
+      inset 0 0 100px #004400,
+      0 0 80px rgba(0, 255, 65, 0.5);
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: #00ff41;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.6);
+/* Subtle flicker (rare, authentic) */
+#mapWrap {
+  animation:
+    gentle-glow 8s ease-in-out infinite alternate,
+    rare-flicker 15s infinite;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #66ff99;
+@keyframes rare-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.97; }
+  97% { opacity: 0.99; }
 }
 
-/* Mobile Optimizations */
+/* Mobile adjustments */
 @media (max-width: 768px) {
-  .pipboy { padding: 12px; }
-  .panel { inset: 12px; padding: 16px; }
-  .header-row { gap: 10px; }
-  .controls { gap: 8px; }
-  .btn, .wallet-btn { padding: 10px 14px; min-width: auto; }
-  #mapWrap { margin: 12px 0; }
-  .gps-badge { left: 12px; bottom: 12px; padding: 6px 10px; }
-  .hidden-signal { top: 12px; right: 12px; padding: 8px 14px; font-size: 0.9rem; }
-}
-
-@media (max-width: 480px) {
-  .controls { flex-direction: column; align-items: stretch; }
-  .btn, .wallet-btn { width: 100%; }
-  .tabs { gap: 6px; }
-  .tab { padding: 10px; font-size: 1rem; }
+  #mapWrap::after {
+    background-size: 40px 40px;
+  }
+  .leaflet-tile-pane {
+    filter: brightness(1.5) contrast(2.2) sepia(0.3) hue-rotate(90deg) saturate(3.2);
+  }
+  @keyframes slow-scan {
+    100% { background-position: 0 3px; }
+  }
 }
