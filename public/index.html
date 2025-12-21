@@ -1,4 +1,4 @@
-<!-- index.html – Updated drop-in replacement with static-noise div added -->
+<!-- index.html – Complete drop-in (no changes needed from your last version, just confirming it's perfect with audio + static-noise) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,9 +40,7 @@
 
             <div id="mapWrap">
                 <div id="map"></div>
-                <!-- Static noise overlay element (required for the new CSS) -->
                 <div class="static-noise"></div>
-
                 <div class="gps-badge">
                     <div id="accDot" class="acc-dot"></div>
                     <div id="accText">GPS: waiting...</div>
@@ -93,23 +91,13 @@
     <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
     <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
     <script src="/js/script.js"></script>
-    <audio id="sfxClaim" preload="auto">
-  <source src="https://assets.codepen.io/605876/fallout-terminal-beep.mp3" type="audio/mpeg">
-</audio>
-<audio id="sfxRadTick" preload="auto">
-  <source src="https://assets.codepen.io/605876/geiger-counter.mp3" type="audio/mpeg">
-</audio>
-<audio id="sfxEquip" preload="auto">
-  <source src="https://assets.codepen.io/605876/fallout-inventory-click.mp3" type="audio/mpeg">
-</audio>
-<audio id="sfxLevelUp" preload="auto">
-  <source src="https://assets.codepen.io/605876/fallout-level-up.mp3" type="audio/mpeg">
-</audio>
-<audio id="sfxGearDrop" preload="auto">
-  <source src="https://assets.codepen.io/605876/fallout-epic-loot.mp3" type="audio/mpeg">
-</audio>
-<audio id="sfxButton" preload="auto">
-  <source src="https://assets.codepen.io/605876/pipboy-button-click.mp3" type="audio/mpeg">
-</audio>
+
+    <!-- Sound Effects -->
+    <audio id="sfxClaim" preload="auto"><source src="https://assets.codepen.io/605876/fallout-terminal-beep.mp3" type="audio/mpeg"></audio>
+    <audio id="sfxRadTick" preload="auto"><source src="https://assets.codepen.io/605876/geiger-counter.mp3" type="audio/mpeg"></audio>
+    <audio id="sfxEquip" preload="auto"><source src="https://assets.codepen.io/605876/fallout-inventory-click.mp3" type="audio/mpeg"></audio>
+    <audio id="sfxLevelUp" preload="auto"><source src="https://assets.codepen.io/605876/fallout-level-up.mp3" type="audio/mpeg"></audio>
+    <audio id="sfxGearDrop" preload="auto"><source src="https://assets.codepen.io/605876/fallout-epic-loot.mp3" type="audio/mpeg"></audio>
+    <audio id="sfxButton" preload="auto"><source src="https://assets.codepen.io/605876/pipboy-button-click.mp3" type="audio/mpeg"></audio>
 </body>
 </html>
