@@ -1,6 +1,9 @@
+/* /css/pipboy.css – Complete drop-in replacement for the map section */
+/* Add/replace the entire map-related block with this ultimate retro Pip-Boy style */
+
 /* === ULTIMATE RETRO PIP-BOY MAP STYLE === */
 
-/* Container glow and rounded screen */
+/* Main map container – rounded screen with green glow */
 #mapWrap {
   position: relative;
   overflow: hidden;
@@ -9,6 +12,9 @@
     inset 0 0 80px #003300,
     0 0 60px rgba(0, 255, 65, 0.4);
   background: #000;
+  animation:
+    gentle-glow 8s ease-in-out infinite alternate,
+    rare-flicker 15s infinite;
 }
 
 /* Monochrome green filter on map tiles */
@@ -23,7 +29,7 @@
   opacity: 0.96;
 }
 
-/* Dark green tint overlay */
+/* Dark green radial tint overlay */
 #map::after {
   content: '';
   position: absolute;
@@ -34,7 +40,7 @@
   border-radius: 16px;
 }
 
-/* Soft CRT scanlines */
+/* Classic CRT scanlines */
 #map::before {
   content: '';
   position: absolute;
@@ -58,7 +64,7 @@
   100% { background-position: 0 4px; }
 }
 
-/* Clean terminal grid */
+/* Subtle terminal grid */
 #mapWrap::after {
   content: '';
   position: absolute;
@@ -73,7 +79,7 @@
   border-radius: 16px;
 }
 
-/* Subtle static noise */
+/* Static noise overlay (inline SVG for no external dependency) */
 #mapWrap > .static-noise {
   position: absolute;
   inset: 0;
@@ -90,7 +96,7 @@
   100% { opacity: 0.35; }
 }
 
-/* Rounded screen + slight barrel effect */
+/* Slight barrel distortion + rounded screen mask */
 .leaflet-container {
   border-radius: 16px;
   overflow: hidden;
@@ -98,11 +104,7 @@
   -webkit-mask-image: radial-gradient(circle at center, black 85%, transparent 100%);
 }
 
-/* Gentle glow pulse */
-#mapWrap {
-  animation: gentle-glow 8s ease-in-out infinite alternate;
-}
-
+/* Gentle outer glow pulse */
 @keyframes gentle-glow {
   0% {
     box-shadow:
@@ -116,20 +118,14 @@
   }
 }
 
-/* Subtle flicker (rare, authentic) */
-#mapWrap {
-  animation:
-    gentle-glow 8s ease-in-out infinite alternate,
-    rare-flicker 15s infinite;
-}
-
+/* Rare authentic screen flicker */
 @keyframes rare-flicker {
   0%, 95%, 100% { opacity: 1; }
   96% { opacity: 0.97; }
   97% { opacity: 0.99; }
 }
 
-/* Mobile adjustments */
+/* Mobile optimizations */
 @media (max-width: 768px) {
   #mapWrap::after {
     background-size: 40px 40px;
@@ -139,5 +135,11 @@
   }
   @keyframes slow-scan {
     100% { background-position: 0 3px; }
+  }
+  #mapWrap {
+    border-radius: 12px;
+  }
+  .leaflet-container {
+    border-radius: 12px;
   }
 }
