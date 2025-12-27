@@ -2,15 +2,6 @@
 seeds = false
 skip-lint = false
 
-[programs.localnet]
-fizzcaps_onchain = "GDGexnGtZPoD1aHv6qg8hjeSspujwWnxJCtdrrj2gKpP"  # Will replace after first build
-
-[programs.devnet]
-fizzcaps_onchain = "ReplaceWithDevnetIDAfterDeploy"
-
-[programs.mainnet-beta]
-fizzcaps_onchain = "ReplaceWithMainnetIDAfterDeploy"
-
 [registry]
 url = "https://api.apr.dev"
 

@@ -9,13 +9,19 @@ crate-type = ["cdylib", "lib"]
 name = "fizzcaps_onchain"
 
 [features]
+default = []
+cpi = ["no-entrypoint"]
 no-entrypoint = []
 no-idl = []
-cpi = ["no-entrypoint"]
-default = []
+
+# These silence common Anchor + solana-program check-cfg warnings (very common in 2025)
+# You can remove them if you prefer #![allow(unexpected_cfgs)] in lib.rs instead
+custom-heap    = []
+custom-panic   = []
+anchor-debug   = []
+no-log-ix-name = []
 
 [dependencies]
-anchor-lang = "0.32.1"
-anchor-spl = "0.32.1"
-mpl-token-metadata = { version = "5.1.1", features = ["no-entrypoint"] }
-solana-program = "~2.0"
+anchor-lang = { version = "0.32", features = ["init-if-needed"] }
+anchor-spl = "0.32"  # without metadata feature
+mpl-token-metadata = "5.1.1"  # latest stable as of Dec 2025 (5.1.2 is still alpha)

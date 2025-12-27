@@ -1,33 +1,28 @@
+#![allow(unexpected_cfgs)]
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token::{Mint, Token, TokenAccount, MintTo, burn},
+    token::{Mint, MintTo, Token, TokenAccount, burn, Burn},
 };
 use mpl_token_metadata::{
     instructions::CreateV1CpiBuilder,
-    types::{TokenStandard, Collection},
+    types::{Collection, TokenStandard},
     ID as METADATA_PROGRAM_ID,
 };
-use solana_program::sysvar::instructions::{Instructions as SysvarInstructions, load_instruction_at_checked};
 
-declare_id!("GDGexnGtZPoD1aHv6qg8hjeSspujwWnxJCtdrrj2gKpP");
+declare_id!("DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP");
 
 const CAPS_MINT_SEEDS: &[u8] = b"caps-mint";
-const TREASURY_SEEDS: &[u8] = b"treasury";
 const LOOT_MINT_AUTHORITY_SEEDS: &[u8] = b"loot-mint-auth";
 
 #[program]
 pub mod fizzcaps_onchain {
     use super::*;
 
-    // Your existing initialize_caps (unchanged from working version)
-
-    // Your existing revoke_mint_authority (using set_authority CPI if needed, but from previous)
-
     pub fn claim_loot(ctx: Context<ClaimLoot>, voucher: LootVoucher) -> Result<()> {
-        let fee_amount = 100 * 10u64.pow(9); // 100 $CAPS burn fee
+        let fee_amount = 100 * 10u64.pow(9);
 
-        // Burn $CAPS for deflation
+        // 1. Burn the $CAPS fee
         burn(
             CpiContext::new(
                 ctx.accounts.token_program.to_account_info(),
@@ -40,10 +35,15 @@ pub mod fizzcaps_onchain {
             fee_amount,
         )?;
 
-        // Verify server-signed voucher using Ed25519 pre-instruction
-        verify_ed25519_signature(&ctx.accounts.instructions_sysvar, &ctx.accounts.server_key.key().to_bytes(), &voucher.serialize(), &voucher.server_signature)?;
+        // 2. Verify server Ed25519 signature
+        verify_ed25519_signature(
+            &ctx.accounts.instructions_sysvar,
+            &ctx.accounts.server_key.key().to_bytes(),
+            &voucher.try_to_vec()?,  // ← Correct Anchor serialization
+            &voucher.server_signature,
+        )?;
 
-        // Mint unique loot NFT
+        // 3. Mint 1 Loot NFT to player
         anchor_spl::token::mint_to(
             CpiContext::new_with_signer(
                 ctx.accounts.token_program.to_account_info(),
@@ -57,12 +57,12 @@ pub mod fizzcaps_onchain {
             1,
         )?;
 
-        // Create metadata — GPS in name (on-chain visible), full data in off-chain uri
         let name = format!(
             "Fizz Cache #{} @ ({:.4},{:.4}) {}",
             voucher.loot_id, voucher.latitude, voucher.longitude, voucher.location_hint
         );
 
+        // 4. Create Metadata for the NFT
         CreateV1CpiBuilder::new(&ctx.accounts.metadata_program)
             .metadata(&ctx.accounts.loot_metadata)
             .mint(&ctx.accounts.loot_mint.to_account_info(), true)
@@ -74,44 +74,52 @@ pub mod fizzcaps_onchain {
             .token_standard(TokenStandard::NonFungible)
             .name(name)
             .symbol("FIZZLOOT".to_string())
-            .uri("https://atomicfizzcaps.xyz/loot/".to_owned() + &voucher.loot_id.to_string() + ".json") // off-chain full JSON with image + all attrs
+            .uri(format!("https://atomicfizzcaps.xyz/loot/{}.json", voucher.loot_id))
             .seller_fee_basis_points(0)
             .creators(vec![])
-            .collection(Collection { verified: false, key: Pubkey::default() })
+            .collection(Collection {
+                verified: false,
+                key: Pubkey::default(),
+            })
             .is_mutable(false)
             .primary_sale_happened(true)
             .invoke_signed(&[&[LOOT_MINT_AUTHORITY_SEEDS, &[ctx.bumps.loot_mint_authority]]])?;
 
-        msg!("Loot claimed by {} at ({}, {})!", ctx.accounts.player.key(), voucher.latitude, voucher.longitude);
+        msg!(
+            "Loot #{} claimed by {} at ({:.4}, {:.4})!",
+            voucher.loot_id,
+            ctx.accounts.player.key(),
+            voucher.latitude,
+            voucher.longitude
+        );
 
         Ok(())
     }
 }
 
-fn verify_ed25519_signature(
-    instructions_sysvar: &UncheckedAccount,
+fn verify_ed25519_signature<'info>(
+    instructions_sysvar: &AccountInfo<'info>,
     expected_pubkey: &[u8],
     message: &[u8],
     signature: &[u8; 64],
 ) -> Result<()> {
-    let ixns = instructions_sysvar.to_account_info();
-    let current_ix_index = load_current_index_checked(&ixns)? as usize;
+    use anchor_lang::solana_program::sysvar::instructions::{
+        load_current_index_checked,
+        load_instruction_at_checked,
+    };
 
-    // The Ed25519 verify ix must be the previous one
-    if current_ix_index == 0 {
+    let current_idx = load_current_index_checked(instructions_sysvar)? as usize;
+    if current_idx == 0 {
         return err!(ErrorCode::NoEd25519Ix);
     }
 
-    let ed25519_ix = load_instruction_at_checked(current_ix_index - 1, &ixns)?;
-
-    // Check it's the Ed25519 program
-    if ed25519_ix.program_id != solana_program::ed25519_program::id() {
+    let ed_ix = load_instruction_at_checked(current_idx - 1, instructions_sysvar)?;
+    if ed_ix.program_id != anchor_lang::solana_program::ed25519_program::id() {
         return err!(ErrorCode::InvalidEd25519Program);
     }
 
-    // Parse data: num_sigs (1), padding, pubkey offset, sig offset, msg offset, msg len...
-    let data = ed25519_ix.data;
-    if data.len() < 16 || data[0] != 1 { // single signature
+    let data = ed_ix.data;
+    if data.len() < 16 || data[0] != 1 {
         return err!(ErrorCode::InvalidEd25519Data);
     }
 
@@ -120,18 +128,20 @@ fn verify_ed25519_signature(
     let msg_offset = u16::from_le_bytes([data[6], data[7]]) as usize;
     let msg_len = u16::from_le_bytes([data[8], data[9]]) as usize;
 
-    if pubkey_offset + 32 > data.len() || sig_offset + 64 > data.len() || msg_offset + msg_len > data.len() {
-        return err!(ErrorCode::InvalidEd25519Offsets);
+    // Basic bounds checking to prevent panics
+    if pubkey_offset + 32 > data.len()
+        || sig_offset + 64 > data.len()
+        || msg_offset + msg_len > data.len()
+    {
+        return err!(ErrorCode::InvalidEd25519Data);
     }
 
     if &data[pubkey_offset..pubkey_offset + 32] != expected_pubkey {
         return err!(ErrorCode::WrongPubkey);
     }
-
     if &data[sig_offset..sig_offset + 64] != signature {
         return err!(ErrorCode::WrongSignature);
     }
-
     if &data[msg_offset..msg_offset + msg_len] != message {
         return err!(ErrorCode::WrongMessage);
     }
@@ -149,65 +159,74 @@ pub struct LootVoucher {
     pub server_signature: [u8; 64],
 }
 
-impl LootVoucher {
-    pub fn serialize(&self) -> Vec<u8> {
-        let mut data = Vec::new();
-        self.serialize(&mut Serializer::new(&mut data)).unwrap();
-        data
-    }
-}
-
 #[derive(Accounts)]
+#[instruction(voucher: LootVoucher)]
 pub struct ClaimLoot<'info> {
     #[account(mut)]
     pub player: Signer<'info>,
 
-    #[account(mut, associated_token::mint = caps_mint, associated_token::authority = player)]
+    #[account(mut)]
     pub player_caps_ata: Account<'info, TokenAccount>,
 
-    #[account(init, payer = player, mint::decimals = 0, mint::authority = loot_mint_authority)]
+    /// Unique NFT mint per loot claim
+    #[account(
+        init,
+        payer = player,
+        mint::decimals = 0,
+        mint::authority = loot_mint_authority,
+        seeds = [LOOT_MINT_AUTHORITY_SEEDS, voucher.loot_id.to_le_bytes().as_ref()],
+        bump
+    )]
     pub loot_mint: Account<'info, Mint>,
 
-    #[account(init_if_needed, payer = player, associated_token::mint = loot_mint, associated_token::authority = player)]
+    #[account(
+        init_if_needed,
+        payer = player,
+        associated_token::mint = loot_mint,
+        associated_token::authority = player
+    )]
     pub player_loot_ata: Account<'info, TokenAccount>,
 
-    /// CHECK: PDA authority for all loot mints
-    #[account(seeds = [LOOT_MINT_AUTHORITY_SEEDS], bump)]
+    /// PDA that signs for mint & metadata
+    #[account(
+        seeds = [LOOT_MINT_AUTHORITY_SEEDS],
+        bump
+    )]
     pub loot_mint_authority: UncheckedAccount<'info>,
 
     #[account(seeds = [CAPS_MINT_SEEDS], bump)]
     pub caps_mint: Account<'info, Mint>,
 
-    /// CHECK: Server pubkey (hardcode or store in config PDA)
+    /// CHECK: Server verification key (should be constant/known)
     pub server_key: AccountInfo<'info>,
 
-    /// CHECK: Loot metadata PDA
+    /// CHECK: Metadata PDA (usually mint + metadata_program)
     #[account(mut)]
     pub loot_metadata: UncheckedAccount<'info>,
 
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,
-    #[account(address = solana_program::sysvar::instructions::ID)]
-    pub instructions_sysvar: UncheckedAccount<'info>,
+
+    #[account(address = anchor_lang::solana_program::sysvar::instructions::ID)]
+    pub instructions_sysvar: AccountInfo<'info>,
+
     #[account(address = METADATA_PROGRAM_ID)]
     pub metadata_program: UncheckedAccount<'info>,
 }
 
 #[error_code]
 pub enum ErrorCode {
-    #[msg("No Ed25519 instruction found")]
+    #[msg("No Ed25519 Verify instruction found in transaction")]
     NoEd25519Ix,
-    #[msg("Invalid Ed25519 program ID")]
+    #[msg("Instruction is not from the Ed25519 program")]
     InvalidEd25519Program,
-    #[msg("Invalid Ed25519 data format")]
+    #[msg("Invalid Ed25519 instruction data format")]
     InvalidEd25519Data,
-    #[msg("Invalid Ed25519 offsets")]
-    InvalidEd25519Offsets,
-    #[msg("Wrong pubkey in Ed25519 ix")]
+    #[msg("Ed25519 pubkey does not match expected server key")]
     WrongPubkey,
-    #[msg("Wrong signature in Ed25519 ix")]
+    #[msg("Ed25519 signature does not match")]
     WrongSignature,
-    #[msg("Wrong message in Ed25519 ix")]
+    #[msg("Ed25519 signed message does not match voucher")]
     WrongMessage,
 }
