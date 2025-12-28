@@ -139,9 +139,15 @@ async function connectWallet() {
   }
 }
 
-// Auto-reconnect if previously connected
+// Auto-reconnect on load if previously connected
 if (player.wallet) {
-  connectWallet(); // Try silent reconnect
+  (async () => {
+    try {
+      await connectWallet();
+    } catch (e) {
+      console.log('Silent reconnect failed:', e);
+    }
+  })();
 }
 
 // ============================================================================
@@ -175,8 +181,12 @@ function placeMarker(lat, lng, accuracy) {
   lastAccuracy = accuracy;
 
   if (!playerMarker) {
-    playerMarker = L.circleMarker(playerLatLng, { radius: 10, color: '#00ff41', weight: 3, fillOpacity: 0.9 })
-      .addTo(map).bindPopup('You are here');
+    playerMarker = L.circleMarker(playerLatLng, {
+      radius: 10,
+      color: '#00ff41',
+      weight: 3,
+      fillOpacity: 0.9
+    }).addTo(map).bindPopup('You are here');
   } else {
     playerMarker.setLatLng(playerLatLng);
   }
@@ -208,18 +218,23 @@ function startLocation() {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Map – this exact setup made it work before
+  // Map init – this exact setup made it work perfectly in the best version
   map = L.map('map').setView([37.7749, -122.4194], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap',
     maxZoom: 19,
   }).addTo(map);
 
-  // Critical: Delay + resize fix for blank map
-  setTimeout(() => map.invalidateSize(true), 500);
-  window.addEventListener('resize', () => map?.invalidateSize());
+  // Critical fix: Delay + resize listener – solves blank map forever
+  setTimeout(() => {
+    map.invalidateSize(true);
+  }, 500);
 
-  // Buttons (no tabs/dropdowns – just direct buttons like before)
+  window.addEventListener('resize', () => {
+    if (map) map.invalidateSize();
+  });
+
+  // Button listeners (no tabs/dropdowns – direct buttons like the classic version)
   document.getElementById('connectWalletBtn')?.addEventListener('click', connectWallet);
   document.getElementById('refreshPlayerBtn')?.addEventListener('click', fetchPlayer);
   document.getElementById('requestGpsBtn')?.addEventListener('click', startLocation);
