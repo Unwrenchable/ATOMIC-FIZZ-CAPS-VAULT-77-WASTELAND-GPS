@@ -127,7 +127,6 @@ function setStatus(text, isGood = true, time = 5000) {
 
 async function connectWallet() {
   try {
-    // Show simple prompt (you can replace with UI selector later)
     const walletName = prompt('Enter wallet (phantom, solflare, backpack):')?.toLowerCase().trim();
     selectedWallet = wallets.find(w => w.name.toLowerCase().includes(walletName));
 
@@ -184,6 +183,9 @@ async function fetchPlayer() {
 // ============================================================================
 // GPS + MAP + CLAIMING
 // ============================================================================
+
+let map, playerMarker = null, playerLatLng = null, lastAccuracy = 999, watchId = null, firstLock = true;
+let markers = {};
 
 function placeMarker(lat, lng, accuracy) {
   playerLatLng = L.latLng(lat, lng);
@@ -313,23 +315,28 @@ async function loadGear() {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Map init
-  map = L.map('map').setView([37.7749, -122.4194], 12);
+  // Map init – this is what made it work perfectly before
+  map = L.map('map').setView([37.7749, -122.4194], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap',
     maxZoom: 19,
   }).addTo(map);
 
-  // Force map fix
-  setTimeout(() => map.invalidateSize(true), 500);
-  window.addEventListener('resize', () => map?.invalidateSize());
+  // Critical fix: Force redraw after container is visible (this solved the blank map)
+  setTimeout(() => {
+    map.invalidateSize(true);
+  }, 500);
+
+  window.addEventListener('resize', () => {
+    if (map) map.invalidateSize();
+  });
 
   // Event listeners
   document.getElementById('connectWalletBtn')?.addEventListener('click', connectWallet);
   document.getElementById('refreshPlayerBtn')?.addEventListener('click', fetchPlayer);
   document.getElementById('requestGpsBtn')?.addEventListener('click', startLocation);
 
-  // Tab switching
+  // Tab switching – restores original dropdown/tab behavior
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -339,7 +346,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       const content = document.getElementById(`tab-${tab.dataset.tab}`);
       if (content) {
         content.classList.remove('hidden');
-        if (tab.dataset.tab === 'map' && map) setTimeout(() => map.invalidateSize(true), 100);
+        if (tab.dataset.tab === 'map' && map) {
+          setTimeout(() => map.invalidateSize(true), 100);
+        }
         if (tab.dataset.tab === 'quests') loadQuests();
         if (tab.dataset.tab === 'gear') loadGear();
       }
