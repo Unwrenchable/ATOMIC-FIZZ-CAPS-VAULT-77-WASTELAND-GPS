@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#001100" />
   <title>ATOMIC FIZZ CAPS - PIP-BOY</title>
 
   <link rel="icon" href="/favcoin.ico" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
-  <!-- Reliable Leaflet (same as before) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
@@ -20,7 +18,8 @@
     <div class="panel">
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
-        <button id="secretSupportBtn" class="invisible-btn" aria-label="Hidden Support"></button>
+        <!-- Secret donation link – now goes to donate.html -->
+        <a href="/donate.html" id="secretSupportBtn" class="invisible-btn" aria-label="Hidden Donation"></a>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
       </header>
 
@@ -28,7 +27,7 @@
         <div class="controls">
           <button class="wallet-btn" id="connectWalletBtn">CONNECT WALLET</button>
           <button class="btn" id="refreshPlayerBtn">REFRESH STATUS</button>
-          <button class="btn hidden" id="terminalUnlockBtn">ACCESS TERMINAL</button>
+          <button class="btn" id="requestGpsBtn">REQUEST GPS ACCESS</button>
         </div>
         <div id="status" class="status-text">STATUS: STANDBY</div>
       </div>
@@ -49,65 +48,14 @@
         <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
       </div>
 
-      <!-- Map Section (this worked before) -->
+      <!-- Map (this worked in the awesome version) -->
       <section id="mapWrap">
         <div id="map"></div>
         <div class="gps-badge">
           <div class="acc-dot" id="gpsDot"></div>
           <span id="gpsStatus">GPS: UNKNOWN</span>
         </div>
-        <button id="requestGpsBtn">REQUEST GPS ACCESS</button>
       </section>
-
-      <!-- Tabs (restored original order + scavengers) -->
-      <div class="tabs">
-        <button class="tab active" data-tab="map">MAP</button>
-        <button class="tab" data-tab="quests">QUESTS</button>
-        <button class="tab" data-tab="gear">GEAR</button>
-        <button class="tab" data-tab="scavengers">SCAVENGERS EXCHANGE</button>
-        <button class="tab" data-tab="narrative">LORE</button>
-      </div>
-
-      <!-- Tab Contents (restored + fixed loading) -->
-      <div class="tab-content" id="tab-map"></div>
-
-      <div class="tab-content hidden" id="tab-quests">
-        <h3>ACTIVE QUESTS</h3>
-        <ul id="questsList">Loading quests...</ul>
-        <h3>COMPLETED</h3>
-        <ul id="completedQuests"></ul>
-      </div>
-
-      <div class="tab-content hidden" id="tab-gear">
-        <h3>EQUIPPED GEAR</h3>
-        <div id="gearList" class="gear-grid">Loading gear...</div>
-      </div>
-
-      <div class="tab-content hidden" id="tab-scavengers">
-        <h3>SCAVENGER'S EXCHANGE</h3>
-        <p>Trade loot for CAPS or rare items.</p>
-        <div id="scavengerOffers">Loading offers...</div>
-        <button id="refreshExchangeBtn">REFRESH OFFERS</button>
-      </div>
-
-      <div class="tab-content hidden" id="tab-narrative">
-        <!-- Your narrative content here -->
-        <p>Loading lore...</p>
-      </div>
-    </div>
-
-    <!-- Terminal & Mint Modal -->
-    <div class="terminal hidden" id="terminalOverlay">
-      <div class="terminal-header">TERMINAL ACCESS</div>
-      <div id="terminalContent"></div>
-      <button class="close-terminal" id="closeTerminalBtn">EXIT</button>
-    </div>
-
-    <div class="mint-modal hidden" id="mintModal">
-      <h2>LOOT CLAIM</h2>
-      <div id="mintProgress"><div class="progress-bar" id="progressBar"></div></div>
-      <p id="mintStatus">Processing...</p>
-      <button id="closeMintBtn">CLOSE</button>
     </div>
   </div>
 
