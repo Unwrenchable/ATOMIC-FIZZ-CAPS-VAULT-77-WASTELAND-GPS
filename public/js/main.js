@@ -23,7 +23,7 @@ let publicKey = null;
 // ============================================================================
 
 const API_BASE = window.location.origin;
-const CLAIM_RADIUS = 50;
+const CLAIM_RADIUS = 50; // meters
 const MAX_RADS = 1000;
 const DROP_CHANCE = { legendary: 0.35, epic: 0.18, rare: 0.09, common: 0.04 };
 
@@ -112,22 +112,13 @@ function updateHPBar() {
 function setStatus(text, isGood = true, time = 5000) {
   const s = document.getElementById('status');
   if (!s) return;
-  s.textContent = `Status: ${text}`;
+  s.textContent = `STATUS: ${text}`;
   s.className = isGood ? 'status-good' : 'status-bad';
   clearTimeout(s._to);
   if (time > 0) s._to = setTimeout(() => {
-    s.textContent = 'Status: ready';
-    s.className = 'status-good';
+    s.textContent = 'STATUS: STANDBY';
+    s.className = '';
   }, time);
-}
-
-function playSfx(id, volume = 0.4) {
-  const audio = document.getElementById(id);
-  if (audio) {
-    audio.currentTime = 0;
-    audio.volume = Math.max(0, Math.min(1, volume));
-    audio.play().catch(() => {});
-  }
 }
 
 // ============================================================================
@@ -136,16 +127,17 @@ function playSfx(id, volume = 0.4) {
 
 async function connectWallet() {
   try {
-    const walletName = prompt('Enter wallet name (phantom, solflare, backpack):')?.toLowerCase();
+    // Show simple prompt (you can replace with UI selector later)
+    const walletName = prompt('Enter wallet (phantom, solflare, backpack):')?.toLowerCase().trim();
     selectedWallet = wallets.find(w => w.name.toLowerCase().includes(walletName));
 
-    if (!selectedWallet) throw new Error('Wallet not supported');
+    if (!selectedWallet) throw new Error('Wallet not found');
 
     await selectedWallet.connect();
     publicKey = selectedWallet.publicKey.toString();
     player.wallet = publicKey;
-    localStorage.setItem('connectedWallet', publicKey); // persist
-    document.getElementById('status').textContent = `STATUS: CONNECTED (${publicKey.slice(0,6)}...)`;
+    localStorage.setItem('connectedWallet', publicKey);
+    document.getElementById('connectWalletBtn').textContent = `CONNECTED (${publicKey.slice(0,6)}...)`;
     setStatus('Wallet connected!', true, 5000);
     await fetchPlayer();
   } catch (err) {
@@ -161,6 +153,7 @@ function disconnectWallet() {
     publicKey = null;
     player.wallet = null;
     localStorage.removeItem('connectedWallet');
+    document.getElementById('connectWalletBtn').textContent = 'CONNECT WALLET';
     setStatus('Disconnected', true);
   }
 }
@@ -168,14 +161,6 @@ function disconnectWallet() {
 // ============================================================================
 // PLAYER DATA FETCH & SYNC
 // ============================================================================
-
-const NarrativeAPI = {
-  async getMain() { const r = await fetch(`${API_BASE}/api/narrative/main`); return r.ok ? r.json() : { acts: [] }; },
-  async getDialogList() { const r = await fetch(`${API_BASE}/api/narrative/dialog`); return r.ok ? r.json() : []; },
-  async getDialog(key) { const r = await fetch(`${API_BASE}/api/narrative/dialog/${key}`); return r.ok ? r.json() : null; },
-  async getTerminals() { const r = await fetch(`${API_BASE}/api/narrative/terminals`); return r.ok ? r.json() : { terminals: [] }; },
-  async getCollectibles() { const r = await fetch(`${API_BASE}/api/narrative/collectibles`); return r.ok ? r.json() : { collectibles: [] }; }
-};
 
 async function fetchPlayer() {
   if (!player.wallet) return;
@@ -205,15 +190,18 @@ function placeMarker(lat, lng, accuracy) {
   lastAccuracy = accuracy;
 
   if (!playerMarker) {
-    playerMarker = L.circleMarker(playerLatLng, { radius: 10, color: '#00ff41', weight: 3, fillOpacity: 0.9 })
-      .addTo(map)
-      .bindPopup('You are here');
+    playerMarker = L.circleMarker(playerLatLng, {
+      radius: 10,
+      color: '#00ff41',
+      weight: 3,
+      fillOpacity: 0.9
+    }).addTo(map).bindPopup('You are here');
   } else {
     playerMarker.setLatLng(playerLatLng);
   }
 
   document.getElementById('gpsStatus').textContent = `GPS: ${Math.round(accuracy)}m`;
-  document.getElementById('gpsDot').className = 'acc-dot ' + (accuracy <= 20 ? 'acc-green' : 'acc-amber');
+  document.getElementById('gpsDot').className = accuracy <= 20 ? 'acc-green' : 'acc-amber';
 
   if (firstLock) {
     map.flyTo(playerLatLng, 16);
@@ -228,21 +216,20 @@ function startLocation() {
   if (watchId) navigator.geolocation.clearWatch(watchId);
   watchId = navigator.geolocation.watchPosition(
     pos => placeMarker(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy),
-    () => setStatus("GPS error", false),
+    err => setStatus("GPS error: " + err.message, false),
     { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
   );
   setStatus("Requesting GPS lock...");
 }
 
 async function attemptClaim(loc) {
-  if (lastAccuracy > CLAIM_RADIUS || !playerLatLng || !player.wallet || player.claimed.has(loc.n)) {
-    setStatus("Cannot claim", false);
-    return;
+  if (!player.wallet) return setStatus("Connect wallet first", false);
+  if (lastAccuracy > CLAIM_RADIUS || !playerLatLng || player.claimed.has(loc.n)) {
+    return setStatus("Cannot claim", false);
   }
   const dist = map.distance(playerLatLng, L.latLng(loc.lat, loc.lng));
   if (dist > CLAIM_RADIUS) {
-    setStatus(`Too far (${Math.round(dist)}m)`, false);
-    return;
+    return setStatus(`Too far (${Math.round(dist)}m)`, false);
   }
 
   const message = `Claim:${loc.n}:${Date.now()}`;
@@ -254,12 +241,7 @@ async function attemptClaim(loc) {
     const res = await fetch(`${API_BASE}/find-loot`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        wallet: player.wallet,
-        spot: loc.n,
-        message,
-        signature
-      })
+      body: JSON.stringify({ wallet: player.wallet, spot: loc.n, message, signature })
     });
     const data = await res.json();
 
@@ -281,19 +263,16 @@ async function attemptClaim(loc) {
         player.maxHp += 10;
         player.hp = player.maxHp;
         setStatus(`LEVEL UP! Level ${player.lvl}`, true, 12000);
-        playSfx('sfxLevelUp', 0.8);
       }
 
       if (Math.random() < (DROP_CHANCE[loc.rarity] || DROP_CHANCE.common)) {
         const newGear = generateGearDrop(loc.rarity || 'common');
         player.gear.push(newGear);
         setStatus(`GEAR DROP! ${newGear.name} (${newGear.rarity.toUpperCase()})`, true, 15000);
-        playSfx('sfxGearDrop', 0.7);
       }
 
-      playSfx('sfxClaim', 0.5);
       updateHPBar();
-      // checkTerminalAccess(); // Add this if you have it
+      setStatus("Claim successful!", true);
     } else {
       setStatus(data.error || "Claim failed", false);
     }
@@ -303,25 +282,71 @@ async function attemptClaim(loc) {
   }
 }
 
+// ============================================================================
+// DATA LOADING
+// ============================================================================
+
+async function loadQuests() {
+  try {
+    const res = await fetch('/quests.json');
+    if (!res.ok) throw new Error('Quests not found');
+    const quests = await res.json();
+    document.getElementById('questsList').innerHTML = quests.map(q => `<li><strong>${q.name}</strong> - ${q.description}</li>`).join('');
+  } catch (e) {
+    document.getElementById('questsList').innerHTML = 'Quests unavailable';
+  }
+}
+
+async function loadGear() {
+  try {
+    const res = await fetch('/gear.json');
+    if (!res.ok) throw new Error('Gear not found');
+    const gear = await res.json();
+    document.getElementById('gearList').innerHTML = gear.map(g => `<div>${g.name} (${g.rarity})</div>`).join('');
+  } catch (e) {
+    document.getElementById('gearList').innerHTML = 'Gear unavailable';
+  }
+}
+
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
 document.addEventListener('DOMContentLoaded', async () => {
+  // Map init
+  map = L.map('map').setView([37.7749, -122.4194], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap',
+    maxZoom: 19,
+  }).addTo(map);
+
+  // Force map fix
+  setTimeout(() => map.invalidateSize(true), 500);
+  window.addEventListener('resize', () => map?.invalidateSize());
+
+  // Event listeners
   document.getElementById('connectWalletBtn')?.addEventListener('click', connectWallet);
   document.getElementById('refreshPlayerBtn')?.addEventListener('click', fetchPlayer);
   document.getElementById('requestGpsBtn')?.addEventListener('click', startLocation);
 
-  document.querySelectorAll('.btn, .tab, .dropdown-btn').forEach(el => {
-    el.addEventListener('click', () => playSfx('sfxButton', 0.3));
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+      const content = document.getElementById(`tab-${tab.dataset.tab}`);
+      if (content) {
+        content.classList.remove('hidden');
+        if (tab.dataset.tab === 'map' && map) setTimeout(() => map.invalidateSize(true), 100);
+        if (tab.dataset.tab === 'quests') loadQuests();
+        if (tab.dataset.tab === 'gear') loadGear();
+      }
+    });
   });
 
-  setInterval(() => {
-    const effectiveRads = Math.max(0, player.rads - (player.radResist || 0));
-    if (effectiveRads > 150 && player.hp > 0) {
-      player.hp -= Math.floor(effectiveRads / 250);
-      if (player.hp <= 0) player.hp = 0;
-      updateHPBar();
-    }
-  }, 30000);
-
+  // Initial loads
+  if (player.wallet) await fetchPlayer();
   updateHPBar();
-  initMap();
 });
-
