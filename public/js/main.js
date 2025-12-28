@@ -1,10 +1,11 @@
-import { Connection, clusterApiUrl } from '@solana/web3.js';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import {
+// Use globals from CDNs (no imports)
+const { Connection, clusterApiUrl } = solanaWeb3;
+const { WalletAdapterNetwork } = WalletAdapterBase;
+const {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
   BackpackWalletAdapter,
-} from '@solana/wallet-adapter-wallets';
+} = WalletAdapterWallets;
 
 const network = WalletAdapterNetwork.Devnet;
 const endpoint = clusterApiUrl(network);
@@ -64,8 +65,12 @@ function placeMarker(lat, lng, accuracy) {
   lastAccuracy = accuracy;
 
   if (!playerMarker) {
-    playerMarker = L.circleMarker(playerLatLng, { radius: 10, color: '#00ff41', weight: 3, fillOpacity: 0.9 })
-      .addTo(map).bindPopup('You are here');
+    playerMarker = L.circleMarker(playerLatLng, {
+      radius: 10,
+      color: '#00ff41',
+      weight: 3,
+      fillOpacity: 0.9
+    }).addTo(map).bindPopup('You are here');
   } else {
     playerMarker.setLatLng(playerLatLng);
   }
@@ -92,7 +97,7 @@ function startLocation() {
 }
 
 // ============================================================================
-// INIT – auto GPS + map fix
+// INIT
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -103,11 +108,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     maxZoom: 19,
   }).addTo(map);
 
-  // Critical: Delay + resize – fixes blank map
+  // Fix blank map
   setTimeout(() => map.invalidateSize(true), 500);
   window.addEventListener('resize', () => map?.invalidateSize());
 
-  // Auto-start GPS on load
+  // Auto GPS on load
   startLocation();
 
   // Buttons
