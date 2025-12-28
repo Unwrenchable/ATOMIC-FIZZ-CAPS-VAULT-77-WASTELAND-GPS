@@ -18,24 +18,12 @@
     <div class="panel">
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
-        <!-- Secret donation hotspot (still there, links to donate.html if you want) -->
-        <a href="/donate.html" id="secretSupportBtn" class="invisible-btn" aria-label="Hidden Donation"></a>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
+        <!-- Wallet top-right -->
+        <button class="wallet-btn top-right" id="connectWalletBtn">CONNECT WALLET</button>
       </header>
 
-      <div class="header-row">
-        <div class="controls">
-          <button class="wallet-btn" id="connectWalletBtn">CONNECT WALLET</button>
-          <button class="btn" id="refreshPlayerBtn">REFRESH STATUS</button>
-          <button class="btn" id="statsBtn">STATS</button>
-          <button class="btn" id="itemsBtn">ITEMS</button>
-          <button class="btn" id="questsBtn">QUESTS</button>
-          <button class="btn" id="scavengersBtn">SCAVENGERS EXCHANGE</button>
-        </div>
-        <div id="status" class="status-text">STATUS: STANDBY</div>
-      </div>
-
-      <!-- Player Stats (always visible, like classic) -->
+      <!-- Stats always visible -->
       <section class="pip-status">
         <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
         <div class="pip-hp-container">
@@ -51,7 +39,7 @@
         <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
       </div>
 
-      <!-- Map – core focus, always visible -->
+      <!-- Map – priority space -->
       <section id="mapWrap">
         <div id="map"></div>
         <div class="gps-badge">
@@ -60,7 +48,16 @@
         </div>
       </section>
 
-      <!-- Content panels (shown/hidden via buttons) -->
+      <!-- Buttons under map – no tabs, direct access -->
+      <div class="controls">
+        <button class="btn" id="refreshPlayerBtn">REFRESH STATUS</button>
+        <button class="btn" id="statsBtn">STATS</button>
+        <button class="btn" id="itemsBtn">ITEMS</button>
+        <button class="btn" id="questsBtn">QUESTS</button>
+        <button class="btn" id="scavengersBtn">SCAVENGERS EXCHANGE</button>
+      </div>
+
+      <!-- Panel contents (show/hide via JS) -->
       <div id="statsPanel" class="panel-content hidden">
         <h2>STATS</h2>
         <p>Level: <span id="panelLevel">1</span></p>
