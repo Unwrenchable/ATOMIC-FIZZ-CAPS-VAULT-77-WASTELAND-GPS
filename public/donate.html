@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pip‑Boy Donation Module</title>
+
+<style>
+  body {
+    background: #003300;
+    color: #00ff66;
+    font-family: "Courier New", monospace;
+    margin: 0;
+    padding: 0;
+    text-shadow: 0 0 6px #00ff66;
+  }
+
+  .pipboy-frame {
+    width: 100%;
+    height: 100vh;
+    padding: 40px;
+    box-sizing: border-box;
+    background: radial-gradient(circle at center, #003300 0%, #001a00 100%);
+    border: 6px solid #00ff66;
+    border-radius: 12px;
+    box-shadow: 0 0 25px #00ff66 inset;
+  }
+
+  h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 16px;
+    opacity: 0.9;
+    margin-bottom: 30px;
+  }
+
+  .pipboy-box {
+    border: 2px solid #00ff66;
+    padding: 20px;
+    margin: auto;
+    max-width: 600px;
+    border-radius: 8px;
+    background: rgba(0, 40, 0, 0.4);
+    box-shadow: 0 0 15px #00ff66 inset;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+  }
+
+  ul li::before {
+    content: "• ";
+    color: #00ff66;
+  }
+
+  button {
+    background: #00ff66;
+    color: #003300;
+    border: 2px solid #00ff66;
+    padding: 12px 20px;
+    font-family: "Courier New", monospace;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 25px;
+    display: block;
+    width: 100%;
+    border-radius: 6px;
+    text-shadow: none;
+  }
+
+  button:hover {
+    background: #00cc55;
+    border-color: #00cc55;
+  }
+
+  .footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  .scanlines {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.05) 0px,
+      rgba(0, 0, 0, 0.05) 2px,
+      rgba(0, 0, 0, 0.1) 3px
+    );
+  }
+</style>
+</head>
+<body>
+
+<div class="pipboy-frame">
+
+  <h1>☢ PIP‑BOY DONATION MODULE</h1>
+  <div class="subtitle">Vault 77 • Wasteland Support Division</div>
+
+  <div class="pipboy-box">
+    <p><strong>Why donate?</strong></p>
+    <p>Your support keeps the Atomic Fizz Caps project alive and evolving. Donations help:</p>
+
+    <ul>
+      <li>Expand the Wasteland with new locations</li>
+      <li>Fund new quests, encounters, and loot drops</li>
+      <li>Keep the Pip‑Boy servers from melting down</li>
+      <li>Feed the Vault 77 dev team (mostly Sugar Bombs)</li>
+      <li>Prevent the Overseer from reallocating our budget to “chair upgrades”</li>
+    </ul>
+
+    <p>Every cap helps keep the Wasteland running smoothly.</p>
+
+    <button id="donateBtn">☢ INITIATE DONATION</button>
+  </div>
+
+  <div class="footer">
+    Vault‑Tec thanks you for your continued service.
+  </div>
+
+</div>
+
+<div class="scanlines"></div>
+
+<script>
+document.getElementById("donateBtn").onclick = async () => {
+  try {
+    const res = await fetch("/funding");
+    const data = await res.json();
+
+    const link = `https://phantom.app/ul/send?recipient=${data.solana}&amount=1`;
+    window.open(link, "_blank");
+  } catch (e) {
+    alert("ERROR: Pip‑Boy network offline. Try again later.");
+  }
+};
+</script>
+
+</body>
+</html>
