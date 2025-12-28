@@ -1,89 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ATOMIC FIZZ CAPS - PIP-BOY</title>
+<!-- Solana Web3.js CDN (exposes solanaWeb3) -->
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
-  <link rel="icon" href="/favcoin.ico" type="image/x-icon" />
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+<!-- Wallet adapters CDNs (expose globals) -->
+<script src="https://unpkg.com/@solana/wallet-adapter-base@latest/dist/umd/index.min.js"></script>
+<script src="https://unpkg.com/@solana/wallet-adapter-wallets@latest/dist/umd/index.min.js"></script>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-
-  <link rel="stylesheet" href="/css/pipboy.css" />
-</head>
-<body>
-  <div class="pipboy">
-    <div class="panel">
-      <header>
-        <h1>ATOMIC FIZZ CAPS</h1>
-        <div class="sub">PIP-BOY 3000 MARK IV</div>
-        <!-- Wallet top-right -->
-        <button class="wallet-btn top-right" id="connectWalletBtn">CONNECT WALLET</button>
-      </header>
-
-      <!-- Stats always visible -->
-      <section class="pip-status">
-        <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
-        <div class="pip-hp-container">
-          <div class="pip-hp-fill" id="hpFill" style="width:100%"></div>
-          <div class="pip-rad-fill" id="radFill" style="width:0%"></div>
-          <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
-        </div>
-        <div class="pip-caps">CAPS: <span id="playerCaps">0</span></div>
-      </section>
-
-      <div class="pip-xp-container">
-        <div class="pip-xp-fill" id="xpFill" style="width:0%"></div>
-        <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
-      </div>
-
-      <!-- Map – priority space -->
-      <section id="mapWrap">
-        <div id="map"></div>
-        <div class="gps-badge">
-          <div class="acc-dot" id="gpsDot"></div>
-          <span id="gpsStatus">GPS: LOADING...</span>
-        </div>
-      </section>
-
-      <!-- Buttons under map – no tabs, direct access -->
-      <div class="controls">
-        <button class="btn" id="refreshPlayerBtn">REFRESH STATUS</button>
-        <button class="btn" id="statsBtn">STATS</button>
-        <button class="btn" id="itemsBtn">ITEMS</button>
-        <button class="btn" id="questsBtn">QUESTS</button>
-        <button class="btn" id="scavengersBtn">SCAVENGERS EXCHANGE</button>
-      </div>
-
-      <!-- Panel contents (show/hide via JS) -->
-      <div id="statsPanel" class="panel-content hidden">
-        <h2>STATS</h2>
-        <p>Level: <span id="panelLevel">1</span></p>
-        <p>CAPS: <span id="panelCaps">0</span></p>
-        <p>Rads: <span id="panelRads">0</span></p>
-        <p>XP: <span id="panelXP">0 / 100</span></p>
-      </div>
-
-      <div id="itemsPanel" class="panel-content hidden">
-        <h2>ITEMS / GEAR</h2>
-        <div id="gearList">Loading gear...</div>
-      </div>
-
-      <div id="questsPanel" class="panel-content hidden">
-        <h2>QUESTS</h2>
-        <ul id="questsList">Loading quests...</ul>
-      </div>
-
-      <div id="scavengersPanel" class="panel-content hidden">
-        <h2>SCAVENGERS EXCHANGE</h2>
-        <p>Trade loot for CAPS or rare items.</p>
-        <div id="scavengerOffers">Loading offers...</div>
-      </div>
-    </div>
-  </div>
-
-  <script type="module" src="/js/main.js"></script>
-</body>
-</html>
+<!-- Your main.js – now uses globals, no imports -->
+<script src="/js/main.js"></script>
