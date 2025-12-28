@@ -57,8 +57,7 @@ let player = {
 };
 
 let map, playerMarker = null, playerLatLng = null, lastAccuracy = 999, watchId = null, firstLock = true;
-let locations = [], allQuests = [], markers = {};
-let terminalSignal = null;
+let markers = {};
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -115,21 +114,17 @@ function setStatus(text, isGood = true, time = 5000) {
   s.textContent = `STATUS: ${text}`;
   s.className = isGood ? 'status-good' : 'status-bad';
   clearTimeout(s._to);
-  if (time > 0) s._to = setTimeout(() => {
-    s.textContent = 'STATUS: STANDBY';
-    s.className = '';
-  }, time);
+  if (time > 0) s._to = setTimeout(() => s.textContent = 'STATUS: STANDBY', time);
 }
 
 // ============================================================================
-// WALLET ADAPTER – CONNECT / DISCONNECT
+// WALLET CONNECT
 // ============================================================================
 
 async function connectWallet() {
   try {
     const walletName = prompt('Enter wallet (phantom, solflare, backpack):')?.toLowerCase().trim();
     selectedWallet = wallets.find(w => w.name.toLowerCase().includes(walletName));
-
     if (!selectedWallet) throw new Error('Wallet not found');
 
     await selectedWallet.connect();
@@ -140,25 +135,17 @@ async function connectWallet() {
     setStatus('Wallet connected!', true, 5000);
     await fetchPlayer();
   } catch (err) {
-    console.error('Wallet connection failed:', err);
     setStatus('Connection failed: ' + err.message, false, 8000);
   }
 }
 
-function disconnectWallet() {
-  if (selectedWallet) {
-    selectedWallet.disconnect();
-    selectedWallet = null;
-    publicKey = null;
-    player.wallet = null;
-    localStorage.removeItem('connectedWallet');
-    document.getElementById('connectWalletBtn').textContent = 'CONNECT WALLET';
-    setStatus('Disconnected', true);
-  }
+// Auto-reconnect if previously connected
+if (player.wallet) {
+  connectWallet(); // Try silent reconnect
 }
 
 // ============================================================================
-// PLAYER DATA FETCH & SYNC
+// PLAYER DATA & UPDATE
 // ============================================================================
 
 async function fetchPlayer() {
@@ -175,29 +162,21 @@ async function fetchPlayer() {
     applyGearBonuses();
     updateHPBar();
   } catch (e) {
-    console.error('Player fetch failed:', e);
     setStatus('STATUS: OFFLINE', false);
   }
 }
 
 // ============================================================================
-// GPS + MAP + CLAIMING
+// MAP & GPS
 // ============================================================================
-
-let map, playerMarker = null, playerLatLng = null, lastAccuracy = 999, watchId = null, firstLock = true;
-let markers = {};
 
 function placeMarker(lat, lng, accuracy) {
   playerLatLng = L.latLng(lat, lng);
   lastAccuracy = accuracy;
 
   if (!playerMarker) {
-    playerMarker = L.circleMarker(playerLatLng, {
-      radius: 10,
-      color: '#00ff41',
-      weight: 3,
-      fillOpacity: 0.9
-    }).addTo(map).bindPopup('You are here');
+    playerMarker = L.circleMarker(playerLatLng, { radius: 10, color: '#00ff41', weight: 3, fillOpacity: 0.9 })
+      .addTo(map).bindPopup('You are here');
   } else {
     playerMarker.setLatLng(playerLatLng);
   }
@@ -224,138 +203,28 @@ function startLocation() {
   setStatus("Requesting GPS lock...");
 }
 
-async function attemptClaim(loc) {
-  if (!player.wallet) return setStatus("Connect wallet first", false);
-  if (lastAccuracy > CLAIM_RADIUS || !playerLatLng || player.claimed.has(loc.n)) {
-    return setStatus("Cannot claim", false);
-  }
-  const dist = map.distance(playerLatLng, L.latLng(loc.lat, loc.lng));
-  if (dist > CLAIM_RADIUS) {
-    return setStatus(`Too far (${Math.round(dist)}m)`, false);
-  }
-
-  const message = `Claim:${loc.n}:${Date.now()}`;
-  try {
-    const encoded = new TextEncoder().encode(message);
-    const signed = await selectedWallet.signMessage(encoded);
-    const signature = bs58.encode(signed);
-
-    const res = await fetch(`${API_BASE}/find-loot`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ wallet: player.wallet, spot: loc.n, message, signature })
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      player.caps = data.totalCaps || player.caps;
-      player.claimed.add(loc.n);
-      markers[loc.n]?.setStyle({ fillColor: '#003300', fillOpacity: 0.5 });
-
-      const baseRad = loc.rarity === 'legendary' ? 120 : loc.rarity === 'epic' ? 80 : loc.rarity === 'rare' ? 50 : 20;
-      player.rads = Math.min(MAX_RADS, player.rads + Math.max(5, baseRad - (player.radResist || 0) / 3));
-
-      const xpGain = loc.rarity === 'legendary' ? 150 : loc.rarity === 'epic' ? 100 : loc.rarity === 'rare' ? 60 : 30;
-      player.xp += xpGain;
-
-      while (player.xp >= player.xpToNext) {
-        player.xp -= player.xpToNext;
-        player.lvl++;
-        player.xpToNext = Math.floor(player.xpToNext * 1.5);
-        player.maxHp += 10;
-        player.hp = player.maxHp;
-        setStatus(`LEVEL UP! Level ${player.lvl}`, true, 12000);
-      }
-
-      if (Math.random() < (DROP_CHANCE[loc.rarity] || DROP_CHANCE.common)) {
-        const newGear = generateGearDrop(loc.rarity || 'common');
-        player.gear.push(newGear);
-        setStatus(`GEAR DROP! ${newGear.name} (${newGear.rarity.toUpperCase()})`, true, 15000);
-      }
-
-      updateHPBar();
-      setStatus("Claim successful!", true);
-    } else {
-      setStatus(data.error || "Claim failed", false);
-    }
-  } catch (err) {
-    setStatus("Claim error", false);
-    console.error(err);
-  }
-}
-
-// ============================================================================
-// DATA LOADING
-// ============================================================================
-
-async function loadQuests() {
-  try {
-    const res = await fetch('/quests.json');
-    if (!res.ok) throw new Error('Quests not found');
-    const quests = await res.json();
-    document.getElementById('questsList').innerHTML = quests.map(q => `<li><strong>${q.name}</strong> - ${q.description}</li>`).join('');
-  } catch (e) {
-    document.getElementById('questsList').innerHTML = 'Quests unavailable';
-  }
-}
-
-async function loadGear() {
-  try {
-    const res = await fetch('/gear.json');
-    if (!res.ok) throw new Error('Gear not found');
-    const gear = await res.json();
-    document.getElementById('gearList').innerHTML = gear.map(g => `<div>${g.name} (${g.rarity})</div>`).join('');
-  } catch (e) {
-    document.getElementById('gearList').innerHTML = 'Gear unavailable';
-  }
-}
-
 // ============================================================================
 // INITIALIZATION
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Map init – this is what made it work perfectly before
+  // Map – this exact setup made it work before
   map = L.map('map').setView([37.7749, -122.4194], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap',
     maxZoom: 19,
   }).addTo(map);
 
-  // Critical fix: Force redraw after container is visible (this solved the blank map)
-  setTimeout(() => {
-    map.invalidateSize(true);
-  }, 500);
+  // Critical: Delay + resize fix for blank map
+  setTimeout(() => map.invalidateSize(true), 500);
+  window.addEventListener('resize', () => map?.invalidateSize());
 
-  window.addEventListener('resize', () => {
-    if (map) map.invalidateSize();
-  });
-
-  // Event listeners
+  // Buttons (no tabs/dropdowns – just direct buttons like before)
   document.getElementById('connectWalletBtn')?.addEventListener('click', connectWallet);
   document.getElementById('refreshPlayerBtn')?.addEventListener('click', fetchPlayer);
   document.getElementById('requestGpsBtn')?.addEventListener('click', startLocation);
 
-  // Tab switching – restores original dropdown/tab behavior
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-      const content = document.getElementById(`tab-${tab.dataset.tab}`);
-      if (content) {
-        content.classList.remove('hidden');
-        if (tab.dataset.tab === 'map' && map) {
-          setTimeout(() => map.invalidateSize(true), 100);
-        }
-        if (tab.dataset.tab === 'quests') loadQuests();
-        if (tab.dataset.tab === 'gear') loadGear();
-      }
-    });
-  });
-
-  // Initial loads
+  // Initial load
   if (player.wallet) await fetchPlayer();
   updateHPBar();
 });
