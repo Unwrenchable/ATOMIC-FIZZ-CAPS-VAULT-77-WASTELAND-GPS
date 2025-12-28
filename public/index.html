@@ -4,23 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#001100" />
-  <meta property="og:title" content="Atomic Fizz Caps" />
-  <meta property="og:description" content="Post-apocalyptic browser game with real Solana wallet integration" />
-  <meta property="og:image" content="/images/og-image.png" />
-  <title>Atomic Fizz Caps - Pip-Boy</title>
+  <title>ATOMIC FIZZ CAPS - PIP-BOY</title>
 
   <link rel="icon" href="/favcoin.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://unpkg.com" crossorigin />
-
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
-  <!-- Reliable Leaflet CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-Zcn6bjR/8RZbLEpH9C0a2wV4Qe0yXj0+7Fz2qW8Q5vZ4ZqZ0w=" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-BwHfrr4c9kmRkLwY3m5c+9p0dW8jY3+8l2qW5oJ3z8z9z0zW+3f8z1jYqZ0w=" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+  <!-- Reliable Leaflet (same as before) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
   <link rel="stylesheet" href="/css/pipboy.css" />
 </head>
@@ -29,7 +20,7 @@
     <div class="panel">
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
-        <button id="secretSupportBtn" class="invisible-btn" aria-label="Hidden Support Control"></button>
+        <button id="secretSupportBtn" class="invisible-btn" aria-label="Hidden Support"></button>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
       </header>
 
@@ -37,7 +28,7 @@
         <div class="controls">
           <button class="wallet-btn" id="connectWalletBtn">CONNECT WALLET</button>
           <button class="btn" id="refreshPlayerBtn">REFRESH STATUS</button>
-          <button class="btn hidden" id="terminalUnlockBtn">ACCESS RESTRICTED SIGNAL</button>
+          <button class="btn hidden" id="terminalUnlockBtn">ACCESS TERMINAL</button>
         </div>
         <div id="status" class="status-text">STATUS: STANDBY</div>
       </div>
@@ -46,19 +37,19 @@
       <section class="pip-status">
         <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
         <div class="pip-hp-container">
-          <div class="pip-hp-fill" id="hpFill" style="width: 100%;"></div>
-          <div class="pip-rad-fill" id="radFill" style="width: 0%;"></div>
+          <div class="pip-hp-fill" id="hpFill" style="width:100%"></div>
+          <div class="pip-rad-fill" id="radFill" style="width:0%"></div>
           <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
         </div>
         <div class="pip-caps">CAPS: <span id="playerCaps">0</span></div>
       </section>
 
       <div class="pip-xp-container">
-        <div class="pip-xp-fill" id="xpFill" style="width: 0%;"></div>
+        <div class="pip-xp-fill" id="xpFill" style="width:0%"></div>
         <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
       </div>
 
-      <!-- Map -->
+      <!-- Map Section (this worked before) -->
       <section id="mapWrap">
         <div id="map"></div>
         <div class="gps-badge">
@@ -68,58 +59,52 @@
         <button id="requestGpsBtn">REQUEST GPS ACCESS</button>
       </section>
 
-      <!-- Tabs -->
-      <div class="tabs" role="tablist">
+      <!-- Tabs (restored original order + scavengers) -->
+      <div class="tabs">
         <button class="tab active" data-tab="map">MAP</button>
         <button class="tab" data-tab="quests">QUESTS</button>
         <button class="tab" data-tab="gear">GEAR</button>
-        <button class="tab" data-tab="scavengers">SCAVENGERS</button>
+        <button class="tab" data-tab="scavengers">SCAVENGERS EXCHANGE</button>
         <button class="tab" data-tab="narrative">LORE</button>
       </div>
 
-      <!-- Tab Contents -->
+      <!-- Tab Contents (restored + fixed loading) -->
       <div class="tab-content" id="tab-map"></div>
 
       <div class="tab-content hidden" id="tab-quests">
-        <h2>ACTIVE QUESTS</h2>
+        <h3>ACTIVE QUESTS</h3>
         <ul id="questsList">Loading quests...</ul>
-        <h2>COMPLETED</h2>
+        <h3>COMPLETED</h3>
         <ul id="completedQuests"></ul>
       </div>
 
       <div class="tab-content hidden" id="tab-gear">
-        <h2>EQUIPPED GEAR</h2>
-        <div id="gearList" class="gear-grid">Loading equipped gear...</div>
+        <h3>EQUIPPED GEAR</h3>
+        <div id="gearList" class="gear-grid">Loading gear...</div>
       </div>
 
       <div class="tab-content hidden" id="tab-scavengers">
-        <h2>SCAVENGERS EXCHANGE</h2>
-        <p>Trade your loot for CAPS or rare items.</p>
+        <h3>SCAVENGER'S EXCHANGE</h3>
+        <p>Trade loot for CAPS or rare items.</p>
         <div id="scavengerOffers">Loading offers...</div>
         <button id="refreshExchangeBtn">REFRESH OFFERS</button>
       </div>
 
       <div class="tab-content hidden" id="tab-narrative">
-        <!-- Your existing narrative content here -->
-        <section id="narrativeSection">
-          <details class="crt-panel">
-            <summary>▼ MAIN STORY ARCHIVES</summary>
-            <div id="pipboy-story-container">Loading main narrative...</div>
-          </details>
-          <!-- ... rest of narrative ... -->
-        </section>
+        <!-- Your narrative content here -->
+        <p>Loading lore...</p>
       </div>
     </div>
 
-    <!-- Terminal & Modals -->
+    <!-- Terminal & Mint Modal -->
     <div class="terminal hidden" id="terminalOverlay">
-      <div class="terminal-header">TERMINAL ACCESS - CLASSIFIED</div>
+      <div class="terminal-header">TERMINAL ACCESS</div>
       <div id="terminalContent"></div>
       <button class="close-terminal" id="closeTerminalBtn">EXIT</button>
     </div>
 
     <div class="mint-modal hidden" id="mintModal">
-      <h2>Claim Loot</h2>
+      <h2>LOOT CLAIM</h2>
       <div id="mintProgress"><div class="progress-bar" id="progressBar"></div></div>
       <p id="mintStatus">Processing...</p>
       <button id="closeMintBtn">CLOSE</button>
@@ -127,23 +112,5 @@
   </div>
 
   <script type="module" src="/js/main.js"></script>
-
-  <!-- Hidden support button -->
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const secretBtn = document.getElementById('secretSupportBtn');
-      if (secretBtn) {
-        secretBtn.addEventListener('click', async () => {
-          alert('VAULT 77 SUPPORT CHANNEL\n\nDonation Wallet:\n[Your wallet here]\n\nSend SOL to keep the wasteland GPS online.');
-        });
-      }
-    });
-  </script>
-
-  <noscript>
-    <p style="color: #ff6666; text-align: center; padding: 2rem; font-family: 'VT323', monospace;">
-      JavaScript is required for the full Pip-Boy experience.
-    </p>
-  </noscript>
 </body>
 </html>
