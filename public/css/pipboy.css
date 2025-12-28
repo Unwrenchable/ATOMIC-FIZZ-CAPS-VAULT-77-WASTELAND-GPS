@@ -7,126 +7,204 @@ html, body {
   font-family: 'VT323', monospace;
   color: #00ff41;
   overflow: hidden;
-  margin: 0;
 }
 
-body {
-  background: radial-gradient(circle at 50% 30%, #002200 0%, #000 70%);
-}
+body { background: radial-gradient(circle at center, #002200, #000); }
 
 .pipboy {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  padding: 8px;
+  padding: 12px;
   background: #001100;
-  box-shadow: inset 0 0 120px rgba(0,255,65,0.35), 0 0 180px rgba(0,255,65,0.55);
+  box-shadow: 0 0 160px #00ff41;
   display: flex;
   flex-direction: column;
+  height: 100vh;
 }
 
 .panel {
   flex: 1;
   position: relative;
   background: #000;
-  border: 3px solid #00ff41;
   border-radius: 14px;
   padding: 14px;
   overflow-y: auto;
-  box-shadow: inset 0 0 100px rgba(0,51,0,0.8), 0 0 90px rgba(0,255,65,0.3);
+  box-shadow: inset 0 0 80px #003300, 0 0 80px rgba(0,255,65,0.18);
 }
-
-header { position: relative; }
 
 h1 {
   font-size: 2.6rem;
   letter-spacing: 8px;
-  background: linear-gradient(90deg, #00ff41, #88ffaa);
+  background: linear-gradient(90deg, #00ff41, #66ff99);
   -webkit-background-clip: text;
   color: transparent;
-  text-shadow: 0 0 14px rgba(0,255,65,0.7);
+  margin-bottom: 6px;
 }
 
-.sub { opacity: 0.7; letter-spacing: 6px; font-size: 1.2rem; margin-bottom: 12px; }
+.sub { opacity: 0.6; letter-spacing: 6px; margin-bottom: 12px; }
 
-.invisible-btn {
-  position: absolute;
-  top: 0; left: 0;
-  width: 120px; height: 70px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  opacity: 0;
-  z-index: 3000;
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
 .btn, .wallet-btn {
   background: #001100;
   color: #00ff41;
-  border: 3px solid #00ff41;
-  padding: 10px 16px;
+  border: 2px solid #00ff41;
+  padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1.1rem;
-  transition: all 0.25s;
+  font-weight: bold;
+  transition: background 0.3s;
 }
 
-.btn:hover, .wallet-btn:hover { background: #002200; box-shadow: 0 0 20px rgba(0,255,65,0.5); }
+.btn:hover, .wallet-btn:hover { background: #002200; }
+
+#status { color: #ff66aa; font-size: 0.95rem; text-align: center; margin-top: 8px; transition: color 0.5s; }
+
+.status-good { color: #66ff99; }
+.status-bad { color: #ff6666; }
+
+.pip-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 6px;
+  background: #001100;
+  border: 2px solid #00ff41;
+  border-radius: 8px;
+}
+
+.pip-hp-container {
+  position: relative;
+  flex: 1;
+  height: 28px;
+  background: #000;
+  border: 2px solid #00ff41;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 12px;
+  box-shadow: inset 0 0 15px #003300;
+}
+
+.pip-hp-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: #00ff41;
+  transition: width 0.6s ease;
+}
+
+.pip-rad-fill {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: #ff0033;
+  opacity: 0.7;
+  transition: width 0.6s ease;
+}
+
+.pip-hp-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  line-height: 28px;
+  font-size: 1rem;
+  color: #fff;
+  text-shadow: 0 0 8px #000;
+  z-index: 1;
+}
 
 #mapWrap {
-  height: 50vh;
-  min-height: 320px;
-  width: 100%;
-  border: 4px solid rgba(0,255,65,0.3);
-  border-radius: 16px;
+  height: 42vh;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: inset 0 0 100px #004400, 0 0 80px rgba(0,255,65,0.6);
+  border: 2px solid rgba(0,255,65,0.06);
+  box-shadow: inset 0 0 60px rgba(0,255,65,0.04);
+  position: relative;
   margin: 12px 0;
 }
 
-#map { width: 100%; height: 100%; background: #001100; }
+#map { width: 100%; height: 100%; background: #001100 !important; }
 
-.leaflet-tile-pane {
-  filter: hue-rotate(155deg) saturate(1.6) brightness(1.05) contrast(1.25) !important;
-  opacity: 0.96;
-}
-
-.gps-badge {
-  position: absolute;
-  left: 20px; bottom: 20px;
-  background: rgba(0,0,0,0.85);
-  border: 3px solid #00ff41;
-  padding: 10px 16px;
-  border-radius: 12px;
-  z-index: 1200;
+.tabs {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 1.1rem;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-
-.tabs { display: flex; gap: 8px; margin: 12px 0; flex-wrap: wrap; justify-content: center; }
 
 .tab {
-  padding: 8px 14px;
-  border: 2px solid rgba(0,255,65,0.2);
+  padding: 8px 12px;
   border-radius: 8px;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(0,255,65,0.06);
   cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.3s;
 }
 
-.tab.active, .tab:hover { background: #002200; border-color: #00ff41; box-shadow: 0 0 16px rgba(0,255,65,0.45); }
+.tab.active, .tab:hover { background: #002200; border-color: #00ff41; }
 
 .tab-content.hidden { display: none; }
 
-.terminal, .mint-modal { /* your existing styles */ }
+.gps-badge {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  background: rgba(0,0,0,0.8);
+  border: 2px solid #00ff41;
+  padding: 8px 12px;
+  border-radius: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 1200;
+  font-size: 0.9rem;
+}
 
-/* Mobile */
+.acc-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff6666;
+  box-shadow: 0 0 8px rgba(255,102,102,0.2);
+  animation: pulseRed 1.5s infinite;
+}
+
+.acc-green { background: #66ff99; box-shadow: 0 0 8px rgba(102,255,153,0.6); animation: none; }
+
+@keyframes pulseRed {
+  0%,100% { box-shadow: 0 0 8px rgba(255,102,102,0.2); }
+  50% { box-shadow: 0 0 20px rgba(255,102,102,0.8); }
+}
+
+/* Safe map filter that worked before */
+.leaflet-tile-pane {
+  filter: invert(0.9) hue-rotate(180deg) brightness(1.1) contrast(1.8) saturate(1.2);
+  opacity: 0.95;
+}
+
 @media (max-width: 768px) {
-  .pipboy { padding: 6px; }
-  h1 { font-size: 2.2rem; }
-  #mapWrap { height: 45vh; min-height: 280px; }
+  .pipboy { padding: 8px; }
+  .panel { padding: 10px; inset: 8px; }
+  h1 { font-size: 2rem; letter-spacing: 6px; }
+  #mapWrap { height: 38vh; min-height: 280px; }
 }
