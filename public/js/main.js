@@ -21,15 +21,14 @@ let publicKey = null;
 const API_BASE = window.location.origin;
 const CLAIM_RADIUS = 50;
 const MAX_RADS = 1000;
-const DROP_CHANCE = { legendary: 0.35, epic: 0.18, rare: 0.09, common: 0.04 };
 
-// ... (keep all your GEAR_NAMES, EFFECT_POOL, player object, utility functions like randomEffect, generateGearDrop, applyGearBonuses, updateHPBar, setStatus)
+// ... keep your GEAR_NAMES, EFFECT_POOL, player object, utility functions ...
 
 let map, playerMarker = null, playerLatLng = null, lastAccuracy = 999, watchId = null, firstLock = true;
 let markers = {};
 
 // ============================================================================
-// WALLET + PLAYER
+// WALLET CONNECT
 // ============================================================================
 
 async function connectWallet() {
@@ -50,6 +49,7 @@ async function connectWallet() {
   }
 }
 
+// Auto-reconnect
 if (player.wallet) {
   (async () => {
     try {
@@ -57,6 +57,10 @@ if (player.wallet) {
     } catch (e) {}
   })();
 }
+
+// ============================================================================
+// PLAYER DATA
+// ============================================================================
 
 async function fetchPlayer() {
   if (!player.wallet) return;
@@ -77,9 +81,7 @@ async function fetchPlayer() {
 }
 
 // ============================================================================
-// MAP & GPS
-// ============================================================================
-
+// MAP & GPS (auto-start + reliable load)
 function placeMarker(lat, lng, accuracy) {
   playerLatLng = L.latLng(lat, lng);
   lastAccuracy = accuracy;
@@ -102,7 +104,6 @@ function placeMarker(lat, lng, accuracy) {
     map.flyTo(playerLatLng, 16);
     firstLock = false;
   }
-  document.getElementById('requestGpsBtn').style.display = 'none';
   setStatus("GPS LOCK ACQUIRED", true, 5000);
 }
 
@@ -118,27 +119,41 @@ function startLocation() {
 }
 
 // ============================================================================
-// INIT
+// INIT – auto GPS + map fix
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Map – exact setup that worked in the awesome version
+  // Map init
   map = L.map('map').setView([37.7749, -122.4194], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap',
     maxZoom: 19,
   }).addTo(map);
 
-  // Force fix for blank map (delay + resize)
+  // Force map to load (this fixed it in the awesome version)
   setTimeout(() => map.invalidateSize(true), 500);
   window.addEventListener('resize', () => map?.invalidateSize());
+
+  // Auto-start GPS on load
+  startLocation();
 
   // Buttons
   document.getElementById('connectWalletBtn')?.addEventListener('click', connectWallet);
   document.getElementById('refreshPlayerBtn')?.addEventListener('click', fetchPlayer);
-  document.getElementById('requestGpsBtn')?.addEventListener('click', startLocation);
 
-  // Initial
+  // Panel buttons (show/hide content)
+  document.getElementById('statsBtn')?.addEventListener('click', () => showPanel('stats'));
+  document.getElementById('itemsBtn')?.addEventListener('click', () => showPanel('items'));
+  document.getElementById('questsBtn')?.addEventListener('click', () => showPanel('quests'));
+  document.getElementById('scavengersBtn')?.addEventListener('click', () => showPanel('scavengers'));
+
+  // Initial load
   if (player.wallet) await fetchPlayer();
   updateHPBar();
 });
+
+function showPanel(panelId) {
+  document.querySelectorAll('.panel-content').forEach(p => p.classList.add('hidden'));
+  document.getElementById(`${panelId}Panel`)?.classList.remove('hidden');
+  setStatus(`Viewing ${panelId.toUpperCase()}`, true, 3000);
+}
