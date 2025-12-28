@@ -18,7 +18,7 @@
     <div class="panel">
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
-        <!-- Secret donation link – now goes to donate.html -->
+        <!-- Secret donation hotspot (still there, links to donate.html if you want) -->
         <a href="/donate.html" id="secretSupportBtn" class="invisible-btn" aria-label="Hidden Donation"></a>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
       </header>
@@ -27,12 +27,15 @@
         <div class="controls">
           <button class="wallet-btn" id="connectWalletBtn">CONNECT WALLET</button>
           <button class="btn" id="refreshPlayerBtn">REFRESH STATUS</button>
-          <button class="btn" id="requestGpsBtn">REQUEST GPS ACCESS</button>
+          <button class="btn" id="statsBtn">STATS</button>
+          <button class="btn" id="itemsBtn">ITEMS</button>
+          <button class="btn" id="questsBtn">QUESTS</button>
+          <button class="btn" id="scavengersBtn">SCAVENGERS EXCHANGE</button>
         </div>
         <div id="status" class="status-text">STATUS: STANDBY</div>
       </div>
 
-      <!-- Player Stats -->
+      <!-- Player Stats (always visible, like classic) -->
       <section class="pip-status">
         <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
         <div class="pip-hp-container">
@@ -48,14 +51,39 @@
         <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
       </div>
 
-      <!-- Map (this worked in the awesome version) -->
+      <!-- Map – core focus, always visible -->
       <section id="mapWrap">
         <div id="map"></div>
         <div class="gps-badge">
           <div class="acc-dot" id="gpsDot"></div>
-          <span id="gpsStatus">GPS: UNKNOWN</span>
+          <span id="gpsStatus">GPS: LOADING...</span>
         </div>
       </section>
+
+      <!-- Content panels (shown/hidden via buttons) -->
+      <div id="statsPanel" class="panel-content hidden">
+        <h2>STATS</h2>
+        <p>Level: <span id="panelLevel">1</span></p>
+        <p>CAPS: <span id="panelCaps">0</span></p>
+        <p>Rads: <span id="panelRads">0</span></p>
+        <p>XP: <span id="panelXP">0 / 100</span></p>
+      </div>
+
+      <div id="itemsPanel" class="panel-content hidden">
+        <h2>ITEMS / GEAR</h2>
+        <div id="gearList">Loading gear...</div>
+      </div>
+
+      <div id="questsPanel" class="panel-content hidden">
+        <h2>QUESTS</h2>
+        <ul id="questsList">Loading quests...</ul>
+      </div>
+
+      <div id="scavengersPanel" class="panel-content hidden">
+        <h2>SCAVENGERS EXCHANGE</h2>
+        <p>Trade loot for CAPS or rare items.</p>
+        <div id="scavengerOffers">Loading offers...</div>
+      </div>
     </div>
   </div>
 
