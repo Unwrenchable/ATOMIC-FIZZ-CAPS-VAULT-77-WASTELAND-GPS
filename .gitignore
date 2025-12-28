@@ -1,0 +1,76 @@
+# ============================
+# Atomic Fizz Caps – Git Ignore
+# ============================
+
+# --- Node Backend ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# Logs
+logs/
+*.log
+*.out
+*.err
+
+# --- Solana / Anchor Program ---
+target/
+**/target/
+*.so
+*.a
+*.rlib
+*.d
+*.o
+
+# Anchor IDL + build artifacts
+*.json.old
+*.idl.json
+*.ts.old
+
+# Cargo
+Cargo.lock
+.cargo/
+rustfmt.toml
+
+# SBPF / Solana build junk
+**/sbpf-solana-solana/
+**/.fingerprint/
+**/deps/
+**/build/
+
+# --- Redis ---
+dump.rdb
+*.rdb
+*.aof
+
+# --- Codespaces / VSCode ---
+.vscode/
+.history/
+*.code-workspace
+
+# --- OS / Editor Junk ---
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# --- Frontend ---
+public/*.map
+public/*.tmp
+public/*.cache
+public/.DS_Store
+
+# --- Render ---
+render.yaml
+.render/
