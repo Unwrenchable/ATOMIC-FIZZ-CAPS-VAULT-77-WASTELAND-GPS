@@ -108,40 +108,11 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-
-        scriptSrc: [
-          "'self'",
-          "https://unpkg.com",
-          "https://cdn.jsdelivr.net",
-        ],
-
-        styleSrc: [
-          "'self'",
-          "'unsafe-inline'",
-          "https://fonts.googleapis.com",
-          "https://unpkg.com",
-        ],
-
-        fontSrc: [
-          "'self'",
-          "https://fonts.gstatic.com",
-          "data:",
-        ],
-
-        imgSrc: [
-          "'self'",
-          "data:",
-          "https:",
-        ],
-
-        connectSrc: [
-          "'self'",
-          SOLANA_RPC,
-          "https://unpkg.com",
-          "https://cdn.jsdelivr.net",
-          "wss:",
-        ],
-
+        scriptSrc: ["'self'", "https://unpkg.com", "https://cdn.jsdelivr.net"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://unpkg.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+        imgSrc: ["'self'", "data:", "https:"],
+        connectSrc: ["'self'", SOLANA_RPC, "https://unpkg.com", "https://cdn.jsdelivr.net", "wss:"],
         mediaSrc: ["'self'", "data:", "https:"],
         objectSrc: ["'none'"],
         frameSrc: ["'self'"],
@@ -193,9 +164,24 @@ app.use(
   actionLimiter
 );
 
-// === Static Files ===
+// === Static Files with MIME-type fix for .js (fixes 415 on Render) ===
 const PUBLIC_DIR = path.join(__dirname, 'public');
-app.use(express.static(PUBLIC_DIR));
+
+app.use(express.static(PUBLIC_DIR, {
+  setHeaders: (res, filePath) => {
+    if (path.extname(filePath) === '.js') {
+      res.setHeader('Content-Type', 'application/javascript');
+    }
+  }
+}));
+
+// Optional: log 404s for static files to help debug
+app.use((req, res, next) => {
+  if (req.method === 'GET' && !res.headersSent) {
+    console.log(`Static file not found: ${req.path}`);
+  }
+  next();
+});
 
 // === Basic Data Endpoints ===
 app.get('/locations', (req, res) => res.json(LOCATIONS));
@@ -244,7 +230,6 @@ app.post('/api/terminal-reward', [
   body('wallet').isString().notEmpty(),
   body('amount').isInt({ min: 1 }),
 ], async (req, res) => {
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
@@ -282,7 +267,6 @@ app.post('/claim-voucher', [
   body('timestamp').isInt(),
   body('location_hint').isString().notEmpty(),
 ], async (req, res) => {
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
@@ -353,7 +337,7 @@ function serializeLootVoucher(v) {
   return buf.slice(0, offset);
 }
 
-// === SPA Catch-all ===
+// === SPA Catch-all (must be LAST) ===
 app.get('*', (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
