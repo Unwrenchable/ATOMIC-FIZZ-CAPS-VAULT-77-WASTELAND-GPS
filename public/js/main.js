@@ -1,16 +1,17 @@
-// /js/main.js — Map + Locations + Wallet + Panels + Stored CAPS + Items + Quests + Scavengers + Claim/Mint hooks
+// /js/main.js — Map + Locations + Wallet + Panels + CAPS + Items + Quests + Scavengers
 
 (function () {
   let map;
   let playerMarker = null;
   let connectedWallet = null;
 
-  // Network / program configuration (mainnet-ready)
+  // Network / program configuration
   const CONFIG = {
     network: "devnet",
     rpcEndpoint: "https://api.devnet.solana.com",
   };
 
+  // --- DOM ELEMENTS ---
   const connectBtn = document.getElementById("connectWalletBtn");
   const gpsStatusEl = document.getElementById("gpsStatus");
   const gpsDot = document.getElementById("gpsDot");
@@ -21,24 +22,26 @@
   const gearListEl = document.getElementById("gearList");
   const questsListEl = document.getElementById("questsList");
 
-  const claimBtn = document.getElementById("claimBtn");
-  const mintBtn = document.getElementById("mintBtn");
-
   // ---------------- MAP ----------------
 
   function initMap() {
+    // Start around Henderson / Vegas
     const start = [36.0023, -114.9538];
 
-    map = L.map("map").setView(start, 13);
+    map = L.map("map", {
+      zoomControl: true,
+      minZoom: 3,
+      maxZoom: 19,
+    }).setView(start, 13);
 
-   L.tileLayer(
-  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-  {
-    maxZoom: 19,
-    attribution: ''
-  }
-  ).addTo(map);
-
+    // Full map: cities, roads, labels (dark style)
+    L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+      {
+        maxZoom: 19,
+        attribution: "",
+      }
+    ).addTo(map);
 
     loadLocations();
   }
@@ -51,12 +54,20 @@
       const locations = await res.json();
 
       locations.forEach((loc) => {
+        // Simple Leaflet marker; you can evolve this to custom icons later
         const marker = L.marker([loc.lat, loc.lng]).addTo(map);
-        marker.bindPopup(`
-          <b>${loc.n}</b><br>
-          Level: ${loc.lvl}<br>
-          Rarity: ${loc.rarity}
-        `);
+
+        const title = loc.name || `Location ${loc.n}`;
+        const lvl = loc.lvl != null ? loc.lvl : "?";
+        const rarity = loc.rarity || "common";
+
+        marker.bindPopup(
+          `
+          <b>${title}</b><br>
+          Level: ${lvl}<br>
+          Rarity: ${rarity}
+        `.trim()
+        );
       });
     } catch (err) {
       console.error("Failed to load locations:", err);
@@ -160,12 +171,12 @@
   function initGPS() {
     if (!navigator.geolocation) {
       gpsStatusEl.textContent = "GPS: NOT AVAILABLE";
-      gpsDot.classList.add("bad");
+      gpsDot.classList.remove("acc-green", "acc-amber");
       return;
     }
 
     gpsStatusEl.textContent = "GPS: WATCHING...";
-    gpsDot.classList.add("ok");
+    gpsDot.classList.add("acc-amber");
 
     navigator.geolocation.watchPosition(
       (pos) => {
@@ -175,6 +186,14 @@
           5
         )}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
 
+        // accuracy coloring: green if good, amber if meh
+        gpsDot.classList.remove("acc-green", "acc-amber");
+        if (accuracy <= 25) {
+          gpsDot.classList.add("acc-green");
+        } else {
+          gpsDot.classList.add("acc-amber");
+        }
+
         const ll = [latitude, longitude];
 
         if (!playerMarker) {
@@ -183,10 +202,10 @@
           playerMarker.setLatLng(ll);
         }
       },
-      () => {
+      (err) => {
+        console.error("GPS error:", err);
         gpsStatusEl.textContent = "GPS: ERROR";
-        gpsDot.classList.remove("ok");
-        gpsDot.classList.add("bad");
+        gpsDot.classList.remove("acc-green", "acc-amber");
       },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
     );
@@ -210,87 +229,39 @@
         connectedWallet.slice(0, 4) + "..." + connectedWallet.slice(-4);
       connectBtn.classList.add("connected");
 
-      // --- REAL STORED CAPS FROM BACKEND ---
-      try {
-        const capsRes = await fetch(`/player/${connectedWallet}`);
-        const playerData = await capsRes.json();
-
-        const caps = playerData.caps || 0;
-
-        playerCapsEl.textContent = caps.toString();
-        panelCapsEl.textContent = caps.toString();
-      } catch (err) {
-        console.warn("Failed to load stored CAPS:", err);
-      }
-
-      // Optional: still fetch SOL for logging/inspection (not used for CAPS)
-      try {
-        const connection = new solanaWeb3.Connection(CONFIG.rpcEndpoint);
-        const publicKey = new solanaWeb3.PublicKey(connectedWallet);
-        const balanceLamports = await connection.getBalance(publicKey);
-        const sol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
-        console.log("SOL balance:", sol);
-      } catch (rpcErr) {
-        console.warn("RPC failed:", rpcErr);
-      }
+      await refreshCapsFromBackend();
+      await logSolBalance();
     } catch (err) {
       console.error("Wallet connect failed:", err);
     }
   }
 
-  // ---------------- CLAIM LOOT ----------------
-
-  async function handleClaimClick() {
-    if (!connectedWallet) {
-      alert("Connect your wallet before claiming loot.");
-      return;
-    }
+  async function refreshCapsFromBackend() {
+    if (!connectedWallet) return;
 
     try {
-      const res = await fetch("/api/claim", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ wallet: connectedWallet }),
-      });
+      const capsRes = await fetch(`/player/${connectedWallet}`);
+      if (!capsRes.ok) throw new Error("Player fetch failed");
 
-      if (!res.ok) throw new Error(`Claim failed: ${res.status}`);
+      const playerData = await capsRes.json();
+      const caps = playerData.caps || 0;
 
-      const data = await res.json();
-      alert(data.message || "Claim successful.");
-
-      loadItems();
-      // refresh CAPS after claim
-      connectWallet();
+      if (playerCapsEl) playerCapsEl.textContent = caps.toString();
+      if (panelCapsEl) panelCapsEl.textContent = caps.toString();
     } catch (err) {
-      console.error("Claim failed:", err);
-      alert("Claim failed.");
+      console.warn("Failed to load stored CAPS:", err);
     }
   }
 
-  // ---------------- MINT ITEMS ----------------
-
-  async function handleMintClick() {
-    if (!connectedWallet) {
-      alert("Connect your wallet before minting items.");
-      return;
-    }
-
+  async function logSolBalance() {
     try {
-      const res = await fetch("/api/mint", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ wallet: connectedWallet }),
-      });
-
-      if (!res.ok) throw new Error(`Mint failed: ${res.status}`);
-
-      const data = await res.json();
-      alert(data.message || "Mint request submitted.");
-
-      loadItems();
-    } catch (err) {
-      console.error("Mint failed:", err);
-      alert("Mint failed.");
+      const connection = new solanaWeb3.Connection(CONFIG.rpcEndpoint);
+      const publicKey = new solanaWeb3.PublicKey(connectedWallet);
+      const balanceLamports = await connection.getBalance(publicKey);
+      const sol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
+      console.log("SOL balance:", sol);
+    } catch (rpcErr) {
+      console.warn("RPC failed:", rpcErr);
     }
   }
 
@@ -308,6 +279,8 @@
       const panelId = mapping[btnId];
       const btn = document.getElementById(btnId);
       const panel = document.getElementById(panelId);
+
+      if (!btn || !panel) return;
 
       btn.addEventListener("click", () => {
         document
@@ -328,10 +301,6 @@
     loadQuests();
     loadScavengerExchange();
 
-    connectBtn.addEventListener("click", connectWallet);
-
-    if (claimBtn) claimBtn.addEventListener("click", handleClaimClick);
-    if (mintBtn) mintBtn.addEventListener("click", handleMintClick);
+    if (connectBtn) connectBtn.addEventListener("click", connectWallet);
   });
 })();
-
