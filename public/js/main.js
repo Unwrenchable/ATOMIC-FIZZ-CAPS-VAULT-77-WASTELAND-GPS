@@ -4,7 +4,6 @@
   let playerMarker = null;
   let connectedWallet = null;
   let markers = {};
-  let booted = false; // STATE MACHINE FLAG
 
   const CONFIG = {
     network: "devnet",
@@ -15,10 +14,8 @@
 
   const bootScreen = document.getElementById("bootScreen");
   const bootText = document.getElementById("bootText");
-  const loginScreen = document.getElementById("loginScreen");
   const pipboyScreen = document.getElementById("pipboyScreen");
 
-  const connectBtn = document.getElementById("connectWalletBtn");
   const walletStatusBtn = document.getElementById("walletStatusBtn");
 
   const gpsStatusEl = document.getElementById("gpsStatus");
@@ -33,6 +30,8 @@
   // ---------------- BOOT SEQUENCE ----------------
 
   function runBootSequence() {
+    if (!bootScreen || !bootText) return;
+
     bootText.textContent = "";
 
     const bootLines = [
@@ -58,9 +57,11 @@
         i++;
         setTimeout(nextLine, 350);
       } else {
+        // When boot finishes, hide boot screen and show Pip-Boy
         bootScreen.classList.add("hidden");
-        loginScreen.classList.remove("hidden");
-        connectBtn.textContent = "CONNECT TERMINAL";
+        if (pipboyScreen) {
+          pipboyScreen.classList.remove("hidden");
+        }
       }
     }
 
@@ -183,9 +184,6 @@
       const res = await provider.connect();
       connectedWallet = res.publicKey.toString();
 
-      loginScreen.classList.add("hidden");
-      pipboyScreen.classList.remove("hidden");
-
       walletStatusBtn.textContent =
         `TERMINAL ONLINE (${connectedWallet.slice(0, 4)}...)`;
 
@@ -297,16 +295,12 @@
     initGPS();
     initPanels();
 
-    connectBtn.addEventListener("click", () => {
-      if (!booted) {
-        loginScreen.classList.add("hidden");
-        bootScreen.classList.remove("hidden");
-        runBootSequence();
-        booted = true;
-        return;
-      }
+    // Auto-run boot animation on load
+    runBootSequence();
 
-      connectWallet();
-    });
+    // Wallet connect button in header
+    if (walletStatusBtn) {
+      walletStatusBtn.addEventListener("click", connectWallet);
+    }
   });
 })();
