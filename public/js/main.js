@@ -105,7 +105,7 @@
       const locations = await res.json();
 
       locations.forEach((loc) => {
-        let iconFile = "landmark.png";
+        let iconFile = "landmark.svg";
         if (loc.type === "vault") iconFile = "vault.svg";
         if (loc.type === "town") iconFile = "town.svg";
         if (loc.type === "quest") iconFile = "quest.svg";
@@ -307,6 +307,7 @@
     }
   });
 })();
+
 
 
 
