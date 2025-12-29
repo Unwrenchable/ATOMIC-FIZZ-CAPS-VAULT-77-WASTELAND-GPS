@@ -106,9 +106,9 @@
 
       locations.forEach((loc) => {
         let iconFile = "landmark.png";
-        if (loc.type === "vault") iconFile = "vault.png";
-        if (loc.type === "town") iconFile = "town.png";
-        if (loc.type === "quest") iconFile = "quest.png";
+        if (loc.type === "vault") iconFile = "vault.svg";
+        if (loc.type === "town") iconFile = "town.svg";
+        if (loc.type === "quest") iconFile = "quest.svg";
 
         const icon = L.icon({
           iconUrl: `/img/icons/${iconFile}`,
@@ -307,5 +307,6 @@
     }
   });
 })();
+
 
 
