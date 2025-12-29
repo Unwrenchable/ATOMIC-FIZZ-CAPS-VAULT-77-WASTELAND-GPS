@@ -1,9 +1,17 @@
-// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS + Items + Quests + Scavengers placeholder
+// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS + Items + Quests + Scavengers + Claim/Mint hooks
 
 (function () {
   let map;
   let playerMarker = null;
   let connectedWallet = null;
+
+  // Network / program configuration (mainnet-ready)
+  const CONFIG = {
+    network: "devnet",
+    rpcEndpoint: "https://api.devnet.solana.com",
+    // When ready for mainnet, change to:
+    // rpcEndpoint: "https://api.mainnet-beta.solana.com",
+  };
 
   const connectBtn = document.getElementById("connectWalletBtn");
   const gpsStatusEl = document.getElementById("gpsStatus");
@@ -14,6 +22,9 @@
 
   const gearListEl = document.getElementById("gearList");
   const questsListEl = document.getElementById("questsList");
+
+  const claimBtn = document.getElementById("claimBtn");
+  const mintBtn = document.getElementById("mintBtn");
 
   // ---------------- MAP ----------------
 
@@ -129,21 +140,69 @@
     }
   }
 
-  // ---------------- SCAVENGERS EXCHANGE (placeholder) ----------------
+  // ---------------- SCAVENGERS EXCHANGE (backend-ready with fallback) ----------------
 
-  function loadScavengerExchange() {
+  async function loadScavengerExchange() {
     const container = document.getElementById("scavengerOffers");
     if (!container) return;
 
-    container.innerHTML = `
-      <div class="pip-scavenger-row">
-        <div class="pip-scavenger-title">SCAVENGERS EXCHANGE</div>
-        <div class="pip-scavenger-desc">
-          Players will be able to list unwanted or valuable NFTs here for buyback by the community.<br>
-          This marketplace activates once the backend is live.
+    container.innerHTML = `<div class="pip-scavenger-desc">Loading scavenger listings...</div>`;
+
+    try {
+      const res = await fetch("/api/scavengers/listings", {
+        method: "GET",
+        headers: { "Accept": "application/json" },
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      const listings = Array.isArray(data) ? data : data.listings || [];
+
+      container.innerHTML = "";
+
+      if (!listings.length) {
+        container.innerHTML = `
+          <div class="pip-scavenger-row">
+            <div class="pip-scavenger-title">SCAVENGERS EXCHANGE</div>
+            <div class="pip-scavenger-desc">
+              No active listings yet. Once players start listing NFTs, they will appear here.
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      listings.forEach((listing) => {
+        const name = listing.name || listing.itemName || "Unknown NFT";
+        const price = listing.priceCaps || listing.price || 0;
+        const seller = listing.sellerShort || (listing.seller && `${listing.seller.slice(0, 4)}...${listing.seller.slice(-4)}`) || "Unknown";
+
+        const div = document.createElement("div");
+        div.className = "pip-scavenger-row";
+        div.innerHTML = `
+          <div class="pip-scavenger-title">${name}</div>
+          <div class="pip-scavenger-desc">
+            Price: ${price} CAPS<br>
+            Seller: ${seller}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    } catch (err) {
+      console.warn("Scavengers backend not ready, showing placeholder:", err);
+      container.innerHTML = `
+        <div class="pip-scavenger-row">
+          <div class="pip-scavenger-title">SCAVENGERS EXCHANGE</div>
+          <div class="pip-scavenger-desc">
+            Players will be able to list unwanted or valuable NFTs here for buyback by the community.<br>
+            This marketplace activates once the backend is live.
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    }
   }
 
   // ---------------- GPS ----------------
@@ -201,16 +260,16 @@
         connectedWallet.slice(0, 4) + "..." + connectedWallet.slice(-4);
       connectBtn.classList.add("connected");
 
-      // --- REAL CAPS BALANCE (DEVNET) ---
+      // --- REAL CAPS BALANCE (via CONFIG.rpcEndpoint) ---
       try {
-        const connection = new solanaWeb3.Connection("https://api.devnet.solana.com");
+        const connection = new solanaWeb3.Connection(CONFIG.rpcEndpoint);
 
         const publicKey = new solanaWeb3.PublicKey(connectedWallet);
 
         const balanceLamports = await connection.getBalance(publicKey);
         const sol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
 
-        const CAPS_PER_SOL = 1555556;
+        const CAPS_PER_SOL = 1555556; // 1 SOL ≈ 1,555,556 CAPS
 
         const caps = Math.floor(sol * CAPS_PER_SOL);
 
@@ -221,6 +280,73 @@
       }
     } catch (err) {
       console.error("Wallet connect failed:", err);
+    }
+  }
+
+  // ---------------- CLAIM LOOT (backend hook) ----------------
+
+  async function handleClaimClick() {
+    if (!connectedWallet) {
+      alert("Connect your wallet before claiming loot.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          wallet: connectedWallet,
+          // Later: locationId, questId, battleId, etc.
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Claim failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      alert(data.message || "Claim successful. Check your inventory and wallet.");
+
+      // Optional: reload items / CAPS after claim
+      loadItems();
+      connectWallet();
+    } catch (err) {
+      console.error("Claim failed:", err);
+      alert("Claim failed. Try again later.");
+    }
+  }
+
+  // ---------------- MINT ITEMS (backend hook) ----------------
+
+  async function handleMintClick() {
+    if (!connectedWallet) {
+      alert("Connect your wallet before minting items.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/mint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          wallet: connectedWallet,
+          // Later: pass specific item IDs or selected loot
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Mint failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      alert(data.message || "Mint request submitted. Check your wallet soon.");
+
+      // Optional: refresh items
+      loadItems();
+    } catch (err) {
+      console.error("Mint failed:", err);
+      alert("Mint failed. Try again later.");
     }
   }
 
@@ -255,9 +381,17 @@
     initGPS();
     initPanels();
     loadItems();
-    loadQuests();            // <--- REAL QUESTS
+    loadQuests();
     loadScavengerExchange();
 
     connectBtn.addEventListener("click", connectWallet);
+
+    if (claimBtn) {
+      claimBtn.addEventListener("click", handleClaimClick);
+    }
+
+    if (mintBtn) {
+      mintBtn.addEventListener("click", handleMintClick);
+    }
   });
 })();
