@@ -5,25 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ATOMIC FIZZ CAPS - PIP-BOY</title>
 
-  <!-- Favicon -->
-  <link rel="icon" href="/favcoin.ico" type="image/x-icon" />
-
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
   <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+    defer
+  ></script>
 
-  <!-- Solana Web3.js (global) -->
-  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js" defer></script>
+  <!-- Solana Web3.js -->
+  <script
+    src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"
+    defer
+  ></script>
 
-  <!-- Wallet adapters (IIFE builds — CSP safe, no eval) -->
-  <script src="https://unpkg.com/@solana/wallet-adapter-base@latest/lib/index.iife.js" defer></script>
-  <script src="https://unpkg.com/@solana/wallet-adapter-wallets@latest/lib/index.iife.js" defer></script>
-
-  <!-- bs58 (global) -->
-  <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js" defer></script>
+  <!-- bs58 -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js"
+    defer
+  ></script>
 
   <!-- Pip-Boy CSS -->
   <link rel="stylesheet" href="/css/pipboy.css" />
@@ -33,14 +42,12 @@
   <div class="pipboy">
     <div class="panel">
 
-      <!-- HEADER -->
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
         <button class="wallet-btn top-right" id="connectWalletBtn">CONNECT WALLET</button>
       </header>
 
-      <!-- PLAYER STATUS -->
       <section class="pip-status">
         <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
 
@@ -53,13 +60,11 @@
         <div class="pip-caps">CAPS: <span id="playerCaps">0</span></div>
       </section>
 
-      <!-- XP BAR -->
       <div class="pip-xp-container">
         <div class="pip-xp-fill" id="xpFill"></div>
         <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
       </div>
 
-      <!-- MAP -->
       <section id="mapWrap">
         <div id="map"></div>
         <div class="gps-badge">
@@ -68,7 +73,6 @@
         </div>
       </section>
 
-      <!-- BUTTON ROW -->
       <div class="controls">
         <button class="btn" id="statsBtn">STATS</button>
         <button class="btn" id="itemsBtn">ITEMS</button>
@@ -76,7 +80,6 @@
         <button class="btn" id="scavengersBtn">SCAVENGERS</button>
       </div>
 
-      <!-- PANELS -->
       <div id="statsPanel" class="panel-content hidden">
         <h2>STATS</h2>
         <p>Level: <span id="panelLevel">1</span></p>
@@ -104,7 +107,6 @@
     </div>
   </div>
 
-  <!-- MAIN GAME LOGIC -->
-  <script type="module" src="/js/main.js"></script>
+  <script src="/js/main.js" defer></script>
 </body>
 </html>
