@@ -18,7 +18,6 @@ html, body {
   border: 3px solid #00ff41;
   box-shadow: 0 0 20px #00ff41;
 }
-
 /* HEADER */
 header {
   text-align: center;
@@ -154,6 +153,15 @@ header .sub {
   display: flex;
   align-items: center;
   gap: 6px;
+  z-index: 999;
+}
+
+.invisible-link {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 40px;
+  height: 40px;
   z-index: 999;
 }
 
