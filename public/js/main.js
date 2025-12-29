@@ -1,18 +1,22 @@
-// /js/main.js — Map + Locations + Wallet + Panels + CAPS + Items + Quests + Scavengers
+// main.js — Pip-Boy Map, Wallet, GPS, Loot Claim, Panels
 
 (function () {
   let map;
   let playerMarker = null;
   let connectedWallet = null;
+  let markers = {};
 
-  // Network / program configuration
   const CONFIG = {
     network: "devnet",
     rpcEndpoint: "https://api.devnet.solana.com",
   };
 
-  // --- DOM ELEMENTS ---
+  // DOM
+  const loginScreen = document.getElementById("loginScreen");
+  const pipboyScreen = document.getElementById("pipboyScreen");
   const connectBtn = document.getElementById("connectWalletBtn");
+  const walletStatusBtn = document.getElementById("walletStatusBtn");
+
   const gpsStatusEl = document.getElementById("gpsStatus");
   const gpsDot = document.getElementById("gpsDot");
 
@@ -25,7 +29,6 @@
   // ---------------- MAP ----------------
 
   function initMap() {
-    // Start around Henderson / Vegas
     const start = [36.0023, -114.9538];
 
     map = L.map("map", {
@@ -34,7 +37,6 @@
       maxZoom: 19,
     }).setView(start, 13);
 
-    // Full map: cities, roads, labels (dark style)
     L.tileLayer(
       "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
       {
@@ -46,7 +48,7 @@
     loadLocations();
   }
 
-  // ---------------- LOAD LOCATIONS ----------------
+  // ---------------- LOAD LOCATIONS WITH FALLOUT ICONS ----------------
 
   async function loadLocations() {
     try {
@@ -54,116 +56,33 @@
       const locations = await res.json();
 
       locations.forEach((loc) => {
-        // Simple Leaflet marker; you can evolve this to custom icons later
-        const marker = L.marker([loc.lat, loc.lng]).addTo(map);
+        let iconFile = "landmark.png";
+        if (loc.type === "vault") iconFile = "vault.png";
+        if (loc.type === "town") iconFile = "town.png";
+        if (loc.type === "quest") iconFile = "quest.png"; // diamond icon
 
-        const title = loc.name || `Location ${loc.n}`;
-        const lvl = loc.lvl != null ? loc.lvl : "?";
-        const rarity = loc.rarity || "common";
+        const icon = L.icon({
+          iconUrl: `/img/icons/${iconFile}`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+          className: "marker-active",
+        });
 
-        marker.bindPopup(
-          `
-          <b>${title}</b><br>
-          Level: ${lvl}<br>
-          Rarity: ${rarity}
-        `.trim()
-        );
+        const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
+
+        marker.bindPopup(`
+          <b>${loc.name}</b><br>
+          Level: ${loc.lvl}<br>
+          Rarity: ${loc.rarity}
+        `);
+
+        marker.on("click", () => attemptClaim(loc));
+
+        markers[loc.n] = marker;
       });
     } catch (err) {
       console.error("Failed to load locations:", err);
     }
-  }
-
-  // ---------------- ITEMS (from /data/mintables.json) ----------------
-
-  async function loadItems() {
-    if (!gearListEl) return;
-
-    try {
-      const res = await fetch("/data/mintables.json");
-      const data = await res.json();
-
-      gearListEl.innerHTML = "";
-
-      const items = Array.isArray(data) ? data : data.items || [];
-
-      if (!items.length) {
-        gearListEl.textContent = "No gear available.";
-        return;
-      }
-
-      items.forEach((item) => {
-        const name = item.name || item.title || item.symbol || "Unknown item";
-        const desc =
-          item.description || item.desc || item.flavor || "No description.";
-
-        const div = document.createElement("div");
-        div.className = "pip-item-row";
-        div.innerHTML = `
-          <div class="pip-item-name">${name}</div>
-          <div class="pip-item-desc">${desc}</div>
-        `;
-        gearListEl.appendChild(div);
-      });
-    } catch (err) {
-      console.error("Failed to load items from /data/mintables.json:", err);
-      gearListEl.textContent = "Error loading gear.";
-    }
-  }
-
-  // ---------------- QUESTS (from /data/quests.json) ----------------
-
-  async function loadQuests() {
-    if (!questsListEl) return;
-
-    try {
-      const res = await fetch("/data/quests.json");
-      const data = await res.json();
-
-      questsListEl.innerHTML = "";
-
-      const quests = Array.isArray(data) ? data : data.quests || [];
-
-      if (!quests.length) {
-        questsListEl.textContent = "No quests available.";
-        return;
-      }
-
-      quests.forEach((q) => {
-        const title = q.title || q.name || "Unknown Quest";
-        const desc = q.description || q.desc || "No description.";
-        const status = q.status || "ACTIVE";
-
-        const li = document.createElement("li");
-        li.className = "pip-quest-row";
-        li.innerHTML = `
-          <div class="pip-quest-title">${title}</div>
-          <div class="pip-quest-desc">${desc}</div>
-          <div class="pip-quest-status">[${status}]</div>
-        `;
-        questsListEl.appendChild(li);
-      });
-    } catch (err) {
-      console.error("Failed to load quests from /data/quests.json:", err);
-      questsListEl.textContent = "Error loading quests.";
-    }
-  }
-
-  // ---------------- SCAVENGERS EXCHANGE (placeholder) ----------------
-
-  async function loadScavengerExchange() {
-    const container = document.getElementById("scavengerOffers");
-    if (!container) return;
-
-    container.innerHTML = `
-      <div class="pip-scavenger-row">
-        <div class="pip-scavenger-title">SCAVENGERS EXCHANGE</div>
-        <div class="pip-scavenger-desc">
-          Players will be able to list unwanted or valuable NFTs here for buyback by the community.<br>
-          This marketplace activates once the backend is live.
-        </div>
-      </div>
-    `;
   }
 
   // ---------------- GPS ----------------
@@ -171,7 +90,6 @@
   function initGPS() {
     if (!navigator.geolocation) {
       gpsStatusEl.textContent = "GPS: NOT AVAILABLE";
-      gpsDot.classList.remove("acc-green", "acc-amber");
       return;
     }
 
@@ -186,13 +104,8 @@
           5
         )}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
 
-        // accuracy coloring: green if good, amber if meh
         gpsDot.classList.remove("acc-green", "acc-amber");
-        if (accuracy <= 25) {
-          gpsDot.classList.add("acc-green");
-        } else {
-          gpsDot.classList.add("acc-amber");
-        }
+        gpsDot.classList.add(accuracy <= 25 ? "acc-green" : "acc-amber");
 
         const ll = [latitude, longitude];
 
@@ -202,8 +115,7 @@
           playerMarker.setLatLng(ll);
         }
       },
-      (err) => {
-        console.error("GPS error:", err);
+      () => {
         gpsStatusEl.textContent = "GPS: ERROR";
         gpsDot.classList.remove("acc-green", "acc-amber");
       },
@@ -211,7 +123,7 @@
     );
   }
 
-  // ---------------- WALLET + REAL STORED CAPS ----------------
+  // ---------------- WALLET ----------------
 
   async function connectWallet() {
     const provider = window.solana;
@@ -225,12 +137,14 @@
       const res = await provider.connect();
       connectedWallet = res.publicKey.toString();
 
-      connectBtn.textContent =
-        connectedWallet.slice(0, 4) + "..." + connectedWallet.slice(-4);
-      connectBtn.classList.add("connected");
+      // Update UI
+      loginScreen.classList.add("hidden");
+      pipboyScreen.classList.remove("hidden");
+
+      walletStatusBtn.textContent =
+        `TERMINAL ONLINE (${connectedWallet.slice(0, 4)}...)`;
 
       await refreshCapsFromBackend();
-      await logSolBalance();
     } catch (err) {
       console.error("Wallet connect failed:", err);
     }
@@ -241,27 +155,76 @@
 
     try {
       const capsRes = await fetch(`/player/${connectedWallet}`);
-      if (!capsRes.ok) throw new Error("Player fetch failed");
-
       const playerData = await capsRes.json();
       const caps = playerData.caps || 0;
 
-      if (playerCapsEl) playerCapsEl.textContent = caps.toString();
-      if (panelCapsEl) panelCapsEl.textContent = caps.toString();
+      playerCapsEl.textContent = caps.toString();
+      panelCapsEl.textContent = caps.toString();
     } catch (err) {
       console.warn("Failed to load stored CAPS:", err);
     }
   }
 
-  async function logSolBalance() {
+  // ---------------- CLAIM LOOT (PHANTOM SIGNATURE) ----------------
+
+  async function attemptClaim(loc) {
+    if (!connectedWallet) {
+      alert("Connect your terminal first.");
+      return;
+    }
+
+    if (!playerMarker) {
+      alert("GPS not ready.");
+      return;
+    }
+
+    const playerPos = playerMarker.getLatLng();
+    const dist = map.distance(playerPos, L.latLng(loc.lat, loc.lng));
+
+    if (dist > 50) {
+      alert(`Too far from location (${Math.round(dist)}m). Move closer.`);
+      return;
+    }
+
+    const message = `Claim:${loc.n}:${Date.now()}`;
+    const encoded = new TextEncoder().encode(message);
+
     try {
-      const connection = new solanaWeb3.Connection(CONFIG.rpcEndpoint);
-      const publicKey = new solanaWeb3.PublicKey(connectedWallet);
-      const balanceLamports = await connection.getBalance(publicKey);
-      const sol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
-      console.log("SOL balance:", sol);
-    } catch (rpcErr) {
-      console.warn("RPC failed:", rpcErr);
+      const signed = await window.solana.signMessage(encoded, "utf8");
+      const signature = bs58.encode(signed);
+
+      const payload = {
+        wallet: connectedWallet,
+        loot_id: loc.n,
+        signature,
+        message,
+        timestamp: Date.now(),
+        latitude: playerPos.lat,
+        longitude: playerPos.lng,
+        location_hint: loc.name,
+      };
+
+      const res = await fetch("/claim-voucher", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        alert(data.error || "Claim failed.");
+        return;
+      }
+
+      alert("Loot voucher created!");
+      refreshCapsFromBackend();
+
+      // Dim marker
+      markers[loc.n].getElement().classList.add("marker-claimed");
+    } catch (err) {
+      console.error("Claim error:", err);
+      alert("Claim failed.");
     }
   }
 
@@ -280,8 +243,6 @@
       const btn = document.getElementById(btnId);
       const panel = document.getElementById(panelId);
 
-      if (!btn || !panel) return;
-
       btn.addEventListener("click", () => {
         document
           .querySelectorAll(".panel-content")
@@ -297,10 +258,7 @@
     initMap();
     initGPS();
     initPanels();
-    loadItems();
-    loadQuests();
-    loadScavengerExchange();
 
-    if (connectBtn) connectBtn.addEventListener("click", connectWallet);
+    connectBtn.addEventListener("click", connectWallet);
   });
 })();
