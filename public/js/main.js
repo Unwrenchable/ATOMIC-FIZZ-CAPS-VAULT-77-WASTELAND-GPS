@@ -1,6 +1,3 @@
-// ============================================================================
-// SOLANA GLOBALS (IIFE builds)
-// ============================================================================
 const { Connection, clusterApiUrl } = window.solanaWeb3;
 const { WalletAdapterNetwork } = window.solanaWalletAdapterBase;
 const {
@@ -393,13 +390,13 @@ async function attemptClaim(loc) {
   }
 
   if (lastAccuracy > CLAIM_RADIUS) {
-    setStatus('GPS too inaccurate', false);
+    setStatus('GPS too inaccurate (>50m)', false);
     return;
   }
 
   const dist = map.distance(playerLatLng, L.latLng(loc.lat, loc.lng));
   if (dist > CLAIM_RADIUS) {
-    setStatus(`Too far (${Math.round(dist)}m)`, false);
+    setStatus(`Too far (${Math.round(dist)}m away)`, false);
     return;
   }
 
@@ -410,7 +407,56 @@ async function attemptClaim(loc) {
     const signed = await selectedWallet.signMessage(encoded);
     const signature = bs58.encode(signed);
 
+    playSfx('click-sfx'); // feedback if sound exists
+
+    setStatus('Claiming location...');
+
     const res = await fetch(`${API_BASE}/find-loot`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:
+      body: JSON.stringify({
+        wallet: player.wallet,
+        locationId: loc.n,
+        signature: signature,
+        timestamp: Date.now(),
+        lat: playerLatLng.lat,
+        lng: playerLatLng.lng
+      })
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `Server error: ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    // Apply rewards (server is source of truth)
+    player.caps += data.caps || 0;
+    player.xp += data.xp || 0;
+    player.claimed.add(loc.n);
+
+    let msg = `Success! +${data.caps || 0} CAPS +${data.xp || 0} XP`;
+
+    if (data.gear) {
+      player.gear.push(data.gear);
+      msg += ` & ${data.gear.name} (${data.gear.rarity})`;
+      playSfx('loot-sfx');
+    }
+
+    if (data.nftMint) {
+      msg += ` • Rare NFT: ${data.nftMint.slice(0, 8)}...`;
+    }
+
+    setStatus(msg, true, 7000);
+
+    applyGearBonuses();
+    updateHPBar();
+    renderMarkers();   // show claimed marker change
+    await savePlayer(); // persist to backend
+
+  } catch (err) {
+    console.error('Claim failed:', err);
+    setStatus(`Failed: ${err.message}`, false, 6000);
+  }
+}
