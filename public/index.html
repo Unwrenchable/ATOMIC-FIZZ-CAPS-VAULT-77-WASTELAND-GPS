@@ -1,109 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- Outside your main HTML file -->
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>ATOMIC FIZZ: WASTELAND GPS</title>
-
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-
-  <!-- Pip-Boy CSS -->
   <link rel="stylesheet" href="/css/pipboy.css" />
-
-  <!-- VT323 Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 </head>
 
 <body>
-  <div class="pipboy">
+  <!-- Splash screen or login screen here -->
 
-    <!-- HEADER -->
-    <header>
-      <h1>ATOMIC FIZZ</h1>
-      <div class="sub">WASTELAND GPS</div>
-      <button id="connectWalletBtn" class="wallet-btn">Connect Wallet</button>
-    </header>
+  <!-- Pip-Boy screen (hidden until wallet connects) -->
+  <div id="pipboyScreen" class="hidden">
+    <div class="pipboy">
+      <!-- HEADER -->
+      <header>
+        <h1>ATOMIC FIZZ CAPS</h1>
+        <div class="sub">PIP-BOY 3000 MARK IV</div>
+        <button class="wallet-btn top-right" id="connectWalletBtn">BOOT TERMINAL</button>
+      </header>
 
-    <!-- STATUS BAR -->
-    <div class="pip-status">
-      <div>LVL 1</div>
-      <div>HP 100/100</div>
-      <div>CAPS <span id="playerCaps">0</span></div>
-    </div>
+      <!-- STATUS BAR -->
+      <section class="pip-status">
+        <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
+        <div class="pip-hp-container">
+          <div class="pip-hp-fill" id="hpFill"></div>
+          <div class="pip-rad-fill" id="radFill"></div>
+          <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
+        </div>
+        <div class="pip-caps">CAPS: <span id="playerCaps">0</span></div>
+      </section>
 
-    <!-- XP BAR -->
-    <div class="pip-xp-container">
-      <div class="pip-xp-fill"></div>
-      <div class="pip-claimed">CLAIMED <span id="claimedCount">0</span></div>
-    </div>
+      <!-- XP BAR -->
+      <div class="pip-xp-container">
+        <div class="pip-xp-fill" id="xpFill"></div>
+        <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
+      </div>
 
-    <!-- ⭐ MAP WRAPPER ⭐ -->
-    <div id="mapWrap">
-      <div id="map"></div>
+      <!-- MAP -->
+      <section id="mapWrap">
+        <div id="map"></div>
+        <div class="gps-badge">
+          <div class="acc-dot" id="gpsDot"></div>
+          <span id="gpsStatus">GPS: INITIALIZING...</span>
+        </div>
+        <a href="/funding.html" id="donateLink" class="invisible-link"></a>
+      </section>
 
-      <!-- GPS BADGE -->
-      <div class="gps-badge">
-        <div id="gpsDot" class="acc-dot"></div>
-        <span id="gpsStatus">GPS: ...</span>
+      <!-- BUTTON ROW -->
+      <div class="controls">
+        <button class="btn" id="statsBtn">STATS</button>
+        <button class="btn" id="itemsBtn">GEAR</button>
+        <button class="btn" id="questsBtn">QUESTS</button>
+        <button class="btn" id="scavengersBtn">EXCHANGE</button>
+      </div>
+
+      <!-- PANELS -->
+      <div id="statsPanel" class="panel-content hidden">
+        <h2>STATS</h2>
+        <p>Level: <span id="panelLevel">1</span></p>
+        <p>CAPS: <span id="panelCaps">0</span></p>
+        <p>Rads: <span id="panelRads">0</span></p>
+        <p>XP: <span id="panelXP">0 / 100</span></p>
+      </div>
+
+      <div id="itemsPanel" class="panel-content hidden">
+        <h2>GEAR</h2>
+        <div id="gearList">Loading gear...</div>
+      </div>
+
+      <div id="questsPanel" class="panel-content hidden">
+        <h2>QUESTS</h2>
+        <ul id="questsList">Loading quests...</ul>
+      </div>
+
+      <div id="scavengersPanel" class="panel-content hidden">
+        <h2>EXCHANGE</h2>
+        <div id="scavengerOffers">Loading offers...</div>
       </div>
     </div>
-
-    <!-- CONTROLS -->
-    <div class="controls">
-      <button id="statsBtn" class="btn">STAT</button>
-      <button id="itemsBtn" class="btn">ITEMS</button>
-      <button id="questsBtn" class="btn">QUESTS</button>
-      <button id="scavengersBtn" class="btn">SCAVENGERS</button>
-    </div>
-
-    <!-- PANELS -->
-    <div id="statsPanel" class="panel-content hidden">
-      <h2>STATS</h2>
-      <p>Level: 1</p>
-      <p>HP: 100/100</p>
-      <p>Rads: 0</p>
-      <p>CAPS: <span id="panelCaps">0</span></p>
-    </div>
-
-    <div id="itemsPanel" class="panel-content hidden">
-      <h2>ITEMS</h2>
-      <div id="gearList">Loading...</div>
-      <button id="mintBtn" class="btn">MINT</button>
-    </div>
-
-    <div id="questsPanel" class="panel-content hidden">
-      <h2>QUESTS</h2>
-      <ul id="questsList"></ul>
-    </div>
-
-    <div id="scavengersPanel" class="panel-content hidden">
-      <h2>SCAVENGER'S EXCHANGE</h2>
-      <div id="scavengerOffers"></div>
-    </div>
-
-    <!-- CLAIM BUTTON -->
-    <button id="claimBtn" class="btn" style="margin-top: 10px;">CLAIM LOOT</button>
-
   </div>
 
-  <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    defer
-  ></script>
-
-  <!-- Solana Web3 -->
-  <script src="https://unpkg.com/@solana/web3.js@1.87.6/lib/index.iife.js"></script>
-
-  <!-- Main JS -->
-  <script src="/js/main.js" defer></script>
+  <!-- Scripts -->
+  <script type="module" src="/js/main.js"></script>
 </body>
+
 </html>
