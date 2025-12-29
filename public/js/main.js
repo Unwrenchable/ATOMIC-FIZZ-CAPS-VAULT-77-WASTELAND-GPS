@@ -57,6 +57,7 @@
         i++;
         setTimeout(nextLine, 350);
       } else {
+        // Clear boot text and swap to Pip-Boy
         bootText.textContent = "";
         bootScreen.classList.add("hidden");
         pipboyScreen.classList.remove("hidden");
@@ -287,4 +288,18 @@
 
   // ---------------- BOOT & EVENT WIRING ----------------
 
-  window.addEventListener
+  window.addEventListener("DOMContentLoaded", () => {
+    initMap();
+    initGPS();
+    initPanels();
+
+    // Auto-run boot animation on load
+    runBootSequence();
+
+    // Wallet connect button in header
+    if (walletStatusBtn) {
+      walletStatusBtn.textContent = "CONNECT";
+      walletStatusBtn.addEventListener("click", connectWallet);
+    }
+  });
+})();
