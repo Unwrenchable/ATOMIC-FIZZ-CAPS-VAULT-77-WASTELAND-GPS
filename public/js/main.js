@@ -10,7 +10,8 @@
     rpcEndpoint: "https://api.devnet.solana.com",
   };
 
-  // DOM
+  // ---------------- DOM ELEMENTS ----------------
+
   const bootScreen = document.getElementById("bootScreen");
   const bootText = document.getElementById("bootText");
   const loginScreen = document.getElementById("loginScreen");
@@ -37,20 +38,23 @@
       return;
     }
 
+    // Clear any previous boot text
+    bootText.textContent = "";
+
     const bootLines = [
-    "              █████████████████████████████",
-    "              █    A T O M I C  F I Z Z   █",
-    "              █          C A P S          █",
-    "              █████████████████████████████",
-    "",
-    "Initializing Pip-Unit 3000-AF...",
-    "Loading Wasteland Navigation Kernel...",
-    "Calibrating Geo-Tracker...",
-    "Decrypting FizzCap Ledger...",
-    "Establishing SolLink Handshake...",
-    "Boot Complete.",
-    "Welcome, Survivor."
-  ];
+      "              █████████████████████████████",
+      "              █    A T O M I C  F I Z Z   █",
+      "              █          C A P S          █",
+      "              █████████████████████████████",
+      "",
+      "Initializing Pip-Unit 3000-AF...",
+      "Loading Wasteland Navigation Kernel...",
+      "Calibrating Geo-Tracker...",
+      "Decrypting FizzCap Ledger...",
+      "Establishing SolLink Handshake...",
+      "Boot Complete.",
+      "Welcome, Survivor."
+    ];
 
     let i = 0;
 
@@ -60,6 +64,7 @@
         i++;
         setTimeout(nextLine, 350);
       } else {
+        // When boot is done, hide boot screen and show login again
         bootScreen.classList.add("hidden");
         if (loginScreen) loginScreen.classList.remove("hidden");
       }
@@ -71,6 +76,12 @@
   // ---------------- MAP ----------------
 
   function initMap() {
+    // Guard: if Leaflet isn't loaded, don't crash the app
+    if (typeof L === "undefined") {
+      console.error("Leaflet (L) is not defined. Map will not initialize.");
+      return;
+    }
+
     const start = [36.0023, -114.9538];
 
     map = L.map("map", {
@@ -93,6 +104,8 @@
   // ---------------- LOAD LOCATIONS WITH ICONS ----------------
 
   async function loadLocations() {
+    if (!map) return;
+
     try {
       const res = await fetch("/data/locations.json");
       const locations = await res.json();
@@ -137,6 +150,7 @@
 
   function initGPS() {
     if (!gpsStatusEl || !gpsDot) return;
+    if (!map || typeof L === "undefined") return;
 
     if (!navigator.geolocation) {
       gpsStatusEl.textContent = "GPS: NOT AVAILABLE";
@@ -308,19 +322,33 @@
     });
   }
 
-  // ---------------- BOOT ----------------
+  // ---------------- BOOT & EVENT WIRING ----------------
 
   window.addEventListener("DOMContentLoaded", () => {
-    runBootSequence();
+    // Initialize systems once
     initMap();
     initGPS();
     initPanels();
 
+    // Start with login screen visible, boot & pipboy hidden handled by CSS
+
+    // BOOT TERMINAL button: run boot sequence on same screen
+    if (connectBtn) {
+      connectBtn.addEventListener("click", () => {
+        // First click: show boot screen instead of connecting wallet directly
+        if (loginScreen) loginScreen.classList.add("hidden");
+        if (bootScreen) bootScreen.classList.remove("hidden");
+        runBootSequence();
+      });
+    }
+
+    // After boot sequence completes, loginScreen is shown again.
+    // When user clicks connect wallet from that login state:
     if (connectBtn) {
       connectBtn.addEventListener("click", connectWallet);
     }
+
+    // Note: The second listener works when loginScreen is visible again
+    // and user clicks BOOT TERMINAL after boot has finished.
   });
 })();
-
-
-
