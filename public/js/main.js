@@ -211,12 +211,7 @@
 
         const balanceLamports = await connection.getBalance(publicKey);
         const sol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
-
-        const CAPS_PER_SOL = 1555556;
-        const caps = Math.floor(sol * CAPS_PER_SOL);
-
-        playerCapsEl.textContent = caps.toString();
-        panelCapsEl.textContent = caps.toString();
+      
       } catch (rpcErr) {
         console.warn("RPC failed:", rpcErr);
       }
@@ -318,3 +313,4 @@
     if (mintBtn) mintBtn.addEventListener("click", handleMintClick);
   });
 })();
+
