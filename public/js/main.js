@@ -1,4 +1,4 @@
-// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS + Items
+// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS + Items + Scavengers placeholder
 
 (function () {
   let map;
@@ -89,6 +89,23 @@
       console.error("Failed to load items from /data/mintables.json:", err);
       gearListEl.textContent = "Error loading gear.";
     }
+  }
+
+  // ---------------- SCAVENGERS EXCHANGE (placeholder until backend) ----------------
+
+  function loadScavengerExchange() {
+    const container = document.getElementById("scavengerOffers");
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="pip-scavenger-row">
+        <div class="pip-scavenger-title">SCAVENGERS EXCHANGE</div>
+        <div class="pip-scavenger-desc">
+          Players will be able to list unwanted or valuable NFTs here for buyback by the community.<br>
+          This marketplace activates once the backend is live.
+        </div>
+      </div>
+    `;
   }
 
   // ---------------- GPS ----------------
@@ -201,7 +218,8 @@
     initMap();
     initGPS();
     initPanels();
-    loadItems(); // load real items into Items panel
+    loadItems();             // real items
+    loadScavengerExchange(); // scavengers placeholder
 
     connectBtn.addEventListener("click", connectWallet);
   });
