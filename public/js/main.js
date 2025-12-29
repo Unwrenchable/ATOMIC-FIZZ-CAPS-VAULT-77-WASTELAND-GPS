@@ -1,4 +1,4 @@
-// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS + Items + Quests + Scavengers + Claim/Mint hooks
+// /js/main.js — Map + Locations + Wallet + Panels + Stored CAPS + Items + Quests + Scavengers + Claim/Mint hooks
 
 (function () {
   let map;
@@ -79,7 +79,8 @@
 
       items.forEach((item) => {
         const name = item.name || item.title || item.symbol || "Unknown item";
-        const desc = item.description || item.desc || item.flavor || "No description.";
+        const desc =
+          item.description || item.desc || item.flavor || "No description.";
 
         const div = document.createElement("div");
         div.className = "pip-item-row";
@@ -187,7 +188,7 @@
     );
   }
 
-  // ---------------- WALLET + DEVNET CAPS ----------------
+  // ---------------- WALLET + REAL STORED CAPS ----------------
 
   async function connectWallet() {
     const provider = window.solana;
@@ -205,13 +206,26 @@
         connectedWallet.slice(0, 4) + "..." + connectedWallet.slice(-4);
       connectBtn.classList.add("connected");
 
+      // --- REAL STORED CAPS FROM BACKEND ---
+      try {
+        const capsRes = await fetch(`/player/${connectedWallet}`);
+        const playerData = await capsRes.json();
+
+        const caps = playerData.caps || 0;
+
+        playerCapsEl.textContent = caps.toString();
+        panelCapsEl.textContent = caps.toString();
+      } catch (err) {
+        console.warn("Failed to load stored CAPS:", err);
+      }
+
+      // Optional: still fetch SOL for logging/inspection (not used for CAPS)
       try {
         const connection = new solanaWeb3.Connection(CONFIG.rpcEndpoint);
         const publicKey = new solanaWeb3.PublicKey(connectedWallet);
-
         const balanceLamports = await connection.getBalance(publicKey);
         const sol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
-      
+        console.log("SOL balance:", sol);
       } catch (rpcErr) {
         console.warn("RPC failed:", rpcErr);
       }
@@ -241,6 +255,7 @@
       alert(data.message || "Claim successful.");
 
       loadItems();
+      // refresh CAPS after claim
       connectWallet();
     } catch (err) {
       console.error("Claim failed:", err);
@@ -291,7 +306,9 @@
       const panel = document.getElementById(panelId);
 
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".panel-content").forEach((p) => p.classList.add("hidden"));
+        document
+          .querySelectorAll(".panel-content")
+          .forEach((p) => p.classList.add("hidden"));
         panel.classList.remove("hidden");
       });
     });
@@ -313,4 +330,3 @@
     if (mintBtn) mintBtn.addEventListener("click", handleMintClick);
   });
 })();
-
