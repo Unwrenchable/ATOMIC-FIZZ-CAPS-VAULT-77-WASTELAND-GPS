@@ -4,6 +4,7 @@
   let playerMarker = null;
   let connectedWallet = null;
   let markers = {};
+  let booted = false; // STATE MACHINE FLAG
 
   const CONFIG = {
     network: "devnet",
@@ -32,13 +33,6 @@
   // ---------------- BOOT SEQUENCE ----------------
 
   function runBootSequence() {
-    if (!bootScreen || !bootText) {
-      // If boot screen isn't present, just fall back to showing login
-      if (loginScreen) loginScreen.classList.remove("hidden");
-      return;
-    }
-
-    // Clear any previous boot text
     bootText.textContent = "";
 
     const bootLines = [
@@ -64,9 +58,9 @@
         i++;
         setTimeout(nextLine, 350);
       } else {
-        // When boot is done, hide boot screen and show login again
         bootScreen.classList.add("hidden");
-        if (loginScreen) loginScreen.classList.remove("hidden");
+        loginScreen.classList.remove("hidden");
+        connectBtn.textContent = "CONNECT TERMINAL";
       }
     }
 
@@ -76,9 +70,8 @@
   // ---------------- MAP ----------------
 
   function initMap() {
-    // Guard: if Leaflet isn't loaded, don't crash the app
     if (typeof L === "undefined") {
-      console.error("Leaflet (L) is not defined. Map will not initialize.");
+      console.error("Leaflet not loaded.");
       return;
     }
 
@@ -92,16 +85,13 @@
 
     L.tileLayer(
       "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-      {
-        maxZoom: 19,
-        attribution: "",
-      }
+      { maxZoom: 19, attribution: "" }
     ).addTo(map);
 
     loadLocations();
   }
 
-  // ---------------- LOAD LOCATIONS WITH ICONS ----------------
+  // ---------------- LOAD LOCATIONS ----------------
 
   async function loadLocations() {
     if (!map) return;
@@ -114,7 +104,7 @@
         let iconFile = "landmark.png";
         if (loc.type === "vault") iconFile = "vault.png";
         if (loc.type === "town") iconFile = "town.png";
-        if (loc.type === "quest") iconFile = "quest.png"; // diamond icon
+        if (loc.type === "quest") iconFile = "quest.png";
 
         const icon = L.icon({
           iconUrl: `/img/icons/${iconFile}`,
@@ -125,20 +115,13 @@
 
         const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
 
-        const name = loc.name || `Location ${loc.n}`;
-        const lvl = loc.lvl != null ? loc.lvl : "?";
-        const rarity = loc.rarity || "common";
-
         marker.bindPopup(
-          `
-          <b>${name}</b><br>
-          Level: ${lvl}<br>
-          Rarity: ${rarity}
-        `.trim()
+          `<b>${loc.name || `Location ${loc.n}`}</b><br>
+           Level: ${loc.lvl ?? "?"}<br>
+           Rarity: ${loc.rarity || "common"}`
         );
 
         marker.on("click", () => attemptClaim(loc));
-
         markers[loc.n] = marker;
       });
     } catch (err) {
@@ -164,9 +147,8 @@
       (pos) => {
         const { latitude, longitude, accuracy } = pos.coords;
 
-        gpsStatusEl.textContent = `GPS: ${latitude.toFixed(
-          5
-        )}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
+        gpsStatusEl.textContent =
+          `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
 
         gpsDot.classList.remove("acc-green", "acc-amber");
         gpsDot.classList.add(accuracy <= 25 ? "acc-green" : "acc-amber");
@@ -179,8 +161,7 @@
           playerMarker.setLatLng(ll);
         }
       },
-      (err) => {
-        console.error("GPS error:", err);
+      () => {
         gpsStatusEl.textContent = "GPS: ERROR";
         gpsDot.classList.remove("acc-green", "acc-amber");
       },
@@ -202,15 +183,13 @@
       const res = await provider.connect();
       connectedWallet = res.publicKey.toString();
 
-      if (loginScreen) loginScreen.classList.add("hidden");
-      if (pipboyScreen) pipboyScreen.classList.remove("hidden");
+      loginScreen.classList.add("hidden");
+      pipboyScreen.classList.remove("hidden");
 
-      if (walletStatusBtn) {
-        walletStatusBtn.textContent =
-          `TERMINAL ONLINE (${connectedWallet.slice(0, 4)}...)`;
-      }
+      walletStatusBtn.textContent =
+        `TERMINAL ONLINE (${connectedWallet.slice(0, 4)}...)`;
 
-      await refreshCapsFromBackend();
+      refreshCapsFromBackend();
     } catch (err) {
       console.error("Wallet connect failed:", err);
     }
@@ -224,32 +203,24 @@
       const playerData = await capsRes.json();
       const caps = playerData.caps || 0;
 
-      if (playerCapsEl) playerCapsEl.textContent = caps.toString();
-      if (panelCapsEl) panelCapsEl.textContent = caps.toString();
+      playerCapsEl.textContent = caps;
+      panelCapsEl.textContent = caps;
     } catch (err) {
       console.warn("Failed to load stored CAPS:", err);
     }
   }
 
-  // ---------------- CLAIM LOOT (PHANTOM SIGNATURE) ----------------
+  // ---------------- CLAIM LOOT ----------------
 
   async function attemptClaim(loc) {
-    if (!connectedWallet) {
-      alert("Connect your terminal first.");
-      return;
-    }
-
-    if (!playerMarker) {
-      alert("GPS not ready.");
-      return;
-    }
+    if (!connectedWallet) return alert("Connect your terminal first.");
+    if (!playerMarker) return alert("GPS not ready.");
 
     const playerPos = playerMarker.getLatLng();
     const dist = map.distance(playerPos, L.latLng(loc.lat, loc.lng));
 
     if (dist > 50) {
-      alert(`Too far from location (${Math.round(dist)}m). Move closer.`);
-      return;
+      return alert(`Too far from location (${Math.round(dist)}m). Move closer.`);
     }
 
     const message = `Claim:${loc.n}:${Date.now()}`;
@@ -278,16 +249,13 @@
 
       const data = await res.json();
 
-      if (!data.success) {
-        alert(data.error || "Claim failed.");
-        return;
-      }
+      if (!data.success) return alert(data.error || "Claim failed.");
 
       alert("Loot voucher created!");
       refreshCapsFromBackend();
 
       const marker = markers[loc.n];
-      if (marker && marker.getElement()) {
+      if (marker?.getElement()) {
         marker.getElement().classList.add("marker-claimed");
       }
     } catch (err) {
@@ -325,30 +293,20 @@
   // ---------------- BOOT & EVENT WIRING ----------------
 
   window.addEventListener("DOMContentLoaded", () => {
-    // Initialize systems once
     initMap();
     initGPS();
     initPanels();
 
-    // Start with login screen visible, boot & pipboy hidden handled by CSS
-
-    // BOOT TERMINAL button: run boot sequence on same screen
-    if (connectBtn) {
-      connectBtn.addEventListener("click", () => {
-        // First click: show boot screen instead of connecting wallet directly
-        if (loginScreen) loginScreen.classList.add("hidden");
-        if (bootScreen) bootScreen.classList.remove("hidden");
+    connectBtn.addEventListener("click", () => {
+      if (!booted) {
+        loginScreen.classList.add("hidden");
+        bootScreen.classList.remove("hidden");
         runBootSequence();
-      });
-    }
+        booted = true;
+        return;
+      }
 
-    // After boot sequence completes, loginScreen is shown again.
-    // When user clicks connect wallet from that login state:
-    if (connectBtn) {
-      connectBtn.addEventListener("click", connectWallet);
-    }
-
-    // Note: The second listener works when loginScreen is visible again
-    // and user clicks BOOT TERMINAL after boot has finished.
+      connectWallet();
+    });
   });
 })();
