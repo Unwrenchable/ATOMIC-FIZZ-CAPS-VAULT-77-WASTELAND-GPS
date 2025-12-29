@@ -12,8 +12,11 @@
   };
 
   // DOM
+  const bootScreen = document.getElementById("bootScreen");
+  const bootText = document.getElementById("bootText");
   const loginScreen = document.getElementById("loginScreen");
   const pipboyScreen = document.getElementById("pipboyScreen");
+
   const connectBtn = document.getElementById("connectWalletBtn");
   const walletStatusBtn = document.getElementById("walletStatusBtn");
 
@@ -26,35 +29,43 @@
   const gearListEl = document.getElementById("gearList");
   const questsListEl = document.getElementById("questsList");
 
-  // ---------------- MAP ----------------
+  // ---------------- BOOT SEQUENCE ----------------
+
   function runBootSequence() {
-  const bootLines = [
-    "ATOMIC FIZZ SYSTEMS\n",
-    "Initializing Pip-Unit 3000-AF...",
-    "Loading Wasteland Navigation Kernel...",
-    "Calibrating Geo-Tracker...",
-    "Decrypting FizzCap Ledger...",
-    "Establishing SolLink Handshake...",
-    "Boot Complete.\n",
-    "Welcome, Survivor."
-  ];
-
-  let i = 0;
-  const bootText = document.getElementById("bootText");
-
-  function nextLine() {
-    if (i < bootLines.length) {
-      bootText.textContent += bootLines[i] + "\n";
-      i++;
-      setTimeout(nextLine, 350);
-    } else {
-      document.getElementById("bootScreen").classList.add("hidden");
-      document.getElementById("loginScreen").classList.remove("hidden");
+    if (!bootScreen || !bootText) {
+      // If boot screen isn't present, just fall back to showing login
+      if (loginScreen) loginScreen.classList.remove("hidden");
+      return;
     }
+
+    const bootLines = [
+      "ATOMIC FIZZ SYSTEMS\n",
+      "Initializing Pip-Unit 3000-AF...",
+      "Loading Wasteland Navigation Kernel...",
+      "Calibrating Geo-Tracker...",
+      "Decrypting FizzCap Ledger...",
+      "Establishing SolLink Handshake...",
+      "Boot Complete.\n",
+      "Welcome, Survivor."
+    ];
+
+    let i = 0;
+
+    function nextLine() {
+      if (i < bootLines.length) {
+        bootText.textContent += bootLines[i] + "\n";
+        i++;
+        setTimeout(nextLine, 350);
+      } else {
+        bootScreen.classList.add("hidden");
+        if (loginScreen) loginScreen.classList.remove("hidden");
+      }
+    }
+
+    nextLine();
   }
 
-  nextLine();
-}
+  // ---------------- MAP ----------------
 
   function initMap() {
     const start = [36.0023, -114.9538];
@@ -76,7 +87,7 @@
     loadLocations();
   }
 
-  // ---------------- LOAD LOCATIONS WITH FALLOUT ICONS ----------------
+  // ---------------- LOAD LOCATIONS WITH ICONS ----------------
 
   async function loadLocations() {
     try {
@@ -98,11 +109,17 @@
 
         const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
 
-        marker.bindPopup(`
-          <b>${loc.name}</b><br>
-          Level: ${loc.lvl}<br>
-          Rarity: ${loc.rarity}
-        `);
+        const name = loc.name || `Location ${loc.n}`;
+        const lvl = loc.lvl != null ? loc.lvl : "?";
+        const rarity = loc.rarity || "common";
+
+        marker.bindPopup(
+          `
+          <b>${name}</b><br>
+          Level: ${lvl}<br>
+          Rarity: ${rarity}
+        `.trim()
+        );
 
         marker.on("click", () => attemptClaim(loc));
 
@@ -116,6 +133,8 @@
   // ---------------- GPS ----------------
 
   function initGPS() {
+    if (!gpsStatusEl || !gpsDot) return;
+
     if (!navigator.geolocation) {
       gpsStatusEl.textContent = "GPS: NOT AVAILABLE";
       return;
@@ -143,7 +162,8 @@
           playerMarker.setLatLng(ll);
         }
       },
-      () => {
+      (err) => {
+        console.error("GPS error:", err);
         gpsStatusEl.textContent = "GPS: ERROR";
         gpsDot.classList.remove("acc-green", "acc-amber");
       },
@@ -165,12 +185,13 @@
       const res = await provider.connect();
       connectedWallet = res.publicKey.toString();
 
-      // Update UI
-      loginScreen.classList.add("hidden");
-      pipboyScreen.classList.remove("hidden");
+      if (loginScreen) loginScreen.classList.add("hidden");
+      if (pipboyScreen) pipboyScreen.classList.remove("hidden");
 
-      walletStatusBtn.textContent =
-        `TERMINAL ONLINE (${connectedWallet.slice(0, 4)}...)`;
+      if (walletStatusBtn) {
+        walletStatusBtn.textContent =
+          `TERMINAL ONLINE (${connectedWallet.slice(0, 4)}...)`;
+      }
 
       await refreshCapsFromBackend();
     } catch (err) {
@@ -186,8 +207,8 @@
       const playerData = await capsRes.json();
       const caps = playerData.caps || 0;
 
-      playerCapsEl.textContent = caps.toString();
-      panelCapsEl.textContent = caps.toString();
+      if (playerCapsEl) playerCapsEl.textContent = caps.toString();
+      if (panelCapsEl) panelCapsEl.textContent = caps.toString();
     } catch (err) {
       console.warn("Failed to load stored CAPS:", err);
     }
@@ -248,8 +269,10 @@
       alert("Loot voucher created!");
       refreshCapsFromBackend();
 
-      // Dim marker
-      markers[loc.n].getElement().classList.add("marker-claimed");
+      const marker = markers[loc.n];
+      if (marker && marker.getElement()) {
+        marker.getElement().classList.add("marker-claimed");
+      }
     } catch (err) {
       console.error("Claim error:", err);
       alert("Claim failed.");
@@ -271,6 +294,8 @@
       const btn = document.getElementById(btnId);
       const panel = document.getElementById(panelId);
 
+      if (!btn || !panel) return;
+
       btn.addEventListener("click", () => {
         document
           .querySelectorAll(".panel-content")
@@ -283,11 +308,13 @@
   // ---------------- BOOT ----------------
 
   window.addEventListener("DOMContentLoaded", () => {
+    runBootSequence();
     initMap();
     initGPS();
     initPanels();
 
-    connectBtn.addEventListener("click", connectWallet);
+    if (connectBtn) {
+      connectBtn.addEventListener("click", connectWallet);
+    }
   });
 })();
-
