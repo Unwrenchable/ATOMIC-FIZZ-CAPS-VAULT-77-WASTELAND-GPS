@@ -1,5 +1,4 @@
 // main.js — Pip-Boy Map, Wallet, GPS, Loot Claim, Panels
-
 (function () {
   let map;
   let playerMarker = null;
@@ -326,4 +325,5 @@
     }
   });
 })();
+
 
