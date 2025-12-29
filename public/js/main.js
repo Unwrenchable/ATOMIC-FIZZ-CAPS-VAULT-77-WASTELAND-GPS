@@ -1,4 +1,4 @@
-// /js/main.js — Map + Locations + Wallet + Panels working
+// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS
 
 (function () {
   let map;
@@ -8,6 +8,9 @@
   const connectBtn = document.getElementById("connectWalletBtn");
   const gpsStatusEl = document.getElementById("gpsStatus");
   const gpsDot = document.getElementById("gpsDot");
+
+  const playerCapsEl = document.getElementById("playerCaps");
+  const panelCapsEl = document.getElementById("panelCaps");
 
   // ---------------- MAP ----------------
 
@@ -81,7 +84,7 @@
     );
   }
 
-  // ---------------- WALLET ----------------
+  // ---------------- WALLET + DEVNET CAPS ----------------
 
   async function connectWallet() {
     const provider = window.solana;
@@ -98,6 +101,32 @@
       connectBtn.textContent =
         connectedWallet.slice(0, 4) + "..." + connectedWallet.slice(-4);
       connectBtn.classList.add("connected");
+
+      // --- REAL CAPS BALANCE (DEVNET) ---
+      try {
+        const connection = new solanaWeb3.Connection("https://api.devnet.solana.com");
+
+        const publicKey = new solanaWeb3.PublicKey(connectedWallet);
+
+        const balanceLamports = await connection.getBalance(publicKey);
+        const sol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
+
+        // Your tokenomics:
+        // Total supply: 77,777,777 CAPS
+        // 10% to liquidity = 7,777,778 CAPS
+        // 5 SOL added to liquidity
+        // => 1 SOL = 1,555,556 CAPS
+        const CAPS_PER_SOL = 1555556;
+
+        const caps = Math.floor(sol * CAPS_PER_SOL);
+
+        playerCapsEl.textContent = caps.toString();
+        panelCapsEl.textContent = caps.toString();
+
+      } catch (rpcErr) {
+        console.warn("RPC failed, using fallback CAPS:", rpcErr);
+      }
+
     } catch (err) {
       console.error("Wallet connect failed:", err);
     }
