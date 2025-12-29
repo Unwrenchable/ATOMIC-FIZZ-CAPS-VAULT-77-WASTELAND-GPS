@@ -141,7 +141,7 @@ header .sub {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('/img/pipboy-grid.png') repeat;
+  background: url('/img/pipboy-grid.svg') repeat;
   opacity: 0.12;
   z-index: 5;
 }
