@@ -27,6 +27,34 @@
   const questsListEl = document.getElementById("questsList");
 
   // ---------------- MAP ----------------
+  function runBootSequence() {
+  const bootLines = [
+    "ATOMIC FIZZ SYSTEMS\n",
+    "Initializing Pip-Unit 3000-AF...",
+    "Loading Wasteland Navigation Kernel...",
+    "Calibrating Geo-Tracker...",
+    "Decrypting FizzCap Ledger...",
+    "Establishing SolLink Handshake...",
+    "Boot Complete.\n",
+    "Welcome, Survivor."
+  ];
+
+  let i = 0;
+  const bootText = document.getElementById("bootText");
+
+  function nextLine() {
+    if (i < bootLines.length) {
+      bootText.textContent += bootLines[i] + "\n";
+      i++;
+      setTimeout(nextLine, 350);
+    } else {
+      document.getElementById("bootScreen").classList.add("hidden");
+      document.getElementById("loginScreen").classList.remove("hidden");
+    }
+  }
+
+  nextLine();
+}
 
   function initMap() {
     const start = [36.0023, -114.9538];
@@ -262,3 +290,4 @@
     connectBtn.addEventListener("click", connectWallet);
   });
 })();
+
