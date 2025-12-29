@@ -114,10 +114,22 @@ header .sub {
 /* MAP WRAPPER */
 #mapWrap {
   position: relative;
-  height: 56vh; /* Pip-Boy style map window */
+  height: 56vh;
   border: 2px solid #00ff41;
   margin-bottom: 10px;
   background: #000;
+  overflow: hidden;
+}
+
+/* PIP-BOY GRID OVERLAY */
+#mapWrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url('/img/pipboy-grid.png') repeat;
+  opacity: 0.12;
+  z-index: 5;
 }
 
 /* MAP ITSELF */
@@ -126,8 +138,8 @@ header .sub {
   height: 100%;
   position: relative;
   z-index: 1;
-}
-#map {
+
+  /* Fallout green CRT filter */
   filter: hue-rotate(90deg) brightness(1.3) contrast(1.2);
 }
 
@@ -196,4 +208,14 @@ header .sub {
 h2 {
   margin-top: 0;
   font-size: 24px;
+}
+
+/* FALLOUT MARKER GLOW */
+.marker-active img {
+  filter: drop-shadow(0 0 4px #00ff41);
+}
+
+.marker-claimed img {
+  opacity: 0.4;
+  filter: drop-shadow(0 0 2px #003300);
 }
