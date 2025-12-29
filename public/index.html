@@ -5,66 +5,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ATOMIC FIZZ CAPS - PIP-BOY</title>
 
+  <!-- Favicon -->
   <link rel="icon" href="/favcoin.ico" type="image/x-icon" />
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
-  <!-- Solana Web3.js (global) -->
+  <!-- Solana Web3.js -->
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
-  <!-- Wallet adapters (global) -->
+
+  <!-- Wallet adapters -->
   <script src="https://unpkg.com/@solana/wallet-adapter-base@latest/dist/umd/index.min.js"></script>
   <script src="https://unpkg.com/@solana/wallet-adapter-wallets@latest/dist/umd/index.min.js"></script>
 
+  <!-- bs58 -->
+  <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js"></script>
+
+  <!-- Pip-Boy CSS -->
   <link rel="stylesheet" href="/css/pipboy.css" />
 </head>
+
 <body>
   <div class="pipboy">
     <div class="panel">
+
+      <!-- HEADER -->
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
-        <!-- Wallet top-right -->
         <button class="wallet-btn top-right" id="connectWalletBtn">CONNECT WALLET</button>
       </header>
 
-      <!-- Stats always visible -->
+      <!-- PLAYER STATUS -->
       <section class="pip-status">
         <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
+
         <div class="pip-hp-container">
-          <div class="pip-hp-fill" id="hpFill" style="width:100%"></div>
-          <div class="pip-rad-fill" id="radFill" style="width:0%"></div>
+          <div class="pip-hp-fill" id="hpFill"></div>
+          <div class="pip-rad-fill" id="radFill"></div>
           <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
         </div>
+
         <div class="pip-caps">CAPS: <span id="playerCaps">0</span></div>
       </section>
 
+      <!-- XP BAR -->
       <div class="pip-xp-container">
-        <div class="pip-xp-fill" id="xpFill" style="width:0%"></div>
+        <div class="pip-xp-fill" id="xpFill"></div>
         <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
       </div>
 
-      <!-- Map – priority space -->
+      <!-- MAP -->
       <section id="mapWrap">
         <div id="map"></div>
         <div class="gps-badge">
           <div class="acc-dot" id="gpsDot"></div>
-          <span id="gpsStatus">GPS: LOADING...</span>
+          <span id="gpsStatus">GPS: INITIALIZING...</span>
         </div>
       </section>
 
-      <!-- Buttons under map -->
+      <!-- BUTTON ROW -->
       <div class="controls">
-        <button class="btn" id="refreshPlayerBtn">REFRESH STATUS</button>
         <button class="btn" id="statsBtn">STATS</button>
         <button class="btn" id="itemsBtn">ITEMS</button>
         <button class="btn" id="questsBtn">QUESTS</button>
-        <button class="btn" id="scavengersBtn">SCAVENGERS EXCHANGE</button>
+        <button class="btn" id="scavengersBtn">SCAVENGERS</button>
       </div>
 
-      <!-- Panel contents -->
+      <!-- PANELS -->
       <div id="statsPanel" class="panel-content hidden">
         <h2>STATS</h2>
         <p>Level: <span id="panelLevel">1</span></p>
@@ -88,9 +100,11 @@
         <p>Trade loot for CAPS or rare items.</p>
         <div id="scavengerOffers">Loading offers...</div>
       </div>
+
     </div>
   </div>
 
+  <!-- MAIN JS -->
   <script type="module" src="/js/main.js"></script>
 </body>
 </html>
