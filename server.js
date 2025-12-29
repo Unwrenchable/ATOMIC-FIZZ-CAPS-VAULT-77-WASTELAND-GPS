@@ -98,6 +98,15 @@ const LOCATIONS = safeJsonRead(path.join(DATA_DIR, 'locations.json'));
 const QUESTS = safeJsonRead(path.join(DATA_DIR, 'quests.json'));
 const MINTABLES = safeJsonRead(path.join(DATA_DIR, 'mintables.json'));
 
+// === Scavenger Marketplace (in-memory v1, Redis v2) ===
+let scavengerListings = [];
+let nextListingId = 1;
+
+function shortWallet(addr) {
+  if (!addr || addr.length < 8) return 'unknown';
+  return `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+}
+
 // === Express App ===
 const app = express();
 app.use(morgan('combined'));
@@ -306,6 +315,115 @@ app.post('/claim-voucher', [
   });
 });
 
+// === Simple Claim Endpoint (frontend expects /api/claim) ===
+app.post('/api/claim', async (req, res) => {
+  const { wallet } = req.body;
+
+  if (!wallet) {
+    return res.status(400).json({ error: 'Missing wallet' });
+  }
+
+  console.log(`[CLAIM] Wallet ${wallet} requested a claim.`);
+
+  // v1: off-chain success, later can hook into claim-voucher / on-chain logic
+  return res.json({
+    ok: true,
+    message: 'Claim successful. Loot recorded.',
+    loot: {
+      capsReward: 100,
+      items: [
+        { id: 'test-crate', name: 'Atomic Test Crate', rarity: 'rare' }
+      ]
+    }
+  });
+});
+
+// === Simple Mint Endpoint (frontend expects /api/mint) ===
+app.post('/api/mint', async (req, res) => {
+  const { wallet, itemId } = req.body;
+
+  if (!wallet) {
+    return res.status(400).json({ error: 'Missing wallet' });
+  }
+
+  console.log(`[MINT] Wallet ${wallet} requested mint for item: ${itemId}`);
+
+  // v1: simulate mint; v2 can use Metaplex + GAME_VAULT
+  return res.json({
+    ok: true,
+    message: `Mint request accepted for ${shortWallet(wallet)}.`,
+    itemId: itemId || null,
+    fakeTxSignature: 'FAKE_TX_' + Date.now(),
+  });
+});
+
+// === Scavenger Marketplace Endpoints ===
+
+// Get all listings
+app.get('/api/scavengers/listings', (req, res) => {
+  res.json({ listings: scavengerListings });
+});
+
+// Create a listing
+app.post('/api/scavengers/list', async (req, res) => {
+  const { wallet, name, priceCaps } = req.body;
+
+  if (!wallet || !name || priceCaps === undefined) {
+    return res.status(400).json({ error: 'Missing fields' });
+  }
+
+  const priceNumber = Number(priceCaps);
+  if (!Number.isFinite(priceNumber) || priceNumber <= 0) {
+    return res.status(400).json({ error: 'Invalid priceCaps' });
+  }
+
+  const listing = {
+    id: nextListingId++,
+    name,
+    priceCaps: priceNumber,
+    seller: wallet,
+    sellerShort: shortWallet(wallet),
+    createdAt: new Date().toISOString(),
+  };
+
+  scavengerListings.push(listing);
+
+  console.log(`[SCAV-LIST] ${wallet} listed ${name} for ${priceNumber} CAPS`);
+
+  res.json({ ok: true, listing });
+});
+
+// Buy a listing
+app.post('/api/scavengers/buy', async (req, res) => {
+  const { wallet, listingId } = req.body;
+
+  if (!wallet || listingId === undefined) {
+    return res.status(400).json({ error: 'Missing fields' });
+  }
+
+  const idNum = Number(listingId);
+  if (!Number.isInteger(idNum)) {
+    return res.status(400).json({ error: 'Invalid listingId' });
+  }
+
+  const idx = scavengerListings.findIndex(l => l.id === idNum);
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Listing not found' });
+  }
+
+  const listing = scavengerListings[idx];
+  scavengerListings.splice(idx, 1);
+
+  console.log(`[SCAV-BUY] ${wallet} bought ${listing.name} for ${listing.priceCaps} CAPS from ${listing.seller}`);
+
+  // v2: hook Solana transfers here
+  res.json({
+    ok: true,
+    message: 'Purchase successful.',
+    listing,
+  });
+});
+
 // === Funding Endpoint ===
 app.get('/funding', (req, res) => {
   res.json({
@@ -353,4 +471,3 @@ app.listen(PORT, '0.0.0.0', () => {
 
 process.on('unhandledRejection', (r) => console.warn('Unhandled Rejection:', r));
 process.on('uncaughtException', (e) => console.error('Uncaught Exception:', e));
- 
