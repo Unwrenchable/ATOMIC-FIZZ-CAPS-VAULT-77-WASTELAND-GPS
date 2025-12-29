@@ -1,10 +1,14 @@
 {
   "name": "atomicfizzcaps-live",
-  "version": "1.0.0",
+  "version": "1.0.1",                       // Bump version for new deploy
   "description": "Atomic Fizz Caps - Wasteland GPS Geo-Game powered by Solana",
   "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20.0.0"                      // Narrow to latest stable; Render supports up to 20.x well
+  },
   "scripts": {
-    "start": "node server.js",
+    "start": "node server.js",              // ← This MUST stay!
     "dev": "nodemon server.js",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -24,10 +28,6 @@
   ],
   "author": "Unwrenchable",
   "license": "MIT",
-  "type": "commonjs",
-  "engines": {
-    "node": ">=18.x <=20.x"
-  },
   "dependencies": {
     "@metaplex-foundation/js": "^0.20.1",
     "@solana/spl-token": "^0.4.8",
@@ -35,10 +35,10 @@
     "bs58": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.21.1",
+    "express": "^4.21.1",                   // Good, latest minor
     "express-rate-limit": "^7.4.0",
     "express-validator": "^7.2.0",
-    "helmet": "^8.0.0",
+    "helmet": "^8.0.0",                     // Updated to latest
     "ioredis": "^5.4.1",
     "morgan": "^1.10.0",
     "tweetnacl": "^1.0.3"
