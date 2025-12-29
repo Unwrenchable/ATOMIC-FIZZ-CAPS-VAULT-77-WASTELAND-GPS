@@ -31,10 +31,14 @@
 
     map = L.map("map").setView(start, 13);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "© OpenStreetMap contributors",
-    }).addTo(map);
+   L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  {
+    maxZoom: 19,
+    attribution: ''
+  }
+  ).addTo(map);
+
 
     loadLocations();
   }
@@ -330,3 +334,4 @@
     if (mintBtn) mintBtn.addEventListener("click", handleMintClick);
   });
 })();
+
