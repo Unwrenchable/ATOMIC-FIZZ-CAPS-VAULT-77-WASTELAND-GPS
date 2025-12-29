@@ -59,8 +59,9 @@
       } else {
         // When boot finishes, hide boot screen and show Pip-Boy
         bootScreen.classList.add("hidden");
-        if (pipboyScreen) {
-          pipboyScreen.classList.remove("hidden");
+        bootText.textContent = ""; // Clear boot text to prevent ghosting
+        pipboyScreen.classList.remove("hidden");
+
         }
       }
     }
@@ -304,3 +305,4 @@
     }
   });
 })();
+
