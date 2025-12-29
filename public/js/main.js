@@ -69,29 +69,31 @@
 
   // ---------------- MAP ----------------
 
-  function initMap() {
+   function initMap() {
     if (typeof L === "undefined") {
-      console.error("Leaflet not loaded.");
-      return;
-    }
+    console.error("Leaflet not loaded.");
+    return;
+   }
 
-    const start = [36.0023, -114.9538];
+   const start = [36.0023, -114.9538];
 
     map = L.map("map", {
-      zoomControl: true,
-      minZoom: 13,
+    zoomControl: true,
+    minZoom: 12,
+    maxZoom: 19,
+    attributionControl: false,
+  }).setView(start, 16);
+
+  // Fallout-style dark basemap (Carto Dark) + CRT styling via CSS
+  L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    {
       maxZoom: 19,
-      attributionControl: false,
-    }).setView(start, 15);
+    }
+  ).addTo(map);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "",
-    }).addTo(map);
-
-
-    loadLocations();
-  }
+  loadLocations();
+}
 
   // ---------------- LOAD LOCATIONS ----------------
 
@@ -305,4 +307,5 @@
     }
   });
 })();
+
 
