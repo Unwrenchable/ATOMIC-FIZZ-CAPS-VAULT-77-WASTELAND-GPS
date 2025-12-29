@@ -1,4 +1,4 @@
-/* GLOBAL */
+/* GLOBAL ------------------------------------------------------------ */
 html, body {
   height: 100%;
   margin: 0;
@@ -9,6 +9,7 @@ html, body {
   text-shadow: 0 0 4px #00ff41;
 }
 
+/* Boot screen cleanup */
 #bootScreen.hidden {
   display: none !important;
   visibility: hidden;
@@ -21,6 +22,7 @@ html, body {
   line-height: 1.4;
 }
 
+/* PIP-BOY CONTAINER -------------------------------------------------- */
 .pipboy {
   width: 100%;
   max-width: 480px;
@@ -30,7 +32,8 @@ html, body {
   border: 3px solid #00ff41;
   box-shadow: 0 0 20px #00ff41;
 }
-/* HEADER */
+
+/* HEADER ------------------------------------------------------------- */
 header {
   text-align: center;
   margin-bottom: 10px;
@@ -63,7 +66,7 @@ header .sub {
   background: #003300;
 }
 
-/* STATUS BAR */
+/* STATUS BAR --------------------------------------------------------- */
 .pip-status {
   display: flex;
   justify-content: space-between;
@@ -100,7 +103,7 @@ header .sub {
   font-size: 14px;
 }
 
-/* XP BAR */
+/* XP BAR ------------------------------------------------------------- */
 .pip-xp-container {
   position: relative;
   height: 16px;
@@ -122,7 +125,7 @@ header .sub {
   font-size: 14px;
 }
 
-/* MAP WRAPPER */
+/* MAP WRAPPER -------------------------------------------------------- */
 #mapWrap {
   position: relative;
   height: 56vh;
@@ -143,18 +146,36 @@ header .sub {
   z-index: 5;
 }
 
-/* MAP ITSELF */
+/* MAP ITSELF --------------------------------------------------------- */
 #map {
   width: 100%;
   height: 100%;
   position: relative;
   z-index: 1;
 
-  /* Fallout green CRT filter */
-  filter: hue-rotate(90deg) brightness(1.3) contrast(1.2);
+  /* Fallout CRT green glow */
+  filter: hue-rotate(90deg) brightness(1.25) contrast(1.25) saturate(1.2);
+  box-shadow: inset 0 0 25px rgba(0, 255, 65, 0.4);
 }
 
-/* GPS BADGE */
+/* OPTIONAL: CRT SCANLINES */
+#mapWrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 65, 0.05) 0px,
+    rgba(0, 255, 65, 0.05) 1px,
+    transparent 2px,
+    transparent 3px
+  );
+  opacity: 0.35;
+  z-index: 4;
+}
+
+/* GPS BADGE ---------------------------------------------------------- */
 .gps-badge {
   position: absolute;
   bottom: 6px;
@@ -192,7 +213,7 @@ header .sub {
   background: #ffaa00;
 }
 
-/* BUTTONS */
+/* BUTTONS ------------------------------------------------------------ */
 .controls {
   display: flex;
   justify-content: space-between;
@@ -214,7 +235,7 @@ header .sub {
   background: #003300;
 }
 
-/* PANELS */
+/* PANELS ------------------------------------------------------------- */
 .panel-content {
   border: 2px solid #00ff41;
   padding: 10px;
@@ -230,7 +251,7 @@ h2 {
   font-size: 24px;
 }
 
-/* FALLOUT MARKER GLOW */
+/* MARKERS ------------------------------------------------------------ */
 .marker-active img {
   filter: drop-shadow(0 0 4px #00ff41);
 }
