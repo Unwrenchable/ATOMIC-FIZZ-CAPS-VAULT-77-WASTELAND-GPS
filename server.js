@@ -10,7 +10,7 @@ const { body, validationResult } = require('express-validator');
 const Redis = require('ioredis');
 const nacl = require('tweetnacl');
 
-// === FIXED bs58 import for Node 20 (ESM-safe) ===
+// === FIXED bs58 import for Node 20 ===
 const bs58pkg = require('bs58');
 const bs58 = bs58pkg.default || bs58pkg;
 
@@ -18,8 +18,6 @@ const {
   Connection,
   Keypair,
   PublicKey,
-  Transaction,
-  sendAndConfirmRawTransaction,
 } = require('@solana/web3.js');
 
 const {
@@ -74,10 +72,8 @@ if (serverSecretKeyUint8.length !== 64) {
 
 const serverKeypair = nacl.sign.keyPair.fromSecretKey(serverSecretKeyUint8);
 const SERVER_PUBKEY = bs58.encode(serverKeypair.publicKey);
-console.log(`Server signing pubkey: ${SERVER_PUBKEY}`);
 
-// === Donation Wallet (Player Support) ===
-// Hard-coded, non-signing wallet for player donations.
+// === Donation Wallet ===
 const DONATION_WALLET = 'GtW88raUHJmcFyqDviE1ZNsQxNpZ5US7TMGf5dzac42u';
 let DONATION_PUBKEY;
 try {
@@ -102,24 +98,57 @@ const LOCATIONS = safeJsonRead(path.join(DATA_DIR, 'locations.json'));
 const QUESTS = safeJsonRead(path.join(DATA_DIR, 'quests.json'));
 const MINTABLES = safeJsonRead(path.join(DATA_DIR, 'mintables.json'));
 
-// === Express App Setup ===
+// === Express App ===
 const app = express();
 app.use(morgan('combined'));
 
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://unpkg.com"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://unpkg.com"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", SOLANA_RPC, "wss:"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
-      mediaSrc: ["'self'", "https://assets.codepen.io"],
-      objectSrc: ["'none'"],
+// === FIXED CSP (Render-safe, Wallet-safe, Map-safe) ===
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+
+        scriptSrc: [
+          "'self'",
+          "https://unpkg.com",
+          "https://cdn.jsdelivr.net",
+        ],
+
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://fonts.googleapis.com",
+          "https://unpkg.com",
+        ],
+
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com",
+          "data:",
+        ],
+
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https:",
+        ],
+
+        connectSrc: [
+          "'self'",
+          SOLANA_RPC,
+          "https://unpkg.com",
+          "https://cdn.jsdelivr.net",
+          "wss:",
+        ],
+
+        mediaSrc: ["'self'", "data:", "https:"],
+        objectSrc: ["'none'"],
+        frameSrc: ["'self'"],
+      },
     },
-  },
-}));
+  })
+);
 
 app.use(cors());
 app.use(express.json({ limit: '100kb' }));
@@ -127,11 +156,9 @@ app.use(express.json({ limit: '100kb' }));
 // === Rate Limits ===
 const globalLimiter = rateLimit({ windowMs: 60_000, max: 200 });
 const actionLimiter = rateLimit({ windowMs: 60_000, max: 20 });
-
 app.use(globalLimiter);
 
-// === Bot Mitigation Middleware ===
-// Lightweight reputation-style guard on IP + optional wallet.
+// === Bot Shield ===
 async function botShield(req, res, next) {
   try {
     const ipHeader = req.headers['x-forwarded-for'];
@@ -146,11 +173,9 @@ async function botShield(req, res, next) {
       redis.incr(uaKey),
     ]);
 
-    // Set a decay window (reputation auto-resets every 60s)
     if (ipScore === 1) await redis.expire(ipKey, 60);
     if (uaScore === 1) await redis.expire(uaKey, 60);
 
-    // Hard cap for abuse-like patterns
     if (ipScore > 400 || uaScore > 400) {
       return res.status(429).json({ error: 'Too many actions, slow down.' });
     }
@@ -162,7 +187,6 @@ async function botShield(req, res, next) {
   }
 }
 
-// Apply botShield + stricter limits only on game action endpoints.
 app.use(
   ['/find-loot', '/shop', '/battle', '/terminal-reward', '/claim-voucher'],
   botShield,
@@ -199,7 +223,6 @@ app.get('/player/:addr', async (req, res) => {
   const redisData = await redis.get(`player:${addr}`);
   if (redisData) playerData = JSON.parse(redisData);
 
-  // Optional: NFT fetch for gear flavor
   try {
     const metaplex = Metaplex.make(connection);
     await metaplex.nfts().findAllByOwner({ owner: new PublicKey(addr) });
@@ -240,18 +263,17 @@ app.post('/api/terminal-reward', [
   res.json({ success: true, newCaps: playerData.caps });
 });
 
-// === Battle Endpoint (placeholder for your detailed combat logic) ===
+// === Battle Placeholder ===
 app.post('/battle', [
   body('wallet').notEmpty(),
   body('gearPower').isInt({ min: 1 }),
   body('signature').notEmpty(),
   body('message').notEmpty(),
 ], async (req, res) => {
-  // You can drop your full battle logic here.
   res.json({ success: true, result: 'Battle logic placeholder' });
 });
 
-// === Claim Loot Voucher ===
+// === Claim Voucher ===
 app.post('/claim-voucher', [
   body('wallet').isString().notEmpty(),
   body('loot_id').isInt({ min: 1 }),
@@ -300,9 +322,7 @@ app.post('/claim-voucher', [
   });
 });
 
-// === Donation / Funding Endpoint ===
-// Used by the Pip-Boy "Support the Vault" button.
-// No on-chain transaction building here, just a clean address + flavor text.
+// === Funding Endpoint ===
 app.get('/funding', (req, res) => {
   res.json({
     success: true,
@@ -316,24 +336,16 @@ app.get('/funding', (req, res) => {
   });
 });
 
-// === Serialization Helper for Vouchers ===
+// === Voucher Serialization ===
 function serializeLootVoucher(v) {
   const buf = Buffer.alloc(200);
   let offset = 0;
 
-  // u64 loot_id
   buf.writeBigUInt64LE(BigInt(v.loot_id), offset); offset += 8;
-
-  // f64 latitude
   buf.writeDoubleLE(v.latitude, offset); offset += 8;
-
-  // f64 longitude
   buf.writeDoubleLE(v.longitude, offset); offset += 8;
-
-  // i64 timestamp
   buf.writeBigInt64LE(BigInt(v.timestamp), offset); offset += 8;
 
-  // string location_hint
   const hintBytes = Buffer.from(v.location_hint, 'utf8');
   buf.writeUInt32LE(hintBytes.length, offset); offset += 4;
   hintBytes.copy(buf, offset); offset += hintBytes.length;
@@ -352,7 +364,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Vault: ${GAME_VAULT.publicKey.toBase58()}`);
   console.log(`Server signing key: ${SERVER_PUBKEY}`);
   console.log(`Donation wallet: ${DONATION_WALLET}`);
-  console.log('MERRY CHRISTMAS 2025 — THE WASTELAND IS OPEN ☢️🌵🥤');
+  console.log('WASTELAND GPS ONLINE ☢️');
 });
 
 process.on('unhandledRejection', (r) => console.warn('Unhandled Rejection:', r));
