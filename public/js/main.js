@@ -1,4 +1,4 @@
-// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS + Items + Scavengers placeholder
+// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS + Items + Quests + Scavengers placeholder
 
 (function () {
   let map;
@@ -13,6 +13,7 @@
   const panelCapsEl = document.getElementById("panelCaps");
 
   const gearListEl = document.getElementById("gearList");
+  const questsListEl = document.getElementById("questsList");
 
   // ---------------- MAP ----------------
 
@@ -60,7 +61,6 @@
 
       gearListEl.innerHTML = "";
 
-      // Support both: { items: [...] } or [...] at root
       const items = Array.isArray(data) ? data : data.items || [];
 
       if (!items.length) {
@@ -91,7 +91,45 @@
     }
   }
 
-  // ---------------- SCAVENGERS EXCHANGE (placeholder until backend) ----------------
+  // ---------------- QUESTS (from /data/quests.json) ----------------
+
+  async function loadQuests() {
+    if (!questsListEl) return;
+
+    try {
+      const res = await fetch("/data/quests.json");
+      const data = await res.json();
+
+      questsListEl.innerHTML = "";
+
+      const quests = Array.isArray(data) ? data : data.quests || [];
+
+      if (!quests.length) {
+        questsListEl.textContent = "No quests available.";
+        return;
+      }
+
+      quests.forEach((q) => {
+        const title = q.title || q.name || "Unknown Quest";
+        const desc = q.description || q.desc || "No description.";
+        const status = q.status || "ACTIVE";
+
+        const li = document.createElement("li");
+        li.className = "pip-quest-row";
+        li.innerHTML = `
+          <div class="pip-quest-title">${title}</div>
+          <div class="pip-quest-desc">${desc}</div>
+          <div class="pip-quest-status">[${status}]</div>
+        `;
+        questsListEl.appendChild(li);
+      });
+    } catch (err) {
+      console.error("Failed to load quests from /data/quests.json:", err);
+      questsListEl.textContent = "Error loading quests.";
+    }
+  }
+
+  // ---------------- SCAVENGERS EXCHANGE (placeholder) ----------------
 
   function loadScavengerExchange() {
     const container = document.getElementById("scavengerOffers");
@@ -172,8 +210,6 @@
         const balanceLamports = await connection.getBalance(publicKey);
         const sol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
 
-        // Tokenomics: 77,777,777 total, 10% to LP, 5 SOL liquidity
-        // => 1 SOL ≈ 1,555,556 CAPS
         const CAPS_PER_SOL = 1555556;
 
         const caps = Math.floor(sol * CAPS_PER_SOL);
@@ -218,8 +254,9 @@
     initMap();
     initGPS();
     initPanels();
-    loadItems();             // real items
-    loadScavengerExchange(); // scavengers placeholder
+    loadItems();
+    loadQuests();            // <--- REAL QUESTS
+    loadScavengerExchange();
 
     connectBtn.addEventListener("click", connectWallet);
   });
