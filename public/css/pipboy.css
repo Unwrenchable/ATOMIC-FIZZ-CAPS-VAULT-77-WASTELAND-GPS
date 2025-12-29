@@ -1,5 +1,6 @@
 /* GLOBAL */
-body {
+html, body {
+  height: 100%;
   margin: 0;
   padding: 0;
   background: #000;
@@ -16,10 +17,6 @@ body {
   background: #001900;
   border: 3px solid #00ff41;
   box-shadow: 0 0 20px #00ff41;
-}
-
-.panel {
-  padding: 10px;
 }
 
 /* HEADER */
@@ -114,19 +111,24 @@ header .sub {
   font-size: 14px;
 }
 
-/* MAP */
+/* MAP WRAPPER */
 #mapWrap {
   position: relative;
-  height: 56vh;
+  height: 56vh; /* Pip-Boy style map window */
   border: 2px solid #00ff41;
   margin-bottom: 10px;
+  background: #000;
 }
 
+/* MAP ITSELF */
 #map {
   width: 100%;
   height: 100%;
+  position: relative;
+  z-index: 1;
 }
 
+/* GPS BADGE */
 .gps-badge {
   position: absolute;
   bottom: 6px;
@@ -137,6 +139,7 @@ header .sub {
   display: flex;
   align-items: center;
   gap: 6px;
+  z-index: 999;
 }
 
 .acc-dot {
