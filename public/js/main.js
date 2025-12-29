@@ -1,29 +1,47 @@
-// main.js — CSP-safe, no modules, no adapters, Phantom only
+// /js/main.js — Map + Locations + Wallet + Panels working
 
 (function () {
-  const connectBtn = document.getElementById("connectWalletBtn");
-  const gpsStatusEl = document.getElementById("gpsStatus");
-  const gpsDot = document.getElementById("gpsDot");
-  const playerCapsEl = document.getElementById("playerCaps");
-  const panelCapsEl = document.getElementById("panelCaps");
-
   let map;
   let playerMarker = null;
   let connectedWallet = null;
+
+  const connectBtn = document.getElementById("connectWalletBtn");
+  const gpsStatusEl = document.getElementById("gpsStatus");
+  const gpsDot = document.getElementById("gpsDot");
 
   // ---------------- MAP ----------------
 
   function initMap() {
     const start = [36.0023, -114.9538];
 
-    map = L.map("map").setView(start, 15);
+    map = L.map("map").setView(start, 13);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "© OpenStreetMap contributors",
     }).addTo(map);
 
-    L.marker(start).addTo(map).bindPopup("MY TEST SPOT");
+    loadLocations();
+  }
+
+  // ---------------- LOAD LOCATIONS ----------------
+
+  async function loadLocations() {
+    try {
+      const res = await fetch("/locations.json");
+      const locations = await res.json();
+
+      locations.forEach((loc) => {
+        const marker = L.marker([loc.latitude, loc.longitude]).addTo(map);
+        marker.bindPopup(`
+          <b>${loc.name}</b><br>
+          Level: ${loc.level}<br>
+          Rarity: ${loc.rarity}
+        `);
+      });
+    } catch (err) {
+      console.error("Failed to load locations:", err);
+    }
   }
 
   // ---------------- GPS ----------------
@@ -80,11 +98,6 @@
       connectBtn.textContent =
         connectedWallet.slice(0, 4) + "..." + connectedWallet.slice(-4);
       connectBtn.classList.add("connected");
-
-      // Fake CAPS for now
-      const caps = 123;
-      playerCapsEl.textContent = caps;
-      panelCapsEl.textContent = caps;
     } catch (err) {
       console.error("Wallet connect failed:", err);
     }
@@ -93,20 +106,23 @@
   // ---------------- PANELS ----------------
 
   function initPanels() {
-    const buttons = {
+    const mapping = {
       statsBtn: "statsPanel",
       itemsBtn: "itemsPanel",
       questsBtn: "questsPanel",
       scavengersBtn: "scavengersPanel",
     };
 
-    Object.keys(buttons).forEach((btnId) => {
-      const panelId = buttons[btnId];
-      document.getElementById(btnId).addEventListener("click", () => {
+    Object.keys(mapping).forEach((btnId) => {
+      const panelId = mapping[btnId];
+      const btn = document.getElementById(btnId);
+      const panel = document.getElementById(panelId);
+
+      btn.addEventListener("click", () => {
         document
           .querySelectorAll(".panel-content")
           .forEach((p) => p.classList.add("hidden"));
-        document.getElementById(panelId).classList.remove("hidden");
+        panel.classList.remove("hidden");
       });
     });
   }
