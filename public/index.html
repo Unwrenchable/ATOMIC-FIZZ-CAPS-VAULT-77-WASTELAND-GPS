@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ATOMIC FIZZ CAPS - PIP-BOY</title>
 
+  <!-- Favicon -->
+  <link rel="icon" href="/favcoin.ico" type="image/x-icon" />
+
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
@@ -42,12 +45,14 @@
   <div class="pipboy">
     <div class="panel">
 
+      <!-- HEADER -->
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
         <button class="wallet-btn top-right" id="connectWalletBtn">CONNECT WALLET</button>
       </header>
 
+      <!-- PLAYER STATUS -->
       <section class="pip-status">
         <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
 
@@ -60,11 +65,13 @@
         <div class="pip-caps">CAPS: <span id="playerCaps">0</span></div>
       </section>
 
+      <!-- XP BAR -->
       <div class="pip-xp-container">
         <div class="pip-xp-fill" id="xpFill"></div>
         <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
       </div>
 
+      <!-- MAP -->
       <section id="mapWrap">
         <div id="map"></div>
         <div class="gps-badge">
@@ -73,6 +80,7 @@
         </div>
       </section>
 
+      <!-- BUTTON ROW -->
       <div class="controls">
         <button class="btn" id="statsBtn">STATS</button>
         <button class="btn" id="itemsBtn">ITEMS</button>
@@ -80,6 +88,7 @@
         <button class="btn" id="scavengersBtn">SCAVENGERS</button>
       </div>
 
+      <!-- PANELS -->
       <div id="statsPanel" class="panel-content hidden">
         <h2>STATS</h2>
         <p>Level: <span id="panelLevel">1</span></p>
@@ -107,6 +116,7 @@
     </div>
   </div>
 
+  <!-- MAIN GAME LOGIC -->
   <script src="/js/main.js" defer></script>
 </body>
 </html>
