@@ -45,7 +45,8 @@
 
   async function loadLocations() {
     try {
-      const res = await fetch("/locations.json");
+      const res = await fetch("/data/locations.json");
+
       const locations = await res.json();
 
       locations.forEach((loc) => {
@@ -395,3 +396,4 @@
     }
   });
 })();
+
