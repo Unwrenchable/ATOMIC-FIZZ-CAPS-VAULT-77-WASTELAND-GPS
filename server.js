@@ -1,3 +1,4 @@
+// === Atomic Fizz Caps — Server (Real Backend, Organized) ===
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
@@ -83,7 +84,7 @@ try {
   process.exit(1);
 }
 
-// === Data Loading ===
+// === Data Loading (backend-side, not public) ===
 function safeJsonRead(filePath) {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -98,7 +99,7 @@ const LOCATIONS = safeJsonRead(path.join(DATA_DIR, 'locations.json'));
 const QUESTS = safeJsonRead(path.join(DATA_DIR, 'quests.json'));
 const MINTABLES = safeJsonRead(path.join(DATA_DIR, 'mintables.json'));
 
-// === Scavenger Marketplace (in-memory v1, Redis v2) ===
+// === Scavenger Marketplace (in-memory v1, can move to Redis later) ===
 let scavengerListings = [];
 let nextListingId = 1;
 
@@ -111,7 +112,7 @@ function shortWallet(addr) {
 const app = express();
 app.use(morgan('combined'));
 
-// === FIXED CSP (Render-safe, Wallet-safe, Map-safe) ===
+// === CSP / Security (Render-safe, Wallet-safe, Map-safe) ===
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -192,7 +193,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// === Basic Data Endpoints ===
+// === Basic Data Endpoints (backend views of world data, not used by main.js now) ===
 app.get('/locations', (req, res) => res.json(LOCATIONS));
 app.get('/quests', (req, res) => res.json(QUESTS));
 app.get('/mintables', (req, res) => res.json(MINTABLES));
@@ -267,7 +268,7 @@ app.post('/battle', [
   res.json({ success: true, result: 'Battle logic placeholder' });
 });
 
-// === Claim Voucher ===
+// === Claim Voucher (your existing signed voucher system) ===
 app.post('/claim-voucher', [
   body('wallet').isString().notEmpty(),
   body('loot_id').isInt({ min: 1 }),
@@ -315,7 +316,7 @@ app.post('/claim-voucher', [
   });
 });
 
-// === Simple Claim Endpoint (frontend expects /api/claim) ===
+// === NEW: Simple Claim Endpoint (frontend expects /api/claim) ===
 app.post('/api/claim', async (req, res) => {
   const { wallet } = req.body;
 
@@ -325,20 +326,26 @@ app.post('/api/claim', async (req, res) => {
 
   console.log(`[CLAIM] Wallet ${wallet} requested a claim.`);
 
-  // v1: off-chain success, later can hook into claim-voucher / on-chain logic
+  // Load player data
+  let playerData = { caps: 0 };
+  const redisData = await redis.get(`player:${wallet}`);
+  if (redisData) playerData = JSON.parse(redisData);
+
+  // Reward CAPS (v1: fixed reward)
+  const reward = 100;
+  playerData.caps = (playerData.caps || 0) + reward;
+
+  // Save back to Redis
+  await redis.set(`player:${wallet}`, JSON.stringify(playerData));
+
   return res.json({
     ok: true,
-    message: 'Claim successful. Loot recorded.',
-    loot: {
-      capsReward: 100,
-      items: [
-        { id: 'test-crate', name: 'Atomic Test Crate', rarity: 'rare' }
-      ]
-    }
+    message: `Claim successful. You earned ${reward} CAPS.`,
+    newCaps: playerData.caps
   });
 });
 
-// === Simple Mint Endpoint (frontend expects /api/mint) ===
+// === NEW: Simple Mint Endpoint (frontend expects /api/mint) ===
 app.post('/api/mint', async (req, res) => {
   const { wallet, itemId } = req.body;
 
@@ -348,7 +355,7 @@ app.post('/api/mint', async (req, res) => {
 
   console.log(`[MINT] Wallet ${wallet} requested mint for item: ${itemId}`);
 
-  // v1: simulate mint; v2 can use Metaplex + GAME_VAULT
+  // v1: simulate mint; v2 will use Metaplex + GAME_VAULT
   return res.json({
     ok: true,
     message: `Mint request accepted for ${shortWallet(wallet)}.`,
@@ -455,7 +462,7 @@ function serializeLootVoucher(v) {
   return buf.slice(0, offset);
 }
 
-// === SPA Catch-all (must be LAST) ===
+// === SPA Catch-all (must be LAST before server start) ===
 app.get('*', (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
@@ -469,5 +476,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log('WASTELAND GPS ONLINE ☢️');
 });
 
+// === Error Handlers ===
 process.on('unhandledRejection', (r) => console.warn('Unhandled Rejection:', r));
 process.on('uncaughtException', (e) => console.error('Uncaught Exception:', e));
+
