@@ -9,6 +9,23 @@ html, body {
   text-shadow: 0 0 4px #00ff41;
 }
 
+#bootScreen {
+  position: fixed;
+  inset: 0;
+  background: #001900;
+  color: #00ff41;
+  font-family: 'VT323', monospace;
+  padding: 20px;
+  z-index: 9999;
+  text-shadow: 0 0 4px #00ff41;
+}
+
+#bootText {
+  white-space: pre-wrap;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
 .pipboy {
   width: 100%;
   max-width: 480px;
