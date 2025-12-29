@@ -57,12 +57,9 @@
         i++;
         setTimeout(nextLine, 350);
       } else {
-        // When boot finishes, hide boot screen and show Pip-Boy
+        bootText.textContent = "";
         bootScreen.classList.add("hidden");
-        bootText.textContent = ""; // Clear boot text to prevent ghosting
         pipboyScreen.classList.remove("hidden");
-
-        }
       }
     }
 
@@ -81,14 +78,14 @@
 
     map = L.map("map", {
       zoomControl: true,
-      minZoom: 3,
+      minZoom: 13,
       maxZoom: 19,
-    }).setView(start, 13);
+      attributionControl: false,
+    }).setView(start, 15);
 
-    L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-      { maxZoom: 19, attribution: "" }
-    ).addTo(map);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+    }).addTo(map);
 
     loadLocations();
   }
@@ -185,8 +182,7 @@
       const res = await provider.connect();
       connectedWallet = res.publicKey.toString();
 
-      walletStatusBtn.textContent =
-        `TERMINAL ONLINE (${connectedWallet.slice(0, 4)}...)`;
+      walletStatusBtn.textContent = "CONNECTED";
 
       refreshCapsFromBackend();
     } catch (err) {
@@ -291,18 +287,4 @@
 
   // ---------------- BOOT & EVENT WIRING ----------------
 
-  window.addEventListener("DOMContentLoaded", () => {
-    initMap();
-    initGPS();
-    initPanels();
-
-    // Auto-run boot animation on load
-    runBootSequence();
-
-    // Wallet connect button in header
-    if (walletStatusBtn) {
-      walletStatusBtn.addEventListener("click", connectWallet);
-    }
-  });
-})();
-
+  window.addEventListener
