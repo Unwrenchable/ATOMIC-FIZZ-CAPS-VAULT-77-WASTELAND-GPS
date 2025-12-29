@@ -9,42 +9,21 @@
   <link rel="icon" href="/favcoin.ico" type="image/x-icon" />
 
   <!-- Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
   <!-- Leaflet -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    defer
-  ></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
   <!-- Solana Web3.js (global) -->
-  <script
-    src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"
-    defer
-  ></script>
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js" defer></script>
 
-  <!-- Wallet adapters (UMD globals) -->
-  <script
-    src="https://unpkg.com/@solana/wallet-adapter-base@latest/dist/umd/index.min.js"
-    defer
-  ></script>
-  <script
-    src="https://unpkg.com/@solana/wallet-adapter-wallets@latest/dist/umd/index.min.js"
-    defer
-  ></script>
+  <!-- Wallet adapters (IIFE builds — CSP safe, no eval) -->
+  <script src="https://unpkg.com/@solana/wallet-adapter-base@latest/lib/index.iife.js" defer></script>
+  <script src="https://unpkg.com/@solana/wallet-adapter-wallets@latest/lib/index.iife.js" defer></script>
 
   <!-- bs58 (global) -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js"
-    defer
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js" defer></script>
 
   <!-- Pip-Boy CSS -->
   <link rel="stylesheet" href="/css/pipboy.css" />
@@ -53,14 +32,12 @@
 <body>
   <div class="pipboy">
     <div class="panel">
+
       <!-- HEADER -->
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
-        <!-- Wallet top-right -->
-        <button class="wallet-btn top-right" id="connectWalletBtn">
-          CONNECT WALLET
-        </button>
+        <button class="wallet-btn top-right" id="connectWalletBtn">CONNECT WALLET</button>
       </header>
 
       <!-- PLAYER STATUS -->
@@ -68,8 +45,8 @@
         <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
 
         <div class="pip-hp-container">
-          <div class="pip-hp-fill" id="hpFill" style="width: 100%;"></div>
-          <div class="pip-rad-fill" id="radFill" style="width: 0%;"></div>
+          <div class="pip-hp-fill" id="hpFill"></div>
+          <div class="pip-rad-fill" id="radFill"></div>
           <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
         </div>
 
@@ -78,7 +55,7 @@
 
       <!-- XP BAR -->
       <div class="pip-xp-container">
-        <div class="pip-xp-fill" id="xpFill" style="width: 0%;"></div>
+        <div class="pip-xp-fill" id="xpFill"></div>
         <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
       </div>
 
@@ -91,7 +68,7 @@
         </div>
       </section>
 
-      <!-- BUTTON ROW (all Pip-Boy green via .btn) -->
+      <!-- BUTTON ROW -->
       <div class="controls">
         <button class="btn" id="statsBtn">STATS</button>
         <button class="btn" id="itemsBtn">ITEMS</button>
@@ -123,6 +100,7 @@
         <p>Trade loot for CAPS or rare items.</p>
         <div id="scavengerOffers">Loading offers...</div>
       </div>
+
     </div>
   </div>
 
