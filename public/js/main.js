@@ -1,4 +1,4 @@
-// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS
+// /js/main.js — Map + Locations + Wallet + Panels + Devnet CAPS + Items
 
 (function () {
   let map;
@@ -11,6 +11,8 @@
 
   const playerCapsEl = document.getElementById("playerCaps");
   const panelCapsEl = document.getElementById("panelCaps");
+
+  const gearListEl = document.getElementById("gearList");
 
   // ---------------- MAP ----------------
 
@@ -44,6 +46,48 @@
       });
     } catch (err) {
       console.error("Failed to load locations:", err);
+    }
+  }
+
+  // ---------------- ITEMS (from /data/mintables.json) ----------------
+
+  async function loadItems() {
+    if (!gearListEl) return;
+
+    try {
+      const res = await fetch("/data/mintables.json");
+      const data = await res.json();
+
+      gearListEl.innerHTML = "";
+
+      // Support both: { items: [...] } or [...] at root
+      const items = Array.isArray(data) ? data : data.items || [];
+
+      if (!items.length) {
+        gearListEl.textContent = "No gear available.";
+        return;
+      }
+
+      items.forEach((item) => {
+        const name =
+          item.name || item.title || item.symbol || "Unknown item";
+        const desc =
+          item.description ||
+          item.desc ||
+          item.flavor ||
+          "No description.";
+
+        const div = document.createElement("div");
+        div.className = "pip-item-row";
+        div.innerHTML = `
+          <div class="pip-item-name">${name}</div>
+          <div class="pip-item-desc">${desc}</div>
+        `;
+        gearListEl.appendChild(div);
+      });
+    } catch (err) {
+      console.error("Failed to load items from /data/mintables.json:", err);
+      gearListEl.textContent = "Error loading gear.";
     }
   }
 
@@ -111,22 +155,17 @@
         const balanceLamports = await connection.getBalance(publicKey);
         const sol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
 
-        // Your tokenomics:
-        // Total supply: 77,777,777 CAPS
-        // 10% to liquidity = 7,777,778 CAPS
-        // 5 SOL added to liquidity
-        // => 1 SOL = 1,555,556 CAPS
+        // Tokenomics: 77,777,777 total, 10% to LP, 5 SOL liquidity
+        // => 1 SOL ≈ 1,555,556 CAPS
         const CAPS_PER_SOL = 1555556;
 
         const caps = Math.floor(sol * CAPS_PER_SOL);
 
         playerCapsEl.textContent = caps.toString();
         panelCapsEl.textContent = caps.toString();
-
       } catch (rpcErr) {
         console.warn("RPC failed, using fallback CAPS:", rpcErr);
       }
-
     } catch (err) {
       console.error("Wallet connect failed:", err);
     }
@@ -162,6 +201,8 @@
     initMap();
     initGPS();
     initPanels();
+    loadItems(); // load real items into Items panel
+
     connectBtn.addEventListener("click", connectWallet);
   });
 })();
