@@ -38,16 +38,24 @@
       return;
     }
 
-    const bootLines = [
-      "ATOMIC FIZZ SYSTEMS\n",
-      "Initializing Pip-Unit 3000-AF...",
-      "Loading Wasteland Navigation Kernel...",
-      "Calibrating Geo-Tracker...",
-      "Decrypting FizzCap Ledger...",
-      "Establishing SolLink Handshake...",
-      "Boot Complete.\n",
-      "Welcome, Survivor."
-    ];
+  const bootLines = [
+  "                 ███████╗██╗███████╗███████╗",
+  "                 ██╔════╝██║██╔════╝██╔════╝",
+  "                 █████╗  ██║█████╗  ███████╗",
+  "                 ██╔══╝  ██║██╔══╝  ╚════██║",
+  "                 ██║     ██║███████╗███████║",
+  "                 ╚═╝     ╚═╝╚══════╝╚══════╝",
+  "",
+  "                     A T O M I C   F I Z Z   C A P S",
+  "",
+  "Initializing Pip-Unit 3000-AF...",
+  "Loading Wasteland Navigation Kernel...",
+  "Calibrating Geo-Tracker...",
+  "Decrypting FizzCap Ledger...",
+  "Establishing SolLink Handshake...",
+  "Boot Complete.",
+  "Welcome, Survivor."
+];
 
     let i = 0;
 
@@ -318,3 +326,4 @@
     }
   });
 })();
+
