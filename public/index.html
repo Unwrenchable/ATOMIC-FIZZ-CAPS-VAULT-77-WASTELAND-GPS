@@ -1,31 +1,46 @@
 <!DOCTYPE html>
-<!-- Outside your main HTML file -->
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Pip-Boy CSS -->
   <link rel="stylesheet" href="/css/pipboy.css" />
+
+  <!-- VT323 Font -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <title>ATOMIC FIZZ CAPS • WASTELAND GPS</title>
 </head>
 
 <body>
-  <!-- Splash screen or login screen here -->
 
-  <!-- Pip-Boy screen (hidden until wallet connects) -->
+  <!-- LOGIN / SPLASH SCREEN (shown first) -->
+  <div id="loginScreen">
+    <button id="connectWalletBtn" class="wallet-btn">BOOT TERMINAL</button>
+  </div>
+
+  <!-- PIP-BOY SCREEN (hidden until wallet connects) -->
   <div id="pipboyScreen" class="hidden">
     <div class="pipboy">
+
       <!-- HEADER -->
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
-        <button class="wallet-btn top-right" id="connectWalletBtn">BOOT TERMINAL</button>
+        <button class="wallet-btn top-right" id="walletStatusBtn">TERMINAL OFFLINE</button>
       </header>
 
       <!-- STATUS BAR -->
       <section class="pip-status">
         <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
+
         <div class="pip-hp-container">
           <div class="pip-hp-fill" id="hpFill"></div>
           <div class="pip-rad-fill" id="radFill"></div>
           <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
         </div>
+
         <div class="pip-caps">CAPS: <span id="playerCaps">0</span></div>
       </section>
 
@@ -38,10 +53,14 @@
       <!-- MAP -->
       <section id="mapWrap">
         <div id="map"></div>
+
+        <!-- GPS BADGE -->
         <div class="gps-badge">
           <div class="acc-dot" id="gpsDot"></div>
           <span id="gpsStatus">GPS: INITIALIZING...</span>
         </div>
+
+        <!-- INVISIBLE DONATION HOTSPOT -->
         <a href="/funding.html" class="invisible-link"></a>
       </section>
 
@@ -76,11 +95,11 @@
         <h2>EXCHANGE</h2>
         <div id="scavengerOffers">Loading offers...</div>
       </div>
+
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- MAIN JS -->
   <script type="module" src="/js/main.js"></script>
 </body>
-
 </html>
