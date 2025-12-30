@@ -1,5 +1,5 @@
 // main.js — Pip-Boy Map, Wallet, GPS, Loot Claim, Panels
-(function () {
+(async function () {  // Make the whole IIFE async for easier await usage
   let map;
   let playerMarker = null;
   let connectedWallet = null;
@@ -11,7 +11,6 @@
   };
 
   // ---------------- DOM ELEMENTS ----------------
-
   const bootScreen = document.getElementById("bootScreen");
   const bootText = document.getElementById("bootText");
   const pipboyScreen = document.getElementById("pipboyScreen");
@@ -28,7 +27,6 @@
   const questsListEl = document.getElementById("questsList");
 
   // ---------------- BOOT SEQUENCE ----------------
-
   function runBootSequence() {
     if (!bootScreen || !bootText) return;
 
@@ -57,51 +55,49 @@
         i++;
         setTimeout(nextLine, 350);
       } else {
-        // Clear boot text and swap to Pip-Boy
-        bootText.textContent = "";
         bootScreen.classList.add("hidden");
         pipboyScreen.classList.remove("hidden");
+        // Boot finished → now safe to init map & GPS
+        initMapAndFeatures();
       }
     }
 
     nextLine();
   }
 
-  // ---------------- MAP ----------------
-
-   function initMap() {
+  // ---------------- MAP & FEATURES (moved here to run after boot) ----------------
+  async function initMapAndFeatures() {
     if (typeof L === "undefined") {
-    console.error("Leaflet not loaded.");
-    return;
-   }
-
-   const start = [36.0023, -114.9538];
-
-    map = L.map("map", {
-    zoomControl: true,
-    minZoom: 12,
-    maxZoom: 19,
-    attributionControl: false,
-  }).setView(start, 16);
-
-  // Fallout-style dark basemap (Carto Dark) + CRT styling via CSS
-  L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    {
-      maxZoom: 19,
+      console.error("Leaflet not loaded. Check /leaflet/leaflet.js");
+      return;
     }
-  ).addTo(map);
 
-  loadLocations();
-}
+    // Create map with dark CartoDB theme
+    map = L.map("map").setView([36.1699, -115.1398], 12); // Las Vegas area start
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      maxZoom: 19,
+      subdomains: "abcd",
+      tileSize: 512,
+      zoomOffset: -1,
+      detectRetina: true,
+    }).addTo(map);
+
+    console.log("Wasteland map initialized - dark theme active ☢️");
+
+    await loadLocations(); // Wait for locations before GPS/markers
+    initGPS();
+  }
 
   // ---------------- LOAD LOCATIONS ----------------
-
   async function loadLocations() {
     if (!map) return;
 
     try {
       const res = await fetch("/data/locations.json");
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const locations = await res.json();
 
       locations.forEach((loc) => {
@@ -120,9 +116,7 @@
         const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
 
         marker.bindPopup(
-          `<b>${loc.name || `Location ${loc.n}`}</b><br>
-           Level: ${loc.lvl ?? "?"}<br>
-           Rarity: ${loc.rarity || "common"}`
+          `<b>${loc.name || `Location ${loc.n}`}</b><br>Level: ${loc.lvl ?? "?"}<br>Rarity: ${loc.rarity || "common"}`
         );
 
         marker.on("click", () => attemptClaim(loc));
@@ -134,10 +128,8 @@
   }
 
   // ---------------- GPS ----------------
-
   function initGPS() {
-    if (!gpsStatusEl || !gpsDot) return;
-    if (!map || typeof L === "undefined") return;
+    if (!gpsStatusEl || !gpsDot || !map) return;
 
     if (!navigator.geolocation) {
       gpsStatusEl.textContent = "GPS: NOT AVAILABLE";
@@ -151,8 +143,7 @@
       (pos) => {
         const { latitude, longitude, accuracy } = pos.coords;
 
-        gpsStatusEl.textContent =
-          `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
+        gpsStatusEl.textContent = `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
 
         gpsDot.classList.remove("acc-green", "acc-amber");
         gpsDot.classList.add(accuracy <= 25 ? "acc-green" : "acc-amber");
@@ -165,8 +156,8 @@
           playerMarker.setLatLng(ll);
         }
       },
-      () => {
-        gpsStatusEl.textContent = "GPS: ERROR";
+      (err) => {
+        gpsStatusEl.textContent = `GPS: ERROR (${err.message})`;
         gpsDot.classList.remove("acc-green", "acc-amber");
       },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
@@ -174,12 +165,11 @@
   }
 
   // ---------------- WALLET ----------------
-
   async function connectWallet() {
     const provider = window.solana;
 
     if (!provider || !provider.isPhantom) {
-      alert("Phantom wallet not found.");
+      alert("Phantom wallet not found. Install or enable it.");
       return;
     }
 
@@ -187,11 +177,14 @@
       const res = await provider.connect();
       connectedWallet = res.publicKey.toString();
 
-      walletStatusBtn.textContent = "CONNECTED";
+      if (walletStatusBtn) {
+        walletStatusBtn.textContent = "CONNECTED";
+      }
 
-      refreshCapsFromBackend();
+      await refreshCapsFromBackend();
     } catch (err) {
       console.error("Wallet connect failed:", err);
+      alert("Wallet connection failed.");
     }
   }
 
@@ -199,19 +192,19 @@
     if (!connectedWallet) return;
 
     try {
-      const capsRes = await fetch(`/player/${connectedWallet}`);
-      const playerData = await capsRes.json();
+      const res = await fetch(`/player/${connectedWallet}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const playerData = await res.json();
       const caps = playerData.caps || 0;
 
-      playerCapsEl.textContent = caps;
-      panelCapsEl.textContent = caps;
+      if (playerCapsEl) playerCapsEl.textContent = caps;
+      if (panelCapsEl) panelCapsEl.textContent = caps;
     } catch (err) {
       console.warn("Failed to load stored CAPS:", err);
     }
   }
 
   // ---------------- CLAIM LOOT ----------------
-
   async function attemptClaim(loc) {
     if (!connectedWallet) return alert("Connect your terminal first.");
     if (!playerMarker) return alert("GPS not ready.");
@@ -247,12 +240,15 @@
         body: JSON.stringify(payload),
       });
 
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Claim failed");
+      }
+
       const data = await res.json();
 
-      if (!data.success) return alert(data.error || "Claim failed.");
-
       alert("Loot voucher created!");
-      refreshCapsFromBackend();
+      await refreshCapsFromBackend();
 
       const marker = markers[loc.n];
       if (marker?.getElement()) {
@@ -260,12 +256,11 @@
       }
     } catch (err) {
       console.error("Claim error:", err);
-      alert("Claim failed.");
+      alert(`Claim failed: ${err.message}`);
     }
   }
 
   // ---------------- PANELS ----------------
-
   function initPanels() {
     const mapping = {
       statsBtn: "statsPanel",
@@ -282,32 +277,23 @@
       if (!btn || !panel) return;
 
       btn.addEventListener("click", () => {
-        document
-          .querySelectorAll(".panel-content")
-          .forEach((p) => p.classList.add("hidden"));
+        document.querySelectorAll(".panel-content").forEach((p) => p.classList.add("hidden"));
         panel.classList.remove("hidden");
       });
     });
   }
 
-  // ---------------- BOOT & EVENT WIRING ----------------
-
+  // ---------------- STARTUP ----------------
   window.addEventListener("DOMContentLoaded", () => {
-    initMap();
-    initGPS();
-    initPanels();
-
     // Auto-run boot animation on load
     runBootSequence();
 
-    // Wallet connect button in header
+    // Wallet connect button
     if (walletStatusBtn) {
       walletStatusBtn.textContent = "CONNECT";
       walletStatusBtn.addEventListener("click", connectWallet);
     }
+
+    initPanels();
   });
 })();
-
-
-
-
