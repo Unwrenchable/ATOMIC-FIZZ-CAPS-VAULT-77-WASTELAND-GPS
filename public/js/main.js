@@ -1,9 +1,10 @@
 // main.js — Pip-Boy Map, Wallet, GPS, Loot Claim, Panels
-(async function () {  // Make the whole IIFE async for easier await usage
+(async function () {
   let map;
   let playerMarker = null;
   let connectedWallet = null;
   let markers = {};
+  let firstFix = true; // For GPS initial zoom
 
   const CONFIG = {
     network: "devnet",
@@ -57,32 +58,39 @@
       } else {
         bootScreen.classList.add("hidden");
         pipboyScreen.classList.remove("hidden");
-        // Boot finished → now safe to init map & GPS
+        // Boot finished → init everything
         initMapAndFeatures();
+        initPanels();
+        if (walletStatusBtn) {
+          walletStatusBtn.textContent = "CONNECT";
+          walletStatusBtn.addEventListener("click", connectWallet);
+        }
       }
     }
 
     nextLine();
   }
 
-  // ---------------- MAP & FEATURES (moved here to run after boot) ----------------
+  // ---------------- MAP & FEATURES ----------------
   async function initMapAndFeatures() {
     if (typeof L === "undefined") {
       console.error("Leaflet not loaded. Check /leaflet/leaflet.js");
       return;
     }
 
-    // Create map with dark CartoDB theme
-    map = L.map("map").setView([36.1699, -115.1398], 12); // Las Vegas area start
+    // Create map with lighter, clearer tiles (OSM standard)
+    map = L.map("map").setView([36.1699, -115.1398], 12); // Las Vegas start
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19,
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
     }).addTo(map);
 
-    console.log("Wasteland map initialized - dark theme active ☢️");
+    console.log("Wasteland map initialized ☢️");
 
-    await loadLocations(); // Wait for locations before GPS/markers
+    // Load data and start GPS
+    await loadLocations();
     initGPS();
   }
 
@@ -122,94 +130,52 @@
     }
   }
 
- // ---------------- GPS ----------------
-function initGPS() {
-  if (!gpsStatusEl || !gpsDot || !map) {
-    console.warn("GPS elements or map not ready");
-    return;
-  }
-
-  if (!navigator.geolocation) {
-    gpsStatusEl.textContent = "GPS: NOT AVAILABLE";
-    gpsDot.classList.add("acc-red");
-    return;
-  }
-
-  gpsStatusEl.textContent = "GPS: INITIALIZING...";
-  gpsDot.classList.add("acc-amber");
-
-  let accuracyCircle = null; // Optional: shows GPS uncertainty radius
-
-  navigator.geolocation.watchPosition(
-    (pos) => {
-      const { latitude, longitude, accuracy } = pos.coords;
-
-      // Update status text
-      gpsStatusEl.textContent = `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
-
-      // Update accuracy dot color
-      gpsDot.classList.remove("acc-green", "acc-amber", "acc-red");
-      if (accuracy <= 25) gpsDot.classList.add("acc-green");
-      else if (accuracy <= 50) gpsDot.classList.add("acc-amber");
-      else gpsDot.classList.add("acc-red");
-
-      const ll = L.latLng(latitude, longitude);
-
-      // Create/update player marker
-      if (!playerMarker) {
-        playerMarker = L.marker(ll, {
-          title: "You",
-          icon: L.divIcon({
-            className: "player-marker",
-            html: '<div class="gps-dot-inner"></div>',
-            iconSize: [20, 20],
-            iconAnchor: [10, 10],
-          }),
-        }).addTo(map);
-      } else {
-        playerMarker.setLatLng(ll);
-      }
-
-      // Optional: Accuracy circle (shows GPS error radius)
-      if (!accuracyCircle) {
-        accuracyCircle = L.circle(ll, {
-          radius: accuracy,
-          color: '#00ff41',
-          weight: 1,
-          opacity: 0.3,
-          fillOpacity: 0.1,
-        }).addTo(map);
-      } else {
-        accuracyCircle.setLatLng(ll);
-        accuracyCircle.setRadius(accuracy);
-      }
-
-      // Center/fly to player (smooth on good accuracy, instant on poor)
-      const targetZoom = accuracy <= 30 ? 17 : 14;
-      if (!firstLock) {
-        map.flyTo(ll, targetZoom, {
-          animate: true,
-          duration: 1.5, // smooth follow
-        });
-      } else {
-        // First lock: quick zoom-in
-        map.setView(ll, targetZoom, { animate: false });
-        firstLock = false;
-      }
-    },
-    (err) => {
-      gpsStatusEl.textContent = `GPS ERROR: ${err.message}`;
-      gpsDot.classList.remove("acc-green", "acc-amber");
-      gpsDot.classList.add("acc-red");
-      console.error("GPS error:", err);
-    },
-    {
-      enableHighAccuracy: true,
-      maximumAge: 5000,     // Use recent position if <5s old
-      timeout: 15000,       // Give more time for first fix
+  // ---------------- GPS (Fixed: centers/follows player) ----------------
+  function initGPS() {
+    if (!gpsStatusEl || !gpsDot || !map) {
+      console.warn("GPS or map not ready");
+      return;
     }
-  );
-}
+
+    if (!navigator.geolocation) {
+      gpsStatusEl.textContent = "GPS: NOT AVAILABLE";
+      gpsDot.classList.add("acc-red");
+      return;
+    }
+
+    gpsStatusEl.textContent = "GPS: SEARCHING...";
+    gpsDot.classList.add("acc-amber");
+
+    navigator.geolocation.watchPosition(
+      (pos) => {
+        const { latitude, longitude, accuracy } = pos.coords;
+
+        gpsStatusEl.textContent = `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
+
+        gpsDot.classList.remove("acc-green", "acc-amber", "acc-red");
+        gpsDot.classList.add(accuracy <= 25 ? "acc-green" : accuracy <= 50 ? "acc-amber" : "acc-red");
+
+        const ll = [latitude, longitude];
+
+        // Create/update player marker
+        if (!playerMarker) {
+          playerMarker = L.marker(ll, { title: "You" }).addTo(map);
+        } else {
+          playerMarker.setLatLng(ll);
+        }
+
+        // Center/follow player (smooth on good accuracy)
+        const targetZoom = accuracy <= 30 ? 17 : 14;
+        map.flyTo(ll, targetZoom, { animate: true, duration: 1.2 });
+      },
+      (err) => {
+        gpsStatusEl.textContent = `GPS ERROR: ${err.message}`;
+        gpsDot.classList.add("acc-red");
+        console.error("GPS error:", err);
+      },
+      { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
+    );
+  }
 
   // ---------------- WALLET ----------------
   async function connectWallet() {
@@ -228,27 +194,50 @@ function initGPS() {
         walletStatusBtn.textContent = "CONNECTED";
       }
 
-      await refreshCapsFromBackend();
+      // Refresh all data after connect
+      await refreshPlayerData();
+      await loadQuests();
+      await loadGear(); // Add if you have gear fetch
     } catch (err) {
       console.error("Wallet connect failed:", err);
       alert("Wallet connection failed.");
     }
   }
 
-  async function refreshCapsFromBackend() {
+  async function refreshPlayerData() {
     if (!connectedWallet) return;
 
     try {
       const res = await fetch(`/player/${connectedWallet}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const playerData = await res.json();
-      const caps = playerData.caps || 0;
+      const data = await res.json();
 
-      if (playerCapsEl) playerCapsEl.textContent = caps;
-      if (panelCapsEl) panelCapsEl.textContent = caps;
+      if (playerCapsEl) playerCapsEl.textContent = data.caps || 0;
+      if (panelCapsEl) panelCapsEl.textContent = data.caps || 0;
     } catch (err) {
-      console.warn("Failed to load stored CAPS:", err);
+      console.warn("Failed to load player data:", err);
     }
+  }
+
+  async function loadQuests() {
+    try {
+      const res = await fetch('/quests');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const quests = await res.json();
+      if (questsListEl) {
+        questsListEl.innerHTML = quests.length > 0
+          ? quests.map(q => `<li>${q.name || 'Quest'} - ${q.status || 'Pending'}</li>`).join('')
+          : "No quests available.";
+      }
+    } catch (err) {
+      console.error("Failed to load quests:", err);
+      if (questsListEl) questsListEl.textContent = "Failed to load quests.";
+    }
+  }
+
+  // Add this if you have gear
+  async function loadGear() {
+    // Similar logic as loadQuests, update gearListEl
   }
 
   // ---------------- CLAIM LOOT ----------------
@@ -295,7 +284,7 @@ function initGPS() {
       const data = await res.json();
 
       alert("Loot voucher created!");
-      await refreshCapsFromBackend();
+      await refreshPlayerData();
 
       const marker = markers[loc.n];
       if (marker?.getElement()) {
@@ -310,6 +299,7 @@ function initGPS() {
   // ---------------- PANELS ----------------
   function initPanels() {
     const mapping = {
+      mapBtn: "mapPanel",    // Add if you have separate map panel
       statsBtn: "statsPanel",
       itemsBtn: "itemsPanel",
       questsBtn: "questsPanel",
@@ -332,15 +322,6 @@ function initGPS() {
 
   // ---------------- STARTUP ----------------
   window.addEventListener("DOMContentLoaded", () => {
-    // Auto-run boot animation on load
     runBootSequence();
-
-    // Wallet connect button
-    if (walletStatusBtn) {
-      walletStatusBtn.textContent = "CONNECT";
-      walletStatusBtn.addEventListener("click", connectWallet);
-    }
-
-    initPanels();
   });
 })();
