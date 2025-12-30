@@ -75,14 +75,9 @@
     // Create map with dark CartoDB theme
     map = L.map("map").setView([36.1699, -115.1398], 12); // Las Vegas area start
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      maxZoom: 19,
-      subdomains: "abcd",
-      tileSize: 512,
-      zoomOffset: -1,
-      detectRetina: true,
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
     }).addTo(map);
 
     console.log("Wasteland map initialized - dark theme active ☢️");
@@ -127,42 +122,94 @@
     }
   }
 
-  // ---------------- GPS ----------------
-  function initGPS() {
-    if (!gpsStatusEl || !gpsDot || !map) return;
-
-    if (!navigator.geolocation) {
-      gpsStatusEl.textContent = "GPS: NOT AVAILABLE";
-      return;
-    }
-
-    gpsStatusEl.textContent = "GPS: WATCHING...";
-    gpsDot.classList.add("acc-amber");
-
-    navigator.geolocation.watchPosition(
-      (pos) => {
-        const { latitude, longitude, accuracy } = pos.coords;
-
-        gpsStatusEl.textContent = `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
-
-        gpsDot.classList.remove("acc-green", "acc-amber");
-        gpsDot.classList.add(accuracy <= 25 ? "acc-green" : "acc-amber");
-
-        const ll = [latitude, longitude];
-
-        if (!playerMarker) {
-          playerMarker = L.marker(ll, { title: "You" }).addTo(map);
-        } else {
-          playerMarker.setLatLng(ll);
-        }
-      },
-      (err) => {
-        gpsStatusEl.textContent = `GPS: ERROR (${err.message})`;
-        gpsDot.classList.remove("acc-green", "acc-amber");
-      },
-      { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
-    );
+ // ---------------- GPS ----------------
+function initGPS() {
+  if (!gpsStatusEl || !gpsDot || !map) {
+    console.warn("GPS elements or map not ready");
+    return;
   }
+
+  if (!navigator.geolocation) {
+    gpsStatusEl.textContent = "GPS: NOT AVAILABLE";
+    gpsDot.classList.add("acc-red");
+    return;
+  }
+
+  gpsStatusEl.textContent = "GPS: INITIALIZING...";
+  gpsDot.classList.add("acc-amber");
+
+  let accuracyCircle = null; // Optional: shows GPS uncertainty radius
+
+  navigator.geolocation.watchPosition(
+    (pos) => {
+      const { latitude, longitude, accuracy } = pos.coords;
+
+      // Update status text
+      gpsStatusEl.textContent = `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)} (±${Math.round(accuracy)}m)`;
+
+      // Update accuracy dot color
+      gpsDot.classList.remove("acc-green", "acc-amber", "acc-red");
+      if (accuracy <= 25) gpsDot.classList.add("acc-green");
+      else if (accuracy <= 50) gpsDot.classList.add("acc-amber");
+      else gpsDot.classList.add("acc-red");
+
+      const ll = L.latLng(latitude, longitude);
+
+      // Create/update player marker
+      if (!playerMarker) {
+        playerMarker = L.marker(ll, {
+          title: "You",
+          icon: L.divIcon({
+            className: "player-marker",
+            html: '<div class="gps-dot-inner"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10],
+          }),
+        }).addTo(map);
+      } else {
+        playerMarker.setLatLng(ll);
+      }
+
+      // Optional: Accuracy circle (shows GPS error radius)
+      if (!accuracyCircle) {
+        accuracyCircle = L.circle(ll, {
+          radius: accuracy,
+          color: '#00ff41',
+          weight: 1,
+          opacity: 0.3,
+          fillOpacity: 0.1,
+        }).addTo(map);
+      } else {
+        accuracyCircle.setLatLng(ll);
+        accuracyCircle.setRadius(accuracy);
+      }
+
+      // Center/fly to player (smooth on good accuracy, instant on poor)
+      const targetZoom = accuracy <= 30 ? 17 : 14;
+      if (!firstLock) {
+        map.flyTo(ll, targetZoom, {
+          animate: true,
+          duration: 1.5, // smooth follow
+        });
+      } else {
+        // First lock: quick zoom-in
+        map.setView(ll, targetZoom, { animate: false });
+        firstLock = false;
+      }
+    },
+    (err) => {
+      gpsStatusEl.textContent = `GPS ERROR: ${err.message}`;
+      gpsDot.classList.remove("acc-green", "acc-amber");
+      gpsDot.classList.add("acc-red");
+      console.error("GPS error:", err);
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 5000,     // Use recent position if <5s old
+      timeout: 15000,       // Give more time for first fix
+    }
+  );
+}
 
   // ---------------- WALLET ----------------
   async function connectWallet() {
