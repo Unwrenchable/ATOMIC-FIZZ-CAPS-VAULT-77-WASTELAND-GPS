@@ -1,4 +1,3 @@
-// === Atomic Fizz Caps — Server (Real Backend, Organized) ===
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
@@ -11,7 +10,7 @@ const { body, validationResult } = require('express-validator');
 const Redis = require('ioredis');
 const nacl = require('tweetnacl');
 
-// === FIXED bs58 import for Node 20 ===
+// === FIXED bs58 import for Node 20+ ===
 const bs58pkg = require('bs58');
 const bs58 = bs58pkg.default || bs58pkg;
 
@@ -84,7 +83,7 @@ try {
   process.exit(1);
 }
 
-// === Data Loading (backend-side, not public) ===
+// === Data Loading ===
 function safeJsonRead(filePath) {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -99,15 +98,6 @@ const LOCATIONS = safeJsonRead(path.join(DATA_DIR, 'locations.json'));
 const QUESTS = safeJsonRead(path.join(DATA_DIR, 'quests.json'));
 const MINTABLES = safeJsonRead(path.join(DATA_DIR, 'mintables.json'));
 
-// === Scavenger Marketplace (in-memory v1, can move to Redis later) ===
-let scavengerListings = [];
-let nextListingId = 1;
-
-function shortWallet(addr) {
-  if (!addr || addr.length < 8) return 'unknown';
-  return `${addr.slice(0, 4)}...${addr.slice(-4)}`;
-}
-
 // === Express App ===
 const app = express();
 app.use(morgan('combined'));
@@ -118,14 +108,53 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "https://unpkg.com", "https://cdn.jsdelivr.net"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://unpkg.com"],
-        fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
-        imgSrc: ["'self'", "data:", "https:"],
-        connectSrc: ["'self'", SOLANA_RPC, "https://unpkg.com", "https://cdn.jsdelivr.net", "wss:"],
+
+        scriptSrc: [
+          "'self'",
+          "'unsafe-eval'",                    // Required for current Solana wallet adapters
+          "https://unpkg.com",                // General-purpose CDNs
+          "https://cdn.jsdelivr.net",
+          "https://*.solana.com",             // Solana RPC & wallet domains
+          "https://*.phantom.app",            // Phantom extension
+          "https://*.walletconnect.com",      // WalletConnect
+          "https://*.backpack.app",           // Backpack wallet
+        ],
+
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",                  // Required for Leaflet dynamic styles + UI
+          "https://fonts.googleapis.com",
+          "https://unpkg.com",
+        ],
+
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com",
+          "data:",
+        ],
+
+        imgSrc: [
+          "'self'",
+          "data:",                            // Leaflet markers, base64 images
+          "blob:",                            // Canvas blobs if used
+          "https:",                           // External tiles
+          "https://*.basemaps.cartocdn.com",  // Dark Carto basemap
+          "https://*.tile.openstreetmap.org", // OSM fallback
+        ],
+
+        connectSrc: [
+          "'self'",
+          SOLANA_RPC,                         // Dynamic RPC from env
+          "https://api.devnet.solana.com",
+          "https://api.mainnet-beta.solana.com",
+          "wss://*.solana.com",               // Websockets for RPC
+          "wss:",
+        ],
+
         mediaSrc: ["'self'", "data:", "https:"],
         objectSrc: ["'none'"],
         frameSrc: ["'self'"],
+        baseUri: ["'self'"],                  // Prevents base URI hijacking
       },
     },
   })
@@ -135,8 +164,16 @@ app.use(cors());
 app.use(express.json({ limit: '100kb' }));
 
 // === Rate Limits ===
-const globalLimiter = rateLimit({ windowMs: 60_000, max: 200 });
-const actionLimiter = rateLimit({ windowMs: 60_000, max: 20 });
+const globalLimiter = rateLimit({
+  windowMs: 60_000, // 1 minute
+  max: 200,
+  message: { error: 'Too many requests, please try again later.' },
+});
+const actionLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 20,
+  message: { error: 'Action rate limit exceeded.' },
+});
 app.use(globalLimiter);
 
 // === Bot Shield ===
@@ -164,7 +201,7 @@ async function botShield(req, res, next) {
     next();
   } catch (e) {
     console.warn('botShield error:', e);
-    next();
+    next(); // Fail open to avoid blocking legitimate users
   }
 }
 
@@ -185,7 +222,7 @@ app.use(express.static(PUBLIC_DIR, {
   }
 }));
 
-// Optional: log 404s for static files to help debug
+// Optional: log 404s for static files (debug only)
 app.use((req, res, next) => {
   if (req.method === 'GET' && !res.headersSent) {
     console.log(`Static file not found: ${req.path}`);
@@ -193,7 +230,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// === Basic Data Endpoints (backend views of world data, not used by main.js now) ===
+// === Basic Data Endpoints ===
 app.get('/locations', (req, res) => res.json(LOCATIONS));
 app.get('/quests', (req, res) => res.json(QUESTS));
 app.get('/mintables', (req, res) => res.json(MINTABLES));
@@ -268,7 +305,7 @@ app.post('/battle', [
   res.json({ success: true, result: 'Battle logic placeholder' });
 });
 
-// === Claim Voucher (your existing signed voucher system) ===
+// === Claim Voucher ===
 app.post('/claim-voucher', [
   body('wallet').isString().notEmpty(),
   body('loot_id').isInt({ min: 1 }),
@@ -316,121 +353,6 @@ app.post('/claim-voucher', [
   });
 });
 
-// === NEW: Simple Claim Endpoint (frontend expects /api/claim) ===
-app.post('/api/claim', async (req, res) => {
-  const { wallet } = req.body;
-
-  if (!wallet) {
-    return res.status(400).json({ error: 'Missing wallet' });
-  }
-
-  console.log(`[CLAIM] Wallet ${wallet} requested a claim.`);
-
-  // Load player data
-  let playerData = { caps: 0 };
-  const redisData = await redis.get(`player:${wallet}`);
-  if (redisData) playerData = JSON.parse(redisData);
-
-  // Reward CAPS (v1: fixed reward)
-  const reward = 100;
-  playerData.caps = (playerData.caps || 0) + reward;
-
-  // Save back to Redis
-  await redis.set(`player:${wallet}`, JSON.stringify(playerData));
-
-  return res.json({
-    ok: true,
-    message: `Claim successful. You earned ${reward} CAPS.`,
-    newCaps: playerData.caps
-  });
-});
-
-// === NEW: Simple Mint Endpoint (frontend expects /api/mint) ===
-app.post('/api/mint', async (req, res) => {
-  const { wallet, itemId } = req.body;
-
-  if (!wallet) {
-    return res.status(400).json({ error: 'Missing wallet' });
-  }
-
-  console.log(`[MINT] Wallet ${wallet} requested mint for item: ${itemId}`);
-
-  // v1: simulate mint; v2 will use Metaplex + GAME_VAULT
-  return res.json({
-    ok: true,
-    message: `Mint request accepted for ${shortWallet(wallet)}.`,
-    itemId: itemId || null,
-    fakeTxSignature: 'FAKE_TX_' + Date.now(),
-  });
-});
-
-// === Scavenger Marketplace Endpoints ===
-
-// Get all listings
-app.get('/api/scavengers/listings', (req, res) => {
-  res.json({ listings: scavengerListings });
-});
-
-// Create a listing
-app.post('/api/scavengers/list', async (req, res) => {
-  const { wallet, name, priceCaps } = req.body;
-
-  if (!wallet || !name || priceCaps === undefined) {
-    return res.status(400).json({ error: 'Missing fields' });
-  }
-
-  const priceNumber = Number(priceCaps);
-  if (!Number.isFinite(priceNumber) || priceNumber <= 0) {
-    return res.status(400).json({ error: 'Invalid priceCaps' });
-  }
-
-  const listing = {
-    id: nextListingId++,
-    name,
-    priceCaps: priceNumber,
-    seller: wallet,
-    sellerShort: shortWallet(wallet),
-    createdAt: new Date().toISOString(),
-  };
-
-  scavengerListings.push(listing);
-
-  console.log(`[SCAV-LIST] ${wallet} listed ${name} for ${priceNumber} CAPS`);
-
-  res.json({ ok: true, listing });
-});
-
-// Buy a listing
-app.post('/api/scavengers/buy', async (req, res) => {
-  const { wallet, listingId } = req.body;
-
-  if (!wallet || listingId === undefined) {
-    return res.status(400).json({ error: 'Missing fields' });
-  }
-
-  const idNum = Number(listingId);
-  if (!Number.isInteger(idNum)) {
-    return res.status(400).json({ error: 'Invalid listingId' });
-  }
-
-  const idx = scavengerListings.findIndex(l => l.id === idNum);
-  if (idx === -1) {
-    return res.status(404).json({ error: 'Listing not found' });
-  }
-
-  const listing = scavengerListings[idx];
-  scavengerListings.splice(idx, 1);
-
-  console.log(`[SCAV-BUY] ${wallet} bought ${listing.name} for ${listing.priceCaps} CAPS from ${listing.seller}`);
-
-  // v2: hook Solana transfers here
-  res.json({
-    ok: true,
-    message: 'Purchase successful.',
-    listing,
-  });
-});
-
 // === Funding Endpoint ===
 app.get('/funding', (req, res) => {
   res.json({
@@ -462,7 +384,7 @@ function serializeLootVoucher(v) {
   return buf.slice(0, offset);
 }
 
-// === SPA Catch-all (must be LAST before server start) ===
+// === SPA Catch-all (LAST route!) ===
 app.get('*', (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
@@ -476,7 +398,13 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log('WASTELAND GPS ONLINE ☢️');
 });
 
-// === Error Handlers ===
-process.on('unhandledRejection', (r) => console.warn('Unhandled Rejection:', r));
-process.on('uncaughtException', (e) => console.error('Uncaught Exception:', e));
+// === Global Error Handlers (critical for production) ===
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
 
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  // Optionally exit process in production after logging
+  // process.exit(1);
+});
