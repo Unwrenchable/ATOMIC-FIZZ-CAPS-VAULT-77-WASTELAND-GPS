@@ -1,4 +1,4 @@
-// main.js – map, GPS, tabs, terminal, simple wallet hook
+// main.js – map, GPS, tabs, terminal, data-driven loot & quests
 
 (function () {
   let map;
@@ -11,6 +11,7 @@
   const DEFAULT_ZOOM = 13;
   const CLAIM_RADIUS_METERS = 50;
 
+  // === DOM HOOKS ===
   const statusEl = document.getElementById("status");
   const accDot = document.getElementById("accDot");
   const accText = document.getElementById("accText");
@@ -18,6 +19,7 @@
   const centerBtn = document.getElementById("centerBtn");
   const recenterMojaveBtn = document.getElementById("recenterMojave");
   const connectWalletBtn = document.getElementById("connectWallet");
+  const enterNukeVaultBtn = document.getElementById("enterNukeVault");
 
   const tabs = document.querySelectorAll(".tab");
   const terminal = document.getElementById("terminal");
@@ -40,13 +42,25 @@
   const xpFillEl = document.getElementById("xpFill");
   const claimedEl = document.getElementById("claimed");
 
+  // === GAME STATE ===
   let caps = 0;
   let level = 1;
   let xp = 0;
   let claimedCount = 0;
-
   let walletPubkey = null;
 
+  // === DATA STORE (all from /data/*.json) ===
+  const DATA = {
+    locations: [],   // from locations.json
+    quests: [],      // from quests.json
+    mintables: [],   // from mintables.json
+    scavenger: [],   // from scavenger.json
+    factions: []     // from factions.json
+  };
+
+  // ==========================
+  // UTILITIES
+  // ==========================
   function setStatus(text, levelClass) {
     statusEl.textContent = text;
     statusEl.classList.remove("status-good", "status-warn", "status-bad");
@@ -70,71 +84,6 @@
     }
   }
 
-  function initMap() {
-    map = L.map("map", {
-      zoomControl: false,
-      attributionControl: false
-    }).setView(MOJAVE_COORDS, DEFAULT_ZOOM);
-
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19
-    }).addTo(map);
-
-    locationsLayer = L.layerGroup().addTo(map);
-
-    loadLocations();
-  }
-
-  async function loadLocations() {
-    try {
-      const res = await fetch("/data/locations.json");
-      if (!res.ok) return;
-
-      const data = await res.json();
-      locationsLayer.clearLayers();
-
-      data.forEach(loc => {
-        const marker = L.marker([loc.lat, loc.lng]);
-        marker.addTo(locationsLayer);
-        marker.bindPopup(loc.name || "Unknown location");
-
-        marker.on("click", () => {
-          openTerminalPanel("LOCATION", `
-<b>${loc.name || "Unknown Location"}</b><br/>
-${loc.description || ""}<br/><br/>
-Distance: <span id="locDistance">calculating...</span><br/><br/>
-<button class="btn" id="claimBtn">CLAIM LOOT</button>
-          `);
-
-          // After render, wire the claim button
-          setTimeout(() => {
-            const claimBtn = document.getElementById("claimBtn");
-            const locDistance = document.getElementById("locDistance");
-            if (!claimBtn || !locDistance) return;
-
-            if (currentPosition) {
-              const d = distanceMeters(
-                currentPosition.lat,
-                currentPosition.lng,
-                loc.lat,
-                loc.lng
-              );
-              locDistance.textContent = `${Math.round(d)}m`;
-            } else {
-              locDistance.textContent = "GPS not locked";
-            }
-
-            claimBtn.addEventListener("click", () => {
-              handleClaimLoot(loc);
-            });
-          }, 0);
-        });
-      });
-    } catch (e) {
-      console.error("Failed to load locations.json", e);
-    }
-  }
-
   function distanceMeters(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -147,6 +96,62 @@ Distance: <span id="locDistance">calculating...</span><br/><br/>
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
+  }
+
+  // ==========================
+  // DATA LOADING
+  // ==========================
+  async function loadDataFile(name) {
+    try {
+      const res = await fetch(`/data/${name}.json`);
+      if (!res.ok) return;
+      DATA[name] = await res.json();
+    } catch (e) {
+      console.error(`Failed to load ${name}.json`, e);
+    }
+  }
+
+  async function loadAllData() {
+    await Promise.all([
+      loadDataFile("locations"),
+      loadDataFile("quests"),
+      loadDataFile("mintables"),
+      loadDataFile("scavenger"),
+      loadDataFile("factions")
+    ]);
+  }
+
+  // ==========================
+  // MAP & LOCATIONS
+  // ==========================
+  function initMap() {
+    map = L.map("map", {
+      zoomControl: false,
+      attributionControl: false
+    }).setView(MOJAVE_COORDS, DEFAULT_ZOOM);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19
+    }).addTo(map);
+
+    locationsLayer = L.layerGroup().addTo(map);
+
+    renderLocations();
+  }
+
+  function renderLocations() {
+    if (!locationsLayer) return;
+    locationsLayer.clearLayers();
+
+    DATA.locations.forEach(loc => {
+      const marker = L.marker([loc.lat, loc.lng]);
+      marker.addTo(locationsLayer);
+      marker.bindPopup(loc.name || "Unknown location");
+
+      marker.on("click", () => {
+        openLocationPanel(loc);
+      });
+    });
   }
 
   function updatePlayerMarker(lat, lng) {
@@ -165,6 +170,9 @@ Distance: <span id="locDistance">calculating...</span><br/><br/>
     }
   }
 
+  // ==========================
+  // GPS
+  // ==========================
   function requestGps() {
     if (!navigator.geolocation) {
       setStatus("GPS not supported on this device.", "status-bad");
@@ -213,6 +221,9 @@ Distance: <span id="locDistance">calculating...</span><br/><br/>
     }
   }
 
+  // ==========================
+  // TERMINAL / PANELS
+  // ==========================
   function openTerminalPanel(title, html) {
     panelTitle.textContent = title;
     panelBody.innerHTML = html;
@@ -231,6 +242,9 @@ Distance: <span id="locDistance">calculating...</span><br/><br/>
     tutorialModal.classList.add("hidden");
   }
 
+  // ==========================
+  // MINT MODAL / LOOT
+  // ==========================
   function openMintModal(title, msg) {
     mintTitle.textContent = title;
     mintMsg.textContent = msg;
@@ -271,6 +285,12 @@ Distance: <span id="locDistance">calculating...</span><br/><br/>
     claimedEl.textContent = claimedCount.toString();
   }
 
+  function findMintForLocation(loc) {
+    if (!loc || !DATA.mintables || !Array.isArray(DATA.mintables)) return null;
+    if (!loc.mintId) return null;
+    return DATA.mintables.find(m => m.id === loc.mintId) || null;
+  }
+
   async function handleClaimLoot(loc) {
     if (!currentPosition) {
       setStatus("Cannot claim: GPS not locked.", "status-bad");
@@ -289,27 +309,116 @@ Distance: <span id="locDistance">calculating...</span><br/><br/>
       return;
     }
 
-    openMintModal("LOOT FOUND", "Minting CAPS from the wasteland...");
+    const mint = findMintForLocation(loc);
+
+    const title = mint?.title || "LOOT FOUND";
+    const message =
+      mint?.message || "Minting CAPS from the wasteland...";
+
+    openMintModal(title, message);
 
     try {
-      // This is where you hook to your backend claim endpoint.
-      // Example (adjust URL and payload to your backend):
-      // const res = await fetch("/api/claim", { method: "POST", body: JSON.stringify({ locationId: loc.id }) });
+      // Placeholder – hook your backend claim endpoint here if needed.
+      // Example:
+      // const res = await fetch("/api/claim", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ locationId: loc.id, wallet: walletPubkey })
+      // });
 
-      // For now just simulate success:
       await new Promise(res => setTimeout(res, 1500));
 
-      addCaps(loc.caps || 5);
-      addXp(loc.xp || 10);
+      const capsReward = mint?.caps ?? 5;
+      const xpReward = mint?.xp ?? 10;
+
+      addCaps(capsReward);
+      addXp(xpReward);
       incrementClaimed();
 
-      mintMsg.textContent = "Claim successful.";
+      mintMsg.textContent = mint?.successMessage || "Claim successful.";
       setStatus("Loot claimed successfully.", "status-good");
     } catch (e) {
       console.error(e);
-      mintMsg.textContent = "Claim failed. Try again.";
+      mintMsg.textContent = mint?.failureMessage || "Claim failed. Try again.";
       setStatus("Loot claim failed.", "status-bad");
     }
+  }
+
+  function openLocationPanel(loc) {
+    openTerminalPanel("LOCATION", `
+<b>${loc.name || "Unknown Location"}</b><br/>
+${loc.description || ""}<br/><br/>
+Distance: <span id="locDistance">calculating...</span><br/><br/>
+<button class="btn" id="claimBtn">CLAIM LOOT</button>
+    `);
+
+    // After render, wire the claim button
+    setTimeout(() => {
+      const claimBtn = document.getElementById("claimBtn");
+      const locDistance = document.getElementById("locDistance");
+      if (!claimBtn || !locDistance) return;
+
+      if (currentPosition) {
+        const d = distanceMeters(
+          currentPosition.lat,
+          currentPosition.lng,
+          loc.lat,
+          loc.lng
+        );
+        locDistance.textContent = `${Math.round(d)}m`;
+      } else {
+        locDistance.textContent = "GPS not locked";
+      }
+
+      claimBtn.addEventListener("click", () => {
+        handleClaimLoot(loc);
+      });
+    }, 0);
+  }
+
+  // ==========================
+  // TABS
+  // ==========================
+  function renderStatsPanel() {
+    openTerminalPanel("STATUS", `
+LEVEL: ${level}<br/>
+XP: ${xp} / 100<br/>
+CAPS: ${caps}<br/>
+CLAIMED LOCATIONS: ${claimedCount}<br/>
+    `);
+  }
+
+  function renderQuestsPanel() {
+    if (!DATA.quests || DATA.quests.length === 0) {
+      openTerminalPanel("QUESTS", "No quests available.");
+      return;
+    }
+
+    const html = DATA.quests.map(q => `
+<b>${q.name}</b><br/>
+${q.description}<br/><br/>
+    `).join("");
+
+    openTerminalPanel("QUESTS", html);
+  }
+
+  function renderItemsPanel() {
+    // Placeholder – you can later wire inventory here.
+    openTerminalPanel("ITEMS", "Inventory system coming soon.");
+  }
+
+  function renderShopPanel() {
+    if (!DATA.scavenger || DATA.scavenger.length === 0) {
+      openTerminalPanel("SCAVENGER'S EXCHANGE", "No items available in the shop.");
+      return;
+    }
+
+    const html = DATA.scavenger.map(item => `
+<b>${item.name}</b> – ${item.cost} CAPS<br/>
+${item.description}<br/><br/>
+    `).join("");
+
+    openTerminalPanel("SCAVENGER'S EXCHANGE", html);
   }
 
   function initTabs() {
@@ -322,23 +431,21 @@ Distance: <span id="locDistance">calculating...</span><br/><br/>
         if (panel === "map") {
           closeTerminalPanel();
         } else if (panel === "stat") {
-          openTerminalPanel("STATUS", `
-LEVEL: ${level}<br/>
-XP: ${xp} / 100<br/>
-CAPS: ${caps}<br/>
-CLAIMED LOCATIONS: ${claimedCount}<br/>
-          `);
+          renderStatsPanel();
         } else if (panel === "items") {
-          openTerminalPanel("ITEMS", "Inventory system coming soon.");
+          renderItemsPanel();
         } else if (panel === "quests") {
-          openTerminalPanel("QUESTS", "Quest log coming soon.");
+          renderQuestsPanel();
         } else if (panel === "shop") {
-          openTerminalPanel("SCAVENGER'S EXCHANGE", "Shop coming soon.");
+          renderShopPanel();
         }
       });
     });
   }
 
+  // ==========================
+  // WALLET
+  // ==========================
   function initWallet() {
     connectWalletBtn.addEventListener("click", async () => {
       if (!window.solana || !window.solana.isPhantom) {
@@ -349,7 +456,10 @@ CLAIMED LOCATIONS: ${claimedCount}<br/>
       try {
         const resp = await window.solana.connect();
         walletPubkey = resp.publicKey.toString();
-        setStatus(`Wallet connected: ${walletPubkey.slice(0, 4)}...${walletPubkey.slice(-4)}`, "status-good");
+        setStatus(
+          `Wallet connected: ${walletPubkey.slice(0, 4)}...${walletPubkey.slice(-4)}`,
+          "status-good"
+        );
         connectWalletBtn.textContent = "Wallet Connected";
       } catch (e) {
         console.error(e);
@@ -358,24 +468,36 @@ CLAIMED LOCATIONS: ${claimedCount}<br/>
     });
   }
 
+  // ==========================
+  // UI INIT
+  // ==========================
   function initUi() {
     requestGpsBtn.addEventListener("click", requestGps);
     centerBtn.addEventListener("click", centerOnPlayer);
     recenterMojaveBtn.addEventListener("click", recenterMojave);
 
     panelClose.addEventListener("click", closeTerminalPanel);
-
     mintCloseBtn.addEventListener("click", closeMintModal);
 
     tutorialClose.addEventListener("click", () => {
       closeTutorial();
     });
 
+    if (enterNukeVaultBtn) {
+      enterNukeVaultBtn.addEventListener("click", () => {
+        window.location = "/nuke.html";
+      });
+    }
+
     initTabs();
     initWallet();
   }
 
-  function initGame() {
+  // ==========================
+  // GAME INIT
+  // ==========================
+  async function initGame() {
+    await loadAllData();
     initMap();
     initUi();
     openTutorial();
