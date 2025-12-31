@@ -541,6 +541,21 @@ html, body {
     inset: 20px 16px 50px 16px;
   }
 }
+/* === FIX: Ensure map container expands === */
+.pipboy-screen {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-container {
+  flex: 1 1 auto;
+  min-height: 200px; /* prevents collapse */
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
 
 /* =====================
    ANIMATIONS
