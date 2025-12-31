@@ -1,5 +1,7 @@
 // main.js – ATOMIC FIZZ CAPS • WASTELAND GPS
-// Hybrid exploration + Fallout-style VATS battles + NFT item rewards + Multi-map modes
+// Complete, merged, drop-in file with multi-map modes (Stamen Terrain default),
+// ESRI Satellite, Stamen Toner, GPS, VATS battle engine, terminals, quests, items,
+// collectibles, wallet integration, and UI wiring to your existing HTML.
 
 (function () {
   // ==========================
@@ -101,6 +103,7 @@
   // UTILITIES
   // ==========================
   function setStatus(text, className) {
+    if (!statusEl) return;
     statusEl.textContent = text;
     statusEl.classList.remove("status-good", "status-warn", "status-bad");
     if (className) statusEl.classList.add(className);
@@ -113,7 +116,6 @@
 
     if (accMeters == null) {
       accText.textContent = "GPS: waiting...";
-      // base CSS is red/pulsing; we just don't add green/amber
       return;
     }
 
@@ -172,6 +174,8 @@
   // PLAYER STATS
   // ==========================
   function updateHud() {
+    if (!lvlEl || !capsEl || !claimedEl || !xpTextEl || !xpFillEl || !hpFillEl || !radFillEl || !hpTextEl) return;
+
     lvlEl.textContent = lvl.toString();
     capsEl.textContent = caps.toString();
     claimedEl.textContent = claimedCount.toString();
@@ -298,11 +302,14 @@
   function switchMapStyle(style) {
     if (!map || !currentMapLayer) return;
 
-    map.removeLayer(currentMapLayer);
+    try {
+      map.removeLayer(currentMapLayer);
+    } catch (e) {
+      // ignore if not present
+    }
 
     if (style === "terrain" && terrainLayer) currentMapLayer = terrainLayer;
-    else if (style === "satellite" && satelliteLayer)
-      currentMapLayer = satelliteLayer;
+    else if (style === "satellite" && satelliteLayer) currentMapLayer = satelliteLayer;
     else if (style === "toner" && tonerLayer) currentMapLayer = tonerLayer;
     else currentMapLayer = terrainLayer || currentMapLayer;
 
@@ -311,28 +318,32 @@
   }
 
   function initMapModeButton() {
-    const controls = document.querySelector(".pip-controls");
-    if (!controls) return;
-
-    let btn = document.getElementById("mapModeBtn");
-    if (!btn) {
-      btn = document.createElement("button");
-      btn.id = "mapModeBtn";
-      btn.className = "btn";
-      btn.textContent = "MAP MODE";
-      controls.appendChild(btn);
-    }
+    // Bind to the button you placed in HTML (inside .map-container)
+    const btn = document.getElementById("mapModeBtn");
+    if (!btn) return;
 
     btn.addEventListener("click", () => {
       mapModeIndex = (mapModeIndex + 1) % mapModes.length;
       const mode = mapModes[mapModeIndex];
       switchMapStyle(mode);
+
+      // small CRT flicker effect (non-blocking)
+      if (mapContainerEl) {
+        mapContainerEl.classList.add("crt-glitch");
+        if (staticNoiseEl) staticNoiseEl.classList.add("active");
+        setTimeout(() => {
+          mapContainerEl.classList.remove("crt-glitch");
+          if (staticNoiseEl) staticNoiseEl.classList.remove("active");
+        }, 520);
+      }
     });
   }
 
   function renderLocations() {
     if (!locationsLayer) return;
     locationsLayer.clearLayers();
+
+    if (!Array.isArray(DATA.locations)) return;
 
     DATA.locations.forEach(loc => {
       const name = loc.n || "Unknown";
@@ -418,12 +429,14 @@
   // TERMINAL & MODALS
   // ==========================
   function openTerminalPanel(title, html) {
+    if (!panelTitle || !panelBody || !terminal) return;
     panelTitle.textContent = title;
     panelBody.innerHTML = html;
     terminal.classList.remove("hidden");
   }
 
   function closeTerminalPanel() {
+    if (!terminal) return;
     terminal.classList.add("hidden");
   }
 
@@ -436,6 +449,7 @@
   }
 
   function openMintModal(title, msg) {
+    if (!mintModal || !mintTitle || !mintMsg || !mintProgressBar) return;
     mintTitle.textContent = title;
     mintMsg.textContent = msg;
     mintProgressBar.style.width = "0%";
@@ -446,6 +460,7 @@
   }
 
   function closeMintModal() {
+    if (!mintModal) return;
     mintModal.classList.add("hidden");
   }
 
@@ -585,7 +600,7 @@
         </div>
       </div>
     `;
-    mapContainerEl.appendChild(battleScreen);
+    if (mapContainerEl) mapContainerEl.appendChild(battleScreen);
     return battleScreen;
   }
 
@@ -659,7 +674,7 @@
     const battleScreen = createBattleScreen();
 
     applyCrtGlitchTransition(() => {
-      mapEl.classList.add("hidden");
+      if (mapEl) mapEl.classList.add("hidden");
       battleScreen.classList.remove("hidden");
       updateBattleHud();
       pushBattleLog("V.A.T.S. ONLINE. TARGET ACQUIRED.");
@@ -680,7 +695,7 @@
 
     applyCrtGlitchTransition(() => {
       battleScreen.classList.add("hidden");
-      mapEl.classList.remove("hidden");
+      if (mapEl) mapEl.classList.remove("hidden");
       updateHud();
     });
   }
