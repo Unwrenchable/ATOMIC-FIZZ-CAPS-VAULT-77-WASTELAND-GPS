@@ -1,13 +1,14 @@
 // boot.js – terminal boot animation, then emit event for game init
 
-(function () {
-  const lines = [
+const lines = [
   "VAULT-77 PERSONAL TERMINAL • ATOMIC FIZZ CAPS",
   "---------------------------------------------",
   "",
-  "  +--------------------------+",
-  "  |    ATOMIC FIZZ CAPS      |",
-  "  +--------------------------+",
+  "                ########################",
+  "                #                      #",
+  "                #   ATOMIC FIZZ CAPS   #",
+  "                #                      #",
+  "                ########################",
   "",
   "Initializing FIZZ CAPS LEDGER.................. OK",
   "Linking SOLANA RELAY........................... OK",
@@ -21,7 +22,6 @@
   "SYSTEM STATUS: ONLINE",
   ""
 ];
-
 
   const bootScreen = document.getElementById("bootScreen");
   const bootTextEl = document.getElementById("bootText");
