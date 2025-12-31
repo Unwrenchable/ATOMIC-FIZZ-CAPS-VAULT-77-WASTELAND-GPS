@@ -1,4 +1,4 @@
-// /js/script.js – Complete drop-in replacement (FULL v1.1 – every feature, no omissions)
+// /js/script.js – COMPLETE v1.1 DROP-IN (full Pip-Boy game – wallet, map, GPS, claims, rads, XP, gear, quests, shop, sounds)
 
 let map, playerMarker = null, playerLatLng = null, lastAccuracy = 999, watchId = null, firstLock = true;
 let wallet = null;
@@ -195,28 +195,27 @@ document.getElementById('connectWallet').onclick = async () => {
   }
 };
 
-// Tabs
-// Epic Pip-Boy Tab System – Delegation + immersive feedback
+// Epic Pip-Boy Tabs – Delegation + immersive feedback
 document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.tab');
   const terminal = document.getElementById('terminal');
   const panelTitle = document.getElementById('panelTitle');
   const panelBody = document.getElementById('panelBody');
 
-  // Add active tab glow (Pip-Boy style)
-  function highlightActiveTab(tab) {
+  // Highlight active tab with glow
+  function highlightTab(tab) {
     tabs.forEach(t => t.classList.remove('active', 'glow-active'));
     tab.classList.add('active', 'glow-active');
     playSfx('sfxButton', 0.4); // Click sound
   }
 
-  // Use event delegation on body for robustness
-  document.body.addEventListener('click', (e) => {
+  // Use delegation for reliability
+  document.body.addEventListener('click', e => {
     const tab = e.target.closest('.tab');
     if (!tab) return;
 
-    e.preventDefault(); // Prevent any default if needed
-    highlightActiveTab(tab);
+    e.preventDefault();
+    highlightTab(tab);
 
     const panel = tab.dataset.panel;
 
@@ -226,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
       terminal.classList.add('open');
       panelTitle.textContent = tab.textContent;
 
-      // Loading state (Pip-Boy feel)
+      // Loading state (real Pip-Boy feel)
       panelBody.innerHTML = '<div class="loading-spinner">ACCESSING DATA...</div>';
 
       // Async content load with timeout for realism
@@ -235,17 +234,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (panel === 'items') renderItems();
         if (panel === 'quests') renderQuests();
         if (panel === 'shop') renderShop();
-      }, 300); // 300ms "loading" delay for immersion
+      }, 400); // 400ms delay for authenticity
     }
   });
 
-  // Close button
+  // Close panel
   document.getElementById('panelClose')?.addEventListener('click', () => {
     terminal.classList.remove('open');
     document.querySelector('.tab[data-panel="map"]').classList.add('active', 'glow-active');
     playSfx('sfxButton', 0.3);
   });
 });
+
 // renderStats
 function renderStats() {
   document.getElementById('panelBody').innerHTML = `
@@ -259,7 +259,7 @@ function renderStats() {
 }
 
 // renderItems
-async function renderItems() {
+function renderItems() {
   let html = '';
   if (player.gear.length === 0) {
     html = '<div class="list-item">Inventory empty – hunt rare locations!</div>';
