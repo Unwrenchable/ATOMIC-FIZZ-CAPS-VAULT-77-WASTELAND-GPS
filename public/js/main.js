@@ -1,5 +1,5 @@
 // main.js – ATOMIC FIZZ CAPS • WASTELAND GPS
-// Complete, merged, drop-in file with multi-map modes (Stamen Terrain default),
+// Complete, fixed, drop-in file with multi-map modes (Stamen Terrain default),
 // ESRI Satellite, Stamen Toner, GPS, VATS battle engine, terminals, quests, items,
 // collectibles, wallet integration, and UI wiring to your existing HTML.
 
@@ -7,7 +7,12 @@
   // ==========================
   // GLOBAL STATE
   // ==========================
-  let map;
+  // DOM element reference (never overwrite the Leaflet map variable with this)
+  const mapEl = document.getElementById("map");
+
+  // Leaflet map instance (created in initMap)
+  let map = null;
+
   let playerMarker = null;
   let locationsLayer = null;
   let currentPosition = null;
@@ -80,7 +85,6 @@
   const hpTextEl = document.getElementById("hpText");
 
   const mapContainerEl = document.querySelector(".map-container");
-  const mapEl = document.getElementById("map");
   const staticNoiseEl = document.querySelector(".static-noise");
 
   // ==========================
@@ -270,7 +274,15 @@
   // MAP + MULTI-MAP MODES
   // ==========================
   function initMap() {
-    map = L.map("map", {
+    // If map already exists and is a Leaflet map, reuse it
+    if (map && window.L && map instanceof L.Map) {
+      if (currentMapLayer && !currentMapLayer._map) currentMapLayer.addTo(map);
+      setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 200);
+      return;
+    }
+
+    // Create the Leaflet map using the DOM element (mapEl)
+    map = L.map(mapEl || "map", {
       zoomControl: false,
       attributionControl: false
     }).setView(MOJAVE_COORDS, DEFAULT_ZOOM);
@@ -297,6 +309,11 @@
 
     locationsLayer = L.layerGroup().addTo(map);
     renderLocations();
+
+    // ensure tiles render if map was initialized while hidden
+    setTimeout(() => {
+      if (map && typeof map.invalidateSize === "function") map.invalidateSize();
+    }, 300);
   }
 
   function switchMapStyle(style) {
@@ -326,6 +343,11 @@
       mapModeIndex = (mapModeIndex + 1) % mapModes.length;
       const mode = mapModes[mapModeIndex];
       switchMapStyle(mode);
+
+      // force redraw after switching layers
+      if (map && typeof map.invalidateSize === "function") {
+        setTimeout(() => map.invalidateSize(), 120);
+      }
 
       // small CRT flicker effect (non-blocking)
       if (mapContainerEl) {
@@ -1296,6 +1318,10 @@ ${pack.description || ""}<br/><br/>
     initWallet();
     initMapModeButton();
     updateHud();
+
+    // disable accidental top-left overlay stealing clicks by default
+    const ol = document.querySelector('.overseer-link');
+    if (ol) ol.style.pointerEvents = 'none';
   }
 
   // ==========================
@@ -1305,6 +1331,15 @@ ${pack.description || ""}<br/><br/>
     await loadAllData();
     initMap();
     initUi();
+
+    // ensure terrain is active and map is sized correctly
+    try {
+      switchMapStyle("terrain");
+    } catch (e) {}
+    setTimeout(() => {
+      if (map && typeof map.invalidateSize === "function") map.invalidateSize();
+    }, 350);
+
     openTutorial();
     setStatus("Pip-Boy online. Request GPS to begin tracking.", "status-good");
   }
@@ -1312,4 +1347,18 @@ ${pack.description || ""}<br/><br/>
   window.addEventListener("pipboyReady", () => {
     initGame();
   });
+
+  // If the page already loaded and pipboyReady was fired earlier, try to init anyway
+  // (safe guard for dev/testing)
+  setTimeout(() => {
+    if (!map && document.body && document.body.contains(mapEl)) {
+      // If pipboyReady hasn't fired, still attempt to initialize after a short delay
+      // This avoids double-initialization because initMap() is guarded.
+      try {
+        initGame();
+      } catch (e) {
+        // ignore; pipboyReady will call initGame when ready
+      }
+    }
+  }, 1200);
 })();
