@@ -150,6 +150,7 @@ app.use(
           "https://api.mainnet-beta.solana.com",
           "wss://*.solana.com",               // Websockets for RPC
           "wss:",
+          "https://*",                        // Allow HTTPS XHR/WebSocket targets (wallet RPCs, APIs, tiles)
         ],
 
         mediaSrc: ["'self'", "data:", "https:"],
