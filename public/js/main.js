@@ -1,26 +1,48 @@
-// main.js – Atomic Fizz Caps Wasteland GPS
-// Map, GPS, tabs, terminal, wallet, data-driven locations, quests, loot, collectibles
+// main.js – ATOMIC FIZZ CAPS • WASTELAND GPS
+// Hybrid exploration + Fallout-style VATS battles + NFT item rewards
 
 (function () {
+  // ==========================
+  // GLOBAL STATE
+  // ==========================
   let map;
   let playerMarker = null;
   let locationsLayer = null;
   let currentPosition = null;
 
-  // Mojave default (approx around Vegas)
   const MOJAVE_COORDS = [36.1699, -115.1398];
   const DEFAULT_ZOOM = 13;
   const CLAIM_RADIUS_METERS = 50;
 
-  // === DOM HOOKS ===
+  // Player stats
+  let lvl = 1;
+  let xp = 0;
+  let caps = 0;
+  let claimedCount = 0;
+
+  const PLAYER_MAX_HP_BASE = 100;
+  let playerMaxHp = PLAYER_MAX_HP_BASE;
+  let playerHp = PLAYER_MAX_HP_BASE;
+  let playerRad = 0; // 0–100
+  let walletPubkey = null;
+
+  // Battle state
+  let inBattle = false;
+  let currentEnemy = null; // { name, type, lvl, rarity, maxHp, hp, baseDamage }
+  let currentBattlePoi = null; // location object
+  let battleLog = [];
+
+  // ==========================
+  // DOM HOOKS
+  // ==========================
   const statusEl = document.getElementById("status");
   const accDot = document.getElementById("accDot");
   const accText = document.getElementById("accText");
+
   const requestGpsBtn = document.getElementById("requestGpsBtn");
   const centerBtn = document.getElementById("centerBtn");
   const recenterMojaveBtn = document.getElementById("recenterMojave");
   const connectWalletBtn = document.getElementById("connectWallet");
-  const enterNukeVaultBtn = document.getElementById("enterNukeVault");
 
   const tabs = document.querySelectorAll(".tab");
   const terminal = document.getElementById("terminal");
@@ -43,34 +65,37 @@
   const xpFillEl = document.getElementById("xpFill");
   const claimedEl = document.getElementById("claimed");
 
-  // === GAME STATE ===
-  let caps = 0;
-  let level = 1;
-  let xp = 0;
-  let claimedCount = 0;
-  let walletPubkey = null;
+  const hpFillEl = document.getElementById("hpFill");
+  const radFillEl = document.getElementById("radFill");
+  const hpTextEl = document.getElementById("hpText");
 
-  // === DATA STORE (all from /public/data/*.json) ===
+  const mapContainerEl = document.querySelector(".map-container");
+  const mapEl = document.getElementById("map");
+  const staticNoiseEl = document.querySelector(".static-noise");
+
+  // ==========================
+  // DATA STORE
+  // ==========================
   const DATA = {
-    locations: [],       // locations.json – [{ n, lat, lng, lvl, rarity }]
-    quests: [],          // quests.json
-    scavenger: [],       // scavenger.json – loot table by spawnPOI
-    collectiblesPack: {  // collectibles.json
+    locations: [],
+    quests: [],
+    scavenger: [],
+    collectiblesPack: {
       id: null,
       description: "",
       collectibles: []
     },
-    factions: [],        // factions.json (optional)
-    mintables: []        // mintables.json (optional / future use)
+    factions: [],
+    mintables: []
   };
 
   // ==========================
   // UTILITIES
   // ==========================
-  function setStatus(text, levelClass) {
+  function setStatus(text, className) {
     statusEl.textContent = text;
     statusEl.classList.remove("status-good", "status-warn", "status-bad");
-    if (levelClass) statusEl.classList.add(levelClass);
+    if (className) statusEl.classList.add(className);
   }
 
   function setGpsAccuracy(accMeters) {
@@ -120,6 +145,74 @@
     return "#00ff66";
   }
 
+  function randomChoice(arr) {
+    if (!arr || arr.length === 0) return null;
+    const idx = Math.floor(Math.random() * arr.length);
+    return arr[idx];
+  }
+
+  function clamp(val, min, max) {
+    return Math.max(min, Math.min(max, val));
+  }
+
+  // ==========================
+  // PLAYER STATS
+  // ==========================
+  function updateHud() {
+    lvlEl.textContent = lvl.toString();
+    capsEl.textContent = caps.toString();
+    claimedEl.textContent = claimedCount.toString();
+
+    const xpNeeded = 100;
+    xpTextEl.textContent = `${xp} / ${xpNeeded}`;
+    xpFillEl.style.width = `${clamp((xp / xpNeeded) * 100, 0, 100)}%`;
+
+    const hpPct = clamp((playerHp / playerMaxHp) * 100, 0, 100);
+    const radPct = clamp(playerRad, 0, 100);
+
+    hpFillEl.style.width = `${hpPct}%`;
+    radFillEl.style.width = `${radPct}%`;
+    hpTextEl.textContent = `HP ${Math.round(playerHp)} / ${playerMaxHp}`;
+  }
+
+  function addCaps(amount) {
+    caps += Math.max(0, amount | 0);
+    updateHud();
+  }
+
+  function addXp(amount) {
+    const xpNeeded = 100;
+    xp += Math.max(0, amount | 0);
+
+    while (xp >= xpNeeded) {
+      xp -= xpNeeded;
+      lvl++;
+      playerMaxHp += 5;
+      playerHp = playerMaxHp;
+      setStatus(`Level up! You are now LVL ${lvl}.`, "status-good");
+    }
+
+    updateHud();
+  }
+
+  function applyDamageToPlayer(amount) {
+    playerHp -= Math.max(0, amount);
+    if (playerHp <= 0) {
+      playerHp = 0;
+    }
+    updateHud();
+  }
+
+  function healPlayer(amount) {
+    playerHp = clamp(playerHp + Math.max(0, amount), 0, playerMaxHp);
+    updateHud();
+  }
+
+  function incrementClaimed() {
+    claimedCount++;
+    updateHud();
+  }
+
   // ==========================
   // DATA LOADING
   // ==========================
@@ -129,12 +222,13 @@
       if (!res.ok) return;
 
       const json = await res.json();
-
       if (name === "collectibles") {
         DATA.collectiblesPack = {
           id: json.id || null,
           description: json.description || "",
-          collectibles: Array.isArray(json.collectibles) ? json.collectibles : []
+          collectibles: Array.isArray(json.collectibles)
+            ? json.collectibles
+            : []
         };
       } else {
         DATA[name] = json;
@@ -156,7 +250,7 @@
   }
 
   // ==========================
-  // MAP & LOCATIONS
+  // MAP
   // ==========================
   function initMap() {
     map = L.map("map", {
@@ -169,7 +263,6 @@
     }).addTo(map);
 
     locationsLayer = L.layerGroup().addTo(map);
-
     renderLocations();
   }
 
@@ -178,12 +271,13 @@
     locationsLayer.clearLayers();
 
     DATA.locations.forEach(loc => {
-      const name = loc.n || "Unknown Location";
+      const name = loc.n || "Unknown";
       const marker = L.marker([loc.lat, loc.lng]);
       marker.addTo(locationsLayer);
       marker.bindPopup(name);
 
       marker.on("click", () => {
+        if (inBattle) return;
         openLocationPanel(loc);
       });
     });
@@ -191,8 +285,8 @@
 
   function updatePlayerMarker(lat, lng) {
     currentPosition = { lat, lng };
-
     if (!map) return;
+
     if (!playerMarker) {
       playerMarker = L.circleMarker([lat, lng], {
         radius: 7,
@@ -202,6 +296,20 @@
       }).addTo(map);
     } else {
       playerMarker.setLatLng([lat, lng]);
+    }
+  }
+
+  function centerOnPlayer() {
+    if (currentPosition && map) {
+      map.setView([currentPosition.lat, currentPosition.lng], DEFAULT_ZOOM);
+    } else {
+      setStatus("No GPS lock yet. Request GPS first.", "status-warn");
+    }
+  }
+
+  function recenterMojave() {
+    if (map) {
+      map.setView(MOJAVE_COORDS, DEFAULT_ZOOM);
     }
   }
 
@@ -242,22 +350,8 @@
     );
   }
 
-  function centerOnPlayer() {
-    if (currentPosition && map) {
-      map.setView([currentPosition.lat, currentPosition.lng], DEFAULT_ZOOM);
-    } else {
-      setStatus("No GPS lock yet. Request GPS first.", "status-warn");
-    }
-  }
-
-  function recenterMojave() {
-    if (map) {
-      map.setView(MOJAVE_COORDS, DEFAULT_ZOOM);
-    }
-  }
-
   // ==========================
-  // TERMINAL / PANELS
+  // TERMINAL & MODALS
   // ==========================
   function openTerminalPanel(title, html) {
     panelTitle.textContent = title;
@@ -270,26 +364,18 @@
   }
 
   function openTutorial() {
-    if (tutorialModal) {
-      tutorialModal.classList.remove("hidden");
-    }
+    if (tutorialModal) tutorialModal.classList.remove("hidden");
   }
 
   function closeTutorial() {
-    if (tutorialModal) {
-      tutorialModal.classList.add("hidden");
-    }
+    if (tutorialModal) tutorialModal.classList.add("hidden");
   }
 
-  // ==========================
-  // MINT MODAL / LOOT
-  // ==========================
   function openMintModal(title, msg) {
     mintTitle.textContent = title;
     mintMsg.textContent = msg;
     mintProgressBar.style.width = "0%";
     mintModal.classList.remove("hidden");
-
     setTimeout(() => {
       mintProgressBar.style.width = "100%";
     }, 50);
@@ -299,160 +385,511 @@
     mintModal.classList.add("hidden");
   }
 
-  function addCaps(amount) {
-    caps += amount;
-    capsEl.textContent = caps.toString();
+  // ==========================
+  // ENEMY GENERATION (E1)
+  // ==========================
+  function inferEnemyTypeFromPoiName(name) {
+    const n = (name || "").toLowerCase();
+
+    if (n.includes("deathclaw") || n.includes("dead wind") || n.includes("quarry"))
+      return "deathclaw";
+    if (n.includes("black mountain")) return "super_mutant";
+    if (n.includes("vault")) return "vault_ghoul";
+    if (n.includes("repc") || n.includes("helios") || n.includes("robot") || n.includes("ncrcf"))
+      return "robot";
+    if (n.includes("strip") || n.includes("atomic wrangler") || n.includes("gomorrah") || n.includes("tops"))
+      return "raider";
+    if (n.includes("pitt")) return "raider_elite";
+    if (n.includes("glow") || n.includes("chernobyl") || n.includes("fukushima"))
+      return "irradiated_beast";
+    if (n.includes("camp") || n.includes("mccarran") || n.includes("mojave outpost"))
+      return "ncr_trooper";
+    if (n.includes("cottonwood") || n.includes("fortification") || n.includes("nelson"))
+      return "legionary";
+
+    return "wasteland_hostile";
   }
 
-  function addXp(amount) {
-    xp += amount;
-    const xpNeeded = 100;
-    if (xp >= xpNeeded) {
-      xp -= xpNeeded;
-      level++;
-      lvlEl.textContent = level.toString();
-      setStatus(`Level up! You are now LVL ${level}.`, "status-good");
+  function buildEnemyForLocation(loc) {
+    const name = loc.n || "Unknown Threat";
+    const baseLvl = loc.lvl || 1;
+    const rarity = (loc.rarity || "common").toLowerCase();
+    const type = inferEnemyTypeFromPoiName(name);
+
+    let lvlMultiplier = 1;
+    if (rarity === "rare") lvlMultiplier = 1.1;
+    else if (rarity === "epic") lvlMultiplier = 1.25;
+    else if (rarity === "legendary") lvlMultiplier = 1.5;
+
+    const enemyLvl = Math.max(1, Math.round(baseLvl * lvlMultiplier));
+
+    let baseHp = 60 + enemyLvl * 5;
+    let baseDamage = 6 + enemyLvl * 1.2;
+
+    if (type === "deathclaw" || type === "raider_elite") {
+      baseHp *= 1.5;
+      baseDamage *= 1.6;
+    } else if (type === "super_mutant" || type === "irradiated_beast") {
+      baseHp *= 1.4;
+      baseDamage *= 1.4;
+    } else if (type === "robot") {
+      baseHp *= 1.2;
+      baseDamage *= 1.3;
     }
 
-    const pct = Math.max(0, Math.min(100, (xp / xpNeeded) * 100));
-    xpFillEl.style.width = `${pct}%`;
-    xpTextEl.textContent = `${xp} / ${xpNeeded}`;
-  }
+    let displayName = "Hostile";
+    if (type === "deathclaw") displayName = "Deathclaw";
+    else if (type === "super_mutant") displayName = "Super Mutant";
+    else if (type === "vault_ghoul") displayName = "Vault Ghoul";
+    else if (type === "robot") displayName = "Security Automaton";
+    else if (type === "raider") displayName = "Raider Thug";
+    else if (type === "raider_elite") displayName = "Pitt Forgemaster";
+    else if (type === "irradiated_beast") displayName = "Irradiated Beast";
+    else if (type === "ncr_trooper") displayName = "NCR Trooper";
+    else if (type === "legionary") displayName = "Legionary";
+    else displayName = "Wasteland Hostile";
 
-  function incrementClaimed() {
-    claimedCount++;
-    claimedEl.textContent = claimedCount.toString();
-  }
-
-  function randomChoice(arr) {
-    if (!arr || arr.length === 0) return null;
-    const idx = Math.floor(Math.random() * arr.length);
-    return arr[idx];
-  }
-
-  function computeXpReward(loc, chosenItems) {
-    const base = (loc.lvl || 1) * 2;
-    const rarityBonusMap = {
-      common: 0,
-      rare: 10,
-      epic: 25,
-      legendary: 50
+    return {
+      name: displayName,
+      type,
+      lvl: enemyLvl,
+      rarity,
+      maxHp: Math.round(baseHp),
+      hp: Math.round(baseHp),
+      baseDamage: baseDamage
     };
-    let rarityBonus = rarityBonusMap[(loc.rarity || "").toLowerCase()] || 0;
-    let itemBonus = 0;
+  }
 
-    if (Array.isArray(chosenItems)) {
-      chosenItems.forEach(item => {
-        const r = (item.rarity || "").toLowerCase();
-        if (r === "rare") itemBonus += 5;
-        if (r === "epic") itemBonus += 15;
-        if (r === "legendary") itemBonus += 30;
-      });
+  // ==========================
+  // BATTLE SCREEN (V1 + B3 + CRT GLITCH)
+  // ==========================
+  function createBattleScreen() {
+    let battleScreen = document.getElementById("battleScreen");
+    if (battleScreen) return battleScreen;
+
+    battleScreen = document.createElement("div");
+    battleScreen.id = "battleScreen";
+    battleScreen.className = "battle-screen hidden";
+    battleScreen.innerHTML = `
+      <div class="battle-inner">
+        <div class="battle-header">
+          <div class="battle-title">V.A.T.S. COMBAT SUBSYSTEM</div>
+          <div class="battle-subtitle" id="battleSubTitle"></div>
+        </div>
+        <div class="battle-main">
+          <div class="battle-enemy">
+            <div class="enemy-silhouette">
+              <div class="enemy-outline"></div>
+            </div>
+            <div class="enemy-info">
+              <div id="enemyName" class="enemy-name"></div>
+              <div id="enemyLvl" class="enemy-lvl"></div>
+              <div class="enemy-hp-bar">
+                <div id="enemyHpFill" class="enemy-hp-fill"></div>
+              </div>
+              <div id="enemyHpText" class="enemy-hp-text"></div>
+            </div>
+          </div>
+          <div class="battle-player">
+            <div class="player-label">YOU</div>
+            <div class="player-hp-bar">
+              <div id="battlePlayerHpFill" class="player-hp-fill"></div>
+            </div>
+            <div id="battlePlayerHpText" class="player-hp-text"></div>
+          </div>
+          <div class="battle-grid">
+            <button class="btn vats-btn" data-part="head">
+              HEAD<br/><small>High crit, low hit</small>
+            </button>
+            <button class="btn vats-btn" data-part="torso">
+              TORSO<br/><small>High hit, normal dmg</small>
+            </button>
+            <button class="btn vats-btn" data-part="arms">
+              ARMS<br/><small>Disarm chance</small>
+            </button>
+            <button class="btn vats-btn" data-part="legs">
+              LEGS<br/><small>Slow target</small>
+            </button>
+          </div>
+          <div class="battle-log-container">
+            <div id="battleLog" class="battle-log"></div>
+          </div>
+          <div class="battle-actions">
+            <button class="btn" id="battleUseItemBtn">USE STIMPAK</button>
+            <button class="btn" id="battleFleeBtn">ATTEMPT ESCAPE</button>
+          </div>
+        </div>
+      </div>
+    `;
+    mapContainerEl.appendChild(battleScreen);
+    return battleScreen;
+  }
+
+  function updateBattleHud() {
+    const battleScreen = document.getElementById("battleScreen");
+    if (!battleScreen || !currentEnemy) return;
+
+    const enemyNameEl = battleScreen.querySelector("#enemyName");
+    const enemyLvlEl = battleScreen.querySelector("#enemyLvl");
+    const enemyHpFillEl = battleScreen.querySelector("#enemyHpFill");
+    const enemyHpTextEl = battleScreen.querySelector("#enemyHpText");
+    const battlePlayerHpFillEl = battleScreen.querySelector("#battlePlayerHpFill");
+    const battlePlayerHpTextEl = battleScreen.querySelector("#battlePlayerHpText");
+    const battleSubTitleEl = battleScreen.querySelector("#battleSubTitle");
+
+    enemyNameEl.textContent = currentEnemy.name.toUpperCase();
+    enemyLvlEl.textContent = `LVL ${currentEnemy.lvl} – ${rarityLabel(currentEnemy.rarity)}`;
+
+    const enemyHpPct = clamp((currentEnemy.hp / currentEnemy.maxHp) * 100, 0, 100);
+    enemyHpFillEl.style.width = `${enemyHpPct}%`;
+    enemyHpTextEl.textContent = `${Math.round(currentEnemy.hp)} / ${currentEnemy.maxHp}`;
+
+    const playerHpPct = clamp((playerHp / playerMaxHp) * 100, 0, 100);
+    battlePlayerHpFillEl.style.width = `${playerHpPct}%`;
+    battlePlayerHpTextEl.textContent = `${Math.round(playerHp)} / ${playerMaxHp}`;
+
+    battleSubTitleEl.textContent =
+      currentBattlePoi && currentBattlePoi.n
+        ? `ENGAGED NEAR: ${currentBattlePoi.n.toUpperCase()}`
+        : "COMBAT ENGAGED";
+  }
+
+  function pushBattleLog(line) {
+    battleLog.push(line);
+    if (battleLog.length > 8) battleLog.shift();
+
+    const battleLogEl = document.getElementById("battleLog");
+    if (!battleLogEl) return;
+    battleLogEl.innerHTML = battleLog
+      .map(l => `<div class="battle-log-line">${l}</div>`)
+      .join("");
+    battleLogEl.scrollTop = battleLogEl.scrollHeight;
+  }
+
+  function applyCrtGlitchTransition(onMidpoint) {
+    if (!mapContainerEl || !staticNoiseEl) {
+      if (typeof onMidpoint === "function") onMidpoint();
+      return;
     }
 
-    return base + rarityBonus + itemBonus;
+    mapContainerEl.classList.add("crt-glitch");
+    staticNoiseEl.classList.add("active");
+
+    setTimeout(() => {
+      if (typeof onMidpoint === "function") onMidpoint();
+    }, 200);
+
+    setTimeout(() => {
+      mapContainerEl.classList.remove("crt-glitch");
+      staticNoiseEl.classList.remove("active");
+    }, 600);
   }
 
-  function computeCapsReward(chosenItems) {
-    if (!Array.isArray(chosenItems) || chosenItems.length === 0) return 25;
-    // Scale down from priceCAPS so rewards are reasonable
-    const totalPrice = chosenItems.reduce(
-      (sum, item) => sum + (item.priceCAPS || 0),
-      0
-    );
-    return Math.max(10, Math.round(totalPrice * 0.15));
-  }
+  function enterBattle(loc) {
+    if (inBattle) return;
+    inBattle = true;
+    currentBattlePoi = loc;
+    currentEnemy = buildEnemyForLocation(loc);
+    battleLog = [];
 
-  function getLootForLocation(loc) {
-    const poiName = loc.n || "";
-    const locLevel = loc.lvl || 1;
+    const battleScreen = createBattleScreen();
 
-    const pool = DATA.scavenger.filter(item => {
-      if (!item.spawnPOI || item.spawnPOI !== poiName) return false;
-      if (item.levelRequirement && item.levelRequirement > level) return false;
-      return true;
+    applyCrtGlitchTransition(() => {
+      mapEl.classList.add("hidden");
+      battleScreen.classList.remove("hidden");
+      updateBattleHud();
+      pushBattleLog("V.A.T.S. ONLINE. TARGET ACQUIRED.");
+      pushBattleLog(`${currentEnemy.name.toUpperCase()} snarls at you.`);
     });
 
-    if (pool.length === 0) return [];
-
-    const results = [];
-    const maxItems = Math.min(3, pool.length);
-    const rolls = 1 + Math.floor(Math.random() * maxItems);
-
-    const usedIds = new Set();
-    for (let i = 0; i < rolls; i++) {
-      const candidate = randomChoice(pool);
-      if (!candidate || usedIds.has(candidate.id)) continue;
-      usedIds.add(candidate.id);
-      results.push(candidate);
-    }
-
-    return results;
+    hookBattleButtons();
   }
 
-  async function handleClaimLoot(loc) {
-    if (!currentPosition) {
-      setStatus("Cannot claim: GPS not locked.", "status-bad");
+  function exitBattle() {
+    inBattle = false;
+    currentEnemy = null;
+    currentBattlePoi = null;
+    battleLog = [];
+
+    const battleScreen = document.getElementById("battleScreen");
+    if (!battleScreen) return;
+
+    applyCrtGlitchTransition(() => {
+      battleScreen.classList.add("hidden");
+      mapEl.classList.remove("hidden");
+      updateHud();
+    });
+  }
+
+  function hookBattleButtons() {
+    const battleScreen = document.getElementById("battleScreen");
+    if (!battleScreen) return;
+
+    const vatsBtns = battleScreen.querySelectorAll(".vats-btn");
+    const fleeBtn = battleScreen.querySelector("#battleFleeBtn");
+    const useItemBtn = battleScreen.querySelector("#battleUseItemBtn");
+
+    vatsBtns.forEach(btn => {
+      btn.onclick = () => {
+        const part = btn.getAttribute("data-part");
+        handlePlayerAttack(part);
+      };
+    });
+
+    fleeBtn.onclick = () => {
+      handlePlayerFlee();
+    };
+
+    useItemBtn.onclick = () => {
+      handleUseStimpak();
+    };
+  }
+
+  // ==========================
+  // VATS ATTACK RESOLUTION
+  // ==========================
+  function getVatsProfile(part) {
+    switch (part) {
+      case "head":
+        return { hit: 35, crit: 25, dmgMult: 2.0, effect: "stun" };
+      case "torso":
+        return { hit: 75, crit: 10, dmgMult: 1.0, effect: null };
+      case "arms":
+        return { hit: 55, crit: 5, dmgMult: 0.8, effect: "disarm" };
+      case "legs":
+        return { hit: 65, crit: 5, dmgMult: 0.8, effect: "slow" };
+      default:
+        return { hit: 60, crit: 5, dmgMult: 1.0, effect: null };
+    }
+  }
+
+  function computePlayerWeaponBonus() {
+    let rarityBonus = 0;
+    let critBonus = 0;
+
+    const r = lvl;
+
+    if (r >= 5) rarityBonus += 5;
+    if (r >= 10) rarityBonus += 5;
+    if (r >= 20) rarityBonus += 10;
+
+    if (r >= 8) critBonus += 5;
+    if (r >= 16) critBonus += 5;
+
+    return { rarityBonus, critBonus };
+  }
+
+  function handlePlayerAttack(part) {
+    if (!currentEnemy || !inBattle) return;
+
+    const profile = getVatsProfile(part);
+    const { rarityBonus, critBonus } = computePlayerWeaponBonus();
+
+    const hitChance = clamp(profile.hit + rarityBonus, 5, 95);
+    const critChance = clamp(profile.crit + critBonus, 0, 60);
+
+    const roll = Math.random() * 100;
+    if (roll > hitChance) {
+      pushBattleLog(`You fire at the ${part.toUpperCase()}... MISS.`);
+      setTimeout(handleEnemyTurn, 400);
       return;
     }
 
-    const d = distanceMeters(
-      currentPosition.lat,
-      currentPosition.lng,
-      loc.lat,
-      loc.lng
+    const baseWeaponDamage = 10 + lvl * 1.5;
+    const dmg = baseWeaponDamage * profile.dmgMult;
+    const critRoll = Math.random() * 100;
+    let totalDamage = dmg;
+    let crit = false;
+
+    if (critRoll < critChance) {
+      crit = true;
+      totalDamage *= 1.75;
+    }
+
+    totalDamage = Math.round(totalDamage);
+    currentEnemy.hp = Math.max(0, currentEnemy.hp - totalDamage);
+
+    const critText = crit ? " CRITICAL!" : "";
+    pushBattleLog(
+      `You hit the ${currentEnemy.name.toUpperCase()}'s ${part.toUpperCase()} for ${totalDamage} DMG.${critText}`
     );
 
-    if (d > CLAIM_RADIUS_METERS) {
-      setStatus(`Too far away to claim (${Math.round(d)}m).`, "status-warn");
+    updateBattleHud();
+
+    if (currentEnemy.hp <= 0) {
+      handleBattleWin();
       return;
     }
 
-    const lootItems = getLootForLocation(loc);
-    const lootListText =
-      lootItems.length > 0
-        ? lootItems.map(i => `- ${i.name} [${rarityLabel(i.rarity)}]`).join("\n")
-        : "Scavenged basic supplies.";
+    setTimeout(handleEnemyTurn, 400);
+  }
+
+  function handleEnemyTurn() {
+    if (!currentEnemy || !inBattle) return;
+
+    const e = currentEnemy;
+    let action = "attack";
+
+    if (e.type === "deathclaw" || e.type === "raider_elite") {
+      if (Math.random() < 0.35) action = "heavy_attack";
+    } else if (e.type === "super_mutant" || e.type === "irradiated_beast") {
+      if (Math.random() < 0.25) action = "smash";
+    } else if (e.type === "robot") {
+      if (Math.random() < 0.25) action = "stun_blast";
+    }
+
+    let damage = 0;
+    if (action === "attack") {
+      damage = e.baseDamage;
+      pushBattleLog(`${e.name} attacks for ${Math.round(damage)} DMG.`);
+    } else if (action === "heavy_attack") {
+      damage = e.baseDamage * 1.7;
+      pushBattleLog(`${e.name} performs a HEAVY SLASH for ${Math.round(damage)} DMG!`);
+    } else if (action === "smash") {
+      damage = e.baseDamage * 1.5;
+      pushBattleLog(`${e.name} SMASHES you for ${Math.round(damage)} DMG!`);
+    } else if (action === "stun_blast") {
+      damage = e.baseDamage * 0.9;
+      pushBattleLog(
+        `${e.name} fires a STUN BLAST for ${Math.round(damage)} DMG. Systems flicker.`
+      );
+    }
+
+    const defMitigation = 1 - Math.min(0.4, lvl * 0.01);
+    const finalDamage = Math.max(1, Math.round(damage * defMitigation));
+
+    applyDamageToPlayer(finalDamage);
+    updateBattleHud();
+
+    if (playerHp <= 0) {
+      handleBattleLoss();
+      return;
+    }
+  }
+
+  function handleUseStimpak() {
+    if (!inBattle) return;
+    const healAmount = 25 + lvl * 2;
+    healPlayer(healAmount);
+    pushBattleLog(`You inject a STIMPAK. Restored ${Math.round(healAmount)} HP.`);
+    setTimeout(handleEnemyTurn, 400);
+  }
+
+  function handlePlayerFlee() {
+    if (!inBattle || !currentEnemy) return;
+
+    const fleeChance = clamp(40 + (lvl - currentEnemy.lvl) * 3, 10, 90);
+    const roll = Math.random() * 100;
+    if (roll < fleeChance) {
+      pushBattleLog("You disengage and flee the combat.");
+      setStatus("You fled the encounter.", "status-warn");
+      setTimeout(exitBattle, 400);
+    } else {
+      pushBattleLog("You try to flee... but fail.");
+      setTimeout(handleEnemyTurn, 400);
+    }
+  }
+
+  function chooseBattleRewardItem(enemy) {
+    const type = enemy.type;
+
+    const pools = {
+      deathclaw: ["deathclaw_hide_armor", "glow_blade"],
+      super_mutant: ["riot_gear_elite", "super_sledge"],
+      vault_ghoul: ["prototype_plasma_rifle", "experiment_log"],
+      robot: ["laser_rifle", "prototype_energy_blade", "prototype_gauss_rifle"],
+      raider: ["raider_spike_armor", "service_rifle"],
+      raider_elite: ["pitt_forge_armor", "pitt_scrap"],
+      irradiated_beast: ["gecko_reactor_core", "chernobyl_relic", "fukushima_core"],
+      ncr_trooper: ["service_rifle", "megaton_security_armor"],
+      legionary: ["raiders_revenge", "centurion_armor"],
+      wasteland_hostile: []
+    };
+
+    const poolIds = pools[type] || [];
+    const idSet = new Set(poolIds);
+
+    const candidates =
+      DATA.scavenger.filter(item => idSet.has(item.id)) || [];
+
+    if (candidates.length === 0) {
+      const highRarity = DATA.scavenger.filter(item => {
+        const r = (item.rarity || "").toLowerCase();
+        return r === "legendary" || r === "epic";
+      });
+      if (highRarity.length > 0) return randomChoice(highRarity);
+
+      return randomChoice(DATA.scavenger);
+    }
+
+    return randomChoice(candidates);
+  }
+
+  function handleBattleWin() {
+    pushBattleLog(`${currentEnemy.name.toUpperCase()} defeated.`);
+    setStatus("Enemy defeated.", "status-good");
+
+    const baseXp = 20 + currentEnemy.lvl * 3;
+    const rarityBonusMap = {
+      common: 0,
+      rare: 20,
+      epic: 45,
+      legendary: 80
+    };
+    const rarityBonus =
+      rarityBonusMap[(currentEnemy.rarity || "").toLowerCase()] || 0;
+    const totalXp = baseXp + rarityBonus;
+    const totalCaps = 30 + currentEnemy.lvl * 5;
+
+    const rewardItem = chooseBattleRewardItem(currentEnemy);
+
+    addXp(totalXp);
+    addCaps(totalCaps);
+
+    let rewardText = `+${totalXp} XP\n+${totalCaps} CAPS\n`;
+    if (rewardItem) {
+      rewardText += `NFT ITEM: ${rewardItem.name} [${rarityLabel(
+        rewardItem.rarity
+      )}]`;
+    } else {
+      rewardText += "No item recovered.";
+    }
+
+    openMintModal("BATTLE COMPLETE", rewardText);
+    setTimeout(exitBattle, 600);
+  }
+
+  function handleBattleLoss() {
+    pushBattleLog("You collapse. Combat sequence terminated.");
+    setStatus("You were defeated in combat.", "status-bad");
+
+    const lostCaps = Math.min(caps, Math.round(caps * 0.25));
+    caps -= lostCaps;
+    playerHp = Math.round(playerMaxHp * 0.4);
+    playerRad = clamp(playerRad + 10, 0, 100);
+    updateHud();
 
     openMintModal(
-      "LOOT CLAIMED",
-      `Scanning area for salvage...\n\n${lootListText}`
+      "YOU DIED",
+      `You were defeated.\nLost ${lostCaps} CAPS.\nHP partially restored, radiation increased.`
     );
 
-    try {
-      // Placeholder for backend claim hook if needed.
-      await new Promise(res => setTimeout(res, 1500));
-
-      const xpReward = computeXpReward(loc, lootItems);
-      const capsReward = computeCapsReward(lootItems);
-
-      addCaps(capsReward);
-      addXp(xpReward);
-      incrementClaimed();
-
-      mintMsg.textContent = `Claim successful.\n+${capsReward} CAPS\n+${xpReward} XP`;
-      setStatus("Loot claimed successfully.", "status-good");
-    } catch (e) {
-      console.error(e);
-      mintMsg.textContent = "Claim failed. Try again.";
-      setStatus("Loot claim failed.", "status-bad");
-    }
+    setTimeout(exitBattle, 600);
   }
 
+  // ==========================
+  // LOCATION PANEL (EXPLORATION + BATTLE HOOK)
+  // ==========================
   function openLocationPanel(loc) {
     const name = loc.n || "Unknown Location";
-    const lvl = loc.lvl || 1;
+    const lvlReq = loc.lvl || 1;
     const rarity = loc.rarity || "common";
-    const rarityText = rarityLabel(rarity);
-    const rarityCssColor = rarityColor(rarity);
 
     const pack = DATA.collectiblesPack;
-    const allCols = Array.isArray(pack.collectibles) ? pack.collectibles : [];
+    const allCols = Array.isArray(pack.collectibles)
+      ? pack.collectibles
+      : [];
     const colsForPoi = allCols.filter(c => c.poi === name);
-
-    const lootPreview = DATA.scavenger.filter(
-      item => item.spawnPOI === name
-    );
 
     let collectiblesHtml = "";
     if (colsForPoi.length > 0) {
@@ -469,57 +906,103 @@
           .join("");
     }
 
-    let lootHtml = "";
-    if (lootPreview.length > 0) {
-      lootHtml =
-        "<br/><b>POSSIBLE LOOT:</b><br/><br/>" +
-        lootPreview
-          .slice(0, 6)
-          .map(
-            item => `
-<span style="color:${rarityColor(item.rarity)};">
-  ${item.name} [${rarityLabel(item.rarity)}]
-</span><br/>
-<small>${item.type} – LVL ${item.levelRequirement || 1} – ${item.priceCAPS} CAPS</small><br/><br/>
-`
-          )
-          .join("");
-    }
+    const enemyPreview = buildEnemyForLocation(loc);
+    const enemyColor = rarityColor(enemyPreview.rarity);
 
     openTerminalPanel(
       "LOCATION",
       `
 <b>${name}</b><br/>
-LVL ${lvl} – <span style="color:${rarityCssColor};">${rarityText}</span><br/>
+LVL ${lvlReq} – <span style="color:${rarityColor(
+        rarity
+      )};">${rarityLabel(rarity)}</span><br/>
 LAT: ${loc.lat.toFixed(4)}, LNG: ${loc.lng.toFixed(4)}<br/><br/>
 Distance: <span id="locDistance">calculating...</span><br/><br/>
-<button class="btn" id="claimBtn">CLAIM LOOT</button>
-${lootHtml}
+
+<b>LOCAL THREAT:</b><br/>
+<span style="color:${enemyColor};">${enemyPreview.name.toUpperCase()}</span><br/>
+LVL ${enemyPreview.lvl} – ${rarityLabel(enemyPreview.rarity)}<br/><br/>
+
+<button class="btn" id="exploreBtn">EXPLORE AREA</button>
+<button class="btn danger-btn" id="engageBtn">ENGAGE TARGET (V.A.T.S.)</button>
+
 ${collectiblesHtml}
-    `
+      `
     );
 
     setTimeout(() => {
-      const claimBtn = document.getElementById("claimBtn");
-      const locDistance = document.getElementById("locDistance");
-      if (!claimBtn || !locDistance) return;
+      const locDistanceEl = document.getElementById("locDistance");
+      const exploreBtn = document.getElementById("exploreBtn");
+      const engageBtn = document.getElementById("engageBtn");
 
-      if (currentPosition) {
+      if (currentPosition && locDistanceEl) {
         const d = distanceMeters(
           currentPosition.lat,
           currentPosition.lng,
           loc.lat,
           loc.lng
         );
-        locDistance.textContent = `${Math.round(d)}m`;
-      } else {
-        locDistance.textContent = "GPS not locked";
+        locDistanceEl.textContent = `${Math.round(d)}m`;
+      } else if (locDistanceEl) {
+        locDistanceEl.textContent = "GPS not locked";
       }
 
-      claimBtn.addEventListener("click", () => {
-        handleClaimLoot(loc);
-      });
+      if (exploreBtn) {
+        exploreBtn.addEventListener("click", () => handleExploreLocation(loc));
+      }
+      if (engageBtn) {
+        engageBtn.addEventListener("click", () => handleEngageLocation(loc));
+      }
     }, 0);
+  }
+
+  function withinClaimRadius(loc) {
+    if (!currentPosition) return false;
+    const d = distanceMeters(
+      currentPosition.lat,
+      currentPosition.lng,
+      loc.lat,
+      loc.lng
+    );
+    return d <= CLAIM_RADIUS_METERS;
+  }
+
+  function handleExploreLocation(loc) {
+    if (!withinClaimRadius(loc)) {
+      setStatus("Too far to explore. Get within 50m.", "status-warn");
+      return;
+    }
+
+    const baseXp = 10 + (loc.lvl || 1) * 1.5;
+    const rarityBonusMap = {
+      common: 0,
+      rare: 8,
+      epic: 18,
+      legendary: 30
+    };
+    const rarityBonus =
+      rarityBonusMap[(loc.rarity || "").toLowerCase()] || 0;
+    const totalXp = Math.round(baseXp + rarityBonus);
+    const totalCaps = 15 + (loc.lvl || 1) * 2;
+
+    addXp(totalXp);
+    addCaps(totalCaps);
+    incrementClaimed();
+
+    openMintModal(
+      "AREA SURVEY COMPLETE",
+      `You survey the area.\n+${totalXp} XP\n+${totalCaps} CAPS`
+    );
+    setStatus("Location explored. Threat profile updated.", "status-good");
+  }
+
+  function handleEngageLocation(loc) {
+    if (!withinClaimRadius(loc)) {
+      setStatus("Too far to engage. Get within 50m.", "status-warn");
+      return;
+    }
+
+    enterBattle(loc);
   }
 
   // ==========================
@@ -529,11 +1012,13 @@ ${collectiblesHtml}
     openTerminalPanel(
       "STATUS",
       `
-LEVEL: ${level}<br/>
+LEVEL: ${lvl}<br/>
 XP: ${xp} / 100<br/>
 CAPS: ${caps}<br/>
-CLAIMED LOCATIONS: ${claimedCount}<br/>
-`
+CLAIMED LOCATIONS: ${claimedCount}<br/><br/>
+HP: ${Math.round(playerHp)} / ${playerMaxHp}<br/>
+RADS: ${playerRad}<br/>
+      `
     );
   }
 
@@ -543,32 +1028,34 @@ CLAIMED LOCATIONS: ${claimedCount}<br/>
       return;
     }
 
-    const html = DATA.quests.map(q => {
-      const typeLabel =
-        (q.type || "").toLowerCase() === "side" ? "SIDE QUEST" : "MAIN QUEST";
-      const poiLine = Array.isArray(q.poIs)
-        ? q.poIs.join(", ")
-        : "Unknown POIs";
+    const html = DATA.quests
+      .map(q => {
+        const typeLabel =
+          (q.type || "").toLowerCase() === "side"
+            ? "SIDE QUEST"
+            : "MAIN QUEST";
+        const poiLine = Array.isArray(q.poIs)
+          ? q.poIs.join(", ")
+          : "Unknown POIs";
 
-      const objectivesHtml = Array.isArray(q.objectives)
-        ? q.objectives
-            .map(o => `- ${o}`)
-            .join("<br/>")
-        : "No objectives listed.";
+        const objectivesHtml = Array.isArray(q.objectives)
+          ? q.objectives.map(o => `- ${o}`).join("<br/>")
+          : "No objectives listed.";
 
-      const endingsHtml = Array.isArray(q.endings) && q.endings.length > 0
-        ? q.endings
-            .map(
-              e => `
+        const endingsHtml =
+          Array.isArray(q.endings) && q.endings.length > 0
+            ? q.endings
+                .map(
+                  e => `
 <b>Ending:</b> ${e.description}<br/>
 <b>Reward:</b> ${e.reward || "Unknown"}<br/>
 <b>Consequence:</b> ${e.consequence || "Unknown"}<br/><br/>
 `
-            )
-            .join("")
-        : "Endings TBD.<br/><br/>";
+                )
+                .join("")
+            : "Endings TBD.<br/><br/>";
 
-      return `
+        return `
 <div style="margin-bottom:18px;">
   <b>${q.name}</b> <small>(${typeLabel})</small><br/>
   <small>POIs: ${poiLine}</small><br/><br/>
@@ -578,7 +1065,8 @@ CLAIMED LOCATIONS: ${claimedCount}<br/>
   ${endingsHtml}
 </div>
 `;
-    }).join("");
+      })
+      .join("");
 
     openTerminalPanel("QUESTS", html);
   }
@@ -649,9 +1137,8 @@ ${pack.description || ""}<br/><br/>
 <span style="color:${rColor};">
   ${item.name} [${rLabel}]
 </span><br/>
-<small>${item.type} – LVL ${item.levelRequirement || 1} – ${item.priceCAPS} CAPS – POI: ${
-          item.spawnPOI || "Unknown"
-        }</small><br/><br/>
+<small>${item.type} – LVL ${item.levelRequirement ||
+          1} – ${item.priceCAPS} CAPS</small><br/><br/>
 `;
       })
       .join("");
@@ -662,6 +1149,8 @@ ${pack.description || ""}<br/><br/>
   function initTabs() {
     tabs.forEach(tab => {
       tab.addEventListener("click", () => {
+        if (inBattle) return;
+
         tabs.forEach(t => t.classList.remove("active"));
         tab.classList.add("active");
 
@@ -697,9 +1186,10 @@ ${pack.description || ""}<br/><br/>
         const resp = await window.solana.connect();
         walletPubkey = resp.publicKey.toString();
         setStatus(
-          `Wallet connected: ${walletPubkey.slice(0, 4)}...${walletPubkey.slice(
-            -4
-          )}`,
+          `Wallet connected: ${walletPubkey.slice(
+            0,
+            4
+          )}...${walletPubkey.slice(-4)}`,
           "status-good"
         );
         connectWalletBtn.textContent = "Wallet Connected";
@@ -714,35 +1204,18 @@ ${pack.description || ""}<br/><br/>
   // UI INIT
   // ==========================
   function initUi() {
-    if (requestGpsBtn) {
-      requestGpsBtn.addEventListener("click", requestGps);
-    }
-    if (centerBtn) {
-      centerBtn.addEventListener("click", centerOnPlayer);
-    }
-    if (recenterMojaveBtn) {
+    if (requestGpsBtn) requestGpsBtn.addEventListener("click", requestGps);
+    if (centerBtn) centerBtn.addEventListener("click", centerOnPlayer);
+    if (recenterMojaveBtn)
       recenterMojaveBtn.addEventListener("click", recenterMojave);
-    }
 
-    if (panelClose) {
-      panelClose.addEventListener("click", closeTerminalPanel);
-    }
-    if (mintCloseBtn) {
-      mintCloseBtn.addEventListener("click", closeMintModal);
-    }
-
-    if (tutorialClose) {
-      tutorialClose.addEventListener("click", closeTutorial);
-    }
-
-    if (enterNukeVaultBtn) {
-      enterNukeVaultBtn.addEventListener("click", () => {
-        window.location = "/nuke.html";
-      });
-    }
+    if (panelClose) panelClose.addEventListener("click", closeTerminalPanel);
+    if (mintCloseBtn) mintCloseBtn.addEventListener("click", closeMintModal);
+    if (tutorialClose) tutorialClose.addEventListener("click", closeTutorial);
 
     initTabs();
     initWallet();
+    updateHud();
   }
 
   // ==========================
@@ -756,9 +1229,7 @@ ${pack.description || ""}<br/><br/>
     setStatus("Pip-Boy online. Request GPS to begin tracking.", "status-good");
   }
 
-  // Start game when boot sequence says ready
   window.addEventListener("pipboyReady", () => {
     initGame();
   });
-
 })();
