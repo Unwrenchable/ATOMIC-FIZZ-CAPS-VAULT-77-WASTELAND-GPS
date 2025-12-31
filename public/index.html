@@ -3,54 +3,61 @@
 <head>
   <meta charset="utf-8" />
   <title>ATOMIC FIZZ CAPS • WASTELAND GPS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 
-  <!-- Favicon -->
+  <!-- Favicon (optional, keep if you have it) -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
   <!-- Leaflet Map -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
 
-  <!-- Google Font: VT323 (Pip-Boy style) -->
+  <!-- VT323 – Pip-Boy font -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
-  <!-- Pip-Boy / CRT Styles -->
+  <!-- Pip-Boy / CRT styles -->
   <link rel="stylesheet" href="/css/pipboy.css" />
 </head>
 <body>
 
-  <!-- =======================
-       BOOT SCREEN – ASCII CRT
-       ======================= -->
+  <!-- ==========================
+       BOOT SCREEN
+       ========================== -->
   <div id="bootScreen">
-    <pre id="bootText"></pre>
+    <div class="boot-inner">
+      <pre id="bootText"></pre>
+      <div id="bootPrompt" class="boot-prompt hidden">
+        PRESS ANY KEY TO ACTIVATE PIP-BOY INTERFACE ▌
+      </div>
+    </div>
   </div>
 
-  <!-- =======================
-       PIP-BOY SCREEN
-       ======================= -->
+  <!-- ==========================
+       PIP-BOY SHELL
+       ========================== -->
   <div id="pipboyScreen" class="hidden">
+    <div class="pipboy-shell">
+      <div class="pipboy-bezel"></div>
 
-    <!-- OVERSEER LINK (top-right) -->
-    <a href="/overseer.html"
-       style="position:absolute;top:20px;right:20px;color:#0f0;font-size:1.2em;text-decoration:none;
-              border:2px solid #0f0;padding:10px 20px;background:rgba(0,15,0,0.5);box-shadow:0 0 10px #0f0;z-index:9999;">
-      OVERSEER TERMINAL
-    </a>
+      <div class="pipboy-screen crt">
 
-    <div class="pipboy">
-      <div class="panel">
+        <!-- OVERSEER TERMINAL LINK -->
+        <a href="/overseer.html" class="overseer-link">
+          OVERSEER TERMINAL
+        </a>
 
-        <!-- HEADER ROW -->
-        <div class="header-row">
-          <div>
-            <h1>ATOMIC FIZZ CAPS</h1>
-            <div class="sub">VAULT 77 • WASTELAND GPS</div>
+        <!-- HEADER + CONTROLS -->
+        <div class="pip-header">
+          <div class="pip-title">
+            <div class="pip-main-title">ATOMIC FIZZ CAPS</div>
+            <div class="pip-sub-title">VAULT 77 • WASTELAND GPS</div>
           </div>
-          <div class="controls">
-            <button class="btn"
-                    onclick="window.location='/nuke.html'"
-                    style="background:#220000;color:#ff0033;border:2px solid #ff0033">
+          <div class="pip-controls">
+            <button class="btn danger-btn" onclick="window.location='/nuke.html'">
               ENTER NUKE VAULT
             </button>
             <button class="btn" id="centerBtn">Center</button>
@@ -59,49 +66,61 @@
           </div>
         </div>
 
-        <!-- STATUS -->
-        <div id="status" class="status-good">
+        <!-- STATUS BAR -->
+        <div id="status" class="status status-good">
           Status: ready – tap REQUEST GPS if needed
         </div>
 
-        <!-- PIP STATUS (LVL / HP / CAPS) -->
-        <div class="pip-status">
-          <div class="pip-lvl">LVL <span id="lvl">1</span></div>
-          <div class="pip-hp-container">
-            <div class="pip-hp-fill" id="hpFill"></div>
-            <div class="pip-rad-fill" id="radFill"></div>
-            <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
+        <!-- HUD BAR -->
+        <div class="hud">
+          <div class="hud-block">
+            LVL <span id="lvl">1</span>
           </div>
-          <div class="pip-caps">CAPS <span id="caps">0</span></div>
-        </div>
 
-        <!-- XP / CLAIMED -->
-        <div style="text-align:center;margin-top:4px;">
-          <div class="pip-xp-container">
-            <div class="pip-xp-fill" id="xpFill"></div>
+          <div class="hud-block hp-block">
+            <div class="hp-bar">
+              <div id="hpFill" class="hp-fill"></div>
+              <div id="radFill" class="rad-fill"></div>
+            </div>
+            <div id="hpText" class="hp-text">HP 100 / 100</div>
           </div>
-          <div class="muted-small">XP <span id="xpText">0 / 100</span></div>
+
+          <div class="hud-block">
+            CAPS <span id="caps">0</span>
+          </div>
+
+          <div class="hud-block xp-wrapper">
+            <div class="xp-bar">
+              <div id="xpFill" class="xp-fill"></div>
+            </div>
+            <div id="xpText" class="xp-text">0 / 100</div>
+          </div>
+
+          <div class="hud-block">
+            CLAIMED <span id="claimed">0</span>
+          </div>
         </div>
 
-        <div class="pip-claimed">
-          CLAIMED <span id="claimed">0</span>
-        </div>
-
-        <!-- MAP WRAPPER -->
-        <div id="mapWrap">
+        <!-- MAP AREA (FULLSCREEN INSIDE PIP-BOY) -->
+        <div class="map-container">
           <div id="map"></div>
 
+          <!-- CRT STATIC -->
           <div class="static-noise"></div>
 
+          <!-- GPS BADGE -->
           <div class="gps-badge">
             <div id="accDot" class="acc-dot"></div>
             <div id="accText">GPS: waiting...</div>
           </div>
 
-          <button class="btn" id="requestGpsBtn">REQUEST GPS</button>
+          <!-- REQUEST GPS BUTTON -->
+          <button class="btn gps-btn" id="requestGpsBtn">
+            REQUEST GPS
+          </button>
         </div>
 
-        <!-- TABS -->
+        <!-- BOTTOM TABS -->
         <div class="tabs">
           <div class="tab active" data-panel="map">MAP</div>
           <div class="tab" data-panel="stat">STAT</div>
@@ -111,35 +130,37 @@
         </div>
 
         <!-- TERMINAL PANEL -->
-        <div class="terminal" id="terminal">
-          <button class="btn" id="panelClose" style="float:right;">X</button>
-          <h4 id="panelTitle">TERMINAL</h4>
-          <div id="panelBody">Select a tab to begin...</div>
+        <div id="terminal" class="terminal hidden">
+          <div class="terminal-inner">
+            <button class="btn terminal-close" id="panelClose">X</button>
+            <h4 id="panelTitle">TERMINAL</h4>
+            <div id="panelBody" class="terminal-body">
+              Select a tab to begin...
+            </div>
+          </div>
         </div>
 
-        <!-- MINT MODAL -->
-        <div id="mintModal" class="mint-modal hidden">
-          <div>
-            <div id="mintTitle">LOOT FOUND</div>
-            <div id="mintMsg" class="muted-small">Claiming CAPS...</div>
-            <div id="mintProgress"
-                 style="height:8px;background:#002200;border-radius:6px;overflow:hidden;margin-top:8px;">
-              <i style="display:block;height:100%;background:linear-gradient(90deg,#00ff41,#66ff99);
-                        width:0%;transition:width 1s ease;"></i>
+        <!-- LOOT MODAL -->
+        <div id="mintModal" class="modal hidden">
+          <div class="modal-inner">
+            <div id="mintTitle" class="modal-title">LOOT FOUND</div>
+            <div id="mintMsg" class="modal-text">Claiming CAPS...</div>
+            <div class="modal-progress">
+              <div id="mintProgressBar" class="modal-progress-fill"></div>
             </div>
-            <button class="btn" id="mintCloseBtn" style="margin-top:10px;">Close</button>
+            <button class="btn" id="mintCloseBtn">Close</button>
           </div>
         </div>
 
         <!-- TUTORIAL MODAL -->
-        <div id="tutorialModal" class="mint-modal hidden">
-          <div>
+        <div id="tutorialModal" class="modal hidden">
+          <div class="modal-inner">
             <div class="modal-title">WELCOME TO THE WASTELAND</div>
-            <div class="modal-content">
+            <div class="modal-text">
               <p>→ Connect Phantom wallet</p>
               <p>→ Allow GPS</p>
               <p>→ Hunt markers – get within 50m to claim</p>
-              <p>→ Survive the atomic fizz ☢️</p>
+              <p>→ Survive the Atomic Fizz.</p>
             </div>
             <button class="btn" id="tutorialClose">ENTER WASTELAND</button>
           </div>
@@ -149,27 +170,31 @@
     </div>
   </div>
 
-  <!-- =======================
+  <!-- ==========================
        SCRIPTS
-       ======================= -->
+       ========================== -->
 
   <!-- Leaflet -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
 
-  <!-- Solana + bs58 -->
+  <!-- Solana + bs58 (keep for wallet/backend integration) -->
   <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
   <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
 
-  <!-- Metaplex / Irys -->
+  <!-- Metaplex / Irys (if your backend uses them; safe to keep) -->
   <script src="https://cdn.jsdelivr.net/npm/@metaplex-foundation/mpl-core@1.1.0/dist/browser/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@metaplex-foundation/umi@1.4.1/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@metaplex-foundation/umi-bundle-defaults@1.4.1/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@irys/sdk@0.2.11/dist/browser/index.umd.js"></script>
 
-  <!-- BOOT FIRST -->
+  <!-- BOOT FIRST (emits event when ready) -->
   <script src="/js/boot.js"></script>
 
-  <!-- GAME SECOND -->
+  <!-- GAME SECOND (listens for boot event) -->
   <script src="/js/main.js"></script>
 
 </body>
