@@ -1,60 +1,95 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const bootScreen = document.getElementById("bootScreen");
-  const bootTextEl = document.getElementById("bootText");
-  const pipboyScreen = document.getElementById("pipboyScreen");
+// boot.js – terminal boot animation, then emit event for game init
 
-  if (!bootScreen || !bootTextEl || !pipboyScreen) return;
-
-  const bootLines = [
-    "VAULT-TEC TERMINAL v77.13",
+(function () {
+  const lines = [
+    "VAULT-TEC (TM) PERSONAL TERMINAL SYSTEM v77.13",
     "PROPERTY OF ATOMIC FIZZ CAPS CORPORATION",
     "",
-    "INITIALIZING WASTELAND GPS SUBSYSTEM...",
-    "",
-    ">>> INIT FIZZ CAPS LEDGER...........................[ OK ]",
-    ">>> LINKING SOLANA RELAY............................[ OK ]",
-    ">>> CALIBRATING GEIGER BACKGROUND RADIATION........[ OK ]",
-    ">>> LOCATING VAULT 77 COORDINATES..................[ OK ]",
+    "Initializing FIZZ CAPS LEDGER.................. OK",
+    "Linking SOLANA RELAY........................... OK",
+    "Calibrating GEIGER COUNTERS.................... OK",
+    "Synchronizing VAULT 77 COORDINATES............. OK",
+    "Bootstrapping WASTELAND GPS SUBSYSTEM.......... OK",
     "",
     "SYSTEM STATUS: ONLINE",
-    "",
-    "PRESS ANY KEY TO ACTIVATE PIP-BOY INTERFACE ▌"
+    ""
   ];
 
-  const fullText = bootLines.join("\n");
-  let index = 0;
+  const bootScreen = document.getElementById("bootScreen");
+  const bootTextEl = document.getElementById("bootText");
+  const bootPrompt = document.getElementById("bootPrompt");
+  const pipboyScreen = document.getElementById("pipboyScreen");
 
-  function typeNext() {
-    if (index <= fullText.length) {
-      bootTextEl.textContent = fullText.slice(0, index);
-      index++;
+  let lineIndex = 0;
+  let charIndex = 0;
+  let currentLine = "";
+  let finished = false;
 
-      const char = fullText[index - 1];
-      const delay = char === "\n" ? 40 : 12; // slightly slower on line breaks
+  function typeNextChar() {
+    if (lineIndex >= lines.length) {
+      finished = true;
+      bootPrompt.classList.remove("hidden");
+      return;
+    }
 
-      setTimeout(typeNext, delay);
+    const line = lines[lineIndex];
+
+    if (charIndex < line.length) {
+      currentLine += line.charAt(charIndex);
+      charIndex++;
     } else {
-      waitForContinue();
+      currentLine += "\n";
+      lineIndex++;
+      charIndex = 0;
+    }
+
+    bootTextEl.textContent = currentLine;
+    setTimeout(typeNextChar, 25);
+  }
+
+  function completeBoot() {
+    if (!finished) {
+      // Fast-forward
+      bootTextEl.textContent = lines.join("\n") + "\n";
+      finished = true;
+      bootPrompt.classList.remove("hidden");
     }
   }
 
-  function waitForContinue() {
-    const continueBoot = () => {
-      // Reveal Pip-Boy UI
-      pipboyScreen.classList.remove("hidden");
-      // Hide/remove boot overlay
-      bootScreen.classList.add("hidden");
+  function activatePipboy() {
+    if (!finished) {
+      completeBoot();
+      return;
+    }
 
-      window.removeEventListener("keydown", handleKey);
-      bootScreen.removeEventListener("click", continueBoot);
-    };
+    // Hide boot, show pipboy
+    bootScreen.classList.add("hidden");
+    pipboyScreen.classList.remove("hidden");
 
-    const handleKey = () => continueBoot();
+    // Dispatch event so main.js can start game
+    window.dispatchEvent(new Event("pipboyReady"));
 
-    window.addEventListener("keydown", handleKey);
-    bootScreen.addEventListener("click", continueBoot);
+    // Remove listeners to avoid double triggers
+    window.removeEventListener("keydown", onKeyDown);
+    window.removeEventListener("click", onClick);
   }
 
-  // Tiny delay before typing for drama
-  setTimeout(typeNext, 250);
-});
+  function onKeyDown() {
+    activatePipboy();
+  }
+
+  function onClick() {
+    activatePipboy();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    typeNextChar();
+
+    // Allow skipping with any key / click
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("click", onClick);
+
+    // Safety timeout (if something goes weird)
+    setTimeout(completeBoot, 8000);
+  });
+})();
