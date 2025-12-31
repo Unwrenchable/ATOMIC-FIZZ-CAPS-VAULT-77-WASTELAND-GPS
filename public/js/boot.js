@@ -2,18 +2,26 @@
 
 (function () {
   const lines = [
-    "VAULT-TEC (TM) PERSONAL TERMINAL SYSTEM v77.13",
-    "PROPERTY OF ATOMIC FIZZ CAPS CORPORATION",
-    "",
-    "Initializing FIZZ CAPS LEDGER.................. OK",
-    "Linking SOLANA RELAY........................... OK",
-    "Calibrating GEIGER COUNTERS.................... OK",
-    "Synchronizing VAULT 77 COORDINATES............. OK",
-    "Bootstrapping WASTELAND GPS SUBSYSTEM.......... OK",
-    "",
-    "SYSTEM STATUS: ONLINE",
-    ""
-  ];
+  "VAULT-77 PERSONAL TERMINAL • ATOMIC FIZZ CAPS",
+  "---------------------------------------------",
+  "",
+  "  +--------------------------+",
+  "  |    ATOMIC FIZZ CAPS      |",
+  "  +--------------------------+",
+  "",
+  "Initializing FIZZ CAPS LEDGER.................. OK",
+  "Linking SOLANA RELAY........................... OK",
+  "Calibrating GEIGER COUNTERS.................... OK",
+  "Synchronizing VAULT 77 COORDINATES............. OK",
+  "Bootstrapping WASTELAND GPS SUBSYSTEM.......... OK",
+  "",
+  "*POP* *FIZZ* *CRACKLE*",
+  "High-gain tone achieved!",
+  "",
+  "SYSTEM STATUS: ONLINE",
+  ""
+];
+
 
   const bootScreen = document.getElementById("bootScreen");
   const bootTextEl = document.getElementById("bootText");
