@@ -3,19 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <!-- Pip-Boy CSS -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="stylesheet" href="/css/pipboy.css" />
-  <!-- VT323 Font -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <title>ATOMIC FIZZ CAPS • WASTELAND GPS</title>
 </head>
 
 <body>
 
-  <!-- BOOT SCREEN -->
+  <!-- BOOT SCREEN – Epic restored -->
   <div id="bootScreen">
     <pre id="bootText"></pre>
   </div>
@@ -27,43 +24,42 @@
       <!-- HEADER -->
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
-        <div class="sub">PIP-BOY 3000 MARK IV</div>
-        <button class="wallet-btn top-right" id="connectWallet">CONNECT WALLET</button>
+        <div class="sub">VAULT 77 • WASTELAND GPS</div>
+        <button class="btn wallet-btn" id="connectWallet">CONNECT WALLET</button>
       </header>
 
       <!-- STATUS BAR -->
-      <section class="pip-status">
-        <div class="pip-lvl">LVL: <span id="lvl">1</span></div>
-
+      <div class="pip-status">
+        <div class="pip-lvl">LVL <span id="lvl">1</span></div>
         <div class="pip-hp-container">
-          <div class="pip-hp-fill" id="hpFill" style="width:100%"></div>
-          <div class="pip-rad-fill" id="radFill" style="width:0%"></div>
+          <div class="pip-hp-fill" id="hpFill"></div>
+          <div class="pip-rad-fill" id="radFill"></div>
           <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
         </div>
+        <div class="pip-caps"><span id="caps">0</span> CAPS</div>
+      </div>
 
-        <div class="pip-caps">CAPS: <span id="caps">0</span></div>
-      </section>
-
-      <!-- MAP -->
-      <section id="mapWrap">
+      <!-- MAP WRAPPER – Full height, no cutoff -->
+      <div id="mapWrap">
         <div id="map"></div>
+        <div class="static-noise"></div>
         <div class="gps-badge">
-          <div class="acc-dot" id="accDot"></div>
-          <span id="accText">GPS: INITIALIZING...</span>
+          <div id="accDot" class="acc-dot"></div>
+          <span id="accText">GPS: waiting...</span>
         </div>
-        <button class="btn" id="requestGpsBtn" style="display:none">REQUEST GPS</button>
-      </section>
+        <button class="btn" id="requestGpsBtn">REQUEST GPS LOCK</button>
+      </div>
 
-      <!-- TABS (fixed with data-panel & .tab class) -->
+      <!-- TABS – Bottom bar, always visible -->
       <div class="tabs">
         <div class="tab active" data-panel="map">MAP</div>
-        <div class="tab" data-panel="stat">STATS</div>
+        <div class="tab" data-panel="stat">STAT</div>
         <div class="tab" data-panel="items">ITEMS</div>
         <div class="tab" data-panel="quests">QUESTS</div>
         <div class="tab" data-panel="shop">SCAVENGER'S EXCHANGE</div>
       </div>
 
-      <!-- TERMINAL PANEL (added id="terminal") -->
+      <!-- TERMINAL PANEL – Full-screen swipe on mobile, right-overlay on desktop -->
       <div id="terminal" class="panel-content">
         <button class="btn" id="panelClose">X</button>
         <h4 id="panelTitle">TERMINAL</h4>
@@ -74,7 +70,7 @@
       <div id="mintModal" class="mint-modal hidden">
         <div>
           <div id="mintTitle">LOOT CLAIMED</div>
-          <div id="mintMsg"></div>
+          <div id="mintMsg" class="muted-small">+0 CAPS</div>
           <button class="btn" id="mintCloseBtn">Close</button>
         </div>
       </div>
