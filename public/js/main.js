@@ -1,314 +1,390 @@
-// /js/main.js – 100% FIXED FINAL v1.1 (boot + wallet + GPS + map + claims + XP + gear + shop + quests + sounds + epic tabs)
+// main.js – map, GPS, tabs, terminal, simple wallet hook
 
-(async function () {
-  // ================= GLOBAL VARS =================
-  let map, playerMarker = null, playerLatLng = null, lastAccuracy = 999, watchId = null, firstLock = true;
-  let wallet = null;
-  let player = {
-    lvl: 1, hp: 100, maxHp: 100, caps: 0, rads: 0, xp: 0, xpToNext: 100,
-    gear: [], equipped: {}, claimed: new Set(), quests: [],
-    radResist: 0  // IMPORTANT: added this
-  };
-  let locations = [], allQuests = [], markers = {};
-  const API_BASE = window.location.origin;
-  const CLAIM_RADIUS = 50;
-  const MAX_RADS = 1000;
-  let terminalSignal = null;
+(function () {
+  let map;
+  let playerMarker = null;
+  let locationsLayer = null;
+  let currentPosition = null;
 
-  // Gear pools...
-  const DROP_CHANCE = { legendary: 0.35, epic: 0.18, rare: 0.09, common: 0.04 };
-  const GEAR_NAMES = {
-    common: ['Pipe Rifle', '10mm Pistol', 'Leather Armor', 'Vault Suit'],
-    rare: ['Hunting Rifle', 'Combat Shotgun', 'Laser Pistol', 'Metal Armor'],
-    epic: ['Plasma Rifle', 'Gauss Rifle', 'Combat Armor', 'T-51b Power Armor'],
-    legendary: ['Alien Blaster', 'Fat Man', 'Lincoln\'s Repeater', 'Experimental MIRV']
-  };
-  const EFFECT_POOL = {
-    common: [{type: 'maxHp', min: 5, max: 20}, {type: 'radResist', min: 20, max: 60}],
-    rare: [{type: 'maxHp', min: 25, max: 50}, {type: 'radResist', min: 70, max: 140}, {type: 'capsBonus', min: 10, max: 25}],
-    epic: [{type: 'maxHp', min: 50, max: 90}, {type: 'radResist', min: 150, max: 250}, {type: 'capsBonus', min: 25, max: 45}, {type: 'xpBonus', min: 15, max: 30}],
-    legendary: [{type: 'maxHp', min: 100, max: 180}, {type: 'radResist', min: 300, max: 500}, {type: 'capsBonus', min: 40, max: 80}, {type: 'critDrop', min: 20, max: 40}]
-  };
+  // Mojave default (approx around Vegas)
+  const MOJAVE_COORDS = [36.1699, -115.1398];
+  const DEFAULT_ZOOM = 13;
+  const CLAIM_RADIUS_METERS = 50;
 
-  function randomEffect(rarity) {
-    const pool = EFFECT_POOL[rarity] || EFFECT_POOL.common;
-    const eff = pool[Math.floor(Math.random() * pool.length)];
-    const val = eff.min + Math.floor(Math.random() * (eff.max - eff.min + 1));
-    return {type: eff.type, val};
+  const statusEl = document.getElementById("status");
+  const accDot = document.getElementById("accDot");
+  const accText = document.getElementById("accText");
+  const requestGpsBtn = document.getElementById("requestGpsBtn");
+  const centerBtn = document.getElementById("centerBtn");
+  const recenterMojaveBtn = document.getElementById("recenterMojave");
+  const connectWalletBtn = document.getElementById("connectWallet");
+
+  const tabs = document.querySelectorAll(".tab");
+  const terminal = document.getElementById("terminal");
+  const panelClose = document.getElementById("panelClose");
+  const panelTitle = document.getElementById("panelTitle");
+  const panelBody = document.getElementById("panelBody");
+
+  const tutorialModal = document.getElementById("tutorialModal");
+  const tutorialClose = document.getElementById("tutorialClose");
+
+  const mintModal = document.getElementById("mintModal");
+  const mintTitle = document.getElementById("mintTitle");
+  const mintMsg = document.getElementById("mintMsg");
+  const mintProgressBar = document.getElementById("mintProgressBar");
+  const mintCloseBtn = document.getElementById("mintCloseBtn");
+
+  const capsEl = document.getElementById("caps");
+  const lvlEl = document.getElementById("lvl");
+  const xpTextEl = document.getElementById("xpText");
+  const xpFillEl = document.getElementById("xpFill");
+  const claimedEl = document.getElementById("claimed");
+
+  let caps = 0;
+  let level = 1;
+  let xp = 0;
+  let claimedCount = 0;
+
+  let walletPubkey = null;
+
+  function setStatus(text, levelClass) {
+    statusEl.textContent = text;
+    statusEl.classList.remove("status-good", "status-warn", "status-bad");
+    if (levelClass) statusEl.classList.add(levelClass);
   }
 
-  function generateGearDrop(rarity = 'common') {
-    const names = GEAR_NAMES[rarity] || GEAR_NAMES.common;
-    const effectCount = rarity === 'legendary' ? 3 : rarity === 'epic' ? 2 : rarity === 'rare' ? 2 : 1;
-    const effects = Array.from({length: effectCount}, () => randomEffect(rarity));
-    return {
-      id: `gear_${Date.now()}_${Math.random().toString(36).substr(2,9)}`,
-      name: names[Math.floor(Math.random() * names.length)],
-      rarity,
-      effects,
-      nftMint: null
-    };
-  }
-
-  // Sound effects
-  function playSfx(id, volume = 0.4) {
-    const audio = document.getElementById(id);
-    if (audio) {
-      audio.currentTime = 0;
-      audio.volume = Math.max(0, Math.min(1, volume));
-      audio.play().catch(() => {});
-    }
-  }
-
-  // Button sounds
-  function initButtonSounds() {
-    document.querySelectorAll('.btn, .tab, .equip-btn, .shop-buy-btn').forEach(el => {
-      el.addEventListener('click', () => playSfx('sfxButton', 0.3));
-    });
-  }
-
-  // Gear bonuses
-  function applyGearBonuses() {
-    let hpBonus = 0, radRes = 0, capsBonus = 0;
-    Object.values(player.equipped).forEach(g => {
-      g.effects.forEach(e => {
-        if (e.type === 'maxHp') hpBonus += e.val;
-        if (e.type === 'radResist') radRes += e.val;
-        if (e.type === 'capsBonus') capsBonus += e.val;
-      });
-    });
-    player.maxHp = 100 + (player.lvl - 1) * 10 + hpBonus;
-    player.radResist = radRes;
-    player.capsBonus = capsBonus;
-    if (player.hp > player.maxHp) player.hp = player.maxHp;
-  }
-
-  function updateHPBar() {
-    const hpPct = Math.min(100, player.hp / player.maxHp * 100);
-    const radPct = Math.min(100, player.rads / MAX_RADS * 100);
-    const hpFill = document.getElementById('hpFill');
-    const radFill = document.getElementById('radFill');
-    const hpText = document.getElementById('hpText');
-    if (hpFill) hpFill.style.width = `${hpPct}%`;
-    if (radFill) radFill.style.width = `${radPct}%`;
-    if (hpText) hpText.textContent = `HP ${Math.floor(player.hp)} / ${player.maxHp}`;
-    document.getElementById('lvl').textContent = player.lvl;
-    document.getElementById('caps').textContent = player.caps;
-    document.getElementById('claimed').textContent = player.claimed.size;
-  }
-
-  function setStatus(text, isGood = true, time = 5000) {
-    const s = document.getElementById('status');
-    if (!s) return;
-    s.textContent = `Status: ${text}`;
-    s.className = isGood ? 'status-good' : 'status-bad';
-    clearTimeout(s._to);
-    if (time > 0) s._to = setTimeout(() => { s.textContent = 'Status: ready'; s.className = 'status-good'; }, time);
-  }
-
-  // GPS
-  function placeMarker(lat, lng, accuracy) {
-    playerLatLng = L.latLng(lat, lng);
-    lastAccuracy = accuracy;
-
-    if (!playerMarker) {
-      playerMarker = L.circleMarker(playerLatLng, {
-        radius: 10,
-        color: '#00ff41',
-        weight: 3,
-        fillOpacity: 0.9
-      }).addTo(map).bindPopup('You are here');
-    } else {
-      playerMarker.setLatLng(playerLatLng);
-    }
-
-    const accText = document.getElementById('accText');
-    const accDot = document.getElementById('accDot');
-    if (accText) accText.textContent = `GPS: ${Math.round(accuracy)}m`;
-    if (accDot) accDot.className = 'acc-dot ' + (accuracy <= 20 ? 'acc-green' : 'acc-amber');
-
-    if (firstLock) {
-      map.flyTo(playerLatLng, 16);
-      firstLock = false;
-    }
-    const gpsBtn = document.getElementById('requestGpsBtn');
-    if (gpsBtn) gpsBtn.style.display = 'none';
-    setStatus("GPS LOCK ACQUIRED", true, 5000);
-  }
-
-  function startLocation() {
-    if (!navigator.geolocation) {
-      setStatus("GPS not supported", false);
+  function setGpsAccuracy(accMeters) {
+    if (accMeters == null) {
+      accText.textContent = "GPS: waiting...";
+      accDot.classList.remove("acc-good", "acc-bad");
       return;
     }
-    if (watchId) navigator.geolocation.clearWatch(watchId);
-    watchId = navigator.geolocation.watchPosition(
-      pos => placeMarker(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy),
-      () => setStatus("GPS error – tap REQUEST GPS", false, 10000),
-      { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
-    );
-    setStatus("Requesting GPS lock...");
+
+    accText.textContent = `GPS: ~${Math.round(accMeters)}m`;
+    accDot.classList.remove("acc-good", "acc-bad");
+
+    if (accMeters <= 25) {
+      accDot.classList.add("acc-good");
+    } else if (accMeters > 75) {
+      accDot.classList.add("acc-bad");
+    }
   }
 
-  document.getElementById('requestGpsBtn').onclick = startLocation;
+  function initMap() {
+    map = L.map("map", {
+      zoomControl: false,
+      attributionControl: false
+    }).setView(MOJAVE_COORDS, DEFAULT_ZOOM);
 
-  // Wallet
-  document.getElementById('connectWallet').onclick = async () => {
-    if (wallet) return setStatus("Wallet already connected");
-    const provider = window.solana;
-    if (!provider || !provider.isPhantom) return setStatus("Phantom not detected", false);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19
+    }).addTo(map);
+
+    locationsLayer = L.layerGroup().addTo(map);
+
+    loadLocations();
+  }
+
+  async function loadLocations() {
     try {
-      await provider.connect();
-      wallet = provider;
-      const addr = wallet.publicKey.toBase58();
-      document.getElementById('connectWallet').textContent = `${addr.slice(0,4)}...${addr.slice(-4)}`;
-      setStatus("Wallet connected", true);
+      const res = await fetch("/data/locations.json");
+      if (!res.ok) return;
 
-      const res = await fetch(`${API_BASE}/player/${addr}`);
-      if (res.ok) {
-        const data = await res.json();
-        player = { ...player, ...data };
-        player.claimed = new Set(data.claimed || []);
-        player.quests = data.quests || [];
-        player.gear = data.gear || [];
-        player.equipped = data.equipped || {};
-        applyGearBonuses();
-        updateHPBar();
-        if (player.claimed.size === 0) document.getElementById('tutorialModal').classList.add('open');
-      }
-    } catch (err) {
-      setStatus("Wallet failed", false);
+      const data = await res.json();
+      locationsLayer.clearLayers();
+
+      data.forEach(loc => {
+        const marker = L.marker([loc.lat, loc.lng]);
+        marker.addTo(locationsLayer);
+        marker.bindPopup(loc.name || "Unknown location");
+
+        marker.on("click", () => {
+          openTerminalPanel("LOCATION", `
+<b>${loc.name || "Unknown Location"}</b><br/>
+${loc.description || ""}<br/><br/>
+Distance: <span id="locDistance">calculating...</span><br/><br/>
+<button class="btn" id="claimBtn">CLAIM LOOT</button>
+          `);
+
+          // After render, wire the claim button
+          setTimeout(() => {
+            const claimBtn = document.getElementById("claimBtn");
+            const locDistance = document.getElementById("locDistance");
+            if (!claimBtn || !locDistance) return;
+
+            if (currentPosition) {
+              const d = distanceMeters(
+                currentPosition.lat,
+                currentPosition.lng,
+                loc.lat,
+                loc.lng
+              );
+              locDistance.textContent = `${Math.round(d)}m`;
+            } else {
+              locDistance.textContent = "GPS not locked";
+            }
+
+            claimBtn.addEventListener("click", () => {
+              handleClaimLoot(loc);
+            });
+          }, 0);
+        });
+      });
+    } catch (e) {
+      console.error("Failed to load locations.json", e);
     }
-  };
+  }
 
-  // Tabs – FIXED & EPIC
-  document.addEventListener('DOMContentLoaded', () => {
-    document.body.addEventListener('click', e => {
-      const tab = e.target.closest('.tab');
-      if (!tab) return;
-      e.preventDefault();
+  function distanceMeters(lat1, lon1, lat2, lon2) {
+    const R = 6371000;
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
 
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
+  function updatePlayerMarker(lat, lng) {
+    currentPosition = { lat, lng };
 
-      const panel = tab.dataset.panel;
-      const terminal = document.getElementById('terminal');
+    if (!map) return;
+    if (!playerMarker) {
+      playerMarker = L.circleMarker([lat, lng], {
+        radius: 7,
+        color: "#00ff66",
+        fillColor: "#00ff66",
+        fillOpacity: 0.8
+      }).addTo(map);
+    } else {
+      playerMarker.setLatLng([lat, lng]);
+    }
+  }
 
-      if (panel === 'map') {
-        terminal.classList.remove('open');
-      } else {
-        terminal.classList.add('open');
-        document.getElementById('panelTitle').textContent = tab.textContent;
-        const body = document.getElementById('panelBody');
-        body.innerHTML = '<div class="loading-spinner">ACCESSING DATA...</div>';
+  function requestGps() {
+    if (!navigator.geolocation) {
+      setStatus("GPS not supported on this device.", "status-bad");
+      return;
+    }
 
-        setTimeout(() => {
-          if (panel === 'stat') renderStats();
-          if (panel === 'items') renderItems();
-          if (panel === 'quests') renderQuests();
-          if (panel === 'shop') renderShop();
-        }, 400);
+    setStatus("Requesting GPS lock...", "status-warn");
+
+    navigator.geolocation.watchPosition(
+      pos => {
+        const { latitude, longitude, accuracy } = pos.coords;
+        updatePlayerMarker(latitude, longitude);
+        setGpsAccuracy(accuracy);
+
+        if (map && !map._movedOnce) {
+          map.setView([latitude, longitude], DEFAULT_ZOOM);
+          map._movedOnce = true;
+        }
+
+        setStatus("GPS lock acquired.", "status-good");
+      },
+      err => {
+        console.error(err);
+        setStatus("GPS error or permission denied.", "status-bad");
+        setGpsAccuracy(null);
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 20000
+      }
+    );
+  }
+
+  function centerOnPlayer() {
+    if (currentPosition && map) {
+      map.setView([currentPosition.lat, currentPosition.lng], DEFAULT_ZOOM);
+    } else {
+      setStatus("No GPS lock yet. Request GPS first.", "status-warn");
+    }
+  }
+
+  function recenterMojave() {
+    if (map) {
+      map.setView(MOJAVE_COORDS, DEFAULT_ZOOM);
+    }
+  }
+
+  function openTerminalPanel(title, html) {
+    panelTitle.textContent = title;
+    panelBody.innerHTML = html;
+    terminal.classList.remove("hidden");
+  }
+
+  function closeTerminalPanel() {
+    terminal.classList.add("hidden");
+  }
+
+  function openTutorial() {
+    tutorialModal.classList.remove("hidden");
+  }
+
+  function closeTutorial() {
+    tutorialModal.classList.add("hidden");
+  }
+
+  function openMintModal(title, msg) {
+    mintTitle.textContent = title;
+    mintMsg.textContent = msg;
+    mintProgressBar.style.width = "0%";
+    mintModal.classList.remove("hidden");
+
+    setTimeout(() => {
+      mintProgressBar.style.width = "100%";
+    }, 50);
+  }
+
+  function closeMintModal() {
+    mintModal.classList.add("hidden");
+  }
+
+  function addCaps(amount) {
+    caps += amount;
+    capsEl.textContent = caps.toString();
+  }
+
+  function addXp(amount) {
+    xp += amount;
+    const xpNeeded = 100;
+    if (xp >= xpNeeded) {
+      xp -= xpNeeded;
+      level++;
+      lvlEl.textContent = level.toString();
+      setStatus(`Level up! You are now LVL ${level}.`, "status-good");
+    }
+
+    const pct = Math.max(0, Math.min(100, (xp / xpNeeded) * 100));
+    xpFillEl.style.width = `${pct}%`;
+    xpTextEl.textContent = `${xp} / ${xpNeeded}`;
+  }
+
+  function incrementClaimed() {
+    claimedCount++;
+    claimedEl.textContent = claimedCount.toString();
+  }
+
+  async function handleClaimLoot(loc) {
+    if (!currentPosition) {
+      setStatus("Cannot claim: GPS not locked.", "status-bad");
+      return;
+    }
+
+    const d = distanceMeters(
+      currentPosition.lat,
+      currentPosition.lng,
+      loc.lat,
+      loc.lng
+    );
+
+    if (d > CLAIM_RADIUS_METERS) {
+      setStatus(`Too far away to claim (${Math.round(d)}m).`, "status-warn");
+      return;
+    }
+
+    openMintModal("LOOT FOUND", "Minting CAPS from the wasteland...");
+
+    try {
+      // This is where you hook to your backend claim endpoint.
+      // Example (adjust URL and payload to your backend):
+      // const res = await fetch("/api/claim", { method: "POST", body: JSON.stringify({ locationId: loc.id }) });
+
+      // For now just simulate success:
+      await new Promise(res => setTimeout(res, 1500));
+
+      addCaps(loc.caps || 5);
+      addXp(loc.xp || 10);
+      incrementClaimed();
+
+      mintMsg.textContent = "Claim successful.";
+      setStatus("Loot claimed successfully.", "status-good");
+    } catch (e) {
+      console.error(e);
+      mintMsg.textContent = "Claim failed. Try again.";
+      setStatus("Loot claim failed.", "status-bad");
+    }
+  }
+
+  function initTabs() {
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        const panel = tab.getAttribute("data-panel");
+        if (panel === "map") {
+          closeTerminalPanel();
+        } else if (panel === "stat") {
+          openTerminalPanel("STATUS", `
+LEVEL: ${level}<br/>
+XP: ${xp} / 100<br/>
+CAPS: ${caps}<br/>
+CLAIMED LOCATIONS: ${claimedCount}<br/>
+          `);
+        } else if (panel === "items") {
+          openTerminalPanel("ITEMS", "Inventory system coming soon.");
+        } else if (panel === "quests") {
+          openTerminalPanel("QUESTS", "Quest log coming soon.");
+        } else if (panel === "shop") {
+          openTerminalPanel("SCAVENGER'S EXCHANGE", "Shop coming soon.");
+        }
+      });
+    });
+  }
+
+  function initWallet() {
+    connectWalletBtn.addEventListener("click", async () => {
+      if (!window.solana || !window.solana.isPhantom) {
+        setStatus("Phantom wallet not detected.", "status-warn");
+        return;
+      }
+
+      try {
+        const resp = await window.solana.connect();
+        walletPubkey = resp.publicKey.toString();
+        setStatus(`Wallet connected: ${walletPubkey.slice(0, 4)}...${walletPubkey.slice(-4)}`, "status-good");
+        connectWalletBtn.textContent = "Wallet Connected";
+      } catch (e) {
+        console.error(e);
+        setStatus("Wallet connection rejected.", "status-bad");
       }
     });
+  }
 
-    document.getElementById('panelClose')?.addEventListener('click', () => {
-      document.getElementById('terminal').classList.remove('open');
-      document.querySelector('.tab[data-panel="map"]')?.classList.add('active');
-      playSfx('sfxButton', 0.3);
+  function initUi() {
+    requestGpsBtn.addEventListener("click", requestGps);
+    centerBtn.addEventListener("click", centerOnPlayer);
+    recenterMojaveBtn.addEventListener("click", recenterMojave);
+
+    panelClose.addEventListener("click", closeTerminalPanel);
+
+    mintCloseBtn.addEventListener("click", closeMintModal);
+
+    tutorialClose.addEventListener("click", () => {
+      closeTutorial();
     });
+
+    initTabs();
+    initWallet();
+  }
+
+  function initGame() {
+    initMap();
+    initUi();
+    openTutorial();
+    setStatus("Pip-Boy online. Request GPS to begin tracking.", "status-good");
+  }
+
+  // Start game when boot sequence says ready
+  window.addEventListener("pipboyReady", () => {
+    initGame();
   });
 
-  // Render functions (basic versions – expand as needed)
-  function renderStats() {
-    document.getElementById('panelBody').innerHTML = `
-      <div class="list-item"><strong>LEVEL</strong><div>${player.lvl}</div></div>
-      <div class="list-item"><strong>XP</strong><div>${player.xp} / ${player.xpToNext}</div></div>
-      <div class="list-item"><strong>HP</strong><div>${Math.floor(player.hp)} / ${player.maxHp}</div></div>
-      <div class="list-item"><strong>RADS</strong><div>${player.rads} / ${MAX_RADS}</div></div>
-      <div class="list-item"><strong>CAPS</strong><div>${player.caps}</div></div>
-      <div class="list-item"><strong>CLAIMED</strong><div>${player.claimed.size}</div></div>
-    `;
-  }
-
-  function renderItems() {
-    document.getElementById('panelBody').innerHTML = '<div class="list-item">Inventory loading...</div>';
-    // Add your full gear rendering here
-  }
-
-  function renderQuests() {
-    document.getElementById('panelBody').innerHTML = '<div class="list-item">Quests loading...</div>';
-    // Add your full quests rendering here
-  }
-
-  function renderShop() {
-    document.getElementById('panelBody').innerHTML = '<div class="list-item">Shop loading...</div>';
-    // Add your full shop rendering here
-  }
-
-  // Radiation drain
-  setInterval(() => {
-    const effectiveRads = Math.max(0, player.rads - player.radResist);
-    if (effectiveRads > 150 && player.hp > 0) {
-      player.hp -= Math.floor(effectiveRads / 250);
-      if (player.hp <= 0) player.hp = 0;
-      updateHPBar();
-      playSfx('sfxRadTick', 0.3 + (effectiveRads / 1000));
-    }
-  }, 30000);
-
-  // Terminal unlock
-  function checkTerminalAccess() {
-    if (player.claimed.size >= 10 && !terminalSignal) {
-      terminalSignal = document.createElement('a');
-      terminalSignal.href = 'terminal.html';
-      terminalSignal.className = 'hidden-signal';
-      terminalSignal.textContent = '[RESTRICTED SIGNAL ACQUIRED]';
-      document.querySelector('.pipboy')?.appendChild(terminalSignal);
-      setTimeout(() => terminalSignal.classList.add('visible'), 100);
-      setStatus('Restricted signal detected...', true, 10000);
-    }
-  }
-
-  // Map init
-  async function initMapAndFeatures() {
-    map = L.map("map", { zoomControl: false }).setView([36.1146, -115.1728], 11);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: '' }).addTo(map);
-
-    try {
-      const res = await fetch(`${API_BASE}/locations`);
-      if (!res.ok) throw new Error();
-      locations = await res.json();
-
-      locations.forEach(loc => {
-        const color = loc.rarity === 'legendary' ? '#ffff00' : loc.rarity === 'epic' ? '#ff6200' : loc.rarity === 'rare' ? '#00ffff' : '#00ff41';
-        const m = L.circleMarker([loc.lat, loc.lng], {
-          radius: 16,
-          weight: 4,
-          color: '#001100',
-          fillColor: color,
-          fillOpacity: 0.9
-        }).addTo(map)
-          .bindPopup(`<b>${loc.n}</b><br>Level ${loc.lvl || 1}<br>Rarity: ${loc.rarity || 'common'}`)
-          .on('click', () => attemptClaim(loc));
-        markers[loc.n] = m;
-        if (player.claimed.has(loc.n)) m.setStyle({ fillColor: '#003300', fillOpacity: 0.5 });
-      });
-
-      setStatus(`Loaded ${locations.length} locations`, true);
-    } catch (err) {
-      setStatus("Locations offline", false);
-    }
-
-    startLocation();
-    updateHPBar();
-  }
-
-  // Attempt Claim (basic version – expand with your full code)
-  async function attemptClaim(loc) {
-    // Add your full claim logic here
-    setStatus("Claim attempted for " + loc.n, true);
-  }
-
-  // ================= STARTUP =================
-  runBootSequence();
 })();
