@@ -102,27 +102,28 @@ const MINTABLES = safeJsonRead(path.join(DATA_DIR, 'mintables.json'));
 const app = express();
 app.use(morgan('combined'));
 
-// === CSP / Security (Render-safe, Wallet-safe, Map-safe) ===
+// === CSP / Security (strict, no unsafe-eval, no inline scripts) ===
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
 
+        // No 'unsafe-eval', no 'unsafe-inline' for scripts
         scriptSrc: [
           "'self'",
-          "'unsafe-eval'",                    // Required for current Solana wallet adapters
-          "https://unpkg.com",                // General-purpose CDNs
+          "https://unpkg.com",
           "https://cdn.jsdelivr.net",
-          "https://*.solana.com",             // Solana RPC & wallet domains
-          "https://*.phantom.app",            // Phantom extension
-          "https://*.walletconnect.com",      // WalletConnect
-          "https://*.backpack.app",           // Backpack wallet
+          "https://*.solana.com",
+          "https://*.phantom.app",
+          "https://*.walletconnect.com",
+          "https://*.backpack.app",
         ],
 
+        // Inline styles allowed (Leaflet, CRT UI), but no inline JS
         styleSrc: [
           "'self'",
-          "'unsafe-inline'",                  // Required for Leaflet dynamic styles + UI
+          "'unsafe-inline'",
           "https://fonts.googleapis.com",
           "https://unpkg.com",
         ],
@@ -137,7 +138,7 @@ app.use(
           "'self'",
           "data:",                            // Leaflet markers, base64 images
           "blob:",                            // Canvas blobs if used
-          "https:",                           // External tiles
+          "https:",                           // External tiles, general https images
           "https://*.basemaps.cartocdn.com",  // Dark Carto basemap
           "https://*.tile.openstreetmap.org", // OSM fallback
         ],
