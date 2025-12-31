@@ -258,9 +258,26 @@
       attributionControl: false
     }).setView(MOJAVE_COORDS, DEFAULT_ZOOM);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19
-    }).addTo(map);
+    // === MULTIPLE MAP LAYERS ===
+const terrainLayer = L.tileLayer(
+  'https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg',
+  { maxZoom: 18 }
+);
+
+const satelliteLayer = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  { maxZoom: 18 }
+);
+
+const tonerLayer = L.tileLayer(
+  'https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
+  { maxZoom: 18 }
+);
+
+// Default map layer
+let currentMapLayer = terrainLayer;
+currentMapLayer.addTo(map);
+
 
     locationsLayer = L.layerGroup().addTo(map);
     renderLocations();
@@ -1233,3 +1250,4 @@ ${pack.description || ""}<br/><br/>
     initGame();
   });
 })();
+
