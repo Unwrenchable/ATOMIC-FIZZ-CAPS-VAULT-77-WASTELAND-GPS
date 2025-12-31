@@ -1,5 +1,5 @@
 // main.js – ATOMIC FIZZ CAPS • WASTELAND GPS
-// Hybrid exploration + Fallout-style VATS battles + NFT item rewards
+// Hybrid exploration + Fallout-style VATS battles + NFT item rewards + Multi-map modes
 
 (function () {
   // ==========================
@@ -31,6 +31,14 @@
   let currentEnemy = null; // { name, type, lvl, rarity, maxHp, hp, baseDamage }
   let currentBattlePoi = null; // location object
   let battleLog = [];
+
+  // Map layers for MAP MODE
+  let terrainLayer = null;
+  let satelliteLayer = null;
+  let tonerLayer = null;
+  let currentMapLayer = null;
+  let mapModes = ["terrain", "satellite", "toner"];
+  let mapModeIndex = 0;
 
   // ==========================
   // DOM HOOKS
@@ -99,19 +107,24 @@
   }
 
   function setGpsAccuracy(accMeters) {
+    if (!accDot || !accText) return;
+
+    accDot.classList.remove("acc-green", "acc-amber");
+
     if (accMeters == null) {
       accText.textContent = "GPS: waiting...";
-      accDot.classList.remove("acc-good", "acc-bad");
+      // base CSS is red/pulsing; we just don't add green/amber
       return;
     }
 
     accText.textContent = `GPS: ~${Math.round(accMeters)}m`;
-    accDot.classList.remove("acc-good", "acc-bad");
 
     if (accMeters <= 25) {
-      accDot.classList.add("acc-good");
+      accDot.classList.add("acc-green");
     } else if (accMeters > 75) {
-      accDot.classList.add("acc-bad");
+      // leave as red (no extra class)
+    } else {
+      accDot.classList.add("acc-amber");
     }
   }
 
@@ -250,7 +263,7 @@
   }
 
   // ==========================
-  // MAP
+  // MAP + MULTI-MAP MODES
   // ==========================
   function initMap() {
     map = L.map("map", {
@@ -258,29 +271,63 @@
       attributionControl: false
     }).setView(MOJAVE_COORDS, DEFAULT_ZOOM);
 
-    // === MULTIPLE MAP LAYERS ===
-const terrainLayer = L.tileLayer(
-  'https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg',
-  { maxZoom: 18 }
-);
+    // Multiple map layers
+    terrainLayer = L.tileLayer(
+      "https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",
+      { maxZoom: 18 }
+    );
 
-const satelliteLayer = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  { maxZoom: 18 }
-);
+    satelliteLayer = L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      { maxZoom: 18 }
+    );
 
-const tonerLayer = L.tileLayer(
-  'https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
-  { maxZoom: 18 }
-);
+    tonerLayer = L.tileLayer(
+      "https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png",
+      { maxZoom: 18 }
+    );
 
-// Default map layer
-let currentMapLayer = terrainLayer;
-currentMapLayer.addTo(map);
-
+    // Default layer: terrain
+    currentMapLayer = terrainLayer;
+    currentMapLayer.addTo(map);
 
     locationsLayer = L.layerGroup().addTo(map);
     renderLocations();
+  }
+
+  function switchMapStyle(style) {
+    if (!map || !currentMapLayer) return;
+
+    map.removeLayer(currentMapLayer);
+
+    if (style === "terrain" && terrainLayer) currentMapLayer = terrainLayer;
+    else if (style === "satellite" && satelliteLayer)
+      currentMapLayer = satelliteLayer;
+    else if (style === "toner" && tonerLayer) currentMapLayer = tonerLayer;
+    else currentMapLayer = terrainLayer || currentMapLayer;
+
+    currentMapLayer.addTo(map);
+    setStatus(`Map mode: ${style.toUpperCase()}`, "status-good");
+  }
+
+  function initMapModeButton() {
+    const controls = document.querySelector(".pip-controls");
+    if (!controls) return;
+
+    let btn = document.getElementById("mapModeBtn");
+    if (!btn) {
+      btn = document.createElement("button");
+      btn.id = "mapModeBtn";
+      btn.className = "btn";
+      btn.textContent = "MAP MODE";
+      controls.appendChild(btn);
+    }
+
+    btn.addEventListener("click", () => {
+      mapModeIndex = (mapModeIndex + 1) % mapModes.length;
+      const mode = mapModes[mapModeIndex];
+      switchMapStyle(mode);
+    });
   }
 
   function renderLocations() {
@@ -1232,6 +1279,7 @@ ${pack.description || ""}<br/><br/>
 
     initTabs();
     initWallet();
+    initMapModeButton();
     updateHud();
   }
 
@@ -1250,4 +1298,3 @@ ${pack.description || ""}<br/><br/>
     initGame();
   });
 })();
-
