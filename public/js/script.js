@@ -196,32 +196,56 @@ document.getElementById('connectWallet').onclick = async () => {
 };
 
 // Tabs
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.onclick = () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    const term = document.getElementById('terminal');
-    if (tab.dataset.panel === 'map') {
-      term.classList.remove('open');
+// Epic Pip-Boy Tab System – Delegation + immersive feedback
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('.tab');
+  const terminal = document.getElementById('terminal');
+  const panelTitle = document.getElementById('panelTitle');
+  const panelBody = document.getElementById('panelBody');
+
+  // Add active tab glow (Pip-Boy style)
+  function highlightActiveTab(tab) {
+    tabs.forEach(t => t.classList.remove('active', 'glow-active'));
+    tab.classList.add('active', 'glow-active');
+    playSfx('sfxButton', 0.4); // Click sound
+  }
+
+  // Use event delegation on body for robustness
+  document.body.addEventListener('click', (e) => {
+    const tab = e.target.closest('.tab');
+    if (!tab) return;
+
+    e.preventDefault(); // Prevent any default if needed
+    highlightActiveTab(tab);
+
+    const panel = tab.dataset.panel;
+
+    if (panel === 'map') {
+      terminal.classList.remove('open');
     } else {
-      term.classList.add('open');
-      document.getElementById('panelTitle').textContent = tab.textContent;
-      if (tab.dataset.panel === 'stat') renderStats();
-      if (tab.dataset.panel === 'items') renderItems();
-      if (tab.dataset.panel === 'quests') renderQuests();
-      if (tab.dataset.panel === 'shop') renderShop();
+      terminal.classList.add('open');
+      panelTitle.textContent = tab.textContent;
+
+      // Loading state (Pip-Boy feel)
+      panelBody.innerHTML = '<div class="loading-spinner">ACCESSING DATA...</div>';
+
+      // Async content load with timeout for realism
+      setTimeout(() => {
+        if (panel === 'stat') renderStats();
+        if (panel === 'items') renderItems();
+        if (panel === 'quests') renderQuests();
+        if (panel === 'shop') renderShop();
+      }, 300); // 300ms "loading" delay for immersion
     }
-  };
+  });
+
+  // Close button
+  document.getElementById('panelClose')?.addEventListener('click', () => {
+    terminal.classList.remove('open');
+    document.querySelector('.tab[data-panel="map"]').classList.add('active', 'glow-active');
+    playSfx('sfxButton', 0.3);
+  });
 });
-document.getElementById('panelClose').onclick = () => {
-  document.getElementById('terminal').classList.remove('open');
-  document.querySelector('.tab[data-panel="map"]').classList.add('active');
-};
-
-// Close modals
-document.getElementById('mintCloseBtn').onclick = () => document.getElementById('mintModal').classList.remove('open');
-document.getElementById('tutorialClose').onclick = () => document.getElementById('tutorialModal').classList.remove('open');
-
 // renderStats
 function renderStats() {
   document.getElementById('panelBody').innerHTML = `

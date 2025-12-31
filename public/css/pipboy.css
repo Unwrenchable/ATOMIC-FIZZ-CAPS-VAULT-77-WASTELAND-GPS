@@ -1,4 +1,7 @@
-/* GLOBAL ------------------------------------------------------------ */
+/* === ATOMIC FIZZ PIP-BOY CSS – COMPLETE REMAKE v1.1 === */
+/* Retro Fallout Pip-Boy 3000 style with CRT effects, green glow, scanlines, static, and full functionality */
+
+/* GLOBAL */
 html, body {
   height: 100%;
   margin: 0;
@@ -24,7 +27,7 @@ html, body {
   text-align: center;
 }
 
-/* PIP-BOY CONTAINER -------------------------------------------------- */
+/* PIP-BOY CONTAINER */
 .pipboy {
   width: 100%;
   max-width: 480px;
@@ -36,9 +39,10 @@ html, body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
-/* HEADER ------------------------------------------------------------- */
+/* HEADER */
 header {
   text-align: center;
   margin-bottom: 10px;
@@ -73,7 +77,7 @@ header .sub {
   background: #003300;
 }
 
-/* STATUS BAR --------------------------------------------------------- */
+/* STATUS BAR */
 .pip-status {
   display: flex;
   justify-content: space-between;
@@ -110,7 +114,7 @@ header .sub {
   font-size: 14px;
 }
 
-/* XP BAR ------------------------------------------------------------- */
+/* XP BAR */
 .pip-xp-container {
   position: relative;
   height: 16px;
@@ -124,6 +128,7 @@ header .sub {
   width: 0%;
 }
 
+/* CLAIMED */
 .pip-claimed {
   position: absolute;
   width: 100%;
@@ -132,10 +137,10 @@ header .sub {
   font-size: 14px;
 }
 
-/* MAP WRAPPER - Responsive & Perfect Height */
+/* MAP WRAPPER – Ultimate Retro Pip-Boy CRT */
 #mapWrap {
   position: relative;
-  height: 60vh; /* Balanced - not too small/tall on mobile */
+  height: 60vh;
   min-height: 400px;
   max-height: 70vh;
   width: 100%;
@@ -145,62 +150,133 @@ header .sub {
   overflow: hidden;
   border-radius: 4px;
   box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+  animation:
+    gentle-glow 8s ease-in-out infinite alternate,
+    rare-flicker 15s infinite;
 }
 
-/* Map itself - full container */
-#map {
-  width: 100% !important;
-  height: 100% !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
+/* Monochrome green filter on map tiles */
+.leaflet-tile-pane {
+  filter:
+    brightness(1.4)
+    contrast(2)
+    sepia(0.3)
+    hue-rotate(90deg)
+    saturate(3)
+    grayscale(0.2);
+  opacity: 0.96;
 }
 
-/* Prevent body scroll when interacting with map */
-body.map-active {
-  overflow: hidden;
-}
-
-/* PIP-BOY GRID OVERLAY */
-#mapWrap::after {
-  content: "";
+/* Dark green radial tint overlay */
+#map::after {
+  content: '';
   position: absolute;
   inset: 0;
+  background: radial-gradient(circle at center, transparent 40%, rgba(0, 30, 0, 0.6) 100%);
   pointer-events: none;
-  background: url('/img/pipboy-grid.svg') repeat;
-  opacity: 0.08; /* Reduced opacity - less intrusive */
-  z-index: 5;
+  z-index: 1000;
+  border-radius: 4px;
 }
 
-/* MAP ITSELF --------------------------------------------------------- */
-#map {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 1;
+/* Classic CRT scanlines */
+#map::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 1001;
+  opacity: 0.5;
+  animation: slow-scan 12s linear infinite;
+  border-radius: 4px;
 }
 
-/* Make map less dark & more Pip-Boy glow (adjustable) */
-#map {
-  filter: hue-rotate(95deg) brightness(1.15) contrast(1.15) saturate(1.3);
-  box-shadow: inset 0 0 25px rgba(0, 255, 65, 0.3);
+@keyframes slow-scan {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 4px; }
 }
 
-/* Hide default Leaflet zoom controls (cleaner look) */
-.leaflet-control-zoom {
-  display: none !important;
+/* Subtle terminal grid */
+#mapWrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 255, 65, 0.06) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(0, 255, 65, 0.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 1002;
+  opacity: 0.35;
+  border-radius: 4px;
 }
 
-/* Small attribution (bottom right, subtle) */
-.leaflet-control-attribution {
-  font-size: 9px;
-  opacity: 0.6;
-  background: rgba(0,0,0,0.5);
-  padding: 2px 6px;
-  border-radius: 3px;
+/* Static noise overlay */
+.static-noise {
+  position: absolute;
+  inset: 0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"/></filter><rect width="100" height="100" filter="url(#noise)" opacity="0.15"/></svg>') repeat;
+  pointer-events: none;
+  z-index: 1003;
+  opacity: 0.3;
+  animation: noise-flicker 0.1s steps(4) infinite;
+  border-radius: 4px;
 }
 
-/* GPS BADGE ---------------------------------------------------------- */
+@keyframes noise-flicker {
+  0% { opacity: 0.25; }
+  100% { opacity: 0.35; }
+}
+
+/* Gentle glow pulse */
+@keyframes gentle-glow {
+  0% {
+    box-shadow:
+      inset 0 0 80px #003300,
+      0 0 50px rgba(0, 255, 65, 0.3);
+  }
+  100% {
+    box-shadow:
+      inset 0 0 100px #004400,
+      0 0 80px rgba(0, 255, 65, 0.5);
+  }
+}
+
+/* Rare screen flicker */
+@keyframes rare-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.97; }
+  97% { opacity: 0.99; }
+}
+
+/* Slight barrel distortion + rounded screen */
+.leaflet-container {
+  border-radius: 4px;
+  overflow: hidden;
+  mask-image: radial-gradient(circle at center, black 85%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at center, black 85%, transparent 100%);
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  #mapWrap::after {
+    background-size: 40px 40px;
+  }
+  .leaflet-tile-pane {
+    filter: brightness(1.5) contrast(2.2) sepia(0.3) hue-rotate(90deg) saturate(3.2);
+  }
+  @keyframes slow-scan {
+    100% { background-position: 0 3px; }
+  }
+}
+
+/* GPS BADGE */
 .gps-badge {
   position: absolute;
   bottom: 12px;
@@ -229,45 +305,44 @@ body.map-active {
 .acc-amber { background: #ffaa00; }
 .acc-red   { background: #ff3300; }
 
-/* BUTTONS / TABS (GREEN PIP-BOY STYLE) */
+/* BUTTONS / TABS */
 .controls, .btn, button {
-  background: transparent !important;
-  border: 2px solid #00ff41 !important;
-  color: #00ff41 !important;
-  font-family: 'VT323', monospace !important;
-  font-size: 16px !important;
-  padding: 8px 12px !important;
-  cursor: pointer !important;
-  transition: all 0.2s !important;
+  background: transparent;
+  border: 2px solid #00ff41;
+  color: #00ff41;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .btn:hover, .btn.active, button:hover {
-  background: #003300 !important;
-  box-shadow: 0 0 12px #00ff41 !important;
+  background: #003300;
+  box-shadow: 0 0 12px #00ff41;
 }
 
-/* Make sure tabs are full-width and readable */
 .controls {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 6px !important;
-  margin: 10px 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
 }
 
 .btn {
-  flex: 1 1 auto !important;
-  min-width: 80px !important;
-  text-align: center !important;
+  flex: 1 1 auto;
+  min-width: 80px;
+  text-align: center;
 }
 
-/* PANELS ------------------------------------------------------------- */
+/* PANELS */
 .panel-content {
   border: 2px solid #00ff41;
   padding: 12px;
   background: #001900;
   flex: 1;
   overflow-y: auto;
-  max-height: 40vh; /* Prevents overflow on small screens */
+  max-height: 40vh;
 }
 
 .hidden {
@@ -287,7 +362,7 @@ h2 {
   font-style: italic;
 }
 
-/* MARKERS ------------------------------------------------------------ */
+/* MARKERS */
 .marker-active img {
   filter: drop-shadow(0 0 4px #00ff41);
 }
@@ -299,5 +374,31 @@ h2 {
 
 /* Fix scrolling on map */
 #mapWrap {
-  touch-action: pinch-zoom; /* Allows pinch zoom, disables bad scroll */
+  touch-action: pinch-zoom;
+}
+
+/* Active tab glow (Pip-Boy neon pulse) */
+.tab.active {
+  box-shadow: 0 0 12px #00ff41, inset 0 0 8px #00ff41;
+  animation: tab-pulse 1.5s infinite alternate;
+}
+
+@keyframes tab-pulse {
+  0%   { box-shadow: 0 0 8px #00ff41; }
+  100% { box-shadow: 0 0 20px #00ff41, inset 0 0 12px #00ff41; }
+}
+
+/* Loading spinner */
+.loading-spinner {
+  text-align: center;
+  color: #00ff41;
+  font-family: 'VT323', monospace;
+  font-size: 1.4em;
+  padding: 30px 0;
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
 }
