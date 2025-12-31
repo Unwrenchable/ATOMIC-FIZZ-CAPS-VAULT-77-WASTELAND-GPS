@@ -6,18 +6,10 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <!-- Pip-Boy CSS -->
   <link rel="stylesheet" href="/css/pipboy.css" />
-
   <!-- VT323 Font -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-
   <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
-
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <title>ATOMIC FIZZ CAPS • WASTELAND GPS</title>
 </head>
 
@@ -36,85 +28,86 @@
       <header>
         <h1>ATOMIC FIZZ CAPS</h1>
         <div class="sub">PIP-BOY 3000 MARK IV</div>
-        <button class="wallet-btn top-right" id="walletStatusBtn">TERMINAL OFFLINE</button>
+        <button class="wallet-btn top-right" id="connectWallet">CONNECT WALLET</button>
       </header>
 
       <!-- STATUS BAR -->
       <section class="pip-status">
-        <div class="pip-lvl">LVL: <span id="playerLevel">1</span></div>
+        <div class="pip-lvl">LVL: <span id="lvl">1</span></div>
 
         <div class="pip-hp-container">
-          <div class="pip-hp-fill" id="hpFill"></div>
-          <div class="pip-rad-fill" id="radFill"></div>
+          <div class="pip-hp-fill" id="hpFill" style="width:100%"></div>
+          <div class="pip-rad-fill" id="radFill" style="width:0%"></div>
           <div class="pip-hp-text" id="hpText">HP 100 / 100</div>
         </div>
 
-        <div class="pip-caps">CAPS: <span id="playerCaps">0</span></div>
+        <div class="pip-caps">CAPS: <span id="caps">0</span></div>
       </section>
-
-      <!-- XP BAR -->
-      <div class="pip-xp-container">
-        <div class="pip-xp-fill" id="xpFill"></div>
-        <div class="pip-claimed" id="xpStatus">XP: 0 / 100</div>
-      </div>
 
       <!-- MAP -->
       <section id="mapWrap">
         <div id="map"></div>
-
         <div class="gps-badge">
-          <div class="acc-dot" id="gpsDot"></div>
-          <span id="gpsStatus">GPS: INITIALIZING...</span>
+          <div class="acc-dot" id="accDot"></div>
+          <span id="accText">GPS: INITIALIZING...</span>
         </div>
-
-        <a href="/funding.html" class="invisible-link"></a>
+        <button class="btn" id="requestGpsBtn" style="display:none">REQUEST GPS</button>
       </section>
 
-      <!-- BUTTON ROW -->
-      <div class="controls">
-        <button>MAP</button>
-        <button>STATS</button>
-        <button>ITEMS</button>
-        <button>QUESTS</button>
-        <button>SCAVENGER'S EXCHANGE</button>
+      <!-- TABS (fixed with data-panel & .tab class) -->
+      <div class="tabs">
+        <div class="tab active" data-panel="map">MAP</div>
+        <div class="tab" data-panel="stat">STATS</div>
+        <div class="tab" data-panel="items">ITEMS</div>
+        <div class="tab" data-panel="quests">QUESTS</div>
+        <div class="tab" data-panel="shop">SCAVENGER'S EXCHANGE</div>
       </div>
 
-      <!-- PANELS -->
-      <div id="statsPanel" class="panel-content hidden">
-        <h2>STATS</h2>
-        <p>Level: <span id="panelLevel">1</span></p>
-        <p>CAPS: <span id="panelCaps">0</span></p>
-        <p>Rads: <span id="panelRads">0</span></p>
-        <p>XP: <span id="panelXP">0 / 100</span></p>
+      <!-- TERMINAL PANEL (added id="terminal") -->
+      <div id="terminal" class="panel-content">
+        <button class="btn" id="panelClose">X</button>
+        <h4 id="panelTitle">TERMINAL</h4>
+        <div id="panelBody">Select a tab to begin...</div>
       </div>
 
-      <div id="itemsPanel" class="panel-content hidden">
-        <h2>GEAR</h2>
-        <div id="gearList">Loading gear...</div>
+      <!-- MODALS -->
+      <div id="mintModal" class="mint-modal hidden">
+        <div>
+          <div id="mintTitle">LOOT CLAIMED</div>
+          <div id="mintMsg"></div>
+          <button class="btn" id="mintCloseBtn">Close</button>
+        </div>
       </div>
 
-      <div id="questsPanel" class="panel-content hidden">
-        <h2>QUESTS</h2>
-        <ul id="questsList">Loading quests...</ul>
-      </div>
-
-      <div id="scavengersPanel" class="panel-content hidden">
-        <h2>EXCHANGE</h2>
-        <div id="scavengerOffers">Loading offers...</div>
+      <div id="tutorialModal" class="mint-modal hidden">
+        <div>
+          <div class="modal-title">WELCOME TO THE WASTELAND</div>
+          <div class="modal-content">
+            <p>→ Connect Phantom wallet</p>
+            <p>→ Allow GPS</p>
+            <p>→ Hunt markers – get within 50m to claim</p>
+            <p>→ Survive the atomic fizz ☢️</p>
+          </div>
+          <button class="btn" id="tutorialClose">ENTER WASTELAND</button>
+        </div>
       </div>
 
     </div>
   </div>
 
-  <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-  ></script>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+  <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
+  <script src="/js/main.js"></script>
 
-  <!-- MAIN JS -->
-  <script type="module" src="/js/main.js"></script>
+  <!-- Sound Effects -->
+  <audio id="sfxClaim" preload="auto"><source src="https://assets.codepen.io/605876/fallout-terminal-beep.mp3" type="audio/mpeg"></audio>
+  <audio id="sfxRadTick" preload="auto"><source src="https://assets.codepen.io/605876/geiger-counter.mp3" type="audio/mpeg"></audio>
+  <audio id="sfxEquip" preload="auto"><source src="https://assets.codepen.io/605876/fallout-inventory-click.mp3" type="audio/mpeg"></audio>
+  <audio id="sfxLevelUp" preload="auto"><source src="https://assets.codepen.io/605876/fallout-level-up.mp3" type="audio/mpeg"></audio>
+  <audio id="sfxGearDrop" preload="auto"><source src="https://assets.codepen.io/605876/fallout-epic-loot.mp3" type="audio/mpeg"></audio>
+  <audio id="sfxButton" preload="auto"><source src="https://assets.codepen.io/605876/pipboy-button-click.mp3" type="audio/mpeg"></audio>
 
 </body>
 </html>
