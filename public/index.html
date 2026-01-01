@@ -93,7 +93,7 @@
             <div class="xp-bar">
               <div id="xpFill" class="xp-fill"></div>
             </div>
-            <div id="xpText" class="xp-text">0 / 100</div>
+            <div class="xp-text" id="xpText">0 / 100</div>
           </div>
 
           <div class="hud-block">
@@ -195,7 +195,10 @@
   <!-- BOOT FIRST (emits event when ready) -->
   <script src="/js/boot.js"></script>
 
-  <!-- GAME SECOND (listens for boot event) -->
+  <!-- MAP CORE SECOND (creates Leaflet map + tiles) -->
+  <script src="/js/map-core.js"></script>
+
+  <!-- GAME LAST (GPS, VATS, quests, etc., uses existing map) -->
   <script src="/js/main.js"></script>
 
 </body>
