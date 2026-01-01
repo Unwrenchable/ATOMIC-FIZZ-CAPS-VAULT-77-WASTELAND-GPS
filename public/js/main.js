@@ -1,49 +1,42 @@
 // public/js/main.js
-// -----------------------------------------------------------------------------
-// ATOMIC-FIZZ-CAPS VAULT-77 WASTELAND GPS
-// Complete drop-in main script (comprehensive, defensive, and ready to run).
+// ATOMIC-FIZZ-CAPS • VAULT-77 WASTELAND GPS
+// Consolidated, defensive, drop-in main script
+// - Single-file consolidation of previous parts
+// - Robust data loading with graceful fallbacks
+// - Leaflet map init with multi-layer support and tile error handling
+// - NFT mintables -> in-game item mapping + XP/leveling
+// - Quest activation engine (active quests only)
+// - UI rendering for shop, mintables, quests, inventory
+// - Geolocation hooks, quest checker, persistence (localStorage)
+// - Boot activation, keyboard shortcuts, debug helpers
+// - Idempotent exports and safe guards for repeated loads
 //
-// Features:
-//  - Top-level safe DATA initializer
-//  - Robust JSON loaders with graceful fallbacks and diagnostics
-//  - NFT mintables -> in-game item mapping + XP/leveling
-//  - Quest activation (only active quests trigger) and proximity checks
-//  - Leaflet map initialization with multiple tile layers, tileerror logging, and OSM fallback
-//  - Boot/activation handler (mobile-friendly) and pipboyReady event
-//  - UI integration points and safe stubs for project-specific functions
-//  - Marketplace, scavenger, inventory, and shop scaffolding
-//  - Wallet connect and minting scaffolding (stubs that call your implementations if present)
-//  - Geolocation handling and quest checking
-//  - Debug helpers and CSS safety injection
-//  - Extensive comments and TODO markers so you can paste your original logic where needed
+// BACKUP your existing public/js/main.js before replacing.
 //
-// NOTE: Replace only if you have a backup. This file aims to be a robust, working baseline.
-// -----------------------------------------------------------------------------
+// NOTE: This file is intentionally defensive and verbose to be robust across environments.
 
-
-/* ============================================================================
-   Top-level safe defaults (MUST be at the very top)
-   ============================================================================ */
-window.DATA = window.DATA || {
-  scavenger: [],
-  mintables: [],
-  quests: [],
-  locations: [],
-  collectibles: [],
-  factions: [],
-  inventory: [],
-  settings: {}
-};
-
-/* ============================================================================
-   IIFE module scope
-   ============================================================================ */
 (function () {
   'use strict';
 
-  /* --------------------------------------------------------------------------
-     Module-scoped globals and state
-     -------------------------------------------------------------------------- */
+  /* ============================================================================
+     Top-level safe defaults
+     ============================================================================ */
+  // Ensure DATA exists to avoid ReferenceErrors from other scripts
+  window.DATA = window.DATA || {
+    scavenger: [],
+    mintables: [],
+    quests: [],
+    locations: [],
+    collectibles: [],
+    factions: [],
+    inventory: [],
+    settings: {}
+  };
+
+  /* ============================================================================
+     Module-scoped globals and config
+     ============================================================================ */
+  // Map and UI globals
   let map = window.map || null;
   let mapEl = document.getElementById('map') || null;
   let currentMapLayer = null;
@@ -52,6 +45,7 @@ window.DATA = window.DATA || {
   let satelliteLayer = null;
   let osmLayer = null;
 
+  // App state
   let _gameInitializing = false;
   let _gameInitialized = false;
   let _bootActivated = false;
@@ -59,17 +53,19 @@ window.DATA = window.DATA || {
   let _questCheckInterval = null;
   let _geoWatchId = null;
 
-  const CONFIG = {
+  // Config
+  const CFG = {
     defaultCenter: [39.5, -119.8],
     defaultZoom: 6,
     questCheckMs: 5000,
     mintXpPerAction: 10,
-    mapTileTimeoutMs: 8000
+    minMapHeight: 320,
+    persistKey: 'atomicfizz_pipboy_v1'
   };
 
-  /* --------------------------------------------------------------------------
-     Logging and small helpers
-     -------------------------------------------------------------------------- */
+  /* ============================================================================
+     Small helpers
+     ============================================================================ */
   function safeLog(...args) { try { console.log(...args); } catch (e) {} }
   function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
   function safeError(...args) { try { console.error(...args); } catch (e) {} }
@@ -77,6 +73,61 @@ window.DATA = window.DATA || {
   function $all(sel) { return Array.from(document.querySelectorAll(sel)); }
   function isFunction(fn) { return typeof fn === 'function'; }
   function nowIso() { return (new Date()).toISOString(); }
+  function noop() {}
+
+  /* ============================================================================
+     CSS safety injection
+     ============================================================================ */
+  (function ensureCssSafety() {
+    try {
+      const styleId = 'pipboy-mainjs-safety';
+      if (document.getElementById(styleId)) return;
+      const css = `
+        .map-container, #map { z-index: 20 !important; pointer-events: auto !important; min-height: ${CFG.minMapHeight}px !important; }
+        .static-noise, .top-overlay, .overseer-link, .pipboy-screen, .hud { pointer-events: none !important; z-index: 5 !important; }
+        .leaflet-tile-pane img.leaflet-tile { visibility: visible !important; opacity: 1 !important; image-rendering: auto !important; }
+        .btn { min-width: 44px; min-height: 44px; touch-action: manipulation; }
+        .pipboy-modal { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #071018; color: #fff; padding: 12px; border: 1px solid #234; z-index: 99999; display: none; max-width: 90%; max-height: 80%; overflow: auto; }
+        .pipboy-modal .modal-close { position: absolute; right: 8px; top: 8px; background: transparent; border: none; color: #fff; font-size: 18px; cursor: pointer; }
+      `;
+      const s = document.createElement('style');
+      s.id = styleId;
+      s.appendChild(document.createTextNode(css));
+      document.head && document.head.appendChild(s);
+    } catch (e) {}
+  }());
+
+  /* ============================================================================
+     Persistence helpers (localStorage)
+     ============================================================================ */
+  function saveState() {
+    try {
+      const snapshot = {
+        DATA: window.DATA,
+        ts: Date.now()
+      };
+      localStorage.setItem(CFG.persistKey, JSON.stringify(snapshot));
+      safeLog('Saved state to localStorage');
+    } catch (e) { safeWarn('saveState failed', e); }
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(CFG.persistKey);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.DATA) {
+        // Merge shallowly to avoid wiping references
+        window.DATA = Object.assign(window.DATA || {}, parsed.DATA);
+        safeLog('Loaded state from localStorage');
+        return parsed;
+      }
+    } catch (e) { safeWarn('loadState failed', e); }
+    return null;
+  }
+
+  // Auto-load on script run (non-blocking)
+  try { loadState(); } catch (e) {}
 
   /* ============================================================================
      Robust data loader
@@ -88,14 +139,14 @@ window.DATA = window.DATA || {
       if (!res.ok) {
         safeWarn(`${name}.json fetch failed:`, res.status, res.statusText);
         if (name === 'scavenger') window.DATA.scavenger = [];
-        return;
+        return null;
       }
       const contentType = (res.headers.get('content-type') || '').toLowerCase();
       const text = await res.text();
       if (!contentType.includes('application/json')) {
         safeWarn(`${name}.json served as ${contentType}; preview:`, text.slice(0, 400));
         if (name === 'scavenger') window.DATA.scavenger = [];
-        return;
+        return null;
       }
       let json;
       try {
@@ -103,7 +154,7 @@ window.DATA = window.DATA || {
       } catch (e) {
         safeWarn(`${name}.json parse error:`, e);
         if (name === 'scavenger') window.DATA.scavenger = [];
-        return;
+        return null;
       }
       if (name === 'collectibles') {
         window.DATA.collectiblesPack = {
@@ -115,9 +166,11 @@ window.DATA = window.DATA || {
         window.DATA[name] = json;
       }
       safeLog(`Loaded ${name}.json (${Array.isArray(json) ? json.length : typeof json})`);
+      return json;
     } catch (e) {
       safeError(`Failed to load ${name}.json`, e);
       if (name === 'scavenger') window.DATA.scavenger = [];
+      return null;
     }
   }
 
@@ -232,7 +285,7 @@ window.DATA = window.DATA || {
       if (_lastPlayerPosition) {
         checkQuestTriggers(_lastPlayerPosition.lat, _lastPlayerPosition.lng);
       }
-    }, CONFIG.questCheckMs);
+    }, CFG.questCheckMs);
   }
 
   function stopQuestChecker() {
@@ -240,27 +293,27 @@ window.DATA = window.DATA || {
   }
 
   /* ============================================================================
-     Map initialization and tile handling
+     Leaflet tile layers and map initialization
      ============================================================================ */
   function createTileLayers() {
     try {
       terrainLayer = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg', {
         maxZoom: 18,
-        attribution: 'Map tiles by Stamen'
+        attribution: 'Stamen Terrain'
       });
     } catch (e) { safeWarn('terrainLayer creation failed', e); terrainLayer = null; }
 
     try {
       tonerLayer = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
         maxZoom: 18,
-        attribution: 'Map tiles by Stamen'
+        attribution: 'Stamen Toner'
       });
     } catch (e) { safeWarn('tonerLayer creation failed', e); tonerLayer = null; }
 
     try {
-      satelliteLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        maxZoom: 17,
-        attribution: 'OpenTopoMap'
+      satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: 'ESRI Satellite'
       });
     } catch (e) { safeWarn('satelliteLayer creation failed', e); satelliteLayer = null; }
 
@@ -272,74 +325,84 @@ window.DATA = window.DATA || {
     } catch (e) { safeWarn('osmLayer creation failed', e); osmLayer = null; }
   }
 
-  function initMap() {
-    if (map && window.L && map instanceof L.Map) {
-      if (currentMapLayer && !currentMapLayer._map) {
-        try { currentMapLayer.addTo(map); } catch (e) { safeWarn('re-adding currentMapLayer failed', e); }
-      }
-      setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 200);
-      return;
-    }
-
-    mapEl = document.getElementById('map');
-    if (!mapEl) {
-      safeWarn('initMap: #map element not found');
-      return;
-    }
-
+  function attachTileErrorHandlers(layers) {
     try {
-      map = L.map(mapEl, {
-        center: CONFIG.defaultCenter,
-        zoom: CONFIG.defaultZoom,
-        preferCanvas: true,
-        zoomControl: true,
-        attributionControl: true
-      });
-      window.map = map;
-    } catch (e) {
-      safeError('Leaflet map creation failed', e);
-      return;
-    }
-
-    createTileLayers();
-
-    currentMapLayer = terrainLayer || osmLayer || tonerLayer || satelliteLayer;
-    try { if (currentMapLayer) currentMapLayer.addTo(map); } catch (e) { safeWarn('adding default layer failed', e); }
-
-    [terrainLayer, tonerLayer, satelliteLayer, osmLayer].forEach(layer => {
-      if (!layer || !layer.on) return;
-      layer.on('tileerror', (e) => {
+      (layers || []).forEach(layer => {
+        if (!layer || !layer.on) return;
         try {
-          const src = e && e.tile && e.tile.src ? e.tile.src : 'unknown';
-          safeWarn('Tile failed to load:', src);
-        } catch (err) { safeWarn('tileerror handler error', err); }
+          layer.on('tileerror', (e) => {
+            try {
+              const src = e && e.tile && e.tile.src ? e.tile.src : 'unknown';
+              safeWarn('Tile failed to load:', src);
+            } catch (err) { safeWarn('tileerror handler error', err); }
+          });
+        } catch (e) { /* ignore */ }
       });
-    });
+    } catch (e) { safeWarn('attachTileErrorHandlers failed', e); }
+  }
 
-    map.on('click', (e) => {
-      safeLog('map click', e && e.latlng);
-    });
-
-    setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 250);
-
-    // Add markers for DATA.locations if present
+  function safeInitMap() {
     try {
-      if (Array.isArray(window.DATA.locations) && window.DATA.locations.length) {
-        window.DATA.locations.forEach(loc => {
-          try {
-            if (!loc || typeof loc.lat !== 'number' || typeof loc.lng !== 'number') return;
-            const marker = L.marker([loc.lat, loc.lng]);
-            if (loc.title) marker.bindPopup(`<strong>${loc.title}</strong>`);
-            marker.addTo(map);
-          } catch (e) { /* ignore per-location errors */ }
-        });
+      if (map && window.L && map instanceof L.Map) {
+        if (currentMapLayer && !currentMapLayer._map) {
+          try { currentMapLayer.addTo(map); } catch (e) { safeWarn('re-adding currentMapLayer failed', e); }
+        }
+        setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 200);
+        return;
       }
-    } catch (e) { safeWarn('initMap: adding DATA.locations markers failed', e); }
+
+      mapEl = document.getElementById('map');
+      if (!mapEl) {
+        safeWarn('safeInitMap: #map element not found');
+        return;
+      }
+
+      try {
+        map = L.map(mapEl, {
+          center: CFG.defaultCenter,
+          zoom: CFG.defaultZoom,
+          preferCanvas: true,
+          zoomControl: true,
+          attributionControl: true
+        });
+        window.map = map;
+      } catch (e) {
+        safeError('Leaflet map creation failed', e);
+        return;
+      }
+
+      createTileLayers();
+      currentMapLayer = terrainLayer || osmLayer || tonerLayer || satelliteLayer;
+      try { if (currentMapLayer) currentMapLayer.addTo(map); } catch (e) { safeWarn('adding default layer failed', e); }
+
+      attachTileErrorHandlers([terrainLayer, tonerLayer, satelliteLayer, osmLayer]);
+
+      // Basic click handler for debugging
+      map.on('click', (e) => { safeLog('map click', e && e.latlng); });
+
+      // Add markers for DATA.locations if present
+      try {
+        if (Array.isArray(window.DATA.locations) && window.DATA.locations.length) {
+          window.DATA.locations.forEach(loc => {
+            try {
+              if (!loc || typeof loc.lat !== 'number' || typeof loc.lng !== 'number') return;
+              const marker = L.marker([loc.lat, loc.lng], { title: loc.title || loc.name || '' });
+              const popupHtml = `<strong>${loc.title || loc.name || 'Location'}</strong><div>${(loc.description||'').slice(0,300)}</div>`;
+              marker.bindPopup(popupHtml);
+              marker.addTo(map);
+            } catch (e) { /* ignore per-location errors */ }
+          });
+        }
+      } catch (e) { safeWarn('initMap: adding DATA.locations markers failed', e); }
+
+      // Ensure map sizing after layout
+      setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 250);
+    } catch (e) { safeWarn('safeInitMap failed', e); }
   }
 
   function switchMapStyle(style) {
-    if (!map) return;
     try {
+      if (!map) return;
       if (currentMapLayer && map.hasLayer && map.hasLayer(currentMapLayer)) map.removeLayer(currentMapLayer);
     } catch (e) { /* ignore */ }
 
@@ -362,11 +425,212 @@ window.DATA = window.DATA || {
   }
 
   /* ============================================================================
-     Marketplace, scavenger, inventory, and shop scaffolding
+     UI rendering helpers
      ============================================================================ */
-  function renderScavengerList(containerSelector) {
+  function showModal(title, html) {
     try {
-      const container = document.querySelector(containerSelector || '#scavengerList');
+      let modal = document.getElementById('pipboy-modal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'pipboy-modal';
+        modal.className = 'pipboy-modal';
+        modal.innerHTML = `<button class="modal-close">×</button><div class="modal-body"></div>`;
+        document.body.appendChild(modal);
+        modal.querySelector('.modal-close').addEventListener('click', () => { modal.style.display = 'none'; });
+      }
+      modal.querySelector('.modal-body').innerHTML = `<h2>${title}</h2>${html}`;
+      modal.style.display = 'block';
+    } catch (e) { safeWarn('showModal failed', e); }
+  }
+
+  function renderShopPanel(containerSelector = '#shopPanel') {
+    try {
+      const container = document.querySelector(containerSelector);
+      if (!container) return;
+      container.innerHTML = '';
+      const items = Array.isArray(window.DATA.scavenger) ? window.DATA.scavenger : [];
+      if (!items.length) {
+        container.innerHTML = '<div class="empty">No shop items available.</div>';
+        return;
+      }
+      const list = document.createElement('div');
+      list.className = 'shop-list';
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'shop-card';
+        card.innerHTML = `
+          <div class="shop-thumb"><img src="${item.image || '/assets/placeholder.png'}" alt="${item.title || item.name || ''}" /></div>
+          <div class="shop-body">
+            <div class="shop-title">${item.title || item.name || 'Unnamed'}</div>
+            <div class="shop-desc">${(item.description || '').slice(0,140)}</div>
+            <div class="shop-meta">Lvl ${item.level || 1} • ${item.rarity || 'common'}</div>
+            <div class="shop-actions">
+              <button class="btn buy" data-id="${item.id}">Buy</button>
+              <button class="btn inspect" data-id="${item.id}">Inspect</button>
+            </div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+      container.appendChild(list);
+
+      // Delegated handlers
+      list.querySelectorAll('.buy').forEach(b => {
+        b.addEventListener('click', (e) => {
+          const id = b.getAttribute('data-id');
+          safeLog('Shop buy clicked', id);
+          if (isFunction(window.handleBuyScavengerItem)) {
+            try { window.handleBuyScavengerItem(id); } catch (err) { safeWarn('handleBuyScavengerItem failed', err); }
+          } else {
+            const item = (window.DATA.scavenger||[]).find(x=>x.id===id);
+            if (item) {
+              window.DATA.inventory = window.DATA.inventory || [];
+              window.DATA.inventory.push(Object.assign({}, item));
+              saveState();
+              alert('Purchased: ' + (item.title || item.name || item.id));
+            } else alert('Item not found');
+          }
+        });
+      });
+
+      list.querySelectorAll('.inspect').forEach(b => {
+        b.addEventListener('click', (e) => {
+          const id = b.getAttribute('data-id');
+          safeLog('Shop inspect clicked', id);
+          if (isFunction(window.handleInspectItem)) {
+            try { window.handleInspectItem(id); } catch (err) { safeWarn('handleInspectItem failed', err); }
+          } else {
+            const item = (window.DATA.scavenger||[]).find(x=>x.id===id);
+            if (item) {
+              const html = `<h3>${item.title || item.name}</h3><p>${item.description || ''}</p>`;
+              showModal('Inspect Item', html);
+            }
+          }
+        });
+      });
+    } catch (e) { safeWarn('renderShopPanel failed', e); }
+  }
+
+  function renderMintablesPanel(containerSelector = '#mintablesPanel') {
+    try {
+      const container = document.querySelector(containerSelector);
+      if (!container) return;
+      container.innerHTML = '';
+      const items = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
+      if (!items.length) {
+        container.innerHTML = '<div class="empty">No mintables available.</div>';
+        return;
+      }
+      const list = document.createElement('div');
+      list.className = 'mint-list';
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'mint-card';
+        card.innerHTML = `
+          <div class="mint-thumb"><img src="${item.image || '/assets/placeholder.png'}" alt="${item.name || ''}" /></div>
+          <div class="mint-body">
+            <div class="mint-title">${item.name || 'Unnamed NFT'}</div>
+            <div class="mint-desc">${(item.description || '').slice(0,120)}</div>
+            <div class="mint-meta">Lvl ${item.level || 1} • ${item.rarity || 'common'} • Power ${item.power || 0}</div>
+            <div class="mint-actions">
+              <button class="btn equip" data-id="${item.id}">Equip</button>
+              <button class="btn use" data-id="${item.id}">Use</button>
+            </div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+      container.appendChild(list);
+
+      list.querySelectorAll('.equip').forEach(b => {
+        b.addEventListener('click', () => {
+          const id = b.getAttribute('data-id');
+          safeLog('Equip clicked', id);
+          if (isFunction(window.handleEquipItem)) {
+            try { window.handleEquipItem(id); } catch (err) { safeWarn('handleEquipItem failed', err); }
+          } else {
+            alert('Equip not implemented');
+          }
+        });
+      });
+
+      list.querySelectorAll('.use').forEach(b => {
+        b.addEventListener('click', () => {
+          const id = b.getAttribute('data-id');
+          safeLog('Use clicked', id);
+          if (isFunction(window.handleUseMintable)) {
+            try { window.handleUseMintable(id); } catch (err) { safeWarn('handleUseMintable failed', err); }
+          } else {
+            addItemXp(id, CFG.mintXpPerAction);
+            saveState();
+            alert('Used item: XP awarded');
+          }
+        });
+      });
+    } catch (e) { safeWarn('renderMintablesPanel failed', e); }
+  }
+
+  function renderQuestPanel(containerSelector = '#questPanel') {
+    try {
+      const container = document.querySelector(containerSelector) || document.querySelector('#quests');
+      if (!container) return;
+      const quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
+      container.innerHTML = '';
+      if (!quests.length) {
+        container.innerHTML = '<div class="empty">No quests available.</div>';
+        return;
+      }
+      quests.forEach(quest => {
+        const el = document.createElement('div');
+        el.className = 'quest-card' + (quest.started ? ' started' : '');
+        el.innerHTML = `
+          <div class="quest-title">${quest.name || quest.id || 'Quest'}</div>
+          <div class="quest-desc">${(quest.description || '').slice(0,200)}</div>
+          <div class="quest-meta">Radius: ${quest.radius || 50}m • Active: ${quest.active ? 'yes' : 'no'}</div>
+          <div class="quest-actions">
+            ${quest.started ? '<button class="btn complete" data-id="'+(quest.id||'')+'">Complete</button>' : '<button class="btn start" data-id="'+(quest.id||'')+'">Start</button>'}
+            <button class="btn nav" data-id="${quest.id||''}">Navigate</button>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+
+      container.querySelectorAll('.start').forEach(b => {
+        b.addEventListener('click', () => {
+          const id = b.getAttribute('data-id');
+          const quest = (window.DATA.quests||[]).find(x=>x.id===id);
+          if (quest) startQuest(quest);
+        });
+      });
+      container.querySelectorAll('.complete').forEach(b => {
+        b.addEventListener('click', () => {
+          const id = b.getAttribute('data-id');
+          const quest = (window.DATA.quests||[]).find(x=>x.id===id);
+          if (quest) {
+            quest.completed = true;
+            saveState();
+            alert('Quest completed');
+            if (isFunction(window.onQuestCompleted)) {
+              try { window.onQuestCompleted(quest); } catch (e) { safeWarn('onQuestCompleted failed', e); }
+            }
+          }
+        });
+      });
+      container.querySelectorAll('.nav').forEach(b => {
+        b.addEventListener('click', () => {
+          const id = b.getAttribute('data-id');
+          const quest = (window.DATA.quests||[]).find(x=>x.id===id);
+          if (quest && quest.triggerPoi && map && map.setView) {
+            map.setView([quest.triggerPoi.lat, quest.triggerPoi.lng], Math.max(12, map.getZoom()));
+          }
+        });
+      });
+    } catch (e) { safeWarn('renderQuestPanel failed', e); }
+  }
+
+  function renderScavengerList(containerSelector = '#scavengerList') {
+    try {
+      const container = document.querySelector(containerSelector);
       if (!container) return;
       container.innerHTML = '';
       const items = Array.isArray(window.DATA.scavenger) ? window.DATA.scavenger : [];
@@ -410,18 +674,17 @@ window.DATA = window.DATA || {
           if (isFunction(window.handleInspectItem)) {
             try { window.handleInspectItem(id); } catch (err) { safeWarn('handleInspectItem failed', err); }
           } else {
-            alert('Inspect flow not implemented.');
+            const item = (window.DATA.scavenger||[]).find(x=>x.id===id);
+            if (item) showModal(item.title || item.name || 'Item', `<p>${item.description || ''}</p>`);
           }
         });
       });
-    } catch (e) {
-      safeWarn('renderScavengerList failed', e);
-    }
+    } catch (e) { safeWarn('renderScavengerList failed', e); }
   }
 
-  function renderMintables(containerSelector) {
+  function renderMintables(containerSelector = '#mintablesList') {
     try {
-      const container = document.querySelector(containerSelector || '#mintablesList');
+      const container = document.querySelector(containerSelector);
       if (!container) return;
       container.innerHTML = '';
       const items = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
@@ -466,18 +729,18 @@ window.DATA = window.DATA || {
           if (isFunction(window.handleUseMintable)) {
             try { window.handleUseMintable(id); } catch (err) { safeWarn('handleUseMintable failed', err); }
           } else {
-            alert('Use flow not implemented.');
+            addItemXp(id, CFG.mintXpPerAction);
+            saveState();
+            alert('Used item: XP awarded');
           }
         });
       });
-    } catch (e) {
-      safeWarn('renderMintables failed', e);
-    }
+    } catch (e) { safeWarn('renderMintables failed', e); }
   }
 
-  function renderInventory(containerSelector) {
+  function renderInventory(containerSelector = '#inventoryList') {
     try {
-      const container = document.querySelector(containerSelector || '#inventoryList');
+      const container = document.querySelector(containerSelector);
       if (!container) return;
       container.innerHTML = '';
       const items = (window.DATA.inventory && Array.isArray(window.DATA.inventory)) ? window.DATA.inventory : [];
@@ -491,40 +754,38 @@ window.DATA = window.DATA || {
         el.innerHTML = `<div class="inventory-title">${item.name || item.id}</div>`;
         container.appendChild(el);
       });
-    } catch (e) {
-      safeWarn('renderInventory failed', e);
-    }
+    } catch (e) { safeWarn('renderInventory failed', e); }
   }
 
   /* ============================================================================
-     Wallet and minting scaffolding (stubs that call your implementations if present)
+     Wallet & minting scaffolding
      ============================================================================ */
   async function walletConnectFlow() {
     if (isFunction(window.walletConnectFlow)) {
       try { return await window.walletConnectFlow(); } catch (e) { safeWarn('external walletConnectFlow failed', e); }
     }
-    safeLog('walletConnectFlow stub: simulating wallet connect');
-    return { connected: true, address: 'DemoWalletPubKey' };
+    safeLog('walletConnectFlow stub: simulated connect');
+    return { connected: true, address: '0xDEMOADDRESS' };
   }
 
-  async function handleMint(nftData) {
+  async function mintItem(nftPayload) {
     if (isFunction(window.handleMint)) {
-      try { return await window.handleMint(nftData); } catch (e) { safeWarn('external handleMint failed', e); }
+      try { return await window.handleMint(nftPayload); } catch (e) { safeWarn('external handleMint failed', e); }
     }
     try {
-      const item = nftToGameItem(nftData);
+      const item = nftToGameItem(nftPayload);
       window.DATA.mintables = window.DATA.mintables || [];
       window.DATA.mintables.push(item);
-      safeLog('handleMint stub: minted', item.id);
+      saveState();
+      if (isFunction(window.onMintComplete)) {
+        try { window.onMintComplete(item); } catch (e) { safeWarn('onMintComplete failed', e); }
+      }
       return item;
-    } catch (e) {
-      safeWarn('handleMint stub failed', e);
-      return null;
-    }
+    } catch (e) { safeWarn('mintItem failed', e); return null; }
   }
 
   /* ============================================================================
-     Geolocation helpers
+     Geolocation and player position
      ============================================================================ */
   function onPlayerPosition(lat, lng, accuracy) {
     _lastPlayerPosition = { lat, lng, accuracy, ts: Date.now() };
@@ -541,18 +802,20 @@ window.DATA = window.DATA || {
   }
 
   function startGeolocationWatch() {
-    if (!navigator.geolocation) return;
-    _geoWatchId = navigator.geolocation.watchPosition((pos) => {
-      try {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        const acc = pos.coords.accuracy;
-        onPlayerPosition(lat, lng, acc);
-      } catch (e) { safeWarn('geolocation callback failed', e); }
-    }, (err) => {
-      safeWarn('geolocation error', err);
-    }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 });
-    return _geoWatchId;
+    if (!navigator.geolocation) return null;
+    try {
+      _geoWatchId = navigator.geolocation.watchPosition((pos) => {
+        try {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          const acc = pos.coords.accuracy;
+          onPlayerPosition(lat, lng, acc);
+        } catch (e) { safeWarn('geolocation callback failed', e); }
+      }, (err) => {
+        safeWarn('geolocation error', err);
+      }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 });
+      return _geoWatchId;
+    } catch (e) { safeWarn('startGeolocationWatch failed', e); return null; }
   }
 
   function stopGeolocationWatch() {
@@ -563,7 +826,7 @@ window.DATA = window.DATA || {
   }
 
   /* ============================================================================
-     Boot / activation handler
+     Boot activation (mobile-friendly)
      ============================================================================ */
   function setupBootActivation() {
     const bootScreen = document.getElementById('bootScreen') || document.querySelector('.boot-screen');
@@ -615,7 +878,7 @@ window.DATA = window.DATA || {
   }
 
   /* ============================================================================
-     UI integration points (safe fallbacks)
+     UI safe init and keyboard shortcuts
      ============================================================================ */
   function initUiSafe() {
     if (isFunction(window.initUi)) {
@@ -645,10 +908,28 @@ window.DATA = window.DATA || {
       });
     });
 
-    // Render lists if present
-    if (document.querySelector('#scavengerList')) renderScavengerList('#scavengerList');
-    if (document.querySelector('#mintablesList')) renderMintables('#mintablesList');
-    if (document.querySelector('#inventoryList')) renderInventory('#inventoryList');
+    // Keyboard shortcuts (Ctrl+M map, Ctrl+S shop, Ctrl+N mintables, Ctrl+Q quests, Ctrl+I inventory)
+    document.addEventListener('keydown', (e) => {
+      if (!e.ctrlKey || e.altKey || e.metaKey) return;
+      const key = (e.key || '').toLowerCase();
+      if (key === 'm') { activateTab('mapPanel'); e.preventDefault(); }
+      if (key === 's') { activateTab('shopPanel'); e.preventDefault(); }
+      if (key === 'n') { activateTab('mintablesPanel'); e.preventDefault(); }
+      if (key === 'q') { activateTab('questPanel'); e.preventDefault(); }
+      if (key === 'i') { activateTab('inventoryPanel'); e.preventDefault(); }
+    });
+
+    function activateTab(panelId) {
+      try {
+        $all('.tab').forEach(t => t.classList.remove('active'));
+        $all('.panel').forEach(p => p.classList.add('hidden'));
+        const tab = $all('.tab').find(t => t.getAttribute('data-target') === panelId);
+        if (tab) tab.classList.add('active');
+        const panel = document.getElementById(panelId);
+        if (panel) panel.classList.remove('hidden');
+        if (panelId === 'mapPanel' && window.map && typeof map.invalidateSize === 'function') setTimeout(()=>map.invalidateSize(), 200);
+      } catch (e) { safeWarn('activateTab failed', e); }
+    }
   }
 
   /* ============================================================================
@@ -666,7 +947,7 @@ window.DATA = window.DATA || {
       window.DATA.quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
       window.DATA.locations = Array.isArray(window.DATA.locations) ? window.DATA.locations : [];
 
-      // Convert mintables into game items (safe)
+      // Convert mintables into in-game items if needed
       if (window.DATA.mintables.length > 0 && typeof nftToGameItem === 'function') {
         window.DATA.mintables = window.DATA.mintables.map(nft => {
           try { return nftToGameItem(nft); } catch (e) { safeWarn('nftToGameItem failed for', nft && nft.id, e); return nft; }
@@ -674,11 +955,19 @@ window.DATA = window.DATA || {
       }
 
       // Initialize map and UI
-      try { initMap(); } catch (e) { safeWarn('initMap error', e); }
+      try { safeInitMap(); } catch (e) { safeWarn('safeInitMap error', e); }
       try { initUiSafe(); } catch (e) { safeWarn('initUiSafe error', e); }
 
+      // Render panels if present
+      try { renderShopPanel('#shopPanel'); } catch (e) {}
+      try { renderMintablesPanel('#mintablesPanel'); } catch (e) {}
+      try { renderQuestPanel('#questPanel'); } catch (e) {}
+      try { renderScavengerList('#scavengerList'); } catch (e) {}
+      try { renderMintables('#mintablesList'); } catch (e) {}
+      try { renderInventory('#inventoryList'); } catch (e) {}
+
       // Ensure map style and sizing
-      try { switchMapStyle && switchMapStyle(window.DATA.settings && window.DATA.settings.mapStyle ? window.DATA.settings.mapStyle : 'terrain'); } catch (e) { safeWarn('switchMapStyle failed', e); }
+      try { switchMapStyle(window.DATA.settings && window.DATA.settings.mapStyle ? window.DATA.settings.mapStyle : 'terrain'); } catch (e) { safeWarn('switchMapStyle failed', e); }
       setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 350);
 
       // Start quest checker and geolocation
@@ -698,108 +987,111 @@ window.DATA = window.DATA || {
     }
   }
 
+  // Auto-run wiring: if pipboyReady event fires, initGame will run
+  window.addEventListener('pipboyReady', () => {
+    try { initGame(); } catch (e) { safeWarn('pipboyReady initGame error', e); }
+  });
+
+  // Dev/test fallback: attempt init if pipboyReady didn't fire but DOM looks ready
+  setTimeout(() => {
+    try {
+      const mapElementPresent = typeof mapEl !== 'undefined' && mapEl && document.body && document.body.contains(mapEl);
+      if (!map && mapElementPresent && !_gameInitialized && !_gameInitializing) {
+        initGame();
+      }
+    } catch (e) { /* ignore */ }
+  }, 1200);
+
+  // Setup boot activation immediately
+  try { setupBootActivation(); } catch (e) { safeWarn('setupBootActivation failed', e); }
+
   /* ============================================================================
-     Debug helpers exposed to console
+     Debug helpers and developer utilities
      ============================================================================ */
-  window.__pipboyDebug = {
-    forceShowTiles: function () {
-      $all('.leaflet-tile-pane').forEach(p => p.style.filter = 'none');
-      $all('.leaflet-tile-pane img.leaflet-tile').forEach(img => { img.style.visibility = 'visible'; img.style.opacity = '1'; });
-      safeLog('Tiles forced visible');
-    },
-    hideOverlaysForTest: function () {
-      $all('.static-noise, .top-overlay, .overseer-link, .pipboy-screen, .hud').forEach(el => {
-        el.dataset._oldDisplay = el.style.display || '';
-        el.style.display = 'none';
-      });
-      setTimeout(() => { if (map && map.invalidateSize) map.invalidateSize(); }, 200);
-      safeLog('Overlays hidden for test');
-    },
-    restoreOverlays: function () {
-      $all('[data-_old-display]').forEach(el => {
-        el.style.display = el.dataset._oldDisplay || '';
-        delete el.dataset._oldDisplay;
-      });
-      safeLog('Overlays restored');
-    },
-    reinit: function () {
-      _gameInitialized = false;
-      initGame();
-    },
-    showDataSummary: function () {
-      safeLog('DATA summary:', {
-        scavenger: (window.DATA.scavenger || []).length,
-        mintables: (window.DATA.mintables || []).length,
-        quests: (window.DATA.quests || []).length,
-        locations: (window.DATA.locations || []).length
-      });
-    },
-    simulatePlayerAt: function (lat, lng) {
-      onPlayerPosition(lat, lng, 10);
-      safeLog('Simulated player at', lat, lng);
-    }
+  window.__pipboyDebug = window.__pipboyDebug || {};
+  window.__pipboyDebug.forceShowTiles = function () {
+    $all('.leaflet-tile-pane').forEach(p => p.style.filter = 'none');
+    $all('.leaflet-tile-pane img.leaflet-tile').forEach(img => { img.style.visibility = 'visible'; img.style.opacity = '1'; });
+    safeLog('Tiles forced visible');
+  };
+  window.__pipboyDebug.hideOverlaysForTest = function () {
+    $all('.static-noise, .top-overlay, .overseer-link, .pipboy-screen, .hud').forEach(el => {
+      el.dataset._oldDisplay = el.style.display || '';
+      el.style.display = 'none';
+    });
+    setTimeout(() => { if (map && map.invalidateSize) map.invalidateSize(); }, 200);
+    safeLog('Overlays hidden for test');
+  };
+  window.__pipboyDebug.restoreOverlays = function () {
+    $all('[data-_old-display]').forEach(el => {
+      el.style.display = el.dataset._oldDisplay || '';
+      delete el.dataset._oldDisplay;
+    });
+    safeLog('Overlays restored');
+  };
+  window.__pipboyDebug.reinit = function () {
+    _gameInitialized = false;
+    initGame();
+  };
+  window.__pipboyDebug.showDataSummary = function () {
+    safeLog('DATA summary:', {
+      scavenger: (window.DATA.scavenger || []).length,
+      mintables: (window.DATA.mintables || []).length,
+      quests: (window.DATA.quests || []).length,
+      locations: (window.DATA.locations || []).length
+    });
+  };
+  window.__pipboyDebug.simulatePlayerAt = function (lat, lng) {
+    onPlayerPosition(lat, lng, 10);
+    safeLog('Simulated player at', lat, lng);
   };
 
   /* ============================================================================
-     Minimal CSS safety injection (useful if CSS accidentally hides tiles or blocks pointer events)
+     Minimal offline hints and service worker registration (non-invasive)
      ============================================================================ */
-  (function ensureCssSafety() {
+  function registerServiceWorker() {
     try {
-      const styleId = 'pipboy-mainjs-safety';
-      if (document.getElementById(styleId)) return;
-      const css = `
-        .leaflet-tile-pane { z-index: 10 !important; filter: none !important; opacity: 1 !important; }
-        .leaflet-tile-pane img.leaflet-tile { visibility: visible !important; opacity: 1 !important; image-rendering: auto !important; }
-        .static-noise, .top-overlay, .overseer-link, .hud, .pipboy-screen { pointer-events: none !important; }
-        .map-container, #map { pointer-events: auto !important; touch-action: manipulation !important; z-index: 10 !important; }
-        .btn { min-width: 44px; min-height: 44px; touch-action: manipulation; }
-      `;
-      const s = document.createElement('style');
-      s.id = styleId;
-      s.appendChild(document.createTextNode(css));
-      document.head && document.head.appendChild(s);
-    } catch (e) {}
-  }());
+      if (!('serviceWorker' in navigator)) { safeLog('Service worker not supported'); return; }
+      if (location.protocol === 'http:' && location.hostname !== 'localhost') {
+        safeLog('Skipping service worker registration on insecure origin');
+        return;
+      }
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        safeLog('Service worker registered', reg.scope);
+      }).catch(err => {
+        safeWarn('Service worker registration failed', err);
+      });
+    } catch (e) { safeWarn('registerServiceWorker failed', e); }
+  }
 
   /* ============================================================================
-     Expose integration functions for other modules
+     Exports (stable single assignments)
      ============================================================================ */
-  window.switchMapStyle = switchMapStyle;
-  window.nftToGameItem = nftToGameItem;
-  window.addItemXp = addItemXp;
-  window.checkQuestTriggers = checkQuestTriggers;
-  window.initGame = initGame;
-  window.renderScavengerList = renderScavengerList;
-  window.renderMintables = renderMintables;
-  window.renderInventory = renderInventory;
-  window.walletConnectFlow = walletConnectFlow;
-  window.handleMint = handleMint;
+  // Only assign if not already assigned to avoid clobbering other modules
+  if (!window.initGame) window.initGame = initGame;
+  if (!window.initMap) window.initMap = safeInitMap;
+  if (!window.switchMapStyle) window.switchMapStyle = switchMapStyle;
+  if (!window.nftToGameItem) window.nftToGameItem = nftToGameItem;
+  if (!window.addItemXp) window.addItemXp = addItemXp;
+  if (!window.checkQuestTriggers) window.checkQuestTriggers = checkQuestTriggers;
+  if (!window.saveState) window.saveState = saveState;
+  if (!window.loadState) window.loadState = loadState;
+  if (!window.renderShopPanel) window.renderShopPanel = renderShopPanel;
+  if (!window.renderMintablesPanel) window.renderMintablesPanel = renderMintablesPanel;
+  if (!window.renderQuestPanel) window.renderQuestPanel = renderQuestPanel;
+  if (!window.renderScavengerList) window.renderScavengerList = renderScavengerList;
+  if (!window.renderMintables) window.renderMintables = renderMintables;
+  if (!window.renderInventory) window.renderInventory = renderInventory;
+  if (!window.walletConnectFlow) window.walletConnectFlow = walletConnectFlow;
+  if (!window.mintItem) window.mintItem = mintItem;
+  if (!window.onPlayerPosition) window.onPlayerPosition = onPlayerPosition;
+  if (!window.startGeolocationWatch) window.startGeolocationWatch = startGeolocationWatch;
+  if (!window.stopGeolocationWatch) window.stopGeolocationWatch = stopGeolocationWatch;
 
   /* ============================================================================
-     Auto-run init if pipboyReady already fired earlier in the page lifecycle
+     Final log
      ============================================================================ */
-  try {
-    if (window._pipboyReadyFired) initGame();
-  } catch (e) {}
+  safeLog('Pip-Boy main.js consolidated and loaded');
 
-  /* ============================================================================
-     End of IIFE
-     ============================================================================ */
+  // End of IIFE
 }());
-
-/* ============================================================================
-   Quick smoke test (run these in DevTools console after loading)
-   ============================================================================
-   console.log('main.js loaded OK');
-   console.log('DATA defined:', typeof DATA !== 'undefined');
-   console.log('DATA summary:', {
-     scavenger: (DATA.scavenger||[]).length,
-     mintables: (DATA.mintables||[]).length,
-     quests: (DATA.quests||[]).length,
-     locations: (DATA.locations||[]).length
-   });
-   fetch('/data/scavenger.json').then(r => console.log('scavenger status', r.status, r.headers.get('content-type'))).catch(e => console.error(e));
-   console.log('map var exists:', typeof map !== 'undefined');
-   console.log('tiles count:', document.querySelectorAll('.leaflet-tile-pane img.leaflet-tile').length);
-   If you see a SyntaxError, copy the single red error line (file:line:col and message) and paste it back here.
-   ============================================================================ */
