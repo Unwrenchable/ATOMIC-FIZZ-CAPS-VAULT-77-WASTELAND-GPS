@@ -1,7 +1,5 @@
-// server/eventsScheduler.js
-
-const activeEvents = new Map();      // eventId -> { startedAt, endsAt }
-const lastActivation = new Map();    // eventId -> timestamp
+const activeEvents = new Map();
+const lastActivation = new Map();
 
 function nowLocalHour() {
   return new Date().getHours();
@@ -50,7 +48,7 @@ function activateEvent(ev, now = new Date()) {
   lastActivation.set(ev.id, now.getTime());
 }
 
-export function startEventScheduler(gameData) {
+function startEventScheduler(gameData) {
   const now = new Date();
   for (const ev of gameData.events) {
     if (canActivateEvent(ev, now)) activateEvent(ev, now);
@@ -68,7 +66,7 @@ export function startEventScheduler(gameData) {
   }, 60 * 1000);
 }
 
-export function getActiveEventsForPOI(gameData, poi) {
+function getActiveEventsForPOI(gameData, poi) {
   const now = new Date();
   const result = [];
 
@@ -93,6 +91,12 @@ export function getActiveEventsForPOI(gameData, poi) {
   return result;
 }
 
-export function isEventActive(eventId) {
+function isEventActive(eventId) {
   return activeEvents.has(eventId);
 }
+
+module.exports = {
+  startEventScheduler,
+  getActiveEventsForPOI,
+  isEventActive
+};
