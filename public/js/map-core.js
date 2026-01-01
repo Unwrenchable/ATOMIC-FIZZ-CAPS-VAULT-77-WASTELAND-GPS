@@ -1,15 +1,14 @@
-// map-core.js – Fallout-style multi-map core
+// map-core.js – Fallout-style multi-map core for ATOMIC FIZZ CAPS
 (function () {
   'use strict';
 
-  // Exposed globals
   let map = null;
   let currentMapLayer = null;
   let terrainLayer = null;
   let tonerLayer = null;
   let satelliteLayer = null;
 
-  const DEFAULT_CENTER = [36.1699, -115.1398]; // Mojave / Vegas
+  const DEFAULT_CENTER = [36.1699, -115.1398]; // Vegas / Mojave
   const DEFAULT_ZOOM = 13;
 
   function safeLog(...args) {
@@ -20,13 +19,13 @@
   }
 
   function createTileLayers() {
-    // Fallout-ish terrain (Stamen terrain)
+    // Terrain (wasteland relief)
     try {
       terrainLayer = L.tileLayer(
         'https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg',
         {
           maxZoom: 18,
-          attribution: 'Map tiles by Stamen, Data by OSM'
+          attribution: 'Map tiles by Stamen; Data © OpenStreetMap'
         }
       );
     } catch (e) {
@@ -34,13 +33,13 @@
       terrainLayer = null;
     }
 
-    // High-contrast “Pip-Boy” look (Stamen toner)
+    // Toner (Pip-Boy schematic feel)
     try {
       tonerLayer = L.tileLayer(
         'https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
         {
           maxZoom: 18,
-          attribution: 'Map tiles by Stamen, Data by OSM'
+          attribution: 'Map tiles by Stamen; Data © OpenStreetMap'
         }
       );
     } catch (e) {
@@ -48,7 +47,7 @@
       tonerLayer = null;
     }
 
-    // Simple satellite-ish fallback using OSM (no keys)
+    // Satellite-like fallback with pure OSM tiles (no key)
     try {
       satelliteLayer = L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -78,7 +77,7 @@
       return;
     }
 
-    // Reuse existing map if something already created it
+    // Reuse existing map if created already
     if (map && window.L && map instanceof L.Map) {
       if (currentMapLayer && !currentMapLayer._map) {
         currentMapLayer.addTo(map);
@@ -105,7 +104,7 @@
 
     createTileLayers();
 
-    // Default: toner (most Pip-Boy-ish) if available
+    // Default: toner (most Pip-Boy-like), else terrain, else OSM
     currentMapLayer = tonerLayer || terrainLayer || satelliteLayer;
     if (currentMapLayer) currentMapLayer.addTo(map);
 
@@ -122,7 +121,7 @@
         map.removeLayer(currentMapLayer);
       }
     } catch (e) {
-      // ignore if not present
+      // ignore
     }
 
     if (style === 'terrain' && terrainLayer) currentMapLayer = terrainLayer;
@@ -135,7 +134,10 @@
     } catch (e) {
       safeWarn('switchMapStyle failed, falling back to OSM', e);
       try {
-        currentMapLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
+        currentMapLayer = L.tileLayer(
+          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          { maxZoom: 19 }
+        );
         currentMapLayer.addTo(map);
       } catch (err) {
         safeWarn('OSM fallback failed', err);
@@ -147,7 +149,6 @@
     }, 150);
   }
 
-  // Small CRT filter vibe via CSS class (optional)
   function attachMapModeButton() {
     const btn = document.getElementById('mapModeBtn');
     const mapContainer = document.querySelector('.map-container');
@@ -173,17 +174,22 @@
     });
   }
 
-  // Minimal CSS safety to prevent overlays hiding tiles
+  // Minimal CSS safety so overlays don’t kill the map
   (function ensureCssSafety() {
     try {
       const id = 'map-core-safety';
       if (document.getElementById(id)) return;
       const css = `
-        #map { min-height: 240px; height: 100%; }
-        .leaflet-tile-pane { z-index: 10 !important; }
+        #map {
+          min-height: 260px;
+          height: 100%;
+        }
+        .leaflet-tile-pane {
+          z-index: 10 !important;
+        }
         .leaflet-tile-pane img.leaflet-tile {
           image-rendering: pixelated;
-          filter: contrast(1.3) saturate(0.4) hue-rotate(110deg);
+          filter: contrast(1.35) saturate(0.4) hue-rotate(110deg);
         }
         .static-noise, .top-overlay, .overseer-link, .hud, .pipboy-screen {
           pointer-events: none;
@@ -199,11 +205,11 @@
     } catch (e) {}
   }());
 
-  // Export to window for your other scripts
+  // Export hooks for your game logic
   window.switchMapStyle = switchMapStyle;
   window.initLeafletMapCore = initMap;
 
-  // Hook into your boot event if you use pipboyReady
+  // Boot integration – your boot.js should dispatch pipboyReady
   window.addEventListener('pipboyReady', () => {
     try {
       initMap();
@@ -213,7 +219,7 @@
     }
   });
 
-  // Dev fallback: init if #map is already in DOM and boot never fired
+  // Dev fallback – if boot never fires but DOM is ready
   setTimeout(() => {
     try {
       const el = document.getElementById('map');
