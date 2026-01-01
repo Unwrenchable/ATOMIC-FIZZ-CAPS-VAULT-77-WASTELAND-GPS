@@ -1,0 +1,180 @@
+// lootRNG.js — Atomic Fizz Caps loot roller
+// Works with existing mintables.json structure (non-breaking)
+
+// Rarity ordering and weights
+const RARITY_ORDER = ["common", "rare", "epic", "legendary"];
+
+const BASE_RARITY_WEIGHTS = {
+  common: 0.80,
+  rare: 0.15,
+  epic: 0.045,
+  legendary: 0.005
+};
+
+// Chance to upgrade base rarity (per roll)
+const RARITY_UPGRADE_CHANCES = {
+  common: 0.10,     // 10% → rare
+  rare: 0.05,       // 5%  → epic
+  epic: 0.01,       // 1%  → legendary
+  legendary: 0.001  // 0.1% chance to flag as god-tier
+};
+
+// Rarity-based stat multipliers
+const RARITY_MULTIPLIERS = {
+  common: 1.0,
+  rare: 1.1,
+  epic: 1.25,
+  legendary: 1.5
+};
+
+// ---------- helpers ----------
+
+function pickRarityBucket(weights) {
+  const entries = Object.entries(weights);
+  const total = entries.reduce((sum, [, w]) => sum + w, 0);
+  let roll = Math.random() * total;
+
+  for (const [rarity, weight] of entries) {
+    if (roll < weight) return rarity;
+    roll -= weight;
+  }
+  return entries[entries.length - 1][0];
+}
+
+function pickBaseItem(mintables) {
+  if (!Array.isArray(mintables) || mintables.length === 0) {
+    throw new Error("mintables array is empty or invalid");
+  }
+
+  const bucket = pickRarityBucket(BASE_RARITY_WEIGHTS);
+  const candidates = mintables.filter((i) => i.rarity === bucket);
+
+  if (candidates.length === 0) {
+    return mintables[Math.floor(Math.random() * mintables.length)];
+  }
+
+  return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+function maybeApplyVariant(baseItem) {
+  const variants = baseItem.variants;
+  if (!variants || variants.length === 0) {
+    return { variant: null, variantLabel: "" };
+  }
+
+  // 30% chance to roll a variant
+  if (Math.random() > 0.30) {
+    return { variant: null, variantLabel: "" };
+  }
+
+  const variant = variants[Math.floor(Math.random() * variants.length)];
+  return {
+    variant,
+    variantLabel: variant.modifier || ""
+  };
+}
+
+function rollRarityUpgrade(baseRarity, variant) {
+  const idx = RARITY_ORDER.indexOf(baseRarity);
+  if (idx === -1) {
+    return { finalRarity: baseRarity, isGodTier: false };
+  }
+
+  let rarity = baseRarity;
+  let isGodTier = false;
+  const baseChance = RARITY_UPGRADE_CHANCES[baseRarity] || 0;
+
+  // Single-step upgrade
+  if (Math.random() < baseChance && idx < RARITY_ORDER.length - 1) {
+    rarity = RARITY_ORDER[idx + 1];
+  } else if (
+    baseRarity === "legendary" &&
+    Math.random() < (RARITY_UPGRADE_CHANCES.legendary || 0)
+  ) {
+    isGodTier = true;
+  }
+
+  // Variant can enforce minimum rarity via rarityBoost
+  if (variant && variant.rarityBoost) {
+    const vIdx = RARITY_ORDER.indexOf(variant.rarityBoost);
+    const rIdx = RARITY_ORDER.indexOf(rarity);
+    if (vIdx > rIdx) rarity = variant.rarityBoost;
+  }
+
+  return { finalRarity: rarity, isGodTier };
+}
+
+function rollItemStats(baseItem, variant, rarity) {
+  const base = baseItem.baseStats || {};
+  const ranges = baseItem.rollRanges || {};
+  const finalStats = { ...base };
+
+  // Roll within per-stat ranges
+  for (const key of Object.keys(ranges)) {
+    const [min, max] = ranges[key];
+    const bonus = Math.floor(Math.random() * (max - min + 1)) + min;
+    finalStats[key] = (finalStats[key] || 0) + bonus;
+  }
+
+  // Apply rarity multiplier
+  const mult = RARITY_MULTIPLIERS[rarity] || 1.0;
+  for (const k of Object.keys(finalStats)) {
+    finalStats[k] = Math.round(finalStats[k] * mult);
+  }
+
+  // Hook for variant-specific adjustments later if you want:
+  // e.g. if (variant?.modifier === "Sharpened") finalStats.damage += 2;
+
+  return finalStats;
+}
+
+function buildRolledItem(baseItem) {
+  const { variant, variantLabel } = maybeApplyVariant(baseItem);
+  const { finalRarity, isGodTier } = rollRarityUpgrade(
+    baseItem.rarity,
+    variant
+  );
+  const stats = rollItemStats(baseItem, variant, finalRarity);
+
+  let displayName = baseItem.name;
+  if (variantLabel) displayName = `${variantLabel} ${displayName}`;
+  if (isGodTier) displayName = `God-Tier ${displayName}`;
+
+  return {
+    // identity
+    baseId: baseItem.id,
+    baseName: baseItem.name,
+    name: displayName,
+
+    // progression / rarity
+    rarity: finalRarity,
+    isGodTier,
+
+    // extra flavor
+    variant: variant || null,
+    effect: variant?.effect || null,
+
+    // gameplay stats (what you’ll use in equipment system)
+    stats,
+
+    // metadata for UI / filtering / marketplace
+    meta: {
+      type: baseItem.type,
+      priceCAPS: baseItem.priceCAPS,
+      spawnPOI: baseItem.spawnPOI,
+      levelRequirement: baseItem.levelRequirement,
+      tags: baseItem.tags || []
+    }
+  };
+}
+
+// ---------- public API ----------
+
+function rollRandomLoot(mintables) {
+  const baseItem = pickBaseItem(mintables);
+  return buildRolledItem(baseItem);
+}
+
+module.exports = {
+  rollRandomLoot
+};
