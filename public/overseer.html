@@ -1,30 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>TERMINAL // RESTRICTED ACCESS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/terminal.css"> <!-- Your new CSS file -->
+
+  <!-- Font (optional) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <!-- Your stylesheet (create or update css/terminal.css) -->
+  <link rel="stylesheet" href="css/terminal.css" />
 </head>
 <body>
-  <a href="/" class="back">← RETURN TO GAME</a>
-  
-  <div class="header">
+  <a href="/" class="back" aria-label="Return to game">← RETURN TO GAME</a>
+
+  <header class="header" role="banner">
     <h1>RESTRICTED TERMINAL</h1>
     <div class="sub">SIGNAL STRENGTH: WEAK</div>
-  </div>
-  
-  <div id="terminal">
-    <div id="chat"></div>
-    <div id="inputRow">
-      <input id="input" type="text" placeholder="> Type message..." autocomplete="off" autofocus>
-      <button id="send">SEND</button>
-    </div>
-  </div>
+  </header>
 
-  <script src="js/overseer.js"></script>
+  <main id="terminal" class="terminal" role="main" aria-labelledby="terminal-title">
+    <h2 id="terminal-title" class="visually-hidden">Terminal Chat</h2>
+
+    <!-- Chat log (role=log for screen readers) -->
+    <section id="chat" class="chat-log" role="log" aria-live="polite" aria-atomic="false"></section>
+
+    <!-- Input row -->
+    <div id="inputRow" class="chat-input-row" role="region" aria-label="Chat input">
+      <label for="input" class="visually-hidden">Message</label>
+      <input id="input" name="input" type="text" placeholder="> Type message..." autocomplete="off" />
+      <button id="send" type="button" aria-label="Send message">SEND</button>
+    </div>
+  </main>
+
+  <!-- Defer script so DOM is ready; ensure js/overseer.js exists -->
+  <script src="js/overseer.js" defer></script>
+
+  <!-- Minimal accessibility helper styles (optional, remove if you prefer CSS file) -->
+  <style>
+    .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; border: 0; padding: 0; margin: -1px; }
+    html,body { height:100%; margin:0; }
+    body { background:#07110a; color:#dfffe6; font-family: 'VT323', monospace, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    .back { display:inline-block; margin:12px; color:#bfffcf; text-decoration:none; }
+    .header { padding:12px; text-align:center; }
+    .header h1 { margin:0; font-size:1.6rem; letter-spacing:1px; }
+    .sub { font-size:0.85rem; opacity:0.8; margin-top:6px; }
+    .terminal { display:flex; flex-direction:column; height:calc(100vh - 96px); margin:12px; gap:8px; }
+    .chat-log { flex:1 1 auto; overflow-y:auto; padding:12px; border-radius:8px; background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.55)); box-shadow:0 6px 18px rgba(0,0,0,0.6); }
+    .chat-input-row { display:flex; gap:8px; align-items:center; }
+    #input { flex:1 1 auto; padding:10px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.04); background:rgba(0,0,0,0.45); color:inherit; font-size:1rem; }
+    #send { padding:10px 14px; border-radius:6px; background:linear-gradient(180deg,#1f6b3f,#0f3b20); color:#eaffea; border:none; font-weight:700; cursor:pointer; }
+    @media (max-width:900px) {
+      .terminal { height:calc(100vh - 72px); margin:8px; }
+      #input { font-size:1.05rem; padding:12px; }
+      #send { padding:12px 16px; font-size:1rem; }
+    }
+  </style>
 </body>
 </html>
-
