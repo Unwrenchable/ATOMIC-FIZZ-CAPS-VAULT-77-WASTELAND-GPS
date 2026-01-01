@@ -1,0 +1,19 @@
+[
+  {
+    "id": "demo-0001",
+    "owner": "DemoWalletPubKey",
+    "title": "Rusty Service Rifle (Demo)",
+    "description": "Demo listing for the scavenger exchange. Replace with real items or API.",
+    "image": "https://via.placeholder.com/320x180.png?text=Demo+Item",
+    "tokenUri": null,
+    "metadata": {
+      "rarity": "common",
+      "level": 1,
+      "basePower": 10,
+      "type": "weapon"
+    },
+    "priceCAPS": 100,
+    "timestamp": "2025-12-31T00:00:00Z",
+    "status": "listed"
+  }
+]
