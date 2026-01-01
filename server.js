@@ -9,9 +9,8 @@ const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
 const Redis = require('ioredis');
 const nacl = require('tweetnacl');
-const gameData = loadAllGameData();
-startEventScheduler(gameData);
-app.use("/events", createEventsRouter(gameData));
+
+// === Event System Imports ===
 const { loadAllGameData } = require("./server/loadData.js");
 const { startEventScheduler } = require("./server/eventsScheduler.js");
 const { createEventsRouter } = require("./server/eventsRoutes.js");
@@ -117,6 +116,11 @@ console.log("Loaded locations:", gameData.locations.length);
 // === Express App ===
 const app = express();
 app.use(morgan('combined'));
+
+// === Load Game Data + Start Event Scheduler + Mount Event Routes ===
+const gameData = loadAllGameData();
+startEventScheduler(gameData);
+app.use("/events", createEventsRouter(gameData));
 
 // === CSP / Security (strict, no unsafe-eval, no inline scripts) ===
 app.use(
@@ -426,6 +430,7 @@ process.on('uncaughtException', (error) => {
   // Optionally exit process in production after logging
   // process.exit(1);
 });
+
 
 
 
