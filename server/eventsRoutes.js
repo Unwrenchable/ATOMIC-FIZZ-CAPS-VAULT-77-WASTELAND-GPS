@@ -1,10 +1,8 @@
-// server/eventsRoutes.js
+const express = require("express");
+const { rollEventLoot, rollRandomInt } = require("./lootRoller.js");
+const { getActiveEventsForPOI, isEventActive } = require("./eventsScheduler.js");
 
-import express from "express";
-import { rollEventLoot, rollRandomInt } from "./lootRoller.js";
-import { getActiveEventsForPOI, isEventActive } from "./eventsScheduler.js";
-
-export function createEventsRouter(gameData) {
+function createEventsRouter(gameData) {
   const router = express.Router();
 
   router.get("/active", (req, res) => {
@@ -13,7 +11,7 @@ export function createEventsRouter(gameData) {
     res.json({ events });
   });
 
-  router.post("/resolve", async (req, res) => {
+  router.post("/resolve", (req, res) => {
     const { eventId, playerId, poi } = req.body || {};
 
     if (!eventId || !playerId) {
@@ -57,3 +55,5 @@ export function createEventsRouter(gameData) {
 
   return router;
 }
+
+module.exports = { createEventsRouter };
