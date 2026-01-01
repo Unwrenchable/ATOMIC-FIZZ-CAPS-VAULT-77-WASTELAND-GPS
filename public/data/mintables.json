@@ -24,8 +24,8 @@
       "durability": [0, 6]
     },
     "tags": ["armor", "hands", "gloves", "light_armor"]
-  },
-  {
+    },
+   {
     "id": "cloth_robe",
     "name": "Tattered Cloth Robe",
     "rarity": "common",
@@ -51,8 +51,8 @@
       "durability": [0, 6]
     },
     "tags": ["armor", "body", "robe", "light_armor"]
-  },
-  {
+    },
+    {
     "id": "cowboy_boots",
     "name": "Cowboy Boots",
     "rarity": "common",
@@ -78,8 +78,8 @@
       "durability": [0, 10]
     },
     "tags": ["armor", "boots", "feet", "light_armor"]
-  },
-  {
+    },
+    {
     "id": "cowboy_hat",
     "name": "Cowboy Hat",
     "rarity": "common",
@@ -107,8 +107,8 @@
       "durability": [0, 10]
     },
     "tags": ["armor", "head", "hat", "light_armor"]
-  },
-  {
+    },
+    {
     "id": "dust_mask",
     "name": "Dust Mask",
     "rarity": "common",
@@ -134,8 +134,8 @@
       "durability": [0, 8]
     },
     "tags": ["armor", "head", "mask", "radiation"]
-  },
-  {
+    },
+    {
     "id": "gecko_tail",
     "name": "Gecko Tail",
     "rarity": "common",
@@ -160,8 +160,8 @@
       "duration": [0, 5]
     },
     "tags": ["consumable", "food", "gecko"]
-  },
-  {
+    },
+    {
     "id": "leather_jacket",
     "name": "Leather Jacket",
     "rarity": "common",
@@ -188,8 +188,8 @@
       "durability": [0, 10]
     },
     "tags": ["armor", "body", "leather", "light_armor"]
-  },
-  {
+    },
+    {
     "id": "makeshift_shield",
     "name": "Makeshift Shield",
     "rarity": "common",
@@ -215,8 +215,8 @@
       "durability": [0, 12]
     },
     "tags": ["armor", "shield", "offhand", "heavy"]
-  },
-  {
+    },
+    {
     "id": "scavenger_vest",
     "name": "Scavenger Vest",
     "rarity": "common",
@@ -243,8 +243,8 @@
       "durability": [0, 10]
     },
     "tags": ["armor", "body", "scavenger", "light_armor"]
-  },
-  {
+    },
+    {
     "id": "vault_111_jumpsuit",
     "name": "Vault 111 Jumpsuit",
     "rarity": "common",
@@ -298,8 +298,8 @@
       "duration": [0, 5]
     },
     "tags": ["consumable", "food", "gecko"]
-  },
-  {
+    },
+    {
     "id": "dirty_water",
     "name": "Dirty Water",
     "rarity": "common",
@@ -324,34 +324,8 @@
       "duration": [0, 5]
     },
     "tags": ["consumable", "drink", "radiation"]
-  },
-  {
-    "id": "gecko_tail",
-    "name": "Gecko Tail",
-    "rarity": "common",
-    "spawnPOI": "Red Rock Canyon",
-    "levelRequirement": 3,
-    "type": "consumable",
-    "priceCAPS": 22,
-    "baseStats": {
-      "hpRestore": 14,
-      "radCure": 0,
-      "apRestore": 0,
-      "buffStrength": 1,
-      "buffPerception": 0,
-      "buffEndurance": 1,
-      "buffLuck": 0,
-      "duration": 10
     },
-    "rollRanges": {
-      "hpRestore": [0, 6],
-      "buffStrength": [0, 1],
-      "buffEndurance": [0, 1],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "food", "gecko"]
-  },
-  {
+    {
     "id": "iguana_bits",
     "name": "Iguana Bits",
     "rarity": "common",
@@ -375,8 +349,8 @@
       "duration": [0, 4]
     },
     "tags": ["consumable", "food", "iguana"]
-  },
-  {
+    },
+    {
     "id": "sarsaparilla_bottle",
     "name": "Sarsaparilla Bottle",
     "rarity": "common",
@@ -402,8 +376,8 @@
       "duration": [0, 5]
     },
     "tags": ["consumable", "drink", "sarsaparilla"]
-  },
-  {
+    },
+    {
     "id": "snack_cakes",
     "name": "Fancy Snack Cakes",
     "rarity": "common",
@@ -446,8 +420,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "toy", "prewar"]
-  },
-  {
+    },
+    {
     "id": "casino_chip",
     "name": "Lucky 38 Casino Chip",
     "rarity": "common",
@@ -464,8 +438,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["cosmetic", "casino", "chip", "collectible"]
-  },
-  {
+    },
+    {
     "id": "gecko_hide",
     "name": "Gecko Hide",
     "rarity": "common",
@@ -482,8 +456,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "gecko", "crafting"]
-  },
-  {
+    },
+    {
     "id": "nuka_cap",
     "name": "Nuka-Cola Bottle Cap",
     "rarity": "common",
@@ -500,8 +474,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "nuka", "cap", "currency_fragment"]
-  },
-  {
+    },
+    {
     "id": "rusted_pan",
     "name": "Rusted Pan",
     "rarity": "common",
@@ -518,8 +492,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "kitchen", "scrap"]
-  },
-  {
+    },
+    {
     "id": "rusted_spoon",
     "name": "Rusted Spoon",
     "rarity": "common",
@@ -536,8 +510,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "kitchen", "scrap"]
-  },
-  {
+    },
+    {
     "id": "rusted_wrench",
     "name": "Rusted Wrench",
     "rarity": "common",
@@ -554,8 +528,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "tool", "scrap"]
-  },
-  {
+    },
+    {
     "id": "scrap_metal",
     "name": "Scrap Metal",
     "rarity": "common",
@@ -572,8 +546,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "scrap", "crafting"]
-  },
-  {
+    },
+    {
     "id": "tin_can",
     "name": "Tin Can",
     "rarity": "common",
@@ -590,8 +564,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "scrap", "container"]
-  },
-  {
+    },
+    {
     "id": "tin_plate",
     "name": "Tin Plate",
     "rarity": "common",
@@ -626,8 +600,8 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["lore", "book", "prewar"]
-  },
-  {
+    },
+    {
     "id": "old_magazine",
     "name": "Old Survivalist Magazine",
     "rarity": "common",
@@ -644,7 +618,7 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["lore", "magazine", "survival"]
-  }
+    },
     {
     "id": "pipe_pistol",
     "name": "Pipe Pistol",
@@ -679,8 +653,8 @@
       "durability": [0, 15]
     },
     "tags": ["weapon", "pistol", "ballistic", "common"]
-  },
-  {
+    },
+    {
     "id": "rusted_knife",
     "name": "Rusted Knife",
     "rarity": "common",
@@ -714,8 +688,8 @@
       "durability": [0, 10]
     },
     "tags": ["weapon", "melee", "knife", "common"]
-  },
-  {
+    },
+    {
     "id": "rusted_revolver",
     "name": "Rusted Revolver",
     "rarity": "common",
@@ -782,8 +756,8 @@
       "durability": [5, 15]
     },
     "tags": ["armor", "body", "combat", "rare"]
-  },
-  {
+    },
+    {
     "id": "mcCarran_trooper_armor",
     "name": "McCarran Trooper Armor",
     "rarity": "rare",
@@ -808,8 +782,8 @@
       "durability": [5, 15]
     },
     "tags": ["armor", "body", "trooper", "rare"]
-  },
-  {
+    },
+    {
     "id": "megaton_security_armor",
     "name": "Megaton Security Armor",
     "rarity": "rare",
@@ -834,8 +808,8 @@
       "durability": [5, 15]
     },
     "tags": ["armor", "body", "security", "rare"]
-  },
-  {
+    },
+    {
     "id": "novac_patrol_vest",
     "name": "Novac Patrol Vest",
     "rarity": "rare",
@@ -859,8 +833,8 @@
       "durability": [5, 15]
     },
     "tags": ["armor", "body", "vest", "rare"]
-  },
-  {
+    },
+    {
     "id": "reinforced_vault_suit",
     "name": "Reinforced Vault Suit",
     "rarity": "rare",
@@ -885,8 +859,8 @@
       "durability": [5, 15]
     },
     "tags": ["armor", "body", "vault_suit", "rare"]
-  },
-  {
+    },
+    {
     "id": "searchlight_guard_uniform",
     "name": "Searchlight Guard Uniform",
     "rarity": "rare",
@@ -938,8 +912,8 @@
       "duration": [0, 6]
     },
     "tags": ["consumable", "medical", "healing"]
-  },
-  {
+    },
+    {
     "id": "radaway",
     "name": "RadAway",
     "rarity": "rare",
@@ -963,8 +937,8 @@
       "duration": [0, 5]
     },
     "tags": ["consumable", "radiation", "medical"]
-  },
-  {
+    },
+    {
     "id": "stimpak",
     "name": "Stimpak",
     "rarity": "rare",
@@ -1007,8 +981,8 @@
       "valueMultiplier": [1, 2]
     },
     "tags": ["trophy", "gecko", "rare"]
-  },
-  {
+    },
+    {
     "id": "vault_poster",
     "name": "Vault-Tec Safety Poster",
     "rarity": "rare",
@@ -1057,8 +1031,8 @@
       "durability": [0, 10]
     },
     "tags": ["weapon", "explosive", "grenade", "rare"]
-  },
-  {
+    },
+    {
     "id": "hunting_rifle",
     "name": "Hunting Rifle",
     "rarity": "rare",
@@ -1092,8 +1066,8 @@
       "durability": [5, 15]
     },
     "tags": ["weapon", "rifle", "ballistic", "rare"]
-  },
-  {
+    },
+    {
     "id": "sawed_off_shotgun",
     "name": "Sawed-Off Shotgun",
     "rarity": "rare",
@@ -1127,8 +1101,8 @@
       "durability": [5, 15]
     },
     "tags": ["weapon", "shotgun", "ballistic", "rare"]
-  },
-  {
+    },
+    {
     "id": "scout_carbine",
     "name": "Scout Carbine",
     "rarity": "rare",
@@ -1162,8 +1136,8 @@
       "durability": [5, 15]
     },
     "tags": ["weapon", "rifle", "carbine", "rare"]
-  },
-  {
+    },
+    {
     "id": "service_rifle",
     "name": "Service Rifle",
     "rarity": "rare",
@@ -1230,8 +1204,8 @@
       "durability": [10, 20]
     },
     "tags": ["armor", "body", "combat", "epic"]
-  },
-  {
+    },
+    {
     "id": "elite_vault_suit",
     "name": "Elite Vault Suit",
     "rarity": "epic",
@@ -1261,8 +1235,8 @@
       "durability": [8, 18]
     },
     "tags": ["armor", "body", "vault_suit", "epic"]
-  },
-  {
+    },
+    {
     "id": "riot_gear",
     "name": "Riot Gear",
     "rarity": "epic",
@@ -1320,8 +1294,8 @@
       "duration": [2, 6]
     },
     "tags": ["consumable", "medical", "healing", "epic"]
-  },
-  {
+    },
+    {
     "id": "radshield",
     "name": "RadShield",
     "rarity": "epic",
@@ -1365,8 +1339,8 @@
       "valueMultiplier": [1, 2]
     },
     "tags": ["lore", "relic", "epic"]
-  },
-  {
+    },
+    {
     "id": "nightstalker_fang",
     "name": "Nightstalker Fang",
     "rarity": "epic",
@@ -1419,8 +1393,8 @@
       "durability": [10, 20]
     },
     "tags": ["weapon", "rifle", "sniper", "epic"]
-  },
-  {
+    },
+    {
     "id": "laser_carbine",
     "name": "Laser Carbine",
     "rarity": "epic",
@@ -1455,8 +1429,8 @@
       "durability": [8, 18]
     },
     "tags": ["weapon", "energy", "laser", "epic"]
-  },
-  {
+    },
+    {
     "id": "plasma_caster",
     "name": "Plasma Caster",
     "rarity": "epic",
@@ -1492,8 +1466,8 @@
       "durability": [10, 20]
     },
     "tags": ["weapon", "energy", "plasma", "epic"]
-  },
-  {
+    },
+    {
     "id": "super_sledge",
     "name": "Super Sledge",
     "rarity": "epic",
@@ -1528,8 +1502,8 @@
       "durability": [10, 20]
     },
     "tags": ["weapon", "melee", "hammer", "epic"]
-  },
-  {
+    },
+    {
     "id": "thermic_lance",
     "name": "Thermic Lance",
     "rarity": "epic",
@@ -1564,8 +1538,8 @@
       "durability": [10, 20]
     },
     "tags": ["weapon", "energy", "melee", "epic"]
-  },
-  {
+    },
+    {
     "id": "trail_carbine",
     "name": "Trail Carbine",
     "rarity": "epic",
@@ -1633,8 +1607,8 @@
       "durability": [15, 30]
     },
     "tags": ["armor", "body", "legendary", "phoenix"]
-  },
-  {
+    },
+    {
     "id": "warden_exosuit",
     "name": "Warden Exosuit",
     "rarity": "legendary",
@@ -1694,8 +1668,8 @@
       "duration": [3, 8]
     },
     "tags": ["consumable", "medical", "healing", "legendary"]
-  },
-  {
+    },
+    {
     "id": "x_cell",
     "name": "X-Cell",
     "rarity": "legendary",
@@ -1740,8 +1714,8 @@
       "valueMultiplier": [2, 3]
     },
     "tags": ["lore", "vault", "legendary"]
-  },
-  {
+    },
+    {
     "id": "deathclaw_horn",
     "name": "Deathclaw Horn",
     "rarity": "legendary",
@@ -1795,8 +1769,8 @@
       "durability": [15, 30]
     },
     "tags": ["weapon", "fire", "explosive", "legendary"]
-  },
-  {
+    },
+    {
     "id": "gauss_overcharger",
     "name": "Gauss Overcharger",
     "rarity": "legendary",
@@ -1831,8 +1805,8 @@
       "durability": [15, 30]
     },
     "tags": ["weapon", "energy", "gauss", "legendary"]
-  },
-  {
+    },
+    {
     "id": "hellfire_pike",
     "name": "Hellfire Pike",
     "rarity": "legendary",
@@ -1867,8 +1841,8 @@
       "durability": [15, 30]
     },
     "tags": ["weapon", "melee", "fire", "legendary"]
-  },
-  {
+    },
+    {
     "id": "ion_repeater",
     "name": "Ion Repeater",
     "rarity": "legendary",
@@ -1903,8 +1877,8 @@
       "durability": [15, 30]
     },
     "tags": ["weapon", "energy", "ion", "legendary"]
-  },
-  {
+    },
+    {
     "id": "overseers_judgment",
     "name": "Overseer’s Judgment",
     "rarity": "legendary",
@@ -1940,8 +1914,8 @@
       "durability": [20, 35]
     },
     "tags": ["weapon", "rifle", "vault", "legendary"]
-  },
-  {
+    },
+    {
     "id": "sunburst_cannon",
     "name": "Sunburst Cannon",
     "rarity": "legendary",
@@ -1979,3 +1953,5 @@
     "tags": ["weapon", "energy", "fire", "legendary"]
   }
 ]
+
+
