@@ -326,32 +326,6 @@
     "tags": ["consumable", "drink", "radiation"]
     },
     {
-    "id": "gecko_tail",
-    "name": "Gecko Tail",
-    "rarity": "common",
-    "spawnPOI": "Red Rock Canyon",
-    "levelRequirement": 3,
-    "type": "consumable",
-    "priceCAPS": 22,
-    "baseStats": {
-      "hpRestore": 14,
-      "radCure": 0,
-      "apRestore": 0,
-      "buffStrength": 1,
-      "buffPerception": 0,
-      "buffEndurance": 1,
-      "buffLuck": 0,
-      "duration": 10
-    },
-    "rollRanges": {
-      "hpRestore": [0, 6],
-      "buffStrength": [0, 1],
-      "buffEndurance": [0, 1],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "food", "gecko"]
-    },
-    {
     "id": "iguana_bits",
     "name": "Iguana Bits",
     "rarity": "common",
@@ -1979,5 +1953,6 @@
     "tags": ["weapon", "energy", "fire", "legendary"]
   }
 ]
+
 
 
