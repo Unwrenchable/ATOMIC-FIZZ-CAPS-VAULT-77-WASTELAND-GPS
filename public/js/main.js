@@ -52,10 +52,10 @@
   let _questCheckInterval = null;
   let _geoWatchId = null;
 
-  // Config (single source)
+  // Config (single source) - FIXED: Changed defaultCenter to Mojave/Vegas area to match locations
   const CONFIG = {
-    defaultCenter: [39.5, -119.8],
-    defaultZoom: 6,
+    defaultCenter: [36.1699, -115.1398],  // Vault 22 / Mojave Wasteland
+    defaultZoom: 10,  // Closer zoom for better initial view
     questCheckMs: 5000,
     mintXpPerAction: 10,
     minMapHeight: 320,
@@ -851,6 +851,44 @@
         switchMapStyle(style);
       });
     });
+
+    // ADDED: Center and Mojave button handlers
+    const centerBtn = document.getElementById('centerBtn');
+    if (centerBtn) {
+      centerBtn.addEventListener('click', () => {
+        if (map) {
+          if (_lastPlayerPosition) {
+            map.setView([_lastPlayerPosition.lat, _lastPlayerPosition.lng], 15);
+          } else {
+            map.setView(CONFIG.defaultCenter, CONFIG.defaultZoom);
+          }
+        }
+      });
+    }
+
+    const recenterMojave = document.getElementById('recenterMojave');
+    if (recenterMojave) {
+      recenterMojave.addEventListener('click', () => {
+        if (map) {
+          map.setView(CONFIG.defaultCenter, CONFIG.defaultZoom);
+        }
+      });
+    }
+
+    // ADDED: Map mode button cycling
+    const mapModeBtn = document.getElementById('mapModeBtn');
+    if (mapModeBtn) {
+      mapModeBtn.addEventListener('click', () => {
+        const styles = ['toner', 'terrain', 'satellite', 'osm'];
+        let currentIdx = 0;
+        if (currentMapLayer === tonerLayer) currentIdx = 0;
+        else if (currentMapLayer === terrainLayer) currentIdx = 1;
+        else if (currentMapLayer === satelliteLayer) currentIdx = 2;
+        else if (currentMapLayer === osmLayer) currentIdx = 3;
+        const nextIdx = (currentIdx + 1) % styles.length;
+        switchMapStyle(styles[nextIdx]);
+      });
+    }
 
     // Render lists if present
     if (document.querySelector('#scavengerList')) renderScavengerList('#scavengerList');
