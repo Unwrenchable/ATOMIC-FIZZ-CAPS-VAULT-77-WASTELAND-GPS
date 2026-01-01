@@ -1,5 +1,561 @@
 [
   {
+    "id": "cloth_gloves",
+    "name": "Cloth Gloves",
+    "rarity": "common",
+    "spawnPOI": "Vault 111",
+    "levelRequirement": 1,
+    "type": "armor",
+    "priceCAPS": 20,
+    "baseStats": {
+      "ballisticResist": 1,
+      "energyResist": 1,
+      "radResist": 0,
+      "poisonResist": 0,
+      "hpBonus": 1,
+      "carryWeight": 0,
+      "moveSpeed": 1,
+      "stealth": 1,
+      "durability": 18
+    },
+    "rollRanges": {
+      "stealth": [0, 2],
+      "moveSpeed": [0, 2],
+      "durability": [0, 6]
+    },
+    "tags": ["armor", "hands", "gloves", "light_armor"]
+  },
+  {
+    "id": "cloth_robe",
+    "name": "Tattered Cloth Robe",
+    "rarity": "common",
+    "spawnPOI": "Vault 111",
+    "levelRequirement": 1,
+    "type": "armor",
+    "priceCAPS": 25,
+    "baseStats": {
+      "ballisticResist": 1,
+      "energyResist": 1,
+      "radResist": 0,
+      "poisonResist": 0,
+      "hpBonus": 1,
+      "carryWeight": 0,
+      "moveSpeed": 1,
+      "stealth": 2,
+      "durability": 18
+    },
+    "rollRanges": {
+      "stealth": [0, 3],
+      "moveSpeed": [0, 2],
+      "hpBonus": [0, 2],
+      "durability": [0, 6]
+    },
+    "tags": ["armor", "body", "robe", "light_armor"]
+  },
+  {
+    "id": "cowboy_boots",
+    "name": "Cowboy Boots",
+    "rarity": "common",
+    "spawnPOI": "Shady Sands",
+    "levelRequirement": 2,
+    "type": "armor",
+    "priceCAPS": 40,
+    "baseStats": {
+      "ballisticResist": 1,
+      "energyResist": 0,
+      "radResist": 1,
+      "poisonResist": 0,
+      "hpBonus": 1,
+      "carryWeight": 2,
+      "moveSpeed": 2,
+      "stealth": 1,
+      "durability": 28
+    },
+    "rollRanges": {
+      "moveSpeed": [0, 3],
+      "carryWeight": [0, 2],
+      "stealth": [0, 2],
+      "durability": [0, 10]
+    },
+    "tags": ["armor", "boots", "feet", "light_armor"]
+  },
+  {
+    "id": "cowboy_hat",
+    "name": "Cowboy Hat",
+    "rarity": "common",
+    "spawnPOI": "Shady Sands",
+    "levelRequirement": 2,
+    "type": "armor",
+    "priceCAPS": 35,
+    "baseStats": {
+      "ballisticResist": 1,
+      "energyResist": 0,
+      "radResist": 1,
+      "poisonResist": 0,
+      "hpBonus": 2,
+      "carryWeight": 2,
+      "moveSpeed": 1,
+      "stealth": 1,
+      "durability": 25
+    },
+    "rollRanges": {
+      "ballisticResist": [0, 2],
+      "radResist": [0, 2],
+      "hpBonus": [0, 3],
+      "carryWeight": [0, 2],
+      "stealth": [0, 2],
+      "durability": [0, 10]
+    },
+    "tags": ["armor", "head", "hat", "light_armor"]
+  },
+  {
+    "id": "dust_mask",
+    "name": "Dust Mask",
+    "rarity": "common",
+    "spawnPOI": "Nipton Trading Post",
+    "levelRequirement": 3,
+    "type": "armor",
+    "priceCAPS": 25,
+    "baseStats": {
+      "ballisticResist": 0,
+      "energyResist": 0,
+      "radResist": 3,
+      "poisonResist": 2,
+      "hpBonus": 0,
+      "carryWeight": 0,
+      "moveSpeed": 0,
+      "stealth": 1,
+      "durability": 20
+    },
+    "rollRanges": {
+      "radResist": [0, 3],
+      "poisonResist": [0, 2],
+      "stealth": [0, 2],
+      "durability": [0, 8]
+    },
+    "tags": ["armor", "head", "mask", "radiation"]
+  },
+  {
+    "id": "gecko_tail",
+    "name": "Gecko Tail",
+    "rarity": "common",
+    "spawnPOI": "Red Rock Canyon",
+    "levelRequirement": 3,
+    "type": "consumable",
+    "priceCAPS": 22,
+    "baseStats": {
+      "hpRestore": 14,
+      "radCure": 0,
+      "apRestore": 0,
+      "buffStrength": 1,
+      "buffPerception": 0,
+      "buffEndurance": 1,
+      "buffLuck": 0,
+      "duration": 10
+    },
+    "rollRanges": {
+      "hpRestore": [0, 6],
+      "buffStrength": [0, 1],
+      "buffEndurance": [0, 1],
+      "duration": [0, 5]
+    },
+    "tags": ["consumable", "food", "gecko"]
+  },
+  {
+    "id": "leather_jacket",
+    "name": "Leather Jacket",
+    "rarity": "common",
+    "spawnPOI": "Goodsprings Saloon",
+    "levelRequirement": 1,
+    "type": "armor",
+    "priceCAPS": 35,
+    "baseStats": {
+      "ballisticResist": 3,
+      "energyResist": 1,
+      "radResist": 1,
+      "poisonResist": 0,
+      "hpBonus": 4,
+      "carryWeight": 2,
+      "moveSpeed": 0,
+      "stealth": 1,
+      "durability": 30
+    },
+    "rollRanges": {
+      "ballisticResist": [0, 3],
+      "energyResist": [0, 2],
+      "hpBonus": [0, 4],
+      "stealth": [0, 2],
+      "durability": [0, 10]
+    },
+    "tags": ["armor", "body", "leather", "light_armor"]
+  },
+  {
+    "id": "makeshift_shield",
+    "name": "Makeshift Shield",
+    "rarity": "common",
+    "spawnPOI": "Primm Rollercoaster",
+    "levelRequirement": 2,
+    "type": "armor",
+    "priceCAPS": 40,
+    "baseStats": {
+      "ballisticResist": 5,
+      "energyResist": 2,
+      "radResist": 0,
+      "poisonResist": 0,
+      "hpBonus": 3,
+      "carryWeight": -2,
+      "moveSpeed": -2,
+      "stealth": 0,
+      "durability": 40
+    },
+    "rollRanges": {
+      "ballisticResist": [0, 4],
+      "energyResist": [0, 2],
+      "hpBonus": [0, 3],
+      "durability": [0, 12]
+    },
+    "tags": ["armor", "shield", "offhand", "heavy"]
+  },
+  {
+    "id": "scavenger_vest",
+    "name": "Scavenger Vest",
+    "rarity": "common",
+    "spawnPOI": "Shady Sands",
+    "levelRequirement": 2,
+    "type": "armor",
+    "priceCAPS": 30,
+    "baseStats": {
+      "ballisticResist": 2,
+      "energyResist": 1,
+      "radResist": 1,
+      "poisonResist": 0,
+      "hpBonus": 3,
+      "carryWeight": 4,
+      "moveSpeed": 1,
+      "stealth": 0,
+      "durability": 28
+    },
+    "rollRanges": {
+      "ballisticResist": [0, 2],
+      "carryWeight": [0, 3],
+      "moveSpeed": [0, 2],
+      "hpBonus": [0, 3],
+      "durability": [0, 10]
+    },
+    "tags": ["armor", "body", "scavenger", "light_armor"]
+  },
+  {
+    "id": "vault_111_jumpsuit",
+    "name": "Vault 111 Jumpsuit",
+    "rarity": "common",
+    "spawnPOI": "Vault 111",
+    "levelRequirement": 1,
+    "type": "armor",
+    "priceCAPS": 40,
+    "baseStats": {
+      "ballisticResist": 2,
+      "energyResist": 2,
+      "radResist": 3,
+      "poisonResist": 1,
+      "hpBonus": 3,
+      "carryWeight": 3,
+      "moveSpeed": 0,
+      "stealth": 0,
+      "durability": 35
+    },
+    "rollRanges": {
+      "ballisticResist": [0, 2],
+      "energyResist": [0, 2],
+      "radResist": [0, 3],
+      "hpBonus": [0, 4],
+      "carryWeight": [0, 3],
+      "durability": [0, 10]
+    },
+    "tags": ["armor", "body", "vault_suit", "light_armor"]
+  }
+    {
+    "id": "cooked_gecko_meat",
+    "name": "Cooked Gecko Meat",
+    "rarity": "common",
+    "spawnPOI": "Freeside Market",
+    "levelRequirement": 2,
+    "type": "consumable",
+    "priceCAPS": 25,
+    "baseStats": {
+      "hpRestore": 18,
+      "radCure": 0,
+      "apRestore": 0,
+      "buffStrength": 1,
+      "buffPerception": 0,
+      "buffEndurance": 1,
+      "buffLuck": 0,
+      "duration": 10
+    },
+    "rollRanges": {
+      "hpRestore": [0, 8],
+      "buffStrength": [0, 1],
+      "buffEndurance": [0, 1],
+      "duration": [0, 5]
+    },
+    "tags": ["consumable", "food", "gecko"]
+  },
+  {
+    "id": "dirty_water",
+    "name": "Dirty Water",
+    "rarity": "common",
+    "spawnPOI": "Vault 101",
+    "levelRequirement": 1,
+    "type": "consumable",
+    "priceCAPS": 15,
+    "baseStats": {
+      "hpRestore": 10,
+      "radCure": -5,
+      "apRestore": 0,
+      "buffStrength": 0,
+      "buffPerception": 0,
+      "buffEndurance": 1,
+      "buffLuck": 0,
+      "duration": 5
+    },
+    "rollRanges": {
+      "hpRestore": [0, 5],
+      "radCure": [-5, 0],
+      "buffEndurance": [0, 1],
+      "duration": [0, 5]
+    },
+    "tags": ["consumable", "drink", "radiation"]
+  },
+  {
+    "id": "gecko_tail",
+    "name": "Gecko Tail",
+    "rarity": "common",
+    "spawnPOI": "Red Rock Canyon",
+    "levelRequirement": 3,
+    "type": "consumable",
+    "priceCAPS": 22,
+    "baseStats": {
+      "hpRestore": 14,
+      "radCure": 0,
+      "apRestore": 0,
+      "buffStrength": 1,
+      "buffPerception": 0,
+      "buffEndurance": 1,
+      "buffLuck": 0,
+      "duration": 10
+    },
+    "rollRanges": {
+      "hpRestore": [0, 6],
+      "buffStrength": [0, 1],
+      "buffEndurance": [0, 1],
+      "duration": [0, 5]
+    },
+    "tags": ["consumable", "food", "gecko"]
+  },
+  {
+    "id": "iguana_bits",
+    "name": "Iguana Bits",
+    "rarity": "common",
+    "spawnPOI": "Freeside Market",
+    "levelRequirement": 2,
+    "type": "consumable",
+    "priceCAPS": 18,
+    "baseStats": {
+      "hpRestore": 12,
+      "radCure": 0,
+      "apRestore": 0,
+      "buffStrength": 0,
+      "buffPerception": 0,
+      "buffEndurance": 1,
+      "buffLuck": 0,
+      "duration": 8
+    },
+    "rollRanges": {
+      "hpRestore": [0, 6],
+      "buffEndurance": [0, 1],
+      "duration": [0, 4]
+    },
+    "tags": ["consumable", "food", "iguana"]
+  },
+  {
+    "id": "sarsaparilla_bottle",
+    "name": "Sarsaparilla Bottle",
+    "rarity": "common",
+    "spawnPOI": "New Vegas Strip",
+    "levelRequirement": 10,
+    "type": "consumable",
+    "priceCAPS": 25,
+    "baseStats": {
+      "hpRestore": 10,
+      "radCure": 0,
+      "apRestore": 8,
+      "buffStrength": 0,
+      "buffPerception": 1,
+      "buffEndurance": 0,
+      "buffLuck": 1,
+      "duration": 10
+    },
+    "rollRanges": {
+      "hpRestore": [0, 6],
+      "apRestore": [0, 5],
+      "buffPerception": [0, 1],
+      "buffLuck": [0, 1],
+      "duration": [0, 5]
+    },
+    "tags": ["consumable", "drink", "sarsaparilla"]
+  },
+  {
+    "id": "snack_cakes",
+    "name": "Fancy Snack Cakes",
+    "rarity": "common",
+    "spawnPOI": "Diamond City",
+    "levelRequirement": 15,
+    "type": "consumable",
+    "priceCAPS": 35,
+    "baseStats": {
+      "hpRestore": 15,
+      "radCure": 0,
+      "apRestore": 5,
+      "buffStrength": 0,
+      "buffPerception": 0,
+      "buffEndurance": 0,
+      "buffLuck": 2,
+      "duration": 10
+    },
+    "rollRanges": {
+      "hpRestore": [0, 8],
+      "apRestore": [0, 5],
+      "buffLuck": [0, 2],
+      "duration": [0, 5]
+    },
+    "tags": ["consumable", "food", "prewar"]
+  }
+    {
+    "id": "broken_toy",
+    "name": "Broken Toy Car",
+    "rarity": "common",
+    "spawnPOI": "Freeside Market",
+    "levelRequirement": 2,
+    "type": "junk",
+    "priceCAPS": 15,
+    "baseStats": {
+      "collectionScore": 4,
+      "valueMultiplier": 1
+    },
+    "rollRanges": {
+      "collectionScore": [0, 4],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["junk", "toy", "prewar"]
+  },
+  {
+    "id": "casino_chip",
+    "name": "Lucky 38 Casino Chip",
+    "rarity": "common",
+    "spawnPOI": "Lucky 38",
+    "levelRequirement": 1,
+    "type": "cosmetic",
+    "priceCAPS": 15,
+    "baseStats": {
+      "collectionScore": 5,
+      "valueMultiplier": 2
+    },
+    "rollRanges": {
+      "collectionScore": [0, 4],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["cosmetic", "casino", "chip", "collectible"]
+  },
+  {
+    "id": "gecko_hide",
+    "name": "Gecko Hide",
+    "rarity": "common",
+    "spawnPOI": "Red Rock Canyon",
+    "levelRequirement": 3,
+    "type": "junk",
+    "priceCAPS": 20,
+    "baseStats": {
+      "collectionScore": 4,
+      "valueMultiplier": 1.5
+    },
+    "rollRanges": {
+      "collectionScore": [0, 3],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["junk", "gecko", "crafting"]
+  },
+  {
+    "id": "nuka_cap",
+    "name": "Nuka-Cola Bottle Cap",
+    "rarity": "common",
+    "spawnPOI": "Nuka-World",
+    "levelRequirement": 1,
+    "type": "junk",
+    "priceCAPS": 10,
+    "baseStats": {
+      "collectionScore": 4,
+      "valueMultiplier": 2
+    },
+    "rollRanges": {
+      "collectionScore": [0, 4],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["junk", "nuka", "cap", "currency_fragment"]
+  },
+  {
+    "id": "rusted_pan",
+    "name": "Rusted Pan",
+    "rarity": "common",
+    "spawnPOI": "Goodsprings Saloon",
+    "levelRequirement": 1,
+    "type": "junk",
+    "priceCAPS": 10,
+    "baseStats": {
+      "collectionScore": 2,
+      "valueMultiplier": 1
+    },
+    "rollRanges": {
+      "collectionScore": [0, 2],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["junk", "kitchen", "scrap"]
+  },
+  {
+    "id": "rusted_spoon",
+    "name": "Rusted Spoon",
+    "rarity": "common",
+    "spawnPOI": "Goodsprings Saloon",
+    "levelRequirement": 1,
+    "type": "junk",
+    "priceCAPS": 5,
+    "baseStats": {
+      "collectionScore": 1,
+      "valueMultiplier": 1
+    },
+    "rollRanges": {
+      "collectionScore": [0, 2],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["junk", "kitchen", "scrap"]
+  },
+  {
+    "id": "rusted_wrench",
+    "name": "Rusted Wrench",
+    "rarity": "common",
+    "spawnPOI": "Goodsprings Saloon",
+    "levelRequirement": 1,
+    "type": "junk",
+    "priceCAPS": 12,
+    "baseStats": {
+      "collectionScore": 3,
+      "valueMultiplier": 1
+    },
+    "rollRanges": {
+      "collectionScore": [0, 3],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["junk", "tool", "scrap"]
+  },
+  {
     "id": "scrap_metal",
     "name": "Scrap Metal",
     "rarity": "common",
@@ -16,6 +572,113 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "scrap", "crafting"]
+  },
+  {
+    "id": "tin_can",
+    "name": "Tin Can",
+    "rarity": "common",
+    "spawnPOI": "The Hub",
+    "levelRequirement": 1,
+    "type": "junk",
+    "priceCAPS": 8,
+    "baseStats": {
+      "collectionScore": 1,
+      "valueMultiplier": 1
+    },
+    "rollRanges": {
+      "collectionScore": [0, 2],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["junk", "scrap", "container"]
+  },
+  {
+    "id": "tin_plate",
+    "name": "Tin Plate",
+    "rarity": "common",
+    "spawnPOI": "The Hub",
+    "levelRequirement": 1,
+    "type": "junk",
+    "priceCAPS": 10,
+    "baseStats": {
+      "collectionScore": 2,
+      "valueMultiplier": 1
+    },
+    "rollRanges": {
+      "collectionScore": [0, 2],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["junk", "metal", "scrap"]
+  }
+    {
+    "id": "dusty_book",
+    "name": "Dusty Book",
+    "rarity": "common",
+    "spawnPOI": "Nipton Trading Post",
+    "levelRequirement": 3,
+    "type": "lore",
+    "priceCAPS": 18,
+    "baseStats": {
+      "collectionScore": 5,
+      "valueMultiplier": 2
+    },
+    "rollRanges": {
+      "collectionScore": [0, 4],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["lore", "book", "prewar"]
+  },
+  {
+    "id": "old_magazine",
+    "name": "Old Survivalist Magazine",
+    "rarity": "common",
+    "spawnPOI": "Vault 111",
+    "levelRequirement": 1,
+    "type": "lore",
+    "priceCAPS": 20,
+    "baseStats": {
+      "collectionScore": 6,
+      "valueMultiplier": 2
+    },
+    "rollRanges": {
+      "collectionScore": [0, 5],
+      "valueMultiplier": [0, 1]
+    },
+    "tags": ["lore", "magazine", "survival"]
+  }
+    {
+    "id": "pipe_pistol",
+    "name": "Pipe Pistol",
+    "rarity": "common",
+    "spawnPOI": "Bonnie Springs Ranch",
+    "levelRequirement": 4,
+    "type": "weapon",
+    "priceCAPS": 65,
+    "variants": [
+      { "modifier": "Scoped", "effect": "Increases range", "rarityBoost": "rare" },
+      { "modifier": "Rusty", "effect": "Lower durability", "rarityBoost": "common" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 10,
+      "energyDamage": 0,
+      "fireDamage": 0,
+      "poisonDamage": 0,
+      "critChance": 4,
+      "critMultiplier": 1.4,
+      "accuracy": 60,
+      "recoil": 15,
+      "fireRate": 2.0,
+      "durability": 40
+    },
+    "rollRanges": {
+      "ballisticDamage": [0, 5],
+      "accuracy": [0, 10],
+      "critChance": [0, 2],
+      "critMultiplier": [0, 0.2],
+      "recoil": [-5, 0],
+      "fireRate": [0, 0.5],
+      "durability": [0, 15]
+    },
+    "tags": ["weapon", "pistol", "ballistic", "common"]
   },
   {
     "id": "rusted_knife",
@@ -53,187 +716,6 @@
     "tags": ["weapon", "melee", "knife", "common"]
   },
   {
-    "id": "dirty_water",
-    "name": "Dirty Water",
-    "rarity": "common",
-    "spawnPOI": "Vault 101",
-    "levelRequirement": 1,
-    "type": "consumable",
-    "priceCAPS": 15,
-    "baseStats": {
-      "hpRestore": 10,
-      "radCure": -5,
-      "apRestore": 0,
-      "buffStrength": 0,
-      "buffPerception": 0,
-      "buffEndurance": 1,
-      "buffLuck": 0,
-      "duration": 5
-    },
-    "rollRanges": {
-      "hpRestore": [0, 5],
-      "radCure": [-5, 0],
-      "buffEndurance": [0, 1],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "drink", "radiation"]
-  },
-  {
-    "id": "cooked_gecko_meat",
-    "name": "Cooked Gecko Meat",
-    "rarity": "common",
-    "spawnPOI": "Freeside Market",
-    "levelRequirement": 2,
-    "type": "consumable",
-    "priceCAPS": 25,
-    "baseStats": {
-      "hpRestore": 18,
-      "radCure": 0,
-      "apRestore": 0,
-      "buffStrength": 1,
-      "buffPerception": 0,
-      "buffEndurance": 1,
-      "buffLuck": 0,
-      "duration": 10
-    },
-    "rollRanges": {
-      "hpRestore": [0, 8],
-      "buffStrength": [0, 1],
-      "buffEndurance": [0, 1],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "food", "gecko"]
-  },
-  {
-    "id": "pipe_pistol",
-    "name": "Pipe Pistol",
-    "rarity": "common",
-    "spawnPOI": "Bonnie Springs Ranch",
-    "levelRequirement": 4,
-    "type": "weapon",
-    "priceCAPS": 65,
-    "variants": [
-      { "modifier": "Scoped", "effect": "Increases range", "rarityBoost": "rare" },
-      { "modifier": "Rusty", "effect": "Lower durability", "rarityBoost": "common" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 10,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 4,
-      "critMultiplier": 1.4,
-      "accuracy": 60,
-      "recoil": 15,
-      "fireRate": 2.0,
-      "durability": 40
-    },
-    "rollRanges": {
-      "ballisticDamage": [0, 5],
-      "accuracy": [0, 10],
-      "critChance": [0, 2],
-      "critMultiplier": [0, 0.2],
-      "recoil": [-5, 0],
-      "fireRate": [0, 0.5],
-      "durability": [0, 15]
-    },
-    "tags": ["weapon", "pistol", "ballistic", "common"]
-  },
-  {
-    "id": "cowboy_hat",
-    "name": "Cowboy Hat",
-    "rarity": "common",
-    "spawnPOI": "Shady Sands",
-    "levelRequirement": 2,
-    "type": "armor",
-    "priceCAPS": 35,
-    "baseStats": {
-      "ballisticResist": 1,
-      "energyResist": 0,
-      "radResist": 1,
-      "poisonResist": 0,
-      "hpBonus": 2,
-      "carryWeight": 2,
-      "moveSpeed": 1,
-      "stealth": 1,
-      "durability": 25
-    },
-    "rollRanges": {
-      "ballisticResist": [0, 2],
-      "radResist": [0, 2],
-      "hpBonus": [0, 3],
-      "carryWeight": [0, 2],
-      "stealth": [0, 2],
-      "durability": [0, 10]
-    },
-    "tags": ["armor", "head", "hat", "light_armor"]
-  },
-  {
-    "id": "vault_111_jumpsuit",
-    "name": "Vault 111 Jumpsuit",
-    "rarity": "common",
-    "spawnPOI": "Vault 111",
-    "levelRequirement": 1,
-    "type": "armor",
-    "priceCAPS": 40,
-    "baseStats": {
-      "ballisticResist": 2,
-      "energyResist": 2,
-      "radResist": 3,
-      "poisonResist": 1,
-      "hpBonus": 3,
-      "carryWeight": 3,
-      "moveSpeed": 0,
-      "stealth": 0,
-      "durability": 35
-    },
-    "rollRanges": {
-      "ballisticResist": [0, 2],
-      "energyResist": [0, 2],
-      "radResist": [0, 3],
-      "hpBonus": [0, 4],
-      "carryWeight": [0, 3],
-      "durability": [0, 10]
-    },
-    "tags": ["armor", "body", "vault_suit", "light_armor"]
-  },
-  {
-    "id": "gecko_hide",
-    "name": "Gecko Hide",
-    "rarity": "common",
-    "spawnPOI": "Red Rock Canyon",
-    "levelRequirement": 3,
-    "type": "junk",
-    "priceCAPS": 20,
-    "baseStats": {
-      "collectionScore": 4,
-      "valueMultiplier": 1.5
-    },
-    "rollRanges": {
-      "collectionScore": [0, 3],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["junk", "gecko", "crafting"]
-  },
-  {
-    "id": "tin_can",
-    "name": "Tin Can",
-    "rarity": "common",
-    "spawnPOI": "The Hub",
-    "levelRequirement": 1,
-    "type": "junk",
-    "priceCAPS": 8,
-    "baseStats": {
-      "collectionScore": 1,
-      "valueMultiplier": 1
-    },
-    "rollRanges": {
-      "collectionScore": [0, 2],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["junk", "scrap", "container"]
-  },
-  {
     "id": "rusted_revolver",
     "name": "Rusted Revolver",
     "rarity": "common",
@@ -267,552 +749,8 @@
       "durability": [0, 15]
     },
     "tags": ["weapon", "pistol", "revolver", "ballistic", "common"]
-  },
-  {
-    "id": "leather_jacket",
-    "name": "Leather Jacket",
-    "rarity": "common",
-    "spawnPOI": "Goodsprings Saloon",
-    "levelRequirement": 1,
-    "type": "armor",
-    "priceCAPS": 35,
-    "baseStats": {
-      "ballisticResist": 3,
-      "energyResist": 1,
-      "radResist": 1,
-      "poisonResist": 0,
-      "hpBonus": 4,
-      "carryWeight": 2,
-      "moveSpeed": 0,
-      "stealth": 1,
-      "durability": 30
-    },
-    "rollRanges": {
-      "ballisticResist": [0, 3],
-      "energyResist": [0, 2],
-      "hpBonus": [0, 4],
-      "stealth": [0, 2],
-      "durability": [0, 10]
-    },
-    "tags": ["armor", "body", "leather", "light_armor"]
-  },
-  {
-    "id": "dust_mask",
-    "name": "Dust Mask",
-    "rarity": "common",
-    "spawnPOI": "Nipton Trading Post",
-    "levelRequirement": 3,
-    "type": "armor",
-    "priceCAPS": 25,
-    "baseStats": {
-      "ballisticResist": 0,
-      "energyResist": 0,
-      "radResist": 3,
-      "poisonResist": 2,
-      "hpBonus": 0,
-      "carryWeight": 0,
-      "moveSpeed": 0,
-      "stealth": 1,
-      "durability": 20
-    },
-    "rollRanges": {
-      "radResist": [0, 3],
-      "poisonResist": [0, 2],
-      "stealth": [0, 2],
-      "durability": [0, 8]
-    },
-    "tags": ["armor", "head", "mask", "radiation"]
-  },
-  {
-    "id": "scavenger_vest",
-    "name": "Scavenger Vest",
-    "rarity": "common",
-    "spawnPOI": "Shady Sands",
-    "levelRequirement": 2,
-    "type": "armor",
-    "priceCAPS": 30,
-    "baseStats": {
-      "ballisticResist": 2,
-      "energyResist": 1,
-      "radResist": 1,
-      "poisonResist": 0,
-      "hpBonus": 3,
-      "carryWeight": 4,
-      "moveSpeed": 1,
-      "stealth": 0,
-      "durability": 28
-    },
-    "rollRanges": {
-      "ballisticResist": [0, 2],
-      "carryWeight": [0, 3],
-      "moveSpeed": [0, 2],
-      "hpBonus": [0, 3],
-      "durability": [0, 10]
-    },
-    "tags": ["armor", "body", "scavenger", "light_armor"]
-  },
-  {
-    "id": "cloth_robe",
-    "name": "Tattered Cloth Robe",
-    "rarity": "common",
-    "spawnPOI": "Vault 111",
-    "levelRequirement": 1,
-    "type": "armor",
-    "priceCAPS": 25,
-    "baseStats": {
-      "ballisticResist": 1,
-      "energyResist": 1,
-      "radResist": 0,
-      "poisonResist": 0,
-      "hpBonus": 1,
-      "carryWeight": 0,
-      "moveSpeed": 1,
-      "stealth": 2,
-      "durability": 18
-    },
-    "rollRanges": {
-      "stealth": [0, 3],
-      "moveSpeed": [0, 2],
-      "hpBonus": [0, 2],
-      "durability": [0, 6]
-    },
-    "tags": ["armor", "body", "robe", "light_armor"]
-  },
-  {
-    "id": "makeshift_shield",
-    "name": "Makeshift Shield",
-    "rarity": "common",
-    "spawnPOI": "Primm Rollercoaster",
-    "levelRequirement": 2,
-    "type": "armor",
-    "priceCAPS": 40,
-    "baseStats": {
-      "ballisticResist": 5,
-      "energyResist": 2,
-      "radResist": 0,
-      "poisonResist": 0,
-      "hpBonus": 3,
-      "carryWeight": -2,
-      "moveSpeed": -2,
-      "stealth": 0,
-      "durability": 40
-    },
-    "rollRanges": {
-      "ballisticResist": [0, 4],
-      "energyResist": [0, 2],
-      "hpBonus": [0, 3],
-      "durability": [0, 12]
-    },
-    "tags": ["armor", "shield", "offhand", "heavy"]
-  },
-  {
-    "id": "casino_chip",
-    "name": "Lucky 38 Casino Chip",
-    "rarity": "common",
-    "spawnPOI": "Lucky 38",
-    "levelRequirement": 1,
-    "type": "cosmetic",
-    "priceCAPS": 15,
-    "baseStats": {
-      "collectionScore": 5,
-      "valueMultiplier": 2
-    },
-    "rollRanges": {
-      "collectionScore": [0, 4],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["cosmetic", "casino", "chip", "collectible"]
-  },
-  {
-    "id": "rusted_spoon",
-    "name": "Rusted Spoon",
-    "rarity": "common",
-    "spawnPOI": "Goodsprings Saloon",
-    "levelRequirement": 1,
-    "type": "junk",
-    "priceCAPS": 5,
-    "baseStats": {
-      "collectionScore": 1,
-      "valueMultiplier": 1
-    },
-    "rollRanges": {
-      "collectionScore": [0, 2],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["junk", "kitchen", "scrap"]
-  },
-  {
-    "id": "nuka_cap",
-    "name": "Nuka-Cola Bottle Cap",
-    "rarity": "common",
-    "spawnPOI": "Nuka-World",
-    "levelRequirement": 1,
-    "type": "junk",
-    "priceCAPS": 10,
-    "baseStats": {
-      "collectionScore": 4,
-      "valueMultiplier": 2
-    },
-    "rollRanges": {
-      "collectionScore": [0, 4],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["junk", "nuka", "cap", "currency_fragment"]
-  },
-  {
-    "id": "rusted_wrench",
-    "name": "Rusted Wrench",
-    "rarity": "common",
-    "spawnPOI": "Goodsprings Saloon",
-    "levelRequirement": 1,
-    "type": "junk",
-    "priceCAPS": 12,
-    "baseStats": {
-      "collectionScore": 3,
-      "valueMultiplier": 1
-    },
-    "rollRanges": {
-      "collectionScore": [0, 3],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["junk", "tool", "scrap"]
-  },
-  {
-    "id": "broken_toy",
-    "name": "Broken Toy Car",
-    "rarity": "common",
-    "spawnPOI": "Freeside Market",
-    "levelRequirement": 2,
-    "type": "junk",
-    "priceCAPS": 15,
-    "baseStats": {
-      "collectionScore": 4,
-      "valueMultiplier": 1
-    },
-    "rollRanges": {
-      "collectionScore": [0, 4],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["junk", "toy", "prewar"]
-  },
-  {
-    "id": "old_magazine",
-    "name": "Old Survivalist Magazine",
-    "rarity": "common",
-    "spawnPOI": "Vault 111",
-    "levelRequirement": 1,
-    "type": "lore",
-    "priceCAPS": 20,
-    "baseStats": {
-      "collectionScore": 6,
-      "valueMultiplier": 2
-    },
-    "rollRanges": {
-      "collectionScore": [0, 5],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["lore", "magazine", "survival"]
-  },
-  {
-    "id": "iguana_bits",
-    "name": "Iguana Bits",
-    "rarity": "common",
-    "spawnPOI": "Freeside Market",
-    "levelRequirement": 2,
-    "type": "consumable",
-    "priceCAPS": 18,
-    "baseStats": {
-      "hpRestore": 12,
-      "radCure": 0,
-      "apRestore": 0,
-      "buffStrength": 0,
-      "buffPerception": 0,
-      "buffEndurance": 1,
-      "buffLuck": 0,
-      "duration": 8
-    },
-    "rollRanges": {
-      "hpRestore": [0, 6],
-      "buffEndurance": [0, 1],
-      "duration": [0, 4]
-    },
-    "tags": ["consumable", "food", "iguana"]
-  },
-  {
-    "id": "snack_cakes",
-    "name": "Fancy Snack Cakes",
-    "rarity": "common",
-    "spawnPOI": "Diamond City",
-    "levelRequirement": 15,
-    "type": "consumable",
-    "priceCAPS": 35,
-    "baseStats": {
-      "hpRestore": 15,
-      "radCure": 0,
-      "apRestore": 5,
-      "buffStrength": 0,
-      "buffPerception": 0,
-      "buffEndurance": 0,
-      "buffLuck": 2,
-      "duration": 10
-    },
-    "rollRanges": {
-      "hpRestore": [0, 8],
-      "apRestore": [0, 5],
-      "buffLuck": [0, 2],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "food", "prewar"]
-  },
-  {
-    "id": "sarsaparilla_bottle",
-    "name": "Sarsaparilla Bottle",
-    "rarity": "common",
-    "spawnPOI": "New Vegas Strip",
-    "levelRequirement": 10,
-    "type": "consumable",
-    "priceCAPS": 25,
-    "baseStats": {
-      "hpRestore": 10,
-      "radCure": 0,
-      "apRestore": 8,
-      "buffStrength": 0,
-      "buffPerception": 1,
-      "buffEndurance": 0,
-      "buffLuck": 1,
-      "duration": 10
-    },
-    "rollRanges": {
-      "hpRestore": [0, 6],
-      "apRestore": [0, 5],
-      "buffPerception": [0, 1],
-      "buffLuck": [0, 1],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "drink", "sarsaparilla"]
-  },
-  {
-    "id": "cowboy_boots",
-    "name": "Cowboy Boots",
-    "rarity": "common",
-    "spawnPOI": "Shady Sands",
-    "levelRequirement": 2,
-    "type": "armor",
-    "priceCAPS": 40,
-    "baseStats": {
-      "ballisticResist": 1,
-      "energyResist": 0,
-      "radResist": 1,
-      "poisonResist": 0,
-      "hpBonus": 1,
-      "carryWeight": 2,
-      "moveSpeed": 2,
-      "stealth": 1,
-      "durability": 28
-    },
-    "rollRanges": {
-      "moveSpeed": [0, 3],
-      "carryWeight": [0, 2],
-      "stealth": [0, 2],
-      "durability": [0, 10]
-    },
-    "tags": ["armor", "boots", "feet", "light_armor"]
-  },
-  {
-    "id": "rusted_pan",
-    "name": "Rusted Pan",
-    "rarity": "common",
-    "spawnPOI": "Goodsprings Saloon",
-    "levelRequirement": 1,
-    "type": "junk",
-    "priceCAPS": 10,
-    "baseStats": {
-      "collectionScore": 2,
-      "valueMultiplier": 1
-    },
-    "rollRanges": {
-      "collectionScore": [0, 2],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["junk", "kitchen", "scrap"]
-  },
-  {
-    "id": "tin_plate",
-    "name": "Tin Plate",
-    "rarity": "common",
-    "spawnPOI": "The Hub",
-    "levelRequirement": 1,
-    "type": "junk",
-    "priceCAPS": 10,
-    "baseStats": {
-      "collectionScore": 2,
-      "valueMultiplier": 1
-    },
-    "rollRanges": {
-      "collectionScore": [0, 2],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["junk", "metal", "scrap"]
-  },
-  {
-    "id": "gecko_tail",
-    "name": "Gecko Tail",
-    "rarity": "common",
-    "spawnPOI": "Red Rock Canyon",
-    "levelRequirement": 3,
-    "type": "consumable",
-    "priceCAPS": 22,
-    "baseStats": {
-      "hpRestore": 14,
-      "radCure": 0,
-      "apRestore": 0,
-      "buffStrength": 1,
-      "buffPerception": 0,
-      "buffEndurance": 1,
-      "buffLuck": 0,
-      "duration": 10
-    },
-    "rollRanges": {
-      "hpRestore": [0, 6],
-      "buffStrength": [0, 1],
-      "buffEndurance": [0, 1],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "food", "gecko"]
-  },
-  {
-    "id": "cloth_gloves",
-    "name": "Cloth Gloves",
-    "rarity": "common",
-    "spawnPOI": "Vault 111",
-    "levelRequirement": 1,
-    "type": "armor",
-    "priceCAPS": 20,
-    "baseStats": {
-      "ballisticResist": 1,
-      "energyResist": 1,
-      "radResist": 0,
-      "poisonResist": 0,
-      "hpBonus": 1,
-      "carryWeight": 0,
-      "moveSpeed": 1,
-      "stealth": 1,
-      "durability": 18
-    },
-    "rollRanges": {
-      "stealth": [0, 2],
-      "moveSpeed": [0, 2],
-      "durability": [0, 6]
-    },
-    "tags": ["armor", "hands", "gloves", "light_armor"]
-  },
-  {
-    "id": "dusty_book",
-    "name": "Dusty Book",
-    "rarity": "common",
-    "spawnPOI": "Nipton Trading Post",
-    "levelRequirement": 3,
-    "type": "lore",
-    "priceCAPS": 18,
-    "baseStats": {
-      "collectionScore": 5,
-      "valueMultiplier": 2
-    },
-    "rollRanges": {
-      "collectionScore": [0, 4],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["lore", "book", "prewar"]
   }
-]
-[
-  {
-    "id": "stimpak",
-    "name": "Stimpak",
-    "rarity": "rare",
-    "spawnPOI": "Novac Motel",
-    "levelRequirement": 5,
-    "type": "consumable",
-    "priceCAPS": 180,
-    "baseStats": {
-      "hpRestore": 45,
-      "radCure": 0,
-      "apRestore": 10,
-      "buffStrength": 0,
-      "buffPerception": 0,
-      "buffEndurance": 2,
-      "buffLuck": 0,
-      "duration": 12
-    },
-    "rollRanges": {
-      "hpRestore": [5, 20],
-      "apRestore": [0, 10],
-      "buffEndurance": [0, 2],
-      "duration": [0, 6]
-    },
-    "tags": ["consumable", "medical", "healing"]
-  },
-  {
-    "id": "radaway",
-    "name": "RadAway",
-    "rarity": "rare",
-    "spawnPOI": "Searchlight Church",
-    "levelRequirement": 10,
-    "type": "consumable",
-    "priceCAPS": 220,
-    "baseStats": {
-      "hpRestore": 0,
-      "radCure": 40,
-      "apRestore": 0,
-      "buffStrength": 0,
-      "buffPerception": 1,
-      "buffEndurance": 0,
-      "buffLuck": 0,
-      "duration": 10
-    },
-    "rollRanges": {
-      "radCure": [10, 20],
-      "buffPerception": [0, 1],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "radiation", "medical"]
-  },
-  {
-    "id": "shotgun",
-    "name": "12-Gauge Shotgun",
-    "rarity": "rare",
-    "spawnPOI": "Megaton",
-    "levelRequirement": 8,
-    "type": "weapon",
-    "priceCAPS": 450,
-    "variants": [
-      { "modifier": "Sawed-Off", "effect": "Shorter range, higher damage", "rarityBoost": "rare" },
-      { "modifier": "Scoped", "effect": "Boosts accuracy", "rarityBoost": "epic" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 20,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 6,
-      "critMultiplier": 1.6,
-      "accuracy": 65,
-      "recoil": 12,
-      "fireRate": 1.8,
-      "durability": 55
-    },
-    "rollRanges": {
-      "ballisticDamage": [2, 6],
-      "accuracy": [5, 15],
-      "critChance": [1, 3],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [5, 15]
-    },
-    "tags": ["weapon", "shotgun", "ballistic", "rare"]
-  },
-  {
+    {
     "id": "combat_armor",
     "name": "Combat Armor",
     "rarity": "rare",
@@ -846,242 +784,30 @@
     "tags": ["armor", "body", "combat", "rare"]
   },
   {
-    "id": "service_rifle",
-    "name": "Service Rifle",
-    "rarity": "rare",
-    "spawnPOI": "Vault 3",
-    "levelRequirement": 15,
-    "type": "weapon",
-    "priceCAPS": 550,
-    "variants": [
-      { "modifier": "Scoped", "effect": "Increases range by 50%", "rarityBoost": "epic" },
-      { "modifier": "Spiked", "effect": "Adds melee damage", "rarityBoost": "rare" },
-      { "modifier": "Prototype", "effect": "Boosts damage but reduces durability", "rarityBoost": "epic" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 22,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 7,
-      "critMultiplier": 1.7,
-      "accuracy": 70,
-      "recoil": 10,
-      "fireRate": 2.5,
-      "durability": 50
-    },
-    "rollRanges": {
-      "ballisticDamage": [2, 6],
-      "accuracy": [5, 15],
-      "critChance": [1, 3],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [5, 15]
-    },
-    "tags": ["weapon", "rifle", "ballistic", "rare"]
-  },
-  {
-    "id": "hunting_rifle",
-    "name": "Hunting Rifle",
+    "id": "mcCarran_trooper_armor",
+    "name": "McCarran Trooper Armor",
     "rarity": "rare",
     "spawnPOI": "McCarran Airport",
     "levelRequirement": 12,
-    "type": "weapon",
-    "priceCAPS": 500,
-    "variants": [
-      { "modifier": "Scoped", "effect": "Boosts accuracy", "rarityBoost": "rare" },
-      { "modifier": "Silenced", "effect": "Adds stealth bonus", "rarityBoost": "epic" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 24,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 8,
-      "critMultiplier": 1.8,
-      "accuracy": 75,
-      "recoil": 8,
-      "fireRate": 1.6,
-      "durability": 55
-    },
-    "rollRanges": {
-      "ballisticDamage": [2, 6],
-      "accuracy": [5, 15],
-      "critChance": [1, 3],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [5, 15]
-    },
-    "tags": ["weapon", "rifle", "sniper", "rare"]
-  },
-  {
-    "id": "frag_grenade",
-    "name": "Frag Grenade",
-    "rarity": "rare",
-    "spawnPOI": "Rhyolite Ghost Town",
-    "levelRequirement": 11,
-    "type": "weapon",
-    "priceCAPS": 300,
-    "baseStats": {
-      "ballisticDamage": 30,
-      "energyDamage": 0,
-      "fireDamage": 10,
-      "poisonDamage": 0,
-      "critChance": 0,
-      "critMultiplier": 1.0,
-      "accuracy": 100,
-      "recoil": 0,
-      "fireRate": 0.5,
-      "durability": 1
-    },
-    "rollRanges": {
-      "ballisticDamage": [5, 10],
-      "fireDamage": [2, 6]
-    },
-    "tags": ["weapon", "explosive", "grenade", "rare"]
-  },
-  {
-    "id": "metal_armor",
-    "name": "Metal Armor",
-    "rarity": "rare",
-    "spawnPOI": "Vault 19",
-    "levelRequirement": 18,
     "type": "armor",
-    "priceCAPS": 520,
+    "priceCAPS": 450,
     "baseStats": {
-      "ballisticResist": 14,
+      "ballisticResist": 12,
       "energyResist": 6,
       "radResist": 4,
       "poisonResist": 2,
-      "hpBonus": 10,
-      "carryWeight": 8,
-      "moveSpeed": -2,
+      "hpBonus": 12,
+      "carryWeight": 6,
+      "moveSpeed": -1,
       "stealth": 0,
       "durability": 60
     },
     "rollRanges": {
       "ballisticResist": [1, 3],
-      "energyResist": [1, 3],
       "hpBonus": [2, 5],
       "durability": [5, 15]
     },
-    "tags": ["armor", "body", "metal", "rare"]
-  },
-  {
-    "id": "sawed_off_shotgun",
-    "name": "Sawed-Off Shotgun",
-    "rarity": "rare",
-    "spawnPOI": "Vault 21",
-    "levelRequirement": 15,
-    "type": "weapon",
-    "priceCAPS": 400,
-    "baseStats": {
-      "ballisticDamage": 26,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 7,
-      "critMultiplier": 1.7,
-      "accuracy": 55,
-      "recoil": 15,
-      "fireRate": 2.0,
-      "durability": 50
-    },
-    "rollRanges": {
-      "ballisticDamage": [2, 6],
-      "accuracy": [5, 15],
-      "critChance": [1, 3],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [5, 15]
-    },
-    "tags": ["weapon", "shotgun", "ballistic", "rare"]
-  },
-  {
-    "id": "scout_carbine",
-    "name": "Scout Carbine",
-    "rarity": "rare",
-    "spawnPOI": "Cottonwood Cove",
-    "levelRequirement": 14,
-    "type": "weapon",
-    "priceCAPS": 480,
-    "baseStats": {
-      "ballisticDamage": 20,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 6,
-      "critMultiplier": 1.6,
-      "accuracy": 72,
-      "recoil": 9,
-      "fireRate": 2.8,
-      "durability": 55
-    },
-    "rollRanges": {
-      "ballisticDamage": [2, 6],
-      "accuracy": [5, 15],
-      "critChance": [1, 3],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [5, 15]
-    },
-    "tags": ["weapon", "carbine", "ballistic", "rare"]
-  },
-  {
-    "id": "reinforced_vault_suit",
-    "name": "Reinforced Vault Suit",
-    "rarity": "rare",
-    "spawnPOI": "Vault 13",
-    "levelRequirement": 15,
-    "type": "armor",
-    "priceCAPS": 420,
-    "baseStats": {
-      "ballisticResist": 8,
-      "energyResist": 8,
-      "radResist": 10,
-      "poisonResist": 4,
-      "hpBonus": 10,
-      "carryWeight": 6,
-      "moveSpeed": 0,
-      "stealth": 1,
-      "durability": 55
-    },
-    "rollRanges": {
-      "radResist": [1, 3],
-      "hpBonus": [2, 5],
-      "durability": [5, 15]
-    },
-    "tags": ["armor", "body", "vault_suit", "rare"]
-  },
-  {
-    "id": "searchlight_guard_uniform",
-    "name": "Searchlight Guard Uniform",
-    "rarity": "rare",
-    "spawnPOI": "Searchlight Church",
-    "levelRequirement": 10,
-    "type": "armor",
-    "priceCAPS": 350,
-    "baseStats": {
-      "ballisticResist": 6,
-      "energyResist": 4,
-      "radResist": 8,
-      "poisonResist": 4,
-      "hpBonus": 8,
-      "carryWeight": 4,
-      "moveSpeed": 1,
-      "stealth": 1,
-      "durability": 50
-    },
-    "rollRanges": {
-      "radResist": [1, 3],
-      "hpBonus": [2, 5],
-      "durability": [5, 15]
-    },
-    "tags": ["armor", "body", "uniform", "rare"]
+    "tags": ["armor", "body", "trooper", "rare"]
   },
   {
     "id": "megaton_security_armor",
@@ -1135,54 +861,136 @@
     "tags": ["armor", "body", "vest", "rare"]
   },
   {
-    "id": "mcCarran_trooper_armor",
-    "name": "McCarran Trooper Armor",
-    "rarity": "rare",
-    "spawnPOI": "McCarran Airport",
-    "levelRequirement": 12,
-    "type": "armor",
-    "priceCAPS": 450,
-    "baseStats": {
-      "ballisticResist": 12,
-      "energyResist": 6,
-      "radResist": 4,
-      "poisonResist": 2,
-      "hpBonus": 12,
-      "carryWeight": 6,
-      "moveSpeed": -1,
-      "stealth": 0,
-      "durability": 60
-    },
-    "rollRanges": {
-      "ballisticResist": [1, 3],
-      "hpBonus": [2, 5],
-      "durability": [5, 15]
-    },
-    "tags": ["armor", "body", "trooper", "rare"]
-  },
-  {
-    "id": "vault_poster",
-    "name": "Vault-Tec Safety Poster",
+    "id": "reinforced_vault_suit",
+    "name": "Reinforced Vault Suit",
     "rarity": "rare",
     "spawnPOI": "Vault 13",
     "levelRequirement": 15,
-    "type": "lore",
-    "priceCAPS": 250,
+    "type": "armor",
+    "priceCAPS": 420,
     "baseStats": {
-      "collectionScore": 12,
-      "valueMultiplier": 3
+      "ballisticResist": 8,
+      "energyResist": 8,
+      "radResist": 10,
+      "poisonResist": 4,
+      "hpBonus": 10,
+      "carryWeight": 6,
+      "moveSpeed": 0,
+      "stealth": 1,
+      "durability": 55
     },
     "rollRanges": {
-      "collectionScore": [5, 10],
-      "valueMultiplier": 3
+      "radResist": [1, 3],
+      "hpBonus": [2, 5],
+      "durability": [5, 15]
     },
-    "rollRanges": {
-      "collectionScore": [5, 10],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["lore", "poster", "vault", "rare"]
+    "tags": ["armor", "body", "vault_suit", "rare"]
   },
   {
+    "id": "searchlight_guard_uniform",
+    "name": "Searchlight Guard Uniform",
+    "rarity": "rare",
+    "spawnPOI": "Searchlight Church",
+    "levelRequirement": 10,
+    "type": "armor",
+    "priceCAPS": 350,
+    "baseStats": {
+      "ballisticResist": 6,
+      "energyResist": 4,
+      "radResist": 8,
+      "poisonResist": 4,
+      "hpBonus": 8,
+      "carryWeight": 4,
+      "moveSpeed": 1,
+      "stealth": 1,
+      "durability": 50
+    },
+    "rollRanges": {
+      "radResist": [1, 3],
+      "hpBonus": [2, 5],
+      "durability": [5, 15]
+    },
+    "tags": ["armor", "body", "uniform", "rare"]
+  }
+    {
+    "id": "doctor_bag",
+    "name": "Doctor’s Bag",
+    "rarity": "rare",
+    "spawnPOI": "Megaton",
+    "levelRequirement": 8,
+    "type": "consumable",
+    "priceCAPS": 260,
+    "baseStats": {
+      "hpRestore": 35,
+      "radCure": 10,
+      "apRestore": 5,
+      "buffStrength": 0,
+      "buffPerception": 0,
+      "buffEndurance": 2,
+      "buffLuck": 0,
+      "duration": 12
+    },
+    "rollRanges": {
+      "hpRestore": [5, 15],
+      "radCure": [5, 10],
+      "apRestore": [0, 5],
+      "buffEndurance": [0, 2],
+      "duration": [0, 6]
+    },
+    "tags": ["consumable", "medical", "healing"]
+  },
+  {
+    "id": "radaway",
+    "name": "RadAway",
+    "rarity": "rare",
+    "spawnPOI": "Searchlight Church",
+    "levelRequirement": 10,
+    "type": "consumable",
+    "priceCAPS": 220,
+    "baseStats": {
+      "hpRestore": 0,
+      "radCure": 40,
+      "apRestore": 0,
+      "buffStrength": 0,
+      "buffPerception": 1,
+      "buffEndurance": 0,
+      "buffLuck": 0,
+      "duration": 10
+    },
+    "rollRanges": {
+      "radCure": [10, 20],
+      "buffPerception": [0, 1],
+      "duration": [0, 5]
+    },
+    "tags": ["consumable", "radiation", "medical"]
+  },
+  {
+    "id": "stimpak",
+    "name": "Stimpak",
+    "rarity": "rare",
+    "spawnPOI": "Novac Motel",
+    "levelRequirement": 5,
+    "type": "consumable",
+    "priceCAPS": 180,
+    "baseStats": {
+      "hpRestore": 45,
+      "radCure": 0,
+      "apRestore": 10,
+      "buffStrength": 0,
+      "buffPerception": 0,
+      "buffEndurance": 2,
+      "buffLuck": 0,
+      "duration": 12
+    },
+    "rollRanges": {
+      "hpRestore": [5, 20],
+      "apRestore": [0, 10],
+      "buffEndurance": [0, 2],
+      "duration": [0, 6]
+    },
+    "tags": ["consumable", "medical", "healing"]
+  }
+    {
     "id": "gecko_skull",
     "name": "Gecko Skull",
     "rarity": "rare",
@@ -1201,291 +1009,13 @@
     "tags": ["trophy", "gecko", "rare"]
   },
   {
-    "id": "doctor_bag",
-    "name": "Doctor’s Bag",
-    "rarity": "rare",
-    "spawnPOI": "Megaton",
-    "levelRequirement": 8,
-    "type": "consumable",
-    "priceCAPS": 260,
-    "baseStats": {
-      "hpRestore": 35,
-      "radCure": 10,
-      "apRestore": 10,
-      "buffStrength": 0,
-      "buffPerception": 1,
-      "buffEndurance": 2,
-      "buffLuck": 0,
-      "duration": 15
-    },
-    "rollRanges": {
-      "hpRestore": [5, 15],
-      "radCure": [5, 10],
-      "apRestore": [5, 10],
-      "buffEndurance": [0, 2],
-      "duration": [0, 6]
-    },
-    "tags": ["consumable", "medical", "rare"]
-  },
-  {
-    "id": "mutfruit",
-    "name": "Mutfruit",
-    "rarity": "rare",
-    "spawnPOI": "Shady Sands",
-    "levelRequirement": 8,
-    "type": "consumable",
-    "priceCAPS": 120,
-    "baseStats": {
-      "hpRestore": 20,
-      "radCure": 5,
-      "apRestore": 5,
-      "buffStrength": 1,
-      "buffPerception": 1,
-      "buffEndurance": 1,
-      "buffLuck": 0,
-      "duration": 12
-    },
-    "rollRanges": {
-      "hpRestore": [5, 10],
-      "radCure": [2, 5],
-      "buffStrength": [0, 1],
-      "buffPerception": [0, 1],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "food", "rare"]
-  },
-  {
-    "id": "healing_powder",
-    "name": "Healing Powder",
-    "rarity": "rare",
-    "spawnPOI": "Red Rock Canyon",
-    "levelRequirement": 8,
-    "type": "consumable",
-    "priceCAPS": 180,
-    "baseStats": {
-      "hpRestore": 30,
-      "radCure": 0,
-      "apRestore": 0,
-      "buffStrength": 2,
-      "buffPerception": 0,
-      "buffEndurance": 2,
-      "buffLuck": 0,
-      "duration": 15
-    },
-    "rollRanges": {
-      "hpRestore": [5, 10],
-      "buffStrength": [0, 2],
-      "buffEndurance": [0, 2],
-      "duration": [0, 5]
-    },
-    "tags": ["consumable", "tribal", "rare"]
-  },
-  {
-    "id": "raider_spike_armor",
-    "name": "Raider Spike Armor",
-    "rarity": "rare",
-    "spawnPOI": "Cottonwood Cove",
-    "levelRequirement": 14,
-    "type": "armor",
-    "priceCAPS": 520,
-    "variants": [
-      { "modifier": "Reinforced", "effect": "Extra durability", "rarityBoost": "epic" },
-      { "modifier": "Bloodied", "effect": "Adds intimidation bonus", "rarityBoost": "rare" }
-    ],
-    "baseStats": {
-      "ballisticResist": 12,
-      "energyResist": 6,
-      "radResist": 4,
-      "poisonResist": 2,
-      "hpBonus": 10,
-      "carryWeight": 6,
-      "moveSpeed": -1,
-      "stealth": 0,
-      "durability": 55
-    },
-    "rollRanges": {
-      "ballisticResist": [1, 3],
-      "hpBonus": [2, 5],
-      "durability": [5, 15]
-    },
-    "tags": ["armor", "body", "raider", "rare"]
-  },
-  {
-    "id": "vault3_jumpsuit",
-    "name": "Vault 3 Jumpsuit",
-    "rarity": "rare",
-    "spawnPOI": "Vault 3",
-    "levelRequirement": 15,
-    "type": "armor",
-    "priceCAPS": 380,
-    "baseStats": {
-      "ballisticResist": 8,
-      "energyResist": 8,
-      "radResist": 10,
-      "poisonResist": 4,
-      "hpBonus": 8,
-      "carryWeight": 5,
-      "moveSpeed": 0,
-      "stealth": 1,
-      "durability": 50
-    },
-    "rollRanges": {
-      "radResist": [1, 3],
-      "hpBonus": [2, 5],
-      "durability": [5, 15]
-    },
-    "tags": ["armor", "body", "vault_suit", "rare"]
-  },
-  {
-    "id": "vault19_jumpsuit",
-    "name": "Vault 19 Jumpsuit",
-    "rarity": "rare",
-    "spawnPOI": "Vault 19",
-    "levelRequirement": 18,
-    "type": "armor",
-    "priceCAPS": 420,
-    "baseStats": {
-      "ballisticResist": 9,
-      "energyResist": 9,
-      "radResist": 12,
-      "poisonResist": 5,
-      "hpBonus": 10,
-      "carryWeight": 6,
-      "moveSpeed": 0,
-      "stealth": 1,
-      "durability": 55
-    },
-    "rollRanges": {
-      "radResist": [1, 3],
-      "hpBonus": [2, 5],
-      "durability": [5, 15]
-    },
-    "tags": ["armor", "body", "vault_suit", "rare"]
-  },
-  {
-    "id": "farharbor_coat",
-    "name": "Far Harbor Raincoat",
-    "rarity": "rare",
-    "spawnPOI": "Far Harbor",
-    "levelRequirement": 33,
-    "type": "armor",
-    "priceCAPS": 650,
-    "baseStats": {
-      "ballisticResist": 6,
-      "energyResist": 4,
-      "radResist": 14,
-      "poisonResist": 6,
-      "hpBonus": 12,
-      "carryWeight": 4,
-      "moveSpeed": 1,
-      "stealth": 2,
-      "durability": 60
-    },
-    "rollRanges": {
-      "radResist": [2, 4],
-      "hpBonus": [2, 5],
-      "durability": [5, 15]
-    },
-    "tags": ["armor", "body", "coat", "rare"]
-  },
-  {
-    "id": "mariposa_patch",
-    "name": "Mariposa Military Patch",
-    "rarity": "rare",
-    "spawnPOI": "Mariposa Base",
-    "levelRequirement": 45,
-    "type": "lore",
-    "priceCAPS": 500,
-    "baseStats": {
-      "collectionScore": 15,
-      "valueMultiplier": 3
-    },
-    "rollRanges": {
-      "collectionScore": [5, 10],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["lore", "military", "patch", "rare"]
-  },
-  {
-    "id": "diamond_city_ticket",
-    "name": "Diamond City Baseball Ticket",
-    "rarity": "rare",
-    "spawnPOI": "Diamond City",
-    "levelRequirement": 15,
-    "type": "lore",
-    "priceCAPS": 280,
-    "baseStats": {
-      "collectionScore": 12,
-      "valueMultiplier": 3
-    },
-    "rollRanges": {
-      "collectionScore": [5, 10],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["lore", "ticket", "rare"]
-  },
-  {
-    "id": "newreno_chip",
-    "name": "New Reno Poker Chip",
-    "rarity": "rare",
-    "spawnPOI": "New Reno",
-    "levelRequirement": 28,
-    "type": "cosmetic",
-    "priceCAPS": 260,
-    "baseStats": {
-      "collectionScore": 10,
-      "valueMultiplier": 3
-    },
-    "rollRanges": {
-      "collectionScore": [5, 10],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["cosmetic", "casino", "chip", "rare"]
-  },
-  {
-    "id": "casino_token",
-    "name": "Lucky 38 Drink Token",
-    "rarity": "rare",
-    "spawnPOI": "Lucky 38",
-    "levelRequirement": 15,
-    "type": "cosmetic",
-    "priceCAPS": 240,
-    "baseStats": {
-      "collectionScore": 10,
-      "valueMultiplier": 3
-    },
-    "rollRanges": {
-      "collectionScore": [5, 10],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["cosmetic", "token", "casino", "rare"]
-  },
-  {
-    "id": "poker_cards",
-    "name": "New Reno Poker Cards",
-    "rarity": "rare",
-    "spawnPOI": "New Reno",
-    "levelRequirement": 28,
-    "type": "cosmetic",
-    "priceCAPS": 260,
-    "baseStats": {
-      "collectionScore": 10,
-      "valueMultiplier": 3
-    },
-    "rollRanges": {
-      "collectionScore": [5, 10],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["cosmetic", "cards", "rare"]
-  },
-  {
-    "id": "vault_pamphlet",
-    "name": "Vault-Tec Pamphlet",
+    "id": "vault_poster",
+    "name": "Vault-Tec Safety Poster",
     "rarity": "rare",
     "spawnPOI": "Vault 13",
     "levelRequirement": 15,
     "type": "lore",
-    "priceCAPS": 260,
+    "priceCAPS": 250,
     "baseStats": {
       "collectionScore": 12,
       "valueMultiplier": 3
@@ -1494,536 +1024,200 @@
       "collectionScore": [5, 10],
       "valueMultiplier": [1, 2]
     },
-    "tags": ["lore", "pamphlet", "vault", "rare"]
+    "tags": ["lore", "poster", "vault", "rare"]
   }
-]
-[
-  {
-    "id": "laser_rifle",
-    "name": "Laser Rifle",
-    "rarity": "epic",
-    "spawnPOI": "Helios One",
+    {
+    "id": "frag_grenade",
+    "name": "Frag Grenade",
+    "rarity": "rare",
+    "spawnPOI": "Nellis Air Force Base",
     "levelRequirement": 12,
     "type": "weapon",
-    "priceCAPS": 2200,
+    "priceCAPS": 350,
     "variants": [
-      { "modifier": "Scoped", "effect": "Boosts accuracy", "rarityBoost": "epic" },
-      { "modifier": "Overcharged", "effect": "Higher damage, lower durability", "rarityBoost": "legendary" }
+      { "modifier": "High Yield", "effect": "Increased explosion radius", "rarityBoost": "epic" },
+      { "modifier": "Fragmentation Core", "effect": "Extra shrapnel damage", "rarityBoost": "rare" }
     ],
     "baseStats": {
       "ballisticDamage": 0,
-      "energyDamage": 28,
+      "energyDamage": 0,
       "fireDamage": 0,
       "poisonDamage": 0,
-      "critChance": 10,
-      "critMultiplier": 1.9,
-      "accuracy": 82,
-      "recoil": 4,
-      "fireRate": 3.2,
-      "durability": 75
-    },
-    "rollRanges": {
-      "energyDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "energy", "laser", "epic"]
-  },
-  {
-    "id": "plasma_grenade",
-    "name": "Plasma Grenade",
-    "rarity": "epic",
-    "spawnPOI": "Black Mountain",
-    "levelRequirement": 20,
-    "type": "weapon",
-    "priceCAPS": 1800,
-    "baseStats": {
-      "ballisticDamage": 0,
-      "energyDamage": 40,
-      "fireDamage": 10,
-      "poisonDamage": 0,
+      "explosiveDamage": 60,
       "critChance": 0,
       "critMultiplier": 1.0,
-      "accuracy": 100,
+      "accuracy": 40,
       "recoil": 0,
       "fireRate": 0.5,
-      "durability": 1
+      "durability": 20
     },
     "rollRanges": {
-      "energyDamage": [6, 12],
-      "fireDamage": [4, 8]
+      "explosiveDamage": [5, 15],
+      "accuracy": [0, 10],
+      "durability": [0, 10]
     },
-    "tags": ["weapon", "explosive", "plasma", "epic"]
+    "tags": ["weapon", "explosive", "grenade", "rare"]
   },
   {
-    "id": "super_sledge",
-    "name": "Super Sledge",
-    "rarity": "epic",
-    "spawnPOI": "Quarry Junction",
-    "levelRequirement": 35,
-    "type": "weapon",
-    "priceCAPS": 2600,
-    "variants": [
-      { "modifier": "Heavy", "effect": "Boosts damage but slower swing", "rarityBoost": "epic" },
-      { "modifier": "Serrated", "effect": "Adds bleed damage", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 38,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 8,
-      "critMultiplier": 2.0,
-      "accuracy": 70,
-      "recoil": 6,
-      "fireRate": 1.4,
-      "durability": 90
-    },
-    "rollRanges": {
-      "ballisticDamage": [4, 10],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "accuracy": [5, 15],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "melee", "hammer", "epic"]
-  },
-  {
-    "id": "gauss_rifle",
-    "name": "Gauss Rifle",
-    "rarity": "epic",
-    "spawnPOI": "Nellis Air Force Base",
-    "levelRequirement": 25,
-    "type": "weapon",
-    "priceCAPS": 2800,
-    "variants": [
-      { "modifier": "Scoped", "effect": "Boosts accuracy", "rarityBoost": "epic" },
-      { "modifier": "Prototype", "effect": "Boosts damage but unstable", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 42,
-      "energyDamage": 12,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 12,
-      "critMultiplier": 2.1,
-      "accuracy": 88,
-      "recoil": 5,
-      "fireRate": 2.2,
-      "durability": 85
-    },
-    "rollRanges": {
-      "ballisticDamage": [4, 10],
-      "energyDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "gauss", "energy", "epic"]
-  },
-  {
-    "id": "plasma_rifle",
-    "name": "Plasma Rifle",
-    "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
+    "id": "hunting_rifle",
+    "name": "Hunting Rifle",
+    "rarity": "rare",
+    "spawnPOI": "Jacobstown",
     "levelRequirement": 18,
     "type": "weapon",
-    "priceCAPS": 2400,
+    "priceCAPS": 480,
+    "variants": [
+      { "modifier": "Scoped", "effect": "Greatly increases range", "rarityBoost": "epic" },
+      { "modifier": "Reinforced Stock", "effect": "Improved recoil control", "rarityBoost": "rare" }
+    ],
     "baseStats": {
-      "ballisticDamage": 0,
-      "energyDamage": 32,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 10,
-      "critMultiplier": 1.9,
-      "accuracy": 80,
-      "recoil": 4,
-      "fireRate": 3.0,
-      "durability": 80
-    },
-    "rollRanges": {
-      "energyDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "plasma", "energy", "epic"]
-  },
-  {
-    "id": "flamer",
-    "name": "Flamer",
-    "rarity": "epic",
-    "spawnPOI": "Ultra-Luxe Casino",
-    "levelRequirement": 20,
-    "type": "weapon",
-    "priceCAPS": 2300,
-    "baseStats": {
-      "ballisticDamage": 0,
-      "energyDamage": 0,
-      "fireDamage": 36,
-      "poisonDamage": 0,
-      "critChance": 6,
-      "critMultiplier": 1.7,
-      "accuracy": 70,
-      "recoil": 8,
-      "fireRate": 3.8,
-      "durability": 75
-    },
-    "rollRanges": {
-      "fireDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "flame", "fire", "epic"]
-  },
-  {
-    "id": "chainsaw",
-    "name": "Chainsaw",
-    "rarity": "epic",
-    "spawnPOI": "Gomorrah Casino",
-    "levelRequirement": 22,
-    "type": "weapon",
-    "priceCAPS": 2300,
-    "baseStats": {
-      "ballisticDamage": 0,
+      "ballisticDamage": 28,
       "energyDamage": 0,
       "fireDamage": 0,
       "poisonDamage": 0,
       "critChance": 8,
       "critMultiplier": 1.8,
-      "accuracy": 65,
-      "recoil": 6,
-      "fireRate": 4.2,
-      "durability": 85
+      "accuracy": 75,
+      "recoil": 22,
+      "fireRate": 1.2,
+      "durability": 55
     },
     "rollRanges": {
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "accuracy": [5, 15],
+      "ballisticDamage": [3, 8],
+      "accuracy": [5, 10],
+      "critChance": [1, 3],
+      "critMultiplier": [0, 0.3],
       "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
+      "fireRate": [0, 0.3],
+      "durability": [5, 15]
     },
-    "tags": ["weapon", "melee", "chainsaw", "epic"]
+    "tags": ["weapon", "rifle", "ballistic", "rare"]
   },
   {
-    "id": "marksman_carbine",
-    "name": "Marksman Carbine",
-    "rarity": "epic",
-    "spawnPOI": "Mt Charleston",
-    "levelRequirement": 16,
+    "id": "sawed_off_shotgun",
+    "name": "Sawed-Off Shotgun",
+    "rarity": "rare",
+    "spawnPOI": "Primm Rollercoaster",
+    "levelRequirement": 10,
     "type": "weapon",
-    "priceCAPS": 2100,
-    "baseStats": {
-      "ballisticDamage": 30,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 10,
-      "critMultiplier": 1.9,
-      "accuracy": 85,
-      "recoil": 5,
-      "fireRate": 3.0,
-      "durability": 80
-    },
-    "rollRanges": {
-      "ballisticDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "rifle", "marksman", "epic"]
-  },
-  {
-    "id": "prototype_carbine",
-    "name": "Prototype Carbine",
-    "rarity": "epic",
-    "spawnPOI": "Helios One",
-    "levelRequirement": 22,
-    "type": "weapon",
-    "priceCAPS": 2600,
-    "baseStats": {
-      "ballisticDamage": 34,
-      "energyDamage": 8,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 12,
-      "critMultiplier": 2.0,
-      "accuracy": 88,
-      "recoil": 5,
-      "fireRate": 3.2,
-      "durability": 85
-    },
-    "rollRanges": {
-      "ballisticDamage": [4, 10],
-      "energyDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "rifle", "prototype", "epic"]
-  },
-  {
-    "id": "prototype_shotgun",
-    "name": "Prototype Shotgun",
-    "rarity": "epic",
-    "spawnPOI": "Megaton",
-    "levelRequirement": 20,
-    "type": "weapon",
-    "priceCAPS": 2500,
+    "priceCAPS": 420,
+    "variants": [
+      { "modifier": "Double-Barrel", "effect": "Two-shot burst", "rarityBoost": "epic" },
+      { "modifier": "Reinforced Grip", "effect": "Reduced recoil", "rarityBoost": "rare" }
+    ],
     "baseStats": {
       "ballisticDamage": 32,
       "energyDamage": 0,
       "fireDamage": 0,
       "poisonDamage": 0,
-      "critChance": 10,
-      "critMultiplier": 1.9,
-      "accuracy": 78,
-      "recoil": 8,
-      "fireRate": 2.6,
-      "durability": 80
+      "critChance": 6,
+      "critMultiplier": 1.6,
+      "accuracy": 45,
+      "recoil": 30,
+      "fireRate": 1.0,
+      "durability": 40
     },
     "rollRanges": {
-      "ballisticDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
+      "ballisticDamage": [3, 8],
+      "accuracy": [0, 10],
+      "critChance": [1, 3],
+      "critMultiplier": [0, 0.3],
+      "recoil": [-8, 0],
+      "fireRate": [0, 0.3],
+      "durability": [5, 15]
     },
-    "tags": ["weapon", "shotgun", "prototype", "epic"]
+    "tags": ["weapon", "shotgun", "ballistic", "rare"]
   },
   {
-    "id": "prototype_plasma_rifle",
-    "name": "Prototype Plasma Rifle",
-    "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
-    "levelRequirement": 22,
+    "id": "scout_carbine",
+    "name": "Scout Carbine",
+    "rarity": "rare",
+    "spawnPOI": "Camp McCarran",
+    "levelRequirement": 14,
     "type": "weapon",
-    "priceCAPS": 2700,
-    "baseStats": {
-      "ballisticDamage": 0,
-      "energyDamage": 38,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 12,
-      "critMultiplier": 2.0,
-      "accuracy": 85,
-      "recoil": 4,
-      "fireRate": 3.2,
-      "durability": 85
-    },
-    "rollRanges": {
-      "energyDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "plasma", "prototype", "epic"]
-  },
-  {
-    "id": "prototype_gauss_rifle",
-    "name": "Prototype Gauss Rifle",
-    "rarity": "epic",
-    "spawnPOI": "Nellis Air Force Base",
-    "levelRequirement": 28,
-    "type": "weapon",
-    "priceCAPS": 2900,
-    "baseStats": {
-      "ballisticDamage": 46,
-      "energyDamage": 14,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 12,
-      "critMultiplier": 2.2,
-      "accuracy": 90,
-      "recoil": 4,
-      "fireRate": 2.4,
-      "durability": 90
-    },
-    "rollRanges": {
-      "ballisticDamage": [4, 10],
-      "energyDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "recoil": [-5, 0],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "gauss", "prototype", "epic"]
-  },
-  {
-    "id": "prototype_energy_blade",
-    "name": "Prototype Energy Blade",
-    "rarity": "epic",
-    "spawnPOI": "Helios One",
-    "levelRequirement": 22,
-    "type": "weapon",
-    "priceCAPS": 2800,
+    "priceCAPS": 460,
     "variants": [
-      { "modifier": "Charged", "effect": "Adds energy damage", "rarityBoost": "legendary" },
-      { "modifier": "Serrated", "effect": "Adds bleed damage", "rarityBoost": "epic" }
+      { "modifier": "Marksman", "effect": "Boosts accuracy and crit chance", "rarityBoost": "epic" },
+      { "modifier": "Light Frame", "effect": "Improves fire rate", "rarityBoost": "rare" }
     ],
     "baseStats": {
-      "ballisticDamage": 0,
-      "energyDamage": 34,
+      "ballisticDamage": 22,
+      "energyDamage": 0,
       "fireDamage": 0,
       "poisonDamage": 0,
-      "critChance": 12,
-      "critMultiplier": 2.1,
-      "accuracy": 82,
-      "recoil": 0,
-      "fireRate": 3.4,
-      "durability": 85
+      "critChance": 7,
+      "critMultiplier": 1.7,
+      "accuracy": 70,
+      "recoil": 18,
+      "fireRate": 2.2,
+      "durability": 50
     },
     "rollRanges": {
-      "energyDamage": [4, 10],
-      "accuracy": [5, 15],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
+      "ballisticDamage": [2, 6],
+      "accuracy": [5, 10],
+      "critChance": [1, 3],
+      "critMultiplier": [0, 0.3],
+      "recoil": [-5, 0],
+      "fireRate": [0, 0.4],
+      "durability": [5, 15]
     },
-    "tags": ["weapon", "energy", "blade", "epic"]
+    "tags": ["weapon", "rifle", "carbine", "rare"]
+  },
+  {
+    "id": "service_rifle",
+    "name": "Service Rifle",
+    "rarity": "rare",
+    "spawnPOI": "Camp McCarran",
+    "levelRequirement": 12,
+    "type": "weapon",
+    "priceCAPS": 440,
+    "variants": [
+      { "modifier": "Reinforced Receiver", "effect": "Boosts damage", "rarityBoost": "epic" },
+      { "modifier": "Stabilized Barrel", "effect": "Improves accuracy", "rarityBoost": "rare" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 24,
+      "energyDamage": 0,
+      "fireDamage": 0,
+      "poisonDamage": 0,
+      "critChance": 6,
+      "critMultiplier": 1.6,
+      "accuracy": 68,
+      "recoil": 20,
+      "fireRate": 2.0,
+      "durability": 48
+    },
+    "rollRanges": {
+      "ballisticDamage": [2, 6],
+      "accuracy": [5, 10],
+      "critChance": [1, 3],
+      "critMultiplier": [0, 0.3],
+      "recoil": [-5, 0],
+      "fireRate": [0, 0.4],
+      "durability": [5, 15]
+    },
+    "tags": ["weapon", "rifle", "service", "rare"]
   }
-]
-[
-  {
-    "id": "t51_power_armor",
-    "name": "T-51 Power Armor",
-    "rarity": "epic",
-    "spawnPOI": "Vault 34",
-    "levelRequirement": 20,
-    "type": "armor",
-    "priceCAPS": 3500,
-    "variants": [
-      { "modifier": "Reinforced", "effect": "Extra durability", "rarityBoost": "epic" },
-      { "modifier": "Stealth", "effect": "Sneak bonus", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticResist": 28,
-      "energyResist": 24,
-      "radResist": 20,
-      "poisonResist": 12,
-      "hpBonus": 30,
-      "carryWeight": 20,
-      "moveSpeed": -2,
-      "stealth": 2,
-      "durability": 110
-    },
-    "rollRanges": {
-      "ballisticResist": [2, 5],
-      "energyResist": [2, 5],
-      "radResist": [2, 5],
-      "hpBonus": [5, 10],
-      "carryWeight": [5, 10],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "power_armor", "epic"]
-  },
-  {
-    "id": "riot_gear_elite",
-    "name": "Elite Riot Gear",
-    "rarity": "epic",
-    "spawnPOI": "Vault 22",
-    "levelRequirement": 32,
-    "type": "armor",
-    "priceCAPS": 3200,
-    "baseStats": {
-      "ballisticResist": 20,
-      "energyResist": 16,
-      "radResist": 10,
-      "poisonResist": 8,
-      "hpBonus": 22,
-      "carryWeight": 10,
-      "moveSpeed": 1,
-      "stealth": 6,
-      "durability": 90
-    },
-    "rollRanges": {
-      "ballisticResist": [2, 5],
-      "energyResist": [2, 5],
-      "stealth": [1, 3],
-      "hpBonus": [5, 10],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "riot", "body", "epic"]
-  },
-  {
-    "id": "hazmat_suit",
-    "name": "Hazmat Suit",
-    "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
-    "levelRequirement": 18,
-    "type": "armor",
-    "priceCAPS": 2000,
-    "baseStats": {
-      "ballisticResist": 2,
-      "energyResist": 4,
-      "radResist": 30,
-      "poisonResist": 20,
-      "hpBonus": 6,
-      "carryWeight": -4,
-      "moveSpeed": -1,
-      "stealth": 4,
-      "durability": 60
-    },
-    "rollRanges": {
-      "radResist": [2, 5],
-      "poisonResist": [2, 5],
-      "stealth": [1, 3],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "hazmat", "body", "epic"]
-  },
-  {
+    {
     "id": "advanced_combat_armor",
     "name": "Advanced Combat Armor",
     "rarity": "epic",
-    "spawnPOI": "Hoover Dam",
-    "levelRequirement": 12,
+    "spawnPOI": "Hidden Valley Bunker",
+    "levelRequirement": 25,
     "type": "armor",
-    "priceCAPS": 2800,
+    "priceCAPS": 1200,
     "variants": [
-      { "modifier": "Reinforced", "effect": "Adds +20 durability", "rarityBoost": "epic" },
-      { "modifier": "Irradiated", "effect": "Radiation resistance", "rarityBoost": "legendary" },
-      { "modifier": "Stealth", "effect": "Sneak bonus", "rarityBoost": "legendary" }
+      { "modifier": "Stealth Weave", "effect": "Major stealth bonus", "rarityBoost": "legendary" },
+      { "modifier": "Reinforced Plating", "effect": "Greatly increased durability", "rarityBoost": "epic" }
     ],
     "baseStats": {
       "ballisticResist": 18,
       "energyResist": 16,
       "radResist": 12,
-      "poisonResist": 8,
+      "poisonResist": 10,
       "hpBonus": 20,
       "carryWeight": 10,
-      "moveSpeed": 0,
+      "moveSpeed": -1,
       "stealth": 4,
       "durability": 85
     },
@@ -2031,607 +1225,488 @@
       "ballisticResist": [2, 5],
       "energyResist": [2, 5],
       "radResist": [2, 5],
-      "hpBonus": [5, 10],
+      "hpBonus": [4, 8],
       "stealth": [1, 3],
       "durability": [10, 20]
     },
-    "tags": ["armor", "combat", "body", "epic"]
+    "tags": ["armor", "body", "combat", "epic"]
   },
   {
-    "id": "casino_guard_uniform",
-    "name": "Casino Guard Uniform",
+    "id": "elite_vault_suit",
+    "name": "Elite Vault Suit",
     "rarity": "epic",
-    "spawnPOI": "Lucky 38",
-    "levelRequirement": 18,
+    "spawnPOI": "Vault 101",
+    "levelRequirement": 22,
     "type": "armor",
-    "priceCAPS": 1900,
+    "priceCAPS": 1100,
+    "variants": [
+      { "modifier": "Radiation Shielding", "effect": "Major rad resistance", "rarityBoost": "epic" },
+      { "modifier": "Servo-Lining", "effect": "Improved movement speed", "rarityBoost": "rare" }
+    ],
     "baseStats": {
-      "ballisticResist": 10,
-      "energyResist": 8,
-      "radResist": 6,
-      "poisonResist": 4,
-      "hpBonus": 12,
-      "carryWeight": 6,
-      "moveSpeed": 1,
+      "ballisticResist": 12,
+      "energyResist": 14,
+      "radResist": 18,
+      "poisonResist": 10,
+      "hpBonus": 16,
+      "carryWeight": 8,
+      "moveSpeed": 2,
       "stealth": 3,
       "durability": 70
     },
     "rollRanges": {
-      "hpBonus": [5, 10],
-      "stealth": [1, 3],
-      "durability": [10, 20]
+      "radResist": [3, 6],
+      "moveSpeed": [1, 3],
+      "hpBonus": [3, 6],
+      "durability": [8, 18]
     },
-    "tags": ["armor", "uniform", "body", "epic"]
+    "tags": ["armor", "body", "vault_suit", "epic"]
   },
   {
-    "id": "riot_shield",
-    "name": "Riot Shield",
+    "id": "riot_gear",
+    "name": "Riot Gear",
     "rarity": "epic",
-    "spawnPOI": "Vault 22",
-    "levelRequirement": 20,
+    "spawnPOI": "Camp Searchlight",
+    "levelRequirement": 24,
     "type": "armor",
-    "priceCAPS": 2100,
+    "priceCAPS": 1300,
+    "variants": [
+      { "modifier": "Shock Padding", "effect": "Reduces melee damage taken", "rarityBoost": "epic" },
+      { "modifier": "Visor Optics", "effect": "Boosts perception", "rarityBoost": "rare" }
+    ],
     "baseStats": {
-      "ballisticResist": 24,
-      "energyResist": 12,
-      "radResist": 4,
-      "poisonResist": 4,
-      "hpBonus": 14,
-      "carryWeight": -4,
-      "moveSpeed": -3,
-      "stealth": 0,
-      "durability": 100
-    },
-    "rollRanges": {
-      "ballisticResist": [2, 5],
-      "energyResist": [2, 5],
-      "hpBonus": [5, 10],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "shield", "offhand", "epic"]
-  },
-  {
-    "id": "diamondcity_baseball_armor",
-    "name": "Diamond City Baseball Armor",
-    "rarity": "epic",
-    "spawnPOI": "Diamond City",
-    "levelRequirement": 15,
-    "type": "armor",
-    "priceCAPS": 2300,
-    "baseStats": {
-      "ballisticResist": 14,
-      "energyResist": 10,
-      "radResist": 6,
-      "poisonResist": 4,
-      "hpBonus": 16,
-      "carryWeight": 8,
-      "moveSpeed": 1,
+      "ballisticResist": 20,
+      "energyResist": 14,
+      "radResist": 10,
+      "poisonResist": 8,
+      "hpBonus": 18,
+      "carryWeight": 6,
+      "moveSpeed": -2,
       "stealth": 2,
-      "durability": 80
+      "durability": 90
     },
     "rollRanges": {
       "ballisticResist": [2, 5],
-      "hpBonus": [5, 10],
+      "energyResist": [2, 4],
+      "hpBonus": [3, 6],
       "durability": [10, 20]
     },
-    "tags": ["armor", "sports", "body", "epic"]
+    "tags": ["armor", "body", "riot", "epic"]
+  }
+    {
+    "id": "ultra_stimpak",
+    "name": "Ultra Stimpak",
+    "rarity": "epic",
+    "spawnPOI": "Hidden Valley Bunker",
+    "levelRequirement": 22,
+    "type": "consumable",
+    "priceCAPS": 480,
+    "baseStats": {
+      "hpRestore": 85,
+      "radCure": 0,
+      "apRestore": 25,
+      "buffStrength": 2,
+      "buffPerception": 1,
+      "buffEndurance": 3,
+      "buffLuck": 1,
+      "duration": 18
+    },
+    "rollRanges": {
+      "hpRestore": [10, 25],
+      "apRestore": [5, 15],
+      "buffStrength": [0, 2],
+      "buffEndurance": [0, 3],
+      "buffLuck": [0, 1],
+      "duration": [2, 6]
+    },
+    "tags": ["consumable", "medical", "healing", "epic"]
   },
   {
-    "id": "experiment_log",
-    "name": "Vault Experiment Log",
+    "id": "radshield",
+    "name": "RadShield",
     "rarity": "epic",
-    "spawnPOI": "Vault 22",
-    "levelRequirement": 32,
-    "type": "lore",
-    "priceCAPS": 1500,
+    "spawnPOI": "Searchlight Church",
+    "levelRequirement": 20,
+    "type": "consumable",
+    "priceCAPS": 520,
     "baseStats": {
-      "collectionScore": 20,
+      "hpRestore": 0,
+      "radCure": 65,
+      "apRestore": 10,
+      "buffStrength": 0,
+      "buffPerception": 2,
+      "buffEndurance": 3,
+      "buffLuck": 0,
+      "duration": 20
+    },
+    "rollRanges": {
+      "radCure": [10, 20],
+      "apRestore": [0, 10],
+      "buffPerception": [0, 2],
+      "buffEndurance": [0, 3],
+      "duration": [2, 6]
+    },
+    "tags": ["consumable", "radiation", "medical", "epic"]
+  }
+    {
+    "id": "ancient_relic",
+    "name": "Ancient Wasteland Relic",
+    "rarity": "epic",
+    "spawnPOI": "Black Mountain",
+    "levelRequirement": 24,
+    "type": "lore",
+    "priceCAPS": 650,
+    "baseStats": {
+      "collectionScore": 22,
       "valueMultiplier": 4
     },
     "rollRanges": {
-      "collectionScore": [5, 15],
+      "collectionScore": [8, 14],
       "valueMultiplier": [1, 2]
     },
-    "tags": ["lore", "vault", "experiment", "epic"]
+    "tags": ["lore", "relic", "epic"]
   },
   {
-    "id": "gecko_reactor_core",
-    "name": "Gecko Reactor Core Fragment",
+    "id": "nightstalker_fang",
+    "name": "Nightstalker Fang",
     "rarity": "epic",
-    "spawnPOI": "Gecko Reactor",
-    "levelRequirement": 25,
-    "type": "artifact",
-    "priceCAPS": 2600,
-    "baseStats": {
-      "anomalyPower": 22,
-      "radiationPulse": 12,
-      "voidCharge": 10,
-      "entropyLevel": 3,
-      "collectionScore": 18
-    },
-    "rollRanges": {
-      "anomalyPower": [5, 15],
-      "radiationPulse": [2, 8],
-      "voidCharge": [2, 8],
-      "entropyLevel": [1, 2],
-      "collectionScore": [5, 10]
-    },
-    "tags": ["artifact", "reactor", "gecko", "epic"]
-  },
-  {
-    "id": "riot_helmet",
-    "name": "Riot Helmet",
-    "rarity": "epic",
-    "spawnPOI": "Vault 22",
+    "spawnPOI": "Red Rock Canyon",
     "levelRequirement": 20,
-    "type": "armor",
-    "priceCAPS": 2000,
+    "type": "trophy",
+    "priceCAPS": 700,
     "baseStats": {
-      "ballisticResist": 12,
-      "energyResist": 10,
-      "radResist": 6,
-      "poisonResist": 4,
-      "hpBonus": 8,
-      "carryWeight": 2,
-      "moveSpeed": 0,
-      "stealth": 2,
-      "durability": 70
+      "collectionScore": 24,
+      "valueMultiplier": 5
     },
     "rollRanges": {
-      "ballisticResist": [2, 5],
-      "hpBonus": [5, 10],
-      "stealth": [1, 3],
-      "durability": [10, 20]
+      "collectionScore": [10, 16],
+      "valueMultiplier": [2, 3]
     },
-    "tags": ["armor", "helmet", "riot", "epic"]
-  },
-  {
-    "id": "reinforced_metal_armor",
-    "name": "Reinforced Metal Armor",
-    "rarity": "epic",
-    "spawnPOI": "Vault 19",
-    "levelRequirement": 25,
-    "type": "armor",
-    "priceCAPS": 2600,
-    "baseStats": {
-      "ballisticResist": 22,
-      "energyResist": 12,
-      "radResist": 8,
-      "poisonResist": 6,
-      "hpBonus": 18,
-      "carryWeight": 10,
-      "moveSpeed": -2,
-      "stealth": 0,
-      "durability": 100
-    },
-    "rollRanges": {
-      "ballisticResist": [2, 5],
-      "hpBonus": [5, 10],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "metal", "body", "epic"]
-  },
-  {
-    "id": "riot_gloves",
-    "name": "Riot Gloves",
-    "rarity": "epic",
-    "spawnPOI": "Vault 22",
-    "levelRequirement": 20,
-    "type": "armor",
-    "priceCAPS": 1900,
-    "baseStats": {
-      "ballisticResist": 6,
-      "energyResist": 4,
-      "radResist": 2,
-      "poisonResist": 2,
-      "hpBonus": 4,
-      "carryWeight": 2,
-      "moveSpeed": 1,
-      "stealth": 3,
-      "durability": 60
-    },
-    "rollRanges": {
-      "stealth": [1, 3],
-      "hpBonus": [2, 5],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "hands", "riot", "epic"]
-  },
-  {
-    "id": "riot_boots",
-    "name": "Riot Boots",
-    "rarity": "epic",
-    "spawnPOI": "Vault 22",
-    "levelRequirement": 20,
-    "type": "armor",
-    "priceCAPS": 1900,
-    "baseStats": {
-      "ballisticResist": 8,
-      "energyResist": 6,
-      "radResist": 4,
-      "poisonResist": 2,
-      "hpBonus": 6,
-      "carryWeight": 4,
-      "moveSpeed": 2,
-      "stealth": 2,
-      "durability": 70
-    },
-    "rollRanges": {
-      "moveSpeed": [1, 3],
-      "hpBonus": [2, 5],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "boots", "riot", "epic"]
-  },
-  {
-    "id": "hazmat_gloves",
-    "name": "Hazmat Gloves",
-    "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
-    "levelRequirement": 18,
-    "type": "armor",
-    "priceCAPS": 1800,
-    "baseStats": {
-      "ballisticResist": 2,
-      "energyResist": 2,
-      "radResist": 12,
-      "poisonResist": 10,
-      "hpBonus": 4,
-      "carryWeight": 0,
-      "moveSpeed": 0,
-      "stealth": 2,
-      "durability": 50
-    },
-    "rollRanges": {
-      "radResist": [2, 5],
-      "poisonResist": [2, 5],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "hands", "hazmat", "epic"]
-  },
-  {
-    "id": "hazmat_boots",
-    "name": "Hazmat Boots",
-    "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
-    "levelRequirement": 18,
-    "type": "armor",
-    "priceCAPS": 1800,
-    "baseStats": {
-      "ballisticResist": 2,
-      "energyResist": 2,
-      "radResist": 14,
-      "poisonResist": 10,
-      "hpBonus": 4,
-      "carryWeight": 0,
-      "moveSpeed": 0,
-      "stealth": 2,
-      "durability": 55
-    },
-    "rollRanges": {
-      "radResist": [2, 5],
-      "poisonResist": [2, 5],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "boots", "hazmat", "epic"]
-  },
-  {
-    "id": "riot_mask",
-    "name": "Riot Mask",
-    "rarity": "epic",
-    "spawnPOI": "Vault 22",
-    "levelRequirement": 20,
-    "type": "armor",
-    "priceCAPS": 1900,
-    "baseStats": {
-      "ballisticResist": 6,
-      "energyResist": 6,
-      "radResist": 4,
-      "poisonResist": 4,
-      "hpBonus": 6,
-      "carryWeight": 0,
-      "moveSpeed": 0,
-      "stealth": 4,
-      "durability": 60
-    },
-    "rollRanges": {
-      "stealth": [1, 3],
-      "hpBonus": [2, 5],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "mask", "riot", "epic"]
+    "tags": ["trophy", "nightstalker", "epic"]
   }
-]
-[
-  {
-    "id": "alien_blaster",
-    "name": "Alien Blaster",
-    "rarity": "legendary",
-    "spawnPOI": "Mothership Zeta",
-    "levelRequirement": 99,
+    {
+    "id": "anti_material_rifle",
+    "name": "Anti-Material Rifle",
+    "rarity": "epic",
+    "spawnPOI": "Nellis Air Force Base",
+    "levelRequirement": 26,
     "type": "weapon",
-    "priceCAPS": 18000,
+    "priceCAPS": 1800,
     "variants": [
-      { "modifier": "Overcharged", "effect": "Massive damage, unstable shots", "rarityBoost": "legendary" },
-      { "modifier": "Scoped", "effect": "Extended range", "rarityBoost": "legendary" }
+      { "modifier": "AP Rounds", "effect": "Massive armor penetration", "rarityBoost": "legendary" },
+      { "modifier": "Stabilized Bipod", "effect": "Greatly improved accuracy", "rarityBoost": "epic" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 65,
+      "energyDamage": 0,
+      "fireDamage": 0,
+      "poisonDamage": 0,
+      "explosiveDamage": 0,
+      "critChance": 10,
+      "critMultiplier": 2.0,
+      "accuracy": 82,
+      "recoil": 35,
+      "fireRate": 0.8,
+      "durability": 90
+    },
+    "rollRanges": {
+      "ballisticDamage": [6, 12],
+      "accuracy": [5, 10],
+      "critChance": [1, 4],
+      "critMultiplier": [0, 0.4],
+      "recoil": [-8, 0],
+      "fireRate": [0, 0.2],
+      "durability": [10, 20]
+    },
+    "tags": ["weapon", "rifle", "sniper", "epic"]
+  },
+  {
+    "id": "laser_carbine",
+    "name": "Laser Carbine",
+    "rarity": "epic",
+    "spawnPOI": "Hidden Valley Bunker",
+    "levelRequirement": 22,
+    "type": "weapon",
+    "priceCAPS": 1500,
+    "variants": [
+      { "modifier": "Overcharged Capacitors", "effect": "Boosts energy damage", "rarityBoost": "legendary" },
+      { "modifier": "Refined Optics", "effect": "Improves accuracy", "rarityBoost": "epic" }
     ],
     "baseStats": {
       "ballisticDamage": 0,
-      "energyDamage": 60,
-      "fireDamage": 20,
+      "energyDamage": 42,
+      "fireDamage": 0,
       "poisonDamage": 0,
-      "critChance": 20,
-      "critMultiplier": 2.8,
-      "accuracy": 94,
-      "recoil": 2,
-      "fireRate": 4.2,
+      "explosiveDamage": 0,
+      "critChance": 8,
+      "critMultiplier": 1.8,
+      "accuracy": 78,
+      "recoil": 10,
+      "fireRate": 2.4,
+      "durability": 70
+    },
+    "rollRanges": {
+      "energyDamage": [4, 10],
+      "accuracy": [5, 10],
+      "critChance": [1, 3],
+      "critMultiplier": [0, 0.3],
+      "recoil": [-4, 0],
+      "fireRate": [0, 0.3],
+      "durability": [8, 18]
+    },
+    "tags": ["weapon", "energy", "laser", "epic"]
+  },
+  {
+    "id": "plasma_caster",
+    "name": "Plasma Caster",
+    "rarity": "epic",
+    "spawnPOI": "Black Mountain",
+    "levelRequirement": 24,
+    "type": "weapon",
+    "priceCAPS": 1700,
+    "variants": [
+      { "modifier": "Superheated Core", "effect": "Adds fire damage", "rarityBoost": "legendary" },
+      { "modifier": "Stabilized Emitter", "effect": "Improves accuracy", "rarityBoost": "epic" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 0,
+      "energyDamage": 48,
+      "fireDamage": 12,
+      "poisonDamage": 0,
+      "explosiveDamage": 0,
+      "critChance": 9,
+      "critMultiplier": 1.9,
+      "accuracy": 72,
+      "recoil": 18,
+      "fireRate": 1.6,
+      "durability": 80
+    },
+    "rollRanges": {
+      "energyDamage": [5, 12],
+      "fireDamage": [2, 6],
+      "accuracy": [5, 10],
+      "critChance": [1, 3],
+      "critMultiplier": [0, 0.3],
+      "recoil": [-6, 0],
+      "fireRate": [0, 0.3],
+      "durability": [10, 20]
+    },
+    "tags": ["weapon", "energy", "plasma", "epic"]
+  },
+  {
+    "id": "super_sledge",
+    "name": "Super Sledge",
+    "rarity": "epic",
+    "spawnPOI": "Jacobstown",
+    "levelRequirement": 20,
+    "type": "weapon",
+    "priceCAPS": 1600,
+    "variants": [
+      { "modifier": "Shock Coil", "effect": "Adds energy damage", "rarityBoost": "legendary" },
+      { "modifier": "Reinforced Head", "effect": "Boosts melee damage", "rarityBoost": "epic" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 38,
+      "energyDamage": 10,
+      "fireDamage": 0,
+      "poisonDamage": 0,
+      "explosiveDamage": 0,
+      "critChance": 7,
+      "critMultiplier": 1.7,
+      "accuracy": 55,
+      "recoil": 0,
+      "fireRate": 1.0,
+      "durability": 95
+    },
+    "rollRanges": {
+      "ballisticDamage": [4, 10],
+      "energyDamage": [2, 5],
+      "accuracy": [0, 10],
+      "critChance": [1, 3],
+      "critMultiplier": [0, 0.3],
+      "fireRate": [0, 0.2],
+      "durability": [10, 20]
+    },
+    "tags": ["weapon", "melee", "hammer", "epic"]
+  },
+  {
+    "id": "thermic_lance",
+    "name": "Thermic Lance",
+    "rarity": "epic",
+    "spawnPOI": "Camp Searchlight",
+    "levelRequirement": 23,
+    "type": "weapon",
+    "priceCAPS": 1750,
+    "variants": [
+      { "modifier": "Overheated Core", "effect": "Adds fire damage", "rarityBoost": "legendary" },
+      { "modifier": "Reinforced Shaft", "effect": "Improves durability", "rarityBoost": "epic" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 0,
+      "energyDamage": 36,
+      "fireDamage": 18,
+      "poisonDamage": 0,
+      "explosiveDamage": 0,
+      "critChance": 6,
+      "critMultiplier": 1.6,
+      "accuracy": 60,
+      "recoil": 0,
+      "fireRate": 1.4,
+      "durability": 85
+    },
+    "rollRanges": {
+      "energyDamage": [4, 10],
+      "fireDamage": [3, 6],
+      "accuracy": [0, 10],
+      "critChance": [1, 3],
+      "critMultiplier": [0, 0.3],
+      "fireRate": [0, 0.2],
+      "durability": [10, 20]
+    },
+    "tags": ["weapon", "energy", "melee", "epic"]
+  },
+  {
+    "id": "trail_carbine",
+    "name": "Trail Carbine",
+    "rarity": "epic",
+    "spawnPOI": "Novac Motel",
+    "levelRequirement": 21,
+    "type": "weapon",
+    "priceCAPS": 1550,
+    "variants": [
+      { "modifier": "Marksman Stock", "effect": "Boosts accuracy", "rarityBoost": "epic" },
+      { "modifier": "Reinforced Receiver", "effect": "Boosts damage", "rarityBoost": "legendary" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 34,
+      "energyDamage": 0,
+      "fireDamage": 0,
+      "poisonDamage": 0,
+      "explosiveDamage": 0,
+      "critChance": 8,
+      "critMultiplier": 1.8,
+      "accuracy": 74,
+      "recoil": 16,
+      "fireRate": 1.8,
+      "durability": 75
+    },
+    "rollRanges": {
+      "ballisticDamage": [4, 8],
+      "accuracy": [5, 10],
+      "critChance": [1, 3],
+      "critMultiplier": [0, 0.3],
+      "recoil": [-5, 0],
+      "fireRate": [0, 0.3],
+      "durability": [8, 18]
+    },
+    "tags": ["weapon", "rifle", "carbine", "epic"]
+  }
+    {
+    "id": "phoenix_plate",
+    "name": "Phoenix Plate",
+    "rarity": "legendary",
+    "spawnPOI": "Black Mountain",
+    "levelRequirement": 30,
+    "type": "armor",
+    "priceCAPS": 2400,
+    "variants": [
+      { "modifier": "Solar Weave", "effect": "Regenerates HP in sunlight", "rarityBoost": "legendary" },
+      { "modifier": "Thermal Plating", "effect": "Major fire resistance", "rarityBoost": "epic" }
+    ],
+    "baseStats": {
+      "ballisticResist": 24,
+      "energyResist": 22,
+      "radResist": 18,
+      "poisonResist": 14,
+      "hpBonus": 30,
+      "carryWeight": 12,
+      "moveSpeed": 1,
+      "stealth": 3,
+      "durability": 120
+    },
+    "rollRanges": {
+      "ballisticResist": [3, 6],
+      "energyResist": [3, 6],
+      "radResist": [3, 6],
+      "hpBonus": [5, 10],
+      "stealth": [1, 3],
+      "durability": [15, 30]
+    },
+    "tags": ["armor", "body", "legendary", "phoenix"]
+  },
+  {
+    "id": "warden_exosuit",
+    "name": "Warden Exosuit",
+    "rarity": "legendary",
+    "spawnPOI": "Hidden Valley Bunker",
+    "levelRequirement": 32,
+    "type": "armor",
+    "priceCAPS": 2600,
+    "variants": [
+      { "modifier": "Servo Boosters", "effect": "Greatly increases carry weight", "rarityBoost": "legendary" },
+      { "modifier": "Shock Dampeners", "effect": "Reduces all incoming melee damage", "rarityBoost": "epic" }
+    ],
+    "baseStats": {
+      "ballisticResist": 28,
+      "energyResist": 24,
+      "radResist": 20,
+      "poisonResist": 16,
+      "hpBonus": 26,
+      "carryWeight": 20,
+      "moveSpeed": -1,
+      "stealth": 1,
       "durability": 140
     },
     "rollRanges": {
-      "energyDamage": [10, 20],
-      "fireDamage": [5, 10],
-      "critChance": [5, 10],
-      "critMultiplier": [0.2, 0.5],
-      "accuracy": [5, 10],
-      "recoil": [-5, 0],
-      "fireRate": [1, 2],
-      "durability": [20, 40]
+      "ballisticResist": [4, 8],
+      "energyResist": [4, 8],
+      "carryWeight": [5, 12],
+      "hpBonus": [4, 8],
+      "durability": [20, 35]
     },
-    "tags": ["weapon", "energy", "alien", "legendary"]
-  },
-  {
-    "id": "fatman",
-    "name": "Fat Man Mini-Nuke Launcher",
-    "rarity": "legendary",
-    "spawnPOI": "Deathclaw Promontory",
-    "levelRequirement": 45,
-    "type": "weapon",
-    "priceCAPS": 20000,
-    "variants": [
-      { "modifier": "Overloaded", "effect": "Wider blast radius", "rarityBoost": "legendary" },
-      { "modifier": "Experimental", "effect": "Chance to misfire", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 120,
-      "energyDamage": 0,
-      "fireDamage": 40,
-      "poisonDamage": 0,
-      "critChance": 0,
-      "critMultiplier": 1.0,
-      "accuracy": 80,
-      "recoil": 0,
-      "fireRate": 0.6,
-      "durability": 120
-    },
-    "rollRanges": {
-      "ballisticDamage": [10, 20],
-      "fireDamage": [5, 10],
-      "accuracy": [5, 10],
-      "durability": [20, 40]
-    },
-    "tags": ["weapon", "explosive", "heavy", "legendary"]
-  },
-  {
-    "id": "tesla_cannon",
-    "name": "Tesla Cannon",
-    "rarity": "legendary",
-    "spawnPOI": "Nevada Test Site",
-    "levelRequirement": 48,
-    "type": "weapon",
-    "priceCAPS": 18500,
-    "variants": [
-      { "modifier": "Overcharged", "effect": "Massive damage, unstable shots", "rarityBoost": "legendary" },
-      { "modifier": "Scoped", "effect": "Extended effective range", "rarityBoost": "legendary" },
-      { "modifier": "Capacitive", "effect": "Chains lightning to nearby targets", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 0,
-      "energyDamage": 70,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 18,
-      "critMultiplier": 2.6,
-      "accuracy": 92,
-      "recoil": 3,
-      "fireRate": 3.6,
-      "durability": 130
-    },
-    "rollRanges": {
-      "energyDamage": [10, 20],
-      "critChance": [5, 10],
-      "critMultiplier": [0.2, 0.5],
-      "accuracy": [5, 10],
-      "recoil": [-5, 0],
-      "fireRate": [1, 2],
-      "durability": [20, 40]
-    },
-    "tags": ["weapon", "energy", "tesla", "legendary"]
-  },
-  {
-    "id": "annihilator_launcher",
-    "name": "Annihilator Missile Launcher",
-    "rarity": "legendary",
-    "spawnPOI": "Glowing Sea",
-    "levelRequirement": 50,
-    "type": "weapon",
-    "priceCAPS": 19500,
-    "variants": [
-      { "modifier": "Overcharged", "effect": "Massive explosive radius", "rarityBoost": "legendary" },
-      { "modifier": "Guided", "effect": "Missiles track targets", "rarityBoost": "legendary" },
-      { "modifier": "Experimental", "effect": "Chance to split into multiple warheads", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 110,
-      "energyDamage": 0,
-      "fireDamage": 30,
-      "poisonDamage": 0,
-      "critChance": 0,
-      "critMultiplier": 1.0,
-      "accuracy": 85,
-      "recoil": 0,
-      "fireRate": 0.8,
-      "durability": 130
-    },
-    "rollRanges": {
-      "ballisticDamage": [10, 20],
-      "fireDamage": [5, 10],
-      "accuracy": [5, 10],
-      "durability": [20, 40]
-    },
-    "tags": ["weapon", "explosive", "missile", "legendary"]
-  },
-  {
-    "id": "prototype_plasma_caster",
-    "name": "Prototype Plasma Caster",
-    "rarity": "legendary",
-    "spawnPOI": "Hanford Site",
-    "levelRequirement": 40,
-    "type": "weapon",
-    "priceCAPS": 17000,
-    "variants": [
-      { "modifier": "Overcharged", "effect": "Boosts plasma damage", "rarityBoost": "legendary" },
-      { "modifier": "Scoped", "effect": "Improves accuracy", "rarityBoost": "legendary" },
-      { "modifier": "Experimental", "effect": "Random chance to cause chain reaction", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 0,
-      "energyDamage": 58,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 16,
-      "critMultiplier": 2.4,
-      "accuracy": 90,
-      "recoil": 3,
-      "fireRate": 3.4,
-      "durability": 120
-    },
-    "rollRanges": {
-      "energyDamage": [10, 20],
-      "critChance": [5, 10],
-      "critMultiplier": [0.2, 0.5],
-      "accuracy": [5, 10],
-      "recoil": [-5, 0],
-      "fireRate": [1, 2],
-      "durability": [20, 40]
-    },
-    "tags": ["weapon", "plasma", "prototype", "legendary"]
-  },
-  {
-    "id": "glow_blade",
-    "name": "Glow Irradiated Blade",
-    "rarity": "legendary",
-    "spawnPOI": "Glow",
-    "levelRequirement": 55,
-    "type": "weapon",
-    "priceCAPS": 18500,
-    "variants": [
-      { "modifier": "Serrated", "effect": "Adds bleed damage", "rarityBoost": "legendary" },
-      { "modifier": "Heavy", "effect": "Boosts damage but slows swing speed", "rarityBoost": "legendary" },
-      { "modifier": "Experimental", "effect": "Chance to trigger radiation explosion", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 0,
-      "energyDamage": 30,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 18,
-      "critMultiplier": 2.5,
-      "accuracy": 88,
-      "recoil": 0,
-      "fireRate": 3.6,
-      "durability": 120
-    },
-    "rollRanges": {
-      "energyDamage": [10, 20],
-      "critChance": [5, 10],
-      "critMultiplier": [0.2, 0.5],
-      "accuracy": [5, 10],
-      "fireRate": [1, 2],
-      "durability": [20, 40]
-    },
-    "tags": ["weapon", "energy", "blade", "legendary"]
-  },
-  {
-    "id": "mariposa_gauss_proto",
-    "name": "Mariposa Prototype Gauss Cannon",
-    "rarity": "legendary",
-    "spawnPOI": "Mariposa Base",
-    "levelRequirement": 45,
-    "type": "weapon",
-    "priceCAPS": 17500,
-    "baseStats": {
-      "ballisticDamage": 70,
-      "energyDamage": 20,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 18,
-      "critMultiplier": 2.6,
-      "accuracy": 94,
-      "recoil": 3,
-      "fireRate": 2.8,
-      "durability": 130
-    },
-    "rollRanges": {
-      "ballisticDamage": [10, 20],
-      "energyDamage": [10, 20],
-      "critChance": [5, 10],
-      "critMultiplier": [0.2, 0.5],
-      "accuracy": [5, 10],
-      "recoil": [-5, 0],
-      "fireRate": [1, 2],
-      "durability": [20, 40]
-    },
-    "tags": ["weapon", "gauss", "prototype", "legendary"]
-  },
-  {
-    "id": "raiders_revenge",
-    "name": "Raider’s Revenge",
-    "rarity": "legendary",
-    "spawnPOI": "Cottonwood Cove",
-    "levelRequirement": 40,
-    "type": "weapon",
-    "priceCAPS": 17000,
-    "variants": [
-      { "modifier": "Bloodied", "effect": "Boosts damage when low health", "rarityBoost": "legendary" },
-      { "modifier": "Spiked", "effect": "Adds melee damage", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticDamage": 48,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 16,
-      "critMultiplier": 2.4,
-      "accuracy": 82,
-      "recoil": 4,
-      "fireRate": 3.0,
-      "durability": 120
-    },
-    "rollRanges": {
-      "ballisticDamage": [10, 20],
-      "critChance": [5, 10],
-      "critMultiplier": [0.2, 0.5],
-      "accuracy": [5, 10],
-      "recoil": [-5, 0],
-      "fireRate": [1, 2],
-      "durability": [20, 40]
-    },
-    "tags": ["weapon", "melee", "raider", "legendary"]
+    "tags": ["armor", "body", "exosuit", "legendary"]
   }
-]
-[
-  {
-    "id": "nuka_quantum",
-    "name": "Nuka-Cola Quantum",
+    {
+    "id": "quantum_stimpak",
+    "name": "Quantum Stimpak",
     "rarity": "legendary",
     "spawnPOI": "Nuka-World",
     "levelRequirement": 30,
     "type": "consumable",
-    "priceCAPS": 9000,
+    "priceCAPS": 950,
     "baseStats": {
-      "hpRestore": 60,
-      "radCure": 10,
+      "hpRestore": 140,
+      "radCure": 20,
       "apRestore": 40,
+      "buffStrength": 3,
+      "buffPerception": 3,
+      "buffEndurance": 4,
+      "buffLuck": 3,
+      "duration": 25
+    },
+    "rollRanges": {
+      "hpRestore": [15, 30],
+      "apRestore": [10, 20],
+      "buffStrength": [1, 3],
+      "buffPerception": [1, 3],
+      "buffEndurance": [1, 4],
+      "buffLuck": [1, 3],
+      "duration": [3, 8]
+    },
+    "tags": ["consumable", "medical", "healing", "legendary"]
+  },
+  {
+    "id": "x_cell",
+    "name": "X-Cell",
+    "rarity": "legendary",
+    "spawnPOI": "Vault 13",
+    "levelRequirement": 28,
+    "type": "consumable",
+    "priceCAPS": 880,
+    "baseStats": {
+      "hpRestore": 0,
+      "radCure": 0,
+      "apRestore": 50,
       "buffStrength": 4,
       "buffPerception": 4,
       "buffEndurance": 4,
@@ -2639,1181 +1714,283 @@
       "duration": 30
     },
     "rollRanges": {
-      "hpRestore": [10, 20],
       "apRestore": [10, 20],
-      "buffLuck": [1, 3],
-      "duration": [5, 10]
-    },
-    "tags": ["consumable", "nuka", "legendary"]
-  },
-  {
-    "id": "experimental_serum",
-    "name": "Experimental Serum",
-    "rarity": "legendary",
-    "spawnPOI": "Los Alamos Lab",
-    "levelRequirement": 50,
-    "type": "consumable",
-    "priceCAPS": 12000,
-    "baseStats": {
-      "hpRestore": 80,
-      "radCure": 20,
-      "apRestore": 40,
-      "buffStrength": 6,
-      "buffPerception": 6,
-      "buffEndurance": 6,
-      "buffLuck": 6,
-      "duration": 40
-    },
-    "rollRanges": {
-      "hpRestore": [10, 20],
-      "radCure": [5, 10],
       "buffStrength": [1, 3],
-      "duration": [5, 10]
+      "buffPerception": [1, 3],
+      "buffEndurance": [1, 3],
+      "buffLuck": [1, 3],
+      "duration": [3, 8]
     },
-    "tags": ["consumable", "serum", "legendary"]
-  },
-  {
-    "id": "prototype_x01",
-    "name": "Prototype X-01 Power Armor",
+    "tags": ["consumable", "chems", "legendary"]
+  }
+    {
+    "id": "ancient_vault_tablet",
+    "name": "Ancient Vault Tablet",
     "rarity": "legendary",
-    "spawnPOI": "Yucca Mountain",
-    "levelRequirement": 50,
-    "type": "armor",
-    "priceCAPS": 20000,
-    "variants": [
-      { "modifier": "Experimental", "effect": "Random stat boosts", "rarityBoost": "legendary" },
-      { "modifier": "Reinforced", "effect": "Extra durability", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticResist": 40,
-      "energyResist": 35,
-      "radResist": 30,
-      "poisonResist": 20,
-      "hpBonus": 40,
-      "carryWeight": 30,
-      "moveSpeed": -1,
-      "stealth": 4,
-      "durability": 150
-    },
-    "rollRanges": {
-      "ballisticResist": [5, 10],
-      "energyResist": [5, 10],
-      "radResist": [5, 10],
-      "hpBonus": [10, 20],
-      "carryWeight": [5, 10],
-      "durability": [20, 40]
-    },
-    "tags": ["armor", "power_armor", "x01", "legendary"]
-  },
-  {
-    "id": "vault_tech_experiment",
-    "name": "Vault-Tec Experimental Device",
-    "rarity": "legendary",
-    "spawnPOI": "Vault 87",
-    "levelRequirement": 30,
-    "type": "artifact",
-    "priceCAPS": 15000,
-    "baseStats": {
-      "anomalyPower": 40,
-      "radiationPulse": 20,
-      "voidCharge": 18,
-      "entropyLevel": 4,
-      "collectionScore": 30
-    },
-    "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
-    },
-    "tags": ["artifact", "vault", "experimental", "legendary"]
-  },
-  {
-    "id": "trinity_core",
-    "name": "Trinity Core",
-    "rarity": "legendary",
-    "spawnPOI": "Trinity Site",
-    "levelRequirement": 55,
-    "type": "artifact",
-    "priceCAPS": 16000,
-    "baseStats": {
-      "anomalyPower": 45,
-      "radiationPulse": 25,
-      "voidCharge": 20,
-      "entropyLevel": 5,
-      "collectionScore": 35
-    },
-    "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
-    },
-    "tags": ["artifact", "trinity", "legendary"]
-  },
-  {
-    "id": "deathclaw_hide_armor",
-    "name": "Deathclaw Hide Armor",
-    "rarity": "legendary",
-    "spawnPOI": "Dead Wind Cavern",
-    "levelRequirement": 40,
-    "type": "armor",
-    "priceCAPS": 17500,
-    "variants": [
-      { "modifier": "Reinforced", "effect": "Extra durability", "rarityBoost": "legendary" },
-      { "modifier": "Spiked", "effect": "Adds melee damage resistance", "rarityBoost": "legendary" }
-    ],
-    "baseStats": {
-      "ballisticResist": 32,
-      "energyResist": 20,
-      "radResist": 18,
-      "poisonResist": 14,
-      "hpBonus": 30,
-      "carryWeight": 12,
-      "moveSpeed": 1,
-      "stealth": 4,
-      "durability": 130
-    },
-    "rollRanges": {
-      "ballisticResist": [5, 10],
-      "energyResist": [5, 10],
-      "hpBonus": [10, 20],
-      "durability": [20, 40]
-    },
-    "tags": ["armor", "deathclaw", "legendary"]
-  },
-  {
-    "id": "chernobyl_relic",
-    "name": "Chernobyl Reactor Relic",
-    "rarity": "legendary",
-    "spawnPOI": "Chernobyl Pripyat",
-    "levelRequirement": 99,
-    "type": "artifact",
-    "priceCAPS": 19000,
-    "baseStats": {
-      "anomalyPower": 50,
-      "radiationPulse": 30,
-      "voidCharge": 25,
-      "entropyLevel": 5,
-      "collectionScore": 40
-    },
-    "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
-    },
-    "tags": ["artifact", "chernobyl", "legendary"]
-  },
-  {
-    "id": "fukushima_core",
-    "name": "Fukushima Core Fragment",
-    "rarity": "legendary",
-    "spawnPOI": "Fukushima Daiichi",
-    "levelRequirement": 99,
-    "type": "artifact",
-    "priceCAPS": 19000,
-    "baseStats": {
-      "anomalyPower": 48,
-      "radiationPulse": 28,
-      "voidCharge": 22,
-      "entropyLevel": 5,
-      "collectionScore": 38
-    },
-    "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
-    },
-    "tags": ["artifact", "fukushima", "legendary"]
-  },
-  {
-    "id": "dunwich_mask",
-    "name": "Dunwich Mask of Madness",
-    "rarity": "legendary",
-    "spawnPOI": "Dunwich Building",
-    "levelRequirement": 40,
-    "type": "armor",
-    "priceCAPS": 17000,
-    "baseStats": {
-      "ballisticResist": 18,
-      "energyResist": 18,
-      "radResist": 20,
-      "poisonResist": 12,
-      "hpBonus": 20,
-      "carryWeight": 4,
-      "moveSpeed": 0,
-      "stealth": 8,
-      "durability": 100
-    },
-    "rollRanges": {
-      "stealth": [2, 5],
-      "hpBonus": [10, 20],
-      "durability": [20, 40]
-    },
-    "tags": ["armor", "mask", "dunwich", "legendary"]
-  },
-  {
-    "id": "pitt_forge_armor",
-    "name": "Pitt Forgemaster Armor",
-    "rarity": "legendary",
-    "spawnPOI": "The Pitt",
-    "levelRequirement": 40,
-    "type": "armor",
-    "priceCAPS": 17000,
-    "baseStats": {
-      "ballisticResist": 30,
-      "energyResist": 18,
-      "radResist": 14,
-      "poisonResist": 10,
-      "hpBonus": 28,
-      "carryWeight": 14,
-      "moveSpeed": -1,
-      "stealth": 0,
-      "durability": 130
-    },
-    "rollRanges": {
-      "ballisticResist": [5, 10],
-      "hpBonus": [10, 20],
-      "durability": [20, 40]
-    },
-    "tags": ["armor", "pitt", "legendary"]
-  },
-  {
-    "id": "pitt_scrap",
-    "name": "Forged Scrap Ingot",
-    "rarity": "legendary",
-    "spawnPOI": "The Pitt",
-    "levelRequirement": 40,
-    "type": "artifact",
-    "priceCAPS": 15000,
-    "baseStats": {
-      "anomalyPower": 35,
-      "radiationPulse": 18,
-      "voidCharge": 16,
-      "entropyLevel": 4,
-      "collectionScore": 28
-    },
-    "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
-    },
-    "tags": ["artifact", "pitt", "legendary"]
-  },
-  {
-    "id": "chernobyl_dust",
-    "name": "Chernobyl Dust Sample",
-    "rarity": "legendary",
-    "spawnPOI": "Chernobyl Pripyat",
-    "levelRequirement": 99,
-    "type": "artifact",
-    "priceCAPS": 15500,
-    "baseStats": {
-      "anomalyPower": 38,
-      "radiationPulse": 22,
-      "voidCharge": 18,
-      "entropyLevel": 4,
-      "collectionScore": 32
-    },
-    "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
-    },
-    "tags": ["artifact", "chernobyl", "legendary"]
-  },
-  {
-    "id": "fukushima_badge",
-    "name": "Fukushima Worker Badge",
-    "rarity": "legendary",
-    "spawnPOI": "Fukushima Daiichi",
-    "levelRequirement": 99,
+    "spawnPOI": "Vault 13",
+    "levelRequirement": 32,
     "type": "lore",
-    "priceCAPS": 14500,
-    "baseStats": {
-      "collectionScore": 30,
-      "valueMultiplier": 5
-    },
-    "rollRanges": {
-      "collectionScore": [10, 20],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["lore", "badge", "fukushima", "legendary"]
-  },
-  {
-    "id": "dunwich_tome",
-    "name": "Dunwich Cult Tome",
-    "rarity": "legendary",
-    "spawnPOI": "Dunwich Building",
-    "levelRequirement": 40,
-    "type": "lore",
-    "priceCAPS": 15000,
+    "priceCAPS": 1400,
     "baseStats": {
       "collectionScore": 32,
-      "valueMultiplier": 5
+      "valueMultiplier": 6
     },
     "rollRanges": {
-      "collectionScore": [10, 20],
-      "valueMultiplier": [1, 2]
+      "collectionScore": [10, 18],
+      "valueMultiplier": [2, 3]
     },
-    "tags": ["lore", "book", "dunwich", "legendary"]
+    "tags": ["lore", "vault", "legendary"]
   },
   {
-    "id": "trinity_glass",
-    "name": "Trinity Site Glass Shard",
+    "id": "deathclaw_horn",
+    "name": "Deathclaw Horn",
     "rarity": "legendary",
-    "spawnPOI": "Trinity Site",
-    "levelRequirement": 55,
-    "type": "artifact",
-    "priceCAPS": 15500,
+    "spawnPOI": "Quarry Junction",
+    "levelRequirement": 34,
+    "type": "trophy",
+    "priceCAPS": 1600,
     "baseStats": {
-      "anomalyPower": 36,
-      "radiationPulse": 20,
-      "voidCharge": 18,
-      "entropyLevel": 4,
-      "collectionScore": 30
+      "collectionScore": 36,
+      "valueMultiplier": 7
     },
     "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
+      "collectionScore": [12, 20],
+      "valueMultiplier": [2, 4]
     },
-    "tags": ["artifact", "trinity", "legendary"]
-  },
-  {
-    "id": "new_reno_gamble",
-    "name": "New Reno Gamble",
-    "rarity": "legendary",
-    "spawnPOI": "New Reno",
-    "levelRequirement": 28,
-    "type": "artifact",
-    "priceCAPS": 15000,
-    "baseStats": {
-      "anomalyPower": 28,
-      "radiationPulse": 12,
-      "voidCharge": 10,
-      "entropyLevel": 3,
-      "collectionScore": 26
-    },
-    "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
-    },
-    "tags": ["artifact", "reno", "legendary"]
-  },
-  {
-    "id": "shards_of_trinity",
-    "name": "Shards of Trinity",
-    "rarity": "legendary",
-    "spawnPOI": "Trinity Site",
-    "levelRequirement": 55,
-    "type": "artifact",
-    "priceCAPS": 16000,
-    "baseStats": {
-      "anomalyPower": 40,
-      "radiationPulse": 22,
-      "voidCharge": 20,
-      "entropyLevel": 4,
-      "collectionScore": 34
-    },
-    "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
-    },
-    "tags": ["artifact", "trinity", "legendary"]
+    "tags": ["trophy", "deathclaw", "legendary"]
   }
-]
-[
-  {
-    "id": "fizz_ion_carbine",
-    "name": "FizzCo Prototype Ion Carbine",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Research Annex",
-    "levelRequirement": 12,
+    {
+    "id": "dragons_roar",
+    "name": "Dragon’s Roar",
+    "rarity": "legendary",
+    "spawnPOI": "Black Mountain",
+    "levelRequirement": 34,
     "type": "weapon",
-    "priceCAPS": 2600,
+    "priceCAPS": 3200,
+    "variants": [
+      { "modifier": "Inferno Core", "effect": "Massive fire damage", "rarityBoost": "legendary" },
+      { "modifier": "Reinforced Barrel", "effect": "Improved durability", "rarityBoost": "epic" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 0,
+      "energyDamage": 0,
+      "fireDamage": 48,
+      "poisonDamage": 0,
+      "explosiveDamage": 22,
+      "critChance": 10,
+      "critMultiplier": 2.2,
+      "accuracy": 70,
+      "recoil": 20,
+      "fireRate": 1.6,
+      "durability": 120
+    },
+    "rollRanges": {
+      "fireDamage": [6, 12],
+      "explosiveDamage": [4, 8],
+      "accuracy": [5, 10],
+      "critChance": [1, 4],
+      "critMultiplier": [0, 0.4],
+      "recoil": [-6, 0],
+      "fireRate": [0, 0.3],
+      "durability": [15, 30]
+    },
+    "tags": ["weapon", "fire", "explosive", "legendary"]
+  },
+  {
+    "id": "gauss_overcharger",
+    "name": "Gauss Overcharger",
+    "rarity": "legendary",
+    "spawnPOI": "Hidden Valley Bunker",
+    "levelRequirement": 36,
+    "type": "weapon",
+    "priceCAPS": 3500,
+    "variants": [
+      { "modifier": "Overloaded Capacitors", "effect": "Massive energy damage", "rarityBoost": "legendary" },
+      { "modifier": "Stabilized Coil", "effect": "Improved accuracy", "rarityBoost": "epic" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 0,
+      "energyDamage": 62,
+      "fireDamage": 0,
+      "poisonDamage": 0,
+      "explosiveDamage": 0,
+      "critChance": 12,
+      "critMultiplier": 2.4,
+      "accuracy": 82,
+      "recoil": 18,
+      "fireRate": 1.4,
+      "durability": 130
+    },
+    "rollRanges": {
+      "energyDamage": [8, 14],
+      "accuracy": [5, 10],
+      "critChance": [2, 5],
+      "critMultiplier": [0, 0.4],
+      "recoil": [-6, 0],
+      "fireRate": [0, 0.3],
+      "durability": [15, 30]
+    },
+    "tags": ["weapon", "energy", "gauss", "legendary"]
+  },
+  {
+    "id": "hellfire_pike",
+    "name": "Hellfire Pike",
+    "rarity": "legendary",
+    "spawnPOI": "Camp Searchlight",
+    "levelRequirement": 33,
+    "type": "weapon",
+    "priceCAPS": 3100,
+    "variants": [
+      { "modifier": "Infernal Core", "effect": "Adds massive fire damage", "rarityBoost": "legendary" },
+      { "modifier": "Reinforced Shaft", "effect": "Improved durability", "rarityBoost": "epic" }
+    ],
     "baseStats": {
       "ballisticDamage": 0,
       "energyDamage": 28,
-      "fireDamage": 4,
+      "fireDamage": 36,
       "poisonDamage": 0,
-      "critChance": 10,
-      "critMultiplier": 1.9,
-      "accuracy": 84,
-      "recoil": 4,
-      "fireRate": 3.4,
-      "durability": 90
-    },
-    "rollRanges": {
-      "energyDamage": [4, 10],
-      "fireDamage": [1, 3],
-      "accuracy": [5, 10],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "energy", "fizzco", "prototype"]
-  },
-  {
-    "id": "fizz_bubbleburst_scattergun",
-    "name": "BubbleBurst Scattergun",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Distribution Hub",
-    "levelRequirement": 10,
-    "type": "weapon",
-    "priceCAPS": 2400,
-    "baseStats": {
-      "ballisticDamage": 22,
-      "energyDamage": 0,
-      "fireDamage": 6,
-      "poisonDamage": 0,
-      "critChance": 8,
-      "critMultiplier": 1.7,
-      "accuracy": 72,
-      "recoil": 10,
-      "fireRate": 2.6,
-      "durability": 85
-    },
-    "rollRanges": {
-      "ballisticDamage": [4, 8],
-      "fireDamage": [2, 4],
-      "accuracy": [5, 10],
-      "critChance": [1, 3],
-      "recoil": [-5, 0],
-      "durability": [10, 20]
-    },
-    "tags": ["weapon", "shotgun", "fizzco", "foam"]
-  },
-  {
-    "id": "fizz_carbon_edge_machete",
-    "name": "Carbon‑Edge Machete",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Reactor Yard",
-    "levelRequirement": 8,
-    "type": "weapon",
-    "priceCAPS": 1800,
-    "baseStats": {
-      "ballisticDamage": 26,
-      "energyDamage": 0,
-      "fireDamage": 0,
-      "poisonDamage": 0,
-      "critChance": 12,
+      "explosiveDamage": 0,
+      "critChance": 9,
       "critMultiplier": 2.0,
-      "accuracy": 78,
+      "accuracy": 65,
       "recoil": 0,
-      "fireRate": 2.8,
-      "durability": 95
+      "fireRate": 1.2,
+      "durability": 115
     },
     "rollRanges": {
-      "ballisticDamage": [4, 8],
-      "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "accuracy": [5, 10],
-      "durability": [10, 20]
+      "energyDamage": [4, 8],
+      "fireDamage": [6, 12],
+      "accuracy": [0, 10],
+      "critChance": [1, 4],
+      "critMultiplier": [0, 0.4],
+      "fireRate": [0, 0.2],
+      "durability": [15, 30]
     },
-    "tags": ["weapon", "melee", "fizzco", "carbon"]
+    "tags": ["weapon", "melee", "fire", "legendary"]
   },
   {
-    "id": "fizz_spark_arc_pistol",
-    "name": "FizzSpark Arc Pistol",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Power Substation",
-    "levelRequirement": 14,
+    "id": "ion_repeater",
+    "name": "Ion Repeater",
+    "rarity": "legendary",
+    "spawnPOI": "Nellis Air Force Base",
+    "levelRequirement": 35,
     "type": "weapon",
-    "priceCAPS": 2200,
+    "priceCAPS": 3300,
+    "variants": [
+      { "modifier": "Ion Burst", "effect": "Adds chain lightning effect", "rarityBoost": "legendary" },
+      { "modifier": "Precision Optics", "effect": "Greatly improved accuracy", "rarityBoost": "epic" }
+    ],
     "baseStats": {
       "ballisticDamage": 0,
-      "energyDamage": 24,
+      "energyDamage": 54,
       "fireDamage": 0,
       "poisonDamage": 0,
-      "critChance": 14,
-      "critMultiplier": 2.1,
-      "accuracy": 86,
-      "recoil": 3,
-      "fireRate": 3.8,
-      "durability": 80
+      "explosiveDamage": 0,
+      "critChance": 11,
+      "critMultiplier": 2.2,
+      "accuracy": 80,
+      "recoil": 12,
+      "fireRate": 2.0,
+      "durability": 110
     },
     "rollRanges": {
-      "energyDamage": [4, 10],
+      "energyDamage": [6, 12],
       "accuracy": [5, 10],
       "critChance": [2, 5],
-      "critMultiplier": [0.1, 0.3],
-      "fireRate": [0, 1],
-      "durability": [10, 20]
+      "critMultiplier": [0, 0.4],
+      "recoil": [-4, 0],
+      "fireRate": [0, 0.3],
+      "durability": [15, 30]
     },
-    "tags": ["weapon", "energy", "fizzco", "arc"]
-  }
-]
-[
-  {
-    "id": "fizz_hazops_suit",
-    "name": "FizzCo HazOps Suit",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Reactor Annex",
-    "levelRequirement": 14,
-    "type": "armor",
-    "priceCAPS": 2600,
-    "baseStats": {
-      "ballisticResist": 6,
-      "energyResist": 10,
-      "radResist": 24,
-      "poisonResist": 16,
-      "hpBonus": 10,
-      "carryWeight": -2,
-      "moveSpeed": -1,
-      "stealth": 4,
-      "durability": 80
-    },
-    "rollRanges": {
-      "radResist": [3, 6],
-      "poisonResist": [2, 5],
-      "stealth": [1, 3],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "hazmat", "fizzco", "body"]
+    "tags": ["weapon", "energy", "ion", "legendary"]
   },
   {
-    "id": "fizz_delivery_armor",
-    "name": "FizzCo Delivery Armor",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Courier Depot",
-    "levelRequirement": 10,
-    "type": "armor",
-    "priceCAPS": 2200,
-    "baseStats": {
-      "ballisticResist": 10,
-      "energyResist": 6,
-      "radResist": 4,
-      "poisonResist": 2,
-      "hpBonus": 12,
-      "carryWeight": 12,
-      "moveSpeed": 2,
-      "stealth": 1,
-      "durability": 70
-    },
-    "rollRanges": {
-      "carryWeight": [3, 6],
-      "moveSpeed": [1, 3],
-      "hpBonus": [3, 6],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "courier", "fizzco", "body"]
-  },
-  {
-    "id": "fizz_glowweave_cloak",
-    "name": "Glow‑Weave Cloak",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Bio‑Lum Lab",
-    "levelRequirement": 16,
-    "type": "armor",
-    "priceCAPS": 2400,
-    "baseStats": {
-      "ballisticResist": 4,
-      "energyResist": 6,
-      "radResist": 10,
-      "poisonResist": 6,
-      "hpBonus": 8,
-      "carryWeight": 0,
-      "moveSpeed": 1,
-      "stealth": 8,
-      "durability": 60
-    },
-    "rollRanges": {
-      "stealth": [2, 5],
-      "radResist": [2, 4],
-      "hpBonus": [2, 4],
-      "durability": [8, 16]
-    },
-    "tags": ["armor", "cloak", "fizzco", "stealth"]
-  },
-  {
-    "id": "fizz_reactor_forged_armor",
-    "name": "Reactor‑Forged Armor",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Core Chamber",
-    "levelRequirement": 18,
-    "type": "armor",
-    "priceCAPS": 3000,
-    "baseStats": {
-      "ballisticResist": 18,
-      "energyResist": 14,
-      "radResist": 20,
-      "poisonResist": 10,
-      "hpBonus": 16,
-      "carryWeight": 6,
-      "moveSpeed": -1,
-      "stealth": 0,
-      "durability": 100
-    },
-    "rollRanges": {
-      "ballisticResist": [3, 6],
-      "energyResist": [2, 5],
-      "radResist": [3, 6],
-      "hpBonus": [4, 8],
-      "durability": [12, 24]
-    },
-    "tags": ["armor", "heavy", "fizzco", "reactor"]
-  },
-  {
-    "id": "fizz_nomad_radmask",
-    "name": "Nomad Rad‑Mask",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Wastefields",
-    "levelRequirement": 12,
-    "type": "armor",
-    "priceCAPS": 1800,
-    "baseStats": {
-      "ballisticResist": 2,
-      "energyResist": 2,
-      "radResist": 18,
-      "poisonResist": 10,
-      "hpBonus": 4,
-      "carryWeight": 0,
-      "moveSpeed": 0,
-      "stealth": 6,
-      "durability": 50
-    },
-    "rollRanges": {
-      "radResist": [3, 6],
-      "poisonResist": [2, 4],
-      "stealth": [1, 3],
-      "durability": [8, 16]
-    },
-    "tags": ["armor", "mask", "fizzco", "radiation"]
-  },
-  {
-    "id": "fizz_archivist_research_suit",
-    "name": "Archivist Research Suit",
-    "rarity": "fizz",
-    "spawnPOI": "Vault‑77 Archive Wing",
-    "levelRequirement": 14,
-    "type": "armor",
-    "priceCAPS": 2300,
-    "baseStats": {
-      "ballisticResist": 6,
-      "energyResist": 8,
-      "radResist": 12,
-      "poisonResist": 6,
-      "hpBonus": 10,
-      "carryWeight": 4,
-      "moveSpeed": 1,
-      "stealth": 4,
-      "durability": 70
-    },
-    "rollRanges": {
-      "radResist": [2, 5],
-      "stealth": [1, 3],
-      "hpBonus": [3, 6],
-      "durability": [10, 20]
-    },
-    "tags": ["armor", "vault77", "fizzco", "research"]
-  }
-]
-[
-  {
-    "id": "fizz_atomic_fizz",
-    "name": "Atomic Fizz (Unopened)",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Vending Ruins",
-    "levelRequirement": 5,
-    "type": "consumable",
-    "priceCAPS": 120,
-    "baseStats": {
-      "hpRestore": 20,
-      "radCure": -10,
-      "apRestore": 15,
-      "buffStrength": 1,
-      "buffPerception": 1,
-      "buffEndurance": 1,
-      "buffLuck": 2,
-      "duration": 12
-    },
-    "rollRanges": {
-      "apRestore": [5, 10],
-      "buffLuck": [1, 2],
-      "duration": [2, 6]
-    },
-    "tags": ["consumable", "drink", "fizzco", "radiation"]
-  },
-  {
-    "id": "fizz_energy_gel",
-    "name": "FizzCo Energy Gel",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Athlete Testing Lab",
-    "levelRequirement": 8,
-    "type": "consumable",
-    "priceCAPS": 180,
-    "baseStats": {
-      "hpRestore": 10,
-      "radCure": 0,
-      "apRestore": 30,
-      "buffStrength": 2,
-      "buffPerception": 0,
-      "buffEndurance": 2,
-      "buffLuck": 0,
-      "duration": 15
-    },
-    "rollRanges": {
-      "apRestore": [5, 10],
-      "buffStrength": [1, 2],
-      "buffEndurance": [1, 2],
-      "duration": [2, 6]
-    },
-    "tags": ["consumable", "stimulant", "fizzco"]
-  },
-  {
-    "id": "fizz_medfoam",
-    "name": "Carbonated Med‑Foam",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo First‑Aid Warehouse",
-    "levelRequirement": 10,
-    "type": "consumable",
-    "priceCAPS": 260,
-    "baseStats": {
-      "hpRestore": 40,
-      "radCure": 0,
-      "apRestore": 10,
-      "buffStrength": 0,
-      "buffPerception": 0,
-      "buffEndurance": 3,
-      "buffLuck": 0,
-      "duration": 10
-    },
-    "rollRanges": {
-      "hpRestore": [10, 20],
-      "buffEndurance": [1, 2],
-      "duration": [2, 4]
-    },
-    "tags": ["consumable", "medical", "fizzco"]
-  },
-  {
-    "id": "fizz_reactor_tonic",
-    "name": "Reactor‑Brew Tonic",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Core Chamber",
-    "levelRequirement": 14,
-    "type": "consumable",
-    "priceCAPS": 300,
-    "baseStats": {
-      "hpRestore": 25,
-      "radCure": 15,
-      "apRestore": 20,
-      "buffStrength": 2,
-      "buffPerception": 2,
-      "buffEndurance": 2,
-      "buffLuck": 1,
-      "duration": 18
-    },
-    "rollRanges": {
-      "radCure": [5, 10],
-      "apRestore": [5, 10],
-      "buffStrength": [1, 2],
-      "buffPerception": [1, 2],
-      "duration": [3, 6]
-    },
-    "tags": ["consumable", "reactor", "fizzco"]
-  },
-  {
-    "id": "fizz_nomad_brew",
-    "name": "Nomad Glow‑Brew",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Wastefields",
-    "levelRequirement": 12,
-    "type": "consumable",
-    "priceCAPS": 200,
-    "baseStats": {
-      "hpRestore": 18,
-      "radCure": 5,
-      "apRestore": 12,
-      "buffStrength": 0,
-      "buffPerception": 2,
-      "buffEndurance": 1,
-      "buffLuck": 2,
-      "duration": 14
-    },
-    "rollRanges": {
-      "buffLuck": [1, 2],
-      "buffPerception": [1, 2],
-      "duration": [2, 5]
-    },
-    "tags": ["consumable", "tribal", "fizzco", "glow"]
-  }
-]
-[
-  {
-    "id": "fizz_platinum_cap",
-    "name": "Platinum FizzCap Key",
+    "id": "overseers_judgment",
+    "name": "Overseer’s Judgment",
     "rarity": "legendary",
-    "spawnPOI": "Vault 77 Core Chamber",
+    "spawnPOI": "Vault 101",
+    "levelRequirement": 38,
+    "type": "weapon",
+    "priceCAPS": 3600,
+    "variants": [
+      { "modifier": "Authority Core", "effect": "Massive damage boost", "rarityBoost": "legendary" },
+      { "modifier": "Stabilized Frame", "effect": "Improved accuracy", "rarityBoost": "epic" }
+    ],
+    "baseStats": {
+      "ballisticDamage": 48,
+      "energyDamage": 18,
+      "fireDamage": 0,
+      "poisonDamage": 0,
+      "explosiveDamage": 0,
+      "critChance": 12,
+      "critMultiplier": 2.3,
+      "accuracy": 78,
+      "recoil": 20,
+      "fireRate": 1.6,
+      "durability": 140
+    },
+    "rollRanges": {
+      "ballisticDamage": [6, 12],
+      "energyDamage": [4, 8],
+      "accuracy": [5, 10],
+      "critChance": [2, 5],
+      "critMultiplier": [0, 0.4],
+      "recoil": [-6, 0],
+      "fireRate": [0, 0.3],
+      "durability": [20, 35]
+    },
+    "tags": ["weapon", "rifle", "vault", "legendary"]
+  },
+  {
+    "id": "sunburst_cannon",
+    "name": "Sunburst Cannon",
+    "rarity": "legendary",
+    "spawnPOI": "Nuka-World",
     "levelRequirement": 40,
-    "type": "artifact",
-    "priceCAPS": 18000,
+    "type": "weapon",
+    "priceCAPS": 4000,
+    "variants": [
+      { "modifier": "Solar Core", "effect": "Massive fire & energy burst", "rarityBoost": "legendary" },
+      { "modifier": "Reinforced Housing", "effect": "Improved durability", "rarityBoost": "epic" }
+    ],
     "baseStats": {
-      "anomalyPower": 40,
-      "radiationPulse": 20,
-      "voidCharge": 18,
-      "entropyLevel": 4,
-      "collectionScore": 40
+      "ballisticDamage": 0,
+      "energyDamage": 58,
+      "fireDamage": 32,
+      "poisonDamage": 0,
+      "explosiveDamage": 0,
+      "critChance": 14,
+      "critMultiplier": 2.5,
+      "accuracy": 76,
+      "recoil": 22,
+      "fireRate": 1.4,
+      "durability": 150
     },
     "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
+      "energyDamage": [8, 14],
+      "fireDamage": [6, 12],
+      "accuracy": [5, 10],
+      "critChance": [2, 5],
+      "critMultiplier": [0, 0.4],
+      "recoil": [-6, 0],
+      "fireRate": [0, 0.3],
+      "durability": [20, 35]
     },
-    "tags": ["artifact", "fizzco", "platinum", "capchain"]
-  },
-  {
-    "id": "fizz_robot_relic_core",
-    "name": "FizzCo Courier Robot Core",
-    "rarity": "fizz",
-    "spawnPOI": "Vault 77 Robotics Bay",
-    "levelRequirement": 30,
-    "type": "artifact",
-    "priceCAPS": 9000,
-    "baseStats": {
-      "anomalyPower": 22,
-      "radiationPulse": 12,
-      "voidCharge": 10,
-      "entropyLevel": 3,
-      "collectionScore": 24
-    },
-    "rollRanges": {
-      "anomalyPower": [5, 10],
-      "radiationPulse": [2, 6],
-      "voidCharge": [2, 6],
-      "entropyLevel": [1, 2],
-      "collectionScore": [5, 10]
-    },
-    "tags": ["artifact", "robot", "fizzco", "vault77"]
-  },
-  {
-    "id": "fizz_capchain_fragment",
-    "name": "CapChain Protocol Fragment",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Server Vault",
-    "levelRequirement": 20,
-    "type": "lore",
-    "priceCAPS": 4200,
-    "baseStats": {
-      "collectionScore": 18,
-      "valueMultiplier": 4
-    },
-    "rollRanges": {
-      "collectionScore": [5, 10],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["lore", "fizzco", "capchain", "data"]
-  },
-  {
-    "id": "fizz_formula_page",
-    "name": "Vault 77 Formula Page",
-    "rarity": "fizz",
-    "spawnPOI": "Vault 77 Chemical Lab",
-    "levelRequirement": 18,
-    "type": "lore",
-    "priceCAPS": 3800,
-    "baseStats": {
-      "collectionScore": 16,
-      "valueMultiplier": 3
-    },
-    "rollRanges": {
-      "collectionScore": [4, 8],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["lore", "formula", "fizzco", "vault77"]
-  },
-  {
-    "id": "fizz_master_recipe_fragment",
-    "name": "FizzCo Master Recipe Fragment",
-    "rarity": "legendary",
-    "spawnPOI": "FizzCo Executive Vault",
-    "levelRequirement": 45,
-    "type": "artifact",
-    "priceCAPS": 16000,
-    "baseStats": {
-      "anomalyPower": 36,
-      "radiationPulse": 18,
-      "voidCharge": 16,
-      "entropyLevel": 4,
-      "collectionScore": 32
-    },
-    "rollRanges": {
-      "anomalyPower": [10, 20],
-      "radiationPulse": [5, 10],
-      "voidCharge": [5, 10],
-      "entropyLevel": [1, 3],
-      "collectionScore": [10, 20]
-    },
-    "tags": ["artifact", "recipe", "fizzco", "legendary"]
-  },
-  {
-    "id": "fizz_house_terminal_key",
-    "name": "House Subsystem Access Key",
-    "rarity": "fizz",
-    "spawnPOI": "Lucky 38 Sub‑Basement",
-    "levelRequirement": 25,
-    "type": "artifact",
-    "priceCAPS": 7200,
-    "baseStats": {
-      "anomalyPower": 18,
-      "radiationPulse": 8,
-      "voidCharge": 6,
-      "entropyLevel": 2,
-      "collectionScore": 20
-    },
-    "rollRanges": {
-      "anomalyPower": [4, 8],
-      "radiationPulse": [2, 4],
-      "voidCharge": [2, 4],
-      "collectionScore": [5, 10]
-    },
-    "tags": ["artifact", "house", "fizzco", "terminal"]
-  },
-  {
-    "id": "fizz_oldworld_converter",
-    "name": "Old‑World Currency Converter Module",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Accounting Vault",
-    "levelRequirement": 22,
-    "type": "artifact",
-    "priceCAPS": 6800,
-    "baseStats": {
-      "anomalyPower": 14,
-      "radiationPulse": 6,
-      "voidCharge": 6,
-      "entropyLevel": 2,
-      "collectionScore": 18
-    },
-    "rollRanges": {
-      "anomalyPower": [4, 8],
-      "voidCharge": [2, 4],
-      "collectionScore": [4, 8]
-    },
-    "tags": ["artifact", "currency", "fizzco", "converter"]
-  },
-  {
-    "id": "fizz_reactor_glass",
-    "name": "Reactor‑Infused Glass Shard",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Core Chamber",
-    "levelRequirement": 20,
-    "type": "artifact",
-    "priceCAPS": 5200,
-    "baseStats": {
-      "anomalyPower": 20,
-      "radiationPulse": 10,
-      "voidCharge": 8,
-      "entropyLevel": 3,
-      "collectionScore": 22
-    },
-    "rollRanges": {
-      "anomalyPower": [5, 10],
-      "radiationPulse": [2, 5],
-      "voidCharge": [2, 5],
-      "collectionScore": [5, 10]
-    },
-    "tags": ["artifact", "reactor", "fizzco", "glass"]
-  },
-  {
-    "id": "fizz_vault77_log",
-    "name": "Vault 77 Overseer Log",
-    "rarity": "fizz",
-    "spawnPOI": "Vault 77 Overseer Office",
-    "levelRequirement": 15,
-    "type": "lore",
-    "priceCAPS": 3000,
-    "baseStats": {
-      "collectionScore": 14,
-      "valueMultiplier": 3
-    },
-    "rollRanges": {
-      "collectionScore": [4, 8],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["lore", "vault77", "fizzco", "overseer"]
+    "tags": ["weapon", "energy", "fire", "legendary"]
   }
 ]
-[
-  {
-    "id": "quest_v77_access_card",
-    "name": "Vault 77 Access Card",
-    "rarity": "fizz",
-    "spawnPOI": "Vault 77 Overseer Office",
-    "levelRequirement": 10,
-    "type": "quest",
-    "priceCAPS": 0,
-    "baseStats": {
-      "collectionScore": 10,
-      "valueMultiplier": 1
-    },
-    "rollRanges": {
-      "collectionScore": [0, 5],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["quest", "vault77", "keycard"]
-  },
-  {
-    "id": "quest_robot_relic_chip",
-    "name": "Robot Relic Instruction Chip",
-    "rarity": "fizz",
-    "spawnPOI": "Vault 77 Robotics Bay",
-    "levelRequirement": 12,
-    "type": "quest",
-    "priceCAPS": 0,
-    "baseStats": {
-      "collectionScore": 12,
-      "valueMultiplier": 2
-    },
-    "rollRanges": {
-      "collectionScore": [2, 6],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["quest", "robot", "fizzco", "data"]
-  },
-  {
-    "id": "quest_capchain_bootloader",
-    "name": "CapChain Bootloader Module",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Server Vault",
-    "levelRequirement": 15,
-    "type": "quest",
-    "priceCAPS": 0,
-    "baseStats": {
-      "collectionScore": 14,
-      "valueMultiplier": 3
-    },
-    "rollRanges": {
-      "collectionScore": [3, 7],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["quest", "capchain", "fizzco", "module"]
-  },
-  {
-    "id": "quest_platinum_cap_shell",
-    "name": "Platinum Cap Shell (Empty)",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Executive Vault",
-    "levelRequirement": 20,
-    "type": "quest",
-    "priceCAPS": 0,
-    "baseStats": {
-      "collectionScore": 16,
-      "valueMultiplier": 3
-    },
-    "rollRanges": {
-      "collectionScore": [4, 8],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["quest", "platinum", "fizzco"]
-  },
-  {
-    "id": "quest_house_subsystem_key",
-    "name": "House Subsystem Encryption Key",
-    "rarity": "fizz",
-    "spawnPOI": "Lucky 38 Sub‑Basement",
-    "levelRequirement": 18,
-    "type": "quest",
-    "priceCAPS": 0,
-    "baseStats": {
-      "collectionScore": 18,
-      "valueMultiplier": 4
-    },
-    "rollRanges": {
-      "collectionScore": [4, 10],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["quest", "house", "fizzco", "encryption"]
-  },
-  {
-    "id": "quest_oldworld_currency_bag",
-    "name": "Old‑World Currency Bag",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Accounting Vault",
-    "levelRequirement": 8,
-    "type": "quest",
-    "priceCAPS": 0,
-    "baseStats": {
-      "collectionScore": 8,
-      "valueMultiplier": 1
-    },
-    "rollRanges": {
-      "collectionScore": [2, 4],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["quest", "currency", "oldworld"]
-  },
-  {
-    "id": "quest_atomic_fizz_sample",
-    "name": "Atomic Fizz Sample Tube",
-    "rarity": "fizz",
-    "spawnPOI": "Vault 77 Chemical Lab",
-    "levelRequirement": 10,
-    "type": "quest",
-    "priceCAPS": 0,
-    "baseStats": {
-      "collectionScore": 10,
-      "valueMultiplier": 2
-    },
-    "rollRanges": {
-      "collectionScore": [2, 5],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["quest", "fizzco", "sample"]
-  },
-  {
-    "id": "quest_fizzco_manifest",
-    "name": "FizzCo Shipment Manifest",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Distribution Hub",
-    "levelRequirement": 6,
-    "type": "quest",
-    "priceCAPS": 0,
-    "baseStats": {
-      "collectionScore": 6,
-      "valueMultiplier": 1
-    },
-    "rollRanges": {
-      "collectionScore": [1, 3],
-      "valueMultiplier": [0, 1]
-    },
-    "tags": ["quest", "fizzco", "manifest"]
-  },
-  {
-    "id": "quest_reactor_override_key",
-    "name": "Reactor Override Key",
-    "rarity": "fizz",
-    "spawnPOI": "FizzCo Core Chamber",
-    "levelRequirement": 22,
-    "type": "quest",
-    "priceCAPS": 0,
-    "baseStats": {
-      "collectionScore": 20,
-      "valueMultiplier": 4
-    },
-    "rollRanges": {
-      "collectionScore": [5, 10],
-      "valueMultiplier": [1, 2]
-    },
-    "tags": ["quest", "reactor", "fizzco", "key"]
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
