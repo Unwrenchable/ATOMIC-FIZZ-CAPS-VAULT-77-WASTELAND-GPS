@@ -768,5 +768,164 @@
     "objectives": [
       "Repair vehicles"
     ]
+  },
+  {
+    "id": "quest_fizz_awakens",
+    "name": "The Fizz Awakens",
+    "type": "main",
+    "poIs": ["Vault 77", "Lucky 38 Sub-Basement", "FizzCo Research Annex"],
+    "description": "Investigate the sudden reactivation of pre-war FizzCo systems beneath the Strip.",
+    "objectives": [
+      "Enter Vault 77 through the collapsed Strip tunnels",
+      "Recover the Robot Relic Core",
+      "Access the hidden subsystem beneath Lucky 38"
+    ],
+    "endings": [
+      {
+        "id": "ending_reboot_capchain",
+        "description": "You reboot the CapChain protocol.",
+        "reward": "Platinum FizzCap Key",
+        "consequence": "Atomic Fizz Caps become the dominant wasteland currency."
+      },
+      {
+        "id": "ending_shutdown",
+        "description": "You shut down the subsystem permanently.",
+        "reward": "Caps payout",
+        "consequence": "FizzCo tech goes dark, factions panic."
+      },
+      {
+        "id": "ending_corrupt",
+        "description": "You corrupt the CapChain for personal gain.",
+        "reward": "Legendary FizzCo Artifact",
+        "consequence": "You secretly control the wasteland’s economy."
+      }
+    ]
+  },
+  {
+    "id": "quest_platinum_cap",
+    "name": "The Platinum Cap",
+    "type": "main",
+    "poIs": ["FizzCo Executive Vault", "Vault 77 Robotics Bay", "Lucky 38"],
+    "description": "Assemble the legendary Platinum Cap, an upgrade key capable of rewriting the wasteland economy.",
+    "objectives": [
+      "Recover the empty Platinum Cap Shell",
+      "Install the Robot Relic Instruction Chip",
+      "Forge the completed Platinum Cap in the Executive Vault"
+    ],
+    "endings": [
+      {
+        "id": "ending_new_economy",
+        "description": "You activate the Platinum Cap.",
+        "reward": "Atomic Fizz Cap Multiplier",
+        "consequence": "Your caps gain increased value across all vendors."
+      },
+      {
+        "id": "ending_destroy_cap",
+        "description": "You destroy the Platinum Cap.",
+        "reward": "Rare loot",
+        "consequence": "CapChain destabilizes, factions panic."
+      },
+      {
+        "id": "ending_sell_cap",
+        "description": "You sell the Platinum Cap to a faction.",
+        "reward": "Faction favor + legendary gear",
+        "consequence": "A faction gains economic dominance."
+      }
+    ]
+  },
+  {
+    "id": "quest_formula_77",
+    "name": "Formula of 77",
+    "type": "main",
+    "poIs": ["Vault 77 Chemical Lab", "FizzCo Bio-Lum Lab", "Helios One"],
+    "description": "Recreate the original Atomic Fizz formula using scattered pre-war research.",
+    "objectives": [
+      "Recover a sample of Atomic Fizz",
+      "Find the Vault 77 Formula Page",
+      "Stabilize the mixture using Helios One’s solar arrays"
+    ],
+    "endings": [
+      {
+        "id": "ending_perfect_fizz",
+        "description": "You perfect the Atomic Fizz formula.",
+        "reward": "Unlimited Atomic Fizz Crafting",
+        "consequence": "You become the Mojave’s most valuable chemist."
+      },
+      {
+        "id": "ending_mutated_fizz",
+        "description": "You create a mutated version.",
+        "reward": "Mutant Fizz Brew",
+        "consequence": "Side effects spread through the Mojave."
+      },
+      {
+        "id": "ending_fail",
+        "description": "The formula destabilizes.",
+        "reward": "Caps payout",
+        "consequence": "Vault 77 lab collapses."
+      }
+    ]
+  },
+  {
+    "id": "side_robot_remembered",
+    "name": "The Robot That Remembered",
+    "type": "side",
+    "poIs": ["Vault 77 Robotics Bay", "Westside", "Lucky 38"],
+    "description": "Help a damaged FizzCo courier robot recover its lost memory routines.",
+    "objectives": [
+      "Install the Robot Relic Core",
+      "Retrieve memory logs from Westside",
+      "Upload restored routines at Lucky 38"
+    ]
+  },
+  {
+    "id": "side_understrip_tunnels",
+    "name": "Under-Strip Tunnels",
+    "type": "side",
+    "poIs": ["Las Vegas Under-Strip", "FizzCo Distribution Hub"],
+    "description": "Explore the forgotten tunnels beneath the Strip and uncover FizzCo’s hidden infrastructure.",
+    "objectives": [
+      "Clear tunnel infestation",
+      "Recover FizzCo Shipment Manifest",
+      "Unlock sealed maintenance door"
+    ]
+  },
+  {
+    "id": "side_oldworld_conversion",
+    "name": "Old-World Conversion",
+    "type": "side",
+    "poIs": ["FizzCo Accounting Vault", "Lucky 38 Sub-Basement"],
+    "description": "Convert old-world currency into Atomic Fizz Caps using a pre-war conversion module.",
+    "objectives": [
+      "Recover Old-World Currency Bag",
+      "Install Converter Module",
+      "Activate CapChain conversion terminal"
+    ]
+  },
+  {
+    "id": "side_glow_dark",
+    "name": "Glow in the Dark",
+    "type": "side",
+    "poIs": ["FizzCo Bio-Lum Lab", "Searchlight"],
+    "description": "Investigate glowing creatures mutated by leaked Atomic Fizz prototypes.",
+    "objectives": [
+      "Collect glow samples",
+      "Neutralize mutated wildlife",
+      "Return samples to Bio-Lum Lab"
+    ]
+  },
+  {
+    "id": "side_lost_shipment",
+    "name": "The Lost FizzCo Shipment",
+    "type": "side",
+    "poIs": ["I-15 Ruins", "FizzCo Distribution Hub"],
+    "description": "Recover a lost pre-war FizzCo shipment buried under highway rubble.",
+    "objectives": [
+      "Locate buried truck",
+      "Retrieve intact Atomic Fizz crates",
+      "Return shipment manifest"
+    ]
   }
 ]
+  
+
+
