@@ -4,9 +4,9 @@
 
   let map = null;
   let currentMapLayer = null;
-  let terrainLayer = null;
-  let tonerLayer = null;
-  let satelliteLayer = null;
+  let osmLayer = null;
+  let cartoDarkLayer = null;
+  let cartoLightLayer = null;
 
   const DEFAULT_CENTER = [36.1699, -115.1398]; // Vegas / Mojave
   const DEFAULT_ZOOM = 13;
@@ -19,65 +19,67 @@
   }
 
   function createTileLayers() {
-    // Terrain (wasteland relief)
     try {
-      terrainLayer = L.tileLayer(
-        'https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg',
-        {
-          maxZoom: 18,
-          attribution: 'Map tiles by Stamen; Data © OpenStreetMap'
-        }
-      );
-    } catch (e) {
-      safeWarn('terrainLayer failed', e);
-      terrainLayer = null;
-    }
-
-    // Toner (Pip-Boy schematic feel)
-    try {
-      tonerLayer = L.tileLayer(
-        'https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
-        {
-          maxZoom: 18,
-          attribution: 'Map tiles by Stamen; Data © OpenStreetMap'
-        }
-      );
-    } catch (e) {
-      safeWarn('tonerLayer failed', e);
-      tonerLayer = null;
-    }
-
-    // Satellite-like fallback with pure OSM tiles (no key)
-    try {
-      satelliteLayer = L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      // Standard OSM tiles (no API key)
+      osmLayer = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
           maxZoom: 19,
-          attribution: '© OpenStreetMap contributors'
+          attribution: "© OpenStreetMap contributors",
+          subdomains: ["a", "b", "c"]
         }
       );
     } catch (e) {
-      safeWarn('satelliteLayer failed', e);
-      satelliteLayer = null;
+      safeWarn("osmLayer failed", e);
+      osmLayer = null;
     }
 
-    [terrainLayer, tonerLayer, satelliteLayer].forEach(layer => {
+    try {
+      // Carto Dark basemap (Pip-Boy feel, no key)
+      cartoDarkLayer = L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        {
+          maxZoom: 20,
+          attribution: "© OpenStreetMap © Carto",
+          subdomains: ["a", "b", "c"]
+        }
+      );
+    } catch (e) {
+      safeWarn("cartoDarkLayer failed", e);
+      cartoDarkLayer = null;
+    }
+
+    try {
+      // Carto Light basemap (terrain-like fallback, no key)
+      cartoLightLayer = L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        {
+          maxZoom: 20,
+          attribution: "© OpenStreetMap © Carto",
+          subdomains: ["a", "b", "c"]
+        }
+      );
+    } catch (e) {
+      safeWarn("cartoLightLayer failed", e);
+      cartoLightLayer = null;
+    }
+
+    [osmLayer, cartoDarkLayer, cartoLightLayer].forEach(layer => {
       if (!layer || !layer.on) return;
-      layer.on('tileerror', (e) => {
-        const src = e && e.tile && e.tile.src ? e.tile.src : 'unknown';
-        safeWarn('Tile failed:', src);
+      layer.on("tileerror", (e) => {
+        const src = e && e.tile && e.tile.src ? e.tile.src : "unknown";
+        safeWarn("Tile failed:", src);
       });
     });
   }
 
   function initMap() {
-    const mapEl = document.getElementById('map');
+    const mapEl = document.getElementById("map");
     if (!mapEl) {
-      safeWarn('initMap: #map element not found');
+      safeWarn("initMap: #map element not found");
       return;
     }
 
-    // Reuse existing map if created already
     if (map && window.L && map instanceof L.Map) {
       if (currentMapLayer && !currentMapLayer._map) {
         currentMapLayer.addTo(map);
@@ -98,14 +100,14 @@
       });
       window.map = map;
     } catch (e) {
-      safeWarn('Leaflet map creation failed', e);
+      safeWarn("Leaflet map creation failed", e);
       return;
     }
 
     createTileLayers();
 
-    // Default: toner (most Pip-Boy-like), else terrain, else OSM
-    currentMapLayer = tonerLayer || terrainLayer || satelliteLayer;
+    // Default: Carto Dark (most Pip-Boy-like), else Carto Light, else OSM
+    currentMapLayer = cartoDarkLayer || cartoLightLayer || osmLayer;
     if (currentMapLayer) currentMapLayer.addTo(map);
 
     setTimeout(() => {
@@ -120,27 +122,25 @@
       if (currentMapLayer && map.hasLayer(currentMapLayer)) {
         map.removeLayer(currentMapLayer);
       }
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
 
-    if (style === 'terrain' && terrainLayer) currentMapLayer = terrainLayer;
-    else if (style === 'toner' && tonerLayer) currentMapLayer = tonerLayer;
-    else if (style === 'satellite' && satelliteLayer) currentMapLayer = satelliteLayer;
-    else currentMapLayer = tonerLayer || terrainLayer || satelliteLayer;
+    if (style === "dark" && cartoDarkLayer) currentMapLayer = cartoDarkLayer;
+    else if (style === "light" && cartoLightLayer) currentMapLayer = cartoLightLayer;
+    else if (style === "osm" && osmLayer) currentMapLayer = osmLayer;
+    else currentMapLayer = cartoDarkLayer || cartoLightLayer || osmLayer;
 
     try {
       if (currentMapLayer) currentMapLayer.addTo(map);
     } catch (e) {
-      safeWarn('switchMapStyle failed, falling back to OSM', e);
+      safeWarn("switchMapStyle failed, falling back to OSM", e);
       try {
         currentMapLayer = L.tileLayer(
-          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
           { maxZoom: 19 }
         );
         currentMapLayer.addTo(map);
       } catch (err) {
-        safeWarn('OSM fallback failed', err);
+        safeWarn("OSM fallback failed", err);
       }
     }
 
@@ -150,43 +150,37 @@
   }
 
   function attachMapModeButton() {
-    const btn = document.getElementById('mapModeBtn');
-    const mapContainer = document.querySelector('.map-container');
-    const staticNoise = document.querySelector('.static-noise');
-    const modes = ['toner', 'terrain', 'satellite'];
+    const btn = document.getElementById("mapModeBtn");
+    const mapContainer = document.querySelector(".map-container");
+    const staticNoise = document.querySelector(".static-noise");
+    const modes = ["dark", "light", "osm"];
     let idx = 0;
 
     if (!btn) return;
 
-    btn.addEventListener('click', () => {
+    btn.addEventListener("click", () => {
       idx = (idx + 1) % modes.length;
       const mode = modes[idx];
       switchMapStyle(mode);
 
       if (mapContainer) {
-        mapContainer.classList.add('crt-glitch');
-        if (staticNoise) staticNoise.classList.add('active');
+        mapContainer.classList.add("crt-glitch");
+        if (staticNoise) staticNoise.classList.add("active");
         setTimeout(() => {
-          mapContainer.classList.remove('crt-glitch');
-          if (staticNoise) staticNoise.classList.remove('active');
+          mapContainer.classList.remove("crt-glitch");
+          if (staticNoise) staticNoise.classList.remove("active");
         }, 520);
       }
     });
   }
 
-  // Minimal CSS safety so overlays don’t kill the map
   (function ensureCssSafety() {
     try {
-      const id = 'map-core-safety';
+      const id = "map-core-safety";
       if (document.getElementById(id)) return;
       const css = `
-        #map {
-          min-height: 260px;
-          height: 100%;
-        }
-        .leaflet-tile-pane {
-          z-index: 10 !important;
-        }
+        #map { min-height: 260px; height: 100%; }
+        .leaflet-tile-pane { z-index: 10 !important; }
         .leaflet-tile-pane img.leaflet-tile {
           image-rendering: pixelated;
           filter: contrast(1.35) saturate(0.4) hue-rotate(110deg);
@@ -194,35 +188,30 @@
         .static-noise, .top-overlay, .overseer-link, .hud, .pipboy-screen {
           pointer-events: none;
         }
-        .map-container, #map {
-          pointer-events: auto;
-        }
+        .map-container, #map { pointer-events: auto; }
       `;
-      const s = document.createElement('style');
+      const s = document.createElement("style");
       s.id = id;
       s.appendChild(document.createTextNode(css));
       document.head.appendChild(s);
     } catch (e) {}
   }());
 
-  // Export hooks for your game logic
   window.switchMapStyle = switchMapStyle;
   window.initLeafletMapCore = initMap;
 
-  // Boot integration – your boot.js should dispatch pipboyReady
-  window.addEventListener('pipboyReady', () => {
+  window.addEventListener("pipboyReady", () => {
     try {
       initMap();
       attachMapModeButton();
     } catch (e) {
-      safeWarn('pipboyReady -> map init failed', e);
+      safeWarn("pipboyReady -> map init failed", e);
     }
   });
 
-  // Dev fallback – if boot never fires but DOM is ready
   setTimeout(() => {
     try {
-      const el = document.getElementById('map');
+      const el = document.getElementById("map");
       if (el && document.body.contains(el) && !map) {
         initMap();
         attachMapModeButton();
