@@ -1,16 +1,8 @@
 // public/js/main.js
 // ATOMIC-FIZZ-CAPS VAULT-77 WASTELAND GPS
 // Consolidated drop-in main script
-// - Merges Parts 1–3 into a single defensive file
-// - Removes duplicates, fixes CFG -> CONFIG, replaces string-eval timeouts/intervals
-// - Guards Leaflet and DOM usage, consolidates exports
-// - Ready to paste into repo: public/js/main.js
-//
-// Notes:
-// - This file is intentionally defensive: it checks for missing DOM elements, missing Leaflet,
-//   and missing optional plugins (marker cluster). It avoids eval-style string timeouts/intervals.
-// - If you have custom UI functions (initUi, handleMint, etc.) this file will call them when present.
-// - Adjust tile URLs or CSP headers on your server if tiles are blocked by CSP/CORB.
+// + NFT → equipment mapping and stat system
+// + Non-breaking: existing behavior still works, new fields are optional
 
 (function () {
   'use strict';
@@ -18,7 +10,6 @@
   /* ============================================================================
      Top-level safe defaults
      ============================================================================ */
-  // Ensure DATA exists to avoid ReferenceErrors from other scripts
   window.DATA = window.DATA || {
     scavenger: [],
     mintables: [],
@@ -52,10 +43,10 @@
   let _questCheckInterval = null;
   let _geoWatchId = null;
 
-  // Config (single source) - FIXED: Changed defaultCenter to Mojave/Vegas area to match locations
+  // Config
   const CONFIG = {
-    defaultCenter: [36.1699, -115.1398],  // Vault 22 / Mojave Wasteland
-    defaultZoom: 10,  // Closer zoom for better initial view
+    defaultCenter: [36.1699, -115.1398],  // Mojave / Vegas area
+    defaultZoom: 10,
     questCheckMs: 5000,
     mintXpPerAction: 10,
     minMapHeight: 320,
@@ -74,7 +65,7 @@
   function safeLog(...args) { try { console.log(...args); } catch (e) {} }
   function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
   function safeError(...args) { try { console.error(...args); } catch (e) {} }
-  function $ (sel) { try { return document.querySelector(sel); } catch (e) { return null; } }
+  function $(sel) { try { return document.querySelector(sel); } catch (e) { return null; } }
   function $all(sel) { try { return Array.from(document.querySelectorAll(sel)); } catch (e) { return []; } }
   function isFunction(fn) { return typeof fn === 'function'; }
   function nowIso() { return (new Date()).toISOString(); }
@@ -155,20 +146,166 @@
   }
 
   /* ============================================================================
+     PLAYER + EQUIPMENT SYSTEM
+     ============================================================================ */
+
+  // Simple, extendable player stat model
+  const PLAYER_STATE = {
+    base: {
+      hp: 100,
+      radResist: 0,
+      capsFind: 0,
+      damage: 1,
+      defense: 0,
+      moveSpeed: 0,
+      critChance: 5
+    },
+    equipped: {
+      head: null,
+      body: null,
+      weapon: null,
+      boots: null,
+      misc: []  // rings/trinkets/etc.
+    },
+    derived: {
+      hp: 100,
+      radResist: 0,
+      capsFind: 0,
+      damage: 1,
+      defense: 0,
+      moveSpeed: 0,
+      critChance: 5
+    }
+  };
+
+  function normalizeItemSlot(gameItem) {
+    const type = (gameItem.meta && gameItem.meta.type) || gameItem.type || 'misc';
+    const tags = (gameItem.meta && gameItem.meta.tags) || gameItem.tags || [];
+
+    if (type === 'weapon') return 'weapon';
+    if (type === 'armor') {
+      if (tags.includes('helmet') || tags.includes('head')) return 'head';
+      if (tags.includes('boots') || tags.includes('feet')) return 'boots';
+      return 'body';
+    }
+    return 'misc';
+  }
+
+  function recomputePlayerStats() {
+    const base = PLAYER_STATE.base;
+    const out = Object.assign({}, base);
+
+    const slots = [
+      PLAYER_STATE.equipped.head,
+      PLAYER_STATE.equipped.body,
+      PLAYER_STATE.equipped.weapon,
+      PLAYER_STATE.equipped.boots
+    ];
+    const misc = PLAYER_STATE.equipped.misc || [];
+
+    const equippedItems = [...slots.filter(Boolean), ...misc];
+
+    equippedItems.forEach(item => {
+      const stats = item.stats || {};
+      for (const key of Object.keys(stats)) {
+        if (typeof stats[key] === 'number') {
+          out[key] = (out[key] || 0) + stats[key];
+        }
+      }
+    });
+
+    PLAYER_STATE.derived = out;
+    safeLog('PLAYER_STATE updated:', out);
+
+    if (isFunction(window.onPlayerStatsChanged)) {
+      try { window.onPlayerStatsChanged(out, equippedItems); } catch (e) { safeWarn('onPlayerStatsChanged failed', e); }
+    }
+  }
+
+  function equipGameItem(gameItem) {
+    const slot = normalizeItemSlot(gameItem);
+    if (slot === 'misc') {
+      PLAYER_STATE.equipped.misc = PLAYER_STATE.equipped.misc || [];
+      PLAYER_STATE.equipped.misc.push(gameItem);
+    } else {
+      PLAYER_STATE.equipped[slot] = gameItem;
+    }
+    recomputePlayerStats();
+  }
+
+  function unequipItemById(itemId) {
+    ['head', 'body', 'weapon', 'boots'].forEach(slot => {
+      if (PLAYER_STATE.equipped[slot] && PLAYER_STATE.equipped[slot].id === itemId) {
+        PLAYER_STATE.equipped[slot] = null;
+      }
+    });
+    if (Array.isArray(PLAYER_STATE.equipped.misc)) {
+      PLAYER_STATE.equipped.misc = PLAYER_STATE.equipped.misc.filter(i => i.id !== itemId);
+    }
+    recomputePlayerStats();
+  }
+
+  function equipItemById(itemId) {
+    const items = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
+    const item = items.find(i => i.id === itemId);
+    if (!item) {
+      safeWarn('equipItemById: item not found', itemId);
+      return;
+    }
+    equipGameItem(item);
+    try {
+      showModal('Equip', `<p>Equipped: ${item.name || item.id}</p>`);
+    } catch (e) {}
+  }
+
+  function getEquippedItems() {
+    const { head, body, weapon, boots, misc } = PLAYER_STATE.equipped;
+    return [head, body, weapon, boots].filter(Boolean).concat(misc || []);
+  }
+
+  function getPlayerStats() {
+    return Object.assign({}, PLAYER_STATE.derived);
+  }
+
+  /* ============================================================================
      NFT -> in-game item mapping and leveling
      ============================================================================ */
+
+  // This is where we read rolled loot from NFT metadata when present.
+  // Expected backend shape (non-strict, all optional):
+  // nft.metadata.rolledItem = {
+  //   baseId, baseName, name, rarity, isGodTier, stats, meta, variant, effect
+  // }
+
   function nftToGameItem(nft) {
     const meta = nft && nft.metadata ? nft.metadata : {};
-    const rarity = (meta.rarity || 'common').toString().toLowerCase();
+    const rolled = meta.rolledItem || nft.rolledItem || null;
+
+    const rarity = ((rolled && rolled.rarity) || meta.rarity || 'common').toString().toLowerCase();
     const level = Math.max(1, parseInt(meta.level || 1, 10) || 1);
+
+    // If backend sent explicit stats, use them. Otherwise fall back to basePower.
+    const statsFromRolled = rolled && rolled.stats ? rolled.stats : null;
     const basePower = Math.max(1, parseFloat(meta.basePower || 1) || 1);
-    const type = meta.type || 'misc';
+    const type = (rolled && rolled.meta && rolled.meta.type) || meta.type || 'misc';
+
     const rarityMultiplier = { common: 1, rare: 1.2, epic: 1.45, legendary: 1.8 }[rarity] || 1;
-    const power = Math.max(1, Math.round(basePower * rarityMultiplier * (1 + (level - 1) * 0.08)));
-    return {
+    const power = statsFromRolled
+      ? Object.values(statsFromRolled).reduce((sum, v) => (typeof v === 'number' ? sum + v : sum), 0)
+      : Math.max(1, Math.round(basePower * rarityMultiplier * (1 + (level - 1) * 0.08)));
+
+    const name =
+      (rolled && rolled.name) ||
+      nft.title ||
+      nft.name ||
+      rolled?.baseName ||
+      nft.id ||
+      'Unknown Item';
+
+    const gameItem = {
       id: nft.id || (`mint-${Date.now()}-${Math.random().toString(36).slice(2,8)}`),
       owner: nft.owner || null,
-      name: nft.title || nft.name || nft.id || 'Unknown Item',
+      name,
       description: nft.description || '',
       image: nft.image || nft.tokenUri || null,
       type,
@@ -178,8 +315,18 @@
       tokenUri: nft.tokenUri || null,
       createdAt: nft.timestamp || nowIso(),
       _xp: nft._xp || 0,
-      raw: nft
+      raw: nft,
+      stats: statsFromRolled || {}, // core stat bag for equipment system
+      meta: {
+        type,
+        priceCAPS: (rolled && rolled.meta && rolled.meta.priceCAPS) || meta.priceCAPS || 0,
+        spawnPOI: (rolled && rolled.meta && rolled.meta.spawnPOI) || meta.spawnPOI || null,
+        levelRequirement: (rolled && rolled.meta && rolled.meta.levelRequirement) || meta.levelRequirement || 1,
+        tags: (rolled && rolled.meta && rolled.meta.tags) || meta.tags || []
+      }
     };
+
+    return gameItem;
   }
 
   function addItemXp(itemId, xpAmount) {
@@ -264,7 +411,6 @@
      Map initialization and tile handling
      ============================================================================ */
   function createTileLayers() {
-    // Guard Leaflet presence
     if (typeof L === 'undefined') {
       safeWarn('Leaflet (L) is not available; map layers will not be created.');
       terrainLayer = tonerLayer = satelliteLayer = osmLayer = null;
@@ -292,7 +438,6 @@
     if (!layer || !layer.on) return;
     try {
       let loadTimer = null;
-      // No string eval: use functions
       layer.on('loading', () => {
         if (loadTimer) clearTimeout(loadTimer);
         loadTimer = setTimeout(() => {
@@ -312,13 +457,11 @@
   }
 
   function initMap() {
-    // If Leaflet missing, bail gracefully
     if (typeof L === 'undefined') {
       safeWarn('Leaflet not loaded; initMap aborted.');
       return;
     }
 
-    // Reuse existing map if present
     if (map && window.L && map instanceof L.Map) {
       if (currentMapLayer && !currentMapLayer._map) {
         try { currentMapLayer.addTo(map); } catch (e) { safeWarn('re-adding currentMapLayer failed', e); }
@@ -352,10 +495,8 @@
     currentMapLayer = terrainLayer || osmLayer || tonerLayer || satelliteLayer;
     try { if (currentMapLayer) currentMapLayer.addTo(map); } catch (e) { safeWarn('adding default layer failed', e); }
 
-    // Attach tileerror handlers
     [terrainLayer, tonerLayer, satelliteLayer, osmLayer].forEach(layer => addTileErrorHandlers(layer));
 
-    // Create locations layer and optional cluster
     try {
       if (typeof L.markerClusterGroup !== 'undefined') {
         clusterLayer = L.markerClusterGroup({ chunkedLoading: true, showCoverageOnHover: false });
@@ -369,7 +510,6 @@
       locationsLayer = L.layerGroup().addTo(map);
     }
 
-    // Add markers for DATA.locations if present
     try {
       if (Array.isArray(window.DATA.locations) && window.DATA.locations.length) {
         window.DATA.locations.forEach(loc => {
@@ -383,17 +523,15 @@
                 try { window.onLocationClick(loc); } catch (e) { safeWarn('onLocationClick failed', e); }
               }
             });
-          } catch (e) { /* ignore per-location errors */ }
+          } catch (e) {}
         });
       }
     } catch (e) { safeWarn('initMap: adding DATA.locations markers failed', e); }
 
-    // Basic click handler for debugging
     map.on('click', (e) => {
       safeLog('map click', e && e.latlng);
     });
 
-    // Ensure map sizing after layout
     setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 250);
   }
 
@@ -401,7 +539,7 @@
     if (!map) return;
     try {
       if (currentMapLayer && map.hasLayer && map.hasLayer(currentMapLayer)) map.removeLayer(currentMapLayer);
-    } catch (e) { /* ignore */ }
+    } catch (e) {}
 
     if (style === 'terrain' && terrainLayer) currentMapLayer = terrainLayer;
     else if (style === 'toner' && tonerLayer) currentMapLayer = tonerLayer;
@@ -445,6 +583,7 @@
     try {
       const snapshot = {
         DATA: window.DATA,
+        PLAYER_STATE,
         ts: Date.now()
       };
       localStorage.setItem(PERSIST_KEY, JSON.stringify(snapshot));
@@ -458,8 +597,14 @@
       if (!raw) return null;
       const parsed = JSON.parse(raw);
       if (parsed && parsed.DATA) {
-        // Merge carefully to avoid wiping runtime defaults
         window.DATA = Object.assign(window.DATA || {}, parsed.DATA);
+        if (parsed.PLAYER_STATE && typeof parsed.PLAYER_STATE === 'object') {
+          try {
+            Object.assign(PLAYER_STATE.base, parsed.PLAYER_STATE.base || {});
+            Object.assign(PLAYER_STATE.equipped, parsed.PLAYER_STATE.equipped || {});
+            recomputePlayerStats();
+          } catch (e) { safeWarn('restore PLAYER_STATE failed', e); }
+        }
         safeLog('Loaded state from localStorage');
         return parsed;
       }
@@ -467,7 +612,6 @@
     return null;
   }
 
-  // Auto-load on script run (safe)
   try { loadState(); } catch (e) { safeWarn('initial loadState failed', e); }
 
   /* ============================================================================
@@ -504,16 +648,14 @@
       });
       container.appendChild(list);
 
-      // Delegated handlers
       container.querySelectorAll('.buy').forEach(b => {
-        b.addEventListener('click', (e) => {
+        b.addEventListener('click', () => {
           const id = b.getAttribute('data-id');
           safeLog('Shop buy clicked', id);
           EventBus.emit('shop:buy', { id });
           if (isFunction(window.handleBuyScavengerItem)) {
             try { window.handleBuyScavengerItem(id); } catch (err) { safeWarn('handleBuyScavengerItem failed', err); }
           } else {
-            // default: add to inventory
             const item = (window.DATA.scavenger || []).find(x => x.id === id);
             if (item) {
               window.DATA.inventory = window.DATA.inventory || [];
@@ -528,7 +670,7 @@
       });
 
       container.querySelectorAll('.inspect').forEach(b => {
-        b.addEventListener('click', (e) => {
+        b.addEventListener('click', () => {
           const id = b.getAttribute('data-id');
           safeLog('Shop inspect clicked', id);
           EventBus.emit('shop:inspect', { id });
@@ -552,7 +694,6 @@
     if (isFunction(window.walletConnectFlow)) {
       try { return await window.walletConnectFlow(); } catch (e) { safeWarn('external walletConnectFlow failed', e); }
     }
-    // Safe stub: simulate connection
     safeLog('walletConnect stub: simulated connect');
     return { connected: true, address: '0xDEMOADDRESS' };
   }
@@ -561,7 +702,6 @@
     if (isFunction(window.handleMint)) {
       try { return await window.handleMint(nftPayload); } catch (e) { safeWarn('external handleMint failed', e); }
     }
-    // Default: convert payload to game item and add to mintables
     try {
       const item = nftToGameItem(nftPayload);
       window.DATA.mintables = window.DATA.mintables || [];
@@ -611,7 +751,8 @@
           if (isFunction(window.handleEquipItem)) {
             try { window.handleEquipItem(id); } catch (err) { safeWarn('handleEquipItem failed', err); }
           } else {
-            try { showModal('Equip', `<p>Equip not implemented for ${id}</p>`); } catch (e) {}
+            equipItemById(id);
+            saveState();
           }
         });
       });
@@ -642,7 +783,6 @@
     try {
       const container = document.querySelector('#questPanel') || document.querySelector('#quests');
       if (!container) return;
-      // If q provided, render single quest; otherwise render active quests
       const quests = q ? [q] : (Array.isArray(window.DATA.quests) ? window.DATA.quests.filter(x => x) : []);
       container.innerHTML = '';
       if (!quests.length) {
@@ -664,7 +804,6 @@
         container.appendChild(el);
       });
 
-      // Attach handlers
       container.querySelectorAll('.start').forEach(b => {
         b.addEventListener('click', () => {
           const id = b.getAttribute('data-id');
@@ -699,7 +838,7 @@
   }
 
   /* ============================================================================
-     Modal helper (very small)
+     Modal helper
      ============================================================================ */
   function showModal(title, html) {
     try {
@@ -718,7 +857,7 @@
   }
 
   /* ============================================================================
-     Analytics and telemetry stubs
+     Analytics / telemetry
      ============================================================================ */
   function analyticsTrack(eventName, payload) {
     try {
@@ -769,7 +908,7 @@
   }
 
   /* ============================================================================
-     Boot / activation handler (mobile-friendly)
+     Boot / activation handler
      ============================================================================ */
   function setupBootActivation() {
     const bootScreen = document.getElementById('bootScreen') || document.querySelector('.boot-screen');
@@ -786,7 +925,6 @@
 
     function activate() {
       if (activated) return;
-      // If boot text still typing, fast-forward first
       if (bootPrompt && bootPrompt.classList && bootPrompt.classList.contains('typing')) {
         completeBootFast();
         return;
@@ -815,7 +953,7 @@
         bootScreen.removeEventListener('touchstart', onTouch);
         bootScreen.removeEventListener('click', onClick);
         window.removeEventListener('keydown', onKey);
-      } catch (e) { /* ignore */ }
+      } catch (e) {}
     }
 
     addListeners();
@@ -830,7 +968,6 @@
     }
     safeLog('initUi: no external initUi found, using safe defaults');
 
-    // Wire tabs
     $all('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
         $all('.tab').forEach(t => t.classList.remove('active'));
@@ -844,7 +981,6 @@
       });
     });
 
-    // Map style buttons
     $all('[data-map-style]').forEach(btn => {
       btn.addEventListener('click', () => {
         const style = btn.getAttribute('data-map-style');
@@ -852,7 +988,6 @@
       });
     });
 
-    // ADDED: Center and Mojave button handlers
     const centerBtn = document.getElementById('centerBtn');
     if (centerBtn) {
       centerBtn.addEventListener('click', () => {
@@ -875,7 +1010,6 @@
       });
     }
 
-    // ADDED: Map mode button cycling
     const mapModeBtn = document.getElementById('mapModeBtn');
     if (mapModeBtn) {
       mapModeBtn.addEventListener('click', () => {
@@ -890,14 +1024,14 @@
       });
     }
 
-    // Render lists if present
     if (document.querySelector('#scavengerList')) renderScavengerList('#scavengerList');
-    if (document.querySelector('#mintablesList')) renderMintablesPanel('#mintablesPanel');
+    if (document.querySelector('#mintablesPanel')) renderMintablesPanel('#mintablesPanel');
     if (document.querySelector('#inventoryList')) renderInventory('#inventoryList');
+    if (document.querySelector('#questPanel')) renderQuestPanel();
   }
 
   /* ============================================================================
-     Render helpers for scavenger/inventory (simple)
+     Render helpers for scavenger/inventory
      ============================================================================ */
   function renderScavengerList(containerSelector) {
     try {
@@ -928,7 +1062,7 @@
       });
 
       container.querySelectorAll('.buy-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-id');
           safeLog('Buy clicked for', id);
           if (isFunction(window.handleBuyScavengerItem)) {
@@ -939,7 +1073,7 @@
         });
       });
       container.querySelectorAll('.inspect-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-id');
           safeLog('Inspect clicked for', id);
           if (isFunction(window.handleInspectItem)) {
@@ -1018,7 +1152,10 @@
     simulatePlayerAt: function (lat, lng) {
       onPlayerPosition(lat, lng, 10);
       safeLog('Simulated player at', lat, lng);
-    }
+    },
+    getPlayerStats,
+    getEquippedItems,
+    unequipItemById
   };
 
   /* ============================================================================
@@ -1030,32 +1167,26 @@
     try {
       await loadAllData();
 
-      // Ensure arrays exist
       window.DATA.scavenger = Array.isArray(window.DATA.scavenger) ? window.DATA.scavenger : [];
       window.DATA.mintables = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
       window.DATA.quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
       window.DATA.locations = Array.isArray(window.DATA.locations) ? window.DATA.locations : [];
 
-      // Convert mintables into game items (safe)
       if (window.DATA.mintables.length > 0 && typeof nftToGameItem === 'function') {
         window.DATA.mintables = window.DATA.mintables.map(nft => {
           try { return nftToGameItem(nft); } catch (e) { safeWarn('nftToGameItem failed for', nft && nft.id, e); return nft; }
         });
       }
 
-      // Initialize map and UI
       try { initMap(); } catch (e) { safeWarn('initMap error', e); }
       try { initUiSafe(); } catch (e) { safeWarn('initUiSafe error', e); }
 
-      // Ensure map style and sizing
       try { switchMapStyle && switchMapStyle(window.DATA.settings && window.DATA.settings.mapStyle ? window.DATA.settings.mapStyle : 'terrain'); } catch (e) { safeWarn('switchMapStyle failed', e); }
       setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 350);
 
-      // Start quest checker and geolocation
       startQuestChecker();
       startGeolocationWatch();
 
-      // Optional tutorial and status
       try { if (isFunction(window.openTutorial)) openTutorial(); } catch (e) {}
       try { if (isFunction(window.setStatus)) setStatus && setStatus('Pip-Boy online. Request GPS to begin tracking.', 'status-good'); } catch (e) { safeLog('status update skipped'); }
 
@@ -1068,26 +1199,23 @@
     }
   }
 
-  // Listen for pipboyReady event (boot activation will dispatch it)
   window.addEventListener('pipboyReady', () => {
     try { initGame(); } catch (e) { safeWarn('pipboyReady initGame error', e); }
   });
 
-  // Dev/test fallback: attempt init if pipboyReady didn't fire but DOM looks ready
   setTimeout(() => {
     try {
       const mapElementPresent = typeof mapEl !== 'undefined' && mapEl && document.body && document.body.contains(mapEl);
       if (!map && mapElementPresent && !_gameInitialized && !_gameInitializing) {
         initGame();
       }
-    } catch (e) { /* ignore */ }
+    } catch (e) {}
   }, 1200);
 
-  // Setup boot activation immediately
   try { setupBootActivation(); } catch (e) { safeWarn('setupBootActivation failed', e); }
 
   /* ============================================================================
-     Expose integration functions for other modules
+     Expose integration functions
      ============================================================================ */
   window.initMap = initMap;
   window.switchMapStyle = switchMapStyle;
@@ -1104,19 +1232,22 @@
   window.loadState = loadState;
   window.showModal = showModal;
   window.analyticsTrack = analyticsTrack;
+  window.getPlayerStats = getPlayerStats;
+  window.getEquippedItems = getEquippedItems;
+  window.equipItemById = equipItemById;
+
   window.quickSmokeTests = function () {
     safeLog('Smoke: DATA summary', {
       scav: (window.DATA.scavenger || []).length,
       mint: (window.DATA.mintables || []).length,
       quests: (window.DATA.quests || []).length,
-      locs: (window.DATA.locations || []).length
+      locs: (window.DATA.locations || []).length,
+      stats: getPlayerStats()
     });
   };
 
-  // Auto-run init if pipboyReady already fired earlier in the page lifecycle
   try {
     if (window._pipboyReadyFired) initGame();
-  } catch (e) { /* ignore */ }
+  } catch (e) {}
 
-  // End of IIFE
 }());
