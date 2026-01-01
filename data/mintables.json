@@ -644,7 +644,7 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["lore", "magazine", "survival"]
-  }
+    },
     {
     "id": "pipe_pistol",
     "name": "Pipe Pistol",
@@ -1979,3 +1979,4 @@
     "tags": ["weapon", "energy", "fire", "legendary"]
   }
 ]
+
