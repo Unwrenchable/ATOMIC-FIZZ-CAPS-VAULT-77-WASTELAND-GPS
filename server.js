@@ -10,7 +10,7 @@ const { body, validationResult } = require('express-validator');
 const Redis = require('ioredis');
 const nacl = require('tweetnacl');
 
-// === Event System Imports (correct placement) ===
+// === Event System Imports ===
 const { loadAllGameData } = require("./server/loadData.js");
 const { startEventScheduler } = require("./server/eventsScheduler.js");
 const { createEventsRouter } = require("./server/eventsRoutes.js");
@@ -88,7 +88,7 @@ try {
   process.exit(1);
 }
 
-// === Data Loading ===
+// === Data Loading (legacy JSONs for API endpoints) ===
 function safeJsonRead(filePath) {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -102,6 +102,12 @@ const DATA_DIR = path.join(__dirname, 'data');
 const LOCATIONS = safeJsonRead(path.join(DATA_DIR, 'locations.json'));
 const QUESTS = safeJsonRead(path.join(DATA_DIR, 'quests.json'));
 const MINTABLES = safeJsonRead(path.join(DATA_DIR, 'mintables.json'));
+
+// === Express App ===
+const app = express();
+app.use(morgan('combined'));
+
+// === Load Game Data + Start Event Scheduler + Mount Event Routes ===
 const gameData = loadAllGameData();
 
 console.log("Loaded mintables:", gameData.mintables.length);
@@ -110,9 +116,8 @@ console.log("Loaded loot tables:", gameData.eventLootTables.length);
 console.log("Loaded quests:", gameData.quests.length);
 console.log("Loaded locations:", gameData.locations.length);
 
-// === Express App ===
-const app = express();
-app.use(morgan('combined'));
+startEventScheduler(gameData);
+app.use("/events", createEventsRouter(gameData));
 
 // === CSP / Security (strict, no unsafe-eval, no inline scripts) ===
 app.use(
@@ -422,10 +427,3 @@ process.on('uncaughtException', (error) => {
   // Optionally exit process in production after logging
   // process.exit(1);
 });
-
-
-
-
-
-
-
