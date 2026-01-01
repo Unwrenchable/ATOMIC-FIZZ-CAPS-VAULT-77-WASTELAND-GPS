@@ -1,7 +1,510 @@
 // main.js – ATOMIC FIZZ CAPS • WASTELAND GPS
 // Complete, fixed, drop-in file with multi-map modes (Stamen Terrain default),
 // ESRI Satellite, Stamen Toner, GPS, VATS battle engine, terminals, quests, items,
-// collectibles, wallet integration, and UI wiring to your existing HTML.
+// collectibles, wallet int// public/js/main.js
+// Comprehensive drop-in main script for Pip-Boy Wasteland GPS
+// - Robust data loading with graceful fallbacks
+// - NFT mintables -> in-game item mapping + leveling
+// - Quest activation (only active quests trigger)
+// - Multi-map support with tile error handling and OSM fallback
+// - Mobile-friendly boot activation and idempotent init
+// - Defensive guards to avoid runtime exceptions
+// - Debug helpers and minimal CSS safety injection
+//
+// NOTE: This file is intentionally self-contained and defensive.
+// If your project already defines functions like initUi(), renderShopPanel(), etc.,
+// this script will call them when available. Adjust paths or names if your project differs.
+
+(function () {
+  'use strict';
+
+  //
+  // === Global safe defaults ===
+  //
+  window.DATA = window.DATA || {
+    scavenger: [],
+    mintables: [],
+    quests: [],
+    locations: [],
+    collectibles: [],
+    factions: []
+  };
+
+  // Map and UI globals
+  let map = window.map || null;
+  let mapEl = document.getElementById('map') || null;
+  let currentMapLayer = null;
+  let terrainLayer = null;
+  let tonerLayer = null;
+  let satelliteLayer = null;
+
+  // Init guards
+  let _gameInitializing = false;
+  let _gameInitialized = false;
+
+  //
+  // === Utility helpers ===
+  //
+  function safeLog(...args) {
+    try { console.log(...args); } catch (e) { /* ignore */ }
+  }
+  function safeWarn(...args) {
+    try { console.warn(...args); } catch (e) { /* ignore */ }
+  }
+  function safeError(...args) {
+    try { console.error(...args); } catch (e) { /* ignore */ }
+  }
+
+  // Simple DOM helper
+  function $(sel) { return document.querySelector(sel); }
+  function $all(sel) { return Array.from(document.querySelectorAll(sel)); }
+
+  //
+  // === Robust data loader ===
+  //
+  async function loadDataFile(name) {
+    try {
+      const url = `/data/${name}.json`;
+      const res = await fetch(url, { cache: 'no-cache' });
+      if (!res.ok) {
+        safeWarn(`${name}.json fetch failed:`, res.status, res.statusText);
+        if (name === 'scavenger') window.DATA.scavenger = [];
+        return;
+      }
+      const contentType = (res.headers.get('content-type') || '').toLowerCase();
+      const text = await res.text();
+      if (!contentType.includes('application/json')) {
+        safeWarn(`${name}.json served as ${contentType}; preview:`, text.slice(0, 400));
+        if (name === 'scavenger') window.DATA.scavenger = [];
+        return;
+      }
+      let json;
+      try {
+        json = JSON.parse(text);
+      } catch (e) {
+        safeWarn(`${name}.json parse error:`, e);
+        if (name === 'scavenger') window.DATA.scavenger = [];
+        return;
+      }
+      if (name === 'collectibles') {
+        window.DATA.collectiblesPack = {
+          id: json.id || null,
+          description: json.description || '',
+          collectibles: Array.isArray(json.collectibles) ? json.collectibles : []
+        };
+      } else {
+        window.DATA[name] = json;
+      }
+    } catch (e) {
+      safeError(`Failed to load ${name}.json`, e);
+      if (name === 'scavenger') window.DATA.scavenger = [];
+    }
+  }
+
+  async function loadAllData() {
+    const names = ['locations', 'quests', 'scavenger', 'collectibles', 'factions', 'mintables'];
+    await Promise.all(names.map(async (name) => {
+      try {
+        await loadDataFile(name);
+      } catch (e) {
+        safeWarn('loadDataFile failed for', name, e);
+        if (name === 'scavenger') window.DATA.scavenger = [];
+      }
+    }));
+  }
+
+  //
+  // === NFT -> in-game item mapping and leveling ===
+  //
+  function nftToGameItem(nft) {
+    const meta = nft && nft.metadata ? nft.metadata : {};
+    const rarity = (meta.rarity || 'common').toString().toLowerCase();
+    const level = Math.max(1, parseInt(meta.level || 1, 10) || 1);
+    const basePower = Math.max(1, parseFloat(meta.basePower || 1) || 1);
+    const type = meta.type || 'misc';
+    const rarityMultiplier = { common: 1, rare: 1.2, epic: 1.45, legendary: 1.8 }[rarity] || 1;
+    const power = Math.max(1, Math.round(basePower * rarityMultiplier * (1 + (level - 1) * 0.08)));
+    return {
+      id: nft.id || (`mint-${Date.now()}-${Math.random().toString(36).slice(2,8)}`),
+      owner: nft.owner || null,
+      name: nft.title || nft.name || nft.id || 'Unknown Item',
+      description: nft.description || '',
+      image: nft.image || nft.tokenUri || null,
+      type,
+      rarity,
+      level,
+      power,
+      tokenUri: nft.tokenUri || null,
+      createdAt: nft.timestamp || new Date().toISOString(),
+      _xp: nft._xp || 0
+    };
+  }
+
+  function addItemXp(itemId, xpAmount) {
+    const list = window.DATA.mintables || [];
+    let item = list.find(i => i.id === itemId);
+    if (!item) item = (window.DATA.scavenger || []).find(i => i.id === itemId);
+    if (!item) return;
+    item._xp = (item._xp || 0) + (xpAmount || 0);
+    const newLevel = Math.floor(item._xp / 100) + 1;
+    if (newLevel > (item.level || 1)) {
+      item.level = newLevel;
+      const rarityMultiplier = { common: 1, rare: 1.2, epic: 1.45, legendary: 1.8 }[item.rarity] || 1;
+      item.power = Math.max(1, Math.round((item.power || 1) * (1 + 0.08 * (newLevel - 1)) * rarityMultiplier));
+      safeLog('Item leveled up', item.id, 'new level', item.level);
+    }
+  }
+
+  //
+  // === Quest helpers ===
+  //
+  function getActiveQuests() {
+    if (!Array.isArray(window.DATA.quests)) return [];
+    return window.DATA.quests.filter(q => q && q.active === true);
+  }
+
+  function distanceMeters(lat1, lon1, lat2, lon2) {
+    const R = 6371000;
+    const toRad = (d) => d * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  function startQuest(q) {
+    try {
+      if (!q) return;
+      q.started = true;
+      safeLog('Quest started:', q.id || q.name);
+      if (typeof window.onQuestStarted === 'function') {
+        try { window.onQuestStarted(q); } catch (e) { safeWarn('onQuestStarted handler failed', e); }
+      }
+      if (typeof renderQuestPanel === 'function') {
+        try { renderQuestPanel(q); } catch (e) { safeWarn('renderQuestPanel failed', e); }
+      }
+    } catch (e) {
+      safeWarn('startQuest error', e);
+    }
+  }
+
+  function checkQuestTriggers(playerLat, playerLng) {
+    const active = getActiveQuests();
+    active.forEach(q => {
+      if (!q || !q.triggerPoi) return;
+      const d = distanceMeters(playerLat, playerLng, q.triggerPoi.lat, q.triggerPoi.lng);
+      if (d <= (q.radius || 50)) {
+        if (!q.started) startQuest(q);
+      }
+    });
+  }
+
+  //
+  // === Map initialization and multi-layer handling ===
+  //
+  function createTileLayers() {
+    try {
+      terrainLayer = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg', {
+        maxZoom: 18,
+        attribution: 'Map tiles by Stamen'
+      });
+    } catch (e) { safeWarn('terrainLayer creation failed', e); terrainLayer = null; }
+
+    try {
+      tonerLayer = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: 'Map tiles by Stamen'
+      });
+    } catch (e) { safeWarn('tonerLayer creation failed', e); tonerLayer = null; }
+
+    try {
+      satelliteLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: 'OSM'
+      });
+    } catch (e) { safeWarn('satelliteLayer creation failed', e); satelliteLayer = null; }
+  }
+
+  function initMap() {
+    // Reuse existing map if present
+    if (map && window.L && map instanceof L.Map) {
+      if (currentMapLayer && !currentMapLayer._map) {
+        try { currentMapLayer.addTo(map); } catch (e) { safeWarn('re-adding currentMapLayer failed', e); }
+      }
+      setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 200);
+      return;
+    }
+
+    mapEl = document.getElementById('map');
+    if (!mapEl) {
+      safeWarn('initMap: #map element not found');
+      return;
+    }
+
+    try {
+      map = L.map(mapEl, {
+        center: [39.5, -119.8],
+        zoom: 6,
+        preferCanvas: true,
+        zoomControl: true,
+        attributionControl: true
+      });
+      window.map = map;
+    } catch (e) {
+      safeError('Leaflet map creation failed', e);
+      return;
+    }
+
+    createTileLayers();
+
+    currentMapLayer = terrainLayer || satelliteLayer || tonerLayer;
+    try { if (currentMapLayer) currentMapLayer.addTo(map); } catch (e) { safeWarn('adding default layer failed', e); }
+
+    // Attach tileerror handlers
+    [terrainLayer, tonerLayer, satelliteLayer].forEach(layer => {
+      if (!layer || !layer.on) return;
+      layer.on('tileerror', (e) => {
+        try {
+          const src = e && e.tile && e.tile.src ? e.tile.src : 'unknown';
+          safeWarn('Tile failed to load:', src);
+        } catch (err) { safeWarn('tileerror handler error', err); }
+      });
+    });
+
+    // Basic click handler for debugging
+    map.on('click', (e) => {
+      safeLog('map click', e && e.latlng);
+    });
+
+    // Ensure map sizing after layout
+    setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 250);
+  }
+
+  function switchMapStyle(style) {
+    if (!map) return;
+    try {
+      if (currentMapLayer && map.hasLayer && map.hasLayer(currentMapLayer)) map.removeLayer(currentMapLayer);
+    } catch (e) { /* ignore */ }
+
+    if (style === 'terrain' && terrainLayer) currentMapLayer = terrainLayer;
+    else if (style === 'toner' && tonerLayer) currentMapLayer = tonerLayer;
+    else if (style === 'satellite' && satelliteLayer) currentMapLayer = satelliteLayer;
+    else currentMapLayer = terrainLayer || satelliteLayer || tonerLayer;
+
+    try {
+      if (currentMapLayer) currentMapLayer.addTo(map);
+    } catch (e) {
+      safeWarn('Failed to add chosen layer, falling back to OSM', e);
+      try {
+        currentMapLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
+        currentMapLayer.addTo(map);
+      } catch (err) { safeWarn('OSM fallback failed', err); }
+    }
+    setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 120);
+  }
+
+  //
+  // === Boot / activation handler (mobile-friendly) ===
+  //
+  function setupBootActivation() {
+    const bootScreen = document.getElementById('bootScreen') || document.querySelector('.boot-screen');
+    const bootPrompt = document.getElementById('bootPrompt') || document.querySelector('.boot-prompt');
+    const pipboyScreen = document.getElementById('pipboyScreen') || document.querySelector('.pipboy-screen');
+    if (!bootScreen) return;
+
+    let activated = false;
+
+    function completeBootFast() {
+      const evt = new Event('completeBoot');
+      document.dispatchEvent(evt);
+    }
+
+    function activate() {
+      if (activated) return;
+      // If boot text still typing, fast-forward first
+      if (bootPrompt && bootPrompt.classList.contains && bootPrompt.classList.contains('typing')) {
+        completeBootFast();
+        return;
+      }
+      activated = true;
+      try { bootScreen.classList.add('hidden'); } catch (e) { bootScreen.style.display = 'none'; }
+      if (pipboyScreen) try { pipboyScreen.classList.remove('hidden'); } catch (e) { pipboyScreen.style.display = ''; }
+      window.dispatchEvent(new Event('pipboyReady'));
+      removeListeners();
+    }
+
+    function onTouch(e) { if (bootScreen.contains(e.target)) { e.preventDefault(); activate(); } }
+    function onClick(e) { if (bootScreen.contains(e.target)) { e.preventDefault(); activate(); } }
+    function onKey(e) { if (!activated) activate(); }
+
+    function addListeners() {
+      bootScreen.addEventListener('touchstart', onTouch, { passive: false });
+      bootScreen.addEventListener('click', onClick, { passive: false });
+      window.addEventListener('keydown', onKey);
+      bootScreen.setAttribute('tabindex', '0');
+      bootScreen.addEventListener('keyup', (e) => { if (e.key === 'Enter' || e.key === ' ') activate(); });
+    }
+    function removeListeners() {
+      try {
+        bootScreen.removeEventListener('touchstart', onTouch);
+        bootScreen.removeEventListener('click', onClick);
+        window.removeEventListener('keydown', onKey);
+      } catch (e) { /* ignore */ }
+    }
+
+    addListeners();
+  }
+
+  //
+  // === UI integration points (no-ops if real implementations exist) ===
+  //
+  function initUiSafe() {
+    if (typeof window.initUi === 'function') {
+      try { window.initUi(); return; } catch (e) { safeWarn('external initUi failed', e); }
+    }
+    // Minimal fallback: ensure some UI elements exist
+    safeLog('initUi: no external initUi found, using safe defaults');
+  }
+
+  //
+  // === Init sequence (idempotent) ===
+  //
+  async function initGame() {
+    if (_gameInitialized || _gameInitializing) return;
+    _gameInitializing = true;
+    try {
+      await loadAllData();
+
+      // Ensure arrays exist
+      window.DATA.scavenger = Array.isArray(window.DATA.scavenger) ? window.DATA.scavenger : [];
+      window.DATA.mintables = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
+      window.DATA.quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
+      window.DATA.locations = Array.isArray(window.DATA.locations) ? window.DATA.locations : [];
+
+      // Convert mintables into game items (safe)
+      if (window.DATA.mintables.length > 0 && typeof nftToGameItem === 'function') {
+        window.DATA.mintables = window.DATA.mintables.map(nft => {
+          try { return nftToGameItem(nft); } catch (e) { safeWarn('nftToGameItem failed for', nft && nft.id, e); return nft; }
+        });
+      }
+
+      // Init map and UI
+      try { initMap(); } catch (e) { safeWarn('initMap error', e); }
+      try { initUiSafe(); } catch (e) { safeWarn('initUiSafe error', e); }
+
+      // Ensure map style and sizing
+      try { switchMapStyle && switchMapStyle('terrain'); } catch (e) { safeWarn('switchMapStyle failed', e); }
+      setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 350);
+
+      // Optional tutorial and status
+      try { if (typeof openTutorial === 'function') openTutorial(); } catch (e) { /* ignore */ }
+      try { if (typeof setStatus === 'function') setStatus('Pip-Boy online. Request GPS to begin tracking.', 'status-good'); } catch (e) { safeLog('status update skipped'); }
+
+      _gameInitialized = true;
+    } catch (err) {
+      safeError('initGame failed', err);
+    } finally {
+      _gameInitializing = false;
+    }
+  }
+
+  // Listen for pipboyReady event (boot activation will dispatch it)
+  window.addEventListener('pipboyReady', () => {
+    try { initGame(); } catch (e) { safeWarn('pipboyReady initGame error', e); }
+  });
+
+  // Dev/test fallback: attempt init if pipboyReady didn't fire but DOM looks ready
+  setTimeout(() => {
+    try {
+      const mapElementPresent = typeof mapEl !== 'undefined' && mapEl && document.body && document.body.contains(mapEl);
+      if (!map && mapElementPresent && !_gameInitialized && !_gameInitializing) {
+        initGame();
+      }
+    } catch (e) { /* ignore */ }
+  }, 1200);
+
+  // Setup boot activation immediately
+  try { setupBootActivation(); } catch (e) { safeWarn('setupBootActivation failed', e); }
+
+  //
+  // === Debug helpers exposed to console ===
+  //
+  window.__pipboyDebug = {
+    forceShowTiles: function () {
+      $all('.leaflet-tile-pane').forEach(p => p.style.filter = 'none');
+      $all('.leaflet-tile-pane img.leaflet-tile').forEach(img => { img.style.visibility = 'visible'; img.style.opacity = '1'; });
+      safeLog('Tiles forced visible');
+    },
+    hideOverlaysForTest: function () {
+      $all('.static-noise, .top-overlay, .overseer-link, .pipboy-screen, .hud').forEach(el => {
+        el.dataset._oldDisplay = el.style.display || '';
+        el.style.display = 'none';
+      });
+      setTimeout(() => { if (map && map.invalidateSize) map.invalidateSize(); }, 200);
+      safeLog('Overlays hidden for test');
+    },
+    restoreOverlays: function () {
+      $all('[data-_old-display]').forEach(el => {
+        el.style.display = el.dataset._oldDisplay || '';
+        delete el.dataset._oldDisplay;
+      });
+      safeLog('Overlays restored');
+    },
+    reinit: function () {
+      _gameInitialized = false;
+      initGame();
+    },
+    showDataSummary: function () {
+      safeLog('DATA summary:', {
+        scavenger: (window.DATA.scavenger || []).length,
+        mintables: (window.DATA.mintables || []).length,
+        quests: (window.DATA.quests || []).length,
+        locations: (window.DATA.locations || []).length
+      });
+    }
+  };
+
+  //
+  // === Minimal CSS safety injection (useful if CSS accidentally hides tiles or blocks pointer events) ===
+  //
+  (function ensureCssSafety() {
+    try {
+      const styleId = 'pipboy-mainjs-safety';
+      if (document.getElementById(styleId)) return;
+      const css = `
+        .leaflet-tile-pane { z-index: 10 !important; filter: none !important; opacity: 1 !important; }
+        .leaflet-tile-pane img.leaflet-tile { visibility: visible !important; opacity: 1 !important; image-rendering: auto !important; }
+        .static-noise, .top-overlay, .overseer-link, .hud, .pipboy-screen { pointer-events: none !important; }
+        .map-container, #map { pointer-events: auto !important; touch-action: manipulation !important; z-index: 10 !important; }
+        .btn { min-width: 44px; min-height: 44px; touch-action: manipulation; }
+      `;
+      const s = document.createElement('style');
+      s.id = styleId;
+      s.appendChild(document.createTextNode(css));
+      document.head && document.head.appendChild(s);
+    } catch (e) { /* ignore */ }
+  }());
+
+  //
+  // === Expose integration functions for other modules ===
+  //
+  window.switchMapStyle = switchMapStyle;
+  window.nftToGameItem = nftToGameItem;
+  window.addItemXp = addItemXp;
+  window.checkQuestTriggers = checkQuestTriggers;
+  window.initGame = initGame;
+
+  // Auto-run init if pipboyReady already fired earlier in the page lifecycle
+  try {
+    if (window._pipboyReadyFired) initGame();
+  } catch (e) { /* ignore */ }
+
+  // End of IIFE
+}());
+egration, and UI wiring to your existing HTML.
 
 (function () {
   // ==========================
@@ -1447,4 +1950,5 @@ setTimeout(() => {
     // ignore; pipboyReady will call initGame when ready
   }
 }, 1200);
+
 
