@@ -237,39 +237,92 @@
   // ==========================
   // DATA LOADING
   // ==========================
-  async function loadDataFile(name) {
-    try {
-      const res = await fetch(`/data/${name}.json`);
-      if (!res.ok) return;
-
-      const json = await res.json();
-      if (name === "collectibles") {
-        DATA.collectiblesPack = {
-          id: json.id || null,
-          description: json.description || "",
-          collectibles: Array.isArray(json.collectibles)
-            ? json.collectibles
-            : []
-        };
-      } else {
-        DATA[name] = json;
-      }
-    } catch (e) {
-      console.error(`Failed to load ${name}.json`, e);
+  // --- robust loader
+async function loadDataFile(name) {
+  try {
+    const res = await fetch(`/data/${name}.json`);
+    if (!res.ok) {
+      console.warn(`${name}.json fetch failed:`, res.status, res.statusText);
+      if (name === 'scavenger') DATA.scavenger = [];
+      return;
     }
+    const contentType = (res.headers.get('content-type') || '').toLowerCase();
+    const text = await res.text();
+    if (!contentType.includes('application/json')) {
+      console.warn(`${name}.json served as ${contentType}; preview:`, text.slice(0,400));
+      if (name === 'scavenger') DATA.scavenger = [];
+      return;
+    }
+    let json;
+    try { json = JSON.parse(text); } catch (e) {
+      console.warn(`${name}.json parse error:`, e);
+      if (name === 'scavenger') DATA.scavenger = [];
+      return;
+    }
+    if (name === 'collectibles') {
+      DATA.collectiblesPack = {
+        id: json.id || null,
+        description: json.description || '',
+        collectibles: Array.isArray(json.collectibles) ? json.collectibles : []
+      };
+    } else {
+      DATA[name] = json;
+    }
+  } catch (e) {
+    console.error(`Failed to load ${name}.json`, e);
+    if (name === 'scavenger') DATA.scavenger = [];
   }
+}
 
-  async function loadAllData() {
-    await Promise.all([
-      loadDataFile("locations"),
-      loadDataFile("quests"),
-      loadDataFile("scavenger"),
-      loadDataFile("collectibles"),
-      loadDataFile("factions"),
-      loadDataFile("mintables")
-    ]);
+// --- tolerant loader for all files
+async function loadAllData() {
+  const names = ['locations','quests','scavenger','collectibles','factions','mintables'];
+  await Promise.all(names.map(async name => {
+    try {
+      await loadDataFile(name);
+    } catch (e) {
+      console.warn('loadDataFile failed for', name, e);
+      if (name === 'scavenger') DATA.scavenger = [];
+    }
+  }));
+}
+
+// --- Convert NFT mint metadata into in-game item object
+function nftToGameItem(nft) {
+  // nft expected shape: { id, owner, title, description, image, metadata: { rarity, level, basePower, type }, tokenUri }
+  const meta = nft.metadata || {};
+  const rarity = (meta.rarity || 'common').toLowerCase();
+  const level = Math.max(1, parseInt(meta.level || 1, 10));
+  const basePower = Math.max(1, parseFloat(meta.basePower || 1));
+  const type = meta.type || 'misc';
+
+  // scale stats by rarity and level
+  const rarityMultiplier = { common:1, rare:1.2, epic:1.45, legendary:1.8 }[rarity] || 1;
+  const power = Math.round(basePower * rarityMultiplier * (1 + (level - 1) * 0.08));
+
+  return {
+    id: nft.id,
+    owner: nft.owner,
+    name: nft.title || nft.id,
+    description: nft.description || '',
+    image: nft.image || null,
+    type,
+    rarity,
+    level,
+    power,
+    tokenUri: nft.tokenUri || null,
+    createdAt: nft.timestamp || new Date().toISOString()
+  };
+}
+
+// Example: corrected initMap guard (remove stray token)
+function initMap() {
+  // If map already exists and is a Leaflet map, reuse it
+  if (map && window.L && map instanceof L.Map) {
+    if (currentMapLayer && !currentMapLayer._map) currentMapLayer.addTo(map);
+    setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 200);
+    return;
   }
-
   // ==========================
   // MAP + MULTI-MAP MODES
   // ==========================
@@ -1327,38 +1380,71 @@ ${pack.description || ""}<br/><br/>
   // ==========================
   // GAME INIT
   // ==========================
-  async function initGame() {
-    await loadAllData();
-    initMap();
-    initUi();
+  // Init sequence: robust, idempotent, and mobile-friendly
+let _gameInitializing = false;
+let _gameInitialized = false;
 
-    // ensure terrain is active and map is sized correctly
+async function initGame() {
+  if (_gameInitialized || _gameInitializing) return;
+  _gameInitializing = true;
+
+  try {
+    // Load all data (tolerant loader should already be in place)
+    await loadAllData();
+
+    // Ensure arrays exist so later code can safely push/iterate
+    DATA.scavenger = Array.isArray(DATA.scavenger) ? DATA.scavenger : [];
+    DATA.mintables = Array.isArray(DATA.mintables) ? DATA.mintables : [];
+
+    // Convert any loaded mintables (NFT metadata) into in-game items
+    if (DATA.mintables.length > 0 && typeof nftToGameItem === "function") {
+      DATA.mintables = DATA.mintables.map(nft => {
+        try { return nftToGameItem(nft); } catch (e) { console.warn("nftToGameItem failed for", nft && nft.id, e); return nft; }
+      });
+    }
+
+    // Initialize map and UI (initMap is guarded to reuse existing map)
+    try { initMap(); } catch (e) { console.warn("initMap error", e); }
+    try { initUi(); } catch (e) { console.warn("initUi error", e); }
+
+    // Ensure a sensible map style is active and the map is sized correctly
     try {
-      switchMapStyle("terrain");
-    } catch (e) {}
+      switchMapStyle && switchMapStyle("terrain");
+    } catch (e) {
+      console.warn("switchMapStyle failed", e);
+    }
     setTimeout(() => {
       if (map && typeof map.invalidateSize === "function") map.invalidateSize();
     }, 350);
 
-    openTutorial();
-    setStatus("Pip-Boy online. Request GPS to begin tracking.", "status-good");
+    // Optional: open tutorial only if function exists and not already shown
+    try { if (typeof openTutorial === "function") openTutorial(); } catch (e) { /* ignore */ }
+
+    // Friendly status update (safe if setStatus exists)
+    try { setStatus && setStatus("Pip-Boy online. Request GPS to begin tracking.", "status-good"); } catch (e) { /* ignore */ }
+
+    _gameInitialized = true;
+  } catch (err) {
+    console.error("initGame failed", err);
+  } finally {
+    _gameInitializing = false;
   }
+}
 
-  window.addEventListener("pipboyReady", () => {
-    initGame();
-  });
+// Trigger init when pipboy is ready (idempotent)
+window.addEventListener("pipboyReady", () => {
+  try { initGame(); } catch (e) { console.warn("pipboyReady initGame error", e); }
+});
 
-  // If the page already loaded and pipboyReady was fired earlier, try to init anyway
-  // (safe guard for dev/testing)
-  setTimeout(() => {
-    if (!map && document.body && document.body.contains(mapEl)) {
-      // If pipboyReady hasn't fired, still attempt to initialize after a short delay
-      // This avoids double-initialization because initMap() is guarded.
-      try {
-        initGame();
-      } catch (e) {
-        // ignore; pipboyReady will call initGame when ready
-      }
+// Dev/test fallback: attempt init if pipboyReady didn't fire but DOM looks ready
+setTimeout(() => {
+  try {
+    const mapElementPresent = typeof mapEl !== "undefined" && mapEl && document.body && document.body.contains(mapEl);
+    if (!map && mapElementPresent && !_gameInitialized && !_gameInitializing) {
+      initGame();
     }
-  }, 1200);
-})();
+  } catch (e) {
+    // ignore; pipboyReady will call initGame when ready
+  }
+}, 1200);
+
