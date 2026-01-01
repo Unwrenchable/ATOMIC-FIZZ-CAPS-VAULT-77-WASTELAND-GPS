@@ -1,0 +1,110 @@
+[
+  {
+    "id": "traveling_merchant_goodsprings",
+    "type": "merchant",
+    "displayName": "Traveling Merchant: Goodsprings",
+    "description": "A caravan merchant has rolled into Goodsprings with a pack full of scavenged goods.",
+    "spawnPOI": "Goodsprings Saloon",
+    "rarity": "uncommon",
+    "durationMinutes": 30,
+    "cooldownMinutes": 240,
+    "maxConcurrent": 1,
+    "activeWindow": {
+      "startHourLocal": 9,
+      "endHourLocal": 21
+    },
+    "rewards": {
+      "lootTableId": "merchant_goodsprings_basic",
+      "fizzCapsMin": 10,
+      "fizzCapsMax": 30
+    },
+    "requirements": {
+      "minPlayerLevel": 1
+    },
+    "flags": {
+      "repeatable": true,
+      "uniquePerDay": false
+    }
+  },
+  {
+    "id": "supply_drop_red_rock",
+    "type": "supply_drop",
+    "displayName": "Cracked Supply Crate",
+    "description": "An old NCR supply crate has been spotted near Red Rock Canyon. First to reach it gets the goods.",
+    "spawnPOI": "Red Rock Canyon",
+    "rarity": "rare",
+    "durationMinutes": 20,
+    "cooldownMinutes": 360,
+    "maxConcurrent": 1,
+    "activeWindow": {
+      "startHourLocal": 12,
+      "endHourLocal": 23
+    },
+    "rewards": {
+      "lootTableId": "supply_drop_red_rock",
+      "fizzCapsMin": 25,
+      "fizzCapsMax": 60
+    },
+    "requirements": {
+      "minPlayerLevel": 5
+    },
+    "flags": {
+      "repeatable": true,
+      "uniquePerDay": true
+    }
+  },
+  {
+    "id": "rad_storm_searchlight",
+    "type": "storm",
+    "displayName": "Radiation Storm Front",
+    "description": "A glowing green storm is rolling over Searchlight. Brave the storm for heightened rewards.",
+    "spawnPOI": "Searchlight Church",
+    "rarity": "rare",
+    "durationMinutes": 15,
+    "cooldownMinutes": 480,
+    "maxConcurrent": 1,
+    "activeWindow": {
+      "startHourLocal": 18,
+      "endHourLocal": 3
+    },
+    "rewards": {
+      "lootTableId": "storm_searchlight_loot",
+      "fizzCapsMin": 20,
+      "fizzCapsMax": 50
+    },
+    "requirements": {
+      "minPlayerLevel": 8
+    },
+    "flags": {
+      "repeatable": true,
+      "uniquePerDay": true
+    }
+  },
+  {
+    "id": "fizz_surge_nuka_world",
+    "type": "fizz_surge",
+    "displayName": "Fizz Surge: Nuka-World",
+    "description": "The carbonation levels spike across Nuka-World. Rumor says caps and chems flow freely.",
+    "spawnPOI": "Nuka-World",
+    "rarity": "epic",
+    "durationMinutes": 25,
+    "cooldownMinutes": 600,
+    "maxConcurrent": 1,
+    "activeWindow": {
+      "startHourLocal": 16,
+      "endHourLocal": 22
+    },
+    "rewards": {
+      "lootTableId": "fizz_surge_nuka_world",
+      "fizzCapsMin": 40,
+      "fizzCapsMax": 90
+    },
+    "requirements": {
+      "minPlayerLevel": 10
+    },
+    "flags": {
+      "repeatable": true,
+      "uniquePerDay": true
+    }
+  }
+]
