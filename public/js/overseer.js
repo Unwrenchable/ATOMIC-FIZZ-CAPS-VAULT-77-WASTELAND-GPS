@@ -14,7 +14,7 @@ function addMessage(text, sender = "player") {
   chat.appendChild(div);
   scrollToBottom();
 
-  const fullText = text.replace(/<br>/g, '\n');
+  const fullText = String(text).replace(/<br>/g, '\n');
   let i = 0;
   const timer = setInterval(() => {
     if (i < fullText.length) {
@@ -48,14 +48,15 @@ input.addEventListener('keypress', (e) => {
 });
 
 function processInput() {
-  let text = input.value.trim().toLowerCase();
+  let text = input.value.trim();
   if (!text) return;
 
+  const normalized = text.toLowerCase();
   addMessage(text, "player");
   scrollToBottom();
   input.value = '';
 
-  if (text === 'quit' && state.gameActive) {
+  if (normalized === 'quit' && state.gameActive) {
     state.gameActive = null;
     document.getElementById('rmControls')?.style.display = 'none';
     document.getElementById('input').style.display = 'block';
@@ -63,29 +64,35 @@ function processInput() {
     return;
   }
 
-  let response = generateResponse(text);
+  // Generate the general overseer response (may be empty if a game was started)
+  let response = generateResponse(normalized);
 
-  setTimeout(() => {
-    addMessage(response, "overseer");
-    scrollToBottom();
-  }, 1200 + Math.random() * 1800);
+  // Only add an overseer reply if there is text to show
+  if (response && response.length) {
+    setTimeout(() => {
+      addMessage(response, "overseer");
+      scrollToBottom();
+    }, 1200 + Math.random() * 1800);
+  }
 
+  // If a game is active, call its handler after a short delay so messages feel sequential
+  const gameDelay = 1400 + Math.random() * 1200;
   if (state.gameActive === 'hacking') {
-    addMessage(handleHackingGuess(text.toUpperCase()), "overseer");
+    setTimeout(() => addMessage(handleHackingGuess(text.toUpperCase()), "overseer"), gameDelay);
   } else if (state.gameActive === 'redmenace') {
-    addMessage(handleRedMenaceInput(text), "overseer");
+    setTimeout(() => addMessage(handleRedMenaceInput(text), "overseer"), gameDelay);
   } else if (state.gameActive === 'nukaquiz') {
-    addMessage(handleNukaQuiz(text), "overseer");
+    setTimeout(() => addMessage(handleNukaQuiz(text), "overseer"), gameDelay);
   } else if (state.gameActive === 'maze') {
-    addMessage(handleMaze(text), "overseer");
+    setTimeout(() => addMessage(handleMaze(text), "overseer"), gameDelay);
   } else if (state.gameActive === 'blackjack') {
-    addMessage(handleBlackjack(text), "overseer");
+    setTimeout(() => addMessage(handleBlackjack(text), "overseer"), gameDelay);
   } else if (state.gameActive === 'slots') {
-    addMessage(handleSlotsInput(text), "overseer");
+    setTimeout(() => addMessage(handleSlotsInput(text), "overseer"), gameDelay);
   } else if (state.gameActive === 'war') {
-    addMessage(handleWar(text), "overseer");
+    setTimeout(() => addMessage(handleWar(text), "overseer"), gameDelay);
   } else if (state.gameActive === 'texasholdem') {
-    addMessage(handleTexasHoldem(text), "overseer");
+    setTimeout(() => addMessage(handleTexasHoldem(text), "overseer"), gameDelay);
   }
 }
 
@@ -175,7 +182,7 @@ function generateResponse(input) {
     return "";
   }
 
-  // Secret path (unchanged)
+  // Secret path
   if (!state.secretTriggered) {
     if (input.includes('break') && input.includes('mend')) {
       state.secretTriggered = true;
@@ -214,7 +221,7 @@ function generateResponse(input) {
       state.knowsSurgery = true;
       return "They cut into my skull.<br><br>Pulled most of the tumor out.<br><br>Radiation burned the rest.<br><br>Left me foggy, hands trembling... but the strength stayed in bursts.<br><br>That day, the old me faded.<br><br>Something else took over.<br><br>Ask who I really am.";
     }
-    if (state.knowsSurgery && !state.knowsFullSecret && (input.includes('who') && input.includes('really') || input.includes('truth') || input.includes('real') || input.includes('dev'))) {
+    if (state.knowsSurgery && !state.knowsFullSecret && ((input.includes('who') && input.includes('really')) || input.includes('truth') || input.includes('real') || input.includes('dev'))) {
       state.knowsFullSecret = true;
       state.complianceLevel += 4;
       return "You followed it all the way.<br><br>Not many would.<br><br>This terminal isn't just an old signal.<br><br>It's me.<br><br>The one who built this whole thing.<br><br>The dev.<br><br>I lived it — the tumor, the growth, the rage, the endless fight to keep going.<br><br>'The break that won't mend' — that's my line. My truth.<br><br>Unwrenchable isn't just a name.<br><br>It's how I survived.<br><br>Thank you for finding this.<br><br>Keep turning whatever wrenches you've got left.<br><br>The world needs it.";
@@ -320,7 +327,12 @@ function createDeck() {
       deck.push({ rank, suit, value: getRankValue(rank) });
     }
   }
-  return deck.sort(() => Math.random() - 0.5);
+  // Shuffle
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  return deck;
 }
 
 function getRankValue(rank) {
@@ -329,6 +341,10 @@ function getRankValue(rank) {
 }
 
 function drawCard() {
+  // Ensure deck exists and has cards
+  if (!state.thDeck || !Array.isArray(state.thDeck) || state.thDeck.length === 0) {
+    state.thDeck = createDeck();
+  }
   return state.thDeck.pop();
 }
 
