@@ -9,6 +9,12 @@ const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
 const Redis = require('ioredis');
 const nacl = require('tweetnacl');
+const gameData = loadAllGameData();
+startEventScheduler(gameData);
+app.use("/events", createEventsRouter(gameData));
+const { loadAllGameData } = require("./server/loadData.js");
+const { startEventScheduler } = require("./server/eventsScheduler.js");
+const { createEventsRouter } = require("./server/eventsRoutes.js");
 
 // === FIXED bs58 import for Node 20+ ===
 const bs58pkg = require('bs58');
@@ -420,5 +426,6 @@ process.on('uncaughtException', (error) => {
   // Optionally exit process in production after logging
   // process.exit(1);
 });
+
 
 
