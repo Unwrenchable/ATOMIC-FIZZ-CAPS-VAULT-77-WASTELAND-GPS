@@ -1,34 +1,102 @@
-// server/lootRoller.js
+const activeEvents = new Map();
+const lastActivation = new Map();
 
-function rollRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function nowLocalHour() {
+  return new Date().getHours();
 }
 
-function weightedChoice(entries) {
-  const total = entries.reduce((sum, e) => sum + e.weight, 0);
-  const r = Math.random() * total;
-  let acc = 0;
-  for (const e of entries) {
-    acc += e.weight;
-    if (r <= acc) return e;
-  }
-  return entries[entries.length - 1];
-}
+function canActivateEvent(ev, now = new Date()) {
+  const hour = nowLocalHour();
+  const { activeWindow, cooldownMinutes, flags = {} } = ev;
 
-export function rollEventLoot(gameData, lootTableId) {
-  const lootTable = gameData.lootTablesById.get(lootTableId);
-  if (!lootTable) return [];
+  if (activeWindow) {
+    const start = activeWindow.startHourLocal;
+    const end = activeWindow.endHourLocal;
 
-  const rolls = rollRandomInt(lootTable.rollsMin, lootTable.rollsMax);
-  const results = [];
-
-  for (let i = 0; i < rolls; i++) {
-    const entry = weightedChoice(lootTable.possibleItems);
-    const item = gameData.mintablesById.get(entry.itemId);
-    if (item) results.push(item);
+    if (start < end) {
+      if (hour < start || hour >= end) return false;
+    } else {
+      if (!(hour >= start || hour < end)) return false;
+    }
   }
 
-  return results;
+  const last = lastActivation.get(ev.id);
+  if (last) {
+    const diffMin = (now - last) / 60000;
+    if (diffMin < cooldownMinutes) return false;
+  }
+
+  if (flags.uniquePerDay && last) {
+    const lastDate = new Date(last);
+    const lastDayKey = lastDate.toISOString().slice(0, 10);
+    const todayKey = now.toISOString().slice(0, 10);
+    if (lastDayKey === todayKey) return false;
+  }
+
+  return true;
 }
 
-export { rollRandomInt };
+function cleanupExpiredEvents(now = new Date()) {
+  for (const [id, state] of activeEvents.entries()) {
+    if (state.endsAt <= now) activeEvents.delete(id);
+  }
+}
+
+function activateEvent(ev, now = new Date()) {
+  const endsAt = new Date(now.getTime() + ev.durationMinutes * 60000);
+  activeEvents.set(ev.id, { startedAt: now, endsAt });
+  lastActivation.set(ev.id, now.getTime());
+}
+
+function startEventScheduler(gameData) {
+  const now = new Date();
+  for (const ev of gameData.events) {
+    if (canActivateEvent(ev, now)) activateEvent(ev, now);
+  }
+
+  setInterval(() => {
+    const tickNow = new Date();
+    cleanupExpiredEvents(tickNow);
+
+    for (const ev of gameData.events) {
+      if (!activeEvents.has(ev.id) && canActivateEvent(ev, tickNow)) {
+        activateEvent(ev, tickNow);
+      }
+    }
+  }, 60 * 1000);
+}
+
+function getActiveEventsForPOI(gameData, poi) {
+  const now = new Date();
+  const result = [];
+
+  for (const [id, state] of activeEvents.entries()) {
+    const ev = gameData.eventsById.get(id);
+    if (!ev) continue;
+    if (state.endsAt <= now) continue;
+    if (poi && ev.spawnPOI !== poi) continue;
+
+    result.push({
+      id: ev.id,
+      type: ev.type,
+      displayName: ev.displayName,
+      description: ev.description,
+      spawnPOI: ev.spawnPOI,
+      rarity: ev.rarity,
+      endsAt: state.endsAt,
+      durationMinutes: ev.durationMinutes
+    });
+  }
+
+  return result;
+}
+
+function isEventActive(eventId) {
+  return activeEvents.has(eventId);
+}
+
+module.exports = {
+  startEventScheduler,
+  getActiveEventsForPOI,
+  isEventActive
+};
