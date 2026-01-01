@@ -21,14 +21,16 @@
   //
   // === Global safe defaults ===
   //
-  window.DATA = window.DATA || {
-    scavenger: [],
-    mintables: [],
-    quests: [],
-    locations: [],
-    collectibles: [],
-    factions: []
-  };
+  // Ensure a safe global DATA object exists before any other code runs
+window.DATA = window.DATA || {
+  scavenger: [],
+  mintables: [],
+  quests: [],
+  locations: [],
+  collectibles: [],
+  factions: []
+};
+
 
   // Map and UI globals
   let map = window.map || null;
@@ -357,7 +359,6 @@
 
     addListeners();
   }
-
   //
   // === UI integration points (no-ops if real implementations exist) ===
   //
@@ -378,18 +379,20 @@
     try {
       await loadAllData();
 
-      // Ensure arrays exist
-      window.DATA.scavenger = Array.isArray(window.DATA.scavenger) ? window.DATA.scavenger : [];
-      window.DATA.mintables = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
-      window.DATA.quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
-      window.DATA.locations = Array.isArray(window.DATA.locations) ? window.DATA.locations : [];
+        // after await loadAllData();
+  // ensure arrays exist
+  window.DATA.scavenger = Array.isArray(window.DATA.scavenger) ? window.DATA.scavenger : [];
+  window.DATA.mintables = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
+  window.DATA.quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
+  window.DATA.locations = Array.isArray(window.DATA.locations) ? window.DATA.locations : [];
 
-      // Convert mintables into game items (safe)
-      if (window.DATA.mintables.length > 0 && typeof nftToGameItem === 'function') {
-        window.DATA.mintables = window.DATA.mintables.map(nft => {
-          try { return nftToGameItem(nft); } catch (e) { safeWarn('nftToGameItem failed for', nft && nft.id, e); return nft; }
-        });
-      }
+  // convert any loaded mintables into in-game items
+  if (window.DATA.mintables.length > 0 && typeof nftToGameItem === 'function') {
+    window.DATA.mintables = window.DATA.mintables.map(nft => {
+      try { return nftToGameItem(nft); } catch (e) { console.warn('nftToGameItem failed for', nft && nft.id, e); return nft; }
+     });
+    }
+
 
       // Init map and UI
       try { initMap(); } catch (e) { safeWarn('initMap error', e); }
@@ -1950,5 +1953,6 @@ setTimeout(() => {
     // ignore; pipboyReady will call initGame when ready
   }
 }, 1200);
+
 
 
