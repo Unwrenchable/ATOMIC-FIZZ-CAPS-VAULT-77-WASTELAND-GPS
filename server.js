@@ -97,6 +97,16 @@ const DATA_DIR = path.join(__dirname, 'data');
 const LOCATIONS = safeJsonRead(path.join(DATA_DIR, 'locations.json'));
 const QUESTS = safeJsonRead(path.join(DATA_DIR, 'quests.json'));
 const MINTABLES = safeJsonRead(path.join(DATA_DIR, 'mintables.json'));
+// === New Unified Game Data Loader (public/data/*.json) ===
+const { loadAllGameData } = require("./server/loadData.js");
+
+const gameData = loadAllGameData();
+
+console.log("Loaded mintables:", gameData.mintables.length);
+console.log("Loaded events:", gameData.events.length);
+console.log("Loaded loot tables:", gameData.eventLootTables.length);
+console.log("Loaded quests:", gameData.quests.length);
+console.log("Loaded locations:", gameData.locations.length);
 
 // === Express App ===
 const app = express();
@@ -410,3 +420,4 @@ process.on('uncaughtException', (error) => {
   // Optionally exit process in production after logging
   // process.exit(1);
 });
+
