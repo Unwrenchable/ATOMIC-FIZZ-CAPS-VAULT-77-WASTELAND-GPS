@@ -209,17 +209,11 @@ window.DATA = window.DATA || {
   //
   function createTileLayers() {
     try {
-      terrainLayer = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg', {
-        maxZoom: 18,
-        attribution: 'Map tiles by Stamen'
-      });
+      terrainLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap &copy; CARTO', subdomains: 'abcd', maxZoom: 20 });
     } catch (e) { safeWarn('terrainLayer creation failed', e); terrainLayer = null; }
 
     try {
-      tonerLayer = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: 'Map tiles by Stamen'
-      });
+      tonerLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap &copy; CARTO', subdomains: 'abcd', maxZoom: 20 });
     } catch (e) { safeWarn('tonerLayer creation failed', e); tonerLayer = null; }
 
     try {
@@ -840,26 +834,26 @@ function initMap() {
     }
 
     // Create the Leaflet map using the DOM element (mapEl)
+    
+    // Apply Pip-Boy Fallout aesthetic filter to map
+    if (mapEl) {
+      mapEl.style.filter = 'brightness(0.8) contrast(1.2) sepia(1) hue-rotate(70deg) saturate(2)';
+    }
+
     map = L.map(mapEl || "map", {
       zoomControl: false,
       attributionControl: false
     }).setView(MOJAVE_COORDS, DEFAULT_ZOOM);
 
     // Multiple map layers
-    terrainLayer = L.tileLayer(
-      "https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",
-      { maxZoom: 18 }
-    );
+    terrainLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap &copy; CARTO', subdomains: 'abcd', maxZoom: 20 });
 
     satelliteLayer = L.tileLayer(
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       { maxZoom: 18 }
     );
 
-    tonerLayer = L.tileLayer(
-      "https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png",
-      { maxZoom: 18 }
-    );
+    tonerLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap &copy; CARTO', subdomains: 'abcd', maxZoom: 20 });
 
     // Default layer: terrain
     currentMapLayer = terrainLayer;
