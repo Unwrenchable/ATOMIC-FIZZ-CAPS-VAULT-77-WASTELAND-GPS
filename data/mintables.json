@@ -272,7 +272,7 @@
       "durability": [0, 10]
     },
     "tags": ["armor", "body", "vault_suit", "light_armor"]
-  }
+    },
     {
     "id": "cooked_gecko_meat",
     "name": "Cooked Gecko Meat",
@@ -428,7 +428,7 @@
       "duration": [0, 5]
     },
     "tags": ["consumable", "food", "prewar"]
-  }
+    },
     {
     "id": "broken_toy",
     "name": "Broken Toy Car",
@@ -608,7 +608,7 @@
       "valueMultiplier": [0, 1]
     },
     "tags": ["junk", "metal", "scrap"]
-  }
+    },
     {
     "id": "dusty_book",
     "name": "Dusty Book",
@@ -749,7 +749,7 @@
       "durability": [0, 15]
     },
     "tags": ["weapon", "pistol", "revolver", "ballistic", "common"]
-  }
+    },
     {
     "id": "combat_armor",
     "name": "Combat Armor",
@@ -911,7 +911,7 @@
       "durability": [5, 15]
     },
     "tags": ["armor", "body", "uniform", "rare"]
-  }
+    },
     {
     "id": "doctor_bag",
     "name": "Doctor’s Bag",
@@ -989,7 +989,7 @@
       "duration": [0, 6]
     },
     "tags": ["consumable", "medical", "healing"]
-  }
+    },
     {
     "id": "gecko_skull",
     "name": "Gecko Skull",
@@ -1025,7 +1025,7 @@
       "valueMultiplier": [1, 2]
     },
     "tags": ["lore", "poster", "vault", "rare"]
-  }
+    },
     {
     "id": "frag_grenade",
     "name": "Frag Grenade",
@@ -1197,7 +1197,7 @@
       "durability": [5, 15]
     },
     "tags": ["weapon", "rifle", "service", "rare"]
-  }
+    },
     {
     "id": "advanced_combat_armor",
     "name": "Advanced Combat Armor",
@@ -1292,7 +1292,7 @@
       "durability": [10, 20]
     },
     "tags": ["armor", "body", "riot", "epic"]
-  }
+    },
     {
     "id": "ultra_stimpak",
     "name": "Ultra Stimpak",
@@ -1347,7 +1347,7 @@
       "duration": [2, 6]
     },
     "tags": ["consumable", "radiation", "medical", "epic"]
-  }
+    },
     {
     "id": "ancient_relic",
     "name": "Ancient Wasteland Relic",
@@ -1383,7 +1383,7 @@
       "valueMultiplier": [2, 3]
     },
     "tags": ["trophy", "nightstalker", "epic"]
-  }
+    },
     {
     "id": "anti_material_rifle",
     "name": "Anti-Material Rifle",
@@ -1600,7 +1600,7 @@
       "durability": [8, 18]
     },
     "tags": ["weapon", "rifle", "carbine", "epic"]
-  }
+    },
     {
     "id": "phoenix_plate",
     "name": "Phoenix Plate",
@@ -1665,7 +1665,7 @@
       "durability": [20, 35]
     },
     "tags": ["armor", "body", "exosuit", "legendary"]
-  }
+    },
     {
     "id": "quantum_stimpak",
     "name": "Quantum Stimpak",
@@ -1722,7 +1722,7 @@
       "duration": [3, 8]
     },
     "tags": ["consumable", "chems", "legendary"]
-  }
+    },
     {
     "id": "ancient_vault_tablet",
     "name": "Ancient Vault Tablet",
@@ -1758,7 +1758,7 @@
       "valueMultiplier": [2, 4]
     },
     "tags": ["trophy", "deathclaw", "legendary"]
-  }
+    },
     {
     "id": "dragons_roar",
     "name": "Dragon’s Roar",
@@ -1979,18 +1979,3 @@
     "tags": ["weapon", "energy", "fire", "legendary"]
   }
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
