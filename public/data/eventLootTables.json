@@ -1,0 +1,14 @@
+[
+  {
+    "id": "merchant_goodsprings_basic",
+    "possibleItems": [
+      { "itemId": "leather_jacket", "weight": 5 },
+      { "itemId": "cloth_gloves", "weight": 8 },
+      { "itemId": "rusted_revolver", "weight": 2 },
+      { "itemId": "dirty_water", "weight": 10 },
+      { "itemId": "stimpak", "weight": 3 }
+    ],
+    "rollsMin": 1,
+    "rollsMax": 3
+  }
+]
