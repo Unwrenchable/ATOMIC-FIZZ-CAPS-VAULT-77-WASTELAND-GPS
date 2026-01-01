@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>TERMINAL // RESTRICTED ACCESS</title>
 
-  <!-- Font (optional) -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
-  <!-- Your stylesheet (create or update css/terminal.css) -->
   <link rel="stylesheet" href="css/terminal.css" />
 </head>
 <body>
@@ -23,10 +21,8 @@
   <main id="terminal" class="terminal" role="main" aria-labelledby="terminal-title">
     <h2 id="terminal-title" class="visually-hidden">Terminal Chat</h2>
 
-    <!-- Chat log (role=log for screen readers) -->
     <section id="chat" class="chat-log" role="log" aria-live="polite" aria-atomic="false"></section>
 
-    <!-- Input row -->
     <div id="inputRow" class="chat-input-row" role="region" aria-label="Chat input">
       <label for="input" class="visually-hidden">Message</label>
       <input id="input" name="input" type="text" placeholder="> Type message..." autocomplete="off" />
@@ -34,28 +30,31 @@
     </div>
   </main>
 
-  <!-- Defer script so DOM is ready; ensure js/overseer.js exists -->
-  <script src="js/overseer.js" defer></script>
+  <!-- Mobile game controls (single container for all games) -->
+  <div id="mobileGameControls" class="mgc hidden" aria-hidden="true" role="region" aria-label="Game controls">
+    <div class="mgc-header" id="mgcHeader" aria-live="polite"></div>
+    <div class="mgc-row mgc-generic" id="mgcGeneric" role="toolbar" aria-label="Game actions"></div>
 
-  <!-- Minimal accessibility helper styles (optional, remove if you prefer CSS file) -->
-  <style>
-    .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; border: 0; padding: 0; margin: -1px; }
-    html,body { height:100%; margin:0; }
-    body { background:#07110a; color:#dfffe6; font-family: 'VT323', monospace, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-    .back { display:inline-block; margin:12px; color:#bfffcf; text-decoration:none; }
-    .header { padding:12px; text-align:center; }
-    .header h1 { margin:0; font-size:1.6rem; letter-spacing:1px; }
-    .sub { font-size:0.85rem; opacity:0.8; margin-top:6px; }
-    .terminal { display:flex; flex-direction:column; height:calc(100vh - 96px); margin:12px; gap:8px; }
-    .chat-log { flex:1 1 auto; overflow-y:auto; padding:12px; border-radius:8px; background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.55)); box-shadow:0 6px 18px rgba(0,0,0,0.6); }
-    .chat-input-row { display:flex; gap:8px; align-items:center; }
-    #input { flex:1 1 auto; padding:10px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.04); background:rgba(0,0,0,0.45); color:inherit; font-size:1rem; }
-    #send { padding:10px 14px; border-radius:6px; background:linear-gradient(180deg,#1f6b3f,#0f3b20); color:#eaffea; border:none; font-weight:700; cursor:pointer; }
-    @media (max-width:900px) {
-      .terminal { height:calc(100vh - 72px); margin:8px; }
-      #input { font-size:1.05rem; padding:12px; }
-      #send { padding:12px 16px; font-size:1rem; }
-    }
-  </style>
+    <div class="mgc-dpad" id="mgcDpad" role="group" aria-label="Movement controls">
+      <button class="dpad-btn" data-dir="north" aria-label="Move north">▲</button>
+      <div class="dpad-mid">
+        <button class="dpad-btn" data-dir="west" aria-label="Move west">◀</button>
+        <button class="dpad-btn" data-dir="east" aria-label="Move east">▶</button>
+      </div>
+      <button class="dpad-btn" data-dir="south" aria-label="Move south">▼</button>
+    </div>
+
+    <div class="mgc-numpad" id="mgcNumpad" role="group" aria-label="Numeric input" aria-hidden="true">
+      <div class="numpad-display" id="numpadDisplay"></div>
+      <div class="numpad-keys">
+        <button class="nkey">1</button><button class="nkey">2</button><button class="nkey">3</button>
+        <button class="nkey">4</button><button class="nkey">5</button><button class="nkey">6</button>
+        <button class="nkey">7</button><button class="nkey">8</button><button class="nkey">9</button>
+        <button class="nkey">←</button><button class="nkey">0</button><button class="nkey">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/overseer.js" defer></script>
 </body>
 </html>
