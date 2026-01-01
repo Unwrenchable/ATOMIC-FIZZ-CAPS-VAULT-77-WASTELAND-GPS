@@ -102,9 +102,6 @@ const DATA_DIR = path.join(__dirname, 'data');
 const LOCATIONS = safeJsonRead(path.join(DATA_DIR, 'locations.json'));
 const QUESTS = safeJsonRead(path.join(DATA_DIR, 'quests.json'));
 const MINTABLES = safeJsonRead(path.join(DATA_DIR, 'mintables.json'));
-// === New Unified Game Data Loader (public/data/*.json) ===
-const { loadAllGameData } = require("./server/loadData.js");
-
 const gameData = loadAllGameData();
 
 console.log("Loaded mintables:", gameData.mintables.length);
@@ -120,6 +117,7 @@ app.use(morgan('combined'));
 const gameData = loadAllGameData();
 startEventScheduler(gameData);
 app.use("/events", createEventsRouter(gameData));
+
 
 // === CSP / Security (strict, no unsafe-eval, no inline scripts) ===
 app.use(
@@ -429,6 +427,7 @@ process.on('uncaughtException', (error) => {
   // Optionally exit process in production after logging
   // process.exit(1);
 });
+
 
 
 
