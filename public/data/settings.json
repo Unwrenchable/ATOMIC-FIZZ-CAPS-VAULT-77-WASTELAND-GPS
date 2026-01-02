@@ -1,0 +1,13 @@
+{
+  "theme": "pipboy",
+  "map": {
+    "tileProvider": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "attribution": "© OpenStreetMap contributors"
+  },
+  "api": {
+    "baseUrl": "https://www.atomicfizzcaps.xyz"
+  },
+  "drawer": {
+    "tabs": ["stats", "items", "quests", "scavenger", "exchange", "overseer", "terminal", "workshops"]
+  }
+}
