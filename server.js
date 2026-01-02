@@ -238,4 +238,5 @@ app.post("/player/:addr", async (req, res) => {
 // === Terminal Reward ===
 app.post("/api/terminal-reward", [
   body("wallet").isString().notEmpty(),
-  body("amount").is
+  body("amount").isInt({ min: 1 }),
+], async (req, res) => {
