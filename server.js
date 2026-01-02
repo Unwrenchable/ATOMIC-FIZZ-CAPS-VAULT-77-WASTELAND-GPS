@@ -94,7 +94,7 @@ try {
   process.exit(1);
 }
 
-// Data Loading (legacy JSONs for API endpoints)
+// Data Loading helper
 function safeJsonRead(filePath) {
   try {
     return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -112,8 +112,138 @@ const MINTABLES = safeJsonRead(path.join(DATA_DIR, "mintables.json"));
 const app = express();
 app.use(morgan("combined"));
 
+// Security middlewares (order matters)
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://unpkg.com", "https://cdn.jsdelivr.net"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://unpkg.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+      imgSrc: [
+        "'self'",
+        "data:",
+        "blob:",
+        "https://tile.openstreetmap.org",
+        "https://*.basemaps.cartocdn.com",
+      ],
+      connectSrc: ["'self'", SOLANA_RPC, "https://api.devnet.solana.com", "https://api.mainnet-beta.solana.com", "wss:", "https://*"],
+      mediaSrc: ["'self'", "data:", "https:"],
+      objectSrc: ["'none'"],
+      frameSrc: ["'self'"],
+      baseUri: ["'self'"],
+    },
+  })
+);
+
+app.use(cors());
+// JSON body parser must be registered before routes that read req.body
+app.use(express.json({ limit: "100kb" }));
+
+// Rate Limits
+const globalLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 200,
+  message: { error: "Too many requests, please try again later." },
+});
+const actionLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 20,
+  message: { error: "Action rate limit exceeded." },
+});
+app.use(globalLimiter);
+
+// Bot Shield
+async function botShield(req, res, next) {
+  try {
+    const ipHeader = req.headers["x-forwarded-for"];
+    const ip = (ipHeader ? ipHeader.split(",")[0].trim() : req.ip) || "unknown";
+    const ua = (req.headers["user-agent"] || "").slice(0, 200);
+
+    const ipKey = `rep:ip:${ip}`;
+    const uaKey = `rep:ua:${ua || "none"}`;
+
+    const [ipScore, uaScore] = await Promise.all([redis.incr(ipKey), redis.incr(uaKey)]);
+
+    if (ipScore === 1) await redis.expire(ipKey, 60);
+    if (uaScore === 1) await redis.expire(uaKey, 60);
+
+    if (ipScore > 400 || uaScore > 400) {
+      return res.status(429).json({ error: "Too many actions, slow down." });
+    }
+
+    next();
+  } catch (e) {
+    console.warn("botShield error:", e);
+    next();
+  }
+}
+
+// Apply botShield + actionLimiter to sensitive endpoints
+app.use(
+  ["/find-loot", "/shop", "/battle", "/terminal-reward", "/claim-voucher", "/api/craft"],
+  botShield,
+  actionLimiter
+);
+
+// Static Files
+const PUBLIC_DIR = path.join(__dirname, "public");
+app.use(express.static(PUBLIC_DIR, {
+  setHeaders: (res, filePath) => {
+    if (path.extname(filePath) === ".js") {
+      res.setHeader("Content-Type", "application/javascript");
+    }
+  }
+}));
+
 // Load Game Data + Start Event Scheduler + Mount Event Routes
 const gameData = loadAllGameData();
+console.log("Loaded mintables:", (gameData.mintables || []).length);
+console.log("Loaded events:", (gameData.events || []).length);
+console.log("Loaded loot tables:", (gameData.eventLootTables || []).length);
+console.log("Loaded quests:", (gameData.quests || []).length);
+console.log("Loaded locations:", (gameData.locations || []).length);
+console.log("Loaded recipes:", (gameData.recipes || []).length);
+
+startEventScheduler(gameData);
+app.use("/events", createEventsRouter(gameData));
+
+// Basic Data Endpoints
+app.get("/locations", (req, res) => res.json(LOCATIONS));
+app.get("/quests", (req, res) => res.json(QUESTS));
+app.get("/mintables", (req, res) => res.json(MINTABLES));
+
+// Player Data
+app.get("/player/:addr", async (req, res) => {
+  const { addr } = req.params;
+  try { new PublicKey(addr); }
+  catch { return res.status(400).json({ error: "Invalid address" }); }
+
+  let playerData = { lvl: 1, hp: 100, caps: 0, gear: [], found: [], xp: 0, xpToNext: 100, rads: 0, inventory: {} };
+  const redisData = await redis.get(`player:${addr}`);
+  if (redisData) {
+    try { playerData = JSON.parse(redisData); } catch (e) { /* ignore parse error */ }
+  }
+
+  try {
+    const metaplex = Metaplex.make(connection);
+    await metaplex.nfts().findAllByOwner({ owner: new PublicKey(addr) });
+  } catch (e) {
+    console.warn("NFT fetch failed:", e);
+  }
+
+  res.json(playerData);
+});
+
+app.post("/player/:addr", async (req, res) => {
+  const { addr } = req.params;
+  await redis.set(`player:${addr}`, JSON.stringify(req.body));
+  res.json({ success: true });
+});
+
+/* -------------------------
+   Crafting endpoint
+   ------------------------- */
 // POST /api/craft
 // Body: { wallet: string, recipeId: string, amount?: number }
 app.post(
@@ -168,7 +298,7 @@ app.post(
 
       // Check materials
       const inv = playerData.inventory || {};
-      for (let i = 0; i < recipe.materials.length; i++) {
+      for (let i = 0; i < (recipe.materials || []).length; i++) {
         const m = recipe.materials[i];
         const need = BigInt(m.qty) * BigInt(amount);
         const have = BigInt(inv[m.itemId] || 0);
@@ -177,11 +307,8 @@ app.post(
         }
       }
 
-      // If recipe.tokenCost is set and you want on-chain payment, require client-signed txSig verification.
-      // For now we assume tokenCost is paid off-chain (caps) or server-side; adapt as needed.
-
       // Deduct materials
-      for (let i = 0; i < recipe.materials.length; i++) {
+      for (let i = 0; i < (recipe.materials || []).length; i++) {
         const m = recipe.materials[i];
         const need = Number(m.qty) * amount;
         playerData.inventory[m.itemId] = (playerData.inventory[m.itemId] || 0) - need;
@@ -189,7 +316,7 @@ app.post(
       }
 
       // Add output
-      const out = recipe.output;
+      const out = recipe.output || { itemId: "unknown", qty: 1 };
       const outQty = (out.qty || 1) * amount;
       playerData.inventory[out.itemId] = (playerData.inventory[out.itemId] || 0) + outQty;
 
@@ -228,134 +355,10 @@ app.post(
   }
 );
 
-console.log("Loaded mintables:", gameData.mintables.length);
-console.log("Loaded events:", gameData.events.length);
-console.log("Loaded loot tables:", gameData.eventLootTables.length);
-console.log("Loaded quests:", gameData.quests.length);
-console.log("Loaded locations:", gameData.locations.length);
-console.log("Loaded recipes:", (gameData.recipes || []).length); // NEW
-
-startEventScheduler(gameData);
-app.use("/events", createEventsRouter(gameData));
-
-// CSP / Security
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://unpkg.com", "https://cdn.jsdelivr.net"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://unpkg.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
-      imgSrc: [
-        "'self'",
-        "data:",
-        "blob:",
-        "https://tile.openstreetmap.org",
-        "https://*.basemaps.cartocdn.com",
-      ],
-      connectSrc: ["'self'", SOLANA_RPC, "https://api.devnet.solana.com", "https://api.mainnet-beta.solana.com", "wss:", "https://*"],
-      mediaSrc: ["'self'", "data:", "https:"],
-      objectSrc: ["'none'"],
-      frameSrc: ["'self'"],
-      baseUri: ["'self'"],
-    },
-  })
-);
-
-app.use(cors());
-app.use(express.json({ limit: "100kb" }));
-
-// Rate Limits
-const globalLimiter = rateLimit({
-  windowMs: 60_000,
-  max: 200,
-  message: { error: "Too many requests, please try again later." },
-});
-const actionLimiter = rateLimit({
-  windowMs: 60_000,
-  max: 20,
-  message: { error: "Action rate limit exceeded." },
-});
-app.use(globalLimiter);
-
-// Bot Shield
-async function botShield(req, res, next) {
-  try {
-    const ipHeader = req.headers["x-forwarded-for"];
-    const ip = (ipHeader ? ipHeader.split(",")[0].trim() : req.ip) || "unknown";
-    const ua = (req.headers["user-agent"] || "").slice(0, 200);
-
-    const ipKey = `rep:ip:${ip}`;
-    const uaKey = `rep:ua:${ua || "none"}`;
-
-    const [ipScore, uaScore] = await Promise.all([redis.incr(ipKey), redis.incr(uaKey)]);
-
-    if (ipScore === 1) await redis.expire(ipKey, 60);
-    if (uaScore === 1) await redis.expire(uaKey, 60);
-
-    if (ipScore > 400 || uaScore > 400) {
-      return res.status(429).json({ error: "Too many actions, slow down." });
-    }
-
-    next();
-  } catch (e) {
-    console.warn("botShield error:", e);
-    next();
-  }
-}
-
-app.use(
-  ["/find-loot", "/shop", "/battle", "/terminal-reward", "/claim-voucher"],
-  botShield,
-  actionLimiter
-);
-
-// Static Files
-const PUBLIC_DIR = path.join(__dirname, "public");
-app.use(express.static(PUBLIC_DIR, {
-  setHeaders: (res, filePath) => {
-    if (path.extname(filePath) === ".js") {
-      res.setHeader("Content-Type", "application/javascript");
-    }
-  }
-}));
-
-// Basic Data Endpoints
-app.get("/locations", (req, res) => res.json(LOCATIONS));
-app.get("/quests", (req, res) => res.json(QUESTS));
-app.get("/mintables", (req, res) => res.json(MINTABLES));
-
-// Player Data
-app.get("/player/:addr", async (req, res) => {
-  const { addr } = req.params;
-  try { new PublicKey(addr); }
-  catch { return res.status(400).json({ error: "Invalid address" }); }
-
-  let playerData = { lvl: 1, hp: 100, caps: 0, gear: [], found: [], xp: 0, xpToNext: 100, rads: 0 };
-  const redisData = await redis.get(`player:${addr}`);
-  if (redisData) playerData = JSON.parse(redisData);
-
-  try {
-    const metaplex = Metaplex.make(connection);
-    await metaplex.nfts().findAllByOwner({ owner: new PublicKey(addr) });
-  } catch (e) {
-    console.warn("NFT fetch failed:", e);
-  }
-
-  res.json(playerData);
-});
-
-app.post("/player/:addr", async (req, res) => {
-  const { addr } = req.params;
-  await redis.set(`player:${addr}`, JSON.stringify(req.body));
-  res.json({ success: true });
-});
-
-// === Terminal Reward ===
-// POST /api/terminal-reward
-// Accepts human-readable amounts (e.g., "0.5") or base units (integer string/number).
-// Enforces cooldown per wallet via Redis and transfers SPL tokens from GAME_VAULT to recipient.
-
+/* -------------------------
+   Terminal Reward endpoint
+   Accepts human-readable amounts (e.g., "0.5") or base units.
+   ------------------------- */
 app.post(
   "/api/terminal-reward",
   [
@@ -515,4 +518,3 @@ app.post(
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
