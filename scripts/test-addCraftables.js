@@ -1,4 +1,3 @@
-/* paste the addCraftables.js content here exactly as provided earlier */
 // scripts/addCraftables.js
 const fs = require('fs');
 const path = require('path');

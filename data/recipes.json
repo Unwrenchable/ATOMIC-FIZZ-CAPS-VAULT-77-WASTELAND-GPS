@@ -1,3 +1,5 @@
+mkdir -p public/data
+cat > public/data/recipes.json <<'JSON'
 [
   {
     "id": "repair_kit",
@@ -52,3 +54,4 @@
     "maxPerDay": 1
   }
 ]
+JSON
