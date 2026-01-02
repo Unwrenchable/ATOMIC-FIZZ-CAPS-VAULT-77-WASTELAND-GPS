@@ -102,44 +102,65 @@
         </div>
 
         <!-- MAP AREA (FULLSCREEN INSIDE PIP-BOY) -->
-        <div class="map-container">
-          <button class="btn" id="mapModeBtn">MAP MODE</button>
-          <div id="map"></div>
+<div class="map-container" role="region" aria-label="Wasteland map">
+  <button class="btn" id="mapModeBtn">MAP MODE</button>
 
-          <!-- CRT STATIC -->
-          <div class="static-noise"></div>
+  <div id="map" aria-hidden="false"></div>
 
-          <!-- GPS BADGE -->
-          <div class="gps-badge">
-            <div id="accDot" class="acc-dot"></div>
-            <div id="accText">GPS: waiting...</div>
-          </div>
+  <!-- CRT STATIC -->
+  <div class="static-noise" aria-hidden="true"></div>
 
-          <!-- REQUEST GPS BUTTON -->
-          <button class="btn gps-btn" id="requestGpsBtn">
-            REQUEST GPS
-          </button>
+  <!-- Floating GPS badge (keeps above drawer) -->
+  <div class="gps-badge" id="gpsBadge" aria-hidden="false">
+    <div id="accDot" class="acc-dot"></div>
+    <div id="accText">GPS: waiting...</div>
+  </div>
+
+  <!-- REQUEST GPS BUTTON (floating above drawer) -->
+  <button class="btn gps-btn" id="requestGpsBtn" aria-label="Request GPS">
+    REQUEST GPS
+  </button>
+
+  <!-- BOTTOM DRAWER (overlay) -->
+  <div id="bottom-drawer" class="hidden" aria-hidden="true">
+    <div class="drawer-handle" id="drawer-toggle" role="button" tabindex="0" aria-label="Toggle drawer"></div>
+
+    <div class="drawer-content">
+      <div class="drawer-left">
+        <div class="pip-controls">
+          <button class="btn pip-btn" id="donate-btn">Donate</button>
+          <button class="btn pip-btn" id="gps-lock-btn">GPS Lock</button>
+          <!-- Overseer open button (hidden until unlocked) -->
+          <button class="btn pip-btn" id="overseer-open-btn" aria-hidden="true">Overseer</button>
         </div>
+      </div>
 
-        <!-- BOTTOM TABS -->
-        <div class="tabs">
-          <div class="tab active" data-panel="map">MAP</div>
-          <div class="tab" data-panel="stat">STAT</div>
-          <div class="tab" data-panel="items">ITEMS</div>
-          <div class="tab" data-panel="quests">QUESTS</div>
-          <div class="tab" data-panel="shop">SCAVENGER'S EXCHANGE</div>
-        </div>
+      <div class="drawer-right">
+        <div class="hud">Locations: <span id="locations-count">0</span>/10</div>
+      </div>
+    </div>
+  </div>
 
-        <!-- TERMINAL PANEL -->
-        <div id="terminal" class="terminal hidden">
-          <div class="terminal-inner">
-            <button class="btn terminal-close" id="panelClose">X</button>
-            <h4 id="panelTitle">TERMINAL</h4>
-            <div id="panelBody" class="terminal-body">
-              Select a tab to begin...
-            </div>
-          </div>
-        </div>
+  <!-- Bottom tabs (positioned above drawer) -->
+  <div class="tabs" role="tablist" aria-label="Main tabs">
+    <div class="tab active" data-panel="map" role="tab" tabindex="0">MAP</div>
+    <div class="tab" data-panel="stat" role="tab" tabindex="0">STAT</div>
+    <div class="tab" data-panel="items" role="tab" tabindex="0">ITEMS</div>
+    <div class="tab" data-panel="quests" role="tab" tabindex="0">QUESTS</div>
+    <div class="tab" data-panel="shop" role="tab" tabindex="0">SCAVENGER'S EXCHANGE</div>
+  </div>
+</div>
+
+<!-- OVERSEER TERMINAL (id matches CSS) -->
+<div id="overseer-terminal" class="terminal" aria-hidden="true">
+  <div class="terminal-inner">
+    <button class="btn terminal-close" id="close-overseer" aria-label="Close overseer">X</button>
+    <h4 id="panelTitle">OVERSEER TERMINAL</h4>
+    <div id="panelBody" class="terminal-body">
+      Overseer locked. Unlock by claiming 10 locations.
+    </div>
+  </div>
+</div>
 
         <!-- LOOT MODAL -->
         <div id="mintModal" class="modal hidden">
@@ -203,3 +224,4 @@
 
 </body>
 </html>
+
