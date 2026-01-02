@@ -1,0 +1,26 @@
+[
+  {
+    "id": "repair_kit",
+    "name": "Repair Kit",
+    "materials": [
+      { "itemId": "scrap_metal", "qty": 5 },
+      { "itemId": "cloth", "qty": 2 }
+    ],
+    "tokenCost": "0.1",
+    "output": { "itemId": "repair_kit", "qty": 1 },
+    "cooldownSeconds": 60,
+    "requiresLevel": 1
+  },
+  {
+    "id": "stimpak",
+    "name": "Stimpak",
+    "materials": [
+      { "itemId": "herb", "qty": 3 },
+      { "itemId": "chem_vial", "qty": 1 }
+    ],
+    "tokenCost": "0.0",
+    "output": { "itemId": "stimpak", "qty": 1 },
+    "cooldownSeconds": 30,
+    "requiresLevel": 1
+  }
+]
