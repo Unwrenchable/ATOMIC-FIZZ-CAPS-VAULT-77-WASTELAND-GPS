@@ -6,10 +6,11 @@
       { "itemId": "scrap_metal", "qty": 5 },
       { "itemId": "cloth", "qty": 2 }
     ],
-    "tokenCost": "0.1",
+    "tokenCost": "0.05",
     "output": { "itemId": "repair_kit", "qty": 1 },
     "cooldownSeconds": 60,
-    "requiresLevel": 1
+    "requiresLevel": 1,
+    "maxPerDay": 10
   },
   {
     "id": "stimpak",
@@ -18,9 +19,36 @@
       { "itemId": "herb", "qty": 3 },
       { "itemId": "chem_vial", "qty": 1 }
     ],
-    "tokenCost": "0.0",
+    "tokenCost": "0.00",
     "output": { "itemId": "stimpak", "qty": 1 },
     "cooldownSeconds": 30,
-    "requiresLevel": 1
+    "requiresLevel": 1,
+    "maxPerDay": 20
+  },
+  {
+    "id": "turret_part",
+    "name": "Turret Part",
+    "materials": [
+      { "itemId": "scrap_metal", "qty": 12 },
+      { "itemId": "circuit", "qty": 2 }
+    ],
+    "tokenCost": "0.25",
+    "output": { "itemId": "turret_part", "qty": 1 },
+    "cooldownSeconds": 300,
+    "requiresLevel": 3,
+    "maxPerDay": 3
+  },
+  {
+    "id": "advanced_kit",
+    "name": "Advanced Kit",
+    "materials": [
+      { "itemId": "turret_part", "qty": 2 },
+      { "itemId": "rare_alloy", "qty": 1 }
+    ],
+    "tokenCost": "1.00",
+    "output": { "itemId": "advanced_kit", "qty": 1 },
+    "cooldownSeconds": 1800,
+    "requiresLevel": 5,
+    "maxPerDay": 1
   }
 ]
