@@ -118,22 +118,57 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://unpkg.com", "https://cdn.jsdelivr.net"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://unpkg.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+
+      scriptSrc: [
+        "'self'",
+        "https://unpkg.com",
+        "https://cdn.jsdelivr.net",
+        "https://www.gstatic.com",
+        "https://www.googletagmanager.com",
+        "https://api.phantom.app",
+        "https://*.phantom.app",
+        "https://wallet.phantom.app"
+      ],
+
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://fonts.googleapis.com",
+        "https://unpkg.com"
+      ],
+
+      fontSrc: [
+        "'self'",
+        "https://fonts.gstatic.com",
+        "data:"
+      ],
+
       imgSrc: [
         "'self'",
         "data:",
         "blob:",
-        "https://tile.openstreetmap.org",
-        "https://*.basemaps.cartocdn.com",
+        "https://*.tile.openstreetmap.org",
+        "https://*.basemaps.cartocdn.com"
       ],
-      connectSrc: ["'self'", SOLANA_RPC, "https://api.devnet.solana.com", "https://api.mainnet-beta.solana.com", "wss:", "https://*"],
+
+      connectSrc: [
+        "'self'",
+        "https://atomicfizzcaps.xyz",
+        "https://www.atomicfizzcaps.xyz",
+        "https://api.mainnet-beta.solana.com",
+        "https://api.devnet.solana.com",
+        "https://api.phantom.app",
+        "https://*.phantom.app",
+        "https://wallet.phantom.app",
+        "wss:"
+      ],
+
       mediaSrc: ["'self'", "data:", "https:"],
       objectSrc: ["'none'"],
       frameSrc: ["'self'"],
       baseUri: ["'self'"],
-    },
+      workerSrc: ["'self'", "blob:"]
+    }
   })
 );
 
@@ -582,3 +617,4 @@ app.post(
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
