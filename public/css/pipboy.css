@@ -1,23 +1,46 @@
-/* pipboy.css – Atomic Fizz CRT Pip-Boy */
+/* pipboy.css – Atomic Fizz CRT Pip-Boy
+   Complete, production-ready stylesheet based on your example.
+   - Full layout for map + overlay drawer
+   - Pip-Boy CRT look and button styles
+   - Safe-area, z-index variables, and accessibility fixes
+*/
 
-/* Global reset */
-* {
-  box-sizing: border-box;
+/* =====================
+   VARIABLES & RESET
+   ===================== */
+:root{
+  --pip-accent: #00ff66;
+  --pip-accent-2: #66ffaa;
+  --pip-warn: #ffaa00;
+  --pip-danger: #ff4444;
+  --drawer-height: 140px;
+  --drawer-bg: rgba(0,8,0,0.92);
+  --z-map: 1;
+  --z-noise: 2;
+  --z-drawer: 40;
+  --z-controls: 60;
+  --z-terminal: 80;
+  --z-modal: 100;
+  --font-mono: "VT323", monospace;
 }
+
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   background: #000;
-  color: #00ff66;
-  font-family: "VT323", monospace;
+  color: var(--pip-accent);
+  font-family: var(--font-mono);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* Utility */
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 /* =====================
    BOOT SCREEN
@@ -26,20 +49,20 @@ html, body {
   position: fixed;
   inset: 0;
   background: #000;
-  color: #00ff66;
+  color: var(--pip-accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: var(--z-modal);
 }
 
 .boot-inner {
   max-width: 800px;
   width: 90%;
-  border: 2px solid #00ff66;
+  border: 2px solid var(--pip-accent);
   padding: 16px;
   background: #000;
-  box-shadow: 0 0 25px #00ff66;
+  box-shadow: 0 0 25px var(--pip-accent);
   position: relative;
 }
 
@@ -48,7 +71,7 @@ html, body {
   white-space: pre-wrap;
   font-size: 16px;
   line-height: 1.4;
-  text-shadow: 0 0 8px #00ff66;
+  text-shadow: 0 0 8px var(--pip-accent);
 }
 
 .boot-prompt {
@@ -75,20 +98,16 @@ html, body {
   height: min(100vh, 700px);
   background: radial-gradient(circle at 30% 10%, #004400 0, #000000 60%);
   border-radius: 40px;
-  box-shadow:
-    0 0 50px #000,
-    inset 0 0 40px #001900;
+  box-shadow: 0 0 50px #000, inset 0 0 40px #001900;
   padding: 12px;
+  overflow: hidden;
 }
 
-/* Bezel */
 .pipboy-bezel {
   position: absolute;
   inset: 0;
   border-radius: 40px;
-  box-shadow:
-    inset 0 0 0 8px #002200,
-    0 0 30px #000;
+  box-shadow: inset 0 0 0 8px #002200, 0 0 30px #000;
   pointer-events: none;
 }
 
@@ -101,8 +120,6 @@ html, body {
   padding: 12px 16px 4px;
   background: #001100;
   overflow: hidden;
-
-  /* FIX: Make children stack vertically */
   display: flex;
   flex-direction: column;
 }
@@ -112,23 +129,21 @@ html, body {
   content: "";
   position: absolute;
   inset: -20%;
-  background: radial-gradient(circle, rgba(0, 255, 100, 0.06), transparent 60%);
+  background: radial-gradient(circle, rgba(0,255,100,0.06), transparent 60%);
   mix-blend-mode: screen;
   pointer-events: none;
 }
-
 .crt::after {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.35),
-      rgba(0, 0, 0, 0.35) 1px,
-      transparent 1px,
-      transparent 3px
-    );
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0.35) 1px,
+    transparent 1px,
+    transparent 3px
+  );
   mix-blend-mode: multiply;
   opacity: 0.7;
   pointer-events: none;
@@ -143,12 +158,13 @@ html, body {
   right: 16px;
   font-size: 14px;
   padding: 4px 10px;
-  border: 1px solid #00ff66;
+  border: 1px solid var(--pip-accent);
   text-decoration: none;
-  color: #00ff66;
-  background: rgba(0, 20, 0, 0.7);
-  box-shadow: 0 0 10px #00ff66;
+  color: var(--pip-accent);
+  background: rgba(0,20,0,0.7);
+  box-shadow: 0 0 10px var(--pip-accent);
   z-index: 10;
+  border-radius: 6px;
 }
 
 .pip-header {
@@ -159,74 +175,47 @@ html, body {
   margin-bottom: 4px;
 }
 
-.pip-title {
-  display: flex;
-  flex-direction: column;
-}
+.pip-title { display: flex; flex-direction: column; }
+.pip-main-title { font-size: 24px; letter-spacing: 2px; text-shadow: 0 0 12px var(--pip-accent); }
+.pip-sub-title { font-size: 14px; opacity: 0.8; }
 
-.pip-main-title {
-  font-size: 24px;
-  letter-spacing: 2px;
-  text-shadow: 0 0 12px #00ff66;
-}
+.pip-controls { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
 
-.pip-sub-title {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-.pip-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: flex-end;
-}
-
-/* Buttons */
+/* =====================
+   BUTTONS (PIP-BOY STYLE)
+   ===================== */
 .btn {
   background: transparent;
-  border: 1px solid #00ff66;
-  color: #00ff66;
-  font-family: inherit;
+  border: 1px solid var(--pip-accent);
+  color: var(--pip-accent);
+  font-family: var(--font-mono);
   font-size: 13px;
-  padding: 4px 10px;
+  padding: 6px 12px;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.05s;
+  border-radius: 999px;
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.25), 0 0 8px rgba(0,255,102,0.04);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn:hover {
-  background: #00ff66;
+  background: var(--pip-accent);
   color: #000;
-  box-shadow: 0 0 10px #00ff66;
+  box-shadow: 0 0 14px var(--pip-accent);
 }
 
-.btn:active {
-  transform: translateY(1px);
-}
+.btn:active { transform: translateY(1px); }
 
-.wallet-btn {
-  border-color: #00ffaa;
-  color: #00ffaa;
-}
+.wallet-btn { border-color: var(--pip-accent-2); color: var(--pip-accent-2); }
+.wallet-btn:hover { background: var(--pip-accent-2); color: #000; box-shadow: 0 0 10px var(--pip-accent-2); }
 
-.wallet-btn:hover {
-  background: #00ffaa;
-  color: #000;
-  box-shadow: 0 0 10px #00ffaa;
-}
+.danger-btn { border-color: #ff0044; color: #ff5577; }
+.danger-btn:hover { background: #ff0044; color: #000; box-shadow: 0 0 15px #ff0044; }
 
-.danger-btn {
-  border-color: #ff0044;
-  color: #ff5577;
-}
-
-.danger-btn:hover {
-  background: #ff0044;
-  color: #000;
-  box-shadow: 0 0 15px #ff0044;
-}
+/* small icon buttons */
+.icon-btn { width: 40px; height: 40px; padding: 6px; display: inline-flex; align-items: center; justify-content: center; }
 
 /* =====================
    STATUS & HUD
@@ -234,255 +223,255 @@ html, body {
 .status {
   font-size: 13px;
   margin-bottom: 4px;
-  padding: 2px 6px;
+  padding: 4px 8px;
   border: 1px solid #004400;
-  background: rgba(0, 20, 0, 0.9);
+  background: rgba(0,20,0,0.9);
+  border-radius: 6px;
 }
 
-.status-good {
-  color: #00ff66;
-}
+.status-good { color: var(--pip-accent); }
+.status-warn { color: var(--pip-warn); }
+.status-bad { color: var(--pip-danger); }
 
-.status-warn {
-  color: #ffaa00;
-}
-
-.status-bad {
-  color: #ff4444;
-}
-
-.hud {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  margin-bottom: 4px;
-  flex-wrap: wrap;
-}
-
-.hud-block {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
+.hud { display: flex; align-items: center; gap: 12px; font-size: 13px; margin-bottom: 4px; flex-wrap: wrap; }
+.hud-block { display: flex; align-items: center; gap: 4px; }
 
 /* =====================
-   MAP (FULLSCREEN)
+   MAP (FULLSCREEN) + OVERLAYS
    ===================== */
 .map-container {
   position: relative;
-  flex: 1 1 auto;
-  min-height: 200px; /* FIX: prevents collapse */
+  width: 100%;
+  height: calc(100vh);
+  min-height: 200px;
   border: 1px solid #003300;
   background: #000;
   overflow: hidden;
-  z-index: 1; /* FIX: ensure map is above noise */
+  z-index: var(--z-map);
+  display: block;
 }
 
 #map {
+  position: absolute;
+  inset: 0;
   height: 100%;
   width: 100%;
   background: #000;
+  z-index: var(--z-map);
 }
 
-/* Static noise overlay */
+/* Static noise overlay (visual only) */
 .static-noise {
-  pointer-events: none !important; /* FIX: allow clicks */
+  pointer-events: none !important;
   position: absolute;
   inset: 0;
   background-image: url("/assets/static-noise.png");
   background-size: cover;
   opacity: 0.09;
   mix-blend-mode: screen;
-  z-index: 0; /* FIX: noise stays behind map */
+  z-index: var(--z-noise);
 }
 
-/* GPS Badge & Button */
+/* Map controls container (keep above drawer if needed) */
+.map-controls {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: var(--z-controls);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* GPS Badge & Button (floating) */
 .gps-badge {
   position: absolute;
   left: 10px;
-  bottom: 36px;
-  padding: 4px 10px;
-  border: 1px solid #00ff66;
-  background: rgba(0, 20, 0, 0.9);
+  bottom: calc(var(--drawer-height) + 18px);
+  padding: 6px 10px;
+  border: 1px solid var(--pip-accent);
+  background: rgba(0,20,0,0.9);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 12px;
+  z-index: var(--z-controls);
+  border-radius: 8px;
 }
 
-.acc-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #ffaa00;
-  box-shadow: 0 0 8px #ffaa00;
-}
+.acc-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--pip-warn); box-shadow: 0 0 8px var(--pip-warn); }
+.acc-good { background: var(--pip-accent); box-shadow: 0 0 8px var(--pip-accent); }
+.acc-bad { background: var(--pip-danger); box-shadow: 0 0 8px var(--pip-danger); }
 
-.acc-good {
-  background: #00ff66;
-  box-shadow: 0 0 8px #00ff66;
-}
-
-.acc-bad {
-  background: #ff4444;
-  box-shadow: 0 0 8px #ff4444;
-}
-
-.gps-btn {
-  position: absolute;
-  right: 10px;
-  bottom: 34px;
-}
+.gps-btn { position: absolute; right: 10px; bottom: calc(var(--drawer-height) + 18px); z-index: var(--z-controls); }
 
 /* =====================
-   TABS
+   TABS (bottom, above drawer)
    ===================== */
 .tabs {
   position: absolute;
   left: 12px;
   right: 12px;
-  bottom: 6px;
+  bottom: calc(var(--drawer-height) + 8px);
   display: flex;
   gap: 8px;
   justify-content: center;
-  z-index: 5;
+  z-index: calc(var(--z-drawer) + 1);
 }
 
 .tab {
-  padding: 4px 10px;
-  border: 1px solid #00ff66;
+  padding: 6px 12px;
+  border: 1px solid var(--pip-accent);
   cursor: pointer;
   font-size: 12px;
   text-transform: uppercase;
-  background: rgba(0, 20, 0, 0.95);
+  background: rgba(0,20,0,0.95);
+  border-radius: 8px;
 }
 
-.tab.active {
-  background: #00ff66;
-  color: #000;
-  box-shadow: 0 0 10px #00ff66;
-}
+.tab.active { background: var(--pip-accent); color: #000; box-shadow: 0 0 10px var(--pip-accent); }
 
 /* =====================
-   TERMINAL PANEL
+   BOTTOM DRAWER (OVER MAP)
    ===================== */
-.terminal {
+#bottom-drawer {
   position: absolute;
-  inset: 40px 40px 60px 40px;
-  background: rgba(0, 10, 0, 0.985);
-  border: 1px solid #00ff66;
-  box-shadow: 0 0 15px #00ff66;
-  z-index: 20;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--drawer-height) + env(safe-area-inset-bottom, 0px));
+  background: var(--drawer-bg);
+  z-index: var(--z-drawer);
   display: flex;
-  align-items: stretch;
+  flex-direction: column;
+  pointer-events: auto;
+  transition: transform 240ms ease;
+  transform: translateY(0);
+  padding: 8px 12px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-top: 1px solid rgba(0,255,102,0.06);
+}
+
+/* hidden state */
+#bottom-drawer.hidden { transform: translateY(calc(var(--drawer-height) + 12px)); pointer-events: none; }
+
+/* handle */
+.drawer-handle {
+  height: 18px;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+.drawer-handle::before {
+  content: "";
+  width: 56px;
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  box-shadow: 0 0 6px rgba(0,255,102,0.06);
 }
 
-.terminal-inner {
-  position: relative;
-  width: 100%;
-  padding: 12px;
+/* drawer content layout */
+.drawer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: 1 1 auto;
 }
 
-.terminal-close {
+/* left/right columns inside drawer */
+.drawer-left, .drawer-right { display:flex; align-items:center; gap:12px; }
+.drawer-left { flex: 1 1 auto; }
+.drawer-right { flex: 0 0 auto; }
+
+/* ensure buttons inside drawer are clickable */
+#bottom-drawer .btn { pointer-events: auto; }
+
+/* Overseer open button hidden until unlocked */
+#overseer-open-btn[aria-hidden="true"] { display: none; }
+
+/* =====================
+   OVERSEER TERMINAL (inside overlay)
+   ===================== */
+#overseer-terminal {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  left: 12px;
+  right: 12px;
+  bottom: calc(var(--drawer-height) + 12px);
+  z-index: var(--z-terminal);
+  max-height: 60vh;
+  overflow: auto;
+  background: rgba(0,10,0,0.985);
+  border: 1px solid var(--pip-accent);
+  box-shadow: 0 0 15px var(--pip-accent);
+  border-radius: 8px;
+  padding: 12px;
+  display: none;
 }
 
-.terminal-body {
-  margin-top: 18px;
-  font-size: 14px;
-  line-height: 1.6;
-}
+#overseer-terminal.open { display: block; pointer-events: auto; }
+
+/* terminal internals */
+.terminal-inner { position: relative; width: 100%; padding: 12px; color: var(--pip-accent); }
+.terminal-close { position: absolute; top: 6px; right: 6px; }
 
 /* =====================
    MODALS
    ===================== */
 .modal {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0,0,0,0.85);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 30;
+  z-index: var(--z-modal);
 }
 
 .modal-inner {
   width: 320px;
   max-width: 90%;
-  border: 1px solid #00ff66;
+  border: 1px solid var(--pip-accent);
   background: #000;
   padding: 16px;
-  box-shadow: 0 0 18px #00ff66;
-}
-
-.modal-title {
-  font-size: 18px;
-  margin-bottom: 8px;
-}
-
-.modal-text {
-  font-size: 14px;
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
-
-.modal-progress {
-  width: 100%;
-  height: 8px;
-  border: 1px solid #00ff66;
-  background: #001800;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-
-.modal-progress-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #00ff66, #66ffaa);
+  box-shadow: 0 0 18px var(--pip-accent);
+  border-radius: 8px;
 }
 
 /* =====================
    RESPONSIVE
    ===================== */
 @media (max-width: 900px) {
-  .pip-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .pip-controls {
-    justify-content: flex-start;
-  }
-
-  .overseer-link {
-    font-size: 12px;
-    padding: 3px 8px;
-  }
-
-  .hud {
-    font-size: 12px;
-  }
+  .pip-header { flex-direction: column; align-items: flex-start; }
+  .pip-controls { justify-content: flex-start; }
+  .overseer-link { font-size: 12px; padding: 3px 8px; }
+  .hud { font-size: 12px; }
+  #overseer-terminal { left: 8px; right: 8px; bottom: calc(var(--drawer-height) + 8px); }
 }
 
 @media (max-width: 600px) {
-  .pipboy-shell {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-  }
-
-  .pipboy-screen {
-    border-radius: 0;
-  }
-
-  .terminal {
-    inset: 20px 16px 50px 16px;
-  }
+  .pipboy-shell { width: 100vw; height: 100vh; border-radius: 0; }
+  .pipboy-screen { border-radius: 0; }
+  .terminal { inset: 20px 16px 50px 16px; }
+  #bottom-drawer { height: calc(var(--drawer-height) + env(safe-area-inset-bottom, 12px)); padding: 10px; }
+  .drawer-handle::before { width: 44px; }
 }
+
+/* =====================
+   Z-INDEX OVERRIDES (library-specific)
+   ===================== */
+/* Leaflet control overrides (if using Leaflet) */
+.leaflet-control { z-index: calc(var(--z-controls) + 1) !important; }
+.leaflet-bottom { margin-bottom: calc(var(--drawer-height) + 8px) !important; }
+
+/* =====================
+   DEBUG HELPERS (comment out in production)
+   ===================== */
+/* * { outline: 1px dashed rgba(255,0,0,0.04); } */
 
 /* =====================
    ANIMATIONS
