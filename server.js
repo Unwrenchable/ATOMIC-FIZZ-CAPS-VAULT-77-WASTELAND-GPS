@@ -114,11 +114,126 @@ app.use(morgan("combined"));
 
 // Load Game Data + Start Event Scheduler + Mount Event Routes
 const gameData = loadAllGameData();
+// POST /api/craft
+// Body: { wallet: string, recipeId: string, amount?: number }
+app.post(
+  "/api/craft",
+  [
+    body("wallet").isString().notEmpty(),
+    body("recipeId").isString().notEmpty(),
+    body("amount").optional().isInt({ min: 1, max: 100 })
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ error: "Invalid request", details: errors.array() });
+
+    const wallet = String(req.body.wallet).trim();
+    const recipeId = String(req.body.recipeId).trim();
+    const amount = Number(req.body.amount || 1);
+
+    // Validate wallet
+    let playerPub;
+    try { playerPub = new PublicKey(wallet); } catch (e) { return res.status(400).json({ error: "Invalid wallet address" }); }
+
+    // Find recipe from loaded gameData
+    const recipe = (gameData.recipes || []).find(r => r.id === recipeId);
+    if (!recipe) return res.status(404).json({ error: "Recipe not found" });
+
+    // Load player data from Redis
+    const playerKey = `player:${wallet}`;
+    let playerData = { lvl: 1, caps: 0, gear: [], inventory: {} };
+    try {
+      const raw = await redis.get(playerKey);
+      if (raw) playerData = JSON.parse(raw);
+    } catch (e) {
+      console.warn("Redis read player failed:", e);
+    }
+
+    // Level check
+    if (recipe.requiresLevel && (playerData.lvl || 0) < recipe.requiresLevel) {
+      return res.status(403).json({ error: "Player level too low for this recipe" });
+    }
+
+    // Acquire simple Redis lock
+    const lockKey = `craft:lock:${wallet}`;
+    const lockVal = `${Date.now()}:${Math.random().toString(36).slice(2)}`;
+    const lockSet = await redis.set(lockKey, lockVal, "NX", "EX", 10);
+    if (!lockSet) return res.status(429).json({ error: "Another craft in progress. Try again." });
+
+    try {
+      // Cooldown per recipe per player
+      const cdKey = `craft:cd:${wallet}:${recipeId}`;
+      const cdExists = await redis.get(cdKey);
+      if (cdExists) return res.status(429).json({ error: "Recipe cooldown active. Try later." });
+
+      // Check materials
+      const inv = playerData.inventory || {};
+      for (let i = 0; i < recipe.materials.length; i++) {
+        const m = recipe.materials[i];
+        const need = BigInt(m.qty) * BigInt(amount);
+        const have = BigInt(inv[m.itemId] || 0);
+        if (have < need) {
+          return res.status(400).json({ error: "Insufficient materials", missing: m.itemId });
+        }
+      }
+
+      // If recipe.tokenCost is set and you want on-chain payment, require client-signed txSig verification.
+      // For now we assume tokenCost is paid off-chain (caps) or server-side; adapt as needed.
+
+      // Deduct materials
+      for (let i = 0; i < recipe.materials.length; i++) {
+        const m = recipe.materials[i];
+        const need = Number(m.qty) * amount;
+        playerData.inventory[m.itemId] = (playerData.inventory[m.itemId] || 0) - need;
+        if (playerData.inventory[m.itemId] <= 0) delete playerData.inventory[m.itemId];
+      }
+
+      // Add output
+      const out = recipe.output;
+      const outQty = (out.qty || 1) * amount;
+      playerData.inventory[out.itemId] = (playerData.inventory[out.itemId] || 0) + outQty;
+
+      // Persist player data
+      await redis.set(playerKey, JSON.stringify(playerData));
+
+      // Set cooldown if defined
+      if (recipe.cooldownSeconds) {
+        await redis.set(cdKey, "1", "EX", recipe.cooldownSeconds);
+      }
+
+      // Emit event for audit
+      try {
+        const evt = { type: "craft", wallet: wallet, recipeId: recipeId, amount: amount, time: Date.now() };
+        await redis.lpush("game:events", JSON.stringify(evt));
+      } catch (e) {
+        console.warn("Failed to emit craft event:", e);
+      }
+
+      return res.json({
+        success: true,
+        recipe: recipeId,
+        amount: amount,
+        inventory: playerData.inventory
+      });
+    } catch (err) {
+      console.error("Craft error:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    } finally {
+      // Release lock if ours
+      try {
+        const cur = await redis.get(lockKey);
+        if (cur === lockVal) await redis.del(lockKey);
+      } catch (e) { /* best-effort */ }
+    }
+  }
+);
+
 console.log("Loaded mintables:", gameData.mintables.length);
 console.log("Loaded events:", gameData.events.length);
 console.log("Loaded loot tables:", gameData.eventLootTables.length);
 console.log("Loaded quests:", gameData.quests.length);
 console.log("Loaded locations:", gameData.locations.length);
+console.log("Loaded recipes:", (gameData.recipes || []).length); // NEW
 
 startEventScheduler(gameData);
 app.use("/events", createEventsRouter(gameData));
@@ -400,3 +515,4 @@ app.post(
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
