@@ -1,8 +1,7 @@
 // public/js/main.js
 // ATOMIC-FIZZ-CAPS VAULT-77 WASTELAND GPS
-// Consolidated drop-in main script
-// + NFT → equipment mapping and stat system
-// + Non-breaking: existing behavior still works, new fields are optional
+// Fallout IRL x Pokemon Go x on-chain loot
+// Backend-integrated, CSP-safe, Leaflet-safe
 
 (function () {
   'use strict';
@@ -18,13 +17,13 @@
     collectibles: [],
     factions: [],
     inventory: [],
-    settings: {}
+    settings: {},
+    player: null
   };
 
   /* ============================================================================
      Module-scoped globals and state
      ============================================================================ */
-  // Map and UI globals
   let map = window.map || null;
   let mapEl = document.getElementById('map') || null;
   let currentMapLayer = null;
@@ -43,9 +42,15 @@
   let _questCheckInterval = null;
   let _geoWatchId = null;
 
-  // Config
+  // Wallet / player
+  let _wallet = {
+    address: null,
+    chain: 'solana',  // future-friendly: 'solana', 'evm', 'other'
+    provider: null
+  };
+
   const CONFIG = {
-    defaultCenter: [36.1699, -115.1398],  // Mojave / Vegas area
+    defaultCenter: [36.1699, -115.1398],
     defaultZoom: 10,
     questCheckMs: 5000,
     mintXpPerAction: 10,
@@ -56,7 +61,8 @@
       toner: 'https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
       satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       osm: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-    }
+    },
+    apiBase: '' // same origin; can be overridden by settings.json
   };
 
   /* ============================================================================
@@ -81,7 +87,7 @@
         .map-container, #map { z-index: 20 !important; pointer-events: auto !important; min-height: ${CONFIG.minMapHeight}px !important; }
         .static-noise, .top-overlay, .overseer-link, .pipboy-screen, .hud { pointer-events: none !important; z-index: 5 !important; }
         .leaflet-tile-pane img.leaflet-tile { visibility: visible !important; opacity: 1 !important; image-rendering: auto !important; }
-        .btn { min-width: 44px; min-height: 44px; touch-action: manipulation; }
+        .btn, .drawer-tabs button, .tab { min-width: 44px; min-height: 40px; touch-action: manipulation; }
       `;
       const s = document.createElement('style');
       s.id = styleId;
@@ -91,65 +97,107 @@
   }());
 
   /* ============================================================================
-     Robust data loader
+     Backend-aware data loader (API first, /data fallback)
      ============================================================================ */
+  async function loadJson(url) {
+    const res = await fetch(url, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const ct = (res.headers.get('content-type') || '').toLowerCase();
+    const text = await res.text();
+    if (!ct.includes('application/json')) {
+      safeWarn('Non-JSON response from', url, 'as', ct, 'preview:', text.slice(0, 200));
+      throw new Error('not_json');
+    }
+    return JSON.parse(text);
+  }
+
   async function loadDataFile(name) {
     try {
+      // API-first for core game collections
+      if (name === 'locations') {
+        try {
+          const api = await loadJson(`${CONFIG.apiBase}/locations`);
+          window.DATA.locations = Array.isArray(api) ? api : [];
+          safeLog('Loaded locations from /locations:', window.DATA.locations.length);
+          return;
+        } catch (e) {
+          safeWarn('API /locations failed, falling back to /data/locations.json', e);
+        }
+      }
+      if (name === 'quests') {
+        try {
+          const api = await loadJson(`${CONFIG.apiBase}/quests`);
+          window.DATA.quests = Array.isArray(api) ? api : [];
+          safeLog('Loaded quests from /quests:', window.DATA.quests.length);
+          return;
+        } catch (e) {
+          safeWarn('API /quests failed, falling back to /data/quests.json', e);
+        }
+      }
+      if (name === 'mintables') {
+        try {
+          const api = await loadJson(`${CONFIG.apiBase}/mintables`);
+          window.DATA.mintables = Array.isArray(api) ? api : [];
+          safeLog('Loaded mintables from /mintables:', window.DATA.mintables.length);
+          return;
+        } catch (e) {
+          safeWarn('API /mintables failed, falling back to /data/mintables.json', e);
+        }
+      }
+
+      // Static fallback
       const url = `/data/${name}.json`;
-      const res = await fetch(url, { cache: 'no-cache' });
-      if (!res.ok) {
-        safeWarn(`${name}.json fetch failed:`, res.status, res.statusText);
-        if (name === 'scavenger') window.DATA.scavenger = [];
-        return;
-      }
-      const contentType = (res.headers.get('content-type') || '').toLowerCase();
-      const text = await res.text();
-      if (!contentType.includes('application/json')) {
-        safeWarn(`${name}.json served as ${contentType}; preview:`, text.slice(0, 400));
-        if (name === 'scavenger') window.DATA.scavenger = [];
-        return;
-      }
-      let json;
-      try {
-        json = JSON.parse(text);
-      } catch (e) {
-        safeWarn(`${name}.json parse error:`, e);
-        if (name === 'scavenger') window.DATA.scavenger = [];
-        return;
-      }
+      safeLog('Loading', name, 'from', url);
+      const json = await loadJson(url);
+
       if (name === 'collectibles') {
         window.DATA.collectiblesPack = {
           id: json.id || null,
           description: json.description || '',
           collectibles: Array.isArray(json.collectibles) ? json.collectibles : []
         };
+      } else if (name === 'settings') {
+        window.DATA.settings = json || {};
+        if (json && json.api && json.api.baseUrl) {
+          CONFIG.apiBase = json.api.baseUrl.replace(/\/+$/, '');
+        }
       } else {
         window.DATA[name] = json;
       }
-      safeLog(`Loaded ${name}.json (${Array.isArray(json) ? json.length : typeof json})`);
+
+      safeLog(
+        `Loaded ${name}.json (${Array.isArray(json) ? json.length : typeof json})`
+      );
     } catch (e) {
-      safeError(`Failed to load ${name}.json`, e);
+      safeWarn(`loadDataFile(${name}) failed:`, e.message || e);
       if (name === 'scavenger') window.DATA.scavenger = [];
     }
   }
 
   async function loadAllData() {
-    const names = ['locations', 'quests', 'scavenger', 'collectibles', 'factions', 'mintables', 'settings'];
-    await Promise.all(names.map(async (name) => {
+    const names = [
+      'settings',
+      'locations',
+      'quests',
+      'scavenger',
+      'collectibles',
+      'factions',
+      'mintables'
+    ];
+    for (const name of names) {
       try {
         await loadDataFile(name);
       } catch (e) {
         safeWarn('loadDataFile failed for', name, e);
         if (name === 'scavenger') window.DATA.scavenger = [];
       }
-    }));
+    }
   }
 
   /* ============================================================================
      PLAYER + EQUIPMENT SYSTEM
      ============================================================================ */
 
-  // Simple, extendable player stat model
   const PLAYER_STATE = {
     base: {
       hp: 100,
@@ -165,7 +213,7 @@
       body: null,
       weapon: null,
       boots: null,
-      misc: []  // rings/trinkets/etc.
+      misc: []
     },
     derived: {
       hp: 100,
@@ -202,7 +250,6 @@
       PLAYER_STATE.equipped.boots
     ];
     const misc = PLAYER_STATE.equipped.misc || [];
-
     const equippedItems = [...slots.filter(Boolean), ...misc];
 
     equippedItems.forEach(item => {
@@ -268,15 +315,8 @@
   }
 
   /* ============================================================================
-     NFT -> in-game item mapping and leveling
+     NFT → in-game item mapping & leveling (future multichain-safe)
      ============================================================================ */
-
-  // This is where we read rolled loot from NFT metadata when present.
-  // Expected backend shape (non-strict, all optional):
-  // nft.metadata.rolledItem = {
-  //   baseId, baseName, name, rarity, isGodTier, stats, meta, variant, effect
-  // }
-
   function nftToGameItem(nft) {
     const meta = nft && nft.metadata ? nft.metadata : {};
     const rolled = meta.rolledItem || nft.rolledItem || null;
@@ -284,7 +324,6 @@
     const rarity = ((rolled && rolled.rarity) || meta.rarity || 'common').toString().toLowerCase();
     const level = Math.max(1, parseInt(meta.level || 1, 10) || 1);
 
-    // If backend sent explicit stats, use them. Otherwise fall back to basePower.
     const statsFromRolled = rolled && rolled.stats ? rolled.stats : null;
     const basePower = Math.max(1, parseFloat(meta.basePower || 1) || 1);
     const type = (rolled && rolled.meta && rolled.meta.type) || meta.type || 'misc';
@@ -304,7 +343,7 @@
 
     const gameItem = {
       id: nft.id || (`mint-${Date.now()}-${Math.random().toString(36).slice(2,8)}`),
-      owner: nft.owner || null,
+      owner: nft.owner || _wallet.address || null,
       name,
       description: nft.description || '',
       image: nft.image || nft.tokenUri || null,
@@ -312,11 +351,13 @@
       rarity,
       level,
       power,
+      chain: nft.chain || _wallet.chain || 'solana',
+      tokenAddress: nft.mint || nft.tokenAddress || null,
       tokenUri: nft.tokenUri || null,
       createdAt: nft.timestamp || nowIso(),
       _xp: nft._xp || 0,
       raw: nft,
-      stats: statsFromRolled || {}, // core stat bag for equipment system
+      stats: statsFromRolled || {},
       meta: {
         type,
         priceCAPS: (rolled && rolled.meta && rolled.meta.priceCAPS) || meta.priceCAPS || 0,
@@ -408,7 +449,7 @@
   }
 
   /* ============================================================================
-     Map initialization and tile handling
+     Map initialization and tile handling (Leaflet-safe)
      ============================================================================ */
   function createTileLayers() {
     if (typeof L === 'undefined') {
@@ -462,17 +503,16 @@
       return;
     }
 
-    if (map && window.L && map instanceof L.Map) {
-      if (currentMapLayer && !currentMapLayer._map) {
-        try { currentMapLayer.addTo(map); } catch (e) { safeWarn('re-adding currentMapLayer failed', e); }
-      }
-      setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 200);
-      return;
-    }
-
+    // Prevent "Map container is already initialized" by reusing the existing map
     mapEl = document.getElementById('map');
     if (!mapEl) {
       safeWarn('initMap: #map element not found');
+      return;
+    }
+    if (mapEl._leaflet_id && window.map && window.map instanceof L.Map) {
+      map = window.map;
+      safeLog('initMap: reusing existing Leaflet map instance');
+      setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 200);
       return;
     }
 
@@ -516,7 +556,7 @@
           try {
             if (!loc || typeof loc.lat !== 'number' || typeof loc.lng !== 'number') return;
             const marker = L.marker([loc.lat, loc.lng]);
-            if (loc.title) marker.bindPopup(`<strong>${loc.title}</strong>`);
+            if (loc.title || loc.name) marker.bindPopup(`<strong>${loc.title || loc.name}</strong>`);
             marker.addTo(locationsLayer);
             marker.on('click', () => {
               if (isFunction(window.onLocationClick)) {
@@ -584,6 +624,7 @@
       const snapshot = {
         DATA: window.DATA,
         PLAYER_STATE,
+        wallet: _wallet,
         ts: Date.now()
       };
       localStorage.setItem(PERSIST_KEY, JSON.stringify(snapshot));
@@ -605,6 +646,9 @@
             recomputePlayerStats();
           } catch (e) { safeWarn('restore PLAYER_STATE failed', e); }
         }
+        if (parsed.wallet && parsed.wallet.address) {
+          _wallet = parsed.wallet;
+        }
         safeLog('Loaded state from localStorage');
         return parsed;
       }
@@ -617,6 +661,57 @@
   /* ============================================================================
      Marketplace, mintables, wallet flow
      ============================================================================ */
+
+  async function walletConnect() {
+    if (isFunction(window.walletConnectFlow)) {
+      try { return await window.walletConnectFlow(); } catch (e) { safeWarn('external walletConnectFlow failed', e); }
+    }
+
+    // Basic Phantom-style detection (future: expand for multichain)
+    const phantom = window.solana && window.solana.isPhantom ? window.solana : null;
+    if (phantom) {
+      try {
+        const resp = await phantom.connect();
+        _wallet.address = resp.publicKey && resp.publicKey.toString ? resp.publicKey.toString() : null;
+        _wallet.chain = 'solana';
+        _wallet.provider = 'phantom';
+        safeLog('Phantom wallet connected', _wallet.address);
+        await refreshPlayerFromBackend();
+        saveState();
+        EventBus.emit('wallet:connected', { wallet: _wallet });
+        return { connected: true, address: _wallet.address };
+      } catch (e) {
+        safeWarn('Phantom connect failed', e);
+        return { connected: false, error: e.message || String(e) };
+      }
+    }
+
+    // Fallback demo
+    safeLog('walletConnect stub: simulated connect');
+    _wallet.address = 'DEMO_WALLET_ADDR';
+    _wallet.chain = 'demo';
+    _wallet.provider = 'stub';
+    await refreshPlayerFromBackend();
+    saveState();
+    EventBus.emit('wallet:connected', { wallet: _wallet });
+    return { connected: true, address: _wallet.address, demo: true };
+  }
+
+  async function refreshPlayerFromBackend() {
+    try {
+      if (!_wallet.address) return;
+      const url = `${CONFIG.apiBase}/player/${encodeURIComponent(_wallet.address)}`;
+      const data = await loadJson(url);
+      window.DATA.player = data;
+      safeLog('Loaded player from backend:', data);
+      if (isFunction(window.onPlayerLoaded)) {
+        try { window.onPlayerLoaded(data); } catch (e) { safeWarn('onPlayerLoaded failed', e); }
+      }
+    } catch (e) {
+      safeWarn('refreshPlayerFromBackend failed', e);
+    }
+  }
+
   function renderShopPanel(containerSelector) {
     try {
       const container = document.querySelector(containerSelector || '#shopPanel');
@@ -688,14 +783,6 @@
     } catch (e) {
       safeWarn('renderShopPanel failed', e);
     }
-  }
-
-  async function walletConnect() {
-    if (isFunction(window.walletConnectFlow)) {
-      try { return await window.walletConnectFlow(); } catch (e) { safeWarn('external walletConnectFlow failed', e); }
-    }
-    safeLog('walletConnect stub: simulated connect');
-    return { connected: true, address: '0xDEMOADDRESS' };
   }
 
   async function mintItem(nftPayload) {
@@ -846,13 +933,13 @@
       if (!modal) {
         modal = document.createElement('div');
         modal.id = 'pipboy-modal';
-        modal.className = 'pipboy-modal';
-        modal.innerHTML = `<div class="modal-inner"><button class="modal-close">×</button><div class="modal-body"></div></div>`;
+        modal.className = 'modal';
+        modal.innerHTML = `<div class="modal-inner"><button class="btn modal-close">×</button><div class="modal-body"></div></div>`;
         document.body.appendChild(modal);
         modal.querySelector('.modal-close').addEventListener('click', () => { modal.style.display = 'none'; });
       }
       modal.querySelector('.modal-body').innerHTML = `<h2>${title}</h2>${html}`;
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
     } catch (e) { safeWarn('showModal failed', e); }
   }
 
@@ -960,6 +1047,84 @@
   }
 
   /* ============================================================================
+     Drawer + UI integration (bottom drawer already styled in pipboy.css)
+     ============================================================================ */
+  function initDrawer() {
+    const drawer = document.getElementById('bottom-drawer');
+    if (!drawer) return;
+
+    const tabs = drawer.querySelectorAll('.drawer-tabs button');
+    const panels = drawer.querySelectorAll('.panel');
+    const handle = drawer.querySelector('.drawer-handle');
+
+    function openDrawer() {
+      drawer.classList.remove('hidden');
+    }
+    function closeDrawer() {
+      drawer.classList.add('hidden');
+    }
+
+    if (handle) {
+      handle.addEventListener('click', () => {
+        if (drawer.classList.contains('hidden')) openDrawer();
+        else closeDrawer();
+      });
+    }
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(b => b.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        const panel = document.getElementById('panel-' + btn.dataset.tab);
+        if (panel) panel.classList.add('active');
+
+        openDrawer();
+        loadPanelData(btn.dataset.tab, panel);
+      });
+    });
+  }
+
+  async function loadPanelData(tab, panel) {
+    if (!panel) return;
+    let url;
+    try {
+      switch (tab) {
+        case 'quests': url = `${CONFIG.apiBase}/quests`; break;
+        case 'items': url = `${CONFIG.apiBase}/mintables`; break;
+        case 'stats':
+          if (_wallet.address) {
+            url = `${CONFIG.apiBase}/player/${encodeURIComponent(_wallet.address)}`;
+          } else {
+            panel.innerHTML = '<div>Connect wallet to load stats.</div>';
+            return;
+          }
+          break;
+        case 'scavenger': url = '/data/scavenger.json'; break;
+        case 'exchange': url = '/data/exchange.json'; break;
+        case 'overseer': url = '/data/overseer.json'; break;
+        case 'terminal': url = '/data/terminal.json'; break;
+        case 'workshops': url = '/data/map/pois/workshops.json'; break;
+        default: return;
+      }
+
+      const res = await fetch(url, { cache: 'no-cache' });
+      if (!res.ok) {
+        panel.innerHTML = `<span style="color:#ff4444">Failed to load ${tab} (${res.status})</span>`;
+        return;
+      }
+      const data = await res.json();
+
+      // Super simple renderer for now; you can replace with rich Pip-Boy layouts
+      panel.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+    } catch (e) {
+      panel.innerHTML = `<span style="color:#ff4444">Error loading ${tab}</span>`;
+      safeWarn('loadPanelData failed for', tab, e);
+    }
+  }
+
+  /* ============================================================================
      UI integration and safe init
      ============================================================================ */
   function initUiSafe() {
@@ -967,6 +1132,8 @@
       try { window.initUi(); return; } catch (e) { safeWarn('external initUi failed', e); }
     }
     safeLog('initUi: no external initUi found, using safe defaults');
+
+    initDrawer();
 
     $all('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -1021,6 +1188,18 @@
         else if (currentMapLayer === osmLayer) currentIdx = 3;
         const nextIdx = (currentIdx + 1) % styles.length;
         switchMapStyle(styles[nextIdx]);
+      });
+    }
+
+    const walletBtn = document.getElementById('walletConnectBtn') || document.getElementById('wallet-btn');
+    if (walletBtn) {
+      walletBtn.addEventListener('click', async () => {
+        const res = await walletConnect();
+        if (res && res.connected && walletBtn) {
+          walletBtn.textContent = _wallet.address
+            ? `${_wallet.address.slice(0,4)}...${_wallet.address.slice(-4)}`
+            : 'Wallet Connected';
+        }
       });
     }
 
@@ -1181,14 +1360,22 @@
       try { initMap(); } catch (e) { safeWarn('initMap error', e); }
       try { initUiSafe(); } catch (e) { safeWarn('initUiSafe error', e); }
 
-      try { switchMapStyle && switchMapStyle(window.DATA.settings && window.DATA.settings.mapStyle ? window.DATA.settings.mapStyle : 'terrain'); } catch (e) { safeWarn('switchMapStyle failed', e); }
+      try {
+        const mapStyle = window.DATA.settings && window.DATA.settings.mapStyle ? window.DATA.settings.mapStyle : 'terrain';
+        switchMapStyle(mapStyle);
+      } catch (e) { safeWarn('switchMapStyle failed', e); }
+
       setTimeout(() => { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); }, 350);
 
       startQuestChecker();
       startGeolocationWatch();
 
       try { if (isFunction(window.openTutorial)) openTutorial(); } catch (e) {}
-      try { if (isFunction(window.setStatus)) setStatus && setStatus('Pip-Boy online. Request GPS to begin tracking.', 'status-good'); } catch (e) { safeLog('status update skipped'); }
+      try {
+        if (isFunction(window.setStatus)) {
+          setStatus('Pip-Boy online. Request GPS to begin tracking.', 'status-good');
+        }
+      } catch (e) { safeLog('status update skipped'); }
 
       _gameInitialized = true;
       safeLog('initGame completed');
@@ -1242,7 +1429,8 @@
       mint: (window.DATA.mintables || []).length,
       quests: (window.DATA.quests || []).length,
       locs: (window.DATA.locations || []).length,
-      stats: getPlayerStats()
+      stats: getPlayerStats(),
+      wallet: _wallet
     });
   };
 
