@@ -35,6 +35,7 @@ const {
   getOrCreateAssociatedTokenAccount,
   createTransferInstruction,
   getMint,
+  getAssociatedTokenAddress,
 } = require("@solana/spl-token");
 
 const { Metaplex } = require("@metaplex-foundation/js");
@@ -208,12 +209,131 @@ console.log("Loaded recipes:", (gameData.recipes || []).length);
 startEventScheduler(gameData);
 app.use("/events", createEventsRouter(gameData));
 
-// Basic Data Endpoints
+/* -------------------------
+   Lua script loader & runner
+   ------------------------- */
+const luaPath = path.join(__dirname, "server", "redis_scripts", "craft_atomic.lua");
+let craftLuaSha = null;
+
+async function loadLuaScripts() {
+  try {
+    const script = fs.readFileSync(luaPath, "utf8");
+    craftLuaSha = await redis.script("load", script);
+    console.log("Loaded craft Lua script SHA:", craftLuaSha);
+  } catch (e) {
+    console.warn("Could not load craft Lua script at startup:", e.message || e);
+    craftLuaSha = null;
+  }
+}
+loadLuaScripts().catch((err) => console.error("Lua load error", err));
+
+async function runCraftLua(wallet, recipe, amount) {
+  const playerKey = `player:${wallet}`;
+  const cdKey = `craft:cd:${wallet}:${recipe.id}`;
+  const recipeJson = JSON.stringify(recipe);
+  const nowTs = String(Date.now());
+
+  const keys = [playerKey, cdKey];
+  const args = [recipeJson, String(amount), nowTs];
+
+  try {
+    if (craftLuaSha) {
+      const res = await redis.evalsha(craftLuaSha, keys.length, ...keys, ...args);
+      return JSON.parse(res);
+    } else {
+      const script = fs.readFileSync(luaPath, "utf8");
+      const res = await redis.eval(script, keys.length, ...keys, ...args);
+      return JSON.parse(res);
+    }
+  } catch (err) {
+    if (err && err.message && err.message.includes("NOSCRIPT")) {
+      const script = fs.readFileSync(luaPath, "utf8");
+      craftLuaSha = await redis.script("load", script);
+      const res = await redis.evalsha(craftLuaSha, keys.length, ...keys, ...args);
+      return JSON.parse(res);
+    }
+    throw err;
+  }
+}
+
+/* -------------------------
+   Utility helpers
+   ------------------------- */
+function parseHumanAmountToBase(amountStr, decimals) {
+  if (typeof amountStr === "number") amountStr = amountStr.toString();
+  if (typeof amountStr !== "string") throw new Error("Amount must be a string or number");
+  amountStr = amountStr.trim();
+  if (/^\d+$/.test(amountStr)) return BigInt(amountStr);
+  if (!/^\d+(\.\d+)?$/.test(amountStr)) throw new Error("Amount must be a non-negative decimal number");
+  const parts = amountStr.split(".");
+  const intPart = parts[0] || "0";
+  const fracPart = parts[1] || "";
+  if (fracPart.length > decimals) throw new Error("Amount has more decimal places than the token supports");
+  const fracPadded = fracPart.padEnd(decimals, "0");
+  const baseStr = (intPart + fracPadded).replace(/^0+(?=\d)|^$/, "0");
+  return BigInt(baseStr);
+}
+
+function mintpubToString(mintPubkey) {
+  try { return mintPubkey.toBase58(); } catch (e) { return String(mintPubkey); }
+}
+
+async function verifyTokenTransferTx(txSig, walletPubkeyStr, requiredBaseAmount, mintPubkey, expectedDestAta) {
+  const parsed = await connection.getParsedTransaction(txSig, { commitment: "confirmed" });
+  if (!parsed) throw new Error("tx_not_found_or_unconfirmed");
+  const meta = parsed.meta;
+  if (!meta || meta.err) throw new Error("tx_failed");
+
+  let found = null;
+  const inner = meta.innerInstructions || [];
+  for (const group of inner) {
+    for (const ix of group.instructions || []) {
+      if (ix.program === "spl-token" && ix.parsed && ix.parsed.type === "transfer") {
+        const info = ix.parsed.info;
+        if (info.mint === mintpubToString(mintPubkey)) {
+          found = { source: info.source, dest: info.destination, amount: BigInt(info.amount) };
+          break;
+        }
+      }
+    }
+    if (found) break;
+  }
+
+  if (!found) {
+    const topIns = parsed.transaction.message.instructions || [];
+    for (const ix of topIns) {
+      if (ix.program === "spl-token" && ix.parsed && ix.parsed.type === "transfer") {
+        const info = ix.parsed.info;
+        if (info.mint === mintpubToString(mintPubkey)) {
+          found = { source: info.source, dest: info.destination, amount: BigInt(info.amount) };
+          break;
+        }
+      }
+    }
+  }
+
+  if (!found) throw new Error("no_valid_token_transfer_found");
+
+  if (expectedDestAta && found.dest !== expectedDestAta.toBase58()) throw new Error("destination_mismatch");
+
+  if (found.amount < BigInt(requiredBaseAmount)) throw new Error("insufficient_amount_in_tx");
+
+  const expectedSourceAta = await getAssociatedTokenAddress(mintPubkey, new PublicKey(walletPubkeyStr));
+  if (found.source !== expectedSourceAta.toBase58()) throw new Error("source_not_player_ata");
+
+  return true;
+}
+
+/* -------------------------
+   Basic Data Endpoints
+   ------------------------- */
 app.get("/locations", (req, res) => res.json(LOCATIONS));
 app.get("/quests", (req, res) => res.json(QUESTS));
 app.get("/mintables", (req, res) => res.json(MINTABLES));
 
-// Player Data
+/* -------------------------
+   Player endpoints
+   ------------------------- */
 app.get("/player/:addr", async (req, res) => {
   const { addr } = req.params;
   try { new PublicKey(addr); }
@@ -242,16 +362,17 @@ app.post("/player/:addr", async (req, res) => {
 });
 
 /* -------------------------
-   Crafting endpoint
+   Crafting endpoint (with Lua atomic update and optional txSig verification)
    ------------------------- */
 // POST /api/craft
-// Body: { wallet: string, recipeId: string, amount?: number }
+// Body: { wallet: string, recipeId: string, amount?: number, txSig?: string }
 app.post(
   "/api/craft",
   [
     body("wallet").isString().notEmpty(),
     body("recipeId").isString().notEmpty(),
-    body("amount").optional().isInt({ min: 1, max: 100 })
+    body("amount").optional().isInt({ min: 1, max: 100 }),
+    body("txSig").optional().isString()
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -260,16 +381,14 @@ app.post(
     const wallet = String(req.body.wallet).trim();
     const recipeId = String(req.body.recipeId).trim();
     const amount = Number(req.body.amount || 1);
+    const txSig = req.body.txSig;
 
-    // Validate wallet
-    let playerPub;
-    try { playerPub = new PublicKey(wallet); } catch (e) { return res.status(400).json({ error: "Invalid wallet address" }); }
+    try { new PublicKey(wallet); } catch (e) { return res.status(400).json({ error: "Invalid wallet address" }); }
 
-    // Find recipe from loaded gameData
     const recipe = (gameData.recipes || []).find(r => r.id === recipeId);
     if (!recipe) return res.status(404).json({ error: "Recipe not found" });
 
-    // Load player data from Redis
+    // Load player data (best-effort)
     const playerKey = `player:${wallet}`;
     let playerData = { lvl: 1, caps: 0, gear: [], inventory: {} };
     try {
@@ -279,78 +398,51 @@ app.post(
       console.warn("Redis read player failed:", e);
     }
 
-    // Level check
     if (recipe.requiresLevel && (playerData.lvl || 0) < recipe.requiresLevel) {
       return res.status(403).json({ error: "Player level too low for this recipe" });
     }
 
-    // Acquire simple Redis lock
-    const lockKey = `craft:lock:${wallet}`;
-    const lockVal = `${Date.now()}:${Math.random().toString(36).slice(2)}`;
-    const lockSet = await redis.set(lockKey, lockVal, "NX", "EX", 10);
-    if (!lockSet) return res.status(429).json({ error: "Another craft in progress. Try again." });
+    // If recipe requires token payment, verify client-signed txSig first
+    if (recipe.tokenCost) {
+      if (!txSig) return res.status(400).json({ error: "txSig required for token-cost recipes" });
 
-    try {
-      // Cooldown per recipe per player
-      const cdKey = `craft:cd:${wallet}:${recipeId}`;
-      const cdExists = await redis.get(cdKey);
-      if (cdExists) return res.status(429).json({ error: "Recipe cooldown active. Try later." });
-
-      // Check materials
-      const inv = playerData.inventory || {};
-      for (let i = 0; i < (recipe.materials || []).length; i++) {
-        const m = recipe.materials[i];
-        const need = BigInt(m.qty) * BigInt(amount);
-        const have = BigInt(inv[m.itemId] || 0);
-        if (have < need) {
-          return res.status(400).json({ error: "Insufficient materials", missing: m.itemId });
-        }
-      }
-
-      // Deduct materials
-      for (let i = 0; i < (recipe.materials || []).length; i++) {
-        const m = recipe.materials[i];
-        const need = Number(m.qty) * amount;
-        playerData.inventory[m.itemId] = (playerData.inventory[m.itemId] || 0) - need;
-        if (playerData.inventory[m.itemId] <= 0) delete playerData.inventory[m.itemId];
-      }
-
-      // Add output
-      const out = recipe.output || { itemId: "unknown", qty: 1 };
-      const outQty = (out.qty || 1) * amount;
-      playerData.inventory[out.itemId] = (playerData.inventory[out.itemId] || 0) + outQty;
-
-      // Persist player data
-      await redis.set(playerKey, JSON.stringify(playerData));
-
-      // Set cooldown if defined
-      if (recipe.cooldownSeconds) {
-        await redis.set(cdKey, "1", "EX", recipe.cooldownSeconds);
-      }
-
-      // Emit event for audit
       try {
-        const evt = { type: "craft", wallet: wallet, recipeId: recipeId, amount: amount, time: Date.now() };
+        const mintInfo = await getMint(connection, MINT_PUBKEY);
+        const decimals = Number(mintInfo.decimals || 0);
+        const requiredBase = parseHumanAmountToBase(recipe.tokenCost, decimals) * BigInt(amount);
+
+        const vaultAtaAddress = await getAssociatedTokenAddress(MINT_PUBKEY, GAME_VAULT.publicKey);
+
+        await verifyTokenTransferTx(txSig, wallet, requiredBase, MINT_PUBKEY, vaultAtaAddress);
+
+        const usedKey = `usedTx:${txSig}`;
+        const used = await redis.set(usedKey, "1", "NX", "EX", 60 * 60 * 24);
+        if (!used) return res.status(400).json({ error: "txSig already used" });
+      } catch (e) {
+        return res.status(400).json({ error: "tx verification failed", details: e.message });
+      }
+    }
+
+    // Run atomic Lua script to check/deduct materials, add output, set cooldown
+    try {
+      const luaResult = await runCraftLua(wallet, recipe, amount);
+      if (!luaResult.ok) {
+        if (luaResult.error === "cooldown") return res.status(429).json({ error: "Recipe cooldown active" });
+        if (luaResult.error === "insufficient") return res.status(400).json({ error: "Insufficient materials", missing: luaResult.missing });
+        return res.status(400).json({ error: "Craft failed", details: luaResult.error });
+      }
+
+      try {
+        const evt = { type: "craft", wallet, recipeId: recipe.id, amount, txSig: txSig || null, time: Date.now() };
         await redis.lpush("game:events", JSON.stringify(evt));
       } catch (e) {
         console.warn("Failed to emit craft event:", e);
       }
 
-      return res.json({
-        success: true,
-        recipe: recipeId,
-        amount: amount,
-        inventory: playerData.inventory
-      });
+      return res.json({ success: true, recipe: recipe.id, amount, inventory: luaResult.inventory });
     } catch (err) {
-      console.error("Craft error:", err);
+      console.error("Craft Lua error", err);
       return res.status(500).json({ error: "Internal server error" });
-    } finally {
-      // Release lock if ours
-      try {
-        const cur = await redis.get(lockKey);
-        if (cur === lockVal) await redis.del(lockKey);
-      } catch (e) { /* best-effort */ }
     }
   }
 );
@@ -366,7 +458,6 @@ app.post(
     body("amount").not().isEmpty(), // accept string or number; we'll validate below
   ],
   async (req, res) => {
-    // Basic validation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: "Invalid request", details: errors.array() });
@@ -375,7 +466,6 @@ app.post(
     const wallet = String(req.body.wallet).trim();
     const amountInput = req.body.amount;
 
-    // Validate Solana address
     let recipientPubkey;
     try {
       recipientPubkey = new PublicKey(wallet);
@@ -383,51 +473,35 @@ app.post(
       return res.status(400).json({ error: "Invalid wallet address" });
     }
 
-    // Helper: parse human amount string into base units (BigInt) using decimals
-    function parseHumanAmountToBase(amountStr, decimals) {
-      if (typeof amountStr === "number") {
-        amountStr = amountStr.toString();
-      }
+    function parseHumanAmountToBaseLocal(amountStr, decimals) {
+      if (typeof amountStr === "number") amountStr = amountStr.toString();
       if (typeof amountStr !== "string") throw new Error("Amount must be a string or number");
-
       amountStr = amountStr.trim();
-      // Accept integer strings (base units) as well
-      if (/^\d+$/.test(amountStr)) {
-        return BigInt(amountStr);
-      }
+      if (/^\d+$/.test(amountStr)) return BigInt(amountStr);
       if (!/^\d+(\.\d+)?$/.test(amountStr)) throw new Error("Amount must be a non-negative decimal number");
-
-      var parts = amountStr.split(".");
-      var intPart = parts[0] || "0";
-      var fracPart = parts[1] || "";
-
-      if (fracPart.length > decimals) {
-        throw new Error("Amount has more decimal places than the token supports");
-      }
-
-      var fracPadded = fracPart.padEnd(decimals, "0");
-      var baseStr = intPart + fracPadded;
-      baseStr = baseStr.replace(/^0+(?=\d)|^$/, "0");
+      const parts = amountStr.split(".");
+      const intPart = parts[0] || "0";
+      const fracPart = parts[1] || "";
+      if (fracPart.length > decimals) throw new Error("Amount has more decimal places than the token supports");
+      const fracPadded = fracPart.padEnd(decimals, "0");
+      const baseStr = (intPart + fracPadded).replace(/^0+(?=\d)|^$/, "0");
       return BigInt(baseStr);
     }
 
     const cooldownKey = `terminal:cooldown:${wallet}`;
 
     try {
-      // Atomically claim cooldown (SET NX EX)
       const setOk = await redis.set(cooldownKey, "1", "NX", "EX", COOLDOWN);
       if (!setOk) {
         return res.status(429).json({ error: "Cooldown active. Try again later." });
       }
 
-      // Fetch mint info to get decimals
       const mintInfo = await getMint(connection, MINT_PUBKEY);
       const decimals = Number(mintInfo.decimals || 0);
 
-      // Parse amount input into base units (BigInt)
       let baseAmount;
       try {
-        baseAmount = parseHumanAmountToBase(amountInput, decimals);
+        baseAmount = parseHumanAmountToBaseLocal(amountInput, decimals);
       } catch (parseErr) {
         await redis.del(cooldownKey);
         return res.status(400).json({ error: "Invalid amount", details: parseErr.message });
@@ -438,10 +512,9 @@ app.post(
         return res.status(400).json({ error: "Amount must be greater than zero" });
       }
 
-      // Ensure GAME_VAULT ATA exists and check balance
       const vaultAta = await getOrCreateAssociatedTokenAccount(
         connection,
-        GAME_VAULT, // payer / signer
+        GAME_VAULT,
         MINT_PUBKEY,
         GAME_VAULT.publicKey
       );
@@ -452,7 +525,6 @@ app.post(
         return res.status(400).json({ error: "Vault has insufficient token balance" });
       }
 
-      // Ensure recipient ATA exists (GAME_VAULT pays fees)
       const recipientAta = await getOrCreateAssociatedTokenAccount(
         connection,
         GAME_VAULT,
@@ -460,7 +532,6 @@ app.post(
         recipientPubkey
       );
 
-      // Build transfer instruction
       const transferIx = createTransferInstruction(
         vaultAta.address,
         recipientAta.address,
@@ -468,24 +539,20 @@ app.post(
         baseAmount
       );
 
-      // Build transaction
       const tx = new Transaction().add(transferIx);
       tx.feePayer = GAME_VAULT.publicKey;
       const latest = await connection.getLatestBlockhash("finalized");
       tx.recentBlockhash = latest.blockhash;
 
-      // Send and confirm transaction signed by GAME_VAULT
       const txSig = await sendAndConfirmTransaction(connection, tx, [GAME_VAULT], {
         commitment: "confirmed",
       });
 
-      // Best-effort: update player state in Redis (non-fatal)
       try {
         const playerKey = `player:${wallet}`;
         const raw = await redis.get(playerKey);
         if (raw) {
           const pd = JSON.parse(raw);
-          // Note: storing base units as Number may overflow for very large amounts; adapt schema if needed
           pd.caps = (pd.caps || 0) + Number(baseAmount);
           await redis.set(playerKey, JSON.stringify(pd));
         }
@@ -493,7 +560,6 @@ app.post(
         console.warn("Failed to update player caps in Redis:", e);
       }
 
-      // Success response
       return res.json({
         success: true,
         tx: txSig,
@@ -505,9 +571,7 @@ app.post(
         message: "Reward transferred. Transaction confirmed.",
       });
     } catch (err) {
-      // Remove cooldown so user can retry (policy choice)
       try { await redis.del(cooldownKey); } catch (e) { /* ignore */ }
-
       console.error("Terminal reward error:", err);
       return res.status(500).json({ error: "Internal server error" });
     }
