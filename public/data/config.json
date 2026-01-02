@@ -1,0 +1,14 @@
+{
+  "appName": "Vault 77 Pip-Boy Shell",
+  "version": "0.1.0",
+  "publicPath": "/",
+  "dataPath": "/data/recipes.json",
+  "feedEndpoint": "/api/feed",
+  "enableCRT": false,
+  "enableAudio": false,
+  "defaultPort": 3000,
+  "dev": {
+    "logLevel": "debug",
+    "useFallbackData": true
+  }
+}
