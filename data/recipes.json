@@ -1,5 +1,3 @@
-mkdir -p public/data
-cat > public/data/recipes.json <<'JSON'
 [
   {
     "id": "repair_kit",
@@ -54,4 +52,4 @@ cat > public/data/recipes.json <<'JSON'
     "maxPerDay": 1
   }
 ]
-JSON
+
