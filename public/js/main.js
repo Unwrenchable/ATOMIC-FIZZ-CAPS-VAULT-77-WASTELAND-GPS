@@ -1,4 +1,4 @@
-// public/js/main.js - Fixed and Complete
+// public/js/main.js - Fixed and Complete with Drawer Inner Tabs Switching
 (function () {
   'use strict';
 
@@ -55,14 +55,10 @@
     
     for (const name of files) {
       try {
-        // Try API endpoint first
         let data = await loadJson(`${CONFIG.apiBase}/${name}`);
-        
-        // Fallback to /data/ directory
         if (!data) {
           data = await loadJson(`/data/${name}.json`);
         }
-        
         if (data) {
           window.DATA[name] = data;
           safeLog(`Loaded ${name}:`, Array.isArray(data) ? data.length : 'object');
@@ -72,7 +68,6 @@
       }
     }
     
-    // Ensure arrays
     window.DATA.locations = Array.isArray(window.DATA.locations) ? window.DATA.locations : [];
     window.DATA.quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
     window.DATA.mintables = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
@@ -92,7 +87,6 @@
       return;
     }
 
-    // Reuse existing map
     if (map && map instanceof L.Map) {
       setTimeout(() => {
         if (map.invalidateSize) map.invalidateSize();
@@ -111,13 +105,11 @@
       window.map = map;
       window._map = map;
 
-      // OSM layer
       osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap'
       });
 
-      // Carto Dark layer
       cartoDarkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 20,
         attribution: '© OpenStreetMap © Carto'
@@ -126,7 +118,6 @@
       currentMapLayer = cartoDarkLayer || osmLayer;
       if (currentMapLayer) currentMapLayer.addTo(map);
 
-      // Add location markers
       if (Array.isArray(window.DATA.locations)) {
         window.DATA.locations.forEach(loc => {
           if (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number') {
@@ -164,7 +155,6 @@
 
         _lastPlayerPosition = { lat, lng, accuracy: acc };
 
-        // Update GPS badge
         const accDot = document.getElementById('accDot');
         const accText = document.getElementById('accText');
         if (accDot && accText) {
@@ -172,7 +162,6 @@
           accDot.className = acc <= 20 ? 'acc-dot acc-good' : 'acc-dot';
         }
 
-        // Update player marker
         if (map) {
           if (!map._playerMarker) {
             map._playerMarker = L.circleMarker([lat, lng], {
@@ -220,7 +209,7 @@
     }
   }
 
-  /* UI Initialization */
+  /* UI Initialization - now includes drawer inner tabs switching */
   function initUI() {
     // Connect wallet button
     const walletBtn = document.getElementById('connectWallet');
@@ -265,14 +254,7 @@
         
         try {
           if (currentMapLayer) map.removeLayer(currentMapLayer);
-          
-          // Toggle between layers
-          if (currentMapLayer === cartoDarkLayer) {
-            currentMapLayer = osmLayer;
-          } else {
-            currentMapLayer = cartoDarkLayer;
-          }
-          
+          currentMapLayer = (currentMapLayer === cartoDarkLayer) ? osmLayer : cartoDarkLayer;
           if (currentMapLayer) currentMapLayer.addTo(map);
           setTimeout(() => {
             if (map && map.invalidateSize) map.invalidateSize();
@@ -283,10 +265,9 @@
       });
     }
 
-    // Drawer toggle
+    // Outer bottom drawer toggle
     const drawer = document.getElementById('bottom-drawer');
     const drawerToggle = document.getElementById('drawer-toggle');
-    
     if (drawer && drawerToggle) {
       drawerToggle.addEventListener('click', () => {
         drawer.classList.toggle('hidden');
@@ -300,14 +281,12 @@
     const tutorialModal = document.getElementById('tutorialModal');
     const tutorialClose = document.getElementById('tutorialClose');
     const openTutorial = document.getElementById('openTutorial');
-    
     if (tutorialClose && tutorialModal) {
       tutorialClose.addEventListener('click', () => {
         tutorialModal.classList.add('hidden');
         tutorialModal.style.display = 'none';
       });
     }
-    
     if (openTutorial && tutorialModal) {
       openTutorial.addEventListener('click', () => {
         tutorialModal.classList.remove('hidden');
@@ -315,7 +294,40 @@
       });
     }
 
-    safeLog('UI initialized');
+    // === NEW: Inner drawer tabs switching (Stats, Items, Quests, etc.) ===
+    const drawerTabs = document.querySelectorAll('.drawer-tabs button');
+    drawerTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Deactivate all tabs
+        drawerTabs.forEach(t => t.classList.remove('active'));
+        // Activate clicked tab
+        tab.classList.add('active');
+
+        // Hide all panels
+        document.querySelectorAll('.drawer-panels .panel').forEach(panel => {
+          panel.classList.remove('active');
+          panel.style.display = 'none';
+        });
+
+        // Show the corresponding panel
+        const panelId = `panel-${tab.dataset.tab}`;
+        const targetPanel = document.getElementById(panelId);
+        if (targetPanel) {
+          targetPanel.classList.add('active');
+          targetPanel.style.display = 'block';
+        }
+
+        // Optional: log for debugging
+        safeLog(`Drawer tab switched to: ${tab.dataset.tab}`);
+      });
+    });
+
+    // Activate first tab by default (e.g. Stats)
+    if (drawerTabs.length > 0) {
+      drawerTabs[0].click();
+    }
+
+    safeLog('UI initialized (with drawer inner tabs)');
   }
 
   /* Main initialization */
@@ -328,7 +340,6 @@
       initMap();
       initUI();
 
-      // Update location count
       const locCount = document.getElementById('locations-count');
       if (locCount) {
         locCount.textContent = window.DATA.locations.length;
@@ -372,4 +383,4 @@
     location: () => _lastPlayerPosition
   };
 
-}());
+})();
