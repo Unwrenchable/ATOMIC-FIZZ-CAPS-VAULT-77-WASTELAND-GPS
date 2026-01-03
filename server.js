@@ -1,6 +1,6 @@
 // server.js
 // === Atomic Fizz Caps Vault 77 Wasteland GPS Backend ===
-// FIXED VERSION - All paths and imports corrected
+// COMPLETE & FIXED VERSION - January 2026
 
 require("dotenv").config();
 const fs = require("fs");
@@ -13,10 +13,7 @@ const rateLimit = require("express-rate-limit");
 const { body, validationResult } = require("express-validator");
 const Redis = require("ioredis");
 const nacl = require("tweetnacl");
-
-// bs58 fix for Node 20+
-const bs58pkg = require("bs58");
-const bs58 = bs58pkg.default || bs58pkg;
+const bs58 = require("bs58").default || require("bs58");
 
 const {
   Connection,
@@ -30,10 +27,7 @@ const {
   getOrCreateAssociatedTokenAccount,
   createTransferInstruction,
   getMint,
-  getAssociatedTokenAddress,
 } = require("@solana/spl-token");
-
-const { Metaplex } = require("@metaplex-foundation/js");
 
 // Required ENV Vars
 const requiredEnv = [
@@ -63,22 +57,19 @@ const {
 // Solana + Redis Setup
 const connection = new Connection(SOLANA_RPC, "confirmed");
 const MINT_PUBKEY = new PublicKey(TOKEN_MINT);
-const GAME_VAULT = Keypair.fromSecretKey(
-  Uint8Array.from(JSON.parse(GAME_VAULT_SECRET))
-);
+const GAME_VAULT = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(GAME_VAULT_SECRET)));
 const COOLDOWN = Number(COOLDOWN_SECONDS);
 const redis = new Redis(REDIS_URL);
 
-redis.on("error", (err) => console.error("Redis error:", err));
+redis.on("error", (err) => console.error("Redis connection error:", err));
 
-// Server Ed25519 Keypair
+// Server Ed25519 Keypair for signing
 const serverSecretKeyUint8 = bs58.decode(SERVER_SECRET_KEY);
 if (serverSecretKeyUint8.length !== 64) {
-  console.error("SERVER_SECRET_KEY must be a 64-byte Ed25519 secret key (base58)");
+  console.error("SERVER_SECRET_KEY must be 64-byte Ed25519 secret key (base58)");
   process.exit(1);
 }
 const serverKeypair = nacl.sign.keyPair.fromSecretKey(serverSecretKeyUint8);
-const SERVER_PUBKEY = bs58.encode(serverKeypair.publicKey);
 
 // Donation Wallet
 const DONATION_WALLET = "GtW88raUHJmcFyqDviE1ZNsQxNpZ5US7TMGf5dzac42u";
@@ -90,17 +81,20 @@ try {
   process.exit(1);
 }
 
-// FIXED: Data Loading helper - corrected path
+// Data Loading Helper
 function safeJsonRead(filePath) {
   try {
+    if (!fs.existsSync(filePath)) {
+      console.warn(`File not found: ${filePath}`);
+      return [];
+    }
     return JSON.parse(fs.readFileSync(filePath, "utf8"));
   } catch (e) {
-    console.error("JSON load error:", filePath, e.message);
+    console.error(`JSON load error: ${filePath}`, e.message);
     return [];
   }
 }
 
-// FIXED: Use public/data directory
 const DATA_DIR = path.join(__dirname, "public", "data");
 const LOCATIONS = safeJsonRead(path.join(DATA_DIR, "locations.json"));
 const QUESTS = safeJsonRead(path.join(DATA_DIR, "quests.json"));
@@ -109,12 +103,9 @@ const EVENTS = safeJsonRead(path.join(DATA_DIR, "events.json"));
 const EVENT_LOOT_TABLES = safeJsonRead(path.join(DATA_DIR, "eventLootTables.json"));
 const RECIPES = safeJsonRead(path.join(DATA_DIR, "recipes.json"));
 
-// Create lookup maps for events
-const eventsById = new Map();
-EVENTS.forEach(e => { if (e && e.id) eventsById.set(e.id, e); });
-
-const lootTablesById = new Map();
-EVENT_LOOT_TABLES.forEach(t => { if (t && t.id) lootTablesById.set(t.id, t); });
+// Event Lookup Maps
+const eventsById = new Map(EVENTS.map(e => [e.id, e]));
+const lootTablesById = new Map(EVENT_LOOT_TABLES.map(t => [t.id, t]));
 
 const gameData = {
   locations: LOCATIONS,
@@ -127,18 +118,20 @@ const gameData = {
   lootTablesById
 };
 
-console.log("Loaded locations:", LOCATIONS.length);
-console.log("Loaded quests:", QUESTS.length);
-console.log("Loaded mintables:", MINTABLES.length);
-console.log("Loaded events:", EVENTS.length);
-console.log("Loaded loot tables:", EVENT_LOOT_TABLES.length);
-console.log("Loaded recipes:", RECIPES.length);
+console.log("Loaded data:", {
+  locations: LOCATIONS.length,
+  quests: QUESTS.length,
+  mintables: MINTABLES.length,
+  events: EVENTS.length,
+  lootTables: EVENT_LOOT_TABLES.length,
+  recipes: RECIPES.length
+});
 
 // Express App
 const app = express();
 app.use(morgan("combined"));
 
-// Security middlewares
+// Helmet CSP - Secure & Modern
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -153,24 +146,9 @@ app.use(
         "https://*.phantom.app",
         "https://wallet.phantom.app"
       ],
-      styleSrc: [
-        "'self'",
-        "'unsafe-inline'",
-        "https://fonts.googleapis.com",
-        "https://unpkg.com"
-      ],
-      fontSrc: [
-        "'self'",
-        "https://fonts.gstatic.com",
-        "data:"
-      ],
-      imgSrc: [
-        "'self'",
-        "data:",
-        "blob:",
-        "https://*.tile.openstreetmap.org",
-        "https://*.basemaps.cartocdn.com"
-      ],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://unpkg.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+      imgSrc: ["'self'", "data:", "blob:", "https://*.tile.openstreetmap.org", "https://*.basemaps.cartocdn.com"],
       connectSrc: [
         "'self'",
         "https://atomicfizzcaps.xyz",
@@ -194,24 +172,23 @@ app.use(
 app.use(cors());
 app.use(express.json({ limit: "100kb" }));
 
-// Rate Limits
+// Rate Limiting
 const globalLimiter = rateLimit({
   windowMs: 60_000,
   max: 200,
-  message: { error: "Too many requests, please try again later." },
+  message: { error: "Too many requests, please try again later." }
 });
 const actionLimiter = rateLimit({
   windowMs: 60_000,
   max: 20,
-  message: { error: "Action rate limit exceeded." },
+  message: { error: "Action rate limit exceeded." }
 });
 app.use(globalLimiter);
 
-// Bot Shield
+// Bot Shield Middleware
 async function botShield(req, res, next) {
   try {
-    const ipHeader = req.headers["x-forwarded-for"];
-    const ip = (ipHeader ? ipHeader.split(",")[0].trim() : req.ip) || "unknown";
+    const ip = (req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.ip) || "unknown";
     const ua = (req.headers["user-agent"] || "").slice(0, 200);
 
     const ipKey = `rep:ip:${ip}`;
@@ -233,58 +210,50 @@ async function botShield(req, res, next) {
   }
 }
 
-// Apply to sensitive endpoints
+// Apply protection to sensitive endpoints
 app.use(
-  ["/find-loot", "/shop", "/battle", "/terminal-reward", "/claim-voucher", "/api/craft"],
+  ["/find-loot", "/shop", "/battle", "/terminal-reward", "/claim-voucher", "/api/craft", "/api/post-trade", "/api/post-nft"],
   botShield,
   actionLimiter
 );
 
 // Static Files
-const PUBLIC_DIR = path.join(__dirname, "public");
-app.use(express.static(PUBLIC_DIR, {
-  setHeaders: (res, filePath) => {
-    if (path.extname(filePath) === ".js") {
-      res.setHeader("Content-Type", "application/javascript");
-    }
-  }
-}));
+app.use(express.static(path.join(__dirname, "public")));
 
-// Simple event system (inline since we don't have separate files)
+// Simple Event Scheduler (in-memory for now)
 const activeEvents = new Map();
 const lastActivation = new Map();
 
 function canActivateEvent(ev, now = new Date()) {
   const hour = now.getHours();
-  const { activeWindow, cooldownMinutes, flags = {} } = ev;
+  const { activeWindow, cooldownMinutes = 60, flags = {} } = ev;
 
   if (activeWindow) {
-    const start = activeWindow.startHourLocal;
-    const end = activeWindow.endHourLocal;
+    const { startHourLocal: start, endHourLocal: end } = activeWindow;
     if (start < end) {
       if (hour < start || hour >= end) return false;
-    } else {
-      if (!(hour >= start || hour < end)) return false;
+    } else if (!(hour >= start || hour < end)) {
+      return false;
     }
   }
 
   const last = lastActivation.get(ev.id);
   if (last) {
-    const diffMin = (now - last) / 60000;
+    const diffMin = (now - new Date(last)) / 60000;
     if (diffMin < cooldownMinutes) return false;
   }
 
   if (flags.uniquePerDay && last) {
-    const lastDayKey = new Date(last).toISOString().slice(0, 10);
-    const todayKey = now.toISOString().slice(0, 10);
-    if (lastDayKey === todayKey) return false;
+    const lastDay = new Date(last).toISOString().slice(0, 10);
+    const today = now.toISOString().slice(0, 10);
+    if (lastDay === today) return false;
   }
 
   return true;
 }
 
 function activateEvent(ev, now = new Date()) {
-  const endsAt = new Date(now.getTime() + ev.durationMinutes * 60000);
+  const endsAt = new Date(now.getTime() + (ev.durationMinutes || 60) * 60000);
   activeEvents.set(ev.id, { startedAt: now, endsAt });
   lastActivation.set(ev.id, now.getTime());
 }
@@ -297,17 +266,15 @@ function startEventScheduler() {
 
   setInterval(() => {
     const tickNow = new Date();
-    // Cleanup expired
     for (const [id, state] of activeEvents.entries()) {
       if (state.endsAt <= tickNow) activeEvents.delete(id);
     }
-    // Activate new
     for (const ev of EVENTS) {
       if (!activeEvents.has(ev.id) && canActivateEvent(ev, tickNow)) {
         activateEvent(ev, tickNow);
       }
     }
-  }, 60 * 1000);
+  }, 60000); // Check every minute
 }
 
 startEventScheduler();
@@ -330,7 +297,7 @@ app.get("/events/active", (req, res) => {
       description: ev.description,
       spawnPOI: ev.spawnPOI,
       rarity: ev.rarity,
-      endsAt: state.endsAt,
+      endsAt: state.endsAt.toISOString(),
       durationMinutes: ev.durationMinutes
     });
   }
@@ -343,20 +310,21 @@ app.get("/locations", (req, res) => res.json(LOCATIONS));
 app.get("/quests", (req, res) => res.json(QUESTS));
 app.get("/mintables", (req, res) => res.json(MINTABLES));
 
-// Player endpoints
+// Player Endpoints
 app.get("/player/:addr", async (req, res) => {
   const { addr } = req.params;
-  try { new PublicKey(addr); }
-  catch { return res.status(400).json({ error: "Invalid address" }); }
+  try { new PublicKey(addr); } catch { return res.status(400).json({ error: "Invalid address" }); }
 
   let playerData = { 
     lvl: 1, hp: 100, caps: 0, gear: [], found: [], 
     xp: 0, xpToNext: 100, rads: 0, inventory: {} 
   };
   
-  const redisData = await redis.get(`player:${addr}`);
-  if (redisData) {
-    try { playerData = JSON.parse(redisData); } catch (e) {}
+  try {
+    const redisData = await redis.get(`player:${addr}`);
+    if (redisData) playerData = { ...playerData, ...JSON.parse(redisData) };
+  } catch (e) {
+    console.warn(`Player data parse error for ${addr}:`, e);
   }
 
   res.json(playerData);
@@ -364,46 +332,59 @@ app.get("/player/:addr", async (req, res) => {
 
 app.post("/player/:addr", async (req, res) => {
   const { addr } = req.params;
-  await redis.set(`player:${addr}`, JSON.stringify(req.body));
-  res.json({ success: true });
+  try { new PublicKey(addr); } catch { return res.status(400).json({ error: "Invalid address" }); }
+
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).json({ error: "No data provided" });
+  }
+
+  try {
+    await redis.set(`player:${addr}`, JSON.stringify(req.body));
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to save player data" });
+  }
 });
 
-// Lua script handling for crafting
+// Lua Script Loader for Crafting
 const luaPath = path.join(__dirname, "server", "redis_scripts", "craft_atomic.lua");
 let craftLuaSha = null;
 
 async function loadLuaScripts() {
   try {
-    if (fs.existsSync(luaPath)) {
-      const script = fs.readFileSync(luaPath, "utf8");
-      craftLuaSha = await redis.script("load", script);
-      console.log("Loaded craft Lua script SHA:", craftLuaSha);
-    } else {
-      console.warn("Craft Lua script not found at:", luaPath);
+    if (!fs.existsSync(luaPath)) {
+      console.warn(`Craft Lua script not found: ${luaPath}`);
+      return;
     }
+    const script = fs.readFileSync(luaPath, "utf8");
+    craftLuaSha = await redis.script("load", script);
+    console.log("Loaded craft Lua script SHA:", craftLuaSha);
   } catch (e) {
-    console.warn("Could not load craft Lua script:", e.message);
+    console.warn("Failed to load craft Lua script:", e.message);
   }
 }
 loadLuaScripts();
 
-// Utility functions
+// Utility: Parse human amount to base units
 function parseHumanAmountToBase(amountStr, decimals) {
   if (typeof amountStr === "number") amountStr = amountStr.toString();
-  if (typeof amountStr !== "string") throw new Error("Amount must be a string or number");
+  if (typeof amountStr !== "string") throw new Error("Amount must be string/number");
+
   amountStr = amountStr.trim();
   if (/^\d+$/.test(amountStr)) return BigInt(amountStr);
-  if (!/^\d+(\.\d+)?$/.test(amountStr)) throw new Error("Amount must be a non-negative decimal number");
-  const parts = amountStr.split(".");
-  const intPart = parts[0] || "0";
-  const fracPart = parts[1] || "";
-  if (fracPart.length > decimals) throw new Error("Amount has more decimal places than the token supports");
-  const fracPadded = fracPart.padEnd(decimals, "0");
-  const baseStr = (intPart + fracPadded).replace(/^0+(?=\d)|^$/, "0");
-  return BigInt(baseStr);
+
+  if (!/^\d+(\.\d+)?$/.test(amountStr)) throw new Error("Invalid amount format");
+
+  const [int = "0", frac = ""] = amountStr.split(".");
+  if (frac.length > decimals) throw new Error(`Amount exceeds ${decimals} decimals`);
+
+  const padded = frac.padEnd(decimals, "0");
+  const full = (int + padded).replace(/^0+(?=\d)|^$/, "0") || "0";
+
+  return BigInt(full);
 }
 
-// Terminal Reward endpoint
+// Terminal Reward Endpoint (FIZZ token distribution)
 app.post(
   "/api/terminal-reward",
   [
@@ -412,9 +393,7 @@ app.post(
   ],
   async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ error: "Invalid request", details: errors.array() });
-    }
+    if (!errors.isEmpty()) return res.status(400).json({ error: "Invalid request", details: errors.array() });
 
     const wallet = String(req.body.wallet).trim();
     const amountInput = req.body.amount;
@@ -422,7 +401,7 @@ app.post(
     let recipientPubkey;
     try {
       recipientPubkey = new PublicKey(wallet);
-    } catch (e) {
+    } catch {
       return res.status(400).json({ error: "Invalid wallet address" });
     }
 
@@ -457,7 +436,7 @@ app.post(
         GAME_VAULT.publicKey
       );
 
-      const vaultBalance = BigInt(vaultAta.amount ? vaultAta.amount.toString() : "0");
+      const vaultBalance = BigInt(vaultAta.amount?.toString() || "0");
       if (vaultBalance < baseAmount) {
         await redis.del(cooldownKey);
         return res.status(400).json({ error: "Vault has insufficient token balance" });
@@ -486,6 +465,7 @@ app.post(
         commitment: "confirmed",
       });
 
+      // Update player caps in Redis
       try {
         const playerKey = `player:${wallet}`;
         const raw = await redis.get(playerKey);
@@ -495,7 +475,7 @@ app.post(
           await redis.set(playerKey, JSON.stringify(pd));
         }
       } catch (e) {
-        console.warn("Failed to update player caps in Redis:", e);
+        console.warn("Failed to update player caps:", e);
       }
 
       return res.json({
@@ -504,36 +484,39 @@ app.post(
         amount: {
           human: String(amountInput),
           base: baseAmount.toString(),
-          decimals: decimals,
+          decimals,
         },
         message: "Reward transferred. Transaction confirmed.",
       });
     } catch (err) {
-      try { await redis.del(cooldownKey); } catch (e) {}
+      try { await redis.del(cooldownKey); } catch {}
       console.error("Terminal reward error:", err);
       return res.status(500).json({ error: "Internal server error" });
     }
   }
 );
 
-// Health check
+// Health Check
 app.get("/health", (req, res) => {
   res.json({ 
     status: "ok", 
     timestamp: new Date().toISOString(),
-    data: {
+    dataLoaded: {
       locations: LOCATIONS.length,
       quests: QUESTS.length,
-      events: EVENTS.length
+      mintables: MINTABLES.length,
+      events: EVENTS.length,
+      lootTables: EVENT_LOOT_TABLES.length,
+      recipes: RECIPES.length
     }
   });
 });
 
-// Start server
+// Start Server
 app.listen(PORT, () => {
   console.log(`\n🚀 Atomic Fizz Caps server running on port ${PORT}`);
   console.log(`📍 Visit: http://localhost:${PORT}`);
   console.log(`💾 Redis: ${REDIS_URL}`);
-  console.log(`⛓️  Solana: ${SOLANA_RPC}`);
+  console.log(`⛓️ Solana: ${SOLANA_RPC}`);
   console.log(`🎮 Game vault: ${GAME_VAULT.publicKey.toBase58()}\n`);
 });
