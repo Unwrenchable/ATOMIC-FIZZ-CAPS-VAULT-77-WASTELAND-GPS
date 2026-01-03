@@ -6,25 +6,25 @@
 
   <!-- CSP: All required hashes included (including the two new ones) -->
   <meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 
-    'sha256-knV59OylGCMUSLMIdwmcnoLKGBWKJTQUzPHVIDUiduo=' 
-    'sha256-GWgqL/UbutCqyqM3J9Gks3xvFmnFo1ORE0ufB/pTDi8=' 
-    'sha256-RKPZWgvMlMXlDlyqgBTkFok8+J/6Dwd8uWypHc9RTq4=' 
-    'sha256-ifhM87Ts8YPjA9BFs7MOrEywjqLlp0CZBKWaOppr1fE=' 
-    'sha256-QZ2UtJkPyVaVpO87TjOtPsu5XUuzvb/kBvJrg3lPegQ=' 
-    'sha256-ht4bn3PtoOPOPNMxHc97QDZz/8/D3tGE3jfXNxJ9b6s=' 
-    'sha256-zsi031c7UsmAaEs6ZwrWyX7dERfVA+d2kUv9D434WHk=' 
-    'sha256-Bq0L5gIP48ZOyBGfM9ydoqp7P9L7Hg4E2Masn1AFDd8=' 
-    'sha256-S1MedYL4CE0qPEGg8EJICzzBCABVBcAaUezoD7465Jo=';  ← ← ← ADD THIS ONE
-  connect-src 'self' https://unpkg.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss: https://*;
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
-  img-src 'self' data: https: blob:;
-  font-src 'self' https://fonts.gstatic.com data:;
-  media-src 'self' data: https:;
-  object-src 'none';
-  frame-src 'self';
-  base-uri 'self';">
+    default-src 'self';
+    script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 
+      'sha256-knV59OylGCMUSLMIdwmcnoLKGBWKJTQUzPHVIDUiduo=' 
+      'sha256-GWgqL/UbutCqyqM3J9Gks3xvFmnFo1ORE0ufB/pTDi8=' 
+      'sha256-RKPZWgvMlMXlDlyqgBTkFok8+J/6Dwd8uWypHc9RTq4=' 
+      'sha256-ifhM87Ts8YPjA9BFs7MOrEywjqLlp0CZBKWaOppr1fE=' 
+      'sha256-QZ2UtJkPyVaVpO87TjOtPsu5XUuzvb/kBvJrg3lPegQ=' 
+      'sha256-ht4bn3PtoOPOPNMxHc97QDZz/8/D3tGE3jfXNxJ9b6s=' 
+      'sha256-zsi031c7UsmAaEs6ZwrWyX7dERfVA+d2kUv9D434WHk=' 
+      'sha256-Bq0L5gIP48ZOyBGfM9ydoqp7P9L7Hg4E2Masn1AFDd8=' 
+      'sha256-S1MedYL4CE0qPEGg8EJICzzBCABVBcAaUezoD7465Jo=';
+    connect-src 'self' https://unpkg.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss: https://*;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
+    img-src 'self' data: https: blob:;
+    font-src 'self' https://fonts.gstatic.com data:;
+    media-src 'self' data: https:;
+    object-src 'none';
+    frame-src 'self';
+    base-uri 'self';">
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -45,16 +45,107 @@
 
   <!-- PIP-BOY SHELL -->
   <div id="pipboyScreen" class="hidden" aria-hidden="true">
-    <!-- === YOUR FULL PIP-BOY UI CONTENT GOES HERE === -->
-    <!-- Header, HUD, map container, drawer, tabs, modals, etc. -->
-    <!-- For example: -->
     <div class="pipboy-shell">
+      <!-- Header -->
       <header class="pip-header">
-        <h1>ATOMIC FIZZ CAPS</h1>
-        <div class="wallet-status">Wallet: <span id="walletAddr"></span></div>
+        <div class="pip-title">
+          <div class="pip-main-title">ATOMIC FIZZ CAPS</div>
+          <div class="pip-sub-title">VAULT 77 • WASTELAND GPS</div>
+        </div>
+        <div class="pip-controls">
+          <button class="btn danger-btn" onclick="location.href='/nuke.html'">ENTER NUKE VAULT</button>
+          <button class="btn" id="centerBtn">Center</button>
+          <button class="btn" id="recenterMojave">Mojave</button>
+          <button class="btn wallet-btn" id="connectWallet">Connect Wallet</button>
+        </div>
       </header>
-      <div id="map" style="height: 500px;"></div>
-      <!-- ... rest of your UI ... -->
+
+      <!-- Status + HUD -->
+      <div id="status" class="status status-good">Status: ready – tap REQUEST GPS if needed</div>
+
+      <div class="hud">
+        <div class="hud-block">LVL <strong id="lvl">1</strong></div>
+        <div class="hud-block hp-block">
+          <div class="hp-container">
+            <div class="hp-bar"><div id="hpFill" class="hp-fill"></div></div>
+            <div id="hpText" class="hp-text">HP 100 / 100</div>
+          </div>
+        </div>
+        <div class="hud-block">CAPS <strong id="caps">0</strong></div>
+        <div class="hud-block xp-wrapper">
+          <div class="xp-bar"><div id="xpFill" class="xp-fill"></div></div>
+          <div class="xp-text" id="xpText">0 / 100</div>
+        </div>
+        <div class="hud-block">CLAIMED <strong id="claimed">0</strong></div>
+      </div>
+
+      <!-- Main grid: sidebar + map -->
+      <section class="main-grid" aria-live="polite">
+        <!-- Sidebar -->
+        <aside class="sidebar" aria-label="Sidebar">
+          <div class="sidebar-content">
+            <div class="status">Quick Actions</div>
+            <div class="quick-actions">
+              <button class="btn" id="openTutorial">How to Play</button>
+              <button class="btn" id="openInventory">Inventory</button>
+              <button class="btn" id="openQuests">Quests</button>
+            </div>
+
+            <hr class="sidebar-divider" />
+
+            <div class="status">Nearby</div>
+            <ul id="nearbyList" class="nearby-list">
+              <li>Workshop Alpha — 1.2km</li>
+              <li>Supply Cache — 800m</li>
+              <li>Turret Parts — 2.4km</li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main" role="main">
+          <div class="map-container" role="region" aria-label="Wasteland map">
+            <div class="map-controls">
+              <button class="btn" id="mapModeBtn">MAP MODE</button>
+            </div>
+
+            <div id="map" aria-hidden="false"></div>
+
+            <div class="static-noise" aria-hidden="true"></div>
+
+            <div class="gps-badge" id="gpsBadge" aria-hidden="false">
+              <div id="accDot" class="acc-dot"></div>
+              <div id="accText">GPS: waiting...</div>
+            </div>
+
+            <button class="btn gps-btn" id="requestGpsBtn" aria-label="Request GPS">REQUEST GPS</button>
+
+            <!-- Bottom drawer -->
+            <div id="bottom-drawer" class="hidden" aria-hidden="true" role="region" aria-label="Drawer">
+              <div class="drawer-handle" id="drawer-toggle" role="button" tabindex="0" aria-label="Toggle drawer"></div>
+
+              <div class="drawer-content">
+                <div class="drawer-left">
+                  <button class="btn pip-btn" id="donate-btn">Donate</button>
+                  <button class="btn pip-btn" id="gps-lock-btn">GPS Lock</button>
+                </div>
+                <div class="drawer-right">
+                  <div class="hud">Locations: <span id="locations-count">0</span>/10</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabs above drawer -->
+            <div class="tabs" role="tablist" aria-label="Main tabs">
+              <div class="tab active" data-panel="map" role="tab" tabindex="0">MAP</div>
+              <div class="tab" data-panel="stat" role="tab" tabindex="0">STAT</div>
+              <div class="tab" data-panel="items" role="tab" tabindex="0">ITEMS</div>
+              <div class="tab" data-panel="quests" role="tab" tabindex="0">QUESTS</div>
+              <div class="tab" data-panel="shop" role="tab" tabindex="0">SCAVENGER'S EXCHANGE</div>
+            </div>
+          </div>
+        </main>
+      </section>
     </div>
   </div>
 
@@ -80,52 +171,5 @@
   <script src="/js/map-core.js"></script>
   <script src="/js/main.js"></script>
 
-  <!-- Boot activation - single, safe, and once-only -->
-  <script>
-    // Boot activation function
-    function activateUI() {
-      const boot = document.getElementById('bootScreen');
-      const pip = document.getElementById('pipboyScreen');
-      
-      if (!boot || !pip) {
-        console.error("Boot or PipBoy screen element missing!");
-        return;
-      }
-
-      boot.style.display = 'none';
-      pip.classList.remove('hidden');
-      pip.setAttribute('aria-hidden', 'false');
-      pip.style.display = 'block'; // Force visibility (safety)
-
-      console.log("Pip-Boy activated!");
-
-      // Force map resize after transition
-      setTimeout(() => {
-        if (window._map && typeof window._map.invalidateSize === 'function') {
-          window._map.invalidateSize();
-        }
-      }, 300);
-    }
-
-    // Bind once (prevents duplicates / multiple triggers)
-    if (!window._bootBound) {
-      // Keydown listener (any key)
-      window.addEventListener('keydown', () => {
-        activateUI();
-      }, { once: true });
-
-      // Click listener on boot screen
-      const bootScreen = document.getElementById('bootScreen');
-      if (bootScreen) {
-        bootScreen.addEventListener('click', () => {
-          activateUI();
-        }, { once: true });
-      }
-
-      window._bootBound = true;
-    }
-  </script>
-
 </body>
 </html>
-
