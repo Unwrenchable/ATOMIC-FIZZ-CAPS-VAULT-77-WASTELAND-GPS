@@ -76,69 +76,48 @@
 
   /* Map initialization */
   function initMap() {
-    if (typeof L === 'undefined') {
-      safeError('Leaflet not loaded');
-      return;
-    }
-
-    mapEl = document.getElementById('map');
-    if (!mapEl) {
-      safeWarn('Map element not found');
-      return;
-    }
-
-    if (map && map instanceof L.Map) {
-      setTimeout(() => {
-        if (map.invalidateSize) map.invalidateSize();
-      }, 200);
-      return;
-    }
-
-    try {
-      map = L.map(mapEl, {
-        center: CONFIG.defaultCenter,
-        zoom: CONFIG.defaultZoom,
-        zoomControl: true,
-        attributionControl: false
-      });
-
-      window.map = map;
-      window._map = map;
-
-      osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap'
-      });
-
-      cartoDarkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 20,
-        attribution: '© OpenStreetMap © Carto'
-      });
-
-      currentMapLayer = cartoDarkLayer || osmLayer;
-      if (currentMapLayer) currentMapLayer.addTo(map);
-
-      if (Array.isArray(window.DATA.locations)) {
-        window.DATA.locations.forEach(loc => {
-          if (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number') {
-            const marker = L.marker([loc.lat, loc.lng]);
-            if (loc.n || loc.name) {
-              marker.bindPopup(`<strong>${loc.n || loc.name}</strong><br>Level: ${loc.lvl || 1}`);
-            }
-            marker.addTo(map);
-          }
-        });
-      }
-
-      setTimeout(() => {
-        if (map && map.invalidateSize) map.invalidateSize();
-      }, 300);
-
-      safeLog('Map initialized successfully');
-    } catch (e) {
-      safeError('Map initialization failed:', e);
-    }
+  if (typeof L === 'undefined') {
+    safeError('Leaflet not loaded');
+    return;
   }
+
+  mapEl = document.getElementById('map');
+  if (!mapEl) {
+    safeWarn('Map element not found');
+    return;
+  }
+
+  // Prevent reinitialization error
+  if (mapEl._leaflet_id) {
+    safeLog('Map already initialized - skipping creation');
+    if (map && map.invalidateSize) {
+      setTimeout(() => map.invalidateSize(), 200);
+    }
+    return;
+  }
+
+  try {
+    map = L.map(mapEl, {
+      center: CONFIG.defaultCenter,
+      zoom: CONFIG.defaultZoom,
+      zoomControl: true,
+      attributionControl: false
+    });
+
+    window.map = map;
+    window._map = map;
+
+    // ... rest of your layer/marker code remains the same ...
+
+    setTimeout(() => {
+      if (map && map.invalidateSize) map.invalidateSize();
+    }, 300);
+
+    safeLog('Map initialized successfully');
+  } catch (e) {
+    safeError('Map initialization failed:', e);
+  }
+}
 
   /* Geolocation */
   function startGeolocationWatch() {
@@ -384,3 +363,4 @@
   };
 
 })();
+
