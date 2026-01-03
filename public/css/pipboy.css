@@ -260,3 +260,21 @@ body {
 .leaflet-container {
   background: #0a1f0a !important; /* dark green fallback */
 }
+
+/* DEBUG: Make sure NOTHING blocks clicks */
+#pipboyScreen, .pipboy-shell, .main-grid, .map-container, .tabs, .drawer-content, button {
+  pointer-events: auto !important;
+  z-index: 10 !important; /* higher than overlays */
+}
+
+/* Force overlays behind */
+.static-noise, .gps-badge, .top-overlay, .leaflet-container {
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+/* Make buttons glow when hovered (visual proof) */
+button:hover {
+  outline: 3px solid #00ff66 !important;
+  box-shadow: 0 0 15px #00ff66 !important;
+}
