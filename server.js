@@ -1,6 +1,6 @@
 // server.js
 // === Atomic Fizz Caps Vault 77 Wasteland GPS Backend ===
-// COMPLETE & FIXED VERSION - January 2026
+// COMPLETE VERSION - All features integrated (Jan 03, 2026)
 
 require("dotenv").config();
 const fs = require("fs");
@@ -63,7 +63,7 @@ const redis = new Redis(REDIS_URL);
 
 redis.on("error", (err) => console.error("Redis connection error:", err));
 
-// Server Ed25519 Keypair for signing
+// Server Ed25519 Keypair for signing (optional future use)
 const serverSecretKeyUint8 = bs58.decode(SERVER_SECRET_KEY);
 if (serverSecretKeyUint8.length !== 64) {
   console.error("SERVER_SECRET_KEY must be 64-byte Ed25519 secret key (base58)");
@@ -220,7 +220,7 @@ app.use(
 // Static Files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Simple Event Scheduler (in-memory for now)
+// Simple Event Scheduler (in-memory)
 const activeEvents = new Map();
 const lastActivation = new Map();
 
@@ -232,9 +232,7 @@ function canActivateEvent(ev, now = new Date()) {
     const { startHourLocal: start, endHourLocal: end } = activeWindow;
     if (start < end) {
       if (hour < start || hour >= end) return false;
-    } else if (!(hour >= start || hour < end)) {
-      return false;
-    }
+    } else if (!(hour >= start || hour < end)) return false;
   }
 
   const last = lastActivation.get(ev.id);
@@ -274,7 +272,7 @@ function startEventScheduler() {
         activateEvent(ev, tickNow);
       }
     }
-  }, 60000); // Check every minute
+  }, 60000);
 }
 
 startEventScheduler();
@@ -346,45 +344,115 @@ app.post("/player/:addr", async (req, res) => {
   }
 });
 
-// Lua Script Loader for Crafting
-const luaPath = path.join(__dirname, "server", "redis_scripts", "craft_atomic.lua");
-let craftLuaSha = null;
+// ================================================
+// Scavenger's Exchange API (NEW)
+// ================================================
 
-async function loadLuaScripts() {
+// GET /api/trades - Fetch all active trades
+app.get('/api/trades', async (req, res) => {
   try {
-    if (!fs.existsSync(luaPath)) {
-      console.warn(`Craft Lua script not found: ${luaPath}`);
-      return;
-    }
-    const script = fs.readFileSync(luaPath, "utf8");
-    craftLuaSha = await redis.script("load", script);
-    console.log("Loaded craft Lua script SHA:", craftLuaSha);
-  } catch (e) {
-    console.warn("Failed to load craft Lua script:", e.message);
+    const keys = await redis.keys('trade:*');
+    if (keys.length === 0) return res.json([]);
+
+    const trades = await Promise.all(
+      keys.map(async (key) => {
+        const data = await redis.hgetall(key);
+        return {
+          id: key.split(':')[1],
+          ...data,
+          posted: Number(data.posted || 0),
+          type: data.type || 'item'
+        };
+      })
+    );
+
+    // Sort newest first
+    trades.sort((a, b) => b.posted - a.posted);
+
+    res.json(trades);
+  } catch (err) {
+    console.error('Error fetching trades:', err);
+    res.status(500).json({ error: 'Failed to load trades' });
   }
-}
-loadLuaScripts();
+});
 
-// Utility: Parse human amount to base units
-function parseHumanAmountToBase(amountStr, decimals) {
-  if (typeof amountStr === "number") amountStr = amountStr.toString();
-  if (typeof amountStr !== "string") throw new Error("Amount must be string/number");
+// POST /api/post-trade - Post regular trade (items/CAPS)
+app.post('/api/post-trade', [
+  body('wallet').isString().notEmpty(),
+  body('offer').isString().notEmpty(),
+  body('priceFizz').isNumeric(),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ error: 'Invalid request', details: errors.array() });
 
-  amountStr = amountStr.trim();
-  if (/^\d+$/.test(amountStr)) return BigInt(amountStr);
+  const { wallet, offer, priceFizz, description = '' } = req.body;
 
-  if (!/^\d+(\.\d+)?$/.test(amountStr)) throw new Error("Invalid amount format");
+  try {
+    const tradeId = `trade:${Date.now()}`;
+    await redis.hset(tradeId, {
+      seller: wallet,
+      offer,
+      priceFizz: String(priceFizz),
+      description,
+      status: 'active',
+      posted: Date.now(),
+      type: 'item'
+    });
 
-  const [int = "0", frac = ""] = amountStr.split(".");
-  if (frac.length > decimals) throw new Error(`Amount exceeds ${decimals} decimals`);
+    res.json({ success: true, tradeId });
+  } catch (err) {
+    console.error('Post trade error:', err);
+    res.status(500).json({ error: 'Failed to post trade' });
+  }
+});
 
-  const padded = frac.padEnd(decimals, "0");
-  const full = (int + padded).replace(/^0+(?=\d)|^$/, "0") || "0";
+// POST /api/post-nft - Post NFT trade (with signature verification)
+app.post('/api/post-nft', [
+  body('wallet').isString().notEmpty(),
+  body('nftMint').isString().notEmpty(),
+  body('priceFizz').isNumeric(),
+  body('signature').isString().notEmpty(),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ error: 'Invalid request', details: errors.array() });
 
-  return BigInt(full);
-}
+  const { wallet, nftMint, priceFizz, description = '', signature } = req.body;
 
-// Terminal Reward Endpoint (FIZZ token distribution)
+  try {
+    // Verify signed message
+    const message = `List NFT ${nftMint} for ${priceFizz} FIZZ - ${description}`;
+    const verified = nacl.sign.detached.verify(
+      new TextEncoder().encode(message),
+      bs58.decode(signature),
+      bs58.decode(wallet)
+    );
+
+    if (!verified) {
+      return res.status(403).json({ error: 'Invalid signature' });
+    }
+
+    const tradeId = `trade:${Date.now()}`;
+    await redis.hset(tradeId, {
+      seller: wallet,
+      nftMint,
+      priceFizz: String(priceFizz),
+      description,
+      status: 'active',
+      posted: Date.now(),
+      type: 'nft'
+    });
+
+    res.json({ success: true, tradeId });
+  } catch (err) {
+    console.error('Post NFT error:', err);
+    res.status(500).json({ error: 'Failed to post NFT' });
+  }
+});
+
+// ================================================
+// Terminal Reward Endpoint (FIZZ distribution)
+// ================================================
+
 app.post(
   "/api/terminal-reward",
   [
@@ -465,114 +533,6 @@ app.post(
         commitment: "confirmed",
       });
 
-      // ================================================
-// Scavenger's Exchange API
-// ================================================
-
-// GET /api/trades - Fetch all active trades
-app.get('/api/trades', async (req, res) => {
-  try {
-    const keys = await redis.keys('trade:*');
-    if (keys.length === 0) return res.json([]);
-
-    const trades = await Promise.all(
-      keys.map(async (key) => {
-        const data = await redis.hgetall(key);
-        return {
-          id: key.split(':')[1],
-          ...data,
-          posted: Number(data.posted || 0),
-          type: data.type || 'item'
-        };
-      })
-    );
-
-    // Sort newest first
-    trades.sort((a, b) => b.posted - a.posted);
-
-    res.json(trades);
-  } catch (err) {
-    console.error('Error fetching trades:', err);
-    res.status(500).json({ error: 'Failed to load trades' });
-  }
-});
-
-// POST /api/post-trade - Post regular trade (items/CAPS)
-app.post('/api/post-trade', [
-  body('wallet').isString().notEmpty(),
-  body('offer').isString().notEmpty(),
-  body('priceFizz').isNumeric(),
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ error: 'Invalid request', details: errors.array() });
-
-  const { wallet, offer, priceFizz, description = '' } = req.body;
-
-  try {
-    const tradeId = `trade:${Date.now()}`;
-    await redis.hset(tradeId, {
-      seller: wallet,
-      offer,
-      priceFizz: String(priceFizz),
-      description,
-      status: 'active',
-      posted: Date.now(),
-      type: 'item'
-    });
-
-    res.json({ success: true, tradeId });
-  } catch (err) {
-    console.error('Post trade error:', err);
-    res.status(500).json({ error: 'Failed to post trade' });
-  }
-});
-
-// POST /api/post-nft - Post NFT trade (with signature)
-app.post('/api/post-nft', [
-  body('wallet').isString().notEmpty(),
-  body('nftMint').isString().notEmpty(),
-  body('priceFizz').isNumeric(),
-  body('signature').isString().notEmpty(),
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ error: 'Invalid request', details: errors.array() });
-
-  const { wallet, nftMint, priceFizz, description = '', signature } = req.body;
-
-  try {
-    // Verify signed message
-    const message = `List NFT ${nftMint} for ${priceFizz} FIZZ - ${description}`;
-    const verified = nacl.sign.detached.verify(
-      new TextEncoder().encode(message),
-      bs58.decode(signature),
-      bs58.decode(wallet)
-    );
-
-    if (!verified) {
-      return res.status(403).json({ error: 'Invalid signature' });
-    }
-
-    // TODO: (Optional) RPC check: verify wallet owns NFT
-    // const owns = await verifyNftOwnership(wallet, nftMint);
-    // if (!owns) return res.status(403).json({ error: 'Not your NFT' });
-
-    const tradeId = `trade:${Date.now()}`;
-    await redis.hset(tradeId, {
-      seller: wallet,
-      nftMint,
-      priceFizz: String(priceFizz),
-      description,
-      status: 'active',
-      posted: Date.now(),
-      type: 'nft'
-    });
-
-    res.json({ success: true, tradeId });
-  } catch (err) {
-    console.error('Post NFT error:', err);
-    res.status(500).json({ error: 'Failed to post NFT' });
-  }
-});
       // Update player caps in Redis
       try {
         const playerKey = `player:${wallet}`;
@@ -620,6 +580,44 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Lua Script Loader for Crafting
+const luaPath = path.join(__dirname, "server", "redis_scripts", "craft_atomic.lua");
+let craftLuaSha = null;
+
+async function loadLuaScripts() {
+  try {
+    if (!fs.existsSync(luaPath)) {
+      console.warn(`Craft Lua script not found: ${luaPath}`);
+      return;
+    }
+    const script = fs.readFileSync(luaPath, "utf8");
+    craftLuaSha = await redis.script("load", script);
+    console.log("Loaded craft Lua script SHA:", craftLuaSha);
+  } catch (e) {
+    console.warn("Failed to load craft Lua script:", e.message);
+  }
+}
+loadLuaScripts();
+
+// Utility: Parse human amount to base units
+function parseHumanAmountToBase(amountStr, decimals) {
+  if (typeof amountStr === "number") amountStr = amountStr.toString();
+  if (typeof amountStr !== "string") throw new Error("Amount must be string/number");
+
+  amountStr = amountStr.trim();
+  if (/^\d+$/.test(amountStr)) return BigInt(amountStr);
+
+  if (!/^\d+(\.\d+)?$/.test(amountStr)) throw new Error("Invalid amount format");
+
+  const [int = "0", frac = ""] = amountStr.split(".");
+  if (frac.length > decimals) throw new Error(`Amount exceeds ${decimals} decimals`);
+
+  const padded = frac.padEnd(decimals, "0");
+  const full = (int + padded).replace(/^0+(?=\d)|^$/, "0") || "0";
+
+  return BigInt(full);
+}
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`\n🚀 Atomic Fizz Caps server running on port ${PORT}`);
@@ -628,4 +626,3 @@ app.listen(PORT, () => {
   console.log(`⛓️ Solana: ${SOLANA_RPC}`);
   console.log(`🎮 Game vault: ${GAME_VAULT.publicKey.toBase58()}\n`);
 });
-
