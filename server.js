@@ -508,7 +508,23 @@ app.post('/api/buy-trade', [
     res.status(500).json({ error: 'Failed to process buy' });
   }
 });
+// ================================================
+// Scavenger Exchange & Settings Endpoints
+// ================================================
 
+// GET /scavenger - Serve scavenger data (fallback safe)
+app.get('/scavenger', (req, res) => {
+  const filePath = path.join(DATA_DIR, 'scavenger.json');
+  const data = safeJsonRead(filePath);
+  res.json(data);
+});
+
+// GET /settings - Serve settings data (fallback safe)
+app.get('/settings', (req, res) => {
+  const filePath = path.join(DATA_DIR, 'settings.json');
+  const data = safeJsonRead(filePath);
+  res.json(data);
+});
 // ================================================
 // Terminal Reward & Other Endpoints (unchanged)
 // ================================================
@@ -526,3 +542,4 @@ app.listen(PORT, () => {
   console.log(`⛓️ Solana: ${SOLANA_RPC}`);
   console.log(`🎮 Game vault: ${GAME_VAULT.publicKey.toBase58()}\n`);
 });
+
