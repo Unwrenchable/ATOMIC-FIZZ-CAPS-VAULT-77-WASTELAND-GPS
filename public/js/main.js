@@ -224,12 +224,7 @@
       const el = document.getElementById(id);
       if (el) el.addEventListener('click', fn);
     }
-    
-    // At end of initUI()
-    if (drawer && !drawer.classList.contains('hidden')) {
-    drawer.style.display = 'block';
-    }
-    
+
     // Wallet
     once('connectWallet', connectWallet);
 
@@ -267,12 +262,14 @@
     // Drawer outer toggle
     const drawer = document.getElementById('bottom-drawer');
     const drawerToggle = document.getElementById('drawer-toggle');
-    if (drawer && drawerToggle && !bound.has('drawer-toggle')) {
-      bound.add('drawer-toggle');
+
+    if (drawerToggle && drawer) {
       drawerToggle.addEventListener('click', () => {
         drawer.classList.toggle('hidden');
-        setTimeout(() => map?.invalidateSize?.(), 260);
+        setTimeout(() => { if (window._map) window._map.invalidateSize(); }, 260);
       });
+    } else {
+      safeWarn('Drawer or toggle not found - skipping binding');
     }
 
     // Tutorial modal
@@ -383,4 +380,3 @@
   };
 
 })();
-
