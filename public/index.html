@@ -69,35 +69,47 @@
   <script src="/js/map-core.js"></script>
   <script src="/js/main.js"></script>
 
-  <!-- UI wiring (inline script - hashes now match) -->
+  <!-- Boot activation - single, safe, and once-only -->
   <script>
-    (function(){
+    // Boot activation function
+    function activateUI() {
       const boot = document.getElementById('bootScreen');
       const pip = document.getElementById('pipboyScreen');
-      function activateUI(){
-        boot.style.display = 'none';
-        pip.classList.remove('hidden');
-        pip.setAttribute('aria-hidden','false');
-        setTimeout(()=>{ if(window._map) window._map.invalidateSize(); }, 300);
-        window.removeEventListener('keydown', onAnyKey);
-      }
-      function onAnyKey(){ activateUI(); }
-      window.addEventListener('keydown', onAnyKey);
-      boot.addEventListener('click', activateUI);
-
-      // Drawer toggle
-      const drawer = document.getElementById('bottom-drawer');
-      const toggle = document.getElementById('drawer-toggle');
-      if (toggle) {
-        toggle.addEventListener('click', () => {
-          drawer.classList.toggle('hidden');
-          setTimeout(() => { if(window._map) window._map.invalidateSize(); }, 260);
-        });
+      
+      if (!boot || !pip) {
+        console.error("Boot or PipBoy screen element missing!");
+        return;
       }
 
-      // ... rest of your UI wiring ...
-    })();
+      boot.style.display = 'none';
+      pip.classList.remove('hidden');
+      pip.setAttribute('aria-hidden', 'false');
+
+      // Force map resize after transition
+      setTimeout(() => {
+        if (window._map && typeof window._map.invalidateSize === 'function') {
+          window._map.invalidateSize();
+        }
+      }, 300);
+    }
+
+    // Bind once (prevents duplicates)
+    if (!window._bootBound) {
+      window.addEventListener('keydown', () => {
+        activateUI();
+      }, { once: true });
+
+      const bootScreen = document.getElementById('bootScreen');
+      if (bootScreen) {
+        bootScreen.addEventListener('click', () => {
+          activateUI();
+        }, { once: true });
+      }
+
+      window._bootBound = true;
+    }
   </script>
 
 </body>
 </html>
+
