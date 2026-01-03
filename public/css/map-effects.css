@@ -1,32 +1,67 @@
 /* map-effects.css */
-/* Global map effects shared across all themes */
+/* Fallout CRT Shader — clean, non-blocking, authentic */
 
-/* CRT scanlines */
+/* Base container */
+.map-crt {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanlines */
 .map-crt::after {
   content: "";
-  pointer-events: none;
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(0,255,0,0.05) 0px,
-      rgba(0,255,0,0.05) 1px,
+      rgba(0,255,0,0.04) 0px,
+      rgba(0,255,0,0.04) 1px,
       transparent 2px
     );
   mix-blend-mode: overlay;
-  opacity: 0.4;
-  z-index: 999;
+  opacity: 0.35;
+  z-index: 3;
 }
 
-/* Vignette */
-#map::before {
+/* Phosphor glow */
+.map-crt::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.6));
-  z-index: 998;
+  background: radial-gradient(circle, rgba(0,255,0,0.08), transparent 70%);
+  mix-blend-mode: screen;
+  z-index: 2;
+}
+
+/* CRT jitter */
+@keyframes crt-jitter {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(0.3px, -0.3px); }
+  40% { transform: translate(-0.3px, 0.3px); }
+  60% { transform: translate(0.2px, -0.2px); }
+  80% { transform: translate(-0.2px, 0.2px); }
+  100% { transform: translate(0, 0); }
+}
+
+.map-crt {
+  animation: crt-jitter 0.18s infinite steps(2);
+}
+
+/* Optional boot glitch */
+@keyframes crt-glitch {
+  0% { clip-path: inset(0 0 0 0); }
+  10% { clip-path: inset(10% 0 30% 0); }
+  20% { clip-path: inset(40% 0 5% 0); }
+  30% { clip-path: inset(20% 0 40% 0); }
+  40% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+.map-crt.boot-glitch {
+  animation: crt-glitch 0.35s ease-out;
 }
 
 /* Glow around the map container */
