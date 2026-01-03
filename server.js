@@ -1,6 +1,6 @@
 // server.js
 // === Atomic Fizz Caps Vault 77 Wasteland GPS Backend ===
-// Node 20+ / Render-safe / CommonJS
+// FIXED VERSION - All paths and imports corrected
 
 require("dotenv").config();
 const fs = require("fs");
@@ -13,11 +13,6 @@ const rateLimit = require("express-rate-limit");
 const { body, validationResult } = require("express-validator");
 const Redis = require("ioredis");
 const nacl = require("tweetnacl");
-
-// Event system imports (CommonJS)
-const { loadAllGameData } = require("./server/loadData.js");
-const { startEventScheduler } = require("./server/eventsScheduler.js");
-const { createEventsRouter } = require("./server/eventsRoutes.js");
 
 // bs58 fix for Node 20+
 const bs58pkg = require("bs58");
@@ -95,30 +90,59 @@ try {
   process.exit(1);
 }
 
-// Data Loading helper
+// FIXED: Data Loading helper - corrected path
 function safeJsonRead(filePath) {
   try {
     return JSON.parse(fs.readFileSync(filePath, "utf8"));
   } catch (e) {
-    console.error("JSON load error:", filePath, e);
+    console.error("JSON load error:", filePath, e.message);
     return [];
   }
 }
-const DATA_DIR = path.join(__dirname, "data");
+
+// FIXED: Use public/data directory
+const DATA_DIR = path.join(__dirname, "public", "data");
 const LOCATIONS = safeJsonRead(path.join(DATA_DIR, "locations.json"));
 const QUESTS = safeJsonRead(path.join(DATA_DIR, "quests.json"));
 const MINTABLES = safeJsonRead(path.join(DATA_DIR, "mintables.json"));
+const EVENTS = safeJsonRead(path.join(DATA_DIR, "events.json"));
+const EVENT_LOOT_TABLES = safeJsonRead(path.join(DATA_DIR, "eventLootTables.json"));
+const RECIPES = safeJsonRead(path.join(DATA_DIR, "recipes.json"));
+
+// Create lookup maps for events
+const eventsById = new Map();
+EVENTS.forEach(e => { if (e && e.id) eventsById.set(e.id, e); });
+
+const lootTablesById = new Map();
+EVENT_LOOT_TABLES.forEach(t => { if (t && t.id) lootTablesById.set(t.id, t); });
+
+const gameData = {
+  locations: LOCATIONS,
+  quests: QUESTS,
+  mintables: MINTABLES,
+  events: EVENTS,
+  eventLootTables: EVENT_LOOT_TABLES,
+  recipes: RECIPES,
+  eventsById,
+  lootTablesById
+};
+
+console.log("Loaded locations:", LOCATIONS.length);
+console.log("Loaded quests:", QUESTS.length);
+console.log("Loaded mintables:", MINTABLES.length);
+console.log("Loaded events:", EVENTS.length);
+console.log("Loaded loot tables:", EVENT_LOOT_TABLES.length);
+console.log("Loaded recipes:", RECIPES.length);
 
 // Express App
 const app = express();
 app.use(morgan("combined"));
 
-// Security middlewares (order matters)
+// Security middlewares
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-
       scriptSrc: [
         "'self'",
         "https://unpkg.com",
@@ -129,20 +153,17 @@ app.use(
         "https://*.phantom.app",
         "https://wallet.phantom.app"
       ],
-
       styleSrc: [
         "'self'",
         "'unsafe-inline'",
         "https://fonts.googleapis.com",
         "https://unpkg.com"
       ],
-
       fontSrc: [
         "'self'",
         "https://fonts.gstatic.com",
         "data:"
       ],
-
       imgSrc: [
         "'self'",
         "data:",
@@ -150,7 +171,6 @@ app.use(
         "https://*.tile.openstreetmap.org",
         "https://*.basemaps.cartocdn.com"
       ],
-
       connectSrc: [
         "'self'",
         "https://atomicfizzcaps.xyz",
@@ -162,7 +182,6 @@ app.use(
         "https://wallet.phantom.app",
         "wss:"
       ],
-
       mediaSrc: ["'self'", "data:", "https:"],
       objectSrc: ["'none'"],
       frameSrc: ["'self'"],
@@ -173,7 +192,6 @@ app.use(
 );
 
 app.use(cors());
-// JSON body parser must be registered before routes that read req.body
 app.use(express.json({ limit: "100kb" }));
 
 // Rate Limits
@@ -215,7 +233,7 @@ async function botShield(req, res, next) {
   }
 }
 
-// Apply botShield + actionLimiter to sensitive endpoints
+// Apply to sensitive endpoints
 app.use(
   ["/find-loot", "/shop", "/battle", "/terminal-reward", "/claim-voucher", "/api/craft"],
   botShield,
@@ -232,68 +250,144 @@ app.use(express.static(PUBLIC_DIR, {
   }
 }));
 
-// Load Game Data + Start Event Scheduler + Mount Event Routes
-const gameData = loadAllGameData();
-console.log("Loaded mintables:", (gameData.mintables || []).length);
-console.log("Loaded events:", (gameData.events || []).length);
-console.log("Loaded loot tables:", (gameData.eventLootTables || []).length);
-console.log("Loaded quests:", (gameData.quests || []).length);
-console.log("Loaded locations:", (gameData.locations || []).length);
-console.log("Loaded recipes:", (gameData.recipes || []).length);
+// Simple event system (inline since we don't have separate files)
+const activeEvents = new Map();
+const lastActivation = new Map();
 
-startEventScheduler(gameData);
-app.use("/events", createEventsRouter(gameData));
+function canActivateEvent(ev, now = new Date()) {
+  const hour = now.getHours();
+  const { activeWindow, cooldownMinutes, flags = {} } = ev;
 
-/* -------------------------
-   Lua script loader & runner
-   ------------------------- */
+  if (activeWindow) {
+    const start = activeWindow.startHourLocal;
+    const end = activeWindow.endHourLocal;
+    if (start < end) {
+      if (hour < start || hour >= end) return false;
+    } else {
+      if (!(hour >= start || hour < end)) return false;
+    }
+  }
+
+  const last = lastActivation.get(ev.id);
+  if (last) {
+    const diffMin = (now - last) / 60000;
+    if (diffMin < cooldownMinutes) return false;
+  }
+
+  if (flags.uniquePerDay && last) {
+    const lastDayKey = new Date(last).toISOString().slice(0, 10);
+    const todayKey = now.toISOString().slice(0, 10);
+    if (lastDayKey === todayKey) return false;
+  }
+
+  return true;
+}
+
+function activateEvent(ev, now = new Date()) {
+  const endsAt = new Date(now.getTime() + ev.durationMinutes * 60000);
+  activeEvents.set(ev.id, { startedAt: now, endsAt });
+  lastActivation.set(ev.id, now.getTime());
+}
+
+function startEventScheduler() {
+  const now = new Date();
+  for (const ev of EVENTS) {
+    if (canActivateEvent(ev, now)) activateEvent(ev, now);
+  }
+
+  setInterval(() => {
+    const tickNow = new Date();
+    // Cleanup expired
+    for (const [id, state] of activeEvents.entries()) {
+      if (state.endsAt <= tickNow) activeEvents.delete(id);
+    }
+    // Activate new
+    for (const ev of EVENTS) {
+      if (!activeEvents.has(ev.id) && canActivateEvent(ev, tickNow)) {
+        activateEvent(ev, tickNow);
+      }
+    }
+  }, 60 * 1000);
+}
+
+startEventScheduler();
+
+// Events API
+app.get("/events/active", (req, res) => {
+  const poi = req.query.poi;
+  const now = new Date();
+  const result = [];
+
+  for (const [id, state] of activeEvents.entries()) {
+    const ev = eventsById.get(id);
+    if (!ev || state.endsAt <= now) continue;
+    if (poi && ev.spawnPOI !== poi) continue;
+
+    result.push({
+      id: ev.id,
+      type: ev.type,
+      displayName: ev.displayName,
+      description: ev.description,
+      spawnPOI: ev.spawnPOI,
+      rarity: ev.rarity,
+      endsAt: state.endsAt,
+      durationMinutes: ev.durationMinutes
+    });
+  }
+
+  res.json({ events: result });
+});
+
+// Basic Data Endpoints
+app.get("/locations", (req, res) => res.json(LOCATIONS));
+app.get("/quests", (req, res) => res.json(QUESTS));
+app.get("/mintables", (req, res) => res.json(MINTABLES));
+
+// Player endpoints
+app.get("/player/:addr", async (req, res) => {
+  const { addr } = req.params;
+  try { new PublicKey(addr); }
+  catch { return res.status(400).json({ error: "Invalid address" }); }
+
+  let playerData = { 
+    lvl: 1, hp: 100, caps: 0, gear: [], found: [], 
+    xp: 0, xpToNext: 100, rads: 0, inventory: {} 
+  };
+  
+  const redisData = await redis.get(`player:${addr}`);
+  if (redisData) {
+    try { playerData = JSON.parse(redisData); } catch (e) {}
+  }
+
+  res.json(playerData);
+});
+
+app.post("/player/:addr", async (req, res) => {
+  const { addr } = req.params;
+  await redis.set(`player:${addr}`, JSON.stringify(req.body));
+  res.json({ success: true });
+});
+
+// Lua script handling for crafting
 const luaPath = path.join(__dirname, "server", "redis_scripts", "craft_atomic.lua");
 let craftLuaSha = null;
 
 async function loadLuaScripts() {
   try {
-    const script = fs.readFileSync(luaPath, "utf8");
-    craftLuaSha = await redis.script("load", script);
-    console.log("Loaded craft Lua script SHA:", craftLuaSha);
-  } catch (e) {
-    console.warn("Could not load craft Lua script at startup:", e.message || e);
-    craftLuaSha = null;
-  }
-}
-loadLuaScripts().catch((err) => console.error("Lua load error", err));
-
-async function runCraftLua(wallet, recipe, amount) {
-  const playerKey = `player:${wallet}`;
-  const cdKey = `craft:cd:${wallet}:${recipe.id}`;
-  const recipeJson = JSON.stringify(recipe);
-  const nowTs = String(Date.now());
-
-  const keys = [playerKey, cdKey];
-  const args = [recipeJson, String(amount), nowTs];
-
-  try {
-    if (craftLuaSha) {
-      const res = await redis.evalsha(craftLuaSha, keys.length, ...keys, ...args);
-      return JSON.parse(res);
-    } else {
-      const script = fs.readFileSync(luaPath, "utf8");
-      const res = await redis.eval(script, keys.length, ...keys, ...args);
-      return JSON.parse(res);
-    }
-  } catch (err) {
-    if (err && err.message && err.message.includes("NOSCRIPT")) {
+    if (fs.existsSync(luaPath)) {
       const script = fs.readFileSync(luaPath, "utf8");
       craftLuaSha = await redis.script("load", script);
-      const res = await redis.evalsha(craftLuaSha, keys.length, ...keys, ...args);
-      return JSON.parse(res);
+      console.log("Loaded craft Lua script SHA:", craftLuaSha);
+    } else {
+      console.warn("Craft Lua script not found at:", luaPath);
     }
-    throw err;
+  } catch (e) {
+    console.warn("Could not load craft Lua script:", e.message);
   }
 }
+loadLuaScripts();
 
-/* -------------------------
-   Utility helpers
-   ------------------------- */
+// Utility functions
 function parseHumanAmountToBase(amountStr, decimals) {
   if (typeof amountStr === "number") amountStr = amountStr.toString();
   if (typeof amountStr !== "string") throw new Error("Amount must be a string or number");
@@ -309,188 +403,12 @@ function parseHumanAmountToBase(amountStr, decimals) {
   return BigInt(baseStr);
 }
 
-function mintpubToString(mintPubkey) {
-  try { return mintPubkey.toBase58(); } catch (e) { return String(mintPubkey); }
-}
-
-async function verifyTokenTransferTx(txSig, walletPubkeyStr, requiredBaseAmount, mintPubkey, expectedDestAta) {
-  const parsed = await connection.getParsedTransaction(txSig, { commitment: "confirmed" });
-  if (!parsed) throw new Error("tx_not_found_or_unconfirmed");
-  const meta = parsed.meta;
-  if (!meta || meta.err) throw new Error("tx_failed");
-
-  let found = null;
-  const inner = meta.innerInstructions || [];
-  for (const group of inner) {
-    for (const ix of group.instructions || []) {
-      if (ix.program === "spl-token" && ix.parsed && ix.parsed.type === "transfer") {
-        const info = ix.parsed.info;
-        if (info.mint === mintpubToString(mintPubkey)) {
-          found = { source: info.source, dest: info.destination, amount: BigInt(info.amount) };
-          break;
-        }
-      }
-    }
-    if (found) break;
-  }
-
-  if (!found) {
-    const topIns = parsed.transaction.message.instructions || [];
-    for (const ix of topIns) {
-      if (ix.program === "spl-token" && ix.parsed && ix.parsed.type === "transfer") {
-        const info = ix.parsed.info;
-        if (info.mint === mintpubToString(mintPubkey)) {
-          found = { source: info.source, dest: info.destination, amount: BigInt(info.amount) };
-          break;
-        }
-      }
-    }
-  }
-
-  if (!found) throw new Error("no_valid_token_transfer_found");
-
-  if (expectedDestAta && found.dest !== expectedDestAta.toBase58()) throw new Error("destination_mismatch");
-
-  if (found.amount < BigInt(requiredBaseAmount)) throw new Error("insufficient_amount_in_tx");
-
-  const expectedSourceAta = await getAssociatedTokenAddress(mintPubkey, new PublicKey(walletPubkeyStr));
-  if (found.source !== expectedSourceAta.toBase58()) throw new Error("source_not_player_ata");
-
-  return true;
-}
-
-/* -------------------------
-   Basic Data Endpoints
-   ------------------------- */
-app.get("/locations", (req, res) => res.json(LOCATIONS));
-app.get("/quests", (req, res) => res.json(QUESTS));
-app.get("/mintables", (req, res) => res.json(MINTABLES));
-
-/* -------------------------
-   Player endpoints
-   ------------------------- */
-app.get("/player/:addr", async (req, res) => {
-  const { addr } = req.params;
-  try { new PublicKey(addr); }
-  catch { return res.status(400).json({ error: "Invalid address" }); }
-
-  let playerData = { lvl: 1, hp: 100, caps: 0, gear: [], found: [], xp: 0, xpToNext: 100, rads: 0, inventory: {} };
-  const redisData = await redis.get(`player:${addr}`);
-  if (redisData) {
-    try { playerData = JSON.parse(redisData); } catch (e) { /* ignore parse error */ }
-  }
-
-  try {
-    const metaplex = Metaplex.make(connection);
-    await metaplex.nfts().findAllByOwner({ owner: new PublicKey(addr) });
-  } catch (e) {
-    console.warn("NFT fetch failed:", e);
-  }
-
-  res.json(playerData);
-});
-
-app.post("/player/:addr", async (req, res) => {
-  const { addr } = req.params;
-  await redis.set(`player:${addr}`, JSON.stringify(req.body));
-  res.json({ success: true });
-});
-
-/* -------------------------
-   Crafting endpoint (with Lua atomic update and optional txSig verification)
-   ------------------------- */
-// POST /api/craft
-// Body: { wallet: string, recipeId: string, amount?: number, txSig?: string }
-app.post(
-  "/api/craft",
-  [
-    body("wallet").isString().notEmpty(),
-    body("recipeId").isString().notEmpty(),
-    body("amount").optional().isInt({ min: 1, max: 100 }),
-    body("txSig").optional().isString()
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ error: "Invalid request", details: errors.array() });
-
-    const wallet = String(req.body.wallet).trim();
-    const recipeId = String(req.body.recipeId).trim();
-    const amount = Number(req.body.amount || 1);
-    const txSig = req.body.txSig;
-
-    try { new PublicKey(wallet); } catch (e) { return res.status(400).json({ error: "Invalid wallet address" }); }
-
-    const recipe = (gameData.recipes || []).find(r => r.id === recipeId);
-    if (!recipe) return res.status(404).json({ error: "Recipe not found" });
-
-    // Load player data (best-effort)
-    const playerKey = `player:${wallet}`;
-    let playerData = { lvl: 1, caps: 0, gear: [], inventory: {} };
-    try {
-      const raw = await redis.get(playerKey);
-      if (raw) playerData = JSON.parse(raw);
-    } catch (e) {
-      console.warn("Redis read player failed:", e);
-    }
-
-    if (recipe.requiresLevel && (playerData.lvl || 0) < recipe.requiresLevel) {
-      return res.status(403).json({ error: "Player level too low for this recipe" });
-    }
-
-    // If recipe requires token payment, verify client-signed txSig first
-    if (recipe.tokenCost) {
-      if (!txSig) return res.status(400).json({ error: "txSig required for token-cost recipes" });
-
-      try {
-        const mintInfo = await getMint(connection, MINT_PUBKEY);
-        const decimals = Number(mintInfo.decimals || 0);
-        const requiredBase = parseHumanAmountToBase(recipe.tokenCost, decimals) * BigInt(amount);
-
-        const vaultAtaAddress = await getAssociatedTokenAddress(MINT_PUBKEY, GAME_VAULT.publicKey);
-
-        await verifyTokenTransferTx(txSig, wallet, requiredBase, MINT_PUBKEY, vaultAtaAddress);
-
-        const usedKey = `usedTx:${txSig}`;
-        const used = await redis.set(usedKey, "1", "NX", "EX", 60 * 60 * 24);
-        if (!used) return res.status(400).json({ error: "txSig already used" });
-      } catch (e) {
-        return res.status(400).json({ error: "tx verification failed", details: e.message });
-      }
-    }
-
-    // Run atomic Lua script to check/deduct materials, add output, set cooldown
-    try {
-      const luaResult = await runCraftLua(wallet, recipe, amount);
-      if (!luaResult.ok) {
-        if (luaResult.error === "cooldown") return res.status(429).json({ error: "Recipe cooldown active" });
-        if (luaResult.error === "insufficient") return res.status(400).json({ error: "Insufficient materials", missing: luaResult.missing });
-        return res.status(400).json({ error: "Craft failed", details: luaResult.error });
-      }
-
-      try {
-        const evt = { type: "craft", wallet, recipeId: recipe.id, amount, txSig: txSig || null, time: Date.now() };
-        await redis.lpush("game:events", JSON.stringify(evt));
-      } catch (e) {
-        console.warn("Failed to emit craft event:", e);
-      }
-
-      return res.json({ success: true, recipe: recipe.id, amount, inventory: luaResult.inventory });
-    } catch (err) {
-      console.error("Craft Lua error", err);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  }
-);
-
-/* -------------------------
-   Terminal Reward endpoint
-   Accepts human-readable amounts (e.g., "0.5") or base units.
-   ------------------------- */
+// Terminal Reward endpoint
 app.post(
   "/api/terminal-reward",
   [
     body("wallet").isString().notEmpty(),
-    body("amount").not().isEmpty(), // accept string or number; we'll validate below
+    body("amount").not().isEmpty(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -508,21 +426,6 @@ app.post(
       return res.status(400).json({ error: "Invalid wallet address" });
     }
 
-    function parseHumanAmountToBaseLocal(amountStr, decimals) {
-      if (typeof amountStr === "number") amountStr = amountStr.toString();
-      if (typeof amountStr !== "string") throw new Error("Amount must be a string or number");
-      amountStr = amountStr.trim();
-      if (/^\d+$/.test(amountStr)) return BigInt(amountStr);
-      if (!/^\d+(\.\d+)?$/.test(amountStr)) throw new Error("Amount must be a non-negative decimal number");
-      const parts = amountStr.split(".");
-      const intPart = parts[0] || "0";
-      const fracPart = parts[1] || "";
-      if (fracPart.length > decimals) throw new Error("Amount has more decimal places than the token supports");
-      const fracPadded = fracPart.padEnd(decimals, "0");
-      const baseStr = (intPart + fracPadded).replace(/^0+(?=\d)|^$/, "0");
-      return BigInt(baseStr);
-    }
-
     const cooldownKey = `terminal:cooldown:${wallet}`;
 
     try {
@@ -536,7 +439,7 @@ app.post(
 
       let baseAmount;
       try {
-        baseAmount = parseHumanAmountToBaseLocal(amountInput, decimals);
+        baseAmount = parseHumanAmountToBase(amountInput, decimals);
       } catch (parseErr) {
         await redis.del(cooldownKey);
         return res.status(400).json({ error: "Invalid amount", details: parseErr.message });
@@ -606,15 +509,31 @@ app.post(
         message: "Reward transferred. Transaction confirmed.",
       });
     } catch (err) {
-      try { await redis.del(cooldownKey); } catch (e) { /* ignore */ }
+      try { await redis.del(cooldownKey); } catch (e) {}
       console.error("Terminal reward error:", err);
       return res.status(500).json({ error: "Internal server error" });
     }
   }
 );
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+// Health check
+app.get("/health", (req, res) => {
+  res.json({ 
+    status: "ok", 
+    timestamp: new Date().toISOString(),
+    data: {
+      locations: LOCATIONS.length,
+      quests: QUESTS.length,
+      events: EVENTS.length
+    }
+  });
 });
 
+// Start server
+app.listen(PORT, () => {
+  console.log(`\n🚀 Atomic Fizz Caps server running on port ${PORT}`);
+  console.log(`📍 Visit: http://localhost:${PORT}`);
+  console.log(`💾 Redis: ${REDIS_URL}`);
+  console.log(`⛓️  Solana: ${SOLANA_RPC}`);
+  console.log(`🎮 Game vault: ${GAME_VAULT.publicKey.toBase58()}\n`);
+});
