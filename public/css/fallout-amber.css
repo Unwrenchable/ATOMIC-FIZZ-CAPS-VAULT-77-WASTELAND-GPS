@@ -1,14 +1,11 @@
-/* fallout-amber.css */
-/* Applies when body has class="fallout-amber" */
-
-body.fallout-amber .leaflet-container {
-  filter: sepia(100%)
-          hue-rotate(-20deg)
-          brightness(0.9)
-          contrast(1.3);
+/* Fallout Amber Theme */
+body.fallout-amber {
+  color: #ffb000;
 }
 
-body.fallout-amber .custom-marker-icon img,
-body.fallout-amber .pip-icon {
-  filter: brightness(0) invert(1) sepia(100%) hue-rotate(-20deg) saturate(300%);
+body.fallout-amber .pip-panel,
+body.fallout-amber .pip-header,
+body.fallout-amber .pip-tabs {
+  color: #ffb000;
+  border-color: #ffb000;
 }
