@@ -1,0 +1,53 @@
+/* ============================================================
+   PIP‑BOY MAP — layout, GPS, POI list, buttons
+   ============================================================ */
+
+.map-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 140px); /* header + tabs + drawer */
+  overflow: hidden;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* GPS badge */
+#gpsBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 40, 0, 0.8);
+  padding: 6px 10px;
+  border: 1px solid #00ff00;
+  z-index: 9999;
+  font-size: 16px;
+}
+
+.acc-dot {
+  width: 10px;
+  height: 10px;
+  background: #00ff00;
+  border-radius: 50%;
+  margin-bottom: 4px;
+  animation: gpsBlink 1s infinite;
+}
+
+@keyframes gpsBlink {
+  0% { opacity: 1; }
+  50% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
+/* POI list */
+.poi-list {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.poi-item {
+  padding: 6px 0;
+  border-bottom: 1px solid #00ff00;
+}
