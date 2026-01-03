@@ -224,7 +224,12 @@
       const el = document.getElementById(id);
       if (el) el.addEventListener('click', fn);
     }
-
+    
+    // At end of initUI()
+    if (drawer && !drawer.classList.contains('hidden')) {
+    drawer.style.display = 'block';
+    }
+    
     // Wallet
     once('connectWallet', connectWallet);
 
@@ -378,3 +383,4 @@
   };
 
 })();
+
