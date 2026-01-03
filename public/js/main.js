@@ -1,4 +1,4 @@
-// public/js/main.js - Fixed, Complete, and Drawer Tabs Fully Wired (January 2026)
+// public/js/main.js – Fixed, Complete, and Drawer Tabs Fully Wired (January 03, 2026)
 (function () {
   'use strict';
 
@@ -19,9 +19,6 @@
   let map = window.map || null;
   let mapEl = document.getElementById('map') || null;
   let currentMapLayer = null;
-  let osmLayer = null;
-  let cartoDarkLayer = null;
-
   let _gameInitializing = false;
   let _gameInitialized = false;
   let _lastPlayerPosition = null;
@@ -38,37 +35,39 @@
   function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
   function safeError(...args) { try { console.error(...args); } catch (e) {} }
 
-  /* Data loader */
-  async function loadJson(url) {
+  /* Data loader - uses server endpoints first, falls back to local JSON */
+  async function loadJson(name) {
     try {
-      const res = await fetch(url, { cache: 'no-cache' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return await res.json();
+      // Try server endpoint first
+      const res = await fetch(`${CONFIG.apiBase}/${name}`);
+      if (res.ok) return await res.json();
     } catch (e) {
-      safeWarn(`Failed to load ${url}:`, e.message);
-      return null;
+      safeWarn(`Server fetch failed for /${name}:`, e.message);
     }
+
+    // Fallback to local file
+    try {
+      const res = await fetch(`/data/${name}.json`);
+      if (res.ok) return await res.json();
+    } catch (e) {
+      safeWarn(`Local fallback failed for ${name}.json:`, e.message);
+    }
+
+    return null;
   }
 
   async function loadAllData() {
-    const files = ['locations', 'quests', 'mintables', 'scavenger', 'settings'];
+    const names = ['locations', 'quests', 'mintables', 'scavenger', 'settings'];
 
-    for (const name of files) {
-      try {
-        let data = await loadJson(`${CONFIG.apiBase}/${name}`);
-        if (!data) {
-          data = await loadJson(`/data/${name}.json`);
-        }
-        if (data) {
-          window.DATA[name] = data;
-          safeLog(`Loaded ${name}:`, Array.isArray(data) ? data.length : 'object');
-        }
-      } catch (e) {
-        safeWarn(`Failed to load ${name}:`, e);
+    for (const name of names) {
+      const data = await loadJson(name);
+      if (data !== null) {
+        window.DATA[name] = data;
+        safeLog(`Loaded ${name}:`, Array.isArray(data) ? data.length : 'object');
       }
     }
 
-    // Ensure arrays/objects
+    // Ensure sane defaults
     window.DATA.locations = Array.isArray(window.DATA.locations) ? window.DATA.locations : [];
     window.DATA.quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
     window.DATA.mintables = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
@@ -110,13 +109,13 @@
       window._map = map;
 
       // OSM layer
-      osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap'
       });
 
       // Carto Dark layer (fallback)
-      cartoDarkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      const cartoDarkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 20,
         attribution: '© OpenStreetMap © Carto'
       });
@@ -216,7 +215,7 @@
 
   /* UI Initialization - Cleaned up, no duplicates */
   function initUI() {
-    // Prevent multiple bindings (idempotent)
+    // Prevent multiple bindings
     const bound = new Set();
 
     function once(id, fn) {
@@ -260,7 +259,7 @@
       }
     });
 
-    // Drawer outer toggle (only one listener)
+    // Drawer outer toggle
     const drawer = document.getElementById('bottom-drawer');
     const drawerToggle = document.getElementById('drawer-toggle');
     if (drawer && drawerToggle && !bound.has('drawer-toggle')) {
@@ -286,7 +285,7 @@
       }
     });
 
-    // === Inner drawer tabs switching (clean, no duplicates) ===
+    // Inner drawer tabs switching
     const drawerTabs = document.querySelectorAll('.drawer-tabs button');
     drawerTabs.forEach(tab => {
       const tabId = `tab-${tab.dataset.tab}`;
@@ -310,14 +309,13 @@
         }
 
         safeLog(`Drawer tab switched to: ${tab.dataset.tab}`);
-        // Optional: resize map if map tab
         if (tab.dataset.tab === 'map' && map) {
           setTimeout(() => map.invalidateSize(), 200);
         }
       });
     });
 
-    // Activate first tab by default (Stats or whatever is first)
+    // Activate first tab by default
     if (drawerTabs.length > 0 && !bound.has('default-tab')) {
       bound.add('default-tab');
       drawerTabs[0].click();
