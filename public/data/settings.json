@@ -1,13 +1,18 @@
 {
-  "theme": "pipboy",
-  "map": {
-    "tileProvider": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    "attribution": "© OpenStreetMap contributors"
+  "gameVersion": "1.0.3",
+  "maxInventorySlots": 50,
+  "defaultFizzPrice": 0.01,
+  "tradeCooldownMinutes": 5,
+  "maxTradeDurationDays": 30,
+  "scavengerExchange": {
+    "welcomeMessage": "Welcome to the Scavenger's Exchange – trade wisely in the wasteland!",
+    "currency": "FIZZ",
+    "feePercentage": 2,
+    "minListingPrice": 0.05
   },
-  "api": {
-    "baseUrl": "https://www.atomicfizzcaps.xyz"
-  },
-  "drawer": {
-    "tabs": ["stats", "items", "quests", "scavenger", "exchange", "overseer", "terminal", "workshops"]
+  "ui": {
+    "theme": "pipboy",
+    "defaultZoom": 13,
+    "mapCenter": [36.1699, -115.1398]
   }
 }
