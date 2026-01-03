@@ -1,137 +1,244 @@
-// ============================================================
-// PIP‑BOY UI CONTROLLER
-// Handles tab switching, panel visibility, CRT warmup,
-// rad flash, and routing UI buttons to existing game logic.
-// ============================================================
+// public/js/pipboy.js – Pip-Boy UI, panels, sounds, animations
+(function () {
+  'use strict';
 
-// Show a panel by name: "map", "stat", "items", "quests", "exchange"
-function showPipPanel(panelName) {
-  const panels = document.querySelectorAll('.pip-panel');
-  panels.forEach(p => {
-    if (p.id === `panel-${panelName}`) {
-      p.classList.remove('hidden');
-      p.classList.add('active');
-    } else {
-      p.classList.add('hidden');
-      p.classList.remove('active');
-    }
-  });
-
-  // Update active tab
-  const tabs = document.querySelectorAll('.pip-tab');
-  tabs.forEach(tab => {
-    tab.classList.toggle('active', tab.dataset.panel === panelName);
-  });
-
-  // Map warm-up effect
-  if (panelName === 'map') {
-    triggerMapWarmup();
+  // ---------------------------
+  // SOUND EFFECTS
+  // ---------------------------
+  function playPipSound(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    try {
+      el.currentTime = 0;
+      el.play().catch(() => {});
+    } catch (e) {}
   }
-}
 
-// CRT warm-up animation
-function triggerMapWarmup() {
-  const mapEl = document.getElementById('map');
-  if (!mapEl) return;
-  mapEl.classList.add('warmup');
-  setTimeout(() => mapEl.classList.remove('warmup'), 1500);
-}
+  // ---------------------------
+  // PANEL SWITCHING
+  // ---------------------------
+  function showPipPanel(panelName) {
+    const panels = document.querySelectorAll('.pip-panel');
+    panels.forEach(p => {
+      if (p.id === `panel-${panelName}`) {
+        p.classList.remove('hidden');
+        p.classList.add('active');
+      } else {
+        p.classList.add('hidden');
+        p.classList.remove('active');
+      }
+    });
 
-// RAD warning flash
-function triggerRadWarning() {
-  const flash = document.getElementById('radFlash');
-  if (!flash) return;
-  flash.style.display = 'block';
-  flash.classList.add('rad-warning');
-  setTimeout(() => {
-    flash.style.display = 'none';
-    flash.classList.remove('rad-warning');
-  }, 1200);
-}
+    const tabs = document.querySelectorAll('.pip-tab');
+    tabs.forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.panel === panelName);
+    });
 
-// Initialize tab click handlers
-function initPipboyTabs() {
-  const tabs = document.querySelectorAll('.pip-tab');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.panel;
-      showPipPanel(target);
+    playPipSound('snd-tab');
+
+    if (panelName === 'map') {
+      triggerMapWarmup();
+      setTimeout(() => {
+        if (window._map && typeof window._map.invalidateSize === 'function') {
+          window._map.invalidateSize();
+        }
+      }, 200);
+    }
+  }
+
+  // ---------------------------
+  // MAP EFFECTS (CRT warmup, RAD flash)
+  // ---------------------------
+  function triggerMapWarmup() {
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+    mapEl.classList.add('warmup');
+    setTimeout(() => mapEl.classList.remove('warmup'), 1500);
+  }
+
+  function triggerRadWarning() {
+    const flash = document.getElementById('radFlash');
+    if (!flash) return;
+    flash.style.display = 'block';
+    flash.classList.add('rad-warning');
+    setTimeout(() => {
+      flash.style.display = 'none';
+      flash.classList.remove('rad-warning');
+    }, 1200);
+  }
+
+  window.triggerRadWarning = triggerRadWarning;
+
+  // ---------------------------
+  // SCREEN ANIMATIONS
+  // ---------------------------
+  function pipScreenRoll() {
+    const screen = document.getElementById('pipboyScreen');
+    if (!screen) return;
+    screen.classList.remove('pip-anim-roll');
+    void screen.offsetWidth;
+    screen.classList.add('pip-anim-roll');
+    playPipSound('snd-scroll');
+  }
+
+  function pipDegauss() {
+    const screen = document.getElementById('pipboyScreen');
+    if (!screen) return;
+    screen.classList.remove('pip-anim-degauss');
+    void screen.offsetWidth;
+    screen.classList.add('pip-anim-degauss');
+    playPipSound('snd-degauss');
+  }
+
+  function pipStaticBurst() {
+    const overlay = document.getElementById('pipStaticOverlay');
+    if (!overlay) return;
+    overlay.classList.remove('pip-anim-static');
+    void overlay.offsetWidth;
+    overlay.classList.add('pip-anim-static');
+    playPipSound('snd-static');
+  }
+
+  window.pipScreenRoll = pipScreenRoll;
+  window.pipDegauss = pipDegauss;
+  window.pipStaticBurst = pipStaticBurst;
+
+  // ---------------------------
+  // TABS & SIDEBAR
+  // ---------------------------
+  function initPipboyTabs() {
+    const tabs = document.querySelectorAll('.pip-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.panel;
+        showPipPanel(target);
+      });
+    });
+  }
+
+  function initSidebarRouting() {
+    const invBtn = document.getElementById('openInventory');
+    if (invBtn) {
+      invBtn.addEventListener('click', () => {
+        showPipPanel('items');
+      });
+    }
+
+    const questsBtn = document.getElementById('openQuests');
+    if (questsBtn) {
+      questsBtn.addEventListener('click', () => {
+        showPipPanel('quests');
+      });
+    }
+
+    const tutorialBtn = document.getElementById('openTutorial');
+    if (tutorialBtn) {
+      tutorialBtn.addEventListener('click', () => {
+        if (!localStorage.getItem('tutorialComplete')) {
+          alert('HOW TO PLAY: Explore the Mojave, follow POIs, complete quests, and claim mintables with your wallet.');
+          localStorage.setItem('tutorialComplete', '1');
+        } else {
+          playPipSound('snd-error');
+        }
+      });
+    }
+  }
+
+  // Optional: sidebar collapse on mobile (you can wire a button to this)
+  function toggleSidebar() {
+    const sb = document.querySelector('.sidebar');
+    if (!sb) return;
+    sb.classList.toggle('open');
+  }
+
+  window.toggleSidebar = toggleSidebar;
+
+  // ---------------------------
+  // WALLET + CLAIM FLOW IN UI
+  // ---------------------------
+  async function connectWalletAndMaybeClaim() {
+    if (typeof window.connectWallet !== 'function') {
+      alert('Wallet system not ready.');
+      return;
+    }
+
+    await window.connectWallet();
+
+    if (typeof window.claimMintableFromServer === 'function') {
+      const confirmClaim = confirm('Wallet connected. Claim a mintable item now?');
+      if (confirmClaim) {
+        await window.claimMintableFromServer();
+      }
+    }
+  }
+
+  function initWalletButtons() {
+    const btns = [
+      document.getElementById('connectWallet'),
+      document.getElementById('connectWalletStat')
+    ];
+
+    btns.forEach(btn => {
+      if (!btn) return;
+      btn.addEventListener('click', async () => {
+        await connectWalletAndMaybeClaim();
+      });
+    });
+
+    // Sidebar claim button (if you keep it) triggers the same flow
+    const sidebarClaim = document.getElementById('claimMintablesSidebar');
+    if (sidebarClaim) {
+      sidebarClaim.addEventListener('click', async () => {
+        await connectWalletAndMaybeClaim();
+      });
+    }
+  }
+
+  // ---------------------------
+  // AUDIO CONTEXT WARMUP (fix autoplay issues)
+  // ---------------------------
+  function initAudioContextWarmup() {
+    const handler = () => {
+      try {
+        if (!window.__pipAudioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (Ctx) {
+            const ctx = new Ctx();
+            ctx.resume().catch(() => {});
+            window.__pipAudioCtx = ctx;
+          }
+        } else {
+          window.__pipAudioCtx.resume().catch(() => {});
+        }
+      } catch (e) {}
+      document.removeEventListener('click', handler);
+      document.removeEventListener('keydown', handler);
+      document.removeEventListener('touchstart', handler);
+    };
+
+    document.addEventListener('click', handler);
+    document.addEventListener('keydown', handler);
+    document.addEventListener('touchstart', handler, { passive: true });
+  }
+
+  // ---------------------------
+  // INIT
+  // ---------------------------
+  function initPipboy() {
+    initPipboyTabs();
+    initSidebarRouting();
+    initWalletButtons();
+    initAudioContextWarmup();
+
+    // Start on MAP panel with a screen roll
+    showPipPanel('map');
+    setTimeout(pipScreenRoll, 200);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Boot.js will show Pip-Boy and dispatch pipboyReady.
+    window.addEventListener('pipboyReady', () => {
+      initPipboy();
     });
   });
-}
-
-// Load quests from JSON
-async function loadQuestsIntoPipboy() {
-  try {
-    const res = await fetch('/data/quests.json');
-    const quests = await res.json();
-    const container = document.getElementById('questList');
-    container.innerHTML = quests.map(q => `
-      <div class="quest-item">
-        <div class="quest-title">${q.title}</div>
-        <div class="quest-desc">${q.description}</div>
-      </div>
-    `).join('');
-  } catch (e) {
-    console.error('Failed to load quests', e);
-  }
-}
-
-// Mirror HUD → STAT panel
-function syncStatPanel() {
-  document.getElementById('statLevel').textContent = document.getElementById('lvl').textContent;
-  document.getElementById('statXP').textContent = document.getElementById('xpText').textContent;
-  document.getElementById('statCaps').textContent = document.getElementById('caps').textContent;
-}
-
-// Init Pip‑Boy UI
-function initPipboy() {
-  initPipboyTabs();
-
-  // Map init (your existing function)
-  if (typeof initWastelandMap === 'function') {
-    initWastelandMap();
-  }
-
-  // Load quests
-  loadQuestsIntoPipboy();
-
-  // Inventory (your existing function)
-  if (typeof renderInventory === 'function') {
-    renderInventory(document.getElementById('inventoryList'));
-  }
-
-  // Exchange (your existing function)
-  if (typeof renderExchange === 'function') {
-    renderExchange(document.getElementById('exchangeContent'));
-  }
-
-  // Wallet buttons
-  const walletBtns = [
-    document.getElementById('connectWallet'),
-    document.getElementById('connectWalletStat')
-  ];
-  walletBtns.forEach(btn => {
-    if (btn && typeof connectWallet === 'function') {
-      btn.addEventListener('click', connectWallet);
-    }
-  });
-
-  // Claim mintables buttons
-  const claimBtns = [
-    document.getElementById('claimMintables'),
-    document.getElementById('claimMintablesStat'),
-    document.getElementById('claimMintablesSidebar')
-  ];
-  claimBtns.forEach(btn => {
-    if (btn && typeof claimMintables === 'function') {
-      btn.addEventListener('click', claimMintables);
-    }
-  });
-
-  // Sync STAT panel with HUD
-  syncStatPanel();
-}
-
-// Boot
-document.addEventListener('DOMContentLoaded', initPipboy);
+})();
