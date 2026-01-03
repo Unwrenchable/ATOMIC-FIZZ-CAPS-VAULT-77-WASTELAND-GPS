@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <title>ATOMIC FIZZ CAPS • WASTELAND GPS</title>
 
-  <!-- FIXED CSP: Added the two new missing inline script hashes -->
+  <!-- CSP: All required hashes included (including the two new ones) -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 
@@ -44,7 +44,17 @@
 
   <!-- PIP-BOY SHELL -->
   <div id="pipboyScreen" class="hidden" aria-hidden="true">
-    <!-- Your full Pip-Boy UI content here (header, HUD, map, drawer, etc.) -->
+    <!-- === YOUR FULL PIP-BOY UI CONTENT GOES HERE === -->
+    <!-- Header, HUD, map container, drawer, tabs, modals, etc. -->
+    <!-- For example: -->
+    <div class="pipboy-shell">
+      <header class="pip-header">
+        <h1>ATOMIC FIZZ CAPS</h1>
+        <div class="wallet-status">Wallet: <span id="walletAddr"></span></div>
+      </header>
+      <div id="map" style="height: 500px;"></div>
+      <!-- ... rest of your UI ... -->
+    </div>
   </div>
 
   <!-- Scripts -->
@@ -84,6 +94,9 @@
       boot.style.display = 'none';
       pip.classList.remove('hidden');
       pip.setAttribute('aria-hidden', 'false');
+      pip.style.display = 'block'; // Force visibility (safety)
+
+      console.log("Pip-Boy activated!");
 
       // Force map resize after transition
       setTimeout(() => {
@@ -93,12 +106,14 @@
       }, 300);
     }
 
-    // Bind once (prevents duplicates)
+    // Bind once (prevents duplicates / multiple triggers)
     if (!window._bootBound) {
+      // Keydown listener (any key)
       window.addEventListener('keydown', () => {
         activateUI();
       }, { once: true });
 
+      // Click listener on boot screen
       const bootScreen = document.getElementById('bootScreen');
       if (bootScreen) {
         bootScreen.addEventListener('click', () => {
@@ -112,4 +127,3 @@
 
 </body>
 </html>
-
