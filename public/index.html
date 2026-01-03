@@ -3,10 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <title>ATOMIC FIZZ CAPS • WASTELAND GPS</title>
+  <meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 'sha256-knV59OylGCMUSLMIdwmcnoLKGBWKJTQUzPHVIDUiduo=';
+  connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss:;
+  style-src 'self' 'unsafe-inline' https://unpkg.com;
+  img-src 'self' data: https:;
+  font-src 'self' https://fonts.gstatic.com;">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png+xml" href="/favicon.png" />
 
   <!-- Leaflet -->
   <link
@@ -231,3 +238,4 @@
 
 </body>
 </html>
+
