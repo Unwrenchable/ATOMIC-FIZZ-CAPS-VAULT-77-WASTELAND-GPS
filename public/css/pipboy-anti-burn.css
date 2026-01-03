@@ -1,0 +1,12 @@
+/* Prevent static burn-in by drifting the entire Pip-Boy screen */
+#pipboyScreen {
+  animation: pip-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes pip-drift {
+  0%   { transform: translate(0px, 0px); }
+  25%  { transform: translate(1px, -1px); }
+  50%  { transform: translate(-1px, 1px); }
+  75%  { transform: translate(1px, 1px); }
+  100% { transform: translate(-1px, -1px); }
+}
