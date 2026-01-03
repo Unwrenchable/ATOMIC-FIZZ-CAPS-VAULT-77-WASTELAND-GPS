@@ -1,4 +1,4 @@
-// public/js/map-core.js – Fallout-style map core (Updated Jan 03, 2026)
+// public/js/map-core.js – Fallout-style map core (Refactored)
 (function () {
   'use strict';
 
@@ -91,7 +91,6 @@
       );
     } catch (e) { safeWarn('Carto Light layer failed', e); }
 
-    // Tile error logging
     [osmLayer, cartoDarkLayer, cartoLightLayer].forEach(layer => {
       if (layer) {
         layer.on('tileerror', e => {
@@ -214,10 +213,8 @@
       return;
     }
 
-    // ensure CRT class (in case HTML didn’t add it)
     mapEl.classList.add('map-crt');
 
-    // Prevent double init
     if (map && map instanceof L.Map) {
       setTimeout(() => map.invalidateSize(), 200);
       return;
@@ -238,7 +235,6 @@
       return;
     }
 
-    // Marker icon default fix (moved out of HTML)
     try {
       delete L.Icon.Default.prototype._getIconUrl;
       L.Icon.Default.mergeOptions({
@@ -252,7 +248,6 @@
 
     createTileLayers();
 
-    // Default to dark / Pip‑Boy green
     currentMapLayer = cartoDarkLayer || osmLayer;
     if (currentMapLayer) currentMapLayer.addTo(map);
     setMapTheme('fallout-green');
@@ -268,7 +263,7 @@
   }
 
   // -------------------------
-  // Map Style Switcher (wired to Fallout themes)
+  // Map Style Switcher
   // -------------------------
   function switchMapStyle(style) {
     if (!map) return;
@@ -312,7 +307,7 @@
   }
 
   // -------------------------
-  // Safety CSS (pixelated green tiles etc.)
+  // Safety CSS (CRT/map layering)
   // -------------------------
   (function injectSafetyCss() {
     const id = 'map-core-safety';
@@ -355,12 +350,5 @@
     }
   });
 
-  // Fallback init
-  setTimeout(() => {
-    if (document.getElementById('map') && !map) {
-      initMap();
-      attachMapModeButton();
-    }
-  }, 1200);
-
+  // Removed old fallback auto-init to avoid double map engines.
 })();
