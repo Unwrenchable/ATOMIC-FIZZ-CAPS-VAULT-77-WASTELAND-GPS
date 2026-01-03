@@ -1,654 +1,197 @@
-/* pipboy.css – Atomic Fizz CRT Pip-Boy
-   Complete, production-ready stylesheet.
-   - Full layout for map + overlay drawer
-   - Pip-Boy CRT look and button styles
-   - Safe-area, z-index variables, and accessibility fixes
-*/
+/* public/css/pipboy.css */
 
-/* =====================
-   VARIABLES & RESET
-   ===================== */
-:root{
-  --pip-accent: #00ff66;
-  --pip-accent-2: #66ffaa;
-  --pip-warn: #ffaa00;
-  --pip-danger: #ff4444;
-
-  /* Drawer height tuned for mobile tap reach */
-  --drawer-height: 190px;
-  --drawer-bg: rgba(0,8,0,0.92);
-
-  --z-map: 1;
-  --z-noise: 2;
-  --z-drawer: 40;
-  --z-controls: 60;
-  --z-terminal: 80;
-  --z-modal: 100;
-
-  --font-mono: "VT323", monospace;
-}
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 * {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  box-sizing: border-box;
+}
+
+body {
   background: #000;
-  color: var(--pip-accent);
-  font-family: var(--font-mono);
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-/* Utility */
-.hidden { display: none !important; }
-.visually-hidden {
-  position: absolute !important;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
+  font-family: 'VT323', monospace;
+  color: #00ff66;
+  height: 100vh;
   overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
 }
 
-/* =====================
-   BOOT SCREEN
-   ===================== */
-#bootScreen {
+/* Scan effects */
+.scan-overlay {
   position: fixed;
   inset: 0;
-  background: #000;
-  color: var(--pip-accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: var(--z-modal);
-}
-
-.boot-inner {
-  max-width: 800px;
-  width: 90%;
-  border: 2px solid var(--pip-accent);
-  padding: 16px;
-  background: #000;
-  box-shadow: 0 0 25px var(--pip-accent);
-  position: relative;
-}
-
-#bootText {
-  margin: 0;
-  white-space: pre-wrap;
-  font-size: 16px;
-  line-height: 1.4;
-  text-shadow: 0 0 8px var(--pip-accent);
-}
-
-.boot-prompt {
-  margin-top: 12px;
-  font-size: 18px;
-  text-align: center;
-  animation: blink 1.2s infinite steps(2, start);
-}
-
-/* =====================
-   PIP-BOY SHELL
-   ===================== */
-#pipboyScreen {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.pipboy-shell {
-  position: relative;
-  width: min(100vw, 1100px);
-  height: min(100vh, 700px);
-  background: radial-gradient(circle at 30% 10%, #004400 0, #000000 60%);
-  border-radius: 40px;
-  box-shadow: 0 0 50px #000, inset 0 0 40px #001900;
-  padding: 12px;
-  overflow: hidden;
-}
-
-.pipboy-bezel {
-  position: absolute;
-  inset: 0;
-  border-radius: 40px;
-  box-shadow: inset 0 0 0 8px #002200, 0 0 30px #000;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
   pointer-events: none;
+  z-index: 100;
 }
 
-/* CRT Screen */
-.pipboy-screen {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 24px;
-  padding: 12px 16px 4px;
-  background: #001100;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-/* CRT effects */
-.crt::before {
-  content: "";
-  position: absolute;
-  inset: -20%;
-  background: radial-gradient(circle, rgba(0,255,100,0.06), transparent 60%);
-  mix-blend-mode: screen;
-  pointer-events: none;
-}
-.crt::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.35),
-    rgba(0,0,0,0.35) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  mix-blend-mode: multiply;
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-/* =====================
-   HEADER & CONTROLS
-   ===================== */
-.overseer-link {
-  position: absolute;
-  top: 8px;
-  right: 16px;
-  font-size: 14px;
-  padding: 4px 10px;
-  border: 1px solid var(--pip-accent);
-  text-decoration: none;
-  color: var(--pip-accent);
-  background: rgba(0,20,0,0.7);
-  box-shadow: 0 0 10px var(--pip-accent);
-  z-index: 10;
-  border-radius: 6px;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.pip-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 4px;
-}
-
-.pip-title { display: flex; flex-direction: column; }
-.pip-main-title {
-  font-size: 24px;
-  letter-spacing: 2px;
-  text-shadow: 0 0 12px var(--pip-accent);
-}
-.pip-sub-title { font-size: 14px; opacity: 0.8; }
-
-.pip-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: flex-end;
-}
-
-/* =====================
-   BUTTONS (PIP-BOY STYLE)
-   ===================== */
-.btn,
-.drawer-tabs button,
-.tab {
-  background: transparent;
-  border: 1px solid var(--pip-accent);
-  color: var(--pip-accent);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  padding: 6px 12px;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.05s;
-  border-radius: 999px;
-  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.25), 0 0 8px rgba(0,255,102,0.04);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btn:hover,
-.drawer-tabs button:hover,
-.tab:hover {
-  background: var(--pip-accent);
-  color: #000;
-  box-shadow: 0 0 14px var(--pip-accent);
-}
-
-.btn:active,
-.drawer-tabs button:active,
-.tab:active {
-  transform: translateY(1px);
-}
-
-.wallet-btn {
-  border-color: var(--pip-accent-2);
-  color: var(--pip-accent-2);
-}
-.wallet-btn:hover {
-  background: var(--pip-accent-2);
-  color: #000;
-  box-shadow: 0 0 10px var(--pip-accent-2);
-}
-
-.danger-btn {
-  border-color: #ff0044;
-  color: #ff5577;
-}
-.danger-btn:hover {
-  background: #ff0044;
-  color: #000;
-  box-shadow: 0 0 15px #ff0044;
-}
-
-/* small icon buttons */
-.icon-btn {
-  width: 40px;
-  height: 40px;
-  padding: 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* =====================
-   STATUS & HUD
-   ===================== */
-.status {
-  font-size: 13px;
-  margin-bottom: 4px;
-  padding: 4px 8px;
-  border: 1px solid #004400;
-  background: rgba(0,20,0,0.9);
-  border-radius: 6px;
-}
-
-.status-good { color: var(--pip-accent); }
-.status-warn { color: var(--pip-warn); }
-.status-bad { color: var(--pip-danger); }
-
-.hud {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  margin-bottom: 4px;
-  flex-wrap: wrap;
-}
-.hud-block { display: flex; align-items: center; gap: 4px; }
-
-/* =====================
-   MAP (FULLSCREEN) + OVERLAYS
-   ===================== */
-.map-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 200px;
-  border: 1px solid #003300;
-  background: #000;
-  overflow: hidden;
-  z-index: var(--z-map);
-  display: block;
-}
-
-#map {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  width: 100%;
-  background: #000;
-  z-index: var(--z-map);
-}
-
-/* Static noise overlay (visual only) */
-.static-noise {
-  pointer-events: none !important;
-  position: absolute;
-  inset: 0;
-  background-image: url("/assets/static-noise.png");
-  background-size: cover;
-  opacity: 0.09;
-  mix-blend-mode: screen;
-  z-index: var(--z-noise);
-}
-
-/* Map controls container */
-.map-controls {
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  z-index: var(--z-controls);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* GPS Badge & Button */
-.gps-badge {
-  position: absolute;
-  left: 10px;
-  bottom: calc(var(--drawer-height) + 18px);
-  padding: 6px 10px;
-  border: 1px solid var(--pip-accent);
-  background: rgba(0,20,0,0.9);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  z-index: var(--z-controls);
-  border-radius: 8px;
-}
-
-.acc-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--pip-warn);
-  box-shadow: 0 0 8px var(--pip-warn);
-}
-.acc-good { background: var(--pip-accent); box-shadow: 0 0 8px var(--pip-accent); }
-.acc-bad { background: var(--pip-danger); box-shadow: 0 0 8px var(--pip-danger); }
-
-.gps-btn {
-  position: absolute;
-  right: 10px;
-  bottom: calc(var(--drawer-height) + 18px);
-  z-index: var(--z-controls);
-}
-
-/* =====================
-   TABS (QUICK ACTION BAR)
-   ===================== */
-.tabs {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: calc(var(--drawer-height) + 8px);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  z-index: calc(var(--z-drawer) + 1);
-}
-
-.tab {
-  font-size: 12px;
-  padding: 6px 10px;
-}
-
-.tab.active {
-  background: var(--pip-accent);
-  color: #000;
-  box-shadow: 0 0 10px var(--pip-accent);
-}
-
-/* =====================
-   BOTTOM DRAWER (OVER MAP)
-   ===================== */
-#bottom-drawer {
-  position: absolute;
+.scan-glow {
+  position: fixed;
+  top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  height: calc(var(--drawer-height) + env(safe-area-inset-bottom, 0px));
-  background: var(--drawer-bg);
-  z-index: var(--z-drawer);
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 255, 102, 0.1), transparent);
+  pointer-events: none;
+  z-index: 98;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: all 1.5s ease-out;
+}
+
+.scan-glow.active {
+  opacity: 1;
+  transform: translateY(100vh);
+}
+
+/* Main Pip-Boy frame */
+#pipboy-frame {
+  width: min(100vw, 1200px);
+  height: min(100vh, 800px);
+  margin: auto;
+  background: radial-gradient(circle at 30% 20%, #003300 0%, #000 70%);
+  border-radius: 30px;
+  padding: 1.5rem;
+  box-shadow: 0 0 60px rgba(0, 255, 102, 0.3), inset 0 0 60px rgba(0, 50, 0, 0.5);
   display: flex;
   flex-direction: column;
-  pointer-events: auto;
-  transition: transform 240ms ease;
-  transform: translateY(0);
-  padding: 8px 12px;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border-top: 1px solid rgba(0,255,102,0.06);
-}
-
-/* hidden / slid-down state (used by JS) */
-#bottom-drawer.hidden {
-  transform: translateY(calc(var(--drawer-height) + 24px));
-  pointer-events: none;
-}
-
-/* handle */
-.drawer-handle {
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  margin-bottom: 6px;
-}
-.drawer-handle::before {
-  content: "";
-  width: 56px;
-  height: 4px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 3px;
-  box-shadow: 0 0 6px rgba(0,255,102,0.06);
-}
-
-/* drawer content layout */
-.drawer-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex: 1 1 auto;
-}
-
-/* left/right columns inside drawer */
-.drawer-left,
-.drawer-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.drawer-left { flex: 1 1 auto; }
-.drawer-right { flex: 0 0 auto; }
-
-/* ensure buttons inside drawer are clickable */
-#bottom-drawer .btn,
-#bottom-drawer button {
-  pointer-events: auto;
-}
-
-/* Overseer open button hidden until unlocked */
-#overseer-open-btn[aria-hidden="true"] { display: none; }
-
-/* =====================
-   DRAWER TABS / PANELS (for stats/items/quests/etc.)
-   ===================== */
-.drawer-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 4px;
-  margin-bottom: 6px;
-}
-
-.drawer-tabs button {
-  flex: 1 1 calc(25% - 4px);
-  min-width: 0;
-  text-align: center;
-}
-
-.drawer-tabs button.active {
-  background: rgba(0,255,102,0.22);
-  box-shadow: 0 0 10px rgba(0,255,102,0.4);
-  color: #000;
-}
-
-.drawer-panels {
-  overflow-y: auto;
-  flex: 1 1 auto;
-  padding: 4px 2px 0;
-  font-size: 13px;
-}
-
-.panel {
-  display: none;
-}
-.panel.active {
-  display: block;
-}
-
-/* =====================
-   OVERSEER TERMINAL (inside overlay)
-   ===================== */
-#overseer-terminal {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: calc(var(--drawer-height) + 12px);
-  z-index: var(--z-terminal);
-  max-height: 60vh;
-  overflow: auto;
-  background: rgba(0,10,0,0.985);
-  border: 1px solid var(--pip-accent);
-  box-shadow: 0 0 15px var(--pip-accent);
-  border-radius: 8px;
-  padding: 12px;
-  display: none;
-}
-
-#overseer-terminal.open {
-  display: block;
-  pointer-events: auto;
-}
-
-.terminal-inner {
+  gap: 1rem;
   position: relative;
-  width: 100%;
-  padding: 12px;
-  color: var(--pip-accent);
-}
-.terminal-close {
-  position: absolute;
-  top: 6px;
-  right: 6px;
+  border: 4px solid #001a00;
 }
 
-/* =====================
-   MODALS
-   ===================== */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
+/* Header */
+header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  z-index: var(--z-modal);
+  padding: 0.5rem 1rem;
+  background: rgba(0, 20, 0, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 255, 102, 0.2);
 }
 
-.modal-inner {
-  width: 320px;
-  max-width: 90%;
-  border: 1px solid var(--pip-accent);
-  background: #000;
-  padding: 16px;
-  box-shadow: 0 0 18px var(--pip-accent);
+.title { font-size: 24px; letter-spacing: 3px; text-shadow: 0 0 10px #00ff66; }
+.subtitle { font-size: 14px; opacity: 0.8; letter-spacing: 2px; }
+
+.gps { display: flex; align-items: center; gap: 0.5rem; }
+.gps-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #ffaa00; box-shadow: 0 0 10px #ffaa00;
+}
+
+/* Status row */
+#status-row {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 20, 0, 0.6);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.status-item { display: flex; align-items: center; gap: 0.5rem; }
+
+/* Progress bars */
+.progress-container {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.5rem 1rem; background: rgba(0, 20, 0, 0.6); border-radius: 8px;
+}
+.progress-label { min-width: 60px; font-size: 14px; font-weight: bold; }
+.progress-bg {
+  flex: 1; height: 16px; background: rgba(0,0,0,0.5);
+  border-radius: 8px; overflow: hidden; border: 1px solid rgba(0,255,102,0.3);
+}
+.progress-fill {
+  height: 100%; transition: width 0.3s ease;
+}
+.progress-fill.hp { background: linear-gradient(90deg, #00ff66, #66ffaa); }
+.progress-fill.rads { background: linear-gradient(90deg, #ffaa00, #ffcc00); }
+.progress-value { min-width: 100px; text-align: right; font-size: 14px; }
+
+/* Content area */
+#content-area {
+  flex: 1; background: rgba(0,10,0,0.8); border-radius: 12px;
+  border: 2px solid rgba(0,255,102,0.2); overflow: hidden; position: relative;
+}
+
+/* Map (placeholder - integrate your Leaflet here) */
+#map-view {
+  width: 100%; height: 100%; background: #000; position: relative;
+}
+.grid-line { position: absolute; background: rgba(0,255,102,0.1); }
+.horizontal { left: 0; right: 0; height: 1px; }
+.vertical { top: 0; bottom: 0; width: 1px; }
+
+.center-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 10; }
+
+/* Markers example */
+.marker {
+  position: absolute; padding: 0.25rem 0.5rem; border-radius: 6px;
+  display: flex; align-items: center; gap: 0.5rem; font-size: 12px; cursor: pointer;
+}
+.marker.cache { background: rgba(0,50,0,0.9); border: 1px solid #00ff66; }
+.marker.warning { background: rgba(50,40,0,0.9); border: 1px solid #ffaa00; color: #ffaa00; box-shadow: 0 0 10px #ffaa00; }
+
+/* Scan button */
+#scan-btn {
+  padding: 0.5rem 1rem; background: rgba(0,50,0,0.9); border: 2px solid #00ff66;
+  color: #00ff66; font-family: 'VT323', monospace; font-size: 16px; cursor: pointer;
   border-radius: 8px;
 }
 
-/* =====================
-   RESPONSIVE
-   ===================== */
-@media (max-width: 900px) {
-  .pip-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .pip-controls { justify-content: flex-start; }
-  .overseer-link {
-    font-size: 12px;
-    padding: 3px 8px;
-  }
-  .hud { font-size: 12px; }
-  #overseer-terminal {
-    left: 8px;
-    right: 8px;
-    bottom: calc(var(--drawer-height) + 8px);
-  }
+/* Tabs */
+#tab-nav {
+  display: flex; gap: 0.5rem; padding: 0.75rem;
+  background: rgba(0,20,0,0.8); border-radius: 12px;
+  border: 2px solid rgba(0,255,102,0.2);
+}
+.tab-btn {
+  flex: 1; padding: 0.75rem 0.5rem; background: transparent;
+  border: 2px solid rgba(0,255,102,0.3); border-radius: 8px;
+  color: #00ff66; font-family: 'VT323', monospace; font-size: 14px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+}
+.tab-btn.active {
+  background: rgba(0,255,102,0.2); border-color: #00ff66;
+  box-shadow: 0 0 15px rgba(0,255,102,0.5);
 }
 
-@media (max-width: 600px) {
-  :root {
-    /* slightly taller drawer for thumb reach on small phones */
-    --drawer-height: 210px;
-  }
-
-  .pipboy-shell {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-  }
-  .pipboy-screen { border-radius: 0; }
-
-  #bottom-drawer {
-    height: calc(var(--drawer-height) + env(safe-area-inset-bottom, 12px));
-    padding: 10px;
-  }
-  .drawer-handle::before { width: 44px; }
-
-  .drawer-tabs button {
-    flex: 1 1 calc(50% - 4px); /* two per row on very small screens */
-    font-size: 12px;
-    padding: 5px 6px;
-  }
-
-  .tabs {
-    bottom: calc(var(--drawer-height) + 4px);
-  }
-
-  .gps-badge,
-  .gps-btn {
-    bottom: calc(var(--drawer-height) + 14px);
-  }
+/* Drawer */
+#bottom-drawer {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(0,20,0,0.95); border-top: 2px solid #00ff66;
+  border-radius: 12px 12px 0 0; padding: 1rem; z-index: 50;
+  transition: transform 0.3s ease;
 }
+.drawer-closed { transform: translateY(calc(100% - 30px)); }
+.drawer-handle { width: 60px; height: 4px; background: rgba(0,255,102,0.5); border-radius: 3px; margin: 0 auto 1rem; }
 
-/* =====================
-   Z-INDEX OVERRIDES (library-specific)
-   ===================== */
-/* Leaflet control overrides (if using Leaflet) */
-.leaflet-control {
-  z-index: calc(var(--z-controls) + 1) !important;
+/* Action buttons in drawer */
+.action-btn {
+  flex: 1; padding: 1rem; font-family: 'VT323', monospace; font-size: 16px;
+  font-weight: bold; cursor: pointer; border-radius: 8px;
 }
-.leaflet-bottom {
-  margin-bottom: calc(var(--drawer-height) + 8px) !important;
-}
+.claim { background: rgba(0,255,102,0.2); border: 2px solid #00ff66; color: #00ff66; }
+.wallet { background: rgba(0,50,0,0.5); border: 2px solid #00ff66; color: #00ff66; }
+.nuke { background: rgba(50,0,0,0.5); border: 2px solid #ff4444; color: #ff4444; }
 
-/* =====================
-   ANIMATIONS
-   ===================== */
-@keyframes blink {
-  0% { opacity: 0; }
-  49% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 1; }
+/* Boot screen */
+#boot-screen {
+  position: fixed; inset: 0; background: #000;
+  display: flex; align-items: center; justify-content: center;
+  color: #00ff66; font-family: 'VT323', monospace;
+  z-index: 1000;
 }
+.boot-box {
+  max-width: 800px; padding: 2rem; border: 2px solid #00ff66;
+  background: rgba(0,20,0,0.9); box-shadow: 0 0 30px #00ff66;
+}
+pre { font-size: 14px; line-height: 1.4; text-shadow: 0 0 8px #00ff66; white-space: pre; }
+
+/* Animations */
+@keyframes blink { 0%,49% {opacity:0} 50%,100% {opacity:1} }
+.blink { animation: blink 1s infinite; }
+
+button:hover { filter: brightness(1.2); }
+button:active { transform: translateY(2px); }
