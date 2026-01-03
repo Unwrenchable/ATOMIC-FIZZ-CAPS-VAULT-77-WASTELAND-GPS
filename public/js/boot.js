@@ -1,4 +1,5 @@
 // public/js/boot.js – Fallout-style interactive terminal boot (2026 edition)
+// Fixed: Reliable mouse/touch + keyboard, debug logs, no blocking
 (function () {
   'use strict';
 
@@ -13,6 +14,7 @@
   }
 
   let activated = false;
+  let finished = false;
 
   // === TERMINAL LINES – Fallout-style boot sequence ===
   const bootLines = [
@@ -36,18 +38,18 @@
     "*BZZZT* *CRACKLE*",
     "High-gain audio tone achieved!",
     "",
-    ">> PRESS ANY KEY TO CONTINUE <<"
+    ">> PRESS ANY KEY / CLICK / TAP TO CONTINUE <<"
   ];
 
   // === ANIMATION SETTINGS ===
-  const typeSpeedMin = 20;   // ms per char
+  const typeSpeedMin = 20;
   const typeSpeedMax = 60;
-  const lineDelay = 800;     // pause between lines
+  const lineDelay = 800;
   let currentLine = 0;
   let charIndex = 0;
   let output = '';
 
-  // Optional: Sound effects (browser-safe)
+  // === SOUND EFFECTS (browser-safe) ===
   function playBeep(frequency = 800, duration = 80) {
     try {
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -65,13 +67,10 @@
     setTimeout(() => playBeep(1500, 80), 80);
   }
 
-  function playError() {
-    playBeep(200, 150);
-  }
-
-  // Typewriter effect
+  // === TYPEWRITER EFFECT ===
   function typeNextChar() {
     if (currentLine >= bootLines.length) {
+      finished = true;
       bootPrompt.classList.remove('hidden');
       bootPrompt.classList.add('blink');
       playSuccess();
@@ -84,7 +83,7 @@
       output += line.charAt(charIndex);
       charIndex++;
       bootText.textContent = output;
-      playBeep(800 + Math.random() * 400, 20); // random beep per char
+      playBeep(800 + Math.random() * 400, 20);
       setTimeout(typeNextChar, typeSpeedMin + Math.random() * (typeSpeedMax - typeSpeedMin));
     } else {
       output += '\n';
@@ -94,72 +93,98 @@
     }
   }
 
-  // Skip to end (for impatient users)
+  // === SKIP TO END ===
   function completeBoot() {
-    output = bootLines.join('\n') + '\n';
-    bootText.textContent = output;
-    currentLine = bootLines.length;
-    bootPrompt.classList.remove('hidden');
-    playSuccess();
+    if (!finished) {
+      output = bootLines.join('\n') + '\n';
+      bootText.textContent = output;
+      currentLine = bootLines.length;
+      finished = true;
+      bootPrompt.classList.remove('hidden');
+      playSuccess();
+    }
   }
 
-  // Activate full Pip-Boy interface
+  // === ACTIVATE FULL PIP-BOY INTERFACE ===
   function activatePipboy() {
     if (activated) return;
     activated = true;
+
+    console.log('activatePipboy called');
 
     // Hide boot
     bootScreen.style.display = 'none';
     bootScreen.setAttribute('aria-hidden', 'true');
 
-    // Show Pip-Boy
+    // Show Pip-Boy (force visibility)
     pipboyScreen.classList.remove('hidden');
     pipboyScreen.setAttribute('aria-hidden', 'false');
     pipboyScreen.style.display = 'block';
+    pipboyScreen.style.visibility = 'visible';
+    pipboyScreen.style.opacity = '1';
 
-    // Play final success tone
     playSuccess();
 
     // Force map resize
     setTimeout(() => {
       if (window._map && typeof window._map.invalidateSize === 'function') {
         window._map.invalidateSize();
+        console.log('Map resized');
       }
     }, 300);
 
-    // Tell other scripts "Pip-Boy is ready!"
     window.dispatchEvent(new Event('pipboyReady'));
     console.log('Pip-Boy interface activated!');
   }
 
-  // Event listeners (once only)
+  // === INPUT HANDLER (keyboard, click, touch) ===
   function setupListeners() {
     const onInput = (e) => {
-      e.preventDefault();
+      // Log every input for debug
+      console.log(`Input detected: ${e.type}`);
+
+      // Don't prevent default on keyboard (Enter/Space works naturally)
+      if (e.type !== 'keydown') {
+        e.preventDefault();
+      }
+
       if (!activated) {
-        if (currentLine < bootLines.length) {
-          completeBoot(); // Skip typing
+        if (!finished) {
+          completeBoot(); // First input: skip typing
         } else {
-          activatePipboy();
+          activatePipboy(); // Second input: activate UI
         }
       }
     };
 
-    window.addEventListener('keydown', onInput, { once: true });
-    bootScreen.addEventListener('click', onInput, { once: true });
-    bootScreen.addEventListener('touchstart', onInput, { passive: false, once: true });
+    // Keyboard (simple)
+    window.addEventListener('keydown', onInput);
+
+    // Mouse click - capture phase to catch early
+    bootScreen.addEventListener('click', onInput, { capture: true });
+
+    // Touch - passive false + capture
+    bootScreen.addEventListener('touchstart', onInput, { passive: false, capture: true });
+
+    // Extra safety: any document click after prompt
+    document.addEventListener('click', (e) => {
+      if (finished && !activated) {
+        console.log('Document click detected → forcing activation');
+        activatePipboy();
+      }
+    }, { once: true });
   }
 
-  // Start when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startBoot);
-  } else {
-    startBoot();
-  }
-
+  // === START BOOT ===
   function startBoot() {
     setupListeners();
     typeNextChar();
   }
 
+  // Run when DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startBoot);
+  } else {
+    startBoot();
+  }
 })();
