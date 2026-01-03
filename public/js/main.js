@@ -1,4 +1,4 @@
-// public/js/main.js – Player State, Mint Integration, XP/CAPS, Quests, Drawer Tabs (January 03, 2026)
+// public/js/main.js – Player State, Mint Integration, XP/CAPS, Quests (Refactored)
 (function () {
   'use strict';
 
@@ -23,10 +23,10 @@
   const PLAYER_STATE_KEY = 'afc_player_state_v1';
 
   const PLAYER = {
-    inventory: [],       // item ids
-    questsActive: [],    // quest ids
-    questsDone: [],      // quest ids
-    visitedLocations: [],// location ids/names
+    inventory: [],
+    questsActive: [],
+    questsDone: [],
+    visitedLocations: [],
     xp: 0,
     caps: 0,
     level: 1
@@ -75,15 +75,10 @@
   }
 
   // ---------------------------
-  // MAP / GAME CORE
+  // MAP / GAME CORE (no init here)
   // ---------------------------
 
-  let map = window.map || null;
-  let mapEl = document.getElementById('map') || null;
-  let currentMapLayer = null;
-  let osmLayer = null;
-  let cartoDarkLayer = null;
-
+  let map = null;
   let _gameInitializing = false;
   let _gameInitialized = false;
   let _lastPlayerPosition = null;
@@ -97,7 +92,15 @@
     apiBase: window.location.origin
   };
 
+  function attachMapReference() {
+    map = window.map || window._map || null;
+  }
+
+  // ---------------------------
+  // DATA LOADING
+  // ---------------------------
   async function loadJson(name) {
+    // Try API route first
     try {
       const res = await fetch(`${CONFIG.apiBase}/${name}`);
       if (res.ok) return await res.json();
@@ -105,6 +108,7 @@
       safeWarn(`Server fetch failed for /${name}:`, e.message);
     }
 
+    // Fallback to static public/data
     try {
       const res = await fetch(`/data/${name}.json`);
       if (res.ok) return await res.json();
@@ -131,66 +135,6 @@
     window.DATA.mintables = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
     window.DATA.scavenger = Array.isArray(window.DATA.scavenger) ? window.DATA.scavenger : [];
     window.DATA.settings = window.DATA.settings || {};
-  }
-
-  function initMap() {
-    if (typeof L === 'undefined') {
-      safeError('Leaflet not loaded');
-      return;
-    }
-
-    mapEl = document.getElementById('map');
-    if (!mapEl) {
-      safeWarn('Map element not found');
-      return;
-    }
-
-    if (mapEl._leaflet_id) {
-      safeLog('Map already initialized - skipping creation, only invalidate size');
-      if (map && map.invalidateSize) setTimeout(() => map.invalidateSize(), 200);
-      return;
-    }
-
-    try {
-      map = L.map(mapEl, {
-        center: CONFIG.defaultCenter,
-        zoom: CONFIG.defaultZoom,
-        zoomControl: true,
-        attributionControl: false
-      });
-
-      window.map = map;
-      window._map = map;
-
-      osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap'
-      });
-
-      cartoDarkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 20,
-        attribution: '© OpenStreetMap © Carto'
-      });
-
-      currentMapLayer = cartoDarkLayer || osmLayer;
-      if (currentMapLayer) currentMapLayer.addTo(map);
-
-      // Add location markers
-      if (Array.isArray(window.DATA.locations)) {
-        window.DATA.locations.forEach(loc => {
-          if (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number') {
-            const marker = L.marker([loc.lat, loc.lng]);
-            marker.bindPopup(`<strong>${loc.name || 'Location'}</strong>`);
-            marker.addTo(map);
-          }
-        });
-      }
-
-      setTimeout(() => map?.invalidateSize?.(), 300);
-      safeLog('Map initialized successfully');
-    } catch (e) {
-      safeError('Map initialization failed:', e);
-    }
   }
 
   // ---------------------------
@@ -328,15 +272,15 @@
   }
 
   // ---------------------------
-  // PANELS RENDERING
+  // PANELS RENDERING (Pip-Boy panels)
   // ---------------------------
 
   function renderInventoryPanel() {
-    const panel = document.getElementById('panel-items');
+    const panel = document.getElementById('inventoryList'); // inner list, not whole pip-panel
     if (!panel) return;
 
     if (!PLAYER.inventory.length) {
-      panel.innerHTML = '<h2>Inventory</h2><p>No items yet — explore the Mojave and claim some caps.</p>';
+      panel.innerHTML = '<p>No items yet — explore the Mojave and claim some caps.</p>';
       return;
     }
 
@@ -352,11 +296,11 @@
       `;
     }).join('');
 
-    panel.innerHTML = `<h2>Inventory</h2>${entries}`;
+    panel.innerHTML = entries;
   }
 
   function renderQuestsPanel() {
-    const panel = document.getElementById('panel-quests');
+    const panel = document.getElementById('questList'); // inner list
     if (!panel) return;
 
     const quests = window.DATA.quests || [];
@@ -396,31 +340,6 @@
     `;
   }
 
-  function renderLocationsPanel() {
-    const panel = document.getElementById('panel-map');
-    if (!panel) return;
-
-    const locs = window.DATA.locations || [];
-    if (!locs.length) {
-      panel.innerHTML = '<h2>Locations</h2><p>No wasteland locations loaded.</p>';
-      return;
-    }
-
-    const entries = locs.map(loc => {
-      const name = loc.name || loc.id || loc.slug || 'Location';
-      const lat = typeof loc.lat === 'number' ? loc.lat.toFixed(5) : '?';
-      const lng = typeof loc.lng === 'number' ? loc.lng.toFixed(5) : '?';
-      return `
-        <div class="pip-entry">
-          <strong>${name}</strong><br>
-          <span>${lat}, ${lng}</span>
-        </div>
-      `;
-    }).join('');
-
-    panel.innerHTML = `<h2>Locations</h2>${entries}`;
-  }
-
   function updateHUD() {
     const lvlEl = document.getElementById('lvl');
     const capsEl = document.getElementById('caps');
@@ -433,11 +352,44 @@
     const needed = PLAYER.level * 100;
     if (xpText) xpText.textContent = `${PLAYER.xp} / ${needed}`;
     if (xpFill) xpFill.style.width = `${Math.min(100, (PLAYER.xp / needed) * 100)}%`;
+
+    // Mirror into STAT panel (if present)
+    const statLevel = document.getElementById('statLevel');
+    const statXP = document.getElementById('statXP');
+    const statCaps = document.getElementById('statCaps');
+    if (statLevel) statLevel.textContent = PLAYER.level;
+    if (statCaps) statCaps.textContent = PLAYER.caps;
+    if (statXP) statXP.textContent = `${PLAYER.xp} / ${needed}`;
   }
 
   // ---------------------------
   // GEOLOCATION
   // ---------------------------
+
+  function updateGPSBadge(acc) {
+    const accDot = document.getElementById('accDot');
+    const accText = document.getElementById('accText');
+    if (accDot && accText) {
+      accText.textContent = `GPS: ${Math.round(acc)}m`;
+      accDot.className = acc <= 20 ? 'acc-dot acc-good' : 'acc-dot';
+    }
+  }
+
+  function updatePlayerMarker(lat, lng) {
+    attachMapReference();
+    if (!map) return;
+
+    if (!map._playerMarker) {
+      map._playerMarker = L.circleMarker([lat, lng], {
+        radius: 8,
+        color: '#00ff66',
+        fillColor: '#00ff66',
+        fillOpacity: 0.8
+      }).addTo(map);
+    } else {
+      map._playerMarker.setLatLng([lat, lng]);
+    }
+  }
 
   function startGeolocationWatch() {
     if (!navigator.geolocation || gpsLocked) return;
@@ -447,25 +399,8 @@
         const { latitude: lat, longitude: lng, accuracy: acc } = pos.coords;
         _lastPlayerPosition = { lat, lng, acc };
 
-        const accDot = document.getElementById('accDot');
-        const accText = document.getElementById('accText');
-        if (accDot && accText) {
-          accText.textContent = `GPS: ${Math.round(acc)}m`;
-          accDot.className = acc <= 20 ? 'acc-dot acc-good' : 'acc-dot';
-        }
-
-        if (map) {
-          if (!map._playerMarker) {
-            map._playerMarker = L.circleMarker([lat, lng], {
-              radius: 8,
-              color: '#00ff66',
-              fillColor: '#00ff66',
-              fillOpacity: 0.8
-            }).addTo(map);
-          } else {
-            map._playerMarker.setLatLng([lat, lng]);
-          }
-        }
+        updateGPSBadge(acc);
+        updatePlayerMarker(lat, lng);
 
         const locs = window.DATA.locations || [];
         locs.forEach(loc => {
@@ -494,7 +429,7 @@
   }
 
   // ---------------------------
-  // WALLET + MINT
+  // WALLET + MINT (exported for pipboy.js)
   // ---------------------------
 
   async function connectWallet() {
@@ -507,8 +442,17 @@
     try {
       await provider.connect();
       const addr = provider.publicKey.toBase58();
+
       const btn = document.getElementById('connectWallet');
-      if (btn) btn.textContent = `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+      const btnStat = document.getElementById('connectWalletStat');
+      const label = `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+
+      if (btn) btn.textContent = label;
+      if (btnStat) btnStat.textContent = label;
+
+      const walletAddressEl = document.getElementById('walletAddress');
+      if (walletAddressEl) walletAddressEl.textContent = addr;
+
       connectedWallet = true;
       safeLog('Wallet connected:', addr);
     } catch (e) {
@@ -543,8 +487,11 @@
     }
   }
 
+  window.connectWallet = connectWallet;
+  window.claimMintableFromServer = claimMintableFromServer;
+
   // ---------------------------
-  // UI INIT
+  // UI INIT (only core controls)
   // ---------------------------
 
   function initUI() {
@@ -557,8 +504,6 @@
       if (el) el.addEventListener('click', fn);
     }
 
-    once('connectWallet', connectWallet);
-
     once('requestGpsBtn', () => {
       startGeolocationWatch();
       const btn = document.getElementById('requestGpsBtn');
@@ -566,21 +511,15 @@
     });
 
     once('centerBtn', () => {
-      if (map && _lastPlayerPosition) map.setView([_lastPlayerPosition.lat, _lastPlayerPosition.lng], 15);
+      attachMapReference();
+      if (map && _lastPlayerPosition) {
+        map.setView([_lastPlayerPosition.lat, _lastPlayerPosition.lng], 15);
+      }
     });
 
-    once('recenterMojave', () => map?.setView(CONFIG.defaultCenter, CONFIG.defaultZoom));
-
-    once('mapModeBtn', () => {
-      if (!map) return;
-      try {
-        if (currentMapLayer) map.removeLayer(currentMapLayer);
-        currentMapLayer = currentMapLayer === cartoDarkLayer ? osmLayer : cartoDarkLayer;
-        if (currentMapLayer) currentMapLayer.addTo(map);
-        setTimeout(() => map?.invalidateSize?.(), 150);
-      } catch (e) {
-        safeWarn('Map mode switch failed:', e);
-      }
+    once('recenterMojave', () => {
+      attachMapReference();
+      if (map) map.setView(CONFIG.defaultCenter, CONFIG.defaultZoom);
     });
 
     const drawer = document.getElementById('bottom-drawer');
@@ -588,7 +527,10 @@
     if (drawerToggle && drawer) {
       drawerToggle.addEventListener('click', () => {
         drawer.classList.toggle('hidden');
-        setTimeout(() => map?.invalidateSize?.(), 260);
+        setTimeout(() => {
+          attachMapReference();
+          if (map && map.invalidateSize) map.invalidateSize();
+        }, 260);
       });
     }
 
@@ -603,46 +545,8 @@
       }
     });
 
-    once('claimMintables', () => {
-      if (!connectedWallet) {
-        alert('Connect wallet first');
-        return;
-      }
-      claimMintableFromServer();
-    });
-
-    const drawerTabs = document.querySelectorAll('.tabs .tab');
-    drawerTabs.forEach(tab => {
-      const tabId = tab.dataset.panel;
-      if (bound.has(tabId)) return;
-      bound.add(tabId);
-
-      tab.addEventListener('click', () => {
-        drawerTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        document.querySelectorAll('.drawer-panels .panel').forEach(p => {
-          p.classList.remove('active');
-          p.style.display = 'none';
-        });
-
-        const panel = document.getElementById(`panel-${tabId}`);
-        if (panel) {
-          panel.classList.add('active');
-          panel.style.display = 'block';
-        }
-
-        if (tabId === 'map' && map) setTimeout(() => map.invalidateSize(), 200);
-
-        if (tabId === 'items') renderInventoryPanel();
-        if (tabId === 'quests') renderQuestsPanel();
-        if (tabId === 'map') renderLocationsPanel();
-      });
-    });
-
-    if (drawerTabs.length > 0) drawerTabs[0].click();
-
-    safeLog('UI initialized (tabs, buttons, drawer wired)');
+    // No more tab/drawer panel switching here; handled by pipboy.js
+    safeLog('UI initialized (core controls wired)');
   }
 
   // ---------------------------
@@ -656,7 +560,8 @@
     try {
       loadPlayerState();
       await loadAllData();
-      initMap();
+
+      attachMapReference();
       initUI();
 
       const locCountEl = document.getElementById('locations-count');
@@ -664,7 +569,6 @@
 
       renderInventoryPanel();
       renderQuestsPanel();
-      renderLocationsPanel();
       updateHUD();
 
       _gameInitialized = true;
@@ -681,19 +585,15 @@
     initGame();
   });
 
-  window.addEventListener('map-ready', () => safeLog('Map ready'));
-
-  setTimeout(() => {
-    if (!_gameInitialized && !_gameInitializing) {
-      safeLog('Fallback init');
-      initGame();
-    }
-  }, 1500);
+  window.addEventListener('map-ready', () => {
+    attachMapReference();
+    safeLog('Map ready');
+  });
 
   window.__pipboy = {
     reinit: () => { _gameInitialized = false; initGame(); },
     data: () => window.DATA,
-    map: () => map,
+    map: () => { attachMapReference(); return map; },
     location: () => _lastPlayerPosition,
     player: () => PLAYER
   };
