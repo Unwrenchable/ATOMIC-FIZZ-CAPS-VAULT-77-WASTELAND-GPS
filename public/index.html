@@ -4,32 +4,77 @@
   <meta charset="utf-8" />
   <title>ATOMIC FIZZ CAPS • WASTELAND GPS</title>
 
-  <!-- Fixed CSP: added fonts.googleapis.com + unpkg.com for Solana libs -->
+  <!-- CSP - all hashes included, unpkg allowed -->
   <meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 'sha256-knV59OylGCMUSLMIdwmcnoLKGBWKJTQUzPHVIDUiduo=' 'sha256-GWgqL/UbutCqyqM3J9Gks3xvFmnFo1ORE0ufB/pTDi8=' 'sha256-RKPZWgvMlMXlDlyqgBTkFok8+J/6Dwd8uWypHc9RTq4=' 'sha256-ifhM87Ts8YPjA9BFs7MOrEywjqLlp0CZBKWaOppr1fE=' 'sha256-QZ2UtJkPyVaVpO87TjOtPsu5XUuzvb/kBvJrg3lPegQ=' 'sha256-ht4bn3PtoOPOPNMxHc97QDZz/8/D3tGE3jfXNxJ9b6s=';
-  connect-src 'self' https://unpkg.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss: https://*;
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
-  img-src 'self' data: https: blob:;
-  font-src 'self' https://fonts.gstatic.com data:;
-  media-src 'self' data: https:;
-  object-src 'none';
-  frame-src 'self';
-  base-uri 'self';">
-  
+    default-src 'self';
+    script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 
+      'sha256-knV59OylGCMUSLMIdwmcnoLKGBWKJTQUzPHVIDUiduo=' 
+      'sha256-GWgqL/UbutCqyqM3J9Gks3xvFmnFo1ORE0ufB/pTDi8=' 
+      'sha256-RKPZWgvMlMXlDlyqgBTkFok8+J/6Dwd8uWypHc9RTq4=' 
+      'sha256-ifhM87Ts8YPjA9BFs7MOrEywjqLlp0CZBKWaOppr1fE=' 
+      'sha256-QZ2UtJkPyVaVpO87TjOtPsu5XUuzvb/kBvJrg3lPegQ=' 
+      'sha256-ht4bn3PtoOPOPNMxHc97QDZz/8/D3tGE3jfXNxJ9b6s=';
+    connect-src 'self' https://unpkg.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss: https://*;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
+    img-src 'self' data: https: blob:;
+    font-src 'self' https://fonts.gstatic.com data:;
+    media-src 'self' data: https:;
+    object-src 'none';
+    frame-src 'self';
+    base-uri 'self';">
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/favicon.png" />
-
-  <!-- Local Leaflet (no more unpkg connect-src spam) -->
   <link rel="stylesheet" href="/css/leaflet.css" />
-
-  <!-- Fonts (now allowed) -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
-
-  <!-- Your Pip-Boy CSS -->
   <link rel="stylesheet" href="/css/pipboy.css" />
+
+  <!-- Critical fixes: Layering + Clickability -->
+  <style>
+    /* Ensure map is visible and clickable underneath overlays */
+    #map {
+      position: absolute !important;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1 !important;
+      pointer-events: auto !important;
+    }
+
+    /* Overlays below buttons */
+    .static-noise, .gps-badge {
+      z-index: 2 !important;
+      pointer-events: none !important;
+    }
+
+    /* All interactive elements on top */
+    .pip-controls button,
+    .gps-btn,
+    .map-controls button,
+    .tabs .tab,
+    #drawer-toggle,
+    .drawer-tabs button,
+    #connectWallet,
+    #requestGpsBtn,
+    #centerBtn,
+    #recenterMojave,
+    .modal,
+    .overseer-link {
+      z-index: 10 !important;
+      position: relative !important;
+      pointer-events: auto !important;
+    }
+
+    /* Drawer on top when open */
+    #bottom-drawer:not(.hidden) {
+      z-index: 20 !important;
+    }
+
+    /* Prevent noise/overlay from blocking clicks */
+    .static-noise { pointer-events: none; }
+  </style>
 </head>
 <body>
 
@@ -48,16 +93,12 @@
 
       <div class="pipboy-screen crt" role="application" aria-label="Pip-Boy interface">
 
-        <!-- Overseer link -->
-        <a href="/overseer.html" class="overseer-link" aria-label="Open Overseer Terminal">OVERSEER TERMINAL</a>
-
-        <!-- Header -->
+        <!-- Header with high z-index buttons -->
         <header class="pip-header">
           <div class="pip-title">
             <div class="pip-main-title">ATOMIC FIZZ CAPS</div>
             <div class="pip-sub-title">VAULT 77 • WASTELAND GPS</div>
           </div>
-
           <div class="pip-controls">
             <button class="btn danger-btn" onclick="location.href='/nuke.html'">ENTER NUKE VAULT</button>
             <button class="btn" id="centerBtn">Center</button>
@@ -73,25 +114,20 @@
           <div class="hud-block">LVL <strong id="lvl">1</strong></div>
           <div class="hud-block hp-block">
             <div class="hp-container">
-              <div class="hp-bar">
-                <div id="hpFill" class="hp-fill"></div>
-              </div>
+              <div class="hp-bar"><div id="hpFill" class="hp-fill"></div></div>
               <div id="hpText" class="hp-text">HP 100 / 100</div>
             </div>
           </div>
           <div class="hud-block">CAPS <strong id="caps">0</strong></div>
           <div class="hud-block xp-wrapper">
-            <div class="xp-bar">
-              <div id="xpFill" class="xp-fill"></div>
-            </div>
+            <div class="xp-bar"><div id="xpFill" class="xp-fill"></div></div>
             <div class="xp-text" id="xpText">0 / 100</div>
           </div>
           <div class="hud-block">CLAIMED <strong id="claimed">0</strong></div>
         </div>
 
-        <!-- Main grid: sidebar + map -->
+        <!-- Main grid -->
         <section class="main-grid" aria-live="polite">
-          <!-- Sidebar -->
           <aside class="sidebar" aria-label="Sidebar">
             <div class="sidebar-content">
               <div class="status">Quick Actions</div>
@@ -100,9 +136,7 @@
                 <button class="btn" id="openInventory">Inventory</button>
                 <button class="btn" id="openQuests">Quests</button>
               </div>
-
               <hr class="sidebar-divider" />
-
               <div class="status">Nearby</div>
               <ul id="nearbyList" class="nearby-list">
                 <li>Workshop Alpha — 1.2km</li>
@@ -112,14 +146,14 @@
             </div>
           </aside>
 
-          <!-- Main content -->
           <main class="main" role="main">
             <div class="map-container" role="region" aria-label="Wasteland map">
               <div class="map-controls">
                 <button class="btn" id="mapModeBtn">MAP MODE</button>
               </div>
 
-              <div id="map" aria-hidden="false"></div>
+              <!-- Map - base layer, fully visible -->
+              <div id="map" style="height: 100%; width: 100%; position: absolute; z-index: 1;"></div>
 
               <div class="static-noise" aria-hidden="true"></div>
 
@@ -133,22 +167,19 @@
               <!-- Bottom drawer -->
               <div id="bottom-drawer" class="hidden" aria-hidden="true" role="region" aria-label="Drawer">
                 <div class="drawer-handle" id="drawer-toggle" role="button" tabindex="0" aria-label="Toggle drawer"></div>
-
                 <div class="drawer-content">
                   <div class="drawer-left">
                     <button class="btn pip-btn" id="donate-btn">Donate</button>
                     <button class="btn pip-btn" id="gps-lock-btn">GPS Lock</button>
-                    <button class="btn pip-btn" id="overseer-open-btn" aria-hidden="true">Overseer</button>
                   </div>
-
                   <div class="drawer-right">
                     <div class="hud">Locations: <span id="locations-count">0</span>/10</div>
                   </div>
                 </div>
               </div>
 
-              <!-- Tabs above drawer -->
-              <div class="tabs" role="tablist" aria-label="Main tabs">
+              <!-- Main tabs - high z-index -->
+              <div class="tabs" role="tablist" aria-label="Main tabs" style="z-index: 10; position: relative;">
                 <div class="tab active" data-panel="map" role="tab" tabindex="0">MAP</div>
                 <div class="tab" data-panel="stat" role="tab" tabindex="0">STAT</div>
                 <div class="tab" data-panel="items" role="tab" tabindex="0">ITEMS</div>
@@ -158,48 +189,13 @@
             </div>
           </main>
         </section>
-
-        <!-- Overseer terminal -->
-        <div id="overseer-terminal" class="terminal" aria-hidden="true">
-          <div class="terminal-inner">
-            <button class="btn terminal-close" id="close-overseer" aria-label="Close overseer">X</button>
-            <h4 id="panelTitle">OVERSEER TERMINAL</h4>
-            <div id="panelBody" class="terminal-body">Overseer locked. Unlock by claiming 10 locations.</div>
-          </div>
-        </div>
-
-        <!-- Modals -->
-        <div id="mintModal" class="modal hidden" aria-hidden="true">
-          <div class="modal-inner">
-            <div id="mintTitle" class="modal-title">LOOT FOUND</div>
-            <div id="mintMsg" class="modal-text">Claiming CAPS...</div>
-            <div class="modal-progress">
-              <div id="mintProgressBar" class="modal-progress-fill"></div>
-            </div>
-            <button class="btn" id="mintCloseBtn">Close</button>
-          </div>
-        </div>
-
-        <div id="tutorialModal" class="modal hidden" aria-hidden="true">
-          <div class="modal-inner">
-            <div class="modal-title">WELCOME TO THE WASTELAND</div>
-            <div class="modal-text">
-              <p>→ Connect Phantom wallet</p>
-              <p>→ Allow GPS</p>
-              <p>→ Hunt markers – get within 50m to claim</p>
-              <p>→ Survive the Atomic Fizz.</p>
-            </div>
-            <button class="btn" id="tutorialClose">ENTER WASTELAND</button>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
 
-  <!-- Bottom drawer (now with inner tabs wired) -->
+  <!-- Drawer with inner tabs -->
   <div id="bottom-drawer">
-    <div class="drawer-tabs">
+    <div class="drawer-tabs" style="z-index: 20;">
       <button data-tab="stats">Stats</button>
       <button data-tab="items">Items</button>
       <button data-tab="quests">Quests</button>
@@ -210,26 +206,23 @@
       <button data-tab="workshops">Workshops</button>
     </div>
     <div class="drawer-panels">
-      <div id="panel-stats" class="panel"></div>
-      <div id="panel-items" class="panel"></div>
-      <div id="panel-quests" class="panel"></div>
-      <div id="panel-scavenger" class="panel"></div>
-      <div id="panel-exchange" class="panel"></div>
-      <div id="panel-overseer" class="panel"></div>
-      <div id="panel-terminal" class="panel"></div>
-      <div id="panel-workshops" class="panel"></div>
+      <div id="panel-stats" class="panel">Stats Panel</div>
+      <div id="panel-items" class="panel">Items Panel</div>
+      <div id="panel-quests" class="panel">Quests Panel</div>
+      <div id="panel-scavenger" class="panel">Scavenger Panel</div>
+      <div id="panel-exchange" class="panel">Exchange Panel</div>
+      <div id="panel-overseer" class="panel">Overseer Panel</div>
+      <div id="panel-terminal" class="panel">Terminal Panel</div>
+      <div id="panel-workshops" class="panel">Workshops Panel</div>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
-
-  <!-- Local Leaflet -->
+  <!-- Scripts -->
   <script src="/js/leaflet.js"></script>
 
-  <!-- Marker icons path fix (updated hash added to CSP above) -->
+  <!-- Marker fix -->
   <script>
     delete L.Icon.Default.prototype._getIconUrl;
-
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: '/images/marker-icon-2x.png',
       iconUrl: '/images/marker-icon.png',
@@ -237,7 +230,7 @@
     });
   </script>
 
-  <!-- Solana libs -->
+  <!-- Solana -->
   <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
   <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
 
@@ -246,16 +239,17 @@
   <script src="/js/map-core.js"></script>
   <script src="/js/main.js"></script>
 
-  <!-- UI wiring (your original inline script - now fully wired for drawers, tabs, wallet) -->
+  <!-- UI wiring: boot, drawers, tabs, wallet, everything clickable -->
   <script>
     (function(){
+      // Boot
       const boot = document.getElementById('bootScreen');
       const pip = document.getElementById('pipboyScreen');
       function activateUI(){
         boot.style.display = 'none';
         pip.classList.remove('hidden');
         pip.setAttribute('aria-hidden','false');
-        setTimeout(()=>{ if(window._map && typeof window._map.invalidateSize === 'function') window._map.invalidateSize(); }, 300);
+        setTimeout(() => { if(window._map) window._map.invalidateSize(); }, 300);
         window.removeEventListener('keydown', onAnyKey);
       }
       function onAnyKey(){ activateUI(); }
@@ -265,60 +259,60 @@
       // Drawer toggle
       const drawer = document.getElementById('bottom-drawer');
       const toggle = document.getElementById('drawer-toggle');
-      function setDrawer(open){
-        if(!drawer) return;
-        drawer.classList.toggle('hidden', !open);
-        drawer.setAttribute('aria-hidden', String(!open));
-        setTimeout(()=>{ if(window._map && typeof window._map.invalidateSize === 'function') window._map.invalidateSize(); }, 260);
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          drawer.classList.toggle('hidden');
+          setTimeout(() => { if(window._map) window._map.invalidateSize(); }, 260);
+        });
       }
-      toggle && toggle.addEventListener('click', ()=> setDrawer(!drawer.classList.contains('hidden')));
-      toggle && toggle.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDrawer(!drawer.classList.contains('hidden')); } });
 
-      // Main tabs (MAP, STAT, ITEMS, QUESTS, SHOP)
-      const mainTabs = Array.from(document.querySelectorAll('.tabs .tab'));
-      mainTabs.forEach(t => {
-        t.addEventListener('click', ()=> {
-          mainTabs.forEach(x=>x.classList.remove('active'));
-          t.classList.add('active');
-          if(t.dataset.panel === 'map') { setTimeout(()=>{ if(window._map) window._map.invalidateSize(); }, 200); }
-          // For SHOP (Scavenger's Exchange) - open new page
-          if(t.dataset.panel === 'shop') { window.location.href = '/exchange.html'; }
+      // Main tabs
+      const mainTabs = document.querySelectorAll('.tabs .tab');
+      mainTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          mainTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          if (tab.dataset.panel === 'map' && window._map) window._map.invalidateSize();
         });
-        t.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); t.click(); } });
       });
 
-      // Drawer inner tabs (Stats, Items, Quests, Scavenger, Exchange, Overseer, Terminal, Workshops)
-      const drawerTabs = Array.from(document.querySelectorAll('.drawer-tabs button'));
-      drawerTabs.forEach(t => {
-        t.addEventListener('click', ()=> {
-          drawerTabs.forEach(x=>x.classList.remove('active'));
-          t.classList.add('active');
-          document.querySelectorAll('.drawer-panels .panel').forEach(p => p.classList.remove('active'));
-          const panelId = `panel-${t.dataset.tab}`;
-          const panel = document.getElementById(panelId);
-          if(panel) panel.classList.add('active');
-          // For Exchange - redirect to full page
-          if(t.dataset.tab === 'exchange') { window.location.href = '/exchange.html'; }
+      // Inner drawer tabs
+      const drawerTabs = document.querySelectorAll('.drawer-tabs button');
+      drawerTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          drawerTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          document.querySelectorAll('.drawer-panels .panel').forEach(p => p.style.display = 'none');
+          const panel = document.getElementById(`panel-${tab.dataset.tab}`);
+          if (panel) panel.style.display = 'block';
         });
-        t.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); t.click(); } });
       });
+      if (drawerTabs.length > 0) drawerTabs[0].click();
 
-      // Wallet connect (basic - expand in main.js if needed)
+      // Wallet
       const walletBtn = document.getElementById('connectWallet');
-      if(walletBtn) {
+      if (walletBtn) {
         walletBtn.addEventListener('click', async () => {
-          if(!window.solana) return alert('Phantom not found');
-          await window.solana.connect();
-          walletBtn.textContent = window.solana.publicKey.toBase58().slice(0,6) + '...';
+          if (!window.solana) return alert('Install Phantom!');
+          try {
+            await window.solana.connect();
+            const addr = window.solana.publicKey.toBase58();
+            walletBtn.textContent = `${addr.slice(0,4)}...${addr.slice(-4)}`;
+          } catch (err) {
+            alert('Wallet connection failed');
+          }
         });
       }
 
-      document.getElementById('centerBtn')?.addEventListener('click', ()=>{ if(window._map) window._map.setView([36.039, -115.000], 12); });
-      document.getElementById('recenterMojave')?.addEventListener('click', ()=>{ if(window._map) window._map.setView([35.0, -115.0], 9); });
-
-      window.addEventListener('map-ready', ()=>{ setTimeout(()=>{ if(window._map) window._map.invalidateSize(); }, 200); });
+      // GPS button
+      const gpsBtn = document.getElementById('requestGpsBtn');
+      if (gpsBtn) {
+        gpsBtn.addEventListener('click', () => {
+          if (navigator.geolocation) navigator.geolocation.getCurrentPosition(() => {});
+          gpsBtn.style.display = 'none';
+        });
+      }
     })();
   </script>
-
 </body>
 </html>
