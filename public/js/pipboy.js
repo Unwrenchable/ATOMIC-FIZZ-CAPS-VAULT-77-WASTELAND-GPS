@@ -220,6 +220,51 @@
     document.addEventListener('keydown', handler);
     document.addEventListener('touchstart', handler, { passive: true });
   }
+  // ============================================================
+// BURN-IN PROTECTION PACK
+// ============================================================
+
+let inactivityTimer = null;
+let lastActivity = Date.now();
+
+// Reset inactivity timer on any input
+function resetInactivity() {
+  lastActivity = Date.now();
+  const screen = document.getElementById('pipboyScreen');
+  if (screen) screen.classList.remove('sleep');
+}
+['mousemove','keydown','click','touchstart'].forEach(evt => {
+  document.addEventListener(evt, resetInactivity);
+});
+
+// Auto-dim after 2 minutes
+setInterval(() => {
+  const screen = document.getElementById('pipboyScreen');
+  if (!screen) return;
+
+  const idle = Date.now() - lastActivity;
+  if (idle > 120000) { // 2 minutes
+    screen.classList.add('sleep');
+  }
+}, 5000);
+
+// Random static burst every 3–6 minutes
+setInterval(() => {
+  if (Math.random() < 0.5) return; // 50% chance
+  if (typeof pipStaticBurst === 'function') {
+    pipStaticBurst();
+  }
+}, 180000 + Math.random() * 180000); // 3–6 minutes
+
+// Wake-up animation when returning from sleep
+document.addEventListener('click', () => {
+  const screen = document.getElementById('pipboyScreen');
+  if (screen && screen.classList.contains('sleep')) {
+    screen.classList.remove('sleep');
+    if (typeof pipScreenRoll === 'function') pipScreenRoll();
+    if (typeof pipDegauss === 'function') pipDegauss();
+  }
+  });
 
   // ---------------------------
   // INIT
