@@ -233,3 +233,30 @@ body {
 
 /* Hidden class */
 .hidden { display: none !important; }
+
+/* Force Pip-Boy shell visible after boot */
+#pipboyScreen {
+  display: none; /* default */
+}
+
+#pipboyScreen:not(.hidden) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1000 !important; /* above everything */
+}
+
+/* If drawer is separate */
+#bottom-drawer {
+  z-index: 1001 !important;
+}
+
+/* Ensure map container doesn't cover UI */
+.map-container, #map {
+  z-index: 1 !important;
+  pointer-events: auto;
+}
+
+.leaflet-container {
+  background: #0a1f0a !important; /* dark green fallback */
+}
