@@ -465,6 +465,114 @@ app.post(
         commitment: "confirmed",
       });
 
+      // ================================================
+// Scavenger's Exchange API
+// ================================================
+
+// GET /api/trades - Fetch all active trades
+app.get('/api/trades', async (req, res) => {
+  try {
+    const keys = await redis.keys('trade:*');
+    if (keys.length === 0) return res.json([]);
+
+    const trades = await Promise.all(
+      keys.map(async (key) => {
+        const data = await redis.hgetall(key);
+        return {
+          id: key.split(':')[1],
+          ...data,
+          posted: Number(data.posted || 0),
+          type: data.type || 'item'
+        };
+      })
+    );
+
+    // Sort newest first
+    trades.sort((a, b) => b.posted - a.posted);
+
+    res.json(trades);
+  } catch (err) {
+    console.error('Error fetching trades:', err);
+    res.status(500).json({ error: 'Failed to load trades' });
+  }
+});
+
+// POST /api/post-trade - Post regular trade (items/CAPS)
+app.post('/api/post-trade', [
+  body('wallet').isString().notEmpty(),
+  body('offer').isString().notEmpty(),
+  body('priceFizz').isNumeric(),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ error: 'Invalid request', details: errors.array() });
+
+  const { wallet, offer, priceFizz, description = '' } = req.body;
+
+  try {
+    const tradeId = `trade:${Date.now()}`;
+    await redis.hset(tradeId, {
+      seller: wallet,
+      offer,
+      priceFizz: String(priceFizz),
+      description,
+      status: 'active',
+      posted: Date.now(),
+      type: 'item'
+    });
+
+    res.json({ success: true, tradeId });
+  } catch (err) {
+    console.error('Post trade error:', err);
+    res.status(500).json({ error: 'Failed to post trade' });
+  }
+});
+
+// POST /api/post-nft - Post NFT trade (with signature)
+app.post('/api/post-nft', [
+  body('wallet').isString().notEmpty(),
+  body('nftMint').isString().notEmpty(),
+  body('priceFizz').isNumeric(),
+  body('signature').isString().notEmpty(),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ error: 'Invalid request', details: errors.array() });
+
+  const { wallet, nftMint, priceFizz, description = '', signature } = req.body;
+
+  try {
+    // Verify signed message
+    const message = `List NFT ${nftMint} for ${priceFizz} FIZZ - ${description}`;
+    const verified = nacl.sign.detached.verify(
+      new TextEncoder().encode(message),
+      bs58.decode(signature),
+      bs58.decode(wallet)
+    );
+
+    if (!verified) {
+      return res.status(403).json({ error: 'Invalid signature' });
+    }
+
+    // TODO: (Optional) RPC check: verify wallet owns NFT
+    // const owns = await verifyNftOwnership(wallet, nftMint);
+    // if (!owns) return res.status(403).json({ error: 'Not your NFT' });
+
+    const tradeId = `trade:${Date.now()}`;
+    await redis.hset(tradeId, {
+      seller: wallet,
+      nftMint,
+      priceFizz: String(priceFizz),
+      description,
+      status: 'active',
+      posted: Date.now(),
+      type: 'nft'
+    });
+
+    res.json({ success: true, tradeId });
+  } catch (err) {
+    console.error('Post NFT error:', err);
+    res.status(500).json({ error: 'Failed to post NFT' });
+  }
+});
       // Update player caps in Redis
       try {
         const playerKey = `player:${wallet}`;
@@ -520,3 +628,4 @@ app.listen(PORT, () => {
   console.log(`⛓️ Solana: ${SOLANA_RPC}`);
   console.log(`🎮 Game vault: ${GAME_VAULT.publicKey.toBase58()}\n`);
 });
+
