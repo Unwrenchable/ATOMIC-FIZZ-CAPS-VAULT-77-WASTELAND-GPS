@@ -1,7 +1,10 @@
-// public/js/main.js – Fixed, Complete, Drawer Tabs Wired, GPS/Claim Ready, Player State Added (January 03, 2026)
+// public/js/main.js – Player State, Mint Integration, XP/CAPS, Quests, Drawer Tabs (January 03, 2026)
 (function () {
   'use strict';
 
+  // ---------------------------
+  // GLOBAL DATA
+  // ---------------------------
   window.DATA = window.DATA || {
     scavenger: [],
     mintables: [],
@@ -20,10 +23,13 @@
   const PLAYER_STATE_KEY = 'afc_player_state_v1';
 
   const PLAYER = {
-    inventory: [],      // array of item ids the player owns
-    questsActive: [],   // array of quest ids
-    questsDone: [],     // array of quest ids
-    visitedLocations: [] // array of location ids (or names as fallback)
+    inventory: [],       // item ids
+    questsActive: [],    // quest ids
+    questsDone: [],      // quest ids
+    visitedLocations: [],// location ids/names
+    xp: 0,
+    caps: 0,
+    level: 1
   };
 
   function safeLog(...args) { try { console.log(...args); } catch (e) {} }
@@ -35,12 +41,16 @@
       const raw = localStorage.getItem(PLAYER_STATE_KEY);
       if (!raw) return;
       const parsed = JSON.parse(raw);
-      if (parsed && typeof parsed === 'object') {
-        if (Array.isArray(parsed.inventory)) PLAYER.inventory = parsed.inventory;
-        if (Array.isArray(parsed.questsActive)) PLAYER.questsActive = parsed.questsActive;
-        if (Array.isArray(parsed.questsDone)) PLAYER.questsDone = parsed.questsDone;
-        if (Array.isArray(parsed.visitedLocations)) PLAYER.visitedLocations = parsed.visitedLocations;
-      }
+      if (!parsed || typeof parsed !== 'object') return;
+
+      if (Array.isArray(parsed.inventory)) PLAYER.inventory = parsed.inventory;
+      if (Array.isArray(parsed.questsActive)) PLAYER.questsActive = parsed.questsActive;
+      if (Array.isArray(parsed.questsDone)) PLAYER.questsDone = parsed.questsDone;
+      if (Array.isArray(parsed.visitedLocations)) PLAYER.visitedLocations = parsed.visitedLocations;
+      if (typeof parsed.xp === 'number') PLAYER.xp = parsed.xp;
+      if (typeof parsed.caps === 'number') PLAYER.caps = parsed.caps;
+      if (typeof parsed.level === 'number') PLAYER.level = parsed.level;
+
       safeLog('Player state loaded');
     } catch (e) {
       safeWarn('Failed to load player state:', e.message);
@@ -53,7 +63,10 @@
         inventory: PLAYER.inventory,
         questsActive: PLAYER.questsActive,
         questsDone: PLAYER.questsDone,
-        visitedLocations: PLAYER.visitedLocations
+        visitedLocations: PLAYER.visitedLocations,
+        xp: PLAYER.xp,
+        caps: PLAYER.caps,
+        level: PLAYER.level
       };
       localStorage.setItem(PLAYER_STATE_KEY, JSON.stringify(payload));
     } catch (e) {
@@ -68,11 +81,15 @@
   let map = window.map || null;
   let mapEl = document.getElementById('map') || null;
   let currentMapLayer = null;
+  let osmLayer = null;
+  let cartoDarkLayer = null;
+
   let _gameInitializing = false;
   let _gameInitialized = false;
   let _lastPlayerPosition = null;
   let _geoWatchId = null;
   let gpsLocked = false;
+  let connectedWallet = false;
 
   const CONFIG = {
     defaultCenter: [36.1699, -115.1398],
@@ -145,12 +162,12 @@
       window.map = map;
       window._map = map;
 
-      const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap'
       });
 
-      const cartoDarkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      cartoDarkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 20,
         attribution: '© OpenStreetMap © Carto'
       });
@@ -181,7 +198,7 @@
   // ---------------------------
 
   function distanceMeters(lat1, lng1, lat2, lng2) {
-    const R = 6371000; // meters
+    const R = 6371000;
     const toRad = d => d * Math.PI / 180;
     const dLat = toRad(lat2 - lat1);
     const dLng = toRad(lng2 - lng1);
@@ -191,6 +208,14 @@
       Math.sin(dLng / 2) * Math.sin(dLng / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
+  }
+
+  function resolveItemById(id) {
+    const items = window.DATA.mintables || [];
+    return (
+      items.find(i => i && (i.id === id || i.slug === id || i.mintableId === id)) ||
+      { name: id, description: '' }
+    );
   }
 
   function givePlayerItemById(itemId) {
@@ -220,6 +245,30 @@
     safeLog('Quest activated:', questId);
   }
 
+  function addXP(amount) {
+    if (!amount) return;
+    PLAYER.xp += amount;
+    checkLevelUp();
+    savePlayerState();
+    updateHUD();
+  }
+
+  function addCaps(amount) {
+    if (!amount) return;
+    PLAYER.caps += amount;
+    savePlayerState();
+    updateHUD();
+  }
+
+  function checkLevelUp() {
+    const needed = PLAYER.level * 100;
+    if (PLAYER.xp >= needed) {
+      PLAYER.xp -= needed;
+      PLAYER.level += 1;
+      alert(`LEVEL UP! You are now level ${PLAYER.level}`);
+    }
+  }
+
   function completeQuest(questId) {
     if (!questId) return;
     if (!PLAYER.questsActive.includes(questId)) return;
@@ -227,15 +276,19 @@
     PLAYER.questsActive = PLAYER.questsActive.filter(id => id !== questId);
     if (!PLAYER.questsDone.includes(questId)) PLAYER.questsDone.push(questId);
 
-    // Optional: give rewards if quest has a rewards.items array
     const quest = (window.DATA.quests || []).find(q => q && (q.id === questId || q.slug === questId));
-    if (quest && quest.rewards && Array.isArray(quest.rewards.items)) {
+
+    if (quest?.rewards?.items) {
       quest.rewards.items.forEach(itemId => givePlayerItemById(itemId));
     }
+
+    if (quest?.rewards?.xp) addXP(quest.rewards.xp);
+    if (quest?.rewards?.caps) addCaps(quest.rewards.caps);
 
     savePlayerState();
     renderQuestsPanel();
     renderInventoryPanel();
+    updateHUD();
     safeLog('Quest completed:', questId);
   }
 
@@ -248,12 +301,8 @@
       const qId = q.id || q.slug;
       if (!qId) return;
 
-      // Do not retrigger completed or already active quests
       if (PLAYER.questsDone.includes(qId) || PLAYER.questsActive.includes(qId)) return;
 
-      // Generic schema-safe trigger:
-      // - q.trigger might have { lat, lng, radius }
-      // - or q.location might reference a location id/name we can resolve
       let triggered = false;
 
       if (q.trigger && typeof q.trigger.lat === 'number' && typeof q.trigger.lng === 'number') {
@@ -274,20 +323,13 @@
         }
       }
 
-      if (triggered) {
-        activateQuest(qId);
-      }
+      if (triggered) activateQuest(qId);
     });
   }
 
   // ---------------------------
   // PANELS RENDERING
   // ---------------------------
-
-  function resolveItemById(id) {
-    const items = window.DATA.mintables || [];
-    return items.find(i => i && (i.id === id || i.slug === id || i.mintableId === id)) || { name: id, description: '' };
-  }
 
   function renderInventoryPanel() {
     const panel = document.getElementById('panel-items');
@@ -379,6 +421,20 @@
     panel.innerHTML = `<h2>Locations</h2>${entries}`;
   }
 
+  function updateHUD() {
+    const lvlEl = document.getElementById('lvl');
+    const capsEl = document.getElementById('caps');
+    const xpText = document.getElementById('xpText');
+    const xpFill = document.getElementById('xpFill');
+
+    if (lvlEl) lvlEl.textContent = PLAYER.level;
+    if (capsEl) capsEl.textContent = PLAYER.caps;
+
+    const needed = PLAYER.level * 100;
+    if (xpText) xpText.textContent = `${PLAYER.xp} / ${needed}`;
+    if (xpFill) xpFill.style.width = `${Math.min(100, (PLAYER.xp / needed) * 100)}%`;
+  }
+
   // ---------------------------
   // GEOLOCATION
   // ---------------------------
@@ -411,7 +467,6 @@
           }
         }
 
-        // Mark nearby locations as visited + trigger quests
         const locs = window.DATA.locations || [];
         locs.forEach(loc => {
           if (!loc || typeof loc.lat !== 'number' || typeof loc.lng !== 'number') return;
@@ -439,7 +494,7 @@
   }
 
   // ---------------------------
-  // WALLET
+  // WALLET + MINT
   // ---------------------------
 
   async function connectWallet() {
@@ -454,10 +509,37 @@
       const addr = provider.publicKey.toBase58();
       const btn = document.getElementById('connectWallet');
       if (btn) btn.textContent = `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+      connectedWallet = true;
       safeLog('Wallet connected:', addr);
-      // Optional: you can store addr on DATA.player later if needed
     } catch (e) {
       safeError('Wallet connection failed:', e);
+    }
+  }
+
+  async function claimMintableFromServer() {
+    try {
+      const res = await fetch('/api/mint-item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const data = await res.json();
+      if (!data.success) {
+        alert('Mint failed: ' + (data.error || 'Unknown error'));
+        return;
+      }
+
+      const itemId = data.itemId;
+      if (itemId) {
+        givePlayerItemById(itemId);
+        addCaps(5);   // example reward
+        addXP(10);    // example reward
+      }
+
+      alert(`Minted: ${itemId}`);
+    } catch (e) {
+      safeError('Mint error:', e);
+      alert('Mint failed');
     }
   }
 
@@ -489,15 +571,10 @@
 
     once('recenterMojave', () => map?.setView(CONFIG.defaultCenter, CONFIG.defaultZoom));
 
-    // NOTE: cartoDarkLayer/osmLayer are defined inside initMap; here we just
-    // keep your existing behavior but guard against missing refs.
     once('mapModeBtn', () => {
       if (!map) return;
       try {
-        // These may not be globally visible; we just keep original logic safe.
-        // eslint-disable-next-line no-undef
         if (currentMapLayer) map.removeLayer(currentMapLayer);
-        // eslint-disable-next-line no-undef
         currentMapLayer = currentMapLayer === cartoDarkLayer ? osmLayer : cartoDarkLayer;
         if (currentMapLayer) currentMapLayer.addTo(map);
         setTimeout(() => map?.invalidateSize?.(), 150);
@@ -506,7 +583,6 @@
       }
     });
 
-    // Drawer toggle
     const drawer = document.getElementById('bottom-drawer');
     const drawerToggle = document.getElementById('drawer-toggle');
     if (drawerToggle && drawer) {
@@ -516,7 +592,6 @@
       });
     }
 
-    // GPS Lock button
     once('gps-lock-btn', () => {
       if (gpsLocked) {
         stopGeolocationWatch();
@@ -528,29 +603,14 @@
       }
     });
 
-    // Claim mintables – now also feeds player inventory (locally)
     once('claimMintables', () => {
-      // connectedWallet is referenced in your original stub; keep behavior if defined
-      if (typeof connectedWallet !== 'undefined' && !connectedWallet) {
+      if (!connectedWallet) {
         alert('Connect wallet first');
         return;
       }
-
-      alert('Claiming minted item... (mock)');
-
-      // Mock behavior: grant the first mintable as a test
-      const mintables = window.DATA.mintables || [];
-      if (mintables.length > 0) {
-        const first = mintables[0];
-        const id = first.id || first.slug || first.mintableId || first.name;
-        if (id) {
-          givePlayerItemById(id);
-        }
-      }
-      // TODO: Replace this with real /api/mint-item integration and call givePlayerItemById
+      claimMintableFromServer();
     });
 
-    // Tab switching
     const drawerTabs = document.querySelectorAll('.tabs .tab');
     drawerTabs.forEach(tab => {
       const tabId = tab.dataset.panel;
@@ -574,7 +634,6 @@
 
         if (tabId === 'map' && map) setTimeout(() => map.invalidateSize(), 200);
 
-        // Refresh panels on tab open so state is always current
         if (tabId === 'items') renderInventoryPanel();
         if (tabId === 'quests') renderQuestsPanel();
         if (tabId === 'map') renderLocationsPanel();
@@ -603,10 +662,10 @@
       const locCountEl = document.getElementById('locations-count');
       if (locCountEl) locCountEl.textContent = window.DATA.locations.length;
 
-      // Initial renders
       renderInventoryPanel();
       renderQuestsPanel();
       renderLocationsPanel();
+      updateHUD();
 
       _gameInitialized = true;
       safeLog('Game initialized successfully');
