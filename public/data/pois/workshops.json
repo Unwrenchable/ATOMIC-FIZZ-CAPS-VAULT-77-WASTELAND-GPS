@@ -1,4 +1,0 @@
-[
-  { "id": "workshop1", "name": "Atomic Workshop", "lat": 36.1720, "lng": -115.1420, "type": "crafting" },
-  { "id": "workshop2", "name": "Caps Exchange", "lat": 36.1730, "lng": -115.1430, "type": "trading" }
-]
