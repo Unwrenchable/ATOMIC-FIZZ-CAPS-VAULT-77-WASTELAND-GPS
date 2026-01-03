@@ -324,3 +324,4 @@
     location: () => _lastPlayerPosition
   };
 })();
+
