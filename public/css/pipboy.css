@@ -1,6 +1,7 @@
-/* public/css/pipboy.css */
+/* public/css/pipboy.css - Fixed for current HTML structure */
 
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); /* Added for pip-main-title */
 
 * {
   margin: 0;
@@ -16,7 +17,7 @@ body {
   overflow: hidden;
 }
 
-/* Scan effects */
+/* Scan effects (CRT overlay + glow) */
 .scan-overlay {
   position: fixed;
   inset: 0;
@@ -44,154 +45,191 @@ body {
   transform: translateY(100vh);
 }
 
-/* Main Pip-Boy frame */
-#pipboy-frame {
-  width: min(100vw, 1200px);
-  height: min(100vh, 800px);
-  margin: auto;
-  background: radial-gradient(circle at 30% 20%, #003300 0%, #000 70%);
-  border-radius: 30px;
-  padding: 1.5rem;
-  box-shadow: 0 0 60px rgba(0, 255, 102, 0.3), inset 0 0 60px rgba(0, 50, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+/* CRT effect for screen */
+.crt {
   position: relative;
-  border: 4px solid #001a00;
+  overflow: hidden;
+}
+.crt::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(0deg, transparent, rgba(0,0,0,0.05) 1px, transparent 2px);
+  pointer-events: none;
+}
+
+/* Layout utilities (from your inline <style>) */
+.pipboy-shell { display: flex; align-items: stretch; justify-content: center; }
+.pipboy-screen { width: 100%; height: 100%; display: flex; flex-direction: column; gap: 10px; }
+.main-grid { display: grid; grid-template-columns: 320px 1fr; gap: 12px; align-items: start; height: calc(100% - 120px); }
+.sidebar { background: rgba(0,8,0,0.92); padding: 12px; border-radius: 10px; overflow: auto; min-height: 0; }
+.main { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.map-container { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0,255,102,0.06); background: #000; flex: 1 1 auto; min-height: 320px; }
+#map { width: 100%; height: 100%; display: block; }
+.tabs { display: flex; gap: 8px; justify-content: center; align-items: center; pointer-events: auto; }
+.tab { cursor: pointer; padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(0,255,102,0.06); user-select: none; }
+.tab:focus { outline: 2px solid rgba(255,204,51,0.6); outline-offset: 2px; }
+.tab.active { background: rgba(0,255,102,0.1); border-color: #00ff66; color: #66ffaa; }
+/* bottom drawer sits inside map container and overlays map */
+#bottom-drawer { position: absolute; left: 0; right: 0; bottom: 0; height: 140px; transform: translateY(0); transition: transform .24s ease; display: flex; align-items: center; gap: 12px; padding: 10px; z-index: 95; background: rgba(0,20,0,0.95); border-top: 2px solid #00ff66; border-radius: 12px 12px 0 0; }
+#bottom-drawer.hidden { transform: translateY(calc(100% - 18px)); pointer-events: none; }
+.drawer-handle { height: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.drawer-handle::before { content: ""; width: 56px; height: 4px; background: rgba(255,255,255,0.06); border-radius: 3px; display: block; }
+/* small responsive adjustments */
+@media (max-width:900px) {
+  .main-grid { grid-template-columns: 1fr; grid-auto-rows: auto 1fr; }
+  .sidebar { order: 3; }
+  .main { order: 2; }
+}
+
+/* Boot screen */
+#bootScreen {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 120;
+}
+.boot-inner {
+  max-width: 800px; width: 90%; border: 2px solid #00ff66; padding: 16px; background: #000;
+}
+#bootText {
+  margin: 0; color: #00ff66; font-family: VT323, monospace; font-size: 16px; line-height: 1.4;
+}
+#bootPrompt {
+  margin-top: 12px; font-size: 18px; text-align: center; animation: blink 1.2s infinite steps(2,start);
 }
 
 /* Header */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  background: rgba(0, 20, 0, 0.6);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 255, 102, 0.2);
+.pip-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 0.5rem 1rem; background: rgba(0, 20, 0, 0.6); border-radius: 12px; border: 1px solid rgba(0, 255, 102, 0.2);
+}
+.pip-title {
+  display: flex; flex-direction: column;
+}
+.pip-main-title {
+  font-family: 'Press Start 2P', VT323, monospace; font-size: 20px; color: #66ffaa;
+}
+.pip-sub-title {
+  font-size: 12px; opacity: 0.85;
+}
+.pip-controls {
+  display: flex; gap: 8px; align-items: center;
 }
 
-.title { font-size: 24px; letter-spacing: 3px; text-shadow: 0 0 10px #00ff66; }
-.subtitle { font-size: 14px; opacity: 0.8; letter-spacing: 2px; }
-
-.gps { display: flex; align-items: center; gap: 0.5rem; }
-.gps-dot {
-  width: 12px; height: 12px; border-radius: 50%;
-  background: #ffaa00; box-shadow: 0 0 10px #ffaa00;
+/* Overseer link */
+.overseer-link {
+  position: absolute; top: 4px; right: 4px; font-size: 12px; color: #66ffaa; text-decoration: none; opacity: 0.7;
 }
+.overseer-link:hover { opacity: 1; }
 
-/* Status row */
-#status-row {
-  display: flex;
-  gap: 1.5rem;
-  padding: 0.5rem 1rem;
-  background: rgba(0, 20, 0, 0.6);
-  border-radius: 8px;
-  flex-wrap: wrap;
+/* Status */
+.status {
+  font-size: 12px; opacity: 0.7; text-align: center; margin-bottom: 6px;
 }
+.status-good { color: #66ffaa; }
 
-.status-item { display: flex; align-items: center; gap: 0.5rem; }
-
-/* Progress bars */
-.progress-container {
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.5rem 1rem; background: rgba(0, 20, 0, 0.6); border-radius: 8px;
+/* HUD */
+.hud {
+  display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 6px;
 }
-.progress-label { min-width: 60px; font-size: 14px; font-weight: bold; }
-.progress-bg {
-  flex: 1; height: 16px; background: rgba(0,0,0,0.5);
-  border-radius: 8px; overflow: hidden; border: 1px solid rgba(0,255,102,0.3);
+.hud-block {
+  padding: 4px 8px; background: rgba(0,20,0,0.6); border-radius: 6px; border: 1px solid rgba(0,255,102,0.08); font-size: 12px;
 }
-.progress-fill {
-  height: 100%; transition: width 0.3s ease;
+.hud-block strong { color: #66ffaa; }
+.hp-bar {
+  width: 160px; height: 10px; background: rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden; border: 1px solid rgba(0,255,102,0.04);
 }
-.progress-fill.hp { background: linear-gradient(90deg, #00ff66, #66ffaa); }
-.progress-fill.rads { background: linear-gradient(90deg, #ffaa00, #ffcc00); }
-.progress-value { min-width: 100px; text-align: right; font-size: 14px; }
-
-/* Content area */
-#content-area {
-  flex: 1; background: rgba(0,10,0,0.8); border-radius: 12px;
-  border: 2px solid rgba(0,255,102,0.2); overflow: hidden; position: relative;
+.hp-fill {
+  width: 100%; height: 100%; background: linear-gradient(90deg, #00ff66, #66ffaa);
+}
+.hp-text {
+  font-size: 12px;
+}
+.xp-bar {
+  width: 120px; height: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden; border: 1px solid rgba(0,255,102,0.04);
+}
+.xp-fill {
+  width: 0%; height: 100%; background: linear-gradient(90deg, #66ffaa, #00ff66);
+}
+.xp-text {
+  font-size: 12px;
 }
 
-/* Map (placeholder - integrate your Leaflet here) */
-#map-view {
-  width: 100%; height: 100%; background: #000; position: relative;
-}
-.grid-line { position: absolute; background: rgba(0,255,102,0.1); }
-.horizontal { left: 0; right: 0; height: 1px; }
-.vertical { top: 0; bottom: 0; width: 1px; }
+/* Sidebar content */
+.sidebar div { display: flex; flex-direction: column; gap: 8px; }
+.sidebar hr { border: none; border-top: 1px solid rgba(0,255,102,0.04); margin: 10px 0; }
+#nearbyList { list-style: none; padding: 0; margin: 0; font-size: 13px; color: rgba(102,255,170,0.9); }
 
-.center-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 10; }
+/* Map extras */
+#mapModeBtn { /* Positioned via inline div - style as .btn */ }
+.static-noise {
+  pointer-events: none; position: absolute; inset: 0; background-image: url('/assets/static-noise.png'); opacity: 0.06; mix-blend-mode: screen;
+}
+.gps-badge {
+  position: absolute; left: 12px; bottom: calc(140px + 18px); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(0,255,102,0.06); background: rgba(0,20,0,0.9); z-index: 90;
+}
+.acc-dot {
+  width: 10px; height: 10px; border-radius: 50%; background: #ffaa00; margin-right: 8px; display: inline-block;
+}
+.acc-dot.acc-good { background: #00ff66; box-shadow: 0 0 6px #00ff66; }
+#accText { display: inline-block; font-size: 12px; color: var(--pip-accent, #66ffaa); }
+.gps-btn { position: absolute; right: 12px; bottom: calc(140px + 18px); z-index: 90; }
 
-/* Markers example */
-.marker {
-  position: absolute; padding: 0.25rem 0.5rem; border-radius: 6px;
-  display: flex; align-items: center; gap: 0.5rem; font-size: 12px; cursor: pointer;
+/* Drawer content */
+.drawer-content {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
 }
-.marker.cache { background: rgba(0,50,0,0.9); border: 1px solid #00ff66; }
-.marker.warning { background: rgba(50,40,0,0.9); border: 1px solid #ffaa00; color: #ffaa00; box-shadow: 0 0 10px #ffaa00; }
+.drawer-left { display: flex; gap: 8px; align-items: center; }
+.drawer-right { display: flex; align-items: center; gap: 8px; }
 
-/* Scan button */
-#scan-btn {
-  padding: 0.5rem 1rem; background: rgba(0,50,0,0.9); border: 2px solid #00ff66;
-  color: #00ff66; font-family: 'VT323', monospace; font-size: 16px; cursor: pointer;
-  border-radius: 8px;
+/* Drawer tabs and panels (from added div at end) */
+.drawer-tabs {
+  display: flex; gap: 4px; margin-bottom: 8px;
 }
+.drawer-tabs button {
+  padding: 4px 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(0,255,102,0.1); border-radius: 6px; color: #00ff66; cursor: pointer; font-size: 12px;
+}
+.drawer-tabs button.active { background: rgba(0,255,102,0.2); border-color: #00ff66; }
+.drawer-panels .panel { display: none; }
+.drawer-panels .panel.active { display: block; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 6px; }
 
-/* Tabs */
-#tab-nav {
-  display: flex; gap: 0.5rem; padding: 0.75rem;
-  background: rgba(0,20,0,0.8); border-radius: 12px;
-  border: 2px solid rgba(0,255,102,0.2);
+/* Overseer terminal */
+#overseer-terminal {
+  display: none; position: absolute; left: 12px; right: 12px; bottom: calc(140px + 12px); z-index: 110;
 }
-.tab-btn {
-  flex: 1; padding: 0.75rem 0.5rem; background: transparent;
-  border: 2px solid rgba(0,255,102,0.3); border-radius: 8px;
-  color: #00ff66; font-family: 'VT323', monospace; font-size: 14px; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+.terminal-inner {
+  padding: 12px; border-radius: 8px; border: 1px solid #00ff66; background: rgba(0,10,0,0.98);
 }
-.tab-btn.active {
-  background: rgba(0,255,102,0.2); border-color: #00ff66;
-  box-shadow: 0 0 15px rgba(0,255,102,0.5);
-}
+.terminal-close { position: absolute; top: 4px; right: 4px; padding: 2px 6px; }
+.terminal-body { font-size: 14px; }
 
-/* Drawer */
-#bottom-drawer {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: rgba(0,20,0,0.95); border-top: 2px solid #00ff66;
-  border-radius: 12px 12px 0 0; padding: 1rem; z-index: 50;
-  transition: transform 0.3s ease;
+/* Modals */
+.modal {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); z-index: 200;
 }
-.drawer-closed { transform: translateY(calc(100% - 30px)); }
-.drawer-handle { width: 60px; height: 4px; background: rgba(0,255,102,0.5); border-radius: 3px; margin: 0 auto 1rem; }
+.modal.hidden { display: none !important; }
+.modal-inner {
+  background: rgba(0,20,0,0.9); border: 2px solid #00ff66; padding: 16px; border-radius: 10px; max-width: 400px; text-align: center;
+}
+.modal-title { font-size: 18px; margin-bottom: 12px; }
+.modal-text { font-size: 14px; margin-bottom: 12px; }
+.modal-text p { margin: 4px 0; }
+.modal-progress { background: rgba(0,0,0,0.3); border-radius: 6px; overflow: hidden; height: 8px; margin-bottom: 12px; }
+.modal-progress-fill { height: 100%; transition: width 0.3s; }
 
-/* Action buttons in drawer */
-.action-btn {
-  flex: 1; padding: 1rem; font-family: 'VT323', monospace; font-size: 16px;
-  font-weight: bold; cursor: pointer; border-radius: 8px;
+/* Buttons (general + variants) */
+.btn {
+  padding: 6px 12px; background: rgba(0,255,102,0.1); border: 1px solid #00ff66; border-radius: 6px; color: #00ff66; cursor: pointer; font-family: 'VT323', monospace; font-size: 14px;
 }
-.claim { background: rgba(0,255,102,0.2); border: 2px solid #00ff66; color: #00ff66; }
-.wallet { background: rgba(0,50,0,0.5); border: 2px solid #00ff66; color: #00ff66; }
-.nuke { background: rgba(50,0,0,0.5); border: 2px solid #ff4444; color: #ff4444; }
-
-/* Boot screen */
-#boot-screen {
-  position: fixed; inset: 0; background: #000;
-  display: flex; align-items: center; justify-content: center;
-  color: #00ff66; font-family: 'VT323', monospace;
-  z-index: 1000;
-}
-.boot-box {
-  max-width: 800px; padding: 2rem; border: 2px solid #00ff66;
-  background: rgba(0,20,0,0.9); box-shadow: 0 0 30px #00ff66;
-}
-pre { font-size: 14px; line-height: 1.4; text-shadow: 0 0 8px #00ff66; white-space: pre; }
+.btn:hover { filter: brightness(1.2); }
+.btn:active { transform: translateY(1px); }
+.danger-btn { border-color: #ff4444; color: #ff4444; background: rgba(255,68,68,0.1); }
+.wallet-btn { /* Specific if needed */ }
+.pip-btn { /* For drawer buttons */ }
+.gps-btn { /* For REQUEST GPS */ }
+.terminal-close { padding: 2px 6px; }
 
 /* Animations */
-@keyframes blink { 0%,49% {opacity:0} 50%,100% {opacity:1} }
+@keyframes blink { 0%,49% { opacity: 0; } 50%,100% { opacity: 1; } }
 .blink { animation: blink 1s infinite; }
 
-button:hover { filter: brightness(1.2); }
-button:active { transform: translateY(2px); }
+/* Hidden class */
+.hidden { display: none !important; }
