@@ -1,12 +1,388 @@
-/* public/js/overseer.js
-   Complete drop-in: chat UI, all games, mobile controls.
-   ES5-compatible, avoids optional chaining.
-*/
 (function () {
   "use strict";
 
-  /* -------------------------
-     DOM references
+  var chat = document.getElementById('chat');
+  var input = document.getElementById('input');
+  var send = document.getElementById('send');
+
+  if (input) try { input.focus(); } catch (e) {}
+
+  function scrollToBottom() {
+    if (!chat) return;
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function addMessage(text, sender) {
+    sender = sender || "player";
+    if (!chat) return;
+    var div = document.createElement('div');
+    div.className = "message " + sender;
+    div.innerHTML = String(text);
+    chat.appendChild(div);
+    scrollToBottom();
+  }
+
+  if (send) send.addEventListener('click', processInput);
+  if (input) {
+    input.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') processInput();
+    });
+  }
+
+  function processInput() {
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text) return;
+    var normalized = text.toLowerCase();
+    addMessage(escapeHtml(text), "player");
+    scrollToBottom();
+    input.value = '';
+
+    if (normalized === 'quit' && state.gameActive) {
+      state.gameActive = null;
+      addMessage("Session terminated. Back to chat.", "overseer");
+      return;
+    }
+
+    var response = generateResponse(normalized);
+    if (response && response.length) {
+      setTimeout(function () {
+        addMessage(response, "overseer");
+        scrollToBottom();
+      }, 800 + Math.random() * 900);
+    }
+
+    var gameDelay = 900 + Math.random() * 900;
+    if (state.gameActive === 'hacking') {
+      setTimeout(function () { addMessage(handleHackingGuess(text.toUpperCase()), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'redmenace') {
+      setTimeout(function () { addMessage(handleRedMenaceInput(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'nukaquiz') {
+      setTimeout(function () { addMessage(handleNukaQuiz(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'maze') {
+      setTimeout(function () { addMessage(handleMaze(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'blackjack') {
+      setTimeout(function () { addMessage(handleBlackjack(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'slots') {
+      setTimeout(function () { addMessage(handleSlotsInput(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'war') {
+      setTimeout(function () { addMessage(handleWar(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'texasholdem') {
+      setTimeout(function () { addMessage(handleTexasHoldem(text), "overseer"); }, gameDelay);
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
+  }
+
+  var state = {
+    greeted: false,
+    gameActive: null,
+    player: { caps: 0 },
+    hackingAttempts: 0,
+    hackingPassword: "",
+    rmWave: 1,
+    rmBaseHp: 100,
+    rmScrap: 50,
+    rmTurrets: [],
+    rmEnemies: [],
+    quizQuestions: [],
+    quizIndex: 0,
+    quizScore: 0,
+    mazePosition: { x: 0, y: 0 },
+    mazeGoal: { x: 2, y: 2 },
+    bjPlayer: 0,
+    bjDealer: 0,
+    warDeck: [],
+    thDeck: [],
+    thPlayerHand: [],
+    thDealerHand: [],
+    thCommunity: []
+  };
+
+  function generateResponse(input) {
+    if (!state.greeted) {
+      state.greeted = true;
+      if (input.indexOf('hello') !== -1 || input.indexOf('hi') !== -1) {
+        return "Hello...<br><br>Been a long time since anyone said that.<br><br>Who am I talking to?";
+      }
+      return "No greeting...<br><br>That's okay. You're different.";
+    }
+
+    if (input.indexOf('help') !== -1 || input.indexOf('games') !== -1 || input.indexOf('commands') !== -1) {
+      return "Available commands:<br><br>• 'hack' - Terminal cracker<br>• 'red menace' - Tower defense<br>• 'nukaquiz' - Trivia<br>• 'maze' - Navigate<br>• 'blackjack' - Card game<br>• 'slots' - Slots<br>• 'war' - Card war<br>• 'texas holdem' - Poker<br>• 'quit' - Exit game";
+    }
+
+    if (input.indexOf('hack') !== -1) { startHackingGame(); return ""; }
+    if (input.indexOf('red menace') !== -1) { startRedMenace(); return ""; }
+    if (input.indexOf('nukaquiz') !== -1) { startNukaQuiz(); return ""; }
+    if (input.indexOf('maze') !== -1) { startMaze(); return ""; }
+    if (input.indexOf('blackjack') !== -1) { startBlackjack(); return ""; }
+    if (input.indexOf('slots') !== -1) { startSlots(); return ""; }
+    if (input.indexOf('war') !== -1) { startWar(); return ""; }
+    if (input.indexOf('texas') !== -1 || input.indexOf('holdem') !== -1) { startTexasHoldem(); return ""; }
+
+    var fallbacks = [
+      "Signal's holding... barely.",
+      "You still out there?",
+      "Try typing 'help' for commands."
+    ];
+    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+  }
+
+  // HACKING GAME
+  function startHackingGame() {
+    state.gameActive = 'hacking';
+    state.hackingAttempts = 4;
+    state.hackingPassword = "DEMO";
+    addMessage("HACKING TERMINAL<br><br>Guess the password. " + state.hackingAttempts + " attempts.", "overseer");
+  }
+
+  function handleHackingGuess(guess) {
+    if (state.gameActive !== 'hacking') return "No hacking session active.";
+    state.hackingAttempts -= 1;
+    if (guess === state.hackingPassword) {
+      state.gameActive = null;
+      return "ACCESS GRANTED. +50 CAPS";
+    }
+    if (state.hackingAttempts <= 0) {
+      state.gameActive = null;
+      return "ACCESS LOCKED.";
+    }
+    return "ACCESS DENIED. Attempts: " + state.hackingAttempts;
+  }
+
+  // RED MENACE
+  function startRedMenace() {
+    state.gameActive = 'redmenace';
+    state.rmWave = 1;
+    state.rmBaseHp = 100;
+    state.rmScrap = 50;
+    state.rmTurrets = [];
+    state.rmEnemies = [];
+    addMessage("RED MENACE<br><br>Type 'shop', 'deploy', 'status', 'hold'", "overseer");
+    setTimeout(startRmWave, 900);
+  }
+
+  function startRmWave() {
+    if (state.gameActive !== 'redmenace') return;
+    var enemies = [];
+    for (var i = 0; i < 3; i++) {
+      enemies.push({ id: i+1, hp: 10, progress: 0 });
+    }
+    state.rmEnemies = enemies;
+    addMessage("Wave " + state.rmWave + " incoming!", "overseer");
+  }
+
+  function handleRedMenaceInput(text) {
+    if (state.gameActive !== 'redmenace') return "No session active.";
+    var cmd = (text || "").trim().toLowerCase();
+
+    if (cmd === 'shop') return "deploy (30), upgrade <id> (40), repair (20), hold";
+    if (cmd === 'status') return "Base: " + state.rmBaseHp + " | Scrap: " + state.rmScrap + " | Enemies: " + state.rmEnemies.length;
+    if (cmd === 'deploy') {
+      if (state.rmScrap < 30) return "Need 30 scrap";
+      state.rmTurrets.push({ id: state.rmTurrets.length + 1, dmg: 6 });
+      state.rmScrap -= 30;
+      return "Turret deployed";
+    }
+    if (cmd === 'hold') {
+      state.rmEnemies.forEach(e => { e.progress += 1; if (e.progress >= 3) state.rmBaseHp -= 5; });
+      state.rmTurrets.forEach(t => {
+        if (state.rmEnemies.length > 0) state.rmEnemies[0].hp -= t.dmg;
+      });
+      state.rmEnemies = state.rmEnemies.filter(e => e.hp > 0 && e.progress < 3);
+      if (state.rmEnemies.length === 0) {
+        state.rmWave++;
+        state.rmScrap += 20;
+        setTimeout(startRmWave, 900);
+        return "Wave cleared!";
+      }
+      if (state.rmBaseHp <= 0) {
+        state.gameActive = null;
+        return "Base destroyed. Game over.";
+      }
+      return "Turn processed. Base: " + state.rmBaseHp;
+    }
+    return "Unknown command";
+  }
+
+  // NUKAQUIZ
+  function startNukaQuiz() {
+    state.gameActive = 'nukaquiz';
+    state.quizQuestions = [
+      { q: "Capital of wasteland?", a: "nowhere" },
+      { q: "Mutated radroach?", a: "roach" }
+    ];
+    state.quizIndex = 0;
+    state.quizScore = 0;
+    addMessage("QUIZ: " + state.quizQuestions[0].q, "overseer");
+  }
+
+  function handleNukaQuiz(text) {
+    var ans = (text || "").toLowerCase();
+    var cur = state.quizQuestions[state.quizIndex];
+    if (ans.indexOf(cur.a) !== -1) state.quizScore += 1;
+    state.quizIndex += 1;
+    if (state.quizIndex >= state.quizQuestions.length) {
+      state.gameActive = null;
+      return "Quiz done. Score: " + state.quizScore;
+    }
+    return state.quizQuestions[state.quizIndex].q;
+  }
+
+  // MAZE
+  function startMaze() {
+    state.gameActive = 'maze';
+    state.mazePosition = { x: 0, y: 0 };
+    state.mazeGoal = { x: 2, y: 2 };
+    addMessage("MAZE: Use north/south/east/west", "overseer");
+  }
+
+  function handleMaze(text) {
+    var cmd = (text || "").toLowerCase();
+    if (cmd.indexOf('north') !== -1) state.mazePosition.y -= 1;
+    if (cmd.indexOf('south') !== -1) state.mazePosition.y += 1;
+    if (cmd.indexOf('east') !== -1) state.mazePosition.x += 1;
+    if (cmd.indexOf('west') !== -1) state.mazePosition.x -= 1;
+    if (state.mazePosition.x === state.mazeGoal.x && state.mazePosition.y === state.mazeGoal.y) {
+      state.gameActive = null;
+      return "Goal reached!";
+    }
+    return "Position: (" + state.mazePosition.x + "," + state.mazePosition.y + ")";
+  }
+
+  // BLACKJACK
+  function startBlackjack() {
+    state.gameActive = 'blackjack';
+    state.bjPlayer = 15;
+    state.bjDealer = 16;
+    addMessage("BLACKJACK: hit or stand. You: " + state.bjPlayer, "overseer");
+  }
+
+  function handleBlackjack(text) {
+    var cmd = (text || "").toLowerCase();
+    if (cmd.indexOf('hit') !== -1) {
+      state.bjPlayer += Math.floor(Math.random() * 10) + 1;
+      if (state.bjPlayer > 21) {
+        state.gameActive = null;
+        return "Bust! " + state.bjPlayer;
+      }
+      return "You: " + state.bjPlayer;
+    }
+    if (cmd.indexOf('stand') !== -1) {
+      while (state.bjDealer < 17) state.bjDealer += Math.floor(Math.random() * 10) + 1;
+      var result = "Dealer: " + state.bjDealer + " You: " + state.bjPlayer + ". ";
+      if (state.bjDealer > 21 || state.bjPlayer > state.bjDealer) result += "Win!";
+      else result += "Lose";
+      state.gameActive = null;
+      return result;
+    }
+    return "hit or stand";
+  }
+
+  // SLOTS
+  function startSlots() {
+    state.gameActive = 'slots';
+    addMessage("SLOTS: Type 'spin'", "overseer");
+  }
+
+  function handleSlotsInput(text) {
+    if ((text || "").toLowerCase().indexOf('spin') !== -1) {
+      var symbols = ['🍒','🔔','7'];
+      var r = [symbols[Math.floor(Math.random()*3)], symbols[Math.floor(Math.random()*3)], symbols[Math.floor(Math.random()*3)]];
+      var res = r.join(' ');
+      if (r[0] === r[1] && r[1] === r[2]) return res + " - JACKPOT!";
+      return res + " - No win";
+    }
+    return "Type 'spin'";
+  }
+
+  // WAR
+  function startWar() {
+    state.gameActive = 'war';
+    state.warDeck = createDeck();
+    addMessage("WAR: Type 'draw'", "overseer");
+  }
+
+  function handleWar(text) {
+    if ((text || "").toLowerCase().indexOf('draw') !== -1) {
+      if (state.warDeck.length < 2) state.warDeck = createDeck();
+      var p = state.warDeck.pop();
+      var a = state.warDeck.pop();
+      if (p.value > a.value) return "You: " + p.rank + " AI: " + a.rank + " - Win!";
+      if (p.value < a.value) return "You: " + p.rank + " AI: " + a.rank + " - Lose";
+      return "Tie";
+    }
+    return "Type 'draw'";
+  }
+
+  // TEXAS HOLDEM
+  function startTexasHoldem() {
+    state.gameActive = 'texasholdem';
+    state.thDeck = createDeck();
+    state.thPlayerHand = [state.thDeck.pop(), state.thDeck.pop()];
+    state.thDealerHand = [state.thDeck.pop(), state.thDeck.pop()];
+    state.thCommunity = [state.thDeck.pop(), state.thDeck.pop(), state.thDeck.pop()];
+    addMessage("HOLD'EM<br>Your: " + handToString(state.thPlayerHand) + "<br>Board: " + handToString(state.thCommunity) + "<br>Type 'continue' or 'fold'", "overseer");
+  }
+
+  function handleTexasHoldem(input) {
+    input = (input || "").toLowerCase();
+    if (input === 'fold') {
+      state.gameActive = null;
+      return "Folded";
+    }
+    if (input === 'continue') {
+      state.thCommunity.push(state.thDeck.pop(), state.thDeck.pop());
+      var result = "Board: " + handToString(state.thCommunity) + "<br>You win!";
+      state.gameActive = null;
+      return result;
+    }
+    return "Type 'continue' or 'fold'";
+  }
+
+  // CARD UTILITIES
+  function createDeck() {
+    var suits = ['♠','♥','♦','♣'];
+    var ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+    var deck = [];
+    for (var si = 0; si < suits.length; si++) {
+      for (var ri = 0; ri < ranks.length; ri++) {
+        deck.push({ rank: ranks[ri], suit: suits[si], value: ri + 2 });
+      }
+    }
+    for (var i = deck.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = deck[i]; deck[i] = deck[j]; deck[j] = tmp;
+    }
+    return deck;
+  }
+
+  function handToString(hand) {
+    return hand.map(function (c) { return c.rank + c.suit; }).join(' ');
+  }
+
+  // Initial greeting
+  window.addEventListener('load', function () {
+    addMessage("Static... *crackle*...<br><br>This is Jax Harlan.<br><br>You real?<br><br>Speak.", "overseer");
+  });
+
+  // EXPOSE GLOBALLY for mobile controls
+  window.state = state;
+  window.addMessage = addMessage;
+  window.handleHackingGuess = handleHackingGuess;
+  window.handleRedMenaceInput = handleRedMenaceInput;
+  window.handleNukaQuiz = handleNukaQuiz;
+  window.handleMaze = handleMaze;
+  window.handleBlackjack = handleBlackjack;
+  window.handleSlotsInput = handleSlotsInput;
+  window.handleWar = handleWar;
+  window.handleTexasHoldem = handleTexasHoldem;
+
+})();
+
      ------------------------- */
   var chat = document.getElementById('chat');
   var input = document.getElementById('input');
@@ -852,3 +1228,4 @@
   window.addMessage = addMessage;
 
 })();
+
