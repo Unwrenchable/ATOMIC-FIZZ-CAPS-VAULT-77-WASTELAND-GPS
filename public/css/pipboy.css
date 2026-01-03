@@ -278,3 +278,20 @@ button:hover {
   outline: 3px solid #00ff66 !important;
   box-shadow: 0 0 15px #00ff66 !important;
 }
+
+/* Force clicks through to buttons */
+#pipboyScreen, .pipboy-shell, .main-grid, .tabs, .drawer-content, button {
+  pointer-events: auto !important;
+  z-index: 10 !important;
+}
+
+.static-noise, .gps-badge, .leaflet-container {
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+/* Visual proof: buttons glow on hover */
+button:hover {
+  box-shadow: 0 0 15px #00ff66 !important;
+  transform: scale(1.05);
+}
