@@ -1,6 +1,6 @@
 // server.js
 // === Atomic Fizz Caps Vault 77 Wasteland GPS Backend ===
-// COMPLETE VERSION - All features integrated (Jan 03, 2026)
+// COMPLETE & PRODUCTION-READY - January 03, 2026
 
 require("dotenv").config();
 const fs = require("fs");
@@ -63,7 +63,7 @@ const redis = new Redis(REDIS_URL);
 
 redis.on("error", (err) => console.error("Redis connection error:", err));
 
-// Server Ed25519 Keypair for signing (optional future use)
+// Server Ed25519 Keypair
 const serverSecretKeyUint8 = bs58.decode(SERVER_SECRET_KEY);
 if (serverSecretKeyUint8.length !== 64) {
   console.error("SERVER_SECRET_KEY must be 64-byte Ed25519 secret key (base58)");
@@ -131,7 +131,7 @@ console.log("Loaded data:", {
 const app = express();
 app.use(morgan("combined"));
 
-// Helmet CSP - Secure & Modern
+// Helmet CSP
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -185,7 +185,7 @@ const actionLimiter = rateLimit({
 });
 app.use(globalLimiter);
 
-// Bot Shield Middleware
+// Bot Shield
 async function botShield(req, res, next) {
   try {
     const ip = (req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.ip) || "unknown";
@@ -220,7 +220,7 @@ app.use(
 // Static Files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Simple Event Scheduler (in-memory)
+// Event Scheduler
 const activeEvents = new Map();
 const lastActivation = new Map();
 
@@ -345,7 +345,7 @@ app.post("/player/:addr", async (req, res) => {
 });
 
 // ================================================
-// Scavenger's Exchange API (NEW)
+// Scavenger's Exchange API
 // ================================================
 
 // GET /api/trades - Fetch all active trades
@@ -366,9 +366,7 @@ app.get('/api/trades', async (req, res) => {
       })
     );
 
-    // Sort newest first
     trades.sort((a, b) => b.posted - a.posted);
-
     res.json(trades);
   } catch (err) {
     console.error('Error fetching trades:', err);
@@ -376,7 +374,7 @@ app.get('/api/trades', async (req, res) => {
   }
 });
 
-// POST /api/post-trade - Post regular trade (items/CAPS)
+// POST /api/post-trade - Post regular trade
 app.post('/api/post-trade', [
   body('wallet').isString().notEmpty(),
   body('offer').isString().notEmpty(),
@@ -406,7 +404,7 @@ app.post('/api/post-trade', [
   }
 });
 
-// POST /api/post-nft - Post NFT trade (with signature verification)
+// POST /api/post-nft - Post NFT trade with signature
 app.post('/api/post-nft', [
   body('wallet').isString().notEmpty(),
   body('nftMint').isString().notEmpty(),
@@ -419,7 +417,6 @@ app.post('/api/post-nft', [
   const { wallet, nftMint, priceFizz, description = '', signature } = req.body;
 
   try {
-    // Verify signed message
     const message = `List NFT ${nftMint} for ${priceFizz} FIZZ - ${description}`;
     const verified = nacl.sign.detached.verify(
       new TextEncoder().encode(message),
@@ -427,9 +424,7 @@ app.post('/api/post-nft', [
       bs58.decode(wallet)
     );
 
-    if (!verified) {
-      return res.status(403).json({ error: 'Invalid signature' });
-    }
+    if (!verified) return res.status(403).json({ error: 'Invalid signature' });
 
     const tradeId = `trade:${Date.now()}`;
     await redis.hset(tradeId, {
@@ -450,7 +445,7 @@ app.post('/api/post-nft', [
 });
 
 // ================================================
-// Terminal Reward Endpoint (FIZZ distribution)
+// Terminal Reward Endpoint
 // ================================================
 
 app.post(
@@ -477,9 +472,7 @@ app.post(
 
     try {
       const setOk = await redis.set(cooldownKey, "1", "NX", "EX", COOLDOWN);
-      if (!setOk) {
-        return res.status(429).json({ error: "Cooldown active. Try again later." });
-      }
+      if (!setOk) return res.status(429).json({ error: "Cooldown active" });
 
       const mintInfo = await getMint(connection, MINT_PUBKEY);
       const decimals = Number(mintInfo.decimals || 0);
@@ -533,7 +526,6 @@ app.post(
         commitment: "confirmed",
       });
 
-      // Update player caps in Redis
       try {
         const playerKey = `player:${wallet}`;
         const raw = await redis.get(playerKey);
@@ -564,23 +556,7 @@ app.post(
   }
 );
 
-// Health Check
-app.get("/health", (req, res) => {
-  res.json({ 
-    status: "ok", 
-    timestamp: new Date().toISOString(),
-    dataLoaded: {
-      locations: LOCATIONS.length,
-      quests: QUESTS.length,
-      mintables: MINTABLES.length,
-      events: EVENTS.length,
-      lootTables: EVENT_LOOT_TABLES.length,
-      recipes: RECIPES.length
-    }
-  });
-});
-
-// Lua Script Loader for Crafting
+// Lua Script Loader
 const luaPath = path.join(__dirname, "server", "redis_scripts", "craft_atomic.lua");
 let craftLuaSha = null;
 
@@ -599,7 +575,7 @@ async function loadLuaScripts() {
 }
 loadLuaScripts();
 
-// Utility: Parse human amount to base units
+// Utility Functions
 function parseHumanAmountToBase(amountStr, decimals) {
   if (typeof amountStr === "number") amountStr = amountStr.toString();
   if (typeof amountStr !== "string") throw new Error("Amount must be string/number");
@@ -617,6 +593,22 @@ function parseHumanAmountToBase(amountStr, decimals) {
 
   return BigInt(full);
 }
+
+// Health Check
+app.get("/health", (req, res) => {
+  res.json({ 
+    status: "ok", 
+    timestamp: new Date().toISOString(),
+    dataLoaded: {
+      locations: LOCATIONS.length,
+      quests: QUESTS.length,
+      mintables: MINTABLES.length,
+      events: EVENTS.length,
+      lootTables: EVENT_LOOT_TABLES.length,
+      recipes: RECIPES.length
+    }
+  });
+});
 
 // Start Server
 app.listen(PORT, () => {
