@@ -4,8 +4,10 @@
   <meta charset="utf-8" />
   <title>ATOMIC FIZZ CAPS • WASTELAND GPS</title>
 
-  <!-- CSP: All hashes included – no more inline script blocks -->
-  <meta http-equiv="Content-Security-Policy" content="
+  <!-- CSP -->
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="
     default-src 'self';
     script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app;
     connect-src 'self' https://unpkg.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss: https://*;
@@ -15,40 +17,45 @@
     media-src 'self' data: https:;
     object-src 'none';
     frame-src 'self';
-    base-uri 'self';">
+    base-uri 'self';
+  ">
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Leaflet core styles -->
   <link rel="stylesheet" href="/css/leaflet.css" />
 
-  <!-- Fallout / Pip-Boy fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <!-- Pip‑Boy fonts -->
+  <link rel="stylesheet" href="/css/fonts.css" />
 
-  <!-- Pip-Boy shell + UI -->
-  <link rel="stylesheet" href="/css/pipboy.css" />
+  <!-- Pip‑Boy UI -->
+  <link rel="stylesheet" href="/css/pipboy-shell.css" />
+  <link rel="stylesheet" href="/css/pipboy-panels.css" />
+  <link rel="stylesheet" href="/css/pipboy-map.css" />
 
-  <!-- Fallout map themes + effects -->
+  <!-- Fallout map themes + CRT effects -->
   <link rel="stylesheet" href="/css/fallout-green.css" />
   <link rel="stylesheet" href="/css/fallout-amber.css" />
   <link rel="stylesheet" href="/css/fallout-blue.css" />
   <link rel="stylesheet" href="/css/map-effects.css" />
 </head>
-<body>
+<body class="fallout-green">
 
   <!-- BOOT SCREEN -->
   <div id="bootScreen" aria-hidden="false" class="boot-screen">
     <div class="boot-inner">
       <pre id="bootText"></pre>
-      <div id="bootPrompt" class="boot-prompt blink">PRESS ANY KEY / CLICK / TAP TO ACTIVATE</div>
+      <div id="bootPrompt" class="boot-prompt blink">
+        PRESS ANY KEY / CLICK / TAP TO ACTIVATE
+      </div>
     </div>
   </div>
 
-  <!-- PIP-BOY SHELL -->
+  <!-- PIP‑BOY SHELL -->
   <div id="pipboyScreen" class="hidden" aria-hidden="true">
     <div class="pipboy-shell">
+
       <!-- Header -->
       <header class="pip-header">
         <div class="pip-title">
@@ -56,7 +63,7 @@
           <div class="pip-sub-title">VAULT 77 • WASTELAND GPS</div>
         </div>
         <div class="pip-controls">
-          <button class="btn danger-btn" onclick="location.href='/nuke.html'">ENTER NUKE VAULT</button>
+          <button class="btn danger-btn" id="enterNukeVaultBtn">ENTER NUKE VAULT</button>
           <button class="btn" id="centerBtn">CENTER</button>
           <button class="btn" id="recenterMojave">MOJAVE</button>
           <button class="btn wallet-btn" id="connectWallet">CONNECT WALLET</button>
@@ -64,92 +71,175 @@
         </div>
       </header>
 
-      <!-- Status + HUD -->
-      <div id="status" class="status status-good">Status: READY – tap REQUEST GPS if needed</div>
+      <!-- HUD / STATUS strip (shown on all panels if you want) -->
+      <div id="status" class="status status-good">
+        Status: READY – tap REQUEST GPS if needed
+      </div>
 
       <div class="hud">
         <div class="hud-block">LVL <strong id="lvl">1</strong></div>
         <div class="hud-block hp-block">
           <div class="hp-container">
-            <div class="hp-bar"><div id="hpFill" class="hp-fill" style="width:100%"></div></div>
+            <div class="hp-bar">
+              <div id="hpFill" class="hp-fill" style="width:100%"></div>
+            </div>
             <div id="hpText" class="hp-text">HP 100 / 100</div>
           </div>
         </div>
         <div class="hud-block">CAPS <strong id="caps">0</strong></div>
         <div class="hud-block xp-wrapper">
-          <div class="xp-bar"><div id="xpFill" class="xp-fill" style="width:50%"></div></div>
+          <div class="xp-bar">
+            <div id="xpFill" class="xp-fill" style="width:0%"></div>
+          </div>
           <div class="xp-text" id="xpText">0 / 100</div>
         </div>
         <div class="hud-block">CLAIMED <strong id="claimed">0</strong></div>
       </div>
 
-      <!-- Main grid: sidebar + map -->
-      <section class="main-grid">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-          <div class="sidebar-content">
-            <div class="status">Quick Actions</div>
-            <div class="quick-actions">
-              <button class="btn" id="openTutorial">HOW TO PLAY</button>
-              <button class="btn" id="openInventory">INVENTORY</button>
-              <button class="btn" id="openQuests">QUESTS</button>
-              <button class="btn" id="claimMintables">Claim Mintables</button>
-            </div>
+      <!-- Pip‑Boy Tabs -->
+      <nav class="pip-tabs">
+        <div class="pip-tab active" data-panel="map">MAP</div>
+        <div class="pip-tab" data-panel="stat">STAT</div>
+        <div class="pip-tab" data-panel="items">ITEMS</div>
+        <div class="pip-tab" data-panel="quests">QUESTS</div>
+        <div class="pip-tab" data-panel="exchange">SCAVENGER'S EXCHANGE</div>
+      </nav>
 
-            <hr class="sidebar-divider" />
+      <!-- PANELS WRAPPER -->
+      <div class="pip-panels-wrapper">
 
-            <div class="status">Nearby</div>
-            <ul id="nearbyList" class="nearby-list">
-              <li>Workshop Alpha — 1.2km</li>
-              <li>Supply Cache — 800m</li>
-              <li>Turret Parts — 2.4km</li>
-            </ul>
-          </div>
-        </aside>
+        <!-- MAP PANEL -->
+        <main id="panel-map" class="pip-panel active">
+          <div class="pip-title">WORLD MAP // WASTELAND GPS</div>
 
-        <!-- Main content -->
-        <main class="main">
-          <div class="map-container">
-            <div class="map-controls">
-              <button class="btn" id="mapModeBtn">MAP MODE</button>
-            </div>
-
-            <!-- Map with CRT overlay class -->
-            <div id="map" class="map-crt"></div>
-            
-            <div class="gps-badge" id="gpsBadge">
-              <div id="accDot" class="acc-dot"></div>
-              <div id="accText">GPS: waiting...</div>
-            </div>
-
-            <button class="btn gps-btn" id="requestGpsBtn">REQUEST GPS</button>
-
-            <!-- Bottom drawer -->
-            <div id="bottom-drawer" class="hidden">
-              <div class="drawer-handle" id="drawer-toggle" role="button" tabindex="0"></div>
-
-              <div class="drawer-content">
-                <div class="drawer-left">
-                  <button class="btn pip-btn" id="donate-btn">DONATE</button>
-                  <button class="btn pip-btn" id="gps-lock-btn">GPS LOCK</button>
+          <section class="main-grid">
+            <!-- Sidebar (Quick Actions + Nearby) -->
+            <aside class="sidebar">
+              <div class="sidebar-content">
+                <div class="status">Quick Actions</div>
+                <div class="quick-actions">
+                  <button class="btn" id="openTutorial">HOW TO PLAY</button>
+                  <button class="btn" id="openInventory">INVENTORY</button>
+                  <button class="btn" id="openQuests">QUESTS</button>
+                  <button class="btn" id="claimMintablesSidebar">Claim Mintables</button>
                 </div>
-                <div class="drawer-right">
-                  <div class="hud">Locations: <span id="locations-count">0</span>/10</div>
+
+                <hr class="sidebar-divider" />
+
+                <div class="status">Nearby</div>
+                <ul id="nearbyList" class="nearby-list">
+                  <!-- JS can overwrite this -->
+                  <li>Workshop Alpha — 1.2km</li>
+                  <li>Supply Cache — 800m</li>
+                  <li>Turret Parts — 2.4km</li>
+                </ul>
+              </div>
+            </aside>
+
+            <!-- Map + controls -->
+            <section class="main">
+              <div class="map-container">
+                <div class="map-controls">
+                  <button class="btn" id="mapModeBtn">MAP MODE</button>
+                </div>
+
+                <!-- RAD warning overlay -->
+                <div id="radFlash" class="rad-warning" style="display:none;"></div>
+
+                <!-- Map with CRT overlay -->
+                <div id="map" class="map-crt"></div>
+
+                <!-- GPS badge -->
+                <div class="gps-badge" id="gpsBadge">
+                  <div id="accDot" class="acc-dot"></div>
+                  <div id="accText">GPS: waiting...</div>
+                </div>
+
+                <!-- GPS request button -->
+                <button class="btn gps-btn" id="requestGpsBtn">REQUEST GPS</button>
+
+                <!-- Bottom drawer (contextual actions) -->
+                <div id="bottom-drawer" class="hidden">
+                  <div class="drawer-handle" id="drawer-toggle" role="button" tabindex="0"></div>
+
+                  <div class="drawer-content">
+                    <div class="drawer-left">
+                      <button class="btn pip-btn" id="donate-btn">DONATE</button>
+                      <button class="btn pip-btn" id="gps-lock-btn">GPS LOCK</button>
+                    </div>
+                    <div class="drawer-right">
+                      <div class="hud">
+                        Locations: <span id="locations-count">0</span>/10
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Tabs above drawer -->
-            <div class="tabs">
-              <div class="tab active" data-panel="map">MAP</div>
-              <div class="tab" data-panel="stat">STAT</div>
-              <div class="tab" data-panel="items">ITEMS</div>
-              <div class="tab" data-panel="quests">QUESTS</div>
-              <div class="tab" data-panel="shop">SCAVENGER'S EXCHANGE</div>
-            </div>
-          </div>
+              <!-- POI list below map on this panel -->
+              <section class="poi-list" id="poiList">
+                <!-- JS: populate from locations.json -->
+              </section>
+            </section>
+          </section>
         </main>
-      </section>
+
+        <!-- STAT PANEL -->
+        <section id="panel-stat" class="pip-panel hidden">
+          <div class="pip-title">STATUS // CAPS, XP & WALLET</div>
+
+          <section class="stat-section">
+            <h2>Player Stats</h2>
+            <p>LEVEL: <span id="statLevel">1</span></p>
+            <p>XP: <span id="statXP">0</span></p>
+            <p>CAPS: <span id="statCaps">0</span></p>
+          </section>
+
+          <section class="stat-section">
+            <h2>Wallet</h2>
+            <p>ADDRESS:</p>
+            <p id="walletAddress">Not connected</p>
+            <button class="btn wallet-btn" id="connectWalletStat">CONNECT WALLET</button>
+          </section>
+
+          <section class="stat-section">
+            <h2>Mintables</h2>
+            <button class="btn" id="claimMintablesStat">CLAIM MINTABLES</button>
+          </section>
+        </section>
+
+        <!-- ITEMS PANEL -->
+        <section id="panel-items" class="pip-panel hidden">
+          <div class="pip-title">INVENTORY</div>
+          <div id="inventoryList">
+            <!-- JS: populate from your items / on-chain state -->
+          </div>
+        </section>
+
+        <!-- QUESTS PANEL -->
+        <section id="panel-quests" class="pip-panel hidden">
+          <div class="pip-title">QUEST LOG</div>
+          <div id="questList">
+            <!-- JS: populate from quests.json or existing quest system -->
+          </div>
+        </section>
+
+        <!-- EXCHANGE PANEL -->
+        <section id="panel-exchange" class="pip-panel hidden">
+          <div class="pip-title">SCAVENGER'S EXCHANGE</div>
+          <div id="exchangeContent">
+            <!-- JS: populate with trade offers, mint UI, etc. -->
+          </div>
+        </section>
+
+      </div> <!-- /.pip-panels-wrapper -->
+
+      <!-- Bottom drawer hint text (global) -->
+      <footer id="pipboy-footer">
+        <span id="drawerHint">
+          USE TABS TO NAVIGATE PIP‑BOY // MAP • STAT • ITEMS • QUESTS • EXCHANGE
+        </span>
+      </footer>
     </div>
   </div>
 
@@ -164,7 +254,6 @@
   <script src="/js/boot.js"></script>
   <script src="/js/map-core.js"></script>
   <script src="/js/main.js"></script>
-
+  <script src="/js/pipboy.js"></script>
 </body>
 </html>
-
