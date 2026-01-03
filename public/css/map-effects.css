@@ -1,0 +1,54 @@
+/* map-effects.css */
+/* Global map effects shared across all themes */
+
+/* CRT scanlines */
+.map-crt::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0,255,0,0.05) 0px,
+      rgba(0,255,0,0.05) 1px,
+      transparent 2px
+    );
+  mix-blend-mode: overlay;
+  opacity: 0.4;
+  z-index: 999;
+}
+
+/* Vignette */
+#map::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.6));
+  z-index: 998;
+}
+
+/* Glow around the map container */
+.leaflet-container {
+  box-shadow: 0 0 40px rgba(0,255,0,0.25);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Smooth zoom wobble */
+#map {
+  transition: transform 0.25s ease;
+}
+
+/* Pip‑Boy pixel feel */
+.leaflet-tile-pane img.leaflet-tile {
+  image-rendering: pixelated;
+}
+
+/* Fallout icon tint baseline */
+.pip-icon {
+  width: 100%;
+  height: 100%;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}

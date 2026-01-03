@@ -20,9 +20,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
   <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <!-- Leaflet core styles -->
   <link rel="stylesheet" href="/css/leaflet.css" />
+
+  <!-- Fallout / Pip-Boy fonts -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
+
+  <!-- Pip-Boy shell + UI -->
   <link rel="stylesheet" href="/css/pipboy.css" />
+
+  <!-- Fallout map themes + effects -->
+  <link rel="stylesheet" href="/css/fallout-green.css" />
+  <link rel="stylesheet" href="/css/fallout-amber.css" />
+  <link rel="stylesheet" href="/css/fallout-blue.css" />
+  <link rel="stylesheet" href="/css/map-effects.css" />
 </head>
 <body>
 
@@ -102,7 +114,8 @@
               <button class="btn" id="mapModeBtn">MAP MODE</button>
             </div>
 
-            <div id="map"></div>
+            <!-- Map with CRT overlay class -->
+            <div id="map" class="map-crt"></div>
 
             <div class="static-noise"></div>
 
@@ -145,16 +158,6 @@
   <!-- Scripts -->
   <script src="/js/leaflet.js"></script>
 
-  <!-- Marker icon fix -->
-  <script>
-    delete L.Icon.Default.prototype._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: '/images/marker-icon-2x.png',
-      iconUrl: '/images/marker-icon.png',
-      shadowUrl: '/images/marker-shadow.png'
-    });
-  </script>
-
   <!-- Solana -->
   <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
   <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
@@ -166,5 +169,3 @@
 
 </body>
 </html>
-
-

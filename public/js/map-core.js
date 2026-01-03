@@ -1,4 +1,4 @@
-// public/js/map-core.js – Improved Fallout-style map core (Fixed Jan 03, 2026)
+// public/js/map-core.js – Fallout-style map core (Updated Jan 03, 2026)
 (function () {
   'use strict';
 
@@ -21,6 +21,16 @@
 
   function safeLog(...args) { try { console.log(...args); } catch (e) {} }
   function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
+
+  // ------------------------------------------------------------
+  // Fallout theme helper (body class based)
+  // ------------------------------------------------------------
+  function setMapTheme(theme) {
+    document.body.classList.remove('fallout-green', 'fallout-amber', 'fallout-blue');
+    if (theme) {
+      document.body.classList.add(theme);
+    }
+  }
 
   // -------------------------
   // Icon helpers
@@ -63,21 +73,21 @@
     try {
       osmLayer = L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        { maxZoom: 19, attribution: '© OpenStreetMap contributors', subdomains: ['a','b','c'] }
+        { maxZoom: 19, attribution: '© OpenStreetMap contributors', subdomains: ['a', 'b', 'c'] }
       );
     } catch (e) { safeWarn('OSM layer failed', e); }
 
     try {
       cartoDarkLayer = L.tileLayer(
         'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        { maxZoom: 20, attribution: '© OpenStreetMap © Carto', subdomains: ['a','b','c'] }
+        { maxZoom: 20, attribution: '© OpenStreetMap © Carto', subdomains: ['a', 'b', 'c'] }
       );
     } catch (e) { safeWarn('Carto Dark layer failed', e); }
 
     try {
       cartoLightLayer = L.tileLayer(
         'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-        { maxZoom: 20, attribution: '© OpenStreetMap © Carto', subdomains: ['a','b','c'] }
+        { maxZoom: 20, attribution: '© OpenStreetMap © Carto', subdomains: ['a', 'b', 'c'] }
       );
     } catch (e) { safeWarn('Carto Light layer failed', e); }
 
@@ -102,7 +112,6 @@
   // Safe POI addition
   // -------------------------
   function addPoi(poi) {
-    // Normalize lat/lng (accept lat/lon, string/number)
     const lat = Number(poi.lat ?? poi.latitude ?? poi.y);
     const lng = Number(poi.lng ?? poi.lon ?? poi.longitude ?? poi.x);
 
@@ -124,11 +133,11 @@
       `;
       marker.bindPopup(popupHtml);
 
-      // Choose layer
-      const layerKey = type === 'workshop' ? 'workshop'
-                     : type === 'loot' ? 'loot'
-                     : type === 'turret' ? 'turret'
-                     : 'default';
+      const layerKey =
+        type === 'workshop' ? 'workshop' :
+        type === 'loot' ? 'loot' :
+        type === 'turret' ? 'turret' :
+        'default';
 
       if (!poiLayers[layerKey]) {
         poiLayers[layerKey] = createPoiLayerGroup();
@@ -136,7 +145,6 @@
 
       poiLayers[layerKey].addLayer(marker);
       safeLog(`Added POI: ${poi.id || poi.name} at [${lat}, ${lng}]`);
-
     } catch (err) {
       safeWarn('addPoi failed:', err, poi);
     }
@@ -146,7 +154,6 @@
   // Load POIs from JSON files
   // -------------------------
   async function loadPOIs() {
-    // Ensure layers exist
     Object.keys(poiLayers).forEach(k => {
       if (!poiLayers[k]) poiLayers[k] = createPoiLayerGroup();
     });
@@ -178,7 +185,6 @@
       }
     }
 
-    // Add layers to map
     if (map) {
       Object.values(poiLayers).forEach(layer => {
         if (layer && !map.hasLayer(layer)) {
@@ -186,7 +192,6 @@
         }
       });
 
-      // Layer control (add only once)
       if (!map._layerControl) {
         const overlays = {
           'Workshops': poiLayers.workshop,
@@ -209,6 +214,9 @@
       return;
     }
 
+    // ensure CRT class (in case HTML didn’t add it)
+    mapEl.classList.add('map-crt');
+
     // Prevent double init
     if (map && map instanceof L.Map) {
       setTimeout(() => map.invalidateSize(), 200);
@@ -224,22 +232,33 @@
         attributionControl: false
       });
       window._map = map;
-      window.map = map; // expose globally
+      window.map = map;
     } catch (e) {
       safeWarn('Map creation failed:', e);
       return;
     }
 
+    // Marker icon default fix (moved out of HTML)
+    try {
+      delete L.Icon.Default.prototype._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: '/images/marker-icon-2x.png',
+        iconUrl: '/images/marker-icon.png',
+        shadowUrl: '/images/marker-shadow.png'
+      });
+    } catch (e) {
+      safeWarn('Marker default icon override failed:', e);
+    }
+
     createTileLayers();
 
-    // Default to dark theme
+    // Default to dark / Pip‑Boy green
     currentMapLayer = cartoDarkLayer || osmLayer;
     if (currentMapLayer) currentMapLayer.addTo(map);
+    setMapTheme('fallout-green');
 
-    // Small zoom control
     L.control.zoom({ position: 'topleft' }).addTo(map);
 
-    // Load POIs
     setTimeout(() => {
       loadPOIs().catch(e => safeWarn('POI loading failed:', e));
       window.dispatchEvent(new Event('map-ready'));
@@ -249,7 +268,7 @@
   }
 
   // -------------------------
-  // Map Style Switcher
+  // Map Style Switcher (wired to Fallout themes)
   // -------------------------
   function switchMapStyle(style) {
     if (!map) return;
@@ -258,10 +277,19 @@
       map.removeLayer(currentMapLayer);
     }
 
-    if (style === 'dark' && cartoDarkLayer) currentMapLayer = cartoDarkLayer;
-    else if (style === 'light' && cartoLightLayer) currentMapLayer = cartoLightLayer;
-    else if (style === 'osm' && osmLayer) currentMapLayer = osmLayer;
-    else currentMapLayer = cartoDarkLayer || osmLayer;
+    if (style === 'dark' && cartoDarkLayer) {
+      currentMapLayer = cartoDarkLayer;
+      setMapTheme('fallout-green');
+    } else if (style === 'light' && cartoLightLayer) {
+      currentMapLayer = cartoLightLayer;
+      setMapTheme('fallout-amber');
+    } else if (style === 'osm' && osmLayer) {
+      currentMapLayer = osmLayer;
+      setMapTheme('fallout-blue');
+    } else {
+      currentMapLayer = cartoDarkLayer || osmLayer;
+      setMapTheme('fallout-green');
+    }
 
     if (currentMapLayer) currentMapLayer.addTo(map);
     setTimeout(() => map.invalidateSize(), 150);
@@ -284,18 +312,27 @@
   }
 
   // -------------------------
-  // Safety CSS
+  // Safety CSS (pixelated green tiles etc.)
   // -------------------------
   (function injectSafetyCss() {
     const id = 'map-core-safety';
     if (document.getElementById(id)) return;
 
     const css = `
-      #map { min-height: 260px; height: 100%; width: 100%; }
+      #map { min-height: 260px; height: 100%; width: 100%; position: relative; }
       .leaflet-container { background: #0a1f0a; }
-      .leaflet-tile-pane img.leaflet-tile { image-rendering: pixelated; filter: contrast(1.35) saturate(0.4) hue-rotate(110deg); }
-      .static-noise, .top-overlay { pointer-events: none !important; z-index: 2 !important; }
-      #map, .map-container { pointer-events: auto !important; z-index: 1 !important; }
+      .leaflet-tile-pane img.leaflet-tile {
+        image-rendering: pixelated;
+        filter: contrast(1.35) saturate(0.4) hue-rotate(110deg);
+      }
+      .static-noise, .top-overlay {
+        pointer-events: none !important;
+        z-index: 2 !important;
+      }
+      #map, .map-container {
+        pointer-events: auto !important;
+        z-index: 1 !important;
+      }
     `;
     const style = document.createElement('style');
     style.id = id;

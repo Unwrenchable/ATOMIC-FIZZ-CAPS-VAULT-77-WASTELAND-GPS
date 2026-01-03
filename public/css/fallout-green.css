@@ -1,0 +1,14 @@
+/* fallout-green.css */
+/* Applies when body has class="fallout-green" */
+
+body.fallout-green .leaflet-container {
+  filter: hue-rotate(90deg)
+          saturate(150%)
+          brightness(0.8)
+          contrast(1.4);
+}
+
+body.fallout-green .custom-marker-icon img,
+body.fallout-green .pip-icon {
+  filter: brightness(0) invert(1) hue-rotate(90deg) saturate(200%);
+}
