@@ -105,7 +105,7 @@
         <label>Your message / description:</label><br>
         <textarea id="description" rows="3" placeholder="Fresh stimpaks, no rads..." style="width:100%; padding:8px;"></textarea><br>
 
-        <button type="submit">Post Trade (sign tx)</button>
+        <button type="submit">Post Trade</button>
       </form>
     </div>
 
@@ -120,150 +120,180 @@
   <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
   <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
   <script>
-  const connectBtn = document.getElementById('connectWalletBtn');
-  const walletAddrEl = document.getElementById('walletAddr');
-  const listNftBtn = document.getElementById('listNftBtn');
-  const nftSelector = document.getElementById('nftSelector');
-  const nftGrid = document.getElementById('nftGrid');
-  let connectedWallet = null;
+    const connectBtn = document.getElementById('connectWalletBtn');
+    const walletAddrEl = document.getElementById('walletAddr');
+    const listNftBtn = document.getElementById('listNftBtn');
+    const nftSelector = document.getElementById('nftSelector');
+    const nftGrid = document.getElementById('nftGrid');
+    let connectedWallet = null;
 
-  // Connect Wallet
-  connectBtn.addEventListener('click', async () => {
-    if (!window.solana || !window.solana.isPhantom) {
-      alert('Phantom wallet not found. Please install it.');
-      return;
-    }
-
-    try {
-      await window.solana.connect();
-      connectedWallet = window.solana.publicKey.toBase58();
-      walletAddrEl.textContent = `Connected: ${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`;
-      connectBtn.disabled = true;
-      listNftBtn.disabled = false;
-      loadTrades();
-    } catch (err) {
-      console.error(err);
-      alert('Connection failed');
-    }
-  });
-
-  // Load real trades from server
-  async function loadTrades() {
-    try {
-      const res = await fetch('/api/trades');
-      const trades = await res.json();
-      const tradeList = document.getElementById('tradeList');
-      tradeList.innerHTML = '';
-
-      if (trades.length === 0) {
-        tradeList.innerHTML = '<div class="trade-card"><h3>No active trades yet</h3></div>';
+    // Connect Wallet
+    connectBtn.addEventListener('click', async () => {
+      if (!window.solana || !window.solana.isPhantom) {
+        alert('Phantom wallet not found. Please install it.');
         return;
       }
 
-      trades.forEach(trade => {
-        const card = document.createElement('div');
-        card.className = 'trade-card';
-        card.innerHTML = `
-          <h3>${trade.type === 'nft' ? 'NFT: ' + (trade.nftMint.slice(0,8) + '...') : trade.offer}</h3>
-          <p class="price">${trade.priceFizz} FIZZ</p>
-          <p>${trade.description || 'No description'}</p>
-          <p>Seller: ${trade.seller.slice(0,6)}...${trade.seller.slice(-4)}</p>
-          <button onclick="alert('Buy coming soon!')">Buy</button>
-        `;
-        tradeList.appendChild(card);
-      });
-    } catch (err) {
-      console.error('Load trades failed:', err);
-      document.getElementById('tradeList').innerHTML = '<div class="trade-card"><h3>Error loading trades</h3></div>';
-    }
-  }
-
-  // Post regular trade
-  document.getElementById('newTradeForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!connectedWallet) return alert('Connect wallet first');
-
-    const offer = document.getElementById('offerItem').value;
-    const price = document.getElementById('price').value;
-    const desc = document.getElementById('description').value;
-
-    try {
-      const res = await fetch('/api/post-trade', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet: connectedWallet, offer, priceFizz: price, description: desc })
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        alert(`Trade posted! ID: ${data.tradeId}`);
+      try {
+        await window.solana.connect();
+        connectedWallet = window.solana.publicKey.toBase58();
+        walletAddrEl.textContent = `Connected: ${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`;
+        connectBtn.disabled = true;
+        listNftBtn.disabled = false;
         loadTrades();
-      } else {
-        alert('Failed: ' + data.error);
+      } catch (err) {
+        console.error(err);
+        alert('Connection failed');
       }
-    } catch (err) {
-      alert('Network error');
-    }
-  });
-
-  // List NFT (mock selector - replace with real Metaplex later)
-  listNftBtn.addEventListener('click', async () => {
-    if (!connectedWallet) return alert('Connect wallet first');
-
-    // Mock NFTs - replace with real fetch
-    const mockNfts = [
-      { mint: 'ABC123', name: 'Pip-Boy Skin #47', image: 'https://via.placeholder.com/150/00ff41/000?text=NFT+47' },
-      { mint: 'DEF456', name: 'Vault 77 Helmet', image: 'https://via.placeholder.com/150/00ff41/000?text=Helmet' }
-    ];
-
-    nftGrid.innerHTML = '';
-    mockNfts.forEach(nft => {
-      const card = document.createElement('div');
-      card.className = 'nft-card';
-      card.innerHTML = `<img src="${nft.image}" alt="${nft.name}"><p>${nft.name}</p>`;
-      card.onclick = () => promptAndListNft(nft);
-      nftGrid.appendChild(card);
     });
 
-    nftSelector.classList.remove('hidden');
-  });
+    // Load real trades from server
+    async function loadTrades() {
+      try {
+        const res = await fetch('/api/trades');
+        const trades = await res.json();
+        const tradeList = document.getElementById('tradeList');
+        tradeList.innerHTML = '';
 
-  async function promptAndListNft(nft) {
-    const price = prompt(`Price in FIZZ for ${nft.name}?`, "1.25");
-    if (!price) return;
+        if (trades.length === 0) {
+          tradeList.innerHTML = '<div class="trade-card"><h3>No active trades yet</h3></div>';
+          return;
+        }
 
-    const desc = prompt("Description:", "");
+        trades.forEach(trade => {
+          const card = document.createElement('div');
+          card.className = 'trade-card';
+          card.innerHTML = `
+            <h3>${trade.type === 'nft' ? 'NFT: ' + (trade.nftMint?.slice(0,8) + '...' || 'Unknown') : trade.offer}</h3>
+            <p class="price">${trade.priceFizz} FIZZ</p>
+            <p>${trade.description || 'No description'}</p>
+            <p>Seller: ${trade.seller.slice(0,6)}...${trade.seller.slice(-4)}</p>
+            <p>Expires: ${new Date(Number(trade.posted) + (trade.durationDays * 86400000)).toLocaleString()}</p>
+            <button class="buy-btn" data-id="${trade.id}">Buy</button>
+          `;
+          card.querySelector('.buy-btn').onclick = () => buyTrade(trade.id);
+          tradeList.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Load trades failed:', err);
+        document.getElementById('tradeList').innerHTML = '<div class="trade-card"><h3>Error loading trades</h3></div>';
+      }
+    }
 
-    try {
-      const message = `List NFT ${nft.mint} for ${price} FIZZ - ${desc}`;
-      const signed = await window.solana.signMessage(new TextEncoder().encode(message), "utf8");
+    // Post regular trade
+    document.getElementById('newTradeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!connectedWallet) return alert('Connect wallet first');
 
-      const res = await fetch('/api/post-nft', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          wallet: connectedWallet,
-          nftMint: nft.mint,
-          priceFizz: price,
-          description: desc,
-          signature: bs58.encode(signed.signature)
-        })
+      const offer = document.getElementById('offerItem').value;
+      const price = document.getElementById('price').value;
+      const desc = document.getElementById('description').value;
+
+      try {
+        const res = await fetch('/api/post-trade', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet: connectedWallet, offer, priceFizz: price, description: desc })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          alert(`Trade posted! ID: ${data.tradeId}`);
+          loadTrades();
+        } else {
+          alert('Failed: ' + data.error);
+        }
+      } catch (err) {
+        alert('Network error');
+      }
+    });
+
+    // List NFT (mock selector - ready for real Metaplex)
+    listNftBtn.addEventListener('click', async () => {
+      if (!connectedWallet) return alert('Connect wallet first');
+
+      // Mock NFTs - replace with real Metaplex fetch later
+      const mockNfts = [
+        { mint: 'ABC123', name: 'Pip-Boy Skin #47', image: 'https://via.placeholder.com/150/00ff41/000?text=NFT+47' },
+        { mint: 'DEF456', name: 'Vault 77 Helmet', image: 'https://via.placeholder.com/150/00ff41/000?text=Helmet' }
+      ];
+
+      nftGrid.innerHTML = '';
+      mockNfts.forEach(nft => {
+        const card = document.createElement('div');
+        card.className = 'nft-card';
+        card.innerHTML = `<img src="${nft.image}" alt="${nft.name}"><p>${nft.name}</p>`;
+        card.onclick = () => promptAndListNft(nft);
+        nftGrid.appendChild(card);
       });
 
-      const data = await res.json();
-      if (data.success) {
-        alert(`NFT listed! ID: ${data.tradeId}`);
-        loadTrades();
-      } else {
-        alert('Failed: ' + data.error);
-      }
-    } catch (err) {
-      alert('Signing failed');
-    }
-  }
+      nftSelector.classList.remove('hidden');
+    });
 
-  // Load on page start
-  loadTrades();
-</script>
+    async function promptAndListNft(nft) {
+      const price = prompt(`Price in FIZZ for ${nft.name}?`, "1.25");
+      if (!price) return;
+
+      const desc = prompt("Description:", "");
+
+      try {
+        const message = `List NFT ${nft.mint} for ${price} FIZZ - ${desc}`;
+        const signed = await window.solana.signMessage(new TextEncoder().encode(message), "utf8");
+
+        const res = await fetch('/api/post-nft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            wallet: connectedWallet,
+            nftMint: nft.mint,
+            priceFizz: price,
+            description: desc,
+            signature: bs58.encode(signed.signature)
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          alert(`NFT listed! ID: ${data.tradeId}`);
+          loadTrades();
+        } else {
+          alert('Failed: ' + data.error);
+        }
+      } catch (err) {
+        alert('Signing failed');
+      }
+    }
+
+    // Buy flow
+    async function buyTrade(tradeId) {
+      if (!connectedWallet) return alert('Connect wallet first');
+
+      try {
+        const res = await fetch('/api/buy-trade', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ buyerWallet: connectedWallet, tradeId })
+        });
+
+        const data = await res.json();
+        if (!data.success) {
+          return alert('Buy failed: ' + data.error);
+        }
+
+        // Sign and send the transaction with Phantom
+        const tx = Transaction.from(Buffer.from(data.serializedTx, 'base64'));
+        const signedTx = await window.solana.signAndSendTransaction(tx);
+        console.log('Buy transaction:', signedTx.signature);
+        alert(`Purchase successful! Tx: ${signedTx.signature.slice(0,8)}...`);
+        loadTrades(); // Refresh list
+      } catch (err) {
+        console.error('Buy error:', err);
+        alert('Buy failed');
+      }
+    }
+
+    // Load on page start
+    loadTrades();
+  </script>
 </body>
 </html>
