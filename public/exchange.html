@@ -1,14 +1,22 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SCAVENGER'S EXCHANGE • ATOMIC FIZZ CAPS</title>
 
-  <!-- Same Pip-Boy style & CSP as main page (copy-paste your working one) -->
+  <!-- CSP: All required hashes included -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 'sha256-knV59OylGCMUSLMIdwmcnoLKGBWKJTQUzPHVIDUiduo=' 'sha256-GWgqL/UbutCqyqM3J9Gks3xvFmnFo1ORE0ufB/pTDi8=' 'sha256-RKPZWgvMlMXlDlyqgBTkFok8+J/6Dwd8uWypHc9RTq4=' 'sha256-ifhM87Ts8YPjA9BFs7MOrEywjqLlp0CZBKWaOppr1fE=' 'sha256-QZ2UtJkPyVaVpO87TjOtPsu5XUuzvb/kBvJrg3lPegQ=' 'sha256-ht4bn3PtoOPOPNMxHc97QDZz/8/D3tGE3jfXNxJ9b6s=';
+    script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 
+      'sha256-knV59OylGCMUSLMIdwmcnoLKGBWKJTQUzPHVIDUiduo=' 
+      'sha256-GWgqL/UbutCqyqM3J9Gks3xvFmnFo1ORE0ufB/pTDi8=' 
+      'sha256-RKPZWgvMlMXlDlyqgBTkFok8+J/6Dwd8uWypHc9RTq4=' 
+      'sha256-ifhM87Ts8YPjA9BFs7MOrEywjqLlp0CZBKWaOppr1fE=' 
+      'sha256-QZ2UtJkPyVaVpO87TjOtPsu5XUuzvb/kBvJrg3lPegQ=' 
+      'sha256-ht4bn3PtoOPOPNMxHc97QDZz/8/D3tGE3jfXNxJ9b6s=' 
+      'sha256-zsi031c7UsmAaEs6ZwrWyX7dERfVA+d2kUv9D434WHk=' 
+      'sha256-Bq0L5gIP48ZOyBGfM9ydoqp7P9L7Hg4E2Masn1AFDd8=';
     connect-src 'self' https://unpkg.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss: https://*;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
     img-src 'self' data: https: blob:;
@@ -21,7 +29,6 @@
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/pipboy.css" />
-  <link rel="stylesheet" href="/css/leaflet.css" /> <!-- optional if you want mini-map -->
 
   <style>
     body { background: #0a1f0a; color: #00ff41; font-family: 'VT323', monospace; margin: 0; padding: 0; }
@@ -56,6 +63,10 @@
     }
     .trade-card button:hover { background: #00ff66; }
     .new-trade-form { margin: 40px 0; padding: 20px; background: rgba(0, 255, 65, 0.08); border: 1px dashed #00ff41; }
+    #nftSelector { margin: 20px 0; padding: 15px; background: rgba(0,255,65,0.05); border: 1px solid #00ff41; }
+    .nft-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
+    .nft-card { border: 1px solid #00ff41; padding: 10px; text-align: center; cursor: pointer; }
+    .nft-card img { width: 100%; height: 120px; object-fit: cover; }
   </style>
 </head>
 <body>
@@ -70,9 +81,20 @@
       <span id="walletAddr"></span>
     </div>
 
-    <!-- New trade form -->
+    <!-- List NFT Button -->
+    <button id="listNftBtn" style="display:block; margin:20px auto; padding:12px 24px; background:#00cc33; color:black; border:none; font-family:'Press Start 2P',cursive; cursor:pointer;">
+      List My NFT for Sale/Trade
+    </button>
+
+    <!-- NFT Selector (hidden until button clicked) -->
+    <div id="nftSelector" class="hidden">
+      <h3>Your NFTs</h3>
+      <div id="nftGrid" class="nft-grid"></div>
+    </div>
+
+    <!-- New trade form (for non-NFT trades) -->
     <div class="new-trade-form">
-      <h2>Post a New Trade</h2>
+      <h2>Post a New Trade (Items/CAPS)</h2>
       <form id="newTradeForm">
         <label>Item you offer:</label><br>
         <input type="text" id="offerItem" placeholder="e.g. 50 Stimpaks" required style="width:100%; padding:8px; margin:8px 0;" /><br>
@@ -90,10 +112,7 @@
     <!-- Active trades list -->
     <h2>Active Trades</h2>
     <div id="tradeList" class="trade-list">
-      <!-- Trades will be injected here -->
-      <div class="trade-card">
-        <h3>Loading trades...</h3>
-      </div>
+      <div class="trade-card"><h3>Loading trades...</h3></div>
     </div>
   </div>
 
@@ -103,7 +122,13 @@
   <script>
     const connectBtn = document.getElementById('connectWalletBtn');
     const walletAddrEl = document.getElementById('walletAddr');
+    const listNftBtn = document.getElementById('listNftBtn');
+    const nftSelector = document.getElementById('nftSelector');
+    const nftGrid = document.getElementById('nftGrid');
 
+    let connectedWallet = null;
+
+    // Connect Wallet
     connectBtn.addEventListener('click', async () => {
       if (!window.solana || !window.solana.isPhantom) {
         alert('Phantom wallet not found. Please install it.');
@@ -112,38 +137,109 @@
 
       try {
         await window.solana.connect();
-        const addr = window.solana.publicKey.toBase58();
-        walletAddrEl.textContent = `Connected: ${addr.slice(0,6)}...${addr.slice(-4)}`;
+        connectedWallet = window.solana.publicKey.toBase58();
+        walletAddrEl.textContent = `Connected: ${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`;
         connectBtn.disabled = true;
-        loadTrades(); // load after connect
+        listNftBtn.disabled = false;
+        loadTrades();
       } catch (err) {
         console.error(err);
         alert('Connection failed');
       }
     });
 
-    // Load trades (mock / fetch from your API later)
+    // Load Trades (mock for now)
     async function loadTrades() {
       const tradeList = document.getElementById('tradeList');
-      tradeList.innerHTML = '<div class="trade-card"><h3>Mock Trade 1</h3><p>50 Stimpaks for 0.75 FIZZ</p><button>Buy</button></div>';
-      // TODO: fetch('/api/trades') and render real list
+      tradeList.innerHTML = `
+        <div class="trade-card">
+          <h3>Mock Trade 1</h3>
+          <p>50 Stimpaks for 0.75 FIZZ</p>
+          <button>Buy</button>
+        </div>
+      `;
+      // TODO: Replace with fetch('/api/trades')
     }
 
-    // Post new trade (will require signing)
+    // Post regular trade (non-NFT)
     document.getElementById('newTradeForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!window.solana?.publicKey) {
-        alert('Please connect wallet first');
-        return;
-      }
+      if (!connectedWallet) return alert('Connect wallet first');
 
       const offer = document.getElementById('offerItem').value;
       const price = document.getElementById('price').value;
       const desc = document.getElementById('description').value;
 
-      alert(`Trade posted!\nOffer: ${offer}\nPrice: ${price} FIZZ\nDesc: ${desc}\n\n(Real tx signing coming soon)`);
-      // TODO: sign tx with Phantom → send to /api/post-trade
+      alert(`Trade posted!\nOffer: ${offer}\nPrice: ${price} FIZZ\nDesc: ${desc}`);
+      // TODO: POST to /api/post-trade
     });
+
+    // List NFT Button
+    listNftBtn.addEventListener('click', async () => {
+      if (!connectedWallet) return alert('Connect wallet first');
+
+      try {
+        // Mock NFT fetch - replace with Metaplex later
+        const mockNfts = [
+          { mint: 'ABC123', name: 'Pip-Boy Skin #47', image: 'https://via.placeholder.com/150/00ff41/000?text=NFT+47' },
+          { mint: 'DEF456', name: 'Vault 77 Helmet', image: 'https://via.placeholder.com/150/00ff41/000?text=Helmet' }
+        ];
+
+        nftGrid.innerHTML = '';
+        mockNfts.forEach(nft => {
+          const card = document.createElement('div');
+          card.className = 'nft-card';
+          card.innerHTML = `
+            <img src="${nft.image}" alt="${nft.name}">
+            <p>${nft.name}</p>
+          `;
+          card.onclick = () => promptAndListNft(nft);
+          nftGrid.appendChild(card);
+        });
+
+        nftSelector.classList.remove('hidden');
+      } catch (err) {
+        alert('Failed to load NFTs');
+      }
+    });
+
+    // Prompt & list selected NFT
+    async function promptAndListNft(nft) {
+      const price = prompt(`Price in FIZZ for ${nft.name}?`, "1.25");
+      if (!price) return;
+
+      const desc = prompt("Description:", "");
+
+      try {
+        const message = `List NFT ${nft.mint} for ${price} FIZZ - ${desc}`;
+        const signed = await window.solana.signMessage(new TextEncoder().encode(message), "utf8");
+
+        const res = await fetch('/api/post-nft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            wallet: connectedWallet,
+            nftMint: nft.mint,
+            priceFizz: price,
+            description: desc,
+            signature: bs58.encode(signed.signature)
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          alert(`NFT listed! ID: ${data.listingId}`);
+          loadTrades();
+        } else {
+          alert('Failed to list: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Signing failed');
+      }
+    }
+
+    // Load trades on page load
+    loadTrades();
   </script>
 </body>
 </html>
