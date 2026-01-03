@@ -1,297 +1,287 @@
-/* public/css/pipboy.css - Fixed for current HTML structure */
+/* Pip-Boy CSS – Fallout-inspired layout for Atomic Fizz Caps (2026) */
+/* Fonts: VT323 (monospace terminal), Press Start 2P (pixel titles) */
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); /* Added for pip-main-title */
-
+/* Global resets & CRT theme */
 * {
+  box-sizing: border-border;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  font-family: 'VT323', monospace;
 }
 
 body {
-  background: #000;
-  font-family: 'VT323', monospace;
-  color: #00ff66;
-  height: 100vh;
+  background: #0a1f0a; /* Dark green wasteland */
+  color: #00ff41; /* Pip-Boy green */
   overflow: hidden;
+  font-size: 16px;
 }
 
-/* Scan effects (CRT overlay + glow) */
-.scan-overlay {
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
-  pointer-events: none;
-  z-index: 100;
-}
-
-.scan-glow {
+/* Boot Screen */
+#bootScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background: #000;
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  height: 100px;
-  background: linear-gradient(to bottom, transparent, rgba(0, 255, 102, 0.1), transparent);
-  pointer-events: none;
-  z-index: 98;
-  opacity: 0;
-  transform: translateY(-100%);
-  transition: all 1.5s ease-out;
+  z-index: 10000;
 }
 
-.scan-glow.active {
-  opacity: 1;
-  transform: translateY(100vh);
-}
-
-/* CRT effect for screen */
-.crt {
+.boot-inner {
+  width: 80%;
+  max-width: 800px;
+  height: 60%;
+  background: rgba(0, 255, 65, 0.05); /* Subtle green glow */
+  border: 2px solid #00ff41;
+  padding: 20px;
   position: relative;
   overflow: hidden;
 }
-.crt::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: repeating-linear-gradient(0deg, transparent, rgba(0,0,0,0.05) 1px, transparent 2px);
-  pointer-events: none;
-}
 
-/* Layout utilities (from your inline <style>) */
-.pipboy-shell { display: flex; align-items: stretch; justify-content: center; }
-.pipboy-screen { width: 100%; height: 100%; display: flex; flex-direction: column; gap: 10px; }
-.main-grid { display: grid; grid-template-columns: 320px 1fr; gap: 12px; align-items: start; height: calc(100% - 120px); }
-.sidebar { background: rgba(0,8,0,0.92); padding: 12px; border-radius: 10px; overflow: auto; min-height: 0; }
-.main { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
-.map-container { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0,255,102,0.06); background: #000; flex: 1 1 auto; min-height: 320px; }
-#map { width: 100%; height: 100%; display: block; }
-.tabs { display: flex; gap: 8px; justify-content: center; align-items: center; pointer-events: auto; }
-.tab { cursor: pointer; padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(0,255,102,0.06); user-select: none; }
-.tab:focus { outline: 2px solid rgba(255,204,51,0.6); outline-offset: 2px; }
-.tab.active { background: rgba(0,255,102,0.1); border-color: #00ff66; color: #66ffaa; }
-/* bottom drawer sits inside map container and overlays map */
-#bottom-drawer { position: absolute; left: 0; right: 0; bottom: 0; height: 140px; transform: translateY(0); transition: transform .24s ease; display: flex; align-items: center; gap: 12px; padding: 10px; z-index: 95; background: rgba(0,20,0,0.95); border-top: 2px solid #00ff66; border-radius: 12px 12px 0 0; }
-#bottom-drawer.hidden { transform: translateY(calc(100% - 18px)); pointer-events: none; }
-.drawer-handle { height: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.drawer-handle::before { content: ""; width: 56px; height: 4px; background: rgba(255,255,255,0.06); border-radius: 3px; display: block; }
-/* small responsive adjustments */
-@media (max-width:900px) {
-  .main-grid { grid-template-columns: 1fr; grid-auto-rows: auto 1fr; }
-  .sidebar { order: 3; }
-  .main { order: 2; }
-}
-
-/* Boot screen */
-#bootScreen {
-  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 120;
-}
-.boot-inner {
-  max-width: 800px; width: 90%; border: 2px solid #00ff66; padding: 16px; background: #000;
-}
 #bootText {
-  margin: 0; color: #00ff66; font-family: VT323, monospace; font-size: 16px; line-height: 1.4;
+  white-space: pre;
+  font-size: 18px;
+  line-height: 1.2;
+  color: #00ff41;
+  text-shadow: 0 0 5px #00ff41;
 }
+
 #bootPrompt {
-  margin-top: 12px; font-size: 18px; text-align: center; animation: blink 1.2s infinite steps(2,start);
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-size: 16px;
+  text-shadow: 0 0 5px #00ff41;
+  animation: blink 1s step-start infinite;
 }
 
-/* Header */
-.pip-header {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 0.5rem 1rem; background: rgba(0, 20, 0, 0.6); border-radius: 12px; border: 1px solid rgba(0, 255, 102, 0.2);
-}
-.pip-title {
-  display: flex; flex-direction: column;
-}
-.pip-main-title {
-  font-family: 'Press Start 2P', VT323, monospace; font-size: 20px; color: #66ffaa;
-}
-.pip-sub-title {
-  font-size: 12px; opacity: 0.85;
-}
-.pip-controls {
-  display: flex; gap: 8px; align-items: center;
+@keyframes blink {
+  50% { opacity: 0; }
 }
 
-/* Overseer link */
-.overseer-link {
-  position: absolute; top: 4px; right: 4px; font-size: 12px; color: #66ffaa; text-decoration: none; opacity: 0.7;
-}
-.overseer-link:hover { opacity: 1; }
-
-/* Status */
-.status {
-  font-size: 12px; opacity: 0.7; text-align: center; margin-bottom: 6px;
-}
-.status-good { color: #66ffaa; }
-
-/* HUD */
-.hud {
-  display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 6px;
-}
-.hud-block {
-  padding: 4px 8px; background: rgba(0,20,0,0.6); border-radius: 6px; border: 1px solid rgba(0,255,102,0.08); font-size: 12px;
-}
-.hud-block strong { color: #66ffaa; }
-.hp-bar {
-  width: 160px; height: 10px; background: rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden; border: 1px solid rgba(0,255,102,0.04);
-}
-.hp-fill {
-  width: 100%; height: 100%; background: linear-gradient(90deg, #00ff66, #66ffaa);
-}
-.hp-text {
-  font-size: 12px;
-}
-.xp-bar {
-  width: 120px; height: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden; border: 1px solid rgba(0,255,102,0.04);
-}
-.xp-fill {
-  width: 0%; height: 100%; background: linear-gradient(90deg, #66ffaa, #00ff66);
-}
-.xp-text {
-  font-size: 12px;
-}
-
-/* Sidebar content */
-.sidebar div { display: flex; flex-direction: column; gap: 8px; }
-.sidebar hr { border: none; border-top: 1px solid rgba(0,255,102,0.04); margin: 10px 0; }
-#nearbyList { list-style: none; padding: 0; margin: 0; font-size: 13px; color: rgba(102,255,170,0.9); }
-
-/* Map extras */
-#mapModeBtn { /* Positioned via inline div - style as .btn */ }
-.static-noise {
-  pointer-events: none; position: absolute; inset: 0; background-image: url('/assets/static-noise.png'); opacity: 0.06; mix-blend-mode: screen;
-}
-.gps-badge {
-  position: absolute; left: 12px; bottom: calc(140px + 18px); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(0,255,102,0.06); background: rgba(0,20,0,0.9); z-index: 90;
-}
-.acc-dot {
-  width: 10px; height: 10px; border-radius: 50%; background: #ffaa00; margin-right: 8px; display: inline-block;
-}
-.acc-dot.acc-good { background: #00ff66; box-shadow: 0 0 6px #00ff66; }
-#accText { display: inline-block; font-size: 12px; color: var(--pip-accent, #66ffaa); }
-.gps-btn { position: absolute; right: 12px; bottom: calc(140px + 18px); z-index: 90; }
-
-/* Drawer content */
-.drawer-content {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
-}
-.drawer-left { display: flex; gap: 8px; align-items: center; }
-.drawer-right { display: flex; align-items: center; gap: 8px; }
-
-/* Drawer tabs and panels (from added div at end) */
-.drawer-tabs {
-  display: flex; gap: 4px; margin-bottom: 8px;
-}
-.drawer-tabs button {
-  padding: 4px 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(0,255,102,0.1); border-radius: 6px; color: #00ff66; cursor: pointer; font-size: 12px;
-}
-.drawer-tabs button.active { background: rgba(0,255,102,0.2); border-color: #00ff66; }
-.drawer-panels .panel { display: none; }
-.drawer-panels .panel.active { display: block; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 6px; }
-
-/* Overseer terminal */
-#overseer-terminal {
-  display: none; position: absolute; left: 12px; right: 12px; bottom: calc(140px + 12px); z-index: 110;
-}
-.terminal-inner {
-  padding: 12px; border-radius: 8px; border: 1px solid #00ff66; background: rgba(0,10,0,0.98);
-}
-.terminal-close { position: absolute; top: 4px; right: 4px; padding: 2px 6px; }
-.terminal-body { font-size: 14px; }
-
-/* Modals */
-.modal {
-  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); z-index: 200;
-}
-.modal.hidden { display: none !important; }
-.modal-inner {
-  background: rgba(0,20,0,0.9); border: 2px solid #00ff66; padding: 16px; border-radius: 10px; max-width: 400px; text-align: center;
-}
-.modal-title { font-size: 18px; margin-bottom: 12px; }
-.modal-text { font-size: 14px; margin-bottom: 12px; }
-.modal-text p { margin: 4px 0; }
-.modal-progress { background: rgba(0,0,0,0.3); border-radius: 6px; overflow: hidden; height: 8px; margin-bottom: 12px; }
-.modal-progress-fill { height: 100%; transition: width 0.3s; }
-
-/* Buttons (general + variants) */
-.btn {
-  padding: 6px 12px; background: rgba(0,255,102,0.1); border: 1px solid #00ff66; border-radius: 6px; color: #00ff66; cursor: pointer; font-family: 'VT323', monospace; font-size: 14px;
-}
-.btn:hover { filter: brightness(1.2); }
-.btn:active { transform: translateY(1px); }
-.danger-btn { border-color: #ff4444; color: #ff4444; background: rgba(255,68,68,0.1); }
-.wallet-btn { /* Specific if needed */ }
-.pip-btn { /* For drawer buttons */ }
-.gps-btn { /* For REQUEST GPS */ }
-.terminal-close { padding: 2px 6px; }
-
-/* Animations */
-@keyframes blink { 0%,49% { opacity: 0; } 50%,100% { opacity: 1; } }
-.blink { animation: blink 1s infinite; }
-
-/* Hidden class */
-.hidden { display: none !important; }
-
-/* Force Pip-Boy shell visible after boot */
+/* Pip-Boy Shell (Main UI) */
 #pipboyScreen {
-  display: none; /* default */
+  display: none; /* Hidden by default */
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  background: #0a1f0a;
+  overflow: auto;
 }
 
 #pipboyScreen:not(.hidden) {
   display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  z-index: 1000 !important; /* above everything */
 }
 
-/* If drawer is separate */
+.pipboy-shell {
+  height: 100%;
+  padding: 10px;
+  position: relative;
+}
+
+/* CRT Effect (Scan lines, static, glow) */
+.pipboy-shell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(to bottom, transparent 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); /* Scan lines */
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.5;
+}
+
+.pipboy-shell::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==') repeat; /* Subtle static noise */
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.05;
+  animation: static 0.5s infinite;
+}
+
+@keyframes static {
+  0% { opacity: 0.05; }
+  50% { opacity: 0.1; }
+  100% { opacity: 0.05; }
+}
+
+/* Header */
+.pip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.pip-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 24px;
+  text-shadow: 0 0 5px #00ff41;
+}
+
+.pip-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  background: #00ff41;
+  color: #000;
+  border: 2px solid #00ff41;
+  padding: 5px 10px;
+  cursor: pointer;
+  text-shadow: 0 0 3px #000;
+}
+
+.btn:hover {
+  background: #000;
+  color: #00ff41;
+  text-shadow: 0 0 5px #00ff41;
+  box-shadow: 0 0 10px #00ff41;
+}
+
+/* HUD Bars */
+.hud {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.hud-block {
+  font-size: 14px;
+  text-shadow: 0 0 3px #00ff41;
+}
+
+.hp-bar, .xp-bar {
+  width: 100px;
+  height: 10px;
+  background: #000;
+  border: 1px solid #00ff41;
+  position: relative;
+}
+
+.hp-fill, .xp-fill {
+  height: 100%;
+  background: #00ff41;
+  box-shadow: 0 0 5px #00ff41;
+}
+
+/* Main Grid (Sidebar + Map) */
+.main-grid {
+  display: flex;
+  height: calc(100vh - 100px); /* Adjust for header/HUD */
+}
+
+.sidebar {
+  width: 200px;
+  background: rgba(0, 255, 65, 0.1);
+  padding: 10px;
+  border-right: 1px solid #00ff41;
+}
+
+.main {
+  flex: 1;
+  position: relative;
+}
+
+.map-container {
+  height: 100%;
+  position: relative;
+}
+
+/* Map (Leaflet Integration) */
+#map {
+  height: 100%;
+  filter: hue-rotate(120deg) saturate(0.5) brightness(1.2); /* Green CRT tint */
+}
+
+.map-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+/* Bottom Drawer & Tabs */
 #bottom-drawer {
-  z-index: 1001 !important;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 255, 65, 0.2);
+  border-top: 2px solid #00ff41;
+  z-index: 1001;
 }
 
-/* Ensure map container doesn't cover UI */
-.map-container, #map {
-  z-index: 1 !important;
-  pointer-events: auto;
+.drawer-handle {
+  cursor: pointer;
+  text-align: center;
+  padding: 5px;
+  background: #00ff41;
+  color: #000;
 }
 
-.leaflet-container {
-  background: #0a1f0a !important; /* dark green fallback */
+.drawer-content {
+  display: flex;
+  padding: 10px;
 }
 
-/* DEBUG: Make sure NOTHING blocks clicks */
-#pipboyScreen, .pipboy-shell, .main-grid, .map-container, .tabs, .drawer-content, button {
-  pointer-events: auto !important;
-  z-index: 10 !important; /* higher than overlays */
+.drawer-tabs {
+  display: flex;
+  gap: 10px;
 }
 
-/* Force overlays behind */
-.static-noise, .gps-badge, .top-overlay, .leaflet-container {
-  pointer-events: none !important;
-  z-index: 1 !important;
+.tab {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  padding: 5px 10px;
+  background: #000;
+  color: #00ff41;
+  border: 1px solid #00ff41;
+  cursor: pointer;
 }
 
-/* Make buttons glow when hovered (visual proof) */
-button:hover {
-  outline: 3px solid #00ff66 !important;
-  box-shadow: 0 0 15px #00ff66 !important;
+.tab.active {
+  background: #00ff41;
+  color: #000;
 }
 
-/* Force clicks through to buttons */
-#pipboyScreen, .pipboy-shell, .main-grid, .tabs, .drawer-content, button {
-  pointer-events: auto !important;
-  z-index: 10 !important;
+/* Panels (hidden by default) */
+.drawer-panels .panel {
+  display: none;
 }
 
-.static-noise, .gps-badge, .leaflet-container {
-  pointer-events: none !important;
-  z-index: 1 !important;
+.drawer-panels .panel.active {
+  display: block;
 }
 
-/* Visual proof: buttons glow on hover */
-button:hover {
-  box-shadow: 0 0 15px #00ff66 !important;
-  transform: scale(1.05);
+/* Responsive for Mobile */
+@media (max-width: 768px) {
+  .main-grid {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #00ff41;
+  }
+
+  #map {
+    height: 300px; /* Adjust for smaller screens */
+  }
 }
