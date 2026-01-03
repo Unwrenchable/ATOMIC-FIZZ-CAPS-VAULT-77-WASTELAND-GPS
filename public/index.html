@@ -3,30 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <title>ATOMIC FIZZ CAPS • WASTELAND GPS</title>
+
+  <!-- CSP - kept exactly as you had it -->
   <meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 'sha256-knV59OylGCMUSLMIdwmcnoLKGBWKJTQUzPHVIDUiduo=';
-  connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss:;
-  style-src 'self' 'unsafe-inline' https://unpkg.com;
-  img-src 'self' data: https:;
-  font-src 'self' https://fonts.gstatic.com;">
+    default-src 'self';
+    script-src 'self' https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 'sha256-knV59OylGCMUSLMIdwmcnoLKGBWKJTQUzPHVIDUiduo=';
+    connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss:;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https:;
+    font-src 'self' https://fonts.gstatic.com;">
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png+xml" href="/favicon.png" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
 
-  <!-- Leaflet -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
+  <!-- === LOCAL LEAFLET FILES (recommended) === -->
+  <link rel="stylesheet" href="/css/leaflet.css" />
+  <!-- Optional: minified version for production -->
+  <!-- <link rel="stylesheet" href="/css/leaflet.min.css" /> -->
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
 
-  <!-- Your Pip-Boy CSS (all styles live here now) -->
+  <!-- Your Pip-Boy CSS -->
   <link rel="stylesheet" href="/css/pipboy.css" />
 </head>
 <body>
@@ -196,7 +196,24 @@
   </div>
 
   <!-- SCRIPTS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- === LOCAL LEAFLET (minified version recommended) === -->
+  <script src="/js/leaflet.js"></script>
+  <!-- Optional minified: <script src="/js/leaflet.min.js"></script> -->
+
+  <!-- Fix default marker icons path (VERY IMPORTANT) -->
+  <script>
+    // This tells Leaflet where your local marker images are
+    delete L.Icon.Default.prototype._getIconUrl;
+
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: '/images/marker-icon-2x.png',
+      iconUrl: '/images/marker-icon.png',
+      shadowUrl: '/images/marker-shadow.png'
+    });
+  </script>
+
+  <!-- Solana & bs58 -->
   <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
   <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
 
@@ -205,14 +222,14 @@
   <script src="/js/map-core.js"></script>
   <script src="/js/main.js"></script>
 
-  <!-- UI wiring (tabs, drawer, boot) - unchanged -->
+  <!-- UI wiring (tabs, drawer, boot) -->
   <script>
     (function(){
       // ... your existing small UI script remains exactly the same ...
     })();
   </script>
 
-  <!-- Drawer tabs/panels (moved inside body as you had it) -->
+  <!-- Drawer tabs/panels -->
   <div id="bottom-drawer">
     <div class="drawer-tabs">
       <button data-tab="stats">Stats</button>
@@ -238,4 +255,3 @@
 
 </body>
 </html>
-
