@@ -1,4 +1,4 @@
-// public/js/main.js - Fixed and Complete with Drawer Inner Tabs Switching
+// public/js/main.js - Fixed, Complete, and Drawer Tabs Fully Wired (January 2026)
 (function () {
   'use strict';
 
@@ -52,7 +52,7 @@
 
   async function loadAllData() {
     const files = ['locations', 'quests', 'mintables', 'scavenger', 'settings'];
-    
+
     for (const name of files) {
       try {
         let data = await loadJson(`${CONFIG.apiBase}/${name}`);
@@ -67,57 +67,85 @@
         safeWarn(`Failed to load ${name}:`, e);
       }
     }
-    
+
+    // Ensure arrays/objects
     window.DATA.locations = Array.isArray(window.DATA.locations) ? window.DATA.locations : [];
     window.DATA.quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
     window.DATA.mintables = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
     window.DATA.scavenger = Array.isArray(window.DATA.scavenger) ? window.DATA.scavenger : [];
+    window.DATA.settings = window.DATA.settings || {};
   }
 
-  /* Map initialization */
+  /* Map initialization - with guard against duplicate init */
   function initMap() {
-  if (typeof L === 'undefined') {
-    safeError('Leaflet not loaded');
-    return;
-  }
-
-  mapEl = document.getElementById('map');
-  if (!mapEl) {
-    safeWarn('Map element not found');
-    return;
-  }
-
-  // Prevent reinitialization error
-  if (mapEl._leaflet_id) {
-    safeLog('Map already initialized - skipping creation');
-    if (map && map.invalidateSize) {
-      setTimeout(() => map.invalidateSize(), 200);
+    if (typeof L === 'undefined') {
+      safeError('Leaflet not loaded');
+      return;
     }
-    return;
+
+    mapEl = document.getElementById('map');
+    if (!mapEl) {
+      safeWarn('Map element not found');
+      return;
+    }
+
+    // Guard: prevent reinitialization
+    if (mapEl._leaflet_id) {
+      safeLog('Map already initialized - skipping creation, only invalidate size');
+      if (map && map.invalidateSize) {
+        setTimeout(() => map.invalidateSize(), 200);
+      }
+      return;
+    }
+
+    try {
+      map = L.map(mapEl, {
+        center: CONFIG.defaultCenter,
+        zoom: CONFIG.defaultZoom,
+        zoomControl: true,
+        attributionControl: false
+      });
+
+      window.map = map;
+      window._map = map;
+
+      // OSM layer
+      osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+      });
+
+      // Carto Dark layer (fallback)
+      cartoDarkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 20,
+        attribution: '© OpenStreetMap © Carto'
+      });
+
+      currentMapLayer = cartoDarkLayer || osmLayer;
+      if (currentMapLayer) currentMapLayer.addTo(map);
+
+      // Add location markers (if data exists)
+      if (Array.isArray(window.DATA.locations)) {
+        window.DATA.locations.forEach(loc => {
+          if (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number') {
+            const marker = L.marker([loc.lat, loc.lng]);
+            if (loc.n || loc.name) {
+              marker.bindPopup(`<strong>${loc.n || loc.name}</strong><br>Level: ${loc.lvl || 1}`);
+            }
+            marker.addTo(map);
+          }
+        });
+      }
+
+      setTimeout(() => {
+        if (map && map.invalidateSize) map.invalidateSize();
+      }, 300);
+
+      safeLog('Map initialized successfully');
+    } catch (e) {
+      safeError('Map initialization failed:', e);
+    }
   }
-
-  try {
-    map = L.map(mapEl, {
-      center: CONFIG.defaultCenter,
-      zoom: CONFIG.defaultZoom,
-      zoomControl: true,
-      attributionControl: false
-    });
-
-    window.map = map;
-    window._map = map;
-
-    // ... rest of your layer/marker code remains the same ...
-
-    setTimeout(() => {
-      if (map && map.invalidateSize) map.invalidateSize();
-    }, 300);
-
-    safeLog('Map initialized successfully');
-  } catch (e) {
-    safeError('Map initialization failed:', e);
-  }
-}
 
   /* Geolocation */
   function startGeolocationWatch() {
@@ -154,9 +182,7 @@
           }
         }
       },
-      (err) => {
-        safeWarn('Geolocation error:', err);
-      },
+      (err) => safeWarn('Geolocation error:', err),
       {
         enableHighAccuracy: true,
         maximumAge: 5000,
@@ -176,7 +202,7 @@
     try {
       await provider.connect();
       const addr = provider.publicKey.toBase58();
-      
+
       const btn = document.getElementById('connectWallet');
       if (btn) {
         btn.textContent = `${addr.slice(0, 4)}...${addr.slice(-4)}`;
@@ -188,128 +214,119 @@
     }
   }
 
-  /* UI Initialization - now includes drawer inner tabs switching */
+  /* UI Initialization - Cleaned up, no duplicates */
   function initUI() {
-    // Connect wallet button
-    const walletBtn = document.getElementById('connectWallet');
-    if (walletBtn) {
-      walletBtn.addEventListener('click', connectWallet);
+    // Prevent multiple bindings (idempotent)
+    const bound = new Set();
+
+    function once(id, fn) {
+      if (bound.has(id)) return;
+      bound.add(id);
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('click', fn);
     }
 
-    // Request GPS button
-    const gpsBtn = document.getElementById('requestGpsBtn');
-    if (gpsBtn) {
-      gpsBtn.addEventListener('click', () => {
-        startGeolocationWatch();
-        gpsBtn.style.display = 'none';
-      });
-    }
+    // Wallet
+    once('connectWallet', connectWallet);
 
-    // Center map button
-    const centerBtn = document.getElementById('centerBtn');
-    if (centerBtn) {
-      centerBtn.addEventListener('click', () => {
-        if (map && _lastPlayerPosition) {
-          map.setView([_lastPlayerPosition.lat, _lastPlayerPosition.lng], 15);
-        }
-      });
-    }
+    // GPS request
+    once('requestGpsBtn', () => {
+      startGeolocationWatch();
+      const btn = document.getElementById('requestGpsBtn');
+      if (btn) btn.style.display = 'none';
+    });
 
-    // Recenter Mojave button
-    const mojaveBtn = document.getElementById('recenterMojave');
-    if (mojaveBtn) {
-      mojaveBtn.addEventListener('click', () => {
-        if (map) {
-          map.setView(CONFIG.defaultCenter, CONFIG.defaultZoom);
-        }
-      });
-    }
+    // Center buttons
+    once('centerBtn', () => {
+      if (map && _lastPlayerPosition) {
+        map.setView([_lastPlayerPosition.lat, _lastPlayerPosition.lng], 15);
+      }
+    });
 
-    // Map mode button
-    const mapModeBtn = document.getElementById('mapModeBtn');
-    if (mapModeBtn) {
-      mapModeBtn.addEventListener('click', () => {
-        if (!map) return;
-        
-        try {
-          if (currentMapLayer) map.removeLayer(currentMapLayer);
-          currentMapLayer = (currentMapLayer === cartoDarkLayer) ? osmLayer : cartoDarkLayer;
-          if (currentMapLayer) currentMapLayer.addTo(map);
-          setTimeout(() => {
-            if (map && map.invalidateSize) map.invalidateSize();
-          }, 150);
-        } catch (e) {
-          safeWarn('Map mode switch failed:', e);
-        }
-      });
-    }
+    once('recenterMojave', () => {
+      if (map) map.setView(CONFIG.defaultCenter, CONFIG.defaultZoom);
+    });
 
-    // Outer bottom drawer toggle
+    // Map mode toggle
+    once('mapModeBtn', () => {
+      if (!map) return;
+      try {
+        if (currentMapLayer) map.removeLayer(currentMapLayer);
+        currentMapLayer = currentMapLayer === cartoDarkLayer ? osmLayer : cartoDarkLayer;
+        if (currentMapLayer) currentMapLayer.addTo(map);
+        setTimeout(() => map?.invalidateSize?.(), 150);
+      } catch (e) {
+        safeWarn('Map mode switch failed:', e);
+      }
+    });
+
+    // Drawer outer toggle (only one listener)
     const drawer = document.getElementById('bottom-drawer');
     const drawerToggle = document.getElementById('drawer-toggle');
-    if (drawer && drawerToggle) {
+    if (drawer && drawerToggle && !bound.has('drawer-toggle')) {
+      bound.add('drawer-toggle');
       drawerToggle.addEventListener('click', () => {
         drawer.classList.toggle('hidden');
-        setTimeout(() => {
-          if (map && map.invalidateSize) map.invalidateSize();
-        }, 260);
+        setTimeout(() => map?.invalidateSize?.(), 260);
       });
     }
 
     // Tutorial modal
     const tutorialModal = document.getElementById('tutorialModal');
-    const tutorialClose = document.getElementById('tutorialClose');
-    const openTutorial = document.getElementById('openTutorial');
-    if (tutorialClose && tutorialModal) {
-      tutorialClose.addEventListener('click', () => {
+    once('tutorialClose', () => {
+      if (tutorialModal) {
         tutorialModal.classList.add('hidden');
         tutorialModal.style.display = 'none';
-      });
-    }
-    if (openTutorial && tutorialModal) {
-      openTutorial.addEventListener('click', () => {
+      }
+    });
+    once('openTutorial', () => {
+      if (tutorialModal) {
         tutorialModal.classList.remove('hidden');
         tutorialModal.style.display = 'flex';
-      });
-    }
+      }
+    });
 
-    // === NEW: Inner drawer tabs switching (Stats, Items, Quests, etc.) ===
+    // === Inner drawer tabs switching (clean, no duplicates) ===
     const drawerTabs = document.querySelectorAll('.drawer-tabs button');
     drawerTabs.forEach(tab => {
+      const tabId = `tab-${tab.dataset.tab}`;
+      if (bound.has(tabId)) return;
+      bound.add(tabId);
+
       tab.addEventListener('click', () => {
-        // Deactivate all tabs
         drawerTabs.forEach(t => t.classList.remove('active'));
-        // Activate clicked tab
         tab.classList.add('active');
 
-        // Hide all panels
-        document.querySelectorAll('.drawer-panels .panel').forEach(panel => {
-          panel.classList.remove('active');
-          panel.style.display = 'none';
+        document.querySelectorAll('.drawer-panels .panel').forEach(p => {
+          p.classList.remove('active');
+          p.style.display = 'none';
         });
 
-        // Show the corresponding panel
         const panelId = `panel-${tab.dataset.tab}`;
-        const targetPanel = document.getElementById(panelId);
-        if (targetPanel) {
-          targetPanel.classList.add('active');
-          targetPanel.style.display = 'block';
+        const target = document.getElementById(panelId);
+        if (target) {
+          target.classList.add('active');
+          target.style.display = 'block';
         }
 
-        // Optional: log for debugging
         safeLog(`Drawer tab switched to: ${tab.dataset.tab}`);
+        // Optional: resize map if map tab
+        if (tab.dataset.tab === 'map' && map) {
+          setTimeout(() => map.invalidateSize(), 200);
+        }
       });
     });
 
-    // Activate first tab by default (e.g. Stats)
-    if (drawerTabs.length > 0) {
+    // Activate first tab by default (Stats or whatever is first)
+    if (drawerTabs.length > 0 && !bound.has('default-tab')) {
+      bound.add('default-tab');
       drawerTabs[0].click();
     }
 
-    safeLog('UI initialized (with drawer inner tabs)');
+    safeLog('UI initialized (drawer tabs wired, no duplicates)');
   }
 
-  /* Main initialization */
+  /* Main game initialization */
   async function initGame() {
     if (_gameInitialized || _gameInitializing) return;
     _gameInitializing = true;
@@ -343,15 +360,15 @@
     safeLog('Map ready event received');
   });
 
-  // Fallback initialization
+  // Fallback init
   setTimeout(() => {
     if (!_gameInitialized && !_gameInitializing) {
-      safeLog('Starting fallback initialization');
+      safeLog('Fallback initialization triggered');
       initGame();
     }
   }, 1500);
 
-  /* Expose for debugging */
+  /* Debugging helpers */
   window.__pipboy = {
     reinit: () => {
       _gameInitialized = false;
@@ -363,4 +380,3 @@
   };
 
 })();
-
