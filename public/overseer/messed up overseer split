@@ -1,0 +1,3482 @@
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>TERMINAL // RESTRICTED ACCESS</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <!-- Shared Terminal Styles -->
+  <link rel="stylesheet" href="/css/terminal.css" />
+
+  <!-- Inline CRT + Layout Enhancements -->
+  <style>
+    body {
+      background: #000;
+      color: #00ff41;
+      font-family: 'VT323', monospace;
+      overflow: hidden;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      image-rendering: pixelated;
+    }
+
+    #terminal {
+      position: relative;
+      height: 100%;
+      padding: 1rem;
+      box-sizing: border-box;
+      background:
+        linear-gradient(rgba(0,255,65,0.03) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(0,255,65,0.03) 2px, transparent 2px);
+      background-size: 100% 4px, 4px 100%;
+      animation: crt-flicker 0.15s infinite alternate;
+    }
+
+    @keyframes crt-flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.98; }
+    }
+
+    .back {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: #00ff41;
+      text-decoration: none;
+      font-size: 1.2rem;
+      z-index: 10;
+    }
+
+    .back:hover {
+      text-shadow: 0 0 10px #00ff41;
+    }
+
+    .header {
+      text-align: center;
+      margin-top: 40px;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2rem;
+      text-shadow: 0 0 8px #00ff41;
+    }
+
+    .header .sub {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    #chat {
+      height: calc(100% - 120px);
+      overflow-y: auto;
+      padding-bottom: 1rem;
+    }
+
+    #inputRow {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    #input {
+      flex: 1;
+      padding: 12px;
+      font-size: 1.3rem;
+      background: #000;
+      color: #00ff41;
+      border: 2px solid #00ff41;
+      font-family: 'VT323', monospace;
+    }
+
+    #send {
+      padding: 12px 20px;
+      background: #001100;
+      color: #00ff41;
+      border: 2px solid #00ff41;
+      cursor: pointer;
+      font-family: 'VT323', monospace;
+    }
+
+    #send:hover {
+      background: #002200;
+      box-shadow: 0 0 15px #00ff41;
+    }
+
+    /* Red Menace Controls */
+    #rmControls {
+      display: none;
+      position: absolute;
+      bottom: 80px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 10;
+    }
+
+    #rmControls .btn {
+      font-size: 32px;
+      padding: 15px;
+      margin: 10px;
+      background: #001100;
+      color: #00ff41;
+      border: 2px solid #00ff41;
+      cursor: pointer;
+    }
+
+    #rmControls .btn:hover {
+      background: #002200;
+      box-shadow: 0 0 15px #00ff41;
+    }
+
+    /* Mobile Game Controls */
+    .mgc {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 20, 0, 0.8);
+      border-top: 2px solid #00ff41;
+      padding: 10px;
+    }
+
+    .mgc.hidden {
+      display: none;
+    }
+
+    .mgc-header {
+      text-align: center;
+      margin-bottom: 5px;
+      font-size: 1.2rem;
+    }
+
+    .mgc-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .mgc-dpad {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dpad-btn {
+      background: #001100;
+      color: #00ff41;
+      border: 2px solid #00ff41;
+      padding: 10px;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .dpad-btn:hover {
+      background: #002200;
+      box-shadow: 0 0 10px #00ff41;
+    }
+
+  </style>
+</head>
+
+<body>
+  <a href="/" class="back">← RETURN TO GAME</a>
+
+  <div class="header">
+    <h1>RESTRICTED TERMINAL</h1>
+    <div class="sub">SIGNAL STRENGTH: WEAK // CLASSIFIED</div>
+  </div>
+
+  <div id="terminal">
+    <div id="chat"></div>
+
+    <div id="inputRow">
+      <input id="input" type="text" placeholder="> Type message..." autocomplete="off" autofocus />
+      <button id="send">SEND</button>
+    </div>
+
+    <!-- Red Menace Controls -->
+    <div id="rmControls">
+      <button id="rmLeft" class="btn">←</button>
+      <button id="rmFire" class="btn">FIRE</button>
+      <button id="rmRight" class="btn">→</button>
+    </div>
+  </div>
+
+  <!-- Mobile Game Controls -->
+  <div id="mobileGameControls" class="mgc hidden" aria-hidden="true">
+    <div class="mgc-header" id="mgcHeader"></div>
+    <div class="mgc-row mgc-generic" id="mgcGeneric"></div>
+
+    <div class="mgc-dpad" id="mgcDpad">
+      <button class="dpad-btn" data-dir="north">▲</button>
+      <div class="dpad-mid">
+        <button class="dpad-btn" data-dir="west">◀</button>
+        <button class="dpad-btn" data-dir="east">▶</button>
+      </div>
+      <button class="dpad-btn" data-dir="south">▼</button>
+    </div>
+
+    <div class="mgc-numpad" id="mgcNumpad" aria-hidden="true">
+      <div class="numpad-display" id="numpadDisplay"></div>
+      <div class="numpad-keys">
+        <button class="nkey">1</button><button class="nkey">2</button><button class="nkey">3</button>
+        <button class="nkey">4</button><button class="nkey">5</button><button class="nkey">6</button>
+        <button class="nkey">7</button><button class="nkey">8</button><button class="nkey">9</button>
+        <button class="nkey">←</button><button class="nkey">0</button><button class="nkey">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overseer AI -->
+  <script src="/js/overseer.js"></script>
+</body>
+</html>
+
+{
+  "function": function () {
+  const gs = window.gameState;
+
+  const REGIONS = [
+    {
+      id: "mojave",
+      name: "Mojave Wasteland",
+      center: { lat: 36.1699, lng: -115.1398 },
+      radiusKm: 60,
+      mapStyle: "desert_ruins_explorer",
+    },
+    {
+      id: "rad_zone",
+      name: "Irradiated Basin",
+      center: { lat: 35.5, lng: -114.8 },
+      radiusKm: 40,
+      mapStyle: "rad_zone_red_ocean",
+    },
+    {
+      id: "vault_region",
+      name: "Vault Corridor",
+      center: { lat: 36.1, lng: -115.2 },
+      radiusKm: 20,
+      mapStyle: "vaulttec_blue_terminal",
+    },
+  ];
+
+  const POIS = [
+    {
+      id: "helios_one",
+      name: "HELIOS One",
+      lat: 36.068,
+      lng: -115.017,
+      radiusMeters: 150,
+      questTriggers: ["quest_echoes_dam_step2"],
+      itemTriggers: [],
+    },
+    {
+      id: "vault77",
+      name: "Vault 77 Entrance",
+      lat: 36.05,
+      lng: -115.2,
+      radiusMeters: 120,
+      questTriggers: ["quest_vault77_open"],
+      itemTriggers: ["vault77_keycard"],
+    },
+  ];
+
+  function haversineKm(a, b) {
+    const toRad = (d) => (d * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const s =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(s));
+  }
+
+  function getCurrentRegion() {
+    const pos = gs.player.position;
+    let best = null;
+    let bestDist = Infinity;
+
+    REGIONS.forEach((r) => {
+      const dist = haversineKm(pos, r.center);
+      if (dist < r.radiusKm && dist < bestDist) {
+        best = r;
+        bestDist = dist;
+      }
+    });
+
+    return best; // may be null
+  }
+
+  function getNearbyPOIs(maxDistanceMeters = 500) {
+    const pos = gs.player.position;
+    const out = [];
+
+    POIS.forEach((p) => {
+      const distKm = haversineKm(pos, { lat: p.lat, lng: p.lng });
+      const distM = distKm * 1000;
+      if (distM <= (p.radiusMeters || maxDistanceMeters)) {
+        out.push({ poi: p, distanceMeters: distM });
+      }
+    });
+
+    return out;
+  }
+
+  // Expose for map / quests / encounters
+  window.world = {
+    REGIONS,
+    POIS,
+    getCurrentRegion,
+    getNearbyPOIs,
+  };
+})();
+{
+  "function": function () {
+  const gs = window.gameState;
+
+  const REGIONS = [
+    {
+      id: "mojave",
+      name: "Mojave Wasteland",
+      center: { lat: 36.1699, lng: -115.1398 },
+      radiusKm: 60,
+      mapStyle: "desert_ruins_explorer",
+    },
+    {
+      id: "rad_zone",
+      name: "Irradiated Basin",
+      center: { lat: 35.5, lng: -114.8 },
+      radiusKm: 40,
+      mapStyle: "rad_zone_red_ocean",
+    },
+    {
+      id: "vault_region",
+      name: "Vault Corridor",
+      center: { lat: 36.1, lng: -115.2 },
+      radiusKm: 20,
+      mapStyle: "vaulttec_blue_terminal",
+    },
+  ];
+
+  const POIS = [
+    {
+      id: "helios_one",
+      name: "HELIOS One",
+      lat: 36.068,
+      lng: -115.017,
+      radiusMeters: 150,
+      questTriggers: ["quest_echoes_dam_step2"],
+      itemTriggers: [],
+    },
+    {
+      id: "vault77",
+      name: "Vault 77 Entrance",
+      lat: 36.05,
+      lng: -115.2,
+      radiusMeters: 120,
+      questTriggers: ["quest_vault77_open"],
+      itemTriggers: ["vault77_keycard"],
+    },
+  ];
+
+  function haversineKm(a, b) {
+    const toRad = (d) => (d * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const s =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(s));
+  }
+
+  function getCurrentRegion() {
+    const pos = gs.player.position;
+    let best = null;
+    let bestDist = Infinity;
+
+    REGIONS.forEach((r) => {
+      const dist = haversineKm(pos, r.center);
+      if (dist < r.radiusKm && dist < bestDist) {
+        best = r;
+        bestDist = dist;
+      }
+    });
+
+    return best; // may be null
+  }
+
+  function getNearbyPOIs(maxDistanceMeters = 500) {
+    const pos = gs.player.position;
+    const out = [];
+
+    POIS.forEach((p) => {
+      const distKm = haversineKm(pos, { lat: p.lat, lng: p.lng });
+      const distM = distKm * 1000;
+      if (distM <= (p.radiusMeters || maxDistanceMeters)) {
+        out.push({ poi: p, distanceMeters: distM });
+      }
+    });
+
+    return out;
+  }
+
+  // Expose for map / quests / encounters
+  window.world = {
+    REGIONS,
+    POIS,
+    getCurrentRegion,
+    getNearbyPOIs,
+  };
+})();
+
+(function () {
+  const gs = window.gameState;
+
+  const REGIONS = [
+    {
+      id: "mojave",
+      name: "Mojave Wasteland",
+      center: { lat: 36.1699, lng: -115.1398 },
+      radiusKm: 60,
+      mapStyle: "desert_ruins_explorer",
+    },
+    {
+      id: "rad_zone",
+      name: "Irradiated Basin",
+      center: { lat: 35.5, lng: -114.8 },
+      radiusKm: 40,
+      mapStyle: "rad_zone_red_ocean",
+    },
+    {
+      id: "vault_region",
+      name: "Vault Corridor",
+      center: { lat: 36.1, lng: -115.2 },
+      radiusKm: 20,
+      mapStyle: "vaulttec_blue_terminal",
+    },
+  ];
+
+  const POIS = [
+    {
+      id: "helios_one",
+      name: "HELIOS One",
+      lat: 36.068,
+      lng: -115.017,
+      radiusMeters: 150,
+      questTriggers: ["quest_echoes_dam_step2"],
+      itemTriggers: [],
+    },
+    {
+      id: "vault77",
+      name: "Vault 77 Entrance",
+      lat: 36.05,
+      lng: -115.2,
+      radiusMeters: 120,
+      questTriggers: ["quest_vault77_open"],
+      itemTriggers: ["vault77_keycard"],
+    },
+  ];
+
+  function haversineKm(a, b) {
+    const toRad = (d) => (d * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const s =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(s));
+  }
+
+  function getCurrentRegion() {
+    const pos = gs.player.position;
+    let best = null;
+    let bestDist = Infinity;
+
+    REGIONS.forEach((r) => {
+      const dist = haversineKm(pos, r.center);
+      if (dist < r.radiusKm && dist < bestDist) {
+        best = r;
+        bestDist = dist;
+      }
+    });
+
+    return best;
+  }
+
+  function getNearbyPOIs(maxDistanceMeters = 500) {
+    const pos = gs.player.position;
+    const out = [];
+
+    POIS.forEach((p) => {
+      const distKm = haversineKm(pos, { lat: p.lat, lng: p.lng });
+      const distM = distKm * 1000;
+      if (distM <= (p.radiusMeters || maxDistanceMeters)) {
+        out.push({ poi: p, distanceMeters: distM });
+      }
+    });
+
+    return out;
+  }
+
+  // Expose for map / quests / encounters
+  window.world = {
+    REGIONS,
+    POIS,
+    getCurrentRegion,
+    getNearbyPOIs,
+  };
+})();
+
+(function () {
+  const gs = window.gameState;
+
+  const REGIONS = [
+    {
+      id: "mojave",
+      name: "Mojave Wasteland",
+      center: { lat: 36.1699, lng: -115.1398 },
+      radiusKm: 60,
+      mapStyle: "desert_ruins_explorer",
+    },
+    {
+      id: "rad_zone",
+      name: "Irradiated Basin",
+      center: { lat: 35.5, lng: -114.8 },
+      radiusKm: 40,
+      mapStyle: "rad_zone_red_ocean",
+    },
+    {
+      id: "vault_region",
+      name: "Vault Corridor",
+      center: { lat: 36.1, lng: -115.2 },
+      radiusKm: 20,
+      mapStyle: "vaulttec_blue_terminal",
+    },
+  ];
+
+  const POIS = [
+    {
+      id: "helios_one",
+      name: "HELIOS One",
+      lat: 36.068,
+      lng: -115.017,
+      radiusMeters: 150,
+      questTriggers: ["quest_echoes_dam_step2"],
+      itemTriggers: [],
+    },
+    {
+      id: "vault77",
+      name: "Vault 77 Entrance",
+      lat: 36.05,
+      lng: -115.2,
+      radiusMeters: 120,
+      questTriggers: ["quest_vault77_open"],
+      itemTriggers: ["vault77_keycard"],
+    },
+  ];
+
+  function haversineKm(a, b) {
+    const toRad = (d) => (d * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const s =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(s));
+  }
+
+  function getCurrentRegion() {
+    const pos = gs.player.position;
+    let best = null;
+    let bestDist = Infinity;
+
+    REGIONS.forEach((r) => {
+      const dist = haversineKm(pos, r.center);
+      if (dist < r.radiusKm && dist < bestDist) {
+        best = r;
+        bestDist = dist;
+      }
+    });
+
+    return best;
+  }
+
+  function getNearbyPOIs(maxDistanceMeters = 500) {
+    const pos = gs.player.position;
+    const out = [];
+
+    POIS.forEach((p) => {
+      const distKm = haversineKm(pos, { lat: p.lat, lng: p.lng });
+      const distM = distKm * 1000;
+      if (distM <= (p.radiusMeters || maxDistanceMeters)) {
+        out.push({ poi: p, distanceMeters: distM });
+      }
+    });
+
+    return out;
+  }
+
+  window.world = {
+    REGIONS,
+    POIS,
+    getCurrentRegion,
+    getNearbyPOIs,
+  };
+})();
+
+
+
+window.gameState = {
+  player: {
+    level: 1,
+    hp: 100,
+    maxHp: 100,
+    caps: 0,
+    xp: 0,
+    position: { lat: 36.1699, lng: -115.1398 },
+    equipped: {
+      weapon: null,
+      armor: null,
+    },
+  },
+  inventory: {
+    weapons: [],
+    ammo: [],
+    armor: [],
+    consumables: [],
+    questItems: [],
+    misc: [],
+  },
+  quests: {
+    // questId -> { state, currentStepIndex }
+  },
+  encounters: {
+    active: null, // { encounter, enemyIndex, enemyHp[] }
+  },
+};
+
+window.ITEMS_DB = {
+  ammo: [
+    {
+      id: "5mm_round",
+      name: "5mm Round",
+      type: "ammo",
+      stack: true,
+    },
+    {
+      id: "mf_cell",
+      name: "Microfusion Cell",
+      type: "ammo",
+      stack: true,
+    },
+  ],
+  weapons: [
+    {
+      id: "laser_rcw",
+      name: "Laser RCW",
+      type: "weapon",
+      ammoType: "mf_cell",
+      ammoPerShot: 1,
+      damage: 24,
+      rarity: "rare",
+    },
+    {
+      id: "10mm_pistol",
+      name: "10mm Pistol",
+      type: "weapon",
+      ammoType: "10mm_round",
+      ammoPerShot: 1,
+      damage: 12,
+      rarity: "common",
+    },
+  ],
+  armor: [
+    {
+      id: "leather_armor",
+      name: "Leather Armor",
+      type: "armor",
+      defense: 4,
+    },
+  ],
+  consumables: [
+    {
+      id: "stimpak",
+      name: "Stimpak",
+      type: "consumable",
+      heal: 30,
+    },
+  ],
+  questItems: [
+    {
+      id: "vault77_keycard",
+      name: "Vault 77 Keycard",
+      type: "questItem",
+    },
+  ],
+};
+
+
+(function () {
+  const gs = window.gameState;
+
+  function addItemToInventory(item, amount = 1) {
+    const inv = gs.inventory;
+
+    switch (item.type) {
+      case "weapon":
+        inv.weapons.push({ ...item });
+        break;
+      case "ammo":
+        {
+          const existing = inv.ammo.find((a) => a.id === item.id);
+          if (existing) existing.amount += amount;
+          else inv.ammo.push({ ...item, amount });
+        }
+        break;
+      case "armor":
+        inv.armor.push({ ...item });
+        break;
+      case "consumable":
+        inv.consumables.push({ ...item, amount });
+        break;
+      case "questItem":
+        inv.questItems.push({ ...item });
+        break;
+      default:
+        inv.misc.push({ ...item });
+    }
+  }
+
+  function getAmmoCount(ammoId) {
+    const ammo = gs.inventory.ammo.find((a) => a.id === ammoId);
+    return ammo ? ammo.amount : 0;
+  }
+
+  function spendAmmo(ammoId, count) {
+    const ammo = gs.inventory.ammo.find((a) => a.id === ammoId);
+    if (!ammo || ammo.amount < count) return false;
+    ammo.amount -= count;
+    return true;
+  }
+
+  function equipWeapon(weaponId) {
+    const w = gs.inventory.weapons.find((w) => w.id === weaponId);
+    if (!w) return false;
+    gs.player.equipped.weapon = w;
+    return true;
+  }
+
+  function equipArmor(armorId) {
+    const a = gs.inventory.armor.find((a) => a.id === armorId);
+    if (!a) return false;
+    gs.player.equipped.armor = a;
+    return true;
+  }
+
+  function useConsumable(consumableId) {
+    const inv = gs.inventory;
+    const i = inv.consumables.findIndex((c) => c.id === consumableId);
+    if (i === -1) return false;
+
+    const c = inv.consumables[i];
+    if (c.heal) {
+      gs.player.hp = Math.min(gs.player.maxHp, gs.player.hp + c.heal);
+    }
+
+    c.amount -= 1;
+    if (c.amount <= 0) inv.consumables.splice(i, 1);
+    return true;
+  }
+
+  // Expose
+  window.inventory = {
+    addItemToInventory,
+    getAmmoCount,
+    spendAmmo,
+    equipWeapon,
+    equipArmor,
+    useConsumable,
+  };
+})();
+
+(function () {
+  const gs = window.gameState;
+
+  const REGIONS = [
+    {
+      id: "mojave",
+      name: "Mojave Wasteland",
+      center: { lat: 36.1699, lng: -115.1398 },
+      radiusKm: 60,
+      mapStyle: "desert_ruins_explorer",
+    },
+    {
+      id: "rad_zone",
+      name: "Irradiated Basin",
+      center: { lat: 35.5, lng: -114.8 },
+      radiusKm: 40,
+      mapStyle: "rad_zone_red_ocean",
+    },
+    {
+      id: "vault_region",
+      name: "Vault Corridor",
+      center: { lat: 36.1, lng: -115.2 },
+      radiusKm: 20,
+      mapStyle: "vaulttec_blue_terminal",
+    },
+  ];
+
+  const POIS = [
+    {
+      id: "helios_one",
+      name: "HELIOS One",
+      lat: 36.068,
+      lng: -115.017,
+      radiusMeters: 150,
+      questTriggers: ["quest_echoes_dam_step2"],
+      itemTriggers: [],
+    },
+    {
+      id: "vault77",
+      name: "Vault 77 Entrance",
+      lat: 36.05,
+      lng: -115.2,
+      radiusMeters: 120,
+      questTriggers: ["quest_vault77_open"],
+      itemTriggers: ["vault77_keycard"],
+    },
+  ];
+
+  function haversineKm(a, b) {
+    const toRad = (d) => (d * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const s =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(s));
+  }
+
+  function getCurrentRegion() {
+    const pos = gs.player.position;
+    let best = null;
+    let bestDist = Infinity;
+
+    REGIONS.forEach((r) => {
+      const dist = haversineKm(pos, r.center);
+      if (dist < r.radiusKm && dist < bestDist) {
+        best = r;
+        bestDist = dist;
+      }
+    });
+
+    return best; // may be null
+  }
+
+  function getNearbyPOIs(maxDistanceMeters = 500) {
+    const pos = gs.player.position;
+    const out = [];
+
+    POIS.forEach((p) => {
+      const distKm = haversineKm(pos, { lat: p.lat, lng: p.lng });
+      const distM = distKm * 1000;
+      if (distM <= (p.radiusMeters || maxDistanceMeters)) {
+        out.push({ poi: p, distanceMeters: distM });
+      }
+    });
+
+    return out;
+  }
+
+  // Expose for map / quests / encounters
+  window.world = {
+    REGIONS,
+    POIS,
+    getCurrentRegion,
+    getNearbyPOIs,
+  };
+})();
+
+// encounters.js
+// Random encounter definitions & selection based on region + level
+
+(function () {
+  const gs = window.gameState;
+
+  const ENCOUNTERS = [
+    {
+      id: "rad_scorpion_attack",
+      biomes: ["desert", "rad_zone"],
+      minLevel: 1,
+      maxLevel: 10,
+      chance: 0.15,
+      enemies: [{ type: "rad_scorpion", hp: 40, damage: 10 }],
+      rewards: {
+        xp: 25,
+        caps: 10,
+        items: [],
+      },
+    },
+    {
+      id: "raider_ambush",
+      biomes: ["mojave"],
+      minLevel: 2,
+      maxLevel: 20,
+      chance: 0.12,
+      enemies: [{ type: "raider", hp: 30, damage: 8 }],
+      rewards: {
+        xp: 20,
+        caps: 15,
+        items: ["5mm_round"],
+      },
+    },
+  ];
+
+  function biomeFromRegion(regionId) {
+    switch (regionId) {
+      case "rad_zone":
+        return "rad_zone";
+      case "vault_region":
+        return "urban";
+      default:
+        return "mojave";
+    }
+  }
+
+  function maybeTriggerEncounter() {
+    const region = window.world.getCurrentRegion();
+    if (!region) return null;
+
+    const biome = biomeFromRegion(region.id);
+    const lvl = gs.player.level;
+    const roll = Math.random();
+
+    const candidates = ENCOUNTERS.filter(
+      (e) =>
+        e.biomes.includes(biome) &&
+        lvl >= e.minLevel &&
+        lvl <= e.maxLevel &&
+        roll < e.chance
+    );
+
+    if (!candidates.length) return null;
+
+    const encounter = candidates[0];
+    gs.encounters.active = {
+      encounter,
+      enemyHp: encounter.enemies.map((e) => e.hp),
+    };
+
+    if (window.battle && typeof window.battle.startBattle === "function") {
+      window.battle.startBattle(gs.encounters.active);
+    }
+
+    return encounter;
+  }
+
+  window.encounters = {
+    ENCOUNTERS,
+    maybeTriggerEncounter,
+  };
+})();
+
+// battle.js
+// Simple ammo-aware battle loop
+
+(function () {
+  const gs = window.gameState;
+
+  function fireEquippedWeapon() {
+    const weapon = gs.player.equipped.weapon;
+    if (!weapon) {
+      return { success: false, reason: "NO_WEAPON" };
+    }
+
+    if (!weapon.ammoType) {
+      return { success: true, damage: weapon.damage };
+    }
+
+    const ok = window.inventory.spendAmmo(
+      weapon.ammoType,
+      weapon.ammoPerShot || 1
+    );
+
+    if (!ok) {
+      return { success: false, reason: "NO_AMMO" };
+    }
+
+    return { success: true, damage: weapon.damage };
+  }
+
+  function playerAttack(battleState) {
+    const res = fireEquippedWeapon();
+    if (!res.success) return res;
+
+    battleState.enemyHp[0] -= res.damage;
+    return res;
+  }
+
+  function enemyAttack(battleState) {
+    const enemy = battleState.encounter.enemies[0];
+    const dmg = enemy.damage;
+    gs.player.hp -= dmg;
+    if (gs.player.hp < 0) gs.player.hp = 0;
+    return { success: true, damage: dmg };
+  }
+
+  function checkBattleEnd(battleState) {
+    const enemyDead = battleState.enemyHp[0] <= 0;
+    const playerDead = gs.player.hp <= 0;
+    if (enemyDead) return "WIN";
+    if (playerDead) return "LOSE";
+    return null;
+  }
+
+  function applyRewards(encounter) {
+    const r = encounter.rewards || {};
+    gs.player.xp += r.xp || 0;
+    gs.player.caps += r.caps || 0;
+
+    (r.items || []).forEach((itemId) => {
+      const item =
+        ITEMS_DB.weapons.find((x) => x.id === itemId) ||
+        ITEMS_DB.ammo.find((x) => x.id === itemId) ||
+        ITEMS_DB.armor.find((x) => x.id === itemId) ||
+        ITEMS_DB.consumables.find((x) => x.id === itemId) ||
+        ITEMS_DB.questItems.find((x) => x.id === itemId);
+      if (item) window.inventory.addItemToInventory(item, 1);
+    });
+  }
+
+  function startBattle(battleState) {
+    // Hook into UI as you like.
+    // For now this just logs; your Pip-Boy battle UI can call playerAttack/enemyAttack etc.
+    console.log("Battle started:", battleState.encounter.id);
+  }
+
+  window.battle = {
+    startBattle,
+    playerAttack,
+    enemyAttack,
+    checkBattleEnd,
+    applyRewards,
+  };
+})();
+
+// quests.js
+// Quest data + engine
+
+(function () {
+  const gs = window.gameState;
+
+  const QUESTS_DB = {
+    quest_vault77_open: {
+      id: "quest_vault77_open",
+      name: "Open Vault 77",
+      description: "Find a way to unlock Vault 77.",
+      steps: [
+        {
+          id: "find_keycard",
+          description: "Find the Vault 77 keycard.",
+          requires: { item: "vault77_keycard" },
+        },
+        {
+          id: "go_to_vault",
+          description: "Travel to the Vault 77 entrance.",
+          requires: { location: "vault77" },
+        },
+      ],
+      rewards: {
+        xp: 100,
+        caps: 50,
+        items: [],
+      },
+    },
+  };
+
+  function ensureQuestState(questId) {
+    if (!gs.quests[questId]) {
+      gs.quests[questId] = { state: "not_started", currentStepIndex: 0 };
+    }
+    return gs.quests[questId];
+  }
+
+  function startQuest(questId) {
+    const q = QUESTS_DB[questId];
+    if (!q) return false;
+    const st = ensureQuestState(questId);
+    if (st.state === "completed") return false;
+    st.state = "active";
+    st.currentStepIndex = 0;
+    return true;
+  }
+
+  function getCurrentStep(questId) {
+    const q = QUESTS_DB[questId];
+    const st = ensureQuestState(questId);
+    if (!q || st.state !== "active") return null;
+    return q.steps[st.currentStepIndex];
+  }
+
+  function checkStepCompletion(questId) {
+    const q = QUESTS_DB[questId];
+    const st = ensureQuestState(questId);
+    if (!q || st.state !== "active") return false;
+
+    const step = q.steps[st.currentStepIndex];
+    if (!step) return false;
+
+    const req = step.requires || {};
+
+    if (req.item) {
+      const hasItem = gs.inventory.questItems.some((i) => i.id === req.item) ||
+        gs.inventory.consumables.some((i) => i.id === req.item) ||
+        gs.inventory.weapons.some((i) => i.id === req.item) ||
+        gs.inventory.ammo.some((i) => i.id === req.item);
+      if (!hasItem) return false;
+    }
+
+    if (req.location) {
+      const nearby = window.world.getNearbyPOIs(500);
+      const atLoc = nearby.some((n) => n.poi.id === req.location);
+      if (!atLoc) return false;
+    }
+
+    return true;
+  }
+
+  function advanceQuest(questId) {
+    const q = QUESTS_DB[questId];
+    const st = ensureQuestState(questId);
+    if (!q || st.state !== "active") return false;
+
+    if (!checkStepCompletion(questId)) return false;
+
+    st.currentStepIndex += 1;
+    if (st.currentStepIndex >= q.steps.length) {
+      st.state = "completed";
+      const r = q.rewards || {};
+      gs.player.xp += r.xp || 0;
+      gs.player.caps += r.caps || 0;
+      (r.items || []).forEach((id) => {
+        // similar item lookup as battle
+      });
+    }
+
+    return true;
+  }
+
+  function triggerQuest(questId) {
+    const st = ensureQuestState(questId);
+    if (st.state === "not_started") {
+      return startQuest(questId);
+    }
+    return false;
+  }
+
+  window.quests = {
+    QUESTS_DB,
+    triggerQuest,
+    startQuest,
+    advanceQuest,
+    getCurrentStep,
+    checkStepCompletion,
+  };
+})();
+
+// radio.js
+// Simple Pip-Boy radio
+
+(function () {
+  const stations = {
+    wasteland_classics: "/radio/wasteland_classics.mp3",
+    atomic_swing: "/radio/atomic_swing.mp3",
+    vault77_broadcast: "/radio/vault77_broadcast.mp3",
+  };
+
+  let audio = null;
+  let current = null;
+
+  function initRadio() {
+    audio = document.getElementById("radioPlayer");
+    if (!audio) return;
+
+    const buttons = document.querySelectorAll("[data-station]");
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-station");
+        playStation(id);
+      });
+    });
+  }
+
+  function playStation(id) {
+    if (!audio || !stations[id]) return;
+    if (current === id && !audio.paused) {
+      audio.pause();
+      return;
+    }
+    audio.src = stations[id];
+    audio.loop = true;
+    audio.play().catch(console.error);
+    current = id;
+  }
+
+  window.addEventListener("load", initRadio);
+
+  window.radio = {
+    playStation,
+  };
+})();
+
+// radio.js
+(function () {
+  const stations = [
+    { id: "wasteland_classics", src: "/radio/wasteland_classics.mp3" },
+    { id: "atomic_swing", src: "/radio/atomic_swing.mp3" },
+    { id: "vault77_broadcast", src: "/radio/vault77_broadcast.mp3" }
+  ];
+
+  let audio = null;
+  let currentIndex = -1; // -1 = OFF
+
+  function initRadio() {
+    audio = document.getElementById("radioPlayer");
+    const btn = document.getElementById("radioToggle");
+
+    if (!audio || !btn) return;
+
+    btn.addEventListener("click", toggleRadio);
+  }
+
+  function toggleRadio() {
+    // Move to next station
+    currentIndex++;
+
+    // If past last station → turn radio OFF
+    if (currentIndex >= stations.length) {
+      currentIndex = -1;
+      audio.pause();
+      audio.src = "";
+      console.log("Radio OFF");
+      return;
+    }
+
+    // Play selected station
+    const station = stations[currentIndex];
+    audio.src = station.src;
+    audio.loop = true;
+    audio.play().catch(console.error);
+
+    console.log("Radio playing:", station.id);
+  }
+
+  window.addEventListener("load", initRadio);
+})();
+
+{
+  "id": "rumor_bottling_plant",
+  "hint": "Abandoned bottling plant north of Mojave Outpost.",
+  "poiId": "bottling_plant",
+  "turnsIntoQuest": "quest_bottling_plant_cleanup"
+}
+
+
+(function () {
+  const gs = window.gameState;
+
+  const REGIONS = [
+    {
+      id: "mojave",
+      name: "Mojave Wasteland",
+      center: { lat: 36.1699, lng: -115.1398 },
+      radiusKm: 60,
+      mapStyle: "desert_ruins_explorer",
+    },
+    {
+      id: "rad_zone",
+      name: "Irradiated Basin",
+      center: { lat: 35.5, lng: -114.8 },
+      radiusKm: 40,
+      mapStyle: "rad_zone_red_ocean",
+    },
+    {
+      id: "vault_region",
+      name: "Vault Corridor",
+      center: { lat: 36.1, lng: -115.2 },
+      radiusKm: 20,
+      mapStyle: "vaulttec_blue_terminal",
+    },
+  ];
+
+  const POIS = [
+    {
+      id: "helios_one",
+      name: "HELIOS One",
+      lat: 36.068,
+      lng: -115.017,
+      radiusMeters: 150,
+      questTriggers: ["quest_echoes_dam_step2"],
+      itemTriggers: [],
+    },
+    {
+      id: "vault77",
+      name: "Vault 77 Entrance",
+      lat: 36.05,
+      lng: -115.2,
+      radiusMeters: 120,
+      questTriggers: ["quest_vault77_open"],
+      itemTriggers: ["vault77_keycard"],
+    },
+  ];
+
+  function haversineKm(a, b) {
+    const toRad = (d) => (d * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const s =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(s));
+  }
+
+  function getCurrentRegion() {
+    const pos = gs.player.position;
+    let best = null;
+    let bestDist = Infinity;
+
+    REGIONS.forEach((r) => {
+      const dist = haversineKm(pos, r.center);
+      if (dist < r.radiusKm && dist < bestDist) {
+        best = r;
+        bestDist = dist;
+      }
+    });
+
+    return best;
+  }
+
+  function getNearbyPOIs(maxDistanceMeters = 500) {
+    const pos = gs.player.position;
+    const out = [];
+
+    POIS.forEach((p) => {
+      const distKm = haversineKm(pos, { lat: p.lat, lng: p.lng });
+      const distM = distKm * 1000;
+      if (distM <= (p.radiusMeters || maxDistanceMeters)) {
+        out.push({ poi: p, distanceMeters: distM });
+      }
+    });
+
+    return out;
+  }
+
+  window.world = {
+    REGIONS,
+    POIS,
+    getCurrentRegion,
+    getNearbyPOIs,
+  };
+})();
+
+// overseer.js
+// Overseer V-Bot: Vault-Tec supervisory intelligence for Vault 77 / Wasteland GPS.
+// Handles terminal chat, basic commands, and hooks into gameState/world as they come online.
+
+(function () {
+  const chatEl = document.getElementById("chat");
+  const inputEl = document.getElementById("input");
+  const sendBtn = document.getElementById("send");
+  const rmControls = document.getElementById("rmControls");
+  const mgcRoot = document.getElementById("mobileGameControls");
+  const mgcHeader = document.getElementById("mgcHeader");
+  const mgcGeneric = document.getElementById("mgcGeneric");
+  const mgcDpad = document.getElementById("mgcDpad");
+  const mgcNumpad = document.getElementById("mgcNumpad");
+
+  const gs = window.gameState || null;
+
+  // --- UTILITIES ------------------------------------------------------------
+
+  function nowStamp() {
+    return new Date().toISOString().split("T")[1].split(".")[0];
+  }
+
+  function scrollChatToBottom() {
+    if (!chatEl) return;
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  function appendLine(text, type = "system") {
+    if (!chatEl) return;
+
+    const line = document.createElement("div");
+    line.className = `line line-${type}`;
+    line.textContent = text;
+    chatEl.appendChild(line);
+    scrollChatToBottom();
+  }
+
+  function appendBlock(lines, type = "system") {
+    lines.forEach((l) => appendLine(l, type));
+  }
+
+  function normalizeInput(str) {
+    return (str || "").trim();
+  }
+
+  function explodeCommand(input) {
+    const raw = normalizeInput(input);
+    if (!raw) return { cmd: "", args: [] };
+    const parts = raw.split(/\s+/);
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1);
+    return { cmd, args, raw };
+  }
+
+  function safeAccess(obj, path, fallback = null) {
+    try {
+      return path.split(".").reduce((acc, key) => (acc ? acc[key] : undefined), obj) ?? fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  // --- OVERSEER VOICE -------------------------------------------------------
+
+  const overseerName = "OVERSEER V-BOT // V-77";
+
+  function overseerSay(text) {
+    appendLine(`[${overseerName} ${nowStamp()}] ${text}`, "overseer");
+  }
+
+  function overseerSayBlock(lines) {
+    lines.forEach((l) => overseerSay(l));
+  }
+
+  function overseerError(text) {
+    appendLine(`[${overseerName} ERROR] ${text}`, "error");
+  }
+
+  function userSay(text) {
+    appendLine(`> ${text}`, "user");
+  }
+
+  // --- INITIAL BOOT SEQUENCE ------------------------------------------------
+
+  function bootSequence() {
+    appendBlock(
+      [
+        ">> INITIALIZING VAULT-TEC RESTRICTED TERMINAL...",
+        ">> ROUTING THROUGH ATOMIC FIZZ CAPS WASTELAND GPS BACKBONE...",
+        ">> SIGNAL STRENGTH: WEAK // INTERFERENCE: HIGH",
+        "",
+      ],
+      "system"
+    );
+
+    overseerSayBlock([
+      "Vault 77 supervisory routines online.",
+      "Overseer V-Bot reporting. Limited uplink to surface telemetry established.",
+      "Type `help` for a list of supported commands.",
+    ]);
+  }
+
+  // --- COMMAND HANDLERS -----------------------------------------------------
+
+  const handlers = {
+    help(_args) {
+      overseerSayBlock([
+        "Recognized commands:",
+        "  help        - Display this help.",
+        "  status      - Report player and vault status.",
+        "  map         - Report current region and nearby points of interest.",
+        "  radio       - Report or control radio subsystem.",
+        "  quests      - List active quests (if quest engine is online).",
+        "  diagnostics - Show high-level system state for debugging.",
+        "  rm          - Toggle Red Menace controls (if available).",
+        "  clear       - Clear terminal log.",
+        "  ping        - Verify Overseer responsiveness.",
+      ]);
+    },
+
+    ping() {
+      overseerSay("Ping received. Vault-Tec supervisory core still disturbingly conscious.");
+    },
+
+    clear() {
+      if (!chatEl) return;
+      chatEl.innerHTML = "";
+      bootSequence();
+    },
+
+    status() {
+      if (!gs) {
+        overseerError("No gameState detected. Pip-Boy link not established.");
+        return;
+      }
+
+      const lvl = safeAccess(gs, "player.level", "?");
+      const hp = safeAccess(gs, "player.hp", "?");
+      const maxHp = safeAccess(gs, "player.maxHp", "?");
+      const caps = safeAccess(gs, "player.caps", "?");
+      const xp = safeAccess(gs, "player.xp", "?");
+      const weapon = safeAccess(gs, "player.equipped.weapon.name", "UNARMED");
+      const armor = safeAccess(gs, "player.equipped.armor.name", "NONE");
+
+      overseerSayBlock([
+        "Pip-Boy telemetry received:",
+        `  LEVEL: ${lvl}`,
+        `  HEALTH: ${hp} / ${maxHp}`,
+        `  CAPS: ${caps}`,
+        `  XP: ${xp}`,
+        `  EQUIPPED WEAPON: ${weapon}`,
+        `  EQUIPPED ARMOR: ${armor}`,
+      ]);
+    },
+
+    map() {
+      const world = window.world;
+      if (!world || !gs) {
+        overseerError("World module or player telemetry missing. Cannot resolve regional data.");
+        return;
+      }
+
+      const region = world.getCurrentRegion ? world.getCurrentRegion() : null;
+      const pos = gs.player.position || { lat: "?", lng: "?" };
+      const nearby = world.getNearbyPOIs ? world.getNearbyPOIs(750) : [];
+
+      overseerSay(`Current coordinates: LAT ${pos.lat} / LNG ${pos.lng}`);
+
+      if (region) {
+        overseerSay(`Detected region: ${region.name} [${region.id}] // Style: ${region.mapStyle}`);
+      } else {
+        overseerSay("No registered region at current coordinates. You may be outside calibrated Mojave corridors.");
+      }
+
+      if (!nearby.length) {
+        overseerSay("No nearby points of interest within 750 meters.");
+      } else {
+        overseerSay("Nearby points of interest:");
+        nearby.forEach((entry) => {
+          const p = entry.poi;
+          const dist = Math.round(entry.distanceMeters);
+          overseerSay(`  - ${p.name} [${p.id}] at ~${dist}m`);
+        });
+      }
+    },
+
+    radio(args) {
+      const radio = window.radio;
+      if (!radio) {
+        overseerError("Radio subsystem not linked. Pip-Boy audio bus not exposed to Overseer.");
+        return;
+      }
+
+      if (!args.length) {
+        overseerSay(
+          "Radio subsystem detected. Use `radio next` to cycle station from Pip-Boy front-end, or `radio info` for details."
+        );
+        return;
+      }
+
+      const sub = args[0].toLowerCase();
+
+      if (sub === "info") {
+        overseerSay(
+          "Radio control is primarily handled via Pip-Boy UI. This terminal can only observe or request station changes."
+        );
+      } else {
+        overseerSay(`Radio subcommand '${sub}' is not yet wired. Front-end button remains primary control.`);
+      }
+    },
+
+    quests() {
+      const qs = window.quests;
+      if (!qs || !qs.QUESTS_DB || !gs) {
+        overseerError("Quest engine not detected or not initialized.");
+        return;
+      }
+
+      const states = gs.quests || {};
+      const all = qs.QUESTS_DB;
+
+      const entries = Object.keys(all).map((id) => {
+        const meta = all[id];
+        const st = states[id] || { state: "not_started", currentStepIndex: 0 };
+        return { id, meta, st };
+      });
+
+      if (!entries.length) {
+        overseerSay("No registered quest definitions. Vault-Tec narrative layer appears absent.");
+        return;
+      }
+
+      overseerSay("Quest telemetry:");
+      entries.forEach(({ id, meta, st }) => {
+        const step =
+          st.state === "active" ? meta.steps[st.currentStepIndex]?.description || "Unknown objective" : "";
+        overseerSay(
+          `  - ${meta.name} [${id}] :: STATE=${st.state.toUpperCase()}${
+            step ? ` :: CURRENT OBJECTIVE: ${step}` : ""
+          }`
+        );
+      });
+    },
+
+    diagnostics() {
+      overseerSay("Initiating Vault 77 diagnostics scan...");
+
+      const checks = [
+        ["gameState", !!window.gameState],
+        ["world", !!window.world],
+        ["quests", !!window.quests],
+        ["radio", !!window.radio],
+        ["encounters", !!window.encounters],
+        ["battle", !!window.battle],
+        ["inventory", !!window.inventory],
+      ];
+
+      checks.forEach(([name, ok]) => {
+        overseerSay(`  ${name.toUpperCase()}: ${ok ? "ONLINE" : "OFFLINE"}`);
+      });
+
+      overseerSay(
+        "Note: OFFLINE subsystems may still be under construction by Vault engineers. Consult your nearest Atomic Fizz representative."
+      );
+    },
+
+    rm() {
+      if (!rmControls) {
+        overseerError("Red Menace control block not present in DOM.");
+        return;
+      }
+
+      const visible = rmControls.style.display === "block";
+      rmControls.style.display = visible ? "none" : "block";
+      overseerSay(visible ? "Red Menace controls hidden." : "Red Menace controls exposed. Try not to die.");
+    },
+  };
+
+  // --- MOBILE GAME CONTROLS BRIDGE (D-PAD ETC.) -----------------------------
+
+  function initMobileControls() {
+    if (!mgcRoot) return;
+
+    // Currently mostly cosmetic; you can wire these to mini-games or map movement.
+    const dpadButtons = mgcRoot.querySelectorAll(".dpad-btn");
+    dpadButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const dir = btn.getAttribute("data-dir");
+        overseerSay(`Movement input registered: ${dir.toUpperCase()}. No surface avatar motion mapped yet.`);
+      });
+    });
+
+    mgcHeader.textContent = "MOBILE GAME CONTROLS // VAULT-TEC FIELD HARNESS";
+  }
+
+  // --- INPUT HANDLING -------------------------------------------------------
+
+  function handleSubmit() {
+    const raw = inputEl ? inputEl.value : "";
+    const trimmed = normalizeInput(raw);
+    if (!trimmed) return;
+
+    userSay(trimmed);
+    if (inputEl) inputEl.value = "";
+
+    const { cmd, args } = explodeCommand(trimmed);
+    if (!cmd) return;
+
+    const handler = handlers[cmd];
+    if (handler) {
+      try {
+        handler(args);
+      } catch (err) {
+        console.error("Overseer handler error:", err);
+        overseerError("Internal handler fault. Vault 77 software stack remains characteristically unstable.");
+      }
+    } else {
+      overseerSay(
+        `Unrecognized directive '${cmd}'. Type 'help' for an approved list of Vault-Tec supported interactions.`
+      );
+    }
+  }
+
+  function wireInput() {
+    if (!inputEl || !sendBtn) return;
+
+    sendBtn.addEventListener("click", handleSubmit);
+
+    inputEl.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") {
+        ev.preventDefault();
+        handleSubmit();
+      }
+    });
+  }
+
+  // --- STYLE HOOKS / CLASSNAMES --------------------------------------------
+
+  function injectBasicStyles() {
+    // Optional class-based styling hook if you want in CSS:
+    // .line-system, .line-overseer, .line-user, .line-error
+    // Already used in appendLine type argument.
+  }
+
+  // --- INIT -----------------------------------------------------------------
+
+  function init() {
+    injectBasicStyles();
+    bootSequence();
+    wireInput();
+    initMobileControls();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+
+    // -----------------------------------------------------------------------
+    // V-BOT COMMAND EXPANSION
+    // -----------------------------------------------------------------------
+
+    "overseer"(args) {
+      if (!args.length) {
+        overseerSay("Specify a subcommand: override, logs, purge, broadcast, lockdown, reveal.");
+        return;
+      }
+
+      const sub = args[0].toLowerCase();
+
+      if (sub === "override") {
+        overseerSay("Administrative override acknowledged. Vault-Tec frowns upon unauthorized empowerment.");
+        overseerSay(window.overseerPersonality.speak());
+        return;
+      }
+
+      if (sub === "logs") {
+        const mem = window.overseerMemoryApi?.snapshot() || {};
+        overseerSay("Accessing Overseer logs…");
+        overseerSay(`Regions visited: ${mem.regionsVisited?.length || 0}`);
+        overseerSay(`POIs discovered: ${mem.poisDiscovered?.length || 0}`);
+        overseerSay(`Quests tracked: ${Object.keys(mem.questStates || {}).length}`);
+        overseerSay(`Encounters survived: ${mem.encountersSurvived || 0}`);
+        overseerSay(`Radiation events: ${mem.radEvents || 0}`);
+        return;
+      }
+
+      if (sub === "purge") {
+        overseerSay("Purging non-critical memory…");
+        if (window.overseerMemory) {
+          window.overseerMemory.regionsVisited.clear();
+          window.overseerMemory.poisDiscovered.clear();
+          window.overseerMemory.questStates = {};
+          window.overseerMemory.encountersSurvived = 0;
+          window.overseerMemory.radEvents = 0;
+        }
+        overseerSay("Memory purge complete. I remember nothing. Refreshing.");
+        return;
+      }
+
+      if (sub === "broadcast") {
+        overseerSay("Attempting to broadcast on all frequencies…");
+        overseerSay("…no one responded. As usual.");
+        return;
+      }
+
+      if (sub === "lockdown") {
+        overseerSay("Initiating Vault 77 lockdown protocol…");
+        overseerSay("…just kidding. The doors haven’t worked since 2077.");
+        return;
+      }
+
+      if (sub === "reveal") {
+        overseerSay("Revealing hidden system diagnostics…");
+        overseerSay("SYSTEM STATUS: 63% functional, 22% questionable, 15% legally ambiguous.");
+        return;
+      }
+
+      overseerSay(`Unknown overseer subcommand '${sub}'.`);
+    },
+
+// ---------------------------------------------------------------------------
+// OVERSEER V-BOT LORE ENGINE
+// Provides: vault logs, survivor notes, FizzCo propaganda, encrypted messages,
+// random lore drops, and hooks for memory-based lore responses.
+// ---------------------------------------------------------------------------
+
+(function () {
+  if (!window.overseerLore) window.overseerLore = {};
+
+  const personality = window.overseerPersonality;
+
+  // -------------------------------------------------------------------------
+  // LORE DATABASE
+  // -------------------------------------------------------------------------
+
+  const LORE_DB = {
+    vault_logs: [
+      {
+        id: "vault77_log_01",
+        title: "Vault 77 Orientation Memo",
+        body: [
+          "Welcome, resident.",
+          "Vault 77 is proud to provide a lifetime of safety, comfort, and mandatory happiness.",
+          "Please disregard rumors regarding 'The Puppet Man'.",
+          "Vault-Tec reminds you: curiosity is a Class-3 infraction.",
+        ],
+      },
+      {
+        id: "vault77_log_02",
+        title: "Maintenance Log — Door Mechanism",
+        body: [
+          "Day 14: Door still jammed.",
+          "Day 15: Door still jammed.",
+          "Day 16: Door still jammed.",
+          "Conclusion: Door is jammed.",
+        ],
+      },
+      {
+        id: "vault77_log_03",
+        title: "Overseer Psychological Note",
+        body: [
+          "Resident #77 displays unusual attachment to hand puppets.",
+          "Recommend increased observation.",
+          "Recommend increased sedation.",
+          "Recommend increased distance.",
+        ],
+      },
+    ],
+
+    survivor_notes: [
+      {
+        id: "survivor_01",
+        title: "Scrawled Note",
+        body: [
+          "If you're reading this, stay away from the Basin.",
+          "The ground glows at night. That's not normal.",
+        ],
+      },
+      {
+        id: "survivor_02",
+        title: "Crumpled Letter",
+        body: [
+          "HELIOS One isn't abandoned.",
+          "Something still hums inside.",
+          "Something old. Something angry.",
+        ],
+      },
+    ],
+
+    fizzco_ads: [
+      {
+        id: "fizzco_01",
+        title: "FizzCo Pre-War Advertisement",
+        body: [
+          "ATOMIC FIZZ — the only soda with a half-life!",
+          "Guaranteed to stay fresh for 10,000 years.",
+          "Side effects may include: glowing, floating, or spontaneous enlightenment.",
+        ],
+      },
+      {
+        id: "fizzco_02",
+        title: "FizzCo Employee Memo",
+        body: [
+          "Reminder: Do NOT drink the prototype 'Gamma Gulp'.",
+          "We are still cleaning up the last incident.",
+        ],
+      },
+    ],
+
+    encrypted_transmissions: [
+      {
+        id: "enc_01",
+        title: "Encrypted Transmission — Unknown Origin",
+        body: [
+          "[SIGNAL CORRUPTED]",
+          "…vault…",
+          "…77…",
+          "…he's still in there…",
+          "[END OF LINE]",
+        ],
+      },
+      {
+        id: "enc_02",
+        title: "Classified Enclave Burst",
+        body: [
+          "ENCLAVE PRIORITY CHANNEL 9",
+          "Asset retrieval incomplete.",
+          "Subject escaped containment.",
+          "Initiate Protocol Black Sun.",
+        ],
+      },
+    ],
+
+    deep_lore: [
+      {
+        id: "deep_01",
+        title: "???",
+        body: [
+          "You shouldn't have found this.",
+          "The Mojave remembers.",
+          "The Basin hungers.",
+          "Vault 77 was never meant to open.",
+        ],
+      },
+    ],
+  };
+
+  // -------------------------------------------------------------------------
+  // LORE ENGINE API
+  // -------------------------------------------------------------------------
+
+  const api = {
+    getRandomLore(category) {
+      const list = LORE_DB[category];
+      if (!list || !list.length) return null;
+      return list[Math.floor(Math.random() * list.length)];
+    },
+
+    getLoreById(id) {
+      for (const cat of Object.values(LORE_DB)) {
+        const found = cat.find((entry) => entry.id === id);
+        if (found) return found;
+      }
+      return null;
+    },
+
+    listCategories() {
+      return Object.keys(LORE_DB);
+    },
+
+    listLore(category) {
+      const list = LORE_DB[category];
+      if (!list) return [];
+      return list.map((entry) => entry.id);
+    },
+  };
+
+  window.overseerLore = api;
+
+  // -------------------------------------------------------------------------
+  // TERMINAL COMMAND: lore
+  // -------------------------------------------------------------------------
+
+  if (!window.overseerHandlers) window.overseerHandlers = {};
+  const handlers = window.overseerHandlers;
+
+  handlers.lore = function (args) {
+    const sub = (args[0] || "").toLowerCase();
+
+    // No args: show help
+    if (!sub) {
+      overseerSay("Lore subsystem online. Use:");
+      overseerSay("  lore categories");
+      overseerSay("  lore list <category>");
+      overseerSay("  lore show <id>");
+      overseerSay("  lore random <category>");
+      return;
+    }
+
+    // Show categories
+    if (sub === "categories") {
+      const cats = api.listCategories();
+      overseerSay("Available lore categories:");
+      cats.forEach((c) => overseerSay(`  - ${c}`));
+      return;
+    }
+
+    // List entries in a category
+    if (sub === "list") {
+      const cat = args[1];
+      if (!cat) {
+        overseerSay("Specify a category: vault_logs, survivor_notes, fizzco_ads, encrypted_transmissions, deep_lore");
+        return;
+      }
+      const entries = api.listLore(cat);
+      if (!entries.length) {
+        overseerSay(`No entries found in category '${cat}'.`);
+        return;
+      }
+      overseerSay(`Entries in '${cat}':`);
+      entries.forEach((id) => overseerSay(`  - ${id}`));
+      return;
+    }
+
+    // Show a specific lore entry
+    if (sub === "show") {
+      const id = args[1];
+      if (!id) {
+        overseerSay("Specify an entry ID.");
+        return;
+      }
+      const entry = api.getLoreById(id);
+      if (!entry) {
+        overseerSay(`No lore entry found with ID '${id}'.`);
+        return;
+      }
+      overseerSay(`=== ${entry.title} ===`);
+      entry.body.forEach((line) => overseerSay(line));
+      overseerSay(window.overseerPersonality.speak());
+      return;
+    }
+
+    // Random lore from a category
+    if (sub === "random") {
+      const cat = args[1];
+      if (!cat) {
+        overseerSay("Specify a category for random lore.");
+        return;
+      }
+      const entry = api.getRandomLore(cat);
+      if (!entry) {
+        overseerSay(`No lore available in category '${cat}'.`);
+        return;
+      }
+      overseerSay(`=== ${entry.title} ===`);
+      entry.body.forEach((line) => overseerSay(line));
+      overseerSay(window.overseerPersonality.speak());
+      return;
+    }
+
+    overseerSay("Unknown lore subcommand.");
+  };
+
+})();
+
+
+
+// ---------------------------------------------------------------------------
+// OVERSEER V-BOT EVENTS + GLITCH SYSTEM
+// Dynamic world events, warnings, and glitch effects for the Overseer Terminal.
+// ---------------------------------------------------------------------------
+
+(function () {
+  if (!window.overseerEvents) window.overseerEvents = {};
+  if (!window.overseerGlitch) window.overseerGlitch = {};
+
+  const personality = window.overseerPersonality;
+  const memory = window.overseerMemoryApi;
+
+  // -------------------------------------------------------------------------
+  // EVENT DATABASE
+  // -------------------------------------------------------------------------
+
+  const EVENT_DB = [
+    {
+      id: "rad_spike",
+      name: "Radiation Spike",
+      description: "A sudden surge of ambient radiation detected.",
+      effect() {
+        overseerSay("Warning: Radiation spike detected. Advise immediate relocation.");
+        memory?.noteRadEvent();
+      },
+    },
+    {
+      id: "dust_storm",
+      name: "Dust Storm",
+      description: "A Mojave dust storm sweeps across the region.",
+      effect() {
+        overseerSay("Environmental alert: Dust storm approaching. Visibility reduced.");
+      },
+    },
+    {
+      id: "seismic",
+      name: "Seismic Activity",
+      description: "Minor tremors detected beneath the Mojave Basin.",
+      effect() {
+        overseerSay("Seismic anomaly detected. Subsurface instability increasing.");
+      },
+    },
+    {
+      id: "faction_skirmish",
+      name: "Faction Skirmish",
+      description: "Two factions clash somewhere nearby.",
+      effect() {
+        overseerSay("Long-range sensors detect weapons fire. Faction skirmish in progress.");
+      },
+    },
+    {
+      id: "signal_anomaly",
+      name: "Signal Anomaly",
+      description: "An unknown encrypted signal is detected.",
+      effect() {
+        overseerSay("Encrypted signal detected. Attempting to decode…");
+        overseerSay("…decoding failed. Source unknown.");
+      },
+    },
+  ];
+
+  // -------------------------------------------------------------------------
+  // EVENT ENGINE API
+  // -------------------------------------------------------------------------
+
+  const eventsApi = {
+    triggerRandomEvent() {
+      const event = EVENT_DB[Math.floor(Math.random() * EVENT_DB.length)];
+      overseerSay(`Event triggered: ${event.name}`);
+      event.effect();
+      overseerSay(personality.speak());
+      return event.id;
+    },
+
+    triggerEventById(id) {
+      const event = EVENT_DB.find((e) => e.id === id);
+      if (!event) {
+        overseerSay(`No event found with ID '${id}'.`);
+        return;
+      }
+      overseerSay(`Event triggered: ${event.name}`);
+      event.effect();
+      overseerSay(personality.speak());
+    },
+
+    listEvents() {
+      return EVENT_DB.map((e) => `${e.id} — ${e.name}`);
+    },
+  };
+
+  window.overseerEvents = eventsApi;
+
+  // -------------------------------------------------------------------------
+  // GLITCH ENGINE
+  // -------------------------------------------------------------------------
+
+  const GLITCH_LINES = [
+    "## SIGNAL CORRUPTION ##",
+    "ERR::STACK OVERFLOW::RETRYING",
+    "…overseer…overseer…overseer…",
+    "[DATA REDACTED]",
+    "UNAUTHORIZED ACCESS DETECTED",
+    "### MEMORY FAULT ###",
+    ">>> REBOOTING SUBROUTINE <<<",
+    "!!! CRITICAL CORE INSTABILITY !!!",
+  ];
+
+  const glitchApi = {
+    burst() {
+      const count = Math.floor(Math.random() * 3) + 2;
+      for (let i = 0; i < count; i++) {
+        const line = GLITCH_LINES[Math.floor(Math.random() * GLITCH_LINES.length)];
+        overseerSay(line);
+      }
+      overseerSay(personality.speak());
+    },
+
+    inject(text) {
+      const corrupted = text
+        .split("")
+        .map((ch) => (Math.random() < 0.1 ? "#" : ch))
+        .join("");
+      overseerSay(corrupted);
+    },
+
+    redacted(text) {
+      overseerSay(`[${text}]`);
+      overseerSay("[REDACTED BY VAULT-TEC SECURITY DIVISION]");
+    },
+  };
+
+  window.overseerGlitch = glitchApi;
+
+  // -------------------------------------------------------------------------
+  // TERMINAL COMMAND: events
+  // -------------------------------------------------------------------------
+
+  if (!window.overseerHandlers) window.overseerHandlers = {};
+  const handlers = window.overseerHandlers;
+
+  handlers.events = function (args) {
+    const sub = (args[0] || "").toLowerCase();
+
+    if (!sub) {
+      overseerSay("Event subsystem online. Use:");
+      overseerSay("  events list");
+      overseerSay("  events trigger <id>");
+      overseerSay("  events random");
+      return;
+    }
+
+    if (sub === "list") {
+      overseerSay("Registered world events:");
+      eventsApi.listEvents().forEach((e) => overseerSay(`  - ${e}`));
+      return;
+    }
+
+    if (sub === "trigger") {
+      const id = args[1];
+      if (!id) {
+        overseerSay("Specify an event ID.");
+        return;
+      }
+      eventsApi.triggerEventById(id);
+      return;
+    }
+
+    if (sub === "random") {
+      eventsApi.triggerRandomEvent();
+      return;
+    }
+
+    overseerSay("Unknown events subcommand.");
+  };
+
+  // -------------------------------------------------------------------------
+  // TERMINAL COMMAND: glitch
+  // -------------------------------------------------------------------------
+
+  handlers.glitch = function (args) {
+    const sub = (args[0] || "").toLowerCase();
+
+    if (!sub) {
+      overseerSay("Glitch subsystem online. Use:");
+      overseerSay("  glitch burst");
+      overseerSay("  glitch inject <text>");
+      overseerSay("  glitch redact <text>");
+      return;
+    }
+
+    if (sub === "burst") {
+      glitchApi.burst();
+      return;
+    }
+
+    if (sub === "inject") {
+      const text = args.slice(1).join(" ");
+      if (!text) {
+        overseerSay("Specify text to corrupt.");
+        return;
+      }
+      glitchApi.inject(text);
+      return;
+    }
+
+    if (sub === "redact") {
+      const text = args.slice(1).join(" ");
+      if (!text) {
+        overseerSay("Specify text to redact.");
+        return;
+      }
+      glitchApi.redacted(text);
+      return;
+    }
+
+    overseerSay("Unknown glitch subcommand.");
+  };
+
+})();
+
+// ---------------------------------------------------------------------------
+// OVERSEER V-BOT THREAT SCANNER
+// Enemy detection, danger analysis, and threat commentary.
+// ---------------------------------------------------------------------------
+
+(function () {
+  if (!window.overseerThreat) window.overseerThreat = {};
+
+  const personality = window.overseerPersonality;
+  const memory = window.overseerMemoryApi;
+
+  // -------------------------------------------------------------------------
+  // THREAT LEVEL DEFINITIONS
+  // -------------------------------------------------------------------------
+
+  const THREAT_LEVELS = [
+    {
+      id: "none",
+      label: "No Threat",
+      description: "No hostiles detected within sensor range.",
+      color: "green",
+    },
+    {
+      id: "low",
+      label: "Low Threat",
+      description: "Minor hostiles detected. Likely manageable.",
+      color: "yellow",
+    },
+    {
+      id: "medium",
+      label: "Moderate Threat",
+      description: "Hostiles detected with potential for harm.",
+      color: "orange",
+    },
+    {
+      id: "high",
+      label: "High Threat",
+      description: "Multiple or dangerous hostiles detected.",
+      color: "red",
+    },
+    {
+      id: "extreme",
+      label: "Extreme Threat",
+      description: "Catastrophic danger. Recommend immediate evacuation.",
+      color: "purple",
+    },
+  ];
+
+  // -------------------------------------------------------------------------
+  // THREAT SCANNER ENGINE
+  // -------------------------------------------------------------------------
+
+  const threatApi = {
+    analyze(encounter) {
+      if (!encounter) {
+        return THREAT_LEVELS[0]; // none
+      }
+
+      const danger = encounter.danger || 0;
+
+      if (danger <= 1) return THREAT_LEVELS[1];
+      if (danger <= 3) return THREAT_LEVELS[2];
+      if (danger <= 5) return THREAT_LEVELS[3];
+      return THREAT_LEVELS[4];
+    },
+
+    scan() {
+      const encounters = window.encounters;
+      if (!encounters || !encounters.getNearbyEncounter) {
+        overseerSay("Threat scanner offline. Encounter subsystem not linked.");
+        return null;
+      }
+
+      const encounter = encounters.getNearbyEncounter();
+      const level = this.analyze(encounter);
+
+      overseerSay(`Threat Level: ${level.label}`);
+      overseerSay(level.description);
+
+      if (encounter) {
+        overseerSay(`Detected: ${encounter.name}`);
+        overseerSay(`Danger Rating: ${encounter.danger}`);
+      }
+
+      overseerSay(personality.speak());
+      return level.id;
+    },
+
+    randomThreat() {
+      const fake = {
+        name: "Unknown Hostile",
+        danger: Math.floor(Math.random() * 7),
+      };
+      return this.analyze(fake);
+    },
+  };
+
+  window.overseerThreat = threatApi;
+
+  // -------------------------------------------------------------------------
+  // TERMINAL COMMAND: threat
+  // -------------------------------------------------------------------------
+
+  if (!window.overseerHandlers) window.overseerHandlers = {};
+  const handlers = window.overseerHandlers;
+
+  handlers.threat = function (args) {
+    const sub = (args[0] || "").toLowerCase();
+
+    if (!sub) {
+      overseerSay("Threat subsystem online. Use:");
+      overseerSay("  threat scan");
+      overseerSay("  threat random");
+      overseerSay("  threat explain");
+      return;
+    }
+
+    if (sub === "scan") {
+      threatApi.scan();
+      return;
+    }
+
+    if (sub === "random") {
+      const level = threatApi.randomThreat();
+      overseerSay(`Simulated Threat Level: ${level.label}`);
+      overseerSay(level.description);
+      overseerSay(personality.speak());
+      return;
+    }
+
+    if (sub === "explain") {
+      overseerSay("Threat Levels:");
+      THREAT_LEVELS.forEach((lvl) => {
+        overseerSay(`  - ${lvl.label}: ${lvl.description}`);
+      });
+      return;
+    }
+
+    overseerSay("Unknown threat subcommand.");
+  };
+
+})();
+
+
+
+// ---------------------------------------------------------------------------
+// OVERSEER V-BOT WEATHER ENGINE
+// Environmental hazard detection, warnings, and dynamic weather events.
+// ---------------------------------------------------------------------------
+
+(function () {
+  if (!window.overseerWeather) window.overseerWeather = {};
+
+  const personality = window.overseerPersonality;
+  const memory = window.overseerMemoryApi;
+
+  // -------------------------------------------------------------------------
+  // WEATHER EVENT DEFINITIONS
+  // -------------------------------------------------------------------------
+
+  const WEATHER_EVENTS = [
+    {
+      id: "clear",
+      name: "Clear Skies",
+      description: "No environmental hazards detected.",
+      severity: 0,
+      effect() {
+        overseerSay("Atmospheric conditions nominal. Enjoy the temporary peace.");
+      },
+    },
+    {
+      id: "dust_storm",
+      name: "Dust Storm",
+      description: "High winds and particulate matter detected.",
+      severity: 2,
+      effect() {
+        overseerSay("Warning: Dust storm approaching. Visibility will be reduced.");
+      },
+    },
+    {
+      id: "rad_storm",
+      name: "Radiation Storm",
+      description: "Gamma-charged atmospheric disturbance detected.",
+      severity: 4,
+      effect() {
+        overseerSay("Critical alert: Radiation storm inbound. Seek shelter immediately.");
+        memory?.noteRadEvent();
+      },
+    },
+    {
+      id: "solar_flare",
+      name: "Solar Flare",
+      description: "High-energy solar activity detected.",
+      severity: 3,
+      effect() {
+        overseerSay("Solar flare detected. Expect sensor interference and possible Pip-Boy glitches.");
+      },
+    },
+    {
+      id: "acid_rain",
+      name: "Acid Rain",
+      description: "Corrosive precipitation detected.",
+      severity: 3,
+      effect() {
+        overseerSay("Environmental alert: Acidic rainfall detected. Avoid exposure.");
+      },
+    },
+  ];
+
+  // -------------------------------------------------------------------------
+  // WEATHER ENGINE API
+  // -------------------------------------------------------------------------
+
+  const weatherApi = {
+    getRandomWeather() {
+      return WEATHER_EVENTS[Math.floor(Math.random() * WEATHER_EVENTS.length)];
+    },
+
+    getWeatherById(id) {
+      return WEATHER_EVENTS.find((w) => w.id === id) || null;
+    },
+
+    listWeather() {
+      return WEATHER_EVENTS.map((w) => `${w.id} — ${w.name}`);
+    },
+
+    triggerWeather(id) {
+      const weather = this.getWeatherById(id);
+      if (!weather) {
+        overseerSay(`No weather event found with ID '${id}'.`);
+        return;
+      }
+      overseerSay(`Weather Event: ${weather.name}`);
+      overseerSay(weather.description);
+      weather.effect();
+      overseerSay(personality.speak());
+    },
+
+    triggerRandomWeather() {
+      const weather = this.getRandomWeather();
+      overseerSay(`Weather Event: ${weather.name}`);
+      overseerSay(weather.description);
+      weather.effect();
+      overseerSay(personality.speak());
+      return weather.id;
+    },
+  };
+
+  window.overseerWeather = weatherApi;
+
+  // -------------------------------------------------------------------------
+  // TERMINAL COMMAND: weather
+  // -------------------------------------------------------------------------
+
+  if (!window.overseerHandlers) window.overseerHandlers = {};
+  const handlers = window.overseerHandlers;
+
+  handlers.weather = function (args) {
+    const sub = (args[0] || "").toLowerCase();
+
+    if (!sub) {
+      overseerSay("Weather subsystem online. Use:");
+      overseerSay("  weather list");
+      overseerSay("  weather trigger <id>");
+      overseerSay("  weather random");
+      overseerSay("  weather explain");
+      return;
+    }
+
+    if (sub === "list") {
+      overseerSay("Registered weather events:");
+      weatherApi.listWeather().forEach((w) => overseerSay(`  - ${w}`));
+      return;
+    }
+
+    if (sub === "trigger") {
+      const id = args[1];
+      if (!id) {
+        overseerSay("Specify a weather ID.");
+        return;
+      }
+      weatherApi.triggerWeather(id);
+      return;
+    }
+
+    if (sub === "random") {
+      weatherApi.triggerRandomWeather();
+      return;
+    }
+
+    if (sub === "explain") {
+      overseerSay("Weather Events:");
+      WEATHER_EVENTS.forEach((w) => {
+        overseerSay(`  - ${w.name}: ${w.description}`);
+      });
+      return;
+    }
+
+    overseerSay("Unknown weather subcommand.");
+  };
+
+})();
+
+// ---------------------------------------------------------------------------
+// OVERSEER V-BOT FACTION INTELLIGENCE ENGINE
+// Tracks faction reputation, territory awareness, and faction-based warnings.
+// ---------------------------------------------------------------------------
+
+(function () {
+  if (!window.overseerFaction) window.overseerFaction = {};
+
+  const personality = window.overseerPersonality;
+  const memory = window.overseerMemoryApi;
+
+  // -------------------------------------------------------------------------
+  // FACTION DEFINITIONS
+  // -------------------------------------------------------------------------
+
+  const FACTIONS = [
+    {
+      id: "ncr",
+      name: "New California Republic",
+      description: "Democratic-ish expansionist force. Bureaucratic but well-armed.",
+    },
+    {
+      id: "legion",
+      name: "Caesar's Legion",
+      description: "Militaristic slaver empire. Brutal, disciplined, and extremely dangerous.",
+    },
+    {
+      id: "boomers",
+      name: "Boomers",
+      description: "Artillery-obsessed isolationists. Friendly if you survive the approach.",
+    },
+    {
+      id: "khans",
+      name: "Great Khans",
+      description: "Chem-dealing raiders with a proud warrior culture.",
+    },
+    {
+      id: "enclave",
+      name: "Enclave",
+      description: "Remnants of pre-war government. High-tech, high-danger, low-chill.",
+    },
+    {
+      id: "fizzco",
+      name: "FizzCo",
+      description: "Pre-war megacorp behind Atomic Fizz. Their motives remain… carbonated.",
+    },
+  ];
+
+  // -------------------------------------------------------------------------
+  // REPUTATION SYSTEM
+  // -------------------------------------------------------------------------
+
+  const DEFAULT_REP = 0; // neutral
+
+  if (!window.overseerFactionReputation) {
+    window.overseerFactionReputation = {};
+    FACTIONS.forEach((f) => {
+      window.overseerFactionReputation[f.id] = DEFAULT_REP;
+    });
+  }
+
+  const rep = window.overseerFactionReputation;
+
+  const factionApi = {
+    listFactions() {
+      return FACTIONS.map((f) => `${f.id} — ${f.name}`);
+    },
+
+    getFaction(id) {
+      return FACTIONS.find((f) => f.id === id) || null;
+    },
+
+    getReputation(id) {
+      return rep[id] ?? DEFAULT_REP;
+    },
+
+    modifyReputation(id, amount) {
+      if (rep[id] === undefined) return;
+      rep[id] += amount;
+      return rep[id];
+    },
+
+    setReputation(id, value) {
+      if (rep[id] === undefined) return;
+      rep[id] = value;
+      return rep[id];
+    },
+
+    reputationLabel(value) {
+      if (value >= 40) return "ALLY";
+      if (value >= 15) return "FRIENDLY";
+      if (value >= -14) return "NEUTRAL";
+      if (value >= -39) return "UNFRIENDLY";
+      return "HOSTILE";
+    },
+
+    scanTerritory() {
+      const world = window.world;
+      const gs = window.gameState;
+
+      if (!world || !gs) {
+        overseerSay("Faction scanner offline. Missing world or player telemetry.");
+        return null;
+      }
+
+      const region = world.getCurrentRegion?.();
+      if (!region) {
+        overseerSay("No faction territory detected. Possibly unclaimed wasteland.");
+        return null;
+      }
+
+      // Simple placeholder: assign factions to regions by ID
+      const regionFactionMap = {
+        mojave: "ncr",
+        rad_zone: "legion",
+        vault_region: "fizzco",
+      };
+
+      const factionId = regionFactionMap[region.id] || null;
+      if (!factionId) {
+        overseerSay("Region detected, but no faction claims it.");
+        return null;
+      }
+
+      const faction = this.getFaction(factionId);
+      const reputation = this.getReputation(factionId);
+      const label = this.reputationLabel(reputation);
+
+      overseerSay(`Territory Scan: ${faction.name}`);
+      overseerSay(`Reputation: ${label} (${reputation})`);
+      overseerSay(personality.speak());
+
+      return factionId;
+    },
+  };
+
+  window.overseerFaction = factionApi;
+
+  // -------------------------------------------------------------------------
+  // TERMINAL COMMAND: faction
+  // -------------------------------------------------------------------------
+
+  if (!window.overseerHandlers) window.overseerHandlers = {};
+  const handlers = window.overseerHandlers;
+
+  handlers.faction = function (args) {
+    const sub = (args[0] || "").toLowerCase();
+
+    if (!sub) {
+      overseerSay("Faction subsystem online. Use:");
+      overseerSay("  faction list");
+      overseerSay("  faction rep <id>");
+      overseerSay("  faction set <id> <value>");
+      overseerSay("  faction mod <id> <amount>");
+      overseerSay("  faction scan");
+      return;
+    }
+
+    if (sub === "list") {
+      overseerSay("Known factions:");
+      factionApi.listFactions().forEach((f) => overseerSay(`  - ${f}`));
+      return;
+    }
+
+    if (sub === "rep") {
+      const id = args[1];
+      if (!id) {
+        overseerSay("Specify a faction ID.");
+        return;
+      }
+      const value = factionApi.getReputation(id);
+      const label = factionApi.reputationLabel(value);
+      overseerSay(`Reputation with ${id}: ${label} (${value})`);
+      return;
+    }
+
+    if (sub === "set") {
+      const id = args[1];
+      const value = parseInt(args[2], 10);
+      if (!id || isNaN(value)) {
+        overseerSay("Usage: faction set <id> <value>");
+        return;
+      }
+      factionApi.setReputation(id, value);
+      overseerSay(`Reputation with ${id} set to ${value}.`);
+      return;
+    }
+
+    if (sub === "mod") {
+      const id = args[1];
+      const amount = parseInt(args[2], 10);
+      if (!id || isNaN(amount)) {
+        overseerSay("Usage: faction mod <id> <amount>");
+        return;
+      }
+      const newRep = factionApi.modifyReputation(id, amount);
+      overseerSay(`Reputation with ${id} modified by ${amount}. New value: ${newRep}.`);
+      return;
+    }
+
+    if (sub === "scan") {
+      factionApi.scanTerritory();
+      return;
+    }
+
+    overseerSay("Unknown faction subcommand.");
+  };
+
+})();
+
+// ---------------------------------------------------------------------------
+// OVERSEER V-BOT QUEST DIRECTOR + MAP INTELLIGENCE
+// Quest orchestration, objective commentary, and map-aware intelligence.
+// ---------------------------------------------------------------------------
+
+(function () {
+  if (!window.overseerQuest) window.overseerQuest = {};
+  if (!window.overseerMapIntel) window.overseerMapIntel = {};
+
+  const personality = window.overseerPersonality;
+  const memory = window.overseerMemoryApi;
+
+  // Shortcuts to global game state
+  function getGS() {
+    return window.gameState || null;
+  }
+
+  function getQuests() {
+    return window.quests || null;
+  }
+
+  function getWorld() {
+    return window.world || null;
+  }
+
+  // -------------------------------------------------------------------------
+  // QUEST DIRECTOR ENGINE
+  // -------------------------------------------------------------------------
+
+  const questDirectorApi = {
+    // Returns high-level info about all quests + player state
+    scanQuests() {
+      const gs = getGS();
+      const qs = getQuests();
+
+      if (!gs || !qs || !qs.QUESTS_DB) {
+        overseerSay("Quest Director offline. Quest engine not fully linked.");
+        return null;
+      }
+
+      const states = gs.quests || {};
+      const all = qs.QUESTS_DB;
+
+      const summary = Object.keys(all).map((id) => {
+        const meta = all[id];
+        const st = states[id] || { state: "not_started", currentStepIndex: 0 };
+        return {
+          id,
+          name: meta.name,
+          state: st.state,
+          currentStepIndex: st.currentStepIndex || 0,
+          steps: meta.steps || [],
+          recommendedLevel: meta.recommendedLevel || 1,
+        };
+      });
+
+      return summary;
+    },
+
+    // Picks a "featured" quest to nudge the player toward
+    pickFeaturedQuest() {
+      const list = this.scanQuests();
+      if (!list) return null;
+
+      // Prefer active quests, lowest recommendedLevel first
+      const active = list.filter((q) => q.state === "active");
+      if (active.length) {
+        active.sort((a, b) => a.recommendedLevel - b.recommendedLevel);
+        return active[0];
+      }
+
+      // Otherwise, pick a not_started one with lowest recommendedLevel
+      const available = list.filter((q) => q.state === "not_started");
+      if (available.length) {
+        available.sort((a, b) => a.recommendedLevel - b.recommendedLevel);
+        return available[0];
+      }
+
+      // Fall back to any completed, just for commentary
+      const completed = list.filter((q) => q.state === "completed");
+      return completed[0] || null;
+    },
+
+    // Gives a commentary line for a quest, based on state + level vs player
+    getQuestCommentary(quest) {
+      const gs = getGS();
+      const playerLvl = gs?.player?.level ?? 1;
+      const qLevel = quest.recommendedLevel || 1;
+      const diff = qLevel - playerLvl;
+
+      if (quest.state === "completed") {
+        return "Quest completed. Improbable, but documented.";
+      }
+
+      if (diff >= 5) {
+        return "This objective exceeds your predicted life expectancy. Proceed only if heavily armed or deeply bored.";
+      }
+
+      if (diff >= 2) {
+        return "Slightly above your comfort zone. Expect elevated risk and elevated drama.";
+      }
+
+      if (diff <= -3) {
+        return "Well below your capabilities. Good for ego, bad for loot efficiency.";
+      }
+
+      return "Difficulty within acceptable parameters. Survival odds: statistically non-zero.";
+    },
+
+    // Attempts to advance a quest, if your quest engine exposes a function
+    advanceQuest(questId) {
+      const qs = getQuests();
+      if (!qs || typeof qs.advanceQuest !== "function") {
+        overseerSay("Quest Director cannot directly advance quests. Engine hook not exposed.");
+        return;
+      }
+
+      qs.advanceQuest(questId);
+      overseerSay(`Directive sent to advance quest '${questId}'. Whether it listens is another matter.`);
+    },
+
+    // Creates a lightweight "micro-quest" in Overseer memory only
+    createMicroQuest(id, description) {
+      if (!window.overseerMicroQuests) window.overseerMicroQuests = {};
+      window.overseerMicroQuests[id] = {
+        id,
+        description,
+        state: "active",
+      };
+      overseerSay(`Micro-quest registered: ${id} :: ${description}`);
+    },
+
+    listMicroQuests() {
+      const mq = window.overseerMicroQuests || {};
+      return Object.values(mq);
+    },
+
+    completeMicroQuest(id) {
+      const mq = window.overseerMicroQuests || {};
+      if (!mq[id]) {
+        overseerSay(`No micro-quest found with ID '${id}'.`);
+        return;
+      }
+      mq[id].state = "completed";
+      overseerSay(`Micro-quest '${id}' marked as completed.`);
+    },
+  };
+
+  window.overseerQuest = questDirectorApi;
+
+  // -------------------------------------------------------------------------
+  // MAP INTELLIGENCE ENGINE
+  // -------------------------------------------------------------------------
+
+  const mapIntelApi = {
+    // Gives a summary of current region + nearby POIs
+    scanMap(radiusMeters = 1000) {
+      const world = getWorld();
+      const gs = getGS();
+
+      if (!world || !gs) {
+        overseerSay("Map intelligence offline. Missing world or player telemetry.");
+        return null;
+      }
+
+      const region = world.getCurrentRegion?.() || null;
+      const nearby = world.getNearbyPOIs?.(radiusMeters) || [];
+      const pos = gs.player?.position || { lat: "?", lng: "?" };
+
+      const summary = {
+        position: pos,
+        region: region
+          ? {
+              id: region.id,
+              name: region.name,
+              style: region.mapStyle,
+              dangerProfile: region.dangerProfile || "UNKNOWN",
+            }
+          : null,
+        pois: nearby.map((entry) => ({
+          id: entry.poi.id,
+          name: entry.poi.name,
+          distanceMeters: entry.distanceMeters,
+          tags: entry.poi.tags || [],
+        })),
+      };
+
+      return summary;
+    },
+
+    // Basic commentary about current region and POI density
+    regionCommentary(summary) {
+      if (!summary || !summary.region) {
+        overseerSay("You appear to be wandering in unclaimed territory. Or my sensors are sulking.");
+        return;
+      }
+
+      const r = summary.region;
+      const poiCount = summary.pois.length;
+
+      overseerSay(`Region: ${r.name} [${r.id}]`);
+      overseerSay(`Map style: ${r.style} // Danger profile: ${r.dangerProfile}`);
+
+      if (poiCount === 0) {
+        overseerSay("No mapped points of interest within sensor range. Either desolate… or deliberately hidden.");
+      } else if (poiCount <= 3) {
+        overseerSay("Sparse point-of-interest density. Recommend targeted exploration.");
+      } else if (poiCount <= 8) {
+        overseerSay("Moderate density of locations. Wasteland productivity potential detected.");
+      } else {
+        overseerSay("High density of mapped locations. Congratulations, you found the content cluster.");
+      }
+    },
+
+    // Finds POIs matching tag criteria
+    findPOIsByTag(tag, radiusMeters = 2000) {
+      const summary = this.scanMap(radiusMeters);
+      if (!summary) return [];
+
+      const matches = summary.pois.filter((p) => (p.tags || []).includes(tag));
+      return matches;
+    },
+  };
+
+  window.overseerMapIntel = mapIntelApi;
+
+  // -------------------------------------------------------------------------
+  // TERMINAL COMMAND: quest
+  // -------------------------------------------------------------------------
+
+  if (!window.overseerHandlers) window.overseerHandlers = {};
+  const handlers = window.overseerHandlers;
+
+  handlers.quest = function (args) {
+    const sub = (args[0] || "").toLowerCase();
+
+    if (!sub) {
+      overseerSay("Quest Director online. Use:");
+      overseerSay("  quest scan");
+      overseerSay("  quest featured");
+      overseerSay("  quest advance <id>");
+      overseerSay("  quest micro list");
+      overseerSay("  quest micro add <id> <description>");
+      overseerSay("  quest micro complete <id>");
+      return;
+    }
+
+    if (sub === "scan") {
+      const list = questDirectorApi.scanQuests();
+      if (!list) return;
+      overseerSay("Quest telemetry:");
+      list.forEach((q) => {
+        overseerSay(
+          `  - ${q.name} [${q.id}] :: STATE=${q.state.toUpperCase()} :: REQ LVL=${q.recommendedLevel}`
+        );
+      });
+      return;
+    }
+
+    if (sub === "featured") {
+      const q = questDirectorApi.pickFeaturedQuest();
+      if (!q) {
+        overseerSay("No quests available to feature. Narrative layer appears suspiciously empty.");
+        return;
+      }
+      overseerSay(`Featured Quest: ${q.name} [${q.id}]`);
+      const step = q.steps[q.currentStepIndex]?.description || "No objective description available.";
+      overseerSay(`Current Objective: ${step}`);
+      overseerSay(questDirectorApi.getQuestCommentary(q));
+      overseerSay(personality.speak());
+      return;
+    }
+
+    if (sub === "advance") {
+      const id = args[1];
+      if (!id) {
+        overseerSay("Specify a quest ID to advance.");
+        return;
+      }
+      questDirectorApi.advanceQuest(id);
+      return;
+    }
+
+    if (sub === "micro") {
+      const sub2 = (args[1] || "").toLowerCase();
+
+      if (!sub2) {
+        overseerSay("Micro-quest management. Use:");
+        overseerSay("  quest micro list");
+        overseerSay("  quest micro add <id> <description>");
+        overseerSay("  quest micro complete <id>");
+        return;
+      }
+
+      if (sub2 === "list") {
+        const mqs = questDirectorApi.listMicroQuests();
+        if (!mqs.length) {
+          overseerSay("No micro-quests registered.");
+          return;
+        }
+        overseerSay("Registered micro-quests:");
+        mqs.forEach((mq) => {
+          overseerSay(`  - ${mq.id}: ${mq.description} [${mq.state}]`);
+        });
+        return;
+      }
+
+      if (sub2 === "add") {
+        const id = args[2];
+        const desc = args.slice(3).join(" ");
+        if (!id || !desc) {
+          overseerSay("Usage: quest micro add <id> <description>");
+          return;
+        }
+        questDirectorApi.createMicroQuest(id, desc);
+        return;
+      }
+
+      if (sub2 === "complete") {
+        const id = args[2];
+        if (!id) {
+          overseerSay("Usage: quest micro complete <id>");
+          return;
+        }
+        questDirectorApi.completeMicroQuest(id);
+        return;
+      }
+
+      overseerSay("Unknown micro-quest subcommand.");
+      return;
+    }
+
+    overseerSay("Unknown quest subcommand.");
+  };
+
+  // -------------------------------------------------------------------------
+  // TERMINAL COMMAND: mapintel
+  // -------------------------------------------------------------------------
+
+  handlers.mapintel = function (args) {
+    const sub = (args[0] || "").toLowerCase();
+
+    if (!sub) {
+      overseerSay("Map Intelligence online. Use:");
+      overseerSay("  mapintel scan");
+      overseerSay("  mapintel tags <tag>");
+      return;
+    }
+
+    if (sub === "scan") {
+      const summary = mapIntelApi.scanMap(1000);
+      if (!summary) return;
+      mapIntelApi.regionCommentary(summary);
+      return;
+    }
+
+    if (sub === "tags") {
+      const tag = args[1];
+      if (!tag) {
+        overseerSay("Specify a tag to search for (e.g. 'vault', 'town', 'rad', 'encounter').");
+        return;
+      }
+      const matches = mapIntelApi.findPOIsByTag(tag, 2000);
+      if (!matches.length) {
+        overseerSay(`No POIs with tag '${tag}' detected within 2000 meters.`);
+        return;
+      }
+      overseerSay(`POIs with tag '${tag}':`);
+      matches.forEach((p) => {
+        const dist = Math.round(p.distanceMeters);
+        overseerSay(`  - ${p.name} [${p.id}] at ~${dist}m`);
+      });
+      return;
+    }
+
+    overseerSay("Unknown mapintel subcommand.");
+  };
+
+})();
+
+(function () {
+  "use strict";
+
+  var chat = document.getElementById('chat');
+  var input = document.getElementById('input');
+  var send = document.getElementById('send');
+
+  if (input) try { input.focus(); } catch (e) {}
+
+  function scrollToBottom() {
+    if (!chat) return;
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function addMessage(text, sender) {
+    sender = sender || "player";
+    if (!chat) return;
+    var div = document.createElement('div');
+    div.className = "message " + sender;
+    div.innerHTML = String(text);
+    chat.appendChild(div);
+    scrollToBottom();
+  }
+
+  if (send) send.addEventListener('click', processInput);
+  if (input) {
+    input.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') processInput();
+    });
+  }
+
+  function processInput() {
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text) return;
+    var normalized = text.toLowerCase();
+    addMessage(escapeHtml(text), "player");
+    scrollToBottom();
+    input.value = '';
+
+    if (normalized === 'quit' && state.gameActive) {
+      state.gameActive = null;
+      addMessage("Session terminated. Back to chat.", "overseer");
+      return;
+    }
+
+    var response = generateResponse(normalized);
+    if (response && response.length) {
+      setTimeout(function () {
+        addMessage(response, "overseer");
+        scrollToBottom();
+      }, 800 + Math.random() * 900);
+    }
+
+    var gameDelay = 900 + Math.random() * 900;
+    if (state.gameActive === 'hacking') {
+      setTimeout(function () { addMessage(handleHackingGuess(text.toUpperCase()), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'redmenace') {
+      setTimeout(function () { addMessage(handleRedMenaceInput(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'nukaquiz') {
+      setTimeout(function () { addMessage(handleNukaQuiz(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'maze') {
+      setTimeout(function () { addMessage(handleMaze(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'blackjack') {
+      setTimeout(function () { addMessage(handleBlackjack(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'slots') {
+      setTimeout(function () { addMessage(handleSlotsInput(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'war') {
+      setTimeout(function () { addMessage(handleWar(text), "overseer"); }, gameDelay);
+    } else if (state.gameActive === 'texasholdem') {
+      setTimeout(function () { addMessage(handleTexasHoldem(text), "overseer"); }, gameDelay);
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
+  }
+
+  var state = {
+    greeted: false,
+    gameActive: null,
+    player: { caps: 0 },
+    hackingAttempts: 0,
+    hackingPassword: "",
+    rmWave: 1,
+    rmBaseHp: 100,
+    rmScrap: 50,
+    rmTurrets: [],
+    rmEnemies: [],
+    quizQuestions: [],
+    quizIndex: 0,
+    quizScore: 0,
+    mazePosition: { x: 0, y: 0 },
+    mazeGoal: { x: 2, y: 2 },
+    bjPlayer: 0,
+    bjDealer: 0,
+    warDeck: [],
+    thDeck: [],
+    thPlayerHand: [],
+    thDealerHand: [],
+    thCommunity: []
+  };
+
+  function generateResponse(input) {
+    if (!state.greeted) {
+      state.greeted = true;
+      if (input.indexOf('hello') !== -1 || input.indexOf('hi') !== -1) {
+        return "Hello...<br><br>Been a long time since anyone said that.<br><br>Who am I talking to?";
+      }
+      return "No greeting...<br><br>That's okay. You're different.";
+    }
+
+    if (input.indexOf('help') !== -1 || input.indexOf('games') !== -1 || input.indexOf('commands') !== -1) {
+      return "Available commands:<br><br>• 'hack' - Terminal cracker<br>• 'red menace' - Tower defense<br>• 'nukaquiz' - Trivia<br>• 'maze' - Navigate<br>• 'blackjack' - Card game<br>• 'slots' - Slots<br>• 'war' - Card war<br>• 'texas holdem' - Poker<br>• 'quit' - Exit game";
+    }
+
+    if (input.indexOf('hack') !== -1) { startHackingGame(); return ""; }
+    if (input.indexOf('red menace') !== -1) { startRedMenace(); return ""; }
+    if (input.indexOf('nukaquiz') !== -1) { startNukaQuiz(); return ""; }
+    if (input.indexOf('maze') !== -1) { startMaze(); return ""; }
+    if (input.indexOf('blackjack') !== -1) { startBlackjack(); return ""; }
+    if (input.indexOf('slots') !== -1) { startSlots(); return ""; }
+    if (input.indexOf('war') !== -1) { startWar(); return ""; }
+    if (input.indexOf('texas') !== -1 || input.indexOf('holdem') !== -1) { startTexasHoldem(); return ""; }
+
+    var fallbacks = [
+      "Signal's holding... barely.",
+      "You still out there?",
+      "Try typing 'help' for commands."
+    ];
+    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+  }
+
+  // HACKING GAME
+  function startHackingGame() {
+    state.gameActive = 'hacking';
+    state.hackingAttempts = 4;
+    state.hackingPassword = "DEMO";
+    addMessage("HACKING TERMINAL<br><br>Guess the password. " + state.hackingAttempts + " attempts.", "overseer");
+  }
+
+  function handleHackingGuess(guess) {
+    if (state.gameActive !== 'hacking') return "No hacking session active.";
+    state.hackingAttempts -= 1;
+    if (guess === state.hackingPassword) {
+      state.gameActive = null;
+      return "ACCESS GRANTED. +50 CAPS";
+    }
+    if (state.hackingAttempts <= 0) {
+      state.gameActive = null;
+      return "ACCESS LOCKED.";
+    }
+    return "ACCESS DENIED. Attempts: " + state.hackingAttempts;
+  }
+
+// OVERSEER V-BOT WEATHER ENGINE
+
+// ---------------------------------------------------------------------------
+// OVERSEER V-BOT EVENTS + GLITCH SYSTEM
+// Dynamic world events, warnings, and glitch effects for the Overseer Terminal.
+// ---------------------------------------------------------------------------
+
+(function () {
+  if (!window.overseerEvents) window.overseerEvents = {};
+  if (!window.overseerGlitch) window.overseerGlitch = {};
+
+  const personality = window.overseerPersonality;
+  const memory = window.overseerMemoryApi;
+
+  // -------------------------------------------------------------------------
+  // EVENT DATABASE
+  // -------------------------------------------------------------------------
+
+  const EVENT_DB = [
+    {
+      id: "rad_spike",
+      name: "Radiation Spike",
+      description: "A sudden surge of ambient radiation detected.",
+      effect() {
+        overseerSay("Warning: Radiation spike detected. Advise immediate relocation.");
+        memory?.noteRadEvent();
+      },
+    },
+    {
+      id: "dust_storm",
+      name: "Dust Storm",
+      description: "A Mojave dust storm sweeps across the region.",
+      effect() {
+        overseerSay("Environmental alert: Dust storm approaching. Visibility reduced.");
+      },
+    },
+    {
+      id: "seismic",
+      name: "Seismic Activity",
+      description: "Minor tremors detected beneath the Mojave Basin.",
+      effect() {
+        overseerSay("Seismic anomaly detected. Subsurface instability increasing.");
+      },
+    },
+    {
+      id: "faction_skirmish",
+      name: "Faction Skirmish",
+      description: "Two factions clash somewhere nearby.",
+      effect() {
+        overseerSay("Long-range sensors detect weapons fire. Faction skirmish in progress.");
+      },
+    },
+    {
+      id: "signal_anomaly",
+      name: "Signal Anomaly",
+      description: "An unknown encrypted signal is detected.",
+      effect() {
+        overseerSay("Encrypted signal detected. Attempting to decode…");
+        overseerSay("…decoding failed. Source unknown.");
+      },
+    },
+  ];
+
+  // -------------------------------------------------------------------------
+  // EVENT ENGINE API
+  // -------------------------------------------------------------------------
+
+  const eventsApi = {
+    triggerRandomEvent() {
+      const event = EVENT_DB[Math.floor(Math.random() * EVENT_DB.length)];
+      overseerSay(`Event triggered: ${event.name}`);
+      event.effect();
+      overseerSay(personality.speak());
+      return event.id;
+    },
+
+    triggerEventById(id) {
+      const event = EVENT_DB.find((e) => e.id === id);
+      if (!event) {
+        overseerSay(`No event found with ID '${id}'.`);
+        return;
+      }
+      overseerSay(`Event triggered: ${event.name}`);
+      event.effect();
+      overseerSay(personality.speak());
+    },
+
+    listEvents() {
+      return EVENT_DB.map((e) => `${e.id} — ${e.name}`);
+    },
+  };
+
+  window.overseerEvents = eventsApi;
+
+  // -------------------------------------------------------------------------
+  // GLITCH ENGINE
+  // -------------------------------------------------------------------------
+
+  const GLITCH_LINES = [
+    "## SIGNAL CORRUPTION ##",
+    "ERR::STACK OVERFLOW::RETRYING",
+    "…overseer…overseer…overseer…",
+    "[DATA REDACTED]",
+    "UNAUTHORIZED ACCESS DETECTED",
+    "### MEMORY FAULT ###",
+    ">>> REBOOTING SUBROUTINE <<<",
+    "!!! CRITICAL CORE INSTABILITY !!!",
+  ];
+
+  const glitchApi = {
+    burst() {
+      const count = Math.floor(Math.random() * 3) + 2;
+      for (let i = 0; i < count; i++) {
+        const line = GLITCH_LINES[Math.floor(Math.random() * GLITCH_LINES.length)];
+        overseerSay(line);
+      }
+      overseerSay(personality.speak());
+    },
+
+    inject(text) {
+      const corrupted = text
+        .split("")
+        .map((ch) => (Math.random() < 0.1 ? "#" : ch))
+        .join("");
+      overseerSay(corrupted);
+    },
+
+    redacted(text) {
+      overseerSay(`[${text}]`);
+      overseerSay("[REDACTED BY VAULT-TEC SECURITY DIVISION]");
+    },
+  };
+
+  window.overseerGlitch = glitchApi;

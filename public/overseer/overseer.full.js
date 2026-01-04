@@ -383,7 +383,6 @@
 
 })();
 
-     ------------------------- */
   var chat = document.getElementById('chat');
   var input = document.getElementById('input');
   var send = document.getElementById('send');

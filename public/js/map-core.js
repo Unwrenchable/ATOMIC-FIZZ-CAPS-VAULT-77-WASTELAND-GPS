@@ -1,354 +1,172 @@
-// public/js/map-core.js – Fallout-style map core (Refactored)
-(function () {
-  'use strict';
+// map-core.js
+// Wasteland GPS + MapTiler styles + basic GPS UI
 
-  let map = null;
-  let currentMapLayer = null;
-  let osmLayer = null;
-  let cartoDarkLayer = null;
-  let cartoLightLayer = null;
+// MapTiler config (replace with your real key & style IDs)
+const MAPTILER_KEY = "YOUR_MAPTILER_KEY_HERE";
 
-  // POI layer groups
-  let poiLayers = {
-    workshop: null,
-    loot: null,
-    turret: null,
-    default: null
-  };
+const MAP_STYLES = {
+  rad_zone_red_ocean: "rad_zone_red_ocean",
+  vaulttec_blue_terminal: "vaulttec_blue_terminal",
+  desert_ruins_explorer: "desert_ruins_explorer",
+};
 
-  const DEFAULT_CENTER = [36.1699, -115.1398]; // Vegas / Mojave
-  const DEFAULT_ZOOM = 13;
+const DEFAULT_STYLE = MAP_STYLES.vaulttec_blue_terminal;
+const MOJAVE_CENTER = [36.1699, -115.1398];
+const MOJAVE_ZOOM = 10;
 
-  function safeLog(...args) { try { console.log(...args); } catch (e) {} }
-  function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
+let wastelandMap = null;
+let baseTiles = null;
 
-  // ------------------------------------------------------------
-  // Fallout theme helper (body class based)
-  // ------------------------------------------------------------
-  function setMapTheme(theme) {
-    document.body.classList.remove('fallout-green', 'fallout-amber', 'fallout-blue');
-    if (theme) {
-      document.body.classList.add(theme);
-    }
-  }
+function initWastelandMap() {
+  const mapEl = document.getElementById("map");
+  if (!mapEl || wastelandMap) return;
 
-  // -------------------------
-  // Icon helpers
-  // -------------------------
-  function createSvgIcon(url, size = [32, 32], anchor = [16, 32]) {
-    try {
-      return L.icon({
-        iconUrl: url,
-        iconSize: size,
-        iconAnchor: anchor,
-        popupAnchor: [0, -Math.round(size[1] / 2)],
-        className: 'custom-marker-icon'
-      });
-    } catch (e) {
-      safeWarn('Failed to create custom icon:', url, e);
-      return null;
-    }
-  }
-
-  const ICONS = {
-    workshop: createSvgIcon('/img/icons/workshop.svg', [36, 36], [18, 36]),
-    loot: createSvgIcon('/img/icons/loot.svg', [32, 32], [16, 32]),
-    turret: createSvgIcon('/img/icons/turret.svg', [30, 30], [15, 30]),
-    player: createSvgIcon('/img/icons/player.svg', [40, 40], [20, 40]),
-    default: L.icon({
-      iconUrl: '/leaflet/images/marker-icon.png',
-      iconRetinaUrl: '/leaflet/images/marker-icon-2x.png',
-      shadowUrl: '/leaflet/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    })
-  };
-
-  // -------------------------
-  // Tile layers
-  // -------------------------
-  function createTileLayers() {
-    try {
-      osmLayer = L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        { maxZoom: 19, attribution: '© OpenStreetMap contributors', subdomains: ['a', 'b', 'c'] }
-      );
-    } catch (e) { safeWarn('OSM layer failed', e); }
-
-    try {
-      cartoDarkLayer = L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        { maxZoom: 20, attribution: '© OpenStreetMap © Carto', subdomains: ['a', 'b', 'c'] }
-      );
-    } catch (e) { safeWarn('Carto Dark layer failed', e); }
-
-    try {
-      cartoLightLayer = L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-        { maxZoom: 20, attribution: '© OpenStreetMap © Carto', subdomains: ['a', 'b', 'c'] }
-      );
-    } catch (e) { safeWarn('Carto Light layer failed', e); }
-
-    [osmLayer, cartoDarkLayer, cartoLightLayer].forEach(layer => {
-      if (layer) {
-        layer.on('tileerror', e => {
-          safeWarn('Tile load failed:', e.url || 'unknown');
-        });
-      }
-    });
-  }
-
-  // -------------------------
-  // POI layer creation
-  // -------------------------
-  function createPoiLayerGroup() {
-    return L.markerClusterGroup ? L.markerClusterGroup({ chunkedLoading: true }) : L.layerGroup();
-  }
-
-  // -------------------------
-  // Safe POI addition
-  // -------------------------
-  function addPoi(poi) {
-    const lat = Number(poi.lat ?? poi.latitude ?? poi.y);
-    const lng = Number(poi.lng ?? poi.lon ?? poi.longitude ?? poi.x);
-
-    if (isNaN(lat) || isNaN(lng)) {
-      safeWarn('Skipping invalid POI (bad lat/lng):', poi);
-      return;
-    }
-
-    try {
-      const type = (poi.type || 'default').toLowerCase();
-      const icon = ICONS[type] || ICONS.default;
-      const marker = L.marker([lat, lng], { icon });
-
-      const popupHtml = `
-        <strong>${poi.name || 'Unnamed POI'}</strong><br>
-        Type: ${poi.type || 'unknown'}<br>
-        ${poi.description || poi.notes || ''}<br>
-        <small>ID: ${poi.id || 'N/A'}</small>
-      `;
-      marker.bindPopup(popupHtml);
-
-      const layerKey =
-        type === 'workshop' ? 'workshop' :
-        type === 'loot' ? 'loot' :
-        type === 'turret' ? 'turret' :
-        'default';
-
-      if (!poiLayers[layerKey]) {
-        poiLayers[layerKey] = createPoiLayerGroup();
-      }
-
-      poiLayers[layerKey].addLayer(marker);
-      safeLog(`Added POI: ${poi.id || poi.name} at [${lat}, ${lng}]`);
-    } catch (err) {
-      safeWarn('addPoi failed:', err, poi);
-    }
-  }
-
-  // -------------------------
-  // Load POIs from JSON files
-  // -------------------------
-  async function loadPOIs() {
-    Object.keys(poiLayers).forEach(k => {
-      if (!poiLayers[k]) poiLayers[k] = createPoiLayerGroup();
-    });
-
-    const urls = [
-      '/data/map/pois/sample.json',
-      '/data/map/pois/pois.json',
-      '/data/map/pois/workshops.json'
-    ];
-
-    for (const url of urls) {
-      try {
-        const res = await fetch(url, { cache: 'no-cache' });
-        if (!res.ok) {
-          safeWarn(`POI file not found: ${url} (HTTP ${res.status})`);
-          continue;
-        }
-
-        const data = await res.json();
-        if (!Array.isArray(data)) {
-          safeWarn(`Invalid POI data (not array): ${url}`);
-          continue;
-        }
-
-        data.forEach(addPoi);
-        safeLog(`Loaded ${data.length} POIs from ${url}`);
-      } catch (e) {
-        safeWarn(`Failed to load POIs from ${url}:`, e);
-      }
-    }
-
-    if (map) {
-      Object.values(poiLayers).forEach(layer => {
-        if (layer && !map.hasLayer(layer)) {
-          layer.addTo(map);
-        }
-      });
-
-      if (!map._layerControl) {
-        const overlays = {
-          'Workshops': poiLayers.workshop,
-          'Loot': poiLayers.loot,
-          'Turrets': poiLayers.turret,
-          'Other POIs': poiLayers.default
-        };
-        map._layerControl = L.control.layers(null, overlays, { collapsed: false }).addTo(map);
-      }
-    }
-  }
-
-  // -------------------------
-  // Map Initialization
-  // -------------------------
-  function initMap() {
-    const mapEl = document.getElementById('map');
-    if (!mapEl) {
-      safeWarn('Map element #map not found');
-      return;
-    }
-
-    mapEl.classList.add('map-crt');
-
-    if (map && map instanceof L.Map) {
-      setTimeout(() => map.invalidateSize(), 200);
-      return;
-    }
-
-    try {
-      map = L.map(mapEl, {
-        center: DEFAULT_CENTER,
-        zoom: DEFAULT_ZOOM,
-        preferCanvas: true,
-        zoomControl: false,
-        attributionControl: false
-      });
-      window._map = map;
-      window.map = map;
-    } catch (e) {
-      safeWarn('Map creation failed:', e);
-      return;
-    }
-
-    try {
-      delete L.Icon.Default.prototype._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl: '/images/marker-icon-2x.png',
-        iconUrl: '/images/marker-icon.png',
-        shadowUrl: '/images/marker-shadow.png'
-      });
-    } catch (e) {
-      safeWarn('Marker default icon override failed:', e);
-    }
-
-    createTileLayers();
-
-    currentMapLayer = cartoDarkLayer || osmLayer;
-    if (currentMapLayer) currentMapLayer.addTo(map);
-    setMapTheme('fallout-green');
-
-    L.control.zoom({ position: 'topleft' }).addTo(map);
-
-    setTimeout(() => {
-      loadPOIs().catch(e => safeWarn('POI loading failed:', e));
-      window.dispatchEvent(new Event('map-ready'));
-    }, 300);
-
-    setTimeout(() => map.invalidateSize(), 250);
-  }
-
-  // -------------------------
-  // Map Style Switcher
-  // -------------------------
-  function switchMapStyle(style) {
-    if (!map) return;
-
-    if (currentMapLayer && map.hasLayer(currentMapLayer)) {
-      map.removeLayer(currentMapLayer);
-    }
-
-    if (style === 'dark' && cartoDarkLayer) {
-      currentMapLayer = cartoDarkLayer;
-      setMapTheme('fallout-green');
-    } else if (style === 'light' && cartoLightLayer) {
-      currentMapLayer = cartoLightLayer;
-      setMapTheme('fallout-amber');
-    } else if (style === 'osm' && osmLayer) {
-      currentMapLayer = osmLayer;
-      setMapTheme('fallout-blue');
-    } else {
-      currentMapLayer = cartoDarkLayer || osmLayer;
-      setMapTheme('fallout-green');
-    }
-
-    if (currentMapLayer) currentMapLayer.addTo(map);
-    setTimeout(() => map.invalidateSize(), 150);
-  }
-
-  // -------------------------
-  // Attach Map Mode Button
-  // -------------------------
-  function attachMapModeButton() {
-    const btn = document.getElementById('mapModeBtn');
-    if (!btn) return;
-
-    const modes = ['dark', 'light', 'osm'];
-    let idx = 0;
-
-    btn.addEventListener('click', () => {
-      idx = (idx + 1) % modes.length;
-      switchMapStyle(modes[idx]);
-    });
-  }
-
-  // -------------------------
-  // Safety CSS (CRT/map layering)
-  // -------------------------
-  (function injectSafetyCss() {
-    const id = 'map-core-safety';
-    if (document.getElementById(id)) return;
-
-    const css = `
-      #map { min-height: 260px; height: 100%; width: 100%; position: relative; }
-      .leaflet-container { background: #0a1f0a; }
-      .leaflet-tile-pane img.leaflet-tile {
-        image-rendering: pixelated;
-        filter: contrast(1.35) saturate(0.4) hue-rotate(110deg);
-      }
-      .static-noise, .top-overlay {
-        pointer-events: none !important;
-        z-index: 2 !important;
-      }
-      #map, .map-container {
-        pointer-events: auto !important;
-        z-index: 1 !important;
-      }
-    `;
-    const style = document.createElement('style');
-    style.id = id;
-    style.textContent = css;
-    document.head.appendChild(style);
-  })();
-
-  // -------------------------
-  // Init & Export
-  // -------------------------
-  window.switchMapStyle = switchMapStyle;
-  window.initLeafletMapCore = initMap;
-
-  window.addEventListener('pipboyReady', () => {
-    try {
-      initMap();
-      attachMapModeButton();
-    } catch (e) {
-      safeWarn('pipboyReady → map init failed', e);
-    }
+  wastelandMap = L.map("map", {
+    center: MOJAVE_CENTER,
+    zoom: MOJAVE_ZOOM,
+    zoomControl: false,
+    attributionControl: false,
+    preferCanvas: true,
   });
 
-  // Removed old fallback auto-init to avoid double map engines.
-})();
+  baseTiles = L.tileLayer(
+    `https://api.maptiler.com/maps/${DEFAULT_STYLE}/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`,
+    {
+      tileSize: 512,
+      zoomOffset: -1,
+      crossOrigin: true,
+    }
+  );
+
+  baseTiles.addTo(wastelandMap);
+
+  loadPOIs();
+  initMapControls();
+  initMapStyleButtons();
+}
+
+function switchTileStyle(styleKey) {
+  if (!baseTiles) return;
+
+  const styleId = MAP_STYLES[styleKey] || DEFAULT_STYLE;
+
+
+  baseTiles.setUrl(
+    `https://api.maptiler.com/maps/${styleId}/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`
+  );
+
+  setRadOverlay(styleKey === "rad_zone_red_ocean");
+}
+
+function initMapStyleButtons() {
+  const buttons = Array.from(document.querySelectorAll(".map-style-btn"));
+  if (!buttons.length) return;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const style = btn.getAttribute("data-style");
+      if (!style) return;
+      switchTileStyle(style);
+    });
+  });
+}
+
+async function loadPOIs() {
+  try {
+    const res = await fetch("/data/map/pois/poi.json");
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+
+    data.forEach((poi) => {
+      if (typeof poi.lat !== "number" || typeof poi.lng !== "number") return;
+
+      const marker = L.circleMarker([poi.lat, poi.lng], {
+        radius: 6,
+        color: "#00ff88",
+        fillColor: "#00ff88",
+        fillOpacity: 0.8,
+        className: "pipboy-marker",
+      });
+
+      const name = poi.name || "Unknown Location";
+      const desc = poi.description || "";
+      marker.bindPopup(`<strong>${name}</strong><br>${desc}`);
+
+      marker.addTo(wastelandMap);
+    });
+  } catch (err) {
+    console.error("Failed to load POIs:", err);
+  }
+}
+
+function initMapControls() {
+  const centerBtn = document.getElementById("centerBtn");
+  const recenterMojaveBtn = document.getElementById("recenterMojave");
+  const requestGpsBtn = document.getElementById("requestGpsBtn");
+
+  if (centerBtn) {
+    centerBtn.addEventListener("click", () => {
+      if (!wastelandMap) return;
+      wastelandMap.setView(MOJAVE_CENTER, MOJAVE_ZOOM);
+    });
+  }
+
+  if (recenterMojaveBtn) {
+    recenterMojaveBtn.addEventListener("click", () => {
+      if (!wastelandMap) return;
+      wastelandMap.setView(MOJAVE_CENTER, MOJAVE_ZOOM);
+    });
+  }
+
+  if (requestGpsBtn && "geolocation" in navigator) {
+    requestGpsBtn.addEventListener("click", () => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          const acc = pos.coords.accuracy;
+
+          if (wastelandMap) {
+            wastelandMap.setView([lat, lng], 15);
+          }
+
+          updateGpsBadge(true, acc);
+        },
+        (err) => {
+          console.error("GPS error:", err);
+          updateGpsBadge(false, null);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 10000,
+        }
+      );
+    });
+  }
+}
+
+function updateGpsBadge(ok, accuracy) {
+  const accDot = document.getElementById("accDot");
+  const accText = document.getElementById("accText");
+  if (!accDot || !accText) return;
+
+  if (ok) {
+    accDot.style.background = "#00ff41";
+    accDot.style.boxShadow = "0 0 6px #00ff41";
+    accText.textContent = accuracy
+      ? `GPS: LOCK (${Math.round(accuracy)}m)`
+      : "GPS: LOCK";
+  } else {
+    accDot.style.background = "red";
+    accDot.style.boxShadow = "0 0 6px red";
+    accText.textContent = "GPS: ERROR";
+  }
+}
+
+function setRadOverlay(active) {
+  const radFlash = document.getElementById("radFlash");
+  if (!radFlash) return;
+  radFlash.style.display = active ? "block" : "none";
+}

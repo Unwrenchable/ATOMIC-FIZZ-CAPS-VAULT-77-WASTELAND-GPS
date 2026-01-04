@@ -25,7 +25,7 @@
 
   <!-- Leaflet core styles -->
   <link rel="stylesheet" href="/css/leaflet.css" />
-
+  
   <!-- Pip‑Boy fonts -->
   <link rel="stylesheet" href="/css/fonts.css" />
 
@@ -39,6 +39,7 @@
   <link rel="stylesheet" href="/css/fallout-amber.css" />
   <link rel="stylesheet" href="/css/fallout-blue.css" />
   <link rel="stylesheet" href="/css/map-effects.css" />
+  <link rel="stylesheet" href="/css/overseer.map.overlays.css">
 </head>
 <body class="fallout-green">
 
@@ -63,6 +64,9 @@
           <div class="pip-sub-title">VAULT 77 • WASTELAND GPS</div>
         </div>
         <div class="pip-controls">
+          <button class="btn" data-station="wasteland_classics">RADIO: CLASSICS</button>
+          <button class="btn" data-station="atomic_swing">ATOMIC SWING</button>
+          <button class="btn" data-station="vault77_broadcast">VAULT 77</button>
           <button class="btn danger-btn" id="enterNukeVaultBtn">ENTER NUKE VAULT</button>
           <button class="btn" id="centerBtn">CENTER</button>
           <button class="btn" id="recenterMojave">MOJAVE</button>
@@ -71,7 +75,7 @@
         </div>
       </header>
 
-      <!-- HUD / STATUS strip (shown on all panels if you want) -->
+      <!-- HUD / STATUS strip -->
       <div id="status" class="status status-good">
         Status: READY – tap REQUEST GPS if needed
       </div>
@@ -128,7 +132,6 @@
 
                 <div class="status">Nearby</div>
                 <ul id="nearbyList" class="nearby-list">
-                  <!-- JS can overwrite this -->
                   <li>Workshop Alpha — 1.2km</li>
                   <li>Supply Cache — 800m</li>
                   <li>Turret Parts — 2.4km</li>
@@ -141,12 +144,19 @@
               <div class="map-container">
                 <div class="map-controls">
                   <button class="btn" id="mapModeBtn">MAP MODE</button>
+
+                  <!-- Map Style Switcher -->
+                  <div class="map-style-switcher">
+                    <button class="btn map-style-btn" data-style="rad_zone_red_ocean">RAD ZONE</button>
+                    <button class="btn map-style-btn" data-style="vaulttec_blue_terminal">VAULT-TEC</button>
+                    <button class="btn map-style-btn" data-style="desert_ruins_explorer">DESERT</button>
+                  </div>
                 </div>
 
                 <!-- RAD warning overlay -->
                 <div id="radFlash" class="rad-warning" style="display:none;"></div>
 
-                <!-- Map with CRT overlay -->
+                <!-- Map -->
                 <div id="map" class="map-crt"></div>
 
                 <!-- GPS badge -->
@@ -211,30 +221,23 @@
         <!-- ITEMS PANEL -->
         <section id="panel-items" class="pip-panel hidden">
           <div class="pip-title">INVENTORY</div>
-          <div id="inventoryList">
-            <!-- JS: populate from your items / on-chain state -->
-          </div>
+          <div id="inventoryList"></div>
         </section>
 
         <!-- QUESTS PANEL -->
         <section id="panel-quests" class="pip-panel hidden">
           <div class="pip-title">QUEST LOG</div>
-          <div id="questList">
-            <!-- JS: populate from quests.json or existing quest system -->
-          </div>
+          <div id="questList"></div>
         </section>
 
         <!-- EXCHANGE PANEL -->
         <section id="panel-exchange" class="pip-panel hidden">
           <div class="pip-title">SCAVENGER'S EXCHANGE</div>
-          <div id="exchangeContent">
-            <!-- JS: populate with trade offers, mint UI, etc. -->
-          </div>
+          <div id="exchangeContent"></div>
         </section>
 
-      </div> <!-- /.pip-panels-wrapper -->
+      </div>
 
-      <!-- Bottom drawer hint text (global) -->
       <footer id="pipboy-footer">
         <span id="drawerHint">
           USE TABS TO NAVIGATE PIP‑BOY // MAP • STAT • ITEMS • QUESTS • EXCHANGE
@@ -244,7 +247,16 @@
   </div>
 
   <!-- Scripts -->
+   <script src="/js/game-state.js"></script>
+   <script src="/js/items-db.js"></script>
+  <script src="/js/inventory.js"></script>
+  <script src="/js/regions-poi.js"></script>
+  <script src="/js/encounters.js"></script>
+  <script src="/js/battle.js"></script>
+  <script src="/js/quests.js"></script>
+  <script src="/js/radio.js"></script>
   <script src="/js/leaflet.js"></script>
+  <script src="/overseer/overseer.map.overlays.js"></script>
 
   <!-- Solana -->
   <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
@@ -255,5 +267,7 @@
   <script src="/js/map-core.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/pipboy.js"></script>
+  <audio id="radioPlayer" preload="none"></audio>
+
 </body>
 </html>

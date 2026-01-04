@@ -516,7 +516,11 @@
         map.setView([_lastPlayerPosition.lat, _lastPlayerPosition.lng], 15);
       }
     });
-
+    
+    once('stylePipboy', () => window.overseerMapStyle.setStyle("pipboy"));
+    once('styleWinter', () => window.overseerMapStyle.setStyle("winter"));
+    once('styleDesert', () => window.overseerMapStyle.setStyle("desert"));
+    once('styleNone', () => window.overseerMapStyle.setStyle("none"));
     once('recenterMojave', () => {
       attachMapReference();
       if (map) map.setView(CONFIG.defaultCenter, CONFIG.defaultZoom);
@@ -586,8 +590,13 @@
   });
 
   window.addEventListener('map-ready', () => {
-    attachMapReference();
-    safeLog('Map ready');
+  attachMapReference();
+  safeLog('Map ready');
+
+  // DEFAULT MAP STYLE HERE
+  if (window.overseerMapStyle) {
+    window.overseerMapStyle.setStyle("pipboy");   // or "winter" / "desert" / "none"
+  }
   });
 
   window.__pipboy = {

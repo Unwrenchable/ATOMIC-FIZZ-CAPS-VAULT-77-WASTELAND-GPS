@@ -4,20 +4,22 @@
 
 /* Global resets & CRT theme */
 * {
-  box-sizing: border-border;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: 'VT323', monospace;
 }
 
 body {
-  background: #0a1f0a; /* Dark green wasteland */
-  color: #00ff41; /* Pip-Boy green */
+  background: #0a1f0a;
+  color: #00ff41;
   overflow: hidden;
   font-size: 16px;
 }
 
-/* Boot Screen */
+/* ===========================
+   BOOT SCREEN
+=========================== */
 #bootScreen {
   display: flex;
   justify-content: center;
@@ -35,7 +37,7 @@ body {
   width: 80%;
   max-width: 800px;
   height: 60%;
-  background: rgba(0, 255, 65, 0.05); /* Subtle green glow */
+  background: rgba(0, 255, 65, 0.05);
   border: 2px solid #00ff41;
   padding: 20px;
   position: relative;
@@ -63,14 +65,16 @@ body {
   50% { opacity: 0; }
 }
 
-/* Pip-Boy Shell (Main UI) */
+/* ===========================
+   MAIN PIP-BOY SCREEN
+=========================== */
 #pipboyScreen {
-  display: none; /* Hidden by default */
+  display: none;
   height: 100vh;
   width: 100vw;
   position: relative;
   background: #0a1f0a;
-  overflow: auto;
+  overflow: hidden;
 }
 
 #pipboyScreen:not(.hidden) {
@@ -79,19 +83,21 @@ body {
 
 .pipboy-shell {
   height: 100%;
-  padding: 10px;
+  width: 100%;
   position: relative;
 }
 
-/* CRT Effect (Scan lines, static, glow) */
+/* CRT EFFECT */
 .pipboy-shell::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(to bottom, transparent 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); /* Scan lines */
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    rgba(0,0,0,0.05) 1px,
+    transparent 2px
+  );
   pointer-events: none;
   z-index: 2;
   opacity: 0.5;
@@ -100,11 +106,8 @@ body {
 .pipboy-shell::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==') repeat; /* Subtle static noise */
+  inset: 0;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==') repeat;
   pointer-events: none;
   z-index: 3;
   opacity: 0.05;
@@ -117,171 +120,97 @@ body {
   100% { opacity: 0.05; }
 }
 
-/* Header */
-.pip-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.pip-title {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 24px;
-  text-shadow: 0 0 5px #00ff41;
-}
-
-.pip-controls {
-  display: flex;
-  gap: 10px;
-}
-
-.btn {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 12px;
-  background: #00ff41;
-  color: #000;
-  border: 2px solid #00ff41;
-  padding: 5px 10px;
-  cursor: pointer;
-  text-shadow: 0 0 3px #000;
-}
-
-.btn:hover {
-  background: #000;
-  color: #00ff41;
-  text-shadow: 0 0 5px #00ff41;
-  box-shadow: 0 0 10px #00ff41;
-}
-
-/* HUD Bars */
-.hud {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 10px;
-}
-
-.hud-block {
-  font-size: 14px;
-  text-shadow: 0 0 3px #00ff41;
-}
-
-.hp-bar, .xp-bar {
-  width: 100px;
-  height: 10px;
-  background: #000;
-  border: 1px solid #00ff41;
-  position: relative;
-}
-
-.hp-fill, .xp-fill {
-  height: 100%;
-  background: #00ff41;
-  box-shadow: 0 0 5px #00ff41;
-}
-
-/* Main Grid (Sidebar + Map) */
-.main-grid {
-  display: flex;
-  height: calc(100vh - 100px); /* Adjust for header/HUD */
-}
-
-.sidebar {
-  width: 200px;
-  background: rgba(0, 255, 65, 0.1);
-  padding: 10px;
-  border-right: 1px solid #00ff41;
-}
-
-.main {
-  flex: 1;
-  position: relative;
-}
-
-.map-container {
-  height: 100%;
-  position: relative;
-}
-
-/* Map (Leaflet Integration) */
-#map {
-  height: 100%;
-  filter: hue-rotate(120deg) saturate(0.5) brightness(1.2); /* Green CRT tint */
-}
-
-.map-controls {
+/* ===========================
+   TOP BAR (Tabs + Wallet)
+=========================== */
+#top-bar {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 24px;
   z-index: 1000;
 }
 
-/* Bottom Drawer & Tabs */
-#bottom-drawer {
+#wallet-connect {
   position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+}
+
+/* Fallout-style buttons */
+.pipboy-btn {
+  background: rgba(0, 255, 0, 0.05);
+  border: 2px solid #00ff41;
+  color: #00ff41;
+  padding: 6px 14px;
+  font-size: 15px;
+  font-family: 'Press Start 2P', cursive;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-shadow: 0 0 4px #00ff41;
+  box-shadow: 0 0 6px rgba(0,255,0,0.4);
+  transition: 0.15s ease;
+}
+
+.pipboy-btn:hover {
+  background: rgba(0, 255, 0, 0.15);
+  box-shadow: 0 0 12px rgba(0,255,0,0.8);
+  transform: scale(1.05);
+}
+
+.pipboy-btn:active {
+  transform: scale(0.97);
+  background: rgba(0, 255, 0, 0.25);
+}
+
+/* ===========================
+   MAP AREA
+=========================== */
+#pipboy-map-shell {
+  position: absolute;
+  top: 60px;
   bottom: 0;
   left: 0;
+  right: 0;
+  background: #010;
+  overflow: hidden;
+}
+
+#map {
   width: 100%;
-  background: rgba(0, 255, 65, 0.2);
-  border-top: 2px solid #00ff41;
-  z-index: 1001;
+  height: 100%;
+  filter: saturate(0.4) contrast(1.2) hue-rotate(90deg);
 }
 
-.drawer-handle {
-  cursor: pointer;
-  text-align: center;
-  padding: 5px;
-  background: #00ff41;
-  color: #000;
+/* CRT Scanlines Overlay */
+#pipboy-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 0, 0.05),
+    rgba(0, 255, 0, 0.05) 1px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 3px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.85;
 }
 
-.drawer-content {
-  display: flex;
-  padding: 10px;
-}
-
-.drawer-tabs {
-  display: flex;
-  gap: 10px;
-}
-
-.tab {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 14px;
-  padding: 5px 10px;
-  background: #000;
-  color: #00ff41;
-  border: 1px solid #00ff41;
-  cursor: pointer;
-}
-
-.tab.active {
-  background: #00ff41;
-  color: #000;
-}
-
-/* Panels (hidden by default) */
-.drawer-panels .panel {
-  display: none;
-}
-
-.drawer-panels .panel.active {
-  display: block;
-}
-
-/* Responsive for Mobile */
-@media (max-width: 768px) {
-  .main-grid {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #00ff41;
-  }
-
-  #map {
-    height: 300px; /* Adjust for smaller screens */
-  }
+/* Optional Radiation Fog */
+#rad-fog {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center,
+    rgba(255,0,0,0.15) 0%,
+    rgba(0,0,0,0.6) 80%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
