@@ -1,12 +1,8 @@
-// solana/fizzcaps/pda.ts
 import { PublicKey } from "@solana/web3.js";
 import {
   FIZZCAPS_PROGRAM_ID,
-  TOKEN_PROGRAM_ID,
-  ASSOCIATED_TOKEN_PROGRAM_ID,
 } from "./types";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
-
 /**
  * caps_mint PDA
  * Seeds: ["caps-mint"]
@@ -51,15 +47,10 @@ export function deriveLootMintAuthorityPda(): PublicKey {
  * Associated token account for any (owner, mint) pair.
  * Used for player_caps_ata and player_loot_ata.
  */
-export async function deriveAta(
+export function deriveAta(
   owner: PublicKey,
   mint: PublicKey
-): Promise<PublicKey> {
-  return getAssociatedTokenAddress(
-    mint,
-    owner,
-    false,
-    TOKEN_PROGRAM_ID,
-    ASSOCIATED_TOKEN_PROGRAM_ID
-  );
+): PublicKey {
+  return getAssociatedTokenAddress(mint, owner);
 }
+
