@@ -1,65 +1,15 @@
 "use client";
 
-import Script from "next/script";
-
 export default function OverseerPage() {
   return (
-    <main className="overseer-page">
-      {/* CAPS / status bar */}
-      <div className="terminal-status">
-        <span>CAPS: <span id="capsDisplay">0</span></span>
-      </div>
-
-      {/* Chat window */}
-      <div id="chat" className="terminal-chat" />
-
-      {/* Input row */}
-      <div className="terminal-input-row">
-        <input
-          id="input"
-          className="terminal-input"
-          type="text"
-          autoComplete="off"
-          placeholder="Type here..."
-        />
-        <button id="send" className="terminal-send">SEND</button>
-      </div>
-
-      {/* Mobile Game Controls */}
-      <div id="mobileGameControls" className="mobile-game-controls hidden" aria-hidden="true">
-        <div id="mgcHeader" className="mgc-header" />
-        <div id="mgcGeneric" className="mgc-generic-buttons" />
-
-        <div id="mgcDpad" className="mgc-dpad">
-          <button className="dpad-btn" data-dir="north">▲</button>
-          <div className="dpad-middle">
-            <button className="dpad-btn" data-dir="west">◀</button>
-            <button className="dpad-btn" data-dir="east">▶</button>
-          </div>
-          <button className="dpad-btn" data-dir="south">▼</button>
-        </div>
-
-        <div id="mgcNumpad" className="mgc-numpad">
-          <div id="numpadDisplay" className="numpad-display" />
-          <div className="numpad-keys">
-            <button className="nkey">1</button>
-            <button className="nkey">2</button>
-            <button className="nkey">3</button>
-            <button className="nkey">4</button>
-            <button className="nkey">5</button>
-            <button className="nkey">6</button>
-            <button className="nkey">7</button>
-            <button className="nkey">8</button>
-            <button className="nkey">9</button>
-            <button className="nkey">0</button>
-            <button className="nkey">←</button>
-            <button className="nkey">OK</button>
-          </div>
-        </div>
-      </div>
-
-      {/* Load the Overseer engine */}
-      <Script src="/overseer/overseer.full.js" strategy="afterInteractive" />
-    </main>
+    <iframe
+      src="/overseer/overseer.html"
+      style={{
+        width: "100%",
+        height: "100vh",
+        border: "none",
+        background: "black",
+      }}
+    />
   );
 }
