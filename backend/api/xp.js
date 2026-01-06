@@ -1,14 +1,22 @@
+// backend/api/xp.js
 const router = require("express").Router();
-const { awardXp } = require("../lib/xp");
+const { authMiddleware } = require("../lib/auth");
+const xp = require("../lib/xp"); // async module
 
-router.post("/api/xp/award", (req, res) => {
+router.post("/api/xp/award", authMiddleware, async (req, res) => {
   try {
-    const { player, amount } = req.body;
-    const result = awardXp(player, amount);
+    const { amount } = req.body;
+    const player = req.player; // trusted from JWT
+
+    // awardXp is async and validates inputs internally
+    const result = await xp.awardXp(player, amount);
+
     res.json(result);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+    console.error("[api/xp] award error:", err && err.message ? err.message : err);
+    // Validation or policy errors -> 400, others -> 500
+    const status = err && /limit|invalid|missing/i.test(err.message) ? 400 : 500;
+    res.status(status).json({ error: err.message || "Failed to award XP" });
   }
 });
 
