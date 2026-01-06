@@ -1,15 +1,31 @@
 // backend/api/loot-voucher.js
 const router = require("express").Router();
 const nacl = require("tweetnacl");
-const bs58 = require("bs58");
-const { serializeVoucherMessage } = require("../lib/gps");
+const serializeVoucherMessage = require("../lib/gps").serializeVoucherMessage;
 
-function isBase58(str) {
-  return typeof str === "string" && /^[1-9A-HJ-NP-Za-km-z]+$/.test(str);
+// Helper: robust bs58 loader that works with different package shapes
+function loadBs58() {
+  try {
+    const b = require("bs58");
+    // If bs58 exports an object with decode, use it
+    if (b && typeof b.decode === "function" && typeof b.encode === "function") {
+      return b;
+    }
+    // Fallback to base-x configured for Base58 alphabet
+    const baseX = require("base-x");
+    const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+    return baseX(BASE58);
+  } catch (err) {
+    // Re-throw with helpful message
+    throw new Error("Base58 library not available: " + err.message);
+  }
 }
+
+const bs58 = loadBs58();
+
 function safeDecodeBase58(str, name = "key") {
-  if (!str) throw new Error(`${name} missing`);
-  if (!isBase58(str)) throw new Error(`${name} contains non-base58 characters`);
+  if (!str || typeof str !== "string") throw new Error(`${name} missing`);
+  if (!/^[1-9A-HJ-NP-Za-km-z]+$/.test(str)) throw new Error(`${name} contains non-base58 characters`);
   try {
     return bs58.decode(str);
   } catch (err) {
@@ -20,20 +36,20 @@ function safeDecodeBase58(str, name = "key") {
 const USE_KMS = process.env.NODE_ENV === "production";
 let SERVER_KEYPAIR = null;
 
-// Dev: decode local secret key (dev only). Production: use KMS signer.
 if (!USE_KMS) {
-  const secretEnv = process.env.SERVER_SECRET_KEY;
+  // Dev-only: decode secret at runtime; fail fast with clear message
   try {
+    const secretEnv = process.env.SERVER_SECRET_KEY;
     const secret = safeDecodeBase58(secretEnv, "SERVER_SECRET_KEY");
     SERVER_KEYPAIR = nacl.sign.keyPair.fromSecretKey(secret);
+    console.log("[loot-voucher] using local SERVER_SECRET_KEY (dev)");
   } catch (err) {
-    // Fail fast with a clear message so logs show the cause
-    console.error("[loot-voucher] invalid SERVER_SECRET_KEY:", err.message);
-    throw err;
+    console.warn("[loot-voucher] no valid SERVER_SECRET_KEY found (dev only). Voucher endpoint will fail until a valid key is provided.", err.message);
+    SERVER_KEYPAIR = null;
   }
 } else {
-  // In production we expect to sign via KMS; ensure kmsSigner exists at runtime when needed.
-  // Do not decode any private key from env in production.
+  // Production: expect KMS signing; do not decode private key from env
+  console.log("[loot-voucher] running in production mode; will use KMS for signing");
 }
 
 /**
@@ -43,38 +59,33 @@ if (!USE_KMS) {
  */
 router.post("/api/loot-voucher", async (req, res) => {
   try {
-    // For now, static loot; later tie to world/POIs
+    // Basic voucher payload (static for now)
     const lootId = 1n;
     const latitude = 36.1699;
     const longitude = -115.1398;
     const timestamp = BigInt(Math.floor(Date.now() / 1000));
     const locationHint = "Vault 77 — Sector C";
 
-    const unsignedVoucher = {
-      lootId,
-      latitude,
-      longitude,
-      timestamp,
-      locationHint,
-    };
-
-    const message = serializeVoucherMessage(unsignedVoucher);
+    const unsignedVoucher = { lootId, latitude, longitude, timestamp, locationHint };
+    const message = serializeVoucherMessage(unsignedVoucher); // Buffer
 
     let signatureBytes;
     let serverKeyInfo;
 
     if (USE_KMS) {
-      // Production: sign with KMS (lib/kmsSigner.js)
+      // Production: sign with KMS
       const { signMessageWithKms } = require("../lib/kmsSigner");
-      // signMessageWithKms returns { keyIdUsed, signatureBase58 }
-      const { keyIdUsed, signatureBase58 } = await signMessageWithKms(Buffer.from(message));
-      signatureBytes = bs58.decode(signatureBase58);
-      serverKeyInfo = keyIdUsed; // return keyId so clients know which public key to verify against
+      const { keyIdUsed, signatureBytes: sigBuf } = await signMessageWithKms(Buffer.from(message));
+      signatureBytes = sigBuf;
+      serverKeyInfo = keyIdUsed;
     } else {
-      // Dev: sign locally with SERVER_KEYPAIR
-      const signature = nacl.sign.detached(message, SERVER_KEYPAIR.secretKey);
-      signatureBytes = signature;
-      serverKeyInfo = bs58.encode(SERVER_KEYPAIR.publicKey);
+      // Dev: require a valid local keypair
+      if (!SERVER_KEYPAIR) {
+        return res.status(500).json({ error: "SERVER_SECRET_KEY not configured or invalid (dev only)" });
+      }
+      const sig = nacl.sign.detached(message, SERVER_KEYPAIR.secretKey);
+      signatureBytes = Buffer.from(sig);
+      serverKeyInfo = bs58.encode(Buffer.from(SERVER_KEYPAIR.publicKey));
     }
 
     res.json({
@@ -87,8 +98,8 @@ router.post("/api/loot-voucher", async (req, res) => {
       serverKey: serverKeyInfo,
     });
   } catch (err) {
-    console.error("Voucher error:", err && err.message ? err.message : err);
-    res.status(500).send("Failed to generate voucher");
+    console.error("[loot-voucher] error:", err && err.stack ? err.stack : err);
+    res.status(500).json({ error: "Failed to generate voucher" });
   }
 });
 
