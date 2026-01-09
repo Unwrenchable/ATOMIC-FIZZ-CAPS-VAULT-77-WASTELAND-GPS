@@ -162,13 +162,13 @@
       </div>
     </div>
 
-        <!-- CORE NAMESPACE -->
+            <!-- CORE NAMESPACE -->
     <script>
       if (!window.Game) window.Game = {};
       if (!Game.modules) Game.modules = {};
     </script>
 
-    <!-- UI MODULES (KEEP THESE — THEY ARE NOT WORLD ENGINE) -->
+    <!-- UI MODULES (VALID) -->
     <script src="/js/modules/economy.js"></script>
     <script src="/js/modules/mintables.js"></script>
     <script src="/js/modules/factions.js"></script>
@@ -176,16 +176,7 @@
     <script src="/js/modules/quests.js"></script>
     <script src="/js/modules/worldmap.js"></script>
 
-    <!-- REMOVE THESE OLD BROKEN MODULES -->
-    <!--
-    <script src="/js/modules/reputation.js"></script>
-    <script src="/js/modules/weather.js"></script>
-    <script src="/js/modules/encounters.js"></script>
-    <script src="/js/modules/merchants.js"></script>
-    <script src="/js/modules/world.js"></script>
-    -->
-
-    <!-- WORLD ENGINE (THE REAL ONE — CORRECT PATHS) -->
+    <!-- WORLD ENGINE (VALID, REAL FILES) -->
     <script src="/js/world/worldLogic.js"></script>
     <script src="/js/world/worldWeather.js"></script>
     <script src="/js/world/bosses.js"></script>
@@ -198,7 +189,7 @@
     <script src="/js/world/index.js"></script>
 
     <!-- MAP + BOOT -->
-    <script src="/js/map-core.js"></script>
+    <script src="/js/map/map-core.js"></script>
     <script src="/js/boot.js"></script>
 
     <!-- STAT PANEL -->
