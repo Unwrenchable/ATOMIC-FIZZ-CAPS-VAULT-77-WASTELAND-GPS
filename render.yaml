@@ -1,0 +1,38 @@
+services:
+  # ============================
+  # Backend API (Node)
+  # ============================
+  - type: web
+    name: atomic-backend
+    rootDir: backend
+    env: node
+    plan: starter
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    autoDeploy: true
+    envVars:
+      NODE_ENV: production
+
+  # ============================
+  # Game UI (Next.js)
+  # ============================
+  - type: web
+    name: atomic-game-ui
+    rootDir: game-ui
+    env: node
+    plan: starter
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    autoDeploy: true
+    envVars:
+      NODE_ENV: production
+
+  # ============================
+  # Pip-Boy (Static Site)
+  # ============================
+  - type: static
+    name: atomic-pipboy
+    rootDir: public
+    buildCommand: ""
+    staticPublishPath: "."
+    autoDeploy: true
