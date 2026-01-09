@@ -1,0 +1,51 @@
+services:
+  # ============================
+  # Backend API (Node)
+  # ============================
+  - type: web
+    name: atomic-backend
+    rootDir: backend
+    env: node
+    plan: starter
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    autoDeploy: true
+    envVars:
+      NODE_ENV: production
+      PORT: 8080
+      SOLANA_RPC: {{ SOLANA_RPC }}
+      TOKEN_MINT: {{ TOKEN_MINT }}
+      GAME_VAULT_SECRET: {{ GAME_VAULT_SECRET }}
+      REDIS_URL: {{ REDIS_URL }}
+      SERVER_SECRET_KEY: {{ SERVER_SECRET_KEY }}
+      SERVER_PUBKEY: {{ SERVER_PUBKEY }}
+      HF_API_KEY: {{ HF_API_KEY }}
+      COOLDOWN_SECONDS: {{ COOLDOWN_SECONDS }}
+      CLAIM_RADIUS_M: {{ CLAIM_RADIUS_M }}
+
+  # ============================
+  # Game UI (Next.js)
+  # ============================
+  - type: web
+    name: atomic-game-ui
+    rootDir: game-ui
+    env: node
+    plan: starter
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    autoDeploy: true
+    envVars:
+      NODE_ENV: production
+      NEXT_PUBLIC_BACKEND_URL: {{ NEXT_PUBLIC_BACKEND_URL }}
+      NEXT_PUBLIC_SOLANA_RPC: {{ SOLANA_RPC }}
+      NEXT_PUBLIC_TOKEN_MINT: {{ TOKEN_MINT }}
+
+  # ============================
+  # Pip-Boy (Static Site)
+  # ============================
+  - type: static
+    name: atomic-pipboy
+    rootDir: public
+    buildCommand: ""
+    staticPublishPath: "."
+    autoDeploy: true
