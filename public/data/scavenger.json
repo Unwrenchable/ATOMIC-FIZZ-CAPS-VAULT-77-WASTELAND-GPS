@@ -1,0 +1,69 @@
+[
+  {
+    "id": "demo-0001",
+    "owner": "DemoWalletPubKey",
+    "title": "Rusty Service Rifle (Demo)",
+    "description": "Demo listing for the scavenger exchange. Replace with real items or API.",
+    "image": "https://via.placeholder.com/320x180.png?text=Demo+Item",
+    "tokenUri": null,
+    "metadata": {
+      "rarity": "common",
+      "level": 1,
+      "basePower": 10,
+      "type": "weapon"
+    },
+    "priceCAPS": 100,
+    "timestamp": "2025-12-31T00:00:00Z",
+    "status": "listed"
+  },
+  {
+    "id": "trade-001",
+    "owner": "WastelanderX42",
+    "title": "50 Stimpaks (Bulk)",
+    "description": "Fresh from the clinic, no rads. Quick trade, first come first serve.",
+    "image": "https://via.placeholder.com/320x180/00ff41/000000?text=Stimpaks",
+    "tokenUri": null,
+    "metadata": {
+      "rarity": "common",
+      "level": 1,
+      "qty": 50,
+      "type": "consumable"
+    },
+    "priceCAPS": 75,
+    "timestamp": "2026-01-02T14:30:00Z",
+    "status": "listed"
+  },
+  {
+    "id": "trade-002",
+    "owner": "VaultTechSurvivor",
+    "title": "Vault 77 Pip-Boy Skin (Rare)",
+    "description": "Limited edition glowing green skin. Level 50+ required.",
+    "image": "https://via.placeholder.com/320x180/00ff99/000000?text=Pip-Boy+Skin",
+    "tokenUri": null,
+    "metadata": {
+      "rarity": "rare",
+      "level": 50,
+      "type": "cosmetic"
+    },
+    "priceCAPS": 500,
+    "timestamp": "2026-01-01T09:15:00Z",
+    "status": "listed"
+  },
+  {
+    "id": "trade-003",
+    "owner": "RadAwayQueen",
+    "title": "100 RadAway + 5 Cloth",
+    "description": "Bulk radiation protection – perfect for deep wasteland runs.",
+    "image": "https://via.placeholder.com/320x180/ff6600/000000?text=RadAway",
+    "tokenUri": null,
+    "metadata": {
+      "rarity": "common",
+      "level": 1,
+      "qty": 100,
+      "type": "consumable"
+    },
+    "priceCAPS": 250,
+    "timestamp": "2026-01-03T18:45:00Z",
+    "status": "listed"
+  }
+]

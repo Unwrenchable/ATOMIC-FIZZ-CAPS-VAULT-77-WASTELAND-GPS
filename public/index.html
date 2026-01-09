@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ATOMIC FIZZ CAPS • Pip‑Boy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/css/pipboy.css" />
+  </head>
+
+  <body>
+    <div class="pipboy-root">
+      <div class="pipboy-bezel">
+        <div class="pipboy-frame">
+          <div class="pipboy-crt">
+
+            <div class="pipboy-noise"></div>
+            <div class="pipboy-scanlines"></div>
+
+            <div class="pipboy-header">
+              <div>
+                <span class="pipboy-title">PIP‑BOY 3000</span>
+                <span class="pipboy-subtitle">ATOMIC FIZZ CAPS</span>
+              </div>
+              <div class="pipboy-meta">
+                <span class="pipboy-meta-item">STATUS: ONLINE</span>
+              </div>
+            </div>
+
+            <div class="pipboy-tabs">
+              <button class="pip-tab pipboy-tab" data-panel="map">MAP</button>
+              <button class="pip-tab pipboy-tab" data-panel="stat">STAT</button>
+              <button class="pip-tab pipboy-tab" data-panel="items">ITEMS</button>
+              <button class="pip-tab pipboy-tab" data-panel="quests">QUESTS</button>
+              <button class="pip-tab pipboy-tab" data-panel="exchange">EXCHANGE</button>
+            </div>
+
+            <div class="pipboy-main">
+              <div class="pipboy-left">
+
+                <div id="panel-map" class="pipboy-panel active">
+                  <div class="panel-header">MAP</div>
+                  <div class="panel-body">
+                    <div id="mapContainer" class="pipboy-map"></div>
+                  </div>
+                </div>
+
+                <div id="panel-stat" class="pipboy-panel hidden">
+                  <div class="panel-header">STATUS</div>
+                  <div class="panel-body">
+
+                    <div class="panel-row">
+                      <span class="label">NAME</span>
+                      <span class="value" id="stat-name">WANDERER</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">LEVEL</span>
+                      <span class="value" id="stat-level">1</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">XP</span>
+                      <span class="value" id="stat-xp">0 / 100</span>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div class="panel-row">
+                      <span class="label">HEALTH</span>
+                      <span class="value" id="stat-hp-label">100 / 100</span>
+                    </div>
+                    <div class="stat-bar">
+                      <div class="stat-bar-fill" id="stat-hp-bar"></div>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">RADIATION</span>
+                      <span class="value" id="stat-rad-label">0%</span>
+                    </div>
+                    <div class="stat-bar stat-bar-rad">
+                      <div class="stat-bar-fill" id="stat-rad-bar"></div>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div class="panel-row">
+                      <span class="label">WALLET</span>
+                      <span class="value" id="stat-wallet">DISCONNECTED</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">FIZZ CAPS</span>
+                      <span class="value" id="stat-caps">0</span>
+                    </div>
+
+                    <div style="margin-top:6px;">
+                      <button id="connectWalletStat" class="pipboy-button">CONNECT WALLET</button>
+                      <button id="claimMintablesStat" class="pipboy-button pipboy-button-small">
+                        CLAIM MINTABLES
+                      </button>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div class="panel-row">
+                      <span class="label">WEAPON</span>
+                      <span class="value" id="stat-weapon">NONE</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">ARMOR</span>
+                      <span class="value" id="stat-armor">NONE</span>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div class="panel-row">
+                      <span class="label">FACTION</span>
+                      <span class="value" id="stat-faction">UNALIGNED</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">REPUTATION</span>
+                      <span class="value" id="stat-rep">NEUTRAL</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">LOCATION</span>
+                      <span class="value" id="stat-location">UNKNOWN</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">WEATHER</span>
+                      <span class="value" id="stat-weather">CLEAR</span>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div id="panel-items" class="pipboy-panel hidden">
+                  <div class="panel-header">INVENTORY</div>
+                  <div class="panel-body"></div>
+                </div>
+
+                <div id="panel-quests" class="pipboy-panel hidden">
+                  <div class="panel-header">QUESTS</div>
+                  <div class="panel-body"></div>
+                </div>
+
+                <div id="panel-exchange" class="pipboy-panel hidden">
+                  <div class="panel-header">EXCHANGE</div>
+                  <div class="panel-body"></div>
+                </div>
+
+              </div>
+
+              <div class="pipboy-right"></div>
+            </div>
+
+            <div class="pipboy-footer">
+              <div class="footer-left">VAULT‑TEC INDUSTRIES</div>
+              <div class="footer-center">WASTELAND GPS</div>
+              <div class="footer-right">REV 77</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CORE NAMESPACE -->
+    <script>
+      if (!window.Game) window.Game = {};
+      if (!Game.modules) Game.modules = {};
+    </script>
+
+    <!-- UI MODULES -->
+    <script src="/js/modules/economy.js"></script>
+    <script src="/js/modules/mintables.js"></script>
+    <script src="/js/modules/factions.js"></script>
+    <script src="/js/modules/reputation.js"></script>
+    <script src="/js/modules/weather.js"></script>
+    <script src="/js/modules/encounters.js"></script>
+    <script src="/js/modules/merchants.js"></script>
+    <script src="/js/modules/enemyScaling.js"></script>
+    <script src="/js/modules/quests.js"></script>
+    <script src="/js/modules/world.js"></script>
+    <script src="/js/modules/worldmap.js"></script>
+
+    <!-- WORLD ENGINE -->
+    <script src="/js/world/worldLogic.js"></script>
+    <script src="/js/world/worldWeather.js"></script>
+    <script src="/js/world/bosses.js"></script>
+    <script src="/js/world/enemies.js"></script>
+    <script src="/js/world/events.js"></script>
+    <script src="/js/world/encounters.js"></script>
+    <script src="/js/world/reputation.js"></script>
+    <script src="/js/world/merchants.js"></script>
+    <script src="/js/world/weather.js"></script>
+    <script src="/js/world/index.js"></script>
+
+    <!-- MAP + BOOT -->
+    <script src="/js/map-core.js"></script>
+    <script src="/js/boot.js"></script>
+
+    <!-- STAT PANEL -->
+    <script src="/js/stat-panel.js"></script>
+
+    <!-- PIP‑BOY SHELL -->
+    <script src="/js/pipboy.js"></script>
+  </body>
+</html>

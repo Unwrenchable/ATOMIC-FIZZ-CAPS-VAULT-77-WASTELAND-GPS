@@ -1,0 +1,609 @@
+// public/js/main.js – Player State, Mint Integration, XP/CAPS, Quests (Refactored)
+(function () {
+  'use strict';
+
+  // ---------------------------
+  // GLOBAL DATA
+  // ---------------------------
+  window.DATA = window.DATA || {
+    scavenger: [],
+    mintables: [],
+    quests: [],
+    locations: [],
+    collectibles: [],
+    factions: [],
+    inventory: [],
+    settings: {},
+    player: null
+  };
+
+  // ---------------------------
+  // PLAYER STATE (PER-DEVICE)
+  // ---------------------------
+  const PLAYER_STATE_KEY = 'afc_player_state_v1';
+
+  const PLAYER = {
+    inventory: [],
+    questsActive: [],
+    questsDone: [],
+    visitedLocations: [],
+    xp: 0,
+    caps: 0,
+    level: 1
+  };
+
+  function safeLog(...args) { try { console.log(...args); } catch (e) {} }
+  function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
+  function safeError(...args) { try { console.error(...args); } catch (e) {} }
+
+  function loadPlayerState() {
+    try {
+      const raw = localStorage.getItem(PLAYER_STATE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return;
+
+      if (Array.isArray(parsed.inventory)) PLAYER.inventory = parsed.inventory;
+      if (Array.isArray(parsed.questsActive)) PLAYER.questsActive = parsed.questsActive;
+      if (Array.isArray(parsed.questsDone)) PLAYER.questsDone = parsed.questsDone;
+      if (Array.isArray(parsed.visitedLocations)) PLAYER.visitedLocations = parsed.visitedLocations;
+      if (typeof parsed.xp === 'number') PLAYER.xp = parsed.xp;
+      if (typeof parsed.caps === 'number') PLAYER.caps = parsed.caps;
+      if (typeof parsed.level === 'number') PLAYER.level = parsed.level;
+
+      safeLog('Player state loaded');
+    } catch (e) {
+      safeWarn('Failed to load player state:', e.message);
+    }
+  }
+
+  function savePlayerState() {
+    try {
+      const payload = {
+        inventory: PLAYER.inventory,
+        questsActive: PLAYER.questsActive,
+        questsDone: PLAYER.questsDone,
+        visitedLocations: PLAYER.visitedLocations,
+        xp: PLAYER.xp,
+        caps: PLAYER.caps,
+        level: PLAYER.level
+      };
+      localStorage.setItem(PLAYER_STATE_KEY, JSON.stringify(payload));
+    } catch (e) {
+      safeWarn('Failed to save player state:', e.message);
+    }
+  }
+
+  // ---------------------------
+  // MAP / GAME CORE (no init here)
+  // ---------------------------
+
+  let map = null;
+  let _gameInitializing = false;
+  let _gameInitialized = false;
+  let _lastPlayerPosition = null;
+  let _geoWatchId = null;
+  let gpsLocked = false;
+  let connectedWallet = false;
+
+  const CONFIG = {
+    defaultCenter: [36.1699, -115.1398],
+    defaultZoom: 10,
+    apiBase: window.location.origin
+  };
+
+  function attachMapReference() {
+    map = window.map || window._map || null;
+  }
+
+  // ---------------------------
+  // DATA LOADING
+  // ---------------------------
+  async function loadJson(name) {
+    // Try API route first
+    try {
+      const res = await fetch(`${CONFIG.apiBase}/${name}`);
+      if (res.ok) return await res.json();
+    } catch (e) {
+      safeWarn(`Server fetch failed for /${name}:`, e.message);
+    }
+
+    // Fallback to static public/data
+    try {
+      const res = await fetch(`/data/${name}.json`);
+      if (res.ok) return await res.json();
+    } catch (e) {
+      safeWarn(`Local fallback failed for ${name}.json:`, e.message);
+    }
+
+    return null;
+  }
+
+  async function loadAllData() {
+    const names = ['locations', 'quests', 'mintables', 'scavenger', 'settings'];
+
+    for (const name of names) {
+      const data = await loadJson(name);
+      if (data !== null) {
+        window.DATA[name] = data;
+        safeLog(`Loaded ${name}:`, Array.isArray(data) ? data.length : 'object');
+      }
+    }
+
+    window.DATA.locations = Array.isArray(window.DATA.locations) ? window.DATA.locations : [];
+    window.DATA.quests = Array.isArray(window.DATA.quests) ? window.DATA.quests : [];
+    window.DATA.mintables = Array.isArray(window.DATA.mintables) ? window.DATA.mintables : [];
+    window.DATA.scavenger = Array.isArray(window.DATA.scavenger) ? window.DATA.scavenger : [];
+    window.DATA.settings = window.DATA.settings || {};
+  }
+
+  // ---------------------------
+  // GAMEPLAY HELPERS
+  // ---------------------------
+
+  function distanceMeters(lat1, lng1, lat2, lng2) {
+    const R = 6371000;
+    const toRad = d => d * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLng = toRad(lng2 - lng1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+      Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  function resolveItemById(id) {
+    const items = window.DATA.mintables || [];
+    return (
+      items.find(i => i && (i.id === id || i.slug === id || i.mintableId === id)) ||
+      { name: id, description: '' }
+    );
+  }
+
+  function givePlayerItemById(itemId) {
+    if (!itemId) return;
+    if (!PLAYER.inventory.includes(itemId)) {
+      PLAYER.inventory.push(itemId);
+      savePlayerState();
+      renderInventoryPanel();
+      safeLog('Player received item:', itemId);
+    }
+  }
+
+  function markLocationVisited(locationIdOrName) {
+    if (!locationIdOrName) return;
+    if (!PLAYER.visitedLocations.includes(locationIdOrName)) {
+      PLAYER.visitedLocations.push(locationIdOrName);
+      savePlayerState();
+    }
+  }
+
+  function activateQuest(questId) {
+    if (!questId) return;
+    if (PLAYER.questsDone.includes(questId) || PLAYER.questsActive.includes(questId)) return;
+    PLAYER.questsActive.push(questId);
+    savePlayerState();
+    renderQuestsPanel();
+    safeLog('Quest activated:', questId);
+  }
+
+  function addXP(amount) {
+    if (!amount) return;
+    PLAYER.xp += amount;
+    checkLevelUp();
+    savePlayerState();
+    updateHUD();
+  }
+
+  function addCaps(amount) {
+    if (!amount) return;
+    PLAYER.caps += amount;
+    savePlayerState();
+    updateHUD();
+  }
+
+  function checkLevelUp() {
+    const needed = PLAYER.level * 100;
+    if (PLAYER.xp >= needed) {
+      PLAYER.xp -= needed;
+      PLAYER.level += 1;
+      alert(`LEVEL UP! You are now level ${PLAYER.level}`);
+    }
+  }
+
+  function completeQuest(questId) {
+    if (!questId) return;
+    if (!PLAYER.questsActive.includes(questId)) return;
+
+    PLAYER.questsActive = PLAYER.questsActive.filter(id => id !== questId);
+    if (!PLAYER.questsDone.includes(questId)) PLAYER.questsDone.push(questId);
+
+    const quest = (window.DATA.quests || []).find(q => q && (q.id === questId || q.slug === questId));
+
+    if (quest?.rewards?.items) {
+      quest.rewards.items.forEach(itemId => givePlayerItemById(itemId));
+    }
+
+    if (quest?.rewards?.xp) addXP(quest.rewards.xp);
+    if (quest?.rewards?.caps) addCaps(quest.rewards.caps);
+
+    savePlayerState();
+    renderQuestsPanel();
+    renderInventoryPanel();
+    updateHUD();
+    safeLog('Quest completed:', questId);
+  }
+
+  function checkQuestTriggersAtPosition(lat, lng) {
+    const quests = window.DATA.quests;
+    if (!Array.isArray(quests) || !quests.length) return;
+
+    quests.forEach(q => {
+      if (!q) return;
+      const qId = q.id || q.slug;
+      if (!qId) return;
+
+      if (PLAYER.questsDone.includes(qId) || PLAYER.questsActive.includes(qId)) return;
+
+      let triggered = false;
+
+      if (q.trigger && typeof q.trigger.lat === 'number' && typeof q.trigger.lng === 'number') {
+        const radius = typeof q.trigger.radius === 'number' ? q.trigger.radius : 75;
+        const d = distanceMeters(lat, lng, q.trigger.lat, q.trigger.lng);
+        if (d <= radius) triggered = true;
+      }
+
+      if (!triggered && q.location) {
+        const locs = window.DATA.locations || [];
+        const match = locs.find(loc =>
+          loc &&
+          (loc.id === q.location || loc.slug === q.location || loc.name === q.location)
+        );
+        if (match && typeof match.lat === 'number' && typeof match.lng === 'number') {
+          const d = distanceMeters(lat, lng, match.lat, match.lng);
+          if (d <= (match.triggerRadius || 75)) triggered = true;
+        }
+      }
+
+      if (triggered) activateQuest(qId);
+    });
+  }
+
+  // ---------------------------
+  // PANELS RENDERING (Pip-Boy panels)
+  // ---------------------------
+
+  function renderInventoryPanel() {
+    const panel = document.getElementById('inventoryList'); // inner list, not whole pip-panel
+    if (!panel) return;
+
+    if (!PLAYER.inventory.length) {
+      panel.innerHTML = '<p>No items yet — explore the Mojave and claim some caps.</p>';
+      return;
+    }
+
+    const entries = PLAYER.inventory.map(id => {
+      const item = resolveItemById(id);
+      const name = item.name || item.id || item.slug || id;
+      const desc = item.description || '';
+      return `
+        <div class="pip-entry">
+          <strong>${name}</strong><br>
+          <span>${desc}</span>
+        </div>
+      `;
+    }).join('');
+
+    panel.innerHTML = entries;
+  }
+
+  function renderQuestsPanel() {
+    const panel = document.getElementById('questList'); // inner list
+    if (!panel) return;
+
+    const quests = window.DATA.quests || [];
+
+    const active = PLAYER.questsActive
+      .map(id => quests.find(q => q && (q.id === id || q.slug === id)))
+      .filter(Boolean);
+
+    const done = PLAYER.questsDone
+      .map(id => quests.find(q => q && (q.id === id || q.slug === id)))
+      .filter(Boolean);
+
+    const renderQuest = (q, extraClass) => {
+      const name = q.name || q.title || q.id || q.slug || 'Quest';
+      const desc = q.description || q.flavor || '';
+      return `
+        <div class="pip-entry ${extraClass || ''}">
+          <strong>${name}</strong><br>
+          <span>${desc}</span>
+        </div>
+      `;
+    };
+
+    const activeHtml = active.length
+      ? active.map(q => renderQuest(q, 'active')).join('')
+      : '<p>No active quests.</p>';
+
+    const doneHtml = done.length
+      ? done.map(q => renderQuest(q, 'done')).join('')
+      : '<p>No completed quests.</p>';
+
+    panel.innerHTML = `
+      <h2>Active Quests</h2>
+      ${activeHtml}
+      <h2>Completed</h2>
+      ${doneHtml}
+    `;
+  }
+
+  function updateHUD() {
+    const lvlEl = document.getElementById('lvl');
+    const capsEl = document.getElementById('caps');
+    const xpText = document.getElementById('xpText');
+    const xpFill = document.getElementById('xpFill');
+
+    if (lvlEl) lvlEl.textContent = PLAYER.level;
+    if (capsEl) capsEl.textContent = PLAYER.caps;
+
+    const needed = PLAYER.level * 100;
+    if (xpText) xpText.textContent = `${PLAYER.xp} / ${needed}`;
+    if (xpFill) xpFill.style.width = `${Math.min(100, (PLAYER.xp / needed) * 100)}%`;
+
+    // Mirror into STAT panel (if present)
+    const statLevel = document.getElementById('statLevel');
+    const statXP = document.getElementById('statXP');
+    const statCaps = document.getElementById('statCaps');
+    if (statLevel) statLevel.textContent = PLAYER.level;
+    if (statCaps) statCaps.textContent = PLAYER.caps;
+    if (statXP) statXP.textContent = `${PLAYER.xp} / ${needed}`;
+  }
+
+  // ---------------------------
+  // GEOLOCATION
+  // ---------------------------
+
+  function updateGPSBadge(acc) {
+    const accDot = document.getElementById('accDot');
+    const accText = document.getElementById('accText');
+    if (accDot && accText) {
+      accText.textContent = `GPS: ${Math.round(acc)}m`;
+      accDot.className = acc <= 20 ? 'acc-dot acc-good' : 'acc-dot';
+    }
+  }
+
+  function updatePlayerMarker(lat, lng) {
+    attachMapReference();
+    if (!map) return;
+
+    if (!map._playerMarker) {
+      map._playerMarker = L.circleMarker([lat, lng], {
+        radius: 8,
+        color: '#00ff66',
+        fillColor: '#00ff66',
+        fillOpacity: 0.8
+      }).addTo(map);
+    } else {
+      map._playerMarker.setLatLng([lat, lng]);
+    }
+  }
+
+  function startGeolocationWatch() {
+    if (!navigator.geolocation || gpsLocked) return;
+
+    _geoWatchId = navigator.geolocation.watchPosition(
+      pos => {
+        const { latitude: lat, longitude: lng, accuracy: acc } = pos.coords;
+        _lastPlayerPosition = { lat, lng, acc };
+
+        updateGPSBadge(acc);
+        updatePlayerMarker(lat, lng);
+
+        const locs = window.DATA.locations || [];
+        locs.forEach(loc => {
+          if (!loc || typeof loc.lat !== 'number' || typeof loc.lng !== 'number') return;
+          const d = distanceMeters(lat, lng, loc.lat, loc.lng);
+          const idOrName = loc.id || loc.slug || loc.name;
+          if (d <= (loc.triggerRadius || 50) && idOrName) {
+            markLocationVisited(idOrName);
+          }
+        });
+
+        checkQuestTriggersAtPosition(lat, lng);
+      },
+      err => safeWarn('Geolocation error:', err),
+      { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+    );
+  }
+
+  function stopGeolocationWatch() {
+    if (_geoWatchId !== null) {
+      navigator.geolocation.clearWatch(_geoWatchId);
+      _geoWatchId = null;
+      gpsLocked = false;
+      safeLog('GPS watch stopped');
+    }
+  }
+
+  // ---------------------------
+  // WALLET + MINT (exported for pipboy.js)
+  // ---------------------------
+
+  async function connectWallet() {
+    const provider = window.solana;
+    if (!provider || !provider.isPhantom) {
+      alert('Please install Phantom wallet');
+      return;
+    }
+
+    try {
+      await provider.connect();
+      const addr = provider.publicKey.toBase58();
+
+      const btn = document.getElementById('connectWallet');
+      const btnStat = document.getElementById('connectWalletStat');
+      const label = `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+
+      if (btn) btn.textContent = label;
+      if (btnStat) btnStat.textContent = label;
+
+      const walletAddressEl = document.getElementById('walletAddress');
+      if (walletAddressEl) walletAddressEl.textContent = addr;
+
+      connectedWallet = true;
+      safeLog('Wallet connected:', addr);
+    } catch (e) {
+      safeError('Wallet connection failed:', e);
+    }
+  }
+
+  async function claimMintableFromServer() {
+    try {
+      const res = await fetch('/api/mint-item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const data = await res.json();
+      if (!data.success) {
+        alert('Mint failed: ' + (data.error || 'Unknown error'));
+        return;
+      }
+
+      const itemId = data.itemId;
+      if (itemId) {
+        givePlayerItemById(itemId);
+        addCaps(5);   // example reward
+        addXP(10);    // example reward
+      }
+
+      alert(`Minted: ${itemId}`);
+    } catch (e) {
+      safeError('Mint error:', e);
+      alert('Mint failed');
+    }
+  }
+
+  window.connectWallet = connectWallet;
+  window.claimMintableFromServer = claimMintableFromServer;
+
+  // ---------------------------
+  // UI INIT (only core controls)
+  // ---------------------------
+
+  function initUI() {
+    const bound = new Set();
+
+    function once(id, fn) {
+      if (bound.has(id)) return;
+      bound.add(id);
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('click', fn);
+    }
+
+    once('requestGpsBtn', () => {
+      startGeolocationWatch();
+      const btn = document.getElementById('requestGpsBtn');
+      if (btn) btn.style.display = 'none';
+    });
+
+    once('centerBtn', () => {
+      attachMapReference();
+      if (map && _lastPlayerPosition) {
+        map.setView([_lastPlayerPosition.lat, _lastPlayerPosition.lng], 15);
+      }
+    });
+    
+    once('stylePipboy', () => window.overseerMapStyle.setStyle("pipboy"));
+    once('styleWinter', () => window.overseerMapStyle.setStyle("winter"));
+    once('styleDesert', () => window.overseerMapStyle.setStyle("desert"));
+    once('styleNone', () => window.overseerMapStyle.setStyle("none"));
+    once('recenterMojave', () => {
+      attachMapReference();
+      if (map) map.setView(CONFIG.defaultCenter, CONFIG.defaultZoom);
+    });
+
+    const drawer = document.getElementById('bottom-drawer');
+    const drawerToggle = document.getElementById('drawer-toggle');
+    if (drawerToggle && drawer) {
+      drawerToggle.addEventListener('click', () => {
+        drawer.classList.toggle('hidden');
+        setTimeout(() => {
+          attachMapReference();
+          if (map && map.invalidateSize) map.invalidateSize();
+        }, 260);
+      });
+    }
+
+    once('gps-lock-btn', () => {
+      if (gpsLocked) {
+        stopGeolocationWatch();
+        alert('GPS unlocked');
+      } else {
+        startGeolocationWatch();
+        gpsLocked = true;
+        alert('GPS locked');
+      }
+    });
+
+    // No more tab/drawer panel switching here; handled by pipboy.js
+    safeLog('UI initialized (core controls wired)');
+  }
+
+  // ---------------------------
+  // GAME INIT
+  // ---------------------------
+
+  async function initGame() {
+    if (_gameInitialized || _gameInitializing) return;
+    _gameInitializing = true;
+
+    try {
+      loadPlayerState();
+      await loadAllData();
+
+      attachMapReference();
+      initUI();
+
+      const locCountEl = document.getElementById('locations-count');
+      if (locCountEl) locCountEl.textContent = window.DATA.locations.length;
+
+      renderInventoryPanel();
+      renderQuestsPanel();
+      updateHUD();
+
+      _gameInitialized = true;
+      safeLog('Game initialized successfully');
+    } catch (e) {
+      safeError('Game initialization failed:', e);
+    } finally {
+      _gameInitializing = false;
+    }
+  }
+
+  window.addEventListener('pipboyReady', () => {
+    safeLog('Pip-Boy ready');
+    initGame();
+  });
+
+  window.addEventListener('map-ready', () => {
+  attachMapReference();
+  safeLog('Map ready');
+
+  // DEFAULT MAP STYLE HERE
+  if (window.overseerMapStyle) {
+    window.overseerMapStyle.setStyle("pipboy");   // or "winter" / "desert" / "none"
+  }
+  });
+
+  window.__pipboy = {
+    reinit: () => { _gameInitialized = false; initGame(); },
+    data: () => window.DATA,
+    map: () => { attachMapReference(); return map; },
+    location: () => _lastPlayerPosition,
+    player: () => PLAYER
+  };
+})();

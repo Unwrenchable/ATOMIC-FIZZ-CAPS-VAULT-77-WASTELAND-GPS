@@ -1,0 +1,52 @@
+/* ============================================================
+   PIP‑BOY SHELL — outer frame, header, tabs, drawer
+   ============================================================ */
+
+body {
+  background: #041f04;
+  color: #00ff00;
+  font-family: var(--pip-font);
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Header bar */
+.pip-header {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 22px;
+  border-bottom: 2px solid #00ff00;
+  letter-spacing: 1px;
+}
+
+/* Tab bar */
+.pip-tabs {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-bottom: 2px solid #00ff00;
+  font-size: 20px;
+}
+
+.pip-tab {
+  padding: 6px 12px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.pip-tab.active {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Bottom drawer */
+#bottom-drawer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #041f04;
+  border-top: 2px solid #00ff00;
+  padding: 12px;
+  z-index: 9999;
+  font-size: 18px;
+}

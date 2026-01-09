@@ -1,0 +1,117 @@
+/* -------------------------------------------------------------------------
+   OVERSEER MAP OVERLAYS
+   Pip-Boy Green, Atomic Winter, Desert Wasteland
+   Attach these classes to your #map container or wrapper elements.
+   ------------------------------------------------------------------------- */
+
+/* Base map container style (optional, adjust to your layout) */
+#map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ---------------------------------------
+   GLOBAL OVERLAY LAYERS (absolute positioned)
+   --------------------------------------- */
+
+.overseer-overlay-layer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 500; /* above tiles, below UI */
+}
+
+/* Pip-Boy grid overlay (green lines) */
+.overseer-pipboy-grid {
+  background-image:
+    linear-gradient(#00ff8844 1px, transparent 1px),
+    linear-gradient(90deg, #00ff8844 1px, transparent 1px);
+  background-size: 40px 40px;
+  mix-blend-mode: screen;
+}
+
+/* Pip-Boy scanlines overlay */
+.overseer-pipboy-scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 136, 0.05) 0px,
+    rgba(0, 255, 136, 0.05) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  mix-blend-mode: screen;
+}
+
+/* Subtle flicker layer */
+@keyframes overseerPipboyFlicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.97; }
+}
+.overseer-pipboy-flicker {
+  background: transparent;
+  animation: overseerPipboyFlicker 0.15s infinite;
+}
+
+/* ---------------------------------------
+   STYLE FILTERS (applied to map container)
+   --------------------------------------- */
+
+/* Pip-Boy color treatment */
+.overseer-style-pipboy {
+  filter: hue-rotate(90deg) saturate(300%) brightness(1.2);
+}
+
+/* Atomic Winter: cold, desaturated, blue-tinted */
+.overseer-style-atomic-winter {
+  filter: grayscale(100%) brightness(0.8) hue-rotate(200deg);
+}
+
+/* Desert Wasteland: sepia, high contrast */
+.overseer-style-desert {
+  filter: sepia(60%) brightness(1.1) contrast(1.2);
+}
+
+/* ---------------------------------------
+   ATOMIC WINTER EFFECTS
+   --------------------------------------- */
+
+/* Fog glow */
+.overseer-atomic-fog {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(200, 220, 255, 0.15),
+    transparent 70%
+  );
+  mix-blend-mode: lighten;
+}
+
+/* Snow canvas (positioned by JS) */
+.overseer-atomic-snow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 510;
+}
+
+/* ---------------------------------------
+   DESERT WASTELAND EFFECTS
+   --------------------------------------- */
+
+/* Dust texture (you provide /textures/dust.png if you want) */
+.overseer-desert-dust {
+  background-image: url("/textures/dust.png");
+  background-size: cover;
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+}
+
+/* Heat shimmer canvas (positioned by JS) */
+.overseer-desert-heat {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 510;
+}

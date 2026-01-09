@@ -1,0 +1,90 @@
+// backend/server.js
+const express = require("express");
+const cors = require("cors");
+const rateLimit = require("express-rate-limit");
+require("dotenv").config();
+
+const app = express();
+app.set("trust proxy", 1);
+
+const PORT = process.env.PORT || 3001;
+const NODE_ENV = process.env.NODE_ENV || "development";
+
+// Core middleware
+app.use(cors());
+app.use(express.json({ limit: "2mb" }));
+
+// Simple rate limiting (per IP)
+app.use(
+  rateLimit({
+    windowMs: 10 * 1000,
+    max: 20,
+  })
+);
+
+// Helper to safely mount routers so missing files don't crash the process
+function safeMount(path, requirePath) {
+  try {
+    const router = require(requirePath);
+    if (typeof router === "function") {
+      app.use(path, router);
+      console.log(`[server] mounted ${requirePath} at ${path}`);
+    } else {
+      // If the module exports a router directly (no path), mount it
+      app.use(router);
+      console.log(`[server] mounted ${requirePath} (no path)`);
+    }
+  } catch (err) {
+    console.warn(`[server] skipping ${requirePath} — module not found or failed to load: ${err.message}`);
+  }
+}
+
+// Mount APIs (use explicit API prefixes where appropriate)
+safeMount("/api/loot-voucher", "./api/loot-voucher");
+safeMount("/api/caps", "./api/caps");
+safeMount("/api/xp", "./api/xp");
+safeMount("/api/gps", "./api/gps");
+safeMount("/api/cooldowns", "./api/cooldowns");
+safeMount("/api/rotation", "./api/rotation");
+safeMount("/api/quests", "./api/quests");
+safeMount("/api/quest-endings", "./api/quest-endings");
+
+// Health check
+app.get("/api/health", (req, res) => {
+  res.json({ ok: true, status: "Backend running", env: NODE_ENV });
+});
+
+// Basic root
+app.get("/", (req, res) => {
+  res.send("Atomic Fizz Caps backend");
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("[server] unhandled error:", err && err.stack ? err.stack : err);
+  if (res.headersSent) return next(err);
+  res.status(500).json({ error: "Internal server error" });
+});
+
+// Start server with graceful shutdown
+const server = app.listen(PORT, () => {
+  console.log(`Atomic Fizz Caps backend running on port ${PORT} (env=${NODE_ENV})`);
+});
+
+function shutdown(signal) {
+  console.log(`[server] received ${signal}, shutting down...`);
+  server.close(() => {
+    console.log("[server] closed HTTP server");
+    process.exit(0);
+  });
+  // Force exit after timeout
+  setTimeout(() => {
+    console.error("[server] force exit");
+    process.exit(1);
+  }, 10_000).unref();
+}
+
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+
+module.exports = app;
