@@ -1,0 +1,70 @@
+diff --git a/game-ui/src/solana/fizzcaps/pda.ts b/game-ui/src/solana/fizzcaps/pda.ts
+index 1111111..2222222 100644
+--- a/game-ui/src/solana/fizzcaps/pda.ts
++++ b/game-ui/src/solana/fizzcaps/pda.ts
+@@ -1,6 +1,6 @@
+ import { PublicKey } from "@solana/web3.js";
+ import { FIZZCAPS_PROGRAM_ID } from "../client";
+-import { getAssociatedTokenAddress } from "@solana/spl-token";
++import { getAssociatedTokenAddressSync } from "@solana/spl-token";
+
+ export function deriveLootMintPda(lootId: string): PublicKey {
+   const [pda] = PublicKey.findProgramAddressSync(
+@@ -33,7 +33,7 @@ export function deriveVoucherPda(voucherId: string): PublicKey {
+ export function derivePlayerLootAta(
+   player: PublicKey,
+   lootMint: PublicKey
+ ) {
+-  return getAssociatedTokenAddress(lootMint, player);
++  return getAssociatedTokenAddressSync(lootMint, player);
+ }
+diff --git a/game-ui/app/api/scavenger/route.ts b/game-ui/app/api/scavenger/route.ts
+index 1111111..2222222 100644
+--- a/game-ui/app/api/scavenger/route.ts
++++ b/game-ui/app/api/scavenger/route.ts
+@@ -1,6 +1,6 @@
+ import { NextResponse } from "next/server";
+-import { loadData } from "@/src/lib/data";
++import { loadData } from "@/lib/data";
+
+ export async function GET() {
+-  const locations = await loadData("locations");
+-  return NextResponse.json(locations);
++  const scavenger = await loadData("scavenger");
++  return NextResponse.json(scavenger);
+ }
+diff --git a/game-ui/tsconfig.json b/game-ui/tsconfig.json
+index 1111111..2222222 100644
+--- a/game-ui/tsconfig.json
++++ b/game-ui/tsconfig.json
+@@ -1,6 +1,6 @@
+ {
+   "compilerOptions": {
+     "baseUrl": ".",
+     "paths": {
+-      "@/*": ["src/*"]
++      "@/*": ["src/*"]
+     }
+   },
+   "include": ["app", "src"]
+diff --git a/game-ui/src/lib/mint.ts b/game-ui/src/lib/mint.ts
+index 1111111..2222222 100644
+--- a/game-ui/src/lib/mint.ts
++++ b/game-ui/src/lib/mint.ts
+@@ -1,6 +1,4 @@
+-import { mintItem } from "@/lib/mint";
+ import { redis } from "./redis";
+
+ export async function mintItem() {
+   const id = "item_" + Math.random().toString(36).slice(2);
+diff --git a/game-ui/app/api/mint/route.ts b/game-ui/app/api/mint/route.ts
+index 1111111..2222222 100644
+--- a/game-ui/app/api/mint/route.ts
++++ b/game-ui/app/api/mint/route.ts
+@@ -1,6 +1,6 @@
+ import { NextResponse } from "next/server";
+-import { mintItem } from "@/src/lib/mint";
++import { mintItem } from "@/lib/mint";
+
+ export async function POST() {
+   try {

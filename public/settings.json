@@ -1,0 +1,21 @@
+{
+  "map": {
+    "tileProvider": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "attribution": "© OpenStreetMap contributors",
+    "fallbackProvider": "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    "fallbackAttribution": "© OpenStreetMap © Carto"
+  },
+  "api": {
+    "baseUrl": "https://www.atomicfizzcaps.xyz",
+    "eventsEndpoint": "/events",
+    "playerEndpoint": "/player",
+    "questsEndpoint": "/quests",
+    "mintablesEndpoint": "/mintables"
+  },
+  "ui": {
+    "theme": "pipboy-green",
+    "gridOverlay": true,
+    "crtGlow": true
+  }
+}
+ 
