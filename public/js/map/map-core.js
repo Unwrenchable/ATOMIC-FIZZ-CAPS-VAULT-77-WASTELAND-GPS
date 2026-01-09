@@ -1,16 +1,40 @@
-// map-core.js (Hybrid Version)
-// Wasteland Map + POI Selection + MapTiler Styles
-// No auto-claim. UI must call Game.claimLocation(window.SelectedPOI)
+// map-core.js (No-key Fallout-style OSM hybrid)
+// Wasteland Map + POI Selection + Retro-inspired styles
 
-const MAPTILER_KEY = "YOUR_MAPTILER_KEY_HERE";
+// ------------------------------------------------------------
+// MAP STYLE DEFINITIONS (no API keys)
+// ------------------------------------------------------------
 
 const MAP_STYLES = {
-  rad_zone_red_ocean: "streets-v2",
-  vaulttec_blue_terminal: "basic-v2",
-  desert_ruins_explorer: "satellite",
+  // Dark, high-contrast – great under green CRT overlay
+  pipboy_terminal: {
+    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+    options: {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors, © Carto"
+    }
+  },
+
+  // Classic OSM streets – good for “desert explorer”
+  desert_ruins_explorer: {
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    options: {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors"
+    }
+  },
+
+  // Harsh black‑and‑white – feels like a cold “winter scan”
+  winter_recon: {
+    url: "https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png",
+    options: {
+      maxZoom: 20,
+      attribution: "Map tiles by Stamen Design, Data © OpenStreetMap"
+    }
+  }
 };
 
-const DEFAULT_STYLE = MAP_STYLES.vaulttec_blue_terminal;
+const DEFAULT_STYLE_KEY = "pipboy_terminal";
 const MOJAVE_CENTER = [36.1699, -115.1398];
 const MOJAVE_ZOOM = 10;
 
@@ -25,8 +49,12 @@ window.SelectedPOI = null; // UI reads this when showing CLAIM button
 // INIT MAP
 // ------------------------------------------------------------
 function initWastelandMap() {
-  const mapEl = document.getElementById("map");
-  if (!mapEl) return;
+  // NOTE: your index.html uses id="mapContainer"
+  const mapEl = document.getElementById("mapContainer");
+  if (!mapEl) {
+    console.error("[MapCore] #mapContainer not found");
+    return;
+  }
   if (wastelandMap) return;
 
   console.log("[MapCore] Initializing Wasteland Map…");
@@ -36,18 +64,17 @@ function initWastelandMap() {
     zoom: MOJAVE_ZOOM,
     zoomControl: false,
     attributionControl: false,
-    preferCanvas: true,
+    preferCanvas: true
   });
 
-  baseTiles = L.tileLayer(
-    `https://api.maptiler.com/maps/${DEFAULT_STYLE}/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`,
-    {
-      tileSize: 512,
-      zoomOffset: -1,
-      crossOrigin: true,
-    }
-  );
+  // Apply default style
+  const style = MAP_STYLES[DEFAULT_STYLE_KEY];
+  if (!style) {
+    console.error("[MapCore] Default style missing:", DEFAULT_STYLE_KEY);
+    return;
+  }
 
+  baseTiles = L.tileLayer(style.url, style.options);
   baseTiles.addTo(wastelandMap);
 
   loadPOIs();
@@ -55,6 +82,9 @@ function initWastelandMap() {
   initMapStyleButtons();
 
   console.log("[MapCore] Map initialized");
+
+  // Let the rest of the game know
+  window.dispatchEvent(new Event("map-ready"));
 }
 
 // ------------------------------------------------------------
@@ -63,17 +93,19 @@ function initWastelandMap() {
 function switchTileStyle(styleKey) {
   if (!baseTiles) return;
 
-  const styleId = MAP_STYLES[styleKey] || DEFAULT_STYLE;
+  const style = MAP_STYLES[styleKey] || MAP_STYLES[DEFAULT_STYLE_KEY];
+  if (!style) return;
 
-  baseTiles.setUrl(
-    `https://api.maptiler.com/maps/${styleId}/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`
-  );
+  baseTiles.setUrl(style.url);
+  // Some providers need options changed too; easiest: recreate layer
+  // but to keep it simple we just change URL here.
 
-  setRadOverlay(styleKey === "rad_zone_red_ocean");
+  // Optional radiation overlay hook
+  setRadOverlay(styleKey === "pipboy_terminal");
 }
 
 // ------------------------------------------------------------
-// STYLE BUTTONS
+// STYLE BUTTONS (expects .map-style-btn with data-style="pipboy_terminal", etc.)
 // ------------------------------------------------------------
 function initMapStyleButtons() {
   const buttons = document.querySelectorAll(".map-style-btn");
@@ -88,7 +120,7 @@ function initMapStyleButtons() {
 }
 
 // ------------------------------------------------------------
-// LOAD POIs (Hybrid)
+// LOAD POIs
 // ------------------------------------------------------------
 async function loadPOIs() {
   try {
@@ -106,7 +138,7 @@ async function loadPOIs() {
         color: "#00ff88",
         fillColor: "#00ff88",
         fillOpacity: 0.8,
-        className: "pipboy-marker",
+        className: "pipboy-marker"
       });
 
       marker.addTo(wastelandMap);
@@ -127,7 +159,7 @@ async function loadPOIs() {
 }
 
 // ------------------------------------------------------------
-// SELECT POI (Hybrid)
+// SELECT POI
 // ------------------------------------------------------------
 function selectPOI(poi, marker) {
   // Clear previous selection
@@ -136,7 +168,7 @@ function selectPOI(poi, marker) {
       radius: 8,
       color: "#00ff88",
       fillColor: "#00ff88",
-      fillOpacity: 0.8,
+      fillOpacity: 0.8
     });
   }
 
@@ -145,7 +177,7 @@ function selectPOI(poi, marker) {
     radius: 12,
     color: "#00ff00",
     fillColor: "#00ff00",
-    fillOpacity: 1.0,
+    fillOpacity: 1.0
   });
 
   selectedMarker = marker;
@@ -153,7 +185,7 @@ function selectPOI(poi, marker) {
 
   console.log("[MapCore] Selected POI:", poi);
 
-  // Notify UI (optional)
+  // Notify UI hook if present
   if (window.Game && Game.hooks && typeof Game.hooks.onPOISelected === "function") {
     Game.hooks.onPOISelected(poi);
   }
@@ -161,6 +193,7 @@ function selectPOI(poi, marker) {
 
 // ------------------------------------------------------------
 // MAP CONTROLS
+// Expects a button with id="request-gps" if you want manual GPS start
 // ------------------------------------------------------------
 function initMapControls() {
   const requestGpsBtn = document.getElementById("request-gps");
@@ -173,21 +206,24 @@ function initMapControls() {
           const lng = pos.coords.longitude;
           const acc = pos.coords.accuracy;
 
-          wastelandMap?.setView([lat, lng], 15);
+          if (wastelandMap) {
+            wastelandMap.setView([lat, lng], 15);
+          }
           updateGpsBadge(true, acc);
 
+          // Optional hook into your game loop
           if (window.Game && typeof Game.startGPS === "function") {
             Game.startGPS();
           }
         },
         (err) => {
-          console.error("GPS error:", err);
+          console.error("[MapCore] GPS error:", err);
           updateGpsBadge(false, null);
         },
         {
           enableHighAccuracy: true,
           timeout: 10000,
-          maximumAge: 10000,
+          maximumAge: 10000
         }
       );
     });
