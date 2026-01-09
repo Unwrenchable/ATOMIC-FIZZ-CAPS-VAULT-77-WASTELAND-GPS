@@ -162,26 +162,30 @@
       </div>
     </div>
 
-    <!-- CORE NAMESPACE -->
+        <!-- CORE NAMESPACE -->
     <script>
       if (!window.Game) window.Game = {};
       if (!Game.modules) Game.modules = {};
     </script>
 
-    <!-- UI MODULES -->
+    <!-- UI MODULES (KEEP THESE — THEY ARE NOT WORLD ENGINE) -->
     <script src="/js/modules/economy.js"></script>
     <script src="/js/modules/mintables.js"></script>
     <script src="/js/modules/factions.js"></script>
+    <script src="/js/modules/enemyScaling.js"></script>
+    <script src="/js/modules/quests.js"></script>
+    <script src="/js/modules/worldmap.js"></script>
+
+    <!-- REMOVE THESE OLD BROKEN MODULES -->
+    <!--
     <script src="/js/modules/reputation.js"></script>
     <script src="/js/modules/weather.js"></script>
     <script src="/js/modules/encounters.js"></script>
     <script src="/js/modules/merchants.js"></script>
-    <script src="/js/modules/enemyScaling.js"></script>
-    <script src="/js/modules/quests.js"></script>
     <script src="/js/modules/world.js"></script>
-    <script src="/js/modules/worldmap.js"></script>
+    -->
 
-    <!-- WORLD ENGINE -->
+    <!-- WORLD ENGINE (THE REAL ONE — CORRECT PATHS) -->
     <script src="/js/world/worldLogic.js"></script>
     <script src="/js/world/worldWeather.js"></script>
     <script src="/js/world/bosses.js"></script>
@@ -202,5 +206,6 @@
 
     <!-- PIP‑BOY SHELL -->
     <script src="/js/pipboy.js"></script>
+
   </body>
 </html>
