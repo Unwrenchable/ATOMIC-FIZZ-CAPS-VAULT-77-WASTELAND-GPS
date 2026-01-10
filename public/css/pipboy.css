@@ -968,4 +968,13 @@ body {
     pointer-events: none;
     z-index: 998;
 }
+.pipboy-tab-boot {
+  animation: tabBoot 0.6s ease-out;
+}
+
+@keyframes tabBoot {
+  0% { opacity: 0; transform: scale(0.8); filter: brightness(0); }
+  40% { opacity: 1; transform: scale(1.05); filter: brightness(2); }
+  100% { opacity: 1; transform: scale(1); filter: brightness(1); }
+}
 
