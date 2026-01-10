@@ -51,16 +51,18 @@ Game.map.init = async function () {
   }
 
   // Load POIs
-  try {
-    const res = await fetch("/data/map/pois/poi.json");
-    const pois = await res.json();
-    Game.map.renderPOIs(pois);
-    document.getElementById("mapStatus").textContent = `LOCATIONS: ${pois.length}`;
-    console.log(`[MapCore] POIs loaded: ${pois.length}`);
-  } catch (err) {
-    console.warn("[MapCore] Failed to load POIs", err);
-    document.getElementById("mapStatus").textContent = "ERROR LOADING POIs";
-  }
+  // Load POIs (Fallout canon only for now)
+try {
+  const res = await fetch("/data/fallout_pois.json");
+  const pois = await res.json();
+  Game.map.renderPOIs(pois);
+  document.getElementById("mapStatus").textContent = `LOCATIONS: ${pois.length}`;
+  console.log(`[MapCore] Fallout POIs loaded: ${pois.length}`);
+} catch (err) {
+  console.warn("[MapCore] Failed to load Fallout POIs", err);
+  document.getElementById("mapStatus").textContent = "ERROR LOADING LOCATIONS";
+}
+
 
   // Dispatch ready event
   setTimeout(() => {
