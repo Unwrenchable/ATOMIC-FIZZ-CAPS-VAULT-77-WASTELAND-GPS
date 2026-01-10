@@ -79,6 +79,7 @@ safeMount("/api/rotation", "./api/rotation");
 safeMount("/api/quests", "./api/quests");
 safeMount("/api/quest-endings", "./api/quest-endings");
 safeMount("/api/player", "./api/player");
+safeMount("/api/location-claim", "./api/location-claim");
 
 // ------------------------------------------------------------
 // FUTURE FEATURE ENDPOINTS (NUKE + BRIDGE)
