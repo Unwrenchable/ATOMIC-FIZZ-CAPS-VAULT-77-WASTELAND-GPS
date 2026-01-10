@@ -977,4 +977,7 @@ body {
   40% { opacity: 1; transform: scale(1.05); filter: brightness(2); }
   100% { opacity: 1; transform: scale(1); filter: brightness(1); }
 }
+.poi-active {
+  filter: drop-shadow(0 0 6px #00ff41);
+}
 
