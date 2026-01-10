@@ -1,4 +1,4 @@
-// map-core.js — Fallout-style Leaflet map engine with POI loader and CRT effects
+// map-core.js — Keyless Fallout-style Leaflet map engine
 
 window.Game = window.Game || {};
 Game.map = Game.map || {};
@@ -18,11 +18,11 @@ Game.map.init = async function () {
 
   Game.map.instance = map;
 
-  // Default style
+  // Load saved style or default
   const style = localStorage.getItem("mapStyle") || "pipboy_terminal";
   Game.map.setStyle(style);
 
-  // Style switcher
+  // Style switcher buttons
   document.querySelectorAll(".map-style-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const style = btn.dataset.style;
@@ -62,20 +62,22 @@ Game.map.init = async function () {
   }, 100);
 };
 
+// KEYLESS map styles (all free)
 Game.map.setStyle = function (style) {
   localStorage.setItem("mapStyle", style);
   if (Game.map.tileLayer) Game.map.instance.removeLayer(Game.map.tileLayer);
 
   const styleURLs = {
-    pipboy_terminal: "https://api.maptiler.com/maps/dataviz-dark/256/{z}/{x}/{y}.png?key=YOUR_KEY",
-    desert_ruins_explorer: "https://api.maptiler.com/maps/topo-v2/256/{z}/{x}/{y}.png?key=YOUR_KEY",
-    winter_recon: "https://api.maptiler.com/maps/winter/256/{z}/{x}/{y}.png?key=YOUR_KEY",
+    pipboy_terminal: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    desert_ruins_explorer: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png",
+    winter_recon: "https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
   };
 
   const url = styleURLs[style] || styleURLs.pipboy_terminal;
   Game.map.tileLayer = L.tileLayer(url, { tileSize: 256 }).addTo(Game.map.instance);
 };
 
+// POI renderer
 Game.map.renderPOIs = function (pois) {
   pois.forEach((poi) => {
     const marker = L.marker([poi.lat, poi.lng], {
