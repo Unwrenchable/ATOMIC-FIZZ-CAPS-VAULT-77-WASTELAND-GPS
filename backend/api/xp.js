@@ -1,5 +1,7 @@
 // backend/api/xp.js
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
+
 const { authMiddleware } = require("../lib/auth");
 const xp = require("../lib/xp");
 
