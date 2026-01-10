@@ -1,54 +1,86 @@
-/* Fallout green tint over base tiles */
-.leaflet-tile {
-    filter: grayscale(1) contrast(1.4) brightness(0.6) hue-rotate(90deg);
-}
-
-/* Pip-Boy markers */
-.pipboy-marker {
-    pointer-events: auto;
-}
-
-.pipboy-marker-svg {
-    width: 22px;
-    height: 22px;
-    color: #00ff41; /* drives currentColor */
-    filter: drop-shadow(0 0 4px #00ff41);
-}
-
-/* Rarity overrides (optional) */
-.pipboy-rarity-epic .pipboy-marker-svg {
-    color: #ff8800;
-}
-.pipboy-rarity-legendary .pipboy-marker-svg {
-    color: #ffff00;
-}
-
-/* Claimed state */
-.pipboy-marker .claimed,
-.leaflet-marker-icon.claimed .pipboy-marker-svg {
-    opacity: 0.5;
-    filter: none;
-}
-
-/* CRT overlays */
-#mapWrap {
-    position: relative;
-}
-#mapWrap::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/assets/overlay/grid.png");
-    opacity: 0.15;
-    pointer-events: none;
-    z-index: 999;
-}
-#mapWrap::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/assets/overlay/scanlines.png");
-    opacity: 0.12;
-    pointer-events: none;
-    z-index: 998;
-}
+[
+  {
+    "id": "goodsprings_fnv",
+    "name": "Goodsprings",
+    "lat": 35.8325,
+    "lng": -115.4336,
+    "lvl": 1,
+    "rarity": "common",
+    "iconKey": "town",
+    "region": "mojave",
+    "game": "fnv",
+    "source": "fallout_canon"
+  },
+  {
+    "id": "primm_fnv",
+    "name": "Primm",
+    "lat": 35.6081,
+    "lng": -115.3892,
+    "lvl": 3,
+    "rarity": "common",
+    "iconKey": "town",
+    "region": "mojave",
+    "game": "fnv",
+    "source": "fallout_canon"
+  },
+  {
+    "id": "novac_fnv",
+    "name": "Novac",
+    "lat": 35.0525,
+    "lng": -114.8247,
+    "lvl": 6,
+    "rarity": "rare",
+    "iconKey": "town",
+    "region": "mojave",
+    "game": "fnv",
+    "source": "fallout_canon"
+  },
+  {
+    "id": "new_vegas_strip_fnv",
+    "name": "New Vegas Strip",
+    "lat": 36.1699,
+    "lng": -115.1398,
+    "lvl": 10,
+    "rarity": "epic",
+    "iconKey": "city",
+    "region": "mojave",
+    "game": "fnv",
+    "source": "fallout_canon"
+  },
+  {
+    "id": "hidden_valley_bos_fnv",
+    "name": "Hidden Valley Bunker",
+    "lat": 35.8017,
+    "lng": -115.6624,
+    "lvl": 12,
+    "rarity": "epic",
+    "iconKey": "bos",
+    "region": "mojave",
+    "game": "fnv",
+    "source": "fallout_canon"
+  },
+  {
+    "id": "quarry_junction_fnv",
+    "name": "Quarry Junction",
+    "lat": 36.0286,
+    "lng": -114.9577,
+    "lvl": 18,
+    "rarity": "legendary",
+    "iconKey": "boss",
+    "region": "mojave",
+    "game": "fnv",
+    "source": "fallout_canon"
+  },
+  {
+    "id": "helios_one_fnv",
+    "name": "HELIOS One",
+    "lat": 36.0430,
+    "lng": -114.9640,
+    "lvl": 8,
+    "rarity": "rare",
+    "iconKey": "satellite",
+    "region": "mojave",
+    "game": "fnv",
+    "source": "fallout_canon"
+  }
+]
