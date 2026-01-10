@@ -859,4 +859,59 @@ body {
     pointer-events: none;
     z-index: 998;
 }
+/* Fallout green tint */
+.leaflet-tile {
+    filter: grayscale(1) contrast(1.4) brightness(0.6) hue-rotate(90deg);
+}
+
+/* Pip-Boy markers */
+.pipboy-marker { pointer-events: auto; }
+
+.pipboy-marker-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #00ff41;
+    background: rgba(0,255,65,0.25);
+    box-shadow: 0 0 6px #00ff41;
+}
+
+.pipboy-marker-dot.epic {
+    border-color: #ff8800;
+    box-shadow: 0 0 8px #ff8800;
+}
+
+.pipboy-marker-dot.legendary {
+    border-color: #ffff00;
+    box-shadow: 0 0 8px #ffff00;
+}
+
+/* SVG markers */
+.pipboy-marker-svg svg {
+    width: 22px;
+    height: 22px;
+    fill: #00ff41;
+    stroke: #00ff41;
+}
+
+/* CRT overlays */
+#mapWrap::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/assets/overlay/grid.png");
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 999;
+}
+
+#mapWrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/assets/overlay/scanlines.png");
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 998;
+}
 
