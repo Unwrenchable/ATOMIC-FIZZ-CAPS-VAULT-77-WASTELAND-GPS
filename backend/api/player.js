@@ -1,3 +1,4 @@
+// backend/api/player.js
 const express = require("express");
 const router = express.Router();
 const redis = require("../redis");
@@ -75,14 +76,10 @@ router.post("/respec", async (req, res) => {
   const profile = await loadProfile(wallet);
   if (!profile) return res.status(404).json({ ok: false, error: "not found" });
 
-  // TODO: real NFT check
   const ownsToken = false;
-
   if (!ownsToken) {
     return res.status(403).json({ ok: false, error: "no recalibration token" });
   }
-
-  // TODO: burn NFT here
 
   profile.special = { ...DEFAULT_SPECIAL };
   await saveProfile(wallet, profile);
