@@ -1,4 +1,6 @@
-/* Root layout */
+/* ============================================================
+   ROOT LAYOUT — PIP-BOY 3000 (NEW VEGAS STYLE)
+   ============================================================ */
 
 html,
 body {
@@ -106,8 +108,8 @@ body {
   inset: -40px;
   border-radius: 999px;
   box-shadow:
-    0 0 40px rgba(159, 232, 141, 0.1),
-    0 0 140px rgba(159, 232, 141, 0.15);
+    0 0 40px rgba(0, 255, 65, 0.12),
+    0 0 140px rgba(0, 255, 65, 0.18);
   pointer-events: none;
 }
 
@@ -121,7 +123,9 @@ body {
   z-index: 2;
 }
 
-/* Header */
+/* ============================================================
+   HEADER
+   ============================================================ */
 
 .pipboy-header {
   display: flex;
@@ -129,6 +133,7 @@ body {
   align-items: flex-end;
   padding: 10px 18px 4px;
   border-bottom: 1px solid rgba(159, 232, 141, 0.2);
+  position: relative;
 }
 
 .pipboy-title {
@@ -153,7 +158,23 @@ body {
   margin-left: 12px;
 }
 
-/* Tabs */
+/* Wallet HUD (DAP-style) */
+
+.wallet-hud {
+  position: absolute;
+  top: 4px;
+  right: 16px;
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
 
 .pipboy-tabs {
   display: flex;
@@ -186,36 +207,43 @@ body {
     inset 0 0 4px rgba(0, 0, 0, 0.9);
 }
 
-/* Main layout */
+/* ============================================================
+   MAIN AREA — FULLSCREEN PANEL SYSTEM
+   ============================================================ */
 
 .pipboy-main {
-  display: grid;
-  grid-template-columns: 34% 66%;
+  position: relative;
   height: calc(100% - 82px);
   padding: 6px 10px;
   box-sizing: border-box;
-  gap: 6px;
 }
 
-/* Left column */
-
-.pipboy-left {
-  border-right: 1px solid rgba(159, 232, 141, 0.18);
-  padding-right: 6px;
-  overflow: hidden;
-}
-
-/* Panels */
+/* New Vegas-style sliding pages */
 
 .pipboy-panel {
-  display: none;
-  height: 100%;
+  position: absolute;
+  inset: 0;
+  background: #041f04;
+  color: #9fe88d;
+  padding: 16px;
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateX(-16px);
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease-out,
+    transform 0.25s ease-out;
+  z-index: 10;
   font-size: 11px;
 }
 
 .pipboy-panel.active {
-  display: block;
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
 }
+
+/* Panel inner structure */
 
 .panel-header {
   border-bottom: 1px solid rgba(159, 232, 141, 0.25);
@@ -298,34 +326,74 @@ body {
   margin-left: 8px;
 }
 
-/* Right column */
-
-.pipboy-right {
-  padding-left: 6px;
-  position: relative;
-}
-
-/* Views */
-
-.pipboy-view {
-  display: none;
-  height: 100%;
-  position: relative;
-}
-
-.pipboy-view.active {
-  display: block;
-}
-
-/* Map */
+/* ============================================================
+   MAP PANEL — NEW VEGAS CRT MAP
+   ============================================================ */
 
 .pipboy-map {
+  position: relative;
   width: 100%;
   height: 100%;
   border: 1px solid rgba(159, 232, 141, 0.3);
   box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.9);
-  filter: grayscale(1) contrast(1.3) hue-rotate(90deg) brightness(1.1);
 }
+
+/* Leaflet container inside mapContainer */
+
+#mapContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #010;
+  overflow: hidden;
+}
+
+/* Apply NV green CRT filter to Leaflet map */
+#mapContainer .leaflet-container {
+  width: 100%;
+  height: 100%;
+  filter:
+    grayscale(100%)
+    brightness(0.55)
+    contrast(2.2)
+    hue-rotate(90deg)
+    saturate(250%);
+  image-rendering: pixelated;
+}
+
+/* Scanlines + vignette on map */
+
+#mapContainer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 255, 80, 0.05) 0px,
+      rgba(0, 255, 80, 0.05) 2px,
+      rgba(0, 0, 0, 0.15) 3px
+    );
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+}
+
+#mapContainer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+}
+
+/* Map overlay texts (bottom) */
 
 .map-overlay {
   position: absolute;
@@ -346,23 +414,152 @@ body {
   opacity: 0.8;
 }
 
-/* Detail views */
+/* Map controls top-right */
 
-.detail-header {
-  border-bottom: 1px solid rgba(159, 232, 141, 0.25);
-  padding-bottom: 4px;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.13em;
-  font-size: 10px;
+.map-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.detail-body {
+/* GPS badge bottom-right */
+
+.gps-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid #00ff41;
+  background: rgba(0, 0, 0, 0.8);
   font-size: 11px;
-  line-height: 1.3;
+  text-shadow: 0 0 4px #00ff41;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
 }
 
-/* Footer */
+.acc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: red;
+  box-shadow: 0 0 6px red;
+}
+
+/* GPS button bottom-left */
+
+.gps-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 2000;
+}
+
+/* Radiation flash */
+
+#radFlash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3000;
+  background: rgba(0, 255, 0, 0.15);
+  mix-blend-mode: screen;
+  display: none;
+  animation: radPulse 0.25s infinite alternate;
+}
+
+@keyframes radPulse {
+  from { opacity: 0.1; }
+  to   { opacity: 0.25; }
+}
+
+/* Glowing POI markers */
+
+.pipboy-marker {
+  filter:
+    drop-shadow(0 0 6px #00ff41)
+    drop-shadow(0 0 12px #00ff41);
+}
+
+/* ============================================================
+   STAT BARS
+   ============================================================ */
+
+.stat-bar {
+  width: 100%;
+  height: 6px;
+  border: 1px solid rgba(159, 232, 141, 0.6);
+  margin: 2px 0 4px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.9);
+}
+
+.stat-bar-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(159, 232, 141, 0.8),
+    rgba(159, 232, 141, 0.4)
+  );
+  box-shadow: 0 0 6px rgba(159, 232, 141, 0.8);
+  transition: width 0.2s ease-out;
+}
+
+.stat-bar-rad .stat-bar-fill {
+  background: linear-gradient(
+    to right,
+    rgba(255, 80, 80, 0.9),
+    rgba(255, 160, 80, 0.5)
+  );
+  box-shadow: 0 0 6px rgba(255, 120, 80, 0.9);
+}
+
+/* ============================================================
+   INVENTORY / QUEST STYLES
+   ============================================================ */
+
+.inventory-item {
+  padding: 4px 0;
+  border-bottom: 1px dotted rgba(159, 232, 141, 0.25);
+}
+
+.inv-name {
+  font-weight: bold;
+}
+
+.inv-meta {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.quest-title {
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+}
+
+.quest-stage {
+  font-size: 10px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+  letter-spacing: 0.12em;
+}
+
+.quest-objective {
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
 
 .pipboy-footer {
   position: absolute;
@@ -462,166 +659,6 @@ body {
   letter-spacing: 0.14em;
 }
 
-/* ============================================================
-   RESPONSIVE LAYOUT — MOBILE + TABLET
-   ============================================================ */
-
-/* Base fixes */
-@media (max-width: 1100px) {
-  .pipboy-root {
-    max-width: 100%;
-    padding: 8px;
-  }
-
-  .pipboy-main {
-    grid-template-columns: 40% 60%;
-  }
-}
-
-/* Tablet & large mobile */
-@media (max-width: 768px) {
-  .pipboy-root {
-    aspect-ratio: auto;
-    height: 100%;
-    padding: 6px;
-  }
-
-  .pipboy-main {
-    display: flex;
-    flex-direction: column;
-    height: calc(100% - 82px);
-    gap: 10px;
-  }
-
-  .pipboy-left {
-    border-right: none;
-    padding-right: 0;
-    border-bottom: 1px solid rgba(159, 232, 141, 0.18);
-    padding-bottom: 6px;
-  }
-
-  .pipboy-right {
-    padding-left: 0;
-    height: 100%;
-  }
-
-  .pipboy-tabs {
-    overflow-x: auto;
-    white-space: nowrap;
-    scrollbar-width: none;
-  }
-
-  .pipboy-tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .pipboy-tab {
-    flex: 0 0 auto;
-    padding: 6px 14px;
-    font-size: 12px;
-  }
-
-  .pipboy-map {
-    height: 50vh;
-  }
-
-  .pipboy-panel {
-    font-size: 12px;
-  }
-
-  .panel-header {
-    font-size: 11px;
-  }
-
-  .pipboy-footer {
-    flex-direction: column;
-    text-align: center;
-    gap: 4px;
-    font-size: 11px;
-  }
-}
-
-/* Small mobile */
-@media (max-width: 480px) {
-  .pipboy-title {
-    font-size: 14px;
-    letter-spacing: 0.1em;
-  }
-
-  .pipboy-subtitle {
-    font-size: 9px;
-  }
-
-  .pipboy-meta {
-    font-size: 9px;
-  }
-
-  .pipboy-tab {
-    padding: 6px 10px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-  }
-
-  .pipboy-map {
-    height: 45vh;
-  }
-
-  .panel-header,
-  .detail-header {
-    font-size: 9px;
-  }
-
-  .panel-body,
-  .detail-body {
-    font-size: 10px;
-  }
-
-  .pipboy-button {
-    font-size: 10px;
-    padding: 6px 12px;
-  }
-}
-
-/* Exchange responsive prep */
-.exchange-mode .pipboy-main {
-  grid-template-columns: 30% 70%;
-}
-
-@media (max-width: 768px) {
-  .exchange-mode .pipboy-main {
-    flex-direction: column;
-  }
-
-  .exchange-mode .pipboy-left {
-    border-bottom: 1px solid rgba(159, 232, 141, 0.2);
-    padding-bottom: 10px;
-  }
-
-  .exchange-mode .pipboy-right {
-    height: auto;
-  }
-}
-/* Radio widget in footer */
-
-.radio-widget {
-  display: inline-flex;
-  gap: 4px;
-  margin-right: 8px;
-}
-
-.radio-btn {
-  background: transparent;
-  border: 1px solid rgba(159, 232, 141, 0.6);
-  border-radius: 2px;
-  color: #9fe88d;
-  font-family: inherit;
-  font-size: 9px;
-  letter-spacing: 0.16em;
-  padding: 2px 4px;
-  cursor: pointer;
-  text-transform: uppercase;
-}
-
 /* Exchange cards */
 
 .exchange-section h2 {
@@ -686,31 +723,89 @@ body {
   font-family: inherit;
   font-size: 11px;
 }
-.stat-bar {
-  width: 100%;
-  height: 6px;
-  border: 1px solid rgba(159, 232, 141, 0.6);
-  margin: 2px 0 4px;
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.9);
+
+/* ============================================================
+   RESPONSIVE LAYOUT — MOBILE + TABLET (still Pip-Boy)
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .pipboy-root {
+    max-width: 100%;
+    padding: 8px;
+  }
 }
 
-.stat-bar-fill {
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(159, 232, 141, 0.8),
-    rgba(159, 232, 141, 0.4)
-  );
-  box-shadow: 0 0 6px rgba(159, 232, 141, 0.8);
-  transition: width 0.2s ease-out;
+@media (max-width: 768px) {
+  .pipboy-root {
+    aspect-ratio: auto;
+    height: 100%;
+    padding: 6px;
+  }
+
+  .pipboy-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+
+  .pipboy-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pipboy-tab {
+    flex: 0 0 auto;
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+
+  .pipboy-panel {
+    font-size: 12px;
+  }
+
+  .panel-header {
+    font-size: 11px;
+  }
+
+  .pipboy-footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 4px;
+    font-size: 11px;
+  }
 }
 
-.stat-bar-rad .stat-bar-fill {
-  background: linear-gradient(
-    to right,
-    rgba(255, 80, 80, 0.9),
-    rgba(255, 160, 80, 0.5)
-  );
-  box-shadow: 0 0 6px rgba(255, 120, 80, 0.9);
+@media (max-width: 480px) {
+  .pipboy-title {
+    font-size: 14px;
+    letter-spacing: 0.1em;
+  }
+
+  .pipboy-subtitle {
+    font-size: 9px;
+  }
+
+  .pipboy-meta {
+    font-size: 9px;
+  }
+
+  .pipboy-tab {
+    padding: 6px 10px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .panel-header,
+  .detail-header {
+    font-size: 9px;
+  }
+
+  .panel-body,
+  .detail-body {
+    font-size: 10px;
+  }
+
+  .pipboy-button {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
 }
