@@ -1,420 +1,246 @@
 // ======================================================================
-//  ATOMIC FIZZ • VAULT 77 • WASTELAND GPS
-//  FULL FALLOUT MAP-CORE (DROP-IN VERSION)
-// ======================================================================
-// Ensure global game namespace exists
-window.game = window.game || {};
-const game = window.game;
-
-// Optionally ensure player object exists
-game.player = game.player || {
-    hp: 100,
-    rads: 0,
-    caps: 0,
-    faction: "UNALIGNED",
-    location: {
-        id: "unknown",
-        name: "Unknown Location",
-        lat: null,
-        lng: null
-    }
-};
-
-// Globals this file uses
-let map;
-let locations = [];
-let markers = {};
-let playerLatLng = null;
-let playerMarker = null;
-let lastAccuracy = 999;
-
-const API_BASE = window.location.origin;
-
-let map, playerMarker = null, wallet = null, playerLatLng = null, lastAccuracy = 999;
-let player = { lvl: 1, hp: 100, maxHp: 100, caps: 0, rads: 0, gear: [], found: [], claimed: new Set() };
-let locations = [], markers = {};
-
-const CLAIM_RADIUS = 50;
-const SOL_RECIPIENT = "YOUR_VAULT_OR_DEV_WALLET_HERE";
-
-// ======================================================================
-//  PIP-BOY ICON SYSTEM (USING <symbol> SPRITE)
-// ======================================================================
-// expects SVG <symbol> sheet in index.html with IDs like #icon-vault, #icon-town, etc.
-
-function getPipboyIcon(loc) {
-    const rarity = (loc.rarity || "common").toLowerCase();
-    const key = loc.iconKey || "poi";
-
-    return L.divIcon({
-        className: `pipboy-marker pipboy-marker-${key} pipboy-rarity-${rarity}`,
-        html: `
-          <svg viewBox="0 0 24 24" class="pipboy-marker-svg">
-            <use href="#icon-${key}"></use>
-          </svg>
-        `,
-        iconSize: [22, 22],
-        iconAnchor: [11, 11]
-    });
-}
-
-// ======================================================================
-//  UI HELPERS
+//  MAP CORE ENGINE (HYBRID MODE)
+//  This file contains NO Leaflet UI. It is the logic layer only.
+//  Drop-in replacement for public/js/map/map-core.js
 // ======================================================================
 
-function updateHPBar() {
-    const radPercent = (player.rads || 0) / 1000 * 100;
-    const hpPercent = player.hp / player.maxHp * 100;
+(function () {
+    "use strict";
 
-    document.getElementById('hpFill').style.width = `${hpPercent}%`;
-    document.getElementById('radFill').style.width = `${radPercent}%`;
+    // ------------------------------------------------------------
+    // GLOBAL GAME NAMESPACE
+    // ------------------------------------------------------------
+    window.game = window.game || {};
+    const game = window.game;
 
-    const effectiveMax = player.maxHp - Math.floor(player.maxHp * radPercent / 100);
-    document.getElementById('hpText').textContent = `HP ${player.hp} / ${effectiveMax}`;
-
-    document.getElementById('lvl').textContent = player.lvl || 1;
-    document.getElementById('caps').textContent = player.caps || 0;
-    document.getElementById('claimed').textContent = player.claimed.size;
-}
-updateHPBar();
-
-function setStatus(text, time = 3000) {
-    const s = document.getElementById('status');
-    s.textContent = `Status: ${text}`;
-    clearTimeout(s.to);
-    s.to = setTimeout(() => s.textContent = wallet ? 'Status: connected' : 'Status: ready', time);
-}
-
-// ======================================================================
-//  WALLET CONNECT
-// ======================================================================
-
-document.getElementById('connectPhantom').onclick = async () => {
-    if (wallet) { setStatus('Syncing...'); await syncPlayer(); return; }
-    try {
-        const p = window.solana;
-        if (!p?.isPhantom) return alert('Install Phantom wallet: https://phantom.app');
-        await p.connect();
-        wallet = p;
-        const addr = p.publicKey.toBase58();
-        document.getElementById('connectPhantom').textContent = `${addr.slice(0,4)}...${addr.slice(-4)}`;
-        await syncPlayer();
-    } catch { setStatus('Connection canceled'); }
-};
-
-async function syncPlayer() {
-    if (!wallet) return;
-    try {
-        const res = await fetch(`${API_BASE}/player/${wallet.publicKey.toBase58()}`);
-        if (res.ok) {
-            const d = await res.json();
-            player = { ...player, ...d };
-            player.claimed = new Set(d.found || []);
-            updateHPBar();
-            markClaimed();
-            setStatus(`Synced – ${player.caps} CAPS`);
+    // Player worldstate
+    game.player = game.player || {
+        hp: 100,
+        rads: 0,
+        caps: 0,
+        faction: "UNALIGNED",
+        location: {
+            id: "unknown",
+            name: "WASTELAND",
+            lat: null,
+            lng: null
         }
-    } catch { setStatus('Local mode'); }
-}
+    };
 
-// ======================================================================
-//  TABS + DRAWER
-// ======================================================================
+    // POI storage
+    game.locations = [];
+    game.markers = {}; // UI layer will populate this
 
-document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
+    // GPS state
+    let playerLatLng = null;
+    let lastAccuracy = 999;
 
-    const drawer = document.getElementById('sidePanel');
-    if (t.dataset.panel === 'map') {
-        drawer.classList.remove('open');
-    } else {
-        drawer.classList.add('open');
-        document.getElementById('panelTitle').textContent = t.textContent;
+    // SCAN radius (meters)
+    const SCAN_RADIUS = 500;
 
-        if (t.dataset.panel === 'stat') renderStats();
-        if (t.dataset.panel === 'quests') renderQuests();
-        if (t.dataset.panel === 'shop') renderShop();
-        if (t.dataset.panel === 'items') renderItems();
-    }
-});
-
-document.getElementById('panelClose').onclick = () => {
-    document.getElementById('sidePanel').classList.remove('open');
-    document.querySelector('.tab[data-panel="map"]').classList.add('active');
-};
-
-// ======================================================================
-//  PANEL RENDERERS
-// ======================================================================
-
-function renderStats() {
-    document.getElementById('panelBody').innerHTML = `
-        <div class="list-item"><strong>LEVEL</strong><div>${player.lvl}</div></div>
-        <div class="list-item"><strong>HP</strong><div>${player.hp}/${player.maxHp}</div></div>
-        <div class="list-item"><strong>RADS</strong><div>${player.rads}</div></div>
-        <div class="list-item"><strong>CAPS</strong><div>${player.caps}</div></div>
-        <div class="list-item"><strong>CLAIMED</strong><div>${player.claimed.size}</div></div>
-    `;
-}
-
-function renderItems() {
-    const gear = player.gear || [];
-    document.getElementById('panelBody').innerHTML =
-        gear.length
-            ? gear.map(g => `<div class="list-item"><strong>${g.name}</strong><div>${g.rarity || 'common'}</div></div>`).join('')
-            : '<div class="list-item"><strong>No gear yet</strong></div>';
-}
-
-async function renderQuests() {
-    document.getElementById('panelBody').innerHTML = '<div class="list-item">Loading quests...</div>';
-    try {
-        const res = await fetch(`${API_BASE}/quests`);
-        const q = await res.json();
-        document.getElementById('panelBody').innerHTML =
-            q.length
-                ? q.map(x => `<div class="list-item"><strong>${x.title}</strong><div class="muted-small">${x.desc}</div></div>`).join('')
-                : '<div class="list-item">No quests available</div>';
-    } catch {
-        document.getElementById('panelBody').innerHTML = '<div class="list-item">Quests offline</div>';
-    }
-}
-
-async function renderShop() {
-    document.getElementById('panelBody').innerHTML = '<div class="list-item">Loading shop...</div>';
-    try {
-        const res = await fetch(`${API_BASE}/shop/listings`);
-        const list = await res.json();
-        document.getElementById('panelBody').innerHTML =
-            list.length
-                ? list.map(l => `
-                    <div class="shop-listing">
-                        <div><strong>NFT ${l.nft.slice(0,8)}...</strong><br><span class="muted">${l.price} CAPS</span></div>
-                        <div>
-                            <button class="buy-btn" onclick="buyCaps('${l.nft}',${l.price})">Buy CAPS</button>
-                            <button class="buy-btn sol-btn" onclick="solPay('${l.nft}',${l.price})">SOL Pay</button>
-                        </div>
-                        <div id="qr-${l.nft}"></div>
-                    </div>
-                `).join('')
-                : '<div class="list-item">Shop is empty</div>';
-    } catch {
-        document.getElementById('panelBody').innerHTML = '<div class="list-item">Shop offline</div>';
-    }
-}
-
-// ======================================================================
-//  SHOP ACTIONS
-// ======================================================================
-
-window.buyCaps = async (nft, price) => {
-    if (!wallet) return alert('Connect wallet first');
-    const msg = `Buy ${nft} for ${price} CAPS ${Date.now()}`;
-    try {
-        const enc = new TextEncoder().encode(msg);
-        const sig = await wallet.signMessage(enc);
-        const res = await fetch(`${API_BASE}/shop/buy`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                wallet: wallet.publicKey.toBase58(),
-                nftAddress: nft,
-                message: msg,
-                signature: bs58.encode(sig)
-            })
-        });
-        const d = await res.json();
-        alert(d.success ? 'Purchase complete!' : d.error || 'Failed');
-        if (d.success) {
-            player.caps -= price;
-            updateHPBar();
-            renderShop();
+    // ------------------------------------------------------------
+    // LOAD FALLOUT POIs
+    // ------------------------------------------------------------
+    async function loadPOIs() {
+        try {
+            const res = await fetch("/data/fallout_pois.json");
+            const data = await res.json();
+            game.locations = data;
+            console.log(`Loaded ${data.length} POIs`);
+        } catch (err) {
+            console.error("Failed to load fallout_pois.json", err);
         }
-    } catch { alert('Canceled'); }
-};
-
-window.solPay = (nft, price) => {
-    const amt = (price / 10000).toFixed(6);
-    const url = `solana:${SOL_RECIPIENT}?amount=${amt}&label=Atomic%20Fizz%20NFT&message=Pay%20for%20${nft.slice(0,8)}&reference=${nft}`;
-    const c = document.getElementById(`qr-${nft}`);
-    c.style.display = 'block';
-    c.innerHTML = `<canvas></canvas><div class="muted">Scan: ${amt} SOL</div>`;
-    QRCode.toCanvas(c.querySelector('canvas'), url, { width: 200 });
-};
-
-// ======================================================================
-//  FALLOUT MAP INITIALIZATION
-// ======================================================================
-
-const MOJAVE_CENTER = [36.1147, -115.1728];
-const MOJAVE_ZOOM = 11;
-
-async function initMap() {
-    map = L.map("map", {
-        zoomControl: false,
-        attributionControl: false
-    }).setView(MOJAVE_CENTER, MOJAVE_ZOOM);
-
-    L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
-        { maxZoom: 19 }
-    ).addTo(map);
-
-    // Load Fallout POIs (canon file)
-    try {
-        const res = await fetch("/data/fallout_pois.json");
-        locations = await res.json();
-
-        locations.forEach(loc => {
-            const marker = L.marker([loc.lat, loc.lng], {
-                icon: getPipboyIcon(loc),
-                title: loc.name
-            })
-            .addTo(map)
-            .on("click", () => attemptClaim(loc));
-
-            markers[loc.id] = marker;
-        });
-
-        markClaimed();
-        setStatus(`Loaded ${locations.length} Fallout locations`);
-    } catch (err) {
-        console.error("Failed to load fallout_pois.json", err);
-        setStatus("Error loading Fallout POIs");
     }
 
-    // OPTIONAL: load dynamic backend locations
-    // await loadDynamicLocationsFromAPI();
-}
+    // ------------------------------------------------------------
+    // GPS TRACKING
+    // ------------------------------------------------------------
+    navigator.geolocation?.watchPosition(
+        p => {
+            lastAccuracy = p.coords.accuracy || 999;
 
-// Optional dynamic POIs (leave off unless you want promos/events)
-async function loadDynamicLocationsFromAPI() {
-    try {
-        const res = await fetch(`${API_BASE}/locations/custom`);
-        if (!res.ok) return;
-        const extra = await res.json();
-        extra.forEach(loc => {
-            const marker = L.marker([loc.lat, loc.lng], {
-                icon: getPipboyIcon(loc),
-                title: loc.name || loc.id
-            })
-            .addTo(map)
-            .on("click", () => attemptClaim(loc));
+            playerLatLng = {
+                lat: p.coords.latitude,
+                lng: p.coords.longitude
+            };
 
-            markers[loc.id] = marker;
-            locations.push(loc);
-        });
-        setStatus(`+${extra.length} dynamic locations loaded`);
-    } catch {
-        // silent fail is fine
-    }
-}
-
-// ======================================================================
-//  CLAIM SYSTEM
-// ======================================================================
-
-function markClaimed() {
-    Object.keys(markers).forEach(id => {
-        if (player.claimed.has(id)) {
-            const m = markers[id];
-            if (m._icon) m._icon.classList.add("claimed");
-        }
-    });
-}
-
-async function attemptClaim(loc) {
-    if (lastAccuracy > 20) return setStatus(`GPS too weak (${Math.round(lastAccuracy)}m)`);
-    if (!playerLatLng) return setStatus('No GPS lock');
-
-    const dist = map.distance(playerLatLng, L.latLng(loc.lat, loc.lng));
-    if (dist > CLAIM_RADIUS) return setStatus(`Too far (${Math.round(dist)}m)`);
-
-    if (!wallet) return alert('Connect Phantom wallet first');
-    if (player.claimed.has(loc.id)) return setStatus('Already claimed');
-
-    const message = `Claim:${loc.id}:${Date.now()}`;
-    try {
-        const encoded = new TextEncoder().encode(message);
-        const signed = await wallet.signMessage(encoded);
-        const signature = bs58.encode(signed);
-
-        setStatus('Submitting claim...');
-        const res = await fetch(`${API_BASE}/find-loot`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                wallet: wallet.publicKey.toBase58(),
-                spot: loc.id,
+            // Sync to game.player.location
+            game.player.location = {
+                id: "world_position",
+                name: "WASTELAND",
                 lat: playerLatLng.lat,
-                lng: playerLatLng.lng,
-                message,
-                signature
+                lng: playerLatLng.lng
+            };
+
+            // Notify UI layer (map-ui.js) if loaded
+            if (typeof game.updatePlayerMarker === "function") {
+                game.updatePlayerMarker(playerLatLng);
+            }
+        },
+        null,
+        { enableHighAccuracy: true }
+    );
+
+    // ------------------------------------------------------------
+    // SCAN LOGIC (used by Overseer Terminal)
+    // ------------------------------------------------------------
+    game.getNearbyPOIs = function () {
+        if (!playerLatLng || !Array.isArray(game.locations)) return [];
+
+        // If Leaflet UI is loaded, use map.distance
+        const hasLeaflet = typeof L !== "undefined";
+
+        return game.locations
+            .map(loc => {
+                let dist;
+
+                if (hasLeaflet) {
+                    dist = L.latLng(playerLatLng.lat, playerLatLng.lng)
+                        .distanceTo(L.latLng(loc.lat, loc.lng));
+                } else {
+                    // Fallback Haversine
+                    dist = haversine(playerLatLng, loc);
+                }
+
+                return { id: loc.id, name: loc.name, distance: dist };
             })
-        });
+            .filter(p => p.distance <= SCAN_RADIUS)
+            .sort((a, b) => a.distance - b.distance);
+    };
 
-        const data = await res.json();
-        if (data.success) {
-            player.caps = data.totalCaps;
-            player.claimed.add(loc.id);
+    // ------------------------------------------------------------
+    // HAVERSINE (fallback distance calculation)
+    // ------------------------------------------------------------
+    function haversine(a, b) {
+        const R = 6371000;
+        const dLat = (b.lat - a.lat) * Math.PI / 180;
+        const dLng = (b.lng - a.lng) * Math.PI / 180;
+        const lat1 = a.lat * Math.PI / 180;
+        const lat2 = b.lat * Math.PI / 180;
 
-            if (markers[loc.id]?._icon) markers[loc.id]._icon.classList.add("claimed");
+        const h =
+            Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
 
-            player.rads = (player.rads || 0) + 50;
-            updateHPBar();
+        return 2 * R * Math.asin(Math.sqrt(h));
+    }
 
-            setStatus(`+${data.capsFound} CAPS from ${loc.name}!`);
-            document.getElementById('mintModal').classList.add('open');
-            document.getElementById('mintMsg').textContent = `LOOTED ${loc.name}! +${data.capsFound} CAPS`;
-        } else {
-            setStatus(data.error || 'Claim failed');
+    // ------------------------------------------------------------
+    // OVERSEER TERMINAL INTEGRATION
+    // ------------------------------------------------------------
+    game.sendStatusToTerminal = function () {
+        window.dispatchEvent(
+            new CustomEvent("game:event", {
+                detail: {
+                    type: "status",
+                    payload: {
+                        hp: game.player.hp,
+                        rads: game.player.rads,
+                        caps: game.player.caps,
+                        faction: game.player.faction
+                    }
+                }
+            })
+        );
+    };
+
+    game.sendInventoryToTerminal = function () {
+        window.dispatchEvent(
+            new CustomEvent("game:event", {
+                detail: {
+                    type: "inventory",
+                    payload: { items: game.inventory || [] }
+                }
+            })
+        );
+    };
+
+    game.sendMapInfoToTerminal = function () {
+        window.dispatchEvent(
+            new CustomEvent("game:event", {
+                detail: {
+                    type: "map_scan",
+                    payload: { nearby: game.getNearbyPOIs() }
+                }
+            })
+        );
+    };
+
+    game.sendLocationToTerminal = function () {
+        window.dispatchEvent(
+            new CustomEvent("game:event", {
+                detail: {
+                    type: "location",
+                    payload: game.player.location
+                }
+            })
+        );
+    };
+
+    game.sendCapsToTerminal = function () {
+        window.dispatchEvent(
+            new CustomEvent("game:event", {
+                detail: {
+                    type: "caps",
+                    payload: { caps: game.player.caps }
+                }
+            })
+        );
+    };
+
+    game.sendVbotToTerminal = function (message) {
+        window.dispatchEvent(
+            new CustomEvent("game:event", {
+                detail: { type: "vbot", payload: { message } }
+            })
+        );
+    };
+
+    // ------------------------------------------------------------
+    // TERMINAL COMMAND LISTENER
+    // ------------------------------------------------------------
+    window.addEventListener("overseer:command", e => {
+        const { type, payload } = e.detail;
+
+        switch (type) {
+            case "terminal_ready":
+                game.sendStatusToTerminal();
+                break;
+
+            case "status":
+                game.sendStatusToTerminal();
+                break;
+
+            case "inventory":
+                game.sendInventoryToTerminal();
+                break;
+
+            case "map_scan":
+                game.sendMapInfoToTerminal();
+                break;
+
+            case "location":
+                game.sendLocationToTerminal();
+                break;
+
+            case "caps":
+                game.sendCapsToTerminal();
+                break;
+
+            case "vbot":
+                game.sendVbotToTerminal(
+                    payload?.text || "ONLINE. AWAITING DIRECTIVES."
+                );
+                break;
+
+            default:
+                break;
         }
-    } catch {
-        setStatus('Signature canceled');
-    }
-}
+    });
 
-document.getElementById('mintCloseBtn').onclick =
-    () => document.getElementById('mintModal').classList.remove('open');
+    // ------------------------------------------------------------
+    // BOOT
+    // ------------------------------------------------------------
+    loadPOIs();
 
-// ======================================================================
-//  GPS SYSTEM
-// ======================================================================
-
-navigator.geolocation?.watchPosition(p => {
-    lastAccuracy = p.coords.accuracy || 999;
-    document.getElementById('accText').textContent = `GPS: ${Math.round(lastAccuracy)}m`;
-
-    const dot = document.getElementById('accDot');
-    if (lastAccuracy <= 20) dot.className = 'acc-dot acc-green';
-    else if (lastAccuracy <= 40) dot.className = 'acc-dot acc-amber';
-    else dot.className = 'acc-dot';
-
-    playerLatLng = L.latLng(p.coords.latitude, p.coords.longitude);
-
-    if (!playerMarker) {
-        playerMarker = L.circleMarker(playerLatLng, {
-            radius: 10,
-            color: '#00ff41',
-            fillOpacity: 0.9
-        }).addTo(map).bindPopup('You');
-    } else {
-        playerMarker.setLatLng(playerLatLng);
-    }
-}, null, { enableHighAccuracy: true });
-
-// ======================================================================
-//  BUTTONS
-// ======================================================================
-
-document.getElementById('centerBtn').onclick =
-    () => playerLatLng && map.flyTo(playerLatLng, 17);
-
-document.getElementById('recenterMojave').onclick =
-    () => map.setView(MOJAVE_CENTER, MOJAVE_ZOOM);
-
-// ======================================================================
-//  BOOT
-// ======================================================================
-
-initMap();
+})();
