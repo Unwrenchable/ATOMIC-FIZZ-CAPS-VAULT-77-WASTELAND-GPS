@@ -4,6 +4,12 @@ window.Game = window.Game || {};
 Game.map = Game.map || {};
 
 Game.map.init = async function () {
+  // Prevent double initialization
+  if (Game.map.instance) {
+    console.warn("[MapCore] Map already initialized — skipping.");
+    return;
+  }
+
   const mapEl = document.getElementById("mapContainer");
   if (!mapEl) return console.warn("[MapCore] #mapContainer not found");
 
