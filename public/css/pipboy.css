@@ -809,3 +809,54 @@ body {
     padding: 6px 12px;
   }
 }
+/* Fallout green tint over satellite */
+.leaflet-tile {
+    filter: grayscale(1) contrast(1.4) brightness(0.6) hue-rotate(90deg);
+}
+
+/* Pip-Boy POI marker */
+.pipboy-marker {
+    pointer-events: auto;
+}
+.pipboy-marker-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #00ff41;
+    background: rgba(0, 255, 65, 0.2);
+    box-shadow: 0 0 6px #00ff41;
+}
+
+/* Example: rarity variants (optional) */
+.pipboy-marker-dot.epic {
+    border-color: #ff8800;
+    box-shadow: 0 0 8px #ff8800;
+}
+.pipboy-marker-dot.legendary {
+    border-color: #ffff00;
+    box-shadow: 0 0 8px #ffff00;
+}
+
+/* CRT overlays */
+#mapWrap {
+    position: relative;
+}
+#mapWrap::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/assets/overlay/grid.png");
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 999;
+}
+#mapWrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/assets/overlay/scanlines.png");
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 998;
+}
+
