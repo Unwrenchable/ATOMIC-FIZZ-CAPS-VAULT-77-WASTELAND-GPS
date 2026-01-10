@@ -2,10 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>ATOMIC FIZZ CAPS • Pip‑Boy</title>
+    <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- PIP-BOY THEME -->
     <link rel="stylesheet" href="/css/pipboy.css" />
+    <!-- Leaflet CSS (if not already in your layout) -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
   </head>
 
   <body>
@@ -13,10 +21,11 @@
       <div class="pipboy-bezel">
         <div class="pipboy-frame">
           <div class="pipboy-crt">
-
+            <!-- CRT overlays -->
             <div class="pipboy-noise"></div>
             <div class="pipboy-scanlines"></div>
 
+            <!-- HEADER -->
             <div class="pipboy-header">
               <div>
                 <span class="pipboy-title">PIP‑BOY 3000</span>
@@ -25,139 +34,181 @@
               <div class="pipboy-meta">
                 <span class="pipboy-meta-item">STATUS: ONLINE</span>
               </div>
+
+              <!-- WALLET HUD (top-right) -->
+              <div class="wallet-hud">
+                <span id="walletAddress">WALLET: DISCONNECTED</span>
+                <button id="connectWalletHUD" class="pipboy-button-small">CONNECT</button>
+              </div>
             </div>
 
+            <!-- TABS -->
             <div class="pipboy-tabs">
-              <button class="pip-tab pipboy-tab" data-panel="map">MAP</button>
-              <button class="pip-tab pipboy-tab" data-panel="stat">STAT</button>
-              <button class="pip-tab pipboy-tab" data-panel="items">ITEMS</button>
-              <button class="pip-tab pipboy-tab" data-panel="quests">QUESTS</button>
-              <button class="pip-tab pipboy-tab" data-panel="exchange">EXCHANGE</button>
+              <button class="pipboy-tab active" data-pipboy-tab="panel-map">MAP</button>
+              <button class="pipboy-tab" data-pipboy-tab="panel-stat">STAT</button>
+              <button class="pipboy-tab" data-pipboy-tab="panel-items">ITEMS</button>
+              <button class="pipboy-tab" data-pipboy-tab="panel-quests">QUESTS</button>
+              <button class="pipboy-tab" data-pipboy-tab="panel-exchange">EXCHANGE</button>
             </div>
 
+            <!-- MAIN FULLSCREEN PANEL SYSTEM -->
             <div class="pipboy-main">
-              <div class="pipboy-left">
 
-                <div id="panel-map" class="pipboy-panel active">
-                  <div class="panel-header">MAP</div>
-                  <div class="panel-body">
-                    <div id="mapContainer" class="pipboy-map"></div>
+              <!-- MAP PANEL (New Vegas style, full-screen map) -->
+              <div id="panel-map" class="pipboy-panel active">
+                <div class="panel-header">MAP</div>
+                <div class="panel-body">
+                  <div id="mapContainer" class="pipboy-map">
+                    <div id="radFlash"></div>
                   </div>
-                </div>
 
-                <div id="panel-items" class="pipboy-panel">
-                  <div class="panel-header">INVENTORY</div>
-                  <div class="panel-body" id="inventoryList"></div>
-                </div>
-                <div id="panel-quests" class="pipboy-panel">
-                  <div class="panel-header">QUEST</div>
-                  <div class="panel-body" id="questBody"></div>
-                </div>
+                  <!-- Map overlay (bottom text) -->
+                  <div class="map-overlay">
+                    <div class="map-label">WORLD MAP</div>
+                    <div class="map-status" id="mapStatus">SCANNING...</div>
+                  </div>
 
-
-
-                    <div class="panel-row">
-                      <span class="label">NAME</span>
-                      <span class="value" id="stat-name">WANDERER</span>
-                    </div>
-                    <div class="panel-row">
-                      <span class="label">LEVEL</span>
-                      <span class="value" id="stat-level">1</span>
-                    </div>
-                    <div class="panel-row">
-                      <span class="label">XP</span>
-                      <span class="value" id="stat-xp">0 / 100</span>
-                    </div>
-
-                    <div class="panel-divider"></div>
-
-                    <div class="panel-row">
-                      <span class="label">HEALTH</span>
-                      <span class="value" id="stat-hp-label">100 / 100</span>
-                    </div>
-                    <div class="stat-bar">
-                      <div class="stat-bar-fill" id="stat-hp-bar"></div>
-                    </div>
-
-                    <div class="panel-row">
-                      <span class="label">RADIATION</span>
-                      <span class="value" id="stat-rad-label">0%</span>
-                    </div>
-                    <div class="stat-bar stat-bar-rad">
-                      <div class="stat-bar-fill" id="stat-rad-bar"></div>
-                    </div>
-
-                    <div class="panel-divider"></div>
-
-                    <div class="panel-row">
-                      <span class="label">WALLET</span>
-                      <span class="value" id="stat-wallet">DISCONNECTED</span>
-                    </div>
-                    <div class="panel-row">
-                      <span class="label">FIZZ CAPS</span>
-                      <span class="value" id="stat-caps">0</span>
-                    </div>
-
-                    <div style="margin-top:6px;">
-                      <button id="connectWalletStat" class="pipboy-button">CONNECT WALLET</button>
-                      <button id="claimMintablesStat" class="pipboy-button pipboy-button-small">
-                        CLAIM MINTABLES
+                  <!-- Map controls (top-right) -->
+                  <div class="map-controls">
+                    <div class="map-style-switcher">
+                      <button class="pipboy-button-small map-style-btn" data-style="pipboy_terminal">
+                        TERMINAL
+                      </button>
+                      <button class="pipboy-button-small map-style-btn" data-style="desert_ruins_explorer">
+                        DESERT
+                      </button>
+                      <button class="pipboy-button-small map-style-btn" data-style="winter_recon">
+                        WINTER
                       </button>
                     </div>
-
-                    <div class="panel-divider"></div>
-
-                    <div class="panel-row">
-                      <span class="label">WEAPON</span>
-                      <span class="value" id="stat-weapon">NONE</span>
-                    </div>
-                    <div class="panel-row">
-                      <span class="label">ARMOR</span>
-                      <span class="value" id="stat-armor">NONE</span>
-                    </div>
-
-                    <div class="panel-divider"></div>
-
-                    <div class="panel-row">
-                      <span class="label">FACTION</span>
-                      <span class="value" id="stat-faction">UNALIGNED</span>
-                    </div>
-                    <div class="panel-row">
-                      <span class="label">REPUTATION</span>
-                      <span class="value" id="stat-rep">NEUTRAL</span>
-                    </div>
-                    <div class="panel-row">
-                      <span class="label">LOCATION</span>
-                      <span class="value" id="stat-location">UNKNOWN</span>
-                    </div>
-                    <div class="panel-row">
-                      <span class="label">WEATHER</span>
-                      <span class="value" id="stat-weather">CLEAR</span>
-                    </div>
-
                   </div>
-                </div>
 
-                <div id="panel-items" class="pipboy-panel hidden">
-                  <div class="panel-header">INVENTORY</div>
-                  <div class="panel-body"></div>
-                </div>
+                  <!-- GPS badge (bottom-right) -->
+                  <div class="gps-badge">
+                    <div id="accDot" class="acc-dot"></div>
+                    <div id="accText">GPS: OFFLINE</div>
+                  </div>
 
-                <div id="panel-quests" class="pipboy-panel hidden">
-                  <div class="panel-header">QUESTS</div>
-                  <div class="panel-body"></div>
+                  <!-- GPS request button (bottom-left) -->
+                  <button id="request-gps" class="gps-btn pipboy-button-small">
+                    REQUEST GPS
+                  </button>
                 </div>
-
-                <div id="panel-exchange" class="pipboy-panel hidden">
-                  <div class="panel-header">EXCHANGE</div>
-                  <div class="panel-body"></div>
-                </div>
-
               </div>
 
-              <div class="pipboy-right"></div>
+              <!-- STAT PANEL -->
+              <div id="panel-stat" class="pipboy-panel">
+                <div class="panel-header">STATUS</div>
+                <div class="panel-body">
+
+                  <div class="panel-row">
+                    <span class="label">NAME</span>
+                    <span class="value" id="stat-name">WANDERER</span>
+                  </div>
+                  <div class="panel-row">
+                    <span class="label">LEVEL</span>
+                    <span class="value" id="stat-level">1</span>
+                  </div>
+                  <div class="panel-row">
+                    <span class="label">XP</span>
+                    <span class="value" id="stat-xp">0 / 100</span>
+                  </div>
+
+                  <div class="panel-divider"></div>
+
+                  <div class="panel-row">
+                    <span class="label">HEALTH</span>
+                    <span class="value" id="stat-hp-label">100 / 100</span>
+                  </div>
+                  <div class="stat-bar">
+                    <div class="stat-bar-fill" id="stat-hp-bar"></div>
+                  </div>
+
+                  <div class="panel-row">
+                    <span class="label">RADIATION</span>
+                    <span class="value" id="stat-rad-label">0%</span>
+                  </div>
+                  <div class="stat-bar stat-bar-rad">
+                    <div class="stat-bar-fill" id="stat-rad-bar"></div>
+                  </div>
+
+                  <div class="panel-divider"></div>
+
+                  <div class="panel-row">
+                    <span class="label">WALLET</span>
+                    <span class="value" id="stat-wallet">DISCONNECTED</span>
+                  </div>
+                  <div class="panel-row">
+                    <span class="label">FIZZ CAPS</span>
+                    <span class="value" id="stat-caps">0</span>
+                  </div>
+
+                  <div style="margin-top:6px;">
+                    <button id="connectWalletStat" class="pipboy-button">CONNECT WALLET</button>
+                    <button id="claimMintablesStat" class="pipboy-button pipboy-button-small">
+                      CLAIM MINTABLES
+                    </button>
+                  </div>
+
+                  <div class="panel-divider"></div>
+
+                  <div class="panel-row">
+                    <span class="label">WEAPON</span>
+                    <span class="value" id="stat-weapon">NONE</span>
+                  </div>
+                  <div class="panel-row">
+                    <span class="label">ARMOR</span>
+                    <span class="value" id="stat-armor">NONE</span>
+                  </div>
+
+                  <div class="panel-divider"></div>
+
+                  <div class="panel-row">
+                    <span class="label">FACTION</span>
+                    <span class="value" id="stat-faction">UNALIGNED</span>
+                  </div>
+                  <div class="panel-row">
+                    <span class="label">REPUTATION</span>
+                    <span class="value" id="stat-rep">NEUTRAL</span>
+                  </div>
+                  <div class="panel-row">
+                    <span class="label">LOCATION</span>
+                    <span class="value" id="stat-location">UNKNOWN</span>
+                  </div>
+                  <div class="panel-row">
+                    <span class="label">WEATHER</span>
+                    <span class="value" id="stat-weather">CLEAR</span>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- ITEMS PANEL -->
+              <div id="panel-items" class="pipboy-panel">
+                <div class="panel-header">INVENTORY</div>
+                <div class="panel-body" id="inventoryList"></div>
+              </div>
+
+              <!-- QUESTS PANEL -->
+              <div id="panel-quests" class="pipboy-panel">
+                <div class="panel-header">QUEST</div>
+                <div class="panel-body" id="questBody"></div>
+              </div>
+
+              <!-- EXCHANGE PANEL -->
+              <div id="panel-exchange" class="pipboy-panel">
+                <div class="panel-header">EXCHANGE</div>
+                <div class="panel-body">
+                  <div class="exchange-placeholder">
+                    <h2>VAULT-TEC EXCHANGE TERMINAL</h2>
+                    <p>Awaiting integration...</p>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
+            <!-- FOOTER -->
             <div class="pipboy-footer">
               <div class="footer-left">VAULT‑TEC INDUSTRIES</div>
               <div class="footer-center">WASTELAND GPS</div>
@@ -169,13 +220,14 @@
       </div>
     </div>
 
-            <!-- CORE NAMESPACE -->
+    <!-- CORE NAMESPACE -->
     <script>
       if (!window.Game) window.Game = {};
       if (!Game.modules) Game.modules = {};
+      Game.hooks = Game.hooks || {};
     </script>
 
-    <!-- UI MODULES (VALID) -->
+    <!-- MODULES -->
     <script src="/js/modules/economy.js"></script>
     <script src="/js/modules/mintables.js"></script>
     <script src="/js/modules/factions.js"></script>
@@ -183,19 +235,27 @@
     <script src="/js/modules/quests.js"></script>
     <script src="/js/modules/worldmap.js"></script>
 
-    <!-- FRONTEND WORLD ENGINE -->
+    <!-- ENGINE -->
     <script src="/js/main.js"></script>
 
+    <!-- LEAFLET JS (if not already included elsewhere) -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
 
     <!-- MAP + BOOT -->
     <script src="/js/map/map-core.js"></script>
     <script src="/js/boot.js"></script>
 
-    <!-- STAT PANEL -->
+    <!-- STAT PANEL LOGIC -->
     <script src="/js/stat-panel.js"></script>
 
-    <!-- PIP‑BOY SHELL -->
-    <script src="/js/pipboy.js"></script>
+    <!-- PIP-BOY UI LEGO BLOCKS -->
+    <script src="/js/ui/pipboy-tabs.js"></script>
+    <script src="/js/ui/inventory-ui.js"></script>
+    <script src="/js/ui/quest-ui.js"></script>
 
   </body>
 </html>
