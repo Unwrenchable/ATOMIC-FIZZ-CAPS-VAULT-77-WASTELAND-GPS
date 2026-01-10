@@ -56,6 +56,7 @@ try {
   const res = await fetch("/data/fallout_pois.json");
   const pois = await res.json();
   Game.map.renderPOIs(pois);
+
   document.getElementById("mapStatus").textContent = `LOCATIONS: ${pois.length}`;
   console.log(`[MapCore] Fallout POIs loaded: ${pois.length}`);
 } catch (err) {
