@@ -1261,4 +1261,4 @@
 {"id":"fot_final_city","name":"Vault City (FoT Campaign)","lat":42.8000,"lng":-86.8000,"lvl":22,"rarity":"legendary","iconKey":"vault","region":"fot_bonus","game":"fot","source":"canon"},
 {"id":"fot_special_encounter_1","name":"Special Encounter: Bunker","lat":42.8200,"lng":-86.7800,"lvl":10,"rarity":"rare","iconKey":"poi","region":"fot_bonus","game":"fot","source":"canon"},
 {"id":"fot_special_encounter_2","name":"Special Encounter: Trader","lat":42.8400,"lng":-86.7600,"lvl":8,"rarity":"common","iconKey":"trader","region":"fot_bonus","game":"fot","source":"canon"}
-[
+]
