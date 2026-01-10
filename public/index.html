@@ -239,9 +239,10 @@
                   <!-- Map controls (top-right) -->
                   <div class="map-controls">
                     <div class="map-style-switcher">
-                      <button class="pipboy-button-small map-style-btn" data-style="pipboy_terminal">
-                        TERMINAL
+                      <button id="terminalTab" class="pipboy-tab" data-pipboy-tab="panel-terminal" style="display:none;">
+                       TERMINAL
                       </button>
+
                       <button class="pipboy-button-small map-style-btn" data-style="desert_ruins_explorer">
                         DESERT
                       </button>
@@ -371,6 +372,14 @@
                     <h2>VAULT-TEC EXCHANGE TERMINAL</h2>
                     <p>Awaiting integration...</p>
                   </div>
+                  <!-- TERMINAL PANEL -->
+                 <div id="panel-terminal" class="pipboy-panel">
+                    <div class="panel-header">OVERSEER TERMINAL</div>
+                    <div class="panel-body">
+                    <iframe src="/terminal/index.html" class="terminal-frame"></iframe>
+  </div>
+</div>
+
                 </div>
               </div>
 
