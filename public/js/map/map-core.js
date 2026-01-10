@@ -2,6 +2,31 @@
 //  ATOMIC FIZZ • VAULT 77 • WASTELAND GPS
 //  FULL FALLOUT MAP-CORE (DROP-IN VERSION)
 // ======================================================================
+// Ensure global game namespace exists
+window.game = window.game || {};
+const game = window.game;
+
+// Optionally ensure player object exists
+game.player = game.player || {
+    hp: 100,
+    rads: 0,
+    caps: 0,
+    faction: "UNALIGNED",
+    location: {
+        id: "unknown",
+        name: "Unknown Location",
+        lat: null,
+        lng: null
+    }
+};
+
+// Globals this file uses
+let map;
+let locations = [];
+let markers = {};
+let playerLatLng = null;
+let playerMarker = null;
+let lastAccuracy = 999;
 
 const API_BASE = window.location.origin;
 
