@@ -1,0 +1,7 @@
+[
+  { "id": "goodsprings_saloon_fnv", "name": "Goodsprings Saloon", "lat": 35.8324, "lng": -115.4320, "lvl": 1, "rarity": "common", "game": "fnv", "region": "mojave", "source": "fallout_canon" },
+  { "id": "primm_rollercoaster_fnv", "name": "Primm Rollercoaster", "lat": 35.6145, "lng": -115.3845, "lvl": 2, "rarity": "common", "game": "fnv", "region": "mojave", "source": "fallout_canon" },
+  { "id": "novac_motel_fnv", "name": "Novac Motel", "lat": 35.0525, "lng": -114.8247, "lvl": 5, "rarity": "rare", "game": "fnv", "region": "mojave", "source": "fallout_canon" },
+  { "id": "hoover_dam_fnv", "name": "Hoover Dam", "lat": 36.016, "lng": -114.738, "lvl": 12, "rarity": "epic", "game": "fnv", "region": "mojave", "source": "fallout_canon" },
+  { "id": "new_vegas_strip_gate_fnv", "name": "The Strip Gate", "lat": 36.1147, "lng": -115.1728, "lvl": 15, "rarity": "epic", "game": "fnv", "region": "mojave", "source": "fallout_canon" }
+]
