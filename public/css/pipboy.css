@@ -914,4 +914,58 @@ body {
     pointer-events: none;
     z-index: 998;
 }
+/* Fallout green tint over base tiles */
+.leaflet-tile {
+    filter: grayscale(1) contrast(1.4) brightness(0.6) hue-rotate(90deg);
+}
+
+/* Pip-Boy markers */
+.pipboy-marker {
+    pointer-events: auto;
+}
+
+.pipboy-marker-svg {
+    width: 22px;
+    height: 22px;
+    color: #00ff41; /* drives currentColor */
+    filter: drop-shadow(0 0 4px #00ff41);
+}
+
+/* Rarity overrides (optional) */
+.pipboy-rarity-epic .pipboy-marker-svg {
+    color: #ff8800;
+}
+.pipboy-rarity-legendary .pipboy-marker-svg {
+    color: #ffff00;
+}
+
+/* Claimed state */
+.pipboy-marker .claimed,
+.leaflet-marker-icon.claimed .pipboy-marker-svg {
+    opacity: 0.5;
+    filter: none;
+}
+
+/* CRT overlays */
+#mapWrap {
+    position: relative;
+}
+#mapWrap::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/assets/overlay/grid.png");
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 999;
+}
+#mapWrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/assets/overlay/scanlines.png");
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 998;
+}
 
