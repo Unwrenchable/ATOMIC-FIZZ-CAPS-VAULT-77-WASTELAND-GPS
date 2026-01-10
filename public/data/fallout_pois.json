@@ -339,7 +339,8 @@
 {"id":"jackal_camp_fnv","name":"Jackal Gang Camp","lat":36.0500,"lng":-115.2400,"lvl":7,"rarity":"common","iconKey":"enemy","region":"unmarked","game":"fnv","source":"canon"},
 {"id":"viper_camp_fnv","name":"Viper Gang Camp","lat":36.0300,"lng":-115.2600,"lvl":7,"rarity":"common","iconKey":"enemy","region":"unmarked","game":"fnv","source":"canon"},
 
-{"id":"legion_scout_post_fnv","name":"Legion Scout Post","
+{"id": "legion_scout_post_fnv","name": "Legion Scout Post","lat": 36.12345,"lng": -115.12345,"type": "legion","region": "mojave"},
+
 {"id":"sierra_madre_villa_fnv","name":"Sierra Madre Villa","lat":35.9900,"lng":-115.9000,"lvl":15,"rarity":"epic","iconKey":"city","region":"dead_money","game":"fnv","source":"canon"},
 {"id":"sierra_madre_fountain_fnv","name":"Sierra Madre Fountain","lat":35.9905,"lng":-115.9005,"lvl":15,"rarity":"rare","iconKey":"poi","region":"dead_money","game":"fnv","source":"canon"},
 
