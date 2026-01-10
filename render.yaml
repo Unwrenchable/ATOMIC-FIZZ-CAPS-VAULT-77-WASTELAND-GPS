@@ -1,6 +1,6 @@
 services:
   # ============================
-  # Backend API (Node)
+  # 1. BACKEND API (Express)
   # ============================
   - type: web
     name: atomic-backend
@@ -11,20 +11,33 @@ services:
     startCommand: "node server.js"
     autoDeploy: true
     envVars:
-      NODE_ENV: production
-      PORT: 8080
-      SOLANA_RPC: {{ SOLANA_RPC }}
-      TOKEN_MINT: {{ TOKEN_MINT }}
-      GAME_VAULT_SECRET: {{ GAME_VAULT_SECRET }}
-      REDIS_URL: {{ REDIS_URL }}
-      SERVER_SECRET_KEY: {{ SERVER_SECRET_KEY }}
-      SERVER_PUBKEY: {{ SERVER_PUBKEY }}
-      HF_API_KEY: {{ HF_API_KEY }}
-      COOLDOWN_SECONDS: {{ COOLDOWN_SECONDS }}
-      CLAIM_RADIUS_M: {{ CLAIM_RADIUS_M }}
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: SOLANA_RPC
+        sync: false
+      - key: TOKEN_MINT
+        sync: false
+      - key: GAME_VAULT_SECRET
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: SERVER_SECRET_KEY
+        sync: false
+      - key: SERVER_PUBKEY
+        sync: false
+      - key: HF_API_KEY
+        sync: false
+      - key: COOLDOWN_SECONDS
+        sync: false
+      - key: CLAIM_RADIUS_M
+        sync: false
+      - key: ADMIN_WALLETS
+        sync: false
 
   # ============================
-  # Game UI (Next.js)
+  # 2. GAME UI (Next.js)
   # ============================
   - type: web
     name: atomic-game-ui
@@ -35,18 +48,21 @@ services:
     startCommand: "npm start"
     autoDeploy: true
     envVars:
-      NODE_ENV: production
-      NEXT_PUBLIC_BACKEND_URL: {{ NEXT_PUBLIC_BACKEND_URL }}
-      NEXT_PUBLIC_SOLANA_RPC: {{ SOLANA_RPC }}
-      NEXT_PUBLIC_TOKEN_MINT: {{ TOKEN_MINT }}
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_BACKEND_URL
+        sync: false
+      - key: NEXT_PUBLIC_SOLANA_RPC
+        sync: false
+      - key: NEXT_PUBLIC_TOKEN_MINT
+        sync: false
 
   # ============================
-  # Pip-Boy (Static Site)
+  # 3. PIP-BOY STATIC SITE
   # ============================
   - type: static
     name: atomic-pipboy
     rootDir: public
-    buildCommand: ""
     staticPublishPath: "."
+    buildCommand: ""
     autoDeploy: true
- 
