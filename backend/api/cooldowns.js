@@ -1,5 +1,7 @@
 // backend/api/cooldowns.js
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
+
 const { authMiddleware } = require("../lib/auth");
 const cooldowns = require("../lib/cooldowns");
 
