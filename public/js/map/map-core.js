@@ -1,6 +1,6 @@
 // ======================================================================
 //  ATOMIC FIZZ • VAULT 77 • WASTELAND GPS
-//  FULL FALLOUT MAP-CORE (FINAL CLEAN VERSION)
+//  FULL FALLOUT MAP-CORE (DROP-IN VERSION)
 // ======================================================================
 
 const API_BASE = window.location.origin;
@@ -13,34 +13,23 @@ const CLAIM_RADIUS = 50;
 const SOL_RECIPIENT = "YOUR_VAULT_OR_DEV_WALLET_HERE";
 
 // ======================================================================
-//  PIP-BOY ICON SYSTEM (SVG + DOT FALLBACK)
+//  PIP-BOY ICON SYSTEM (USING <symbol> SPRITE)
 // ======================================================================
-
-const ICON_SVGS = {
-    vault: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" stroke="#00ff41" fill="none"/></svg>`,
-    rad: `<svg viewBox="0 0 24 24"><path d="M12 2L13.5 9h-3zM4 20l4.5-6L6 12zM20 20l-2-8-2.5 2z" fill="#00ff41"/></svg>`,
-    boss: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" stroke="#ffff00" fill="none"/></svg>`
-};
+// expects SVG <symbol> sheet in index.html with IDs like #icon-vault, #icon-town, etc.
 
 function getPipboyIcon(loc) {
     const rarity = (loc.rarity || "common").toLowerCase();
-    const iconKey = loc.iconKey || null;
-    const svg = iconKey && ICON_SVGS[iconKey] ? ICON_SVGS[iconKey] : null;
-
-    if (svg) {
-        return L.divIcon({
-            className: "pipboy-marker",
-            html: `<div class="pipboy-marker-svg">${svg}</div>`,
-            iconSize: [22, 22],
-            iconAnchor: [11, 11]
-        });
-    }
+    const key = loc.iconKey || "poi";
 
     return L.divIcon({
-        className: "pipboy-marker",
-        html: `<div class="pipboy-marker-dot ${rarity}"></div>`,
-        iconSize: [12, 12],
-        iconAnchor: [6, 6]
+        className: `pipboy-marker pipboy-marker-${key} pipboy-rarity-${rarity}`,
+        html: `
+          <svg viewBox="0 0 24 24" class="pipboy-marker-svg">
+            <use href="#icon-${key}"></use>
+          </svg>
+        `,
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
     });
 }
 
@@ -62,6 +51,7 @@ function updateHPBar() {
     document.getElementById('caps').textContent = player.caps || 0;
     document.getElementById('claimed').textContent = player.claimed.size;
 }
+updateHPBar();
 
 function setStatus(text, time = 3000) {
     const s = document.getElementById('status');
@@ -241,11 +231,11 @@ async function initMap() {
     }).setView(MOJAVE_CENTER, MOJAVE_ZOOM);
 
     L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
         { maxZoom: 19 }
     ).addTo(map);
 
-    // === Load Fallout POIs ===
+    // Load Fallout POIs (canon file)
     try {
         const res = await fetch("/data/fallout_pois.json");
         locations = await res.json();
@@ -268,8 +258,31 @@ async function initMap() {
         setStatus("Error loading Fallout POIs");
     }
 
-    // === OPTIONAL dynamic backend POIs ===
-    // loadDynamicLocationsFromAPI();
+    // OPTIONAL: load dynamic backend locations
+    // await loadDynamicLocationsFromAPI();
+}
+
+// Optional dynamic POIs (leave off unless you want promos/events)
+async function loadDynamicLocationsFromAPI() {
+    try {
+        const res = await fetch(`${API_BASE}/locations/custom`);
+        if (!res.ok) return;
+        const extra = await res.json();
+        extra.forEach(loc => {
+            const marker = L.marker([loc.lat, loc.lng], {
+                icon: getPipboyIcon(loc),
+                title: loc.name || loc.id
+            })
+            .addTo(map)
+            .on("click", () => attemptClaim(loc));
+
+            markers[loc.id] = marker;
+            locations.push(loc);
+        });
+        setStatus(`+${extra.length} dynamic locations loaded`);
+    } catch {
+        // silent fail is fine
+    }
 }
 
 // ======================================================================
@@ -380,4 +393,3 @@ document.getElementById('recenterMojave').onclick =
 // ======================================================================
 
 initMap();
-updateHPBar();
