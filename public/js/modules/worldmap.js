@@ -1,11 +1,14 @@
-// worldmap.js
+// public/js/modules/worldmap.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps – Pip-Boy World Map Module (Resurrected)
 // New Vegas style: green CRT UI over real-world tiles
 // Integrates with Game.modules.world, quests, battle, inventory
+// Uses #mapContainer inside Pip-Boy MAP panel
 // ------------------------------------------------------------
 
 (function () {
+  "use strict";
+
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
@@ -19,7 +22,7 @@
     locationsLoaded: false,
 
     init(gameState) {
-      this.gs = gameState;
+      this.gs = gameState || (window.DATA || {});
       this.ensurePlayerPosition();
       this.initMap();
       this.loadLocations();
@@ -28,7 +31,7 @@
     ensurePlayerPosition() {
       if (!this.gs.player) this.gs.player = {};
       if (!this.gs.player.position) {
-        // Default to New Vegas Strip if no position yet
+        // Default to Mojave / Vegas strip if no position yet
         this.gs.player.position = {
           lat: 36.11274,
           lng: -115.174301
@@ -39,20 +42,19 @@
     initMap() {
       if (this.map) return;
 
-      const container = document.getElementById("map");
+      const container = document.getElementById("mapContainer");
       if (!container) {
-        console.warn("worldmap: #map container not found");
+        console.warn("worldmap: #mapContainer not found");
         return;
       }
 
-      // Basic Leaflet init – you can replace with your MapTiler tiles
+      // Leaflet init – can replace tiles with MapTiler later
       this.map = L.map(container, {
         zoomControl: false,
         attributionControl: false
       });
 
       this.tiles = L.tileLayer(
-        // TODO: replace with your MapTiler URL
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
           maxZoom: 18,
@@ -61,23 +63,19 @@
       ).addTo(this.map);
 
       const pos = this.gs.player.position;
-      this.map.setView([pos.lat, pos.lng], 7);
+      this.map.setView([pos.lat, pos.lng], 12);
+
+      // Expose to window so main.js can attach and update markers
+      window.map = this.map;
 
       this.initPlayerMarker();
-      this.applyCRTTheme();
-    },
 
-    applyCRTTheme() {
-      const container = document.getElementById("mapPanel");
-      if (!container) return;
-      container.classList.add("pipboy-map", "pipboy-green");
-      // You can style .pipboy-map, .pipboy-green in CSS:
-      // - green tint overlay
-      // - scanlines
-      // - Pip-Boy frame, etc.
+      // Let main.js know map is ready
+      window.dispatchEvent(new Event("map-ready"));
     },
 
     initPlayerMarker() {
+      this.ensurePlayerPosition();
       const pos = this.gs.player.position;
 
       if (this.playerMarker) {
@@ -85,20 +83,20 @@
         return;
       }
 
-      const playerIcon = L.divIcon({
-        className: "pipboy-player-marker",
-        html: "▲",
-        iconSize: [16, 16],
-        iconAnchor: [8, 8]
+      const marker = L.circleMarker([pos.lat, pos.lng], {
+        radius: 8,
+        color: "#00ff66",
+        fillColor: "#00ff66",
+        fillOpacity: 0.8
       });
 
-      this.playerMarker = L.marker([pos.lat, pos.lng], {
-        icon: playerIcon
-      }).addTo(this.map);
+      this.playerMarker = marker.addTo(this.map);
     },
 
     setPlayerPosition(lat, lng) {
+      if (!this.gs.player) this.gs.player = {};
       this.gs.player.position = { lat, lng };
+
       if (this.playerMarker) {
         this.playerMarker.setLatLng([lat, lng]);
       }
@@ -115,11 +113,24 @@
       if (this.locationsLoaded) return;
 
       try {
-        // Adjust path to wherever locations.json actually lives
-        const res = await fetch("locations.json");
-        this.locations = await res.json();
+        // Your locations live under /data/locations.json
+        const res = await fetch("/data/locations.json");
+        if (!res.ok) {
+          console.error("worldmap: HTTP error loading /data/locations.json:", res.status);
+          return;
+        }
+
+        const json = await res.json();
+        if (!Array.isArray(json)) {
+          console.error("worldmap: expected array in locations.json");
+          return;
+        }
+
+        this.locations = json;
         this.locationsLoaded = true;
         this.renderPOIMarkers();
+
+        console.log(`worldmap: loaded ${this.locations.length} locations`);
       } catch (e) {
         console.error("worldmap: failed to load locations.json", e);
       }
@@ -129,10 +140,11 @@
       if (!this.map || !this.locationsLoaded) return;
 
       // Clear old markers
-      this.poiMarkers.forEach(m => this.map.removeLayer(m));
+      this.poiMarkers.forEach(m => this.map.removeLayer(m.marker || m));
       this.poiMarkers = [];
 
       this.locations.forEach((loc, idx) => {
+        if (typeof loc.lat !== "number" || typeof loc.lng !== "number") return;
         const marker = this.createPOIMarker(loc, idx);
         marker.addTo(this.map);
         this.poiMarkers.push({ marker, loc });
@@ -142,11 +154,18 @@
     createPOIMarker(loc, idx) {
       const rarity = loc.rarity || "common";
 
+      // Use Pip-Boy marker classes (styled in pipboy.css)
+      const iconHtml = `
+        <div class="pipboy-marker">
+          <div class="pipboy-marker-dot ${rarity === "epic" ? "epic" : ""} ${rarity === "legendary" ? "legendary" : ""}"></div>
+        </div>
+      `;
+
       const icon = L.divIcon({
-        className: `pipboy-poi-marker rarity-${rarity}`,
-        html: this.getMarkerGlyphFor(loc),
-        iconSize: [12, 12],
-        iconAnchor: [6, 6]
+        className: "pipboy-marker-icon",
+        html: iconHtml,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
       });
 
       const marker = L.marker([loc.lat, loc.lng], { icon });
@@ -155,22 +174,15 @@
         this.onLocationClick(loc, idx);
       });
 
+      const name = loc.n || loc.name || loc.id || `POI ${idx + 1}`;
+      const level = loc.lvl || 1;
+
       marker.bindTooltip(
-        `${loc.n} (Lv ${loc.lvl || 1}, ${rarity})`,
+        `${name} (Lv ${level}, ${rarity})`,
         { permanent: false, direction: "top", className: "pipboy-tooltip" }
       );
 
       return marker;
-    },
-
-    getMarkerGlyphFor(loc) {
-      // You can get fancier with types later; for now use rarity
-      switch (loc.rarity) {
-        case "legendary": return "✶"; // star
-        case "epic": return "◆";
-        case "rare": return "⬤";
-        default: return "·";
-      }
     },
 
     // --------------------------------------------------------
@@ -199,7 +211,7 @@
         const worldState = Game.modules.world.state || this.gs.worldState || this.gs;
         const locationForWorld = {
           id: loc.id || `loc_${loc.n}_${loc.lat}_${loc.lng}`,
-          name: loc.n,
+          name: loc.n || loc.name || "Unknown Location",
           lvl: loc.lvl || 1,
           biome: loc.biome || "temperate_forest",
           type: loc.type || "poi",
@@ -216,21 +228,22 @@
     },
 
     handleEncounterResult(result, loc) {
+      const name = loc.n || loc.name || "this location";
+
       if (!result || result.type === "none") {
-        this.showMapMessage(`You arrive at ${loc.n}. The wastes are quiet... for now.`);
+        this.showMapMessage(`You arrive at ${name}. The wastes are quiet... for now.`);
         return;
       }
 
       switch (result.type) {
         case "combat":
-          this.showMapMessage(`Hostiles near ${loc.n}!`);
+          this.showMapMessage(`Hostiles near ${name}!`);
           if (Game.modules.battle) {
-            // Basic mapping: wrap enemies into the format battle module expects
             const encounter = {
-              id: `encounter_${loc.n}_${Date.now()}`,
-              enemies: (result.enemies.list || []).map(id => ({
+              id: `encounter_${name}_${Date.now()}`,
+              enemies: (result.enemies?.list || []).map(id => ({
                 id,
-                damage: 5 // default; your enemy system can enrich this later
+                damage: 5 // placeholder; your enemy system can enrich it
               })),
               rewards: result.rewards || {}
             };
@@ -239,31 +252,28 @@
           break;
 
         case "merchant":
-          this.showMapMessage(`A merchant caravan has appeared near ${loc.n}.`);
-          // Later: open merchant UI, use Game.modules.world.merchants.inventory
+          this.showMapMessage(`A merchant caravan has appeared near ${name}.`);
           break;
 
         case "boss":
-          this.showMapMessage(`You sense a powerful presence at ${loc.n}...`);
-          // Hook into boss UI / battle later
+          this.showMapMessage(`You sense a powerful presence at ${name}...`);
           break;
 
         case "event":
-          this.showMapMessage(result.event?.description || `Something strange happens near ${loc.n}.`);
+          this.showMapMessage(result.event?.description || `Something strange happens near ${name}.`);
           break;
 
         case "ambient":
-          this.showMapMessage(result.description || `The air feels heavy around ${loc.n}.`);
+          this.showMapMessage(result.description || `The air feels heavy around ${name}.`);
           break;
 
         default:
-          this.showMapMessage(`You arrive at ${loc.n}.`);
+          this.showMapMessage(`You arrive at ${name}.`);
       }
     },
 
     showMapMessage(text) {
-      // Simple Pip-Boy style log area (optional)
-      let log = document.getElementById("mapLog");
+      const log = document.getElementById("mapLog");
       if (!log) return;
       const line = document.createElement("div");
       line.textContent = text;
@@ -272,7 +282,6 @@
 
     // --------------------------------------------------------
     // QUEST SUPPORT: getNearbyPOIs(radiusMeters)
-    // Used by your quests module already
     // --------------------------------------------------------
 
     getNearbyPOIs(radiusMeters) {
@@ -305,11 +314,10 @@
     },
 
     // --------------------------------------------------------
-    // UI HOOK
+    // UI HOOK (called when MAP tab opens, if you want)
     // --------------------------------------------------------
 
     onOpen() {
-      // Called when the Pip-Boy Map tab is opened
       this.initMap();
       this.initPlayerMarker();
       this.renderPOIMarkers();
@@ -317,6 +325,7 @@
       if (this.map) {
         setTimeout(() => {
           this.map.invalidateSize();
+          this.ensurePlayerPosition();
           const pos = this.gs.player.position;
           this.map.setView([pos.lat, pos.lng], this.map.getZoom());
         }, 50);
@@ -325,4 +334,13 @@
   };
 
   Game.modules.worldmap = worldmapModule;
+
+  // Optional: auto-init when script loads, using global DATA
+  document.addEventListener("DOMContentLoaded", () => {
+    try {
+      worldmapModule.init(window.DATA || {});
+    } catch (e) {
+      console.error("worldmap: auto-init failed:", e);
+    }
+  });
 })();
