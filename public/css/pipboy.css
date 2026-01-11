@@ -990,4 +990,85 @@ body {
   object-fit: cover;
   border-radius: 4px;
 }
+/* ============================================================
+   ON‑CHAIN NFT INVENTORY (Pip‑Boy 3000 Style)
+   ============================================================ */
+
+.pip-entry-nft {
+  border-left: 3px solid #00ff99;
+  padding-left: 10px;
+  margin: 10px 0;
+  background: rgba(0, 255, 153, 0.06);
+  box-shadow: inset 0 0 6px rgba(0, 255, 153, 0.12);
+}
+
+.pip-entry-nft strong {
+  color: #00ff99;
+  font-weight: bold;
+  text-shadow: 0 0 4px rgba(0, 255, 153, 0.6);
+}
+
+.pip-nft-mint {
+  display: block;
+  font-size: 10px;
+  opacity: 0.7;
+  margin-top: 2px;
+  word-break: break-all;
+  letter-spacing: 0.05em;
+}
+
+.pip-nft-tag {
+  font-size: 9px;
+  margin-top: 4px;
+  opacity: 0.85;
+  color: #00ff99;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pip-nft-attrs {
+  margin-top: 8px;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.pip-attr {
+  margin-bottom: 2px;
+}
+
+.pip-attr span {
+  color: #00ff99;
+  margin-right: 4px;
+  text-shadow: 0 0 4px rgba(0, 255, 153, 0.6);
+}
+
+.pip-item-more {
+  opacity: 0.6;
+  font-size: 9px;
+  margin-top: 4px;
+}
+
+/* Optional: NFT thumbnails (if you enable images later) */
+.pip-item-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border: 1px solid #00ff99;
+  border-radius: 4px;
+  margin-right: 10px;
+  box-shadow: 0 0 6px rgba(0, 255, 153, 0.4);
+}
+
+.pip-item-thumb-empty {
+  width: 48px;
+  height: 48px;
+  border: 1px dashed #00ff99;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.4;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+}
 
