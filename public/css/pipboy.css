@@ -1,5 +1,5 @@
 /* ============================================================
-   ROOT LAYOUT — PIP-BOY 3000 (NEW VEGAS STYLE)
+   ROOT LAYOUT — PIP-BOY 3000 (NEW VEGAS STYLE, RESPONSIVE)
    ============================================================ */
 
 html,
@@ -17,27 +17,65 @@ body {
   align-items: center;
   justify-content: center;
   color: #9fe88d;
+  overflow: hidden;
+}
+
+/* Universal CRT text feel */
+
+* {
+  box-sizing: border-box;
+  color: #9fe88d;
+  text-shadow: 0 0 4px rgba(0, 255, 65, 0.4);
+}
+
+/* Utility */
+
+.hidden {
+  display: none !important;
+}
+
+/* ============================================================
+   OUTER PIP-BOY DEVICE (FULLSCREEN + WATCH-READY)
+   ============================================================ */
+
+.pipboy-root {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Orientation-aware (for phones, tablets, watches) */
+
+@media (orientation: portrait) {
+  .pipboy-root {
+    flex-direction: column;
+  }
+}
+
+@media (orientation: landscape) {
+  .pipboy-root {
+    flex-direction: row;
+  }
 }
 
 /* Outer bezel */
 
-.pipboy-root {
-  width: 100%;
-  max-width: 1100px;
-  aspect-ratio: 16 / 9;
-  padding: 16px;
-  box-sizing: border-box;
-}
-
 .pipboy-bezel {
   width: 100%;
   height: 100%;
+  padding: 12px;
   background: radial-gradient(circle at top left, #1b2e18 0%, #050705 60%, #000 100%);
   border-radius: 24px;
   box-shadow:
     0 0 40px rgba(0, 0, 0, 0.9),
     inset 0 0 30px rgba(0, 0, 0, 0.9);
-  padding: 14px;
 }
 
 /* Inner frame */
@@ -62,6 +100,19 @@ body {
   background: radial-gradient(circle at center, #102310 0%, #050705 60%, #020302 100%);
   color: #9fe88d;
   overflow: hidden;
+}
+
+/* CRT glow */
+
+.pipboy-crt::after {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  border-radius: 999px;
+  box-shadow:
+    0 0 40px rgba(0, 255, 65, 0.12),
+    0 0 140px rgba(0, 255, 65, 0.18);
+  pointer-events: none;
 }
 
 /* Noise + scanlines */
@@ -98,19 +149,6 @@ body {
   50% {
     opacity: 0.45;
   }
-}
-
-/* Glow */
-
-.pipboy-crt::after {
-  content: "";
-  position: absolute;
-  inset: -40px;
-  border-radius: 999px;
-  box-shadow:
-    0 0 40px rgba(0, 255, 65, 0.12),
-    0 0 140px rgba(0, 255, 65, 0.18);
-  pointer-events: none;
 }
 
 /* Content layering */
@@ -158,7 +196,7 @@ body {
   margin-left: 12px;
 }
 
-/* Wallet HUD (DAP-style) */
+/* Wallet HUD */
 
 .wallet-hud {
   position: absolute;
@@ -207,13 +245,25 @@ body {
     inset 0 0 4px rgba(0, 0, 0, 0.9);
 }
 
+/* Boot flicker when tab first appears */
+
+.pipboy-tab-boot {
+  animation: tabBoot 0.6s ease-out;
+}
+
+@keyframes tabBoot {
+  0% { opacity: 0; transform: scale(0.8); filter: brightness(0); }
+  40% { opacity: 1; transform: scale(1.05); filter: brightness(2); }
+  100% { opacity: 1; transform: scale(1); filter: brightness(1); }
+}
+
 /* ============================================================
    MAIN AREA — FULLSCREEN PANEL SYSTEM
    ============================================================ */
 
 .pipboy-main {
   position: relative;
-  height: calc(100% - 82px);
+  height: calc(100vh - 140px); /* header + tabs + footer budget */
   padding: 6px 10px;
   box-sizing: border-box;
 }
@@ -297,26 +347,40 @@ body {
   background: rgba(159, 232, 141, 0.18);
 }
 
-/* Buttons */
+/* ============================================================
+   BUTTONS — UNIVERSAL THEME
+   ============================================================ */
 
-.pipboy-button {
+button,
+.pipboy-button,
+.pipboy-button-small {
   display: inline-block;
-  background: transparent;
-  border: 1px solid rgba(159, 232, 141, 0.6);
+  background: rgba(0, 255, 65, 0.05);
+  border: 1px solid rgba(0, 255, 65, 0.4);
   border-radius: 2px;
   color: #9fe88d;
   font-family: inherit;
   font-size: 11px;
-  letter-spacing: 0.17em;
+  letter-spacing: 0.14em;
   padding: 4px 10px;
   cursor: pointer;
   text-transform: uppercase;
   margin-top: 4px;
-  text-shadow: 0 0 4px rgba(159, 232, 141, 0.8);
+  text-shadow: 0 0 4px rgba(0, 255, 65, 0.8);
+  transition: background 0.15s, box-shadow 0.15s, transform 0.05s;
 }
 
-.pipboy-button:hover {
-  background: rgba(159, 232, 141, 0.18);
+button:hover,
+.pipboy-button:hover,
+.pipboy-button-small:hover {
+  background: rgba(0, 255, 65, 0.18);
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+}
+
+button:active,
+.pipboy-button:active,
+.pipboy-button-small:active {
+  transform: translateY(1px);
 }
 
 .pipboy-button-small {
@@ -338,7 +402,7 @@ body {
   box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.9);
 }
 
-/* Leaflet container inside mapContainer */
+/* Leaflet container */
 
 #mapContainer {
   position: relative;
@@ -348,49 +412,14 @@ body {
   overflow: hidden;
 }
 
-/* Apply NV green CRT filter to Leaflet map */
-#mapContainer .leaflet-container {
-  width: 100%;
-  height: 100%;
+/* CRT tint over tiles */
+
+.leaflet-tile {
   filter:
-    grayscale(100%)
-    brightness(0.55)
-    contrast(2.2)
-    hue-rotate(90deg)
-    saturate(250%);
-  image-rendering: pixelated;
-}
-
-/* Scanlines + vignette on map */
-
-#mapContainer::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(0, 255, 80, 0.05) 0px,
-      rgba(0, 255, 80, 0.05) 2px,
-      rgba(0, 0, 0, 0.15) 3px
-    );
-  mix-blend-mode: overlay;
-  opacity: 0.35;
-}
-
-#mapContainer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 60;
-  background: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 0) 40%,
-    rgba(0, 0, 0, 0.45) 100%
-  );
+    grayscale(1)
+    contrast(1.4)
+    brightness(0.6)
+    hue-rotate(90deg);
 }
 
 /* Map overlay texts (bottom) */
@@ -452,15 +481,6 @@ body {
   box-shadow: 0 0 6px red;
 }
 
-/* GPS button bottom-left */
-
-.gps-btn {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  z-index: 2000;
-}
-
 /* Radiation flash */
 
 #radFlash {
@@ -479,12 +499,56 @@ body {
   to   { opacity: 0.25; }
 }
 
-/* Glowing POI markers */
+/* Pip-Boy markers */
 
 .pipboy-marker {
+  pointer-events: auto;
   filter:
     drop-shadow(0 0 6px #00ff41)
     drop-shadow(0 0 12px #00ff41);
+}
+
+.pipboy-marker-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #00ff41;
+  background: rgba(0, 255, 65, 0.25);
+  box-shadow: 0 0 6px #00ff41;
+}
+
+.pipboy-marker-dot.epic {
+  border-color: #ff8800;
+  box-shadow: 0 0 8px #ff8800;
+}
+
+.pipboy-marker-dot.legendary {
+  border-color: #ffff00;
+  box-shadow: 0 0 8px #ffff00;
+}
+
+/* SVG markers */
+
+.pipboy-marker-svg svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.pipboy-rarity-epic .pipboy-marker-svg {
+  color: #ff8800;
+}
+
+.pipboy-rarity-legendary .pipboy-marker-svg {
+  color: #ffff00;
+}
+
+/* Claimed markers */
+
+.leaflet-marker-icon.claimed .pipboy-marker-svg {
+  opacity: 0.5;
+  filter: none;
 }
 
 /* ============================================================
@@ -577,19 +641,6 @@ body {
   letter-spacing: 0.13em;
 }
 
-/* Utility */
-
-.small {
-  font-size: 10px;
-  opacity: 0.8;
-}
-
-/* Leaflet override */
-
-.leaflet-control-container {
-  display: none;
-}
-
 /* ============================================================
    EXCHANGE TERMINAL — VAULT-TEC CORPORATE UI
    ============================================================ */
@@ -600,7 +651,6 @@ body {
   background: rgba(0, 20, 0, 0.85);
 }
 
-/* Header */
 .exchange-header {
   margin-bottom: 10px;
   padding-bottom: 6px;
@@ -620,7 +670,6 @@ body {
   letter-spacing: 0.12em;
 }
 
-/* Left menu */
 .exchange-menu {
   list-style: none;
   padding: 0;
@@ -640,7 +689,6 @@ body {
   background: rgba(159, 232, 141, 0.18);
 }
 
-/* Right content panel */
 .exchange-content {
   padding: 10px;
   font-size: 11px;
@@ -658,8 +706,6 @@ body {
   margin-bottom: 6px;
   letter-spacing: 0.14em;
 }
-
-/* Exchange cards */
 
 .exchange-section h2 {
   font-size: 13px;
@@ -725,272 +771,6 @@ body {
 }
 
 /* ============================================================
-   RESPONSIVE LAYOUT — MOBILE + TABLET (still Pip-Boy)
-   ============================================================ */
-
-@media (max-width: 1100px) {
-  .pipboy-root {
-    max-width: 100%;
-    padding: 8px;
-  }
-}
-
-@media (max-width: 768px) {
-  .pipboy-root {
-    aspect-ratio: auto;
-    height: 100%;
-    padding: 6px;
-  }
-
-  .pipboy-tabs {
-    overflow-x: auto;
-    white-space: nowrap;
-    scrollbar-width: none;
-  }
-
-  .pipboy-tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .pipboy-tab {
-    flex: 0 0 auto;
-    padding: 6px 14px;
-    font-size: 12px;
-  }
-
-  .pipboy-panel {
-    font-size: 12px;
-  }
-
-  .panel-header {
-    font-size: 11px;
-  }
-
-  .pipboy-footer {
-    flex-direction: column;
-    text-align: center;
-    gap: 4px;
-    font-size: 11px;
-  }
-}
-
-@media (max-width: 480px) {
-  .pipboy-title {
-    font-size: 14px;
-    letter-spacing: 0.1em;
-  }
-
-  .pipboy-subtitle {
-    font-size: 9px;
-  }
-
-  .pipboy-meta {
-    font-size: 9px;
-  }
-
-  .pipboy-tab {
-    padding: 6px 10px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-  }
-
-  .panel-header,
-  .detail-header {
-    font-size: 9px;
-  }
-
-  .panel-body,
-  .detail-body {
-    font-size: 10px;
-  }
-
-  .pipboy-button {
-    font-size: 10px;
-    padding: 6px 12px;
-  }
-}
-/* Fallout green tint over satellite */
-.leaflet-tile {
-    filter: grayscale(1) contrast(1.4) brightness(0.6) hue-rotate(90deg);
-}
-
-/* Pip-Boy POI marker */
-.pipboy-marker {
-    pointer-events: auto;
-}
-.pipboy-marker-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid #00ff41;
-    background: rgba(0, 255, 65, 0.2);
-    box-shadow: 0 0 6px #00ff41;
-}
-
-/* Example: rarity variants (optional) */
-.pipboy-marker-dot.epic {
-    border-color: #ff8800;
-    box-shadow: 0 0 8px #ff8800;
-}
-.pipboy-marker-dot.legendary {
-    border-color: #ffff00;
-    box-shadow: 0 0 8px #ffff00;
-}
-
-/* CRT overlays */
-#mapWrap {
-    position: relative;
-}
-#mapWrap::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/assets/overlay/grid.png");
-    opacity: 0.15;
-    pointer-events: none;
-    z-index: 999;
-}
-#mapWrap::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/assets/overlay/scanlines.png");
-    opacity: 0.12;
-    pointer-events: none;
-    z-index: 998;
-}
-/* Fallout green tint */
-.leaflet-tile {
-    filter: grayscale(1) contrast(1.4) brightness(0.6) hue-rotate(90deg);
-}
-
-/* Pip-Boy markers */
-.pipboy-marker { pointer-events: auto; }
-
-.pipboy-marker-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid #00ff41;
-    background: rgba(0,255,65,0.25);
-    box-shadow: 0 0 6px #00ff41;
-}
-
-.pipboy-marker-dot.epic {
-    border-color: #ff8800;
-    box-shadow: 0 0 8px #ff8800;
-}
-
-.pipboy-marker-dot.legendary {
-    border-color: #ffff00;
-    box-shadow: 0 0 8px #ffff00;
-}
-
-/* SVG markers */
-.pipboy-marker-svg svg {
-    width: 22px;
-    height: 22px;
-    fill: #00ff41;
-    stroke: #00ff41;
-}
-
-/* CRT overlays */
-#mapWrap::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/assets/overlay/grid.png");
-    opacity: 0.15;
-    pointer-events: none;
-    z-index: 999;
-}
-
-#mapWrap::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/assets/overlay/scanlines.png");
-    opacity: 0.12;
-    pointer-events: none;
-    z-index: 998;
-}
-/* Fallout green tint over base tiles */
-.leaflet-tile {
-    filter: grayscale(1) contrast(1.4) brightness(0.6) hue-rotate(90deg);
-}
-
-/* Pip-Boy markers */
-.pipboy-marker {
-    pointer-events: auto;
-}
-
-.pipboy-marker-svg {
-    width: 22px;
-    height: 22px;
-    color: #00ff41; /* drives currentColor */
-    filter: drop-shadow(0 0 4px #00ff41);
-}
-
-/* Rarity overrides (optional) */
-.pipboy-rarity-epic .pipboy-marker-svg {
-    color: #ff8800;
-}
-.pipboy-rarity-legendary .pipboy-marker-svg {
-    color: #ffff00;
-}
-
-/* Claimed state */
-.pipboy-marker .claimed,
-.leaflet-marker-icon.claimed .pipboy-marker-svg {
-    opacity: 0.5;
-    filter: none;
-}
-
-/* CRT overlays */
-#mapWrap {
-    position: relative;
-}
-#mapWrap::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/assets/overlay/grid.png");
-    opacity: 0.15;
-    pointer-events: none;
-    z-index: 999;
-}
-#mapWrap::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/assets/overlay/scanlines.png");
-    opacity: 0.12;
-    pointer-events: none;
-    z-index: 998;
-}
-.pipboy-tab-boot {
-  animation: tabBoot 0.6s ease-out;
-}
-
-@keyframes tabBoot {
-  0% { opacity: 0; transform: scale(0.8); filter: brightness(0); }
-  40% { opacity: 1; transform: scale(1.05); filter: brightness(2); }
-  100% { opacity: 1; transform: scale(1); filter: brightness(1); }
-}
-.poi-active {
-  filter: drop-shadow(0 0 6px #00ff41);
-}
-.nft-item {
-  border-left: 3px solid #00ff99;
-}
-
-.nft-item .item-image {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-/* ============================================================
    ON‑CHAIN NFT INVENTORY (Pip‑Boy 3000 Style)
    ============================================================ */
 
@@ -1048,7 +828,6 @@ body {
   margin-top: 4px;
 }
 
-/* Optional: NFT thumbnails (if you enable images later) */
 .pip-item-thumb {
   width: 48px;
   height: 48px;
@@ -1071,6 +850,11 @@ body {
   font-size: 8px;
   letter-spacing: 0.1em;
 }
+
+/* ============================================================
+   TERMINAL IFRAME (if used in RADIO in future)
+   ============================================================ */
+
 .terminal-frame {
   width: 100%;
   height: 420px;
@@ -1079,32 +863,91 @@ body {
   border: 2px solid #0f9;
   border-radius: 6px;
 }
-.hidden {
-  display: none !important;
-}
 
-/* Make the Pip-Boy scale to ANY device */
-.pipboy-root {
-  width: 100vw;
-  height: 100vh;
-  max-width: none;
-  max-height: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
+/* ============================================================
+   RESPONSIVE TUNING
+   ============================================================ */
 
-/* Scale the CRT to fill the screen */
-.pipboy-crt {
-  width: 100%;
-  height: 100%;
-  transform-origin: center center;
-}
-
-/* Prevent tiny layout on watches */
-@media (max-width: 400px) {
-  .pipboy-crt {
-    font-size: 0.8rem;
+@media (max-width: 1100px) {
+  .pipboy-root {
+    padding: 0;
   }
+}
+
+@media (max-width: 768px) {
+  .pipboy-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+
+  .pipboy-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pipboy-tab {
+    flex: 0 0 auto;
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+
+  .pipboy-panel {
+    font-size: 12px;
+  }
+
+  .panel-header {
+    font-size: 11px;
+  }
+
+  .pipboy-footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 4px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pipboy-title {
+    font-size: 14px;
+    letter-spacing: 0.1em;
+  }
+
+  .pipboy-subtitle {
+    font-size: 9px;
+  }
+
+  .pipboy-meta {
+    font-size: 9px;
+  }
+
+  .pipboy-tab {
+    padding: 6px 10px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .panel-header {
+    font-size: 9px;
+  }
+
+  .panel-body {
+    font-size: 10px;
+  }
+
+  .pipboy-button {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+}
+
+/* Remove debug scrollbars */
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.leaflet-control-container {
+  display: none;
 }
