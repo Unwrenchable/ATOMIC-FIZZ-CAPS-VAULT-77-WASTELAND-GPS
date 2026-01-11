@@ -1,10 +1,12 @@
-// mintables.js
+// public/js/modules/mintables.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps – Mintables Module
 // Master item database: weapons, armor, consumables, junk, lore, trophies
 // ------------------------------------------------------------
 
 (function () {
+  "use strict";
+
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
@@ -18,11 +20,21 @@
     async init() {
       if (this.loaded) return;
       try {
-        // Adjust path if your mintables live elsewhere
-        const res = await fetch("mintables.json");
-        this.items = await res.json();
+        // Mintables live in /public/data/mintables.json
+        const res = await fetch("/data/mintables.json");
+        if (!res.ok) {
+          console.error("mintables: HTTP error loading /data/mintables.json:", res.status);
+          return;
+        }
+        const json = await res.json();
+        if (!Array.isArray(json)) {
+          console.error("mintables: expected array in mintables.json");
+          return;
+        }
+        this.items = json;
         this.buildIndexes();
         this.loaded = true;
+        console.log(`mintables: loaded ${this.items.length} items`);
       } catch (e) {
         console.error("mintables: failed to load mintables.json", e);
       }
@@ -34,13 +46,19 @@
       this.indexedByRarity = {};
 
       this.items.forEach(item => {
+        if (!item || !item.id) return;
+
         this.indexedById[item.id] = item;
 
-        if (!this.indexedByType[item.type]) this.indexedByType[item.type] = [];
-        this.indexedByType[item.type].push(item);
+        if (item.type) {
+          if (!this.indexedByType[item.type]) this.indexedByType[item.type] = [];
+          this.indexedByType[item.type].push(item);
+        }
 
-        if (!this.indexedByRarity[item.rarity]) this.indexedByRarity[item.rarity] = [];
-        this.indexedByRarity[item.rarity].push(item);
+        if (item.rarity) {
+          if (!this.indexedByRarity[item.rarity]) this.indexedByRarity[item.rarity] = [];
+          this.indexedByRarity[item.rarity].push(item);
+        }
       });
     },
 
@@ -67,7 +85,6 @@
       Object.keys(rollRanges).forEach(stat => {
         const [min, max] = rollRanges[stat];
         const delta = Math.random() * (max - min) + min;
-        // If base is integer, keep stat integer-ish
         const baseVal = baseStats[stat] ?? 0;
         if (Number.isInteger(baseVal) && Number.isInteger(min) && Number.isInteger(max)) {
           rolled[stat] = baseVal + Math.round(delta);
@@ -81,10 +98,9 @@
 
     // Optionally roll a variant (for weapons mostly)
     rollVariant(item) {
-      if (!item.variants || !item.variants.length) return null;
-      // Simple: pick one at random for now
-      const variant = item.variants[Math.floor(Math.random() * item.variants.length)];
-      return variant;
+      if (!item || !Array.isArray(item.variants) || !item.variants.length) return null;
+      const idx = Math.floor(Math.random() * item.variants.length);
+      return item.variants[idx];
     }
   };
 
