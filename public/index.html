@@ -90,7 +90,8 @@
 
                     <div class="map-controls">
                       <div class="map-style-switcher">
-                        <button class="pipboy-button-small map-style-btn" data-style="pipboy_terminal">TERMINAL</button>
+                        <!-- Renamed label so it’s clearly a map style, not the Overseer terminal -->
+                        <button class="pipboy-button-small map-style-btn" data-style="pipboy_terminal">CRT MAP</button>
                         <button class="pipboy-button-small map-style-btn" data-style="desert_ruins_explorer">DESERT</button>
                         <button class="pipboy-button-small map-style-btn" data-style="winter_recon">WINTER</button>
                       </div>
@@ -295,6 +296,9 @@
       </div>       <!-- pipboy-root -->
     </div>         <!-- pipboyScreen -->
 
+    <!-- Invisible counter for locations (used by main.js) -->
+    <span id="locations-count" class="hidden"></span>
+
     <!-- CORE NAMESPACE -->
     <script>
       if (!window.Game) window.Game = {};
@@ -335,7 +339,7 @@
         const btn = document.getElementById("openOverseerTerminal");
 
         // TEMP: unlock terminal immediately
-        terminalSection.style.display = "block";
+        if (terminalSection) terminalSection.style.display = "block";
 
         function openOverseerPopup() {
           const screenW = window.innerWidth || screen.width;
