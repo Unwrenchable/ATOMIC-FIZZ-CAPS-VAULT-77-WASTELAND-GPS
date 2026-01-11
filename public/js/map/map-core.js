@@ -1,9 +1,3 @@
-// ======================================================================
-//  MAP CORE ENGINE (HYBRID MODE)
-//  This file contains NO Leaflet UI. It is the logic layer only.
-//  Drop-in replacement for public/js/map/map-core.js
-// ======================================================================
-
 (function () {
     "use strict";
 
@@ -29,7 +23,7 @@
 
     // POI storage
     game.locations = [];
-    game.markers = {}; // UI layer will populate this
+    game.markers = {};
 
     // GPS state
     let playerLatLng = null;
@@ -37,6 +31,10 @@
 
     // SCAN radius (meters)
     const SCAN_RADIUS = 500;
+
+    // SCAN cooldown
+    let lastScan = 0;
+    const SCAN_COOLDOWN = 1500; // ms
 
     // ------------------------------------------------------------
     // LOAD FALLOUT POIs
@@ -64,7 +62,6 @@
                 lng: p.coords.longitude
             };
 
-            // Sync to game.player.location
             game.player.location = {
                 id: "world_position",
                 name: "WASTELAND",
@@ -72,44 +69,69 @@
                 lng: playerLatLng.lng
             };
 
-            // Notify UI layer (map-ui.js) if loaded
             if (typeof game.updatePlayerMarker === "function") {
                 game.updatePlayerMarker(playerLatLng);
             }
+
+            game.sendLocationToTerminal?.();
         },
-        null,
+        err => {
+            console.warn("GPS unavailable:", err);
+
+            game.player.location = {
+                id: "gps_denied",
+                name: "NO SIGNAL",
+                lat: null,
+                lng: null
+            };
+
+            if (typeof game.updatePlayerMarker === "function") {
+                game.updatePlayerMarker(null);
+            }
+
+            game.sendLocationToTerminal?.();
+        },
         { enableHighAccuracy: true }
     );
 
     // ------------------------------------------------------------
-    // SCAN LOGIC (used by Overseer Terminal)
+    // SCAN LOGIC
     // ------------------------------------------------------------
     game.getNearbyPOIs = function () {
         if (!playerLatLng || !Array.isArray(game.locations)) return [];
 
-        // If Leaflet UI is loaded, use map.distance
+        const now = Date.now();
+        if (now - lastScan < SCAN_COOLDOWN) {
+            return game._lastScanResults || [];
+        }
+        lastScan = now;
+
         const hasLeaflet = typeof L !== "undefined";
 
-        return game.locations
+        const results = game.locations
             .map(loc => {
-                let dist;
+                if (loc.lat == null || loc.lng == null) return null;
 
+                let dist;
                 if (hasLeaflet) {
                     dist = L.latLng(playerLatLng.lat, playerLatLng.lng)
                         .distanceTo(L.latLng(loc.lat, loc.lng));
                 } else {
-                    // Fallback Haversine
                     dist = haversine(playerLatLng, loc);
                 }
 
                 return { id: loc.id, name: loc.name, distance: dist };
             })
+            .filter(Boolean)
             .filter(p => p.distance <= SCAN_RADIUS)
             .sort((a, b) => a.distance - b.distance);
+
+        game._lastScanResults = results;
+        return results;
     };
 
     // ------------------------------------------------------------
-    // HAVERSINE (fallback distance calculation)
+    // HAVERSINE FALLBACK
     // ------------------------------------------------------------
     function haversine(a, b) {
         const R = 6371000;
@@ -205,6 +227,10 @@
         switch (type) {
             case "terminal_ready":
                 game.sendStatusToTerminal();
+                game.sendLocationToTerminal();
+                game.sendMapInfoToTerminal();
+                game.sendInventoryToTerminal();
+                game.sendCapsToTerminal();
                 break;
 
             case "status":
@@ -241,6 +267,8 @@
     // ------------------------------------------------------------
     // BOOT
     // ------------------------------------------------------------
-    loadPOIs();
+    loadPOIs().then(() => {
+        window.dispatchEvent(new CustomEvent("game:ready"));
+    });
 
 })();
