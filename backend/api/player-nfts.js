@@ -1,4 +1,4 @@
-// backend/api/nfts.js
+// backend/api/player-nfts.js
 
 const express = require("express");
 const router = express.Router();
@@ -9,23 +9,28 @@ router.get("/", async (req, res) => {
     const wallet = req.query.wallet;
 
     if (!wallet) {
-      return res.status(400).json({ error: "Missing wallet parameter" });
+      return res.status(400).json({ ok: false, error: "Missing wallet parameter" });
     }
 
-    const nfts = await fetchNFTsForWallet(wallet);
+    // Fetch NFTs from devnet via Helius
+    const chainNFTs = await fetchNFTsForWallet(wallet);
+
+    // OPTIONAL: merge with off-chain inventory later
+    // const player = await getPlayerProfile(wallet);
+    // const merged = mergeInventory(chainNFTs, player.inventory);
 
     res.json({
       ok: true,
       wallet,
-      count: nfts.length,
-      nfts
+      count: chainNFTs.length,
+      nfts: chainNFTs
     });
 
   } catch (err) {
-    console.error("[api/nfts] error:", err);
+    console.error("[api/player-nfts] error:", err);
     res.status(500).json({
       ok: false,
-      error: err.message || "Failed to fetch NFTs"
+      error: err.message || "Failed to fetch player NFTs"
     });
   }
 });
