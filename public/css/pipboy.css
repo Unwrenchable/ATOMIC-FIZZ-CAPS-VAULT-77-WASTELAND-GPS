@@ -980,4 +980,14 @@ body {
 .poi-active {
   filter: drop-shadow(0 0 6px #00ff41);
 }
+.nft-item {
+  border-left: 3px solid #00ff99;
+}
+
+.nft-item .item-image {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+}
 
