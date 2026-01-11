@@ -1,4 +1,4 @@
-// public/js/main.js – Player State, Mint Integration, XP/CAPS, Quests (Refactored)
+// public/js/main.js – Player State, Mint Integration, XP/CAPS, Quests + NFT inventory
 (function () {
   'use strict';
 
@@ -30,6 +30,13 @@
     xp: 0,
     caps: 0,
     level: 1
+  };
+
+  // ---------------------------
+  // ON-CHAIN NFT STATE
+  // ---------------------------
+  const NFT_STATE = {
+    list: [] // array of { mint, name, image, attributes, ... }
   };
 
   function safeLog(...args) { try { console.log(...args); } catch (e) {} }
@@ -272,6 +279,59 @@
   }
 
   // ---------------------------
+  // NFT HELPERS (backend /api/player-nfts)
+  // ---------------------------
+
+  async function fetchPlayerNFTs(wallet) {
+    if (!wallet) {
+      safeLog('[NFT] No wallet set; skipping NFT fetch.');
+      return [];
+    }
+
+    const backend = window.BACKEND_URL || CONFIG.apiBase;
+    if (!backend) {
+      safeWarn('[NFT] No BACKEND_URL/api base; skipping NFT fetch.');
+      return [];
+    }
+
+    try {
+      const url = `${backend}/api/player-nfts?wallet=${encodeURIComponent(wallet)}`;
+      const res = await fetch(url);
+      const json = await res.json();
+
+      if (!res.ok || !json.ok) {
+        safeWarn('[NFT] NFT fetch failed:', json.error || `HTTP ${res.status}`);
+        return [];
+      }
+
+      const nfts = Array.isArray(json.nfts) ? json.nfts : [];
+      safeLog(`[NFT] Loaded ${nfts.length} NFTs for wallet ${wallet}`);
+      return nfts;
+    } catch (e) {
+      safeError('[NFT] Failed to load NFTs:', e);
+      return [];
+    }
+  }
+
+  async function refreshNFTs() {
+    const wallet =
+      window.PLAYER_WALLET ||
+      (window.solana && window.solana.publicKey && window.solana.publicKey.toBase58
+        ? window.solana.publicKey.toBase58()
+        : null);
+
+    if (!wallet) {
+      NFT_STATE.list = [];
+      renderInventoryPanel();
+      return;
+    }
+
+    const nfts = await fetchPlayerNFTs(wallet);
+    NFT_STATE.list = nfts;
+    renderInventoryPanel();
+  }
+
+  // ---------------------------
   // PANELS RENDERING (Pip-Boy panels)
   // ---------------------------
 
@@ -279,24 +339,64 @@
     const panel = document.getElementById('inventoryList'); // inner list, not whole pip-panel
     if (!panel) return;
 
+    const parts = [];
+
+    // Off-chain/local items (mintables, quest rewards, etc.)
     if (!PLAYER.inventory.length) {
-      panel.innerHTML = '<p>No items yet — explore the Mojave and claim some caps.</p>';
-      return;
+      parts.push('<p>No items yet — explore the Mojave and claim some caps.</p>');
+    } else {
+      const entries = PLAYER.inventory.map(id => {
+        const item = resolveItemById(id);
+        const name = item.name || item.id || item.slug || id;
+        const desc = item.description || '';
+        return `
+          <div class="pip-entry">
+            <strong>${name}</strong><br>
+            <span>${desc}</span>
+          </div>
+        `;
+      }).join('');
+      parts.push('<h2>Inventory</h2>');
+      parts.push(entries);
     }
 
-    const entries = PLAYER.inventory.map(id => {
-      const item = resolveItemById(id);
-      const name = item.name || item.id || item.slug || id;
-      const desc = item.description || '';
-      return `
-        <div class="pip-entry">
-          <strong>${name}</strong><br>
-          <span>${desc}</span>
-        </div>
-      `;
-    }).join('');
+    // On-chain NFTs (devnet, from backend)
+    if (NFT_STATE.list.length > 0) {
+      const nftEntries = NFT_STATE.list.map(nft => {
+        const name = nft.name || 'Unnamed NFT';
+        const mint = nft.mint || nft.id || 'Unknown mint';
+        const attrs = Array.isArray(nft.attributes) ? nft.attributes.slice(0, 3) : [];
+        const attrsHtml = attrs
+          .map(a => `<div class="pip-attr"><span>${a.trait_type || 'Trait'}:</span> ${a.value}</div>`)
+          .join('');
 
-    panel.innerHTML = entries;
+        const moreTag =
+          Array.isArray(nft.attributes) && nft.attributes.length > 3
+            ? `<div class="pip-item-more">+ more…</div>`
+            : '';
+
+        return `
+          <div class="pip-entry pip-entry-nft">
+            <strong>${name}</strong><br>
+            <span class="pip-nft-mint">${mint}</span>
+            <div class="pip-nft-tag">NFT • DEVNET</div>
+            <div class="pip-nft-attrs">
+              ${attrsHtml}
+              ${moreTag}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      parts.push('<h2>On-Chain NFTs</h2>');
+      parts.push(nftEntries);
+    }
+
+    if (!parts.length) {
+      panel.innerHTML = '<p>No items yet — explore the Mojave and claim some caps.</p>';
+    } else {
+      panel.innerHTML = parts.join('');
+    }
   }
 
   function renderQuestsPanel() {
@@ -447,14 +547,24 @@
       const btnStat = document.getElementById('connectWalletStat');
       const label = `${addr.slice(0, 4)}...${addr.slice(-4)}`;
 
-      if (btn) btn.textContent = label;
-      if (btnStat) btnStat.textContent = label;
+      if (btn) {
+        btn.textContent = label;
+        btn.classList.add('connected');
+      }
+      if (btnStat) {
+        btnStat.textContent = label;
+        btnStat.classList.add('connected');
+      }
 
       const walletAddressEl = document.getElementById('walletAddress');
       if (walletAddressEl) walletAddressEl.textContent = addr;
 
       connectedWallet = true;
+      window.PLAYER_WALLET = addr;
       safeLog('Wallet connected:', addr);
+
+      // Load NFTs as soon as wallet is connected
+      refreshNFTs();
     } catch (e) {
       safeError('Wallet connection failed:', e);
     }
@@ -517,10 +627,10 @@
       }
     });
     
-    once('stylePipboy', () => window.overseerMapStyle.setStyle("pipboy"));
-    once('styleWinter', () => window.overseerMapStyle.setStyle("winter"));
-    once('styleDesert', () => window.overseerMapStyle.setStyle("desert"));
-    once('styleNone', () => window.overseerMapStyle.setStyle("none"));
+    once('stylePipboy', () => window.overseerMapStyle && window.overseerMapStyle.setStyle("pipboy"));
+    once('styleWinter', () => window.overseerMapStyle && window.overseerMapStyle.setStyle("winter"));
+    once('styleDesert', () => window.overseerMapStyle && window.overseerMapStyle.setStyle("desert"));
+    once('styleNone', () => window.overseerMapStyle && window.overseerMapStyle.setStyle("none"));
     once('recenterMojave', () => {
       attachMapReference();
       if (map) map.setView(CONFIG.defaultCenter, CONFIG.defaultZoom);
@@ -549,7 +659,6 @@
       }
     });
 
-    // No more tab/drawer panel switching here; handled by pipboy.js
     safeLog('UI initialized (core controls wired)');
   }
 
@@ -571,9 +680,15 @@
       const locCountEl = document.getElementById('locations-count');
       if (locCountEl) locCountEl.textContent = window.DATA.locations.length;
 
+      // Render local inventory + quests + HUD
       renderInventoryPanel();
       renderQuestsPanel();
       updateHUD();
+
+      // If a wallet is already known (e.g. reconnect), pull NFTs too
+      if (window.PLAYER_WALLET || connectedWallet) {
+        refreshNFTs();
+      }
 
       _gameInitialized = true;
       safeLog('Game initialized successfully');
@@ -590,20 +705,3 @@
   });
 
   window.addEventListener('map-ready', () => {
-  attachMapReference();
-  safeLog('Map ready');
-
-  // DEFAULT MAP STYLE HERE
-  if (window.overseerMapStyle) {
-    window.overseerMapStyle.setStyle("pipboy");   // or "winter" / "desert" / "none"
-  }
-  });
-
-  window.__pipboy = {
-    reinit: () => { _gameInitialized = false; initGame(); },
-    data: () => window.DATA,
-    map: () => { attachMapReference(); return map; },
-    location: () => _lastPlayerPosition,
-    player: () => PLAYER
-  };
-})();
