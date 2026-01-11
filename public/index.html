@@ -18,265 +18,276 @@
   </head>
 
   <body>
+    <!-- Leaflet JS -->
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <!-- ICON SPRITE SHEET -->
-    <!-- Keep your existing <svg> ... </svg> block here unchanged -->
-    <!-- I’m omitting it for brevity; paste your current icon block -->
 
-    <div class="pipboy-root">
-      <div class="pipboy-bezel">
-        <div class="pipboy-frame">
-          <div class="pipboy-crt">
-            <!-- CRT overlays -->
-            <div class="pipboy-noise"></div>
-            <div class="pipboy-scanlines"></div>
+    <!-- BOOT SCREEN -->
+    <div id="bootScreen">
+      <pre id="bootText"></pre>
+    </div>
 
-            <!-- HEADER -->
-            <div class="pipboy-header">
-              <div>
-                <span class="pipboy-title">PIP‑BOY 3000</span>
-                <span class="pipboy-subtitle">ATOMIC FIZZ CAPS</span>
-              </div>
+    <!-- MAIN PIP-BOY UI (hidden until boot finishes) -->
+    <div id="pipboyScreen" class="hidden">
+      <!-- ICON SPRITE SHEET -->
+      <!-- Keep your existing <svg> ... </svg> block here unchanged -->
 
-              <div class="pipboy-meta">
-                <span class="pipboy-meta-item">STATUS: ONLINE</span>
-              </div>
+      <div class="pipboy-root">
+        <div class="pipboy-bezel">
+          <div class="pipboy-frame">
+            <div class="pipboy-crt">
+              <!-- CRT overlays -->
+              <div class="pipboy-noise"></div>
+              <div class="pipboy-scanlines"></div>
 
-              <!-- WALLET HUD -->
-              <div class="wallet-hud">
-                <span id="walletAddress">WALLET: DISCONNECTED</span>
-                <button id="connectWalletHUD" class="pipboy-button-small">CONNECT</button>
-              </div>
-            </div>
+              <!-- HEADER -->
+              <div class="pipboy-header">
+                <div>
+                  <span class="pipboy-title">PIP‑BOY 3000</span>
+                  <span class="pipboy-subtitle">ATOMIC FIZZ CAPS</span>
+                </div>
 
-            <!-- TABS -->
-            <div class="pipboy-tabs">
-              <button class="pipboy-tab active" data-pipboy-tab="panel-map">MAP</button>
-              <button class="pipboy-tab" data-pipboy-tab="panel-stat">STAT</button>
-              <button class="pipboy-tab" data-pipboy-tab="panel-items">ITEMS</button>
-              <button class="pipboy-tab" data-pipboy-tab="panel-quests">QUESTS</button>
-              <button class="pipboy-tab" data-pipboy-tab="panel-radio">RADIO</button>
-            </div>
+                <div class="pipboy-meta">
+                  <span class="pipboy-meta-item">STATUS: ONLINE</span>
+                </div>
 
-            <!-- MAIN PANELS -->
-            <div class="pipboy-main">
-
-              <!-- MAP PANEL -->
-              <div id="panel-map" class="pipboy-panel active">
-                <div class="panel-header">MAP</div>
-                <div class="panel-body">
-                  <div id="mapContainer" class="pipboy-map">
-                    <div id="radFlash"></div>
-                  </div>
-
-                  <div class="map-overlay">
-                    <div class="map-label">WORLD MAP</div>
-                    <div class="map-status" id="mapStatus">SCANNING...</div>
-                  </div>
-
-                  <div class="map-controls">
-                    <div class="map-style-switcher">
-                      <button class="pipboy-button-small map-style-btn" data-style="pipboy_terminal">TERMINAL</button>
-                      <button class="pipboy-button-small map-style-btn" data-style="desert_ruins_explorer">DESERT</button>
-                      <button class="pipboy-button-small map-style-btn" data-style="winter_recon">WINTER</button>
-                    </div>
-                  </div>
-
-                  <!-- GPS badge is the only clickable GPS control -->
-                  <div class="gps-badge" id="gpsBadge">
-                    <div id="accDot" class="acc-dot"></div>
-                    <div id="accText">GPS: OFFLINE</div>
-                  </div>
+                <!-- WALLET HUD -->
+                <div class="wallet-hud">
+                  <span id="walletAddress">WALLET: DISCONNECTED</span>
+                  <button id="connectWalletHUD" class="pipboy-button-small">CONNECT</button>
                 </div>
               </div>
 
-              <!-- FULL STAT PANEL + SPECIAL -->
-              <div id="panel-stat" class="pipboy-panel">
-                <div class="panel-header">STATUS</div>
-                <div class="panel-body">
-
-                  <!-- NAME / LEVEL / XP -->
-                  <div class="panel-row">
-                    <span class="label">NAME</span>
-                    <span class="value" id="stat-name">WANDERER</span>
-                  </div>
-                  <div class="panel-row">
-                    <span class="label">LEVEL</span>
-                    <span class="value" id="stat-level">1</span>
-                  </div>
-                  <div class="panel-row">
-                    <span class="label">XP</span>
-                    <span class="value" id="stat-xp">0 / 100</span>
-                  </div>
-
-                  <div class="panel-divider"></div>
-
-                  <!-- HEALTH -->
-                  <div class="panel-row">
-                    <span class="label">HEALTH</span>
-                    <span class="value" id="stat-hp-label">100 / 100</span>
-                  </div>
-                  <div class="stat-bar">
-                    <div class="stat-bar-fill" id="stat-hp-bar"></div>
-                  </div>
-
-                  <!-- RADIATION -->
-                  <div class="panel-row">
-                    <span class="label">RADIATION</span>
-                    <span class="value" id="stat-rad-label">0%</span>
-                  </div>
-                  <div class="stat-bar stat-bar-rad">
-                    <div class="stat-bar-fill" id="stat-rad-bar"></div>
-                  </div>
-
-                  <div class="panel-divider"></div>
-
-                  <!-- WALLET / CAPS -->
-                  <div class="panel-row">
-                    <span class="label">WALLET</span>
-                    <span class="value" id="stat-wallet">DISCONNECTED</span>
-                  </div>
-                  <div class="panel-row">
-                    <span class="label">FIZZ CAPS</span>
-                    <span class="value" id="stat-caps">0</span>
-                  </div>
-
-                  <div style="margin-top:6px;">
-                    <button id="connectWalletStat" class="pipboy-button">CONNECT WALLET</button>
-                    <button id="claimMintablesStat" class="pipboy-button pipboy-button-small">
-                      CLAIM MINTABLES
-                    </button>
-                  </div>
-
-                  <div class="panel-divider"></div>
-
-                  <!-- WEAPON / ARMOR -->
-                  <div class="panel-row">
-                    <span class="label">WEAPON</span>
-                    <span class="value" id="stat-weapon">NONE</span>
-                  </div>
-                  <div class="panel-row">
-                    <span class="label">ARMOR</span>
-                    <span class="value" id="stat-armor">NONE</span>
-                  </div>
-
-                  <div class="panel-divider"></div>
-
-                  <!-- FACTION / REP / LOCATION / WEATHER -->
-                  <div class="panel-row">
-                    <span class="label">FACTION</span>
-                    <span class="value" id="stat-faction">UNALIGNED</span>
-                  </div>
-                  <div class="panel-row">
-                    <span class="label">REPUTATION</span>
-                    <span class="value" id="stat-rep">NEUTRAL</span>
-                  </div>
-                  <div class="panel-row">
-                    <span class="label">LOCATION</span>
-                    <span class="value" id="stat-location">UNKNOWN</span>
-                  </div>
-                  <div class="panel-row">
-                    <span class="label">WEATHER</span>
-                    <span class="value" id="stat-weather">CLEAR</span>
-                  </div>
-
-                  <div class="panel-divider"></div>
-
-                  <!-- SPECIAL -->
-                  <div class="panel-header" style="margin-top:10px;">SPECIAL</div>
-
-                  <div id="specialBlock">
-                    <div class="special-row">
-                      <span class="special-label">S</span>
-                      <span class="special-bar" data-special-key="S"></span>
-                      <span class="special-value" id="special-S">5</span>
-                    </div>
-                    <div class="special-row">
-                      <span class="special-label">P</span>
-                      <span class="special-bar" data-special-key="P"></span>
-                      <span class="special-value" id="special-P">5</span>
-                    </div>
-                    <div class="special-row">
-                      <span class="special-label">E</span>
-                      <span class="special-bar" data-special-key="E"></span>
-                      <span class="special-value" id="special-E">5</span>
-                    </div>
-                    <div class="special-row">
-                      <span class="special-label">C</span>
-                      <span class="special-bar" data-special-key="C"></span>
-                      <span class="special-value" id="special-C">5</span>
-                    </div>
-                    <div class="special-row">
-                      <span class="special-label">I</span>
-                      <span class="special-bar" data-special-key="I"></span>
-                      <span class="special-value" id="special-I">5</span>
-                    </div>
-                    <div class="special-row">
-                      <span class="special-label">A</span>
-                      <span class="special-bar" data-special-key="A"></span>
-                      <span class="special-value" id="special-A">5</span>
-                    </div>
-                    <div class="special-row">
-                      <span class="special-label">L</span>
-                      <span class="special-bar" data-special-key="L"></span>
-                      <span class="special-value" id="special-L">5</span>
-                    </div>
-                  </div>
-
-                  <div id="respecRow" style="margin-top:10px;">
-                    <button id="respecBtn" class="pipboy-button">
-                      REBUILD SPECIAL (REQUIRES TOKEN)
-                    </button>
-                    <div id="respecStatus"></div>
-                  </div>
-
-                </div>
+              <!-- TABS -->
+              <div class="pipboy-tabs">
+                <button class="pipboy-tab active" data-pipboy-tab="panel-map">MAP</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-stat">STAT</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-items">ITEMS</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-quests">QUESTS</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-radio">RADIO</button>
               </div>
 
-              <!-- ITEMS PANEL -->
-              <div id="panel-items" class="pipboy-panel">
-                <div class="panel-header">INVENTORY</div>
-                <div class="panel-body" id="inventoryList"></div>
-              </div>
+              <!-- MAIN PANELS -->
+              <div class="pipboy-main">
 
-              <!-- QUESTS PANEL -->
-              <div id="panel-quests" class="pipboy-panel">
-                <div class="panel-header">QUEST</div>
-                <div class="panel-body" id="questBody"></div>
-              </div>
+                <!-- MAP PANEL -->
+                <div id="panel-map" class="pipboy-panel active">
+                  <div class="panel-header">MAP</div>
+                  <div class="panel-body">
+                    <div id="mapContainer" class="pipboy-map">
+                      <div id="radFlash"></div>
+                    </div>
 
-              <!-- RADIO PANEL (WITH TERMINAL NESTED) -->
-              <div id="panel-radio" class="pipboy-panel">
-                <div class="panel-header">RADIO</div>
-                <div class="panel-body">
-                  <div id="radioStations">
-                    <button class="pipboy-button-small" id="radioCycleBtn">CYCLE STATION</button>
-                    <div id="currentStation">NO SIGNAL</div>
-                  </div>
+                    <div class="map-overlay">
+                      <div class="map-label">WORLD MAP</div>
+                      <div class="map-status" id="mapStatus">SCANNING...</div>
+                    </div>
 
-                  <div class="panel-divider"></div>
+                    <div class="map-controls">
+                      <div class="map-style-switcher">
+                        <button class="pipboy-button-small map-style-btn" data-style="pipboy_terminal">TERMINAL</button>
+                        <button class="pipboy-button-small map-style-btn" data-style="desert_ruins_explorer">DESERT</button>
+                        <button class="pipboy-button-small map-style-btn" data-style="winter_recon">WINTER</button>
+                      </div>
+                    </div>
 
-                  <!-- TERMINAL SECTION (UNLOCKABLE) -->
-                  <div id="terminalSection" style="display:none;">
-                    <div class="panel-header">OVERSEER TERMINAL</div>
-                    <iframe src="/terminal/index.html" class="terminal-frame"></iframe>
+                    <!-- GPS badge is the only clickable GPS control -->
+                    <div class="gps-badge" id="gpsBadge">
+                      <div id="accDot" class="acc-dot"></div>
+                      <div id="accText">GPS: OFFLINE</div>
+                    </div>
                   </div>
                 </div>
+
+                <!-- FULL STAT PANEL + SPECIAL -->
+                <div id="panel-stat" class="pipboy-panel">
+                  <div class="panel-header">STATUS</div>
+                  <div class="panel-body">
+
+                    <!-- NAME / LEVEL / XP -->
+                    <div class="panel-row">
+                      <span class="label">NAME</span>
+                      <span class="value" id="stat-name">WANDERER</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">LEVEL</span>
+                      <span class="value" id="stat-level">1</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">XP</span>
+                      <span class="value" id="stat-xp">0 / 100</span>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- HEALTH -->
+                    <div class="panel-row">
+                      <span class="label">HEALTH</span>
+                      <span class="value" id="stat-hp-label">100 / 100</span>
+                    </div>
+                    <div class="stat-bar">
+                      <div class="stat-bar-fill" id="stat-hp-bar"></div>
+                    </div>
+
+                    <!-- RADIATION -->
+                    <div class="panel-row">
+                      <span class="label">RADIATION</span>
+                      <span class="value" id="stat-rad-label">0%</span>
+                    </div>
+                    <div class="stat-bar stat-bar-rad">
+                      <div class="stat-bar-fill" id="stat-rad-bar"></div>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- WALLET / CAPS -->
+                    <div class="panel-row">
+                      <span class="label">WALLET</span>
+                      <span class="value" id="stat-wallet">DISCONNECTED</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">FIZZ CAPS</span>
+                      <span class="value" id="stat-caps">0</span>
+                    </div>
+
+                    <div style="margin-top:6px;">
+                      <button id="connectWalletStat" class="pipboy-button">CONNECT WALLET</button>
+                      <button id="claimMintablesStat" class="pipboy-button pipboy-button-small">
+                        CLAIM MINTABLES
+                      </button>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- WEAPON / ARMOR -->
+                    <div class="panel-row">
+                      <span class="label">WEAPON</span>
+                      <span class="value" id="stat-weapon">NONE</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">ARMOR</span>
+                      <span class="value" id="stat-armor">NONE</span>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- FACTION / REP / LOCATION / WEATHER -->
+                    <div class="panel-row">
+                      <span class="label">FACTION</span>
+                      <span class="value" id="stat-faction">UNALIGNED</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">REPUTATION</span>
+                      <span class="value" id="stat-rep">NEUTRAL</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">LOCATION</span>
+                      <span class="value" id="stat-location">UNKNOWN</span>
+                    </div>
+                    <div class="panel-row">
+                      <span class="label">WEATHER</span>
+                      <span class="value" id="stat-weather">CLEAR</span>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- SPECIAL -->
+                    <div class="panel-header" style="margin-top:10px;">SPECIAL</div>
+
+                    <div id="specialBlock">
+                      <div class="special-row">
+                        <span class="special-label">S</span>
+                        <span class="special-bar" data-special-key="S"></span>
+                        <span class="special-value" id="special-S">5</span>
+                      </div>
+                      <div class="special-row">
+                        <span class="special-label">P</span>
+                        <span class="special-bar" data-special-key="P"></span>
+                        <span class="special-value" id="special-P">5</span>
+                      </div>
+                      <div class="special-row">
+                        <span class="special-label">E</span>
+                        <span class="special-bar" data-special-key="E"></span>
+                        <span class="special-value" id="special-E">5</span>
+                      </div>
+                      <div class="special-row">
+                        <span class="special-label">C</span>
+                        <span class="special-bar" data-special-key="C"></span>
+                        <span class="special-value" id="special-C">5</span>
+                      </div>
+                      <div class="special-row">
+                        <span class="special-label">I</span>
+                        <span class="special-bar" data-special-key="I"></span>
+                        <span class="special-value" id="special-I">5</span>
+                      </div>
+                      <div class="special-row">
+                        <span class="special-label">A</span>
+                        <span class="special-bar" data-special-key="A"></span>
+                        <span class="special-value" id="special-A">5</span>
+                      </div>
+                      <div class="special-row">
+                        <span class="special-label">L</span>
+                        <span class="special-bar" data-special-key="L"></span>
+                        <span class="special-value" id="special-L">5</span>
+                      </div>
+                    </div>
+
+                    <div id="respecRow" style="margin-top:10px;">
+                      <button id="respecBtn" class="pipboy-button">
+                        REBUILD SPECIAL (REQUIRES TOKEN)
+                      </button>
+                      <div id="respecStatus"></div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- ITEMS PANEL -->
+                <div id="panel-items" class="pipboy-panel">
+                  <div class="panel-header">INVENTORY</div>
+                  <div class="panel-body" id="inventoryList"></div>
+                </div>
+
+                <!-- QUESTS PANEL -->
+                <div id="panel-quests" class="pipboy-panel">
+                  <div class="panel-header">QUEST</div>
+                  <div class="panel-body" id="questBody"></div>
+                </div>
+
+                <!-- RADIO PANEL (OVERSEER POPUP) -->
+                <div id="panel-radio" class="pipboy-panel">
+                  <div class="panel-header">RADIO</div>
+                  <div class="panel-body">
+                    <div id="radioStations">
+                      <button class="pipboy-button-small" id="radioCycleBtn">CYCLE STATION</button>
+                      <div id="currentStation">NO SIGNAL</div>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- TERMINAL SECTION (UNLOCKABLE) -->
+                    <div id="terminalSection" style="display:none;">
+                      <div class="panel-header">OVERSEER TERMINAL</div>
+                      <button class="pipboy-button" id="openOverseerTerminal">
+                        OPEN TERMINAL
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- FOOTER -->
+              <div class="pipboy-footer">
+                <div class="footer-left">VAULT‑TEC INDUSTRIES</div>
+                <div class="footer-center">WASTELAND GPS</div>
+                <div class="footer-right">REV 77</div>
               </div>
 
             </div>
-
-            <!-- FOOTER -->
-            <div class="pipboy-footer">
-              <div class="footer-left">VAULT‑TEC INDUSTRIES</div>
-              <div class="footer-center">WASTELAND GPS</div>
-              <div class="footer-right">REV 77</div>
-            </div>
-
           </div>
         </div>
       </div>
@@ -300,13 +311,6 @@
     <!-- ENGINE -->
     <script src="/js/main.js"></script>
 
-    <!-- LEAFLET -->
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
-
     <!-- MAP + BOOT -->
     <script src="/js/map/map-core.js"></script>
     <script src="/js/boot.js"></script>
@@ -321,5 +325,52 @@
 
     <!-- SPECIAL SYSTEM -->
     <script src="/js/pipboy-special.js"></script>
+
+    <!-- RADIO / OVERSEER POPUP WIRING -->
+    <script>
+      (function () {
+        const terminalSection = document.getElementById("terminalSection");
+        const btn = document.getElementById("openOverseerTerminal");
+
+        // Simple unlock stub: show terminalSection immediately.
+        // Later, gate this behind a quest flag or wallet check.
+        if (terminalSection) {
+          terminalSection.style.display = "block";
+        }
+
+        function openOverseerPopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
+
+          const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
+          const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
+
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
+
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
+
+          window.open("/overseer.html", "overseer_terminal", features);
+        }
+
+        if (btn) {
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            openOverseerPopup();
+          });
+        }
+      })();
+    </script>
   </body>
 </html>
