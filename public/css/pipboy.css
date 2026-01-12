@@ -1,5 +1,6 @@
 /* ============================================================
    ROOT LAYOUT — PIP-BOY 3000 (NEW VEGAS STYLE, RESPONSIVE)
+   Scoped to .pipboy-root / .pipboy-crt to avoid collisions
    ============================================================ */
 
 html,
@@ -12,20 +13,13 @@ body {
   font-family: "Consolas", "Courier New", monospace;
 }
 
-body {
+/* Only center & colorize when Pip-Boy is active */
+body.pipboy-mode {
   display: flex;
   align-items: center;
   justify-content: center;
   color: #9fe88d;
   overflow: hidden;
-}
-
-/* Universal CRT text feel */
-
-* {
-  box-sizing: border-box;
-  color: #9fe88d;
-  text-shadow: 0 0 4px rgba(0, 255, 65, 0.4);
 }
 
 /* Utility */
@@ -102,6 +96,15 @@ body {
   overflow: hidden;
 }
 
+/* CRT text feel only inside CRT */
+
+.pipboy-crt,
+.pipboy-crt * {
+  box-sizing: border-box;
+  color: #9fe88d;
+  text-shadow: 0 0 4px rgba(0, 255, 65, 0.4);
+}
+
 /* CRT glow */
 
 .pipboy-crt::after {
@@ -133,21 +136,21 @@ body {
 .pipboy-scanlines {
   background-image: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.4) 1px,
+    rgba(0, 0, 0, 0.45) 1px,
     transparent 2px
   );
   background-size: 100% 3px;
-  opacity: 0.35;
+  opacity: 0.3;
   animation: scanline-flicker 2.2s infinite ease-in-out;
 }
 
 @keyframes scanline-flicker {
   0%,
   100% {
-    opacity: 0.3;
+    opacity: 0.25;
   }
   50% {
-    opacity: 0.45;
+    opacity: 0.4;
   }
 }
 
@@ -348,10 +351,10 @@ body {
 }
 
 /* ============================================================
-   BUTTONS — UNIVERSAL THEME
+   BUTTONS — UNIVERSAL THEME (scoped)
    ============================================================ */
 
-button,
+.pipboy-crt button,
 .pipboy-button,
 .pipboy-button-small {
   display: inline-block;
@@ -370,14 +373,14 @@ button,
   transition: background 0.15s, box-shadow 0.15s, transform 0.05s;
 }
 
-button:hover,
+.pipboy-crt button:hover,
 .pipboy-button:hover,
 .pipboy-button-small:hover {
   background: rgba(0, 255, 65, 0.18);
   box-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
 }
 
-button:active,
+.pipboy-crt button:active,
 .pipboy-button:active,
 .pipboy-button-small:active {
   transform: translateY(1px);
@@ -412,14 +415,14 @@ button:active,
   overflow: hidden;
 }
 
-/* CRT tint over tiles */
+/* CRT tint over tiles – lighter so map is readable */
 
-.leaflet-tile {
+.pipboy-crt .leaflet-tile {
   filter:
-    grayscale(1)
-    contrast(1.4)
-    brightness(0.6)
-    hue-rotate(90deg);
+    grayscale(0.7)
+    contrast(1.3)
+    brightness(0.8)
+    hue-rotate(85deg);
 }
 
 /* Map overlay texts (bottom) */
@@ -432,6 +435,7 @@ button:active,
   font-size: 10px;
   text-shadow: 0 0 4px rgba(159, 232, 141, 0.9);
   pointer-events: none;
+  z-index: 2001;
 }
 
 .map-label {
@@ -449,7 +453,7 @@ button:active,
   position: absolute;
   top: 10px;
   right: 10px;
-  z-index: 2000;
+  z-index: 2002;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -461,13 +465,13 @@ button:active,
   position: absolute;
   bottom: 10px;
   right: 10px;
-  z-index: 2000;
+  z-index: 2002;
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 4px 8px;
   border: 1px solid #00ff41;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   font-size: 11px;
   text-shadow: 0 0 4px #00ff41;
   box-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
@@ -941,12 +945,14 @@ button:active,
   }
 }
 
-/* Remove debug scrollbars */
+/* Remove debug scrollbars only inside CRT */
 
-::-webkit-scrollbar {
+.pipboy-crt ::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
+
+/* Hide default Leaflet controls */
 
 .leaflet-control-container {
   display: none;
