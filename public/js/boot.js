@@ -14,12 +14,12 @@
     "FIZ",
     "FIZZ",
     "",
-    "███████╗██╗███████╗███████╗",
-    "██╔════╝██║██╔════╝    ██╝",
-    "█████╗  ██║█████╗    ██    ",
-    "██╔══╝  ██║██╔══╝  ██      ",
-    "██║     ██║███████╗███████║",
-    "╚═╝     ╚═╝╚══════╝╚══════╝",
+    "███████╗ ██╗ ███████╗ ███████╗",
+    "██╔════╝ ██║ ██╔════╝ ██╔════╝",
+    "█████╗   ██║ █████╗   ███████╗",
+    "██╔══╝   ██║ ██╔══╝   ╚════██║",
+    "██║      ██║ ███████╗ ███████║",
+    "╚═╝      ╚═╝ ╚══════╝ ╚══════╝",
     "",
     "[BOOTING FIZZ CORE]",
     "[█▒▒▒▒▒▒▒▒▒] 10%",
@@ -65,6 +65,10 @@
     bootScreen.classList.add("hidden");
     pipboyScreen.classList.remove("hidden");
 
+    // 🔥 CRITICAL: Wake the Pip-Boy game loop
+    window.dispatchEvent(new Event("pipboyReady"));
+
+    // Legacy hooks (safe to keep)
     if (window.Game && typeof Game.onPipboyReady === "function") {
       Game.onPipboyReady();
     }
@@ -73,11 +77,9 @@
       initWastelandMap();
     }
 
-    // Update STAT panel once Pip-Boy is active
-if (window.Game?.ui?.updateStatPanel) {
-  Game.ui.updateStatPanel();
-}
-
+    if (window.Game?.ui?.updateStatPanel) {
+      Game.ui.updateStatPanel();
+    }
 
     window.removeEventListener("keydown", onContinue);
     window.removeEventListener("click", onContinue);
