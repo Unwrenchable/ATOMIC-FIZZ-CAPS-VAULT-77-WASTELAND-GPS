@@ -48,23 +48,57 @@
         return;
       }
 
-      // Leaflet init – can replace tiles with MapTiler later
+      // Leaflet init – fullscreen Pip-Boy map
       this.map = L.map(container, {
         zoomControl: false,
         attributionControl: false
       });
 
-      this.tiles = L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      // --------------------------------------------------------
+      // DUAL TILE LAYERS:
+      //  - /tiles/world_overview: low zoom, Fallout-style world map
+      //  - /tiles/world_satellite: higher zoom, satellite CRT
+      // --------------------------------------------------------
 
-        {
-          maxZoom: 18,
-          minZoom: 2
-        }
-      ).addTo(this.map);
+      const overviewTiles = L.tileLayer("/tiles/world_overview/{z}/{x}/{y}.png", {
+        minZoom: 0,
+        maxZoom: 4,
+        noWrap: true
+      });
 
+      const satelliteTiles = L.tileLayer("/tiles/world_satellite/{z}/{x}/{y}.png", {
+        minZoom: 3,
+        maxZoom: 7,
+        noWrap: true
+      });
+
+      this.tiles = { overview: overviewTiles, satellite: satelliteTiles };
+
+      // Start near player, at a mid zoom where satellite *can* show
       const pos = this.gs.player.position;
-      this.map.setView([pos.lat, pos.lng], 12);
+      const startZoom = 4;
+      this.map.setView([pos.lat, pos.lng], startZoom);
+
+      // Add both; visibility is controlled by zoom rules below
+      overviewTiles.addTo(this.map);
+      satelliteTiles.addTo(this.map);
+
+      const updateBaseLayerForZoom = () => {
+        const z = this.map.getZoom();
+
+        // At low zooms, use overview (Fallout world map)
+        if (z <= 3) {
+          if (!this.map.hasLayer(overviewTiles)) this.map.addLayer(overviewTiles);
+          if (this.map.hasLayer(satelliteTiles)) this.map.removeLayer(satelliteTiles);
+        } else {
+          // At higher zooms, use satellite
+          if (!this.map.hasLayer(satelliteTiles)) this.map.addLayer(satelliteTiles);
+          if (this.map.hasLayer(overviewTiles)) this.map.removeLayer(overviewTiles);
+        }
+      };
+
+      this.map.on("zoomend", updateBaseLayerForZoom);
+      updateBaseLayerForZoom();
 
       // Expose to window so main.js can attach and update markers
       window.map = this.map;
@@ -322,7 +356,7 @@
       const R = 6371000; // meters
       const toRad = deg => (deg * Math.PI) / 180;
       const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lon2 - lon1);
+      const dLon = toRad(lat2 - lon1);
       const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
