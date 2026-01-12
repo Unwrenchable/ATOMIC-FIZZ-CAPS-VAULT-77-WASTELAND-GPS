@@ -88,7 +88,7 @@
   }
 
   // ---------------------------
-  // MAP / GAME CORE (no init here)
+  // MAP / GAME CORE
   // ---------------------------
 
   let map = null;
@@ -102,7 +102,7 @@
   const CONFIG = {
     defaultCenter: [36.1699, -115.1398],
     defaultZoom: 10,
-    apiBase: window.location.origin
+    apiBase: window.BACKEND_URL || window.location.origin
   };
 
   function attachMapReference() {
@@ -110,25 +110,41 @@
   }
 
   // ---------------------------
-  // DATA LOADING
+  // DATA LOADING (hybrid: /api + /data)
   // ---------------------------
+
   async function loadJson(name) {
-    // Try API route first
+    // 1) Try backend API route first: /api/{name}
     try {
-      const res = await fetch(`${CONFIG.apiBase}/${name}`);
-      if (res.ok) return await res.json();
+      const apiUrl = `${CONFIG.apiBase.replace(/\/+$/, "")}/api/${name}`;
+      const res = await fetch(apiUrl, { headers: { "Accept": "application/json" } });
+      if (res.ok) {
+        const json = await res.json();
+        safeLog(`API loaded /api/${name}`);
+        return json;
+      } else {
+        safeWarn(`API /api/${name} responded with ${res.status}`);
+      }
     } catch (e) {
-      safeWarn(`Server fetch failed for /${name}:`, e.message);
+      safeWarn(`API fetch failed for /api/${name}:`, e.message);
     }
 
-    // Fallback to static public/data
+    // 2) Fallback to static public/data/{name}.json
     try {
-      const res = await fetch(`/data/${name}.json`);
-      if (res.ok) return await res.json();
+      const staticUrl = `/data/${name}.json`;
+      const res = await fetch(staticUrl, { headers: { "Accept": "application/json" } });
+      if (res.ok) {
+        const json = await res.json();
+        safeLog(`Static loaded ${staticUrl}`);
+        return json;
+      } else {
+        safeWarn(`Static ${staticUrl} responded with ${res.status}`);
+      }
     } catch (e) {
-      safeWarn(`Local fallback failed for ${name}.json:`, e.message);
+      safeWarn(`Local fallback failed for /data/${name}.json:`, e.message);
     }
 
+    safeWarn(`Failed to load ${name} from API or /data`);
     return null;
   }
 
@@ -139,10 +155,14 @@
       const data = await loadJson(name);
       if (data !== null) {
         window.DATA[name] = data;
-        safeLog(
-          `Loaded ${name}:`,
-          Array.isArray(data) ? data.length : "object"
-        );
+        safeLog(`Loaded ${name}:`, Array.isArray(data) ? data.length : "object");
+      } else {
+        // Ensure types are sane even if missing
+        if (["locations", "quests", "mintables", "scavenger"].includes(name)) {
+          window.DATA[name] = [];
+        } else if (name === "settings") {
+          window.DATA.settings = window.DATA.settings || {};
+        }
       }
     }
 
@@ -217,8 +237,9 @@
     if (
       PLAYER.questsDone.includes(questId) ||
       PLAYER.questsActive.includes(questId)
-    )
+    ) {
       return;
+    }
     PLAYER.questsActive.push(questId);
     savePlayerState();
     renderQuestsPanel();
@@ -254,8 +275,9 @@
     if (!PLAYER.questsActive.includes(questId)) return;
 
     PLAYER.questsActive = PLAYER.questsActive.filter(id => id !== questId);
-    if (!PLAYER.questsDone.includes(questId))
+    if (!PLAYER.questsDone.includes(questId)) {
       PLAYER.questsDone.push(questId);
+    }
 
     const quest = (window.DATA.quests || []).find(
       q => q && (q.id === questId || q.slug === questId)
@@ -284,11 +306,13 @@
       const qId = q.id || q.slug;
       if (!qId) return;
 
-      if (PLAYER.questsDone.includes(qId) || PLAYER.questsActive.includes(qId))
+      if (PLAYER.questsDone.includes(qId) || PLAYER.questsActive.includes(qId)) {
         return;
+      }
 
       let triggered = false;
 
+      // Direct coordinate trigger
       if (
         q.trigger &&
         typeof q.trigger.lat === "number" &&
@@ -300,6 +324,7 @@
         if (d <= radius) triggered = true;
       }
 
+      // Location-based trigger
       if (!triggered && q.location) {
         const locs = window.DATA.locations || [];
         const match = locs.find(
@@ -340,17 +365,13 @@
     }
 
     try {
-      const url = `${backend}/api/player-nfts?wallet=${encodeURIComponent(
-        wallet
-      )}`;
-      const res = await fetch(url);
+      const base = backend.replace(/\/+$/, "");
+      const url = `${base}/api/player-nfts?wallet=${encodeURIComponent(wallet)}`;
+      const res = await fetch(url, { headers: { "Accept": "application/json" } });
       const json = await res.json();
 
       if (!res.ok || !json.ok) {
-        safeWarn(
-          "[NFT] NFT fetch failed:",
-          json.error || `HTTP ${res.status}`
-        );
+        safeWarn("[NFT] NFT fetch failed:", json.error || `HTTP ${res.status}`);
         return [];
       }
 
@@ -367,8 +388,8 @@
     const wallet =
       window.PLAYER_WALLET ||
       (window.solana &&
-      window.solana.publicKey &&
-      window.solana.publicKey.toBase58
+        window.solana.publicKey &&
+        window.solana.publicKey.toBase58
         ? window.solana.publicKey.toBase58()
         : null);
 
@@ -519,11 +540,9 @@
 
     const needed = PLAYER.level * 100;
     if (xpText) xpText.textContent = `${PLAYER.xp} / ${needed}`;
-    if (xpFill)
-      xpFill.style.width = `${Math.min(
-        100,
-        (PLAYER.xp / needed) * 100
-      )}%`;
+    if (xpFill) {
+      xpFill.style.width = `${Math.min(100, (PLAYER.xp / needed) * 100)}%`;
+    }
 
     // STAT panel in Pip-Boy
     const statLevel = document.getElementById("stat-level");
@@ -550,7 +569,7 @@
 
   function updatePlayerMarker(lat, lng) {
     attachMapReference();
-    if (!map) return;
+    if (!map || typeof L === "undefined") return;
 
     if (!map._playerMarker) {
       map._playerMarker = L.circleMarker([lat, lng], {
@@ -577,8 +596,9 @@
 
         const locs = window.DATA.locations || [];
         locs.forEach(loc => {
-          if (!loc || typeof loc.lat !== "number" || typeof loc.lng !== "number")
+          if (!loc || typeof loc.lat !== "number" || typeof loc.lng !== "number") {
             return;
+          }
           const d = distanceMeters(lat, lng, loc.lat, loc.lng);
           const idOrName = loc.id || loc.slug || loc.name;
           if (d <= (loc.triggerRadius || 50) && idOrName) {
@@ -657,14 +677,15 @@
 
   async function claimMintableFromServer() {
     try {
-      const res = await fetch("/api/mint-item", {
+      const base = (window.BACKEND_URL || CONFIG.apiBase || "").replace(/\/+$/, "");
+      const res = await fetch(`${base}/api/mint-item`, {
         method: "POST",
         headers: { "Content-Type": "application/json" }
       });
 
       const data = await res.json();
-      if (!data.success) {
-        alert("Mint failed: " + (data.error || "Unknown error"));
+      if (!res.ok || !data.success) {
+        alert("Mint failed: " + (data.error || `HTTP ${res.status}`));
         return;
       }
 
@@ -843,7 +864,7 @@
     initGame();
   });
 
-  // Fired by map init (map-ui) when Leaflet is ready
+  // Fired by map init when Leaflet is ready
   window.addEventListener("map-ready", () => {
     safeLog("Map ready");
     attachMapReference();
