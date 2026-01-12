@@ -1,8 +1,15 @@
 // public/js/modules/worldmap.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps – Pip-Boy World Map Module
-// Dual tiles: overview (custom) + Esri World Imagery (high-zoom)
-// Overlay: your own labels + roads (JSON-defined)
+// Dual base layers:
+//   - Custom overview tiles (low zoom, Fallout-style)
+//   - Esri World Imagery (high zoom, real satellite)
+// Overlays:
+//   - Your own labels + roads (JSON-defined)
+// Behavior:
+//   - Free-look map
+//   - Auto-snap back to player after idle (5s)
+//   - Smooth GPS centering for travel
 // ------------------------------------------------------------
 
 (function () {
@@ -25,6 +32,10 @@
     roadLayer: null,
     worldLabels: [],
     worldRoads: [],
+
+    // Auto-follow: free-look, then snap back after idle
+    followTimeout: null,
+    followDelay: 5000, // 5 seconds of no movement before snapping back
 
     init(gameState) {
       this.gs = gameState || (window.DATA || {});
@@ -83,8 +94,9 @@
 
       this.tiles = { overview: overviewTiles, satellite: esriSatelliteTiles };
 
+      this.ensurePlayerPosition();
       const pos = this.gs.player.position;
-      const startZoom = 6; // start high enough to see real detail
+      const startZoom = 6; // Start high enough to see real detail
       this.map.setView([pos.lat, pos.lng], startZoom);
 
       overviewTiles.addTo(this.map);
@@ -113,6 +125,9 @@
       this.labelLayer = L.layerGroup().addTo(this.map);
       this.roadLayer = L.layerGroup().addTo(this.map);
 
+      // Auto-follow behavior: free-look, then snap back to player
+      this.enableAutoFollow();
+
       // Expose for other modules
       window.map = this.map;
 
@@ -121,6 +136,50 @@
       // Map ready event
       window.dispatchEvent(new Event("map-ready"));
     },
+
+    // --------------------------------------------------------
+    // AUTO-FOLLOW: free-look, then snap back after idle
+    // --------------------------------------------------------
+
+    enableAutoFollow() {
+      if (!this.map) return;
+
+      // When the user starts moving the map, cancel any pending snap-back
+      this.map.on("movestart", () => {
+        if (this.followTimeout) {
+          clearTimeout(this.followTimeout);
+          this.followTimeout = null;
+        }
+      });
+
+      // When movement stops, start a timer to snap back to player
+      this.map.on("moveend", () => {
+        if (this.followTimeout) {
+          clearTimeout(this.followTimeout);
+        }
+
+        this.followTimeout = setTimeout(() => {
+          this.centerOnPlayer();
+        }, this.followDelay);
+      });
+    },
+
+    centerOnPlayer() {
+      if (!this.map || !this.gs?.player?.position) return;
+
+      const { lat, lng } = this.gs.player.position;
+
+      // Smooth GPS tracking for travel
+      this.map.panTo([lat, lng], {
+        animate: true,
+        duration: 1.0,
+        easeLinearity: 0.25
+      });
+    },
+
+    // --------------------------------------------------------
+    // PLAYER MARKER + POSITION
+    // --------------------------------------------------------
 
     initPlayerMarker() {
       this.ensurePlayerPosition();
@@ -148,9 +207,9 @@
       if (this.playerMarker) {
         this.playerMarker.setLatLng([lat, lng]);
       }
-      if (this.map) {
-        this.map.setView([lat, lng], this.map.getZoom());
-      }
+
+      // GPS update: ensure map recenters on player smoothly
+      this.centerOnPlayer();
     },
 
     // --------------------------------------------------------
@@ -550,6 +609,10 @@
       return R * c;
     },
 
+    // --------------------------------------------------------
+    // UI HOOK (called when MAP tab opens, if you want)
+    // --------------------------------------------------------
+
     onOpen() {
       this.initMap();
       this.initPlayerMarker();
@@ -571,6 +634,7 @@
 
   Game.modules.worldmap = worldmapModule;
 
+  // Optional: auto-init when script loads, using global DATA
   document.addEventListener("DOMContentLoaded", () => {
     try {
       worldmapModule.init(window.DATA || {});
