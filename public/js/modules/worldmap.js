@@ -193,35 +193,52 @@
       // Move player to this location
       this.setPlayerPosition(loc.lat, loc.lng);
 
+      // Notify Overseer, if present
+      if (window.Game?.overseer?.onPOIVisit) {
+        try {
+          Game.overseer.onPOIVisit(loc);
+        } catch (e) {
+          console.error("worldmap: overseer onPOIVisit failed:", e);
+        }
+      }
+
       // Get weather from world module
       let weather = null;
       if (Game.modules.world && Game.modules.world.weather) {
-        weather = Game.modules.world.weather.at(
-          Game.modules.world.state || this.gs.worldState || this.gs,
-          {
-            biome: loc.biome || "temperate_forest",
-            continent: loc.continent || "north_america"
-          }
-        );
+        try {
+          weather = Game.modules.world.weather.at(
+            Game.modules.world.state || this.gs.worldState || this.gs,
+            {
+              biome: loc.biome || "temperate_forest",
+              continent: loc.continent || "north_america"
+            }
+          );
+        } catch (e) {
+          console.error("worldmap: weather lookup failed:", e);
+        }
       }
 
       // Roll encounter using world module if available
       let encounterResult = null;
       if (Game.modules.world && Game.modules.world.encounters) {
-        const worldState = Game.modules.world.state || this.gs.worldState || this.gs;
-        const locationForWorld = {
-          id: loc.id || `loc_${loc.n}_${loc.lat}_${loc.lng}`,
-          name: loc.n || loc.name || "Unknown Location",
-          lvl: loc.lvl || 1,
-          biome: loc.biome || "temperate_forest",
-          type: loc.type || "poi",
-          faction: loc.faction || "free_scavs"
-        };
+        try {
+          const worldState = Game.modules.world.state || this.gs.worldState || this.gs;
+          const locationForWorld = {
+            id: loc.id || `loc_${loc.n}_${loc.lat}_${loc.lng}`,
+            name: loc.n || loc.name || "Unknown Location",
+            lvl: loc.lvl || 1,
+            biome: loc.biome || "temperate_forest",
+            type: loc.type || "poi",
+            faction: loc.faction || "free_scavs"
+          };
 
-        encounterResult = Game.modules.world.encounters.roll(
-          worldState,
-          locationForWorld
-        );
+          encounterResult = Game.modules.world.encounters.roll(
+            worldState,
+            locationForWorld
+          );
+        } catch (e) {
+          console.error("worldmap: encounter roll failed:", e);
+        }
       }
 
       this.handleEncounterResult(encounterResult, loc);
