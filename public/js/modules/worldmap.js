@@ -1,9 +1,8 @@
 // public/js/modules/worldmap.js
 // ------------------------------------------------------------
-// Atomic Fizz Caps – Pip-Boy World Map Module (Resurrected)
-// New Vegas style: green CRT UI over real-world tiles
-// Integrates with Game.modules.world, quests, battle, inventory
-// Uses #mapContainer inside Pip-Boy MAP panel
+// Atomic Fizz Caps – Pip-Boy World Map Module
+// Dual tiles: overview (custom) + Esri World Imagery (high-zoom)
+// Overlay: your own labels + roads (JSON-defined)
 // ------------------------------------------------------------
 
 (function () {
@@ -21,11 +20,18 @@
     locations: [],
     locationsLoaded: false,
 
+    // Overlay layers
+    labelLayer: null,
+    roadLayer: null,
+    worldLabels: [],
+    worldRoads: [],
+
     init(gameState) {
       this.gs = gameState || (window.DATA || {});
       this.ensurePlayerPosition();
       this.initMap();
       this.loadLocations();
+      this.loadWorldOverlays();
     },
 
     ensurePlayerPosition() {
@@ -48,16 +54,16 @@
         return;
       }
 
-      // Leaflet init – fullscreen Pip-Boy map
+      // Leaflet init – Pip-Boy map
       this.map = L.map(container, {
         zoomControl: false,
         attributionControl: false
       });
 
       // --------------------------------------------------------
-      // DUAL TILE LAYERS:
-      //  - /tiles/world_overview: low zoom, Fallout-style world map
-      //  - /tiles/world_satellite: higher zoom, satellite CRT
+      // BASE LAYERS
+      // 1) Custom overview tiles (low zoom, Fallout-style)
+      // 2) Esri World Imagery (high zoom, real satellite)
       // --------------------------------------------------------
 
       const overviewTiles = L.tileLayer("/tiles/world_overview/{z}/{x}/{y}.png", {
@@ -66,46 +72,53 @@
         noWrap: true
       });
 
-      const satelliteTiles = L.tileLayer("/tiles/world_satellite/{z}/{x}/{y}.png", {
-        minZoom: 3,
-        maxZoom: 7,
-        noWrap: true
-      });
+      const esriSatelliteTiles = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          minZoom: 4,
+          maxZoom: 18,
+          noWrap: true
+        }
+      );
 
-      this.tiles = { overview: overviewTiles, satellite: satelliteTiles };
+      this.tiles = { overview: overviewTiles, satellite: esriSatelliteTiles };
 
-      // Start near player, at a mid zoom where satellite *can* show
       const pos = this.gs.player.position;
-      const startZoom = 4;
+      const startZoom = 6; // start high enough to see real detail
       this.map.setView([pos.lat, pos.lng], startZoom);
 
-      // Add both; visibility is controlled by zoom rules below
       overviewTiles.addTo(this.map);
-      satelliteTiles.addTo(this.map);
+      esriSatelliteTiles.addTo(this.map);
 
       const updateBaseLayerForZoom = () => {
         const z = this.map.getZoom();
 
-        // At low zooms, use overview (Fallout world map)
-        if (z <= 3) {
+        // At low zoom, use your custom overview map
+        if (z <= 4) {
           if (!this.map.hasLayer(overviewTiles)) this.map.addLayer(overviewTiles);
-          if (this.map.hasLayer(satelliteTiles)) this.map.removeLayer(satelliteTiles);
+          if (this.map.hasLayer(esriSatelliteTiles)) this.map.removeLayer(esriSatelliteTiles);
         } else {
-          // At higher zooms, use satellite
-          if (!this.map.hasLayer(satelliteTiles)) this.map.addLayer(satelliteTiles);
+          // At higher zoom, use Esri satellite
+          if (!this.map.hasLayer(esriSatelliteTiles)) this.map.addLayer(esriSatelliteTiles);
           if (this.map.hasLayer(overviewTiles)) this.map.removeLayer(overviewTiles);
         }
+
+        this.updateOverlayVisibility(z);
       };
 
       this.map.on("zoomend", updateBaseLayerForZoom);
       updateBaseLayerForZoom();
 
-      // Expose to window so main.js can attach and update markers
+      // Overlay layers (labels + roads)
+      this.labelLayer = L.layerGroup().addTo(this.map);
+      this.roadLayer = L.layerGroup().addTo(this.map);
+
+      // Expose for other modules
       window.map = this.map;
 
       this.initPlayerMarker();
 
-      // Let main.js know map is ready
+      // Map ready event
       window.dispatchEvent(new Event("map-ready"));
     },
 
@@ -141,6 +154,185 @@
     },
 
     // --------------------------------------------------------
+    // WORLD OVERLAYS (LABELS + ROADS)
+    // --------------------------------------------------------
+
+    async loadWorldOverlays() {
+      // Labels
+      try {
+        const resLabels = await fetch("/data/world_labels.json");
+        if (resLabels.ok) {
+          const json = await resLabels.json();
+          if (Array.isArray(json)) {
+            this.worldLabels = json;
+            this.renderWorldLabels();
+          } else {
+            console.warn("worldmap: world_labels.json not array");
+          }
+        } else {
+          console.warn("worldmap: no /data/world_labels.json (ok if not yet created)");
+        }
+      } catch (e) {
+        console.error("worldmap: failed to load world_labels.json", e);
+      }
+
+      // Roads
+      try {
+        const resRoads = await fetch("/data/world_roads.json");
+        if (resRoads.ok) {
+          const json = await resRoads.json();
+          if (Array.isArray(json)) {
+            this.worldRoads = json;
+            this.renderWorldRoads();
+          } else {
+            console.warn("worldmap: world_roads.json not array");
+          }
+        } else {
+          console.warn("worldmap: no /data/world_roads.json (ok if not yet created)");
+        }
+      } catch (e) {
+        console.error("worldmap: failed to load world_roads.json", e);
+      }
+
+      if (this.map) {
+        this.updateOverlayVisibility(this.map.getZoom());
+      }
+    },
+
+    renderWorldLabels() {
+      if (!this.map || !this.labelLayer) return;
+
+      this.labelLayer.clearLayers();
+
+      this.worldLabels.forEach(label => {
+        if (typeof label.lat !== "number" || typeof label.lng !== "number") return;
+
+        const zoomRule = this.labelZoomVisibility(label);
+
+        const marker = L.marker([label.lat, label.lng], {
+          interactive: false,
+          icon: L.divIcon({
+            className: `pipboy-label pipboy-label-${label.type || "generic"} ${zoomRule.className || ""}`,
+            html: `<div>${label.name}</div>`
+          })
+        });
+
+        marker._pipboyZoomRule = zoomRule;
+        this.labelLayer.addLayer(marker);
+      });
+    },
+
+    renderWorldRoads() {
+      if (!this.map || !this.roadLayer) return;
+
+      this.roadLayer.clearLayers();
+
+      this.worldRoads.forEach(road => {
+        if (!Array.isArray(road.points) || road.points.length < 2) return;
+
+        const latlngs = road.points
+          .filter(p => typeof p.lat === "number" && typeof p.lng === "number")
+          .map(p => [p.lat, p.lng]);
+
+        if (!latlngs.length) return;
+
+        const zoomRule = this.roadZoomVisibility(road);
+
+        const poly = L.polyline(latlngs, this.roadStyle(road));
+        poly._pipboyZoomRule = zoomRule;
+        this.roadLayer.addLayer(poly);
+      });
+    },
+
+    labelZoomVisibility(label) {
+      const importance = label.importance || 1;
+
+      // Higher importance appears sooner (lower zoom)
+      let minZoom = 10;
+      if (importance >= 6) minZoom = 3;  // big regions
+      else if (importance >= 4) minZoom = 6; // major cities
+      else if (importance >= 2) minZoom = 10; // minor locations
+
+      return {
+        minZoom,
+        maxZoom: 18,
+        className: ""
+      };
+    },
+
+    roadZoomVisibility(road) {
+      const kind = road.kind || "local";
+      let minZoom = 10;
+
+      if (kind === "highway") minZoom = 6;
+      if (kind === "major") minZoom = 8;
+      if (kind === "local") minZoom = 12;
+
+      return {
+        minZoom,
+        maxZoom: 18
+      };
+    },
+
+    roadStyle(road) {
+      const kind = road.kind || "local";
+
+      if (kind === "highway") {
+        return {
+          color: "#66ff99",
+          weight: 3,
+          opacity: 0.9
+        };
+      }
+
+      if (kind === "major") {
+        return {
+          color: "#55dd88",
+          weight: 2,
+          opacity: 0.8
+        };
+      }
+
+      return {
+        color: "#44bb66",
+        weight: 1.5,
+        opacity: 0.7
+      };
+    },
+
+    updateOverlayVisibility(zoom) {
+      if (!this.map) return;
+
+      // Labels
+      if (this.labelLayer) {
+        this.labelLayer.eachLayer(layer => {
+          const rule = layer._pipboyZoomRule;
+          if (!rule) return;
+          const visible = zoom >= rule.minZoom && zoom <= (rule.maxZoom || 18);
+          if (visible) {
+            if (!this.map.hasLayer(layer)) this.map.addLayer(layer);
+          } else {
+            if (this.map.hasLayer(layer)) this.map.removeLayer(layer);
+          }
+        });
+      }
+
+      // Roads
+      if (this.roadLayer) {
+        this.roadLayer.eachLayer(layer => {
+          const rule = layer._pipboyZoomRule;
+          if (!rule) return;
+          const visible = zoom >= rule.minZoom && zoom <= (rule.maxZoom || 18);
+          if (visible) {
+            if (!this.map.hasLayer(layer)) this.map.addLayer(layer);
+          } else {
+            if (this.map.hasLayer(layer)) this.map.removeLayer(layer);
+          }
+        });
+      }
+    },
+
+    // --------------------------------------------------------
     // LOCATION LOADING + MARKERS
     // --------------------------------------------------------
 
@@ -148,7 +340,6 @@
       if (this.locationsLoaded) return;
 
       try {
-        // Your locations live under /data/locations.json
         const res = await fetch("/data/locations.json");
         if (!res.ok) {
           console.error("worldmap: HTTP error loading /data/locations.json:", res.status);
@@ -174,7 +365,6 @@
     renderPOIMarkers() {
       if (!this.map || !this.locationsLoaded) return;
 
-      // Clear old markers
       this.poiMarkers.forEach(m => this.map.removeLayer(m.marker || m));
       this.poiMarkers = [];
 
@@ -189,7 +379,6 @@
     createPOIMarker(loc, idx) {
       const rarity = loc.rarity || "common";
 
-      // Use Pip-Boy marker classes (styled in pipboy.css)
       const iconHtml = `
         <div class="pipboy-marker">
           <div class="pipboy-marker-dot ${rarity === "epic" ? "epic" : ""} ${rarity === "legendary" ? "legendary" : ""}"></div>
@@ -225,10 +414,8 @@
     // --------------------------------------------------------
 
     async onLocationClick(loc) {
-      // Move player to this location
       this.setPlayerPosition(loc.lat, loc.lng);
 
-      // Notify Overseer, if present
       if (window.Game?.overseer?.onPOIVisit) {
         try {
           Game.overseer.onPOIVisit(loc);
@@ -237,7 +424,6 @@
         }
       }
 
-      // Get weather from world module
       let weather = null;
       if (Game.modules.world && Game.modules.world.weather) {
         try {
@@ -253,7 +439,6 @@
         }
       }
 
-      // Roll encounter using world module if available
       let encounterResult = null;
       if (Game.modules.world && Game.modules.world.encounters) {
         try {
@@ -295,7 +480,7 @@
               id: `encounter_${name}_${Date.now()}`,
               enemies: (result.enemies?.list || []).map(id => ({
                 id,
-                damage: 5 // placeholder; your enemy system can enrich it
+                damage: 5
               })),
               rewards: result.rewards || {}
             };
@@ -333,7 +518,7 @@
     },
 
     // --------------------------------------------------------
-    // QUEST SUPPORT: getNearbyPOIs(radiusMeters)
+    // QUEST SUPPORT
     // --------------------------------------------------------
 
     getNearbyPOIs(radiusMeters) {
@@ -353,10 +538,10 @@
     },
 
     distanceMeters(lat1, lon1, lat2, lon2) {
-      const R = 6371000; // meters
+      const R = 6371000;
       const toRad = deg => (deg * Math.PI) / 180;
       const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lat2 - lon1);
+      const dLon = toRad(lon2 - lon1);
       const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
@@ -365,14 +550,12 @@
       return R * c;
     },
 
-    // --------------------------------------------------------
-    // UI HOOK (called when MAP tab opens, if you want)
-    // --------------------------------------------------------
-
     onOpen() {
       this.initMap();
       this.initPlayerMarker();
       this.renderPOIMarkers();
+      this.renderWorldLabels();
+      this.renderWorldRoads();
 
       if (this.map) {
         setTimeout(() => {
@@ -380,6 +563,7 @@
           this.ensurePlayerPosition();
           const pos = this.gs.player.position;
           this.map.setView([pos.lat, pos.lng], this.map.getZoom());
+          this.updateOverlayVisibility(this.map.getZoom());
         }, 50);
       }
     }
@@ -387,7 +571,6 @@
 
   Game.modules.worldmap = worldmapModule;
 
-  // Optional: auto-init when script loads, using global DATA
   document.addEventListener("DOMContentLoaded", () => {
     try {
       worldmapModule.init(window.DATA || {});
