@@ -229,7 +229,7 @@ app.post('/battle', [
     });
 });
 
-// MUST BE LAST — SPA catch-all
+// MUST BE LAST Â— SPA catch-all
 app.get('*', (req, res) => {
     res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
