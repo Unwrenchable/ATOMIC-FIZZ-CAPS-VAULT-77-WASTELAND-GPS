@@ -65,11 +65,27 @@
         return;
       }
 
+      if (typeof L === "undefined") {
+        console.error("worldmap: Leaflet (L) is not available");
+        return;
+      }
+
       // Leaflet init – Pip-Boy map
       this.map = L.map(container, {
         zoomControl: false,
-        attributionControl: false
+        attributionControl: false,
+        worldCopyJump: false
       });
+
+      // Optional: limit panning to something Earth-like
+      try {
+        const southWest = L.latLng(-85, -180);
+        const northEast = L.latLng(85, 180);
+        const bounds = L.latLngBounds(southWest, northEast);
+        this.map.setMaxBounds(bounds);
+      } catch (e) {
+        console.warn("worldmap: failed to set max bounds", e);
+      }
 
       // --------------------------------------------------------
       // BASE LAYERS
@@ -80,7 +96,8 @@
       const overviewTiles = L.tileLayer("/tiles/world_overview/{z}/{x}/{y}.png", {
         minZoom: 0,
         maxZoom: 4,
-        noWrap: true
+        noWrap: true,
+        errorTileUrl: "" // avoid ugly default 'missing' tile
       });
 
       const esriSatelliteTiles = L.tileLayer(
@@ -99,10 +116,12 @@
       const startZoom = 6; // Start high enough to see real detail
       this.map.setView([pos.lat, pos.lng], startZoom);
 
+      // Add both, then switch based on zoom
       overviewTiles.addTo(this.map);
       esriSatelliteTiles.addTo(this.map);
 
       const updateBaseLayerForZoom = () => {
+        if (!this.map) return;
         const z = this.map.getZoom();
 
         // At low zoom, use your custom overview map
@@ -128,11 +147,12 @@
       // Auto-follow behavior: free-look, then snap back to player
       this.enableAutoFollow();
 
-      // Expose for other modules
+      // Expose for other modules / dev console
       window.map = this.map;
 
       this.initPlayerMarker();
 
+      console.log("worldmap: map initialized");
       // Map ready event
       window.dispatchEvent(new Event("map-ready"));
     },
@@ -166,15 +186,19 @@
 
     centerOnPlayer() {
       if (!this.map || !this.gs?.player?.position) return;
-
       const { lat, lng } = this.gs.player.position;
 
       // Smooth GPS tracking for travel
-      this.map.panTo([lat, lng], {
-        animate: true,
-        duration: 1.0,
-        easeLinearity: 0.25
-      });
+      try {
+        this.map.panTo([lat, lng], {
+          animate: true,
+          duration: 1.0,
+          easeLinearity: 0.25
+        });
+      } catch (e) {
+        console.warn("worldmap: panTo failed, falling back to setView", e);
+        this.map.setView([lat, lng], this.map.getZoom() || 6);
+      }
     },
 
     // --------------------------------------------------------
@@ -183,6 +207,8 @@
 
     initPlayerMarker() {
       this.ensurePlayerPosition();
+      if (!this.map) return;
+
       const pos = this.gs.player.position;
 
       if (this.playerMarker) {
@@ -254,7 +280,7 @@
       }
 
       if (this.map) {
-        this.updateOverlayVisibility(this.map.getZoom());
+        this.updateOverlayVisibility(this.map.getZoom() || 6);
       }
     },
 
@@ -276,6 +302,7 @@
           })
         });
 
+        // attach zoom rule to layer
         marker._pipboyZoomRule = zoomRule;
         this.labelLayer.addLayer(marker);
       });
@@ -361,13 +388,14 @@
 
     updateOverlayVisibility(zoom) {
       if (!this.map) return;
+      const z = typeof zoom === "number" ? zoom : this.map.getZoom() || 6;
 
       // Labels
       if (this.labelLayer) {
         this.labelLayer.eachLayer(layer => {
           const rule = layer._pipboyZoomRule;
           if (!rule) return;
-          const visible = zoom >= rule.minZoom && zoom <= (rule.maxZoom || 18);
+          const visible = z >= rule.minZoom && z <= (rule.maxZoom || 18);
           if (visible) {
             if (!this.map.hasLayer(layer)) this.map.addLayer(layer);
           } else {
@@ -381,7 +409,7 @@
         this.roadLayer.eachLayer(layer => {
           const rule = layer._pipboyZoomRule;
           if (!rule) return;
-          const visible = zoom >= rule.minZoom && zoom <= (rule.maxZoom || 18);
+          const visible = z >= rule.minZoom && z <= (rule.maxZoom || 18);
           if (visible) {
             if (!this.map.hasLayer(layer)) this.map.addLayer(layer);
           } else {
@@ -401,7 +429,7 @@
       try {
         const res = await fetch("/data/locations.json");
         if (!res.ok) {
-          console.error("worldmap: HTTP error loading /data/locations.json:", res.status);
+          console.warn("worldmap: HTTP error loading /data/locations.json:", res.status);
           return;
         }
 
@@ -600,7 +628,7 @@
       const R = 6371000;
       const toRad = deg => (deg * Math.PI) / 180;
       const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lon2 - lon1);
+      const dLon = toRad(lon1 - lon2);
       const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
@@ -625,8 +653,8 @@
           this.map.invalidateSize();
           this.ensurePlayerPosition();
           const pos = this.gs.player.position;
-          this.map.setView([pos.lat, pos.lng], this.map.getZoom());
-          this.updateOverlayVisibility(this.map.getZoom());
+          this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 6);
+          this.updateOverlayVisibility(this.map.getZoom() || 6);
         }, 50);
       }
     }
