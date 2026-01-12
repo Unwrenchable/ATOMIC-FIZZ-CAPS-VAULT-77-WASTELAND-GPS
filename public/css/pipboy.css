@@ -394,7 +394,7 @@ body.pipboy-mode {
 }
 
 /* ============================================================
-   MAP PANEL — NEW VEGAS CRT MAP
+   MAP PANEL — NEW VEGAS CRT MAP (FIXED + COMPLETE)
    ============================================================ */
 
 .pipboy-map {
@@ -403,6 +403,7 @@ body.pipboy-mode {
   height: 100%;
   border: 1px solid rgba(159, 232, 141, 0.3);
   box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.9);
+  z-index: 2; /* ensures map is above panel backgrounds */
 }
 
 /* Leaflet container */
@@ -411,18 +412,25 @@ body.pipboy-mode {
   position: relative;
   width: 100%;
   height: 100%;
-  background: #010;
+  background: transparent; /* was #010 — this fixes map being hidden */
   overflow: hidden;
 }
 
-/* CRT tint over tiles – lighter so map is readable */
+/* Ensure Leaflet canvas respects sizing and stays visible */
+#mapContainer .leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
 
+/* CRT tint over tiles – Fallout NV style, readable and bright */
 .pipboy-crt .leaflet-tile {
   filter:
-    grayscale(0.7)
-    contrast(1.3)
-    brightness(0.8)
-    hue-rotate(85deg);
+    grayscale(0.3)        /* keep detail */
+    contrast(1.5)         /* punchy */
+    brightness(1.25)      /* lift out of darkness */
+    hue-rotate(95deg)     /* Pip‑Boy green */
+    saturate(1.8);        /* stronger glow */
 }
 
 /* Map overlay texts (bottom) */
