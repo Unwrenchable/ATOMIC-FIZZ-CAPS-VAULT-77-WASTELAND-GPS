@@ -965,3 +965,14 @@ body.pipboy-mode {
 .leaflet-control-container {
   display: none;
 }
+#bootScreen {
+  background: #000000;
+}
+
+#bootText {
+  color: #33ff33; /* bright Fallout green */
+  font-family: "Courier New", monospace;
+  white-space: pre;
+  line-height: 1.1;
+  text-shadow: 0 0 6px #33ff33; /* CRT glow */
+}
