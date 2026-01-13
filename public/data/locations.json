@@ -1,4 +1,10 @@
 [
+{"id":"freeside_courier_shadow","name":"Freeside - The Courier’s Shadow","lat":36.1699,"lng":-115.1398,"lvl":12,"rarity":"rare","iconKey":"drifter","region":"freeside","game":"fnv","source":"custom","npcId":"courier_shadow","portraitId":"courier_shadow","voiceId":"courier_shadow"},
+{"id":"novac_lone_stranger","name":"Novac - The Lone Stranger","lat":36.9951,"lng":-114.9912,"lvl":18,"rarity":"legendary","iconKey":"ghoul","region":"mojave","game":"fnv","source":"custom","npcId":"lone_stranger","portraitId":"lone_stranger","voiceId":"lone_stranger"},
+{"id":"hidden_valley_vaultghost","name":"Hidden Valley - Vault Ghost","lat":36.0641,"lng":-115.0331,"lvl":10,"rarity":"rare","iconKey":"vault","region":"mojave","game":"fnv","source":"custom","npcId":"vaultghost","portraitId":"vaultghost","voiceId":"vaultghost"},
+{"id":"strip_platinum_drifter","name":"The Strip - Platinum Drifter","lat":36.1704,"lng":-115.1405,"lvl":14,"rarity":"rare","iconKey":"city","region":"strip","game":"fnv","source":"custom","npcId":"platinum_drifter","portraitId":"platinum_drifter","voiceId":"platinum_drifter"},
+{"id":"westside_desert_saint","name":"Westside - The Desert Saint","lat":36.1761,"lng":-115.1481,"lvl":9,"rarity":"common","iconKey":"followers","region":"freeside","game":"fnv","source":"custom","npcId":"desert_saint","portraitId":"desert_saint","voiceId":"desert_saint"},
+
 {"id":"new_vegas_strip_gate_north_fnv","name":"Strip North Gate","lat":36.1719,"lng":-115.1394,"lvl":10,"rarity":"common","iconKey":"city","region":"strip","game":"fnv","source":"canon"},
 {"id":"new_vegas_strip_gate_south_fnv","name":"Strip South Gate","lat":36.1688,"lng":-115.1398,"lvl":10,"rarity":"common","iconKey":"city","region":"strip","game":"fnv","source":"canon"},
 {"id":"gomorrah_fnv","name":"Gomorrah","lat":36.1706,"lng":-115.1417,"lvl":12,"rarity":"rare","iconKey":"city","region":"strip","game":"fnv","source":"canon"},
