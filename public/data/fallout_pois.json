@@ -125,7 +125,6 @@
   "fo3": [
 {"id":"adams_afb_reactor_fo3","name":"Adams AFB Reactor","lat":38.8000,"lng":-76.9000,"lvl":30,"rarity":"epic","iconKey":"reactor","region":"nuclear_sites","game":"fo3","source":"canon"},
 {"id":"bethesda_reactor_fo3","name":"Bethesda Ruins Reactor","lat":39.0300,"lng":-77.1000,"lvl":20,"rarity":"rare","iconKey":"reactor","region":"nuclear_sites","game":"fo3","source":"canon"}
-
 {"id":"megaton_fo3","name":"Megaton","lat":38.9100,"lng":-77.0200,"lvl":8,"rarity":"rare","iconKey":"town","region":"fo3","game":"fo3","source":"canon"},
 {"id":"rivet_city_fo3","name":"Rivet City","lat":38.8719,"lng":-77.0000,"lvl":12,"rarity":"epic","iconKey":"city","region":"fo3","game":"fo3","source":"canon"},
 {"id":"tenpenny_tower_fo3","name":"Tenpenny Tower","lat":38.9500,"lng":-77.0400,"lvl":14,"rarity":"rare","iconKey":"tower","region":"fo3","game":"fo3","source":"canon"},
@@ -136,14 +135,12 @@
 {"id":"arefu_fo3","name":"Arefu","lat":39.1500,"lng":-77.3500,"lvl":9,"rarity":"common","iconKey":"town","region":"fo3","game":"fo3","source":"canon"},
 {"id":"grayditch_fo3","name":"Grayditch","lat":38.8800,"lng":-76.9800,"lvl":6,"rarity":"common","iconKey":"town","region":"fo3","game":"fo3","source":"canon"},
 {"id":"girder_shade_fo3","name":"GirderShade","lat":39.0000,"lng":-77.2800,"lvl":10,"rarity":"rare","iconKey":"town","region":"fo3","game":"fo3","source":"canon"},
-
 {"id":"vault_101_fo3","name":"Vault 101","lat":38.9900,"lng":-77.0200,"lvl":5,"rarity":"common","iconKey":"vault","region":"fo3","game":"fo3","source":"canon"},
 {"id":"vault_106_fo3","name":"Vault 106","lat":39.0000,"lng":-77.1500,"lvl":18,"rarity":"rare","iconKey":"vault","region":"fo3","game":"fo3","source":"canon"},
 {"id":"vault_108_fo3","name":"Vault 108","lat":38.9500,"lng":-77.2000,"lvl":20,"rarity":"rare","iconKey":"vault","region":"fo3","game":"fo3","source":"canon"},
 {"id":"vault_92_fo3","name":"Vault 92","lat":39.1500,"lng":-77.0500,"lvl":18,"rarity":"rare","iconKey":"vault","region":"fo3","game":"fo3","source":"canon"},
 {"id":"vault_87_fo3","name":"Vault 87","lat":39.0700,"lng":-77.2800,"lvl":22,"rarity":"epic","iconKey":"vault","region":"fo3","game":"fo3","source":"canon"},
 {"id":"vault_112_fo3","name":"Vault 112","lat":39.0000,"lng":-77.1200,"lvl":16,"rarity":"rare","iconKey":"vault","region":"fo3","game":"fo3","source":"canon"},
-
 {"id":"jefferson_memorial_fo3","name":"Jefferson Memorial","lat":38.8814,"lng":-77.0365,"lvl":20,"rarity":"epic","iconKey":"facility","region":"fo3","game":"fo3","source":"canon"},
 {"id":"galaxy_news_radio_fo3","name":"Galaxy News Radio","lat":38.9105,"lng":-77.0450,"lvl":15,"rarity":"rare","iconKey":"radio","region":"fo3","game":"fo3","source":"canon"},
 {"id":"super_duper_mart_fo3","name":"Super-Duper Mart","lat":38.9000,"lng":-77.0300,"lvl":6,"rarity":"common","iconKey":"shop","region":"fo3","game":"fo3","source":"canon"},
@@ -154,7 +151,6 @@
 {"id":"red_racer_factory_fo3","name":"Red Racer Factory","lat":38.9600,"lng":-77.0500,"lvl":16,"rarity":"rare","iconKey":"factory","region":"fo3","game":"fo3","source":"canon"},
 {"id":"nuka_cola_plant_fo3","name":"Nuka-Cola Plant","lat":38.8900,"lng":-76.9900,"lvl":15,"rarity":"rare","iconKey":"factory","region":"fo3","game":"fo3","source":"canon"},
 {"id":"mason_district_fo3","name":"Mason District","lat":38.8800,"lng":-77.0000,"lvl":17,"rarity":"common","iconKey":"ruins","region":"fo3","game":"fo3","source":"canon"},
-
 {"id":"arlington_cemetery_fo3","name":"Arlington Cemetery","lat":38.8800,"lng":-77.0700,"lvl":14,"rarity":"rare","iconKey":"ruins","region":"fo3","game":"fo3","source":"canon"},
 {"id":"arlington_library_fo3","name":"Arlington Library","lat":38.8810,"lng":-77.0720,"lvl":16,"rarity":"rare","iconKey":"ruins","region":"fo3","game":"fo3","source":"canon"},
 {"id":"museum_of_history_fo3","name":"Museum of History","lat":38.8910,"lng":-77.0320,"lvl":14,"rarity":"common","iconKey":"museum","region":"fo3","game":"fo3","source":"canon"},
@@ -162,12 +158,10 @@
 {"id":"capitol_building_fo3","name":"Capitol Building","lat":38.8899,"lng":-77.0091,"lvl":20,"rarity":"epic","iconKey":"ruins","region":"fo3","game":"fo3","source":"canon"},
 {"id":"statesman_hotel_fo3","name":"Statesman Hotel","lat":38.8925,"lng":-77.0205,"lvl":16,"rarity":"common","iconKey":"hotel","region":"fo3","game":"fo3","source":"canon"},
 {"id":"trinity_tower_fo3","name":"Trinity Tower","lat":38.8922,"lng":-77.0180,"lvl":17,"rarity":"common","iconKey":"tower","region":"fo3","game":"fo3","source":"canon"},
-
 {"id":"fort_constantine_fo3","name":"Fort Constantine","lat":39.2000,"lng":-77.3000,"lvl":22,"rarity":"epic","iconKey":"fort","region":"fo3","game":"fo3","source":"canon"},
 {"id":"fort_bannister_fo3","name":"Fort Bannister","lat":38.7500,"lng":-77.2000,"lvl":18,"rarity":"rare","iconKey":"fort","region":"fo3","game":"fo3","source":"canon"},
 {"id":"fort_independence_fo3","name":"Fort Independence","lat":38.8400,"lng":-77.0700,"lvl":17,"rarity":"rare","iconKey":"fort","region":"fo3","game":"fo3","source":"canon"},
 {"id":"anchorage_memorial_fo3","name":"Anchorage Memorial","lat":38.8890,"lng":-77.0400,"lvl":10,"rarity":"common","iconKey":"ruins","region":"fo3","game":"fo3","source":"canon"},
-
 {"id":"reilly_rangers_fo3","name":"Ranger Compound","lat":38.9050,"lng":-77.0300,"lvl":14,"rarity":"rare","iconKey":"camp","region":"fo3","game":"fo3","source":"canon"},
 {"id":"regulator_hq_fo3","name":"Regulator HQ","lat":39.1000,"lng":-77.1500,"lvl":18,"rarity":"rare","iconKey":"camp","region":"fo3","game":"fo3","source":"canon"},
 {"id":"slaver_town_paradise_falls_fo3","name":"Paradise Falls","lat":39.1000,"lng":-77.3500,"lvl":16,"rarity":"rare","iconKey":"camp","region":"fo3","game":"fo3","source":"canon"},
@@ -178,7 +172,6 @@
 {"id":"dupont_station_fo3","name":"Dupont Circle Metro","lat":38.9100,"lng":-77.0455,"lvl":14,"rarity":"common","iconKey":"metro","region":"fo3","game":"fo3","source":"canon"},
 {"id":"metro_central_fo3","name":"Metro Central","lat":38.8950,"lng":-77.0200,"lvl":16,"rarity":"common","iconKey":"metro","region":"fo3","game":"fo3","source":"canon"},
 {"id":"farragut_metro_fo3","name":"Farragut West Metro","lat":38.9010,"lng":-77.0400,"lvl":13,"rarity":"common","iconKey":"metro","region":"fo3","game":"fo3","source":"canon"},
-
 {"id":"evergreen_mills_fo3","name":"Evergreen Mills","lat":39.0500,"lng":-77.4000,"lvl":20,"rarity":"epic","iconKey":"raider","region":"fo3","game":"fo3","source":"canon"},
 {"id":"jerrys_gas_n_go_fo3","name":"Jerrys Gas & Go","lat":39.0100,"lng":-77.2300,"lvl":8,"rarity":"common","iconKey":"ruins","region":"fo3","game":"fo3","source":"canon"},
 {"id":"hallowed_moors_cemetery_fo3","name":"Hallowed Moors Cemetery","lat":38.8700,"lng":-77.1100,"lvl":16,"rarity":"rare","iconKey":"cemetery","region":"fo3","game":"fo3","source":"canon"},
@@ -189,11 +182,9 @@
 {"id":"meresti_station_fo3","name":"Meresti Trainyard","lat":39.1800,"lng":-77.2800,"lvl":16,"rarity":"rare","iconKey":"station","region":"fo3","game":"fo3","source":"canon"},
 {"id":"meresti_metro_station_fo3","name":"Meresti Metro Station","lat":39.1810,"lng":-77.2810,"lvl":16,"rarity":"rare","iconKey":"metro","region":"fo3","game":"fo3","source":"canon"},
 {"id":"scrapyard_fo3","name":"Scrapyard","lat":39.0800,"lng":-77.2300,"lvl":8,"rarity":"common","iconKey":"ruins","region":"fo3","game":"fo3","source":"canon"},
-
 {"id":"abandoned_car_tunnel_fo3","name":"Abandoned Car Tunnel","lat":39.0200,"lng":-77.2600,"lvl":10,"rarity":"common","iconKey":"tunnel","region":"fo3","game":"fo3","source":"canon"},
 {"id":"yagut_caves_fo3","name":"Yao Guai Tunnels","lat":39.0000,"lng":-77.3200,"lvl":18,"rarity":"rare","iconKey":"cave","region":"fo3","game":"fo3","source":"canon"}
-],
-  
+],  
   "fo4": [
 {"id":"sanctuary_fo4","name":"Sanctuary Hills","lat":42.4620,"lng":-71.2040,"lvl":1,"rarity":"common","iconKey":"town","region":"fo4","game":"fo4","source":"canon"},
 {"id":"red_rocket_fo4","name":"Red Rocket Truck Stop","lat":42.4600,"lng":-71.2000,"lvl":2,"rarity":"common","iconKey":"shop","region":"fo4","game":"fo4","source":"canon"},
@@ -205,13 +196,11 @@
 {"id":"sunshine_tidings_fo4","name":"Sunshine Tidings Co-op","lat":42.4200,"lng":-71.3000,"lvl":8,"rarity":"common","iconKey":"farm","region":"fo4","game":"fo4","source":"canon"},
 {"id":"greygarden_fo4","name":"Greygarden","lat":42.3800,"lng":-71.2000,"lvl":10,"rarity":"rare","iconKey":"farm","region":"fo4","game":"fo4","source":"canon"},
 {"id":"covenant_fo4","name":"Covenant","lat":42.5200,"lng":-71.1800,"lvl":12,"rarity":"rare","iconKey":"town","region":"fo4","game":"fo4","source":"canon"},
-
 {"id":"vault_111_fo4","name":"Vault 111","lat":42.4630,"lng":-71.2050,"lvl":1,"rarity":"common","iconKey":"vault","region":"fo4","game":"fo4","source":"canon"},
 {"id":"vault_81_fo4","name":"Vault 81","lat":42.3500,"lng":-71.1200,"lvl":18,"rarity":"rare","iconKey":"vault","region":"fo4","game":"fo4","source":"canon"},
 {"id":"vault_95_fo4","name":"Vault 95","lat":42.2000,"lng":-71.3500,"lvl":25,"rarity":"epic","iconKey":"vault","region":"fo4","game":"fo4","source":"canon"},
 {"id":"vault_75_fo4","name":"Vault 75","lat":42.3800,"lng":-71.0500,"lvl":20,"rarity":"rare","iconKey":"vault","region":"fo4","game":"fo4","source":"canon"},
 {"id":"vault_114_fo4","name":"Vault 114","lat":42.3600,"lng":-71.0700,"lvl":22,"rarity":"rare","iconKey":"vault","region":"fo4","game":"fo4","source":"canon"},
-
 {"id":"diamond_city_fo4","name":"Diamond City","lat":42.3460,"lng":-71.0820,"lvl":15,"rarity":"epic","iconKey":"city","region":"fo4","game":"fo4","source":"canon"},
 {"id":"goodneighbor_fo4","name":"Goodneighbor","lat":42.3550,"lng":-71.0650,"lvl":18,"rarity":"rare","iconKey":"city","region":"fo4","game":"fo4","source":"canon"},
 {"id":"bunker_hill_fo4","name":"Bunker Hill","lat":42.3740,"lng":-71.0600,"lvl":16,"rarity":"rare","iconKey":"town","region":"fo4","game":"fo4","source":"canon"},
@@ -221,12 +210,10 @@
 {"id":"old_north_church_fo4","name":"Old North Church","lat":42.3660,"lng":-71.0540,"lvl":18,"rarity":"rare","iconKey":"church","region":"fo4","game":"fo4","source":"canon"},
 {"id":"boston_public_library_fo4","name":"Boston Public Library","lat":42.3490,"lng":-71.0780,"lvl":20,"rarity":"rare","iconKey":"library","region":"fo4","game":"fo4","source":"canon"},
 {"id":"police_station_cambridge_fo4","name":"Cambridge Police Station","lat":42.3730,"lng":-71.1100,"lvl":12,"rarity":"common","iconKey":"police","region":"fo4","game":"fo4","source":"canon"},
-
 {"id":"prydwen_fo4","name":"The Prydwen","lat":42.3500,"lng":-71.0800,"lvl":30,"rarity":"legendary","iconKey":"airship","region":"fo4","game":"fo4","source":"canon"},
 {"id":"cambridge_bos_fo4","name":"Cambridge BoS Outpost","lat":42.3735,"lng":-71.1105,"lvl":15,"rarity":"rare","iconKey":"faction","region":"fo4","game":"fo4","source":"canon"},
 {"id":"railroad_hq_fo4","name":"Railroad HQ","lat":42.3665,"lng":-71.0545,"lvl":20,"rarity":"rare","iconKey":"faction","region":"fo4","game":"fo4","source":"canon"},
 {"id":"institute_fo4","name":"The Institute","lat":42.3600,"lng":-71.0589,"lvl":40,"rarity":"legendary","iconKey":"facility","region":"fo4","game":"fo4","source":"canon"},
-
 {"id":"fort_hagen_fo4","name":"Fort Hagen","lat":42.3200,"lng":-71.1200,"lvl":18,"rarity":"rare","iconKey":"fort","region":"fo4","game":"fo4","source":"canon"},
 {"id":"revere_satellite_fo4","name":"Revere Satellite Array","lat":42.4100,"lng":-70.9900,"lvl":25,"rarity":"epic","iconKey":"facility","region":"fo4","game":"fo4","source":"canon"},
 {"id":"saugus_ironworks_fo4","name":"Saugus Ironworks","lat":42.4700,"lng":-71.0100,"lvl":22,"rarity":"rare","iconKey":"factory","region":"fo4","game":"fo4","source":"canon"},
@@ -236,7 +223,6 @@
 {"id":"glowing_sea_fo4","name":"The Glowing Sea","lat":42.1500,"lng":-71.4500,"lvl":35,"rarity":"legendary","iconKey":"danger","region":"fo4","game":"fo4","source":"canon"},
 {"id":"crater_of_atom_fo4","name":"Crater of Atom","lat":42.1400,"lng":-71.4600,"lvl":38,"rarity":"epic","iconKey":"religion","region":"fo4","game":"fo4","source":"canon"},
 {"id":"virgil_lab_fo4","name":"Virgil's Laboratory","lat":42.1300,"lng":-71.4700,"lvl":32,"rarity":"rare","iconKey":"facility","region":"fo4","game":"fo4","source":"canon"},
-
 {"id":"quincy_ruins_fo4","name":"Quincy Ruins","lat":42.2500,"lng":-71.0000,"lvl":28,"rarity":"epic","iconKey":"ruins","region":"fo4","game":"fo4","source":"canon"},
 {"id":"jamaica_plain_fo4","name":"Jamaica Plain","lat":42.3000,"lng":-71.1200,"lvl":20,"rarity":"rare","iconKey":"ruins","region":"fo4","game":"fo4","source":"canon"},
 {"id":"milton_general_fo4","name":"Milton General Hospital","lat":42.2800,"lng":-71.1400,"lvl":22,"rarity":"rare","iconKey":"hospital","region":"fo4","game":"fo4","source":"canon"},
@@ -254,42 +240,32 @@
 {"id":"vault_63_fo76","name":"Vault 63","lat":38.1500,"lng":-81.0500,"lvl":30,"rarity":"epic","iconKey":"vault","region":"fo76","game":"fo76","source":"canon"},
 {"id":"vault_94_fo76","name":"Vault 94","lat":39.5000,"lng":-79.3000,"lvl":35,"rarity":"epic","iconKey":"vault","region":"fo76","game":"fo76","source":"canon"},
 {"id":"vault_96_fo76","name":"Vault 96","lat":38.2000,"lng":-80.5000,"lvl":40,"rarity":"legendary","iconKey":"vault","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"charleston_fo76","name":"Charleston","lat":38.3500,"lng":-81.6300,"lvl":15,"rarity":"common","iconKey":"city","region":"fo76","game":"fo76","source":"canon"},
 {"id":"charleston_capitol_fo76","name":"Charleston Capitol Building","lat":38.3360,"lng":-81.6120,"lvl":18,"rarity":"rare","iconKey":"facility","region":"fo76","game":"fo76","source":"canon"},
 {"id":"charleston_fire_dept_fo76","name":"Charleston Fire Department","lat":38.3370,"lng":-81.6100,"lvl":16,"rarity":"common","iconKey":"fire","region":"fo76","game":"fo76","source":"canon"},
 {"id":"airport_charleston_fo76","name":"Charleston Airport","lat":38.3700,"lng":-81.5900,"lvl":18,"rarity":"common","iconKey":"airport","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"watoga_fo76","name":"Watoga","lat":38.0500,"lng":-80.5500,"lvl":40,"rarity":"epic","iconKey":"city","region":"fo76","game":"fo76","source":"canon"},
 {"id":"watoga_civic_center_fo76","name":"Watoga Civic Center","lat":38.0480,"lng":-80.5480,"lvl":42,"rarity":"rare","iconKey":"facility","region":"fo76","game":"fo76","source":"canon"},
 {"id":"watoga_transit_hub_fo76","name":"Watoga Transit Hub","lat":38.0490,"lng":-80.5520,"lvl":38,"rarity":"common","iconKey":"station","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"harpers_ferry_fo76","name":"Harpers Ferry","lat":39.3250,"lng":-77.7400,"lvl":30,"rarity":"rare","iconKey":"town","region":"fo76","game":"fo76","source":"canon"},
 {"id":"berkeley_springs_fo76","name":"Berkeley Springs","lat":39.6300,"lng":-78.2300,"lvl":20,"rarity":"common","iconKey":"town","region":"fo76","game":"fo76","source":"canon"},
 {"id":"point_pleasant_fo76","name":"Point Pleasant","lat":38.8900,"lng":-82.1300,"lvl":18,"rarity":"rare","iconKey":"town","region":"fo76","game":"fo76","source":"canon"},
 {"id":"mothman_museum_fo76","name":"Mothman Museum","lat":38.8905,"lng":-82.1305,"lvl":20,"rarity":"rare","iconKey":"museum","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"top_of_the_world_fo76","name":"Top of the World","lat":38.7000,"lng":-79.5300,"lvl":25,"rarity":"rare","iconKey":"tower","region":"fo76","game":"fo76","source":"canon"},
 {"id":"pleasant_valley_ski_fo76","name":"Pleasant Valley Ski Resort","lat":38.6900,"lng":-79.5400,"lvl":22,"rarity":"common","iconKey":"resort","region":"fo76","game":"fo76","source":"canon"},
 {"id":"monongah_mine_fo76","name":"Monongah Mine","lat":39.5300,"lng":-80.2100,"lvl":30,"rarity":"rare","iconKey":"mine","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"white_springs_fo76","name":"White Springs Resort","lat":38.7500,"lng":-80.3000,"lvl":28,"rarity":"rare","iconKey":"resort","region":"fo76","game":"fo76","source":"canon"},
 {"id":"white_springs_bunker_fo76","name":"White Springs Bunker","lat":38.7480,"lng":-80.2980,"lvl":35,"rarity":"epic","iconKey":"bunker","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"fort_defiance_fo76","name":"Fort Defiance","lat":38.1000,"lng":-80.5500,"lvl":40,"rarity":"epic","iconKey":"fort","region":"fo76","game":"fo76","source":"canon"},
 {"id":"camp_venture_fo76","name":"Camp Venture","lat":38.1200,"lng":-80.5300,"lvl":32,"rarity":"rare","iconKey":"camp","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"the_bog_fo76","name":"Cranberry Bog","lat":38.2000,"lng":-80.6000,"lvl":35,"rarity":"epic","iconKey":"wasteland","region":"fo76","game":"fo76","source":"canon"},
 {"id":"quarry_x3_fo76","name":"Quarry X3","lat":38.2100,"lng":-80.6200,"lvl":38,"rarity":"rare","iconKey":"danger","region":"fo76","game":"fo76","source":"canon"},
 {"id":"fissure_site_prime_fo76","name":"Fissure Site Prime","lat":38.1800,"lng":-80.6500,"lvl":50,"rarity":"legendary","iconKey":"danger","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"toxic_valley_fo76","name":"Toxic Valley","lat":39.3500,"lng":-80.0000,"lvl":10,"rarity":"common","iconKey":"wasteland","region":"fo76","game":"fo76","source":"canon"},
 {"id":"wavy_willards_fo76","name":"Wavy Willard's Water Park","lat":39.3600,"lng":-80.0200,"lvl":12,"rarity":"common","iconKey":"park","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"ash_heap_fo76","name":"Ash Heap","lat":38.2000,"lng":-81.2000,"lvl":20,"rarity":"common","iconKey":"wasteland","region":"fo76","game":"fo76","source":"canon"},
 {"id":"welch_fo76","name":"Welch","lat":38.2000,"lng":-81.2100,"lvl":18,"rarity":"common","iconKey":"town","region":"fo76","game":"fo76","source":"canon"},
 {"id":"mount_blair_fo76","name":"Mount Blair","lat":38.1500,"lng":-81.2500,"lvl":25,"rarity":"rare","iconKey":"mine","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"the_mire_fo76","name":"The Mire","lat":39.3000,"lng":-78.3000,"lvl":25,"rarity":"rare","iconKey":"wasteland","region":"fo76","game":"fo76","source":"canon"},
 {"id":"dolly_sods_fo76","name":"Dolly Sods Wilderness","lat":39.1000,"lng":-79.3000,"lvl":28,"rarity":"rare","iconKey":"wilderness","region":"fo76","game":"fo76","source":"canon"},
 {"id":"tnt_dome_fo76","name":"TNT Dome","lat":39.3200,"lng":-78.3100,"lvl":30,"rarity":"rare","iconKey":"facility","region":"fo76","game":"fo76","source":"canon"}
@@ -307,7 +283,6 @@
 {"id":"mariposa_fo1","name":"Mariposa Military Base","lat":37.0000,"lng":-119.0000,"lvl":25,"rarity":"epic","iconKey":"facility","region":"fo1_2","game":"fo1","source":"canon"},
 {"id":"vault_13_fo1","name":"Vault 13","lat":36.9000,"lng":-116.9000,"lvl":1,"rarity":"common","iconKey":"vault","region":"fo1_2","game":"fo1","source":"canon"},
 {"id":"vault_15_fo1","name":"Vault 15","lat":36.8500,"lng":-116.9200,"lvl":8,"rarity":"common","iconKey":"vault","region":"fo1_2","game":"fo1","source":"canon"},
-
 {"id":"arroyo_fo2","name":"Arroyo","lat":41.0000,"lng":-123.0000,"lvl":1,"rarity":"common","iconKey":"town","region":"fo1_2","game":"fo2","source":"canon"},
 {"id":"klamath_fo2","name":"Klamath","lat":41.5000,"lng":-122.5000,"lvl":4,"rarity":"common","iconKey":"town","region":"fo1_2","game":"fo2","source":"canon"},
 {"id":"the_den_fo2","name":"The Den","lat":40.8000,"lng":-124.0000,"lvl":6,"rarity":"common","iconKey":"town","region":"fo1_2","game":"fo2","source":"canon"},
@@ -322,7 +297,6 @@
 {"id":"navarro_fo2","name":"Navarro Enclave Base","lat":38.0000,"lng":-121.5000,"lvl":30,"rarity":"legendary","iconKey":"facility","region":"fo1_2","game":"fo2","source":"canon"},
 {"id":"oil_rig_fo2","name":"Enclave Oil Rig","lat":36.0000,"lng":-130.0000,"lvl":40,"rarity":"legendary","iconKey":"facility","region":"fo1_2","game":"fo2","source":"canon"}
 ],
-  
   "fot": [
 {"id":"brahmin_wood_fot","name":"Brahmin Wood","lat":41.0000,"lng":-89.0000,"lvl":1,"rarity":"common","iconKey":"town","region":"fot","game":"fot","source":"canon"},
 {"id":"rock_falls_fot","name":"Rock Falls","lat":41.2000,"lng":-89.2000,"lvl":3,"rarity":"common","iconKey":"town","region":"fot","game":"fot","source":"canon"},
@@ -349,35 +323,27 @@
 {"id":"robot_factory_fot","name":"Robot Factory","lat":38.8500,"lng":-104.6500,"lvl":32,"rarity":"epic","iconKey":"facility","region":"fot","game":"fot","source":"canon"},
 {"id":"vault_0_fot","name":"Vault 0","lat":38.9000,"lng":-104.8000,"lvl":40,"rarity":"legendary","iconKey":"vault","region":"fot","game":"fot","source":"canon"}
 ],
-
   "bos": [
 {"id":"brahmin_wood_bos","name":"Brahmin Wood","lat":34.2000,"lng":-118.4500,"lvl":1,"rarity":"common","iconKey":"town","region":"bos","game":"bos","source":"canon"},
 {"id":"los_bos","name":"Los","lat":34.0500,"lng":-118.2500,"lvl":5,"rarity":"rare","iconKey":"city","region":"bos","game":"bos","source":"canon"},
 {"id":"los_sewers_bos","name":"Los Sewers","lat":34.0490,"lng":-118.2490,"lvl":6,"rarity":"common","iconKey":"sewer","region":"bos","game":"bos","source":"canon"},
 {"id":"los_ruins_bos","name":"Los Ruins","lat":34.0480,"lng":-118.2480,"lvl":7,"rarity":"common","iconKey":"ruins","region":"bos","game":"bos","source":"canon"},
-
 {"id":"kansas_city_bos","name":"Kansas City","lat":39.0997,"lng":-94.5786,"lvl":10,"rarity":"rare","iconKey":"city","region":"bos","game":"bos","source":"canon"},
 {"id":"kansas_city_sewers_bos","name":"Kansas City Sewers","lat":39.0990,"lng":-94.5790,"lvl":11,"rarity":"common","iconKey":"sewer","region":"bos","game":"bos","source":"canon"},
 {"id":"kansas_city_mutant_den_bos","name":"Mutant Den (Kansas City)","lat":39.0980,"lng":-94.5800,"lvl":12,"rarity":"rare","iconKey":"danger","region":"bos","game":"bos","source":"canon"},
-
 {"id":"phoenix_bos","name":"Phoenix","lat":33.4484,"lng":-112.0740,"lvl":15,"rarity":"rare","iconKey":"city","region":"bos","game":"bos","source":"canon"},
 {"id":"phoenix_reactor_bos","name":"Phoenix Nuclear Plant","lat":33.4490,"lng":-112.0730,"lvl":18,"rarity":"epic","iconKey":"reactor","region":"bos","game":"bos","source":"canon"},
 {"id":"phoenix_robot_factory_bos","name":"Phoenix Robot Factory","lat":33.4500,"lng":-112.0720,"lvl":20,"rarity":"epic","iconKey":"facility","region":"bos","game":"bos","source":"canon"},
-
 {"id":"boulder_bos","name":"Boulder","lat":40.0140,"lng":-105.2700,"lvl":22,"rarity":"rare","iconKey":"city","region":"bos","game":"bos","source":"canon"},
 {"id":"boulder_mutant_labs_bos","name":"Boulder Mutant Labs","lat":40.0150,"lng":-105.2710,"lvl":24,"rarity":"epic","iconKey":"facility","region":"bos","game":"bos","source":"canon"},
-
 {"id":"carbon_bos","name":"Carbon","lat":39.6000,"lng":-110.8000,"lvl":26,"rarity":"rare","iconKey":"town","region":"bos","game":"bos","source":"canon"},
 {"id":"carbon_mines_bos","name":"Carbon Mines","lat":39.6010,"lng":-110.8010,"lvl":27,"rarity":"common","iconKey":"mine","region":"bos","game":"bos","source":"canon"},
 {"id":"carbon_mutant_pits_bos","name":"Carbon Mutant Pits","lat":39.6020,"lng":-110.8020,"lvl":28,"rarity":"rare","iconKey":"danger","region":"bos","game":"bos","source":"canon"},
-
 {"id":"vault_tec_hq_bos","name":"Vault-Tec HQ","lat":34.0000,"lng":-118.2500,"lvl":30,"rarity":"epic","iconKey":"facility","region":"bos","game":"bos","source":"canon"},
 {"id":"vault_tec_reactor_bos","name":"Vault-Tec Reactor Core","lat":34.0010,"lng":-118.2510,"lvl":32,"rarity":"legendary","iconKey":"reactor","region":"bos","game":"bos","source":"canon"},
-
 {"id":"calculator_core_bos","name":"The Calculator Core","lat":34.0020,"lng":-118.2520,"lvl":40,"rarity":"legendary","iconKey":"facility","region":"bos","game":"bos","source":"canon"},
 {"id":"calculator_chamber_bos","name":"Calculator Final Chamber","lat":34.0030,"lng":-118.2530,"lvl":45,"rarity":"legendary","iconKey":"danger","region":"bos","game":"bos","source":"canon"}
 ],
-
   "nuclear_sites": [
 {"id":"nuclear_nevada_test_site","name":"Nevada Test Site","lat":37.1167,"lng":-116.0500,"lvl":50,"rarity":"legendary","iconKey":"reactor","region":"nuclear_sites","game":"real","source":"real"},
 {"id":"nuclear_hanford_site","name":"Hanford Site","lat":46.5500,"lng":-119.5833,"lvl":50,"rarity":"legendary","iconKey":"reactor","region":"nuclear_sites","game":"real","source":"real"},
@@ -488,28 +454,21 @@
 {"id":"nuka_town_usa_fo4","name":"Nuka‑Town USA","lat":42.1820,"lng":-71.9020,"lvl":25,"rarity":"rare","iconKey":"town","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"market_fo4","name":"Nuka‑Town Market","lat":42.1825,"lng":-71.9025,"lvl":25,"rarity":"common","iconKey":"shop","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"fizz_top_mountain_fo4","name":"Fizz Top Mountain","lat":42.1830,"lng":-71.9030,"lvl":30,"rarity":"epic","iconKey":"tower","region":"fo4_nuka_world","game":"fo4","source":"canon"},
-
 {"id":"galactic_zone_fo4","name":"Galactic Zone","lat":42.1850,"lng":-71.9050,"lvl":30,"rarity":"epic","iconKey":"park","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"galactic_zone_hub_fo4","name":"Galactic Zone Hub","lat":42.1855,"lng":-71.9055,"lvl":32,"rarity":"rare","iconKey":"facility","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"robco_battlezone_fo4","name":"RobCo Battlezone","lat":42.1860,"lng":-71.9060,"lvl":34,"rarity":"epic","iconKey":"arena","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"starlight_interstellar_fo4","name":"Starlight Interstellar Theater","lat":42.1865,"lng":-71.9065,"lvl":28,"rarity":"rare","iconKey":"theater","region":"fo4_nuka_world","game":"fo4","source":"canon"},
-
 {"id":"dry_rock_gulch_fo4","name":"Dry Rock Gulch","lat":42.1880,"lng":-71.9080,"lvl":26,"rarity":"rare","iconKey":"park","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"mad_mulligans_fo4","name":"Mad Mulligan's Mine","lat":42.1885,"lng":-71.9085,"lvl":28,"rarity":"rare","iconKey":"mine","region":"fo4_nuka_world","game":"fo4","source":"canon"},
-
 {"id":"safari_adventure_fo4","name":"Safari Adventure","lat":42.1900,"lng":-71.9100,"lvl":30,"rarity":"epic","iconKey":"park","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"primate_house_fo4","name":"Primate House","lat":42.1905,"lng":-71.9105,"lvl":28,"rarity":"rare","iconKey":"facility","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"reptile_house_fo4","name":"Reptile House","lat":42.1910,"lng":-71.9110,"lvl":29,"rarity":"rare","iconKey":"facility","region":"fo4_nuka_world","game":"fo4","source":"canon"},
-
 {"id":"kiddie_kingdom_fo4","name":"Kiddie Kingdom","lat":42.1920,"lng":-71.9120,"lvl":32,"rarity":"epic","iconKey":"park","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"kiddie_kingdom_castle_fo4","name":"Kiddie Kingdom Castle","lat":42.1925,"lng":-71.9125,"lvl":34,"rarity":"epic","iconKey":"tower","region":"fo4_nuka_world","game":"fo4","source":"canon"},
-
 {"id":"nuka_cola_bottling_fo4","name":"Nuka‑Cola Bottling Plant","lat":42.1940,"lng":-71.9140,"lvl":30,"rarity":"epic","iconKey":"factory","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"nuka_cola_rivers_fo4","name":"Nuka‑Cola Rivers","lat":42.1945,"lng":-71.9145,"lvl":28,"rarity":"rare","iconKey":"facility","region":"fo4_nuka_world","game":"fo4","source":"canon"},
-
 {"id":"nuka_power_plant_fo4","name":"Nuka‑World Power Plant","lat":42.1960,"lng":-71.9160,"lvl":35,"rarity":"legendary","iconKey":"reactor","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"nuka_power_control_fo4","name":"Power Plant Control Room","lat":42.1965,"lng":-71.9165,"lvl":36,"rarity":"legendary","iconKey":"facility","region":"fo4_nuka_world","game":"fo4","source":"canon"},
-
 {"id":"nuka_red_rocket_fo4","name":"Nuka‑World Red Rocket","lat":42.1980,"lng":-71.9180,"lvl":20,"rarity":"common","iconKey":"shop","region":"fo4_nuka_world","game":"fo4","source":"canon"},
 {"id":"nuka_scrapyard_fo4","name":"Nuka Scrapyard","lat":42.1985,"lng":-71.9185,"lvl":22,"rarity":"common","iconKey":"ruins","region":"fo4_nuka_world","game":"fo4","source":"canon"}
 ],
@@ -538,45 +497,33 @@
 {"id":"fort_atlas_fo76","name":"Fort Atlas","lat":39.6300,"lng":-79.9500,"lvl":30,"rarity":"epic","iconKey":"fort","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
 {"id":"fort_atlas_command_fo76","name":"Fort Atlas Command Wing","lat":39.6310,"lng":-79.9510,"lvl":32,"rarity":"rare","iconKey":"facility","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
 {"id":"fort_atlas_sublevel_fo76","name":"Fort Atlas Sub‑Level","lat":39.6320,"lng":-79.9520,"lvl":34,"rarity":"rare","iconKey":"bunker","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
-
 {"id":"watoga_bos_ops_fo76","name":"Watoga BoS Operations","lat":38.0480,"lng":-80.5480,"lvl":35,"rarity":"rare","iconKey":"facility","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
 {"id":"watoga_bos_checkpoint_fo76","name":"Watoga BoS Checkpoint","lat":38.0490,"lng":-80.5490,"lvl":33,"rarity":"common","iconKey":"checkpoint","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
-
 {"id":"foundation_bos_liaison_fo76","name":"Foundation BoS Liaison Office","lat":38.8510,"lng":-79.2010,"lvl":25,"rarity":"common","iconKey":"facility","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
 {"id":"crater_bos_liaison_fo76","name":"Crater BoS Liaison Office","lat":39.3510,"lng":-78.9010,"lvl":26,"rarity":"common","iconKey":"facility","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
-
 {"id":"fort_atlas_recon_bunker_fo76","name":"Atlas Recon Bunker","lat":39.6330,"lng":-79.9530,"lvl":36,"rarity":"epic","iconKey":"bunker","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
 {"id":"fort_atlas_supply_depot_fo76","name":"Atlas Supply Depot","lat":39.6340,"lng":-79.9540,"lvl":28,"rarity":"common","iconKey":"warehouse","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
-
 {"id":"bos_field_camp_alpha_fo76","name":"BoS Field Camp Alpha","lat":39.2000,"lng":-79.3000,"lvl":24,"rarity":"common","iconKey":"camp","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
 {"id":"bos_field_camp_bravo_fo76","name":"BoS Field Camp Bravo","lat":38.9000,"lng":-80.0000,"lvl":26,"rarity":"common","iconKey":"camp","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
-
 {"id":"glowing_valley_ops_fo76","name":"Glowing Valley BoS Ops","lat":38.1500,"lng":-80.5500,"lvl":38,"rarity":"rare","iconKey":"facility","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
 {"id":"glowing_valley_recon_post_fo76","name":"Glowing Valley Recon Post","lat":38.1510,"lng":-80.5510,"lvl":40,"rarity":"epic","iconKey":"danger","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
-
 {"id":"fort_atlas_armory_fo76","name":"Fort Atlas Armory","lat":39.6350,"lng":-79.9550,"lvl":34,"rarity":"rare","iconKey":"armory","region":"fo76_steel_dawn","game":"fo76","source":"canon"},
 {"id":"fort_atlas_research_wing_fo76","name":"Fort Atlas Research Wing","lat":39.6360,"lng":-79.9560,"lvl":35,"rarity":"epic","iconKey":"facility","region":"fo76_steel_dawn","game":"fo76","source":"canon"}
 ],
-"fo76_steel_reign": [
+  "fo76_steel_reign": [
 {"id":"fort_atlas_expanded_fo76","name":"Fort Atlas (Steel Reign)","lat":39.6300,"lng":-79.9500,"lvl":40,"rarity":"epic","iconKey":"fort","region":"fo76_steel_reign","game":"fo76","source":"canon"},
 {"id":"fort_atlas_command_center_fo76","name":"Fort Atlas Command Center","lat":39.6310,"lng":-79.9510,"lvl":42,"rarity":"epic","iconKey":"facility","region":"fo76_steel_reign","game":"fo76","source":"canon"},
 {"id":"fort_atlas_substructure_fo76","name":"Fort Atlas Substructure","lat":39.6320,"lng":-79.9520,"lvl":44,"rarity":"rare","iconKey":"bunker","region":"fo76_steel_reign","game":"fo76","source":"canon"},
-
 {"id":"west_tek_research_center_fo76","name":"West‑Tek Research Center","lat":38.1500,"lng":-80.5500,"lvl":50,"rarity":"legendary","iconKey":"facility","region":"fo76_steel_reign","game":"fo76","source":"canon"},
 {"id":"west_tek_lower_labs_fo76","name":"West‑Tek Lower Labs","lat":38.1510,"lng":-80.5510,"lvl":52,"rarity":"legendary","iconKey":"danger","region":"fo76_steel_reign","game":"fo76","source":"canon"},
-
 {"id":"regulus_bunker_fo76","name":"Regulus Bunker","lat":39.2000,"lng":-79.3000,"lvl":45,"rarity":"epic","iconKey":"bunker","region":"fo76_steel_reign","game":"fo76","source":"canon"},
 {"id":"regulus_control_room_fo76","name":"Regulus Control Room","lat":39.2010,"lng":-79.3010,"lvl":46,"rarity":"epic","iconKey":"facility","region":"fo76_steel_reign","game":"fo76","source":"canon"},
-
 {"id":"the_foundry_fo76","name":"The Foundry","lat":39.3500,"lng":-78.9000,"lvl":38,"rarity":"rare","iconKey":"factory","region":"fo76_steel_reign","game":"fo76","source":"canon"},
 {"id":"the_foundry_forge_fo76","name":"The Foundry Forge","lat":39.3510,"lng":-78.9010,"lvl":40,"rarity":"epic","iconKey":"danger","region":"fo76_steel_reign","game":"fo76","source":"canon"},
-
 {"id":"vault_96_fo76","name":"Vault 96","lat":38.5000,"lng":-80.3000,"lvl":50,"rarity":"legendary","iconKey":"vault","region":"fo76_steel_reign","game":"fo76","source":"canon"},
 {"id":"vault_96_research_wing_fo76","name":"Vault 96 Research Wing","lat":38.5010,"lng":-80.3010,"lvl":52,"rarity":"legendary","iconKey":"facility","region":"fo76_steel_reign","game":"fo76","source":"canon"},
-
 {"id":"fort_atlas_armory_sr_fo76","name":"Fort Atlas Armory (Steel Reign)","lat":39.6330,"lng":-79.9530,"lvl":43,"rarity":"rare","iconKey":"armory","region":"fo76_steel_reign","game":"fo76","source":"canon"},
 {"id":"fort_atlas_war_room_fo76","name":"Fort Atlas War Room","lat":39.6340,"lng":-79.9540,"lvl":45,"rarity":"epic","iconKey":"facility","region":"fo76_steel_reign","game":"fo76","source":"canon"},
-
 {"id":"bos_recon_camp_charlie_fo76","name":"BoS Recon Camp Charlie","lat":38.9000,"lng":-80.0000,"lvl":35,"rarity":"common","iconKey":"camp","region":"fo76_steel_reign","game":"fo76","source":"canon"},
 {"id":"bos_recon_camp_delta_fo76","name":"BoS Recon Camp Delta","lat":38.3000,"lng":-81.2000,"lvl":37,"rarity":"common","iconKey":"camp","region":"fo76_steel_reign","game":"fo76","source":"canon"}
 ],
@@ -601,23 +548,17 @@
 {"id":"ac_boardwalk_casino_fo76","name":"Boardwalk Casino","lat":39.3555,"lng":-74.4355,"lvl":54,"rarity":"epic","iconKey":"casino","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
 {"id":"ac_five_of_a_kind_fo76","name":"Five of a Kind Casino","lat":39.3560,"lng":-74.4360,"lvl":55,"rarity":"epic","iconKey":"casino","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
 {"id":"ac_the_gamblers_den_fo76","name":"The Gambler's Den","lat":39.3565,"lng":-74.4365,"lvl":53,"rarity":"rare","iconKey":"casino","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
-
 {"id":"ac_underbelly_fo76","name":"The Underbelly","lat":39.3570,"lng":-74.4370,"lvl":56,"rarity":"epic","iconKey":"danger","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
 {"id":"ac_underbelly_pipes_fo76","name":"Underbelly Steamworks","lat":39.3575,"lng":-74.4375,"lvl":57,"rarity":"epic","iconKey":"facility","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
 {"id":"ac_underbelly_maintenance_fo76","name":"Underbelly Maintenance Sector","lat":39.3580,"lng":-74.4380,"lvl":58,"rarity":"legendary","iconKey":"danger","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
-
 {"id":"ac_conservatory_fo76","name":"The Conservatory","lat":39.3590,"lng":-74.4390,"lvl":54,"rarity":"rare","iconKey":"facility","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
 {"id":"ac_conservatory_gardens_fo76","name":"Conservatory Gardens","lat":39.3595,"lng":-74.4395,"lvl":55,"rarity":"rare","iconKey":"wilderness","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
-
 {"id":"ac_mausoleum_fo76","name":"The Mausoleum","lat":39.3600,"lng":-74.4400,"lvl":56,"rarity":"epic","iconKey":"facility","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
 {"id":"ac_mausoleum_catacombs_fo76","name":"Mausoleum Catacombs","lat":39.3605,"lng":-74.4405,"lvl":58,"rarity":"legendary","iconKey":"danger","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
-
 {"id":"ac_police_station_fo76","name":"Atlantic City Police Station","lat":39.3610,"lng":-74.4410,"lvl":52,"rarity":"common","iconKey":"facility","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
 {"id":"ac_firehouse_fo76","name":"Atlantic City Firehouse","lat":39.3615,"lng":-74.4415,"lvl":53,"rarity":"common","iconKey":"facility","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
-
 {"id":"ac_hotel_monarch_fo76","name":"Hotel Monarch","lat":39.3620,"lng":-74.4420,"lvl":54,"rarity":"rare","iconKey":"hotel","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
 {"id":"ac_hotel_monarch_penthouse_fo76","name":"Hotel Monarch Penthouse","lat":39.3625,"lng":-74.4425,"lvl":56,"rarity":"epic","iconKey":"tower","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
-
 {"id":"ac_boardwalk_market_fo76","name":"Boardwalk Market","lat":39.3540,"lng":-74.4340,"lvl":51,"rarity":"common","iconKey":"shop","region":"fo76_atlantic_city","game":"fo76","source":"canon"},
 {"id":"ac_boardwalk_pier_fo76","name":"Boardwalk Pier","lat":39.3535,"lng":-74.4335,"lvl":52,"rarity":"common","iconKey":"dock","region":"fo76_atlantic_city","game":"fo76","source":"canon"}
 ],
@@ -673,7 +614,7 @@
 {"id":"sr_vault96_aux_lab_fo76","name":"Vault 96 Auxiliary Lab","lat":38.5020,"lng":-80.3020,"lvl":51,"rarity":"epic","iconKey":"facility","region":"fo76_steel_reign_bonus_expanded","game":"fo76","source":"expanded"},
 {"id":"sr_vault96_cryostorage_fo76","name":"Vault 96 Cryo‑Storage","lat":38.5030,"lng":-80.3030,"lvl":52,"rarity":"legendary","iconKey":"danger","region":"fo76_steel_reign_bonus_expanded","game":"fo76","source":"expanded"}
 ],
-"fo76_steel_dawn_bonus_expanded": [
+  "fo76_steel_dawn_bonus_expanded": [
 {"id":"sd_atlas_outer_checkpoint_fo76","name":"Atlas Outer Checkpoint","lat":39.6370,"lng":-79.9570,"lvl":28,"rarity":"common","iconKey":"checkpoint","region":"fo76_steel_dawn_bonus_expanded","game":"fo76","source":"expanded"},
 {"id":"sd_atlas_training_field_fo76","name":"Atlas Training Field","lat":39.6380,"lng":-79.9580,"lvl":30,"rarity":"common","iconKey":"camp","region":"fo76_steel_dawn_bonus_expanded","game":"fo76","source":"expanded"},
 {"id":"sd_atlas_signal_array_fo76","name":"Atlas Signal Array","lat":39.6390,"lng":-79.9590,"lvl":32,"rarity":"rare","iconKey":"tower","region":"fo76_steel_dawn_bonus_expanded","game":"fo76","source":"expanded"},
@@ -691,7 +632,7 @@
 {"id":"sd_atlas_lower_storage_fo76","name":"Atlas Lower Storage","lat":39.6430,"lng":-79.9630,"lvl":32,"rarity":"common","iconKey":"warehouse","region":"fo76_steel_dawn_bonus_expanded","game":"fo76","source":"expanded"},
 {"id":"sd_atlas_aux_generator_fo76","name":"Atlas Auxiliary Generator","lat":39.6440,"lng":-79.9640,"lvl":34,"rarity":"rare","iconKey":"reactor","region":"fo76_steel_dawn_bonus_expanded","game":"fo76","source":"expanded"}
 ],
-"fo76_wastelanders_bonus_expanded": [
+  "fo76_wastelanders_bonus_expanded": [
 {"id":"wl_wayward_basement_fo76","name":"The Wayward Basement","lat":38.9905,"lng":-79.0155,"lvl":7,"rarity":"common","iconKey":"facility","region":"fo76_wastelanders_bonus_expanded","game":"fo76","source":"expanded"},
 {"id":"wl_wayward_storage_fo76","name":"Wayward Storage Room","lat":38.9910,"lng":-79.0160,"lvl":8,"rarity":"common","iconKey":"warehouse","region":"fo76_wastelanders_bonus_expanded","game":"fo76","source":"expanded"},
 {"id":"wl_foundation_outskirts_fo76","name":"Foundation Outskirts","lat":38.8490,"lng":-79.1990,"lvl":21,"rarity":"common","iconKey":"wilderness","region":"fo76_wastelanders_bonus_expanded","game":"fo76","source":"expanded"},
