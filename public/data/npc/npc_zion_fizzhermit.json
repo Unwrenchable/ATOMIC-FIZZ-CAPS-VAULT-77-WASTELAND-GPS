@@ -1,0 +1,13 @@
+{
+  "id": "npc_zion_fizzhermit",
+  "name": "FizzCo Hermit",
+  "region": "Zion",
+  "type": "Ex-FizzCo Scientist",
+  "dialog": [
+    "I didn’t quit FizzCo. FizzCo quit reality.",
+    "The formula lives in the water here."
+  ],
+  "quests": ["side_zion_fizzwater"],
+  "faction": "FizzCo",
+  "notes": "Hiding from FizzCo’s corporate remnants."
+}
