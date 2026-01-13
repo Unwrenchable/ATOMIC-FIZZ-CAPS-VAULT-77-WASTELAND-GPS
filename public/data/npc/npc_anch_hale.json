@@ -1,0 +1,13 @@
+{
+  "id": "npc_anch_hale",
+  "name": "Sergeant Hale",
+  "region": "Anchorage",
+  "type": "Temporal Echo",
+  "dialog": [
+    "Soldier… you’re out of time. Literally.",
+    "The war never ended. Not for me."
+  ],
+  "quests": ["quest_anch_frozen_signal"],
+  "faction": "US Army (Echo)",
+  "notes": "Appears and disappears with timeline shifts."
+}
