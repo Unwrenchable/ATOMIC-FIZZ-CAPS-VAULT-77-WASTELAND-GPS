@@ -1,22 +1,39 @@
 // overseer.js
-// Unified Overseer Brain – terminal + personality + memory + lore + faction + threat + weather + game events
+// Unified Overseer Brain – connects terminal UI to all AI engines.
 
 (function () {
   "use strict";
 
-  if (!window.overseer) {
-    console.warn("[Overseer] Terminal not loaded yet.");
-    return;
+  // ---------------------------------------------------------------------------
+  // GLOBAL OUTPUT FUNCTION (required by lore, memory, threat, etc.)
+  // ---------------------------------------------------------------------------
+  window.overseerSay = function (text) {
+    if (window.overseer && typeof window.overseer.print === "function") {
+      window.overseer.print(text);
+    } else {
+      console.log("[OVERSEER]", text);
+    }
+  };
+
+  // ---------------------------------------------------------------------------
+  // SAFE ENGINE GETTERS
+  // ---------------------------------------------------------------------------
+  function getEngines() {
+    return {
+      Personality: window.overseerPersonality || null,
+      Memory: window.overseerMemoryApi || null,
+      Lore: window.overseerLore || null,
+      Faction: window.overseerFaction || null,
+      Threat: window.overseerThreat || null,
+      Weather: window.overseerWeather || null,
+      WorldState: window.overseerWorldState || null,
+      CommandExt: window.overseerCommandExt || null
+    };
   }
 
-  const Terminal = window.overseer;
-  const Personality = window.overseerPersonality || null;
-  const Memory = window.overseerMemoryApi || null;
-  const Lore = window.overseerLore || null;
-  const Faction = window.overseerFaction || null;
-  const Threat = window.overseerThreat || null;
-  const Weather = window.overseerWeather || null;
-
+  // ---------------------------------------------------------------------------
+  // MAIN BRAIN OBJECT
+  // ---------------------------------------------------------------------------
   const Brain = {
     initialized: false,
 
@@ -24,272 +41,225 @@
       if (this.initialized) return;
       this.initialized = true;
 
-      this.attachPersonality();
-      this.attachMemory();
-      this.attachLore();
-      this.attachFaction();
-      this.attachThreat();
-      this.attachWeather();
+      const Terminal = window.overseer;
+      const Engines = getEngines();
 
-      this.extendCommands();
-      this.extendGameEvents();
+      // Attach engines
+      this.attachPersonality(Terminal, Engines.Personality);
+      this.attachMemory(Terminal, Engines.Memory);
+      this.attachLore(Terminal, Engines.Lore);
+      this.attachFaction(Terminal, Engines.Faction);
+      this.attachThreat(Terminal, Engines.Threat);
+      this.attachWeather(Terminal, Engines.Weather);
+
+      // Patch commands + events
+      this.extendCommands(Terminal);
+      this.extendGameEvents(Terminal, Engines);
 
       console.log("[Overseer] Brain online.");
+      overseerSay("Overseer AI online.");
     },
 
-    // -----------------------------
+    // -------------------------------------------------------------------------
     // PERSONALITY
-    // -----------------------------
-    attachPersonality() {
+    // -------------------------------------------------------------------------
+    attachPersonality(Terminal, Personality) {
       if (!Personality) {
-        Terminal.say = () => Terminal.print("...");
-        Terminal.react = (context = "") => {
-          Terminal.print("...");
-          if (context) Terminal.print("// " + context);
-        };
+        Terminal.say = () => overseerSay("...");
+        Terminal.react = (ctx = "") => overseerSay("..." + (ctx ? " // " + ctx : ""));
         return;
       }
 
-      Terminal.say = () => {
-        Terminal.print(Personality.speak());
-      };
-
-      Terminal.react = (context = "") => {
+      Terminal.say = () => overseerSay(Personality.speak());
+      Terminal.react = (ctx = "") => {
         const line = Personality.speak();
-        Terminal.print(line + (context ? " // " + context : ""));
+        overseerSay(line + (ctx ? " // " + ctx : ""));
       };
     },
 
-    // -----------------------------
+    // -------------------------------------------------------------------------
     // MEMORY
-    // -----------------------------
-    attachMemory() {
+    // -------------------------------------------------------------------------
+    attachMemory(Terminal, Memory) {
       if (!Memory) return;
-
       Terminal.memory = Memory;
 
       Terminal.memorySummary = function () {
         const snap = Memory.snapshot();
-        Terminal.print("OVERSEER MEMORY SUMMARY");
-        Terminal.print("  Regions visited: " + snap.regionsVisited.length);
-        Terminal.print("  POIs discovered: " + snap.poisDiscovered.length);
-        Terminal.print("  Quests tracked: " + Object.keys(snap.questStates).length);
-        Terminal.print("  Encounters survived: " + snap.encountersSurvived);
-        Terminal.print("  Radiation events: " + snap.radEvents);
+        overseerSay("OVERSEER MEMORY SUMMARY");
+        overseerSay("  Regions visited: " + snap.regionsVisited.length);
+        overseerSay("  POIs discovered: " + snap.poisDiscovered.length);
+        overseerSay("  Quests tracked: " + Object.keys(snap.questStates).length);
+        overseerSay("  Encounters survived: " + snap.encountersSurvived);
+        overseerSay("  Radiation events: " + snap.radEvents);
       };
     },
 
-    // -----------------------------
+    // -------------------------------------------------------------------------
     // LORE
-    // -----------------------------
-    attachLore() {
+    // -------------------------------------------------------------------------
+    attachLore(Terminal, Lore) {
       if (!Lore) return;
-
       Terminal.lore = Lore;
 
       Terminal.loreComment = function (category) {
         const entry = Lore.getRandomLore(category);
         if (!entry) return;
-        Terminal.print("=== " + entry.title + " ===");
-        entry.body.forEach((line) => Terminal.print(line));
+        overseerSay("=== " + entry.title + " ===");
+        entry.body.forEach((line) => overseerSay(line));
         Terminal.react("lore recall");
       };
     },
 
-    // -----------------------------
+    // -------------------------------------------------------------------------
     // FACTION
-    // -----------------------------
-    attachFaction() {
+    // -------------------------------------------------------------------------
+    attachFaction(Terminal, Faction) {
       if (!Faction) return;
-
       Terminal.faction = Faction;
 
       Terminal.factionComment = function (factionId) {
         const rep = Faction.getReputation(factionId);
         const label = Faction.reputationLabel(rep);
 
-        if (label === "ALLY") Terminal.print("Faction Status: They consider you an ally.");
-        else if (label === "FRIENDLY") Terminal.print("Faction Status: Relations are positive.");
-        else if (label === "NEUTRAL") Terminal.print("Faction Status: No strong feelings either way.");
-        else if (label === "UNFRIENDLY") Terminal.print("Faction Status: Caution advised.");
-        else if (label === "HOSTILE") Terminal.print("Faction Status: Hostile territory detected.");
+        const map = {
+          ALLY: "They consider you an ally.",
+          FRIENDLY: "Relations are positive.",
+          NEUTRAL: "No strong feelings either way.",
+          UNFRIENDLY: "Caution advised.",
+          HOSTILE: "Hostile territory detected."
+        };
+
+        overseerSay("Faction Status: " + (map[label] || "Unknown"));
       };
     },
 
-    // -----------------------------
+    // -------------------------------------------------------------------------
     // THREAT
-    // -----------------------------
-    attachThreat() {
+    // -------------------------------------------------------------------------
+    attachThreat(Terminal, Threat) {
       if (!Threat) return;
-
       Terminal.threat = Threat;
 
-      Terminal.threatComment = function (levelOrPayload) {
-        const level = Threat.analyze(
-          typeof levelOrPayload === "object" ? levelOrPayload : { danger: levelOrPayload }
-        );
-        Terminal.print("Threat Assessment: " + level.label);
-        Terminal.print(level.description);
+      Terminal.threatComment = function (payload) {
+        const level = Threat.analyze(payload);
+        overseerSay("Threat Level: " + level.label);
+        overseerSay(level.description);
       };
     },
 
-    // -----------------------------
+    // -------------------------------------------------------------------------
     // WEATHER
-    // -----------------------------
-    attachWeather() {
+    // -------------------------------------------------------------------------
+    attachWeather(Terminal, Weather) {
       if (!Weather) return;
-
       Terminal.weather = Weather;
 
-      Terminal.weatherComment = function (weatherId) {
-        const w = Weather.getWeatherById(weatherId);
+      Terminal.weatherComment = function (id) {
+        const w = Weather.getWeatherById(id);
         if (!w) return;
-        Terminal.print("Weather Status: " + w.name);
-        Terminal.print(w.description);
+        overseerSay("Weather: " + w.name);
+        overseerSay(w.description);
         Terminal.react("weather update");
       };
     },
 
-    // -----------------------------
+    // -------------------------------------------------------------------------
     // COMMAND EXTENSIONS
-    // -----------------------------
-    extendCommands() {
-      const originalHandle = Terminal.handleInput.bind(Terminal);
+    // -------------------------------------------------------------------------
+    extendCommands(Terminal) {
+      const original = Terminal.handleInput.bind(Terminal);
 
       Terminal.handleInput = function (raw) {
-        const trimmed = raw.trim();
-        if (!trimmed) return;
-        const line = trimmed.toLowerCase();
+        const line = raw.trim().toLowerCase();
         const parts = line.split(" ");
         const cmd = parts[0];
         const args = parts.slice(1);
+
         const handlers = window.overseerHandlers || {};
 
-        // Extended commands routed to cores
-        if (cmd === "memory" && handlers.memory) {
-          handlers.memory(args);
+        if (handlers[cmd]) {
+          handlers[cmd](args);
           return;
         }
 
-        if (cmd === "overseer" && handlers.overseer) {
-          handlers.overseer(args);
-          return;
-        }
-
-        if (cmd === "lore" && handlers.lore) {
-          handlers.lore(args);
-          return;
-        }
-
-        if (cmd === "faction" && handlers.faction) {
-          handlers.faction(args);
-          return;
-        }
-
-        if (cmd === "threat" && handlers.threat) {
-          handlers.threat(args);
-          return;
-        }
-
-        if (cmd === "weather" && handlers.weather) {
-          handlers.weather(args);
-          return;
-        }
-
-        // Personality test
         if (cmd === "speak" || cmd === "talk") {
           Terminal.say();
           return;
         }
 
-        // Fallback to built-in commands (status, inventory, map, etc.)
-        originalHandle(raw);
+        original(raw);
       };
     },
 
-    // -----------------------------
+    // -------------------------------------------------------------------------
     // GAME EVENT REACTIONS
-    // -----------------------------
-    extendGameEvents() {
-      const originalHandler = Terminal.handleGameEvent.bind(Terminal);
+    // -------------------------------------------------------------------------
+    extendGameEvents(Terminal, Engines) {
+      const original = Terminal.handleGameEvent.bind(Terminal);
 
       Terminal.handleGameEvent = function (data) {
         const type = data.type || "";
         const payload = data.payload || {};
 
         // Personality reactions
-        switch (type) {
-          case "status":
-            Terminal.react("status update received");
-            break;
-          case "quest_update":
-            Terminal.react("quest progression detected");
-            break;
-          case "caps":
-            Terminal.react("financial update");
-            break;
-          case "inventory":
-            Terminal.react("inventory change");
-            break;
-        }
+        if (type === "status") Terminal.react("status update");
+        if (type === "quest_update") Terminal.react("quest progression");
+        if (type === "caps") Terminal.react("financial update");
+        if (type === "inventory") Terminal.react("inventory change");
 
-        // Memory hooks
-        if (Memory) {
-          if (type === "location" && payload.regionId) {
-            Memory.markRegionVisited(payload.regionId);
-          }
-
+        // Memory
+        if (Engines.Memory) {
+          if (type === "location" && payload.regionId) Engines.Memory.markRegionVisited(payload.regionId);
           if (type === "map_scan" && Array.isArray(payload.nearby)) {
-            payload.nearby.forEach((poi) => {
-              if (poi.id) Memory.markPoiDiscovered(poi.id);
-            });
+            payload.nearby.forEach((poi) => poi.id && Engines.Memory.markPoiDiscovered(poi.id));
           }
-
           if (type === "quest_update" && payload.id && payload.step) {
-            Memory.noteQuestState(payload.id, payload.step);
+            Engines.Memory.noteQuestState(payload.id, payload.step);
           }
-
-          if (type === "enemy_detected") {
-            Memory.noteEncounterSurvived();
-          }
+          if (type === "enemy_detected") Engines.Memory.noteEncounterSurvived();
         }
 
-        // Faction reactions
-        if (type === "location" && payload.regionId && Faction) {
-          const factionId = Faction.scanTerritory?.();
+        // Faction
+        if (type === "location" && Engines.Faction) {
+          const factionId = Engines.Faction.scanTerritory?.();
           if (factionId) Terminal.factionComment(factionId);
         }
 
-        // Threat reactions
-        if (type === "enemy_detected" && Threat) {
-          const level = Threat.analyze(payload);
-          Terminal.print("Threat Level: " + level.label);
-          Terminal.print(level.description);
-          Terminal.react("hostile presence detected");
+        // Threat
+        if (type === "enemy_detected" && Engines.Threat) {
+          Terminal.threatComment(payload);
+          Terminal.react("hostile presence");
         }
 
-        // Weather reactions
-        if (type === "weather_change" && Weather && payload.id) {
+        // Weather
+        if (type === "weather_change" && Engines.Weather) {
           Terminal.weatherComment(payload.id);
         }
 
-        // Lore reactions (contextual by region id patterns)
-        if (type === "location" && Lore && payload.regionId) {
+        // Lore (contextual)
+        if (type === "location" && Engines.Lore && payload.regionId) {
           const region = String(payload.regionId).toLowerCase();
           if (region.includes("vault")) Terminal.loreComment("vault_logs");
           if (region.includes("fizz")) Terminal.loreComment("fizzco_ads");
           if (region.includes("basin")) Terminal.loreComment("survivor_notes");
         }
 
-        originalHandler(data);
+        original(data);
       };
     }
   };
 
-  // Expose brain globally in case you want admin hooks later
-  window.OverseerBrain = Brain;
+  // ---------------------------------------------------------------------------
+  // WAIT FOR TERMINAL BEFORE INITIALIZING
+  // ---------------------------------------------------------------------------
+  function waitForTerminal() {
+    if (window.overseer && typeof window.overseer.print === "function") {
+      Brain.init();
+      return;
+    }
+    setTimeout(waitForTerminal, 50);
+  }
 
-  // In popup mode, just initialize once scripts are loaded.
-  // Terminal functions already exist at this point.
-  Brain.init();
+  waitForTerminal();
 })();
