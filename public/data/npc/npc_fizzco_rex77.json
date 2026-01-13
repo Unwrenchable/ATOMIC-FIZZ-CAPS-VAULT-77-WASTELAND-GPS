@@ -1,0 +1,13 @@
+{
+  "id": "npc_fizzco_rex77",
+  "name": "REX-77",
+  "region": "Mojave",
+  "type": "Courier Robot",
+  "dialog": [
+    "ERROR: Memory sectors corrupted.",
+    "PRIMARY DIRECTIVE: Deliver… something. Somewhere."
+  ],
+  "quests": ["side_robot_remembered", "quest_platinum_cap"],
+  "faction": "FizzCo",
+  "notes": "Carries fragments of the Platinum Cap instructions."
+}
