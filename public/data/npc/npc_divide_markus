@@ -1,0 +1,13 @@
+{
+  "id": "npc_divide_markus",
+  "name": "Markus the Buried",
+  "region": "The Divide",
+  "type": "Survivor",
+  "dialog": [
+    "I dug myself out once. I can do it again.",
+    "The ground here hates us."
+  ],
+  "quests": ["side_divide_buriedcache"],
+  "faction": "None",
+  "notes": "Knows hidden caches buried under rubble."
+}
