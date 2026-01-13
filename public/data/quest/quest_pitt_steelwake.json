@@ -1,0 +1,16 @@
+{
+  "id": "quest_pitt_steelwake",
+  "name": "Steelwake",
+  "type": "regional",
+  "poIs": ["poi_pitt_steel_yards", "poi_pitt_overlook"],
+  "description": "Investigate strange vibrations under the steel yards.",
+  "objectives": [
+    "Enter the lower steel tunnels",
+    "Scan the seismic anomaly",
+    "Return data to Ironjaw Marn"
+  ],
+  "endings": {
+    "stabilize": "You reinforce the tunnels, slowing the collapse.",
+    "ignore": "The tremors worsen. Trogs grow restless."
+  }
+}
