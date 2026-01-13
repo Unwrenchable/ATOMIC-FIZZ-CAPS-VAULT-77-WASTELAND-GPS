@@ -1,0 +1,13 @@
+{
+  "id": "npc_pitt_bronn",
+  "name": "Ash-Eater Bronn",
+  "region": "The Pitt",
+  "type": "Raider Lieutenant",
+  "dialog": [
+    "Steel keeps us alive. Steel kills us too.",
+    "You smell like fresh air. I hate it."
+  ],
+  "quests": ["quest_pitt_ironlung"],
+  "faction": "Pitt Raiders",
+  "notes": "Controls the smog tunnels."
+}
