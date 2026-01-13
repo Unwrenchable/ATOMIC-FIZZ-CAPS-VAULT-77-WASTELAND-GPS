@@ -1,5 +1,6 @@
 {
   "strip": [
+{"id":"vegas_humming_robot_fizzcode","name":"The Humming One","lat":36.1159,"lng":-115.1734,"lvl":1,"rarity":"legendary","iconKey":"ruins","region":"vegas_strip","game":"fo_new","source":"generated"}
 {"id":"strip_gate_north_fnv","name":"Strip North Gate","lat":36.1719,"lng":-115.1394,"lvl":10,"rarity":"common","iconKey":"city","region":"strip","game":"fnv","source":"canon"},
 {"id":"strip_gate_south_fnv","name":"Strip South Gate","lat":36.1688,"lng":-115.1398,"lvl":10,"rarity":"common","iconKey":"city","region":"strip","game":"fnv","source":"canon"},
 {"id":"gomorrah_fnv","name":"Gomorrah","lat":36.1706,"lng":-115.1417,"lvl":12,"rarity":"rare","iconKey":"casino","region":"strip","game":"fnv","source":"canon"},
