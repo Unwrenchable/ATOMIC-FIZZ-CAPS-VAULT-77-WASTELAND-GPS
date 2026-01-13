@@ -1,0 +1,13 @@
+{
+  "id": "npc_fizzco_halden_pierce",
+  "name": "Dr. Halden Pierce",
+  "region": "Mojave",
+  "type": "Bio-Lum Researcher",
+  "dialog": [
+    "The glowing creatures aren’t accidents. They’re prototypes.",
+    "Atomic Fizz was never meant to be… consumed."
+  ],
+  "quests": ["side_glow_dark", "quest_formula_77"],
+  "faction": "FizzCo",
+  "notes": "Knows the truth about the mutated Fizz formula."
+}
