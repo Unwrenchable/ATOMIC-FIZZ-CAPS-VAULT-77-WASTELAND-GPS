@@ -1,0 +1,11 @@
+{
+  "poi":{"id":"npc_strip_securitron_tech_fo_new","name":"Rex Dalton","role":"Securitron Technician","faction":"House","lat":36.1156,"lng":-115.1727,"lvl":16,"rarity":"rare","iconKey":"npc","region":"vegas_strip","game":"fo_new","source":"generated"},
+  "personality":{"personality":["loyal","sarcastic","curious"],"morality":"neutral","confidence":"high","temper":"calm"},
+  "behavior":{"behavior":["static","merchant"]},
+  "dialog":{"greeting":["House sees everything."],"rumor":["One of our units had… unauthorized code."],"quest":["If you find that robot, don’t touch anything."],"trade":["I can tune your bots."],"combat":["Bad move, friend."]},
+  "rumors":{"rumors":["House quarantined a file he didn’t write.","The Strip hums at night."]},
+  "questHooks":{"gives":null,"advances":["q_the_humming_one"],"resolves":[],"redirects":["q_the_humming_one"],"hints":["vegas_humming_robot_fizzcode"]},
+  "factionAlignment":{"raiders":"enemy","settlers":"neutral","bos":"enemy","ss":"neutral","atom":"enemy"},
+  "encounter":{"encounter":["scripted"]},
+  "density":{"density":"medium","spawnWeight":4}
+}
