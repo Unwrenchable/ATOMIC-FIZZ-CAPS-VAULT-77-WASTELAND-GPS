@@ -1,0 +1,26 @@
+{
+  "id": "quest_pitt_ironlung",
+  "name": "Iron Lung",
+  "type": "main",
+  "poIs": ["Steel Yards", "Smog Tunnels", "Pitt Overlook"],
+  "description": "Investigate the toxic smog choking the Pitt.",
+  "objectives": [
+    "Scan the smog vents",
+    "Collect toxin samples",
+    "Confront Bronn about the source"
+  ],
+  "endings": [
+    {
+      "id": "ending_filter",
+      "description": "You repair the filtration system.",
+      "reward": "Clean-Air Mask",
+      "consequence": "Smog levels drop."
+    },
+    {
+      "id": "ending_burn",
+      "description": "You burn out the vents.",
+      "reward": "Molten Steel Blade",
+      "consequence": "Trog mutations spike."
+    }
+  ]
+}
