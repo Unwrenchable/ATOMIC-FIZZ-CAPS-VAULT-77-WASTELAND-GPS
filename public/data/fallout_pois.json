@@ -124,7 +124,7 @@
 
   "fo3": [
 {"id":"adams_afb_reactor_fo3","name":"Adams AFB Reactor","lat":38.8000,"lng":-76.9000,"lvl":30,"rarity":"epic","iconKey":"reactor","region":"nuclear_sites","game":"fo3","source":"canon"},
-{"id":"bethesda_reactor_fo3","name":"Bethesda Ruins Reactor","lat":39.0300,"lng":-77.1000,"lvl":20,"rarity":"rare","iconKey":"reactor","region":"nuclear_sites","game":"fo3","source":"canon"}
+{"id":"bethesda_reactor_fo3","name":"Bethesda Ruins Reactor","lat":39.0300,"lng":-77.1000,"lvl":20,"rarity":"rare","iconKey":"reactor","region":"nuclear_sites","game":"fo3","source":"canon"},
 {"id":"megaton_fo3","name":"Megaton","lat":38.9100,"lng":-77.0200,"lvl":8,"rarity":"rare","iconKey":"town","region":"fo3","game":"fo3","source":"canon"},
 {"id":"rivet_city_fo3","name":"Rivet City","lat":38.8719,"lng":-77.0000,"lvl":12,"rarity":"epic","iconKey":"city","region":"fo3","game":"fo3","source":"canon"},
 {"id":"tenpenny_tower_fo3","name":"Tenpenny Tower","lat":38.9500,"lng":-77.0400,"lvl":14,"rarity":"rare","iconKey":"tower","region":"fo3","game":"fo3","source":"canon"},
