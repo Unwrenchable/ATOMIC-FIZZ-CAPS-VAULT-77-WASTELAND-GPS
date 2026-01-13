@@ -1,0 +1,11 @@
+{
+  "id": "side_divide_buriedcache",
+  "name": "Buried Cache",
+  "type": "side",
+  "poIs": ["Collapsed Highway", "Rubble Pit"],
+  "description": "Recover a buried pre‑war cache.",
+  "objectives": [
+    "Locate the buried crate",
+    "Extract the contents"
+  ]
+}
