@@ -1,0 +1,11 @@
+{
+  "poi":{"id":"npc_atomic_fizz_tech_fo_new","name":"Kara Mullins","role":"Fizz Systems Technician","faction":"AtomicFizz","lat":36.1164,"lng":-115.1718,"lvl":14,"rarity":"rare","iconKey":"npc","region":"vegas_strip","game":"fo_new","source":"generated"},
+  "personality":{"personality":["nervous","brilliant","loyal"],"morality":"high","confidence":"low","temper":"nervous"},
+  "behavior":{"behavior":["static","merchant","scavenger"]},
+  "dialog":{"greeting":["You’re not with House, right?"],"rumor":["Fizz code wasn’t supposed to be in a robot."],"quest":["If you found the humming unit… I need the data."],"trade":["I can repair your gear. Quietly."],"combat":["I don’t want to fight!"]},
+  "rumors":{"rumors":["Fizz OS was experimental. Dangerous.","House quarantined it for a reason."]},
+  "questHooks":{"gives":null,"advances":["q_the_humming_one"],"resolves":[],"redirects":[],"hints":["vegas_humming_robot_fizzcode"]},
+  "factionAlignment":{"raiders":"enemy","settlers":"neutral","bos":"neutral","ss":"ally","atom":"enemy"},
+  "encounter":{"encounter":["ambient"]},
+  "density":{"density":"medium","spawnWeight":5}
+}
