@@ -10,6 +10,7 @@
 //   - Free-look map
 //   - Auto-snap back to player after idle (5s)
 //   - Smooth GPS centering for travel
+//   - NPC dialog auto-opens when clicking POIs with npcId/dialogId
 // ------------------------------------------------------------
 
 (function () {
@@ -89,15 +90,13 @@
 
       // --------------------------------------------------------
       // BASE LAYERS
-      // 1) Custom overview tiles (low zoom, Fallout-style)
-      // 2) Esri World Imagery (high zoom, real satellite)
       // --------------------------------------------------------
 
       const overviewTiles = L.tileLayer("/tiles/world_overview/{z}/{x}/{y}.png", {
         minZoom: 0,
         maxZoom: 4,
         noWrap: true,
-        errorTileUrl: "" // avoid ugly default 'missing' tile
+        errorTileUrl: ""
       });
 
       const esriSatelliteTiles = L.tileLayer(
@@ -113,10 +112,9 @@
 
       this.ensurePlayerPosition();
       const pos = this.gs.player.position;
-      const startZoom = 6; // Start high enough to see real detail
+      const startZoom = 6;
       this.map.setView([pos.lat, pos.lng], startZoom);
 
-      // Add both, then switch based on zoom
       overviewTiles.addTo(this.map);
       esriSatelliteTiles.addTo(this.map);
 
@@ -124,12 +122,10 @@
         if (!this.map) return;
         const z = this.map.getZoom();
 
-        // At low zoom, use your custom overview map
         if (z <= 4) {
           if (!this.map.hasLayer(overviewTiles)) this.map.addLayer(overviewTiles);
           if (this.map.hasLayer(esriSatelliteTiles)) this.map.removeLayer(esriSatelliteTiles);
         } else {
-          // At higher zoom, use Esri satellite
           if (!this.map.hasLayer(esriSatelliteTiles)) this.map.addLayer(esriSatelliteTiles);
           if (this.map.hasLayer(overviewTiles)) this.map.removeLayer(overviewTiles);
         }
@@ -140,31 +136,29 @@
       this.map.on("zoomend", updateBaseLayerForZoom);
       updateBaseLayerForZoom();
 
-      // Overlay layers (labels + roads)
+      // Overlay layers
       this.labelLayer = L.layerGroup().addTo(this.map);
       this.roadLayer = L.layerGroup().addTo(this.map);
 
-      // Auto-follow behavior: free-look, then snap back to player
+      // Auto-follow behavior
       this.enableAutoFollow();
 
-      // Expose for other modules / dev console
+      // Expose for debugging
       window.map = this.map;
 
       this.initPlayerMarker();
 
       console.log("worldmap: map initialized");
-      // Map ready event
       window.dispatchEvent(new Event("map-ready"));
     },
 
     // --------------------------------------------------------
-    // AUTO-FOLLOW: free-look, then snap back after idle
+    // AUTO-FOLLOW
     // --------------------------------------------------------
 
     enableAutoFollow() {
       if (!this.map) return;
 
-      // When the user starts moving the map, cancel any pending snap-back
       this.map.on("movestart", () => {
         if (this.followTimeout) {
           clearTimeout(this.followTimeout);
@@ -172,11 +166,8 @@
         }
       });
 
-      // When movement stops, start a timer to snap back to player
       this.map.on("moveend", () => {
-        if (this.followTimeout) {
-          clearTimeout(this.followTimeout);
-        }
+        if (this.followTimeout) clearTimeout(this.followTimeout);
 
         this.followTimeout = setTimeout(() => {
           this.centerOnPlayer();
@@ -188,7 +179,6 @@
       if (!this.map || !this.gs?.player?.position) return;
       const { lat, lng } = this.gs.player.position;
 
-      // Smooth GPS tracking for travel
       try {
         this.map.panTo([lat, lng], {
           animate: true,
@@ -202,7 +192,7 @@
     },
 
     // --------------------------------------------------------
-    // PLAYER MARKER + POSITION
+    // PLAYER MARKER
     // --------------------------------------------------------
 
     initPlayerMarker() {
@@ -234,12 +224,11 @@
         this.playerMarker.setLatLng([lat, lng]);
       }
 
-      // GPS update: ensure map recenters on player smoothly
       this.centerOnPlayer();
     },
 
     // --------------------------------------------------------
-    // WORLD OVERLAYS (LABELS + ROADS)
+    // WORLD OVERLAYS
     // --------------------------------------------------------
 
     async loadWorldOverlays() {
@@ -251,11 +240,7 @@
           if (Array.isArray(json)) {
             this.worldLabels = json;
             this.renderWorldLabels();
-          } else {
-            console.warn("worldmap: world_labels.json not array");
           }
-        } else {
-          console.warn("worldmap: no /data/world_labels.json (ok if not yet created)");
         }
       } catch (e) {
         console.error("worldmap: failed to load world_labels.json", e);
@@ -269,11 +254,7 @@
           if (Array.isArray(json)) {
             this.worldRoads = json;
             this.renderWorldRoads();
-          } else {
-            console.warn("worldmap: world_roads.json not array");
           }
-        } else {
-          console.warn("worldmap: no /data/world_roads.json (ok if not yet created)");
         }
       } catch (e) {
         console.error("worldmap: failed to load world_roads.json", e);
@@ -283,7 +264,6 @@
         this.updateOverlayVisibility(this.map.getZoom() || 6);
       }
     },
-
     renderWorldLabels() {
       if (!this.map || !this.labelLayer) return;
 
@@ -302,7 +282,6 @@
           })
         });
 
-        // attach zoom rule to layer
         marker._pipboyZoomRule = zoomRule;
         this.labelLayer.addLayer(marker);
       });
@@ -333,11 +312,10 @@
     labelZoomVisibility(label) {
       const importance = label.importance || 1;
 
-      // Higher importance appears sooner (lower zoom)
       let minZoom = 10;
-      if (importance >= 6) minZoom = 3;  // big regions
-      else if (importance >= 4) minZoom = 6; // major cities
-      else if (importance >= 2) minZoom = 10; // minor locations
+      if (importance >= 6) minZoom = 3;
+      else if (importance >= 4) minZoom = 6;
+      else if (importance >= 2) minZoom = 10;
 
       return {
         minZoom,
@@ -364,33 +342,20 @@
       const kind = road.kind || "local";
 
       if (kind === "highway") {
-        return {
-          color: "#66ff99",
-          weight: 3,
-          opacity: 0.9
-        };
+        return { color: "#66ff99", weight: 3, opacity: 0.9 };
       }
 
       if (kind === "major") {
-        return {
-          color: "#55dd88",
-          weight: 2,
-          opacity: 0.8
-        };
+        return { color: "#55dd88", weight: 2, opacity: 0.8 };
       }
 
-      return {
-        color: "#44bb66",
-        weight: 1.5,
-        opacity: 0.7
-      };
+      return { color: "#44bb66", weight: 1.5, opacity: 0.7 };
     },
 
     updateOverlayVisibility(zoom) {
       if (!this.map) return;
       const z = typeof zoom === "number" ? zoom : this.map.getZoom() || 6;
 
-      // Labels
       if (this.labelLayer) {
         this.labelLayer.eachLayer(layer => {
           const rule = layer._pipboyZoomRule;
@@ -404,7 +369,6 @@
         });
       }
 
-      // Roads
       if (this.roadLayer) {
         this.roadLayer.eachLayer(layer => {
           const rule = layer._pipboyZoomRule;
@@ -497,12 +461,33 @@
     },
 
     // --------------------------------------------------------
-    // LOCATION INTERACTION / ENCOUNTERS
+    // LOCATION INTERACTION / NPC DIALOG INTEGRATION
     // --------------------------------------------------------
 
     async onLocationClick(loc) {
       this.setPlayerPosition(loc.lat, loc.lng);
 
+      // ⭐ NARRATIVE HOOK — auto-open dialog if POI has an NPC
+      if (loc.npcId && Game.modules?.narrative) {
+        try {
+          Game.modules.narrative.openForNpc(loc.npcId);
+          return; // dialog takes over
+        } catch (e) {
+          console.error("worldmap: failed to open NPC dialog:", e);
+        }
+      }
+
+      // ⭐ Direct dialogId support
+      if (loc.dialogId && Game.modules?.narrative) {
+        try {
+          Game.modules.narrative.openByDialogId(loc.dialogId);
+          return;
+        } catch (e) {
+          console.error("worldmap: failed to open dialog by id:", e);
+        }
+      }
+
+      // Overseer POI hook
       if (window.Game?.overseer?.onPOIVisit) {
         try {
           Game.overseer.onPOIVisit(loc);
@@ -511,6 +496,7 @@
         }
       }
 
+      // Weather system
       let weather = null;
       if (Game.modules.world && Game.modules.world.weather) {
         try {
@@ -526,6 +512,7 @@
         }
       }
 
+      // Encounter system
       let encounterResult = null;
       if (Game.modules.world && Game.modules.world.encounters) {
         try {
@@ -638,7 +625,7 @@
     },
 
     // --------------------------------------------------------
-    // UI HOOK (called when MAP tab opens, if you want)
+    // UI HOOK
     // --------------------------------------------------------
 
     onOpen() {
@@ -662,7 +649,6 @@
 
   Game.modules.worldmap = worldmapModule;
 
-  // Optional: auto-init when script loads, using global DATA
   document.addEventListener("DOMContentLoaded", () => {
     try {
       worldmapModule.init(window.DATA || {});
