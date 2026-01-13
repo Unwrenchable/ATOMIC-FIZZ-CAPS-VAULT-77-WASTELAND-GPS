@@ -1,0 +1,13 @@
+{
+  "id": "npc_vault77_overseer",
+  "name": "Overseer-77",
+  "region": "Mojave",
+  "type": "AI Overseer",
+  "dialog": [
+    "Vault 77 remains sealed. For your safety. And mine.",
+    "Unauthorized access detected. Initiating… conversation."
+  ],
+  "quests": ["quest_fizz_awakens", "quest_formula_77"],
+  "faction": "Vault-Tec",
+  "notes": "Glitched personality; sometimes helpful, sometimes hostile."
+}
