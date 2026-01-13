@@ -1,5 +1,5 @@
 // boot.js
-// Fallout-style FIZZ boot animation for Pip-Boy activation
+// Fallout-style FIZZ boot animation + narrative intro
 
 (function () {
   const bootScreen = document.getElementById("bootScreen");
@@ -8,6 +8,9 @@
 
   if (!bootScreen || !pipboyScreen || !bootTextEl) return;
 
+  // -----------------------------
+  // 1. FIZZ BOOT FRAMES
+  // -----------------------------
   const fizzFrames = [
     "F",
     "FI",
@@ -29,29 +32,61 @@
     "",
     "FIZZ CORE ONLINE",
     "VAULT-TEC SYSTEMS NOMINAL",
+    ""
+  ];
+
+  // -----------------------------
+  // 2. NEW NARRATIVE INTRO FRAMES
+  // -----------------------------
+  const introFrames = [
+    ">> INITIALIZING TIMELINE ANCHOR...",
+    ">> WARNING: MULTIPLE FALLOUT ERAS DETECTED",
+    "",
+    ">> SCANNING GEOGRAPHIC COORDINATES...",
+    ">> REGION DETECTED: UNKNOWN WASTELAND",
+    "",
+    ">> LOADING LOCAL WASTELAND PROFILE...",
+    "",
+    "[INCOMING RADIO SIGNAL...]",
+    "\"If you can hear this... get to Vegas.\"",
+    "\"The timelines are collapsing.\"",
+    "",
+    ">> QUEST ADDED: WAKE UP",
     "",
     "Press any key to continue..."
   ];
 
   let index = 0;
+  let phase = 0; // 0 = fizz, 1 = intro
   let finished = false;
 
   function typeNext() {
-    if (index >= fizzFrames.length) {
+    const frames = phase === 0 ? fizzFrames : introFrames;
+
+    if (index >= frames.length) {
+      if (phase === 0) {
+        // Move to intro sequence
+        phase = 1;
+        index = 0;
+        setTimeout(typeNext, 400);
+        return;
+      }
+
+      // Fully finished
       finished = true;
       return;
     }
 
-    bootTextEl.textContent += fizzFrames[index] + "\n";
+    bootTextEl.textContent += frames[index] + "\n";
     index++;
 
-    const delay = 50 + Math.random() * 60;
+    const delay = 40 + Math.random() * 50;
     setTimeout(typeNext, delay);
   }
 
   function skipToEnd() {
     if (!finished) {
-      bootTextEl.textContent = fizzFrames.join("\n") + "\n";
+      bootTextEl.textContent = fizzFrames.join("\n") + "\n\n" + introFrames.join("\n") + "\n";
       finished = true;
     }
   }
@@ -65,10 +100,8 @@
     bootScreen.classList.add("hidden");
     pipboyScreen.classList.remove("hidden");
 
-    // 🔥 CRITICAL: Wake the Pip-Boy game loop
     window.dispatchEvent(new Event("pipboyReady"));
 
-    // Legacy hooks (safe to keep)
     if (window.Game && typeof Game.onPipboyReady === "function") {
       Game.onPipboyReady();
     }
@@ -96,5 +129,6 @@
   window.addEventListener("click", onContinue);
   window.addEventListener("touchstart", onContinue);
 
-  setTimeout(skipToEnd, 9000);
+  setTimeout(skipToEnd, 12000);
 })();
+
