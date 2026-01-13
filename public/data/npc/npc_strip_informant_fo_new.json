@@ -1,0 +1,11 @@
+{
+  "poi":{"id":"npc_strip_informant_fo_new","name":"Mira Voss","role":"Information Broker","faction":"Independent","lat":36.1152,"lng":-115.1721,"lvl":12,"rarity":"rare","iconKey":"npc","region":"vegas_strip","game":"fo_new","source":"generated"},
+  "personality":{"personality":["observant","paranoid","dry-humored"],"morality":"neutral","confidence":"high","temper":"calm"},
+  "behavior":{"behavior":["static","merchant","conditional_hostile"]},
+  "dialog":{"greeting":["You look like someone who listens."],"rumor":["Ever hear a dead robot hum?"],"quest":["I know where it is. The Humming One."],"trade":["Information isn’t free."],"combat":["Should’ve kept walking."]},
+  "rumors":{"rumors":["Something under the Strip is waking up.","House had files he never explained."]},
+  "questHooks":{"gives":"q_the_humming_one","advances":[],"resolves":[],"redirects":[],"hints":["vegas_humming_robot_fizzcode"]},
+  "factionAlignment":{"raiders":"enemy","settlers":"neutral","bos":"neutral","ss":"neutral","atom":"enemy"},
+  "encounter":{"encounter":["scripted"]},
+  "density":{"density":"medium","spawnWeight":6}
+}
