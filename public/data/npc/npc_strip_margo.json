@@ -1,0 +1,13 @@
+{
+  "id": "npc_strip_margo",
+  "name": "Tunnel Rat Margo",
+  "region": "Las Vegas Strip",
+  "type": "Scavenger",
+  "dialog": [
+    "You ever been under the Strip? It’s louder than the casinos.",
+    "FizzCo left more down there than soda machines."
+  ],
+  "quests": ["side_understrip_tunnels", "side_lost_shipment"],
+  "faction": "Independent",
+  "notes": "Knows every tunnel beneath Vegas."
+}
