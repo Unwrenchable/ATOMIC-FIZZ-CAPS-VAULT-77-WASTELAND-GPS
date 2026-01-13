@@ -1,0 +1,13 @@
+{
+  "id": "npc_divide_rhea",
+  "name": "Stormcaller Rhea",
+  "region": "The Divide",
+  "type": "Wasteland Mystic",
+  "dialog": [
+    "The storms speak. You just don’t listen.",
+    "Vegas pulls at the sky itself."
+  ],
+  "quests": ["quest_divide_faultline", "side_divide_stormsamples"],
+  "faction": "Independent",
+  "notes": "Studies the Divide’s unnatural weather."
+}
