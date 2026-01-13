@@ -1,0 +1,16 @@
+{
+  "id": "quest_mojave_vegas_pull",
+  "name": "The Vegas Pull",
+  "type": "main",
+  "poIs": ["poi_mojave_highway", "poi_vegas_outskirts"],
+  "description": "Follow the strange magnetic pull drawing you toward Vegas.",
+  "objectives": [
+    "Travel the old highway",
+    "Investigate the glowing fissure",
+    "Reach the outskirts of Vegas"
+  ],
+  "endings": {
+    "approach": "You feel the Convergence intensify.",
+    "avoid": "The pull grows stronger. You cannot escape it."
+  }
+}
