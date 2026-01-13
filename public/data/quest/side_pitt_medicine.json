@@ -1,0 +1,11 @@
+{
+  "id": "side_pitt_medicine",
+  "name": "Medicine Run",
+  "type": "side",
+  "poIs": ["Scavver Clinic", "Steel Yards"],
+  "description": "Gather ingredients for an anti‑smog cure.",
+  "objectives": [
+    "Collect 3 toxin glands",
+    "Return to Mara"
+  ]
+}
