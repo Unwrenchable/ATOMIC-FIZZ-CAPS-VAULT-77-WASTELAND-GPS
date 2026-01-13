@@ -1,0 +1,26 @@
+{
+  "id": "quest_zion_spirittrail",
+  "name": "Spirit Trail",
+  "type": "main",
+  "poIs": ["Zion Waterfall", "Spirit Cave", "Old Scout Camp"],
+  "description": "Follow strange lights through Zion to uncover their source.",
+  "objectives": [
+    "Investigate the waterfall lights",
+    "Track the glowing footprints",
+    "Confront the anomaly in Spirit Cave"
+  ],
+  "endings": [
+    {
+      "id": "ending_purify",
+      "description": "You cleanse the anomaly.",
+      "reward": "Spirit‑Blessed Trinket",
+      "consequence": "Zion stabilizes."
+    },
+    {
+      "id": "ending_harness",
+      "description": "You harness the anomaly.",
+      "reward": "Anomalous Essence",
+      "consequence": "Zion becomes unpredictable."
+    }
+  ]
+}
