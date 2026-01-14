@@ -1,13 +1,13 @@
-<svg viewBox="0 0 24 24">
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Outer circle -->
-  <circle cx="12" cy="12" r="10" fill="black"/>
+  <circle cx="12" cy="12" r="10" fill="black" />
 
-  <!-- Top equilateral triangle cutout -->
-  <path d="M12 12 L12 5 L15.464 9.5 Z" fill="white"/>
+  <!-- Top wedge -->
+  <path d="M12 12 L12 4 L17 10 Z" fill="black" />
 
-  <!-- Bottom-right equilateral triangle cutout -->
-  <path d="M12 12 L17.196 14.5 L14.732 19 Z" fill="white"/>
+  <!-- Bottom-right wedge -->
+  <path d="M12 12 L18 14 L15 20 Z" fill="black" />
 
-  <!-- Bottom-left equilateral triangle cutout -->
-  <path d="M12 12 L6.804 14.5 L9.268 19 Z" fill="white"/>
+  <!-- Bottom-left wedge -->
+  <path d="M12 12 L6 14 L9 20 Z" fill="black" />
 </svg>
