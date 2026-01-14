@@ -1,0 +1,57 @@
+{
+  "id": "dialog_rhea",
+  "entries": {
+    "rhea_intro": {
+      "type": "spoken",
+      "text": "If it's broken, I can probably fix it. If Vault-Tec built it, I can definitely break it."
+    },
+    "rhea_about_harlan": {
+      "type": "spoken",
+      "text": "Harlan Voss? Ranger with a busted rifle and a worse attitude. Good man, though. Loyal."
+    },
+    "rhea_about_jax": {
+      "type": "spoken",
+      "text": "Jax was sharp. Too sharp. Vault-Tec loves kids like that. They call it 'potential'. I call it 'target'."
+    },
+    "rhea_reacts_overseer_voice": {
+      "type": "spoken",
+      "text": "That voice isn't synthetic. That's a human pattern running on a machine. Someone got uploaded."
+    },
+    "rhea_realization_jax_ai": {
+      "type": "spoken",
+      "text": "Wait... that’s Jax? They shoved his mind into the Overseer core? That’s not tech, that’s torture."
+    },
+    "rhea_about_vault77_systems": {
+      "type": "spoken",
+      "text": "Vault 77's architecture is a nightmare. Redundant loops, dead-end circuits, and a core that was never meant to hold a person."
+    },
+    "rhea_about_body": {
+      "type": "spoken",
+      "text": "The ghoul body’s running on instinct. Higher functions are gone. Like a machine missing its processor."
+    },
+    "rhea_body_reacts": {
+      "type": "spoken",
+      "text": "See that? It responds to the Overseer’s voice. That’s a resonance link. Biological hardware still remembers the original firmware."
+    },
+    "rhea_warning_sync": {
+      "type": "spoken",
+      "text": "Mind-body sync is risky. Could stabilize. Could fry both. Vault-Tec never finished the research for a reason."
+    },
+    "rhea_finalA_peace": {
+      "type": "ending",
+      "text": "Shutting him down was the safest option. Clean. Final. No more suffering."
+    },
+    "rhea_finalB_wander": {
+      "type": "ending",
+      "text": "Letting the body go was smart. It’s functional enough to survive. The mind stays safe in the system."
+    },
+    "rhea_finalC_sync": {
+      "type": "ending",
+      "text": "He’s syncing. Mind and body. I don’t know how long it’ll hold, but damn… that’s one hell of a miracle."
+    },
+    "rhea_aftermath": {
+      "type": "spoken",
+      "text": "Vault-Tec built horrors. But sometimes, the wasteland builds something new out of the wreckage."
+    }
+  }
+}
