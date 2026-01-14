@@ -69,8 +69,9 @@
                 lng: playerLatLng.lng
             };
 
+            // MAP ENGINE HOOK
             if (typeof game.updatePlayerMarker === "function") {
-                game.updatePlayerMarker(playerLatLng);
+                game.updatePlayerMarker(playerLatLng, lastAccuracy);
             }
 
             game.sendLocationToTerminal?.();
@@ -86,7 +87,7 @@
             };
 
             if (typeof game.updatePlayerMarker === "function") {
-                game.updatePlayerMarker(null);
+                game.updatePlayerMarker(null, null);
             }
 
             game.sendLocationToTerminal?.();
@@ -257,9 +258,6 @@
                 game.sendVbotToTerminal(
                     payload?.text || "ONLINE. AWAITING DIRECTIVES."
                 );
-                break;
-
-            default:
                 break;
         }
     });
