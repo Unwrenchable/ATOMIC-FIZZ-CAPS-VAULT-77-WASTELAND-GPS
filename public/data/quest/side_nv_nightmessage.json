@@ -1,0 +1,12 @@
+{
+  "id": "side_nv_nightmessage",
+  "name": "Night Message",
+  "type": "side",
+  "poIs": ["New Vegas Strip"],
+  "description": "Meet the Night Courier and deliver a message across the Strip.",
+  "objectives": [
+    "Find the Night Courier (only at night)",
+    "Deliver the sealed message",
+    "Return for your reward"
+  ]
+}
