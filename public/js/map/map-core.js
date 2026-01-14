@@ -1,5 +1,5 @@
 // ============================================================
-// PIP‑BOY TILE MAP CORE (CLEAN VERSION)
+// PIP‑BOY TILE MAP CORE (CLEAN + WIRED VERSION)
 // ============================================================
 
 window.Game = window.Game || {};
@@ -16,6 +16,7 @@ const Game = window.Game;
 
     console.log("Pip‑Boy MapCore: init");
 
+    // Create Leaflet map
     map = L.map("map", {
       zoomControl: false,
       attributionControl: false,
@@ -36,13 +37,15 @@ const Game = window.Game;
     }).addTo(map);
 
     // ------------------------------------------------------------
-    // LOAD POIs (if poi-markers.js is present)
+    // LOAD POIs (if poi-markers.js defines loader)
     // ------------------------------------------------------------
-    if (Game.loadPOIMarkers) {
+    if (typeof Game.loadPOIMarkers === "function") {
       Game.loadPOIMarkers(map);
     }
 
+    // Expose map globally for other systems
     Game.map = map;
+
     return map;
   }
 
