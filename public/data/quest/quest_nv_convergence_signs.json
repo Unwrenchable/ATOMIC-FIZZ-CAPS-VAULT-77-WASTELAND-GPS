@@ -1,0 +1,26 @@
+{
+  "id": "quest_nv_convergence_signs",
+  "name": "Signs of the Convergence",
+  "type": "main",
+  "poIs": ["Freeside", "New Vegas Strip", "Lucky 38"],
+  "description": "Investigate strange omens pointing toward the Vegas Convergence.",
+  "objectives": [
+    "Hear Juno’s prophecy",
+    "Witness a Convergence anomaly",
+    "Report findings to the Overseer"
+  ],
+  "endings": [
+    {
+      "id": "ending_warn",
+      "description": "You warn the Strip.",
+      "reward": "Prophet’s Charm",
+      "consequence": "NPCs become more cautious."
+    },
+    {
+      "id": "ending_ignore",
+      "description": "You ignore the signs.",
+      "reward": "Caps",
+      "consequence": "Convergence accelerates."
+    }
+  ]
+}
