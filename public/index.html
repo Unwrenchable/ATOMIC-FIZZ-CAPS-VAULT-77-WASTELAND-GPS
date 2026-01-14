@@ -5,15 +5,20 @@
     <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- PIP-BOY THEME -->
-    <link rel="stylesheet" href="/css/pipboy.css" />
+    <!-- Pip‑Boy visual styles -->
+    <link rel="stylesheet" href="/css/pipboy.css">
+
+    <!-- Pip‑Boy style JSON for the map (must load before map init) -->
+    <script src="/js/pipboy/pipboy-style.js"></script>
+
 
     <!-- Leaflet CSS -->
     <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      crossorigin=""
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
     />
+
   </head>
 
   <body>
@@ -304,82 +309,85 @@
     <span id="locations-count" class="hidden"></span>
 
     <!-- CORE NAMESPACE -->
-    <script>
-      if (!window.Game) window.Game = {};
-      if (!Game.modules) Game.modules = {};
-      Game.hooks = Game.hooks || {};
-    </script>
+<script>
+  if (!window.Game) window.Game = {};
+  if (!Game.modules) Game.modules = {};
+  Game.hooks = Game.hooks || {};
+</script>
 
-    <!-- MODULES -->
-    <script src="/js/modules/economy.js"></script>
-    <script src="/js/modules/mintables.js"></script>
-    <script src="/js/modules/factions.js"></script>
-    <script src="/js/modules/enemyScaling.js"></script>
-    <script src="/js/modules/quests.js"></script>
-    <script src="/js/modules/worldmap.js"></script>
-    <script src="/js/modules/narrative.js"></script>
+<!-- MODULES -->
+<script src="/js/modules/economy.js"></script>
+<script src="/js/modules/mintables.js"></script>
+<script src="/js/modules/factions.js"></script>
+<script src="/js/modules/enemyScaling.js"></script>
+<script src="/js/modules/quests.js"></script>
+<script src="/js/modules/worldmap.js"></script>
+<script src="/js/modules/narrative.js"></script>
 
-    <!-- ENGINE -->
-    <script src="/js/main.js"></script>
+<!-- ENGINE -->
+<script src="/js/main.js"></script>
 
-    <!-- MAP + BOOT -->
-    <script src="/js/map/worldstate.js"></script>
-    <script src="/js/map/map-core.js"></script>
-    <script src="/js/boot.js"></script>
+<!-- LEAFLET (must load BEFORE map-core.js) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
-    <!-- STAT PANEL LOGIC -->
-    <script src="/js/stat-panel.js"></script>
+<!-- PIP‑BOY MAP STYLE (must load BEFORE map-core.js) -->
+<script src="/js/pipboy/pipboy-style.js"></script>
 
-    <!-- PIP-BOY UI -->
-    <script src="/js/ui/pipboy-tabs.js"></script>
-    <script src="/js/ui/inventory-ui.js"></script>
-    <script src="/js/ui/quest-ui.js"></script>
+<!-- MAP + BOOT -->
+<script src="/js/map/worldstate.js"></script>
+<script src="/js/map/map-core.js"></script>
+<script src="/js/boot.js"></script>
 
-    <!-- SPECIAL SYSTEM -->
-    <script src="/js/pipboy-special.js"></script>
+<!-- STAT PANEL LOGIC -->
+<script src="/js/stat-panel.js"></script>
 
-    <!-- RADIO / OVERSEER POPUP -->
-    <script>
-      (function () {
-        const terminalSection = document.getElementById("terminalSection");
-        const btn = document.getElementById("openOverseerTerminal");
+<!-- PIP‑BOY UI -->
+<script src="/js/ui/pipboy-tabs.js"></script>
+<script src="/js/ui/inventory-ui.js"></script>
+<script src="/js/ui/quest-ui.js"></script>
 
-        if (terminalSection) terminalSection.style.display = "block";
+<!-- SPECIAL SYSTEM -->
+<script src="/js/pipboy-special.js"></script>
 
-        function openOverseerPopup() {
-          const screenW = window.innerWidth || screen.width;
-          const screenH = window.innerHeight || screen.height;
+<!-- RADIO / OVERSEER POPUP -->
+<script>
+  (function () {
+    const terminalSection = document.getElementById("terminalSection");
+    const btn = document.getElementById("openOverseerTerminal");
 
-          const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
-          const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
+    if (terminalSection) terminalSection.style.display = "block";
 
-          const left = Math.floor((screenW - width) / 2);
-          const top = Math.floor((screenH - height) / 2);
+    function openOverseerPopup() {
+      const screenW = window.innerWidth || screen.width;
+      const screenH = window.innerHeight || screen.height;
 
-          const features = [
-            "resizable=yes",
-            "scrollbars=yes",
-            "status=no",
-            "toolbar=no",
-            "menubar=no",
-            "location=no",
-            "width=" + width,
-            "height=" + height,
-            "left=" + left,
-            "top=" + top
-          ].join(",");
+      const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
+      const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
 
-          window.open("/overseer.html", "overseer_terminal", features);
-        }
+      const left = Math.floor((screenW - width) / 2);
+      const top = Math.floor((screenH - height) / 2);
 
-        if (btn) {
-          btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            openOverseerPopup();
-          });
-        }
-      })();
-    </script>
+      const features = [
+        "resizable=yes",
+        "scrollbars=yes",
+        "status=no",
+        "toolbar=no",
+        "menubar=no",
+        "location=no",
+        "width=" + width,
+        "height=" + height,
+        "left=" + left,
+        "top=" + top
+      ].join(",");
 
-  </body>
-</html>
+      window.open("/overseer.html", "overseer_terminal", features);
+    }
+
+    if (btn) {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        openOverseerPopup();
+      });
+    }
+  })();
+</script>
