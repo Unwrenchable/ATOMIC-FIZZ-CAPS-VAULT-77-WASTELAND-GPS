@@ -1,57 +1,22 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
-  <!-- Mushroom cloud top -->
+  <!-- Main skyline silhouette -->
   <path d="
-    M6 10
-    C4 10 3 8.5 3 7
-    C3 4.5 5.5 3 9 3
-    C10 2 12 2 13.5 3
-    C17 3 20 4.5 20 7
-    C20 8.5 19 10 17 10
-    Z
+    M4 18 V13 H7 V18 Z
+    M8 18 V10 H11 V18 Z
+    M12 18 V6 H15 V18 Z
+    M16 18 V12 H20 V18 Z
   " fill="black"/>
 
-  <!-- Cloud underside curve -->
-  <path d="
-    M7 10
-    C9 12 15 12 17 10
-    Z
-  " fill="black"/>
+  <!-- Tower antenna -->
+  <rect x="13.5" y="4" width="1" height="2" fill="black"/>
 
-  <!-- Stem -->
-  <path d="
-    M10 10
-    C10 13 10.5 15 12 15
-    C13.5 15 14 13 14 10
-    Z
-  " fill="black"/>
+  <!-- Window cutouts -->
+  <rect x="9" y="12" width="1.5" height="1.5" fill="white"/>
+  <rect x="9" y="14.5" width="1.5" height="1.5" fill="white"/>
 
-  <!-- Base mound -->
-  <path d="
-    M5 18
-    C7 16 17 16 19 18
-    V20
-    H5
-    Z
-  " fill="black"/>
-
-  <!-- Inner cloud cutouts -->
-  <path d="
-    M9 7
-    C8 7 7 6.2 7 5.2
-    C7 4.2 8 3.5 9 3.5
-    C10 3.5 11 4.2 11 5.2
-    C11 6.2 10 7 9 7
-    Z
-  " fill="white"/>
-
-  <path d="
-    M15 7
-    C14 7 13 6.2 13 5.2
-    C13 4.2 14 3.5 15 3.5
-    C16 3.5 17 4.2 17 5.2
-    C17 6.2 16 7 15 7
-    Z
-  " fill="white"/>
+  <rect x="13.5" y="8" width="1.5" height="1.5" fill="white"/>
+  <rect x="13.5" y="10.5" width="1.5" height="1.5" fill="white"/>
+  <rect x="13.5" y="13" width="1.5" height="1.5" fill="white"/>
 
 </svg>
