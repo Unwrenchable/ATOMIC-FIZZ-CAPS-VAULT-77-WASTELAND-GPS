@@ -1,4 +1,59 @@
-<svg viewBox="0 0 24 24" fill="#00ff41">
-  <path d="M3 20l9-16 9 16H3z"/>
-  <rect x="10" y="12" width="4" height="6" fill="#000"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Body -->
+  <path d="
+    M9 9
+    H15
+    V15
+    H9
+    Z
+  " fill="black"/>
+
+  <!-- Head -->
+  <path d="
+    M10 6
+    H14
+    V9
+    H10
+    Z
+  " fill="black"/>
+
+  <!-- Eye cutouts -->
+  <circle cx="11" cy="7.5" r="0.8" fill="white"/>
+  <circle cx="13" cy="7.5" r="0.8" fill="white"/>
+
+  <!-- Arms -->
+  <path d="
+    M7 10
+    H9
+    V14
+    H7
+    Z
+
+    M15 10
+    H17
+    V14
+    H15
+    Z
+  " fill="black"/>
+
+  <!-- Legs -->
+  <path d="
+    M10 15
+    H12
+    V19
+    H10
+    Z
+
+    M12 15
+    H14
+    V19
+    H12
+    Z
+  " fill="black"/>
+
+  <!-- Foot cutouts -->
+  <rect x="10" y="18" width="2" height="1" fill="white"/>
+  <rect x="12" y="18" width="2" height="1" fill="white"/>
+
 </svg>
