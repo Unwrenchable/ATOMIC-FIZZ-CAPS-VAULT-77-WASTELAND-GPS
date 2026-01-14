@@ -1,0 +1,21 @@
+{
+  "id": "quest_harlan_echoes",
+  "name": "Echoes of a Ranger",
+  "type": "main",
+  "poIs": ["Freeside", "Old NCR Outpost", "Under-Strip Node"],
+  "description": "Follow the first clues left behind by Harlan Voss, a retired NCR Ranger and Jax’s father.",
+  "objectives": [
+    "Find Harlan’s abandoned NCR locker",
+    "Recover the Ranger holotape",
+    "Play the message on your Pip-Boy",
+    "Investigate the signal source beneath the Strip"
+  ],
+  "endings": [
+    {
+      "id": "ending_signal_found",
+      "description": "You locate a corrupted FizzCo signal tied to Harlan.",
+      "reward": "Ranger Patch (Harlan’s)",
+      "consequence": "Unlocks next quest."
+    }
+  ]
+}
