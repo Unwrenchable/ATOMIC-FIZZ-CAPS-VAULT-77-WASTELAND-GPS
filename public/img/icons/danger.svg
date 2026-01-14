@@ -1,4 +1,40 @@
-<svg viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2">
-  <polygon points="12,2 22,20 2,20"/>
-  <line x1="12" y1="8" x2="12" y2="14"/>
-  <circle cx="12" cy="17" r="1"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- City skyline silhouette -->
+  <path d="
+    M3 18
+    V12
+    H6
+    V18
+    Z
+
+    M7 18
+    V9
+    H11
+    V18
+    Z
+
+    M12 18
+    V6
+    H16
+    V18
+    Z
+
+    M17 18
+    V10
+    H21
+    V18
+    Z
+  " fill="black"/>
+
+  <!-- Window cutouts -->
+  <rect x="8" y="10" width="1.5" height="1.5" fill="white"/>
+  <rect x="8" y="12.5" width="1.5" height="1.5" fill="white"/>
+  <rect x="8" y="15" width="1.5" height="1.5" fill="white"/>
+
+  <rect x="13.5" y="7.5" width="1.5" height="1.5" fill="white"/>
+  <rect x="13.5" y="10" width="1.5" height="1.5" fill="white"/>
+  <rect x="13.5" y="12.5" width="1.5" height="1.5" fill="white"/>
+  <rect x="13.5" y="15" width="1.5" height="1.5" fill="white"/>
+
+</svg>
