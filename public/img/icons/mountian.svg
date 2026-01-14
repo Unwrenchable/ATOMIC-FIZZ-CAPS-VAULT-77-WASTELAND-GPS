@@ -1,4 +1,34 @@
-<svg viewBox="0 0 24 24" fill="#00ff41">
-  <polygon points="2,20 12,4 22,20"/>
-  <polygon points="8,20 12,12 16,20" fill="#000"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Main mountain -->
+  <path d="
+    M4 18
+    L10 7
+    L16 18
+    Z
+  " fill="black"/>
+
+  <!-- Secondary peak -->
+  <path d="
+    M12 18
+    L15 11
+    L20 18
+    Z
+  " fill="black"/>
+
+  <!-- Snow caps -->
+  <path d="
+    M10 7
+    L11 9
+    L9 9
+    Z
+  " fill="white"/>
+
+  <path d="
+    M15 11
+    L16 13
+    L14 13
+    Z
+  " fill="white"/>
+
 </svg>
