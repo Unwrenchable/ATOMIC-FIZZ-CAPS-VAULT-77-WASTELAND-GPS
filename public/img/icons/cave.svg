@@ -1,3 +1,29 @@
-<svg viewBox="0 0 24 24">
-  <path d="M4 20v-6c0-6 4-10 8-10s8 4 8 10v6z"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Mountain silhouette -->
+  <path d="
+    M3 18
+    L10 6
+    L12 9
+    L14 6
+    L21 18
+    Z
+  " fill="black"/>
+
+  <!-- Cave mouth cutout -->
+  <path d="
+    M10 18
+    C10 15 11 13 12 13
+    C13 13 14 15 14 18
+    Z
+  " fill="white"/>
+
+  <!-- Inner cave depth cutout -->
+  <path d="
+    M11 18
+    C11 16 11.5 15 12 15
+    C12.5 15 13 16 13 18
+    Z
+  " fill="white"/>
+
 </svg>
