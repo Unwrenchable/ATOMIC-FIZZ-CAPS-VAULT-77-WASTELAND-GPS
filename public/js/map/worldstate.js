@@ -37,7 +37,7 @@
     let lastScan = 0;
 
     // ------------------------------------------------------------
-    // LOAD POIs (correct path)
+    // LOAD POIs
     // ------------------------------------------------------------
     async function loadPOIs() {
         try {
@@ -57,10 +57,28 @@
     }
 
     // ------------------------------------------------------------
+    // ENSURE PLAYER MARKER EXISTS
+    // ------------------------------------------------------------
+    function ensurePlayerMarker() {
+        if (!game.map) return;
+        if (game.playerMarker) return;
+
+        game.playerMarker = L.circleMarker([0, 0], {
+            radius: 6,
+            color: "#00ff41",
+            weight: 2,
+            fillColor: "#00ff41",
+            fillOpacity: 0
+        }).addTo(game.map);
+    }
+
+    // ------------------------------------------------------------
     // GPS TRACKING
     // ------------------------------------------------------------
     navigator.geolocation?.watchPosition(
         pos => {
+            ensurePlayerMarker();
+
             lastAccuracy = pos.coords.accuracy || 999;
 
             playerLatLng = {
