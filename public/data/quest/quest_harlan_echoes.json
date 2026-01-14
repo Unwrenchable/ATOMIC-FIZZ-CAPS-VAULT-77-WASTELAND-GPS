@@ -2,20 +2,83 @@
   "id": "quest_harlan_echoes",
   "name": "Echoes of a Ranger",
   "type": "main",
-  "poIs": ["Freeside", "Old NCR Outpost", "Under-Strip Node"],
-  "description": "Follow the first clues left behind by Harlan Voss, a retired NCR Ranger and Jax’s father.",
-  "objectives": [
-    "Find Harlan’s abandoned NCR locker",
-    "Recover the Ranger holotape",
-    "Play the message on your Pip-Boy",
-    "Investigate the signal source beneath the Strip"
-  ],
-  "endings": [
+  "region": "Mojave",
+  "description": "You discover a damaged holotape left behind by NCR Ranger Harlan Voss. Its contents hint at the disappearance of his son, Jax.",
+  "stages": [
     {
-      "id": "ending_signal_found",
-      "description": "You locate a corrupted FizzCo signal tied to Harlan.",
-      "reward": "Ranger Patch (Harlan’s)",
-      "consequence": "Unlocks next quest."
+      "id": 0,
+      "name": "Find the Holotape",
+      "description": "You found a damaged holotape labeled 'VOSS-01'. It appears to belong to NCR Ranger Harlan Voss.",
+      "trigger": "player_pickup:holotape_voss01",
+      "actions": [
+        "dialogue:overseer_detect_tape",
+        "set_flag:harlan_echoes_found=true",
+        "unlock_stage:10"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Play the Holotape",
+      "description": "Play the holotape to hear Harlan's message.",
+      "trigger": "player_use:holotape_voss01",
+      "actions": [
+        "dialogue:harlan_tape01",
+        "set_flag:harlan_tape01_played=true",
+        "unlock_stage:20"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Investigate the Coordinates",
+      "description": "The holotape mentions coordinates tied to Jax's disappearance. Travel to the marked location.",
+      "trigger": "player_reaches:harlan_echoes_coords",
+      "actions": [
+        "spawn:scavenger_camp_ruins",
+        "dialogue:overseer_comment_coords",
+        "unlock_stage:30"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Search the Ruins",
+      "description": "Search the ruined scavenger camp for clues about Jax.",
+      "trigger": "player_search:scavenger_camp_ruins",
+      "actions": [
+        "spawn:item_harlan_note",
+        "dialogue:overseer_find_note",
+        "unlock_stage:40"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Read Harlan's Note",
+      "description": "Read the note left behind by Harlan.",
+      "trigger": "player_use:item_harlan_note",
+      "actions": [
+        "dialogue:harlan_note01",
+        "set_flag:harlan_note01_read=true",
+        "unlock_stage:50"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Quest Complete",
+      "description": "You have uncovered the first clues about Jax's disappearance. More questions remain.",
+      "trigger": "auto",
+      "actions": [
+        "unlock_quest:quest_harlan_lastsigns",
+        "complete_quest:true"
+      ]
     }
-  ]
+  ],
+  "flags": {
+    "harlan_echoes_found": false,
+    "harlan_tape01_played": false,
+    "harlan_note01_read": false
+  },
+  "npcs": {},
+  "rewards": {
+    "xp": 150,
+    "items": ["item_harlan_note"]
+  }
 }
