@@ -1,0 +1,41 @@
+{
+  "id": "dialog_jax_body",
+  "entries": {
+    "jaxbody_idle_groan": {
+      "type": "vocal",
+      "text": "*low ghoul groan, confused but not hostile*"
+    },
+    "jaxbody_alert_snarl": {
+      "type": "vocal",
+      "text": "*sharp inhale, defensive snarl, recognition flicker*"
+    },
+    "jaxbody_memory_echo_01": {
+      "type": "memory",
+      "text": "*a broken whisper escapes the ruined throat: '...dad...' *"
+    },
+    "jaxbody_memory_echo_02": {
+      "type": "memory",
+      "text": "*a rasping exhale, almost forming the word '...home...' *"
+    },
+    "jaxbody_recoil_overseer_voice": {
+      "type": "reaction",
+      "text": "*the body jerks violently, as if hearing its own voice from far away*"
+    },
+    "jaxbody_touch_reaction": {
+      "type": "reaction",
+      "text": "*flinches, then relaxes slightly, confused by the contact*"
+    },
+    "jaxbody_finalA_peace": {
+      "type": "ending",
+      "text": "*the body exhales softly, tension fading, a final calm settling in*"
+    },
+    "jaxbody_finalB_wander": {
+      "type": "ending",
+      "text": "*the body turns away, limping into the wasteland with a hollow, distant groan*"
+    },
+    "jaxbody_finalC_sync": {
+      "type": "ending",
+      "text": "*the body reaches toward the terminal voice, a broken sound escaping: '...me...' *"
+    }
+  }
+}
