@@ -1,0 +1,26 @@
+{
+  "id": "side_nv_dealerfavor",
+  "name": "Dealer’s Favor",
+  "type": "side",
+  "poIs": ["New Vegas Strip"],
+  "description": "Help Dealer Dex settle a quiet dispute with a Strip VIP.",
+  "objectives": [
+    "Speak with Dex",
+    "Find the VIP in Lucky 38",
+    "Resolve the dispute peacefully or violently"
+  ],
+  "endings": [
+    {
+      "id": "ending_peace",
+      "description": "You negotiate a peaceful solution.",
+      "reward": "VIP Access Token",
+      "consequence": "Dex becomes friendly."
+    },
+    {
+      "id": "ending_force",
+      "description": "You intimidate the VIP.",
+      "reward": "Strip Influence",
+      "consequence": "Dex owes you a favor."
+    }
+  ]
+}
