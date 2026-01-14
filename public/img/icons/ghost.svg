@@ -1,0 +1,28 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Ghost body -->
+  <path d="
+    M12 4
+    C9 4 7 6 7 9
+    V16
+    C7 17 8 18 9 18
+    C10 18 11 17 12 17
+    C13 17 14 18 15 18
+    C16 18 17 17 17 16
+    V9
+    C17 6 15 4 12 4
+    Z
+  " fill="black"/>
+
+  <!-- Eyes -->
+  <circle cx="10" cy="9" r="1" fill="white"/>
+  <circle cx="14" cy="9" r="1" fill="white"/>
+
+  <!-- Mouth -->
+  <path d="
+    M11 12
+    C11 13 13 13 13 12
+    Z
+  " fill="white"/>
+
+</svg>
