@@ -2,19 +2,100 @@
   "id": "quest_harlan_lastsigns",
   "name": "The Last Signs of Jax",
   "type": "main",
-  "poIs": ["Under-Strip", "FizzCo Node", "Old Courier Station"],
-  "description": "Follow the trail Harlan uncovered while searching for Jax before the bombs fell.",
-  "objectives": [
-    "Find Harlan’s investigation notes",
-    "Scan the Under-Strip signal he detected",
-    "Recover the corrupted Vault 77 access log"
+  "region": "Mojave",
+  "description": "Following Harlan's trail, you search for the last known signs of Jax before the bombs fell.",
+  "triggers": [
+    "unlock_from:quest_harlan_echoes",
+    "player_pickup:harlan_map_fragment",
+    "player_talk:npc_drunk_prospector",
+    "player_enter:poi_old_relay_station",
+    "overseer_memory_glitch:true"
   ],
-  "endings": [
+  "stages": [
     {
-      "id": "ending_signal",
-      "description": "You discover Harlan traced Jax to a Vault experiment.",
-      "reward": "Ranger Tracking Module",
-      "consequence": "Unlocks next quest."
+      "id": 0,
+      "name": "Harlan's Trail Continues",
+      "description": "You've uncovered more clues about Jax's disappearance. Harlan's trail leads deeper into the Mojave.",
+      "trigger": "auto",
+      "actions": [
+        "dialogue:overseer_lastsigns_intro",
+        "set_flag:lastsigns_started=true",
+        "unlock_stage:10"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Investigate the Relay Station",
+      "description": "Harlan's note mentions a pre-war relay station where Jax was last seen. Travel there.",
+      "trigger": "player_reaches:poi_old_relay_station",
+      "actions": [
+        "spawn:raider_scouts",
+        "dialogue:overseer_comment_relay",
+        "unlock_stage:20"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Search for Evidence",
+      "description": "Search the relay station for signs of Jax.",
+      "trigger": "player_search:poi_old_relay_station",
+      "actions": [
+        "spawn:item_jax_backpack",
+        "spawn:item_harlan_tape02",
+        "dialogue:overseer_detect_backpack",
+        "unlock_stage:30"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Play Harlan's Second Holotape",
+      "description": "Play the holotape found at the relay station.",
+      "trigger": "player_use:item_harlan_tape02",
+      "actions": [
+        "dialogue:harlan_tape02",
+        "set_flag:harlan_tape02_played=true",
+        "unlock_stage:40"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Follow the Blood Trail",
+      "description": "A faint blood trail leads away from the relay station. Follow it.",
+      "trigger": "player_reaches:harlan_bloodtrail_endpoint",
+      "actions": [
+        "spawn:abandoned_medical_cache",
+        "dialogue:overseer_bloodtrail_comment",
+        "unlock_stage:50"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Search the Medical Cache",
+      "description": "Search the abandoned medical cache for more clues.",
+      "trigger": "player_search:abandoned_medical_cache",
+      "actions": [
+        "spawn:item_vault77_keyfragment",
+        "dialogue:overseer_find_keyfragment",
+        "unlock_stage:60"
+      ]
+    },
+    {
+      "id": 60,
+      "name": "Quest Complete",
+      "description": "You've uncovered the last known signs of Jax before his disappearance.",
+      "trigger": "auto",
+      "actions": [
+        "unlock_quest:quest_harlan_beforebombs",
+        "complete_quest:true"
+      ]
     }
-  ]
+  ],
+  "flags": {
+    "lastsigns_started": false,
+    "harlan_tape02_played": false
+  },
+  "rewards": {
+    "xp": 200,
+    "items": ["item_vault77_keyfragment"]
+  }
 }
