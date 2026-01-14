@@ -1,0 +1,30 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Hull -->
+  <path d="
+    M4 15
+    L6 18
+    H18
+    L20 15
+    Z
+  " fill="black"/>
+
+  <!-- Lower deck -->
+  <rect x="6" y="12" width="12" height="3" fill="black"/>
+
+  <!-- Upper cabin -->
+  <rect x="8" y="9" width="8" height="3" fill="black"/>
+
+  <!-- Cabin windows -->
+  <rect x="9" y="10" width="1.5" height="1.5" fill="white"/>
+  <rect x="11" y="10" width="1.5" height="1.5" fill="white"/>
+  <rect x="13" y="10" width="1.5" height="1.5" fill="white"/>
+
+  <!-- Lower deck windows -->
+  <rect x="7" y="13" width="1.5" height="1.5" fill="white"/>
+  <rect x="9" y="13" width="1.5" height="1.5" fill="white"/>
+  <rect x="11" y="13" width="1.5" height="1.5" fill="white"/>
+  <rect x="13" y="13" width="1.5" height="1.5" fill="white"/>
+  <rect x="15" y="13" width="1.5" height="1.5" fill="white"/>
+
+</svg>
