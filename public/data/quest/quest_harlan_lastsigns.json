@@ -1,0 +1,20 @@
+{
+  "id": "quest_harlan_lastsigns",
+  "name": "The Last Signs of Jax",
+  "type": "main",
+  "poIs": ["Under-Strip", "FizzCo Node", "Old Courier Station"],
+  "description": "Follow the trail Harlan uncovered while searching for Jax before the bombs fell.",
+  "objectives": [
+    "Find Harlan’s investigation notes",
+    "Scan the Under-Strip signal he detected",
+    "Recover the corrupted Vault 77 access log"
+  ],
+  "endings": [
+    {
+      "id": "ending_signal",
+      "description": "You discover Harlan traced Jax to a Vault experiment.",
+      "reward": "Ranger Tracking Module",
+      "consequence": "Unlocks next quest."
+    }
+  ]
+}
