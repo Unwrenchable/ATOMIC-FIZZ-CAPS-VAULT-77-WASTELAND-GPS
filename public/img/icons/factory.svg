@@ -1,4 +1,39 @@
-<svg viewBox="0 0 24 24">
-  <path d="M3 20V10l4 2 4-2v10z"/>
-  <path d="M15 20V8l4 2v10z"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Smokestack -->
+  <path d="
+    M5 6
+    H8
+    V18
+    H5
+    Z
+  " fill="black"/>
+
+  <!-- Smoke cutout -->
+  <path d="
+    M5.5 4.5
+    C5.5 3.5 6.5 3 7.5 3
+    C8.5 3 9.5 3.5 9.5 4.5
+    C9.5 5.5 8.5 6 7.5 6
+    C6.5 6 5.5 5.5 5.5 4.5
+    Z
+  " fill="white"/>
+
+  <!-- Factory building -->
+  <path d="
+    M10 10
+    L13 8
+    L16 10
+    L19 8
+    V18
+    H10
+    Z
+  " fill="black"/>
+
+  <!-- Windows -->
+  <rect x="12" y="12" width="2" height="2" fill="white"/>
+  <rect x="15" y="12" width="2" height="2" fill="white"/>
+  <rect x="12" y="15" width="2" height="2" fill="white"/>
+  <rect x="15" y="15" width="2" height="2" fill="white"/>
+
 </svg>
