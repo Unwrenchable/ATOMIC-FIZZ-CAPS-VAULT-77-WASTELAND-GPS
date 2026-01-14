@@ -1,3 +1,40 @@
-<svg viewBox="0 0 24 24">
-  <path d="M12 2l8 4v6c0 6-4 10-8 10s-8-4-8-10V6z"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Left flag pole -->
+  <rect x="7" y="5" width="1.5" height="14" fill="black"/>
+
+  <!-- Right flag pole -->
+  <rect x="15.5" y="5" width="1.5" height="14" fill="black"/>
+
+  <!-- Left flag -->
+  <path d="
+    M8.5 6
+    L12 7.5
+    L8.5 9
+    Z
+  " fill="black"/>
+
+  <!-- Right flag -->
+  <path d="
+    M15.5 6
+    L12 7.5
+    L15.5 9
+    Z
+  " fill="black"/>
+
+  <!-- Star cutout -->
+  <path d="
+    M12 11
+    L12.6 12.8
+    H14.5
+    L13 14
+    L13.6 15.8
+    L12 14.7
+    L10.4 15.8
+    L11 14
+    L9.5 12.8
+    H11.4
+    Z
+  " fill="white"/>
+
 </svg>
