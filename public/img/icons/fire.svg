@@ -1,0 +1,31 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Outer flame silhouette -->
+  <path d="
+    M12 3
+    C13 5 15 7 15 9
+    C15 11 13.5 12.5 12 14
+    C10.5 12.5 9 11 9 9
+    C9 7 11 5 12 3
+    Z
+  " fill="black"/>
+
+  <!-- Inner flame cutout -->
+  <path d="
+    M12 7
+    C12.7 8 13 9 13 10
+    C13 11 12.5 11.7 12 12.2
+    C11.5 11.7 11 11 11 10
+    C11 9 11.3 8 12 7
+    Z
+  " fill="white"/>
+
+  <!-- Base glow cutout -->
+  <path d="
+    M10 14
+    C10 15.5 11 17 12 17
+    C13 17 14 15.5 14 14
+    Z
+  " fill="white"/>
+
+</svg>
