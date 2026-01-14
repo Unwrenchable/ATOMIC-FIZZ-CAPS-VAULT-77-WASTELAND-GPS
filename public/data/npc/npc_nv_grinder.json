@@ -1,0 +1,23 @@
+{
+  "id": "npc_nv_grinder",
+  "name": "Grinder",
+  "region": "New Vegas Strip",
+  "type": "Arena Pit Boss",
+  "dialog": {
+    "idle": [
+      "You look like you can take a hit.",
+      "Step into the pit. Earn your name."
+    ],
+    "after_win": [
+      "You fight like a demon.",
+      "Crowd loves you. I don’t."
+    ],
+    "after_loss": [
+      "You’ll heal. Maybe.",
+      "Come back when you’re not dying."
+    ]
+  },
+  "quests": ["side_nv_arena"],
+  "faction": "Arena",
+  "notes": "Triggers combat encounters and survival challenges."
+}
