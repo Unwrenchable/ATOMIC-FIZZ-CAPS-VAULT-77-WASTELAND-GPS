@@ -1,0 +1,61 @@
+{
+  "id": "dialog_lena",
+  "entries": {
+    "lena_intro_meet": {
+      "type": "spoken",
+      "text": "You look like someone who's seen ghosts. Out here, they tend to follow you."
+    },
+    "lena_about_harlan": {
+      "type": "spoken",
+      "text": "Harlan Voss? Yeah, I knew him. Ranger with a busted heart. Never stopped looking for his kid."
+    },
+    "lena_about_jax": {
+      "type": "spoken",
+      "text": "Jax was a good kid. Too smart for his own good. Vault-Tec sniffed that out quick."
+    },
+    "lena_warning_vault77": {
+      "type": "spoken",
+      "text": "Vault 77 isn't a place you walk into. It's a place you survive walking out of."
+    },
+    "lena_reacts_overseer_voice": {
+      "type": "spoken",
+      "text": "That voice... where the hell is it coming from? Sounds scared. Sounds young."
+    },
+    "lena_realization_jax_ai": {
+      "type": "spoken",
+      "text": "Wait. No. No way. That voice... that's Jax. They put him in the damn machine."
+    },
+    "lena_anger_vaulttec": {
+      "type": "spoken",
+      "text": "Vault-Tec didn't just ruin lives. They carved people up and called it progress."
+    },
+    "lena_seeing_body": {
+      "type": "spoken",
+      "text": "Oh god... that's him. That's Jax. What's left of him, anyway."
+    },
+    "lena_to_overseer_soft": {
+      "type": "spoken",
+      "text": "Jax... if you can hear me... you're not alone. Not anymore."
+    },
+    "lena_to_overseer_firm": {
+      "type": "spoken",
+      "text": "Listen to me. You don't get to run from this. Not now. Not after everything."
+    },
+    "lena_finalA_peace": {
+      "type": "ending",
+      "text": "He deserved rest. You did right by him. Both of him."
+    },
+    "lena_finalB_wander": {
+      "type": "ending",
+      "text": "Letting him go... that took guts. Sometimes love means not holding on."
+    },
+    "lena_finalC_sync": {
+      "type": "ending",
+      "text": "He's still in there. Both parts of him. Maybe now he gets a second chance."
+    },
+    "lena_aftermath_reflection": {
+      "type": "spoken",
+      "text": "The wasteland doesn't give back what it takes. But sometimes... it gives you something new."
+    }
+  }
+}
