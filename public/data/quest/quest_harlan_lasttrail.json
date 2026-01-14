@@ -1,0 +1,26 @@
+{
+  "id": "quest_harlan_lasttrail",
+  "name": "The Ranger’s Last Trail",
+  "type": "main",
+  "poIs": ["Mojave Ridge", "FizzCo Blacksite", "Under-Strip Node"],
+  "description": "Follow Harlan’s final trail as he searched for Jax until the day he vanished.",
+  "objectives": [
+    "Find Harlan’s final campsite",
+    "Recover his last holotape",
+    "Follow his coordinates to the FizzCo blacksite"
+  ],
+  "endings": [
+    {
+      "id": "ending_fallen",
+      "description": "You find evidence Harlan died searching for Jax.",
+      "reward": "Ranger’s Legacy Perk",
+      "consequence": "Jax gains emotional closure."
+    },
+    {
+      "id": "ending_missing",
+      "description": "You find signs Harlan may still be alive.",
+      "reward": "Hope",
+      "consequence": "Future DLC arc unlocked."
+    }
+  ]
+}
