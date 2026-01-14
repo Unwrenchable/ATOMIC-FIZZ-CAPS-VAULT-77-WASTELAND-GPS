@@ -10,6 +10,9 @@ const game = window.game;
     let worldLayer = null;
     let playerMarker = null;
 
+    let mapInitializing = false;
+    let mapReady = false;
+
     const mapStatus = document.getElementById("mapStatus");
     const accDot = document.getElementById("accDot");
     const accText = document.getElementById("accText");
@@ -28,10 +31,11 @@ const game = window.game;
     }
 
     // ------------------------------------------------------------
-    // INIT MAP
+    // INIT MAP (runs ONCE)
     // ------------------------------------------------------------
     function init() {
-        if (map) return;
+        if (mapInitializing || mapReady) return;
+        mapInitializing = true;
 
         map = L.map("mapContainer", {
             zoomControl: false,
@@ -49,10 +53,14 @@ const game = window.game;
                 worldLayer = L.geoJSON(data, { style: worldStyle }).addTo(map);
                 map.fitBounds(worldLayer.getBounds());
                 mapStatus.textContent = "READY";
+
+                mapReady = true;
+                mapInitializing = false;
             })
             .catch(err => {
                 console.error("World map failed:", err);
                 mapStatus.textContent = "ERROR";
+                mapInitializing = false;
             });
 
         // Player marker
@@ -71,7 +79,9 @@ const game = window.game;
     // UPDATE PLAYER MARKER (called by worldstate.js)
     // ------------------------------------------------------------
     game.updatePlayerMarker = function (latlng, accuracy) {
-        if (!map) init();
+        // Ensure map is initialized
+        if (!mapReady && !mapInitializing) init();
+        if (!mapReady) return; // Wait until map is fully ready
 
         if (!latlng) {
             accText.textContent = "NO SIGNAL";
