@@ -1,0 +1,11 @@
+{
+  "id": "side_nv_understrip",
+  "name": "Under-Strip Echoes",
+  "type": "side",
+  "poIs": ["Under-Strip Tunnels"],
+  "description": "Investigate strange signals beneath the Strip.",
+  "objectives": [
+    "Locate the signal source",
+    "Recover corrupted FizzCo logs"
+  ]
+}
