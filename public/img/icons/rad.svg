@@ -2,12 +2,12 @@
   <!-- Outer circle -->
   <circle cx="12" cy="12" r="10" fill="black"/>
 
-  <!-- Top triangle cutout -->
-  <path d="M12 12 L12 4 L15 8 Z" fill="white"/>
+  <!-- Top equilateral triangle cutout -->
+  <path d="M12 12 L12 5 L15.464 9.5 Z" fill="white"/>
 
-  <!-- Bottom-right triangle cutout -->
-  <path d="M12 12 L18 15 L14 18 Z" fill="white"/>
+  <!-- Bottom-right equilateral triangle cutout -->
+  <path d="M12 12 L17.196 14.5 L14.732 19 Z" fill="white"/>
 
-  <!-- Bottom-left triangle cutout -->
-  <path d="M12 12 L6 15 L10 18 Z" fill="white"/>
+  <!-- Bottom-left equilateral triangle cutout -->
+  <path d="M12 12 L6.804 14.5 L9.268 19 Z" fill="white"/>
 </svg>
