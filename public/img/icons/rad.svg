@@ -1,3 +1,13 @@
 <svg viewBox="0 0 24 24">
-  <path d="M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20zm0 8l-3-5h6l-3 5zm5 4l5 3l-3 5l-5-3l3-5zm-10 0l-5 3l3 5l5-3l-3-5z" fill="black"/>
+  <!-- Outer circle -->
+  <circle cx="12" cy="12" r="10" fill="black"/>
+
+  <!-- Top triangle cutout -->
+  <path d="M12 12 L12 4 L15 8 Z" fill="white"/>
+
+  <!-- Bottom-right triangle cutout -->
+  <path d="M12 12 L18 15 L14 18 Z" fill="white"/>
+
+  <!-- Bottom-left triangle cutout -->
+  <path d="M12 12 L6 15 L10 18 Z" fill="white"/>
 </svg>
