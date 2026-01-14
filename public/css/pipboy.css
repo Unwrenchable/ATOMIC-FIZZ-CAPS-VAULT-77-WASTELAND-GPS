@@ -394,54 +394,71 @@ body.pipboy-mode {
 }
 
 /* ============================================================
-   MAP PANEL — NEW VEGAS CRT MAP (FIXED + COMPLETE)
+   MAP PANEL — FALLOUT GLOBAL VECTOR MAP (CLEAN + FINAL)
    ============================================================ */
 
 .pipboy-map {
   position: relative;
   width: 100%;
   height: 100%;
-  border: 1px solid rgba(159, 232, 141, 0.3);
+  border: 1px solid rgba(0, 255, 65, 0.35);
   box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.9);
-  z-index: 2; /* ensures map is above panel backgrounds */
+  z-index: 2;
 }
 
-/* Leaflet container */
-
+/* Map container for vector map */
 #mapContainer {
   position: relative;
   width: 100%;
   height: 100%;
-  background: transparent; /* was #010 — this fixes map being hidden */
+  background: transparent;
   overflow: hidden;
 }
 
-/* Ensure Leaflet canvas respects sizing and stays visible */
+/* Leaflet vector container */
 #mapContainer .leaflet-container {
   width: 100%;
   height: 100%;
   background: transparent;
 }
 
-/* CRT tint over tiles – Fallout NV style, readable and bright */
-.pipboy-crt .leaflet-tile {
-  filter:
-    grayscale(0.3)        /* keep detail */
-    contrast(1.5)         /* punchy */
-    brightness(1.25)      /* lift out of darkness */
-    hue-rotate(95deg)     /* Pip‑Boy green */
-    saturate(1.8);        /* stronger glow */
+/* REMOVE TILE FILTERS — vector maps do NOT use tiles */
+#mapContainer .leaflet-tile {
+  display: none !important;
 }
 
-/* Map overlay texts (bottom) */
+/* Fallout CRT + parchment hybrid overlay */
+#mapContainer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    /* scanlines */
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.35) 1px,
+      transparent 2px
+    ),
+    /* parchment warmth */
+    radial-gradient(
+      circle at center,
+      rgba(198, 174, 115, 0.18) 0%,
+      rgba(30, 24, 18, 0.7) 90%
+    );
+  mix-blend-mode: soft-light;
+  opacity: 0.8;
+  z-index: 50;
+}
 
+/* Map overlay text */
 .map-overlay {
   position: absolute;
   inset: auto 10px 10px 10px;
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  text-shadow: 0 0 4px rgba(159, 232, 141, 0.9);
+  text-shadow: 0 0 4px rgba(0, 255, 65, 0.45);
   pointer-events: none;
   z-index: 2001;
 }
@@ -449,14 +466,15 @@ body.pipboy-mode {
 .map-label {
   text-transform: uppercase;
   letter-spacing: 0.14em;
+  color: #8fef7a;
 }
 
 .map-status {
   opacity: 0.8;
+  color: #8fef7a;
 }
 
-/* Map controls top-right */
-
+/* Map controls */
 .map-controls {
   position: absolute;
   top: 10px;
@@ -467,8 +485,7 @@ body.pipboy-mode {
   gap: 6px;
 }
 
-/* GPS badge bottom-right */
-
+/* GPS badge */
 .gps-badge {
   position: absolute;
   bottom: 10px;
@@ -481,7 +498,8 @@ body.pipboy-mode {
   border: 1px solid #00ff41;
   background: rgba(0, 0, 0, 0.85);
   font-size: 11px;
-  text-shadow: 0 0 4px #00ff41;
+  color: #8fef7a;
+  text-shadow: 0 0 4px rgba(0, 255, 65, 0.45);
   box-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
 }
 
@@ -494,7 +512,6 @@ body.pipboy-mode {
 }
 
 /* Radiation flash */
-
 #radFlash {
   position: absolute;
   inset: 0;
@@ -512,7 +529,6 @@ body.pipboy-mode {
 }
 
 /* Pip-Boy markers */
-
 .pipboy-marker {
   pointer-events: auto;
   filter:
@@ -540,7 +556,6 @@ body.pipboy-mode {
 }
 
 /* SVG markers */
-
 .pipboy-marker-svg svg {
   width: 22px;
   height: 22px;
@@ -557,11 +572,11 @@ body.pipboy-mode {
 }
 
 /* Claimed markers */
-
 .leaflet-marker-icon.claimed .pipboy-marker-svg {
   opacity: 0.5;
   filter: none;
 }
+
 
 /* ============================================================
    STAT BARS
