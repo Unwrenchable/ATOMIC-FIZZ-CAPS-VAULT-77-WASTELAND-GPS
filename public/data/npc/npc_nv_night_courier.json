@@ -1,0 +1,23 @@
+{
+  "id": "npc_nv_night_courier",
+  "name": "The Night Courier",
+  "region": "New Vegas Strip",
+  "type": "Wanderer",
+  "dialog": {
+    "idle": [
+      "Night hides the truth. Day hides the lies.",
+      "I’ve walked the Divide. It walks back."
+    ],
+    "player_has_traveled": [
+      "You’ve been to Zion. I can smell the river on you.",
+      "The Pitt’s smoke clings to your clothes."
+    ],
+    "convergence_active": [
+      "The timelines are thinning.",
+      "Vegas is calling all of us home."
+    ]
+  },
+  "quests": ["side_nv_nightmessage"],
+  "faction": "None",
+  "notes": "Appears only at night; reacts to player travel history."
+}
