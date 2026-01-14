@@ -12,7 +12,6 @@
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
   </head>
@@ -21,7 +20,6 @@
     <!-- Leaflet JS -->
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
 
@@ -55,7 +53,9 @@
                 <!-- WALLET HUD -->
                 <div class="wallet-hud">
                   <span id="walletAddress">WALLET: DISCONNECTED</span>
-                  <button id="connectWalletHUD" class="pipboy-button-small">CONNECT</button>
+                  <button id="connectWalletHUD" class="pipboy-button-small">
+                    CONNECT
+                  </button>
                 </div>
               </div>
 
@@ -75,27 +75,27 @@
                 <div id="panel-map" class="pipboy-panel active">
                   <div class="panel-header">MAP</div>
                   <div class="panel-body">
+
+                    <!-- Vector Map Container -->
                     <div id="mapContainer" class="pipboy-map">
                       <div id="radFlash"></div>
                     </div>
 
+                    <!-- Overlay Text -->
                     <div class="map-overlay">
                       <div class="map-label">WORLD MAP</div>
                       <div class="map-status" id="mapStatus">SCANNING...</div>
                     </div>
 
-                    <div class="map-controls">
-                      <div class="map-style-switcher">
-                        <button class="pipboy-button-small map-style-btn" data-style="pipboy_terminal">CRT MAP</button>
-                        <button class="pipboy-button-small map-style-btn" data-style="desert_ruins_explorer">DESERT</button>
-                        <button class="pipboy-button-small map-style-btn" data-style="winter_recon">WINTER</button>
-                      </div>
-                    </div>
+                    <!-- Controls (empty for future features) -->
+                    <div class="map-controls"></div>
 
+                    <!-- GPS Badge -->
                     <div class="gps-badge" id="gpsBadge">
                       <div id="accDot" class="acc-dot"></div>
                       <div id="accText">GPS: OFFLINE</div>
                     </div>
+
                   </div>
                 </div>
 
@@ -108,10 +108,12 @@
                       <span class="label">NAME</span>
                       <span class="value" id="stat-name">WANDERER</span>
                     </div>
+
                     <div class="panel-row">
                       <span class="label">LEVEL</span>
                       <span class="value" id="stat-level">1</span>
                     </div>
+
                     <div class="panel-row">
                       <span class="label">XP</span>
                       <span class="value" id="stat-xp">0 / 100</span>
@@ -141,6 +143,7 @@
                       <span class="label">WALLET</span>
                       <span class="value" id="stat-wallet">DISCONNECTED</span>
                     </div>
+
                     <div class="panel-row">
                       <span class="label">FIZZ CAPS</span>
                       <span class="value" id="stat-caps">0</span>
@@ -159,6 +162,7 @@
                       <span class="label">WEAPON</span>
                       <span class="value" id="stat-weapon">NONE</span>
                     </div>
+
                     <div class="panel-row">
                       <span class="label">ARMOR</span>
                       <span class="value" id="stat-armor">NONE</span>
@@ -170,14 +174,17 @@
                       <span class="label">FACTION</span>
                       <span class="value" id="stat-faction">UNALIGNED</span>
                     </div>
+
                     <div class="panel-row">
                       <span class="label">REPUTATION</span>
                       <span class="value" id="stat-rep">NEUTRAL</span>
                     </div>
+
                     <div class="panel-row">
                       <span class="label">LOCATION</span>
                       <span class="value" id="stat-location">UNKNOWN</span>
                     </div>
+
                     <div class="panel-row">
                       <span class="label">WEATHER</span>
                       <span class="value" id="stat-weather">CLEAR</span>
@@ -185,6 +192,7 @@
 
                     <div class="panel-divider"></div>
 
+                    <!-- SPECIAL -->
                     <div class="panel-header" style="margin-top:10px;">SPECIAL</div>
 
                     <div id="specialBlock">
@@ -247,12 +255,14 @@
                   <div class="panel-body" id="questBody"></div>
                 </div>
 
-                <!-- DIALOG PANEL (auto-open) -->
+                <!-- DIALOG PANEL -->
                 <div id="panel-dialog" class="pipboy-panel" style="display:none;">
                   <div class="panel-header">DIALOG</div>
                   <div class="panel-body">
                     <div id="dialogBody" class="dialog-body"></div>
-                    <button id="dialogCloseBtn" class="pipboy-button-small" style="margin-top:12px;">CLOSE</button>
+                    <button id="dialogCloseBtn" class="pipboy-button-small" style="margin-top:12px;">
+                      CLOSE
+                    </button>
                   </div>
                 </div>
 
