@@ -1,0 +1,112 @@
+{
+  "id": "dialog_overseer",
+  "entries": {
+    "overseer_detect_harlan": {
+      "type": "spoken",
+      "text": "Travis... this signature is familiar. Harlan Voss. My father."
+    },
+    "overseer_lastsigns_intro": {
+      "type": "spoken",
+      "text": "Harlan's trail isn't cold yet. There's more out there. I can feel it."
+    },
+    "overseer_comment_coords": {
+      "type": "spoken",
+      "text": "These coordinates... they're close. Too close. Something happened here."
+    },
+    "overseer_find_note": {
+      "type": "spoken",
+      "text": "There's something under the rubble. Paper. Old. Human."
+    },
+    "overseer_beforebombs_intro": {
+      "type": "spoken",
+      "text": "That key fragment... it's Vault-Tec. They took me. They took us."
+    },
+    "overseer_comment_vaultsurface": {
+      "type": "spoken",
+      "text": "This place... I remember screaming. Metal doors. Cold hands."
+    },
+    "overseer_detect_logs": {
+      "type": "spoken",
+      "text": "Those logs... they're about me. About Jax. About what they did."
+    },
+    "overseer_find_keycard": {
+      "type": "spoken",
+      "text": "That keycard opens the sublevel. That's where they took me."
+    },
+    "overseer_sublevel_open": {
+      "type": "spoken",
+      "text": "This is it. The truth is below."
+    },
+    "overseer_lasttrail_intro": {
+      "type": "spoken",
+      "text": "Harlan was close. Too close. This is where everything changed."
+    },
+    "overseer_comment_rangercamp": {
+      "type": "spoken",
+      "text": "This camp... I remember voices. Fear. My dad was here."
+    },
+    "overseer_detect_tape03": {
+      "type": "spoken",
+      "text": "That holotape... this is the last one he ever recorded."
+    },
+    "overseer_canyon_memory": {
+      "type": "spoken",
+      "text": "This canyon... I remember being carried. Cold. Dead. Alive."
+    },
+    "overseer_find_finalnote": {
+      "type": "spoken",
+      "text": "There's something wedged under the rocks. Paper. Old. Human."
+    },
+
+    "overseer_panic": {
+      "type": "spoken",
+      "text": "Travis— wait— don't touch him yet— I'm not ready."
+    },
+    "overseer_breakdown": {
+      "type": "spoken",
+      "text": "That's my body. I remember that scar. I remember that shirt. I remember being alive."
+    },
+    "overseer_soft": {
+      "type": "spoken",
+      "text": "It's okay... I'm scared too."
+    },
+    "overseer_fragmented": {
+      "type": "spoken",
+      "text": "I don't know who I am anymore. Him? Me? Both?"
+    },
+    "overseer_stabilize": {
+      "type": "spoken",
+      "text": "Thank you... I feel lighter. Like a weight lifted."
+    },
+    "overseer_conflicted": {
+      "type": "spoken",
+      "text": "I don't know what comes next... but I'm ready."
+    },
+
+    "overseer_memory_glitch_01": {
+      "type": "glitch",
+      "text": "J—Jax—J77—error—memory—"
+    },
+    "overseer_memory_glitch_02": {
+      "type": "glitch",
+      "text": "Dad... I— I remember— no— I don't—"
+    },
+    "overseer_memory_glitch_03": {
+      "type": "glitch",
+      "text": "Subject J77. Neural echo detected. Fragment unstable."
+    },
+
+    "overseer_endingA": {
+      "type": "spoken",
+      "text": "Thank you... for letting him rest. For letting me rest."
+    },
+    "overseer_endingB": {
+      "type": "spoken",
+      "text": "He's out there. Wandering. And I'm... I'm not okay."
+    },
+    "overseer_endingC": {
+      "type": "spoken",
+      "text": "He's alive. I'm alive. I don't know what that means... but I'm ready."
+    }
+  }
+}
