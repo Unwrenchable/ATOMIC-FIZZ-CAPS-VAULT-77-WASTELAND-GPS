@@ -1,0 +1,23 @@
+{
+  "id": "npc_nv_v77_survivor",
+  "name": "Echo Survivor",
+  "region": "New Vegas Strip",
+  "type": "Vault 77 Escapee",
+  "dialog": {
+    "idle": [
+      "Vault 77 never let go of me.",
+      "You ever hear voices in your Pip‑Boy? That’s how it starts."
+    ],
+    "overseer_active": [
+      "Your Overseer talks to you? Mine screamed.",
+      "If it glitches, don’t look at the screen. Trust me."
+    ],
+    "fizzco_active": [
+      "FizzCo built things they shouldn’t have.",
+      "CapChain wasn’t meant for humans."
+    ]
+  },
+  "quests": ["quest_fizz_awakens"],
+  "faction": "Vault-Tec",
+  "notes": "Dynamic dialog tied to Overseer AI state."
+}
