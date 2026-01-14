@@ -1,4 +1,22 @@
-<svg viewBox="0 0 24 24">
-  <path d="M2 20l10-16 10 16z"/>
-  <path d="M12 4v16"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Tent silhouette -->
+  <path d="
+    M3 18
+    L11.5 6
+    L20 18
+    Z
+  " fill="black"/>
+
+  <!-- Tent flap cutout -->
+  <path d="
+    M11.5 9
+    L9 18
+    H14
+    Z
+  " fill="white"/>
+
+  <!-- Support pole cutout -->
+  <rect x="11" y="6" width="1" height="12" fill="white"/>
+
 </svg>
