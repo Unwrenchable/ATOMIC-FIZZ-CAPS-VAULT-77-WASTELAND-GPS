@@ -1,0 +1,20 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Line curve -->
+  <path d="
+    M12 3
+    C9 4 9 7 12 8
+  " fill="none" stroke="black" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Hook -->
+  <path d="
+    M12 8
+    V15
+    C12 17 10.5 18.5 9 18.5
+    C7.5 18.5 6 17 6 15.5
+  " fill="none" stroke="black" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Hook point cutout -->
+  <circle cx="6" cy="15.5" r="1" fill="white"/>
+
+</svg>
