@@ -7,7 +7,9 @@
     window.game = window.game || {};
     const game = window.game;
 
-    // Player worldstate
+    // ------------------------------------------------------------
+    // PLAYER STATE
+    // ------------------------------------------------------------
     game.player = game.player || {
         hp: 100,
         rads: 0,
@@ -21,32 +23,36 @@
         }
     };
 
-    // POI storage
+    // ------------------------------------------------------------
+    // POI + GPS STATE
+    // ------------------------------------------------------------
     game.locations = [];
     game.markers = {};
 
-    // GPS state
     let playerLatLng = null;
     let lastAccuracy = 999;
 
-    // SCAN radius (meters)
-    const SCAN_RADIUS = 500;
-
-    // SCAN cooldown
+    const SCAN_RADIUS = 500;       // meters
+    const SCAN_COOLDOWN = 1500;    // ms
     let lastScan = 0;
-    const SCAN_COOLDOWN = 1500; // ms
 
     // ------------------------------------------------------------
-    // LOAD FALLOUT POIs
+    // LOAD POIs (correct path)
     // ------------------------------------------------------------
     async function loadPOIs() {
         try {
-            const res = await fetch("/data/fallout_pois.json");
+            const res = await fetch("/data/map/fallout_pois.json");
             const data = await res.json();
+
+            if (!Array.isArray(data)) {
+                console.error("POI file invalid:", data);
+                return;
+            }
+
             game.locations = data;
-            console.log(`Loaded ${data.length} POIs`);
+            console.log(`worldstate: loaded ${data.length} POIs`);
         } catch (err) {
-            console.error("Failed to load fallout_pois.json", err);
+            console.error("worldstate: failed to load fallout_pois.json", err);
         }
     }
 
@@ -54,12 +60,12 @@
     // GPS TRACKING
     // ------------------------------------------------------------
     navigator.geolocation?.watchPosition(
-        p => {
-            lastAccuracy = p.coords.accuracy || 999;
+        pos => {
+            lastAccuracy = pos.coords.accuracy || 999;
 
             playerLatLng = {
-                lat: p.coords.latitude,
-                lng: p.coords.longitude
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude
             };
 
             game.player.location = {
@@ -69,15 +75,14 @@
                 lng: playerLatLng.lng
             };
 
-            // MAP ENGINE HOOK
-            if (typeof game.updatePlayerMarker === "function") {
-                game.updatePlayerMarker(playerLatLng, lastAccuracy);
-            }
+            // Update map
+            game.updatePlayerMarker?.(playerLatLng, lastAccuracy);
 
+            // Update terminal
             game.sendLocationToTerminal?.();
         },
         err => {
-            console.warn("GPS unavailable:", err);
+            console.warn("worldstate: GPS unavailable:", err);
 
             game.player.location = {
                 id: "gps_denied",
@@ -86,17 +91,14 @@
                 lng: null
             };
 
-            if (typeof game.updatePlayerMarker === "function") {
-                game.updatePlayerMarker(null, null);
-            }
-
+            game.updatePlayerMarker?.(null, null);
             game.sendLocationToTerminal?.();
         },
         { enableHighAccuracy: true }
     );
 
     // ------------------------------------------------------------
-    // SCAN LOGIC
+    // SCAN NEARBY POIs
     // ------------------------------------------------------------
     game.getNearbyPOIs = function () {
         if (!playerLatLng || !Array.isArray(game.locations)) return [];
@@ -107,19 +109,16 @@
         }
         lastScan = now;
 
-        const hasLeaflet = typeof L !== "undefined";
+        const useLeaflet = typeof L !== "undefined";
 
         const results = game.locations
             .map(loc => {
                 if (loc.lat == null || loc.lng == null) return null;
 
-                let dist;
-                if (hasLeaflet) {
-                    dist = L.latLng(playerLatLng.lat, playerLatLng.lng)
-                        .distanceTo(L.latLng(loc.lat, loc.lng));
-                } else {
-                    dist = haversine(playerLatLng, loc);
-                }
+                const dist = useLeaflet
+                    ? L.latLng(playerLatLng.lat, playerLatLng.lng)
+                        .distanceTo(L.latLng(loc.lat, loc.lng))
+                    : haversine(playerLatLng, loc);
 
                 return { id: loc.id, name: loc.name, distance: dist };
             })
@@ -149,74 +148,65 @@
     }
 
     // ------------------------------------------------------------
-    // OVERSEER TERMINAL INTEGRATION
+    // TERMINAL OUTPUT HELPERS
     // ------------------------------------------------------------
     game.sendStatusToTerminal = function () {
-        window.dispatchEvent(
-            new CustomEvent("game:event", {
-                detail: {
-                    type: "status",
-                    payload: {
-                        hp: game.player.hp,
-                        rads: game.player.rads,
-                        caps: game.player.caps,
-                        faction: game.player.faction
-                    }
+        window.dispatchEvent(new CustomEvent("game:event", {
+            detail: {
+                type: "status",
+                payload: {
+                    hp: game.player.hp,
+                    rads: game.player.rads,
+                    caps: game.player.caps,
+                    faction: game.player.faction
                 }
-            })
-        );
+            }
+        }));
     };
 
     game.sendInventoryToTerminal = function () {
-        window.dispatchEvent(
-            new CustomEvent("game:event", {
-                detail: {
-                    type: "inventory",
-                    payload: { items: game.inventory || [] }
-                }
-            })
-        );
+        window.dispatchEvent(new CustomEvent("game:event", {
+            detail: {
+                type: "inventory",
+                payload: { items: game.inventory || [] }
+            }
+        }));
     };
 
     game.sendMapInfoToTerminal = function () {
-        window.dispatchEvent(
-            new CustomEvent("game:event", {
-                detail: {
-                    type: "map_scan",
-                    payload: { nearby: game.getNearbyPOIs() }
-                }
-            })
-        );
+        window.dispatchEvent(new CustomEvent("game:event", {
+            detail: {
+                type: "map_scan",
+                payload: { nearby: game.getNearbyPOIs() }
+            }
+        }));
     };
 
     game.sendLocationToTerminal = function () {
-        window.dispatchEvent(
-            new CustomEvent("game:event", {
-                detail: {
-                    type: "location",
-                    payload: game.player.location
-                }
-            })
-        );
+        window.dispatchEvent(new CustomEvent("game:event", {
+            detail: {
+                type: "location",
+                payload: game.player.location
+            }
+        }));
     };
 
     game.sendCapsToTerminal = function () {
-        window.dispatchEvent(
-            new CustomEvent("game:event", {
-                detail: {
-                    type: "caps",
-                    payload: { caps: game.player.caps }
-                }
-            })
-        );
+        window.dispatchEvent(new CustomEvent("game:event", {
+            detail: {
+                type: "caps",
+                payload: { caps: game.player.caps }
+            }
+        }));
     };
 
     game.sendVbotToTerminal = function (message) {
-        window.dispatchEvent(
-            new CustomEvent("game:event", {
-                detail: { type: "vbot", payload: { message } }
-            })
-        );
+        window.dispatchEvent(new CustomEvent("game:event", {
+            detail: {
+                type: "vbot",
+                payload: { message }
+            }
+        }));
     };
 
     // ------------------------------------------------------------
@@ -255,9 +245,7 @@
                 break;
 
             case "vbot":
-                game.sendVbotToTerminal(
-                    payload?.text || "ONLINE. AWAITING DIRECTIVES."
-                );
+                game.sendVbotToTerminal(payload?.text || "ONLINE. AWAITING DIRECTIVES.");
                 break;
         }
     });
