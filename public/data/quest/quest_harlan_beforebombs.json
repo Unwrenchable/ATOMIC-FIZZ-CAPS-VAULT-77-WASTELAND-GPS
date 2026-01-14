@@ -2,19 +2,101 @@
   "id": "quest_harlan_beforebombs",
   "name": "Before the Bombs",
   "type": "main",
-  "poIs": ["Vault 77 Perimeter", "FizzCo Research Wing"],
-  "description": "Uncover what happened to Jax before the bombs fell, and why he was taken into Vault 77.",
-  "objectives": [
-    "Use Harlan’s notes to locate the Vault 77 perimeter",
-    "Recover pre-war FizzCo experiment logs",
-    "Decode the entry labeled 'Subject JX-77'"
+  "region": "Mojave",
+  "description": "You uncover the truth about Jax's disappearance before the Great War. Harlan's trail leads to a hidden Vault-Tec facility.",
+  "triggers": [
+    "unlock_from:quest_harlan_lastsigns",
+    "player_pickup:vault77_keyfragment",
+    "player_enter:poi_vault77_surface",
+    "overseer_memory_glitch:true"
   ],
-  "endings": [
+  "stages": [
     {
-      "id": "ending_truth",
-      "description": "You learn Jax was digitized into the Overseer system.",
-      "reward": "Vault 77 Access Token",
-      "consequence": "Overseer reacts emotionally."
+      "id": 0,
+      "name": "The Vault-Tec Connection",
+      "description": "You've found a Vault-Tec key fragment tied to Jax's disappearance.",
+      "trigger": "auto",
+      "actions": [
+        "dialogue:overseer_beforebombs_intro",
+        "set_flag:beforebombs_started=true",
+        "unlock_stage:10"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Reach the Vault 77 Surface Entrance",
+      "description": "Travel to the surface entrance of Vault 77.",
+      "trigger": "player_reaches:poi_vault77_surface",
+      "actions": [
+        "spawn:feral_ghoul_pack",
+        "dialogue:overseer_comment_vaultsurface",
+        "unlock_stage:20"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Search the Surface Facility",
+      "description": "Search the abandoned Vault-Tec surface facility for clues.",
+      "trigger": "player_search:poi_vault77_surface",
+      "actions": [
+        "spawn:item_vault77_log01",
+        "spawn:item_vault77_log02",
+        "dialogue:overseer_detect_logs",
+        "unlock_stage:30"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Read the Vault-Tec Logs",
+      "description": "Read the logs to learn what happened to Jax before the bombs fell.",
+      "trigger": [
+        "player_use:item_vault77_log01",
+        "player_use:item_vault77_log02"
+      ],
+      "actions": [
+        "dialogue:vault77_logs_reveal",
+        "set_flag:vault77_logs_read=true",
+        "unlock_stage:40"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Find the Sublevel Access Panel",
+      "description": "The logs mention a hidden sublevel where Jax was taken. Locate the access panel.",
+      "trigger": "player_reaches:vault77_accesspanel",
+      "actions": [
+        "spawn:item_vault77_keycard",
+        "dialogue:overseer_find_keycard",
+        "unlock_stage:50"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Open the Sublevel Door",
+      "description": "Use the Vault 77 keycard to open the sublevel door.",
+      "trigger": "player_use:item_vault77_keycard",
+      "actions": [
+        "dialogue:overseer_sublevel_open",
+        "unlock_stage:60"
+      ]
+    },
+    {
+      "id": 60,
+      "name": "Quest Complete",
+      "description": "You've uncovered what happened to Jax before the bombs fell. The trail leads deeper underground.",
+      "trigger": "auto",
+      "actions": [
+        "unlock_quest:quest_harlan_lasttrail",
+        "complete_quest:true"
+      ]
     }
-  ]
+  ],
+  "flags": {
+    "beforebombs_started": false,
+    "vault77_logs_read": false
+  },
+  "rewards": {
+    "xp": 250,
+    "items": ["item_vault77_keycard"]
+  }
 }
