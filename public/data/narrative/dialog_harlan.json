@@ -1,0 +1,33 @@
+{
+  "id": "dialog_harlan",
+  "entries": {
+    "harlan_tape01": {
+      "type": "holotape",
+      "text": "This is NCR Ranger Harlan Voss. If you're hearing this... I'm still looking for my boy. Jax, if you're out there... I won't stop."
+    },
+    "harlan_tape02": {
+      "type": "holotape",
+      "text": "Jax was here. I found his pack. Blood on the rocks. I'm close now... closer than ever."
+    },
+    "harlan_tape03": {
+      "type": "holotape",
+      "text": "I saw them. Vault-Tec. They moved Jax's body into the canyon. I'm going after them. If I don't make it... tell him I tried."
+    },
+    "harlan_note01": {
+      "type": "note",
+      "text": "Jax — I found your trail again. I won't give up. Not now. Not ever."
+    },
+    "harlan_finalnote": {
+      "type": "note",
+      "text": "If anyone finds this... follow the trail. My son is still out there. I won't stop. Not until I bring him home."
+    },
+    "harlan_memory_echo": {
+      "type": "memory",
+      "text": "Jax... I swear I'll find you. Even if it kills me."
+    },
+    "harlan_ghoul_variant": {
+      "type": "spoken",
+      "text": "I ain't what I used to be... but I still remember my boy."
+    }
+  }
+}
