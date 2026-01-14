@@ -1,26 +1,111 @@
 {
   "id": "quest_harlan_lasttrail",
-  "name": "The Ranger’s Last Trail",
+  "name": "The Ranger's Last Trail",
   "type": "main",
-  "poIs": ["Mojave Ridge", "FizzCo Blacksite", "Under-Strip Node"],
-  "description": "Follow Harlan’s final trail as he searched for Jax until the day he vanished.",
-  "objectives": [
-    "Find Harlan’s final campsite",
-    "Recover his last holotape",
-    "Follow his coordinates to the FizzCo blacksite"
+  "region": "Mojave",
+  "description": "You retrace Harlan Voss's final journey before he became a ghoul. His trail leads into the deep desert, where the truth about Jax's fate begins to surface.",
+  "triggers": [
+    "unlock_from:quest_harlan_beforebombs",
+    "player_pickup:harlan_tape03",
+    "player_enter:poi_desert_ranger_camp",
+    "overseer_memory_glitch:true"
   ],
-  "endings": [
+  "stages": [
     {
-      "id": "ending_fallen",
-      "description": "You find evidence Harlan died searching for Jax.",
-      "reward": "Ranger’s Legacy Perk",
-      "consequence": "Jax gains emotional closure."
+      "id": 0,
+      "name": "The Final Trail",
+      "description": "You've uncovered the Vault-Tec connection. Now you follow Harlan's last known path into the Mojave.",
+      "trigger": "auto",
+      "actions": [
+        "dialogue:overseer_lasttrail_intro",
+        "set_flag:lasttrail_started=true",
+        "unlock_stage:10"
+      ]
     },
     {
-      "id": "ending_missing",
-      "description": "You find signs Harlan may still be alive.",
-      "reward": "Hope",
-      "consequence": "Future DLC arc unlocked."
+      "id": 10,
+      "name": "Reach the Desert Ranger Camp",
+      "description": "Harlan's last log mentions a remote Ranger camp. Travel there.",
+      "trigger": "player_reaches:poi_desert_ranger_camp",
+      "actions": [
+        "spawn:feral_ghoul_rangers",
+        "dialogue:overseer_comment_rangercamp",
+        "unlock_stage:20"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Search the Ranger Camp",
+      "description": "Search the abandoned camp for Harlan's final holotape.",
+      "trigger": "player_search:poi_desert_ranger_camp",
+      "actions": [
+        "spawn:item_harlan_tape03",
+        "dialogue:overseer_detect_tape03",
+        "unlock_stage:30"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Play Harlan's Final Holotape",
+      "description": "Play the holotape to hear Harlan's last message before he vanished.",
+      "trigger": "player_use:item_harlan_tape03",
+      "actions": [
+        "dialogue:harlan_tape03",
+        "set_flag:harlan_tape03_played=true",
+        "unlock_stage:40"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Follow Harlan's Last Footsteps",
+      "description": "The holotape mentions a canyon where Harlan saw Jax's body being moved. Travel there.",
+      "trigger": "player_reaches:poi_harlan_canyon",
+      "actions": [
+        "spawn:ghoul_ambush_pack",
+        "dialogue:overseer_canyon_memory",
+        "unlock_stage:50"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Investigate the Canyon",
+      "description": "Search the canyon for signs of what happened to Harlan.",
+      "trigger": "player_search:poi_harlan_canyon",
+      "actions": [
+        "spawn:item_harlan_finalnote",
+        "dialogue:overseer_find_finalnote",
+        "unlock_stage:60"
+      ]
+    },
+    {
+      "id": 60,
+      "name": "Read Harlan's Final Note",
+      "description": "Read the note Harlan left before he disappeared.",
+      "trigger": "player_use:item_harlan_finalnote",
+      "actions": [
+        "dialogue:harlan_finalnote",
+        "set_flag:harlan_finalnote_read=true",
+        "unlock_stage:70"
+      ]
+    },
+    {
+      "id": 70,
+      "name": "Quest Complete",
+      "description": "You've retraced Harlan's final journey. The truth lies ahead.",
+      "trigger": "auto",
+      "actions": [
+        "unlock_quest:quest_jax_bodywalks",
+        "complete_quest:true"
+      ]
     }
-  ]
+  ],
+  "flags": {
+    "lasttrail_started": false,
+    "harlan_tape03_played": false,
+    "harlan_finalnote_read": false
+  },
+  "rewards": {
+    "xp": 300,
+    "items": ["item_harlan_finalnote"]
+  }
 }
