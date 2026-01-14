@@ -1,0 +1,26 @@
+{
+  "id": "side_nv_gangpressure",
+  "name": "Gang Pressure",
+  "type": "side",
+  "poIs": ["New Vegas Strip", "Freeside"],
+  "description": "Razor-Jack pressures you to help his gang control a Strip block.",
+  "objectives": [
+    "Meet Razor-Jack",
+    "Decide whether to help or betray him",
+    "Survive the resulting confrontation"
+  ],
+  "endings": [
+    {
+      "id": "ending_help",
+      "description": "You help the gang seize territory.",
+      "reward": "Gang Armor",
+      "consequence": "Gang presence increases."
+    },
+    {
+      "id": "ending_betray",
+      "description": "You betray Razor-Jack.",
+      "reward": "Caps + reputation",
+      "consequence": "Razor-Jack becomes a recurring enemy."
+    }
+  ]
+}
