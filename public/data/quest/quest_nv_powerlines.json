@@ -1,0 +1,26 @@
+{
+  "id": "quest_nv_powerlines",
+  "name": "Powerlines of the Strip",
+  "type": "main",
+  "poIs": ["Lucky 38", "Under-Strip Tunnels", "FizzCo Distribution Hub"],
+  "description": "Investigate strange power fluctuations affecting the Strip.",
+  "objectives": [
+    "Scan Lucky 38 power relays",
+    "Enter the Under-Strip and locate the anomaly",
+    "Confront Old Man Circuit about the FizzCo node"
+  ],
+  "endings": [
+    {
+      "id": "ending_stabilize",
+      "description": "You stabilize the Strip’s power grid.",
+      "reward": "Lucky 38 Access Key",
+      "consequence": "Strip becomes safer."
+    },
+    {
+      "id": "ending_overclock",
+      "description": "You overclock the FizzCo node.",
+      "reward": "FizzCo Surge Implant",
+      "consequence": "Strip becomes unstable but profitable."
+    }
+  ]
+}
