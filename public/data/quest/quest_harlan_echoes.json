@@ -3,34 +3,49 @@
   "name": "Echoes of a Ranger",
   "type": "main",
   "region": "Mojave",
-  "description": "You discover a damaged holotape left behind by NCR Ranger Harlan Voss. Its contents hint at the disappearance of his son, Jax.",
+  "description": "You discover clues left behind by NCR Ranger Harlan Voss. His trail hints at the disappearance of his son, Jax.",
+  "triggers": [
+    "player_pickup:holotape_voss01",
+    "player_pickup:ranger_badge_fragment",
+    "player_pickup:note_harlan_coords",
+    "player_loot:scavenger_drop_harlan",
+    "player_talk:npc_random_scavenger",
+    "player_talk:npc_ranger_retired",
+    "player_enter:poi_ranger_outpost_ruins",
+    "player_enter:poi_highway_collapse",
+    "overseer_memory_glitch:true"
+  ],
   "stages": [
     {
       "id": 0,
-      "name": "Find the Holotape",
-      "description": "You found a damaged holotape labeled 'VOSS-01'. It appears to belong to NCR Ranger Harlan Voss.",
-      "trigger": "player_pickup:holotape_voss01",
+      "name": "A Ranger's Echo",
+      "description": "You've found something connected to NCR Ranger Harlan Voss.",
+      "trigger": "auto",
       "actions": [
-        "dialogue:overseer_detect_tape",
-        "set_flag:harlan_echoes_found=true",
+        "dialogue:overseer_detect_harlan",
+        "set_flag:harlan_echoes_started=true",
         "unlock_stage:10"
       ]
     },
     {
       "id": 10,
-      "name": "Play the Holotape",
-      "description": "Play the holotape to hear Harlan's message.",
-      "trigger": "player_use:holotape_voss01",
+      "name": "Play the Holotape or Read the Note",
+      "description": "Examine the item you found to learn more about Harlan's search for Jax.",
+      "trigger": [
+        "player_use:holotape_voss01",
+        "player_use:note_harlan_coords",
+        "player_use:ranger_badge_fragment"
+      ],
       "actions": [
-        "dialogue:harlan_tape01",
-        "set_flag:harlan_tape01_played=true",
+        "dialogue:harlan_initial_message",
+        "set_flag:harlan_initial_clue_read=true",
         "unlock_stage:20"
       ]
     },
     {
       "id": 20,
       "name": "Investigate the Coordinates",
-      "description": "The holotape mentions coordinates tied to Jax's disappearance. Travel to the marked location.",
+      "description": "Travel to the location mentioned in Harlan's clue.",
       "trigger": "player_reaches:harlan_echoes_coords",
       "actions": [
         "spawn:scavenger_camp_ruins",
@@ -41,7 +56,7 @@
     {
       "id": 30,
       "name": "Search the Ruins",
-      "description": "Search the ruined scavenger camp for clues about Jax.",
+      "description": "Search the ruined scavenger camp for more clues about Jax.",
       "trigger": "player_search:scavenger_camp_ruins",
       "actions": [
         "spawn:item_harlan_note",
@@ -63,7 +78,7 @@
     {
       "id": 50,
       "name": "Quest Complete",
-      "description": "You have uncovered the first clues about Jax's disappearance. More questions remain.",
+      "description": "You've uncovered the first clues about Jax's disappearance.",
       "trigger": "auto",
       "actions": [
         "unlock_quest:quest_harlan_lastsigns",
@@ -72,11 +87,10 @@
     }
   ],
   "flags": {
-    "harlan_echoes_found": false,
-    "harlan_tape01_played": false,
+    "harlan_echoes_started": false,
+    "harlan_initial_clue_read": false,
     "harlan_note01_read": false
   },
-  "npcs": {},
   "rewards": {
     "xp": 150,
     "items": ["item_harlan_note"]
