@@ -1,4 +1,31 @@
-<svg viewBox="0 0 24 24" fill="#00ff41">
-  <polygon points="12,3 22,20 2,20"/>
-  <rect x="10" y="12" width="4" height="6" fill="#000"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Mine entrance frame -->
+  <path d="
+    M6 10
+    H18
+    V18
+    H16
+    V12
+    H8
+    V18
+    H6
+    Z
+  " fill="black"/>
+
+  <!-- Pickaxe handle -->
+  <rect x="11" y="6" width="2" height="8" transform="rotate(-20 12 10)" fill="black"/>
+
+  <!-- Pickaxe head -->
+  <path d="
+    M9 7
+    L15 5
+    L15.5 6.5
+    L9.5 8.5
+    Z
+  " fill="black"/>
+
+  <!-- Entrance cutout -->
+  <rect x="10" y="12" width="4" height="6" fill="white"/>
+
 </svg>
