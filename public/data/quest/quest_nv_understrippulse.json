@@ -1,0 +1,26 @@
+{
+  "id": "quest_nv_understrippulse",
+  "name": "Under-Strip Pulse",
+  "type": "main",
+  "poIs": ["Under-Strip Tunnels", "FizzCo Node"],
+  "description": "Investigate a strange pulse beneath the Strip.",
+  "objectives": [
+    "Scan the pulse origin",
+    "Retrieve corrupted logs",
+    "Confront Old Man Circuit"
+  ],
+  "endings": [
+    {
+      "id": "ending_trace",
+      "description": "You trace the pulse to Vault 77.",
+      "reward": "Overseer Debug Key",
+      "consequence": "Overseer reacts strongly."
+    },
+    {
+      "id": "ending_block",
+      "description": "You block the pulse.",
+      "reward": "FizzCo Firewall Implant",
+      "consequence": "FizzCo becomes suspicious."
+    }
+  ]
+}
