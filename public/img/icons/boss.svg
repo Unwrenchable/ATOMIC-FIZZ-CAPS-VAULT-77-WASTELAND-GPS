@@ -27,3 +27,6 @@
   <!-- Teeth cutouts -->
   <rect x="9" y="16" width="1.5" height="2" fill="white"/>
   <rect x="11.25" y="16" width="1.5" height="2" fill="white"/>
+  <rect x="13.5" y="16" width="1.5" height="2" fill="white"/>
+
+</svg>
