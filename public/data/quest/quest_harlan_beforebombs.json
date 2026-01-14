@@ -1,0 +1,20 @@
+{
+  "id": "quest_harlan_beforebombs",
+  "name": "Before the Bombs",
+  "type": "main",
+  "poIs": ["Vault 77 Perimeter", "FizzCo Research Wing"],
+  "description": "Uncover what happened to Jax before the bombs fell, and why he was taken into Vault 77.",
+  "objectives": [
+    "Use Harlan’s notes to locate the Vault 77 perimeter",
+    "Recover pre-war FizzCo experiment logs",
+    "Decode the entry labeled 'Subject JX-77'"
+  ],
+  "endings": [
+    {
+      "id": "ending_truth",
+      "description": "You learn Jax was digitized into the Overseer system.",
+      "reward": "Vault 77 Access Token",
+      "consequence": "Overseer reacts emotionally."
+    }
+  ]
+}
