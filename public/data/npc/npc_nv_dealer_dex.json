@@ -1,0 +1,24 @@
+{
+  "id": "npc_nv_dealer_dex",
+  "name": "Dealer Dex",
+  "region": "New Vegas Strip",
+  "type": "Blackjack Dealer",
+  "dialog": {
+    "idle": [
+      "Hit or stay, friend?",
+      "House always wins… unless the world ends first.",
+      "You hear about that glowing canyon? Zion’s getting weird."
+    ],
+    "player_famous": [
+      "Hey, you’re the one messing with the power grid, right?",
+      "Lucky 38’s been buzzing since you showed up."
+    ],
+    "convergence_active": [
+      "Cards keep flipping themselves. I swear.",
+      "Something’s wrong with the Strip tonight."
+    ]
+  },
+  "quests": ["side_nv_dealerfavor"],
+  "faction": "Strip",
+  "notes": "Dynamic dialog based on worldstate and player reputation."
+}
