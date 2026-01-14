@@ -1,5 +1,22 @@
-<svg viewBox="0 0 24 24">
-  <path d="M3 6h18l-2 8H5z"/>
-  <circle cx="9" cy="18" r="2"/>
-  <circle cx="15" cy="18" r="2"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Awning -->
+  <path d="
+    M5 7
+    H19
+    L18 10
+    H6
+    Z
+  " fill="black"/>
+
+  <!-- Building body -->
+  <rect x="6" y="10" width="12" height="8" fill="black"/>
+
+  <!-- Door cutout -->
+  <rect x="10" y="12" width="4" height="6" fill="white"/>
+
+  <!-- Window cutouts -->
+  <rect x="7.5" y="12" width="2" height="2" fill="white"/>
+  <rect x="14.5" y="12" width="2" height="2" fill="white"/>
+
 </svg>
