@@ -7,44 +7,67 @@
   <title>OVERSEER TERMINAL // RESTRICTED ACCESS</title>
 
   <!-- Pip‑Boy Terminal Font -->
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+    rel="stylesheet"
+  />
 
-  <!-- Your unified Pip‑Boy terminal theme -->
+  <!-- Pip‑Boy / Overseer Terminal Theme -->
   <link rel="stylesheet" href="/css/terminal.css" />
 </head>
 
-<body class="popup">
+<body>
 
-  <!-- Close popup window -->
-  <a href="#" class="back" onclick="window.close()">← CLOSE TERMINAL</a>
+  <!-- MAIN TERMINAL WRAPPER -->
+  <div class="terminal-wrap">
 
-  <!-- Header -->
-  <div class="header">
-    <h1>RESTRICTED TERMINAL</h1>
-    <div class="sub">SIGNAL STRENGTH: WEAK // CLASSIFIED</div>
-  </div>
-
-  <!-- Terminal Container -->
-  <div id="terminal">
-    <div id="chat"></div>
-
-    <div id="inputRow">
-      <input id="input" type="text" placeholder="> Type message..." autocomplete="off" autofocus>
-      <button id="send">SEND</button>
+    <!-- Header -->
+    <div class="terminal-header">
+      OVERSEER TERMINAL // RESTRICTED ACCESS
     </div>
 
-    <!-- Red Menace / Mobile Game Controls -->
-    <div id="rmControls" class="mgc hidden">
-      <button id="rmLeft" class="btn">←</button>
-      <button id="rmFire" class="btn">FIRE</button>
-      <button id="rmRight" class="btn">→</button>
+    <!-- System line -->
+    <div class="terminal-output terminal-system">
+      SIGNAL STRENGTH: WEAK // LINKED TO PIP‑BOY 3000<br/>
+      TYPE "STATUS", "LOCATION", "SCAN", "INVENTORY" OR MESSAGE VBOT DIRECTLY.
     </div>
+
+    <!-- Chat / log area -->
+    <div id="chat" class="terminal-output"></div>
+
+    <!-- Input line -->
+    <div class="terminal-input-line">
+      <span class="terminal-prompt">&gt;</span>
+      <input
+        id="input"
+        type="text"
+        class="terminal-input"
+        placeholder="TYPE COMMAND OR MESSAGE..."
+        autocomplete="off"
+        autofocus
+      />
+      <button id="send" class="terminal-button">SEND</button>
+    </div>
+
+    <!-- Optional mini-game / Red Menace controls -->
+    <div id="rmControls" class="terminal-output" style="margin-top:16px; display:none;">
+      <span class="terminal-system">RED MENACE CONTROLS:</span><br/>
+      <button id="rmLeft" class="terminal-button">←</button>
+      <button id="rmFire" class="terminal-button">FIRE</button>
+      <button id="rmRight" class="terminal-button">→</button>
+    </div>
+
+    <!-- Close link -->
+    <div style="margin-top:18px; text-align:right;">
+      <button class="terminal-button" onclick="window.close()">CLOSE TERMINAL</button>
+    </div>
+
   </div>
 
-  <!-- Terminal Engine (must load first) -->
+  <!-- Terminal Engine (handles rendering / input wiring) -->
   <script src="/js/overseer/overseer.full.js"></script>
 
-  <!-- Unified Overseer Brain -->
+  <!-- Unified Overseer Brain (talks to game via events) -->
   <script src="/js/overseer/overseer.js"></script>
 
 </body>
