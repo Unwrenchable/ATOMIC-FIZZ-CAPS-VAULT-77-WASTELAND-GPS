@@ -1,0 +1,61 @@
+{
+  "id": "dialog_echo",
+  "entries": {
+    "echo_intro": {
+      "type": "spoken",
+      "text": "You brought something interesting. Biological signatures like this don't just happen."
+    },
+    "echo_about_harlan": {
+      "type": "spoken",
+      "text": "Harlan Voss. NCR Ranger. His medical records show chronic radiation exposure and long-term stress markers."
+    },
+    "echo_about_jax": {
+      "type": "spoken",
+      "text": "Jax Voss. Subject J-77. Vault-Tec flagged him as 'high cognitive yield'. That never means anything good."
+    },
+    "echo_analysis_keyfragment": {
+      "type": "spoken",
+      "text": "This key fragment is Vault-Tec issue. Sublevel access. Restricted. They were hiding something down there."
+    },
+    "echo_analysis_logs": {
+      "type": "spoken",
+      "text": "These logs describe neural extraction. They didn't just scan him. They moved his consciousness."
+    },
+    "echo_reacts_overseer_voice": {
+      "type": "spoken",
+      "text": "That voice... it's patterned like a human neural echo. Not synthetic. Not simulated. Real."
+    },
+    "echo_realization_jax_ai": {
+      "type": "spoken",
+      "text": "The Overseer isn't an AI. It's a person. Jax. His mind is still active in the system."
+    },
+    "echo_about_body": {
+      "type": "spoken",
+      "text": "The ghoul body shows signs of neural vacancy. The brainstem is active, but higher functions are missing."
+    },
+    "echo_body_reacts": {
+      "type": "spoken",
+      "text": "Interesting. The body responds to the Overseer's voice. Residual neural resonance, maybe."
+    },
+    "echo_warning_sync": {
+      "type": "spoken",
+      "text": "If the mind and body reconnect, the outcome is unpredictable. Could stabilize. Could collapse."
+    },
+    "echo_finalA_peace": {
+      "type": "ending",
+      "text": "Termination was humane. The neural echo has stabilized. No further activity detected."
+    },
+    "echo_finalB_wander": {
+      "type": "ending",
+      "text": "The body is functional enough to survive. The mind remains separate. Two halves, permanently divided."
+    },
+    "echo_finalC_sync": {
+      "type": "ending",
+      "text": "Neural resonance detected. Mind and body are aligning. This shouldn't be possible... but it's happening."
+    },
+    "echo_aftermath": {
+      "type": "spoken",
+      "text": "Vault-Tec wanted to prove consciousness could be relocated. They succeeded. Horrifically."
+    }
+  }
+}
