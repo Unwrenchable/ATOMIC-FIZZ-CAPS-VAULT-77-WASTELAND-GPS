@@ -1,1 +1,31 @@
-<svg viewBox="0 0 24 24"><path d="M12 2l2 1 2 0 1 2 1 2-1 2 1 2-1 2-1 2-2 1-2 0-2-1-2 0-1-2-1-2 1-2-1-2 1-2 1-2 2-1z"/><circle cx="12" cy="12" r="3"/></svg>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Outer cog -->
+  <path d="
+    M12 3
+    L14 4
+    L17 4.5
+    L18 7
+    L19 9
+    L18 11
+    L19 13
+    L18 15
+    L17 17.5
+    L14 18
+    L12 19
+    L10 18
+    L7 17.5
+    L6 15
+    L5 13
+    L6 11
+    L5 9
+    L6 7
+    L7 4.5
+    L10 4
+    Z
+  " fill="black"/>
+
+  <!-- Center cutout -->
+  <circle cx="12" cy="12" r="3" fill="white"/>
+
+</svg>
