@@ -1,0 +1,32 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Silo -->
+  <path d="
+    M5 8
+    C5 6 6 5 7.5 5
+    C9 5 10 6 10 8
+    V18
+    H5
+    Z
+  " fill="black"/>
+
+  <!-- Barn body -->
+  <path d="
+    M11 10
+    L15 6
+    L19 10
+    V18
+    H11
+    Z
+  " fill="black"/>
+
+  <!-- Barn door cutout -->
+  <rect x="13" y="14" width="4" height="4" fill="white"/>
+
+  <!-- Barn window cutout -->
+  <rect x="14" y="11" width="2" height="2" fill="white"/>
+
+  <!-- Silo band cutout -->
+  <rect x="6" y="9" width="3" height="1" fill="white"/>
+
+</svg>
