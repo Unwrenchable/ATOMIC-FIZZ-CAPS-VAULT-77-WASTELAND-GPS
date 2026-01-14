@@ -1,0 +1,27 @@
+{
+  "id": "npc_jax_harlan_voss",
+  "name": "Harlan Voss",
+  "region": "Mojave / New Vegas",
+  "type": "Retired NCR Ranger",
+  "dialog": {
+    "idle": [
+      "Once a Ranger, always a Ranger. Even when the badge is gone.",
+      "Jax… that boy always ran toward danger. Must’ve gotten that from me."
+    ],
+    "serious": [
+      "The NCR thinks they own the Mojave. They don’t. Nobody does.",
+      "FizzCo’s experiments… I saw things during my service I was ordered to forget."
+    ],
+    "emotional": [
+      "Jax, if you’re hearing this… I failed you. I failed your mother.",
+      "I left the NCR to protect my family. Turns out the danger followed anyway."
+    ],
+    "ranger_memory": [
+      "The Rangers taught me to track storms, men, and lies.",
+      "Vault 77 wasn’t on any NCR map. That scared me more than anything."
+    ]
+  },
+  "quests": ["quest_jax_familytruth", "quest_nv_convergence_signs"],
+  "faction": "NCR (Retired)",
+  "notes": "Decorated NCR Ranger veteran; left the service after uncovering classified FizzCo/Vault-Tec operations."
+}
