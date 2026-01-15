@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const { authMiddleware } = require("../../backend/lib/auth");
-const gps = require("../../backend/lib/gps");
+const { authMiddleware } = require("../lib/auth");
+const gps = require("../lib/gps");
 
 // Mounted at /api/gps
 router.post("/update", authMiddleware, async (req, res) => {
