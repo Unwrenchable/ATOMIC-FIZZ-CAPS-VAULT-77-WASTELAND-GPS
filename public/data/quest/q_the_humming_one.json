@@ -1,0 +1,19 @@
+{
+  "id":"q_the_humming_one",
+  "name":"The Humming One",
+  "region":"vegas_strip",
+  "giver":"npc_strip_informant_fo_new",
+  "objectives":[
+    {"id":"find_robot","desc":"Locate the source of the humming beneath the Strip.","poi":"vegas_humming_robot_fizzcode"},
+    {"id":"scan_core","desc":"Extract the code fragment still running inside the ruined robot.","poi":"vegas_humming_robot_fizzcode"},
+    {"id":"consult_fizz","desc":"Bring the data to Kara Mullins at the Strip.","npc":"npc_atomic_fizz_tech_fo_new"},
+    {"id":"confront_survivor","desc":"Speak with the Vault 77 survivor who knows the truth.","npc":"npc_vault77_survivor_fo_new"}
+  ],
+  "rewards":{"xp":450,"items":["atomic_fizz_sample","vault77_fragment"],"caps":120},
+  "factions":{"affected":["AtomicFizz","Vault77","House"]},
+  "outcomes":{
+    "atomic_fizz":"Kara gains access to the fragment.",
+    "vault77":"Jonas warns you of what the code really means.",
+    "house":"House flags you as a variable."
+  }
+}
