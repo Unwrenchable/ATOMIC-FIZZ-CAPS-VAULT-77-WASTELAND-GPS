@@ -1,0 +1,16 @@
+{
+  "id": "npc_goodsprings_prospector_alan_ryder",
+  "name": "Alan Ryder",
+  "faction": "goodsprings",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Prospector",
+  "personality": "Nervous, jumpy, always looking over his shoulder.",
+  "description": "Alan dug up something he shouldn't have near Sloan. Now he’s hiding out in Goodsprings until the heat dies down.",
+  "questHooks": [
+    "Claims a gang is after him for something he found.",
+    "Shows the player a strange cap he dug up — faintly warm.",
+    "Says the ground near Sloan 'hums' at night."
+  ],
+  "poi": "goodsprings_saloon_fnv"
+}
