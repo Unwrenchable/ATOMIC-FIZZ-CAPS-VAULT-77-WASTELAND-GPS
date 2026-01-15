@@ -5,20 +5,24 @@
     <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Pip‑Boy visual styles -->
-    <link rel="stylesheet" href="/css/pipboy.css">
+    <!-- Leaflet core CSS (must load FIRST) -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      crossorigin=""
+    />
 
-    <!-- Pip‑Boy style JSON for the map (must load before map init) -->
+    <!-- Pip‑Boy UI skin -->
+    <link rel="stylesheet" href="/css/pipboy.css" />
+
+    <!-- Pip‑Boy tile map styling -->
+    <link rel="stylesheet" href="/css/pipboy-map.css" />
+
+    <!-- Pip‑Boy style JSON (safe to load early, not used by Leaflet) -->
     <script src="/js/pipboy/pipboy-style.js"></script>
-    
   </head>
 
-  <body>
-    <!-- Leaflet JS -->
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      crossorigin=""
-    ></script>
+  <body class="pipboy-mode">
 
     <!-- BOOT SCREEN -->
     <div id="bootScreen">
@@ -68,13 +72,13 @@
               <!-- MAIN PANELS -->
               <div class="pipboy-main">
 
-                <!-- MAP PANEL -->
+                <!-- MAP PANEL (TILE MAP VERSION) -->
                 <div id="panel-map" class="pipboy-panel active">
                   <div class="panel-header">MAP</div>
                   <div class="panel-body">
 
-                    <!-- Vector Map Container -->
-                    <div id="mapContainer" class="pipboy-map">
+                    <!-- TILE MAP CONTAINER -->
+                    <div id="map" class="pipboy-map">
                       <div id="radFlash"></div>
                     </div>
 
@@ -84,7 +88,7 @@
                       <div class="map-status" id="mapStatus">SCANNING...</div>
                     </div>
 
-                    <!-- Controls (empty for future features) -->
+                    <!-- Controls (future) -->
                     <div class="map-controls"></div>
 
                     <!-- GPS Badge -->
@@ -193,41 +197,13 @@
                     <div class="panel-header" style="margin-top:10px;">SPECIAL</div>
 
                     <div id="specialBlock">
-                      <div class="special-row">
-                        <span class="special-label">S</span>
-                        <span class="special-bar" data-special-key="S"></span>
-                        <span class="special-value" id="special-S">5</span>
-                      </div>
-                      <div class="special-row">
-                        <span class="special-label">P</span>
-                        <span class="special-bar" data-special-key="P"></span>
-                        <span class="special-value" id="special-P">5</span>
-                      </div>
-                      <div class="special-row">
-                        <span class="special-label">E</span>
-                        <span class="special-bar" data-special-key="E"></span>
-                        <span class="special-value" id="special-E">5</span>
-                      </div>
-                      <div class="special-row">
-                        <span class="special-label">C</span>
-                        <span class="special-bar" data-special-key="C"></span>
-                        <span class="special-value" id="special-C">5</span>
-                      </div>
-                      <div class="special-row">
-                        <span class="special-label">I</span>
-                        <span class="special-bar" data-special-key="I"></span>
-                        <span class="special-value" id="special-I">5</span>
-                      </div>
-                      <div class="special-row">
-                        <span class="special-label">A</span>
-                        <span class="special-bar" data-special-key="A"></span>
-                        <span class="special-value" id="special-A">5</span>
-                      </div>
-                      <div class="special-row">
-                        <span class="special-label">L</span>
-                        <span class="special-bar" data-special-key="L"></span>
-                        <span class="special-value" id="special-L">5</span>
-                      </div>
+                      <div class="special-row"><span class="special-label">S</span><span class="special-bar" data-special-key="S"></span><span class="special-value" id="special-S">5</span></div>
+                      <div class="special-row"><span class="special-label">P</span><span class="special-bar" data-special-key="P"></span><span class="special-value" id="special-P">5</span></div>
+                      <div class="special-row"><span class="special-label">E</span><span class="special-bar" data-special-key="E"></span><span class="special-value" id="special-E">5</span></div>
+                      <div class="special-row"><span class="special-label">C</span><span class="special-bar" data-special-key="C"></span><span class="special-value" id="special-C">5</span></div>
+                      <div class="special-row"><span class="special-label">I</span><span class="special-bar" data-special-key="I"></span><span class="special-value" id="special-I">5</span></div>
+                      <div class="special-row"><span class="special-label">A</span><span class="special-bar" data-special-key="A"></span><span class="special-value" id="special-A">5</span></div>
+                      <div class="special-row"><span class="special-label">L</span><span class="special-bar" data-special-key="L"></span><span class="special-value" id="special-L">5</span></div>
                     </div>
 
                     <div id="respecRow" style="margin-top:10px;">
@@ -301,85 +277,82 @@
     <span id="locations-count" class="hidden"></span>
 
     <!-- CORE NAMESPACE -->
-<script>
-  if (!window.Game) window.Game = {};
-  if (!Game.modules) Game.modules = {};
-  Game.hooks = Game.hooks || {};
-</script>
+    <script>
+      if (!window.Game) window.Game = {};
+      if (!Game.modules) Game.modules = {};
+      Game.hooks = Game.hooks || {};
+    </script>
 
-<!-- MODULES -->
-<script src="/js/modules/economy.js"></script>
-<script src="/js/modules/mintables.js"></script>
-<script src="/js/modules/factions.js"></script>
-<script src="/js/modules/enemyScaling.js"></script>
-<script src="/js/modules/quests.js"></script>
-<script src="/js/modules/worldmap.js"></script>
-<script src="/js/modules/narrative.js"></script>
+    <!-- MODULES -->
+    <script src="/js/modules/economy.js"></script>
+    <script src="/js/modules/mintables.js"></script>
+    <script src="/js/modules/factions.js"></script>
+    <script src="/js/modules/enemyScaling.js"></script>
+    <script src="/js/modules/quests.js"></script>
+    <script src="/js/modules/worldmap.js"></script>
+    <script src="/js/modules/narrative.js"></script>
 
-<!-- ENGINE -->
-<script src="/js/main.js"></script>
+    <!-- ENGINE -->
+    <script src="/js/main.js"></script>
 
-<!-- LEAFLET (must load BEFORE map-core.js) -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- MAP + BOOT -->
+    <script src="/js/map/worldstate.js"></script>
+    <script src="/js/map/map-core.js"></script>
+    <script src="/js/boot.js"></script>
 
-<!-- PIP‑BOY MAP STYLE (must load BEFORE map-core.js) -->
-<script src="/js/pipboy/pipboy-style.js"></script>
+    <!-- STAT PANEL LOGIC -->
+    <script src="/js/stat-panel.js"></script>
 
-<!-- MAP + BOOT -->
-<script src="/js/map/worldstate.js"></script>
-<script src="/js/map/map-core.js"></script>
-<script src="/js/boot.js"></script>
+    <!-- PIP‑BOY UI -->
+    <script src="/js/ui/pipboy-tabs.js"></script>
+    <script src="/js/ui/inventory-ui.js"></script>
+    <script src="/js/ui/quest-ui.js"></script>
 
-<!-- STAT PANEL LOGIC -->
-<script src="/js/stat-panel.js"></script>
+    <!-- SPECIAL SYSTEM -->
+    <script src="/js/pipboy-special.js"></script>
 
-<!-- PIP‑BOY UI -->
-<script src="/js/ui/pipboy-tabs.js"></script>
-<script src="/js/ui/inventory-ui.js"></script>
-<script src="/js/ui/quest-ui.js"></script>
+    <!-- RADIO / OVERSEER POPUP -->
+    <script>
+      (function () {
+        const terminalSection = document.getElementById("terminalSection");
+        const btn = document.getElementById("openOverseerTerminal");
 
-<!-- SPECIAL SYSTEM -->
-<script src="/js/pipboy-special.js"></script>
+        if (terminalSection) terminalSection.style.display = "block";
 
-<!-- RADIO / OVERSEER POPUP -->
-<script>
-  (function () {
-    const terminalSection = document.getElementById("terminalSection");
-    const btn = document.getElementById("openOverseerTerminal");
+        function openOverseerPopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
 
-    if (terminalSection) terminalSection.style.display = "block";
+          const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
+          const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
 
-    function openOverseerPopup() {
-      const screenW = window.innerWidth || screen.width;
-      const screenH = window.innerHeight || screen.height;
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
 
-      const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
-      const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
 
-      const left = Math.floor((screenW - width) / 2);
-      const top = Math.floor((screenH - height) / 2);
+          window.open("/overseer.html", "overseer_terminal", features);
+        }
 
-      const features = [
-        "resizable=yes",
-        "scrollbars=yes",
-        "status=no",
-        "toolbar=no",
-        "menubar=no",
-        "location=no",
-        "width=" + width,
-        "height=" + height,
-        "left=" + left,
-        "top=" + top
-      ].join(",");
+        if (btn) {
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            openOverseerPopup();
+          });
+        }
+      })();
+    </script>
 
-      window.open("/overseer.html", "overseer_terminal", features);
-    }
-
-    if (btn) {
-      btn.addEventListener("click", function (e) {
-        e.preventDefault();
-        openOverseerPopup();
-      });
-    }
-  })();
-</script>
+  </body>
+</html>
