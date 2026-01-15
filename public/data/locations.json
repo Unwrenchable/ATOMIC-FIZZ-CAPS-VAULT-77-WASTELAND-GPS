@@ -1,1 +1,157 @@
+{
+  "regions": [
+    {
+      "id": "strip-core",
+      "name": "The Strip Core",
+      "description": "The political and economic heart of New Vegas. Casinos, power grids, and hidden secrets beneath the surface.",
+      "subregions": [
+        { "id": "strip-north", "name": "North Strip" },
+        { "id": "strip-central", "name": "Central Strip" },
+        { "id": "strip-underground", "name": "Strip Underground" }
+      ]
+    },
+    {
+      "id": "freeside-outer-vegas",
+      "name": "Freeside & Outer Vegas",
+      "description": "Chaotic streets, scavenger life, and early‑game encounters.",
+      "subregions": [
+        { "id": "freeside-east", "name": "Freeside East" },
+        { "id": "freeside-west", "name": "Freeside West" },
+        { "id": "outer-vegas-ruins", "name": "Outer Vegas Ruins" }
+      ]
+    },
+    {
+      "id": "westside-north-vegas",
+      "name": "Westside & North Vegas",
+      "description": "Settlements under pressure, raider activity, and industrial decay.",
+      "subregions": [
+        { "id": "westside-blocks", "name": "Westside Blocks" },
+        { "id": "north-vegas-alleys", "name": "North Vegas Alleys" },
+        { "id": "industrial-belt", "name": "Industrial Belt" }
+      ]
+    },
+    {
+      "id": "mojave-outskirts",
+      "name": "Mojave Outskirts",
+      "description": "The open desert surrounding Vegas. Exploration, scanning, and early threats.",
+      "subregions": [
+        { "id": "dry-lake-edge", "name": "Dry Lake Edge" },
+        { "id": "old-highway-route", "name": "Old Highway Route" },
+        { "id": "desert-ridge", "name": "Desert Ridge" }
+      ]
+    },
+    {
+      "id": "hidden-valley-bunker-zone",
+      "name": "Hidden Valley / Bunker Zone",
+      "description": "Underground facilities, tech factions, and sealed vault systems.",
+      "subregions": [
+        { "id": "hidden-valley-east", "name": "Hidden Valley East" },
+        { "id": "bunker-access-tunnels", "name": "Bunker Access Tunnels" },
+        { "id": "ridge-observation-line", "name": "Ridge Observation Line" }
+      ]
+    },
+    {
+      "id": "hoover-dam-perimeter",
+      "name": "Hoover Dam Perimeter",
+      "description": "High‑level military zone, power infrastructure, and endgame conflict.",
+      "subregions": [
+        { "id": "dam-west-bank", "name": "Dam West Bank" },
+        { "id": "dam-service-roads", "name": "Dam Service Roads" },
+        { "id": "lower-power-station", "name": "Lower Power Station" }
+      ]
+    }
+  ],
 
+  "locations": [
+    {
+      "id": "vault-77",
+      "name": "Vault 77",
+      "region": "strip-core",
+      "subregion": "strip-underground",
+      "lat": 0,
+      "lng": 0,
+      "type": "vault"
+    },
+    {
+      "id": "fizzcap-processing-plant",
+      "name": "FizzCap Processing Plant",
+      "region": "strip-core",
+      "subregion": "strip-north",
+      "lat": 0,
+      "lng": 0,
+      "type": "industrial"
+    },
+    {
+      "id": "trader-hub",
+      "name": "Trader Hub",
+      "region": "freeside-outer-vegas",
+      "subregion": "freeside-west",
+      "lat": 0,
+      "lng": 0,
+      "type": "settlement"
+    },
+    {
+      "id": "wasteland-outskirts",
+      "name": "Wasteland Outskirts",
+      "region": "freeside-outer-vegas",
+      "subregion": "outer-vegas-ruins",
+      "lat": 0,
+      "lng": 0,
+      "type": "region"
+    },
+    {
+      "id": "abandoned-factory",
+      "name": "Abandoned Factory",
+      "region": "westside-north-vegas",
+      "subregion": "industrial-belt",
+      "lat": 0,
+      "lng": 0,
+      "type": "industrial"
+    },
+    {
+      "id": "raider-camp-alpha",
+      "name": "Raider Camp Alpha",
+      "region": "westside-north-vegas",
+      "subregion": "north-vegas-alleys",
+      "lat": 0,
+      "lng": 0,
+      "type": "enemy-camp"
+    },
+    {
+      "id": "mysterious-bunker",
+      "name": "Mysterious Bunker",
+      "region": "hidden-valley-bunker-zone",
+      "subregion": "bunker-access-tunnels",
+      "lat": 0,
+      "lng": 0,
+      "type": "bunker"
+    },
+    {
+      "id": "rusted-observatory",
+      "name": "Rusted Observatory",
+      "region": "hidden-valley-bunker-zone",
+      "subregion": "ridge-observation-line",
+      "lat": 0,
+      "lng": 0,
+      "type": "scientific"
+    },
+    {
+      "id": "old-world-bridge",
+      "name": "Old World Bridge",
+      "region": "mojave-outskirts",
+      "subregion": "old-highway-route",
+      "lat": 0,
+      "lng": 0,
+      "type": "landmark"
+    },
+    {
+      "id": "sunken-highway",
+      "name": "Sunken Highway",
+      "region": "mojave-outskirts",
+      "subregion": "dry-lake-edge",
+      "lat": 0,
+      "lng": 0,
+      "type": "ruins"
+    }
+  ]
+}
