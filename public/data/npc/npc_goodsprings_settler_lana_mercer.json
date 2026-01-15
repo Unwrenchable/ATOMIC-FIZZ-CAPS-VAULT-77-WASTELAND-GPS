@@ -1,0 +1,16 @@
+{
+  "id": "npc_goodsprings_settler_lana_mercer",
+  "name": "Lana Mercer",
+  "faction": "goodsprings",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Settler / Gardener",
+  "personality": "Soft-spoken, hopeful, tries to keep Goodsprings alive.",
+  "description": "Lana tends a small garden behind the saloon. She believes Goodsprings can thrive again if people stop fighting long enough to help each other.",
+  "questHooks": [
+    "Needs help clearing pests from her garden.",
+    "Found a metal shard in her soil that vibrates faintly.",
+    "Saw a stranger watching the town from the ridge."
+  ],
+  "poi": "goodsprings_saloon_fnv"
+}
