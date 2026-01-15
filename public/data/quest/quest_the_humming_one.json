@@ -1,19 +1,85 @@
 {
-  "id":"q_the_humming_one",
-  "name":"The Humming One",
-  "region":"vegas_strip",
-  "giver":"npc_strip_informant_fo_new",
-  "objectives":[
-    {"id":"find_robot","desc":"Locate the source of the humming beneath the Strip.","poi":"vegas_humming_robot_fizzcode"},
-    {"id":"scan_core","desc":"Extract the code fragment still running inside the ruined robot.","poi":"vegas_humming_robot_fizzcode"},
-    {"id":"consult_fizz","desc":"Bring the data to Kara Mullins at the Strip.","npc":"npc_atomic_fizz_tech_fo_new"},
-    {"id":"confront_survivor","desc":"Speak with the Vault 77 survivor who knows the truth.","npc":"npc_vault77_survivor_fo_new"}
+  "id": "q_the_humming_one",
+  "name": "The Humming One",
+  "type": "main",
+  "region": "strip-core",
+  "subregion": "strip-underground",
+
+  "giver": "npc_strip_informant_fo_new",
+
+  "start_conditions": {
+    "rumor_heard": true,
+    "min_level": 1,
+    "location": "vegas_strip"
+  },
+
+  "npc_links": [
+    "npc_strip_informant_fo_new",
+    "npc_atomic_fizz_tech_fo_new",
+    "npc_vault77_survivor_fo_new"
   ],
-  "rewards":{"xp":450,"items":["atomic_fizz_sample","vault77_fragment"],"caps":120},
-  "factions":{"affected":["AtomicFizz","Vault77","House"]},
-  "outcomes":{
-    "atomic_fizz":"Kara gains access to the fragment.",
-    "vault77":"Jonas warns you of what the code really means.",
-    "house":"House flags you as a variable."
-  }
+
+  "map_markers": [
+    {
+      "id": "marker_humming_robot",
+      "poi": "vegas_humming_robot_fizzcode",
+      "stage": "find_robot"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "find_robot",
+      "desc": "Locate the source of the humming beneath the Strip.",
+      "poi": "vegas_humming_robot_fizzcode",
+      "dialogue": "dialog_echo.json"
+    },
+    {
+      "id": "scan_core",
+      "desc": "Extract the code fragment still running inside the ruined robot.",
+      "poi": "vegas_humming_robot_fizzcode",
+      "dialogue": "dialog_overseer.json"
+    },
+    {
+      "id": "consult_fizz",
+      "desc": "Bring the data to Kara Mullins at the Strip.",
+      "npc": "npc_atomic_fizz_tech_fo_new",
+      "dialogue": "dialog_lena.json"
+    },
+    {
+      "id": "confront_survivor",
+      "desc": "Speak with the Vault 77 survivor who knows the truth.",
+      "npc": "npc_vault77_survivor_fo_new",
+      "dialogue": "dialog_jax_harlan_voss.json"
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "find_robot", "desc": "Follow the humming into the Strip tunnels." },
+    { "id": 1, "objective": "scan_core", "desc": "Scan the ruined robot for active code fragments." },
+    { "id": 2, "objective": "consult_fizz", "desc": "Deliver the fragment to Kara Mullins." },
+    { "id": 3, "objective": "confront_survivor", "desc": "Find the Vault 77 survivor and learn the truth." },
+    { "id": 4, "objective": "complete", "desc": "The hum has awakened something deeper." }
+  ],
+
+  "rewards": {
+    "xp": 450,
+    "items": ["atomic_fizz_sample", "vault77_fragment"],
+    "caps": 120
+  },
+
+  "factions": {
+    "affected": ["AtomicFizz", "Vault77", "House"]
+  },
+
+  "outcomes": {
+    "atomic_fizz": "Kara gains access to the fragment.",
+    "vault77": "Jonas warns you of what the code really means.",
+    "house": "House flags you as a variable."
+  },
+
+  "next_quests": [
+    "quest_harlan_echoes",
+    "quest_harlan_lastsigns"
+  ]
 }
