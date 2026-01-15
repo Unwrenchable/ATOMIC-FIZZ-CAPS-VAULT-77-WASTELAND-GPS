@@ -1,0 +1,16 @@
+{
+  "id": "npc_novac_repairman_judd_keller",
+  "name": "Judd Keller",
+  "faction": "novac",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Repairman",
+  "personality": "Gruff, practical, hates surprises.",
+  "description": "Judd keeps the motel’s ancient wiring from burning the place down. He knows every crawlspace and hidden corner.",
+  "questHooks": [
+    "Says something is messing with the motel’s power grid.",
+    "Found a metal shard fused into a breaker box.",
+    "Heard humming through the walls late at night."
+  ],
+  "poi": "novac_motel_fnv"
+}
