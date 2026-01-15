@@ -7,16 +7,13 @@ const serializeVoucherMessage = require("../lib/gps").serializeVoucherMessage;
 function loadBs58() {
   try {
     const b = require("bs58");
-    // If bs58 exports an object with decode, use it
     if (b && typeof b.decode === "function" && typeof b.encode === "function") {
       return b;
     }
-    // Fallback to base-x configured for Base58 alphabet
     const baseX = require("base-x");
     const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
     return baseX(BASE58);
   } catch (err) {
-    // Re-throw with helpful message
     throw new Error("Base58 library not available: " + err.message);
   }
 }
@@ -37,7 +34,6 @@ const USE_KMS = process.env.NODE_ENV === "production";
 let SERVER_KEYPAIR = null;
 
 if (!USE_KMS) {
-  // Dev-only: decode secret at runtime; fail fast with clear message
   try {
     const secretEnv = process.env.SERVER_SECRET_KEY;
     const secret = safeDecodeBase58(secretEnv, "SERVER_SECRET_KEY");
@@ -48,18 +44,12 @@ if (!USE_KMS) {
     SERVER_KEYPAIR = null;
   }
 } else {
-  // Production: expect KMS signing; do not decode private key from env
   console.log("[loot-voucher] running in production mode; will use KMS for signing");
 }
 
-/**
- * POST /api/loot-voucher
- * - Dev: signs with local SERVER_SECRET_KEY and returns public key (base58)
- * - Prod: signs with KMS via lib/kmsSigner and returns keyId used
- */
-router.post("/api/loot-voucher", async (req, res) => {
+// Mounted at /api/loot-voucher
+router.post("/", async (req, res) => {
   try {
-    // Basic voucher payload (static for now)
     const lootId = 1n;
     const latitude = 36.1699;
     const longitude = -115.1398;
@@ -67,19 +57,17 @@ router.post("/api/loot-voucher", async (req, res) => {
     const locationHint = "Vault 77 — Sector C";
 
     const unsignedVoucher = { lootId, latitude, longitude, timestamp, locationHint };
-    const message = serializeVoucherMessage(unsignedVoucher); // Buffer
+    const message = serializeVoucherMessage(unsignedVoucher);
 
     let signatureBytes;
     let serverKeyInfo;
 
     if (USE_KMS) {
-      // Production: sign with KMS
       const { signMessageWithKms } = require("../lib/kmsSigner");
       const { keyIdUsed, signatureBytes: sigBuf } = await signMessageWithKms(Buffer.from(message));
       signatureBytes = sigBuf;
       serverKeyInfo = keyIdUsed;
     } else {
-      // Dev: require a valid local keypair
       if (!SERVER_KEYPAIR) {
         return res.status(500).json({ error: "SERVER_SECRET_KEY not configured or invalid (dev only)" });
       }
