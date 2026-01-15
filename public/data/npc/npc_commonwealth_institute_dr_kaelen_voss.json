@@ -1,0 +1,16 @@
+{
+  "id": "npc_commonwealth_institute_dr_kaelen_voss",
+  "name": "Dr. Kaelen Voss",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "mojave",
+  "reasonForDisplacement": "Assigned to investigate anomalous FizzCo radiation signatures detected beneath the Strip.",
+  "role": "Bioscience Researcher",
+  "personality": "Cold, clinical, fascinated by cross-timeline biology.",
+  "questHooks": [
+    "Requests samples from Divide storm anomalies.",
+    "Seeks to capture a rogue synth displaced into Zion.",
+    "Wants access to Vault 77 logs for cross-reality genetic drift research."
+  ],
+  "poi": "Strip Underground — abandoned FizzCo lab"
+}
