@@ -1,5 +1,5 @@
 // ============================================================
-// PIP‑BOY TILE MAP CORE (CLEAN + WIRED VERSION)
+// PIP‑BOY TILE MAP CORE (FINAL CLEAN VERSION)
 // ============================================================
 
 window.Game = window.Game || {};
@@ -22,7 +22,7 @@ const Game = window.Game;
       attributionControl: false,
       minZoom: 3,
       maxZoom: 6,
-      center: [36.1699, -115.1398], // Vegas
+      center: [36.1699, -115.1398], // Vegas default
       zoom: 4
     });
 
@@ -37,15 +37,20 @@ const Game = window.Game;
     }).addTo(map);
 
     // ------------------------------------------------------------
+    // PLAYER MARKER (created by worldstate.js)
+    // ------------------------------------------------------------
+    if (typeof Game.initPlayerMarker === "function") {
+      Game.initPlayerMarker();
+    }
+
+    // ------------------------------------------------------------
     // LOAD POIs (if poi-markers.js defines loader)
     // ------------------------------------------------------------
     if (typeof Game.loadPOIMarkers === "function") {
       Game.loadPOIMarkers(map);
     }
 
-    // Expose map globally for other systems
     Game.map = map;
-
     return map;
   }
 
