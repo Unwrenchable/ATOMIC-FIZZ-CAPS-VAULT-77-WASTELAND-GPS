@@ -1,0 +1,16 @@
+{
+  "id": "npc_novac_settler_mira_dalton",
+  "name": "Mira Dalton",
+  "faction": "novac",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Settler",
+  "personality": "Soft-spoken, lonely, clings to routine.",
+  "description": "Mira has lived in Novac for years. She rarely leaves her room, but she notices everything.",
+  "questHooks": [
+    "Saw someone digging behind the motel at night.",
+    "Keeps hearing a faint hum through her floorboards.",
+    "Says a stranger left a note under her door — addressed to someone else."
+  ],
+  "poi": "novac_motel_fnv"
+}
