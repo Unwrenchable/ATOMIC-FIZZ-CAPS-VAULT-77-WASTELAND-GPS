@@ -1,0 +1,16 @@
+{
+  "id": "npc_primm_museum_curator_loretta_vance",
+  "name": "Loretta Vance",
+  "faction": "primm_town",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Museum Curator",
+  "personality": "Proud, dramatic, loves telling stories whether they’re true or not.",
+  "description": "Loretta runs the Vikki & Vance Museum with theatrical flair. She’s desperate to keep Primm’s history alive.",
+  "questHooks": [
+    "Wants help recovering stolen memorabilia.",
+    "Heard rumors of a new outlaw gang forming near Nipton.",
+    "Says a strange cap was left in the donation box — humming softly."
+  ],
+  "poi": "vicki_vance_museum_fnv"
+}
