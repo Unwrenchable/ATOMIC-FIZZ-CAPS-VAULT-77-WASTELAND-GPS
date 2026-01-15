@@ -1,0 +1,16 @@
+{
+  "id": "npc_nipton_legion_scout_varro",
+  "name": "Varro",
+  "faction": "caesar_legion",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Legion Scout",
+  "personality": "Calm, disciplined, speaks with quiet menace.",
+  "description": "Varro watches Nipton from the shadows, studying the town’s weaknesses. He believes the Mojave is full of soft places waiting to be cut open.",
+  "questHooks": [
+    "Wants information about NCR patrols near Primm.",
+    "Says the town is 'marked' by something older than the Legion.",
+    "Carries a strange cap he claims is a bad omen."
+  ],
+  "poi": "nipton_hall_fnv"
+}
