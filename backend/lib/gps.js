@@ -1,27 +1,21 @@
-// backend/lib/gps.js
+const express = require("express");
+const router = express.Router();
 
-const redis = require('../redis');
+const { authMiddleware } = require("../lib/auth");
+const gps = require("../lib/gps");
 
-async function updateLocation(player, lat, lng) {
-  if (!player || !player.wallet) {
-    throw new Error("missing player");
+// Mounted at /api/gps
+router.post("/update", authMiddleware, async (req, res) => {
+  try {
+    const player = req.player;
+    const { lat, lng } = req.body;
+
+    const result = await gps.updateLocation(player, lat, lng);
+    res.json(result);
+  } catch (err) {
+    console.error("[api/gps] update error:", err?.message || err);
+    res.status(400).json({ error: err.message || "Failed to update GPS" });
   }
-  if (typeof lat !== "number" || typeof lng !== "number") {
-    throw new Error("invalid coordinates");
-  }
+});
 
-  const key = `player:${player.wallet}`;
-  const raw = await redis.hget(key, "profile");
-  if (!raw) throw new Error("player not found");
-
-  const profile = JSON.parse(raw);
-  profile.location = { lat, lng };
-
-  await redis.hset(key, "profile", JSON.stringify(profile));
-
-  return { ok: true, location: profile.location };
-}
-
-module.exports = {
-  updateLocation
-};
+module.exports = router;
