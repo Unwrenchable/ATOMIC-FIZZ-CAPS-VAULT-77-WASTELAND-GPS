@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const { authMiddleware } = require("../../backend/lib/auth");
-const xp = require("../../backend/lib/xp");
+const { authMiddleware } = require("../lib/auth");
+const xp = require("../lib/xp");
 
 // Mounted at /api/xp
 router.post("/award", authMiddleware, async (req, res) => {
