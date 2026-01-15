@@ -1,0 +1,21 @@
+{
+  "id": "npc_commonwealth_institute_synth_observer_s3_iris",
+  "name": "S3-Iris",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "zion",
+  "reasonForDisplacement": "Claims she followed a 'fracture seam' visible only to synth optics.",
+  "role": "Fracture Observer",
+  "personality": "Soft-spoken, unnervingly calm, speaks in metaphors.",
+  "questHooks": [
+    "Says the Humming One is 'not a sound, but a direction'.",
+    "Believes Zion is a convergence point for multiple timelines.",
+    "Wants to map fracture seams using Atomic Fizz Caps as markers."
+  ],
+  "lore": {
+    "heardHummingOne": true,
+    "interpretation": "A gravitational pull toward a future event.",
+    "atomicFizzRumors": "Fizz Caps glow faintly in her optical spectrum."
+  },
+  "poi": "Zion — cliffside vantage point"
+}
