@@ -1,0 +1,16 @@
+{
+  "id": "npc_boulder_city_settler_james_hollin",
+  "name": "James Hollin",
+  "faction": "boulder_city",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Settler / Construction Worker",
+  "personality": "Honest, hardworking, frustrated with NCR and Khans alike.",
+  "description": "James is trying to rebuild Boulder City one brick at a time. He’s tired of soldiers, tired of raiders, and tired of being ignored.",
+  "questHooks": [
+    "Needs help clearing rubble from a collapsed building.",
+    "Found a metal shard fused into concrete — still warm.",
+    "Says someone has been sneaking into the ruins after dark."
+  ],
+  "poi": "boulder_city_hotel_fnv"
+}
