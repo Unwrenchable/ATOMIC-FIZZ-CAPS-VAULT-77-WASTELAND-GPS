@@ -1,0 +1,16 @@
+{
+  "id": "npc_nipton_trader_sylas_renwick",
+  "name": "Sylas Renwick",
+  "faction": "traders",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Traveling Trader",
+  "personality": "Wary, sharp-eyed, always calculating risk.",
+  "description": "Sylas stopped in Nipton to rest and got caught in the middle of something he doesn’t understand. Now he’s trying to get out alive.",
+  "questHooks": [
+    "Saw masked figures moving through Nipton at night.",
+    "Claims someone is sabotaging caravans near the town.",
+    "Found a metal shard in his pack that vibrates faintly."
+  ],
+  "poi": "nipton_trading_post_fnv"
+}
