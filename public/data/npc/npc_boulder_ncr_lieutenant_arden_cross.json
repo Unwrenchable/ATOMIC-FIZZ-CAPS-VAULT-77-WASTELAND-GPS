@@ -1,0 +1,16 @@
+{
+  "id": "npc_boulder_ncr_lieutenant_arden_cross",
+  "name": "Lieutenant Arden Cross",
+  "faction": "ncr",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "NCR Field Lieutenant",
+  "personality": "Disciplined, weary, carries the weight of every bad order.",
+  "description": "Cross oversees NCR operations in Boulder City. He’s caught between political pressure and the reality of a stretched‑thin army.",
+  "questHooks": [
+    "Needs intel on Great Khan movements in the ruins.",
+    "Reports strange radio interference bouncing off the canyon walls.",
+    "Says a scout found a cap that vibrates near NCR comms gear."
+  ],
+  "poi": "boulder_city_hotel_fnv"
+}
