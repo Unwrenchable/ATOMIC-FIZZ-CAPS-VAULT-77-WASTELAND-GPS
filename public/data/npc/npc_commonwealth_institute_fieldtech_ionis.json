@@ -1,0 +1,16 @@
+{
+  "id": "npc_commonwealth_institute_fieldtech_ionis",
+  "name": "Ionis",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "strip",
+  "reasonForDisplacement": "Volunteered to study pre-war robotics after detecting anomalous Securitron firmware signatures.",
+  "role": "Robotics Field Technician",
+  "personality": "Nervous, brilliant, easily overwhelmed by Mojave chaos.",
+  "questHooks": [
+    "Wants access to Lucky 38 terminal nodes.",
+    "Can upgrade a Securitron if given Institute components.",
+    "Fears being hunted by Gunners hired by a rival Institute scientist."
+  ],
+  "poi": "The Strip — backroom of a mod shop"
+}
