@@ -1,0 +1,16 @@
+{
+  "id": "npc_goodsprings_barkeep_tessa_marlow",
+  "name": "Tessa Marlow",
+  "faction": "goodsprings",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Saloon Owner",
+  "personality": "Sharp-tongued but fair, protective of her town.",
+  "description": "Tessa runs the Goodsprings Saloon with a mix of grit and hospitality. She hears every rumor before it hits the road.",
+  "questHooks": [
+    "Knows about a courier who passed through with strange caps.",
+    "Worries about trouble brewing down in Primm.",
+    "Says someone’s been poking around the old cemetery at night."
+  ],
+  "poi": "goodsprings_saloon_fnv"
+}
