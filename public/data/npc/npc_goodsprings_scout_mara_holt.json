@@ -1,0 +1,16 @@
+{
+  "id": "npc_goodsprings_scout_mara_holt",
+  "name": "Mara Holt",
+  "faction": "goodsprings",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Scout / Hunter",
+  "personality": "Patient, grounded, knows every ridge and trail around Goodsprings.",
+  "description": "Mara grew up tracking coyotes and bighorners through the hills. She teaches newcomers how to survive without getting themselves killed.",
+  "questHooks": [
+    "Offers a basic survival lesson for new players.",
+    "Mentions hearing a faint hum near the old well at night.",
+    "Says a stranger buried something behind the saloon years ago."
+  ],
+  "poi": "goodsprings_saloon_fnv"
+}
