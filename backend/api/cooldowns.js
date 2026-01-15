@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const { authMiddleware } = require("../../backend/lib/auth");
-const cooldowns = require("../../backend/lib/cooldowns");
+const { authMiddleware } = require("../lib/auth");
+const cooldowns = require("../lib/cooldowns");
 
 // Mounted at /api/cooldowns
 router.post("/check", authMiddleware, async (req, res) => {
