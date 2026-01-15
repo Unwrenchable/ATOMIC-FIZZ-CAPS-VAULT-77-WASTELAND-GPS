@@ -1,0 +1,21 @@
+{
+  "id": "npc_commonwealth_institute_echo_researcher_lythra",
+  "name": "Dr. Lythra Hale",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "mojave",
+  "reasonForDisplacement": "Claims she heard a 'harmonic intrusion' through the Institute relay — a signal she calls the Humming One.",
+  "role": "Temporal Harmonics Researcher",
+  "personality": "Obsessive, brilliant, sleep-deprived, convinced the multiverse is collapsing inward.",
+  "questHooks": [
+    "Wants the player to locate FizzCo relay nodes emitting sub-harmonic pulses.",
+    "Believes Vault 77 is broadcasting a distress signal across timelines.",
+    "Carries a device that reacts violently near Atomic Fizz Caps."
+  ],
+  "lore": {
+    "heardHummingOne": true,
+    "interpretation": "A cross-reality distress beacon or a warning from a future timeline.",
+    "atomicFizzRumors": "Believes the caps store quantum residue from fractured timelines."
+  },
+  "poi": "Mojave — hidden bunker near Black Mountain"
+}
