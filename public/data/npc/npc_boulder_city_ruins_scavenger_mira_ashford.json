@@ -1,0 +1,16 @@
+{
+  "id": "npc_boulder_city_ruins_scavenger_mira_ashford",
+  "name": "Mira Ashford",
+  "faction": "scavengers",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Scavenger",
+  "personality": "Fearless, reckless, addicted to the thrill of the ruins.",
+  "description": "Mira dives into the Boulder City ruins looking for salvage. She’s seen things she won’t talk about — and heard things she can’t explain.",
+  "questHooks": [
+    "Claims she found a sealed bunker door under the rubble.",
+    "Heard a low hum echoing through the ruins at dawn.",
+    "Says someone is marking walls with strange symbols."
+  ],
+  "poi": "boulder_city_ruins_fnv"
+}
