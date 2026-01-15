@@ -1,0 +1,16 @@
+{
+  "id": "npc_boulder_khan_negotiator_sira_kallin",
+  "name": "Sira Kallin",
+  "faction": "great_khans",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Khan Negotiator",
+  "personality": "Sharp, distrustful, carries old grudges like weapons.",
+  "description": "Sira represents a small Khan group hiding in the Boulder City ruins. She’s tired of NCR lies and ready to strike a deal with anyone who treats her people fairly.",
+  "questHooks": [
+    "Wants proof NCR is planning another crackdown.",
+    "Says the ruins 'hum' at night — and not from wind.",
+    "Carries a strange cap she believes is a bad omen."
+  ],
+  "poi": "boulder_city_ruins_fnv"
+}
