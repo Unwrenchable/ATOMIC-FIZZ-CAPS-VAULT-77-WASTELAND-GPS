@@ -1,0 +1,16 @@
+{
+  "id": "npc_commonwealth_institute_courser_x7_92",
+  "name": "Courser X7-92",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "divide",
+  "reasonForDisplacement": "Tracking a rogue synth that vanished during a timeline fracture event.",
+  "role": "Elite Synth Hunter",
+  "personality": "Efficient, emotionless, mission-focused.",
+  "questHooks": [
+    "Hunts a rogue synth hiding among Divide Echo Hunters.",
+    "Requests assistance navigating storm anomalies.",
+    "Offers Institute tech in exchange for cooperation."
+  ],
+  "poi": "The Divide — storm-blasted comms tower"
+}
