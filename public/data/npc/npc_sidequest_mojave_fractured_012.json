@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_mojave_fractured_012",
+  "type": "side_quest",
+  "name": "Kade Tessa",
+  "region": "mojave",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_mojave_fractured_012_dialog",
+  "lootPool": "npc_sidequest_mojave_fractured_012_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.77,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

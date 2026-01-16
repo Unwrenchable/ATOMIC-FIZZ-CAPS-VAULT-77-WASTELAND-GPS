@@ -1,0 +1,25 @@
+{
+  "id": "npc_sidequest_travelers_echo_001",
+  "type": "side_quest",
+  "name": "Lenn Marla",
+  "region": "mojave",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_echo_001_dialog",
+  "lootPool": "npc_sidequest_travelers_echo_001_loot",
+  "questHooks": [
+    "vegas_rumor_01"
+  ],
+  "anomalyAwareness": 0.31,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "mojave",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "mojave",
+    "vegas_outskirts"
+  ]
+}
