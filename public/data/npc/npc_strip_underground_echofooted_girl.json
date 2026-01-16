@@ -1,0 +1,16 @@
+{
+  "id": "npc_strip_underground_echofooted_girl",
+  "name": "The Echo-Footed Girl",
+  "faction": "unknown",
+  "homeRegion": "unknown",
+  "currentRegion": "strip-underground",
+  "role": "Wanderer",
+  "personality": "Quiet, fast, impossible to track.",
+  "description": "You hear her before you see her—soft footsteps, then silence. Nobody knows where she sleeps.",
+  "questHooks": [
+    "Says she saw someone 'walking upside down' in the tunnels.",
+    "Knows a shortcut that bypasses Strip security.",
+    "Claims she can hear voices through the pipes."
+  ],
+  "poi": "strip_underground_echo_corridor"
+}
