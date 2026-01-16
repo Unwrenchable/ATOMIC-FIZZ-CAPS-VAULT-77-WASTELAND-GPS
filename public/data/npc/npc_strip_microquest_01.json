@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_microquest_01",
+  "name": "Crying Dealer",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "They took my lucky chip… I need it back.",
+    "It wasn’t just a chip. It… whispered to me."
+  ],
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": true
+}
