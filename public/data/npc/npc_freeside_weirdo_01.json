@@ -1,0 +1,11 @@
+{
+  "id": "npc_freeside_weirdo_01",
+  "name": "Alley Prophet",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "The Strip’s shadow stretches across timelines.",
+    "Freeside is the hinge of the world."
+  ],
+  "spawnPool": ["freeside_backstreets"],
+  "uniquePerWorld": true
+}
