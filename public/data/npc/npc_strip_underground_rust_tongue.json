@@ -1,0 +1,16 @@
+{
+  "id": "npc_strip_underground_rust_tongue",
+  "name": "Rust-Tongue",
+  "faction": "underground_scavs",
+  "homeRegion": "strip-underground",
+  "currentRegion": "strip-underground",
+  "role": "Scrap Mystic",
+  "personality": "Cryptic, metallic-voiced, unsettling.",
+  "description": "A scavenger whose voice is metallic from inhaling fumes. Speaks in riddles about 'the machine beneath the city.'",
+  "questHooks": [
+    "Claims the Strip sits on a sleeping giant.",
+    "Says he found a gear that 'bleeds oil'.",
+    "Warns that something is listening through the vents."
+  ],
+  "poi": "strip_underground_scrap_den"
+}
