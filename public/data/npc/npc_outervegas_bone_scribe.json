@@ -1,0 +1,16 @@
+{
+  "id": "npc_outervegas_bone_scribe",
+  "name": "The Bone-Scribe",
+  "faction": "bone_pickers",
+  "homeRegion": "outer-vegas-ruins",
+  "currentRegion": "outer-vegas-ruins",
+  "role": "Collector",
+  "personality": "Soft-spoken, reverent, unsettlingly gentle.",
+  "description": "Collects skeletons and writes stories about who they used to be.",
+  "questHooks": [
+    "Says one skeleton 'moved' when he wasn’t looking.",
+    "Claims he found a skull with a bullet still humming.",
+    "Knows where a mass grave lies untouched."
+  ],
+  "poi": "outer_vegas_ruins_bone_pit"
+}
