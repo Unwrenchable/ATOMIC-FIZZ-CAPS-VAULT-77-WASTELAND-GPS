@@ -1,0 +1,14 @@
+{
+  "id": "npc_cottonwood_vexillarius_kaeso_ren",
+  "name": "Vexillarius Kaeso Ren",
+  "faction": "caesar_legion",
+  "role": "Standard Bearer",
+  "personality": "Proud, ritualistic, obsessed with symbolism.",
+  "description": "Kaeso maintains the Legion’s banners and ceremonial gear. He sees omens in every shadow.",
+  "questHooks": [
+    "Claims a banner was stolen by a slave.",
+    "Saw a glowing cap floating in the river.",
+    "Heard a hum echoing through the canyon walls."
+  ],
+  "poi": "cottonwood_cove_fnv"
+}
