@@ -1,0 +1,16 @@
+{
+  "id": "npc_industrial_smoke_eater",
+  "name": "The Smoke-Eater",
+  "faction": "industrial_workers",
+  "homeRegion": "industrial-belt",
+  "currentRegion": "industrial-belt",
+  "role": "Factory Veteran",
+  "personality": "Calm, raspy-voiced, fatalistic.",
+  "description": "A worker who breathes in fumes and claims it lets him 'see the future'.",
+  "questHooks": [
+    "Says he saw a shadow moving inside a smokestack.",
+    "Mentions a hum that only starts when he closes his eyes.",
+    "Claims someone is living in the old boiler room."
+  ],
+  "poi": "industrial_belt_factory_floor"
+}
