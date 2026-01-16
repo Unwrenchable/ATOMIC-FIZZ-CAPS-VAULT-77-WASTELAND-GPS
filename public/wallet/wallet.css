@@ -43,3 +43,62 @@ h1, h2 {
 .small {
   font-size: 0.8em;
 }
+/* ------------------------------------------------------------
+   NFT DETAIL MODAL
+-------------------------------------------------------------*/
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 20, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #0d0f0c;
+  border: 1px solid #00ff66;
+  padding: 20px;
+  width: 360px;
+  max-width: 90%;
+  box-shadow: 0 0 12px #00ff66;
+}
+
+.modal-close {
+  float: right;
+  margin-bottom: 10px;
+}
+
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#nft-modal-body img {
+  width: 100%;
+  border: 1px solid #00ff66;
+  margin-bottom: 10px;
+}
+
+#nft-modal-body .nft-name {
+  font-size: 1.2em;
+  margin-bottom: 6px;
+}
+
+#nft-modal-body .nft-mint {
+  opacity: 0.6;
+  font-size: 0.8em;
+  margin-bottom: 10px;
+}
+
+#nft-modal-body .nft-desc {
+  margin-top: 10px;
+  opacity: 0.9;
+}
