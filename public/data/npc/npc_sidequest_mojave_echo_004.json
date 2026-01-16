@@ -1,21 +1,20 @@
 {
   "id": "npc_sidequest_mojave_echo_004",
   "type": "side_quest",
-  "name": "Voss Mara",
+  "name": "Voss Ash",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
-  "archetype": "sidequest_traveler",
+  "archetype": "sidequest_anomaly_researcher",
   "behaviorPattern": "vegas_bound",
   "dialogPool": "npc_sidequest_mojave_echo_004_dialog",
   "lootPool": "npc_sidequest_mojave_echo_004_loot",
   "questHooks": [
-    "fizzcaps_clue_03",
-    "fizzcaps_clue_02",
-    "region_story_02"
+    "timeline_warning_02",
+    "fizzcaps_clue_02"
   ],
-  "anomalyAwareness": 0.9,
+  "anomalyAwareness": 0.8,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

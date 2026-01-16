@@ -1,21 +1,19 @@
 {
   "id": "npc_sidequest_mojave_echo_001",
   "type": "side_quest",
-  "name": "Lira Rook",
+  "name": "Voss Dax",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
   "archetype": "sidequest_traveler",
-  "behaviorPattern": "anomaly_sensitive",
+  "behaviorPattern": "vegas_bound",
   "dialogPool": "npc_sidequest_mojave_echo_001_dialog",
   "lootPool": "npc_sidequest_mojave_echo_001_loot",
   "questHooks": [
-    "anomaly_investigation_02",
-    "region_story_01",
-    "fizzcaps_clue_03"
+    "vegas_rumor_01"
   ],
-  "anomalyAwareness": 0.5,
+  "anomalyAwareness": 0.78,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

@@ -1,20 +1,21 @@
 {
   "id": "npc_sidequest_mojave_echo_019",
   "type": "side_quest",
-  "name": "Voss Daro",
+  "name": "Tessa Joren",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
-  "archetype": "sidequest_fizzcaps_contact",
-  "behaviorPattern": "vegas_bound",
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "fizzcaps_informer",
   "dialogPool": "npc_sidequest_mojave_echo_019_dialog",
   "lootPool": "npc_sidequest_mojave_echo_019_loot",
   "questHooks": [
-    "vegas_rumor_01",
-    "fizzcaps_clue_02"
+    "anomaly_investigation_01",
+    "timeline_warning_01",
+    "vegas_rumor_03"
   ],
-  "anomalyAwareness": 0.62,
+  "anomalyAwareness": 0.52,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

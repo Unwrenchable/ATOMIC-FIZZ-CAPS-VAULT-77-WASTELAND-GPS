@@ -1,20 +1,20 @@
 {
   "id": "npc_sidequest_mojave_prime_011",
   "type": "side_quest",
-  "name": "Nina Varra",
+  "name": "Lio Kael",
   "region": "mojave",
   "timelines": [
     "prime"
   ],
-  "archetype": "sidequest_fizzcaps_contact",
-  "behaviorPattern": "timeline_observer",
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "quest_seeker",
   "dialogPool": "npc_sidequest_mojave_prime_011_dialog",
   "lootPool": "npc_sidequest_mojave_prime_011_loot",
   "questHooks": [
-    "fizzcaps_clue_01",
-    "anomaly_investigation_01"
+    "vegas_rumor_03",
+    "fizzcaps_clue_01"
   ],
-  "anomalyAwareness": 0.67,
+  "anomalyAwareness": 0.35,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

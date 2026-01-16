@@ -1,22 +1,21 @@
 {
   "id": "npc_sidequest_mojave_prime-shadow_008",
   "type": "side_quest",
-  "name": "Lira Hale",
+  "name": "Voss Dax",
   "region": "mojave",
   "timelines": [
     "prime",
     "shadow"
   ],
   "archetype": "sidequest_traveler",
-  "behaviorPattern": "vegas_bound",
+  "behaviorPattern": "timeline_observer",
   "dialogPool": "npc_sidequest_mojave_prime-shadow_008_dialog",
   "lootPool": "npc_sidequest_mojave_prime-shadow_008_loot",
   "questHooks": [
-    "vegas_rumor_03",
-    "anomaly_investigation_02",
-    "timeline_warning_02"
+    "vegas_rumor_01",
+    "region_story_01"
   ],
-  "anomalyAwareness": 0.54,
+  "anomalyAwareness": 0.47,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

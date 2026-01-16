@@ -1,21 +1,20 @@
 {
-  "id": "npc_sidequest_mojave_prime-echo_018",
+  "id": "npc_sidequest_mojave_prime-echo_002",
   "type": "side_quest",
-  "name": "Dax Kael",
+  "name": "Marla Kael",
   "region": "mojave",
   "timelines": [
     "prime",
     "echo"
   ],
   "archetype": "sidequest_region_legend",
-  "behaviorPattern": "quest_seeker",
-  "dialogPool": "npc_sidequest_mojave_prime-echo_018_dialog",
-  "lootPool": "npc_sidequest_mojave_prime-echo_018_loot",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_mojave_prime-echo_002_dialog",
+  "lootPool": "npc_sidequest_mojave_prime-echo_002_loot",
   "questHooks": [
-    "anomaly_investigation_02",
     "anomaly_investigation_01"
   ],
-  "anomalyAwareness": 0.8,
+  "anomalyAwareness": 0.45,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

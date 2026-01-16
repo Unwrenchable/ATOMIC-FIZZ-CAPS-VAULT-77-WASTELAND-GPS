@@ -1,21 +1,20 @@
 {
   "id": "npc_sidequest_mojave_prime_018",
   "type": "side_quest",
-  "name": "Dax Daro",
+  "name": "Mara Hale",
   "region": "mojave",
   "timelines": [
     "prime"
   ],
-  "archetype": "sidequest_region_legend",
-  "behaviorPattern": "quest_seeker",
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
   "dialogPool": "npc_sidequest_mojave_prime_018_dialog",
   "lootPool": "npc_sidequest_mojave_prime_018_loot",
   "questHooks": [
     "fizzcaps_clue_03",
-    "timeline_warning_01",
-    "anomaly_investigation_02"
+    "region_story_01"
   ],
-  "anomalyAwareness": 0.64,
+  "anomalyAwareness": 0.33,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

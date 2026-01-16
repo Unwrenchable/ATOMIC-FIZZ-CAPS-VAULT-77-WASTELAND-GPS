@@ -1,22 +1,21 @@
 {
   "id": "npc_sidequest_mojave_prime-shadow_005",
   "type": "side_quest",
-  "name": "Jett Lenn",
+  "name": "Ash Daro",
   "region": "mojave",
   "timelines": [
     "prime",
     "shadow"
   ],
-  "archetype": "sidequest_fizzcaps_contact",
-  "behaviorPattern": "anomaly_sensitive",
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "quest_seeker",
   "dialogPool": "npc_sidequest_mojave_prime-shadow_005_dialog",
   "lootPool": "npc_sidequest_mojave_prime-shadow_005_loot",
   "questHooks": [
-    "vegas_rumor_03",
     "anomaly_investigation_02",
-    "region_story_01"
+    "vegas_rumor_01"
   ],
-  "anomalyAwareness": 0.9,
+  "anomalyAwareness": 0.67,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

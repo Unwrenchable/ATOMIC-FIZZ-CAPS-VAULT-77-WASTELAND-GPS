@@ -1,19 +1,21 @@
 {
   "id": "npc_sidequest_mojave_echo_020",
   "type": "side_quest",
-  "name": "Nina Marla",
+  "name": "Voss Vera",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
-  "archetype": "sidequest_informer",
-  "behaviorPattern": "timeline_observer",
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "vegas_bound",
   "dialogPool": "npc_sidequest_mojave_echo_020_dialog",
   "lootPool": "npc_sidequest_mojave_echo_020_loot",
   "questHooks": [
+    "anomaly_investigation_02",
+    "timeline_warning_01",
     "vegas_rumor_02"
   ],
-  "anomalyAwareness": 0.31,
+  "anomalyAwareness": 0.87,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }
