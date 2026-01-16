@@ -1,0 +1,14 @@
+{
+  "id": "npc_cottonwood_slave_lira_senn",
+  "name": "Lira Senn",
+  "faction": "enslaved",
+  "role": "Slave",
+  "personality": "Quiet, observant, secretly defiant.",
+  "description": "Lira has survived Cottonwood Cove by staying invisible. She knows every hidden corner of the camp.",
+  "questHooks": [
+    "Saw Legionaries burying something near the river.",
+    "Heard a hum beneath the docks.",
+    "Knows a hidden escape tunnel."
+  ],
+  "poi": "cottonwood_cove_fnv"
+}
