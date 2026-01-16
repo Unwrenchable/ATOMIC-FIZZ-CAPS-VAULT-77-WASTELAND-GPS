@@ -1,0 +1,16 @@
+{
+  "id": "npc_bunker_tunnel_ghost",
+  "name": "Tunnel-Ghost",
+  "faction": "unknown",
+  "homeRegion": "bunker-tunnels",
+  "currentRegion": "bunker-tunnels",
+  "role": "Urban Legend",
+  "personality": "Soft-spoken, half-there, eerie.",
+  "description": "Nobody knows if he’s real. Appears in the corner of your eye, then vanishes.",
+  "questHooks": [
+    "Says he hears humming through the walls.",
+    "Mentions a vault door that 'isn’t on any map'.",
+    "Claims he saw someone walking through a locked bulkhead."
+  ],
+  "poi": "bunker_access_shadow_corridor"
+}
