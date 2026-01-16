@@ -1,0 +1,67 @@
+{
+  "id": "npc_drylake_watcher",
+  "name": "The Watcher",
+  "faction": "None",
+  "role": "Silhouette",
+  "type": "anomaly",
+
+  "homeRegion": "dry-lake",
+  "currentRegion": "dry-lake",
+  "poi": "dry_lake_ridge_silhouette",
+
+  "personality": "Silent. Motionless. Observant. Presence feels intentional, but unreadable.",
+  "description": "A distant figure seen standing on the ridge above the Dry Lake. No one has ever reached them. Approaching causes the figure to vanish, only to reappear elsewhere.",
+
+  "dialogueProfile": {
+    "tone": "silent-distant",
+    "personalityTags": [
+      "triangle-sensitive",
+      "major-character",
+      "visual-anomaly",
+      "nonverbal",
+      "rare-encounter"
+    ],
+    "knowledge": [
+      "triangle",
+      "dry-lake",
+      "hum",
+      "lost-people",
+      "shifting-geometry"
+    ],
+    "anomalyAwareness": 1.0
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["dry_lake_ridge_silhouette"],
+      "night": ["dry_lake_ridge_silhouette"],
+      "wanderChance": 0.0
+    },
+    "roaming": [
+      "dry-lake",
+      "dry-lake-ridge",
+      "old-highway-route"
+    ],
+    "anomalySensitivity": 1.0,
+    "rareEncounter": true,
+    "distanceLock": 40
+  },
+
+  "dialog": {
+    "idle": [],
+    "player_present": [
+      "The figure shifts when you blink.",
+      "You feel watched, but the wind is silent."
+    ],
+    "triangle_active": [
+      "The silhouette flickers in and out of existence.",
+      "The Watcher turns toward the hum."
+    ]
+  },
+
+  "quests": [
+    "side_drylake_sightings"
+  ],
+
+  "notes": "The Watcher cannot be approached. They vanish if the player gets too close and reappear elsewhere on the ridge. Strongly tied to triangle geometry and Dry Lake anomalies."
+}
