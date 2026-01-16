@@ -1,0 +1,16 @@
+{
+  "id": "npc_drylake_sand_scribe",
+  "name": "The Sand-Scribe",
+  "faction": "desert_wanderers",
+  "homeRegion": "dry-lake-edge",
+  "currentRegion": "dry-lake-edge",
+  "role": "Story Keeper",
+  "personality": "Patient, poetic, strangely hopeful.",
+  "description": "Writes stories in the dunes that the wind erases. Says the desert keeps the ones worth remembering.",
+  "questHooks": [
+    "Claims he found symbols in the sand that weren't his.",
+    "Mentions a stranger who asked about a vault with no number.",
+    "Says the wind carried a hum that felt 'familiar'."
+  ],
+  "poi": "dry_lake_edge_sandbank"
+}
