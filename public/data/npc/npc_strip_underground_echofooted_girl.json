@@ -2,15 +2,54 @@
   "id": "npc_strip_underground_echofooted_girl",
   "name": "The Echo-Footed Girl",
   "faction": "unknown",
-  "homeRegion": "unknown",
-  "currentRegion": "strip-underground",
   "role": "Wanderer",
+
+  "homeRegion": "strip-underground",
+  "currentRegion": "strip-underground",
+  "poi": "strip_underground_echo_corridor",
+
   "personality": "Quiet, fast, impossible to track.",
   "description": "You hear her before you see her—soft footsteps, then silence. Nobody knows where she sleeps.",
+
+  "dialogueProfile": {
+    "tone": "whispered",
+    "personalityTags": [
+      "major-character",
+      "triangle-sensitive",
+      "mythic",
+      "unpredictable",
+      "liminal"
+    ],
+    "knowledge": [
+      "rumors",
+      "triangle",
+      "pipes",
+      "underground",
+      "lost-places"
+    ],
+    "anomalyAwareness": 0.92
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["strip_underground_echo_corridor"],
+      "night": ["strip_underground_hidden_nest"],
+      "wanderChance": 0.35
+    },
+    "roaming": [
+      "strip-underground",
+      "freeside-east",
+      "dry-lake-edge"
+    ],
+    "anomalySensitivity": 0.95,
+    "rareEncounter": true
+  },
+
   "questHooks": [
     "Says she saw someone 'walking upside down' in the tunnels.",
     "Knows a shortcut that bypasses Strip security.",
     "Claims she can hear voices through the pipes."
   ],
-  "poi": "strip_underground_echo_corridor"
+
+  "notes": "Moves too quietly for a normal human. Often appears where she shouldn't be. Some scavengers swear she leaves no footprints at all."
 }
