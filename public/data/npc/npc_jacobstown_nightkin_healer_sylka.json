@@ -1,0 +1,14 @@
+{
+  "id": "npc_jacobstown_nightkin_healer_sylka",
+  "name": "Sylka",
+  "faction": "nightkin",
+  "role": "Healer",
+  "personality": "Gentle, soft-spoken, surprisingly kind.",
+  "description": "Sylka tends to Nightkin injuries and episodes. She believes healing is a form of rebellion against the world that made them.",
+  "questHooks": [
+    "Needs herbs from a dangerous area.",
+    "Worries about a Nightkin showing new symptoms.",
+    "Found a strange symbol carved into a tree."
+  ],
+  "poi": "jacobstown_fnv"
+}
