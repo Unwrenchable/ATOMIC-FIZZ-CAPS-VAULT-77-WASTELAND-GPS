@@ -1,0 +1,16 @@
+{
+  "id": "npc_freeside_alley_painter",
+  "name": "The Alley Painter",
+  "faction": "freeside_locals",
+  "homeRegion": "freeside-east",
+  "currentRegion": "freeside-east",
+  "role": "Street Artist",
+  "personality": "Quiet, focused, lost in his work.",
+  "description": "Covers walls with murals of people nobody recognizes. Says he 'remembers faces from before'.",
+  "questHooks": [
+    "Painted a mural of someone who went missing yesterday.",
+    "Claims he saw a man with no shadow.",
+    "Says one of his murals changed overnight."
+  ],
+  "poi": "freeside_east_alley_murals"
+}
