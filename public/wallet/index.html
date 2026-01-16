@@ -16,6 +16,7 @@
   <div class="boot-line">LOADING PIP-BOY INTERFACE...</div>
 </div>
 
+<!-- MAIN WALLET APP -->
 <div id="wallet-app" class="crt">
 
   <!-- BRANDING -->
@@ -75,10 +76,8 @@
     <div id="afw-trade-status" class="mono small muted"></div>
   </section>
 
-</div>
+</div> <!-- END WALLET APP -->
 
-<script src="/js/main.js"></script>
-<script src="wallet.js"></script>
 <!-- NFT DETAIL POPUP -->
 <div id="nft-modal" class="modal hidden">
   <div class="modal-content crt">
@@ -95,6 +94,20 @@
     </div>
   </div>
 </div>
+
+<!-- FUSION POPUP -->
+<div id="fusion-modal" class="modal hidden">
+  <div class="modal-content crt">
+    <button id="fusion-close" class="btn modal-close">CLOSE</button>
+    <h2>FUSION</h2>
+    <div id="fusion-body"></div>
+    <button id="fusion-start" class="btn">FUSE</button>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="/js/main.js"></script>
+<script src="wallet.js"></script>
 
 </body>
 </html>
