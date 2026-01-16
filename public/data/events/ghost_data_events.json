@@ -1,0 +1,32 @@
+{
+  "ghostData": [
+    {
+      "id": "ghost_recent_scavenge",
+      "type": "poi_hint",
+      "icon": "scavenge_mark",
+      "chance": 0.05,
+      "regions": ["*"],
+      "message": "Someone scavenged this area not long ago.",
+      "overseerMessage": "Activity spike detected at this POI."
+    },
+    {
+      "id": "ghost_dropped_item",
+      "type": "loot_hint",
+      "icon": "dropped_item",
+      "chance": 0.03,
+      "regions": ["vegas_outskirts", "freeside"],
+      "message": "A wanderer left something behind.",
+      "lootTable": ["scrap_metal", "empty_bottle", "torn_note"]
+    },
+    {
+      "id": "ghost_battle_residue",
+      "type": "combat_hint",
+      "icon": "battle_residue",
+      "chance": 0.02,
+      "regions": ["highway_93", "sloan", "novac"],
+      "message": "Signs of a recent fight.",
+      "overseerMessage": "Combat echoes detected.",
+      "jaxLine": "Someone fought here… not long ago."
+    }
+  ]
+}
