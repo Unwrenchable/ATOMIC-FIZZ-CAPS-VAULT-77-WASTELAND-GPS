@@ -1,0 +1,14 @@
+{
+  "id": "npc_jacobstown_nightkin_scout_varra",
+  "name": "Varra",
+  "faction": "nightkin",
+  "role": "Scout",
+  "personality": "Unpredictable, intense, loyal to Garran.",
+  "description": "Varra patrols the woods around Jacobstown. She struggles with auditory hallucinations but hides it well.",
+  "questHooks": [
+    "Saw outsiders spying on Jacobstown.",
+    "Claims something is stalking the woods.",
+    "Heard 'voices' near the frozen lake."
+  ],
+  "poi": "jacobstown_fnv"
+}
