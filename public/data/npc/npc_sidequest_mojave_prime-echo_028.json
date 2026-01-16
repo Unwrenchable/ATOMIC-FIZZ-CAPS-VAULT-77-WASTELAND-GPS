@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_mojave_prime-echo_028",
+  "type": "side_quest",
+  "name": "Mira Varra",
+  "region": "mojave",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_mojave_prime-echo_028_dialog",
+  "lootPool": "npc_sidequest_mojave_prime-echo_028_loot",
+  "questHooks": [
+    "fizzcaps_clue_02",
+    "vegas_rumor_03",
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.71,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

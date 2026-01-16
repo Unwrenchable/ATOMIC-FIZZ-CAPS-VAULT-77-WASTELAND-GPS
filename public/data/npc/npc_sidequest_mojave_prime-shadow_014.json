@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_mojave_prime-shadow_014",
+  "type": "side_quest",
+  "name": "Varra Voss",
+  "region": "mojave",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_mojave_prime-shadow_014_dialog",
+  "lootPool": "npc_sidequest_mojave_prime-shadow_014_loot",
+  "questHooks": [
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.72,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_shadow_007",
+  "type": "side_quest",
+  "name": "Marla Kade",
+  "region": "mojave",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_mojave_shadow_007_dialog",
+  "lootPool": "npc_sidequest_mojave_shadow_007_loot",
+  "questHooks": [
+    "region_story_01",
+    "fizzcaps_clue_01",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_mojave_shadow_011",
+  "type": "side_quest",
+  "name": "Rhea Voss",
+  "region": "mojave",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_mojave_shadow_011_dialog",
+  "lootPool": "npc_sidequest_mojave_shadow_011_loot",
+  "questHooks": [
+    "region_story_02",
+    "vegas_rumor_01"
+  ],
+  "anomalyAwareness": 0.58,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_mojave_shadow_030",
+  "type": "side_quest",
+  "name": "Nova Hale",
+  "region": "mojave",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_mojave_shadow_030_dialog",
+  "lootPool": "npc_sidequest_mojave_shadow_030_loot",
+  "questHooks": [
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.37,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
