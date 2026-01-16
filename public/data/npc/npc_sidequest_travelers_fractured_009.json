@@ -1,0 +1,27 @@
+{
+  "id": "npc_sidequest_travelers_fractured_009",
+  "type": "side_quest",
+  "name": "Daro Varra",
+  "region": "capital_wasteland",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_fractured_009_dialog",
+  "lootPool": "npc_sidequest_travelers_fractured_009_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "fizzcaps_clue_03",
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.68,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "capital_wasteland",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "capital_wasteland",
+    "vegas_outskirts"
+  ]
+}

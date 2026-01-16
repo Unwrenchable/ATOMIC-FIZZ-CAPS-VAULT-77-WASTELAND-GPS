@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_new_reno_prime-echo_010",
+  "type": "side_quest",
+  "name": "Marla Hale",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_new_reno_prime-echo_010_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-echo_010_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.74,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

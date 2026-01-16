@@ -1,0 +1,27 @@
+{
+  "id": "npc_sidequest_travelers_fractured_004",
+  "type": "side_quest",
+  "name": "Jett Rook",
+  "region": "appalachia",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_fractured_004_dialog",
+  "lootPool": "npc_sidequest_travelers_fractured_004_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "anomaly_investigation_01",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.73,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "appalachia",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "appalachia",
+    "vegas_outskirts"
+  ]
+}
