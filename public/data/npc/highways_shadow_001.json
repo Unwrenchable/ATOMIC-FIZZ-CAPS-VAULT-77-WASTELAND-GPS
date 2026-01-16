@@ -1,6 +1,6 @@
 {
   "id": "highways_shadow_001",
-  "name": "Scrap Hunter",
+  "name": "Scavenger",
   "archetype": "wasteland_scavenger",
   "spawnPool": [
     "highway_93",
@@ -20,5 +20,7 @@
   ],
   "factionTag": "legion_adjacent",
   "timeline": "shadow",
-  "timelineVariants": []
+  "timelineVariants": [
+    "echo"
+  ]
 }

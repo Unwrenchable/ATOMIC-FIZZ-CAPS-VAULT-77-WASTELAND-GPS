@@ -1,26 +1,23 @@
 {
   "id": "highways_echo_001",
-  "name": "Scrap Hunter",
-  "archetype": "wasteland_scavenger",
+  "name": "Trooper",
+  "archetype": "faction_grunt",
   "spawnPool": [
     "highway_93",
     "highway_95",
     "sloan_road"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "ammo_556",
+    "radio"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "Orders are orders.",
+    "Keep moving, citizen.",
+    "Stay alert. Trouble’s never far."
   ],
   "factionTag": "neutral",
   "timeline": "echo",
-  "timelineVariants": [
-    "echo"
-  ]
+  "timelineVariants": []
 }

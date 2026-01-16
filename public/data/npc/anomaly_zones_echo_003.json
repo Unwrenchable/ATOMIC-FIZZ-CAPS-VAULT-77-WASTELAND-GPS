@@ -1,11 +1,11 @@
 {
-  "id": "highways_shadow_003",
+  "id": "anomaly_zones_echo_003",
   "name": "Nomad",
   "archetype": "highway_drifter",
   "spawnPool": [
-    "highway_93",
-    "highway_95",
-    "sloan_road"
+    "triangle_center",
+    "dry_lake_cracks",
+    "vault77_perimeter"
   ],
   "behaviorPattern": "highway_roamer",
   "lootPool": [
@@ -18,6 +18,6 @@
     "Saw something moving out there. Didn’t stick around."
   ],
   "factionTag": "neutral",
-  "timeline": "shadow",
+  "timeline": "echo",
   "timelineVariants": []
 }

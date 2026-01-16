@@ -1,24 +1,24 @@
 {
   "id": "general_wasteland_echo_001",
-  "name": "Scout",
-  "archetype": "faction_grunt",
+  "name": "Caravan Runner",
+  "archetype": "traveler_merchant",
   "spawnPool": [
     "dry_lake",
     "red_rock",
     "highway_95",
     "novac_outskirts"
   ],
-  "behaviorPattern": "static_local",
+  "behaviorPattern": "merchant_idle",
   "lootPool": [
-    "ammo_556",
-    "radio"
+    "small_caps",
+    "trade_goods"
   ],
   "dialogPool": [
-    "Orders are orders.",
-    "Keep moving, citizen.",
-    "Stay alert. Trouble’s never far."
+    "Caps for goods, goods for caps.",
+    "Road’s rough, but business is business.",
+    "Got something you might like."
   ],
-  "factionTag": "legion_adjacent",
+  "factionTag": "neutral",
   "timeline": "echo",
   "timelineVariants": []
 }

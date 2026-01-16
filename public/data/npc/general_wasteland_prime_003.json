@@ -1,25 +1,24 @@
 {
   "id": "general_wasteland_prime_003",
-  "name": "Scrap Hunter",
-  "archetype": "wasteland_scavenger",
+  "name": "Local",
+  "archetype": "vegas_outskirts_local",
   "spawnPool": [
     "dry_lake",
     "red_rock",
     "highway_95",
     "novac_outskirts"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "food_ration",
+    "small_caps"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "Vegas lights look close, but they’re a world away.",
+    "Strangers don’t usually come this far out.",
+    "Keep your head down. Raiders like this stretch."
   ],
-  "factionTag": "neutral",
+  "factionTag": "raider_adjacent",
   "timeline": "prime",
   "timelineVariants": []
 }

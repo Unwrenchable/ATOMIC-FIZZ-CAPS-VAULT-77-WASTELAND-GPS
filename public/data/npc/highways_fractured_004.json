@@ -1,23 +1,23 @@
 {
   "id": "highways_fractured_004",
-  "name": "Merchant",
-  "archetype": "traveler_merchant",
+  "name": "Outskirts Resident",
+  "archetype": "vegas_outskirts_local",
   "spawnPool": [
     "highway_93",
     "highway_95",
     "sloan_road"
   ],
-  "behaviorPattern": "merchant_idle",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "small_caps",
-    "trade_goods"
+    "food_ration",
+    "small_caps"
   ],
   "dialogPool": [
-    "Caps for goods, goods for caps.",
-    "Road’s rough, but business is business.",
-    "Got something you might like."
+    "Vegas lights look close, but they’re a world away.",
+    "Strangers don’t usually come this far out.",
+    "Keep your head down. Raiders like this stretch."
   ],
-  "factionTag": "raider_adjacent",
+  "factionTag": "neutral",
   "timeline": "fractured",
   "timelineVariants": []
 }

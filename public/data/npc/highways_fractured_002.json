@@ -1,22 +1,23 @@
 {
   "id": "highways_fractured_002",
-  "name": "Echo Wanderer",
-  "archetype": "timeline_echo_wanderer",
+  "name": "Scout",
+  "archetype": "faction_grunt",
   "spawnPool": [
     "highway_93",
     "highway_95",
     "sloan_road"
   ],
-  "behaviorPattern": "anomaly_wander",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "echo_fragment"
+    "ammo_556",
+    "radio"
   ],
   "dialogPool": [
-    "…you’ve walked this path before…",
-    "…time folds strangely around this place…",
-    "…not your first time here…"
+    "Orders are orders.",
+    "Keep moving, citizen.",
+    "Stay alert. Trouble’s never far."
   ],
-  "factionTag": "brotherhood_adjacent",
+  "factionTag": "legion_adjacent",
   "timeline": "fractured",
   "timelineVariants": []
 }
