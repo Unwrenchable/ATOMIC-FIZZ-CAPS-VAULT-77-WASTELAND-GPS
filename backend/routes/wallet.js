@@ -14,9 +14,27 @@ let PLAYER_DATA = {
   Award CAPS to the player
 */
 function awardCaps(amount) {
-  PLAYER_DATA.caps += amount;
+  const amt = Number(amount) || 0;
+  PLAYER_DATA.caps += amt;
   return PLAYER_DATA.caps;
 }
+
+/*
+  CAPS reward table
+*/
+const rarityCaps = {
+  common: 10,
+  uncommon: 25,
+  rare: 50,
+  epic: 100,
+  legendary: 250,
+  fizz: 777
+};
+
+/*
+  Rarity evolution order
+*/
+const rarityOrder = ["common", "uncommon", "rare", "epic", "legendary", "fizz"];
 
 /* ------------------------------------------------------------
    SCRAP NFT → CAPS
@@ -25,8 +43,8 @@ router.post("/scrap-nft", async (req, res) => {
   try {
     const { mint } = req.body;
 
-    if (!mint) {
-      return res.status(400).json({ ok: false, error: "Missing mint" });
+    if (!mint || typeof mint !== "string") {
+      return res.status(400).json({ ok: false, error: "Missing or invalid mint" });
     }
 
     const nft = PLAYER_DATA.nfts.find(n => n.mint === mint);
@@ -34,26 +52,17 @@ router.post("/scrap-nft", async (req, res) => {
       return res.status(400).json({ ok: false, error: "NFT not owned" });
     }
 
-    // Remove NFT from inventory
+    // Remove NFT
     PLAYER_DATA.nfts = PLAYER_DATA.nfts.filter(n => n.mint !== mint);
 
-    // Award CAPS based on rarity
-    const rarityCaps = {
-      common: 10,
-      uncommon: 25,
-      rare: 50,
-      epic: 100,
-      legendary: 250,
-      fizz: 777
-    };
-
-    const capsAwarded = rarityCaps[nft.rarity] || 10;
-    const newTotal = awardCaps(capsAwarded);
+    // Award CAPS
+    const capsAwarded = rarityCaps[nft.rarity] || rarityCaps.common;
+    const totalCaps = awardCaps(capsAwarded);
 
     return res.json({
       ok: true,
       caps: capsAwarded,
-      totalCaps: newTotal
+      totalCaps
     });
 
   } catch (err) {
@@ -69,8 +78,8 @@ router.post("/fuse", async (req, res) => {
   try {
     const { mint } = req.body;
 
-    if (!mint) {
-      return res.status(400).json({ ok: false, error: "Missing mint" });
+    if (!mint || typeof mint !== "string") {
+      return res.status(400).json({ ok: false, error: "Missing or invalid mint" });
     }
 
     const baseNFT = PLAYER_DATA.nfts.find(n => n.mint === mint);
@@ -81,12 +90,11 @@ router.post("/fuse", async (req, res) => {
     // Remove base NFT
     PLAYER_DATA.nfts = PLAYER_DATA.nfts.filter(n => n.mint !== mint);
 
-    // Rarity evolution
-    const rarityOrder = ["common", "uncommon", "rare", "epic", "legendary", "fizz"];
+    // Evolve rarity
     const currentIndex = rarityOrder.indexOf(baseNFT.rarity || "common");
     const newRarity = rarityOrder[Math.min(currentIndex + 1, rarityOrder.length - 1)];
 
-    // Create new fused NFT
+    // Create new NFT
     const newNFT = {
       name: `Fused ${baseNFT.name}`,
       mint: "FUSED-" + Math.random().toString(36).slice(2),
@@ -117,8 +125,8 @@ router.post("/transfer-fizz", async (req, res) => {
   try {
     const { from, to, amount } = req.body;
 
-    if (!from || !to || !amount) {
-      return res.status(400).json({ ok: false, error: "Missing fields" });
+    if (!from || !to || typeof amount !== "number") {
+      return res.status(400).json({ ok: false, error: "Missing or invalid fields" });
     }
 
     // TODO: integrate Solana token transfer here
