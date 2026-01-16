@@ -1,1 +1,14 @@
-npc_searchlight_survivor_mira_holt.json
+{
+  "id": "npc_cottonwood_centurion_varrus_kai",
+  "name": "Centurion Varrus Kai",
+  "faction": "caesar_legion",
+  "role": "Centurion",
+  "personality": "Cold, disciplined, unwavering in loyalty.",
+  "description": "Varrus commands Cottonwood Cove with iron precision. He believes the Mojave is weak and ripe for conquest.",
+  "questHooks": [
+    "Wants intel on NCR troop movements near Searchlight.",
+    "Says the river carries 'omens' at night — humming stones.",
+    "Believes someone is sabotaging Legion supply caches."
+  ],
+  "poi": "cottonwood_cove_fnv"
+}
