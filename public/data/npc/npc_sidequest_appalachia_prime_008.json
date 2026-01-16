@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_appalachia_prime_008",
+  "type": "side_quest",
+  "name": "Lio Mira",
+  "region": "appalachia",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_appalachia_prime_008_dialog",
+  "lootPool": "npc_sidequest_appalachia_prime_008_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "vegas_rumor_03",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.85,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

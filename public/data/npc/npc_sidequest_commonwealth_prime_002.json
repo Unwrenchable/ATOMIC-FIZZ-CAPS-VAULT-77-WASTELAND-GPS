@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_commonwealth_prime_002",
+  "type": "side_quest",
+  "name": "Nova Jett",
+  "region": "commonwealth",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_commonwealth_prime_002_dialog",
+  "lootPool": "npc_sidequest_commonwealth_prime_002_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.86,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

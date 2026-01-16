@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_new_reno_echo_009",
+  "type": "side_quest",
+  "name": "Kade Kader",
+  "region": "new_reno",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_new_reno_echo_009_dialog",
+  "lootPool": "npc_sidequest_new_reno_echo_009_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "anomaly_investigation_01",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.82,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

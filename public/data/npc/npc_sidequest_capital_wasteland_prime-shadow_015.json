@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime-shadow_015",
+  "type": "side_quest",
+  "name": "Vera Rhea",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime-shadow_015_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime-shadow_015_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.49,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

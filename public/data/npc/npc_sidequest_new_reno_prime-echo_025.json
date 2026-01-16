@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_new_reno_prime-echo_025",
+  "type": "side_quest",
+  "name": "Varra Daro",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_new_reno_prime-echo_025_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-echo_025_loot",
+  "questHooks": [
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.84,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_dlc_regions_shadow_007",
+  "type": "side_quest",
+  "name": "Kael Dax",
+  "region": "dlc_regions",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_dlc_regions_shadow_007_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_shadow_007_loot",
+  "questHooks": [
+    "vegas_rumor_03",
+    "anomaly_investigation_02",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.64,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
