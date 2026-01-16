@@ -1,0 +1,14 @@
+{
+  "id": "npc_jacobstown_settler_mira_ash",
+  "name": "Mira Ash",
+  "faction": "jacobstown",
+  "role": "Settler",
+  "personality": "Hopeful, nervous, grateful to be alive.",
+  "description": "Mira fled raiders and found sanctuary in Jacobstown. She’s one of the few humans the mutants trust.",
+  "questHooks": [
+    "Wants help retrieving belongings from her old home.",
+    "Saw someone watching Jacobstown from the ridge.",
+    "Heard strange noises in the lodge basement."
+  ],
+  "poi": "jacobstown_fnv"
+}
