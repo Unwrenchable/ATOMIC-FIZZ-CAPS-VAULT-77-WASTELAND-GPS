@@ -2,23 +2,17 @@
 require("dotenv").config();
 
 const express = require("express");
-const path = require("path");
 const cors = require("cors");
 const helmet = require("helmet");
+const path = require("path");
 
 const walletRoutes = require("./routes/wallet");
 
 const app = express();
 
-// ------------------------------------------------------------
-// CONFIG
-// ------------------------------------------------------------
 const PORT = process.env.PORT || 3000;
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "*";
 
-// ------------------------------------------------------------
-// MIDDLEWARE
-// ------------------------------------------------------------
 app.use(express.json({ limit: "1mb" }));
 app.use(
   cors({
@@ -28,29 +22,22 @@ app.use(
 );
 app.use(
   helmet({
-    contentSecurityPolicy: false, // you can tighten this later
+    contentSecurityPolicy: false,
   })
 );
 
-// Static wallet (if you serve it from backend)
+// serve static wallet if you want: /wallet -> public/wallet
 app.use(
   "/wallet",
   express.static(path.join(__dirname, "..", "public", "wallet"))
 );
 
-// ------------------------------------------------------------
-// ROUTES
-// ------------------------------------------------------------
 app.use("/api", walletRoutes);
 
-// Health check
 app.get("/health", (req, res) => {
   res.json({ ok: true, status: "healthy" });
 });
 
-// ------------------------------------------------------------
-// START
-// ------------------------------------------------------------
 app.listen(PORT, () => {
-  console.log(`Backend running on port ${PORT}`);
+  console.log(`Atomic Fizz Wallet backend running on port ${PORT}`);
 });
