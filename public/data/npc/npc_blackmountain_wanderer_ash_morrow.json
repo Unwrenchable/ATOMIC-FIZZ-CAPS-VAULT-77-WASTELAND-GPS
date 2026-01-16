@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_wanderer_ash_morrow",
+  "name": "Ash Morrow",
+  "faction": "independent",
+  "role": "Wanderer",
+  "personality": "Calm, fearless, strange.",
+  "description": "Ash wanders Black Mountain freely, unafraid of mutants. No one knows why Gorath tolerates him.",
+  "questHooks": [
+    "Knows a secret about the tower.",
+    "Saw someone sabotaging equipment.",
+    "Claims the static carries memories."
+  ],
+  "poi": "black_mountain_fnv"
+}
