@@ -1,0 +1,25 @@
+{
+  "id": "anomaly_zones_fractured_003",
+  "name": "Scout",
+  "archetype": "faction_grunt",
+  "spawnPool": [
+    "triangle_center",
+    "dry_lake_cracks",
+    "vault77_perimeter"
+  ],
+  "behaviorPattern": "static_local",
+  "lootPool": [
+    "ammo_556",
+    "radio"
+  ],
+  "dialogPool": [
+    "Orders are orders.",
+    "Keep moving, citizen.",
+    "Stay alert. Trouble’s never far."
+  ],
+  "factionTag": "ncr_adjacent",
+  "timeline": "fractured",
+  "timelineVariants": [
+    "fractured"
+  ]
+}
