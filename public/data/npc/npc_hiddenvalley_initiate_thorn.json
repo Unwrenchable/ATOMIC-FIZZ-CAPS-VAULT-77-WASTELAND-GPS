@@ -1,0 +1,16 @@
+{
+  "id": "npc_hiddenvalley_initiate_thorn",
+  "name": "Initiate Thorn",
+  "faction": "brotherhood_of_steel",
+  "homeRegion": "hidden-valley",
+  "currentRegion": "hidden-valley-east",
+  "role": "Weapons Apprentice",
+  "personality": "Eager, reckless, obsessed with energy weapons.",
+  "description": "Wants to build a laser shotgun. Has burned his eyebrows off twice.",
+  "questHooks": [
+    "Says he found a capacitor that hums even when unplugged.",
+    "Mentions a stranger asking about old vault tech.",
+    "Claims a training dummy moved on its own."
+  ],
+  "poi": "hidden_valley_east_workshop"
+}
