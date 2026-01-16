@@ -1,0 +1,20 @@
+{
+  "idFormat": "npc_gen_{region}_{index}",
+  "useArchetypesFrom": "public/data/archetypes/archetypes.json",
+  "useRegionPoolsFrom": "public/data/archetypes/region_pools.json",
+  "useTimelineVariantsFrom": "public/data/archetypes/timeline_variants.json",
+  "useBehaviorPatternsFrom": "public/data/archetypes/behavior_patterns.json",
+  "fields": {
+    "id": "auto",
+    "name": "fromArchetypeNamePattern",
+    "archetype": "fromWeightedArchetype",
+    "spawnPool": "fromRegionPool",
+    "behaviorPattern": "fromArchetypeOrDefault",
+    "lootPool": "fromArchetype",
+    "dialogPool": "fromArchetype",
+    "factionTag": "fromFactionWeights",
+    "timelineVariants": "fromTimelineRules",
+    "uniquePerWorld": "falseByDefault",
+    "duplicateAcrossRegions": "falseByDefault"
+  }
+}
