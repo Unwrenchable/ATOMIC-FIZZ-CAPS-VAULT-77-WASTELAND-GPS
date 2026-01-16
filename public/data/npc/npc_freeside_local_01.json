@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_weirdo_02",
+  "name": "Corridor Whisperer",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "The walls shift when no one’s looking.",
+    "You ever walk into a hallway that wasn’t there before?"
+  ],
+  "spawnPool": ["strip_service_corridors"],
+  "uniquePerWorld": true
+}
