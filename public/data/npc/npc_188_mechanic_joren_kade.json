@@ -1,0 +1,16 @@
+{
+  "id": "npc_188_mechanic_joren_kade",
+  "name": "Joren Kade",
+  "faction": "traders",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Mechanic",
+  "personality": "Calm, methodical, grease permanently under his nails.",
+  "description": "Joren keeps the caravans rolling. He can fix anything with wheels, and half the things without them.",
+  "questHooks": [
+    "Needs help retrieving a lost tool crate near Sloan.",
+    "Says a caravan brought in a strange humming cap.",
+    "Knows a shortcut to avoid deathclaws — maybe."
+  ],
+  "poi": "188_trading_post_fnv"
+}
