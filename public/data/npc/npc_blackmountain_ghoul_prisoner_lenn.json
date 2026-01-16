@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_ghoul_prisoner_lenn",
+  "name": "Lenn",
+  "faction": "ghoul",
+  "role": "Prisoner",
+  "personality": "Sarcastic, bitter, surprisingly calm.",
+  "description": "Lenn was captured by Nightkin while scavenging. He’s been locked in a shack, waiting for someone to notice.",
+  "questHooks": [
+    "Wants help escaping.",
+    "Knows about a hidden bunker near the tower.",
+    "Saw a Nightkin bury something important."
+  ],
+  "poi": "black_mountain_fnv"
+}
