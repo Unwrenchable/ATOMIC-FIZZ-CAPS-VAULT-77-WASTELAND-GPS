@@ -1,0 +1,24 @@
+{
+  "id": "general_wasteland_prime_002",
+  "name": "Local",
+  "archetype": "vegas_outskirts_local",
+  "spawnPool": [
+    "dry_lake",
+    "red_rock",
+    "highway_95",
+    "novac_outskirts"
+  ],
+  "behaviorPattern": "static_local",
+  "lootPool": [
+    "food_ration",
+    "small_caps"
+  ],
+  "dialogPool": [
+    "Vegas lights look close, but they’re a world away.",
+    "Strangers don’t usually come this far out.",
+    "Keep your head down. Raiders like this stretch."
+  ],
+  "factionTag": "neutral",
+  "timeline": "prime",
+  "timelineVariants": []
+}

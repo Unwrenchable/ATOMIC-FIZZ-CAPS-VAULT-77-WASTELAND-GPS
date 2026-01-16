@@ -1,0 +1,24 @@
+{
+  "id": "general_wasteland_prime_001",
+  "name": "Road Walker",
+  "archetype": "highway_drifter",
+  "spawnPool": [
+    "dry_lake",
+    "red_rock",
+    "highway_95",
+    "novac_outskirts"
+  ],
+  "behaviorPattern": "highway_roamer",
+  "lootPool": [
+    "dirty_water",
+    "old_map"
+  ],
+  "dialogPool": [
+    "Long road behind me… longer ahead.",
+    "Highway’s quiet today.",
+    "Saw something moving out there. Didn’t stick around."
+  ],
+  "factionTag": "raider_adjacent",
+  "timeline": "prime",
+  "timelineVariants": []
+}

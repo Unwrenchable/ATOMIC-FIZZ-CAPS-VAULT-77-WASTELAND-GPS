@@ -1,0 +1,24 @@
+{
+  "id": "general_wasteland_fractured_006",
+  "name": "Trader",
+  "archetype": "traveler_merchant",
+  "spawnPool": [
+    "dry_lake",
+    "red_rock",
+    "highway_95",
+    "novac_outskirts"
+  ],
+  "behaviorPattern": "merchant_idle",
+  "lootPool": [
+    "small_caps",
+    "trade_goods"
+  ],
+  "dialogPool": [
+    "Caps for goods, goods for caps.",
+    "Road’s rough, but business is business.",
+    "Got something you might like."
+  ],
+  "factionTag": "neutral",
+  "timeline": "fractured",
+  "timelineVariants": []
+}

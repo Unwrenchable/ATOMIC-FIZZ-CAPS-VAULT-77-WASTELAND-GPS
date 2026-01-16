@@ -1,0 +1,25 @@
+{
+  "id": "vegas_outskirts_fractured_004",
+  "name": "Shack Dweller",
+  "archetype": "vegas_outskirts_local",
+  "spawnPool": [
+    "vegas_outskirts_north",
+    "vegas_outskirts_south",
+    "freeside_border"
+  ],
+  "behaviorPattern": "static_local",
+  "lootPool": [
+    "food_ration",
+    "small_caps"
+  ],
+  "dialogPool": [
+    "Vegas lights look close, but they’re a world away.",
+    "Strangers don’t usually come this far out.",
+    "Keep your head down. Raiders like this stretch."
+  ],
+  "factionTag": "legion_adjacent",
+  "timeline": "fractured",
+  "timelineVariants": [
+    "shadow"
+  ]
+}
