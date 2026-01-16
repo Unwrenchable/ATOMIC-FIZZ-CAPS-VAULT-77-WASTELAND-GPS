@@ -1,0 +1,16 @@
+{
+  "id": "npc_strip_silver_coat_man",
+  "name": "The Man in the Silver Coat",
+  "faction": "unknown",
+  "homeRegion": "unknown",
+  "currentRegion": "strip-central",
+  "role": "Observer",
+  "personality": "Silent, unreadable, unsettling.",
+  "description": "Never gambles. Never speaks. Just watches people lose.",
+  "questHooks": [
+    "Some say he follows winners home.",
+    "Rumor is he once owned a casino that burned down.",
+    "Claims he never blinks."
+  ],
+  "poi": "strip_central_casino_balcony"
+}
