@@ -2,15 +2,55 @@
   "id": "npc_strip_underground_rust_tongue",
   "name": "Rust-Tongue",
   "faction": "underground_scavs",
+  "role": "Scrap Mystic",
+
   "homeRegion": "strip-underground",
   "currentRegion": "strip-underground",
-  "role": "Scrap Mystic",
+  "poi": "strip_underground_scrap_den",
+
   "personality": "Cryptic, metallic-voiced, unsettling.",
   "description": "A scavenger whose voice is metallic from inhaling fumes. Speaks in riddles about 'the machine beneath the city.'",
+
+  "dialogueProfile": {
+    "tone": "raspy",
+    "personalityTags": [
+      "major-character",
+      "triangle-sensitive",
+      "scrap-mystic",
+      "underground-prophet",
+      "cryptic"
+    ],
+    "knowledge": [
+      "underground",
+      "pipes",
+      "machine-beneath",
+      "triangle",
+      "rumors",
+      "lost-tech"
+    ],
+    "anomalyAwareness": 0.88
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["strip_underground_scrap_den"],
+      "night": ["strip_underground_vent_shrine"],
+      "wanderChance": 0.25
+    },
+    "roaming": [
+      "strip-underground",
+      "freeside-east",
+      "industrial-belt"
+    ],
+    "anomalySensitivity": 0.9,
+    "rareEncounter": false
+  },
+
   "questHooks": [
     "Claims the Strip sits on a sleeping giant.",
     "Says he found a gear that 'bleeds oil'.",
     "Warns that something is listening through the vents."
   ],
-  "poi": "strip_underground_scrap_den"
+
+  "notes": "His voice has a metallic resonance from years of inhaling fumes. Some scavengers believe he can 'hear' the machine beneath the Strip."
 }
