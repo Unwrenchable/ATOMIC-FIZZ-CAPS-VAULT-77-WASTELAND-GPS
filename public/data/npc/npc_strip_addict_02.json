@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_addict_02",
+  "name": "Lost Soul",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Time slips here… you feel it too?",
+    "I walked down this alley twice… but it wasn’t the same alley."
+  ],
+  "spawnPool": ["strip_underground"],
+  "uniquePerWorld": false
+}
