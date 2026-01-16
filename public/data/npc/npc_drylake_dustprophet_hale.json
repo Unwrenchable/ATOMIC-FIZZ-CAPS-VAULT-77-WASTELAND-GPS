@@ -1,0 +1,16 @@
+{
+  "id": "npc_drylake_dustprophet_hale",
+  "name": "Dust-Prophet Hale",
+  "faction": "desert_wanderers",
+  "homeRegion": "dry-lake-edge",
+  "currentRegion": "dry-lake-edge",
+  "role": "Wasteland Seer",
+  "personality": "Calm, cryptic, speaks like the wind is listening.",
+  "description": "Reads wind patterns like scripture. Says storms carry messages if you know how to listen.",
+  "questHooks": [
+    "Mentions a hum that rides the dust storms.",
+    "Says the lakebed 'remembers footsteps that never happened'.",
+    "Claims someone buried a metal box that sings at night."
+  ],
+  "poi": "dry_lake_edge_overlook"
+}
