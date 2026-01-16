@@ -1,0 +1,16 @@
+{
+  "id": "npc_freeside_patchstitch_mara",
+  "name": "Patch-Stitch Mara",
+  "faction": "freeside_locals",
+  "homeRegion": "freeside-east",
+  "currentRegion": "freeside-east",
+  "role": "Makeshift Tailor",
+  "personality": "Warm, superstitious, believes every stitch has meaning.",
+  "description": "Mara sews clothes from tarp, canvas, and scrap. She says every stitch keeps a ghost quiet.",
+  "questHooks": [
+    "Claims a spirit follows anyone wearing torn clothing.",
+    "Says she found a pre-war sewing kit that 'whispers' at night.",
+    "Knows who’s been stealing blankets from the shelter."
+  ],
+  "poi": "freeside_east_market"
+}
