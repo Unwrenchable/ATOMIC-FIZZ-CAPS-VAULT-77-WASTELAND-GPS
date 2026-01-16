@@ -1,0 +1,11 @@
+{
+  "id": "npc_freeside_storyhook_01",
+  "name": "Desperate Mother",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "My daughter vanished near the old clinic.",
+    "People disappear in Freeside. Please… help me."
+  ],
+  "spawnPool": ["freeside_north"],
+  "uniquePerWorld": true
+}
