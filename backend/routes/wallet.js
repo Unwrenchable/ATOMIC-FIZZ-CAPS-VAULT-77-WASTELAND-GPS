@@ -3,21 +3,25 @@ const router = express.Router();
 const redis = require("../redis");
 
 /*
-  TEMP PLAYER DATA STORE
-  Replace with Redis / Postgres / Mongo later.
+  Redis-backed state helpers
 */
-let PLAYER_DATA = {
-  caps: 0,
-  nfts: [] // { name, mint, rarity, image, description, slot, special }
-};
+async function getState() {
+  const [capsStr, nftsStr] = await Promise.all([
+    redis.get("afw:caps"),
+    redis.get("afw:nfts"),
+  ]);
 
-/*
-  Award CAPS to the player
-*/
-function awardCaps(amount) {
-  const amt = Number(amount) || 0;
-  PLAYER_DATA.caps += amt;
-  return PLAYER_DATA.caps;
+  return {
+    caps: capsStr ? Number(capsStr) : 0,
+    nfts: nftsStr ? JSON.parse(nftsStr) : []
+  };
+}
+
+async function saveState(state) {
+  await Promise.all([
+    redis.set("afw:caps", String(state.caps)),
+    redis.set("afw:nfts", JSON.stringify(state.nfts))
+  ]);
 }
 
 /*
@@ -48,22 +52,26 @@ router.post("/scrap-nft", async (req, res) => {
       return res.status(400).json({ ok: false, error: "Missing or invalid mint" });
     }
 
-    const nft = PLAYER_DATA.nfts.find(n => n.mint === mint);
+    const state = await getState();
+    const nft = state.nfts.find(n => n.mint === mint);
+
     if (!nft) {
       return res.status(400).json({ ok: false, error: "NFT not owned" });
     }
 
     // Remove NFT
-    PLAYER_DATA.nfts = PLAYER_DATA.nfts.filter(n => n.mint !== mint);
+    state.nfts = state.nfts.filter(n => n.mint !== mint);
 
     // Award CAPS
     const capsAwarded = rarityCaps[nft.rarity] || rarityCaps.common;
-    const totalCaps = awardCaps(capsAwarded);
+    state.caps += capsAwarded;
+
+    await saveState(state);
 
     return res.json({
       ok: true,
       caps: capsAwarded,
-      totalCaps
+      totalCaps: state.caps
     });
 
   } catch (err) {
@@ -83,13 +91,15 @@ router.post("/fuse", async (req, res) => {
       return res.status(400).json({ ok: false, error: "Missing or invalid mint" });
     }
 
-    const baseNFT = PLAYER_DATA.nfts.find(n => n.mint === mint);
+    const state = await getState();
+    const baseNFT = state.nfts.find(n => n.mint === mint);
+
     if (!baseNFT) {
       return res.status(400).json({ ok: false, error: "NFT not owned" });
     }
 
     // Remove base NFT
-    PLAYER_DATA.nfts = PLAYER_DATA.nfts.filter(n => n.mint !== mint);
+    state.nfts = state.nfts.filter(n => n.mint !== mint);
 
     // Evolve rarity
     const currentIndex = rarityOrder.indexOf(baseNFT.rarity || "common");
@@ -106,7 +116,8 @@ router.post("/fuse", async (req, res) => {
       special: baseNFT.special || {}
     };
 
-    PLAYER_DATA.nfts.push(newNFT);
+    state.nfts.push(newNFT);
+    await saveState(state);
 
     return res.json({
       ok: true,
