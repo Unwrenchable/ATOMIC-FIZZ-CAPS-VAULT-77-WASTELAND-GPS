@@ -1,0 +1,16 @@
+{
+  "id": "npc_novac_nightscout",
+  "name": "Night-Vision Scout",
+  "faction": "None",
+  "role": "Scout",
+  "type": "civilian",
+  "homeRegion": "novac",
+  "currentRegion": "novac",
+  "poi": "novac_ridge",
+  "dialog": {
+    "idle": [
+      "Night’s when the Mojave really wakes up.",
+      "Keep your eyes open. Things move out here."
+    ]
+  }
+}
