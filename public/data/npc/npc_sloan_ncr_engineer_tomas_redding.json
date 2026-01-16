@@ -1,0 +1,16 @@
+{
+  "id": "npc_sloan_ncr_engineer_tomas_redding",
+  "name": "Engineer Tomas Redding",
+  "faction": "ncr",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "NCR Structural Engineer",
+  "personality": "Smart, sarcastic, tired of NCR bureaucracy.",
+  "description": "Redding was sent to assess the quarry’s structural integrity. He’s more worried about what’s beneath the rock than the rock itself.",
+  "questHooks": [
+    "Detected seismic anomalies under the quarry floor.",
+    "Found a metal shard vibrating near NCR equipment.",
+    "Wants help placing sensors in dangerous areas."
+  ],
+  "poi": "sloan_station_fnv"
+}
