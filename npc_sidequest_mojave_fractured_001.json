@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_mojave_fractured_001",
+  "type": "side_quest",
+  "name": "Sylas Varra",
+  "region": "mojave",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_mojave_fractured_001_dialog",
+  "lootPool": "npc_sidequest_mojave_fractured_001_loot",
+  "questHooks": [
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.85,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
