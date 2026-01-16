@@ -1,9 +1,7 @@
 // public/js/modules/worldmap.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps – Pip-Boy World Map Module
-// Dual base layers:
-//   - Custom overview tiles (low zoom, Fallout-style)
-//   - Esri World Imagery (high zoom, real satellite)
+// Esri World Imagery base layer only (no custom tiles)
 // Overlays:
 //   - Your own labels + roads (JSON-defined)
 // Behavior:
@@ -89,52 +87,26 @@
       }
 
       // --------------------------------------------------------
-      // BASE LAYERS
+      // BASE LAYER – ESRI WORLD IMAGERY ONLY
       // --------------------------------------------------------
-
-      const overviewTiles = L.tileLayer("/tiles/world_overview/{z}/{x}/{y}.png", {
-        minZoom: 0,
-        maxZoom: 4,
-        noWrap: true,
-        errorTileUrl: ""
-      });
 
       const esriSatelliteTiles = L.tileLayer(
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         {
-          minZoom: 4,
-          maxZoom: 18,
+          minZoom: 0,
+          maxZoom: 19,
           noWrap: true
         }
       );
 
-      this.tiles = { overview: overviewTiles, satellite: esriSatelliteTiles };
+      this.tiles = { satellite: esriSatelliteTiles };
 
       this.ensurePlayerPosition();
       const pos = this.gs.player.position;
-      const startZoom = 6;
+      const startZoom = 6; // start zoomed out a bit over Mojave
       this.map.setView([pos.lat, pos.lng], startZoom);
 
-      overviewTiles.addTo(this.map);
       esriSatelliteTiles.addTo(this.map);
-
-      const updateBaseLayerForZoom = () => {
-        if (!this.map) return;
-        const z = this.map.getZoom();
-
-        if (z <= 4) {
-          if (!this.map.hasLayer(overviewTiles)) this.map.addLayer(overviewTiles);
-          if (this.map.hasLayer(esriSatelliteTiles)) this.map.removeLayer(esriSatelliteTiles);
-        } else {
-          if (!this.map.hasLayer(esriSatelliteTiles)) this.map.addLayer(esriSatelliteTiles);
-          if (this.map.hasLayer(overviewTiles)) this.map.removeLayer(overviewTiles);
-        }
-
-        this.updateOverlayVisibility(z);
-      };
-
-      this.map.on("zoomend", updateBaseLayerForZoom);
-      updateBaseLayerForZoom();
 
       // Overlay layers
       this.labelLayer = L.layerGroup().addTo(this.map);
@@ -150,6 +122,12 @@
 
       console.log("worldmap: map initialized");
       window.dispatchEvent(new Event("map-ready"));
+
+      // Ensure overlays respect current zoom
+      this.updateOverlayVisibility(this.map.getZoom() || startZoom);
+      this.map.on("zoomend", () => {
+        this.updateOverlayVisibility(this.map.getZoom() || startZoom);
+      });
     },
 
     // --------------------------------------------------------
@@ -264,6 +242,7 @@
         this.updateOverlayVisibility(this.map.getZoom() || 6);
       }
     },
+
     renderWorldLabels() {
       if (!this.map || !this.labelLayer) return;
 
@@ -615,7 +594,7 @@
       const R = 6371000;
       const toRad = deg => (deg * Math.PI) / 180;
       const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lon1 - lon2);
+      const dLon = toRad(lon2 - lon1);
       const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
