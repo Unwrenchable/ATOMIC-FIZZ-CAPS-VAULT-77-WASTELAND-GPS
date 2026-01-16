@@ -1,0 +1,11 @@
+{
+  "regions": {
+    "vegas": ["echo_flicker", "static_blip"],
+    "freeside": ["echo_flicker", "ghost_recent_scavenge"],
+    "strip": ["static_blip"],
+    "dry_lake": ["trail_glow"],
+    "red_rock": ["trail_glow", "ghost_battle_residue"],
+    "highway_95": ["ghost_recent_scavenge"],
+    "quarry_junction": ["ghost_battle_residue"]
+  }
+}
