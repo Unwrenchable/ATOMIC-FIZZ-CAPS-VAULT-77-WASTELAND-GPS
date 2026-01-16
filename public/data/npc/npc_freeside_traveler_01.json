@@ -1,0 +1,9 @@
+{
+  "id": "npc_freeside_traveler_01",
+  "name": "Wandering Merchant",
+  "archetype": "highway_drifter",
+  "lootPool": ["small_caps", "junk_item", "ammo_9mm"],
+  "spawnPool": ["freeside_border", "freeside_north"],
+  "duplicateAcrossRegions": true,
+  "uniquePerWorld": false
+}
