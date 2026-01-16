@@ -1,0 +1,72 @@
+{
+  "id": "npc_oldhighway_staticdrifter",
+  "name": "The Static Drifter",
+  "faction": "None",
+  "role": "Static Anchor",
+  "type": "anomaly",
+
+  "homeRegion": "old-highway-route",
+  "currentRegion": "old-highway-route",
+  "poi": "old_highway_median",
+
+  "personality": "Still, patient, unreadable. Speaks rarely, and only when the static peaks.",
+  "description": "A lone figure who stands on the Old Highway, surrounded by a faint halo of static. Unlike the Hitchhiker, he does not walk — he waits.",
+
+  "dialogueProfile": {
+    "tone": "low-static",
+    "personalityTags": [
+      "triangle-sensitive",
+      "static-field",
+      "major-character",
+      "rare-encounter",
+      "player-reactive"
+    ],
+    "knowledge": [
+      "old-highway",
+      "triangle",
+      "static-events",
+      "lost-signals",
+      "hum-patterns"
+    ],
+    "anomalyAwareness": 0.94
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["old_highway_median"],
+      "night": ["old_highway_median"],
+      "wanderChance": 0.0
+    },
+    "roaming": [
+      "old-highway-route",
+      "dry-lake-edge"
+    ],
+    "anomalySensitivity": 0.97,
+    "rareEncounter": true
+  },
+
+  "dialog": {
+    "idle": [
+      "Static’s rising. Means someone’s coming.",
+      "The road remembers every footstep."
+    ],
+    "player_present": [
+      "You carry noise with you.",
+      "Your signal’s clearer than most."
+    ],
+    "triangle_active": [
+      "Three points… the static bends around them.",
+      "The hum and the static are arguing again."
+    ],
+    "static_event": [
+      "Hear that? That’s not radio. That’s something else.",
+      "The static’s trying to say your name."
+    ]
+  },
+
+  "quests": [
+    "side_oldhighway_statictrace"
+  ],
+
+  "notes": "Counterpart to the Hitchhiker. He waits instead of walks. Static builds around him during triangle events."
+}

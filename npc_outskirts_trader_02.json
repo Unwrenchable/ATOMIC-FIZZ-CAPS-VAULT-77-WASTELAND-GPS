@@ -1,0 +1,8 @@
+{
+  "id": "npc_outskirts_trader_02",
+  "name": "Pack Trader",
+  "archetype": "vegas_outskirts_local",
+  "lootPool": ["small_caps", "ammo_9mm", "water_clean"],
+  "spawnPool": ["vegas_outskirts_south"],
+  "uniquePerWorld": false
+}

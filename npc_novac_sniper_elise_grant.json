@@ -1,0 +1,16 @@
+{
+  "id": "npc_novac_sniper_elise_grant",
+  "name": "Elise Grant",
+  "faction": "novac",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Sniper / Lookout",
+  "personality": "Quiet, intense, haunted by something she won’t talk about.",
+  "description": "Elise keeps watch from the dinosaur’s mouth at night. She’s not NCR, not Legion — just someone who’s seen too much.",
+  "questHooks": [
+    "Saw lights moving near the highway at 3 AM.",
+    "Says someone has been signaling from the hills.",
+    "Found a strange cap lodged in the dinosaur’s teeth."
+  ],
+  "poi": "novac_motel_fnv"
+}

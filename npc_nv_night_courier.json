@@ -1,0 +1,70 @@
+{
+  "id": "npc_nv_night_courier",
+  "name": "The Night Courier",
+  "faction": "none",
+  "role": "Wanderer",
+  "type": "mythic-wanderer",
+
+  "homeRegion": "new-vegas-strip",
+  "currentRegion": "new-vegas-strip",
+  "poi": "strip_night_alley",
+
+  "personality": "Calm, unsettling, speaks like he’s already read tomorrow’s headlines.",
+  "description": "A traveler who appears only at night. Knows places he’s never been, and people he’s never met. Some say he walks between timelines.",
+
+  "dialogueProfile": {
+    "tone": "low-prophetic",
+    "personalityTags": [
+      "major-character",
+      "triangle-sensitive",
+      "time-walker",
+      "mythic",
+      "player-reactive",
+      "night-bound"
+    ],
+    "knowledge": [
+      "the-divide",
+      "zion",
+      "the-pitt",
+      "timeline-convergence",
+      "triangle",
+      "vegas-history"
+    ],
+    "anomalyAwareness": 0.95
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": [],
+      "night": ["strip_night_alley", "freeside_night_crossroads"],
+      "wanderChance": 0.55
+    },
+    "roaming": [
+      "new-vegas-strip",
+      "freeside",
+      "outer-vegas-ruins",
+      "188-overpass"
+    ],
+    "anomalySensitivity": 0.93,
+    "rareEncounter": true
+  },
+
+  "dialog": {
+    "idle": [
+      "Night hides the truth. Day hides the lies.",
+      "I’ve walked the Divide. It walks back."
+    ],
+    "player_has_traveled": [
+      "You’ve been to Zion. I can smell the river on you.",
+      "The Pitt’s smoke clings to your clothes."
+    ],
+    "convergence_active": [
+      "The timelines are thinning.",
+      "Vegas is calling all of us home."
+    ]
+  },
+
+  "quests": ["side_nv_nightmessage"],
+
+  "notes": "Appears only at night. Reacts to player travel history and triangle convergence events. Rare encounter wanderer tied to timeline instability."
+}

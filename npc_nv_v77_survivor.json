@@ -1,0 +1,66 @@
+{
+  "id": "npc_nv_v77_survivor",
+  "name": "Echo Survivor",
+  "faction": "Vault-Tec",
+  "role": "Vault 77 Escapee",
+
+  "homeRegion": "strip-underground",
+  "currentRegion": "strip-underground",
+  "poi": "strip_underground_maintenance_hatch",
+
+  "description": "A shaken survivor of Vault 77. Their eyes dart at every hum, every flicker, every echo.",
+
+  "dialogueProfile": {
+    "tone": "shaken-low",
+    "personalityTags": [
+      "major-character",
+      "vault77-survivor",
+      "trauma-coded",
+      "triangle-sensitive",
+      "overseer-reactive"
+    ],
+    "knowledge": [
+      "vault-77",
+      "overseer-ai",
+      "fizzco",
+      "capchain",
+      "triangle",
+      "underground"
+    ],
+    "anomalyAwareness": 0.91
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["strip_underground_maintenance_hatch"],
+      "night": ["strip_underground_shadow_corner"],
+      "wanderChance": 0.18
+    },
+    "roaming": [
+      "strip-underground",
+      "freeside-east",
+      "outer-vegas-ruins"
+    ],
+    "anomalySensitivity": 0.92,
+    "rareEncounter": true
+  },
+
+  "dialog": {
+    "idle": [
+      "Vault 77 never let go of me.",
+      "You ever hear voices in your Pip‑Boy? That’s how it starts."
+    ],
+    "overseer_active": [
+      "Your Overseer talks to you? Mine screamed.",
+      "If it glitches, don’t look at the screen. Trust me."
+    ],
+    "fizzco_active": [
+      "FizzCo built things they shouldn’t have.",
+      "CapChain wasn’t meant for humans."
+    ]
+  },
+
+  "quests": ["quest_fizz_awakens"],
+
+  "notes": "Dynamic dialog tied to Overseer AI state. Survivor reacts strongly to hums, flickers, and triangle anomalies."
+}

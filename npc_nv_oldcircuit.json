@@ -1,0 +1,14 @@
+{
+  "id": "npc_nv_oldcircuit",
+  "name": "Old Man Circuit",
+  "region": "Under-Strip",
+  "type": "Tech Hermit",
+  "dialog": [
+    "The Strip’s power grid ain’t from this timeline.",
+    "Vault 77 pings me sometimes. Creepy.",
+    "FizzCo built half this city and nobody noticed."
+  ],
+  "quests": ["quest_nv_powerlines", "side_nv_understrip"],
+  "faction": "FizzCo",
+  "notes": "Knows about CapChain nodes under the Strip."
+}
