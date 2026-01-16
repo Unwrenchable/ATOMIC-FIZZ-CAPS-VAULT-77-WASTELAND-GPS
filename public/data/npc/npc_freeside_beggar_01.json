@@ -1,0 +1,11 @@
+{
+  "id": "npc_freeside_beggar_01",
+  "name": "Hungry Beggar",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Spare a cap… or a crumb…",
+    "Haven’t eaten since yesterday."
+  ],
+  "spawnPool": ["freeside_north"],
+  "uniquePerWorld": false
+}
