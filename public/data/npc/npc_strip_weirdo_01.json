@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_weirdo_01",
+  "name": "Neon Prophet",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "The lights speak. You just don’t listen.",
+    "Neon remembers every timeline."
+  ],
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": true
+}
