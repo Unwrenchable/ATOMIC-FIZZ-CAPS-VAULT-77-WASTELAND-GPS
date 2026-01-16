@@ -1,7 +1,7 @@
 {
   "id": "npc_sidequest_mojave_prime-shadow_014",
   "type": "side_quest",
-  "name": "Varra Voss",
+  "name": "Dax Daxr",
   "region": "mojave",
   "timelines": [
     "prime",
@@ -12,9 +12,9 @@
   "dialogPool": "npc_sidequest_mojave_prime-shadow_014_dialog",
   "lootPool": "npc_sidequest_mojave_prime-shadow_014_loot",
   "questHooks": [
-    "vegas_rumor_02"
+    "anomaly_investigation_02"
   ],
-  "anomalyAwareness": 0.72,
+  "anomalyAwareness": 0.73,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

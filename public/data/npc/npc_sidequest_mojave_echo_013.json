@@ -1,19 +1,19 @@
 {
   "id": "npc_sidequest_mojave_echo_013",
   "type": "side_quest",
-  "name": "Voss Jett",
+  "name": "Kade Dax",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
   "archetype": "sidequest_informer",
-  "behaviorPattern": "timeline_observer",
+  "behaviorPattern": "anomaly_sensitive",
   "dialogPool": "npc_sidequest_mojave_echo_013_dialog",
   "lootPool": "npc_sidequest_mojave_echo_013_loot",
   "questHooks": [
-    "timeline_warning_01"
+    "fizzcaps_clue_01"
   ],
-  "anomalyAwareness": 0.81,
+  "anomalyAwareness": 0.73,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

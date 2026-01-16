@@ -1,19 +1,19 @@
 {
   "id": "npc_sidequest_mojave_fractured_001",
   "type": "side_quest",
-  "name": "Sylas Varra",
+  "name": "Dax Jett",
   "region": "mojave",
   "timelines": [
     "fractured"
   ],
-  "archetype": "sidequest_informer",
-  "behaviorPattern": "fizzcaps_informer",
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
   "dialogPool": "npc_sidequest_mojave_fractured_001_dialog",
   "lootPool": "npc_sidequest_mojave_fractured_001_loot",
   "questHooks": [
-    "fizzcaps_clue_01"
+    "fizzcaps_clue_03"
   ],
-  "anomalyAwareness": 0.85,
+  "anomalyAwareness": 0.43,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

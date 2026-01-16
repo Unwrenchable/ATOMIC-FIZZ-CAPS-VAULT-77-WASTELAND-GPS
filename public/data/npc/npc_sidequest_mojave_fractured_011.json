@@ -1,20 +1,21 @@
 {
   "id": "npc_sidequest_mojave_fractured_011",
   "type": "side_quest",
-  "name": "Lio Ash",
+  "name": "Kael Tessa",
   "region": "mojave",
   "timelines": [
     "fractured"
   ],
   "archetype": "sidequest_region_legend",
-  "behaviorPattern": "anomaly_sensitive",
+  "behaviorPattern": "timeline_observer",
   "dialogPool": "npc_sidequest_mojave_fractured_011_dialog",
   "lootPool": "npc_sidequest_mojave_fractured_011_loot",
   "questHooks": [
-    "timeline_warning_02",
-    "anomaly_investigation_01"
+    "fizzcaps_clue_02",
+    "vegas_rumor_03",
+    "fizzcaps_clue_03"
   ],
-  "anomalyAwareness": 0.82,
+  "anomalyAwareness": 0.54,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

@@ -1,21 +1,21 @@
 {
   "id": "npc_sidequest_mojave_fractured_002",
   "type": "side_quest",
-  "name": "Vera Tessa",
+  "name": "Nova Hale",
   "region": "mojave",
   "timelines": [
     "fractured"
   ],
   "archetype": "sidequest_fizzcaps_contact",
-  "behaviorPattern": "timeline_observer",
+  "behaviorPattern": "vegas_bound",
   "dialogPool": "npc_sidequest_mojave_fractured_002_dialog",
   "lootPool": "npc_sidequest_mojave_fractured_002_loot",
   "questHooks": [
-    "timeline_warning_02",
-    "fizzcaps_clue_01",
-    "vegas_rumor_02"
+    "anomaly_investigation_01",
+    "region_story_02",
+    "fizzcaps_clue_02"
   ],
-  "anomalyAwareness": 0.54,
+  "anomalyAwareness": 0.34,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

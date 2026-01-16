@@ -1,20 +1,20 @@
 {
   "id": "npc_sidequest_mojave_shadow_015",
   "type": "side_quest",
-  "name": "Hale Daro",
+  "name": "Lio Joren",
   "region": "mojave",
   "timelines": [
     "shadow"
   ],
-  "archetype": "sidequest_informer",
+  "archetype": "sidequest_anomaly_researcher",
   "behaviorPattern": "vegas_bound",
   "dialogPool": "npc_sidequest_mojave_shadow_015_dialog",
   "lootPool": "npc_sidequest_mojave_shadow_015_loot",
   "questHooks": [
-    "vegas_rumor_03",
-    "region_story_01"
+    "vegas_rumor_02",
+    "anomaly_investigation_01"
   ],
-  "anomalyAwareness": 0.59,
+  "anomalyAwareness": 0.71,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

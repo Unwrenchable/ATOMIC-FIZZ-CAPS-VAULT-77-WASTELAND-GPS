@@ -1,21 +1,20 @@
 {
   "id": "npc_sidequest_mojave_shadow_003",
   "type": "side_quest",
-  "name": "Nova Rook",
+  "name": "Joren Ren",
   "region": "mojave",
   "timelines": [
     "shadow"
   ],
-  "archetype": "sidequest_region_legend",
+  "archetype": "sidequest_anomaly_researcher",
   "behaviorPattern": "quest_seeker",
   "dialogPool": "npc_sidequest_mojave_shadow_003_dialog",
   "lootPool": "npc_sidequest_mojave_shadow_003_loot",
   "questHooks": [
-    "timeline_warning_01",
-    "fizzcaps_clue_03",
-    "region_story_01"
+    "fizzcaps_clue_02",
+    "vegas_rumor_03"
   ],
-  "anomalyAwareness": 0.34,
+  "anomalyAwareness": 0.85,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

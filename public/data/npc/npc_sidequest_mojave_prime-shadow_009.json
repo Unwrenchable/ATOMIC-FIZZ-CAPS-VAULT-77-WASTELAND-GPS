@@ -1,21 +1,21 @@
 {
   "id": "npc_sidequest_mojave_prime-shadow_009",
   "type": "side_quest",
-  "name": "Dax Lira",
+  "name": "Nina Vera",
   "region": "mojave",
   "timelines": [
     "prime",
     "shadow"
   ],
-  "archetype": "sidequest_traveler",
-  "behaviorPattern": "anomaly_sensitive",
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "fizzcaps_informer",
   "dialogPool": "npc_sidequest_mojave_prime-shadow_009_dialog",
   "lootPool": "npc_sidequest_mojave_prime-shadow_009_loot",
   "questHooks": [
     "region_story_02",
-    "timeline_warning_01"
+    "vegas_rumor_03"
   ],
-  "anomalyAwareness": 0.82,
+  "anomalyAwareness": 0.51,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

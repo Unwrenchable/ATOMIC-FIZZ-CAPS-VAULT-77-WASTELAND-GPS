@@ -1,19 +1,19 @@
 {
   "id": "npc_sidequest_mojave_echo_003",
   "type": "side_quest",
-  "name": "Lenn Mira",
+  "name": "Tessa Ash",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
-  "archetype": "sidequest_informer",
-  "behaviorPattern": "fizzcaps_informer",
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "timeline_observer",
   "dialogPool": "npc_sidequest_mojave_echo_003_dialog",
   "lootPool": "npc_sidequest_mojave_echo_003_loot",
   "questHooks": [
-    "fizzcaps_clue_01"
+    "vegas_rumor_03"
   ],
-  "anomalyAwareness": 0.61,
+  "anomalyAwareness": 0.62,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

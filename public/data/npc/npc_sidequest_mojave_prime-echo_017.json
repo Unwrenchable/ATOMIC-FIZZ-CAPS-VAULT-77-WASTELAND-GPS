@@ -1,20 +1,18 @@
 {
   "id": "npc_sidequest_mojave_prime-echo_017",
   "type": "side_quest",
-  "name": "Kade Tessa",
+  "name": "Nova Daro",
   "region": "mojave",
   "timelines": [
     "prime",
     "echo"
   ],
-  "archetype": "sidequest_anomaly_researcher",
-  "behaviorPattern": "quest_seeker",
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
   "dialogPool": "npc_sidequest_mojave_prime-echo_017_dialog",
   "lootPool": "npc_sidequest_mojave_prime-echo_017_loot",
   "questHooks": [
-    "anomaly_investigation_01",
-    "vegas_rumor_02",
-    "anomaly_investigation_02"
+    "fizzcaps_clue_03"
   ],
   "anomalyAwareness": 0.6,
   "factionTag": "neutral",

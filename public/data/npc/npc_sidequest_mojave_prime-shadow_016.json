@@ -1,22 +1,21 @@
 {
   "id": "npc_sidequest_mojave_prime-shadow_016",
   "type": "side_quest",
-  "name": "Sylas Lenn",
+  "name": "Lenn Voss",
   "region": "mojave",
   "timelines": [
     "prime",
     "shadow"
   ],
-  "archetype": "sidequest_region_legend",
-  "behaviorPattern": "anomaly_sensitive",
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "quest_seeker",
   "dialogPool": "npc_sidequest_mojave_prime-shadow_016_dialog",
   "lootPool": "npc_sidequest_mojave_prime-shadow_016_loot",
   "questHooks": [
-    "region_story_01",
     "fizzcaps_clue_02",
     "region_story_02"
   ],
-  "anomalyAwareness": 0.42,
+  "anomalyAwareness": 0.59,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

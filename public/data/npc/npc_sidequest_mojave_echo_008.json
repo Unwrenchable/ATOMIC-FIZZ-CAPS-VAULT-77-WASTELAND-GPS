@@ -1,21 +1,21 @@
 {
   "id": "npc_sidequest_mojave_echo_008",
   "type": "side_quest",
-  "name": "Voss Vera",
+  "name": "Vera Mara",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
-  "archetype": "sidequest_fizzcaps_contact",
-  "behaviorPattern": "quest_seeker",
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "timeline_observer",
   "dialogPool": "npc_sidequest_mojave_echo_008_dialog",
   "lootPool": "npc_sidequest_mojave_echo_008_loot",
   "questHooks": [
+    "fizzcaps_clue_01",
     "region_story_02",
-    "vegas_rumor_03",
-    "anomaly_investigation_01"
+    "fizzcaps_clue_03"
   ],
-  "anomalyAwareness": 0.87,
+  "anomalyAwareness": 0.71,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

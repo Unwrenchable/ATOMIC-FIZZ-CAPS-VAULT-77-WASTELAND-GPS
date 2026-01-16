@@ -1,21 +1,22 @@
 {
   "id": "npc_sidequest_mojave_prime-shadow_012",
   "type": "side_quest",
-  "name": "Tessa Kael",
+  "name": "Kade Kader",
   "region": "mojave",
   "timelines": [
     "prime",
     "shadow"
   ],
   "archetype": "sidequest_fizzcaps_contact",
-  "behaviorPattern": "timeline_observer",
+  "behaviorPattern": "vegas_bound",
   "dialogPool": "npc_sidequest_mojave_prime-shadow_012_dialog",
   "lootPool": "npc_sidequest_mojave_prime-shadow_012_loot",
   "questHooks": [
     "vegas_rumor_01",
-    "region_story_01"
+    "fizzcaps_clue_03",
+    "fizzcaps_clue_01"
   ],
-  "anomalyAwareness": 0.74,
+  "anomalyAwareness": 0.32,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }
