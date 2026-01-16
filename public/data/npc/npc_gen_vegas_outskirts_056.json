@@ -1,0 +1,22 @@
+{
+  "id": "npc_gen_vegas_outskirts_056",
+  "name": "Road Walker",
+  "archetype": "highway_drifter",
+  "spawnPool": [
+    "vegas_outskirts_north",
+    "vegas_outskirts_south",
+    "freeside_border"
+  ],
+  "behaviorPattern": "highway_roamer",
+  "lootPool": [
+    "dirty_water",
+    "old_map"
+  ],
+  "dialogPool": [
+    "Long road behind me… longer ahead.",
+    "Highway’s quiet today.",
+    "Saw something moving out there. Didn’t stick around."
+  ],
+  "factionTag": "neutral",
+  "timelineVariants": []
+}

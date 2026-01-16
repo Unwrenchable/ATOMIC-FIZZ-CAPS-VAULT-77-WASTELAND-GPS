@@ -1,0 +1,21 @@
+{
+  "id": "npc_gen_vegas_outskirts_070",
+  "name": "Lost Reflection",
+  "archetype": "timeline_echo_wanderer",
+  "spawnPool": [
+    "vegas_outskirts_north",
+    "vegas_outskirts_south",
+    "freeside_border"
+  ],
+  "behaviorPattern": "anomaly_wander",
+  "lootPool": [
+    "echo_fragment"
+  ],
+  "dialogPool": [
+    "…you’ve walked this path before…",
+    "…time folds strangely around this place…",
+    "…not your first time here…"
+  ],
+  "factionTag": "brotherhood_adjacent",
+  "timelineVariants": []
+}

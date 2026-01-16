@@ -1,0 +1,22 @@
+{
+  "id": "npc_gen_vegas_outskirts_061",
+  "name": "Trader",
+  "archetype": "traveler_merchant",
+  "spawnPool": [
+    "vegas_outskirts_north",
+    "vegas_outskirts_south",
+    "freeside_border"
+  ],
+  "behaviorPattern": "merchant_idle",
+  "lootPool": [
+    "small_caps",
+    "trade_goods"
+  ],
+  "dialogPool": [
+    "Caps for goods, goods for caps.",
+    "Road’s rough, but business is business.",
+    "Got something you might like."
+  ],
+  "factionTag": "ncr_adjacent",
+  "timelineVariants": []
+}

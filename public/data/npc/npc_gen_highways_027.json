@@ -1,0 +1,23 @@
+{
+  "id": "npc_gen_highways_027",
+  "name": "Scrap Hunter",
+  "archetype": "wasteland_scavenger",
+  "spawnPool": [
+    "highway_93",
+    "highway_95",
+    "sloan_road"
+  ],
+  "behaviorPattern": "wanderer_basic",
+  "lootPool": [
+    "scrap_metal",
+    "empty_bottle",
+    "torn_note"
+  ],
+  "dialogPool": [
+    "Scrap’s getting harder to find.",
+    "Tracks here look fresh… not sure I like that.",
+    "Wind’s carrying strange sounds today."
+  ],
+  "factionTag": "neutral",
+  "timelineVariants": []
+}
