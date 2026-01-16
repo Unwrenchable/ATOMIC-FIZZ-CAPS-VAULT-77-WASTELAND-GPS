@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_supermutant_cook_marla",
+  "name": "Marla",
+  "faction": "black_mountain",
+  "role": "Cook",
+  "personality": "Cheerful, chaotic, terrible at cooking.",
+  "description": "Marla cooks for Black Mountain. Her food is legendary for all the wrong reasons.",
+  "questHooks": [
+    "Needs ingredients from dangerous areas.",
+    "Wants to impress Gorath with a feast.",
+    "Heard something rummaging near the food stores."
+  ],
+  "poi": "black_mountain_fnv"
+}
