@@ -1,0 +1,11 @@
+{
+  "id": "npc_outskirts_weirdo_01",
+  "name": "Tin‑Foil Prophet",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "The Strip hums at night… you hear it too.",
+    "They watch from the neon. They always watch."
+  ],
+  "spawnPool": ["vegas_outskirts_north"],
+  "uniquePerWorld": true
+}
