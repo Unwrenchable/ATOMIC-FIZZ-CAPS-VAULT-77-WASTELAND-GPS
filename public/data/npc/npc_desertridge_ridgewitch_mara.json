@@ -1,0 +1,16 @@
+{
+  "id": "npc_desertridge_ridgewitch_mara",
+  "name": "Ridge-Witch Mara",
+  "faction": "ridge_nomads",
+  "homeRegion": "desert-ridge",
+  "currentRegion": "desert-ridge",
+  "role": "Herbalist",
+  "personality": "Mysterious, sharp-tongued, insightful.",
+  "description": "Sells potions made from desert plants. Says the ridge whispers warnings if you listen closely.",
+  "questHooks": [
+    "Mentions a hum that scares away coyotes.",
+    "Says she found a vault jumpsuit scrap near a cliff.",
+    "Knows a hidden cave with strange markings."
+  ],
+  "poi": "desert_ridge_herbal_hut"
+}
