@@ -1,1 +1,19 @@
-fill
+{
+  "variants": {
+    "echo": {
+      "visual": "flicker",
+      "dialogModifier": "fragmented",
+      "spawnChanceMultiplier": 0.6
+    },
+    "shadow": {
+      "visual": "darkened",
+      "dialogModifier": "whispered",
+      "spawnChanceMultiplier": 0.3
+    },
+    "fractured": {
+      "visual": "glitch",
+      "dialogModifier": "broken",
+      "spawnChanceMultiplier": 0.1
+    }
+  }
+}
