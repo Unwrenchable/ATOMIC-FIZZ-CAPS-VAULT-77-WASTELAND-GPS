@@ -1,0 +1,14 @@
+{
+  "id": "npc_cottonwood_mysterious_wanderer_kaelus",
+  "name": "Kaelus",
+  "faction": "unknown",
+  "role": "Wanderer",
+  "personality": "Calm, cryptic, unsettling.",
+  "description": "Kaelus arrived at Cottonwood Cove without explanation. The Legion tolerates him because they fear him.",
+  "questHooks": [
+    "Says the river carries 'messages'.",
+    "Carries a cap that glows faintly in moonlight.",
+    "Knows the Humming One’s presence near the water."
+  ],
+  "poi": "cottonwood_cove_fnv"
+}
