@@ -1,0 +1,16 @@
+{
+  "id": "npc_industrial_forgemaster_kade",
+  "name": "Forge-Master Kade",
+  "faction": "industrial_workers",
+  "homeRegion": "industrial-belt",
+  "currentRegion": "industrial-belt",
+  "role": "Scrap Blacksmith",
+  "personality": "Focused, intense, philosophical.",
+  "description": "Reforges scrap into weapons with surprising skill. Talks about metal like it has a memory.",
+  "questHooks": [
+    "Says a piece of metal 'vibrated' when he hammered it.",
+    "Mentions a scavenger who brought him a strange gear.",
+    "Claims the factories hum differently when storms roll in."
+  ],
+  "poi": "industrial_belt_forge"
+}
