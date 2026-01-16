@@ -1,0 +1,7 @@
+{
+  "id": "npc_strip_fractured_01",
+  "archetype": "timeline_echo_wanderer",
+  "timelineVariants": ["fractured"],
+  "spawnPool": ["strip_underground"],
+  "uniquePerWorld": true
+}
