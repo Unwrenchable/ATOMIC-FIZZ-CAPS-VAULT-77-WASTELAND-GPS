@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_hustler_01",
+  "name": "Card Shark",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Odds are better out here than inside.",
+    "You look like someone who appreciates a good gamble."
+  ],
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": false
+}
