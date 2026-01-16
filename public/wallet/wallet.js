@@ -5,7 +5,7 @@
   function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
 
   const SOL_DECIMALS = 9;
-  const FIZZ_MINT = null; 59AWm25fgvCBDuSFXthjT4wyrW455qgdZ67zaqVkEgPV
+  const FIZZ_MINT = "59AWm25fgvCBDuSFXthjT4wyrW455qgdZ67zaqVkEgPV";
 
   async function fetchSolBalance(pubkey) {
     try {
