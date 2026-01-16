@@ -1,0 +1,8 @@
+{
+  "id": "npc_strip_guard_01",
+  "name": "Unofficial Security",
+  "archetype": "vegas_outskirts_local",
+  "behaviorPattern": "static_local",
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": false
+}
