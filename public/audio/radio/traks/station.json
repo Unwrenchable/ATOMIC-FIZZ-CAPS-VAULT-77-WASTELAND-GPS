@@ -1,0 +1,21 @@
+{
+  "stationName": "Atomic Fizz Radio",
+  "dj": {
+    "name": "Fizzmaster Frank",
+    "style": "smooth, sarcastic, wasteland‑wise",
+    "introLines": [
+      "Welcome back, wanderer. This is Fizzmaster Frank, broadcasting from somewhere the Geiger counter won't find me.",
+      "If you're hearing this, congratulations — you're still alive. Let's keep that streak going."
+    ]
+  },
+  "ads": [
+    "This broadcast is brought to you by Atomic Fizz — the only soda guaranteed to glow brighter than your future.",
+    "Tired of raiders? Try not living near raiders. This message paid for by the Wasteland Tourism Board.",
+    "Remember: if your Geiger counter clicks more than your Pip‑Boy buttons, seek medical attention immediately."
+  ],
+  "interstitials": [
+    "Hold tight, survivor — more tunes coming after this.",
+    "Don't wander too far. The wasteland has a way of wandering back.",
+    "If you see a glowing cap on the ground… maybe don’t pick it up."
+  ]
+}
