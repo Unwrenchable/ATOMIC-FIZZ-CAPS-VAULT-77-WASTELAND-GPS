@@ -1,0 +1,147 @@
+// npcDialogue.js
+// Dynamic NPC dialogue engine powered by the Overseer AI personality system.
+// Works with existing NPC JSONs and the npcController.
+
+export const npcDialogue = {
+  cache: new Map(),
+
+  async getLine(npc, playerContext = {}) {
+    const cacheKey = `${npc.id}_${playerContext.event || "default"}`;
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey);
+    }
+
+    const prompt = this.buildPrompt(npc, playerContext);
+    const response = await this.queryOverseer(prompt);
+
+    const line = response || this.fallbackLine(npc);
+    this.cache.set(cacheKey, line);
+
+    return line;
+  },
+
+  // =============================
+  //  PROMPT BUILDER
+  // =============================
+  buildPrompt(npc, playerContext) {
+    const {
+      name,
+      faction,
+      role,
+      personality,
+      description,
+      questHooks = [],
+      behavior = {}
+    } = npc;
+
+    const anomaly = behavior.anomalySensitivity || 0;
+    const status = npc.status || "active";
+
+    const tags = [
+      personality,
+      role,
+      faction,
+      status,
+      anomaly > 0.6 ? "anomaly-sensitive" : "",
+      anomaly > 0.8 ? "hears-the-hum" : ""
+    ].filter(Boolean);
+
+    const hook = questHooks.length
+      ? questHooks[Math.floor(Math.random() * questHooks.length)]
+      : null;
+
+    return `
+You are speaking as NPC "${name}" in a post-nuclear Mojave wasteland.
+
+NPC PROFILE:
+- Role: ${role}
+- Faction: ${faction}
+- Personality: ${personality}
+- Description: ${description}
+- Status: ${status}
+- Tags: ${tags.join(", ")}
+
+WORLD CONTEXT:
+- Region: ${npc.currentRegion}
+- Player Reputation: ${playerContext.reputation || "neutral"}
+- Player Event: ${playerContext.event || "general interaction"}
+
+ANOMALY TRIANGLE:
+- Sensitivity: ${anomaly}
+- If sensitivity is high, subtly reference hums, echoes, strange feelings, or missing time.
+- Never explain the anomaly directly.
+
+QUEST HOOK (optional):
+${hook ? `- "${hook}"` : "- None"}
+
+RESPONSE RULES:
+- Speak in the NPC's voice.
+- Keep responses short (1–2 sentences).
+- Never break character.
+- If anomaly-sensitive, add subtle weirdness.
+- If status is "wandering" or "traveling", mention movement.
+- If status is "drawn-to-anomaly", sound distracted or uneasy.
+- If status is "avoiding-anomaly", sound nervous or evasive.
+
+Generate ONE line of dialogue.
+    `;
+  },
+
+  // =============================
+  //  SEND PROMPT TO OVERSEER AI
+  // =============================
+  async queryOverseer(prompt) {
+    try {
+      const res = await fetch("/api/overseer-dialogue", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
+
+      const data = await res.json();
+      return data.reply || null;
+    } catch (err) {
+      console.warn("Dialogue AI error:", err);
+      return null;
+    }
+  },
+
+  // =============================
+  //  FALLBACK LINES
+  // =============================
+  fallbackLine(npc) {
+    const status = npc.status || "active";
+
+    const fallbacks = {
+      active: [
+        "What do you need?",
+        "Yeah?",
+        "You lost or something?",
+        "Make it quick."
+      ],
+      wandering: [
+        "Can't talk long, I'm moving.",
+        "I'm headed somewhere.",
+        "Walk with me or don't."
+      ],
+      traveling: [
+        "I'm passing through.",
+        "Long road ahead.",
+        "Not staying long."
+      ],
+      "drawn-to-anomaly": [
+        "Do you hear that…?",
+        "Something's calling.",
+        "Feels strange out here."
+      ],
+      "avoiding-anomaly": [
+        "Don't go that way.",
+        "Bad feeling about this place.",
+        "Let's keep moving."
+      ]
+    };
+
+    const list = fallbacks[status] || fallbacks.active;
+    return list[Math.floor(Math.random() * list.length)];
+  }
+};
