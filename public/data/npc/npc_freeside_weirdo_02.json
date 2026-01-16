@@ -1,0 +1,11 @@
+{
+  "id": "npc_freeside_weirdo_02",
+  "name": "Bottle Whisperer",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "The bottles talk if you listen.",
+    "Heard a voice from a bottle once. Didn’t like it."
+  ],
+  "spawnPool": ["freeside_south"],
+  "uniquePerWorld": true
+}
