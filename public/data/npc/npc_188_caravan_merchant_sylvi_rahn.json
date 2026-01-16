@@ -1,0 +1,16 @@
+{
+  "id": "npc_188_caravan_merchant_sylvi_rahn",
+  "name": "Sylvi Rahn",
+  "faction": "caravans",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Caravan Merchant",
+  "personality": "Friendly, sharp-tongued, always negotiating.",
+  "description": "Sylvi runs a caravan route between Novac, 188, and the Strip. She hears every rumor before it hits the radio.",
+  "questHooks": [
+    "Says a caravan vanished near Quarry Junction.",
+    "Heard NCR is hiding something under HELIOS One.",
+    "Found a cap that vibrates near old-world tech."
+  ],
+  "poi": "188_trading_post_fnv"
+}
