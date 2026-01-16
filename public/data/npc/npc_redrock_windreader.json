@@ -1,0 +1,16 @@
+{
+  "id": "npc_redrock_windreader",
+  "name": "Wind-Pattern Reader",
+  "faction": "None",
+  "role": "Wanderer",
+  "type": "civilian",
+  "homeRegion": "red-rock",
+  "currentRegion": "red-rock",
+  "poi": "redrock_trails",
+  "dialog": {
+    "idle": [
+      "Wind tells you more than people do.",
+      "Canyon breezes carry strange stories."
+    ]
+  }
+}
