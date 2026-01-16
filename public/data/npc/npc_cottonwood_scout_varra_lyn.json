@@ -1,0 +1,14 @@
+{
+  "id": "npc_cottonwood_scout_varra_lyn",
+  "name": "Varra Lyn",
+  "faction": "caesar_legion",
+  "role": "Scout (Disguised Frumentarius)",
+  "personality": "Sharp, deadly, blends into shadows.",
+  "description": "Varra operates outside Legion norms, gathering intelligence under the guise of a scout.",
+  "questHooks": [
+    "Knows NCR is planning something near Searchlight.",
+    "Saw a glowing shard embedded in the canyon wall.",
+    "Believes the Humming One is a 'desert omen'."
+  ],
+  "poi": "cottonwood_cove_fnv"
+}
