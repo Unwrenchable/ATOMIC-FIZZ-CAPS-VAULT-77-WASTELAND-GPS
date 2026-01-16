@@ -1,0 +1,16 @@
+{
+  "id": "npc_desertridge_coyote_whisperer_ren",
+  "name": "Coyote-Whisperer Ren",
+  "faction": "ridge_nomads",
+  "homeRegion": "desert-ridge",
+  "currentRegion": "desert-ridge",
+  "role": "Beast Tamer",
+  "personality": "Calm, confident, deeply connected to nature.",
+  "description": "Travels with a pack of semi-tamed coyotes. Says they sense things humans can’t.",
+  "questHooks": [
+    "Says his coyotes growl at a certain ridge at night.",
+    "Mentions hearing a hum that made the animals freeze.",
+    "Claims one coyote brought him a strange metal token."
+  ],
+  "poi": "desert_ridge_coyote_den"
+}
