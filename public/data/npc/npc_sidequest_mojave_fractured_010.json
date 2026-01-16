@@ -1,20 +1,19 @@
 {
   "id": "npc_sidequest_mojave_fractured_010",
   "type": "side_quest",
-  "name": "Daro Mara",
+  "name": "Dax Lenn",
   "region": "mojave",
   "timelines": [
     "fractured"
   ],
   "archetype": "sidequest_anomaly_researcher",
-  "behaviorPattern": "quest_seeker",
+  "behaviorPattern": "fizzcaps_informer",
   "dialogPool": "npc_sidequest_mojave_fractured_010_dialog",
   "lootPool": "npc_sidequest_mojave_fractured_010_loot",
   "questHooks": [
-    "fizzcaps_clue_03",
-    "anomaly_investigation_01"
+    "anomaly_investigation_02"
   ],
-  "anomalyAwareness": 0.57,
+  "anomalyAwareness": 0.59,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }
