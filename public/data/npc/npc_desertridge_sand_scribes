@@ -1,0 +1,16 @@
+{
+  "id": "npc_desertridge_sand_scribes",
+  "name": "The Sand-Scribes",
+  "faction": "ridge_nomads",
+  "homeRegion": "desert-ridge",
+  "currentRegion": "desert-ridge",
+  "role": "Nomadic Historians",
+  "personality": "Calm, observant, ritualistic.",
+  "description": "Nomadic historians who record stories in the dunes. They say the desert keeps its own archives.",
+  "questHooks": [
+    "Say they found a story etched into stone that wasn’t there before.",
+    "Mention a hum that made the sand vibrate.",
+    "Know of a traveler who asked about Vault 77."
+  ],
+  "poi": "desert_ridge_story_dunes"
+}
