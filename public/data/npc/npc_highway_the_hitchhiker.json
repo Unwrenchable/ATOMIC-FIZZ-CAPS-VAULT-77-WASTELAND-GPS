@@ -2,15 +2,58 @@
   "id": "npc_highway_the_hitchhiker",
   "name": "The Hitchhiker",
   "faction": "unknown",
-  "homeRegion": "unknown",
-  "currentRegion": "old-highway-route",
   "role": "Wanderer",
+
+  "homeRegion": "none",
+  "currentRegion": "old-highway-route",
+  "poi": "none",
+
   "personality": "Silent, unreadable, unsettling.",
   "description": "Always walking. Never stops. Never talks. Some say he’s been walking the same stretch of road for years.",
+
+  "dialogueProfile": {
+    "tone": "flat-distant",
+    "personalityTags": [
+      "major-character",
+      "triangle-sensitive",
+      "liminal",
+      "temporal-glitch",
+      "unfixed",
+      "rare-entity"
+    ],
+    "knowledge": [
+      "roads",
+      "triangle",
+      "lost-time",
+      "hum",
+      "vault-rumors",
+      "memory-fragments"
+    ],
+    "anomalyAwareness": 0.99
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["old_highway_route_longwalk"],
+      "night": ["old_highway_route_longwalk"],
+      "wanderChance": 0.85
+    },
+    "roaming": [
+      "old-highway-route",
+      "dry-lake-edge",
+      "188-overpass",
+      "outer-vegas-ruins",
+      "mojave-outskirts"
+    ],
+    "anomalySensitivity": 0.98,
+    "rareEncounter": true
+  },
+
   "questHooks": [
     "Caravans report hearing a hum when he passes.",
     "Someone swears they saw him twice in the same day, miles apart.",
     "A trader claims he dropped a vault key without noticing."
   ],
-  "poi": "old_highway_route_longwalk"
+
+  "notes": "He never asks for a ride. He never looks at you. Some travelers swear he vanishes when they blink, only to reappear further down the road."
 }
