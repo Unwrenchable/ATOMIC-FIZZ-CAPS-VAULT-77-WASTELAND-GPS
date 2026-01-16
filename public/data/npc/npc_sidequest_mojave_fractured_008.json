@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_mojave_fractured_008",
+  "type": "side_quest",
+  "name": "Ash Vera",
+  "region": "mojave",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_mojave_fractured_008_dialog",
+  "lootPool": "npc_sidequest_mojave_fractured_008_loot",
+  "questHooks": [
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.72,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

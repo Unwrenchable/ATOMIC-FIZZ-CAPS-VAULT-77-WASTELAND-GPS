@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_appalachia_echo_007",
+  "type": "side_quest",
+  "name": "Nova Ren",
+  "region": "appalachia",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_appalachia_echo_007_dialog",
+  "lootPool": "npc_sidequest_appalachia_echo_007_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.47,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_mojave_prime-echo_017",
+  "type": "side_quest",
+  "name": "Kade Tessa",
+  "region": "mojave",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_mojave_prime-echo_017_dialog",
+  "lootPool": "npc_sidequest_mojave_prime-echo_017_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "vegas_rumor_02",
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.6,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
