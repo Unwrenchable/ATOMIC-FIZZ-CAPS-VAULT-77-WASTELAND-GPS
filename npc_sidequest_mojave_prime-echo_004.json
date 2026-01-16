@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_mojave_prime-echo_004",
+  "type": "side_quest",
+  "name": "Mira Mirar",
+  "region": "mojave",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_mojave_prime-echo_004_dialog",
+  "lootPool": "npc_sidequest_mojave_prime-echo_004_loot",
+  "questHooks": [
+    "vegas_rumor_02",
+    "region_story_02",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.62,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

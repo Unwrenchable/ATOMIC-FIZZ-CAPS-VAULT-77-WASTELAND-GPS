@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_prime_009",
+  "type": "side_quest",
+  "name": "Varra Daro",
+  "region": "mojave",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_mojave_prime_009_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_009_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "vegas_rumor_01",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.61,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
