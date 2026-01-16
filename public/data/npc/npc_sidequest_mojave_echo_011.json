@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_echo_011",
+  "type": "side_quest",
+  "name": "Ren Dax",
+  "region": "mojave",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_mojave_echo_011_dialog",
+  "lootPool": "npc_sidequest_mojave_echo_011_loot",
+  "questHooks": [
+    "vegas_rumor_03",
+    "region_story_01",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.51,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

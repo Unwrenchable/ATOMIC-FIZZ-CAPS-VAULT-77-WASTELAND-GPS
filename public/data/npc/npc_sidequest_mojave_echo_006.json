@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_echo_006",
+  "type": "side_quest",
+  "name": "Kade Mira",
+  "region": "mojave",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_mojave_echo_006_dialog",
+  "lootPool": "npc_sidequest_mojave_echo_006_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "region_story_02",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.36,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

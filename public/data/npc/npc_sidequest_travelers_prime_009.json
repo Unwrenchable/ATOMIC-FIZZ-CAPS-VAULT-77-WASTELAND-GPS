@@ -1,0 +1,27 @@
+{
+  "id": "npc_sidequest_travelers_prime_009",
+  "type": "side_quest",
+  "name": "Mara Varra",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_prime_009_dialog",
+  "lootPool": "npc_sidequest_travelers_prime_009_loot",
+  "questHooks": [
+    "region_story_02",
+    "timeline_warning_02",
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.67,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "capital_wasteland",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "capital_wasteland",
+    "vegas_outskirts"
+  ]
+}
