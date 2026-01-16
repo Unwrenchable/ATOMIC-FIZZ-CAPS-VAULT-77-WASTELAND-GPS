@@ -1,0 +1,16 @@
+{
+  "id": "npc_drylake_mirage_twin_sera",
+  "name": "Mirage-Twin Sera",
+  "faction": "mirage_wanderers",
+  "homeRegion": "dry-lake-edge",
+  "currentRegion": "dry-lake-edge",
+  "role": "Wanderer",
+  "personality": "Soft-spoken, distant, half-present.",
+  "description": "Appears and disappears unpredictably. Claims she has a sister nobody has ever seen.",
+  "questHooks": [
+    "Says she saw someone 'split into two' in the heat shimmer.",
+    "Mentions a humming sound that makes mirages sharper.",
+    "Claims her sister knows a secret path under the lakebed."
+  ],
+  "poi": "dry_lake_edge_mirage_zone"
+}
