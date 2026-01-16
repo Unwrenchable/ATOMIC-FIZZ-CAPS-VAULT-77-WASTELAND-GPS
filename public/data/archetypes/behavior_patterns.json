@@ -1,1 +1,25 @@
-fill
+{
+  "patterns": {
+    "wanderer_basic": {
+      "wanderChance": 0.4,
+      "idleChance": 0.6,
+      "radiusMeters": 40
+    },
+    "highway_roamer": {
+      "wanderChance": 0.7,
+      "idleChance": 0.3,
+      "radiusMeters": 120
+    },
+    "static_local": {
+      "wanderChance": 0.1,
+      "idleChance": 0.9,
+      "radiusMeters": 10
+    },
+    "anomaly_wander": {
+      "wanderChance": 0.5,
+      "idleChance": 0.5,
+      "radiusMeters": 60,
+      "anomalySensitivity": 0.8
+    }
+  }
+}
