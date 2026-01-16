@@ -422,9 +422,8 @@ body.pipboy-mode {
   background: transparent;
 }
 
-/* REMOVE TILE FILTERS — vector maps do NOT use tiles */
 #mapContainer .leaflet-tile {
-  display: none !important;
+  filter: sepia(1) hue-rotate(70deg) saturate(4) brightness(0.6) contrast(1.3);
 }
 
 /* Fallout CRT + parchment hybrid overlay */
