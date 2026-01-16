@@ -1,5 +1,5 @@
 // pipboy.js
-// Tabs, panel switching, basic routing for buttons (Pip-Boy shell)
+// Pip‑Boy shell: tabs, panel switching, swipe navigation, routing
 
 (function () {
   const tabs = Array.from(document.querySelectorAll(".pip-tab"));
@@ -11,6 +11,9 @@
     exchange: document.getElementById("panel-exchange"),
   };
 
+  // ------------------------------------------------------------
+  // CORE PANEL SWITCHER
+  // ------------------------------------------------------------
   function setActivePanel(panelKey) {
     Object.entries(panels).forEach(([key, el]) => {
       if (!el) return;
@@ -24,47 +27,90 @@
       tab.classList.toggle("active", tKey === panelKey);
     });
 
-    // MAP: let ui-wiring handle map init / Game.onMapReady
+    // MAP PANEL ACTIVATION
     if (panelKey === "map") {
-      if (typeof initWastelandMap === "function") {
-        initWastelandMap();
+      // Initialize map module if needed
+      if (window.Game && Game.modules?.worldmap) {
+        try {
+          Game.modules.worldmap.onOpen();
+        } catch (e) {
+          console.warn("[PipBoy] worldmap.onOpen failed:", e);
+        }
       }
-      if (window.Game && typeof Game.onMapReady === "function") {
-        Game.onMapReady();
-      }
+
+      // Resize Leaflet after panel animation
       setTimeout(() => {
-        if (window.wastelandMap?.invalidateSize) {
-          window.wastelandMap.invalidateSize();
+        if (window.map && typeof window.map.invalidateSize === "function") {
+          window.map.invalidateSize();
         }
       }, 200);
     }
   }
 
+  // ------------------------------------------------------------
+  // CLICK‑TO‑SWITCH TABS
+  // ------------------------------------------------------------
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       const key = tab.getAttribute("data-panel");
-      if (!key) return;
-      setActivePanel(key);
+      if (key) setActivePanel(key);
     });
   });
 
+  // ------------------------------------------------------------
+  // SWIPE‑TO‑SWITCH TABS (mobile + trackpads)
+  // ------------------------------------------------------------
+  (function enableSwipeTabs() {
+    let startX = 0;
+    let endX = 0;
+    const threshold = 50;
+
+    function activateTabByIndex(i) {
+      const tab = tabs[i];
+      if (!tab) return;
+      const key = tab.getAttribute("data-panel");
+      if (key) setActivePanel(key);
+    }
+
+    document.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+    });
+
+    document.addEventListener("touchend", (e) => {
+      endX = e.changedTouches[0].clientX;
+      const diff = endX - startX;
+
+      const activeIndex = tabs.findIndex((t) =>
+        t.classList.contains("active")
+      );
+
+      if (diff > threshold && activeIndex > 0) {
+        activateTabByIndex(activeIndex - 1); // swipe right
+      } else if (diff < -threshold && activeIndex < tabs.length - 1) {
+        activateTabByIndex(activeIndex + 1); // swipe left
+      }
+    });
+  })();
+
+  // ------------------------------------------------------------
+  // BOOT DIRECTLY INTO MAP PANEL
+  // ------------------------------------------------------------
   setActivePanel("map");
 
-  // Sidebar quick action buttons route to panels
+  // ------------------------------------------------------------
+  // SIDEBAR QUICK ACTION BUTTONS
+  // ------------------------------------------------------------
   const openInventoryBtn = document.getElementById("openInventory");
   const openQuestsBtn = document.getElementById("openQuests");
   const openTutorialBtn = document.getElementById("openTutorial");
 
-  if (openInventoryBtn) {
-    openInventoryBtn.addEventListener("click", () => setActivePanel("items"));
-  }
-  if (openQuestsBtn) {
-    openQuestsBtn.addEventListener("click", () => setActivePanel("quests"));
-  }
-  if (openTutorialBtn) {
-    openTutorialBtn.addEventListener("click", () => setActivePanel("stat"));
-  }
+  if (openInventoryBtn) openInventoryBtn.addEventListener("click", () => setActivePanel("items"));
+  if (openQuestsBtn) openQuestsBtn.addEventListener("click", () => setActivePanel("quests"));
+  if (openTutorialBtn) openTutorialBtn.addEventListener("click", () => setActivePanel("stat"));
 
+  // ------------------------------------------------------------
+  // CLAIM BUTTONS
+  // ------------------------------------------------------------
   const claimSidebar = document.getElementById("claimMintablesSidebar");
   const claimMain = document.getElementById("claimMintables");
   const claimStat = document.getElementById("claimMintablesStat");
@@ -78,15 +124,16 @@
   }
 
   [claimSidebar, claimMain, claimStat].forEach((btn) => {
-    if (!btn) return;
-    btn.addEventListener("click", triggerClaimMintables);
+    if (btn) btn.addEventListener("click", triggerClaimMintables);
   });
 
+  // ------------------------------------------------------------
+  // WALLET CONNECT
+  // ------------------------------------------------------------
   const connectWalletBtn = document.getElementById("connectWallet");
   const connectWalletStat = document.getElementById("connectWalletStat");
 
   async function triggerConnectWallet() {
-    // Prefer Game engine if present
     if (window.Game && typeof Game.connectWallet === "function") {
       try {
         const addr = await Game.connectWallet();
@@ -107,7 +154,6 @@
       return;
     }
 
-    // Fallback to older global connectWallet if Game not available
     if (typeof window.connectWallet === "function") {
       window.connectWallet();
     } else {
@@ -117,7 +163,6 @@
   }
 
   [connectWalletBtn, connectWalletStat].forEach((btn) => {
-    if (!btn) return;
-    btn.addEventListener("click", triggerConnectWallet);
+    if (btn) btn.addEventListener("click", triggerConnectWallet);
   });
 })();
