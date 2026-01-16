@@ -1,0 +1,16 @@
+{
+  "id": "npc_strip_glimmer",
+  "name": "Glimmer",
+  "faction": "street_performers",
+  "homeRegion": "strip",
+  "currentRegion": "strip-central",
+  "role": "Neon Performer",
+  "personality": "Eccentric, bright, unpredictable.",
+  "description": "Paints her face with crushed neon tubes. Says the colors talk back to her.",
+  "questHooks": [
+    "Claims she saw a 'blue ghost' in the neon reflections.",
+    "Says the Strip lights flicker when someone lies.",
+    "Knows a hidden maintenance hatch behind a billboard."
+  ],
+  "poi": "strip_central_neon_walk"
+}
