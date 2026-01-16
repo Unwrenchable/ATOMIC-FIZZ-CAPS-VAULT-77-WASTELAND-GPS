@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime-echo_018",
+  "type": "side_quest",
+  "name": "Marla Vera",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime-echo_018_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime-echo_018_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.46,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

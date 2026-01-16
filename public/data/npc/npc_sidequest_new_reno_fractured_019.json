@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_new_reno_fractured_019",
+  "type": "side_quest",
+  "name": "Daro Kade",
+  "region": "new_reno",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_new_reno_fractured_019_dialog",
+  "lootPool": "npc_sidequest_new_reno_fractured_019_loot",
+  "questHooks": [
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.53,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
