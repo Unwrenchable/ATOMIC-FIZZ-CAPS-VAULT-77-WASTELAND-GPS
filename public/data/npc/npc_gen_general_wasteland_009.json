@@ -1,0 +1,24 @@
+{
+  "id": "npc_gen_general_wasteland_009",
+  "name": "Faded Traveler",
+  "archetype": "timeline_echo_wanderer",
+  "spawnPool": [
+    "dry_lake",
+    "red_rock",
+    "highway_95",
+    "novac_outskirts"
+  ],
+  "behaviorPattern": "anomaly_wander",
+  "lootPool": [
+    "echo_fragment"
+  ],
+  "dialogPool": [
+    "…you’ve walked this path before…",
+    "…time folds strangely around this place…",
+    "…not your first time here…"
+  ],
+  "factionTag": "independent_merc",
+  "timelineVariants": [
+    "echo"
+  ]
+}
