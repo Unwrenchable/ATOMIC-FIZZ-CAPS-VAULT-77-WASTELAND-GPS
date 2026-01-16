@@ -1,5 +1,5 @@
 // ------------------------------------------------------------
-// STANDALONE SIDE‑QUEST NPC GENERATOR (K‑UPGRADED)
+// STANDALONE SIDE‑QUEST NPC GENERATOR (FULL K+ UPGRADE)
 // ------------------------------------------------------------
 
 const fs = require("fs");
@@ -245,6 +245,18 @@ const REGION_DIALOG = {
   ]
 };
 
+// Region “identity” notes
+const REGION_IDENTITY = {
+  drylake: "Reality thins where the lake once was.",
+  divide: "Storms carve memory into the land.",
+  freeside: "Hope is a currency nobody accepts.",
+  industrial: "Machines outlive the hands that built them.",
+  pitt: "Steel is law, and law is pain.",
+  outskirts: "Close enough to see Vegas, too far to touch it.",
+  vegas_outskirts: "The city pulls at everyone out here.",
+  anomaly_zones: "The world glitches at the edges of understanding."
+};
+
 // Region-specific loot pools (added on top of base loot)
 const REGION_LOOT = {
   divide: ["echo_shard", "storm_mark"],
@@ -324,41 +336,95 @@ const PERSONALITY_TRAITS = [
   "anomaly_tuned"
 ];
 
-// Simple micro-quest templates (region + archetype flavored)
-const MICRO_QUEST_TEMPLATES = {
+// Moods
+const MOODS = [
+  "tired",
+  "agitated",
+  "curious",
+  "distant",
+  "haunted",
+  "wired",
+  "calm"
+];
+
+// Roles (for UI grouping)
+const ROLES = [
+  "scout",
+  "wanderer",
+  "informant",
+  "legend",
+  "researcher",
+  "drifter",
+  "local"
+];
+
+// World hooks (tiny lore fragments)
+const WORLD_HOOKS = {
+  divide: [
+    "They mention a courier who vanished in a storm.",
+    "They talk about markings that move between visits."
+  ],
+  drylake: [
+    "They swear the dust remembers footsteps.",
+    "They mention a circle of stones that hum at night."
+  ],
+  freeside: [
+    "They know a back alley where debts are settled in blood.",
+    "They mention a kid who paints warnings on walls."
+  ],
+  industrial: [
+    "They talk about a machine that keeps working with no power.",
+    "They mention a unit that remembers old commands."
+  ],
+  pitt: [
+    "They whisper about a chain gang that never sleeps.",
+    "They mention a trog that speaks in broken words."
+  ],
+  outskirts: [
+    "They talk about a signal that only comes at dusk.",
+    "They mention a trader who never reaches the city."
+  ],
+  vegas_outskirts: [
+    "They know a ridge where you can see the Strip flicker.",
+    "They mention a camp that moves every night."
+  ]
+};
+
+// Story seeds (for future quest expansion)
+const STORY_SEEDS = {
+  divide: [
+    {
+      id: "seed_divide_01",
+      summary: "Mentions a courier who vanished in a Divide storm.",
+      potential: "Could lead to a Divide micro‑quest later."
+    }
+  ],
   drylake: [
     {
-      id: "mq_drylake_ritual_01",
-      summary: "Investigate the dust circle near Drylake.",
-      reward: "caps_medium"
+      id: "seed_drylake_01",
+      summary: "Talks about a ritual that keeps the dust calm.",
+      potential: "Could tie into anomaly stabilization."
     }
   ],
   freeside: [
     {
-      id: "mq_freeside_debt_01",
-      summary: "Settle a bad debt in a Freeside alley.",
-      reward: "caps_small"
-    }
-  ],
-  divide: [
-    {
-      id: "mq_divide_mark_01",
-      summary: "Follow a fresh storm marking deeper into the Divide.",
-      reward: "caps_large"
+      id: "seed_freeside_01",
+      summary: "Knows a name that still scares the Kings.",
+      potential: "Could unlock a Freeside faction thread."
     }
   ],
   pitt: [
     {
-      id: "mq_pitt_chain_01",
-      summary: "Smuggle a message past the chain gangs.",
-      reward: "caps_medium"
+      id: "seed_pitt_01",
+      summary: "Heard of a chain that even the bosses fear.",
+      potential: "Could lead to a unique Pitt artifact."
     }
   ],
   outskirts: [
     {
-      id: "mq_outskirts_signal_01",
-      summary: "Track a strange signal near the Vegas outskirts.",
-      reward: "caps_medium"
+      id: "seed_outskirts_01",
+      summary: "Mentions a radio tower that only broadcasts at 3:33.",
+      potential: "Could tie into Overseer signal anomalies."
     }
   ]
 };
@@ -404,12 +470,76 @@ function assignTraits() {
   return [...traits];
 }
 
+function assignMood() {
+  return pick(MOODS);
+}
+
+function assignRole(archetype) {
+  switch (archetype) {
+    case "sidequest_informer":
+      return "informant";
+    case "sidequest_traveler":
+      return "wanderer";
+    case "sidequest_anomaly_researcher":
+      return "researcher";
+    case "sidequest_region_legend":
+      return "legend";
+    case "sidequest_fizzcaps_contact":
+      return "informant";
+    default:
+      return pick(ROLES);
+  }
+}
+
+function assignIntelligence() {
+  return 3 + Math.floor(Math.random() * 6); // 3–8
+}
+
+function assignStability(region) {
+  if (region === "anomaly_zones" || region === "divide" || region === "drylake") {
+    return Math.round((0.2 + Math.random() * 0.5) * 100) / 100; // 0.2–0.7
+  }
+  return Math.round((0.6 + Math.random() * 0.4) * 100) / 100; // 0.6–1.0
+}
+
+function assignDanger(region) {
+  if (region === "pitt" || region === "divide" || region === "anomaly_zones") {
+    return pick(["high", "unknown"]);
+  }
+  if (region === "freeside" || region === "industrial" || region === "outervegas") {
+    return pick(["medium", "high"]);
+  }
+  return pick(["low", "medium"]);
+}
+
+function assignLootRarity(npcRarity) {
+  switch (npcRarity) {
+    case "common": return pick(["common", "common", "uncommon"]);
+    case "uncommon": return pick(["uncommon", "uncommon", "rare"]);
+    case "rare": return pick(["rare", "rare", "legendary"]);
+    case "legendary": return pick(["legendary", "legendary", "anomaly"]);
+    default: return "common";
+  }
+}
+
 function pickQuestHooks(region) {
   const pool = REGION_QUEST_HOOKS[region] || QUEST_HOOKS;
   const count = 1 + Math.floor(Math.random() * 3);
   const hooks = new Set();
   while (hooks.size < count) hooks.add(pick(pool));
   return [...hooks];
+}
+
+function pickWorldHook(region) {
+  const pool = WORLD_HOOKS[region];
+  if (!pool || !pool.length) return null;
+  return pick(pool);
+}
+
+function pickStorySeed(region) {
+  const pool = STORY_SEEDS[region];
+  if (!pool || !pool.length) return null;
+  return pick(pool);
 }
 
 function buildTravelData(region) {
@@ -451,6 +581,14 @@ function generateNPC(region, index) {
   const travelData = buildTravelData(safeRegion);
   const rarity = assignRarity();
   const traits = assignTraits();
+  const mood = assignMood();
+  const role = assignRole(archetype);
+  const intelligence = assignIntelligence();
+  const stability = assignStability(safeRegion);
+  const danger = assignDanger(safeRegion);
+  const worldHook = pickWorldHook(safeRegion);
+  const storySeed = pickStorySeed(safeRegion);
+  const lootRarity = assignLootRarity(rarity);
 
   const npc = {
     id,
@@ -461,14 +599,28 @@ function generateNPC(region, index) {
     archetype,
     behaviorPattern,
     rarity,
+    lootRarity,
     traits,
+    mood,
+    role,
+    intelligence,
+    stability,
+    danger,
     dialogPool: `${id}_dialog`,
     lootPool: `${id}_loot`,
     questHooks,
     anomalyAwareness: Math.round((0.3 + Math.random() * 0.6) * 100) / 100,
     factionTag: "neutral",
-    notes: "Generated side‑quest NPC with region, timeline, rarity, traits, and quest hooks."
+    notes: REGION_IDENTITY[safeRegion] || "Generated side‑quest NPC with region, timeline, rarity, traits, and quest hooks."
   };
+
+  if (worldHook) {
+    npc.worldHook = worldHook;
+  }
+
+  if (storySeed && Math.random() < 0.35) {
+    npc.storySeed = storySeed;
+  }
 
   if (travelData) {
     npc.originRegion = travelData.originRegion;
@@ -480,6 +632,11 @@ function generateNPC(region, index) {
   if (mqPool && Math.random() < 0.3) {
     npc.microQuest = pick(mqPool);
   }
+
+  // Glitch flags for UI based on timelines
+  npc.glitchEcho = (timelines || []).includes("echo");
+  npc.glitchShadow = (timelines || []).includes("shadow");
+  npc.glitchFractured = (timelines || []).includes("fractured");
 
   return npc;
 }
@@ -535,6 +692,31 @@ function generateDialog(npc) {
     }
   }
 
+  // Mood flavor
+  switch (npc.mood) {
+    case "tired":
+      lines.push("Sorry, it’s been a long day out here.");
+      break;
+    case "agitated":
+      lines.push("Look, I don’t have time for this.");
+      break;
+    case "curious":
+      lines.push("You don’t move like the locals. Where’re you from?");
+      break;
+    case "haunted":
+      lines.push("Sometimes I hear footsteps behind me when I’m alone.");
+      break;
+    case "wired":
+      lines.push("Haven’t slept much. Too much noise in my head.");
+      break;
+    case "distant":
+      lines.push("I was thinking about somewhere else. Someone else.");
+      break;
+    case "calm":
+      lines.push("Storms come and go. You learn to breathe through them.");
+      break;
+  }
+
   // Timeline flavor
   const timelines = npc.timelines || [];
   if (timelines.includes("echo")) {
@@ -554,6 +736,11 @@ function generateDialog(npc) {
   }
   if (npc.traits && npc.traits.includes("echo_haunted")) {
     lines.push("I hear voices that sound like mine, but wrong.");
+  }
+
+  // Intelligence-based special line
+  if (npc.intelligence >= 7) {
+    lines.push("You ever think this world isn’t the first draft?");
   }
 
   return {
@@ -589,8 +776,10 @@ function generateLoot(npc) {
     items.push("caps_large", "legendary_token");
   }
 
+  // Loot rarity tag for UI
   return {
     id: npc.lootPool,
+    lootRarity: npc.lootRarity,
     items: [...new Set(items)]
   };
 }
