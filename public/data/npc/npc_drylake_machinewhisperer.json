@@ -1,0 +1,72 @@
+{
+  "id": "npc_drylake_machinewhisperer",
+  "name": "The Machine-Whisperer",
+  "faction": "None",
+  "role": "Mechanical Listener",
+  "type": "anomaly-adjacent",
+
+  "homeRegion": "dry-lake",
+  "currentRegion": "dry-lake",
+  "poi": "dry_lake_scrapfield",
+
+  "personality": "Calm, analytical, speaks in mechanical metaphors.",
+  "description": "A scavenger who listens to broken machines like they’re speaking. Claims he can hear failures before they happen.",
+
+  "dialogueProfile": {
+    "tone": "metallic-soft",
+    "personalityTags": [
+      "machine-attuned",
+      "triangle-sensitive",
+      "dry-lake",
+      "player-reactive",
+      "rare-encounter"
+    ],
+    "knowledge": [
+      "machine-hum",
+      "triangle",
+      "dry-lake",
+      "rust-tongue",
+      "scrapfield"
+    ],
+    "anomalyAwareness": 0.88
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["dry_lake_scrapfield"],
+      "night": ["dry_lake_scrapfield"],
+      "wanderChance": 0.12
+    },
+    "roaming": [
+      "dry-lake",
+      "dry-lake-edge"
+    ],
+    "anomalySensitivity": 0.93,
+    "rareEncounter": true
+  },
+
+  "dialog": {
+    "idle": [
+      "Metal remembers every wound.",
+      "This one’s dying. Listen closely."
+    ],
+    "player_present": [
+      "Your gear’s humming wrong. Something’s coming.",
+      "You carry a strange resonance."
+    ],
+    "triangle_active": [
+      "The machines are vibrating. They feel the geometry.",
+      "Three points… even metal knows the pattern."
+    ],
+    "machine_event": [
+      "Hear that? That’s not decay. That’s a warning.",
+      "The scrap is whispering again."
+    ]
+  },
+
+  "quests": [
+    "side_drylake_machinewhispers"
+  ],
+
+  "notes": "Counterpart to Rust-Tongue. Hears machines before they fail. Strongly tied to Dry Lake anomalies."
+}
