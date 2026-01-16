@@ -1,6 +1,6 @@
 /* ============================================================
-   terminal.css — Overseer Terminal (Pip‑Boy Themed)
-   Mobile‑first, Fallout‑authentic, matches pipboy.css
+   terminal.css — Overseer Terminal (Fallout‑Authentic Edition)
+   Matches Pip‑Boy CRT, glow, scanlines, and retro hardware feel
    ============================================================ */
 
 :root {
@@ -30,6 +30,9 @@ html, body {
   font-family: var(--font);
   display: flex;
   flex-direction: column;
+
+  /* CRT subtle flicker */
+  animation: crt-flicker 4s infinite steps(1);
 }
 
 /* Terminal container */
@@ -43,6 +46,25 @@ html, body {
   overflow-y: auto;
   line-height: 1.4;
   font-size: 20px;
+
+  /* CRT scanlines */
+  position: relative;
+}
+
+.terminal-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 0, 0.05) 0px,
+    rgba(0, 255, 0, 0.05) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  opacity: 0.25;
+  z-index: 5;
 }
 
 /* Header */
@@ -53,6 +75,9 @@ html, body {
   border-bottom: 2px solid var(--panel-border);
   font-size: 26px;
   letter-spacing: 2px;
+
+  /* Glow */
+  text-shadow: 0 0 6px rgba(0, 255, 0, 0.6);
 }
 
 /* Output text */
@@ -60,12 +85,14 @@ html, body {
   white-space: pre-wrap;
   margin-bottom: 20px;
   color: var(--text);
+  text-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
 }
 
 /* Dimmed system messages */
 .terminal-system {
   color: var(--text-dim);
   opacity: 0.8;
+  text-shadow: 0 0 2px rgba(0, 255, 0, 0.2);
 }
 
 /* Input line */
@@ -77,6 +104,7 @@ html, body {
 
 .terminal-prompt {
   color: var(--accent);
+  text-shadow: 0 0 4px rgba(0, 255, 0, 0.5);
 }
 
 .terminal-input {
@@ -88,6 +116,7 @@ html, body {
   font-family: var(--font);
   font-size: 20px;
   padding: 4px;
+  text-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
 }
 
 .terminal-input:focus {
@@ -105,11 +134,13 @@ html, body {
   font-size: 20px;
   border-radius: var(--radius);
   cursor: pointer;
+  text-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
 }
 
 .terminal-button:hover {
   background: var(--accent-soft);
   color: #000;
+  text-shadow: none;
 }
 
 /* Scrollbar (Pip‑Boy style) */
@@ -140,4 +171,15 @@ html, body {
   .terminal-input {
     font-size: 18px;
   }
+}
+
+/* ============================================================
+   CRT EFFECTS
+   ============================================================ */
+
+@keyframes crt-flicker {
+  0% { opacity: 1; }
+  98% { opacity: 1; }
+  99% { opacity: 0.92; }
+  100% { opacity: 1; }
 }
