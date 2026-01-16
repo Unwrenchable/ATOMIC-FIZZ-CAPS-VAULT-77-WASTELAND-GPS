@@ -1,39 +1,47 @@
 {
-  "dialogueProfile": {
-  "tone": "distinct",
-  "personalityTags": [
-    "major-character",
-    "lore-carrier",
-    "emotionally-complex"
-  ],
-  "knowledge": [
-    "region",
-    "faction",
-    "rumors",
-    "triangle",
-    "local-history"
-  ],
-  "anomalyAwareness": 0.7
-},
-
-"behavior": {
-  "schedule": {
-    "day": ["poi_primary", "poi_secondary"],
-    "night": ["home_primary"],
-    "wanderChance": 0.20
-  },
-  "roaming": [
-    "region-primary",
-    "region-secondary"
-  ],
-  "anomalySensitivity": 0.8,
-  "rareEncounter": false
-},
-
   "id": "npc_jax_harlan_voss",
   "name": "Harlan Voss",
-  "region": "Mojave / New Vegas",
   "type": "Retired NCR Ranger",
+  "faction": "NCR (Retired)",
+  "homeRegion": "mojave-outskirts",
+  "currentRegion": "mojave-outskirts",
+  "poi": "overpass_echo_point",
+
+  "dialogueProfile": {
+    "tone": "distinct",
+    "personalityTags": [
+      "major-character",
+      "lore-carrier",
+      "emotionally-complex",
+      "ranger-veteran"
+    ],
+    "knowledge": [
+      "region",
+      "faction",
+      "rumors",
+      "triangle",
+      "local-history",
+      "vault-77",
+      "fizzco"
+    ],
+    "anomalyAwareness": 0.75
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["overpass_echo_point", "188_trading_post_fnv"],
+      "night": ["harlan_camp_hidden"],
+      "wanderChance": 0.18
+    },
+    "roaming": [
+      "mojave-outskirts",
+      "dry-lake-edge",
+      "188-overpass"
+    ],
+    "anomalySensitivity": 0.82,
+    "rareEncounter": false
+  },
+
   "dialog": {
     "idle": [
       "Once a Ranger, always a Ranger. Even when the badge is gone.",
@@ -52,7 +60,11 @@
       "Vault 77 wasn’t on any NCR map. That scared me more than anything."
     ]
   },
-  "quests": ["quest_jax_familytruth", "quest_nv_convergence_signs"],
-  "faction": "NCR (Retired)",
+
+  "quests": [
+    "quest_jax_familytruth",
+    "quest_nv_convergence_signs"
+  ],
+
   "notes": "Decorated NCR Ranger veteran; left the service after uncovering classified FizzCo/Vault-Tec operations."
 }
