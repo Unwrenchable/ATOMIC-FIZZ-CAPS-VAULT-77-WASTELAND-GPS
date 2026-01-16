@@ -1,7 +1,7 @@
 {
   "id": "highways_fractured_003",
-  "name": "Shack Dweller",
-  "archetype": "vegas_outskirts_local",
+  "name": "Trooper",
+  "archetype": "faction_grunt",
   "spawnPool": [
     "highway_93",
     "highway_95",
@@ -9,17 +9,17 @@
   ],
   "behaviorPattern": "static_local",
   "lootPool": [
-    "food_ration",
-    "small_caps"
+    "ammo_556",
+    "radio"
   ],
   "dialogPool": [
-    "Vegas lights look close, but they’re a world away.",
-    "Strangers don’t usually come this far out.",
-    "Keep your head down. Raiders like this stretch."
+    "Orders are orders.",
+    "Keep moving, citizen.",
+    "Stay alert. Trouble’s never far."
   ],
-  "factionTag": "independent_merc",
+  "factionTag": "ncr_adjacent",
   "timeline": "fractured",
   "timelineVariants": [
-    "fractured"
+    "echo"
   ]
 }

@@ -1,6 +1,6 @@
 {
   "id": "highways_prime_004",
-  "name": "Scavenger",
+  "name": "Dust Picker",
   "archetype": "wasteland_scavenger",
   "spawnPool": [
     "highway_93",

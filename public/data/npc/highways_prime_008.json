@@ -1,6 +1,6 @@
 {
-  "id": "highways_shadow_003",
-  "name": "Nomad",
+  "id": "highways_prime_008",
+  "name": "Drifter",
   "archetype": "highway_drifter",
   "spawnPool": [
     "highway_93",
@@ -18,6 +18,6 @@
     "Saw something moving out there. Didn’t stick around."
   ],
   "factionTag": "neutral",
-  "timeline": "shadow",
+  "timeline": "prime",
   "timelineVariants": []
 }

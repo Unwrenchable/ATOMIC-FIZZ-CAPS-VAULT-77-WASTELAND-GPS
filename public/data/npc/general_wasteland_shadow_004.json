@@ -18,7 +18,9 @@
     "Strangers don’t usually come this far out.",
     "Keep your head down. Raiders like this stretch."
   ],
-  "factionTag": "ncr_adjacent",
+  "factionTag": "neutral",
   "timeline": "shadow",
-  "timelineVariants": []
+  "timelineVariants": [
+    "echo"
+  ]
 }

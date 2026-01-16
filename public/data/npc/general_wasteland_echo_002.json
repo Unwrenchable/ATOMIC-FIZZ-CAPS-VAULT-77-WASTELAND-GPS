@@ -1,24 +1,26 @@
 {
   "id": "general_wasteland_echo_002",
-  "name": "Nomad",
-  "archetype": "highway_drifter",
+  "name": "Trader",
+  "archetype": "traveler_merchant",
   "spawnPool": [
     "dry_lake",
     "red_rock",
     "highway_95",
     "novac_outskirts"
   ],
-  "behaviorPattern": "highway_roamer",
+  "behaviorPattern": "merchant_idle",
   "lootPool": [
-    "dirty_water",
-    "old_map"
+    "small_caps",
+    "trade_goods"
   ],
   "dialogPool": [
-    "Long road behind me… longer ahead.",
-    "Highway’s quiet today.",
-    "Saw something moving out there. Didn’t stick around."
+    "Caps for goods, goods for caps.",
+    "Road’s rough, but business is business.",
+    "Got something you might like."
   ],
-  "factionTag": "neutral",
+  "factionTag": "independent_merc",
   "timeline": "echo",
-  "timelineVariants": []
+  "timelineVariants": [
+    "shadow"
+  ]
 }

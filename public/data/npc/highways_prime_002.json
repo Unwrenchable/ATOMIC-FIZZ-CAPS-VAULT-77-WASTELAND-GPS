@@ -1,24 +1,23 @@
 {
   "id": "highways_prime_002",
-  "name": "Scavenger",
-  "archetype": "wasteland_scavenger",
+  "name": "Caravan Runner",
+  "archetype": "traveler_merchant",
   "spawnPool": [
     "highway_93",
     "highway_95",
     "sloan_road"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "merchant_idle",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "small_caps",
+    "trade_goods"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "Caps for goods, goods for caps.",
+    "Road’s rough, but business is business.",
+    "Got something you might like."
   ],
-  "factionTag": "neutral",
+  "factionTag": "raider_adjacent",
   "timeline": "prime",
   "timelineVariants": []
 }

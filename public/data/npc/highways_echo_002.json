@@ -1,22 +1,21 @@
 {
   "id": "highways_echo_002",
-  "name": "Scrap Hunter",
-  "archetype": "wasteland_scavenger",
+  "name": "Outskirts Resident",
+  "archetype": "vegas_outskirts_local",
   "spawnPool": [
     "highway_93",
     "highway_95",
     "sloan_road"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "food_ration",
+    "small_caps"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "Vegas lights look close, but they’re a world away.",
+    "Strangers don’t usually come this far out.",
+    "Keep your head down. Raiders like this stretch."
   ],
   "factionTag": "neutral",
   "timeline": "echo",

@@ -1,11 +1,11 @@
 {
-  "id": "vegas_outskirts_prime_001",
-  "name": "Local",
+  "id": "highways_prime_006",
+  "name": "Outskirts Resident",
   "archetype": "vegas_outskirts_local",
   "spawnPool": [
-    "vegas_outskirts_north",
-    "vegas_outskirts_south",
-    "freeside_border"
+    "highway_93",
+    "highway_95",
+    "sloan_road"
   ],
   "behaviorPattern": "static_local",
   "lootPool": [
@@ -17,7 +17,7 @@
     "Strangers don’t usually come this far out.",
     "Keep your head down. Raiders like this stretch."
   ],
-  "factionTag": "neutral",
+  "factionTag": "legion_adjacent",
   "timeline": "prime",
   "timelineVariants": []
 }

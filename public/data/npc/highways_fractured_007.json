@@ -1,11 +1,11 @@
 {
-  "id": "anomaly_zones_fractured_001",
-  "name": "Trader",
+  "id": "highways_fractured_007",
+  "name": "Caravan Runner",
   "archetype": "traveler_merchant",
   "spawnPool": [
-    "triangle_center",
-    "dry_lake_cracks",
-    "vault77_perimeter"
+    "highway_93",
+    "highway_95",
+    "sloan_road"
   ],
   "behaviorPattern": "merchant_idle",
   "lootPool": [
@@ -17,7 +17,7 @@
     "Road’s rough, but business is business.",
     "Got something you might like."
   ],
-  "factionTag": "ncr_adjacent",
+  "factionTag": "legion_adjacent",
   "timeline": "fractured",
   "timelineVariants": []
 }
