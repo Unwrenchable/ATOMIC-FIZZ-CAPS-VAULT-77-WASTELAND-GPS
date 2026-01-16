@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Atomic Fizz Wallet</title>
+  <link rel="stylesheet" href="wallet.css">
+</head>
+<body>
+
+<div id="wallet-app" class="crt">
+
+  <h1>ATOMIC FIZZ WALLET</h1>
+
+  <button id="afw-connect" class="btn">CONNECT WALLET</button>
+  <div id="afw-address" class="mono small muted">WALLET: DISCONNECTED</div>
+
+  <section>
+    <h2>ON-CHAIN BALANCES</h2>
+    <div class="entry"><strong>SOL</strong><br><span id="afw-sol">0.000</span></div>
+    <div class="entry"><strong>FIZZ</strong><br><span id="afw-fizz">0</span></div>
+  </section>
+
+  <section>
+    <h2>WASTELAND STATS</h2>
+    <div class="entry"><strong>CAPS</strong><br><span id="afw-caps">0</span></div>
+    <div class="entry"><strong>XP</strong><br><span id="afw-xp">0 / 0</span></div>
+    <div class="entry"><strong>LEVEL</strong><br><span id="afw-level">1</span></div>
+  </section>
+
+  <section>
+    <h2>FEATURED ITEMS</h2>
+    <div id="afw-items"></div>
+  </section>
+
+  <section>
+    <h2>ON-CHAIN NFTs</h2>
+    <div id="afw-nfts"></div>
+  </section>
+
+</div>
+
+<script src="/js/main.js"></script>
+<script src="wallet.js"></script>
+
+</body>
+</html>
