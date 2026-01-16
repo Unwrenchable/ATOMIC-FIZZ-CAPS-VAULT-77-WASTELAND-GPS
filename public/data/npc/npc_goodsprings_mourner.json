@@ -1,0 +1,16 @@
+{
+  "id": "npc_goodsprings_mourner",
+  "name": "Quiet Mourner",
+  "faction": "None",
+  "role": "Wastelander",
+  "type": "civilian",
+  "homeRegion": "goodsprings",
+  "currentRegion": "goodsprings",
+  "poi": "goodsprings_cemetery",
+  "dialog": {
+    "idle": [
+      "Some folks never leave this place… even after they're gone.",
+      "The wind here always feels colder."
+    ]
+  }
+}
