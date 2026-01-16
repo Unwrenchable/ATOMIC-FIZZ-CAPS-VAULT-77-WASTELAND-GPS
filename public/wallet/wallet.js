@@ -99,11 +99,17 @@
     const PLAYER = window.PLAYER || { caps: 0, xp: 0, level: 1, inventory: [] };
     const needed = PLAYER.level * 100;
 
-    document.getElementById("afw-caps").textContent = PLAYER.caps;
-    document.getElementById("afw-level").textContent = PLAYER.level;
-    document.getElementById("afw-xp").textContent = `${PLAYER.xp} / ${needed}`;
-
+    const capsEl = document.getElementById("afw-caps");
+    const lvlEl = document.getElementById("afw-level");
+    const xpEl = document.getElementById("afw-xp");
     const itemsEl = document.getElementById("afw-items");
+
+    if (capsEl) capsEl.textContent = PLAYER.caps;
+    if (lvlEl) lvlEl.textContent = PLAYER.level;
+    if (xpEl) xpEl.textContent = `${PLAYER.xp} / ${needed}`;
+
+    if (!itemsEl) return;
+
     if (!PLAYER.inventory.length) {
       itemsEl.innerHTML = `<p class="muted">No items yet — explore the Mojave.</p>`;
       return;
@@ -135,7 +141,7 @@
   }
 
   // ------------------------------------------------------------
-  // NFT DISPLAY (WITH RARITY + MODAL SUPPORT)
+  // NFT DISPLAY (RARITY + MODAL SUPPORT)
   // ------------------------------------------------------------
   function renderNFTs() {
     const nftsEl = document.getElementById("afw-nfts");
@@ -172,13 +178,16 @@
     document.querySelectorAll(".nft-entry").forEach(el => {
       el.addEventListener("click", () => {
         const index = parseInt(el.dataset.nftIndex, 10);
-        openNFTModal(list[index]);
+        const NFT_STATE = window.NFT_STATE || { list: [] };
+        const list = NFT_STATE.list || [];
+        const nft = list[index];
+        if (nft) openNFTModal(nft);
       });
     });
   }
 
   // ------------------------------------------------------------
-  // NFT DETAIL MODAL
+  // NFT DETAIL MODAL + ACTIONS
   // ------------------------------------------------------------
   function openNFTModal(nft) {
     const modal = document.getElementById("nft-modal");
@@ -214,34 +223,114 @@
     if (modal) modal.classList.add("hidden");
   }
 
+  // EQUIP → Pip-Boy
   function equipNFT(nft) {
-    alert("Equip coming in Step 2");
+    if (typeof window.updatePipBoyEquipment !== "function") {
+      alert("Pip-Boy not connected.");
+      return;
+    }
+    window.updatePipBoyEquipment(nft);
+    alert(`${nft.name || "Item"} equipped.`);
+    closeNFTModal();
   }
 
-  function scrapNFT(nft) {
-    alert("Scrap coming in Step 3");
+  // SCRAP → CAPS
+  async function scrapNFT(nft) {
+    const base = (window.BACKEND_URL || window.location.origin).replace(/\/+$/, "");
+    try {
+      const res = await fetch(`${base}/api/scrap-nft`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mint: nft.mint })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) {
+        alert("Scrap failed.");
+        return;
+      }
+
+      const caps = data.caps || 0;
+      if (typeof window.updatePipBoyCaps === "function") {
+        window.updatePipBoyCaps(caps);
+      }
+      alert(`Scrapped for ${caps} CAPS.`);
+      closeNFTModal();
+      renderNFTs();
+    } catch (e) {
+      safeWarn("[AFW] scrapNFT failed:", e);
+      alert("Scrap failed (network error).");
+    }
   }
 
+  // FUSION → backend
   function fuseNFT(nft) {
-    alert("Fusion coming in Step 4");
+    const modal = document.getElementById("fusion-modal");
+    const body = document.getElementById("fusion-body");
+    if (!modal || !body) {
+      alert("Fusion UI not available.");
+      return;
+    }
+
+    body.innerHTML = `
+      <p>Select another NFT in a future step to fuse with <strong>${nft.name || "this item"}</strong>.</p>
+      <p class="muted small">For now, this will call /api/fuse with a single mint.</p>
+    `;
+
+    modal.classList.remove("hidden");
+
+    const startBtn = document.getElementById("fusion-start");
+    if (startBtn) {
+      startBtn.onclick = () => startFusion(nft);
+    }
+  }
+
+  async function startFusion(nft) {
+    const base = (window.BACKEND_URL || window.location.origin).replace(/\/+$/, "");
+    try {
+      const res = await fetch(`${base}/api/fuse`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mint: nft.mint })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) {
+        alert("Fusion failed.");
+        return;
+      }
+
+      alert(`Fusion complete: ${data.newItem?.name || "New Item"}`);
+      closeNFTModal();
+      const fusionModal = document.getElementById("fusion-modal");
+      if (fusionModal) fusionModal.classList.add("hidden");
+      renderNFTs();
+    } catch (e) {
+      safeWarn("[AFW] startFusion failed:", e);
+      alert("Fusion failed (network error).");
+    }
   }
 
   // ------------------------------------------------------------
   // REFRESH ON-CHAIN DATA
   // ------------------------------------------------------------
   async function refreshOnChain(pubkey) {
-    document.getElementById("afw-address").textContent =
-      `WALLET: ${pubkey.slice(0, 4)}...${pubkey.slice(-4)}`;
+    const addrEl = document.getElementById("afw-address");
+    if (addrEl) {
+      addrEl.textContent = `WALLET: ${pubkey.slice(0, 4)}...${pubkey.slice(-4)}`;
+    }
 
     const [sol, fizz] = await Promise.all([
       fetchSolBalance(pubkey),
       fetchFizzBalance(pubkey)
     ]);
 
-    document.getElementById("afw-sol").textContent = sol.toFixed(3);
-    document.getElementById("afw-fizz").textContent = fizz;
+    const solEl = document.getElementById("afw-sol");
+    const fizzEl = document.getElementById("afw-fizz");
+    if (solEl) solEl.textContent = sol.toFixed(3);
+    if (fizzEl) fizzEl.textContent = fizz;
 
-    if (window.updatePipBoyWalletState) {
+    if (typeof window.updatePipBoyWalletState === "function") {
       window.updatePipBoyWalletState(pubkey);
     }
   }
@@ -256,11 +345,19 @@
     const localBtn = document.getElementById("afw-local");
     const tradeBtn = document.getElementById("afw-trade-send");
     const modalClose = document.getElementById("nft-modal-close");
+    const fusionClose = document.getElementById("fusion-close");
 
     if (modalClose) {
       modalClose.addEventListener("click", closeNFTModal);
     }
+    if (fusionClose) {
+      fusionClose.addEventListener("click", () => {
+        const fm = document.getElementById("fusion-modal");
+        if (fm) fm.classList.add("hidden");
+      });
+    }
 
+    // Phantom connect
     if (connectBtn) {
       connectBtn.addEventListener("click", async () => {
         try {
@@ -281,6 +378,7 @@
       });
     }
 
+    // Local wallet mode
     if (localBtn) {
       localBtn.addEventListener("click", async () => {
         let pubkey = loadLocalWallet();
@@ -296,6 +394,7 @@
       });
     }
 
+    // Trade UI shell
     if (tradeBtn) {
       tradeBtn.addEventListener("click", async () => {
         const to = document.getElementById("afw-trade-to").value.trim();
