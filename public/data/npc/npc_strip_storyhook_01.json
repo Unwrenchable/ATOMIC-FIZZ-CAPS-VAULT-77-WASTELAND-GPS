@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_storyhook_01",
+  "name": "Back‑Alley Broker",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Got a job. Dangerous. Pays well.",
+    "You ever been under the Strip? Not many come back."
+  ],
+  "spawnPool": ["strip_service_corridors"],
+  "uniquePerWorld": true
+}
