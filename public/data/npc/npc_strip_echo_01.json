@@ -1,0 +1,7 @@
+{
+  "id": "npc_strip_echo_01",
+  "archetype": "timeline_echo_wanderer",
+  "timelineVariants": ["echo"],
+  "spawnPool": ["strip_service_corridors"],
+  "uniquePerWorld": false
+}
