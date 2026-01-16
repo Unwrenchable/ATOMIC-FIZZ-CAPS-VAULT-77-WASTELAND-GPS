@@ -1,0 +1,10 @@
+{
+  "icons": {
+    "echo_flicker": "ui/echo_flicker",
+    "static_blip": "ui/static_blip",
+    "trail_glow": "ui/trail_glow",
+    "scavenge_mark": "ui/scavenge_mark",
+    "dropped_item": "ui/dropped_item",
+    "battle_residue": "ui/battle_residue"
+  }
+}
