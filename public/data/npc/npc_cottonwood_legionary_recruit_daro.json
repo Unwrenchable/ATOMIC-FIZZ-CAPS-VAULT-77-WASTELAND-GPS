@@ -1,0 +1,14 @@
+{
+  "id": "npc_cottonwood_legionary_recruit_daro",
+  "name": "Daro",
+  "faction": "caesar_legion",
+  "role": "Recruit",
+  "personality": "Eager, naive, easily manipulated.",
+  "description": "Daro is new to the Legion and still believes in its promises of strength and purpose.",
+  "questHooks": [
+    "Wants to prove himself by hunting NCR scouts.",
+    "Found a strange cap near the slave pens.",
+    "Heard humming from the cliffs at night."
+  ],
+  "poi": "cottonwood_cove_fnv"
+}
