@@ -1,0 +1,16 @@
+{
+  "id": "npc_strip_chipstack_nolan",
+  "name": "Chip-Stack Nolan",
+  "faction": "strip_gamblers",
+  "homeRegion": "strip",
+  "currentRegion": "strip-central",
+  "role": "Gambler",
+  "personality": "Paranoid, jittery, convinced luck is alive.",
+  "description": "Claims he once won a fortune and buried it somewhere under the Strip. Won’t say where. Won’t say why.",
+  "questHooks": [
+    "Talks about a 'lucky pit' beneath the casinos.",
+    "Says someone else is digging for his buried caps.",
+    "Mentions a map he tore into pieces and hid."
+  ],
+  "poi": "strip_central_casino_floor"
+}
