@@ -18,16 +18,60 @@ ensureDir(NPC_DIR);
 ensureDir(DIALOG_DIR);
 ensureDir(LOOT_DIR);
 
-// Regions supported
 const REGIONS = [
+  "188",
+  "anch",
+  "anomaly_zones",
+  "atomic_fizz",
+  "blackmountain",
+  "boulder_city",
+  "bouldercity",
+  "brotherhood",
+  "bunker",
+  "commonwealth_institute",
+  "cottonwood",
+  "desertridge",
+  "divide",
+  "drylake",
+  "enclave",
+  "fizzco",
+  "freeside",
+  "general_wasteland",
+  "goodsprings",
+  "hiddenvalley",
+  "highway",
+  "highways",
+  "industrial",
+  "jacobstown",
+  "lakemead",
+  "legion",
   "mojave",
-  "commonwealth",
-  "capital_wasteland",
-  "new_reno",
-  "appalachia",
-  "dlc_regions",
-  "travelers"
+  "mojaveridge",
+  "ncr",
+  "nellis",
+  "nipton",
+  "northvegas",
+  "novac",
+  "nv",
+  "oldhighway",
+  "outervegas",
+  "outskirts",
+  "pitt",
+  "primm",
+  "quarry",
+  "redrock",
+  "ridge",
+  "ridgeline",
+  "searchlight",
+  "vegas_outskirts"
 ];
+
+if (!REGIONS.includes(region)) {
+  console.error(`ERROR: Unknown region "${region}".`);
+  console.error("Allowed regions are:");
+  console.error(REGIONS.join(", "));
+  process.exit(1);
+}
 
 // Timeline sets
 const TIMELINE_SETS = [
@@ -57,28 +101,99 @@ const BEHAVIOR_PATTERNS = [
   "fizzcaps_informer"
 ];
 
-// Quest hooks
 const QUEST_HOOKS = [
+  // Vegas Core & Outskirts
   "vegas_rumor_01",
   "vegas_rumor_02",
   "vegas_rumor_03",
+  "strip_whisper_01",
+  "freeside_trouble_01",
+  "outervegas_shadow_01",
+
+  // FizzCaps / Atomic Fizz Corporate
   "fizzcaps_clue_01",
   "fizzcaps_clue_02",
   "fizzcaps_clue_03",
+  "fizzco_coverup_01",
+  "fizzco_lost_shipment_01",
+
+  // Anomaly Zones
   "anomaly_investigation_01",
   "anomaly_investigation_02",
+  "anomaly_bleed_01",
+  "anomaly_echo_trace_01",
+  "anomaly_fracture_warning_01",
+
+  // Timeline Distortions
   "timeline_warning_01",
   "timeline_warning_02",
+  "timeline_overlap_01",
+  "timeline_shadow_event_01",
+  "timeline_prime_discrepancy_01",
+
+  // Mojave Subregions
+  "goodsprings_mystery_01",
+  "primm_oddity_01",
+  "novac_sighting_01",
+  "nipton_survivor_story_01",
+  "boulder_city_conflict_01",
+  "jacobstown_research_01",
+  "blackmountain_broadcast_01",
+  "drylake_ritual_01",
+  "redrock_wind_omen_01",
+  "searchlight_ash_phenomenon_01",
+
+  // Highways & Wasteland Routes
+  "highway_encounter_01",
+  "highway_ghost_signal_01",
+  "wasteland_route_warning_01",
+
+  // NCR / Legion / Brotherhood / Enclave
+  "ncr_dispatch_01",
+  "ncr_border_tension_01",
+  "legion_whisper_01",
+  "legion_trial_01",
+  "brotherhood_retrieval_01",
+  "enclave_probe_01",
+
+  // Divide / Pitt / DLC Regions
+  "divide_echo_01",
+  "divide_marking_01",
+  "pitt_chain_rumor_01",
+  "pitt_trog_activity_01",
+
+  // Institute / Commonwealth
+  "institute_scouting_01",
+  "institute_synth_trace_01",
+
+  // General Wasteland
   "region_story_01",
-  "region_story_02"
+  "region_story_02",
+  "wanderer_tale_01",
+  "lost_caravan_01",
+  "old_world_fragment_01"
 ];
+
 
 // Name fragments
 const NAME_FRAGMENTS = [
+  // Original core
   "Kael","Mira","Sylas","Varra","Daro","Lira","Joren","Hale",
   "Rhea","Tessa","Nina","Voss","Lenn","Marla","Dax","Nova",
-  "Rook","Jett","Vera","Ash","Ren","Kade","Lio","Mara"
+  "Rook","Jett","Vera","Ash","Ren","Kade","Lio","Mara",
+
+  // New additions (expanded + diverse)
+  "Soren","Elara","Kerr","Vey","Talon","Nyx","Riven","Sable",
+  "Kira","Dune","Solin","Rooke","Venn","Arlo","Sera","Kest",
+  "Rylin","Tarn","Eris","Vale","Korr","Lyra","Senn","Dara",
+  "Marlow","Jax","Riven","Torin","Sela","Brin","Korrin","Nira",
+  "Thane","Vara","Eon","Rooke","Sira","Dren","Kallin","Minsk",
+  "Torra","Veyra","Saros","Nell","Ryl","Kess","Tovin","Saro",
+  "Vennic","Daro","Lysa","Tovin","Renn","Karo","Vexa","Sorin",
+  "Jora","Nexa","Tallis","Vorn","Syla","Rav","Kerrin","Dessa",
+  "Maro","Vex","Soren","Nira","Tess","Rylas","Kova","Jalen"
 ];
+
 
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
