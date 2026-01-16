@@ -1,0 +1,24 @@
+{
+  "id": "highways_shadow_003",
+  "name": "Dust Picker",
+  "archetype": "wasteland_scavenger",
+  "spawnPool": [
+    "highway_93",
+    "highway_95",
+    "sloan_road"
+  ],
+  "behaviorPattern": "wanderer_basic",
+  "lootPool": [
+    "scrap_metal",
+    "empty_bottle",
+    "torn_note"
+  ],
+  "dialogPool": [
+    "Scrap’s getting harder to find.",
+    "Tracks here look fresh… not sure I like that.",
+    "Wind’s carrying strange sounds today."
+  ],
+  "factionTag": "neutral",
+  "timeline": "shadow",
+  "timelineVariants": []
+}
