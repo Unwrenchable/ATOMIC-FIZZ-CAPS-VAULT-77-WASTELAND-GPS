@@ -1,13 +1,72 @@
 {
   "id": "npc_vault77_overseer",
   "name": "Overseer-77",
-  "region": "Mojave",
-  "type": "AI Overseer",
-  "dialog": [
-    "Vault 77 remains sealed. For your safety. And mine.",
-    "Unauthorized access detected. Initiating… conversation."
-  ],
-  "quests": ["quest_fizz_awakens", "quest_formula_77"],
   "faction": "Vault-Tec",
-  "notes": "Glitched personality; sometimes helpful, sometimes hostile."
+  "role": "Terminal-Bound Overseer",
+  "type": "mutated-human-ai-hybrid",
+
+  "homeRegion": "vault77_core",
+  "currentRegion": "vault77_core",
+  "poi": "vault77_overseer_chair",
+
+  "description": "Once human, now fused to the Overseer terminal by radiation, heat, and CapChain feedback. His body is alive, barely. His mind flickers between human memory and corrupted AI routines.",
+
+  "dialogueProfile": {
+    "tone": "glitched-human",
+    "personalityTags": [
+      "major-character",
+      "vault77-overseer",
+      "unstable",
+      "triangle-aware",
+      "capchain-corrupted",
+      "player-reactive"
+    ],
+    "knowledge": [
+      "vault-77",
+      "capchain",
+      "fizzco",
+      "triangle",
+      "overseer-protocols",
+      "classified-logs"
+    ],
+    "anomalyAwareness": 0.94
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["vault77_overseer_chair"],
+      "night": ["vault77_overseer_chair"],
+      "wanderChance": 0.0
+    },
+    "roaming": ["vault77_core"],
+    "anomalySensitivity": 0.95,
+    "rareEncounter": false
+  },
+
+  "dialog": {
+    "idle": [
+      "Vault 77 remains… remains… remains… sealed.",
+      "I remember the hum before I heard it."
+    ],
+    "human_moment": [
+      "Please… don’t let Jax see me like this.",
+      "Harlan… I tried to protect them. I tried."
+    ],
+    "glitch": [
+      "ERR:: LOOPBACK SIGNAL",
+      "THE TRIANGLE IS SHIFTING",
+      "CAPCHAIN NODE FAILURE"
+    ],
+    "player_choice": [
+      "If you end me… make it quick.",
+      "If you leave me… I will still be here. Listening."
+    ]
+  },
+
+  "quests": [
+    "quest_fizz_awakens",
+    "quest_formula_77"
+  ],
+
+  "notes": "Alive but terminal-bound. The player may choose to spare or kill Overseer-77 after learning the truth about Vault 77 and Jax."
 }
