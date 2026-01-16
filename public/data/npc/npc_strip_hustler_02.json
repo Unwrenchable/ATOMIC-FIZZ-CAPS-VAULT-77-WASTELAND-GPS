@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_hustler_02",
+  "name": "Dice Runner",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Loaded? Me? Never.",
+    "Careful—these alleys bite back."
+  ],
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": false
+}
