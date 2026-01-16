@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_dlc_regions_fractured_007",
+  "type": "side_quest",
+  "name": "Lira Nina",
+  "region": "dlc_regions",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_dlc_regions_fractured_007_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_fractured_007_loot",
+  "questHooks": [
+    "timeline_warning_01",
+    "vegas_rumor_02",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.63,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime-shadow_002",
+  "type": "side_quest",
+  "name": "Kade Dax",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_dlc_regions_prime-shadow_002_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime-shadow_002_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.49,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "npc_sidequest_travelers_echo_008",
+  "type": "side_quest",
+  "name": "Lira Marla",
+  "region": "capital_wasteland",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_echo_008_dialog",
+  "lootPool": "npc_sidequest_travelers_echo_008_loot",
+  "questHooks": [
+    "region_story_01",
+    "fizzcaps_clue_02",
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.87,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "capital_wasteland",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "capital_wasteland",
+    "vegas_outskirts"
+  ]
+}

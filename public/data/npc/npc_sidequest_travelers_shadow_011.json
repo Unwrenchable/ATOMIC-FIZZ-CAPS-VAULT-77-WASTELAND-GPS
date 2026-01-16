@@ -1,0 +1,27 @@
+{
+  "id": "npc_sidequest_travelers_shadow_011",
+  "type": "side_quest",
+  "name": "Ash Rook",
+  "region": "appalachia",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_shadow_011_dialog",
+  "lootPool": "npc_sidequest_travelers_shadow_011_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "anomaly_investigation_02",
+    "vegas_rumor_01"
+  ],
+  "anomalyAwareness": 0.56,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "appalachia",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "appalachia",
+    "vegas_outskirts"
+  ]
+}

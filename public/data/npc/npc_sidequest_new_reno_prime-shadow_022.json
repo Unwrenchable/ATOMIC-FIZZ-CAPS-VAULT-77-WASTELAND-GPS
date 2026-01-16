@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_new_reno_prime-shadow_022",
+  "type": "side_quest",
+  "name": "Mira Ash",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_new_reno_prime-shadow_022_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-shadow_022_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "fizzcaps_clue_02",
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.74,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

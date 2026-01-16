@@ -1,0 +1,28 @@
+{
+  "id": "npc_sidequest_travelers_prime-echo_007",
+  "type": "side_quest",
+  "name": "Daro Ren",
+  "region": "commonwealth",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_prime-echo_007_dialog",
+  "lootPool": "npc_sidequest_travelers_prime-echo_007_loot",
+  "questHooks": [
+    "vegas_rumor_03",
+    "anomaly_investigation_01",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.89,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "commonwealth",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "commonwealth",
+    "vegas_outskirts"
+  ]
+}

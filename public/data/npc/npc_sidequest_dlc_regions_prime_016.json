@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime_016",
+  "type": "side_quest",
+  "name": "Varra Kael",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_dlc_regions_prime_016_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime_016_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "vegas_rumor_01"
+  ],
+  "anomalyAwareness": 0.6,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

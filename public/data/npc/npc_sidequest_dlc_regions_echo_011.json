@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_dlc_regions_echo_011",
+  "type": "side_quest",
+  "name": "Lenn Hale",
+  "region": "dlc_regions",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_dlc_regions_echo_011_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_echo_011_loot",
+  "questHooks": [
+    "region_story_01",
+    "timeline_warning_02",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.84,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

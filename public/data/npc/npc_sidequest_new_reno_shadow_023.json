@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_new_reno_shadow_023",
+  "type": "side_quest",
+  "name": "Lira Voss",
+  "region": "new_reno",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_new_reno_shadow_023_dialog",
+  "lootPool": "npc_sidequest_new_reno_shadow_023_loot",
+  "questHooks": [
+    "vegas_rumor_02",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.72,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

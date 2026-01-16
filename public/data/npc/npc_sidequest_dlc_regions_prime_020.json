@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime_020",
+  "type": "side_quest",
+  "name": "Jett Rook",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_dlc_regions_prime_020_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime_020_loot",
+  "questHooks": [
+    "timeline_warning_01",
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.56,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

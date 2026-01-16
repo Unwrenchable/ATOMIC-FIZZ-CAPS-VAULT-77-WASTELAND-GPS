@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_new_reno_prime-echo_005",
+  "type": "side_quest",
+  "name": "Dax Kade",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_new_reno_prime-echo_005_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-echo_005_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "region_story_01",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.34,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

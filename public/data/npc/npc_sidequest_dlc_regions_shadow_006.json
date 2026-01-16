@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_dlc_regions_shadow_006",
+  "type": "side_quest",
+  "name": "Daro Kade",
+  "region": "dlc_regions",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_dlc_regions_shadow_006_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_shadow_006_loot",
+  "questHooks": [
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
