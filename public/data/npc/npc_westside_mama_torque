@@ -1,0 +1,16 @@
+{
+  "id": "npc_westside_mama_torque",
+  "name": "Mama Torque",
+  "faction": "westside_collective",
+  "homeRegion": "westside",
+  "currentRegion": "westside-blocks",
+  "role": "Generator Mechanic",
+  "personality": "Gruff, practical, secretly soft-hearted.",
+  "description": "Keeps Westside’s generators alive with brute force and scrap. Claims machines behave better when you talk to them.",
+  "questHooks": [
+    "Mentions a generator that hums in a 'strange rhythm'.",
+    "Says someone’s been siphoning power at night.",
+    "Knows a scavenger who vanished near an old service tunnel."
+  ],
+  "poi": "westside_generator_yard"
+}
