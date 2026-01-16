@@ -1,0 +1,45 @@
+body {
+  background: #0d0f0c;
+  color: #00ff66;
+  font-family: monospace;
+  padding: 20px;
+}
+
+.crt {
+  text-shadow: 0 0 4px #00ff66;
+}
+
+h1, h2 {
+  border-bottom: 1px solid #00ff66;
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+.entry {
+  margin-bottom: 12px;
+}
+
+.btn {
+  background: transparent;
+  border: 1px solid #00ff66;
+  padding: 8px 12px;
+  color: #00ff66;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #00ff66;
+  color: #0d0f0c;
+}
+
+.muted {
+  opacity: 0.6;
+}
+
+.mono {
+  font-family: monospace;
+}
+
+.small {
+  font-size: 0.8em;
+}
