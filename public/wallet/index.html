@@ -7,19 +7,37 @@
 </head>
 <body>
 
+<!-- BOOT OVERLAY -->
+<div id="boot-overlay">
+  <img src="branding/logo.png" id="boot-logo">
+  <div class="boot-line">INITIALIZING ATOMIC FIZZ WALLET...</div>
+  <div class="boot-line">SCANNING WASTELAND NETWORK...</div>
+  <div class="boot-line">VERIFYING CAPS LEDGER...</div>
+  <div class="boot-line">LOADING PIP-BOY INTERFACE...</div>
+</div>
+
 <div id="wallet-app" class="crt">
 
-  <h1>ATOMIC FIZZ WALLET</h1>
+  <!-- BRANDING -->
+  <div id="wallet-branding">
+    <img src="branding/logo.png" id="wallet-logo">
+    <h1>ATOMIC FIZZ WALLET</h1>
+  </div>
 
-  <button id="afw-connect" class="btn">CONNECT WALLET</button>
+  <!-- WALLET CONNECTION -->
+  <button id="afw-connect" class="btn">CONNECT PHANTOM</button>
+  <button id="afw-local" class="btn">LOCAL FIZZ WALLET</button>
   <div id="afw-address" class="mono small muted">WALLET: DISCONNECTED</div>
+  <div id="afw-qr" class="mono small muted"></div>
 
+  <!-- ON-CHAIN BALANCES -->
   <section>
     <h2>ON-CHAIN BALANCES</h2>
     <div class="entry"><strong>SOL</strong><br><span id="afw-sol">0.000</span></div>
     <div class="entry"><strong>FIZZ</strong><br><span id="afw-fizz">0</span></div>
   </section>
 
+  <!-- WASTELAND STATS -->
   <section>
     <h2>WASTELAND STATS</h2>
     <div class="entry"><strong>CAPS</strong><br><span id="afw-caps">0</span></div>
@@ -27,14 +45,34 @@
     <div class="entry"><strong>LEVEL</strong><br><span id="afw-level">1</span></div>
   </section>
 
+  <!-- FEATURED ITEMS -->
   <section>
     <h2>FEATURED ITEMS</h2>
     <div id="afw-items"></div>
   </section>
 
+  <!-- NFT INVENTORY -->
   <section>
     <h2>ON-CHAIN NFTs</h2>
     <div id="afw-nfts"></div>
+  </section>
+
+  <!-- TRADE UI -->
+  <section>
+    <h2>WALLET-TO-WALLET TRADE</h2>
+
+    <div class="entry">
+      <label>Recipient Address</label><br>
+      <input id="afw-trade-to" class="mono">
+    </div>
+
+    <div class="entry">
+      <label>Amount (FIZZ)</label><br>
+      <input id="afw-trade-amount" class="mono">
+    </div>
+
+    <button id="afw-trade-send" class="btn">SEND</button>
+    <div id="afw-trade-status" class="mono small muted"></div>
   </section>
 
 </div>
