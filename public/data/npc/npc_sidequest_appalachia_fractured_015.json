@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_appalachia_fractured_015",
+  "type": "side_quest",
+  "name": "Rhea Vera",
+  "region": "appalachia",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_appalachia_fractured_015_dialog",
+  "lootPool": "npc_sidequest_appalachia_fractured_015_loot",
+  "questHooks": [
+    "fizzcaps_clue_02",
+    "anomaly_investigation_02",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.81,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

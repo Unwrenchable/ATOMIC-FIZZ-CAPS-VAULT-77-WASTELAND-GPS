@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_prime-echo_014",
+  "type": "side_quest",
+  "name": "Nina Lira",
+  "region": "mojave",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_mojave_prime-echo_014_dialog",
+  "lootPool": "npc_sidequest_mojave_prime-echo_014_loot",
+  "questHooks": [
+    "timeline_warning_01",
+    "vegas_rumor_01"
+  ],
+  "anomalyAwareness": 0.87,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_mojave_shadow_020",
+  "type": "side_quest",
+  "name": "Dax Kade",
+  "region": "mojave",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_mojave_shadow_020_dialog",
+  "lootPool": "npc_sidequest_mojave_shadow_020_loot",
+  "questHooks": [
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.56,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

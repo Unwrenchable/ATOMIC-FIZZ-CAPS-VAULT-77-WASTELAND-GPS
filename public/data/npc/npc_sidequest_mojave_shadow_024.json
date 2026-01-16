@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_shadow_024",
+  "type": "side_quest",
+  "name": "Marla Varra",
+  "region": "mojave",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_mojave_shadow_024_dialog",
+  "lootPool": "npc_sidequest_mojave_shadow_024_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "region_story_01",
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.35,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

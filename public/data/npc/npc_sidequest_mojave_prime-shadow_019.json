@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_mojave_prime-shadow_019",
+  "type": "side_quest",
+  "name": "Ren Rook",
+  "region": "mojave",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_mojave_prime-shadow_019_dialog",
+  "lootPool": "npc_sidequest_mojave_prime-shadow_019_loot",
+  "questHooks": [
+    "region_story_01",
+    "anomaly_investigation_02",
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.37,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
