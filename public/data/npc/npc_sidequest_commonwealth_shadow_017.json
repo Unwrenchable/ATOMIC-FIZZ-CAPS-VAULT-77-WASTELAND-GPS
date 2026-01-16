@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_commonwealth_shadow_017",
+  "type": "side_quest",
+  "name": "Varra Voss",
+  "region": "commonwealth",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_commonwealth_shadow_017_dialog",
+  "lootPool": "npc_sidequest_commonwealth_shadow_017_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "vegas_rumor_02",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.89,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_commonwealth_fractured_021",
+  "type": "side_quest",
+  "name": "Marla Mara",
+  "region": "commonwealth",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_commonwealth_fractured_021_dialog",
+  "lootPool": "npc_sidequest_commonwealth_fractured_021_loot",
+  "questHooks": [
+    "fizzcaps_clue_02",
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.85,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

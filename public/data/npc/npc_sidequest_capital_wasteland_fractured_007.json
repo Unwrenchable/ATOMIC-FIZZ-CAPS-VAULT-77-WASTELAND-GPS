@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_fractured_007",
+  "type": "side_quest",
+  "name": "Nina Rook",
+  "region": "capital_wasteland",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_capital_wasteland_fractured_007_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_fractured_007_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "vegas_rumor_02",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.49,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

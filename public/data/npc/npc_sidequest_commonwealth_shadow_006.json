@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_commonwealth_shadow_006",
+  "type": "side_quest",
+  "name": "Ash Kade",
+  "region": "commonwealth",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_commonwealth_shadow_006_dialog",
+  "lootPool": "npc_sidequest_commonwealth_shadow_006_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.32,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

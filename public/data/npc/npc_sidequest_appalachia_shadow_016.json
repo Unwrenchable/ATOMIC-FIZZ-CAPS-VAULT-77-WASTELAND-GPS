@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_appalachia_shadow_016",
+  "type": "side_quest",
+  "name": "Tessa Voss",
+  "region": "appalachia",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_appalachia_shadow_016_dialog",
+  "lootPool": "npc_sidequest_appalachia_shadow_016_loot",
+  "questHooks": [
+    "vegas_rumor_01",
+    "anomaly_investigation_01",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.52,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

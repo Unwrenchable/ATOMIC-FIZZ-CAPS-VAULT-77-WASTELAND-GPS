@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_new_reno_prime-echo_008",
+  "type": "side_quest",
+  "name": "Joren Rhea",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_new_reno_prime-echo_008_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-echo_008_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.79,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

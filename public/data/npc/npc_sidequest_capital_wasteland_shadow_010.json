@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_capital_wasteland_shadow_010",
+  "type": "side_quest",
+  "name": "Sylas Joren",
+  "region": "capital_wasteland",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_capital_wasteland_shadow_010_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_shadow_010_loot",
+  "questHooks": [
+    "vegas_rumor_01"
+  ],
+  "anomalyAwareness": 0.68,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

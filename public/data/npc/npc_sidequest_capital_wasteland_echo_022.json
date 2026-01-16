@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_capital_wasteland_echo_022",
+  "type": "side_quest",
+  "name": "Rhea Kade",
+  "region": "capital_wasteland",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_capital_wasteland_echo_022_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_echo_022_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.88,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
