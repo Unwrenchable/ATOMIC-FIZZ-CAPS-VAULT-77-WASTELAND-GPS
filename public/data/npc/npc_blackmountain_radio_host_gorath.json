@@ -1,0 +1,19 @@
+{
+  "id": "npc_blackmountain_radio_host_gorath",
+  "name": "Gorath",
+  "faction": "black_mountain",
+  "role": "Radio Host / Leader",
+  "personality": "Bombastic, theatrical, paranoid, loves the sound of his own voice.",
+  "description": "Gorath runs Black Mountain Radio, broadcasting rants, threats, and bizarre philosophy. His followers treat him like a prophet.",
+  "relationships": {
+    "nightkin": "Respected but feared",
+    "super_mutants": "Leader and entertainer",
+    "outsiders": "Despises them"
+  },
+  "questHooks": [
+    "Wants help boosting his radio signal.",
+    "Believes NCR is jamming his broadcasts.",
+    "Claims someone is sabotaging his equipment."
+  ],
+  "poi": "black_mountain_fnv"
+}
