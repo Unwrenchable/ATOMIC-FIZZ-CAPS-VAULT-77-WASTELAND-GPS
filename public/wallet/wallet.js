@@ -98,27 +98,36 @@
   }
 
   function renderNFTs() {
-    const nftsEl = document.getElementById("afw-nfts");
-    const NFT_STATE = window.NFT_STATE || { list: [] };
-    const list = NFT_STATE.list || [];
+  const nftsEl = document.getElementById("afw-nfts");
+  if (!nftsEl) return;
 
-    if (!list.length) {
-      nftsEl.innerHTML = `<p class="muted">No NFTs detected.</p>`;
-      return;
-    }
+  const NFT_STATE = window.NFT_STATE || { list: [] };
+  const list = NFT_STATE.list || [];
 
-    nftsEl.innerHTML = list
-      .slice(0, 10)
-      .map(nft => {
-        return `
-          <div class="entry">
-            <strong>${nft.name || "Unnamed NFT"}</strong><br>
-            <span class="mono small">${nft.mint}</span>
-          </div>
-        `;
-      })
-      .join("");
+  if (!list.length) {
+    nftsEl.innerHTML = `<p class="muted">No Atomic Fizz NFTs detected.</p>`;
+    return;
   }
+
+  nftsEl.innerHTML = list
+    .slice(0, 20)
+    .map(nft => {
+      const name = nft.name || "Unnamed NFT";
+      const mint = nft.mint || "Unknown Mint";
+      const img = nft.image || null;
+
+      return `
+        <div class="entry nft-entry">
+          ${img ? `<img src="${img}" class="nft-thumb">` : ""}
+          <div class="nft-info">
+            <strong>${name}</strong><br>
+            <span class="mono small">${mint}</span>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+}
 
   async function refreshOnChain(pubkey) {
     document.getElementById("afw-address").textContent =
