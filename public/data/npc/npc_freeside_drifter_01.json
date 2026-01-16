@@ -1,0 +1,6 @@
+{
+  "id": "npc_freeside_drifter_01",
+  "archetype": "highway_drifter",
+  "spawnPool": ["freeside_border"],
+  "uniquePerWorld": false
+}
