@@ -2,15 +2,56 @@
   "id": "npc_drylake_mirage_twin_sera",
   "name": "Mirage-Twin Sera",
   "faction": "mirage_wanderers",
+  "role": "Wanderer",
+
   "homeRegion": "dry-lake-edge",
   "currentRegion": "dry-lake-edge",
-  "role": "Wanderer",
+  "poi": "dry_lake_edge_mirage_zone",
+
   "personality": "Soft-spoken, distant, half-present.",
   "description": "Appears and disappears unpredictably. Claims she has a sister nobody has ever seen.",
+
+  "dialogueProfile": {
+    "tone": "echoing-soft",
+    "personalityTags": [
+      "major-character",
+      "triangle-sensitive",
+      "mirage-avatar",
+      "time-slip",
+      "unreliable-memory",
+      "liminal"
+    ],
+    "knowledge": [
+      "mirages",
+      "triangle",
+      "dust-lake-memory",
+      "lost-paths",
+      "heat-shimmer",
+      "anomaly-rumors"
+    ],
+    "anomalyAwareness": 0.97
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["dry_lake_edge_mirage_zone"],
+      "night": ["dry_lake_edge_reflection_hollow"],
+      "wanderChance": 0.40
+    },
+    "roaming": [
+      "dry-lake-edge",
+      "dry-lake-basin",
+      "old-highway-route"
+    ],
+    "anomalySensitivity": 0.98,
+    "rareEncounter": true
+  },
+
   "questHooks": [
     "Says she saw someone 'split into two' in the heat shimmer.",
     "Mentions a humming sound that makes mirages sharper.",
     "Claims her sister knows a secret path under the lakebed."
   ],
-  "poi": "dry_lake_edge_mirage_zone"
+
+  "notes": "Some scavengers swear they’ve seen Sera twice in the same moment—one ahead on the ridge, one behind in the shimmer. She denies this, then later insists it was you."
 }
