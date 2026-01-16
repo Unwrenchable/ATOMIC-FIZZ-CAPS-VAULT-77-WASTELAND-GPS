@@ -1,0 +1,8 @@
+{
+  "id": "npc_freeside_guard_02",
+  "name": "Gate Watcher",
+  "archetype": "vegas_outskirts_local",
+  "behaviorPattern": "static_local",
+  "spawnPool": ["freeside_border"],
+  "uniquePerWorld": false
+}
