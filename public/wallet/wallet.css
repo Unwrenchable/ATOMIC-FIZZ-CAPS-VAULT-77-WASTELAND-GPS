@@ -1,23 +1,83 @@
+/* ------------------------------------------------------------
+   GLOBAL CRT THEME
+-------------------------------------------------------------*/
+
 body {
   background: #0d0f0c;
   color: #00ff66;
   font-family: monospace;
   padding: 20px;
+  margin: 0;
+  overflow-x: hidden;
 }
 
+/* CRT glow */
 .crt {
   text-shadow: 0 0 4px #00ff66;
 }
+
+/* CRT scanlines */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 102, 0.05) 0px,
+    rgba(0, 255, 102, 0.05) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  z-index: 999;
+}
+
+/* CRT curvature */
+#wallet-app {
+  transform: perspective(900px) rotateX(2deg);
+  border-radius: 6px;
+}
+
+/* ------------------------------------------------------------
+   HEADERS
+-------------------------------------------------------------*/
 
 h1, h2 {
   border-bottom: 1px solid #00ff66;
   padding-bottom: 4px;
   margin-bottom: 10px;
+  letter-spacing: 1px;
 }
 
-.entry {
-  margin-bottom: 12px;
+/* ------------------------------------------------------------
+   BRANDING
+-------------------------------------------------------------*/
+
+#wallet-branding {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
 }
+
+#wallet-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px #00ff66);
+}
+
+#boot-logo {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px #00ff66);
+}
+
+/* ------------------------------------------------------------
+   BUTTONS
+-------------------------------------------------------------*/
 
 .btn {
   background: transparent;
@@ -25,12 +85,21 @@ h1, h2 {
   padding: 8px 12px;
   color: #00ff66;
   cursor: pointer;
+  font-family: monospace;
+  font-size: 14px;
+  text-shadow: 0 0 4px #00ff66;
+  margin-right: 6px;
 }
 
 .btn:hover {
   background: #00ff66;
   color: #0d0f0c;
+  box-shadow: 0 0 8px #00ff66;
 }
+
+/* ------------------------------------------------------------
+   TEXT HELPERS
+-------------------------------------------------------------*/
 
 .muted {
   opacity: 0.6;
@@ -43,6 +112,109 @@ h1, h2 {
 .small {
   font-size: 0.8em;
 }
+
+/* ------------------------------------------------------------
+   INPUTS
+-------------------------------------------------------------*/
+
+input {
+  background: transparent;
+  border: 1px solid #00ff66;
+  color: #00ff66;
+  padding: 6px;
+  width: 100%;
+  font-family: monospace;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 6px #00ff66;
+}
+
+/* ------------------------------------------------------------
+   ENTRIES
+-------------------------------------------------------------*/
+
+.entry {
+  margin-bottom: 12px;
+}
+
+/* ------------------------------------------------------------
+   NFT LIST
+-------------------------------------------------------------*/
+
+.nft-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+.nft-entry:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 0 6px #00ff66);
+}
+
+.nft-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border: 1px solid #00ff66;
+}
+
+.nft-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ------------------------------------------------------------
+   RARITY GLOW
+-------------------------------------------------------------*/
+
+.rarity-common {
+  opacity: 0.8;
+}
+
+.rarity-uncommon {
+  color: #00ff66;
+  text-shadow: 0 0 4px #00ff66;
+}
+
+.rarity-rare {
+  color: #00ffaa;
+  text-shadow: 0 0 6px #00ffaa;
+}
+
+.rarity-epic {
+  color: #00eaff;
+  text-shadow: 0 0 8px #00eaff;
+}
+
+.rarity-legendary {
+  color: #ffe066;
+  text-shadow: 0 0 10px #ffdd55, 0 0 20px #ffdd55;
+  border-left: 2px solid #ffdd55;
+  padding-left: 6px;
+}
+
+.rarity-fizz {
+  color: #00ff66;
+  text-shadow:
+    0 0 6px #00ff66,
+    0 0 12px #00ff66,
+    0 0 18px #00ff66;
+  border-left: 2px solid #00ff66;
+  padding-left: 6px;
+  animation: fizzPulse 1.6s infinite alternate;
+}
+
+@keyframes fizzPulse {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
 /* ------------------------------------------------------------
    NFT DETAIL MODAL
 -------------------------------------------------------------*/
@@ -68,6 +240,7 @@ h1, h2 {
   width: 360px;
   max-width: 90%;
   box-shadow: 0 0 12px #00ff66;
+  text-shadow: 0 0 4px #00ff66;
 }
 
 .modal-close {
@@ -101,4 +274,59 @@ h1, h2 {
 #nft-modal-body .nft-desc {
   margin-top: 10px;
   opacity: 0.9;
+}
+
+/* ------------------------------------------------------------
+   FUSION MODAL
+-------------------------------------------------------------*/
+
+#fusion-modal .modal-content {
+  width: 420px;
+}
+
+#fusion-body {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px dashed #00ff66;
+  min-height: 80px;
+}
+
+/* ------------------------------------------------------------
+   BOOT OVERLAY
+-------------------------------------------------------------*/
+
+#boot-overlay {
+  position: fixed;
+  inset: 0;
+  background: #020302;
+  color: #00ff66;
+  font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  text-shadow: 0 0 4px #00ff66;
+  z-index: 999999;
+}
+
+#boot-overlay.hidden {
+  display: none;
+}
+
+.boot-line {
+  animation: flicker 1.2s infinite alternate;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* ------------------------------------------------------------
+   SECTION SPACING
+-------------------------------------------------------------*/
+
+section {
+  margin-top: 20px;
 }
