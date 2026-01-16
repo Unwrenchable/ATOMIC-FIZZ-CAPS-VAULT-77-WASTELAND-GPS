@@ -1,20 +1,21 @@
 {
-  "id": "npc_sidequest_mojave_shadow_019",
+  "id": "npc_sidequest_appalachia_shadow_003",
   "type": "side_quest",
-  "name": "Sylas Ren",
-  "region": "mojave",
+  "name": "Lio Nina",
+  "region": "appalachia",
   "timelines": [
     "shadow"
   ],
   "archetype": "sidequest_traveler",
   "behaviorPattern": "timeline_observer",
-  "dialogPool": "npc_sidequest_mojave_shadow_019_dialog",
-  "lootPool": "npc_sidequest_mojave_shadow_019_loot",
+  "dialogPool": "npc_sidequest_appalachia_shadow_003_dialog",
+  "lootPool": "npc_sidequest_appalachia_shadow_003_loot",
   "questHooks": [
-    "vegas_rumor_02",
+    "fizzcaps_clue_01",
+    "region_story_02",
     "vegas_rumor_01"
   ],
-  "anomalyAwareness": 0.45,
+  "anomalyAwareness": 0.76,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

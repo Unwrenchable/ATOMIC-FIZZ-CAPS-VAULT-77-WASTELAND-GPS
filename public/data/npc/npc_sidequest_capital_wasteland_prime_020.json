@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime_020",
+  "type": "side_quest",
+  "name": "Ash Lio",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime_020_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime_020_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "vegas_rumor_01",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.46,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

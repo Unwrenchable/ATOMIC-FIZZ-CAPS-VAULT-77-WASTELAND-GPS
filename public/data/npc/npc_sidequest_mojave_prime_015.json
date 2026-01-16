@@ -1,20 +1,20 @@
 {
-  "id": "npc_sidequest_mojave_shadow_006",
+  "id": "npc_sidequest_mojave_prime_015",
   "type": "side_quest",
-  "name": "Joren Kael",
+  "name": "Kade Voss",
   "region": "mojave",
   "timelines": [
-    "shadow"
+    "prime"
   ],
   "archetype": "sidequest_anomaly_researcher",
   "behaviorPattern": "timeline_observer",
-  "dialogPool": "npc_sidequest_mojave_shadow_006_dialog",
-  "lootPool": "npc_sidequest_mojave_shadow_006_loot",
+  "dialogPool": "npc_sidequest_mojave_prime_015_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_015_loot",
   "questHooks": [
-    "vegas_rumor_01",
-    "anomaly_investigation_02"
+    "anomaly_investigation_02",
+    "vegas_rumor_01"
   ],
-  "anomalyAwareness": 0.85,
+  "anomalyAwareness": 0.37,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

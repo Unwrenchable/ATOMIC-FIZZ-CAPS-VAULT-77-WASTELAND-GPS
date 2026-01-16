@@ -1,20 +1,20 @@
 {
   "id": "npc_sidequest_mojave_prime-shadow_003",
   "type": "side_quest",
-  "name": "Lenn Rook",
+  "name": "Rook Lenn",
   "region": "mojave",
   "timelines": [
     "prime",
     "shadow"
   ],
-  "archetype": "sidequest_traveler",
+  "archetype": "sidequest_informer",
   "behaviorPattern": "quest_seeker",
   "dialogPool": "npc_sidequest_mojave_prime-shadow_003_dialog",
   "lootPool": "npc_sidequest_mojave_prime-shadow_003_loot",
   "questHooks": [
-    "timeline_warning_01"
+    "fizzcaps_clue_02"
   ],
-  "anomalyAwareness": 0.57,
+  "anomalyAwareness": 0.45,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

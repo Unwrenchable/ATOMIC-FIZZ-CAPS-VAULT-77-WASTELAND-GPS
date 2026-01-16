@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime_001",
+  "type": "side_quest",
+  "name": "Mira Vera",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime_001_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime_001_loot",
+  "questHooks": [
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.33,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
