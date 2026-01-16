@@ -1,1 +1,39 @@
-fill
+{
+  "archetypes": [
+    {
+      "id": "wasteland_scavenger",
+      "namePattern": ["Scavenger", "Scrap Hunter", "Dust Picker"],
+      "personality": ["cautious", "resourceful", "quiet"],
+      "dialogPool": [
+        "Scrap’s getting harder to find.",
+        "Tracks here look fresh… not sure I like that.",
+        "Wind’s carrying strange sounds today."
+      ],
+      "lootPool": ["scrap_metal", "empty_bottle", "torn_note"],
+      "behaviorPattern": "wanderer_basic",
+      "regionPool": "general_wasteland"
+    },
+    {
+      "id": "highway_drifter",
+      "namePattern": ["Drifter", "Road Walker", "Nomad"],
+      "personality": ["tired", "wandering", "neutral"],
+      "dialogPool": [
+        "Long road behind me… longer ahead.",
+        "Highway’s quiet today.",
+        "Saw something moving out there. Didn’t stick around."
+      ],
+      "lootPool": ["dirty_water", "old_map"],
+      "behaviorPattern": "highway_roamer",
+      "regionPool": "highways"
+    },
+    {
+      "id": "vegas_outskirts_local",
+      "namePattern": ["Local", "Outskirts Resident", "Shack Dweller"],
+      "personality": ["friendly", "wary"],
+      "dialogPool": [
+        "Vegas lights look close, but they’re a world away.",
+        "Strangers don’t usually come this far out.",
+        "Keep your head down. Raiders like this stretch."
+      ],
+      "lootPool": ["food_ration", "small_caps"],
+      "behaviorPattern": "static_local
