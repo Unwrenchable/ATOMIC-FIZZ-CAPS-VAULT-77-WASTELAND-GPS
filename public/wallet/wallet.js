@@ -135,7 +135,7 @@
   }
 
   // ------------------------------------------------------------
-  // NFT DISPLAY (WITH RARITY SUPPORT)
+  // NFT DISPLAY (WITH RARITY + MODAL SUPPORT)
   // ------------------------------------------------------------
   function renderNFTs() {
     const nftsEl = document.getElementById("afw-nfts");
@@ -151,14 +151,14 @@
 
     nftsEl.innerHTML = list
       .slice(0, 20)
-      .map(nft => {
+      .map((nft, i) => {
         const name = nft.name || "Unnamed NFT";
         const mint = nft.mint || "Unknown Mint";
         const img = nft.image || null;
         const rarity = (nft.rarity || "common").toLowerCase();
 
         return `
-          <div class="entry nft-entry rarity-${rarity}">
+          <div class="entry nft-entry rarity-${rarity}" data-nft-index="${i}">
             ${img ? `<img src="${img}" class="nft-thumb">` : ""}
             <div class="nft-info">
               <strong>${name}</strong><br>
@@ -168,6 +168,62 @@
         `;
       })
       .join("");
+
+    document.querySelectorAll(".nft-entry").forEach(el => {
+      el.addEventListener("click", () => {
+        const index = parseInt(el.dataset.nftIndex, 10);
+        openNFTModal(list[index]);
+      });
+    });
+  }
+
+  // ------------------------------------------------------------
+  // NFT DETAIL MODAL
+  // ------------------------------------------------------------
+  function openNFTModal(nft) {
+    const modal = document.getElementById("nft-modal");
+    const body = document.getElementById("nft-modal-body");
+    if (!modal || !body) return;
+
+    const name = nft.name || "Unnamed NFT";
+    const mint = nft.mint || "Unknown Mint";
+    const img = nft.image || null;
+    const rarity = (nft.rarity || "common").toLowerCase();
+    const desc = nft.description || nft.lore || "No description available.";
+
+    body.innerHTML = `
+      ${img ? `<img src="${img}">` : ""}
+      <div class="nft-name rarity-${rarity}">${name}</div>
+      <div class="nft-mint mono small">${mint}</div>
+      <div class="nft-desc">${desc}</div>
+    `;
+
+    modal.classList.remove("hidden");
+
+    const equipBtn = document.getElementById("nft-equip");
+    const scrapBtn = document.getElementById("nft-scrap");
+    const fuseBtn = document.getElementById("nft-fuse");
+
+    if (equipBtn) equipBtn.onclick = () => equipNFT(nft);
+    if (scrapBtn) scrapBtn.onclick = () => scrapNFT(nft);
+    if (fuseBtn) fuseBtn.onclick = () => fuseNFT(nft);
+  }
+
+  function closeNFTModal() {
+    const modal = document.getElementById("nft-modal");
+    if (modal) modal.classList.add("hidden");
+  }
+
+  function equipNFT(nft) {
+    alert("Equip coming in Step 2");
+  }
+
+  function scrapNFT(nft) {
+    alert("Scrap coming in Step 3");
+  }
+
+  function fuseNFT(nft) {
+    alert("Fusion coming in Step 4");
   }
 
   // ------------------------------------------------------------
@@ -185,7 +241,6 @@
     document.getElementById("afw-sol").textContent = sol.toFixed(3);
     document.getElementById("afw-fizz").textContent = fizz;
 
-    // Pip-Boy bridge
     if (window.updatePipBoyWalletState) {
       window.updatePipBoyWalletState(pubkey);
     }
@@ -200,88 +255,95 @@
     const connectBtn = document.getElementById("afw-connect");
     const localBtn = document.getElementById("afw-local");
     const tradeBtn = document.getElementById("afw-trade-send");
+    const modalClose = document.getElementById("nft-modal-close");
 
-    // Phantom connect
-    connectBtn.addEventListener("click", async () => {
-      try {
-        if (typeof window.connectWallet === "function") {
-          await window.connectWallet();
+    if (modalClose) {
+      modalClose.addEventListener("click", closeNFTModal);
+    }
+
+    if (connectBtn) {
+      connectBtn.addEventListener("click", async () => {
+        try {
+          if (typeof window.connectWallet === "function") {
+            await window.connectWallet();
+          }
+          const pubkey = window.PLAYER_WALLET;
+          if (!pubkey) {
+            alert("Wallet not connected.");
+            return;
+          }
+          await refreshOnChain(pubkey);
+          renderWastelandStats();
+          renderNFTs();
+        } catch (e) {
+          safeWarn("[AFW] connect failed:", e);
         }
-        const pubkey = window.PLAYER_WALLET;
+      });
+    }
+
+    if (localBtn) {
+      localBtn.addEventListener("click", async () => {
+        let pubkey = loadLocalWallet();
         if (!pubkey) {
-          alert("Wallet not connected.");
-          return;
+          pubkey = generateLocalKeypair();
+          saveLocalWallet(pubkey);
+          alert("New Atomic Fizz local wallet created.");
         }
+        window.PLAYER_WALLET = pubkey;
         await refreshOnChain(pubkey);
         renderWastelandStats();
         renderNFTs();
-      } catch (e) {
-        safeWarn("[AFW] connect failed:", e);
-      }
-    });
+      });
+    }
 
-    // Local wallet mode
-    localBtn.addEventListener("click", async () => {
-      let pubkey = loadLocalWallet();
-      if (!pubkey) {
-        pubkey = generateLocalKeypair();
-        saveLocalWallet(pubkey);
-        alert("New Atomic Fizz local wallet created.");
-      }
-      window.PLAYER_WALLET = pubkey;
-      await refreshOnChain(pubkey);
-      renderWastelandStats();
-      renderNFTs();
-    });
+    if (tradeBtn) {
+      tradeBtn.addEventListener("click", async () => {
+        const to = document.getElementById("afw-trade-to").value.trim();
+        const amtStr = document.getElementById("afw-trade-amount").value.trim();
+        const status = document.getElementById("afw-trade-status");
 
-    // Trade UI shell
-    tradeBtn.addEventListener("click", async () => {
-      const to = document.getElementById("afw-trade-to").value.trim();
-      const amtStr = document.getElementById("afw-trade-amount").value.trim();
-      const status = document.getElementById("afw-trade-status");
-
-      const from = window.PLAYER_WALLET;
-      if (!from) {
-        status.textContent = "Connect a wallet first.";
-        return;
-      }
-      if (!to || !amtStr) {
-        status.textContent = "Enter recipient and amount.";
-        return;
-      }
-
-      const amount = parseFloat(amtStr);
-      if (!Number.isFinite(amount) || amount <= 0) {
-        status.textContent = "Enter a valid positive amount.";
-        return;
-      }
-
-      status.textContent = "Submitting FIZZ transfer…";
-
-      try {
-        const base = (window.BACKEND_URL || window.location.origin).replace(/\/+$/, "");
-        const res = await fetch(`${base}/api/transfer-fizz`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ from, to, amount })
-        });
-
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok || data.ok === false) {
-          status.textContent = `Transfer failed: ${data.error || `HTTP ${res.status}`}`;
+        const from = window.PLAYER_WALLET;
+        if (!from) {
+          status.textContent = "Connect a wallet first.";
+          return;
+        }
+        if (!to || !amtStr) {
+          status.textContent = "Enter recipient and amount.";
           return;
         }
 
-        status.textContent = "Transfer complete.";
-        await refreshOnChain(from);
-      } catch (e) {
-        safeWarn("[AFW] transfer-fizz failed:", e);
-        status.textContent = "Transfer failed (network error).";
-      }
-    });
+        const amount = parseFloat(amtStr);
+        if (!Number.isFinite(amount) || amount <= 0) {
+          status.textContent = "Enter a valid positive amount.";
+          return;
+        }
 
-    // Auto-load if already connected
+        status.textContent = "Submitting FIZZ transfer…";
+
+        try {
+          const base = (window.BACKEND_URL || window.location.origin).replace(/\/+$/, "");
+          const res = await fetch(`${base}/api/transfer-fizz`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ from, to, amount })
+          });
+
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok || data.ok === false) {
+            status.textContent = `Transfer failed: ${data.error || `HTTP ${res.status}`}`;
+            return;
+          }
+
+          status.textContent = "Transfer complete.";
+          await refreshOnChain(from);
+        } catch (e) {
+          safeWarn("[AFW] transfer-fizz failed:", e);
+          status.textContent = "Transfer failed (network error).";
+        }
+      });
+    }
+
     if (window.PLAYER_WALLET) {
       refreshOnChain(window.PLAYER_WALLET);
     }
