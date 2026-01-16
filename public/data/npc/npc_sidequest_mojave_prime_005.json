@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_prime_005",
+  "type": "side_quest",
+  "name": "Kael Rhea",
+  "region": "mojave",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_mojave_prime_005_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_005_loot",
+  "questHooks": [
+    "vegas_rumor_03",
+    "fizzcaps_clue_02",
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.55,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

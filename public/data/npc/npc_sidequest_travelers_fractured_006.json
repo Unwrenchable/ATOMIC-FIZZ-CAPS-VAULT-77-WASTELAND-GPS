@@ -1,0 +1,26 @@
+{
+  "id": "npc_sidequest_travelers_fractured_006",
+  "type": "side_quest",
+  "name": "Marla Rook",
+  "region": "new_reno",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_fractured_006_dialog",
+  "lootPool": "npc_sidequest_travelers_fractured_006_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.8,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "new_reno",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "new_reno",
+    "vegas_outskirts"
+  ]
+}
