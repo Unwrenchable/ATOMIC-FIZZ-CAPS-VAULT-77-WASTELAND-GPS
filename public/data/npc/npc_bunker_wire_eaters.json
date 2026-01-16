@@ -1,0 +1,16 @@
+{
+  "id": "npc_bunker_wire_eaters",
+  "name": "The Wire-Eaters",
+  "faction": "tunnel_scavs",
+  "homeRegion": "bunker-tunnels",
+  "currentRegion": "bunker-tunnels",
+  "role": "Scavenger Group",
+  "personality": "Chaotic, twitchy, unpredictable.",
+  "description": "Scavengers who chew insulation off wires for fun. Somehow still alive.",
+  "questHooks": [
+    "Say they found a cable that hummed like a heartbeat.",
+    "Mention a sealed hatch with a vault symbol scratched off.",
+    "Claim someone is stealing wires at night."
+  ],
+  "poi": "bunker_access_maintenance_hall"
+}
