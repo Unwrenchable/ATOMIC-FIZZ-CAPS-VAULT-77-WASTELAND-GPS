@@ -1,0 +1,23 @@
+{
+  "id": "anomaly_zones_prime_004",
+  "name": "Shack Dweller",
+  "archetype": "vegas_outskirts_local",
+  "spawnPool": [
+    "triangle_center",
+    "dry_lake_cracks",
+    "vault77_perimeter"
+  ],
+  "behaviorPattern": "static_local",
+  "lootPool": [
+    "food_ration",
+    "small_caps"
+  ],
+  "dialogPool": [
+    "Vegas lights look close, but they’re a world away.",
+    "Strangers don’t usually come this far out.",
+    "Keep your head down. Raiders like this stretch."
+  ],
+  "factionTag": "legion_adjacent",
+  "timeline": "prime",
+  "timelineVariants": []
+}

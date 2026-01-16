@@ -1,0 +1,24 @@
+{
+  "id": "general_wasteland_prime_006",
+  "name": "Merchant",
+  "archetype": "traveler_merchant",
+  "spawnPool": [
+    "dry_lake",
+    "red_rock",
+    "highway_95",
+    "novac_outskirts"
+  ],
+  "behaviorPattern": "merchant_idle",
+  "lootPool": [
+    "small_caps",
+    "trade_goods"
+  ],
+  "dialogPool": [
+    "Caps for goods, goods for caps.",
+    "Road’s rough, but business is business.",
+    "Got something you might like."
+  ],
+  "factionTag": "raider_adjacent",
+  "timeline": "prime",
+  "timelineVariants": []
+}

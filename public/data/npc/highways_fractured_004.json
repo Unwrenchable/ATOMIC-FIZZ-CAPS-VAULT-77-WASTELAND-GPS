@@ -1,0 +1,23 @@
+{
+  "id": "highways_fractured_004",
+  "name": "Merchant",
+  "archetype": "traveler_merchant",
+  "spawnPool": [
+    "highway_93",
+    "highway_95",
+    "sloan_road"
+  ],
+  "behaviorPattern": "merchant_idle",
+  "lootPool": [
+    "small_caps",
+    "trade_goods"
+  ],
+  "dialogPool": [
+    "Caps for goods, goods for caps.",
+    "Road’s rough, but business is business.",
+    "Got something you might like."
+  ],
+  "factionTag": "raider_adjacent",
+  "timeline": "fractured",
+  "timelineVariants": []
+}

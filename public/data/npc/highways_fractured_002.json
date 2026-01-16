@@ -1,0 +1,22 @@
+{
+  "id": "highways_fractured_002",
+  "name": "Echo Wanderer",
+  "archetype": "timeline_echo_wanderer",
+  "spawnPool": [
+    "highway_93",
+    "highway_95",
+    "sloan_road"
+  ],
+  "behaviorPattern": "anomaly_wander",
+  "lootPool": [
+    "echo_fragment"
+  ],
+  "dialogPool": [
+    "…you’ve walked this path before…",
+    "…time folds strangely around this place…",
+    "…not your first time here…"
+  ],
+  "factionTag": "brotherhood_adjacent",
+  "timeline": "fractured",
+  "timelineVariants": []
+}
