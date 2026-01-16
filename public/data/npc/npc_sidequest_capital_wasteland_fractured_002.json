@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_fractured_002",
+  "type": "side_quest",
+  "name": "Dax Hale",
+  "region": "capital_wasteland",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_capital_wasteland_fractured_002_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_fractured_002_loot",
+  "questHooks": [
+    "vegas_rumor_03",
+    "timeline_warning_02",
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.51,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

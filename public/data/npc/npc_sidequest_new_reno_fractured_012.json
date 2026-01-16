@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_new_reno_fractured_012",
+  "type": "side_quest",
+  "name": "Dax Lira",
+  "region": "new_reno",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_new_reno_fractured_012_dialog",
+  "lootPool": "npc_sidequest_new_reno_fractured_012_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "anomaly_investigation_02",
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.56,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

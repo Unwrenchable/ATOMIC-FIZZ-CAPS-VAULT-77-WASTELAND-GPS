@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_commonwealth_shadow_011",
+  "type": "side_quest",
+  "name": "Kade Rhea",
+  "region": "commonwealth",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_commonwealth_shadow_011_dialog",
+  "lootPool": "npc_sidequest_commonwealth_shadow_011_loot",
+  "questHooks": [
+    "vegas_rumor_02",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.38,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

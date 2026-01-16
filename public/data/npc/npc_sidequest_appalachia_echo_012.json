@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_appalachia_echo_012",
+  "type": "side_quest",
+  "name": "Mira Ash",
+  "region": "appalachia",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_appalachia_echo_012_dialog",
+  "lootPool": "npc_sidequest_appalachia_echo_012_loot",
+  "questHooks": [
+    "region_story_01",
+    "fizzcaps_clue_03",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.74,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
