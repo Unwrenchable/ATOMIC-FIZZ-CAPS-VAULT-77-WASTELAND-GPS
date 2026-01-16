@@ -5,7 +5,7 @@
   function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
 
   const SOL_DECIMALS = 9;
-  const FIZZ_MINT = null; // set your SPL mint later
+  const FIZZ_MINT = null; 59AWm25fgvCBDuSFXthjT4wyrW455qgdZ67zaqVkEgPV
 
   async function fetchSolBalance(pubkey) {
     try {
