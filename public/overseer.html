@@ -7,10 +7,7 @@
   <title>OVERSEER TERMINAL // RESTRICTED ACCESS</title>
 
   <!-- Pip‑Boy Terminal Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
   <!-- Pip‑Boy / Overseer Terminal Theme -->
   <link rel="stylesheet" href="/css/terminal.css" />
@@ -67,7 +64,11 @@
   <!-- Terminal Engine (handles rendering / input wiring) -->
   <script src="/js/overseer/overseer.full.js"></script>
 
-  <!-- Unified Overseer Brain (talks to game via events) -->
+  <!-- Personality + Custom Commands (MUST load before overseer.js) -->
+  <script src="/js/overseer/personality.js"></script>
+  <script src="/js/overseer/handlers.js"></script>
+
+  <!-- Unified Overseer Brain (attaches engines + commands) -->
   <script src="/js/overseer/overseer.js"></script>
 
 </body>
