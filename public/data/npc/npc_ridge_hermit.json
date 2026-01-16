@@ -1,0 +1,56 @@
+{
+  "id": "npc_ridge_hermit",
+  "name": "The Ridge Hermit",
+  "faction": "none",
+  "role": "Recluse",
+
+  "homeRegion": "mojave-ridge",
+  "currentRegion": "mojave-ridge",
+  "poi": "mojave_ridge_clifftop_shelter",
+
+  "personality": "Paranoid, weathered, mutters to himself. Knows things he shouldn't.",
+  "description": "An old man living alone on a high ridge overlooking the Dry Lake. Claims he’s seen the triangle 'shift' at night.",
+
+  "dialogueProfile": {
+    "tone": "raspy-worn",
+    "personalityTags": [
+      "triangle-sensitive",
+      "old-survivor",
+      "cryptic",
+      "major-character",
+      "witness"
+    ],
+    "knowledge": [
+      "triangle",
+      "dry-lake",
+      "overpass-echo",
+      "strip-underground",
+      "old-world-rumors",
+      "lost-people"
+    ],
+    "anomalyAwareness": 0.89
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["mojave_ridge_clifftop_shelter"],
+      "night": ["mojave_ridge_firepit"],
+      "wanderChance": 0.12
+    },
+    "roaming": [
+      "mojave-ridge",
+      "dry-lake-edge",
+      "old-highway-route"
+    ],
+    "anomalySensitivity": 0.87,
+    "rareEncounter": false
+  },
+
+  "questHooks": [
+    "Says he saw the Dry Lake 'blink' once.",
+    "Claims the hum is older than the Strip.",
+    "Warns that the triangle is 'closing in'."
+  ],
+
+  "notes": "Lives alone on a ridge overlooking the anomaly triangle. Speaks in half-memories and warnings."
+}
