@@ -1951,7 +1951,28 @@
       "durability": [20, 35]
     },
     "tags": ["weapon", "energy", "fire", "legendary"]
-  }
+  },
+  {
+  "id": "king_legacy_cue",
+  "name": "Legacy of The King",
+  "rarity": "ultra-rare",
+  "spawnPOI": "putters-horizon-ridge",
+  "levelRequirement": 10,
+  "type": "cosmetic",
+  "priceCAPS": 250,
+  "baseStats": {
+    "collectionScore": 20,
+    "valueMultiplier": 4,
+    "skillBonus": 1
+  },
+  "rollRanges": {
+    "collectionScore": [5, 10],
+    "valueMultiplier": [1, 2],
+    "skillBonus": [0, 1]
+  },
+  "tags": ["cosmetic", "cue_skin", "the_king", "legendary"]
+}
+
 ]
 
 
