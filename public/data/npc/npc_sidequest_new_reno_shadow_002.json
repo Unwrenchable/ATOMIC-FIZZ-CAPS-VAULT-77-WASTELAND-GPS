@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_new_reno_shadow_002",
+  "type": "side_quest",
+  "name": "Sylas Vera",
+  "region": "new_reno",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_new_reno_shadow_002_dialog",
+  "lootPool": "npc_sidequest_new_reno_shadow_002_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.88,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

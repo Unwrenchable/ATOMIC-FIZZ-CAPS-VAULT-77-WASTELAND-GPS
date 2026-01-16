@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime-echo_015",
+  "type": "side_quest",
+  "name": "Lenn Marla",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_dlc_regions_prime-echo_015_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime-echo_015_loot",
+  "questHooks": [
+    "vegas_rumor_01",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.74,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

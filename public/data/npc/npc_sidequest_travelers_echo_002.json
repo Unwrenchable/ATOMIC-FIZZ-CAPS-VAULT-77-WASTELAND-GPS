@@ -1,0 +1,25 @@
+{
+  "id": "npc_sidequest_travelers_echo_002",
+  "type": "side_quest",
+  "name": "Rook Sylas",
+  "region": "new_reno",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_echo_002_dialog",
+  "lootPool": "npc_sidequest_travelers_echo_002_loot",
+  "questHooks": [
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.37,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "new_reno",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "new_reno",
+    "vegas_outskirts"
+  ]
+}

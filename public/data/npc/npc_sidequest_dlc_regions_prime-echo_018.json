@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime-echo_018",
+  "type": "side_quest",
+  "name": "Dax Mira",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_dlc_regions_prime-echo_018_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime-echo_018_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "vegas_rumor_02",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.35,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

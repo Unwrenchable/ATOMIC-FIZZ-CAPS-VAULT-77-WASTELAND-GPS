@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_new_reno_prime-shadow_025",
+  "type": "side_quest",
+  "name": "Varra Lio",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_new_reno_prime-shadow_025_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-shadow_025_loot",
+  "questHooks": [
+    "vegas_rumor_01"
+  ],
+  "anomalyAwareness": 0.77,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

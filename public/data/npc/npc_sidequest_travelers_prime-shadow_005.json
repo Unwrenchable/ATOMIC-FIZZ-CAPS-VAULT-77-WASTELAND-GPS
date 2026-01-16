@@ -1,0 +1,28 @@
+{
+  "id": "npc_sidequest_travelers_prime-shadow_005",
+  "type": "side_quest",
+  "name": "Tessa Tessar",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_prime-shadow_005_dialog",
+  "lootPool": "npc_sidequest_travelers_prime-shadow_005_loot",
+  "questHooks": [
+    "vegas_rumor_02",
+    "timeline_warning_01",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.52,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "new_reno",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "new_reno",
+    "vegas_outskirts"
+  ]
+}

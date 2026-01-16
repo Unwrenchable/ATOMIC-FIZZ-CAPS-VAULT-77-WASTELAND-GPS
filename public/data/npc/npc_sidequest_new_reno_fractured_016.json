@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_new_reno_fractured_016",
+  "type": "side_quest",
+  "name": "Lira Lenn",
+  "region": "new_reno",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_new_reno_fractured_016_dialog",
+  "lootPool": "npc_sidequest_new_reno_fractured_016_loot",
+  "questHooks": [
+    "vegas_rumor_02",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.42,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

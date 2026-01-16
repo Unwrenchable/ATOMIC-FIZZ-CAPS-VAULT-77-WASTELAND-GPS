@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_new_reno_echo_019",
+  "type": "side_quest",
+  "name": "Lira Tessa",
+  "region": "new_reno",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_new_reno_echo_019_dialog",
+  "lootPool": "npc_sidequest_new_reno_echo_019_loot",
+  "questHooks": [
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.62,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

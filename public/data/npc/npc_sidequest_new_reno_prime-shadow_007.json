@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_new_reno_prime-shadow_007",
+  "type": "side_quest",
+  "name": "Kade Dax",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_new_reno_prime-shadow_007_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-shadow_007_loot",
+  "questHooks": [
+    "region_story_02",
+    "vegas_rumor_01",
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.56,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

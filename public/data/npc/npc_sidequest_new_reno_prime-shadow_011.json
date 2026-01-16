@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_new_reno_prime-shadow_011",
+  "type": "side_quest",
+  "name": "Rook Kael",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_new_reno_prime-shadow_011_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-shadow_011_loot",
+  "questHooks": [
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.68,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

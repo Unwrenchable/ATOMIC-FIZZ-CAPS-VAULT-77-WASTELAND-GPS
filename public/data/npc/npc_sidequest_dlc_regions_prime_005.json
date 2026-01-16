@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime_005",
+  "type": "side_quest",
+  "name": "Lira Lirar",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_dlc_regions_prime_005_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime_005_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.87,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

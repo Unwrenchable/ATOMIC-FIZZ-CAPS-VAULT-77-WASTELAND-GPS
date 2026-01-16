@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_commonwealth_echo_008",
+  "type": "side_quest",
+  "name": "Joren Kade",
+  "region": "commonwealth",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_commonwealth_echo_008_dialog",
+  "lootPool": "npc_sidequest_commonwealth_echo_008_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.64,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
