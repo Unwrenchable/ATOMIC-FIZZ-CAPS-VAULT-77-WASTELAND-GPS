@@ -1,0 +1,16 @@
+{
+  "id": "npc_highway_the_hitchhiker",
+  "name": "The Hitchhiker",
+  "faction": "unknown",
+  "homeRegion": "unknown",
+  "currentRegion": "old-highway-route",
+  "role": "Wanderer",
+  "personality": "Silent, unreadable, unsettling.",
+  "description": "Always walking. Never stops. Never talks. Some say he’s been walking the same stretch of road for years.",
+  "questHooks": [
+    "Caravans report hearing a hum when he passes.",
+    "Someone swears they saw him twice in the same day, miles apart.",
+    "A trader claims he dropped a vault key without noticing."
+  ],
+  "poi": "old_highway_route_longwalk"
+}
