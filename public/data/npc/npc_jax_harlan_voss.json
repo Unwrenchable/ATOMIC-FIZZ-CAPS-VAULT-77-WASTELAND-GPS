@@ -1,4 +1,35 @@
 {
+  "dialogueProfile": {
+  "tone": "distinct",
+  "personalityTags": [
+    "major-character",
+    "lore-carrier",
+    "emotionally-complex"
+  ],
+  "knowledge": [
+    "region",
+    "faction",
+    "rumors",
+    "triangle",
+    "local-history"
+  ],
+  "anomalyAwareness": 0.7
+},
+
+"behavior": {
+  "schedule": {
+    "day": ["poi_primary", "poi_secondary"],
+    "night": ["home_primary"],
+    "wanderChance": 0.20
+  },
+  "roaming": [
+    "region-primary",
+    "region-secondary"
+  ],
+  "anomalySensitivity": 0.8,
+  "rareEncounter": false
+},
+
   "id": "npc_jax_harlan_voss",
   "name": "Harlan Voss",
   "region": "Mojave / New Vegas",
