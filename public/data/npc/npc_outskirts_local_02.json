@@ -1,0 +1,6 @@
+{
+  "id": "npc_outskirts_local_02",
+  "archetype": "vegas_outskirts_local",
+  "spawnPool": ["vegas_outskirts_south"],
+  "uniquePerWorld": true
+}
