@@ -1,0 +1,14 @@
+{
+  "id": "npc_jacobstown_guard_torren_malk",
+  "name": "Torren Malk",
+  "faction": "jacobstown",
+  "role": "Guard",
+  "personality": "Serious, disciplined, distrustful of outsiders.",
+  "description": "Torren guards Jacobstown’s entrance. He’s loyal to Garran but believes humans bring trouble.",
+  "questHooks": [
+    "Reports footprints leading toward Black Mountain.",
+    "Says a Nightkin hasn’t returned from patrol.",
+    "Found claw marks on the lodge door."
+  ],
+  "poi": "jacobstown_fnv"
+}
