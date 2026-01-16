@@ -1,0 +1,16 @@
+{
+  "id": "npc_hiddenvalley_scribe_delta",
+  "name": "Scribe Delta",
+  "faction": "brotherhood_of_steel",
+  "homeRegion": "hidden-valley",
+  "currentRegion": "hidden-valley-east",
+  "role": "Archivist",
+  "personality": "Nerdy, excitable, easily distracted.",
+  "description": "Obsessed with pre-war comic books. Claims some issues predicted real events.",
+  "questHooks": [
+    "Mentions a comic about a vault that 'never opened'.",
+    "Says he heard a hum through the bunker vents.",
+    "Knows of a sealed room the elders pretend doesn’t exist."
+  ],
+  "poi": "hidden_valley_east_archive_room"
+}
