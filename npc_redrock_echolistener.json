@@ -1,0 +1,16 @@
+{
+  "id": "npc_redrock_echolistener",
+  "name": "Canyon Echo Listener",
+  "faction": "None",
+  "role": "Listener",
+  "type": "civilian",
+  "homeRegion": "red-rock",
+  "currentRegion": "red-rock",
+  "poi": "redrock_trails",
+  "dialog": {
+    "idle": [
+      "Echoes bounce weird out here.",
+      "Sometimes you hear voices that aren’t yours."
+    ]
+  }
+}

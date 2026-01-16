@@ -1,0 +1,6 @@
+{
+  "id": "npc_outskirts_drifter_01",
+  "archetype": "highway_drifter",
+  "spawnPool": ["vegas_outskirts_north"],
+  "uniquePerWorld": false
+}

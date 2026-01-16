@@ -1,0 +1,19 @@
+{
+  "id": "npc_nv_lucky_lark",
+  "name": "Lucky Lark",
+  "region": "New Vegas Strip",
+  "type": "Street Performer",
+  "dialog": {
+    "idle": [
+      "Tips appreciated. Secrets appreciated more.",
+      "I saw a man vanish into thin air last night."
+    ],
+    "player_famous": [
+      "You’re the one messing with the powerlines!",
+      "Everyone’s talking about you."
+    ]
+  },
+  "quests": ["side_nv_larkrumors"],
+  "faction": "Independent",
+  "notes": "Spreads rumors that unlock new quests."
+}

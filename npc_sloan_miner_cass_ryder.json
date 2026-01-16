@@ -1,0 +1,16 @@
+{
+  "id": "npc_sloan_miner_cass_ryder",
+  "name": "Cass Ryder",
+  "faction": "sloan_miners",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Miner / Hunter",
+  "personality": "Angry, reckless, determined to kill a deathclaw.",
+  "description": "Cass lost a brother in the quarry. He’s been hunting deathclaws ever since, even though he knows it’s suicide.",
+  "questHooks": [
+    "Wants help tracking a legendary deathclaw.",
+    "Believes the quarry matriarch guards something valuable.",
+    "Says the deathclaws avoid a certain tunnel — for a reason."
+  ],
+  "poi": "sloan_station_fnv"
+}

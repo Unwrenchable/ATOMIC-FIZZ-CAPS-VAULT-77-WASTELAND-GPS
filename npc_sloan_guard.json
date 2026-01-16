@@ -1,0 +1,16 @@
+{
+  "id": "npc_sloan_guard",
+  "name": "Quarry Guard",
+  "faction": "None",
+  "role": "Guard",
+  "type": "civilian",
+  "homeRegion": "sloan",
+  "currentRegion": "sloan",
+  "poi": "sloan_quarry_edge",
+  "dialog": {
+    "idle": [
+      "Keep your distance from the quarry. It’s not safe.",
+      "We’ve had… problems out here before."
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "npc_outskirts_microquest_02",
+  "name": "Old Map Seller",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Maps ain’t cheap, but they’ll save your life.",
+    "Got one that shows something… strange… near Dry Lake."
+  ],
+  "spawnPool": ["freeside_border"],
+  "uniquePerWorld": true
+}
