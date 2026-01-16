@@ -1,0 +1,16 @@
+{
+  "id": "npc_highway_mapmaker_lio",
+  "name": "Map-Maker Lio",
+  "faction": "caravan_folk",
+  "homeRegion": "old-highway-route",
+  "currentRegion": "old-highway-route",
+  "role": "Cartographer",
+  "personality": "Artistic, distracted, always sketching.",
+  "description": "Draws maps that are 70% accurate and 100% artistic. Says the land shifts when nobody is looking.",
+  "questHooks": [
+    "Claims he drew a road that wasn’t there the next day.",
+    "Mentions a humming sound that made his hand shake.",
+    "Says someone asked him to map a vault that 'shouldn’t exist'."
+  ],
+  "poi": "old_highway_route_reststop"
+}
