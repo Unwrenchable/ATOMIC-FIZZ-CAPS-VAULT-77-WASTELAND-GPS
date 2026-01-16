@@ -276,40 +276,32 @@
 
     <span id="locations-count" class="hidden"></span>
 
-    <!-- CORE NAMESPACE -->
-    <script>
-      if (!window.Game) window.Game = {};
-      if (!Game.modules) Game.modules = {};
-      Game.hooks = Game.hooks || {};
-    </script>
+    <!-- GLOBAL GPS -->
+<script src="/js/gps.js"></script>
 
-    <!-- MODULES -->
-    <script src="/js/modules/economy.js"></script>
-    <script src="/js/modules/mintables.js"></script>
-    <script src="/js/modules/factions.js"></script>
-    <script src="/js/modules/enemyScaling.js"></script>
-    <script src="/js/modules/quests.js"></script>
-    <script src="/js/modules/worldmap.js"></script>
-    <script src="/js/modules/narrative.js"></script>
+<!-- CORE GAME ENGINE -->
+<script src="/js/main.js"></script>
 
-    <!-- ENGINE -->
-    <script src="/js/main.js"></script>
+<!-- GAME MODULES -->
+<script src="/js/modules/economy.js"></script>
+<script src="/js/modules/mintables.js"></script>
+<script src="/js/modules/factions.js"></script>
+<script src="/js/modules/enemyScaling.js"></script>
+<script src="/js/modules/quests.js"></script>
+<script src="/js/modules/narrative.js"></script>
 
-    <!-- MAP + BOOT -->
-    <script src="/js/map/worldstate.js"></script>
-    <script src="/js/map/map-core.js"></script>
-    <script src="/js/boot.js"></script>
+<!-- WORLD MAP (ESRI ONLY) -->
+<script src="/js/modules/worldmap.js"></script>
 
-    <!-- STAT PANEL LOGIC -->
-    <script src="/js/stat-panel.js"></script>
+<!-- PIP‑BOY UI SHELL -->
+<script src="/js/pipboy.js"></script>
 
-    <!-- PIP‑BOY UI -->
-    <script src="/js/ui/pipboy-tabs.js"></script>
-    <script src="/js/ui/inventory-ui.js"></script>
-    <script src="/js/ui/quest-ui.js"></script>
+<!-- UI MODULES -->
+<script src="/js/modules/inventory-ui.js"></script>
+<script src="/js/modules/quest-ui.js"></script>
 
-    <!-- SPECIAL SYSTEM -->
-    <script src="/js/pipboy-special.js"></script>
+<!-- SPECIAL SYSTEM -->
+<script src="/js/pipboy-special.js"></script>
 
     <!-- RADIO / OVERSEER POPUP -->
     <script>
