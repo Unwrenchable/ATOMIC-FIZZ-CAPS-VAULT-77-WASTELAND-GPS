@@ -1,0 +1,16 @@
+{
+  "id": "npc_bouldercity_settler",
+  "name": "Wary Settler",
+  "faction": "None",
+  "role": "Settler",
+  "type": "civilian",
+  "homeRegion": "boulder-city",
+  "currentRegion": "boulder-city",
+  "poi": "bouldercity_ruins",
+  "dialog": {
+    "idle": [
+      "Trying to rebuild… one brick at a time.",
+      "The past hangs heavy here."
+    ]
+  }
+}
