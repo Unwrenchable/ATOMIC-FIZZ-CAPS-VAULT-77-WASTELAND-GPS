@@ -1,21 +1,21 @@
 {
-  "id": "npc_sidequest_mojave_echo_006",
+  "id": "npc_sidequest_mojave_prime_019",
   "type": "side_quest",
-  "name": "Daro Mira",
+  "name": "Rook Ash",
   "region": "mojave",
   "timelines": [
-    "echo"
+    "prime"
   ],
   "archetype": "sidequest_informer",
   "behaviorPattern": "anomaly_sensitive",
-  "dialogPool": "npc_sidequest_mojave_echo_006_dialog",
-  "lootPool": "npc_sidequest_mojave_echo_006_loot",
+  "dialogPool": "npc_sidequest_mojave_prime_019_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_019_loot",
   "questHooks": [
     "vegas_rumor_03",
-    "region_story_01",
-    "timeline_warning_02"
+    "region_story_02",
+    "region_story_01"
   ],
-  "anomalyAwareness": 0.42,
+  "anomalyAwareness": 0.32,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

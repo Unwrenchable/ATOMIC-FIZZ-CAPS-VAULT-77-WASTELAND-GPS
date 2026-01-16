@@ -1,19 +1,19 @@
 {
   "id": "npc_sidequest_mojave_shadow_010",
   "type": "side_quest",
-  "name": "Rook Hale",
+  "name": "Nina Nova",
   "region": "mojave",
   "timelines": [
     "shadow"
   ],
-  "archetype": "sidequest_fizzcaps_contact",
-  "behaviorPattern": "fizzcaps_informer",
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "vegas_bound",
   "dialogPool": "npc_sidequest_mojave_shadow_010_dialog",
   "lootPool": "npc_sidequest_mojave_shadow_010_loot",
   "questHooks": [
-    "timeline_warning_02"
+    "anomaly_investigation_01"
   ],
-  "anomalyAwareness": 0.39,
+  "anomalyAwareness": 0.4,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

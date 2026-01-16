@@ -1,17 +1,17 @@
 {
   "id": "npc_sidequest_mojave_fractured_007",
   "type": "side_quest",
-  "name": "Kael Lenn",
+  "name": "Ash Lio",
   "region": "mojave",
   "timelines": [
     "fractured"
   ],
-  "archetype": "sidequest_region_legend",
-  "behaviorPattern": "vegas_bound",
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "fizzcaps_informer",
   "dialogPool": "npc_sidequest_mojave_fractured_007_dialog",
   "lootPool": "npc_sidequest_mojave_fractured_007_loot",
   "questHooks": [
-    "anomaly_investigation_01"
+    "fizzcaps_clue_01"
   ],
   "anomalyAwareness": 0.49,
   "factionTag": "neutral",

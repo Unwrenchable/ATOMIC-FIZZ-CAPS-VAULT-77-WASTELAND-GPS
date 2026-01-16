@@ -1,7 +1,7 @@
 {
   "id": "npc_sidequest_mojave_prime-shadow_007",
   "type": "side_quest",
-  "name": "Varra Nova",
+  "name": "Vera Rook",
   "region": "mojave",
   "timelines": [
     "prime",
@@ -12,9 +12,9 @@
   "dialogPool": "npc_sidequest_mojave_prime-shadow_007_dialog",
   "lootPool": "npc_sidequest_mojave_prime-shadow_007_loot",
   "questHooks": [
-    "vegas_rumor_02"
+    "region_story_01"
   ],
-  "anomalyAwareness": 0.62,
+  "anomalyAwareness": 0.9,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

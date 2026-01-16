@@ -1,21 +1,21 @@
 {
   "id": "npc_sidequest_mojave_echo_009",
   "type": "side_quest",
-  "name": "Kael Ash",
+  "name": "Daro Nova",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
-  "archetype": "sidequest_traveler",
-  "behaviorPattern": "timeline_observer",
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "quest_seeker",
   "dialogPool": "npc_sidequest_mojave_echo_009_dialog",
   "lootPool": "npc_sidequest_mojave_echo_009_loot",
   "questHooks": [
-    "fizzcaps_clue_03",
-    "timeline_warning_02",
-    "timeline_warning_01"
+    "timeline_warning_01",
+    "region_story_02",
+    "region_story_01"
   ],
-  "anomalyAwareness": 0.78,
+  "anomalyAwareness": 0.81,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

@@ -1,19 +1,19 @@
 {
   "id": "npc_sidequest_mojave_echo_017",
   "type": "side_quest",
-  "name": "Rook Varra",
+  "name": "Joren Tessa",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
-  "archetype": "sidequest_anomaly_researcher",
-  "behaviorPattern": "timeline_observer",
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "anomaly_sensitive",
   "dialogPool": "npc_sidequest_mojave_echo_017_dialog",
   "lootPool": "npc_sidequest_mojave_echo_017_loot",
   "questHooks": [
-    "anomaly_investigation_02"
+    "fizzcaps_clue_02"
   ],
-  "anomalyAwareness": 0.58,
+  "anomalyAwareness": 0.37,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

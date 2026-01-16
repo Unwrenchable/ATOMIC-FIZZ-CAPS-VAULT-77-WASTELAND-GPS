@@ -1,7 +1,7 @@
 {
   "id": "npc_sidequest_mojave_fractured_012",
   "type": "side_quest",
-  "name": "Kade Tessa",
+  "name": "Kael Nova",
   "region": "mojave",
   "timelines": [
     "fractured"
@@ -11,10 +11,10 @@
   "dialogPool": "npc_sidequest_mojave_fractured_012_dialog",
   "lootPool": "npc_sidequest_mojave_fractured_012_loot",
   "questHooks": [
-    "anomaly_investigation_02",
-    "fizzcaps_clue_03"
+    "vegas_rumor_02",
+    "fizzcaps_clue_01"
   ],
-  "anomalyAwareness": 0.77,
+  "anomalyAwareness": 0.35,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

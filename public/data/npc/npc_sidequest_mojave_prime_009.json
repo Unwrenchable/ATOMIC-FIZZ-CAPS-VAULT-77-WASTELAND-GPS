@@ -1,20 +1,20 @@
 {
-  "id": "npc_sidequest_mojave_prime_002",
+  "id": "npc_sidequest_mojave_prime_009",
   "type": "side_quest",
-  "name": "Rook Mira",
+  "name": "Jett Kael",
   "region": "mojave",
   "timelines": [
     "prime"
   ],
   "archetype": "sidequest_traveler",
   "behaviorPattern": "quest_seeker",
-  "dialogPool": "npc_sidequest_mojave_prime_002_dialog",
-  "lootPool": "npc_sidequest_mojave_prime_002_loot",
+  "dialogPool": "npc_sidequest_mojave_prime_009_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_009_loot",
   "questHooks": [
-    "fizzcaps_clue_01",
-    "anomaly_investigation_01"
+    "timeline_warning_01",
+    "vegas_rumor_01"
   ],
-  "anomalyAwareness": 0.57,
+  "anomalyAwareness": 0.53,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

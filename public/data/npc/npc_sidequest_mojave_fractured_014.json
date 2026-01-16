@@ -1,21 +1,19 @@
 {
   "id": "npc_sidequest_mojave_fractured_014",
   "type": "side_quest",
-  "name": "Lira Dax",
+  "name": "Lenn Lira",
   "region": "mojave",
   "timelines": [
     "fractured"
   ],
   "archetype": "sidequest_fizzcaps_contact",
-  "behaviorPattern": "quest_seeker",
+  "behaviorPattern": "anomaly_sensitive",
   "dialogPool": "npc_sidequest_mojave_fractured_014_dialog",
   "lootPool": "npc_sidequest_mojave_fractured_014_loot",
   "questHooks": [
-    "fizzcaps_clue_02",
-    "region_story_01",
-    "fizzcaps_clue_01"
+    "anomaly_investigation_01"
   ],
-  "anomalyAwareness": 0.46,
+  "anomalyAwareness": 0.36,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

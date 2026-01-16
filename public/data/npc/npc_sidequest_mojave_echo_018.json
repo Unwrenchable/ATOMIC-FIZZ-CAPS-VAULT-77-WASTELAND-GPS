@@ -1,19 +1,20 @@
 {
   "id": "npc_sidequest_mojave_echo_018",
   "type": "side_quest",
-  "name": "Rook Lira",
+  "name": "Rook Daro",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
   "archetype": "sidequest_traveler",
-  "behaviorPattern": "vegas_bound",
+  "behaviorPattern": "fizzcaps_informer",
   "dialogPool": "npc_sidequest_mojave_echo_018_dialog",
   "lootPool": "npc_sidequest_mojave_echo_018_loot",
   "questHooks": [
-    "fizzcaps_clue_03"
+    "vegas_rumor_01",
+    "anomaly_investigation_02"
   ],
-  "anomalyAwareness": 0.41,
+  "anomalyAwareness": 0.6,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

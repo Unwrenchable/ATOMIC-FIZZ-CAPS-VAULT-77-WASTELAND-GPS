@@ -1,19 +1,20 @@
 {
   "id": "npc_sidequest_mojave_prime_004",
   "type": "side_quest",
-  "name": "Sylas Jett",
+  "name": "Kael Daro",
   "region": "mojave",
   "timelines": [
     "prime"
   ],
-  "archetype": "sidequest_informer",
-  "behaviorPattern": "quest_seeker",
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "anomaly_sensitive",
   "dialogPool": "npc_sidequest_mojave_prime_004_dialog",
   "lootPool": "npc_sidequest_mojave_prime_004_loot",
   "questHooks": [
-    "anomaly_investigation_02"
+    "vegas_rumor_02",
+    "timeline_warning_01"
   ],
-  "anomalyAwareness": 0.57,
+  "anomalyAwareness": 0.84,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

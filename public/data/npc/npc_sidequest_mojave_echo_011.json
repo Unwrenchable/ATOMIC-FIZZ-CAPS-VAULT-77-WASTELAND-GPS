@@ -1,21 +1,20 @@
 {
   "id": "npc_sidequest_mojave_echo_011",
   "type": "side_quest",
-  "name": "Ren Dax",
+  "name": "Nina Rook",
   "region": "mojave",
   "timelines": [
     "echo"
   ],
   "archetype": "sidequest_anomaly_researcher",
-  "behaviorPattern": "vegas_bound",
+  "behaviorPattern": "anomaly_sensitive",
   "dialogPool": "npc_sidequest_mojave_echo_011_dialog",
   "lootPool": "npc_sidequest_mojave_echo_011_loot",
   "questHooks": [
-    "vegas_rumor_03",
-    "region_story_01",
-    "timeline_warning_02"
+    "timeline_warning_02",
+    "anomaly_investigation_01"
   ],
-  "anomalyAwareness": 0.51,
+  "anomalyAwareness": 0.35,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

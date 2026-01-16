@@ -1,19 +1,19 @@
 {
-  "id": "npc_sidequest_mojave_fractured_018",
+  "id": "npc_sidequest_mojave_prime_013",
   "type": "side_quest",
-  "name": "Ash Kade",
+  "name": "Mara Lira",
   "region": "mojave",
   "timelines": [
-    "fractured"
+    "prime"
   ],
   "archetype": "sidequest_traveler",
   "behaviorPattern": "fizzcaps_informer",
-  "dialogPool": "npc_sidequest_mojave_fractured_018_dialog",
-  "lootPool": "npc_sidequest_mojave_fractured_018_loot",
+  "dialogPool": "npc_sidequest_mojave_prime_013_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_013_loot",
   "questHooks": [
-    "fizzcaps_clue_02"
+    "vegas_rumor_02"
   ],
-  "anomalyAwareness": 0.62,
+  "anomalyAwareness": 0.41,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

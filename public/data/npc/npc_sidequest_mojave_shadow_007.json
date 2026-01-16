@@ -1,21 +1,20 @@
 {
   "id": "npc_sidequest_mojave_shadow_007",
   "type": "side_quest",
-  "name": "Marla Kade",
+  "name": "Kade Nova",
   "region": "mojave",
   "timelines": [
     "shadow"
   ],
-  "archetype": "sidequest_fizzcaps_contact",
-  "behaviorPattern": "quest_seeker",
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
   "dialogPool": "npc_sidequest_mojave_shadow_007_dialog",
   "lootPool": "npc_sidequest_mojave_shadow_007_loot",
   "questHooks": [
-    "region_story_01",
-    "fizzcaps_clue_01",
-    "timeline_warning_01"
+    "region_story_02",
+    "vegas_rumor_01"
   ],
-  "anomalyAwareness": 0.65,
+  "anomalyAwareness": 0.87,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

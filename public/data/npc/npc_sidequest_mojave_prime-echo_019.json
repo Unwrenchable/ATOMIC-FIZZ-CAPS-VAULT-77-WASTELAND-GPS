@@ -1,22 +1,21 @@
 {
   "id": "npc_sidequest_mojave_prime-echo_019",
   "type": "side_quest",
-  "name": "Marla Mara",
+  "name": "Joren Ash",
   "region": "mojave",
   "timelines": [
     "prime",
     "echo"
   ],
   "archetype": "sidequest_informer",
-  "behaviorPattern": "vegas_bound",
+  "behaviorPattern": "timeline_observer",
   "dialogPool": "npc_sidequest_mojave_prime-echo_019_dialog",
   "lootPool": "npc_sidequest_mojave_prime-echo_019_loot",
   "questHooks": [
-    "timeline_warning_02",
     "anomaly_investigation_01",
-    "timeline_warning_01"
+    "timeline_warning_02"
   ],
-  "anomalyAwareness": 0.54,
+  "anomalyAwareness": 0.58,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

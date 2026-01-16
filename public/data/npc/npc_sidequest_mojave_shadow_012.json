@@ -1,21 +1,19 @@
 {
   "id": "npc_sidequest_mojave_shadow_012",
   "type": "side_quest",
-  "name": "Lenn Lira",
+  "name": "Ash Mira",
   "region": "mojave",
   "timelines": [
     "shadow"
   ],
-  "archetype": "sidequest_region_legend",
+  "archetype": "sidequest_fizzcaps_contact",
   "behaviorPattern": "anomaly_sensitive",
   "dialogPool": "npc_sidequest_mojave_shadow_012_dialog",
   "lootPool": "npc_sidequest_mojave_shadow_012_loot",
   "questHooks": [
-    "anomaly_investigation_02",
-    "region_story_01",
-    "anomaly_investigation_01"
+    "vegas_rumor_03"
   ],
-  "anomalyAwareness": 0.8,
+  "anomalyAwareness": 0.72,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }

@@ -1,20 +1,22 @@
 {
   "id": "npc_sidequest_mojave_prime-shadow_018",
   "type": "side_quest",
-  "name": "Ash Daro",
+  "name": "Jett Marla",
   "region": "mojave",
   "timelines": [
     "prime",
     "shadow"
   ],
-  "archetype": "sidequest_traveler",
-  "behaviorPattern": "anomaly_sensitive",
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "timeline_observer",
   "dialogPool": "npc_sidequest_mojave_prime-shadow_018_dialog",
   "lootPool": "npc_sidequest_mojave_prime-shadow_018_loot",
   "questHooks": [
-    "timeline_warning_01"
+    "fizzcaps_clue_02",
+    "vegas_rumor_03",
+    "fizzcaps_clue_01"
   ],
-  "anomalyAwareness": 0.48,
+  "anomalyAwareness": 0.39,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }
