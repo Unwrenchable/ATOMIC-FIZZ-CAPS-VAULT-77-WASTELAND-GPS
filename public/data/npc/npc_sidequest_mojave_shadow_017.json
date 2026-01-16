@@ -1,20 +1,20 @@
 {
   "id": "npc_sidequest_mojave_shadow_017",
   "type": "side_quest",
-  "name": "Ren Mara",
+  "name": "Jett Mara",
   "region": "mojave",
   "timelines": [
     "shadow"
   ],
-  "archetype": "sidequest_region_legend",
-  "behaviorPattern": "fizzcaps_informer",
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "quest_seeker",
   "dialogPool": "npc_sidequest_mojave_shadow_017_dialog",
   "lootPool": "npc_sidequest_mojave_shadow_017_loot",
   "questHooks": [
-    "region_story_01",
-    "fizzcaps_clue_03"
+    "fizzcaps_clue_01",
+    "anomaly_investigation_02"
   ],
-  "anomalyAwareness": 0.52,
+  "anomalyAwareness": 0.42,
   "factionTag": "neutral",
   "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
 }
