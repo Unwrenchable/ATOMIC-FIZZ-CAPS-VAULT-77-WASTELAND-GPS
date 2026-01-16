@@ -1,12 +1,46 @@
 (function () {
   "use strict";
 
+  // ------------------------------------------------------------
+  // SAFE LOGGING
+  // ------------------------------------------------------------
   function safeLog(...args) { try { console.log(...args); } catch (e) {} }
   function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
 
+  // ------------------------------------------------------------
+  // CONSTANTS
+  // ------------------------------------------------------------
   const SOL_DECIMALS = 9;
   const FIZZ_MINT = "59AWm25fgvCBDuSFXthjT4wyrW455qgdZ67zaqVkEgPV";
+  const LOCAL_WALLET_KEY = "afw_local_wallet_v1";
 
+  // ------------------------------------------------------------
+  // BOOT OVERLAY
+  // ------------------------------------------------------------
+  function hideBootOverlay() {
+    const overlay = document.getElementById("boot-overlay");
+    if (overlay) overlay.classList.add("hidden");
+  }
+
+  // ------------------------------------------------------------
+  // LOCAL WALLET MODE
+  // ------------------------------------------------------------
+  function generateLocalKeypair() {
+    const rand = crypto.getRandomValues(new Uint8Array(32));
+    return Array.from(rand).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function loadLocalWallet() {
+    try { return localStorage.getItem(LOCAL_WALLET_KEY) || null; } catch { return null; }
+  }
+
+  function saveLocalWallet(pubkey) {
+    try { localStorage.setItem(LOCAL_WALLET_KEY, pubkey); } catch {}
+  }
+
+  // ------------------------------------------------------------
+  // ON-CHAIN BALANCES
+  // ------------------------------------------------------------
   async function fetchSolBalance(pubkey) {
     try {
       const rpc = window.SOLANA_RPC || "https://api.devnet.solana.com";
@@ -58,6 +92,9 @@
     }
   }
 
+  // ------------------------------------------------------------
+  // WASTELAND STATS
+  // ------------------------------------------------------------
   function renderWastelandStats() {
     const PLAYER = window.PLAYER || { caps: 0, xp: 0, level: 1, inventory: [] };
     const needed = PLAYER.level * 100;
@@ -97,38 +134,45 @@
       .join("");
   }
 
+  // ------------------------------------------------------------
+  // NFT DISPLAY (WITH RARITY SUPPORT)
+  // ------------------------------------------------------------
   function renderNFTs() {
-  const nftsEl = document.getElementById("afw-nfts");
-  if (!nftsEl) return;
+    const nftsEl = document.getElementById("afw-nfts");
+    if (!nftsEl) return;
 
-  const NFT_STATE = window.NFT_STATE || { list: [] };
-  const list = NFT_STATE.list || [];
+    const NFT_STATE = window.NFT_STATE || { list: [] };
+    const list = NFT_STATE.list || [];
 
-  if (!list.length) {
-    nftsEl.innerHTML = `<p class="muted">No Atomic Fizz NFTs detected.</p>`;
-    return;
+    if (!list.length) {
+      nftsEl.innerHTML = `<p class="muted">No Atomic Fizz NFTs detected.</p>`;
+      return;
+    }
+
+    nftsEl.innerHTML = list
+      .slice(0, 20)
+      .map(nft => {
+        const name = nft.name || "Unnamed NFT";
+        const mint = nft.mint || "Unknown Mint";
+        const img = nft.image || null;
+        const rarity = (nft.rarity || "common").toLowerCase();
+
+        return `
+          <div class="entry nft-entry rarity-${rarity}">
+            ${img ? `<img src="${img}" class="nft-thumb">` : ""}
+            <div class="nft-info">
+              <strong>${name}</strong><br>
+              <span class="mono small">${mint}</span>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
   }
 
-  nftsEl.innerHTML = list
-    .slice(0, 20)
-    .map(nft => {
-      const name = nft.name || "Unnamed NFT";
-      const mint = nft.mint || "Unknown Mint";
-      const img = nft.image || null;
-
-      return `
-        <div class="entry nft-entry">
-          ${img ? `<img src="${img}" class="nft-thumb">` : ""}
-          <div class="nft-info">
-            <strong>${name}</strong><br>
-            <span class="mono small">${mint}</span>
-          </div>
-        </div>
-      `;
-    })
-    .join("");
-}
-
+  // ------------------------------------------------------------
+  // REFRESH ON-CHAIN DATA
+  // ------------------------------------------------------------
   async function refreshOnChain(pubkey) {
     document.getElementById("afw-address").textContent =
       `WALLET: ${pubkey.slice(0, 4)}...${pubkey.slice(-4)}`;
@@ -140,11 +184,24 @@
 
     document.getElementById("afw-sol").textContent = sol.toFixed(3);
     document.getElementById("afw-fizz").textContent = fizz;
+
+    // Pip-Boy bridge
+    if (window.updatePipBoyWalletState) {
+      window.updatePipBoyWalletState(pubkey);
+    }
   }
 
+  // ------------------------------------------------------------
+  // INIT WALLET APP
+  // ------------------------------------------------------------
   function initWallet() {
-    const connectBtn = document.getElementById("afw-connect");
+    hideBootOverlay();
 
+    const connectBtn = document.getElementById("afw-connect");
+    const localBtn = document.getElementById("afw-local");
+    const tradeBtn = document.getElementById("afw-trade-send");
+
+    // Phantom connect
     connectBtn.addEventListener("click", async () => {
       try {
         if (typeof window.connectWallet === "function") {
@@ -163,6 +220,67 @@
       }
     });
 
+    // Local wallet mode
+    localBtn.addEventListener("click", async () => {
+      let pubkey = loadLocalWallet();
+      if (!pubkey) {
+        pubkey = generateLocalKeypair();
+        saveLocalWallet(pubkey);
+        alert("New Atomic Fizz local wallet created.");
+      }
+      window.PLAYER_WALLET = pubkey;
+      await refreshOnChain(pubkey);
+      renderWastelandStats();
+      renderNFTs();
+    });
+
+    // Trade UI shell
+    tradeBtn.addEventListener("click", async () => {
+      const to = document.getElementById("afw-trade-to").value.trim();
+      const amtStr = document.getElementById("afw-trade-amount").value.trim();
+      const status = document.getElementById("afw-trade-status");
+
+      const from = window.PLAYER_WALLET;
+      if (!from) {
+        status.textContent = "Connect a wallet first.";
+        return;
+      }
+      if (!to || !amtStr) {
+        status.textContent = "Enter recipient and amount.";
+        return;
+      }
+
+      const amount = parseFloat(amtStr);
+      if (!Number.isFinite(amount) || amount <= 0) {
+        status.textContent = "Enter a valid positive amount.";
+        return;
+      }
+
+      status.textContent = "Submitting FIZZ transfer…";
+
+      try {
+        const base = (window.BACKEND_URL || window.location.origin).replace(/\/+$/, "");
+        const res = await fetch(`${base}/api/transfer-fizz`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ from, to, amount })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || data.ok === false) {
+          status.textContent = `Transfer failed: ${data.error || `HTTP ${res.status}`}`;
+          return;
+        }
+
+        status.textContent = "Transfer complete.";
+        await refreshOnChain(from);
+      } catch (e) {
+        safeWarn("[AFW] transfer-fizz failed:", e);
+        status.textContent = "Transfer failed (network error).";
+      }
+    });
+
     // Auto-load if already connected
     if (window.PLAYER_WALLET) {
       refreshOnChain(window.PLAYER_WALLET);
@@ -170,6 +288,8 @@
 
     renderWastelandStats();
     renderNFTs();
+
+    safeLog("[AFW] Wallet app initialized");
   }
 
   window.addEventListener("DOMContentLoaded", initWallet);
