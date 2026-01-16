@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_commonwealth_prime_022",
+  "type": "side_quest",
+  "name": "Nina Kade",
+  "region": "commonwealth",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_commonwealth_prime_022_dialog",
+  "lootPool": "npc_sidequest_commonwealth_prime_022_loot",
+  "questHooks": [
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.54,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

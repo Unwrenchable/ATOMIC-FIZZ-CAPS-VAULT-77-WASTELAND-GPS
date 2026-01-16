@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_capital_wasteland_echo_016",
+  "type": "side_quest",
+  "name": "Jett Marla",
+  "region": "capital_wasteland",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_capital_wasteland_echo_016_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_echo_016_loot",
+  "questHooks": [
+    "vegas_rumor_02",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.6,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

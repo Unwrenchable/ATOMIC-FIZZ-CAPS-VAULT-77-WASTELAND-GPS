@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_new_reno_prime_023",
+  "type": "side_quest",
+  "name": "Marla Kade",
+  "region": "new_reno",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_new_reno_prime_023_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime_023_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "anomaly_investigation_02",
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.38,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

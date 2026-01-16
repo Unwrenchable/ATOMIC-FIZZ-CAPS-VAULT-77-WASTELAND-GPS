@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_new_reno_prime-echo_004",
+  "type": "side_quest",
+  "name": "Rook Varra",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_new_reno_prime-echo_004_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-echo_004_loot",
+  "questHooks": [
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.66,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

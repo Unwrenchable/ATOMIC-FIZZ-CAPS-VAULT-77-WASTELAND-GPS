@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_new_reno_prime-echo_019",
+  "type": "side_quest",
+  "name": "Lio Rook",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_new_reno_prime-echo_019_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-echo_019_loot",
+  "questHooks": [
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.84,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

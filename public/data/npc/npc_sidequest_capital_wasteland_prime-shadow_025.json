@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime-shadow_025",
+  "type": "side_quest",
+  "name": "Rook Kade",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime-shadow_025_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime-shadow_025_loot",
+  "questHooks": [
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.84,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

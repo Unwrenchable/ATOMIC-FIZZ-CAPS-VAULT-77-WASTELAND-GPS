@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_commonwealth_shadow_003",
+  "type": "side_quest",
+  "name": "Kael Kade",
+  "region": "commonwealth",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_commonwealth_shadow_003_dialog",
+  "lootPool": "npc_sidequest_commonwealth_shadow_003_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "vegas_rumor_02",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.49,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_appalachia_fractured_017",
+  "type": "side_quest",
+  "name": "Mara Rhea",
+  "region": "appalachia",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_appalachia_fractured_017_dialog",
+  "lootPool": "npc_sidequest_appalachia_fractured_017_loot",
+  "questHooks": [
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.36,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

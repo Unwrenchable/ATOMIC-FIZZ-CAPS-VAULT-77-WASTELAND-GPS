@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_capital_wasteland_fractured_004",
+  "type": "side_quest",
+  "name": "Hale Dax",
+  "region": "capital_wasteland",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_capital_wasteland_fractured_004_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_fractured_004_loot",
+  "questHooks": [
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.36,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

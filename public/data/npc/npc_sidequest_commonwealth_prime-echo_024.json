@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_commonwealth_prime-echo_024",
+  "type": "side_quest",
+  "name": "Mira Vera",
+  "region": "commonwealth",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_commonwealth_prime-echo_024_dialog",
+  "lootPool": "npc_sidequest_commonwealth_prime-echo_024_loot",
+  "questHooks": [
+    "vegas_rumor_03",
+    "fizzcaps_clue_01",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.83,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_mojave_fractured_020",
+  "type": "side_quest",
+  "name": "Daro Tessa",
+  "region": "mojave",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_mojave_fractured_020_dialog",
+  "lootPool": "npc_sidequest_mojave_fractured_020_loot",
+  "questHooks": [
+    "fizzcaps_clue_02",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.54,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
