@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_supermutant_engineer_kragg",
+  "name": "Kragg",
+  "faction": "black_mountain",
+  "role": "Engineer",
+  "personality": "Patient, methodical, surprisingly gentle.",
+  "description": "Kragg repairs the heavy machinery around Black Mountain. He’s one of the few mutants who prefers building to breaking.",
+  "questHooks": [
+    "Needs help retrieving tools from a collapsed bunker.",
+    "Found a strange metal shard in a generator.",
+    "Worries about structural instability in the tower."
+  ],
+  "poi": "black_mountain_fnv"
+}
