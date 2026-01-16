@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_nightkin_commander_sylth",
+  "name": "Sylth",
+  "faction": "nightkin",
+  "role": "Nightkin Commander",
+  "personality": "Cold, disciplined, barely holding sanity together.",
+  "description": "Sylth enforces Gorath’s rule with brutal efficiency. She struggles with auditory hallucinations but hides it behind discipline.",
+  "questHooks": [
+    "Wants help tracking a rogue Nightkin.",
+    "Reports strange signals coming from the valley.",
+    "Believes someone is spying on Black Mountain."
+  ],
+  "poi": "black_mountain_fnv"
+}
