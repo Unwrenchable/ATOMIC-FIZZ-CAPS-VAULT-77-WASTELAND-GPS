@@ -1,0 +1,7 @@
+{
+  "id": "npc_freeside_echo_01",
+  "archetype": "timeline_echo_wanderer",
+  "timelineVariants": ["echo"],
+  "spawnPool": ["freeside_backstreets"],
+  "uniquePerWorld": false
+}
