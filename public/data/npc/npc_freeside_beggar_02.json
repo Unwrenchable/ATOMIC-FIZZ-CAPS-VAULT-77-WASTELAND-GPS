@@ -1,0 +1,11 @@
+{
+  "id": "npc_freeside_beggar_02",
+  "name": "Shivering Man",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Cold… even when it’s hot…",
+    "Something’s wrong with the air here."
+  ],
+  "spawnPool": ["freeside_south"],
+  "uniquePerWorld": false
+}
