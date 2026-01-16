@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_commonwealth_prime_024",
+  "type": "side_quest",
+  "name": "Dax Mira",
+  "region": "commonwealth",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_commonwealth_prime_024_dialog",
+  "lootPool": "npc_sidequest_commonwealth_prime_024_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "vegas_rumor_02",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.72,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

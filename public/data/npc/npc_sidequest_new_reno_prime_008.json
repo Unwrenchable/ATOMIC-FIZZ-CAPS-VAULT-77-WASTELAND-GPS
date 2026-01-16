@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_new_reno_prime_008",
+  "type": "side_quest",
+  "name": "Varra Voss",
+  "region": "new_reno",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_new_reno_prime_008_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime_008_loot",
+  "questHooks": [
+    "vegas_rumor_01",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.71,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

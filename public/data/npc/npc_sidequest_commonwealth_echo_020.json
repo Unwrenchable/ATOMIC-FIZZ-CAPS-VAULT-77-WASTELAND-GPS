@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_commonwealth_echo_020",
+  "type": "side_quest",
+  "name": "Lenn Nina",
+  "region": "commonwealth",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_commonwealth_echo_020_dialog",
+  "lootPool": "npc_sidequest_commonwealth_echo_020_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "vegas_rumor_03",
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.46,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

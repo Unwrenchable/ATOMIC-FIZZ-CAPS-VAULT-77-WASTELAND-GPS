@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_appalachia_prime-shadow_017",
+  "type": "side_quest",
+  "name": "Kael Dax",
+  "region": "appalachia",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_appalachia_prime-shadow_017_dialog",
+  "lootPool": "npc_sidequest_appalachia_prime-shadow_017_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.56,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

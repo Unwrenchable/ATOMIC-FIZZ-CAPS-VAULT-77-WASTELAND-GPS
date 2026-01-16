@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime-shadow_019",
+  "type": "side_quest",
+  "name": "Ren Nina",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_dlc_regions_prime-shadow_019_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime-shadow_019_loot",
+  "questHooks": [
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

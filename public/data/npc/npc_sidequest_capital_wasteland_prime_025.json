@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime_025",
+  "type": "side_quest",
+  "name": "Marla Kael",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime_025_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime_025_loot",
+  "questHooks": [
+    "vegas_rumor_02",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.55,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

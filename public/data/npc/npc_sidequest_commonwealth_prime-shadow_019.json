@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_commonwealth_prime-shadow_019",
+  "type": "side_quest",
+  "name": "Lenn Nina",
+  "region": "commonwealth",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_commonwealth_prime-shadow_019_dialog",
+  "lootPool": "npc_sidequest_commonwealth_prime-shadow_019_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.37,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
