@@ -1,24 +1,23 @@
 {
   "id": "anomaly_zones_prime_006",
-  "name": "Scrap Hunter",
-  "archetype": "wasteland_scavenger",
+  "name": "Drifter",
+  "archetype": "highway_drifter",
   "spawnPool": [
     "triangle_center",
     "dry_lake_cracks",
     "vault77_perimeter"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "highway_roamer",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "dirty_water",
+    "old_map"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "Long road behind me… longer ahead.",
+    "Highway’s quiet today.",
+    "Saw something moving out there. Didn’t stick around."
   ],
-  "factionTag": "ncr_adjacent",
+  "factionTag": "independent_merc",
   "timeline": "prime",
   "timelineVariants": []
 }

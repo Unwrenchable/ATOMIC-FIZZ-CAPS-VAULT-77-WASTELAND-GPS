@@ -1,11 +1,11 @@
 {
-  "id": "vegas_outskirts_prime_002",
-  "name": "Scavenger",
+  "id": "highways_prime_007",
+  "name": "Dust Picker",
   "archetype": "wasteland_scavenger",
   "spawnPool": [
-    "vegas_outskirts_north",
-    "vegas_outskirts_south",
-    "freeside_border"
+    "highway_93",
+    "highway_95",
+    "sloan_road"
   ],
   "behaviorPattern": "wanderer_basic",
   "lootPool": [
@@ -18,7 +18,7 @@
     "Tracks here look fresh… not sure I like that.",
     "Wind’s carrying strange sounds today."
   ],
-  "factionTag": "brotherhood_adjacent",
+  "factionTag": "neutral",
   "timeline": "prime",
   "timelineVariants": []
 }

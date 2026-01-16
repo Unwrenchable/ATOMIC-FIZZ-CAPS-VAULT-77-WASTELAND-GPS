@@ -1,5 +1,5 @@
 {
-  "id": "highways_shadow_003",
+  "id": "highways_fractured_006",
   "name": "Nomad",
   "archetype": "highway_drifter",
   "spawnPool": [
@@ -18,6 +18,8 @@
     "Saw something moving out there. Didn’t stick around."
   ],
   "factionTag": "neutral",
-  "timeline": "shadow",
-  "timelineVariants": []
+  "timeline": "fractured",
+  "timelineVariants": [
+    "echo"
+  ]
 }

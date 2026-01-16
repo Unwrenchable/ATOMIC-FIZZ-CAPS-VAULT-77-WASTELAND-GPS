@@ -1,22 +1,23 @@
 {
   "id": "general_wasteland_prime_001",
-  "name": "Road Walker",
-  "archetype": "highway_drifter",
+  "name": "Scrap Hunter",
+  "archetype": "wasteland_scavenger",
   "spawnPool": [
     "dry_lake",
     "red_rock",
     "highway_95",
     "novac_outskirts"
   ],
-  "behaviorPattern": "highway_roamer",
+  "behaviorPattern": "wanderer_basic",
   "lootPool": [
-    "dirty_water",
-    "old_map"
+    "scrap_metal",
+    "empty_bottle",
+    "torn_note"
   ],
   "dialogPool": [
-    "Long road behind me… longer ahead.",
-    "Highway’s quiet today.",
-    "Saw something moving out there. Didn’t stick around."
+    "Scrap’s getting harder to find.",
+    "Tracks here look fresh… not sure I like that.",
+    "Wind’s carrying strange sounds today."
   ],
   "factionTag": "raider_adjacent",
   "timeline": "prime",

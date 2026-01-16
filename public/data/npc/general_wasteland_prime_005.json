@@ -1,22 +1,22 @@
 {
   "id": "general_wasteland_prime_005",
-  "name": "Nomad",
-  "archetype": "highway_drifter",
+  "name": "Scout",
+  "archetype": "faction_grunt",
   "spawnPool": [
     "dry_lake",
     "red_rock",
     "highway_95",
     "novac_outskirts"
   ],
-  "behaviorPattern": "highway_roamer",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "dirty_water",
-    "old_map"
+    "ammo_556",
+    "radio"
   ],
   "dialogPool": [
-    "Long road behind me… longer ahead.",
-    "Highway’s quiet today.",
-    "Saw something moving out there. Didn’t stick around."
+    "Orders are orders.",
+    "Keep moving, citizen.",
+    "Stay alert. Trouble’s never far."
   ],
   "factionTag": "neutral",
   "timeline": "prime",

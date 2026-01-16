@@ -1,24 +1,25 @@
 {
   "id": "general_wasteland_fractured_005",
-  "name": "Grunt",
-  "archetype": "faction_grunt",
+  "name": "Scrap Hunter",
+  "archetype": "wasteland_scavenger",
   "spawnPool": [
     "dry_lake",
     "red_rock",
     "highway_95",
     "novac_outskirts"
   ],
-  "behaviorPattern": "static_local",
+  "behaviorPattern": "wanderer_basic",
   "lootPool": [
-    "ammo_556",
-    "radio"
+    "scrap_metal",
+    "empty_bottle",
+    "torn_note"
   ],
   "dialogPool": [
-    "Orders are orders.",
-    "Keep moving, citizen.",
-    "Stay alert. Trouble’s never far."
+    "Scrap’s getting harder to find.",
+    "Tracks here look fresh… not sure I like that.",
+    "Wind’s carrying strange sounds today."
   ],
-  "factionTag": "neutral",
+  "factionTag": "legion_adjacent",
   "timeline": "fractured",
   "timelineVariants": []
 }

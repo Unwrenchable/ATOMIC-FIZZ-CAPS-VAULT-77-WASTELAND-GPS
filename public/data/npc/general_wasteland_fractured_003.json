@@ -1,25 +1,27 @@
 {
   "id": "general_wasteland_fractured_003",
-  "name": "Dust Picker",
-  "archetype": "wasteland_scavenger",
+  "name": "Nomad",
+  "archetype": "highway_drifter",
   "spawnPool": [
     "dry_lake",
     "red_rock",
     "highway_95",
     "novac_outskirts"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "highway_roamer",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "dirty_water",
+    "old_map"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "Long road behind me… longer ahead.",
+    "Highway’s quiet today.",
+    "Saw something moving out there. Didn’t stick around."
   ],
-  "factionTag": "neutral",
+  "factionTag": "raider_adjacent",
   "timeline": "fractured",
-  "timelineVariants": []
+  "timelineVariants": [
+    "shadow",
+    "fractured"
+  ]
 }

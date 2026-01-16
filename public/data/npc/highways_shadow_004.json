@@ -1,6 +1,6 @@
 {
   "id": "highways_shadow_004",
-  "name": "Nomad",
+  "name": "Road Walker",
   "archetype": "highway_drifter",
   "spawnPool": [
     "highway_93",
@@ -17,9 +17,7 @@
     "Highway’s quiet today.",
     "Saw something moving out there. Didn’t stick around."
   ],
-  "factionTag": "brotherhood_adjacent",
+  "factionTag": "legion_adjacent",
   "timeline": "shadow",
-  "timelineVariants": [
-    "echo"
-  ]
+  "timelineVariants": []
 }

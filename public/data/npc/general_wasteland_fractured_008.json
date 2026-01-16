@@ -1,11 +1,12 @@
 {
-  "id": "vegas_outskirts_prime_001",
-  "name": "Local",
+  "id": "general_wasteland_fractured_008",
+  "name": "Outskirts Resident",
   "archetype": "vegas_outskirts_local",
   "spawnPool": [
-    "vegas_outskirts_north",
-    "vegas_outskirts_south",
-    "freeside_border"
+    "dry_lake",
+    "red_rock",
+    "highway_95",
+    "novac_outskirts"
   ],
   "behaviorPattern": "static_local",
   "lootPool": [
@@ -18,6 +19,8 @@
     "Keep your head down. Raiders like this stretch."
   ],
   "factionTag": "neutral",
-  "timeline": "prime",
-  "timelineVariants": []
+  "timeline": "fractured",
+  "timelineVariants": [
+    "fractured"
+  ]
 }

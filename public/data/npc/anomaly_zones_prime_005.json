@@ -17,7 +17,7 @@
     "Highway’s quiet today.",
     "Saw something moving out there. Didn’t stick around."
   ],
-  "factionTag": "neutral",
+  "factionTag": "raider_adjacent",
   "timeline": "prime",
   "timelineVariants": []
 }

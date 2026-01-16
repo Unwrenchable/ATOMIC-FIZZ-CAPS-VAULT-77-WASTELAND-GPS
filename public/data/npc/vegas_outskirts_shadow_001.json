@@ -1,25 +1,23 @@
 {
   "id": "vegas_outskirts_shadow_001",
-  "name": "Scout",
-  "archetype": "faction_grunt",
+  "name": "Road Walker",
+  "archetype": "highway_drifter",
   "spawnPool": [
     "vegas_outskirts_north",
     "vegas_outskirts_south",
     "freeside_border"
   ],
-  "behaviorPattern": "static_local",
+  "behaviorPattern": "highway_roamer",
   "lootPool": [
-    "ammo_556",
-    "radio"
+    "dirty_water",
+    "old_map"
   ],
   "dialogPool": [
-    "Orders are orders.",
-    "Keep moving, citizen.",
-    "Stay alert. Trouble’s never far."
+    "Long road behind me… longer ahead.",
+    "Highway’s quiet today.",
+    "Saw something moving out there. Didn’t stick around."
   ],
   "factionTag": "neutral",
   "timeline": "shadow",
-  "timelineVariants": [
-    "shadow"
-  ]
+  "timelineVariants": []
 }

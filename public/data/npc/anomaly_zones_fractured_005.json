@@ -1,23 +1,26 @@
 {
   "id": "anomaly_zones_fractured_005",
-  "name": "Trader",
-  "archetype": "traveler_merchant",
+  "name": "Nomad",
+  "archetype": "highway_drifter",
   "spawnPool": [
     "triangle_center",
     "dry_lake_cracks",
     "vault77_perimeter"
   ],
-  "behaviorPattern": "merchant_idle",
+  "behaviorPattern": "highway_roamer",
   "lootPool": [
-    "small_caps",
-    "trade_goods"
+    "dirty_water",
+    "old_map"
   ],
   "dialogPool": [
-    "Caps for goods, goods for caps.",
-    "Road’s rough, but business is business.",
-    "Got something you might like."
+    "Long road behind me… longer ahead.",
+    "Highway’s quiet today.",
+    "Saw something moving out there. Didn’t stick around."
   ],
-  "factionTag": "raider_adjacent",
+  "factionTag": "neutral",
   "timeline": "fractured",
-  "timelineVariants": []
+  "timelineVariants": [
+    "echo",
+    "shadow"
+  ]
 }

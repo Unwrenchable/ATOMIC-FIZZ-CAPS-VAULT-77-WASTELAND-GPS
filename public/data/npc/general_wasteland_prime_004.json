@@ -1,25 +1,23 @@
 {
   "id": "general_wasteland_prime_004",
-  "name": "Dust Picker",
-  "archetype": "wasteland_scavenger",
+  "name": "Lost Reflection",
+  "archetype": "timeline_echo_wanderer",
   "spawnPool": [
     "dry_lake",
     "red_rock",
     "highway_95",
     "novac_outskirts"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "anomaly_wander",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "echo_fragment"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "…you’ve walked this path before…",
+    "…time folds strangely around this place…",
+    "…not your first time here…"
   ],
-  "factionTag": "brotherhood_adjacent",
+  "factionTag": "ncr_adjacent",
   "timeline": "prime",
   "timelineVariants": []
 }

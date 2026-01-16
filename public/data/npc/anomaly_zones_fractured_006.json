@@ -1,11 +1,11 @@
 {
-  "id": "vegas_outskirts_prime_002",
-  "name": "Scavenger",
+  "id": "anomaly_zones_fractured_006",
+  "name": "Scrap Hunter",
   "archetype": "wasteland_scavenger",
   "spawnPool": [
-    "vegas_outskirts_north",
-    "vegas_outskirts_south",
-    "freeside_border"
+    "triangle_center",
+    "dry_lake_cracks",
+    "vault77_perimeter"
   ],
   "behaviorPattern": "wanderer_basic",
   "lootPool": [
@@ -18,7 +18,9 @@
     "Tracks here look fresh… not sure I like that.",
     "Wind’s carrying strange sounds today."
   ],
-  "factionTag": "brotherhood_adjacent",
-  "timeline": "prime",
-  "timelineVariants": []
+  "factionTag": "neutral",
+  "timeline": "fractured",
+  "timelineVariants": [
+    "echo"
+  ]
 }

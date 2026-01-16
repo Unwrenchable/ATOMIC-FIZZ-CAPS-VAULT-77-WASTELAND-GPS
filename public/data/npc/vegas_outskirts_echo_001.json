@@ -1,25 +1,24 @@
 {
   "id": "vegas_outskirts_echo_001",
-  "name": "Shack Dweller",
-  "archetype": "vegas_outskirts_local",
+  "name": "Dust Picker",
+  "archetype": "wasteland_scavenger",
   "spawnPool": [
     "vegas_outskirts_north",
     "vegas_outskirts_south",
     "freeside_border"
   ],
-  "behaviorPattern": "static_local",
+  "behaviorPattern": "wanderer_basic",
   "lootPool": [
-    "food_ration",
-    "small_caps"
+    "scrap_metal",
+    "empty_bottle",
+    "torn_note"
   ],
   "dialogPool": [
-    "Vegas lights look close, but they’re a world away.",
-    "Strangers don’t usually come this far out.",
-    "Keep your head down. Raiders like this stretch."
+    "Scrap’s getting harder to find.",
+    "Tracks here look fresh… not sure I like that.",
+    "Wind’s carrying strange sounds today."
   ],
-  "factionTag": "legion_adjacent",
+  "factionTag": "brotherhood_adjacent",
   "timeline": "echo",
-  "timelineVariants": [
-    "echo"
-  ]
+  "timelineVariants": []
 }

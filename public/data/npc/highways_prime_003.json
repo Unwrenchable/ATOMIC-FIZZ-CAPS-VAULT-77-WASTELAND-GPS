@@ -1,21 +1,22 @@
 {
   "id": "highways_prime_003",
-  "name": "Merchant",
-  "archetype": "traveler_merchant",
+  "name": "Scrap Hunter",
+  "archetype": "wasteland_scavenger",
   "spawnPool": [
     "highway_93",
     "highway_95",
     "sloan_road"
   ],
-  "behaviorPattern": "merchant_idle",
+  "behaviorPattern": "wanderer_basic",
   "lootPool": [
-    "small_caps",
-    "trade_goods"
+    "scrap_metal",
+    "empty_bottle",
+    "torn_note"
   ],
   "dialogPool": [
-    "Caps for goods, goods for caps.",
-    "Road’s rough, but business is business.",
-    "Got something you might like."
+    "Scrap’s getting harder to find.",
+    "Tracks here look fresh… not sure I like that.",
+    "Wind’s carrying strange sounds today."
   ],
   "factionTag": "neutral",
   "timeline": "prime",

@@ -1,11 +1,12 @@
 {
-  "id": "vegas_outskirts_prime_002",
+  "id": "general_wasteland_fractured_007",
   "name": "Scavenger",
   "archetype": "wasteland_scavenger",
   "spawnPool": [
-    "vegas_outskirts_north",
-    "vegas_outskirts_south",
-    "freeside_border"
+    "dry_lake",
+    "red_rock",
+    "highway_95",
+    "novac_outskirts"
   ],
   "behaviorPattern": "wanderer_basic",
   "lootPool": [
@@ -19,6 +20,6 @@
     "Wind’s carrying strange sounds today."
   ],
   "factionTag": "brotherhood_adjacent",
-  "timeline": "prime",
+  "timeline": "fractured",
   "timelineVariants": []
 }

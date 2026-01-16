@@ -1,23 +1,23 @@
 {
   "id": "highways_prime_001",
-  "name": "Nomad",
-  "archetype": "highway_drifter",
+  "name": "Local",
+  "archetype": "vegas_outskirts_local",
   "spawnPool": [
     "highway_93",
     "highway_95",
     "sloan_road"
   ],
-  "behaviorPattern": "highway_roamer",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "dirty_water",
-    "old_map"
+    "food_ration",
+    "small_caps"
   ],
   "dialogPool": [
-    "Long road behind me… longer ahead.",
-    "Highway’s quiet today.",
-    "Saw something moving out there. Didn’t stick around."
+    "Vegas lights look close, but they’re a world away.",
+    "Strangers don’t usually come this far out.",
+    "Keep your head down. Raiders like this stretch."
   ],
-  "factionTag": "raider_adjacent",
+  "factionTag": "neutral",
   "timeline": "prime",
   "timelineVariants": []
 }

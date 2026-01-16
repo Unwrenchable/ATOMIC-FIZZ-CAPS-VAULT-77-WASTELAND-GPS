@@ -1,23 +1,23 @@
 {
   "id": "highways_shadow_005",
-  "name": "Shack Dweller",
-  "archetype": "vegas_outskirts_local",
+  "name": "Nomad",
+  "archetype": "highway_drifter",
   "spawnPool": [
     "highway_93",
     "highway_95",
     "sloan_road"
   ],
-  "behaviorPattern": "static_local",
+  "behaviorPattern": "highway_roamer",
   "lootPool": [
-    "food_ration",
-    "small_caps"
+    "dirty_water",
+    "old_map"
   ],
   "dialogPool": [
-    "Vegas lights look close, but they’re a world away.",
-    "Strangers don’t usually come this far out.",
-    "Keep your head down. Raiders like this stretch."
+    "Long road behind me… longer ahead.",
+    "Highway’s quiet today.",
+    "Saw something moving out there. Didn’t stick around."
   ],
-  "factionTag": "raider_adjacent",
+  "factionTag": "legion_adjacent",
   "timeline": "shadow",
   "timelineVariants": []
 }

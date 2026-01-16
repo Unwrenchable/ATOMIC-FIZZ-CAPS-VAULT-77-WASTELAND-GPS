@@ -1,23 +1,26 @@
 {
   "id": "anomaly_zones_fractured_002",
-  "name": "Merchant",
-  "archetype": "traveler_merchant",
+  "name": "Local",
+  "archetype": "vegas_outskirts_local",
   "spawnPool": [
     "triangle_center",
     "dry_lake_cracks",
     "vault77_perimeter"
   ],
-  "behaviorPattern": "merchant_idle",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "small_caps",
-    "trade_goods"
+    "food_ration",
+    "small_caps"
   ],
   "dialogPool": [
-    "Caps for goods, goods for caps.",
-    "Road’s rough, but business is business.",
-    "Got something you might like."
+    "Vegas lights look close, but they’re a world away.",
+    "Strangers don’t usually come this far out.",
+    "Keep your head down. Raiders like this stretch."
   ],
   "factionTag": "neutral",
   "timeline": "fractured",
-  "timelineVariants": []
+  "timelineVariants": [
+    "echo",
+    "fractured"
+  ]
 }

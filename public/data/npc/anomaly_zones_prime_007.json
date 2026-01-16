@@ -1,24 +1,23 @@
 {
   "id": "anomaly_zones_prime_007",
-  "name": "Dust Picker",
-  "archetype": "wasteland_scavenger",
+  "name": "Grunt",
+  "archetype": "faction_grunt",
   "spawnPool": [
     "triangle_center",
     "dry_lake_cracks",
     "vault77_perimeter"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "ammo_556",
+    "radio"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "Orders are orders.",
+    "Keep moving, citizen.",
+    "Stay alert. Trouble’s never far."
   ],
-  "factionTag": "brotherhood_adjacent",
+  "factionTag": "raider_adjacent",
   "timeline": "prime",
   "timelineVariants": []
 }

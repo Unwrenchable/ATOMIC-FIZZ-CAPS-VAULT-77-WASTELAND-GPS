@@ -1,24 +1,26 @@
 {
   "id": "highways_fractured_001",
-  "name": "Scavenger",
-  "archetype": "wasteland_scavenger",
+  "name": "Grunt",
+  "archetype": "faction_grunt",
   "spawnPool": [
     "highway_93",
     "highway_95",
     "sloan_road"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "ammo_556",
+    "radio"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "Orders are orders.",
+    "Keep moving, citizen.",
+    "Stay alert. Trouble’s never far."
   ],
-  "factionTag": "neutral",
+  "factionTag": "legion_adjacent",
   "timeline": "fractured",
-  "timelineVariants": []
+  "timelineVariants": [
+    "echo",
+    "fractured"
+  ]
 }

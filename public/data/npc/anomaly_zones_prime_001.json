@@ -1,24 +1,23 @@
 {
   "id": "anomaly_zones_prime_001",
-  "name": "Scrap Hunter",
-  "archetype": "wasteland_scavenger",
+  "name": "Outskirts Resident",
+  "archetype": "vegas_outskirts_local",
   "spawnPool": [
     "triangle_center",
     "dry_lake_cracks",
     "vault77_perimeter"
   ],
-  "behaviorPattern": "wanderer_basic",
+  "behaviorPattern": "static_local",
   "lootPool": [
-    "scrap_metal",
-    "empty_bottle",
-    "torn_note"
+    "food_ration",
+    "small_caps"
   ],
   "dialogPool": [
-    "Scrap’s getting harder to find.",
-    "Tracks here look fresh… not sure I like that.",
-    "Wind’s carrying strange sounds today."
+    "Vegas lights look close, but they’re a world away.",
+    "Strangers don’t usually come this far out.",
+    "Keep your head down. Raiders like this stretch."
   ],
-  "factionTag": "ncr_adjacent",
+  "factionTag": "neutral",
   "timeline": "prime",
   "timelineVariants": []
 }
