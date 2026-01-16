@@ -1,10 +1,9 @@
 // GLOBAL NPC CONTROLLER — ATOMIC FIZZ CAPS WASTELAND GPS
-// This module controls ALL NPC behavior in the world.
-// It requires NO changes to existing NPC JSON files.
+// Controls ALL NPC behavior in the world.
+// Requires NO changes to existing NPC JSON files.
 
-// =============================
-//  NPC CONTROLLER CORE OBJECT
-// =============================
+import { npcDialogue } from "./npcDialogue.js";
+
 export const npcController = {
   npcs: [],
   tickInterval: 60000, // 1 minute real-time = 1 tick
@@ -28,6 +27,15 @@ export const npcController = {
     for (const file of npcFiles) {
       try {
         const data = await fetch(`/public/data/npc/${file}`).then(res => res.json());
+
+        // Ensure every NPC has a stable ID
+        if (!data.id) {
+          data.id = file.replace(".json", "");
+        }
+
+        // Ensure region fallback
+        data.currentRegion = data.currentRegion || data.homeRegion || "unknown-region";
+
         npcs.push(data);
       } catch (err) {
         console.warn("NPC load failed:", file);
@@ -43,13 +51,20 @@ export const npcController = {
   assignAutoProfiles() {
     for (const npc of this.npcs) {
       npc.status = npc.status || "active";
-
       npc.behavior = npc.behavior || {};
 
-      npc.behavior.schedule = npc.behavior.schedule || this.generateSchedule(npc);
-      npc.behavior.roaming = npc.behavior.roaming || this.generateRoaming(npc);
-      npc.behavior.anomalySensitivity = npc.behavior.anomalySensitivity ?? this.generateAnomalySensitivity(npc);
-      npc.behavior.rareEncounter = npc.behavior.rareEncounter || false;
+      npc.behavior.schedule =
+        npc.behavior.schedule || this.generateSchedule(npc);
+
+      npc.behavior.roaming =
+        npc.behavior.roaming || this.generateRoaming(npc);
+
+      npc.behavior.anomalySensitivity =
+        npc.behavior.anomalySensitivity ??
+        this.generateAnomalySensitivity(npc);
+
+      npc.behavior.rareEncounter =
+        npc.behavior.rareEncounter || false;
     }
   },
 
@@ -57,10 +72,10 @@ export const npcController = {
   //  SCHEDULE GENERATION
   // =============================
   generateSchedule(npc) {
-    const region = npc.currentRegion || npc.homeRegion;
+    const region = npc.currentRegion || npc.homeRegion || "unknown-region";
 
     return {
-      day: [npc.poi],
+      day: [npc.poi || `${region}_poi_default`],
       night: [`${region}_home`],
       wanderChance: 0.15
     };
@@ -70,7 +85,7 @@ export const npcController = {
   //  ROAMING GENERATION
   // =============================
   generateRoaming(npc) {
-    const region = npc.currentRegion || npc.homeRegion;
+    const region = npc.currentRegion || npc.homeRegion || "unknown-region";
 
     const roamingRegions = {
       "freeside-east": ["freeside-east", "strip-underground"],
@@ -89,8 +104,13 @@ export const npcController = {
   generateAnomalySensitivity(npc) {
     const keywords = JSON.stringify(npc).toLowerCase();
 
-    if (keywords.includes("hum") || keywords.includes("vault") || keywords.includes("echo"))
+    if (
+      keywords.includes("hum") ||
+      keywords.includes("vault") ||
+      keywords.includes("echo")
+    ) {
       return 0.8;
+    }
 
     return Math.random() * 0.4;
   },
@@ -120,11 +140,9 @@ export const npcController = {
   // =============================
   updateSchedule(npc, hour) {
     const schedule = npc.behavior.schedule;
-
     if (!schedule) return;
 
     const isDay = hour >= 6 && hour < 20;
-
     const targetPOIs = isDay ? schedule.day : schedule.night;
 
     if (Math.random() < schedule.wanderChance) {
@@ -140,12 +158,12 @@ export const npcController = {
   // =============================
   updateRoaming(npc) {
     const roaming = npc.behavior.roaming;
-
     if (!roaming || roaming.length <= 1) return;
 
     if (Math.random() < 0.02) {
       npc.status = "traveling";
-      npc.currentRegion = roaming[Math.floor(Math.random() * roaming.length)];
+      npc.currentRegion =
+        roaming[Math.floor(Math.random() * roaming.length)];
     }
   },
 
@@ -162,5 +180,15 @@ export const npcController = {
     if (Math.random() < sensitivity * 0.005) {
       npc.status = "avoiding-anomaly";
     }
+  },
+
+  // =============================
+  //  DIALOGUE HOOK
+  // =============================
+  async speak(npcId, playerContext = {}) {
+    const npc = this.npcs.find(n => n.id === npcId);
+    if (!npc) return "NPC not found.";
+
+    return await npcDialogue.getLine(npc, playerContext);
   }
 };
