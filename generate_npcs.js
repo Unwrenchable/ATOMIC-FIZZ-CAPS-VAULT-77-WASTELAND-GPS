@@ -34,10 +34,15 @@ let npcIndex = 1;
 for (const region in regionPools) {
   const regionList = regionPools[region];
 
+  if (!Array.isArray(regionList)) {
+    console.warn(`Skipping region "${region}" — regionPools entry is invalid.`);
+    continue;
+  }
+
   // Determine population
   const override = rules.population.regionOverrides[region] || {};
-  const min = override.min || rules.population.defaultPerRegionMin;
-  const max = override.max || rules.population.defaultPerRegionMax;
+  const min = override.min ?? rules.population.defaultPerRegionMin;
+  const max = override.max ?? rules.population.defaultPerRegionMax;
   const count = Math.floor(Math.random() * (max - min + 1)) + min;
 
   for (let i = 0; i < count; i++) {
@@ -48,14 +53,19 @@ for (const region in regionPools) {
     const archetypeId = weightedPick(rules.archetypeWeights);
     const archetype = archetypes.find(a => a.id === archetypeId);
 
+    if (!archetype) {
+      console.warn(`Missing archetype "${archetypeId}" — skipping NPC ${id}`);
+      continue;
+    }
+
     const npc = {
       id,
-      name: pick(archetype.namePattern),
+      name: pick(archetype.namePattern || ["Wanderer"]),
       archetype: archetype.id,
       spawnPool: regionList,
       behaviorPattern: archetype.behaviorPattern || "wanderer_basic",
-      lootPool: archetype.lootPool,
-      dialogPool: archetype.dialogPool,
+      lootPool: archetype.lootPool || "default_loot",
+      dialogPool: archetype.dialogPool || "default_dialog",
       factionTag: weightedPick(rules.factions.weights),
       timelineVariants: []
     };
