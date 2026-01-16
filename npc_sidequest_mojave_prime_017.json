@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_prime_017",
+  "type": "side_quest",
+  "name": "Lio Mira",
+  "region": "mojave",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_mojave_prime_017_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_017_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "region_story_02",
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.3,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

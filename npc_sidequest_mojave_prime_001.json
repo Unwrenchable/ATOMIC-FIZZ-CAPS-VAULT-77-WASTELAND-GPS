@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_prime_001",
+  "type": "side_quest",
+  "name": "Jett Ash",
+  "region": "mojave",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_mojave_prime_001_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_001_loot",
+  "questHooks": [
+    "region_story_01",
+    "vegas_rumor_03",
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.3,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
