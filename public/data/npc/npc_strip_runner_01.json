@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_runner_01",
+  "name": "Chip Runner",
+  "archetype": "highway_drifter",
+  "dialogPool": [
+    "Running chips for the wrong people.",
+    "If anyone asks, you didn’t see me."
+  ],
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": false
+}
