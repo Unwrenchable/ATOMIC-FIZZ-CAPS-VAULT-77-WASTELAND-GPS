@@ -1,0 +1,73 @@
+{
+  "id": "npc_vault77_pattern_survivor",
+  "name": "Pattern Survivor",
+  "faction": "Vault-Tec",
+  "role": "Vault 77 Survivor",
+  "type": "unstable",
+
+  "homeRegion": "vault77_core",
+  "currentRegion": "vault77_core",
+  "poi": "vault77_storage_corridor",
+
+  "personality": "Distant, twitchy, mutters sequences under his breath. Seems half-present, half elsewhere.",
+  "description": "One of the few who survived Vault 77’s final days. His mind loops through numbers and patterns he can’t stop repeating. Sometimes the sequences match triangle hum events.",
+
+  "dialogueProfile": {
+    "tone": "fractured-low",
+    "personalityTags": [
+      "triangle-sensitive",
+      "vault77-survivor",
+      "pattern-mutterer",
+      "unstable",
+      "player-reactive"
+    ],
+    "knowledge": [
+      "vault-77",
+      "hum-patterns",
+      "triangle",
+      "lost-time",
+      "overseer-protocols"
+    ],
+    "anomalyAwareness": 0.91
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["vault77_storage_corridor"],
+      "night": ["vault77_lower_hall"],
+      "wanderChance": 0.14
+    },
+    "roaming": [
+      "vault77_core",
+      "vault77_lower",
+      "vault77_storage"
+    ],
+    "anomalySensitivity": 0.96,
+    "rareEncounter": true
+  },
+
+  "dialog": {
+    "idle": [
+      "Seven… seven… no, that’s not right.",
+      "The pattern loops. I loop with it."
+    ],
+    "player_present": [
+      "You carry numbers with you. I can hear them.",
+      "Your steps… they sync with the sequence."
+    ],
+    "triangle_active": [
+      "Three points… three points… three points…",
+      "It’s humming again. I can’t shut it out."
+    ],
+    "memory_fragment": [
+      "Someone screamed in the dark. Or maybe that was me.",
+      "The Overseer said it was safe. The walls said otherwise."
+    ]
+  },
+
+  "quests": [
+    "side_v77_patterntrace"
+  ],
+
+  "notes": "A second Vault 77 survivor. Mutters sequences tied to triangle hums. Never reveals anything directly about Jax or the Overseer, but his patterns align with their echoes."
+}
