@@ -9,7 +9,7 @@
   if (!bootScreen || !pipboyScreen || !bootTextEl) return;
 
   // -----------------------------
-  // 1. FIZZ BOOT FRAMES
+  // 1. FIZZ BOOT FRAMES (UNCHANGED)
   // -----------------------------
   const fizzFrames = [
     "F",
@@ -36,7 +36,7 @@
   ];
 
   // -----------------------------
-  // 2. NEW NARRATIVE INTRO FRAMES
+  // 2. NARRATIVE INTRO (UNCHANGED)
   // -----------------------------
   const introFrames = [
     ">> INITIALIZING TIMELINE ANCHOR...",
@@ -65,14 +65,11 @@
 
     if (index >= frames.length) {
       if (phase === 0) {
-        // Move to intro sequence
         phase = 1;
         index = 0;
         setTimeout(typeNext, 400);
         return;
       }
-
-      // Fully finished
       finished = true;
       return;
     }
@@ -86,30 +83,37 @@
 
   function skipToEnd() {
     if (!finished) {
-      bootTextEl.textContent = fizzFrames.join("\n") + "\n\n" + introFrames.join("\n") + "\n";
+      bootTextEl.textContent =
+        fizzFrames.join("\n") +
+        "\n\n" +
+        introFrames.join("\n") +
+        "\n";
       finished = true;
     }
   }
 
+  // -----------------------------
+  // CLEAN PIP-BOY ACTIVATION
+  // -----------------------------
   function activatePipboy() {
-    if (!finished) {
-      skipToEnd();
-      return;
-    }
+    if (!finished) skipToEnd();
 
     bootScreen.classList.add("hidden");
     pipboyScreen.classList.remove("hidden");
 
+    // Notify the game
     window.dispatchEvent(new Event("pipboyReady"));
 
-    if (window.Game && typeof Game.onPipboyReady === "function") {
-      Game.onPipboyReady();
+    // New ESRI worldmap hook
+    if (window.Game?.modules?.worldmap?.onOpen) {
+      try {
+        Game.modules.worldmap.onOpen();
+      } catch (err) {
+        console.warn("[BOOT] worldmap.onOpen failed:", err);
+      }
     }
 
-    if (typeof initWastelandMap === "function") {
-      initWastelandMap();
-    }
-
+    // Update stats if available
     if (window.Game?.ui?.updateStatPanel) {
       Game.ui.updateStatPanel();
     }
@@ -123,12 +127,15 @@
     activatePipboy();
   }
 
+  // -----------------------------
+  // STARTUP
+  // -----------------------------
   typeNext();
 
   window.addEventListener("keydown", onContinue);
   window.addEventListener("click", onContinue);
   window.addEventListener("touchstart", onContinue);
 
+  // Auto-skip failsafe
   setTimeout(skipToEnd, 12000);
 })();
-
