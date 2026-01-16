@@ -1,0 +1,16 @@
+{
+  "id": "npc_strip_underground_breaker_jack",
+  "name": "Breaker-Jack",
+  "faction": "power_tappers",
+  "homeRegion": "strip-underground",
+  "currentRegion": "strip-underground",
+  "role": "Black-Market Electrician",
+  "personality": "Cocky, reckless, always sparking something.",
+  "description": "Runs a black-market power tap. Claims the Strip’s grid is alive and hungry.",
+  "questHooks": [
+    "Says a cable 'bit him' once.",
+    "Knows where the old pre-war power conduits run.",
+    "Claims someone is stealing electricity from his tap."
+  ],
+  "poi": "strip_underground_power_nexus"
+}
