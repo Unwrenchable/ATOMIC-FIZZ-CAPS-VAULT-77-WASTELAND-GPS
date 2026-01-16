@@ -293,61 +293,59 @@
 <!-- WORLD MAP (ESRI ONLY) -->
 <script src="/js/modules/worldmap.js"></script>
 
-<!-- PIP‑BOY UI SHELL -->
-<script src="/js/pipboy.js"></script>
-
-<!-- UI MODULES -->
+<!-- UI MODULES (MUST LOAD BEFORE pipboy.js) -->
 <script src="/js/modules/inventory-ui.js"></script>
 <script src="/js/modules/quest-ui.js"></script>
-
-<!-- SPECIAL SYSTEM -->
 <script src="/js/pipboy-special.js"></script>
 
-<!-- BOOT SEQUENCE (KEEP THIS — Pip‑Boy startup animation) -->
+<!-- PIP‑BOY UI SHELL (LOAD AFTER UI MODULES) -->
+<script src="/js/pipboy.js"></script>
+
+<!-- BOOT SEQUENCE -->
 <script src="/js/boot.js"></script>
 
-    <!-- RADIO / OVERSEER POPUP -->
-    <script>
-      (function () {
-        const terminalSection = document.getElementById("terminalSection");
-        const btn = document.getElementById("openOverseerTerminal");
+<!-- RADIO / OVERSEER POPUP -->
+<script>
+  (function () {
+    const terminalSection = document.getElementById("terminalSection");
+    const btn = document.getElementById("openOverseerTerminal");
 
-        if (terminalSection) terminalSection.style.display = "block";
+    if (terminalSection) terminalSection.style.display = "block";
 
-        function openOverseerPopup() {
-          const screenW = window.innerWidth || screen.width;
-          const screenH = window.innerHeight || screen.height;
+    function openOverseerPopup() {
+      const screenW = window.innerWidth || screen.width;
+      const screenH = window.innerHeight || screen.height;
 
-          const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
-          const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
+      const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
+      const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
 
-          const left = Math.floor((screenW - width) / 2);
-          const top = Math.floor((screenH - height) / 2);
+      const left = Math.floor((screenW - width) / 2);
+      const top = Math.floor((screenH - height) / 2);
 
-          const features = [
-            "resizable=yes",
-            "scrollbars=yes",
-            "status=no",
-            "toolbar=no",
-            "menubar=no",
-            "location=no",
-            "width=" + width,
-            "height=" + height,
-            "left=" + left,
-            "top=" + top
-          ].join(",");
+      const features = [
+        "resizable=yes",
+        "scrollbars=yes",
+        "status=no",
+        "toolbar=no",
+        "menubar=no",
+        "location=no",
+        "width=" + width,
+        "height=" + height,
+        "left=" + left,
+        "top=" + top
+      ].join(",");
 
-          window.open("/overseer.html", "overseer_terminal", features);
-        }
+      window.open("/overseer.html", "overseer_terminal", features);
+    }
 
-        if (btn) {
-          btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            openOverseerPopup();
-          });
-        }
-      })();
-    </script>
+    if (btn) {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        openOverseerPopup();
+      });
+    }
+  })();
+</script>
 
   </body>
 </html>
