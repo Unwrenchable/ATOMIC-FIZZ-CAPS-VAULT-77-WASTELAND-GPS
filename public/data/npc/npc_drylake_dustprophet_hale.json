@@ -2,15 +2,54 @@
   "id": "npc_drylake_dustprophet_hale",
   "name": "Dust-Prophet Hale",
   "faction": "desert_wanderers",
+  "role": "Wasteland Seer",
+
   "homeRegion": "dry-lake-edge",
   "currentRegion": "dry-lake-edge",
-  "role": "Wasteland Seer",
+  "poi": "dry_lake_edge_overlook",
+
   "personality": "Calm, cryptic, speaks like the wind is listening.",
   "description": "Reads wind patterns like scripture. Says storms carry messages if you know how to listen.",
+
+  "dialogueProfile": {
+    "tone": "soft-prophetic",
+    "personalityTags": [
+      "major-character",
+      "triangle-sensitive",
+      "desert-seer",
+      "wind-listener",
+      "cryptic"
+    ],
+    "knowledge": [
+      "dust-storms",
+      "triangle",
+      "old-world-rumors",
+      "lakebed-memory",
+      "lost-places"
+    ],
+    "anomalyAwareness": 0.93
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["dry_lake_edge_overlook"],
+      "night": ["dry_lake_edge_shifting_dunes"],
+      "wanderChance": 0.22
+    },
+    "roaming": [
+      "dry-lake-edge",
+      "dry-lake-basin",
+      "old-highway-route"
+    ],
+    "anomalySensitivity": 0.94,
+    "rareEncounter": true
+  },
+
   "questHooks": [
     "Mentions a hum that rides the dust storms.",
     "Says the lakebed 'remembers footsteps that never happened'.",
     "Claims someone buried a metal box that sings at night."
   ],
-  "poi": "dry_lake_edge_overlook"
+
+  "notes": "Hale claims the dust carries messages from before the bombs. Some scavengers swear he can predict storms hours before they form."
 }
