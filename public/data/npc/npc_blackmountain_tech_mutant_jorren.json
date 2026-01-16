@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_tech_mutant_jorren",
+  "name": "Jorren",
+  "faction": "black_mountain",
+  "role": "Tech Specialist",
+  "personality": "Nervous, brilliant, terrified of Gorath.",
+  "description": "Jorren keeps the radio tower running. He’s one of the few mutants who understands pre‑war electronics.",
+  "questHooks": [
+    "Needs rare parts from HELIOS One.",
+    "Says the tower is picking up unknown transmissions.",
+    "Found a device he can’t identify."
+  ],
+  "poi": "black_mountain_fnv"
+}
