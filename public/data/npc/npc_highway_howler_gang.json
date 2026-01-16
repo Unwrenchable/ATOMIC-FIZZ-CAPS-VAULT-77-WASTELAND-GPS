@@ -1,0 +1,16 @@
+{
+  "id": "npc_highway_howler_gang",
+  "name": "The Highway Howlers",
+  "faction": "raiders",
+  "homeRegion": "old-highway-route",
+  "currentRegion": "old-highway-route",
+  "role": "Raider Gang",
+  "personality": "Loud, chaotic, unpredictable.",
+  "description": "A biker-style raider gang who howl before attacking. Their engines echo strangely across the desert.",
+  "questHooks": [
+    "Claim they chased a glowing figure off the road.",
+    "Say one of their bikes started humming on its own.",
+    "Know of a stash hidden in an abandoned rest stop."
+  ],
+  "poi": "old_highway_route_raider_camp"
+}
