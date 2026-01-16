@@ -1,0 +1,14 @@
+{
+  "id": "npc_nv_f9",
+  "name": "FizzCo Replicant F-9",
+  "region": "New Vegas Strip",
+  "type": "Android",
+  "dialog": [
+    "FizzCo directive… corrupted.",
+    "Searching for… Platinum Cap…",
+    "Vegas anomaly detected."
+  ],
+  "quests": ["quest_nv_replicant"],
+  "faction": "FizzCo",
+  "notes": "Connects Strip to FizzCo main arc."
+}

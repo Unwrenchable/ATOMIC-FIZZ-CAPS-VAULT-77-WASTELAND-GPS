@@ -1,0 +1,13 @@
+{
+  "id": "npc_mojave_juno",
+  "name": "Dustwalker Juno",
+  "region": "Mojave",
+  "type": "Wasteland Guide",
+  "dialog": [
+    "Vegas pulls at everyone. Even the dead.",
+    "You feel it too, don’t you? The timelines humming."
+  ],
+  "quests": ["quest_mojave_vegas_pull"],
+  "faction": "Independent",
+  "notes": "Knows about the Convergence before anyone else."
+}

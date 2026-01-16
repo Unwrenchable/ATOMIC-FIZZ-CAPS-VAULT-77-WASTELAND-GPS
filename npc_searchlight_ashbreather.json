@@ -1,0 +1,16 @@
+{
+  "id": "npc_searchlight_ashbreather",
+  "name": "Ash-Breather",
+  "faction": "None",
+  "role": "Wanderer",
+  "type": "civilian",
+  "homeRegion": "searchlight",
+  "currentRegion": "searchlight",
+  "poi": "searchlight_outskirts",
+  "dialog": {
+    "idle": [
+      "Air tastes like burnt metal.",
+      "You get used to the smell. Eventually."
+    ]
+  }
+}

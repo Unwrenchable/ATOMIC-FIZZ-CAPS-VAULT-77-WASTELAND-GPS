@@ -1,0 +1,16 @@
+{
+  "id": "npc_northvegas_ghoststep_vee",
+  "name": "Ghost-Step Vee",
+  "faction": "northvegas_locals",
+  "homeRegion": "north-vegas",
+  "currentRegion": "north-vegas-alleys",
+  "role": "Runner / Courier",
+  "personality": "Quiet, observant, always moving.",
+  "description": "A parkour runner who delivers messages across rooftops. Says the city feels different at night.",
+  "questHooks": [
+    "Mentions seeing a figure standing perfectly still on a rooftop.",
+    "Says she heard humming through an air vent.",
+    "Knows a shortcut that bypasses three gang territories."
+  ],
+  "poi": "northvegas_rooftop_route"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "npc_searchlight_glower",
+  "name": "Glowing Wanderer",
+  "faction": "None",
+  "role": "Wanderer",
+  "type": "civilian",
+  "homeRegion": "searchlight",
+  "currentRegion": "searchlight",
+  "poi": "searchlight_outskirts",
+  "dialog": {
+    "idle": [
+      "Radiation’s lighter out here. Barely.",
+      "Some places you just don’t go anymore."
+    ]
+  }
+}
