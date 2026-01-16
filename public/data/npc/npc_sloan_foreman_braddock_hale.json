@@ -1,0 +1,16 @@
+{
+  "id": "npc_sloan_foreman_braddock_hale",
+  "name": "Foreman Braddock Hale",
+  "faction": "sloan_miners",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Mining Foreman",
+  "personality": "Gruff, exhausted, fiercely protective of his crew.",
+  "description": "Braddock oversees the Sloan mining operation. He’s lost too many workers to the quarry and refuses to send anyone else in until the deathclaws are dealt with.",
+  "questHooks": [
+    "Needs help recovering equipment left in the quarry.",
+    "Says the quarry walls 'hum' at night — not wind, something deeper.",
+    "Knows about a sealed tunnel the deathclaws avoid."
+  ],
+  "poi": "sloan_station_fnv"
+}
