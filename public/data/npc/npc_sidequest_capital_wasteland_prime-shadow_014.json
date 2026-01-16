@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime-shadow_014",
+  "type": "side_quest",
+  "name": "Varra Voss",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime-shadow_014_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime-shadow_014_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "region_story_01",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.56,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
