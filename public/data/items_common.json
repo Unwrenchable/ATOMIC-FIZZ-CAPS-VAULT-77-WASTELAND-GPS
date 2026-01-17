@@ -1,1 +1,106 @@
-fill
+{
+  "tools": [
+    { "id": "bobby_pin", "name": "Bobby Pin", "type": "tool", "durability": 3, "tags": ["lockpick", "tool"] },
+    { "id": "screwdriver", "name": "Screwdriver", "type": "tool", "durability": 20, "tags": ["tool", "maintenance"] },
+    { "id": "wrench", "name": "Wrench", "type": "tool", "durability": 25, "tags": ["tool", "repair"] },
+    { "id": "duct_tape", "name": "Duct Tape", "type": "tool", "uses": 3, "tags": ["tool", "crafting"] },
+    { "id": "repair_kit", "name": "Repair Kit", "type": "tool", "uses": 1, "tags": ["tool", "repair"] },
+    { "id": "flashlight", "name": "Flashlight", "type": "tool", "durability": 50, "tags": ["tool", "light"] },
+    { "id": "geiger_counter", "name": "Geiger Counter", "type": "tool", "durability": 40, "tags": ["tool", "radiation"] },
+    { "id": "signal_tuner", "name": "Signal Tuner", "type": "tool", "durability": 15, "tags": ["tool", "humming_one"] }
+  ],
+
+  "ammo": [
+    { "id": "ammo_9mm", "name": "9mm Rounds", "type": "ammo", "tags": ["ballistic"] },
+    { "id": "ammo_357", "name": ".357 Magnum Rounds", "type": "ammo", "tags": ["ballistic"] },
+    { "id": "ammo_44", "name": ".44 Magnum Rounds", "type": "ammo", "tags": ["ballistic"] },
+    { "id": "ammo_308", "name": ".308 Rifle Rounds", "type": "ammo", "tags": ["ballistic"] },
+    { "id": "ammo_556", "name": "5.56mm Rounds", "type": "ammo", "tags": ["ballistic"] },
+    { "id": "ammo_12g", "name": "12 Gauge Shells", "type": "ammo", "tags": ["shotgun"] },
+    { "id": "ammo_fuel", "name": "Flamer Fuel", "type": "ammo", "tags": ["fire"] },
+    { "id": "ammo_ecell", "name": "Energy Cells", "type": "ammo", "tags": ["energy"] },
+    { "id": "ammo_mfc", "name": "Microfusion Cells", "type": "ammo", "tags": ["energy"] },
+    { "id": "ammo_plasma", "name": "Plasma Cartridges", "type": "ammo", "tags": ["energy"] },
+    { "id": "ammo_gauss", "name": "Gauss Slugs", "type": "ammo", "tags": ["energy"] },
+    { "id": "ammo_rocket", "name": "Rockets", "type": "ammo", "tags": ["explosive"] },
+    { "id": "ammo_grenade", "name": "Grenades", "type": "ammo", "tags": ["explosive"] }
+  ],
+
+  "junk": [
+    { "id": "scrap_metal", "name": "Scrap Metal", "type": "junk", "tags": ["crafting"] },
+    { "id": "scrap_electronics", "name": "Scrap Electronics", "type": "junk", "tags": ["crafting"] },
+    { "id": "copper_wire", "name": "Copper Wire", "type": "junk", "tags": ["crafting"] },
+    { "id": "circuit_board", "name": "Circuit Board", "type": "junk", "tags": ["crafting"] },
+    { "id": "gecko_hide", "name": "Gecko Hide", "type": "junk", "tags": ["crafting"] },
+    { "id": "tin_can", "name": "Tin Can", "type": "junk", "tags": ["scrap"] },
+    { "id": "tin_plate", "name": "Tin Plate", "type": "junk", "tags": ["scrap"] },
+    { "id": "broken_toy", "name": "Broken Toy Car", "type": "junk", "tags": ["scrap"] },
+    { "id": "rusted_pan", "name": "Rusted Pan", "type": "junk", "tags": ["scrap"] },
+    { "id": "rusted_spoon", "name": "Rusted Spoon", "type": "junk", "tags": ["scrap"] },
+    { "id": "springs", "name": "Springs", "type": "junk", "tags": ["crafting"] },
+    { "id": "gears", "name": "Gears", "type": "junk", "tags": ["crafting"] },
+    { "id": "adhesive", "name": "Adhesive", "type": "junk", "tags": ["crafting"] },
+    { "id": "cloth", "name": "Cloth Scraps", "type": "junk", "tags": ["crafting"] },
+    { "id": "leather", "name": "Leather Scraps", "type": "junk", "tags": ["crafting"] }
+  ],
+
+  "consumables": [
+    { "id": "stimpak", "name": "Stimpak", "type": "consumable", "tags": ["healing"] },
+    { "id": "radaway", "name": "RadAway", "type": "consumable", "tags": ["radiation"] },
+    { "id": "radx", "name": "Rad-X", "type": "consumable", "tags": ["radiation"] },
+    { "id": "dirty_water", "name": "Dirty Water", "type": "consumable", "tags": ["drink"] },
+    { "id": "purified_water", "name": "Purified Water", "type": "consumable", "tags": ["drink"] },
+    { "id": "iguana_bits", "name": "Iguana Bits", "type": "consumable", "tags": ["food"] },
+    { "id": "gecko_meat", "name": "Gecko Meat", "type": "consumable", "tags": ["food"] },
+    { "id": "snack_cakes", "name": "Fancy Snack Cakes", "type": "consumable", "tags": ["food"] },
+    { "id": "sarsaparilla", "name": "Sarsaparilla Bottle", "type": "consumable", "tags": ["drink"] },
+    { "id": "nuka_cola", "name": "Nuka-Cola", "type": "consumable", "tags": ["drink"] },
+    { "id": "buffout", "name": "Buffout", "type": "consumable", "tags": ["chem"] },
+    { "id": "jet", "name": "Jet", "type": "consumable", "tags": ["chem"] },
+    { "id": "psycho", "name": "Psycho", "type": "consumable", "tags": ["chem"] },
+    { "id": "mentats", "name": "Mentats", "type": "consumable", "tags": ["chem"] }
+  ],
+
+  "holotapes": [
+    { "id": "pru_log_01", "name": "PRU Log: Initial Signal", "type": "holotape", "tags": ["lore", "humming_one"] },
+    { "id": "pru_log_02", "name": "PRU Log: Fire Station 77", "type": "holotape", "tags": ["lore", "pru"] },
+    { "id": "vault_log_01", "name": "Vault Overseer Log", "type": "holotape", "tags": ["lore", "vault"] },
+    { "id": "distress_signal", "name": "Distress Signal Recording", "type": "holotape", "tags": ["signal"] },
+    { "id": "corrupted_tape", "name": "Corrupted Audio Tape", "type": "holotape", "tags": ["corrupted"] }
+  ],
+
+  "notes": [
+    { "id": "safe_code_note", "name": "Safe Code Note", "type": "note", "tags": ["code"] },
+    { "id": "warning_note", "name": "Warning Note", "type": "note", "tags": ["lore"] },
+    { "id": "scavenger_note", "name": "Scavenger Note", "type": "note", "tags": ["lore"] },
+    { "id": "map_fragment", "name": "Map Fragment", "type": "note", "tags": ["map"] }
+  ],
+
+  "keys": [
+    { "id": "firestation77_key", "name": "Fire Station 77 Access Key", "type": "key", "tags": ["access"] },
+    { "id": "pru_keycard", "name": "PRU Bunker Keycard", "type": "key", "tags": ["access"] },
+    { "id": "vault_keycard", "name": "Vault Keycard", "type": "key", "tags": ["vault"] },
+    { "id": "motel_key", "name": "Motel Room Key", "type": "key", "tags": ["access"] }
+  ],
+
+  "quest_items": [
+    { "id": "humming_resonator", "name": "Humming Resonator", "type": "quest", "tags": ["humming_one"] },
+    { "id": "anomaly_stabilizer", "name": "Anomaly Stabilizer", "type": "quest", "tags": ["anomaly"] },
+    { "id": "signal_triangulator", "name": "Signal Triangulator", "type": "quest", "tags": ["signal"] },
+    { "id": "vault_override_chip", "name": "Vault Override Chip", "type": "quest", "tags": ["vault"] }
+  ],
+
+  "crafting": [
+    { "id": "weapon_mod_blueprint", "name": "Weapon Mod Blueprint", "type": "crafting", "tags": ["blueprint"] },
+    { "id": "armor_mod_blueprint", "name": "Armor Mod Blueprint", "type": "crafting", "tags": ["blueprint"] },
+    { "id": "ammo_recipe", "name": "Ammo Crafting Recipe", "type": "crafting", "tags": ["recipe"] },
+    { "id": "chem_recipe", "name": "Chem Recipe", "type": "crafting", "tags": ["recipe"] }
+  ],
+
+  "world_logic": [
+    { "id": "region_unlock_token", "name": "Region Unlock Token", "type": "logic", "tags": ["region"] },
+    { "id": "anomaly_marker", "name": "Anomaly Marker", "type": "logic", "tags": ["anomaly"] },
+    { "id": "hum_resonance_level", "name": "Hum Resonance Level", "type": "logic", "tags": ["humming_one"] },
+    { "id": "faction_reputation", "name": "Faction Reputation Token", "type": "logic", "tags": ["faction"] }
+  ]
+}
