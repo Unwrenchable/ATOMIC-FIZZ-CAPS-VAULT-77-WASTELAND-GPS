@@ -2,7 +2,7 @@
 // Pip‑Boy shell: tabs, panel switching, swipe navigation, routing
 
 (function () {
-  const tabs = Array.from(document.querySelectorAll(".pip-tab"));
+  const tabs = Array.from(document.querySelectorAll(".pipboy-tab"));
   const panels = {
     map: document.getElementById("panel-map"),
     stat: document.getElementById("panel-stat"),
