@@ -19,11 +19,7 @@ app.use(
     methods: ["GET", "POST", "OPTIONS"],
   })
 );
-app.use(
-  helmet({
-    contentSecurityPolicy: false,
-  })
-);
+app.use(helmet());
 
 // serve wallet UI from /wallet
 app.use(
