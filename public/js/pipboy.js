@@ -2,12 +2,14 @@
 // Pip‑Boy shell: tabs, panel switching, swipe navigation, routing
 
 (function () {
+  // Correct selector + correct attribute
   const tabs = Array.from(document.querySelectorAll(".pipboy-tab"));
   const panels = {
     map: document.getElementById("panel-map"),
     stat: document.getElementById("panel-stat"),
     items: document.getElementById("panel-items"),
     quests: document.getElementById("panel-quests"),
+    radio: document.getElementById("panel-radio"),
     exchange: document.getElementById("panel-exchange"),
   };
 
@@ -23,13 +25,12 @@
     });
 
     tabs.forEach((tab) => {
-      const tKey = tab.getAttribute("data-panel");
-      tab.classList.toggle("active", tKey === panelKey);
+      const tKey = tab.getAttribute("data-pipboy-tab"); // FIXED
+      tab.classList.toggle("active", tKey === `panel-${panelKey}`);
     });
 
     // MAP PANEL ACTIVATION
     if (panelKey === "map") {
-      // Initialize map module if needed
       if (window.Game && Game.modules?.worldmap) {
         try {
           Game.modules.worldmap.onOpen();
@@ -38,7 +39,6 @@
         }
       }
 
-      // Resize Leaflet after panel animation
       setTimeout(() => {
         if (window.map && typeof window.map.invalidateSize === "function") {
           window.map.invalidateSize();
@@ -52,13 +52,15 @@
   // ------------------------------------------------------------
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      const key = tab.getAttribute("data-panel");
-      if (key) setActivePanel(key);
+      const key = tab.getAttribute("data-pipboy-tab"); // FIXED
+      if (!key) return;
+      const panelKey = key.replace("panel-", ""); // FIXED
+      setActivePanel(panelKey);
     });
   });
 
   // ------------------------------------------------------------
-  // SWIPE‑TO‑SWITCH TABS (mobile + trackpads)
+  // SWIPE‑TO‑SWITCH TABS
   // ------------------------------------------------------------
   (function enableSwipeTabs() {
     let startX = 0;
@@ -68,8 +70,10 @@
     function activateTabByIndex(i) {
       const tab = tabs[i];
       if (!tab) return;
-      const key = tab.getAttribute("data-panel");
-      if (key) setActivePanel(key);
+      const key = tab.getAttribute("data-pipboy-tab"); // FIXED
+      if (!key) return;
+      const panelKey = key.replace("panel-", ""); // FIXED
+      setActivePanel(panelKey);
     }
 
     document.addEventListener("touchstart", (e) => {
@@ -85,9 +89,9 @@
       );
 
       if (diff > threshold && activeIndex > 0) {
-        activateTabByIndex(activeIndex - 1); // swipe right
+        activateTabByIndex(activeIndex - 1);
       } else if (diff < -threshold && activeIndex < tabs.length - 1) {
-        activateTabByIndex(activeIndex + 1); // swipe left
+        activateTabByIndex(activeIndex + 1);
       }
     });
   })();
