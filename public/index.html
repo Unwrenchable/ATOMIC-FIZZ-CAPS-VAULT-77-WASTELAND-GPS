@@ -72,33 +72,34 @@
               <!-- MAIN PANELS -->
               <div class="pipboy-main">
 
-                <!-- MAP PANEL (TILE MAP VERSION) -->
-                <div id="panel-map" class="pipboy-panel active">
-                  <div class="panel-header">MAP</div>
-                  <div class="panel-body">
+               <!-- MAP PANEL (TILE MAP VERSION) -->
+<div id="panel-map" class="pipboy-panel active">
+  <div class="panel-header">MAP</div>
+  <div class="panel-body">
 
-                    <!-- TILE MAP CONTAINER -->
-                    <div id="map" class="pipboy-map">
-                      <div id="radFlash"></div>
-                    </div>
+    <!-- REQUIRED BY worldmap.js -->
+    <div id="mapContainer" class="pipboy-map">
+      <div id="radFlash"></div>
+    </div>
 
-                    <!-- Overlay Text -->
-                    <div class="map-overlay">
-                      <div class="map-label">WORLD MAP</div>
-                      <div class="map-status" id="mapStatus">SCANNING...</div>
-                    </div>
+    <!-- Overlay Text -->
+    <div class="map-overlay">
+      <div class="map-label">WORLD MAP</div>
+      <div class="map-status" id="mapStatus">SCANNING...</div>
+    </div>
 
-                    <!-- Controls (future) -->
-                    <div class="map-controls"></div>
+    <!-- Controls (future) -->
+    <div class="map-controls"></div>
 
-                    <!-- GPS Badge -->
-                    <div class="gps-badge" id="gpsBadge">
-                      <div id="accDot" class="acc-dot"></div>
-                      <div id="accText">GPS: OFFLINE</div>
-                    </div>
+    <!-- GPS Badge -->
+    <div class="gps-badge" id="gpsBadge">
+      <div id="accDot" class="acc-dot"></div>
+      <div id="accText">GPS: OFFLINE</div>
+    </div>
 
-                  </div>
-                </div>
+  </div>
+</div>
+
 
                 <!-- STAT PANEL -->
                 <div id="panel-stat" class="pipboy-panel">
