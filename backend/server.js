@@ -58,21 +58,25 @@ function safeMount(mountPath, requirePath) {
 // ------------------------------------------------------------
 // GAME API ROUTES (existing)
 // ------------------------------------------------------------
-safeMount("/api/loot-voucher", "./api/loot-voucher");
-safeMount("/api/caps", "./api/caps");
-safeMount("/api/xp", "./api/xp");
-safeMount("/api/gps", "./api/gps");
-safeMount("/api/cooldowns", "./api/cooldowns");
-safeMount("/api/rotation", "./api/rotation");
-safeMount("/api/quests", "./api/quests");
-safeMount("/api/quest-endings", "./api/quest-endings");
-safeMount("/api/player", "./api/player");
-safeMount("/api/location-claim", "./api/location-claim");
+// ------------------------------------------------------------
+// GAME API ROUTES (FIXED PATHS)
+// ------------------------------------------------------------
+const api = (file) => path.join(__dirname, "api", file);
 
-// ------------------------------------------------------------
-// NEW: WALLET API
-// ------------------------------------------------------------
-safeMount("/api/wallet", "./routes/wallet");
+safeMount("/api/loot-voucher", api("loot-voucher"));
+safeMount("/api/caps", api("caps"));
+safeMount("/api/xp", api("xp"));
+safeMount("/api/gps", api("gps"));
+safeMount("/api/cooldowns", api("cooldowns"));
+safeMount("/api/rotation", api("rotation"));
+safeMount("/api/quests", api("quests"));
+safeMount("/api/quest-endings", api("quest-endings"));
+safeMount("/api/player", api("player"));
+safeMount("/api/location-claim", api("location-claim"));
+
+// WALLET API
+safeMount("/api/wallet", path.join(__dirname, "routes", "wallet"));
+
 
 // ------------------------------------------------------------
 // NEW: WALLET UI
