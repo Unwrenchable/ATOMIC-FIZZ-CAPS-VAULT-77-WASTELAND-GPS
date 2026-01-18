@@ -8,7 +8,8 @@ Game.ui.renderInventory = function () {
   const tabs = document.getElementById("inventoryTabs");
   if (!body || !tabs) return;
 
-  const items = Game.player.items || [];
+  // FIX: Only show what the player actually owns
+  const items = Game.player.inventory || [];
 
   // Group items by type
   const groups = {
