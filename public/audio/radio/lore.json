@@ -1,0 +1,12 @@
+{
+  "lore": [
+    {
+      "text": "Sometimes when the music fades, I swear I hear someone else breathing on the line.",
+      "file": "/audio/radio/dj/lore_1.mp3"
+    },
+    {
+      "text": "Old terminals been flickerin’ lately… like someone’s tryin’ to talk through ’em.",
+      "file": "/audio/radio/dj/lore_2.mp3"
+    }
+  ]
+}
