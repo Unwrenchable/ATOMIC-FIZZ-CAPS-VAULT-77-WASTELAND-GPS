@@ -1,9 +1,14 @@
 {
-  "djName": "Fizzmaster Rex",
-  "personality": "Smooth‑talking wasteland crooner with a wink in his voice and a love for old‑world swing.",
-  "clips": [
-    "/audio/radio/dj/dj_intro_1.mp3",
-    "/audio/radio/dj/dj_bumper_1.mp3",
-    "/audio/radio/dj/dj_outro_1.mp3"
-  ]
+  "name": "Fizzmaster Rex",
+  "voice": "smooth, warm, charismatic, slightly mysterious",
+  "clips": {
+    "intros": [
+      "/audio/radio/dj/intro_1.mp3",
+      "/audio/radio/dj/intro_2.mp3"
+    ],
+    "outros": [
+      "/audio/radio/dj/outro_1.mp3",
+      "/audio/radio/dj/outro_2.mp3"
+    ]
+  }
 }
