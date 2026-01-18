@@ -1,1 +1,6 @@
-
+[
+  { "id": "region_unlock_token", "name": "Region Unlock Token", "type": "logic", "tags": ["region"] },
+  { "id": "anomaly_marker", "name": "Anomaly Marker", "type": "logic", "tags": ["anomaly"] },
+  { "id": "hum_resonance_level", "name": "Hum Resonance Level", "type": "logic", "tags": ["humming_one"] },
+  { "id": "faction_reputation", "name": "Faction Reputation Token", "type": "logic", "tags": ["faction"] }
+]
