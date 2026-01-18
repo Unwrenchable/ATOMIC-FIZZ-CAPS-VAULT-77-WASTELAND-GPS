@@ -23,33 +23,101 @@
     followTimeout: null,
     followDelay: 5000, // 5 seconds of no movement before snapping back
 
+    // --------------------------------------------------------
+    // PUBLIC API
+    // --------------------------------------------------------
     init(gameState) {
+      // Accept explicit gameState or fall back to global DATA if present.
       this.gs = gameState || (window.DATA || {});
+      if (!this.gs) this.gs = {};
+
+      // Ensure player object exists before doing anything that reads it.
       this.ensurePlayerPosition();
+
+      // Initialize map and overlays (idempotent)
       this.initMap();
       this.loadLocations();
       this.loadWorldOverlays();
     },
 
+    // Called when the Pip‑Boy map panel is opened.
+    // Safe to call even if init() hasn't completed.
+    onOpen() {
+      try {
+        if (!this.map) {
+          console.warn("worldmap: map not initialized yet, calling init()");
+          this.init(window.gameState || window.DATA || {});
+        }
+
+        if (!this.locationsLoaded) {
+          // Try to load locations if they haven't been loaded yet
+          this.loadLocations().catch(err => {
+            console.warn("worldmap: loadLocations onOpen failed", err);
+          });
+        } else {
+          this.renderPOIMarkers();
+        }
+
+        // Ensure player marker exists and center map
+        this.ensurePlayerPosition();
+        this.initPlayerMarker();
+        this.centerOnPlayer();
+
+        // Render overlays
+        this.renderWorldLabels();
+        this.renderWorldRoads();
+
+        if (this.map) {
+          setTimeout(() => {
+            try {
+              this.map.invalidateSize();
+              this.ensurePlayerPosition();
+              const pos = this.gs.player.position;
+              this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 6);
+              this.updateOverlayVisibility(this.map.getZoom() || 6);
+            } catch (e) {
+              console.warn("worldmap: onOpen view update failed", e);
+            }
+          }, 50);
+        }
+      } catch (e) {
+        console.error("worldmap: onOpen failed", e);
+      }
+    },
+
+    // --------------------------------------------------------
+    // SAFE PLAYER POSITION
+    // --------------------------------------------------------
     ensurePlayerPosition() {
-  if (!this.gs) {
-    console.warn("worldmap: no gameState yet");
-    this.gs = {};
-  }
+      // Guarantee this.gs exists
+      if (!this.gs) {
+        console.warn("worldmap: no gameState yet");
+        this.gs = {};
+      }
 
-  if (!this.gs.player) {
-    this.gs.player = {};
-  }
+      // Guarantee player object exists
+      if (!this.gs.player || typeof this.gs.player !== "object") {
+        this.gs.player = {};
+      }
 
-  if (!this.gs.player.position) {
-    // Default to Mojave / Vegas strip if no position yet
-    this.gs.player.position = {
-      lat: 36.11274,
-      lng: -115.174301
-    };
-  }
-}
+      // Guarantee player.position exists and has lat/lng numbers
+      const pos = this.gs.player.position;
+      if (
+        !pos ||
+        typeof pos.lat !== "number" ||
+        typeof pos.lng !== "number"
+      ) {
+        // Default to Mojave / Vegas strip if no position yet
+        this.gs.player.position = {
+          lat: 36.11274,
+          lng: -115.174301
+        };
+      }
+    },
 
+    // --------------------------------------------------------
+    // MAP INITIALIZATION
+    // --------------------------------------------------------
     initMap() {
       if (this.map) return;
 
@@ -84,7 +152,6 @@
       // --------------------------------------------------------
       // BASE LAYER – ESRI WORLD IMAGERY ONLY
       // --------------------------------------------------------
-
       const esriSatelliteTiles = L.tileLayer(
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         {
@@ -96,10 +163,15 @@
 
       this.tiles = { satellite: esriSatelliteTiles };
 
+      // Ensure player position exists before setting view
       this.ensurePlayerPosition();
       const pos = this.gs.player.position;
       const startZoom = 6; // start zoomed out a bit over Mojave
-      this.map.setView([pos.lat, pos.lng], startZoom);
+      try {
+        this.map.setView([pos.lat, pos.lng], startZoom);
+      } catch (e) {
+        console.warn("worldmap: setView failed, using fallback coords", e);
+      }
 
       esriSatelliteTiles.addTo(this.map);
 
@@ -113,13 +185,15 @@
       // Expose for debugging
       window.map = this.map;
 
+      // Initialize player marker (idempotent)
       this.initPlayerMarker();
 
       console.log("worldmap: map initialized");
       window.dispatchEvent(new Event("map-ready"));
 
       // Ensure overlays respect current zoom
-      this.updateOverlayVisibility(this.map.getZoom() || startZoom);
+      const currentZoom = this.map.getZoom() || startZoom;
+      this.updateOverlayVisibility(currentZoom);
       this.map.on("zoomend", () => {
         this.updateOverlayVisibility(this.map.getZoom() || startZoom);
       });
@@ -128,7 +202,6 @@
     // --------------------------------------------------------
     // AUTO-FOLLOW
     // --------------------------------------------------------
-
     enableAutoFollow() {
       if (!this.map) return;
 
@@ -149,25 +222,36 @@
     },
 
     centerOnPlayer() {
-      if (!this.map || !this.gs?.player?.position) return;
+      if (!this.map) return;
+      this.ensurePlayerPosition();
+      if (!this.gs?.player?.position) return;
+
       const { lat, lng } = this.gs.player.position;
 
       try {
-        this.map.panTo([lat, lng], {
-          animate: true,
-          duration: 1.0,
-          easeLinearity: 0.25
-        });
+        // Leaflet panTo options differ by version; use try/catch to be safe
+        if (typeof this.map.panTo === "function") {
+          this.map.panTo([lat, lng], {
+            animate: true,
+            duration: 1.0,
+            easeLinearity: 0.25
+          });
+        } else {
+          this.map.setView([lat, lng], this.map.getZoom() || 6);
+        }
       } catch (e) {
         console.warn("worldmap: panTo failed, falling back to setView", e);
-        this.map.setView([lat, lng], this.map.getZoom() || 6);
+        try {
+          this.map.setView([lat, lng], this.map.getZoom() || 6);
+        } catch (err) {
+          console.error("worldmap: setView fallback also failed", err);
+        }
       }
     },
 
     // --------------------------------------------------------
     // PLAYER MARKER
     // --------------------------------------------------------
-
     initPlayerMarker() {
       this.ensurePlayerPosition();
       if (!this.map) return;
@@ -175,26 +259,39 @@
       const pos = this.gs.player.position;
 
       if (this.playerMarker) {
-        this.playerMarker.setLatLng([pos.lat, pos.lng]);
+        try {
+          this.playerMarker.setLatLng([pos.lat, pos.lng]);
+        } catch (e) {
+          console.warn("worldmap: failed to update existing playerMarker", e);
+        }
         return;
       }
 
-      const marker = L.circleMarker([pos.lat, pos.lng], {
-        radius: 8,
-        color: "#00ff66",
-        fillColor: "#00ff66",
-        fillOpacity: 0.8
-      });
+      try {
+        const marker = L.circleMarker([pos.lat, pos.lng], {
+          radius: 8,
+          color: "#00ff66",
+          fillColor: "#00ff66",
+          fillOpacity: 0.8
+        });
 
-      this.playerMarker = marker.addTo(this.map);
+        this.playerMarker = marker.addTo(this.map);
+      } catch (e) {
+        console.error("worldmap: failed to create playerMarker", e);
+      }
     },
 
     setPlayerPosition(lat, lng) {
+      if (!this.gs) this.gs = {};
       if (!this.gs.player) this.gs.player = {};
       this.gs.player.position = { lat, lng };
 
       if (this.playerMarker) {
-        this.playerMarker.setLatLng([lat, lng]);
+        try {
+          this.playerMarker.setLatLng([lat, lng]);
+        } catch (e) {
+          console.warn("worldmap: failed to set playerMarker position", e);
+        }
       }
 
       this.centerOnPlayer();
@@ -203,7 +300,6 @@
     // --------------------------------------------------------
     // WORLD OVERLAYS
     // --------------------------------------------------------
-
     async loadWorldOverlays() {
       // Labels
       try {
@@ -213,7 +309,11 @@
           if (Array.isArray(json)) {
             this.worldLabels = json;
             this.renderWorldLabels();
+          } else {
+            console.warn("worldmap: world_labels.json not an array, ignoring");
           }
+        } else {
+          console.warn("worldmap: world_labels.json fetch returned", resLabels.status);
         }
       } catch (e) {
         console.error("worldmap: failed to load world_labels.json", e);
@@ -227,7 +327,11 @@
           if (Array.isArray(json)) {
             this.worldRoads = json;
             this.renderWorldRoads();
+          } else {
+            console.warn("worldmap: world_roads.json not an array, ignoring");
           }
+        } else {
+          console.warn("worldmap: world_roads.json fetch returned", resRoads.status);
         }
       } catch (e) {
         console.error("worldmap: failed to load world_roads.json", e);
@@ -241,7 +345,14 @@
     renderWorldLabels() {
       if (!this.map || !this.labelLayer) return;
 
-      this.labelLayer.clearLayers();
+      try {
+        this.labelLayer.clearLayers();
+      } catch (e) {
+        // Some Leaflet builds may not have clearLayers; fallback to manual removal
+        try {
+          this.labelLayer.eachLayer(l => this.labelLayer.removeLayer(l));
+        } catch (err) {}
+      }
 
       this.worldLabels.forEach(label => {
         if (typeof label.lat !== "number" || typeof label.lng !== "number") return;
@@ -264,7 +375,13 @@
     renderWorldRoads() {
       if (!this.map || !this.roadLayer) return;
 
-      this.roadLayer.clearLayers();
+      try {
+        this.roadLayer.clearLayers();
+      } catch (e) {
+        try {
+          this.roadLayer.eachLayer(l => this.roadLayer.removeLayer(l));
+        } catch (err) {}
+      }
 
       this.worldRoads.forEach(road => {
         if (!Array.isArray(road.points) || road.points.length < 2) return;
@@ -315,6 +432,9 @@
     roadStyle(road) {
       const kind = road.kind || "local";
 
+      // Defensive defaults and slightly richer styling
+      const base = { color: "#44bb66", weight: 1.5, opacity: 0.7 };
+
       if (kind === "highway") {
         return { color: "#66ff99", weight: 3, opacity: 0.9 };
       }
@@ -323,90 +443,122 @@
         return { color: "#55dd88", weight: 2, opacity: 0.8 };
       }
 
-      return { color: "#44bb66", weight: 1.5, opacity: 0.7 };
+      return base;
     },
 
     updateOverlayVisibility(zoom) {
       if (!this.map) return;
-      const z = typeof zoom === "number" ? zoom : this.map.getZoom() || 6;
+      const z = typeof zoom === "number" ? zoom : (this.map.getZoom() || 6);
 
-      if (this.labelLayer) {
-        this.labelLayer.eachLayer(layer => {
+      const toggleLayer = (layerGroup) => {
+        if (!layerGroup) return;
+        layerGroup.eachLayer(layer => {
           const rule = layer._pipboyZoomRule;
           if (!rule) return;
-          const visible = z >= rule.minZoom && z <= (rule.maxZoom || 18);
-          if (visible) {
-            if (!this.map.hasLayer(layer)) this.map.addLayer(layer);
-          } else {
-            if (this.map.hasLayer(layer)) this.map.removeLayer(layer);
+          const visible = z >= (rule.minZoom || 0) && z <= (rule.maxZoom || 18);
+          try {
+            if (visible) {
+              if (!this.map.hasLayer(layer)) layerGroup.addLayer(layer);
+            } else {
+              if (this.map.hasLayer(layer)) layerGroup.removeLayer(layer);
+            }
+          } catch (e) {
+            console.warn("worldmap: updateOverlayVisibility layer toggle failed", e);
           }
         });
-      }
+      };
 
-      if (this.roadLayer) {
-        this.roadLayer.eachLayer(layer => {
-          const rule = layer._pipboyZoomRule;
-          if (!rule) return;
-          const visible = z >= rule.minZoom && z <= (rule.maxZoom || 18);
-          if (visible) {
-            if (!this.map.hasLayer(layer)) this.map.addLayer(layer);
-          } else {
-            if (this.map.hasLayer(layer)) this.map.removeLayer(layer);
-          }
-        });
-      }
+      toggleLayer(this.labelLayer);
+      toggleLayer(this.roadLayer);
     },
 
     // --------------------------------------------------------
     // LOCATION LOADING + MARKERS
     // --------------------------------------------------------
-
     async loadLocations() {
       if (this.locationsLoaded) return;
 
-      try {
-        const res = await fetch("/data/locations.json");
-        if (!res.ok) {
-          console.warn("worldmap: HTTP error loading /data/locations.json:", res.status);
-          return;
-        }
+      // Try API first, then static file fallback
+      const candidates = ["/api/locations", "/data/locations.json"];
+      let data = null;
 
-        const json = await res.json();
-        if (!Array.isArray(json)) {
-          console.error("worldmap: expected array in locations.json");
-          return;
+      for (const url of candidates) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) {
+            console.warn(`worldmap: ${url} responded ${res.status}`);
+            continue;
+          }
+          const json = await res.json();
+          data = json;
+          break;
+        } catch (e) {
+          console.warn(`worldmap: fetch ${url} failed`, e);
         }
+      }
 
-        this.locations = json;
+      if (!data) {
+        console.warn("worldmap: no locations data found; continuing with empty list");
+        this.locations = [];
         this.locationsLoaded = true;
         this.renderPOIMarkers();
-
-        console.log(`worldmap: loaded ${this.locations.length} locations`);
-      } catch (e) {
-        console.error("worldmap: failed to load locations.json", e);
+        return;
       }
+
+      // Accept either an array or an object with a 'locations' array
+      if (Array.isArray(data)) {
+        this.locations = data;
+      } else if (Array.isArray(data.locations)) {
+        this.locations = data.locations;
+      } else {
+        console.warn("worldmap: locations.json format unexpected, expected array or { locations: [] }");
+        this.locations = [];
+      }
+
+      this.locationsLoaded = true;
+      this.renderPOIMarkers();
+      console.log(`worldmap: loaded ${this.locations.length} locations`);
     },
 
     renderPOIMarkers() {
-      if (!this.map || !this.locationsLoaded) return;
+      if (!this.map) return;
 
-      this.poiMarkers.forEach(m => this.map.removeLayer(m.marker || m));
+      // Remove existing markers safely
+      try {
+        this.poiMarkers.forEach(entry => {
+          const m = entry && (entry.marker || entry);
+          if (m && this.map.hasLayer(m)) this.map.removeLayer(m);
+        });
+      } catch (e) {
+        console.warn("worldmap: error clearing existing POI markers", e);
+      }
       this.poiMarkers = [];
+
+      if (!this.locationsLoaded || !Array.isArray(this.locations)) return;
 
       this.locations.forEach((loc, idx) => {
         if (typeof loc.lat !== "number" || typeof loc.lng !== "number") return;
-        const marker = this.createPOIMarker(loc, idx);
-        marker.addTo(this.map);
-        this.poiMarkers.push({ marker, loc });
+        try {
+          const marker = this.createPOIMarker(loc, idx);
+          marker.addTo(this.map);
+          this.poiMarkers.push({ marker, loc });
+        } catch (e) {
+          console.warn("worldmap: failed to create POI marker for", loc, e);
+        }
       });
     },
 
     createPOIMarker(loc, idx) {
       const rarity = loc.rarity || "common";
 
+      const dotClasses = [
+        rarity === "epic" ? "epic" : "",
+        rarity === "legendary" ? "legendary" : ""
+      ].filter(Boolean).join(" ");
+
       const iconHtml = `
         <div class="pipboy-marker">
-          <div class="pipboy-marker-dot ${rarity === "epic" ? "epic" : ""} ${rarity === "legendary" ? "legendary" : ""}"></div>
+          <div class="pipboy-marker-dot ${dotClasses}"></div>
         </div>
       `;
 
@@ -420,16 +572,27 @@
       const marker = L.marker([loc.lat, loc.lng], { icon });
 
       marker.on("click", () => {
-        this.onLocationClick(loc, idx);
+        try {
+          this.onLocationClick(loc, idx);
+        } catch (e) {
+          console.error("worldmap: onLocationClick handler threw", e);
+        }
       });
 
       const name = loc.n || loc.name || loc.id || `POI ${idx + 1}`;
       const level = loc.lvl || 1;
 
-      marker.bindTooltip(
-        `${name} (Lv ${level}, ${rarity})`,
-        { permanent: false, direction: "top", className: "pipboy-tooltip" }
-      );
+      try {
+        marker.bindTooltip(
+          `${name} (Lv ${level}, ${rarity})`,
+          { permanent: false, direction: "top", className: "pipboy-tooltip" }
+        );
+      } catch (e) {
+        // binding tooltip can fail on some Leaflet builds; ignore
+      }
+
+      // Attach metadata for later use
+      marker._pipboyData = loc;
 
       return marker;
     },
@@ -437,21 +600,26 @@
     // --------------------------------------------------------
     // LOCATION INTERACTION / NPC DIALOG INTEGRATION
     // --------------------------------------------------------
+    async onLocationClick(loc, idx) {
+      if (!loc || typeof loc.lat !== "number" || typeof loc.lng !== "number") return;
 
-    async onLocationClick(loc) {
-      this.setPlayerPosition(loc.lat, loc.lng);
+      // Move player to location
+      try {
+        this.setPlayerPosition(loc.lat, loc.lng);
+      } catch (e) {
+        console.warn("worldmap: setPlayerPosition failed", e);
+      }
 
-      // ⭐ NARRATIVE HOOK — auto-open dialog if POI has an NPC
+      // Narrative / dialog hooks
       if (loc.npcId && Game.modules?.narrative) {
         try {
           Game.modules.narrative.openForNpc(loc.npcId);
-          return; // dialog takes over
+          return;
         } catch (e) {
           console.error("worldmap: failed to open NPC dialog:", e);
         }
       }
 
-      // ⭐ Direct dialogId support
       if (loc.dialogId && Game.modules?.narrative) {
         try {
           Game.modules.narrative.openByDialogId(loc.dialogId);
@@ -461,7 +629,7 @@
         }
       }
 
-      // Overseer POI hook
+      // Overseer hook
       if (window.Game?.overseer?.onPOIVisit) {
         try {
           Game.overseer.onPOIVisit(loc);
@@ -470,9 +638,9 @@
         }
       }
 
-      // Weather system
+      // Weather lookup (optional)
       let weather = null;
-      if (Game.modules.world && Game.modules.world.weather) {
+      if (Game.modules?.world?.weather) {
         try {
           weather = Game.modules.world.weather.at(
             Game.modules.world.state || this.gs.worldState || this.gs,
@@ -486,13 +654,13 @@
         }
       }
 
-      // Encounter system
+      // Encounter roll (optional)
       let encounterResult = null;
-      if (Game.modules.world && Game.modules.world.encounters) {
+      if (Game.modules?.world?.encounters) {
         try {
           const worldState = Game.modules.world.state || this.gs.worldState || this.gs;
           const locationForWorld = {
-            id: loc.id || `loc_${loc.n}_${loc.lat}_${loc.lng}`,
+            id: loc.id || `loc_${loc.n || idx}_${loc.lat}_${loc.lng}`,
             name: loc.n || loc.name || "Unknown Location",
             lvl: loc.lvl || 1,
             biome: loc.biome || "temperate_forest",
@@ -500,10 +668,7 @@
             faction: loc.faction || "free_scavs"
           };
 
-          encounterResult = Game.modules.world.encounters.roll(
-            worldState,
-            locationForWorld
-          );
+          encounterResult = Game.modules.world.encounters.roll(worldState, locationForWorld);
         } catch (e) {
           console.error("worldmap: encounter roll failed:", e);
         }
@@ -513,68 +678,73 @@
     },
 
     handleEncounterResult(result, loc) {
-      const name = loc.n || loc.name || "this location";
+      const name = loc?.n || loc?.name || "this location";
 
       if (!result || result.type === "none") {
         this.showMapMessage(`You arrive at ${name}. The wastes are quiet... for now.`);
         return;
       }
 
-      switch (result.type) {
-        case "combat":
-          this.showMapMessage(`Hostiles near ${name}!`);
-          if (Game.modules.battle) {
-            const encounter = {
-              id: `encounter_${name}_${Date.now()}`,
-              enemies: (result.enemies?.list || []).map(id => ({
-                id,
-                damage: 5
-              })),
-              rewards: result.rewards || {}
-            };
-            Game.modules.battle.start(encounter);
-          }
-          break;
+      try {
+        switch (result.type) {
+          case "combat":
+            this.showMapMessage(`Hostiles near ${name}!`);
+            if (Game.modules?.battle) {
+              const encounter = {
+                id: `encounter_${name}_${Date.now()}`,
+                enemies: (result.enemies?.list || []).map(id => ({ id, damage: 5 })),
+                rewards: result.rewards || {}
+              };
+              Game.modules.battle.start(encounter);
+            }
+            break;
 
-        case "merchant":
-          this.showMapMessage(`A merchant caravan has appeared near ${name}.`);
-          break;
+          case "merchant":
+            this.showMapMessage(`A merchant caravan has appeared near ${name}.`);
+            break;
 
-        case "boss":
-          this.showMapMessage(`You sense a powerful presence at ${name}...`);
-          break;
+          case "boss":
+            this.showMapMessage(`You sense a powerful presence at ${name}...`);
+            break;
 
-        case "event":
-          this.showMapMessage(result.event?.description || `Something strange happens near ${name}.`);
-          break;
+          case "event":
+            this.showMapMessage(result.event?.description || `Something strange happens near ${name}.`);
+            break;
 
-        case "ambient":
-          this.showMapMessage(result.description || `The air feels heavy around ${name}.`);
-          break;
+          case "ambient":
+            this.showMapMessage(result.description || `The air feels heavy around ${name}.`);
+            break;
 
-        default:
-          this.showMapMessage(`You arrive at ${name}.`);
+          default:
+            this.showMapMessage(`You arrive at ${name}.`);
+        }
+      } catch (e) {
+        console.error("worldmap: handleEncounterResult failed", e);
+        this.showMapMessage(`You arrive at ${name}.`);
       }
     },
 
     showMapMessage(text) {
-      const log = document.getElementById("mapLog");
-      if (!log) return;
-      const line = document.createElement("div");
-      line.textContent = text;
-      log.prepend(line);
+      try {
+        const log = document.getElementById("mapLog");
+        if (!log) return;
+        const line = document.createElement("div");
+        line.textContent = text;
+        log.prepend(line);
+      } catch (e) {
+        console.warn("worldmap: showMapMessage failed", e);
+      }
     },
 
     // --------------------------------------------------------
     // QUEST SUPPORT
     // --------------------------------------------------------
-
     getNearbyPOIs(radiusMeters) {
       this.ensurePlayerPosition();
       const pos = this.gs.player.position;
       const radius = radiusMeters || 500;
 
-      if (!this.locationsLoaded) return [];
+      if (!this.locationsLoaded || !Array.isArray(this.locations)) return [];
 
       return this.locations
         .map(loc => {
@@ -586,7 +756,10 @@
     },
 
     distanceMeters(lat1, lon1, lat2, lon2) {
-      const R = 6371000;
+      // Defensive checks
+      if ([lat1, lon1, lat2, lon2].some(v => typeof v !== "number")) return Infinity;
+
+      const R = 6371000; // meters
       const toRad = deg => (deg * Math.PI) / 180;
       const dLat = toRad(lat2 - lat1);
       const dLon = toRad(lon2 - lon1);
@@ -599,30 +772,30 @@
     },
 
     // --------------------------------------------------------
-    // UI HOOK
+    // CLEANUP / UTIL
     // --------------------------------------------------------
-
-    onOpen() {
-      this.initMap();
-      this.initPlayerMarker();
-      this.renderPOIMarkers();
-      this.renderWorldLabels();
-      this.renderWorldRoads();
-
-      if (this.map) {
-        setTimeout(() => {
-          this.map.invalidateSize();
-          this.ensurePlayerPosition();
-          const pos = this.gs.player.position;
-          this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 6);
-          this.updateOverlayVisibility(this.map.getZoom() || 6);
-        }, 50);
+    destroy() {
+      try {
+        if (this.map) {
+          this.map.off();
+          this.map.remove();
+        }
+      } catch (e) {
+        console.warn("worldmap: destroy error", e);
+      } finally {
+        this.map = null;
+        this.playerMarker = null;
+        this.poiMarkers = [];
+        this.locations = [];
+        this.locationsLoaded = false;
       }
     }
   };
 
+  // Expose module
   Game.modules.worldmap = worldmapModule;
 
+  // Auto-init when DOM ready, but tolerate failures
   document.addEventListener("DOMContentLoaded", () => {
     try {
       worldmapModule.init(window.DATA || {});
