@@ -1,1 +1,6 @@
-
+[
+  { "id": "weapon_mod_blueprint", "name": "Weapon Mod Blueprint", "type": "crafting", "tags": ["blueprint"] },
+  { "id": "armor_mod_blueprint", "name": "Armor Mod Blueprint", "type": "crafting", "tags": ["blueprint"] },
+  { "id": "ammo_recipe", "name": "Ammo Crafting Recipe", "type": "crafting", "tags": ["recipe"] },
+  { "id": "chem_recipe", "name": "Chem Recipe", "type": "crafting", "tags": ["recipe"] }
+]
