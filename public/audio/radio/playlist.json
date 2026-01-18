@@ -1,38 +1,11 @@
 [
-  {
-    "title": "1930s Big Band Swing Jazz",
-    "file": "/audio/tracks/1930s-big-band-swing-jazz-236170.mp3"
-  },
-  {
-    "title": "1940s Big Band Swing Instrumental",
-    "file": "/audio/tracks/1940s-big-band-swing-instrumental-236175.mp3"
-  },
-  {
-    "title": "Nuclear Fallout Countdown",
-    "file": "/audio/tracks/big-band-swing-instrumental-nuclear-fallout-countdown-374790.mp3"
-  },
-  {
-    "title": "Just Swing",
-    "file": "/audio/tracks/just-swing-1940s-big-band-swing-361070.mp3"
-  },
-  {
-    "title": "Late Night Big Band Swing",
-    "file": "/audio/tracks/late-night-big-band-swing-jazz-instrumental-236168.mp3"
-  },
-  {
-    "title": "Lively Big Band Swing",
-    "file": "/audio/tracks/lively-big-band-swing-for-dancing-296170.mp3"
-  },
-  {
-    "title": "Smooth Big Band Swing",
-    "file": "/audio/tracks/smooth-big-band-swing-instrumental-313184.mp3"
-  },
-  {
-    "title": "Vintage Big Band Groove",
-    "file": "/audio/tracks/vintage-big-band-swing-groove-230434.mp3"
-  },
-  {
-    "title": "Waddling to Doom",
-    "file": "/audio/tracks/waddling-to-doom-big-band-swing-instrumental-253956.mp3"
-  }
+  { "title": "1930s Big Band Swing Jazz", "file": "/audio/tracks/1930s-big-band-swing-jazz-236170.mp3" },
+  { "title": "1940s Big Band Swing Instrumental", "file": "/audio/tracks/1940s-big-band-swing-instrumental-236175.mp3" },
+  { "title": "Nuclear Fallout Countdown", "file": "/audio/tracks/big-band-swing-instrumental-nuclear-fallout-countdown-374790.mp3" },
+  { "title": "Just Swing", "file": "/audio/tracks/just-swing-1940s-big-band-swing-361070.mp3" },
+  { "title": "Late Night Big Band Swing", "file": "/audio/tracks/late-night-big-band-swing-jazz-instrumental-236168.mp3" },
+  { "title": "Lively Big Band Swing", "file": "/audio/tracks/lively-big-band-swing-for-dancing-296170.mp3" },
+  { "title": "Smooth Big Band Swing", "file": "/audio/tracks/smooth-big-band-swing-instrumental-313184.mp3" },
+  { "title": "Vintage Big Band Groove", "file": "/audio/tracks/vintage-big-band-swing-groove-230434.mp3" },
+  { "title": "Waddling to Doom", "file": "/audio/tracks/waddling-to-doom-big-band-swing-instrumental-253956.mp3" }
 ]
