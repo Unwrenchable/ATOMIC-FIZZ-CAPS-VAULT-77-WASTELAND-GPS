@@ -57,7 +57,7 @@
   ];
 
   let index = 0;
-  let phase = 0; // 0 = fizz, 1 = intro
+  let phase = 0;
   let finished = false;
 
   function typeNext() {
@@ -101,10 +101,10 @@
     bootScreen.classList.add("hidden");
     pipboyScreen.classList.remove("hidden");
 
-    // Notify the game
+    // Notify the game (radio engine listens for this)
     window.dispatchEvent(new Event("pipboyReady"));
 
-    // New ESRI worldmap hook
+    // Worldmap hook
     if (window.Game?.modules?.worldmap?.onOpen) {
       try {
         Game.modules.worldmap.onOpen();
