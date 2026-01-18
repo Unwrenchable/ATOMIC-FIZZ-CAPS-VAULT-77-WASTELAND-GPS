@@ -1,0 +1,12 @@
+{
+  "psas": [
+    {
+      "text": "If your Geiger counter clicks more than your Pip‑Boy buttons, seek shelter immediately.",
+      "file": "/audio/radio/dj/psa_1.mp3"
+    },
+    {
+      "text": "Reminder: glowing mushrooms are NOT food.",
+      "file": "/audio/radio/dj/psa_2.mp3"
+    }
+  ]
+}
