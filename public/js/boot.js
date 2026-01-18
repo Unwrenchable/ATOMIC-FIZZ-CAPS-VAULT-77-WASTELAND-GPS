@@ -124,18 +124,63 @@
   }
 
   function onContinue() {
-    activatePipboy();
+  // Start a short loading sequence before activating the Pip‑Boy
+  startLoadingSequence();
+}
+
+// -----------------------------
+// LOADING SEQUENCE BEFORE PIP‑BOY
+// -----------------------------
+function startLoadingSequence() {
+  // Prevent double‑trigger
+  window.removeEventListener("keydown", onContinue);
+  window.removeEventListener("click", onContinue);
+  window.removeEventListener("touchstart", onContinue);
+
+  // Create loading bar container
+  const barContainer = document.createElement("div");
+  barContainer.style.width = "80%";
+  barContainer.style.height = "8px";
+  barContainer.style.margin = "20px auto";
+  barContainer.style.border = "1px solid rgba(0,255,0,0.4)";
+  barContainer.style.background = "rgba(0,255,0,0.15)";
+
+  const bar = document.createElement("div");
+  bar.style.width = "0%";
+  bar.style.height = "100%";
+  bar.style.background = "rgba(0,255,0,0.8)";
+  bar.style.transition = "width 0.15s linear";
+
+  barContainer.appendChild(bar);
+  bootTextEl.appendChild(barContainer);
+
+  let percent = 0;
+
+  function step() {
+    percent += Math.floor(Math.random() * 15) + 5;
+    if (percent > 100) percent = 100;
+
+    bar.style.width = percent + "%";
+
+    if (percent < 100) {
+      setTimeout(step, 120);
+    } else {
+      setTimeout(() => activatePipboy(), 300);
+    }
   }
 
-  // -----------------------------
-  // STARTUP
-  // -----------------------------
-  typeNext();
+  step();
+}
 
-  window.addEventListener("keydown", onContinue);
-  window.addEventListener("click", onContinue);
-  window.addEventListener("touchstart", onContinue);
+// -----------------------------
+// STARTUP
+// -----------------------------
+typeNext();
 
-  // Auto-skip failsafe
-  setTimeout(skipToEnd, 12000);
+window.addEventListener("keydown", onContinue);
+window.addEventListener("click", onContinue);
+window.addEventListener("touchstart", onContinue);
+
+// Auto-skip failsafe
+setTimeout(skipToEnd, 12000);
 })();
