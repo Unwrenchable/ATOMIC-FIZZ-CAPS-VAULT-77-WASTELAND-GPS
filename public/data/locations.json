@@ -1,4 +1,3 @@
-[
 {
   "regions": [
     {
@@ -14,7 +13,7 @@
     {
       "id": "freeside-outer-vegas",
       "name": "Freeside & Outer Vegas",
-      "description": "Chaotic streets, scavenger life, and early‑game encounters.",
+      "description": "Chaotic streets, scavenger life, and early-game encounters.",
       "subregions": [
         { "id": "freeside-east", "name": "Freeside East" },
         { "id": "freeside-west", "name": "Freeside West" },
@@ -54,7 +53,7 @@
     {
       "id": "hoover-dam-perimeter",
       "name": "Hoover Dam Perimeter",
-      "description": "High‑level military zone, power infrastructure, and endgame conflict.",
+      "description": "High-level military zone, power infrastructure, and endgame conflict.",
       "subregions": [
         { "id": "dam-west-bank", "name": "Dam West Bank" },
         { "id": "dam-service-roads", "name": "Dam Service Roads" },
@@ -155,58 +154,58 @@
       "type": "ruins"
     },
     {
-  "id": "brakin-ballz-bunker",
-  "name": "Brakin’ Ballz Billiard Bunker",
-  "region": "strip-core",
-  "subregion": "strip-north",
-  "lat": 0,
-  "lng": 0,
-  "type": "pool-hall"
-},
-{
-  "id": "cue-club-ruins",
-  "name": "Cue Club Ruins",
-  "region": "freeside-outer-vegas",
-  "subregion": "freeside-west",
-  "lat": 0,
-  "lng": 0,
-  "type": "pool-hall"
-},
-{
-  "id": "good-timez-remains",
-  "name": "Good Timez Remains",
-  "region": "westside-north-vegas",
-  "subregion": "westside-blocks",
-  "lat": 0,
-  "lng": 0,
-  "type": "pool-hall"
-},
-{
-  "id": "griffs-last-stand",
-  "name": "Griff’s Last Stand",
-  "region": "westside-north-vegas",
-  "subregion": "industrial-belt",
-  "lat": 0,
-  "lng": 0,
-  "type": "pool-hall"
-},
-{
-  "id": "rackhouse",
-  "name": "The Rackhouse",
-  "region": "westside-north-vegas",
-  "subregion": "north-vegas-alleys",
-  "lat": 0,
-  "lng": 0,
-  "type": "pool-hall"
-},
-{
-  "id": "putters-horizon-ridge",
-  "name": "Putter’s Horizon Ridge",
-  "region": "mojave-outskirts",
-  "subregion": "desert-ridge",
-  "lat": 0,
-  "lng": 0,
-  "type": "pool-hall"
+      "id": "brakin-ballz-bunker",
+      "name": "Brakin' Ballz Billiard Bunker",
+      "region": "strip-core",
+      "subregion": "strip-north",
+      "lat": 0,
+      "lng": 0,
+      "type": "pool-hall"
+    },
+    {
+      "id": "cue-club-ruins",
+      "name": "Cue Club Ruins",
+      "region": "freeside-outer-vegas",
+      "subregion": "freeside-west",
+      "lat": 0,
+      "lng": 0,
+      "type": "pool-hall"
+    },
+    {
+      "id": "good-timez-remains",
+      "name": "Good Timez Remains",
+      "region": "westside-north-vegas",
+      "subregion": "westside-blocks",
+      "lat": 0,
+      "lng": 0,
+      "type": "pool-hall"
+    },
+    {
+      "id": "griffs-last-stand",
+      "name": "Griff's Last Stand",
+      "region": "westside-north-vegas",
+      "subregion": "industrial-belt",
+      "lat": 0,
+      "lng": 0,
+      "type": "pool-hall"
+    },
+    {
+      "id": "rackhouse",
+      "name": "The Rackhouse",
+      "region": "westside-north-vegas",
+      "subregion": "north-vegas-alleys",
+      "lat": 0,
+      "lng": 0,
+      "type": "pool-hall"
+    },
+    {
+      "id": "putters-horizon-ridge",
+      "name": "Putter's Horizon Ridge",
+      "region": "mojave-outskirts",
+      "subregion": "desert-ridge",
+      "lat": 0,
+      "lng": 0,
+      "type": "pool-hall"
+    }
+  ]
 }
-]
-
