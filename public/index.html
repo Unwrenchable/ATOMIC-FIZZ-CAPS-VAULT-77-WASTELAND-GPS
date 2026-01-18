@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Leaflet core CSS (must load FIRST) -->
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      crossorigin=""
-    />
+  <!-- Leaflet core CSS (must load FIRST) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
 
-    <!-- Pip‑Boy UI skin -->
-    <link rel="stylesheet" href="/css/pipboy.css" />
+  <!-- Leaflet core JS (must load BEFORE worldmap.js) -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin=""
+  ></script>
 
-    <!-- Pip‑Boy tile map styling -->
-    <link rel="stylesheet" href="/css/pipboy-map.css" />
+  <!-- Pip‑Boy UI skin -->
+  <link rel="stylesheet" href="/css/pipboy.css" />
 
-    <!-- Pip‑Boy style JSON (safe to load early, not used by Leaflet) -->
-    <script src="/js/pipboy/pipboy-style.js"></script>
-  </head>
+  <!-- Pip‑Boy tile map styling -->
+  <link rel="stylesheet" href="/css/pipboy-map.css" />
+
+  <!-- Pip‑Boy style JSON -->
+  <script src="/js/pipboy/pipboy-style.js"></script>
+</head>
 
   <body class="pipboy-mode">
 
