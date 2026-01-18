@@ -13,7 +13,7 @@
     exchange: document.getElementById("panel-exchange"),
   };
 
-  // ------------------------------------------------------------
+    // ------------------------------------------------------------
   // CORE PANEL SWITCHER
   // ------------------------------------------------------------
   function setActivePanel(panelKey) {
@@ -31,6 +31,9 @@
 
     // MAP PANEL ACTIVATION
     if (panelKey === "map") {
+      // QUEST HOOK: Wake Up → open_map
+      Game.quests?.completeObjective("wake_up", "open_map");
+
       if (window.Game && Game.modules?.worldmap) {
         try {
           Game.modules.worldmap.onOpen();
