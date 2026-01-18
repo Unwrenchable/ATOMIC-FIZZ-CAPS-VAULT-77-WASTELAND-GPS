@@ -39,22 +39,27 @@
   // 2. NARRATIVE INTRO (UNCHANGED)
   // -----------------------------
   const introFrames = [
-    ">> INITIALIZING TIMELINE ANCHOR...",
-    ">> WARNING: MULTIPLE FALLOUT ERAS DETECTED",
-    "",
-    ">> SCANNING GEOGRAPHIC COORDINATES...",
-    ">> REGION DETECTED: UNKNOWN WASTELAND",
-    "",
-    ">> LOADING LOCAL WASTELAND PROFILE...",
-    "",
-    "[INCOMING RADIO SIGNAL...]",
-    "\"If you can hear this... get to Vegas.\"",
-    "\"The timelines are collapsing.\"",
-    "",
-    ">> QUEST ADDED: WAKE UP",
-    "",
-    "Press any key to continue..."
-  ];
+  ">> INITIALIZING TIMELINE ANCHOR...",
+  ">> WARNING: TEMPORAL OVERLAP DETECTED",
+  "",
+  ">> SCANNING GEOGRAPHIC COORDINATES...",
+  ">> REGION: UNREGISTERED WASTELAND",
+  "",
+  ">> LOADING LOCAL PROFILE...",
+  "",
+  "[INCOMING SIGNAL...]",
+  "\"If you can hear this... you’re drifting.\"",
+  "\"The timelines are folding in on themselves.\"",
+  "",
+  "[SIGNAL DISTORTION...]",
+  "\"Wake up.\"",
+  "\"This world isn’t what you think it is.\"",
+  "",
+  ">> QUEST ADDED: WAKE UP",
+  "",
+  "Press any key to continue..."
+];
+
 
   let index = 0;
   let phase = 0;
