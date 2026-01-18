@@ -1,1 +1,6 @@
-quest_items.json
+[
+  { "id": "humming_resonator", "name": "Humming Resonator", "type": "quest", "tags": ["humming_one"] },
+  { "id": "anomaly_stabilizer", "name": "Anomaly Stabilizer", "type": "quest", "tags": ["anomaly"] },
+  { "id": "signal_triangulator", "name": "Signal Triangulator", "type": "quest", "tags": ["signal"] },
+  { "id": "vault_override_chip", "name": "Vault Override Chip", "type": "quest", "tags": ["vault"] }
+]
