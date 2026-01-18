@@ -1,16 +1,14 @@
 // quests.js
-// ------------------------------------------------------------
-// Unified Quest Engine (Steps + Objectives + Scripted Events)
-// ------------------------------------------------------------
+// Quest data + engine (steps + objectives)
 
 (function () {
   const gs = window.gameState;
 
   // ------------------------------------------------------------
   // QUEST DATABASE
-  // Supports both step-based and objective-based quests
   // ------------------------------------------------------------
   const QUESTS_DB = {
+    // STEP-BASED QUEST (your original)
     quest_vault77_open: {
       id: "quest_vault77_open",
       name: "Open Vault 77",
@@ -31,20 +29,20 @@
       rewards: { xp: 100, caps: 50, items: [] }
     },
 
-    // Wake Up quest (objectives)
+    // OBJECTIVE-BASED QUEST (Wake Up)
     wake_up: {
       id: "wake_up",
       name: "Wake Up",
       type: "objectives",
       description: "You awaken in the wasteland. Something is wrong.",
       objectives: {
-        open_inventory: { completed: false },
-        switch_tabs: { completed: false },
-        pick_item: { completed: false },
-        equip_item: { completed: false },
-        turn_on_radio: { completed: false },
-        open_map: { completed: false },
-        npc_arrives: { completed: false }
+        open_inventory: {},
+        switch_tabs: {},
+        pick_item: {},
+        equip_item: {},
+        turn_on_radio: {},
+        open_map: {},
+        npc_arrives: {}
       },
       order: [
         "open_inventory",
@@ -97,7 +95,7 @@
   }
 
   // ------------------------------------------------------------
-  // STEP-BASED QUESTS
+  // STEP-BASED QUEST LOGIC
   // ------------------------------------------------------------
   function getCurrentStep(questId) {
     const q = QUESTS_DB[questId];
@@ -116,15 +114,18 @@
 
     const req = step.requires || {};
 
+    // Item requirement
     if (req.item) {
       const hasItem =
         gs.inventory.questItems.some(i => i.id === req.item) ||
         gs.inventory.consumables.some(i => i.id === req.item) ||
         gs.inventory.weapons.some(i => i.id === req.item) ||
         gs.inventory.ammo.some(i => i.id === req.item);
+
       if (!hasItem) return false;
     }
 
+    // Location requirement
     if (req.location) {
       const nearby = window.world.getNearbyPOIs(500);
       const atLoc = nearby.some(n => n.poi.id === req.location);
@@ -151,7 +152,7 @@
   }
 
   // ------------------------------------------------------------
-  // OBJECTIVE-BASED QUESTS
+  // OBJECTIVE-BASED QUEST LOGIC
   // ------------------------------------------------------------
   function completeObjective(questId, objectiveId) {
     const q = QUESTS_DB[questId];
@@ -160,7 +161,7 @@
     const st = ensureQuestState(questId);
     if (st.state !== "active") return false;
 
-    if (!q.objectives[objectiveId]) {
+    if (!(objectiveId in st.objectives)) {
       console.warn(`[Quests] Unknown objective: ${objectiveId}`);
       return false;
     }
@@ -169,6 +170,19 @@
 
     st.objectives[objectiveId] = true;
     console.log(`[Quests] Objective complete: ${questId} → ${objectiveId}`);
+
+    // SCRIPTED ENCOUNTER HOOK
+    if (questId === "wake_up" && objectiveId === "open_map") {
+      if (Game.modules?.npcEncounter) {
+        Game.modules.npcEncounter.triggerEncounter("signal_runner", {
+          spawnRadius: 50,
+          dialogId: "wake_up_intro",
+          onComplete: () => {
+            completeObjective("wake_up", "npc_arrives");
+          }
+        });
+      }
+    }
 
     // Check if all objectives are done
     const allDone = q.order.every(obj => st.objectives[obj]);
