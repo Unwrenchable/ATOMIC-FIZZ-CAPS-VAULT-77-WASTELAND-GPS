@@ -4,6 +4,8 @@ window.Game = window.Game || {};
 Game.ui = Game.ui || {};
 
 Game.ui.renderInventory = function () {
+Game.quests?.completeObjective("wake_up", "open_inventory");
+
   const body = document.getElementById("inventoryList");
   const tabs = document.getElementById("inventoryTabs");
   if (!body || !tabs) return;
