@@ -14,11 +14,6 @@
       "completeOn": "tabs_cycled"
     },
     {
-      "id": "connect_wallet",
-      "text": "Connect your Fizz Wallet",
-      "completeOn": "wallet_connected"
-    },
-    {
       "id": "pick_item",
       "text": "Pick up an item",
       "completeOn": "item_picked"
