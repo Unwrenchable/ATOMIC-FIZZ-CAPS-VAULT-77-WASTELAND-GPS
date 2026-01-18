@@ -19,6 +19,11 @@
       "completeOn": "item_picked"
     },
     {
+      "id": "open_stats",
+      "text": "Open the STAT panel",
+      "completeOn": "stat_opened"
+    },
+    {
       "id": "open_inventory",
       "text": "Open your inventory",
       "completeOn": "inventory_opened"
