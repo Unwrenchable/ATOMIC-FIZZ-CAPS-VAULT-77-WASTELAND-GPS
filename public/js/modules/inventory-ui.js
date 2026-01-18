@@ -65,12 +65,25 @@ Game.ui.renderInventory = function () {
         stats = `ARMOR: ${item.armor} • SLOT: ${item.slot.toUpperCase()}`;
       }
 
+      // ⭐ ADDED: Equip button
       div.innerHTML = `
         <div class="inv-name">${item.name}</div>
         <div class="inv-meta">${stats}</div>
+        <button class="equip-btn" data-item-id="${item.id}">EQUIP</button>
       `;
 
       body.appendChild(div);
+    });
+
+    // ⭐ ADDED: Equip button handler
+    document.querySelectorAll(".equip-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-item-id");
+        const item = Game.player.inventory.find(i => i.id === id);
+        if (item) {
+          Game.equipItem(item);
+        }
+      });
     });
   }
 };
