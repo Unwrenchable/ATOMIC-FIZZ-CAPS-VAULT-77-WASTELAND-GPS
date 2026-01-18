@@ -1,2 +1,10 @@
-
-fil
+[
+  { "id": "bobby_pin", "name": "Bobby Pin", "type": "tool", "durability": 3, "tags": ["lockpick", "tool"] },
+  { "id": "screwdriver", "name": "Screwdriver", "type": "tool", "durability": 20, "tags": ["tool", "maintenance"] },
+  { "id": "wrench", "name": "Wrench", "type": "tool", "durability": 25, "tags": ["tool", "repair"] },
+  { "id": "duct_tape", "name": "Duct Tape", "type": "tool", "uses": 3, "tags": ["tool", "crafting"] },
+  { "id": "repair_kit", "name": "Repair Kit", "type": "tool", "uses": 1, "tags": ["tool", "repair"] },
+  { "id": "flashlight", "name": "Flashlight", "type": "tool", "durability": 50, "tags": ["tool", "light"] },
+  { "id": "geiger_counter", "name": "Geiger Counter", "type": "tool", "durability": 40, "tags": ["tool", "radiation"] },
+  { "id": "signal_tuner", "name": "Signal Tuner", "type": "tool", "durability": 15, "tags": ["tool", "humming_one"] }
+]
