@@ -1,7 +1,7 @@
 {
   "id": "wake_up",
   "name": "Wake Up",
-  "description": "Something feels wrong. The timelines are shifting. You need to get your bearings.",
+  "description": "Something is wrong. The world feels unstable. A distorted signal urges you to wake up and stabilize your presence in this timeline.",
   "objectives": [
     {
       "id": "open_pipboy",
@@ -9,14 +9,14 @@
       "completeOn": "pipboy_opened"
     },
     {
-      "id": "move_around",
-      "text": "Move around to get your bearings",
-      "completeOn": "player_moved"
+      "id": "switch_tabs",
+      "text": "Cycle through the Pip‑Boy tabs",
+      "completeOn": "tabs_cycled"
     },
     {
-      "id": "open_map",
-      "text": "Check your map",
-      "completeOn": "map_opened"
+      "id": "connect_wallet",
+      "text": "Connect your Fizz Wallet",
+      "completeOn": "wallet_connected"
     },
     {
       "id": "pick_item",
@@ -29,13 +29,24 @@
       "completeOn": "inventory_opened"
     },
     {
+      "id": "equip_item",
+      "text": "Equip an item",
+      "completeOn": "item_equipped"
+    },
+    {
       "id": "turn_on_radio",
-      "text": "Turn on the radio",
+      "text": "Tune into Atomic Fizz Radio",
       "completeOn": "radio_started"
+    },
+    {
+      "id": "open_map",
+      "text": "Check your map",
+      "completeOn": "map_opened"
     }
   ],
   "reward": {
-    "xp": 25,
-    "items": ["vault77_sidearm"]
-  }
+    "xp": 50,
+    "items": ["pru_stabilizer_shard"]
+  },
+  "onComplete": "wake_up_npc_intro"
 }
