@@ -1,37 +1,15 @@
-// ------------------------------------------------------------
-// Atomic Fizz RadioPlayer — Multi‑Station, DJ, Bumpers, Ads, PSAs, Lore
-// ------------------------------------------------------------
-// Features:
-// - Multi‑station support (radio knob style)
-// - Playlist loading per station
-// - DJ intros / outros
-// - Station bumpers
-// - Ads + PSAs
-// - Lore drops
-// - Randomized interleaving
-// - Simple crossfade between tracks
-// - Auto‑start when Pip‑Boy is ready
-// ------------------------------------------------------------
-
 (function () {
   "use strict";
 
-  // ------------------------------------------------------------
+  // ============================================================
   // CONFIG
-  // ------------------------------------------------------------
+  // ============================================================
 
   const RADIO_CONFIG = {
-    // How often (in tracks) to insert non‑music content
     minTracksBetweenEvents: 1,
     maxTracksBetweenEvents: 3,
-
-    // Crossfade duration in ms
     crossfadeDuration: 2000,
-
-    // DOM element for the "radio knob" (optional)
     knobSelector: "#radioKnob",
-
-    // Stations (you can add more later)
     stations: [
       {
         id: "atomic_fizz_radio",
@@ -39,26 +17,33 @@
         playlistUrl: "/audio/radio/playlist.json",
         stationUrl: "/audio/radio/station.json"
       }
-      // Add more stations here if desired
     ]
   };
 
-  // ------------------------------------------------------------
+  // ============================================================
   // UTILS
-  // ------------------------------------------------------------
+  // ============================================================
 
-  function randInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  const randInt = (min, max) =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
 
-  function pickRandom(arr) {
-    if (!arr || !arr.length) return null;
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
+  const pickRandom = arr =>
+    !arr || !arr.length ? null : arr[Math.floor(Math.random() * arr.length)];
 
-  // ------------------------------------------------------------
-  // AtomicFizzStation — handles one station's content
-  // ------------------------------------------------------------
+  const safeFetchJSON = async (url, fallback = null) => {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } catch (err) {
+      console.warn(`[Radio] Failed to fetch ${url}:`, err);
+      return fallback;
+    }
+  };
+
+  // ============================================================
+  // AtomicFizzStation — handles station metadata + content
+  // ============================================================
 
   class AtomicFizzStation {
     constructor(meta) {
@@ -69,9 +54,10 @@
 
       this.playlist = [];
       this.station = null;
+
       this.dj = null;
       this.bumpers = [];
-      this.ads = [];
+     this.ads = [];
       this.psas = [];
       this.lore = [];
 
@@ -79,120 +65,58 @@
     }
 
     async load() {
-      const [playlist, station] = await Promise.all([
-        fetch(this.playlistUrl).then(r => r.json()),
-        fetch(this.stationUrl).then(r => r.json())
-      ]);
+      console.log(`[Radio] Loading station: ${this.name}`);
 
-      // playlist can be array or { tracks: [...] }
-      this.playlist = Array.isArray(playlist) ? playlist : (playlist.tracks || []);
+      const playlist = await safeFetchJSON(this.playlistUrl, []);
+      const station = await safeFetchJSON(this.stationUrl, {});
 
-      this.station = station || {};
+      this.playlist = Array.isArray(playlist)
+        ? playlist
+        : playlist.tracks || [];
 
-      // Optional linked JSONs from station.json
-      const djUrl = this.station.dj;
-      const bumpersUrl = this.station.bumpers;
-      const adsUrl = this.station.ads;
-      const psasUrl = this.station.psas;
-      const loreUrl = this.station.lore;
+      this.station = station;
 
-      const promises = [];
+      const linked = [
+        ["dj", "clips"],
+        ["bumpers", "bumpers"],
+        ["ads", "ads"],
+        ["psas", "psas"],
+        ["lore", "lore"]
+      ];
 
-      if (djUrl) {
-        promises.push(
-          fetch(djUrl)
-            .then(r => r.json())
-            .then(dj => {
-              this.dj = dj;
-            })
-            .catch(() => {})
-        );
-      }
+      const promises = linked.map(async ([key, field]) => {
+        const url = station[key];
+        if (!url) return;
 
-      if (bumpersUrl) {
-        promises.push(
-          fetch(bumpersUrl)
-            .then(r => r.json())
-            .then(b => {
-              this.bumpers = b.bumpers || [];
-            })
-            .catch(() => {})
-        );
-      }
+        const data = await safeFetchJSON(url, null);
+        if (!data) return;
 
-      if (adsUrl) {
-        promises.push(
-          fetch(adsUrl)
-            .then(r => r.json())
-            .then(a => {
-              this.ads = a.ads || [];
-            })
-            .catch(() => {})
-        );
-      }
-
-      if (psasUrl) {
-        promises.push(
-          fetch(psasUrl)
-            .then(r => r.json())
-            .then(p => {
-              this.psas = p.psas || [];
-            })
-            .catch(() => {})
-        );
-      }
-
-      if (loreUrl) {
-        promises.push(
-          fetch(loreUrl)
-            .then(r => r.json())
-            .then(l => {
-              this.lore = l.lore || [];
-            })
-            .catch(() => {})
-        );
-      }
+        if (key === "dj") {
+          this.dj = data;
+        } else {
+          this[key] = data[field] || [];
+        }
+      });
 
       await Promise.all(promises);
 
       this.ready = true;
-      console.log(`[Radio] Station loaded: ${this.name}`);
+      console.log(`[Radio] Station ready: ${this.name}`);
     }
 
-    getRandomTrack() {
-      return pickRandom(this.playlist);
-    }
-
-    getRandomDJIntro() {
-      if (!this.dj || !this.dj.clips || !this.dj.clips.intros) return null;
-      return pickRandom(this.dj.clips.intros);
-    }
-
-    getRandomDJOutro() {
-      if (!this.dj || !this.dj.clips || !this.dj.clips.outros) return null;
-      return pickRandom(this.dj.clips.outros);
-    }
-
-    getRandomBumper() {
-      return pickRandom(this.bumpers);
-    }
-
-    getRandomAd() {
-      return pickRandom(this.ads);
-    }
-
-    getRandomPSA() {
-      return pickRandom(this.psas);
-    }
-
-    getRandomLore() {
-      return pickRandom(this.lore);
-    }
+    // Random content getters
+    getRandomTrack() { return pickRandom(this.playlist); }
+    getRandomDJIntro() { return this.dj?.clips?.intros ? pickRandom(this.dj.clips.intros) : null; }
+    getRandomDJOutro() { return this.dj?.clips?.outros ? pickRandom(this.dj.clips.outros) : null; }
+    getRandomBumper() { return pickRandom(this.bumpers); }
+    getRandomAd() { return pickRandom(this.ads); }
+    getRandomPSA() { return pickRandom(this.psas); }
+    getRandomLore() { return pickRandom(this.lore); }
   }
 
-  // ------------------------------------------------------------
-  // AtomicFizzRadioPlayer — multi‑station, crossfade, events
-  // ------------------------------------------------------------
+  // ============================================================
+  // AtomicFizzRadioPlayer — multi-station engine
+  // ============================================================
 
   class AtomicFizzRadioPlayer {
     constructor(config) {
@@ -205,16 +129,14 @@
       this.audioB = new Audio();
       this.audioA.volume = 0.7;
       this.audioB.volume = 0.0;
-      this.audioA.loop = false;
-      this.audioB.loop = false;
 
       this.activeAudio = this.audioA;
       this.inactiveAudio = this.audioB;
 
       this.tracksSinceEvent = 0;
       this.nextEventAt = randInt(
-        this.config.minTracksBetweenEvents,
-        this.config.maxTracksBetweenEvents
+        config.minTracksBetweenEvents,
+        config.maxTracksBetweenEvents
       );
 
       this.isFading = false;
@@ -224,17 +146,18 @@
       this._initStations();
     }
 
+    // ------------------------------------------------------------
+    // Setup
+    // ------------------------------------------------------------
+
     _bindEvents() {
-      // When active audio ends, decide what to play next
       const onEnded = () => {
-        if (this.isFading) return;
-        this._onTrackEnded();
+        if (!this.isFading) this._onTrackEnded();
       };
 
       this.audioA.addEventListener("ended", onEnded);
       this.audioB.addEventListener("ended", onEnded);
 
-      // Optional: radio knob UI
       if (this.config.knobSelector) {
         const knob = document.querySelector(this.config.knobSelector);
         if (knob) {
@@ -244,29 +167,30 @@
     }
 
     async _initStations() {
+      console.log("[Radio] Initializing stations…");
+
       for (const meta of this.config.stations) {
         const station = new AtomicFizzStation(meta);
         this.stations.set(meta.id, station);
-        station.load().catch(err => {
-          console.warn("[Radio] Failed to load station:", meta.id, err);
-        });
+        station.load().catch(err =>
+          console.warn(`[Radio] Failed to load station ${meta.id}:`, err)
+        );
       }
 
-      // Default to first station
       if (this.config.stations.length > 0) {
         this.currentStationId = this.config.stations[0].id;
       }
 
-      // Wait a bit for station load, then start
-      setTimeout(() => {
-        this.start();
-      }, 1000);
+      setTimeout(() => this.start(), 1000);
     }
 
     get currentStation() {
-      if (!this.currentStationId) return null;
       return this.stations.get(this.currentStationId) || null;
     }
+
+    // ------------------------------------------------------------
+    // Start Radio
+    // ------------------------------------------------------------
 
     start() {
       const station = this.currentStation;
@@ -274,9 +198,18 @@
         console.warn("[Radio] No ready station to start");
         return;
       }
+
       console.log(`[Radio] Starting station: ${station.name}`);
+
+      // ⭐ QUEST HOOK: Wake Up → turn_on_radio
+      Game.quests?.completeObjective("wake_up", "turn_on_radio");
+
       this._playNext();
     }
+
+    // ------------------------------------------------------------
+    // Station Switching
+    // ------------------------------------------------------------
 
     cycleStation() {
       const ids = Array.from(this.stations.keys());
@@ -287,33 +220,36 @@
       this.currentStationId = ids[nextIdx];
 
       const station = this.currentStation;
-      console.log(`[Radio] Switched to station: ${station ? station.name : "Unknown"}`);
+      console.log(`[Radio] Switched to station: ${station?.name || "Unknown"}`);
 
-      // Hard switch: stop current and start new
       this.audioA.pause();
       this.audioB.pause();
       this._playNext(true);
     }
 
+    // ------------------------------------------------------------
+    // Playback Logic
+    // ------------------------------------------------------------
+
     _onTrackEnded() {
       if (this.isPlayingEvent) {
-        // Event finished, go back to music
         this.isPlayingEvent = false;
         this._playNext();
+        return;
+      }
+
+      this.tracksSinceEvent++;
+
+      if (this.tracksSinceEvent >= this.nextEventAt) {
+        this._playEvent();
       } else {
-        // Music finished, decide if we play event or another track
-        this.tracksSinceEvent++;
-        if (this.tracksSinceEvent >= this.nextEventAt) {
-          this._playEvent();
-        } else {
-          this._playNext();
-        }
+        this._playNext();
       }
     }
 
     _playNext(forceMusic = false) {
       const station = this.currentStation;
-      if (!station || !station.ready) {
+      if (!station?.ready) {
         console.warn("[Radio] Station not ready");
         return;
       }
@@ -325,7 +261,7 @@
 
       const track = station.getRandomTrack();
       if (!track) {
-        console.warn("[Radio] No tracks available for station");
+        console.warn("[Radio] No tracks available");
         return;
       }
 
@@ -335,47 +271,25 @@
 
     _playEvent() {
       const station = this.currentStation;
-      if (!station || !station.ready) {
+      if (!station?.ready) {
         this._playNext(true);
         return;
       }
 
-      // Decide what kind of event to play
       const eventTypes = ["djIntro", "bumper", "ad", "psa", "lore"];
       const type = pickRandom(eventTypes);
 
       let file = null;
 
       switch (type) {
-        case "djIntro": {
-          const intro = station.getRandomDJIntro();
-          file = intro || null;
-          break;
-        }
-        case "bumper": {
-          const bumper = station.getRandomBumper();
-          file = bumper && bumper.file ? bumper.file : null;
-          break;
-        }
-        case "ad": {
-          const ad = station.getRandomAd();
-          file = ad && ad.file ? ad.file : null;
-          break;
-        }
-        case "psa": {
-          const psa = station.getRandomPSA();
-          file = psa && psa.file ? psa.file : null;
-          break;
-        }
-        case "lore": {
-          const lore = station.getRandomLore();
-          file = lore && lore.file ? lore.file : null;
-          break;
-        }
+        case "djIntro": file = station.getRandomDJIntro(); break;
+        case "bumper": file = station.getRandomBumper()?.file; break;
+        case "ad": file = station.getRandomAd()?.file; break;
+        case "psa": file = station.getRandomPSA()?.file; break;
+        case "lore": file = station.getRandomLore()?.file; break;
       }
 
       if (!file) {
-        // If no event available, reset counters and go back to music
         this.tracksSinceEvent = 0;
         this.nextEventAt = randInt(
           this.config.minTracksBetweenEvents,
@@ -395,6 +309,10 @@
       this._setSourceAndPlay(file, true);
     }
 
+    // ------------------------------------------------------------
+    // Audio Handling
+    // ------------------------------------------------------------
+
     _setSourceAndPlay(file, isEvent) {
       const station = this.currentStation;
       if (!station) return;
@@ -402,11 +320,9 @@
       const active = this.activeAudio;
       const inactive = this.inactiveAudio;
 
-      // Prepare inactive audio with new source
       inactive.pause();
       inactive.currentTime = 0;
 
-      // If file is already absolute path, use as is; otherwise assume /audio/radio/...
       const src =
         file.startsWith("/") || file.startsWith("http")
           ? file
@@ -414,16 +330,14 @@
 
       inactive.src = src;
 
-      // Crossfade
+      console.log(`[Radio] Playing: ${src}`);
+
       this._crossfade(active, inactive, () => {
-        // After crossfade, swap roles
         this.activeAudio = inactive;
         this.inactiveAudio = active;
       });
 
-      inactive
-        .play()
-        .catch(e => console.warn("[Radio] Play error:", e));
+      inactive.play().catch(e => console.warn("[Radio] Play error:", e));
     }
 
     _crossfade(fromAudio, toAudio, onComplete) {
@@ -457,9 +371,9 @@
     }
   }
 
-  // ------------------------------------------------------------
+  // ============================================================
   // GLOBAL HOOK
-  // ------------------------------------------------------------
+  // ============================================================
 
   window.AtomicFizzRadioPlayer = AtomicFizzRadioPlayer;
 
