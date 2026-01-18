@@ -32,15 +32,23 @@
     },
 
     ensurePlayerPosition() {
-      if (!this.gs.player) this.gs.player = {};
-      if (!this.gs.player.position) {
-        // Default to Mojave / Vegas strip if no position yet
-        this.gs.player.position = {
-          lat: 36.11274,
-          lng: -115.174301
-        };
-      }
-    },
+  if (!this.gs) {
+    console.warn("worldmap: no gameState yet");
+    this.gs = {};
+  }
+
+  if (!this.gs.player) {
+    this.gs.player = {};
+  }
+
+  if (!this.gs.player.position) {
+    // Default to Mojave / Vegas strip if no position yet
+    this.gs.player.position = {
+      lat: 36.11274,
+      lng: -115.174301
+    };
+  }
+}
 
     initMap() {
       if (this.map) return;
