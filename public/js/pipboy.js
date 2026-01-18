@@ -51,13 +51,17 @@
   // CLICK‑TO‑SWITCH TABS
   // ------------------------------------------------------------
   tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const key = tab.getAttribute("data-pipboy-tab"); // FIXED
-      if (!key) return;
-      const panelKey = key.replace("panel-", ""); // FIXED
-      setActivePanel(panelKey);
-    });
+  tab.addEventListener("click", () => {
+    const key = tab.getAttribute("data-pipboy-tab"); // FIXED
+    if (!key) return;
+    const panelKey = key.replace("panel-", ""); // FIXED
+    setActivePanel(panelKey);
+
+    // QUEST HOOK: Wake Up → switch_tabs
+    Game.quests?.completeObjective("wake_up", "switch_tabs");
   });
+});
+
 
   // ------------------------------------------------------------
   // SWIPE‑TO‑SWITCH TABS
