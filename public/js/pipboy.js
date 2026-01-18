@@ -169,4 +169,9 @@
   [connectWalletBtn, connectWalletStat].forEach((btn) => {
     if (btn) btn.addEventListener("click", triggerConnectWallet);
   });
+  // ------------------------------------------------------------
+// SIGNAL: PIP‑BOY UI IS READY (RADIO ENGINE LISTENS FOR THIS)
+// ------------------------------------------------------------
+window.dispatchEvent(new Event("pipboyReady"));
+
 })();
