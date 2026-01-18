@@ -1,1 +1,16 @@
-
+[
+  { "id": "stimpak", "name": "Stimpak", "type": "consumable", "tags": ["healing"] },
+  { "id": "radaway", "name": "RadAway", "type": "consumable", "tags": ["radiation"] },
+  { "id": "radx", "name": "Rad-X", "type": "consumable", "tags": ["radiation"] },
+  { "id": "dirty_water", "name": "Dirty Water", "type": "consumable", "tags": ["drink"] },
+  { "id": "purified_water", "name": "Purified Water", "type": "consumable", "tags": ["drink"] },
+  { "id": "iguana_bits", "name": "Iguana Bits", "type": "consumable", "tags": ["food"] },
+  { "id": "gecko_meat", "name": "Gecko Meat", "type": "consumable", "tags": ["food"] },
+  { "id": "snack_cakes", "name": "Fancy Snack Cakes", "type": "consumable", "tags": ["food"] },
+  { "id": "sarsaparilla", "name": "Sarsaparilla Bottle", "type": "consumable", "tags": ["drink"] },
+  { "id": "nuka_cola", "name": "Nuka-Cola", "type": "consumable", "tags": ["drink"] },
+  { "id": "buffout", "name": "Buffout", "type": "consumable", "tags": ["chem"] },
+  { "id": "jet", "name": "Jet", "type": "consumable", "tags": ["chem"] },
+  { "id": "psycho", "name": "Psycho", "type": "consumable", "tags": ["chem"] },
+  { "id": "mentats", "name": "Mentats", "type": "consumable", "tags": ["chem"] }
+]
