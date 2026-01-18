@@ -1,1 +1,6 @@
-
+[
+  { "id": "safe_code_note", "name": "Safe Code Note", "type": "note", "tags": ["code"] },
+  { "id": "warning_note", "name": "Warning Note", "type": "note", "tags": ["lore"] },
+  { "id": "scavenger_note", "name": "Scavenger Note", "type": "note", "tags": ["lore"] },
+  { "id": "map_fragment", "name": "Map Fragment", "type": "note", "tags": ["map"] }
+]
