@@ -1,4 +1,4 @@
-// pipboy.js
+t // pipboy.js
 // Pip‑Boy shell: tabs, panel switching, swipe navigation, routing
 
 (function () {
