@@ -1,1 +1,17 @@
-fill
+[
+  { "id": "scrap_metal", "name": "Scrap Metal", "type": "junk", "tags": ["crafting"] },
+  { "id": "scrap_electronics", "name": "Scrap Electronics", "type": "junk", "tags": ["crafting"] },
+  { "id": "copper_wire", "name": "Copper Wire", "type": "junk", "tags": ["crafting"] },
+  { "id": "circuit_board", "name": "Circuit Board", "type": "junk", "tags": ["crafting"] },
+  { "id": "gecko_hide", "name": "Gecko Hide", "type": "junk", "tags": ["crafting"] },
+  { "id": "tin_can", "name": "Tin Can", "type": "junk", "tags": ["scrap"] },
+  { "id": "tin_plate", "name": "Tin Plate", "type": "junk", "tags": ["scrap"] },
+  { "id": "broken_toy", "name": "Broken Toy Car", "type": "junk", "tags": ["scrap"] },
+  { "id": "rusted_pan", "name": "Rusted Pan", "type": "junk", "tags": ["scrap"] },
+  { "id": "rusted_spoon", "name": "Rusted Spoon", "type": "junk", "tags": ["scrap"] },
+  { "id": "springs", "name": "Springs", "type": "junk", "tags": ["crafting"] },
+  { "id": "gears", "name": "Gears", "type": "junk", "tags": ["crafting"] },
+  { "id": "adhesive", "name": "Adhesive", "type": "junk", "tags": ["crafting"] },
+  { "id": "cloth", "name": "Cloth Scraps", "type": "junk", "tags": ["crafting"] },
+  { "id": "leather", "name": "Leather Scraps", "type": "junk", "tags": ["crafting"] }
+]
