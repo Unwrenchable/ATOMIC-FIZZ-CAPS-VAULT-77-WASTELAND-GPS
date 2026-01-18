@@ -1,211 +1,146 @@
-{
-  "regions": [
-    {
-      "id": "strip-core",
-      "name": "The Strip Core",
-      "description": "The political and economic heart of New Vegas. Casinos, power grids, and hidden secrets beneath the surface.",
-      "subregions": [
-        { "id": "strip-north", "name": "North Strip" },
-        { "id": "strip-central", "name": "Central Strip" },
-        { "id": "strip-underground", "name": "Strip Underground" }
-      ]
-    },
-    {
-      "id": "freeside-outer-vegas",
-      "name": "Freeside & Outer Vegas",
-      "description": "Chaotic streets, scavenger life, and early-game encounters.",
-      "subregions": [
-        { "id": "freeside-east", "name": "Freeside East" },
-        { "id": "freeside-west", "name": "Freeside West" },
-        { "id": "outer-vegas-ruins", "name": "Outer Vegas Ruins" }
-      ]
-    },
-    {
-      "id": "westside-north-vegas",
-      "name": "Westside & North Vegas",
-      "description": "Settlements under pressure, raider activity, and industrial decay.",
-      "subregions": [
-        { "id": "westside-blocks", "name": "Westside Blocks" },
-        { "id": "north-vegas-alleys", "name": "North Vegas Alleys" },
-        { "id": "industrial-belt", "name": "Industrial Belt" }
-      ]
-    },
-    {
-      "id": "mojave-outskirts",
-      "name": "Mojave Outskirts",
-      "description": "The open desert surrounding Vegas. Exploration, scanning, and early threats.",
-      "subregions": [
-        { "id": "dry-lake-edge", "name": "Dry Lake Edge" },
-        { "id": "old-highway-route", "name": "Old Highway Route" },
-        { "id": "desert-ridge", "name": "Desert Ridge" }
-      ]
-    },
-    {
-      "id": "hidden-valley-bunker-zone",
-      "name": "Hidden Valley / Bunker Zone",
-      "description": "Underground facilities, tech factions, and sealed vault systems.",
-      "subregions": [
-        { "id": "hidden-valley-east", "name": "Hidden Valley East" },
-        { "id": "bunker-access-tunnels", "name": "Bunker Access Tunnels" },
-        { "id": "ridge-observation-line", "name": "Ridge Observation Line" }
-      ]
-    },
-    {
-      "id": "hoover-dam-perimeter",
-      "name": "Hoover Dam Perimeter",
-      "description": "High-level military zone, power infrastructure, and endgame conflict.",
-      "subregions": [
-        { "id": "dam-west-bank", "name": "Dam West Bank" },
-        { "id": "dam-service-roads", "name": "Dam Service Roads" },
-        { "id": "lower-power-station", "name": "Lower Power Station" }
-      ]
-    }
-  ],
-
-  "locations": [
-    {
-      "id": "vault-77",
-      "name": "Vault 77",
-      "region": "strip-core",
-      "subregion": "strip-underground",
-      "lat": 0,
-      "lng": 0,
-      "type": "vault"
-    },
-    {
-      "id": "fizzcap-processing-plant",
-      "name": "FizzCap Processing Plant",
-      "region": "strip-core",
-      "subregion": "strip-north",
-      "lat": 0,
-      "lng": 0,
-      "type": "industrial"
-    },
-    {
-      "id": "trader-hub",
-      "name": "Trader Hub",
-      "region": "freeside-outer-vegas",
-      "subregion": "freeside-west",
-      "lat": 0,
-      "lng": 0,
-      "type": "settlement"
-    },
-    {
-      "id": "wasteland-outskirts",
-      "name": "Wasteland Outskirts",
-      "region": "freeside-outer-vegas",
-      "subregion": "outer-vegas-ruins",
-      "lat": 0,
-      "lng": 0,
-      "type": "region"
-    },
-    {
-      "id": "abandoned-factory",
-      "name": "Abandoned Factory",
-      "region": "westside-north-vegas",
-      "subregion": "industrial-belt",
-      "lat": 0,
-      "lng": 0,
-      "type": "industrial"
-    },
-    {
-      "id": "raider-camp-alpha",
-      "name": "Raider Camp Alpha",
-      "region": "westside-north-vegas",
-      "subregion": "north-vegas-alleys",
-      "lat": 0,
-      "lng": 0,
-      "type": "enemy-camp"
-    },
-    {
-      "id": "mysterious-bunker",
-      "name": "Mysterious Bunker",
-      "region": "hidden-valley-bunker-zone",
-      "subregion": "bunker-access-tunnels",
-      "lat": 0,
-      "lng": 0,
-      "type": "bunker"
-    },
-    {
-      "id": "rusted-observatory",
-      "name": "Rusted Observatory",
-      "region": "hidden-valley-bunker-zone",
-      "subregion": "ridge-observation-line",
-      "lat": 0,
-      "lng": 0,
-      "type": "scientific"
-    },
-    {
-      "id": "old-world-bridge",
-      "name": "Old World Bridge",
-      "region": "mojave-outskirts",
-      "subregion": "old-highway-route",
-      "lat": 0,
-      "lng": 0,
-      "type": "landmark"
-    },
-    {
-      "id": "sunken-highway",
-      "name": "Sunken Highway",
-      "region": "mojave-outskirts",
-      "subregion": "dry-lake-edge",
-      "lat": 0,
-      "lng": 0,
-      "type": "ruins"
-    },
-    {
-      "id": "brakin-ballz-bunker",
-      "name": "Brakin' Ballz Billiard Bunker",
-      "region": "strip-core",
-      "subregion": "strip-north",
-      "lat": 0,
-      "lng": 0,
-      "type": "pool-hall"
-    },
-    {
-      "id": "cue-club-ruins",
-      "name": "Cue Club Ruins",
-      "region": "freeside-outer-vegas",
-      "subregion": "freeside-west",
-      "lat": 0,
-      "lng": 0,
-      "type": "pool-hall"
-    },
-    {
-      "id": "good-timez-remains",
-      "name": "Good Timez Remains",
-      "region": "westside-north-vegas",
-      "subregion": "westside-blocks",
-      "lat": 0,
-      "lng": 0,
-      "type": "pool-hall"
-    },
-    {
-      "id": "griffs-last-stand",
-      "name": "Griff's Last Stand",
-      "region": "westside-north-vegas",
-      "subregion": "industrial-belt",
-      "lat": 0,
-      "lng": 0,
-      "type": "pool-hall"
-    },
-    {
-      "id": "rackhouse",
-      "name": "The Rackhouse",
-      "region": "westside-north-vegas",
-      "subregion": "north-vegas-alleys",
-      "lat": 0,
-      "lng": 0,
-      "type": "pool-hall"
-    },
-    {
-      "id": "putters-horizon-ridge",
-      "name": "Putter's Horizon Ridge",
-      "region": "mojave-outskirts",
-      "subregion": "desert-ridge",
-      "lat": 0,
-      "lng": 0,
-      "type": "pool-hall"
-    }
-  ]
-}
+[
+  {
+    "id": "vault-77",
+    "name": "Vault 77",
+    "region": "strip-core",
+    "subregion": "strip-underground",
+    "lat": 36.1699,
+    "lng": -115.1398,
+    "type": "vault"
+  },
+  {
+    "id": "fizzcap-processing-plant",
+    "name": "FizzCap Processing Plant",
+    "region": "strip-core",
+    "subregion": "strip-north",
+    "lat": 36.1715,
+    "lng": -115.142,
+    "type": "industrial"
+  },
+  {
+    "id": "trader-hub",
+    "name": "Trader Hub",
+    "region": "freeside-outer-vegas",
+    "subregion": "freeside-west",
+    "lat": 36.15,
+    "lng": -115.13,
+    "type": "settlement"
+  },
+  {
+    "id": "wasteland-outskirts",
+    "name": "Wasteland Outskirts",
+    "region": "freeside-outer-vegas",
+    "subregion": "outer-vegas-ruins",
+    "lat": 36.12,
+    "lng": -115.2,
+    "type": "region"
+  },
+  {
+    "id": "abandoned-factory",
+    "name": "Abandoned Factory",
+    "region": "westside-north-vegas",
+    "subregion": "industrial-belt",
+    "lat": 36.2,
+    "lng": -115.16,
+    "type": "industrial"
+  },
+  {
+    "id": "raider-camp-alpha",
+    "name": "Raider Camp Alpha",
+    "region": "westside-north-vegas",
+    "subregion": "north-vegas-alleys",
+    "lat": 36.21,
+    "lng": -115.155,
+    "type": "enemy-camp"
+  },
+  {
+    "id": "mysterious-bunker",
+    "name": "Mysterious Bunker",
+    "region": "hidden-valley-bunker-zone",
+    "subregion": "bunker-access-tunnels",
+    "lat": 36.3,
+    "lng": -115.22,
+    "type": "bunker"
+  },
+  {
+    "id": "rusted-observatory",
+    "name": "Rusted Observatory",
+    "region": "hidden-valley-bunker-zone",
+    "subregion": "ridge-observation-line",
+    "lat": 36.305,
+    "lng": -115.225,
+    "type": "scientific"
+  },
+  {
+    "id": "old-world-bridge",
+    "name": "Old World Bridge",
+    "region": "mojave-outskirts",
+    "subregion": "old-highway-route",
+    "lat": 35.98,
+    "lng": -115.18,
+    "type": "landmark"
+  },
+  {
+    "id": "sunken-highway",
+    "name": "Sunken Highway",
+    "region": "mojave-outskirts",
+    "subregion": "dry-lake-edge",
+    "lat": 35.99,
+    "lng": -115.19,
+    "type": "ruins"
+  },
+  {
+    "id": "brakin-ballz-bunker",
+    "name": "Brakin' Ballz Billiard Bunker",
+    "region": "strip-core",
+    "subregion": "strip-north",
+    "lat": 36.172,
+    "lng": -115.138,
+    "type": "pool-hall"
+  },
+  {
+    "id": "cue-club-ruins",
+    "name": "Cue Club Ruins",
+    "region": "freeside-outer-vegas",
+    "subregion": "freeside-west",
+    "lat": 36.148,
+    "lng": -115.132,
+    "type": "pool-hall"
+  },
+  {
+    "id": "good-timez-remains",
+    "name": "Good Timez Remains",
+    "region": "westside-north-vegas",
+    "subregion": "westside-blocks",
+    "lat": 36.205,
+    "lng": -115.158,
+    "type": "pool-hall"
+  },
+  {
+    "id": "griffs-last-stand",
+    "name": "Griff's Last Stand",
+    "region": "westside-north-vegas",
+    "subregion": "industrial-belt",
+    "lat": 36.198,
+    "lng": -115.162,
+    "type": "pool-hall"
+  },
+  {
+    "id": "rackhouse",
+    "name": "The Rackhouse",
+    "region": "westside-north-vegas",
+    "subregion": "north-vegas-alleys",
+    "lat": 36.202,
+    "lng": -115.15,
+    "type": "pool-hall"
+  },
+  {
+    "id": "putters-horizon-ridge",
+    "name": "Putter's Horizon Ridge",
+    "region": "mojave-outskirts",
+    "subregion": "desert-ridge",
+    "lat": 35.95,
+    "lng": -115.25,
+    "type": "pool-hall"
+  }
+]
