@@ -1,0 +1,41 @@
+{
+  "id": "wake_up",
+  "name": "Wake Up",
+  "description": "Something feels wrong. The timelines are shifting. You need to get your bearings.",
+  "objectives": [
+    {
+      "id": "open_pipboy",
+      "text": "Open your Pip‑Boy",
+      "completeOn": "pipboy_opened"
+    },
+    {
+      "id": "move_around",
+      "text": "Move around to get your bearings",
+      "completeOn": "player_moved"
+    },
+    {
+      "id": "open_map",
+      "text": "Check your map",
+      "completeOn": "map_opened"
+    },
+    {
+      "id": "pick_item",
+      "text": "Pick up an item",
+      "completeOn": "item_picked"
+    },
+    {
+      "id": "open_inventory",
+      "text": "Open your inventory",
+      "completeOn": "inventory_opened"
+    },
+    {
+      "id": "turn_on_radio",
+      "text": "Turn on the radio",
+      "completeOn": "radio_started"
+    }
+  ],
+  "reward": {
+    "xp": 25,
+    "items": ["vault77_sidearm"]
+  }
+}
