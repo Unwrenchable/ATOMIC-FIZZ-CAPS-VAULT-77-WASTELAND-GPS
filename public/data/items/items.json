@@ -1,0 +1,199 @@
+[
+  /* ===========================
+     WEAPONS — BALLISTIC
+     =========================== */
+  {
+    "id": "vault77_sidearm",
+    "name": "Vault 77 Security Sidearm",
+    "type": "weapon",
+    "category": "pistol",
+    "damage": 22,
+    "ammoType": "ammo_9mm",
+    "weight": 3.2,
+    "value": 55,
+    "description": "Standard‑issue sidearm carried by Vault 77 security personnel."
+  },
+  {
+    "id": "desert_reclaimer",
+    "name": "Desert Reclaimer",
+    "type": "weapon",
+    "category": "rifle",
+    "damage": 34,
+    "ammoType": "ammo_556",
+    "weight": 7.8,
+    "value": 120,
+    "description": "A scavenger‑rebuilt rifle favored by Mojave drifters."
+  },
+  {
+    "id": "rusted_handcannon",
+    "name": "Rusted Handcannon",
+    "type": "weapon",
+    "category": "pistol",
+    "damage": 28,
+    "ammoType": "ammo_44",
+    "weight": 4.1,
+    "value": 65,
+    "description": "A heavy, improvised pistol built from scrap and stubbornness."
+  },
+
+  /* ===========================
+     WEAPONS — ENERGY / PRU TECH
+     =========================== */
+  {
+    "id": "pru_resonance_emitter",
+    "name": "PRU Resonance Emitter",
+    "type": "weapon",
+    "category": "energy",
+    "damage": 30,
+    "ammoType": "ammo_ecell",
+    "weight": 5.0,
+    "value": 140,
+    "description": "A prototype weapon tuned to the Humming One’s resonance field."
+  },
+  {
+    "id": "signal_lance",
+    "name": "Signal Lance",
+    "type": "weapon",
+    "category": "energy",
+    "damage": 42,
+    "ammoType": "ammo_plasma",
+    "weight": 6.4,
+    "value": 180,
+    "description": "A PRU‑grade plasma tool repurposed into a devastating energy spear."
+  },
+
+  /* ===========================
+     WEAPONS — MELEE / JAX / VEGAS
+     =========================== */
+  {
+    "id": "jax_reinforced_gloves",
+    "name": "Jax’s Reinforced Gloves",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 18,
+    "weight": 1.2,
+    "value": 45,
+    "description": "Weighted gloves used by Jax in both martial arts and pool‑hall brawls."
+  },
+  {
+    "id": "pool_cue_spear",
+    "name": "Pool Cue Spear",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 24,
+    "weight": 3.0,
+    "value": 25,
+    "description": "A broken pool cue sharpened into a surprisingly effective spear."
+  },
+  {
+    "id": "cueball_sling",
+    "name": "Cueball Sling",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 16,
+    "weight": 1.0,
+    "value": 20,
+    "description": "A leather sling designed to launch cueballs with painful accuracy."
+  },
+
+  /* ===========================
+     WEAPONS — ATOMIC FIZZ PROTOTYPES
+     =========================== */
+  {
+    "id": "fizz_spark_wrench",
+    "name": "Fizz‑Spark Wrench",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 20,
+    "weight": 2.8,
+    "value": 60,
+    "description": "An Atomic Fizz promotional wrench modified with a shock coil."
+  },
+  {
+    "id": "fizz_bottle_blade",
+    "name": "Fizz Bottle Blade",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 14,
+    "weight": 1.5,
+    "value": 18,
+    "description": "A shattered Fizz bottle fused into a jagged cutting tool."
+  },
+
+  /* ===========================
+     ARMOR — VAULT / PRU / WASTELAND
+     =========================== */
+  {
+    "id": "vault77_security_armor",
+    "name": "Vault 77 Security Armor",
+    "type": "armor",
+    "slot": "chest",
+    "armor": 18,
+    "weight": 12,
+    "value": 90,
+    "description": "Reinforced chest armor issued to Vault 77 security staff."
+  },
+  {
+    "id": "pru_hazard_suit",
+    "name": "PRU Hazard Suit",
+    "type": "armor",
+    "slot": "chest",
+    "armor": 14,
+    "weight": 9,
+    "value": 110,
+    "description": "A protective suit designed for anomaly‑exposed environments."
+  },
+  {
+    "id": "vegas_scavenger_leathers",
+    "name": "Vegas Scavenger Leathers",
+    "type": "armor",
+    "slot": "chest",
+    "armor": 10,
+    "weight": 7,
+    "value": 45,
+    "description": "Light armor pieced together from casino backroom scraps."
+  },
+
+  /* ===========================
+     AMMO
+     =========================== */
+  { "id": "ammo_9mm", "name": "9mm Rounds", "type": "ammo", "weight": 0.01, "value": 1 },
+  { "id": "ammo_556", "name": "5.56mm Rounds", "type": "ammo", "weight": 0.01, "value": 1 },
+  { "id": "ammo_44", "name": ".44 Rounds", "type": "ammo", "weight": 0.01, "value": 2 },
+  { "id": "ammo_ecell", "name": "Energy Cells", "type": "ammo", "weight": 0.02, "value": 3 },
+  { "id": "ammo_plasma", "name": "Plasma Cartridges", "type": "ammo", "weight": 0.03, "value": 4 },
+
+  /* ===========================
+     CONSUMABLES
+     =========================== */
+  { "id": "stimpak", "name": "Stimpak", "type": "consumable", "heal": 30, "weight": 0.1, "value": 75 },
+  { "id": "radaway", "name": "RadAway", "type": "consumable", "heal": 0, "weight": 0.2, "value": 60 },
+  { "id": "dirty_water", "name": "Dirty Water", "type": "consumable", "heal": 5, "weight": 0.5, "value": 5 },
+
+  /* ===========================
+     TOOLS
+     =========================== */
+  { "id": "bobby_pin", "name": "Bobby Pin", "type": "tool", "durability": 3, "weight": 0.01, "value": 1 },
+  { "id": "wrench", "name": "Wrench", "type": "tool", "durability": 25, "weight": 2.0, "value": 10 },
+  { "id": "geiger_counter", "name": "Geiger Counter", "type": "tool", "durability": 40, "weight": 3.0, "value": 35 },
+
+  /* ===========================
+     JUNK / CRAFTING
+     =========================== */
+  { "id": "scrap_metal", "name": "Scrap Metal", "type": "junk", "weight": 0.5, "value": 2 },
+  { "id": "adhesive", "name": "Adhesive", "type": "junk", "weight": 0.1, "value": 4 },
+  { "id": "circuit_board", "name": "Circuit Board", "type": "junk", "weight": 0.3, "value": 12 },
+
+  /* ===========================
+     HOLOTAPES / NOTES / KEYS
+     =========================== */
+  { "id": "pru_log_01", "name": "PRU Log: Initial Signal", "type": "holotape", "weight": 0, "value": 0 },
+  { "id": "map_fragment", "name": "Map Fragment", "type": "note", "weight": 0, "value": 0 },
+  { "id": "vault_keycard", "name": "Vault Keycard", "type": "key", "weight": 0, "value": 0 },
+
+  /* ===========================
+     QUEST ITEMS / WORLD LOGIC
+     =========================== */
+  { "id": "humming_resonator", "name": "Humming Resonator", "type": "quest", "weight": 0, "value": 0 },
+  { "id": "region_unlock_token", "name": "Region Unlock Token", "type": "logic", "weight": 0, "value": 0 }
+]
