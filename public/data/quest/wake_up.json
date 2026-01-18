@@ -1,7 +1,7 @@
 {
   "id": "wake_up",
   "name": "Wake Up",
-  "description": "Something is wrong. The world feels unstable. A distorted signal urges you to wake up and stabilize your presence in this timeline.",
+  "description": "A distorted signal cut through the boot sequence. Something is wrong with this timeline. Stabilize your anchor and get your bearings.",
   "objectives": [
     {
       "id": "open_pipboy",
