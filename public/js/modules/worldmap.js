@@ -1,16 +1,3 @@
-// public/js/modules/worldmap.js
-// ------------------------------------------------------------
-// Atomic Fizz Caps – Pip-Boy World Map Module
-// Esri World Imagery base layer only (no custom tiles)
-// Overlays:
-//   - Your own labels + roads (JSON-defined)
-// Behavior:
-//   - Free-look map
-//   - Auto-snap back to player after idle (5s)
-//   - Smooth GPS centering for travel
-//   - NPC dialog auto-opens when clicking POIs with npcId/dialogId
-// ------------------------------------------------------------
-
 (function () {
   "use strict";
 
