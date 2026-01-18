@@ -1,1 +1,6 @@
-
+[
+  { "id": "firestation77_key", "name": "Fire Station 77 Access Key", "type": "key", "tags": ["access"] },
+  { "id": "pru_keycard", "name": "PRU Bunker Keycard", "type": "key", "tags": ["access"] },
+  { "id": "vault_keycard", "name": "Vault Keycard", "type": "key", "tags": ["vault"] },
+  { "id": "motel_key", "name": "Motel Room Key", "type": "key", "tags": ["access"] }
+]
