@@ -5,13 +5,26 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const path = require("path");
+
 const walletRoutes = require("./routes/wallet");
+
+// --- ADMIN AUTH ---
+const {
+  adminLoginHandler,
+  adminLogoutHandler,
+  requireAdmin,
+} = require("./middleware/adminAuth");
+
+// --- ADMIN MODULES ---
+const adminPlayerRoutes = require("./api/adminPlayer");
+const adminMonitorRoutes = require("./api/adminMonitor"); // Jax read-only monitor
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Strict CORS whitelist
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "https://www.atomicfizzcaps.xyz";
+const CLIENT_ORIGIN =
+  process.env.CLIENT_ORIGIN || "https://www.atomicfizzcaps.xyz";
 
 // Required if behind Cloudflare / Render / Vercel
 app.set("trust proxy", 1);
@@ -32,7 +45,7 @@ app.use(
 // Hardened Helmet config
 app.use(
   helmet({
-    contentSecurityPolicy: false, // you serve static wallet UI
+    contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false,
   })
 );
@@ -49,7 +62,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve wallet UI
+// ------------------------------------------------------------
+// Serve Wallet UI
+// ------------------------------------------------------------
 app.use(
   "/wallet",
   express.static(path.join(__dirname, "..", "public", "wallet"), {
@@ -58,20 +73,52 @@ app.use(
   })
 );
 
+// ------------------------------------------------------------
+// Serve Admin Panel UI
+// ------------------------------------------------------------
+app.use(
+  "/admin",
+  express.static(path.join(__dirname, "..", "public", "admin"), {
+    maxAge: "1h",
+    etag: true,
+  })
+);
+
+// ------------------------------------------------------------
 // Wallet API
+// ------------------------------------------------------------
 app.use("/api", walletRoutes);
 
-// Health check
+// ------------------------------------------------------------
+// Admin Auth Routes
+// ------------------------------------------------------------
+app.post("/api/admin/login", adminLoginHandler);
+app.post("/api/admin/logout", requireAdmin, adminLogoutHandler);
+
+// ------------------------------------------------------------
+// Admin Tools
+// ------------------------------------------------------------
+app.use("/api/admin/player", requireAdmin, adminPlayerRoutes);
+app.use("/api/admin/monitor", requireAdmin, adminMonitorRoutes);
+
+// ------------------------------------------------------------
+// Health Check
+// ------------------------------------------------------------
 app.get("/health", (req, res) => {
   res.json({ ok: true, status: "healthy" });
 });
 
-// Global error handler (prevents crashes)
+// ------------------------------------------------------------
+// Global Error Handler
+// ------------------------------------------------------------
 app.use((err, req, res, next) => {
   console.error("GLOBAL ERROR:", err);
   res.status(500).json({ ok: false, error: "Internal server error" });
 });
 
+// ------------------------------------------------------------
+// Start Server
+// ------------------------------------------------------------
 app.listen(PORT, () => {
   console.log(`Atomic Fizz Wallet backend running on port ${PORT}`);
 });
