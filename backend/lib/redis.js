@@ -10,6 +10,7 @@ const redis = createClient({
   url: process.env.REDIS_URL,
 });
 
+// Log connection events
 redis.on("error", (err) => {
   console.error("[redis] error:", err);
 });
@@ -22,6 +23,7 @@ redis.on("reconnecting", () => {
   console.log("[redis] reconnecting...");
 });
 
+// Connect immediately
 (async () => {
   try {
     await redis.connect();
