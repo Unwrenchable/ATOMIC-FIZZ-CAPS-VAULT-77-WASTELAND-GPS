@@ -1,3 +1,9 @@
+// server.js
+// ------------------------------------------------------------
+// Atomic Fizz Caps – Backend Server
+// Express + Static Frontend + Modular API Routes
+// ------------------------------------------------------------
+
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -10,19 +16,23 @@ app.set("trust proxy", 1);
 const PORT = process.env.PORT || 3001;
 const NODE_ENV = process.env.NODE_ENV || "development";
 
-// Static frontend root
+// ------------------------------------------------------------
+// STATIC FRONTEND ROOT
+// ------------------------------------------------------------
 const FRONTEND_DIR = path.join(__dirname, "..", "public");
 console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 
-// Core middleware
+// ------------------------------------------------------------
+// CORE MIDDLEWARE
+// ------------------------------------------------------------
 app.use(
   cors({
     origin: process.env.FRONTEND_ORIGIN || "*",
   })
 );
+
 app.use(express.json({ limit: "2mb" }));
 
-// Rate limiting
 app.use(
   rateLimit({
     windowMs: 10 * 1000,
@@ -37,6 +47,7 @@ app.use(express.static(FRONTEND_DIR));
 app.use("/js", express.static(path.join(FRONTEND_DIR, "js")));
 app.use("/css", express.static(path.join(FRONTEND_DIR, "css")));
 app.use("/images", express.static(path.join(FRONTEND_DIR, "images")));
+app.use("/wallet", express.static(path.join(FRONTEND_DIR, "wallet")));
 
 // ------------------------------------------------------------
 // SAFE MOUNT HELPER
@@ -51,15 +62,14 @@ function safeMount(mountPath, requirePath) {
     app.use(mountPath, router);
     console.log(`[server] mounted ${requirePath} at ${mountPath}`);
   } catch (err) {
-    console.warn(`[server] skipping ${requirePath} — failed to load: ${err.message}`);
+    console.warn(
+      `[server] skipping ${requirePath} — failed to load: ${err.message}`
+    );
   }
 }
 
 // ------------------------------------------------------------
-// GAME API ROUTES (existing)
-// ------------------------------------------------------------
-// ------------------------------------------------------------
-// GAME API ROUTES (FIXED PATHS)
+// API ROUTES
 // ------------------------------------------------------------
 const api = (file) => path.join(__dirname, "api", file);
 
@@ -77,31 +87,25 @@ safeMount("/api/location-claim", api("location-claim"));
 // WALLET API
 safeMount("/api/wallet", path.join(__dirname, "routes", "wallet"));
 
-
-// ------------------------------------------------------------
-// NEW: WALLET UI
-// ------------------------------------------------------------
-app.use("/wallet", express.static(path.join(FRONTEND_DIR, "wallet")));
-
 // ------------------------------------------------------------
 // FUTURE FEATURE ENDPOINTS
 // ------------------------------------------------------------
 app.post("/api/nuke-gear", (req, res) => {
-  return res.json({
+  res.json({
     success: false,
     error: "NUKE GEAR system offline (future update)",
   });
 });
 
 app.post("/api/bridge/solana-to-evm", (req, res) => {
-  return res.json({
+  res.json({
     success: false,
     error: "BRIDGE system offline (future update)",
   });
 });
 
 app.post("/api/bridge/evm-to-solana", (req, res) => {
-  return res.json({
+  res.json({
     success: false,
     error: "BRIDGE system offline (future update)",
   });
@@ -115,20 +119,21 @@ app.get("/api/health", (req, res) => {
 });
 
 // ------------------------------------------------------------
-// SPA FALLBACK
+// SPA FALLBACK (React/Leaflet Frontend)
 // ------------------------------------------------------------
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api/")) return next();
-  const ext = path.extname(req.path);
-  if (ext) return next();
+  if (path.extname(req.path)) return next();
   res.sendFile(path.join(FRONTEND_DIR, "index.html"));
 });
 
 // ------------------------------------------------------------
 // START SERVER
 // ------------------------------------------------------------
-const server = app.listen(PORT, () => {
-  console.log(`Atomic Fizz Caps backend running on port ${PORT} (env=${NODE_ENV})`);
+app.listen(PORT, () => {
+  console.log(
+    `Atomic Fizz Caps backend running on port ${PORT} (env=${NODE_ENV})`
+  );
 });
 
 module.exports = app;
