@@ -4,11 +4,11 @@
     <!-- Outer locator ring -->
     <circle cx="32" cy="32" r="22" fill="none"/>
 
-    <!-- Directional arrow (player heading) -->
-    <path d="M32 10 L40 26 L24 26 Z" />
+    <!-- Directional arrow (rotates) -->
+    <path d="M32 8 L42 28 L22 28 Z" />
 
     <!-- Inner core dot -->
-    <circle cx="32" cy="34" r="6" />
+    <circle cx="32" cy="36" r="6" />
 
   </g>
 </svg>
