@@ -129,6 +129,12 @@ function safeMount(mountPath, requirePath) {
 }
 
 // ------------------------------------------------------------
+// AUTH ROUTES
+// ------------------------------------------------------------
+const { router: authRouter } = require("./lib/auth");
+app.use("/api/auth", authRouter);
+
+// ------------------------------------------------------------
 // API ROUTES
 // ------------------------------------------------------------
 const api = (file) => path.join(__dirname, "api", file);
