@@ -162,6 +162,42 @@
         .addTo(map);
         });
         });
+      // Load POIs with custom SVG icons
+      fetch("/data/poi.json")
+      .then(r => r.json())
+      .then(pois => {
+       pois.forEach(poi => {
+       const icon = L.icon({
+        iconUrl: `/img/icons/${poi.icon}.svg`,
+        iconSize: [24, 24],      // adjust if needed
+        iconAnchor: [12, 12],    // center the icon
+        popupAnchor: [0, -12]
+       });
+
+      L.marker([poi.lat, poi.lng], { icon })
+        .bindPopup(`<b>${poi.name}</b>`)
+        .addTo(map);
+     });
+     });
+     map.setMinZoom(5);
+     map.setMaxZoom(14);
+     map.setMaxBounds([
+     [49.5, -125],   // top-left
+     [31, -102]      // bottom-right
+     ]);
+     const map = L.map("map").setView([36.1, -115.1], 7);
+      // Player marker (static for now)
+     const playerIcon = L.icon({
+     iconUrl: "/img/icons/player.svg",   // your SVG
+     iconSize: [28, 28],
+     iconAnchor: [14, 14]
+     });
+
+// Starting position (can be anywhere you want)
+const playerLatLng = [36.1699, -115.1398]; // Vegas for now
+
+const playerMarker = L.marker(playerLatLng, { icon: playerIcon }).addTo(map);
+
 
       // --------------------------------------------------------
       // LOAD VECTOR ROADS (roads.json)
