@@ -1,0 +1,58 @@
+[
+  {
+    "chain": "solana",
+    "nativeSymbol": "SOL",
+    "nativeName": "Solana",
+    "icon": "/wallet/icons/sol.png",
+    "rpc": "https://api.mainnet-beta.solana.com",
+    "type": "account"
+  },
+  {
+    "chain": "polygon",
+    "nativeSymbol": "POL",
+    "nativeName": "Polygon",
+    "icon": "/wallet/icons/polygon.png",
+    "rpc": "https://polygon-rpc.com",
+    "type": "evm"
+  },
+  {
+    "chain": "bnb",
+    "nativeSymbol": "BNB",
+    "nativeName": "BNB Chain",
+    "icon": "/wallet/icons/bnb.png",
+    "rpc": "https://bsc-dataseed.binance.org",
+    "type": "evm"
+  },
+  {
+    "chain": "avalanche",
+    "nativeSymbol": "AVAX",
+    "nativeName": "Avalanche",
+    "icon": "/wallet/icons/avax.png",
+    "rpc": "https://api.avax.network/ext/bc/C/rpc",
+    "type": "evm"
+  },
+  {
+    "chain": "sui",
+    "nativeSymbol": "SUI",
+    "nativeName": "Sui",
+    "icon": "/wallet/icons/sui.png",
+    "rpc": "https://fullnode.mainnet.sui.io",
+    "type": "move"
+  },
+  {
+    "chain": "aptos",
+    "nativeSymbol": "APT",
+    "nativeName": "Aptos",
+    "icon": "/wallet/icons/aptos.png",
+    "rpc": "https://fullnode.mainnet.aptoslabs.com/v1",
+    "type": "move"
+  },
+  {
+    "chain": "bitcoin",
+    "nativeSymbol": "BTC",
+    "nativeName": "Bitcoin",
+    "icon": "/wallet/icons/btc.png",
+    "rpc": "https://blockstream.info/api",
+    "type": "utxo"
+  }
+]
