@@ -18,6 +18,7 @@ const {
 // --- ADMIN MODULES ---
 const adminPlayerRoutes = require("./api/adminPlayer");
 const adminMonitorRoutes = require("./api/adminMonitor"); // Jax read-only monitor
+const adminMintablesRoutes = require("./api/adminMintables"); // World Tools: Mintables
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -100,6 +101,7 @@ app.post("/api/admin/logout", requireAdmin, adminLogoutHandler);
 // ------------------------------------------------------------
 app.use("/api/admin/player", requireAdmin, adminPlayerRoutes);
 app.use("/api/admin/monitor", requireAdmin, adminMonitorRoutes);
+app.use("/api/admin/mintables", requireAdmin, adminMintablesRoutes); // <— ADDED
 
 // ------------------------------------------------------------
 // Health Check
