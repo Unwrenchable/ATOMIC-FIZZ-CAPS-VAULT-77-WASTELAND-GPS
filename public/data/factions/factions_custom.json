@@ -1,1 +1,154 @@
-custom factions ie vaut77 fizzco 
+{
+  "factions": [
+    {
+      "id": "fizzco_remnants",
+      "name": "Fizzco Remnants",
+      "shortName": "Fizzco",
+      "description": "Survivors of the pre‑war megacorp. Obsessed with experimental tech, unstable prototypes, and corporate dominance. Their labs still hum beneath the wasteland.",
+      "alignment": "Corporate Militarist",
+      "color": "#ff0066",
+      "emblem": "Fizz Bolt",
+      "basePOIs": ["Fizzco Basin", "Fizzco Blacksite", "Fizzco Cooling Tower"],
+      "leader": "Director Halvorsen",
+      "reputationLevels": ["Vilified", "Hated", "Neutral", "Accepted", "Trusted", "Executive"],
+      "perks": {
+        "Trusted": "Access to prototype gear",
+        "Executive": "Fizzco Executive Armor + energy regen"
+      },
+      "enemies": ["dustwalkers", "the_circuit", "feral_broods"],
+      "allies": ["free_scavs"],
+      "patrolChance": 0.25,
+      "lootBias": "tech",
+      "weatherInfluence": "chemical_smog"
+    },
+
+    {
+      "id": "the_circuit",
+      "name": "The Circuit",
+      "shortName": "Circuit",
+      "description": "A techno‑cult worshipping machine consciousness. They salvage AI fragments, build servo‑shrines, and believe the world must be rebooted.",
+      "alignment": "Techno‑Cult",
+      "color": "#00e5ff",
+      "emblem": "Neon Eye",
+      "basePOIs": ["Circuit Shrine", "Data Spire", "Signal Pit"],
+      "leader": "The Conductor",
+      "reputationLevels": ["Vilified", "Feared", "Observed", "Neutral", "Accepted", "Integrated"],
+      "perks": {
+        "Accepted": "Servo‑enhanced reflexes",
+        "Integrated": "AI‑linked targeting bonus"
+      },
+      "enemies": ["fizzco_remnants", "dustwalkers"],
+      "allies": ["hollow_choir"],
+      "patrolChance": 0.2,
+      "lootBias": "electronics",
+      "weatherInfluence": "emp_storm"
+    },
+
+    {
+      "id": "dustwalkers",
+      "name": "Dustwalkers",
+      "shortName": "Walkers",
+      "description": "Nomadic raider clans hardened by the wastes. They follow storms, hunt caravans, and believe strength is the only law.",
+      "alignment": "Chaotic Raider",
+      "color": "#c26b00",
+      "emblem": "Spiked Mask",
+      "basePOIs": ["Dustwalker Camp", "Rust Dunes", "Broken Highway"],
+      "leader": "Ash‑Eater",
+      "reputationLevels": ["Vilified", "Hated", "Feared", "Neutral", "Respected", "Blood‑Bonded"],
+      "perks": {
+        "Respected": "Raider intimidation bonus",
+        "Blood‑Bonded": "Dustwalker armor + melee boost"
+      },
+      "enemies": ["fizzco_remnants", "the_circuit", "deepwatch"],
+      "allies": [],
+      "patrolChance": 0.4,
+      "lootBias": "scrap",
+      "weatherInfluence": null
+    },
+
+    {
+      "id": "hollow_choir",
+      "name": "Hollow Choir",
+      "shortName": "Choir",
+      "description": "A cult of whisper‑priests who believe the anomalies are divine messages. Their rituals warp the air and twist the minds of nearby travelers.",
+      "alignment": "Occult",
+      "color": "#7f00ff",
+      "emblem": "Hollow Mask",
+      "basePOIs": ["Choir Chapel", "Rift Monastery"],
+      "leader": "The Cantor",
+      "reputationLevels": ["Vilified", "Shunned", "Observed", "Neutral", "Blessed", "Anointed"],
+      "perks": {
+        "Blessed": "Resistance to anomaly effects",
+        "Anointed": "Choir ritual armor"
+      },
+      "enemies": ["deepwatch", "fizzco_remnants"],
+      "allies": ["the_circuit"],
+      "patrolChance": 0.1,
+      "lootBias": "ritual",
+      "weatherInfluence": "ritual_fog"
+    },
+
+    {
+      "id": "deepwatch",
+      "name": "Deepwatch",
+      "shortName": "Deepwatch",
+      "description": "A frozen‑frontier militia guarding the northern wastes. They fight anomalies, mutants, and anything that crawls out of the ice.",
+      "alignment": "Frontier Militarist",
+      "color": "#00bfff",
+      "emblem": "Ice Wolf",
+      "basePOIs": ["Deepwatch Outpost", "Frozen Barracks"],
+      "leader": "Commander Rime",
+      "reputationLevels": ["Vilified", "Distrusted", "Neutral", "Accepted", "Trusted", "Shield‑Brother"],
+      "perks": {
+        "Trusted": "Cold resistance",
+        "Shield‑Brother": "Deepwatch armor + defense bonus"
+      },
+      "enemies": ["dustwalkers", "hollow_choir", "feral_broods"],
+      "allies": ["free_scavs"],
+      "patrolChance": 0.3,
+      "lootBias": "military",
+      "weatherInfluence": "whiteout"
+    },
+
+    {
+      "id": "free_scavs",
+      "name": "Free Scavs",
+      "shortName": "Scavs",
+      "description": "Independent scavenger collectives who trade, repair, and salvage anything not nailed down. Neutral until crossed.",
+      "alignment": "Neutral",
+      "color": "#aaaaaa",
+      "emblem": "Wrench",
+      "basePOIs": ["Scav Market", "Junk Ridge"],
+      "leader": "Scrap‑Queen Mara",
+      "reputationLevels": ["Vilified", "Shunned", "Neutral", "Accepted", "Trusted", "Partner"],
+      "perks": {
+        "Trusted": "Repair discount",
+        "Partner": "Access to rare scav gear"
+      },
+      "enemies": ["dustwalkers"],
+      "allies": ["fizzco_remnants", "deepwatch"],
+      "patrolChance": 0.15,
+      "lootBias": "mixed",
+      "weatherInfluence": null
+    },
+
+    {
+      "id": "feral_broods",
+      "name": "Feral Broods",
+      "shortName": "Broods",
+      "description": "Mutant nests spawned from anomaly‑warped biology. Territorial, aggressive, and unpredictable.",
+      "alignment": "Chaotic",
+      "color": "#228b22",
+      "emblem": "Claw",
+      "basePOIs": ["Brood Nest", "Green Rot"],
+      "leader": "Broodmother",
+      "reputationLevels": ["Vilified", "Hated", "Feared"],
+      "perks": {},
+      "enemies": ["everyone"],
+      "allies": [],
+      "patrolChance": 0.5,
+      "lootBias": "bio",
+      "weatherInfluence": "anomaly_surge"
+    }
+  ]
+}
