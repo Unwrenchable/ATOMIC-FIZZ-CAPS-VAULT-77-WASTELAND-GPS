@@ -257,6 +257,12 @@
   function addCaps(amount) {
     if (!amount) return;
     PLAYER.caps += amount;
+
+    // Sync to world simulation player caps
+    if (window.overseerWorldState && window.overseerWorldState.player) {
+      window.overseerWorldState.player.caps = PLAYER.caps;
+    }
+
     savePlayerState();
     updateHUD();
   }
@@ -840,6 +846,16 @@
       renderQuestsPanel();
       updateHUD();
 
+      // Sync caps into world simulation player state
+      if (window.overseerWorldState && window.overseerWorldState.player) {
+        window.overseerWorldState.player.caps = PLAYER.caps;
+      }
+
+      // Set a default region for the world simulation
+      if (window.overseerWorldState && typeof window.overseerWorldState.setRegion === "function") {
+        window.overseerWorldState.setRegion("mojave_core");
+      }
+
       // If a wallet is already known (e.g. reconnect), pull NFTs too
       if (window.PLAYER_WALLET || connectedWallet) {
         refreshNFTs();
@@ -847,6 +863,12 @@
 
       _gameInitialized = true;
       safeLog("Game initialized successfully");
+
+      // Start the world simulation loop once game is ready
+      if (window.overseerGameLoop && typeof window.overseerGameLoop.start === "function") {
+        window.overseerGameLoop.start();
+        safeLog("World simulation loop started");
+      }
     } catch (e) {
       safeError("Game initialization failed:", e);
     } finally {
