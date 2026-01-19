@@ -27,6 +27,27 @@
       this.fogPane = worldmap.map.createPane("fogPane");
       this.fogPane.style.zIndex = 600;
       this.fogPane.style.pointerEvents = "none";
+      saveState() {
+      try {
+      const json = JSON.stringify(this.revealed);
+      localStorage.setItem("fow_revealed_v1", json);
+      } catch (e) {
+      console.warn("fogOfWar: failed to save state", e);
+      }
+      },
+
+      loadState() {
+      try {
+      const raw = localStorage.getItem("fow_revealed_v1");
+      if (!raw) return [];
+
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+      } catch (e) {
+      console.warn("fogOfWar: failed to load state", e);
+      return [];
+      }
+      },
 
       // Full fog overlay
       this.fogLayer = L.rectangle(worldmap.map.getBounds(), {
