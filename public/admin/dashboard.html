@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard • Atomic Fizz Caps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+
+<body>
+  <div id="adminWrapper">
+
+    <aside id="adminSidebar">
+      <h2>ADMIN</h2>
+
+      <nav>
+        <button class="nav-btn" data-panel="panel-home">Home</button>
+        <button class="nav-btn" data-panel="panel-players">Players</button>
+        <button class="nav-btn" data-panel="panel-world">World</button>
+        <button class="nav-btn" data-panel="panel-debug">Debug</button>
+        <button class="nav-btn" data-panel="panel-jax">Jax Monitor</button>
+        <button id="adminLogoutBtn" class="nav-btn danger">Logout</button>
+      </nav>
+    </aside>
+
+    <main id="adminMain">
+
+      <section id="panel-home" class="panel active">
+        <h1>Welcome, Administrator</h1>
+        <p>Select a tool from the left to begin.</p>
+      </section>
+
+      <section id="panel-players" class="panel">
+        <h1>Player Tools</h1>
+        <p>Player search, editor, inventory, quests (coming next layers).</p>
+      </section>
+
+      <section id="panel-world" class="panel">
+        <h1>World Tools</h1>
+        <p>Mintables, NPCs, locations, factions (coming next layers).</p>
+      </section>
+
+      <section id="panel-debug" class="panel">
+        <h1>Debug Tools</h1>
+        <p>Teleport, spawn, reset, logs (coming next layers).</p>
+      </section>
+
+      <section id="panel-jax" class="panel">
+        <h1>Jax Monitoring</h1>
+        <p>Anomaly reports, world health, system diagnostics (coming next layers).</p>
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
