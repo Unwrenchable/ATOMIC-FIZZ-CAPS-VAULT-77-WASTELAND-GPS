@@ -1,0 +1,51 @@
+[
+  {
+    "name": "BONK",
+    "symbol": "BONK",
+    "mint": "DezXAZ8z7PnrnYkZq2qkJc9EwP6KDAdPD8YGtXgZtP6",
+    "icon": "/wallet/icons/bonk.png",
+    "description": "The rowdiest dog faction in the wasteland. BONK Raiders roam the highways looking for trouble."
+  },
+  {
+    "name": "Dogwifhat",
+    "symbol": "WIF",
+    "mint": "Es9vMFrzaCERp5uWZLxE3obVhtSGcVwqDAVBBusfvEv",
+    "icon": "/wallet/icons/wif.png",
+    "description": "A mysterious traveler wearing a hat. Followers of WIF believe the hat holds ancient power."
+  },
+  {
+    "name": "Shiba Inu",
+    "symbol": "SHIB",
+    "mint": "SHIB_MINT_ADDRESS_HERE",
+    "icon": "/wallet/icons/shib.png",
+    "description": "A loyal nomadic clan wandering the wasteland. Known for honor, trade, and fierce protection."
+  },
+  {
+    "name": "FLOKI",
+    "symbol": "FLOKI",
+    "mint": "FLOKI_MINT_ADDRESS_HERE",
+    "icon": "/wallet/icons/floki.png",
+    "description": "Viking‑coded explorers who believe the wasteland is theirs to conquer."
+  },
+  {
+    "name": "PEPE",
+    "symbol": "PEPE",
+    "mint": "PEPE_MINT_ADDRESS_HERE",
+    "icon": "/wallet/icons/pepe.png",
+    "description": "A chaotic meme cult that leaves strange caches hidden across the wasteland."
+  },
+  {
+    "name": "USDC",
+    "symbol": "USDC",
+    "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "icon": "/wallet/icons/usdc.png",
+    "description": "Stable currency used by caravans and traders across the wasteland."
+  },
+  {
+    "name": "Solana",
+    "symbol": "SOL",
+    "mint": "So11111111111111111111111111111111111111112",
+    "icon": "/wallet/icons/sol.png",
+    "description": "The lifeblood of all wasteland tech. Everything runs on SOL."
+  }
+]
