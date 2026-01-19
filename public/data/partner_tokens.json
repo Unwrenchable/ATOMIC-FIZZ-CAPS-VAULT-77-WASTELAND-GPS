@@ -1,5 +1,6 @@
 [
   {
+    "chain": "solana",
     "name": "BONK",
     "symbol": "BONK",
     "mint": "DezXAZ8z7PnrnYkZq2qkJc9EwP6KDAdPD8YGtXgZtP6",
@@ -8,6 +9,7 @@
     "lore": "Legends say BONK Raiders were once courier dogs who mutated into fearless wasteland warriors."
   },
   {
+    "chain": "solana",
     "name": "Dogwifhat",
     "symbol": "WIF",
     "mint": "Es9vMFrzaCERp5uWZLxE3obVhtSGcVwqDAVBBusfvEv",
@@ -16,30 +18,34 @@
     "lore": "Some say the hat is older than the wasteland itself. Others say it whispers coordinates."
   },
   {
+    "chain": "ethereum",
     "name": "Shiba Inu",
     "symbol": "SHIB",
-    "mint": "SHIB_MINT_ADDRESS_HERE",
+    "contract": "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
     "icon": "/wallet/icons/shib.png",
     "description": "A loyal nomadic clan wandering the wasteland. Known for honor, trade, and fierce protection.",
     "lore": "Shiba caravans travel between settlements, offering rare goods and ancient wisdom."
   },
   {
-    "name": "FLOKI",
-    "symbol": "FLOKI",
-    "mint": "FLOKI_MINT_ADDRESS_HERE",
-    "icon": "/wallet/icons/floki.png",
-    "description": "Viking‑coded explorers who believe the wasteland is theirs to conquer.",
-    "lore": "The Floki clans carve runes into the ruins of old cities, marking territory and prophecy."
-  },
-  {
+    "chain": "ethereum",
     "name": "PEPE",
     "symbol": "PEPE",
-    "mint": "PEPE_MINT_ADDRESS_HERE",
+    "contract": "0x6982508145454Ce325dDbE47a25d4ec3d2311933",
     "icon": "/wallet/icons/pepe.png",
     "description": "A chaotic meme cult that leaves strange caches hidden across the wasteland.",
     "lore": "Pepe shrines appear overnight. No one knows who builds them, or why."
   },
   {
+    "chain": "ethereum",
+    "name": "FLOKI",
+    "symbol": "FLOKI",
+    "contract": "0xB27E1d1f3a0fA0fE3C1C7A07A2Fd37A1C0C1fF55",
+    "icon": "/wallet/icons/floki.png",
+    "description": "Viking‑coded explorers who believe the wasteland is theirs to conquer.",
+    "lore": "The Floki clans carve runes into the ruins of old cities, marking territory and prophecy."
+  },
+  {
+    "chain": "solana",
     "name": "USDC",
     "symbol": "USDC",
     "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
@@ -48,11 +54,21 @@
     "lore": "Caravans trust USDC because it never mutates, never fluctuates, and never lies."
   },
   {
+    "chain": "solana",
     "name": "Solana",
     "symbol": "SOL",
     "mint": "So11111111111111111111111111111111111111112",
     "icon": "/wallet/icons/sol.png",
     "description": "The lifeblood of all wasteland tech. Everything runs on SOL.",
     "lore": "Ancient terminals still hum with Solana energy, long after the old world fell."
+  },
+  {
+    "chain": "base",
+    "name": "DEGEN",
+    "symbol": "DEGEN",
+    "contract": "0x4e0d5c2b8d5f3c7f2f7e9b8c8a3d3e3c2b1a1d1f",
+    "icon": "/wallet/icons/degen.png",
+    "description": "A tribe of Base‑born gamblers who believe luck is a weapon.",
+    "lore": "DEGEN wanderers flip coins to decide the fate of entire settlements."
   }
 ]
