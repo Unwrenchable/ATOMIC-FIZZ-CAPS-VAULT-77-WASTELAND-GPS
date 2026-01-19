@@ -56,3 +56,28 @@ body {
 .panel.active {
   display: block;
 }
+.player-search {
+  margin-bottom: 20px;
+}
+
+.player-search input {
+  width: 60%;
+  padding: 8px;
+  margin-right: 10px;
+}
+
+.player-details {
+  border-top: 1px solid #333;
+  padding-top: 20px;
+}
+
+.special-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  max-width: 400px;
+}
+
+.player-actions button {
+  margin-right: 10px;
+}
