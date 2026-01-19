@@ -2,7 +2,7 @@
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const router = express.Router();
-const redis = require("../redis");
+const redis = require("../lib/redis");
 
 // Per-route limiter (sensitive: balance / inventory / mutation)
 const walletLimiter = rateLimit({
