@@ -34,7 +34,12 @@ document.getElementById("adminLogoutBtn").addEventListener("click", async () => 
 
   localStorage.removeItem("adminSession");
   window.location.href = "/admin/index.html";
-  // --- PLAYER ADMIN TOOLS ---
+});
+
+// ============================================================================
+// PLAYER ADMIN TOOLS
+// ============================================================================
+
 const playerWalletInput = document.getElementById("adminPlayerWallet");
 const playerSearchBtn = document.getElementById("adminPlayerSearchBtn");
 const playerSearchStatus = document.getElementById("adminPlayerSearchStatus");
@@ -62,6 +67,7 @@ const playerResetBtn = document.getElementById("adminPlayerResetBtn");
 let currentPlayerWallet = null;
 let currentPlayerProfile = null;
 
+// --- SECURE ADMIN FETCH WRAPPER ---
 async function adminFetch(path, options = {}) {
   const token = localStorage.getItem("adminSession");
   const res = await fetch(path, {
@@ -75,6 +81,7 @@ async function adminFetch(path, options = {}) {
   return res.json();
 }
 
+// --- SEARCH PLAYER ---
 async function searchPlayer() {
   const wallet = playerWalletInput.value.trim();
   if (!wallet) {
@@ -103,6 +110,7 @@ async function searchPlayer() {
   }
 }
 
+// --- POPULATE EDITOR ---
 function populatePlayerEditor(wallet, profile) {
   playerDetails.style.display = "block";
 
@@ -125,6 +133,7 @@ function populatePlayerEditor(wallet, profile) {
   unlockedTerminalCheckbox.checked = !!profile.unlockedTerminal;
 }
 
+// --- SAVE CHANGES ---
 async function savePlayerChanges() {
   if (!currentPlayerWallet) return;
 
@@ -166,6 +175,7 @@ async function savePlayerChanges() {
   }
 }
 
+// --- RESET PROFILE ---
 async function resetPlayerProfile() {
   if (!currentPlayerWallet) return;
   if (!confirm("Reset this profile to default?")) return;
@@ -192,9 +202,7 @@ async function resetPlayerProfile() {
   }
 }
 
+// --- EVENT LISTENERS ---
 playerSearchBtn?.addEventListener("click", searchPlayer);
 playerSaveBtn?.addEventListener("click", savePlayerChanges);
 playerResetBtn?.addEventListener("click", resetPlayerProfile);
-
-});
-
