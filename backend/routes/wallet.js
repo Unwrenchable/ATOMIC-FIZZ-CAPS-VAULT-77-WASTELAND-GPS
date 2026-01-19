@@ -8,7 +8,9 @@ const rateLimit = require("express-rate-limit");
 const walletLimiter = rateLimit({
   windowMs: 10 * 1000, // 10 seconds
   max: 5,              // only 5 requests per 10 seconds
-  message: { success: false, error: "Too many wallet requests" }
+  message: { success: false, error: "Too many wallet requests" },
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
 const express = require("express");
@@ -21,7 +23,7 @@ const { v4: uuidv4 } = require("uuid");
 // ------------------------------------------------------------
 // Generate a nonce for the wallet to sign
 // ------------------------------------------------------------
-router.get("/nonce/:publicKey", async (req, res) => {
+router.get("/nonce/:publicKey", walletLimiter, async (req, res) => {
   const { publicKey } = req.params;
 
   if (!publicKey) {
@@ -38,7 +40,7 @@ router.get("/nonce/:publicKey", async (req, res) => {
 // ------------------------------------------------------------
 // Verify signature + create session
 // ------------------------------------------------------------
-router.post("/verify", async (req, res) => {
+router.post("/verify", walletLimiter, async (req, res) => {
   const { publicKey, signature } = req.body;
 
   if (!publicKey || !signature) {
@@ -87,7 +89,7 @@ router.post("/verify", async (req, res) => {
 // ------------------------------------------------------------
 // Validate session
 // ------------------------------------------------------------
-router.get("/session/:sessionId", async (req, res) => {
+router.get("/session/:sessionId", walletLimiter, async (req, res) => {
   const { sessionId } = req.params;
 
   const wallet = await redis.get(`wallet:session:${sessionId}`);
