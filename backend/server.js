@@ -1,14 +1,16 @@
-// server.js
+// backend/server.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps – Backend Server
 // Express + Static Frontend + Modular API Routes
 // ------------------------------------------------------------
 
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
-require("dotenv").config();
+const helmet = require("helmet");
 
 const app = express();
 app.set("trust proxy", 1);
@@ -25,29 +27,87 @@ console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 // ------------------------------------------------------------
 // CORE MIDDLEWARE
 // ------------------------------------------------------------
+
+// Strict CORS (frontend only)
+const FRONTEND_ORIGIN =
+  process.env.FRONTEND_ORIGIN || "https://www.atomicfizzcaps.xyz";
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_ORIGIN || "*",
+    origin: FRONTEND_ORIGIN,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false,
   })
 );
 
+// JSON body limit
 app.use(express.json({ limit: "2mb" }));
 
+// Global rate limiting (coarse)
 app.use(
   rateLimit({
     windowMs: 10 * 1000,
-    max: 20,
+    max: 50,
+    standardHeaders: true,
+    legacyHeaders: false,
   })
 );
+
+// Security headers
+app.use(
+  helmet({
+    contentSecurityPolicy: false, // static SPA handles its own CSP if needed
+    crossOriginEmbedderPolicy: false,
+  })
+);
+
+// Basic body sanitization
+app.use((req, res, next) => {
+  if (req.body && typeof req.body === "object") {
+    for (const key in req.body) {
+      if (typeof req.body[key] === "string") {
+        req.body[key] = req.body[key].trim();
+      }
+    }
+  }
+  next();
+});
 
 // ------------------------------------------------------------
 // STATIC FRONTEND
 // ------------------------------------------------------------
-app.use(express.static(FRONTEND_DIR));
-app.use("/js", express.static(path.join(FRONTEND_DIR, "js")));
-app.use("/css", express.static(path.join(FRONTEND_DIR, "css")));
-app.use("/images", express.static(path.join(FRONTEND_DIR, "images")));
-app.use("/wallet", express.static(path.join(FRONTEND_DIR, "wallet")));
+app.use(
+  express.static(FRONTEND_DIR, {
+    maxAge: NODE_ENV === "production" ? "1h" : 0,
+    etag: true,
+  })
+);
+
+app.use(
+  "/js",
+  express.static(path.join(FRONTEND_DIR, "js"), {
+    maxAge: NODE_ENV === "production" ? "1h" : 0,
+  })
+);
+app.use(
+  "/css",
+  express.static(path.join(FRONTEND_DIR, "css"), {
+    maxAge: NODE_ENV === "production" ? "1h" : 0,
+  })
+);
+app.use(
+  "/images",
+  express.static(path.join(FRONTEND_DIR, "images"), {
+    maxAge: NODE_ENV === "production" ? "1h" : 0,
+  })
+);
+app.use(
+  "/wallet",
+  express.static(path.join(FRONTEND_DIR, "wallet"), {
+    maxAge: NODE_ENV === "production" ? "1h" : 0,
+  })
+);
 
 // ------------------------------------------------------------
 // SAFE MOUNT HELPER
@@ -125,6 +185,14 @@ app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api/")) return next();
   if (path.extname(req.path)) return next();
   res.sendFile(path.join(FRONTEND_DIR, "index.html"));
+});
+
+// ------------------------------------------------------------
+// GLOBAL ERROR HANDLER
+// ------------------------------------------------------------
+app.use((err, req, res, next) => {
+  console.error("[server] GLOBAL ERROR:", err);
+  res.status(500).json({ ok: false, error: "Internal server error" });
 });
 
 // ------------------------------------------------------------
