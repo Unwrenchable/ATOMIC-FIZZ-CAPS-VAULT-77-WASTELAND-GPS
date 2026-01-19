@@ -1010,3 +1010,6 @@ body.pipboy-mode {
   line-height: 1.1;
   text-shadow: 0 0 6px #33ff33; /* CRT glow */
 }
+.pipboy-road {
+  filter: drop-shadow(0 0 4px #00ff41);
+}
