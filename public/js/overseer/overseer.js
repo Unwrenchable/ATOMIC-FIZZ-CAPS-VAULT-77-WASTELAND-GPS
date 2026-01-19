@@ -61,19 +61,25 @@
     },
 
     // -------------------------------------------------------------------------
-    // PERSONALITY
+    // PERSONALITY (AI‑ENABLED)
     // -------------------------------------------------------------------------
     attachPersonality(Terminal, Personality) {
       if (!Personality) {
-        Terminal.say = () => overseerSay("...");
-        Terminal.react = (ctx = "") => overseerSay("..." + (ctx ? " // " + ctx : ""));
+        Terminal.say = async () => overseerSay("...");
+        Terminal.react = async (ctx = "") =>
+          overseerSay("..." + (ctx ? " // " + ctx : ""));
         return;
       }
 
-      Terminal.say = () => overseerSay(Personality.speak());
-      Terminal.react = (ctx = "") => {
-        const line = Personality.speak();
-        overseerSay(line + (ctx ? " // " + ctx : ""));
+      // AI‑powered speak()
+      Terminal.say = async () => {
+        const line = await Personality.speak();
+        overseerSay(line);
+      };
+
+      Terminal.react = async (ctx = "") => {
+        const line = await Personality.speak(ctx);
+        overseerSay(line);
       };
     },
 
@@ -102,12 +108,12 @@
       if (!Lore) return;
       Terminal.lore = Lore;
 
-      Terminal.loreComment = function (category) {
+      Terminal.loreComment = async function (category) {
         const entry = Lore.getRandomLore(category);
         if (!entry) return;
         overseerSay("=== " + entry.title + " ===");
         entry.body.forEach((line) => overseerSay(line));
-        Terminal.react("lore recall");
+        await Terminal.react("lore recall");
       };
     },
 
@@ -155,12 +161,12 @@
       if (!Weather) return;
       Terminal.weather = Weather;
 
-      Terminal.weatherComment = function (id) {
+      Terminal.weatherComment = async function (id) {
         const w = Weather.getWeatherById(id);
         if (!w) return;
         overseerSay("Weather: " + w.name);
         overseerSay(w.description);
-        Terminal.react("weather update");
+        await Terminal.react("weather update");
       };
     },
 
@@ -170,7 +176,7 @@
     extendCommands(Terminal) {
       const original = Terminal.handleInput.bind(Terminal);
 
-      Terminal.handleInput = function (raw) {
+      Terminal.handleInput = async function (raw) {
         const line = raw.trim().toLowerCase();
         const parts = line.split(" ");
         const cmd = parts[0];
@@ -184,11 +190,11 @@
         }
 
         if (cmd === "speak" || cmd === "talk") {
-          Terminal.say();
+          await Terminal.say();
           return;
         }
 
-        original(raw);
+        await original(raw);
       };
     },
 
@@ -198,19 +204,20 @@
     extendGameEvents(Terminal, Engines) {
       const original = Terminal.handleGameEvent.bind(Terminal);
 
-      Terminal.handleGameEvent = function (data) {
+      Terminal.handleGameEvent = async function (data) {
         const type = data.type || "";
         const payload = data.payload || {};
 
         // Personality reactions
-        if (type === "status") Terminal.react("status update");
-        if (type === "quest_update") Terminal.react("quest progression");
-        if (type === "caps") Terminal.react("financial update");
-        if (type === "inventory") Terminal.react("inventory change");
+        if (type === "status") await Terminal.react("status update");
+        if (type === "quest_update") await Terminal.react("quest progression");
+        if (type === "caps") await Terminal.react("financial update");
+        if (type === "inventory") await Terminal.react("inventory change");
 
         // Memory
         if (Engines.Memory) {
-          if (type === "location" && payload.regionId) Engines.Memory.markRegionVisited(payload.regionId);
+          if (type === "location" && payload.regionId)
+            Engines.Memory.markRegionVisited(payload.regionId);
           if (type === "map_scan" && Array.isArray(payload.nearby)) {
             payload.nearby.forEach((poi) => poi.id && Engines.Memory.markPoiDiscovered(poi.id));
           }
@@ -229,23 +236,23 @@
         // Threat
         if (type === "enemy_detected" && Engines.Threat) {
           Terminal.threatComment(payload);
-          Terminal.react("hostile presence");
+          await Terminal.react("hostile presence");
         }
 
         // Weather
         if (type === "weather_change" && Engines.Weather) {
-          Terminal.weatherComment(payload.id);
+          await Terminal.weatherComment(payload.id);
         }
 
         // Lore (contextual)
         if (type === "location" && Engines.Lore && payload.regionId) {
           const region = String(payload.regionId).toLowerCase();
-          if (region.includes("vault")) Terminal.loreComment("vault_logs");
-          if (region.includes("fizz")) Terminal.loreComment("fizzco_ads");
-          if (region.includes("basin")) Terminal.loreComment("survivor_notes");
+          if (region.includes("vault")) await Terminal.loreComment("vault_logs");
+          if (region.includes("fizz")) await Terminal.loreComment("fizzco_ads");
+          if (region.includes("basin")) await Terminal.loreComment("survivor_notes");
         }
 
-        original(data);
+        await original(data);
       };
     }
   };
