@@ -178,6 +178,25 @@
       // Overlay layers
       this.labelLayer = L.layerGroup().addTo(this.map);
       this.roadLayer = L.layerGroup().addTo(this.map);
+      // --------------------------------------------------------
+// LOAD VECTOR ROADS (Fallout-style)
+// --------------------------------------------------------
+fetch("/data/roads.json")
+  .then(res => res.json())
+  .then(data => {
+    data.roads.forEach(road => {
+      const poly = L.polyline(road.coords, {
+        color: "#00ff41",
+        weight: 2.5,
+        opacity: 0.9,
+        lineJoin: "round",
+        lineCap: "round",
+        className: "pipboy-road"
+      });
+      poly.addTo(this.roadLayer);
+    });
+  })
+  .catch(err => console.warn("worldmap: failed to load roads.json", err));
 
       // Auto-follow behavior
       this.enableAutoFollow();
