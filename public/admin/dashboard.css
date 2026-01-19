@@ -87,3 +87,30 @@ body {
 .player-actions button {
   margin-right: 10px;
 }
+.mintables-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.mintables-table th,
+.mintables-table td {
+  border: 1px solid #333;
+  padding: 8px;
+}
+
+.mintables-table input {
+  width: 100%;
+  background: #111;
+  border: 1px solid #333;
+  color: #e0e0e0;
+  padding: 4px;
+}
+
+.mintables-table button {
+  background: #550000;
+  color: #fff;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+}
