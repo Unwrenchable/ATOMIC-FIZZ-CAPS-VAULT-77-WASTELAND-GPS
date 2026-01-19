@@ -3,6 +3,13 @@
 // Atomic Fizz Caps – Wallet Authentication Route
 // Solana signature verification + Redis session storage
 // ------------------------------------------------------------
+const rateLimit = require("express-rate-limit");
+
+const walletLimiter = rateLimit({
+  windowMs: 10 * 1000, // 10 seconds
+  max: 5,              // only 5 requests per 10 seconds
+  message: { success: false, error: "Too many wallet requests" }
+});
 
 const express = require("express");
 const router = express.Router();
