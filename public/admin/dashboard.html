@@ -77,9 +77,36 @@
 
       <!-- WORLD -->
       <section id="panel-world" class="panel">
-        <h1>World Tools</h1>
-        <p>Mintables, NPCs, locations, factions (coming next layers).</p>
-      </section>
+  <h1>World Tools</h1>
+
+  <h2>Mintables</h2>
+
+  <button id="mintablesLoadBtn">Load Mintables</button>
+  <button id="mintablesSaveBtn">Save Changes</button>
+
+  <div id="mintablesStatus"></div>
+
+  <table id="mintablesTable" class="mintables-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Rarity</th>
+        <th>Caps</th>
+        <th>Enabled</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>Add New Mintable</h3>
+  <input id="newMintName" placeholder="Name" />
+  <input id="newMintRarity" placeholder="Rarity" />
+  <input id="newMintCaps" type="number" placeholder="Caps" />
+  <button id="addMintableBtn">Add</button>
+</section>
+
 
       <!-- DEBUG -->
       <section id="panel-debug" class="panel">
