@@ -1,153 +1,95 @@
+// routes/wallet.js
+// ------------------------------------------------------------
+// Atomic Fizz Caps – Wallet Authentication Route
+// Solana signature verification + Redis session storage
+// ------------------------------------------------------------
+
 const express = require("express");
 const router = express.Router();
-const redis = require("../redis");
+const redis = require("../lib/redis");
+const nacl = require("tweetnacl");
+const bs58 = require("bs58");
+const { v4: uuidv4 } = require("uuid");
 
-/*
-  Redis-backed state helpers
-*/
-async function getState() {
-  const [capsStr, nftsStr] = await Promise.all([
-    redis.get("afw:caps"),
-    redis.get("afw:nfts"),
-  ]);
+// ------------------------------------------------------------
+// Generate a nonce for the wallet to sign
+// ------------------------------------------------------------
+router.get("/nonce/:publicKey", async (req, res) => {
+  const { publicKey } = req.params;
 
-  return {
-    caps: capsStr ? Number(capsStr) : 0,
-    nfts: nftsStr ? JSON.parse(nftsStr) : []
-  };
-}
-
-async function saveState(state) {
-  await Promise.all([
-    redis.set("afw:caps", String(state.caps)),
-    redis.set("afw:nfts", JSON.stringify(state.nfts))
-  ]);
-}
-
-/*
-  CAPS reward table
-*/
-const rarityCaps = {
-  common: 10,
-  uncommon: 25,
-  rare: 50,
-  epic: 100,
-  legendary: 250,
-  fizz: 777
-};
-
-/*
-  Rarity evolution order
-*/
-const rarityOrder = ["common", "uncommon", "rare", "epic", "legendary", "fizz"];
-
-/* ------------------------------------------------------------
-   SCRAP NFT → CAPS
--------------------------------------------------------------*/
-router.post("/scrap-nft", async (req, res) => {
-  try {
-    const { mint } = req.body;
-
-    if (!mint || typeof mint !== "string") {
-      return res.status(400).json({ ok: false, error: "Missing or invalid mint" });
-    }
-
-    const state = await getState();
-    const nft = state.nfts.find(n => n.mint === mint);
-
-    if (!nft) {
-      return res.status(400).json({ ok: false, error: "NFT not owned" });
-    }
-
-    // Remove NFT
-    state.nfts = state.nfts.filter(n => n.mint !== mint);
-
-    // Award CAPS
-    const capsAwarded = rarityCaps[nft.rarity] || rarityCaps.common;
-    state.caps += capsAwarded;
-
-    await saveState(state);
-
-    return res.json({
-      ok: true,
-      caps: capsAwarded,
-      totalCaps: state.caps
-    });
-
-  } catch (err) {
-    console.error("SCRAP ERROR:", err);
-    return res.status(500).json({ ok: false, error: "Server error" });
+  if (!publicKey) {
+    return res.status(400).json({ success: false, error: "Missing publicKey" });
   }
+
+  const nonce = uuidv4();
+
+  await redis.set(`wallet:nonce:${publicKey}`, nonce, { EX: 300 });
+
+  res.json({ success: true, nonce });
 });
 
-/* ------------------------------------------------------------
-   FUSION → NEW NFT
--------------------------------------------------------------*/
-router.post("/fuse", async (req, res) => {
-  try {
-    const { mint } = req.body;
+// ------------------------------------------------------------
+// Verify signature + create session
+// ------------------------------------------------------------
+router.post("/verify", async (req, res) => {
+  const { publicKey, signature } = req.body;
 
-    if (!mint || typeof mint !== "string") {
-      return res.status(400).json({ ok: false, error: "Missing or invalid mint" });
-    }
-
-    const state = await getState();
-    const baseNFT = state.nfts.find(n => n.mint === mint);
-
-    if (!baseNFT) {
-      return res.status(400).json({ ok: false, error: "NFT not owned" });
-    }
-
-    // Remove base NFT
-    state.nfts = state.nfts.filter(n => n.mint !== mint);
-
-    // Evolve rarity
-    const currentIndex = rarityOrder.indexOf(baseNFT.rarity || "common");
-    const newRarity = rarityOrder[Math.min(currentIndex + 1, rarityOrder.length - 1)];
-
-    // Create new NFT
-    const newNFT = {
-      name: `Fused ${baseNFT.name}`,
-      mint: "FUSED-" + Math.random().toString(36).slice(2),
-      rarity: newRarity,
-      image: baseNFT.image,
-      description: `A fused evolution of ${baseNFT.name}.`,
-      slot: baseNFT.slot || "weapon",
-      special: baseNFT.special || {}
-    };
-
-    state.nfts.push(newNFT);
-    await saveState(state);
-
-    return res.json({
-      ok: true,
-      newItem: newNFT
-    });
-
-  } catch (err) {
-    console.error("FUSION ERROR:", err);
-    return res.status(500).json({ ok: false, error: "Server error" });
+  if (!publicKey || !signature) {
+    return res.status(400).json({ success: false, error: "Missing fields" });
   }
+
+  const nonce = await redis.get(`wallet:nonce:${publicKey}`);
+
+  if (!nonce) {
+    return res.status(400).json({ success: false, error: "Nonce expired" });
+  }
+
+  // Decode
+  let pubKeyBytes, sigBytes;
+  try {
+    pubKeyBytes = bs58.decode(publicKey);
+    sigBytes = bs58.decode(signature);
+  } catch (err) {
+    return res.status(400).json({ success: false, error: "Invalid encoding" });
+  }
+
+  const msgBytes = Buffer.from(nonce);
+
+  // Verify signature
+  const valid = nacl.sign.detached.verify(msgBytes, sigBytes, pubKeyBytes);
+
+  if (!valid) {
+    return res.status(401).json({ success: false, error: "Invalid signature" });
+  }
+
+  // Create session
+  const sessionId = uuidv4();
+
+  await redis.set(`wallet:session:${sessionId}`, publicKey, { EX: 86400 });
+
+  // Cleanup nonce
+  await redis.del(`wallet:nonce:${publicKey}`);
+
+  res.json({
+    success: true,
+    session: sessionId,
+    wallet: publicKey,
+  });
 });
 
-/* ------------------------------------------------------------
-   FIZZ TRANSFER (stub for Solana integration)
--------------------------------------------------------------*/
-router.post("/transfer-fizz", async (req, res) => {
-  try {
-    const { from, to, amount } = req.body;
+// ------------------------------------------------------------
+// Validate session
+// ------------------------------------------------------------
+router.get("/session/:sessionId", async (req, res) => {
+  const { sessionId } = req.params;
 
-    if (!from || !to || typeof amount !== "number") {
-      return res.status(400).json({ ok: false, error: "Missing or invalid fields" });
-    }
+  const wallet = await redis.get(`wallet:session:${sessionId}`);
 
-    // TODO: integrate Solana token transfer here
-    return res.json({ ok: true });
-
-  } catch (err) {
-    console.error("TRANSFER ERROR:", err);
-    return res.status(500).json({ ok: false, error: "Server error" });
+  if (!wallet) {
+    return res.json({ success: false, valid: false });
   }
+
+  res.json({ success: true, valid: true, wallet });
 });
 
 module.exports = router;
