@@ -185,84 +185,104 @@
 
   // ========= COMMAND HANDLING (USER INPUT) =========
 
-  Overseer.handleInput = function (raw) {
-    const line = raw.trim();
-    if (!line) return;
+Overseer.handleInput = async function (raw) {
+  const line = raw.trim();
+  if (!line) return;
 
-    Overseer.history.push(line);
-    Overseer.historyIndex = Overseer.history.length;
+  Overseer.history.push(line);
+  Overseer.historyIndex = Overseer.history.length;
 
-    Overseer.print("> " + line);
+  Overseer.print("> " + line);
 
-    const parts = line.split(" ");
-    const cmd = parts[0].toLowerCase();
-    const args = parts.slice(1);
+  const parts = line.split(" ");
+  const cmd = parts[0].toLowerCase();
+  const args = parts.slice(1);
 
-    switch (cmd) {
-      case "help":
-        Overseer.print("AVAILABLE COMMANDS:");
-        Overseer.print("  HELP       - Show this help screen");
-        Overseer.print("  CLEAR      - Clear terminal buffer");
-        Overseer.print("  STATUS     - Request player status");
-        Overseer.print("  INVENTORY  - Request inventory list");
-        Overseer.print("  MAP        - Request map scan");
-        Overseer.print("  SCAN       - Alias for MAP");
-        Overseer.print("  QUEST      - Request quest log");
-        Overseer.print("  WHEREAMI   - Request current location");
-        Overseer.print("  CAPS       - Request CAPS balance");
-        Overseer.print("  VBOT ...   - Send message to V-BOT");
-        Overseer.print("  RM ON/OFF  - Toggle Red Menace mode (signal only)");
-        break;
+  // 1. Known terminal commands (game-side)
+  switch (cmd) {
+    case "help":
+      Overseer.print("AVAILABLE COMMANDS:");
+      Overseer.print("  HELP       - Show this help screen");
+      Overseer.print("  CLEAR      - Clear terminal buffer");
+      Overseer.print("  STATUS     - Request player status");
+      Overseer.print("  INVENTORY  - Request inventory list");
+      Overseer.print("  MAP        - Request map scan");
+      Overseer.print("  SCAN       - Alias for MAP");
+      Overseer.print("  QUEST      - Request quest log");
+      Overseer.print("  WHEREAMI   - Request current location");
+      Overseer.print("  CAPS       - Request CAPS balance");
+      Overseer.print("  VBOT ...   - Send message to V-BOT");
+      Overseer.print("  RM ON/OFF  - Toggle Red Menace mode (signal only)");
+      return;
 
-      case "clear":
-        Overseer.clear();
-        break;
+    case "clear":
+      Overseer.clear();
+      return;
 
-      case "status":
-        sendToGame("status", {});
-        break;
+    case "status":
+      sendToGame("status", {});
+      return;
 
-      case "inventory":
-        sendToGame("inventory", {});
-        break;
+    case "inventory":
+      sendToGame("inventory", {});
+      return;
 
-      case "map":
-      case "scan":
-        sendToGame("map_scan", {});
-        break;
+    case "map":
+    case "scan":
+      sendToGame("map_scan", {});
+      return;
 
-      case "quest":
-        sendToGame("quest_log", {});
-        break;
+    case "quest":
+      sendToGame("quest_log", {});
+      return;
 
-      case "whereami":
-        sendToGame("location", {});
-        break;
+    case "whereami":
+      sendToGame("location", {});
+      return;
 
-      case "caps":
-        sendToGame("caps", {});
-        break;
+    case "caps":
+      sendToGame("caps", {});
+      return;
 
-      case "vbot":
-        sendToGame("vbot", { text: args.join(" ") });
-        break;
+    case "vbot":
+      sendToGame("vbot", { text: args.join(" ") });
+      return;
 
-      case "rm":
-        if (args[0] && args[0].toLowerCase() === "on") {
-          sendToGame("rm_mode", { active: true });
-        } else if (args[0] && args[0].toLowerCase() === "off") {
-          sendToGame("rm_mode", { active: false });
-        } else {
-          Overseer.print("USAGE: RM ON | RM OFF");
-        }
-        break;
+    case "rm":
+      if (args[0] && args[0].toLowerCase() === "on") {
+        sendToGame("rm_mode", { active: true });
+      } else if (args[0] && args[0].toLowerCase() === "off") {
+        sendToGame("rm_mode", { active: false });
+      } else {
+        Overseer.print("USAGE: RM ON | RM OFF");
+      }
+      return;
+  }
 
-      default:
-        sendToGame("unknown", { raw: line, cmd, args });
-        Overseer.print("UNKNOWN COMMAND: " + cmd.toUpperCase());
-        Overseer.print("TYPE 'HELP' FOR A LIST OF COMMANDS.");
+  // 2. Overseer.js command extensions (bridge to handlers.js)
+  const handlers = window.overseerHandlers || {};
+  if (handlers[cmd]) {
+    handlers[cmd](args);
+    return;
+  }
+
+  // 3. AI fallback — ANY unknown input goes to the Overseer AI
+  if (window.overseerPersonality && typeof window.overseerPersonality.speak === "function") {
+    try {
+      const reply = await window.overseerPersonality.speak(line);
+      Overseer.print(reply);
+    } catch (err) {
+      Overseer.print("AI CORE ERROR: SIGNAL CORRUPTED");
+      console.error("Overseer AI error:", err);
     }
-  };
+    return;
+  }
+
+  // 4. Final fallback (should never hit unless AI missing)
+  Overseer.print("UNKNOWN COMMAND: " + cmd.toUpperCase());
+  Overseer.print("TYPE 'HELP' FOR A LIST OF COMMANDS.");
+};
+
 
   // ========= RED MENACE CONTROLS =========
 
