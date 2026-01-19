@@ -12,7 +12,8 @@
     poiMarkers: [],
     locations: [],
     locationsLoaded: false,
-
+    
+    prevPlayerPosition: null,
     labelLayer: null,
     roadLayer: null,
     worldLabels: [],
@@ -213,11 +214,53 @@
     },
 
     setPlayerPosition(lat, lng, opts = {}) {
-      this.gs.player.position = { lat, lng };
-      if (this.playerMarker) this.playerMarker.setLatLng([lat, lng]);
-      if (opts.heading !== undefined) this.setPlayerHeading(opts.heading);
-      if (opts.fromGPS) this.centerOnPlayer(true);
-    },
+  const newPos = { lat, lng };
+
+  // Auto-heading from movement if no explicit heading provided
+  if (this.prevPlayerPosition && opts.heading === undefined) {
+    const h = this.computeHeading(
+      this.prevPlayerPosition.lat,
+      this.prevPlayerPosition.lng,
+      newPos.lat,
+      newPos.lng
+    );
+    if (!isNaN(h)) this.setPlayerHeading(h);
+  }
+
+  this.prevPlayerPosition = newPos;
+  this.gs.player.position = newPos;
+
+  if (this.playerMarker) {
+    this.playerMarker.setLatLng([lat, lng]);
+  }
+
+  if (opts.heading !== undefined) {
+    this.setPlayerHeading(opts.heading);
+  }
+  computeHeading(lat1, lon1, lat2, lon2) {
+  const toRad = d => (d * Math.PI) / 180;
+  const toDeg = r => (r * 180) / Math.PI;
+
+  const φ1 = toRad(lat1);
+  const φ2 = toRad(lat2);
+  const Δλ = toRad(lon2 - lon1);
+
+  const y = Math.sin(Δλ) * Math.cos(φ2);
+  const x =
+    Math.cos(φ1) * Math.sin(φ2) -
+    Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+
+  let brng = toDeg(Math.atan2(y, x)); // -180..180
+  if (brng < 0) brng += 360;          // 0..360
+
+  return brng;
+},
+
+  if (opts.fromGPS) {
+    this.centerOnPlayer(true);
+  }
+},
+
 
     updatePlayerPosition(lat, lng, opts = {}) {
       this.setPlayerPosition(lat, lng, opts);
