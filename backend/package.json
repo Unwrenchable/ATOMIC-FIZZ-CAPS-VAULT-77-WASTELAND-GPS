@@ -1,7 +1,7 @@
 {
   "name": "atomic-fizz-caps-backend",
   "version": "1.0.0",
-  "description": "Backend server for Atomic Fizz Caps – Vault 77 Wasteland GPS",
+  "description": "Backend server for Atomic Fizz Caps",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -14,6 +14,8 @@
     "dotenv": "^16.4.5",
     "body-parser": "^1.20.2",
     "redis": "^4.6.13",
+    "tweetnacl": "^1.0.3",
+    "bs58": "^5.0.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
