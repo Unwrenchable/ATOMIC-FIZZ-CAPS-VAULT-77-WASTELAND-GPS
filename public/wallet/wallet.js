@@ -455,3 +455,151 @@
 
   window.addEventListener("DOMContentLoaded", initWallet);
 })();
+(function () {
+    // ------------------------------------------------------------
+// MULTICHAIN + PARTNER TOKEN EXPANSION (CHUNK 3)
+// ------------------------------------------------------------
+
+(function () {
+  "use strict";
+
+  let partnerTokens = [];
+  let chains = [];
+  let currentWalletPublicKey = null;
+
+  // ------------------------------------------------------------
+  // LOAD PARTNER TOKENS
+  // ------------------------------------------------------------
+  async function loadPartnerTokens() {
+    try {
+      const res = await fetch("/data/partner_tokens.json");
+      partnerTokens = await res.json();
+      renderPartnerTokens();
+    } catch (e) {
+      console.warn("[AFW] Failed to load partner tokens:", e);
+    }
+  }
+
+  // ------------------------------------------------------------
+  // LOAD CHAINS
+  // ------------------------------------------------------------
+  async function loadChains() {
+    try {
+      const res = await fetch("/data/chains.json");
+      chains = await res.json();
+      renderChains();
+    } catch (e) {
+      console.warn("[AFW] Failed to load chains:", e);
+    }
+  }
+
+  // ------------------------------------------------------------
+  // RENDER PARTNER TOKENS
+  // ------------------------------------------------------------
+  function renderPartnerTokens() {
+    const container = document.getElementById("partner-tokens");
+    if (!container) return;
+
+    if (!partnerTokens.length) {
+      container.innerHTML = `<p class="muted">No partner tokens configured.</p>`;
+      return;
+    }
+
+    container.innerHTML = partnerTokens
+      .map(t => `
+        <div class="data-row">
+          <div class="data-label">${t.name} (${t.symbol})</div>
+          <div class="data-value" id="pt-${t.symbol}">—</div>
+        </div>
+      `)
+      .join("");
+  }
+
+  // ------------------------------------------------------------
+  // RENDER CHAINS
+  // ------------------------------------------------------------
+  function renderChains() {
+    const container = document.getElementById("chain-list");
+    if (!container) return;
+
+    if (!chains.length) {
+      container.innerHTML = `<p class="muted">No chains configured.</p>`;
+      return;
+    }
+
+    container.innerHTML = chains
+      .map(c => `
+        <div class="data-row">
+          <div class="data-label">${c.nativeName} (${c.nativeSymbol})</div>
+          <div class="data-value" id="chain-${c.chain}">—</div>
+        </div>
+      `)
+      .join("");
+  }
+
+  // ------------------------------------------------------------
+  // MOONPAY BUY USDC
+  // ------------------------------------------------------------
+  function openMoonPayForUSDC() {
+    const pubkey = window.PLAYER_WALLET;
+    if (!pubkey) {
+      alert("Connect your wallet first.");
+      return;
+    }
+
+    const baseUrl = "https://buy.moonpay.com";
+    const params = new URLSearchParams({
+      currencyCode: "usdc_sol",
+      walletAddress: pubkey
+    });
+
+    window.open(`${baseUrl}?${params.toString()}`, "_blank", "noopener,noreferrer");
+  }
+
+  // ------------------------------------------------------------
+  // MULTICHAIN BALANCE REFRESH (SAFE STUBS)
+  // ------------------------------------------------------------
+  async function refreshMultichainBalances(pubkey) {
+    if (!pubkey) return;
+
+    // Placeholder — safe, no breakage
+    chains.forEach(c => {
+      const el = document.getElementById(`chain-${c.chain}`);
+      if (el) el.textContent = "—";
+    });
+
+    partnerTokens.forEach(t => {
+      const el = document.getElementById(`pt-${t.symbol}`);
+      if (el) el.textContent = "—";
+    });
+  }
+
+  // ------------------------------------------------------------
+  // PATCH INTO EXISTING INIT
+  // ------------------------------------------------------------
+  const oldInit = window.initWallet;
+
+  window.initWallet = function patchedInitWallet() {
+    if (typeof oldInit === "function") oldInit();
+
+    // Load registries
+    loadPartnerTokens();
+    loadChains();
+
+    // Wire MoonPay button
+    const buyBtn = document.getElementById("buy-usdc-button");
+    if (buyBtn) buyBtn.addEventListener("click", openMoonPayForUSDC);
+
+    // Patch refresh
+    const oldRefresh = window.refreshOnChain;
+    window.refreshOnChain = async function patchedRefresh(pubkey) {
+      await oldRefresh(pubkey);
+      await refreshMultichainBalances(pubkey);
+    };
+
+    console.log("[AFW] Multichain + Partner Token Expansion Loaded");
+  };
+
+})();
+
+})();
