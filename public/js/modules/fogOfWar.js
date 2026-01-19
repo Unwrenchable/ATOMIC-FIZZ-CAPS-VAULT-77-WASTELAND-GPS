@@ -16,6 +16,9 @@
     revealRadius: 500, // meters
     lastPos: null,
 
+    // ------------------------------------------------------------
+    // INIT
+    // ------------------------------------------------------------
     init() {
       const worldmap = Game.modules.worldmap;
       if (!worldmap || !worldmap.map) {
@@ -27,27 +30,6 @@
       this.fogPane = worldmap.map.createPane("fogPane");
       this.fogPane.style.zIndex = 600;
       this.fogPane.style.pointerEvents = "none";
-      saveState() {
-      try {
-      const json = JSON.stringify(this.revealed);
-      localStorage.setItem("fow_revealed_v1", json);
-      } catch (e) {
-      console.warn("fogOfWar: failed to save state", e);
-      }
-      },
-
-      loadState() {
-      try {
-      const raw = localStorage.getItem("fow_revealed_v1");
-      if (!raw) return [];
-
-      const arr = JSON.parse(raw);
-      return Array.isArray(arr) ? arr : [];
-      } catch (e) {
-      console.warn("fogOfWar: failed to load state", e);
-      return [];
-      }
-      },
 
       // Full fog overlay
       this.fogLayer = L.rectangle(worldmap.map.getBounds(), {
@@ -68,12 +50,19 @@
         }
       }).addTo(worldmap.map);
 
+      // Load saved exploration
+      this.revealed = this.loadState();
+      this.revealed.forEach(poly => this.revealLayer.addData(poly));
+
       this.injectStyles();
       this.patchMovement(worldmap);
 
       console.log("fogOfWar: initialized");
     },
 
+    // ------------------------------------------------------------
+    // CSS
+    // ------------------------------------------------------------
     injectStyles() {
       const style = document.createElement("style");
       style.textContent = `
@@ -84,6 +73,9 @@
       document.head.appendChild(style);
     },
 
+    // ------------------------------------------------------------
+    // MOVEMENT HOOK
+    // ------------------------------------------------------------
     patchMovement(worldmap) {
       const originalSetPos = worldmap.setPlayerPosition.bind(worldmap);
 
@@ -93,6 +85,9 @@
       };
     },
 
+    // ------------------------------------------------------------
+    // REVEAL AREA
+    // ------------------------------------------------------------
     reveal(lat, lng) {
       const newPos = L.latLng(lat, lng);
 
@@ -107,6 +102,33 @@
 
       this.revealed.push(circle);
       this.revealLayer.addData(circle);
+
+      // Save to localStorage
+      this.saveState();
+    },
+
+    // ------------------------------------------------------------
+    // PERSISTENCE
+    // ------------------------------------------------------------
+    saveState() {
+      try {
+        const json = JSON.stringify(this.revealed);
+        localStorage.setItem("fow_revealed_v1", json);
+      } catch (e) {
+        console.warn("fogOfWar: failed to save state", e);
+      }
+    },
+
+    loadState() {
+      try {
+        const raw = localStorage.getItem("fow_revealed_v1");
+        if (!raw) return [];
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr : [];
+      } catch (e) {
+        console.warn("fogOfWar: failed to load state", e);
+        return [];
+      }
     }
   };
 
