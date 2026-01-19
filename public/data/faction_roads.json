@@ -1,0 +1,142 @@
+{
+  "faction_roads": [
+    {
+      "road_id": "na_i15",
+      "faction": "NCR",
+      "condition": "maintained",
+      "hazards": ["patrols", "checkpoints"],
+      "notes": "Primary NCR supply artery between SoCal and Mojave."
+    },
+    {
+      "road_id": "na_i95",
+      "faction": "Brotherhood of Steel",
+      "condition": "restricted",
+      "hazards": ["scanners", "sentry_drones"],
+      "notes": "Brotherhood controls key bunkers along the East Coast corridor."
+    },
+    {
+      "road_id": "na_i80",
+      "faction": "Enclave Remnants",
+      "condition": "degraded",
+      "hazards": ["radioactive_hotspots", "black_ops_activity"],
+      "notes": "Sparse but strategic Enclave presence along abandoned military depots."
+    },
+    {
+      "road_id": "na_us93",
+      "faction": "Independent Wastelanders",
+      "condition": "rough",
+      "hazards": ["raiders", "ambush_points"],
+      "notes": "Vital Mojave route with scattered settlements and raider threats."
+    },
+    {
+      "road_id": "na_us95",
+      "faction": "Raider Clans",
+      "condition": "broken",
+      "hazards": ["roadblocks", "trap_fields"],
+      "notes": "High raider activity between Searchlight and the Mojave outskirts."
+    },
+    {
+      "road_id": "na_nv160",
+      "faction": "Atomic Fizz Caps",
+      "condition": "maintained",
+      "hazards": ["corporate_drones"],
+      "notes": "FizzCo maintains this corridor for supply convoys and field teams."
+    },
+    {
+      "road_id": "na_i215",
+      "faction": "Vegas Free Zone",
+      "condition": "patched",
+      "hazards": ["scavengers"],
+      "notes": "Locals keep the beltway semi-functional for trade and salvage runs."
+    },
+
+    {
+      "road_id": "eu_e40",
+      "faction": "European Federation",
+      "condition": "maintained",
+      "hazards": ["border_checks"],
+      "notes": "One of the last stable transnational corridors in Europe."
+    },
+    {
+      "road_id": "eu_e35",
+      "faction": "Brotherhood of Steel (Euro Chapter)",
+      "condition": "restricted",
+      "hazards": ["tech_scanners"],
+      "notes": "Euro Brotherhood controls key choke points along this route."
+    },
+    {
+      "road_id": "eu_e75",
+      "faction": "Wasteland Tribes",
+      "condition": "broken",
+      "hazards": ["tribal_territory"],
+      "notes": "Fragmented control; safe passage depends on local agreements."
+    },
+
+    {
+      "road_id": "as_ah1",
+      "faction": "Pan-Asian Coalition",
+      "condition": "maintained",
+      "hazards": ["military_convoys"],
+      "notes": "Major stabilized corridor across East and Southeast Asia."
+    },
+    {
+      "road_id": "as_ah2",
+      "faction": "Warlord Territories",
+      "condition": "dangerous",
+      "hazards": ["ambushes", "toll_gangs"],
+      "notes": "Control shifts frequently; high-risk route."
+    },
+    {
+      "road_id": "as_golden_quad",
+      "faction": "Indian Wasteland Authority",
+      "condition": "patched",
+      "hazards": ["mutant_zones"],
+      "notes": "Critical trade loop; partially restored after the Collapse."
+    },
+
+    {
+      "road_id": "af_trans_sahara",
+      "faction": "Nomad Clans",
+      "condition": "rough",
+      "hazards": ["sandstorms", "bandits"],
+      "notes": "Long, harsh corridor with minimal infrastructure."
+    },
+    {
+      "road_id": "af_cairo_cape",
+      "faction": "African Union Remnants",
+      "condition": "varied",
+      "hazards": ["militia_zones"],
+      "notes": "Patchwork control; some segments fortified, others abandoned."
+    },
+
+    {
+      "road_id": "sa_pan_american_north",
+      "faction": "South American Coalition",
+      "condition": "maintained",
+      "hazards": ["jungle_mutants"],
+      "notes": "Vital north–south artery across Central and Northern South America."
+    },
+    {
+      "road_id": "sa_pan_american_south",
+      "faction": "Andes Warlords",
+      "condition": "dangerous",
+      "hazards": ["mountain_ambushes"],
+      "notes": "High-altitude segments controlled by fragmented factions."
+    },
+
+    {
+      "road_id": "oc_hume",
+      "faction": "Australian Wasteland Authority",
+      "condition": "patched",
+      "hazards": ["wildlife"],
+      "notes": "One of the few semi-maintained long-distance routes in Oceania."
+    },
+    {
+      "road_id": "oc_pacific_hwy",
+      "faction": "Coastal Settlements",
+      "condition": "maintained",
+      "hazards": ["storms"],
+      "notes": "Vital coastal corridor linking major survivor hubs."
+    }
+  ]
+}
