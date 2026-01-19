@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <meta charset="UTF-8" />
-  <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Leaflet core CSS (must load FIRST) -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    crossorigin=""
-  />
+    <!-- Leaflet core CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      crossorigin=""
+    />
 
-  <!-- Leaflet core JS (must load BEFORE worldmap.js) -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    crossorigin=""
-  ></script>
+    <!-- Leaflet core JS -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      crossorigin=""
+    ></script>
+
     <script src="https://unpkg.com/topojson-client@3"></script>
     <script src="https://unpkg.com/@turf/turf@6"></script>
+
+    <!-- bs58 + AuthClient -->
     <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js"></script>
     <script src="/js/authClient.js"></script>
 
-
-  <!-- Pip‑Boy UI skin -->
-  <link rel="stylesheet" href="/css/pipboy.css" />
-
-  <!-- Pip‑Boy tile map styling -->
-  <link rel="stylesheet" href="/css/pipboy-map.css" />
-
-  <!-- Pip‑Boy style JSON -->
-  <script src="/js/pipboy/pipboy-style.js"></script>
-</head>
+    <!-- Pip‑Boy UI -->
+    <link rel="stylesheet" href="/css/pipboy.css" />
+    <link rel="stylesheet" href="/css/pipboy-map.css" />
+    <script src="/js/pipboy/pipboy-style.js"></script>
+  </head>
 
   <body class="pipboy-mode">
 
@@ -62,7 +60,7 @@
                   <span class="pipboy-meta-item">STATUS: ONLINE</span>
                 </div>
 
-                <!-- WALLET HUD -->
+                <!-- WALLET HUD (Phantom only) -->
                 <div class="wallet-hud">
                   <span id="walletAddress">WALLET: DISCONNECTED</span>
                   <button id="connectWalletHUD" class="pipboy-button-small">
@@ -84,34 +82,29 @@
               <div class="pipboy-main">
                 <div id="encounterFeed" class="pip-feed"></div>
 
-               <!-- MAP PANEL (TILE MAP VERSION) -->
-<div id="panel-map" class="pipboy-panel active">
-  <div class="panel-header">MAP</div>
-  <div class="panel-body">
+                <!-- MAP PANEL -->
+                <div id="panel-map" class="pipboy-panel active">
+                  <div class="panel-header">MAP</div>
+                  <div class="panel-body">
 
-    <!-- REQUIRED BY worldmap.js -->
-    <div id="mapContainer" class="pipboy-map">
-      <div id="radFlash"></div>
-    </div>
+                    <div id="mapContainer" class="pipboy-map">
+                      <div id="radFlash"></div>
+                    </div>
 
-    <!-- Overlay Text -->
-    <div class="map-overlay">
-      <div class="map-label">WORLD MAP</div>
-      <div class="map-status" id="mapStatus">SCANNING...</div>
-    </div>
+                    <div class="map-overlay">
+                      <div class="map-label">WORLD MAP</div>
+                      <div class="map-status" id="mapStatus">SCANNING...</div>
+                    </div>
 
-    <!-- Controls (future) -->
-    <div class="map-controls"></div>
+                    <div class="map-controls"></div>
 
-    <!-- GPS Badge -->
-    <div class="gps-badge" id="gpsBadge">
-      <div id="accDot" class="acc-dot"></div>
-      <div id="accText">GPS: OFFLINE</div>
-    </div>
+                    <div class="gps-badge" id="gpsBadge">
+                      <div id="accDot" class="acc-dot"></div>
+                      <div id="accText">GPS: OFFLINE</div>
+                    </div>
 
-  </div>
-</div>
-
+                  </div>
+                </div>
 
                 <!-- STAT PANEL -->
                 <div id="panel-stat" class="pipboy-panel">
@@ -163,11 +156,16 @@
                       <span class="value" id="stat-caps">0</span>
                     </div>
 
-                    <div style="margin-top:6px;">
-                      <button id="connectWalletStat" class="pipboy-button">CONNECT WALLET</button>
-                      <button id="claimMintablesStat" class="pipboy-button pipboy-button-small">
-                        CLAIM MINTABLES
-                      </button>
+                    <!-- SP1: ATOMIC FIZZ WALLET BLOCK (S4 STYLE) -->
+                    <div class="panel-divider"></div>
+
+                    <div id="fizzWalletBlock" style="border:1px solid #00ffae; padding:10px; margin-top:10px;">
+                      <div style="font-weight:bold; margin-bottom:6px;">ATOMIC FIZZ WALLET</div>
+                      <div>WALLET: <span id="fizzWalletAddress">—</span></div>
+                      <div>CAPS: <span id="fizzWalletCaps">0</span></div>
+                      <div>XP: <span id="fizzWalletXP">0</span></div>
+                      <div>ITEMS: <span id="fizzWalletItems">0</span></div>
+                      <div>NFTS: <span id="fizzWalletNFTs">0</span></div>
                     </div>
 
                     <div class="panel-divider"></div>
@@ -290,77 +288,131 @@
     <span id="locations-count" class="hidden"></span>
 
     <!-- GLOBAL GPS -->
-<script src="/js/gps.js"></script>
+    <script src="/js/gps.js"></script>
 
-<!-- CORE GAME ENGINE -->
-<script src="/public/js/radioPlayer.js"></script>
-<script src="/public/js/main.js"></script>
+    <!-- CORE GAME ENGINE -->
+    <script src="/public/js/radioPlayer.js"></script>
+    <script src="/public/js/main.js"></script>
 
-<!-- GAME MODULES -->
-<script src="/js/modules/economy.js"></script>
-<script src="/js/modules/mintables.js"></script>
-<script src="/js/modules/factions.js"></script>
-<script src="/js/modules/enemyScaling.js"></script>
-<script src="/js/modules/quests.js"></script>
-<script src="/js/modules/narrative.js"></script>
+    <!-- GAME MODULES -->
+    <script src="/js/modules/economy.js"></script>
+    <script src="/js/modules/mintables.js"></script>
+    <script src="/js/modules/factions.js"></script>
+    <script src="/js/modules/enemyScaling.js"></script>
+    <script src="/js/modules/quests.js"></script>
+    <script src="/js/modules/narrative.js"></script>
 
-<!-- WORLD MAP (ESRI ONLY) -->
-<script src="/js/modules/worldmap.js"></script>
+    <!-- WORLD MAP -->
+    <script src="/js/modules/worldmap.js"></script>
 
-<!-- UI MODULES (MUST LOAD BEFORE pipboy.js) -->
-<script src="/js/modules/inventory-loader.js"></script>
-<script src="/js/modules/inventory-ui.js"></script>
-<script src="/js/modules/quest-ui.js"></script>
-<script src="/js/pipboy-special.js"></script>
+    <!-- UI MODULES -->
+    <script src="/js/modules/inventory-loader.js"></script>
+    <script src="/js/modules/inventory-ui.js"></script>
+    <script src="/js/modules/quest-ui.js"></script>
+    <script src="/js/pipboy-special.js"></script>
 
-<!-- PIP‑BOY UI SHELL (LOAD AFTER UI MODULES) -->
-<script src="/js/pipboy.js"></script>
+    <!-- PIP‑BOY UI SHELL -->
+    <script src="/js/pipboy.js"></script>
 
-<!-- BOOT SEQUENCE -->
-<script src="/js/boot.js"></script>
+    <!-- BOOT SEQUENCE -->
+    <script src="/js/boot.js"></script>
 
-<!-- RADIO / OVERSEER POPUP -->
-<script>
-  (function () {
-    const terminalSection = document.getElementById("terminalSection");
-    const btn = document.getElementById("openOverseerTerminal");
+    <!-- RADIO / OVERSEER POPUP -->
+    <script>
+      (function () {
+        const terminalSection = document.getElementById("terminalSection");
+        const btn = document.getElementById("openOverseerTerminal");
 
-    if (terminalSection) terminalSection.style.display = "block";
+        if (terminalSection) terminalSection.style.display = "block";
 
-    function openOverseerPopup() {
-      const screenW = window.innerWidth || screen.width;
-      const screenH = window.innerHeight || screen.height;
+        function openOverseerPopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
 
-      const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
-      const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
+          const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
+          const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
 
-      const left = Math.floor((screenW - width) / 2);
-      const top = Math.floor((screenH - height) / 2);
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
 
-      const features = [
-        "resizable=yes",
-        "scrollbars=yes",
-        "status=no",
-        "toolbar=no",
-        "menubar=no",
-        "location=no",
-        "width=" + width,
-        "height=" + height,
-        "left=" + left,
-        "top=" + top
-      ].join(",");
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
 
-      window.open("/overseer.html", "overseer_terminal", features);
-    }
+          window.open("/overseer.html", "overseer_terminal", features);
+        }
 
-    if (btn) {
-      btn.addEventListener("click", function (e) {
-        e.preventDefault();
-        openOverseerPopup();
-      });
-    }
-  })();
-</script>
+        if (btn) {
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            openOverseerPopup();
+          });
+        }
+      })();
+    </script>
+
+    <!-- WALLET LOGIN + FIZZ WALLET LOADER -->
+    <script>
+      const auth = new AuthClient();
+
+      const hudBtn = document.getElementById("connectWalletHUD");
+      const hudAddress = document.getElementById("walletAddress");
+
+      async function updateWalletUI() {
+        if (auth.isAuthenticated()) {
+          const wallet = auth.getWallet();
+          hudAddress.textContent = "WALLET: " + wallet.slice(0, 4) + "..." + wallet.slice(-4);
+          hudBtn.style.display = "none";
+
+          // Load player data
+          const res = await auth.authedFetch("/api/player", { method: "GET" });
+          const json = await res.json();
+
+          document.getElementById("stat-wallet").textContent = wallet;
+          document.getElementById("stat-caps").textContent = json.caps || 0;
+
+          document.getElementById("fizzWalletAddress").textContent = wallet;
+          document.getElementById("fizzWalletCaps").textContent = json.caps || 0;
+          document.getElementById("fizzWalletXP").textContent = json.xp || 0;
+          document.getElementById("fizzWalletItems").textContent = json.items?.length || 0;
+          document.getElementById("fizzWalletNFTs").textContent = json.nfts?.length || 0;
+
+        } else {
+          hudAddress.textContent = "WALLET: DISCONNECTED";
+          hudBtn.style.display = "inline-block";
+        }
+      }
+
+      async function connectPhantom() {
+        try {
+          const provider = window.solana;
+          if (!provider || !provider.isPhantom) {
+            alert("Phantom Wallet not found.");
+            return;
+          }
+
+          await provider.connect();
+          await auth.login(provider);
+          updateWalletUI();
+        } catch (err) {
+          console.error(err);
+          alert("Wallet login failed: " + err.message);
+        }
+      }
+
+      hudBtn.addEventListener("click", connectPhantom);
+
+      updateWalletUI();
+    </script>
 
   </body>
 </html>
