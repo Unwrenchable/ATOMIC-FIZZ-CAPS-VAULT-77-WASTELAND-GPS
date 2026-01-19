@@ -1,0 +1,72 @@
+{
+  "regions": {
+    "fizzco_basin": {
+      "name": "Fizzco Basin",
+      "personality": "unstable",
+      "encounters": {
+        "raiders": 0.3,
+        "mutants": 0.4,
+        "travelers": 0.1,
+        "anomaly": 0.2
+      },
+      "loot": {
+        "rarityMultiplier": 1.4,
+        "quantityMultiplier": 1.2
+      },
+      "threat": 0.8,
+      "weatherBias": "radstorm",
+      "anomalyLevel": 0.9,
+      "overseerLines": [
+        "Careful… the Basin hums with leftover Fizzco experiments.",
+        "Sensors picking up unstable readings. Proceed with caution.",
+        "If you see glowing puddles, don’t touch them. Or do. I’m not your dad."
+      ]
+    },
+
+    "vault77_exterior": {
+      "name": "Vault 77 Exterior",
+      "personality": "mysterious",
+      "encounters": {
+        "raiders": 0.1,
+        "mutants": 0.1,
+        "travelers": 0.5,
+        "anomaly": 0.3
+      },
+      "loot": {
+        "rarityMultiplier": 1.0,
+        "quantityMultiplier": 1.0
+      },
+      "threat": 0.3,
+      "weatherBias": "clear",
+      "anomalyLevel": 0.4,
+      "overseerLines": [
+        "Home sweet irradiated home.",
+        "Vault 77… still standing. Mostly.",
+        "If you hear puppets laughing, ignore it. Probably nothing."
+      ]
+    },
+
+    "mojave_fringe": {
+      "name": "Mojave Fringe",
+      "personality": "dusty",
+      "encounters": {
+        "raiders": 0.2,
+        "mutants": 0.1,
+        "travelers": 0.6,
+        "anomaly": 0.1
+      },
+      "loot": {
+        "rarityMultiplier": 0.9,
+        "quantityMultiplier": 1.0
+      },
+      "threat": 0.2,
+      "weatherBias": "heatwave",
+      "anomalyLevel": 0.1,
+      "overseerLines": [
+        "Welcome to the Mojave Fringe. Try not to melt.",
+        "Travelers pass through here often. Keep your caps ready.",
+        "Heat signatures rising. Drink water. Or don’t. I’m not your doctor."
+      ]
+    }
+  }
+}
