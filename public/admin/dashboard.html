@@ -25,26 +25,69 @@
 
     <main id="adminMain">
 
+      <!-- HOME -->
       <section id="panel-home" class="panel active">
         <h1>Welcome, Administrator</h1>
         <p>Select a tool from the left to begin.</p>
       </section>
 
+      <!-- PLAYERS -->
       <section id="panel-players" class="panel">
         <h1>Player Tools</h1>
-        <p>Player search, editor, inventory, quests (coming next layers).</p>
+
+        <div class="player-search">
+          <label>Wallet Address</label>
+          <input id="adminPlayerWallet" type="text" placeholder="Enter wallet address" />
+          <button id="adminPlayerSearchBtn">Search</button>
+          <div id="adminPlayerSearchStatus"></div>
+        </div>
+
+        <div id="adminPlayerDetails" class="player-details" style="display:none;">
+          <h2 id="adminPlayerName"></h2>
+          <p><strong>Wallet:</strong> <span id="adminPlayerWalletLabel"></span></p>
+
+          <p><strong>Level:</strong> <input id="adminPlayerLevel" type="number" min="1" /></p>
+          <p><strong>XP:</strong> <input id="adminPlayerXP" type="number" min="0" /></p>
+          <p><strong>Caps:</strong> <input id="adminPlayerCaps" type="number" min="0" /></p>
+
+          <h3>SPECIAL</h3>
+          <div class="special-grid">
+            <label>S: <input id="adminSpecialS" type="number" /></label>
+            <label>P: <input id="adminSpecialP" type="number" /></label>
+            <label>E: <input id="adminSpecialE" type="number" /></label>
+            <label>C: <input id="adminSpecialC" type="number" /></label>
+            <label>I: <input id="adminSpecialI" type="number" /></label>
+            <label>A: <input id="adminSpecialA" type="number" /></label>
+            <label>L: <input id="adminSpecialL" type="number" /></label>
+          </div>
+
+          <p>
+            <label>
+              <input id="adminUnlockedTerminal" type="checkbox" />
+              Terminal Unlocked
+            </label>
+          </p>
+
+          <div class="player-actions">
+            <button id="adminPlayerSaveBtn">Save Changes</button>
+            <button id="adminPlayerResetBtn" class="danger">Reset Profile</button>
+          </div>
+        </div>
       </section>
 
+      <!-- WORLD -->
       <section id="panel-world" class="panel">
         <h1>World Tools</h1>
         <p>Mintables, NPCs, locations, factions (coming next layers).</p>
       </section>
 
+      <!-- DEBUG -->
       <section id="panel-debug" class="panel">
         <h1>Debug Tools</h1>
         <p>Teleport, spawn, reset, logs (coming next layers).</p>
       </section>
 
+      <!-- JAX MONITOR -->
       <section id="panel-jax" class="panel">
         <h1>Jax Monitoring</h1>
         <p>Anomaly reports, world health, system diagnostics (coming next layers).</p>
