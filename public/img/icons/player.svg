@@ -1,28 +1,14 @@
 <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <!-- Pip-Boy green fill on transparent background -->
-  <g fill="#00ff88" stroke="#001000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Outer circle (radar / locator ring) -->
-    <circle cx="32" cy="32" r="20" fill="none"/>
+  <g fill="#00ff88" stroke="#001000" stroke-width="2" stroke-linejoin="round">
+    
+    <!-- Outer locator ring -->
+    <circle cx="32" cy="32" r="22" fill="none"/>
 
-    <!-- Inner solid circle (player core) -->
-    <circle cx="32" cy="24" r="6"/>
+    <!-- Directional arrow (player heading) -->
+    <path d="M32 10 L40 26 L24 26 Z" />
 
-    <!-- Body -->
-    <path d="
-      M26 36
-      L26 30
-      Q26 28 28 28
-      L36 28
-      Q38 28 38 30
-      L38 36
-      " fill="none"/>
+    <!-- Inner core dot -->
+    <circle cx="32" cy="34" r="6" />
 
-    <!-- Arms -->
-    <path d="M22 32 L26 30" />
-    <path d="M42 32 L38 30" />
-
-    <!-- Legs -->
-    <path d="M28 36 L26 44" />
-    <path d="M36 36 L38 44" />
   </g>
 </svg>
