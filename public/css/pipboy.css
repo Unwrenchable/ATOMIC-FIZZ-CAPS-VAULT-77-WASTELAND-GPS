@@ -1013,3 +1013,62 @@ body.pipboy-mode {
 .pipboy-road {
   filter: drop-shadow(0 0 4px #00ff41);
 }
+/* ============================================================
+   MAP INTERACTION FIX — Prevent Pip-Boy swipe conflicts
+   ============================================================ */
+
+/* Allow Leaflet to receive drag events normally */
+#mapContainer,
+#mapContainer * {
+  pointer-events: auto !important;
+  touch-action: pan-x pan-y !important;
+}
+
+/* Prevent Pip-Boy panel swipe/scroll from stealing map gestures */
+.pipboy-panel[data-panel="map"] {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+
+/* Ensure CRT overlays never block map interaction */
+.pipboy-noise,
+.pipboy-scanlines {
+  pointer-events: none !important;
+}
+
+/* GPS accuracy "good" state (missing in your CSS) */
+.acc-dot.acc-good {
+  background: #00ff41;
+  box-shadow: 0 0 6px #00ff41;
+}
+
+/* ============================================================
+   ENCOUNTER FEED — Fallout-style event log
+   ============================================================ */
+
+.pip-feed {
+  padding: 8px 6px;
+  font-family: inherit;
+  font-size: 10px;
+  color: #9fe88d;
+  max-height: 220px;
+  overflow-y: auto;
+  border-top: 1px solid rgba(159, 232, 141, 0.35);
+  margin-top: 6px;
+}
+
+.pip-feed-entry {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(159, 232, 141, 0.25);
+}
+
+.pip-feed-entry strong {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pip-feed-entry em {
+  font-style: normal;
+  opacity: 0.8;
+}
