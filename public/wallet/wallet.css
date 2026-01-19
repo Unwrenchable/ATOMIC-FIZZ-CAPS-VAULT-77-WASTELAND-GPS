@@ -1,332 +1,205 @@
-/* ------------------------------------------------------------
-   GLOBAL CRT THEME
--------------------------------------------------------------*/
+/* ---------------------------------------------------------
+   ATOMIC FIZZ WALLET — PIP‑BOY THEME
+   Location: public/wallet/pipboy.css
+   --------------------------------------------------------- */
 
-body {
-  background: #0d0f0c;
-  color: #00ff66;
-  font-family: monospace;
-  padding: 20px;
+/* GLOBAL RESET */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* GLOBAL COLORS + FONTS */
+:root {
+  --pipboy-green: #00ff66;
+  --pipboy-green-dim: #00cc55;
+  --pipboy-green-dark: #009944;
+  --pipboy-black: #0a0f0a;
+  --pipboy-bg: #0d120d;
+  --pipboy-scanline: rgba(0, 255, 102, 0.05);
+  --pipboy-font: "VT323", monospace;
+}
+
+/* PAGE BACKGROUND */
+body {
+  background: var(--pipboy-bg);
+  color: var(--pipboy-green);
+  font-family: var(--pipboy-font);
+  font-size: 20px;
+  line-height: 1.4;
+  padding: 20px;
   overflow-x: hidden;
+  text-shadow: 0 0 4px var(--pipboy-green);
 }
 
-/* CRT glow */
-.crt {
-  text-shadow: 0 0 4px #00ff66;
-}
-
-/* CRT scanlines */
+/* CRT SCANLINES */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(0, 255, 102, 0.05) 0px,
-    rgba(0, 255, 102, 0.05) 2px,
+    var(--pipboy-scanline) 0px,
+    var(--pipboy-scanline) 2px,
     transparent 2px,
     transparent 4px
   );
-  z-index: 999;
+  pointer-events: none;
+  z-index: 9999;
 }
 
-/* CRT curvature */
-#wallet-app {
-  transform: perspective(900px) rotateX(2deg);
+/* CRT GLOW */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0,255,102,0.15), transparent 70%);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* WALLET CONTAINER */
+.wallet-container {
+  border: 2px solid var(--pipboy-green);
+  padding: 20px;
   border-radius: 6px;
+  background: rgba(0, 20, 0, 0.4);
+  box-shadow: 0 0 20px var(--pipboy-green-dark);
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-/* ------------------------------------------------------------
-   HEADERS
--------------------------------------------------------------*/
-
-h1, h2 {
-  border-bottom: 1px solid #00ff66;
-  padding-bottom: 4px;
+/* HEADER */
+.wallet-header {
+  font-size: 32px;
   margin-bottom: 10px;
-  letter-spacing: 1px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 2px solid var(--pipboy-green);
+  padding-bottom: 10px;
 }
 
-/* ------------------------------------------------------------
-   BRANDING
--------------------------------------------------------------*/
+/* SUBHEADERS */
+.section-title {
+  font-size: 24px;
+  margin: 25px 0 10px;
+  text-transform: uppercase;
+  border-bottom: 1px dashed var(--pipboy-green);
+  padding-bottom: 5px;
+}
 
-#wallet-branding {
+/* DATA ROWS */
+.data-row {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dotted var(--pipboy-green-dark);
 }
 
-#wallet-logo {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 6px #00ff66);
+.data-row:last-child {
+  border-bottom: none;
 }
 
-#boot-logo {
-  width: 96px;
-  height: 96px;
-  margin-bottom: 20px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 8px #00ff66);
-}
-
-/* ------------------------------------------------------------
-   BUTTONS
--------------------------------------------------------------*/
-
-.btn {
-  background: transparent;
-  border: 1px solid #00ff66;
-  padding: 8px 12px;
-  color: #00ff66;
-  cursor: pointer;
-  font-family: monospace;
-  font-size: 14px;
-  text-shadow: 0 0 4px #00ff66;
-  margin-right: 6px;
-}
-
-.btn:hover {
-  background: #00ff66;
-  color: #0d0f0c;
-  box-shadow: 0 0 8px #00ff66;
-}
-
-/* ------------------------------------------------------------
-   TEXT HELPERS
--------------------------------------------------------------*/
-
-.muted {
-  opacity: 0.6;
-}
-
-.mono {
-  font-family: monospace;
-}
-
-.small {
-  font-size: 0.8em;
-}
-
-/* ------------------------------------------------------------
-   INPUTS
--------------------------------------------------------------*/
-
-input {
-  background: transparent;
-  border: 1px solid #00ff66;
-  color: #00ff66;
-  padding: 6px;
-  width: 100%;
-  font-family: monospace;
-}
-
-input:focus {
-  outline: none;
-  box-shadow: 0 0 6px #00ff66;
-}
-
-/* ------------------------------------------------------------
-   ENTRIES
--------------------------------------------------------------*/
-
-.entry {
-  margin-bottom: 12px;
-}
-
-/* ------------------------------------------------------------
-   NFT LIST
--------------------------------------------------------------*/
-
-.nft-entry {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  transition: transform 0.1s ease, filter 0.1s ease;
-}
-
-.nft-entry:hover {
-  transform: scale(1.02);
-  filter: drop-shadow(0 0 6px #00ff66);
-}
-
-.nft-thumb {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border: 1px solid #00ff66;
-}
-
-.nft-info {
-  display: flex;
-  flex-direction: column;
-}
-
-/* ------------------------------------------------------------
-   RARITY GLOW
--------------------------------------------------------------*/
-
-.rarity-common {
+.data-label {
   opacity: 0.8;
 }
 
-.rarity-uncommon {
-  color: #00ff66;
-  text-shadow: 0 0 4px #00ff66;
+.data-value {
+  font-weight: bold;
 }
 
-.rarity-rare {
-  color: #00ffaa;
-  text-shadow: 0 0 6px #00ffaa;
-}
-
-.rarity-epic {
-  color: #00eaff;
-  text-shadow: 0 0 8px #00eaff;
-}
-
-.rarity-legendary {
-  color: #ffe066;
-  text-shadow: 0 0 10px #ffdd55, 0 0 20px #ffdd55;
-  border-left: 2px solid #ffdd55;
-  padding-left: 6px;
-}
-
-.rarity-fizz {
-  color: #00ff66;
-  text-shadow:
-    0 0 6px #00ff66,
-    0 0 12px #00ff66,
-    0 0 18px #00ff66;
-  border-left: 2px solid #00ff66;
-  padding-left: 6px;
-  animation: fizzPulse 1.6s infinite alternate;
-}
-
-@keyframes fizzPulse {
-  0% { opacity: 0.7; }
-  100% { opacity: 1; }
-}
-
-/* ------------------------------------------------------------
-   NFT DETAIL MODAL
--------------------------------------------------------------*/
-
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 20, 0, 0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-}
-
-.modal.hidden {
-  display: none;
-}
-
-.modal-content {
-  background: #0d0f0c;
-  border: 1px solid #00ff66;
-  padding: 20px;
-  width: 360px;
-  max-width: 90%;
-  box-shadow: 0 0 12px #00ff66;
-  text-shadow: 0 0 4px #00ff66;
-}
-
-.modal-close {
-  float: right;
-  margin-bottom: 10px;
-}
-
-.modal-actions {
+/* BUTTONS */
+.pipboy-button {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 2px solid var(--pipboy-green);
+  color: var(--pipboy-green);
+  text-decoration: none;
+  font-size: 20px;
   margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
+  background: rgba(0, 40, 0, 0.4);
+  transition: 0.15s ease-in-out;
+  cursor: pointer;
 }
 
-#nft-modal-body img {
+.pipboy-button:hover {
+  background: var(--pipboy-green);
+  color: var(--pipboy-black);
+  text-shadow: none;
+}
+
+/* LISTS */
+.wallet-list {
+  list-style: none;
+  margin-top: 10px;
+}
+
+.wallet-list li {
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--pipboy-green-dark);
+}
+
+/* BADGES (RARITY / STATUS) */
+.badge {
+  padding: 2px 6px;
+  border: 1px solid var(--pipboy-green);
+  border-radius: 4px;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.badge-rare {
+  color: #00e6ff;
+  border-color: #00e6ff;
+}
+
+.badge-epic {
+  color: #ff00ff;
+  border-color: #ff00ff;
+}
+
+.badge-legendary {
+  color: #ffaa00;
+  border-color: #ffaa00;
+}
+
+/* TABLES */
+.wallet-table {
   width: 100%;
-  border: 1px solid #00ff66;
-  margin-bottom: 10px;
-}
-
-#nft-modal-body .nft-name {
-  font-size: 1.2em;
-  margin-bottom: 6px;
-}
-
-#nft-modal-body .nft-mint {
-  opacity: 0.6;
-  font-size: 0.8em;
-  margin-bottom: 10px;
-}
-
-#nft-modal-body .nft-desc {
+  border-collapse: collapse;
   margin-top: 10px;
-  opacity: 0.9;
 }
 
-/* ------------------------------------------------------------
-   FUSION MODAL
--------------------------------------------------------------*/
-
-#fusion-modal .modal-content {
-  width: 420px;
-}
-
-#fusion-body {
-  margin-top: 10px;
+.wallet-table th,
+.wallet-table td {
   padding: 10px;
-  border: 1px dashed #00ff66;
-  min-height: 80px;
+  border-bottom: 1px dotted var(--pipboy-green-dark);
 }
 
-/* ------------------------------------------------------------
-   BOOT OVERLAY
--------------------------------------------------------------*/
-
-#boot-overlay {
-  position: fixed;
-  inset: 0;
-  background: #020302;
-  color: #00ff66;
-  font-family: monospace;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  text-shadow: 0 0 4px #00ff66;
-  z-index: 999999;
+.wallet-table th {
+  text-align: left;
+  opacity: 0.8;
 }
 
-#boot-overlay.hidden {
-  display: none;
+/* FOOTER */
+.wallet-footer {
+  margin-top: 30px;
+  text-align: center;
+  opacity: 0.7;
+  font-size: 16px;
 }
 
-.boot-line {
-  animation: flicker 1.2s infinite alternate;
+/* ANIMATED CURSOR */
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 20px;
+  background: var(--pipboy-green);
+  animation: blink 1s infinite;
 }
 
-@keyframes flicker {
-  0% { opacity: 0.4; }
-  100% { opacity: 1; }
-}
-
-/* ------------------------------------------------------------
-   SECTION SPACING
--------------------------------------------------------------*/
-
-section {
-  margin-top: 20px;
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
