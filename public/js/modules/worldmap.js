@@ -151,6 +151,17 @@
 
       this.labelLayer = L.layerGroup().addTo(this.map);
       this.roadLayer = L.layerGroup().addTo(this.map);
+      const map = L.map("map").setView([36.1, -115.1], 7);
+      // Load POIs
+      fetch("/data/poi.json")
+     .then(r => r.json())
+     .then(pois => {
+      pois.forEach(poi => {
+      L.marker([poi.lat, poi.lng])
+        .bindPopup(`<b>${poi.name}</b>`)
+        .addTo(map);
+        });
+        });
 
       // --------------------------------------------------------
       // LOAD VECTOR ROADS (roads.json)
