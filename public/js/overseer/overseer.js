@@ -219,7 +219,9 @@
           if (type === "location" && payload.regionId)
             Engines.Memory.markRegionVisited(payload.regionId);
           if (type === "map_scan" && Array.isArray(payload.nearby)) {
-            payload.nearby.forEach((poi) => poi.id && Engines.Memory.markPoiDiscovered(poi.id));
+            payload.nearby.forEach(
+              (poi) => poi.id && Engines.Memory.markPoiDiscovered(poi.id)
+            );
           }
           if (type === "quest_update" && payload.id && payload.step) {
             Engines.Memory.noteQuestState(payload.id, payload.step);
