@@ -1,169 +1,194 @@
-
-// encounters.js
+// encounters.js (v2)
 // ------------------------------------------------------------
-// Procedural Encounter Orchestrator
-// ------------------------------------------------------------
-
-const { reputationStatus } = require("./reputation");
-const { pickEnemiesFor } = require("./enemies");
-const { rollMerchantEncounter } = require("./merchants");
-const { pickEventFor } = require("./events");
-const { rollBossEncounter } = require("./bosses");
-const { scaleEnemyLevels } = require("./enemyScaling");
-const { getWeatherAtLocation } = require("./weather");
-
-function rollAmbientFor(biome, faction) {
-  const lines = [
-    `You notice fresh tracks left by ${faction} in the ${biome}.`,
-    `The ${biome} carries distant echoes of ${faction} activity.`,
-    `Discarded gear bearing ${faction} colors lies half-buried.`,
-    `A cairn marked with ${faction} sigils watches over the ${biome}.`
-  ];
-  return lines[Math.floor(Math.random() * lines.length)];
-}
-
-function rollEncounter(worldState, location, weather) {
-  const repStatus = reputationStatus(worldState, location.faction);
-  const lvl = location.lvl;
-  const biome = location.biome;
-  const type = location.type;
-  const weather = getWeatherAtLocation(worldState, location);
-
-  // 1. Boss check
-  const bossCheck = rollBossEncounter(worldState, location, weather);
-  if (bossCheck) return bossCheck;
-
-  // 2. Merchant check
-  const merchantCheck = rollMerchantEncounter(worldState, location, weather);
-  if (merchantCheck) return merchantCheck;
-
-  const roll = Math.random();
-  // merchantInventory.js
-// ------------------------------------------------------------
-// Dynamic Merchant Inventory Generator
+// World‑Aware Procedural Encounter Orchestrator
+// Integrates: Regions, Weather, Factions, Traits, Loot,
+// Micro‑Quests, Anomalies, Timeline, Overseer, WorldState.
 // ------------------------------------------------------------
 
-const BASE_ITEMS = {
-  common: ["scrap_metal", "dirty_water", "cloth_rags", "old_batteries"],
-  rare: ["ammo_pack", "medkit", "toolkit", "prewar_food"],
-  epic: ["energy_cell", "advanced_toolkit", "stim_injector"],
-  legendary: ["prototype_core", "artifact_relic", "relic_weapon"]
-};
+(function () {
+  "use strict";
 
-const FACTION_ITEMS = {
-  fizzco_remnants: ["fizzco_prototype", "corporate_datapad", "energy_pack"],
-  iron_wastes_militia: ["military_rifle", "combat_armor", "ammo_crate"],
-  radborne_tribes: ["radcloak", "tribal_blade", "ritual_components"],
-  crater_syndicate: ["contraband_case", "encrypted_chip"],
-  hollow_choir: ["ritual_mask", "bone_talisman"],
-  the_circuit: ["ai_fragment", "servo_core"],
-  dustwalkers: ["raider_armor", "spiked_bat"],
-  deepwatch: ["polar_cloak", "flare_pack"],
-  free_scavs: ["salvaged_gear", "patchwork_armor"],
-  feral_broods: ["mutant_claw", "acid_gland"]
-};
+  const Regions = window.overseerRegions;
+  const Weather = window.overseerWeather;
+  const Factions = window.overseerFaction;
+  const Loot = window.overseerLoot;
+  const Microquests = window.overseerMicroquests;
+  const Anomalies = window.overseerAnomalies;
+  const Timeline = window.overseerTimeline;
+  const WorldState = window.overseerWorldState;
+  const Traits = window.overseerNpcTraits;
 
-const BIOME_ITEMS = {
-  desert: ["water_ration", "sunscorched_armor"],
-  jungle: ["toxin_sample", "camouflage_cloak"],
-  tundra: ["thermal_coat", "insulated_boots"],
-  arctic: ["heavy_parka", "heat_cell"],
-  crater: ["irradiated_sample", "lead_shielding"],
-  industrial_zone: ["mechanical_parts", "coolant_canister"],
-  urban_ruins: ["handgun_parts", "lockbox"],
-  oceanic: ["diving_mask", "harpoon"]
-};
-
-function generateMerchantInventory(faction, biome, seed = Date.now()) {
-  const rng = mulberry32(seed);
-
-  const rarityRoll = rng();
-  let rarity = "common";
-  if (rarityRoll > 0.85) rarity = "rare";
-  if (rarityRoll > 0.95) rarity = "epic";
-  if (rarityRoll > 0.99) rarity = "legendary";
-
-  const items = new Set();
-
-  function pull(pool) {
-    if (!pool || pool.length === 0) return;
-    items.add(pool[Math.floor(rng() * pool.length)]);
+  // ------------------------------------------------------------
+  // Ambient flavor
+  // ------------------------------------------------------------
+  function rollAmbientFor(region, faction) {
+    const lines = [
+      `You notice fresh tracks left by ${faction} in ${region.name}.`,
+      `${region.name} carries distant echoes of ${faction} activity.`,
+      `Discarded gear bearing ${faction} colors lies half‑buried.`,
+      `A cairn marked with ${faction} sigils watches over the wastes.`
+    ];
+    return lines[Math.floor(Math.random() * lines.length)];
   }
 
-  // Base items
-  for (let i = 0; i < 3; i++) pull(BASE_ITEMS[rarity]);
+  // ------------------------------------------------------------
+  // Main encounter roll
+  // ------------------------------------------------------------
+  function rollEncounter() {
+    const regionId = WorldState.currentRegion;
+    const region = Regions.get(regionId);
+    const weather = Weather.getCurrent();
+    const factionId = Factions.getControl(regionId);
+    const rep = Factions.getReputation(factionId);
+    const repStatus = Factions.reputationLabel(rep, factionId);
 
-  // Faction items
-  for (let i = 0; i < 2; i++) pull(FACTION_ITEMS[faction]);
-
-  // Biome items
-  for (let i = 0; i < 2; i++) pull(BIOME_ITEMS[biome]);
-
-  return Array.from(items);
-}
-
-// Deterministic RNG
-function mulberry32(a) {
-  return function () {
-    a |= 0;
-    a = (a + 0x6D2B79F5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-module.exports = {
-  generateMerchantInventory
-};
-
-  // 3. Nemesis
-  if (repStatus === "nemesis" && roll < 0.85) {
-    return {
-      type: "combat",
-      enemies: pickEnemiesFor(biome, lvl + 5, location.faction),
-      modifier: "nemesis"
-    };
-  }
-
-  // 4. Hostile
-  if (repStatus === "hostile" && roll < 0.6) {
-    return {
-      type: "combat",
-      enemies: pickEnemiesFor(biome, lvl, location.faction),
-      modifier: "hostile"
-    };
-  }
-
-  // 5. Friendly
-  if ((repStatus === "friendly" || repStatus === "allied") && roll < 0.35) {
-    return {
-      type: "merchant",
-      merchant: {
-        faction: location.faction,
-        biome,
-        greeting: "A friendly trader approaches."
+    // ------------------------------------------------------------
+    // 1. Timeline Distortion Check
+    // ------------------------------------------------------------
+    if (Timeline.isUnstable(regionId)) {
+      if (Math.random() < Timeline.distortionChance(regionId)) {
+        return Timeline.rollEcho(regionId);
       }
-    };
+    }
+
+    // ------------------------------------------------------------
+    // 2. Anomaly Encounter Check
+    // ------------------------------------------------------------
+    const anomalyLevel = WorldState.getAnomalyLevel(regionId);
+    if (anomalyLevel > 0.3) {
+      if (Math.random() < anomalyLevel * 0.25) {
+        return Anomalies.roll(regionId, weather);
+      }
+    }
+
+    // ------------------------------------------------------------
+    // 3. Micro‑Quest Check
+    // ------------------------------------------------------------
+    if (Math.random() < (region.questChance || 0.1)) {
+      return {
+        type: "microquest",
+        quest: Microquests.generate(regionId, weather, factionId)
+      };
+    }
+
+    // ------------------------------------------------------------
+    // 4. Faction Patrols / Hostility
+    // ------------------------------------------------------------
+    if (repStatus === "HOSTILE" && Math.random() < region.threat * 0.6) {
+      const enemies = Traits.applyToGroup(
+        Regions.pickEnemies(regionId),
+        region,
+        weather
+      );
+
+      return {
+        type: "combat",
+        faction: factionId,
+        enemies,
+        loot: Loot.generateLoot({
+          regionId,
+          factionId,
+          npcTraits: enemies.map(e => e.traits)
+        }),
+        modifier: "hostile_faction"
+      };
+    }
+
+    if (repStatus === "ALLY" && Math.random() < 0.25) {
+      return {
+        type: "ally_patrol",
+        faction: factionId,
+        message: "An allied patrol waves as they pass by."
+      };
+    }
+
+    // ------------------------------------------------------------
+    // 5. Region Encounter Weights
+    // ------------------------------------------------------------
+    const encounterType = weightedPick(region.encounters);
+
+    switch (encounterType) {
+      case "raiders":
+      case "mutants":
+      case "scavengers":
+      case "wildlife": {
+        const enemies = Traits.applyToGroup(
+          Regions.pickEnemies(regionId, encounterType),
+          region,
+          weather
+        );
+
+        return {
+          type: "combat",
+          enemies,
+          loot: Loot.generateLoot({
+            regionId,
+            factionId,
+            npcTraits: enemies.map(e => e.traits)
+          }),
+          modifier: "regional"
+        };
+      }
+
+      case "travelers":
+        return {
+          type: "traveler",
+          npc: Traits.applyToNpc(
+            Regions.pickTraveler(regionId),
+            region,
+            weather
+          ),
+          message: "A traveler approaches."
+        };
+
+      case "merchant":
+        return {
+          type: "merchant",
+          merchant: Regions.pickMerchant(regionId),
+          message: "A merchant flags you down."
+        };
+
+      case "anomaly":
+        return Anomalies.roll(regionId, weather);
+
+      case "event":
+        return {
+          type: "event",
+          event: Regions.pickEvent(regionId)
+        };
+    }
+
+    // ------------------------------------------------------------
+    // 6. Ambient
+    // ------------------------------------------------------------
+    if (Math.random() < 0.2) {
+      return {
+        type: "ambient",
+        description: rollAmbientFor(region, factionId)
+      };
+    }
+
+    // ------------------------------------------------------------
+    // 7. No Encounter
+    // ------------------------------------------------------------
+    return { type: "none" };
   }
 
-  // 6. Special locations
-  if ((type === "vault" || type === "megastructure") && roll < 0.5) {
-    return {
-      type: "event",
-      event: pickEventFor(location, worldState)
-    };
+  // ------------------------------------------------------------
+  // Weighted pick helper
+  // ------------------------------------------------------------
+  function weightedPick(weights) {
+    const entries = Object.entries(weights);
+    const total = entries.reduce((sum, [, w]) => sum + w, 0);
+    let roll = Math.random() * total;
+
+    for (const [key, weight] of entries) {
+      if (roll < weight) return key;
+      roll -= weight;
+    }
+    return entries[entries.length - 1][0];
   }
 
-  // 7. Ambient
-  if (roll < 0.2) {
-    return {
-      type: "ambient",
-      description: rollAmbientFor(biome, location.faction)
-    };
-  }
-
-  return { type: "none" };
-}
-
-module.exports = { rollEncounter };
+  // Expose globally
+  window.overseerEncounters = { rollEncounter };
+})();
