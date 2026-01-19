@@ -1,0 +1,58 @@
+body {
+  margin: 0;
+  background: #0d0d0d;
+  color: #e0e0e0;
+  font-family: Arial, sans-serif;
+}
+
+#adminWrapper {
+  display: flex;
+  height: 100vh;
+}
+
+#adminSidebar {
+  width: 220px;
+  background: #1a1a1a;
+  border-right: 1px solid #333;
+  padding: 20px;
+}
+
+#adminSidebar h2 {
+  color: #00ffae;
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #222;
+  border: 1px solid #333;
+  color: #e0e0e0;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 4px;
+}
+
+.nav-btn:hover {
+  background: #333;
+}
+
+.nav-btn.danger {
+  background: #550000;
+  border-color: #770000;
+}
+
+#adminMain {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.panel {
+  display: none;
+}
+
+.panel.active {
+  display: block;
+}
