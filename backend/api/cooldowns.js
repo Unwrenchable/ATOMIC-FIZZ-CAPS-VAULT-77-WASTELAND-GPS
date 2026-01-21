@@ -27,3 +27,4 @@ router.post("/check", authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
+
