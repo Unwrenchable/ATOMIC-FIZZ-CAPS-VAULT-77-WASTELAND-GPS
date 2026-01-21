@@ -4,6 +4,32 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // safeFetchJSON: returns parsed JSON or null and logs diagnostics
+  async function safeFetchJSON(url, opts = {}) {
+    try {
+      const res = await fetch(url, opts);
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        console.warn(`[safeFetchJSON] ${url} returned ${res.status} ${res.statusText}`, text.slice(0, 500));
+        return null;
+      }
+      const text = await res.text();
+      if (!text) {
+        console.warn(`[safeFetchJSON] ${url} returned empty body`);
+        return null;
+      }
+      try {
+        return JSON.parse(text);
+      } catch (err) {
+        console.warn(`[safeFetchJSON] ${url} returned invalid JSON (first 200 chars):`, text.slice(0, 200));
+        return null;
+      }
+    } catch (err) {
+      console.error(`[safeFetchJSON] failed to fetch ${url}:`, err && err.message ? err.message : err);
+      return null;
+    }
+  }
+
   const worldmapModule = {
     gs: null,
     map: null,
@@ -12,7 +38,7 @@
     poiMarkers: [],
     locations: [],
     locationsLoaded: false,
-    
+
     prevPlayerPosition: null,
     labelLayer: null,
     roadLayer: null,
@@ -108,13 +134,13 @@
       this.roadLayer = L.layerGroup().addTo(this.map);
 
       // --------------------------------------------------------
-      // LOAD POIs (SVG ICONS)
+      // LOAD POIs (SVG ICONS) - safe
       // --------------------------------------------------------
-      fetch("/data/poi.json")
-        .then(r => r.json())
-        .then(pois => {
-          if (!Array.isArray(pois)) return;
-          pois.forEach(poi => {
+      (async () => {
+        const pois = await safeFetchJSON("/data/poi.json");
+        if (!Array.isArray(pois)) return;
+        pois.forEach(poi => {
+          try {
             const icon = L.icon({
               iconUrl: `/img/icons/${poi.icon}.svg`,
               iconSize: [24, 24],
@@ -123,27 +149,36 @@
             L.marker([poi.lat, poi.lng], { icon })
               .bindPopup(`<b>${poi.name}</b>`)
               .addTo(this.map);
-          });
+          } catch (e) {
+            console.warn("[worldmap] failed to add POI", poi && poi.id, e && e.message ? e.message : e);
+          }
         });
+      })();
 
       // --------------------------------------------------------
-      // LOAD HIGHWAYS (TopoJSON)
+      // LOAD HIGHWAYS (TopoJSON) - safe
       // --------------------------------------------------------
-      fetch("/data/highways.topojson")
-        .then(r => r.json())
-        .then(topo => {
-          if (!topo || !topo.objects) return;
-          const geo = topojson.feature(topo, topo.objects.highways);
-
-          L.geoJSON(geo, {
-            style: {
-              color: "#00ff41",
-              weight: 2,
-              opacity: 0.9,
-              className: "pipboy-road"
-            }
-          }).addTo(this.roadLayer);
-        });
+      (async () => {
+        const topo = await safeFetchJSON("/data/highways.topojson");
+        if (!topo || !topo.objects) return;
+        try {
+          if (typeof topojson !== "undefined" && topojson.feature) {
+            const geo = topojson.feature(topo, topo.objects.highways);
+            L.geoJSON(geo, {
+              style: {
+                color: "#00ff41",
+                weight: 2,
+                opacity: 0.9,
+                className: "pipboy-road"
+              }
+            }).addTo(this.roadLayer);
+          } else {
+            console.warn("[worldmap] topojson not available; skipping highways overlay");
+          }
+        } catch (e) {
+          console.warn("[worldmap] failed to render highways topojson:", e && e.message ? e.message : e);
+        }
+      })();
 
       // Auto-follow
       this.enableAutoFollow();
@@ -213,7 +248,7 @@
       if (el) el.style.transform = `rotate(${deg}deg)`;
     },
 
-        setPlayerPosition(lat, lng, opts = {}) {
+    setPlayerPosition(lat, lng, opts = {}) {
       const newPos = { lat, lng };
 
       // Auto-heading from movement if no explicit heading provided
@@ -266,28 +301,34 @@
       this.setPlayerPosition(lat, lng, opts);
     },
 
-
     // --------------------------------------------------------
     // WORLD LABELS
     // --------------------------------------------------------
     async loadWorldOverlays() {
       try {
-        const res = await fetch("/data/world_labels.json");
-        const json = await res.json();
+        const json = await safeFetchJSON("/data/world_labels.json");
+        if (!json) return;
         this.worldLabels = Array.isArray(json.labels) ? json.labels : json;
         this.renderWorldLabels();
-      } catch (e) {}
+      } catch (e) {
+        console.warn("[worldmap] loadWorldOverlays failed", e && e.message ? e.message : e);
+      }
     },
 
     renderWorldLabels() {
+      if (!this.labelLayer) return;
       this.labelLayer.clearLayers();
-      this.worldLabels.forEach(label => {
-        const icon = L.divIcon({
-          className: "pipboy-label",
-          html: `<div>${label.name}</div>`
-        });
-        L.marker([label.lat, label.lng], { icon, interactive: false })
-          .addTo(this.labelLayer);
+      (this.worldLabels || []).forEach(label => {
+        try {
+          const icon = L.divIcon({
+            className: "pipboy-label",
+            html: `<div>${label.name}</div>`
+          });
+          L.marker([label.lat, label.lng], { icon, interactive: false })
+            .addTo(this.labelLayer);
+        } catch (e) {
+          console.warn("[worldmap] failed to render label", label && label.name, e && e.message ? e.message : e);
+        }
       });
     },
 
@@ -300,10 +341,25 @@
     // --------------------------------------------------------
     async loadLocations() {
       try {
-        const res = await fetch("/data/locations.json");
-        const data = await res.json();
-        this.locations = Array.isArray(data) ? data : data.locations || [];
+        // try API first
+        const apiLocations = await safeFetchJSON("/api/locations");
+        if (Array.isArray(apiLocations) && apiLocations.length) {
+          this.locations = apiLocations;
+          this.locationsLoaded = true;
+          this.renderPOIMarkers();
+          return;
+        }
+
+        // fallback to static file
+        const staticLocations = await safeFetchJSON("/data/locations.json");
+        if (Array.isArray(staticLocations) && staticLocations.length) {
+          this.locations = staticLocations;
+        } else {
+          this.locations = [];
+          console.warn("[worldmap] no locations available from API or static fallback");
+        }
       } catch (e) {
+        console.warn("[worldmap] loadLocations error", e && e.message ? e.message : e);
         this.locations = [];
       }
       this.locationsLoaded = true;
@@ -311,13 +367,22 @@
     },
 
     renderPOIMarkers() {
-      this.poiMarkers.forEach(m => this.map.removeLayer(m.marker));
+      if (!this.map) return;
+      this.poiMarkers.forEach(m => {
+        try {
+          if (m.marker && this.map.hasLayer(m.marker)) this.map.removeLayer(m.marker);
+        } catch (e) {}
+      });
       this.poiMarkers = [];
 
-      this.locations.forEach((loc, idx) => {
-        const marker = this.createPOIMarker(loc, idx);
-        marker.addTo(this.map);
-        this.poiMarkers.push({ marker, loc });
+      (this.locations || []).forEach((loc, idx) => {
+        try {
+          const marker = this.createPOIMarker(loc, idx);
+          marker.addTo(this.map);
+          this.poiMarkers.push({ marker, loc });
+        } catch (e) {
+          console.warn("[worldmap] failed to create POI marker", loc && loc.id, e && e.message ? e.message : e);
+        }
       });
     },
 
