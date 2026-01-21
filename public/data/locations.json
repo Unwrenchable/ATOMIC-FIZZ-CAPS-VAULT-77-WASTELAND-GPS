@@ -8,12 +8,10 @@
 {"id":"vault_21_hotel_fnv","name":"Vault 21 Hotel","lat":36.1708,"lng":-115.1388,"lvl":8,"rarity":"common","iconKey":"vault","region":"strip","game":"fnv","source":"canon"},
 {"id":"lucky_38_fnv","name":"Lucky 38","lat":36.1700,"lng":-115.1422,"lvl":20,"rarity":"legendary","iconKey":"casino","region":"strip","game":"fnv","source":"canon"},
 {"id":"strip_monorail_fnv","name":"Strip Monorail Station","lat":36.1694,"lng":-115.1430,"lvl":8,"rarity":"common","iconKey":"station","region":"strip","game":"fnv","source":"canon"},
-
 {"id":"freeside_market_fnv","name":"Freeside Market","lat":36.170719,"lng":-115.143929,"lvl":5,"rarity":"common","iconKey":"market","region":"freeside","game":"fnv","source":"canon"},
 {"id":"silver_rush_fnv","name":"Silver Rush","lat":36.1498,"lng":-115.1390,"lvl":9,"rarity":"rare","iconKey":"shop","region":"freeside","game":"fnv","source":"canon"},
 {"id":"atomic_wrangler_fnv","name":"Atomic Wrangler","lat":36.1499,"lng":-115.1383,"lvl":8,"rarity":"rare","iconKey":"casino","region":"freeside","game":"fnv","source":"canon"},
 {"id":"old_mormon_fort_fnv","name":"Old Mormon Fort","lat":36.1694,"lng":-115.1305,"lvl":6,"rarity":"common","iconKey":"fort","region":"freeside","game":"fnv","source":"canon"},
-
 {"id":"bonnie_springs_fnv","name":"Bonnie Springs Ranch","lat":36.06007,"lng":-115.45027,"lvl":7,"rarity":"common","iconKey":"town","region":"outer_vegas","game":"fnv","source":"canon"},
 {"id":"callville_bay_fnv","name":"Callville Bay Marina","lat":36.14400,"lng":-114.72200,"lvl":9,"rarity":"common","iconKey":"town","region":"outer_vegas","game":"fnv","source":"canon"},
 {"id":"sloan_station_fnv","name":"Sloan Station","lat":35.94361,"lng":-115.21722,"lvl":5,"rarity":"common","iconKey":"town","region":"outer_vegas","game":"fnv","source":"canon"},
@@ -25,7 +23,6 @@
 {"id":"primm_valley_resort_fnv","name":"Primm Valley Resort","lat":35.6160,"lng":-115.3900,"lvl":3,"rarity":"common","iconKey":"casino","region":"outer_vegas","game":"fnv","source":"canon"},
 {"id":"westgate_hotel_fnv","name":"Westgate Hotel","lat":36.1311,"lng":-115.1564,"lvl":10,"rarity":"epic","iconKey":"city","region":"outer_vegas","game":"fnv","source":"canon"},
 {"id":"coca_cola_factory_fnv","name":"Coca Cola Factory","lat":36.1025,"lng":-115.1738,"lvl":8,"rarity":"rare","iconKey":"factory","region":"outer_vegas","game":"fnv","source":"canon"},
-
 {"id":"goodsprings_saloon_fnv","name":"Goodsprings Saloon","lat":35.8324,"lng":-115.4320,"lvl":1,"rarity":"common","iconKey":"town","region":"mojave_towns","game":"fnv","source":"canon"},
 {"id":"primm_rollercoaster_fnv","name":"Primm Rollercoaster","lat":35.6145,"lng":-115.3845,"lvl":2,"rarity":"common","iconKey":"town","region":"mojave_towns","game":"fnv","source":"canon"},
 {"id":"novac_motel_fnv","name":"Novac Motel","lat":35.0525,"lng":-114.8247,"lvl":5,"rarity":"rare","iconKey":"town","region":"mojave_towns","game":"fnv","source":"canon"},
@@ -34,7 +31,6 @@
 {"id":"jacobstown_fnv","name":"Jacobstown","lat":36.3000,"lng":-115.6500,"lvl":22,"rarity":"rare","iconKey":"town","region":"mojave_towns","game":"fnv","source":"canon"},
 {"id":"searchlight_church_fnv","name":"Searchlight Church","lat":35.46434,"lng":-114.91844,"lvl":10,"rarity":"rare","iconKey":"town","region":"mojave_towns","game":"fnv","source":"canon"},
 {"id":"cottonwood_cove_fnv","name":"Cottonwood Cove","lat":35.9990,"lng":-114.5000,"lvl":14,"rarity":"rare","iconKey":"town","region":"mojave_towns","game":"fnv","source":"canon"},
-
 {"id":"helios_one_fnv","name":"Helios One","lat":35.7580,"lng":-114.9530,"lvl":13,"rarity":"epic","iconKey":"facility","region":"fnv_minor","game":"fnv","source":"canon"},
 {"id":"repconn_test_site_fnv","name":"REPCONN Test Site","lat":36.0360,"lng":-115.0880,"lvl":12,"rarity":"rare","iconKey":"facility","region":"fnv_minor","game":"fnv","source":"canon"},
 {"id":"repconn_headquarters_fnv","name":"REPCONN Headquarters","lat":36.0500,"lng":-115.1000,"lvl":13,"rarity":"rare","iconKey":"facility","region":"fnv_minor","game":"fnv","source":"canon"},
@@ -48,7 +44,6 @@
 {"id":"primm_schoolhouse_fnv","name":"Primm Schoolhouse","lat":35.6150,"lng":-115.3850,"lvl":3,"rarity":"common","iconKey":"ruins","region":"fnv_minor","game":"fnv","source":"canon"},
 {"id":"nipton_hall_fnv","name":"Nipton Hall","lat":35.4667,"lng":-115.2722,"lvl":5,"rarity":"common","iconKey":"ruins","region":"fnv_minor","game":"fnv","source":"canon"},
 {"id":"boulder_city_ruins_fnv","name":"Boulder City Ruins","lat":35.9775,"lng":-114.8364,"lvl":7,"rarity":"common","iconKey":"ruins","region":"fnv_minor","game":"fnv","source":"canon"},
-
 {"id":"ncr_capital_fnv","name":"NCR Capital (Vegas HQ)","lat":36.1699,"lng":-115.1398,"lvl":30,"rarity":"epic","iconKey":"faction","region":"fnv_factions","game":"fnv","source":"canon"},
 {"id":"ncr_base_fnv","name":"NCR Base","lat":36.1699,"lng":-115.1398,"lvl":15,"rarity":"common","iconKey":"faction","region":"fnv_factions","game":"fnv","source":"canon"},
 {"id":"brotherhood_bunker_fnv","name":"Brotherhood of Steel Bunker","lat":34.0522,"lng":-118.2437,"lvl":30,"rarity":"rare","iconKey":"bunker","region":"fnv_factions","game":"fnv","source":"canon"},
@@ -57,7 +52,6 @@
 {"id":"free_economic_zone_fnv","name":"Free Economic Zone","lat":36.1699,"lng":-115.1398,"lvl":18,"rarity":"common","iconKey":"faction","region":"fnv_factions","game":"fnv","source":"canon"},
 {"id":"new_california_republic_fnv","name":"New California Republic Embassy","lat":36.1699,"lng":-115.1398,"lvl":25,"rarity":"rare","iconKey":"faction","region":"fnv_factions","game":"fnv","source":"canon"},
 {"id":"cottonwood_cove_legion_fnv","name":"Cottonwood Cove (Legion)","lat":35.9990,"lng":-114.5000,"lvl":14,"rarity":"rare","iconKey":"faction","region":"fnv_factions","game":"fnv","source":"canon"},
-
 {"id":"black_mountain_fnv","name":"Black Mountain","lat":35.9310,"lng":-115.0440,"lvl":20,"rarity":"epic","iconKey":"mountain","region":"fnv_wild","game":"fnv","source":"canon"},
 {"id":"dead_wind_cavern_fnv","name":"Dead Wind Cavern","lat":35.8000,"lng":-115.4000,"lvl":40,"rarity":"legendary","iconKey":"cave","region":"fnv_wild","game":"fnv","source":"canon"},
 {"id":"deathclaw_promontory_fnv","name":"Deathclaw Promontory","lat":36.1000,"lng":-114.9000,"lvl":45,"rarity":"legendary","iconKey":"danger","region":"fnv_wild","game":"fnv","source":"canon"},
@@ -65,7 +59,6 @@
 {"id":"mesquite_mountains_fnv","name":"Mesquite Mountains","lat":35.8500,"lng":-115.9500,"lvl":17,"rarity":"rare","iconKey":"mountain","region":"fnv_wild","game":"fnv","source":"canon"},
 {"id":"devils_gullet_fnv","name":"Devil's Gullet","lat":35.7000,"lng":-115.3000,"lvl":23,"rarity":"rare","iconKey":"cave","region":"fnv_wild","game":"fnv","source":"canon"},
 {"id":"cazador_hive_fnv","name":"Cazador Hive","lat":36.0000,"lng":-115.0000,"lvl":30,"rarity":"rare","iconKey":"danger","region":"fnv_wild","game":"fnv","source":"canon"},
-
 {"id":"sierra_madre_villa_fnv","name":"Sierra Madre Villa","lat":36.0500,"lng":-115.1000,"lvl":20,"rarity":"epic","iconKey":"ruins","region":"fnv_dm","game":"fnv","source":"canon"},
 {"id":"sierra_madre_casino_fnv","name":"Sierra Madre Casino","lat":36.0505,"lng":-115.0995,"lvl":25,"rarity":"legendary","iconKey":"casino","region":"fnv_dm","game":"fnv","source":"canon"},
 {"id":"sierra_madre_lobby_fnv","name":"Sierra Madre Casino Lobby","lat":36.0506,"lng":-115.0994,"lvl":25,"rarity":"epic","iconKey":"casino","region":"fnv_dm","game":"fnv","source":"canon"},
@@ -78,7 +71,6 @@
 {"id":"cloud_zone_north_fnv","name":"Cloud Zone (North)","lat":36.0510,"lng":-115.0990,"lvl":30,"rarity":"epic","iconKey":"danger","region":"fnv_dm","game":"fnv","source":"canon"},
 {"id":"cloud_zone_south_fnv","name":"Cloud Zone (South)","lat":36.0480,"lng":-115.1015,"lvl":30,"rarity":"epic","iconKey":"danger","region":"fnv_dm","game":"fnv","source":"canon"},
 {"id":"villa_toxic_cloud_fnv","name":"Villa Toxic Cloud","lat":36.0490,"lng":-115.1008,"lvl":28,"rarity":"rare","iconKey":"danger","region":"fnv_dm","game":"fnv","source":"canon"},
-
 {"id":"zion_canyon_fnv","name":"Zion Canyon","lat":37.3000,"lng":-113.0300,"lvl":15,"rarity":"common","iconKey":"wilderness","region":"fnv_hh","game":"fnv","source":"canon"},
 {"id":"dead_horses_camp_fnv","name":"Dead Horses Camp","lat":37.3050,"lng":-113.0250,"lvl":18,"rarity":"rare","iconKey":"camp","region":"fnv_hh","game":"fnv","source":"canon"},
 {"id":"sorrows_camp_fnv","name":"Sorrows Camp","lat":37.3100,"lng":-113.0200,"lvl":18,"rarity":"rare","iconKey":"camp","region":"fnv_hh","game":"fnv","source":"canon"},
@@ -87,7 +79,6 @@
 {"id":"zion_ranger_station_fnv","name":"Zion Ranger Station","lat":37.2980,"lng":-113.0500,"lvl":14,"rarity":"common","iconKey":"station","region":"fnv_hh","game":"fnv","source":"canon"},
 {"id":"white_legs_encampment_fnv","name":"White Legs Encampment","lat":37.2850,"lng":-113.0600,"lvl":22,"rarity":"epic","iconKey":"camp","region":"fnv_hh","game":"fnv","source":"canon"},
 {"id":"fallen_trees_pass_fnv","name":"Fallen Trees Pass","lat":37.2920,"lng":-113.0450,"lvl":17,"rarity":"common","iconKey":"wilderness","region":"fnv_hh","game":"fnv","source":"canon"},
-
 {"id":"big_mt_crater_fnv","name":"Big MT Crater","lat":36.9000,"lng":-116.0500,"lvl":30,"rarity":"epic","iconKey":"wasteland","region":"fnv_owb","game":"fnv","source":"canon"},
 {"id":"think_tank_fnv","name":"The Think Tank","lat":36.9010,"lng":-116.0490,"lvl":35,"rarity":"legendary","iconKey":"facility","region":"fnv_owb","game":"fnv","source":"canon"},
 {"id":"x2_transmitter_fnv","name":"X-2 Transmitter Antenna Array","lat":36.9020,"lng":-116.0480,"lvl":28,"rarity":"rare","iconKey":"facility","region":"fnv_owb","game":"fnv","source":"canon"},
@@ -98,7 +89,6 @@
 {"id":"big_mt_central_facility_fnv","name":"Big MT Central Facility","lat":36.9070,"lng":-116.0430,"lvl":33,"rarity":"rare","iconKey":"facility","region":"fnv_owb","game":"fnv","source":"canon"},
 {"id":"crater_lake_fnv","name":"Crater Lake","lat":36.9080,"lng":-116.0420,"lvl":22,"rarity":"common","iconKey":"wasteland","region":"fnv_owb","game":"fnv","source":"canon"},
 {"id":"big_mt_sonic_emitters_fnv","name":"Sonic Emitter Testing Range","lat":36.9090,"lng":-116.0410,"lvl":27,"rarity":"rare","iconKey":"facility","region":"fnv_owb","game":"fnv","source":"canon"},
-
 {"id":"the_divide_fnv","name":"The Divide","lat":36.4000,"lng":-116.4000,"lvl":35,"rarity":"epic","iconKey":"wasteland","region":"fnv_lr","game":"fnv","source":"canon"},
 {"id":"hopeville_silo_fnv","name":"Hopeville Missile Silo","lat":36.4050,"lng":-116.3950,"lvl":40,"rarity":"legendary","iconKey":"facility","region":"fnv_lr","game":"fnv","source":"canon"},
 {"id":"hopeville_ruins_fnv","name":"Hopeville Ruins","lat":36.4030,"lng":-116.3980,"lvl":32,"rarity":"rare","iconKey":"ruins","region":"fnv_lr","game":"fnv","source":"canon"},
@@ -109,7 +99,6 @@
 {"id":"ulysses_temple_fnv","name":"Ulysses' Temple","lat":36.4150,"lng":-116.3850,"lvl":45,"rarity":"legendary","iconKey":"facility","region":"fnv_lr","game":"fnv","source":"canon"},
 {"id":"divide_municipal_building_fnv","name":"Divide Municipal Building","lat":36.3970,"lng":-116.4020,"lvl":30,"rarity":"rare","iconKey":"ruins","region":"fnv_lr","game":"fnv","source":"canon"},
 {"id":"collapsed_overpass_fnv","name":"Collapsed Overpass","lat":36.3990,"lng":-116.4070,"lvl":27,"rarity":"common","iconKey":"ruins","region":"fnv_lr","game":"fnv","source":"canon"},
-
 {"id":"adams_afb_reactor_fo3","name":"Adams AFB Reactor","lat":38.8000,"lng":-76.9000,"lvl":30,"rarity":"epic","iconKey":"reactor","region":"fo3","game":"fo3","source":"canon"},
 {"id":"bethesda_reactor_fo3","name":"Bethesda Ruins Reactor","lat":39.0300,"lng":-77.1000,"lvl":20,"rarity":"rare","iconKey":"reactor","region":"fo3","game":"fo3","source":"canon"},
 {"id":"megaton_fo3","name":"Megaton","lat":38.9100,"lng":-77.0200,"lvl":8,"rarity":"rare","iconKey":"town","region":"fo3","game":"fo3","source":"canon"},
@@ -171,7 +160,6 @@
 {"id":"scrapyard_fo3","name":"Scrapyard","lat":39.0800,"lng":-77.2300,"lvl":8,"rarity":"common","iconKey":"ruins","region":"fo3","game":"fo3","source":"canon"},
 {"id":"abandoned_car_tunnel_fo3","name":"Abandoned Car Tunnel","lat":39.0200,"lng":-77.2600,"lvl":10,"rarity":"common","iconKey":"tunnel","region":"fo3","game":"fo3","source":"canon"},
 {"id":"yao_guai_tunnels_fo3","name":"Yao Guai Tunnels","lat":39.0000,"lng":-77.3200,"lvl":18,"rarity":"rare","iconKey":"cave","region":"fo3","game":"fo3","source":"canon"},
-
 {"id":"sanctuary_fo4","name":"Sanctuary Hills","lat":42.4620,"lng":-71.2040,"lvl":1,"rarity":"common","iconKey":"town","region":"fo4","game":"fo4","source":"canon"},
 {"id":"red_rocket_fo4","name":"Red Rocket Truck Stop","lat":42.4600,"lng":-71.2000,"lvl":2,"rarity":"common","iconKey":"shop","region":"fo4","game":"fo4","source":"canon"},
 {"id":"concord_fo4","name":"Concord","lat":42.4610,"lng":-71.1800,"lvl":3,"rarity":"common","iconKey":"town","region":"fo4","game":"fo4","source":"canon"},
@@ -215,7 +203,6 @@
 {"id":"medford_memorial_fo4","name":"Medford Memorial Hospital","lat":42.4200,"lng":-71.1000,"lvl":18,"rarity":"common","iconKey":"hospital","region":"fo4","game":"fo4","source":"canon"},
 {"id":"malden_center_fo4","name":"Malden Center","lat":42.4300,"lng":-71.0700,"lvl":16,"rarity":"common","iconKey":"metro","region":"fo4","game":"fo4","source":"canon"},
 {"id":"revere_beach_fo4","name":"Revere Beach Station","lat":42.4100,"lng":-70.9900,"lvl":14,"rarity":"common","iconKey":"metro","region":"fo4","game":"fo4","source":"canon"},
-
 {"id":"vault_76_fo76","name":"Vault 76","lat":39.0000,"lng":-79.0000,"lvl":1,"rarity":"common","iconKey":"vault","region":"fo76","game":"fo76","source":"canon"},
 {"id":"flatwoods_fo76","name":"Flatwoods","lat":38.9900,"lng":-79.0100,"lvl":5,"rarity":"common","iconKey":"town","region":"fo76","game":"fo76","source":"canon"},
 {"id":"morgantown_fo76","name":"Morgantown","lat":39.6300,"lng":-79.9500,"lvl":8,"rarity":"common","iconKey":"city","region":"fo76","game":"fo76","source":"canon"},
@@ -254,7 +241,6 @@
 {"id":"the_mire_fo76","name":"The Mire","lat":39.3000,"lng":-78.3000,"lvl":25,"rarity":"rare","iconKey":"wasteland","region":"fo76","game":"fo76","source":"canon"},
 {"id":"dolly_sods_fo76","name":"Dolly Sods Wilderness","lat":39.1000,"lng":-79.3000,"lvl":28,"rarity":"rare","iconKey":"wilderness","region":"fo76","game":"fo76","source":"canon"},
 {"id":"tnt_dome_fo76","name":"TNT Dome","lat":39.3200,"lng":-78.3100,"lvl":30,"rarity":"rare","iconKey":"facility","region":"fo76","game":"fo76","source":"canon"},
-
 {"id":"mariposa_reactor_fo1","name":"Mariposa Nuclear Vault","lat":37.0000,"lng":-119.0000,"lvl":25,"rarity":"epic","iconKey":"reactor","region":"nuclear_sites","game":"fo1","source":"canon"},
 {"id":"gecko_reactor_fo2","name":"Gecko Nuclear Reactor","lat":40.7500,"lng":-116.9000,"lvl":20,"rarity":"rare","iconKey":"reactor","region":"nuclear_sites","game":"fo2","source":"canon"},
 {"id":"oil_rig_reactor_fo2","name":"Enclave Oil Rig Reactor","lat":36.0000,"lng":-130.0000,"lvl":40,"rarity":"legendary","iconKey":"reactor","region":"nuclear_sites","game":"fo2","source":"canon"},
@@ -280,7 +266,6 @@
 {"id":"san_francisco_fo2","name":"San Francisco","lat":37.7749,"lng":-122.4194,"lvl":25,"rarity":"epic","iconKey":"city","region":"fo1_2","game":"fo2","source":"canon"},
 {"id":"navarro_fo2","name":"Navarro Enclave Base","lat":38.0000,"lng":-121.5000,"lvl":30,"rarity":"legendary","iconKey":"facility","region":"fo1_2","game":"fo2","source":"canon"},
 {"id":"oil_rig_fo2","name":"Enclave Oil Rig","lat":36.0000,"lng":-130.0000,"lvl":40,"rarity":"legendary","iconKey":"facility","region":"fo1_2","game":"fo2","source":"canon"},
-
 {"id":"brahmin_wood_fot","name":"Brahmin Wood","lat":41.0000,"lng":-89.0000,"lvl":1,"rarity":"common","iconKey":"town","region":"fot","game":"fot","source":"canon"},
 {"id":"rock_falls_fot","name":"Rock Falls","lat":41.2000,"lng":-89.2000,"lvl":3,"rarity":"common","iconKey":"town","region":"fot","game":"fot","source":"canon"},
 {"id":"mardin_fot","name":"Mardin","lat":41.3000,"lng":-89.3000,"lvl":4,"rarity":"common","iconKey":"town","region":"fot","game":"fot","source":"canon"},
@@ -305,7 +290,6 @@
 {"id":"bunker_zeta_fot","name":"Brotherhood Bunker Zeta","lat":38.9000,"lng":-104.7000,"lvl":30,"rarity":"epic","iconKey":"bunker","region":"fot","game":"fot","source":"canon"},
 {"id":"robot_factory_fot","name":"Robot Factory","lat":38.8500,"lng":-104.6500,"lvl":32,"rarity":"epic","iconKey":"facility","region":"fot","game":"fot","source":"canon"},
 {"id":"vault_0_fot","name":"Vault 0","lat":38.9000,"lng":-104.8000,"lvl":40,"rarity":"legendary","iconKey":"vault","region":"fot","game":"fot","source":"canon"},
-
 {"id":"brahmin_wood_bos","name":"Brahmin Wood","lat":34.2000,"lng":-118.4500,"lvl":1,"rarity":"common","iconKey":"town","region":"bos","game":"bos","source":"canon"},
 {"id":"los_bos","name":"Los","lat":34.0500,"lng":-118.2500,"lvl":5,"rarity":"rare","iconKey":"city","region":"bos","game":"bos","source":"canon"},
 {"id":"los_sewers_bos","name":"Los Sewers","lat":34.0490,"lng":-118.2490,"lvl":6,"rarity":"common","iconKey":"sewer","region":"bos","game":"bos","source":"canon"},
@@ -325,7 +309,6 @@
 {"id":"vault_tec_reactor_bos","name":"Vault-Tec Reactor Core","lat":34.0010,"lng":-118.2510,"lvl":32,"rarity":"legendary","iconKey":"reactor","region":"bos","game":"bos","source":"canon"},
 {"id":"calculator_core_bos","name":"The Calculator Core","lat":34.0020,"lng":-118.2520,"lvl":40,"rarity":"legendary","iconKey":"facility","region":"bos","game":"bos","source":"canon"},
 {"id":"calculator_chamber_bos","name":"Calculator Final Chamber","lat":34.0030,"lng":-118.2530,"lvl":45,"rarity":"legendary","iconKey":"danger","region":"bos","game":"bos","source":"canon"},
-
 {"id":"nuclear_nevada_test_site","name":"Nevada Test Site","lat":37.1167,"lng":-116.0500,"lvl":50,"rarity":"legendary","iconKey":"reactor","region":"nuclear_sites","game":"real","source":"real"},
 {"id":"nuclear_hanford_site","name":"Hanford Site","lat":46.5500,"lng":-119.5833,"lvl":50,"rarity":"legendary","iconKey":"reactor","region":"nuclear_sites","game":"real","source":"real"},
 {"id":"nuclear_oak_ridge","name":"Oak Ridge National Lab","lat":35.9300,"lng":-84.3100,"lvl":45,"rarity":"epic","iconKey":"reactor","region":"nuclear_sites","game":"real","source":"real"},
@@ -336,7 +319,6 @@
 {"id":"nuclear_zaporizhzhia","name":"Zaporizhzhia NPP","lat":47.5100,"lng":34.5850,"lvl":55,"rarity":"epic","iconKey":"reactor","region":"nuclear_sites","game":"real","source":"real"},
 {"id":"nuclear_palo_verde","name":"Palo Verde Nuclear Plant","lat":33.3890,"lng":-112.8650,"lvl":40,"rarity":"rare","iconKey":"reactor","region":"nuclear_sites","game":"real","source":"real"},
 {"id":"nuclear_diablo_canyon","name":"Diablo Canyon Nuclear Plant","lat":35.2100,"lng":-120.8500,"lvl":40,"rarity":"rare","iconKey":"reactor","region":"nuclear_sites","game":"real","source":"real"},
-
 {"id":"anchorage_outpost_fo3","name":"U.S. Army Anchorage Outpost","lat":61.2180,"lng":-149.9000,"lvl":20,"rarity":"rare","iconKey":"military","region":"fo3_anchorage","game":"fo3","source":"canon"},
 {"id":"anchorage_hq_fo3","name":"U.S. Army Field HQ","lat":61.2190,"lng":-149.9010,"lvl":22,"rarity":"rare","iconKey":"military","region":"fo3_anchorage","game":"fo3","source":"canon"},
 {"id":"anchorage_artillery_base_fo3","name":"Artillery Base","lat":61.2200,"lng":-149.9050,"lvl":24,"rarity":"epic","iconKey":"facility","region":"fo3_anchorage","game":"fo3","source":"canon"},
