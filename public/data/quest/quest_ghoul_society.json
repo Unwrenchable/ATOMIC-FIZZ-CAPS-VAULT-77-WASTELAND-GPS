@@ -1,0 +1,139 @@
+{
+  "id": "q_ghoul_society",
+  "name": "Ghoul Society",
+  "type": "main",
+  "region": "metro_underground",
+  "subregion": "abandoned_metro",
+
+  "giver": "npc_survivor_refugee",
+
+  "start_conditions": {
+    "min_level": 12,
+    "location": "metro_entrance"
+  },
+
+  "npc_links": [
+    "npc_survivor_refugee",
+    "npc_ghoul_elder",
+    "npc_ghoul_child",
+    "npc_wasteland_vigilante",
+    "npc_settlers_leader"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_ghoul_metro",
+      "poi": "underground_sanctuary",
+      "stage": "find_sanctuary"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "investigate_rumors",
+      "desc": "Investigate rumors of a hidden Ghoul community.",
+      "dialogue": "dialog_refugee_rumors.json"
+    },
+    {
+      "id": "find_sanctuary",
+      "desc": "Navigate the metro tunnels to find the Ghoul sanctuary.",
+      "poi": "underground_sanctuary",
+      "hazards": ["radiation", "feral_ghouls", "collapsed_tunnels"]
+    },
+    {
+      "id": "meet_ghouls",
+      "desc": "Make contact with the peaceful Ghoul society.",
+      "npc": "npc_ghoul_elder",
+      "dialogue": "dialog_ghoul_elder.json"
+    },
+    {
+      "id": "investigate_accusations",
+      "desc": "Investigate claims that the Ghouls are cannibals.",
+      "poi": "sanctuary_food_storage",
+      "clues": ["food_supplies", "medical_records", "witness_accounts"]
+    },
+    {
+      "id": "confront_vigilantes",
+      "desc": "Deal with the vigilantes planning to attack.",
+      "npc": "npc_wasteland_vigilante",
+      "dialogue": "dialog_vigilante_leader.json"
+    },
+    {
+      "id": "make_judgment",
+      "desc": "Decide the fate of the Ghoul sanctuary.",
+      "choices": [
+        "protect_ghouls",
+        "expose_fabrication",
+        "side_with_vigilantes",
+        "fabricate_evidence"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "investigate_rumors", "desc": "Learn about the hidden Ghoul community." },
+    { "id": 1, "objective": "find_sanctuary", "desc": "Venture into the dangerous metro tunnels." },
+    { "id": 2, "objective": "meet_ghouls", "desc": "Encounter the peaceful Ghoul society." },
+    { "id": 3, "objective": "investigate_accusations", "desc": "Search for truth about the cannibalism claims." },
+    { "id": 4, "objective": "confront_vigilantes", "desc": "Face those who want the Ghouls destroyed." },
+    { "id": 5, "objective": "make_judgment", "desc": "Choose between justice and prejudice." },
+    { "id": 6, "objective": "complete", "desc": "The Ghouls' fate is decided." }
+  ],
+
+  "choices": {
+    "protect_ghouls": {
+      "desc": "Defend the sanctuary and help the Ghouls prove their innocence.",
+      "requirements": { "combat_skill": 65, "reputation_ghouls": 20 },
+      "consequences": {
+        "faction_rep": { "ghouls": 100, "settlers": -20, "vigilantes": -80 },
+        "rewards": { "xp": 900, "caps": 350, "items": ["ghoul_mask", "sanctuary_key", "rad_resistance_serum"] },
+        "unlock": ["ghoul_sanctuary_access", "ghoul_merchant"],
+        "outcome": "The Ghouls survive. They remember your kindness and offer their aid when needed."
+      }
+    },
+    "expose_fabrication": {
+      "desc": "Prove the accusations are lies and reveal the truth to all.",
+      "requirements": { "intelligence": 8, "investigation_skill": 70 },
+      "consequences": {
+        "faction_rep": { "ghouls": 80, "settlers": 40, "vigilantes": -60 },
+        "rewards": { "xp": 1000, "caps": 400, "items": ["investigator_badge", "truth_documents"] },
+        "outcome": "The truth spreads. Prejudice diminishes. The Ghouls are accepted by some settlements."
+      }
+    },
+    "side_with_vigilantes": {
+      "desc": "Help the vigilantes destroy the Ghoul sanctuary.",
+      "requirements": { "morality": "evil", "combat_skill": 60 },
+      "consequences": {
+        "faction_rep": { "ghouls": -100, "settlers": 50, "vigilantes": 80 },
+        "rewards": { "xp": 700, "caps": 500, "items": ["vigilante_armor", "bounty_reward"] },
+        "outcome": "The sanctuary is destroyed. The Ghouls are scattered or dead. The wasteland is 'safer.'"
+      }
+    },
+    "fabricate_evidence": {
+      "desc": "Plant evidence to frame the Ghouls and justify their elimination.",
+      "requirements": { "deception": 80, "morality": "evil" },
+      "consequences": {
+        "faction_rep": { "ghouls": -100, "settlers": 30, "vigilantes": 60 },
+        "rewards": { "xp": 650, "caps": 600, "items": ["forged_documents", "blood_money"] },
+        "karma": -500,
+        "outcome": "Innocent Ghouls die based on your lies. Your conscience may never recover."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 900,
+    "caps": 350
+  },
+
+  "factions": {
+    "affected": ["Ghouls", "Settlers", "Vigilantes", "Followers_of_Apocalypse"]
+  },
+
+  "next_quests": [
+    "quest_ghoul_uprising",
+    "quest_radiation_cure"
+  ],
+
+  "notes": "A morally challenging quest exploring prejudice, truth, and the cost of blind hatred in the wasteland."
+}
