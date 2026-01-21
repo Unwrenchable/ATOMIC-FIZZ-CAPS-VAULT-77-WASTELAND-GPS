@@ -2,7 +2,7 @@
 const nacl = require("tweetnacl");
 const bs58 = require("bs58");
 const serializeVoucherMessage = require("./gps").serializeVoucherMessage;
-const redis = require("../redis");
+const redis = require('../lib/redis');
 
 /**
  * Validate a voucher payload from the client.
