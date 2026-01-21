@@ -111,6 +111,14 @@ BACKEND_URL: https://api.atomicfizzcaps.xyz
 3. Deploy
 4. Configure custom domain `www.atomicfizzcaps.xyz` (optional)
 
+#### Manual Deployment
+
+If you need to force a deployment (e.g., when automatic deployments are paused or build minutes are limited), you can use the manual deployment workflow:
+
+- **Quick Start**: See [Quick Start Guide](docs/QUICK_START_FORCE_DEPLOY.md) for a condensed setup and usage guide
+- **Full Documentation**: See [Manual Vercel Deployment Guide](docs/MANUAL_VERCEL_DEPLOY.md) for complete instructions on triggering manual deployments via GitHub Actions
+- **Local CLI**: Use `vercel --prod` from your local machine (requires Vercel CLI)
+
 ### Backend (Render)
 
 1. Connect your GitHub repository to Render
