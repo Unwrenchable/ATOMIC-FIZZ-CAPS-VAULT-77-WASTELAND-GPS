@@ -1,6 +1,6 @@
 // backend/lib/xp.js
 
-const redis = require('./lib/redis');
+const redis = require('./redis');
 
 async function awardXp(player, amount) {
   if (!player || !player.wallet) {
