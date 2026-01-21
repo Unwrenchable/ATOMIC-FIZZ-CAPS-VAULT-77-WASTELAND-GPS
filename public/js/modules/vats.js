@@ -27,12 +27,14 @@
     if (distance > 50) baseChance *= 0.7;
     else if (distance > 20) baseChance *= 0.85;
     
-    // Perception bonus
-    const perceptionBonus = (playerPerception - 5) * 0.05;
+    // Perception bonus (default to 5 if not provided)
+    const perception = typeof playerPerception === 'number' ? playerPerception : 5;
+    const perceptionBonus = (perception - 5) * 0.05;
     baseChance += perceptionBonus;
     
-    // Weapon accuracy
-    baseChance *= (weaponAccuracy || 1.0);
+    // Weapon accuracy (default to 1.0 if not provided)
+    const accuracy = typeof weaponAccuracy === 'number' ? weaponAccuracy : 1.0;
+    baseChance *= accuracy;
     
     return Math.min(0.95, Math.max(0.05, baseChance));
   }
@@ -141,7 +143,13 @@
   }
 
   function calculateDamage(bodyPart, enemy) {
-    const baseDamage = window.PLAYER?.weapon?.damage || 20;
+    // Safely get base damage with proper fallback
+    let baseDamage = 20; // Default damage
+    
+    if (window.PLAYER && window.PLAYER.weapon && typeof window.PLAYER.weapon.damage === 'number') {
+      baseDamage = window.PLAYER.weapon.damage;
+    }
+    
     return Math.floor(baseDamage * bodyPart.damageMultiplier);
   }
 
@@ -208,24 +216,54 @@
     // Update AP
     apValue.textContent = Math.floor(VATS.actionPoints);
 
+    // Clear previous content
+    targetsDiv.innerHTML = '';
+
     // Update targets
-    targetsDiv.innerHTML = VATS.targets.map((enemy, idx) => `
-      <div class="vats-target" data-enemy-id="${idx}">
-        <strong>${enemy.name}</strong>
-        <div class="vats-body-parts">
-          ${BODY_PARTS.map(part => {
-            const hitChance = calculateHitChance(part, enemy.distance || 10, 5, 1.0);
-            return `
-              <button class="vats-body-part ${VATS.actionPoints < part.apCost ? 'disabled' : ''}"
-                      data-enemy-id="${idx}" data-body-part="${part.id}"
-                      onclick="window.Game.modules.vats.queueShot(window.Game.modules.vats.getTargets()[${idx}], ${JSON.stringify(part)})">
-                ${part.name}: ${Math.floor(hitChance * 100)}% (${part.apCost} AP)
-              </button>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `).join('');
+    VATS.targets.forEach((enemy, idx) => {
+      const targetDiv = document.createElement('div');
+      targetDiv.className = 'vats-target';
+      targetDiv.setAttribute('data-enemy-id', idx);
+
+      const enemyName = document.createElement('strong');
+      enemyName.textContent = enemy.name;
+      targetDiv.appendChild(enemyName);
+
+      const bodyPartsDiv = document.createElement('div');
+      bodyPartsDiv.className = 'vats-body-parts';
+
+      BODY_PARTS.forEach(part => {
+        const hitChance = calculateHitChance(
+          part, 
+          enemy.distance || 10, 
+          (window.PLAYER && window.PLAYER.special && window.PLAYER.special.P) || 5, 
+          1.0
+        );
+        
+        const button = document.createElement('button');
+        button.className = 'vats-body-part';
+        button.textContent = `${part.name}: ${Math.floor(hitChance * 100)}% (${part.apCost} AP)`;
+        button.setAttribute('data-enemy-id', idx);
+        button.setAttribute('data-body-part', part.id);
+        
+        if (VATS.actionPoints < part.apCost) {
+          button.classList.add('disabled');
+          button.disabled = true;
+        }
+        
+        // Safe event binding instead of inline onclick
+        button.addEventListener('click', function() {
+          if (!button.disabled) {
+            queueShot(VATS.targets[idx], part);
+          }
+        });
+
+        bodyPartsDiv.appendChild(button);
+      });
+
+      targetDiv.appendChild(bodyPartsDiv);
+      targetsDiv.appendChild(targetDiv);
+    });
 
     // Update queue
     queueDiv.innerHTML = VATS.queuedShots.length > 0
