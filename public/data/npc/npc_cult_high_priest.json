@@ -1,0 +1,99 @@
+{
+  "id": "npc_cult_high_priest",
+  "name": "Father Solomon",
+  "faction": "Overseer Cult",
+  "role": "High Priest / Former Vault Dweller",
+  "type": "human",
+
+  "homeRegion": "vault_88_cultist",
+  "currentRegion": "vault_88_cultist",
+  "poi": "vault_88_chapel",
+
+  "description": "Once a simple Vault dweller, Solomon was conditioned since childhood to worship the Overseer as a god. Now he leads the cult with unwavering faith, truly believing he serves a divine purpose. His eyes reflect both madness and conviction.",
+
+  "dialogueProfile": {
+    "tone": "fanatical-priest",
+    "personalityTags": [
+      "fanatic",
+      "charismatic",
+      "delusional",
+      "dangerous",
+      "tragic",
+      "conditioned-victim"
+    ],
+    "knowledge": [
+      "vault-88-history",
+      "overseer-worship",
+      "conditioning-protocols",
+      "cult-rituals",
+      "vault-tec-experiments"
+    ],
+    "anomalyAwareness": 0.0
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["vault_88_chapel", "vault_88_overseer_shrine"],
+      "night": ["vault_88_private_quarters"],
+      "wanderChance": 0.1
+    },
+    "roaming": ["vault_88_cultist"],
+    "anomalySensitivity": 0.0,
+    "rareEncounter": false
+  },
+
+  "dialog": {
+    "idle": [
+      "The Overseer watches over us all.",
+      "Through devotion, we find salvation.",
+      "Blessed are those who serve the Vault."
+    ],
+    "greeting": [
+      "Welcome, child. Have you come to receive the Overseer's blessing?",
+      "The Overseer's light shines upon you, stranger."
+    ],
+    "hostile": [
+      "You dare blaspheme in the Overseer's house?!",
+      "Heretic! The faithful will strike you down!",
+      "The Overseer's wrath will consume you!"
+    ],
+    "questioning": [
+      "What is faith without sacrifice?",
+      "The Overseer gave us everything. What have you given?",
+      "Do you not see the truth? The Overseer IS truth!"
+    ],
+    "realization": [
+      "No... it can't be... the conditioning... it was all...",
+      "My whole life... a lie? What am I without this purpose?"
+    ]
+  },
+
+  "stats": {
+    "level": 12,
+    "health": 180,
+    "combat_skill": 45,
+    "charisma": 8,
+    "intelligence": 5,
+    "special": {
+      "S": 5,
+      "P": 6,
+      "E": 6,
+      "C": 8,
+      "I": 5,
+      "A": 4,
+      "L": 4
+    }
+  },
+
+  "equipment": {
+    "weapon": "ceremonial_staff",
+    "armor": "cult_priest_robes",
+    "items": ["overseer_medallion", "prayer_beads", "conditioning_holotape"]
+  },
+
+  "quests": [
+    "quest_vault_experiment_cult"
+  ],
+
+  "notes": "A tragic figure - victim of psychological conditioning who became the enforcer of that same system. Can be reasoned with if presented with undeniable evidence of the experiment."
+}

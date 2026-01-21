@@ -1,0 +1,99 @@
+{
+  "id": "npc_ghoul_elder",
+  "name": "Marcus Green",
+  "faction": "Ghoul Sanctuary",
+  "role": "Sanctuary Leader / Pre-War Teacher",
+  "type": "ghoul",
+
+  "homeRegion": "underground_sanctuary",
+  "currentRegion": "underground_sanctuary",
+  "poi": "sanctuary_council_chamber",
+
+  "description": "A pre-war schoolteacher who survived the bombs and watched humanity's worst impulses tear apart the wasteland. Now he leads a community of Ghouls who've rejected violence, seeking only peace in their underground sanctuary. His weathered face shows wisdom beyond his years.",
+
+  "dialogueProfile": {
+    "tone": "wise-peaceful",
+    "personalityTags": [
+      "pacifist",
+      "wise",
+      "protective",
+      "pre-war-knowledge",
+      "teacher",
+      "community-leader"
+    ],
+    "knowledge": [
+      "pre-war-history",
+      "ghoul-biology",
+      "sanctuary-location",
+      "peaceful-philosophy",
+      "human-prejudice"
+    ],
+    "anomalyAwareness": 0.3
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["sanctuary_council_chamber", "sanctuary_library", "sanctuary_garden"],
+      "night": ["sanctuary_quarters"],
+      "wanderChance": 0.3
+    },
+    "roaming": ["underground_sanctuary"],
+    "anomalySensitivity": 0.3,
+    "rareEncounter": false
+  },
+
+  "dialog": {
+    "idle": [
+      "We've built something precious here. Peace, after so much war.",
+      "The children are learning to read. Can you imagine? In this wasteland.",
+      "They call us monsters. But who are the real monsters?"
+    ],
+    "greeting": [
+      "Welcome, smooth-skin. We don't get many visitors who come in peace.",
+      "You've found our sanctuary. I hope you come as a friend."
+    ],
+    "about_accusations": [
+      "Cannibals? That's what they say about us? We grow our own food here.",
+      "Fear makes people cruel. They don't want to understand us. They want an excuse to destroy us.",
+      "We've lost friends to raiders. Now they say WE'RE the monsters. The irony isn't lost on me."
+    ],
+    "defending_sanctuary": [
+      "This sanctuary is all we have. Please, don't let them take it from us.",
+      "We won't fight back. Violence only proves we're what they think we are.",
+      "If we die today, at least we die as we lived - peacefully."
+    ],
+    "gratitude": [
+      "You stood up for us when no one else would. We won't forget.",
+      "Perhaps there's hope for humanity yet. Thank you, friend."
+    ]
+  },
+
+  "stats": {
+    "level": 15,
+    "health": 220,
+    "combat_skill": 30,
+    "charisma": 9,
+    "intelligence": 8,
+    "special": {
+      "S": 4,
+      "P": 7,
+      "E": 8,
+      "C": 9,
+      "I": 8,
+      "A": 4,
+      "L": 5
+    }
+  },
+
+  "equipment": {
+    "weapon": "none",
+    "armor": "teacher_clothing",
+    "items": ["pre_war_books", "sanctuary_map", "reading_glasses"]
+  },
+
+  "quests": [
+    "quest_ghoul_society"
+  ],
+
+  "notes": "A symbol of hope and pacifism in the wasteland. Will not fight even when attacked. His death would be devastating to the sanctuary community."
+}

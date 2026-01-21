@@ -1,0 +1,119 @@
+{
+  "id": "q_vault_experiment_cult",
+  "name": "The Vault Experiment Gone Wrong",
+  "type": "main",
+  "region": "mojave_wasteland",
+  "subregion": "hidden_vault",
+
+  "giver": "npc_scavenger_intel",
+
+  "start_conditions": {
+    "min_level": 8,
+    "location": "abandoned_research_facility"
+  },
+
+  "npc_links": [
+    "npc_scavenger_intel",
+    "npc_cult_high_priest",
+    "npc_vault_scientist_survivor",
+    "npc_cult_believer"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_cult_vault",
+      "poi": "vault_88_cultist",
+      "stage": "infiltrate_vault"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "find_vault_entrance",
+      "desc": "Locate the hidden Vault 88 entrance in the wasteland.",
+      "poi": "vault_88_entrance"
+    },
+    {
+      "id": "infiltrate_vault",
+      "desc": "Gain entry to the Vault without alerting the cult.",
+      "poi": "vault_88_cultist",
+      "dialogue": "dialog_cult_guard.json"
+    },
+    {
+      "id": "investigate_experiment",
+      "desc": "Uncover records of the Vault-Tec experiment.",
+      "poi": "vault_88_overseer_terminal"
+    },
+    {
+      "id": "meet_high_priest",
+      "desc": "Confront the cult's High Priest.",
+      "npc": "npc_cult_high_priest",
+      "dialogue": "dialog_high_priest.json"
+    },
+    {
+      "id": "make_choice",
+      "desc": "Decide the fate of the cult and its inhabitants.",
+      "choices": [
+        "overthrow_cult",
+        "become_overseer",
+        "expose_truth"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "find_vault_entrance", "desc": "Search for the hidden Vault entrance." },
+    { "id": 1, "objective": "infiltrate_vault", "desc": "Enter the Vault undetected." },
+    { "id": 2, "objective": "investigate_experiment", "desc": "Learn about the conditioning experiment." },
+    { "id": 3, "objective": "meet_high_priest", "desc": "Face the cult leader." },
+    { "id": 4, "objective": "make_choice", "desc": "Choose how to resolve the situation." },
+    { "id": 5, "objective": "complete", "desc": "The cult's fate has been decided." }
+  ],
+
+  "choices": {
+    "overthrow_cult": {
+      "desc": "Free the inhabitants by overthrowing the cult.",
+      "requirements": { "charisma": 6, "combat_skill": 50 },
+      "consequences": {
+        "faction_rep": { "settlers": 50, "vault_tec": -30 },
+        "rewards": { "xp": 650, "caps": 300, "items": ["cult_robes", "overseer_key"] },
+        "outcome": "The cult is disbanded. The inhabitants struggle to adapt to freedom, but appreciate your help."
+      }
+    },
+    "become_overseer": {
+      "desc": "Pretend to be the reincarnation of the Overseer and take control.",
+      "requirements": { "charisma": 8, "deception": 75 },
+      "consequences": {
+        "faction_rep": { "vault_tec": 40, "settlers": -50 },
+        "rewards": { "xp": 550, "caps": 500, "items": ["overseer_armor", "vault_command_codes"] },
+        "unlock": ["vault_88_resources", "cult_followers"],
+        "outcome": "You become the new Overseer. The cult follows your commands, for better or worse."
+      }
+    },
+    "expose_truth": {
+      "desc": "Reveal the truth and let the inhabitants decide their own fate.",
+      "requirements": { "intelligence": 7, "evidence_collected": true },
+      "consequences": {
+        "faction_rep": { "settlers": 30, "vault_tec": -20 },
+        "rewards": { "xp": 700, "caps": 200, "items": ["vault_tec_documents", "experimental_data"] },
+        "outcome": "The truth divides the Vault. Some leave, some stay. Chaos reigns temporarily, but freedom is theirs."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 650,
+    "caps": 300
+  },
+
+  "factions": {
+    "affected": ["Vault-Tec", "Settlers", "Raiders"]
+  },
+
+  "next_quests": [
+    "quest_vault_reconstruction",
+    "quest_cult_revenge"
+  ],
+
+  "notes": "A morally complex quest about freedom, control, and the lingering effects of Vault-Tec's experiments."
+}
