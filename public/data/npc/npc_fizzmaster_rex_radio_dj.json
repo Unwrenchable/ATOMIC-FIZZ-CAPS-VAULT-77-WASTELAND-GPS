@@ -1,0 +1,182 @@
+{
+  "id": "npc_fizzmaster_rex_radio_dj",
+  "name": "Fizzmaster Rex",
+  "fullName": "Rex 'The Fizzmaster' Atomic",
+  "region": "Radio Studio - Atomic Fizz Radio HQ",
+  "type": "Radio DJ / Broadcaster",
+  "faction": "Atomic Fizz Radio (Independent)",
+  "voice": "smooth, warm, charismatic, slightly mysterious with wasteland grit",
+  "appearance": {
+    "species": "Human (possibly Ghoul)",
+    "description": "Never seen in person. Mysterious figure broadcasting from unknown location. Some say he's a pre-war DJ who survived, others claim he's a synth. The truth? Nobody knows.",
+    "outfit": "Unknown - voice only",
+    "distinctive": "Iconic voice that every wastelander recognizes. Sounds like whiskey, cigarettes, and hope mixed together."
+  },
+  "personality": {
+    "traits": ["Charismatic", "Knowledgeable", "Mysterious", "Entertaining", "Supportive"],
+    "quirks": [
+      "Never reveals his location",
+      "References pre-war music trivia",
+      "Has inside knowledge of wasteland events",
+      "Protective of listeners",
+      "Occasionally goes 'LIVE' with special broadcasts"
+    ],
+    "motivation": "Keep the wasteland's spirits up through music and entertainment. Give people hope in the apocalypse."
+  },
+  "backstory": {
+    "origin": "Unknown. Claims to have been broadcasting since 'before the bombs,' but that would make him over 200 years old. Some theories:\n- Pre-war DJ who became a ghoul\n- AI created by FizzCo to maintain morale\n- Time-displaced broadcaster from fractured timeline\n- Multiple people using the same persona\n- Synth with downloaded pre-war DJ personality",
+    "legend": "The voice that never dies. During the darkest nights of the wasteland, when raiders attack and radiation storms howl, you can still hear Rex on the radio, playing music and telling stories. He's become a myth, a beacon of normalcy in the chaos."
+  },
+  "broadcasts": {
+    "regular_shows": [
+      {
+        "name": "The Atomic Hour",
+        "schedule": "Daily at sunset",
+        "format": "Pre-war classics, news, wasteland stories",
+        "catchphrase": "Stay atomic, wastelanders."
+      },
+      {
+        "name": "Midnight in the Mojave",
+        "schedule": "Late night",
+        "format": "Slow jams, lore readings, call-ins",
+        "catchphrase": "The wasteland never sleeps, and neither do we."
+      },
+      {
+        "name": "Rex's Rarities",
+        "schedule": "Weekly special",
+        "format": "Rare pre-war recordings, vault tech secrets",
+        "catchphrase": "You won't hear this anywhere else, friends."
+      }
+    ],
+    "live_shows": [
+      {
+        "name": "LIVE FROM THE WASTELAND",
+        "description": "Special live broadcasts where Rex goes on-air in real-time to interact with listeners, take requests, discuss current events, and host special guests.",
+        "features": [
+          "Real-time DJ commentary",
+          "Live music requests",
+          "Wasteland news updates",
+          "Listener call-ins (text chat)",
+          "Special guest interviews",
+          "Emergency broadcasts during in-game events"
+        ],
+        "indicators": "🔴 LIVE indicator appears on radio, special intro music plays",
+        "how_it_works": "When admin/DJ goes live, all players hear the live stream. Chat is enabled for listener interaction."
+      }
+    ]
+  },
+  "radio_station": {
+    "name": "Atomic Fizz Radio",
+    "frequency": "77.7 MHz (The Lucky Sevens)",
+    "tagline": "The Voice of the Wasteland",
+    "coverage": "Entire Mojave Desert + surrounding regions",
+    "signal_strength": "Strongest signal in the wasteland - reaches everywhere",
+    "studio_location": "Unknown (heavily protected secret)",
+    "equipment": "Pre-war broadcast equipment, FizzCo modified transmitter, backup generators, massive music library"
+  },
+  "dialog": {
+    "greetings": [
+      "This is Fizzmaster Rex, coming at you live from... well, that's classified.",
+      "You're tuned into Atomic Fizz Radio, 77.7 on your dial. I'm Rex, and I'm here to keep you company.",
+      "Good [morning/evening] wastelanders! Rex here, spinning the sounds that keep us sane.",
+      "If you're hearing this, you survived another day. Congratulations. Let's celebrate with some music."
+    ],
+    "song_intros": [
+      "Here's a little something from before the world ended...",
+      "This next one goes out to all you vault dwellers and wastelanders alike...",
+      "Found this gem in a pre-war jukebox. Take a listen...",
+      "A survivor near Primm requested this one. This is for you, friend.",
+      "Time to slow it down with a classic..."
+    ],
+    "news_updates": [
+      "Breaking news from the wasteland: [event details]",
+      "Word from my sources says [faction] is making moves near [location]...",
+      "Friendly reminder, wastelanders: radiation storm heading through [area]. Find shelter.",
+      "Caravan update: Route 95 is clear, but watch for raiders near [location].",
+      "Settlement alert: [settlement] is under attack. Any nearby survivors, lend a hand."
+    ],
+    "live_announcements": [
+      "🔴 We're going LIVE, people! That's right, yours truly is on the air in real-time. Chat is open - talk to me!",
+      "Special live broadcast tonight! Taking requests, answering questions, and who knows what else. Join me!",
+      "LIVE from an undisclosed location in the Mojave... it's showtime, wastelanders!",
+      "You're listening to a LIVE broadcast. This is happening RIGHT NOW. How exciting is that?"
+    ],
+    "sign_offs": [
+      "This is Fizzmaster Rex, signing off. Stay safe out there, wastelanders.",
+      "Remember: stay atomic, stay alive, and stay tuned.",
+      "Until next time, this is Rex. Keep your pip-boy close and your trigger finger closer.",
+      "The wasteland's dangerous, but you're tougher. Rex out.",
+      "🔴 That's all for tonight's live show! Thanks for hanging out with me. See you next time!"
+    ],
+    "mysterious_comments": [
+      "I've seen things you wouldn't believe... but that's a story for another time.",
+      "Ever wonder how I've been broadcasting for so long? So do I, sometimes.",
+      "There are secrets in the wasteland, friends. Secrets even I don't fully understand.",
+      "The static... sometimes I swear I hear voices in the static. Old voices. Pre-war voices.",
+      "Location? Nice try, NCR. Nice try, Legion. I'm everywhere and nowhere."
+    ]
+  },
+  "interactions": {
+    "if_player_finds_studio": {
+      "likelihood": "Extremely Rare Easter Egg",
+      "description": "If player somehow discovers the hidden radio studio location, they find it empty except for automated equipment. A note says: 'If you're reading this, congratulations on finding me. Or did you? I was just here. -Rex' The equipment continues broadcasting.",
+      "reward": "Unique 'Radio Hunter' achievement, special Rex collectible"
+    },
+    "call_in_system": {
+      "description": "During LIVE broadcasts, players can 'call in' via chat interface integrated with Pip-Boy radio",
+      "features": [
+        "Text chat appears on radio screen",
+        "Rex responds to select messages live",
+        "Players can request songs",
+        "Share wasteland stories",
+        "Ask lore questions",
+        "Report sightings/news"
+      ]
+    }
+  },
+  "related_quests": [
+    "quest_find_rex_studio",
+    "quest_broadcast_emergency",
+    "quest_rex_music_request",
+    "quest_become_guest_dj"
+  ],
+  "reputation_effects": {
+    "listening_to_rex": {
+      "effect": "+1 Morale per hour of listening",
+      "description": "Rex's music and commentary boost wasteland morale"
+    },
+    "calling_in_live": {
+      "effect": "+5 Fame, +10 Morale",
+      "description": "Having your story told on the radio makes you famous"
+    },
+    "finding_easter_eggs": {
+      "effect": "Special rewards from Rex for discovering hidden content",
+      "description": "Rex occasionally mentions hidden locations or items for attentive listeners"
+    }
+  },
+  "technical_notes": {
+    "audio_sources": [
+      "Pre-recorded DJ clips for regular programming",
+      "Live stream URL when admin goes live",
+      "Fallback to recorded content when stream ends",
+      "Music library for automated playlists"
+    ],
+    "live_streaming": {
+      "admin_can_broadcast_as_rex": true,
+      "stream_sources_supported": ["Twitch", "YouTube Live", "Custom RTMP", "Direct audio stream"],
+      "chat_integration": true,
+      "live_indicator": "🔴 LIVE badge on radio UI",
+      "notification": "All players get Pip-Boy notification when Rex goes live"
+    }
+  },
+  "voice_acting_notes": {
+    "style": "Think 'Three Dog' from Fallout 3 meets 'Mr. New Vegas' from New Vegas",
+    "inspiration": "Smooth jazz radio DJ + wasteland survivor",
+    "emotion": "Warm but weathered, hopeful but realistic, entertaining but grounded",
+    "delivery": "Conversational, like talking to a friend over the radio at 2 AM"
+  },
+  "meta": {
+    "creator_notes": "Fizzmaster Rex is designed to be both an automated character AND a real person (the admin) depending on context. The mystery of 'who is Rex?' is intentional and adds to the lore. Players should never be 100% sure if they're listening to recordings or a live human.",
+    "live_streaming_purpose": "Allows admin to create special events, build community, interact with players in-character, and make the game world feel more alive and dynamic."
+  }
+}

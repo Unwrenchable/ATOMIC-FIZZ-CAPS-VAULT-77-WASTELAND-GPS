@@ -1,0 +1,171 @@
+{
+  "hardcore_mode": {
+    "enabled": false,
+    "description": "Hardcore Mode adds realistic survival mechanics to the wasteland.",
+    "features": {
+      "hunger": {
+        "enabled": true,
+        "depletion_rate": 1.0,
+        "effects": {
+          "starving": { "hp_drain": 5, "strength_penalty": -2 }
+        }
+      },
+      "thirst": {
+        "enabled": true,
+        "depletion_rate": 1.5,
+        "effects": {
+          "dehydrated": { "hp_drain": 10, "perception_penalty": -2 }
+        }
+      },
+      "sleep": {
+        "enabled": true,
+        "depletion_rate": 0.5,
+        "effects": {
+          "exhausted": { "accuracy_penalty": -25, "agility_penalty": -2 }
+        }
+      },
+      "ammo_weight": {
+        "enabled": true,
+        "description": "Ammunition has weight and affects carry capacity."
+      },
+      "limb_damage": {
+        "enabled": true,
+        "description": "Individual body parts can be crippled."
+      }
+    }
+  },
+  "weather_system": {
+    "enabled": true,
+    "types": [
+      {
+        "id": "clear",
+        "name": "Clear Skies",
+        "description": "A rare clear day in the wasteland.",
+        "effects": { "visibility": 1.0, "radiation": 0 },
+        "probability": 0.30
+      },
+      {
+        "id": "overcast",
+        "name": "Overcast",
+        "description": "Gray skies blanket the wasteland.",
+        "effects": { "visibility": 0.9, "radiation": 1 },
+        "probability": 0.35
+      },
+      {
+        "id": "dust_storm",
+        "name": "Dust Storm",
+        "description": "Heavy dust reduces visibility.",
+        "effects": { "visibility": 0.5, "radiation": 2, "accuracy_penalty": -15 },
+        "probability": 0.15
+      },
+      {
+        "id": "radiation_storm",
+        "name": "Radiation Storm",
+        "description": "Deadly radiation rain falls from the sky.",
+        "effects": { "visibility": 0.7, "radiation": 10, "rad_per_second": 2 },
+        "probability": 0.10,
+        "visual": "green_lightning"
+      },
+      {
+        "id": "nuclear_fog",
+        "name": "Nuclear Fog",
+        "description": "Thick radioactive fog blankets the area.",
+        "effects": { "visibility": 0.3, "radiation": 5, "perception_penalty": -3 },
+        "probability": 0.10
+      }
+    ],
+    "day_night_cycle": {
+      "enabled": true,
+      "day_duration": 1200,
+      "night_duration": 800,
+      "effects": {
+        "night": {
+          "visibility": 0.6,
+          "enemy_spawn_rate": 1.5,
+          "stealth_bonus": 25
+        }
+      }
+    }
+  },
+  "radiation_mechanics": {
+    "enabled": true,
+    "thresholds": [
+      { "level": 0, "name": "Clean", "effects": {} },
+      { "level": 200, "name": "Minor Rad Poisoning", "effects": { "endurance": -1 } },
+      { "level": 400, "name": "Advanced Rad Poisoning", "effects": { "endurance": -2, "agility": -1 } },
+      { "level": 600, "name": "Critical Rad Poisoning", "effects": { "endurance": -3, "agility": -2, "hp_drain": 1 } },
+      { "level": 800, "name": "Deadly Rad Poisoning", "effects": { "endurance": -4, "agility": -3, "hp_drain": 3 } },
+      { "level": 1000, "name": "Fatal Rad Poisoning", "effects": { "imminent_death": true } }
+    ],
+    "mutations": [
+      {
+        "id": "rad_regeneration",
+        "name": "Rad Regeneration",
+        "description": "Your body has adapted to radiation. Heal when irradiated.",
+        "required_rad": 600,
+        "effects": { "rad_regen": 0.5 },
+        "chance": 0.05
+      },
+      {
+        "id": "glowing_one",
+        "name": "Glowing One",
+        "description": "You glow with radiation. Heal nearby ghouls, damage humans.",
+        "required_rad": 800,
+        "effects": { "rad_aura": 5, "charisma": -2 },
+        "chance": 0.03
+      },
+      {
+        "id": "rad_vision",
+        "name": "Rad Vision",
+        "description": "You can see radiation sources through walls.",
+        "required_rad": 500,
+        "effects": { "rad_sight": true, "perception": 1 },
+        "chance": 0.08
+      }
+    ]
+  },
+  "consumables": [
+    {
+      "id": "purified_water",
+      "name": "Purified Water",
+      "type": "drink",
+      "effects": { "thirst": -50, "hp": 5 }
+    },
+    {
+      "id": "dirty_water",
+      "name": "Dirty Water",
+      "type": "drink",
+      "effects": { "thirst": -30, "radiation": 5 }
+    },
+    {
+      "id": "cram",
+      "name": "Cram",
+      "type": "food",
+      "effects": { "hunger": -25, "hp": 5 }
+    },
+    {
+      "id": "sugar_bombs",
+      "name": "Sugar Bombs",
+      "type": "food",
+      "effects": { "hunger": -20, "agility": 1, "duration": 300 }
+    },
+    {
+      "id": "radaway",
+      "name": "RadAway",
+      "type": "chem",
+      "effects": { "radiation": -300 }
+    },
+    {
+      "id": "rad_x",
+      "name": "Rad-X",
+      "type": "chem",
+      "effects": { "rad_resistance": 50, "duration": 600 }
+    },
+    {
+      "id": "stimpak",
+      "name": "Stimpak",
+      "type": "medical",
+      "effects": { "hp": 50 }
+    }
+  ]
+}

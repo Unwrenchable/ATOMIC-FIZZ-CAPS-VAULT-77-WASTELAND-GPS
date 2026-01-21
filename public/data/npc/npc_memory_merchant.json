@@ -1,0 +1,104 @@
+{
+  "id": "npc_memory_merchant",
+  "name": "Silas Thorne",
+  "faction": "Black Market",
+  "role": "Memory Technology Dealer",
+  "type": "human",
+
+  "homeRegion": "underground_market",
+  "currentRegion": "underground_market",
+  "poi": "pre_war_memories_shop",
+
+  "description": "A smooth-talking merchant who sells pre-war memories via neural implants. He genuinely believes he's providing a valuable service - an escape from the wasteland's horrors. The fact that some customers die is, to him, just a risk they willingly take.",
+
+  "dialogueProfile": {
+    "tone": "charming-salesman",
+    "personalityTags": [
+      "merchant",
+      "smooth-talker",
+      "rationalize-harm",
+      "capitalist",
+      "defensive",
+      "slippery"
+    ],
+    "knowledge": [
+      "memory-technology",
+      "black-market-operations",
+      "pre-war-recordings",
+      "neural-implants",
+      "customer-manipulation"
+    ],
+    "anomalyAwareness": 0.4
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["pre_war_memories_shop", "underground_market_bazaar"],
+      "night": ["safe_house", "underground_market_bar"],
+      "wanderChance": 0.2
+    },
+    "roaming": ["underground_market"],
+    "anomalySensitivity": 0.2,
+    "rareEncounter": false
+  },
+
+  "dialog": {
+    "idle": [
+      "Finest memories in the wasteland. Pre-war quality!",
+      "Escape reality. Experience paradise. Only 50 caps per session.",
+      "Customer satisfaction guaranteed... mostly."
+    ],
+    "sales_pitch": [
+      "Why suffer in the wasteland when you can live in the old world?",
+      "Ever wonder what it was like before the bombs? Now you can KNOW.",
+      "My memory recordings are 100% authentic. Pre-war certified!",
+      "One hour in the past beats a lifetime in this hell. Try it yourself."
+    ],
+    "defensive": [
+      "They knew the risks! I tell everyone about the side effects!",
+      "I'm providing a service people WANT. Is that so wrong?",
+      "That overdose wasn't my fault. He ignored the warnings.",
+      "Everyone's got to make a living. At least I'm honest about it."
+    ],
+    "negotiating": [
+      "Look, maybe we can work something out. You seem reasonable.",
+      "What if I gave you free access? Best memories, no charge.",
+      "I've got caps. Weapons. Whatever you want. Let's make a deal.",
+      "Shut me down and someone worse takes my place. At least I have standards."
+    ],
+    "threatened": [
+      "You're making a mistake! I have powerful friends!",
+      "Fine! Take it all! Just don't hurt me!",
+      "You'll regret this. The market doesn't forget."
+    ]
+  },
+
+  "stats": {
+    "level": 11,
+    "health": 140,
+    "combat_skill": 35,
+    "charisma": 8,
+    "intelligence": 7,
+    "special": {
+      "S": 4,
+      "P": 6,
+      "E": 5,
+      "C": 8,
+      "I": 7,
+      "A": 5,
+      "L": 6
+    }
+  },
+
+  "equipment": {
+    "weapon": "pistol",
+    "armor": "merchant_outfit",
+    "items": ["memory_devices", "sales_records", "blackmarket_contacts", "emergency_caps"]
+  },
+
+  "quests": [
+    "quest_debt_to_time"
+  ],
+
+  "notes": "A morally gray character who isn't purely evil - he genuinely believes in his product. Can be convinced, bargained with, or eliminated."
+}

@@ -1,0 +1,147 @@
+{
+  "id": "q_time_capsule_hunt",
+  "name": "Time Capsule Hunt",
+  "type": "side",
+  "region": "pre_war_suburbs",
+  "subregion": "buried_vault",
+
+  "giver": "npc_scavenger_trader",
+
+  "start_conditions": {
+    "min_level": 5,
+    "location": "trading_post"
+  },
+
+  "npc_links": [
+    "npc_scavenger_trader",
+    "npc_cryptologist",
+    "npc_pre_war_ghoul"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_capsule_clue_1",
+      "poi": "old_library",
+      "stage": "find_first_clue"
+    },
+    {
+      "id": "marker_capsule_clue_2",
+      "poi": "abandoned_school",
+      "stage": "decode_holotape"
+    },
+    {
+      "id": "marker_capsule_location",
+      "poi": "buried_time_capsule",
+      "stage": "uncover_capsule"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "find_first_clue",
+      "desc": "Search the old library for the first encoded holotape.",
+      "poi": "old_library",
+      "items_required": ["holotape_alpha"]
+    },
+    {
+      "id": "decode_holotape",
+      "desc": "Find a cryptologist to decode the holotape puzzle.",
+      "npc": "npc_cryptologist",
+      "dialogue": "dialog_decoder.json"
+    },
+    {
+      "id": "find_second_clue",
+      "desc": "Follow the decoded message to the abandoned school.",
+      "poi": "abandoned_school",
+      "items_required": ["holotape_beta"]
+    },
+    {
+      "id": "solve_puzzle",
+      "desc": "Solve the pre-war puzzle to locate the time capsule.",
+      "puzzle_type": "cipher",
+      "difficulty": "medium"
+    },
+    {
+      "id": "uncover_capsule",
+      "desc": "Dig up the time capsule at the marked location.",
+      "poi": "buried_time_capsule",
+      "tools_required": ["shovel"]
+    },
+    {
+      "id": "open_capsule",
+      "desc": "Open the time capsule and discover its contents.",
+      "dialogue": "dialog_capsule_reveal.json"
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "find_first_clue", "desc": "Begin the hunt at the old library." },
+    { "id": 1, "objective": "decode_holotape", "desc": "Get help decoding the encrypted message." },
+    { "id": 2, "objective": "find_second_clue", "desc": "Follow the trail to the school." },
+    { "id": 3, "objective": "solve_puzzle", "desc": "Crack the pre-war cipher." },
+    { "id": 4, "objective": "uncover_capsule", "desc": "Excavate the time capsule." },
+    { "id": 5, "objective": "open_capsule", "desc": "Reveal what's inside." },
+    { "id": 6, "objective": "complete", "desc": "The past speaks through satire." }
+  ],
+
+  "capsule_contents": {
+    "junk_items": [
+      "pet_rock",
+      "mood_ring",
+      "disco_ball_keychain",
+      "rubiks_cube",
+      "slinky",
+      "floppy_disk_collection",
+      "beanie_babies",
+      "y2k_survival_guide"
+    ],
+    "satirical_messages": [
+      {
+        "title": "A Letter to the Future",
+        "content": "Dear future person, if you're reading this, we're probably all dead. Enjoy our collection of useless crap! - The Class of 2077",
+        "xp_reward": 200
+      },
+      {
+        "title": "Pre-War Social Commentary",
+        "content": "We spent more on this time capsule than on education. Priorities! Also, democracy is awesome. Unless you disagree.",
+        "xp_reward": 250
+      },
+      {
+        "title": "Apocalypse Prediction",
+        "content": "If nuclear war hasn't destroyed everything, we're shocked. If it has, we're not surprised. Either way, we're disappointed.",
+        "xp_reward": 300
+      },
+      {
+        "title": "Consumer Culture Manifesto",
+        "content": "Remember: the more stuff you buy, the happier you are! This message brought to you by every corporation ever.",
+        "xp_reward": 200
+      }
+    ],
+    "hidden_treasure": {
+      "item": "vintage_nuka_cola",
+      "desc": "A perfectly preserved Nuka-Cola from before the war. Worth a fortune to collectors."
+    }
+  },
+
+  "rewards": {
+    "xp": 950,
+    "caps": 150,
+    "items": ["satirical_holotapes", "vintage_nuka_cola", "pre_war_memorabilia"],
+    "special_reward": {
+      "title": "Historian",
+      "perk": "historical_knowledge",
+      "bonus": "+10% XP when discovering pre-war locations"
+    }
+  },
+
+  "factions": {
+    "affected": ["Followers_of_Apocalypse", "Historians", "Collectors"]
+  },
+
+  "next_quests": [
+    "quest_more_time_capsules",
+    "quest_pre_war_museum"
+  ],
+
+  "notes": "A lighthearted quest with dark humor about pre-war American culture. The 'treasure' is worthless junk, but the messages offer massive XP and social commentary."
+}

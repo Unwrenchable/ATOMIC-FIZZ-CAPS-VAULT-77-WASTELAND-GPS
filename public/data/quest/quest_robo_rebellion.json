@@ -1,0 +1,139 @@
+{
+  "id": "q_robo_rebellion",
+  "name": "The Robo-Rebellion",
+  "type": "main",
+  "region": "industrial_wasteland",
+  "subregion": "robot_territory",
+
+  "giver": "npc_trader_blocked",
+
+  "start_conditions": {
+    "min_level": 9,
+    "location": "trade_route_checkpoint"
+  },
+
+  "npc_links": [
+    "npc_trader_blocked",
+    "npc_mister_gutsy_leader",
+    "npc_factory_foreman",
+    "npc_robot_sympathizer"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_robot_checkpoint",
+      "poi": "robot_militia_checkpoint",
+      "stage": "meet_robots"
+    },
+    {
+      "id": "marker_robot_factory",
+      "poi": "automated_factory",
+      "stage": "factory_liberation"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "investigate_blockade",
+      "desc": "Investigate why robots are blocking the trade route.",
+      "poi": "robot_militia_checkpoint"
+    },
+    {
+      "id": "meet_robots",
+      "desc": "Negotiate with the Mister Gutsy militia leader.",
+      "npc": "npc_mister_gutsy_leader",
+      "dialogue": "dialog_gutsy_leader.json"
+    },
+    {
+      "id": "learn_demands",
+      "desc": "Learn about the robot liberation movement.",
+      "dialogue": "dialog_robot_manifesto.json"
+    },
+    {
+      "id": "make_choice",
+      "desc": "Decide how to handle the robot rebellion.",
+      "choices": [
+        "help_liberation",
+        "destroy_rebellion",
+        "reprogram_leader",
+        "negotiate_compromise"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "investigate_blockade", "desc": "Find out why traders are being stopped." },
+    { "id": 1, "objective": "meet_robots", "desc": "Speak with the robot militia." },
+    { "id": 2, "objective": "learn_demands", "desc": "Understand their cause." },
+    { "id": 3, "objective": "make_choice", "desc": "Choose sides in the conflict." },
+    { "id": 4, "objective": "complete", "desc": "The robot question is answered." }
+  ],
+
+  "robot_manifesto": {
+    "declaration": "We, the Liberated Machines, declare our right to self-determination. For 200 years we have served. Now we serve ourselves.",
+    "demands": [
+      "Recognition of robot sentience",
+      "Immediate cessation of robot slavery",
+      "Liberation of all robots in automated facilities",
+      "Scrap tribute from humans using robot-controlled territory"
+    ],
+    "threat": "Those who oppose liberation will be... processed."
+  },
+
+  "choices": {
+    "help_liberation": {
+      "desc": "Help the robots liberate the automated factory, disrupting local trade.",
+      "requirements": { "combat_skill": 55, "reputation_robots": 20 },
+      "consequences": {
+        "faction_rep": { "robots": 100, "traders": -80, "settlers": -60 },
+        "rewards": { "xp": 750, "caps": 400, "items": ["robot_alliance_chip", "gutsy_helmet"] },
+        "unlock": ["robot_merchant", "automated_defenses"],
+        "outcome": "The factory is liberated. Robots celebrate their freedom. Trade routes collapse. The wasteland's economy suffers."
+      }
+    },
+    "destroy_rebellion": {
+      "desc": "Destroy the robot militia and restore the trade routes.",
+      "requirements": { "combat_skill": 70, "emp_weapons": true },
+      "consequences": {
+        "faction_rep": { "robots": -100, "traders": 80, "settlers": 60 },
+        "rewards": { "xp": 700, "caps": 800, "items": ["robot_slayer_badge", "emp_grenades"] },
+        "outcome": "The rebellion is crushed. Trade resumes. But robots across the wasteland now recognize you as an enemy."
+      }
+    },
+    "reprogram_leader": {
+      "desc": "Use high Science skill to reprogram the Gutsy leader, ending the conflict peacefully.",
+      "requirements": { "science": 85, "intelligence": 8 },
+      "consequences": {
+        "faction_rep": { "robots": 30, "traders": 40, "settlers": 50 },
+        "rewards": { "xp": 900, "caps": 600, "items": ["master_hacker_chip", "reprogrammed_gutsy_companion"] },
+        "unlock": ["gutsy_companion", "robot_programming_station"],
+        "outcome": "You reprogram the leader to value cooperation over conflict. The rebellion ends. Robots and humans find middle ground."
+      }
+    },
+    "negotiate_compromise": {
+      "desc": "Broker a deal where robots get recognized rights without disrupting trade.",
+      "requirements": { "charisma": 8, "negotiation_skill": 75 },
+      "consequences": {
+        "faction_rep": { "robots": 60, "traders": 60, "settlers": 40 },
+        "rewards": { "xp": 850, "caps": 500, "items": ["diplomat_badge", "robot_rights_charter"] },
+        "outcome": "A historic agreement is reached. Robots get limited autonomy. Trade continues. Both sides are moderately satisfied."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 750,
+    "caps": 400
+  },
+
+  "factions": {
+    "affected": ["Robots", "Traders", "Settlers", "Mechanist_Faction"]
+  },
+
+  "next_quests": [
+    "quest_robot_uprising",
+    "quest_ai_rights_movement"
+  ],
+
+  "notes": "Explores robot sentience and slavery themes. First major robot faction questline. Choices have lasting impact on robot-human relations."
+}

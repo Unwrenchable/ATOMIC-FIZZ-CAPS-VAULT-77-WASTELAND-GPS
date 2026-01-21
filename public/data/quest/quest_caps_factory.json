@@ -1,0 +1,139 @@
+{
+  "id": "q_caps_factory",
+  "name": "The Caps Factory",
+  "type": "main",
+  "region": "industrial_wasteland",
+  "subregion": "factory_district",
+
+  "giver": "npc_local_militia_leader",
+
+  "start_conditions": {
+    "min_level": 10,
+    "location": "factory_ruins"
+  },
+
+  "npc_links": [
+    "npc_local_militia_leader",
+    "npc_ncr_representative",
+    "npc_legion_spy",
+    "npc_raider_boss",
+    "npc_merchant_guild_rep"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_caps_factory",
+      "poi": "bottle_cap_factory",
+      "stage": "discover_factory"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "discover_factory",
+      "desc": "Locate the legendary bottle cap manufacturing plant.",
+      "poi": "bottle_cap_factory"
+    },
+    {
+      "id": "secure_entrance",
+      "desc": "Clear the factory entrance of hostile forces.",
+      "poi": "bottle_cap_factory",
+      "enemies": ["raiders", "feral_ghouls"]
+    },
+    {
+      "id": "investigate_machinery",
+      "desc": "Examine the factory's cap-making machinery.",
+      "poi": "factory_production_floor"
+    },
+    {
+      "id": "faction_approaches",
+      "desc": "Multiple factions arrive, each wanting control of the factory.",
+      "dialogue": "dialog_faction_standoff.json"
+    },
+    {
+      "id": "make_alliance",
+      "desc": "Choose who controls the caps factory - or take it for yourself.",
+      "choices": [
+        "defend_with_militia",
+        "side_with_ncr",
+        "side_with_legion",
+        "help_raiders",
+        "take_for_self"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "discover_factory", "desc": "Find the caps manufacturing plant." },
+    { "id": 1, "objective": "secure_entrance", "desc": "Fight through the factory defenses." },
+    { "id": 2, "objective": "investigate_machinery", "desc": "Assess the factory's capabilities." },
+    { "id": 3, "objective": "faction_approaches", "desc": "Multiple factions converge on the factory." },
+    { "id": 4, "objective": "make_alliance", "desc": "Decide who controls the wasteland's currency." },
+    { "id": 5, "objective": "complete", "desc": "The factory's fate is sealed." }
+  ],
+
+  "choices": {
+    "defend_with_militia": {
+      "desc": "Help the local militia defend the factory for the community.",
+      "requirements": { "combat_skill": 60, "reputation_settlers": 50 },
+      "consequences": {
+        "faction_rep": { "settlers": 80, "ncr": 20, "legion": -50, "raiders": -80 },
+        "rewards": { "xp": 800, "caps": 400, "items": ["militia_badge", "factory_shares"] },
+        "outcome": "The militia holds the factory. Caps flow to local communities. You're a hero to the people."
+      }
+    },
+    "side_with_ncr": {
+      "desc": "Side with the NCR for order and stability.",
+      "requirements": { "reputation_ncr": 30 },
+      "consequences": {
+        "faction_rep": { "ncr": 100, "settlers": -30, "legion": -100 },
+        "rewards": { "xp": 750, "caps": 600, "items": ["ncr_commendation", "ranger_armor"] },
+        "outcome": "The NCR controls the factory. Caps are regulated. You gain favor with the Republic."
+      }
+    },
+    "side_with_legion": {
+      "desc": "Help Caesar's Legion secure the factory.",
+      "requirements": { "reputation_legion": 30 },
+      "consequences": {
+        "faction_rep": { "legion": 100, "ncr": -100, "settlers": -50 },
+        "rewards": { "xp": 750, "caps": 500, "items": ["legion_coin", "praetorian_favor"] },
+        "outcome": "The Legion controls the factory. Caps fund their war machine. You are marked by Caesar."
+      }
+    },
+    "help_raiders": {
+      "desc": "Join the raiders in robbing the factory.",
+      "requirements": { "morality": "evil", "combat_skill": 55 },
+      "consequences": {
+        "faction_rep": { "raiders": 80, "settlers": -70, "ncr": -60 },
+        "rewards": { "xp": 650, "caps": 1000, "items": ["raider_armor", "factory_loot"] },
+        "outcome": "Raiders loot the factory. Chaos spreads as counterfeit caps flood the wasteland."
+      }
+    },
+    "take_for_self": {
+      "desc": "Betray everyone and seize the factory for yourself.",
+      "requirements": { "combat_skill": 70, "charisma": 7 },
+      "consequences": {
+        "faction_rep": { "all": -40 },
+        "rewards": { "xp": 900, "caps": 2000, "items": ["factory_deed", "bottlecap_mold"] },
+        "unlock": ["caps_manufacturing", "merchant_empire"],
+        "outcome": "You control the caps. You control the wasteland's economy. Everyone wants you dead."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 800,
+    "caps": 400
+  },
+
+  "factions": {
+    "affected": ["NCR", "Legion", "Raiders", "Settlers", "Merchant_Guild"]
+  },
+
+  "next_quests": [
+    "quest_currency_war",
+    "quest_counterfeit_crisis"
+  ],
+
+  "notes": "A high-stakes quest about economic power and the true value of currency in the wasteland."
+}

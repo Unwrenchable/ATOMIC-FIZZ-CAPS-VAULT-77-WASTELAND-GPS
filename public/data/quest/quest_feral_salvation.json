@@ -1,0 +1,141 @@
+{
+  "id": "q_feral_salvation",
+  "name": "Feral Salvation",
+  "type": "main",
+  "region": "abandoned_asylum",
+  "subregion": "medical_district",
+
+  "giver": "npc_wasteland_doctor",
+
+  "start_conditions": {
+    "min_level": 14,
+    "location": "ruins_hospital"
+  },
+
+  "npc_links": [
+    "npc_wasteland_doctor",
+    "npc_mad_scientist",
+    "npc_captured_traveler",
+    "npc_feral_test_subject",
+    "npc_followers_medic"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_asylum",
+      "poi": "abandoned_asylum",
+      "stage": "find_asylum"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "investigate_rumors",
+      "desc": "Investigate reports of a scientist working on a feral ghoul cure.",
+      "npc": "npc_wasteland_doctor",
+      "dialogue": "dialog_doctor_rumor.json"
+    },
+    {
+      "id": "find_asylum",
+      "desc": "Locate the abandoned asylum in the wasteland.",
+      "poi": "abandoned_asylum",
+      "hazards": ["feral_ghouls", "traps"]
+    },
+    {
+      "id": "meet_scientist",
+      "desc": "Confront the scientist about their experiments.",
+      "npc": "npc_mad_scientist",
+      "dialogue": "dialog_mad_scientist.json"
+    },
+    {
+      "id": "discover_methods",
+      "desc": "Uncover the truth about the experimental methods.",
+      "poi": "asylum_laboratory",
+      "evidence": ["test_logs", "captive_cells", "serum_samples"]
+    },
+    {
+      "id": "meet_captives",
+      "desc": "Talk to the imprisoned test subjects.",
+      "npc": "npc_captured_traveler",
+      "dialogue": "dialog_captive.json"
+    },
+    {
+      "id": "moral_choice",
+      "desc": "Decide the fate of the experiment and its subjects.",
+      "choices": [
+        "support_scientist",
+        "shut_down_experiment",
+        "steal_research",
+        "release_all"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "investigate_rumors", "desc": "Learn about the ghoul cure experiment." },
+    { "id": 1, "objective": "find_asylum", "desc": "Journey to the abandoned asylum." },
+    { "id": 2, "objective": "meet_scientist", "desc": "Confront the scientist." },
+    { "id": 3, "objective": "discover_methods", "desc": "Uncover the dark truth." },
+    { "id": 4, "objective": "meet_captives", "desc": "Hear the victims' stories." },
+    { "id": 5, "objective": "moral_choice", "desc": "Make an impossible choice." },
+    { "id": 6, "objective": "complete", "desc": "The price of progress is paid." }
+  ],
+
+  "choices": {
+    "support_scientist": {
+      "desc": "Support the research despite the immoral methods, believing the end justifies the means.",
+      "requirements": { "intelligence": 7, "morality": "neutral_or_evil" },
+      "consequences": {
+        "faction_rep": { "scientists": 60, "followers_apocalypse": -80, "ghouls": -50 },
+        "rewards": { "xp": 850, "caps": 600, "items": ["experimental_serum", "research_notes", "scientist_coat"] },
+        "unlock": ["feral_cure_progress"],
+        "outcome": "The research continues. Some ferals are saved, but at a terrible cost. The captives remain imprisoned."
+      }
+    },
+    "shut_down_experiment": {
+      "desc": "Stop the experiment and free the captives, losing the only hope for a cure.",
+      "requirements": { "combat_skill": 70, "morality": "good" },
+      "consequences": {
+        "faction_rep": { "followers_apocalypse": 80, "scientists": -60, "settlers": 50 },
+        "rewards": { "xp": 900, "caps": 400, "items": ["liberation_medal", "survivor_gratitude"] },
+        "outcome": "The experiment ends. The captives are free. The cure is lost forever. You sleep well at night."
+      }
+    },
+    "steal_research": {
+      "desc": "Steal the research data to blackmail or sell to the highest bidder.",
+      "requirements": { "stealth": 75, "science": 60 },
+      "consequences": {
+        "faction_rep": { "all": -20, "criminals": 60 },
+        "rewards": { "xp": 750, "caps": 1500, "items": ["stolen_data", "blackmail_material"] },
+        "karma": -400,
+        "outcome": "You profit from suffering. The research falls into unknown hands. The captives' fate is uncertain."
+      }
+    },
+    "release_all": {
+      "desc": "Free all test subjects, including the partially-cured ferals, risking chaos.",
+      "requirements": { "charisma": 8, "medicine": 50 },
+      "consequences": {
+        "faction_rep": { "ghouls": 100, "settlers": -40, "followers_apocalypse": 60 },
+        "rewards": { "xp": 950, "caps": 300, "items": ["humanitarian_award", "ghoul_blessing"] },
+        "unlock": ["ghoul_settlement", "feral_allies"],
+        "outcome": "All are freed. Some partially-cured ferals retain sanity. Others attack nearby settlements. Hope and chaos in equal measure."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 850,
+    "caps": 600
+  },
+
+  "factions": {
+    "affected": ["Followers_of_Apocalypse", "Ghouls", "Scientists", "Settlers"]
+  },
+
+  "next_quests": [
+    "quest_cure_consequences",
+    "quest_revenge_of_captives"
+  ],
+
+  "notes": "A morally complex quest exploring the ethics of human experimentation and whether the ends can ever justify the means."
+}
