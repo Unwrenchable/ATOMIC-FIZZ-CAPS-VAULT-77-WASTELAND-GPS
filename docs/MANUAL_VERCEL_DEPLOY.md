@@ -24,20 +24,35 @@ This workflow allows you to manually trigger a Vercel deployment, bypassing auto
 
 ### 3. Configure Vercel Project
 
-You also need to add your Vercel project configuration as secrets:
+The workflow requires your Vercel project configuration. Add these as GitHub repository secrets:
 
 1. **VERCEL_ORG_ID**: Your Vercel organization/team ID
-   - Find this in your Vercel project settings or by running `vercel link` locally
 2. **VERCEL_PROJECT_ID**: Your Vercel project ID
-   - Find this in your Vercel project settings or by running `vercel link` locally
 
-Alternatively, you can link the project by running these commands locally:
+**How to get these values:**
+
+Run these commands locally in your project directory:
 ```bash
 npm install -g vercel
 vercel link
 ```
 
-This creates a `.vercel/project.json` file with your org and project IDs. You can extract these values and add them as GitHub secrets.
+This creates a `.vercel/project.json` file. View its contents:
+```bash
+cat .vercel/project.json
+```
+
+You'll see something like:
+```json
+{
+  "orgId": "team_xxxxxxxxxxxxx",
+  "projectId": "prj_xxxxxxxxxxxxx"
+}
+```
+
+Add these values as GitHub secrets:
+- `VERCEL_ORG_ID` = the `orgId` value
+- `VERCEL_PROJECT_ID` = the `projectId` value
 
 ## Usage
 
@@ -78,9 +93,10 @@ The deployment still counts against your Vercel plan's build minutes, but it giv
 ### "Error: No token found"
 - Make sure you've added the `VERCEL_TOKEN` secret to your GitHub repository
 
-### "Error: Project not found"
-- Ensure your Vercel project is properly linked
-- Verify `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` secrets are set (if required)
+### "Error: Project not found" or "Error: No Project Settings found"
+- Ensure you've added both `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` secrets
+- Run `vercel link` locally to get these values from `.vercel/project.json`
+- Verify the token has access to the correct Vercel project and organization
 
 ### "Build failed"
 - Check the build logs in the workflow run
