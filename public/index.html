@@ -12,23 +12,26 @@
       crossorigin=""
     />
 
-    <!-- Leaflet core JS -->
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      crossorigin=""
-    ></script>
-
-    <script src="https://unpkg.com/topojson-client@3"></script>
-    <script src="https://unpkg.com/@turf/turf@6"></script>
-
-    <!-- bs58 + AuthClient -->
-    <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js"></script>
-    <script src="/js/authClient.js"></script>
-
     <!-- Pip‑Boy UI -->
     <link rel="stylesheet" href="/css/pipboy.css" />
     <link rel="stylesheet" href="/css/pipboy-map.css" />
-    <script src="/js/pipboy/pipboy-style.js"></script>
+
+    <!-- Third‑party libs (non-module, global) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+    <script src="https://unpkg.com/topojson-client@3" defer></script>
+    <script src="https://unpkg.com/@turf/turf@6" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js" defer></script>
+
+    <!-- AuthClient (keeps global AuthClient for inline usage) -->
+    <script src="/js/authClient.js" defer></script>
+
+    <!-- Pip‑Boy styling helper (non-module) -->
+    <script src="/js/pipboy/pipboy-style.js" defer></script>
+
+    <style>
+      /* Minimal safe fallback to avoid FOUC while scripts load */
+      body.pipboy-mode { background:#000; color:#00ffae; }
+    </style>
   </head>
 
   <body class="pipboy-mode">
@@ -287,35 +290,34 @@
 
     <span id="locations-count" class="hidden"></span>
 
-    <!-- GLOBAL GPS -->
-    <script src="/js/gps.js"></script>
+    <!-- GLOBAL GPS (non-module) -->
+    <script src="/js/gps.js" defer></script>
 
-    <!-- CORE GAME ENGINE -->
-    <script src="/public/js/radioPlayer.js"></script>
-    <script src="/public/js/main.js"></script>
+    <!-- CORE GAME ENGINE (plain scripts; correct paths) -->
+    <script src="/js/radioPlayer.js" defer></script>
+    <script src="/js/main.js" defer></script>
 
-    <!-- GAME MODULES -->
-    <script src="/js/modules/economy.js"></script>
-    <script src="/js/modules/mintables.js"></script>
-    <script src="/js/modules/factions.js"></script>
-    <script src="/js/modules/enemyScaling.js"></script>
-    <script src="/js/modules/quests.js"></script>
-    <script src="/js/modules/narrative.js"></script>
+    <!-- GAME MODULES (ES modules) -->
+    <script type="module" src="/js/modules/economy.js"></script>
+    <script type="module" src="/js/modules/mintables.js"></script>
+    <script type="module" src="/js/modules/factions.js"></script>
+    <script type="module" src="/js/modules/enemyScaling.js"></script>
+    <script type="module" src="/js/modules/quests.js"></script>
+    <script type="module" src="/js/modules/narrative.js"></script>
 
-    <!-- WORLD MAP -->
-    <script src="/js/modules/worldmap.js"></script>
+    <!-- WORLD MAP (ES module) -->
+    <script type="module" src="/js/modules/worldmap.js"></script>
 
-    <!-- UI MODULES -->
-    <script src="/js/modules/inventory-loader.js"></script>
-    <script src="/js/modules/inventory-ui.js"></script>
-    <script src="/js/modules/quest-ui.js"></script>
-    <script src="/js/pipboy-special.js"></script>
+    <!-- UI MODULES (ES modules) -->
+    <script type="module" src="/js/modules/inventory-loader.js"></script>
+    <script type="module" src="/js/modules/inventory-ui.js"></script>
+    <script type="module" src="/js/modules/quest-ui.js"></script>
 
-    <!-- PIP‑BOY UI SHELL -->
-    <script src="/js/pipboy.js"></script>
+    <!-- PIP‑BOY UI SHELL (non-module) -->
+    <script src="/js/pipboy.js" defer></script>
 
-    <!-- BOOT SEQUENCE -->
-    <script src="/js/boot.js"></script>
+    <!-- BOOT SEQUENCE (non-module) -->
+    <script src="/js/boot.js" defer></script>
 
     <!-- RADIO / OVERSEER POPUP -->
     <script>
@@ -360,58 +362,87 @@
       })();
     </script>
 
-    <!-- WALLET LOGIN + FIZZ WALLET LOADER -->
+    <!-- GLOBAL CONFIG: API base (set to your Render backend) -->
     <script>
-      const auth = new AuthClient();
+      // Set API_BASE to your Render backend URL. Replace if different.
+      window.API_BASE = "https://atomicfizzcaps-live.onrender.com";
+    </script>
 
-      const hudBtn = document.getElementById("connectWalletHUD");
-      const hudAddress = document.getElementById("walletAddress");
+    <!-- WALLET LOGIN + FIZZ WALLET LOADER (uses global AuthClient) -->
+    <script>
+      (function () {
+        const auth = new AuthClient({ apiBase: window.API_BASE });
 
-      async function updateWalletUI() {
-        if (auth.isAuthenticated()) {
-          const wallet = auth.getWallet();
-          hudAddress.textContent = "WALLET: " + wallet.slice(0, 4) + "..." + wallet.slice(-4);
-          hudBtn.style.display = "none";
+        const hudBtn = document.getElementById("connectWalletHUD");
+        const hudAddress = document.getElementById("walletAddress");
 
-          // Load player data
-          const res = await auth.authedFetch("/api/player", { method: "GET" });
-          const json = await res.json();
-
-          document.getElementById("stat-wallet").textContent = wallet;
-          document.getElementById("stat-caps").textContent = json.caps || 0;
-
-          document.getElementById("fizzWalletAddress").textContent = wallet;
-          document.getElementById("fizzWalletCaps").textContent = json.caps || 0;
-          document.getElementById("fizzWalletXP").textContent = json.xp || 0;
-          document.getElementById("fizzWalletItems").textContent = json.items?.length || 0;
-          document.getElementById("fizzWalletNFTs").textContent = json.nfts?.length || 0;
-
-        } else {
-          hudAddress.textContent = "WALLET: DISCONNECTED";
-          hudBtn.style.display = "inline-block";
-        }
-      }
-
-      async function connectPhantom() {
-        try {
-          const provider = window.solana;
-          if (!provider || !provider.isPhantom) {
-            alert("Phantom Wallet not found.");
-            return;
+        async function safeJson(res) {
+          const text = await res.text();
+          try {
+            return JSON.parse(text);
+          } catch (err) {
+            console.error("[safeJson] Non-JSON response:", text.slice(0, 400));
+            throw new Error("Server did not return valid JSON");
           }
-
-          await provider.connect();
-          await auth.login(provider);
-          updateWalletUI();
-        } catch (err) {
-          console.error(err);
-          alert("Wallet login failed: " + err.message);
         }
-      }
 
-      hudBtn.addEventListener("click", connectPhantom);
+        async function updateWalletUI() {
+          try {
+            if (auth.isAuthenticated && auth.isAuthenticated()) {
+              const wallet = auth.getWallet();
+              hudAddress.textContent = "WALLET: " + wallet.slice(0, 4) + "..." + wallet.slice(-4);
+              if (hudBtn) hudBtn.style.display = "none";
 
-      updateWalletUI();
+              // Use absolute backend URL to avoid Vercel HTML fallback
+              const apiUrl = (window.API_BASE || "") + "/api/player";
+              const res = await auth.authedFetch(apiUrl, { method: "GET" });
+
+              const json = await safeJson(res);
+
+              document.getElementById("stat-wallet").textContent = wallet;
+              document.getElementById("stat-caps").textContent = json.caps || 0;
+
+              document.getElementById("fizzWalletAddress").textContent = wallet;
+              document.getElementById("fizzWalletCaps").textContent = json.caps || 0;
+              document.getElementById("fizzWalletXP").textContent = json.xp || 0;
+              document.getElementById("fizzWalletItems").textContent = (json.items && json.items.length) || 0;
+              document.getElementById("fizzWalletNFTs").textContent = (json.nfts && json.nfts.length) || 0;
+            } else {
+              hudAddress.textContent = "WALLET: DISCONNECTED";
+              if (hudBtn) hudBtn.style.display = "inline-block";
+            }
+          } catch (err) {
+            console.error("[updateWalletUI] error:", err);
+            hudAddress.textContent = "WALLET: DISCONNECTED";
+            if (hudBtn) hudBtn.style.display = "inline-block";
+          }
+        }
+
+        async function connectPhantom() {
+          try {
+            const provider = window.solana;
+            if (!provider || !provider.isPhantom) {
+              alert("Phantom Wallet not found.");
+              return;
+            }
+
+            await provider.connect();
+            await auth.login(provider);
+            await updateWalletUI();
+          } catch (err) {
+            console.error(err);
+            alert("Wallet login failed: " + (err && err.message ? err.message : err));
+          }
+        }
+
+        if (hudBtn) hudBtn.addEventListener("click", connectPhantom);
+
+        // Defer initial UI update until AuthClient has initialized
+        window.addEventListener("load", function () {
+          // small delay to ensure authClient has set up
+          setTimeout(updateWalletUI, 250);
+        });
+      })();
     </script>
 
   </body>
