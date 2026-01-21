@@ -2,7 +2,7 @@
   "name": "atomicfizzcaps-live",
   "version": "1.0.1",
   "description": "Atomic Fizz Caps - Wasteland GPS Geo-Game powered by Solana",
-  "main": "server.js",
+  "main": "backend/server.js",
   "type": "commonjs",
   "engines": {
     "node": ">=18.0.0 <=20.999.999"
