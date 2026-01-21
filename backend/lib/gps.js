@@ -1,7 +1,6 @@
 // backend/lib/gps.js
 
-const redis = require("../redis");
-
+const redis = require('./redis');
 async function updateLocation(player, lat, lng) {
   if (!player || !player.wallet) {
     throw new Error("missing player");
