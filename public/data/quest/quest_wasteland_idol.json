@@ -1,0 +1,164 @@
+{
+  "id": "q_wasteland_idol",
+  "name": "The Wasteland Idol",
+  "type": "side",
+  "region": "entertainment_district",
+  "subregion": "vault_tec_studio",
+
+  "giver": "npc_eccentric_ai_host",
+
+  "start_conditions": {
+    "min_level": 6,
+    "location": "vault_tec_broadcast_station"
+  },
+
+  "npc_links": [
+    "npc_eccentric_ai_host",
+    "npc_contestant_raider",
+    "npc_contestant_ghoul",
+    "npc_contestant_merchant",
+    "npc_contestant_brotherhood"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_studio",
+      "poi": "vault_tec_talent_studio",
+      "stage": "register_contestant"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "register_contestant",
+      "desc": "Sign up for the Wasteland Idol competition.",
+      "npc": "npc_eccentric_ai_host",
+      "dialogue": "dialog_ai_host_intro.json"
+    },
+    {
+      "id": "round_1_combat",
+      "desc": "Round 1: Survive a raider ambush while being filmed.",
+      "challenge_type": "combat",
+      "location": "arena_stage",
+      "enemies": ["raiders"],
+      "audience_score_required": 60
+    },
+    {
+      "id": "round_2_survival",
+      "desc": "Round 2: Endure 5 minutes in an irradiated death zone.",
+      "challenge_type": "survival",
+      "location": "radiation_chamber",
+      "hazards": ["high_radiation", "timer"],
+      "audience_score_required": 70
+    },
+    {
+      "id": "round_3_talent",
+      "desc": "Round 3: Present your unique wasteland skill or craft.",
+      "challenge_type": "talent",
+      "options": [
+        "combat_display",
+        "craft_showcase",
+        "charisma_performance",
+        "hacking_demo"
+      ],
+      "audience_score_required": 80
+    },
+    {
+      "id": "finals_decision",
+      "desc": "Choose how to secure victory in the finals.",
+      "choices": [
+        "win_fair",
+        "sabotage_rivals",
+        "hack_ai"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "register_contestant", "desc": "Enter the Wasteland Idol competition." },
+    { "id": 1, "objective": "round_1_combat", "desc": "Prove your combat prowess." },
+    { "id": 2, "objective": "round_2_survival", "desc": "Survive the radiation trial." },
+    { "id": 3, "objective": "round_3_talent", "desc": "Show off your special skills." },
+    { "id": 4, "objective": "finals_decision", "desc": "Win the competition - by any means." },
+    { "id": 5, "objective": "complete", "desc": "You are the Wasteland Idol!" }
+  ],
+
+  "rivals": [
+    {
+      "name": "Razor Rick",
+      "type": "raider",
+      "specialty": "combat",
+      "personality": "aggressive",
+      "sabotage_difficulty": "easy"
+    },
+    {
+      "name": "Glowing Gloria",
+      "type": "ghoul",
+      "specialty": "radiation_immunity",
+      "personality": "friendly",
+      "sabotage_difficulty": "medium"
+    },
+    {
+      "name": "Trader Tom",
+      "type": "merchant",
+      "specialty": "charisma",
+      "personality": "scheming",
+      "sabotage_difficulty": "hard"
+    },
+    {
+      "name": "Paladin Steel",
+      "type": "brotherhood",
+      "specialty": "technology",
+      "personality": "honorable",
+      "sabotage_difficulty": "very_hard"
+    }
+  ],
+
+  "choices": {
+    "win_fair": {
+      "desc": "Win through genuine skill and charm.",
+      "requirements": { "combat_skill": 50, "charisma": 6, "survival": 50 },
+      "consequences": {
+        "faction_rep": { "all": 30 },
+        "rewards": { "xp": 600, "caps": 800, "items": ["wasteland_idol_trophy", "vault_tec_prize_pack"] },
+        "outcome": "You win honestly. The wasteland respects your talent. The AI praises your authenticity."
+      }
+    },
+    "sabotage_rivals": {
+      "desc": "Sabotage other contestants to ensure your victory.",
+      "requirements": { "stealth": 60, "deception": 70 },
+      "consequences": {
+        "faction_rep": { "raiders": 40, "all_others": -20 },
+        "rewards": { "xp": 550, "caps": 1000, "items": ["saboteur_kit", "stolen_glory"] },
+        "karma": -300,
+        "outcome": "You win through deception. Rivals suspect foul play. The AI finds it 'entertaining.'"
+      }
+    },
+    "hack_ai": {
+      "desc": "Hack the AI for an automatic win.",
+      "requirements": { "science": 75, "intelligence": 8 },
+      "consequences": {
+        "faction_rep": { "hackers": 50, "vault_tec": -30 },
+        "rewards": { "xp": 700, "caps": 500, "items": ["ai_control_chip", "hacker_trophy"] },
+        "unlock": ["ai_host_control", "broadcast_access"],
+        "outcome": "You hack your way to victory. The AI congratulates you on your 'initiative.' You now control the show."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 600,
+    "caps": 800
+  },
+
+  "factions": {
+    "affected": ["Vault-Tec", "Raiders", "Ghouls", "Brotherhood", "Merchants"]
+  },
+
+  "next_quests": [
+    "quest_wasteland_idol_season_2",
+    "quest_ai_uprising"
+  ],
+
+  "notes": "A quirky, satirical quest parodying reality TV shows. Multiple paths to victory with varying moral implications."
+}
