@@ -42,7 +42,8 @@ app.use(
       // allow comma-separated list
       const allowed = FRONTEND_ORIGIN.split(",").map((s) => s.trim());
       if (allowed.includes(origin)) return cb(null, true);
-      // also allow any vercel.app deployment domain for easier testing
+      // Allow Vercel preview deployments for testing (e.g., atomic-fizz-caps-*.vercel.app)
+      // This is safe because sensitive operations still require authentication
       if (origin.endsWith(".vercel.app")) return cb(null, true);
       return cb(new Error("CORS not allowed"), false);
     },
