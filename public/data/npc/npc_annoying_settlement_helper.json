@@ -1,0 +1,206 @@
+{
+  "npc_id": "npc_garrison_prevvy",
+  "name": "Garrison Prevvy",
+  "title": "Settlement Coordinator (Self-Proclaimed)",
+  "type": "Companion/Killable NPC",
+  "description": "A Preston Garvey parody - the most annoying 'helpful' NPC in the wasteland who you can ACTUALLY kill this time",
+  
+  "appearance": {
+    "race": "Human",
+    "age": 35,
+    "clothing": "Colonial duster (suspiciously similar to Minutemen outfit)",
+    "hat": "Tricorn hat (worn backwards)",
+    "weapon": "Laser musket (jams frequently)",
+    "distinctive_features": "Overly earnest smile, clipboard permanently attached to hand"
+  },
+  
+  "personality": {
+    "archetype": "Well-meaning but insufferable do-gooder",
+    "traits": [
+      "Relentlessly optimistic to the point of delusion",
+      "Interrupts important moments with minor requests",
+      "Cannot read social cues",
+      "Repeats himself constantly",
+      "Guilt-trips player for every decision",
+      "Takes credit for player's achievements",
+      "Never stops talking about 'the settlements'"
+    ],
+    "voice": "Nasally, overly enthusiastic, slightly whiny when things don't go his way"
+  },
+  
+  "backstory": {
+    "summary": "Former middle manager who found purpose in the apocalypse by organizing settlements. Unfortunately, he's REALLY bad at it but refuses to accept this.",
+    "details": "Garrison was a corporate team-building facilitator before the war (somehow survived as a ghoul, then got cured - long story). He now applies his 'synergistic settlement solutions' to the wasteland. Every settlement he 'helps' mysteriously has more problems afterward. He's been kicked out of 47 settlements but remains undeterred.",
+    "motivation": "Genuinely wants to help, but his methods are so annoying that people would rather fight raiders alone"
+  },
+  
+  "annoying_behaviors": {
+    "random_interruptions": [
+      "Interrupts combat to ask if you've checked on Settlement #43",
+      "Interrupts romance scenes with companions",
+      "Interrupts final boss fights with 'just a quick question'",
+      "Wakes you up during sleep with 'urgent' non-urgent requests",
+      "Talks over radio broadcasts with settlement updates"
+    ],
+    
+    "radiant_quests_spam": [
+      {
+        "quest": "Another Settlement Needs Help",
+        "description": "Garrison marks yet another settlement on your map",
+        "frequency": "Every 5 minutes if he's your companion",
+        "problem": "Usually something trivial like 'they need 3 corn planted'",
+        "reward": "Garrison's 'gratitude' (worthless)"
+      },
+      {
+        "quest": "I've Got Word of Another Settlement",
+        "description": "Garrison heard rumors of a settlement that might need help someday",
+        "problem": "Settlement doesn't exist or doesn't need help",
+        "frequency": "Every 10 minutes"
+      },
+      {
+        "quest": "Supplies Run to Settlement X",
+        "description": "Deliver common items settlements already have",
+        "frequency": "Every 15 minutes",
+        "player_response_options": [
+          "Accept (regret immediately)",
+          "Decline (he guilt trips you)",
+          "Shoot him (finally an option!)"
+        ]
+      }
+    ],
+    
+    "guilt_trips": [
+      "You know, while you were having fun, Settlement #7 was attacked by bloatflies...",
+      "I'm not saying you're selfish, but those settlers could really use your help...",
+      "Another settlement got wiped out. But hey, you do you.",
+      "I thought you were different. I thought you cared about the little guy.",
+      "Fine. I'll just tell those orphans you were too busy."
+    ],
+    
+    "taking_credit": [
+      "Remember when WE saved that settlement? (You did all the work)",
+      "WE'RE really making a difference! (You've done everything)",
+      "I couldn't have done it without you! (He did nothing)",
+      "The settlements love US! (They only know you)"
+    ]
+  },
+  
+  "killing_garrison": {
+    "can_be_killed": true,
+    "respawns": false,
+    "karma_penalty": 0,
+    "reputation_changes": {
+      "settlements": "+50 (they're relieved)",
+      "other_companions": "+25 (they understand)",
+      "minutemen": "-10 (they knew he was annoying but still...)"
+    },
+    
+    "death_scenes": [
+      {
+        "method": "Combat",
+        "description": "Garrison drops clipboard, looks betrayed",
+        "last_words": "But... but the settlements...",
+        "loot": "Clipboard of Eternal Quests (vendor trash), 5 caps, broken laser musket"
+      },
+      {
+        "method": "Stealth kill",
+        "description": "Never saw it coming while marking another settlement",
+        "last_words": "Another settlement ne— *gurgle*"
+      },
+      {
+        "method": "Pushed off cliff",
+        "description": "Still trying to tell you about settlements on the way down",
+        "last_words": "ANOTHER SETTLEMEEEEENT!"
+      },
+      {
+        "method": "Fed to deathclaw",
+        "description": "Deathclaw also finds him annoying, kills him faster than usual",
+        "last_words": "Wait, can I mark this deathclaw cave as a settlement?"
+      }
+    ],
+    
+    "consequences_of_killing": {
+      "immediate": [
+        "Other NPCs: 'Took you long enough'",
+        "Radio broadcasts celebrate briefly",
+        "Settlements throw parties",
+        "Achievement unlocked: 'Wasteland Hero (For Real This Time)'"
+      ],
+      "long_term": [
+        "No more radiant quest spam",
+        "Settlements slightly more self-sufficient (without his 'help')",
+        "His ghost appears briefly to mark one last settlement (can be killed again)",
+        "Memorial built: 'Here Lies Garrison Prevvy - He Meant Well, But Please Don't Resurrect Him'"
+      ]
+    }
+  },
+  
+  "alternative_to_killing": {
+    "peaceful_solution": {
+      "quest": "Garrison's Retirement Party",
+      "description": "Convince Garrison he's done 'enough' and should retire",
+      "requirements": [
+        "Charisma 10+",
+        "Complete 50 of his annoying quests",
+        "Find him a retirement settlement (far, far away)",
+        "Convince him he's earned a 'Presidential Medal of Settlement Services'"
+      ],
+      "outcome": "Garrison retires to a remote settlement, still sends mail (can be ignored)",
+      "karma": +50,
+      "reward": "Peace and quiet"
+    },
+    
+    "slavery_solution": {
+      "description": "Sell Garrison to traders (evil karma)",
+      "outcome": "Traders return him after 24 hours, apologizing profusely",
+      "karma": -100,
+      "trader_message": "Please take him back. The slaves are complaining about him."
+    },
+    
+    "ignore_solution": {
+      "description": "Just... never recruit him",
+      "outcome": "He follows you anyway, shouting about settlements from a distance",
+      "effectiveness": "Low - he's persistent"
+    }
+  },
+  
+  "dialogue_samples": {
+    "greeting": "Hey there! I've got something different for you this time. Another settlement needs our help!",
+    "radiant_quest_intro": "I've been thinking... you know what would really help the cause? If you could just quickly check on Settlement #92...",
+    "player_declines": "I understand you're busy saving the world and all, but these people REALLY need— okay, fine. But don't come crying to me when Settlement #14 gets overrun.",
+    "combat_barks": [
+      "For the settlements!",
+      "This'll make a great report!",
+      "I'm helping!",
+      "Quick, after this can you check on—"
+    ],
+    "death_rattle": "Tell... the settlements... I... I tried...",
+    "ghost_appearance": "I know I'm dead, but there's this one settlement—"
+  },
+  
+  "player_reactions": {
+    "first_meeting": "Oh no, not another one...",
+    "after_10_quests": "I'm going to kill him.",
+    "after_50_quests": "Why haven't I killed him yet?",
+    "after_killing": "I should have done that 40 hours ago.",
+    "if_spared": "I'm a saint for not killing him."
+  },
+  
+  "meta_commentary": {
+    "purpose": "Cathartic revenge for everyone who played Fallout 4",
+    "difference_from_preston": "You can ACTUALLY kill this one",
+    "player_satisfaction": "Extremely high",
+    "developer_note": "We heard your pain. This one is for you."
+  },
+  
+  "spawn_location": "Outside Sanctuary (making it VERY easy to find and deal with)",
+  "essential_until": "Never (killable from moment 1)",
+  
+  "achievement_unlocks": {
+    "killed_garrison": "Finally - Kill Garrison Prevvy (90% of players unlock this)",
+    "spared_garrison": "Saint of the Wasteland - Spared Garrison through entire game (0.1% of players)",
+    "completed_all_quests": "Glutton for Punishment - Did every single one of his quests before killing him",
+    "killed_him_immediately": "Speed Run - Killed Garrison within 5 minutes of meeting him",
+    "creative_kill": "Artistic Justice - Killed Garrison in creative way (fed to deathclaw, etc.)"
+  }
+}
