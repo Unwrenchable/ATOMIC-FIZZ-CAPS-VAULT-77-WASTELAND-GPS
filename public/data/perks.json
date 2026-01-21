@@ -1,0 +1,131 @@
+// public/data/perks.json - Fallout-style Perks and Traits
+{
+  "perks": [
+    {
+      "id": "bloody_mess",
+      "name": "Bloody Mess",
+      "description": "More violent death animations. +5% damage to all weapons.",
+      "level_required": 1,
+      "effects": { "damage_multiplier": 1.05 },
+      "flavor": "You leave a trail of carnage wherever you go."
+    },
+    {
+      "id": "iron_lung",
+      "name": "Iron Lung",
+      "description": "Radiation resistance +15%. Better breathing in contaminated areas.",
+      "level_required": 3,
+      "effects": { "rad_resistance": 0.15 },
+      "flavor": "Your lungs are adapted to the wasteland air."
+    },
+    {
+      "id": "scavenger",
+      "name": "Scavenger",
+      "description": "+20% chance to find extra loot when scavenging.",
+      "level_required": 2,
+      "effects": { "loot_bonus": 0.20 },
+      "flavor": "You have a knack for finding the good stuff."
+    },
+    {
+      "id": "road_warrior",
+      "name": "Road Warrior",
+      "description": "Move 25% faster on the world map.",
+      "level_required": 4,
+      "effects": { "speed_multiplier": 1.25 },
+      "flavor": "The wasteland is your highway."
+    },
+    {
+      "id": "caps_collector",
+      "name": "Caps Collector",
+      "description": "+10% caps from all sources.",
+      "level_required": 2,
+      "effects": { "caps_multiplier": 1.10 },
+      "flavor": "Every cap counts in the wasteland."
+    },
+    {
+      "id": "rad_child",
+      "name": "Rad Child",
+      "description": "Regenerate health while irradiated.",
+      "level_required": 6,
+      "effects": { "rad_regen": true },
+      "flavor": "Radiation is your friend."
+    },
+    {
+      "id": "strong_back",
+      "name": "Strong Back",
+      "description": "+50 carry weight capacity.",
+      "level_required": 2,
+      "effects": { "carry_weight": 50 },
+      "flavor": "You can carry more gear."
+    },
+    {
+      "id": "locksmith",
+      "name": "Locksmith",
+      "description": "Unlock containers of all difficulty levels.",
+      "level_required": 5,
+      "effects": { "lockpick_bonus": 100 },
+      "flavor": "No lock can keep you out."
+    },
+    {
+      "id": "science",
+      "name": "Science!",
+      "description": "Hack terminals and craft advanced tech.",
+      "level_required": 5,
+      "effects": { "science_bonus": 50 },
+      "flavor": "Knowledge is power."
+    },
+    {
+      "id": "sniper",
+      "name": "Sniper",
+      "description": "+25% accuracy with ranged weapons.",
+      "level_required": 7,
+      "effects": { "accuracy_bonus": 0.25 },
+      "flavor": "One shot, one kill."
+    },
+    {
+      "id": "ghoul_friend",
+      "name": "Ghoul Whisperer",
+      "description": "Ghouls are less hostile. +10% XP from ghoul encounters.",
+      "level_required": 4,
+      "effects": { "ghoul_reputation": 50, "ghoul_xp_bonus": 0.10 },
+      "flavor": "You understand the smoothskins... and the not-so-smooth."
+    },
+    {
+      "id": "fortune_finder",
+      "name": "Fortune Finder",
+      "description": "Find more caps in containers.",
+      "level_required": 3,
+      "effects": { "caps_find_bonus": 0.30 },
+      "flavor": "Caps just seem to find their way to you."
+    }
+  ],
+  "traits": [
+    {
+      "id": "vault_dweller",
+      "name": "Vault Dweller",
+      "description": "+1 INT, -1 END. You spent your life underground.",
+      "effects": { "I": 1, "E": -1 },
+      "flavor": "The vault raised you, for better or worse."
+    },
+    {
+      "id": "wasteland_survivor",
+      "name": "Wasteland Survivor",
+      "description": "+1 END, +1 A, -1 C. Born in the wastes.",
+      "effects": { "E": 1, "A": 1, "C": -1 },
+      "flavor": "The wasteland is your home."
+    },
+    {
+      "id": "tech_specialist",
+      "name": "Tech Specialist",
+      "description": "+2 INT, -1 S, -1 P. You prefer machines to people.",
+      "effects": { "I": 2, "S": -1, "P": -1 },
+      "flavor": "Technology is your passion."
+    },
+    {
+      "id": "born_fighter",
+      "name": "Born Fighter",
+      "description": "+2 S, -1 INT, -1 C. Strength over smarts.",
+      "effects": { "S": 2, "I": -1, "C": -1 },
+      "flavor": "You solve problems with your fists."
+    }
+  ]
+}
