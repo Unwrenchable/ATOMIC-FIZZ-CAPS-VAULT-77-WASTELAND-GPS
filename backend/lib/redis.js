@@ -4,7 +4,7 @@
 // Resilient connector: uses real Redis when available, falls back
 // to a small in-memory store when Redis is not configured or fails.
 // Exports a consistent API so the rest of the codebase can use it
-// without change: redis, key, getJSON, setJSON.
+// without change: get, set, hget, hset, del, incr, expire, smembers, sadd, srem, on, quit, ping, key, getJSON, setJSON.
 // ------------------------------------------------------------
 
 const PREFIX = process.env.REDIS_PREFIX || "afw:";
@@ -15,12 +15,12 @@ let usingFallback = false;
 
 /**
  * In-memory fallback implementation that mirrors the minimal async
- * Redis API used by the app (get, set, del, incr, expire, smembers, sadd, srem).
- * This is intentionally simple and not a full Redis replacement.
+ * Redis API used by the app (get, set, del, incr, expire, smembers, sadd, srem, hget, hset).
  */
 function createInMemoryClient() {
-  const store = new Map();
-  const sets = new Map();
+  const store = new Map(); // string -> string
+  const sets = new Map();  // key -> Set
+  const hashes = new Map(); // key -> Map(field -> value)
 
   function toStr(v) {
     if (v === undefined || v === null) return null;
@@ -33,7 +33,6 @@ function createInMemoryClient() {
       return store.has(key) ? store.get(key) : null;
     },
     async set(key, value, opts) {
-      // support both redis.set(key, value) and redis.set(key, value, { EX: seconds })
       const val = toStr(value);
       store.set(key, val);
       if (opts && opts.EX) {
@@ -42,7 +41,10 @@ function createInMemoryClient() {
       return "OK";
     },
     async del(key) {
-      return store.delete(key) ? 1 : 0;
+      const removed = store.delete(key);
+      hashes.delete(key);
+      sets.delete(key);
+      return removed ? 1 : 0;
     },
     async incr(key) {
       const cur = parseInt(store.get(key) || "0", 10) + 1;
@@ -50,8 +52,12 @@ function createInMemoryClient() {
       return cur;
     },
     async expire(key, seconds) {
-      if (!store.has(key)) return 0;
-      setTimeout(() => store.delete(key), Number(seconds) * 1000);
+      if (!store.has(key) && !hashes.has(key) && !sets.has(key)) return 0;
+      setTimeout(() => {
+        store.delete(key);
+        hashes.delete(key);
+        sets.delete(key);
+      }, Number(seconds) * 1000);
       return 1;
     },
     async smembers(key) {
@@ -71,6 +77,18 @@ function createInMemoryClient() {
       members.forEach(m => { if (s.delete(String(m))) removed++; });
       if (s.size === 0) sets.delete(key);
       return removed;
+    },
+    // Hash support
+    async hget(key, field) {
+      const h = hashes.get(key);
+      if (!h) return null;
+      return h.has(field) ? h.get(field) : null;
+    },
+    async hset(key, field, value) {
+      const h = hashes.get(key) || new Map();
+      h.set(field, toStr(value));
+      hashes.set(key, h);
+      return 1;
     },
     on() { /* noop for events */ },
     quit() { return Promise.resolve(); },
@@ -97,7 +115,6 @@ async function initClient() {
     const client = createClient({
       url: REDIS_URL,
       socket: {
-        // reconnectStrategy receives the number of retries and should return delay in ms
         reconnectStrategy: (retries) => {
           const delay = Math.min(1000 * Math.pow(2, retries), 8000);
           console.warn(`[redis] reconnect attempt ${retries}, retrying in ${delay}ms`);
@@ -112,10 +129,8 @@ async function initClient() {
     client.on("reconnecting", () => console.warn("[redis] reconnecting..."));
     client.on("error", (err) => console.error("[redis] error:", err && err.message ? err.message : err));
 
-    // Attempt to connect; if it fails we'll catch and fallback
     await client.connect();
 
-    // If connect succeeded, use this client
     usingFallback = false;
     redisClient = client;
     return redisClient;
@@ -127,20 +142,16 @@ async function initClient() {
   }
 }
 
-// Kick off initialization immediately but export functions that will
-// wait for the client to be ready if necessary.
+// Kick off initialization immediately
 const initPromise = initClient();
 
-/* Helper to ensure the client is ready before calling methods */
 async function ensureClient() {
   if (redisClient) return redisClient;
   await initPromise;
   return redisClient;
 }
 
-// ------------------------------------------------------------
-// Key helpers and JSON helpers (safe wrappers)
-// ------------------------------------------------------------
+// Key helpers and JSON helpers
 function key(k) {
   return PREFIX + k;
 }
@@ -153,7 +164,6 @@ async function getJSON(k) {
     try {
       return JSON.parse(raw);
     } catch (err) {
-      // If stored value is plain string, return it as-is
       return raw;
     }
   } catch (err) {
@@ -166,12 +176,9 @@ async function setJSON(k, value, opts = {}) {
   try {
     const client = await ensureClient();
     const payload = JSON.stringify(value);
-    // Support both node-redis v4 signature and fallback options object
     if (client.isFallback) {
-      // our fallback expects set(key, value, opts)
       return await client.set(key(k), payload, opts);
     } else {
-      // node-redis v4 supports set(key, value, { EX: seconds })
       if (opts.EX) {
         return await client.set(key(k), payload, { EX: opts.EX });
       }
@@ -183,63 +190,87 @@ async function setJSON(k, value, opts = {}) {
   }
 }
 
-// Export the raw client (may be the fallback), helpers, and a small API
+// Top-level wrappers expected by the rest of the codebase
+async function get(k) {
+  const c = await ensureClient();
+  return c.get(key(k));
+}
+async function set(k, v, opts) {
+  const c = await ensureClient();
+  if (c.isFallback) return c.set(key(k), v, opts);
+  if (opts && opts.EX) return c.set(key(k), v, { EX: opts.EX });
+  return c.set(key(k), v);
+}
+async function del(k) {
+  const c = await ensureClient();
+  return c.del(key(k));
+}
+async function incr(k) {
+  const c = await ensureClient();
+  return c.incr(key(k));
+}
+async function expire(k, s) {
+  const c = await ensureClient();
+  return c.expire(key(k), s);
+}
+async function smembers(k) {
+  const c = await ensureClient();
+  return c.smembers(key(k));
+}
+async function sadd(k, ...m) {
+  const c = await ensureClient();
+  return c.sadd(key(k), ...m);
+}
+async function srem(k, ...m) {
+  const c = await ensureClient();
+  return c.srem(key(k), ...m);
+}
+async function hget(k, field) {
+  const c = await ensureClient();
+  return c.hget(key(k), field);
+}
+async function hset(k, field, value) {
+  const c = await ensureClient();
+  return c.hset(key(k), field, value);
+}
+function on(ev, fn) {
+  if (redisClient && typeof redisClient.on === "function") {
+    redisClient.on(ev, fn);
+  }
+}
+async function quit() {
+  const c = await ensureClient();
+  if (c && typeof c.quit === "function") return c.quit();
+  return Promise.resolve();
+}
+async function ping() {
+  const c = await ensureClient();
+  if (c && typeof c.ping === "function") return c.ping();
+  return Promise.resolve("PONG");
+}
+
+// Export the API expected by the codebase
 module.exports = {
   // Promise that resolves when initialization completes
   _init: initPromise,
-  // The live client (may be null until init completes); callers should await _init or use ensureClient
+  // direct access to underlying client (may be null until init completes)
   get client() { return redisClient; },
   usingFallback: () => usingFallback,
-  redis: {
-    // Provide thin wrappers so existing code that expects `redis.get(...)` still works.
-    get: async (k) => {
-      const c = await ensureClient();
-      return c.get(k);
-    },
-    set: async (k, v, opts) => {
-      const c = await ensureClient();
-      // If opts is an object (fallback), pass it through; otherwise try to map
-      if (opts && typeof opts === "object") {
-        return c.set(k, v, opts);
-      }
-      return c.set(k, v);
-    },
-    del: async (k) => {
-      const c = await ensureClient();
-      return c.del(k);
-    },
-    incr: async (k) => {
-      const c = await ensureClient();
-      return c.incr(k);
-    },
-    expire: async (k, s) => {
-      const c = await ensureClient();
-      return c.expire(k, s);
-    },
-    smembers: async (k) => {
-      const c = await ensureClient();
-      return c.smembers(k);
-    },
-    sadd: async (k, ...m) => {
-      const c = await ensureClient();
-      return c.sadd(k, ...m);
-    },
-    srem: async (k, ...m) => {
-      const c = await ensureClient();
-      return c.srem(k, ...m);
-    },
-    on: (ev, fn) => {
-      // attach to underlying client if available
-      if (redisClient && typeof redisClient.on === "function") {
-        redisClient.on(ev, fn);
-      }
-    },
-    quit: async () => {
-      const c = await ensureClient();
-      if (c && typeof c.quit === "function") return c.quit();
-      return Promise.resolve();
-    }
-  },
+  // top-level methods (so require('./redis') returns an object with get/set/hget/hset etc.)
+  get,
+  set,
+  del,
+  incr,
+  expire,
+  smembers,
+  sadd,
+  srem,
+  hget,
+  hset,
+  on,
+  quit,
+  ping,
+  // helpers
   key,
   getJSON,
   setJSON
