@@ -1,0 +1,142 @@
+{
+  "id": "q_timeline_ncr_minutemen",
+  "name": "The Democracy Tug-of-War",
+  "type": "faction_main",
+  "region": "timeline_overlap_commonwealth",
+  "subregion": "contested_territory",
+
+  "giver": "npc_ncr_senator_crane",
+
+  "start_conditions": {
+    "min_level": 18,
+    "location": "commonwealth_crossroads",
+    "timeline_event": "regional_collision"
+  },
+
+  "npc_links": [
+    "npc_ncr_senator_crane",
+    "npc_minutemen_general",
+    "npc_preston_echo",
+    "npc_ncr_general_monroe"
+  ],
+
+  "description": "The NCR's expansion into timeline-displaced Commonwealth territories threatens the Minutemen's grassroots democracy. Two visions of the future clash.",
+
+  "objectives": [
+    {
+      "id": "witness_collision",
+      "desc": "Witness the NCR's arrival in Commonwealth territory.",
+      "event": "timeline_merge_commonwealth"
+    },
+    {
+      "id": "meet_factions",
+      "desc": "Meet representatives from both the NCR and Minutemen.",
+      "npcs": ["npc_ncr_senator_crane", "npc_minutemen_general"]
+    },
+    {
+      "id": "attend_summit",
+      "desc": "Attend the tense diplomatic summit between factions.",
+      "poi": "commonwealth_capitol_ruins"
+    },
+    {
+      "id": "investigate_sabotage",
+      "desc": "Investigate sabotage attempts disrupting peace talks.",
+      "clues": ["raider_agents", "brotherhood_interference", "internal_extremists"]
+    },
+    {
+      "id": "final_decision",
+      "desc": "Choose which form of democracy will rule the Commonwealth.",
+      "choices": [
+        "support_ncr",
+        "support_minutemen",
+        "broker_compromise",
+        "chaos_option"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "witness_collision", "desc": "Timelines merge. Factions collide." },
+    { "id": 1, "objective": "meet_factions", "desc": "Two democracies, one territory." },
+    { "id": 2, "objective": "attend_summit", "desc": "Diplomacy or war?" },
+    { "id": 3, "objective": "investigate_sabotage", "desc": "Someone wants war." },
+    { "id": 4, "objective": "final_decision", "desc": "Shape the Commonwealth's future." },
+    { "id": 5, "objective": "complete", "desc": "Democracy wins... or loses." }
+  },
+
+  "faction_positions": {
+    "ncr": {
+      "argument": "We have experience governing large territories. The Commonwealth needs structure, not militias.",
+      "offer": "Protection, trade networks, legal system, taxes",
+      "threat": "Annexation by force if necessary"
+    },
+    "minutemen": {
+      "argument": "We know this land. We protect it. We don't need outsiders telling us how to live.",
+      "offer": "Local autonomy, community defense, no taxes",
+      "threat": "Guerrilla resistance if invaded"
+    }
+  },
+
+  "choices": {
+    "support_ncr": {
+      "desc": "Support NCR annexation of the Commonwealth.",
+      "requirements": { "reputation_ncr": 50 },
+      "consequences": {
+        "faction_rep": { "ncr": 150, "minutemen": -150, "settlers": -80 },
+        "rewards": { "xp": 1200, "caps": 1000, "items": ["ncr_ambassador_badge", "ranger_armor_mk2"] },
+        "regional_change": "commonwealth_becomes_ncr_territory",
+        "outcome": "NCR flag flies over Commonwealth. Order imposed. Minutemen disband. Some become insurgents. Progress with a heavy hand."
+      }
+    },
+    "support_minutemen": {
+      "desc": "Support Minutemen independence and repel the NCR.",
+      "requirements": { "reputation_minutemen": 50 },
+      "consequences": {
+        "faction_rep": { "minutemen": 150, "ncr": -150, "settlers": 100 },
+        "rewards": { "xp": 1200, "caps": 800, "items": ["general_rank", "minutemen_legendary_weapon"] },
+        "regional_change": "commonwealth_independent",
+        "outcome": "Minutemen triumph. Commonwealth stays free. NCR retreats. But without structure, challenges remain."
+      }
+    },
+    "broker_compromise": {
+      "desc": "Create a federation where both systems coexist.",
+      "requirements": { "charisma": 10, "reputation_ncr": 30, "reputation_minutemen": 30 },
+      "consequences": {
+        "faction_rep": { "ncr": 80, "minutemen": 80, "settlers": 120 },
+        "rewards": { "xp": 1500, "caps": 1200, "items": ["peacemaker_medal", "federation_charter", "dual_citizenship"] },
+        "regional_change": "commonwealth_federation",
+        "unlock": ["federation_government", "hybrid_military"],
+        "outcome": "Historic compromise. Commonwealth Federation formed. Local autonomy under NCR protection. Both sides win and lose."
+      }
+    },
+    "chaos_option": {
+      "desc": "Sabotage both sides, letting raiders and Brotherhood fill the power vacuum.",
+      "requirements": { "morality": "evil", "explosives": 80 },
+      "consequences": {
+        "faction_rep": { "ncr": -100, "minutemen": -100, "raiders": 100, "brotherhood": 80 },
+        "rewards": { "xp": 1000, "caps": 2000, "items": ["anarchist_reputation", "chaos_rewards"] },
+        "regional_change": "commonwealth_anarchy",
+        "outcome": "You light the match. Both factions bleed. Raiders thrive. Brotherhood seizes tech. The wasteland stays wasteland."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 1200,
+    "caps": 1000
+  },
+
+  "factions": {
+    "affected": ["NCR", "Minutemen", "Settlers", "Raiders", "Brotherhood"]
+  },
+
+  "regional_impact": "Major - determines government structure of timeline-merged Commonwealth",
+
+  "next_quests": [
+    "quest_federation_crisis",
+    "quest_ncr_occupation",
+    "quest_minutemen_resistance"
+  ],
+
+  "notes": "First major timeline collision quest. Player choice determines entire region's political future. Multiple follow-up questlines based on outcome."
+}
