@@ -49,7 +49,7 @@
       style.textContent = `
         #pipboyCompass {
           position: fixed;
-          top: 10px;
+          top: 45px;
           left: 50%;
           transform: translateX(-50%);
           width: 260px;
