@@ -1,7 +1,7 @@
 // backend/lib/admin.js
 
 const crypto = require("crypto");
-const redis = require("../../redis");
+const redis = require('./redis');
 const { PublicKey } = require("@solana/web3.js");
 const nacl = require("tweetnacl");
 
