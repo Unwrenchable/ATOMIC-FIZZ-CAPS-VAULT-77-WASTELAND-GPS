@@ -134,25 +134,59 @@
       this.roadLayer = L.layerGroup().addTo(this.map);
 
       // --------------------------------------------------------
-      // LOAD POIs (SVG ICONS) - safe
+      // LOAD POIs (SVG ICONS) - safe, handles grouped structure
       // --------------------------------------------------------
       (async () => {
-        const pois = await safeFetchJSON("/data/poi.json");
-        if (!Array.isArray(pois)) return;
-        pois.forEach(poi => {
+        const poiData = await safeFetchJSON("/data/poi.json");
+        if (!poiData) return;
+        
+        // Flatten grouped POI structure (strip, freeside, outer_vegas, etc.)
+        const allPois = [];
+        if (typeof poiData === 'object') {
+          Object.values(poiData).forEach(group => {
+            if (Array.isArray(group)) {
+              allPois.push(...group);
+            }
+          });
+        } else if (Array.isArray(poiData)) {
+          allPois.push(...poiData);
+        }
+        
+        allPois.forEach(poi => {
           try {
+            // Use iconKey (from data) or icon (fallback)
+            const iconName = poi.iconKey || poi.icon || 'poi';
             const icon = L.icon({
-              iconUrl: `/img/icons/${poi.icon}.svg`,
+              iconUrl: `/img/icons/${iconName}.svg`,
               iconSize: [24, 24],
-              iconAnchor: [12, 12]
+              iconAnchor: [12, 12],
+              className: 'poi-marker'
             });
-            L.marker([poi.lat, poi.lng], { icon })
-              .bindPopup(`<b>${poi.name}</b>`)
-              .addTo(this.map);
+            
+            const marker = L.marker([poi.lat, poi.lng], { icon });
+            
+            // Enhanced popup with Fallout-style info
+            const rarityColor = {
+              common: '#00ff41',
+              rare: '#00d4ff',
+              epic: '#d900ff',
+              legendary: '#ffaa00'
+            }[poi.rarity] || '#00ff41';
+            
+            marker.bindPopup(`
+              <div style="color: ${rarityColor}; font-family: monospace;">
+                <b>${poi.name}</b><br>
+                <small>LVL ${poi.lvl || '?'} • ${(poi.rarity || 'UNKNOWN').toUpperCase()}</small>
+              </div>
+            `);
+            
+            marker.addTo(this.map);
           } catch (e) {
             console.warn("[worldmap] failed to add POI", poi && poi.id, e && e.message ? e.message : e);
           }
         });
+        
+        console.log(`[worldmap] loaded ${allPois.length} POI markers`);
       })();
 
       // --------------------------------------------------------
