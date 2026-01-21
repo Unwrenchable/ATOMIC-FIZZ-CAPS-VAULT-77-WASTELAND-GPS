@@ -1,0 +1,203 @@
+{
+  "id": "quest_all_eras_brotherhood_war",
+  "title": "Steel Across Time",
+  "type": "faction_war",
+  "difficulty": "hard",
+  "level_required": 10,
+  "description": "Four Brotherhood of Steel chapters from different timelines now exist simultaneously. Elder Lyons (FO3), Elder Maxson (FO4), Paladin Rahmani (FO76), and the Western BoS (FO1/FO2) all claim to be the 'true' Brotherhood. Their ideological conflict threatens to tear the wasteland apart.",
+  
+  "fractured_timeline_premise": "In this impossible reality, all Brotherhood chapters exist at once. They're confused, hostile, and debating which philosophy represents real Brotherhood values: tech hoarding, humanitarian aid, fascist control, or democratic protection.",
+
+  "factions_involved": {
+    "lyons_brotherhood": {
+      "era": "Fallout 3 (2277)",
+      "leader": "Elder Owyn Lyons",
+      "philosophy": "Protect the innocent, provide aid, technology serves the people",
+      "base": "Capital Wasteland sector",
+      "strength": "Public support, humanitarian focus",
+      "weakness": "Low resources, considered 'soft' by other chapters"
+    },
+    "maxson_brotherhood": {
+      "era": "Fallout 4 (2287)",
+      "leader": "Elder Arthur Maxson",
+      "philosophy": "Purge synths, control technology, military discipline",
+      "base": "Commonwealth sector (Prydwen docked nearby)",
+      "strength": "Military power, airship, vertibirds",
+      "weakness": "Authoritarian, hated by Institute and Railroad"
+    },
+    "rahmani_brotherhood": {
+      "era": "Fallout 76 (2103)",
+      "leader": "Paladin Leila Rahmani",
+      "philosophy": "Help rebuild society, question old orders, adapt to new world",
+      "base": "Appalachia sector (Fort Atlas)",
+      "strength": "Flexible ideology, rebuilding focus",
+      "weakness": "Internal dissent, far from traditional BoS values"
+    },
+    "western_brotherhood": {
+      "era": "Fallout 1/2 (2161-2241)",
+      "leader": "High Elder from Lost Hills",
+      "philosophy": "Original Codex, isolationist, tech preservation above all",
+      "base": "Lost Hills bunker (California zone)",
+      "strength": "Original authority, strict discipline",
+      "weakness": "Outdated tactics, refusal to adapt"
+    }
+  },
+
+  "stages": [
+    {
+      "id": "stage1_council_of_steel",
+      "name": "Council of Steel",
+      "description": "The four Brotherhood factions have called a summit. They want YOU to mediate because you're not affiliated with any chapter. But tensions are high - Maxson calls Lyons a traitor, Lyons calls Maxson a fascist, Rahmani questions the entire Codex, and the Western Elder says they're all heretics.",
+      "objectives": [
+        {
+          "id": "obj1_attend_summit",
+          "text": "Attend the Brotherhood Council at Helios One"
+        },
+        {
+          "id": "obj2_hear_arguments",
+          "text": "Listen to each chapter's grievances",
+          "details": [
+            "Lyons: Accuses others of abandoning humanity",
+            "Maxson: Calls for unified military action against synths/mutants",
+            "Rahmani: Proposes abandoning the Codex entirely",
+            "Western Elder: Demands all chapters return to Lost Hills authority"
+          ]
+        },
+        {
+          "id": "obj3_prevent_violence",
+          "text": "Stop the factions from attacking each other (Speech check or combat)"
+        }
+      ],
+      "outcomes": {
+        "success": "Temporary ceasefire established",
+        "failure": "Brotherhood civil war begins immediately"
+      },
+      "rewards": {
+        "xp": 1200,
+        "reputation_changes": {
+          "all_brotherhood_chapters": 50
+        }
+      }
+    },
+    {
+      "id": "stage2_field_test",
+      "name": "Proving Ground",
+      "description": "Each Brotherhood chapter wants to prove their philosophy is superior. They've agreed to a 'field test' - you'll accompany each chapter on a mission and judge their effectiveness.",
+      "missions": {
+        "lyons_mission": {
+          "name": "Protect Megaton",
+          "objective": "Help Lyons' BoS defend a settlement from raiders",
+          "philosophy_test": "Do they protect civilians or prioritize tech?",
+          "success_metric": "Civilian casualties vs tech secured"
+        },
+        "maxson_mission": {
+          "name": "Synth Purge",
+          "objective": "Join Maxson's forces hunting Institute synths",
+          "philosophy_test": "Military efficiency vs collateral damage",
+          "moral_choice": "Do you let them execute a synth claiming to be sentient?"
+        },
+        "rahmani_mission": {
+          "name": "Rebuild Hope",
+          "objective": "Help Rahmani's chapter rebuild infrastructure",
+          "philosophy_test": "Community building vs Brotherhood tradition",
+          "moral_choice": "Share technology with settlers or keep it secured?"
+        },
+        "western_mission": {
+          "name": "Codex Retrieval",
+          "objective": "Recover pre-war tech for the archives",
+          "philosophy_test": "Preservation vs utilization",
+          "moral_choice": "Hoard the tech or let NCR use it for public good?"
+        }
+      },
+      "rewards": {
+        "xp": 1500,
+        "unique_item": "Brotherhood Commendation (from chapter you favor most)"
+      }
+    },
+    {
+      "id": "stage3_schism",
+      "name": "The Great Schism",
+      "description": "The test results are in, and none of the chapters can agree. Now you must make a choice that will shape the Brotherhood's future across ALL timelines.",
+      "player_choice": {
+        "option1_unite_under_one": {
+          "name": "Unite Under One Elder",
+          "description": "Choose which Elder should lead ALL Brotherhood chapters. The others must submit or be destroyed.",
+          "choices": ["Lyons", "Maxson", "Rahmani", "Western Elder"],
+          "consequence": "Chosen chapter becomes dominant, others disband or go rogue"
+        },
+        "option2_separate_but_allied": {
+          "name": "Separate But Allied",
+          "description": "Let each chapter maintain independence but create a Brotherhood Alliance for mutual defense.",
+          "consequence": "Four separate Brotherhood factions coexist peacefully, player can join all"
+        },
+        "option3_destroy_them_all": {
+          "name": "End the Brotherhood",
+          "description": "Side with the NCR, Institute, or other factions to destroy ALL Brotherhood chapters.",
+          "consequence": "No Brotherhood exists anymore, massive reputation loss, huge reward from anti-BoS factions"
+        },
+        "option4_create_new_chapter": {
+          "name": "Found Your Own Chapter",
+          "description": "Take the best ideas from each chapter and create a NEW Brotherhood chapter with you as Elder.",
+          "consequence": "Player becomes Brotherhood leader, can recruit from all chapters, mixed philosophy"
+        }
+      }
+    }
+  ],
+
+  "endings": {
+    "ending_lyons_victory": {
+      "name": "The Humanitarian Order",
+      "description": "Lyons' philosophy won. The Brotherhood becomes a force for good, protecting people first, technology second.",
+      "gameplay": "Brotherhood provides aid to settlements, popular with civilians, weak militarily"
+    },
+    "ending_maxson_victory": {
+      "name": "The Iron Fist",
+      "description": "Maxson united the Brotherhood under military rule. They're a powerful fascist force controlling the wasteland.",
+      "gameplay": "Brotherhood dominates militarily, feared by all factions, synths hunted to extinction"
+    },
+    "ending_rahmani_victory": {
+      "name": "The New Order",
+      "description": "Rahmani's progressive vision won. The Brotherhood abandoned the Codex and became builders, not hoarders.",
+      "gameplay": "Brotherhood becomes a rebuilding faction, shares tech freely, loses traditional identity"
+    },
+    "ending_western_victory": {
+      "name": "Return to Tradition",
+      "description": "The original Brotherhood's vision prevailed. They returned to isolationist tech preservation.",
+      "gameplay": "Brotherhood seals themselves in bunkers, rarely interacts with wasteland"
+    },
+    "ending_alliance": {
+      "name": "The Four Banners",
+      "description": "All four chapters coexist as independent but allied forces. Players can join all of them.",
+      "gameplay": "Access to all Brotherhood resources, complete quests for any chapter, maximum freedom"
+    },
+    "ending_destruction": {
+      "name": "The Fall of Steel",
+      "description": "The Brotherhood is no more. Their technology scattered, their legacy ended.",
+      "gameplay": "Unique Brotherhood tech available for scavenging, other factions strengthen"
+    },
+    "ending_player_chapter": {
+      "name": "The Fifth Path",
+      "description": "You created a new Brotherhood combining the best of all eras. You are the Elder.",
+      "gameplay": "Player controls Brotherhood policy, recruits from any chapter, custom philosophy"
+    }
+  },
+
+  "cross_timeline_references": {
+    "fo1_fo2_callbacks": "Western Elder mentions the Mariposa disaster and Master's defeat",
+    "fo3_callbacks": "Lyons references Project Purity and fighting super mutants in DC",
+    "fo4_callbacks": "Maxson talks about the Institute threat and Liberty Prime",
+    "fo76_callbacks": "Rahmani discusses Appalachia's scorched plague and rebuilding"
+  },
+
+  "rewards": {
+    "xp_range": "3000-5000 depending on outcome",
+    "unique_rewards": [
+      "T-51 Power Armor (FO1 era)",
+      "T-60 Power Armor (FO4 era)",
+      "T-65 Power Armor (FO76 era)",
+      "Access to all Brotherhood tech vendors",
+      "Vertibird fast travel (if Maxson allied)",
+      "Brotherhood training (SPECIAL boost)"
+    ]
+  }
+}
