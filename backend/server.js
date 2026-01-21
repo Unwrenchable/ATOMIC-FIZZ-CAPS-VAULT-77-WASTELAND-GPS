@@ -141,6 +141,7 @@ const api = (file) => path.join(__dirname, "api", file);
 
 // Core API endpoints
 safeMount("/api/loot-voucher", api("loot-voucher"));
+safeMount("/api/mintables", api("mintables"));
 safeMount("/api/caps", api("caps"));
 safeMount("/api/xp", api("xp"));
 safeMount("/api/gps", api("gps"));
