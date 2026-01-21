@@ -341,5 +341,4 @@
 {"id":"anchorage_hq_fo3","name":"U.S. Army Field HQ","lat":61.2190,"lng":-149.9010,"lvl":22,"rarity":"rare","iconKey":"military","region":"fo3_anchorage","game":"fo3","source":"canon"},
 {"id":"anchorage_artillery_base_fo3","name":"Artillery Base","lat":61.2200,"lng":-149.9050,"lvl":24,"rarity":"epic","iconKey":"facility","region":"fo3_anchorage","game":"fo3","source":"canon"},
 {"id":"anchorage_cliffs_fo3","name":"Frozen Cliffs","lat":61.2250,"lng":-149.9100,"lvl":26,"rarity":"rare","iconKey":"wilderness","region":"fo3_anchorage","game":"fo3","source":"canon"}
-
 ]
