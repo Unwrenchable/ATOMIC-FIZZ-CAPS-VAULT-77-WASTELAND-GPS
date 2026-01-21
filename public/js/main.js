@@ -835,6 +835,16 @@
         await Game.modules.mintables.init();
       }
 
+      // Initialize NPC spawn system if present
+      if (
+        window.Game &&
+        Game.modules &&
+        Game.modules.npcSpawn &&
+        typeof Game.modules.npcSpawn.init === "function"
+      ) {
+        await Game.modules.npcSpawn.init();
+      }
+
       attachMapReference();
       initUI();
 
