@@ -8,6 +8,7 @@ require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
@@ -15,7 +16,7 @@ const helmet = require("helmet");
 const app = express();
 app.set("trust proxy", 1);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || "development";
 
 // ------------------------------------------------------------
@@ -28,13 +29,21 @@ console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 // CORE MIDDLEWARE
 // ------------------------------------------------------------
 
-// Strict CORS (frontend only)
+// Allow local dev origins as well as production frontend origin
 const FRONTEND_ORIGIN =
-  process.env.FRONTEND_ORIGIN || "https://www.atomicfizzcaps.xyz";
+  process.env.FRONTEND_ORIGIN ||
+  "https://www.atomicfizzcaps.xyz, http://localhost:3000, http://127.0.0.1:3000";
 
 app.use(
   cors({
-    origin: FRONTEND_ORIGIN,
+    origin: (origin, cb) => {
+      // allow requests with no origin (e.g., curl, server-to-server)
+      if (!origin) return cb(null, true);
+      // allow comma-separated list
+      const allowed = FRONTEND_ORIGIN.split(",").map((s) => s.trim());
+      if (allowed.includes(origin)) return cb(null, true);
+      return cb(new Error("CORS not allowed"), false);
+    },
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: false,
@@ -114,16 +123,19 @@ app.use(
 // ------------------------------------------------------------
 function safeMount(mountPath, requirePath) {
   try {
-    const router = require(requirePath);
+    const mod = require(requirePath);
+    const router = (mod && (mod.router || mod.default)) || mod;
     if (!router) {
-      console.warn(`[server] skipping ${requirePath} — module exported undefined`);
+      console.warn(
+        `[server] skipping ${requirePath} — module exported undefined`
+      );
       return;
     }
     app.use(mountPath, router);
     console.log(`[server] mounted ${requirePath} at ${mountPath}`);
   } catch (err) {
     console.warn(
-      `[server] skipping ${requirePath} — failed to load: ${err.message}`
+      `[server] skipping ${requirePath} — failed to load: ${err && err.message}`
     );
   }
 }
@@ -131,8 +143,18 @@ function safeMount(mountPath, requirePath) {
 // ------------------------------------------------------------
 // AUTH ROUTES
 // ------------------------------------------------------------
-const { router: authRouter } = require("./lib/auth");
-app.use("/api/auth", authRouter);
+try {
+  const authMod = require("./lib/auth");
+  const authRouter = (authMod && (authMod.router || authMod.default)) || authMod;
+  if (authRouter) {
+    app.use("/api/auth", authRouter);
+    console.log("[server] mounted ./lib/auth at /api/auth");
+  } else {
+    console.warn("[server] ./lib/auth did not export a router");
+  }
+} catch (err) {
+  console.warn("[server] failed to load ./lib/auth:", err && err.message);
+}
 
 // ------------------------------------------------------------
 // API ROUTES
@@ -157,6 +179,33 @@ safeMount("/api/locations", api("locations"));
 
 // WALLET API
 safeMount("/api/wallet", path.join(__dirname, "routes", "wallet"));
+
+// ------------------------------------------------------------
+// GENERIC STATIC JSON PROXY (fallback for /api/<name>)
+// Serves public/data/<name>.json for simple API endpoints.
+// This is mounted AFTER explicit routers so explicit handlers take precedence.
+// ------------------------------------------------------------
+app.use("/api", (req, res, next) => {
+  // Only handle GET requests for top-level names like /api/settings or /api/locations
+  if (req.method !== "GET") return next();
+  const parts = req.path.split("/").filter(Boolean);
+  if (parts.length !== 1) return next(); // only handle /api/<name>
+  const name = parts[0];
+  if (!/^[a-z0-9_\-]+$/.test(name)) return next();
+  const file = path.join(FRONTEND_DIR, "data", `${name}.json`);
+  fs.stat(file, (err, stat) => {
+    if (err || !stat.isFile()) return next();
+    res.type("application/json");
+    res.sendFile(file, (sendErr) => {
+      if (sendErr) {
+        console.error(`[api/proxy] sendFile error for ${name}:`, sendErr);
+        if (!res.headersSent) res.status(500).json({ error: "failed to send file" });
+      } else {
+        console.log(`[api/proxy] served ${file} for /api/${name}`);
+      }
+    });
+  });
+});
 
 // ------------------------------------------------------------
 // FUTURE FEATURE ENDPOINTS
@@ -195,14 +244,20 @@ app.get("/api/health", (req, res) => {
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api/")) return next();
   if (path.extname(req.path)) return next();
-  res.sendFile(path.join(FRONTEND_DIR, "index.html"));
+  const indexFile = path.join(FRONTEND_DIR, "index.html");
+  if (fs.existsSync(indexFile)) {
+    res.sendFile(indexFile);
+  } else {
+    res.status(404).send("Not Found");
+  }
 });
 
 // ------------------------------------------------------------
 // GLOBAL ERROR HANDLER
 // ------------------------------------------------------------
 app.use((err, req, res, next) => {
-  console.error("[server] GLOBAL ERROR:", err);
+  console.error("[server] GLOBAL ERROR:", err && err.stack ? err.stack : err);
+  if (res.headersSent) return next(err);
   res.status(500).json({ ok: false, error: "Internal server error" });
 });
 
