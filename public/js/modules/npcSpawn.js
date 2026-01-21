@@ -43,8 +43,17 @@
         if (!npc.spawnPool || !Array.isArray(npc.spawnPool)) return false;
         
         // Check if location ID matches any spawn pool entry
+        // Use word boundaries to avoid false positives
         return npc.spawnPool.some(spawnId => {
-          return location.id.toLowerCase().includes(spawnId.toLowerCase());
+          const spawnIdLower = spawnId.toLowerCase();
+          const locationIdLower = location.id.toLowerCase();
+          
+          // Exact match or location contains spawn pool term with word boundaries
+          return locationIdLower === spawnIdLower || 
+                 locationIdLower.split('_').includes(spawnIdLower) ||
+                 locationIdLower.startsWith(spawnIdLower + '_') ||
+                 locationIdLower.endsWith('_' + spawnIdLower) ||
+                 locationIdLower.includes('_' + spawnIdLower + '_');
         });
       });
 
@@ -84,8 +93,10 @@
 
     // Fallback: show NPC dialog directly
     showNPCDialog(npc) {
-      const dialog = npc.dialogPool && npc.dialogPool.length > 0
-        ? npc.dialogPool[Math.floor(Math.random() * npc.dialogPool.length)]
+      // Handle both 'dialog' and 'dialogPool' structures
+      const dialogArray = npc.dialogPool || npc.dialog || [];
+      const dialog = dialogArray.length > 0
+        ? dialogArray[Math.floor(Math.random() * dialogArray.length)]
         : "...";
 
       const message = `${npc.name} approaches you.\n\n"${dialog}"`;
@@ -101,9 +112,17 @@
     getNPCsForLocation(locationId) {
       return this.npcs.filter(npc => {
         if (!npc.spawnPool) return false;
-        return npc.spawnPool.some(spawnId => 
-          locationId.toLowerCase().includes(spawnId.toLowerCase())
-        );
+        return npc.spawnPool.some(spawnId => {
+          const spawnIdLower = spawnId.toLowerCase();
+          const locationIdLower = locationId.toLowerCase();
+          
+          // Exact match or location contains spawn pool term with word boundaries
+          return locationIdLower === spawnIdLower || 
+                 locationIdLower.split('_').includes(spawnIdLower) ||
+                 locationIdLower.startsWith(spawnIdLower + '_') ||
+                 locationIdLower.endsWith('_' + spawnIdLower) ||
+                 locationIdLower.includes('_' + spawnIdLower + '_');
+        });
       });
     }
   };

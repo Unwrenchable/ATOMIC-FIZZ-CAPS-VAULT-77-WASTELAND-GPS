@@ -464,15 +464,13 @@
         Game.overseer.onPOIVisit(loc);
       }
 
-      // Check for NPC encounters first
+      // Check for NPC encounters (doesn't bypass other encounters)
+      let npcEncounter = null;
       if (Game.modules?.npcSpawn) {
-        const npcEncounter = Game.modules.npcSpawn.checkForNPCEncounter(loc);
-        if (npcEncounter) {
-          this.handleEncounterResult(npcEncounter, loc);
-          return;
-        }
+        npcEncounter = Game.modules.npcSpawn.checkForNPCEncounter(loc);
       }
 
+      // Check for regular world encounters
       let encounter = null;
       if (Game.modules?.world?.encounters) {
         const worldState = Game.modules.world.state || this.gs.worldState || this.gs;
@@ -485,7 +483,18 @@
         });
       }
 
-      this.handleEncounterResult(encounter, loc);
+      // Handle NPC encounter first if present, then regular encounter
+      if (npcEncounter) {
+        this.handleEncounterResult(npcEncounter, loc);
+      }
+      
+      // Still process regular encounters if present
+      if (encounter) {
+        this.handleEncounterResult(encounter, loc);
+      } else if (!npcEncounter) {
+        // Only show arrival message if no encounters occurred
+        this.handleEncounterResult(null, loc);
+      }
     },
 
     handleEncounterResult(result, loc) {
