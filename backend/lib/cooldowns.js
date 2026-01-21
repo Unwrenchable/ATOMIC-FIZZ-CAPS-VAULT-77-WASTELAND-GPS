@@ -1,29 +1,31 @@
-const express = require("express");
-const router = express.Router();
+// backend/lib/cooldowns.js
 
-const { authMiddleware } = require("../lib/auth");
-const cooldowns = require("../lib/cooldowns");
+const redis = require('./redis');
 
-// Mounted at /api/cooldowns
-router.post("/check", authMiddleware, async (req, res) => {
-  try {
-    const player = req.player;
-    const { action } = req.body;
-
-    if (!player || !player.wallet) {
-      return res.status(401).json({ error: "Unauthorized: missing player" });
-    }
-
-    if (!action || typeof action !== "string") {
-      return res.status(400).json({ error: "Missing or invalid 'action' in request body" });
-    }
-
-    const result = await cooldowns.check(player, action);
-    return res.json(result);
-  } catch (err) {
-    console.error("[api/cooldowns] check error:", err && err.stack ? err.stack : err);
-    return res.status(400).json({ error: err?.message || "Cooldown check failed" });
+async function check(player, action) {
+  if (!player || !player.wallet) {
+    throw new Error("missing player");
   }
-});
+  if (!action) {
+    throw new Error("missing action");
+  }
 
-module.exports = router;
+  const key = `cooldown:${player.wallet}:${action}`;
+  const now = Date.now();
+
+  const last = await redis.get(key);
+  if (last) {
+    const diff = now - Number(last);
+    if (diff < 5000) {
+      // 5 second cooldown example
+      throw new Error("action on cooldown");
+    }
+  }
+
+  await redis.set(key, now);
+  return { ok: true };
+}
+
+module.exports = {
+  check
+};
