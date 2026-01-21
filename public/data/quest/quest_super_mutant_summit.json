@@ -1,0 +1,90 @@
+{
+  "id": "quest_super_mutant_summit",
+  "title": "The United Mutant Front",
+  "type": "cross_timeline_unity",
+  "difficulty": "medium",
+  "level_required": 8,
+  "fractured_timeline_context": "Super mutants from ALL Fallout games exist simultaneously: The Master's Army (FO1), Vault 87 mutants (FO3), Institute FEV mutants (FO4), and Appalachian mutants (FO76). They've realized they're all cousins created by different FEV strains. Now they want to unite.",
+
+  "premise": "Marcus (FO2 super mutant companion) has called a summit of all super mutant leaders. Fawkes (FO3), Strong (FO4), Grahm (FO76), and others attend. They're tired of being hunted. They want to create the first Super Mutant Nation. Will you help or hinder them?",
+
+  "stages": [
+    {
+      "id": "stage1_marcus_vision",
+      "name": "A Dream of Unity",
+      "description": "Marcus from Jacobstown has a radical idea: unite ALL super mutants regardless of intelligence level or origin. Recruit peaceful mutants, educate violent ones, create a society.",
+      "objectives": [
+        {"text": "Meet Marcus at Jacobstown"},
+        {"text": "Recruit Fawkes (FO3 intelligent mutant)"},
+        {"text": "Recruit Strong (FO4 mutant seeking 'milk of human kindness')"},
+        {"text": "Recruit Grahm (FO76 friendly merchant mutant)"},
+        {"text": "Convince hostile mutant leaders (Speech checks or combat)"}
+      ]
+    },
+    {
+      "id": "stage2_nightkin_problem",
+      "name": "The Nightkin Question",
+      "description": "Nightkin (stealth super mutants from FO1/FO:NV) are having psychotic episodes from Stealth Boy addiction. They're attacking the summit. You must cure them or contain them.",
+      "choices": [
+        "Find Stealth Boy cure (Science check)",
+        "Use Vault 77 tech to stabilize them",
+        "Exile them (makes summit easier but morally dark)",
+        "Accept them as-is (harder but more inclusive)"
+      ]
+    },
+    {
+      "id": "stage3_human_reaction",
+      "name": "The World Reacts",
+      "description": "News of a Super Mutant Nation terrifies humans. Brotherhood wants to nuke it. NCR wants to quarantine it. Institute wants to study it. You must negotiate or fight.",
+      "player_choice": {
+        "option1": "Defend mutant sovereignty (fight human factions)",
+        "option2": "Broker peace treaty (difficult Speech checks with all factions)",
+        "option3": "Sabotage summit (side with human supremacists)",
+        "option4": "Create DMZ where mutants and humans trade but don't mix"
+      }
+    }
+  ],
+
+  "endings": {
+    "ending_mutant_nation": {
+      "name": "The Green Republic",
+      "description": "Super Mutant Nation founded. Jacobstown expands into a city-state. Marcus becomes first mutant president.",
+      "gameplay": "New mutant vendors, quests, and companions. Some human factions become hostile."
+    },
+    "ending_integration": {
+      "name": "One Wasteland",
+      "description": "Mutants integrate into human society. No separate nation, but equal rights established.",
+      "gameplay": "Mutant NPCs appear in all towns, mixed-species settlements, reduced faction tensions."
+    },
+    "ending_quarantine": {
+      "name": "The Green Zone",
+      "description": "Mutants confined to specific territories. Peaceful but segregated.",
+      "gameplay": "Mutant zones on map, travel restrictions, underground railroad for mutant refugees."
+    },
+    "ending_extermination": {
+      "name": "The Final Solution",
+      "description": "You helped human factions hunt mutants to near-extinction. Dark ending.",
+      "gameplay": "Mutant content removed, huge rewards from BoS/Enclave, karma loss."
+    }
+  },
+
+  "cross_timeline_magic": "This quest celebrates how EVERY Fallout game created different FEV mutants. Now they all meet and compare origin stories. It's absurd and beautiful.",
+
+  "companion_reactions": {
+    "fawkes": "Overjoyed - finally a chance at mutant dignity",
+    "strong": "Confused - is this 'milk of human kindness'?",
+    "marcus": "Proud - his dream coming true",
+    "jax_voss": "Fascinated by mutant timeline convergence",
+    "harlan_voss": "Skeptical but willing to try"
+  },
+
+  "rewards": {
+    "xp": 2500,
+    "unique_items": [
+      "Super Mutant Diplomat Badge",
+      "Marcus's Minigun (legendary variant)",
+      "FEV Inoculation (permanent rad resistance boost)"
+    ],
+    "unlocks": "Super Mutant companions from all games become recruitable"
+  }
+}
