@@ -6,6 +6,8 @@ on:
 jobs:
   api-smoke:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Wait briefly for service
         run: sleep 10

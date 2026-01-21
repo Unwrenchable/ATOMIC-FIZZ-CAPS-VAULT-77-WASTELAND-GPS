@@ -37,7 +37,12 @@ const rawOrigins = (process.env.FRONTEND_ORIGIN || 'https://www.atomicfizzcaps.x
 
 function wildcardToRegex(pattern) {
   // turn https://*.vercel.app into ^https?:\/\/[^\/]+\.vercel\.app(:\d+)?$
-  const escaped = pattern.replace(/^https?:\/\//, '').replace(/\./g, '\\.').replace(/\*/g, '[^\\/]+');
+  // Escape backslashes first, then dots, then replace wildcards
+  const escaped = pattern
+    .replace(/^https?:\/\//, '')
+    .replace(/\\/g, '\\\\')
+    .replace(/\./g, '\\.')
+    .replace(/\*/g, '[^\\/]+');
   return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
 }
 
