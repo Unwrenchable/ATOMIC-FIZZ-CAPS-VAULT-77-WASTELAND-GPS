@@ -464,6 +464,15 @@
         Game.overseer.onPOIVisit(loc);
       }
 
+      // Check for NPC encounters first
+      if (Game.modules?.npcSpawn) {
+        const npcEncounter = Game.modules.npcSpawn.checkForNPCEncounter(loc);
+        if (npcEncounter) {
+          this.handleEncounterResult(npcEncounter, loc);
+          return;
+        }
+      }
+
       let encounter = null;
       if (Game.modules?.world?.encounters) {
         const worldState = Game.modules.world.state || this.gs.worldState || this.gs;
@@ -488,6 +497,15 @@
       }
 
       switch (result.type) {
+        case "npc":
+          if (result.npc) {
+            this.showMapMessage(`${result.npc.name} is at ${name}.`);
+            if (Game.modules?.npcSpawn) {
+              Game.modules.npcSpawn.triggerNPCApproach(result.npc, loc);
+            }
+          }
+          break;
+
         case "combat":
           this.showMapMessage(`Hostiles near ${name}!`);
           if (Game.modules?.battle) {
