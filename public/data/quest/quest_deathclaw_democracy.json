@@ -1,0 +1,113 @@
+{
+  "id": "quest_deathclaw_evolution",
+  "title": "Deathclaw Democracy",
+  "type": "creature_evolution",
+  "difficulty": "medium",
+  "level_required": 12,
+  "fractured_timeline_context": "Deathclaws from FO1's intelligent talking deathclaws (Vault 13), FO3's feral ones, FO4's nest-protecting mothers, and FO76's cryptid variants all exist at once. One group is intelligent. The others are not. Conflict ensues.",
+
+  "premise": "Goris (FO2 intelligent deathclaw companion) survives in this timeline. He's discovered that some FO1-era deathclaws retained intelligence while others devolved. He wants to restore intelligence to ALL deathclaws. Humanity is... not thrilled.",
+
+  "stages": [
+    {
+      "id": "stage1_goris_plea",
+      "name": "A Claw Extended",
+      "description": "Goris contacts you through Harlan Voss (who remembers intelligent deathclaws from old NCR reports). Goris wants to create serum to restore intelligence to feral deathclaws.",
+      "objectives": [
+        {"text": "Meet Goris at Quarry Junction (dangerous)"},
+        {"text": "Protect Goris from deathclaw hunters"},
+        {"text": "Help gather FEV samples from Mariposa/Institute"},
+        {"text": "Test serum on one feral deathclaw"}
+      ],
+      "outcome": "First feral deathclaw regains intelligence, can speak, remembers being intelligent centuries ago. Emotional moment."
+    },
+    {
+      "id": "stage2_deathclaw_awakening",
+      "name": "The Awakening",
+      "description": "You've restored intelligence to a pack of deathclaws. They remember their origins, their creators, their persecution. Now they want rights. They want a seat at the faction table.",
+      "deathclaw_demands": [
+        "Stop hunting them for sport",
+        "Give them territory (Quarry Junction becomes Deathclaw City)",
+        "Recognize them as sentient beings with rights",
+        "Access to medical care and education",
+        "Representation in NCR/wasteland politics"
+      ],
+      "human_reaction": {
+        "ncr": "Horrified, refuses",
+        "brotherhood": "Want to exterminate them all",
+        "institute": "Want to study them",
+        "legion": "Want to enslave them as war beasts",
+        "minutemen": "Willing to negotiate (Preston Garvey is surprisingly progressive)"
+      }
+    },
+    {
+      "id": "stage3_species_war",
+      "name": "Claw and Order",
+      "description": "Tensions explode. Deathclaw  hunters won't stop. Intelligent deathclaws defend themselves. You must prevent species war or pick a side.",
+      "player_choice": {
+        "option1_deathclaw_rights": {
+          "name": "Fight for Deathclaw Rights",
+          "description": "Help Goris create first Deathclaw Nation. Fight human factions who refuse to accept them.",
+          "consequence": "Deathclaw City founded, but many humans die in conflict"
+        },
+        "option2_compromise": {
+          "name": "Broker Compromise",
+          "description": "Create DMZ where intelligent deathclaws live separately but peacefully.",
+          "consequence": "Uneasy peace, regular negotiation quests unlock"
+        },
+        "option3_reverse_serum": {
+          "name": "Reverse the Process",
+          "description": "Destroy serum, return deathclaws to feral state. Goris begs you not to.",
+          "consequence": "Intelligent deathclaws lost forever, Goris becomes enemy"
+        },
+        "option4_human_supremacy": {
+          "name": "Extermination",
+          "description": "Help BoS hunt ALL deathclaws, intelligent or not.",
+          "consequence": "Deathclaws extinct, huge dark karma loss, BoS loves you"
+        }
+      }
+    }
+  ],
+
+  "endings": {
+    "ending_deathclaw_nation": {
+      "name": "The Scaled Republic",
+      "description": "Intelligent deathclaws form their own nation. Quarry Junction becomes Deathclaw City with schools, government, culture.",
+      "gameplay": "Deathclaw vendors, quests, companions. Some human factions perpetually hostile. New storylines about deathclaw-human integration."
+    },
+    "ending_coexistence": {
+      "name": "Separate but Equal",
+      "description": "Deathclaws and humans maintain separate territories with trade agreements.",
+      "gameplay": "Deathclaw zone on map, diplomatic quests, trading post at border."
+    },
+    "ending_tragic_loss": {
+      "name": "The Last Intelligent Deathclaw",
+      "description": "You chose to reverse intelligence. Goris is last of his kind, bitter and alone.",
+      "gameplay": "Goris becomes tragic wandering NPC, occasionally helps player but resents them."
+    },
+    "ending_extinction": {
+      "name": "Silent Quarries",
+      "description": "All deathclaws exterminated. Wasteland is 'safer' but you genocided a sentient species.",
+      "gameplay": "No more deathclaws, massive karma loss, haunted by choice."
+    }
+  },
+
+  "meta_note": "FO2 had intelligent talking deathclaws. Most players never experienced them. This quest brings them back and asks: should ALL deathclaws be intelligent? Heavy moral weight.",
+
+  "goris_dialogue": {
+    "if_player_helps": "You have shown that humans and deathclaws can be allies. My people will remember this.",
+    "if_player_betrays": "I thought you were different. I was wrong about humans. I was wrong about you.",
+    "on_success": "For the first time in generations, deathclaws have a future that isn't just survival. Thank you.",
+    "on_extinction": "You could have saved us. You chose not to. I hope you can live with that."
+  },
+
+  "rewards": {
+    "xp": 3500,
+    "unique_items": [
+      "Goris's Respect (legendary charm that makes deathclaws non-hostile)",
+      "Deathclaw Egg (companion pet)",
+      "Intelligent Deathclaw Linguistics Book (lore item)"
+    ],
+    "potential_companion": "Goris (intelligent deathclaw from FO2 joins permanently if you help him)"
+  }
+}

@@ -1,0 +1,349 @@
+{
+  "system_name": "Atomic Fizz Caps NFT System",
+  "description": "Mintable NFT categories for game items, services, and achievements",
+  "version": "1.0",
+  
+  "nft_categories": [
+    {
+      "category_id": "utility_tokens",
+      "name": "Utility Tokens",
+      "description": "NFTs that provide in-game services and functionality",
+      "icon": "⚙️",
+      "items": [
+        {
+          "nft_id": "rebuild_special_token",
+          "name": "Vault-Tec SPECIAL Respec Token",
+          "description": "One-time use token that allows complete rebuild of your SPECIAL stats. Extremely rare Vault-Tec technology.",
+          "rarity": "legendary",
+          "supply": "limited",
+          "max_mints": 1000,
+          "mint_cost_caps": 5000,
+          "mint_cost_fizz": 500,
+          "tradeable": true,
+          "consumable": true,
+          "effects": {
+            "action": "respec_special",
+            "description": "Reset all SPECIAL points and redistribute them",
+            "requirements": ["level_5_minimum"],
+            "cooldown_hours": 168
+          },
+          "lore": "Pre-War Vault-Tec engineers created these devices to help Vault Dwellers adapt to experimental conditions. Only a handful survived the apocalypse.",
+          "image_placeholder": "vault_tec_holotape_gold.png",
+          "merchant_availability": {
+            "scavenger_exchange": true,
+            "base_price": 8000,
+            "stock_refresh": "weekly",
+            "max_stock": 2
+          }
+        },
+        {
+          "nft_id": "fast_travel_pass",
+          "name": "Brotherhood Transport Beacon",
+          "description": "Unlimited fast travel pass for one month",
+          "rarity": "rare",
+          "supply": "unlimited",
+          "mint_cost_caps": 1000,
+          "mint_cost_fizz": 100,
+          "tradeable": true,
+          "consumable": false,
+          "duration_days": 30,
+          "effects": {
+            "action": "unlock_fast_travel",
+            "description": "Fast travel to discovered locations without restriction"
+          },
+          "merchant_availability": {
+            "scavenger_exchange": true,
+            "base_price": 1500,
+            "faction_merchants": ["brotherhood", "ncr"]
+          }
+        },
+        {
+          "nft_id": "bank_vault_token",
+          "name": "Secure Storage Upgrade",
+          "description": "Permanent increase to stash capacity (+100 slots)",
+          "rarity": "epic",
+          "supply": "unlimited",
+          "mint_cost_caps": 3000,
+          "mint_cost_fizz": 250,
+          "tradeable": false,
+          "consumable": true,
+          "effects": {
+            "action": "increase_stash",
+            "amount": 100,
+            "permanent": true
+          },
+          "merchant_availability": {
+            "scavenger_exchange": true,
+            "base_price": 4500
+          }
+        }
+      ]
+    },
+    
+    {
+      "category_id": "weapon_blueprints",
+      "name": "Weapon Blueprints",
+      "description": "Mintable NFT weapon schematics that unlock crafting",
+      "icon": "🔫",
+      "items": [
+        {
+          "nft_id": "gauss_rifle_blueprint",
+          "name": "Pre-War Gauss Rifle Schematic",
+          "description": "Allows crafting of legendary Gauss Rifles",
+          "rarity": "legendary",
+          "supply": "limited",
+          "max_mints": 500,
+          "mint_cost_caps": 10000,
+          "mint_cost_fizz": 1000,
+          "tradeable": true,
+          "consumable": false,
+          "effects": {
+            "action": "unlock_crafting",
+            "items": ["gauss_rifle", "gauss_rifle_legendary"]
+          },
+          "merchant_availability": {
+            "scavenger_exchange": true,
+            "base_price": 15000,
+            "rare_merchant_only": true
+          }
+        },
+        {
+          "nft_id": "plasma_caster_blueprint",
+          "name": "Enclave Plasma Caster Plans",
+          "description": "Unlock ability to craft Plasma Casters",
+          "rarity": "epic",
+          "supply": "limited",
+          "max_mints": 750,
+          "mint_cost_caps": 7500,
+          "mint_cost_fizz": 750,
+          "tradeable": true,
+          "consumable": false,
+          "merchant_availability": {
+            "scavenger_exchange": true,
+            "faction_merchants": ["enclave"],
+            "base_price": 12000
+          }
+        }
+      ]
+    },
+    
+    {
+      "category_id": "power_armor",
+      "name": "Power Armor Frames",
+      "description": "Mintable power armor sets with unique skins",
+      "icon": "🤖",
+      "items": [
+        {
+          "nft_id": "t60_custom_paint",
+          "name": "Brotherhood of Steel Custom T-60",
+          "description": "Full T-60 power armor with exclusive Brotherhood paint scheme",
+          "rarity": "epic",
+          "supply": "limited",
+          "max_mints": 1000,
+          "mint_cost_caps": 15000,
+          "mint_cost_fizz": 1500,
+          "tradeable": true,
+          "consumable": false,
+          "stats": {
+            "damage_resistance": 350,
+            "radiation_resistance": 150,
+            "special_bonus": {"strength": 2, "endurance": 1}
+          },
+          "merchant_availability": {
+            "scavenger_exchange": true,
+            "faction_merchants": ["brotherhood"],
+            "base_price": 20000
+          }
+        }
+      ]
+    },
+    
+    {
+      "category_id": "companions",
+      "name": "Companion Contracts",
+      "description": "NFTs that unlock unique companions",
+      "icon": "👥",
+      "items": [
+        {
+          "nft_id": "mr_handy_companion",
+          "name": "Codsworth-Class Mr. Handy",
+          "description": "Personal robot companion with British accent",
+          "rarity": "rare",
+          "supply": "unlimited",
+          "mint_cost_caps": 5000,
+          "mint_cost_fizz": 500,
+          "tradeable": false,
+          "consumable": false,
+          "effects": {
+            "action": "unlock_companion",
+            "companion_id": "mr_handy_butler"
+          },
+          "merchant_availability": {
+            "scavenger_exchange": true,
+            "base_price": 7500
+          }
+        }
+      ]
+    },
+    
+    {
+      "category_id": "cosmetics",
+      "name": "Cosmetic Items",
+      "description": "Appearance customization NFTs",
+      "icon": "🎨",
+      "items": [
+        {
+          "nft_id": "vault_77_jumpsuit",
+          "name": "Vault 77 Jumpsuit (Cursed)",
+          "description": "The legendary Vault 77 jumpsuit. Makes you look badass.",
+          "rarity": "legendary",
+          "supply": "limited",
+          "max_mints": 77,
+          "mint_cost_caps": 7777,
+          "mint_cost_fizz": 777,
+          "tradeable": true,
+          "consumable": false,
+          "lore": "From the infamous puppet-man vault. This jumpsuit has seen things.",
+          "merchant_availability": {
+            "scavenger_exchange": true,
+            "base_price": 10000,
+            "unlock_condition": "complete_humming_one_quest"
+          }
+        }
+      ]
+    },
+    
+    {
+      "category_id": "achievements",
+      "name": "Achievement Badges",
+      "description": "Non-tradeable achievement NFTs",
+      "icon": "🏆",
+      "items": [
+        {
+          "nft_id": "karma_messiah",
+          "name": "Messiah of the Wasteland",
+          "description": "Reached Legendary Good karma",
+          "rarity": "legendary",
+          "supply": "unlimited",
+          "mint_cost_caps": 0,
+          "mint_cost_fizz": 0,
+          "tradeable": false,
+          "consumable": false,
+          "auto_mint_on": "karma_level_messiah",
+          "display_value": "Proof of heroism"
+        },
+        {
+          "nft_id": "killed_garrison",
+          "name": "Wasteland's True Hero",
+          "description": "Killed Garrison Prevvy (Everyone understands)",
+          "rarity": "common",
+          "supply": "unlimited",
+          "mint_cost_caps": 0,
+          "tradeable": false,
+          "auto_mint_on": "garrison_death",
+          "humor": "Achievement: Doing what everyone wanted to do"
+        }
+      ]
+    },
+    
+    {
+      "category_id": "property_deeds",
+      "name": "Property & Settlements",
+      "description": "Ownable settlement and building NFTs",
+      "icon": "🏠",
+      "items": [
+        {
+          "nft_id": "lucky_38_penthouse",
+          "name": "Lucky 38 Penthouse Suite",
+          "description": "Exclusive player housing in New Vegas",
+          "rarity": "legendary",
+          "supply": "limited",
+          "max_mints": 38,
+          "mint_cost_caps": 50000,
+          "mint_cost_fizz": 5000,
+          "tradeable": true,
+          "consumable": false,
+          "effects": {
+            "action": "unlock_housing",
+            "location": "lucky_38_penthouse",
+            "features": ["crafting_stations", "storage_unlimited", "fast_travel_point"]
+          },
+          "merchant_availability": {
+            "scavenger_exchange": true,
+            "base_price": 75000,
+            "rare_merchant_only": true
+          }
+        }
+      ]
+    }
+  ],
+  
+  "minting_mechanics": {
+    "currencies": {
+      "caps": {
+        "name": "Bottle Caps",
+        "description": "Standard wasteland currency"
+      },
+      "fizz": {
+        "name": "Atomic Fizz Tokens",
+        "description": "Premium currency earned through gameplay or wallet"
+      }
+    },
+    
+    "minting_process": {
+      "steps": [
+        "1. Player selects NFT from category in Scavenger Exchange",
+        "2. Wallet connection required (Phantom, MetaMask, etc.)",
+        "3. Confirm transaction with required caps + fizz cost",
+        "4. NFT minted to wallet address",
+        "5. NFT automatically added to player inventory",
+        "6. One-time use NFTs consumed on use, permanent NFTs kept"
+      ],
+      "blockchain": "Solana preferred (fast, low fees)",
+      "metadata": "Stored on-chain with game stats",
+      "marketplace": "Player-to-player trading enabled for tradeable NFTs"
+    },
+    
+    "scavenger_exchange_integration": {
+      "location": "Main hub, accessible via Pip-Boy ITEMS > EXCHANGE",
+      "features": [
+        "Browse all NFT categories",
+        "Filter by rarity, price, utility",
+        "Preview NFT stats and effects before purchase",
+        "See mint count for limited supply items",
+        "Purchase with caps + fizz OR mint as NFT to wallet",
+        "View owned NFTs and their wallet addresses"
+      ],
+      "merchant_rotation": {
+        "common_items": "Always available",
+        "rare_items": "Weekly rotation",
+        "legendary_items": "Monthly special events",
+        "faction_locked": "Requires faction reputation"
+      }
+    }
+  },
+  
+  "rebuild_special_integration": {
+    "button_behavior": {
+      "default_state": "Shows 'REBUILD SPECIAL (REQUIRES TOKEN)'",
+      "check_wallet": "On click, checks connected wallet for rebuild_special_token NFT",
+      "if_has_token": "Button enabled, shows 'REBUILD SPECIAL (1 TOKEN AVAILABLE)'",
+      "if_no_token": "Opens Scavenger Exchange to purchase/mint section",
+      "after_use": "Token consumed (burned or marked as used), cooldown starts"
+    },
+    
+    "purchase_flow": {
+      "option_1": "Buy from merchant with caps (8000 caps)",
+      "option_2": "Mint as NFT to wallet (5000 caps + 500 fizz)",
+      "benefit_of_minting": "NFT is tradeable, can sell to other players"
+    },
+    
+    "respec_process": {
+      "1_confirm": "Are you sure? This will reset all SPECIAL points.",
+      "2_consume_token": "Token consumed from wallet or inventory",
+      "3_reset_stats": "All SPECIAL points returned to unallocated pool",
+      "4_redistribute": "Player reallocates points as desired",
+      "5_cooldown": "Cannot respec again for 7 days (168 hours)"
+    }
+  }
+}

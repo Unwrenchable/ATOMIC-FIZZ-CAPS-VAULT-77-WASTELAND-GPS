@@ -1,0 +1,324 @@
+{
+  "name": "Wasteland Karma System",
+  "description": "Dynamic reputation system that tracks player morality and affects questline availability",
+  "version": "1.0",
+  
+  "karma_levels": [
+    {
+      "level": "Very Evil",
+      "range": [-1000, -750],
+      "title": "Demon Spawn",
+      "description": "The wasteland fears your very name. Even raiders think you're too much.",
+      "consequences": [
+        "Good faction questlines permanently closed",
+        "Can only work with evil factions (Raiders, Legion, slavers)",
+        "Towns shoot on sight",
+        "Merchants refuse service or charge 300% markup",
+        "Good companions abandon you permanently"
+      ],
+      "unlocks": [
+        "Exclusive raider boss questlines",
+        "Slaver operations",
+        "Legion Praetorian missions",
+        "Enclave genocide contracts"
+      ]
+    },
+    {
+      "level": "Evil",
+      "range": [-749, -500],
+      "title": "Scourge",
+      "description": "You're known for cruelty and selfishness across the wasteland.",
+      "consequences": [
+        "NCR, Minutemen, Railroad questlines closed",
+        "Good companions leave if karma drops further",
+        "Settlement access restricted",
+        "Bounty hunters track you"
+      ],
+      "unlocks": [
+        "Raider alliance quests",
+        "Mercenary assassination contracts",
+        "Black market dealer access"
+      ]
+    },
+    {
+      "level": "Bad",
+      "range": [-499, -250],
+      "title": "Opportunist",
+      "description": "You look out for number one, often at others' expense.",
+      "consequences": [
+        "Some good faction quests locked",
+        "Reduced caps rewards from good factions",
+        "Companions express disapproval"
+      ],
+      "unlocks": [
+        "Morally gray questlines",
+        "Con artist operations",
+        "Gray market trading"
+      ]
+    },
+    {
+      "level": "Neutral",
+      "range": [-249, 249],
+      "title": "Mercenary",
+      "description": "You walk the line between good and evil, judged by actions alone.",
+      "consequences": [
+        "Access to most questlines",
+        "Some extreme faction quests locked (both good and evil)"
+      ],
+      "unlocks": [
+        "All moderate questlines available",
+        "Neutral faction quests",
+        "Most companions available"
+      ]
+    },
+    {
+      "level": "Good",
+      "range": [250, 499],
+      "title": "Defender",
+      "description": "You're known as someone who helps those in need.",
+      "consequences": [
+        "Some evil faction quests locked",
+        "Evil companions may leave"
+      ],
+      "unlocks": [
+        "Minutemen advanced quests",
+        "Settlement leader missions",
+        "Protective detail contracts"
+      ]
+    },
+    {
+      "level": "Very Good",
+      "range": [500, 749],
+      "title": "Savior",
+      "description": "The wasteland sees you as a beacon of hope.",
+      "consequences": [
+        "All evil faction questlines closed",
+        "Raiders and slavers attack on sight",
+        "Evil companions refuse to join"
+      ],
+      "unlocks": [
+        "Brotherhood Paladin quests",
+        "Railroad leadership missions",
+        "Vault rescue operations",
+        "Settlement founding quests"
+      ]
+    },
+    {
+      "level": "Legendary Good",
+      "range": [750, 1000],
+      "title": "Messiah",
+      "description": "Legends will be told of your heroism for generations.",
+      "consequences": [
+        "Cannot work with any evil factions",
+        "Raiders flee rather than fight",
+        "Enormous expectations - failure hurts reputation badly"
+      ],
+      "unlocks": [
+        "Epic hero questlines",
+        "Unite wasteland under peace",
+        "Legendary companion recruitment",
+        "Monument built in your honor"
+      ]
+    }
+  ],
+  
+  "karma_actions": {
+    "good_deeds": [
+      {"action": "Help settler", "karma": 50},
+      {"action": "Donate caps to charity", "karma": 25},
+      {"action": "Spare enemy life", "karma": 30},
+      {"action": "Free slaves", "karma": 100},
+      {"action": "Save innocent from danger", "karma": 75},
+      {"action": "Give food to starving", "karma": 40},
+      {"action": "Return stolen property", "karma": 35},
+      {"action": "Cure disease/addiction for free", "karma": 60},
+      {"action": "Protect caravan from raiders", "karma": 80},
+      {"action": "Rebuild destroyed settlement", "karma": 150}
+    ],
+    "neutral_deeds": [
+      {"action": "Complete mercenary contract", "karma": 0},
+      {"action": "Scavenge from corpse", "karma": 0},
+      {"action": "Trade fairly", "karma": 0},
+      {"action": "Kill in self-defense", "karma": 0}
+    ],
+    "evil_deeds": [
+      {"action": "Murder innocent", "karma": -100},
+      {"action": "Steal from poor", "karma": -50},
+      {"action": "Enslave person", "karma": -150},
+      {"action": "Betray ally", "karma": -75},
+      {"action": "Poison water supply", "karma": -200},
+      {"action": "Extort protection money", "karma": -60},
+      {"action": "Sabotage settlement", "karma": -120},
+      {"action": "Torture for information", "karma": -80},
+      {"action": "Sell child to slavers", "karma": -250},
+      {"action": "Genocide of settlement", "karma": -300}
+    ]
+  },
+  
+  "questline_karma_locks": {
+    "description": "Questlines that lock based on karma decisions",
+    "permanent_locks": [
+      {
+        "questline": "Brotherhood Paladin Path",
+        "locked_if_karma": "Evil or worse",
+        "reason": "Brotherhood witnessed you commit atrocities",
+        "realignment_possible": false,
+        "message": "The Brotherhood has declared you an enemy of humanity. There is no redemption."
+      },
+      {
+        "questline": "Raider Warlord Path",
+        "locked_if_karma": "Very Good or better",
+        "reason": "Raiders see you as a threat to their way of life",
+        "realignment_possible": false,
+        "message": "Raiders attack you on sight. You're too 'good' for their world."
+      },
+      {
+        "questline": "Institute Director Path",
+        "locked_if_karma": "Very Evil",
+        "reason": "Institute doesn't trust unstable psychopaths",
+        "realignment_possible": true,
+        "realignment_threshold": "Bad or better",
+        "message": "The Institute requires... control. Prove you can be disciplined."
+      },
+      {
+        "questline": "NCR General Path",
+        "locked_if_karma": "Evil or worse",
+        "reason": "NCR cannot promote known war criminals",
+        "realignment_possible": true,
+        "realignment_threshold": "Neutral or better",
+        "message": "The NCR demands you atone for your crimes before advancement."
+      },
+      {
+        "questline": "Railroad Heavy",
+        "locked_if_karma": "Bad or worse",
+        "reason": "Railroad requires trust and empathy",
+        "realignment_possible": true,
+        "realignment_threshold": "Neutral or better",
+        "message": "The Railroad needs heroes, not opportunists. Change your ways."
+      }
+    ],
+    
+    "conditional_locks": [
+      {
+        "questline": "Ghoul Society Integration",
+        "locked_if": "player killed ghouls",
+        "lock_message": "Ghouls will never trust you after what you did.",
+        "realignment_quest": "The Long Atonement",
+        "realignment_description": "Rescue 20 ghouls from persecution to earn forgiveness"
+      },
+      {
+        "questline": "Super Mutant Alliance",
+        "locked_if": "player sided against mutants",
+        "lock_message": "Super mutants remember betrayal. Forever.",
+        "realignment_quest": "Prove Your Worth",
+        "realignment_description": "Defeat anti-mutant extremists and donate 1000 caps to mutant settlement"
+      },
+      {
+        "questline": "Synth Liberation",
+        "locked_if": "player killed synths knowingly",
+        "lock_message": "You're marked as a synth hunter. The Railroad wants you dead.",
+        "realignment_quest": "The False Memory",
+        "realignment_description": "Free 10 synths and destroy Institute tracking systems"
+      }
+    ]
+  },
+  
+  "karma_realignment_mechanics": {
+    "description": "How players can recover from bad karma",
+    "base_rules": [
+      "Karma below -500 requires MAJOR good deeds to climb back",
+      "Each good deed at low karma is worth 50% more",
+      "Each evil deed at high karma costs double",
+      "Realignment quests become available at certain thresholds",
+      "Some locks are permanent - no coming back"
+    ],
+    
+    "realignment_quests": [
+      {
+        "quest": "Redemption Road",
+        "unlock_karma": "Below -500",
+        "description": "A former raider turned monk offers you a path to redemption through service",
+        "requirements": [
+          "Help 50 wasteland settlers",
+          "Donate 5000 caps to charity",
+          "Free all slaves in 3 slaver camps",
+          "Rebuild destroyed settlement"
+        ],
+        "karma_reward": 400,
+        "unlocks": "Neutral factions now willing to talk"
+      },
+      {
+        "quest": "The Last Good Deed",
+        "unlock_karma": "Between -300 and -100",
+        "description": "One massive selfless act to prove you've changed",
+        "requirements": [
+          "Sacrifice rare item to save settlement",
+          "Take bullet for innocent NPC",
+          "Give up wealth to fund hospital"
+        ],
+        "karma_reward": 250,
+        "unlocks": "Good faction questlines reopen"
+      },
+      {
+        "quest": "Blood Atonement",
+        "unlock_karma": "Below -750 (Very Evil)",
+        "description": "Only the most extreme sacrifice can wash away your sins",
+        "requirements": [
+          "Destroy all raider gangs in region",
+          "Free every slave in wasteland",
+          "Donate all possessions except basic gear",
+          "Complete 100 good deeds"
+        ],
+        "karma_reward": 600,
+        "time_required": "50+ hours gameplay",
+        "unlocks": "Path back from the abyss",
+        "warning": "This is the ONLY way back from Very Evil"
+      }
+    ]
+  },
+  
+  "companion_karma_reactions": {
+    "description": "How companions react to player karma changes",
+    "rules": [
+      {
+        "companion_type": "Good companions (Piper, Preston, etc.)",
+        "karma_tolerance": "Neutral or better",
+        "warning_threshold": "Bad karma",
+        "leave_threshold": "Evil karma",
+        "warning_message": "I don't know if I can keep following you down this path...",
+        "leave_message": "I can't be part of this anymore. Goodbye."
+      },
+      {
+        "companion_type": "Neutral companions (Nick Valentine, Hancock)",
+        "karma_tolerance": "Bad to Very Good",
+        "warning_threshold": "Evil or Very Evil",
+        "leave_threshold": "Very Evil sustained for 10+ actions",
+        "warning_message": "You're scaring me. This isn't who I thought you were.",
+        "leave_message": "I've seen enough. We're done."
+      },
+      {
+        "companion_type": "Evil companions (Cait, X6-88)",
+        "karma_tolerance": "Bad or worse",
+        "warning_threshold": "Very Good",
+        "leave_threshold": "Legendary Good",
+        "warning_message": "You're getting soft. I don't work with bleeding hearts.",
+        "leave_message": "You're too 'good' for me now. Find another saint to travel with."
+      }
+    ]
+  },
+  
+  "visual_indicators": {
+    "karma_display": "Pip-Boy STATUS screen shows current karma level and title",
+    "faction_reputation": "Color-coded reputation bars (red=hostile, yellow=cautious, green=friendly)",
+    "npc_reactions": "NPCs comment on your reputation when you approach",
+    "quest_markers": "Locked quests show karma requirement in red",
+    "realignment_progress": "Track progress toward redemption in journal"
+  },
+  
+  "integration_notes": {
+    "wallet_connection": "Player karma can tie to wallet address - persistent across sessions",
+    "blockchain_tracking": "Major karma milestones (Messiah, Demon Spawn) can be NFT achievements",
+    "character_creation": "Starting karma based on trait selection during character creation",
+    "fractured_timeline": "Karma separate per timeline - can be evil in one era, good in another"
+  }
+}

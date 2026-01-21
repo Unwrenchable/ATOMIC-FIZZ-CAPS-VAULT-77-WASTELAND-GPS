@@ -1,0 +1,275 @@
+/* public/css/vats.css - VATS Interface Styling (Responsive) */
+
+.vats-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 40, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Courier New", monospace;
+  color: #00ff66;
+  animation: vatsEnter 0.3s ease-out;
+  padding: clamp(1rem, 2vw, 2rem);
+  overflow-y: auto;
+}
+
+@keyframes vatsEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.vats-container {
+  width: 100%;
+  max-width: min(90rem, 95vw);
+  background: rgba(0, 20, 0, 0.9);
+  border: clamp(2px, 0.3vw, 3px) solid #00ff66;
+  padding: clamp(1rem, 2vw, 2rem);
+  box-shadow: 0 0 clamp(2rem, 4vw, 4rem) rgba(0, 255, 102, 0.6);
+  border-radius: clamp(0.4rem, 0.8vw, 0.8rem);
+}
+
+.vats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: clamp(1rem, 1.5vw, 1.5rem);
+  border-bottom: clamp(1px, 0.2vw, 2px) solid #00ff66;
+  margin-bottom: clamp(1.5rem, 2vw, 2rem);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.vats-title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: bold;
+  text-shadow: 0 0 clamp(0.5rem, 1vw, 1rem) #00ff66;
+  letter-spacing: clamp(0.2rem, 0.4vw, 0.4rem);
+}
+
+.vats-ap {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: bold;
+}
+
+.vats-targets {
+  margin-bottom: clamp(1.5rem, 2vw, 2rem);
+  max-height: clamp(30rem, 50vh, 40rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.vats-target {
+  background: rgba(0, 40, 0, 0.5);
+  border: clamp(1px, 0.2vw, 1px) solid #00ff66;
+  padding: clamp(1rem, 1.5vw, 1.5rem);
+  margin-bottom: clamp(0.8rem, 1vw, 1rem);
+  border-radius: clamp(0.4rem, 0.6vw, 0.6rem);
+}
+
+.vats-target strong {
+  display: block;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  margin-bottom: clamp(0.8rem, 1vw, 1rem);
+  color: #00ffff;
+}
+
+.vats-body-parts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(15rem, 20vw, 20rem), 1fr));
+  gap: clamp(0.6rem, 0.8vw, 0.8rem);
+}
+
+.vats-body-part {
+  background: #00ff66;
+  color: #003300;
+  border: none;
+  padding: clamp(0.6rem, 1vw, 0.8rem) clamp(1rem, 1.5vw, 1.2rem);
+  font-family: "Courier New", monospace;
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: clamp(0.2rem, 0.4vw, 0.4rem);
+  /* Minimum touch target */
+  min-height: 4rem;
+}
+
+.vats-body-part:hover {
+  background: #00cc55;
+  box-shadow: 0 0 clamp(0.5rem, 1vw, 1rem) #00ff66;
+  transform: translateY(-2px);
+}
+
+.vats-body-part:active {
+  transform: translateY(0);
+}
+
+.vats-body-part.disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.vats-queue {
+  min-height: clamp(3rem, 4vw, 4rem);
+  padding: clamp(0.8rem, 1vw, 1rem);
+  background: rgba(0, 20, 0, 0.7);
+  border: clamp(1px, 0.2vw, 1px) dashed #00ff66;
+  margin-bottom: clamp(1rem, 1.5vw, 1.5rem);
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+  border-radius: clamp(0.3rem, 0.5vw, 0.5rem);
+}
+
+.vats-controls {
+  display: flex;
+  gap: clamp(0.8rem, 1vw, 1rem);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.vats-controls button {
+  flex: 1;
+  min-width: clamp(12rem, 20vw, 20rem);
+  max-width: 25rem;
+  padding: clamp(0.8rem, 1.2vw, 1.2rem) clamp(1.5rem, 2vw, 2rem);
+  font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+  /* Minimum touch target */
+  min-height: 4.4rem;
+}
+
+/* Hit/Miss markers */
+.vats-hit-marker {
+  position: absolute;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: bold;
+  color: #ff0000;
+  text-shadow: 0 0 clamp(0.5rem, 1vw, 1rem) #ff0000;
+  animation: hitMarkerFade 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 10001;
+}
+
+.vats-miss-marker {
+  position: absolute;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: bold;
+  color: #ffff00;
+  text-shadow: 0 0 clamp(0.5rem, 1vw, 1rem) #ffff00;
+  animation: hitMarkerFade 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 10001;
+}
+
+@keyframes hitMarkerFade {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-5rem);
+  }
+}
+
+/* Scrollbar styling */
+.vats-targets::-webkit-scrollbar {
+  width: clamp(0.6rem, 0.8vw, 0.8rem);
+}
+
+.vats-targets::-webkit-scrollbar-track {
+  background: rgba(0, 20, 0, 0.5);
+  border-radius: clamp(0.2rem, 0.4vw, 0.4rem);
+}
+
+.vats-targets::-webkit-scrollbar-thumb {
+  background: #00ff66;
+  border-radius: clamp(0.2rem, 0.4vw, 0.4rem);
+}
+
+.vats-targets::-webkit-scrollbar-thumb:hover {
+  background: #00cc55;
+}
+
+/* Mobile Specific */
+@media screen and (max-width: 768px) {
+  .vats-overlay {
+    padding: 1rem;
+  }
+
+  .vats-container {
+    padding: 1.5rem;
+  }
+
+  .vats-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vats-title {
+    font-size: 2.4rem;
+  }
+
+  .vats-ap {
+    font-size: 1.6rem;
+  }
+
+  .vats-body-parts {
+    grid-template-columns: 1fr;
+  }
+
+  .vats-controls {
+    flex-direction: column;
+  }
+
+  .vats-controls button {
+    width: 100%;
+    max-width: none;
+  }
+
+  .vats-targets {
+    max-height: 40vh;
+  }
+}
+
+/* Tablet Specific */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .vats-body-parts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Landscape Mobile */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .vats-targets {
+    max-height: 30vh;
+  }
+
+  .vats-container {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* Touch devices - larger tap targets */
+@media (hover: none) and (pointer: coarse) {
+  .vats-body-part {
+    min-height: 4.4rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .vats-controls button {
+    min-height: 5rem;
+  }
+}
+

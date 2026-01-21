@@ -1,0 +1,150 @@
+{
+  "id": "q_sea_of_madness",
+  "name": "The Sea of Madness",
+  "type": "main",
+  "region": "coastal_wasteland",
+  "subregion": "ghost_fleet",
+
+  "giver": "npc_coastal_settler",
+
+  "start_conditions": {
+    "min_level": 16,
+    "location": "coastal_settlement"
+  },
+
+  "npc_links": [
+    "npc_coastal_settler",
+    "npc_mad_sailor",
+    "npc_mutant_fisherman",
+    "npc_salvage_diver"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_ghost_fleet",
+      "poi": "derelict_naval_ships",
+      "stage": "reach_fleet"
+    },
+    {
+      "id": "marker_flagship",
+      "poi": "uss_eternal_vigil",
+      "stage": "find_sailor"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "investigate_rumors",
+      "desc": "Investigate tales of a ghost fleet off the coast.",
+      "npc": "npc_coastal_settler",
+      "dialogue": "dialog_fleet_rumors.json"
+    },
+    {
+      "id": "reach_fleet",
+      "desc": "Brave the radioactive waters to reach the derelict ships.",
+      "poi": "derelict_naval_ships",
+      "hazards": ["radiation_water", "mutant_sea_creatures", "hostile_currents"]
+    },
+    {
+      "id": "explore_ships",
+      "desc": "Search the abandoned vessels for valuable pre-War technology.",
+      "loot": ["military_tech", "naval_weapons", "submarine_codes"]
+    },
+    {
+      "id": "find_sailor",
+      "desc": "Discover the lone sailor who's lived here for 200 years.",
+      "npc": "npc_mad_sailor",
+      "dialogue": "dialog_mad_sailor.json"
+    },
+    {
+      "id": "make_decision",
+      "desc": "Decide what to do with the fleet and its guardian.",
+      "choices": [
+        "help_sailor_peace",
+        "take_over_fleet",
+        "befriend_sailor",
+        "destroy_creatures"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "investigate_rumors", "desc": "Hear tales of the ghost fleet." },
+    { "id": 1, "objective": "reach_fleet", "desc": "Cross the deadly waters." },
+    { "id": 2, "objective": "explore_ships", "desc": "Scavenge the naval graveyard." },
+    { "id": 3, "objective": "find_sailor", "desc": "Meet the last man of the war." },
+    { "id": 4, "objective": "make_decision", "desc": "Choose the fleet's fate." },
+    { "id": 5, "objective": "complete", "desc": "The sea claims its due." }
+  ],
+
+  "mad_sailor_profile": {
+    "name": "Captain Marcus \"Eternal\" Hayes",
+    "status": "Ghoulified, mentally trapped in 2077",
+    "beliefs": "War never ended, still defending against Chinese invasion",
+    "condition": "Sustained by radiation, fish, and delusion",
+    "lucidity": "Brief moments of clarity reveal deep loneliness"
+  },
+
+  "fleet_contents": {
+    "ships": ["Destroyer", "Carrier", "Submarine", "Cruiser"],
+    "treasure": "Pre-War naval technology, weapons, nuclear codes",
+    "dangers": "Mirelurk kings, radiated sharks, submarine ghosts"
+  },
+
+  "choices": {
+    "help_sailor_peace": {
+      "desc": "Help the sailor find peace by showing him the war is over.",
+      "requirements": { "charisma": 8, "medicine": 60, "empathy": true },
+      "consequences": {
+        "faction_rep": { "ghouls": 80, "settlers": 60 },
+        "rewards": { "xp": 1000, "caps": 600, "items": ["captain_log", "naval_honor_medal", "rad_free_supplies"] },
+        "outcome": "You gently show him the truth. He weeps. Then smiles. His war is over. He dies peacefully. The fleet is yours."
+      }
+    },
+    "take_over_fleet": {
+      "desc": "Claim the fleet for yourself, dealing with creatures and sailor.",
+      "requirements": { "combat_skill": 80, "underwater_combat": 70 },
+      "consequences": {
+        "faction_rep": { "pirates": 80, "settlers": -40, "military_factions": 60 },
+        "rewards": { "xp": 950, "caps": 2000, "items": ["fleet_command_codes", "naval_arsenal", "submarine_access"] },
+        "unlock": ["naval_base", "submarine_operations", "sea_trade_routes"],
+        "outcome": "You conquer the sea. The fleet is your fortress. Sea trade is yours to control. Captain Hayes is imprisoned or killed."
+      }
+    },
+    "befriend_sailor": {
+      "desc": "Befriend the sailor, letting him believe you're his new crew.",
+      "requirements": { "charisma": 7, "deception": 60 },
+      "consequences": {
+        "faction_rep": { "ghouls": 60, "pirates": 40 },
+        "rewards": { "xp": 900, "caps": 800, "items": ["naval_knowledge", "loyal_sailor_ally", "fleet_maps"] },
+        "unlock": ["mad_sailor_companion", "naval_expertise"],
+        "outcome": "You play along. He's happy. You gain a loyal (if insane) companion and naval expert. The fleet remains his."
+      }
+    },
+    "destroy_creatures": {
+      "desc": "Clear out the mutant sea creatures and salvage everything.",
+      "requirements": { "combat_skill": 75, "explosives": 70 },
+      "consequences": {
+        "faction_rep": { "settlers": 80, "salvagers": 100 },
+        "rewards": { "xp": 850, "caps": 1500, "items": ["sea_monster_trophies", "massive_salvage", "cleared_waters"] },
+        "outcome": "Creatures dead. Waters safer. Massive salvage. But the sailor dies defending his 'post.' His war truly ends."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 1000,
+    "caps": 600
+  },
+
+  "factions": {
+    "affected": ["Ghouls", "Settlers", "Pirates", "Salvagers"]
+  },
+
+  "next_quests": [
+    "quest_submarine_secrets",
+    "quest_sea_trade_empire"
+  ],
+
+  "notes": "Emotional quest about war's lasting trauma. Unique ghoul NPC. Naval base can become major player asset."
+}

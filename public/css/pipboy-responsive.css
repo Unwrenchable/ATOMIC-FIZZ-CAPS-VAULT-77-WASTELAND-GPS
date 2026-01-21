@@ -1,0 +1,459 @@
+/* ============================================================
+   RESPONSIVE SCALING FIX
+   Makes CSS work on mobile, desktop, and browsers at 75-85% zoom
+   ============================================================ */
+
+/* Reset and base responsive setup */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* Use 62.5% for easy rem calculations (1rem = 10px at 100% zoom) */
+  font-size: 62.5%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  /* Base font size in rem (16px equivalent) */
+  font-size: 1.6rem;
+  /* Prevent horizontal overflow */
+  overflow-x: hidden;
+  /* Smooth font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   VIEWPORT BASED RESPONSIVE CONTAINERS
+   ============================================================ */
+
+.pipboy-root {
+  width: 100vw;
+  height: 100vh;
+  /* Use dvh for better mobile support (dynamic viewport height) */
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+.pipboy-bezel {
+  width: 100%;
+  height: 100%;
+  /* Responsive padding using viewport units */
+  padding: clamp(0.5rem, 1vw, 1.2rem);
+}
+
+.pipboy-frame {
+  width: 100%;
+  height: 100%;
+  /* Responsive border radius */
+  border-radius: clamp(0.8rem, 1.5vw, 1.8rem);
+  border-width: clamp(2px, 0.3vw, 3px);
+}
+
+/* ============================================================
+   HEADER - RESPONSIVE
+   ============================================================ */
+
+.pipboy-header {
+  padding: clamp(0.8rem, 1.5vw, 1.5rem);
+  font-size: clamp(1.2rem, 1.5vw, 1.6rem);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pipboy-title {
+  font-size: clamp(1.8rem, 3vw, 2.8rem) !important;
+  letter-spacing: clamp(0.1rem, 0.3vw, 0.4rem);
+}
+
+.pipboy-subtitle {
+  font-size: clamp(1rem, 1.5vw, 1.4rem) !important;
+}
+
+/* Wallet HUD - responsive */
+.wallet-hud {
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  font-size: clamp(1rem, 1.2vw, 1.3rem);
+}
+
+.wallet-hud button {
+  padding: clamp(0.4rem, 0.8vw, 0.8rem) clamp(0.8rem, 1.5vw, 1.2rem);
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+}
+
+/* ============================================================
+   TABS - RESPONSIVE
+   ============================================================ */
+
+.pipboy-tabs {
+  padding: clamp(0.5rem, 1vw, 1rem);
+  gap: clamp(0.3rem, 0.8vw, 0.8rem);
+  flex-wrap: wrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* Enable smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+}
+
+.pipboy-tab {
+  padding: clamp(0.6rem, 1vw, 1rem) clamp(1rem, 2vw, 2rem);
+  font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+  white-space: nowrap;
+  /* Prevent tabs from being too small on mobile */
+  min-width: clamp(6rem, 10vw, 10rem);
+}
+
+/* ============================================================
+   MAIN PANELS - RESPONSIVE
+   ============================================================ */
+
+.pipboy-main {
+  padding: clamp(0.8rem, 1.5vw, 1.5rem);
+  /* Adjust height to account for header/footer */
+  height: calc(100% - clamp(12rem, 20vh, 20rem));
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+}
+
+.pipboy-panel {
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+}
+
+.panel-header {
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem) !important;
+  padding: clamp(0.5rem, 1vw, 1rem) 0;
+  margin-bottom: clamp(0.8rem, 1.5vw, 1.2rem);
+}
+
+.panel-body {
+  padding: clamp(0.5rem, 1vw, 1rem);
+}
+
+.panel-row {
+  padding: clamp(0.5rem, 0.8vw, 0.8rem) 0;
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+}
+
+/* ============================================================
+   BUTTONS - RESPONSIVE
+   ============================================================ */
+
+.pipboy-button,
+.pipboy-button-small {
+  padding: clamp(0.6rem, 1vw, 1rem) clamp(1rem, 2vw, 1.5rem);
+  font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+  border-width: clamp(1px, 0.2vw, 2px);
+  /* Prevent buttons from being too narrow */
+  min-width: clamp(8rem, 15vw, 12rem);
+}
+
+.pipboy-button-small {
+  padding: clamp(0.4rem, 0.8vw, 0.8rem) clamp(0.8rem, 1.5vw, 1.2rem);
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  min-width: clamp(6rem, 12vw, 10rem);
+}
+
+/* ============================================================
+   FOOTER - RESPONSIVE
+   ============================================================ */
+
+.pipboy-footer {
+  padding: clamp(0.8rem, 1.5vw, 1.5rem);
+  font-size: clamp(1rem, 1.3vw, 1.3rem);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* ============================================================
+   MAP CONTAINER - RESPONSIVE
+   ============================================================ */
+
+.pipboy-map {
+  height: clamp(30rem, 50vh, 50rem);
+  min-height: 25rem;
+  border-radius: clamp(0.4rem, 0.8vw, 0.8rem);
+}
+
+.map-overlay {
+  padding: clamp(0.8rem, 1.5vw, 1.5rem);
+  font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+}
+
+.gps-badge {
+  padding: clamp(0.5rem, 1vw, 1rem);
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  bottom: clamp(1rem, 2vw, 2rem);
+  right: clamp(1rem, 2vw, 2rem);
+}
+
+/* ============================================================
+   SPECIAL STATS - RESPONSIVE
+   ============================================================ */
+
+.special-row {
+  padding: clamp(0.4rem, 0.8vw, 0.8rem) 0;
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+}
+
+.special-label {
+  font-size: clamp(1.4rem, 1.8vw, 1.8rem);
+  width: clamp(2rem, 3vw, 3rem);
+}
+
+.special-bar {
+  margin: 0 clamp(0.8rem, 1.5vw, 1.5rem);
+  height: clamp(1.4rem, 2vw, 2rem);
+}
+
+/* ============================================================
+   MOBILE SPECIFIC (phones and small tablets)
+   ============================================================ */
+
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 55%; /* Slightly smaller base for mobile */
+  }
+
+  .pipboy-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pipboy-tabs {
+    justify-content: flex-start;
+    padding-bottom: 1rem;
+  }
+
+  .pipboy-tab {
+    flex: 0 0 auto;
+  }
+
+  .pipboy-main {
+    /* More vertical space on mobile */
+    height: calc(100% - 18rem);
+  }
+
+  .pipboy-footer {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  /* Stack elements vertically on mobile */
+  .panel-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Make buttons full-width on mobile */
+  .pipboy-button,
+  .pipboy-button-small {
+    width: 100%;
+    min-width: unset;
+  }
+
+  /* Adjust map height on mobile */
+  .pipboy-map {
+    height: 40vh;
+    min-height: 20rem;
+  }
+}
+
+/* ============================================================
+   TABLET SPECIFIC (tablets in portrait/landscape)
+   ============================================================ */
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  html {
+    font-size: 58%; /* Medium base for tablets */
+  }
+
+  .pipboy-main {
+    height: calc(100% - 16rem);
+  }
+}
+
+/* ============================================================
+   DESKTOP SPECIFIC (large screens)
+   ============================================================ */
+
+@media screen and (min-width: 1025px) {
+  html {
+    font-size: 62.5%; /* Standard base for desktop */
+  }
+
+  .pipboy-bezel {
+    max-width: 140rem;
+    max-height: 90rem;
+    margin: auto;
+  }
+}
+
+/* ============================================================
+   ULTRA-WIDE SCREENS
+   ============================================================ */
+
+@media screen and (min-width: 1920px) {
+  .pipboy-bezel {
+    max-width: 160rem;
+  }
+}
+
+/* ============================================================
+   LANDSCAPE MOBILE (phones in landscape)
+   ============================================================ */
+
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .pipboy-main {
+    height: calc(100% - 14rem);
+  }
+
+  .pipboy-map {
+    height: 35vh;
+  }
+}
+
+/* ============================================================
+   BROWSER ZOOM COMPENSATION (75-85% zoom)
+   ============================================================ */
+
+/* These rules help maintain readability at different zoom levels */
+@media screen and (min-width: 1400px) {
+  /* Assume user might be zoomed out */
+  html {
+    font-size: 65%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  /* Assume user might be zoomed in on mobile */
+  html {
+    font-size: 52%;
+  }
+}
+
+/* ============================================================
+   WALLET BROWSER SPECIFIC (Phantom, MetaMask mobile)
+   ============================================================ */
+
+/* Wallet browsers often have navigation bars */
+@supports (padding: max(0px)) {
+  .pipboy-root {
+    /* Account for safe areas (notches, nav bars) */
+    padding-top: max(env(safe-area-inset-top), 1rem);
+    padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* ============================================================
+   SCROLLBAR STYLING (webkit browsers)
+   ============================================================ */
+
+.pipboy-main::-webkit-scrollbar,
+.pipboy-tabs::-webkit-scrollbar {
+  width: clamp(0.6rem, 1vw, 1rem);
+  height: clamp(0.6rem, 1vw, 1rem);
+}
+
+.pipboy-main::-webkit-scrollbar-track,
+.pipboy-tabs::-webkit-scrollbar-track {
+  background: rgba(0, 20, 0, 0.3);
+  border-radius: 0.5rem;
+}
+
+.pipboy-main::-webkit-scrollbar-thumb,
+.pipboy-tabs::-webkit-scrollbar-thumb {
+  background: rgba(159, 232, 141, 0.5);
+  border-radius: 0.5rem;
+}
+
+.pipboy-main::-webkit-scrollbar-thumb:hover,
+.pipboy-tabs::-webkit-scrollbar-thumb:hover {
+  background: rgba(159, 232, 141, 0.7);
+}
+
+/* ============================================================
+   TOUCH FRIENDLY (increase tap targets)
+   ============================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Touch devices */
+  .pipboy-tab,
+  .pipboy-button,
+  .pipboy-button-small,
+  button {
+    /* Minimum tap target size: 44x44px (Apple) / 48x48px (Android) */
+    min-height: 4.4rem;
+    min-width: 4.4rem;
+  }
+
+  /* Add more spacing between interactive elements */
+  .pipboy-tabs {
+    gap: 1rem;
+  }
+
+  .panel-row button,
+  .panel-body button {
+    margin: 0.5rem 0;
+  }
+}
+
+/* ============================================================
+   HIGH DPI / RETINA DISPLAYS
+   ============================================================ */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Sharper text rendering on high DPI */
+  .pipboy-crt * {
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* ============================================================
+   PRINT (disable for print)
+   ============================================================ */
+
+@media print {
+  .pipboy-noise,
+  .pipboy-scanlines,
+  .pipboy-bezel {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION (accessibility)
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   DARK MODE SUPPORT (system preference)
+   ============================================================ */
+
+@media (prefers-color-scheme: dark) {
+  /* Already dark, but ensure consistency */
+  .pipboy-crt {
+    background: radial-gradient(circle at center, #0a1a0a 0%, #020502 60%, #000000 100%);
+  }
+}
