@@ -198,6 +198,11 @@ safeMount("/api/location-claim", api("location-claim"));
 // Add locations endpoint (frontend expects /api/locations)
 safeMount("/api/locations", api("locations"));
 
+// Admin panel routes
+safeMount("/api/admin/player", api("adminPlayer"));
+safeMount("/api/admin/mintables", api("adminMintables"));
+safeMount("/api/admin/keys", api("keys-admin"));
+
 // WALLET API
 safeMount("/api/wallet", path.join(__dirname, "routes", "wallet"));
 
