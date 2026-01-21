@@ -13,8 +13,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 8080
+      # Do not hardcode PORT here; Render provides process.env.PORT to the runtime
       - key: SOLANA_RPC
         sync: false
       - key: TOKEN_MINT
@@ -45,6 +44,7 @@ services:
     env: node
     plan: starter
     buildCommand: "npm install && npm run build"
+    # Ensure your package.json start script uses process.env.PORT (e.g., "next start -p $PORT")
     startCommand: "npm start"
     autoDeploy: true
     envVars:
