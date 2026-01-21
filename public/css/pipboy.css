@@ -287,3 +287,174 @@ body.pipboy-mode {
 }
 
 .leaflet-control-container { display: none; }
+
+/* ============================================================
+   PIPBOY BUTTONS - FALLOUT THEMED
+   ============================================================ */
+
+/* Base button style - Vault-Tec terminal aesthetic */
+button,
+.pipboy-button,
+.pipboy-button-small {
+  background: rgba(0, 0, 0, 0.85);
+  color: #00ff41;
+  border: 2px solid #00ff41;
+  padding: 8px 16px;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 
+    inset 0 0 8px rgba(0, 255, 65, 0.2),
+    0 0 12px rgba(0, 255, 65, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Small button variant */
+.pipboy-button-small {
+  padding: 4px 12px;
+  font-size: 14px;
+}
+
+/* Hover state - amber glow like Pip-Boy selections */
+button:hover,
+.pipboy-button:hover,
+.pipboy-button-small:hover {
+  background: rgba(0, 255, 65, 0.15);
+  color: #ffaa00;
+  border-color: #ffaa00;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.9);
+  box-shadow: 
+    inset 0 0 12px rgba(255, 170, 0, 0.3),
+    0 0 20px rgba(255, 170, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Active/pressed state */
+button:active,
+.pipboy-button:active,
+.pipboy-button-small:active {
+  background: rgba(0, 255, 65, 0.25);
+  transform: translateY(0);
+  box-shadow: 
+    inset 0 0 15px rgba(0, 255, 65, 0.5),
+    0 0 8px rgba(0, 255, 65, 0.3);
+}
+
+/* Disabled state - faded out */
+button:disabled,
+.pipboy-button:disabled,
+.pipboy-button-small:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.6);
+  border-color: rgba(0, 255, 65, 0.3);
+  text-shadow: none;
+  box-shadow: none;
+}
+
+/* Scanline effect on buttons */
+button::before,
+.pipboy-button::before,
+.pipboy-button-small::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 65, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+button:hover::before,
+.pipboy-button:hover::before,
+.pipboy-button-small:hover::before {
+  left: 100%;
+}
+
+/* Danger/warning button variant (for admin/reset actions) */
+button.danger,
+.pipboy-button.danger {
+  border-color: #ff4444;
+  color: #ff4444;
+  text-shadow: 0 0 5px rgba(255, 68, 68, 0.7);
+  box-shadow: 
+    inset 0 0 8px rgba(255, 68, 68, 0.2),
+    0 0 12px rgba(255, 68, 68, 0.3);
+}
+
+button.danger:hover,
+.pipboy-button.danger:hover {
+  background: rgba(255, 68, 68, 0.15);
+  border-color: #ff6666;
+  text-shadow: 0 0 8px rgba(255, 68, 68, 0.9);
+  box-shadow: 
+    inset 0 0 12px rgba(255, 68, 68, 0.3),
+    0 0 20px rgba(255, 68, 68, 0.5);
+}
+
+/* Success/confirm button variant */
+button.success,
+.pipboy-button.success {
+  border-color: #00d4ff;
+  color: #00d4ff;
+  text-shadow: 0 0 5px rgba(0, 212, 255, 0.7);
+  box-shadow: 
+    inset 0 0 8px rgba(0, 212, 255, 0.2),
+    0 0 12px rgba(0, 212, 255, 0.3);
+}
+
+button.success:hover,
+.pipboy-button.success:hover {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: #00e4ff;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.9);
+  box-shadow: 
+    inset 0 0 12px rgba(0, 212, 255, 0.3),
+    0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+/* Make sure all buttons inherit Pip-Boy theming */
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  background: rgba(0, 0, 0, 0.85);
+  color: #00ff41;
+  border: 2px solid #00ff41;
+  padding: 8px 16px;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 
+    inset 0 0 8px rgba(0, 255, 65, 0.2),
+    0 0 12px rgba(0, 255, 65, 0.3);
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+  background: rgba(0, 255, 65, 0.15);
+  color: #ffaa00;
+  border-color: #ffaa00;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.9);
+  box-shadow: 
+    inset 0 0 12px rgba(255, 170, 0, 0.3),
+    0 0 20px rgba(255, 170, 0, 0.5);
+}
