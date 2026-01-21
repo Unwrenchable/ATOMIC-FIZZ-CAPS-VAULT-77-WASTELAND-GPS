@@ -286,16 +286,24 @@
 
                     <div class="panel-divider"></div>
 
-                    <div id="nukeSection" style="display:none;">
-                      <div class="panel-header">NUKE TESTING GROUNDS</div>
-                      <button class="pipboy-button" id="openNukeTerminal">OPEN NUKE</button>
+                    <div id="nukeSection">
+                      <div class="panel-header" style="color:#ffaa00;">⚠️ NUKE TESTING GROUNDS</div>
+                      <div style="padding:10px; background:rgba(255,0,0,0.1); border:1px solid #ff0000; margin:10px 0;">
+                        <div style="font-size:0.9em; opacity:0.9;">Destroy unwanted gear for CAPS</div>
+                        <div style="font-size:0.8em; margin-top:5px; color:#ff6666;">🔒 SYSTEM LOCKED - Awaiting Admin Activation</div>
+                      </div>
+                      <button class="pipboy-button" id="openNukeTerminal" disabled style="opacity:0.5; cursor:not-allowed;">🔒 NUKE (COMING SOON)</button>
                     </div>
 
                     <div class="panel-divider"></div>
 
-                    <div id="bridgeSection" style="display:none;">
-                      <div class="panel-header">WORMHOLE BRIDGE</div>
-                      <button class="pipboy-button" id="openBridgeTerminal">OPEN BRIDGE</button>
+                    <div id="bridgeSection">
+                      <div class="panel-header" style="color:#00ffff;">🌀 WORMHOLE BRIDGE</div>
+                      <div style="padding:10px; background:rgba(0,100,255,0.1); border:1px solid #0088ff; margin:10px 0;">
+                        <div style="font-size:0.9em; opacity:0.9;">Cross-chain asset portal</div>
+                        <div style="font-size:0.8em; margin-top:5px; color:#66bbff;">🔒 SYSTEM LOCKED - Awaiting Admin Activation</div>
+                      </div>
+                      <button class="pipboy-button" id="openBridgeTerminal" disabled style="opacity:0.5; cursor:not-allowed;">🔒 BRIDGE (COMING SOON)</button>
                     </div>
                   </div>
                 </div>
@@ -388,9 +396,11 @@
         const bridgeSection = document.getElementById("bridgeSection");
         const bridgeBtn = document.getElementById("openBridgeTerminal");
 
+        // Always show terminal section
         if (terminalSection) terminalSection.style.display = "block";
-        if (nukeSection) nukeSection.style.display = "block";
-        if (bridgeSection) bridgeSection.style.display = "block";
+        
+        // Nuke and Bridge are always visible but disabled
+        // Admin can enable them later via config or wallet check
 
         function openOverseerPopup() {
           const screenW = window.innerWidth || screen.width;
@@ -480,14 +490,22 @@
         if (nukeBtn) {
           nukeBtn.addEventListener("click", function (e) {
             e.preventDefault();
-            openNukePopup();
+            if (nukeBtn.disabled) {
+              alert('⚠️ NUKE SYSTEM LOCKED\n\nThe Gear Fusion Chamber is currently disabled.\nAdmin activation required.\n\nComing soon!');
+            } else {
+              openNukePopup();
+            }
           });
         }
 
         if (bridgeBtn) {
           bridgeBtn.addEventListener("click", function (e) {
             e.preventDefault();
-            openBridgePopup();
+            if (bridgeBtn.disabled) {
+              alert('🌀 WORMHOLE BRIDGE LOCKED\n\nThe cross-chain portal is currently disabled.\nAdmin activation required.\n\nComing soon!');
+            } else {
+              openBridgePopup();
+            }
           });
         }
       })();
