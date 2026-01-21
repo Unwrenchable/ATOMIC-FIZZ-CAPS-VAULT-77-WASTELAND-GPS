@@ -16,7 +16,7 @@ import "./core.quest_mapintel.js";
 import "./overseer.full.js";
 
 // PERSONALITY + CUSTOM COMMANDS (must load BEFORE overseer.js)
-import "./personality.js";
+import "./core.personality.js";
 import "./handlers.js";
 
 // UNIFIED OVERSEER BRAIN (attaches engines + commands)
