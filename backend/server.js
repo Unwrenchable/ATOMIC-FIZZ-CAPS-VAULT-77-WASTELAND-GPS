@@ -260,11 +260,7 @@ app.get('/api/health', async (req, res) => {
       if (redisModule && redisModule.client) {
         const client = redisModule.client;
         // Check if client is connected (node-redis v4 has isReady property)
-        if (client.isReady) {
-          redisOk = true;
-        } else if (client.status === 'ready' || client.status === 'connected') {
-          redisOk = true;
-        }
+        redisOk = client.isReady || client.status === 'ready' || client.status === 'connected';
       }
     } catch (e) {
       // redis module not available or error loading it
