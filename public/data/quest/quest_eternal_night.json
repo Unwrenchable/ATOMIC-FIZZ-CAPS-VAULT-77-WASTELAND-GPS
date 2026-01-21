@@ -1,0 +1,145 @@
+{
+  "id": "q_eternal_night",
+  "name": "The Eternal Night",
+  "type": "main",
+  "region": "darkened_zone",
+  "subregion": "perpetual_shadow",
+
+  "giver": "npc_shadow_dweller",
+
+  "start_conditions": {
+    "min_level": 13,
+    "location": "edge_of_darkness"
+  },
+
+  "npc_links": [
+    "npc_shadow_dweller",
+    "npc_satellite_engineer",
+    "npc_raider_night_king",
+    "npc_mutant_researcher"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_dark_zone",
+      "poi": "eternal_night_settlement",
+      "stage": "enter_darkness"
+    },
+    {
+      "id": "marker_satellite_station",
+      "poi": "weather_control_facility",
+      "stage": "investigate_satellite"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "investigate_darkness",
+      "desc": "Investigate reports of a region in perpetual darkness.",
+      "poi": "edge_of_darkness"
+    },
+    {
+      "id": "enter_darkness",
+      "desc": "Venture into the darkened zone.",
+      "poi": "eternal_night_settlement",
+      "hazards": ["zero_visibility", "mutated_creatures", "hypothermia"]
+    },
+    {
+      "id": "meet_inhabitants",
+      "desc": "Meet the desperate survivors living in darkness.",
+      "npc": "npc_shadow_dweller",
+      "dialogue": "dialog_shadow_dweller.json"
+    },
+    {
+      "id": "investigate_satellite",
+      "desc": "Find the malfunctioning weather control satellite station.",
+      "poi": "weather_control_facility"
+    },
+    {
+      "id": "make_decision",
+      "desc": "Decide the fate of the eternal night.",
+      "choices": [
+        "repair_satellite",
+        "exploit_darkness",
+        "abandon_to_darkness",
+        "study_mutations"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "investigate_darkness", "desc": "Learn about the darkened region." },
+    { "id": 1, "objective": "enter_darkness", "desc": "Brave the perpetual night." },
+    { "id": 2, "objective": "meet_inhabitants", "desc": "Find survivors in the shadows." },
+    { "id": 3, "objective": "investigate_satellite", "desc": "Locate the cause of darkness." },
+    { "id": 4, "objective": "make_decision", "desc": "Choose light or shadow." },
+    { "id": 5, "objective": "complete", "desc": "The night's fate is sealed." }
+  ],
+
+  "dark_zone_effects": {
+    "visibility": 0.1,
+    "temperature": -20,
+    "mutation_rate": 2.5,
+    "unique_flora": ["luminescent_fungus", "shadow_vine", "void_flower"],
+    "unique_fauna": ["night_stalker", "shadow_prowler", "void_bat"]
+  },
+
+  "choices": {
+    "repair_satellite": {
+      "desc": "Repair the weather control satellite and restore sunlight to the region.",
+      "requirements": { "science": 80, "repair": 75 },
+      "consequences": {
+        "faction_rep": { "settlers": 100, "raiders": -80, "mutants": -50 },
+        "rewards": { "xp": 950, "caps": 700, "items": ["solar_powered_armor", "satellite_control_key"] },
+        "environmental_change": "darkness_removed",
+        "outcome": "Sunlight returns! Settlers rejoice. But unique mutated life dies off. Some raiders flee, losing their haven."
+      }
+    },
+    "exploit_darkness": {
+      "desc": "Use the darkness to establish a hidden raider stronghold or stealth operations base.",
+      "requirements": { "stealth": 70, "reputation_raiders": 30 },
+      "consequences": {
+        "faction_rep": { "raiders": 80, "settlers": -60, "criminals": 60 },
+        "rewards": { "xp": 800, "caps": 1000, "items": ["night_vision_goggles", "stealth_armor"] },
+        "unlock": ["shadow_operations", "raider_stronghold"],
+        "outcome": "Darkness becomes your weapon. Raiders thrive. The Night King offers you a position in his shadow empire."
+      }
+    },
+    "abandon_to_darkness": {
+      "desc": "Leave the region to its fate and document the unique mutations thriving there.",
+      "requirements": { "science": 60, "survival": 65 },
+      "consequences": {
+        "faction_rep": { "scientists": 70, "settlers": -40 },
+        "rewards": { "xp": 1000, "caps": 400, "items": ["mutation_research_data", "bioluminescent_samples", "unique_flora_collection"] },
+        "unlock": ["mutation_research", "dark_zone_access"],
+        "outcome": "The darkness remains. Unique mutated ecosystem thrives. Scientists hail your discovery. Settlers are abandoned."
+      }
+    },
+    "study_mutations": {
+      "desc": "Establish a research station to study the unique life forms while helping survivors adapt.",
+      "requirements": { "science": 75, "medicine": 70, "charisma": 7 },
+      "consequences": {
+        "faction_rep": { "scientists": 90, "settlers": 50, "followers_apocalypse": 80 },
+        "rewards": { "xp": 950, "caps": 600, "items": ["bioluminescent_implant", "mutation_suppressor", "research_grant"] },
+        "unlock": ["research_station", "mutation_treatments"],
+        "outcome": "Research station established. Survivors learn to thrive in darkness. Science advances. Balance achieved."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 950,
+    "caps": 700
+  },
+
+  "factions": {
+    "affected": ["Settlers", "Raiders", "Scientists", "Mutants"]
+  },
+
+  "next_quests": [
+    "quest_weather_control_wars",
+    "quest_shadow_creatures"
+  ],
+
+  "notes": "Environmental quest with lasting world impact. Unique ecosystem at stake. Choice between progress and preservation."
+}
