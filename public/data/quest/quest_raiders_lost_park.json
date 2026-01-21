@@ -1,0 +1,155 @@
+{
+  "id": "q_raiders_lost_park",
+  "name": "Raiders of the Lost Park",
+  "type": "main",
+  "region": "amusement_district",
+  "subregion": "nuka_ruins",
+
+  "giver": "npc_treasure_hunter",
+
+  "start_conditions": {
+    "min_level": 14,
+    "location": "park_entrance"
+  },
+
+  "npc_links": [
+    "npc_treasure_hunter",
+    "npc_raider_park_boss",
+    "npc_park_ghoul_survivor",
+    "npc_trader_guild_rep"
+  ],
+
+  "map_markers": [
+    {
+      "id": "marker_park_entrance",
+      "poi": "nuka_park_gates",
+      "stage": "enter_park"
+    },
+    {
+      "id": "marker_treasure_vault",
+      "poi": "park_underground_vault",
+      "stage": "find_treasure"
+    }
+  ],
+
+  "objectives": [
+    {
+      "id": "locate_park",
+      "desc": "Find the abandoned amusement park in the wasteland.",
+      "poi": "nuka_park_gates"
+    },
+    {
+      "id": "enter_park",
+      "desc": "Navigate the raider-controlled death traps.",
+      "poi": "nuka_park_main_street",
+      "hazards": ["explosive_rides", "sniper_nests", "trapped_attractions"]
+    },
+    {
+      "id": "meet_boss",
+      "desc": "Confront the raider boss controlling the park.",
+      "npc": "npc_raider_park_boss",
+      "dialogue": "dialog_park_boss.json"
+    },
+    {
+      "id": "find_treasure",
+      "desc": "Locate the pre-War treasures buried under the park.",
+      "poi": "park_underground_vault"
+    },
+    {
+      "id": "make_decision",
+      "desc": "Decide the park's future.",
+      "choices": [
+        "storm_and_loot",
+        "become_boss",
+        "trading_hub",
+        "destroy_raiders_free_park"
+      ]
+    }
+  ],
+
+  "stages": [
+    { "id": 0, "objective": "locate_park", "desc": "Discover the legendary amusement park." },
+    { "id": 1, "objective": "enter_park", "desc": "Brave the deadly attractions." },
+    { "id": 2, "objective": "meet_boss", "desc": "Face the Park King." },
+    { "id": 3, "objective": "find_treasure", "desc": "Uncover pre-War riches." },
+    { "id": 4, "objective": "make_decision", "desc": "Control the park's destiny." },
+    { "id": 5, "objective": "complete", "desc": "The park has a new purpose." }
+  ],
+
+  "park_attractions": [
+    {
+      "name": "Atom's Scream Coaster",
+      "status": "Weaponized - launches raiders at enemies"
+    },
+    {
+      "name": "Funhouse of Horrors",
+      "status": "Torture chamber and maze trap"
+    },
+    {
+      "name": "Fizz-Go-Round",
+      "status": "Spinning blade death trap"
+    },
+    {
+      "name": "Underground Vault",
+      "status": "Sealed treasure chamber"
+    }
+  ],
+
+  "choices": {
+    "storm_and_loot": {
+      "desc": "Fight through raiders, claim the treasures, and leave.",
+      "requirements": { "combat_skill": 75, "explosives": 60 },
+      "consequences": {
+        "faction_rep": { "raiders": -80, "treasure_hunters": 60 },
+        "rewards": { "xp": 850, "caps": 1500, "items": ["pre_war_treasures", "nuka_quantum_stash", "park_deed"] },
+        "outcome": "You storm the park. Raiders scatter. Treasure is yours. The park remains a dangerous ruin."
+      }
+    },
+    "become_boss": {
+      "desc": "Challenge and defeat the current boss, taking over the raider gang.",
+      "requirements": { "combat_skill": 80, "charisma": 7, "intimidation": 70 },
+      "consequences": {
+        "faction_rep": { "raiders": 100, "settlers": -70, "traders": -60 },
+        "rewards": { "xp": 900, "caps": 1000, "items": ["park_king_crown", "raider_loyalty", "death_trap_controls"] },
+        "unlock": ["raider_stronghold", "death_arena", "tribute_system"],
+        "outcome": "You're the new Park King. Raiders obey. The death traps are yours. Fear spreads across the wasteland."
+      }
+    },
+    "trading_hub": {
+      "desc": "Broker peace and transform the park into a neutral trading hub.",
+      "requirements": { "charisma": 9, "caps": 2000, "negotiation_skill": 85 },
+      "consequences": {
+        "faction_rep": { "traders": 100, "raiders": -40, "ncr": 50, "legion": -30 },
+        "rewards": { "xp": 1000, "caps": 500, "items": ["merchant_king_title", "trade_permits", "protected_caravans"] },
+        "unlock": ["trading_hub", "merchant_empire", "neutral_territory"],
+        "outcome": "Peace breaks out. Raiders become merchants. The park thrives. Some factions are furious at this neutral ground."
+      }
+    },
+    "destroy_raiders_free_park": {
+      "desc": "Eliminate all raiders and free the park for settlers.",
+      "requirements": { "combat_skill": 70, "morality": "good" },
+      "consequences": {
+        "faction_rep": { "raiders": -100, "settlers": 100, "ncr": 60 },
+        "rewards": { "xp": 950, "caps": 700, "items": ["liberator_medal", "grateful_settlers", "park_restoration_plans"] },
+        "unlock": ["settlement_park", "tourism"],
+        "outcome": "Raiders are gone. Settlers move in. Children play on fixed rides. Hope returns to the wasteland."
+      }
+    }
+  },
+
+  "rewards": {
+    "xp": 850,
+    "caps": 1500
+  },
+
+  "factions": {
+    "affected": ["Raiders", "Traders", "Settlers", "NCR"]
+  },
+
+  "next_quests": [
+    "quest_park_power_struggle",
+    "quest_attraction_restoration"
+  ],
+
+  "notes": "Nuka-World inspired quest. Multiple economic and moral outcomes. Park can become hub, stronghold, or settlement."
+}

@@ -1,0 +1,77 @@
+{
+  "id": "quest_institute_meets_enclave",
+  "title": "Science Wars: Institute vs Enclave",
+  "type": "faction_conflict",
+  "difficulty": "very_hard",
+  "level_required": 15,
+  "fractured_timeline_context": "The Institute (FO4, 2287) and the Enclave (FO2/FO3, 2241/2277) both exist simultaneously. Both consider themselves humanity's best hope. Both have advanced technology. Both are supremacists who view wastelanders as inferior. Now they've discovered each other - and they're NOT friends.",
+  
+  "premise": "The Institute's Father and the Enclave's Colonel Autumn have entered a cold war over who represents 'true humanity.' The Institute sees the Enclave as barbaric fascists. The Enclave sees synths as abominations. You're caught in the middle of a technological arms race between two of the wasteland's most dangerous factions.",
+
+  "stages": [
+    {
+      "id": "stage1_first_contact",
+      "name": "When Titans Meet",
+      "description": "An Institute courser team encountered Enclave troops at Helios One. Both sides opened fire. Now both factions want you to spy on the other.",
+      "objectives": [
+        {
+          "text": "Infiltrate the Institute (via relay or Vault 77 connection)",
+          "optional_approaches": ["Use Jax Voss's glitching to phase in", "Hack a relay", "Get synth escort"]
+        },
+        {
+          "text": "Infiltrate Enclave base (Raven Rock or Adams AFB ruins)",
+          "optional_approaches": ["Steal Enclave uniform", "Use Harlan Voss's old NCR connections", "Vertibird hijack"]
+        },
+        {
+          "text": "Report findings to both factions (or betray one)"
+        }
+      ]
+    },
+    {
+      "id": "stage2_tech_race",
+      "name": "The Arms Race",
+      "description": "Both factions are developing super-weapons. Institute is building army of Gen-3 synths with FEV immunity. Enclave is upgrading their Hellfire armor with Institute-killing protocols.",
+      "player_choice": {
+        "option1": "Help Institute develop anti-Enclave synths",
+        "option2": "Help Enclave develop anti-synth weapons",
+        "option3": "Sabotage both (work with Railroad or Brotherhood)",
+        "option4": "Steal tech from both for personal use"
+      }
+    },
+    {
+      "id": "stage3_ideological_showdown",
+      "name": "Two Visions of Humanity",
+      "description": "Father and Colonel Autumn agree to a debate at Hoover Dam. They want you to moderate. This won't end peacefully.",
+      "debate_topics": [
+        "What defines 'humanity'? (Synths vs Pure Humans)",
+        "Who should lead the wasteland? (Scientists vs Military)",
+        "Is democracy dead? (Institute technocracy vs Enclave oligarchy)",
+        "Should mutants exist? (Both say no, but for different reasons)"
+      ],
+      "outcomes": [
+        "Broker peace (both factions ally AGAINST you for seeing their similarity)",
+        "Support Institute (Enclave becomes enemy, synth army unlocked)",
+        "Support Enclave (Institute becomes enemy, power armor upgrades)",
+        "Reveal they're the same (both try to kill you, wasteland celebrates)"
+      ]
+    }
+  ],
+
+  "endings": {
+    "ending_institute_victory": "Institute eliminates Enclave, synths everywhere",
+    "ending_enclave_victory": "Enclave nukes the Institute, pure humanity restored",
+    "ending_mutual_destruction": "Both factions destroy each other, wasteland is free",
+    "ending_unholy_alliance": "You convince them to ally - worst timeline, dystopian nightmare"
+  },
+
+  "cross_timeline_meta": "This quest only exists because timelines are fractured. FO4's Institute and FO2/FO3's Enclave never coexisted in canon. That's what makes this special.",
+
+  "rewards": {
+    "xp": 4000,
+    "unique_items": [
+      "Synth Component + Enclave Chip (hybrid tech)",
+      "X-01 Power Armor with Institute mods",
+      "Courser Coat with Enclave stealth field"
+    ]
+  }
+}
