@@ -1,6 +1,6 @@
 // backend/lib/cooldowns.js
 
-const redis = require('../redis');
+const redis = require('./lib/redis');
 
 async function check(player, action) {
   if (!player || !player.wallet) {
