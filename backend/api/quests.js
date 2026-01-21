@@ -37,3 +37,17 @@ router.get("/health", questsLimiter, (req, res) => {
 });
 
 module.exports = router;
+
+/* Minimal GET / handler added to ensure API responds with JSON */
+router.get('/', async (req, res) => {
+  try {
+    if (typeof listQuests === 'function') {
+      const data = await listQuests();
+      return res.json(data);
+    }
+    return res.json([]);
+  } catch (err) {
+    console.error('[quests] GET / error', err && err.message ? err.message : err);
+    return res.status(500).json({ error: 'internal' });
+  }
+});
