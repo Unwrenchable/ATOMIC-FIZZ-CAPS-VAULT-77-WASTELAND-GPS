@@ -139,6 +139,7 @@ app.use("/api/auth", authRouter);
 // ------------------------------------------------------------
 const api = (file) => path.join(__dirname, "api", file);
 
+// Core API endpoints
 safeMount("/api/loot-voucher", api("loot-voucher"));
 safeMount("/api/caps", api("caps"));
 safeMount("/api/xp", api("xp"));
@@ -149,6 +150,9 @@ safeMount("/api/quests", api("quests"));
 safeMount("/api/quest-endings", api("quest-endings"));
 safeMount("/api/player", api("player"));
 safeMount("/api/location-claim", api("location-claim"));
+
+// Add locations endpoint (frontend expects /api/locations)
+safeMount("/api/locations", api("locations"));
 
 // WALLET API
 safeMount("/api/wallet", path.join(__dirname, "routes", "wallet"));
