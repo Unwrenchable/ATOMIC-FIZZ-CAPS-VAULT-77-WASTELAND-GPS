@@ -88,6 +88,18 @@ game-ui/node_modules/
 game-ui/.turbo/
 game-ui/.vercel/
 
-# --- Misc ---
+# --- Backup & Temporary Files ---
 *.patch
 *.bak
+*.backup
+*.old
+*.tmp
+*~
+test/
+tool/
+data-archive/
+
+# --- Legacy / Unused Code ---
+*legacy*
+*archive*
+*experimental*
