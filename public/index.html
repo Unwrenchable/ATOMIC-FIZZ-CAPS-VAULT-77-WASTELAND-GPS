@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- API base: local dev vs production -->
+    <script>
+      window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.github.dev'))
+        ? 'http://localhost:3001'
+        : 'https://atomicfizzcaps-live.onrender.com';
+    </script>
 
     <!-- Leaflet core CSS -->
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      crossorigin=""
-    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
-    <!-- Pip‑Boy UI -->
+    <!-- Pip‑Boy UI CSS -->
     <link rel="stylesheet" href="/css/pipboy.css" />
     <link rel="stylesheet" href="/css/pipboy-map.css" />
 
-    <!-- Third‑party libs (non-module, global) -->
+    <!-- Third-party libs (deferred, non-module globals) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
     <script src="https://unpkg.com/topojson-client@3" defer></script>
-    <script src="https://unpkg.com/@turf/turf@6" defer></script>
+
+    <!-- Turf UMD (fixes exports is not defined) -->
+    <script src="https://unpkg.com/@turf/turf@6.5.0/dist/turf.min.js" defer></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js" defer></script>
 
-    <!-- AuthClient (keeps global AuthClient for inline usage) -->
+    <!-- AuthClient must be available before inline wallet code -->
     <script src="/js/authClient.js" defer></script>
 
     <!-- Pip‑Boy styling helper (non-module) -->
     <script src="/js/pipboy/pipboy-style.js" defer></script>
 
     <style>
-      /* Minimal safe fallback to avoid FOUC while scripts load */
       body.pipboy-mode { background:#000; color:#00ffae; }
     </style>
   </head>
@@ -66,9 +71,7 @@
                 <!-- WALLET HUD (Phantom only) -->
                 <div class="wallet-hud">
                   <span id="walletAddress">WALLET: DISCONNECTED</span>
-                  <button id="connectWalletHUD" class="pipboy-button-small">
-                    CONNECT
-                  </button>
+                  <button id="connectWalletHUD" class="pipboy-button-small">CONNECT</button>
                 </div>
               </div>
 
@@ -89,7 +92,6 @@
                 <div id="panel-map" class="pipboy-panel active">
                   <div class="panel-header">MAP</div>
                   <div class="panel-body">
-
                     <div id="mapContainer" class="pipboy-map">
                       <div id="radFlash"></div>
                     </div>
@@ -105,7 +107,6 @@
                       <div id="accDot" class="acc-dot"></div>
                       <div id="accText">GPS: OFFLINE</div>
                     </div>
-
                   </div>
                 </div>
 
@@ -113,7 +114,6 @@
                 <div id="panel-stat" class="pipboy-panel">
                   <div class="panel-header">STATUS</div>
                   <div class="panel-body">
-
                     <div class="panel-row">
                       <span class="label">NAME</span>
                       <span class="value" id="stat-name">WANDERER</span>
@@ -159,9 +159,8 @@
                       <span class="value" id="stat-caps">0</span>
                     </div>
 
-                    <!-- SP1: ATOMIC FIZZ WALLET BLOCK (S4 STYLE) -->
+                    <!-- ATOMIC FIZZ WALLET BLOCK -->
                     <div class="panel-divider"></div>
-
                     <div id="fizzWalletBlock" style="border:1px solid #00ffae; padding:10px; margin-top:10px;">
                       <div style="font-weight:bold; margin-bottom:6px;">ATOMIC FIZZ WALLET</div>
                       <div>WALLET: <span id="fizzWalletAddress">—</span></div>
@@ -221,9 +220,7 @@
                     </div>
 
                     <div id="respecRow" style="margin-top:10px;">
-                      <button id="respecBtn" class="pipboy-button">
-                        REBUILD SPECIAL (REQUIRES TOKEN)
-                      </button>
+                      <button id="respecBtn" class="pipboy-button">REBUILD SPECIAL (REQUIRES TOKEN)</button>
                       <div id="respecStatus"></div>
                     </div>
 
@@ -247,9 +244,7 @@
                   <div class="panel-header">DIALOG</div>
                   <div class="panel-body">
                     <div id="dialogBody" class="dialog-body"></div>
-                    <button id="dialogCloseBtn" class="pipboy-button-small" style="margin-top:12px;">
-                      CLOSE
-                    </button>
+                    <button id="dialogCloseBtn" class="pipboy-button-small" style="margin-top:12px;">CLOSE</button>
                   </div>
                 </div>
 
@@ -266,9 +261,7 @@
 
                     <div id="terminalSection" style="display:none;">
                       <div class="panel-header">OVERSEER TERMINAL</div>
-                      <button class="pipboy-button" id="openOverseerTerminal">
-                        OPEN TERMINAL
-                      </button>
+                      <button class="pipboy-button" id="openOverseerTerminal">OPEN TERMINAL</button>
                     </div>
                   </div>
                 </div>
@@ -319,7 +312,7 @@
     <!-- BOOT SEQUENCE (non-module) -->
     <script src="/js/boot.js" defer></script>
 
-    <!-- RADIO / OVERSEER POPUP -->
+    <!-- RADIO / OVERSEER POPUP (keeps same behavior) -->
     <script>
       (function () {
         const terminalSection = document.getElementById("terminalSection");
@@ -362,89 +355,83 @@
       })();
     </script>
 
-    <!-- GLOBAL CONFIG: API base (set to your Render backend) -->
+    <!-- WALLET LOGIN + FIZZ WALLET LOADER (waits for AuthClient) -->
     <script>
-      // Set API_BASE to your Render backend URL. Replace if different.
-      window.API_BASE = "https://atomicfizzcaps-live.onrender.com";
+      (function waitForAuthClient() {
+        function ready() {
+          if (typeof AuthClient === 'undefined') {
+            return setTimeout(ready, 50);
+          }
+
+          const auth = new AuthClient({ apiBase: window.API_BASE });
+
+          const hudBtn = document.getElementById("connectWalletHUD");
+          const hudAddress = document.getElementById("walletAddress");
+
+          async function safeJson(res) {
+            const text = await res.text();
+            try { return JSON.parse(text); } catch (err) {
+              console.error("[safeJson] Non-JSON response:", text.slice(0,400));
+              throw new Error("Server did not return valid JSON");
+            }
+          }
+
+          async function updateWalletUI() {
+            try {
+              if (auth.isAuthenticated && auth.isAuthenticated()) {
+                const wallet = auth.getWallet();
+                hudAddress.textContent = "WALLET: " + wallet.slice(0, 4) + "..." + wallet.slice(-4);
+                if (hudBtn) hudBtn.style.display = "none";
+
+                const apiUrl = (window.API_BASE || "") + "/api/player";
+                const res = await auth.authedFetch(apiUrl, { method: "GET" });
+                const json = await safeJson(res);
+
+                document.getElementById("stat-wallet").textContent = wallet;
+                document.getElementById("stat-caps").textContent = json.caps || 0;
+                document.getElementById("fizzWalletAddress").textContent = wallet;
+                document.getElementById("fizzWalletCaps").textContent = json.caps || 0;
+                document.getElementById("fizzWalletXP").textContent = json.xp || 0;
+                document.getElementById("fizzWalletItems").textContent = (json.items && json.items.length) || 0;
+                document.getElementById("fizzWalletNFTs").textContent = (json.nfts && json.nfts.length) || 0;
+              } else {
+                hudAddress.textContent = "WALLET: DISCONNECTED";
+                if (hudBtn) hudBtn.style.display = "inline-block";
+              }
+            } catch (err) {
+              console.error("[updateWalletUI] error:", err);
+              hudAddress.textContent = "WALLET: DISCONNECTED";
+              if (hudBtn) hudBtn.style.display = "inline-block";
+            }
+          }
+
+          async function connectPhantom() {
+            try {
+              const provider = window.solana;
+              if (!provider || !provider.isPhantom) {
+                alert("Phantom Wallet not found.");
+                return;
+              }
+              await provider.connect();
+              await auth.login(provider);
+              await updateWalletUI();
+            } catch (err) {
+              console.error(err);
+              alert("Wallet login failed: " + (err && err.message ? err.message : err));
+            }
+          }
+
+          if (hudBtn) hudBtn.addEventListener("click", connectPhantom);
+          window.addEventListener("load", () => setTimeout(updateWalletUI, 250));
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', ready);
+        } else {
+          ready();
+        }
+      })();
     </script>
-
-    <!-- WALLET LOGIN + FIZZ WALLET LOADER (uses global AuthClient) -->
-    <script>
-    (function waitForAuthClient() {
-     function ready() {
-      if (typeof AuthClient === 'undefined') {
-        return setTimeout(ready, 50);
-      }
-
-      const auth = new AuthClient({ apiBase: window.API_BASE });
-
-      const hudBtn = document.getElementById("connectWalletHUD");
-      const hudAddress = document.getElementById("walletAddress");
-
-      async function safeJson(res) {
-        const text = await res.text();
-        try { return JSON.parse(text); } catch (err) {
-          console.error("[safeJson] Non-JSON response:", text.slice(0,400));
-          throw new Error("Server did not return valid JSON");
-        }
-      }
-
-      async function updateWalletUI() {
-        try {
-          if (auth.isAuthenticated && auth.isAuthenticated()) {
-            const wallet = auth.getWallet();
-            hudAddress.textContent = "WALLET: " + wallet.slice(0, 4) + "..." + wallet.slice(-4);
-            if (hudBtn) hudBtn.style.display = "none";
-
-            const apiUrl = (window.API_BASE || "") + "/api/player";
-            const res = await auth.authedFetch(apiUrl, { method: "GET" });
-            const json = await safeJson(res);
-
-            document.getElementById("stat-wallet").textContent = wallet;
-            document.getElementById("stat-caps").textContent = json.caps || 0;
-            document.getElementById("fizzWalletAddress").textContent = wallet;
-            document.getElementById("fizzWalletCaps").textContent = json.caps || 0;
-            document.getElementById("fizzWalletXP").textContent = json.xp || 0;
-            document.getElementById("fizzWalletItems").textContent = (json.items && json.items.length) || 0;
-            document.getElementById("fizzWalletNFTs").textContent = (json.nfts && json.nfts.length) || 0;
-          } else {
-            hudAddress.textContent = "WALLET: DISCONNECTED";
-            if (hudBtn) hudBtn.style.display = "inline-block";
-          }
-        } catch (err) {
-          console.error("[updateWalletUI] error:", err);
-          hudAddress.textContent = "WALLET: DISCONNECTED";
-          if (hudBtn) hudBtn.style.display = "inline-block";
-        }
-      }
-
-      async function connectPhantom() {
-        try {
-          const provider = window.solana;
-          if (!provider || !provider.isPhantom) {
-            alert("Phantom Wallet not found.");
-            return;
-          }
-          await provider.connect();
-          await auth.login(provider);
-          await updateWalletUI();
-        } catch (err) {
-          console.error(err);
-          alert("Wallet login failed: " + (err && err.message ? err.message : err));
-        }
-      }
-
-      if (hudBtn) hudBtn.addEventListener("click", connectPhantom);
-      window.addEventListener("load", () => setTimeout(updateWalletUI, 250));
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', ready);
-    } else {
-      ready();
-    }
-  })();
-  </script>
 
   </body>
 </html>
