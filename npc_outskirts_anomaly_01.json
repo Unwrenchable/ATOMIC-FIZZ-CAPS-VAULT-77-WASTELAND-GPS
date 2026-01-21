@@ -1,6 +1,0 @@
-{
-  "id": "npc_outskirts_anomaly_01",
-  "archetype": "timeline_echo_wanderer",
-  "spawnPool": ["vegas_outskirts_north"],
-  "timelineVariants": ["echo"]
-}

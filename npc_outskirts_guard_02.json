@@ -1,7 +1,0 @@
-{
-  "id": "npc_outskirts_guard_02",
-  "name": "Fence Watcher",
-  "archetype": "vegas_outskirts_local",
-  "spawnPool": ["vegas_outskirts_north"],
-  "uniquePerWorld": false
-}
