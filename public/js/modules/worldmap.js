@@ -101,13 +101,36 @@
       if (this.map) return;
 
       const container = document.getElementById("mapContainer");
-      if (!container) return;
+      if (!container) {
+        console.error('[worldmap] mapContainer not found in DOM');
+        return;
+      }
+      
+      // Check if Leaflet is loaded
+      if (typeof L === 'undefined') {
+        console.error('[worldmap] Leaflet library not loaded');
+        setTimeout(() => this.initMap(), 500); // Retry after 500ms
+        return;
+      }
 
-      this.map = L.map(container, {
-        zoomControl: false,
-        attributionControl: false,
-        worldCopyJump: false
-      });
+      // Clear any existing map instance on the container
+      if (container._leaflet_id) {
+        console.warn('[worldmap] clearing existing leaflet instance');
+        container._leaflet_id = undefined;
+        container.innerHTML = '';
+      }
+
+      try {
+        this.map = L.map(container, {
+          zoomControl: false,
+          attributionControl: false,
+          worldCopyJump: false,
+          preferCanvas: true // Better performance
+        });
+      } catch (e) {
+        console.error('[worldmap] failed to create map:', e);
+        return;
+      }
 
       // Regional bounds
       this.map.setMinZoom(5);
@@ -117,17 +140,35 @@
         [31, -102]
       ]);
 
-      // Tiles
-      const tiles = L.tileLayer(
+      // Tiles with offline fallback
+      const satelliteTiles = L.tileLayer(
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        { minZoom: 0, maxZoom: 19, noWrap: true }
+        { 
+          minZoom: 0, 
+          maxZoom: 19, 
+          noWrap: true,
+          errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzA1MDcwNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMDBmZjQxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+T0ZGTElORTwvdGV4dD48L3N2Zz4='
+        }
       );
-      tiles.addTo(this.map);
-      this.tiles = { satellite: tiles };
+      
+      // Add offline detection and fallback
+      satelliteTiles.on('tileerror', (e) => {
+        console.warn('[worldmap] tile load error, using offline mode');
+        // Switch to offline canvas-based tiles if all tiles fail
+        if (!this.tiles.offline) {
+          this.switchToOfflineMode();
+        }
+      });
+      
+      satelliteTiles.addTo(this.map);
+      this.tiles = { satellite: satelliteTiles };
 
       // Start view
       const pos = this.gs.player.position;
       this.map.setView([pos.lat, pos.lng], 7);
+      
+      // Update map status
+      this.updateMapStatus('Initializing map...');
 
       // Layers
       this.labelLayer = L.layerGroup().addTo(this.map);
@@ -227,6 +268,17 @@
       });
 
       window.dispatchEvent(new Event("map-ready"));
+      
+      // Confirm map is ready
+      this.updateMapStatus('Map online - Ready');
+      console.log('[worldmap] Map initialization complete');
+    },
+
+    updateMapStatus(text) {
+      const statusEl = document.getElementById('mapStatus');
+      if (statusEl) {
+        statusEl.textContent = text;
+      }
     },
 
     // --------------------------------------------------------
@@ -368,6 +420,75 @@
 
     updateOverlayVisibility(zoom) {
       // labels always visible for now
+    },
+
+    // --------------------------------------------------------
+    // OFFLINE MODE FALLBACK
+    // --------------------------------------------------------
+    switchToOfflineMode() {
+      if (this.tiles.offline) return; // Already in offline mode
+      
+      console.log('[worldmap] switching to offline canvas tiles');
+      
+      // Create canvas-based offline tiles
+      const CanvasTileLayer = L.GridLayer.extend({
+        createTile: function(coords) {
+          const tile = document.createElement('canvas');
+          const tileSize = this.getTileSize();
+          tile.width = tileSize.x;
+          tile.height = tileSize.y;
+          
+          const ctx = tile.getContext('2d');
+          
+          // Draw offline tile background
+          ctx.fillStyle = '#0a1a0a';
+          ctx.fillRect(0, 0, tile.width, tile.height);
+          
+          // Draw grid
+          ctx.strokeStyle = '#00ff4133';
+          ctx.lineWidth = 1;
+          for (let i = 0; i < tile.width; i += 32) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, tile.height);
+            ctx.stroke();
+          }
+          for (let i = 0; i < tile.height; i += 32) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(tile.width, i);
+            ctx.stroke();
+          }
+          
+          // Draw coordinates
+          ctx.fillStyle = '#00ff41';
+          ctx.font = '10px monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(`${coords.z}/${coords.x}/${coords.y}`, tile.width / 2, tile.height / 2);
+          
+          // Draw "OFFLINE" text
+          ctx.font = 'bold 12px monospace';
+          ctx.fillStyle = '#00ff4166';
+          ctx.fillText('OFFLINE', tile.width / 2, tile.height / 2 + 20);
+          
+          return tile;
+        }
+      });
+      
+      this.tiles.offline = new CanvasTileLayer({
+        minZoom: 0,
+        maxZoom: 19
+      });
+      
+      // Remove satellite tiles and add offline tiles
+      if (this.tiles.satellite) {
+        this.map.removeLayer(this.tiles.satellite);
+      }
+      this.tiles.offline.addTo(this.map);
+      
+      // Show offline message
+      this.showMapMessage('MAP OFFLINE - Using grid mode');
     },
 
     // --------------------------------------------------------
