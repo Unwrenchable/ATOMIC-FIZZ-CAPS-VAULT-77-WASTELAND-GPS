@@ -213,58 +213,59 @@
       if (el) el.style.transform = `rotate(${deg}deg)`;
     },
 
-    setPlayerPosition(lat, lng, opts = {}) {
-  const newPos = { lat, lng };
+        setPlayerPosition(lat, lng, opts = {}) {
+      const newPos = { lat, lng };
 
-  // Auto-heading from movement if no explicit heading provided
-  if (this.prevPlayerPosition && opts.heading === undefined) {
-    const h = this.computeHeading(
-      this.prevPlayerPosition.lat,
-      this.prevPlayerPosition.lng,
-      newPos.lat,
-      newPos.lng
-    );
-    if (!isNaN(h)) this.setPlayerHeading(h);
-  }
+      // Auto-heading from movement if no explicit heading provided
+      if (this.prevPlayerPosition && opts.heading === undefined) {
+        const h = this.computeHeading(
+          this.prevPlayerPosition.lat,
+          this.prevPlayerPosition.lng,
+          newPos.lat,
+          newPos.lng
+        );
+        if (!isNaN(h)) this.setPlayerHeading(h);
+      }
 
-  this.prevPlayerPosition = newPos;
-  this.gs.player.position = newPos;
+      this.prevPlayerPosition = newPos;
+      this.gs.player.position = newPos;
 
-  if (this.playerMarker) {
-    this.playerMarker.setLatLng([lat, lng]);
-  }
+      if (this.playerMarker) {
+        this.playerMarker.setLatLng([lat, lng]);
+      }
 
-  if (opts.heading !== undefined) {
-    this.setPlayerHeading(opts.heading);
-  }
-  computeHeading(lat1, lon1, lat2, lon2) {
-  const toRad = d => (d * Math.PI) / 180;
-  const toDeg = r => (r * 180) / Math.PI;
+      if (opts.heading !== undefined) {
+        this.setPlayerHeading(opts.heading);
+      }
 
-  const φ1 = toRad(lat1);
-  const φ2 = toRad(lat2);
-  const Δλ = toRad(lon2 - lon1);
+      if (opts.fromGPS) {
+        this.centerOnPlayer(true);
+      }
+    },
 
-  const y = Math.sin(Δλ) * Math.cos(φ2);
-  const x =
-    Math.cos(φ1) * Math.sin(φ2) -
-    Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+    computeHeading(lat1, lon1, lat2, lon2) {
+      const toRad = d => (d * Math.PI) / 180;
+      const toDeg = r => (r * 180) / Math.PI;
 
-  let brng = toDeg(Math.atan2(y, x)); // -180..180
-  if (brng < 0) brng += 360;          // 0..360
+      const φ1 = toRad(lat1);
+      const φ2 = toRad(lat2);
+      const Δλ = toRad(lon2 - lon1);
 
-  return brng;
-},
+      const y = Math.sin(Δλ) * Math.cos(φ2);
+      const x =
+        Math.cos(φ1) * Math.sin(φ2) -
+        Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
 
-  if (opts.fromGPS) {
-    this.centerOnPlayer(true);
-  }
-},
+      let brng = toDeg(Math.atan2(y, x)); // -180..180
+      if (brng < 0) brng += 360;          // 0..360
 
+      return brng;
+    },
 
     updatePlayerPosition(lat, lng, opts = {}) {
       this.setPlayerPosition(lat, lng, opts);
     },
+
 
     // --------------------------------------------------------
     // WORLD LABELS
