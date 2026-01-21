@@ -370,80 +370,81 @@
 
     <!-- WALLET LOGIN + FIZZ WALLET LOADER (uses global AuthClient) -->
     <script>
-      (function () {
-        const auth = new AuthClient({ apiBase: window.API_BASE });
+    (function waitForAuthClient() {
+     function ready() {
+      if (typeof AuthClient === 'undefined') {
+        return setTimeout(ready, 50);
+      }
 
-        const hudBtn = document.getElementById("connectWalletHUD");
-        const hudAddress = document.getElementById("walletAddress");
+      const auth = new AuthClient({ apiBase: window.API_BASE });
 
-        async function safeJson(res) {
-          const text = await res.text();
-          try {
-            return JSON.parse(text);
-          } catch (err) {
-            console.error("[safeJson] Non-JSON response:", text.slice(0, 400));
-            throw new Error("Server did not return valid JSON");
-          }
+      const hudBtn = document.getElementById("connectWalletHUD");
+      const hudAddress = document.getElementById("walletAddress");
+
+      async function safeJson(res) {
+        const text = await res.text();
+        try { return JSON.parse(text); } catch (err) {
+          console.error("[safeJson] Non-JSON response:", text.slice(0,400));
+          throw new Error("Server did not return valid JSON");
         }
+      }
 
-        async function updateWalletUI() {
-          try {
-            if (auth.isAuthenticated && auth.isAuthenticated()) {
-              const wallet = auth.getWallet();
-              hudAddress.textContent = "WALLET: " + wallet.slice(0, 4) + "..." + wallet.slice(-4);
-              if (hudBtn) hudBtn.style.display = "none";
+      async function updateWalletUI() {
+        try {
+          if (auth.isAuthenticated && auth.isAuthenticated()) {
+            const wallet = auth.getWallet();
+            hudAddress.textContent = "WALLET: " + wallet.slice(0, 4) + "..." + wallet.slice(-4);
+            if (hudBtn) hudBtn.style.display = "none";
 
-              // Use absolute backend URL to avoid Vercel HTML fallback
-              const apiUrl = (window.API_BASE || "") + "/api/player";
-              const res = await auth.authedFetch(apiUrl, { method: "GET" });
+            const apiUrl = (window.API_BASE || "") + "/api/player";
+            const res = await auth.authedFetch(apiUrl, { method: "GET" });
+            const json = await safeJson(res);
 
-              const json = await safeJson(res);
-
-              document.getElementById("stat-wallet").textContent = wallet;
-              document.getElementById("stat-caps").textContent = json.caps || 0;
-
-              document.getElementById("fizzWalletAddress").textContent = wallet;
-              document.getElementById("fizzWalletCaps").textContent = json.caps || 0;
-              document.getElementById("fizzWalletXP").textContent = json.xp || 0;
-              document.getElementById("fizzWalletItems").textContent = (json.items && json.items.length) || 0;
-              document.getElementById("fizzWalletNFTs").textContent = (json.nfts && json.nfts.length) || 0;
-            } else {
-              hudAddress.textContent = "WALLET: DISCONNECTED";
-              if (hudBtn) hudBtn.style.display = "inline-block";
-            }
-          } catch (err) {
-            console.error("[updateWalletUI] error:", err);
+            document.getElementById("stat-wallet").textContent = wallet;
+            document.getElementById("stat-caps").textContent = json.caps || 0;
+            document.getElementById("fizzWalletAddress").textContent = wallet;
+            document.getElementById("fizzWalletCaps").textContent = json.caps || 0;
+            document.getElementById("fizzWalletXP").textContent = json.xp || 0;
+            document.getElementById("fizzWalletItems").textContent = (json.items && json.items.length) || 0;
+            document.getElementById("fizzWalletNFTs").textContent = (json.nfts && json.nfts.length) || 0;
+          } else {
             hudAddress.textContent = "WALLET: DISCONNECTED";
             if (hudBtn) hudBtn.style.display = "inline-block";
           }
+        } catch (err) {
+          console.error("[updateWalletUI] error:", err);
+          hudAddress.textContent = "WALLET: DISCONNECTED";
+          if (hudBtn) hudBtn.style.display = "inline-block";
         }
+      }
 
-        async function connectPhantom() {
-          try {
-            const provider = window.solana;
-            if (!provider || !provider.isPhantom) {
-              alert("Phantom Wallet not found.");
-              return;
-            }
-
-            await provider.connect();
-            await auth.login(provider);
-            await updateWalletUI();
-          } catch (err) {
-            console.error(err);
-            alert("Wallet login failed: " + (err && err.message ? err.message : err));
+      async function connectPhantom() {
+        try {
+          const provider = window.solana;
+          if (!provider || !provider.isPhantom) {
+            alert("Phantom Wallet not found.");
+            return;
           }
+          await provider.connect();
+          await auth.login(provider);
+          await updateWalletUI();
+        } catch (err) {
+          console.error(err);
+          alert("Wallet login failed: " + (err && err.message ? err.message : err));
         }
+      }
 
-        if (hudBtn) hudBtn.addEventListener("click", connectPhantom);
+      if (hudBtn) hudBtn.addEventListener("click", connectPhantom);
+      window.addEventListener("load", () => setTimeout(updateWalletUI, 250));
+    }
 
-        // Defer initial UI update until AuthClient has initialized
-        window.addEventListener("load", function () {
-          // small delay to ensure authClient has set up
-          setTimeout(updateWalletUI, 250);
-        });
-      })();
-    </script>
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', ready);
+    } else {
+      ready();
+    }
+  })();
+  </script>
 
   </body>
 </html>
