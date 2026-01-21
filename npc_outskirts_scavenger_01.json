@@ -1,6 +1,0 @@
-{
-  "id": "npc_outskirts_scavenger_01",
-  "archetype": "wasteland_scavenger",
-  "spawnPool": ["vegas_outskirts_north", "vegas_outskirts_south"],
-  "uniquePerWorld": false
-}

@@ -1,8 +1,0 @@
-{
-  "id": "npc_outskirts_trader_01",
-  "name": "Traveling Trader",
-  "archetype": "vegas_outskirts_local",
-  "lootPool": ["small_caps", "food_ration", "junk_item"],
-  "spawnPool": ["vegas_outskirts_north", "freeside_border"],
-  "uniquePerWorld": false
-}
