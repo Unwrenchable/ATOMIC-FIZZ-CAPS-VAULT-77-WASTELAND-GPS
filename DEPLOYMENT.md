@@ -47,14 +47,20 @@ The CORS configuration also automatically allows any `*.vercel.app` domain for p
 Set these environment variables in your Render service dashboard:
 
 - `NODE_ENV=production`
-- `FRONTEND_ORIGIN` (optional, defaults to `https://www.atomicfizzcaps.xyz`)
+- `FRONTEND_ORIGIN` (recommended: `https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, https://*.vercel.app, http://localhost:3000`)
+  - The backend now supports wildcard patterns like `https://*.vercel.app` for Vercel preview deployments
+  - Multiple origins can be comma-separated
 - `REDIS_URL` (required for player state)
 - `PLAYER_AUTH_SECRET` (required for authentication)
 - Other service-specific variables (see `backend/.env.example`)
 
+**Note**: If using Cloudflare proxy, temporarily disable it during CORS verification to ensure proper origin headers are sent.
+
 #### Frontend (Vercel)
 
 No environment variables needed - the frontend auto-configures based on hostname.
+
+The `vercel.json` configuration includes an API proxy that forwards `/api/*` requests to the backend at `https://api.atomicfizzcaps.xyz`. This allows the frontend to use relative paths and avoid CORS issues.
 
 ## Troubleshooting
 
