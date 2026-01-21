@@ -9,7 +9,9 @@
     <script>
       window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.github.dev'))
         ? 'http://localhost:3001'
-        : 'https://atomicfizzcaps-live.onrender.com';
+        : 'https://api.atomicfizzcaps.xyz';
+      // Also set BACKEND_URL for compatibility with existing code
+      window.BACKEND_URL = window.API_BASE;
     </script>
 
     <!-- Leaflet core CSS -->

@@ -1,6 +1,0 @@
-{
-  "id": "npc_outskirts_local_03",
-  "archetype": "vegas_outskirts_local",
-  "spawnPool": ["freeside_border"],
-  "uniquePerWorld": true
-}
