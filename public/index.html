@@ -278,6 +278,20 @@
                       <div class="panel-header">OVERSEER TERMINAL</div>
                       <button class="pipboy-button" id="openOverseerTerminal">OPEN TERMINAL</button>
                     </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div id="nukeSection" style="display:none;">
+                      <div class="panel-header">NUKE TESTING GROUNDS</div>
+                      <button class="pipboy-button" id="openNukeTerminal">OPEN NUKE</button>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div id="bridgeSection" style="display:none;">
+                      <div class="panel-header">WORMHOLE BRIDGE</div>
+                      <button class="pipboy-button" id="openBridgeTerminal">OPEN BRIDGE</button>
+                    </div>
                   </div>
                 </div>
 
@@ -315,6 +329,7 @@
     
     <!-- Combat & Encounters -->
     <script src="/js/modules/battles.js" defer></script>
+    <script src="/js/modules/npcSpawn.js" defer></script>
     <script src="/js/modules/npcEncounter.js" defer></script>
     <script src="/js/modules/npc_signal_runner.js" defer></script>
     
@@ -359,8 +374,14 @@
       (function () {
         const terminalSection = document.getElementById("terminalSection");
         const btn = document.getElementById("openOverseerTerminal");
+        const nukeSection = document.getElementById("nukeSection");
+        const nukeBtn = document.getElementById("openNukeTerminal");
+        const bridgeSection = document.getElementById("bridgeSection");
+        const bridgeBtn = document.getElementById("openBridgeTerminal");
 
         if (terminalSection) terminalSection.style.display = "block";
+        if (nukeSection) nukeSection.style.display = "block";
+        if (bridgeSection) bridgeSection.style.display = "block";
 
         function openOverseerPopup() {
           const screenW = window.innerWidth || screen.width;
@@ -388,10 +409,76 @@
           window.open("/overseer.html", "overseer_terminal", features);
         }
 
+        function openNukePopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
+
+          const width = Math.min(800, Math.max(400, Math.floor(screenW * 0.8)));
+          const height = Math.min(900, Math.max(600, Math.floor(screenH * 0.8)));
+
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
+
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
+
+          window.open("/nuke.html", "nuke_terminal", features);
+        }
+
+        function openBridgePopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
+
+          const width = Math.min(700, Math.max(400, Math.floor(screenW * 0.7)));
+          const height = Math.min(850, Math.max(600, Math.floor(screenH * 0.8)));
+
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
+
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
+
+          window.open("/bridge.html", "bridge_terminal", features);
+        }
+
         if (btn) {
           btn.addEventListener("click", function (e) {
             e.preventDefault();
             openOverseerPopup();
+          });
+        }
+
+        if (nukeBtn) {
+          nukeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            openNukePopup();
+          });
+        }
+
+        if (bridgeBtn) {
+          bridgeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            openBridgePopup();
           });
         }
       })();
