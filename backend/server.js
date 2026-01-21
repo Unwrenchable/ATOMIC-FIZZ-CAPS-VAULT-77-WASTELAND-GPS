@@ -29,29 +29,42 @@ console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 // CORE MIDDLEWARE
 // ------------------------------------------------------------
 
-// Allow local dev origins as well as production frontend origin
-const FRONTEND_ORIGIN =
-  process.env.FRONTEND_ORIGIN ||
-  "https://www.atomicfizzcaps.xyz, http://localhost:3000, http://127.0.0.1:3000";
+// --- CORS setup (safe, env-driven) ---
+// Parse FRONTEND_ORIGIN env var into an array of allowed origins.
+// Accepts comma-separated values. Example:
+// FRONTEND_ORIGIN="https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000"
+const rawOrigins = (process.env.FRONTEND_ORIGIN || 'https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000, https://*.vercel.app').split(/\s*,\s*/);
 
-app.use(
-  cors({
-    origin: (origin, cb) => {
-      // allow requests with no origin (e.g., curl, server-to-server)
-      if (!origin) return cb(null, true);
-      // allow comma-separated list
-      const allowed = FRONTEND_ORIGIN.split(",").map((s) => s.trim());
-      if (allowed.includes(origin)) return cb(null, true);
-      // Allow Vercel preview deployments for testing (e.g., atomic-fizz-caps-*.vercel.app)
-      // This is safe because sensitive operations still require authentication
-      if (origin.endsWith(".vercel.app")) return cb(null, true);
-      return cb(new Error("CORS not allowed"), false);
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: false,
-  })
-);
+function wildcardToRegex(pattern) {
+  // turn https://*.vercel.app into ^https?:\/\/[^\/]+\.vercel\.app(:\d+)?$
+  const escaped = pattern.replace(/^https?:\/\//, '').replace(/\./g, '\\.').replace(/\*/g, '[^\\/]+');
+  return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
+}
+
+const allowedOrigins = rawOrigins.map(s => s.trim()).filter(Boolean);
+
+const corsOptions = {
+  origin: function(origin, callback) {
+    // allow server-to-server or curl requests with no origin
+    if (!origin) return callback(null, true);
+    const ok = allowedOrigins.some(pattern => {
+      if (pattern.includes('*')) {
+        return wildcardToRegex(pattern).test(origin);
+      }
+      return origin === pattern;
+    });
+    if (ok) return callback(null, true);
+    console.warn('[server] CORS blocked origin:', origin);
+    return callback(new Error('CORS not allowed'), false);
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  allowedHeaders: ['Content-Type','Authorization','X-Requested-With','Accept'],
+  credentials: true,
+  maxAge: 86400
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // JSON body limit
 app.use(express.json({ limit: "2mb" }));
@@ -237,8 +250,42 @@ app.post("/api/bridge/evm-to-solana", (req, res) => {
 // ------------------------------------------------------------
 // HEALTH CHECK
 // ------------------------------------------------------------
-app.get("/api/health", (req, res) => {
-  res.json({ ok: true, status: "Backend running", env: NODE_ENV });
+// Add health endpoint for smoke checks
+app.get('/api/health', async (req, res) => {
+  try {
+    // Try to load redis module to check its status
+    let redisOk = false;
+    try {
+      const redisModule = require('./lib/redis');
+      if (redisModule && redisModule.client) {
+        const client = redisModule.client;
+        // Check if client is connected (node-redis v4 has isReady property)
+        if (client.isReady) {
+          redisOk = true;
+        } else if (client.status === 'ready' || client.status === 'connected') {
+          redisOk = true;
+        }
+      }
+    } catch (e) {
+      // redis module not available or error loading it
+      redisOk = false;
+    }
+
+    const ok = {
+      status: 'ok',
+      env: process.env.NODE_ENV || 'unknown',
+      time: new Date().toISOString(),
+      redis: redisOk,
+      solana_rpc: !!process.env.SOLANA_RPC
+    };
+    res.json(ok);
+  } catch (err) {
+    console.error('[health] error:', err);
+    res.status(500).json({
+      status: 'error',
+      error: err.message
+    });
+  }
 });
 
 // ------------------------------------------------------------
