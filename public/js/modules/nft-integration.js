@@ -41,32 +41,52 @@
     },
 
     async checkWalletConnection() {
-      // Check if wallet is already connected via existing wallet.js
-      if (window.wallet && window.wallet.connected) {
+      // Wait for web3 wallet adapter to load
+      if (!window.web3Wallet || !window.web3Wallet.loaded) {
+        console.log("[nft-integration] Waiting for web3 wallet adapter...");
+        return;
+      }
+
+      // Check if wallet is already connected via web3 adapter
+      if (window.web3Wallet.isConnected()) {
         this.walletConnected = true;
-        this.walletAddress = window.wallet.publicKey?.toString();
+        this.walletAddress = window.web3Wallet.getWalletAddress();
         console.log("[nft-integration] Wallet connected:", this.walletAddress);
         await this.refreshOwnedNFTs();
       }
+
+      // Listen for wallet connection changes
+      window.addEventListener('web3WalletStateChanged', async (e) => {
+        const { connected, address } = e.detail;
+        this.walletConnected = connected;
+        this.walletAddress = address;
+        if (connected) {
+          await this.refreshOwnedNFTs();
+        } else {
+          this.ownedNFTs = {};
+          this.updateUI();
+        }
+      });
     },
 
     async connectWallet() {
-      // Use existing wallet connection system
-      if (window.wallet && window.wallet.connect) {
-        try {
-          await window.wallet.connect();
+      // Use universal web3 wallet adapter
+      if (!window.web3Wallet || !window.web3Wallet.loaded) {
+        alert("Wallet system is still loading. Please wait a moment and try again.");
+        return false;
+      }
+
+      try {
+        const success = await window.web3Wallet.connect();
+        if (success) {
           this.walletConnected = true;
-          this.walletAddress = window.wallet.publicKey?.toString();
-          console.log("[nft-integration] Wallet connected:", this.walletAddress);
+          this.walletAddress = window.web3Wallet.getWalletAddress();
+          console.log("[nft-integration] Wallet connected via web3 adapter:", this.walletAddress);
           await this.refreshOwnedNFTs();
-          return true;
-        } catch (e) {
-          console.error("[nft-integration] Wallet connection failed:", e);
-          return false;
         }
-      } else {
-        console.warn("[nft-integration] No wallet provider found");
-        alert("Please install Phantom or MetaMask wallet to use NFT features");
+        return success;
+      } catch (e) {
+        console.error("[nft-integration] Wallet connection failed:", e);
         return false;
       }
     },
