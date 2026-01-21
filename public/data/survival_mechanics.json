@@ -1,4 +1,3 @@
-// public/data/survival_mechanics.json - Hardcore Mode & Weather System
 {
   "hardcore_mode": {
     "enabled": false,
