@@ -1,0 +1,15 @@
+name: API smoke test
+on:
+  push:
+    branches:
+      - main
+jobs:
+  api-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait briefly for service
+        run: sleep 10
+      - name: Check API health
+        run: |
+          echo "Checking API health: https://api.atomicfizzcaps.xyz/api/health"
+          curl -sSf https://api.atomicfizzcaps.xyz/api/health | jq .
