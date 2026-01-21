@@ -60,9 +60,26 @@
     },
 
     onOpen() {
-      if (!this.map) this.init(window.DATA || {});
-      if (!this.locationsLoaded) this.loadLocations();
-      else this.renderPOIMarkers();
+      console.log('[worldmap] onOpen called');
+      
+      // Initialize map if not yet created (happens after boot screen)
+      if (!this.map) {
+        console.log('[worldmap] map not initialized, initializing now...');
+        this.init(window.DATA || {});
+      }
+      
+      // If map still isn't created, something went wrong
+      if (!this.map) {
+        console.error('[worldmap] map failed to initialize');
+        this.updateMapStatus('Map initialization failed - check console');
+        return;
+      }
+      
+      if (!this.locationsLoaded) {
+        this.loadLocations();
+      } else {
+        this.renderPOIMarkers();
+      }
 
       this.ensurePlayerPosition();
       this.initPlayerMarker();
@@ -70,14 +87,21 @@
 
       this.renderWorldLabels();
 
+      // Force map to recalculate size and re-render
       setTimeout(() => {
         try {
-          this.map.invalidateSize();
-          const pos = this.gs.player.position;
-          this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 6);
-          this.updateOverlayVisibility(this.map.getZoom() || 6);
-        } catch (e) {}
-      }, 50);
+          if (this.map) {
+            console.log('[worldmap] invalidating map size and recentering...');
+            this.map.invalidateSize();
+            const pos = this.gs.player.position;
+            this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7);
+            this.updateOverlayVisibility(this.map.getZoom() || 7);
+            this.updateMapStatus('Map online - Ready');
+          }
+        } catch (e) {
+          console.error('[worldmap] error in onOpen timeout:', e);
+        }
+      }, 100);
     },
 
     // --------------------------------------------------------
@@ -98,7 +122,10 @@
     // MAP INITIALIZATION (CLEAN + SINGLE MAP)
     // --------------------------------------------------------
     initMap() {
-      if (this.map) return;
+      if (this.map) {
+        console.log('[worldmap] map already initialized');
+        return;
+      }
 
       const container = document.getElementById("mapContainer");
       if (!container) {
@@ -106,12 +133,22 @@
         return;
       }
       
+      // Check if container is visible (not hidden by boot screen)
+      const pipboyScreen = document.getElementById('pipboyScreen');
+      if (pipboyScreen && pipboyScreen.classList.contains('hidden')) {
+        console.log('[worldmap] waiting for pipboyScreen to be visible...');
+        // Will be called by onOpen() when pipboyReady event fires
+        return;
+      }
+      
       // Check if Leaflet is loaded
       if (typeof L === 'undefined') {
-        console.error('[worldmap] Leaflet library not loaded');
+        console.error('[worldmap] Leaflet library not loaded, retrying...');
         setTimeout(() => this.initMap(), 500); // Retry after 500ms
         return;
       }
+
+      console.log('[worldmap] initializing map...');
 
       // Clear any existing map instance on the container
       if (container._leaflet_id) {
@@ -127,6 +164,7 @@
           worldCopyJump: false,
           preferCanvas: true // Better performance
         });
+        console.log('[worldmap] Leaflet map object created successfully');
       } catch (e) {
         console.error('[worldmap] failed to create map:', e);
         return;
@@ -690,7 +728,14 @@
 
   Game.modules.worldmap = worldmapModule;
 
-  document.addEventListener("DOMContentLoaded", () => {
-    worldmapModule.init(window.DATA || {});
+  // Listen for pipboyReady event instead of DOMContentLoaded
+  // This ensures map initializes AFTER boot screen is hidden
+  window.addEventListener('pipboyReady', () => {
+    console.log('[worldmap] pipboyReady event received, initializing...');
+    if (worldmapModule.onOpen) {
+      worldmapModule.onOpen();
+    }
   });
+
+  console.log('[worldmap] module loaded, waiting for pipboyReady event');
 })();
