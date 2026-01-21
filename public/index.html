@@ -5,6 +5,19 @@
     <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!-- Content Security Policy to allow external resources -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app 'unsafe-inline';
+      connect-src 'self' https://unpkg.com https://server.arcgisonline.com https://*.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
+      img-src 'self' data: https: blob:;
+      font-src 'self' https://fonts.gstatic.com data:;
+      media-src 'self' data: https:;
+      object-src 'none';
+      frame-src 'self';
+      base-uri 'self';">
+
     <!-- API base: local dev vs production -->
     <script>
       window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.github.dev'))
@@ -292,21 +305,48 @@
     <script src="/js/radioPlayer.js" defer></script>
     <script src="/js/main.js" defer></script>
 
-    <!-- GAME MODULES (ES modules) -->
-    <script type="module" src="/js/modules/economy.js"></script>
-    <script type="module" src="/js/modules/mintables.js"></script>
-    <script type="module" src="/js/modules/factions.js"></script>
-    <script type="module" src="/js/modules/enemyScaling.js"></script>
-    <script type="module" src="/js/modules/quests.js"></script>
-    <script type="module" src="/js/modules/narrative.js"></script>
+    <!-- GAME MODULES (IIFE scripts attached to window.Game) -->
+    <!-- Core Systems -->
+    <script src="/js/modules/economy.js" defer></script>
+    <script src="/js/modules/mintables.js" defer></script>
+    <script src="/js/modules/recipes.js" defer></script>
+    <script src="/js/modules/factions.js" defer></script>
+    <script src="/js/modules/enemyScaling.js" defer></script>
+    
+    <!-- Combat & Encounters -->
+    <script src="/js/modules/battles.js" defer></script>
+    <script src="/js/modules/npcEncounter.js" defer></script>
+    <script src="/js/modules/npc_signal_runner.js" defer></script>
+    
+    <!-- Quests & Narrative -->
+    <script src="/js/modules/quests.js" defer></script>
+    <script src="/js/modules/narrative.js" defer></script>
+    
+    <!-- Crafting & Collectables -->
+    <script src="/js/modules/crafting.js" defer></script>
+    <script src="/js/modules/collectables.js" defer></script>
 
-    <!-- WORLD MAP (ES module) -->
-    <script type="module" src="/js/modules/worldmap.js"></script>
+    <!-- WORLD MAP -->
+    <script src="/js/modules/worldmap.js" defer></script>
+    
+    <!-- Map Overlays & Features -->
+    <script src="/js/modules/fogOfWar.js" defer></script>
+    <script src="/js/modules/weatherOverlay.js" defer></script>
+    <script src="/js/modules/radiationZones.js" defer></script>
+    <script src="/js/modules/factionOverlay.js" defer></script>
+    <script src="/js/modules/questMarker.js" defer></script>
+    <script src="/js/modules/trail.js" defer></script>
+    <script src="/js/modules/encounterHeatmap.js" defer></script>
+    
+    <!-- UI Widgets & Helpers -->
+    <script src="/js/modules/compass.js" defer></script>
+    <script src="/js/modules/lootScanner.js" defer></script>
+    <script src="/js/modules/discoveryBanner.js" defer></script>
 
-    <!-- UI MODULES (ES modules) -->
-    <script type="module" src="/js/modules/inventory-loader.js"></script>
-    <script type="module" src="/js/modules/inventory-ui.js"></script>
-    <script type="module" src="/js/modules/quest-ui.js"></script>
+    <!-- UI MODULES -->
+    <script src="/js/modules/inventory-loader.js" defer></script>
+    <script src="/js/modules/inventory-ui.js" defer></script>
+    <script src="/js/modules/quest-ui.js" defer></script>
 
     <!-- PIP‑BOY UI SHELL (non-module) -->
     <script src="/js/pipboy.js" defer></script>

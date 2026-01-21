@@ -1,0 +1,375 @@
+/* ============================================================================
+   FALLOUT-STYLE MAP STYLING
+   Mix of Fallout 1 (isometric green CRT) & New Vegas (world map)
+   ============================================================================ */
+
+/* Map Container - Green CRT glow */
+.pipboy-map {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background: #000;
+  border: 2px solid #00ff41;
+  box-shadow: 
+    inset 0 0 20px rgba(0, 255, 65, 0.3),
+    0 0 30px rgba(0, 255, 65, 0.2);
+  filter: contrast(1.1) brightness(0.95);
+}
+
+/* Leaflet tile layer - green/amber tint for Fallout feel */
+.leaflet-tile-pane {
+  filter: 
+    sepia(0.3) 
+    hue-rotate(60deg) 
+    saturate(0.8) 
+    contrast(1.2)
+    brightness(0.7);
+  opacity: 0.85;
+}
+
+/* POI Markers - Fallout style with scan effect */
+.poi-marker {
+  filter: 
+    drop-shadow(0 0 3px #00ff41)
+    drop-shadow(0 0 8px #00ff41);
+  animation: poi-pulse 2s ease-in-out infinite;
+}
+
+@keyframes poi-pulse {
+  0%, 100% { 
+    opacity: 0.9;
+    filter: 
+      drop-shadow(0 0 3px #00ff41)
+      drop-shadow(0 0 8px #00ff41);
+  }
+  50% { 
+    opacity: 1;
+    filter: 
+      drop-shadow(0 0 5px #00ff41)
+      drop-shadow(0 0 12px #00ff41)
+      drop-shadow(0 0 15px #00ff41);
+  }
+}
+
+/* Player marker - bright cyan like Pip-Boy cursor */
+.leaflet-marker-icon[src*="player"] {
+  filter: 
+    brightness(1.4)
+    drop-shadow(0 0 5px #00d4ff)
+    drop-shadow(0 0 10px #00d4ff)
+    drop-shadow(0 0 15px #00d4ff);
+  animation: player-beacon 1.5s ease-in-out infinite;
+  z-index: 1000 !important;
+}
+
+@keyframes player-beacon {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+/* Fallout 1 style grid overlay */
+.pipboy-map::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 19px,
+      rgba(0, 255, 65, 0.03) 19px,
+      rgba(0, 255, 65, 0.03) 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 19px,
+      rgba(0, 255, 65, 0.03) 19px,
+      rgba(0, 255, 65, 0.03) 20px
+    );
+  pointer-events: none;
+  z-index: 400;
+}
+
+/* Scan line effect (Fallout 1 CRT terminals) */
+.pipboy-map::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 255, 65, 0.05) 0%,
+    transparent 50%,
+    rgba(0, 255, 65, 0.05) 100%
+  );
+  background-size: 100% 4px;
+  animation: scan-line 8s linear infinite;
+  pointer-events: none;
+  z-index: 450;
+}
+
+@keyframes scan-line {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 500px; }
+}
+
+/* Leaflet popups - Fallout terminal style */
+.leaflet-popup-content-wrapper {
+  background: rgba(0, 0, 0, 0.95) !important;
+  color: #00ff41 !important;
+  border: 2px solid #00ff41 !important;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 255, 65, 0.2),
+    0 0 20px rgba(0, 255, 65, 0.3) !important;
+  font-family: 'VT323', 'Courier New', monospace !important;
+  font-size: 16px !important;
+  text-shadow: 0 0 5px #00ff41;
+  padding: 8px !important;
+}
+
+.leaflet-popup-content {
+  margin: 8px !important;
+}
+
+.leaflet-popup-tip {
+  background: #000 !important;
+  border: 1px solid #00ff41 !important;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3) !important;
+}
+
+.leaflet-popup-close-button {
+  color: #00ff41 !important;
+  font-size: 24px !important;
+  font-weight: bold !important;
+  text-shadow: 0 0 5px #00ff41;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #ffaa00 !important;
+  text-shadow: 0 0 8px #ffaa00;
+}
+
+/* Roads/highways - like New Vegas map */
+.pipboy-road {
+  stroke: #00ff41 !important;
+  stroke-width: 2 !important;
+  opacity: 0.7 !important;
+  filter: drop-shadow(0 0 3px #00ff41);
+  animation: road-pulse 3s ease-in-out infinite;
+}
+
+@keyframes road-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+}
+
+/* Quest markers - golden glow like New Vegas */
+.quest-marker {
+  filter: 
+    drop-shadow(0 0 5px #ffaa00)
+    drop-shadow(0 0 10px #ffaa00)
+    drop-shadow(0 0 15px #ffaa00);
+  animation: quest-pulse 1s ease-in-out infinite;
+  z-index: 900 !important;
+}
+
+@keyframes quest-pulse {
+  0%, 100% { 
+    transform: scale(1) translateY(0);
+    opacity: 0.9;
+  }
+  50% { 
+    transform: scale(1.15) translateY(-2px);
+    opacity: 1;
+  }
+}
+
+/* Radiation zones - green hazard glow */
+.radiation-zone {
+  fill: rgba(0, 255, 65, 0.15) !important;
+  stroke: #00ff41 !important;
+  stroke-width: 2 !important;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 65, 0.5));
+  animation: rad-pulse 2s ease-in-out infinite;
+}
+
+@keyframes rad-pulse {
+  0%, 100% { 
+    fill-opacity: 0.15;
+    stroke-opacity: 0.7;
+  }
+  50% { 
+    fill-opacity: 0.25;
+    stroke-opacity: 1;
+  }
+}
+
+/* Faction territories - color-coded like New Vegas rep system */
+.faction-overlay {
+  stroke-width: 3 !important;
+  stroke-opacity: 0.8 !important;
+  fill-opacity: 0.1 !important;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.faction-ncr { stroke: #d4a000 !important; fill: #d4a000 !important; }
+.faction-legion { stroke: #d40000 !important; fill: #d40000 !important; }
+.faction-bos { stroke: #0080ff !important; fill: #0080ff !important; }
+.faction-house { stroke: #ffffff !important; fill: #ffffff !important; }
+
+/* Fog of War - unexplored areas darkened */
+.fog-reveal {
+  mix-blend-mode: destination-out;
+}
+
+/* Compass widget - Vault-Tec style */
+.compass-widget {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 80px;
+  height: 80px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00ff41;
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 255, 65, 0.3),
+    0 0 15px rgba(0, 255, 65, 0.2);
+  z-index: 500;
+}
+
+/* Map controls - Pip-Boy button style */
+.leaflet-control-zoom a {
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: #00ff41 !important;
+  border: 2px solid #00ff41 !important;
+  box-shadow: 
+    inset 0 0 5px rgba(0, 255, 65, 0.2),
+    0 0 10px rgba(0, 255, 65, 0.2) !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  text-shadow: 0 0 5px #00ff41;
+}
+
+.leaflet-control-zoom a:hover {
+  background: rgba(0, 255, 65, 0.2) !important;
+  color: #ffaa00 !important;
+  border-color: #ffaa00 !important;
+  text-shadow: 0 0 8px #ffaa00;
+}
+
+/* Weather overlay effects */
+.weather-overlay {
+  pointer-events: none;
+  z-index: 400;
+}
+
+.weather-radstorm {
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 255, 65, 0.2),
+    rgba(0, 255, 65, 0.05),
+    transparent
+  );
+  animation: rad-storm 3s ease-in-out infinite;
+}
+
+@keyframes rad-storm {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+/* Discovery banner - New Vegas style notification */
+.discovery-banner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.95);
+  color: #ffaa00;
+  border: 3px solid #ffaa00;
+  padding: 20px 40px;
+  font-family: 'VT323', monospace;
+  font-size: 24px;
+  text-align: center;
+  box-shadow: 
+    inset 0 0 20px rgba(255, 170, 0, 0.3),
+    0 0 30px rgba(255, 170, 0, 0.5);
+  text-shadow: 0 0 10px #ffaa00;
+  z-index: 1000;
+  animation: discovery-fade 3s ease-out forwards;
+}
+
+@keyframes discovery-fade {
+  0% { 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  20%, 80% { 
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% { 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+/* Player trail - breadcrumb dots like Pip-Boy */
+.player-trail-dot {
+  width: 6px;
+  height: 6px;
+  background: #00d4ff;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #00d4ff, 0 0 10px #00d4ff;
+  opacity: 0.6;
+}
+
+/* Loot scanner pulse effect */
+.loot-scanner-pulse {
+  position: absolute;
+  border: 2px solid #00ff41;
+  border-radius: 50%;
+  animation: scanner-pulse 2s ease-out infinite;
+  pointer-events: none;
+  z-index: 450;
+}
+
+@keyframes scanner-pulse {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+  }
+}
+
+/* Map status text - terminal style */
+.map-status {
+  color: #00ff41 !important;
+  text-shadow: 0 0 5px #00ff41;
+  font-family: 'VT323', monospace !important;
+  animation: text-flicker 0.1s infinite;
+}
+
+@keyframes text-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
