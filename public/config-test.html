@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Configuration Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #000;
+            color: #00ff00;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .result {
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .label {
+            color: #00ffae;
+            font-weight: bold;
+        }
+        .value {
+            color: #ffffff;
+            word-break: break-all;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-family: monospace;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #00ffae;
+        }
+    </style>
+    <script>
+      // Same API_BASE configuration as index.html
+      window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.github.dev'))
+        ? 'http://localhost:3001'
+        : 'https://api.atomicfizzcaps.xyz';
+      window.BACKEND_URL = window.API_BASE;
+    </script>
+</head>
+<body>
+    <h1>🛠️ API Configuration Test</h1>
+    
+    <div class="result">
+        <div class="label">Current Hostname:</div>
+        <div class="value" id="hostname"></div>
+    </div>
+    
+    <div class="result">
+        <div class="label">window.API_BASE:</div>
+        <div class="value" id="apiBase"></div>
+    </div>
+    
+    <div class="result">
+        <div class="label">window.BACKEND_URL:</div>
+        <div class="value" id="backendUrl"></div>
+    </div>
+    
+    <div class="result">
+        <div class="label">Expected API URL:</div>
+        <div class="value" id="expectedUrl"></div>
+    </div>
+    
+    <div>
+        <button onclick="testBackend()">Test Backend Connection</button>
+        <button onclick="testLocation()">Test /api/locations</button>
+    </div>
+    
+    <div class="result" id="testResult" style="display:none;">
+        <div class="label">Test Result:</div>
+        <div class="value" id="testOutput"></div>
+    </div>
+
+    <script>
+        // Display configuration
+        document.getElementById('hostname').textContent = location.hostname;
+        document.getElementById('apiBase').textContent = window.API_BASE || '(not set)';
+        document.getElementById('backendUrl').textContent = window.BACKEND_URL || '(not set)';
+        document.getElementById('expectedUrl').textContent = (window.API_BASE || 'N/A') + '/api/locations';
+        
+        async function testBackend() {
+            const resultDiv = document.getElementById('testResult');
+            const outputDiv = document.getElementById('testOutput');
+            resultDiv.style.display = 'block';
+            outputDiv.innerHTML = 'Testing connection...';
+            
+            try {
+                const url = `${window.API_BASE}/api/locations`;
+                outputDiv.innerHTML = `Fetching: ${url}<br>`;
+                
+                const response = await fetch(url);
+                const status = response.status;
+                outputDiv.innerHTML += `Status: ${status}<br>`;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    outputDiv.innerHTML += `<span class="success">✓ SUCCESS!</span><br>`;
+                    outputDiv.innerHTML += `Received ${Array.isArray(data) ? data.length : 'unknown'} locations<br>`;
+                    outputDiv.innerHTML += `First location: ${JSON.stringify(data[0], null, 2).substring(0, 200)}...`;
+                } else {
+                    const text = await response.text();
+                    outputDiv.innerHTML += `<span class="error">✗ FAILED</span><br>`;
+                    outputDiv.innerHTML += `Response: ${text.substring(0, 500)}`;
+                }
+            } catch (err) {
+                outputDiv.innerHTML += `<span class="error">✗ ERROR</span><br>`;
+                outputDiv.innerHTML += `${err.message}`;
+            }
+        }
+        
+        async function testLocation() {
+            const resultDiv = document.getElementById('testResult');
+            const outputDiv = document.getElementById('testOutput');
+            resultDiv.style.display = 'block';
+            outputDiv.innerHTML = 'Testing /api/locations...';
+            
+            try {
+                // Test both with API_BASE and window.location.origin to compare
+                const apiUrl = `${window.API_BASE}/api/locations`;
+                const originUrl = `${window.location.origin}/api/locations`;
+                
+                outputDiv.innerHTML = `Test 1: ${apiUrl}<br>`;
+                const response1 = await fetch(apiUrl);
+                outputDiv.innerHTML += `Status: ${response1.status} ${response1.statusText}<br><br>`;
+                
+                outputDiv.innerHTML += `Test 2: ${originUrl}<br>`;
+                const response2 = await fetch(originUrl);
+                outputDiv.innerHTML += `Status: ${response2.status} ${response2.statusText}<br>`;
+                
+                if (response1.ok) {
+                    outputDiv.innerHTML += `<br><span class="success">✓ Backend API is working!</span>`;
+                } else if (response2.status === 404) {
+                    outputDiv.innerHTML += `<br><span class="error">⚠ Frontend is calling wrong URL (origin instead of backend)</span>`;
+                }
+            } catch (err) {
+                outputDiv.innerHTML += `<span class="error">✗ ERROR: ${err.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
