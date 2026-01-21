@@ -1,0 +1,246 @@
+{
+  "vault_generation": {
+    "enabled": true,
+    "description": "Randomly generated Vaults with unique stories and experiments",
+    "vault_templates": [
+      {
+        "id": "control_vault",
+        "name": "Control Vault",
+        "description": "A standard vault with no experiments. Boring but safe.",
+        "experiment": "None",
+        "probability": 0.05,
+        "dangers": ["equipment_failure", "resource_shortage"],
+        "loot_quality": "common"
+      },
+      {
+        "id": "social_experiment",
+        "name": "Social Experiment Vault",
+        "description": "Tests human behavior under extreme conditions.",
+        "experiment": "Random social experiment (e.g., all residents are clones, no entertainment, puppet government)",
+        "probability": 0.30,
+        "dangers": ["insanity", "civil_war", "cult_formation"],
+        "loot_quality": "rare"
+      },
+      {
+        "id": "biological_experiment",
+        "name": "Biological Experiment Vault",
+        "description": "Tests exposure to viruses, mutations, or FEV.",
+        "experiment": "Biological agents, FEV exposure, or forced evolution",
+        "probability": 0.20,
+        "dangers": ["mutants", "diseases", "super_mutants"],
+        "loot_quality": "epic"
+      },
+      {
+        "id": "tech_experiment",
+        "name": "Technology Experiment Vault",
+        "description": "Tests advanced pre-war technology.",
+        "experiment": "AI control, cryo-storage, or advanced robotics",
+        "probability": 0.25,
+        "dangers": ["rogue_ai", "malfunctioning_robots", "tech_malfunction"],
+        "loot_quality": "legendary"
+      },
+      {
+        "id": "isolation_experiment",
+        "name": "Isolation Experiment Vault",
+        "description": "Tests psychological effects of extreme isolation.",
+        "experiment": "Complete isolation, no external contact, sensory deprivation",
+        "probability": 0.15,
+        "dangers": ["madness", "cannibalism", "suicide_cult"],
+        "loot_quality": "rare"
+      },
+      {
+        "id": "paradise_vault",
+        "name": "Paradise Vault",
+        "description": "Everything went perfectly... too perfectly.",
+        "experiment": "Unknown - seemingly perfect conditions",
+        "probability": 0.03,
+        "dangers": ["hidden_experiment", "mind_control", "utopia_syndrome"],
+        "loot_quality": "legendary"
+      },
+      {
+        "id": "failed_vault",
+        "name": "Failed Vault",
+        "description": "Something went catastrophically wrong.",
+        "experiment": "Experiment failed or was never completed",
+        "probability": 0.02,
+        "dangers": ["radiation", "structural_collapse", "raiders"],
+        "loot_quality": "epic"
+      }
+    ],
+    "vault_sections": [
+      {
+        "id": "entrance",
+        "name": "Vault Entrance",
+        "description": "Massive gear door with Vault-Tec logo",
+        "required": true,
+        "enemies": ["radroaches", "feral_ghouls"],
+        "loot": ["vault_jumpsuits", "pip_boys", "basic_supplies"]
+      },
+      {
+        "id": "atrium",
+        "name": "Main Atrium",
+        "description": "Central hub of the vault",
+        "required": true,
+        "enemies": ["security_robots", "turrets"],
+        "loot": ["weapons", "ammo", "stimpaks"]
+      },
+      {
+        "id": "living_quarters",
+        "name": "Living Quarters",
+        "description": "Residential section with apartments",
+        "required": true,
+        "enemies": ["feral_ghouls", "radroaches"],
+        "loot": ["food", "water", "pre_war_money", "holotapes"]
+      },
+      {
+        "id": "overseer_office",
+        "name": "Overseer's Office",
+        "description": "Administrative center and overseer's quarters",
+        "required": true,
+        "enemies": ["overseer_ghost", "protectrons"],
+        "loot": ["overseer_keycard", "vault_documents", "unique_weapons"]
+      },
+      {
+        "id": "reactor",
+        "name": "Nuclear Reactor",
+        "description": "Powers the entire vault",
+        "required": false,
+        "enemies": ["glowing_ones", "protectrons"],
+        "loot": ["fusion_cores", "energy_weapons", "power_armor_parts"]
+      },
+      {
+        "id": "medical_bay",
+        "name": "Medical Bay",
+        "description": "Hospital and medical research facility",
+        "required": false,
+        "enemies": ["feral_doctors", "radsscorpions"],
+        "loot": ["stimpaks", "rad_away", "medical_supplies", "chems"]
+      },
+      {
+        "id": "armory",
+        "name": "Armory",
+        "description": "Weapon storage and security station",
+        "required": false,
+        "enemies": ["sentry_bots", "turrets"],
+        "loot": ["advanced_weapons", "ammo", "armor", "explosives"]
+      },
+      {
+        "id": "laboratory",
+        "name": "Research Laboratory",
+        "description": "Scientific research and experimentation",
+        "required": false,
+        "enemies": ["mutants", "test_subjects"],
+        "loot": ["research_data", "rare_chems", "tech_components"]
+      },
+      {
+        "id": "hydroponics",
+        "name": "Hydroponics Bay",
+        "description": "Food production and water purification",
+        "required": false,
+        "enemies": ["mutated_plants", "radroaches"],
+        "loot": ["food", "purified_water", "seeds"]
+      },
+      {
+        "id": "cryo_facility",
+        "name": "Cryogenic Facility",
+        "description": "Long-term preservation pods",
+        "required": false,
+        "enemies": ["frozen_experiments", "protectrons"],
+        "loot": ["cryo_weapons", "unique_armor", "frozen_supplies"]
+      }
+    ],
+    "generation_rules": {
+      "min_sections": 5,
+      "max_sections": 10,
+      "min_enemies_per_section": 3,
+      "max_enemies_per_section": 12,
+      "loot_density": "medium",
+      "difficulty_scaling": true
+    }
+  },
+  "settlements": {
+    "types": [
+      {
+        "id": "trading_post",
+        "name": "Trading Post",
+        "description": "Small merchant settlement",
+        "services": ["merchant", "repair", "doctor"],
+        "population_range": [5, 20]
+      },
+      {
+        "id": "fortified_town",
+        "name": "Fortified Town",
+        "description": "Walled settlement with defenses",
+        "services": ["merchant", "repair", "doctor", "blacksmith", "inn"],
+        "population_range": [20, 100]
+      },
+      {
+        "id": "raider_camp",
+        "name": "Raider Camp",
+        "description": "Hostile raider settlement",
+        "services": [],
+        "population_range": [10, 30],
+        "hostile": true
+      },
+      {
+        "id": "farming_village",
+        "name": "Farming Village",
+        "description": "Peaceful agricultural settlement",
+        "services": ["merchant", "doctor"],
+        "population_range": [15, 50]
+      },
+      {
+        "id": "scavenger_outpost",
+        "name": "Scavenger Outpost",
+        "description": "Settlement focused on salvaging pre-war tech",
+        "services": ["merchant", "repair", "tech_specialist"],
+        "population_range": [8, 25]
+      }
+    ]
+  },
+  "iconic_locations": [
+    {
+      "id": "the_glow",
+      "name": "The Glow",
+      "description": "Highly irradiated crater of the West Tek Research Facility",
+      "lat": 35.5,
+      "lng": -117.5,
+      "level": 25,
+      "rarity": "legendary",
+      "dangers": ["extreme_radiation", "glowing_ones", "feral_ghoul_reavers"],
+      "loot": ["power_armor", "energy_weapons", "FEV_data"]
+    },
+    {
+      "id": "shady_sands",
+      "name": "Shady Sands (NCR Capital)",
+      "description": "Capital of the New California Republic",
+      "lat": 36.5,
+      "lng": -116.5,
+      "level": 1,
+      "rarity": "epic",
+      "faction": "ncr",
+      "services": ["all"]
+    },
+    {
+      "id": "the_hub",
+      "name": "The Hub",
+      "description": "Major trading center of the wasteland",
+      "lat": 34.05,
+      "lng": -118.25,
+      "level": 5,
+      "rarity": "rare",
+      "services": ["merchant", "caravan", "water_merchants"]
+    },
+    {
+      "id": "mariposa",
+      "name": "Mariposa Military Base",
+      "description": "Birthplace of the Super Mutants",
+      "lat": 37.5,
+      "lng": -120.5,
+      "level": 30,
+      "rarity": "legendary",
+      "dangers": ["super_mutants", "centaurs", "floaters"],
+      "loot": ["FEV_samples", "military_tech", "power_armor"]
+    }
+  ]
+}

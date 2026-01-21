@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
 
     <!-- Content Security Policy to allow external resources -->
     <meta http-equiv="Content-Security-Policy" content="
@@ -33,6 +33,8 @@
     <!-- Pip‑Boy UI CSS -->
     <link rel="stylesheet" href="/css/pipboy.css" />
     <link rel="stylesheet" href="/css/pipboy-map.css" />
+    <link rel="stylesheet" href="/css/pipboy-responsive.css" />
+    <link rel="stylesheet" href="/css/vats.css" />
 
     <!-- Third-party libs (deferred, non-module globals) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
@@ -360,6 +362,7 @@
     <script src="/js/modules/compass.js" defer></script>
     <script src="/js/modules/lootScanner.js" defer></script>
     <script src="/js/modules/discoveryBanner.js" defer></script>
+    <script src="/js/modules/vats.js" defer></script>
 
     <!-- UI MODULES -->
     <script src="/js/modules/inventory-loader.js" defer></script>
@@ -371,6 +374,9 @@
 
     <!-- BOOT SEQUENCE (non-module) -->
     <script src="/js/boot.js" defer></script>
+
+    <!-- KONAMI CODE EASTER EGG -->
+    <script src="/js/konami.js" defer></script>
 
     <!-- RADIO / OVERSEER POPUP (keeps same behavior) -->
     <script>
