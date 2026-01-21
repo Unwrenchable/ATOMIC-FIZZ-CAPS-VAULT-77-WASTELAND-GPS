@@ -42,6 +42,8 @@ app.use(
       // allow comma-separated list
       const allowed = FRONTEND_ORIGIN.split(",").map((s) => s.trim());
       if (allowed.includes(origin)) return cb(null, true);
+      // also allow any vercel.app deployment domain for easier testing
+      if (origin.endsWith(".vercel.app")) return cb(null, true);
       return cb(new Error("CORS not allowed"), false);
     },
     methods: ["GET", "POST", "OPTIONS"],
