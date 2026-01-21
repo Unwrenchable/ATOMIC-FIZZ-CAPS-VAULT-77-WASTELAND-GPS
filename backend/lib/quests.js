@@ -1,5 +1,5 @@
 // backend/lib/quests.js
-const redis = require("../redis");
+const redis = require('./redis');
 
 /**
  * Mark a quest as completed for a player.
