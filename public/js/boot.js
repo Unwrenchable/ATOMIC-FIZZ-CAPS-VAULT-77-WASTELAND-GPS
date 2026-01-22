@@ -24,20 +24,16 @@
     "██║      ██║ ███████╗ ███████║",
     "╚═╝      ╚═╝ ╚══════╝ ╚══════╝",
     "",
-    "[BOOTING FIZZ CORE]",
-    "[█▒▒▒▒▒▒▒▒▒] 10%",
-    "[███▒▒▒▒▒▒▒] 30%",
-    "[██████▒▒▒▒] 60%",
+    "[BOOTING FIZZ CORE]",    
+    "[█         ] 10%",
+    "[███       ] 30%",
+    "[██████    ] 60%",
     "[██████████] 100%",
     "",
     "FIZZ CORE ONLINE",
     "VAULT-TEC SYSTEMS NOMINAL",
     ""
   ];
-
-  // -----------------------------
-  // 2. NARRATIVE INTRO (UNCHANGED)
-  // -----------------------------
   const introFrames = [
   ">> INITIALIZING TIMELINE ANCHOR...",
   ">> WARNING: TEMPORAL OVERLAP DETECTED",
