@@ -21,13 +21,13 @@
         id: "mojave_nights",
         name: "Mojave Nights",
         playlistUrl: "/audio/radio/playlist-mojave.json",
-        stationUrl: "/audio/radio/station.json"
+        stationUrl: "/audio/radio/station-mojave.json"
       },
       {
         id: "wasteland_swing",
         name: "Wasteland Swing",
         playlistUrl: "/audio/radio/playlist-swing.json",
-        stationUrl: "/audio/radio/station.json"
+        stationUrl: "/audio/radio/station-swing.json"
       }
     ]
   };

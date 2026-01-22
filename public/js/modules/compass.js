@@ -8,6 +8,7 @@
     element: null,
     lastHeading: 0,
     hasInit: false,
+    retryTimeout: null,
 
     init() {
       if (this.hasInit) return;
@@ -17,6 +18,12 @@
       const worldmap = Game.modules.worldmap;
       if (!worldmap || typeof worldmap.setPlayerHeading !== "function") {
         console.warn("compass: worldmap not loaded yet");
+        if (!this.retryTimeout) {
+          this.retryTimeout = setTimeout(() => {
+            this.retryTimeout = null;
+            this.init();
+          }, 500);
+        }
         return;
       }
 
@@ -66,7 +73,7 @@
           top: 10px;
           left: 50%;
           transform: translateX(-50%);
-          width: min(260px, 70vw);
+          width: min(260px, 60%);
           height: 28px;
           overflow: hidden;
           z-index: 500;
