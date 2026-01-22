@@ -20,8 +20,11 @@
   // ------------------------------------------------------------
   const TICK_INTERVAL = 6000; // 6 seconds per world tick
   const ENCOUNTER_CHANCE = 0.35; // 35% chance per tick
+  const ENCOUNTER_COOLDOWN_MS = 30000;
 
   let lastRegion = null;
+  let lastEncounterKey = null;
+  let lastEncounterAt = 0;
 
   // ------------------------------------------------------------
   // Region Change Handler
@@ -46,6 +49,17 @@
     }
   }
 
+  function getEncounterKey(encounter) {
+    if (!encounter || !encounter.type) return null;
+    const id =
+      encounter.id ||
+      encounter.quest?.id ||
+      encounter.event?.id ||
+      encounter.npc?.id ||
+      encounter.merchant?.id;
+    return id ? `${encounter.type}:${id}` : encounter.type;
+  }
+
   // ------------------------------------------------------------
   // World Tick
   // ------------------------------------------------------------
@@ -68,13 +82,24 @@
     // 4. Anomaly drift
     const anomaly = WorldState.getAnomalyLevel(regionId);
     if (Math.random() < 0.1) {
-      const drift = anomaly + (Math.random() * 0.1 - 0.05);
+      const drift = Math.max(0, Math.min(1, anomaly + (Math.random() * 0.1 - 0.05)));
       WorldState.setAnomalyLevel(regionId, drift);
     }
 
     // 5. Random encounter
     if (Math.random() < ENCOUNTER_CHANCE) {
       const encounter = Encounters.rollEncounter();
+      const key = getEncounterKey(encounter);
+      const now = Date.now();
+
+      if (key && key === lastEncounterKey && now - lastEncounterAt < ENCOUNTER_COOLDOWN_MS) {
+        return;
+      }
+
+      if (key) {
+        lastEncounterKey = key;
+        lastEncounterAt = now;
+      }
       handleEncounter(encounter);
     }
   }
