@@ -1,0 +1,19 @@
+{
+  "stationName": "Wasteland Swing",
+  "dj": {
+    "name": "Swinger Mae",
+    "style": "upbeat, crackling charm",
+    "introLines": [
+      "Dust off those boots, swing time is back.",
+      "If the world ends, we end it dancing."
+    ]
+  },
+  "ads": [
+    "Smooth moves need smooth soles — grab Vault-Tec polish today.",
+    "Wasteland Swing reminds you: hydrate before you jitterbug."
+  ],
+  "interstitials": [
+    "Keep the rhythm steady — more brass on the way.",
+    "You bring the steps, we bring the swing."
+  ]
+}
