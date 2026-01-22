@@ -11,12 +11,11 @@
 
     init() {
       if (this.hasInit) return;
-      this.hasInit = true;
       this.createCompassUI();
 
       // Hook into worldmap heading updates
       const worldmap = Game.modules.worldmap;
-      if (!worldmap) {
+      if (!worldmap || typeof worldmap.setPlayerHeading !== "function") {
         console.warn("compass: worldmap not loaded yet");
         return;
       }
@@ -29,6 +28,7 @@
         this.updateCompass(deg);
       };
 
+      this.hasInit = true;
       console.log("compass: initialized");
     },
 
