@@ -106,6 +106,15 @@
     bootScreen.classList.add("hidden");
     pipboyScreen.classList.remove("hidden");
 
+    // Compass hook (after UI becomes visible)
+    if (window.Game?.modules?.compass?.onPipboyReady) {
+      try {
+        Game.modules.compass.onPipboyReady();
+      } catch (err) {
+        console.warn("[BOOT] compass onPipboyReady failed:", err);
+      }
+    }
+
     // Notify the game (radio engine listens for this)
     window.dispatchEvent(new Event("pipboyReady"));
 

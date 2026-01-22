@@ -182,6 +182,10 @@ body.pipboy-mode {
   pointer-events: auto;
 }
 
+.pipboy-panel.has-compass {
+  position: relative;
+}
+
 /* ============================================================
    MAP PANEL — FINAL
    ============================================================ */
