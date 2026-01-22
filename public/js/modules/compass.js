@@ -7,8 +7,11 @@
   const compassModule = {
     element: null,
     lastHeading: 0,
+    hasInit: false,
 
     init() {
+      if (this.hasInit) return;
+      this.hasInit = true;
       this.createCompassUI();
 
       // Hook into worldmap heading updates
@@ -29,7 +32,13 @@
       console.log("compass: initialized");
     },
 
+    onPipboyReady() {
+      this.init();
+    },
+
     createCompassUI() {
+      if (document.getElementById("pipboyCompass")) return;
+      const mapPanel = document.getElementById("panel-map");
       // Create container
       const bar = document.createElement("div");
       bar.id = "pipboyCompass";
@@ -41,21 +50,26 @@
         </div>
       `;
 
-      document.body.appendChild(bar);
+      if (mapPanel) {
+        mapPanel.appendChild(bar);
+        mapPanel.classList.add("has-compass");
+      } else {
+        document.body.appendChild(bar);
+      }
       this.element = bar;
 
       // Style
       const style = document.createElement("style");
       style.textContent = `
         #pipboyCompass {
-          position: fixed;
-          top: 45px;
+          position: absolute;
+          top: 10px;
           left: 50%;
           transform: translateX(-50%);
-          width: 260px;
+          width: min(260px, 70vw);
           height: 28px;
           overflow: hidden;
-          z-index: 9999;
+          z-index: 500;
           pointer-events: none;
           border: 1px solid #00ff41;
           background: rgba(0, 0, 0, 0.35);
@@ -102,7 +116,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     try {
-      compassModule.init();
+      // Defer until boot completes
     } catch (e) {
       console.error("compass: init failed", e);
     }
