@@ -54,7 +54,7 @@
     // ------------------------------------------------------------
     // 2. Anomaly Encounter Check
     // ------------------------------------------------------------
-    const anomalyLevel = WorldState.getAnomalyLevel(regionId);
+    const anomalyLevel = Math.max(0, Math.min(1, WorldState.getAnomalyLevel(regionId)));
     if (anomalyLevel > 0.3) {
       if (Math.random() < anomalyLevel * 0.25) {
         return Anomalies.roll(regionId, weather);

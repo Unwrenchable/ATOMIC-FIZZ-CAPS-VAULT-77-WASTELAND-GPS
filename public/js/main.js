@@ -96,6 +96,8 @@
   let _gameInitialized = false;
   let _lastPlayerPosition = null;
   let _geoWatchId = null;
+  let _lastQuestCheckPosition = null;
+  let _lastQuestCheckAt = 0;
   let gpsLocked = false;
   let connectedWallet = false;
 
@@ -247,8 +249,8 @@
   }
 
   function addXP(amount) {
-    if (!amount) return;
-    PLAYER.xp += amount;
+    if (typeof amount !== "number" || !Number.isFinite(amount) || amount <= 0) return;
+    PLAYER.xp = Math.max(0, PLAYER.xp + amount);
     checkLevelUp();
     savePlayerState();
     updateHUD();
@@ -612,7 +614,17 @@
           }
         });
 
-        checkQuestTriggersAtPosition(lat, lng);
+        const now = Date.now();
+        const canCheckQuests =
+          !_lastQuestCheckPosition ||
+          distanceMeters(lat, lng, _lastQuestCheckPosition.lat, _lastQuestCheckPosition.lng) > 10 ||
+          now - _lastQuestCheckAt > 30000;
+
+        if (canCheckQuests) {
+          checkQuestTriggersAtPosition(lat, lng);
+          _lastQuestCheckPosition = { lat, lng };
+          _lastQuestCheckAt = now;
+        }
       },
       err => safeWarn("Geolocation error:", err),
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
