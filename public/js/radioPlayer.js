@@ -16,6 +16,18 @@
         name: "Atomic Fizz Radio",
         playlistUrl: "/audio/radio/playlist.json",
         stationUrl: "/audio/radio/station.json"
+      },
+      {
+        id: "mojave_nights",
+        name: "Mojave Nights",
+        playlistUrl: "/audio/radio/playlist-mojave.json",
+        stationUrl: "/audio/radio/station-mojave.json"
+      },
+      {
+        id: "wasteland_swing",
+        name: "Wasteland Swing",
+        playlistUrl: "/audio/radio/playlist-swing.json",
+        stationUrl: "/audio/radio/station-swing.json"
       }
     ]
   };
@@ -164,6 +176,11 @@
           knob.addEventListener("click", () => this.cycleStation());
         }
       }
+
+      const cycleBtn = document.getElementById("radioCycleBtn");
+      if (cycleBtn) {
+        cycleBtn.addEventListener("click", () => this.cycleStation());
+      }
     }
 
     async _initStations() {
@@ -194,6 +211,7 @@
 
     start() {
       const station = this.currentStation;
+      this._updateStationDisplay();
       if (!station || !station.ready) {
         console.warn("[Radio] No ready station to start");
         return;
@@ -221,10 +239,18 @@
 
       const station = this.currentStation;
       console.log(`[Radio] Switched to station: ${station?.name || "Unknown"}`);
+      this._updateStationDisplay();
 
       this.audioA.pause();
       this.audioB.pause();
       this._playNext(true);
+    }
+
+    _updateStationDisplay() {
+      const label = document.getElementById("currentStation");
+      if (!label) return;
+      const station = this.currentStation;
+      label.textContent = station?.name || "NO SIGNAL";
     }
 
     // ------------------------------------------------------------
