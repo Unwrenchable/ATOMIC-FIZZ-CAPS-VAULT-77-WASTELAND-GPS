@@ -41,11 +41,17 @@ The encounters module (`encounters.js`) orchestrates random events based on regi
 
 ### Main Roll
 
-#### `overseerEncounters.rollEncounter()`
+#### `Game.modules.world.encounters.roll(worldState, location)`
 Generates an encounter based on current conditions.
 
 ```javascript
-const encounter = overseerEncounters.rollEncounter();
+const encounter = Game.modules.world.encounters.roll(worldState, {
+  id: "mojave_ruins",
+  name: "Ruins",
+  lvl: 5,
+  biome: "desert",
+  type: "poi"
+});
 // { type: "combat", enemies: [...], loot: {...} }
 ```
 

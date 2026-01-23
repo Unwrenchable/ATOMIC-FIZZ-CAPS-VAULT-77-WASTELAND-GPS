@@ -53,16 +53,16 @@ The weather module (`weather.js`) generates weather conditions based on region, 
 
 ### Weather Generation
 
-#### `overseerWeather.rollWeather()`
-Generates new weather based on current conditions.
+#### `overseerWeather.updateWeather()`
+Generates new weather based on current conditions and updates world state.
 
 ```javascript
-const weather = overseerWeather.rollWeather();
-// { type: "rad_storm", anomaly: 0.4, faction: "ncr", region: "mojave", timestamp: ... }
+const weather = overseerWeather.updateWeather();
+// Returns: { type: "rad_storm", anomaly: 0.4, faction: "ncr", region: "mojave", timestamp: ... }
 ```
 
 #### `overseerWeather.getCurrent()`
-Gets current weather or generates new if none.
+Gets current weather or generates new if none exists.
 
 ```javascript
 const weather = overseerWeather.getCurrent();

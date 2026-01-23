@@ -16,11 +16,9 @@ This wiki documents all the game functions and systems in the current state of t
 ### Combat & Survival
 - [[Battle-System]] - Real-time combat mechanics
 - [[VATS-System]] - V.A.T.S. targeting assistance
-- [[Enemy-Scaling]] - Level-based enemy difficulty
 
 ### Character & Inventory
 - [[Inventory-System]] - Manage weapons, armor, consumables
-- [[Equipment-System]] - Equip and manage gear
 - [[Loot-RNG]] - Procedural loot generation
 
 ### Crafting & Economy
@@ -37,21 +35,13 @@ This wiki documents all the game functions and systems in the current state of t
 - [[Weather-System]] - Dynamic weather effects
 - [[Fog-of-War]] - Exploration and discovery
 - [[Encounters]] - Procedural world events
-- [[Radiation-Zones]] - Hazardous areas
 
 ### Communication & Media
-- [[Radio-System]] - Wasteland radio stations
-- [[Live-Streaming]] - Live DJ broadcasts
+- [[Radio-System]] - Wasteland radio stations and live DJ broadcasts
 - [[Narrative-System]] - NPC dialog and storytelling
 
-### Blockchain & Economy
-- [[Wallet-Integration]] - Phantom wallet connection
+### Blockchain
 - [[Bridge-Portal]] - Cross-chain asset bridging
-- [[NFT-System]] - NFT item integration
-
-### AI & Overseer
-- [[Overseer-Terminal]] - AI assistant and intel
-- [[World-State]] - Global game state tracking
 
 ---
 

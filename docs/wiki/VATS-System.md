@@ -45,7 +45,7 @@ Enters V.A.T.S. targeting mode.
 const enemies = [
   { id: "raider_1", name: "Raider", health: 50, distance: 15 }
 ];
-Game.modules.vats.enter(enemies);
+const success = Game.modules.vats.enter(enemies);
 ```
 
 - Returns `false` if no targets available
