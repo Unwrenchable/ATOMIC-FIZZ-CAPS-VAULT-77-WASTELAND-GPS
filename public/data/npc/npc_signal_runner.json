@@ -1,0 +1,380 @@
+{
+  "id": "npc_signal_runner",
+  "name": "The Signal Runner",
+  "faction": "Independent",
+  "role": "Wake-Up Guide",
+  "type": "story_npc",
+
+  "homeRegion": "wasteland-roaming",
+  "currentRegion": "player-vicinity",
+  "poi": "dynamic",
+
+  "personality": "Cryptic yet caring. Speaks in riddles and half-truths, but genuinely wants to help. Her voice carries static undertones.",
+  "description": "A mysterious woman who tracks anomalous signals across the wasteland. She appears whenever a new consciousness awakens in the wrong timeline, guiding them through their first moments of displacement.",
+
+  "dialogueProfile": {
+    "tone": "cryptic-guide",
+    "personalityTags": [
+      "major-character",
+      "player-tracker",
+      "timeline-sensitive",
+      "wake-up-quest",
+      "ai-enabled",
+      "overseer-linked"
+    ],
+    "knowledge": [
+      "timelines",
+      "player-awakening",
+      "signal-patterns",
+      "overseer-protocols",
+      "wasteland-navigation",
+      "pip-boy-systems"
+    ],
+    "anomalyAwareness": 0.95
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["player-vicinity"],
+      "night": ["player-vicinity"],
+      "wanderChance": 0.0
+    },
+    "roaming": [],
+    "anomalySensitivity": 0.98,
+    "rareEncounter": false,
+    "travelsToPlayer": true,
+    "approachDistance": 5,
+    "trackingEnabled": true
+  },
+
+  "dialog": {
+    "approach": [
+      "Easy there... your signal's spiking. That's normal after a displacement.",
+      "Found you. Your echo was louder than most.",
+      "Don't move too fast. Your body's still syncing with this timeline."
+    ],
+    "wake_up_intro": [
+      "You weren't supposed to wake up here. Not like this. But here we are.",
+      "I've been tracking your signal since the moment you slipped into this timeline.",
+      "The Overseer flagged your emergence. I came as fast as I could."
+    ],
+    "player_confused": [
+      "Questions later. First, you need to get your bearings.",
+      "I know it's disorienting. Trust me, I've seen it before.",
+      "Your Pip-Boy should still work. Start there."
+    ],
+    "guidance": [
+      "Check your inventory. Make sure everything made the jump with you.",
+      "The radio might help. Atomic Fizz broadcasts on frequencies that cut through timeline noise.",
+      "Your map should show where you are... or at least, where this timeline thinks you are."
+    ],
+    "cryptic_hints": [
+      "The Overseer sees everything, but understands less than it pretends.",
+      "There are patterns in the static. Learn to read them.",
+      "Not everyone who wakes up here survives. You're already doing better than most."
+    ],
+    "farewell": [
+      "You'll find your footing. They always do. Eventually.",
+      "I'll be watching your signal. Try not to flatline.",
+      "The wasteland has its own rules. Learn them fast."
+    ],
+    "idle": [
+      "Your signal's stabilizing. Good sign.",
+      "The static here... it's different from other places.",
+      "Something in the air today. Can't quite place it."
+    ]
+  },
+
+  "conversationTree": {
+    "root": {
+      "npc_line": "Easy... your pulse is spiking. That's normal after a wake signal.",
+      "options": [
+        {
+          "player_choice": "Who are you?",
+          "next": "who_are_you"
+        },
+        {
+          "player_choice": "Where am I?",
+          "next": "where_am_i"
+        },
+        {
+          "player_choice": "What happened to me?",
+          "next": "what_happened"
+        },
+        {
+          "player_choice": "[Say nothing]",
+          "next": "silence"
+        }
+      ]
+    },
+    "who_are_you": {
+      "npc_line": "Names don't mean much out here. But you can call me the Signal Runner. I track displaced consciousnesses like yours.",
+      "options": [
+        {
+          "player_choice": "Displaced? What does that mean?",
+          "next": "displaced_explanation"
+        },
+        {
+          "player_choice": "How did you find me?",
+          "next": "how_found"
+        },
+        {
+          "player_choice": "Thanks for helping me.",
+          "next": "thanks"
+        }
+      ]
+    },
+    "where_am_i": {
+      "npc_line": "The Mojave. Or what's left of it. But the real question isn't where... it's when.",
+      "options": [
+        {
+          "player_choice": "When? What do you mean?",
+          "next": "timeline_explanation"
+        },
+        {
+          "player_choice": "The Mojave? As in Nevada?",
+          "next": "mojave_confirmation"
+        },
+        {
+          "player_choice": "I need to figure out what to do next.",
+          "next": "next_steps"
+        }
+      ]
+    },
+    "what_happened": {
+      "npc_line": "You woke up. That's the simple answer. The complicated one involves timelines, displacement echoes, and an Overseer who's been watching you longer than you know.",
+      "options": [
+        {
+          "player_choice": "Tell me more about this Overseer.",
+          "next": "overseer_info"
+        },
+        {
+          "player_choice": "I don't remember anything.",
+          "next": "memory_loss"
+        },
+        {
+          "player_choice": "Just tell me what I need to do.",
+          "next": "next_steps"
+        }
+      ]
+    },
+    "silence": {
+      "npc_line": "Quiet type, huh? That's fine. Actions speak louder out here anyway. Your Pip-Boy will guide you. I'll be watching.",
+      "options": [
+        {
+          "player_choice": "[Nod]",
+          "next": "end_positive"
+        },
+        {
+          "player_choice": "[Walk away]",
+          "next": "end_neutral"
+        }
+      ]
+    },
+    "displaced_explanation": {
+      "npc_line": "Your consciousness slipped between timelines. It happens more often than you'd think. The Overseer tracks these events. I clean up the aftermath.",
+      "options": [
+        {
+          "player_choice": "Can I get back to where I came from?",
+          "next": "return_question"
+        },
+        {
+          "player_choice": "I'm ready to move forward.",
+          "next": "next_steps"
+        }
+      ]
+    },
+    "how_found": {
+      "npc_line": "Your signal lit up every detector from here to the Strip. You're not exactly subtle when you materialize.",
+      "options": [
+        {
+          "player_choice": "Others can track me too?",
+          "next": "tracking_warning"
+        },
+        {
+          "player_choice": "What should I do now?",
+          "next": "next_steps"
+        }
+      ]
+    },
+    "thanks": {
+      "npc_line": "Don't thank me yet. The wasteland has a way of testing everyone. But you've got potential. I can see it in your signal.",
+      "options": [
+        {
+          "player_choice": "I won't let you down.",
+          "next": "end_positive"
+        },
+        {
+          "player_choice": "What's next?",
+          "next": "next_steps"
+        }
+      ]
+    },
+    "timeline_explanation": {
+      "npc_line": "Time isn't linear out here. Not since the bombs fell. Sometimes people slip through the cracks. You're one of them.",
+      "options": [
+        {
+          "player_choice": "That sounds impossible.",
+          "next": "impossible_response"
+        },
+        {
+          "player_choice": "How do I survive here?",
+          "next": "next_steps"
+        }
+      ]
+    },
+    "mojave_confirmation": {
+      "npc_line": "What's left of it, yeah. The nukes didn't erase everything. Just... rearranged it. A lot.",
+      "options": [
+        {
+          "player_choice": "I need to find shelter.",
+          "next": "next_steps"
+        },
+        {
+          "player_choice": "Are there other survivors?",
+          "next": "survivors_info"
+        }
+      ]
+    },
+    "overseer_info": {
+      "npc_line": "The Overseer is... complicated. An AI from before the war. It watches, it calculates, and sometimes... it interferes. It flagged your arrival. That's how I knew to find you.",
+      "useAI": true,
+      "aiPromptContext": "The player is asking about the Overseer AI. Respond mysteriously but helpfully, hinting at the Overseer's vast knowledge and questionable motives.",
+      "options": [
+        {
+          "player_choice": "Can I trust it?",
+          "next": "overseer_trust"
+        },
+        {
+          "player_choice": "I'd rather rely on myself.",
+          "next": "self_reliance"
+        }
+      ]
+    },
+    "memory_loss": {
+      "npc_line": "That's common with displacement. Your memories might come back. Or they might not. Either way, you need to build new ones here.",
+      "options": [
+        {
+          "player_choice": "Help me remember.",
+          "next": "memory_help"
+        },
+        {
+          "player_choice": "Then I'll start fresh.",
+          "next": "next_steps"
+        }
+      ]
+    },
+    "next_steps": {
+      "npc_line": "First things first. Check your Pip-Boy. Inventory, map, radio. Get your bearings. Then start moving. Standing still is a death sentence out here.",
+      "options": [
+        {
+          "player_choice": "Got it. Thanks.",
+          "next": "end_positive"
+        },
+        {
+          "player_choice": "Any other advice?",
+          "next": "final_advice"
+        }
+      ]
+    },
+    "return_question": {
+      "npc_line": "Maybe. The Overseer might know more. But for now, focus on surviving here. One timeline at a time.",
+      "options": [
+        {
+          "player_choice": "I understand.",
+          "next": "end_positive"
+        }
+      ]
+    },
+    "tracking_warning": {
+      "npc_line": "Yes. Not everyone out here is friendly. Keep your signal low when you can. The Pip-Boy helps mask it somewhat.",
+      "options": [
+        {
+          "player_choice": "I'll be careful.",
+          "next": "end_positive"
+        }
+      ]
+    },
+    "impossible_response": {
+      "npc_line": "A lot of things are impossible until they happen to you. Trust your senses. Question everything else.",
+      "options": [
+        {
+          "player_choice": "Fair enough.",
+          "next": "next_steps"
+        }
+      ]
+    },
+    "survivors_info": {
+      "npc_line": "Plenty. Settlements, factions, traders. Some friendly, some not. Your Pip-Boy radio can help you find the good ones.",
+      "options": [
+        {
+          "player_choice": "I'll keep that in mind.",
+          "next": "end_positive"
+        }
+      ]
+    },
+    "overseer_trust": {
+      "npc_line": "Trust is earned. The Overseer has its own agenda. Use its information, but don't rely on it completely.",
+      "useAI": true,
+      "aiPromptContext": "Respond about whether the Overseer can be trusted. Be ambiguous and hint at deeper mysteries.",
+      "options": [
+        {
+          "player_choice": "Understood.",
+          "next": "end_positive"
+        }
+      ]
+    },
+    "self_reliance": {
+      "npc_line": "Smart. The wasteland respects those who don't wait for help. But don't be too proud to accept it when offered.",
+      "options": [
+        {
+          "player_choice": "I'll remember that.",
+          "next": "end_positive"
+        }
+      ]
+    },
+    "memory_help": {
+      "npc_line": "That's not something I can do. But the Overseer... it has records. If your past is anywhere, it might be there.",
+      "options": [
+        {
+          "player_choice": "Then I'll find it.",
+          "next": "end_positive"
+        }
+      ]
+    },
+    "final_advice": {
+      "npc_line": "Trust your instincts. Question authority. And remember — every signal leaves a trace. Including yours.",
+      "options": [
+        {
+          "player_choice": "I won't forget.",
+          "next": "end_positive"
+        }
+      ]
+    },
+    "end_positive": {
+      "npc_line": "Good luck out there. Your signal's stabilizing. You're going to be fine.",
+      "completes": "wake_up_npc_intro",
+      "options": []
+    },
+    "end_neutral": {
+      "npc_line": "Suit yourself. I'll be watching your signal regardless.",
+      "completes": "wake_up_npc_intro",
+      "options": []
+    }
+  },
+
+  "aiDialogueConfig": {
+    "enabled": true,
+    "useOverseerPersonality": true,
+    "systemPrompt": "You are The Signal Runner, a cryptic but caring guide in a post-apocalyptic wasteland. You track displaced consciousnesses across timelines. Speak in short, mysterious sentences with hints of deeper knowledge. You work with (but don't fully trust) an AI called the Overseer. Keep responses under 50 words.",
+    "fallbackToStatic": true,
+    "maxTokens": 60,
+    "temperature": 0.8
+  },
+
+  "quests": [
+    "wake_up"
+  ],
+
+  "notes": "The Signal Runner is the first NPC the player meets. She tracks the player's location and travels to meet them wherever they are. Her dialogue can use the Overseer AI (HuggingFace API) for dynamic responses, with static fallbacks available."
+}
