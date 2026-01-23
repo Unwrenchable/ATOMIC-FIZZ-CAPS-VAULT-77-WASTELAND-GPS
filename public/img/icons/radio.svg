@@ -1,0 +1,12 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Radio tower -->
+  <path d="M12 4 L8 20 L10 20 L12 12 L14 20 L16 20 Z" fill="black"/>
+  <!-- Crossbars -->
+  <rect x="9" y="10" width="6" height="1.5" fill="black"/>
+  <rect x="9.5" y="14" width="5" height="1.5" fill="black"/>
+  <!-- Signal waves -->
+  <path d="M4 6 Q8 4 8 8" fill="none" stroke="black" stroke-width="1.5"/>
+  <path d="M2 8 Q6 4 6 10" fill="none" stroke="black" stroke-width="1.5"/>
+  <path d="M20 6 Q16 4 16 8" fill="none" stroke="black" stroke-width="1.5"/>
+  <path d="M22 8 Q18 4 18 10" fill="none" stroke="black" stroke-width="1.5"/>
+</svg>

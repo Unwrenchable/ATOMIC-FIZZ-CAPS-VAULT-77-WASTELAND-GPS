@@ -1,0 +1,13 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Lighthouse tower -->
+  <path d="M8 20 L10 8 L14 8 L16 20 Z" fill="black"/>
+  <!-- Light room -->
+  <rect x="9" y="5" width="6" height="3" fill="black"/>
+  <!-- Light beacon -->
+  <circle cx="12" cy="6.5" r="1.5" fill="white"/>
+  <!-- Light rays -->
+  <path d="M5 4 L9 6 M19 4 L15 6 M12 2 L12 5" stroke="black" stroke-width="1.5"/>
+  <!-- Stripes -->
+  <rect x="9" y="10" width="6" height="2" fill="white"/>
+  <rect x="8.5" y="14" width="7" height="2" fill="white"/>
+</svg>
