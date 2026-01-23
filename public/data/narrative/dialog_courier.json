@@ -1,0 +1,42 @@
+{
+  "id": "dialog_courier",
+  "npc": "Wasteland Courier",
+  "title": "Courier",
+  "description": "A rugged courier who delivers messages across the wasteland",
+
+  "intro": {
+    "id": "courier_intro",
+    "text": "Hey, you! You're finally awake. Name's Pip, wasteland courier. Got a message for you from Vault-Tec.\n\nSays you need to get your bearings. The wasteland ain't friendly to the unprepared, but lucky for you, someone left you some gear.",
+    "conditions": ["!flag:courier_intro_seen"],
+    "set_flags": ["courier_intro_seen"],
+    "offers_quest": "wake_up"
+  },
+
+  "quest_nodes": [
+    {
+      "id": "courier_quest_active",
+      "text": "You still got things to do, wanderer. Check your inventory, equip your gear, tune into that radio. Don't die out there... I'd hate to have to deliver your obituary.",
+      "conditions": ["flag:courier_intro_seen", "!flag:wake_up_complete"]
+    },
+    {
+      "id": "courier_quest_complete",
+      "text": "Well look at you, all geared up and ready for the wasteland. Good luck out there. Maybe I'll see you around... if you survive.",
+      "conditions": ["flag:wake_up_complete"]
+    }
+  ],
+
+  "emotional_nodes": [],
+
+  "knowledge_nodes": [
+    {
+      "id": "courier_about_gear",
+      "text": "The gear? Standard Vault-Tec issue. Jumpsuit'll keep you warm, sidearm'll keep you alive. Don't waste the stimpaks on paper cuts.",
+      "conditions": ["flag:courier_intro_seen"]
+    }
+  ],
+
+  "fallback": {
+    "id": "courier_fallback",
+    "text": "Stay sharp, wanderer. The wasteland has a way of catching folks off guard."
+  }
+}
