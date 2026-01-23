@@ -173,9 +173,16 @@
         console.log('[worldmap] Leaflet map object created successfully');
         
         // Prevent touch events from propagating outside map container (mobile swipe fix)
-        container.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: false });
-        container.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: false });
-        container.addEventListener('touchend', (e) => e.stopPropagation(), { passive: true });
+        // Only stop propagation, don't prevent default as Leaflet needs those events
+        container.addEventListener('touchstart', (e) => {
+          e.stopPropagation();
+        }, { passive: true });
+        container.addEventListener('touchmove', (e) => {
+          e.stopPropagation();
+        }, { passive: true });
+        container.addEventListener('touchend', (e) => {
+          e.stopPropagation();
+        }, { passive: true });
         
       } catch (e) {
         console.error('[worldmap] failed to create map:', e);

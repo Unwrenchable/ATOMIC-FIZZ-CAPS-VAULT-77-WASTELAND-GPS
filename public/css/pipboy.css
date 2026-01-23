@@ -314,20 +314,17 @@ body.pipboy-mode {
    MAP INTERACTION FIX
    ============================================================ */
 
-#mapContainer, #mapContainer * {
-  pointer-events: auto !important;
-}
-
-/* Map container needs to capture all touch events to prevent swipe-out */
 #mapContainer {
+  pointer-events: auto !important;
   touch-action: none !important;
   -webkit-user-select: none;
   user-select: none;
 }
 
-/* Leaflet container handles its own touch actions */
+/* Leaflet container handles its own touch actions - allow pan and pinch-zoom */
 #mapContainer .leaflet-container {
-  touch-action: manipulation !important;
+  touch-action: pan-x pan-y pinch-zoom !important;
+  pointer-events: auto !important;
 }
 
 /* Map panel should not interfere with map touch events */
