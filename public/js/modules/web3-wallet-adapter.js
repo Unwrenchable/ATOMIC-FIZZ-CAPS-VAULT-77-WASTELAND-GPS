@@ -335,10 +335,11 @@
       // Generate public key (simplified - in production, use proper Solana key derivation)
       const publicKey = 'AFW' + privateKey.substring(0, 40);
 
-      // Save to localStorage
+      // Save only the public key to localStorage
+      // SECURITY: Private keys are NEVER stored in localStorage per audit guidelines
+      // Private key remains only in memory during the session
       const LOCAL_WALLET_KEY = "afw_local_wallet_v1";
       localStorage.setItem(LOCAL_WALLET_KEY, publicKey);
-      localStorage.setItem(`${LOCAL_WALLET_KEY}_private`, privateKey); // WARNING: Not secure for production
 
       // Create wallet object
       const wallet = {
