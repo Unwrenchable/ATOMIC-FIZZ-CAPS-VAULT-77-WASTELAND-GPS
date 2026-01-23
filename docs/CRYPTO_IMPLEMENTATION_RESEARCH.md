@@ -1110,12 +1110,414 @@ A token launchpad built into the Atomic Fizz Caps ecosystem could serve as both 
 | **10,000 CAPS** | Reduced launch fee (50 CAPS instead of 100) |
 | **100,000 CAPS** | Featured placement, priority support |
 | **1,000,000 CAPS** | "Vault Overseer" badge, governance rights |
+| **Admin Panel** | Launch tokens with USDC (pre-mainnet bootstrap) |
 
 **Why This Works:**
 - **For Creators**: Must hold CAPS to launch → creates CAPS demand
 - **For Traders**: No barrier to entry → maximum liquidity and volume
 - **For Ecosystem**: Every trade brings new users who might buy CAPS to launch their own token
 - **Lore-Friendly**: SOL/USDC = "old world currencies" that still have some value
+
+---
+
+### Admin Panel: USDC Token Launches (Pre-Mainnet Bootstrap)
+
+**Why Admin USDC Launches?**
+Before CAPS is widely distributed on mainnet, admins need a way to bootstrap the Fizz.fun ecosystem by launching tokens with USDC. This:
+1. Creates initial trading activity to attract users
+2. Generates revenue before CAPS economy is established
+3. Demonstrates the platform works before requiring CAPS
+4. Builds liquidity and TVL for marketing
+
+**Admin Launch Flow:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    🔐 ADMIN PANEL - TOKEN LAUNCH                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  LAUNCH MODE:  [○ CAPS (Standard)]  [◉ USDC (Admin Bootstrap)]             │
+│                                                                             │
+│  ⚠️  USDC launches are admin-only for pre-mainnet bootstrap                 │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Token Name:     [Radroach_________________]                        │   │
+│  │  Symbol:         [ROACH___]                                         │   │
+│  │  Description:    [For the bugs that survived_______________]        │   │
+│  │  Image URL:      [https://...______________________________]        │   │
+│  │                                                                     │   │
+│  │  Launch Fee:     50 USDC (Admin rate)                               │   │
+│  │  Your Balance:   1,250.00 USDC                                      │   │
+│  │                                                                     │   │
+│  │  [🚀 Launch Token with USDC]                                        │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  📊 ADMIN STATS                                                             │
+│  ├─ Tokens launched (USDC): 12                                             │
+│  ├─ Total USDC collected: 600 USDC                                         │
+│  ├─ Tokens launched (CAPS): 3                                              │
+│  └─ Total CAPS burned: 300 CAPS                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Implementation:**
+
+```javascript
+// Backend: Admin panel token launch with USDC
+const ADMIN_WALLETS = process.env.ADMIN_WALLETS?.split(',') || [];
+const USDC_LAUNCH_FEE = 50 * 1e6; // 50 USDC (6 decimals)
+const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'); // Mainnet USDC
+
+async function adminLaunchWithUSDC(wallet, tokenDetails) {
+    // 1. Verify admin status
+    if (!ADMIN_WALLETS.includes(wallet.toBase58())) {
+        throw new Error('Only admins can launch with USDC');
+    }
+    
+    // 2. Check USDC balance
+    const usdcBalance = await getTokenBalance(wallet, USDC_MINT);
+    if (usdcBalance < USDC_LAUNCH_FEE) {
+        throw new Error(`Insufficient USDC. Need ${USDC_LAUNCH_FEE / 1e6} USDC`);
+    }
+    
+    // 3. Transfer USDC to treasury (not burned - it's revenue!)
+    const transferIx = createTransferInstruction(
+        getAssociatedTokenAddress(USDC_MINT, wallet),
+        getAssociatedTokenAddress(USDC_MINT, TREASURY_WALLET),
+        wallet,
+        USDC_LAUNCH_FEE
+    );
+    
+    // 4. Create token (same as CAPS launch, just different payment)
+    const createTokenIx = await program.methods
+        .createTokenAdmin(tokenDetails.name, tokenDetails.symbol, tokenDetails.uri)
+        .accounts({
+            creator: wallet,
+            // ... standard accounts
+        })
+        .instruction();
+    
+    // 5. Bundle and send
+    const tx = new Transaction().add(transferIx, createTokenIx);
+    return await sendAndConfirmTransaction(connection, tx, [wallet]);
+}
+
+// API endpoint for admin panel
+router.post('/api/admin/launch-token-usdc', adminAuthMiddleware, async (req, res) => {
+    try {
+        const { name, symbol, uri } = req.body;
+        const wallet = req.admin.wallet;
+        
+        const txSig = await adminLaunchWithUSDC(wallet, { name, symbol, uri });
+        
+        // Log for tracking
+        await logAdminAction({
+            action: 'USDC_TOKEN_LAUNCH',
+            admin: wallet,
+            token: { name, symbol },
+            usdcPaid: USDC_LAUNCH_FEE / 1e6,
+            txSig
+        });
+        
+        res.json({ 
+            ok: true, 
+            txSig,
+            message: `Token ${symbol} launched successfully with USDC!`
+        });
+    } catch (err) {
+        res.status(500).json({ ok: false, error: err.message });
+    }
+});
+```
+
+**Solana Program: Admin Launch Instruction**
+
+```rust
+/// Admin-only token launch with USDC payment
+/// Used for pre-mainnet bootstrap before CAPS economy is established
+pub fn create_token_admin(
+    ctx: Context<CreateTokenAdmin>,
+    name: String,
+    symbol: String,
+    uri: String,
+) -> Result<()> {
+    // 1. Verify admin authority
+    require!(
+        ctx.accounts.config.admins.contains(&ctx.accounts.creator.key()),
+        FizzError::NotAdmin
+    );
+
+    // NOTE: No CAPS check or burn - USDC payment handled off-chain
+    // This allows bootstrapping before CAPS is widely distributed
+
+    // 2. Initialize bonding curve (same as regular launch)
+    let curve = &mut ctx.accounts.bonding_curve;
+    curve.creator = ctx.accounts.creator.key();
+    curve.token_mint = ctx.accounts.token_mint.key();
+    curve.name = name.clone();
+    curve.symbol = symbol.clone();
+    curve.uri = uri;
+    curve.sol_reserve = 0;
+    curve.token_reserve = CURVE_SUPPLY;
+    curve.total_supply = TOTAL_SUPPLY;
+    curve.graduated = false;
+    curve.created_at = Clock::get()?.unix_timestamp;
+    curve.launch_type = LaunchType::AdminUSDC; // Track how it was launched
+    curve.bump = ctx.bumps.bonding_curve;
+
+    // 3. Mint total supply to curve vault
+    token::mint_to(
+        CpiContext::new_with_signer(
+            ctx.accounts.token_program.to_account_info(),
+            MintTo {
+                mint: ctx.accounts.token_mint.to_account_info(),
+                to: ctx.accounts.curve_token_vault.to_account_info(),
+                authority: ctx.accounts.bonding_curve.to_account_info(),
+            },
+            &[&[
+                b"bonding_curve",
+                ctx.accounts.token_mint.key().as_ref(),
+                &[curve.bump],
+            ]],
+        ),
+        TOTAL_SUPPLY,
+    )?;
+
+    // 4. Update config stats
+    let config = &mut ctx.accounts.config;
+    config.total_tokens_launched += 1;
+    config.admin_usdc_launches += 1;
+
+    emit!(TokenCreatedAdmin {
+        mint: ctx.accounts.token_mint.key(),
+        creator: ctx.accounts.creator.key(),
+        name,
+        symbol,
+        launch_type: "USDC".to_string(),
+        timestamp: Clock::get()?.unix_timestamp,
+    });
+
+    Ok(())
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq)]
+pub enum LaunchType {
+    CapsStandard,    // Regular user with CAPS
+    CapsVeteran,     // User with 10k+ CAPS (reduced fee)
+    AdminUSDC,       // Admin bootstrap with USDC
+    AdminFree,       // Admin free launch (for official tokens)
+}
+
+#[derive(Accounts)]
+#[instruction(name: String, symbol: String, uri: String)]
+pub struct CreateTokenAdmin<'info> {
+    #[account(mut)]
+    pub creator: Signer<'info>,
+    
+    #[account(
+        mut, 
+        seeds = [b"config"], 
+        bump,
+        constraint = config.admins.contains(&creator.key()) @ FizzError::NotAdmin
+    )]
+    pub config: Account<'info, Config>,
+    
+    // ... same accounts as CreateToken, minus CAPS accounts
+    
+    #[account(
+        init,
+        payer = creator,
+        mint::decimals = 9,
+        mint::authority = bonding_curve,
+    )]
+    pub token_mint: Account<'info, Mint>,
+    
+    #[account(
+        init,
+        payer = creator,
+        space = 8 + 32 + 32 + 64 + 16 + 256 + 8 + 8 + 8 + 1 + 1 + 9 + 8 + 1,
+        seeds = [b"bonding_curve", token_mint.key().as_ref()],
+        bump
+    )]
+    pub bonding_curve: Account<'info, BondingCurve>,
+    
+    #[account(
+        init,
+        payer = creator,
+        associated_token::mint = token_mint,
+        associated_token::authority = bonding_curve,
+    )]
+    pub curve_token_vault: Account<'info, TokenAccount>,
+    
+    pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub system_program: Program<'info, System>,
+    pub rent: Sysvar<'info, Rent>,
+}
+
+// Updated Config to track admin list and stats
+#[account]
+pub struct Config {
+    pub authority: Pubkey,
+    pub treasury: Pubkey,
+    pub caps_mint: Pubkey,
+    pub admins: Vec<Pubkey>,              // Admin wallets
+    pub total_tokens_launched: u64,
+    pub admin_usdc_launches: u64,         // Track USDC launches
+    pub caps_launches: u64,               // Track CAPS launches
+    pub total_volume_sol: u64,
+    pub total_caps_burned: u64,
+}
+
+// New error
+#[error_code]
+pub enum FizzError {
+    // ... existing errors
+    #[msg("Only admins can use this function")]
+    NotAdmin,
+}
+
+// New event for admin launches
+#[event]
+pub struct TokenCreatedAdmin {
+    pub mint: Pubkey,
+    pub creator: Pubkey,
+    pub name: String,
+    pub symbol: String,
+    pub launch_type: String,
+    pub timestamp: i64,
+}
+```
+
+**Bootstrap Strategy Timeline:**
+
+```
+PHASE 1: Pre-Mainnet (USDC Only)
+├─ Admins launch 10-20 tokens with USDC
+├─ Build initial liquidity and trading activity
+├─ Generate USDC revenue for treasury
+├─ Create buzz and demonstrate platform
+└─ Duration: 2-4 weeks
+
+PHASE 2: Soft Launch (CAPS + USDC Admin)
+├─ Enable CAPS launches for early community
+├─ Admins can still use USDC for official tokens
+├─ Monitor CAPS burn rate and economy
+└─ Duration: 2-4 weeks
+
+PHASE 3: Mainnet (CAPS Only for Public)
+├─ Disable admin USDC launches (or keep for emergencies)
+├─ All public launches require CAPS
+├─ CAPS economy fully operational
+└─ Duration: Ongoing
+```
+
+**Admin Panel React Component:**
+
+```tsx
+// AdminTokenLaunch.tsx
+import { useState } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
+
+export function AdminTokenLaunch() {
+    const { publicKey } = useWallet();
+    const [launchMode, setLaunchMode] = useState<'CAPS' | 'USDC'>('USDC');
+    const [formData, setFormData] = useState({ name: '', symbol: '', uri: '' });
+    const [loading, setLoading] = useState(false);
+
+    async function handleLaunch() {
+        if (!publicKey) return;
+        setLoading(true);
+        
+        try {
+            const endpoint = launchMode === 'USDC' 
+                ? '/api/admin/launch-token-usdc'
+                : '/api/admin/launch-token-caps';
+            
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            
+            const data = await res.json();
+            if (data.ok) {
+                alert(`Token launched! TX: ${data.txSig}`);
+            } else {
+                alert(`Error: ${data.error}`);
+            }
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return (
+        <div className="admin-launch-panel">
+            <h2>🔐 Admin Token Launch</h2>
+            
+            <div className="launch-mode-toggle">
+                <label>
+                    <input 
+                        type="radio" 
+                        checked={launchMode === 'CAPS'}
+                        onChange={() => setLaunchMode('CAPS')}
+                    />
+                    CAPS (Standard)
+                </label>
+                <label>
+                    <input 
+                        type="radio" 
+                        checked={launchMode === 'USDC'}
+                        onChange={() => setLaunchMode('USDC')}
+                    />
+                    USDC (Admin Bootstrap)
+                </label>
+            </div>
+            
+            {launchMode === 'USDC' && (
+                <div className="warning-banner">
+                    ⚠️ USDC launches are for pre-mainnet bootstrap only
+                </div>
+            )}
+            
+            <input 
+                placeholder="Token Name"
+                value={formData.name}
+                onChange={e => setFormData({...formData, name: e.target.value})}
+            />
+            <input 
+                placeholder="Symbol"
+                value={formData.symbol}
+                onChange={e => setFormData({...formData, symbol: e.target.value})}
+            />
+            <input 
+                placeholder="Image URI"
+                value={formData.uri}
+                onChange={e => setFormData({...formData, uri: e.target.value})}
+            />
+            
+            <button onClick={handleLaunch} disabled={loading}>
+                {loading ? 'Launching...' : `🚀 Launch with ${launchMode}`}
+            </button>
+            
+            <p className="fee-info">
+                Fee: {launchMode === 'USDC' ? '50 USDC' : '100 CAPS (burned)'}
+            </p>
+        </div>
+    );
+}
+```
+
+**Why This Helps the CAPS Economy:**
+
+1. **Bootstraps Activity**: Tokens launched with USDC create trading volume before CAPS exists
+2. **Generates Revenue**: USDC fees fund treasury for CAPS buybacks/rewards
+3. **Builds Demand**: Users see active platform → want to launch → need CAPS
+4. **Creates Scarcity**: When CAPS launches go live, admin USDC option can be disabled
+5. **Proves Concept**: Shows platform works, building confidence for CAPS adoption
+
+---
 
 ```javascript
 // Backend: Check eligibility - CAPS only needed to LAUNCH
