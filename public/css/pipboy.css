@@ -171,13 +171,14 @@ body.pipboy-mode {
   inset: 0;
   background: #041f04;
   padding: 16px;
-  overflow: hidden;
   opacity: 0;
   transform: translateX(-16px);
   pointer-events: none;
   transition: opacity .25s, transform .25s;
   display: flex;
   flex-direction: column;
+  /* Allow scrolling inside child elements, not the panel itself */
+  overflow: hidden;
 }
 
 .pipboy-panel.active {
@@ -188,6 +189,15 @@ body.pipboy-mode {
 
 .pipboy-panel.has-compass {
   position: relative;
+}
+
+/* General panel-body - scrollable content area */
+.panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Map panel specific - fill available space */
@@ -485,4 +495,52 @@ input[type="reset"]:hover {
   box-shadow: 
     inset 0 0 12px rgba(255, 170, 0, 0.3),
     0 0 20px rgba(255, 170, 0, 0.5);
+}
+
+/* ============================================================
+   QUEST UI STYLES
+   ============================================================ */
+
+.quest-entry {
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.quest-entry.active {
+  border-color: #00ff41;
+  background: rgba(0, 255, 65, 0.05);
+}
+
+.quest-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #00ff41;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.quest-description {
+  font-size: 0.9em;
+  color: #9fe88d;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+
+.quest-objectives {
+  margin-top: 8px;
+}
+
+.quest-objective {
+  padding: 4px 0;
+  color: #9fe88d;
+  font-size: 0.95em;
+}
+
+.quest-objective.completed {
+  color: #00ff41;
+  text-decoration: line-through;
+  opacity: 0.7;
 }
