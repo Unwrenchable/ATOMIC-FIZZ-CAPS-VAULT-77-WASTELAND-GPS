@@ -114,15 +114,21 @@
     // Notify the game (radio engine listens for this)
     window.dispatchEvent(new Event("pipboyReady"));
 
-    // Start the "Wake Up" quest after boot completes
-    if (window.Game?.modules?.quests?.startQuest) {
+    // Initialize quests module if needed
+    if (window.Game?.modules?.quests?.init) {
       try {
-        Game.modules.quests.startQuest("wake_up");
-        console.log("[BOOT] wake_up quest started");
+        Game.modules.quests.init();
+        console.log("[BOOT] quests module initialized");
       } catch (err) {
-        console.warn("[BOOT] Failed to start wake_up quest:", err);
+        console.warn("[BOOT] Failed to init quests module:", err);
       }
     }
+
+    // Trigger the courier NPC dialogue for first-time players
+    // This shows the Fallout-style NPC dialogue with the first quest
+    setTimeout(() => {
+      triggerCourierDialogue();
+    }, 500);
 
     // Worldmap hook
     if (window.Game?.modules?.worldmap?.onOpen) {
@@ -142,6 +148,39 @@
     window.removeEventListener("click", onContinue);
     window.removeEventListener("touchstart", onContinue);
   }
+
+  // -----------------------------
+  // COURIER NPC DIALOGUE TRIGGER
+  // -----------------------------
+  function triggerCourierDialogue() {
+    // Check if we've already seen the courier intro
+    const courierKey = "afc_courier_intro_seen";
+    if (localStorage.getItem(courierKey)) {
+      console.log("[BOOT] Courier intro already seen, skipping");
+      return;
+    }
+
+    // Open the courier NPC dialogue
+    if (window.Game?.modules?.narrative?.openByDialogId) {
+      try {
+        Game.modules.narrative.openByDialogId("dialog_courier");
+        console.log("[BOOT] Courier dialogue opened");
+        
+        // Mark as seen
+        localStorage.setItem(courierKey, "true");
+        
+        // Also mark the flag in GAME_STATE for the narrative system
+        if (window.GAME_STATE && window.GAME_STATE.flags) {
+          window.GAME_STATE.flags.courier_intro_seen = true;
+        }
+      } catch (err) {
+        console.warn("[BOOT] Failed to open courier dialogue:", err);
+      }
+    } else {
+      console.warn("[BOOT] narrative module not available for courier dialogue");
+    }
+  }
+
 
   function onContinue() {
   // Start a short loading sequence before activating the Pip‑Boy
