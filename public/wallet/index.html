@@ -2,14 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Atomic Fizz Wallet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <title>Atomic Fizz Wallet | Vault-Tec Approved</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#00ff66">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Fizz Wallet">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Atomic Fizz Wallet">
+  
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://cdn.jsdelivr.net https://unpkg.com 'unsafe-inline';
+    connect-src 'self' https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://*.solana.com wss://*.solana.com https://atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com data:;
+    img-src 'self' data: https: blob:;
+    frame-src 'none';
+    object-src 'none';
+    base-uri 'self';
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="wallet.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
 </head>
 <body>
 
 <!-- BOOT OVERLAY -->
 <div id="boot-overlay">
-  <img src="branding/logo.png" id="boot-logo">
+  <img src="branding/logo.png" id="boot-logo" alt="Loading...">
   <div class="boot-line">INITIALIZING ATOMIC FIZZ WALLET...</div>
   <div class="boot-line">SCANNING WASTELAND NETWORK...</div>
   <div class="boot-line">VERIFYING CAPS LEDGER...</div>
@@ -18,44 +51,112 @@
 
 <!-- MAIN WALLET APP -->
 <div id="wallet-app" class="crt">
-
-  <!-- BRANDING -->
   <div id="wallet-branding">
-    <img src="branding/logo.png" id="wallet-logo">
+    <img src="branding/logo.png" id="wallet-logo" alt="Atomic Fizz Caps">
     <h1>ATOMIC FIZZ WALLET</h1>
+    <p class="small muted">Vault-Tec Approved • Secure Cross-Chain Transactions</p>
   </div>
 
-  <!-- WALLET CONNECTION -->
-  <button id="afw-connect" class="btn">CONNECT PHANTOM</button>
-  <button id="afw-local" class="btn">LOCAL FIZZ WALLET</button>
-  <div id="afw-address" class="mono small muted">WALLET: DISCONNECTED</div>
-  <div id="afw-qr" class="mono small muted"></div>
+  <!-- WALLET CONNECTION SECTION -->
+  <section id="wallet-connect-section">
+    <h2>CONNECT WALLET</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+      <button id="afw-connect" class="btn">🔮 CONNECT PHANTOM</button>
+      <button id="afw-local" class="btn">⚡ LOCAL FIZZ WALLET</button>
+    </div>
+    <div id="afw-address" class="mono small muted">WALLET: DISCONNECTED</div>
+    <div id="afw-qr" class="mono small muted"></div>
+  </section>
 
   <!-- ON-CHAIN BALANCES -->
   <section>
     <h2>ON-CHAIN BALANCES</h2>
-    <div class="entry"><strong>SOL</strong><br><span id="afw-sol">0.000</span></div>
-    <div class="entry"><strong>FIZZ</strong><br><span id="afw-fizz">0</span></div>
+    <div class="data-row">
+      <span class="data-label">SOL</span>
+      <span class="data-value" id="afw-sol">0.000</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">FIZZ</span>
+      <span class="data-value" id="afw-fizz">0</span>
+    </div>
   </section>
 
   <!-- WASTELAND STATS -->
   <section>
     <h2>WASTELAND STATS</h2>
-    <div class="entry"><strong>CAPS</strong><br><span id="afw-caps">0</span></div>
-    <div class="entry"><strong>XP</strong><br><span id="afw-xp">0 / 0</span></div>
-    <div class="entry"><strong>LEVEL</strong><br><span id="afw-level">1</span></div>
+    <div class="data-row">
+      <span class="data-label">CAPS</span>
+      <span class="data-value" id="afw-caps">0</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">XP</span>
+      <span class="data-value" id="afw-xp">0 / 0</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">LEVEL</span>
+      <span class="data-value" id="afw-level">1</span>
+    </div>
+  </section>
+
+  <!-- MULTICHAIN BALANCES -->
+  <section class="bridge-section">
+    <h2>🌀 MULTICHAIN BALANCES</h2>
+    <div id="chain-list">
+      <p class="muted small">Connect wallet to view cross-chain balances...</p>
+    </div>
+  </section>
+
+  <!-- PARTNER TOKENS -->
+  <section>
+    <h2>PARTNER TOKENS</h2>
+    <div id="partner-tokens">
+      <p class="muted small">Connect wallet to view partner token balances...</p>
+    </div>
+  </section>
+
+  <!-- SWAP UI -->
+  <section>
+    <h2>⚡ CROSS-CHAIN SWAP</h2>
+    <div id="swap-panel">
+      <p class="muted small">Connect wallet to access swapping...</p>
+    </div>
   </section>
 
   <!-- FEATURED ITEMS -->
   <section>
     <h2>FEATURED ITEMS</h2>
-    <div id="afw-items"></div>
+    <div id="afw-items">
+      <p class="muted">No items yet — explore the Mojave.</p>
+    </div>
   </section>
 
   <!-- NFT INVENTORY -->
   <section>
     <h2>ON-CHAIN NFTs</h2>
-    <div id="afw-nfts"></div>
+    <div id="afw-nfts">
+      <p class="muted">No Atomic Fizz NFTs detected.</p>
+    </div>
+  </section>
+
+  <!-- SCAVENGER EXCHANGE QUICK ACCESS -->
+  <section>
+    <h2>SCAVENGER EXCHANGE</h2>
+    <p class="small muted">Trade items, NFTs, and tokens with other wastelanders.</p>
+    <a href="/exchange.html" class="btn" target="_blank" rel="noopener">OPEN EXCHANGE</a>
+  </section>
+
+  <!-- WORMHOLE BRIDGE QUICK ACCESS -->
+  <section class="bridge-section">
+    <h2>🌀 WORMHOLE BRIDGE</h2>
+    <p class="small muted">Cross-chain asset transfers powered by Wormhole.</p>
+    <a href="/bridge.html" class="btn" target="_blank" rel="noopener">OPEN BRIDGE</a>
+  </section>
+
+  <!-- NUKE TERMINAL QUICK ACCESS -->
+  <section>
+    <h2>💣 NUKE TERMINAL</h2>
+    <p class="small muted">Destroy unwanted gear for CAPS recycling.</p>
+    <a href="/nuke.html" class="btn" target="_blank" rel="noopener">OPEN NUKE</a>
   </section>
 
   <!-- TRADE UI -->
@@ -63,17 +164,36 @@
     <h2>WALLET-TO-WALLET TRADE</h2>
 
     <div class="entry">
-      <label>Recipient Address</label><br>
-      <input id="afw-trade-to" class="mono">
+      <label>Recipient Address</label>
+      <input id="afw-trade-to" class="mono" placeholder="Enter recipient wallet address">
     </div>
 
     <div class="entry">
-      <label>Amount (FIZZ)</label><br>
-      <input id="afw-trade-amount" class="mono">
+      <label>Amount (FIZZ)</label>
+      <input id="afw-trade-amount" class="mono" type="number" min="0" step="0.01" placeholder="0.00">
     </div>
 
-    <button id="afw-trade-send" class="btn">SEND</button>
+    <button id="afw-trade-send" class="btn">SEND FIZZ</button>
     <div id="afw-trade-status" class="mono small muted"></div>
+  </section>
+
+  <!-- FIZZ.FUN SECTION -->
+  <section class="fizz-fun-section">
+    <h2>🚀 FIZZ.FUN TOKEN LAUNCHPAD</h2>
+    <p class="small muted">Create and launch your own Fizz Caps economy tokens. Early ShibaSwap vibes, Vault-Tec approved.</p>
+    
+    <div class="token-launch-card">
+      <strong>BONDING CURVE LAUNCHES</strong>
+      <p class="small">Fair launch tokens with automated price discovery</p>
+      <div class="bonding-curve"></div>
+    </div>
+    
+    <div class="token-launch-card">
+      <strong>PARTNER TOKEN INTEGRATION</strong>
+      <p class="small">Cross-chain meme coins: SHIB, BONK, WIF, PEPE, FLOKI</p>
+    </div>
+    
+    <button id="buy-usdc-button" class="btn">💰 BUY USDC (MOONPAY)</button>
   </section>
 
 </div> <!-- END WALLET APP -->
@@ -107,7 +227,90 @@
 
 <!-- SCRIPTS -->
 <script src="/js/main.js"></script>
+<script src="/js/modules/web3-wallet-adapter.js"></script>
 <script src="wallet.js"></script>
+
+<!-- Wallet Integration Script -->
+<script>
+(function() {
+  'use strict';
+  
+  // Wait for web3Wallet to be available
+  function initWalletIntegration() {
+    if (typeof window.web3Wallet === 'undefined') {
+      setTimeout(initWalletIntegration, 100);
+      return;
+    }
+    
+    // Wire web3-wallet-adapter to wallet UI
+    const connectBtn = document.getElementById('afw-connect');
+    const localBtn = document.getElementById('afw-local');
+    
+    if (connectBtn) {
+      connectBtn.addEventListener('click', async () => {
+        try {
+          const success = await window.web3Wallet.connect('phantom');
+          if (success && window.refreshOnChain) {
+            await window.refreshOnChain(window.web3Wallet.getWalletAddress());
+          }
+        } catch (err) {
+          console.error('[Wallet] Phantom connect failed:', err);
+        }
+      });
+    }
+    
+    if (localBtn) {
+      localBtn.addEventListener('click', async () => {
+        try {
+          const success = await window.web3Wallet.connect('integrated');
+          if (success && window.refreshOnChain) {
+            await window.refreshOnChain(window.web3Wallet.getWalletAddress());
+          }
+        } catch (err) {
+          console.error('[Wallet] Integrated wallet connect failed:', err);
+        }
+      });
+    }
+    
+    // Listen for wallet state changes
+    window.addEventListener('web3WalletStateChanged', (e) => {
+      const { connected, address, type } = e.detail;
+      const addrEl = document.getElementById('afw-address');
+      
+      if (addrEl) {
+        if (connected && address) {
+          addrEl.textContent = `WALLET: ${address.slice(0, 6)}...${address.slice(-4)} (${type})`;
+          addrEl.style.color = 'var(--vault-gold)';
+        } else {
+          addrEl.textContent = 'WALLET: DISCONNECTED';
+          addrEl.style.color = '';
+        }
+      }
+      
+      // Update global PLAYER_WALLET for compatibility
+      window.PLAYER_WALLET = connected ? address : null;
+    });
+    
+    // Check for existing connection
+    if (window.web3Wallet.isConnected()) {
+      const addr = window.web3Wallet.getWalletAddress();
+      window.PLAYER_WALLET = addr;
+      if (window.refreshOnChain) {
+        window.refreshOnChain(addr);
+      }
+    }
+    
+    console.log('[Wallet] Integration initialized');
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWalletIntegration);
+  } else {
+    initWalletIntegration();
+  }
+})();
+</script>
 
 </body>
 </html>
