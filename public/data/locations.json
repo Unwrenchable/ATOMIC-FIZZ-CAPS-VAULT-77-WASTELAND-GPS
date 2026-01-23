@@ -494,19 +494,6 @@
     "icon": "ruins"
   },
   {
-    "id": "sarsaparilla_hq_fnv",
-    "name": "Sunset Sarsaparilla HQ",
-    "lat": 36,
-    "lng": -115.2,
-    "lvl": 10,
-    "rarity": "rare",
-    "iconKey": "factory",
-    "region": "fnv_minor",
-    "game": "fnv",
-    "source": "canon",
-    "icon": "factory"
-  },
-  {
     "id": "helios_one_entrance_fnv",
     "name": "HELIOS One Entrance",
     "lat": 35.76,
