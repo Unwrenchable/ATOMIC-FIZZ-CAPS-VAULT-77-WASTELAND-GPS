@@ -1094,52 +1094,267 @@ A token launchpad built into the Atomic Fizz Caps ecosystem could serve as both 
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### CAPS Holder Gating
+### CAPS Holder Gating (Launch Only) + Open Trading
 
-**Tiered Access Based on CAPS Holdings:**
+**Key Design Decision:** CAPS holders get exclusive *launch* privileges, but *anyone* can trade using SOL or USDC. This creates demand for CAPS while maximizing trading volume and accessibility.
 
-| CAPS Held | Privileges |
-|-----------|------------|
-| 100 CAPS | Can buy/sell tokens on Fizz.fun |
-| 1,000 CAPS | Can launch tokens |
-| 10,000 CAPS | Reduced launch fees (50 CAPS instead of 100) |
-| 100,000 CAPS | Featured placement, priority support |
-| 1,000,000 CAPS | "Vault Overseer" badge, governance rights |
+> *"In the wasteland, your old world paper money is worthless scrap. But here on Fizz.fun, we'll take your SOL and USDC - we're not picky about which pre-war currencies you're holding. Just don't expect to launch your own token without proving you're one of us."*
+> — Fizz.fun Welcome Message
+
+**Access Tiers:**
+
+| Requirement | What You Can Do |
+|-------------|-----------------|
+| **No CAPS needed** | Buy/sell any token with SOL or USDC |
+| **1,000 CAPS** | Launch your own token |
+| **10,000 CAPS** | Reduced launch fee (50 CAPS instead of 100) |
+| **100,000 CAPS** | Featured placement, priority support |
+| **1,000,000 CAPS** | "Vault Overseer" badge, governance rights |
+
+**Why This Works:**
+- **For Creators**: Must hold CAPS to launch → creates CAPS demand
+- **For Traders**: No barrier to entry → maximum liquidity and volume
+- **For Ecosystem**: Every trade brings new users who might buy CAPS to launch their own token
+- **Lore-Friendly**: SOL/USDC = "old world currencies" that still have some value
 
 ```javascript
-// Backend: Check CAPS balance for launch eligibility
-async function checkLaunchEligibility(wallet) {
+// Backend: Check eligibility - CAPS only needed to LAUNCH
+async function checkFizzFunAccess(wallet) {
     const capsBalance = await getCapsBalance(wallet);
     
-    if (capsBalance < 100) {
-        return { 
-            eligible: false, 
-            canTrade: false,
-            reason: 'Hold at least 100 CAPS to use Fizz.fun' 
-        };
-    }
+    // ANYONE can trade - no CAPS required
+    const canTrade = true;
     
-    if (capsBalance < 1000) {
-        return { 
-            eligible: false, 
-            canTrade: true,
-            reason: 'Hold at least 1,000 CAPS to launch tokens' 
-        };
-    }
+    // Only CAPS holders can launch
+    const canLaunch = capsBalance >= 1000 * 1e9; // 1000 CAPS with 9 decimals
     
-    const launchFee = capsBalance >= 10000 ? 50 : 100;
-    const tier = capsBalance >= 1000000 ? 'overseer' : 
-                 capsBalance >= 100000 ? 'elite' :
-                 capsBalance >= 10000 ? 'veteran' : 'wastelander';
+    // Calculate launch fee discount for bigger holders
+    let launchFee = 100; // Default: 100 CAPS
+    if (capsBalance >= 10000 * 1e9) launchFee = 50; // Veteran discount
+    
+    // Determine tier for UI badges
+    const tier = capsBalance >= 1000000 * 1e9 ? 'overseer' : 
+                 capsBalance >= 100000 * 1e9 ? 'elite' :
+                 capsBalance >= 10000 * 1e9 ? 'veteran' : 
+                 capsBalance >= 1000 * 1e9 ? 'wastelander' : 'outsider';
     
     return { 
-        eligible: true, 
-        canTrade: true,
-        launchFee,
+        canTrade,      // Always true - anyone can trade
+        canLaunch,     // Only if holding 1000+ CAPS
+        launchFee,     // In CAPS (burned on launch)
         tier,
-        perks: getTierPerks(tier)
+        capsBalance: capsBalance / 1e9, // Human readable
     };
 }
+```
+
+### Supported Trading Pairs
+
+Each token on Fizz.fun can be traded with multiple currencies:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    FIZZ.FUN TRADING                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  $RADROACH / SOL    ████████████████░░░░  Volume: 45,230 SOL   │
+│  $RADROACH / USDC   ██████░░░░░░░░░░░░░░  Volume: 12,450 USDC  │
+│                                                                 │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  BUY $RADROACH                                          │   │
+│  │                                                         │   │
+│  │  Pay with:  [◉ SOL] [○ USDC]                           │   │
+│  │                                                         │   │
+│  │  Amount:    [________] SOL                              │   │
+│  │  You get:   ~1,234,567 $RADROACH                       │   │
+│  │  Price:     0.0000365 SOL per token                    │   │
+│  │                                                         │   │
+│  │  [Buy Now]                                              │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+│  💡 Want to launch your own token?                              │
+│     Hold 1,000 CAPS to unlock the Launch button                │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Multi-Currency Bonding Curve
+
+The bonding curve accepts both SOL and USDC, converting to a unified reserve:
+
+```javascript
+// Multi-currency buy function
+async function buyTokensMultiCurrency(
+    tokenMint: PublicKey,
+    paymentAmount: number,
+    paymentCurrency: 'SOL' | 'USDC',
+    minTokensOut: number
+) {
+    // Get current SOL/USDC price from oracle (Pyth)
+    const solPrice = await getPythPrice('SOL/USD');
+    
+    // Convert payment to SOL-equivalent for curve calculation
+    let solEquivalent: number;
+    if (paymentCurrency === 'SOL') {
+        solEquivalent = paymentAmount;
+    } else {
+        // USDC payment - convert to SOL equivalent
+        solEquivalent = paymentAmount / solPrice;
+    }
+    
+    // Calculate tokens from bonding curve (same math as before)
+    const tokensOut = calculateBuyReturn(solEquivalent, curve);
+    
+    if (tokensOut < minTokensOut) {
+        throw new Error('Slippage exceeded');
+    }
+    
+    // Execute trade based on payment currency
+    if (paymentCurrency === 'SOL') {
+        return executeSOLBuy(tokenMint, paymentAmount, tokensOut);
+    } else {
+        return executeUSDCBuy(tokenMint, paymentAmount, tokensOut);
+    }
+}
+
+// Multi-currency sell function
+async function sellTokensMultiCurrency(
+    tokenMint: PublicKey,
+    tokenAmount: number,
+    receiveCurrency: 'SOL' | 'USDC',
+    minAmountOut: number
+) {
+    // Calculate SOL value from curve
+    const solValue = calculateSellReturn(tokenAmount, curve);
+    
+    let amountOut: number;
+    if (receiveCurrency === 'SOL') {
+        amountOut = solValue;
+    } else {
+        // Convert SOL to USDC
+        const solPrice = await getPythPrice('SOL/USD');
+        amountOut = solValue * solPrice;
+    }
+    
+    if (amountOut < minAmountOut) {
+        throw new Error('Slippage exceeded');
+    }
+    
+    return executeSell(tokenMint, tokenAmount, receiveCurrency, amountOut);
+}
+```
+
+### Updated Solana Program (No CAPS Check for Trading)
+
+```rust
+/// Buy tokens - NO CAPS REQUIRED (open to everyone)
+pub fn buy(ctx: Context<BuyTokens>, sol_amount: u64, min_tokens_out: u64) -> Result<()> {
+    // NOTE: No CAPS check here - anyone can buy/sell
+    // This maximizes liquidity and trading volume
+    
+    let curve = &mut ctx.accounts.bonding_curve;
+    require!(!curve.graduated, FizzError::TokenGraduated);
+
+    // ... rest of buy logic (same as before)
+}
+
+/// Sell tokens - NO CAPS REQUIRED (open to everyone)  
+pub fn sell(ctx: Context<SellTokens>, token_amount: u64, min_sol_out: u64) -> Result<()> {
+    // NOTE: No CAPS check here - anyone can sell
+    
+    let curve = &mut ctx.accounts.bonding_curve;
+    require!(!curve.graduated, FizzError::TokenGraduated);
+
+    // ... rest of sell logic (same as before)
+}
+
+/// Launch token - CAPS REQUIRED (1000 CAPS minimum)
+pub fn create_token(
+    ctx: Context<CreateToken>,
+    name: String,
+    symbol: String,
+    uri: String,
+) -> Result<()> {
+    // ONLY launch requires CAPS
+    require!(
+        ctx.accounts.creator_caps_ata.amount >= CAPS_TO_LAUNCH,
+        FizzError::InsufficientCapsToLaunch
+    );
+
+    // Burn CAPS launch fee
+    token::burn(
+        CpiContext::new(
+            ctx.accounts.token_program.to_account_info(),
+            Burn {
+                mint: ctx.accounts.caps_mint.to_account_info(),
+                from: ctx.accounts.creator_caps_ata.to_account_info(),
+                authority: ctx.accounts.creator.to_account_info(),
+            },
+        ),
+        CAPS_LAUNCH_FEE,
+    )?;
+
+    // ... rest of launch logic
+}
+```
+
+### USDC Integration (Jupiter/Orca Swap)
+
+For USDC trades, integrate with Jupiter aggregator or Orca for best rates:
+
+```typescript
+import { Jupiter } from '@jup-ag/core';
+
+async function buyWithUSDC(
+    tokenMint: PublicKey,
+    usdcAmount: number,
+    wallet: WalletAdapter
+) {
+    // Option 1: Swap USDC → SOL first, then buy from curve
+    const jupiter = await Jupiter.load({ connection, wallet });
+    
+    const routes = await jupiter.computeRoutes({
+        inputMint: USDC_MINT,
+        outputMint: SOL_MINT, // Native SOL
+        amount: usdcAmount * 1e6, // USDC has 6 decimals
+        slippageBps: 50, // 0.5%
+    });
+    
+    // Execute swap
+    const { execute } = await jupiter.exchange({ routeInfo: routes[0] });
+    const swapResult = await execute();
+    
+    // Now buy tokens with SOL
+    const solReceived = swapResult.outputAmount / 1e9;
+    return buyTokensFromCurve(tokenMint, solReceived, wallet);
+}
+```
+
+### Why Open Trading is Better for the Ecosystem
+
+| Metric | CAPS-Gated Trading | Open Trading |
+|--------|-------------------|--------------|
+| Trading Volume | Lower (barrier) | Higher (no barrier) |
+| New User Onboarding | Friction | Smooth |
+| Fee Revenue | Less | More |
+| CAPS Demand | Only from traders | From creators (more valuable) |
+| Viral Potential | Limited | Maximum |
+
+**The Funnel:**
+```
+New User discovers token on Fizz.fun
+            ↓
+Buys token with SOL/USDC (no barrier)
+            ↓
+Sees other successful tokens
+            ↓
+Wants to launch their own token
+            ↓
+Needs 1000 CAPS → Buys CAPS → CAPS demand!
+            ↓
+Launches token, promotes it
+            ↓
+Brings more new users → Cycle repeats
 ```
 
 ### How Pump.fun Actually Works (For Reference)
@@ -1279,10 +1494,10 @@ const VIRTUAL_SOL: u64 = 30_000_000_000;             // 30 SOL virtual
 const FEE_BPS: u64 = 100;                            // 1% fee
 const CAPS_DECIMALS: u64 = 1_000_000_000;            // 9 decimals
 
-// CAPS requirements
-const CAPS_TO_LAUNCH: u64 = 1000 * CAPS_DECIMALS;
-const CAPS_TO_TRADE: u64 = 100 * CAPS_DECIMALS;
-const CAPS_LAUNCH_FEE: u64 = 100 * CAPS_DECIMALS;
+// CAPS requirements - ONLY for launching, NOT for trading
+const CAPS_TO_LAUNCH: u64 = 1000 * CAPS_DECIMALS;    // Must hold 1000 CAPS to launch
+const CAPS_LAUNCH_FEE: u64 = 100 * CAPS_DECIMALS;    // Burn 100 CAPS on launch
+// NOTE: No CAPS_TO_TRADE - anyone can buy/sell with SOL/USDC
 
 #[program]
 pub mod fizz_fun {
@@ -1375,17 +1590,16 @@ pub mod fizz_fun {
     }
 
     /// Buy tokens from the bonding curve
+    /// NOTE: NO CAPS REQUIRED - Anyone can buy with SOL
+    /// This maximizes liquidity and allows "old world currency" holders to participate
     pub fn buy(ctx: Context<BuyTokens>, sol_amount: u64, min_tokens_out: u64) -> Result<()> {
-        // 1. Verify CAPS balance for trading
-        require!(
-            ctx.accounts.buyer_caps_ata.amount >= CAPS_TO_TRADE,
-            FizzError::InsufficientCapsToTrade
-        );
+        // NO CAPS CHECK - Open trading for maximum liquidity
+        // "Your old world paper money (SOL/USDC) is worthless scrap, but we'll take it"
 
         let curve = &mut ctx.accounts.bonding_curve;
         require!(!curve.graduated, FizzError::TokenGraduated);
 
-        // 2. Calculate fee (1%)
+        // 1. Calculate fee (1%)
         let fee = sol_amount.checked_mul(FEE_BPS).unwrap().checked_div(10000).unwrap();
         let sol_after_fee = sol_amount.checked_sub(fee).unwrap();
 
@@ -1690,14 +1904,8 @@ pub struct BuyTokens<'info> {
     
     pub token_mint: Account<'info, Mint>,
     
-    // CAPS verification
-    pub caps_mint: Account<'info, Mint>,
-    
-    #[account(
-        associated_token::mint = caps_mint,
-        associated_token::authority = buyer,
-    )]
-    pub buyer_caps_ata: Account<'info, TokenAccount>,
+    // NOTE: No CAPS accounts required for buying!
+    // Anyone can trade with SOL - "old world currency accepted"
     
     /// CHECK: Treasury for fees
     #[account(mut)]
@@ -1810,8 +2018,7 @@ pub struct TokenGraduated {
 pub enum FizzError {
     #[msg("Must hold at least 1000 CAPS to launch tokens")]
     InsufficientCapsToLaunch,
-    #[msg("Must hold at least 100 CAPS to trade")]
-    InsufficientCapsToTrade,
+    // NOTE: No InsufficientCapsToTrade error - trading is open to everyone!
     #[msg("Token has already graduated to Raydium")]
     TokenGraduated,
     #[msg("Token has already graduated")]
@@ -1892,6 +2099,7 @@ export class FizzFunClient {
 
     /**
      * Buy tokens from bonding curve
+     * NOTE: No CAPS required - anyone can buy with SOL!
      */
     async buyTokens(
         buyer: PublicKey,
@@ -1899,6 +2107,9 @@ export class FizzFunClient {
         solAmount: number,
         slippageBps: number = 100 // 1% default slippage
     ): Promise<string> {
+        // No CAPS check needed - open trading for everyone
+        // "Your old world currency (SOL) is accepted here"
+        
         const [bondingCurve] = PublicKey.findProgramAddressSync(
             [Buffer.from('bonding_curve'), tokenMint.toBuffer()],
             FIZZ_FUN_PROGRAM_ID
@@ -1923,7 +2134,7 @@ export class FizzFunClient {
                 buyer,
                 bondingCurve,
                 tokenMint,
-                // ... other accounts
+                // ... other accounts (no CAPS accounts needed!)
             })
             .rpc();
 
@@ -1932,6 +2143,7 @@ export class FizzFunClient {
 
     /**
      * Sell tokens back to bonding curve
+     * NOTE: No CAPS required - anyone can sell for SOL!
      */
     async sellTokens(
         seller: PublicKey,
