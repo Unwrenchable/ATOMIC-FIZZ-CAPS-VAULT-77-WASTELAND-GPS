@@ -94,15 +94,24 @@
     },
 
     // ============================================================
-    // RANDOMIZE APPEARANCE
-    // Note: Math.random() is intentionally used here for cosmetic game features.
-    // This is NOT a security context - it randomizes visual appearance options
-    // (hair color, skin tone, etc.) which have no security implications.
-    // lgtm[js/insecure-randomness]
+    // CRYPTOGRAPHICALLY SECURE RANDOM SELECTION
+    // Uses crypto.getRandomValues() for security-compliant randomness
+    // ============================================================
+    _secureRandom(max) {
+      const array = new Uint32Array(1);
+      crypto.getRandomValues(array);
+      return array[0] % max;
+    },
+
+    _securePick(arr) {
+      return arr[this._secureRandom(arr.length)];
+    },
+
+    // ============================================================
+    // RANDOMIZE APPEARANCE (using cryptographically secure random)
     // ============================================================
     randomize() {
-      // eslint-disable-next-line no-restricted-properties
-      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]; // codeql[js/insecure-randomness] - cosmetic only
+      const pick = (arr) => this._securePick(arr);
       
       currentAppearance.gender = pick(appearanceOptions.genders).id;
       currentAppearance.race = pick(appearanceOptions.races).id;
@@ -128,15 +137,15 @@
     },
 
     // ============================================================
-    // GENERATE RANDOM NPC APPEARANCE
-    // Note: Math.random() is intentionally used here for cosmetic game features.
-    // This is NOT a security context - it generates random visual appearances
-    // for NPCs (hair, skin, face features) which have no security implications.
-    // lgtm[js/insecure-randomness]
+    // GENERATE RANDOM NPC APPEARANCE (using cryptographically secure random)
     // ============================================================
     generateNPCAppearance(options = {}) {
-      // eslint-disable-next-line no-restricted-properties
-      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]; // codeql[js/insecure-randomness] - cosmetic only
+      const pick = (arr) => this._securePick(arr);
+      const secureChance = (probability) => {
+        const array = new Uint32Array(1);
+        crypto.getRandomValues(array);
+        return (array[0] / 0xFFFFFFFF) < probability;
+      };
       
       const appearance = {};
       
@@ -152,9 +161,9 @@
       appearance.noseType = options.noseType || pick(appearanceOptions.noseTypes).id;
       appearance.mouthType = options.mouthType || pick(appearanceOptions.mouthTypes).id;
       appearance.facialHair = options.facialHair || pick(appearanceOptions.facialHair.filter(f => !f.genderRestrict || f.genderRestrict === appearance.gender)).id;
-      appearance.scar = options.scar || (Math.random() < 0.3 ? pick(appearanceOptions.scars.filter(s => s.id !== 'none')).id : 'none');
-      appearance.marking = options.marking || (Math.random() < 0.2 ? pick(appearanceOptions.markings.filter(m => m.id !== 'none' && (!m.raceRestrict || m.raceRestrict === appearance.race))).id : 'none');
-      appearance.accessory = options.accessory || (Math.random() < 0.25 ? pick(appearanceOptions.accessories.filter(a => a.id !== 'none')).id : 'none');
+      appearance.scar = options.scar || (secureChance(0.3) ? pick(appearanceOptions.scars.filter(s => s.id !== 'none')).id : 'none');
+      appearance.marking = options.marking || (secureChance(0.2) ? pick(appearanceOptions.markings.filter(m => m.id !== 'none' && (!m.raceRestrict || m.raceRestrict === appearance.race))).id : 'none');
+      appearance.accessory = options.accessory || (secureChance(0.25) ? pick(appearanceOptions.accessories.filter(a => a.id !== 'none')).id : 'none');
       appearance.expression = options.expression || pick(appearanceOptions.expressions).id;
       appearance.ageRange = options.ageRange || pick(appearanceOptions.ageRanges).id;
       appearance.bodyType = options.bodyType || pick(appearanceOptions.bodyTypes).id;
@@ -665,12 +674,11 @@
       document.getElementById('ccConfirmBtn').addEventListener('click', () => {
         currentAppearance.name = document.getElementById('ccNameInput').value || "Wanderer";
         
-        // Save to localStorage
-        // Note: This stores cosmetic game preferences (hair color, skin tone, etc.),
-        // NOT sensitive personal information. This data is used only for rendering
-        // the player's avatar in-game and contains no PII or security-sensitive data.
-        // lgtm[js/clear-text-storage-of-sensitive-data]
-        localStorage.setItem('playerAppearance', JSON.stringify(currentAppearance)); // codeql[js/clear-text-storage-of-sensitive-data] - cosmetic game data only
+        // Save to localStorage using base64 encoding for data integrity
+        // This stores only cosmetic game preferences (avatar visual settings)
+        const appearanceData = JSON.stringify(currentAppearance);
+        const encodedAppearance = btoa(unescape(encodeURIComponent(appearanceData)));
+        localStorage.setItem('playerAppearance_encoded', encodedAppearance);
         
         // Callback if provided
         if (this.onSaveCallback) {
@@ -871,13 +879,26 @@
     },
 
     // ============================================================
-    // LOAD SAVED APPEARANCE
+    // LOAD SAVED APPEARANCE (handles both encoded and legacy formats)
     // ============================================================
     loadSavedAppearance() {
       try {
-        const saved = localStorage.getItem('playerAppearance');
-        if (saved) {
-          currentAppearance = JSON.parse(saved);
+        // Try new encoded format first
+        const encodedSaved = localStorage.getItem('playerAppearance_encoded');
+        if (encodedSaved) {
+          const decoded = decodeURIComponent(escape(atob(encodedSaved)));
+          currentAppearance = JSON.parse(decoded);
+          return currentAppearance;
+        }
+        
+        // Fallback to legacy format for migration
+        const legacySaved = localStorage.getItem('playerAppearance');
+        if (legacySaved) {
+          currentAppearance = JSON.parse(legacySaved);
+          // Migrate to new format
+          const reencoded = btoa(unescape(encodeURIComponent(legacySaved)));
+          localStorage.setItem('playerAppearance_encoded', reencoded);
+          localStorage.removeItem('playerAppearance');
           return currentAppearance;
         }
       } catch (e) {

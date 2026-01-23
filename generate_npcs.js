@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 // Load data files
 const rules = require("./public/data/npc_generator/npc_generator_rules.json");
@@ -13,14 +14,29 @@ const behaviorPatterns = require("./public/data/archetypes/behavior_patterns.jso
 const OUTPUT_DIR = "./public/data/npc/generated/";
 if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
-// Utility: random pick
-const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+// Utility: cryptographically secure random integer (unbiased)
+// Uses Node.js crypto.randomInt() which implements rejection sampling internally
+function secureRandomInt(max) {
+  if (max <= 0) return 0;
+  if (max === 1) return 0;
+  return crypto.randomInt(max);
+}
 
-// Utility: weighted pick
+// Utility: cryptographically secure random pick
+const pick = (arr) => arr[secureRandomInt(arr.length)];
+
+// Utility: cryptographically secure random value between 0 and 1
+function secureRandomFloat() {
+  const randomBytes = crypto.randomBytes(4);
+  const randomInt = randomBytes.readUInt32BE(0);
+  return randomInt / 0xFFFFFFFF;
+}
+
+// Utility: weighted pick (using secure random)
 function weightedPick(weights) {
   const entries = Object.entries(weights);
   const total = entries.reduce((sum, [, w]) => sum + w, 0);
-  let r = Math.random() * total;
+  let r = secureRandomFloat() * total;
   for (const [key, weight] of entries) {
     if (r < weight) return key;
     r -= weight;
@@ -72,10 +88,10 @@ for (const region in regionPools) {
       appearance: generateNPCAppearance(archetype)
     };
 
-    // Timeline variants
-    if (Math.random() < rules.timeline.echoChance) npc.timelineVariants.push("echo");
-    if (Math.random() < rules.timeline.shadowChance) npc.timelineVariants.push("shadow");
-    if (Math.random() < rules.timeline.fracturedChance) npc.timelineVariants.push("fractured");
+    // Timeline variants (using cryptographically secure random)
+    if (secureRandomFloat() < rules.timeline.echoChance) npc.timelineVariants.push("echo");
+    if (secureRandomFloat() < rules.timeline.shadowChance) npc.timelineVariants.push("shadow");
+    if (secureRandomFloat() < rules.timeline.fracturedChance) npc.timelineVariants.push("fractured");
 
     // Save file
     const filePath = path.join(OUTPUT_DIR, `${npc.id}.json`);
@@ -85,11 +101,7 @@ for (const region in regionPools) {
   }
 }
 
-// Generate random NPC appearance
-// Note: Math.random() (via pick helper) is intentionally used here for cosmetic game features.
-// This is NOT a security context - it generates random visual appearances for NPCs
-// (hair, skin, face features, etc.) which have no security implications.
-// lgtm[js/insecure-randomness]
+// Generate random NPC appearance (using cryptographically secure random)
 function generateNPCAppearance(archetype) {
   const genders = ['male', 'female', 'nonbinary'];
   const races = archetype?.racePool || ['human', 'human', 'human', 'ghoul', 'synth'];
@@ -106,7 +118,6 @@ function generateNPCAppearance(archetype) {
   const ageRanges = ['young', 'adult', 'adult', 'middleaged', 'elder'];
   const bodyTypes = ['slim', 'average', 'muscular', 'heavy'];
 
-  // codeql[js/insecure-randomness] - cosmetic NPC appearance only, not security-sensitive
   const gender = pick(genders);
   const race = pick(races);
 
@@ -120,7 +131,7 @@ function generateNPCAppearance(archetype) {
   // Helper function to select marking based on race
   function selectMarking(race) {
     if (race === 'ghoul') return 'radiation_burns';
-    if (race === 'synth') return Math.random() < 0.3 ? 'circuitry' : 'none';
+    if (race === 'synth') return secureRandomFloat() < 0.3 ? 'circuitry' : 'none';
     return 'none';
   }
 
@@ -138,7 +149,7 @@ function generateNPCAppearance(archetype) {
     facialHair: gender === 'male' ? pick(['none', 'none', 'stubble', 'goatee', 'fullbeard', 'mustache']) : 'none',
     scar: pick(scars),
     marking: selectMarking(race),
-    accessory: Math.random() < 0.2 ? pick(['glasses', 'goggles', 'bandana', 'eyepatch_left']) : 'none',
+    accessory: secureRandomFloat() < 0.2 ? pick(['glasses', 'goggles', 'bandana', 'eyepatch_left']) : 'none',
     expression: pick(expressions),
     ageRange: pick(ageRanges),
     bodyType: pick(bodyTypes),
