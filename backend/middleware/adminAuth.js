@@ -1,6 +1,7 @@
 // backend/middleware/adminAuth.js
 const crypto = require("crypto");
-const { redis } = require("../lib/redis");
+const redis = require("../lib/redis");
+const rateLimit = require("express-rate-limit");
 
 const ADMIN_SESSION_PREFIX = "admin:sess:";
 
@@ -23,8 +24,8 @@ async function createAdminSession() {
 async function validateAdminSession(token) {
   if (!token) return false;
   const key = ADMIN_SESSION_PREFIX + token;
-  const exists = await redis.exists(key);
-  return exists === 1;
+  const value = await redis.get(key);
+  return value !== null;
 }
 
 async function destroyAdminSession(token) {
@@ -39,11 +40,19 @@ async function adminLoginHandler(req, res) {
     const envUser = process.env.ADMIN_USERNAME || "";
     const envPass = process.env.ADMIN_PASSWORD || "";
 
+    // Validate admin credentials are configured
+    if (!envUser || !envPass) {
+      console.error("[adminAuth] CRITICAL: Admin credentials not configured (ADMIN_USERNAME/ADMIN_PASSWORD)");
+      return res.status(503).json({ ok: false, error: "admin_not_configured" });
+    }
+
     if (!safeCompare(username || "", envUser) || !safeCompare(password || "", envPass)) {
+      console.warn("[adminAuth] Failed login attempt");
       return res.status(401).json({ ok: false, error: "invalid_admin_credentials" });
     }
 
     const sessionId = await createAdminSession();
+    console.log("[adminAuth] Admin session created");
     return res.json({ ok: true, token: sessionId });
   } catch (err) {
     console.error("ADMIN LOGIN ERROR:", err);
@@ -79,8 +88,32 @@ async function requireAdmin(req, res, next) {
   }
 }
 
+/**
+ * Rate limiter for admin routes - strict limits to prevent brute force attacks
+ */
+const adminRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: { ok: false, error: "too_many_admin_requests" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+/**
+ * Rate limiter for admin login - very strict to prevent brute force
+ */
+const adminLoginRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // only 5 login attempts per 15 minutes
+  message: { ok: false, error: "too_many_login_attempts" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 module.exports = {
   adminLoginHandler,
   adminLogoutHandler,
   requireAdmin,
+  adminRateLimiter,
+  adminLoginRateLimiter,
 };

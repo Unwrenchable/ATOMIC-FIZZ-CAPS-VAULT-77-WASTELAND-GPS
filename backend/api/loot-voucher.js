@@ -32,20 +32,54 @@ function safeDecodeBase58(str, name = "key") {
 
 const USE_KMS = process.env.NODE_ENV === "production";
 let SERVER_KEYPAIR = null;
+let KEY_INIT_ERROR = null;
 
-if (!USE_KMS) {
-  try {
-    const secretEnv = process.env.SERVER_SECRET_KEY;
-    const secret = safeDecodeBase58(secretEnv, "SERVER_SECRET_KEY");
-    SERVER_KEYPAIR = nacl.sign.keyPair.fromSecretKey(secret);
-    console.log("[loot-voucher] using local SERVER_SECRET_KEY (dev)");
-  } catch (err) {
-    console.warn("[loot-voucher] no valid SERVER_SECRET_KEY found (dev only). Voucher endpoint will fail until a valid key is provided.", err.message);
-    SERVER_KEYPAIR = null;
+/**
+ * Validate and load SERVER_SECRET_KEY at startup.
+ * Enhanced error handling to prevent application outages from misconfigured keys.
+ */
+function initServerKey() {
+  if (USE_KMS) {
+    console.log("[loot-voucher] running in production mode; will use KMS for signing");
+    return;
   }
-} else {
-  console.log("[loot-voucher] running in production mode; will use KMS for signing");
+
+  const secretEnv = process.env.SERVER_SECRET_KEY;
+
+  // Check if key is present
+  if (!secretEnv) {
+    KEY_INIT_ERROR = "SERVER_SECRET_KEY environment variable is not set";
+    console.error(`[loot-voucher] CRITICAL: ${KEY_INIT_ERROR}. Voucher endpoint will be unavailable.`);
+    return;
+  }
+
+  // Validate key format before attempting decode
+  if (typeof secretEnv !== "string" || secretEnv.length < 64) {
+    KEY_INIT_ERROR = "SERVER_SECRET_KEY appears to be invalid (too short or wrong format)";
+    console.error(`[loot-voucher] CRITICAL: ${KEY_INIT_ERROR}. Expected a 64-byte Ed25519 secret key in base58.`);
+    return;
+  }
+
+  try {
+    const secret = safeDecodeBase58(secretEnv, "SERVER_SECRET_KEY");
+
+    // Validate key length (Ed25519 secret keys should be 64 bytes)
+    if (secret.length !== 64) {
+      KEY_INIT_ERROR = `SERVER_SECRET_KEY has invalid length (${secret.length} bytes, expected 64)`;
+      console.error(`[loot-voucher] CRITICAL: ${KEY_INIT_ERROR}`);
+      return;
+    }
+
+    SERVER_KEYPAIR = nacl.sign.keyPair.fromSecretKey(secret);
+    console.log("[loot-voucher] SERVER_SECRET_KEY loaded successfully (dev mode)");
+  } catch (err) {
+    KEY_INIT_ERROR = `Failed to initialize SERVER_SECRET_KEY: ${err.message}`;
+    console.error(`[loot-voucher] CRITICAL: ${KEY_INIT_ERROR}`);
+  }
 }
+
+// Initialize key at module load
+initServerKey();
 
 // Mounted at /api/loot-voucher
 router.post("/", async (req, res) => {
@@ -69,7 +103,13 @@ router.post("/", async (req, res) => {
       serverKeyInfo = keyIdUsed;
     } else {
       if (!SERVER_KEYPAIR) {
-        return res.status(500).json({ error: "SERVER_SECRET_KEY not configured or invalid (dev only)" });
+        // Provide detailed error message for debugging misconfigured environments
+        const errorMessage = KEY_INIT_ERROR || "SERVER_SECRET_KEY not configured or invalid";
+        console.error(`[loot-voucher] Cannot sign voucher: ${errorMessage}`);
+        return res.status(503).json({
+          error: "Voucher signing service unavailable",
+          reason: process.env.NODE_ENV === "development" ? errorMessage : undefined
+        });
       }
       const sig = nacl.sign.detached(message, SERVER_KEYPAIR.secretKey);
       signatureBytes = Buffer.from(sig);

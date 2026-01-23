@@ -9,6 +9,8 @@
 
 const PREFIX = process.env.REDIS_PREFIX || "afw:";
 const REDIS_URL = process.env.REDIS_URL || process.env.REDIS || null;
+const NODE_ENV = process.env.NODE_ENV || "development";
+const REQUIRE_REDIS_IN_PRODUCTION = process.env.REQUIRE_REDIS_IN_PRODUCTION !== "false";
 
 let redisClient = null;
 let usingFallback = false;
@@ -99,12 +101,28 @@ function createInMemoryClient() {
 /**
  * Initialize a real Redis client if REDIS_URL is provided.
  * If initialization fails, fall back to the in-memory client.
+ *
+ * WARNING: In-memory fallback is NOT suitable for production environments
+ * as it will cause data consistency issues in distributed deployments
+ * and data loss on server restarts.
  */
 async function initClient() {
   if (!REDIS_URL) {
+    // Emit strong warnings for production environments
+    if (NODE_ENV === "production") {
+      console.error("[redis] CRITICAL: REDIS_URL not set in production environment!");
+      console.error("[redis] WARNING: In-memory fallback will cause:");
+      console.error("[redis]   - Data inconsistency in distributed environments");
+      console.error("[redis]   - Session/voucher replay protection failures");
+      console.error("[redis]   - Data loss on server restarts");
+      if (REQUIRE_REDIS_IN_PRODUCTION) {
+        throw new Error("Redis is required in production. Set REDIS_URL or set REQUIRE_REDIS_IN_PRODUCTION=false to override (not recommended).");
+      }
+    }
+
     usingFallback = true;
     redisClient = createInMemoryClient();
-    console.warn("[redis] REDIS_URL not set — using in-memory fallback (not for production)");
+    console.warn("[redis] REDIS_URL not set — using in-memory fallback (NOT FOR PRODUCTION)");
     return redisClient;
   }
 
@@ -135,7 +153,17 @@ async function initClient() {
     redisClient = client;
     return redisClient;
   } catch (err) {
-    console.error("[redis] connection failed — falling back to in-memory store", err && err.message ? err.message : err);
+    // Emit strong warnings for production environments
+    if (NODE_ENV === "production") {
+      console.error("[redis] CRITICAL: Redis connection failed in production environment!");
+      console.error("[redis] Error:", err && err.message ? err.message : err);
+      console.error("[redis] WARNING: Falling back to in-memory store will cause data consistency issues.");
+      if (REQUIRE_REDIS_IN_PRODUCTION) {
+        throw new Error("Redis connection failed in production. Fix Redis or set REQUIRE_REDIS_IN_PRODUCTION=false to override (not recommended).");
+      }
+    } else {
+      console.error("[redis] connection failed — falling back to in-memory store", err && err.message ? err.message : err);
+    }
     usingFallback = true;
     redisClient = createInMemoryClient();
     return redisClient;
