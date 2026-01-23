@@ -2,6 +2,7 @@
 // ------------------------------------------------------------
 // Atomic Fizz Caps – POI Discovery Banner
 // Shows a Fallout-style "LOCATION DISCOVERED" popup
+// Also enables permanent labels on discovered locations
 // ------------------------------------------------------------
 
 (function () {
@@ -81,6 +82,23 @@
         #poiDiscoveryBanner.show {
           opacity: 1;
         }
+        
+        /* Discovered location marker styling */
+        .poi-marker-discovered {
+          position: relative;
+        }
+        
+        .poi-marker-discovered::after {
+          content: '';
+          position: absolute;
+          top: -2px;
+          right: -2px;
+          width: 8px;
+          height: 8px;
+          background: #00ff41;
+          border-radius: 50%;
+          box-shadow: 0 0 4px #00ff41;
+        }
       `;
       document.head.appendChild(style);
     },
@@ -88,9 +106,17 @@
     trigger(loc) {
       if (!loc || !loc.id) return;
 
-      // Only show once per session
-      if (this.discovered.has(loc.id)) return;
+      // Check if already discovered
+      const wasDiscovered = this.discovered.has(loc.id);
+      
+      // Mark as discovered
       this.discovered.add(loc.id);
+      
+      // Update the marker to show permanent label
+      this.markAsDiscovered(loc);
+
+      // Only show banner on first discovery
+      if (wasDiscovered) return;
 
       const nameEl = this.element.querySelector(".name");
       nameEl.textContent = loc.name || "Unknown Location";
@@ -100,6 +126,49 @@
       setTimeout(() => {
         this.element.classList.remove("show");
       }, 2500);
+    },
+    
+    // Mark a location marker as discovered - enables permanent label
+    markAsDiscovered(loc) {
+      if (!loc || !loc.id) return;
+      
+      const worldmap = Game.modules.worldmap;
+      if (!worldmap || !worldmap.poiMarkers) return;
+      
+      // Find the marker for this location
+      const poiEntry = worldmap.poiMarkers.find(p => p.loc && p.loc.id === loc.id);
+      if (!poiEntry || !poiEntry.marker) return;
+      
+      const marker = poiEntry.marker;
+      
+      // Add discovered class to the marker element
+      const el = marker.getElement();
+      if (el && !el.classList.contains('poi-marker-discovered')) {
+        el.classList.add('poi-marker-discovered');
+      }
+      
+      // Make the tooltip permanent so the label is always visible
+      try {
+        // Unbind existing tooltip and rebind as permanent
+        const tooltip = marker.getTooltip();
+        if (tooltip) {
+          const content = tooltip.getContent();
+          marker.unbindTooltip();
+          marker.bindTooltip(content, {
+            permanent: true,
+            direction: 'top',
+            offset: [0, -14],
+            className: 'poi-label-tooltip poi-label-discovered'
+          });
+        }
+      } catch (e) {
+        console.warn("discoveryBanner: failed to update marker label", e);
+      }
+    },
+    
+    // Check if a location is discovered
+    isDiscovered(locId) {
+      return this.discovered.has(locId);
     }
   };
 
