@@ -198,6 +198,9 @@ safeMount("/api/location-claim", api("location-claim"));
 // Add locations endpoint (frontend expects /api/locations)
 safeMount("/api/locations", api("locations"));
 
+// Frontend configuration endpoint (exposes safe config values from env vars)
+safeMount("/api/config/frontend", api("frontend-config"));
+
 // Admin panel routes
 safeMount("/api/admin/player", api("adminPlayer"));
 safeMount("/api/admin/mintables", api("adminMintables"));
