@@ -3,7 +3,12 @@
 // Requires bs58 to be included in your HTML:
 // <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js"></script>
 
-const API_BASE = "/api/auth";
+// Use window.API_BASE if available (set in index.html), otherwise default to relative path
+// This allows direct API calls in production and Vercel rewrite fallback in dev
+function getApiBase() {
+  const base = (window.API_BASE || '').replace(/\/+$/, '');
+  return base ? `${base}/api/auth` : '/api/auth';
+}
 
 /**
  * Safely parse a fetch response as JSON.
@@ -104,9 +109,10 @@ class AuthClient {
 
   async login(wallet) {
     const publicKey = wallet.publicKey.toBase58();
+    const apiBase = getApiBase();
 
     // 1. Get nonce
-    const nonceRes = await fetch(`${API_BASE}/nonce/${publicKey}`);
+    const nonceRes = await fetch(`${apiBase}/nonce/${publicKey}`);
     const nonceJson = await safeJsonParse(nonceRes);
     if (!nonceJson.ok) throw new Error(nonceJson.error || "Failed to get nonce");
 
@@ -119,7 +125,7 @@ class AuthClient {
     const signatureBase58 = bs58.encode(signature);
 
     // 3. Verify
-    const verifyRes = await fetch(`${API_BASE}/verify`, {
+    const verifyRes = await fetch(`${apiBase}/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -146,7 +152,8 @@ class AuthClient {
       return;
     }
 
-    await fetch(`${API_BASE}/logout`, {
+    const apiBase = getApiBase();
+    await fetch(`${apiBase}/logout`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${this.state.sessionId}`,
