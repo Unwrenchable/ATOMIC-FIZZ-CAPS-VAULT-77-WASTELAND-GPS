@@ -3,11 +3,10 @@
 (function() {
   'use strict';
 
-  // Obfuscated sequence storage using encoded values
+  // Obfuscated sequence storage using numeric key codes
   // This prevents easy discovery by searching for "ArrowUp" or similar strings
-  // The sequence is encoded using base64 and character codes
   var _0x7f = (function() {
-    // Encoded directional sequence (not directly readable)
+    // Key codes mapped to key names at runtime
     var _a = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
     var _m = {};
     _m[38] = 'ArrowUp';

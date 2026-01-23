@@ -63,56 +63,56 @@
 
     document.addEventListener('keydown', function(e) {
       // F12
-      if (e.key === 'F12' || e.keyCode === 123) {
+      if (e.key === 'F12') {
         e.preventDefault();
         showConsoleWarning();
         return false;
       }
 
       // Ctrl+Shift+I (Chrome DevTools)
-      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
         e.preventDefault();
         showConsoleWarning();
         return false;
       }
 
       // Ctrl+Shift+J (Chrome Console)
-      if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) {
         e.preventDefault();
         showConsoleWarning();
         return false;
       }
 
       // Ctrl+Shift+C (Chrome Inspect Element)
-      if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) {
         e.preventDefault();
         showConsoleWarning();
         return false;
       }
 
       // Ctrl+U (View Source)
-      if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {
+      if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) {
         e.preventDefault();
         showConsoleWarning();
         return false;
       }
 
       // Cmd+Option+I (Mac DevTools)
-      if (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {
+      if (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'i')) {
         e.preventDefault();
         showConsoleWarning();
         return false;
       }
 
       // Cmd+Option+J (Mac Console)
-      if (e.metaKey && e.altKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {
+      if (e.metaKey && e.altKey && (e.key === 'J' || e.key === 'j')) {
         e.preventDefault();
         showConsoleWarning();
         return false;
       }
 
       // Cmd+Option+U (Mac View Source)
-      if (e.metaKey && e.altKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {
+      if (e.metaKey && e.altKey && (e.key === 'U' || e.key === 'u')) {
         e.preventDefault();
         showConsoleWarning();
         return false;

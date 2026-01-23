@@ -77,7 +77,9 @@
       // Find the most appropriate quip based on HP threshold
       let selectedQuip = null;
       for (const quip of quips) {
-        const threshold = parseInt(quip.condition.match(/\d+/)[0]);
+        const match = quip.condition.match(/\d+/);
+        if (!match) continue;
+        const threshold = parseInt(match[0], 10);
         if (hpPercent <= threshold) {
           selectedQuip = quip;
           break;
@@ -117,7 +119,10 @@
       
       const quips = this.quipsData.battle_struggle_quips;
       const eligibleQuips = quips.filter(q => {
-        const threshold = parseInt(q.triggers_after);
+        // Parse threshold - handles "60 seconds" or just "60"
+        const match = String(q.triggers_after).match(/\d+/);
+        if (!match) return false;
+        const threshold = parseInt(match[0], 10);
         return seconds >= threshold;
       });
 
@@ -144,7 +149,10 @@
 
       const quips = this.quipsData.quest_stuck_quips;
       const eligibleQuips = quips.filter(q => {
-        const threshold = parseInt(q.triggers_after);
+        // Parse threshold - handles "30 minutes same area" or just "30"
+        const match = String(q.triggers_after).match(/\d+/);
+        if (!match) return false;
+        const threshold = parseInt(match[0], 10);
         return minutes >= threshold;
       });
 
