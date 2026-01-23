@@ -86,6 +86,10 @@ for (const region in regionPools) {
 }
 
 // Generate random NPC appearance
+// Note: Math.random() (via pick helper) is intentionally used here for cosmetic game features.
+// This is NOT a security context - it generates random visual appearances for NPCs
+// (hair, skin, face features, etc.) which have no security implications.
+// lgtm[js/insecure-randomness]
 function generateNPCAppearance(archetype) {
   const genders = ['male', 'female', 'nonbinary'];
   const races = archetype?.racePool || ['human', 'human', 'human', 'ghoul', 'synth'];
@@ -102,6 +106,7 @@ function generateNPCAppearance(archetype) {
   const ageRanges = ['young', 'adult', 'adult', 'middleaged', 'elder'];
   const bodyTypes = ['slim', 'average', 'muscular', 'heavy'];
 
+  // codeql[js/insecure-randomness] - cosmetic NPC appearance only, not security-sensitive
   const gender = pick(genders);
   const race = pick(races);
 

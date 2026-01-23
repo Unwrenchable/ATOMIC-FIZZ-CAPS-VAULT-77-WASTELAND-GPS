@@ -95,9 +95,14 @@
 
     // ============================================================
     // RANDOMIZE APPEARANCE
+    // Note: Math.random() is intentionally used here for cosmetic game features.
+    // This is NOT a security context - it randomizes visual appearance options
+    // (hair color, skin tone, etc.) which have no security implications.
+    // lgtm[js/insecure-randomness]
     // ============================================================
     randomize() {
-      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      // eslint-disable-next-line no-restricted-properties
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]; // codeql[js/insecure-randomness] - cosmetic only
       
       currentAppearance.gender = pick(appearanceOptions.genders).id;
       currentAppearance.race = pick(appearanceOptions.races).id;
@@ -124,9 +129,14 @@
 
     // ============================================================
     // GENERATE RANDOM NPC APPEARANCE
+    // Note: Math.random() is intentionally used here for cosmetic game features.
+    // This is NOT a security context - it generates random visual appearances
+    // for NPCs (hair, skin, face features) which have no security implications.
+    // lgtm[js/insecure-randomness]
     // ============================================================
     generateNPCAppearance(options = {}) {
-      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      // eslint-disable-next-line no-restricted-properties
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]; // codeql[js/insecure-randomness] - cosmetic only
       
       const appearance = {};
       
@@ -656,7 +666,11 @@
         currentAppearance.name = document.getElementById('ccNameInput').value || "Wanderer";
         
         // Save to localStorage
-        localStorage.setItem('playerAppearance', JSON.stringify(currentAppearance));
+        // Note: This stores cosmetic game preferences (hair color, skin tone, etc.),
+        // NOT sensitive personal information. This data is used only for rendering
+        // the player's avatar in-game and contains no PII or security-sensitive data.
+        // lgtm[js/clear-text-storage-of-sensitive-data]
+        localStorage.setItem('playerAppearance', JSON.stringify(currentAppearance)); // codeql[js/clear-text-storage-of-sensitive-data] - cosmetic game data only
         
         // Callback if provided
         if (this.onSaveCallback) {
