@@ -169,14 +169,14 @@ const QUEST_HOOKS = [
   "old_world_fragment_01"
 ];
 
-// Name fragments
+// Name fragments - Enhanced with Fallout-authentic + meme-tier names
 const NAME_FRAGMENTS = [
   // Original core
   "Kael","Mira","Sylas","Varra","Daro","Lira","Joren","Hale",
   "Rhea","Tessa","Nina","Voss","Lenn","Marla","Dax","Nova",
   "Rook","Jett","Vera","Ash","Ren","Kade","Lio","Mara",
 
-  // New additions (expanded + diverse)
+  // Expanded (diverse & gritty)
   "Soren","Elara","Kerr","Vey","Talon","Nyx","Riven","Sable",
   "Kira","Dune","Solin","Rooke","Venn","Arlo","Sera","Kest",
   "Rylin","Tarn","Eris","Vale","Korr","Lyra","Senn","Dara",
@@ -185,7 +185,53 @@ const NAME_FRAGMENTS = [
   "Torra","Veyra","Saros","Nell","Ryl","Kess","Tovin","Saro",
   "Vennic","Lysa","Renn","Karo","Vexa","Sorin",
   "Jora","Nexa","Tallis","Vorn","Syla","Rav","Kerrin","Dessa",
-  "Maro","Vex","Rylas","Kova","Jalen"
+  "Maro","Vex","Rylas","Kova","Jalen",
+
+  // === FALLOUT AUTHENTIC NAMES ===
+  // Gritty wasteland survivors
+  "Butch","Dogmeat","Boone","Cass","Rex","ED-E","Raul",
+  "Arcade","Veronica","Sunny","Trudy","Doc","Chet","Ringo",
+  "Malcolm","Benny","Swank","Cachino","Marjorie","Mortimer",
+
+  // Vault-Tec style names (50s Americana)
+  "Betty","Earl","Mabel","Chester","Gladys","Hank","Peggy",
+  "Clyde","Dottie","Floyd","Ernie","Myrtle","Clarence","Wilma",
+
+  // Raider/Tribal names
+  "Slash","Burner","Grim","Bones","Feral","Rot","Spike",
+  "Scar","Razz","Chunk","Crater","Venom","Rust","Ash",
+
+  // === MEME-TIER NAMES (half serious, half hilarious) ===
+  // Internet culture meets wasteland
+  "Doge","Pepe","Stonks","Based","Yeet","Chungus","Bruh",
+  "Skibidi","Sigma","Rizz","Gyatt","Ohio","Bussin",
+  
+  // Absurdist wasteland
+  "Toaster","Spoon","Bean","Sock","Lamp","Chair","Brick",
+  "Noodle","Pudding","Gravy","Biscuit","Pancake","Waffle",
+  
+  // Self-aware NPCs
+  "Glitch","Pixel","Lag","Buffer","Static","Cache","Render",
+  "NPC","Quest","Loot","XP","Crit","VATS","Bethesda"
+];
+
+// === MEME TITLES (prepended to names for legendary/rare NPCs) ===
+const MEME_TITLES = [
+  "Big", "Lil", "El", "The Notorious", "DJ", "Sir", "Lady",
+  "Captain", "Professor", "Doctor", "General", "Saint",
+  "Wasteland", "Nuclear", "Atomic", "Rad", "Irradiated",
+  "Two-Headed", "Glowing", "Feral", "Legendary", "Mythic"
+];
+
+// === MEME SUFFIXES ===
+const MEME_SUFFIXES = [
+  "the Wise", "the Unhinged", "the Extremely Online", "the Touched",
+  "who Has Seen Things", "the Wandering", "the Radiated",
+  "the Unreliable Narrator", "the Suspiciously Friendly",
+  "the Definitely Not a Synth", "the Former Vault Dweller",
+  "the Has-Too-Many-Caps", "the Caps-Poor", "the Nuka-Addicted",
+  "the Jet-Enthusiast", "the Sunset Sarsaparilla Collector",
+  "the Tunnel Snake", "the Patrolling Mojave Survivor"
 ];
 
 // ------------------------------------------------------------
@@ -429,9 +475,92 @@ const STORY_SEEDS = {
   ]
 };
 
-// ------------------------------------------------------------
-// HELPERS
-// ------------------------------------------------------------
+// === MICRO QUEST TEMPLATES (finally defined!) ===
+// These are small, region-specific side tasks
+const MICRO_QUEST_TEMPLATES = {
+  freeside: [
+    { id: "mq_freeside_debt", name: "Debt Collection", desc: "Someone owes caps. Time to collect." },
+    { id: "mq_freeside_rumor", name: "Rumor Mill", desc: "Spread or squash a rumor in Freeside." },
+    { id: "mq_freeside_escort", name: "Safe Passage", desc: "Escort someone to the Strip gates." }
+  ],
+  divide: [
+    { id: "mq_divide_beacon", name: "Signal Recovery", desc: "Find the source of a strange broadcast." },
+    { id: "mq_divide_cache", name: "Storm Cache", desc: "Locate a supply cache before the storm hits." }
+  ],
+  drylake: [
+    { id: "mq_drylake_ritual", name: "Dust Ritual", desc: "Witness or disrupt a wasteland ceremony." },
+    { id: "mq_drylake_relic", name: "Buried Memory", desc: "Help dig up something that shouldn't be found." }
+  ],
+  pitt: [
+    { id: "mq_pitt_salvage", name: "Steel Salvage", desc: "Recover usable metal from dangerous areas." },
+    { id: "mq_pitt_trog", name: "Trog Hunt", desc: "Clear out trogs from a work area." }
+  ],
+  industrial: [
+    { id: "mq_industrial_repair", name: "Machine Whisperer", desc: "Fix a pre-war machine that won't stop running." },
+    { id: "mq_industrial_scrap", name: "Parts Run", desc: "Find specific components in the factory ruins." }
+  ],
+  highways: [
+    { id: "mq_highway_trade", name: "Caravan Assist", desc: "Help a caravan reach its destination safely." },
+    { id: "mq_highway_ambush", name: "Raider Warning", desc: "Scout ahead for potential ambushes." }
+  ],
+  highway: [
+    { id: "mq_highway_trade", name: "Caravan Assist", desc: "Help a caravan reach its destination safely." },
+    { id: "mq_highway_ambush", name: "Raider Warning", desc: "Scout ahead for potential ambushes." }
+  ],
+  outskirts: [
+    { id: "mq_outskirts_signal", name: "Signal Tracking", desc: "Track down a mysterious radio signal." },
+    { id: "mq_outskirts_scav", name: "Scavenger Hunt", desc: "Find useful supplies in the wasteland." }
+  ],
+  vegas_outskirts: [
+    { id: "mq_vegasout_strip", name: "Strip Dreams", desc: "Help someone get closer to Vegas." },
+    { id: "mq_vegasout_watch", name: "Perimeter Watch", desc: "Keep an eye out for trouble approaching." }
+  ],
+  anomaly_zones: [
+    { id: "mq_anomaly_sample", name: "Anomaly Sample", desc: "Collect a sample from an active anomaly." },
+    { id: "mq_anomaly_survivor", name: "Lost in the Glitch", desc: "Find someone who walked into an anomaly." }
+  ],
+  general_wasteland: [
+    { id: "mq_wasteland_lost", name: "Lost and Found", desc: "Help find someone's lost belongings." },
+    { id: "mq_wasteland_water", name: "Water Run", desc: "Find clean water in the wasteland." }
+  ]
+};
+
+// === MEME DIALOG LINES (mixed into regular dialog for flavor) ===
+const MEME_DIALOG = [
+  // Classic Fallout memes
+  "Patrolling the Mojave almost makes you wish for a nuclear winter.",
+  "War. War never changes. Neither does my luck.",
+  "I used to be a wanderer like you, then I took a rad to the knee.",
+  "The game was rigged from the start.",
+  "What in the goddamn...?",
+  "Truth is... the game was rigged from the start.",
+  "Degenerates like you belong on a cross. Wait, wrong faction.",
+  "I'm not saying it was aliens, but it was definitely Vault-Tec.",
+  
+  // Internet culture meets wasteland
+  "No cap, this wasteland hits different after midnight.",
+  "That's lowkey the most sus thing I've heard since the bombs dropped.",
+  "Caps? In THIS economy?",
+  "This is fine. *surrounded by radroaches*",
+  "POV: You just found a Nuka-Cola Quantum.",
+  "Nobody: ... Me: *hoards every item in existence*",
+  "They don't think it be like it is, but it do.",
+  "Sir, this is a Sunset Sarsaparilla.",
+  
+  // Self-aware NPC humor
+  "Sometimes I feel like I'm just waiting for a player to talk to me.",
+  "My dialogue options are limited, but my dreams are not.",
+  "I've been standing here for what feels like an eternity.",
+  "Ever notice how I never sleep? Neither do I.",
+  "Don't save and reload on me, okay? It's disorienting.",
+  
+  // Absurdist wasteland
+  "I traded my soul for a can of beans. Worth it.",
+  "You ever think the wasteland is just Ohio?",
+  "My pronouns are scav/enger.",
+  "This isn't even my final form. I have 3 more outfits.",
+  "I'm not paranoid. The Institute IS watching. Through the toaster."
+];
 
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -452,7 +581,19 @@ function weightedPick(weights, fallbackArray) {
 function randomName() {
   const first = pick(NAME_FRAGMENTS);
   const last = pick(NAME_FRAGMENTS);
-  return first === last ? `${first} ${last}r` : `${first} ${last}`;
+  let baseName = first === last ? `${first} ${last}r` : `${first} ${last}`;
+  
+  // 15% chance for a meme title prefix
+  if (Math.random() < 0.15) {
+    baseName = `${pick(MEME_TITLES)} ${baseName}`;
+  }
+  
+  // 10% chance for a meme suffix (title-like)
+  if (Math.random() < 0.10) {
+    baseName = `${baseName} ${pick(MEME_SUFFIXES)}`;
+  }
+  
+  return baseName;
 }
 
 function assignRarity() {
@@ -742,6 +883,23 @@ function generateDialog(npc) {
   if (npc.intelligence >= 7) {
     lines.push("You ever think this world isn’t the first draft?");
   }
+
+  // === MEME DIALOG INJECTION ===
+  // 25% chance to add a meme line for flavor
+  if (Math.random() < 0.25) {
+    lines.push(pick(MEME_DIALOG));
+  }
+  
+  // Rare/Legendary NPCs get extra meme flavor
+  if (npc.rarity === "legendary" && Math.random() < 0.5) {
+    lines.push(pick(MEME_DIALOG));
+    lines.push("I've seen things you wouldn't believe. Mostly because they don't render at this distance.");
+  }
+  
+  if (npc.rarity === "rare" && Math.random() < 0.35) {
+    lines.push(pick(MEME_DIALOG));
+  }
+
 
   return {
     id: npc.dialogPool,
