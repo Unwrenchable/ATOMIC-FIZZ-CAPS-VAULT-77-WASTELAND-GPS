@@ -16,6 +16,14 @@
     rads: 0
   };
 
+  // HTML sanitization helper to prevent XSS
+  function escapeHtml(text) {
+    if (!text) return "";
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   const narrative = {
     dialogs: {},          // dialogId -> dialog JSON
     loadingDialogs: {},   // dialogId -> Promise
@@ -91,7 +99,8 @@
               return json;
             }
           } catch (err) {
-            // Try next URL
+            console.warn("narrative: error loading from", url, err.message);
+            // Continue to try next URL
           }
         }
         console.error("narrative: failed to load dialog", dialogId);
@@ -268,11 +277,12 @@
         return;
       }
 
-      const npcName = dialog.npc || dialog.title || dialog.id || "Unknown";
-      const npcDescription = dialog.description || "";
+      // Sanitize text content to prevent XSS
+      const npcName = escapeHtml(dialog.npc || dialog.title || dialog.id || "Unknown");
+      const npcDescription = escapeHtml(dialog.description || "");
       
-      // Convert \n to <br> for proper line breaks
-      const formattedText = (node.text || "").replace(/\n/g, "<br>");
+      // Escape HTML first, then convert \n to <br> for proper line breaks
+      const formattedText = escapeHtml(node.text || "").replace(/\n/g, "<br>");
 
       // Check if this is the courier intro and we should show starter gear
       let starterGearHtml = "";
@@ -282,8 +292,9 @@
           <div class="starter-gear-list">
             <h4>📦 Your Starting Gear:</h4>
             ${starterGear.map(item => {
+              const safeName = escapeHtml(item.name);
               const qty = item.quantity ? ` (x${item.quantity})` : "";
-              return `<div class="starter-gear-item">${item.name}${qty}</div>`;
+              return `<div class="starter-gear-item">${safeName}${qty}</div>`;
             }).join("")}
           </div>
         `;
