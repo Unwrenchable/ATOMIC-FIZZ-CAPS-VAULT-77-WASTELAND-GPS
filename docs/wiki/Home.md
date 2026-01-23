@@ -57,6 +57,7 @@ This wiki documents all game systems, features, and technical implementation det
 ### Development & Administration
 - [[Deployment-Guide]] - Deploying to production
 - [[Security-Guide]] - Security measures and best practices
+- [[Security-Audit]] - Certek security audit report
 
 ---
 

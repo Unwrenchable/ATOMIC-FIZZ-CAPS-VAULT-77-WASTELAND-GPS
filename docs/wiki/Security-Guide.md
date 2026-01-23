@@ -160,6 +160,8 @@ All inputs validated server-side:
 
 ## Audit Status
 
+For the full security audit report, see [[Security-Audit]].
+
 ### Reviewed Areas
 
 | Area | Status | Risk Level | Notes |
