@@ -1,0 +1,684 @@
+/* ============================================================
+   CHARACTER CREATOR CSS - FALLOUT 4 STYLE
+   ============================================================ */
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+
+.character-creator-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  overflow-y: auto;
+  font-family: "Consolas", "Courier New", monospace;
+  color: #00ff41;
+}
+
+.character-creator-overlay.hidden {
+  display: none;
+}
+
+.character-creator-container {
+  width: 100%;
+  max-width: 1200px;
+  background: rgba(5, 15, 5, 0.95);
+  border: 2px solid #00ff41;
+  border-radius: 8px;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 65, 0.3),
+    inset 0 0 20px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.cc-header {
+  background: linear-gradient(to right, rgba(0, 255, 65, 0.15), rgba(0, 100, 30, 0.1));
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cc-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
+}
+
+.cc-subtitle {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.cc-close-btn {
+  background: transparent;
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-close-btn:hover {
+  background: rgba(255, 68, 68, 0.2);
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.4);
+}
+
+/* ============================================================
+   MAIN CONTENT AREA
+   ============================================================ */
+
+.cc-main {
+  display: flex;
+  min-height: 500px;
+}
+
+@media (max-width: 768px) {
+  .cc-main {
+    flex-direction: column;
+  }
+}
+
+/* ============================================================
+   PREVIEW PANEL (LEFT SIDE)
+   ============================================================ */
+
+.cc-preview-panel {
+  flex: 0 0 320px;
+  background: radial-gradient(circle at center, rgba(0, 30, 10, 0.9) 0%, rgba(0, 10, 5, 0.95) 100%);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+@media (max-width: 768px) {
+  .cc-preview-panel {
+    flex: 0 0 auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+  }
+}
+
+.cc-preview-title {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+/* Character Portrait Canvas */
+.cc-portrait-container {
+  width: 240px;
+  height: 300px;
+  border: 2px solid #00ff41;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 65, 0.2),
+    inset 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+/* CRT scanline overlay */
+.cc-portrait-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 1px, transparent 2px);
+  background-size: 100% 3px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.cc-portrait-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Portrait SVG display */
+.cc-portrait-svg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-portrait-svg svg {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* Character name display */
+.cc-preview-name {
+  margin-top: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+  text-align: center;
+}
+
+.cc-preview-stats {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.7;
+  text-align: center;
+}
+
+/* Randomize button */
+.cc-randomize-btn {
+  margin-top: 20px;
+  background: transparent;
+  border: 1px solid #ffaa00;
+  color: #ffaa00;
+  padding: 10px 24px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-randomize-btn:hover {
+  background: rgba(255, 170, 0, 0.2);
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.4);
+}
+
+/* ============================================================
+   OPTIONS PANEL (RIGHT SIDE)
+   ============================================================ */
+
+.cc-options-panel {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Category tabs */
+.cc-category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+  margin-bottom: 16px;
+}
+
+.cc-tab {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 65, 0.4);
+  color: #00ff41;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.2s ease;
+}
+
+.cc-tab:hover {
+  background: rgba(0, 255, 65, 0.1);
+}
+
+.cc-tab.active {
+  background: rgba(0, 255, 65, 0.2);
+  border-color: #00ff41;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+/* Options content area */
+.cc-options-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Option category section */
+.cc-category-section {
+  display: none;
+}
+
+.cc-category-section.active {
+  display: block;
+}
+
+.cc-section-title {
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+/* Option group */
+.cc-option-group {
+  margin-bottom: 20px;
+}
+
+.cc-option-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+/* Grid of selectable options */
+.cc-option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.cc-option-grid.large {
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+
+.cc-option-item {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 12px;
+  color: #9fe88d;
+}
+
+.cc-option-item:hover {
+  background: rgba(0, 255, 65, 0.1);
+  border-color: rgba(0, 255, 65, 0.6);
+}
+
+.cc-option-item.selected {
+  background: rgba(0, 255, 65, 0.2);
+  border-color: #00ff41;
+  color: #00ff41;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+}
+
+.cc-option-item .option-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.cc-option-item .option-name {
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+/* Color swatch grid */
+.cc-color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 6px;
+}
+
+.cc-color-swatch {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(0, 255, 65, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.cc-color-swatch:hover {
+  transform: scale(1.1);
+  border-color: rgba(0, 255, 65, 0.7);
+}
+
+.cc-color-swatch.selected {
+  border-color: #00ff41;
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.5);
+}
+
+.cc-color-swatch.selected::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+}
+
+.cc-color-swatch.rare {
+  animation: rare-pulse 2s ease-in-out infinite;
+}
+
+@keyframes rare-pulse {
+  0%, 100% { box-shadow: 0 0 5px currentColor; }
+  50% { box-shadow: 0 0 15px currentColor; }
+}
+
+/* Slider controls */
+.cc-slider-group {
+  margin-bottom: 16px;
+}
+
+.cc-slider-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.cc-slider-value {
+  color: #ffaa00;
+}
+
+.cc-slider {
+  width: 100%;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  border-radius: 4px;
+  outline: none;
+}
+
+.cc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #00ff41;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.cc-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #00ff41;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  border: none;
+}
+
+/* Name input */
+.cc-name-input {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 65, 0.4);
+  color: #00ff41;
+  font-family: inherit;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.cc-name-input:focus {
+  border-color: #00ff41;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+}
+
+.cc-name-input::placeholder {
+  color: rgba(0, 255, 65, 0.4);
+}
+
+/* ============================================================
+   FOOTER (CONFIRM BUTTONS)
+   ============================================================ */
+
+.cc-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(0, 255, 65, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 20, 10, 0.8);
+}
+
+.cc-footer-left {
+  display: flex;
+  gap: 12px;
+}
+
+.cc-reset-btn {
+  background: transparent;
+  border: 1px solid #888;
+  color: #888;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-reset-btn:hover {
+  border-color: #aaa;
+  color: #aaa;
+}
+
+.cc-confirm-btn {
+  background: rgba(0, 255, 65, 0.2);
+  border: 2px solid #00ff41;
+  color: #00ff41;
+  padding: 12px 32px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+}
+
+.cc-confirm-btn:hover {
+  background: rgba(0, 255, 65, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   PRESET CARDS
+   ============================================================ */
+
+.cc-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cc-preset-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.cc-preset-card:hover {
+  background: rgba(0, 255, 65, 0.1);
+  border-color: rgba(0, 255, 65, 0.6);
+  transform: translateY(-2px);
+}
+
+.cc-preset-portrait {
+  width: 100%;
+  height: 120px;
+  background: rgba(0, 20, 10, 0.8);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.cc-preset-name {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.cc-preset-desc {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+
+.cc-options-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.cc-options-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.cc-options-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 65, 0.4);
+  border-radius: 4px;
+}
+
+.cc-options-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 65, 0.6);
+}
+
+/* ============================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .character-creator-overlay {
+    padding: 10px;
+  }
+
+  .cc-header {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .cc-title {
+    font-size: 18px;
+  }
+
+  .cc-preview-panel {
+    padding: 16px;
+  }
+
+  .cc-portrait-container {
+    width: 180px;
+    height: 225px;
+  }
+
+  .cc-category-tabs {
+    justify-content: center;
+  }
+
+  .cc-tab {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+
+  .cc-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cc-footer-left {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cc-confirm-btn {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   ANIMATION EFFECTS
+   ============================================================ */
+
+@keyframes cc-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.character-creator-container {
+  animation: cc-fade-in 0.3s ease-out;
+}
+
+/* Terminal flicker effect for header */
+.cc-title {
+  animation: terminal-flicker 4s ease-in-out infinite;
+}
+
+@keyframes terminal-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  95% { opacity: 0.9; }
+  96% { opacity: 1; }
+}
+
+/* Selection glow animation */
+.cc-option-item.selected {
+  animation: selection-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes selection-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 65, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(0, 255, 65, 0.5); }
+}

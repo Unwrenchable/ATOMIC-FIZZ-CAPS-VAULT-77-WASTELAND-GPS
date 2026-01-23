@@ -1,0 +1,666 @@
+/* ============================================================
+   FALLOUT 4 STYLE DIALOGUE CSS
+   Cinematic dialogue system with character portraits
+   ============================================================ */
+
+/* ============================================================
+   DIALOGUE OVERLAY
+   ============================================================ */
+
+.fo4-dialogue-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  font-family: "Consolas", "Courier New", monospace;
+  pointer-events: auto;
+}
+
+.fo4-dialogue-overlay.hidden {
+  display: none;
+}
+
+/* Cinematic black bars */
+.fo4-dialogue-overlay::before,
+.fo4-dialogue-overlay::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #000;
+  z-index: 1;
+}
+
+.fo4-dialogue-overlay::before {
+  top: 0;
+}
+
+.fo4-dialogue-overlay::after {
+  bottom: 0;
+}
+
+/* ============================================================
+   PORTRAIT AREA (TOP)
+   ============================================================ */
+
+.fo4-portrait-area {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 5%;
+  z-index: 2;
+}
+
+/* Individual portrait containers */
+.fo4-portrait-container {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.4;
+  transform: scale(0.9);
+  transition: all 0.3s ease;
+}
+
+.fo4-portrait-container.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.fo4-portrait-container.player {
+  align-items: flex-start;
+}
+
+.fo4-portrait-container.npc {
+  align-items: flex-end;
+}
+
+/* Portrait frame */
+.fo4-portrait-frame {
+  width: 160px;
+  height: 200px;
+  border: 2px solid #00ff41;
+  border-radius: 4px;
+  background: rgba(0, 20, 10, 0.9);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 65, 0.3),
+    inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.fo4-portrait-frame.npc {
+  border-color: #ffaa00;
+  box-shadow: 
+    0 0 20px rgba(255, 170, 0, 0.3),
+    inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+/* Scanlines on portrait */
+.fo4-portrait-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 2px);
+  background-size: 100% 3px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Portrait SVG container */
+.fo4-portrait-svg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fo4-portrait-svg svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Name label under portrait */
+.fo4-portrait-name {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 8px currentColor;
+  color: #00ff41;
+}
+
+.fo4-portrait-container.npc .fo4-portrait-name {
+  color: #ffaa00;
+}
+
+/* Role/title under name */
+.fo4-portrait-role {
+  font-size: 10px;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9fe88d;
+}
+
+/* ============================================================
+   DIALOGUE BOX (BOTTOM)
+   ============================================================ */
+
+.fo4-dialogue-box {
+  position: relative;
+  z-index: 3;
+  background: linear-gradient(to top, rgba(0, 20, 10, 0.95), rgba(0, 30, 15, 0.9));
+  border-top: 2px solid rgba(0, 255, 65, 0.4);
+  padding: 24px 5% 80px;
+  min-height: 200px;
+}
+
+/* Speaker indicator */
+.fo4-speaker-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.fo4-speaker-icon {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ffaa00;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: rgba(255, 170, 0, 0.1);
+}
+
+.fo4-speaker-name {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #ffaa00;
+  text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+}
+
+/* Dialogue text area */
+.fo4-dialogue-text {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #e8e8e8;
+  max-width: 800px;
+  margin: 0 auto 24px;
+  padding: 16px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 3px solid rgba(255, 170, 0, 0.5);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Typewriter effect */
+.fo4-dialogue-text.typing::after {
+  content: "▋";
+  animation: cursor-blink 0.8s infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ============================================================
+   RESPONSE OPTIONS (FALLOUT 4 WHEEL STYLE)
+   ============================================================ */
+
+.fo4-response-area {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+/* Response option */
+.fo4-response-option {
+  width: 100%;
+  padding: 14px 20px;
+  background: rgba(0, 30, 15, 0.8);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  color: #9fe88d;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fo4-response-option:hover {
+  background: rgba(0, 255, 65, 0.15);
+  border-color: #00ff41;
+  color: #00ff41;
+  transform: translateX(8px);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+}
+
+.fo4-response-option:focus {
+  outline: none;
+  border-color: #00ff41;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+}
+
+/* Response key indicator (1, 2, 3, 4) */
+.fo4-response-key {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #00ff41;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #00ff41;
+  flex-shrink: 0;
+}
+
+.fo4-response-text {
+  flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Response tone indicator */
+.fo4-response-tone {
+  font-size: 11px;
+  opacity: 0.6;
+  text-transform: capitalize;
+  margin-left: auto;
+}
+
+/* Fallout 4 style diamond wheel (optional alternative) */
+.fo4-response-wheel {
+  position: absolute;
+  bottom: 100px;
+  right: 5%;
+  width: 200px;
+  height: 200px;
+  display: none; /* Hidden by default, use list instead */
+}
+
+.fo4-response-wheel.active {
+  display: block;
+}
+
+.fo4-wheel-option {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  background: rgba(0, 30, 15, 0.9);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #9fe88d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fo4-wheel-option:hover {
+  background: rgba(0, 255, 65, 0.2);
+  border-color: #00ff41;
+  color: #00ff41;
+}
+
+/* Wheel positions */
+.fo4-wheel-option.top { top: 0; left: 50%; transform: translateX(-50%); }
+.fo4-wheel-option.right { top: 50%; right: 0; transform: translateY(-50%); }
+.fo4-wheel-option.bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
+.fo4-wheel-option.left { top: 50%; left: 0; transform: translateY(-50%); }
+
+/* ============================================================
+   CONTINUE PROMPT
+   ============================================================ */
+
+.fo4-continue-prompt {
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  background: rgba(0, 30, 15, 0.9);
+  border: 1px solid rgba(0, 255, 65, 0.5);
+  color: #00ff41;
+  font-family: inherit;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  animation: pulse-glow 2s infinite;
+}
+
+.fo4-continue-prompt:hover {
+  background: rgba(0, 255, 65, 0.2);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.5); }
+}
+
+/* ============================================================
+   CLOSE BUTTON
+   ============================================================ */
+
+.fo4-dialogue-close {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  z-index: 10;
+  background: transparent;
+  border: 1px solid rgba(255, 68, 68, 0.5);
+  color: #ff4444;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fo4-dialogue-close:hover {
+  background: rgba(255, 68, 68, 0.2);
+  border-color: #ff4444;
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+}
+
+/* ============================================================
+   NPC MOOD INDICATOR
+   ============================================================ */
+
+.fo4-mood-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 2px;
+}
+
+.fo4-mood-indicator.friendly {
+  background: rgba(0, 255, 65, 0.2);
+  color: #00ff41;
+  border: 1px solid rgba(0, 255, 65, 0.4);
+}
+
+.fo4-mood-indicator.neutral {
+  background: rgba(255, 170, 0, 0.2);
+  color: #ffaa00;
+  border: 1px solid rgba(255, 170, 0, 0.4);
+}
+
+.fo4-mood-indicator.hostile {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  border: 1px solid rgba(255, 68, 68, 0.4);
+}
+
+/* ============================================================
+   AFFINITY CHANGE POPUP
+   ============================================================ */
+
+.fo4-affinity-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px 40px;
+  background: rgba(0, 20, 10, 0.95);
+  border: 2px solid #00ff41;
+  text-align: center;
+  z-index: 10001;
+  animation: affinity-fade 2s forwards;
+}
+
+.fo4-affinity-popup.negative {
+  border-color: #ff4444;
+}
+
+.fo4-affinity-text {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #00ff41;
+}
+
+.fo4-affinity-popup.negative .fo4-affinity-text {
+  color: #ff4444;
+}
+
+@keyframes affinity-fade {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ============================================================
+   QUEST UPDATE NOTIFICATION
+   ============================================================ */
+
+.fo4-quest-update {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16px 32px;
+  background: rgba(0, 20, 10, 0.95);
+  border: 1px solid #ffaa00;
+  z-index: 10001;
+  animation: quest-slide 3s forwards;
+}
+
+.fo4-quest-update-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #ffaa00;
+  margin-bottom: 8px;
+}
+
+.fo4-quest-update-text {
+  font-size: 16px;
+  color: #fff;
+}
+
+@keyframes quest-slide {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ============================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .fo4-portrait-area {
+    top: 70px;
+    padding: 0 3%;
+  }
+
+  .fo4-portrait-container {
+    width: 120px;
+  }
+
+  .fo4-portrait-frame {
+    width: 100px;
+    height: 125px;
+  }
+
+  .fo4-portrait-name {
+    font-size: 11px;
+  }
+
+  .fo4-dialogue-box {
+    padding: 16px 4% 90px;
+    min-height: 180px;
+  }
+
+  .fo4-dialogue-text {
+    font-size: 15px;
+    padding: 12px 16px;
+  }
+
+  .fo4-response-option {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .fo4-response-key {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fo4-portrait-area {
+    display: none; /* Hide portraits on very small screens */
+  }
+
+  .fo4-dialogue-box {
+    padding: 12px 3% 100px;
+  }
+
+  .fo4-speaker-indicator {
+    margin-bottom: 12px;
+  }
+
+  .fo4-speaker-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .fo4-speaker-name {
+    font-size: 14px;
+  }
+
+  .fo4-dialogue-text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .fo4-response-area {
+    bottom: 70px;
+  }
+
+  .fo4-response-option {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+}
+
+/* ============================================================
+   ANIMATION STATES
+   ============================================================ */
+
+/* Dialogue opening animation */
+.fo4-dialogue-overlay.opening {
+  animation: dialogue-open 0.4s ease-out forwards;
+}
+
+@keyframes dialogue-open {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fo4-dialogue-overlay.opening .fo4-dialogue-box {
+  animation: box-slide-up 0.4s ease-out forwards;
+}
+
+@keyframes box-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Portrait appearance animation */
+.fo4-portrait-container.appearing {
+  animation: portrait-appear 0.5s ease-out forwards;
+}
+
+@keyframes portrait-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Response options stagger animation */
+.fo4-response-option {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.fo4-response-area.visible .fo4-response-option {
+  animation: response-appear 0.3s ease-out forwards;
+}
+
+.fo4-response-area.visible .fo4-response-option:nth-child(1) { animation-delay: 0.1s; }
+.fo4-response-area.visible .fo4-response-option:nth-child(2) { animation-delay: 0.2s; }
+.fo4-response-area.visible .fo4-response-option:nth-child(3) { animation-delay: 0.3s; }
+.fo4-response-area.visible .fo4-response-option:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes response-appear {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
