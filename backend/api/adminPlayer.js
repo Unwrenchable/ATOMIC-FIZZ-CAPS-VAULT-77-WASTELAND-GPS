@@ -84,7 +84,7 @@ router.post("/update", async (req, res) => {
     }
 
     await saveProfile(wallet, profile);
-    console.log(`[adminPlayer] Player ${wallet} updated by admin:`, updates);
+    console.log("[adminPlayer] Player %s updated by admin:", wallet, updates);
     return res.json({ ok: true, wallet, profile });
   } catch (err) {
     console.error("[adminPlayer] update error:", err);
