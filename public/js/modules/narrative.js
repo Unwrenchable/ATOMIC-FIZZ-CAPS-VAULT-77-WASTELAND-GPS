@@ -75,27 +75,34 @@
       if (this.dialogs[dialogId]) return this.dialogs[dialogId];
       if (this.loadingDialogs[dialogId]) return this.loadingDialogs[dialogId];
 
-      // Load from /data/dialog_<id>.json
-      const url = "/data/" + dialogId + ".json";
+      // Try loading from /data/narrative/ first, then fallback to /data/
+      const urls = [
+        "/data/narrative/" + dialogId + ".json",
+        "/data/" + dialogId + ".json"
+      ];
 
-      const p = fetch(url)
-        .then((res) => {
-          if (!res.ok) throw new Error("HTTP " + res.status);
-          return res.json();
-        })
-        .then((json) => {
-          this.dialogs[dialogId] = json;
-          return json;
-        })
-        .catch((err) => {
-          console.error("narrative: failed to load dialog", dialogId, err);
-          return null;
-        })
-        .finally(() => {
-          delete this.loadingDialogs[dialogId];
-        });
+      const p = (async () => {
+        for (const url of urls) {
+          try {
+            const res = await fetch(url);
+            if (res.ok) {
+              const json = await res.json();
+              this.dialogs[dialogId] = json;
+              return json;
+            }
+          } catch (err) {
+            // Try next URL
+          }
+        }
+        console.error("narrative: failed to load dialog", dialogId);
+        return null;
+      })();
 
       this.loadingDialogs[dialogId] = p;
+      p.finally(() => {
+        delete this.loadingDialogs[dialogId];
+      });
+
       return p;
     },
 
@@ -262,14 +269,39 @@
       }
 
       const npcName = dialog.npc || dialog.title || dialog.id || "Unknown";
+      const npcDescription = dialog.description || "";
+      
+      // Convert \n to <br> for proper line breaks
+      const formattedText = (node.text || "").replace(/\n/g, "<br>");
+
+      // Check if this is the courier intro and we should show starter gear
+      let starterGearHtml = "";
+      if (node.id === "courier_intro" && Game.modules?.quests?.STARTER_GEAR) {
+        const starterGear = Game.modules.quests.STARTER_GEAR;
+        starterGearHtml = `
+          <div class="starter-gear-list">
+            <h4>📦 Your Starting Gear:</h4>
+            ${starterGear.map(item => {
+              const qty = item.quantity ? ` (x${item.quantity})` : "";
+              return `<div class="starter-gear-item">${item.name}${qty}</div>`;
+            }).join("")}
+          </div>
+        `;
+      }
 
       const html = `
+        <div class="dialog-npc-portrait">
+          <div class="dialog-npc-icon">👤</div>
+        </div>
         <div class="dialog-header-row">
           <span class="dialog-npc-name">${npcName}</span>
         </div>
+        ${npcDescription ? `<div class="dialog-npc-desc">${npcDescription}</div>` : ""}
+        <div class="dialog-divider"></div>
         <div class="dialog-text">
-          ${node.text || ""}
+          ${formattedText}
         </div>
+        ${starterGearHtml}
       `;
 
       panel.innerHTML = html;
@@ -306,9 +338,23 @@
 
     closeDialog() {
       const dialogPanel = document.getElementById("panel-dialog");
+      const closingDialogId = this.currentDialogId;
+      
       if (dialogPanel) {
         dialogPanel.classList.remove("active");
         dialogPanel.style.display = "none";
+      }
+
+      // If closing the courier dialogue, start the wake_up quest
+      if (closingDialogId === "dialog_courier") {
+        if (Game.modules?.quests?.startQuest) {
+          try {
+            Game.modules.quests.startQuest("wake_up");
+            console.log("[narrative] Wake up quest started after courier dialogue");
+          } catch (err) {
+            console.warn("[narrative] Failed to start wake_up quest:", err);
+          }
+        }
       }
 
       // Restore previous panel/tab
