@@ -27,37 +27,8 @@ Game.ui.renderQuest = function () {
     return;
   }
 
-  // Render quests from the quests module
-  const QUESTS_DB = {
-    wake_up: {
-      id: "wake_up",
-      name: "Wake Up",
-      type: "objectives",
-      description: "You awaken in the wasteland. Something is wrong with this timeline.",
-      objectives: {
-        open_inventory: { text: "Open your inventory" },
-        switch_tabs: { text: "Cycle through the Pip-Boy tabs" },
-        pick_item: { text: "Pick up an item" },
-        equip_item: { text: "Equip an item" },
-        turn_on_radio: { text: "Tune into Atomic Fizz Radio" },
-        open_map: { text: "Check your map" }
-      },
-      order: [
-        "open_inventory",
-        "switch_tabs",
-        "pick_item",
-        "equip_item",
-        "turn_on_radio",
-        "open_map"
-      ]
-    },
-    quest_vault77_open: {
-      id: "quest_vault77_open",
-      name: "Open Vault 77",
-      type: "steps",
-      description: "Find a way to unlock Vault 77."
-    }
-  };
+  // Get quest database from module if available
+  const QUESTS_DB = questsModule.QUESTS_DB || {};
 
   let html = "";
   let hasActiveQuests = false;

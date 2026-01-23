@@ -15,7 +15,7 @@
       description: "You awaken in the wasteland. Something is wrong with this timeline.",
       objectives: {
         open_inventory: { text: "Open your inventory" },
-        switch_tabs: { text: "Cycle through the Pip‑Boy tabs" },
+        switch_tabs: { text: "Cycle through the Pip-Boy tabs" },
         pick_item: { text: "Pick up an item" },
         equip_item: { text: "Equip an item" },
         turn_on_radio: { text: "Tune into Atomic Fizz Radio" },
@@ -255,7 +255,10 @@
 
         container.appendChild(div);
       });
-    }
+    },
+
+    // Expose quest database for quest-ui.js
+    QUESTS_DB: QUESTS_DB
   };
 
   Game.modules.quests = questsModule;
