@@ -36,34 +36,87 @@ const CONTINENTS = {
 // ---------------------------------------------
 // NAME GENERATORS
 // ---------------------------------------------
+// === LOCATION NAME GENERATORS - Enhanced with Fallout authenticity + meme flavor ===
+
+// Gritty, realistic wasteland names
 const gritty = [
   "Exclusion Zone", "Crater District", "Ashen Quarter", "Collapsed Sector",
   "Irradiated Belt", "Dead Horizon", "Broken Ridge", "Shattered Metro",
-  "Blackwater Zone", "Glassfall Ruins"
+  "Blackwater Zone", "Glassfall Ruins",
+  // New realistic additions
+  "Scorched Flats", "Deathclaw Alley", "Rad Pocket Delta", "Bone Yard Strip",
+  "Fissure Site Alpha", "Corpse Crossing", "Ghoul Town Limits", "Last Light District",
+  "Bitter Springs Memorial", "Divide Scar", "The Glowing Sea Edge", "Massacre Mile"
 ];
 
+// Retro 50s Americana / Vault-Tec corporate names
 const retro = [
   "FizzCo Relay", "Atomic Works", "Continental Hub", "Neutron Tower",
   "RetroCore Facility", "Sunset Fusion Plant", "Echelon Node",
-  "Quantum Depot", "Radion Research Wing", "Helios Array"
+  "Quantum Depot", "Radion Research Wing", "Helios Array",
+  // New retro additions
+  "Nuka-World Adjacent", "Vim Pop Factory", "Sunset Sarsaparilla Depot",
+  "RobCo Service Center", "General Atomics Plaza", "Vault-Tec Regional HQ",
+  "Mass Fusion Auxiliary", "Poseidon Energy Sub-Station", "Super-Duper Mart Hub"
 ];
 
+// Eerie, atmospheric names
 const eerie = [
   "Whispering Coast", "Hollowing Fields", "Silent Meridian",
   "Blackglass Peninsula", "Cobalt Mire", "The Dimming Expanse",
-  "Screaming Savannah", "Pale Wastes", "Nightfall Basin", "Echoing Steppe"
+  "Screaming Savannah", "Pale Wastes", "Nightfall Basin", "Echoing Steppe",
+  // New eerie additions
+  "The Fog Crawlers' Rest", "Mothman's Vigil", "Wendigo Woods",
+  "Flatwoods Anomaly", "Point Lookout Shadow", "Dunwich Borers Deep",
+  "The Interloper's Domain", "Phantom Grove", "Spectral Shores"
 ];
 
+// Military/Brotherhood/Enclave names
 const militaryNames = [
   "Defense Vault", "Listening Post", "Strike Bunker", "Command Node",
   "Forward Operating Dome", "Silo Complex", "Deepwatch Station",
-  "Recon Outpost", "Perimeter Bastion", "Omega Redoubt"
+  "Recon Outpost", "Perimeter Bastion", "Omega Redoubt",
+  // New military additions
+  "Enclave Remnant Post", "Brotherhood Patrol Point", "NCR Forward Base",
+  "Legion Outpost Decimus", "Minutemen Checkpoint", "Gunner Plaza",
+  "Institute Surface Access", "Railroad Dead Drop"
 ];
 
+// Wild/mutant territory names
 const wild = [
   "Mutant Nest", "Overgrowth Zone", "Toxic Fen", "Radbeast Territory",
   "Feral Expanse", "Blightlands", "Crimson Thicket", "Wastestalker Grounds",
-  "Gamma Marsh", "Verdigris Hollow"
+  "Gamma Marsh", "Verdigris Hollow",
+  // New wild additions
+  "Deathclaw Promontory", "Yao Guai Caves", "Mirelurk Spawning Pool",
+  "Radscorpion Burrow", "Cazador Hive", "Bloatfly Breeding Grounds",
+  "Supermutant Stronghold", "Feral Ghoul Metro"
+];
+
+// === NEW: MEME-TIER LOCATION NAMES (for rare/legendary POIs) ===
+const memeLocations = [
+  // Classic Fallout memes
+  "Patrolling Mojave Rest Stop", "Nuclear Winter Resort",
+  "The Tunnel Snakes' Clubhouse", "Gary Vault Annex",
+  "Benny's Bad Luck Casino", "Fisto's Workshop",
+  
+  // Internet culture meets wasteland
+  "Big Iron Shooting Range", "No Cap Trading Post",
+  "Ohio Portal Site", "Literally 1984 Bunker",
+  "Based Department HQ", "Skill Issue Recovery Center",
+  "Touch Grass Sanctuary", "POV You Found Loot Memorial",
+  
+  // Self-aware game humor
+  "Quicksave Point Alpha", "Fast Travel Node 7",
+  "Random Encounter Zone", "Loot Respawn Cache",
+  "NPC Spawn Point", "The Loading Screen",
+  "Essential NPC Safehouse", "Level Scaling Observatory",
+  
+  // Absurdist wasteland
+  "The Toaster Collective", "Bean Enthusiasts Guild",
+  "Institute of Questionable Decisions", "Deez Caps Exchange",
+  "Pre-War Meme Archive", "Certified Bruh Moment Site",
+  "Sir, This Is A Wasteland", "The Backrooms Entry Point"
 ];
 
 function pick(arr) {
@@ -76,7 +129,9 @@ function slug(str) {
 
 function generateBaseName() {
   const style = Math.random();
-  if (style < 0.25) return `${pick(gritty)}`;
+  // 10% chance for meme location (for that perfect half-serious, half-hilarious vibe)
+  if (style < 0.10) return `${pick(memeLocations)}`;
+  if (style < 0.30) return `${pick(gritty)}`;
   if (style < 0.50) return `${pick(retro)}`;
   if (style < 0.70) return `${pick(eerie)}`;
   if (style < 0.85) return `${pick(militaryNames)}`;
@@ -254,6 +309,26 @@ function assignType(lvl, rarity) {
 // ---------------------------------------------
 // LORE GENERATION
 // ---------------------------------------------
+
+// === MEME LORE ADDITIONS (sprinkled in for flavor) ===
+const memeLoreSnippets = [
+  "Locals say this place is cursed. Visitors say it's just Ohio.",
+  "Someone spray-painted 'THE GAME WAS RIGGED FROM THE START' on the entrance. They weren't wrong.",
+  "A pre-war sign still reads 'YOU ARE HERE' with an arrow pointing at a crater.",
+  "Tunnel Snakes allegedly ruled here once. Nobody knows what that means anymore.",
+  "Legend has it a wanderer once took a rad to the knee here. They don't wander anymore.",
+  "The terminal here only displays one message: 'War. War never changes.'",
+  "Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+  "A skeleton sits at a desk, hand on mouse, forever waiting for the game to load.",
+  "Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
+  "Pre-war records suggest this was a Deez Caps distribution center. Nobody knows what those are.",
+  "A sign outside warns: 'BEWARE OF DOUG.' No Doug has ever been found.",
+  "The vending machines here only dispense existential dread. And Nuka-Cola.",
+  "Patrolling this area almost makes you wish for a nuclear winter. Wait.",
+  "Someone carved 'SAVE BEFORE ENTERING' into the wall. Ominous.",
+  "A holotape found here is just 10 hours of someone saying 'bruh' repeatedly."
+];
+
 function generateLore(name, continent, biome, faction, type) {
   const basis = name.replace(/_/g, " ");
 
@@ -290,7 +365,10 @@ function generateLore(name, continent, biome, faction, type) {
     boss: " Few walk away from this place; those who do return with tales that don’t quite make sense."
   }[type] || "";
 
-  return `${basis}. ${factionFlavor} ${biomeFlavor}${typeFlavor}`.trim();
+  // 15% chance to add a meme lore snippet for flavor
+  const memeFlavor = Math.random() < 0.15 ? ` ${pick(memeLoreSnippets)}` : "";
+
+  return `${basis}. ${factionFlavor} ${biomeFlavor}${typeFlavor}${memeFlavor}`.trim();
 }
 
 // ---------------------------------------------
