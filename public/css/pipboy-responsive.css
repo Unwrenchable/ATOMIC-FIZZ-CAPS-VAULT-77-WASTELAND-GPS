@@ -190,7 +190,7 @@ body {
 
 .pipboy-map {
   height: 100%;
-  min-height: 20rem;
+  min-height: 40rem;
   max-height: none;
   border-radius: clamp(0.4rem, 0.8vw, 0.8rem);
 }
@@ -200,11 +200,17 @@ body {
   height: calc(100% - 4rem);
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 #panel-map #mapContainer {
   flex: 1;
   min-height: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .map-overlay {
@@ -293,8 +299,8 @@ body {
 
   /* Adjust map height on mobile */
   .pipboy-map {
-    height: 40vh;
-    min-height: 20rem;
+    height: 50vh;
+    min-height: 30rem;
   }
 }
 
@@ -348,7 +354,8 @@ body {
   }
 
   .pipboy-map {
-    height: 35vh;
+    height: 50vh;
+    min-height: 25rem;
   }
 }
 
