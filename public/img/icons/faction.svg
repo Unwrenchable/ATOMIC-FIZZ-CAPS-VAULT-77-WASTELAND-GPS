@@ -1,10 +1,10 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
   <!-- Left flag pole -->
-  <rect x="7" y="5" width="1.5" height="14" fill="black"/>
+  <rect x="7" y="5" width="1.5" height="14" fill="currentColor"/>
 
   <!-- Right flag pole -->
-  <rect x="15.5" y="5" width="1.5" height="14" fill="black"/>
+  <rect x="15.5" y="5" width="1.5" height="14" fill="currentColor"/>
 
   <!-- Left flag -->
   <path d="
@@ -12,7 +12,7 @@
     L12 7.5
     L8.5 9
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Right flag -->
   <path d="
@@ -20,7 +20,7 @@
     L12 7.5
     L15.5 9
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Star cutout -->
   <path d="

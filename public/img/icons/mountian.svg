@@ -6,7 +6,7 @@
     L10 7
     L16 18
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Secondary peak -->
   <path d="
@@ -14,7 +14,7 @@
     L15 11
     L20 18
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Snow caps -->
   <path d="

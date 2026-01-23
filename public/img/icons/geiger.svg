@@ -1,7 +1,7 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
   <!-- Body -->
-  <rect x="6" y="5" width="12" height="14" fill="black"/>
+  <rect x="6" y="5" width="12" height="14" fill="currentColor"/>
 
   <!-- Gauge circle cutout -->
   <circle cx="12" cy="10" r="3" fill="white"/>
@@ -10,7 +10,7 @@
   <path d="
     M12 10
     L14 8.5
-  " stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+  " stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
 
   <!-- Bottom vent cutouts -->
   <rect x="8" y="14" width="2" height="1.5" fill="white"/>

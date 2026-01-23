@@ -17,7 +17,7 @@
     V10
     C19 6 16 3 12 3
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Eye lenses -->
   <circle cx="9" cy="11" r="1.6" fill="white"/>

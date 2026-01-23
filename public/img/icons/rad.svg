@@ -1,13 +1,13 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Outer circle -->
-  <circle cx="12" cy="12" r="10" fill="black" />
+  <circle cx="12" cy="12" r="10" fill="currentColor" />
 
   <!-- Top wedge -->
-  <path d="M12 12 L12 4 L17 10 Z" fill="black" />
+  <path d="M12 12 L12 4 L17 10 Z" fill="currentColor" />
 
   <!-- Bottom-right wedge -->
-  <path d="M12 12 L18 14 L15 20 Z" fill="black" />
+  <path d="M12 12 L18 14 L15 20 Z" fill="currentColor" />
 
   <!-- Bottom-left wedge -->
-  <path d="M12 12 L6 14 L9 20 Z" fill="black" />
+  <path d="M12 12 L6 14 L9 20 Z" fill="currentColor" />
 </svg>

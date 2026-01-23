@@ -430,3 +430,59 @@
 .poi-marker-legendary img {
   filter: brightness(0) saturate(100%) invert(70%) sepia(90%) saturate(2000%) hue-rotate(10deg) brightness(105%) contrast(100%);
 }
+
+/* ============================================================================
+   MAP CONTROLS - Exploration mode toggle
+   ============================================================================ */
+
+.map-controls {
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-control-btn {
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: #00ff41 !important;
+  border: 2px solid #00ff41 !important;
+  padding: 8px 12px !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 14px !important;
+  cursor: pointer;
+  box-shadow: 
+    inset 0 0 5px rgba(0, 255, 65, 0.2),
+    0 0 10px rgba(0, 255, 65, 0.2);
+  text-shadow: 0 0 5px #00ff41;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.map-control-btn:hover {
+  background: rgba(0, 255, 65, 0.2) !important;
+  color: #ffaa00 !important;
+  border-color: #ffaa00 !important;
+  text-shadow: 0 0 8px #ffaa00;
+  box-shadow: 
+    inset 0 0 8px rgba(255, 170, 0, 0.3),
+    0 0 15px rgba(255, 170, 0, 0.3);
+}
+
+/* Exploration mode active state */
+.map-control-btn.exploration-active {
+  background: rgba(0, 100, 255, 0.3) !important;
+  color: #00d4ff !important;
+  border-color: #00d4ff !important;
+  text-shadow: 0 0 8px #00d4ff;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 212, 255, 0.3),
+    0 0 15px rgba(0, 212, 255, 0.4);
+}
+
+.map-control-btn.exploration-active:hover {
+  background: rgba(0, 212, 255, 0.4) !important;
+  color: #ffffff !important;
+}

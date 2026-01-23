@@ -15,7 +15,7 @@
     C18.5 16.5 20 14 20 11
     C20 6.5 17 3 12 3
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Eye cutouts -->
   <circle cx="9" cy="11" r="2" fill="white"/>
