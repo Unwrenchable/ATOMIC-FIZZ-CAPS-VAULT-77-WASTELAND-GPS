@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const MARKER_SIZE_RETINA = MARKER_SIZE * 2;
 
     // Generate Pip-Boy style marker SVG with contained glow (no bleed, no animation)
-    function createPipboyMarkerSVG(size, uniqueId) {
+    function createPipboyMarkerSVG(size) {
       const center = size / 2;
       const outerR = size * 0.42;  // Outer glow ring
       const midR = size * 0.33;    // Mid glow ring  
@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 </svg>`)}`;
     }
 
-    const pipboyMarkerSVG = createPipboyMarkerSVG(MARKER_SIZE, '1x');
-    const pipboyMarkerSVG2x = createPipboyMarkerSVG(MARKER_SIZE_RETINA, '2x');
+    const pipboyMarkerSVG = createPipboyMarkerSVG(MARKER_SIZE);
+    const pipboyMarkerSVG2x = createPipboyMarkerSVG(MARKER_SIZE_RETINA);
 
     // Shadow is not needed for Pip-Boy style markers, use transparent
     const transparentShadow = 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>');
