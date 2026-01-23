@@ -203,6 +203,9 @@ body.pipboy-mode {
 /* Map panel specific - fill available space */
 #panel-map {
   padding: 8px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 #panel-map .panel-header {
@@ -216,6 +219,7 @@ body.pipboy-mode {
   display: flex;
   flex-direction: column;
   position: relative;
+  height: 100%;
 }
 
 /* ============================================================
@@ -226,13 +230,18 @@ body.pipboy-mode {
   position: relative;
   width: 100%;
   flex: 1;
-  min-height: 200px;
+  min-height: 400px;
+  height: 100%;
   border: 2px solid rgba(0,255,65,0.35);
   box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 12px rgba(0,255,65,0.25);
 }
 
 #mapContainer {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
