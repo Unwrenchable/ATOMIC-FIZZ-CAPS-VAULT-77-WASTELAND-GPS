@@ -1,6 +1,7 @@
 /* ---------------------------------------------------------
-   ATOMIC FIZZ WALLET — PIP‑BOY THEME
-   Location: public/wallet/pipboy.css
+   ATOMIC FIZZ WALLET — VAULT-TEC / FIZZ CAPS THEME
+   Responsive PWA-ready wallet interface
+   Location: public/wallet/wallet.css
    --------------------------------------------------------- */
 
 /* GLOBAL RESET */
@@ -10,7 +11,7 @@
   box-sizing: border-box;
 }
 
-/* GLOBAL COLORS + FONTS */
+/* GLOBAL COLORS + FONTS — VAULT-TEC FIZZ CAPS BRANDING */
 :root {
   --pipboy-green: #00ff66;
   --pipboy-green-dim: #00cc55;
@@ -19,6 +20,27 @@
   --pipboy-bg: #0d120d;
   --pipboy-scanline: rgba(0, 255, 102, 0.05);
   --pipboy-font: "VT323", monospace;
+  
+  /* Vault-Tec Gold Accent */
+  --vault-gold: #ffcc00;
+  --vault-gold-dim: #cc9900;
+  
+  /* Fizz Caps Orange (radioactive soda glow) */
+  --fizz-orange: #ff9933;
+  --fizz-orange-dim: #cc7722;
+  
+  /* Safe Area Insets for PWA */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* RESPONSIVE BASE — 62.5% for rem calculations */
+html {
+  font-size: 62.5%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 /* PAGE BACKGROUND */
@@ -26,11 +48,15 @@ body {
   background: var(--pipboy-bg);
   color: var(--pipboy-green);
   font-family: var(--pipboy-font);
-  font-size: 20px;
+  font-size: clamp(1.4rem, 2vw, 2rem);
   line-height: 1.4;
-  padding: 20px;
+  padding: clamp(1rem, 2vw, 2rem);
+  padding-top: max(var(--safe-top), clamp(1rem, 2vw, 2rem));
+  padding-bottom: max(var(--safe-bottom), clamp(1rem, 2vw, 2rem));
   overflow-x: hidden;
   text-shadow: 0 0 4px var(--pipboy-green);
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* CRT SCANLINES */
@@ -59,41 +85,45 @@ body::after {
   z-index: 9998;
 }
 
-/* WALLET CONTAINER */
+/* WALLET CONTAINER — RESPONSIVE SCALING */
 .wallet-container {
   border: 2px solid var(--pipboy-green);
-  padding: 20px;
-  border-radius: 6px;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: clamp(0.4rem, 1vw, 0.6rem);
   background: rgba(0, 20, 0, 0.4);
   box-shadow: 0 0 20px var(--pipboy-green-dark);
-  max-width: 800px;
+  max-width: min(800px, calc(100vw - 2rem));
+  width: 100%;
   margin: 0 auto;
 }
 
-/* HEADER */
+/* HEADER — RESPONSIVE VAULT-TEC STYLE */
 .wallet-header {
-  font-size: 32px;
-  margin-bottom: 10px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: clamp(0.5rem, 1.5vw, 1rem);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: clamp(0.1rem, 0.3vw, 0.2rem);
   border-bottom: 2px solid var(--pipboy-green);
-  padding-bottom: 10px;
+  padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
 }
 
-/* SUBHEADERS */
+/* SUBHEADERS — RESPONSIVE */
 .section-title {
-  font-size: 24px;
-  margin: 25px 0 10px;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(0.5rem, 1.5vw, 1rem);
   text-transform: uppercase;
   border-bottom: 1px dashed var(--pipboy-green);
-  padding-bottom: 5px;
+  padding-bottom: clamp(0.3rem, 0.8vw, 0.5rem);
 }
 
-/* DATA ROWS */
+/* DATA ROWS — RESPONSIVE FLEX */
 .data-row {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  padding: clamp(0.5rem, 1vw, 0.8rem) 0;
   border-bottom: 1px dotted var(--pipboy-green-dark);
 }
 
@@ -109,18 +139,21 @@ body::after {
   font-weight: bold;
 }
 
-/* BUTTONS */
+/* BUTTONS — RESPONSIVE WITH TOUCH TARGETS */
 .pipboy-button {
   display: inline-block;
-  padding: 10px 18px;
+  padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.2rem, 2.5vw, 1.8rem);
   border: 2px solid var(--pipboy-green);
   color: var(--pipboy-green);
   text-decoration: none;
-  font-size: 20px;
-  margin-top: 20px;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  margin-top: clamp(1rem, 2vw, 2rem);
   background: rgba(0, 40, 0, 0.4);
   transition: 0.15s ease-in-out;
   cursor: pointer;
+  min-height: 44px; /* Touch-friendly minimum */
+  min-width: clamp(8rem, 20vw, 12rem);
+  text-align: center;
 }
 
 .pipboy-button:hover {
@@ -129,24 +162,24 @@ body::after {
   text-shadow: none;
 }
 
-/* LISTS */
+/* LISTS — RESPONSIVE */
 .wallet-list {
   list-style: none;
-  margin-top: 10px;
+  margin-top: clamp(0.5rem, 1.5vw, 1rem);
 }
 
 .wallet-list li {
-  padding: 6px 0;
+  padding: clamp(0.4rem, 1vw, 0.6rem) 0;
   border-bottom: 1px dotted var(--pipboy-green-dark);
 }
 
-/* BADGES (RARITY / STATUS) */
+/* BADGES (RARITY / STATUS) — RESPONSIVE */
 .badge {
-  padding: 2px 6px;
+  padding: clamp(0.1rem, 0.3vw, 0.2rem) clamp(0.4rem, 0.8vw, 0.6rem);
   border: 1px solid var(--pipboy-green);
-  border-radius: 4px;
-  font-size: 16px;
-  margin-left: 10px;
+  border-radius: clamp(0.2rem, 0.5vw, 0.4rem);
+  font-size: clamp(1rem, 1.5vw, 1.6rem);
+  margin-left: clamp(0.5rem, 1vw, 1rem);
 }
 
 .badge-rare {
@@ -164,37 +197,40 @@ body::after {
   border-color: #ffaa00;
 }
 
-/* TABLES */
+/* TABLES — RESPONSIVE */
 .wallet-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: clamp(0.5rem, 1.5vw, 1rem);
+  overflow-x: auto;
+  display: block;
 }
 
 .wallet-table th,
 .wallet-table td {
-  padding: 10px;
+  padding: clamp(0.6rem, 1.5vw, 1rem);
   border-bottom: 1px dotted var(--pipboy-green-dark);
+  text-align: left;
+  white-space: nowrap;
 }
 
 .wallet-table th {
-  text-align: left;
   opacity: 0.8;
 }
 
-/* FOOTER */
+/* FOOTER — RESPONSIVE */
 .wallet-footer {
-  margin-top: 30px;
+  margin-top: clamp(1.5rem, 3vw, 3rem);
   text-align: center;
   opacity: 0.7;
-  font-size: 16px;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);
 }
 
 /* ANIMATED CURSOR */
 .cursor {
   display: inline-block;
-  width: 10px;
-  height: 20px;
+  width: clamp(0.6rem, 1vw, 1rem);
+  height: clamp(1.4rem, 2vw, 2rem);
   background: var(--pipboy-green);
   animation: blink 1s infinite;
 }
@@ -202,4 +238,638 @@ body::after {
 @keyframes blink {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+/* Mobile First (phones < 480px) */
+@media screen and (max-width: 480px) {
+  html {
+    font-size: 50%;
+  }
+  
+  body {
+    padding: 0.8rem;
+    padding-top: max(var(--safe-top), 0.8rem);
+  }
+  
+  .data-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .pipboy-button {
+    width: 100%;
+    display: block;
+  }
+  
+  .wallet-table {
+    font-size: 1.2rem;
+  }
+}
+
+/* Small Tablets (481px - 768px) */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  html {
+    font-size: 55%;
+  }
+}
+
+/* Large Tablets / Small Laptops (769px - 1024px) */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  html {
+    font-size: 58%;
+  }
+}
+
+/* Desktop (1025px+) */
+@media screen and (min-width: 1025px) {
+  html {
+    font-size: 62.5%;
+  }
+  
+  .wallet-container {
+    max-width: 900px;
+  }
+}
+
+/* Large Desktop / 4K (1920px+) */
+@media screen and (min-width: 1920px) {
+  html {
+    font-size: 70%;
+  }
+  
+  .wallet-container {
+    max-width: 1100px;
+  }
+}
+
+/* Touch Devices */
+@media (hover: none) and (pointer: coarse) {
+  .pipboy-button,
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 1.2rem 2rem;
+  }
+  
+  .data-row {
+    padding: 1rem 0;
+  }
+}
+
+/* PWA / Standalone Mode */
+@media (display-mode: standalone) {
+  body {
+    /* Extra padding for PWA navigation gestures */
+    padding-bottom: max(var(--safe-bottom), 2rem);
+  }
+}
+
+/* ============================================================
+   WALLET APP SPECIFIC STYLES
+   ============================================================ */
+
+/* Boot Overlay */
+#boot-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--pipboy-black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: opacity 0.5s ease-out;
+}
+
+#boot-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#boot-logo {
+  width: clamp(80px, 20vw, 150px);
+  height: auto;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+  filter: drop-shadow(0 0 10px var(--pipboy-green));
+}
+
+.boot-line {
+  font-size: clamp(1rem, 1.5vw, 1.4rem);
+  margin: 0.3rem 0;
+  opacity: 0;
+  animation: fadeInLine 0.5s ease-out forwards;
+}
+
+.boot-line:nth-child(2) { animation-delay: 0.3s; }
+.boot-line:nth-child(3) { animation-delay: 0.6s; }
+.boot-line:nth-child(4) { animation-delay: 0.9s; }
+.boot-line:nth-child(5) { animation-delay: 1.2s; }
+
+@keyframes fadeInLine {
+  to { opacity: 1; }
+}
+
+/* Main Wallet App */
+#wallet-app {
+  max-width: min(900px, calc(100vw - 2rem));
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+#wallet-app.crt::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--pipboy-scanline) 0px,
+    var(--pipboy-scanline) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Branding Section */
+#wallet-branding {
+  text-align: center;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  padding-bottom: clamp(1rem, 2vw, 1.5rem);
+  border-bottom: 2px solid var(--pipboy-green);
+}
+
+#wallet-logo {
+  width: clamp(60px, 15vw, 100px);
+  height: auto;
+  filter: drop-shadow(0 0 8px var(--pipboy-green));
+}
+
+#wallet-branding h1 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  margin-top: clamp(0.8rem, 1.5vw, 1rem);
+  letter-spacing: clamp(0.1rem, 0.3vw, 0.2rem);
+}
+
+/* Wallet Buttons */
+.btn {
+  display: inline-block;
+  padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2rem);
+  margin: clamp(0.5rem, 1vw, 0.8rem);
+  border: 2px solid var(--pipboy-green);
+  background: rgba(0, 40, 0, 0.5);
+  color: var(--pipboy-green);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  min-height: 44px;
+}
+
+.btn:hover {
+  background: var(--pipboy-green);
+  color: var(--pipboy-black);
+  text-shadow: none;
+  box-shadow: 0 0 15px var(--pipboy-green);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* Connect Wallet Buttons — Special Styling */
+#afw-connect {
+  border-color: var(--vault-gold);
+  color: var(--vault-gold);
+  box-shadow: 0 0 10px var(--vault-gold-dim);
+}
+
+#afw-connect:hover {
+  background: var(--vault-gold);
+  color: var(--pipboy-black);
+  box-shadow: 0 0 20px var(--vault-gold);
+}
+
+#afw-local {
+  border-color: var(--fizz-orange);
+  color: var(--fizz-orange);
+}
+
+#afw-local:hover {
+  background: var(--fizz-orange);
+  color: var(--pipboy-black);
+}
+
+/* Wallet Address Display */
+#afw-address {
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+  padding: clamp(0.8rem, 1.5vw, 1rem);
+  background: rgba(0, 255, 102, 0.05);
+  border: 1px solid var(--pipboy-green-dark);
+  border-radius: 4px;
+  word-break: break-all;
+  font-size: clamp(1rem, 1.4vw, 1.4rem);
+}
+
+/* QR Code Container */
+#afw-qr {
+  text-align: center;
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+}
+
+#afw-qr canvas,
+#afw-qr img {
+  max-width: min(200px, 50vw);
+  height: auto;
+}
+
+/* Section Styling */
+section {
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--pipboy-green-dark);
+  border-radius: clamp(0.3rem, 0.6vw, 0.5rem);
+  background: rgba(0, 20, 0, 0.3);
+}
+
+section h2 {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  margin-bottom: clamp(0.8rem, 1.5vw, 1.2rem);
+  padding-bottom: clamp(0.4rem, 0.8vw, 0.6rem);
+  border-bottom: 1px dashed var(--pipboy-green);
+  text-transform: uppercase;
+}
+
+/* Entry Styling */
+.entry {
+  padding: clamp(0.8rem, 1.5vw, 1.2rem);
+  margin: clamp(0.5rem, 1vw, 0.8rem) 0;
+  border-bottom: 1px dotted var(--pipboy-green-dark);
+}
+
+.entry:last-child {
+  border-bottom: none;
+}
+
+.entry strong {
+  color: var(--vault-gold);
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+}
+
+/* Input Fields */
+input.mono,
+textarea.mono {
+  width: 100%;
+  padding: clamp(0.6rem, 1.2vw, 1rem);
+  margin: clamp(0.4rem, 0.8vw, 0.6rem) 0;
+  background: rgba(0, 20, 0, 0.6);
+  border: 1px solid var(--pipboy-green);
+  color: var(--pipboy-green);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+  border-radius: 3px;
+}
+
+input.mono:focus,
+textarea.mono:focus {
+  outline: none;
+  border-color: var(--vault-gold);
+  box-shadow: 0 0 8px var(--vault-gold-dim);
+}
+
+/* Trade UI */
+#afw-trade-status {
+  margin-top: clamp(0.8rem, 1.5vw, 1rem);
+  padding: clamp(0.5rem, 1vw, 0.8rem);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+}
+
+/* Modals */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  max-width: min(600px, calc(100vw - 2rem));
+  max-height: calc(100vh - 4rem);
+  max-height: calc(100dvh - 4rem);
+  overflow-y: auto;
+  background: var(--pipboy-bg);
+  border: 2px solid var(--pipboy-green);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: clamp(0.4rem, 0.8vw, 0.6rem);
+  box-shadow: 0 0 30px var(--pipboy-green-dark);
+}
+
+.modal-close {
+  position: absolute;
+  top: clamp(0.5rem, 1vw, 1rem);
+  right: clamp(0.5rem, 1vw, 1rem);
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  min-width: auto;
+  padding: 0.5rem 1rem;
+}
+
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  justify-content: center;
+}
+
+/* NFT Grid */
+.nft-entry {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.8rem, 1.5vw, 1.2rem);
+  padding: clamp(0.8rem, 1.5vw, 1.2rem);
+  border: 1px solid var(--pipboy-green-dark);
+  margin: clamp(0.5rem, 1vw, 0.8rem) 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: clamp(0.2rem, 0.5vw, 0.4rem);
+}
+
+.nft-entry:hover {
+  background: rgba(0, 255, 102, 0.1);
+  border-color: var(--pipboy-green);
+}
+
+.nft-thumb {
+  width: clamp(40px, 10vw, 60px);
+  height: clamp(40px, 10vw, 60px);
+  object-fit: cover;
+  border: 1px solid var(--pipboy-green);
+}
+
+.nft-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.nft-info strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Rarity Colors */
+.rarity-common { border-left: 3px solid var(--pipboy-green); }
+.rarity-rare { border-left: 3px solid #00e6ff; }
+.rarity-epic { border-left: 3px solid #ff00ff; }
+.rarity-legendary { border-left: 3px solid var(--vault-gold); }
+
+/* Utility Classes */
+.mono { font-family: monospace; }
+.small { font-size: clamp(0.9rem, 1.2vw, 1.1rem); }
+.muted { opacity: 0.7; }
+.hidden { display: none !important; }
+
+/* ============================================================
+   FIZZ.FUN STYLE TOKEN LAUNCH SECTION
+   ============================================================ */
+
+.fizz-fun-section {
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.1), rgba(0, 255, 102, 0.1));
+  border: 2px solid var(--fizz-orange);
+  border-radius: clamp(0.5rem, 1vw, 0.8rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  margin: clamp(2rem, 4vw, 3rem) 0;
+}
+
+.fizz-fun-section h2 {
+  color: var(--fizz-orange);
+  border-bottom-color: var(--fizz-orange);
+}
+
+.token-launch-card {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--vault-gold);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  margin: clamp(0.8rem, 1.5vw, 1rem) 0;
+  border-radius: clamp(0.3rem, 0.6vw, 0.5rem);
+}
+
+.bonding-curve {
+  height: clamp(80px, 15vw, 120px);
+  background: linear-gradient(to top, var(--pipboy-green-dark), transparent);
+  border: 1px solid var(--pipboy-green);
+  margin: clamp(0.8rem, 1.5vw, 1rem) 0;
+  position: relative;
+}
+
+.bonding-curve::after {
+  content: "BONDING CURVE";
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  opacity: 0.7;
+}
+
+/* ============================================================
+   WORMHOLE BRIDGE SECTION
+   ============================================================ */
+
+.bridge-section {
+  background: linear-gradient(135deg, rgba(0, 200, 255, 0.1), rgba(100, 0, 200, 0.1));
+  border: 2px solid #00ccff;
+  border-radius: clamp(0.5rem, 1vw, 0.8rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  margin: clamp(2rem, 4vw, 3rem) 0;
+}
+
+.bridge-section h2 {
+  color: #00ccff;
+  border-bottom-color: #00ccff;
+}
+
+.chain-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1vw, 0.8rem);
+  margin: clamp(0.8rem, 1.5vw, 1rem) 0;
+}
+
+.chain-badge {
+  padding: clamp(0.4rem, 0.8vw, 0.6rem) clamp(0.8rem, 1.5vw, 1rem);
+  border: 1px solid #00ccff;
+  border-radius: clamp(0.2rem, 0.5vw, 0.4rem);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chain-badge:hover,
+.chain-badge.active {
+  background: #00ccff;
+  color: var(--pipboy-black);
+}
+
+/* ============================================================
+   SCAVENGER EXCHANGE STYLES
+   ============================================================ */
+
+.exchange-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+}
+
+.exchange-item {
+  border: 1px solid var(--pipboy-green);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: rgba(0, 40, 0, 0.3);
+  border-radius: clamp(0.3rem, 0.6vw, 0.5rem);
+  transition: all 0.2s ease;
+}
+
+.exchange-item:hover {
+  border-color: var(--vault-gold);
+  box-shadow: 0 0 15px var(--vault-gold-dim);
+}
+
+.exchange-price {
+  color: var(--vault-gold);
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-weight: bold;
+}
+
+/* ============================================================
+   SWAP UI STYLES
+   ============================================================ */
+
+#swap-panel {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--pipboy-green);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: clamp(0.4rem, 0.8vw, 0.6rem);
+  margin: clamp(1.5rem, 3vw, 2rem) 0;
+}
+
+.swap-section {
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+}
+
+.swap-label {
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+  margin-bottom: clamp(0.4rem, 0.8vw, 0.6rem);
+  color: var(--vault-gold);
+  text-transform: uppercase;
+}
+
+.pipboy-select {
+  width: 100%;
+  padding: clamp(0.6rem, 1.2vw, 1rem);
+  background: rgba(0, 20, 0, 0.8);
+  border: 1px solid var(--pipboy-green);
+  color: var(--pipboy-green);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.pipboy-select:focus {
+  outline: none;
+  border-color: var(--vault-gold);
+}
+
+.pipboy-input {
+  width: 100%;
+  padding: clamp(0.6rem, 1.2vw, 1rem);
+  margin-top: clamp(0.4rem, 0.8vw, 0.6rem);
+  background: rgba(0, 20, 0, 0.8);
+  border: 1px solid var(--pipboy-green);
+  color: var(--pipboy-green);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+  border-radius: 3px;
+}
+
+.pipboy-input:focus {
+  outline: none;
+  border-color: var(--vault-gold);
+}
+
+.pipboy-status {
+  margin-top: clamp(0.8rem, 1.5vw, 1rem);
+  padding: clamp(0.5rem, 1vw, 0.8rem);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  text-align: center;
+}
+
+/* ============================================================
+   PARTNER TOKENS & MULTICHAIN DISPLAY
+   ============================================================ */
+
+#partner-tokens,
+#chain-list {
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+}
+
+/* ============================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --pipboy-green: #00ff00;
+    --pipboy-green-dim: #00dd00;
+    --vault-gold: #ffff00;
+  }
+  
+  .btn,
+  .pipboy-button {
+    border-width: 3px;
+  }
+}
+
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+
+@media print {
+  body::before,
+  body::after,
+  #wallet-app.crt::before {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+    text-shadow: none;
+  }
 }
