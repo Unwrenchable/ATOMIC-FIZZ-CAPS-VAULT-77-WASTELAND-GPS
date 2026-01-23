@@ -14,7 +14,7 @@
   box-shadow: 
     inset 0 0 20px rgba(0, 255, 65, 0.3),
     0 0 30px rgba(0, 255, 65, 0.2);
-  filter: contrast(1.1) brightness(0.95);
+  filter: contrast(1.05) brightness(1.0);
 }
 
 /* Leaflet tile layer - green/amber tint for Fallout feel */
@@ -23,9 +23,9 @@
     sepia(0.3) 
     hue-rotate(60deg) 
     saturate(0.8) 
-    contrast(1.2)
-    brightness(0.7);
-  opacity: 0.85;
+    contrast(1.15)
+    brightness(0.85);
+  opacity: 0.9;
 }
 
 /* POI Markers - Fallout style with contained glow (no bleed) */
