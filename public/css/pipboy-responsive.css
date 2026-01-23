@@ -296,6 +296,20 @@ body {
     height: 40vh;
     min-height: 20rem;
   }
+
+  /* MOBILE MAP TOUCH FIX - prevent swipe navigation */
+  #mapContainer,
+  .pipboy-map,
+  #panel-map .panel-body {
+    touch-action: none !important;
+    -webkit-overflow-scrolling: auto !important;
+    overscroll-behavior: contain !important;
+  }
+
+  /* Leaflet handles its own gestures */
+  #mapContainer .leaflet-container {
+    touch-action: manipulation !important;
+  }
 }
 
 /* ============================================================
