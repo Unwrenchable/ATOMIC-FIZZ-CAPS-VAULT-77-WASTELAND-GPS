@@ -5,10 +5,37 @@
   if (!window.overseerPersonality) window.overseerPersonality = {};
 
   // -------------------------------------------------------------
-  // CONFIG — YOUR HUGGINGFACE KEY + MODEL
+  // CONFIG — LOADED FROM BACKEND (environment variables)
   // -------------------------------------------------------------
-  const HF_API_KEY = "YOUR_HF_KEY_HERE";   // <— replace with your JS key
-  const MODEL = "mistralai/Mixtral-8x7B-Instruct-v0.1";
+  let HF_API_KEY = "";
+  let MODEL = "mistralai/Mixtral-8x7B-Instruct-v0.1";
+  let configLoaded = false;
+
+  // Fetch configuration from backend
+  // Called at module init (non-blocking) and before AI requests (blocking)
+  async function loadConfig() {
+    if (configLoaded) return;
+    try {
+      // Build config URL - uses API_BASE/BACKEND_URL if available, otherwise relative path
+      const apiBase = window.API_BASE || window.BACKEND_URL || "";
+      const configUrl = apiBase ? `${apiBase}/api/config/frontend` : "/api/config/frontend";
+      const res = await fetch(configUrl);
+      if (res.ok) {
+        const config = await res.json();
+        if (config.overseer) {
+          HF_API_KEY = config.overseer.hfApiKey || "";
+          MODEL = config.overseer.hfModel || MODEL;
+        }
+        configLoaded = true;
+        console.log("[Overseer] Configuration loaded from backend");
+      }
+    } catch (err) {
+      console.warn("[Overseer] Failed to load config from backend:", err.message);
+    }
+  }
+
+  // Load config immediately (non-blocking, will retry in askAI if needed)
+  loadConfig();
 
   // -------------------------------------------------------------
   // FALLBACK TONES (used if AI fails)
@@ -58,6 +85,15 @@
   // AI REQUEST
   // -------------------------------------------------------------
   async function askAI(prompt) {
+    // Ensure config is loaded before making API calls
+    await loadConfig();
+
+    // If no API key configured, skip AI request and use fallback
+    if (!HF_API_KEY) {
+      console.warn("[Overseer] HF_API_KEY not configured, using fallback responses");
+      return null;
+    }
+
     try {
       const res = await fetch(
         `https://api-inference.huggingface.co/models/${MODEL}`,
