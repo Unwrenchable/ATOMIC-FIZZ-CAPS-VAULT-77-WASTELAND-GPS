@@ -73,16 +73,25 @@ body {
   font-size: clamp(1rem, 1.5vw, 1.4rem) !important;
 }
 
-/* Wallet HUD - responsive */
+/* Wallet HUD - responsive, minimal dApp-style connect */
 .wallet-hud {
-  flex-wrap: wrap;
-  gap: clamp(0.5rem, 1vw, 1rem);
-  font-size: clamp(1rem, 1.2vw, 1.3rem);
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  font-size: clamp(0.9rem, 1vw, 1.1rem);
+}
+
+.wallet-hud span {
+  font-size: clamp(0.8rem, 0.9vw, 1rem);
+  opacity: 0.9;
 }
 
 .wallet-hud button {
-  padding: clamp(0.4rem, 0.8vw, 0.8rem) clamp(0.8rem, 1.5vw, 1.2rem);
-  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  padding: 0.3rem 0.8rem;
+  font-size: clamp(0.8rem, 0.9vw, 1rem);
+  min-width: auto;
+  border-radius: 3px;
 }
 
 /* ============================================================
@@ -133,6 +142,11 @@ body {
 
 .panel-body {
   padding: clamp(0.5rem, 1vw, 1rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  min-height: 0;
 }
 
 .panel-row {

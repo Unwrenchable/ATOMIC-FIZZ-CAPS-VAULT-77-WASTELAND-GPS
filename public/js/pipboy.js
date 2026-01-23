@@ -48,6 +48,29 @@
         }
       }, 200);
     }
+
+    // ITEMS PANEL ACTIVATION
+    if (panelKey === "items") {
+      // QUEST HOOK: Wake Up → open_inventory
+      Game.quests?.completeObjective("wake_up", "open_inventory");
+    }
+
+    // QUESTS PANEL ACTIVATION - render quest UI
+    if (panelKey === "quests") {
+      if (Game.ui?.renderQuest) {
+        try {
+          Game.ui.renderQuest();
+        } catch (e) {
+          console.warn("[PipBoy] renderQuest failed:", e);
+        }
+      }
+    }
+
+    // RADIO PANEL ACTIVATION
+    if (panelKey === "radio") {
+      // QUEST HOOK: Wake Up → turn_on_radio
+      Game.quests?.completeObjective("wake_up", "turn_on_radio");
+    }
   }
 
   // ------------------------------------------------------------
