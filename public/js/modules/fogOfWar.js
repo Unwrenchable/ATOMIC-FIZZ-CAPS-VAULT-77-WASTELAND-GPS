@@ -26,17 +26,17 @@
         return;
       }
 
-      // Create fog pane
+      // Create fog pane - z-index below weather (450) so weather effects show above fog
       this.fogPane = worldmap.map.createPane("fogPane");
-      this.fogPane.style.zIndex = 600;
+      this.fogPane.style.zIndex = 420;
       this.fogPane.style.pointerEvents = "none";
 
-      // Full fog overlay
+      // Full fog overlay - reduced opacity from 0.75 to 0.55 for better visibility
       this.fogLayer = L.rectangle(worldmap.map.getBounds(), {
         pane: "fogPane",
         color: "#000",
         weight: 0,
-        fillOpacity: 0.75
+        fillOpacity: 0.55
       }).addTo(worldmap.map);
 
       // Reveal layer (mask)
@@ -134,11 +134,29 @@
 
   Game.modules.fogOfWar = fogModule;
 
+  // Wait for map-ready event instead of DOMContentLoaded
+  // This ensures the map exists before we try to create fog overlay
+  window.addEventListener("map-ready", () => {
+    // Small delay to ensure map is fully initialized
+    setTimeout(() => {
+      try {
+        fogModule.init();
+      } catch (e) {
+        console.error("fogOfWar: init failed", e);
+      }
+    }, 700);
+  });
+  
+  // Fallback: also try on DOMContentLoaded with a longer delay
   document.addEventListener("DOMContentLoaded", () => {
-    try {
-      fogModule.init();
-    } catch (e) {
-      console.error("fogOfWar: init failed", e);
-    }
+    setTimeout(() => {
+      if (!fogModule.fogPane) {
+        try {
+          fogModule.init();
+        } catch (e) {
+          console.error("fogOfWar: fallback init failed", e);
+        }
+      }
+    }, 3000);
   });
 })();
