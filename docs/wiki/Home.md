@@ -89,7 +89,7 @@ This wiki documents all game systems, features, and technical implementation det
 
 - 🎮 **Game**: [atomicfizzcaps.xyz](https://www.atomicfizzcaps.xyz)
 - 🔌 **API**: [api.atomicfizzcaps.xyz](https://api.atomicfizzcaps.xyz)
-- 🪙 **FIZZ Token**: `fizzQBcaFLKjCoZ8Ppfkw2Xa7vH2pmW4FC6C74NpJmw`
+- 🪙 **FIZZ Token**: [fizzQBcaFLKjCoZ8Ppfkw2Xa7vH2pmW4FC6C74NpJmw](https://explorer.solana.com/address/fizzQBcaFLKjCoZ8Ppfkw2Xa7vH2pmW4FC6C74NpJmw)
 
 ---
 

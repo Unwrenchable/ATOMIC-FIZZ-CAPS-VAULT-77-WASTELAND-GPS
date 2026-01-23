@@ -146,8 +146,8 @@ const signature = await wallet.signMessage(message);
 Allowed origins:
 - `https://www.atomicfizzcaps.xyz`
 - `https://atomicfizzcaps.xyz`
-- `https://*.vercel.app` (preview)
-- `http://localhost:*` (development)
+- Vercel preview deployments (verified via header)
+- `http://localhost:*` (development only)
 
 ### Request Validation
 
@@ -162,14 +162,14 @@ All inputs validated server-side:
 
 ### Reviewed Areas
 
-| Area | Status | Risk Level |
-|------|--------|------------|
-| Client-Side Security | ✅ Reviewed | MEDIUM |
-| Secret Protection | ✅ Implemented | LOW |
-| DevTools Detection | ✅ Active | LOW |
-| Code Obfuscation | ✅ Applied | LOW |
-| Authentication | ✅ Secure | LOW |
-| Data Storage | ✅ Reviewed | MEDIUM |
+| Area | Status | Risk Level | Notes |
+|------|--------|------------|-------|
+| Client-Side Security | ✅ Reviewed | MEDIUM | Input validation, XSS prevention |
+| Secret Protection | ✅ Implemented | LOW | Obfuscation for Easter eggs |
+| DevTools Detection | ✅ Active | LOW | Deterrence only |
+| Code Obfuscation | ✅ Applied | LOW | Key sequences hidden |
+| Authentication | ✅ Secure | LOW | Ed25519 wallet signatures |
+| Data Storage | ✅ Reviewed | MEDIUM | Redis for sessions, localStorage for client state |
 
 ### Compliance Checklist
 
