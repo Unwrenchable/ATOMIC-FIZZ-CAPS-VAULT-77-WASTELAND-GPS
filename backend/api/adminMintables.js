@@ -2,6 +2,11 @@
 const express = require("express");
 const router = express.Router();
 const { redis, key } = require("../lib/redis");
+const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
+
+// Apply admin auth and rate limiting to all routes in this router
+router.use(adminRateLimiter);
+router.use(requireAdmin);
 
 // Load all mintables
 async function loadMintables() {
@@ -34,6 +39,7 @@ router.post("/save", async (req, res) => {
     }
 
     await saveMintables(mintables);
+    console.log("[adminMintables] Mintables updated by admin");
     res.json({ ok: true });
   } catch (err) {
     console.error("[adminMintables] save error:", err);
