@@ -1,0 +1,9 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Motel building -->
+  <rect x="3" y="8" width="18" height="12" fill="currentColor"/>
+  <rect x="5" y="10" width="3" height="4" fill="white"/>
+  <rect x="10" y="10" width="3" height="4" fill="white"/>
+  <rect x="15" y="10" width="3" height="4" fill="white"/>
+  <rect x="9" y="16" width="6" height="4" fill="white"/>
+  <text x="12" y="6" fill="currentColor" font-size="4" text-anchor="middle">MOTEL</text>
+</svg>

@@ -12,7 +12,7 @@
     V9
     C17 6 15 4 12 4
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Eyes -->
   <circle cx="10" cy="9" r="1" fill="white"/>

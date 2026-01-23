@@ -10,7 +10,7 @@
     V10
     C18 6.5 15.5 4 12 4
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Eyes -->
   <circle cx="9.5" cy="10" r="1.2" fill="white"/>

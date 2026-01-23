@@ -7,34 +7,62 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // ============================================================
+  // STARTER GEAR - Items players begin with
+  // ============================================================
+  const STARTER_GEAR = [
+    { id: "vault77_sidearm", name: "Vault 77 Security Sidearm", type: "weapon", equipped: false },
+    { id: "vault77_jumpsuit", name: "Vault 77 Jumpsuit", type: "armor", equipped: false },
+    { id: "stimpak", name: "Stimpak", type: "consumable", quantity: 3 },
+    { id: "dirty_water", name: "Dirty Water", type: "consumable", quantity: 2 },
+    { id: "bobby_pin", name: "Bobby Pin", type: "tool", quantity: 5 },
+    { id: "ammo_9mm", name: "9mm Rounds", type: "ammo", quantity: 24 }
+  ];
+
+  // ============================================================
+  // QUEST TRIGGER TYPES:
+  // - "npc"      : Delivered by an NPC who approaches player
+  // - "location" : Triggered when player visits a specific location
+  // - "item"     : Triggered when player picks up a specific item
+  // - "auto"     : Starts automatically (tutorial quests)
+  // - "manual"   : Must be manually started (debug/admin)
+  // ============================================================
+
+  // ============================================================
+  // QUESTS DATABASE
+  // ============================================================
   const QUESTS_DB = {
     wake_up: {
       id: "wake_up",
       name: "Wake Up",
       type: "objectives",
-      description: "You awaken in the wasteland. Something is wrong with this timeline.",
+      triggerType: "npc",           // Delivered by NPC courier
+      triggerNpc: "courier_pip",    // The courier NPC who delivers this quest
+      description: "You awaken in the wasteland. A courier has arrived with an urgent message.",
+      npcMessage: "Hey, you! You're finally awake. Got a message for you from Vault-Tec. Says you need to get your bearings. Check your gear, tune your radio, and figure out where you are. The wasteland ain't friendly to the unprepared.",
       objectives: {
         open_inventory: { text: "Open your inventory" },
-        switch_tabs: { text: "Cycle through the Pip-Boy tabs" },
-        pick_item: { text: "Pick up an item" },
-        equip_item: { text: "Equip an item" },
+        equip_weapon: { text: "Equip your Vault 77 Sidearm" },
+        equip_armor: { text: "Equip your Vault 77 Jumpsuit" },
         turn_on_radio: { text: "Tune into Atomic Fizz Radio" },
         open_map: { text: "Check your map" }
       },
       order: [
         "open_inventory",
-        "switch_tabs",
-        "pick_item",
-        "equip_item",
+        "equip_weapon",
+        "equip_armor",
         "turn_on_radio",
         "open_map"
       ],
-      rewards: { xp: 50, caps: 10 }
+      rewards: { xp: 50, caps: 25 }
     },
+    
     quest_vault77_open: {
       id: "quest_vault77_open",
       name: "Open Vault 77",
       type: "steps",
+      triggerType: "location",       // Triggered by visiting location
+      triggerLocation: "vault77_entrance",
       description: "Find a way to unlock Vault 77.",
       steps: [
         {
@@ -53,17 +81,298 @@
         caps: 50,
         items: []
       }
+    },
+
+    quest_lost_signal: {
+      id: "quest_lost_signal",
+      name: "Lost Signal",
+      type: "steps",
+      triggerType: "item",           // Triggered by finding an item
+      triggerItem: "broken_radio_beacon",
+      description: "You found a damaged radio beacon. Someone might need help.",
+      steps: [
+        {
+          id: "repair_beacon",
+          description: "Repair the radio beacon.",
+          requires: { item: "circuit_board" }
+        },
+        {
+          id: "follow_signal",
+          description: "Follow the beacon's signal.",
+          requires: { location: "signal_source" }
+        }
+      ],
+      rewards: {
+        xp: 75,
+        caps: 30,
+        items: ["stimpak"]
+      }
     }
   };
 
+  // ============================================================
+  // QUEST STATE TRACKING
+  // ============================================================
+  // Available quests are quests that have been offered but not yet accepted
+  // Format: { questId: { offeredBy: npcId|locationId|itemId, offeredAt: timestamp, message: string } }
+
   const questsModule = {
     gs: null,
+    starterGearGiven: false,
+    availableQuests: {},  // Quests offered but not accepted yet
 
     init(gameState) {
       this.gs = gameState || window.gameState || window.DATA || {};
       if (!this.gs.quests) this.gs.quests = {};
       if (!this.gs.player) this.gs.player = { xp: 0, caps: 0 };
+      if (!this.gs.inventory) this.gs.inventory = { weapons: [], armor: [], consumables: [], ammo: [], tools: [], questItems: [] };
+      
+      // Load saved available quests
+      this.loadAvailableQuests();
+      
+      // Give starter gear on first init
+      this.giveStarterGear();
+      
+      // Auto-trigger the wake_up quest courier on first load
+      this.triggerNPCQuestDelivery("wake_up");
     },
+
+    // ============================================================
+    // STARTER GEAR SYSTEM
+    // ============================================================
+    giveStarterGear() {
+      // Check if we've already given starter gear (stored in localStorage)
+      const starterKey = "afc_starter_gear_given";
+      if (localStorage.getItem(starterKey)) {
+        this.starterGearGiven = true;
+        return;
+      }
+
+      console.log("[quests] Giving starter gear to new player");
+
+      // Add each starter item to appropriate inventory category
+      STARTER_GEAR.forEach(item => {
+        const invItem = {
+          id: item.id,
+          name: item.name,
+          type: item.type,
+          quantity: item.quantity || 1,
+          equipped: item.equipped || false
+        };
+
+        // Add to appropriate inventory category
+        switch (item.type) {
+          case "weapon":
+            if (!this.gs.inventory.weapons) this.gs.inventory.weapons = [];
+            this.gs.inventory.weapons.push(invItem);
+            break;
+          case "armor":
+            if (!this.gs.inventory.armor) this.gs.inventory.armor = [];
+            this.gs.inventory.armor.push(invItem);
+            break;
+          case "consumable":
+            if (!this.gs.inventory.consumables) this.gs.inventory.consumables = [];
+            this.gs.inventory.consumables.push(invItem);
+            break;
+          case "ammo":
+            if (!this.gs.inventory.ammo) this.gs.inventory.ammo = [];
+            this.gs.inventory.ammo.push(invItem);
+            break;
+          case "tool":
+            if (!this.gs.inventory.tools) this.gs.inventory.tools = [];
+            this.gs.inventory.tools.push(invItem);
+            break;
+          default:
+            if (!this.gs.inventory.misc) this.gs.inventory.misc = [];
+            this.gs.inventory.misc.push(invItem);
+        }
+      });
+
+      // Mark as given
+      localStorage.setItem(starterKey, "true");
+      this.starterGearGiven = true;
+
+      // Dispatch event for UI to update
+      window.dispatchEvent(new CustomEvent("inventoryUpdated", { detail: { reason: "starter_gear" } }));
+    },
+
+    // ============================================================
+    // QUEST TRIGGER SYSTEM
+    // ============================================================
+
+    // Trigger a quest delivered by NPC
+    triggerNPCQuestDelivery(questId) {
+      const quest = QUESTS_DB[questId];
+      if (!quest || quest.triggerType !== "npc") return false;
+
+      const st = this.ensureQuestState(questId);
+      if (st.state !== "not_started") return false; // Already started or completed
+
+      // Add to available quests (waiting for player to accept)
+      this.availableQuests[questId] = {
+        offeredBy: quest.triggerNpc,
+        offeredAt: Date.now(),
+        message: quest.npcMessage || `${quest.triggerNpc} has a quest for you: ${quest.name}`,
+        type: "npc"
+      };
+
+      this.saveAvailableQuests();
+
+      // Show NPC approach notification
+      this.showQuestOfferNotification(questId);
+
+      console.log("[quests] NPC quest offered:", questId, "by", quest.triggerNpc);
+      return true;
+    },
+
+    // Trigger a quest when visiting a location
+    triggerLocationQuest(locationId) {
+      // Find quests that trigger at this location
+      Object.values(QUESTS_DB).forEach(quest => {
+        if (quest.triggerType === "location" && quest.triggerLocation === locationId) {
+          const st = this.ensureQuestState(quest.id);
+          if (st.state === "not_started") {
+            this.availableQuests[quest.id] = {
+              offeredBy: locationId,
+              offeredAt: Date.now(),
+              message: `You discovered something at ${locationId}. ${quest.description}`,
+              type: "location"
+            };
+            this.saveAvailableQuests();
+            this.showQuestOfferNotification(quest.id);
+            console.log("[quests] Location quest triggered:", quest.id, "at", locationId);
+          }
+        }
+      });
+    },
+
+    // Trigger a quest when picking up an item
+    triggerItemQuest(itemId) {
+      // Find quests that trigger when finding this item
+      Object.values(QUESTS_DB).forEach(quest => {
+        if (quest.triggerType === "item" && quest.triggerItem === itemId) {
+          const st = this.ensureQuestState(quest.id);
+          if (st.state === "not_started") {
+            this.availableQuests[quest.id] = {
+              offeredBy: itemId,
+              offeredAt: Date.now(),
+              message: `You found ${itemId}. ${quest.description}`,
+              type: "item"
+            };
+            this.saveAvailableQuests();
+            this.showQuestOfferNotification(quest.id);
+            console.log("[quests] Item quest triggered:", quest.id, "by", itemId);
+          }
+        }
+      });
+    },
+
+    // ============================================================
+    // QUEST ACCEPTANCE SYSTEM
+    // ============================================================
+
+    // Accept a quest that has been offered
+    acceptQuest(questId) {
+      if (!this.availableQuests[questId]) {
+        console.warn("[quests] Quest not available to accept:", questId);
+        return false;
+      }
+
+      // Remove from available and start the quest
+      delete this.availableQuests[questId];
+      this.saveAvailableQuests();
+
+      const started = this.startQuest(questId);
+      if (started) {
+        this.showQuestAcceptedNotification(questId);
+      }
+      return started;
+    },
+
+    // Decline a quest offer
+    declineQuest(questId) {
+      if (!this.availableQuests[questId]) return false;
+
+      delete this.availableQuests[questId];
+      this.saveAvailableQuests();
+
+      console.log("[quests] Quest declined:", questId);
+      return true;
+    },
+
+    // Get all available (offered but not accepted) quests
+    getAvailableQuests() {
+      return Object.keys(this.availableQuests).map(questId => ({
+        ...QUESTS_DB[questId],
+        offer: this.availableQuests[questId]
+      }));
+    },
+
+    // ============================================================
+    // NOTIFICATIONS
+    // ============================================================
+
+    showQuestOfferNotification(questId) {
+      const quest = QUESTS_DB[questId];
+      const offer = this.availableQuests[questId];
+      if (!quest || !offer) return;
+
+      // Dispatch event for UI to handle
+      window.dispatchEvent(new CustomEvent("questOffered", {
+        detail: {
+          questId: questId,
+          questName: quest.name,
+          message: offer.message,
+          npc: offer.type === "npc" ? offer.offeredBy : null
+        }
+      }));
+
+      // Also show in map message if worldmap is available
+      if (Game.modules?.worldmap?.showMapMessage) {
+        Game.modules.worldmap.showMapMessage(`NEW QUEST AVAILABLE: ${quest.name}`);
+      }
+    },
+
+    showQuestAcceptedNotification(questId) {
+      const quest = QUESTS_DB[questId];
+      if (!quest) return;
+
+      window.dispatchEvent(new CustomEvent("questAccepted", {
+        detail: {
+          questId: questId,
+          questName: quest.name
+        }
+      }));
+
+      if (Game.modules?.worldmap?.showMapMessage) {
+        Game.modules.worldmap.showMapMessage(`QUEST STARTED: ${quest.name}`);
+      }
+    },
+
+    // ============================================================
+    // PERSISTENCE
+    // ============================================================
+
+    saveAvailableQuests() {
+      try {
+        localStorage.setItem("afc_available_quests", JSON.stringify(this.availableQuests));
+      } catch (e) {
+        console.warn("[quests] Failed to save available quests:", e);
+      }
+    },
+
+    loadAvailableQuests() {
+      try {
+        const saved = localStorage.getItem("afc_available_quests");
+        if (saved) {
+          this.availableQuests = JSON.parse(saved);
+        }
+      } catch (e) {
+        console.warn("[quests] Failed to load available quests:", e);
+        this.availableQuests = {};
+      }
+    },
+
 
     ensureGameState() {
       if (!this.gs) {
@@ -255,10 +564,64 @@
 
         container.appendChild(div);
       });
+
+      // Show available quests (offered but not accepted)
+      const availableQuestsSection = document.createElement("div");
+      availableQuestsSection.className = "available-quests-section";
+      
+      const availableList = this.getAvailableQuests();
+      if (availableList.length > 0) {
+        availableQuestsSection.innerHTML = `<h2 style="color: #ffaa00;">AVAILABLE QUESTS</h2>`;
+        
+        availableList.forEach(q => {
+          const questDiv = document.createElement("div");
+          questDiv.className = "quest-entry quest-available";
+          questDiv.innerHTML = `
+            <h3 style="color: #ffaa00;">${q.name}</h3>
+            <p>${q.offer.message}</p>
+            <p><em>${q.description}</em></p>
+            <div class="quest-actions" style="margin-top: 8px;">
+              <button class="pipboy-button-small quest-accept-btn" data-quest-id="${q.id}">ACCEPT</button>
+              <button class="pipboy-button-small quest-decline-btn" data-quest-id="${q.id}" style="margin-left: 8px; opacity: 0.7;">DECLINE</button>
+            </div>
+          `;
+          availableQuestsSection.appendChild(questDiv);
+        });
+
+        container.insertBefore(availableQuestsSection, container.firstChild);
+
+        // Add event listeners for accept/decline buttons
+        container.querySelectorAll(".quest-accept-btn").forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            const questId = e.target.getAttribute("data-quest-id");
+            this.acceptQuest(questId);
+            this.onOpen(); // Refresh the UI
+          });
+        });
+
+        container.querySelectorAll(".quest-decline-btn").forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            const questId = e.target.getAttribute("data-quest-id");
+            this.declineQuest(questId);
+            this.onOpen(); // Refresh the UI
+          });
+        });
+      }
+    },
+
+    // Get starter gear list (for UI display)
+    getStarterGear() {
+      return STARTER_GEAR;
+    },
+
+    // Check if player has starter gear
+    hasStarterGear() {
+      return this.starterGearGiven || !!localStorage.getItem("afc_starter_gear_given");
     },
 
     // Expose quest database for quest-ui.js
-    QUESTS_DB: QUESTS_DB
+    QUESTS_DB: QUESTS_DB,
+    STARTER_GEAR: STARTER_GEAR
   };
 
   Game.modules.quests = questsModule;

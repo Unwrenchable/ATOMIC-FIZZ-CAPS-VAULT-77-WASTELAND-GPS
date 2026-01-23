@@ -1,10 +1,10 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Wasteland/post-apocalyptic -->
-  <circle cx="18" cy="6" r="3" fill="black"/>
+  <circle cx="18" cy="6" r="3" fill="currentColor"/>
   <!-- Dead tree -->
-  <path d="M8 20 L8 10 L5 6 M8 10 L11 7 M8 12 L6 10 M8 14 L10 12" stroke="black" stroke-width="2" fill="none"/>
+  <path d="M8 20 L8 10 L5 6 M8 10 L11 7 M8 12 L6 10 M8 14 L10 12" stroke="currentColor" stroke-width="2" fill="none"/>
   <!-- Ground -->
-  <path d="M2 20 Q6 18 12 20 Q18 18 22 20" stroke="black" stroke-width="2" fill="none"/>
+  <path d="M2 20 Q6 18 12 20 Q18 18 22 20" stroke="currentColor" stroke-width="2" fill="none"/>
   <!-- Skull -->
-  <circle cx="16" cy="18" r="2" fill="black"/>
+  <circle cx="16" cy="18" r="2" fill="currentColor"/>
 </svg>

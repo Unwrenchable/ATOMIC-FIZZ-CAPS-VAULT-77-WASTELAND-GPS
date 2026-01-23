@@ -8,13 +8,13 @@
     C20 17 17 19 12 19
     C7 19 4 17 4 14
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Spikes / twigs -->
-  <path d="M6 12 L3 11" stroke="black" stroke-width="2" stroke-linecap="round"/>
-  <path d="M18 12 L21 11" stroke="black" stroke-width="2" stroke-linecap="round"/>
-  <path d="M8 9 L6 7" stroke="black" stroke-width="2" stroke-linecap="round"/>
-  <path d="M16 9 L18 7" stroke="black" stroke-width="2" stroke-linecap="round"/>
+  <path d="M6 12 L3 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M18 12 L21 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M8 9 L6 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M16 9 L18 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
 
   <!-- Egg cutouts -->
   <ellipse cx="10" cy="14" rx="1.4" ry="2" fill="white"/>

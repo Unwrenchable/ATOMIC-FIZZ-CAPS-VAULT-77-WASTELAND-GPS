@@ -1,12 +1,12 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Metro/subway entrance -->
-  <rect x="4" y="10" width="16" height="10" fill="black"/>
+  <rect x="4" y="10" width="16" height="10" fill="currentColor"/>
   <!-- Entrance arch -->
   <path d="M6 20 L6 14 Q12 10 18 14 L18 20" fill="white"/>
   <!-- M sign -->
-  <rect x="8" y="5" width="8" height="5" fill="black"/>
+  <rect x="8" y="5" width="8" height="5" fill="currentColor"/>
   <path d="M9 9 L9 6 L11 8 L13 6 L15 8 L15 6" stroke="white" stroke-width="1.5" fill="none"/>
   <!-- Steps -->
-  <rect x="8" y="16" width="8" height="1" fill="black"/>
-  <rect x="8" y="18" width="8" height="1" fill="black"/>
+  <rect x="8" y="16" width="8" height="1" fill="currentColor"/>
+  <rect x="8" y="18" width="8" height="1" fill="currentColor"/>
 </svg>

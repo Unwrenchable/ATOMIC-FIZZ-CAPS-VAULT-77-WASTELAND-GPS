@@ -1,9 +1,9 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Hospital building -->
-  <rect x="4" y="8" width="16" height="12" fill="black"/>
+  <rect x="4" y="8" width="16" height="12" fill="currentColor"/>
   <!-- Red cross -->
   <rect x="10" y="10" width="4" height="8" fill="white"/>
   <rect x="8" y="12" width="8" height="4" fill="white"/>
   <!-- Roof -->
-  <polygon points="2,8 12,3 22,8" fill="black"/>
+  <polygon points="2,8 12,3 22,8" fill="currentColor"/>
 </svg>

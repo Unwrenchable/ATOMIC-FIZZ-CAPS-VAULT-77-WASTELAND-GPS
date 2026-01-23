@@ -1,12 +1,12 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Dock/pier -->
-  <rect x="2" y="14" width="20" height="3" fill="black"/>
+  <rect x="2" y="14" width="20" height="3" fill="currentColor"/>
   <!-- Support posts -->
-  <rect x="4" y="17" width="2" height="4" fill="black"/>
-  <rect x="11" y="17" width="2" height="4" fill="black"/>
-  <rect x="18" y="17" width="2" height="4" fill="black"/>
+  <rect x="4" y="17" width="2" height="4" fill="currentColor"/>
+  <rect x="11" y="17" width="2" height="4" fill="currentColor"/>
+  <rect x="18" y="17" width="2" height="4" fill="currentColor"/>
   <!-- Boat -->
-  <path d="M6 10 L6 14 L16 14 L16 10 Q11 8 6 10 Z" fill="black"/>
+  <path d="M6 10 L6 14 L16 14 L16 10 Q11 8 6 10 Z" fill="currentColor"/>
   <!-- Mast -->
-  <rect x="10" y="4" width="2" height="6" fill="black"/>
+  <rect x="10" y="4" width="2" height="6" fill="currentColor"/>
 </svg>

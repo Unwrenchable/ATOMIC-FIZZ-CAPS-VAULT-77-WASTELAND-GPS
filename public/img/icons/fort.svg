@@ -7,12 +7,12 @@
     V18
     H4
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Left battlements -->
-  <rect x="4" y="9" width="1" height="1" fill="black"/>
-  <rect x="5.5" y="9" width="1" height="1" fill="black"/>
-  <rect x="7" y="9" width="1" height="1" fill="black"/>
+  <rect x="4" y="9" width="1" height="1" fill="currentColor"/>
+  <rect x="5.5" y="9" width="1" height="1" fill="currentColor"/>
+  <rect x="7" y="9" width="1" height="1" fill="currentColor"/>
 
   <!-- Right tower -->
   <path d="
@@ -21,12 +21,12 @@
     V18
     H17
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Right battlements -->
-  <rect x="17" y="9" width="1" height="1" fill="black"/>
-  <rect x="18.5" y="9" width="1" height="1" fill="black"/>
-  <rect x="20" y="9" width="1" height="1" fill="black"/>
+  <rect x="17" y="9" width="1" height="1" fill="currentColor"/>
+  <rect x="18.5" y="9" width="1" height="1" fill="currentColor"/>
+  <rect x="20" y="9" width="1" height="1" fill="currentColor"/>
 
   <!-- Center wall -->
   <path d="
@@ -35,7 +35,7 @@
     V18
     H7
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Gate cutout -->
   <path d="

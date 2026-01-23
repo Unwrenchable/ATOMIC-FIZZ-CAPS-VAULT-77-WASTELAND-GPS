@@ -8,7 +8,7 @@
     V18
     H5
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Barn body -->
   <path d="
@@ -18,7 +18,7 @@
     V18
     H11
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Barn door cutout -->
   <rect x="13" y="14" width="4" height="4" fill="white"/>

@@ -10,7 +10,7 @@
     V7.5
     C6 6 6.5 5 8 5
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Windows cutout -->
   <rect x="9" y="7" width="6" height="2.2" fill="white"/>
@@ -26,7 +26,7 @@
     H7.5
     L9 16
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <path d="
     M17 16
@@ -34,6 +34,6 @@
     H16.5
     L15 16
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
 </svg>

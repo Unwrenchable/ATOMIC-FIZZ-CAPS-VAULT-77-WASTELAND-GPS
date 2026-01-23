@@ -7,7 +7,7 @@
     V15
     H9
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Head -->
   <path d="
@@ -16,7 +16,7 @@
     V9
     H10
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Eye cutouts -->
   <circle cx="11" cy="7.5" r="0.8" fill="white"/>
@@ -35,7 +35,7 @@
     V14
     H15
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Legs -->
   <path d="
@@ -50,7 +50,7 @@
     V19
     H12
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Foot cutouts -->
   <rect x="10" y="18" width="2" height="1" fill="white"/>

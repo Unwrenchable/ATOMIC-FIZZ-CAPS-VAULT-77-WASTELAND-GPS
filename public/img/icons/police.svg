@@ -1,10 +1,10 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Police station -->
-  <rect x="4" y="10" width="16" height="10" fill="black"/>
+  <rect x="4" y="10" width="16" height="10" fill="currentColor"/>
   <!-- Roof -->
-  <polygon points="4,10 12,5 20,10" fill="black"/>
+  <polygon points="4,10 12,5 20,10" fill="currentColor"/>
   <!-- Badge/shield -->
   <path d="M12 12 L15 13 L15 16 L12 18 L9 16 L9 13 Z" fill="white"/>
   <!-- Star in badge -->
-  <polygon points="12,13 12.5,14.5 14,14.5 13,15.5 13.5,17 12,16 10.5,17 11,15.5 10,14.5 11.5,14.5" fill="black"/>
+  <polygon points="12,13 12.5,14.5 14,14.5 13,15.5 13.5,17 12,16 10.5,17 11,15.5 10,14.5 11.5,14.5" fill="currentColor"/>
 </svg>
