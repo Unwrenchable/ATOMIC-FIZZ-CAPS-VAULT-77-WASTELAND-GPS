@@ -110,5 +110,7 @@
   "wasteland": "wasteland.svg",
   "wilderness": "wilderness.svg",
   "facility": "facility.svg",
-  "poolhall": "poolhall.svg"
+  "poolhall": "poolhall.svg",
+  "8ball": "8ball.svg",
+  "poolCuesCrossed": "pool-cues-crossed.svg"
 }
