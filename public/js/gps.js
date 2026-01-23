@@ -8,6 +8,7 @@ Game.gps = {
   coords: { lat: null, lng: null },
   ready: false,
   watchId: null,
+  snapToPlayer: true, // Enable auto-snap to player position
 
   // Called only after worldmap is ready
   init() {
@@ -17,11 +18,13 @@ Game.gps = {
     console.log("[gps] init (delayed until map-ready)");
 
     this.startWatch();
+    this.updateGPSBadge('acquiring');
   },
 
   startWatch() {
     if (!navigator.geolocation) {
       console.warn("[gps] Geolocation not supported");
+      this.updateGPSBadge('unavailable');
       return;
     }
 
@@ -32,21 +35,25 @@ Game.gps = {
 
     this.watchId = navigator.geolocation.watchPosition(
       (pos) => this.handlePosition(pos),
-      (err) => console.warn("[gps] Error:", err.message),
+      (err) => {
+        console.warn("[gps] Error:", err.message);
+        this.updateGPSBadge('error');
+      },
       {
         enableHighAccuracy: true,
-        maximumAge: 3000,
-        timeout: 10000
+        maximumAge: 2000,
+        timeout: 15000
       }
     );
   },
 
   handlePosition(pos) {
-    const { latitude, longitude } = pos.coords;
+    const { latitude, longitude, accuracy } = pos.coords;
 
     // Sanity check
     if (typeof latitude !== "number" || typeof longitude !== "number") {
       console.warn("[gps] Invalid coords");
+      this.updateGPSBadge('error');
       return;
     }
 
@@ -58,15 +65,67 @@ Game.gps = {
     if (!gameState.player) gameState.player = {};
     gameState.player.position = { lat: latitude, lng: longitude };
 
-    // Update worldmap only if it's fully ready
-    if (window.worldmap && worldmap.map && worldmap.updatePlayerPosition) {
+    // Update GPS badge with accuracy
+    this.updateGPSBadge(accuracy < 50 ? 'good' : 'fair');
+
+    // Update worldmap - use correct path to module
+    const worldmap = window.Game?.modules?.worldmap;
+    if (worldmap && worldmap.map && worldmap.updatePlayerPosition) {
       worldmap.updatePlayerPosition(latitude, longitude, { fromGPS: true });
+      
+      // Force snap to player if enabled
+      if (this.snapToPlayer && worldmap.centerOnPlayer) {
+        worldmap.autoFollowEnabled = true;
+        worldmap.centerOnPlayer(true);
+      }
+    }
+  },
+
+  updateGPSBadge(status) {
+    const dot = document.getElementById('accDot');
+    const text = document.getElementById('accText');
+    
+    if (!dot || !text) return;
+
+    // Remove all status classes
+    dot.classList.remove('acc-good', 'acc-bad', 'acc-fair');
+
+    switch (status) {
+      case 'good':
+        dot.classList.add('acc-good');
+        text.textContent = 'GPS: LOCKED';
+        break;
+      case 'fair':
+        dot.classList.add('acc-fair');
+        text.textContent = 'GPS: TRACKING';
+        break;
+      case 'acquiring':
+        dot.classList.add('acc-fair');
+        text.textContent = 'GPS: ACQUIRING...';
+        break;
+      case 'error':
+        dot.classList.add('acc-bad');
+        text.textContent = 'GPS: ERROR';
+        break;
+      case 'unavailable':
+        dot.classList.add('acc-bad');
+        text.textContent = 'GPS: UNAVAILABLE';
+        break;
+      default:
+        dot.classList.add('acc-bad');
+        text.textContent = 'GPS: OFFLINE';
     }
   },
 
   // Used by worldmap.js
   ensurePlayerPosition() {
     return this.coords;
+  },
+
+  // Toggle snap-to-player behavior
+  setSnapToPlayer(enabled) {
+    this.snapToPlayer = enabled;
+    console.log("[gps] snapToPlayer:", enabled);
   }
 };
 

@@ -3,12 +3,13 @@
    Mix of Fallout 1 (isometric green CRT) & New Vegas (world map)
    ============================================================================ */
 
-/* Map Container - Green CRT glow */
+/* Map Container - Green CRT glow - FILLS PANEL */
 .pipboy-map {
   position: relative;
   width: 100%;
-  height: 500px;
-  background: #000;
+  height: 100%;
+  min-height: 200px;
+  background: #0a120a;
   border: 2px solid #00ff41;
   box-shadow: 
     inset 0 0 20px rgba(0, 255, 65, 0.3),
@@ -27,50 +28,42 @@
   opacity: 0.85;
 }
 
-/* POI Markers - Fallout style with scan effect */
+/* POI Markers - Fallout style with contained glow (no bleed) */
 .poi-marker {
-  filter: 
-    drop-shadow(0 0 3px #00ff41)
-    drop-shadow(0 0 8px #00ff41);
-  animation: poi-pulse 2s ease-in-out infinite;
+  opacity: 0.95;
 }
 
-@keyframes poi-pulse {
-  0%, 100% { 
-    opacity: 0.9;
-    filter: 
-      drop-shadow(0 0 3px #00ff41)
-      drop-shadow(0 0 8px #00ff41);
-  }
-  50% { 
-    opacity: 1;
-    filter: 
-      drop-shadow(0 0 5px #00ff41)
-      drop-shadow(0 0 12px #00ff41)
-      drop-shadow(0 0 15px #00ff41);
-  }
+/* POI Marker SVG icons - ensure visibility and proper sizing */
+.poi-marker img,
+.poi-marker svg {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  min-height: 32px;
+  /* Convert black SVGs to green - contained glow via box-shadow on wrapper */
+  filter: brightness(0) saturate(100%) invert(89%) sepia(11%) saturate(1984%) hue-rotate(70deg) brightness(101%) contrast(101%);
 }
 
-/* Player marker - bright cyan like Pip-Boy cursor */
-.leaflet-marker-icon[src*="player"] {
-  filter: 
-    brightness(1.4)
-    drop-shadow(0 0 5px #00d4ff)
-    drop-shadow(0 0 10px #00d4ff)
-    drop-shadow(0 0 15px #00d4ff);
-  animation: player-beacon 1.5s ease-in-out infinite;
+/* Contained glow wrapper for POI markers */
+.leaflet-marker-icon.poi-marker {
+  background: radial-gradient(circle, rgba(0, 255, 65, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  padding: 4px;
+}
+
+/* Player marker - bright cyan like Pip-Boy cursor (contained glow) */
+.leaflet-marker-icon[src*="player"],
+.player-marker {
   z-index: 1000 !important;
+  width: 40px !important;
+  height: 40px !important;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.25) 0%, transparent 60%);
+  border-radius: 50%;
 }
 
-@keyframes player-beacon {
-  0%, 100% { 
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% { 
-    transform: scale(1.1);
-    opacity: 0.9;
-  }
+.leaflet-marker-icon[src*="player"] img,
+.player-marker img {
+  filter: brightness(1.3) saturate(1.2);
 }
 
 /* Fallout 1 style grid overlay */
@@ -110,14 +103,15 @@
   bottom: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 255, 65, 0.05) 0%,
+    rgba(0, 255, 65, 0.03) 0%,
     transparent 50%,
-    rgba(0, 255, 65, 0.05) 100%
+    rgba(0, 255, 65, 0.03) 100%
   );
   background-size: 100% 4px;
-  animation: scan-line 8s linear infinite;
+  animation: scan-line 12s linear infinite;
   pointer-events: none;
   z-index: 450;
+  opacity: 0.5;
 }
 
 @keyframes scan-line {
@@ -161,59 +155,33 @@
   text-shadow: 0 0 8px #ffaa00;
 }
 
-/* Roads/highways - like New Vegas map */
+/* Roads/highways - like New Vegas map (no animation, clean lines) */
 .pipboy-road {
   stroke: #00ff41 !important;
   stroke-width: 2 !important;
-  opacity: 0.7 !important;
-  filter: drop-shadow(0 0 3px #00ff41);
-  animation: road-pulse 3s ease-in-out infinite;
+  opacity: 0.75 !important;
 }
 
-@keyframes road-pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.9; }
-}
-
-/* Quest markers - golden glow like New Vegas */
+/* Quest markers - golden glow like New Vegas (contained) */
 .quest-marker {
-  filter: 
-    drop-shadow(0 0 5px #ffaa00)
-    drop-shadow(0 0 10px #ffaa00)
-    drop-shadow(0 0 15px #ffaa00);
-  animation: quest-pulse 1s ease-in-out infinite;
   z-index: 900 !important;
+  width: 36px !important;
+  height: 36px !important;
+  background: radial-gradient(circle, rgba(255, 170, 0, 0.2) 0%, transparent 60%);
+  border-radius: 50%;
 }
 
-@keyframes quest-pulse {
-  0%, 100% { 
-    transform: scale(1) translateY(0);
-    opacity: 0.9;
-  }
-  50% { 
-    transform: scale(1.15) translateY(-2px);
-    opacity: 1;
-  }
+.quest-marker img,
+.quest-marker svg {
+  filter: brightness(0) saturate(100%) invert(73%) sepia(97%) saturate(1000%) hue-rotate(360deg) brightness(103%) contrast(106%);
 }
 
-/* Radiation zones - green hazard glow */
+/* Radiation zones - green hazard (no animation, subtle fill) */
 .radiation-zone {
-  fill: rgba(0, 255, 65, 0.15) !important;
+  fill: rgba(0, 255, 65, 0.08) !important;
   stroke: #00ff41 !important;
-  stroke-width: 2 !important;
-  filter: drop-shadow(0 0 10px rgba(0, 255, 65, 0.5));
-  animation: rad-pulse 2s ease-in-out infinite;
-}
-
-@keyframes rad-pulse {
-  0%, 100% { 
-    fill-opacity: 0.15;
-    stroke-opacity: 0.7;
-  }
-  50% { 
-    fill-opacity: 0.25;
-    stroke-opacity: 1;
-  }
+  stroke-width: 1.5 !important;
+  stroke-opacity: 0.6 !important;
 }
 
 /* Faction territories - color-coded like New Vegas rep system */
@@ -280,16 +248,17 @@
 .weather-radstorm {
   background: radial-gradient(
     circle at center,
-    rgba(0, 255, 65, 0.2),
-    rgba(0, 255, 65, 0.05),
+    rgba(0, 255, 65, 0.1),
+    rgba(0, 255, 65, 0.03),
     transparent
   );
-  animation: rad-storm 3s ease-in-out infinite;
+  animation: rad-storm 6s ease-in-out infinite;
+  opacity: 0.4;
 }
 
 @keyframes rad-storm {
   0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.6; }
+  50% { opacity: 0.5; }
 }
 
 /* Discovery banner - New Vegas style notification */
@@ -334,42 +303,90 @@
   height: 6px;
   background: #00d4ff;
   border-radius: 50%;
-  box-shadow: 0 0 5px #00d4ff, 0 0 10px #00d4ff;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
-/* Loot scanner pulse effect */
+/* Loot scanner pulse effect - disabled by default, enable via JS when needed */
 .loot-scanner-pulse {
   position: absolute;
-  border: 2px solid #00ff41;
+  border: 1px solid #00ff41;
   border-radius: 50%;
-  animation: scanner-pulse 2s ease-out infinite;
+  animation: scanner-pulse 3s ease-out;
   pointer-events: none;
   z-index: 450;
+  opacity: 0.6;
 }
 
 @keyframes scanner-pulse {
   0% {
     width: 0;
     height: 0;
-    opacity: 1;
+    opacity: 0.6;
   }
   100% {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     opacity: 0;
   }
 }
 
-/* Map status text - terminal style */
+/* Map status text - terminal style (no flicker) */
 .map-status {
   color: #00ff41 !important;
-  text-shadow: 0 0 5px #00ff41;
   font-family: 'VT323', monospace !important;
-  animation: text-flicker 0.1s infinite;
 }
 
-@keyframes text-flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.95; }
+/* ============================================================================
+   PIPBOY MARKER DOTS (for locations)
+   ============================================================================ */
+
+.pipboy-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.pipboy-marker-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00ff41;
+  border: 2px solid rgba(0, 255, 65, 0.6);
+}
+
+.pipboy-marker-dot.epic {
+  background: #d900ff;
+  border-color: rgba(217, 0, 255, 0.6);
+}
+
+.pipboy-marker-dot.legendary {
+  background: #ffaa00;
+  border-color: rgba(255, 170, 0, 0.6);
+}
+
+.pipboy-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* ============================================================================
+   LEAFLET MARKER FIXES - Ensure proper sizing
+   ============================================================================ */
+
+.leaflet-marker-icon {
+  background: transparent;
+  border: none;
+}
+
+.leaflet-marker-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Ensure all SVG icons are visible on dark background */
+.leaflet-marker-icon img[src$=".svg"] {
+  filter: brightness(0) saturate(100%) invert(89%) sepia(11%) saturate(1984%) hue-rotate(70deg) brightness(101%) contrast(101%);
 }
