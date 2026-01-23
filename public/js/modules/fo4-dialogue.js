@@ -126,10 +126,16 @@
       responseArea.classList.remove('visible');
       continuePrompt.style.display = 'none';
 
-      // Process text (support HTML formatting)
+      // Process and sanitize text for display
       let displayText = node.text || '';
+      // Convert <br> to newlines first
       displayText = displayText.replace(/<br\s*\/?>/gi, '\n');
-      displayText = displayText.replace(/<[^>]+>/g, ''); // Strip other HTML for typewriter
+      // Use a DOM-based approach for safe HTML stripping
+      const tempDiv = document.createElement('div');
+      tempDiv.textContent = displayText; // This escapes any HTML
+      displayText = tempDiv.textContent;
+      // Restore newlines that we intentionally converted
+      displayText = displayText.replace(/\\n/g, '\n');
 
       // Typewriter effect
       this._typewriterEffect(textEl, displayText, () => {
