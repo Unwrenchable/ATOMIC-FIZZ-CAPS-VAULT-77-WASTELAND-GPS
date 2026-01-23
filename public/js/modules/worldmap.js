@@ -5,7 +5,7 @@
   if (!Game.modules) Game.modules = {};
 
   // ============================================================
-  // ICON FALLBACK MAPPING
+  // ICON FALLBACK MAPPING (Enhanced for Fallout authenticity)
   // Maps iconKey values that don't have SVG files to existing icons
   // ============================================================
   const ICON_FALLBACK_MAP = {
@@ -13,22 +13,106 @@
     'drifter': 'ghost',
     'courier': 'player',
     'wanderer': 'ghost',
+    'settler': 'settlement',
+    'wastelander': 'ghost',
+    'survivor': 'player',
     
     // Factions without dedicated icons
     'followers': 'medical',
     'institute': 'lab',
     'minutemen': 'settlement',
     'railroad': 'tunnel',
+    'brotherhood': 'bos',
+    'enclave_faction': 'enclave',
+    'ncr_faction': 'ncr',
+    'legion_faction': 'legion',
+    'gunners': 'raider',
+    'super_mutants': 'enemy',
     
     // Trading/Commerce
     'trader': 'trading',
     'merchant': 'market',
     'vendor': 'shop',
+    'caravan_stop': 'caravan',
+    'general_store': 'store',
+    
+    // Location types without dedicated icons
+    'office': 'city',
+    'apartment': 'city',
+    'residential': 'town',
+    'industrial': 'factory',
+    'research': 'lab',
+    'science': 'lab',
+    'medical_center': 'hospital',
+    'clinic_building': 'clinic',
+    'military_base': 'military',
+    'army': 'military',
+    'navy': 'military',
+    'air_force': 'airport',
+    'vault_entrance': 'vault',
+    'vault_door': 'vault',
+    'underground': 'tunnel',
+    'subway': 'metro',
+    'train': 'station',
+    'bus': 'station',
+    'gas': 'gasstation',
+    'fuel_station': 'gasstation',
+    'motel_sign': 'motel',
+    'inn': 'motel',
+    'bar_tavern': 'bar',
+    'saloon': 'bar',
+    'restaurant_cafe': 'restaurant',
+    'food': 'restaurant',
+    'church_chapel': 'church',
+    'religious': 'religion',
+    'cemetery_graveyard': 'cemetery',
+    'grave': 'graveyard',
+    'farm_field': 'farm',
+    'agricultural': 'farm',
+    'forest_woods': 'forest',
+    'wilderness_wild': 'wilderness',
+    'mountain_peak': 'mountain',
+    'hill': 'mountain',
+    'water_body': 'water',
+    'lake': 'water',
+    'river': 'water',
+    'ocean': 'water',
+    'dam': 'power',
+    'power_plant': 'power',
+    'nuclear': 'reactor',
+    'radiation': 'rad',
+    'danger_zone': 'danger',
+    'hazard': 'danger',
+    'warning': 'danger',
+    'raider_camp': 'raider',
+    'bandit': 'raider',
+    'gang': 'raider',
+    'ghoul_area': 'ghoul',
+    'feral': 'ghoul',
+    'boss_area': 'boss',
+    'boss_fight': 'boss',
+    'legendary': 'boss',
+    'quest_marker': 'quest',
+    'mission': 'quest',
+    'objective': 'quest',
+    'sidequest_marker': 'sidequest',
+    'loot_cache': 'loot',
+    'treasure': 'loot',
+    'stash': 'loot',
+    'supply_depot': 'supply',
+    'resources': 'supply',
+    'tools': 'toolbox',
+    'workshop': 'toolbox',
+    'scrap': 'scrapyard',
+    'junk': 'junkyard',
     
     // Null/Invalid fallback
     'null': 'poi',
     'undefined': 'poi',
-    '': 'poi'
+    '': 'poi',
+    'unknown': 'poi',
+    'default': 'poi',
+    'generic': 'poi'
   };
 
   // Get valid icon name with fallback
