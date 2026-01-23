@@ -5,6 +5,46 @@
 
 const API_BASE = "/api/auth";
 
+/**
+ * Safely parse a fetch response as JSON.
+ * Handles non-JSON responses (like HTML error pages) gracefully.
+ * @param {Response} response - The fetch response object
+ * @returns {Promise<Object>} - The parsed JSON object with ok/error fields
+ */
+async function safeJsonParse(response) {
+  // Check if response is OK first
+  if (!response.ok) {
+    // Try to get error message from response body
+    let errorMessage = `Server error: ${response.status} ${response.statusText}`;
+    try {
+      const text = await response.text();
+      // Try to parse as JSON in case the server returned a JSON error
+      try {
+        const json = JSON.parse(text);
+        if (json.error) errorMessage = json.error;
+        return { ok: false, error: errorMessage };
+      } catch {
+        // Not JSON - might be an HTML error page
+        // Extract meaningful text if it looks like an error message
+        if (text.length < 200 && !text.includes('<')) {
+          errorMessage = text;
+        }
+        return { ok: false, error: errorMessage };
+      }
+    } catch {
+      return { ok: false, error: errorMessage };
+    }
+  }
+
+  // Response is OK, try to parse JSON
+  try {
+    const text = await response.text();
+    return JSON.parse(text);
+  } catch (parseError) {
+    return { ok: false, error: "Invalid response from server (not JSON)" };
+  }
+}
+
 class AuthClient {
   constructor() {
     this.state = {
@@ -67,7 +107,7 @@ class AuthClient {
 
     // 1. Get nonce
     const nonceRes = await fetch(`${API_BASE}/nonce/${publicKey}`);
-    const nonceJson = await nonceRes.json();
+    const nonceJson = await safeJsonParse(nonceRes);
     if (!nonceJson.ok) throw new Error(nonceJson.error || "Failed to get nonce");
 
     const nonce = nonceJson.nonce;
@@ -88,7 +128,7 @@ class AuthClient {
       }),
     });
 
-    const verifyJson = await verifyRes.json();
+    const verifyJson = await safeJsonParse(verifyRes);
     if (!verifyJson.ok) throw new Error(verifyJson.error || "Signature verify failed");
 
     // 4. Save session
