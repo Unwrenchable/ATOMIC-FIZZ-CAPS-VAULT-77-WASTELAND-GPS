@@ -1,0 +1,12 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Religious building/temple -->
+  <rect x="5" y="10" width="14" height="10" fill="black"/>
+  <!-- Dome -->
+  <ellipse cx="12" cy="10" rx="6" ry="4" fill="black"/>
+  <!-- Spire -->
+  <polygon points="12,2 10,6 14,6" fill="black"/>
+  <!-- Door arch -->
+  <path d="M9 20 L9 15 Q12 12 15 15 L15 20" fill="white"/>
+  <!-- Symbol -->
+  <circle cx="12" cy="8" r="1.5" fill="white"/>
+</svg>

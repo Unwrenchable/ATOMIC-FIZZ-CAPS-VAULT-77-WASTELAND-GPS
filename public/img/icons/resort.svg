@@ -1,0 +1,14 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Resort building -->
+  <rect x="2" y="10" width="20" height="10" fill="black"/>
+  <!-- Palm trees -->
+  <path d="M4 10 Q2 6 5 4" stroke="black" stroke-width="1.5" fill="none"/>
+  <path d="M4 10 Q6 6 3 4" stroke="black" stroke-width="1.5" fill="none"/>
+  <path d="M20 10 Q18 6 21 4" stroke="black" stroke-width="1.5" fill="none"/>
+  <path d="M20 10 Q22 6 19 4" stroke="black" stroke-width="1.5" fill="none"/>
+  <!-- Pool -->
+  <ellipse cx="12" cy="16" rx="5" ry="2" fill="white"/>
+  <!-- Windows -->
+  <rect x="6" y="11" width="3" height="2" fill="white"/>
+  <rect x="15" y="11" width="3" height="2" fill="white"/>
+</svg>
