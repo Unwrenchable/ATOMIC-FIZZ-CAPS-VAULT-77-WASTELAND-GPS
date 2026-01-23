@@ -1519,6 +1519,189 @@ export function AdminTokenLaunch() {
 
 ---
 
+### Legal & Ethical Considerations for Token Launchpads
+
+**Is this legal and ethical?** Yes, **as long as users are fully informed** that they're participating in a gaming ecosystem with experimental tokenomics. Transparency is key.
+
+#### ✅ What Makes It Ethical
+
+| Practice | Why It's Ethical |
+|----------|-----------------|
+| **Full Disclosure** | Users know tokens are ecosystem tokens, not investments |
+| **No False Promises** | Never claim tokens will increase in value |
+| **Clear Rules** | Everyone knows the same rules (bonding curve, graduation, etc.) |
+| **Open Source** | Smart contracts are verifiable on-chain |
+| **No Hidden Manipulation** | Admin launches are labeled as such |
+| **User Choice** | No one is forced to participate |
+
+#### ⚠️ Required Disclosures
+
+Every Fizz.fun page should include clear disclaimers:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         ⚠️ IMPORTANT DISCLOSURES                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. ECOSYSTEM TOKENS, NOT INVESTMENTS                                       │
+│     Tokens on Fizz.fun are part of the Atomic Fizz Caps gaming ecosystem.  │
+│     They are NOT securities or investment products. Do not purchase with   │
+│     the expectation of profit from the efforts of others.                  │
+│                                                                             │
+│  2. HIGH RISK                                                               │
+│     Token values can go to zero. Most tokens fail. Only use funds you      │
+│     can afford to lose entirely.                                           │
+│                                                                             │
+│  3. EXPERIMENTAL PLATFORM                                                   │
+│     Fizz.fun is experimental software. Smart contracts may have bugs.      │
+│     Use at your own risk.                                                  │
+│                                                                             │
+│  4. ADMIN-LAUNCHED TOKENS                                                   │
+│     Some tokens are launched by platform admins to bootstrap the           │
+│     ecosystem. These are clearly labeled with a 🔐 badge.                  │
+│                                                                             │
+│  5. NOT FINANCIAL ADVICE                                                    │
+│     Nothing on this platform constitutes financial, legal, or tax advice.  │
+│     Consult professionals before making financial decisions.               │
+│                                                                             │
+│  By using Fizz.fun, you acknowledge these risks and agree to our           │
+│  Terms of Service.                                                         │
+│                                                                             │
+│  [I Understand and Accept]                                                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Labeling Admin-Launched Tokens
+
+**Transparency requirement:** Admin-launched tokens MUST be clearly labeled so users know the difference:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  TRENDING TOKENS                                                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  1. 🔐 $RADROACH   "Official ecosystem token"     45,000 SOL   │
+│        └── Admin-launched (USDC) - Official Vault-Tec token    │
+│                                                                 │
+│  2. 🔐 $NUKA       "Classic refreshment"          32,000 SOL   │
+│        └── Admin-launched (USDC) - Bootstrap token             │
+│                                                                 │
+│  3. 👤 $WASTELANDER "Community meme"              28,000 SOL   │
+│        └── Community-launched (CAPS) by 7xK9...F2nP            │
+│                                                                 │
+│  4. 👤 $DEATHCLAW  "Scary boi"                    15,000 SOL   │
+│        └── Community-launched (CAPS) by 3mN7...H8qR            │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+Legend:
+🔐 = Admin/Official launch (USDC bootstrap)
+👤 = Community launch (CAPS required)
+```
+
+#### On-Chain Transparency
+
+The `LaunchType` field in the bonding curve is stored **on-chain** and cannot be hidden:
+
+```rust
+pub enum LaunchType {
+    CapsStandard,    // 👤 Community launch
+    CapsVeteran,     // 👤 Community launch (veteran)
+    AdminUSDC,       // 🔐 Admin bootstrap
+    AdminFree,       // 🔐 Official token
+}
+```
+
+Anyone can verify how a token was launched by reading the on-chain data:
+
+```javascript
+// Verify token launch type (anyone can do this)
+async function getTokenLaunchInfo(tokenMint) {
+    const [bondingCurve] = PublicKey.findProgramAddressSync(
+        [Buffer.from('bonding_curve'), tokenMint.toBuffer()],
+        FIZZ_FUN_PROGRAM_ID
+    );
+    
+    const curveData = await program.account.bondingCurve.fetch(bondingCurve);
+    
+    return {
+        creator: curveData.creator.toBase58(),
+        launchType: curveData.launchType, // AdminUSDC, CapsStandard, etc.
+        createdAt: new Date(curveData.createdAt * 1000),
+        isAdminLaunch: ['AdminUSDC', 'AdminFree'].includes(curveData.launchType)
+    };
+}
+```
+
+#### Terms of Service Essentials
+
+Your Terms of Service should include:
+
+```markdown
+## Fizz.fun Terms of Service
+
+### 1. Nature of Tokens
+Tokens created on Fizz.fun are digital assets within the Atomic Fizz Caps 
+gaming ecosystem. They are NOT:
+- Securities or investment contracts
+- Promises of future value or returns
+- Backed by any real-world assets
+
+### 2. Risks
+Users acknowledge:
+- Token values are highly volatile and may go to zero
+- Smart contracts may contain bugs or vulnerabilities
+- The platform is experimental and provided "as-is"
+- Past performance does not indicate future results
+
+### 3. Admin Activities
+Users acknowledge that platform administrators may:
+- Launch tokens to bootstrap ecosystem activity
+- Such tokens are clearly labeled as admin-launched
+- Admin launches do not constitute endorsement or guarantee
+
+### 4. No Financial Advice
+Nothing on Fizz.fun constitutes financial, investment, legal, or tax advice.
+Users should consult qualified professionals.
+
+### 5. Jurisdiction
+Users are responsible for compliance with their local laws.
+Fizz.fun may not be available in all jurisdictions.
+```
+
+#### Ethical Best Practices
+
+| Do ✅ | Don't ❌ |
+|------|---------|
+| Label all admin tokens clearly | Hide admin involvement |
+| Disclose all risks upfront | Promise returns or profits |
+| Make contracts open source | Use obfuscated code |
+| Allow users to verify on-chain | Manipulate prices secretly |
+| Set reasonable expectations | Hype or shill tokens |
+| Build for the long term | Rug pull or exit scam |
+
+#### Comparison to Traditional Platforms
+
+| Aspect | Pump.fun | Fizz.fun (With Disclosures) |
+|--------|----------|----------------------------|
+| Launch transparency | Anyone can launch | Admin launches clearly labeled |
+| On-chain verification | Yes | Yes |
+| Risk disclosures | Minimal | Comprehensive |
+| Ecosystem context | None | Part of gaming ecosystem |
+| User education | Limited | Built-in explanations |
+
+#### Summary: It's Ethical IF You:
+
+1. ✅ **Disclose everything** - Admin launches, risks, experimental nature
+2. ✅ **Label clearly** - Users can always tell admin vs community tokens
+3. ✅ **Store on-chain** - Launch type is verifiable by anyone
+4. ✅ **Never promise profits** - It's a gaming ecosystem, not an investment
+5. ✅ **Get user acknowledgment** - They must accept terms before participating
+6. ✅ **Build transparently** - Open source contracts, verifiable behavior
+
+---
+
 ```javascript
 // Backend: Check eligibility - CAPS only needed to LAUNCH
 async function checkFizzFunAccess(wallet) {
