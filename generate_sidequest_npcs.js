@@ -503,10 +503,8 @@ const MICRO_QUEST_TEMPLATES = {
     { id: "mq_highway_trade", name: "Caravan Assist", desc: "Help a caravan reach its destination safely." },
     { id: "mq_highway_ambush", name: "Raider Warning", desc: "Scout ahead for potential ambushes." }
   ],
-  highway: [
-    { id: "mq_highway_trade", name: "Caravan Assist", desc: "Help a caravan reach its destination safely." },
-    { id: "mq_highway_ambush", name: "Raider Warning", desc: "Scout ahead for potential ambushes." }
-  ],
+  // 'highway' shares the same quests as 'highways' for compatibility
+  get highway() { return this.highways; },
   outskirts: [
     { id: "mq_outskirts_signal", name: "Signal Tracking", desc: "Track down a mysterious radio signal." },
     { id: "mq_outskirts_scav", name: "Scavenger Hunt", desc: "Find useful supplies in the wasteland." }
@@ -553,6 +551,7 @@ const MEME_DIALOG = [
   "I've been standing here for what feels like an eternity.",
   "Ever notice how I never sleep? Neither do I.",
   "Don't save and reload on me, okay? It's disorienting.",
+  "I've seen things you wouldn't believe. Mostly because they don't render at this distance.",
   
   // Absurdist wasteland
   "I traded my soul for a can of beans. Worth it.",
@@ -893,7 +892,7 @@ function generateDialog(npc) {
   // Rare/Legendary NPCs get extra meme flavor
   if (npc.rarity === "legendary" && Math.random() < 0.5) {
     lines.push(pick(MEME_DIALOG));
-    lines.push("I've seen things you wouldn't believe. Mostly because they don't render at this distance.");
+    lines.push(pick(MEME_DIALOG)); // Legendary gets double meme flavor
   }
   
   if (npc.rarity === "rare" && Math.random() < 0.35) {
