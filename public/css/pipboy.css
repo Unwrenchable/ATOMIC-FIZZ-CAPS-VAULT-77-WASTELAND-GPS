@@ -254,7 +254,8 @@ body.pipboy-mode {
 }
 
 #mapContainer .leaflet-tile {
-  filter: brightness(0.55) contrast(1.4) saturate(0.5) hue-rotate(85deg);
+  /* Increased brightness from 0.55 to 0.85 for better visibility while maintaining Pip-Boy aesthetic */
+  filter: brightness(0.85) contrast(1.2) saturate(0.6) hue-rotate(85deg);
 }
 
 /* Grid */
@@ -270,17 +271,17 @@ body.pipboy-mode {
   z-index: 40;
 }
 
-/* CRT overlay */
+/* CRT overlay - reduced opacity for better visibility while maintaining Pip-Boy feel */
 #mapContainer::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    repeating-linear-gradient(to bottom, rgba(0,0,0,0.15) 1px, transparent 2px),
-    radial-gradient(circle at center, rgba(0,255,65,0.05) 0%, rgba(0,0,0,0.45) 90%);
+    repeating-linear-gradient(to bottom, rgba(0,0,0,0.10) 1px, transparent 2px),
+    radial-gradient(circle at center, rgba(0,255,65,0.03) 0%, rgba(0,0,0,0.25) 90%);
   mix-blend-mode: overlay;
-  opacity: 0.35;
+  opacity: 0.25;
   z-index: 50;
 }
 
