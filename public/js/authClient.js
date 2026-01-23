@@ -23,7 +23,7 @@ async function safeJsonParse(response) {
         const json = JSON.parse(text);
         if (json.error) errorMessage = json.error;
         return { ok: false, error: errorMessage };
-      } catch {
+      } catch (_parseErr) {
         // Not JSON - might be an HTML error page
         // Extract meaningful text if it looks like an error message
         if (text.length < 200 && !text.includes('<')) {
@@ -31,7 +31,7 @@ async function safeJsonParse(response) {
         }
         return { ok: false, error: errorMessage };
       }
-    } catch {
+    } catch (_fetchErr) {
       return { ok: false, error: errorMessage };
     }
   }
