@@ -237,8 +237,8 @@
             const iconName = poi.iconKey || poi.icon || 'poi';
             const icon = L.icon({
               iconUrl: `/img/icons/${iconName}.svg`,
-              iconSize: [24, 24],
-              iconAnchor: [12, 12],
+              iconSize: [32, 32],
+              iconAnchor: [16, 16],
               className: 'poi-marker'
             });
             
@@ -359,11 +359,12 @@
 
       const icon = L.icon({
         iconUrl: "/img/icons/player.svg",
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+        className: 'player-marker'
       });
 
-      this.playerMarker = L.marker([pos.lat, pos.lng], { icon }).addTo(this.map);
+      this.playerMarker = L.marker([pos.lat, pos.lng], { icon, zIndexOffset: 1000 }).addTo(this.map);
     },
 
     setPlayerHeading(deg) {
@@ -586,10 +587,10 @@
         rarity === "legendary" ? "legendary" : "";
 
       const icon = L.divIcon({
-        className: "pipboy-marker-icon",
+        className: "pipboy-marker-icon poi-marker",
         html: `<div class="pipboy-marker"><div class="pipboy-marker-dot ${dotClass}"></div></div>`,
-        iconSize: [14, 14],
-        iconAnchor: [7, 7]
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
       });
 
       const marker = L.marker([loc.lat, loc.lng], { icon });
