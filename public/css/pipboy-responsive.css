@@ -171,25 +171,44 @@ body {
 }
 
 /* ============================================================
-   MAP CONTAINER - RESPONSIVE
+   MAP CONTAINER - RESPONSIVE - FILLS AVAILABLE SPACE
    ============================================================ */
 
 .pipboy-map {
-  height: clamp(30rem, 50vh, 50rem);
-  min-height: 25rem;
+  height: 100%;
+  min-height: 20rem;
+  max-height: none;
   border-radius: clamp(0.4rem, 0.8vw, 0.8rem);
 }
 
+/* Map panel body should fill available space */
+#panel-map .panel-body {
+  height: calc(100% - 4rem);
+  display: flex;
+  flex-direction: column;
+}
+
+#panel-map #mapContainer {
+  flex: 1;
+  min-height: 0;
+}
+
 .map-overlay {
-  padding: clamp(0.8rem, 1.5vw, 1.5rem);
-  font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+  padding: clamp(0.5rem, 1vw, 1rem);
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  z-index: 1000;
 }
 
 .gps-badge {
-  padding: clamp(0.5rem, 1vw, 1rem);
-  font-size: clamp(1rem, 1.2vw, 1.2rem);
-  bottom: clamp(1rem, 2vw, 2rem);
-  right: clamp(1rem, 2vw, 2rem);
+  padding: clamp(0.4rem, 0.8vw, 0.8rem);
+  font-size: clamp(0.9rem, 1.1vw, 1.1rem);
+  bottom: clamp(0.5rem, 1vw, 1rem);
+  right: clamp(0.5rem, 1vw, 1rem);
 }
 
 /* ============================================================
@@ -455,5 +474,127 @@ body {
   /* Already dark, but ensure consistency */
   .pipboy-crt {
     background: radial-gradient(circle at center, #0a1a0a 0%, #020502 60%, #000000 100%);
+  }
+}
+
+/* ============================================================
+   SMARTWATCH SUPPORT (Apple Watch, Wear OS)
+   Small circular/square displays ~38-45mm (150-200px)
+   ============================================================ */
+
+@media screen and (max-width: 250px), 
+       screen and (max-height: 250px) {
+  html {
+    font-size: 45%;
+  }
+
+  /* Hide non-essential UI for watches */
+  .pipboy-header,
+  .pipboy-tabs,
+  .pipboy-footer,
+  .wallet-hud,
+  .pipboy-noise,
+  .pipboy-scanlines,
+  .map-overlay,
+  .panel-header {
+    display: none !important;
+  }
+
+  .pipboy-root,
+  .pipboy-bezel,
+  .pipboy-frame,
+  .pipboy-crt {
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+  }
+
+  .pipboy-main {
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+  }
+
+  .pipboy-panel {
+    padding: 2px;
+    border-radius: 0;
+  }
+
+  /* Map fills entire watch screen */
+  .pipboy-map,
+  #mapContainer {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    min-height: unset;
+    border: none;
+    border-radius: 0;
+  }
+
+  /* Larger touch targets for watch */
+  .leaflet-marker-icon {
+    min-width: 30px !important;
+    min-height: 30px !important;
+  }
+
+  /* GPS badge compact for watch */
+  .gps-badge {
+    padding: 2px 4px;
+    font-size: 8px;
+    bottom: 2px;
+    right: 2px;
+    border: none;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .acc-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* POI markers larger for watch touch */
+  .poi-marker img,
+  .poi-marker svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+}
+
+/* ============================================================
+   SMALL MOBILE / VERY SMALL SCREENS (< 360px width)
+   ============================================================ */
+
+@media screen and (max-width: 360px) {
+  html {
+    font-size: 50%;
+  }
+
+  .pipboy-header {
+    padding: 4px 8px;
+  }
+
+  .pipboy-title {
+    font-size: 1.4rem !important;
+  }
+
+  .pipboy-tabs {
+    padding: 2px 4px;
+    gap: 2px;
+  }
+
+  .pipboy-tab {
+    padding: 4px 8px;
+    font-size: 1rem;
+    min-width: 4rem;
+  }
+
+  .pipboy-main {
+    height: calc(100% - 10rem);
+    padding: 4px;
+  }
+
+  .pipboy-map {
+    min-height: 15rem;
   }
 }
