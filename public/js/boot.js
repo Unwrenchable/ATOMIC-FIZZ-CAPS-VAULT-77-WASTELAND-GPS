@@ -114,6 +114,16 @@
     // Notify the game (radio engine listens for this)
     window.dispatchEvent(new Event("pipboyReady"));
 
+    // Start the "Wake Up" quest after boot completes
+    if (window.Game?.modules?.quests?.startQuest) {
+      try {
+        Game.modules.quests.startQuest("wake_up");
+        console.log("[BOOT] wake_up quest started");
+      } catch (err) {
+        console.warn("[BOOT] Failed to start wake_up quest:", err);
+      }
+    }
+
     // Worldmap hook
     if (window.Game?.modules?.worldmap?.onOpen) {
       try {
