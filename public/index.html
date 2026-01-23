@@ -50,6 +50,10 @@
     <link rel="stylesheet" href="/css/pipboy-responsive.css" />
     <link rel="stylesheet" href="/css/vats.css" />
     <link rel="stylesheet" href="/css/live-radio.css" />
+    
+    <!-- Character Creator & Fallout 4 Dialogue CSS -->
+    <link rel="stylesheet" href="/css/character-creator.css" />
+    <link rel="stylesheet" href="/css/fo4-dialogue.css" />
 
     <!-- Third-party libs (deferred, non-module globals) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
@@ -168,9 +172,19 @@
                 <div id="panel-stat" class="pipboy-panel">
                   <div class="panel-header">STATUS</div>
                   <div class="panel-body">
+                    <!-- Character Portrait Preview -->
+                    <div id="characterPortraitPreview" style="text-align:center; margin-bottom:12px;">
+                      <div id="statPortraitSvg" style="width:80px; height:100px; margin:0 auto; border:1px solid #00ff41; background:rgba(0,20,10,0.8);"></div>
+                    </div>
+                    
                     <div class="panel-row">
                       <span class="label">NAME</span>
                       <span class="value" id="stat-name">WANDERER</span>
+                    </div>
+                    
+                    <!-- Character Creator Button -->
+                    <div style="margin:8px 0;">
+                      <button id="openCharacterCreator" class="pipboy-button-small" style="width:100%;">👤 CUSTOMIZE APPEARANCE</button>
                     </div>
 
                     <div class="panel-row">
@@ -424,6 +438,10 @@
     <script src="/js/modules/inventory-loader.js" defer></script>
     <script src="/js/modules/inventory-ui.js" defer></script>
     <script src="/js/modules/quest-ui.js" defer></script>
+    
+    <!-- Character Creator & Fallout 4 Dialogue Systems -->
+    <script src="/js/modules/character-creator.js" defer></script>
+    <script src="/js/modules/fo4-dialogue.js" defer></script>
     <script src="/js/modules/struggle-quips.js" defer></script>
 
     <!-- PIP‑BOY UI SHELL (non-module) -->
@@ -652,6 +670,81 @@
             });
         });
       }
+    </script>
+
+    <!-- Character Creator Integration -->
+    <script>
+      (function() {
+        function initCharacterCreator() {
+          const btn = document.getElementById('openCharacterCreator');
+          const portraitContainer = document.getElementById('statPortraitSvg');
+          const nameDisplay = document.getElementById('stat-name');
+
+          // Update portrait and name display
+          function updateStatDisplay() {
+            if (Game?.modules?.CharacterCreator) {
+              const appearance = Game.modules.CharacterCreator.loadSavedAppearance() 
+                || Game.modules.CharacterCreator.getAppearance();
+              
+              if (appearance && portraitContainer) {
+                portraitContainer.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(appearance, 80);
+              }
+              
+              if (appearance?.name && nameDisplay) {
+                nameDisplay.textContent = appearance.name;
+              }
+            }
+          }
+
+          // Open character creator
+          if (btn) {
+            btn.addEventListener('click', () => {
+              if (Game?.modules?.CharacterCreator) {
+                Game.modules.CharacterCreator.open(null, (newAppearance) => {
+                  console.log('[CharacterCreator] Saved appearance:', newAppearance);
+                  updateStatDisplay();
+                });
+              } else {
+                alert('Character Creator is loading...');
+              }
+            });
+          }
+
+          // Wait for characterCreatorOpened event which signals the module is ready
+          window.addEventListener('characterCreatorOpened', updateStatDisplay);
+
+          // Also try to update display when pipboy is ready
+          window.addEventListener('pipboyReady', () => {
+            // Give modules a moment to initialize after pipboy ready
+            requestAnimationFrame(() => {
+              updateStatDisplay();
+            });
+          });
+
+          // Listen for character creation events
+          window.addEventListener('characterCreated', () => {
+            updateStatDisplay();
+          });
+
+          // Fallback: check periodically until module is ready (max 5 seconds)
+          let attempts = 0;
+          const checkModule = () => {
+            if (Game?.modules?.CharacterCreator) {
+              updateStatDisplay();
+            } else if (attempts < 10) {
+              attempts++;
+              setTimeout(checkModule, 500);
+            }
+          };
+          checkModule();
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initCharacterCreator);
+        } else {
+          initCharacterCreator();
+        }
+      })();
     </script>
 
   </body>

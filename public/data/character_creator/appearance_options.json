@@ -1,0 +1,213 @@
+{
+  "version": "1.0.0",
+  "description": "Character appearance customization options - Fallout 4 style",
+
+  "genders": [
+    { "id": "male", "name": "Male", "icon": "👨" },
+    { "id": "female", "name": "Female", "icon": "👩" },
+    { "id": "nonbinary", "name": "Non-Binary", "icon": "🧑" }
+  ],
+
+  "races": [
+    { "id": "human", "name": "Human", "description": "Standard wasteland survivor", "icon": "🧑" },
+    { "id": "ghoul", "name": "Ghoul", "description": "Radiation-scarred but resilient", "icon": "🧟", "skinTint": "#8B7355" },
+    { "id": "synth", "name": "Synth", "description": "Institute creation - Gen 3", "icon": "🤖", "eyeGlow": true }
+  ],
+
+  "skinTones": [
+    { "id": "pale", "name": "Pale", "color": "#FFE4C4", "ghoulVariant": "#A89080" },
+    { "id": "fair", "name": "Fair", "color": "#F5DEB3", "ghoulVariant": "#9B8B7A" },
+    { "id": "light", "name": "Light", "color": "#DEB887", "ghoulVariant": "#8B7B6B" },
+    { "id": "medium", "name": "Medium", "color": "#C8A882", "ghoulVariant": "#7B6B5B" },
+    { "id": "tan", "name": "Tan", "color": "#B08968", "ghoulVariant": "#6B5B4B" },
+    { "id": "olive", "name": "Olive", "color": "#9C7A5C", "ghoulVariant": "#5C4C3C" },
+    { "id": "brown", "name": "Brown", "color": "#8B5A2B", "ghoulVariant": "#4B3A2B" },
+    { "id": "dark", "name": "Dark", "color": "#5C4033", "ghoulVariant": "#3C2A23" }
+  ],
+
+  "faceShapes": [
+    { "id": "oval", "name": "Oval", "widthMod": 1.0, "heightMod": 1.1 },
+    { "id": "round", "name": "Round", "widthMod": 1.1, "heightMod": 1.0 },
+    { "id": "square", "name": "Square", "widthMod": 1.1, "heightMod": 1.0 },
+    { "id": "heart", "name": "Heart", "widthMod": 1.0, "heightMod": 1.05 },
+    { "id": "oblong", "name": "Oblong", "widthMod": 0.9, "heightMod": 1.2 },
+    { "id": "diamond", "name": "Diamond", "widthMod": 0.95, "heightMod": 1.1 }
+  ],
+
+  "hairStyles": [
+    { "id": "bald", "name": "Bald", "icon": "🦲", "genderRestrict": null },
+    { "id": "buzzcut", "name": "Buzz Cut", "icon": "💇", "genderRestrict": null },
+    { "id": "short", "name": "Short", "icon": "💇", "genderRestrict": null },
+    { "id": "medium", "name": "Medium", "icon": "💇", "genderRestrict": null },
+    { "id": "long", "name": "Long", "icon": "💇", "genderRestrict": null },
+    { "id": "mohawk", "name": "Mohawk", "icon": "🧑‍🎤", "genderRestrict": null },
+    { "id": "ponytail", "name": "Ponytail", "icon": "💇", "genderRestrict": null },
+    { "id": "braids", "name": "Braids", "icon": "💇", "genderRestrict": null },
+    { "id": "dreads", "name": "Dreadlocks", "icon": "🧑‍🎤", "genderRestrict": null },
+    { "id": "slickedback", "name": "Slicked Back", "icon": "💇", "genderRestrict": null },
+    { "id": "wasteland", "name": "Wasteland Survivor", "icon": "🧑‍🔧", "genderRestrict": null }
+  ],
+
+  "hairColors": [
+    { "id": "black", "name": "Black", "color": "#0a0a0a" },
+    { "id": "darkbrown", "name": "Dark Brown", "color": "#3b2314" },
+    { "id": "brown", "name": "Brown", "color": "#6b4226" },
+    { "id": "auburn", "name": "Auburn", "color": "#8b4513" },
+    { "id": "red", "name": "Red", "color": "#8b0000" },
+    { "id": "ginger", "name": "Ginger", "color": "#b54817" },
+    { "id": "blonde", "name": "Blonde", "color": "#d4a574" },
+    { "id": "platinum", "name": "Platinum", "color": "#e8e8e8" },
+    { "id": "white", "name": "White", "color": "#f5f5f5" },
+    { "id": "gray", "name": "Gray", "color": "#808080" },
+    { "id": "neongreen", "name": "Neon Green", "color": "#00ff41", "rare": true },
+    { "id": "neonpink", "name": "Neon Pink", "color": "#ff00ff", "rare": true },
+    { "id": "neonblue", "name": "Neon Blue", "color": "#00d4ff", "rare": true }
+  ],
+
+  "eyeShapes": [
+    { "id": "almond", "name": "Almond" },
+    { "id": "round", "name": "Round" },
+    { "id": "hooded", "name": "Hooded" },
+    { "id": "downturned", "name": "Downturned" },
+    { "id": "upturned", "name": "Upturned" },
+    { "id": "monolid", "name": "Monolid" },
+    { "id": "deepset", "name": "Deep Set" }
+  ],
+
+  "eyeColors": [
+    { "id": "brown", "name": "Brown", "color": "#5c4033" },
+    { "id": "hazel", "name": "Hazel", "color": "#8e7618" },
+    { "id": "amber", "name": "Amber", "color": "#ff8c00" },
+    { "id": "green", "name": "Green", "color": "#228b22" },
+    { "id": "blue", "name": "Blue", "color": "#4169e1" },
+    { "id": "gray", "name": "Gray", "color": "#708090" },
+    { "id": "black", "name": "Black", "color": "#1a1a1a" },
+    { "id": "synth_blue", "name": "Synth Blue", "color": "#00d4ff", "glowing": true, "raceRestrict": "synth" },
+    { "id": "synth_gold", "name": "Synth Gold", "color": "#ffd700", "glowing": true, "raceRestrict": "synth" },
+    { "id": "ghoul_yellow", "name": "Irradiated Yellow", "color": "#c8b400", "glowing": true, "raceRestrict": "ghoul" }
+  ],
+
+  "noseTypes": [
+    { "id": "straight", "name": "Straight" },
+    { "id": "roman", "name": "Roman" },
+    { "id": "snub", "name": "Snub" },
+    { "id": "button", "name": "Button" },
+    { "id": "aquiline", "name": "Aquiline" },
+    { "id": "wide", "name": "Wide" },
+    { "id": "narrow", "name": "Narrow" }
+  ],
+
+  "mouthTypes": [
+    { "id": "thin", "name": "Thin" },
+    { "id": "full", "name": "Full" },
+    { "id": "wide", "name": "Wide" },
+    { "id": "small", "name": "Small" },
+    { "id": "heartshaped", "name": "Heart-Shaped" }
+  ],
+
+  "facialHair": [
+    { "id": "none", "name": "None", "genderRestrict": null },
+    { "id": "stubble", "name": "Stubble", "genderRestrict": "male" },
+    { "id": "goatee", "name": "Goatee", "genderRestrict": "male" },
+    { "id": "fullbeard", "name": "Full Beard", "genderRestrict": "male" },
+    { "id": "mustache", "name": "Mustache", "genderRestrict": "male" },
+    { "id": "mutton", "name": "Mutton Chops", "genderRestrict": "male" },
+    { "id": "vandyke", "name": "Van Dyke", "genderRestrict": "male" },
+    { "id": "wastelandbeard", "name": "Wasteland Survivor Beard", "genderRestrict": "male" }
+  ],
+
+  "scars": [
+    { "id": "none", "name": "None" },
+    { "id": "cheek_left", "name": "Left Cheek Scar" },
+    { "id": "cheek_right", "name": "Right Cheek Scar" },
+    { "id": "brow", "name": "Brow Scar" },
+    { "id": "lip", "name": "Lip Scar" },
+    { "id": "forehead", "name": "Forehead Scar" },
+    { "id": "burn_left", "name": "Left Burn Mark" },
+    { "id": "burn_right", "name": "Right Burn Mark" },
+    { "id": "claw", "name": "Claw Marks" },
+    { "id": "bullet", "name": "Bullet Graze" }
+  ],
+
+  "markings": [
+    { "id": "none", "name": "None" },
+    { "id": "tribal", "name": "Tribal Paint" },
+    { "id": "warpaint", "name": "War Paint" },
+    { "id": "freckles", "name": "Freckles" },
+    { "id": "moles", "name": "Beauty Marks" },
+    { "id": "radiation_burns", "name": "Radiation Burns", "raceRestrict": "ghoul" },
+    { "id": "circuitry", "name": "Visible Circuitry", "raceRestrict": "synth" },
+    { "id": "tattoo_vault", "name": "Vault-Tec Tattoo" },
+    { "id": "tattoo_faction", "name": "Faction Tattoo" }
+  ],
+
+  "accessories": [
+    { "id": "none", "name": "None" },
+    { "id": "eyepatch_left", "name": "Left Eyepatch" },
+    { "id": "eyepatch_right", "name": "Right Eyepatch" },
+    { "id": "glasses", "name": "Glasses" },
+    { "id": "sunglasses", "name": "Sunglasses" },
+    { "id": "goggles", "name": "Wasteland Goggles" },
+    { "id": "bandana", "name": "Bandana" },
+    { "id": "respirator", "name": "Respirator" },
+    { "id": "earring_left", "name": "Left Earring" },
+    { "id": "earring_right", "name": "Right Earring" },
+    { "id": "earrings_both", "name": "Both Earrings" },
+    { "id": "nose_ring", "name": "Nose Ring" },
+    { "id": "cybernetic_eye", "name": "Cybernetic Eye" }
+  ],
+
+  "expressions": [
+    { "id": "neutral", "name": "Neutral", "icon": "😐" },
+    { "id": "stern", "name": "Stern", "icon": "😤" },
+    { "id": "friendly", "name": "Friendly", "icon": "🙂" },
+    { "id": "suspicious", "name": "Suspicious", "icon": "🤨" },
+    { "id": "weary", "name": "Weary", "icon": "😔" },
+    { "id": "determined", "name": "Determined", "icon": "😠" },
+    { "id": "smirking", "name": "Smirking", "icon": "😏" }
+  ],
+
+  "ageRanges": [
+    { "id": "young", "name": "Young Adult", "min": 18, "max": 25 },
+    { "id": "adult", "name": "Adult", "min": 26, "max": 40 },
+    { "id": "middleaged", "name": "Middle-Aged", "min": 41, "max": 55 },
+    { "id": "elder", "name": "Elder", "min": 56, "max": 80 }
+  ],
+
+  "bodyTypes": [
+    { "id": "slim", "name": "Slim" },
+    { "id": "average", "name": "Average" },
+    { "id": "muscular", "name": "Muscular" },
+    { "id": "heavy", "name": "Heavy" }
+  ],
+
+  "voices": [
+    { "id": "smooth", "name": "Smooth" },
+    { "id": "gruff", "name": "Gruff" },
+    { "id": "raspy", "name": "Raspy" },
+    { "id": "robotic", "name": "Robotic", "raceRestrict": "synth" },
+    { "id": "weathered", "name": "Weathered" },
+    { "id": "youthful", "name": "Youthful" }
+  ],
+
+  "defaultAppearance": {
+    "gender": "male",
+    "race": "human",
+    "skinTone": "medium",
+    "faceShape": "oval",
+    "hairStyle": "short",
+    "hairColor": "brown",
+    "eyeShape": "almond",
+    "eyeColor": "brown",
+    "noseType": "straight",
+    "mouthType": "full",
+    "facialHair": "none",
+    "scar": "none",
+    "marking": "none",
+    "accessory": "none",
+    "expression": "neutral",
+    "ageRange": "adult",
+    "bodyType": "average",
+    "voice": "smooth"
+  }
+}
