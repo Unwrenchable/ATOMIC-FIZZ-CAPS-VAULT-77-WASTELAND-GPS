@@ -602,19 +602,45 @@
 
     createPOIMarker(loc, idx) {
       const rarity = loc.rarity || "common";
-      const dotClass =
-        rarity === "epic" ? "epic" :
-        rarity === "legendary" ? "legendary" : "";
-
-      const icon = L.divIcon({
-        className: "pipboy-marker-icon poi-marker",
-        html: `<div class="pipboy-marker"><div class="pipboy-marker-dot ${dotClass}"></div></div>`,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
+      
+      // Rarity-based styling for the label
+      const rarityColor = {
+        common: '#00ff41',
+        rare: '#00d4ff',
+        epic: '#d900ff',
+        legendary: '#ffaa00'
+      }[rarity] || '#00ff41';
+      
+      // Use SVG icon from the icon field, fallback to 'poi' default
+      const iconName = loc.icon || loc.iconKey || 'poi';
+      const icon = L.icon({
+        iconUrl: `/img/icons/${iconName}.svg`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        className: `poi-marker poi-marker-${rarity}`
       });
 
       const marker = L.marker([loc.lat, loc.lng], { icon });
       marker._pipboyData = loc;
+
+      // Bind persistent tooltip (location label) that's always visible at higher zoom
+      marker.bindTooltip(
+        `<span style="color: ${rarityColor}; font-family: 'VT323', monospace; font-size: 12px; text-shadow: 0 0 4px ${rarityColor};">${loc.name || 'Unknown'}</span>`,
+        {
+          permanent: false,
+          direction: 'top',
+          offset: [0, -14],
+          className: 'poi-label-tooltip'
+        }
+      );
+
+      // Bind popup with more details for click interaction
+      marker.bindPopup(`
+        <div style="color: ${rarityColor}; font-family: 'VT323', monospace;">
+          <b>${loc.name || 'Unknown Location'}</b><br>
+          <small>LVL ${loc.lvl || '?'} • ${(rarity || 'COMMON').toUpperCase()}</small>
+        </div>
+      `);
 
       marker.on("click", () => {
         this.autoFollowEnabled = false;
