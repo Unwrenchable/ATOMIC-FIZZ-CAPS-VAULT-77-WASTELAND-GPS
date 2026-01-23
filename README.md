@@ -1,97 +1,332 @@
-☢️ OFFICIAL VAULT‑TEC PRESS RELEASE
-FOR IMMEDIATE DISTRIBUTION TO ALL SURVIVORS, MUTANTS, AND SHAREHOLDERS
-VAULT‑TEC CORPORATION  
-“Building a Brighter Tomorrow, Yesterday.”
+☢️ OFFICIAL VAULT‑TEC PRESS RELEASE ☢️
+===================================
+**FOR IMMEDIATE DISTRIBUTION TO ALL SURVIVORS, MUTANTS, AND SHAREHOLDERS**
 
-January 2077 (Reissued 2026)  
-Vault‑77, Mojave Exclusion Zone
+```
+██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗   ████████╗███████╗ ██████╗
+██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝   ╚══██╔══╝██╔════╝██╔════╝
+██║   ██║███████║██║   ██║██║     ██║         ██║   █████╗  ██║     
+╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║         ██║   ██╔══╝  ██║     
+ ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║         ██║   ███████╗╚██████╗
+  ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝         ╚═╝   ╚══════╝ ╚═════╝
+```
 
-VAULT‑TEC ANNOUNCES THE RETURN OF THE ATOMIC FIZZ CAPS PROGRAM
-“The Future of Currency Is Glowing.”
-Vault‑Tec is proud (and legally obligated) to announce the relaunch of its groundbreaking Atomic Fizz Caps Initiative, a revolutionary economic system designed to bring stability, prosperity, and mild radiation poisoning to the post‑nuclear American wasteland.
+**VAULT‑TEC CORPORATION**  
+*"Building a Brighter Tomorrow, Yesterday."*
 
-Originally conceived as a promotional tie‑in for the failed soft drink Atomic Fizz™, the caps have since become the de facto currency of the Mojave, thanks to their durability, collectability, and faint but comforting luminescence.
+📅 **January 2077** (Reissued 2026)  
+📍 **Vault‑77, Mojave Exclusion Zone**
 
-Today, Vault‑Tec is thrilled to unveil the Vault‑77 Wasteland GPS, a Pip‑Boy–powered scavenging platform that allows survivors to:
+---
 
-Explore irradiated ruins
+## 🎉 VAULT‑TEC ANNOUNCES THE RETURN OF THE ATOMIC FIZZ CAPS PROGRAM
 
-Claim real‑world locations
+### *"The Future of Currency Is Glowing."*
 
-Earn glowing soda caps
+Vault‑Tec is proud (and legally obligated) to announce the relaunch of its groundbreaking **Atomic Fizz Caps Initiative**, a revolutionary economic system designed to bring stability, prosperity, and mild radiation poisoning to the post‑nuclear American wasteland.
 
-Level up their survival rank
+Originally conceived as a promotional tie‑in for the failed soft drink **Atomic Fizz™**, the caps have since become the de facto currency of the Mojave, thanks to their durability, collectability, and faint but comforting luminescence.
 
-Collect gear of questionable origin
+Today, Vault‑Tec is thrilled to unveil the **Vault‑77 Wasteland GPS**, a Pip‑Boy–powered scavenging platform that allows survivors to:
 
-And participate in the thriving post‑apocalyptic economy
+- 🗺️ **Explore irradiated ruins** (real GPS, real danger)
+- 📍 **Claim real‑world locations** (because colonialism never died)
+- 💰 **Earn glowing soda caps** (FIZZ token on Solana)
+- ⬆️ **Level up their survival rank**
+- 🎒 **Collect gear of questionable origin**
+- ⚔️ **Battle wasteland creatures** (NEW!)
+- 🛠️ **Craft weapons and consumables** (NEW!)
+- 🏛️ **Join factions and build reputation** (NEW!)
+- 🤖 **Chat with the Overseer AI** (NEW!)
+- 🌉 **Bridge assets across 35+ blockchains** (NEW!)
 
 All from the comfort of their Pip‑Boy wrist-mounted survival assistant.
 
-“A New Era of Scavenging Begins,” Says Vault‑Tec Spokesperson
-Vault‑Tec spokesperson Dr. Harold Fizzworth, speaking through a heavily filtered intercom system, stated:
+---
 
-“Atomic Fizz Caps represents the next evolution of wasteland commerce.
-We believe every survivor deserves the opportunity to earn currency by walking directly into dangerous areas.
-It’s what capitalism is all about.”
+## 📢 "A New Era of Scavenging Begins," Says Vault‑Tec Spokesperson
 
-Dr. Fizzworth was later escorted away by security after attempting to drink a sample of raw coolant.
+Vault‑Tec spokesperson **Dr. Harold Fizzworth**, speaking through a heavily filtered intercom system, stated:
 
-KEY FEATURES OF THE ATOMIC FIZZ CAPS PROGRAM
-☢️ WASTELAND GPS
+> *"Atomic Fizz Caps represents the next evolution of wasteland commerce.
+> We believe every survivor deserves the opportunity to earn currency by walking directly into dangerous areas.
+> It's what capitalism is all about."*
+
+*Dr. Fizzworth was later escorted away by security after attempting to drink a sample of raw coolant.*
+
+---
+
+## 🎮 KEY FEATURES OF THE ATOMIC FIZZ CAPS PROGRAM
+
+### ☢️ WASTELAND GPS
 Navigate the Mojave using a state‑of‑the‑art Pip‑Boy interface.
-Now with 30% fewer map glitches.
+- Real GPS-based exploration
+- Fog of War discovery system
+- Custom Leaflet map with Fallout-themed overlays
+- Radiation zones and weather effects
 
-🥤 CLAIM SYSTEM
-Tap a glowing POI.
-Sign a message.
-Hope the backend likes you.
-Receive loot, XP, CAPS, and possibly rads.
+*Now with 30% fewer map glitches.*
 
-🧪 GEAR SYSTEM
-Collect weapons, armor, and artifacts ranging from “mildly useful” to “why does this whisper at night.”
+---
 
-📡 SCAVENGER EXCHANGE
+### 🥤 CLAIM SYSTEM
+1. Tap a glowing POI
+2. Sign a message with your wallet
+3. Hope the backend likes you
+4. Receive loot, XP, CAPS, and possibly rads
+
+*Location cooldowns prevent farming (Vault‑Tec calls this "balanced gameplay," survivors call it "annoying").*
+
+---
+
+### ⚔️ BATTLE SYSTEM *(NEW!)*
+- Real-time combat encounters
+- Enemy scaling based on player level
+- Weapon damage and ammo tracking
+- V.A.T.S.-style targeting assistance
+- Rad scorpions, raiders, super mutants, and more
+
+*Warning: Death may result in loss of caps. Vault‑Tec is not responsible for your poor aim.*
+
+---
+
+### 🛠️ CRAFTING SYSTEM *(NEW!)*
+- Craft weapons, armor, and consumables
+- Recipe discovery through exploration
+- Component scavenging from the wasteland
+- Workbench integration
+
+*Vault‑Tec recommends not asking where the mystery meat comes from.*
+
+---
+
+### 🏛️ FACTION SYSTEM *(NEW!)*
+- Multiple wasteland factions to join
+- Reputation tracking and consequences
+- Faction-specific quests and rewards
+- Territory control mechanics
+
+*Choose wisely. Everyone in the wasteland holds grudges.*
+
+---
+
+### 🎖️ PERKS SYSTEM *(NEW!)*
+Unlock powerful perks as you level up:
+- **Bloody Mess** – +5% damage, +100% gore
+- **Scavenger** – +20% loot bonus
+- **Caps Collector** – +10% caps from all sources
+- **Road Warrior** – 25% faster map movement
+- **Rad Child** – Regenerate health while irradiated
+
+*Side effects may include: overconfidence, reckless behavior, and spontaneous combustion.*
+
+---
+
+### 🤖 OVERSEER TERMINAL *(NEW!)*
+An AI-powered assistant that knows too much about you:
+- Real-time status reports
+- Location scanning and intel
+- Quest guidance and lore dumps
+- Weather forecasts (radioactive rain, 80% chance of death)
+- Faction threat assessments
+
+*The Overseer sees all. The Overseer judges all. The Overseer has opinions about your inventory management.*
+
+---
+
+### 🧪 GEAR SYSTEM
+Collect weapons, armor, and artifacts ranging from "mildly useful" to "why does this whisper at night."
+- Rarity tiers: Common → Uncommon → Rare → Epic → Legendary
+- Equipment slots: Weapon, Helmet, Chest, Legs, Accessory
+- Stat bonuses and special effects
+- NFT integration for rare items
+
+---
+
+### 📡 SCAVENGER EXCHANGE
 Trade items, redeem vouchers, browse listings, and stare at the NUKE button wondering what it does.
+- Peer-to-peer trading via Solana
+- NFT marketplace integration
+- Phantom wallet support
+- FIZZ token transactions
 
-💣 NUKE SYSTEM (COMING SOON)
-Destroy unwanted gear in exchange for CAPS.
-Vault‑Tec calls this “recycling.”
-The EPA calls it “a violation of seventeen federal laws.”
+---
 
-🌉 BRIDGE SYSTEM (COMING SOON)
-Cross‑chain portal for inter‑vault commerce.
-Vault‑Tec denies all responsibility.
+### 💣 NUKE SYSTEM
+**Destroy unwanted gear in exchange for CAPS.**
+- Feed the Fusion Chamber your garbage
+- Receive FIZZ tokens in return
+- Permanent. No refunds. No regrets.
 
-SAFETY NOTICE
-Vault‑Tec reminds all users:
+*Vault‑Tec calls this "recycling."*  
+*The EPA calls it "a violation of seventeen federal laws."*
 
-Do not ingest Atomic Fizz Caps.
+---
 
-Do not attempt to microwave Atomic Fizz Caps.
+### 🌉 WORMHOLE BRIDGE *(NEW!)*
+Cross‑chain portal for inter‑vault commerce:
+- **Solana** ↔ **Ethereum** ↔ **Base** ↔ **BNB** ↔ **XRPL** ↔ **35+ chains**
+- Bridge FIZZ tokens across ecosystems
+- Wormhole protocol integration
+- Auto-featured FIZZ token support
 
-Do not attempt to use Atomic Fizz Caps as dental fillings.
+*Vault‑Tec denies all responsibility for items lost in the dimensional void.*
 
-Do not attempt to use Atomic Fizz Caps as contraceptives.
+---
 
-Do not attempt to use Atomic Fizz Caps as currency in pre‑war vending machines.
+### 🌤️ WEATHER SYSTEM *(NEW!)*
+Dynamic weather that affects gameplay:
+- Radiation storms
+- Dust clouds
+- Toxic fog
+- Clear skies (rare)
 
-Do not attempt to sue Vault‑Tec.
-(You waived this right when you opened the Pip‑Boy.)
+*Pack a gas mask. Or don't. Natural selection needs participants.*
 
-ABOUT VAULT‑TEC
-Founded in 2031, Vault‑Tec is America’s leading provider of underground survival solutions, nuclear‑adjacent beverages, and questionable scientific ethics.
-Our mission is simple:
+---
 
-“To ensure the survival of humanity, or at least the parts we like.”
+### 🎯 RANDOM ENCOUNTERS *(NEW!)*
+Procedurally generated events as you explore:
+- Hostile creatures based on biome
+- Trader caravans
+- Faction patrols
+- Mysterious strangers
 
-Vault‑Tec is a proud subsidiary of FizzCo Industries, a company that definitely still exists.
+*Every step could be your last. Isn't that exciting?*
 
-FOR MEDIA INQUIRIES
+---
+
+### 📻 WASTELAND RADIO *(NEW!)*
+- Live streaming radio stations
+- Fallout-inspired ambiance
+- DJ commentary (recordings found in the rubble)
+- Toggle on/off from Pip‑Boy
+
+*Music to scavenge by.*
+
+---
+
+### 📱 NPC SYSTEM *(NEW!)*
+Meet colorful characters across the wasteland:
+- Signal runners with urgent messages
+- Quest-giving NPCs
+- Faction representatives
+- Mysterious strangers with cryptic warnings
+
+*Not all of them want to kill you. Just most of them.*
+
+---
+
+## 🔧 TECHNICAL SPECIFICATIONS
+
+### Architecture
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     ATOMIC FIZZ CAPS v1.0.1                     │
+├─────────────────────────────────────────────────────────────────┤
+│  FRONTEND (Vercel)          │  BACKEND (Render)                 │
+│  • Static HTML/CSS/JS       │  • Node.js/Express API            │
+│  • Leaflet Maps             │  • Redis State Management         │
+│  • Phantom Wallet           │  • Solana Integration             │
+│  • PWA Support              │  • Rate Limiting & Auth           │
+├─────────────────────────────────────────────────────────────────┤
+│                        BLOCKCHAIN (Solana)                      │
+│  • FIZZ SPL Token           │  • Metaplex NFT Integration       │
+│  • Wormhole Bridge          │  • On-chain Programs (Anchor)     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Tech Stack
+| Layer | Technology |
+|-------|------------|
+| Frontend | HTML5, CSS3, Vanilla JS, Leaflet.js |
+| Backend | Node.js, Express, Redis |
+| Blockchain | Solana, @solana/web3.js, Metaplex |
+| Wallet | Phantom Wallet Adapter |
+| Bridge | Wormhole Protocol |
+| Hosting | Vercel (frontend), Render (backend) |
+| Auth | Ed25519 Signature Verification |
+
+### Live URLs
+- 🌐 **Frontend**: [atomicfizzcaps.xyz](https://www.atomicfizzcaps.xyz)
+- 🔌 **API**: [api.atomicfizzcaps.xyz](https://api.atomicfizzcaps.xyz)
+- 🪙 **FIZZ Token**: `fizzQBcaFLKjCoZ8Ppfkw2Xa7vH2pmW4FC6C74NpJmw`
+
+---
+
+## ⚠️ SAFETY NOTICE
+
+**Vault‑Tec reminds all users:**
+
+- ❌ Do not ingest Atomic Fizz Caps.
+- ❌ Do not attempt to microwave Atomic Fizz Caps.
+- ❌ Do not attempt to use Atomic Fizz Caps as dental fillings.
+- ❌ Do not attempt to use Atomic Fizz Caps as contraceptives.
+- ❌ Do not attempt to use Atomic Fizz Caps as currency in pre‑war vending machines.
+- ❌ Do not attempt to sue Vault‑Tec. *(You waived this right when you opened the Pip‑Boy.)*
+- ❌ Do not share your seed phrase with anyone claiming to be "Vault‑Tec Support."
+- ❌ Do not bridge tokens while irradiated.
+- ❌ Do not feed the Overseer after midnight.
+
+---
+
+## 🏢 ABOUT VAULT‑TEC
+
+Founded in 2031, Vault‑Tec is America's leading provider of:
+- Underground survival solutions
+- Nuclear‑adjacent beverages
+- Questionable scientific ethics
+- Blockchain experiments on human subjects
+
+**Our mission is simple:**
+
+> *"To ensure the survival of humanity, or at least the parts we like."*
+
+Vault‑Tec is a proud subsidiary of **FizzCo Industries**, a company that definitely still exists.
+
+---
+
+## 📞 FOR MEDIA INQUIRIES
+
 Please contact:
 
-Vault‑Tec Public Relations Department  
-Sub‑Basement C, Vault‑77
-(Behind the door marked “Do Not Enter”)
-Fax: Unavailable due to radroach infestation  
-Email: Temporarily offline due to reactor leak
+**Vault‑Tec Public Relations Department**  
+Sub‑Basement C, Vault‑77  
+*(Behind the door marked "Do Not Enter")*
+
+📠 **Fax**: Unavailable due to radroach infestation  
+📧 **Email**: Temporarily offline due to reactor leak  
+🐦 **Twitter**: [@atomicfizzcaps](https://twitter.com/atomicfizzcaps) *(monitored by surviving interns)*  
+💬 **Discord**: Ask around. Someone knows.
+
+---
+
+## 📜 LICENSE
+
+MIT License – Because even the apocalypse is open source.
+
+---
+
+## 🙏 CREDITS
+
+Built with ☢️ by wasteland survivors who should probably be focusing on finding clean water instead.
+
+**Special Thanks:**
+- Bethesda Game Studios (for the inspiration, please don't sue)
+- The Solana Foundation (for fast, cheap transactions)
+- Phantom Wallet (for making Web3 almost usable)
+- Every survivor who reported a bug instead of hoarding caps
+
+---
+
+```
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║   "War. War never changes. But transaction fees? Those change."   ║
+║                                                                   ║
+║                           — Vault‑Tec Marketing, 2077             ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
+```
+
+**☢️ STAY RADIATED, WASTELANDERS ☢️**
