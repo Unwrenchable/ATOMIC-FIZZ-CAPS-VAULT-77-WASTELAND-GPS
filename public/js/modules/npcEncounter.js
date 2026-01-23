@@ -2,6 +2,7 @@
 // ------------------------------------------------------------
 // Scripted NPC Encounter Manager
 // Handles story-driven NPC arrivals (e.g., Wake Up quest NPC)
+// Supports NPCs that track and travel to player location
 // ------------------------------------------------------------
 
 (function () {
@@ -14,7 +15,7 @@
     // ------------------------------------------------------------
     // Trigger a scripted encounter
     // npcId: string (your NPC template ID)
-    // options: { spawnRadius, dialogId, onComplete }
+    // options: { spawnRadius, dialogId, onComplete, useSignalRunner }
     // ------------------------------------------------------------
     triggerEncounter(npcId, options = {}) {
       if (this.activeEncounter) {
@@ -25,7 +26,13 @@
       const radius = options.spawnRadius || 40; // meters
       const dialogId = options.dialogId || null;
 
-      console.log(`[NPC Encounter] Triggering encounter with ${npcId}`);
+      console.log("[NPC Encounter] Triggering encounter with " + npcId);
+
+      // Special handling for Signal Runner - uses dedicated module
+      if (npcId === "signal_runner" && Game.modules.SignalRunner) {
+        this._triggerSignalRunnerEncounter(options);
+        return;
+      }
 
       // 1. Spawn NPC near player
       const npc = this._spawnNPCNearPlayer(npcId, radius);
@@ -45,9 +52,71 @@
     },
 
     // ------------------------------------------------------------
+    // Signal Runner specific encounter handling
+    // Uses the Signal Runner module for tracking and AI dialogue
+    // ------------------------------------------------------------
+    _triggerSignalRunnerEncounter(options) {
+      const SignalRunner = Game.modules.SignalRunner;
+      
+      // Get player position for spawn
+      let spawnPos = { lat: 36.1699, lng: -115.1398 }; // Default Vegas position
+      if (Game.modules.worldmap?.getPlayerPosition) {
+        const playerPos = Game.modules.worldmap.getPlayerPosition();
+        if (playerPos) {
+          // Spawn at a distance from player
+          const angle = Math.random() * Math.PI * 2;
+          const dist = options.spawnRadius || 50;
+          spawnPos = {
+            lat: playerPos.lat + (Math.cos(angle) * dist) / 111111,
+            lng: playerPos.lng + (Math.sin(angle) * dist) / 111111
+          };
+        }
+      }
+
+      // Create the NPC entity
+      const npc = SignalRunner.createNPC(spawnPos);
+      
+      // Add to world if possible
+      if (Game.modules.worldmap?.addNPC) {
+        Game.modules.worldmap.addNPC(npc);
+      }
+
+      this.activeEncounter = {
+        npc,
+        dialogId: options.dialogId,
+        onComplete: options.onComplete || null,
+        isSignalRunner: true
+      };
+
+      // Start tracking - Signal Runner will travel to player
+      SignalRunner.startTrackingPlayer();
+
+      // Listen for conversation completion
+      const completeHandler = (event) => {
+        if (event.detail.npcId === "signal_runner") {
+          window.removeEventListener('npc_conversation_complete', completeHandler);
+          this._finishEncounter();
+        }
+      };
+      window.addEventListener('npc_conversation_complete', completeHandler);
+    },
+
+    // ------------------------------------------------------------
     // Spawn NPC near player using your NPC generator + worldmap
     // ------------------------------------------------------------
     _spawnNPCNearPlayer(npcId, radius) {
+      // Check for Signal Runner module first
+      if (npcId === "signal_runner" && Game.modules.SignalRunner) {
+        const playerPos = Game.modules.worldmap?.getPlayerPosition() || { lat: 36.1699, lng: -115.1398 };
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.random() * radius;
+        const spawnPos = {
+          lat: playerPos.lat + (Math.cos(angle) * dist) / 111111,
+          lng: playerPos.lng + (Math.sin(angle) * dist) / 111111
+        };
+        return Game.modules.SignalRunner.createNPC(spawnPos);
+      }
+
       if (!Game.modules.worldmap || !Game.modules.npcGenerator) {
         console.warn("[NPC Encounter] Missing worldmap or npcGenerator");
         return null;
@@ -81,20 +150,25 @@
 
     // ------------------------------------------------------------
     // NPC walks toward player until within greeting distance
+    // Continuously tracks player position
     // ------------------------------------------------------------
     _beginApproach(npc) {
-      console.log("[NPC Encounter] NPC approaching player…");
+      console.log("[NPC Encounter] NPC approaching player...");
 
       const interval = setInterval(() => {
+        if (!Game.modules.worldmap) {
+          clearInterval(interval);
+          return;
+        }
+
         const playerPos = Game.modules.worldmap.getPlayerPosition();
         if (!playerPos) return;
 
-        const dist = Game.modules.worldmap.distanceBetween(
-          npc.position,
-          playerPos
-        );
+        const dist = Game.modules.worldmap.distanceBetween
+          ? Game.modules.worldmap.distanceBetween(npc.position, playerPos)
+          : this._calculateDistance(npc.position, playerPos);
 
-        // Move NPC toward player
+        // Move NPC toward player (continuously tracking)
         this._moveToward(npc, playerPos);
 
         // Greeting distance reached
@@ -106,6 +180,15 @@
     },
 
     // ------------------------------------------------------------
+    // Calculate distance between two positions (fallback)
+    // ------------------------------------------------------------
+    _calculateDistance(pos1, pos2) {
+      const dx = pos2.lat - pos1.lat;
+      const dy = pos2.lng - pos1.lng;
+      return Math.sqrt(dx * dx + dy * dy) * 111111;
+    },
+
+    // ------------------------------------------------------------
     // Move NPC toward a target position
     // ------------------------------------------------------------
     _moveToward(npc, targetPos) {
@@ -113,21 +196,32 @@
 
       const dx = targetPos.lat - npc.position.lat;
       const dy = targetPos.lng - npc.position.lng;
+      const magnitude = Math.sqrt(dx * dx + dy * dy);
 
-      npc.position.lat += dx * speed;
-      npc.position.lng += dy * speed;
+      if (magnitude > 0) {
+        npc.position.lat += (dx / magnitude) * speed;
+        npc.position.lng += (dy / magnitude) * speed;
 
-      Game.modules.worldmap.updateNPCPosition(npc);
+        if (Game.modules.worldmap?.updateNPCPosition) {
+          Game.modules.worldmap.updateNPCPosition(npc);
+        }
+      }
     },
 
     // ------------------------------------------------------------
-    // Trigger dialog (placeholder until your dialog system is ready)
+    // Trigger dialog - uses Signal Runner's conversation system if available
     // ------------------------------------------------------------
     _beginDialog(npc) {
-      console.log("[NPC Encounter] NPC reached player, starting dialog…");
+      console.log("[NPC Encounter] NPC reached player, starting dialog...");
 
-      // Placeholder dialog
-      alert(`${npc.name} approaches you.\n\n"${npc.introLine || "..." }"`);
+      // If it's the Signal Runner, use its conversation system
+      if (npc.id === "signal_runner" && Game.modules.SignalRunner) {
+        Game.modules.SignalRunner.beginConversation();
+        return;
+      }
+
+      // Placeholder dialog for other NPCs
+      alert(npc.name + " approaches you.\n\n\"" + (npc.introLine || "...") + "\"");
 
       this._finishEncounter();
     },
