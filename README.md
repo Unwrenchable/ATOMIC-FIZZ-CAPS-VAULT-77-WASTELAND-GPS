@@ -251,6 +251,7 @@ Meet colorful characters across the wasteland:
 - 🌐 **Frontend**: [atomicfizzcaps.xyz](https://www.atomicfizzcaps.xyz)
 - 🔌 **API**: [api.atomicfizzcaps.xyz](https://api.atomicfizzcaps.xyz)
 - 🪙 **FIZZ Token**: `fizzQBcaFLKjCoZ8Ppfkw2Xa7vH2pmW4FC6C74NpJmw`
+- 📚 **Wiki**: [Vault-Tec Documentation Archive](https://github.com/Unwrenchable/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS/wiki)
 
 ---
 
@@ -297,7 +298,8 @@ Sub‑Basement C, Vault‑77
 📠 **Fax**: Unavailable due to radroach infestation  
 📧 **Email**: Temporarily offline due to reactor leak  
 🐦 **Twitter**: [@atomicfizzcaps](https://twitter.com/atomicfizzcaps) *(monitored by surviving interns)*  
-💬 **Discord**: Ask around. Someone knows.
+💬 **Discord**: Ask around. Someone knows.  
+📚 **Wiki**: [Vault-Tec Documentation Archive](https://github.com/Unwrenchable/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS/wiki) *(declassified survival guides)*
 
 ---
 
