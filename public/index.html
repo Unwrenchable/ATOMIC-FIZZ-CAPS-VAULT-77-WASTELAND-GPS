@@ -710,13 +710,33 @@
             });
           }
 
-          // Initial display update after modules load
-          setTimeout(updateStatDisplay, 1000);
+          // Wait for characterCreatorOpened event which signals the module is ready
+          window.addEventListener('characterCreatorOpened', updateStatDisplay);
+
+          // Also try to update display when pipboy is ready
+          window.addEventListener('pipboyReady', () => {
+            // Give modules a moment to initialize after pipboy ready
+            requestAnimationFrame(() => {
+              updateStatDisplay();
+            });
+          });
 
           // Listen for character creation events
           window.addEventListener('characterCreated', () => {
             updateStatDisplay();
           });
+
+          // Fallback: check periodically until module is ready (max 5 seconds)
+          let attempts = 0;
+          const checkModule = () => {
+            if (Game?.modules?.CharacterCreator) {
+              updateStatDisplay();
+            } else if (attempts < 10) {
+              attempts++;
+              setTimeout(checkModule, 500);
+            }
+          };
+          checkModule();
         }
 
         if (document.readyState === 'loading') {

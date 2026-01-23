@@ -165,6 +165,11 @@
       const speed = 25; // ms per character
       let index = 0;
 
+      // Store current state for skip functionality
+      this._currentTypewriterText = text;
+      this._currentTypewriterCallback = onComplete;
+      this._currentTypewriterElement = element;
+
       element.classList.add('typing');
 
       this.typewriterInterval = setInterval(() => {
@@ -175,6 +180,9 @@
           clearInterval(this.typewriterInterval);
           this.typewriterInterval = null;
           element.classList.remove('typing');
+          this._currentTypewriterText = null;
+          this._currentTypewriterCallback = null;
+          this._currentTypewriterElement = null;
           if (onComplete) onComplete();
         }
       }, speed);
@@ -188,10 +196,19 @@
         clearInterval(this.typewriterInterval);
         this.typewriterInterval = null;
 
-        const textEl = this.overlayEl.querySelector('.fo4-dialogue-text');
-        textEl.classList.remove('typing');
-        
-        // Could trigger the callback here if needed
+        // Complete the text immediately
+        if (this._currentTypewriterElement && this._currentTypewriterText) {
+          this._currentTypewriterElement.textContent = this._currentTypewriterText;
+          this._currentTypewriterElement.classList.remove('typing');
+        }
+
+        // Trigger the callback
+        const callback = this._currentTypewriterCallback;
+        this._currentTypewriterText = null;
+        this._currentTypewriterCallback = null;
+        this._currentTypewriterElement = null;
+
+        if (callback) callback();
       }
     },
 

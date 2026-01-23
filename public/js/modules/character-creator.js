@@ -214,16 +214,28 @@
       // Face base
       svg += `<ellipse cx="${cx}" cy="${cy}" rx="${faceWidth}" ry="${faceHeight}" fill="${skinColor}"/>`;
       
-      // Ghoul texture
+      // Ghoul texture - use deterministic positions based on appearance hash
       if (app.race === 'ghoul') {
-        svg += `<ellipse cx="${cx}" cy="${cy}" rx="${faceWidth}" ry="${faceHeight}" fill="url(#ghoulTexture)" opacity="0.3"/>`;
-        // Add some rough patches
-        for (let i = 0; i < 5; i++) {
-          const px = cx + (Math.random() - 0.5) * faceWidth * 1.5;
-          const py = cy + (Math.random() - 0.5) * faceHeight * 1.5;
-          const pr = 5 + Math.random() * 10;
-          svg += `<circle cx="${px}" cy="${py}" r="${pr}" fill="rgba(80,60,40,0.3)"/>`;
+        // Generate consistent patches using simple hash from appearance
+        const hashStr = `${app.skinTone}${app.faceShape}${app.hairStyle}`;
+        let hash = 0;
+        for (let i = 0; i < hashStr.length; i++) {
+          hash = ((hash << 5) - hash) + hashStr.charCodeAt(i);
+          hash = hash & hash;
         }
+        // Add rough patches at deterministic positions
+        const patchPositions = [
+          { dx: 0.3, dy: -0.2, r: 8 },
+          { dx: -0.25, dy: 0.15, r: 6 },
+          { dx: 0.15, dy: 0.35, r: 10 },
+          { dx: -0.35, dy: -0.1, r: 7 },
+          { dx: 0.05, dy: 0.25, r: 9 }
+        ];
+        patchPositions.forEach((pos, i) => {
+          const px = cx + pos.dx * faceWidth;
+          const py = cy + pos.dy * faceHeight;
+          svg += `<circle cx="${px}" cy="${py}" r="${pos.r}" fill="rgba(80,60,40,0.3)"/>`;
+        });
       }
       
       // Hair (back layer for longer styles)

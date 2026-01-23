@@ -105,6 +105,20 @@ function generateNPCAppearance(archetype) {
   const gender = pick(genders);
   const race = pick(races);
 
+  // Helper function to select eye color based on race
+  function selectEyeColor(race) {
+    if (race === 'ghoul') return 'ghoul_yellow';
+    if (race === 'synth') return pick(['synth_blue', 'synth_gold', ...eyeColors]);
+    return pick(eyeColors);
+  }
+
+  // Helper function to select marking based on race
+  function selectMarking(race) {
+    if (race === 'ghoul') return 'radiation_burns';
+    if (race === 'synth') return Math.random() < 0.3 ? 'circuitry' : 'none';
+    return 'none';
+  }
+
   return {
     gender,
     race,
@@ -113,12 +127,12 @@ function generateNPCAppearance(archetype) {
     hairStyle: pick(hairStyles),
     hairColor: pick(hairColors),
     eyeShape: pick(eyeShapes),
-    eyeColor: race === 'ghoul' ? 'ghoul_yellow' : (race === 'synth' ? pick(['synth_blue', 'synth_gold', ...eyeColors]) : pick(eyeColors)),
+    eyeColor: selectEyeColor(race),
     noseType: pick(noseTypes),
     mouthType: pick(mouthTypes),
     facialHair: gender === 'male' ? pick(['none', 'none', 'stubble', 'goatee', 'fullbeard', 'mustache']) : 'none',
     scar: pick(scars),
-    marking: race === 'ghoul' ? 'radiation_burns' : (race === 'synth' ? (Math.random() < 0.3 ? 'circuitry' : 'none') : 'none'),
+    marking: selectMarking(race),
     accessory: Math.random() < 0.2 ? pick(['glasses', 'goggles', 'bandana', 'eyepatch_left']) : 'none',
     expression: pick(expressions),
     ageRange: pick(ageRanges),
