@@ -276,7 +276,8 @@
         if (!topo || !topo.objects) return;
         try {
           if (typeof topojson !== "undefined" && topojson.feature) {
-            const geo = topojson.feature(topo, topo.objects.highways);
+            // The topojson file has 'roads' not 'highways' in objects
+            const geo = topojson.feature(topo, topo.objects.roads);
             L.geoJSON(geo, {
               style: {
                 color: "#00ff41",
