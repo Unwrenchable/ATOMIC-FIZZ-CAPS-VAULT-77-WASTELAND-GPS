@@ -4,12 +4,17 @@
 const express = require("express");
 const router = express.Router();
 const { redis, key } = require("../lib/redis");
+const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
+
+// Apply admin auth and rate limiting to all routes in this router
+router.use(adminRateLimiter);
+router.use(requireAdmin);
 
 const DEFAULT_SPECIAL = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
 
 async function loadProfile(wallet) {
   try {
-    const raw = await redis.hGet(key(`player:${wallet}`), "profile");
+    const raw = await redis.hget(key(`player:${wallet}`), "profile");
     if (!raw) return null;
     return JSON.parse(raw);
   } catch (err) {
@@ -20,7 +25,7 @@ async function loadProfile(wallet) {
 
 async function saveProfile(wallet, profile) {
   try {
-    await redis.hSet(key(`player:${wallet}`), "profile", JSON.stringify(profile));
+    await redis.hset(key(`player:${wallet}`), "profile", JSON.stringify(profile));
   } catch (err) {
     console.error("[adminPlayer] saveProfile error:", err);
   }
@@ -79,6 +84,7 @@ router.post("/update", async (req, res) => {
     }
 
     await saveProfile(wallet, profile);
+    console.log("[adminPlayer] Player %s updated by admin:", wallet, updates);
     return res.json({ ok: true, wallet, profile });
   } catch (err) {
     console.error("[adminPlayer] update error:", err);
@@ -111,6 +117,7 @@ router.post("/reset", async (req, res) => {
     };
 
     await saveProfile(wallet, resetProfile);
+    console.log(`[adminPlayer] Player ${wallet} reset by admin`);
     return res.json({ ok: true, wallet, profile: resetProfile });
   } catch (err) {
     console.error("[adminPlayer] reset error:", err);

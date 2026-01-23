@@ -8,9 +8,16 @@ const caps = require("../lib/caps"); // mintCapsToPlayer
 const redis = require("../lib/redis"); // use the shared redis wrapper
 
 const VOUCHER_USED_KEY = (voucherId) => `voucher:used:${voucherId}`; // value: JSON { usedBy, usedAt, tx }
+const NODE_ENV = process.env.NODE_ENV || "development";
+const STRICT_REPLAY_PROTECTION = process.env.STRICT_REPLAY_PROTECTION !== "false";
 
-if (!redis) {
-  console.warn("[redeem-voucher] Redis wrapper not available — voucher replay protection may not persist across restarts.");
+// Validate Redis availability at startup
+if (!redis || typeof redis.set !== "function") {
+  console.error("[redeem-voucher] CRITICAL: Redis wrapper not available!");
+  console.error("[redeem-voucher] Voucher replay protection will NOT function properly.");
+  if (NODE_ENV === "production" && STRICT_REPLAY_PROTECTION) {
+    console.error("[redeem-voucher] Set STRICT_REPLAY_PROTECTION=false to disable this check (NOT RECOMMENDED).");
+  }
 }
 
 const PUBLIC_KEYS = {
@@ -72,10 +79,30 @@ router.post("/redeem-voucher", authMiddleware, async (req, res) => {
     if (ts + ttl < nowSec) return res.status(400).json({ error: "Voucher expired" });
 
     // 5) Replay protection: atomically mark voucher used in Redis
-    if (redis && typeof redis.set === "function") {
+    // CRITICAL: This protection is mandatory for production environments
+    if (!redis || typeof redis.set !== "function") {
+      if (NODE_ENV === "production" && STRICT_REPLAY_PROTECTION) {
+        console.error("[redeem-voucher] CRITICAL: Redis unavailable for replay protection in production!");
+        return res.status(503).json({
+          error: "Replay protection service unavailable",
+          reason: "Redis is required for voucher redemption in production"
+        });
+      }
+      console.warn("[redeem-voucher] WARNING: Proceeding without replay protection (development mode only)");
+      // In development mode without strict protection, allow proceeding (for testing)
+    } else {
+      // Check if we're using the in-memory fallback (not safe for production)
+      if (redis.usingFallback && redis.usingFallback() && NODE_ENV === "production" && STRICT_REPLAY_PROTECTION) {
+        console.error("[redeem-voucher] CRITICAL: Using in-memory Redis fallback in production!");
+        return res.status(503).json({
+          error: "Replay protection insufficient",
+          reason: "Redis in-memory fallback is not safe for production voucher redemption"
+        });
+      }
+
       const usedKey = VOUCHER_USED_KEY(voucherId);
       const value = JSON.stringify({ usedBy: player, usedAt: Date.now() });
-      const ttlSeconds = Number(ttl) + 60; // keep a buffer
+      const ttlSecondsValue = Number(ttl) + 60; // keep a buffer
 
       // Support both node-redis and fallback wrappers:
       // - node-redis v4: set(key, value, { NX: true, EX: ttlSeconds })
@@ -84,14 +111,15 @@ router.post("/redeem-voucher", authMiddleware, async (req, res) => {
       try {
         if (redis.set.length >= 3) {
           // try node-redis style first
-          setRes = await redis.set(usedKey, value, { NX: true, EX: ttlSeconds });
+          setRes = await redis.set(usedKey, value, { NX: true, EX: ttlSecondsValue });
         } else {
           // fallback style
-          setRes = await redis.set(usedKey, value, "NX", "EX", ttlSeconds);
+          setRes = await redis.set(usedKey, value, "NX", "EX", ttlSecondsValue);
         }
       } catch (e) {
+        console.error("[redeem-voucher] Redis set error:", e.message);
         // Some wrappers return null/undefined on NX failure; normalize behavior
-        setRes = setRes || null;
+        setRes = null;
       }
 
       // Normalize check for success
@@ -99,11 +127,9 @@ router.post("/redeem-voucher", authMiddleware, async (req, res) => {
       if (alreadyUsed) {
         const existingRaw = await redis.get(usedKey);
         const existing = existingRaw ? JSON.parse(existingRaw) : null;
+        console.warn(`[redeem-voucher] Replay attack blocked: voucher ${voucherId} already redeemed`);
         return res.status(409).json({ error: "Voucher already redeemed", info: existing });
       }
-    } else {
-      // In-memory fallback not implemented here; reject to be safe
-      return res.status(500).json({ error: "Replay protection not available" });
     }
 
     // 6) Mint CAPS or award loot atomically (call your caps mint)
