@@ -1049,6 +1049,332 @@ module.exports = router;
 
 ---
 
+## Fizz.fun Token Launchpad - Marketing & Utility Strategy
+
+A token launchpad built into the Atomic Fizz Caps ecosystem could serve as both a **major marketing tool** and a **utility driver for $CAPS**. Similar to pump.fun but integrated with the wasteland theme - "Fizz.fun" lets anyone launch tokens, but only if they hold CAPS.
+
+### Why a Token Launchpad?
+
+| Benefit | Description |
+|---------|-------------|
+| **CAPS Utility** | Holding CAPS becomes a requirement to launch, creating buy pressure |
+| **Marketing** | Every token launched brings new users to the ecosystem |
+| **Revenue** | Small fees on launches/trades go to treasury |
+| **Community** | Meme tokens create viral moments and engagement |
+| **Cross-Promotion** | New tokens can integrate with the game |
+
+### Fizz.fun Concept
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           🧪 FIZZ.FUN 🧪                                    │
+│                    "Brew Your Own Atomic Token"                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │  LAUNCH REQUIREMENTS                                                │  │
+│   │  ✓ Hold at least 1,000 CAPS in connected wallet                     │  │
+│   │  ✓ Pay 100 CAPS launch fee (burned)                                 │  │
+│   │  ✓ Choose token name, symbol, and supply                            │  │
+│   │  ✓ Set bonding curve parameters                                     │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │  TRENDING TOKENS                                           24h Vol  │  │
+│   │  ──────────────────────────────────────────────────────────────────│  │
+│   │  1. 🔥 $RADROACH    "For the bugs that survived"      45,000 SOL   │  │
+│   │  2. 🥤 $NUKA        "Classic wasteland refreshment"   32,000 SOL   │  │
+│   │  3. ⚛️ $GLOW        "Embrace the radiation"           28,000 SOL   │  │
+│   │  4. 🤖 $PROTECTRON  "Beep boop"                        15,000 SOL   │  │
+│   │  5. 🎰 $LUCKYCAPS   "Feeling lucky?"                   12,000 SOL   │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+│   [🧪 Launch Token]  [📊 My Tokens]  [🔥 Trending]  [💰 Portfolio]         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### CAPS Holder Gating
+
+**Tiered Access Based on CAPS Holdings:**
+
+| CAPS Held | Privileges |
+|-----------|------------|
+| 100 CAPS | Can buy/sell tokens on Fizz.fun |
+| 1,000 CAPS | Can launch tokens |
+| 10,000 CAPS | Reduced launch fees (50 CAPS instead of 100) |
+| 100,000 CAPS | Featured placement, priority support |
+| 1,000,000 CAPS | "Vault Overseer" badge, governance rights |
+
+```javascript
+// Backend: Check CAPS balance for launch eligibility
+async function checkLaunchEligibility(wallet) {
+    const capsBalance = await getCapsBalance(wallet);
+    
+    if (capsBalance < 100) {
+        return { 
+            eligible: false, 
+            canTrade: false,
+            reason: 'Hold at least 100 CAPS to use Fizz.fun' 
+        };
+    }
+    
+    if (capsBalance < 1000) {
+        return { 
+            eligible: false, 
+            canTrade: true,
+            reason: 'Hold at least 1,000 CAPS to launch tokens' 
+        };
+    }
+    
+    const launchFee = capsBalance >= 10000 ? 50 : 100;
+    const tier = capsBalance >= 1000000 ? 'overseer' : 
+                 capsBalance >= 100000 ? 'elite' :
+                 capsBalance >= 10000 ? 'veteran' : 'wastelander';
+    
+    return { 
+        eligible: true, 
+        canTrade: true,
+        launchFee,
+        tier,
+        perks: getTierPerks(tier)
+    };
+}
+```
+
+### Bonding Curve Mechanics
+
+Fizz.fun uses bonding curves like pump.fun - token price increases as supply is bought:
+
+```
+Price = BasePrice × (1 + (Supply / MaxSupply))^CurveExponent
+
+Example with exponential curve:
+- At 0% supply bought: 0.0001 SOL per token
+- At 25% supply bought: 0.001 SOL per token  
+- At 50% supply bought: 0.01 SOL per token
+- At 75% supply bought: 0.1 SOL per token
+- At 100% supply bought: 1 SOL per token (graduates to DEX)
+```
+
+**Graduation to Raydium:**
+When bonding curve reaches target (e.g., 69 SOL raised), token automatically:
+1. Creates Raydium liquidity pool
+2. Burns LP tokens (locked forever)
+3. Token becomes freely tradeable on DEX
+
+### Technical Implementation
+
+#### Solana Program Structure
+
+```rust
+// programs/fizz-fun/src/lib.rs
+use anchor_lang::prelude::*;
+
+declare_id!("FizzFunXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
+#[program]
+pub mod fizz_fun {
+    use super::*;
+
+    /// Launch a new token (requires CAPS holding)
+    pub fn launch_token(
+        ctx: Context<LaunchToken>,
+        name: String,
+        symbol: String,
+        total_supply: u64,
+        curve_type: CurveType,
+    ) -> Result<()> {
+        // 1. Verify CAPS balance >= 1000
+        let caps_balance = ctx.accounts.creator_caps_ata.amount;
+        require!(caps_balance >= 1000 * 10u64.pow(9), FizzError::InsufficientCaps);
+        
+        // 2. Calculate and burn launch fee
+        let fee = if caps_balance >= 10000 * 10u64.pow(9) { 50 } else { 100 };
+        burn_caps(&ctx, fee * 10u64.pow(9))?;
+        
+        // 3. Create token mint
+        create_token_mint(&ctx, &name, &symbol, total_supply)?;
+        
+        // 4. Initialize bonding curve
+        let curve = &mut ctx.accounts.bonding_curve;
+        curve.token_mint = ctx.accounts.token_mint.key();
+        curve.creator = ctx.accounts.creator.key();
+        curve.curve_type = curve_type;
+        curve.total_supply = total_supply;
+        curve.sold_supply = 0;
+        curve.sol_raised = 0;
+        curve.graduated = false;
+        
+        emit!(TokenLaunched {
+            mint: ctx.accounts.token_mint.key(),
+            creator: ctx.accounts.creator.key(),
+            name,
+            symbol,
+        });
+        
+        Ok(())
+    }
+
+    /// Buy tokens from bonding curve
+    pub fn buy(ctx: Context<Buy>, sol_amount: u64) -> Result<()> {
+        // Verify buyer holds at least 100 CAPS
+        let caps_balance = ctx.accounts.buyer_caps_ata.amount;
+        require!(caps_balance >= 100 * 10u64.pow(9), FizzError::InsufficientCapsToTrade);
+        
+        let curve = &mut ctx.accounts.bonding_curve;
+        require!(!curve.graduated, FizzError::AlreadyGraduated);
+        
+        // Calculate tokens to receive based on curve
+        let tokens_out = calculate_buy_return(curve, sol_amount)?;
+        
+        // Transfer SOL to curve vault
+        transfer_sol(&ctx, sol_amount)?;
+        
+        // Mint tokens to buyer
+        mint_tokens(&ctx, tokens_out)?;
+        
+        // Update curve state
+        curve.sold_supply += tokens_out;
+        curve.sol_raised += sol_amount;
+        
+        // Check graduation
+        if curve.sol_raised >= GRADUATION_THRESHOLD {
+            graduate_to_raydium(&ctx)?;
+            curve.graduated = true;
+        }
+        
+        Ok(())
+    }
+
+    /// Sell tokens back to bonding curve
+    pub fn sell(ctx: Context<Sell>, token_amount: u64) -> Result<()> {
+        let curve = &mut ctx.accounts.bonding_curve;
+        require!(!curve.graduated, FizzError::AlreadyGraduated);
+        
+        // Calculate SOL to receive
+        let sol_out = calculate_sell_return(curve, token_amount)?;
+        
+        // Burn tokens
+        burn_tokens(&ctx, token_amount)?;
+        
+        // Transfer SOL to seller
+        transfer_sol_to_seller(&ctx, sol_out)?;
+        
+        // Update curve state
+        curve.sold_supply -= token_amount;
+        curve.sol_raised -= sol_out;
+        
+        Ok(())
+    }
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq)]
+pub enum CurveType {
+    Linear,
+    Exponential,
+    Sigmoid,
+}
+
+#[error_code]
+pub enum FizzError {
+    #[msg("Must hold at least 1000 CAPS to launch tokens")]
+    InsufficientCaps,
+    #[msg("Must hold at least 100 CAPS to trade")]
+    InsufficientCapsToTrade,
+    #[msg("Token has graduated to DEX")]
+    AlreadyGraduated,
+}
+```
+
+### Revenue Model
+
+| Fee Type | Amount | Destination |
+|----------|--------|-------------|
+| Launch fee | 100 CAPS (burned) | Deflationary |
+| Trade fee | 1% of SOL | 0.5% treasury, 0.5% creator |
+| Graduation fee | 0.5 SOL | Treasury |
+
+**Projected Revenue (Conservative):**
+```
+Assuming 50 token launches per day:
+- Launch fees: 50 × 100 CAPS = 5,000 CAPS burned/day
+- Trade fees (avg 10 SOL/token/day): 50 × 10 × 1% = 5 SOL/day
+- Graduation fees (10% graduate): 5 × 0.5 = 2.5 SOL/day
+
+Monthly: 150,000 CAPS burned + 225 SOL revenue
+```
+
+### Marketing Synergies
+
+#### 1. **Cross-Promotion with Game**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  NEW TOKEN ALERT IN VAULT 77!                              │
+│                                                             │
+│  🔥 $RADROACH just launched on Fizz.fun!                   │
+│                                                             │
+│  Creator @WastelandTrader77 is offering:                   │
+│  • 1000 $RADROACH airdrop to first 100 claimers           │
+│  • Special "Radroach Pet" NFT for top 10 holders          │
+│                                                             │
+│  [View on Fizz.fun]  [Claim Airdrop]                       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 2. **In-Game Token Integration**
+Launched tokens can optionally integrate with the game:
+- Token holders get cosmetic items
+- Tokens can be used in mini-games
+- Special faction tokens for faction staking
+
+#### 3. **Viral Loop**
+```
+User discovers Fizz.fun → Needs CAPS to participate → 
+Buys CAPS → Discovers the game → Plays game → 
+Earns more CAPS → Launches own token → 
+Promotes token → Brings friends → They need CAPS → ...
+```
+
+### Implementation Phases
+
+| Phase | Features | Timeline |
+|-------|----------|----------|
+| 1 - MVP | Basic launch, buy, sell with CAPS gating | 2-3 weeks |
+| 2 - Polish | UI, trending page, creator profiles | 1-2 weeks |
+| 3 - Integration | Game cross-promotion, in-game alerts | 1-2 weeks |
+| 4 - Advanced | Custom curves, token integration, governance | Ongoing |
+
+### Security Considerations
+
+| Risk | Mitigation |
+|------|------------|
+| Rug pulls | Bonding curve ensures liquidity; graduation locks LP |
+| Bot manipulation | CAPS gating creates cost barrier; rate limiting |
+| Spam tokens | Launch fee creates friction; reporting system |
+| Contract exploits | Audit before mainnet; start with caps on TVL |
+
+### Why This Works as Marketing
+
+1. **Viral Mechanics**: Meme tokens spread naturally on social media
+2. **CAPS Demand**: Everyone needs CAPS to participate
+3. **Community**: Each token creates a micro-community
+4. **Revenue**: Self-sustaining with fees
+5. **Network Effect**: More tokens → more users → more tokens
+6. **Game Integration**: Tokens can tie back to wasteland gameplay
+
+### Comparison to Pump.fun
+
+| Feature | Pump.fun | Fizz.fun |
+|---------|----------|----------|
+| Requirement | None | Hold CAPS |
+| Theme | Generic | Wasteland/Atomic |
+| Game integration | None | Full integration |
+| Fees | SOL only | CAPS burn + SOL |
+| Community | Separate | Shared with game |
+
+---
+
 ## Conclusion
 
 The Atomic Fizz Caps project already uses a solid foundation with Solana, Ed25519 signatures, and Metaplex NFTs. The most impactful additions would be:
@@ -1057,5 +1383,6 @@ The Atomic Fizz Caps project already uses a solid foundation with Solana, Ed2551
 2. **Cross-chain bridges** - Enable broader token utility
 3. **Decentralized storage** - Ensure NFT metadata permanence
 4. **Game-integrated staking** - Add economic depth without breaking gameplay
+5. **Fizz.fun launchpad** - Major marketing driver with CAPS utility
 
 These additions would align the project with current best practices in web3 gaming while maintaining compatibility with the existing Solana-based architecture.
