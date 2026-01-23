@@ -162,9 +162,28 @@
           zoomControl: false,
           attributionControl: false,
           worldCopyJump: false,
-          preferCanvas: true // Better performance
+          preferCanvas: true, // Better performance
+          // Mobile touch settings - prevent gestures from propagating
+          tap: true,
+          tapTolerance: 15,
+          touchZoom: true,
+          dragging: true,
+          bounceAtZoomLimits: false
         });
         console.log('[worldmap] Leaflet map object created successfully');
+        
+        // Prevent touch events from propagating outside map container (mobile swipe fix)
+        // Only stop propagation, don't prevent default as Leaflet needs those events
+        container.addEventListener('touchstart', (e) => {
+          e.stopPropagation();
+        }, { passive: true });
+        container.addEventListener('touchmove', (e) => {
+          e.stopPropagation();
+        }, { passive: true });
+        container.addEventListener('touchend', (e) => {
+          e.stopPropagation();
+        }, { passive: true });
+        
       } catch (e) {
         console.error('[worldmap] failed to create map:', e);
         return;

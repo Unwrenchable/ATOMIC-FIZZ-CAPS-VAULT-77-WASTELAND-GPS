@@ -245,7 +245,7 @@ body.pipboy-mode {
 }
 
 #mapContainer .leaflet-tile {
-  filter: brightness(0.35) contrast(1.6) saturate(0.4) hue-rotate(85deg);
+  filter: brightness(0.55) contrast(1.4) saturate(0.5) hue-rotate(85deg);
 }
 
 /* Grid */
@@ -268,10 +268,10 @@ body.pipboy-mode {
   inset: 0;
   pointer-events: none;
   background:
-    repeating-linear-gradient(to bottom, rgba(0,0,0,0.25) 1px, transparent 2px),
-    radial-gradient(circle at center, rgba(0,255,65,0.05) 0%, rgba(0,0,0,0.65) 90%);
+    repeating-linear-gradient(to bottom, rgba(0,0,0,0.15) 1px, transparent 2px),
+    radial-gradient(circle at center, rgba(0,255,65,0.05) 0%, rgba(0,0,0,0.45) 90%);
   mix-blend-mode: overlay;
-  opacity: 0.45;
+  opacity: 0.35;
   z-index: 50;
 }
 
@@ -314,14 +314,34 @@ body.pipboy-mode {
    MAP INTERACTION FIX
    ============================================================ */
 
-#mapContainer, #mapContainer * {
+#mapContainer {
   pointer-events: auto !important;
-  touch-action: pan-x pan-y !important;
+  touch-action: none !important;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.pipboy-panel[data-panel="map"] {
+/* Leaflet container handles its own touch actions - allow pan and pinch-zoom */
+#mapContainer .leaflet-container {
+  touch-action: pan-x pan-y pinch-zoom !important;
+  pointer-events: auto !important;
+}
+
+/* Map panel should not interfere with map touch events */
+#panel-map {
   overflow: hidden !important;
   touch-action: none !important;
+}
+
+#panel-map .panel-body {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+
+/* Prevent parent elements from capturing touch events */
+.pipboy-map {
+  touch-action: none !important;
+  -webkit-overflow-scrolling: auto !important;
 }
 
 .leaflet-control-container { display: none; }
