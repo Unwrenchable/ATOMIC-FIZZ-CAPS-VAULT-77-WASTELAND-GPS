@@ -204,7 +204,6 @@ body {
 }
 
 #panel-map #mapContainer {
-  flex: 1;
   min-height: 0;
   position: absolute;
   top: 0;
