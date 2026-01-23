@@ -5,7 +5,7 @@
 
 // Use window.API_BASE if available (set in index.html), otherwise default to relative path
 // This allows direct API calls in production and Vercel rewrite fallback in dev
-function getApiBase() {
+function getAuthApiUrl() {
   const base = (window.API_BASE || '').replace(/\/+$/, '');
   return base ? `${base}/api/auth` : '/api/auth';
 }
@@ -109,10 +109,10 @@ class AuthClient {
 
   async login(wallet) {
     const publicKey = wallet.publicKey.toBase58();
-    const apiBase = getApiBase();
+    const authUrl = getAuthApiUrl();
 
     // 1. Get nonce
-    const nonceRes = await fetch(`${apiBase}/nonce/${publicKey}`);
+    const nonceRes = await fetch(`${authUrl}/nonce/${publicKey}`);
     const nonceJson = await safeJsonParse(nonceRes);
     if (!nonceJson.ok) throw new Error(nonceJson.error || "Failed to get nonce");
 
@@ -125,7 +125,7 @@ class AuthClient {
     const signatureBase58 = bs58.encode(signature);
 
     // 3. Verify
-    const verifyRes = await fetch(`${apiBase}/verify`, {
+    const verifyRes = await fetch(`${authUrl}/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -152,8 +152,8 @@ class AuthClient {
       return;
     }
 
-    const apiBase = getApiBase();
-    await fetch(`${apiBase}/logout`, {
+    const authUrl = getAuthApiUrl();
+    await fetch(`${authUrl}/logout`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${this.state.sessionId}`,
