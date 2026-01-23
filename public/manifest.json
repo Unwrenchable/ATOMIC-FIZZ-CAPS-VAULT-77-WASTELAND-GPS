@@ -1,0 +1,39 @@
+{
+  "name": "Atomic Fizz Caps - Wasteland GPS",
+  "short_name": "Atomic Fizz",
+  "description": "Pip-Boy 3000 Wasteland GPS - A Fallout-themed geo-game powered by Solana",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050705",
+  "theme_color": "#00ff41",
+  "orientation": "any",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192 512x512 832x832",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Open Map",
+      "short_name": "Map",
+      "description": "View the Wasteland Map",
+      "url": "/?tab=map"
+    },
+    {
+      "name": "Quests",
+      "short_name": "Quests",
+      "description": "View your active quests",
+      "url": "/?tab=quests"
+    }
+  ]
+}
