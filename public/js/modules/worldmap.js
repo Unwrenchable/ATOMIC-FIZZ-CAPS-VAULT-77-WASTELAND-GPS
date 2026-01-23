@@ -4,6 +4,41 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // ============================================================
+  // ICON FALLBACK MAPPING
+  // Maps iconKey values that don't have SVG files to existing icons
+  // ============================================================
+  const ICON_FALLBACK_MAP = {
+    // NPCs/Characters
+    'drifter': 'ghost',
+    'courier': 'player',
+    'wanderer': 'ghost',
+    
+    // Factions without dedicated icons
+    'followers': 'medical',
+    'institute': 'lab',
+    'minutemen': 'settlement',
+    'railroad': 'tunnel',
+    
+    // Trading/Commerce
+    'trader': 'trading',
+    'merchant': 'market',
+    'vendor': 'shop',
+    
+    // Null/Invalid fallback
+    'null': 'poi',
+    'undefined': 'poi',
+    '': 'poi'
+  };
+
+  // Get valid icon name with fallback
+  function getValidIcon(iconKey) {
+    if (!iconKey || iconKey === 'null' || iconKey === 'undefined') {
+      return 'poi';
+    }
+    return ICON_FALLBACK_MAP[iconKey] || iconKey;
+  }
+
   // safeFetchJSON: returns parsed JSON or null and logs diagnostics
   async function safeFetchJSON(url, opts = {}) {
     try {
@@ -191,8 +226,9 @@
       }
 
       // Expanded bounds to cover all game regions (Vegas, DC, and beyond)
+      // Increased max zoom to 18 to allow closer inspection of player location
       this.map.setMinZoom(3);
-      this.map.setMaxZoom(14);
+      this.map.setMaxZoom(18);
       this.map.setMaxBounds([
         [70, -180],   // Northwest corner (covers Alaska)
         [20, 180]     // Southeast corner (covers all locations)
@@ -253,8 +289,9 @@
         
         allPois.forEach(poi => {
           try {
-            // Use iconKey (from data) or icon (fallback)
-            const iconName = poi.iconKey || poi.icon || 'poi';
+            // Use iconKey (from data) or icon (fallback) with proper fallback mapping
+            const rawIconKey = poi.iconKey || poi.icon || 'poi';
+            const iconName = getValidIcon(rawIconKey);
             const icon = L.icon({
               iconUrl: `/img/icons/${iconName}.svg`,
               iconSize: [32, 32],
@@ -668,8 +705,9 @@
         legendary: '#ffaa00'
       }[rarity] || '#00ff41';
       
-      // Use SVG icon from the icon field, fallback to 'poi' default
-      const iconName = loc.icon || loc.iconKey || 'poi';
+      // Use SVG icon from the icon field, with proper fallback mapping for missing icons
+      const rawIconKey = loc.icon || loc.iconKey || 'poi';
+      const iconName = getValidIcon(rawIconKey);
       const icon = L.icon({
         iconUrl: `/img/icons/${iconName}.svg`,
         iconSize: [28, 28],

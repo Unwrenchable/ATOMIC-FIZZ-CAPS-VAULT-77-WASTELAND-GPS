@@ -18,14 +18,15 @@
 }
 
 /* Leaflet tile layer - green/amber tint for Fallout feel */
+/* Brightness increased from 0.85 to 1.0 for better visibility */
 .leaflet-tile-pane {
   filter: 
-    sepia(0.3) 
+    sepia(0.25) 
     hue-rotate(60deg) 
-    saturate(0.8) 
-    contrast(1.15)
-    brightness(0.85);
-  opacity: 0.9;
+    saturate(0.85) 
+    contrast(1.1)
+    brightness(1.0);
+  opacity: 0.95;
 }
 
 /* POI Markers - Fallout style with contained glow (no bleed) */
