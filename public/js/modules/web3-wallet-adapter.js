@@ -13,16 +13,24 @@
 
   // Security utilities
   const securityUtils = {
-    // Sanitize wallet address to prevent XSS
+    // Sanitize wallet address to prevent XSS - preserves valid address characters
     sanitizeAddress(address) {
       if (!address || typeof address !== 'string') return null;
-      // Only allow alphanumeric characters typical in crypto addresses
-      return address.replace(/[^a-zA-Z0-9]/g, '');
+      // Base58 characters: 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz
+      // EVM addresses also need 0x prefix and hex chars
+      // Allow only safe characters for both address types
+      const cleaned = address.replace(/[^a-zA-Z0-9]/g, '');
+      // If it was an EVM address (started with 0x), preserve that
+      if (address.toLowerCase().startsWith('0x')) {
+        return '0x' + cleaned.slice(2); // Remove potential double 0x
+      }
+      return cleaned;
     },
 
     // Validate Solana address format (base58, 32-44 chars)
     isValidSolanaAddress(address) {
       if (!address || typeof address !== 'string') return false;
+      // Base58 alphabet excludes 0, O, I, l to avoid confusion
       const base58Regex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
       return base58Regex.test(address);
     },
@@ -32,6 +40,13 @@
       if (!address || typeof address !== 'string') return false;
       const evmRegex = /^0x[a-fA-F0-9]{40}$/;
       return evmRegex.test(address);
+    },
+
+    // Validate integrated wallet address (our custom format)
+    isValidIntegratedAddress(address) {
+      if (!address || typeof address !== 'string') return false;
+      // Our integrated wallets start with 'Fz' and are 44 chars
+      return /^Fz[1-9A-HJ-NP-Za-km-z]{42}$/.test(address);
     },
 
     // Rate limit function calls
@@ -469,13 +484,30 @@
       console.log("[web3-wallet] Generating new integrated Fizz Caps wallet...");
 
       try {
-        // Generate secure random keypair
-        const randomBytes = securityUtils.getSecureRandomBytes(32);
-        const privateKey = Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+        // Base58 alphabet (excludes 0, O, I, l to avoid confusion)
+        const BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+        const ALPHABET_SIZE = BASE58_ALPHABET.length; // 58
         
-        // Generate public key (simplified - in production, use proper Solana key derivation)
-        // This creates a base58-like address starting with 'Fizz'
-        const publicKey = 'Fizz' + privateKey.substring(0, 40);
+        // Generate unbiased random selection for each character
+        // Using rejection sampling to avoid modulo bias
+        function getUnbiasedRandomIndex() {
+          const randomBytes = securityUtils.getSecureRandomBytes(1);
+          const value = randomBytes[0];
+          // Reject values that would cause bias (256 is not evenly divisible by 58)
+          // Max unbiased value: 58 * 4 = 232
+          const maxUnbiased = Math.floor(256 / ALPHABET_SIZE) * ALPHABET_SIZE;
+          if (value >= maxUnbiased) {
+            // Rejection: try again with new random byte
+            return getUnbiasedRandomIndex();
+          }
+          return value % ALPHABET_SIZE;
+        }
+        
+        // Generate a valid base58 public key starting with 'Fz' (for Fizz)
+        let publicKey = 'Fz'; // Our wallet prefix (valid base58 chars)
+        for (let i = 0; i < 42; i++) {
+          publicKey += BASE58_ALPHABET[getUnbiasedRandomIndex()];
+        }
 
         // Save only the public key to localStorage
         // SECURITY: Private keys are NEVER stored in localStorage per audit guidelines
@@ -486,22 +518,27 @@
         const encodedPubKey = btoa(publicKey);
         localStorage.setItem(LOCAL_WALLET_KEY, encodedPubKey);
 
-        // Create wallet object (private key only in memory)
+        // Create wallet object (actual signing would require proper Solana keypair)
+        // Note: This is a LOCAL wallet for testing/demo purposes only
+        // For real transactions, users should connect Phantom or other secure wallets
         const wallet = {
           publicKey,
-          // Private key stored in closure, not directly accessible
+          // Signing is mocked for local wallet - real signing requires proper keypair
           sign: async (message) => {
-            // Simplified signing - in production use tweetnacl or similar
+            console.warn('[web3-wallet] Local wallet signing is for demo only. Use Phantom for real transactions.');
             if (!message) throw new Error('Message required for signing');
+            // This creates a deterministic hash, NOT a real signature
+            // Real implementation would use tweetnacl or @solana/web3.js
             const encoder = new TextEncoder();
-            const data = encoder.encode(message);
+            const data = encoder.encode(message + publicKey);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
           },
           type: 'integrated',
           generated: Date.now(),
-          toString: () => publicKey
+          toString: () => publicKey,
+          isLocalWallet: true // Flag to indicate this is a demo wallet
         };
 
         // Update global wallet reference (without exposing private key)
@@ -510,8 +547,9 @@
         }
         window.wallet.publicKey = { toString: () => publicKey };
         window.wallet.sign = wallet.sign;
+        window.wallet.isLocalWallet = true;
 
-        console.log("[web3-wallet] Generated secure wallet:", publicKey.substring(0, 12) + '...');
+        console.log("[web3-wallet] Generated local wallet:", publicKey.substring(0, 12) + '...');
         return wallet;
         
       } catch (error) {
