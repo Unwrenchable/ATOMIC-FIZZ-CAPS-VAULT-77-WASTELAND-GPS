@@ -8,9 +8,33 @@
   if (!Game.modules) Game.modules = {};
 
   const QUESTS_DB = {
+    wake_up: {
+      id: "wake_up",
+      name: "Wake Up",
+      type: "objectives",
+      description: "You awaken in the wasteland. Something is wrong with this timeline.",
+      objectives: {
+        open_inventory: { text: "Open your inventory" },
+        switch_tabs: { text: "Cycle through the Pip‑Boy tabs" },
+        pick_item: { text: "Pick up an item" },
+        equip_item: { text: "Equip an item" },
+        turn_on_radio: { text: "Tune into Atomic Fizz Radio" },
+        open_map: { text: "Check your map" }
+      },
+      order: [
+        "open_inventory",
+        "switch_tabs",
+        "pick_item",
+        "equip_item",
+        "turn_on_radio",
+        "open_map"
+      ],
+      rewards: { xp: 50, caps: 10 }
+    },
     quest_vault77_open: {
       id: "quest_vault77_open",
       name: "Open Vault 77",
+      type: "steps",
       description: "Find a way to unlock Vault 77.",
       steps: [
         {
@@ -33,21 +57,38 @@
   };
 
   const questsModule = {
+    gs: null,
+
     init(gameState) {
-      this.gs = gameState;
+      this.gs = gameState || window.gameState || window.DATA || {};
       if (!this.gs.quests) this.gs.quests = {};
+      if (!this.gs.player) this.gs.player = { xp: 0, caps: 0 };
+    },
+
+    ensureGameState() {
+      if (!this.gs) {
+        this.init();
+      }
     },
 
     ensureQuestState(questId) {
+      this.ensureGameState();
       if (!this.gs.quests[questId]) {
-        this.gs.quests[questId] = { state: "not_started", currentStepIndex: 0 };
+        this.gs.quests[questId] = { 
+          state: "not_started", 
+          currentStepIndex: 0,
+          objectives: {}
+        };
       }
       return this.gs.quests[questId];
     },
 
     startQuest(questId) {
       const q = QUESTS_DB[questId];
-      if (!q) return false;
+      if (!q) {
+        console.warn("[quests] Unknown quest:", questId);
+        return false;
+      }
 
       const st = this.ensureQuestState(questId);
       if (st.state === "completed") return false;
@@ -55,7 +96,57 @@
       st.state = "active";
       st.currentStepIndex = 0;
 
+      // Initialize objective states for objective-based quests
+      if (q.type === "objectives" && q.objectives) {
+        Object.keys(q.objectives).forEach(obj => {
+          st.objectives[obj] = false;
+        });
+      }
+
+      console.log("[quests] Quest started:", questId);
       return true;
+    },
+
+    // For objective-based quests (like wake_up)
+    completeObjective(questId, objectiveId) {
+      const q = QUESTS_DB[questId];
+      if (!q || q.type !== "objectives") return false;
+
+      const st = this.ensureQuestState(questId);
+      if (st.state !== "active") return false;
+
+      if (!(objectiveId in q.objectives)) {
+        console.warn("[quests] Unknown objective:", objectiveId, "for quest:", questId);
+        return false;
+      }
+
+      if (st.objectives[objectiveId]) return true; // already done
+
+      st.objectives[objectiveId] = true;
+      console.log("[quests] Objective complete:", questId, "→", objectiveId);
+
+      // Check if all objectives are done
+      const allDone = q.order.every(obj => st.objectives[obj]);
+      if (allDone) {
+        this.completeQuest(questId);
+      }
+
+      return true;
+    },
+
+    completeQuest(questId) {
+      const q = QUESTS_DB[questId];
+      const st = this.ensureQuestState(questId);
+
+      st.state = "completed";
+
+      const r = q.rewards || {};
+      if (this.gs.player) {
+        this.gs.player.xp = (this.gs.player.xp || 0) + (r.xp || 0);
+        this.gs.player.caps = (this.gs.player.caps || 0) + (r.caps || 0);
+      }
+
+      console.log("[quests] Quest completed:", questId);
     },
 
     getCurrentStep(questId) {
@@ -63,7 +154,8 @@
       const st = this.ensureQuestState(questId);
 
       if (!q || st.state !== "active") return null;
-      return q.steps[st.currentStepIndex];
+      if (q.type === "objectives") return null; // objectives don't have steps
+      return q.steps ? q.steps[st.currentStepIndex] : null;
     },
 
     checkStepCompletion(questId) {
@@ -167,4 +259,7 @@
   };
 
   Game.modules.quests = questsModule;
+  
+  // Also expose as Game.quests for compatibility with pipboy.js
+  Game.quests = questsModule;
 })();
