@@ -67,7 +67,9 @@ for (const region in regionPools) {
       lootPool: archetype.lootPool || "default_loot",
       dialogPool: archetype.dialogPool || "default_dialog",
       factionTag: weightedPick(rules.factions.weights),
-      timelineVariants: []
+      timelineVariants: [],
+      // Appearance data for Fallout 4 style character portraits
+      appearance: generateNPCAppearance(archetype)
     };
 
     // Timeline variants
@@ -81,6 +83,48 @@ for (const region in regionPools) {
 
     npcIndex++;
   }
+}
+
+// Generate random NPC appearance
+function generateNPCAppearance(archetype) {
+  const genders = ['male', 'female', 'nonbinary'];
+  const races = archetype?.racePool || ['human', 'human', 'human', 'ghoul', 'synth'];
+  const skinTones = ['pale', 'fair', 'light', 'medium', 'tan', 'olive', 'brown', 'dark'];
+  const faceShapes = ['oval', 'round', 'square', 'heart', 'oblong', 'diamond'];
+  const hairStyles = ['bald', 'buzzcut', 'short', 'medium', 'long', 'mohawk', 'ponytail', 'braids', 'dreads', 'slickedback', 'wasteland'];
+  const hairColors = ['black', 'darkbrown', 'brown', 'auburn', 'red', 'ginger', 'blonde', 'platinum', 'white', 'gray'];
+  const eyeShapes = ['almond', 'round', 'hooded', 'downturned', 'upturned', 'monolid', 'deepset'];
+  const eyeColors = ['brown', 'hazel', 'amber', 'green', 'blue', 'gray', 'black'];
+  const noseTypes = ['straight', 'roman', 'snub', 'button', 'aquiline', 'wide', 'narrow'];
+  const mouthTypes = ['thin', 'full', 'wide', 'small', 'heartshaped'];
+  const scars = ['none', 'none', 'none', 'cheek_left', 'cheek_right', 'brow', 'lip', 'forehead', 'claw', 'bullet'];
+  const expressions = ['neutral', 'stern', 'friendly', 'suspicious', 'weary', 'determined', 'smirking'];
+  const ageRanges = ['young', 'adult', 'adult', 'middleaged', 'elder'];
+  const bodyTypes = ['slim', 'average', 'muscular', 'heavy'];
+
+  const gender = pick(genders);
+  const race = pick(races);
+
+  return {
+    gender,
+    race,
+    skinTone: pick(skinTones),
+    faceShape: pick(faceShapes),
+    hairStyle: pick(hairStyles),
+    hairColor: pick(hairColors),
+    eyeShape: pick(eyeShapes),
+    eyeColor: race === 'ghoul' ? 'ghoul_yellow' : (race === 'synth' ? pick(['synth_blue', 'synth_gold', ...eyeColors]) : pick(eyeColors)),
+    noseType: pick(noseTypes),
+    mouthType: pick(mouthTypes),
+    facialHair: gender === 'male' ? pick(['none', 'none', 'stubble', 'goatee', 'fullbeard', 'mustache']) : 'none',
+    scar: pick(scars),
+    marking: race === 'ghoul' ? 'radiation_burns' : (race === 'synth' ? (Math.random() < 0.3 ? 'circuitry' : 'none') : 'none'),
+    accessory: Math.random() < 0.2 ? pick(['glasses', 'goggles', 'bandana', 'eyepatch_left']) : 'none',
+    expression: pick(expressions),
+    ageRange: pick(ageRanges),
+    bodyType: pick(bodyTypes),
+    voice: race === 'synth' ? 'robotic' : pick(['smooth', 'gruff', 'raspy', 'weathered', 'youthful'])
+  };
 }
 
 console.log("NPC generation complete.");

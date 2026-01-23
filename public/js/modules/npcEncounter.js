@@ -212,7 +212,7 @@
     },
 
     // ------------------------------------------------------------
-    // Trigger dialog - uses Signal Runner's conversation system if available
+    // Trigger dialog - uses Fallout 4 style dialogue system
     // ------------------------------------------------------------
     _beginDialog(npc) {
       console.log("[NPC Encounter] NPC reached player, starting dialog...");
@@ -223,10 +223,82 @@
         return;
       }
 
-      // Placeholder dialog for other NPCs
+      // Use Fallout 4 style dialogue system if available
+      if (Game.modules.FO4Dialogue) {
+        // Create dialogue data from NPC
+        const dialogueData = this._buildNPCDialogue(npc);
+        
+        Game.modules.FO4Dialogue.startDialogue(npc, dialogueData, () => {
+          this._finishEncounter();
+        });
+        return;
+      }
+
+      // Fallback: Placeholder dialog for other NPCs
       alert(npc.name + " approaches you.\n\n\"" + (npc.introLine || "...") + "\"");
 
       this._finishEncounter();
+    },
+
+    // ------------------------------------------------------------
+    // Build dialogue data from NPC definition
+    // ------------------------------------------------------------
+    _buildNPCDialogue(npc) {
+      const dialogue = {
+        nodes: []
+      };
+
+      // Build intro node
+      const introNode = {
+        id: 'intro',
+        text: npc.introLine || npc.dialog?.idle?.[0] || "...",
+        responses: []
+      };
+
+      // Add basic responses
+      if (npc.dialog?.player_choice) {
+        npc.dialog.player_choice.forEach((choice, i) => {
+          introNode.responses.push({
+            text: choice,
+            tone: 'question',
+            next: `response_${i}`
+          });
+        });
+      }
+
+      // Add a goodbye option
+      introNode.responses.push({
+        text: 'Goodbye.',
+        tone: 'neutral',
+        end: true
+      });
+
+      dialogue.nodes.push(introNode);
+
+      // Add response nodes if NPC has additional dialog
+      if (npc.dialog) {
+        // Add knowledge nodes
+        if (npc.dialog.human_moment) {
+          npc.dialog.human_moment.forEach((text, i) => {
+            dialogue.nodes.push({
+              id: `response_${i}`,
+              text: text,
+              responses: [{ text: 'I see...', end: true }]
+            });
+          });
+        }
+
+        // Add glitch dialog for special NPCs
+        if (npc.dialog.glitch) {
+          dialogue.nodes.push({
+            id: 'glitch',
+            text: npc.dialog.glitch[Math.floor(Math.random() * npc.dialog.glitch.length)],
+            responses: [{ text: 'What?', next: 'intro' }]
+          });
+        }
+      }
+
+      return dialogue;
     },
 
     // ------------------------------------------------------------
