@@ -1,0 +1,8 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mountain peaks -->
+  <polygon points="2,20 8,8 14,20" fill="black"/>
+  <polygon points="10,20 16,6 22,20" fill="black"/>
+  <!-- Snow caps -->
+  <polygon points="8,8 6,12 10,12" fill="white"/>
+  <polygon points="16,6 14,10 18,10" fill="white"/>
+</svg>

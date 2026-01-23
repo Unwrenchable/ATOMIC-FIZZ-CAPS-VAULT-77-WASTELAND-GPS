@@ -1,0 +1,16 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Raider skull -->
+  <circle cx="12" cy="10" r="7" fill="black"/>
+  <!-- Eye sockets -->
+  <ellipse cx="9" cy="9" rx="2" ry="2.5" fill="white"/>
+  <ellipse cx="15" cy="9" rx="2" ry="2.5" fill="white"/>
+  <!-- Nose hole -->
+  <polygon points="12,11 10,14 14,14" fill="white"/>
+  <!-- Teeth -->
+  <rect x="8" y="15" width="8" height="2" fill="white"/>
+  <rect x="9" y="15" width="1" height="2" fill="black"/>
+  <rect x="11" y="15" width="1" height="2" fill="black"/>
+  <rect x="13" y="15" width="1" height="2" fill="black"/>
+  <!-- Mohawk -->
+  <path d="M12 3 L10 5 L12 4 L14 5 Z" fill="black"/>
+</svg>

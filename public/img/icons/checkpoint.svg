@@ -1,0 +1,14 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Checkpoint barrier -->
+  <rect x="2" y="10" width="2" height="10" fill="black"/>
+  <rect x="20" y="10" width="2" height="10" fill="black"/>
+  <!-- Barrier arm -->
+  <rect x="4" y="11" width="16" height="3" fill="black"/>
+  <!-- Stripes -->
+  <rect x="6" y="11" width="2" height="3" fill="white"/>
+  <rect x="10" y="11" width="2" height="3" fill="white"/>
+  <rect x="14" y="11" width="2" height="3" fill="white"/>
+  <!-- Guard booth -->
+  <rect x="8" y="16" width="8" height="4" fill="black"/>
+  <rect x="10" y="17" width="4" height="2" fill="white"/>
+</svg>

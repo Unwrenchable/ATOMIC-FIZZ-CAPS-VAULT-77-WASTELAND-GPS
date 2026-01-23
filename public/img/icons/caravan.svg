@@ -1,0 +1,10 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Caravan wagon -->
+  <rect x="4" y="8" width="14" height="8" fill="black"/>
+  <circle cx="7" cy="18" r="2" fill="black"/>
+  <circle cx="15" cy="18" r="2" fill="black"/>
+  <!-- Canvas top -->
+  <path d="M4 8 Q11 4 18 8" fill="none" stroke="black" stroke-width="2"/>
+  <!-- Brahmin horns hint -->
+  <path d="M19 10 L22 8 M19 14 L22 16" stroke="black" stroke-width="1.5"/>
+</svg>
