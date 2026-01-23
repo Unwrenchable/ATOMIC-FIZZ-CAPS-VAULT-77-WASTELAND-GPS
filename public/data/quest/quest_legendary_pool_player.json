@@ -4,8 +4,8 @@
   "type": "main",
   "triggerType": "location",
   "triggerLocation": "griffs_billiards",
-  "description": "Track down the legendary pool player known only as 'The King' by following clues across Vegas Valley's pool halls.",
-  "lore": "Before the bombs fell, there was a pool player so skilled that people called him 'The King'. He vanished during the war, but legends say he left behind his prized cue and the secrets of his technique scattered across the pool halls of Vegas.",
+  "description": "Track down the legendary pool player known only as 'The King' by following clues across the Mojave's ruined pool halls.",
+  "lore": "Before the bombs fell, there was a pool player so skilled that people called him 'The King'. He vanished during the Great War, but legends say he left behind his prized cue and the secrets of his technique scattered across what remains of Vegas.",
   "poIs": [
     "griffs_billiards",
     "cue_ds_pool_hall", 
@@ -18,43 +18,43 @@
   "objectives": [
     {
       "id": "find_first_clue",
-      "description": "Visit Griff's Bar & Billiards and search for The King's first clue",
+      "description": "Visit Griff's Wasteland Cues and search for The King's first clue",
       "location": "griffs_billiards",
       "reward": { "xp": 25 }
     },
     {
       "id": "investigate_cue_ds",
-      "description": "The clue mentions Cue D's - investigate the pool hall",
+      "description": "The clue mentions 'Rack & Ruin' - investigate Cue D's old hall",
       "location": "cue_ds_pool_hall",
       "reward": { "xp": 25 }
     },
     {
       "id": "tournament_trail",
-      "description": "Follow The King's tournament trail to Bangin' Ballz Billiards",
+      "description": "Follow The King's tournament trail to Ballz Deep Billiards near the Strip",
       "location": "bangin_ballz_billiards",
       "reward": { "xp": 30 }
     },
     {
       "id": "late_night_spot",
-      "description": "Visit Good Timez Billiards - The King's favorite late-night spot",
+      "description": "Visit Good Timez Tavern - The King's favorite late-night refuge",
       "location": "good_timez_billiards",
       "reward": { "xp": 25 }
     },
     {
       "id": "training_grounds",
-      "description": "Search the Las Vegas Cue Club where The King trained champions",
+      "description": "Search the New Vegas Cue Club where The King trained champions",
       "location": "vegas_cue_club",
       "reward": { "xp": 30 }
     },
     {
       "id": "downtown_legend",
-      "description": "Visit Backstage Bar & Billiards where The King's cue was displayed",
+      "description": "Visit Backstage Bunker Bar where The King's cue was displayed",
       "location": "backstage_billiards",
       "reward": { "xp": 35 }
     },
     {
       "id": "final_destination",
-      "description": "Journey to Putter's at Horizon Ridge - The King's final resting place",
+      "description": "Journey to Putter's Ridge Hideaway - The King's final resting place",
       "location": "putters_horizon_ridge",
       "reward": { "xp": 50, "item": "king_legacy_cue" }
     }
@@ -67,21 +67,21 @@
   "endings": [
     {
       "id": "ending_inherit_legacy",
-      "description": "You claim The King's legacy and become the new champion.",
+      "description": "You claim The King's legacy and become the new champion of the wasteland.",
       "reward": "Legacy of The King (Legendary Cue)",
-      "consequence": "Pool hall owners across Vegas recognize you as The King's heir."
+      "consequence": "Pool hall survivors across the Mojave recognize you as The King's heir."
     },
     {
       "id": "ending_preserve_legend",
-      "description": "You leave the cue where it belongs, preserving The King's legend.",
-      "reward": "Reputation boost with Vegas locals",
-      "consequence": "The legend of The King continues to inspire pool players."
+      "description": "You leave the cue where it belongs, preserving The King's legend for future generations.",
+      "reward": "Reputation boost with Mojave locals",
+      "consequence": "The legend of The King continues to inspire wastelanders."
     },
     {
       "id": "ending_sell_artifact",
-      "description": "You sell The King's cue to a collector.",
+      "description": "You sell The King's cue to a pre-war artifact collector.",
       "reward": "500 Caps",
-      "consequence": "The King's legacy fades into obscurity."
+      "consequence": "The King's legacy fades into the irradiated dust."
     }
   ]
 }
