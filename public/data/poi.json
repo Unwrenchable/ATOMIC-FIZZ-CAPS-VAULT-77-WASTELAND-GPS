@@ -685,4 +685,17 @@
 {"id":"nw_red_rocket_underground_fo4","name":"Nuka‑Red Rocket Underground","lat":42.1990,"lng":-71.9190,"lvl":23,"rarity":"common","iconKey":"tunnel","region":"fo4_nuka_world_bonus_expanded","game":"fo4","source":"expanded"},
 {"id":"nw_scrapyard_hidden_cache_fo4","name":"Scrapyard Hidden Cache","lat":42.1995,"lng":-71.9195,"lvl":24,"rarity":"rare","iconKey":"ruins","region":"fo4_nuka_world_bonus_expanded","game":"fo4","source":"expanded"}
 ]
+,
+  "vegas_pool_halls": [
+{"id":"griffs_billiards","name":"Griff's Bar & Billiards","lat":36.1308,"lng":-115.2072,"lvl":8,"rarity":"rare","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"Upscale pool hall with 30+ tables. The King was last seen here before his disappearance."},
+{"id":"cue_ds_pool_hall","name":"Cue D's Pool Hall","lat":36.1340,"lng":-115.2420,"lvl":6,"rarity":"common","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"25+ tables, tournaments nightly. Rumor has it The King left a challenge here."},
+{"id":"bangin_ballz_billiards","name":"Bangin' Ballz Billiards","lat":36.0830,"lng":-115.1720,"lvl":10,"rarity":"rare","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"Near the Strip, 30 Rasson tables. The King's final tournament was held here."},
+{"id":"good_timez_billiards","name":"Good Timez Billiards","lat":36.1580,"lng":-115.2540,"lvl":5,"rarity":"common","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"24-hour pool hall, classic Vegas vibe. The King's favorite late-night spot."},
+{"id":"vegas_cue_club","name":"Las Vegas Cue Club","lat":36.1440,"lng":-115.1380,"lvl":7,"rarity":"rare","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"24 tables, 24/7. The King trained many champions here."},
+{"id":"backstage_billiards","name":"Backstage Bar & Billiards","lat":36.1698,"lng":-115.1390,"lvl":9,"rarity":"rare","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"Downtown Fremont pool scene. The King's legendary cue was displayed here."},
+{"id":"the_nerd_neonopolis","name":"The Nerd at Neonopolis","lat":36.1690,"lng":-115.1420,"lvl":6,"rarity":"common","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"Geek bar with billiards. The King's protégé frequents this spot."},
+{"id":"billiards_n_more_henderson","name":"Billiards N More","lat":36.0700,"lng":-115.0420,"lvl":5,"rarity":"common","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"Henderson's premier pool supply and hall. The King left clues here."},
+{"id":"on_cue_billiards","name":"On Cue Billiards","lat":36.2680,"lng":-115.2800,"lvl":7,"rarity":"common","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"North Vegas pool haven. A piece of The King's legacy awaits."},
+{"id":"putters_horizon_ridge","name":"Putter's at Horizon Ridge","lat":36.0150,"lng":-115.0350,"lvl":12,"rarity":"legendary","iconKey":"bar","region":"vegas_pool_halls","game":"afc","source":"real_world","description":"Henderson landmark bar. The King's legendary cue, 'Legacy of The King', is hidden here."}
+]
 }
