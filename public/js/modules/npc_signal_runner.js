@@ -9,6 +9,9 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // Approximate meters per degree of latitude/longitude at mid-latitudes
+  const METERS_PER_DEGREE = 111111;
+
   const SignalRunner = {
     id: "signal_runner",
     name: "The Signal Runner",
@@ -161,8 +164,7 @@
     _calculateDistance(pos1, pos2) {
       const dx = pos2.lat - pos1.lat;
       const dy = pos2.lng - pos1.lng;
-      // Approximate meters (rough conversion)
-      return Math.sqrt(dx * dx + dy * dy) * 111111;
+      return Math.sqrt(dx * dx + dy * dy) * METERS_PER_DEGREE;
     },
 
     // ------------------------------------------------------------

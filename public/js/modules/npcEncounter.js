@@ -9,6 +9,9 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // Approximate meters per degree of latitude/longitude at mid-latitudes
+  const METERS_PER_DEGREE = 111111;
+
   const npcEncounter = {
     activeEncounter: null,
 
@@ -67,8 +70,8 @@
           const angle = Math.random() * Math.PI * 2;
           const dist = options.spawnRadius || 50;
           spawnPos = {
-            lat: playerPos.lat + (Math.cos(angle) * dist) / 111111,
-            lng: playerPos.lng + (Math.sin(angle) * dist) / 111111
+            lat: playerPos.lat + (Math.cos(angle) * dist) / METERS_PER_DEGREE,
+            lng: playerPos.lng + (Math.sin(angle) * dist) / METERS_PER_DEGREE
           };
         }
       }
@@ -111,8 +114,8 @@
         const angle = Math.random() * Math.PI * 2;
         const dist = Math.random() * radius;
         const spawnPos = {
-          lat: playerPos.lat + (Math.cos(angle) * dist) / 111111,
-          lng: playerPos.lng + (Math.sin(angle) * dist) / 111111
+          lat: playerPos.lat + (Math.cos(angle) * dist) / METERS_PER_DEGREE,
+          lng: playerPos.lng + (Math.sin(angle) * dist) / METERS_PER_DEGREE
         };
         return Game.modules.SignalRunner.createNPC(spawnPos);
       }
@@ -133,8 +136,8 @@
       const dist = Math.random() * radius;
 
       const spawnPos = {
-        lat: playerPos.lat + (Math.cos(angle) * dist) / 111111,
-        lng: playerPos.lng + (Math.sin(angle) * dist) / 111111
+        lat: playerPos.lat + (Math.cos(angle) * dist) / METERS_PER_DEGREE,
+        lng: playerPos.lng + (Math.sin(angle) * dist) / METERS_PER_DEGREE
       };
 
       console.log("[NPC Encounter] Spawning NPC at:", spawnPos);
@@ -185,7 +188,7 @@
     _calculateDistance(pos1, pos2) {
       const dx = pos2.lat - pos1.lat;
       const dy = pos2.lng - pos1.lng;
-      return Math.sqrt(dx * dx + dy * dy) * 111111;
+      return Math.sqrt(dx * dx + dy * dy) * METERS_PER_DEGREE;
     },
 
     // ------------------------------------------------------------
