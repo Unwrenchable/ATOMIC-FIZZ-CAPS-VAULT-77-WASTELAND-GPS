@@ -1142,148 +1142,1010 @@ async function checkLaunchEligibility(wallet) {
 }
 ```
 
-### Bonding Curve Mechanics
+### How Pump.fun Actually Works (For Reference)
 
-Fizz.fun uses bonding curves like pump.fun - token price increases as supply is bought:
+Since Fizz.fun is already in your wallet, here's exactly how pump.fun works so you can replicate it for your ecosystem:
+
+#### Pump.fun Core Mechanics
 
 ```
-Price = BasePrice × (1 + (Supply / MaxSupply))^CurveExponent
-
-Example with exponential curve:
-- At 0% supply bought: 0.0001 SOL per token
-- At 25% supply bought: 0.001 SOL per token  
-- At 50% supply bought: 0.01 SOL per token
-- At 75% supply bought: 0.1 SOL per token
-- At 100% supply bought: 1 SOL per token (graduates to DEX)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      PUMP.FUN LIFECYCLE                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  PHASE 1: LAUNCH                                                            │
+│  ─────────────────                                                          │
+│  • Creator pays ~0.02 SOL to create token                                   │
+│  • 1 BILLION tokens minted (fixed supply)                                   │
+│  • 800M tokens go into bonding curve pool                                   │
+│  • 200M tokens reserved for Raydium LP at graduation                        │
+│  • NO pre-sale, NO team allocation, NO presale                              │
+│                                                                             │
+│  PHASE 2: BONDING CURVE TRADING                                             │
+│  ─────────────────────────────                                              │
+│  • Users buy/sell from the curve (not each other)                           │
+│  • Price increases as more is bought                                        │
+│  • Price decreases as more is sold                                          │
+│  • 1% fee on each trade (to pump.fun)                                       │
+│  • Target: Raise ~85 SOL to graduate                                        │
+│                                                                             │
+│  PHASE 3: GRADUATION TO RAYDIUM                                             │
+│  ─────────────────────────────────                                          │
+│  • At 85 SOL raised, curve "graduates"                                      │
+│  • ~79 SOL + 200M tokens → Raydium LP                                       │
+│  • LP tokens are BURNED (liquidity locked forever)                          │
+│  • Token now trades freely on Raydium                                       │
+│  • Creator gets ~6 SOL graduation bonus                                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Graduation to Raydium:**
-When bonding curve reaches target (e.g., 69 SOL raised), token automatically:
-1. Creates Raydium liquidity pool
-2. Burns LP tokens (locked forever)
-3. Token becomes freely tradeable on DEX
+### Fizz.fun: Pump.fun For Your Ecosystem
 
-### Technical Implementation
+Here's exactly how to adapt this for Atomic Fizz Caps:
 
-#### Solana Program Structure
+#### Key Differences from Pump.fun
+
+| Aspect | Pump.fun | Fizz.fun |
+|--------|----------|----------|
+| Who can launch | Anyone | CAPS holders only |
+| Launch cost | ~0.02 SOL | 100 CAPS (burned) + 0.02 SOL |
+| Trading access | Anyone | CAPS holders only (optional) |
+| Fees | 1% to pump.fun | 1% split: treasury + creator |
+| Theme | Generic | Wasteland/Atomic |
+| Integration | None | Game items, quests, factions |
+
+### Exact Bonding Curve Math (Pump.fun Style)
+
+Pump.fun uses a **constant product** style curve. Here's the exact math:
+
+```javascript
+// Fizz.fun Bonding Curve Implementation
+// This matches pump.fun's actual curve behavior
+
+const TOTAL_SUPPLY = 1_000_000_000; // 1 billion tokens
+const CURVE_SUPPLY = 800_000_000;   // 800M in curve
+const LP_SUPPLY = 200_000_000;      // 200M reserved for LP
+const GRADUATION_SOL = 85_000_000_000; // 85 SOL in lamports
+const INITIAL_VIRTUAL_SOL = 30_000_000_000; // 30 SOL virtual liquidity
+
+/**
+ * Calculate tokens received for SOL input
+ * Uses constant product formula: x * y = k
+ */
+function calculateBuyTokens(solAmount, currentSolReserve, currentTokenReserve) {
+    // Add virtual liquidity for initial price stability
+    const virtualSol = currentSolReserve + INITIAL_VIRTUAL_SOL;
+    const k = virtualSol * currentTokenReserve;
+    
+    const newSolReserve = virtualSol + solAmount;
+    const newTokenReserve = k / newSolReserve;
+    
+    const tokensOut = currentTokenReserve - newTokenReserve;
+    
+    return Math.floor(tokensOut);
+}
+
+/**
+ * Calculate SOL received for token input
+ */
+function calculateSellReturn(tokenAmount, currentSolReserve, currentTokenReserve) {
+    const virtualSol = currentSolReserve + INITIAL_VIRTUAL_SOL;
+    const k = virtualSol * currentTokenReserve;
+    
+    const newTokenReserve = currentTokenReserve + tokenAmount;
+    const newSolReserve = k / newTokenReserve;
+    
+    const solOut = virtualSol - newSolReserve;
+    
+    // Can't return more than actual reserve
+    return Math.floor(Math.min(solOut, currentSolReserve));
+}
+
+/**
+ * Calculate current token price
+ */
+function getCurrentPrice(currentSolReserve, currentTokenReserve) {
+    const virtualSol = currentSolReserve + INITIAL_VIRTUAL_SOL;
+    // Price = SOL reserve / Token reserve
+    return virtualSol / currentTokenReserve;
+}
+
+/**
+ * Calculate market cap
+ */
+function getMarketCap(currentSolReserve, currentTokenReserve) {
+    const price = getCurrentPrice(currentSolReserve, currentTokenReserve);
+    return price * TOTAL_SUPPLY;
+}
+```
+
+### Complete Solana Program (Production-Ready Structure)
 
 ```rust
 // programs/fizz-fun/src/lib.rs
 use anchor_lang::prelude::*;
+use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer, MintTo, Burn};
+use anchor_spl::associated_token::AssociatedToken;
 
-declare_id!("FizzFunXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+declare_id!("YOUR_PROGRAM_ID_HERE");
+
+// Constants matching pump.fun
+const TOTAL_SUPPLY: u64 = 1_000_000_000_000_000_000; // 1B with 9 decimals
+const CURVE_SUPPLY: u64 = 800_000_000_000_000_000;   // 800M
+const LP_RESERVE: u64 = 200_000_000_000_000_000;     // 200M
+const GRADUATION_SOL: u64 = 85_000_000_000;          // 85 SOL
+const VIRTUAL_SOL: u64 = 30_000_000_000;             // 30 SOL virtual
+const FEE_BPS: u64 = 100;                            // 1% fee
+const CAPS_DECIMALS: u64 = 1_000_000_000;            // 9 decimals
+
+// CAPS requirements
+const CAPS_TO_LAUNCH: u64 = 1000 * CAPS_DECIMALS;
+const CAPS_TO_TRADE: u64 = 100 * CAPS_DECIMALS;
+const CAPS_LAUNCH_FEE: u64 = 100 * CAPS_DECIMALS;
 
 #[program]
 pub mod fizz_fun {
     use super::*;
 
-    /// Launch a new token (requires CAPS holding)
-    pub fn launch_token(
-        ctx: Context<LaunchToken>,
+    /// Initialize the Fizz.fun protocol
+    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+        let config = &mut ctx.accounts.config;
+        config.authority = ctx.accounts.authority.key();
+        config.treasury = ctx.accounts.treasury.key();
+        config.caps_mint = ctx.accounts.caps_mint.key();
+        config.total_tokens_launched = 0;
+        config.total_volume_sol = 0;
+        config.total_caps_burned = 0;
+        Ok(())
+    }
+
+    /// Launch a new token on Fizz.fun
+    pub fn create_token(
+        ctx: Context<CreateToken>,
         name: String,
         symbol: String,
-        total_supply: u64,
-        curve_type: CurveType,
+        uri: String,
     ) -> Result<()> {
         // 1. Verify CAPS balance >= 1000
-        let caps_balance = ctx.accounts.creator_caps_ata.amount;
-        require!(caps_balance >= 1000 * 10u64.pow(9), FizzError::InsufficientCaps);
-        
-        // 2. Calculate and burn launch fee
-        let fee = if caps_balance >= 10000 * 10u64.pow(9) { 50 } else { 100 };
-        burn_caps(&ctx, fee * 10u64.pow(9))?;
-        
-        // 3. Create token mint
-        create_token_mint(&ctx, &name, &symbol, total_supply)?;
-        
-        // 4. Initialize bonding curve
+        require!(
+            ctx.accounts.creator_caps_ata.amount >= CAPS_TO_LAUNCH,
+            FizzError::InsufficientCapsToLaunch
+        );
+
+        // 2. Burn CAPS launch fee (100 CAPS)
+        token::burn(
+            CpiContext::new(
+                ctx.accounts.token_program.to_account_info(),
+                Burn {
+                    mint: ctx.accounts.caps_mint.to_account_info(),
+                    from: ctx.accounts.creator_caps_ata.to_account_info(),
+                    authority: ctx.accounts.creator.to_account_info(),
+                },
+            ),
+            CAPS_LAUNCH_FEE,
+        )?;
+
+        // 3. Initialize bonding curve state
         let curve = &mut ctx.accounts.bonding_curve;
-        curve.token_mint = ctx.accounts.token_mint.key();
         curve.creator = ctx.accounts.creator.key();
-        curve.curve_type = curve_type;
-        curve.total_supply = total_supply;
-        curve.sold_supply = 0;
-        curve.sol_raised = 0;
+        curve.token_mint = ctx.accounts.token_mint.key();
+        curve.name = name.clone();
+        curve.symbol = symbol.clone();
+        curve.uri = uri;
+        curve.sol_reserve = 0;
+        curve.token_reserve = CURVE_SUPPLY;
+        curve.total_supply = TOTAL_SUPPLY;
         curve.graduated = false;
-        
-        emit!(TokenLaunched {
+        curve.created_at = Clock::get()?.unix_timestamp;
+        curve.bump = ctx.bumps.bonding_curve;
+
+        // 4. Mint total supply to curve vault
+        token::mint_to(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                MintTo {
+                    mint: ctx.accounts.token_mint.to_account_info(),
+                    to: ctx.accounts.curve_token_vault.to_account_info(),
+                    authority: ctx.accounts.bonding_curve.to_account_info(),
+                },
+                &[&[
+                    b"bonding_curve",
+                    ctx.accounts.token_mint.key().as_ref(),
+                    &[curve.bump],
+                ]],
+            ),
+            TOTAL_SUPPLY,
+        )?;
+
+        // 5. Update global config
+        let config = &mut ctx.accounts.config;
+        config.total_tokens_launched += 1;
+        config.total_caps_burned += CAPS_LAUNCH_FEE;
+
+        emit!(TokenCreated {
             mint: ctx.accounts.token_mint.key(),
             creator: ctx.accounts.creator.key(),
             name,
             symbol,
+            timestamp: Clock::get()?.unix_timestamp,
         });
-        
+
         Ok(())
     }
 
-    /// Buy tokens from bonding curve
-    pub fn buy(ctx: Context<Buy>, sol_amount: u64) -> Result<()> {
-        // Verify buyer holds at least 100 CAPS
-        let caps_balance = ctx.accounts.buyer_caps_ata.amount;
-        require!(caps_balance >= 100 * 10u64.pow(9), FizzError::InsufficientCapsToTrade);
-        
+    /// Buy tokens from the bonding curve
+    pub fn buy(ctx: Context<BuyTokens>, sol_amount: u64, min_tokens_out: u64) -> Result<()> {
+        // 1. Verify CAPS balance for trading
+        require!(
+            ctx.accounts.buyer_caps_ata.amount >= CAPS_TO_TRADE,
+            FizzError::InsufficientCapsToTrade
+        );
+
         let curve = &mut ctx.accounts.bonding_curve;
-        require!(!curve.graduated, FizzError::AlreadyGraduated);
-        
-        // Calculate tokens to receive based on curve
-        let tokens_out = calculate_buy_return(curve, sol_amount)?;
-        
-        // Transfer SOL to curve vault
-        transfer_sol(&ctx, sol_amount)?;
-        
-        // Mint tokens to buyer
-        mint_tokens(&ctx, tokens_out)?;
-        
-        // Update curve state
-        curve.sold_supply += tokens_out;
-        curve.sol_raised += sol_amount;
-        
-        // Check graduation
-        if curve.sol_raised >= GRADUATION_THRESHOLD {
-            graduate_to_raydium(&ctx)?;
-            curve.graduated = true;
+        require!(!curve.graduated, FizzError::TokenGraduated);
+
+        // 2. Calculate fee (1%)
+        let fee = sol_amount.checked_mul(FEE_BPS).unwrap().checked_div(10000).unwrap();
+        let sol_after_fee = sol_amount.checked_sub(fee).unwrap();
+
+        // 3. Calculate tokens out using constant product
+        let virtual_sol = curve.sol_reserve.checked_add(VIRTUAL_SOL).unwrap();
+        let k = virtual_sol.checked_mul(curve.token_reserve).unwrap();
+        let new_sol = virtual_sol.checked_add(sol_after_fee).unwrap();
+        let new_tokens = k.checked_div(new_sol).unwrap();
+        let tokens_out = curve.token_reserve.checked_sub(new_tokens).unwrap();
+
+        require!(tokens_out >= min_tokens_out, FizzError::SlippageExceeded);
+
+        // 4. Transfer SOL from buyer to curve vault
+        anchor_lang::system_program::transfer(
+            CpiContext::new(
+                ctx.accounts.system_program.to_account_info(),
+                anchor_lang::system_program::Transfer {
+                    from: ctx.accounts.buyer.to_account_info(),
+                    to: ctx.accounts.curve_sol_vault.to_account_info(),
+                },
+            ),
+            sol_after_fee,
+        )?;
+
+        // 5. Transfer fee to treasury
+        anchor_lang::system_program::transfer(
+            CpiContext::new(
+                ctx.accounts.system_program.to_account_info(),
+                anchor_lang::system_program::Transfer {
+                    from: ctx.accounts.buyer.to_account_info(),
+                    to: ctx.accounts.treasury.to_account_info(),
+                },
+            ),
+            fee,
+        )?;
+
+        // 6. Transfer tokens to buyer
+        token::transfer(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from: ctx.accounts.curve_token_vault.to_account_info(),
+                    to: ctx.accounts.buyer_token_ata.to_account_info(),
+                    authority: ctx.accounts.bonding_curve.to_account_info(),
+                },
+                &[&[
+                    b"bonding_curve",
+                    curve.token_mint.as_ref(),
+                    &[curve.bump],
+                ]],
+            ),
+            tokens_out,
+        )?;
+
+        // 7. Update curve state
+        curve.sol_reserve = curve.sol_reserve.checked_add(sol_after_fee).unwrap();
+        curve.token_reserve = curve.token_reserve.checked_sub(tokens_out).unwrap();
+
+        // 8. Check for graduation
+        if curve.sol_reserve >= GRADUATION_SOL {
+            // Will trigger graduation in separate instruction
+            emit!(ReadyToGraduate {
+                mint: curve.token_mint,
+                sol_raised: curve.sol_reserve,
+            });
         }
-        
+
+        emit!(TokenBought {
+            mint: curve.token_mint,
+            buyer: ctx.accounts.buyer.key(),
+            sol_amount: sol_after_fee,
+            tokens_received: tokens_out,
+            new_price: calculate_price(curve.sol_reserve, curve.token_reserve),
+        });
+
         Ok(())
     }
 
-    /// Sell tokens back to bonding curve
-    pub fn sell(ctx: Context<Sell>, token_amount: u64) -> Result<()> {
+    /// Sell tokens back to the bonding curve
+    pub fn sell(ctx: Context<SellTokens>, token_amount: u64, min_sol_out: u64) -> Result<()> {
+        let curve = &mut ctx.accounts.bonding_curve;
+        require!(!curve.graduated, FizzError::TokenGraduated);
+
+        // 1. Calculate SOL out using constant product
+        let virtual_sol = curve.sol_reserve.checked_add(VIRTUAL_SOL).unwrap();
+        let k = virtual_sol.checked_mul(curve.token_reserve).unwrap();
+        let new_tokens = curve.token_reserve.checked_add(token_amount).unwrap();
+        let new_sol = k.checked_div(new_tokens).unwrap();
+        let sol_out_gross = virtual_sol.checked_sub(new_sol).unwrap();
+        
+        // Can't withdraw more than actual reserve
+        let sol_out_gross = std::cmp::min(sol_out_gross, curve.sol_reserve);
+
+        // 2. Calculate fee (1%)
+        let fee = sol_out_gross.checked_mul(FEE_BPS).unwrap().checked_div(10000).unwrap();
+        let sol_out = sol_out_gross.checked_sub(fee).unwrap();
+
+        require!(sol_out >= min_sol_out, FizzError::SlippageExceeded);
+
+        // 3. Transfer tokens from seller to curve
+        token::transfer(
+            CpiContext::new(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from: ctx.accounts.seller_token_ata.to_account_info(),
+                    to: ctx.accounts.curve_token_vault.to_account_info(),
+                    authority: ctx.accounts.seller.to_account_info(),
+                },
+            ),
+            token_amount,
+        )?;
+
+        // 4. Transfer SOL to seller (from PDA vault)
+        **ctx.accounts.curve_sol_vault.try_borrow_mut_lamports()? -= sol_out;
+        **ctx.accounts.seller.try_borrow_mut_lamports()? += sol_out;
+
+        // 5. Transfer fee to treasury
+        **ctx.accounts.curve_sol_vault.try_borrow_mut_lamports()? -= fee;
+        **ctx.accounts.treasury.try_borrow_mut_lamports()? += fee;
+
+        // 6. Update curve state
+        curve.sol_reserve = curve.sol_reserve.checked_sub(sol_out_gross).unwrap();
+        curve.token_reserve = curve.token_reserve.checked_add(token_amount).unwrap();
+
+        emit!(TokenSold {
+            mint: curve.token_mint,
+            seller: ctx.accounts.seller.key(),
+            tokens_sold: token_amount,
+            sol_received: sol_out,
+            new_price: calculate_price(curve.sol_reserve, curve.token_reserve),
+        });
+
+        Ok(())
+    }
+
+    /// Graduate token to Raydium (called when threshold reached)
+    pub fn graduate(ctx: Context<Graduate>) -> Result<()> {
         let curve = &mut ctx.accounts.bonding_curve;
         require!(!curve.graduated, FizzError::AlreadyGraduated);
-        
-        // Calculate SOL to receive
-        let sol_out = calculate_sell_return(curve, token_amount)?;
-        
-        // Burn tokens
-        burn_tokens(&ctx, token_amount)?;
-        
-        // Transfer SOL to seller
-        transfer_sol_to_seller(&ctx, sol_out)?;
-        
-        // Update curve state
-        curve.sold_supply -= token_amount;
-        curve.sol_raised -= sol_out;
-        
+        require!(curve.sol_reserve >= GRADUATION_SOL, FizzError::NotReadyToGraduate);
+
+        // 1. Calculate amounts for Raydium LP
+        let lp_sol = curve.sol_reserve.checked_mul(93).unwrap().checked_div(100).unwrap(); // 93%
+        let creator_bonus = curve.sol_reserve.checked_sub(lp_sol).unwrap(); // 7% to creator
+
+        // 2. Create Raydium pool (CPI to Raydium program)
+        // This is simplified - actual implementation needs Raydium CPI
+        msg!("Creating Raydium pool with {} SOL and {} tokens", lp_sol, LP_RESERVE);
+
+        // 3. Send creator bonus
+        **ctx.accounts.curve_sol_vault.try_borrow_mut_lamports()? -= creator_bonus;
+        **ctx.accounts.creator.try_borrow_mut_lamports()? += creator_bonus;
+
+        // 4. Mark as graduated
+        curve.graduated = true;
+        curve.graduated_at = Some(Clock::get()?.unix_timestamp);
+
+        emit!(TokenGraduated {
+            mint: curve.token_mint,
+            creator: curve.creator,
+            sol_raised: curve.sol_reserve,
+            creator_bonus,
+            raydium_pool: ctx.accounts.raydium_pool.key(),
+        });
+
         Ok(())
     }
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq)]
-pub enum CurveType {
-    Linear,
-    Exponential,
-    Sigmoid,
+// ============ ACCOUNT STRUCTURES ============
+
+#[account]
+pub struct Config {
+    pub authority: Pubkey,
+    pub treasury: Pubkey,
+    pub caps_mint: Pubkey,
+    pub total_tokens_launched: u64,
+    pub total_volume_sol: u64,
+    pub total_caps_burned: u64,
 }
+
+#[account]
+pub struct BondingCurve {
+    pub creator: Pubkey,
+    pub token_mint: Pubkey,
+    pub name: String,
+    pub symbol: String,
+    pub uri: String,
+    pub sol_reserve: u64,
+    pub token_reserve: u64,
+    pub total_supply: u64,
+    pub graduated: bool,
+    pub graduated_at: Option<i64>,
+    pub created_at: i64,
+    pub bump: u8,
+}
+
+// ============ CONTEXT STRUCTURES ============
+
+#[derive(Accounts)]
+pub struct Initialize<'info> {
+    #[account(mut)]
+    pub authority: Signer<'info>,
+    
+    #[account(
+        init,
+        payer = authority,
+        space = 8 + 32 + 32 + 32 + 8 + 8 + 8,
+        seeds = [b"config"],
+        bump
+    )]
+    pub config: Account<'info, Config>,
+    
+    /// CHECK: Treasury wallet
+    pub treasury: AccountInfo<'info>,
+    
+    pub caps_mint: Account<'info, Mint>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+#[instruction(name: String, symbol: String, uri: String)]
+pub struct CreateToken<'info> {
+    #[account(mut)]
+    pub creator: Signer<'info>,
+    
+    #[account(mut, seeds = [b"config"], bump)]
+    pub config: Account<'info, Config>,
+    
+    #[account(
+        init,
+        payer = creator,
+        mint::decimals = 9,
+        mint::authority = bonding_curve,
+    )]
+    pub token_mint: Account<'info, Mint>,
+    
+    #[account(
+        init,
+        payer = creator,
+        space = 8 + 32 + 32 + 64 + 16 + 256 + 8 + 8 + 8 + 1 + 9 + 8 + 1,
+        seeds = [b"bonding_curve", token_mint.key().as_ref()],
+        bump
+    )]
+    pub bonding_curve: Account<'info, BondingCurve>,
+    
+    #[account(
+        init,
+        payer = creator,
+        associated_token::mint = token_mint,
+        associated_token::authority = bonding_curve,
+    )]
+    pub curve_token_vault: Account<'info, TokenAccount>,
+    
+    /// CHECK: SOL vault PDA
+    #[account(
+        mut,
+        seeds = [b"sol_vault", token_mint.key().as_ref()],
+        bump
+    )]
+    pub curve_sol_vault: AccountInfo<'info>,
+    
+    // CAPS accounts for fee burning
+    #[account(address = config.caps_mint)]
+    pub caps_mint: Account<'info, Mint>,
+    
+    #[account(
+        mut,
+        associated_token::mint = caps_mint,
+        associated_token::authority = creator,
+    )]
+    pub creator_caps_ata: Account<'info, TokenAccount>,
+    
+    pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub system_program: Program<'info, System>,
+    pub rent: Sysvar<'info, Rent>,
+}
+
+#[derive(Accounts)]
+pub struct BuyTokens<'info> {
+    #[account(mut)]
+    pub buyer: Signer<'info>,
+    
+    #[account(mut)]
+    pub bonding_curve: Account<'info, BondingCurve>,
+    
+    #[account(mut)]
+    pub curve_token_vault: Account<'info, TokenAccount>,
+    
+    /// CHECK: SOL vault
+    #[account(mut, seeds = [b"sol_vault", bonding_curve.token_mint.as_ref()], bump)]
+    pub curve_sol_vault: AccountInfo<'info>,
+    
+    #[account(
+        init_if_needed,
+        payer = buyer,
+        associated_token::mint = token_mint,
+        associated_token::authority = buyer,
+    )]
+    pub buyer_token_ata: Account<'info, TokenAccount>,
+    
+    pub token_mint: Account<'info, Mint>,
+    
+    // CAPS verification
+    pub caps_mint: Account<'info, Mint>,
+    
+    #[account(
+        associated_token::mint = caps_mint,
+        associated_token::authority = buyer,
+    )]
+    pub buyer_caps_ata: Account<'info, TokenAccount>,
+    
+    /// CHECK: Treasury for fees
+    #[account(mut)]
+    pub treasury: AccountInfo<'info>,
+    
+    pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct SellTokens<'info> {
+    #[account(mut)]
+    pub seller: Signer<'info>,
+    
+    #[account(mut)]
+    pub bonding_curve: Account<'info, BondingCurve>,
+    
+    #[account(mut)]
+    pub curve_token_vault: Account<'info, TokenAccount>,
+    
+    /// CHECK: SOL vault
+    #[account(mut, seeds = [b"sol_vault", bonding_curve.token_mint.as_ref()], bump)]
+    pub curve_sol_vault: AccountInfo<'info>,
+    
+    #[account(mut)]
+    pub seller_token_ata: Account<'info, TokenAccount>,
+    
+    pub token_mint: Account<'info, Mint>,
+    
+    /// CHECK: Treasury for fees
+    #[account(mut)]
+    pub treasury: AccountInfo<'info>,
+    
+    pub token_program: Program<'info, Token>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct Graduate<'info> {
+    #[account(mut)]
+    pub bonding_curve: Account<'info, BondingCurve>,
+    
+    /// CHECK: Creator receives bonus
+    #[account(mut, address = bonding_curve.creator)]
+    pub creator: AccountInfo<'info>,
+    
+    /// CHECK: SOL vault
+    #[account(mut, seeds = [b"sol_vault", bonding_curve.token_mint.as_ref()], bump)]
+    pub curve_sol_vault: AccountInfo<'info>,
+    
+    #[account(mut)]
+    pub curve_token_vault: Account<'info, TokenAccount>,
+    
+    /// CHECK: Raydium pool (created during graduation)
+    #[account(mut)]
+    pub raydium_pool: AccountInfo<'info>,
+    
+    pub token_program: Program<'info, Token>,
+    pub system_program: Program<'info, System>,
+}
+
+// ============ EVENTS ============
+
+#[event]
+pub struct TokenCreated {
+    pub mint: Pubkey,
+    pub creator: Pubkey,
+    pub name: String,
+    pub symbol: String,
+    pub timestamp: i64,
+}
+
+#[event]
+pub struct TokenBought {
+    pub mint: Pubkey,
+    pub buyer: Pubkey,
+    pub sol_amount: u64,
+    pub tokens_received: u64,
+    pub new_price: u64,
+}
+
+#[event]
+pub struct TokenSold {
+    pub mint: Pubkey,
+    pub seller: Pubkey,
+    pub tokens_sold: u64,
+    pub sol_received: u64,
+    pub new_price: u64,
+}
+
+#[event]
+pub struct ReadyToGraduate {
+    pub mint: Pubkey,
+    pub sol_raised: u64,
+}
+
+#[event]
+pub struct TokenGraduated {
+    pub mint: Pubkey,
+    pub creator: Pubkey,
+    pub sol_raised: u64,
+    pub creator_bonus: u64,
+    pub raydium_pool: Pubkey,
+}
+
+// ============ ERRORS ============
 
 #[error_code]
 pub enum FizzError {
     #[msg("Must hold at least 1000 CAPS to launch tokens")]
-    InsufficientCaps,
+    InsufficientCapsToLaunch,
     #[msg("Must hold at least 100 CAPS to trade")]
     InsufficientCapsToTrade,
-    #[msg("Token has graduated to DEX")]
+    #[msg("Token has already graduated to Raydium")]
+    TokenGraduated,
+    #[msg("Token has already graduated")]
     AlreadyGraduated,
+    #[msg("Token has not reached graduation threshold")]
+    NotReadyToGraduate,
+    #[msg("Slippage tolerance exceeded")]
+    SlippageExceeded,
+}
+
+// ============ HELPER FUNCTIONS ============
+
+fn calculate_price(sol_reserve: u64, token_reserve: u64) -> u64 {
+    let virtual_sol = sol_reserve.checked_add(VIRTUAL_SOL).unwrap_or(sol_reserve);
+    // Returns price in lamports per token (scaled)
+    virtual_sol.checked_mul(1_000_000_000).unwrap_or(0)
+        .checked_div(token_reserve).unwrap_or(0)
+}
+```
+
+### Frontend Integration (JavaScript/TypeScript)
+
+```typescript
+// fizz-fun-client.ts
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
+import { Program, AnchorProvider, BN } from '@coral-xyz/anchor';
+import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from '@solana/spl-token';
+
+const FIZZ_FUN_PROGRAM_ID = new PublicKey('YOUR_PROGRAM_ID');
+const CAPS_MINT = new PublicKey('YOUR_CAPS_MINT');
+const VIRTUAL_SOL = 30_000_000_000; // 30 SOL in lamports
+
+export class FizzFunClient {
+    private program: Program;
+    private connection: Connection;
+    
+    constructor(provider: AnchorProvider) {
+        this.program = new Program(IDL, FIZZ_FUN_PROGRAM_ID, provider);
+        this.connection = provider.connection;
+    }
+
+    /**
+     * Create a new token on Fizz.fun
+     */
+    async createToken(
+        creator: PublicKey,
+        name: string,
+        symbol: string,
+        uri: string
+    ): Promise<string> {
+        // Check CAPS balance first
+        const capsAta = await getAssociatedTokenAddress(CAPS_MINT, creator);
+        const capsBalance = await this.connection.getTokenAccountBalance(capsAta);
+        
+        if (parseInt(capsBalance.value.amount) < 1000_000_000_000) {
+            throw new Error('Insufficient CAPS. Need at least 1000 CAPS to launch.');
+        }
+
+        const tokenMint = Keypair.generate();
+        const [bondingCurve] = PublicKey.findProgramAddressSync(
+            [Buffer.from('bonding_curve'), tokenMint.publicKey.toBuffer()],
+            FIZZ_FUN_PROGRAM_ID
+        );
+
+        const tx = await this.program.methods
+            .createToken(name, symbol, uri)
+            .accounts({
+                creator,
+                tokenMint: tokenMint.publicKey,
+                bondingCurve,
+                // ... other accounts
+            })
+            .signers([tokenMint])
+            .rpc();
+
+        return tx;
+    }
+
+    /**
+     * Buy tokens from bonding curve
+     */
+    async buyTokens(
+        buyer: PublicKey,
+        tokenMint: PublicKey,
+        solAmount: number,
+        slippageBps: number = 100 // 1% default slippage
+    ): Promise<string> {
+        const [bondingCurve] = PublicKey.findProgramAddressSync(
+            [Buffer.from('bonding_curve'), tokenMint.toBuffer()],
+            FIZZ_FUN_PROGRAM_ID
+        );
+
+        // Fetch current curve state
+        const curveData = await this.program.account.bondingCurve.fetch(bondingCurve);
+        
+        // Calculate expected tokens
+        const expectedTokens = this.calculateBuyReturn(
+            solAmount * 1e9,
+            curveData.solReserve.toNumber(),
+            curveData.tokenReserve.toNumber()
+        );
+
+        // Apply slippage tolerance
+        const minTokens = expectedTokens * (10000 - slippageBps) / 10000;
+
+        const tx = await this.program.methods
+            .buy(new BN(solAmount * 1e9), new BN(minTokens))
+            .accounts({
+                buyer,
+                bondingCurve,
+                tokenMint,
+                // ... other accounts
+            })
+            .rpc();
+
+        return tx;
+    }
+
+    /**
+     * Sell tokens back to bonding curve
+     */
+    async sellTokens(
+        seller: PublicKey,
+        tokenMint: PublicKey,
+        tokenAmount: number,
+        slippageBps: number = 100
+    ): Promise<string> {
+        const [bondingCurve] = PublicKey.findProgramAddressSync(
+            [Buffer.from('bonding_curve'), tokenMint.toBuffer()],
+            FIZZ_FUN_PROGRAM_ID
+        );
+
+        const curveData = await this.program.account.bondingCurve.fetch(bondingCurve);
+        
+        const expectedSol = this.calculateSellReturn(
+            tokenAmount * 1e9,
+            curveData.solReserve.toNumber(),
+            curveData.tokenReserve.toNumber()
+        );
+
+        const minSol = expectedSol * (10000 - slippageBps) / 10000;
+
+        const tx = await this.program.methods
+            .sell(new BN(tokenAmount * 1e9), new BN(minSol))
+            .accounts({
+                seller,
+                bondingCurve,
+                tokenMint,
+                // ... other accounts
+            })
+            .rpc();
+
+        return tx;
+    }
+
+    /**
+     * Calculate tokens received for SOL input (constant product AMM)
+     */
+    calculateBuyReturn(solAmount: number, solReserve: number, tokenReserve: number): number {
+        const virtualSol = solReserve + VIRTUAL_SOL;
+        const fee = solAmount * 0.01; // 1% fee
+        const solAfterFee = solAmount - fee;
+        
+        const k = virtualSol * tokenReserve;
+        const newSol = virtualSol + solAfterFee;
+        const newTokens = k / newSol;
+        
+        return Math.floor(tokenReserve - newTokens);
+    }
+
+    /**
+     * Calculate SOL received for token input
+     */
+    calculateSellReturn(tokenAmount: number, solReserve: number, tokenReserve: number): number {
+        const virtualSol = solReserve + VIRTUAL_SOL;
+        const k = virtualSol * tokenReserve;
+        const newTokens = tokenReserve + tokenAmount;
+        const newSol = k / newTokens;
+        
+        const solOutGross = virtualSol - newSol;
+        const solOut = Math.min(solOutGross, solReserve);
+        const fee = solOut * 0.01; // 1% fee
+        
+        return Math.floor(solOut - fee);
+    }
+
+    /**
+     * Get current token price in SOL
+     */
+    async getPrice(tokenMint: PublicKey): Promise<number> {
+        const [bondingCurve] = PublicKey.findProgramAddressSync(
+            [Buffer.from('bonding_curve'), tokenMint.toBuffer()],
+            FIZZ_FUN_PROGRAM_ID
+        );
+
+        const curveData = await this.program.account.bondingCurve.fetch(bondingCurve);
+        const virtualSol = curveData.solReserve.toNumber() + VIRTUAL_SOL;
+        
+        return virtualSol / curveData.tokenReserve.toNumber();
+    }
+
+    /**
+     * Get market cap in SOL
+     */
+    async getMarketCap(tokenMint: PublicKey): Promise<number> {
+        const price = await this.getPrice(tokenMint);
+        const totalSupply = 1_000_000_000; // 1B tokens
+        return price * totalSupply / 1e9; // Convert to SOL
+    }
+
+    /**
+     * Check if token is ready to graduate
+     */
+    async isReadyToGraduate(tokenMint: PublicKey): Promise<boolean> {
+        const [bondingCurve] = PublicKey.findProgramAddressSync(
+            [Buffer.from('bonding_curve'), tokenMint.toBuffer()],
+            FIZZ_FUN_PROGRAM_ID
+        );
+
+        const curveData = await this.program.account.bondingCurve.fetch(bondingCurve);
+        return curveData.solReserve.toNumber() >= 85_000_000_000; // 85 SOL
+    }
+
+    /**
+     * Get all tokens created by a wallet
+     */
+    async getTokensByCreator(creator: PublicKey): Promise<any[]> {
+        const accounts = await this.program.account.bondingCurve.all([
+            { memcmp: { offset: 8, bytes: creator.toBase58() } }
+        ]);
+        return accounts;
+    }
+
+    /**
+     * Get trending tokens (by volume or market cap)
+     */
+    async getTrendingTokens(limit: number = 10): Promise<any[]> {
+        const allCurves = await this.program.account.bondingCurve.all();
+        
+        // Sort by SOL raised (proxy for popularity)
+        const sorted = allCurves.sort((a, b) => 
+            b.account.solReserve.toNumber() - a.account.solReserve.toNumber()
+        );
+        
+        return sorted.slice(0, limit);
+    }
+}
+```
+
+### Wallet Integration Example
+
+```typescript
+// In your custom wallet's Fizz.fun tab
+import { FizzFunClient } from './fizz-fun-client';
+
+export function FizzFunTab({ wallet, connection }) {
+    const [client, setClient] = useState<FizzFunClient | null>(null);
+    const [trending, setTrending] = useState([]);
+    const [capsBalance, setCapsBalance] = useState(0);
+
+    useEffect(() => {
+        const provider = new AnchorProvider(connection, wallet, {});
+        setClient(new FizzFunClient(provider));
+        loadTrending();
+        loadCapsBalance();
+    }, [wallet]);
+
+    async function loadTrending() {
+        const tokens = await client.getTrendingTokens(20);
+        setTrending(tokens);
+    }
+
+    async function loadCapsBalance() {
+        const balance = await getCapsBalance(wallet.publicKey);
+        setCapsBalance(balance);
+    }
+
+    async function handleLaunch(name: string, symbol: string, uri: string) {
+        if (capsBalance < 1000) {
+            alert('Need at least 1000 CAPS to launch a token!');
+            return;
+        }
+
+        try {
+            const tx = await client.createToken(wallet.publicKey, name, symbol, uri);
+            alert(`Token launched! TX: ${tx}`);
+            loadCapsBalance(); // Refresh after burning CAPS
+        } catch (e) {
+            alert(`Launch failed: ${e.message}`);
+        }
+    }
+
+    async function handleBuy(tokenMint: PublicKey, solAmount: number) {
+        if (capsBalance < 100) {
+            alert('Need at least 100 CAPS to trade on Fizz.fun!');
+            return;
+        }
+
+        try {
+            const tx = await client.buyTokens(wallet.publicKey, tokenMint, solAmount);
+            alert(`Bought tokens! TX: ${tx}`);
+        } catch (e) {
+            alert(`Buy failed: ${e.message}`);
+        }
+    }
+
+    async function handleSell(tokenMint: PublicKey, tokenAmount: number) {
+        try {
+            const tx = await client.sellTokens(wallet.publicKey, tokenMint, tokenAmount);
+            alert(`Sold tokens! TX: ${tx}`);
+        } catch (e) {
+            alert(`Sell failed: ${e.message}`);
+        }
+    }
+
+    return (
+        <div className="fizz-fun-container">
+            <header>
+                <h1>🧪 Fizz.fun</h1>
+                <p>CAPS Balance: {capsBalance.toLocaleString()} CAPS</p>
+            </header>
+
+            {capsBalance >= 1000 && (
+                <LaunchTokenForm onLaunch={handleLaunch} />
+            )}
+
+            <TrendingTokens 
+                tokens={trending} 
+                onBuy={handleBuy}
+                onSell={handleSell}
+                capsBalance={capsBalance}
+            />
+        </div>
+    );
 }
 ```
 
