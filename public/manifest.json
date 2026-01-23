@@ -1,39 +1,102 @@
 {
   "name": "Atomic Fizz Caps - Wasteland GPS",
-  "short_name": "Atomic Fizz",
-  "description": "Pip-Boy 3000 Wasteland GPS - A Fallout-themed geo-game powered by Solana",
+  "short_name": "Fizz Caps",
+  "description": "Pip-Boy 3000 Wasteland GPS - A Fallout-themed geo-game with Solana wallet integration. Explore, scavenge, trade NFTs, and earn FIZZ tokens in the post-apocalyptic Mojave.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#050705",
   "theme_color": "#00ff41",
   "orientation": "any",
   "scope": "/",
+  "id": "/",
   "icons": [
     {
       "src": "/favicon.png",
-      "sizes": "192x192 512x512 832x832",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "categories": ["games", "entertainment"],
+  "categories": ["games", "entertainment", "finance"],
   "lang": "en-US",
   "dir": "ltr",
   "prefer_related_applications": false,
-  "related_applications": [],
-  "screenshots": [],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=xyz.atomicfizzcaps.app",
+      "id": "xyz.atomicfizzcaps.app"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/app/atomic-fizz-caps/id0000000000"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/img/screenshot-map.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Wasteland Map View"
+    },
+    {
+      "src": "/img/screenshot-wallet.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Atomic Fizz Wallet"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Open Map",
       "short_name": "Map",
       "description": "View the Wasteland Map",
-      "url": "/?tab=map"
+      "url": "/?tab=map",
+      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
     },
     {
       "name": "Quests",
       "short_name": "Quests",
       "description": "View your active quests",
-      "url": "/?tab=quests"
+      "url": "/?tab=quests",
+      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Wallet",
+      "short_name": "Wallet",
+      "description": "Open Atomic Fizz Wallet",
+      "url": "/wallet/index.html",
+      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Exchange",
+      "short_name": "Exchange",
+      "description": "Scavenger's Exchange",
+      "url": "/exchange.html",
+      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
     }
-  ]
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+fizz",
+      "url": "/wallet/index.html?action=%s"
+    }
+  ],
+  "share_target": {
+    "action": "/wallet/index.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
 }

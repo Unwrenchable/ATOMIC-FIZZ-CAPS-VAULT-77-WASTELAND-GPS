@@ -77,21 +77,29 @@ body {
 .wallet-hud {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  gap: clamp(0.3rem, 0.8vw, 0.5rem);
   font-size: clamp(0.9rem, 1vw, 1.1rem);
+  max-width: 100%;
 }
 
 .wallet-hud span {
   font-size: clamp(0.8rem, 0.9vw, 1rem);
   opacity: 0.9;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: min(200px, 40vw);
 }
 
 .wallet-hud button {
-  padding: 0.3rem 0.8rem;
+  padding: clamp(0.3rem, 0.6vw, 0.4rem) clamp(0.6rem, 1.2vw, 0.8rem);
   font-size: clamp(0.8rem, 0.9vw, 1rem);
   min-width: auto;
+  min-height: 32px;
   border-radius: 3px;
+  white-space: nowrap;
+  touch-action: manipulation;
 }
 
 /* ============================================================
