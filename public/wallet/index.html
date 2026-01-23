@@ -37,6 +37,14 @@
   <link rel="stylesheet" href="wallet.css">
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/favicon.png">
+  
+  <!-- API base: local dev vs production -->
+  <script>
+    window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.github.dev'))
+      ? 'http://localhost:3001'
+      : 'https://api.atomicfizzcaps.xyz';
+    window.BACKEND_URL = window.API_BASE;
+  </script>
 </head>
 <body>
 
