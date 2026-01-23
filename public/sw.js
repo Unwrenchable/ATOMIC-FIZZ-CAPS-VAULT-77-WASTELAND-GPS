@@ -74,6 +74,7 @@ self.addEventListener('fetch', (event) => {
           // Clone the response
           const responseToCache = response.clone();
 
+          // Cache in background (don't block response)
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
@@ -92,8 +93,12 @@ self.addEventListener('fetch', (event) => {
 
 // Handle push notifications (future feature)
 self.addEventListener('push', (event) => {
+  const body = (event.data && typeof event.data.text === 'function') 
+    ? event.data.text() 
+    : 'New wasteland activity detected!';
+    
   const options = {
-    body: event.data ? event.data.text() : 'New wasteland activity detected!',
+    body: body,
     icon: '/favicon.png',
     badge: '/favicon.png',
     vibrate: [100, 50, 100],
