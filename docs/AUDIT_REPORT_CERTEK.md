@@ -33,16 +33,17 @@ This audit report covers the security posture, code integrity, and secret protec
 **Risk**: LOW
 
 #### How It Works
-The Konami Code is a classic video game cheat code sequence that, when entered correctly, triggers a hidden feature. In this application:
+The Konami Code is a classic video game cheat code Easter egg that, when entered correctly, triggers a hidden feature. In this application:
 
-1. **Sequence**: ↑ ↑ ↓ ↓ ← → ← → B A
-2. **Trigger**: Opens a secret donation portal
+1. **Sequence**: Classic gaming sequence (obfuscated in code)
+2. **Function**: Opens a secret donation portal to support the project
 3. **Protection**: Obfuscated to prevent easy discovery
+4. **Note**: This is a fun Easter egg only - it does NOT provide any gameplay advantages
 
 #### Technical Implementation
 - Event listener tracks keyboard input
 - Sequence is matched against encoded pattern
-- Successful entry triggers popup window
+- Successful entry triggers donation popup window
 - 5-second cooldown prevents spam
 
 ### 2. DEVTOOLS PROTECTION

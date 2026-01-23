@@ -1,0 +1,149 @@
+{
+  "id": "dj_struggle_quips",
+  "description": "Condescending but helpful quips from Fizzmaster Rex when players are having a tough time. These trigger during frustrating moments like failed terminal hacks, difficult battles, or low health situations. The Konami code references are nostalgic jokes - the code only unlocks the donation portal, not gameplay cheats.",
+
+  "terminal_hack_fails": [
+    {
+      "id": "hack_fail_konami_hint",
+      "triggers_after": 3,
+      "quip": "Heh, struggling with that terminal, friend? You know, back in the day, there was this secret code that worked on everything. Up, up, down, down... ah, but those days are long gone. This is the real wasteland - no cheat codes here!",
+      "tone": "condescending_nostalgic"
+    },
+    {
+      "id": "hack_fail_generic_1",
+      "triggers_after": 2,
+      "quip": "Sounds like someone's having trouble with a terminal over there. Don't worry, friend, even the best of us lock ourselves out sometimes.",
+      "tone": "sympathetic"
+    },
+    {
+      "id": "hack_fail_generic_2",
+      "triggers_after": 4,
+      "quip": "You know what? Maybe hacking isn't your thing. Have you considered just... blowing it up? I'm kidding. Mostly.",
+      "tone": "sarcastic"
+    },
+    {
+      "id": "hack_fail_vault_tec",
+      "triggers_after": 5,
+      "quip": "Vault-Tec security is no joke, wastelander. Keep at it - persistence beats passwords every time.",
+      "tone": "encouraging"
+    }
+  ],
+
+  "low_health_quips": [
+    {
+      "id": "low_hp_1",
+      "condition": "hp <= 25%",
+      "quip": "To whoever's bleeding out near Black Mountain... might want to use that Stimpak. Just a suggestion from your friendly neighborhood DJ.",
+      "tone": "urgent"
+    },
+    {
+      "id": "low_hp_2",
+      "condition": "hp <= 15%",
+      "quip": "I'm getting reports of someone looking like they lost a fight with a Deathclaw. If that's you... well, it's been nice knowing you. Kidding! Find cover!",
+      "tone": "dark_humor"
+    },
+    {
+      "id": "low_hp_konami",
+      "condition": "hp <= 10%",
+      "quip": "Looking rough out there, friend. You know, in the old video games, there was always a cheat code when things got desperate. Shame this is real life, huh? Get some rest, wastelander.",
+      "tone": "philosophical"
+    }
+  ],
+
+  "death_respawn_quips": [
+    {
+      "id": "death_1",
+      "quip": "And just like that, another wastelander learns why we don't walk into Quarry Junction alone. Rest in peace, friend. Or don't. Time works weird out here.",
+      "tone": "dark_humor"
+    },
+    {
+      "id": "death_konami",
+      "quip": "Back from the dead? Impressive. Almost like you found a continue button. Unfortunately, wastelander, there's no '30 lives' code out here. Stay sharp!",
+      "tone": "wink_joke"
+    }
+  ],
+
+  "battle_struggle_quips": [
+    {
+      "id": "battle_long_1",
+      "triggers_after": "60 seconds",
+      "quip": "Sounds like someone's in a real firefight out there! Remember: cover, reload, repeat. And maybe pray to whatever wasteland gods you believe in.",
+      "tone": "supportive"
+    },
+    {
+      "id": "battle_long_2",
+      "triggers_after": "120 seconds",
+      "quip": "Still fighting, huh? Stubborn. I like that. Keep at it, wastelander. Or run. Running is also valid.",
+      "tone": "encouraging"
+    },
+    {
+      "id": "battle_konami_hint",
+      "triggers_after": "180 seconds",
+      "quip": "Three minutes in a fight? That's dedication... or poor planning. Pre-war gamers had cheat codes for this. You? You've just got skill and luck. Use 'em both!",
+      "tone": "nostalgic_tease"
+    }
+  ],
+
+  "quest_stuck_quips": [
+    {
+      "id": "quest_stuck_1",
+      "triggers_after": "30 minutes same area",
+      "quip": "Hey friend, you've been wandering that same area for a while. Lost? Or just enjoying the scenery? If it's the former, try checking your Pip-Boy map.",
+      "tone": "helpful"
+    },
+    {
+      "id": "quest_stuck_konami",
+      "triggers_after": "60 minutes same area",
+      "quip": "An hour in one place? Either you found something incredible, or you're completely stuck. No shame in asking for directions, wastelander. Even the Courier got lost sometimes.",
+      "tone": "supportive"
+    }
+  ],
+
+  "companion_struggle_remarks": {
+    "description": "Remarks from companions when they notice the player struggling. These are nostalgic gaming jokes, not hints about actual cheat codes.",
+    "lucy_sparkplug": [
+      {
+        "id": "lucy_konami_remark",
+        "condition": "player_failed_hack >= 3",
+        "dialog": "You know, my dad used to tell me about these old video game tricks. Some magic button combo that made you invincible. Too bad real terminals don't work that way, huh?",
+        "tone": "nostalgic_joke"
+      },
+      {
+        "id": "lucy_hack_help",
+        "condition": "player_failed_hack >= 2",
+        "dialog": "Want me to take a crack at it? I've got nimble fingers... and less pride to lose.",
+        "tone": "teasing"
+      }
+    ],
+    "jax_signal_ghost": [
+      {
+        "id": "jax_konami_remark",
+        "condition": "player_low_health",
+        "dialog": "*static crackle* ...old patterns... codes... they meant something once... *static* ...but meaning fades...",
+        "tone": "cryptic"
+      }
+    ],
+    "captain_rex": [
+      {
+        "id": "rex_konami_mock",
+        "condition": "player_failed_multiple_times",
+        "dialog": "Keep smashing buttons hoping something happens? This isn't some pre-war arcade game, kid. No shortcuts here - just hard work and harder choices.",
+        "tone": "gruff_realistic"
+      }
+    ],
+    "mara_glowseeker": [
+      {
+        "id": "mara_konami_science",
+        "condition": "player_stuck_on_puzzle",
+        "dialog": "Fascinating. You've been trying the same approach repeatedly. In pre-war game theory, they called this 'trial and error.' Keep experimenting - that's how science works!",
+        "tone": "academic_encouraging"
+      }
+    ]
+  },
+
+  "meta": {
+    "purpose": "These quips serve to add humor and character to difficult moments. The Konami code references are nostalgic jokes about old gaming - the actual Konami code in this app only unlocks the donation portal, not gameplay cheats.",
+    "implementation_notes": "Quips should feel organic and in-character. References to 'cheat codes' are jokes about gaming history, not hints about actual functionality.",
+    "trigger_system": "Use event listeners for: terminal_hack_failed, player_hp_low, player_died, battle_duration, area_time_spent"
+  }
+}

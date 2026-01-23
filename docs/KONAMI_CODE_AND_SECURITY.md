@@ -9,14 +9,7 @@
 
 ## 🎮 WHAT IS THE KONAMI CODE?
 
-The Konami Code is a famous cheat code originally used in Konami video games. The sequence is:
-
-```
-↑ ↑ ↓ ↓ ← → ← → B A
-```
-
-When entered correctly on a keyboard:
-- **ArrowUp, ArrowUp, ArrowDown, ArrowDown, ArrowLeft, ArrowRight, ArrowLeft, ArrowRight, B, A**
+The Konami Code is a famous cheat code originally used in Konami video games. It's a classic gaming Easter egg.
 
 ### How It Works in This Application
 
@@ -24,15 +17,17 @@ When entered correctly on a keyboard:
 2. **Sequence Matching**: Each key press is compared against the expected sequence
 3. **Progressive Matching**: The system tracks progress through the sequence
 4. **Reset on Mismatch**: If a wrong key is pressed, progress resets to zero
-5. **Activation**: When all 10 keys are entered correctly, the secret feature activates
+5. **Activation**: When all keys are entered correctly, the feature activates
 
 ### What Happens When Activated
 
 In Atomic Fizz Caps, the Konami code:
 1. Plays a sound effect (if audio is available)
 2. Shows an alert notification
-3. Opens the secret donation portal in a popup window
+3. **Opens the secret donation portal** in a popup window
 4. Has a 5-second cooldown to prevent spam
+
+**Important**: This is a fun Easter egg for supporting the project. It does **NOT** provide any gameplay advantages - no extra caps, no invincibility, no cheat effects. It's purely a nostalgic nod to gaming history that lets players discover the donation page.
 
 ---
 
@@ -96,11 +91,7 @@ Instead of `konamiCode` or `donationUrl`, we use meaningless names:
 - `_pt` - Portal target
 
 #### 5. No Console Hints
-The original code logged a hint:
-```javascript
-console.log('🎮 Konami Code listener active. Try: ↑↑↓↓←→←→BA');
-```
-This has been **removed** to prevent easy discovery.
+The original code logged a hint revealing the sequence. This has been **removed** to prevent easy discovery.
 
 ---
 

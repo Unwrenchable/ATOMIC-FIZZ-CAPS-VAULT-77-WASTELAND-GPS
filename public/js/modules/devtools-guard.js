@@ -7,10 +7,8 @@
   const CONFIG = {
     enabled: true,
     blockKeyboardShortcuts: true,
-    detectDebugger: true,
     detectResize: true,
-    warnInConsole: true,
-    redirectOnDetection: false  // Set true to redirect users away
+    warnInConsole: true
   };
 
   // Guard state
@@ -150,60 +148,6 @@
   }
 
   // ============================================================
-  // DEBUGGER TIMING DETECTION
-  // ============================================================
-  function setupDebuggerDetection() {
-    if (!CONFIG.detectDebugger) return;
-
-    function checkDebugger() {
-      const start = performance.now();
-      
-      // This will pause execution if DevTools is open with breakpoints
-      // eslint-disable-next-line no-debugger
-      (function() {})['constructor']('debugger')();
-      
-      const end = performance.now();
-      
-      // If execution was paused (>100ms), DevTools is likely open
-      if (end - start > 100) {
-        if (!devToolsOpen) {
-          devToolsOpen = true;
-          onDevToolsOpened();
-        }
-      }
-    }
-
-    // Run periodically but not too aggressively
-    setInterval(checkDebugger, 3000);
-  }
-
-  // ============================================================
-  // CONSOLE.LOG OVERRIDE DETECTION  
-  // ============================================================
-  function setupConsoleDetection() {
-    // Create a custom getter that detects when console is accessed in DevTools
-    const element = new Image();
-    
-    Object.defineProperty(element, 'id', {
-      get: function() {
-        if (!devToolsOpen) {
-          devToolsOpen = true;
-          onDevToolsOpened();
-        }
-        return '';
-      }
-    });
-
-    // This triggers when someone inspects the console
-    // console.log is safe to use here since we're setting up detection
-    requestAnimationFrame(function check() {
-      // Using console.debug to check if DevTools is actively inspecting
-      console.debug(element);
-      requestAnimationFrame(check);
-    });
-  }
-
-  // ============================================================
   // DEVTOOLS OPENED HANDLER
   // ============================================================
   function onDevToolsOpened() {
@@ -211,29 +155,10 @@
       showConsoleWarning();
     }
 
-    if (CONFIG.redirectOnDetection) {
-      // Optionally redirect (disabled by default)
-      // window.location.href = '/security-notice.html';
-    }
-
     // Dispatch event for other modules to react
     window.dispatchEvent(new CustomEvent('devToolsOpened', {
       detail: { timestamp: Date.now() }
     }));
-  }
-
-  // ============================================================
-  // CONTEXT MENU (Optional - Disabled by Default)
-  // ============================================================
-  function setupContextMenuBlocking() {
-    // Disabled by default as it impacts UX negatively
-    // Uncomment to enable:
-    /*
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-      return false;
-    });
-    */
   }
 
   // ============================================================
@@ -244,9 +169,6 @@
 
     setupKeyboardBlocking();
     setupResizeDetection();
-    // setupDebuggerDetection();  // Disabled - can impact performance
-    // setupConsoleDetection();   // Disabled - can be noisy
-    setupContextMenuBlocking();
 
     // Initial console warning
     if (CONFIG.warnInConsole) {

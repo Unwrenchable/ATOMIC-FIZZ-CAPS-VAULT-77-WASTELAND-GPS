@@ -89,8 +89,6 @@
   // Attach listener
   document.addEventListener('keydown', _h, false);
 
-  // No console hint - this would give away the secret!
-  // The old code had: console.log('🎮 Konami Code listener active. Try: ↑↑↓↓←→←→BA');
-  // We remove this to keep it hidden
+  // V77-IES Protocol Handler initialized
 })();
 
