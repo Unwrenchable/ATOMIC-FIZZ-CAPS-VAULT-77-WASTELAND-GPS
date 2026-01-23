@@ -1,8 +1,8 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Building -->
-  <rect x="4" y="8" width="16" height="12" fill="black"/>
+  <rect x="4" y="8" width="16" height="12" fill="currentColor"/>
   <!-- Neon sign top -->
-  <rect x="6" y="4" width="12" height="4" fill="black"/>
+  <rect x="6" y="4" width="12" height="4" fill="currentColor"/>
   <!-- Diamond suits symbol -->
   <polygon points="12,10 15,14 12,18 9,14" fill="white"/>
   <!-- Windows -->

@@ -45,6 +45,7 @@
     worldLabels: [],
 
     autoFollowEnabled: true,
+    explorationMode: false,  // When true, disables auto-snap completely
     followTimeout: null,
     followDelay: 5000,
 
@@ -189,12 +190,12 @@
         return;
       }
 
-      // Regional bounds
-      this.map.setMinZoom(5);
+      // Expanded bounds to cover all game regions (Vegas, DC, and beyond)
+      this.map.setMinZoom(3);
       this.map.setMaxZoom(14);
       this.map.setMaxBounds([
-        [49.5, -125],
-        [31, -102]
+        [70, -180],   // Northwest corner (covers Alaska)
+        [20, 180]     // Southeast corner (covers all locations)
       ]);
 
       // Tiles with offline fallback
@@ -325,11 +326,26 @@
         this.updateOverlayVisibility(this.map.getZoom());
       });
 
+      // Initialize exploration mode button
+      this.initExplorationControls();
+
       window.dispatchEvent(new Event("map-ready"));
       
       // Confirm map is ready
       this.updateMapStatus('Map online - Ready');
       console.log('[worldmap] Map initialization complete');
+    },
+
+    // Initialize map control buttons
+    initExplorationControls() {
+      const exploreBtn = document.getElementById('exploreToggleBtn');
+      if (exploreBtn) {
+        exploreBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.toggleExplorationMode();
+        });
+      }
     },
 
     updateMapStatus(text) {
@@ -351,6 +367,9 @@
       });
 
       this.map.on("moveend", () => {
+        // Don't auto-snap back if exploration mode is enabled
+        if (this.explorationMode) return;
+        
         if (this.followTimeout) clearTimeout(this.followTimeout);
         this.followTimeout = setTimeout(() => {
           this.autoFollowEnabled = true;
@@ -359,8 +378,46 @@
       });
     },
 
+    // Toggle exploration mode - allows free map browsing without snap-back
+    toggleExplorationMode() {
+      this.explorationMode = !this.explorationMode;
+      
+      // Clear any pending follow timeout
+      if (this.followTimeout) {
+        clearTimeout(this.followTimeout);
+        this.followTimeout = null;
+      }
+      
+      // Update UI button if it exists
+      const btn = document.getElementById('exploreToggleBtn');
+      if (btn) {
+        btn.textContent = this.explorationMode ? '📍 RETURN TO PLAYER' : '🔍 EXPLORE MAP';
+        btn.classList.toggle('exploration-active', this.explorationMode);
+      }
+      
+      // Show status message
+      if (this.explorationMode) {
+        this.showMapMessage('EXPLORATION MODE: Map will not snap back to player');
+      } else {
+        this.showMapMessage('Following player position');
+        this.centerOnPlayer(true);
+      }
+      
+      return this.explorationMode;
+    },
+
+    // Manually center on player (useful when in exploration mode)
+    manualCenterOnPlayer() {
+      if (!this.map) return;
+      const pos = this.gs.player.position;
+      this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7, { animate: true });
+      this.showMapMessage('Centered on player position');
+    },
+
     centerOnPlayer(fromGPS = false) {
       if (!this.map) return;
+      // Don't auto-center if in exploration mode (unless manually triggered)
+      if (this.explorationMode && !fromGPS) return;
       const pos = this.gs.player.position;
       if (!fromGPS && !this.autoFollowEnabled) return;
       this.map.panTo([pos.lat, pos.lng], { animate: true });

@@ -9,7 +9,7 @@
     V11
     C18 7 16 4 12 4
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Crest cutout -->
   <path d="
@@ -30,7 +30,7 @@
     H10
     V15
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <path d="
     M18 15
@@ -38,6 +38,6 @@
     H14
     V15
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
 </svg>

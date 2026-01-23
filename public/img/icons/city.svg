@@ -6,10 +6,10 @@
     M8 18 V10 H11 V18 Z
     M12 18 V6 H15 V18 Z
     M16 18 V12 H20 V18 Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Tower antenna -->
-  <rect x="13.5" y="4" width="1" height="2" fill="black"/>
+  <rect x="13.5" y="4" width="1" height="2" fill="currentColor"/>
 
   <!-- Window cutouts -->
   <rect x="9" y="12" width="1.5" height="1.5" fill="white"/>

@@ -13,7 +13,7 @@
     V10
     C18 8 17 6 15 6
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Left arm -->
   <path d="
@@ -22,7 +22,7 @@
     L6 14.5
     V11
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Right arm -->
   <path d="
@@ -31,7 +31,7 @@
     L18 14.5
     V11
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Left head -->
   <path d="
@@ -42,7 +42,7 @@
     V6.2
     C11 5 10.2 4 9 4
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Right head -->
   <path d="
@@ -53,7 +53,7 @@
     V6.2
     C17 5 16.2 4 15 4
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Eye cutouts -->
   <circle cx="8.5" cy="6.2" r="0.6" fill="white"/>

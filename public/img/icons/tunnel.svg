@@ -1,12 +1,12 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Tunnel entrance -->
-  <rect x="2" y="4" width="20" height="16" fill="black"/>
+  <rect x="2" y="4" width="20" height="16" fill="currentColor"/>
   <!-- Tunnel arch opening -->
   <path d="M5 20 L5 10 Q12 4 19 10 L19 20 Z" fill="white"/>
   <!-- Darkness inside -->
-  <ellipse cx="12" cy="14" rx="5" ry="4" fill="black"/>
+  <ellipse cx="12" cy="14" rx="5" ry="4" fill="currentColor"/>
   <!-- Rail tracks -->
-  <rect x="6" y="18" width="12" height="1" fill="black"/>
-  <rect x="8" y="16" width="1" height="3" fill="black"/>
-  <rect x="15" y="16" width="1" height="3" fill="black"/>
+  <rect x="6" y="18" width="12" height="1" fill="currentColor"/>
+  <rect x="8" y="16" width="1" height="3" fill="currentColor"/>
+  <rect x="15" y="16" width="1" height="3" fill="currentColor"/>
 </svg>
