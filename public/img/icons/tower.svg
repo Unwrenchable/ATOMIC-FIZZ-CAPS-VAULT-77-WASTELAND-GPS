@@ -10,11 +10,11 @@
     H17
     L13 4
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Crossbars -->
-  <rect x="8.5" y="12" width="7" height="1.2" fill="black"/>
-  <rect x="9.5" y="15" width="5" height="1.2" fill="black"/>
+  <rect x="8.5" y="12" width="7" height="1.2" fill="currentColor"/>
+  <rect x="9.5" y="15" width="5" height="1.2" fill="currentColor"/>
 
   <!-- Signal arcs (cutouts) -->
   <path d="

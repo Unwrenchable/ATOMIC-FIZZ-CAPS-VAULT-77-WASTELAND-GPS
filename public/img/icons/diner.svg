@@ -1,0 +1,7 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Retro diner -->
+  <path d="M4 10 L4 20 L20 20 L20 10 Q12 6 4 10" fill="currentColor"/>
+  <rect x="6" y="12" width="4" height="3" fill="white"/>
+  <rect x="14" y="12" width="4" height="3" fill="white"/>
+  <rect x="10" y="16" width="4" height="4" fill="white"/>
+</svg>

@@ -1,7 +1,7 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
   <!-- Top beam -->
-  <rect x="5" y="6" width="14" height="2" fill="black"/>
+  <rect x="5" y="6" width="14" height="2" fill="currentColor"/>
 
   <!-- Left gate door -->
   <path d="
@@ -10,7 +10,7 @@
     V18
     H5
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Right gate door -->
   <path d="
@@ -19,7 +19,7 @@
     V18
     H13
     Z
-  " fill="black"/>
+  " fill="currentColor"/>
 
   <!-- Hinges / cutouts -->
   <rect x="10" y="10" width="1.5" height="1.5" fill="white"/>

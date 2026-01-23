@@ -1,0 +1,6 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Road sign -->
+  <rect x="11" y="8" width="2" height="12" fill="currentColor"/>
+  <polygon points="12,2 4,8 20,8" fill="currentColor"/>
+  <text x="12" y="6.5" fill="white" font-size="3" text-anchor="middle">!</text>
+</svg>

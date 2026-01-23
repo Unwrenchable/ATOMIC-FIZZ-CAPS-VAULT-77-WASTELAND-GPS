@@ -1,10 +1,10 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Armory/weapons storage -->
-  <rect x="4" y="8" width="16" height="12" fill="black"/>
+  <rect x="4" y="8" width="16" height="12" fill="currentColor"/>
   <rect x="6" y="10" width="4" height="8" fill="white"/>
   <rect x="14" y="10" width="4" height="8" fill="white"/>
   <!-- Gun silhouette -->
-  <path d="M7 13 L9 13 L9 14 L7 14 Z M7 15 L8 15 L8 16 L7 16 Z" fill="black"/>
-  <path d="M15 13 L17 13 L17 14 L15 14 Z M15 15 L16 15 L16 16 L15 16 Z" fill="black"/>
-  <polygon points="12,4 8,8 16,8" fill="black"/>
+  <path d="M7 13 L9 13 L9 14 L7 14 Z M7 15 L8 15 L8 16 L7 16 Z" fill="currentColor"/>
+  <path d="M15 13 L17 13 L17 14 L15 14 Z M15 15 L16 15 L16 16 L15 16 Z" fill="currentColor"/>
+  <polygon points="12,4 8,8 16,8" fill="currentColor"/>
 </svg>

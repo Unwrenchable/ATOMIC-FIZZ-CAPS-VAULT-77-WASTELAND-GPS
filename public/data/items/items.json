@@ -124,6 +124,16 @@
      ARMOR — VAULT / PRU / WASTELAND
      =========================== */
   {
+    "id": "vault77_jumpsuit",
+    "name": "Vault 77 Jumpsuit",
+    "type": "armor",
+    "slot": "chest",
+    "armor": 5,
+    "weight": 2,
+    "value": 15,
+    "description": "Standard-issue blue and yellow jumpsuit worn by Vault 77 residents. Provides minimal protection but is surprisingly comfortable."
+  },
+  {
     "id": "vault77_security_armor",
     "name": "Vault 77 Security Armor",
     "type": "armor",

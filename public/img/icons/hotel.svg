@@ -1,6 +1,6 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Hotel building -->
-  <rect x="4" y="6" width="16" height="14" fill="black"/>
+  <rect x="4" y="6" width="16" height="14" fill="currentColor"/>
   <!-- Floors of windows -->
   <rect x="6" y="8" width="2" height="2" fill="white"/>
   <rect x="11" y="8" width="2" height="2" fill="white"/>
@@ -11,6 +11,6 @@
   <!-- Door -->
   <rect x="10" y="16" width="4" height="4" fill="white"/>
   <!-- H sign -->
-  <rect x="8" y="3" width="8" height="3" fill="black"/>
+  <rect x="8" y="3" width="8" height="3" fill="currentColor"/>
   <text x="12" y="5.5" font-size="3" fill="white" text-anchor="middle">H</text>
 </svg>
