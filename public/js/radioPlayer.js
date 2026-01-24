@@ -44,7 +44,8 @@
 
   const safeFetchJSON = async (url, fallback = null) => {
     try {
-      const res = await fetch(url);
+      const fullUrl = url.startsWith('/api/') ? `${window.API_BASE}${url}` : url;
+      const res = await fetch(fullUrl);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
     } catch (err) {
