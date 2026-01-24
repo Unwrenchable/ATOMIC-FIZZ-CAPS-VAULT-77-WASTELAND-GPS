@@ -5,7 +5,10 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const path = require("path");
+const app = express();
+const PORT = process.env.PORT || 3000;
 
+// --- API ROUTES --- //
 const walletRoutes = require("./routes/wallet");
 
 // --- ADMIN AUTH ---
@@ -20,8 +23,11 @@ const adminPlayerRoutes = require("./api/adminPlayer");
 const adminMonitorRoutes = require("./api/adminMonitor"); // Jax read-only monitor
 const adminMintablesRoutes = require("./api/adminMintables"); // World Tools: Mintables
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+// --- GAME DATA ROUTES (add each of these as you implement the file) ---
+const mintablesRoutes = require("./routes/mintables");
+// const scavengerRoutes = require("./routes/scavenger");
+// const locationsRoutes = require("./routes/locations");
+// const settingsRoutes = require("./routes/settings");
 
 // Strict CORS whitelist
 const CLIENT_ORIGIN =
@@ -65,7 +71,6 @@ app.use((req, res, next) => {
 
 // ------------------------------------------------------------
 // Serve Wallet UI
-// ------------------------------------------------------------
 app.use(
   "/wallet",
   express.static(path.join(__dirname, "..", "public", "wallet"), {
@@ -76,7 +81,6 @@ app.use(
 
 // ------------------------------------------------------------
 // Serve Admin Panel UI
-// ------------------------------------------------------------
 app.use(
   "/admin",
   express.static(path.join(__dirname, "..", "public", "admin"), {
@@ -87,32 +91,35 @@ app.use(
 
 // ------------------------------------------------------------
 // Wallet API
-// ------------------------------------------------------------
 app.use("/api", walletRoutes);
 
 // ------------------------------------------------------------
 // Admin Auth Routes
-// ------------------------------------------------------------
 app.post("/api/admin/login", adminLoginHandler);
 app.post("/api/admin/logout", requireAdmin, adminLogoutHandler);
 
 // ------------------------------------------------------------
 // Admin Tools
-// ------------------------------------------------------------
 app.use("/api/admin/player", requireAdmin, adminPlayerRoutes);
 app.use("/api/admin/monitor", requireAdmin, adminMonitorRoutes);
-app.use("/api/admin/mintables", requireAdmin, adminMintablesRoutes); // <— ADDED
+app.use("/api/admin/mintables", requireAdmin, adminMintablesRoutes);
+
+// ------------------------------------------------------------
+// Game Data APIs - READ ONLY
+app.use("/api/mintables", mintablesRoutes);
+// Uncomment/add as you create the files:
+/// app.use("/api/scavenger", scavengerRoutes);
+/// app.use("/api/locations", locationsRoutes);
+/// app.use("/api/settings", settingsRoutes);
 
 // ------------------------------------------------------------
 // Health Check
-// ------------------------------------------------------------
 app.get("/health", (req, res) => {
   res.json({ ok: true, status: "healthy" });
 });
 
 // ------------------------------------------------------------
 // Global Error Handler
-// ------------------------------------------------------------
 app.use((err, req, res, next) => {
   console.error("GLOBAL ERROR:", err);
   res.status(500).json({ ok: false, error: "Internal server error" });
@@ -120,7 +127,6 @@ app.use((err, req, res, next) => {
 
 // ------------------------------------------------------------
 // Start Server
-// ------------------------------------------------------------
 app.listen(PORT, () => {
   console.log(`Atomic Fizz Wallet backend running on port ${PORT}`);
 });
