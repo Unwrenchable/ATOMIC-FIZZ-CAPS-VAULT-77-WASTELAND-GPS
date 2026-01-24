@@ -30,14 +30,11 @@ console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 // ------------------------------------------------------------
 
 // --- CORS setup (safe, env-driven) ---
-// Parse FRONTEND_ORIGIN env var into an array of allowed origins.
-// Accepts comma-separated values. Example:
-// FRONTEND_ORIGIN="https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000"
-const rawOrigins = (process.env.FRONTEND_ORIGIN || 'https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000, https://*.vercel.app').split(/\s*,\s*/);
+const rawOrigins = (process.env.FRONTEND_ORIGIN ||
+  "https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000, https://*.vercel.app"
+).split(/\s*,\s*/);
 
 function wildcardToRegex(pattern) {
-  // turn https://*.vercel.app into ^https?:\/\/[^\/]+\.vercel\.app(:\d+)?$
-  // Escape backslashes first, then dots, then replace wildcards
   const escaped = pattern
     .replace(/^https?:\/\//, '')
     .replace(/\\/g, '\\\\')
@@ -50,8 +47,7 @@ const allowedOrigins = rawOrigins.map(s => s.trim()).filter(Boolean);
 
 const corsOptions = {
   origin: function(origin, callback) {
-    // allow server-to-server or curl requests with no origin
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); // server-side/curl requests
     const ok = allowedOrigins.some(pattern => {
       if (pattern.includes('*')) {
         return wildcardToRegex(pattern).test(origin);
@@ -87,7 +83,7 @@ app.use(
 // Security headers
 app.use(
   helmet({
-    contentSecurityPolicy: false, // static SPA handles its own CSP if needed
+    contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false,
   })
 );
@@ -114,29 +110,14 @@ app.use(
   })
 );
 
-app.use(
-  "/js",
-  express.static(path.join(FRONTEND_DIR, "js"), {
-    maxAge: NODE_ENV === "production" ? "1h" : 0,
-  })
-);
-app.use(
-  "/css",
-  express.static(path.join(FRONTEND_DIR, "css"), {
-    maxAge: NODE_ENV === "production" ? "1h" : 0,
-  })
-);
-app.use(
-  "/images",
-  express.static(path.join(FRONTEND_DIR, "images"), {
-    maxAge: NODE_ENV === "production" ? "1h" : 0,
-  })
-);
-app.use(
-  "/wallet",
-  express.static(path.join(FRONTEND_DIR, "wallet"), {
-    maxAge: NODE_ENV === "production" ? "1h" : 0,
-  })
+// Subdirectories
+["js","css","images","wallet"].forEach(dir =>
+  app.use(
+    `/${dir}`,
+    express.static(path.join(FRONTEND_DIR, dir), {
+      maxAge: NODE_ENV === "production" ? "1h" : 0,
+    })
+  )
 );
 
 // ------------------------------------------------------------
@@ -178,30 +159,21 @@ try {
 }
 
 // ------------------------------------------------------------
-// API ROUTES
+// API ROUTES (Game loop, admin, wallet, etc)
+// Any that aren't in /api/<name> or have custom logic should have a real router here.
 // ------------------------------------------------------------
 const api = (file) => path.join(__dirname, "api", file);
 
 // Core API endpoints
 safeMount("/api/loot-voucher", api("loot-voucher"));
-safeMount("/api/mintables", api("mintables"));
-safeMount("/api/caps", api("caps"));
-safeMount("/api/xp", api("xp"));
-safeMount("/api/gps", api("gps"));
-safeMount("/api/cooldowns", api("cooldowns"));
-safeMount("/api/rotation", api("rotation"));
-safeMount("/api/quests", api("quests"));
-safeMount("/api/quest-endings", api("quest-endings"));
-safeMount("/api/player", api("player"));
-safeMount("/api/location-claim", api("location-claim"));
+safeMount("/api/mintables", api("mintables"));  // Your mintables router - serves mintables.json
+safeMount("/api/scavenger", api("scavenger"));  // Add a scavenger router if needed, otherwise use JSON proxy below!
+safeMount("/api/locations", api("locations"));  // routes/api/locations.js: serves locations.json
 
-// Add locations endpoint (frontend expects /api/locations)
-safeMount("/api/locations", api("locations"));
+// Add more game-related endpoints as you need them!
+// For example, settings router: safeMount("/api/settings", api("settings"));
 
-// Frontend configuration endpoint (exposes safe config values from env vars)
-safeMount("/api/config/frontend", api("frontend-config"));
-
-// Admin panel routes
+// Admin/advanced panel routes
 safeMount("/api/admin/player", api("adminPlayer"));
 safeMount("/api/admin/mintables", api("adminMintables"));
 safeMount("/api/admin/keys", api("keys-admin"));
@@ -211,11 +183,10 @@ safeMount("/api/wallet", path.join(__dirname, "routes", "wallet"));
 
 // ------------------------------------------------------------
 // GENERIC STATIC JSON PROXY (fallback for /api/<name>)
-// Serves public/data/<name>.json for simple API endpoints.
-// This is mounted AFTER explicit routers so explicit handlers take precedence.
+// If you have `public/data/settings.json`, `public/data/scavenger.json`, etc.
+// This will handle them automatically if no route is more specific.
 // ------------------------------------------------------------
 app.use("/api", (req, res, next) => {
-  // Only handle GET requests for top-level names like /api/settings or /api/locations
   if (req.method !== "GET") return next();
   const parts = req.path.split("/").filter(Boolean);
   if (parts.length !== 1) return next(); // only handle /api/<name>
@@ -237,46 +208,18 @@ app.use("/api", (req, res, next) => {
 });
 
 // ------------------------------------------------------------
-// FUTURE FEATURE ENDPOINTS
-// ------------------------------------------------------------
-app.post("/api/nuke-gear", (req, res) => {
-  res.json({
-    success: false,
-    error: "NUKE GEAR system offline (future update)",
-  });
-});
-
-app.post("/api/bridge/solana-to-evm", (req, res) => {
-  res.json({
-    success: false,
-    error: "BRIDGE system offline (future update)",
-  });
-});
-
-app.post("/api/bridge/evm-to-solana", (req, res) => {
-  res.json({
-    success: false,
-    error: "BRIDGE system offline (future update)",
-  });
-});
-
-// ------------------------------------------------------------
 // HEALTH CHECK
 // ------------------------------------------------------------
-// Add health endpoint for smoke checks
 app.get('/api/health', async (req, res) => {
   try {
-    // Try to load redis module to check its status
     let redisOk = false;
     try {
       const redisModule = require('./lib/redis');
       if (redisModule && redisModule.client) {
         const client = redisModule.client;
-        // Check if client is connected (node-redis v4 has isReady property)
         redisOk = client.isReady || client.status === 'ready' || client.status === 'connected';
       }
     } catch (e) {
-      // redis module not available or error loading it
       redisOk = false;
     }
 
@@ -298,7 +241,7 @@ app.get('/api/health', async (req, res) => {
 });
 
 // ------------------------------------------------------------
-// SPA FALLBACK (React/Leaflet Frontend)
+// SPA FALLBACK
 // ------------------------------------------------------------
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api/")) return next();
