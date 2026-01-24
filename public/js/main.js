@@ -104,7 +104,7 @@
   const CONFIG = {
     defaultCenter: [36.1699, -115.1398],
     defaultZoom: 10,
-    apiBase: window.BACKEND_URL || window.location.origin
+    apiBase: window.API_BASE || window.BACKEND_URL || window.location.origin
   };
 
   function attachMapReference() {

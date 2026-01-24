@@ -7,7 +7,7 @@
 // This allows direct API calls in production and Vercel rewrite fallback in dev
 function getAuthApiUrl() {
   const base = (window.API_BASE || '').replace(/\/+$/, '');
-  return base ? `${base}/api/auth` : '/api/auth';
+  return `${base}/api/auth`;
 }
 
 /**

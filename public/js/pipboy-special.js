@@ -5,14 +5,14 @@ window.Pipboy = window.Pipboy || {};
   const SPECIAL_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
 
   async function apiGetProfile(wallet) {
-    const res = await fetch(`/api/player/${wallet}`);
+    const res = await fetch(`${window.API_BASE}/api/player/${wallet}`);
     if (!res.ok) return null;
     const data = await res.json();
     return data.ok ? data.profile : null;
   }
 
   async function apiCreateProfile(wallet, name) {
-    const res = await fetch("/api/player/create", {
+    const res = await fetch(`${window.API_BASE}/api/player/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ wallet, name }),
@@ -23,7 +23,7 @@ window.Pipboy = window.Pipboy || {};
   }
 
   async function apiRespec(wallet) {
-    const res = await fetch("/api/player/respec", {
+    const res = await fetch(`${window.API_BASE}/api/player/respec`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ wallet }),
