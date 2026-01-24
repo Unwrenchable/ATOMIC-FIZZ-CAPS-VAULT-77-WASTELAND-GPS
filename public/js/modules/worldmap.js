@@ -126,7 +126,8 @@
   // safeFetchJSON: returns parsed JSON or null and logs diagnostics
   async function safeFetchJSON(url, opts = {}) {
     try {
-      const res = await fetch(url, opts);
+      const fullUrl = url.startsWith('/api/') ? `${window.API_BASE}${url}` : url;
+      const res = await fetch(fullUrl, opts);
       if (!res.ok) {
         const text = await res.text().catch(() => "");
         console.warn(`[safeFetchJSON] ${url} returned ${res.status} ${res.statusText}`, text.slice(0, 500));
