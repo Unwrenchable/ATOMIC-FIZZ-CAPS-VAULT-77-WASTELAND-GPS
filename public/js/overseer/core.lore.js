@@ -19,9 +19,9 @@
         title: "Vault 77 Orientation Memo",
         body: [
           "Welcome, resident.",
-          "Vault 77 is proud to provide a lifetime of safety, comfort, and mandatory happiness.",
+          "Vault 77 provides long-term shelter and protocols.",
           "Please disregard rumors regarding 'The Puppet Man'.",
-          "Vault-Tec reminds you: curiosity is a Class-3 infraction.",
+          "Operations reminds you: curiosity is discouraged.",
         ],
       },
       {

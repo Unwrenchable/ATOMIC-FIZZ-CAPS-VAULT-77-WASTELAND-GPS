@@ -1,0 +1,71 @@
+{
+  "wake_up": {
+    "id": "wake_up",
+    "name": "Wake Up",
+    "description": "You awaken in the wasteland. A courier has arrived with an urgent message.",
+    "objectives": [
+      { "id": "open_inventory", "text": "Open your inventory" },
+      { "id": "equip_weapon", "text": "Equip your sidearm" },
+      { "id": "equip_armor", "text": "Equip your jumpsuit" },
+      { "id": "turn_on_radio", "text": "Tune into local radio" },
+      { "id": "open_map", "text": "Check your map" }
+    ],
+    "rewards": { "xp": 50, "caps": 25 },
+    "lore": {
+      "intro": "The courier's voice crackles over the radio. 'If you can hear this...'",
+      "deep": "Fragments of a fractured timeline hint that Vault 77 never told the full story."
+    }
+  },
+  "quest_vault77_open": {
+    "id": "quest_vault77_open",
+    "name": "Open Vault 77",
+    "description": "A sealed vault riddled with old security systems. Discover how to open it.",
+    "steps": [
+      { "id": "find_keycard", "description": "Find the Vault 77 keycard." },
+      { "id": "go_to_vault", "description": "Travel to the Vault 77 entrance." }
+    ],
+    "rewards": { "xp": 120, "caps": 80, "items": ["vault77_kit"] },
+    "lore": {
+      "hint": "Look for a courier who keeps a ledger of delivery codes.",
+      "deep": "Vault 77's overseer wrote of experiments that broke time itself."
+    }
+  },
+  "saitama_token_story": {
+    "id": "saitama_token_story",
+    "name": "Saitama Echo",
+    "type": "meta",
+    "description": "An enigmatic token rumor echoing through markets and back alleys.",
+    "notes": "In-world legend: a meme token that gained mythic status after a fraud scandal. NPCs mention 'Saitama' as cautionary tale.",
+    "relatedQuests": ["quest_vault77_open"]
+  }
+  ,
+  "saitama_main_arc": {
+    "id": "saitama_main_arc",
+    "name": "Saitama Echo: The Fall",
+    "type": "main",
+    "description": "Investigate the Saitama token collapse and the hidden cabal behind it.",
+    "steps": [
+      { "id": "find_russ_trail", "description": "Track down Russ, the disgraced dev who vanished." },
+      { "id": "trace_wallets", "description": "Trace suspicious wallet flows linked to the token." },
+      { "id": "expose_kabal", "description": "Gather evidence and expose the cabal to the public." }
+    ],
+    "requireProof": true,
+    "rewards": { "xp": 500, "caps": 1000, "items": ["saitama_remnant"] },
+    "lore": {
+      "intro": "Rumors say a small group of insiders siphoned millions during the token launch.",
+      "deep": "Some members of the so-called community were agents of a larger fraud; their names are whispered in certain taverns."
+    }
+  },
+  "saitama_side_scammers": {
+    "id": "saitama_side_scammers",
+    "name": "Scammer's Ledger",
+    "type": "side",
+    "description": "Collect testimonies and ledger fragments from victims of the Saitama scam.",
+    "objectives": [
+      { "id": "collect_testimonies", "text": "Gather 5 victim testimonies" },
+      { "id": "find_ledger", "text": "Locate a fragment of the scammer ledger" }
+    ],
+    "requireProof": true,
+    "rewards": { "xp": 200, "caps": 300 }
+  }
+}

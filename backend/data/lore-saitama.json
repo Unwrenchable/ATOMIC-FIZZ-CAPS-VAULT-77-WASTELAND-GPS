@@ -1,0 +1,28 @@
+{
+  "russ": {
+    "name": "Russ 'Riv' Mercer",
+    "role": "ex-lead dev / poster boy",
+    "bio": "Once the public face of the Saitama launch. Vanished after suspicious transfers. Some say he was a scapegoat; others say he ran with the money.",
+    "notes": [
+      "Loved the spotlight; rare photos show him with a golden watch.",
+      "Rumors: he had backchannels with exchange insiders."
+    ]
+  },
+  "kabal": {
+    "name": "The Kabal",
+    "role": "hidden cabal of insiders",
+    "bio": "A small network of wealthy community members and anonymous devs who coordinated the pump-and-dump; used fake accounts and insiders to launder funds.",
+    "notes": [
+      "Members embedded themselves in community moderation.",
+      "They posted 'proof of rug' while pulling liquidity." 
+    ]
+  },
+  "lessons": {
+    "title": "Lessons for Newcomers",
+    "body": [
+      "Don't trust promises of guaranteed moonshots.",
+      "Verify devs independently; look for multi-sig and audits.",
+      "Use small test amounts and learn about wallets and transactions."
+    ]
+  }
+}

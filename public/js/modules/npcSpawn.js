@@ -17,14 +17,56 @@
 
     async loadNPCs() {
       try {
-        const index = await fetch("/data/npc/index.json").then(res => res.json());
-        
+        const idxRes = await fetch("/data/npc/index.json");
+        if (!idxRes.ok) {
+          console.warn('[npcSpawn] index.json not available', idxRes.status);
+          return;
+        }
+        const index = await idxRes.json();
+
+        if (!Array.isArray(index)) {
+          console.warn('[npcSpawn] npc index is not an array');
+          return;
+        }
+
         for (const npcFile of index) {
           try {
-            const npc = await fetch(`/data/npc/${npcFile}`).then(res => res.json());
-            this.npcs.push(npc);
+            const res = await fetch(`/data/npc/${npcFile}`);
+            if (!res.ok) {
+              console.warn(`[npcSpawn] failed to fetch ${npcFile}: ${res.status}`);
+              continue;
+            }
+            const npc = await res.json();
+            if (npc && npc.id) {
+              this.npcs.push(npc);
+              // register NPC in global registry for portrait/swap usage
+              if (window.NPCRegistry) {
+                // ensure parts exist
+                if (!npc.parts) {
+                  // derive parts from npc appearance if available
+                  if (npc.appearance) {
+                    npc.parts = npc.appearance.parts || {};
+                  } else {
+                    npc.parts = {};
+                  }
+                }
+                window.NPCRegistry.register(npc);
+                // Preload portrait (SVG) immediately
+                if (window.NPCPortraits) {
+                  try { window.NPCPortraits.preloadSVG(npc); } catch (e) {}
+                  // If NPC provides armatureBase, try DragonBones preload in background
+                  // If NPC has appearance data, randomly assign the demo armature for variety (demo only)
+                  if (!npc.armatureBase && npc.appearance && Math.random() < 0.25) {
+                    npc.armatureBase = '/assets/dragonbones/demo/hero';
+                  }
+                  if (npc.armatureBase) {
+                    try { window.NPCPortraits.preloadDragonbones(npc, npc.armatureBase); } catch (e) {}
+                  }
+                }
+              }
+            }
           } catch (err) {
-            console.warn(`[npcSpawn] Failed to load ${npcFile}:`, err.message);
+            console.warn(`[npcSpawn] Failed to load ${npcFile}:`, err && err.message ? err.message : err);
           }
         }
 

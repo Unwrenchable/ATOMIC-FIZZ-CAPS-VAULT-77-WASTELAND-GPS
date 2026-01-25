@@ -387,7 +387,16 @@
         }
 
         if (npcAppearance && Game.modules.CharacterCreator) {
-          npcSvg.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(npcAppearance, 160);
+          // Use DragonBones animated portrait for NPC if available
+          if (window.NPCPortraits && window.NPCPortraits.showInDialog) {
+            // Try dragonbones first when NPC provides armatureBase
+            const useDB = !!this.currentNPC?.armatureBase;
+            await window.NPCPortraits.showInDialog(this.currentNPC, { useDragonbones: useDB, armatureBase: this.currentNPC?.armatureBase, containerId: null });
+            // Also set the static svg inside the portrait slot for fallback
+            npcSvg.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(npcAppearance, 160);
+          } else {
+            npcSvg.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(npcAppearance, 160);
+          }
         } else {
           // Fallback icon
           const icon = this.currentNPC.icon || '👤';

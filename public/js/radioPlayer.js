@@ -44,12 +44,29 @@
 
   const safeFetchJSON = async (url, fallback = null) => {
     try {
-      const fullUrl = url.startsWith('/api/') ? `${window.API_BASE}${url}` : url;
+      // Normalize input: accept strings or simple objects that reference a URL/file
+      let input = url;
+      if (typeof input === 'object' && input !== null) {
+        if (typeof input.url === 'string') input = input.url;
+        else if (typeof input.file === 'string') input = input.file;
+        else if (typeof input.stationUrl === 'string') input = input.stationUrl;
+        else {
+          console.warn('[Radio] safeFetchJSON received non-string object, returning fallback', input);
+          return fallback;
+        }
+      }
+
+      if (typeof input !== 'string') {
+        console.warn('[Radio] safeFetchJSON received invalid URL type, returning fallback', input);
+        return fallback;
+      }
+
+      const fullUrl = input.startsWith('/api/') ? `${window.API_BASE}${input}` : input;
       const res = await fetch(fullUrl);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
     } catch (err) {
-      console.warn(`[Radio] Failed to fetch ${url}:`, err);
+      console.warn(`[Radio] Failed to fetch ${typeof url === 'string' ? url : JSON.stringify(url)}:`, err);
       return fallback;
     }
   };

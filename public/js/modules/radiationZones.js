@@ -61,6 +61,10 @@
     async loadZones() {
       try {
         const res = await fetch("/data/radiation_zones.json");
+        if (!res.ok) {
+          console.warn('radiationZones: failed to fetch radiation_zones.json', res.status);
+          return;
+        }
         const json = await res.json();
 
         if (!json || !Array.isArray(json.zones)) {
@@ -69,18 +73,33 @@
         }
 
         json.zones.forEach(zone => {
-          if (!zone.coords) return;
+          try {
+            if (!zone || !zone.coords) return;
 
-          const geo = {
-            type: "Feature",
-            properties: {},
-            geometry: {
-              type: "Polygon",
-              coordinates: [zone.coords]
+            // If coords are an object with lat/lng or an array, normalize
+            let coords = zone.coords;
+            if (!Array.isArray(coords) && coords.center && coords.radius) {
+              // simple circle representation
+              const lat = coords.center[0];
+              const lng = coords.center[1];
+              const radius = coords.radius;
+              const circle = L.circle([lat, lng], { radius }).addTo(this.layer);
+              return;
             }
-          };
 
-          this.layer.addData(geo);
+            const geo = {
+              type: "Feature",
+              properties: zone.properties || {},
+              geometry: {
+                type: "Polygon",
+                coordinates: [coords]
+              }
+            };
+
+            this.layer.addData(geo);
+          } catch (e) {
+            console.warn('radiationZones: failed to add zone', e && e.message ? e.message : e);
+          }
         });
 
         this.loaded = true;
@@ -118,3 +137,4 @@
     }, 2500);
   });
 })();
+
