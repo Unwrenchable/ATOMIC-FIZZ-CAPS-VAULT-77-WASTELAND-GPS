@@ -1,5 +1,5 @@
-// boot.js
-// Fallout-style FIZZ boot animation + narrative intro
+  // boot.js
+  // Afterfall-style FIZZ boot animation + narrative intro (copy-safe)
 
 (function () {
   const bootScreen = document.getElementById("bootScreen");
@@ -31,7 +31,7 @@
     "[██████████] 100%",
     "",
     "FIZZ CORE ONLINE",
-    "VAULT-TEC SYSTEMS NOMINAL",
+    "HAVENTECH SYSTEMS NOMINAL",
     ""
   ];
   const introFrames = [
@@ -94,7 +94,7 @@
   }
 
   // -----------------------------
-  // CLEAN PIP-BOY ACTIVATION
+  // CLEAN WRIST UI ACTIVATION
   // -----------------------------
   function activatePipboy() {
     if (!finished) skipToEnd();
@@ -103,15 +103,19 @@
     pipboyScreen.classList.remove("hidden");
 
     // Compass hook (after UI becomes visible)
-    if (window.Game?.modules?.compass?.onPipboyReady) {
+    if (window.Game?.modules?.compass?.onWristReady || window.Game?.modules?.compass?.onPipboyReady) {
       try {
-        Game.modules.compass.onPipboyReady();
+        if (Game.modules.compass.onWristReady) Game.modules.compass.onWristReady();
+        else Game.modules.compass.onPipboyReady();
       } catch (err) {
-        console.warn("[BOOT] compass onPipboyReady failed:", err);
+        console.warn("[BOOT] compass ready hook failed:", err);
       }
     }
 
-    // Notify the game (radio engine listens for this)
+
+    // Notify the game (radio + legacy modules listen for these events)
+    window.dispatchEvent(new Event("wristReady"));
+    // Also dispatch legacy event for compatibility with modules still listening for pipboyReady
     window.dispatchEvent(new Event("pipboyReady"));
 
     // Initialize quests module if needed

@@ -1,5 +1,5 @@
 /* ============================================================
-   ROOT LAYOUT — PIP-BOY 3000 (NEW VEGAS STYLE)
+   ROOT LAYOUT — WRIST UI 3000 (AFTERFALL STYLE)
    ============================================================ */
 
 html, body {
@@ -357,10 +357,10 @@ body.pipboy-mode {
 .leaflet-control-container { display: none; }
 
 /* ============================================================
-   PIPBOY BUTTONS - FALLOUT THEMED
+   WRIST UI BUTTONS - AFTERFALL THEMED
    ============================================================ */
 
-/* Base button style - Vault-Tec terminal aesthetic */
+/* Base button style - HavenTech terminal aesthetic */
 button,
 .pipboy-button,
 .pipboy-button-small {

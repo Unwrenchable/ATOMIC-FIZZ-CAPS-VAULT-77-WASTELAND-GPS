@@ -116,26 +116,39 @@
       const pos = worldmap.gs?.player?.position;
       if (!pos) return;
 
-      // Ask your existing weather engine
-      let weather = null;
-      try {
-        weather = Game.modules.world.weather.at(
-          Game.modules.world.state || worldmap.gs.worldState || worldmap.gs,
-          {
-            biome: "auto",
-            continent: "north_america",
-            lat: pos.lat,
-            lng: pos.lng
-          }
-        );
-      } catch (e) {
-        console.warn("weatherOverlay: weather lookup failed", e);
+      // Guard: ensure weather engine exists and has the expected API
+      if (!Game.modules || !Game.modules.world || !Game.modules.world.weather || typeof Game.modules.world.weather.at !== 'function') {
+        if (!this._warnedMissingWeather) {
+          console.warn('weatherOverlay: weather engine unavailable; skipping weather updates');
+          this._warnedMissingWeather = true;
+        }
         return;
       }
 
-      if (!weather || !weather.type) return;
+      // Ask your existing weather engine (defensive)
+      try {
+        const state = Game.modules.world.state || worldmap.gs.worldState || worldmap.gs;
+        const weather = Game.modules.world.weather.at(state, {
+          biome: "auto",
+          continent: "north_america",
+          lat: pos.lat,
+          lng: pos.lng
+        });
 
-      this.applyWeather(weather.type);
+        if (!weather || !weather.type) return;
+
+        // Ensure overlay element exists before applying
+        if (!this.overlayEl) return;
+
+        this.applyWeather(weather.type);
+      } catch (e) {
+        // Log once to avoid spamming console during map interactions
+        if (!this._warnedWeatherError) {
+          console.warn('weatherOverlay: weather lookup failed', e && e.message ? e.message : e);
+          this._warnedWeatherError = true;
+        }
+        return;
+      }
     },
 
     applyWeather(type) {
@@ -205,3 +218,4 @@
     }, 2000);
   });
 })();
+

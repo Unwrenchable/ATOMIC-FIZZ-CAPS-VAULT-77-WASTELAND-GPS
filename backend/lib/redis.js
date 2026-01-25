@@ -21,8 +21,11 @@ let usingFallback = false;
  */
 function createInMemoryClient() {
   const store = new Map(); // string -> string
-  const sets = new Map();  // key -> Set
+  const sets = new Map(); // key -> Set
   const hashes = new Map(); // key -> Map(field -> value)
+  const lists = new Map(); // key -> Array
+  const streams = new Map(); // key -> Array of { id, data }
+  let streamSeq = 0;
 
   function toStr(v) {
     if (v === undefined || v === null) return null;
@@ -41,6 +44,58 @@ function createInMemoryClient() {
         setTimeout(() => store.delete(key), Number(opts.EX) * 1000);
       }
       return "OK";
+    },
+    // List support
+    async lPush(key, ...values) {
+      const arr = lists.get(key) || [];
+      values.forEach(v => arr.unshift(typeof v === 'string' ? v : JSON.stringify(v)));
+      lists.set(key, arr);
+      return arr.length;
+    },
+    async rPop(key) {
+      const arr = lists.get(key) || [];
+      const v = arr.pop();
+      if (arr.length === 0) lists.delete(key);
+      else lists.set(key, arr);
+      return v || null;
+    },
+    // Stream support (very small subset): XADD + XREVRANGE + XREADGROUP/XAUTOCLAIM/XACK
+    async xAdd(key, idPlaceholder, field, value) {
+      streamSeq++;
+      const id = `${Date.now()}-${streamSeq}`;
+      const arr = streams.get(key) || [];
+      arr.push({ id, data: { [field]: value } });
+      streams.set(key, arr);
+      return id;
+    },
+    async xRevRange(key) {
+      const arr = streams.get(key) || [];
+      if (!arr.length) return [];
+      const last = arr[arr.length - 1];
+      return [[last.id, Object.entries(last.data).flat()]];
+    },
+    // basic sendCommand shim for XADD/XREVRANGE/XREADGROUP/XACK/XAUTOCLAIM
+    async sendCommand(cmd) {
+      const c = (cmd[0] || '').toUpperCase();
+      if (c === 'XADD') {
+        const key = cmd[1];
+        const field = cmd[3];
+        const value = cmd[4];
+        return this.xAdd(key, '*', field, value);
+      }
+      if (c === 'XREVRANGE') {
+        const key = cmd[1];
+        return this.xRevRange(key);
+      }
+      if (c === 'XACK') {
+        // ignore in fallback
+        return 1;
+      }
+      if (c === 'XGROUP' || c === 'XREADGROUP' || c === 'XAUTOCLAIM' || c === 'XREAD') {
+        // Not fully supported in fallback; return null
+        return null;
+      }
+      return null;
     },
     async del(key) {
       const removed = store.delete(key);
@@ -97,6 +152,7 @@ function createInMemoryClient() {
     ping() { return Promise.resolve("PONG"); }
   };
 }
+
 
 /**
  * Initialize a real Redis client if REDIS_URL is provided.
@@ -303,3 +359,41 @@ module.exports = {
   getJSON,
   setJSON
 };
+
+// Also provide a `redis` named export and camelCase aliases expected by
+// various modules in the codebase. Some files do `const { redis, key } = require('./redis')`
+// or call `redis.hGet` / `redis.hSet` so we expose those names to remain
+// backwards-compatible.
+const redisWrapper = {
+  _init: initPromise,
+  get client() { return redisClient; },
+  usingFallback: () => usingFallback,
+  // lower-case
+  get,
+  set,
+  del,
+  incr,
+  expire,
+  smembers,
+  sadd,
+  srem,
+  hget,
+  hset,
+  on,
+  quit,
+  ping,
+  // helpers
+  key,
+  getJSON,
+  setJSON,
+};
+
+// camelCase aliases (e.g. hGet/hSet) for modules that use different naming
+redisWrapper.hGet = redisWrapper.hget;
+redisWrapper.hSet = redisWrapper.hset;
+redisWrapper.sMembers = redisWrapper.smembers;
+redisWrapper.sAdd = redisWrapper.sadd;
+redisWrapper.sRem = redisWrapper.srem;
+
+// Attach to module.exports for backward compatibility
+module.exports.redis = redisWrapper;

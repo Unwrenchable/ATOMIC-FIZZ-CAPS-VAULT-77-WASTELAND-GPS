@@ -1,0 +1,12 @@
+{
+  "name": "afc-avatar-pack-svg-v1",
+  "description": "Small curated SVG layered avatar pack. Low footprint, easy to compose client-side.",
+  "parts": {
+    "head": ["head_base.svg"],
+    "eyes": ["eyes_set1.svg"],
+    "hair": ["hair_short.svg","hair_long.svg"],
+    "shirt": ["shirt_jacket.svg"]
+  },
+  "license": "CC0 or original - created for this project",
+  "notes": "These SVGs are intentionally simple, stylistically muted, and small in file size. Use as layered assets in the avatar composer."
+}
