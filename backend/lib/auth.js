@@ -23,15 +23,21 @@ const ADMIN_WALLETS = (process.env.ADMIN_WALLETS || "")
 // ------------------------------------------------------------
 function loadBs58() {
   try {
-    const b = require("bs58");
-    if (b && typeof b.decode === "function" && typeof b.encode === "function") {
-      return b;
+    // Try the common `bs58` package first. It may export the functions directly
+    // or under a `.default` property depending on install/build.
+    let b = require("bs58");
+    if (b) {
+      if (typeof b.encode === "function" && typeof b.decode === "function") return b;
+      if (b.default && typeof b.default.encode === "function" && typeof b.default.decode === "function") return b.default;
     }
+
+    // Fallback to `base-x` if installed (construct a base58 codec)
     const baseX = require("base-x");
     const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-    return baseX(BASE58);
+    const codec = baseX(BASE58);
+    if (codec && typeof codec.encode === "function" && typeof codec.decode === "function") return codec;
   } catch (err) {
-    throw new Error("Base58 library not available: " + err.message);
+    throw new Error("Base58 library not available: " + err.message + ". Install 'bs58' or 'base-x' in your project.");
   }
 }
 

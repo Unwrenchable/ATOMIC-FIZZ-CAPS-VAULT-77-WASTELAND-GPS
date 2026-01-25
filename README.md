@@ -1,4 +1,4 @@
-☢️ OFFICIAL VAULT‑TEC PRESS RELEASE ☢️
+☢️ OFFICIAL HAVENTECH PRESS RELEASE ☢️
 ===================================
 **FOR IMMEDIATE DISTRIBUTION TO ALL SURVIVORS, MUTANTS, AND SHAREHOLDERS**
 
@@ -11,7 +11,7 @@
   ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝         ╚═╝   ╚══════╝ ╚═════╝
 ```
 
-**VAULT‑TEC CORPORATION**  
+**HAVENTECH CORPORATION**  
 *"Building a Brighter Tomorrow, Yesterday."*
 
 📅 **January 2077** (Reissued 2026)  
@@ -23,7 +23,7 @@
 
 ### *"The Future of Currency Is Glowing."*
 
-Vault‑Tec is proud (and legally obligated) to announce the relaunch of its groundbreaking **Atomic Fizz Caps Initiative**, a revolutionary economic system designed to bring stability, prosperity, and mild radiation poisoning to the post‑nuclear American wasteland.
+HavenTech is proud (and legally obligated) to announce the relaunch of its groundbreaking **Atomic Fizz Caps Initiative**, a revolutionary economic system designed to bring stability, prosperity, and mild radiation poisoning to the post‑nuclear American wasteland.
 
 Originally conceived as a promotional tie‑in for the failed soft drink **Atomic Fizz™**, the caps have since become the de facto currency of the Mojave, thanks to their durability, collectability, and faint but comforting luminescence.
 
@@ -40,7 +40,7 @@ Today, Vault‑Tec is thrilled to unveil the **Vault‑77 Wasteland GPS**, a Pip
 - 🤖 **Chat with the Overseer AI** (NEW!)
 - 🌉 **Bridge assets across 35+ blockchains** (NEW!)
 
-All from the comfort of their Pip‑Boy wrist-mounted survival assistant.
+All from the comfort of their Wrist UI wrist-mounted survival assistant.
 
 ---
 
@@ -158,7 +158,7 @@ Trade items, redeem vouchers, browse listings, and stare at the NUKE button wond
 - Receive FIZZ tokens in return
 - Permanent. No refunds. No regrets.
 
-*Vault‑Tec calls this "recycling."*  
+*HavenTech calls this "recycling."*  
 *The EPA calls it "a violation of seventeen federal laws."*
 
 ---
@@ -235,98 +235,11 @@ Meet colorful characters across the wasteland:
 │  • Wormhole Bridge          │  • On-chain Programs (Anchor)     │
 └─────────────────────────────────────────────────────────────────┘
 ```
-
-### Tech Stack
-| Layer | Technology |
-|-------|------------|
-| Frontend | HTML5, CSS3, Vanilla JS, Leaflet.js |
-| Backend | Node.js, Express, Redis |
-| Blockchain | Solana, @solana/web3.js, Metaplex |
-| Wallet | Phantom Wallet Adapter |
-| Bridge | Wormhole Protocol |
-| Hosting | Vercel (frontend), Render (backend) |
-| Auth | Ed25519 Signature Verification |
-
-### Live URLs
-- 🌐 **Frontend**: [atomicfizzcaps.xyz](https://www.atomicfizzcaps.xyz)
-- 🔌 **API**: [api.atomicfizzcaps.xyz](https://api.atomicfizzcaps.xyz)
-- 🪙 **FIZZ Token**: `fizzQBcaFLKjCoZ8Ppfkw2Xa7vH2pmW4FC6C74NpJmw`
-- 📚 **Wiki**: [Vault-Tec Documentation Archive](https://github.com/Unwrenchable/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS/wiki)
-
----
-
-## ⚠️ SAFETY NOTICE
-
-**Vault‑Tec reminds all users:**
-
-- ❌ Do not ingest Atomic Fizz Caps.
-- ❌ Do not attempt to microwave Atomic Fizz Caps.
-- ❌ Do not attempt to use Atomic Fizz Caps as dental fillings.
-- ❌ Do not attempt to use Atomic Fizz Caps as contraceptives.
-- ❌ Do not attempt to use Atomic Fizz Caps as currency in pre‑war vending machines.
-- ❌ Do not attempt to sue Vault‑Tec. *(You waived this right when you opened the Pip‑Boy.)*
-- ❌ Do not share your seed phrase with anyone claiming to be "Vault‑Tec Support."
-- ❌ Do not bridge tokens while irradiated.
-- ❌ Do not feed the Overseer after midnight.
-
----
-
-## 🏢 ABOUT VAULT‑TEC
-
-Founded in 2031, Vault‑Tec is America's leading provider of:
-- Underground survival solutions
-- Nuclear‑adjacent beverages
-- Questionable scientific ethics
-- Blockchain experiments on human subjects
-
-**Our mission is simple:**
-
-> *"To ensure the survival of humanity, or at least the parts we like."*
-
-Vault‑Tec is a proud subsidiary of **FizzCo Industries**, a company that definitely still exists.
-
----
-
-## 📞 FOR MEDIA INQUIRIES
-
-Please contact:
-
-**Vault‑Tec Public Relations Department**  
-Sub‑Basement C, Vault‑77  
-*(Behind the door marked "Do Not Enter")*
-
-📠 **Fax**: Unavailable due to radroach infestation  
-📧 **Email**: Temporarily offline due to reactor leak  
-🐦 **Twitter**: [@atomicfizzcaps](https://twitter.com/atomicfizzcaps) *(monitored by surviving interns)*  
-💬 **Discord**: Ask around. Someone knows.  
-📚 **Wiki**: [Vault-Tec Documentation Archive](https://github.com/Unwrenchable/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS/wiki) *(declassified survival guides)*
-
----
-
-## 📜 LICENSE
-
-MIT License – Because even the apocalypse is open source.
-
----
-
-## 🙏 CREDITS
-
-Built with ☢️ by wasteland survivors who should probably be focusing on finding clean water instead.
-
-**Special Thanks:**
-- Bethesda Game Studios (for the inspiration, please don't sue)
-- The Solana Foundation (for fast, cheap transactions)
-- Phantom Wallet (for making Web3 almost usable)
-- Every survivor who reported a bug instead of hoarding caps
-
----
-
-```
 ╔═══════════════════════════════════════════════════════════════════╗
 ║                                                                   ║
 ║   "War. War never changes. But transaction fees? Those change."   ║
 ║                                                                   ║
-║                           — Vault‑Tec Marketing, 2077             ║
+║                           — HavenTech Marketing, 2077             ║
 ║                                                                   ║
 ╚═══════════════════════════════════════════════════════════════════╝
 ```

@@ -167,8 +167,25 @@ const api = (file) => path.join(__dirname, "api", file);
 // Core API endpoints
 safeMount("/api/loot-voucher", api("loot-voucher"));
 safeMount("/api/mintables", api("mintables"));  // Your mintables router - serves mintables.json
+// Minimal dev-only mint endpoint (mounted here so frontend claim flow works)
+safeMount("/api/mint-item", api("mint-item"));
+// Expose frontend config for client-side personality (overseer)
+safeMount("/api/config/frontend", api("frontend-config"));
+// Mount quest secrets API (server-side secret validation + lore reveals)
+safeMount('/api/quest-secrets', api('quest-secrets'));
+// Server-side quest store (placeholders + reveal endpoint)
+safeMount('/api/quests-store', api('quests-store'));
 safeMount("/api/scavenger", api("scavenger"));  // Add a scavenger router if needed, otherwise use JSON proxy below!
 safeMount("/api/locations", api("locations"));  // routes/api/locations.js: serves locations.json
+
+// Additional game APIs
+safeMount("/api/player", api("player"));
+safeMount("/api/player-nfts", api("player-nfts"));
+safeMount("/api/quests", api("quests"));
+safeMount("/api/redeem-voucher", api("redeem-voucher"));
+safeMount("/api/xp", api("xp"));
+safeMount("/api/caps", api("caps"));
+safeMount("/api/settings", api("settings"));
 
 // Add more game-related endpoints as you need them!
 // For example, settings router: safeMount("/api/settings", api("settings"));

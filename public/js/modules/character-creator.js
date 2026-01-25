@@ -65,6 +65,28 @@
       this.overlayEl.classList.remove('hidden');
       this._renderOptions();
       this._updatePreview();
+      // Provide DragonBones quick toggle if runtime available
+      const dbToggle = document.createElement('button');
+      dbToggle.textContent = 'Use Animated Preview';
+      dbToggle.className = 'pipboy-button-small';
+      dbToggle.style.marginLeft = '8px';
+      dbToggle.addEventListener('click', async () => {
+        // initialize DragonBones stage and load demo armature (if available)
+        if (window.Game && Game.modules && Game.modules.Dragon) {
+          document.getElementById('afc-cc-preview').style.display = 'none';
+          document.getElementById('dragonbonesStage').style.display = 'block';
+          try {
+            await Game.modules.Dragon.init('dragonbonesStage');
+            await Game.modules.Dragon.loadArmatureJSON('/assets/dragonbones/demo/hero');
+            Game.modules.Dragon.createArmatureDisplay('hero', 'idle');
+          } catch (e) {
+            console.warn('DragonBones demo failed', e);
+          }
+        } else {
+          alert('DragonBones runtime not available');
+        }
+      });
+      this.overlayEl.querySelector('div').appendChild(dbToggle);
       
       // Dispatch event
       window.dispatchEvent(new CustomEvent('characterCreatorOpened'));

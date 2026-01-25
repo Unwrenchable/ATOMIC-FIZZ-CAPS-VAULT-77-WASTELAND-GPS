@@ -5,7 +5,7 @@
   if (!Game.modules) Game.modules = {};
 
   // ============================================================
-  // ICON FALLBACK MAPPING (Enhanced for Fallout authenticity)
+  // ICON FALLBACK MAPPING (Enhanced for Afterfall authenticity)
   // Maps iconKey values that don't have SVG files to existing icons
   // ============================================================
   const ICON_FALLBACK_MAP = {
@@ -126,26 +126,46 @@
   // safeFetchJSON: returns parsed JSON or null and logs diagnostics
   async function safeFetchJSON(url, opts = {}) {
     try {
-      const fullUrl = url.startsWith('/api/') ? `${window.API_BASE}${url}` : url;
+      // Normalize input: accept strings or simple objects containing a URL
+      let input = url;
+      if (typeof input === 'object' && input !== null) {
+        if (typeof input.url === 'string') input = input.url;
+        else if (typeof input.file === 'string') input = input.file;
+        else if (typeof input.path === 'string') input = input.path;
+        else {
+          console.warn('[safeFetchJSON] received non-string input, returning null', input);
+          return null;
+        }
+      }
+
+      if (typeof input !== 'string') {
+        console.warn('[safeFetchJSON] invalid URL type, returning null', input);
+        return null;
+      }
+
+      const fullUrl = input.startsWith('/api/') ? `${window.API_BASE}${input}` : input;
       const res = await fetch(fullUrl, opts);
       if (!res.ok) {
         const text = await res.text().catch(() => "");
-        console.warn(`[safeFetchJSON] ${url} returned ${res.status} ${res.statusText}`, text.slice(0, 500));
+        console.warn(`[safeFetchJSON] ${input} returned ${res.status} ${res.statusText}`, text.slice(0, 500));
         return null;
       }
+
+      // Try parsing JSON safely
       const text = await res.text();
       if (!text) {
-        console.warn(`[safeFetchJSON] ${url} returned empty body`);
+        console.warn(`[safeFetchJSON] ${input} returned empty body`);
         return null;
       }
+
       try {
         return JSON.parse(text);
       } catch (err) {
-        console.warn(`[safeFetchJSON] ${url} returned invalid JSON (first 200 chars):`, text.slice(0, 200));
+        console.warn(`[safeFetchJSON] ${input} returned invalid JSON (first 200 chars):`, text.slice(0, 200));
         return null;
       }
     } catch (err) {
-      console.error(`[safeFetchJSON] failed to fetch ${url}:`, err && err.message ? err.message : err);
+      console.error(`[safeFetchJSON] failed to fetch ${typeof url === 'string' ? url : JSON.stringify(url)}:`, err && err.message ? err.message : err);
       return null;
     }
   }
@@ -255,10 +275,10 @@
       }
       
       // Check if container is visible (not hidden by boot screen)
-      const pipboyScreen = document.getElementById('pipboyScreen');
-      if (pipboyScreen && pipboyScreen.classList.contains('hidden')) {
-        console.log('[worldmap] waiting for pipboyScreen to be visible...');
-        // Will be called by onOpen() when pipboyReady event fires
+      const wristScreen = document.getElementById('pipboyScreen') || document.getElementById('wristScreen');
+      if (wristScreen && wristScreen.classList.contains('hidden')) {
+        console.log('[worldmap] waiting for wristScreen to be visible...');
+        // Will be called by onOpen() when wristReady event fires
         return;
       }
       
@@ -955,14 +975,21 @@
 
   Game.modules.worldmap = worldmapModule;
 
-  // Listen for pipboyReady event instead of DOMContentLoaded
-  // This ensures map initializes AFTER boot screen is hidden
-  window.addEventListener('pipboyReady', () => {
-    console.log('[worldmap] pipboyReady event received, initializing...');
+  // Listen for wristReady and pipboyReady events to initialize map
+  window.addEventListener('wristReady', () => {
+    console.log('[worldmap] wristReady event received, initializing...');
     if (worldmapModule.onOpen) {
       worldmapModule.onOpen();
     }
   });
 
-  console.log('[worldmap] module loaded, waiting for pipboyReady event');
+  // Legacy support
+  window.addEventListener('pipboyReady', () => {
+    console.log('[worldmap] pipboyReady event received, initializing (legacy)...');
+    if (worldmapModule.onOpen) {
+      worldmapModule.onOpen();
+    }
+  });
+
+  console.log('[worldmap] module loaded, waiting for wristReady / pipboyReady events');
 })();

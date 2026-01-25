@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!--
+      NOTICE: This is a community fan project. NOT affiliated with any
+      commercial game studio or trademark owner. Assets, names and
+      references are used for creative purposes only.
+    -->
     <meta charset="utf-8" />
-    <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
+    <title>ATOMIC FIZZ CAPS • Wrist UI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
     
     <!-- PWA Meta Tags - Enables app-like experience -->
@@ -61,10 +66,14 @@
     <!-- WalletConnect for universal wallet support -->
     <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js" defer></script>
 
+    <!-- PixiJS + DragonBones runtime for animated 2D avatars -->
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@6.5.8/dist/pixi.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dragonbones-pixi@5.7.0/dist/dragonbones-pixi.min.js" defer></script>
+
     <!-- AuthClient must be available before inline wallet code -->
     <script src="/js/authClient.js" defer></script>
 
-    <!-- Vault-Tec Security Module (DevTools Guard) -->
+    <!-- Security Module (DevTools Guard) -->
     <script src="/js/modules/devtools-guard.js" defer></script>
 
     <!-- Web3 Wallet Adapter (universal wallet support) -->
@@ -109,7 +118,7 @@
               <!-- HEADER -->
               <div class="pipboy-header">
                 <div>
-                  <span class="pipboy-title">PIP‑BOY 3000</span>
+                  <span class="pipboy-title">WRIST UI</span>
                   <span class="pipboy-subtitle">ATOMIC FIZZ CAPS</span>
                 </div>
 
@@ -169,6 +178,8 @@
                     <!-- Character Portrait Preview -->
                     <div id="characterPortraitPreview" style="text-align:center; margin-bottom:12px;">
                       <div id="statPortraitSvg" style="width:80px; height:100px; margin:0 auto; border:1px solid #00ff41; background:rgba(0,20,10,0.8);"></div>
+                      <!-- DragonBones stage (hidden by default) -->
+                      <div id="dragonbonesStage" style="width:80px; height:100px; margin:0 auto; display:none;"></div>
                     </div>
                     
                     <div class="panel-row">
@@ -305,8 +316,16 @@
                 <div id="panel-dialog" class="pipboy-panel" style="display:none;">
                   <div class="panel-header">DIALOG</div>
                   <div class="panel-body">
-                    <div id="dialogBody" class="dialog-body"></div>
-                    <button id="dialogCloseBtn" class="pipboy-button-small" style="margin-top:12px;">CLOSE</button>
+                    <div style="display:flex; gap:10px; align-items:flex-start;">
+                      <div style="width:120px; text-align:center;">
+                        <div id="dialogPortraitContainer" style="width:100px; height:120px; border:1px solid #00ff41; background:rgba(0,20,10,0.6);"></div>
+                        <div id="dialogNPCName" style="margin-top:6px; color:#ffaa00; font-weight:bold;">NPC</div>
+                      </div>
+                      <div style="flex:1;">
+                        <div id="dialogBody" class="dialog-body"></div>
+                        <div style="margin-top:8px;"><button id="dialogCloseBtn" class="pipboy-button-small">CLOSE</button></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -322,31 +341,11 @@
                     <div class="panel-divider"></div>
 
                     <div id="terminalSection" style="display:none;">
-                      <div class="panel-header">OVERSEER TERMINAL</div>
+              <div class="panel-header">TERMINAL</div>
                       <button class="pipboy-button" id="openOverseerTerminal">OPEN TERMINAL</button>
                     </div>
 
-                    <div class="panel-divider"></div>
-
-                    <div id="nukeSection">
-                      <div class="panel-header" style="color:#ffaa00;">⚠️ NUKE TESTING GROUNDS</div>
-                      <div style="padding:10px; background:rgba(255,0,0,0.1); border:1px solid #ff0000; margin:10px 0;">
-                        <div style="font-size:0.9em; opacity:0.9;">Destroy unwanted gear for CAPS</div>
-                        <div style="font-size:0.8em; margin-top:5px; color:#ff6666;">🔒 SYSTEM LOCKED - Awaiting Admin Activation</div>
-                      </div>
-                      <button class="pipboy-button" id="openNukeTerminal" disabled style="opacity:0.5; cursor:not-allowed;">🔒 NUKE (COMING SOON)</button>
-                    </div>
-
-                    <div class="panel-divider"></div>
-
-                    <div id="bridgeSection">
-                      <div class="panel-header" style="color:#00ffff;">🌀 WORMHOLE BRIDGE</div>
-                      <div style="padding:10px; background:rgba(0,100,255,0.1); border:1px solid #0088ff; margin:10px 0;">
-                        <div style="font-size:0.9em; opacity:0.9;">Cross-chain asset portal</div>
-                        <div style="font-size:0.8em; margin-top:5px; color:#66bbff;">🔒 SYSTEM LOCKED - Awaiting Admin Activation</div>
-                      </div>
-                      <button class="pipboy-button" id="openBridgeTerminal" disabled style="opacity:0.5; cursor:not-allowed;">🔒 BRIDGE (COMING SOON)</button>
-                    </div>
+                    <!-- Advanced features (admin-only) are hidden by default -->
                   </div>
                 </div>
 
@@ -368,9 +367,9 @@
 
               <!-- FOOTER -->
               <div class="pipboy-footer">
-                <div class="footer-left">VAULT‑TEC INDUSTRIES</div>
+                <div class="footer-left">FIZZTEC INDUSTRIES</div>
                 <div class="footer-center">WASTELAND GPS</div>
-                <div class="footer-right">REV 77</div>
+                <div class="footer-right">REV 1</div>
               </div>
 
             </div>
@@ -432,6 +431,8 @@
     <script src="/js/modules/inventory-loader.js" defer></script>
     <script src="/js/modules/inventory-ui.js" defer></script>
     <script src="/js/modules/quest-ui.js" defer></script>
+    <script src="/js/modules/npc-registry.js" defer></script>
+    <script src="/js/modules/npc-portraits.js" defer></script>
     
     <!-- Character Creator & Fallout 4 Dialogue Systems -->
     <script src="/js/modules/character-creator.js" defer></script>

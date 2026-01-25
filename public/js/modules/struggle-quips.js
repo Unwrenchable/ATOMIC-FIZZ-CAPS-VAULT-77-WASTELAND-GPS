@@ -24,10 +24,16 @@
     // ============================================================
     async init() {
       try {
-        const res = await fetch('/data/narrative/dj_struggle_quips.json');
-        if (res.ok) {
-          this.quipsData = await res.json();
-          console.log('[struggle-quips] Loaded DJ struggle quips');
+        try {
+          const res = await fetch('/data/narrative/dj_struggle_quips.json');
+          if (res.ok) {
+            this.quipsData = await res.json();
+            console.log('[struggle-quips] Loaded DJ struggle quips');
+          } else {
+            console.warn('[struggle-quips] dj_struggle_quips.json not available', res.status);
+          }
+        } catch (e) {
+          console.warn('[struggle-quips] Failed to fetch quips data:', e && e.message ? e.message : e);
         }
       } catch (err) {
         console.warn('[struggle-quips] Failed to load quips data:', err);
