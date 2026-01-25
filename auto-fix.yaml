@@ -1,0 +1,44 @@
+name: Auto Apply Repo Fixes
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0' # weekly (Sunday 03:00 UTC) — adjust as needed
+
+permissions:
+  contents: write
+  checks: write
+
+jobs:
+  apply-fixes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Run auto-fix script
+        run: |
+          node scripts/apply-fixes.js
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+
+      - name: Create Pull Request with changes (if any)
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(automated): inject /api/config/frontend mount"
+          branch: automatic/auto-fixes
+          title: "Automated: inject /api/config/frontend mount"
+          body: |
+            This PR was created automatically by the auto-fix workflow.
+            - Injects `safeMount(\"/api/config/frontend\", api(\"frontend-config\"));` into `backend/server.js`
+            Review before merging.
+          labels: automated, fixes
