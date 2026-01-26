@@ -12,19 +12,19 @@
     H7
     C5 5 4 6.5 4 8
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Blast door frame cutout -->
-  <rect x="7" y="9" width="10" height="8" fill="white"/>
+  <rect x="7" y="9" width="10" height="8" fill="#0a1a0a"/>
 
   <!-- Blast door silhouette -->
-  <rect x="8" y="10" width="8" height="6" fill="currentColor"/>
+  <rect x="8" y="10" width="8" height="6" fill="#00ff41"/>
 
   <!-- Horizontal vent cutouts -->
-  <rect x="9" y="11" width="6" height="1" fill="white"/>
-  <rect x="9" y="13" width="6" height="1" fill="white"/>
+  <rect x="9" y="11" width="6" height="1" fill="#0a1a0a"/>
+  <rect x="9" y="13" width="6" height="1" fill="#0a1a0a"/>
 
   <!-- Door handle cutout -->
-  <rect x="12" y="14.5" width="1" height="1.5" fill="white"/>
+  <rect x="12" y="14.5" width="1" height="1.5" fill="#0a1a0a"/>
 
 </svg>

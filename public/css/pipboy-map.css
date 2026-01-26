@@ -41,8 +41,8 @@
   height: 32px !important;
   min-width: 32px;
   min-height: 32px;
-  /* Convert black SVGs to green - contained glow via box-shadow on wrapper */
-  filter: brightness(0) saturate(100%) invert(89%) sepia(11%) saturate(1984%) hue-rotate(70deg) brightness(101%) contrast(101%);
+  /* SVGs now have native Pip-Boy green (#00ff41) - add subtle glow for visibility */
+  filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
 }
 
 /* Contained glow wrapper for POI markers */
@@ -174,7 +174,8 @@
 
 .quest-marker img,
 .quest-marker svg {
-  filter: brightness(0) saturate(100%) invert(73%) sepia(97%) saturate(1000%) hue-rotate(360deg) brightness(103%) contrast(106%);
+  /* Quest markers - golden/amber glow */
+  filter: drop-shadow(0 0 3px rgba(255, 170, 0, 0.9)) brightness(1.1) saturate(1.2) hue-rotate(-50deg);
 }
 
 /* Radiation zones - green hazard (no animation, subtle fill) */
@@ -389,7 +390,8 @@
 
 /* Ensure all SVG icons are visible on dark background */
 .leaflet-marker-icon img[src$=".svg"] {
-  filter: brightness(0) saturate(100%) invert(89%) sepia(11%) saturate(1984%) hue-rotate(70deg) brightness(101%) contrast(101%);
+  /* SVGs now have native Pip-Boy green - just add subtle glow */
+  filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
 }
 
 /* ============================================================================
@@ -415,21 +417,25 @@
   box-shadow: 0 0 10px rgba(0, 255, 65, 0.5) !important;
 }
 
-/* Rarity-based POI marker styling */
+/* Rarity-based POI marker styling - enhanced glow effects for different rarities */
 .poi-marker-common img {
-  filter: brightness(0) saturate(100%) invert(89%) sepia(11%) saturate(1984%) hue-rotate(70deg) brightness(101%) contrast(101%);
+  /* Standard green glow */
+  filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
 }
 
 .poi-marker-rare img {
-  filter: brightness(0) saturate(100%) invert(75%) sepia(60%) saturate(3000%) hue-rotate(160deg) brightness(100%) contrast(100%);
+  /* Blue-cyan glow for rare */
+  filter: drop-shadow(0 0 3px rgba(0, 200, 255, 0.9)) hue-rotate(-30deg);
 }
 
 .poi-marker-epic img {
-  filter: brightness(0) saturate(100%) invert(30%) sepia(100%) saturate(5000%) hue-rotate(270deg) brightness(100%) contrast(120%);
+  /* Purple glow for epic */
+  filter: drop-shadow(0 0 4px rgba(180, 0, 255, 0.9)) hue-rotate(250deg);
 }
 
 .poi-marker-legendary img {
-  filter: brightness(0) saturate(100%) invert(70%) sepia(90%) saturate(2000%) hue-rotate(10deg) brightness(105%) contrast(100%);
+  /* Golden glow for legendary */
+  filter: drop-shadow(0 0 5px rgba(255, 170, 0, 1)) hue-rotate(-50deg) brightness(1.2);
 }
 
 /* ============================================================================

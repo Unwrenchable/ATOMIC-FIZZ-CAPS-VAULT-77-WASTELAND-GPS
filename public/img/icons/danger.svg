@@ -9,14 +9,14 @@
     C17 3 20 4.5 20 7
     C20 8.5 19 10 17 10
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Cloud underside curve -->
   <path d="
     M7 10
     C9 12 15 12 17 10
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Stem -->
   <path d="
@@ -24,7 +24,7 @@
     C10 13 10.5 15 12 15
     C13.5 15 14 13 14 10
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Base mound -->
   <path d="
@@ -33,7 +33,7 @@
     V20
     H5
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Inner cloud cutouts -->
   <path d="
@@ -43,7 +43,7 @@
     C10 3.5 11 4.2 11 5.2
     C11 6.2 10 7 9 7
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <path d="
     M15 7
@@ -52,6 +52,6 @@
     C16 3.5 17 4.2 17 5.2
     C17 6.2 16 7 15 7
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
 </svg>

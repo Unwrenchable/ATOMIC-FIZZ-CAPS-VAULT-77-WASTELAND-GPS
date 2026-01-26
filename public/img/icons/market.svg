@@ -1,13 +1,13 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Market stall/tent -->
-  <polygon points="2,10 12,4 22,10" fill="currentColor"/>
+  <polygon points="2,10 12,4 22,10" fill="#00ff41"/>
   <!-- Counter -->
-  <rect x="4" y="10" width="16" height="4" fill="currentColor"/>
+  <rect x="4" y="10" width="16" height="4" fill="#00ff41"/>
   <!-- Table legs -->
-  <rect x="5" y="14" width="2" height="6" fill="currentColor"/>
-  <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+  <rect x="5" y="14" width="2" height="6" fill="#00ff41"/>
+  <rect x="17" y="14" width="2" height="6" fill="#00ff41"/>
   <!-- Goods on counter -->
-  <circle cx="8" cy="11" r="1.5" fill="white"/>
-  <circle cx="12" cy="11" r="1.5" fill="white"/>
-  <circle cx="16" cy="11" r="1.5" fill="white"/>
+  <circle cx="8" cy="11" r="1.5" fill="#0a1a0a"/>
+  <circle cx="12" cy="11" r="1.5" fill="#0a1a0a"/>
+  <circle cx="16" cy="11" r="1.5" fill="#0a1a0a"/>
 </svg>

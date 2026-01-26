@@ -8,10 +8,10 @@
     V19
     H7
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Handle cutout -->
-  <rect x="9" y="6" width="4" height="1.5" fill="white"/>
+  <rect x="9" y="6" width="4" height="1.5" fill="#0a1a0a"/>
 
   <!-- X-pattern cutouts -->
   <path d="
@@ -19,20 +19,20 @@
     L11 12
     L9 14
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <path d="
     M15 10
     L13 12
     L15 14
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <path d="
     M11 12
     L13 12
     L12 13
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
 </svg>

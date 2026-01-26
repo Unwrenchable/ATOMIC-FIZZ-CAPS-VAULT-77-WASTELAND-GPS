@@ -1,8 +1,8 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Quarry/pit -->
-  <path d="M2 8 L6 16 L18 16 L22 8" fill="none" stroke="currentColor" stroke-width="2"/>
-  <path d="M4 12 L8 18 L16 18 L20 12" fill="none" stroke="currentColor" stroke-width="2"/>
-  <path d="M6 16 L10 20 L14 20 L18 16" fill="none" stroke="currentColor" stroke-width="2"/>
-  <path d="M10 6 L12 4 L14 6" stroke="currentColor" stroke-width="2"/>
-  <path d="M12 4 L12 12" stroke="currentColor" stroke-width="2"/>
+  <path d="M2 8 L6 16 L18 16 L22 8" fill="none" stroke="#00ff41" stroke-width="2"/>
+  <path d="M4 12 L8 18 L16 18 L20 12" fill="none" stroke="#00ff41" stroke-width="2"/>
+  <path d="M6 16 L10 20 L14 20 L18 16" fill="none" stroke="#00ff41" stroke-width="2"/>
+  <path d="M10 6 L12 4 L14 6" stroke="#00ff41" stroke-width="2"/>
+  <path d="M12 4 L12 12" stroke="#00ff41" stroke-width="2"/>
 </svg>

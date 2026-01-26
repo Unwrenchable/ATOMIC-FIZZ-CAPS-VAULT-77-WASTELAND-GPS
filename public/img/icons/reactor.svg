@@ -1,12 +1,12 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Nuclear reactor cooling tower -->
-  <path d="M6 20 Q4 12 8 6 L16 6 Q20 12 18 20 Z" fill="currentColor"/>
+  <path d="M6 20 Q4 12 8 6 L16 6 Q20 12 18 20 Z" fill="#00ff41"/>
   <!-- Reactor core glow -->
-  <ellipse cx="12" cy="8" rx="3" ry="1.5" fill="white"/>
+  <ellipse cx="12" cy="8" rx="3" ry="1.5" fill="#0a1a0a"/>
   <!-- Steam clouds -->
-  <circle cx="10" cy="3" r="2" fill="currentColor"/>
-  <circle cx="14" cy="2" r="2.5" fill="currentColor"/>
-  <circle cx="12" cy="4" r="1.5" fill="currentColor"/>
+  <circle cx="10" cy="3" r="2" fill="#00ff41"/>
+  <circle cx="14" cy="2" r="2.5" fill="#00ff41"/>
+  <circle cx="12" cy="4" r="1.5" fill="#00ff41"/>
   <!-- Warning stripes -->
-  <rect x="8" y="14" width="8" height="2" fill="white"/>
+  <rect x="8" y="14" width="8" height="2" fill="#0a1a0a"/>
 </svg>

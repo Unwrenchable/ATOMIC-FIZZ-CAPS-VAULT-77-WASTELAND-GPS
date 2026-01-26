@@ -1,16 +1,16 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Raider skull -->
-  <circle cx="12" cy="10" r="7" fill="currentColor"/>
+  <circle cx="12" cy="10" r="7" fill="#00ff41"/>
   <!-- Eye sockets -->
-  <ellipse cx="9" cy="9" rx="2" ry="2.5" fill="white"/>
-  <ellipse cx="15" cy="9" rx="2" ry="2.5" fill="white"/>
+  <ellipse cx="9" cy="9" rx="2" ry="2.5" fill="#0a1a0a"/>
+  <ellipse cx="15" cy="9" rx="2" ry="2.5" fill="#0a1a0a"/>
   <!-- Nose hole -->
-  <polygon points="12,11 10,14 14,14" fill="white"/>
+  <polygon points="12,11 10,14 14,14" fill="#0a1a0a"/>
   <!-- Teeth -->
-  <rect x="8" y="15" width="8" height="2" fill="white"/>
-  <rect x="9" y="15" width="1" height="2" fill="currentColor"/>
-  <rect x="11" y="15" width="1" height="2" fill="currentColor"/>
-  <rect x="13" y="15" width="1" height="2" fill="currentColor"/>
+  <rect x="8" y="15" width="8" height="2" fill="#0a1a0a"/>
+  <rect x="9" y="15" width="1" height="2" fill="#00ff41"/>
+  <rect x="11" y="15" width="1" height="2" fill="#00ff41"/>
+  <rect x="13" y="15" width="1" height="2" fill="#00ff41"/>
   <!-- Mohawk -->
-  <path d="M12 3 L10 5 L12 4 L14 5 Z" fill="currentColor"/>
+  <path d="M12 3 L10 5 L12 4 L14 5 Z" fill="#00ff41"/>
 </svg>
