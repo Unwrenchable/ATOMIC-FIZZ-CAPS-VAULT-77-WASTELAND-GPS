@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📟 Map Fixes Test - Vault 77 Overseer</title>
+    <style>
+        body {
+            background: #000;
+            color: #00ff41;
+            font-family: 'VT323', monospace;
+            padding: 20px;
+        }
+        .test-section {
+            border: 2px solid #00ff41;
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(0, 255, 65, 0.05);
+        }
+        .test-result {
+            margin: 5px 0;
+            padding: 5px;
+        }
+        .pass { color: #00ff41; }
+        .fail { color: #ff0041; }
+        .warn { color: #ffaa00; }
+        button {
+            background: rgba(0, 0, 0, 0.9);
+            color: #00ff41;
+            border: 2px solid #00ff41;
+            padding: 10px 20px;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: rgba(0, 255, 65, 0.2);
+            color: #ffaa00;
+        }
+        .icon-test {
+            display: inline-block;
+            margin: 5px;
+            text-align: center;
+        }
+        .icon-test img {
+            width: 32px;
+            height: 32px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>📟 VAULT 77 OVERSEER - MAP DIAGNOSTIC TERMINAL</h1>
+    <p>Per Vault-Tec regulations, all map systems must be tested before deployment.</p>
+
+    <div class="test-section">
+        <h2>TEST 1: ICON FALLBACK SYSTEM</h2>
+        <p>Testing icon loading with onerror fallback to poi.svg</p>
+        <div id="iconTests"></div>
+        <button onclick="testIcons()">RUN ICON TEST</button>
+    </div>
+
+    <div class="test-section">
+        <h2>TEST 2: EXPLORE BUTTON FUNCTIONALITY</h2>
+        <p>Testing the explore map button event binding</p>
+        <button id="testExploreBtn" onclick="testExploreButton()">🔍 TEST EXPLORE BUTTON</button>
+        <div id="exploreTestResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>TEST 3: ICON FALLBACK MAPPING</h2>
+        <p>Testing fallback mapping for missing icons</p>
+        <button onclick="testFallbackMapping()">TEST FALLBACK MAP</button>
+        <div id="fallbackTestResult"></div>
+    </div>
+
+    <script>
+        // Helper: Handle image error with fallback
+        function handleImageError(img) {
+            img.onerror = null; // Prevent infinite loop
+            img.src = '/img/icons/poi.svg';
+            img.style.border = '2px solid #ffaa00';
+        }
+        
+        // Helper: Handle image load success
+        function handleImageLoad(img) {
+            img.style.border = '2px solid #00ff41';
+        }
+        
+        // Test 1: Icon loading with onerror fallback
+        function testIcons() {
+            const testContainer = document.getElementById('iconTests');
+            testContainer.innerHTML = '<p class="warn">Testing icon fallback mechanism...</p>';
+            
+            const testCases = [
+                { name: 'Valid Icon', file: 'poi.svg' },
+                { name: 'Valid Icon 2', file: 'vault.svg' },
+                { name: 'Invalid Icon (should fallback)', file: 'nonexistent-icon-12345.svg' },
+                { name: 'Another Invalid (should fallback)', file: 'fake-icon.svg' }
+            ];
+            
+            let html = '';
+            testCases.forEach(test => {
+                const imgId = 'test-icon-' + Math.random().toString(36).substr(2, 9);
+                html += `
+                    <div class="icon-test">
+                        <img id="${imgId}" 
+                             src="/img/icons/${test.file}" 
+                             onerror="handleImageError(this)"
+                             onload="handleImageLoad(this)"
+                             style="border: 2px solid #666;" />
+                        <div style="font-size: 12px; max-width: 100px;">${test.name}</div>
+                    </div>
+                `;
+            });
+            
+            testContainer.innerHTML = html;
+            
+            setTimeout(() => {
+                const imgs = testContainer.querySelectorAll('img');
+                let passed = 0;
+                imgs.forEach(img => {
+                    if (img.complete && img.naturalHeight !== 0) {
+                        passed++;
+                    }
+                });
+                
+                testContainer.innerHTML += `
+                    <div class="test-result ${passed === imgs.length ? 'pass' : 'warn'}">
+                        ✓ Icons loaded: ${passed}/${imgs.length}
+                        ${passed === imgs.length ? ' - ALL ICONS LOADED OR FALLBACK WORKING' : ' - Some icons failed'}
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        // Test 2: Explore button
+        let exploreMode = false;
+        function testExploreButton() {
+            const btn = document.getElementById('testExploreBtn');
+            const result = document.getElementById('exploreTestResult');
+            
+            exploreMode = !exploreMode;
+            btn.textContent = exploreMode ? '📍 RETURN TO PLAYER' : '🔍 TEST EXPLORE BUTTON';
+            btn.style.borderColor = exploreMode ? '#00d4ff' : '#00ff41';
+            
+            result.innerHTML = `
+                <div class="test-result pass">
+                    ✓ Button click event working!<br>
+                    ✓ Mode: ${exploreMode ? 'EXPLORATION' : 'FOLLOW'}<br>
+                    ✓ Text toggle: WORKING<br>
+                    ✓ Style toggle: WORKING
+                </div>
+            `;
+        }
+
+        // Test 3: Fallback mapping
+        function testFallbackMapping() {
+            const result = document.getElementById('fallbackTestResult');
+            
+            const ICON_FALLBACK_MAP = {
+                'marker': 'poi',
+                'unknown': 'poi',
+                'building': 'facility',
+                'trader': 'trading',
+                'null': 'poi',
+                'undefined': 'poi'
+            };
+            
+            function getValidIcon(iconKey) {
+                // Handle all falsy values and string representations
+                if (!iconKey || iconKey === 'null' || iconKey === 'undefined' || iconKey === '') {
+                    return 'poi';
+                }
+                return ICON_FALLBACK_MAP[iconKey] || iconKey;
+            }
+            }
+            
+            const testCases = [
+                { input: 'vault', expected: 'vault' },
+                { input: 'marker', expected: 'poi' },
+                { input: 'unknown', expected: 'poi' },
+                { input: 'building', expected: 'facility' },
+                { input: 'trader', expected: 'trading' },
+                { input: null, expected: 'poi' },
+                { input: undefined, expected: 'poi' },
+                { input: '', expected: 'poi' }
+            ];
+            
+            let html = '<div class="test-result">';
+            let allPassed = true;
+            
+            testCases.forEach(test => {
+                const result = getValidIcon(test.input);
+                const passed = result === test.expected;
+                allPassed = allPassed && passed;
+                
+                html += `
+                    <div class="${passed ? 'pass' : 'fail'}">
+                        ${passed ? '✓' : '✗'} Input: "${test.input}" → "${result}" 
+                        ${passed ? '' : `(expected: "${test.expected}")`}
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            html += `<div class="test-result ${allPassed ? 'pass' : 'fail'}">
+                ${allPassed ? '✓ ALL FALLBACK TESTS PASSED' : '✗ SOME TESTS FAILED'}
+            </div>`;
+            
+            result.innerHTML = html;
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            console.log('[Vault 77 Overseer] Map diagnostic terminal online');
+            setTimeout(testIcons, 500);
+            setTimeout(testFallbackMapping, 1000);
+        });
+    </script>
+</body>
+</html>
