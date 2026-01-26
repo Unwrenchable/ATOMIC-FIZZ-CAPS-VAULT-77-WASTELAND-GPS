@@ -1505,3 +1505,577 @@
 
   console.log("[AFW] Chunk 9 (Quest + Encounter Hooks) Loaded");
 })();
+
+// ============================================================
+// CHUNK 10: TAB NAVIGATION & FIZZ.FUN INTEGRATION
+// ============================================================
+(function () {
+  "use strict";
+
+  safeLog("[AFW] Chunk 10: Tab Navigation & Fizz.fun Integration Loading...");
+
+  // ------------------------------------------------------------
+  // CONSTANTS - Matching backend fizz-fun.js
+  // NOTE: These constants are duplicated from backend/api/fizz-fun.js
+  // for client-side calculations. Keep in sync or consider moving to
+  // a shared config that both frontend and backend can import.
+  // FUTURE: Create shared/constants.js for cross-environment values
+  // ------------------------------------------------------------
+  const GRADUATION_SOL = 85_000_000_000; // 85 SOL in lamports (bonding curve graduation threshold)
+  const VIRTUAL_SOL = 30_000_000_000; // 30 SOL virtual liquidity (constant product AMM)
+
+  // ------------------------------------------------------------
+  // TAB SWITCHING
+  // ------------------------------------------------------------
+  function initTabNavigation() {
+    const tabs = document.querySelectorAll(".wallet-tab");
+    const contents = document.querySelectorAll(".tab-content");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const targetTab = tab.getAttribute("data-tab");
+
+        // Remove active from all tabs and contents
+        tabs.forEach((t) => t.classList.remove("active"));
+        contents.forEach((c) => c.classList.remove("active"));
+
+        // Add active to clicked tab
+        tab.classList.add("active");
+
+        // Show corresponding content
+        const targetContent = document.getElementById(`tab-${targetTab}`);
+        if (targetContent) {
+          targetContent.classList.add("active");
+          
+          // Terminal boot animation
+          targetContent.style.animation = "none";
+          setTimeout(() => {
+            targetContent.style.animation = "fadeIn 0.5s ease-in";
+          }, 10);
+        }
+
+        safeLog(`[AFW] Switched to tab: ${targetTab}`);
+      });
+    });
+  }
+
+  // ------------------------------------------------------------
+  // TOAST NOTIFICATIONS
+  // ------------------------------------------------------------
+  function showToast(message, type = "success", duration = 3000) {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add("removing");
+      setTimeout(() => toast.remove(), 300);
+    }, duration);
+  }
+
+  // ------------------------------------------------------------
+  // FIZZ.FUN API INTEGRATION
+  // ------------------------------------------------------------
+  const FizzFun = {
+    currentAction: "buy", // buy or sell
+    selectedToken: null,
+    
+    async checkAccess(wallet) {
+      try {
+        const apiBase = window.BACKEND_URL || window.API_BASE || "";
+        const res = await fetch(`${apiBase}/api/fizz-fun/access/${wallet}`);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        
+        const data = await res.json();
+        this.renderAccessStatus(data);
+        return data;
+      } catch (err) {
+        safeWarn("[Fizz.fun] Access check failed:", err);
+        showToast("Failed to check Fizz.fun access", "error");
+        return null;
+      }
+    },
+
+    renderAccessStatus(data) {
+      const loading = document.getElementById("fizz-loading");
+      const info = document.getElementById("fizz-access-info");
+      const message = document.getElementById("fizz-access-message");
+      
+      if (loading) loading.style.display = "none";
+      if (info) info.style.display = "block";
+
+      const tierEl = document.getElementById("fizz-tier");
+      const capsEl = document.getElementById("fizz-caps-balance");
+      const canLaunchEl = document.getElementById("fizz-can-launch");
+      const feeEl = document.getElementById("fizz-launch-fee");
+      const feeRow = document.getElementById("fizz-launch-fee-row");
+      const launchSection = document.getElementById("fizz-launch-section");
+
+      if (tierEl) {
+        tierEl.textContent = data.tier.toUpperCase();
+        tierEl.className = `tier-badge ${data.tier}`;
+      }
+      if (capsEl) capsEl.textContent = data.capsBalance.toLocaleString();
+      if (canLaunchEl) {
+        canLaunchEl.textContent = data.canLaunch ? "YES" : "NO";
+        canLaunchEl.style.color = data.canLaunch ? "var(--pipboy-green)" : "#ff6666";
+      }
+      if (feeEl && data.canLaunch) {
+        feeEl.textContent = `${data.launchFee} CAPS`;
+        if (feeRow) feeRow.style.display = "flex";
+      }
+      if (message) message.textContent = data.message;
+
+      // Show/hide launch form
+      if (launchSection) {
+        launchSection.style.display = data.canLaunch ? "block" : "none";
+      }
+    },
+
+    async fetchTokens(sort = "volume", limit = 50) {
+      try {
+        const apiBase = window.BACKEND_URL || window.API_BASE || "";
+        const res = await fetch(`${apiBase}/api/fizz-fun/tokens?sort=${sort}&limit=${limit}`);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        
+        const data = await res.json();
+        this.renderTokenList(data.tokens);
+        return data;
+      } catch (err) {
+        safeWarn("[Fizz.fun] Fetch tokens failed:", err);
+        showToast("Failed to load tokens", "error");
+        return null;
+      }
+    },
+
+    renderTokenList(tokens) {
+      const container = document.getElementById("fizz-token-list");
+      if (!container) return;
+
+      if (!tokens || tokens.length === 0) {
+        container.innerHTML = '<p class="muted small">No tokens launched yet. Be the first!</p>';
+        return;
+      }
+
+      container.innerHTML = tokens.map((token) => {
+        const progress = Math.min((token.solReserve / GRADUATION_SOL) * 100, 100);
+        const price = token.solReserve > 0 
+          ? ((token.solReserve + VIRTUAL_SOL) / token.tokenReserve).toFixed(9)
+          : "0.000000000";
+        
+        return `
+          <div class="token-card" data-mint="${token.mint}">
+            <div class="token-symbol">${token.symbol || "TKN"}</div>
+            <div class="token-name">${token.name || "Token"}</div>
+            <div class="token-stats">
+              <div class="token-stat-row">
+                <span>Price:</span>
+                <span>${price} SOL</span>
+              </div>
+              <div class="token-stat-row">
+                <span>Reserve:</span>
+                <span>${(token.solReserve / 1e9).toFixed(2)} SOL</span>
+              </div>
+              <div class="token-stat-row">
+                <span>Status:</span>
+                <span>${token.graduated ? "🎓 GRADUATED" : "📈 BONDING"}</span>
+              </div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${progress}%"></div>
+              <div class="progress-text">${progress.toFixed(1)}% to Graduation</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      // Add click handlers
+      container.querySelectorAll(".token-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          const mint = card.getAttribute("data-mint");
+          this.selectToken(mint);
+        });
+      });
+    },
+
+    async selectToken(mint) {
+      try {
+        const apiBase = window.BACKEND_URL || window.API_BASE || "";
+        const res = await fetch(`${apiBase}/api/fizz-fun/token/${mint}`);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        
+        const data = await res.json();
+        this.selectedToken = data;
+        this.renderTradePanel(data);
+        
+        // Scroll to trade section
+        const tradeSection = document.getElementById("fizz-trade-section");
+        if (tradeSection) {
+          tradeSection.style.display = "block";
+          tradeSection.scrollIntoView({ behavior: "smooth" });
+        }
+      } catch (err) {
+        safeWarn("[Fizz.fun] Select token failed:", err);
+        showToast("Failed to load token details", "error");
+      }
+    },
+
+    renderTradePanel(token) {
+      const symbolEl = document.getElementById("fizz-selected-symbol");
+      const infoEl = document.getElementById("fizz-selected-info");
+
+      if (symbolEl) symbolEl.textContent = token.symbol;
+      if (infoEl) {
+        infoEl.innerHTML = `
+          <div class="wallet-card" style="padding: 1rem;">
+            <div class="data-row">
+              <span class="data-label">NAME:</span>
+              <span class="data-value">${token.name}</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">PRICE:</span>
+              <span class="data-value">${token.priceFormatted}</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">MARKET CAP:</span>
+              <span class="data-value">${token.marketCapFormatted}</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">PROGRESS:</span>
+              <span class="data-value">${token.graduationProgress.toFixed(1)}%</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">STATUS:</span>
+              <span class="data-value">${token.graduated ? "🎓 GRADUATED" : "📈 BONDING"}</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    async getQuote() {
+      if (!this.selectedToken) {
+        showToast("No token selected", "warning");
+        return;
+      }
+
+      const amountInput = document.getElementById("fizz-trade-amount");
+      const amount = parseFloat(amountInput.value || 0);
+      
+      if (amount <= 0) {
+        showToast("Enter a valid amount", "warning");
+        return;
+      }
+
+      try {
+        const apiBase = window.BACKEND_URL || window.API_BASE || "";
+        let url;
+        
+        if (this.currentAction === "buy") {
+          url = `${apiBase}/api/fizz-fun/quote/buy?mint=${this.selectedToken.mint}&solAmount=${amount}`;
+        } else {
+          url = `${apiBase}/api/fizz-fun/quote/sell?mint=${this.selectedToken.mint}&tokenAmount=${amount}`;
+        }
+
+        const res = await fetch(url);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        
+        const data = await res.json();
+        this.renderQuote(data);
+      } catch (err) {
+        safeWarn("[Fizz.fun] Get quote failed:", err);
+        showToast("Failed to get quote", "error");
+      }
+    },
+
+    renderQuote(quote) {
+      const quoteEl = document.getElementById("fizz-quote");
+      if (!quoteEl) return;
+
+      quoteEl.style.display = "block";
+      
+      if (this.currentAction === "buy") {
+        quoteEl.innerHTML = `
+          <div class="data-row">
+            <span>You Pay:</span>
+            <span>${quote.solAmount} SOL</span>
+          </div>
+          <div class="data-row">
+            <span>Fee (1%):</span>
+            <span>${quote.fee.toFixed(6)} SOL</span>
+          </div>
+          <div class="data-row">
+            <span>You Receive:</span>
+            <span class="balance-value">${quote.tokensOut.toFixed(2)} ${this.selectedToken.symbol}</span>
+          </div>
+          <div class="data-row">
+            <span>Price Impact:</span>
+            <span>${quote.priceImpact.toFixed(2)}%</span>
+          </div>
+          <div class="data-row">
+            <span>New Price:</span>
+            <span>${(quote.newPrice * 1e9).toFixed(9)} SOL</span>
+          </div>
+        `;
+      } else {
+        quoteEl.innerHTML = `
+          <div class="data-row">
+            <span>You Sell:</span>
+            <span>${quote.tokenAmount} ${this.selectedToken.symbol}</span>
+          </div>
+          <div class="data-row">
+            <span>Gross Return:</span>
+            <span>${quote.solOutGross.toFixed(6)} SOL</span>
+          </div>
+          <div class="data-row">
+            <span>Fee (1%):</span>
+            <span>${quote.fee.toFixed(6)} SOL</span>
+          </div>
+          <div class="data-row">
+            <span>You Receive:</span>
+            <span class="balance-value">${quote.solOut.toFixed(6)} SOL</span>
+          </div>
+          <div class="data-row">
+            <span>Price Impact:</span>
+            <span>${quote.priceImpact.toFixed(2)}%</span>
+          </div>
+        `;
+      }
+    },
+
+    executeTrade() {
+      // Validation checks
+      if (!this.selectedToken) {
+        showToast("Please select a token first", "warning");
+        return;
+      }
+      
+      if (!window.PLAYER_WALLET && !window.web3Wallet?.isConnected()) {
+        showToast("Please connect your wallet first", "warning");
+        return;
+      }
+      
+      const amountInput = document.getElementById("fizz-trade-amount");
+      const amount = parseFloat(amountInput?.value || 0);
+      
+      if (amount <= 0) {
+        showToast("Please enter a valid amount", "warning");
+        return;
+      }
+      
+      showToast("Trade execution coming soon! On-chain integration in progress.", "warning");
+      // TODO [HIGH PRIORITY - Phase 2]: Implement on-chain trade execution
+      // Timeline: After Solana program deployment to devnet
+      // Steps:
+      // 1. Get connected wallet (Phantom or local)
+      // 2. Build transaction using Fizz.fun program
+      // 3. Call appropriate instruction (buy_token or sell_token)
+      // 4. Sign transaction with wallet
+      // 5. Send and confirm transaction
+      // 6. Update UI with transaction status
+      // 7. Refresh token data and user balances
+    },
+
+    async launchToken() {
+      const nameInput = document.getElementById("fizz-launch-name");
+      const symbolInput = document.getElementById("fizz-launch-symbol");
+      const uriInput = document.getElementById("fizz-launch-uri");
+      const statusEl = document.getElementById("fizz-launch-status");
+
+      const name = nameInput?.value.trim();
+      const symbol = symbolInput?.value.trim().toUpperCase();
+      const uri = uriInput?.value.trim();
+
+      if (!name || !symbol || !uri) {
+        showToast("Fill in all fields", "warning");
+        return;
+      }
+
+      if (statusEl) statusEl.textContent = "Launching token...";
+
+      try {
+        showToast("Token launch coming soon! On-chain integration needed.", "warning");
+        // TODO [HIGH PRIORITY - Phase 2]: Implement on-chain token launch
+        // Timeline: After Solana program deployment to devnet
+        // Dependencies: Requires CAPS token deployed and program authority setup
+        // Steps:
+        // 1. Get connected wallet and verify CAPS balance
+        // 2. Build create_token transaction with program
+        // 3. Include name, symbol, uri parameters
+        // 4. Burn required CAPS fee (tier-based)
+        // 5. Sign transaction with wallet
+        // 6. Send and confirm transaction
+        // 7. Get new token mint address from logs
+        // 8. Refresh token list to show new token
+        // 9. Clear form and show success message
+        
+        if (statusEl) statusEl.textContent = "Feature coming soon!";
+      } catch (err) {
+        safeWarn("[Fizz.fun] Launch failed:", err);
+        showToast("Launch failed", "error");
+        if (statusEl) statusEl.textContent = `Error: ${err.message}`;
+      }
+    },
+
+    async loadStats() {
+      try {
+        const apiBase = window.BACKEND_URL || window.API_BASE || "";
+        const res = await fetch(`${apiBase}/api/fizz-fun/stats`);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        
+        const data = await res.json();
+        
+        const tokensEl = document.getElementById("fizz-stat-tokens");
+        const volumeEl = document.getElementById("fizz-stat-volume");
+        const capsEl = document.getElementById("fizz-stat-caps");
+
+        if (tokensEl) tokensEl.textContent = data.totalTokensLaunched.toLocaleString();
+        if (volumeEl) volumeEl.textContent = `${data.totalVolumeSol.toFixed(2)} SOL`;
+        if (capsEl) capsEl.textContent = data.totalCapsBurned.toLocaleString();
+      } catch (err) {
+        safeWarn("[Fizz.fun] Load stats failed:", err);
+      }
+    }
+  };
+
+  // ------------------------------------------------------------
+  // EVENT LISTENERS
+  // ------------------------------------------------------------
+  // Debounce timer for quote updates (declared outside to persist across events)
+  let quoteDebounceTimer = null;
+  
+  function initFizzFunListeners() {
+    // Sort buttons
+    const sortVolume = document.getElementById("fizz-sort-volume");
+    const sortNewest = document.getElementById("fizz-sort-newest");
+    const sortGraduating = document.getElementById("fizz-sort-graduating");
+    const refresh = document.getElementById("fizz-refresh");
+
+    if (sortVolume) sortVolume.addEventListener("click", () => FizzFun.fetchTokens("volume"));
+    if (sortNewest) sortNewest.addEventListener("click", () => FizzFun.fetchTokens("newest"));
+    if (sortGraduating) sortGraduating.addEventListener("click", () => FizzFun.fetchTokens("graduating"));
+    if (refresh) refresh.addEventListener("click", () => {
+      FizzFun.fetchTokens();
+      FizzFun.loadStats();
+      showToast("Refreshed!", "success");
+    });
+
+    // Trade action buttons
+    const buyBtn = document.getElementById("fizz-action-buy");
+    const sellBtn = document.getElementById("fizz-action-sell");
+
+    if (buyBtn) {
+      buyBtn.addEventListener("click", () => {
+        FizzFun.currentAction = "buy";
+        buyBtn.style.background = "var(--pipboy-green)";
+        buyBtn.style.color = "var(--pipboy-black)";
+        if (sellBtn) {
+          sellBtn.style.background = "";
+          sellBtn.style.color = "";
+        }
+        const label = document.getElementById("fizz-input-label");
+        if (label) label.textContent = "SOL AMOUNT";
+      });
+    }
+
+    if (sellBtn) {
+      sellBtn.addEventListener("click", () => {
+        FizzFun.currentAction = "sell";
+        sellBtn.style.background = "var(--pipboy-green)";
+        sellBtn.style.color = "var(--pipboy-black)";
+        if (buyBtn) {
+          buyBtn.style.background = "";
+          buyBtn.style.color = "";
+        }
+        const label = document.getElementById("fizz-input-label");
+        if (label) label.textContent = "TOKEN AMOUNT";
+      });
+    }
+
+    // Amount input - get quote on change
+    const amountInput = document.getElementById("fizz-trade-amount");
+    if (amountInput) {
+      amountInput.addEventListener("input", () => {
+        clearTimeout(quoteDebounceTimer);
+        quoteDebounceTimer = setTimeout(() => FizzFun.getQuote(), 500);
+      });
+    }
+
+    // Execute trade
+    const executeBtn = document.getElementById("fizz-execute-trade");
+    if (executeBtn) {
+      executeBtn.addEventListener("click", () => FizzFun.executeTrade());
+    }
+
+    // Launch token
+    const launchBtn = document.getElementById("fizz-execute-launch");
+    if (launchBtn) {
+      launchBtn.addEventListener("click", () => FizzFun.launchToken());
+    }
+  }
+
+  // ------------------------------------------------------------
+  // INITIALIZE ON WALLET CONNECT
+  // ------------------------------------------------------------
+  function initFizzFunOnConnect(wallet) {
+    safeLog("[Fizz.fun] Initializing for wallet:", wallet);
+    
+    FizzFun.checkAccess(wallet);
+    FizzFun.fetchTokens();
+    FizzFun.loadStats();
+  }
+
+  // Listen for wallet connection
+  window.addEventListener("web3WalletStateChanged", (e) => {
+    const { connected, address } = e.detail;
+    if (connected && address) {
+      initFizzFunOnConnect(address);
+    }
+  });
+
+  // ------------------------------------------------------------
+  // INIT
+  // ------------------------------------------------------------
+  function initWalletEnhancements() {
+    initTabNavigation();
+    initFizzFunListeners();
+    
+    // If already connected, init fizz.fun
+    if (window.PLAYER_WALLET) {
+      initFizzFunOnConnect(window.PLAYER_WALLET);
+    }
+    
+    safeLog("[AFW] Chunk 10 (Tabs & Fizz.fun) Loaded ✅");
+  }
+
+  // Wait for DOM
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initWalletEnhancements);
+  } else {
+    initWalletEnhancements();
+  }
+
+  // Expose for debugging
+  window.FizzFun = FizzFun;
+  window.showToast = showToast;
+})();
