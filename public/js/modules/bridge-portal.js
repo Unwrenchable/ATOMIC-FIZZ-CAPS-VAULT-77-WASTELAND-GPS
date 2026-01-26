@@ -1,7 +1,7 @@
 // bridge-portal.js
 // ------------------------------------------------------------
 // Cross-Chain Bridge Portal
-// Opens enhanced wallet interface for cross-chain operations
+// Opens bridge.html for Wormhole cross-chain token transfers
 // ------------------------------------------------------------
 
 (function () {
@@ -67,17 +67,17 @@
       const left = (screen.width / 2) - (width / 2);
       const top = (screen.height / 2) - (height / 2);
 
-      // Open wallet interface in new window
+      // Open bridge interface in new window
       this.walletWindow = window.open(
-        '/wallet/index.html',
-        'AtomicFizzWallet',
+        '/bridge.html',
+        'AtomicFizzBridge',
         `width=${width},height=${height},left=${left},top=${top},` +
         `resizable=yes,scrollbars=yes,status=yes,toolbar=no,menubar=no,location=no`
       );
 
       if (this.walletWindow) {
         this.isOpen = true;
-        console.log("[bridge-portal] Wallet window opened");
+        console.log("[bridge-portal] Bridge window opened");
 
         // Pass wallet connection info to child window
         this.walletWindow.addEventListener('load', () => {
@@ -88,7 +88,7 @@
         const checkClosed = setInterval(() => {
           if (this.walletWindow && this.walletWindow.closed) {
             this.isOpen = false;
-            console.log("[bridge-portal] Wallet window closed");
+            console.log("[bridge-portal] Bridge window closed");
             clearInterval(checkClosed);
           }
         }, 1000);
@@ -97,7 +97,7 @@
         if (window.Game.modules.notifications) {
           Game.modules.notifications.show({
             title: "Bridge Portal Opened",
-            message: "Enhanced wallet interface loaded. Manage your cross-chain assets.",
+            message: "Cross-chain bridge interface loaded. Bridge your tokens across chains.",
             icon: "🌀",
             duration: 5000
           });
@@ -106,7 +106,7 @@
         alert(
           "⚠️ Popup Blocked\n\n" +
           "Please allow popups for this site to use the bridge portal.\n\n" +
-          "The wallet interface will open in a new window."
+          "The bridge interface will open in a new window."
         );
       }
     },
@@ -135,14 +135,14 @@
       }
     },
 
-    closeWallet() {
+    closeBridge() {
       if (this.walletWindow && !this.walletWindow.closed) {
         this.walletWindow.close();
         this.isOpen = false;
       }
     },
 
-    isWalletOpen() {
+    isBridgeOpen() {
       return this.isOpen && this.walletWindow && !this.walletWindow.closed;
     }
   };
