@@ -7,10 +7,10 @@
     L18 10
     C18 15 15 18 10 18
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Feed horn -->
-  <rect x="14" y="10" width="4" height="1.5" transform="rotate(45 14 10)" fill="currentColor"/>
+  <rect x="14" y="10" width="4" height="1.5" transform="rotate(45 14 10)" fill="#00ff41"/>
 
   <!-- Signal cutout -->
   <path d="
