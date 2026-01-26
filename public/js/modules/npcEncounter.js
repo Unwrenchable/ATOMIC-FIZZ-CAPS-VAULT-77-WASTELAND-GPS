@@ -14,6 +14,8 @@
 
   const npcEncounter = {
     activeEncounter: null,
+    ambientNPCs: [], // Track background NPCs for ambient comments
+    lastGreetingTime: 0,
 
     // ------------------------------------------------------------
     // Trigger a scripted encounter
@@ -312,6 +314,250 @@
 
       if (enc && typeof enc.onComplete === "function") {
         enc.onComplete();
+      }
+    },
+
+    // ============================================================
+    // AMBIENT NPC REACTIONS
+    // ============================================================
+    
+    // Register an NPC for ambient behaviors
+    registerAmbientNPC(npc) {
+      if (!this.ambientNPCs.find(n => n.id === npc.id)) {
+        this.ambientNPCs.push(npc);
+        console.log('[NPC Encounter] Ambient NPC registered:', npc.name);
+      }
+    },
+
+    // Check if player is near any ambient NPCs
+    checkAmbientReactions(playerPos) {
+      if (!playerPos || !Game.modules.worldmap) return;
+      
+      const now = Date.now();
+      
+      this.ambientNPCs.forEach(npc => {
+        if (!npc.position) return;
+        
+        const dist = Game.modules.worldmap.distanceBetween
+          ? Game.modules.worldmap.distanceBetween(npc.position, playerPos)
+          : this._calculateDistance(npc.position, playerPos);
+        
+        // Player approaching (10-15m range)
+        if (dist < 15 && dist > 10) {
+          this._npcTurnToPlayer(npc, playerPos);
+        }
+        
+        // Player very close (< 5m) - greeting
+        if (dist < 5 && now - this.lastGreetingTime > 5000) {
+          this._npcGreetPlayer(npc);
+          this.lastGreetingTime = now;
+        }
+        
+        // Background comments (random, 15-25m range)
+        if (dist > 15 && dist < 25) {
+          this._npcAmbientComment(npc);
+        }
+      });
+    },
+
+    // NPC turns to face player
+    _npcTurnToPlayer(npc, playerPos) {
+      // Calculate angle to player
+      const dx = playerPos.lat - npc.position.lat;
+      const dy = playerPos.lng - npc.position.lng;
+      const angle = Math.atan2(dy, dx);
+      
+      // Update NPC rotation if supported
+      if (npc.rotation !== undefined) {
+        npc.rotation = angle;
+        
+        if (Game.modules.worldmap?.updateNPCRotation) {
+          Game.modules.worldmap.updateNPCRotation(npc);
+        }
+      }
+      
+      // Trigger greeting animation if available
+      if (npc.animations?.greet && Game.modules.Dragon) {
+        // Play greeting animation
+        console.log(`[NPC Encounter] ${npc.name} notices player`);
+      }
+    },
+
+    // NPC greets player
+    _npcGreetPlayer(npc) {
+      const greetings = this._getTimeBasedGreetings();
+      
+      // Random greeting based on NPC disposition
+      let greeting;
+      if (npc.disposition === 'hostile') {
+        greeting = this._getHostileComment();
+      } else if (npc.disposition === 'suspicious') {
+        greeting = this._getSuspiciousComment();
+      } else {
+        const random = new Uint32Array(1);
+        crypto.getRandomValues(random);
+        const index = random[0] % greetings.length;
+        greeting = greetings[index];
+      }
+      
+      // Show greeting popup
+      this._showAmbientPopup(npc.name, greeting);
+    },
+
+    // Background ambient comments
+    _npcAmbientComment(npc) {
+      // Random chance to comment (low probability to avoid spam)
+      const random = new Uint32Array(1);
+      crypto.getRandomValues(random);
+      
+      if (random[0] / 0xFFFFFFFF > 0.998) { // 0.2% chance per check
+        const comments = [
+          "Another day in the wasteland...",
+          "Think it might rain radiation?",
+          "Seen any good scrap lately?",
+          "Hope the raiders don't come through today.",
+          "Caps are getting harder to come by.",
+          "That Atomic Fizz stuff... makes you glow.",
+          "Vault dwellers... always thinking they're special.",
+          "Watch out for the radscorpions.",
+          "Trade routes are getting dangerous.",
+          "Wonder what's in those old ruins..."
+        ];
+        
+        const index = random[0] % comments.length;
+        this._showAmbientPopup(npc.name, comments[index], true);
+      }
+    },
+
+    // Get time-of-day appropriate greetings
+    _getTimeBasedGreetings() {
+      const hour = new Date().getHours();
+      
+      if (hour >= 5 && hour < 12) {
+        return [
+          "Morning, wanderer.",
+          "Early start today?",
+          "Another sunrise in the wasteland.",
+          "Good morning... if you can call it that."
+        ];
+      } else if (hour >= 12 && hour < 18) {
+        return [
+          "Afternoon.",
+          "How's the day treating you?",
+          "Hot one today.",
+          "Making any progress out there?"
+        ];
+      } else if (hour >= 18 && hour < 22) {
+        return [
+          "Evening.",
+          "Getting dark soon.",
+          "Heading back before nightfall?",
+          "Better find shelter soon."
+        ];
+      } else {
+        return [
+          "Can't sleep either?",
+          "Dangerous to be out this late.",
+          "What brings you out at this hour?",
+          "Night patrols are active."
+        ];
+      }
+    },
+
+    _getHostileComment() {
+      const comments = [
+        "Get lost.",
+        "Move along.",
+        "You don't belong here.",
+        "Keep walking.",
+        "This is my territory."
+      ];
+      const random = new Uint32Array(1);
+      crypto.getRandomValues(random);
+      return comments[random[0] % comments.length];
+    },
+
+    _getSuspiciousComment() {
+      const comments = [
+        "Who are you?",
+        "What do you want?",
+        "I'm watching you...",
+        "Don't try anything.",
+        "State your business."
+      ];
+      const random = new Uint32Array(1);
+      crypto.getRandomValues(random);
+      return comments[random[0] % comments.length];
+    },
+
+    // Show ambient comment popup
+    _showAmbientPopup(name, text, whisper = false) {
+      const popup = document.createElement('div');
+      popup.style.cssText = `
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 20, 10, 0.95);
+        border: 1px solid ${whisper ? 'rgba(255, 170, 0, 0.3)' : 'rgba(0, 255, 65, 0.5)'};
+        padding: 12px 20px;
+        font-family: 'Consolas', monospace;
+        font-size: ${whisper ? '11px' : '13px'};
+        color: ${whisper ? '#ffaa00' : '#00ff41'};
+        text-shadow: 0 0 5px currentColor;
+        z-index: 9000;
+        animation: ambientFade 4s forwards;
+        pointer-events: none;
+        max-width: 400px;
+        text-align: center;
+      `;
+      
+      popup.innerHTML = `
+        <div style="font-weight: bold; margin-bottom: 4px; opacity: 0.7;">${name}</div>
+        <div>${text}</div>
+      `;
+      
+      // Add animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes ambientFade {
+          0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+          15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+          85% { opacity: 1; }
+          100% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+        }
+      `;
+      document.head.appendChild(style);
+      
+      document.body.appendChild(popup);
+      
+      setTimeout(() => {
+        popup.remove();
+        style.remove();
+      }, 4000);
+    },
+
+    // Initialize ambient behavior monitoring
+    startAmbientMonitoring() {
+      if (this._ambientInterval) return;
+      
+      this._ambientInterval = setInterval(() => {
+        if (!Game.modules.worldmap) return;
+        
+        const playerPos = Game.modules.worldmap.getPlayerPosition();
+        if (playerPos) {
+          this.checkAmbientReactions(playerPos);
+        }
+      }, 2000); // Check every 2 seconds
+      
+      console.log('[NPC Encounter] Ambient monitoring started');
+    },
+
+    stopAmbientMonitoring() {
+      if (this._ambientInterval) {
+        clearInterval(this._ambientInterval);
+        this._ambientInterval = null;
+        console.log('[NPC Encounter] Ambient monitoring stopped');
       }
     }
   };
