@@ -637,6 +637,14 @@
   window.AtomicFizzRadioPlayer = AtomicFizzRadioPlayer;
 
   window.addEventListener("pipboyReady", () => {
+    // ⚠️ SINGLETON PROTECTION: Prevent multiple radio player instances
+    // The pipboyReady event can be dispatched multiple times (boot.js + pipboy.js)
+    // Only create one radio player instance to prevent audio overlap
+    if (window._radioPlayer) {
+      console.log("[Radio] Radio player already initialized, skipping duplicate initialization");
+      return;
+    }
+    
     try {
       console.log("[Radio] Pip‑Boy ready → starting AtomicFizzRadioPlayer");
       window._radioPlayer = new AtomicFizzRadioPlayer(RADIO_CONFIG);
