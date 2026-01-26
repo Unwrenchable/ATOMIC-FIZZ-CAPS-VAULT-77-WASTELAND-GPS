@@ -21,23 +21,32 @@
     <link rel="stylesheet" href="/css/terminal.css" />
 </head>
 <body>
-    <div class="terminal-screen crt">
-        <h1>GEAR FUSION CHAMBER</h1>
-        <!-- Community project notice -->
-        <!-- Not an official or commercial product; branding is fictional -->
-        <div style="text-align:center; margin: 10px 0 20px; opacity: 0.8;">
-            WARNING: PERMANENT DESTRUCTION • NO UNDO
+    <!-- MAIN TERMINAL WRAPPER -->
+    <div class="terminal-wrap">
+
+        <!-- Header -->
+        <div class="terminal-header">
+            ⚛️ GEAR FUSION CHAMBER
         </div>
 
-        <div id="gearList">
+        <!-- Community project notice -->
+        <!-- Not an official or commercial product; branding is fictional -->
+        <div class="terminal-output terminal-system">
+            ⚠️ WARNING: PERMANENT DESTRUCTION • NO UNDO
+        </div>
+
+        <!-- Gear list area -->
+        <div id="gearList" class="terminal-output">
             Loading equipped gear...
         </div>
 
-        <div style="text-align:center; margin-top:30px;">
-            <button class="buy-btn sol-btn" id="backBtn">
+        <!-- Back button -->
+        <div style="margin-top: 18px; text-align: right;">
+            <button class="terminal-button" id="backBtn">
                 RETURN TO WRIST UI
             </button>
         </div>
+
     </div>
 
     <!-- Solana utilities -->
