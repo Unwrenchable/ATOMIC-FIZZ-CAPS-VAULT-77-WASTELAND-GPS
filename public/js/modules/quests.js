@@ -9,10 +9,11 @@
 
   // ============================================================
   // STARTER GEAR - Items players begin with
+  // The jumpsuit is already equipped (player wakes up wearing it)
   // ============================================================
   const STARTER_GEAR = [
     { id: "vault77_sidearm", name: "Security Sidearm", type: "weapon", equipped: false },
-    { id: "vault77_jumpsuit", name: "Wasteland Jumpsuit", type: "armor", equipped: false },
+    { id: "vault77_jumpsuit", name: "Wasteland Jumpsuit", type: "armor", equipped: true },
     { id: "stimpak", name: "Stimpak", type: "consumable", quantity: 3 },
     { id: "dirty_water", name: "Dirty Water", type: "consumable", quantity: 2 },
     { id: "bobby_pin", name: "Bobby Pin", type: "tool", quantity: 5 },
@@ -39,19 +40,17 @@
       type: "objectives",
       triggerType: "npc",           // Delivered by NPC courier
       triggerNpc: "courier_pip",    // The courier NPC who delivers this quest
-      description: "You awaken in the wasteland. A courier has arrived with an urgent message.",
+      description: "You awaken in the wasteland wearing your jumpsuit. A courier has arrived with an urgent message.",
       npcMessage: "Hey, you! You're finally awake. Got a message for you from Operations. Says you need to get your bearings. Check your gear, tune your radio, and figure out where you are. The wasteland ain't friendly to the unprepared.",
       objectives: {
         open_inventory: { text: "Open your inventory" },
         equip_weapon: { text: "Equip your sidearm" },
-        equip_armor: { text: "Equip your jumpsuit" },
         turn_on_radio: { text: "Tune into local radio" },
         open_map: { text: "Check your map" }
       },
       order: [
         "open_inventory",
         "equip_weapon",
-        "equip_armor",
         "turn_on_radio",
         "open_map"
       ],
@@ -162,6 +161,10 @@
 
       console.log("[quests] Giving starter gear to new player");
 
+      // Ensure player equipped slots exist
+      if (!Game.player) Game.player = {};
+      if (!Game.player.equipped) Game.player.equipped = {};
+
       // Add each starter item to appropriate inventory category
       STARTER_GEAR.forEach(item => {
         const invItem = {
@@ -177,10 +180,19 @@
           case "weapon":
             if (!this.gs.inventory.weapons) this.gs.inventory.weapons = [];
             this.gs.inventory.weapons.push(invItem);
+            // If marked as equipped, set it on the player
+            if (item.equipped) {
+              Game.player.equipped.weapon = invItem;
+            }
             break;
           case "armor":
             if (!this.gs.inventory.armor) this.gs.inventory.armor = [];
             this.gs.inventory.armor.push(invItem);
+            // If marked as equipped (jumpsuit), set it on the player
+            if (item.equipped) {
+              Game.player.equipped.armor = invItem;
+              console.log("[quests] Player starts with equipped armor:", invItem.name);
+            }
             break;
           case "consumable":
             if (!this.gs.inventory.consumables) this.gs.inventory.consumables = [];
