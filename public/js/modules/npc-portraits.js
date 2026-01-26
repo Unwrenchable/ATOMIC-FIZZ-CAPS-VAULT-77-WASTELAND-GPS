@@ -7,6 +7,11 @@
   const cache = new Map();
 
   async function preloadSVG(npc) {
+    // Ensure Game.Avatar is available before composing
+    if (!window.Game || !Game.Avatar || typeof Game.Avatar.compose !== 'function') {
+      console.warn('[NPCPortraits] Game.Avatar not ready, skipping preload for', npc.id);
+      return null;
+    }
     const parts = npc.parts || { head: 'head_base.svg', eyes: 'eyes_set1.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' };
     const url = await Game.Avatar.compose(parts);
     cache.set(npc.id, { type: 'svg', url });
@@ -54,6 +59,10 @@
 
         // Fallback: compose an SVG portrait and create a tiny AnimatedSprite from it so the portrait feels animated
         try {
+          if (!window.Game || !Game.Avatar || typeof Game.Avatar.compose !== 'function') {
+            console.warn('[NPCPortraits] Game.Avatar not ready for fallback SVG');
+            return null;
+          }
           const parts = npc.parts || { head: 'head_base.svg', eyes: 'eyes_set1.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' };
           const svgUrl = await Game.Avatar.compose(parts);
           const app = Game.modules.Dragon.app;
@@ -136,6 +145,10 @@
       // For convenience assume global NPC registry: window.NPCS[npcId]
       const npc = window.NPCS && window.NPCS[npcId];
       if (!npc) return false;
+      if (!window.Game || !Game.Avatar || typeof Game.Avatar.compose !== 'function') {
+        console.warn('[NPCPortraits] Game.Avatar not ready for skin swap');
+        return false;
+      }
       const parts = Object.assign({}, npc.parts || {}, skin);
       const url = await Game.Avatar.compose(parts);
       cache.set(npcId, { type: 'svg', url });
