@@ -1,7 +1,7 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Fenced compound -->
-  <rect x="4" y="4" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"/>
-  <rect x="8" y="8" width="8" height="8" fill="currentColor"/>
-  <rect x="10" y="10" width="4" height="4" fill="white"/>
-  <path d="M10 4 L10 2 M14 4 L14 2 M10 20 L10 22 M14 20 L14 22" stroke="currentColor" stroke-width="1"/>
+  <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00ff41" stroke-width="2"/>
+  <rect x="8" y="8" width="8" height="8" fill="#00ff41"/>
+  <rect x="10" y="10" width="4" height="4" fill="#0a1a0a"/>
+  <path d="M10 4 L10 2 M14 4 L14 2 M10 20 L10 22 M14 20 L14 22" stroke="#00ff41" stroke-width="1"/>
 </svg>

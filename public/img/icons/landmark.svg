@@ -7,7 +7,7 @@
     L16 19
     H8
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Capstone cutout -->
   <path d="
@@ -15,9 +15,9 @@
     L12 3.5
     L13 5
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <!-- Base cutout -->
-  <rect x="9" y="17" width="6" height="1.5" fill="white"/>
+  <rect x="9" y="17" width="6" height="1.5" fill="#0a1a0a"/>
 
 </svg>

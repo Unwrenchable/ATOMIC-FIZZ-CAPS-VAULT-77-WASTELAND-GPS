@@ -14,10 +14,10 @@
     H16
     C15.5 5 14 4 12 4
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Eye cutout -->
-  <circle cx="12" cy="7" r="0.8" fill="white"/>
+  <circle cx="12" cy="7" r="0.8" fill="#0a1a0a"/>
 
   <!-- Wing cutouts -->
   <path d="
@@ -25,14 +25,14 @@
     C9 11 9.5 12 10.5 12.5
     L10.5 11
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <path d="
     M15 10
     C15 11 14.5 12 13.5 12.5
     L13.5 11
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <!-- Chest cutout -->
   <path d="
@@ -42,6 +42,6 @@
     C12.8 14 13.2 13.5 13.2 13
     C13.2 12.5 12.8 12 12 12
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
 </svg>
