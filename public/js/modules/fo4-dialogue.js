@@ -709,13 +709,19 @@
       const npcPortrait = this.overlayEl.querySelector('.fo4-portrait-container.npc');
 
       // Player portrait
-      if (playerPortrait && Game.modules.CharacterCreator) {
+      if (playerPortrait) {
         const playerSvg = playerPortrait.querySelector('.fo4-portrait-svg');
         const playerName = playerPortrait.querySelector('.fo4-portrait-name');
         
-        const appearance = this.playerAppearance || Game.modules.CharacterCreator.getAppearance();
-        playerSvg.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(appearance, 160);
-        playerName.textContent = appearance?.name || 'WANDERER';
+        if (Game.modules.CharacterCreator) {
+          const appearance = this.playerAppearance || Game.modules.CharacterCreator.getAppearance();
+          playerSvg.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(appearance, 160);
+          playerName.textContent = appearance?.name || 'WANDERER';
+        } else {
+          // Fallback player portrait when CharacterCreator isn't loaded
+          playerSvg.innerHTML = this._generateFallbackPortraitSVG('player', 160);
+          playerName.textContent = 'WANDERER';
+        }
       }
 
       // NPC portrait with enhanced DragonBones support
@@ -771,9 +777,8 @@
           if (npcAppearance && Game.modules.CharacterCreator) {
             npcSvg.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(npcAppearance, 160);
           } else {
-            // Final fallback icon
-            const icon = this.currentNPC.icon || '👤';
-            npcSvg.innerHTML = `<div style="font-size: 80px; display: flex; align-items: center; justify-content: center; height: 100%;">${icon}</div>`;
+            // Final fallback - generate a simple SVG portrait
+            npcSvg.innerHTML = this._generateFallbackPortraitSVG('npc', 160, this.currentNPC);
           }
         }
 
@@ -822,6 +827,80 @@
       if (lower.includes('suspicious') || lower.includes('wary')) return 'suspicious';
       if (lower.includes('sad') || lower.includes('tired')) return 'weary';
       return 'neutral';
+    },
+
+    // ============================================================
+    // GENERATE FALLBACK PORTRAIT SVG
+    // When CharacterCreator isn't loaded, generate a simple Pip-Boy style portrait
+    // ============================================================
+    _generateFallbackPortraitSVG(type, size = 160, npcData = null) {
+      const isNPC = type === 'npc';
+      const primaryColor = isNPC ? '#ffaa00' : '#00ff41';
+      const secondaryColor = isNPC ? '#cc8800' : '#00cc33';
+      
+      // Determine icon based on NPC data or default
+      let icon = '👤';
+      if (npcData) {
+        if (npcData.icon) icon = npcData.icon;
+        else if (npcData.type?.toLowerCase().includes('robot')) icon = '🤖';
+        else if (npcData.type?.toLowerCase().includes('ghoul')) icon = '🧟';
+        else if (npcData.faction?.toLowerCase().includes('raider')) icon = '💀';
+        else if (npcData.faction?.toLowerCase().includes('brotherhood')) icon = '⚙️';
+        else if (npcData.role?.toLowerCase().includes('merchant')) icon = '💰';
+        else if (npcData.role?.toLowerCase().includes('courier')) icon = '📨';
+      }
+      
+      // Use a square viewBox for better centering
+      const viewSize = 200;
+      // Generate unique but consistent ID based on type
+      const uniqueId = isNPC ? 'npc' : 'player';
+      
+      return `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${viewSize} ${viewSize}" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+          <!-- All pattern definitions in one defs block -->
+          <defs>
+            <pattern id="grid-${uniqueId}" width="10" height="10" patternUnits="userSpaceOnUse">
+              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="${primaryColor}" stroke-width="0.3" opacity="0.2"/>
+            </pattern>
+            <pattern id="scanlines-${uniqueId}" width="2" height="4" patternUnits="userSpaceOnUse">
+              <rect width="2" height="2" fill="rgba(0,0,0,0.1)"/>
+            </pattern>
+          </defs>
+          
+          <!-- Background with Pip-Boy style -->
+          <rect width="100%" height="100%" fill="#0a1a0a"/>
+          
+          <!-- Grid overlay -->
+          <rect width="100%" height="100%" fill="url(#grid-${uniqueId})"/>
+          
+          <!-- Head silhouette circle -->
+          <circle cx="${viewSize/2}" cy="${viewSize*0.38}" r="${viewSize*0.22}" fill="rgba(0,40,20,0.5)" stroke="${primaryColor}" stroke-width="2" opacity="0.7"/>
+          
+          <!-- Body/shoulders silhouette -->
+          <ellipse cx="${viewSize/2}" cy="${viewSize*0.85}" rx="${viewSize*0.35}" ry="${viewSize*0.25}" fill="rgba(0,40,20,0.3)" stroke="${primaryColor}" stroke-width="2" opacity="0.4"/>
+          
+          <!-- Icon display - centered in head area -->
+          <text x="${viewSize/2}" y="${viewSize*0.42}" font-size="${viewSize*0.25}" text-anchor="middle" dominant-baseline="middle" fill="${primaryColor}">${icon}</text>
+          
+          <!-- Scanlines overlay -->
+          <rect width="100%" height="100%" fill="url(#scanlines-${uniqueId})" opacity="0.3"/>
+          
+          <!-- Corner brackets for that Pip-Boy feel -->
+          <path d="M 8 20 L 8 8 L 20 8" fill="none" stroke="${primaryColor}" stroke-width="2"/>
+          <path d="M ${viewSize-20} 8 L ${viewSize-8} 8 L ${viewSize-8} 20" fill="none" stroke="${primaryColor}" stroke-width="2"/>
+          <path d="M 8 ${viewSize-20} L 8 ${viewSize-8} L 20 ${viewSize-8}" fill="none" stroke="${primaryColor}" stroke-width="2"/>
+          <path d="M ${viewSize-20} ${viewSize-8} L ${viewSize-8} ${viewSize-8} L ${viewSize-8} ${viewSize-20}" fill="none" stroke="${primaryColor}" stroke-width="2"/>
+          
+          <!-- Status indicator with pulse animation -->
+          <circle cx="${viewSize-18}" cy="18" r="5" fill="${secondaryColor}" opacity="0.8">
+            <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          
+          <!-- Label bar at bottom -->
+          <rect x="10" y="${viewSize-30}" width="${viewSize-20}" height="20" fill="rgba(0,20,10,0.8)" stroke="${primaryColor}" stroke-width="1" opacity="0.6"/>
+          <text x="${viewSize/2}" y="${viewSize-16}" font-size="10" text-anchor="middle" fill="${primaryColor}" font-family="monospace">${isNPC ? (npcData?.name || 'NPC').toUpperCase().substring(0,15) : 'WANDERER'}</text>
+        </svg>
+      `;
     },
 
     // ============================================================

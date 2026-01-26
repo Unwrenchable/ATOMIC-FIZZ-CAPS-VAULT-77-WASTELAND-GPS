@@ -201,9 +201,11 @@
   });
 
   // ------------------------------------------------------------
-  // SIGNAL: PIP‑BOY UI IS READY (RADIO ENGINE LISTENS FOR THIS)
+  // NOTE: pipboyReady event is now dispatched by boot.js after
+  // the user dismisses the boot screen. This prevents duplicate
+  // event dispatches that were causing multiple radio player
+  // instances to be created (resulting in audio overlap).
   // ------------------------------------------------------------
-  window.dispatchEvent(new Event("pipboyReady"));
 
 })();
 
