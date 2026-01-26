@@ -576,12 +576,18 @@
       
       // Update UI button if it exists
       const btn = document.getElementById('exploreToggleBtn');
+      const textEl = document.getElementById('exploreText');
       if (btn) {
-        btn.textContent = this.explorationMode ? '📍 RETURN TO PLAYER' : '🔍 EXPLORE MAP';
         btn.classList.toggle('exploration-active', this.explorationMode);
-        console.log('[worldmap] Button text updated to:', btn.textContent);
+        // Update the text span if it exists, otherwise update button directly
+        if (textEl) {
+          textEl.textContent = this.explorationMode ? 'RETURN TO PLAYER' : 'EXPLORE MAP';
+        } else {
+          btn.textContent = this.explorationMode ? 'RETURN TO PLAYER' : 'EXPLORE MAP';
+        }
+        console.log('[worldmap] Button updated, exploration mode:', this.explorationMode);
       } else {
-        console.warn('[worldmap] Could not find exploreToggleBtn to update text');
+        console.warn('[worldmap] Could not find exploreToggleBtn to update');
       }
       
       // Show status message
