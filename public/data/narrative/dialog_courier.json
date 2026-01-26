@@ -6,7 +6,7 @@
 
   "intro": {
     "id": "courier_intro",
-    "text": "Hey, you! You're finally awake. Name's Pip, wasteland courier. Got a message for you from Vault-Tec.\n\nSays you need to get your bearings. The wasteland ain't friendly to the unprepared, but lucky for you, someone left you some gear.",
+    "text": "Hey, you! You're finally awake. Name's Pip, wasteland courier. Got a message for you from Vault-Tec.\n\nSays you need to get your bearings. Good thing you're already wearing that jumpsuit - the wasteland ain't friendly to the unprepared. Now grab that sidearm and get moving.",
     "conditions": ["!flag:courier_intro_seen"],
     "set_flags": ["courier_intro_seen"],
     "offers_quest": "wake_up"
@@ -15,7 +15,7 @@
   "quest_nodes": [
     {
       "id": "courier_quest_active",
-      "text": "You still got things to do, wanderer. Check your inventory, equip your gear, tune into that radio. Don't die out there... I'd hate to have to deliver your obituary.",
+      "text": "You still got things to do, wanderer. Check your inventory, grab that sidearm, tune into that radio. Don't die out there... I'd hate to have to deliver your obituary.",
       "conditions": ["flag:courier_intro_seen", "!flag:wake_up_complete"]
     },
     {
@@ -30,7 +30,7 @@
   "knowledge_nodes": [
     {
       "id": "courier_about_gear",
-      "text": "The gear? Standard Vault-Tec issue. Jumpsuit'll keep you warm, sidearm'll keep you alive. Don't waste the stimpaks on paper cuts.",
+      "text": "The gear? Standard Vault-Tec issue. That jumpsuit you're wearing'll keep you warm, sidearm'll keep you alive. Don't waste the stimpaks on paper cuts.",
       "conditions": ["flag:courier_intro_seen"]
     }
   ],
