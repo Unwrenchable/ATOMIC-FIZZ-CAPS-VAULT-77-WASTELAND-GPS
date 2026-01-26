@@ -1,9 +1,51 @@
 // public/js/modules/dragonbones-npc.js
 // Minimal DragonBones + Pixi example loader and NPC portrait display
+// Supports randomized variations so NPCs using the same armature feel unique
 
 (function () {
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
+
+  // Randomization presets for NPC variety
+  const NPC_TINTS = [
+    0xFFFFFF, // normal
+    0xFFE4C4, // warm/tan
+    0xE8D4C4, // pale
+    0xD4A574, // darker
+    0xC4B4A4, // weathered
+    0xF5DEB3, // wheat
+    0xDEB887, // burlywood
+    0xFFDAB9, // peach
+  ];
+
+  const ANIMATION_SPEED_RANGE = { min: 0.8, max: 1.2 };
+  const SCALE_RANGE = { min: 0.55, max: 0.68 };
+  const IDLE_BOB_RANGE = { min: 2, max: 6 };
+
+  // Generate consistent random values from NPC id (so same NPC always looks the same)
+  function seededRandom(seed) {
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+      const char = seed.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return Math.abs(hash % 1000) / 1000;
+  }
+
+  function getRandomVariation(npcId) {
+    const r1 = seededRandom(npcId || 'default');
+    const r2 = seededRandom((npcId || 'default') + '_2');
+    const r3 = seededRandom((npcId || 'default') + '_3');
+    const r4 = seededRandom((npcId || 'default') + '_4');
+
+    return {
+      tint: NPC_TINTS[Math.floor(r1 * NPC_TINTS.length)],
+      animSpeed: ANIMATION_SPEED_RANGE.min + r2 * (ANIMATION_SPEED_RANGE.max - ANIMATION_SPEED_RANGE.min),
+      scale: SCALE_RANGE.min + r3 * (SCALE_RANGE.max - SCALE_RANGE.min),
+      idleBob: IDLE_BOB_RANGE.min + r4 * (IDLE_BOB_RANGE.max - IDLE_BOB_RANGE.min)
+    };
+  }
 
   const Module = {
     app: null,
@@ -83,10 +125,14 @@
       });
     },
 
-    createArmatureDisplay(armatureName, animationName) {
+    async createArmatureDisplay(armatureName, animationName, npcId = null) {
       // Try to build a real DragonBones armature display. If anything fails, fallback to a simple composed Pixi sprite animation.
+      // npcId is used to generate consistent random variations so each NPC looks unique
       if (!this.app) this.init();
       if (!this.factory) throw new Error('factory not loaded');
+
+      // Get randomized variation based on NPC ID
+      const variation = getRandomVariation(npcId || 'default_' + Math.random());
 
       // cleanup previous
       if (this.armatureDisplay) {
@@ -97,23 +143,32 @@
 
       try {
         const armatureDisplay = this.factory.buildArmatureDisplay(armatureName);
+        
+        // Apply NPC-specific variations for uniqueness
+        armatureDisplay.tint = variation.tint;
+        
         // animation names (may be empty)
         const animNames = armatureDisplay.animation && armatureDisplay.animation.animationNames ? armatureDisplay.animation.animationNames : [];
         if (animNames && animNames.length > 0) {
           armatureDisplay.animation.play(animationName || animNames[0]);
+          // Vary animation speed slightly per NPC
+          if (armatureDisplay.animation.timeScale !== undefined) {
+            armatureDisplay.animation.timeScale = variation.animSpeed;
+          }
         } else {
           // no animations exported -> we'll apply a small runtime idle bob using PIXI ticker
           // to make the portrait feel alive without authoring animations
-          let t = 0;
+          let t = Math.random() * Math.PI * 2; // randomize starting phase
+          const bobAmount = variation.idleBob;
           armatureDisplay._idleTicker = (delta) => {
-            t += 0.05 * (delta || 1);
-            armatureDisplay.y = (this.app.view.height - 20) + Math.sin(t) * 4;
+            t += 0.05 * variation.animSpeed * (delta || 1);
+            armatureDisplay.y = (this.app.view.height - 20) + Math.sin(t) * bobAmount;
           };
           this.app.ticker.add(armatureDisplay._idleTicker);
         }
         armatureDisplay.x = this.app.view.width / 2;
         if (typeof armatureDisplay.y === 'undefined') armatureDisplay.y = this.app.view.height - 20;
-        armatureDisplay.scale.set(0.6);
+        armatureDisplay.scale.set(variation.scale);
         this.app.stage.addChild(armatureDisplay);
         this.armatureDisplay = armatureDisplay;
         return armatureDisplay;
@@ -172,4 +227,7 @@
   };
 
   Game.modules.Dragon = Module;
+  
+  // Expose variation generator for external use (e.g., SVG tinting)
+  Game.modules.Dragon.getRandomVariation = getRandomVariation;
 })();
