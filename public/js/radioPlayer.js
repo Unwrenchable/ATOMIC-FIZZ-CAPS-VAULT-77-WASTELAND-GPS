@@ -10,22 +10,26 @@
     maxTracksBetweenEvents: 3,
     crossfadeDuration: 2000,
     knobSelector: "#radioKnob",
+    staticDuration: 500, // Duration of static noise during tuning (ms)
     stations: [
       {
         id: "atomic_fizz_radio",
         name: "Atomic Fizz Radio",
+        frequency: 91.5,
         playlistUrl: "/audio/radio/playlist.json",
         stationUrl: "/audio/radio/station.json"
       },
       {
         id: "mojave_nights",
         name: "Mojave Nights",
+        frequency: 97.3,
         playlistUrl: "/audio/radio/playlist-mojave.json",
         stationUrl: "/audio/radio/station-mojave.json"
       },
       {
         id: "wasteland_swing",
         name: "Wasteland Swing",
+        frequency: 103.7,
         playlistUrl: "/audio/radio/playlist-swing.json",
         stationUrl: "/audio/radio/station-swing.json"
       }
@@ -79,6 +83,7 @@
     constructor(meta) {
       this.id = meta.id;
       this.name = meta.name;
+      this.frequency = meta.frequency || 87.5;
       this.playlistUrl = meta.playlistUrl;
       this.stationUrl = meta.stationUrl;
 
@@ -87,7 +92,7 @@
 
       this.dj = null;
       this.bumpers = [];
-     this.ads = [];
+      this.ads = [];
       this.psas = [];
       this.lore = [];
 
@@ -171,9 +176,12 @@
 
       this.isFading = false;
       this.isPlayingEvent = false;
+      this.fadeInterval = null;
+      this.staticAudio = null;
 
       this._bindEvents();
       this._initStations();
+      this._createDialUI();
     }
 
     // ------------------------------------------------------------
@@ -253,15 +261,49 @@
 
       const idx = ids.indexOf(this.currentStationId);
       const nextIdx = (idx + 1) % ids.length;
+      
+      const fromStation = this.currentStation;
       this.currentStationId = ids[nextIdx];
+      const toStation = this.currentStation;
 
-      const station = this.currentStation;
-      console.log(`[Radio] Switched to station: ${station?.name || "Unknown"}`);
-      this._updateStationDisplay();
+      console.log(`[Radio] Switched to station: ${toStation?.name || "Unknown"}`);
+      
+      // ⚠️ CRITICAL FIX: Properly stop all audio playback
+      // Clear any active crossfade intervals
+      if (this.fadeInterval) {
+        clearInterval(this.fadeInterval);
+        this.fadeInterval = null;
+      }
 
+      // Stop and reset both audio elements
       this.audioA.pause();
+      this.audioA.currentTime = 0;
+      this.audioA.src = "";
+      
       this.audioB.pause();
-      this._playNext(true);
+      this.audioB.currentTime = 0;
+      this.audioB.src = "";
+
+      // Reset volumes
+      this.audioA.volume = 0.7;
+      this.audioB.volume = 0.0;
+
+      // Reset active/inactive pointers
+      this.activeAudio = this.audioA;
+      this.inactiveAudio = this.audioB;
+      this.isFading = false;
+
+      // Update UI with animation
+      this._updateStationDisplay();
+      this._animateDial(fromStation, toStation);
+      
+      // Play static noise during tuning
+      this._playStaticNoise();
+
+      // Start playing the new station after static
+      setTimeout(() => {
+        this._playNext(true);
+      }, this.config.staticDuration);
     }
 
     _updateStationDisplay() {
@@ -412,6 +454,179 @@
           if (typeof onComplete === "function") onComplete();
         }
       }, stepTime);
+      
+      // Store reference to interval for cleanup
+      this.fadeInterval = fadeInterval;
+    }
+
+    // ------------------------------------------------------------
+    // Vintage 50s Radio Dial UI
+    // ------------------------------------------------------------
+
+    _createDialUI() {
+      // Check if dial container already exists or if we should create it
+      const existingDial = document.getElementById("radioDialContainer");
+      if (existingDial) return;
+
+      // Find the radio controls container to inject the dial
+      const radioControls = document.getElementById("radioControls");
+      if (!radioControls) {
+        console.warn("[Radio] Cannot create dial: #radioControls not found");
+        return;
+      }
+
+      // Create the dial HTML structure
+      const dialHTML = `
+        <div id="radioDialContainer" class="radio-dial-container">
+          <div class="radio-dial">
+            <div class="radio-dial-face">
+              <div class="radio-frequency-markers">
+                ${this._generateFrequencyMarkers()}
+              </div>
+              <div class="radio-needle" id="radioNeedle"></div>
+              <div class="radio-center-knob"></div>
+            </div>
+          </div>
+          <div class="radio-station-display">
+            <div class="radio-station-name" id="radioStationName">ATOMIC FIZZ RADIO</div>
+            <div class="radio-frequency-display" id="radioFrequencyDisplay">91.5 FM</div>
+          </div>
+        </div>
+      `;
+
+      // Insert before the station label or at the beginning
+      const stationLabel = document.getElementById("currentStation");
+      if (stationLabel && stationLabel.parentNode === radioControls) {
+        stationLabel.insertAdjacentHTML("beforebegin", dialHTML);
+      } else {
+        radioControls.insertAdjacentHTML("afterbegin", dialHTML);
+      }
+
+      // Initialize needle position
+      this._updateStationIndicator();
+    }
+
+    _generateFrequencyMarkers() {
+      // Generate frequency markers from 87.5 to 108.0 FM
+      let markers = "";
+      const frequencies = [88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108];
+      
+      frequencies.forEach((freq, index) => {
+        const angle = -135 + (index * 27); // Distribute across 270 degrees
+        markers += `
+          <div class="frequency-marker" style="transform: rotate(${angle}deg)">
+            <span class="frequency-text">${freq}</span>
+          </div>
+        `;
+      });
+
+      return markers;
+    }
+
+    _animateDial(fromStation, toStation) {
+      const needle = document.getElementById("radioNeedle");
+      if (!needle) return;
+
+      const dialContainer = document.getElementById("radioDialContainer");
+      if (dialContainer) {
+        dialContainer.classList.add("radio-tuning");
+        setTimeout(() => {
+          dialContainer.classList.remove("radio-tuning");
+        }, this.config.staticDuration);
+      }
+
+      // Calculate needle rotation based on frequency
+      const minFreq = 87.5;
+      const maxFreq = 108.0;
+      const angleRange = 270; // Degrees of rotation (-135 to +135)
+
+      const toFreq = toStation?.frequency || 91.5;
+      const progress = (toFreq - minFreq) / (maxFreq - minFreq);
+      const angle = -135 + (progress * angleRange);
+
+      // Animate the needle
+      needle.style.transform = `rotate(${angle}deg)`;
+
+      // Update station indicator
+      this._updateStationIndicator();
+    }
+
+    _updateStationIndicator() {
+      const station = this.currentStation;
+      if (!station) return;
+
+      const nameDisplay = document.getElementById("radioStationName");
+      const freqDisplay = document.getElementById("radioFrequencyDisplay");
+
+      if (nameDisplay) {
+        nameDisplay.textContent = station.name.toUpperCase();
+      }
+
+      if (freqDisplay) {
+        freqDisplay.textContent = `${station.frequency} FM`;
+      }
+
+      // Also update needle position if not animating
+      const needle = document.getElementById("radioNeedle");
+      if (needle && !needle.style.transform) {
+        const minFreq = 87.5;
+        const maxFreq = 108.0;
+        const angleRange = 270;
+        const progress = (station.frequency - minFreq) / (maxFreq - minFreq);
+        const angle = -135 + (progress * angleRange);
+        needle.style.transform = `rotate(${angle}deg)`;
+      }
+    }
+
+    _playStaticNoise() {
+      // Create synthetic static noise using Web Audio API
+      if (!window.AudioContext && !window.webkitAudioContext) {
+        console.warn("[Radio] Web Audio API not supported for static noise");
+        return;
+      }
+
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Create white noise buffer
+        const bufferSize = audioContext.sampleRate * (this.config.staticDuration / 1000);
+        const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+        const output = buffer.getChannelData(0);
+
+        // Generate white noise using crypto for quality
+        const noiseData = new Uint8Array(bufferSize);
+        window.crypto.getRandomValues(noiseData);
+        
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = (noiseData[i] / 128) - 1.0;
+        }
+
+        // Create source and gain nodes
+        const source = audioContext.createBufferSource();
+        const gainNode = audioContext.createGain();
+        
+        source.buffer = buffer;
+        gainNode.gain.value = 0.15; // Quiet static
+        
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        // Play the static
+        source.start(0);
+
+        // Clean up after playing
+        setTimeout(() => {
+          try {
+            source.stop();
+            audioContext.close();
+          } catch (e) {
+            console.warn("[Radio] Error stopping static:", e);
+          }
+        }, this.config.staticDuration);
+
+      } catch (err) {
+        console.warn("[Radio] Failed to play static noise:", err);
+      }
     }
   }
 

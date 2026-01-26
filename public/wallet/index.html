@@ -69,7 +69,7 @@
   </div>
 
   <!-- WALLET CONNECTION SECTION -->
-  <section id="wallet-connect-section">
+  <section id="wallet-connect-section" class="wallet-card">
     <h2>CONNECT WALLET</h2>
     <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
       <button id="afw-connect" class="btn">🔮 CONNECT PHANTOM</button>
@@ -79,135 +79,278 @@
     <div id="afw-qr" class="mono small muted"></div>
   </section>
 
-  <!-- ON-CHAIN BALANCES -->
-  <section>
-    <h2>ON-CHAIN BALANCES</h2>
-    <div class="data-row">
-      <span class="data-label">SOL</span>
-      <span class="data-value" id="afw-sol">0.000</span>
-    </div>
-    <div class="data-row">
-      <span class="data-label">FIZZ</span>
-      <span class="data-value" id="afw-fizz">0</span>
-    </div>
-  </section>
+  <!-- TAB NAVIGATION -->
+  <div class="wallet-tabs">
+    <button class="wallet-tab active" data-tab="overview">📊 OVERVIEW</button>
+    <button class="wallet-tab" data-tab="tokens">💰 TOKENS</button>
+    <button class="wallet-tab" data-tab="nfts">🎨 NFTs</button>
+    <button class="wallet-tab" data-tab="trade">⚡ TRADE</button>
+    <button class="wallet-tab" data-tab="fizzfun">🚀 FIZZ.FUN</button>
+  </div>
 
-  <!-- WASTELAND STATS -->
-  <section>
-    <h2>WASTELAND STATS</h2>
-    <div class="data-row">
-      <span class="data-label">CAPS</span>
-      <span class="data-value" id="afw-caps">0</span>
-    </div>
-    <div class="data-row">
-      <span class="data-label">XP</span>
-      <span class="data-value" id="afw-xp">0 / 0</span>
-    </div>
-    <div class="data-row">
-      <span class="data-label">LEVEL</span>
-      <span class="data-value" id="afw-level">1</span>
-    </div>
-  </section>
+  <!-- ============ TAB: OVERVIEW ============ -->
+  <div class="tab-content active terminal-boot" id="tab-overview">
+    <!-- ON-CHAIN BALANCES -->
+    <section class="wallet-card neon-glow">
+      <div class="wallet-card-header">
+        <span class="card-icon">💎</span> ON-CHAIN BALANCES
+      </div>
+      <div class="data-row">
+        <span class="data-label">SOL</span>
+        <span class="balance-value" id="afw-sol">0.000</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">FIZZ</span>
+        <span class="balance-value" id="afw-fizz">0</span>
+      </div>
+    </section>
 
-  <!-- MULTICHAIN BALANCES -->
-  <section class="bridge-section">
-    <h2>🌀 MULTICHAIN BALANCES</h2>
-    <div id="chain-list">
-      <p class="muted small">Connect wallet to view cross-chain balances...</p>
-    </div>
-  </section>
+    <!-- WASTELAND STATS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">☢️</span> WASTELAND STATS
+      </div>
+      <div class="data-row">
+        <span class="data-label">CAPS</span>
+        <span class="balance-value" id="afw-caps">0</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">XP</span>
+        <span class="data-value" id="afw-xp">0 / 0</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">LEVEL</span>
+        <span class="data-value" id="afw-level">1</span>
+      </div>
+    </section>
 
-  <!-- PARTNER TOKENS -->
-  <section>
-    <h2>PARTNER TOKENS</h2>
-    <div id="partner-tokens">
-      <p class="muted small">Connect wallet to view partner token balances...</p>
-    </div>
-  </section>
+    <!-- QUICK LINKS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">🔗</span> QUICK LINKS
+      </div>
+      <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <a href="/exchange.html" class="btn" target="_blank" rel="noopener">EXCHANGE</a>
+        <a href="/bridge.html" class="btn" target="_blank" rel="noopener">🌀 BRIDGE</a>
+        <a href="/nuke.html" class="btn" target="_blank" rel="noopener">💣 NUKE</a>
+      </div>
+    </section>
+  </div>
 
-  <!-- SWAP UI -->
-  <section>
-    <h2>⚡ CROSS-CHAIN SWAP</h2>
-    <div id="swap-panel">
-      <p class="muted small">Connect wallet to access swapping...</p>
-    </div>
-  </section>
+  <!-- ============ TAB: TOKENS ============ -->
+  <div class="tab-content terminal-boot" id="tab-tokens">
+    <!-- PARTNER TOKENS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">🪙</span> PARTNER TOKENS
+      </div>
+      <div id="partner-tokens">
+        <p class="muted small">Connect wallet to view partner token balances...</p>
+      </div>
+    </section>
 
-  <!-- FEATURED ITEMS -->
-  <section>
-    <h2>FEATURED ITEMS</h2>
-    <div id="afw-items">
-      <p class="muted">No items yet — explore the Mojave.</p>
-    </div>
-  </section>
+    <!-- MULTICHAIN BALANCES -->
+    <section class="wallet-card bridge-section">
+      <div class="wallet-card-header">
+        <span class="card-icon">🌀</span> MULTICHAIN BALANCES
+      </div>
+      <div id="chain-list">
+        <p class="muted small">Connect wallet to view cross-chain balances...</p>
+      </div>
+    </section>
 
-  <!-- NFT INVENTORY -->
-  <section>
-    <h2>ON-CHAIN NFTs</h2>
-    <div id="afw-nfts">
-      <p class="muted">No Atomic Fizz NFTs detected.</p>
-    </div>
-  </section>
+    <!-- CROSS-CHAIN SWAP -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">⚡</span> CROSS-CHAIN SWAP
+      </div>
+      <div id="swap-panel">
+        <p class="muted small">Connect wallet to access swapping...</p>
+      </div>
+    </section>
+  </div>
 
-  <!-- SCAVENGER EXCHANGE QUICK ACCESS -->
-  <section>
-    <h2>SCAVENGER EXCHANGE</h2>
-    <p class="small muted">Trade items, NFTs, and tokens with other wastelanders.</p>
-    <a href="/exchange.html" class="btn" target="_blank" rel="noopener">OPEN EXCHANGE</a>
-  </section>
+  <!-- ============ TAB: NFTs ============ -->
+  <div class="tab-content terminal-boot" id="tab-nfts">
+    <!-- FEATURED ITEMS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">⭐</span> FEATURED ITEMS
+      </div>
+      <div id="afw-items">
+        <p class="muted">No items yet — explore the Mojave.</p>
+      </div>
+    </section>
 
-  <!-- WORMHOLE BRIDGE QUICK ACCESS -->
-  <section class="bridge-section">
-    <h2>🌀 WORMHOLE BRIDGE</h2>
-    <p class="small muted">Cross-chain asset transfers powered by Wormhole.</p>
-    <a href="/bridge.html" class="btn" target="_blank" rel="noopener">OPEN BRIDGE</a>
-  </section>
+    <!-- NFT INVENTORY -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">🎨</span> ON-CHAIN NFTs
+      </div>
+      <div id="afw-nfts">
+        <p class="muted">No Atomic Fizz NFTs detected.</p>
+      </div>
+    </section>
+  </div>
 
-  <!-- NUKE TERMINAL QUICK ACCESS -->
-  <section>
-    <h2>💣 NUKE TERMINAL</h2>
-    <p class="small muted">Destroy unwanted gear for CAPS recycling.</p>
-    <a href="/nuke.html" class="btn" target="_blank" rel="noopener">OPEN NUKE</a>
-  </section>
+  <!-- ============ TAB: TRADE ============ -->
+  <div class="tab-content terminal-boot" id="tab-trade">
+    <!-- WALLET-TO-WALLET TRADE -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">💸</span> WALLET-TO-WALLET TRADE
+      </div>
 
-  <!-- TRADE UI -->
-  <section>
-    <h2>WALLET-TO-WALLET TRADE</h2>
+      <div class="entry">
+        <label>Recipient Address</label>
+        <input id="afw-trade-to" class="mono" placeholder="Enter recipient wallet address">
+      </div>
 
-    <div class="entry">
-      <label>Recipient Address</label>
-      <input id="afw-trade-to" class="mono" placeholder="Enter recipient wallet address">
-    </div>
+      <div class="entry">
+        <label>Amount (FIZZ)</label>
+        <input id="afw-trade-amount" class="mono" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
 
-    <div class="entry">
-      <label>Amount (FIZZ)</label>
-      <input id="afw-trade-amount" class="mono" type="number" min="0" step="0.01" placeholder="0.00">
-    </div>
+      <button id="afw-trade-send" class="btn">SEND FIZZ</button>
+      <div id="afw-trade-status" class="mono small muted"></div>
+    </section>
+  </div>
 
-    <button id="afw-trade-send" class="btn">SEND FIZZ</button>
-    <div id="afw-trade-status" class="mono small muted"></div>
-  </section>
+  <!-- ============ TAB: FIZZ.FUN ============ -->
+  <div class="tab-content terminal-boot" id="tab-fizzfun">
+    <!-- FIZZ.FUN HEADER -->
+    <section class="wallet-card fizz-fun-section static-noise">
+      <div class="wallet-card-header">
+        <span class="card-icon">🚀</span> FIZZ.FUN TOKEN LAUNCHPAD
+      </div>
+      <p class="small muted">Create and launch your own Fizz Caps economy tokens. Fair launch bonding curves, Vault-Tec approved.</p>
+      
+      <!-- User Access Status -->
+      <div id="fizz-access-status" class="wallet-card" style="margin-top: 1.5rem;">
+        <div class="skeleton" style="height: 60px; display: none;" id="fizz-loading"></div>
+        <div id="fizz-access-info" style="display: none;">
+          <div class="data-row">
+            <span class="data-label">YOUR TIER:</span>
+            <span id="fizz-tier" class="tier-badge">LOADING...</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">CAPS BALANCE:</span>
+            <span class="data-value" id="fizz-caps-balance">0</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">CAN LAUNCH:</span>
+            <span class="data-value" id="fizz-can-launch">NO</span>
+          </div>
+          <div class="data-row" id="fizz-launch-fee-row" style="display: none;">
+            <span class="data-label">LAUNCH FEE:</span>
+            <span class="data-value" id="fizz-launch-fee">100 CAPS</span>
+          </div>
+        </div>
+        <p class="small muted" id="fizz-access-message">Connect wallet to check access...</p>
+      </div>
+    </section>
 
-  <!-- FIZZ.FUN SECTION -->
-  <section class="fizz-fun-section">
-    <h2>🚀 FIZZ.FUN TOKEN LAUNCHPAD</h2>
-    <p class="small muted">Create and launch your own Fizz Caps economy tokens. Early ShibaSwap vibes, Vault-Tec approved.</p>
-    
-    <div class="token-launch-card">
-      <strong>BONDING CURVE LAUNCHES</strong>
-      <p class="small">Fair launch tokens with automated price discovery</p>
-      <div class="bonding-curve"></div>
-    </div>
-    
-    <div class="token-launch-card">
-      <strong>PARTNER TOKEN INTEGRATION</strong>
-      <p class="small">Cross-chain meme coins: SHIB, BONK, WIF, PEPE, FLOKI</p>
-    </div>
-    
-    <button id="buy-usdc-button" class="btn">💰 BUY USDC (MOONPAY)</button>
-  </section>
+    <!-- TOKEN LISTING -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">📈</span> ACTIVE TOKENS
+      </div>
+      
+      <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+        <button class="btn" id="fizz-sort-volume">VOLUME</button>
+        <button class="btn" id="fizz-sort-newest">NEWEST</button>
+        <button class="btn" id="fizz-sort-graduating">GRADUATING</button>
+        <button class="btn" id="fizz-refresh">🔄 REFRESH</button>
+      </div>
+
+      <div id="fizz-token-list" class="token-grid">
+        <div class="skeleton" style="height: 200px;"></div>
+        <div class="skeleton" style="height: 200px;"></div>
+        <div class="skeleton" style="height: 200px;"></div>
+      </div>
+    </section>
+
+    <!-- TRADE PANEL -->
+    <section class="wallet-card trade-panel" id="fizz-trade-section" style="display: none;">
+      <div class="wallet-card-header">
+        <span class="card-icon">💱</span> TRADE: <span id="fizz-selected-symbol">N/A</span>
+      </div>
+      
+      <div id="fizz-selected-info" style="margin-bottom: 1.5rem;">
+        <!-- Filled dynamically -->
+      </div>
+
+      <div class="trade-controls">
+        <button class="btn" id="fizz-action-buy">BUY</button>
+        <button class="btn" id="fizz-action-sell">SELL</button>
+      </div>
+
+      <div class="trade-input-group">
+        <label class="trade-label" id="fizz-input-label">SOL AMOUNT</label>
+        <input type="number" class="mono" id="fizz-trade-amount" placeholder="0.0" step="0.01" min="0">
+      </div>
+
+      <div class="quote-display" id="fizz-quote" style="display: none;">
+        <!-- Quote details filled dynamically -->
+      </div>
+
+      <button class="btn" id="fizz-execute-trade" style="width: 100%;">EXECUTE TRADE</button>
+      <div id="fizz-trade-status" class="mono small muted" style="margin-top: 1rem;"></div>
+    </section>
+
+    <!-- TOKEN LAUNCH FORM -->
+    <section class="wallet-card" id="fizz-launch-section" style="display: none;">
+      <div class="wallet-card-header">
+        <span class="card-icon">🚀</span> LAUNCH NEW TOKEN
+      </div>
+      
+      <div class="trade-input-group">
+        <label class="trade-label">TOKEN NAME</label>
+        <input type="text" class="mono" id="fizz-launch-name" placeholder="My Wasteland Token" maxlength="32">
+      </div>
+
+      <div class="trade-input-group">
+        <label class="trade-label">SYMBOL</label>
+        <input type="text" class="mono" id="fizz-launch-symbol" placeholder="MWT" maxlength="10" style="text-transform: uppercase;">
+      </div>
+
+      <div class="trade-input-group">
+        <label class="trade-label">METADATA URI</label>
+        <input type="text" class="mono" id="fizz-launch-uri" placeholder="https://..." maxlength="200">
+      </div>
+
+      <button class="btn" id="fizz-execute-launch" style="width: 100%;">LAUNCH TOKEN</button>
+      <div id="fizz-launch-status" class="mono small muted" style="margin-top: 1rem;"></div>
+    </section>
+
+    <!-- PROTOCOL STATS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">📊</span> PROTOCOL STATS
+      </div>
+      <div id="fizz-stats">
+        <div class="data-row">
+          <span class="data-label">TOTAL TOKENS LAUNCHED:</span>
+          <span class="data-value" id="fizz-stat-tokens">0</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">TOTAL VOLUME:</span>
+          <span class="data-value" id="fizz-stat-volume">0 SOL</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">CAPS BURNED:</span>
+          <span class="data-value" id="fizz-stat-caps">0</span>
+        </div>
+      </div>
+    </section>
+
+    <button id="buy-usdc-button" class="btn" style="width: 100%; margin-top: 1.5rem;">💰 BUY USDC (MOONPAY)</button>
+  </div>
 
 </div> <!-- END WALLET APP -->
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
 
 <!-- NFT DETAIL POPUP -->
 <div id="nft-modal" class="modal hidden">

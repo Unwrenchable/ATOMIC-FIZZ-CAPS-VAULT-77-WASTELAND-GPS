@@ -16,6 +16,8 @@
     'settler': 'settlement',
     'wastelander': 'ghost',
     'survivor': 'player',
+    'npc': 'ghost',
+    'character': 'player',
     
     // Factions without dedicated icons
     'followers': 'medical',
@@ -28,6 +30,8 @@
     'legion_faction': 'legion',
     'gunners': 'raider',
     'super_mutants': 'enemy',
+    'mutant': 'enemy',
+    'hostile': 'enemy',
     
     // Trading/Commerce
     'trader': 'trading',
@@ -35,6 +39,8 @@
     'vendor': 'shop',
     'caravan_stop': 'caravan',
     'general_store': 'store',
+    'marketplace': 'market',
+    'bazaar': 'market',
     
     // Location types without dedicated icons
     'office': 'city',
@@ -43,6 +49,7 @@
     'industrial': 'factory',
     'research': 'lab',
     'science': 'lab',
+    'laboratory': 'lab',
     'medical_center': 'hospital',
     'clinic_building': 'clinic',
     'military_base': 'military',
@@ -61,13 +68,17 @@
     'inn': 'motel',
     'bar_tavern': 'bar',
     'saloon': 'bar',
+    'pub': 'bar',
+    'tavern': 'bar',
     'pool_hall': '8ball',
     'billiards': '8ball',
     'poolhall': '8ball',
     'restaurant_cafe': 'restaurant',
     'food': 'restaurant',
+    'diner_old': 'diner',
     'church_chapel': 'church',
     'religious': 'religion',
+    'chapel': 'church',
     'cemetery_graveyard': 'cemetery',
     'grave': 'graveyard',
     'farm_field': 'farm',
@@ -84,6 +95,7 @@
     'power_plant': 'power',
     'nuclear': 'reactor',
     'radiation': 'rad',
+    'radioactive': 'rad',
     'danger_zone': 'danger',
     'hazard': 'danger',
     'warning': 'danger',
@@ -98,16 +110,27 @@
     'quest_marker': 'quest',
     'mission': 'quest',
     'objective': 'quest',
+    'task': 'quest',
     'sidequest_marker': 'sidequest',
     'loot_cache': 'loot',
     'treasure': 'loot',
     'stash': 'loot',
     'supply_depot': 'supply',
     'resources': 'supply',
+    'supplies': 'supply',
     'tools': 'toolbox',
     'workshop': 'toolbox',
     'scrap': 'scrapyard',
     'junk': 'junkyard',
+    'building': 'facility',
+    'structure': 'facility',
+    'location': 'poi',
+    'place': 'poi',
+    'site': 'poi',
+    'area': 'wasteland',
+    'zone': 'wasteland',
+    'region': 'wilderness',
+    'marker': 'poi',
     
     // Null/Invalid fallback
     'null': 'poi',
@@ -115,7 +138,8 @@
     '': 'poi',
     'unknown': 'poi',
     'default': 'poi',
-    'generic': 'poi'
+    'generic': 'poi',
+    'none': 'poi'
   };
 
   // Get valid icon name with fallback
@@ -124,6 +148,15 @@
       return 'poi';
     }
     return ICON_FALLBACK_MAP[iconKey] || iconKey;
+  }
+  
+  // Create icon HTML with automatic fallback to poi.svg on error
+  // This ensures no POI ever shows as a broken image or default Leaflet marker
+  function createIconHTML(iconName, size = 32) {
+    return `<img src="/img/icons/${iconName}.svg" 
+            onerror="this.onerror=null; this.src='/img/icons/poi.svg';" 
+            style="width:${size}px;height:${size}px;display:block;" 
+            alt="${iconName}" />`;
   }
 
   // safeFetchJSON: returns parsed JSON or null and logs diagnostics
@@ -400,14 +433,16 @@
             // Use iconKey (from data) or icon (fallback) with proper fallback mapping
             const rawIconKey = poi.iconKey || poi.icon || 'poi';
             const iconName = getValidIcon(rawIconKey);
-            const icon = L.icon({
-              iconUrl: `/img/icons/${iconName}.svg`,
+            
+            // Create icon with fallback error handling using shared helper
+            const iconDiv = L.divIcon({
+              className: 'pipboy-poi-marker',
+              html: createIconHTML(iconName, 32),
               iconSize: [32, 32],
-              iconAnchor: [16, 16],
-              className: 'poi-marker'
+              iconAnchor: [16, 16]
             });
             
-            const marker = L.marker([poi.lat, poi.lng], { icon });
+            const marker = L.marker([poi.lat, poi.lng], { icon: iconDiv });
             
             // Enhanced popup with Fallout-style info
             const rarityColor = {
@@ -483,13 +518,18 @@
 
     // Initialize map control buttons
     initExplorationControls() {
+      console.log('[worldmap] Initializing exploration controls...');
       const exploreBtn = document.getElementById('exploreToggleBtn');
       if (exploreBtn) {
+        console.log('[worldmap] Explore button found, attaching event listener');
         exploreBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
+          console.log('[worldmap] Explore button clicked, toggling mode');
           this.toggleExplorationMode();
         });
+      } else {
+        console.warn('[worldmap] exploreToggleBtn element not found in DOM');
       }
     },
 
@@ -526,6 +566,7 @@
     // Toggle exploration mode - allows free map browsing without snap-back
     toggleExplorationMode() {
       this.explorationMode = !this.explorationMode;
+      console.log(`[worldmap] Exploration mode ${this.explorationMode ? 'ENABLED' : 'DISABLED'}`);
       
       // Clear any pending follow timeout
       if (this.followTimeout) {
@@ -535,9 +576,18 @@
       
       // Update UI button if it exists
       const btn = document.getElementById('exploreToggleBtn');
+      const textEl = document.getElementById('exploreText');
       if (btn) {
-        btn.textContent = this.explorationMode ? '📍 RETURN TO PLAYER' : '🔍 EXPLORE MAP';
         btn.classList.toggle('exploration-active', this.explorationMode);
+        // Update the text span if it exists, otherwise update button directly
+        if (textEl) {
+          textEl.textContent = this.explorationMode ? 'RETURN TO PLAYER' : 'EXPLORE MAP';
+        } else {
+          btn.textContent = this.explorationMode ? 'RETURN TO PLAYER' : 'EXPLORE MAP';
+        }
+        console.log('[worldmap] Button updated, exploration mode:', this.explorationMode);
+      } else {
+        console.warn('[worldmap] Could not find exploreToggleBtn to update');
       }
       
       // Show status message
@@ -816,11 +866,13 @@
       // Use SVG icon from the icon field, with proper fallback mapping for missing icons
       const rawIconKey = loc.icon || loc.iconKey || 'poi';
       const iconName = getValidIcon(rawIconKey);
-      const icon = L.icon({
-        iconUrl: `/img/icons/${iconName}.svg`,
+      
+      // Create divIcon with embedded image and onerror handler using shared helper
+      const icon = L.divIcon({
+        className: `pipboy-poi-marker poi-marker-${rarity}`,
+        html: createIconHTML(iconName, 28),
         iconSize: [28, 28],
-        iconAnchor: [14, 14],
-        className: `poi-marker poi-marker-${rarity}`
+        iconAnchor: [14, 14]
       });
 
       const marker = L.marker([loc.lat, loc.lng], { icon });

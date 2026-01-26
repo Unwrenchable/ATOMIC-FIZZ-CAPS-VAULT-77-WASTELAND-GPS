@@ -239,6 +239,22 @@ body {
   right: clamp(0.5rem, 1vw, 1rem);
 }
 
+/* Map Controls - Responsive, matches GPS badge */
+.map-controls {
+  bottom: clamp(0.5rem, 1vw, 1rem);
+  left: clamp(0.5rem, 1vw, 1rem);
+}
+
+.map-control-btn {
+  padding: clamp(0.4rem, 0.8vw, 0.8rem);
+  font-size: clamp(0.9rem, 1.1vw, 1.1rem);
+}
+
+.explore-dot {
+  width: clamp(6px, 0.8vw, 8px);
+  height: clamp(6px, 0.8vw, 8px);
+}
+
 /* ============================================================
    SPECIAL STATS - RESPONSIVE
    ============================================================ */
@@ -589,6 +605,24 @@ body {
     right: 2px;
     border: none;
     background: rgba(0, 0, 0, 0.6);
+  }
+
+  /* Map controls compact for watch - uniform with GPS badge */
+  .map-controls {
+    bottom: 2px;
+    left: 2px;
+  }
+
+  .map-control-btn {
+    padding: 2px 4px;
+    font-size: 8px;
+    border: none;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .explore-dot {
+    width: 6px;
+    height: 6px;
   }
 
   .acc-dot {

@@ -644,6 +644,359 @@ textarea.mono:focus {
 .hidden { display: none !important; }
 
 /* ============================================================
+   TAB NAVIGATION
+   ============================================================ */
+
+.wallet-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  margin: clamp(1.5rem, 3vw, 2rem) 0;
+  border-bottom: 2px solid var(--pipboy-green-dark);
+  padding-bottom: clamp(0.5rem, 1vw, 0.8rem);
+}
+
+.wallet-tab {
+  padding: clamp(0.8rem, 1.5vw, 1.2rem) clamp(1.5rem, 3vw, 2rem);
+  background: rgba(0, 20, 0, 0.3);
+  border: 1px solid var(--pipboy-green-dark);
+  border-bottom: none;
+  color: var(--pipboy-green-dim);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: clamp(0.05rem, 0.15vw, 0.1rem);
+  position: relative;
+  min-height: 44px;
+  border-radius: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.3rem, 0.6vw, 0.5rem) 0 0;
+}
+
+.wallet-tab:hover {
+  background: rgba(0, 40, 0, 0.6);
+  color: var(--pipboy-green);
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+}
+
+.wallet-tab.active {
+  background: rgba(0, 60, 0, 0.8);
+  border-color: var(--pipboy-green);
+  color: var(--pipboy-green);
+  box-shadow: 0 0 20px var(--pipboy-green-dark), inset 0 0 15px rgba(0, 255, 102, 0.2);
+  text-shadow: 0 0 8px var(--pipboy-green);
+  animation: tabGlow 2s ease-in-out infinite;
+}
+
+.wallet-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--pipboy-green);
+  box-shadow: 0 0 10px var(--pipboy-green);
+}
+
+@keyframes tabGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--pipboy-green-dark), inset 0 0 15px rgba(0, 255, 102, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--pipboy-green), inset 0 0 20px rgba(0, 255, 102, 0.3);
+  }
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   ANIMATED CARD LAYOUTS
+   ============================================================ */
+
+.wallet-card {
+  background: rgba(0, 20, 0, 0.4);
+  border: 1px solid var(--pipboy-green-dark);
+  border-radius: clamp(0.4rem, 0.8vw, 0.6rem);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 102, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.wallet-card:hover::before {
+  left: 100%;
+}
+
+.wallet-card:hover {
+  border-color: var(--pipboy-green);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
+  transform: translateY(-2px);
+}
+
+.wallet-card-header {
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  margin-bottom: clamp(0.8rem, 1.5vw, 1.2rem);
+  padding-bottom: clamp(0.5rem, 1vw, 0.8rem);
+  border-bottom: 1px dashed var(--pipboy-green-dark);
+  text-transform: uppercase;
+  color: var(--vault-gold);
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1vw, 0.8rem);
+}
+
+.card-icon {
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* ============================================================
+   CRT EFFECTS AND GLOWS
+   ============================================================ */
+
+@keyframes crtFlicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.98; }
+}
+
+.crt-element {
+  animation: crtFlicker 0.15s infinite;
+}
+
+.neon-glow {
+  box-shadow: 0 0 5px var(--pipboy-green),
+              0 0 10px var(--pipboy-green),
+              0 0 20px var(--pipboy-green-dark);
+  animation: neonPulse 3s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--pipboy-green),
+                0 0 10px var(--pipboy-green),
+                0 0 20px var(--pipboy-green-dark);
+  }
+  50% {
+    box-shadow: 0 0 10px var(--pipboy-green),
+                0 0 20px var(--pipboy-green),
+                0 0 30px var(--pipboy-green);
+  }
+}
+
+.static-noise {
+  position: relative;
+}
+
+.static-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  animation: staticMove 0.5s steps(2) infinite;
+}
+
+@keyframes staticMove {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(1px, -1px); }
+  50% { transform: translate(-1px, 1px); }
+  75% { transform: translate(1px, 1px); }
+}
+
+/* ============================================================
+   ANIMATED BALANCE COUNTERS
+   ============================================================ */
+
+.balance-value {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: bold;
+  color: var(--vault-gold);
+  text-shadow: 0 0 10px var(--vault-gold-dim);
+  transition: all 0.5s ease;
+  display: inline-block;
+}
+
+.balance-value.updating {
+  animation: balanceUpdate 0.5s ease;
+}
+
+@keyframes balanceUpdate {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); color: var(--pipboy-green); }
+}
+
+/* ============================================================
+   LOADING SPINNERS
+   ============================================================ */
+
+.spinner {
+  display: inline-block;
+  width: clamp(20px, 4vw, 30px);
+  height: clamp(20px, 4vw, 30px);
+  border: 2px solid var(--pipboy-green-dark);
+  border-top-color: var(--pipboy-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 102, 0.05) 0%,
+    rgba(0, 255, 102, 0.15) 50%,
+    rgba(0, 255, 102, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: clamp(0.2rem, 0.5vw, 0.4rem);
+  min-height: clamp(20px, 4vw, 30px);
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ============================================================
+   TOAST NOTIFICATIONS
+   ============================================================ */
+
+.toast-container {
+  position: fixed;
+  top: max(var(--safe-top), clamp(1rem, 2vw, 2rem));
+  right: clamp(1rem, 2vw, 2rem);
+  z-index: 10002;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  max-width: min(400px, calc(100vw - 2rem));
+}
+
+.toast {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: rgba(0, 20, 0, 0.95);
+  border: 2px solid var(--pipboy-green);
+  border-radius: clamp(0.3rem, 0.6vw, 0.5rem);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
+  animation: toastSlideIn 0.3s ease-out;
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+}
+
+.toast.success {
+  border-color: var(--pipboy-green);
+  box-shadow: 0 0 20px var(--pipboy-green);
+}
+
+.toast.error {
+  border-color: #ff3333;
+  color: #ff6666;
+  box-shadow: 0 0 20px #ff3333;
+}
+
+.toast.warning {
+  border-color: var(--vault-gold);
+  color: var(--vault-gold);
+  box-shadow: 0 0 20px var(--vault-gold);
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.removing {
+  animation: toastSlideOut 0.3s ease-in forwards;
+}
+
+@keyframes toastSlideOut {
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   TERMINAL BOOT SEQUENCE
+   ============================================================ */
+
+.terminal-boot {
+  animation: terminalBoot 0.5s ease-out;
+}
+
+@keyframes terminalBoot {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    opacity: 0.5;
+    transform: scaleY(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* ============================================================
    FIZZ.FUN STYLE TOKEN LAUNCH SECTION
    ============================================================ */
 
@@ -685,6 +1038,169 @@ textarea.mono:focus {
   font-size: clamp(0.8rem, 1.2vw, 1rem);
   opacity: 0.7;
 }
+
+/* Token Grid */
+.token-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin: clamp(1.5rem, 3vw, 2rem) 0;
+}
+
+.token-card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--pipboy-green-dark);
+  border-radius: clamp(0.3rem, 0.6vw, 0.5rem);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.token-card:hover {
+  border-color: var(--fizz-orange);
+  box-shadow: 0 0 20px rgba(255, 153, 51, 0.3);
+  transform: translateY(-5px);
+}
+
+.token-symbol {
+  font-size: clamp(1.6rem, 2.5vw, 2rem);
+  font-weight: bold;
+  color: var(--fizz-orange);
+  margin-bottom: clamp(0.5rem, 1vw, 0.8rem);
+}
+
+.token-name {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: var(--pipboy-green-dim);
+  margin-bottom: clamp(0.8rem, 1.5vw, 1rem);
+}
+
+.token-stats {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.8vw, 0.6rem);
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+}
+
+.token-stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: clamp(0.3rem, 0.6vw, 0.5rem) 0;
+  border-bottom: 1px dotted var(--pipboy-green-dark);
+}
+
+.progress-bar {
+  width: 100%;
+  height: clamp(20px, 3vw, 25px);
+  background: rgba(0, 20, 0, 0.8);
+  border: 1px solid var(--pipboy-green-dark);
+  border-radius: clamp(0.2rem, 0.4vw, 0.3rem);
+  overflow: hidden;
+  position: relative;
+  margin: clamp(0.5rem, 1vw, 0.8rem) 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--pipboy-green-dark),
+    var(--pipboy-green)
+  );
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px var(--pipboy-green);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  font-weight: bold;
+  text-shadow: 0 0 3px var(--pipboy-black);
+}
+
+/* Trade Panel */
+.trade-panel {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--fizz-orange);
+  border-radius: clamp(0.4rem, 0.8vw, 0.6rem);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  margin: clamp(1.5rem, 3vw, 2rem) 0;
+}
+
+.trade-controls {
+  display: flex;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+}
+
+.trade-controls .btn {
+  flex: 1;
+}
+
+.trade-input-group {
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+}
+
+.trade-label {
+  display: block;
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  color: var(--vault-gold);
+  margin-bottom: clamp(0.4rem, 0.8vw, 0.6rem);
+  text-transform: uppercase;
+}
+
+.quote-display {
+  background: rgba(0, 255, 102, 0.05);
+  border: 1px solid var(--pipboy-green-dark);
+  border-radius: clamp(0.3rem, 0.6vw, 0.5rem);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+}
+
+.tier-badge {
+  display: inline-block;
+  padding: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.8rem, 1.5vw, 1.2rem);
+  background: rgba(255, 204, 0, 0.2);
+  border: 1px solid var(--vault-gold);
+  border-radius: clamp(0.2rem, 0.4vw, 0.3rem);
+  color: var(--vault-gold);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.tier-badge.overseer { background: rgba(255, 204, 0, 0.3); border-color: var(--vault-gold); }
+.tier-badge.elite { background: rgba(255, 0, 255, 0.2); border-color: #ff00ff; color: #ff00ff; }
+.tier-badge.veteran { background: rgba(0, 230, 255, 0.2); border-color: #00e6ff; color: #00e6ff; }
+.tier-badge.wastelander { background: rgba(0, 255, 102, 0.2); border-color: var(--pipboy-green); color: var(--pipboy-green); }
+.tier-badge.outsider { background: rgba(150, 150, 150, 0.2); border-color: #999; color: #999; }
 
 /* ============================================================
    WORMHOLE BRIDGE SECTION
