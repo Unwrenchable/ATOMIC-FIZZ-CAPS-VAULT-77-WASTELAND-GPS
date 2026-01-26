@@ -300,25 +300,127 @@
   margin-left: auto;
 }
 
-/* Fallout 4 style diamond wheel (optional alternative) */
+/* ============================================================
+   SPEECH CHECKS / PERSUASION BADGES
+   ============================================================ */
+
+.fo4-speech-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 2px;
+  margin-right: 8px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+/* Difficulty colors */
+.fo4-speech-badge.easy {
+  background: rgba(255, 220, 0, 0.2);
+  border-color: #ffdc00;
+  color: #ffdc00;
+  text-shadow: 0 0 5px rgba(255, 220, 0, 0.5);
+}
+
+.fo4-speech-badge.medium {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: #ff8c00;
+  color: #ff8c00;
+  text-shadow: 0 0 5px rgba(255, 140, 0, 0.5);
+}
+
+.fo4-speech-badge.hard {
+  background: rgba(255, 68, 68, 0.2);
+  border-color: #ff4444;
+  color: #ff4444;
+  text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+}
+
+/* Speech check success/failure feedback */
+.fo4-speech-result {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 24px 40px;
+  background: rgba(0, 20, 10, 0.98);
+  border: 2px solid;
+  text-align: center;
+  z-index: 10002;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  animation: speech-result-fade 2.5s forwards;
+}
+
+.fo4-speech-result.success {
+  border-color: #00ff41;
+  color: #00ff41;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+}
+
+.fo4-speech-result.failure {
+  border-color: #ff4444;
+  color: #ff4444;
+  box-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+}
+
+@keyframes speech-result-fade {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+  15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* ============================================================
+   FALLOUT 4 DIAMOND WHEEL (Enhanced)
+   ============================================================ */
+
 .fo4-response-wheel {
   position: absolute;
-  bottom: 100px;
-  right: 5%;
-  width: 200px;
-  height: 200px;
-  display: none; /* Hidden by default, use list instead */
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 320px;
+  display: none; /* Toggle with .active */
 }
 
 .fo4-response-wheel.active {
   display: block;
 }
 
-.fo4-wheel-option {
+/* Center indicator showing key prompts */
+.fo4-wheel-center {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 80px;
   height: 80px;
+  border: 2px solid rgba(0, 255, 65, 0.4);
+  border-radius: 50%;
+  background: rgba(0, 20, 10, 0.95);
   display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #00ff41;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  z-index: 2;
+}
+
+.fo4-wheel-option {
+  position: absolute;
+  width: 120px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -330,19 +432,61 @@
   color: #9fe88d;
   cursor: pointer;
   transition: all 0.2s ease;
+  clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
 }
 
 .fo4-wheel-option:hover {
   background: rgba(0, 255, 65, 0.2);
   border-color: #00ff41;
   color: #00ff41;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+  z-index: 3;
 }
 
-/* Wheel positions */
-.fo4-wheel-option.top { top: 0; left: 50%; transform: translateX(-50%); }
-.fo4-wheel-option.right { top: 50%; right: 0; transform: translateY(-50%); }
-.fo4-wheel-option.bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
-.fo4-wheel-option.left { top: 50%; left: 0; transform: translateY(-50%); }
+.fo4-wheel-option.selected {
+  background: rgba(0, 255, 65, 0.3);
+  border-color: #00ff41;
+  color: #00ff41;
+  box-shadow: 0 0 25px rgba(0, 255, 65, 0.6);
+}
+
+/* Wheel key indicator inside each option */
+.fo4-wheel-key {
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffaa00;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Wheel positions - Diamond layout */
+.fo4-wheel-option.top { 
+  top: 0; 
+  left: 50%; 
+  transform: translateX(-50%); 
+}
+.fo4-wheel-option.right { 
+  top: 50%; 
+  right: 0; 
+  transform: translateY(-50%); 
+}
+.fo4-wheel-option.bottom { 
+  bottom: 0; 
+  left: 50%; 
+  transform: translateX(-50%); 
+}
+.fo4-wheel-option.left { 
+  top: 50%; 
+  left: 0; 
+  transform: translateY(-50%); 
+}
+
+/* Hover transform adjustments per position */
+.fo4-wheel-option.top:hover { transform: translateX(-50%) translateY(-4px) scale(1.05); }
+.fo4-wheel-option.right:hover { transform: translateY(-50%) translateX(4px) scale(1.05); }
+.fo4-wheel-option.bottom:hover { transform: translateX(-50%) translateY(4px) scale(1.05); }
+.fo4-wheel-option.left:hover { transform: translateY(-50%) translateX(-4px) scale(1.05); }
 
 /* ============================================================
    CONTINUE PROMPT
@@ -663,4 +807,106 @@
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+/* ============================================================
+   NPC TYPE VISUAL EFFECTS
+   ============================================================ */
+
+/* Glitch effect for suspicious/hostile NPCs */
+.fo4-portrait-frame.glitch {
+  animation: glitch-effect 0.3s infinite;
+}
+
+@keyframes glitch-effect {
+  0%, 100% { 
+    transform: translate(0, 0); 
+    filter: none;
+  }
+  20% { 
+    transform: translate(-2px, 1px); 
+    filter: hue-rotate(90deg);
+  }
+  40% { 
+    transform: translate(2px, -1px); 
+    filter: hue-rotate(180deg);
+  }
+  60% { 
+    transform: translate(-1px, 2px); 
+    filter: hue-rotate(270deg);
+  }
+  80% { 
+    transform: translate(1px, -2px); 
+    filter: none;
+  }
+}
+
+/* Radiation static for ghoul NPCs */
+.fo4-portrait-frame.ghoul::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 0, 0.03) 0px,
+      transparent 2px,
+      transparent 4px,
+      rgba(0, 255, 0, 0.03) 6px
+    );
+  animation: radiation-static 0.1s infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes radiation-static {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+/* Synth/Robot scan line effect */
+.fo4-portrait-frame.synth::after,
+.fo4-portrait-frame.robot::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to bottom, transparent, #00ffff, transparent);
+  animation: scan-line 2s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+@keyframes scan-line {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* Pulsing highlight on active dialogue options */
+.fo4-response-option.pulse {
+  animation: option-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes option-pulse {
+  0%, 100% { 
+    border-color: rgba(0, 255, 65, 0.3);
+    box-shadow: 0 0 5px rgba(0, 255, 65, 0.2);
+  }
+  50% { 
+    border-color: rgba(0, 255, 65, 0.7);
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+  }
+}
+
+/* Camera zoom effect on portrait */
+.fo4-portrait-frame.zoom {
+  animation: portrait-zoom 0.5s ease-out;
+}
+
+@keyframes portrait-zoom {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
