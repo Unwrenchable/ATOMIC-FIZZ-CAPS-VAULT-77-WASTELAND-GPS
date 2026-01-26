@@ -143,12 +143,59 @@
         });
       }
 
-      // Offer quest if present
-      if (node.offers_quest && Game.modules && Game.modules.main && typeof Game.modules.main.activateQuest === "function") {
-        try {
-          Game.modules.main.activateQuest(node.offers_quest);
-        } catch (e) {
-          console.error("narrative: failed to activate quest", node.offers_quest, e);
+      // Offer quest if present - try multiple quest systems for compatibility
+      if (node.offers_quest) {
+        const questId = node.offers_quest;
+        let questActivated = false;
+        
+        // Try the unified quests module first (newer system)
+        if (Game.modules?.quests) {
+          try {
+            // Accept the quest if it's available, otherwise start it directly
+            if (Game.modules.quests.availableQuests?.[questId]) {
+              Game.modules.quests.acceptQuest(questId);
+              questActivated = true;
+              console.log("[narrative] Quest accepted via unified quests module:", questId);
+            } else {
+              Game.modules.quests.startQuest(questId);
+              questActivated = true;
+              console.log("[narrative] Quest started via unified quests module:", questId);
+            }
+          } catch (e) {
+            console.warn("[narrative] unified quests module failed:", e);
+          }
+        }
+        
+        // Fallback to Game.quests (also points to quests module)
+        if (!questActivated && Game.quests) {
+          try {
+            if (Game.quests.availableQuests?.[questId]) {
+              Game.quests.acceptQuest(questId);
+              questActivated = true;
+              console.log("[narrative] Quest accepted via Game.quests:", questId);
+            } else {
+              Game.quests.startQuest(questId);
+              questActivated = true;
+              console.log("[narrative] Quest started via Game.quests:", questId);
+            }
+          } catch (e) {
+            console.warn("[narrative] Game.quests failed:", e);
+          }
+        }
+        
+        // Final fallback to main.js activateQuest (legacy system)
+        if (!questActivated && Game.modules?.main?.activateQuest) {
+          try {
+            Game.modules.main.activateQuest(questId);
+            questActivated = true;
+            console.log("[narrative] Quest activated via main module:", questId);
+          } catch (e) {
+            console.error("[narrative] failed to activate quest via main:", questId, e);
+          }
+        }
+        
+        if (!questActivated) {
+          console.warn("[narrative] Could not activate quest - no quest system available:", questId);
         }
       }
 
