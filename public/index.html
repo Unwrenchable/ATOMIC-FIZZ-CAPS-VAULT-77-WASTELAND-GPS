@@ -332,7 +332,7 @@
                 <!-- RADIO PANEL -->
                 <div id="panel-radio" class="pipboy-panel">
                   <div class="panel-header">RADIO</div>
-                  <div class="panel-body">
+                  <div class="panel-body" style="overflow-y: auto; max-height: calc(100vh - 280px);">
                     <div id="radioStations">
                       <button class="pipboy-button-small" id="radioCycleBtn">CYCLE STATION</button>
                       <div id="currentStation">NO SIGNAL</div>
@@ -340,12 +340,30 @@
 
                     <div class="panel-divider"></div>
 
-                    <div id="terminalSection" style="display:none;">
-              <div class="panel-header">TERMINAL</div>
-                      <button class="pipboy-button" id="openOverseerTerminal">OPEN TERMINAL</button>
+                    <div id="terminalSection">
+                      <div class="panel-header">OVERSEER TERMINAL</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Access the Vault 77 Overseer AI for assistance, intel, and wasteland guidance.</p>
+                      <button class="pipboy-button" id="openOverseerTerminal">📟 OPEN TERMINAL</button>
                     </div>
 
-                    <!-- Advanced features (admin-only) are hidden by default -->
+                    <div class="panel-divider"></div>
+
+                    <!-- NUKE FUSION CHAMBER -->
+                    <div id="nukeSection">
+                      <div class="panel-header">⚛️ GEAR FUSION CHAMBER</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Combine NFT gear to create powerful fusion items. Requires connected wallet.</p>
+                      <button class="pipboy-button" id="openNukeTerminal">☢️ OPEN FUSION CHAMBER</button>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- CROSS-CHAIN BRIDGE -->
+                    <div id="bridgeSection">
+                      <div class="panel-header">🌀 WORMHOLE BRIDGE</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Transfer tokens across chains via the interdimensional portal.</p>
+                      <button class="pipboy-button" id="openBridgeTerminal">🌉 OPEN BRIDGE PORTAL</button>
+                    </div>
+
                   </div>
                 </div>
 
