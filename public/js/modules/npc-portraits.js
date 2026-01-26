@@ -27,7 +27,7 @@
         const res = await Game.modules.Dragon.loadArmatureJSON(armatureBase);
         // If DragonBones factory loaded
         if (res && res.type === 'dragon') {
-          const display = Game.modules.Dragon.createArmatureDisplay('hero', 'idle');
+          const display = Game.modules.Dragon.createArmatureDisplay('hero', 'idle', npc.id);
           cache.set(npc.id, { type: 'dragon', display });
           return display;
         }
