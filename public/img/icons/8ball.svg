@@ -1,10 +1,10 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- 8-ball outer circle -->
-  <circle cx="12" cy="12" r="10" fill="currentColor"/>
+  <circle cx="12" cy="12" r="10" fill="#00ff41"/>
   <!-- White circle for number area -->
-  <circle cx="12" cy="12" r="4.5" fill="white"/>
+  <circle cx="12" cy="12" r="4.5" fill="#0a1a0a"/>
   <!-- Number 8 -->
-  <text x="12" y="14.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="currentColor">8</text>
+  <text x="12" y="14.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="#00ff41">8</text>
   <!-- Shine highlight -->
-  <ellipse cx="8" cy="8" rx="2" ry="1.5" fill="white" opacity="0.3" transform="rotate(-45 8 8)"/>
+  <ellipse cx="8" cy="8" rx="2" ry="1.5" fill="#0a1a0a" opacity="0.3" transform="rotate(-45 8 8)"/>
 </svg>

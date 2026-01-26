@@ -6,7 +6,7 @@
     L11.5 6
     L20 18
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Tent flap cutout -->
   <path d="
@@ -14,9 +14,9 @@
     L9 18
     H14
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <!-- Support pole cutout -->
-  <rect x="11" y="6" width="1" height="12" fill="white"/>
+  <rect x="11" y="6" width="1" height="12" fill="#0a1a0a"/>
 
 </svg>

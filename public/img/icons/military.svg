@@ -9,7 +9,7 @@
     C9 19 6 16 6 12
     V6
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Star cutout -->
   <path d="
@@ -24,6 +24,6 @@
     L8.5 11
     L11 10.5
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
 </svg>

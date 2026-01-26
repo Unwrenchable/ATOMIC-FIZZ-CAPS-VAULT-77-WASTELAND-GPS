@@ -1,12 +1,12 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Island with palm tree -->
-  <ellipse cx="12" cy="18" rx="8" ry="3" fill="currentColor"/>
+  <ellipse cx="12" cy="18" rx="8" ry="3" fill="#00ff41"/>
   <!-- Palm trunk -->
-  <path d="M12 18 Q13 14 12 8" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M12 18 Q13 14 12 8" stroke="#00ff41" stroke-width="2" fill="none"/>
   <!-- Palm fronds -->
-  <path d="M12 8 Q8 6 4 8" stroke="currentColor" stroke-width="1.5" fill="none"/>
-  <path d="M12 8 Q16 6 20 8" stroke="currentColor" stroke-width="1.5" fill="none"/>
-  <path d="M12 8 Q10 4 6 4" stroke="currentColor" stroke-width="1.5" fill="none"/>
-  <path d="M12 8 Q14 4 18 4" stroke="currentColor" stroke-width="1.5" fill="none"/>
-  <path d="M12 8 L12 3" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M12 8 Q8 6 4 8" stroke="#00ff41" stroke-width="1.5" fill="none"/>
+  <path d="M12 8 Q16 6 20 8" stroke="#00ff41" stroke-width="1.5" fill="none"/>
+  <path d="M12 8 Q10 4 6 4" stroke="#00ff41" stroke-width="1.5" fill="none"/>
+  <path d="M12 8 Q14 4 18 4" stroke="#00ff41" stroke-width="1.5" fill="none"/>
+  <path d="M12 8 L12 3" stroke="#00ff41" stroke-width="1.5"/>
 </svg>

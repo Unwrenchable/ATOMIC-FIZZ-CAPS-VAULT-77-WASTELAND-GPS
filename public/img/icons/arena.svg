@@ -1,6 +1,6 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Arena/Colosseum -->
-  <ellipse cx="12" cy="16" rx="9" ry="4" fill="none" stroke="currentColor" stroke-width="2"/>
-  <path d="M4 12 L4 16 M8 10 L8 16 M12 9 L12 16 M16 10 L16 16 M20 12 L20 16" stroke="currentColor" stroke-width="2"/>
-  <ellipse cx="12" cy="12" rx="9" ry="4" fill="none" stroke="currentColor" stroke-width="2"/>
+  <ellipse cx="12" cy="16" rx="9" ry="4" fill="none" stroke="#00ff41" stroke-width="2"/>
+  <path d="M4 12 L4 16 M8 10 L8 16 M12 9 L12 16 M16 10 L16 16 M20 12 L20 16" stroke="#00ff41" stroke-width="2"/>
+  <ellipse cx="12" cy="12" rx="9" ry="4" fill="none" stroke="#00ff41" stroke-width="2"/>
 </svg>

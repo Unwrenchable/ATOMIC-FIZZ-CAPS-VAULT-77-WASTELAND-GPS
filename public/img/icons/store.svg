@@ -7,16 +7,16 @@
     L18 10
     H6
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Building body -->
-  <rect x="6" y="10" width="12" height="8" fill="currentColor"/>
+  <rect x="6" y="10" width="12" height="8" fill="#00ff41"/>
 
   <!-- Door cutout -->
-  <rect x="10" y="12" width="4" height="6" fill="white"/>
+  <rect x="10" y="12" width="4" height="6" fill="#0a1a0a"/>
 
   <!-- Window cutouts -->
-  <rect x="7.5" y="12" width="2" height="2" fill="white"/>
-  <rect x="14.5" y="12" width="2" height="2" fill="white"/>
+  <rect x="7.5" y="12" width="2" height="2" fill="#0a1a0a"/>
+  <rect x="14.5" y="12" width="2" height="2" fill="#0a1a0a"/>
 
 </svg>

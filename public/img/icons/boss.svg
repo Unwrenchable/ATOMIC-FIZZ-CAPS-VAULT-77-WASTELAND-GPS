@@ -15,18 +15,18 @@
     C18.5 16.5 20 14 20 11
     C20 6.5 17 3 12 3
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Eye cutouts -->
-  <circle cx="9" cy="11" r="2" fill="white"/>
-  <circle cx="15" cy="11" r="2" fill="white"/>
+  <circle cx="9" cy="11" r="2" fill="#0a1a0a"/>
+  <circle cx="15" cy="11" r="2" fill="#0a1a0a"/>
 
   <!-- Nose cutout -->
-  <path d="M12 13 L10.5 15 L13.5 15 Z" fill="white"/>
+  <path d="M12 13 L10.5 15 L13.5 15 Z" fill="#0a1a0a"/>
 
   <!-- Teeth cutouts -->
-  <rect x="9" y="16" width="1.5" height="2" fill="white"/>
-  <rect x="11.25" y="16" width="1.5" height="2" fill="white"/>
-  <rect x="13.5" y="16" width="1.5" height="2" fill="white"/>
+  <rect x="9" y="16" width="1.5" height="2" fill="#0a1a0a"/>
+  <rect x="11.25" y="16" width="1.5" height="2" fill="#0a1a0a"/>
+  <rect x="13.5" y="16" width="1.5" height="2" fill="#0a1a0a"/>
 
 </svg>
