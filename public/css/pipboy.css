@@ -251,6 +251,9 @@ body.pipboy-mode {
   width: 100%;
   height: 100%;
   background: transparent;
+  /* Touch-action allows pan and pinch-zoom gestures */
+  touch-action: pan-x pan-y pinch-zoom !important;
+  pointer-events: auto !important;
 }
 
 #mapContainer .leaflet-tile {
@@ -322,36 +325,53 @@ body.pipboy-mode {
 
 /* ============================================================
    MAP INTERACTION FIX
+   Enables touch gestures (pan, pinch-zoom) on mobile devices
+   while preventing page-level swipe/scroll interference
    ============================================================ */
 
 #mapContainer {
   pointer-events: auto !important;
-  touch-action: none !important;
+  /* manipulation allows pan/zoom but prevents double-tap zoom delay */
+  touch-action: manipulation !important;
   -webkit-user-select: none;
   user-select: none;
+  /* Prevent scroll chaining to parent containers */
+  overscroll-behavior: contain;
 }
 
-/* Leaflet container handles its own touch actions - allow pan and pinch-zoom */
-#mapContainer .leaflet-container {
-  touch-action: pan-x pan-y pinch-zoom !important;
+/* Leaflet panes and tile layers should allow touch through */
+#mapContainer .leaflet-pane,
+#mapContainer .leaflet-tile-pane,
+#mapContainer .leaflet-overlay-pane {
+  touch-action: inherit !important;
   pointer-events: auto !important;
 }
 
 /* Map panel should not interfere with map touch events */
 #panel-map {
   overflow: hidden !important;
-  touch-action: none !important;
+  /* Allow touch to pass through to map */
+  touch-action: manipulation !important;
 }
 
 #panel-map .panel-body {
   overflow: hidden !important;
-  touch-action: none !important;
+  touch-action: manipulation !important;
+  overscroll-behavior: contain;
 }
 
 /* Prevent parent elements from capturing touch events */
 .pipboy-map {
-  touch-action: none !important;
+  touch-action: manipulation !important;
   -webkit-overflow-scrolling: auto !important;
+  overscroll-behavior: contain;
+}
+
+/* Ensure radFlash and other overlays don't block touches */
+#radFlash,
+#mapContainer::before,
+#mapContainer::after {
+  pointer-events: none !important;
 }
 
 .leaflet-control-container { display: none; }
