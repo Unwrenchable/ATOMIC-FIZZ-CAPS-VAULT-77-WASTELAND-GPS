@@ -88,20 +88,25 @@
         name: "Phantom",
         icon: "👻",
         chain: "solana",
-        check: () => window.solana && window.solana.isPhantom,
+        check: () => (window.solana && window.solana.isPhantom) || (window.phantom?.solana?.isPhantom),
         connect: async function() {
           if (!securityUtils.rateLimit('phantom_connect', 2000)) {
             throw new Error('Please wait before trying again');
           }
           try {
-            const resp = await window.solana.connect();
+            // Support both provider locations (regular and in-app browser)
+            const provider = (window.solana?.isPhantom) ? window.solana : window.phantom?.solana;
+            if (!provider) {
+              throw new Error('Phantom provider not found');
+            }
+            const resp = await provider.connect();
             const address = resp.publicKey.toString();
             if (!securityUtils.isValidSolanaAddress(address)) {
               throw new Error('Invalid wallet address received');
             }
             return {
               address: securityUtils.sanitizeAddress(address),
-              provider: window.solana
+              provider: provider
             };
           } catch (error) {
             throw new Error(`Phantom connection failed: ${error.message}`);
