@@ -359,17 +359,15 @@
         console.log('[worldmap] Leaflet map object created successfully');
         
         // Prevent touch events from propagating outside map container (mobile swipe fix)
-        // This prevents page scroll/navigation while interacting with the map
-        // Use passive: false for touchmove to allow preventDefault when needed
+        // This stops touch gestures from bubbling up to parent elements
+        // which could cause page scroll/navigation. We use passive: true to allow
+        // the browser to handle touch gestures smoothly - Leaflet handles its own events.
         container.addEventListener('touchstart', (e) => {
           e.stopPropagation();
         }, { passive: true });
         
         container.addEventListener('touchmove', (e) => {
-          // Prevent page scroll while interacting with map
-          if (e.touches.length > 0) {
-            e.stopPropagation();
-          }
+          e.stopPropagation();
         }, { passive: true });
         
         container.addEventListener('touchend', (e) => {
@@ -380,7 +378,7 @@
         const panelBody = document.querySelector('#panel-map .panel-body');
         if (panelBody) {
           panelBody.addEventListener('touchstart', (e) => {
-            // Only prevent if touch is on the map container
+            // Only stop propagation if touch is on the map container
             if (container.contains(e.target) || e.target === container) {
               e.stopPropagation();
             }

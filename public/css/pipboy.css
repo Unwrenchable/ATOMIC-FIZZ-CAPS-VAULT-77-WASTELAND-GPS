@@ -251,6 +251,9 @@ body.pipboy-mode {
   width: 100%;
   height: 100%;
   background: transparent;
+  /* Touch-action allows pan and pinch-zoom gestures */
+  touch-action: pan-x pan-y pinch-zoom !important;
+  pointer-events: auto !important;
 }
 
 #mapContainer .leaflet-tile {
@@ -334,12 +337,6 @@ body.pipboy-mode {
   user-select: none;
   /* Prevent scroll chaining to parent containers */
   overscroll-behavior: contain;
-}
-
-/* Leaflet container handles its own touch actions - allow pan and pinch-zoom */
-#mapContainer .leaflet-container {
-  touch-action: pan-x pan-y pinch-zoom !important;
-  pointer-events: auto !important;
 }
 
 /* Leaflet panes and tile layers should allow touch through */

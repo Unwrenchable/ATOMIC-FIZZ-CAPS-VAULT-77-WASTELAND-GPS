@@ -491,19 +491,7 @@ body {
     margin: 0.5rem 0;
   }
 
-  /* Touch-specific map improvements */
-  #mapContainer,
-  .pipboy-map {
-    /* Ensure touch events work on the map */
-    touch-action: manipulation !important;
-  }
-
-  #mapContainer .leaflet-container {
-    /* Enable all map gestures on touch devices */
-    touch-action: pan-x pan-y pinch-zoom !important;
-  }
-
-  /* Larger POI markers for easier tapping */
+  /* Larger POI markers for easier tapping on touch devices */
   .leaflet-marker-icon {
     min-width: 40px !important;
     min-height: 40px !important;
