@@ -326,11 +326,12 @@ body {
     min-height: 30rem;
   }
 
-  /* MOBILE MAP TOUCH FIX - prevent swipe navigation */
+  /* MOBILE MAP TOUCH FIX - enable map gestures while preventing page scroll */
   #mapContainer,
   .pipboy-map,
   #panel-map .panel-body {
-    touch-action: none !important;
+    /* manipulation allows pan/zoom gestures without double-tap delay */
+    touch-action: manipulation !important;
     -webkit-overflow-scrolling: auto !important;
     overscroll-behavior: contain !important;
   }
@@ -338,6 +339,14 @@ body {
   /* Leaflet handles its own gestures - allow pan and pinch-zoom */
   #mapContainer .leaflet-container {
     touch-action: pan-x pan-y pinch-zoom !important;
+    pointer-events: auto !important;
+  }
+
+  /* Ensure map markers remain clickable on touch devices */
+  .leaflet-marker-icon,
+  .leaflet-marker-pane {
+    touch-action: auto !important;
+    pointer-events: auto !important;
   }
 }
 
@@ -480,6 +489,23 @@ body {
   .panel-row button,
   .panel-body button {
     margin: 0.5rem 0;
+  }
+
+  /* Larger POI markers for easier tapping on touch devices */
+  .leaflet-marker-icon {
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+
+  /* Larger touch targets for map controls */
+  .map-control-btn {
+    min-height: 4.4rem;
+    padding: 0.8rem 1.2rem;
+  }
+
+  .gps-badge {
+    min-height: 4.4rem;
+    padding: 0.8rem 1.2rem;
   }
 }
 
