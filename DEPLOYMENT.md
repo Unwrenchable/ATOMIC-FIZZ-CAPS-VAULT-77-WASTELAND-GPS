@@ -4,41 +4,50 @@
 
 This application uses a split deployment architecture:
 
-- **Frontend**: Deployed on Vercel
+- **Frontend**: Deployed on Vercel (or Render)
   - Primary domain: `https://www.atomicfizzcaps.xyz`
-  - Preview/testing: `*.vercel.app`
+  - Preview/testing (Vercel): `*.vercel.app`
+  - Preview/testing (Render): `*.onrender.com`
 - **Backend API**: Deployed on Render
   - API domain: `https://api.atomicfizzcaps.xyz`
 
+## Domain Unification
+
+All frontend deployments (Vercel, Render, or custom domains) automatically connect to the centralized API at `https://api.atomicfizzcaps.xyz`. This ensures consistent behavior across:
+- Main production site (`atomicfizzcaps.xyz`, `www.atomicfizzcaps.xyz`)
+- Vercel preview deployments (`*.vercel.app`)
+- Render deployments (`*.onrender.com`)
+
 ## Configuration
 
-### Frontend (Vercel)
+### Frontend (Vercel/Render)
 
 The frontend automatically detects its environment and configures the backend URL:
 
-**File**: `public/index.html`
+**File**: `public/js/config.js`
 ```javascript
-window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.github.dev'))
-  ? 'http://localhost:3001'
-  : 'https://api.atomicfizzcaps.xyz';
-window.BACKEND_URL = window.API_BASE;
+// Local development (localhost, Codespaces) -> http://localhost:3000
+// All production/preview environments -> https://api.atomicfizzcaps.xyz
 ```
 
-**Local development**: Points to `http://localhost:3001`  
-**Production**: Points to `https://api.atomicfizzcaps.xyz`
+**Local development**: Points to `http://localhost:3000`  
+**Production/Preview**: Points to `https://api.atomicfizzcaps.xyz`
 
 ### Backend (Render)
 
-The backend is configured to accept requests from the frontend domains:
+The backend is configured to accept requests from all frontend domains:
 
 **File**: `backend/server.js`
 ```javascript
-const FRONTEND_ORIGIN =
-  process.env.FRONTEND_ORIGIN ||
-  "https://www.atomicfizzcaps.xyz, http://localhost:3000, http://127.0.0.1:3000";
+// Default CORS origins include:
+// - https://www.atomicfizzcaps.xyz
+// - https://atomicfizzcaps.xyz  
+// - http://localhost:3000
+// - https://*.vercel.app (Vercel previews)
+// - https://*.onrender.com (Render previews)
 ```
 
-The CORS configuration also automatically allows any `*.vercel.app` domain for preview deployments.
+The CORS configuration automatically allows any `*.vercel.app` and `*.onrender.com` domain for preview deployments.
 
 ### Environment Variables
 
@@ -47,8 +56,8 @@ The CORS configuration also automatically allows any `*.vercel.app` domain for p
 Set these environment variables in your Render service dashboard:
 
 - `NODE_ENV=production`
-- `FRONTEND_ORIGIN` (recommended: `https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, https://*.vercel.app, http://localhost:3000`)
-  - The backend now supports wildcard patterns like `https://*.vercel.app` for Vercel preview deployments
+- `FRONTEND_ORIGIN` (recommended: `https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, https://*.vercel.app, https://*.onrender.com, http://localhost:3000`)
+  - The backend supports wildcard patterns like `https://*.vercel.app` and `https://*.onrender.com` for preview deployments
   - Multiple origins can be comma-separated
 - `REDIS_URL` (required for player state)
 - `PLAYER_AUTH_SECRET` (required for authentication)
