@@ -146,6 +146,12 @@
       
       // Auto-trigger the wake_up quest courier on first load
       this.triggerNPCQuestDelivery("wake_up");
+      
+      // Re-show notifications for any available quests that were persisted
+      // This ensures users see the notification even after page refresh
+      Object.keys(this.availableQuests).forEach(questId => {
+        this.showQuestOfferNotification(questId);
+      });
     },
 
     // ============================================================
@@ -313,7 +319,7 @@
     // ============================================================
 
     // Accept a quest that has been offered
-    acceptQuest(questId) {
+    async acceptQuest(questId) {
       if (!this.availableQuests[questId]) {
         console.warn("[quests] Quest not available to accept:", questId);
         return false;
@@ -326,11 +332,11 @@
       // Request quest reveal from server (if present). If not, start locally.
       try {
         const wallet = window.PLAYER_WALLET || null;
-      const res = await fetch(`/api/quests-store/reveal`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet, questId })
-      });
+        const res = await fetch(`/api/quests-store/reveal`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, questId })
+        });
         const json = await res.json();
         if (json && json.ok && json.quest) {
           // Merge server quest details into local DB
@@ -340,7 +346,18 @@
         // ignore and fallback
       }
 
-    // helper: request server proof check for quests that require it
+      const started = this.startQuest(questId);
+      if (started) {
+        this.showQuestAcceptedNotification(questId);
+        // If this is the Saitama learning quest, launch the tutorial UI
+        if (questId === 'saitama_learning' || questId === 'saitama_main_arc') {
+          this.startLearningQuest(questId);
+        }
+      }
+      return started;
+    },
+
+    // Helper: request server proof check for quests that require it
     async requestProof(questId, proof) {
       try {
         const wallet = window.PLAYER_WALLET || null;
@@ -353,17 +370,6 @@
       } catch (e) {
         return { ok: false };
       }
-    },
-
-      const started = this.startQuest(questId);
-      if (started) {
-        this.showQuestAcceptedNotification(questId);
-        // If this is the Saitama learning quest, launch the tutorial UI
-        if (questId === 'saitama_learning' || questId === 'saitama_main_arc') {
-          this.startLearningQuest(questId);
-        }
-      }
-      return started;
     },
 
     // Launch Saitama learning tutorial: fetch lore and show modal/tutorial steps
@@ -443,6 +449,74 @@
       if (Game.modules?.worldmap?.showMapMessage) {
         Game.modules.worldmap.showMapMessage(`NEW QUEST AVAILABLE: ${quest.name}`);
       }
+      
+      // Create a visual notification toast that doesn't rely on other modules
+      this.showQuestToast(quest.name, offer.message);
+    },
+    
+    // Simple toast notification for quest offers
+    showQuestToast(questName, message) {
+      // Check if toast container exists, create if not
+      let toastContainer = document.getElementById("quest-toast-container");
+      if (!toastContainer) {
+        toastContainer = document.createElement("div");
+        toastContainer.id = "quest-toast-container";
+        toastContainer.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 10000;
+          max-width: 350px;
+        `;
+        document.body.appendChild(toastContainer);
+      }
+      
+      // Create toast element
+      const toast = document.createElement("div");
+      toast.className = "quest-toast";
+      toast.style.cssText = `
+        background: rgba(5, 20, 5, 0.95);
+        border: 2px solid #00ff41;
+        border-radius: 4px;
+        padding: 12px 16px;
+        margin-bottom: 10px;
+        color: #00ff41;
+        font-family: 'VT323', 'Share Tech Mono', monospace;
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        animation: questToastIn 0.3s ease-out;
+      `;
+      
+      toast.innerHTML = `
+        <div style="font-size: 14px; color: #ffaa00; margin-bottom: 6px;">📜 NEW QUEST AVAILABLE</div>
+        <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${questName}</div>
+        <div style="font-size: 13px; opacity: 0.85;">${message}</div>
+        <div style="margin-top: 8px; font-size: 12px; color: #aaa;">Check QUESTS tab to accept</div>
+      `;
+      
+      // Add CSS animation if not present
+      if (!document.getElementById("quest-toast-styles")) {
+        const style = document.createElement("style");
+        style.id = "quest-toast-styles";
+        style.textContent = `
+          @keyframes questToastIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          @keyframes questToastOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(50px); }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      
+      toastContainer.appendChild(toast);
+      
+      // Auto-remove after 8 seconds
+      setTimeout(() => {
+        toast.style.animation = "questToastOut 0.3s ease-out forwards";
+        setTimeout(() => toast.remove(), 300);
+      }, 8000);
     },
 
     showQuestAcceptedNotification(questId) {

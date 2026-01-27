@@ -644,10 +644,56 @@
   // WALLET + MINT
   // ---------------------------
 
+  // Helper function to get Phantom provider (handles in-app browser delay)
+  async function getPhantomProvider(maxWaitMs = 3000) {
+    // Check immediate availability
+    if (window.solana?.isPhantom) {
+      return window.solana;
+    }
+    // Also check newer provider location
+    if (window.phantom?.solana?.isPhantom) {
+      return window.phantom.solana;
+    }
+
+    // In Phantom's in-app browser, provider may take a moment to inject
+    return new Promise((resolve) => {
+      const startTime = Date.now();
+      const checkInterval = 100; // ms
+
+      function check() {
+        if (window.solana?.isPhantom) {
+          resolve(window.solana);
+          return;
+        }
+        if (window.phantom?.solana?.isPhantom) {
+          resolve(window.phantom.solana);
+          return;
+        }
+        if (Date.now() - startTime < maxWaitMs) {
+          setTimeout(check, checkInterval);
+        } else {
+          resolve(null); // Timeout - provider not found
+        }
+      }
+
+      check();
+    });
+  }
+
   async function connectWallet() {
-    const provider = window.solana;
-    if (!provider || !provider.isPhantom) {
-      alert("Please install Phantom wallet");
+    // Wait for Phantom provider (handles in-app browser timing)
+    const provider = await getPhantomProvider();
+    
+    if (!provider) {
+      // Check if we're in a browser that might be Phantom but provider isn't ready
+      const userAgent = navigator.userAgent || "";
+      const isPhantomBrowser = userAgent.toLowerCase().includes("phantom");
+      
+      if (isPhantomBrowser) {
+        alert("Phantom wallet is loading. Please try again in a moment.");
+      } else {
+        alert("Please install Phantom wallet.\n\nVisit https://phantom.app to install.");
+      }
       return;
     }
 
