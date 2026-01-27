@@ -61,14 +61,27 @@
 
   </div>
 
+  <!-- API config for backend calls -->
+  <script src="/js/config.js"></script>
+
   <!-- Terminal Engine (handles rendering / input wiring) -->
   <script src="/js/overseer/overseer.full.js"></script>
 
   <!-- Game Bridge (handles terminal commands and responses) -->
   <script src="/js/game.overseer-bridge.js"></script>
 
-  <!-- Personality + Custom Commands (must load BEFORE overseer.js) -->
+  <!-- CORE AI ENGINES (must load BEFORE overseer.js brain) -->
   <script src="/js/overseer/core.personality.js"></script>
+  <script src="/js/overseer/core.memory.js"></script>
+  <script src="/js/overseer/core.lore.js"></script>
+  <script src="/js/overseer/core.faction.js"></script>
+  <script src="/js/overseer/core.threat.js"></script>
+  <script src="/js/overseer/core.weather.js"></script>
+  <script src="/js/overseer/core.worldstate.js"></script>
+  <script src="/js/overseer/core.commands.js"></script>
+  <script src="/js/overseer/core.quest_mapintel.js"></script>
+
+  <!-- Custom Commands Extension -->
   <script src="/js/overseer/handlers.js"></script>
 
   <!-- Unified Overseer Brain (attaches engines + commands) -->
