@@ -340,26 +340,58 @@
           attributionControl: false,
           worldCopyJump: false,
           preferCanvas: true, // Better performance
-          // Mobile touch settings - prevent gestures from propagating
+          // Mobile touch settings - enable all touch interactions
           tap: true,
           tapTolerance: 15,
           touchZoom: true,
           dragging: true,
-          bounceAtZoomLimits: false
+          bounceAtZoomLimits: false,
+          // Additional mobile-friendly settings
+          scrollWheelZoom: true,
+          doubleClickZoom: true,
+          boxZoom: true,
+          keyboard: true,
+          // Inertia for smooth pan on mobile
+          inertia: true,
+          inertiaDeceleration: 3000,
+          inertiaMaxSpeed: 1500
         });
         console.log('[worldmap] Leaflet map object created successfully');
         
         // Prevent touch events from propagating outside map container (mobile swipe fix)
-        // Only stop propagation, don't prevent default as Leaflet needs those events
+        // This prevents page scroll/navigation while interacting with the map
+        // Use passive: false for touchmove to allow preventDefault when needed
         container.addEventListener('touchstart', (e) => {
           e.stopPropagation();
         }, { passive: true });
+        
         container.addEventListener('touchmove', (e) => {
-          e.stopPropagation();
+          // Prevent page scroll while interacting with map
+          if (e.touches.length > 0) {
+            e.stopPropagation();
+          }
         }, { passive: true });
+        
         container.addEventListener('touchend', (e) => {
           e.stopPropagation();
         }, { passive: true });
+        
+        // Also prevent any parent scrolling/gestures from interfering
+        const panelBody = document.querySelector('#panel-map .panel-body');
+        if (panelBody) {
+          panelBody.addEventListener('touchstart', (e) => {
+            // Only prevent if touch is on the map container
+            if (container.contains(e.target) || e.target === container) {
+              e.stopPropagation();
+            }
+          }, { passive: true });
+          
+          panelBody.addEventListener('touchmove', (e) => {
+            if (container.contains(e.target) || e.target === container) {
+              e.stopPropagation();
+            }
+          }, { passive: true });
+        }
         
       } catch (e) {
         console.error('[worldmap] failed to create map:', e);
