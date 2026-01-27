@@ -30,8 +30,9 @@ console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 // ------------------------------------------------------------
 
 // --- CORS setup (safe, env-driven) ---
+// Includes all deployment environments: main domains, Vercel previews, and Render hosting
 const rawOrigins = (process.env.FRONTEND_ORIGIN ||
-  "https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000, https://*.vercel.app"
+  "https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000, https://*.vercel.app, https://*.onrender.com"
 ).split(/\s*,\s*/);
 
 function wildcardToRegex(pattern) {
