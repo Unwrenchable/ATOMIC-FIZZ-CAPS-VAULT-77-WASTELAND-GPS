@@ -76,7 +76,7 @@
 
       try {
         // Attempt to fetch player's equipped gear from API
-        const apiBase = window.API_BASE || "https://atomicfizzcaps.xyz";
+        const apiBase = window.API_BASE || "https://api.atomicfizzcaps.xyz";
         const response = await fetch(`${apiBase}/api/player/${walletAddress}/inventory`, {
           method: "GET",
           headers: { "Content-Type": "application/json" }
