@@ -16,6 +16,7 @@
     window.API_BASE = 'https://api.atomicfizzcaps.xyz';
   }
   
-  // Also set BACKEND_URL for modules that use that variable
+  // BACKEND_URL is an alias used by some older modules (main.js, authClient.js)
+  // while newer modules use API_BASE - both point to the same endpoint
   window.BACKEND_URL = window.API_BASE;
 })();
