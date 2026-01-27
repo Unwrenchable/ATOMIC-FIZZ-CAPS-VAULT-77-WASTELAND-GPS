@@ -422,7 +422,7 @@
     getAvailableQuests() {
       return Object.keys(this.availableQuests).map(questId => ({
         ...QUESTS_DB[questId],
-         offer: this.availableQuests[questId]
+        offer: this.availableQuests[questId]
       }));
     },
 
