@@ -49,6 +49,13 @@ This document provides a comprehensive alphabetical reference of all environment
 - **Description**: AWS region for KMS signing operations
 - **Example**: `us-west-2`
 
+### CAPS_MINT
+- **Type**: String
+- **Required**: Yes (for CAPS ecosystem features)
+- **Description**: Solana token mint address for CAPS (Atomic Fizz Caps SPL token)
+- **Example**: `CapsToken1111111111111111111111111111111111`
+- **Note**: Same as TOKEN_MINT - CAPS is the primary token for the ecosystem
+
 ### CLIENT_ORIGIN
 - **Type**: String
 - **Required**: No
@@ -83,6 +90,13 @@ This document provides a comprehensive alphabetical reference of all environment
 - **Required**: Yes
 - **Description**: Allowed frontend origins for CORS. Supports wildcards.
 - **Example**: `https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, https://*.vercel.app, https://*.onrender.com`
+
+### FIZZ_FUN_PROGRAM_ID
+- **Type**: String
+- **Required**: No (only if using Fizz.fun launchpad)
+- **Description**: Solana program ID for the Fizz.fun token launchpad (part of CAPS ecosystem)
+- **Example**: `FizzFun111111111111111111111111111111111111`
+- **Note**: Token launchpad feature for CAPS holders to create new tokens with bonding curves
 
 ### GAME_VAULT_SECRET
 - **Type**: String
@@ -213,8 +227,16 @@ This document provides a comprehensive alphabetical reference of all environment
 ### TOKEN_MINT
 - **Type**: String
 - **Required**: Yes
-- **Description**: Solana token mint address for FIZZ tokens
-- **Example**: `FizzTokenMintPublicKey...`
+- **Description**: Solana token mint address for CAPS tokens (Atomic Fizz Caps SPL token)
+- **Example**: `CapsToken1111111111111111111111111111111111`
+- **Note**: Alias for CAPS_MINT - both refer to the same CAPS token mint address
+
+### TREASURY_WALLET
+- **Type**: String
+- **Required**: Yes (for CAPS ecosystem features)
+- **Description**: Treasury wallet address for the CAPS ecosystem (receives fees, manages liquidity)
+- **Example**: `Treasury1111111111111111111111111111111111`
+- **Note**: Used by Fizz.fun and other ecosystem features for fee collection
 
 ### VOUCHER_KEY
 - **Type**: String
