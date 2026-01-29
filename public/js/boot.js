@@ -118,21 +118,15 @@
     // Also dispatch legacy event for compatibility with modules still listening for pipboyReady
     window.dispatchEvent(new Event("pipboyReady"));
 
-    // Initialize quests module if needed
-    if (window.Game?.modules?.quests?.init) {
-      try {
-        Game.modules.quests.init();
-        console.log("[BOOT] quests module initialized");
-      } catch (err) {
-        console.warn("[BOOT] Failed to init quests module:", err);
-      }
-    }
+    // NOTE: Quest initialization moved to main.js initGame() to ensure proper load order
+    // Quest system needs player state to be fully initialized first
 
     // Trigger the courier NPC dialogue for first-time players
     // This shows the Fallout-style NPC dialogue with the first quest
+    // Delayed to allow game initialization to complete
     setTimeout(() => {
       triggerCourierDialogue();
-    }, 500);
+    }, 1500);
 
     // Worldmap hook
     if (window.Game?.modules?.worldmap?.onOpen) {

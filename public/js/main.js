@@ -31,6 +31,9 @@
     caps: 0,
     level: 1
   };
+  
+  // Expose PLAYER globally for quest module and other systems to sync
+  window.PLAYER = PLAYER;
 
   // ---------------------------
   // ON-CHAIN NFT STATE
@@ -882,6 +885,23 @@
     try {
       loadPlayerState();
       await loadAllData();
+
+      // Initialize quest module FIRST to give starter gear (vault jumpsuit, etc)
+      if (
+        window.Game &&
+        Game.modules &&
+        Game.modules.quests &&
+        typeof Game.modules.quests.init === "function"
+      ) {
+        // Pass DATA as gameState for quest module to use
+        Game.modules.quests.init(window.DATA);
+        safeLog("Quest module initialized with starter gear");
+        
+        // Sync equipped items from quest module to main PLAYER state
+        if (Game.player && Game.player.equipped && Game.player.equipped.armor) {
+          safeLog("Player equipped armor synced:", Game.player.equipped.armor.name);
+        }
+      }
 
       // Initialize mintables module if present
       if (
