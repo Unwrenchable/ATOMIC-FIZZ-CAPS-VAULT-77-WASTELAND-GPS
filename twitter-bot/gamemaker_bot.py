@@ -29,7 +29,7 @@ from flask import Flask, jsonify
 # Optional Redis (used if REDIS_URL is set)
 try:
     import redis
-except Exception:
+except ImportError:
     redis = None
 
 # ────────────────────────────────────────
@@ -193,21 +193,35 @@ if REDIS_URL and redis:
 
 def load_state():
     if use_redis:
-        s = redis_client.get(STATE_KEY)
-        if s:
-            return json.loads(s)
+        try:
+            s = redis_client.get(STATE_KEY)
+            if s:
+                return json.loads(s)
+        except (redis.RedisError, json.JSONDecodeError) as e:
+            print(f"⚠️  Error loading state from Redis: {e}. Using default state.")
+        except Exception as e:
+            print(f"⚠️  Unexpected error loading state: {e}. Using default state.")
         return {"games": {}, "last_tweet_id": None}
     else:
         if not GAMES_PATH.exists():
             return {"games": {}, "last_tweet_id": None}
         try:
             return json.loads(GAMES_PATH.read_text(encoding="utf-8"))
-        except Exception:
+        except json.JSONDecodeError as e:
+            print(f"⚠️  Error parsing games.json: {e}. Using default state.")
+            return {"games": {}, "last_tweet_id": None}
+        except Exception as e:
+            print(f"⚠️  Error reading games.json: {e}. Using default state.")
             return {"games": {}, "last_tweet_id": None}
 
 def save_state(state):
     if use_redis:
-        redis_client.set(STATE_KEY, json.dumps(state, ensure_ascii=False))
+        try:
+            redis_client.set(STATE_KEY, json.dumps(state, ensure_ascii=False))
+        except redis.RedisError as e:
+            print(f"⚠️  Error saving state to Redis: {e}. State not persisted.")
+        except Exception as e:
+            print(f"⚠️  Unexpected error saving state: {e}. State not persisted.")
         return
     # atomic file write
     tmp = None
@@ -216,12 +230,14 @@ def save_state(state):
         with os.fdopen(fd, "w", encoding="utf-8") as f:
             json.dump(state, f, ensure_ascii=False)
         Path(tmp).replace(GAMES_PATH)
+    except Exception as e:
+        print(f"⚠️  Error saving state to file: {e}. State not persisted.")
     finally:
         if tmp and Path(tmp).exists():
             try:
                 os.remove(tmp)
-            except Exception:
-                pass
+            except OSError:
+                pass  # Cleanup failed, not critical
 
 # ────────────────────────────────────────
 #  Twitter Bot Logic
@@ -230,18 +246,35 @@ def run_twitter_bot():
     """Main Twitter bot loop running in a separate thread"""
     global bot_stats
     
+    # Validate required environment variables
+    required_vars = ['API_KEY', 'API_SECRET', 'ACCESS_TOKEN', 'ACCESS_SECRET']
+    missing = [var for var in required_vars if not os.getenv(var)]
+    if missing:
+        error_msg = f"❌ Missing required environment variables: {', '.join(missing)}"
+        print(error_msg)
+        bot_stats["status"] = "error"
+        bot_stats["error"] = error_msg
+        return
+    
     # API SETUP (Tweepy Client v4)
-    client = tweepy.Client(
-        consumer_key=os.getenv("API_KEY"),
-        consumer_secret=os.getenv("API_SECRET"),
-        access_token=os.getenv("ACCESS_TOKEN"),
-        access_token_secret=os.getenv("ACCESS_SECRET"),
-        wait_on_rate_limit=True
-    )
+    try:
+        client = tweepy.Client(
+            consumer_key=os.getenv("API_KEY"),
+            consumer_secret=os.getenv("API_SECRET"),
+            access_token=os.getenv("ACCESS_TOKEN"),
+            access_token_secret=os.getenv("ACCESS_SECRET"),
+            wait_on_rate_limit=True
+        )
 
-    me = client.get_me(user_auth=True).data
-    bot_id = me.id
-    print(f"🎮 Gamemaker online as @{me.username} (ID: {bot_id})")
+        me = client.get_me(user_auth=True).data
+        bot_id = me.id
+        print(f"🎮 Gamemaker online as @{me.username} (ID: {bot_id})")
+    except Exception as e:
+        error_msg = f"❌ Failed to authenticate with Twitter API: {e}"
+        print(error_msg)
+        bot_stats["status"] = "error"
+        bot_stats["error"] = error_msg
+        return
     
     bot_stats["status"] = "running"
     bot_stats["bot_username"] = me.username
@@ -274,7 +307,13 @@ def run_twitter_bot():
                 # update last_tweet_id to the newest processed id
                 ids = [int(t.id) for t in mentions.data]
                 newest = max(ids)
-                last_tweet_id = max(int(last_tweet_id) if last_tweet_id else 0, newest)
+                # Handle both int and string last_tweet_id safely
+                try:
+                    current_last = int(last_tweet_id) if last_tweet_id else 0
+                except (ValueError, TypeError):
+                    print(f"⚠️  Invalid last_tweet_id: {last_tweet_id}, resetting to 0")
+                    current_last = 0
+                last_tweet_id = max(current_last, newest)
 
                 # build author map from includes
                 author_map = {}
@@ -297,7 +336,11 @@ def run_twitter_bot():
                         try:
                             u = client.get_user(id=tweet.author_id, user_auth=True).data
                             author_username = u.username if u else str(tweet.author_id)
-                        except Exception:
+                        except tweepy.TweepyException as e:
+                            print(f"⚠️  Could not fetch user {tweet.author_id}: {e}")
+                            author_username = str(tweet.author_id)
+                        except Exception as e:
+                            print(f"⚠️  Unexpected error fetching user: {e}")
                             author_username = str(tweet.author_id)
 
                     # Quick opt-out / quit
@@ -404,24 +447,26 @@ def run_twitter_bot():
             time.sleep(60)
 
 # ────────────────────────────────────────
-#  MAIN ENTRY POINT
+#  MAIN ENTRY POINT & BOT INITIALIZATION
 # ────────────────────────────────────────
+
+# Start bot thread when module is loaded (works with both gunicorn and direct run)
+print("=" * 60)
+print("🎮 GAMEMAKER TWITTER BOT - ATOMIC FIZZ CAPS")
+print("=" * 60)
+print(f"Redis URL: {REDIS_URL[:30] + '...' if REDIS_URL and len(REDIS_URL) > 30 else 'Not configured'}")
+print(f"Check interval: {CHECK_EVERY_SECONDS} seconds")
+print(f"Max mentions per cycle: {MAX_MENTIONS_PER_CYCLE}")
+print("=" * 60)
+
+# Start Twitter bot in a separate thread
+bot_thread = threading.Thread(target=run_twitter_bot, daemon=True)
+bot_thread.start()
+
 if __name__ == "__main__":
-    print("=" * 60)
-    print("🎮 GAMEMAKER TWITTER BOT - ATOMIC FIZZ CAPS")
-    print("=" * 60)
-    print(f"Redis URL: {REDIS_URL[:30] + '...' if REDIS_URL and len(REDIS_URL) > 30 else 'Not configured'}")
-    print(f"Check interval: {CHECK_EVERY_SECONDS} seconds")
-    print(f"Max mentions per cycle: {MAX_MENTIONS_PER_CYCLE}")
-    print("=" * 60)
-    
-    # Start Twitter bot in a separate thread
-    bot_thread = threading.Thread(target=run_twitter_bot, daemon=True)
-    bot_thread.start()
-    
-    # Start Flask server (keeps Render awake!)
+    # Direct run mode (development)
     port = int(os.getenv("PORT", "10000"))
-    print(f"🌐 Starting Flask server on port {port}...")
+    print(f"🌐 Starting Flask development server on port {port}...")
     print("🔥 The Gamemaker is ready. The arena awaits!")
     print("=" * 60)
     

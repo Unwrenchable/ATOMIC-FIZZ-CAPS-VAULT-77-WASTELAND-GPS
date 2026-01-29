@@ -40,7 +40,7 @@ Your code is already in the repository! The Twitter bot is in the `twitter-bot/`
    - **Root Directory:** `twitter-bot`
    - **Runtime:** `Python 3`
    - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `python gamemaker_bot.py`
+   - **Start Command:** Leave blank (uses Procfile with gunicorn)
 
    **Instance Type:**
    - Select **Free** (or Starter for guaranteed uptime)
