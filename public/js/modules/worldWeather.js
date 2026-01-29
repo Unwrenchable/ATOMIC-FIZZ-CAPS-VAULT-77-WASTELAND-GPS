@@ -75,9 +75,13 @@
         startedAt: Date.now()
       };
     } else if (weather.radStormFront) {
-      // Storm intensifies or dissipates
-      if (Math.random() < 0.1) weather.radStormFront.intensity++;
-      if (Math.random() < 0.05) weather.radStormFront.intensity--;
+      // Storm intensifies or dissipates (mutually exclusive)
+      const stormRoll = Math.random();
+      if (stormRoll < 0.1) {
+        weather.radStormFront.intensity++;
+      } else if (stormRoll < 0.15) {
+        weather.radStormFront.intensity--;
+      }
 
       // End storm
       if (weather.radStormFront.intensity <= 0) {
@@ -91,6 +95,11 @@
 
   // Biome weather roll
   function getBiomeWeather(biome) {
+    // Handle "auto" by defaulting to temperate_forest
+    if (!biome || biome === "auto") {
+      biome = "temperate_forest";
+    }
+    
     const pool = BIOME_WEATHER[biome] || ["clear"];
     return pool[Math.floor(Math.random() * pool.length)];
   }
@@ -141,11 +150,31 @@
     return continents[Math.floor(Math.random() * continents.length)];
   }
 
+  // Store interval ID for cleanup
+  let updateIntervalId = null;
+
   // Auto-update loop
-  function startUpdateLoop(worldState, intervalMs = 10000) {
-    setInterval(() => {
+  function startUpdateLoop(worldState, intervalMs = 5000) {
+    // Prevent multiple intervals
+    if (updateIntervalId !== null) {
+      console.warn("[worldWeather] Update loop already running");
+      return;
+    }
+    
+    updateIntervalId = setInterval(() => {
       updateGlobalWeather(worldState);
     }, intervalMs);
+    
+    console.log(`[worldWeather] Auto-update started (every ${intervalMs}ms)`);
+  }
+  
+  // Stop the update loop
+  function stopUpdateLoop() {
+    if (updateIntervalId !== null) {
+      clearInterval(updateIntervalId);
+      updateIntervalId = null;
+      console.log("[worldWeather] Auto-update stopped");
+    }
   }
 
   // Public API
@@ -162,9 +191,14 @@
 
     ensureWeather,
     
-    // Start automatic weather updates
+    // Start automatic weather updates (prevents duplicate intervals)
     startAutoUpdate(worldState, intervalMs) {
       startUpdateLoop(worldState, intervalMs);
+    },
+    
+    // Stop automatic weather updates
+    stopAutoUpdate() {
+      stopUpdateLoop();
     }
   };
 
@@ -182,8 +216,8 @@
         // Initialize weather
         ensureWeather(worldState);
         
-        // Start automatic updates every 10 seconds
-        startUpdateLoop(worldState, 10000);
+        // Start automatic updates every 5 seconds (matches weatherOverlay interval)
+        startUpdateLoop(worldState, 5000);
         
         console.log("[worldWeather] Weather engine initialized and auto-update started");
       }
