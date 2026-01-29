@@ -248,8 +248,17 @@ safeMount("/api/xp", api("xp"));
 safeMount("/api/caps", api("caps"));
 safeMount("/api/settings", api("settings"));
 
-// Add more game-related endpoints as you need them!
-// For example, settings router: safeMount("/api/settings", api("settings"));
+// GPS and Location features
+safeMount("/api/gps", api("gps"));
+safeMount("/api/location-claim", api("location-claim"));
+safeMount("/api/cooldowns", api("cooldowns"));
+safeMount("/api/rotation", api("rotation"));
+
+// Quest endings
+safeMount("/api/quest-endings", api("quest-endings"));
+
+// Fizz Fun token launcher
+safeMount("/api/fizz-fun", api("fizz-fun"));
 
 // Admin/advanced panel routes
 safeMount("/api/admin/player", api("adminPlayer"));
