@@ -35,7 +35,7 @@ function safeDecodeBase58(str, name = "key") {
   }
 }
 
-const USE_KMS = process.env.NODE_ENV === "production";
+const USE_KMS = !!process.env.KMS_SIGNING_KEY_ID;  // Use KMS only if explicitly configured
 let SERVER_KEYPAIR = null;
 let KEY_INIT_ERROR = null;
 
@@ -45,10 +45,12 @@ let KEY_INIT_ERROR = null;
  */
 function initServerKey() {
   if (USE_KMS) {
-    console.log("[loot-voucher] running in production mode; will use KMS for signing");
+    console.log("[loot-voucher] KMS_SIGNING_KEY_ID configured; will use AWS KMS for signing");
+    console.log("[loot-voucher] Note: AWS KMS costs $1+/month. See docs/LOCAL_SIGNING_SETUP.md for FREE alternative");
     return;
   }
 
+  console.log("[loot-voucher] Using FREE local signing (see docs/LOCAL_SIGNING_SETUP.md)");
   const secretEnv = process.env.SERVER_SECRET_KEY;
 
   // Check if key is present
