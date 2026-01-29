@@ -262,7 +262,8 @@ Overseer.handleInput = async function (raw) {
   // 2. Overseer.js command extensions (bridge to handlers.js)
   const handlers = window.overseerHandlers || {};
   if (handlers[cmd]) {
-    handlers[cmd](args);
+    // Handlers may be async, so await them
+    await handlers[cmd](args);
     return;
   }
 
