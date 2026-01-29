@@ -111,39 +111,47 @@ class AuthClient {
     const publicKey = wallet.publicKey.toBase58();
     const authUrl = getAuthApiUrl();
 
-    // 1. Get nonce
-    const nonceRes = await fetch(`${authUrl}/nonce/${publicKey}`);
-    const nonceJson = await safeJsonParse(nonceRes);
-    if (!nonceJson.ok) throw new Error(nonceJson.error || "Failed to get nonce");
+    try {
+      // 1. Get nonce
+      const nonceRes = await fetch(`${authUrl}/nonce/${publicKey}`);
+      const nonceJson = await safeJsonParse(nonceRes);
+      if (!nonceJson.ok) throw new Error(nonceJson.error || "Failed to get nonce");
 
-    const nonce = nonceJson.nonce;
-    const message = `Atomic Fizz Caps login: ${nonce}`;
-    const encoded = new TextEncoder().encode(message);
+      const nonce = nonceJson.nonce;
+      const message = `Atomic Fizz Caps login: ${nonce}`;
+      const encoded = new TextEncoder().encode(message);
 
-    // 2. Sign nonce
-    const signature = await wallet.signMessage(encoded);
-    const signatureBase58 = bs58.encode(signature);
+      // 2. Sign nonce
+      const signature = await wallet.signMessage(encoded);
+      const signatureBase58 = bs58.encode(signature);
 
-    // 3. Verify
-    const verifyRes = await fetch(`${authUrl}/verify`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        publicKey,
-        signature: signatureBase58,
-      }),
-    });
+      // 3. Verify
+      const verifyRes = await fetch(`${authUrl}/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          publicKey,
+          signature: signatureBase58,
+        }),
+      });
 
-    const verifyJson = await safeJsonParse(verifyRes);
-    if (!verifyJson.ok) throw new Error(verifyJson.error || "Signature verify failed");
+      const verifyJson = await safeJsonParse(verifyRes);
+      if (!verifyJson.ok) throw new Error(verifyJson.error || "Signature verify failed");
 
-    // 4. Save session
-    this.saveSession(verifyJson.sessionId, publicKey);
+      // 4. Save session
+      this.saveSession(verifyJson.sessionId, publicKey);
 
-    return {
-      wallet: publicKey,
-      sessionId: verifyJson.sessionId,
-    };
+      return {
+        wallet: publicKey,
+        sessionId: verifyJson.sessionId,
+      };
+    } catch (error) {
+      // Handle network errors and provide user-friendly messages
+      if (error.message === 'Failed to fetch') {
+        throw new Error('Authentication service unavailable. Please try again later or check your network connection.');
+      }
+      throw error;
+    }
   }
 
   async logout() {
@@ -153,12 +161,17 @@ class AuthClient {
     }
 
     const authUrl = getAuthApiUrl();
-    await fetch(`${authUrl}/logout`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${this.state.sessionId}`,
-      },
-    });
+    try {
+      await fetch(`${authUrl}/logout`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${this.state.sessionId}`,
+        },
+      });
+    } catch (error) {
+      // Logout should succeed locally even if the server call fails
+      console.warn('Logout API call failed, but clearing local session:', error.message);
+    }
 
     this.clearSession();
   }
