@@ -24,7 +24,13 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/favicon.png" />
 
-    <!-- Content Security Policy to allow external resources -->
+    <!-- Content Security Policy to allow external resources
+         Note: 'unsafe-eval' is required for:
+         - Phantom Wallet SDK (uses eval for dynamic code generation)
+         - WalletConnect (uses eval in their connection protocol)
+         - Leaflet mapping library (uses Function constructor for some operations)
+         This is a known limitation of these Web3 wallet libraries.
+         All other CSP directives remain strict for XSS protection. -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
       script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org https://vercel.live 'unsafe-inline' 'unsafe-eval';
