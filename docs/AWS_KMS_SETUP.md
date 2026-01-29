@@ -476,7 +476,7 @@ KMS_SIGNING_KEY_ID=arn:aws:kms:us-west-2:123456789012:key/YOUR_KEY_ID
 **Solution**: Key must be:
 - Type: `Asymmetric`
 - Usage: `Sign and verify`
-- Spec: `ED25519` or `ECC_SECG_P256K1` (or other signing-compatible spec)
+- Spec: `ECC_NIST_EDWARDS25519` or `ECC_SECG_P256K1` (or other signing-compatible spec)
 
 ### Warning: "KMS_SIGNING_KEY_ID not set"
 

@@ -114,9 +114,9 @@ async function listKeys() {
           log(`\n   💡 To use this key, add to your .env:`, "yellow");
           log(`   KMS_SIGNING_KEY_ID=${metadata.Arn}`);
           
-          // Determine algorithm
-          if (metadata.KeySpec === 'ED25519') {
-            log(`   KMS_SIGNING_ALGORITHM=SIGN_VERIFY`);
+          // Determine algorithm based on AWS key spec
+          if (metadata.KeySpec === 'ECC_NIST_EDWARDS25519') {
+            log(`   KMS_SIGNING_ALGORITHM=ED25519_SHA_512`);
           } else if (metadata.KeySpec.includes('ECC')) {
             log(`   KMS_SIGNING_ALGORITHM=ECDSA_SHA_256`);
           }
@@ -152,7 +152,7 @@ async function createKey(algorithm = 'ECDSA', alias = null) {
   let keySpec, signingAlgorithm;
   if (algorithm.toUpperCase() === 'ED25519') {
     keySpec = 'ECC_NIST_EDWARDS25519';  // AWS key spec for Ed25519
-    signingAlgorithm = 'ED25519_SHA_512';  // AWS signing algorithm for Ed25519
+    signingAlgorithm = 'ED25519_SHA_512';  // AWS KMS-specific signing algorithm (uses SHA-512 internally)
   } else if (algorithm.toUpperCase() === 'ECDSA') {
     keySpec = 'ECC_SECG_P256K1';
     signingAlgorithm = 'ECDSA_SHA_256';
@@ -269,8 +269,9 @@ async function describeKey(keyId) {
       log("\n📝 To use this key, add to your .env:", "yellow");
       log(`   KMS_SIGNING_KEY_ID=${metadata.Arn}`);
       
-      if (metadata.KeySpec === 'ED25519') {
-        log(`   KMS_SIGNING_ALGORITHM=SIGN_VERIFY`);
+      // Determine algorithm based on AWS key spec
+      if (metadata.KeySpec === 'ECC_NIST_EDWARDS25519') {
+        log(`   KMS_SIGNING_ALGORITHM=ED25519_SHA_512`);
       } else if (metadata.KeySpec.includes('ECC')) {
         log(`   KMS_SIGNING_ALGORITHM=ECDSA_SHA_256`);
       }
