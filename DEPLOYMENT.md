@@ -51,6 +51,8 @@ The CORS configuration automatically allows any `*.vercel.app` and `*.onrender.c
 
 ### Environment Variables
 
+**📋 For a complete alphabetical reference of all environment variables, see [ENVIRONMENT_VARIABLES.md](ENVIRONMENT_VARIABLES.md)**
+
 #### Backend (Render)
 
 Set these environment variables in your Render service dashboard:
@@ -60,8 +62,8 @@ Set these environment variables in your Render service dashboard:
   - The backend supports wildcard patterns like `https://*.vercel.app` and `https://*.onrender.com` for preview deployments
   - Multiple origins can be comma-separated
 - `REDIS_URL` (required for player state)
-- `PLAYER_AUTH_SECRET` (required for authentication)
-- Other service-specific variables (see `backend/.env.example`)
+- `SERVER_SECRET_KEY` (required for authentication)
+- Other service-specific variables (see `backend/.env.example` or [ENVIRONMENT_VARIABLES.md](ENVIRONMENT_VARIABLES.md))
 
 **Note**: If using Cloudflare proxy, temporarily disable it during CORS verification to ensure proper origin headers are sent.
 
