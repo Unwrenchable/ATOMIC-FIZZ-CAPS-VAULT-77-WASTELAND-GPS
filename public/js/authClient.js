@@ -60,6 +60,9 @@ class AuthClient {
     this.restoreSession();
   }
 
+  // Error message constants
+  static AUTH_SERVICE_UNAVAILABLE = 'Authentication service unavailable. Please try again later or check your network connection.';
+
   saveSession(sessionId, wallet) {
     localStorage.setItem("sessionId", sessionId);
     localStorage.setItem("wallet", wallet);
@@ -112,7 +115,14 @@ class AuthClient {
     const authUrl = getAuthApiUrl();
 
     // 1. Get nonce
-    const nonceRes = await fetch(`${authUrl}/nonce/${publicKey}`);
+    let nonceRes;
+    try {
+      nonceRes = await fetch(`${authUrl}/nonce/${publicKey}`);
+    } catch (fetchError) {
+      // Network error during fetch
+      throw new Error(AuthClient.AUTH_SERVICE_UNAVAILABLE);
+    }
+    
     const nonceJson = await safeJsonParse(nonceRes);
     if (!nonceJson.ok) throw new Error(nonceJson.error || "Failed to get nonce");
 
@@ -120,19 +130,25 @@ class AuthClient {
     const message = `Atomic Fizz Caps login: ${nonce}`;
     const encoded = new TextEncoder().encode(message);
 
-    // 2. Sign nonce
+    // 2. Sign nonce (this can throw if user rejects)
     const signature = await wallet.signMessage(encoded);
     const signatureBase58 = bs58.encode(signature);
 
     // 3. Verify
-    const verifyRes = await fetch(`${authUrl}/verify`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        publicKey,
-        signature: signatureBase58,
-      }),
-    });
+    let verifyRes;
+    try {
+      verifyRes = await fetch(`${authUrl}/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          publicKey,
+          signature: signatureBase58,
+        }),
+      });
+    } catch (fetchError) {
+      // Network error during fetch
+      throw new Error(AuthClient.AUTH_SERVICE_UNAVAILABLE);
+    }
 
     const verifyJson = await safeJsonParse(verifyRes);
     if (!verifyJson.ok) throw new Error(verifyJson.error || "Signature verify failed");
@@ -153,12 +169,17 @@ class AuthClient {
     }
 
     const authUrl = getAuthApiUrl();
-    await fetch(`${authUrl}/logout`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${this.state.sessionId}`,
-      },
-    });
+    try {
+      await fetch(`${authUrl}/logout`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${this.state.sessionId}`,
+        },
+      });
+    } catch (error) {
+      // Logout should succeed locally even if the server call fails
+      console.warn('Logout API call failed, but clearing local session:', error.message);
+    }
 
     this.clearSession();
   }
