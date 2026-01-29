@@ -40,6 +40,7 @@ Today, Vault‑Tec is thrilled to unveil the **Vault‑77 Wasteland GPS**, a Pip
 - 🏛️ **Join factions and build reputation** (NEW!)
 - 🤖 **Chat with the Overseer AI** (NEW!)
 - 🌉 **Bridge assets across 35+ blockchains** (NEW!)
+- 🎮 **Play Tic-Tac-Toe with the Gamemaker on Twitter** (NEW!)
 
 All from the comfort of their Wrist UI wrist-mounted survival assistant.
 
@@ -218,6 +219,18 @@ Meet colorful characters across the wasteland:
 
 ---
 
+### 🎮 TWITTER GAMEMAKER BOT *(NEW!)*
+Battle the Gamemaker in Tic-Tac-Toe on Twitter:
+- Interactive gameplay via Twitter mentions
+- Hunger Games themed personality
+- Persistent game state across restarts
+- Reuses your existing Redis infrastructure
+- Never sleeps - runs 24/7 on Render
+
+*May the odds be ever in your favor. Deploy in 5 minutes: [twitter-bot/QUICKSTART.md](twitter-bot/QUICKSTART.md)*
+
+---
+
 ## 🔧 TECHNICAL SPECIFICATIONS
 
 ### Architecture
@@ -231,9 +244,11 @@ Meet colorful characters across the wasteland:
 │  • Phantom Wallet           │  • Solana Integration             │
 │  • PWA Support              │  • Rate Limiting & Auth           │
 ├─────────────────────────────────────────────────────────────────┤
-│                        BLOCKCHAIN (Solana)                      │
-│  • FIZZ SPL Token           │  • Metaplex NFT Integration       │
-│  • Wormhole Bridge          │  • On-chain Programs (Anchor)     │
+│  TWITTER BOT (Render)       │  BLOCKCHAIN (Solana)              │
+│  • Python/Flask             │  • FIZZ SPL Token                 │
+│  • Tweepy v2 API            │  • Metaplex NFT Integration       │
+│  • Shared Redis             │  • Wormhole Bridge                │
+│  • 24/7 Uptime              │  • On-chain Programs (Anchor)     │
 └─────────────────────────────────────────────────────────────────┘
 ```
 ╔═══════════════════════════════════════════════════════════════════╗
