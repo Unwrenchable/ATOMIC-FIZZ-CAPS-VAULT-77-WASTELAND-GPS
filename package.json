@@ -8,8 +8,8 @@
     "node": ">=18.0.0 <=20.999.999"
   },
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "echo \"No tests yet\" && exit 0"
