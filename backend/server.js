@@ -81,11 +81,71 @@ app.use(
   })
 );
 
-// Security headers
+// Security headers with proper CSP configuration
+// CSP allows the necessary external resources while maintaining security
 app.use(
   helmet({
-    contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'", // Required for inline scripts in index.html
+          "https://unpkg.com",
+          "https://cdn.jsdelivr.net",
+          "https://www.gstatic.com",
+          "https://api.phantom.app",
+          "https://*.phantom.app",
+          "https://wallet.phantom.app",
+          "https://*.walletconnect.com",
+          "https://*.walletconnect.org"
+        ],
+        connectSrc: [
+          "'self'",
+          "https://unpkg.com",
+          "https://server.arcgisonline.com",
+          "https://*.arcgisonline.com",
+          "https://*.tile.openstreetmap.org",
+          "https://*.basemaps.cartocdn.com",
+          "https://atomicfizzcaps.xyz",
+          "https://www.atomicfizzcaps.xyz",
+          "https://api.atomicfizzcaps.xyz",
+          "https://*.onrender.com",
+          "https://*.vercel.app",
+          "https://api.mainnet-beta.solana.com",
+          "https://api.devnet.solana.com",
+          "https://api.phantom.app",
+          "https://*.phantom.app",
+          "https://wallet.phantom.app",
+          "https://*.walletconnect.com",
+          "https://*.walletconnect.org",
+          "https://*.infura.io",
+          "https://polygon-rpc.com",
+          "https://mainnet.infura.io",
+          "wss://api.mainnet-beta.solana.com",
+          "wss://api.devnet.solana.com",
+          "wss://*.walletconnect.com",
+          "wss://*.walletconnect.org"
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'", // Required for dynamic styles
+          "https://fonts.googleapis.com",
+          "https://unpkg.com"
+        ],
+        imgSrc: ["'self'", "data:", "https:", "blob:"],
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com",
+          "data:"
+        ],
+        mediaSrc: ["'self'", "data:", "https:"],
+        objectSrc: ["'none'"],
+        frameSrc: ["'self'"],
+        baseUri: ["'self'"]
+      }
+    },
+    crossOriginEmbedderPolicy: false, // Keep disabled for external resource compatibility
   })
 );
 
