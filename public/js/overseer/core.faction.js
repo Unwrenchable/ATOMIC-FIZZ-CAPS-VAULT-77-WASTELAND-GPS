@@ -93,7 +93,7 @@
       return "HOSTILE";
     },
 
-    scanTerritory() {
+    async scanTerritory() {
       const world = window.world;
       const gs = window.gameState;
 
@@ -127,7 +127,10 @@
 
       overseerSay(`Territory Scan: ${faction.name}`);
       overseerSay(`Reputation: ${label} (${reputation})`);
-      overseerSay(personality.speak());
+      if (personality && typeof personality.speak === "function") {
+        const line = await personality.speak("faction territory scan");
+        overseerSay(line);
+      }
 
       return factionId;
     },
@@ -142,7 +145,7 @@
   if (!window.overseerHandlers) window.overseerHandlers = {};
   const handlers = window.overseerHandlers;
 
-  handlers.faction = function (args) {
+  handlers.faction = async function (args) {
     const sub = (args[0] || "").toLowerCase();
 
     if (!sub) {
@@ -198,7 +201,7 @@
     }
 
     if (sub === "scan") {
-      factionApi.scanTerritory();
+      await factionApi.scanTerritory();
       return;
     }
 

@@ -127,7 +127,7 @@
   // TERMINAL COMMAND: overseer (admin)
   // -------------------------------------------------------------------------
 
-  handlers.overseer = function (args) {
+  handlers.overseer = async function (args) {
     if (!args.length) {
       overseerSay("Specify a subcommand: override, logs, purge, broadcast, lockdown, reveal.");
       return;
@@ -137,7 +137,10 @@
 
     if (sub === "override") {
       overseerSay("Administrative override acknowledged. Vault-Tec frowns upon unauthorized empowerment.");
-      overseerSay(window.overseerPersonality.speak());
+      if (window.overseerPersonality && typeof window.overseerPersonality.speak === "function") {
+        const line = await window.overseerPersonality.speak("admin override");
+        overseerSay(line);
+      }
       return;
     }
 
