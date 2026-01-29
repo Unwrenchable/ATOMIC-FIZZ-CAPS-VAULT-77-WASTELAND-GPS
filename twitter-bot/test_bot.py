@@ -20,7 +20,7 @@ print("🧪 Testing Gamemaker Bot Core Functions\n")
 # Import game functions (before Flask app starts)
 from gamemaker_bot import (
     render_board, check_winner, is_full, 
-    gamemaker_move, contains_command, extract_move,
+    bot_move, contains_command, extract_move,
     EMPTY, X, O
 )
 
@@ -62,7 +62,7 @@ print("  Full board detection works\n")
 # Test 6: AI move selection
 print("✓ Test 6: AI Move Selection")
 test_board = [X, O, EMPTY, EMPTY, X, O, EMPTY, EMPTY, X]
-move = gamemaker_move(test_board)
+move = bot_move(test_board)
 assert move in [2, 3, 6, 7], f"AI selected invalid move: {move}"
 assert test_board[move] == EMPTY, "AI tried to move on occupied square"
 print(f"  AI selected valid move: position {move}\n")

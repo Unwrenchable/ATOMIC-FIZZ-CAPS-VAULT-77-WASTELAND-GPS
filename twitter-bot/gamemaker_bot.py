@@ -92,8 +92,8 @@ MAX_MENTIONS_PER_CYCLE = int(os.getenv("MAX_MENTIONS_PER_CYCLE", "5"))
 #  GAME STATE (persisted)
 # ────────────────────────────────────────
 EMPTY = "⬜"
-X = "❌"    # human
-O = "⭕"    # bot
+X = "❌"    # human player
+O = "⭕"    # bot player
 
 WIN_COMBOS = [
     [0,1,2], [3,4,5], [6,7,8],
@@ -102,42 +102,42 @@ WIN_COMBOS = [
 ]
 
 GAMES_PATH = Path("games.json")
-STATE_KEY = "gm:state"   # Redis key (stores JSON with games and last_tweet_id)
+STATE_KEY = "9dttt:state"   # Redis key (stores JSON with games and last_tweet_id)
 
 # ────────────────────────────────────────
-#  Personality lines (unchanged)
+#  Personality lines - 9D Tic Tac Toe themed
 # ────────────────────────────────────────
-GM_LINES = {
+BOT_MESSAGES = {
     "start": [
-        "Welcome to the arena, tribute! You = ❌   Gamemaker = ⭕\nMay the odds be ever in your favor…\nReply with 1–9 to claim your square.\nLet the games begin! 🔥",
-        "A new player enters the Games… Bold choice.\nYou play as ❌. Make your first move, tribute. 1–9.",
-        "The cannon sounds. The arena awaits.\nPlace your mark (1–9), or perish. ⏳"
+        "🎮 Welcome to 9D Tic Tac Toe! You play as ❌, I play as ⭕\nThink strategically across dimensions! Reply with 1–9 to make your move.\nLet's explore the multiverse of strategy! ✨",
+        "⚡ A new challenger enters the dimensional grid!\nYou = ❌, Bot = ⭕\nEvery move ripples across the strategic plane. Choose 1–9 to begin! 🎯",
+        "🌌 Welcome to the ultimate strategy challenge!\nPlace your mark (1–9) and let's see how deep your tactical thinking goes.\nIn 9D TTT, every move matters! 🧠"
     ],
     "move_ok": [
-        "A cunning strike… The board trembles.",
-        "Impressive, tribute. But the Gamemaker is watching.",
-        "Your move is registered. Now… witness mine."
+        "🎯 Brilliant tactical positioning! The board shifts in your favor...",
+        "✨ Nice move! I can see you're thinking dimensionally.",
+        "🧠 Strategic! Your move has been registered. Now witness my counter-strategy..."
     ],
     "invalid": [
-        "Foolish tribute. That square is already claimed.",
-        "The arena rejects your plea. Choose an empty cell (1–9).",
-        "Such insolence… Try again, if you dare."
+        "⚠️ That square is already occupied! Choose an empty cell (1–9).",
+        "🤔 Oops! That space is taken. Try another position 1–9.",
+        "💡 Strategy tip: Pick an available square marked with ⬜ (1–9)."
     ],
     "human_win": [
-        "…Impossible. You have bested the Gamemaker.\nVictory is yours… for now. 🎉",
-        "The crowd roars! A rare upset in the arena.\nYou win, tribute. Magnificent."
+        "🎉 VICTORY! You've mastered the dimensional grid!\nYour strategic thinking was flawless. Want to go again? 🏆",
+        "👑 Incredible! You've conquered the 9D challenge!\nYour tactical prowess is impressive. Ready for another round? ✨"
     ],
     "bot_win": [
-        "The odds were never in your favor.\nThe Gamemaker claims victory. 😈",
-        "Another tribute falls… Delicious.",
-        "Game over. Better luck in the next Games."
+        "🤖 I win this round! But your strategy was solid.\nWant to try again? Every game makes you sharper! 💪",
+        "✨ Victory is mine this time! But you're learning fast.\nReady for a rematch? The grid awaits! 🎮",
+        "🎯 Game over! That was a great match.\nYour next game will be even better. Play again? 🔄"
     ],
     "draw": [
-        "A stalemate… How dreadfully dull.\nNo victor today. The arena is displeased.",
-        "Neither triumphs. The Capitol is not amused."
+        "🤝 A perfect stalemate! Our strategies were evenly matched.\nThat's the beauty of 9D TTT. Another round? ⚖️",
+        "⚡ Draw! Both players played brilliantly.\nIn the multiverse of possibilities, we found perfect balance. Again? 🌌"
     ],
     "quit": [
-        "The tribute flees the arena… Cowardice noted.\nGame terminated. You may return… if you grow braver."
+        "👋 Thanks for playing 9D Tic Tac Toe!\nCome back anytime for another strategic challenge. See you in the grid! 🎮"
     ]
 }
 
@@ -157,7 +157,8 @@ def check_winner(board, mark):
 def is_full(board):
     return all(c != EMPTY for c in board)
 
-def gamemaker_move(board):
+def bot_move(board):
+    """Select bot's next move - currently random selection"""
     empty = [i for i, c in enumerate(board) if c == EMPTY]
     return random.choice(empty) if empty else None
 
@@ -292,7 +293,7 @@ def run_twitter_bot():
     while True:
         try:
             bot_stats["last_check"] = datetime.now().isoformat()
-            print(f"[{datetime.now()}] Scanning the arena… (last_id={last_tweet_id})")
+            print(f"[{datetime.now()}] Scanning for new challenges… (last_id={last_tweet_id})")
 
             mentions = client.get_users_mentions(
                 id=bot_id,
@@ -348,14 +349,14 @@ def run_twitter_bot():
                     if contains_command(text, ["stop", "quit", "end game", "unsubscribe", "no more"]):
                         if str(conv_id) in games:
                             del games[str(conv_id)]
-                        reply_text = f"@{author_username} {random.choice(GM_LINES['quit'])}"
+                        reply_text = f"@{author_username} {random.choice(BOT_MESSAGES['quit'])}"
                         client.create_tweet(text=reply_text[:280], in_reply_to_tweet_id=tweet.id)
                         continue
 
                     # Start game
-                    if contains_command(text, ["start", "new game", "play", "enter arena", "begin", "let the games"]):
+                    if contains_command(text, ["start", "new game", "play", "challenge", "begin", "let's play"]):
                         if str(conv_id) in games:
-                            reply_text = f"@{author_username} The Games are already underway in this thread, tribute."
+                            reply_text = f"@{author_username} A game is already in progress in this thread! Finish this one first or start a new thread."
                         else:
                             board = [EMPTY] * 9
                             games[str(conv_id)] = {
@@ -364,7 +365,7 @@ def run_twitter_bot():
                                 "status": "active",
                                 "last_tweet_id": tweet.id
                             }
-                            reply_text = f"@{author_username} {random.choice(GM_LINES['start'])}\n\n{render_board(board)}"
+                            reply_text = f"@{author_username} {random.choice(BOT_MESSAGES['start'])}\n\n{render_board(board)}"
                         client.create_tweet(text=reply_text[:280], in_reply_to_tweet_id=tweet.id)
                         # persist after state change
                         save_state({"games": games, "last_tweet_id": str(last_tweet_id)})
@@ -378,12 +379,12 @@ def run_twitter_bot():
 
                         pos = extract_move(raw_text)
                         if pos is None:
-                            reply_text = f"@{author_username} Speak clearly, tribute. Reply with a number 1–9.\n\n{render_board(board)}"
+                            reply_text = f"@{author_username} Please reply with a number 1–9 to make your move.\n\n{render_board(board)}"
                             client.create_tweet(text=reply_text[:280], in_reply_to_tweet_id=tweet.id)
                             continue
 
                         if not (0 <= pos < 9) or board[pos] != EMPTY:
-                            reply_text = f"@{author_username} {random.choice(GM_LINES['invalid'])}\n\n{render_board(board)}"
+                            reply_text = f"@{author_username} {random.choice(BOT_MESSAGES['invalid'])}\n\n{render_board(board)}"
                             client.create_tweet(text=reply_text[:280], in_reply_to_tweet_id=tweet.id)
                             continue
 
@@ -395,36 +396,36 @@ def run_twitter_bot():
 
                         if check_winner(board, X):
                             game["status"] = "ended"
-                            reply_text = f"@{author_username} {random.choice(GM_LINES['human_win'])}\n\n{board_str}\nReply 'start' for a new arena."
+                            reply_text = f"@{author_username} {random.choice(BOT_MESSAGES['human_win'])}\n\n{board_str}\nReply 'start' for a new game!"
                             client.create_tweet(text=reply_text[:280], in_reply_to_tweet_id=tweet.id)
                             save_state({"games": games, "last_tweet_id": str(last_tweet_id)})
                             bot_stats["active_games"] = len([g for g in games.values() if g.get("status") == "active"])
                             continue
                         elif is_full(board):
                             game["status"] = "ended"
-                            reply_text = f"@{author_username} {random.choice(GM_LINES['draw'])}\n\n{board_str}\nA new challenge awaits – say 'start'."
+                            reply_text = f"@{author_username} {random.choice(BOT_MESSAGES['draw'])}\n\n{board_str}\nReady for another strategic challenge? Say 'start'!"
                             client.create_tweet(text=reply_text[:280], in_reply_to_tweet_id=tweet.id)
                             save_state({"games": games, "last_tweet_id": str(last_tweet_id)})
                             bot_stats["active_games"] = len([g for g in games.values() if g.get("status") == "active"])
                             continue
 
-                        # Gamemaker moves
-                        gm_pos = gamemaker_move(board)
-                        if gm_pos is not None:
-                            board[gm_pos] = O
+                        # Bot moves
+                        bot_pos = bot_move(board)
+                        if bot_pos is not None:
+                            board[bot_pos] = O
                             board_str = render_board(board)
 
                             if check_winner(board, O):
                                 game["status"] = "ended"
-                                reply_text = f"@{author_username} {random.choice(GM_LINES['bot_win'])}\n\n{board_str}\nReply 'start' if you dare return."
+                                reply_text = f"@{author_username} {random.choice(BOT_MESSAGES['bot_win'])}\n\n{board_str}\nReply 'start' for another match!"
                             elif is_full(board):
                                 game["status"] = "ended"
-                                reply_text = f"@{author_username} {random.choice(GM_LINES['draw'])}\n\n{board_str}"
+                                reply_text = f"@{author_username} {random.choice(BOT_MESSAGES['draw'])}\n\n{board_str}"
                             else:
-                                reply_text = f"@{author_username} {random.choice(GM_LINES['move_ok'])}\n\n{board_str}\nYour move, tribute. (1–9)"
+                                reply_text = f"@{author_username} {random.choice(BOT_MESSAGES['move_ok'])}\n\n{board_str}\nYour turn! Reply with 1–9."
                         else:
                             # Shouldn't happen (board full checked above)
-                            reply_text = f"@{author_username} The arena is silent…\n\n{board_str}"
+                            reply_text = f"@{author_username} Game complete!\n\n{board_str}"
 
                         client.create_tweet(text=reply_text[:280], in_reply_to_tweet_id=tweet.id)
                         save_state({"games": games, "last_tweet_id": str(last_tweet_id)})
