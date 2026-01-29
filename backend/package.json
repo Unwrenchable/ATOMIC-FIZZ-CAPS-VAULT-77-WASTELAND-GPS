@@ -17,7 +17,11 @@
   "bs58": "^5.0.0",
   "uuid": "^9.0.1",
   "express-rate-limit": "^7.4.0",
-  "helmet": "^7.1.0"
+  "helmet": "^7.1.0",
+  "node-fetch": "^2.7.0",
+  "@solana/web3.js": "^1.98.4",
+  "@solana/spl-token": "^0.1.8",
+  "@coral-xyz/anchor": "^0.32.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
