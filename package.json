@@ -22,14 +22,13 @@
     "web3",
     "gps",
     "atomic-fizz",
-    "metaplex",
     "spl-token",
-    "random-encounters"
+    "random-encounters",
+    "helius"
   ],
   "author": "Unwrenchable",
   "license": "MIT",
   "dependencies": {
-    "@metaplex-foundation/js": "^0.19.5",
     "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.98.4",
     "bs58": "^6.0.0",

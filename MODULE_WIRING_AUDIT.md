@@ -212,8 +212,11 @@ REDIS_URL=redis://localhost:6379  # For player state
 
 ### ✅ Optional (Production/Advanced)
 ```bash
-# Metaplex & minting
-METAPLEX_COLLECTION_ADDRESS=your_collection
+# NFT features (optional - see docs/NFT_INTEGRATION_GUIDE.md)
+HELIUS_API_KEY=your_helius_api_key  # For NFT display (recommended)
+# Note: Old Metaplex JS SDK is obsolete - use Umi/Kit SDK if minting needed
+
+# Token economy
 CAPS_MINT=your_token_mint
 TREASURY_WALLET=your_wallet
 
@@ -298,7 +301,7 @@ ADMIN_MINT_SECRET=secret_key
 2. **Configure Redis** for player state
 3. **Add Helius API Key** for NFT features
 4. **Test with Real Wallets** on devnet
-5. **Document Metaplex Integration**
+5. **Review NFT Integration Guide** (docs/NFT_INTEGRATION_GUIDE.md)
 6. **Create Deployment Scripts**
 
 ---

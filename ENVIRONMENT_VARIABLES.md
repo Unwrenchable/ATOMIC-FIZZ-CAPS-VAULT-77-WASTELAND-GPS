@@ -127,15 +127,20 @@ This document provides a comprehensive alphabetical reference of all environment
 ### KMS_SIGNING_ALGORITHM
 - **Type**: String
 - **Required**: No (only if using AWS KMS)
-- **Default**: `ECDSA_SHA_256`
-- **Description**: AWS KMS signing algorithm
+- **Default**: `ECDSA_SHA_256` (for ECC_SECG_P256K1 keys, most compatible)
+- **Description**: AWS KMS signing algorithm to use with your key
+- **Options**:
+  - `ECDSA_SHA_256` - For ECC_SECG_P256K1 keys (recommended - most compatible)
+  - `ED25519_SHA_512` - For ECC_NIST_EDWARDS25519 keys (newer, faster, requires recent AWS SDK)
 - **Example**: `ECDSA_SHA_256`
+- **Note**: Must match your KMS key spec. See [docs/AWS_KMS_SETUP.md](docs/AWS_KMS_SETUP.md) for details
 
 ### KMS_SIGNING_KEY_ID
 - **Type**: String
 - **Required**: No (only if using AWS KMS)
 - **Description**: AWS KMS key ARN for signing operations
 - **Example**: `arn:aws:kms:us-west-2:123456789012:key/abcd-efgh`
+- **Setup Guide**: See [docs/AWS_KMS_SETUP.md](docs/AWS_KMS_SETUP.md) for complete instructions on creating and retrieving your KMS key ARN
 
 ### LOOT_COOLDOWN_SECONDS
 - **Type**: Integer
