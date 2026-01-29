@@ -133,6 +133,21 @@
     availableQuests: {},  // Quests offered but not accepted yet
 
     init(gameState) {
+      // Prevent multiple initializations (check localStorage for persistence across refreshes)
+      const initKey = "afc_quests_initialized_session";
+      if (sessionStorage.getItem(initKey)) {
+        console.log("[quests] Already initialized this session, skipping");
+        // Still need to set up gs and load state for returning players
+        this.gs = gameState || window.gameState || window.DATA || {};
+        if (!this.gs.quests) this.gs.quests = {};
+        if (!this.gs.player) this.gs.player = { xp: 0, caps: 0 };
+        if (!this.gs.inventory) this.gs.inventory = { weapons: [], armor: [], consumables: [], ammo: [], tools: [], questItems: [] };
+        this.loadAvailableQuests();
+        this.giveStarterGear(); // This checks its own flag
+        return;
+      }
+      sessionStorage.setItem(initKey, "true");
+      
       this.gs = gameState || window.gameState || window.DATA || {};
       if (!this.gs.quests) this.gs.quests = {};
       if (!this.gs.player) this.gs.player = { xp: 0, caps: 0 };
@@ -141,16 +156,27 @@
       // Load saved available quests
       this.loadAvailableQuests();
       
-      // Give starter gear on first init
+      // Give starter gear on first init (checks localStorage internally)
       this.giveStarterGear();
       
-      // Auto-trigger the wake_up quest courier on first load
-      this.triggerNPCQuestDelivery("wake_up");
+      // Auto-trigger the wake_up quest courier ONLY on first load (new players)
+      // Check localStorage to avoid retriggering for returning players
+      const wakeUpKey = "afc_wake_up_triggered";
+      if (!localStorage.getItem(wakeUpKey)) {
+        const triggered = this.triggerNPCQuestDelivery("wake_up");
+        if (triggered) {
+          localStorage.setItem(wakeUpKey, "true");
+        }
+      }
       
       // Re-show notifications for any available quests that were persisted
-      // This ensures users see the notification even after page refresh
+      // Use sessionStorage to track shown notifications (once per browser session)
       Object.keys(this.availableQuests).forEach(questId => {
-        this.showQuestOfferNotification(questId);
+        const shownKey = `afc_quest_notif_shown_${questId}`;
+        if (!sessionStorage.getItem(shownKey)) {
+          this.showQuestOfferNotification(questId);
+          sessionStorage.setItem(shownKey, "true");
+        }
       });
     },
 
@@ -158,18 +184,22 @@
     // STARTER GEAR SYSTEM
     // ============================================================
     giveStarterGear() {
+      // Ensure player equipped slots exist
+      if (!Game.player) Game.player = {};
+      if (!Game.player.equipped) Game.player.equipped = {};
+      
       // Check if we've already given starter gear (stored in localStorage)
       const starterKey = "afc_starter_gear_given";
-      if (localStorage.getItem(starterKey)) {
+      const alreadyGiven = localStorage.getItem(starterKey);
+      
+      if (alreadyGiven) {
         this.starterGearGiven = true;
+        // For returning players, restore their equipped items from localStorage
+        this.loadEquippedItems();
         return;
       }
 
       console.log("[quests] Giving starter gear to new player");
-
-      // Ensure player equipped slots exist
-      if (!Game.player) Game.player = {};
-      if (!Game.player.equipped) Game.player.equipped = {};
 
       // Add each starter item to appropriate inventory category
       STARTER_GEAR.forEach(item => {
@@ -218,12 +248,52 @@
         }
       });
 
-      // Mark as given
+      // Mark as given and save equipped items
       localStorage.setItem(starterKey, "true");
       this.starterGearGiven = true;
+      this.saveEquippedItems();
 
       // Dispatch event for UI to update
       window.dispatchEvent(new CustomEvent("inventoryUpdated", { detail: { reason: "starter_gear" } }));
+    },
+
+    // Save equipped items to localStorage
+    saveEquippedItems() {
+      try {
+        const equipped = Game.player?.equipped || {};
+        localStorage.setItem("afc_equipped_items", JSON.stringify(equipped));
+      } catch (e) {
+        console.warn("[quests] Failed to save equipped items:", e);
+      }
+    },
+
+    // Load equipped items from localStorage (for returning players)
+    loadEquippedItems() {
+      try {
+        const saved = localStorage.getItem("afc_equipped_items");
+        if (saved) {
+          const equipped = JSON.parse(saved);
+          Game.player.equipped = equipped;
+          console.log("[quests] Restored equipped items for returning player:", equipped);
+        } else {
+          // No saved equipped items - give them the default jumpsuit
+          // This handles the edge case where flag was set but equipped wasn't saved
+          const jumpsuit = STARTER_GEAR.find(item => item.type === "armor" && item.equipped);
+          if (jumpsuit && !Game.player.equipped.armor) {
+            Game.player.equipped.armor = {
+              id: jumpsuit.id,
+              name: jumpsuit.name,
+              type: jumpsuit.type,
+              quantity: 1,
+              equipped: true
+            };
+            console.log("[quests] Restored default jumpsuit for returning player");
+            this.saveEquippedItems();
+          }
+        }
+      } catch (e) {
+        console.warn("[quests] Failed to load equipped items:", e);
+      }
     },
 
   // ============================================================
