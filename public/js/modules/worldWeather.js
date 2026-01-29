@@ -20,24 +20,25 @@
   // Weather types
   const GLOBAL_WEATHER = [
     "clear",
-    "cloudy",
+    "fog",
     "storm",
-    "rad_storm",
-    "heatwave",
-    "cold_snap"
+    "radstorm",
+    "dust",
+    "rain",
+    "gamma_lightning"
   ];
 
   // Biome-local weather
   const BIOME_WEATHER = {
-    desert: ["clear", "clear", "heatwave", "sandstorm"],
-    jungle: ["humid", "rain", "storm"],
+    desert: ["clear", "clear", "dust", "dust"],
+    jungle: ["rain", "rain", "storm"],
     temperate_forest: ["clear", "rain", "storm"],
-    tundra: ["clear", "snow", "blizzard"],
-    arctic: ["snow", "blizzard", "whiteout"],
+    tundra: ["clear", "fog", "storm"],
+    arctic: ["fog", "fog", "storm"],
     mountain: ["clear", "fog", "storm"],
-    crater: ["clear", "rad_storm", "rad_storm"],
-    industrial_zone: ["smog", "acid_rain", "storm"],
-    urban_ruins: ["clear", "smog", "storm"],
+    crater: ["radstorm", "radstorm", "radstorm"],
+    industrial_zone: ["fog", "fog", "rain"],
+    urban_ruins: ["clear", "fog", "storm"],
     oceanic: ["clear", "rain", "storm"]
   };
 
@@ -113,11 +114,14 @@
     const biomeWeather = getBiomeWeather(location.biome);
 
     // If global weather is extreme, override
-    if (weather.global === "rad_storm") {
+    if (weather.global === "radstorm") {
       return { type: "radstorm", intensity: 1 };
     }
     if (weather.global === "storm") {
       return { type: "storm" };
+    }
+    if (weather.global === "gamma_lightning") {
+      return { type: "gamma_lightning" };
     }
 
     return { type: biomeWeather };
