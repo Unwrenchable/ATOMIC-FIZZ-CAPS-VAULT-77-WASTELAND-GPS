@@ -2,13 +2,17 @@
 
 ## Overview
 
-Successfully implemented an epic Twitter Gamemaker bot for the ATOMIC FIZZ CAPS project that:
+Successfully implemented an interactive Twitter bot for @9dtictactoe that:
 - ✅ Plays interactive Tic-Tac-Toe on Twitter
 - ✅ Never sleeps (keeps Render alive 24/7)
-- ✅ Reuses existing Redis infrastructure
+- ✅ Uses Redis or file storage for persistence
 - ✅ Production-ready with gunicorn
 - ✅ Comprehensive error handling
 - ✅ Full test coverage
+
+**Bot Account:** [@9dtictactoe](https://twitter.com/9dtictactoe)  
+**Website:** [9DTTT.COM](https://9DTTT.COM)  
+**GitHub:** [github.com/9dtictactoe](https://github.com/9dtictactoe)
 
 ## What Was Built
 
@@ -135,7 +139,7 @@ Successfully implemented an epic Twitter Gamemaker bot for the ATOMIC FIZZ CAPS 
 
 ```
 ┌──────────────────────────────────────┐
-│   Twitter Gamemaker Bot (Render)    │
+│   Twitter 9D Tic Tac Toe Bot (Render)    │
 ├──────────────────────────────────────┤
 │  Gunicorn WSGI Server                │
 │  ├─ Flask App (health endpoints)    │
@@ -254,9 +258,9 @@ README.md                 (+13 lines, Twitter bot section)
 
 > "Welcome to the arena, tribute! May the odds be ever in your favor…" 🔥
 
-> "The Gamemaker claims victory. 😈"
+> "The 9D Tic Tac Toe claims victory. 😈"
 
-> "…Impossible. You have bested the Gamemaker. 🎉"
+> "…Impossible. You have bested the 9D Tic Tac Toe. 🎉"
 
 ## Support
 
@@ -277,7 +281,7 @@ python gamemaker_bot.py
 
 ## Conclusion
 
-The Twitter Gamemaker bot is **production-ready** and **epic**! 🚀
+The Twitter 9D Tic Tac Toe bot is **production-ready** and **epic**! 🚀
 
 Features:
 - ✅ Epic Hunger Games personality
@@ -291,6 +295,6 @@ Deploy it in 5 minutes and let the games begin! 🎮🔥
 
 ---
 
-**Built with ❤️ for the ATOMIC FIZZ CAPS Wasteland GPS**
+**Built with ❤️ for the 9DTTT.COM Wasteland GPS**
 
 *May the odds be ever in your favor!*

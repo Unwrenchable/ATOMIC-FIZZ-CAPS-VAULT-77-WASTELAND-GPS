@@ -1,11 +1,11 @@
-# ⚡ Quick Start Guide - Twitter Gamemaker Bot
+# ⚡ Quick Start Guide - 9D Tic Tac Toe Twitter Bot
 
-Get your bot running in 5 minutes!
+Get your @9dtictactoe bot running in 5 minutes!
 
 ## 🎯 What You'll Need
 
 1. **Twitter Developer Account** (free) - [Apply here](https://developer.twitter.com/en/portal/petition/essential/basic-info)
-2. **Your existing Redis URL** - Copy from your ATOMIC FIZZ backend
+2. **Redis URL** (optional) - For persistence across restarts
 3. **Render Account** (free) - [Sign up here](https://render.com/)
 
 ## 🚀 Deploy in 3 Steps
@@ -29,7 +29,7 @@ Get your bot running in 5 minutes!
 2. Click **New +** → **Web Service**
 3. Connect repository: `Unwrenchable/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS`
 4. Configure:
-   - **Name:** `gamemaker-bot`
+   - **Name:** `9dttt-twitter-bot`
    - **Root Directory:** `twitter-bot`
    - **Runtime:** Python 3
    - **Build Command:** `pip install -r requirements.txt`
@@ -45,8 +45,8 @@ API_KEY=<your_twitter_api_key>
 API_SECRET=<your_twitter_api_secret>
 ACCESS_TOKEN=<your_twitter_access_token>
 ACCESS_SECRET=<your_twitter_access_secret>
-BOT_USERNAME=YourBotHandle
-REDIS_URL=<copy_from_your_backend>
+BOT_USERNAME=9dtictactoe
+REDIS_URL=<optional_redis_url>
 ```
 
 Click **Save Changes** - bot will auto-restart!
@@ -56,7 +56,7 @@ Click **Save Changes** - bot will auto-restart!
 1. Wait for deployment to complete (watch logs)
 2. Visit: `https://your-service.onrender.com/health`
 3. Should see: `{"status": "healthy", ...}`
-4. Tweet: `@YourBot start`
+4. Tweet: `@9dtictactoe start`
 5. Bot replies with game board! 🎉
 
 ## 🔥 Keep It Awake (Optional but Recommended)
@@ -75,7 +75,7 @@ Render free tier sleeps after 15 min. Keep it awake:
 
 **Start Game:**
 ```
-@YourBot start
+@9dtictactoe start
 ```
 
 **Make Move:**
@@ -88,7 +88,7 @@ Reply with number 1-9:
 
 **Quit:**
 ```
-@YourBot quit
+@9dtictactoe quit
 ```
 
 ## 📊 Monitor Your Bot

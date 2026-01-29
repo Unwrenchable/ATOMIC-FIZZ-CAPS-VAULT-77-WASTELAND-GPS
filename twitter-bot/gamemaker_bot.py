@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Gamemaker Twitter bot with Flask server for Render deployment
+9D Tic Tac Toe Twitter bot with Flask server for Render deployment
 
 Usage:
 - Fill environment variables (API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_SECRET)
-- Set REDIS_URL to use the same Redis instance as the main game
+- Set REDIS_URL for game state persistence
 - Flask web server runs on PORT (default 10000) to keep Render service alive
 
-This bot REUSES your existing Redis instance from the ATOMIC FIZZ CAPS game!
-It uses a separate key namespace (gm:state) so it won't interfere with game data.
+Bot for @9dtictactoe - Play 9D Tic Tac Toe on Twitter!
+Website: https://9DTTT.COM
 """
 import os
 import time
@@ -53,8 +53,9 @@ def home():
     uptime_seconds = (datetime.now() - datetime.fromisoformat(bot_stats["started_at"])).total_seconds()
     return jsonify({
         "status": "alive",
-        "service": "Gamemaker Twitter Bot",
-        "message": "The arena is active. May the odds be ever in your favor! 🎮",
+        "service": "9D Tic Tac Toe Twitter Bot",
+        "message": "Play 9D Tic Tac Toe on Twitter! @9dtictactoe 🎮",
+        "website": "https://9DTTT.COM",
         "uptime_seconds": uptime_seconds,
         "uptime_human": f"{int(uptime_seconds // 3600)}h {int((uptime_seconds % 3600) // 60)}m",
         "stats": bot_stats
@@ -83,7 +84,7 @@ def stats():
 # ────────────────────────────────────────
 #  CONFIG – Basic tier safe
 # ────────────────────────────────────────
-BOT_USERNAME = os.getenv("BOT_USERNAME", "9dTic60428").lstrip("@")
+BOT_USERNAME = os.getenv("BOT_USERNAME", "9dtictactoe").lstrip("@")
 CHECK_EVERY_SECONDS = int(os.getenv("CHECK_EVERY_SECONDS", "600"))
 MAX_MENTIONS_PER_CYCLE = int(os.getenv("MAX_MENTIONS_PER_CYCLE", "5"))
 
@@ -452,8 +453,9 @@ def run_twitter_bot():
 
 # Start bot thread when module is loaded (works with both gunicorn and direct run)
 print("=" * 60)
-print("🎮 GAMEMAKER TWITTER BOT - ATOMIC FIZZ CAPS")
+print("🎮 9D TIC TAC TOE TWITTER BOT - @9dtictactoe")
 print("=" * 60)
+print(f"Website: https://9DTTT.COM")
 print(f"Redis URL: {REDIS_URL[:30] + '...' if REDIS_URL and len(REDIS_URL) > 30 else 'Not configured'}")
 print(f"Check interval: {CHECK_EVERY_SECONDS} seconds")
 print(f"Max mentions per cycle: {MAX_MENTIONS_PER_CYCLE}")
@@ -467,7 +469,7 @@ if __name__ == "__main__":
     # Direct run mode (development)
     port = int(os.getenv("PORT", "10000"))
     print(f"🌐 Starting Flask development server on port {port}...")
-    print("🔥 The Gamemaker is ready. The arena awaits!")
+    print("🎮 9D Tic Tac Toe Bot is ready!")
     print("=" * 60)
     
     # Run Flask app

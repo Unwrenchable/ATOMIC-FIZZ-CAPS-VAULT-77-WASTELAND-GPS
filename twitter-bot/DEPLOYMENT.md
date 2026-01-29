@@ -1,6 +1,6 @@
 # 🚀 Twitter Bot Deployment Guide for Render
 
-This guide will help you deploy the Gamemaker Twitter Bot on Render and keep it running 24/7.
+This guide will help you deploy the 9D Tic Tac Toe Twitter Bot (@9dtictactoe) on Render and keep it running 24/7.
 
 ## ✅ Prerequisites
 
@@ -59,14 +59,14 @@ ACCESS_SECRET=your_twitter_access_secret_here
 
 #### Required - Bot Config
 ```bash
-BOT_USERNAME=YourBotTwitterHandle
+BOT_USERNAME=9dtictactoe
 ```
 
-#### Required - Redis (REUSE from main game!)
+#### Optional - Redis (for persistence across restarts)
 ```bash
 REDIS_URL=redis://:password@your-redis-host.upstash.io:6379
 ```
-*Copy this from your backend's environment variables*
+*Bot uses file storage if Redis not configured*
 
 #### Optional - Tuning
 ```bash
@@ -105,7 +105,7 @@ You should see:
 ## 🎮 Test the Bot
 
 1. Go to Twitter
-2. Tweet at your bot: `@YourBot start`
+2. Tweet at your bot: `@9dtictactoe start`
 3. The bot should reply with a game board!
 4. Reply with a number (1-9) to make moves
 
@@ -162,7 +162,7 @@ You'll see:
 **Check Twitter API Access:**
 ```bash
 # In Render logs, look for:
-"🎮 Gamemaker online as @YourBot"
+"🎮 Gamemaker online as @9dtictactoe"
 ```
 
 If you see errors:

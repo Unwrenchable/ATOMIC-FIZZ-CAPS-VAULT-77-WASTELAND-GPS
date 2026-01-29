@@ -1,12 +1,15 @@
-# 🎮 Gamemaker Twitter Bot - ATOMIC FIZZ CAPS
+# 🎮 9D Tic Tac Toe Twitter Bot - @9dtictactoe
 
-An epic Tic-Tac-Toe Twitter bot themed around The Hunger Games, integrated with the ATOMIC FIZZ CAPS Wasteland GPS game.
+An interactive Tic-Tac-Toe Twitter bot for playing games on Twitter/X.
+
+**Bot Account:** [@9dtictactoe](https://twitter.com/9dtictactoe)  
+**Website:** [9DTTT.COM](https://9DTTT.COM)  
+**GitHub:** [github.com/9dtictactoe](https://github.com/9dtictactoe)
 
 ## 🌟 Features
 
-- **Interactive Tic-Tac-Toe on Twitter** - Play against the Gamemaker AI
-- **Hunger Games Theme** - Dramatic personality with wasteland vibes
-- **Persistent State** - Reuses your existing Redis instance from the main game
+- **Interactive Tic-Tac-Toe on Twitter** - Play against the bot AI
+- **Persistent State** - Uses Redis or file storage for game persistence
 - **Never Sleeps** - Flask web server keeps Render service alive 24/7
 - **Health Monitoring** - Built-in health check and stats endpoints
 - **Rate Limit Handling** - Automatic backoff and retry logic
@@ -16,7 +19,7 @@ An epic Tic-Tac-Toe Twitter bot themed around The Hunger Games, integrated with 
 ### Prerequisites
 
 1. Twitter Developer Account with API v2 access
-2. Your existing Redis instance from ATOMIC FIZZ CAPS game
+2. Redis instance (optional - uses file storage fallback)
 3. Render account
 
 ### Setup Instructions
@@ -39,11 +42,11 @@ An epic Tic-Tac-Toe Twitter bot themed around The Hunger Games, integrated with 
    ACCESS_SECRET=your_twitter_access_secret
    
    # Bot Settings
-   BOT_USERNAME=YourBotUsername
+   BOT_USERNAME=9dtictactoe
    CHECK_EVERY_SECONDS=600
    MAX_MENTIONS_PER_CYCLE=5
    
-   # Redis (REUSE from your main game!)
+   # Redis (Optional)
    REDIS_URL=redis://:password@your-redis-host:6379
    
    # Render auto-sets PORT
@@ -57,10 +60,10 @@ An epic Tic-Tac-Toe Twitter bot themed around The Hunger Games, integrated with 
 
 ### Starting a Game
 Tweet at your bot with any of:
-- `@YourBot start`
-- `@YourBot play`
-- `@YourBot new game`
-- `@YourBot enter arena`
+- `@9dtictactoe start`
+- `@9dtictactoe play`
+- `@9dtictactoe new game`
+- `@9dtictactoe enter arena`
 
 ### Making Moves
 Reply with a number 1-9 to claim a square:
@@ -182,7 +185,7 @@ For extra reliability, set up a free service like [UptimeRobot](https://uptimero
   "last_check": "2026-01-29T12:00:00",
   "status": "running",
   "redis_connected": true,
-  "bot_username": "YourBot"
+  "bot_username": "9dtictactoe"
 }
 ```
 
