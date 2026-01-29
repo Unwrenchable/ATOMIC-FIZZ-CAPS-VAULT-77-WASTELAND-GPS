@@ -35,6 +35,13 @@ This document provides a comprehensive alphabetical reference of all environment
 - **Description**: Comma-separated list of Solana wallet addresses with admin privileges
 - **Example**: `wallet1PubKey...,wallet2PubKey...`
 
+### AUDIT_S3_BUCKET
+- **Type**: String
+- **Required**: No (optional for logging)
+- **Description**: AWS S3 bucket name for audit log storage
+- **Example**: `your-audit-bucket`
+- **Note**: Only needed if implementing AWS-based audit logging
+
 ### AWS_REGION
 - **Type**: String
 - **Required**: No (only if using AWS KMS)
@@ -293,7 +300,7 @@ For the good of the Vault, ensure you have configured:
 
 **📟 OVERSEER MESSAGE:**
 
-> "All environment variables have been catalogued and secured per Vault-Tec regulations.
+> "All environment variables have been cataloged and secured per Vault-Tec regulations.
 > Remember: A well-configured Vault is a safe Vault.
 > 
 > Stay safe out there, Vault Dweller. ☢️"
