@@ -208,11 +208,12 @@
       }
     });
 
-    // List NFT (mock selector - ready for real Metaplex)
+    // List NFT (uses Helius DAS API - see docs/NFT_INTEGRATION_GUIDE.md)
     listNftBtn.addEventListener('click', async () => {
       if (!connectedWallet) return alert('Connect wallet first');
 
-      // Mock NFTs - replace with real Metaplex fetch later
+      // Mock NFTs - replace with real Helius DAS API fetch
+      // See docs/NFT_INTEGRATION_GUIDE.md for implementation details
       const mockNfts = [
         { mint: 'ABC123', name: 'Pip-Boy Skin #47', image: 'https://via.placeholder.com/150/00ff41/000?text=NFT+47' },
         { mint: 'DEF456', name: 'Vault 77 Helmet', image: 'https://via.placeholder.com/150/00ff41/000?text=Helmet' }
