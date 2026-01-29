@@ -18,6 +18,13 @@ Game.equipItem = function (item) {
     Game.player.equipped.misc = item;
   }
 
+  // Save equipped items to localStorage for persistence
+  try {
+    localStorage.setItem("afc_equipped_items", JSON.stringify(Game.player.equipped));
+  } catch (e) {
+    console.warn("[equip] Failed to save equipped items:", e);
+  }
+
   // Optional: trigger UI refresh if needed
   if (Game.hooks?.onInventoryUpdated) {
     Game.hooks.onInventoryUpdated();
