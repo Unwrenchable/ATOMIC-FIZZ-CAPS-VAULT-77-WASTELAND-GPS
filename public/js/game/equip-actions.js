@@ -19,10 +19,18 @@ Game.equipItem = function (item) {
   }
 
   // Save equipped items to localStorage for persistence
-  try {
-    localStorage.setItem("afc_equipped_items", JSON.stringify(Game.player.equipped));
-  } catch (e) {
-    console.warn("[equip] Failed to save equipped items:", e);
+  // Use quests module method if available, otherwise save directly
+  if (Game.modules?.quests?.saveEquippedItems) {
+    Game.modules.quests.saveEquippedItems();
+  } else if (Game.quests?.saveEquippedItems) {
+    Game.quests.saveEquippedItems();
+  } else {
+    // Fallback direct save
+    try {
+      localStorage.setItem("afc_equipped_items", JSON.stringify(Game.player.equipped));
+    } catch (e) {
+      console.warn("[equip] Failed to save equipped items:", e);
+    }
   }
 
   // Optional: trigger UI refresh if needed

@@ -131,15 +131,22 @@
     gs: null,
     starterGearGiven: false,
     availableQuests: {},  // Quests offered but not accepted yet
-    initialized: false,   // Prevent multiple initializations
 
     init(gameState) {
-      // Prevent multiple initializations
-      if (this.initialized) {
-        console.log("[quests] Already initialized, skipping");
+      // Prevent multiple initializations (check localStorage for persistence across refreshes)
+      const initKey = "afc_quests_initialized_session";
+      if (sessionStorage.getItem(initKey)) {
+        console.log("[quests] Already initialized this session, skipping");
+        // Still need to set up gs and load state for returning players
+        this.gs = gameState || window.gameState || window.DATA || {};
+        if (!this.gs.quests) this.gs.quests = {};
+        if (!this.gs.player) this.gs.player = { xp: 0, caps: 0 };
+        if (!this.gs.inventory) this.gs.inventory = { weapons: [], armor: [], consumables: [], ammo: [], tools: [], questItems: [] };
+        this.loadAvailableQuests();
+        this.giveStarterGear(); // This checks its own flag
         return;
       }
-      this.initialized = true;
+      sessionStorage.setItem(initKey, "true");
       
       this.gs = gameState || window.gameState || window.DATA || {};
       if (!this.gs.quests) this.gs.quests = {};
@@ -163,15 +170,14 @@
       }
       
       // Re-show notifications for any available quests that were persisted
-      // But only show ONCE per session to avoid spamming
-      const shownThisSession = window._questNotificationsShown || {};
+      // Use sessionStorage to track shown notifications (once per browser session)
       Object.keys(this.availableQuests).forEach(questId => {
-        if (!shownThisSession[questId]) {
+        const shownKey = `afc_quest_notif_shown_${questId}`;
+        if (!sessionStorage.getItem(shownKey)) {
           this.showQuestOfferNotification(questId);
-          shownThisSession[questId] = true;
+          sessionStorage.setItem(shownKey, "true");
         }
       });
-      window._questNotificationsShown = shownThisSession;
     },
 
     // ============================================================
