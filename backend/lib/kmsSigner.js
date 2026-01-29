@@ -3,11 +3,11 @@ const { KMSClient, SignCommand, GetPublicKeyCommand } = require("@aws-sdk/client
 const bs58 = require("bs58");
 
 const REGION = process.env.AWS_REGION || "us-west-2";
-const DEFAULT_SIGNING_ALG = process.env.KMS_SIGNING_ALGORITHM || "ED25519";
+const DEFAULT_SIGNING_ALG = process.env.KMS_SIGNING_ALGORITHM || "ECDSA_SHA_256";
 const KMS_KEY_ID = process.env.KMS_SIGNING_KEY_ID || null;
 
 if (!KMS_KEY_ID) {
-  console.warn("[kmsSigner] KMS_SIGNING_KEY_ID not set. Set this to your KMS asymmetric key ARN or KeyId for production signing.");
+  console.warn("[kmsSigner] KMS_SIGNING_KEY_ID not set. KMS signing disabled. Using local signing instead (FREE). See docs/LOCAL_SIGNING_SETUP.md");
 }
 
 const client = new KMSClient({ region: REGION, maxAttempts: 3 });
