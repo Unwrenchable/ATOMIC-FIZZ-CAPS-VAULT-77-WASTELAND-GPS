@@ -897,9 +897,9 @@
         Game.modules.quests.init(window.DATA);
         safeLog("Quest module initialized with starter gear");
         
-        // Sync equipped items from quest module to main PLAYER state
+        // Verify equipped items (quest module sets Game.player.equipped directly)
         if (Game.player && Game.player.equipped && Game.player.equipped.armor) {
-          safeLog("Player equipped armor synced:", Game.player.equipped.armor.name);
+          safeLog("Player equipped armor verified:", Game.player.equipped.armor.name);
         }
       }
 
@@ -951,6 +951,9 @@
 
       _gameInitialized = true;
       safeLog("Game initialized successfully");
+
+      // Dispatch event to signal game is ready (for boot.js courier dialogue)
+      window.dispatchEvent(new Event("gameInitialized"));
 
       // Start the world simulation loop once game is ready
       if (window.overseerGameLoop && typeof window.overseerGameLoop.start === "function") {

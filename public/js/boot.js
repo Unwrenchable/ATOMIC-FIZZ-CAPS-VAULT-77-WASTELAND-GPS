@@ -123,10 +123,13 @@
 
     // Trigger the courier NPC dialogue for first-time players
     // This shows the Fallout-style NPC dialogue with the first quest
-    // Delayed to allow game initialization to complete
-    setTimeout(() => {
-      triggerCourierDialogue();
-    }, 1500);
+    // Wait for game initialization to complete via event
+    window.addEventListener("gameInitialized", () => {
+      // Small delay to ensure all UI is ready
+      setTimeout(() => {
+        triggerCourierDialogue();
+      }, 300);
+    }, { once: true });
 
     // Worldmap hook
     if (window.Game?.modules?.worldmap?.onOpen) {
