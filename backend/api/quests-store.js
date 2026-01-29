@@ -2,11 +2,42 @@
 // Small server-side quest store and API. Migrates sensitive quest data to server.
 
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const router = express.Router();
 const { redis, key } = require('../lib/redis');
 
 // Key for storing quests JSON
 const QUESTS_KEY = key('quests:store');
+
+// ------------------------------------------------------------
+// Rate limiters for sensitive endpoints
+// ------------------------------------------------------------
+// Quest proof submissions (token guessing protection)
+const proveRateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // 5 attempts per minute per IP
+  message: { ok: false, error: 'Too many proof attempts. Please wait.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Admin endpoints (heightened security)
+const adminRateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // 10 requests per minute
+  message: { ok: false, error: 'Too many admin requests. Please wait.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// General quest operations
+const questRateLimiter = rateLimit({
+  windowMs: 10 * 1000, // 10 seconds
+  max: 30, // 30 requests per 10 seconds
+  message: { ok: false, error: 'Too many quest requests. Please slow down.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Default minimal public placeholders (client will fetch these)
 const DEFAULT_PLACEHOLDERS = [
@@ -72,7 +103,7 @@ router.get('/placeholders', async (req, res) => {
 });
 
 // Test helper: allow setting a secret token in server-side redis (dev only or with admin secret)
-router.post('/admin/set-token', async (req, res) => {
+router.post('/admin/set-token', adminRateLimiter, async (req, res) => {
   try {
     const { token, value, ttl } = req.body || {};
     if (!token) return res.status(400).json({ ok: false, error: 'missing' });
@@ -102,7 +133,7 @@ router.get('/lore/:tag', async (req, res) => {
 });
 
 // Accept proofs for quests that require verification. Body: { wallet, questId, proof }
-router.post('/prove', async (req, res) => {
+router.post('/prove', proveRateLimiter, async (req, res) => {
   try {
     const { wallet, questId, proof } = req.body || {};
     if (!wallet || !questId || !proof) return res.status(400).json({ ok: false, error: 'missing' });
@@ -155,7 +186,7 @@ router.post('/prove', async (req, res) => {
 });
 
 // Public: get detailed quest for a player when server validates (requires wallet/session id in body)
-router.post('/reveal', async (req, res) => {
+router.post('/reveal', questRateLimiter, async (req, res) => {
   try {
     const { wallet, questId } = req.body || {};
     if (!wallet || !questId) return res.status(400).json({ ok: false, error: 'missing' });

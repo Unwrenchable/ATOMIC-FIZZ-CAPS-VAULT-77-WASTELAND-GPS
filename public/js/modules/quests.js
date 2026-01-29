@@ -211,7 +211,7 @@
           equipped: item.equipped || false
         };
 
-        // Add to appropriate inventory category
+        // Add to quest module's inventory system
         switch (item.type) {
           case "weapon":
             if (!this.gs.inventory.weapons) this.gs.inventory.weapons = [];
@@ -245,6 +245,14 @@
           default:
             if (!this.gs.inventory.misc) this.gs.inventory.misc = [];
             this.gs.inventory.misc.push(invItem);
+        }
+        
+        // ALSO add to main.js PLAYER inventory for quest rewards visibility
+        // main.js tracks items by ID in a flat array
+        if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
+          if (!window.PLAYER.inventory.includes(item.id)) {
+            window.PLAYER.inventory.push(item.id);
+          }
         }
       });
 
@@ -710,6 +718,32 @@
         this.gs.player.xp = (this.gs.player.xp || 0) + (r.xp || 0);
         this.gs.player.caps = (this.gs.player.caps || 0) + (r.caps || 0);
       }
+      
+      // Give item rewards and sync with main.js PLAYER inventory
+      if (r.items && Array.isArray(r.items)) {
+        r.items.forEach(itemId => {
+          // Add to quest module inventory
+          if (!this.gs.inventory.questItems) this.gs.inventory.questItems = [];
+          this.gs.inventory.questItems.push({ id: itemId, name: itemId, quantity: 1 });
+          
+          // Sync with main.js PLAYER inventory
+          if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
+            if (!window.PLAYER.inventory.includes(itemId)) {
+              window.PLAYER.inventory.push(itemId);
+            }
+          }
+        });
+      }
+      
+      // Sync XP and caps with main.js PLAYER state
+      if (window.PLAYER) {
+        if (r.xp) {
+          window.PLAYER.xp = (window.PLAYER.xp || 0) + r.xp;
+        }
+        if (r.caps) {
+          window.PLAYER.caps = (window.PLAYER.caps || 0) + r.caps;
+        }
+      }
 
       console.log("[quests] Quest completed:", questId);
     },
@@ -772,9 +806,25 @@
         this.gs.player.xp += r.xp || 0;
         this.gs.player.caps += r.caps || 0;
 
-        (r.items || []).forEach(id => {
-          // TODO: item lookup + add to inventory
+        // Give item rewards and sync with main.js PLAYER inventory
+        (r.items || []).forEach(itemId => {
+          // Add to quest module inventory
+          if (!this.gs.inventory.questItems) this.gs.inventory.questItems = [];
+          this.gs.inventory.questItems.push({ id: itemId, name: itemId, quantity: 1 });
+          
+          // Sync with main.js PLAYER inventory
+          if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
+            if (!window.PLAYER.inventory.includes(itemId)) {
+              window.PLAYER.inventory.push(itemId);
+            }
+          }
         });
+        
+        // Sync XP and caps with main.js PLAYER state
+        if (window.PLAYER) {
+          window.PLAYER.xp = (window.PLAYER.xp || 0) + (r.xp || 0);
+          window.PLAYER.caps = (window.PLAYER.caps || 0) + (r.caps || 0);
+        }
 
         return true;
       }
