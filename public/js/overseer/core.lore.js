@@ -163,7 +163,7 @@
   if (!window.overseerHandlers) window.overseerHandlers = {};
   const handlers = window.overseerHandlers;
 
-  handlers.lore = function (args) {
+  handlers.lore = async function (args) {
     const sub = (args[0] || "").toLowerCase();
 
     // No args: show help
@@ -215,7 +215,10 @@
       }
       overseerSay(`=== ${entry.title} ===`);
       entry.body.forEach((line) => overseerSay(line));
-      overseerSay(window.overseerPersonality.speak());
+      if (personality && typeof personality.speak === "function") {
+        const line = await personality.speak("lore recall");
+        overseerSay(line);
+      }
       return;
     }
 
@@ -233,7 +236,10 @@
       }
       overseerSay(`=== ${entry.title} ===`);
       entry.body.forEach((line) => overseerSay(line));
-      overseerSay(window.overseerPersonality.speak());
+      if (personality && typeof personality.speak === "function") {
+        const line = await personality.speak("lore recall");
+        overseerSay(line);
+      }
       return;
     }
 
