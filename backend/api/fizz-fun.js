@@ -14,8 +14,9 @@ const { Program, AnchorProvider, BN } = require("@coral-xyz/anchor");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
 
 // Configuration
+// Use CAPS_MINT or fall back to TOKEN_MINT (both refer to the CAPS SPL token)
 const FIZZ_FUN_PROGRAM_ID = new PublicKey(process.env.FIZZ_FUN_PROGRAM_ID || "FizzFun111111111111111111111111111111111111");
-const CAPS_MINT = new PublicKey(process.env.CAPS_MINT || "CAPSxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+const CAPS_MINT = new PublicKey(process.env.CAPS_MINT || process.env.TOKEN_MINT || "CAPSxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 const TREASURY = new PublicKey(process.env.TREASURY_WALLET || "TREASxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
 // Constants matching the Solana program
