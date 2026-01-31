@@ -192,8 +192,7 @@
 
   Game.modules.weatherOverlay = weatherOverlay;
 
-  // Wait for map-ready event instead of DOMContentLoaded
-  // This ensures the map pane exists before we try to create weather overlays
+  // Wait for map-ready event to ensure the map pane exists before creating overlays
   window.addEventListener("map-ready", () => {
     // Small delay to ensure map is fully initialized
     setTimeout(() => {
@@ -203,19 +202,6 @@
         console.error("weatherOverlay: init failed", e);
       }
     }, 500);
-  });
-  
-  // Fallback: also try on DOMContentLoaded with a longer delay
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => {
-      if (!weatherOverlay.pane) {
-        try {
-          weatherOverlay.init();
-        } catch (e) {
-          console.error("weatherOverlay: fallback init failed", e);
-        }
-      }
-    }, 2000);
   });
 })();
 

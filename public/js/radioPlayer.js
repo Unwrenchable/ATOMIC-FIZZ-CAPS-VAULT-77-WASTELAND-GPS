@@ -507,14 +507,13 @@
     }
 
     _generateFrequencyMarkers() {
-      // Generate frequency markers from 87.5 to 108.0 FM
+      // Generate frequency markers from 87.5 to 108.0 FM for horizontal layout
       let markers = "";
       const frequencies = [88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108];
       
-      frequencies.forEach((freq, index) => {
-        const angle = -135 + (index * 27); // Distribute across 270 degrees
+      frequencies.forEach((freq) => {
         markers += `
-          <div class="frequency-marker" style="transform: rotate(${angle}deg)">
+          <div class="frequency-marker">
             <span class="frequency-text">${freq}</span>
           </div>
         `;
@@ -535,17 +534,24 @@
         }, this.config.staticDuration);
       }
 
-      // Calculate needle rotation based on frequency
+      // Calculate needle position based on frequency (horizontal movement)
       const minFreq = 87.5;
       const maxFreq = 108.0;
-      const angleRange = 270; // Degrees of rotation (-135 to +135)
-
+      
+      // Dial horizontal padding (15px left, 15px right = 30px total)
+      const DIAL_HORIZONTAL_PADDING = 15;
+      
+      // Get the dial face width to calculate position
+      const dialFace = needle.parentElement;
+      if (!dialFace) return;
+      
+      const dialWidth = dialFace.offsetWidth - (2 * DIAL_HORIZONTAL_PADDING);
       const toFreq = toStation?.frequency || 91.5;
       const progress = (toFreq - minFreq) / (maxFreq - minFreq);
-      const angle = -135 + (progress * angleRange);
+      const position = DIAL_HORIZONTAL_PADDING + (progress * dialWidth);
 
-      // Animate the needle
-      needle.style.transform = `rotate(${angle}deg)`;
+      // Animate the needle horizontally
+      needle.style.left = `${position}px`;
 
       // Update station indicator
       this._updateStationIndicator();
@@ -566,15 +572,19 @@
         freqDisplay.textContent = `${station.frequency} FM`;
       }
 
-      // Also update needle position if not animating
+      // Also update needle position for initial setup (horizontal position)
       const needle = document.getElementById("radioNeedle");
-      if (needle && !needle.style.transform) {
-        const minFreq = 87.5;
-        const maxFreq = 108.0;
-        const angleRange = 270;
-        const progress = (station.frequency - minFreq) / (maxFreq - minFreq);
-        const angle = -135 + (progress * angleRange);
-        needle.style.transform = `rotate(${angle}deg)`;
+      if (needle) {
+        const dialFace = needle.parentElement;
+        if (dialFace) {
+          const minFreq = 87.5;
+          const maxFreq = 108.0;
+          const DIAL_HORIZONTAL_PADDING = 15;
+          const dialWidth = dialFace.offsetWidth - (2 * DIAL_HORIZONTAL_PADDING);
+          const progress = (station.frequency - minFreq) / (maxFreq - minFreq);
+          const position = DIAL_HORIZONTAL_PADDING + (progress * dialWidth);
+          needle.style.left = `${position}px`;
+        }
       }
     }
 

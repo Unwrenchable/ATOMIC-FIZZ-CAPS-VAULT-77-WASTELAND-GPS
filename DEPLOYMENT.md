@@ -2,14 +2,31 @@
 
 ## Architecture Overview
 
-This application uses a split deployment architecture:
+This application uses a **unified backend** architecture with multiple frontend deployment options:
 
-- **Frontend**: Deployed on Vercel (or Render)
-  - Primary domain: `https://www.atomicfizzcaps.xyz`
+- **Backend API** (Single Source of Truth): Deployed on Render
+  - API domain: `https://api.atomicfizzcaps.xyz`
+  - **All game state, quests, player data managed here**
+  - **Single shared database** (Redis/PostgreSQL)
+  
+- **Frontend** (Multiple deployments all connect to same backend):
+  - Primary domain: `https://www.atomicfizzcaps.xyz` (Vercel)
+  - Also: `https://atomicfizzcaps.xyz` (Vercel)
   - Preview/testing (Vercel): `*.vercel.app`
   - Preview/testing (Render): `*.onrender.com`
-- **Backend API**: Deployed on Render
-  - API domain: `https://api.atomicfizzcaps.xyz`
+
+## ⚠️ Important: Single Game Instance
+
+**All frontend deployments connect to the SAME backend API**, which means:
+- ✅ `atomicfizzcaps.xyz` → connects to `api.atomicfizzcaps.xyz`
+- ✅ `www.atomicfizzcaps.xyz` → connects to `api.atomicfizzcaps.xyz`
+- ✅ `preview-xyz.vercel.app` → connects to `api.atomicfizzcaps.xyz`
+- ✅ `xyz.onrender.com` → connects to `api.atomicfizzcaps.xyz`
+
+This ensures:
+- **One unified game world** - all players share the same game state
+- **Consistent player progress** - your progress works across all frontend URLs
+- **Centralized game logic** - quests, items, economy all managed in one place
 
 ## Domain Unification
 

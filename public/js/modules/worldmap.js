@@ -428,9 +428,9 @@
       satelliteTiles.addTo(this.map);
       this.tiles = { satellite: satelliteTiles };
 
-      // Start view
+      // Start view - use zoom 15 initially (will snap to 18 when GPS locks)
       const pos = this.gs.player.position;
-      this.map.setView([pos.lat, pos.lng], 7);
+      this.map.setView([pos.lat, pos.lng], 15);
       
       // Update map status
       this.updateMapStatus('Initializing map...');
@@ -645,7 +645,19 @@
       if (this.explorationMode && !fromGPS) return;
       const pos = this.gs.player.position;
       if (!fromGPS && !this.autoFollowEnabled) return;
-      this.map.panTo([pos.lat, pos.lng], { animate: true });
+      
+      // Use setView with zoom 18 for close-up view (about 400 feet above)
+      // This feels like being right above the player
+      const closeZoom = 18; // GPS locked view - close-up
+      const currentZoom = this.map.getZoom() || 15; // Fallback to 15 if not initialized
+      
+      // When GPS updates, snap to player with close zoom
+      if (fromGPS) {
+        this.map.setView([pos.lat, pos.lng], closeZoom, { animate: true });
+      } else {
+        // Manual centering preserves current zoom level
+        this.map.setView([pos.lat, pos.lng], currentZoom, { animate: true });
+      }
     },
 
     // --------------------------------------------------------

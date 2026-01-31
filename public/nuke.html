@@ -5,11 +5,11 @@
     <title>NUKE GEAR • ATOMIC FIZZ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Content Security Policy to allow external resources -->
+    <!-- Content Security Policy: 'unsafe-eval' required for Solana web3.js dynamic code -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
-      script-src 'self' https://unpkg.com https://cdn.jsdelivr.net 'unsafe-inline';
-      connect-src 'self' https://unpkg.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
+      script-src 'self' https://unpkg.com https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval';
+      connect-src 'self' https://unpkg.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://rpc.ankr.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       img-src 'self' data: https: blob:;
       font-src 'self' https://fonts.gstatic.com data:;
