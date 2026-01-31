@@ -9,11 +9,12 @@ Game.equipItem = function (item) {
   // Equip by type
   if (item.type === "weapon") {
     Game.player.equipped.weapon = item;
-    // QUEST HOOK: Wake Up → equip_weapon
-    Game.quests?.completeObjective("wake_up", "equip_weapon");
+    // QUEST HOOK: Wake Up → equip_item (matches wake_up.json objective)
+    Game.quests?.completeObjective("wake_up", "equip_item");
   } else if (item.type === "armor") {
     Game.player.equipped.armor = item;
-    // Note: equip_armor objective removed - player starts with jumpsuit equipped
+    // QUEST HOOK: Wake Up → equip_item (for any equipment)
+    Game.quests?.completeObjective("wake_up", "equip_item");
   } else {
     Game.player.equipped.misc = item;
   }
