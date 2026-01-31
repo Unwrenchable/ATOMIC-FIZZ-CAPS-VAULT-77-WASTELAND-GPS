@@ -11,7 +11,6 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
-  // Security utilities
   const securityUtils = {
     // Sanitize wallet address to prevent XSS - preserves valid address characters
     sanitizeAddress(address) {
@@ -73,6 +72,39 @@
     }
   };
 
+  // Constants
+  const PHANTOM_PROVIDER_TIMEOUT = 3000; // ms to wait for Phantom provider injection in in-app browser
+
+  // Helper to wait for Phantom provider (handles in-app browser timing)
+  async function waitForPhantomProvider(timeoutMs = PHANTOM_PROVIDER_TIMEOUT) {
+    // Check if already available
+    if (window.solana?.isPhantom) return window.solana;
+    if (window.phantom?.solana?.isPhantom) return window.phantom.solana;
+    
+    // Wait for provider to inject
+    return new Promise((resolve) => {
+      const startTime = Date.now();
+      const checkInterval = 100;
+      
+      function check() {
+        if (window.solana?.isPhantom) {
+          resolve(window.solana);
+          return;
+        }
+        if (window.phantom?.solana?.isPhantom) {
+          resolve(window.phantom.solana);
+          return;
+        }
+        if (Date.now() - startTime < timeoutMs) {
+          setTimeout(check, checkInterval);
+        } else {
+          resolve(null);
+        }
+      }
+      check();
+    });
+  }
+
   const web3WalletAdapter = {
     loaded: false,
     connected: false,
@@ -95,32 +127,7 @@
           }
           try {
             // Wait for Phantom provider to inject (handles in-app browser timing)
-            let provider = (window.solana?.isPhantom) ? window.solana : window.phantom?.solana;
-            
-            // If not immediately available, wait up to 3 seconds for injection
-            if (!provider) {
-              provider = await new Promise((resolve) => {
-                const startTime = Date.now();
-                const checkInterval = 100;
-                
-                function check() {
-                  if (window.solana?.isPhantom) {
-                    resolve(window.solana);
-                    return;
-                  }
-                  if (window.phantom?.solana?.isPhantom) {
-                    resolve(window.phantom.solana);
-                    return;
-                  }
-                  if (Date.now() - startTime < 3000) {
-                    setTimeout(check, checkInterval);
-                  } else {
-                    resolve(null);
-                  }
-                }
-                check();
-              });
-            }
+            const provider = await waitForPhantomProvider();
             
             if (!provider) {
               // Check if we're in Phantom's in-app browser
