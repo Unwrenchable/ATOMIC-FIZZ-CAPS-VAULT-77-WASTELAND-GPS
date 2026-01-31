@@ -538,14 +538,17 @@
       const minFreq = 87.5;
       const maxFreq = 108.0;
       
+      // Dial horizontal padding (15px left, 15px right = 30px total)
+      const DIAL_HORIZONTAL_PADDING = 15;
+      
       // Get the dial face width to calculate position
       const dialFace = needle.parentElement;
       if (!dialFace) return;
       
-      const dialWidth = dialFace.offsetWidth - 30; // Account for padding
+      const dialWidth = dialFace.offsetWidth - (2 * DIAL_HORIZONTAL_PADDING);
       const toFreq = toStation?.frequency || 91.5;
       const progress = (toFreq - minFreq) / (maxFreq - minFreq);
-      const position = 15 + (progress * dialWidth); // 15px is left padding
+      const position = DIAL_HORIZONTAL_PADDING + (progress * dialWidth);
 
       // Animate the needle horizontally
       needle.style.left = `${position}px`;
@@ -576,9 +579,10 @@
         if (dialFace) {
           const minFreq = 87.5;
           const maxFreq = 108.0;
-          const dialWidth = dialFace.offsetWidth - 30;
+          const DIAL_HORIZONTAL_PADDING = 15;
+          const dialWidth = dialFace.offsetWidth - (2 * DIAL_HORIZONTAL_PADDING);
           const progress = (station.frequency - minFreq) / (maxFreq - minFreq);
-          const position = 15 + (progress * dialWidth);
+          const position = DIAL_HORIZONTAL_PADDING + (progress * dialWidth);
           needle.style.left = `${position}px`;
         }
       }

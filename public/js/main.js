@@ -531,7 +531,7 @@
       const desc = q.description || q.flavor || "";
       const message = q.offer?.message || "";
       return `
-        <div class="pip-entry available-quest" style="border-left: 3px solid #ffaa00;">
+        <div class="pip-entry available-quest">
           <strong style="color: #ffaa00;">⚠️ ${name}</strong><br>
           <span>${message || desc}</span><br>
           <div style="margin-top: 8px;">

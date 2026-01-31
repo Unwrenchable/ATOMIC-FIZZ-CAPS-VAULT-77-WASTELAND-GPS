@@ -688,3 +688,27 @@ input[type="reset"]:hover {
   content: "• ";
   color: #00ff41;
 }
+
+/* ============================================================
+   QUEST PANEL STYLES
+   ============================================================ */
+
+.pip-entry {
+  margin-bottom: 12px;
+  padding: 8px;
+  background: rgba(0, 255, 65, 0.05);
+  border-radius: 4px;
+}
+
+.pip-entry.active {
+  border-left: 3px solid #00ff41;
+}
+
+.pip-entry.done {
+  opacity: 0.6;
+}
+
+.pip-entry.available-quest {
+  border-left: 3px solid #ffaa00;
+  background: rgba(255, 170, 0, 0.05);
+}

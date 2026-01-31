@@ -648,14 +648,14 @@
       
       // Use setView with zoom 18 for close-up view (about 400 feet above)
       // This feels like being right above the player
-      const closeZoom = 18;
-      const currentZoom = this.map.getZoom();
+      const closeZoom = 18; // GPS locked view - close-up
+      const currentZoom = this.map.getZoom() || 15; // Fallback to 15 if not initialized
       
       // When GPS updates, snap to player with close zoom
       if (fromGPS) {
         this.map.setView([pos.lat, pos.lng], closeZoom, { animate: true });
       } else {
-        // Manual centering keeps current zoom
+        // Manual centering preserves current zoom level
         this.map.setView([pos.lat, pos.lng], currentZoom, { animate: true });
       }
     },
