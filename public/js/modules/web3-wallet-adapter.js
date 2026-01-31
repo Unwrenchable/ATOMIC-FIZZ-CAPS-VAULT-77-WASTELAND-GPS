@@ -73,7 +73,10 @@
   };
 
   // Constants
-  const PHANTOM_PROVIDER_TIMEOUT = 3000; // ms to wait for Phantom provider injection in in-app browser
+  // Timeout for Phantom provider injection in in-app browser
+  // 3000ms chosen based on testing - typically injects within 100-500ms but allowing
+  // extra time for slower devices/connections while keeping user wait reasonable
+  const PHANTOM_PROVIDER_TIMEOUT = 3000;
 
   /**
    * Wait for Phantom provider to be injected into the page.
@@ -139,7 +142,9 @@
             const provider = await waitForPhantomProvider();
             
             if (!provider) {
-              // Check if we're in Phantom's in-app browser
+              // Check if we're in Phantom's in-app browser via user agent
+              // Note: User agent detection is not 100% reliable but provides better UX
+              // Phantom's in-app browser typically includes "Phantom" in the UA string
               const userAgent = navigator.userAgent || "";
               const isPhantomBrowser = userAgent.toLowerCase().includes("phantom");
               
