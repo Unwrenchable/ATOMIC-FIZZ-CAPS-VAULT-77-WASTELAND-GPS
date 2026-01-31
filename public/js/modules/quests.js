@@ -733,6 +733,11 @@
           // This prevents quest completion failure due to missing item definitions
           const itemObj = itemDef ? { ...itemDef, quantity: 1 } : { id: itemId, name: itemId, type: "questItem", quantity: 1 };
           
+          // Warn if using fallback (item not in database)
+          if (!itemDef) {
+            console.warn(`[quests] Item '${itemId}' not found in items database, using fallback`);
+          }
+          
           // Add to quest module inventory
           if (!this.gs.inventory.questItems) this.gs.inventory.questItems = [];
           this.gs.inventory.questItems.push(itemObj);
@@ -740,11 +745,11 @@
           // Add to Game.player.inventory (main inventory system)
           if (window.Game && window.Game.player) {
             if (!window.Game.player.inventory) window.Game.player.inventory = [];
-            // Check if item already exists
-            const existing = window.Game.player.inventory.find(i => i.id === itemId);
-            if (existing && existing.quantity !== undefined) {
-              existing.quantity += 1;
-            } else if (!existing) {
+            // Check if item already exists in inventory
+            const existingItem = window.Game.player.inventory.find(i => i.id === itemId);
+            if (existingItem && existingItem.quantity !== undefined) {
+              existingItem.quantity += 1;
+            } else if (!existingItem) {
               window.Game.player.inventory.push(itemObj);
             }
           }
