@@ -11,7 +11,6 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
-  // Security utilities
   const securityUtils = {
     // Sanitize wallet address to prevent XSS - preserves valid address characters
     sanitizeAddress(address) {
@@ -73,6 +72,51 @@
     }
   };
 
+  // Constants
+  // Timeout for Phantom provider injection in in-app browser
+  // 3000ms chosen based on testing - typically injects within 100-500ms but allowing
+  // extra time for slower devices/connections while keeping user wait reasonable
+  const PHANTOM_PROVIDER_TIMEOUT = 3000;
+
+  /**
+   * Wait for Phantom provider to be injected into the page.
+   * 
+   * In Phantom's in-app browser, the provider object (window.solana or window.phantom.solana)
+   * is injected asynchronously after the page loads. This function polls for the provider
+   * to become available, waiting up to the specified timeout period.
+   * 
+   * @param {number} timeoutMs - Maximum time to wait for provider in milliseconds
+   * @returns {Promise<Object|null>} Phantom provider object if found, null if timeout
+   */
+  async function waitForPhantomProvider(timeoutMs = PHANTOM_PROVIDER_TIMEOUT) {
+    // Check if already available
+    if (window.solana?.isPhantom) return window.solana;
+    if (window.phantom?.solana?.isPhantom) return window.phantom.solana;
+    
+    // Wait for provider to inject
+    return new Promise((resolve) => {
+      const startTime = Date.now();
+      const checkInterval = 100;
+      
+      function pollForProvider() {
+        if (window.solana?.isPhantom) {
+          resolve(window.solana);
+          return;
+        }
+        if (window.phantom?.solana?.isPhantom) {
+          resolve(window.phantom.solana);
+          return;
+        }
+        if (Date.now() - startTime < timeoutMs) {
+          setTimeout(pollForProvider, checkInterval);
+        } else {
+          resolve(null);
+        }
+      }
+      pollForProvider();
+    });
+  }
+
   const web3WalletAdapter = {
     loaded: false,
     connected: false,
@@ -94,11 +138,23 @@
             throw new Error('Please wait before trying again');
           }
           try {
-            // Support both provider locations (regular and in-app browser)
-            const provider = (window.solana?.isPhantom) ? window.solana : window.phantom?.solana;
+            // Wait for Phantom provider to inject (handles in-app browser timing)
+            const provider = await waitForPhantomProvider();
+            
             if (!provider) {
-              throw new Error('Phantom provider not found');
+              // Check if we're in Phantom's in-app browser via user agent
+              // Note: User agent detection is not 100% reliable but provides better UX
+              // Phantom's in-app browser typically includes "Phantom" in the UA string
+              const userAgent = navigator.userAgent || "";
+              const isPhantomBrowser = userAgent.toLowerCase().includes("phantom");
+              
+              if (isPhantomBrowser) {
+                throw new Error('Phantom wallet is loading. Please try again in a moment.');
+              } else {
+                throw new Error('Phantom wallet not found. Please install Phantom from https://phantom.app');
+              }
             }
+            
             const resp = await provider.connect();
             const address = resp.publicKey.toString();
             if (!securityUtils.isValidSolanaAddress(address)) {
@@ -389,18 +445,23 @@
 
         console.log(`[web3-wallet] Connecting to ${provider.name}...`);
 
-        // Check if provider is available
-        if (!provider.check()) {
-          if (walletType === 'phantom') {
-            alert(`${provider.name} not detected!\n\nPlease install Phantom wallet:\nhttps://phantom.app/`);
-          } else if (walletType === 'metamask') {
-            alert(`${provider.name} not detected!\n\nPlease install MetaMask:\nhttps://metamask.io/`);
-          } else if (walletType === 'walletconnect') {
-            alert(`WalletConnect library not loaded.\n\nPlease refresh the page.`);
-          } else {
-            alert(`${provider.name} not available.\n\nPlease install the wallet extension.`);
+        // For Phantom, try to connect even if check() returns false initially
+        // (handles in-app browser timing where provider injects after page load)
+        if (walletType === 'phantom') {
+          // Skip the check() for Phantom - the connect() method will wait for provider
+          // This handles the in-app browser case where provider isn't immediately available
+        } else {
+          // Check if provider is available for other wallets
+          if (!provider.check()) {
+            if (walletType === 'metamask') {
+              alert(`${provider.name} not detected!\n\nPlease install MetaMask:\nhttps://metamask.io/`);
+            } else if (walletType === 'walletconnect') {
+              alert(`WalletConnect library not loaded.\n\nPlease refresh the page.`);
+            } else {
+              alert(`${provider.name} not available.\n\nPlease install the wallet extension.`);
+            }
+            return false;
           }
-          return false;
         }
 
         // Connect to wallet
