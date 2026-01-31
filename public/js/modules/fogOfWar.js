@@ -170,8 +170,7 @@
 
   Game.modules.fogOfWar = fogModule;
 
-  // Wait for map-ready event instead of DOMContentLoaded
-  // This ensures the map exists before we try to create fog overlay
+  // Wait for map-ready event to ensure the map exists before creating fog overlay
   window.addEventListener("map-ready", () => {
     // Small delay to ensure map is fully initialized
     setTimeout(() => {
@@ -181,18 +180,5 @@
         console.error("fogOfWar: init failed", e);
       }
     }, 700);
-  });
-  
-  // Fallback: also try on DOMContentLoaded with a longer delay
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => {
-      if (!fogModule.fogPane) {
-        try {
-          fogModule.init();
-        } catch (e) {
-          console.error("fogOfWar: fallback init failed", e);
-        }
-      }
-    }, 3000);
   });
 })();

@@ -504,6 +504,9 @@
 
     const quests = window.DATA.quests || [];
 
+    // Get available quests from the quest module
+    const available = Game.modules?.quests?.getAvailableQuests?.() || [];
+
     const active = PLAYER.questsActive
       .map(id => quests.find(q => q && (q.id === id || q.slug === id)))
       .filter(Boolean);
@@ -523,6 +526,26 @@
       `;
     };
 
+    const renderAvailableQuest = (q) => {
+      const name = q.name || q.title || q.id || q.slug || "Quest";
+      const desc = q.description || q.flavor || "";
+      const message = q.offer?.message || "";
+      return `
+        <div class="pip-entry available-quest">
+          <strong style="color: #ffaa00;">⚠️ ${name}</strong><br>
+          <span>${message || desc}</span><br>
+          <div style="margin-top: 8px;">
+            <button class="pipboy-button-small quest-accept-btn" data-quest-id="${q.id}">ACCEPT</button>
+            <button class="pipboy-button-small quest-decline-btn" data-quest-id="${q.id}" style="margin-left: 8px;">DECLINE</button>
+          </div>
+        </div>
+      `;
+    };
+
+    const availableHtml = available.length
+      ? available.map(q => renderAvailableQuest(q)).join("")
+      : "";
+
     const activeHtml = active.length
       ? active.map(q => renderQuest(q, "active")).join("")
       : "<p>No active quests.</p>";
@@ -532,11 +555,33 @@
       : "<p>No completed quests.</p>";
 
     panel.innerHTML = `
+      ${availableHtml ? `<h2>Available Quests</h2>${availableHtml}` : ''}
       <h2>Active Quests</h2>
       ${activeHtml}
       <h2>Completed</h2>
       ${doneHtml}
     `;
+
+    // Attach event listeners for accept/decline buttons
+    panel.querySelectorAll(".quest-accept-btn").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const questId = e.target.getAttribute("data-quest-id");
+        if (Game.modules?.quests?.acceptQuest) {
+          await Game.modules.quests.acceptQuest(questId);
+          renderQuestsPanel(); // Re-render to show updated state
+        }
+      });
+    });
+
+    panel.querySelectorAll(".quest-decline-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const questId = e.target.getAttribute("data-quest-id");
+        if (Game.modules?.quests?.declineQuest) {
+          Game.modules.quests.declineQuest(questId);
+          renderQuestsPanel(); // Re-render to show updated state
+        }
+      });
+    });
   }
 
   function updateHUD() {
@@ -987,5 +1032,14 @@
     if (gpsLocked) {
       startGeolocationWatch();
     }
+  });
+
+  // Listen for quest events to update the quests panel
+  window.addEventListener("questOffered", () => {
+    renderQuestsPanel();
+  });
+
+  window.addEventListener("questAccepted", () => {
+    renderQuestsPanel();
   });
 })();

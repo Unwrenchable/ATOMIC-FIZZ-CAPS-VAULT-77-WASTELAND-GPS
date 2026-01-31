@@ -6,6 +6,18 @@
 
   <title>OVERSEER TERMINAL // RESTRICTED ACCESS</title>
 
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    connect-src 'self' https://api.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https: blob:;
+    font-src 'self' https://fonts.gstatic.com data:;
+    object-src 'none';
+    frame-src 'self';
+    base-uri 'self';">
+
   <!-- Pip‑Boy Terminal Font -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
