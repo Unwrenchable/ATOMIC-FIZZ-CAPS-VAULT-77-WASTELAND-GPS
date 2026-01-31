@@ -423,6 +423,8 @@
 
 /* ============================================================
    PIP-BOY RADIO TAB UI (Slim Horizontal Design)
+   Redesigned from circular 280px jukebox dial to 50px horizontal bar
+   to match Pip-Boy minimalist CRT aesthetic
    ============================================================ */
 
 .radio-dial-container {

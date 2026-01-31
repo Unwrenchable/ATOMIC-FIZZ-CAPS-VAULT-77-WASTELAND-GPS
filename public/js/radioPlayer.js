@@ -569,11 +569,11 @@
         freqDisplay.textContent = `${station.frequency} FM`;
       }
 
-      // Also update needle position if not animating (horizontal position)
+      // Also update needle position for initial setup (horizontal position)
       const needle = document.getElementById("radioNeedle");
       if (needle) {
         const dialFace = needle.parentElement;
-        if (dialFace && !needle.style.left) {
+        if (dialFace) {
           const minFreq = 87.5;
           const maxFreq = 108.0;
           const dialWidth = dialFace.offsetWidth - 30;
