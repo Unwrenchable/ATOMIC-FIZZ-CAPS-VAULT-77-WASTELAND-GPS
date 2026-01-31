@@ -729,6 +729,8 @@
           }
           
           // Create item object with full metadata if available
+          // Fallback creates a placeholder questItem if not found in database
+          // This prevents quest completion failure due to missing item definitions
           const itemObj = itemDef ? { ...itemDef, quantity: 1 } : { id: itemId, name: itemId, type: "questItem", quantity: 1 };
           
           // Add to quest module inventory

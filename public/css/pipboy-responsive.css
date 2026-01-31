@@ -344,6 +344,7 @@ body {
   /* Ensure map markers remain clickable on touch devices */
   .leaflet-marker-icon,
   .leaflet-marker-pane {
+    touch-action: auto !important;
     pointer-events: auto !important;
   }
 }
