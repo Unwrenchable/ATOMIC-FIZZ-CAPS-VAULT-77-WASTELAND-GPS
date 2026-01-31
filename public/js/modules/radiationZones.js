@@ -111,8 +111,7 @@
 
   Game.modules.radiationZones = radZones;
 
-  // Wait for map-ready event instead of DOMContentLoaded
-  // This ensures the map pane exists before we try to create radiation zone overlays
+  // Wait for map-ready event to ensure the map pane exists before creating overlays
   window.addEventListener("map-ready", () => {
     // Small delay to ensure map is fully initialized
     setTimeout(() => {
@@ -122,19 +121,6 @@
         console.error("radiationZones: init failed", e);
       }
     }, 600);
-  });
-  
-  // Fallback: also try on DOMContentLoaded with a longer delay
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => {
-      if (!radZones.loaded) {
-        try {
-          radZones.init();
-        } catch (e) {
-          console.error("radiationZones: fallback init failed", e);
-        }
-      }
-    }, 2500);
   });
 })();
 
