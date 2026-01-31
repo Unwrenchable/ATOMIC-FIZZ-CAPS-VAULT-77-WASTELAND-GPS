@@ -719,19 +719,49 @@
         this.gs.player.caps = (this.gs.player.caps || 0) + (r.caps || 0);
       }
       
-      // Give item rewards and sync with main.js PLAYER inventory
+      // Give item rewards and sync with inventory systems
       if (r.items && Array.isArray(r.items)) {
         r.items.forEach(itemId => {
+          // Look up item definition from loaded items database
+          let itemDef = null;
+          if (window.Game && window.Game.player && window.Game.player.items) {
+            itemDef = window.Game.player.items.find(i => i.id === itemId);
+          }
+          
+          // Create item object with full metadata if available
+          // Fallback creates a placeholder questItem if not found in database
+          // This prevents quest completion failure due to missing item definitions
+          const itemObj = itemDef ? { ...itemDef, quantity: 1 } : { id: itemId, name: itemId, type: "questItem", quantity: 1 };
+          
+          // Warn if using fallback (item not in database)
+          if (!itemDef) {
+            console.warn(`[quests] Item '${itemId}' not found in items database, using fallback`);
+          }
+          
           // Add to quest module inventory
           if (!this.gs.inventory.questItems) this.gs.inventory.questItems = [];
-          this.gs.inventory.questItems.push({ id: itemId, name: itemId, quantity: 1 });
+          this.gs.inventory.questItems.push(itemObj);
           
-          // Sync with main.js PLAYER inventory
+          // Add to Game.player.inventory (main inventory system)
+          if (window.Game && window.Game.player) {
+            if (!window.Game.player.inventory) window.Game.player.inventory = [];
+            // Check if item already exists in inventory
+            const existingItem = window.Game.player.inventory.find(i => i.id === itemId);
+            if (existingItem && existingItem.quantity !== undefined) {
+              existingItem.quantity += 1;
+            } else if (!existingItem) {
+              window.Game.player.inventory.push(itemObj);
+            }
+          }
+          
+          // Legacy sync with main.js PLAYER inventory (if it exists)
           if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
             if (!window.PLAYER.inventory.includes(itemId)) {
               window.PLAYER.inventory.push(itemId);
             }
           }
+          
+          console.log("[quests] Rewarded item:", itemObj);
         });
       }
       
@@ -746,6 +776,11 @@
       }
 
       console.log("[quests] Quest completed:", questId);
+      
+      // Trigger inventory UI refresh
+      if (window.Game && window.Game.hooks && window.Game.hooks.onInventoryUpdated) {
+        window.Game.hooks.onInventoryUpdated();
+      }
     },
 
     getCurrentStep(questId) {

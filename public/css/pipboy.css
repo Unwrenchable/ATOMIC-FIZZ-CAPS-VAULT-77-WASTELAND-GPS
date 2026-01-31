@@ -331,8 +331,7 @@ body.pipboy-mode {
 
 #mapContainer {
   pointer-events: auto !important;
-  /* manipulation allows pan/zoom but prevents double-tap zoom delay */
-  touch-action: manipulation !important;
+  /* Allow Leaflet to handle its own touch gestures - don't override */
   -webkit-user-select: none;
   user-select: none;
   /* Prevent scroll chaining to parent containers */
@@ -343,26 +342,25 @@ body.pipboy-mode {
 #mapContainer .leaflet-pane,
 #mapContainer .leaflet-tile-pane,
 #mapContainer .leaflet-overlay-pane {
-  touch-action: inherit !important;
+  /* Let Leaflet handle touch - don't override */
   pointer-events: auto !important;
 }
 
 /* Map panel should not interfere with map touch events */
 #panel-map {
   overflow: hidden !important;
-  /* Allow touch to pass through to map */
-  touch-action: manipulation !important;
+  /* Allow touch to pass through to map - don't override Leaflet */
 }
 
 #panel-map .panel-body {
   overflow: hidden !important;
-  touch-action: manipulation !important;
+  /* Let Leaflet control touch behavior */
   overscroll-behavior: contain;
 }
 
 /* Prevent parent elements from capturing touch events */
 .pipboy-map {
-  touch-action: manipulation !important;
+  /* Let Leaflet handle map gestures */
   -webkit-overflow-scrolling: auto !important;
   overscroll-behavior: contain;
 }
