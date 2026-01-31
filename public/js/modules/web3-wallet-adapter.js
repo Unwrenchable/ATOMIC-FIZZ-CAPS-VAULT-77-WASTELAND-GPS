@@ -75,7 +75,16 @@
   // Constants
   const PHANTOM_PROVIDER_TIMEOUT = 3000; // ms to wait for Phantom provider injection in in-app browser
 
-  // Helper to wait for Phantom provider (handles in-app browser timing)
+  /**
+   * Wait for Phantom provider to be injected into the page.
+   * 
+   * In Phantom's in-app browser, the provider object (window.solana or window.phantom.solana)
+   * is injected asynchronously after the page loads. This function polls for the provider
+   * to become available, waiting up to the specified timeout period.
+   * 
+   * @param {number} timeoutMs - Maximum time to wait for provider in milliseconds
+   * @returns {Promise<Object|null>} Phantom provider object if found, null if timeout
+   */
   async function waitForPhantomProvider(timeoutMs = PHANTOM_PROVIDER_TIMEOUT) {
     // Check if already available
     if (window.solana?.isPhantom) return window.solana;
@@ -86,7 +95,7 @@
       const startTime = Date.now();
       const checkInterval = 100;
       
-      function check() {
+      function pollForProvider() {
         if (window.solana?.isPhantom) {
           resolve(window.solana);
           return;
@@ -96,12 +105,12 @@
           return;
         }
         if (Date.now() - startTime < timeoutMs) {
-          setTimeout(check, checkInterval);
+          setTimeout(pollForProvider, checkInterval);
         } else {
           resolve(null);
         }
       }
-      check();
+      pollForProvider();
     });
   }
 
