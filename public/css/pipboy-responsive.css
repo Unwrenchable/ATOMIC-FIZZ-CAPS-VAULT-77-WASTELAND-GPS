@@ -330,22 +330,20 @@ body {
   #mapContainer,
   .pipboy-map,
   #panel-map .panel-body {
-    /* manipulation allows pan/zoom gestures without double-tap delay */
-    touch-action: manipulation !important;
+    /* Let Leaflet control its own touch behavior - don't override */
     -webkit-overflow-scrolling: auto !important;
     overscroll-behavior: contain !important;
   }
 
   /* Leaflet handles its own gestures - allow pan and pinch-zoom */
   #mapContainer .leaflet-container {
-    touch-action: pan-x pan-y pinch-zoom !important;
+    touch-action: none !important;
     pointer-events: auto !important;
   }
 
   /* Ensure map markers remain clickable on touch devices */
   .leaflet-marker-icon,
   .leaflet-marker-pane {
-    touch-action: auto !important;
     pointer-events: auto !important;
   }
 }
