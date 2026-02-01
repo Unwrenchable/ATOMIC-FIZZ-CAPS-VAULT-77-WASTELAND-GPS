@@ -225,11 +225,11 @@
     followTimeout: null,
     followDelay: 5000,
     
-    // Mobile fix: retry counter and constants for container dimension check
+    // Mobile fix: retry configuration and state for container dimension check
     containerRetryCount: 0,
     maxContainerRetries: 10,
-    CONTAINER_RETRY_DELAY_MS: 200,
-    MAP_INVALIDATE_DELAY_MS: 150,
+    containerRetryDelayMs: 200,
+    mapInvalidateDelayMs: 150,
     isRetrying: false,
 
     // --------------------------------------------------------
@@ -257,7 +257,7 @@
       if (container) {
         const rect = container.getBoundingClientRect();
         if (rect.width === 0 || rect.height === 0) {
-          // Guard against overlapping retry chains
+          // Guard against overlapping retry chains - only one retry chain can be active
           if (this.isRetrying) {
             console.warn('[worldmap] retry already in progress, skipping duplicate call');
             return;
@@ -268,9 +268,11 @@
             this.isRetrying = true;
             console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), retry', this.containerRetryCount, '/', this.maxContainerRetries);
             setTimeout(() => {
-              this.isRetrying = false; // Reset flag to allow retry attempt
+              // Reset flag immediately before retry - this allows the retry to proceed
+              // but still blocks any external calls during the timeout
+              this.isRetrying = false;
               this.onOpen();
-            }, this.CONTAINER_RETRY_DELAY_MS);
+            }, this.containerRetryDelayMs);
             return;
           } else {
             console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
@@ -321,7 +323,7 @@
         } catch (e) {
           console.error('[worldmap] error in onOpen timeout:', e);
         }
-      }, this.MAP_INVALIDATE_DELAY_MS);
+      }, this.mapInvalidateDelayMs);
     },
 
     // --------------------------------------------------------
