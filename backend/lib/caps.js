@@ -1,21 +1,49 @@
 // backend/lib/caps.js
 // ------------------------------------------------------------
-// Atomic Fizz Caps – Caps Currency Management Library
-// Handles minting caps to players, balance checks, and transfers
+// Atomic Fizz Caps – IN-GAME Caps Management Library
+// ------------------------------------------------------------
+// 
+// ⚠️ IMPORTANT DISTINCTION:
+// 
+// This module manages IN-GAME CAPS (virtual game currency for tracking
+// gameplay progress, rewards, and achievements). This is SERVER-SIDE
+// bookkeeping, NOT actual cryptocurrency operations.
+// 
+// ═══════════════════════════════════════════════════════════════
+// ACTUAL AFC TOKEN ON SOLANA MAINNET:
+// ═══════════════════════════════════════════════════════════════
+// - FIXED SUPPLY: All tokens pre-minted at launch
+// - NO MINTING: No additional tokens will EVER be created
+// - TREASURY WALLET: Holds the entire supply and distributes
+// - DISTRIBUTION: Treasury SENDS tokens to players (not minting)
+// 
+// See: backend/api/fizz-fun.js for actual token operations
+// Env vars: TREASURY_WALLET, CAPS_MINT, TOKEN_MINT
+// ═══════════════════════════════════════════════════════════════
+//
+// IN-GAME CAPS (this module) are used for:
+// - Quest rewards (complete quest → earn in-game caps)
+// - Battle victories (defeat enemy → earn in-game caps)
+// - Location discoveries (find POI → earn in-game caps)
+// - NPC trading (buy/sell with NPCs)
+// 
+// Players can later claim REAL tokens from treasury based on their
+// in-game caps balance through proper distribution mechanics
+// (airdrops, claims, redemptions, etc.)
 // ------------------------------------------------------------
 
 const { redis, key } = require("./redis");
 
-// Maximum caps a player can hold (overflow protection)
+// Maximum in-game caps a player can hold (overflow protection)
 const MAX_CAPS = 999_999_999;
 
 // Default caps for new players
 const DEFAULT_CAPS = 0;
 
 /**
- * Get player's current caps balance
+ * Get player's current in-game caps balance
  * @param {string} wallet - Player wallet address
- * @returns {Promise<number>} Current caps balance
+ * @returns {Promise<number>} Current in-game caps balance
  */
 async function getCapsBalance(wallet) {
   if (!wallet || typeof wallet !== "string") {
@@ -36,12 +64,16 @@ async function getCapsBalance(wallet) {
 }
 
 /**
- * Mint caps to a player (add to their balance)
+ * Award in-game caps to a player (add to their balance)
+ * 
+ * NOTE: This is NOT token minting. This awards virtual in-game currency
+ * for gameplay rewards. The actual AFC token has a fixed supply.
+ * 
  * @param {string} wallet - Player wallet address  
- * @param {number} amount - Amount of caps to mint
- * @returns {Promise<{ok: boolean, newBalance: number, signature: string}>}
+ * @param {number} amount - Amount of in-game caps to award
+ * @returns {Promise<{ok: boolean, newBalance: number, txId: string}>}
  */
-async function mintCapsToPlayer(wallet, amount) {
+async function awardCapsToPlayer(wallet, amount) {
   if (!wallet || typeof wallet !== "string" || wallet.length > 128) {
     throw new Error("Invalid wallet address");
   }
@@ -74,7 +106,7 @@ async function mintCapsToPlayer(wallet, amount) {
       profile = JSON.parse(profileRaw);
     }
 
-    // Add caps (with overflow protection)
+    // Add in-game caps (with overflow protection)
     const currentCaps = typeof profile.caps === "number" ? profile.caps : 0;
     profile.caps = Math.min(currentCaps + safeAmount, MAX_CAPS);
 
@@ -82,8 +114,7 @@ async function mintCapsToPlayer(wallet, amount) {
     await redis.hset(profileKey, "profile", JSON.stringify(profile));
 
     // Generate a transaction ID for audit tracking
-    // Note: This is an internal transaction reference for server-side tracking/auditing,
-    // not a cryptographic signature. Blockchain transactions use proper on-chain signatures.
+    // This is an internal reference for server-side auditing, not a blockchain signature
     const crypto = require("crypto");
     const txId = crypto.randomBytes(16).toString("hex");
 
@@ -92,26 +123,26 @@ async function mintCapsToPlayer(wallet, amount) {
     await redis.set(txKey, JSON.stringify({
       wallet,
       amount: safeAmount,
-      type: "mint",
+      type: "award", // Changed from "mint" to "award" - these are in-game rewards
       timestamp: Date.now(),
       newBalance: profile.caps
     }), { EX: 30 * 24 * 60 * 60 }); // 30 day expiry
 
-    console.log(`[caps] Minted ${safeAmount} caps to ${wallet}. New balance: ${profile.caps}`);
+    console.log(`[caps] Awarded ${safeAmount} in-game caps to ${wallet}. New balance: ${profile.caps}`);
 
     return {
       ok: true,
       newBalance: profile.caps,
-      txId // renamed from 'signature' to avoid confusion with cryptographic signatures
+      txId
     };
   } catch (err) {
-    console.error("[caps] mintCapsToPlayer error:", err);
-    throw new Error("Failed to mint caps");
+    console.error("[caps] awardCapsToPlayer error:", err);
+    throw new Error("Failed to award caps");
   }
 }
 
 /**
- * Transfer caps between players
+ * Transfer in-game caps between players
  * @param {string} fromWallet - Sender wallet address
  * @param {string} toWallet - Recipient wallet address
  * @param {number} amount - Amount to transfer
@@ -165,7 +196,7 @@ async function transferCaps(fromWallet, toWallet, amount) {
     toProfile.caps = Math.min((toProfile.caps || 0) + amount, MAX_CAPS);
     await redis.hset(toProfileKey, "profile", JSON.stringify(toProfile));
 
-    console.log(`[caps] Transferred ${amount} caps from ${fromWallet} to ${toWallet}`);
+    console.log(`[caps] Transferred ${amount} in-game caps from ${fromWallet} to ${toWallet}`);
 
     return {
       ok: true,
@@ -178,9 +209,14 @@ async function transferCaps(fromWallet, toWallet, amount) {
   }
 }
 
+// Legacy alias for backward compatibility
+// TODO: Update all callers to use awardCapsToPlayer instead
+const mintCapsToPlayer = awardCapsToPlayer;
+
 module.exports = {
   getCapsBalance,
-  mintCapsToPlayer,
+  awardCapsToPlayer,
+  mintCapsToPlayer, // Legacy alias - use awardCapsToPlayer for new code
   transferCaps,
   MAX_CAPS,
   DEFAULT_CAPS
