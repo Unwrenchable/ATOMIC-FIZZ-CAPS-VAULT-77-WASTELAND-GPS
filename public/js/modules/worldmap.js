@@ -241,15 +241,27 @@
       this.loadWorldOverlays();
     },
 
+    // Helper method to reset retry state
+    resetRetryState() {
+      this.containerRetryCount = 0;
+      this.isRetrying = false;
+    },
+
     onOpen() {
       console.log('[worldmap] onOpen called');
+      
+      // Guard against overlapping retry chains
+      if (this.isRetrying) {
+        console.warn('[worldmap] retry already in progress, skipping duplicate call');
+        return;
+      }
       
       // CRITICAL FOR MOBILE: Check if map container has dimensions before proceeding
       const container = document.getElementById("mapContainer");
       if (container) {
         const rect = container.getBoundingClientRect();
         if (rect.width === 0 || rect.height === 0) {
-          if (this.containerRetryCount < this.maxContainerRetries && !this.isRetrying) {
+          if (this.containerRetryCount < this.maxContainerRetries) {
             this.containerRetryCount++;
             this.isRetrying = true;
             console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), retry', this.containerRetryCount, '/', this.maxContainerRetries);
@@ -258,18 +270,13 @@
               this.onOpen();
             }, 200);
             return;
-          } else if (this.isRetrying) {
-            console.warn('[worldmap] retry already in progress, skipping duplicate call');
-            return;
           } else {
             console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
-            this.containerRetryCount = 0; // Reset counter for future attempts
-            this.isRetrying = false;
+            this.resetRetryState(); // Reset for future attempts
           }
         } else {
           console.log('[worldmap] container dimensions OK (width:', rect.width, 'height:', rect.height, ')');
-          this.containerRetryCount = 0; // Reset counter on success
-          this.isRetrying = false;
+          this.resetRetryState(); // Reset on success
         }
       }
       
