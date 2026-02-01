@@ -319,6 +319,7 @@ For the good of the Vault, ensure you have configured:
 ## 📚 RELATED DOCUMENTATION
 
 - [Deployment Guide](DEPLOYMENT.md)
+- [Render & Vercel Step-by-Step Setup](docs/RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
 - [Backend .env.example](backend/.env.example)
 - [Root .env.example](.env.example)
 - [Testing Guide](TESTING_GUIDE.md)

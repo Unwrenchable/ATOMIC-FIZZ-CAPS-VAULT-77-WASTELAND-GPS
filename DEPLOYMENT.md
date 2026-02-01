@@ -1,5 +1,8 @@
 # Deployment Guide
 
+> 📚 **NEW: Step-by-Step Guide Available**
+> For a complete walkthrough with detailed instructions, see [Render & Vercel Deployment Guide](docs/RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
+
 ## Architecture Overview
 
 This application uses a **unified backend** architecture with multiple frontend deployment options:
