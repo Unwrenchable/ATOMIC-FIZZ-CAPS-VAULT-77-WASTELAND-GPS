@@ -329,8 +329,8 @@ body {
 
   /* MOBILE MAP FIX - ensure panel-body has proper dimensions */
   #panel-map .panel-body {
-    height: 100% !important;
-    position: relative !important;
+    height: 100%;
+    position: relative;
     min-height: 25rem;
   }
 

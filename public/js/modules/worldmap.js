@@ -224,6 +224,10 @@
     explorationMode: false,  // When true, disables auto-snap completely
     followTimeout: null,
     followDelay: 5000,
+    
+    // Mobile fix: retry counter for container dimension check
+    containerRetryCount: 0,
+    maxContainerRetries: 10,
 
     // --------------------------------------------------------
     // INIT
@@ -244,11 +248,18 @@
       if (container) {
         const rect = container.getBoundingClientRect();
         if (rect.width === 0 || rect.height === 0) {
-          console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), waiting...');
-          setTimeout(() => this.onOpen(), 200);
-          return;
+          if (this.containerRetryCount < this.maxContainerRetries) {
+            this.containerRetryCount++;
+            console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), retry', this.containerRetryCount, '/', this.maxContainerRetries);
+            setTimeout(() => this.onOpen(), 200);
+            return;
+          } else {
+            console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
+          }
+        } else {
+          console.log('[worldmap] container dimensions OK (width:', rect.width, 'height:', rect.height, ')');
+          this.containerRetryCount = 0; // Reset counter on success
         }
-        console.log('[worldmap] container dimensions OK (width:', rect.width, 'height:', rect.height, ')');
       }
       
       // Initialize map if not yet created (happens after boot screen)
