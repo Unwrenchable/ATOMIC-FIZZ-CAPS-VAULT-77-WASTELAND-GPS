@@ -56,15 +56,15 @@
   // Main weather roll
   // ------------------------------------------------------------
   function rollWeather() {
-    const regionId = WorldState.currentRegion;
-    const region = Regions.get(regionId);
-    const faction = Factions.getControl(regionId);
-    const anomalyLevel = region.anomalyLevel || 0;
+    const regionId = WorldState?.currentRegion;
+    const region = Regions?.get?.(regionId);
+    const faction = Factions?.getControl?.(regionId);
+    const anomalyLevel = region?.anomalyLevel || 0;
 
     let table = { ...BASE_WEATHER };
 
     // Region bias
-    if (region.weatherBias) {
+    if (region?.weatherBias) {
       table[region.weatherBias] = (table[region.weatherBias] || 0) + 1.5;
     }
 
@@ -76,14 +76,14 @@
     }
 
     // Faction influence
-    if (FACTION_WEATHER[faction]) {
+    if (faction && FACTION_WEATHER[faction]) {
       for (const [k, v] of Object.entries(FACTION_WEATHER[faction])) {
         table[k] = (table[k] || 0) + v;
       }
     }
 
     // Timeline distortions
-    if (Timeline.isUnstable(regionId)) {
+    if (Timeline?.isUnstable?.(regionId)) {
       table["distortion_fog"] = (table["distortion_fog"] || 0) + 0.5;
       table["static_haze"] = (table["static_haze"] || 0) + 0.5;
     }
