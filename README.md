@@ -157,13 +157,10 @@ Access the admin panel at: **https://www.atomicfizzcaps.xyz/admin**
 **Login Configuration:**
 Set these environment variables to enable admin access:
 - `ADMIN_USERNAME` - Admin username (default: `admin`)
-- `ADMIN_PASSWORD_HASH` - MD5/SHA hash of admin password
+- `ADMIN_PASSWORD` - Admin password (stored securely with timing-safe comparison)
 - `ADMIN_WALLETS` - Comma-separated list of authorized wallet addresses
 
-Example password hash generation:
-```bash
-echo -n "your_password" | md5sum
-```
+**Security Note:** The password is compared using constant-time comparison to prevent timing attacks. Store your `.env` file securely and never commit it to version control.
 
 ---
 
