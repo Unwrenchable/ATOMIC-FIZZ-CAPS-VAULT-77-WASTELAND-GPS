@@ -332,17 +332,15 @@ body {
     min-height: var(--mobile-map-min-height);
   }
 
-  /* MOBILE MAP FIX - ensure panel-body has minimum height and proper touch handling */
+  /* MOBILE MAP FIX - ensure panel-body has minimum height */
   #panel-map .panel-body {
     min-height: var(--mobile-map-min-height);
-    /* Let Leaflet control its own touch behavior - don't override */
-    -webkit-overflow-scrolling: auto !important;
-    overscroll-behavior: contain !important;
   }
 
   /* MOBILE MAP TOUCH FIX - enable map gestures while preventing page scroll */
   #mapContainer,
-  .pipboy-map {
+  .pipboy-map,
+  #panel-map .panel-body {
     /* Let Leaflet control its own touch behavior - don't override */
     -webkit-overflow-scrolling: auto !important;
     overscroll-behavior: contain !important;

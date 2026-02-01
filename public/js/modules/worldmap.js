@@ -225,9 +225,11 @@
     followTimeout: null,
     followDelay: 5000,
     
-    // Mobile fix: retry counter and flag for container dimension check
+    // Mobile fix: retry counter and constants for container dimension check
     containerRetryCount: 0,
     maxContainerRetries: 10,
+    CONTAINER_RETRY_DELAY_MS: 200,
+    MAP_INVALIDATE_DELAY_MS: 150,
     isRetrying: false,
 
     // --------------------------------------------------------
@@ -268,7 +270,7 @@
             setTimeout(() => {
               this.resetRetryState();
               this.onOpen();
-            }, 200);
+            }, this.CONTAINER_RETRY_DELAY_MS);
             return;
           } else {
             console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
@@ -319,7 +321,7 @@
         } catch (e) {
           console.error('[worldmap] error in onOpen timeout:', e);
         }
-      }, 150);
+      }, this.MAP_INVALIDATE_DELAY_MS);
     },
 
     // --------------------------------------------------------
