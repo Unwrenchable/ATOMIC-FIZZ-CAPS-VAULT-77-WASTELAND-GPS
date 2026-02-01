@@ -1,3 +1,7 @@
+// Global safe logging utilities (available to all chunks)
+window.safeLog = function(...args) { try { console.log(...args); } catch (e) {} };
+window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {} };
+
 (function () {
   "use strict";
 

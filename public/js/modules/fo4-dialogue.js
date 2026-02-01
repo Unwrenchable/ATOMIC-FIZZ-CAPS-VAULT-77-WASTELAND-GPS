@@ -1037,24 +1037,47 @@
     },
 
     _giveRewards(rewards) {
-      // Give caps
-      if (rewards.caps && Game.economy) {
-        Game.economy.addCaps(rewards.caps);
+      // Give caps - use unified PlayerState
+      if (rewards.caps) {
+        if (Game.modules?.PlayerState?.awardCaps) {
+          Game.modules.PlayerState.awardCaps(rewards.caps);
+        } else if (Game.economy?.addCaps) {
+          Game.economy.addCaps(rewards.caps);
+        }
         this.showQuestUpdate('CAPS', `+${rewards.caps} bottle caps`);
       }
       
-      // Give XP
-      if (rewards.xp && Game.player) {
-        Game.player.addXP(rewards.xp);
+      // Give XP - use unified PlayerState
+      if (rewards.xp) {
+        if (Game.modules?.PlayerState?.awardXP) {
+          Game.modules.PlayerState.awardXP(rewards.xp);
+        } else if (Game.player?.addXP) {
+          Game.player.addXP(rewards.xp);
+        }
         this.showQuestUpdate('EXPERIENCE', `+${rewards.xp} XP`);
       }
       
-      // Give items
-      if (rewards.items && Game.inventory) {
-        rewards.items.forEach(itemId => {
-          Game.inventory.addItem(itemId);
+      // Give items - use unified PlayerState
+      if (rewards.items) {
+        const itemsArray = Array.isArray(rewards.items) ? rewards.items : [rewards.items];
+        itemsArray.forEach(item => {
+          // Item can be an ID string or a full item object
+          const itemObj = typeof item === 'string' 
+            ? { id: item, name: item, type: 'reward' }
+            : item;
+          
+          // Use unified receiveItemFromNPC for proper binding
+          if (Game.receiveItemFromNPC) {
+            Game.receiveItemFromNPC(itemObj, this.currentNPC?.name || 'NPC');
+          } else if (Game.modules?.PlayerState?.addItem) {
+            Game.modules.PlayerState.addItem(itemObj);
+          } else if (Game.giveItem) {
+            Game.giveItem(itemObj);
+          } else if (Game.inventory?.addItem) {
+            Game.inventory.addItem(item);
+          }
         });
-        this.showQuestUpdate('ITEMS', `Received ${rewards.items.length} item(s)`);
+        this.showQuestUpdate('ITEMS', `Received ${itemsArray.length} item(s)`);
       }
     },
 
