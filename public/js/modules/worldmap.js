@@ -268,7 +268,7 @@
             this.isRetrying = true;
             console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), retry', this.containerRetryCount, '/', this.maxContainerRetries);
             setTimeout(() => {
-              this.resetRetryState();
+              this.isRetrying = false; // Reset flag to allow retry attempt
               this.onOpen();
             }, this.CONTAINER_RETRY_DELAY_MS);
             return;

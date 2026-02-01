@@ -5,7 +5,7 @@
 
 /* CSS custom properties for responsive design */
 :root {
-  --mobile-map-min-height: 25rem;
+  --mobile-map-min-height: 30rem;
 }
 
 /* Reset and base responsive setup */
