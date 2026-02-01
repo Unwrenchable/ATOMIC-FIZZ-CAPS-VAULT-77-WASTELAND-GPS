@@ -25,7 +25,7 @@ window.overseerHandlers = {
       overseerSay("> AUTHORIZATION GRANTED.");
       overseerSay("> OPENING WORMHOLE BRIDGE INTERFACE...");
       setTimeout(() => {
-        window.open("/experimental/bridge/portal.html", "_blank");
+        window.open("/bridge-portal", "_blank");
       }, 800);
     }, 1200);
   },
@@ -43,7 +43,7 @@ window.overseerHandlers = {
       overseerSay("> LOCKS DISENGAGED.");
       overseerSay("> OPENING TESTING GROUNDS INTERFACE...");
       setTimeout(() => {
-        window.open("/experimental/nuke/index.html", "_blank");
+        window.open("/nuke-portal", "_blank");
       }, 800);
     }, 1500);
   }
