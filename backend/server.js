@@ -114,6 +114,7 @@ app.use(
           "https://*.vercel.app",
           "https://api.mainnet-beta.solana.com",
           "https://api.devnet.solana.com",
+          "https://api-inference.huggingface.co",
           "https://api.phantom.app",
           "https://*.phantom.app",
           "https://wallet.phantom.app",
