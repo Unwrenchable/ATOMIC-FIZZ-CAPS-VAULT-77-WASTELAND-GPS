@@ -151,7 +151,16 @@
               if (isPhantomBrowser) {
                 throw new Error('Phantom wallet is loading. Please try again in a moment.');
               } else {
-                throw new Error('Phantom wallet not found. Please install Phantom from https://phantom.app');
+                // Offer to open Phantom install page
+                const shouldInstall = confirm(
+                  'Phantom wallet not detected!\n\n' +
+                  'Phantom is a browser extension wallet for Solana.\n\n' +
+                  'Would you like to open the Phantom website to install it?'
+                );
+                if (shouldInstall) {
+                  window.open('https://phantom.app', '_blank');
+                }
+                throw new Error('Phantom wallet not installed. Please install it from https://phantom.app and refresh this page.');
               }
             }
             
@@ -180,6 +189,19 @@
             throw new Error('Please wait before trying again');
           }
           try {
+            // Check if Solflare is installed
+            if (!window.solflare || !window.solflare.isSolflare) {
+              const shouldInstall = confirm(
+                'Solflare wallet not detected!\n\n' +
+                'Solflare is a browser extension wallet for Solana.\n\n' +
+                'Would you like to open the Solflare website to install it?'
+              );
+              if (shouldInstall) {
+                window.open('https://solflare.com/', '_blank');
+              }
+              throw new Error('Solflare not installed. Please install it from https://solflare.com and refresh this page.');
+            }
+            
             await window.solflare.connect();
             const address = window.solflare.publicKey.toString();
             if (!securityUtils.isValidSolanaAddress(address)) {
@@ -199,15 +221,24 @@
         name: "WalletConnect",
         icon: "🔗",
         chain: "multi",
-        check: () => window.WalletConnectProvider !== undefined,
+        check: () => true, // Always show as available option
         connect: async function() {
           if (!securityUtils.rateLimit('walletconnect_connect', 2000)) {
             throw new Error('Please wait before trying again');
           }
           try {
-            // Use WalletConnect v2
+            // Check if WalletConnect library is loaded
             if (!window.WalletConnectProvider) {
-              throw new Error("WalletConnect not loaded. Add script: https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider");
+              // Guide user to install or refresh
+              const userChoice = confirm(
+                "WalletConnect library is not loaded.\n\n" +
+                "Please refresh the page to load WalletConnect.\n\n" +
+                "Click OK to refresh now, or Cancel to try a different wallet."
+              );
+              if (userChoice) {
+                window.location.reload();
+              }
+              throw new Error("WalletConnect library not loaded");
             }
             
             const provider = new window.WalletConnectProvider({
@@ -248,6 +279,19 @@
             throw new Error('Please wait before trying again');
           }
           try {
+            // Check if MetaMask is installed
+            if (!window.ethereum || !window.ethereum.isMetaMask) {
+              const shouldInstall = confirm(
+                'MetaMask wallet not detected!\n\n' +
+                'MetaMask is a browser extension wallet for Ethereum and other EVM chains.\n\n' +
+                'Would you like to open the MetaMask website to install it?'
+              );
+              if (shouldInstall) {
+                window.open('https://metamask.io/download/', '_blank');
+              }
+              throw new Error('MetaMask not installed. Please install it from https://metamask.io and refresh this page.');
+            }
+            
             const accounts = await window.ethereum.request({ 
               method: 'eth_requestAccounts' 
             });
@@ -277,6 +321,19 @@
             throw new Error('Please wait before trying again');
           }
           try {
+            // Check if Coinbase Wallet is installed
+            if (!window.ethereum || !window.ethereum.isCoinbaseWallet) {
+              const shouldInstall = confirm(
+                'Coinbase Wallet not detected!\n\n' +
+                'Coinbase Wallet is a browser extension wallet for Ethereum and other EVM chains.\n\n' +
+                'Would you like to open the Coinbase Wallet website to install it?'
+              );
+              if (shouldInstall) {
+                window.open('https://www.coinbase.com/wallet', '_blank');
+              }
+              throw new Error('Coinbase Wallet not installed. Please install it from https://www.coinbase.com/wallet and refresh this page.');
+            }
+            
             const accounts = await window.ethereum.request({ 
               method: 'eth_requestAccounts' 
             });
@@ -370,23 +427,19 @@
     getAvailableWallets() {
       const available = [];
       
+      // Always show these popular wallets as options
+      const alwaysShow = ['phantom', 'walletconnect', 'integrated'];
+      
       for (const [key, provider] of Object.entries(this.providers)) {
-        if (provider.check()) {
+        // Always show popular wallets, or show if detected
+        if (alwaysShow.includes(key) || provider.check()) {
           available.push({
             key,
             name: provider.name,
-            icon: provider.icon
+            icon: provider.icon,
+            detected: provider.check()
           });
         }
-      }
-
-      // Always show integrated wallet
-      if (!available.find(w => w.key === 'integrated')) {
-        available.push({
-          key: 'integrated',
-          name: this.providers.integrated.name,
-          icon: this.providers.integrated.icon
-        });
       }
 
       return available;
@@ -397,8 +450,10 @@
       
       let message = "🔗 CONNECT WALLET\n\nSelect a wallet provider:\n\n";
       available.forEach((wallet, i) => {
-        message += `[${i + 1}] ${wallet.icon} ${wallet.name}\n`;
+        const status = wallet.detected ? "✅" : "⚠️";
+        message += `[${i + 1}] ${wallet.icon} ${wallet.name} ${status}\n`;
       });
+      message += `\n✅ = Detected\n⚠️ = Not installed (will prompt)\n`;
       message += `\n[0] Cancel\n\nEnter number (0-${available.length}):`;
 
       const choice = prompt(message);
