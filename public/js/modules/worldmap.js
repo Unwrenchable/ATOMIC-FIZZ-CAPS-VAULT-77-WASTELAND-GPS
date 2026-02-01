@@ -254,9 +254,13 @@
       
       // CRITICAL FOR MOBILE: Check if map container has dimensions before proceeding
       const container = document.getElementById("mapContainer");
-      if (container) {
-        const rect = container.getBoundingClientRect();
-        if (rect.width === 0 || rect.height === 0) {
+      if (!container) {
+        console.warn('[worldmap] mapContainer element not found in DOM - cannot initialize map');
+        return;
+      }
+      
+      const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
           // Guard against overlapping retry chains - only one retry chain can be active
           if (this.isRetrying) {
             console.warn('[worldmap] retry already in progress, skipping duplicate call');
@@ -282,7 +286,6 @@
           console.log('[worldmap] container dimensions OK (width:', rect.width, 'height:', rect.height, ')');
           this.resetRetryState(); // Reset on success
         }
-      }
       
       // Initialize map if not yet created (happens after boot screen)
       if (!this.map) {
