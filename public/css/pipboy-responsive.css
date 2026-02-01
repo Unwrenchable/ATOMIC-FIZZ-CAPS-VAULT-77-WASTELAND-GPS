@@ -332,10 +332,8 @@ body {
     min-height: var(--mobile-map-min-height);
   }
 
-  /* MOBILE MAP FIX - ensure panel-body has proper dimensions */
+  /* MOBILE MAP FIX - ensure panel-body has minimum height for map to render */
   #panel-map .panel-body {
-    height: 100%;
-    position: relative;
     min-height: var(--mobile-map-min-height);
   }
 
