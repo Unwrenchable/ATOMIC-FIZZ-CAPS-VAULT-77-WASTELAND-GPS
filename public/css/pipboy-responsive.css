@@ -280,6 +280,11 @@ body {
    ============================================================ */
 
 @media screen and (max-width: 768px) {
+  /* CSS custom properties for mobile map sizing */
+  :root {
+    --mobile-map-min-height: 25rem;
+  }
+
   html {
     font-size: 55%; /* Slightly smaller base for mobile */
   }
@@ -324,14 +329,14 @@ body {
   /* Adjust map height on mobile - ensure sufficient space for map to render */
   .pipboy-map {
     height: 60vh;
-    min-height: 25rem;
+    min-height: var(--mobile-map-min-height);
   }
 
   /* MOBILE MAP FIX - ensure panel-body has proper dimensions */
   #panel-map .panel-body {
     height: 100%;
     position: relative;
-    min-height: 25rem;
+    min-height: var(--mobile-map-min-height);
   }
 
   /* MOBILE MAP TOUCH FIX - enable map gestures while preventing page scroll */

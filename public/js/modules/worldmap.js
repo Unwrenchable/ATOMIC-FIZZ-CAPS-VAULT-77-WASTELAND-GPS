@@ -255,6 +255,7 @@
             return;
           } else {
             console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
+            this.containerRetryCount = 0; // Reset counter for future attempts
           }
         } else {
           console.log('[worldmap] container dimensions OK (width:', rect.width, 'height:', rect.height, ')');
