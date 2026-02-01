@@ -27,11 +27,15 @@
   if (isLocalhost || isCodespace) {
     // Local dev or GitHub Codespaces: point to local backend
     window.API_BASE = 'http://localhost:3000';
+    // Use devnet for local development
+    window.SOLANA_RPC = 'https://api.devnet.solana.com';
   } else {
     // All production/preview environments (Vercel, Render, custom domain):
     // Use the centralized API at api.atomicfizzcaps.xyz
     // This ensures ONE unified game world for all players
     window.API_BASE = 'https://api.atomicfizzcaps.xyz';
+    // Use mainnet for production
+    window.SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
   }
   
   // BACKEND_URL is an alias used by some older modules (main.js, authClient.js)
@@ -41,5 +45,6 @@
   // Log configuration for debugging
   console.log('[Config] Frontend:', hostname);
   console.log('[Config] Backend API:', window.API_BASE);
+  console.log('[Config] Solana RPC:', window.SOLANA_RPC);
   console.log('[Config] Architecture: Unified - all frontends → single backend');
 })();
