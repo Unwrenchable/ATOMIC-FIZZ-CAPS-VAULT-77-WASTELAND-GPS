@@ -415,6 +415,22 @@
     <script src="/js/radioPlayer.js" defer></script>
     <script src="/js/main.js" defer></script>
 
+    <!-- WORLD SIMULATION SYSTEM (in dependency order) -->
+    <!-- These provide window.overseer* globals for world state, encounters, NPCs -->
+    <script src="/js/world/state.js" defer></script>
+    <script src="/js/world/factions.js" defer></script>
+    <script src="/js/world/regions.js" defer></script>
+    <script src="/js/world/npc_traits.js" defer></script>
+    <script src="/js/world/timeline.js" defer></script>
+    <script src="/js/world/weather.js" defer></script>
+    <script src="/js/world/anomalies.js" defer></script>
+    <script src="/js/world/loot.js" defer></script>
+    <script src="/js/world/microquests.js" defer></script>
+    <script src="/js/world/encounters.js" defer></script>
+
+    <!-- GAME/WORLD BRIDGE (provides window.world using real implementations) -->
+    <script src="/js/game.overseer-bridge.js" defer></script>
+
     <!-- UNIFIED PLAYER STATE & ACTIONS (must load before modules) -->
     <script src="/js/game/player-state.js" defer></script>
     <script src="/js/game/api-client.js" defer></script>
