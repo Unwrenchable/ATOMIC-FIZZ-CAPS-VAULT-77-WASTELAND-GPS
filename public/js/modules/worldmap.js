@@ -250,23 +250,23 @@
     onOpen() {
       console.log('[worldmap] onOpen called');
       
-      // Guard against overlapping retry chains
-      if (this.isRetrying) {
-        console.warn('[worldmap] retry already in progress, skipping duplicate call');
-        return;
-      }
-      
       // CRITICAL FOR MOBILE: Check if map container has dimensions before proceeding
       const container = document.getElementById("mapContainer");
       if (container) {
         const rect = container.getBoundingClientRect();
         if (rect.width === 0 || rect.height === 0) {
+          // Guard against overlapping retry chains
+          if (this.isRetrying) {
+            console.warn('[worldmap] retry already in progress, skipping duplicate call');
+            return;
+          }
+          
           if (this.containerRetryCount < this.maxContainerRetries) {
             this.containerRetryCount++;
             this.isRetrying = true;
             console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), retry', this.containerRetryCount, '/', this.maxContainerRetries);
             setTimeout(() => {
-              this.isRetrying = false;
+              this.resetRetryState();
               this.onOpen();
             }, 200);
             return;
