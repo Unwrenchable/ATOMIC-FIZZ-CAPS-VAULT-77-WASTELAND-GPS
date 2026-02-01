@@ -126,6 +126,27 @@
     connectionAttempts: 0,
     maxConnectionAttempts: 3,
 
+    // Helper functions for wallet detection
+    _isMetaMaskInstalled() {
+      if (!window.ethereum) return false;
+      // If multiple providers exist, check the array
+      if (window.ethereum.providers?.length) {
+        return window.ethereum.providers.some(p => p.isMetaMask);
+      }
+      // Single provider case
+      return window.ethereum.isMetaMask === true;
+    },
+
+    _isCoinbaseInstalled() {
+      if (!window.ethereum) return false;
+      // If multiple providers exist, check the array
+      if (window.ethereum.providers?.length) {
+        return window.ethereum.providers.some(p => p.isCoinbaseWallet);
+      }
+      // Single provider case
+      return window.ethereum.isCoinbaseWallet === true;
+    },
+
     // Supported wallet providers
     providers: {
       phantom: {
@@ -273,28 +294,14 @@
         name: "MetaMask",
         icon: "🦊",
         chain: "evm",
-        check: () => {
-          // Handle multiple wallet providers
-          if (window.ethereum) {
-            // If multiple providers exist, check the array
-            if (window.ethereum.providers?.length) {
-              return window.ethereum.providers.some(p => p.isMetaMask);
-            }
-            // Single provider case
-            return window.ethereum.isMetaMask === true;
-          }
-          return false;
-        },
+        check: () => web3WalletAdapter._isMetaMaskInstalled(),
         connect: async function() {
           if (!securityUtils.rateLimit('metamask_connect', 2000)) {
             throw new Error('Please wait before trying again');
           }
           try {
             // Check if MetaMask is installed
-            const hasMetaMask = window.ethereum?.providers?.some(p => p.isMetaMask) || 
-                               window.ethereum?.isMetaMask === true;
-            
-            if (!hasMetaMask) {
+            if (!web3WalletAdapter._isMetaMaskInstalled()) {
               const shouldInstall = confirm(
                 'MetaMask wallet not detected!\n\n' +
                 'MetaMask is a browser extension wallet for Ethereum and other EVM chains.\n\n' +
@@ -329,28 +336,14 @@
         name: "Coinbase Wallet",
         icon: "💼",
         chain: "evm",
-        check: () => {
-          // Handle multiple wallet providers
-          if (window.ethereum) {
-            // If multiple providers exist, check the array
-            if (window.ethereum.providers?.length) {
-              return window.ethereum.providers.some(p => p.isCoinbaseWallet);
-            }
-            // Single provider case
-            return window.ethereum.isCoinbaseWallet === true;
-          }
-          return false;
-        },
+        check: () => web3WalletAdapter._isCoinbaseInstalled(),
         connect: async function() {
           if (!securityUtils.rateLimit('coinbase_connect', 2000)) {
             throw new Error('Please wait before trying again');
           }
           try {
             // Check if Coinbase Wallet is installed
-            const hasCoinbase = window.ethereum?.providers?.some(p => p.isCoinbaseWallet) || 
-                               window.ethereum?.isCoinbaseWallet === true;
-            
-            if (!hasCoinbase) {
+            if (!web3WalletAdapter._isCoinbaseInstalled()) {
               const shouldInstall = confirm(
                 'Coinbase Wallet not detected!\n\n' +
                 'Coinbase Wallet is a browser extension wallet for Ethereum and other EVM chains.\n\n' +
