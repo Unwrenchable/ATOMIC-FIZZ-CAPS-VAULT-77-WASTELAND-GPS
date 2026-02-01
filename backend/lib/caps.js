@@ -10,15 +10,28 @@
 // bookkeeping, NOT actual cryptocurrency operations.
 // 
 // ═══════════════════════════════════════════════════════════════
-// ACTUAL AFC TOKEN ON SOLANA MAINNET:
+// ECOSYSTEM ARCHITECTURE:
 // ═══════════════════════════════════════════════════════════════
-// - FIXED SUPPLY: All tokens pre-minted at launch
-// - NO MINTING: No additional tokens will EVER be created
-// - TREASURY WALLET: Holds the entire supply and distributes
-// - DISTRIBUTION: Treasury SENDS tokens to players (not minting)
 // 
-// See: backend/api/fizz-fun.js for actual token operations
-// Env vars: TREASURY_WALLET, CAPS_MINT, TOKEN_MINT
+// 1. AFC TOKEN (Main Ecosystem Token):
+//    - FIXED SUPPLY: All tokens pre-minted at launch
+//    - NO MINTING: No additional tokens will EVER be created
+//    - TREASURY WALLET: Holds the entire supply and distributes
+//    - DISTRIBUTION: Treasury SENDS tokens to players (not minting)
+//    - Env vars: TREASURY_WALLET, CAPS_MINT, TOKEN_MINT
+// 
+// 2. FIZZ.FUN (Token Launchpad - like pump.fun):
+//    - SEPARATE from the main AFC token
+//    - Lets CAPS holders launch NEW tokens on the platform
+//    - Integrated into the custom wallet
+//    - Fees/revenue support the main FIZZ ecosystem
+//    - See: backend/api/fizz-fun.js for launchpad operations
+// 
+// 3. IN-GAME CAPS (this module):
+//    - Virtual game currency for gameplay tracking
+//    - Quest rewards, battles, discoveries, NPC trading
+//    - Can be redeemed for REAL AFC tokens from treasury
+// 
 // ═══════════════════════════════════════════════════════════════
 //
 // IN-GAME CAPS (this module) are used for:
@@ -27,7 +40,7 @@
 // - Location discoveries (find POI → earn in-game caps)
 // - NPC trading (buy/sell with NPCs)
 // 
-// Players can later claim REAL tokens from treasury based on their
+// Players can later claim REAL AFC tokens from treasury based on their
 // in-game caps balance through proper distribution mechanics
 // (airdrops, claims, redemptions, etc.)
 // ------------------------------------------------------------
