@@ -239,6 +239,18 @@
     onOpen() {
       console.log('[worldmap] onOpen called');
       
+      // CRITICAL FOR MOBILE: Check if map container has dimensions before proceeding
+      const container = document.getElementById("mapContainer");
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) {
+          console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), waiting...');
+          setTimeout(() => this.onOpen(), 200);
+          return;
+        }
+        console.log('[worldmap] container dimensions OK (width:', rect.width, 'height:', rect.height, ')');
+      }
+      
       // Initialize map if not yet created (happens after boot screen)
       if (!this.map) {
         console.log('[worldmap] map not initialized, initializing now...');
@@ -264,12 +276,12 @@
 
       this.renderWorldLabels();
 
-      // Force map to recalculate size and re-render
+      // Force map to recalculate size and re-render (increased delay for mobile)
       setTimeout(() => {
         try {
           if (this.map) {
             console.log('[worldmap] invalidating map size and recentering...');
-            this.map.invalidateSize();
+            this.map.invalidateSize(true); // 'true' for animated resize
             const pos = this.gs.player.position;
             this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7);
             this.updateOverlayVisibility(this.map.getZoom() || 7);
@@ -278,7 +290,7 @@
         } catch (e) {
           console.error('[worldmap] error in onOpen timeout:', e);
         }
-      }, 100);
+      }, 150);
     },
 
     // --------------------------------------------------------

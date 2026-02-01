@@ -205,7 +205,8 @@ body {
 
 /* Map panel body should fill available space */
 #panel-map .panel-body {
-  height: calc(100% - 4rem);
+  position: relative;
+  height: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -320,10 +321,17 @@ body {
     min-width: unset;
   }
 
-  /* Adjust map height on mobile */
+  /* Adjust map height on mobile - ensure sufficient space for map to render */
   .pipboy-map {
-    height: 50vh;
-    min-height: 30rem;
+    height: 60vh;
+    min-height: 25rem;
+  }
+
+  /* MOBILE MAP FIX - ensure panel-body has proper dimensions */
+  #panel-map .panel-body {
+    height: 100% !important;
+    position: relative !important;
+    min-height: 25rem;
   }
 
   /* MOBILE MAP TOUCH FIX - enable map gestures while preventing page scroll */
