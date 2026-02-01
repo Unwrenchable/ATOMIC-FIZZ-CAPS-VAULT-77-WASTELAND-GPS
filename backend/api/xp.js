@@ -28,7 +28,7 @@ const xpLimiter = rateLimit({
 router.post("/award", authMiddleware, xpLimiter, async (req, res) => {
   try {
     const { amount } = req.body;
-    const player = req.player; // trusted from authMiddleware
+    const player = req.player; // trusted from authMiddleware - object { wallet, role, sessionId }
 
     // -----------------------------
     // Input validation
@@ -44,7 +44,7 @@ router.post("/award", authMiddleware, xpLimiter, async (req, res) => {
         .json({ ok: false, error: "Invalid XP amount" });
     }
 
-    if (!player || typeof player !== "string" || player.length > 128) {
+    if (!player || !player.wallet || typeof player.wallet !== "string") {
       return res
         .status(400)
         .json({ ok: false, error: "Invalid player identity" });
