@@ -8,12 +8,12 @@ This document provides a comprehensive alphabetical reference of all environment
 
 ## 📋 ALPHABETICAL REFERENCE
 
-### ADMIN_PASSWORD_HASH
+### ADMIN_PASSWORD
 - **Type**: String
 - **Required**: Yes (for admin functionality)
-- **Description**: MD5 or SHA hash of the admin password for backend authentication
-- **Example**: `5f4dcc3b5aa765d61d8327deb882cf99` (MD5 hash)
-- **Security**: Use a strong cryptographic hash (SHA-256 recommended)
+- **Description**: Plain-text admin password for backend authentication (compared using timing-safe comparison)
+- **Example**: `your_secure_password_here`
+- **Security**: Store securely in environment variables, never commit to version control. The backend uses constant-time comparison to prevent timing attacks.
 
 ### ADMIN_SESSION_TTL_SECONDS
 - **Type**: Integer
