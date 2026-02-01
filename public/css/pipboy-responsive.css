@@ -3,6 +3,11 @@
    Makes CSS work on mobile, desktop, and browsers at 75-85% zoom
    ============================================================ */
 
+/* CSS custom properties for responsive design */
+:root {
+  --mobile-map-min-height: 30rem;
+}
+
 /* Reset and base responsive setup */
 * {
   box-sizing: border-box;
@@ -205,7 +210,8 @@ body {
 
 /* Map panel body should fill available space */
 #panel-map .panel-body {
-  height: calc(100% - 4rem);
+  position: relative;
+  height: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -320,10 +326,15 @@ body {
     min-width: unset;
   }
 
-  /* Adjust map height on mobile */
+  /* Adjust map height on mobile - ensure sufficient space for map to render */
   .pipboy-map {
-    height: 50vh;
-    min-height: 30rem;
+    height: 60vh;
+    min-height: var(--mobile-map-min-height);
+  }
+
+  /* MOBILE MAP FIX - ensure panel-body has minimum height */
+  #panel-map .panel-body {
+    min-height: var(--mobile-map-min-height);
   }
 
   /* MOBILE MAP TOUCH FIX - enable map gestures while preventing page scroll */

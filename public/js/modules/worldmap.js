@@ -224,6 +224,13 @@
     explorationMode: false,  // When true, disables auto-snap completely
     followTimeout: null,
     followDelay: 5000,
+    
+    // Mobile fix: retry configuration and state for container dimension check
+    containerRetryCount: 0,
+    maxContainerRetries: 10,
+    containerRetryDelayMs: 200,
+    mapInvalidateDelayMs: 150,
+    isRetrying: false,
 
     // --------------------------------------------------------
     // INIT
@@ -236,8 +243,49 @@
       this.loadWorldOverlays();
     },
 
+    // Helper method to reset retry state
+    resetRetryState() {
+      this.containerRetryCount = 0;
+      this.isRetrying = false;
+    },
+
     onOpen() {
       console.log('[worldmap] onOpen called');
+      
+      // CRITICAL FOR MOBILE: Check if map container has dimensions before proceeding
+      const container = document.getElementById("mapContainer");
+      if (!container) {
+        console.warn('[worldmap] mapContainer element not found in DOM - cannot initialize map');
+        return;
+      }
+      
+      const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
+          // Guard against overlapping retry chains - only one retry chain can be active
+          if (this.isRetrying) {
+            console.warn('[worldmap] retry already in progress, skipping duplicate call');
+            return;
+          }
+          
+          if (this.containerRetryCount < this.maxContainerRetries) {
+            this.containerRetryCount++;
+            this.isRetrying = true;
+            console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), retry', this.containerRetryCount, '/', this.maxContainerRetries);
+            setTimeout(() => {
+              // Reset flag immediately before retry - this allows the retry to proceed
+              // but still blocks any external calls during the timeout
+              this.isRetrying = false;
+              this.onOpen();
+            }, this.containerRetryDelayMs);
+            return;
+          } else {
+            console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
+            this.resetRetryState(); // Reset for future attempts
+          }
+        } else {
+          console.log('[worldmap] container dimensions OK (width:', rect.width, 'height:', rect.height, ')');
+          this.resetRetryState(); // Reset on success
+        }
       
       // Initialize map if not yet created (happens after boot screen)
       if (!this.map) {
@@ -264,12 +312,12 @@
 
       this.renderWorldLabels();
 
-      // Force map to recalculate size and re-render
+      // Force map to recalculate size and re-render (increased delay for mobile)
       setTimeout(() => {
         try {
           if (this.map) {
             console.log('[worldmap] invalidating map size and recentering...');
-            this.map.invalidateSize();
+            this.map.invalidateSize(true); // 'true' for animated resize
             const pos = this.gs.player.position;
             this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7);
             this.updateOverlayVisibility(this.map.getZoom() || 7);
@@ -278,7 +326,7 @@
         } catch (e) {
           console.error('[worldmap] error in onOpen timeout:', e);
         }
-      }, 100);
+      }, this.mapInvalidateDelayMs);
     },
 
     // --------------------------------------------------------
