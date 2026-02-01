@@ -714,12 +714,36 @@
       st.state = "completed";
 
       const r = q.rewards || {};
-      if (this.gs.player) {
-        this.gs.player.xp = (this.gs.player.xp || 0) + (r.xp || 0);
-        this.gs.player.caps = (this.gs.player.caps || 0) + (r.caps || 0);
+      
+      // Award XP using unified PlayerState
+      if (r.xp) {
+        if (Game.modules?.PlayerState?.awardXP) {
+          Game.modules.PlayerState.awardXP(r.xp);
+        } else {
+          if (this.gs.player) {
+            this.gs.player.xp = (this.gs.player.xp || 0) + r.xp;
+          }
+          if (window.PLAYER) {
+            window.PLAYER.xp = (window.PLAYER.xp || 0) + r.xp;
+          }
+        }
       }
       
-      // Give item rewards and sync with inventory systems
+      // Award caps using unified PlayerState
+      if (r.caps) {
+        if (Game.modules?.PlayerState?.awardCaps) {
+          Game.modules.PlayerState.awardCaps(r.caps);
+        } else {
+          if (this.gs.player) {
+            this.gs.player.caps = (this.gs.player.caps || 0) + r.caps;
+          }
+          if (window.PLAYER) {
+            window.PLAYER.caps = (window.PLAYER.caps || 0) + r.caps;
+          }
+        }
+      }
+      
+      // Give item rewards using unified PlayerState for proper persistence
       if (r.items && Array.isArray(r.items)) {
         r.items.forEach(itemId => {
           // Look up item definition from loaded items database
@@ -729,56 +753,49 @@
           }
           
           // Create item object with full metadata if available
-          // Fallback creates a placeholder questItem if not found in database
-          // This prevents quest completion failure due to missing item definitions
-          const itemObj = itemDef ? { ...itemDef, quantity: 1 } : { id: itemId, name: itemId, type: "questItem", quantity: 1 };
+          const itemObj = itemDef 
+            ? { ...itemDef, quantity: 1 } 
+            : { id: itemId, name: itemId, type: "questItem", quantity: 1 };
           
-          // Warn if using fallback (item not in database)
           if (!itemDef) {
             console.warn(`[quests] Item '${itemId}' not found in items database, using fallback`);
           }
           
-          // Add to quest module inventory
-          if (!this.gs.inventory.questItems) this.gs.inventory.questItems = [];
-          this.gs.inventory.questItems.push(itemObj);
-          
-          // Add to Game.player.inventory (main inventory system)
-          if (window.Game && window.Game.player) {
-            if (!window.Game.player.inventory) window.Game.player.inventory = [];
-            // Check if item already exists in inventory
-            const existingItem = window.Game.player.inventory.find(i => i.id === itemId);
-            if (existingItem && existingItem.quantity !== undefined) {
-              existingItem.quantity += 1;
-            } else if (!existingItem) {
-              window.Game.player.inventory.push(itemObj);
+          // Use unified PlayerState for proper persistence (survives reload)
+          if (Game.modules?.PlayerState?.addItem) {
+            Game.modules.PlayerState.addItem(itemObj, 1);
+          } else if (Game.giveItem) {
+            Game.giveItem(itemObj, 1);
+          } else {
+            // Legacy fallback
+            if (!this.gs.inventory.questItems) this.gs.inventory.questItems = [];
+            this.gs.inventory.questItems.push(itemObj);
+            
+            if (window.Game?.player) {
+              if (!window.Game.player.inventory) window.Game.player.inventory = [];
+              const existingItem = window.Game.player.inventory.find(i => i.id === itemId);
+              if (existingItem && existingItem.quantity !== undefined) {
+                existingItem.quantity += 1;
+              } else if (!existingItem) {
+                window.Game.player.inventory.push(itemObj);
+              }
             }
-          }
-          
-          // Legacy sync with main.js PLAYER inventory (if it exists)
-          if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
-            if (!window.PLAYER.inventory.includes(itemId)) {
-              window.PLAYER.inventory.push(itemId);
+            
+            if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
+              if (!window.PLAYER.inventory.includes(itemId)) {
+                window.PLAYER.inventory.push(itemId);
+              }
             }
           }
           
           console.log("[quests] Rewarded item:", itemObj);
         });
       }
-      
-      // Sync XP and caps with main.js PLAYER state
-      if (window.PLAYER) {
-        if (r.xp) {
-          window.PLAYER.xp = (window.PLAYER.xp || 0) + r.xp;
-        }
-        if (r.caps) {
-          window.PLAYER.caps = (window.PLAYER.caps || 0) + r.caps;
-        }
-      }
 
       console.log("[quests] Quest completed:", questId);
       
       // Trigger inventory UI refresh
-      if (window.Game && window.Game.hooks && window.Game.hooks.onInventoryUpdated) {
+      if (window.Game?.hooks?.onInventoryUpdated) {
         window.Game.hooks.onInventoryUpdated();
       }
     },
