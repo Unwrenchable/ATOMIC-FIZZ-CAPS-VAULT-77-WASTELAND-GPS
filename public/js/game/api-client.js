@@ -237,10 +237,13 @@
 
     if (!result.ok) {
       showError(`Failed to mint caps: ${result.error}`);
-    } else {
-      // Sync with local state
+    } else if (result.data?.newBalance !== undefined) {
+      // Sync local state to match backend's returned balance (don't add, just set)
       if (Game.modules?.PlayerState) {
-        Game.modules.PlayerState.awardCaps(amount);
+        const state = Game.modules.PlayerState.getState();
+        // Only update if backend returned a balance
+        state.caps = result.data.newBalance;
+        Game.modules.PlayerState.save();
       }
     }
 
@@ -261,10 +264,15 @@
     if (!result.ok) {
       // XP award may require auth - don't show error, just log
       console.warn(`[API] XP award failed: ${result.error}`);
-    } else {
-      // Sync with local state
+    } else if (result.data?.xp !== undefined) {
+      // Sync local state to match backend's returned values (don't add, just set)
       if (Game.modules?.PlayerState) {
-        Game.modules.PlayerState.awardXP(amount);
+        const state = Game.modules.PlayerState.getState();
+        state.xp = result.data.xp;
+        if (result.data.level !== undefined) {
+          state.level = result.data.level;
+        }
+        Game.modules.PlayerState.save();
       }
     }
 

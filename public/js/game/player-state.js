@@ -13,6 +13,7 @@
   Game.modules = Game.modules || {};
 
   const STORAGE_KEY = "afc_unified_player_state_v2";
+  const AUTO_SAVE_INTERVAL = 15000; // 15 seconds - reduced from 5s for performance
   const BACKEND_SYNC_INTERVAL = 30000; // 30 seconds
 
   // Default player state structure
@@ -45,6 +46,7 @@
   let _state = null;
   let _dirty = false;
   let _syncTimer = null;
+  let _backendSyncTimer = null;
   let _wallet = null;
 
   /**
@@ -59,8 +61,19 @@
     // Also sync with legacy PLAYER object if it exists
     syncWithLegacyPlayer();
     
-    // Start auto-save interval
-    setInterval(saveToStorage, 5000);
+    // Start auto-save interval (only saves when dirty)
+    setInterval(() => {
+      if (_dirty) {
+        saveToStorage();
+      }
+    }, AUTO_SAVE_INTERVAL);
+    
+    // Start backend sync interval if wallet is connected
+    _backendSyncTimer = setInterval(() => {
+      if (_wallet) {
+        syncWithBackend(_wallet);
+      }
+    }, BACKEND_SYNC_INTERVAL);
     
     // Listen for visibility changes to save on tab hide
     document.addEventListener("visibilitychange", () => {

@@ -81,12 +81,14 @@ async function mintCapsToPlayer(wallet, amount) {
     // Save updated profile
     await redis.hset(profileKey, "profile", JSON.stringify(profile));
 
-    // Generate a transaction signature for tracking
+    // Generate a transaction ID for audit tracking
+    // Note: This is an internal transaction reference for server-side tracking/auditing,
+    // not a cryptographic signature. Blockchain transactions use proper on-chain signatures.
     const crypto = require("crypto");
-    const signature = crypto.randomBytes(32).toString("hex");
+    const txId = crypto.randomBytes(16).toString("hex");
 
-    // Log the transaction
-    const txKey = key(`caps:tx:${signature}`);
+    // Log the transaction for audit purposes
+    const txKey = key(`caps:tx:${txId}`);
     await redis.set(txKey, JSON.stringify({
       wallet,
       amount: safeAmount,
@@ -100,7 +102,7 @@ async function mintCapsToPlayer(wallet, amount) {
     return {
       ok: true,
       newBalance: profile.caps,
-      signature
+      txId // renamed from 'signature' to avoid confusion with cryptographic signatures
     };
   } catch (err) {
     console.error("[caps] mintCapsToPlayer error:", err);
