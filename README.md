@@ -132,7 +132,35 @@ An AI-powered assistant that knows too much about you:
 - Weather forecasts (radioactive rain, 80% chance of death)
 - Faction threat assessments
 
+Access the Overseer at: **https://www.atomicfizzcaps.xyz/overseer**
+
+**Configuration Required:**
+To enable the HF AI personality, set these environment variables:
+- `HF_API_KEY` - Your Hugging Face API key
+- `HF_MODEL` - Model to use (default: `mistralai/Mixtral-8x7B-Instruct-v0.1`)
+
+Without these, the Overseer uses pre-programmed fallback responses.
+
 *The Overseer sees all. The Overseer judges all. The Overseer has opinions about your inventory management.*
+
+---
+
+### 🔐 ADMIN PANEL *(NEW!)*
+Manage your wasteland empire from the admin dashboard:
+- Player management and statistics
+- Mintable item configuration
+- Quest secret management
+- System monitoring
+
+Access the admin panel at: **https://www.atomicfizzcaps.xyz/admin**
+
+**Login Configuration:**
+Set these environment variables to enable admin access:
+- `ADMIN_USERNAME` - Admin username (default: `admin`)
+- `ADMIN_PASSWORD` - Admin password (stored securely with timing-safe comparison)
+- `ADMIN_WALLETS` - Comma-separated list of authorized wallet addresses
+
+**Security Note:** The password is compared using constant-time comparison to prevent timing attacks. Store your `.env` file securely and never commit it to version control.
 
 ---
 
