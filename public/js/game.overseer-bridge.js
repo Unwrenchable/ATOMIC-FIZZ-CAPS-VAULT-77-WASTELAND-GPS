@@ -9,6 +9,62 @@
   window.game = window.game || {};
   const game = window.game;
 
+  // ========= WORLD INTERFACE =========
+  // Provides window.world using real world simulation systems when available,
+  // with safe fallbacks for missing implementations.
+  // Fallback order:
+  // 1. Real world state (overseerWorldState + overseerRegions)
+  // 2. Player location data (game.player.location)
+  // 3. Default "mojave_core" region
+  window.world = window.world || {
+    getCurrentRegion: function () {
+      // Priority 1: Use real world state if available
+      if (window.overseerWorldState && typeof window.overseerWorldState.getRegion === "function") {
+        const regionId = window.overseerWorldState.getRegion();
+        if (regionId && window.overseerRegions && typeof window.overseerRegions.get === "function") {
+          return window.overseerRegions.get(regionId) || { id: regionId, name: regionId };
+        }
+        return { id: regionId || "mojave_core", name: "Unknown Region" };
+      }
+      // Priority 2: Fallback to player location
+      const playerLoc = game.player?.location;
+      if (playerLoc && playerLoc.regionId) {
+        return { id: playerLoc.regionId, name: playerLoc.name || "Unknown" };
+      }
+      // Priority 3: Default fallback region
+      return { id: "mojave_core", name: "Mojave Core" };
+    },
+
+    getNearbyPOIs: function (radius) {
+      // Try to use game.getNearbyPOIs if available
+      if (typeof game.getNearbyPOIs === "function") {
+        return game.getNearbyPOIs(radius);
+      }
+      // Try worldmap module
+      if (window.Game?.modules?.worldmap?.getNearbyPOIs) {
+        return window.Game.modules.worldmap.getNearbyPOIs(radius);
+      }
+      // Return empty array as safe fallback
+      return [];
+    },
+
+    getPlayerLocation: function () {
+      return game.player?.location || { id: "unknown", name: "Unknown", lat: null, lng: null };
+    },
+
+    // Expose world simulation subsystems for advanced usage
+    get state() { return window.overseerWorldState; },
+    get regions() { return window.overseerRegions; },
+    get factions() { return window.overseerFaction; },
+    get encounters() { return window.overseerEncounters; },
+    get weather() { return window.overseerWeather; },
+    get timeline() { return window.overseerTimeline; },
+    get anomalies() { return window.overseerAnomalies; },
+    get loot() { return window.overseerLoot; },
+    get microquests() { return window.overseerMicroquests; },
+    get npcTraits() { return window.overseerNpcTraits; }
+  };
+
   // ========= BASIC PLAYER / WORLDSTATE STUBS =========
   // Replace these with your real implementations.
 
