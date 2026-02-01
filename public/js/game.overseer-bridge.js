@@ -9,6 +9,42 @@
   window.game = window.game || {};
   const game = window.game;
 
+  // ========= WORLD SHIM FOR LEGACY COMPATIBILITY =========
+  // Some modules expect window.world with getCurrentRegion() and getNearbyPOIs()
+  // This shim provides safe fallback implementations.
+  window.world = window.world || {
+    getCurrentRegion: function () {
+      // Return current region from player location or worldmap if available
+      const playerLoc = game.player?.location;
+      if (playerLoc && playerLoc.regionId) {
+        return { id: playerLoc.regionId, name: playerLoc.name || "Unknown" };
+      }
+      // Try to get from worldmap module
+      if (window.Game?.modules?.worldmap?.currentRegion) {
+        return window.Game.modules.worldmap.currentRegion;
+      }
+      // Default fallback region
+      return { id: "mojave_core", name: "Mojave Core" };
+    },
+
+    getNearbyPOIs: function (radius) {
+      // Try to use game.getNearbyPOIs if available
+      if (typeof game.getNearbyPOIs === "function") {
+        return game.getNearbyPOIs(radius);
+      }
+      // Try worldmap module
+      if (window.Game?.modules?.worldmap?.getNearbyPOIs) {
+        return window.Game.modules.worldmap.getNearbyPOIs(radius);
+      }
+      // Return empty array as safe fallback
+      return [];
+    },
+
+    getPlayerLocation: function () {
+      return game.player?.location || { id: "unknown", name: "Unknown", lat: null, lng: null };
+    }
+  };
+
   // ========= BASIC PLAYER / WORLDSTATE STUBS =========
   // Replace these with your real implementations.
 
