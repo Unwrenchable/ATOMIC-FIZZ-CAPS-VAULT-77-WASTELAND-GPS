@@ -3,6 +3,11 @@
    Makes CSS work on mobile, desktop, and browsers at 75-85% zoom
    ============================================================ */
 
+/* CSS custom properties for responsive design */
+:root {
+  --mobile-map-min-height: 25rem;
+}
+
 /* Reset and base responsive setup */
 * {
   box-sizing: border-box;
@@ -280,11 +285,6 @@ body {
    ============================================================ */
 
 @media screen and (max-width: 768px) {
-  /* CSS custom properties for mobile map sizing */
-  :root {
-    --mobile-map-min-height: 25rem;
-  }
-
   html {
     font-size: 55%; /* Slightly smaller base for mobile */
   }
