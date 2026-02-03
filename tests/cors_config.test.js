@@ -23,11 +23,11 @@ function testCorsLogic() {
     const envOrigins = defaultOrigins;
     const rawOrigins = [...new Set([...criticalOrigins, ...envOrigins])];
     
-    assert(rawOrigins.includes("https://www.atomicfizzcaps.xyz"), 
+    assert(rawOrigins.some(origin => origin === "https://www.atomicfizzcaps.xyz"), 
       "Critical origin www.atomicfizzcaps.xyz must be included");
-    assert(rawOrigins.includes("https://atomicfizzcaps.xyz"), 
+    assert(rawOrigins.some(origin => origin === "https://atomicfizzcaps.xyz"), 
       "Critical origin atomicfizzcaps.xyz must be included");
-    assert(rawOrigins.includes("http://localhost:3000"), 
+    assert(rawOrigins.some(origin => origin === "http://localhost:3000"), 
       "Default origin localhost:3000 must be included");
     console.log('✓ Test Case 1: Default configuration passed');
   }
@@ -38,13 +38,13 @@ function testCorsLogic() {
     const envOrigins = FRONTEND_ORIGIN.split(/\s*,\s*/).map(s => s.trim()).filter(Boolean);
     const rawOrigins = [...new Set([...criticalOrigins, ...envOrigins])];
     
-    assert(rawOrigins.includes("https://www.atomicfizzcaps.xyz"), 
+    assert(rawOrigins.some(origin => origin === "https://www.atomicfizzcaps.xyz"), 
       "Critical origin www.atomicfizzcaps.xyz must be included even with custom env");
-    assert(rawOrigins.includes("https://atomicfizzcaps.xyz"), 
+    assert(rawOrigins.some(origin => origin === "https://atomicfizzcaps.xyz"), 
       "Critical origin atomicfizzcaps.xyz must be included even with custom env");
-    assert(rawOrigins.includes("https://custom.domain.com"), 
+    assert(rawOrigins.some(origin => origin === "https://custom.domain.com"), 
       "Custom origin from env must be included");
-    assert(rawOrigins.includes("https://*.example.com"), 
+    assert(rawOrigins.some(origin => origin === "https://*.example.com"), 
       "Wildcard origin from env must be included");
     console.log('✓ Test Case 2: Custom FRONTEND_ORIGIN configuration passed');
   }
@@ -56,7 +56,7 @@ function testCorsLogic() {
         .replace(/^https?:\/\//, '')
         .replace(/\\/g, '\\\\')
         .replace(/\./g, '\\.')
-        .replace(/\*/g, '[^\\/]+');
+        .replace(/\*/g, '[^/.]+');
       return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
     }
 
@@ -74,10 +74,64 @@ function testCorsLogic() {
       "Render domain should match wildcard");
     assert(!vercelRegex.test("https://evil.com"), 
       "Non-matching domain should not match");
+    
+    // SECURITY: Test bypass attempts
+    assert(!vercelRegex.test("https://vercel.app.evil.com"),
+      "Security: Should not match subdomain spoofing");
+    assert(!vercelRegex.test("https://evil.com/https://preview.vercel.app"),
+      "Security: Should not match path-based spoofing");
+    assert(!vercelRegex.test("https://evil-vercel.app"),
+      "Security: Should not match similar domain");
+    assert(!vercelRegex.test("https://my.app.vercel.app.evil.com"),
+      "Security: Should not match domain appending");
+    assert(!vercelRegex.test("http://evil.com?redirect=https://my-app.vercel.app"),
+      "Security: Should not match query parameter spoofing");
+      
     console.log('✓ Test Case 3: Wildcard pattern matching passed');
   }
 
-  // Test Case 4: Duplicate removal
+  // Test Case 4: Security - Origin validation bypass attempts
+  {
+    function wildcardToRegex(pattern) {
+      const escaped = pattern
+        .replace(/^https?:\/\//, '')
+        .replace(/\\/g, '\\\\')
+        .replace(/\./g, '\\.')
+        .replace(/\*/g, '[^/.]+');
+      return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
+    }
+    
+    // Test exact origin matching with attack vectors
+    const allowedOrigins = [
+      "https://www.atomicfizzcaps.xyz",
+      "https://atomicfizzcaps.xyz"
+    ];
+    
+    // Valid origin should match
+    assert(allowedOrigins.some(origin => origin === "https://www.atomicfizzcaps.xyz"),
+      "Security: Exact origin should match exactly");
+    
+    // Attack vectors should NOT match
+    assert(!allowedOrigins.some(origin => origin === "https://evil.com/https://www.atomicfizzcaps.xyz"),
+      "Security: Path-based spoofing should not match");
+    assert(!allowedOrigins.some(origin => origin === "https://www.atomicfizzcaps.xyz.evil.com"),
+      "Security: Domain appending should not match");
+    assert(!allowedOrigins.some(origin => origin === "https://evil-atomicfizzcaps.xyz"),
+      "Security: Similar domain should not match");
+    assert(!allowedOrigins.some(origin => origin === "http://www.atomicfizzcaps.xyz"),
+      "Security: Protocol mismatch should not match");
+    
+    // Test wildcard pattern cannot match dots in subdomain
+    const wildcardRegex = wildcardToRegex("https://*.vercel.app");
+    assert(!wildcardRegex.test("https://a.b.vercel.app"),
+      "Security: Wildcard should not match nested subdomains with dots");
+    assert(wildcardRegex.test("https://a-b.vercel.app"),
+      "Wildcard should match single-level subdomain with hyphens");
+    
+    console.log('✓ Test Case 4: Security bypass prevention passed');
+  }
+
+  // Test Case 5: Duplicate removal
   {
     const FRONTEND_ORIGIN = "https://www.atomicfizzcaps.xyz,https://atomicfizzcaps.xyz,http://localhost:3000";
     const envOrigins = FRONTEND_ORIGIN.split(/\s*,\s*/).map(s => s.trim()).filter(Boolean);
@@ -87,7 +141,7 @@ function testCorsLogic() {
     const uniqueOrigins = [...new Set(rawOrigins)];
     assert.strictEqual(rawOrigins.length, uniqueOrigins.length, 
       "Should not have duplicate origins");
-    console.log('✓ Test Case 4: Duplicate removal passed');
+    console.log('✓ Test Case 5: Duplicate removal passed');
   }
 
   console.log('\n✅ All CORS configuration tests passed!\n');

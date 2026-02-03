@@ -31,7 +31,7 @@ http.get('http://localhost:3000/api/config/frontend', (res) => {
           console.log('   To fix: Set HF_API_KEY in your .env file');
         } else if (key.startsWith('hf_')) {
           console.log('✅ HF_API_KEY is configured properly');
-          console.log('   Key format: ' + key.substring(0, 7) + '...' + key.substring(key.length - 4));
+          console.log('   Key format: [REDACTED]');
         } else {
           console.log('⚠️  HF_API_KEY format looks incorrect (should start with "hf_")');
         }
@@ -80,7 +80,7 @@ function runBehaviorTest(config) {
     console.log('   ✅ AI responses will be dynamic and contextual');
     console.log('\n   API Call Details:');
     console.log('   - Endpoint: https://api-inference.huggingface.co/models/' + config.overseer.hfModel);
-    console.log('   - Auth: Bearer ' + config.overseer.hfApiKey.substring(0, 10) + '...');
+    console.log('   - Auth: Bearer [REDACTED]');
     console.log('   - Parameters: max_new_tokens=80, temperature=0.8, top_p=0.9');
   } else {
     console.log('   ⚠️  Bot will NOT make API calls to Hugging Face');

@@ -56,7 +56,7 @@ function wildcardToRegex(pattern) {
     .replace(/^https?:\/\//, '')
     .replace(/\\/g, '\\\\')
     .replace(/\./g, '\\.')
-    .replace(/\*/g, '[^\\/]+');
+    .replace(/\*/g, '[^/.]+');
   return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
 }
 

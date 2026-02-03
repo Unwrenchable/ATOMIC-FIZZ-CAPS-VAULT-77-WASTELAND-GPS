@@ -5,11 +5,12 @@ const rateLimit = require("express-rate-limit");
 
 const ADMIN_SESSION_PREFIX = "admin:sess:";
 
+// SECURITY: Constant-time comparison to prevent timing attacks
+// Uses SHA-256 hashing to ensure both length and content comparison are constant-time
 function safeCompare(a, b) {
-  const bufA = Buffer.from(a || "");
-  const bufB = Buffer.from(b || "");
-  if (bufA.length !== bufB.length) return false;
-  return crypto.timingSafeEqual(bufA, bufB);
+  const hash1 = crypto.createHash('sha256').update(String(a || "")).digest();
+  const hash2 = crypto.createHash('sha256').update(String(b || "")).digest();
+  return crypto.timingSafeEqual(hash1, hash2);
 }
 
 async function createAdminSession() {
