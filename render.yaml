@@ -7,8 +7,10 @@ services:
   - type: web
     name: atomic-fizz-caps-api
     runtime: node
-    plan: free  # Change to 'starter' or higher for production
-    region: oregon  # Change to your preferred region
+    # Free tier for development, 'starter' or higher recommended for production
+    plan: free
+    # Oregon region selected for optimal west coast latency
+    region: oregon
     branch: main
     rootDir: backend
     buildCommand: npm install
