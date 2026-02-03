@@ -61,7 +61,7 @@ requester.get(options, (res) => {
       } else if (hfApiKey.startsWith('hf_')) {
         console.log('✅ CONFIGURED');
         console.log('   Status: Valid HF API key detected');
-        console.log('   Key: ' + hfApiKey.substring(0, 7) + '...' + hfApiKey.substring(hfApiKey.length - 4));
+        console.log('   Key: [REDACTED]');
         console.log('   Behavior: Bot WILL use HF API for AI responses');
         console.log('\n✨ TO VERIFY IN BROWSER:');
         console.log('   1. Open: ' + BACKEND_URL + '/overseer.html');
@@ -72,7 +72,7 @@ requester.get(options, (res) => {
       } else {
         console.log('⚠️  UNUSUAL FORMAT');
         console.log('   Status: API key present but doesn\'t start with "hf_"');
-        console.log('   Key: ' + hfApiKey.substring(0, 10) + '...');
+        console.log('   Key: [REDACTED]');
         console.log('   Behavior: Will attempt to use key (may fail)');
       }
       
