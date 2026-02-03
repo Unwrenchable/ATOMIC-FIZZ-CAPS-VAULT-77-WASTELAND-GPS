@@ -1,0 +1,24 @@
+# ☢️ ATOMIC FIZZ CAPS - Render Configuration
+# Vault-Tec Deployment Protocol for Backend API
+
+services:
+  # Backend API Service
+  - type: web
+    name: atomic-fizz-caps-api
+    runtime: node
+    plan: free  # Change to 'starter' or higher for production
+    region: oregon  # Change to your preferred region
+    branch: main
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    
+    # Environment-specific settings
+    envVars:
+      - key: NODE_ENV
+        value: production
+      
+      # NOTE: Sensitive environment variables (REDIS_URL, SERVER_SECRET_KEY, etc.)
+      # should be configured through the Render Dashboard for security.
+      # This file only configures the deployment structure, not secrets.
