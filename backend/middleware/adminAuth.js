@@ -1,5 +1,6 @@
 // backend/middleware/adminAuth.js
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 const redis = require("../lib/redis");
 const rateLimit = require("express-rate-limit");
 
@@ -11,6 +12,40 @@ function safeCompare(a, b) {
   const hash1 = crypto.createHash('sha256').update(String(a || "")).digest();
   const hash2 = crypto.createHash('sha256').update(String(b || "")).digest();
   return crypto.timingSafeEqual(hash1, hash2);
+}
+
+/**
+ * Check if a string looks like a bcrypt hash
+ * Bcrypt hashes start with $2a$, $2b$, or $2y$
+ */
+function isBcryptHash(str) {
+  return /^\$2[aby]\$/.test(str);
+}
+
+/**
+ * Securely compare a password against a stored credential
+ * Supports both bcrypt hashes (preferred) and plain text (backward compatibility)
+ * @param {string} inputPassword - The password provided by the user
+ * @param {string} storedPassword - The stored password (bcrypt hash or plain text)
+ * @returns {Promise<boolean>} - True if passwords match
+ */
+async function verifyPassword(inputPassword, storedPassword) {
+  if (!inputPassword || !storedPassword) {
+    return false;
+  }
+
+  // If stored password is a bcrypt hash, use bcrypt.compare
+  if (isBcryptHash(storedPassword)) {
+    try {
+      return await bcrypt.compare(inputPassword, storedPassword);
+    } catch (err) {
+      console.error("[adminAuth] bcrypt comparison error:", err);
+      return false;
+    }
+  }
+
+  // Fall back to safe constant-time comparison for plain text (backward compatibility)
+  return safeCompare(inputPassword, storedPassword);
 }
 
 async function createAdminSession() {
@@ -47,8 +82,16 @@ async function adminLoginHandler(req, res) {
       return res.status(503).json({ ok: false, error: "admin_not_configured" });
     }
 
-    if (!safeCompare(username || "", envUser) || !safeCompare(password || "", envPass)) {
-      console.warn("[adminAuth] Failed login attempt");
+    // Verify username with constant-time comparison
+    if (!safeCompare(username || "", envUser)) {
+      console.warn("[adminAuth] Failed login attempt - invalid username");
+      return res.status(401).json({ ok: false, error: "invalid_admin_credentials" });
+    }
+
+    // Verify password (supports both bcrypt hashes and plain text)
+    const passwordValid = await verifyPassword(password || "", envPass);
+    if (!passwordValid) {
+      console.warn("[adminAuth] Failed login attempt - invalid password");
       return res.status(401).json({ ok: false, error: "invalid_admin_credentials" });
     }
 
