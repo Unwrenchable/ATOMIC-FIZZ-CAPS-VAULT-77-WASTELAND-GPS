@@ -194,8 +194,20 @@ This document provides a comprehensive alphabetical reference of all environment
 - **Type**: String
 - **Required**: Yes (in production)
 - **Description**: Redis connection URL for state management and caching
-- **Example**: `redis://default:password@localhost:6379`
-- **Format**: `redis://[username]:[password]@[host]:[port]`
+- **Format**: `redis://[username]:[password]@[host]:[port]` or `rediss://[username]:[password]@[host]:[port]` (for TLS)
+- **Valid Examples**:
+  - ✅ `redis://default:password@localhost:6379` (standard connection)
+  - ✅ `rediss://default:password@redis.example.com:6380` (TLS/SSL connection)
+  - ✅ `redis://user:pass@redis-12345.render.com:6379` (cloud Redis)
+- **Invalid Examples** (will be rejected):
+  - ❌ `http://localhost:6379` (wrong protocol - use redis:// not http://)
+  - ❌ `https://redis.example.com:6379` (wrong protocol - use rediss:// not https://)
+  - ❌ `localhost:6379` (missing protocol)
+- **Validation**: 
+  - URL must start with `redis://` or `rediss://` protocol
+  - Leading/trailing whitespace is automatically trimmed
+  - Invalid protocols (e.g., `http://`, `https://`) will be rejected with clear error message
+- **Note**: The system will fall back to in-memory storage if Redis connection fails, but this is NOT recommended for production as it causes data loss on restarts and inconsistency in multi-instance deployments
 
 ### REQUIRE_REDIS_IN_PRODUCTION
 - **Type**: Boolean
