@@ -115,14 +115,17 @@ async function runTests() {
   for (const test of detectTests) {
     const result = isBcryptHash(test.input);
     if (result !== test.expected) {
-      console.log(`❌ FAIL: Hash detection for '${test.input}' expected ${test.expected}, got ${result}`);
+      console.log(`❌ Detection failed for '${test.input}' - expected ${test.expected}, got ${result}`);
       detectPassed = false;
-      failed++;
     }
   }
+  
   if (detectPassed) {
     console.log('✅ PASS: Bcrypt hash detection works correctly\n');
     passed++;
+  } else {
+    console.log('❌ FAIL: Bcrypt hash detection has errors\n');
+    failed++;
   }
 
   // Summary

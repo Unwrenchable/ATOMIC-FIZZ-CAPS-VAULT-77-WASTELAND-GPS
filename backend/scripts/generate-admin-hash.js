@@ -63,7 +63,7 @@ async function promptPassword() {
     process.stdout.write('Enter admin password: ');
     
     let password = '';
-    stdin.setRawMode(true);
+    setRawMode(true);
     stdin.resume();
     stdin.setEncoding('utf8');
     
@@ -74,7 +74,7 @@ async function promptPassword() {
         case '\n':
         case '\r':
         case '\u0004': // Ctrl+D
-          stdin.setRawMode(false);
+          setRawMode(false);
           stdin.pause();
           process.stdout.write('\n');
           rl.close();
