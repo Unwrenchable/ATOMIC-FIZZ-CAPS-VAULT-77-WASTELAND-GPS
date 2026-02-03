@@ -31,9 +31,25 @@ console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 
 // --- CORS setup (safe, env-driven) ---
 // Includes all deployment environments: main domains, Vercel previews, and Render hosting
-const rawOrigins = (process.env.FRONTEND_ORIGIN ||
-  "https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000, https://*.vercel.app, https://*.onrender.com"
-).split(/\s*,\s*/);
+// Critical production domains are ALWAYS allowed to prevent accidental lockout
+const criticalOrigins = [
+  "https://www.atomicfizzcaps.xyz",
+  "https://atomicfizzcaps.xyz"
+];
+
+const defaultOrigins = [
+  "http://localhost:3000",
+  "https://*.vercel.app",
+  "https://*.onrender.com"
+];
+
+// Merge critical origins with env-configured or default origins
+const envOrigins = process.env.FRONTEND_ORIGIN 
+  ? process.env.FRONTEND_ORIGIN.split(/\s*,\s*/).map(s => s.trim()).filter(Boolean)
+  : defaultOrigins;
+
+// Combine critical origins with environment origins, removing duplicates
+const allowedOrigins = [...new Set([...criticalOrigins, ...envOrigins])];
 
 function wildcardToRegex(pattern) {
   const escaped = pattern
@@ -43,8 +59,6 @@ function wildcardToRegex(pattern) {
     .replace(/\*/g, '[^\\/]+');
   return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
 }
-
-const allowedOrigins = rawOrigins.map(s => s.trim()).filter(Boolean);
 
 const corsOptions = {
   origin: function(origin, callback) {
@@ -64,6 +78,9 @@ const corsOptions = {
   credentials: true,
   maxAge: 86400
 };
+
+// Log configured CORS origins on startup for debugging
+console.log('[server] CORS configured with origins:', allowedOrigins.join(', '));
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
