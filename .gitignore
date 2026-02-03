@@ -79,7 +79,7 @@ public/data/map/test
 public/data/map/pois/empty
 
 # --- Render / Deployment ---
-render.yaml
+# render.yaml - Now tracked for proper deployment configuration
 .render/
 
 # --- Game UI (Next.js) ---
