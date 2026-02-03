@@ -397,13 +397,30 @@ Access to fetch at 'https://api.atomicfizzcaps.xyz' from origin 'https://atomicf
 
 #### Issue: Redis Connection Failed
 
-**Symptom**: Backend logs show Redis connection errors
+**Symptom**: Backend logs show Redis connection errors, such as:
+- `[redis] connection failed — falling back to in-memory store Invalid protocol`
+- `[redis] INVALID REDIS_URL: must start with redis:// or rediss://`
+
+**Common Causes**:
+1. **Invalid Protocol**: REDIS_URL must start with `redis://` or `rediss://` (for TLS)
+   - ❌ Wrong: `http://localhost:6379` or `https://redis.example.com`
+   - ✅ Correct: `redis://default:password@localhost:6379`
+   - ✅ Correct (TLS): `rediss://default:password@redis.example.com:6380`
+
+2. **Whitespace in URL**: Environment variable contains leading/trailing spaces
+   - The system now automatically trims whitespace, but check your `.env` file
+
+3. **Missing URL Components**: Ensure the URL includes all required parts
+   - Format: `redis://[username]:[password]@[host]:[port]`
+   - Example: `redis://default:mypassword@redis-12345.render.com:6379`
 
 **Solution**:
-1. Verify `REDIS_URL` is correct
-2. If using Render Redis internal URL, ensure both services are in same region
-3. Check Redis instance is running
-4. Try using external URL if internal URL fails
+1. Verify `REDIS_URL` format matches `redis://` or `rediss://` protocol
+2. Check the URL in the Render dashboard environment variables (not in code)
+3. If using Render Redis internal URL, ensure both services are in same region
+4. Check Redis instance is running and accessible
+5. Try using external URL if internal URL fails
+6. Review backend logs for detailed error messages (now shows masked URL format)
 
 #### Issue: Free Tier Spin-up Delay
 
