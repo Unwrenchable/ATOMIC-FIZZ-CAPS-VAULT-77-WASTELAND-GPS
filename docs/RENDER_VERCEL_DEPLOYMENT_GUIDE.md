@@ -111,7 +111,9 @@ PORT=10000
 # CORS Configuration (CRITICAL - Include all your frontend URLs)
 FRONTEND_ORIGIN=https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, https://*.vercel.app, https://*.onrender.com, http://localhost:3000
 
-# Redis Connection
+# Redis Connection (IMPORTANT: Must use redis:// or rediss:// protocol)
+# ❌ WRONG: http://your-redis-host:6379
+# ✅ CORRECT: redis://default:your_redis_password@your-redis-host:6379
 REDIS_URL=redis://default:your_redis_password@your-redis-host:6379
 
 # Security Keys (Generate unique 64-byte Base58 strings for each)
