@@ -2,9 +2,18 @@
 // Small server-side quest store and API. Migrates sensitive quest data to server.
 
 const express = require('express');
+const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
 const router = express.Router();
 const { redis, key } = require('../lib/redis');
+
+// SECURITY: Constant-time comparison to prevent timing attacks
+// Uses SHA-256 hashing to ensure both length and content comparison are constant-time
+function safeCompare(a, b) {
+  const hash1 = crypto.createHash('sha256').update(String(a || "")).digest();
+  const hash2 = crypto.createHash('sha256').update(String(b || "")).digest();
+  return crypto.timingSafeEqual(hash1, hash2);
+}
 
 // Key for storing quests JSON
 const QUESTS_KEY = key('quests:store');
@@ -111,7 +120,11 @@ router.post('/admin/set-token', adminRateLimiter, async (req, res) => {
     const NODE_ENV = process.env.NODE_ENV || 'development';
     if (NODE_ENV === 'production') {
       const admin = req.headers['x-admin-mint'] || req.body.adminSecret;
-      if (!admin || admin !== process.env.ADMIN_MINT_SECRET) return res.status(403).json({ ok: false, error: 'forbidden' });
+      const adminSecret = process.env.ADMIN_MINT_SECRET;
+      // SECURITY: Use constant-time comparison to prevent timing attacks
+      if (!admin || !adminSecret || !safeCompare(admin, adminSecret)) {
+        return res.status(403).json({ ok: false, error: 'forbidden' });
+      }
     }
 
     const keyName = `secret:token:${token}`;
@@ -138,20 +151,19 @@ router.post('/prove', proveRateLimiter, async (req, res) => {
     const { wallet, questId, proof } = req.body || {};
     if (!wallet || !questId || !proof) return res.status(400).json({ ok: false, error: 'missing' });
 
-    console.log('[quests-store] prove request', { wallet, questId, proof });
+    // SECURITY: Do not log proof values as they contain secret tokens
+    console.log('[quests-store] prove request', { wallet, questId, proofType: proof?.type });
 
     // Very small proof validation: if proof.token matches a stored token, accept
     if (proof.type === 'token' && proof.value) {
       // Try standard lookup via redis wrapper
       let stored = await redis.get(`secret:token:${proof.value}`);
-      console.log('[quests-store] lookup via redis.get ->', stored);
+      // SECURITY: Do not log stored value or keys containing secret tokens
       // If not found, attempt raw client read (supports cases where code used key(...) earlier)
       if (!stored && redis.client && typeof redis.client.get === 'function') {
         try {
           const rawKey = (typeof redis.key === 'function' ? redis.key(`secret:token:${proof.value}`) : null) || (process.env.REDIS_PREFIX || 'afw:') + `secret:token:${proof.value}`;
-          console.log('[quests-store] raw client get key=', rawKey);
           stored = await redis.client.get(rawKey);
-          console.log('[quests-store] raw client get ->', stored);
         } catch (e) {
           // ignore
         }
