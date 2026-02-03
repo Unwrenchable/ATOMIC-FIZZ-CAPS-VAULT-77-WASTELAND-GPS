@@ -23,11 +23,11 @@ function testCorsLogic() {
     const envOrigins = defaultOrigins;
     const rawOrigins = [...new Set([...criticalOrigins, ...envOrigins])];
     
-    assert(rawOrigins.includes("https://www.atomicfizzcaps.xyz"), 
+    assert(rawOrigins.some(origin => origin === "https://www.atomicfizzcaps.xyz"), 
       "Critical origin www.atomicfizzcaps.xyz must be included");
-    assert(rawOrigins.includes("https://atomicfizzcaps.xyz"), 
+    assert(rawOrigins.some(origin => origin === "https://atomicfizzcaps.xyz"), 
       "Critical origin atomicfizzcaps.xyz must be included");
-    assert(rawOrigins.includes("http://localhost:3000"), 
+    assert(rawOrigins.some(origin => origin === "http://localhost:3000"), 
       "Default origin localhost:3000 must be included");
     console.log('✓ Test Case 1: Default configuration passed');
   }
@@ -38,13 +38,13 @@ function testCorsLogic() {
     const envOrigins = FRONTEND_ORIGIN.split(/\s*,\s*/).map(s => s.trim()).filter(Boolean);
     const rawOrigins = [...new Set([...criticalOrigins, ...envOrigins])];
     
-    assert(rawOrigins.includes("https://www.atomicfizzcaps.xyz"), 
+    assert(rawOrigins.some(origin => origin === "https://www.atomicfizzcaps.xyz"), 
       "Critical origin www.atomicfizzcaps.xyz must be included even with custom env");
-    assert(rawOrigins.includes("https://atomicfizzcaps.xyz"), 
+    assert(rawOrigins.some(origin => origin === "https://atomicfizzcaps.xyz"), 
       "Critical origin atomicfizzcaps.xyz must be included even with custom env");
-    assert(rawOrigins.includes("https://custom.domain.com"), 
+    assert(rawOrigins.some(origin => origin === "https://custom.domain.com"), 
       "Custom origin from env must be included");
-    assert(rawOrigins.includes("https://*.example.com"), 
+    assert(rawOrigins.some(origin => origin === "https://*.example.com"), 
       "Wildcard origin from env must be included");
     console.log('✓ Test Case 2: Custom FRONTEND_ORIGIN configuration passed');
   }
@@ -56,7 +56,7 @@ function testCorsLogic() {
         .replace(/^https?:\/\//, '')
         .replace(/\\/g, '\\\\')
         .replace(/\./g, '\\.')
-        .replace(/\*/g, '[^\\/]+');
+        .replace(/\*/g, '[^/.]+');
       return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
     }
 
