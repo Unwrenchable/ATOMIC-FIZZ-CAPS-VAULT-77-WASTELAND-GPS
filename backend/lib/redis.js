@@ -8,7 +8,17 @@
 // ------------------------------------------------------------
 
 const PREFIX = process.env.REDIS_PREFIX || "afw:";
-const REDIS_URL = process.env.REDIS_URL || process.env.REDIS || null;
+// Sanitize and validate REDIS_URL - trim whitespace and check protocol
+let REDIS_URL = (process.env.REDIS_URL || process.env.REDIS || "").trim();
+// Validate protocol if URL is provided
+if (REDIS_URL && !REDIS_URL.startsWith("redis://") && !REDIS_URL.startsWith("rediss://")) {
+  console.error(`[redis] INVALID REDIS_URL: must start with redis:// or rediss://, got: ${REDIS_URL.substring(0, 20)}...`);
+  REDIS_URL = null; // Invalidate malformed URL
+}
+// If URL is empty after trim, set to null
+if (REDIS_URL === "") {
+  REDIS_URL = null;
+}
 const NODE_ENV = process.env.NODE_ENV || "development";
 const REQUIRE_REDIS_IN_PRODUCTION = process.env.REQUIRE_REDIS_IN_PRODUCTION !== "false";
 
@@ -186,6 +196,8 @@ async function initClient() {
     // Try to use node-redis (v4+) if available
     const { createClient } = require("redis");
 
+    console.log(`[redis] attempting connection to ${REDIS_URL.replace(/:[^:@]+@/, ':***@')}`); // Mask password in logs
+
     const client = createClient({
       url: REDIS_URL,
       socket: {
@@ -207,18 +219,22 @@ async function initClient() {
 
     usingFallback = false;
     redisClient = client;
+    console.log("[redis] successfully connected");
     return redisClient;
   } catch (err) {
     // Emit strong warnings for production environments
     if (NODE_ENV === "production") {
       console.error("[redis] CRITICAL: Redis connection failed in production environment!");
       console.error("[redis] Error:", err && err.message ? err.message : err);
+      console.error("[redis] REDIS_URL format (masked):", REDIS_URL ? REDIS_URL.replace(/:[^:@]+@/, ':***@') : "not set");
       console.error("[redis] WARNING: Falling back to in-memory store will cause data consistency issues.");
       if (REQUIRE_REDIS_IN_PRODUCTION) {
         throw new Error("Redis connection failed in production. Fix Redis or set REQUIRE_REDIS_IN_PRODUCTION=false to override (not recommended).");
       }
     } else {
-      console.error("[redis] connection failed — falling back to in-memory store", err && err.message ? err.message : err);
+      console.error("[redis] connection failed — falling back to in-memory store");
+      console.error("[redis] Error:", err && err.message ? err.message : err);
+      console.error("[redis] REDIS_URL format (masked):", REDIS_URL ? REDIS_URL.replace(/:[^:@]+@/, ':***@') : "not set");
     }
     usingFallback = true;
     redisClient = createInMemoryClient();
