@@ -56,7 +56,7 @@ function wildcardToRegex(pattern) {
     .replace(/^https?:\/\//, '')
     .replace(/\\/g, '\\\\')
     .replace(/\./g, '\\.')
-    .replace(/\*/g, '[^/.]+');
+    .replace(/\*/g, '[a-zA-Z0-9-]+');  // SECURITY FIX: Only allow valid hostname characters (alphanumeric and hyphens)
   return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
 }
 

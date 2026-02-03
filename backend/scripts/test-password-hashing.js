@@ -5,16 +5,9 @@
  * Test script to verify the adminAuth password hashing works correctly
  */
 
-const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
 // Copy the functions from adminAuth.js for testing
-function safeCompare(a, b) {
-  const hash1 = crypto.createHash('sha256').update(String(a || "")).digest();
-  const hash2 = crypto.createHash('sha256').update(String(b || "")).digest();
-  return crypto.timingSafeEqual(hash1, hash2);
-}
-
 function isBcryptHash(str) {
   return /^\$2[aby]\$/.test(str);
 }
@@ -33,7 +26,9 @@ async function verifyPassword(inputPassword, storedPassword) {
     }
   }
 
-  return safeCompare(inputPassword, storedPassword);
+  // For plain text passwords (backward compatibility), use direct comparison
+  // Note: In production, all passwords should be bcrypt hashes
+  return inputPassword === storedPassword;
 }
 
 async function runTests() {
