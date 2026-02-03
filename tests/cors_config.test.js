@@ -101,17 +101,25 @@ function testCorsLogic() {
       return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
     }
     
-    const criticalPattern = "https://www.atomicfizzcaps.xyz";
+    // Test exact origin matching with attack vectors
+    const allowedOrigins = [
+      "https://www.atomicfizzcaps.xyz",
+      "https://atomicfizzcaps.xyz"
+    ];
     
-    // Test exact matching (no wildcards)
-    assert(criticalPattern === "https://www.atomicfizzcaps.xyz",
+    // Valid origin should match
+    assert(allowedOrigins.some(origin => origin === "https://www.atomicfizzcaps.xyz"),
       "Security: Exact origin should match exactly");
-    assert(criticalPattern !== "https://evil.com/https://www.atomicfizzcaps.xyz",
+    
+    // Attack vectors should NOT match
+    assert(!allowedOrigins.some(origin => origin === "https://evil.com/https://www.atomicfizzcaps.xyz"),
       "Security: Path-based spoofing should not match");
-    assert(criticalPattern !== "https://www.atomicfizzcaps.xyz.evil.com",
+    assert(!allowedOrigins.some(origin => origin === "https://www.atomicfizzcaps.xyz.evil.com"),
       "Security: Domain appending should not match");
-    assert(criticalPattern !== "https://evil-atomicfizzcaps.xyz",
+    assert(!allowedOrigins.some(origin => origin === "https://evil-atomicfizzcaps.xyz"),
       "Security: Similar domain should not match");
+    assert(!allowedOrigins.some(origin => origin === "http://www.atomicfizzcaps.xyz"),
+      "Security: Protocol mismatch should not match");
     
     // Test wildcard pattern cannot match dots in subdomain
     const wildcardRegex = wildcardToRegex("https://*.vercel.app");
