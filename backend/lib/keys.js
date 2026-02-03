@@ -3,8 +3,28 @@ const assert = require("assert");
 const Redis = require("ioredis");
 const bs58 = require("bs58");
 
-const REDIS_URL = process.env.REDIS_URL;
-const redis = REDIS_URL ? new Redis(REDIS_URL) : null;
+// Sanitize and validate REDIS_URL - trim whitespace and check protocol
+let REDIS_URL = (process.env.REDIS_URL || "").trim();
+if (REDIS_URL && !REDIS_URL.startsWith("redis://") && !REDIS_URL.startsWith("rediss://")) {
+  console.error(`[keys] INVALID REDIS_URL: must start with redis:// or rediss://, got: ${REDIS_URL.replace(/:[^:@]+@/, ':***@').substring(0, 50)}...`);
+  REDIS_URL = null;
+}
+if (REDIS_URL === "") {
+  REDIS_URL = null;
+}
+
+let redis = null;
+if (REDIS_URL) {
+  try {
+    redis = new Redis(REDIS_URL);
+    redis.on("error", (err) => {
+      console.error("[keys] Redis error:", err && err.message ? err.message : err);
+    });
+  } catch (err) {
+    console.error("[keys] Failed to create Redis client:", err && err.message ? err.message : err);
+    redis = null;
+  }
+}
 const KEY_HASH_PREFIX = "keys:meta:";        // keys:meta:<keyId> -> JSON
 const KEY_LIST_SET = "keys:list";            // set of keyIds
 const AUDIT_STREAM = process.env.KEYS_AUDIT_STREAM || "stream:keys:audit";
