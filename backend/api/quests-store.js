@@ -8,11 +8,11 @@ const router = express.Router();
 const { redis, key } = require('../lib/redis');
 
 // SECURITY: Constant-time comparison to prevent timing attacks
+// Uses SHA-256 hashing to ensure both length and content comparison are constant-time
 function safeCompare(a, b) {
-  const bufA = Buffer.from(String(a || ""));
-  const bufB = Buffer.from(String(b || ""));
-  if (bufA.length !== bufB.length) return false;
-  return crypto.timingSafeEqual(bufA, bufB);
+  const hash1 = crypto.createHash('sha256').update(String(a || "")).digest();
+  const hash2 = crypto.createHash('sha256').update(String(b || "")).digest();
+  return crypto.timingSafeEqual(hash1, hash2);
 }
 
 // Key for storing quests JSON
