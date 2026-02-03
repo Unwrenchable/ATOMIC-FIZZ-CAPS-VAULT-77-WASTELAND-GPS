@@ -12,7 +12,7 @@ const PREFIX = process.env.REDIS_PREFIX || "afw:";
 let REDIS_URL = (process.env.REDIS_URL || process.env.REDIS || "").trim();
 // Validate protocol if URL is provided
 if (REDIS_URL && !REDIS_URL.startsWith("redis://") && !REDIS_URL.startsWith("rediss://")) {
-  console.error(`[redis] INVALID REDIS_URL: must start with redis:// or rediss://, got: ${REDIS_URL.substring(0, 20)}...`);
+  console.error(`[redis] INVALID REDIS_URL: must start with redis:// or rediss://, got: ${REDIS_URL.replace(/:[^:@]+@/, ':***@').substring(0, 50)}...`);
   REDIS_URL = null; // Invalidate malformed URL
 }
 // If URL is empty after trim, set to null

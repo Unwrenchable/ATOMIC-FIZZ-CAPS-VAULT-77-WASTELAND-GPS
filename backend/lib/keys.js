@@ -6,7 +6,7 @@ const bs58 = require("bs58");
 // Sanitize and validate REDIS_URL - trim whitespace and check protocol
 let REDIS_URL = (process.env.REDIS_URL || "").trim();
 if (REDIS_URL && !REDIS_URL.startsWith("redis://") && !REDIS_URL.startsWith("rediss://")) {
-  console.error(`[keys] INVALID REDIS_URL: must start with redis:// or rediss://, got: ${REDIS_URL.substring(0, 20)}...`);
+  console.error(`[keys] INVALID REDIS_URL: must start with redis:// or rediss://, got: ${REDIS_URL.replace(/:[^:@]+@/, ':***@').substring(0, 50)}...`);
   REDIS_URL = null;
 }
 if (REDIS_URL === "") {
