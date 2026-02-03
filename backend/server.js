@@ -49,7 +49,7 @@ const envOrigins = process.env.FRONTEND_ORIGIN
   : defaultOrigins;
 
 // Combine critical origins with environment origins, removing duplicates
-const rawOrigins = [...new Set([...criticalOrigins, ...envOrigins])];
+const allowedOrigins = [...new Set([...criticalOrigins, ...envOrigins])];
 
 function wildcardToRegex(pattern) {
   const escaped = pattern
@@ -59,8 +59,6 @@ function wildcardToRegex(pattern) {
     .replace(/\*/g, '[^\\/]+');
   return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
 }
-
-const allowedOrigins = rawOrigins;
 
 const corsOptions = {
   origin: function(origin, callback) {
