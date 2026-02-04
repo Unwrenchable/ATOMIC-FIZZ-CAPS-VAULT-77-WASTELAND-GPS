@@ -29,8 +29,17 @@
     loadingDialogs: {},   // dialogId -> Promise
     currentDialogId: null,
     lastPanelId: null,
+    isInitialized: false,
+    escKeyHandler: null,
 
     init() {
+      // Prevent double initialization
+      if (this.isInitialized) {
+        console.warn("[narrative] Already initialized, skipping");
+        return;
+      }
+      this.isInitialized = true;
+      
       // Wire dialog close button (remove nested DOMContentLoaded - we're already in one!)
       const closeBtn = document.getElementById("dialogCloseBtn");
       if (closeBtn) {
@@ -43,13 +52,14 @@
         console.warn("[narrative] Close button not found in DOM");
       }
       
-      // Add ESC key listener as backup exit method
-      document.addEventListener("keydown", (e) => {
+      // Add ESC key listener as backup exit method (store reference to prevent duplicates)
+      this.escKeyHandler = (e) => {
         if (e.key === "Escape" && this.currentDialogId) {
           console.log("[narrative] ESC pressed, closing dialogue");
           this.closeDialog();
         }
-      });
+      };
+      document.addEventListener("keydown", this.escKeyHandler);
       
       console.log("[narrative] Initialized with close handlers");
     },

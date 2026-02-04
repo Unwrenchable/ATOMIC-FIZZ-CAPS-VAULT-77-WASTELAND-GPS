@@ -136,6 +136,18 @@
       }
     }
 
+    // Check if game is already initialized (handles race condition)
+    if (window._gameInitialized) {
+      console.log("[BOOT] Game already initialized");
+      gameReady = true;
+    }
+    
+    // Check if wallet is already connected (handles race condition)
+    if (window.PLAYER_WALLET) {
+      console.log("[BOOT] Wallet already connected");
+      walletReady = true;
+    }
+
     window.addEventListener("gameInitialized", () => {
       console.log("[BOOT] Game initialized");
       gameReady = true;
@@ -147,6 +159,9 @@
       walletReady = true;
       triggerCourierIfReady();
     }, { once: true });
+    
+    // Check immediately in case both are already ready
+    triggerCourierIfReady();
 
 
     // Worldmap hook
