@@ -2,6 +2,21 @@
 
 This guide explains how to deploy the entire Atomic Fizz Caps application (frontend + backend) on Vercel as a unified full-stack application.
 
+## Quick Start (TL;DR)
+
+1. **Connect Repository**: Link your GitHub repo to Vercel
+2. **Set Environment Variables**: Add required env vars in Vercel dashboard
+   - `NODE_ENV=production`
+   - `SERVER_SECRET_KEY=<your-key>`
+   - `ADMIN_USERNAME=<username>`
+   - `ADMIN_PASSWORD=<bcrypt-hash>`
+3. **Deploy**: Click deploy - Vercel auto-configures from `vercel.json`
+4. **Done**: Your app is live with both frontend and backend!
+
+See below for detailed instructions and troubleshooting.
+
+---
+
 ## Architecture Overview
 
 ### Full Stack Vercel Deployment
@@ -115,6 +130,8 @@ Response to User
 
 ### Run Full Stack Locally
 
+**Option 1: Traditional approach (separate frontend and backend)**
+
 ```bash
 # Terminal 1: Start backend server
 cd backend
@@ -129,18 +146,23 @@ npx serve public -p 8080
 
 The frontend will automatically detect `localhost` and point API calls to `http://localhost:3000`.
 
-### Test with Vercel CLI (Optional)
+**Option 2: Test with Vercel CLI (simulates serverless environment)**
 
 ```bash
-# Install Vercel CLI
+# Install Vercel CLI globally
 npm i -g vercel
 
-# Run locally with Vercel dev server
+# Install dependencies
+npm install && cd backend && npm install && cd ..
+
+# Run with Vercel dev server
 vercel dev
 # Runs full stack on http://localhost:3000
 ```
 
-This simulates the Vercel environment locally, including serverless functions.
+This simulates the Vercel serverless environment locally, including serverless functions.
+
+**Note**: For the Vercel CLI approach, you may need to set environment variables in a `.env` file at the root of the project, or use `vercel env pull` to download environment variables from your Vercel project.
 
 ## Troubleshooting
 
@@ -151,6 +173,18 @@ This simulates the Vercel environment locally, including serverless functions.
 
 **Error**: `Function size exceeds limit`
 - **Solution**: Add unnecessary files to `.vercelignore` (programs, target, docs, etc.)
+- **Note**: Vercel has size limits for serverless functions:
+  - Free tier: 50MB compressed
+  - Pro tier: 50MB compressed (can request increase)
+  - The `.vercelignore` file excludes unnecessary files (Rust programs, docs, test files)
+  - If you still hit the limit, consider:
+    - Moving large dependencies to external services
+    - Splitting into multiple serverless functions
+    - Using Vercel Edge Functions for lighter endpoints
+
+**Error**: `Module not found` during build
+- **Solution**: Ensure all dependencies are listed in `backend/package.json`
+- **Check**: The install command in `vercel.json` installs both root and backend dependencies
 
 ### Runtime Errors
 
