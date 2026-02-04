@@ -302,6 +302,7 @@ Battle the Gamemaker in Tic-Tac-Toe on Twitter:
 ```
 
 ### Deployment Guides
+- **Quick Start (5 min)**: [VERCEL_QUICKSTART.md](VERCEL_QUICKSTART.md) ⚡
 - **Full Stack Vercel**: [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
 - **Split Architecture**: [DEPLOYMENT.md](DEPLOYMENT.md)
 
