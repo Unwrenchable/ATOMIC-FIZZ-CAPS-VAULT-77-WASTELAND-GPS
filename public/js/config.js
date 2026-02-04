@@ -1,21 +1,23 @@
 // API Base URL Configuration for Atomic Fizz Caps
 // ============================================================
-// IMPORTANT: This ensures ALL frontend deployments connect to 
-// the SAME backend API, creating ONE unified game instance.
+// IMPORTANT: This configuration supports multiple deployment modes:
 //
-// Architecture:
-// - Backend API: https://api.atomicfizzcaps.xyz (Render)
-//   → Single source of truth for all game state, player data, quests
+// 1. Full Stack Vercel (Recommended):
+//    - Frontend: Vercel static hosting
+//    - Backend: Vercel serverless functions (api/ directory)
+//    - API calls use relative paths (e.g., /api/locations)
 //
-// - All Frontends → Point to same backend:
-//   → atomicfizzcaps.xyz (Vercel)
-//   → www.atomicfizzcaps.xyz (Vercel)  
-//   → *.vercel.app (Vercel previews)
-//   → *.onrender.com (Render previews)
-//   → All connect to: api.atomicfizzcaps.xyz
+// 2. Split Architecture (Legacy):
+//    - Frontend: Vercel static hosting
+//    - Backend: External server (e.g., Render)
+//    - API calls point to external URL (e.g., https://api.atomicfizzcaps.xyz)
 //
-// This means: All players see the same game world regardless of
-// which frontend URL they use. Progress syncs across all domains.
+// 3. Local Development:
+//    - Frontend: Any static server
+//    - Backend: Local Express server on localhost:3000
+//    - API calls point to http://localhost:3000
+//
+// This ensures flexible deployment while maintaining a consistent API.
 // ============================================================
 (function() {
   const hostname = window.location.hostname;
@@ -30,10 +32,11 @@
     // Use devnet for local development
     window.SOLANA_RPC = 'https://api.devnet.solana.com';
   } else {
-    // All production/preview environments (Vercel, Render, custom domain):
-    // Use the centralized API at api.atomicfizzcaps.xyz
-    // This ensures ONE unified game world for all players
-    window.API_BASE = 'https://api.atomicfizzcaps.xyz';
+    // Production/preview environments on Vercel or custom domains:
+    // Use relative paths for API calls - they'll be handled by:
+    // - Vercel serverless functions if deployed as full stack
+    // - External proxy if configured in vercel.json
+    window.API_BASE = '';  // Empty string means relative paths
     // Use mainnet for production
     window.SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
   }
@@ -44,7 +47,7 @@
   
   // Log configuration for debugging
   console.log('[Config] Frontend:', hostname);
-  console.log('[Config] Backend API:', window.API_BASE);
+  console.log('[Config] Backend API:', window.API_BASE || '(relative paths)');
   console.log('[Config] Solana RPC:', window.SOLANA_RPC);
-  console.log('[Config] Architecture: Unified - all frontends → single backend');
+  console.log('[Config] Mode: Full stack or proxied deployment');
 })();

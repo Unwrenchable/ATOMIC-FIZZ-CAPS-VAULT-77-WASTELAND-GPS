@@ -16,6 +16,7 @@ const {
   adminLoginHandler,
   adminLogoutHandler,
   requireAdmin,
+  adminLoginRateLimiter,
 } = require("./middleware/adminAuth");
 
 // --- ADMIN MODULES ---
@@ -95,7 +96,7 @@ app.use("/api", walletRoutes);
 
 // ------------------------------------------------------------
 // Admin Auth Routes
-app.post("/api/admin/login", adminLoginHandler);
+app.post("/api/admin/login", adminLoginRateLimiter, adminLoginHandler);
 app.post("/api/admin/logout", requireAdmin, adminLogoutHandler);
 
 // ------------------------------------------------------------
