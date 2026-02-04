@@ -1124,7 +1124,13 @@
   window.addEventListener('wristReady', () => {
     console.log('[worldmap] wristReady event received, initializing...');
     if (worldmapModule.onOpen) {
-      worldmapModule.onOpen();
+      // Use requestAnimationFrame to wait for browser reflow after hidden class is removed
+      // This ensures the container has proper dimensions before we try to initialize
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          worldmapModule.onOpen();
+        });
+      });
     }
   });
 
@@ -1132,7 +1138,13 @@
   window.addEventListener('pipboyReady', () => {
     console.log('[worldmap] pipboyReady event received, initializing (legacy)...');
     if (worldmapModule.onOpen) {
-      worldmapModule.onOpen();
+      // Use requestAnimationFrame to wait for browser reflow after hidden class is removed
+      // This ensures the container has proper dimensions before we try to initialize
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          worldmapModule.onOpen();
+        });
+      });
     }
   });
 
