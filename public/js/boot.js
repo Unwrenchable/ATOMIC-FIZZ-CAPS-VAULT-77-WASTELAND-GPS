@@ -127,7 +127,7 @@
     let gameReady = false;
     let walletReady = false;
 
-    function checkAndTriggerCourier() {
+    function triggerCourierIfReady() {
       if (gameReady && walletReady) {
         console.log("[BOOT] Game ready and wallet connected, triggering Courier dialogue");
         setTimeout(() => {
@@ -139,13 +139,13 @@
     window.addEventListener("gameInitialized", () => {
       console.log("[BOOT] Game initialized");
       gameReady = true;
-      checkAndTriggerCourier();
+      triggerCourierIfReady();
     }, { once: true });
 
     window.addEventListener("walletConnected", () => {
       console.log("[BOOT] Wallet connected, ready for Courier dialogue");
       walletReady = true;
-      checkAndTriggerCourier();
+      triggerCourierIfReady();
     }, { once: true });
 
 
