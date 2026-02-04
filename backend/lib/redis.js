@@ -20,7 +20,8 @@ if (REDIS_URL === "") {
   REDIS_URL = null;
 }
 const NODE_ENV = process.env.NODE_ENV || "development";
-const REQUIRE_REDIS_IN_PRODUCTION = process.env.REQUIRE_REDIS_IN_PRODUCTION !== "false";
+// Default to false for better resilience - can be set to true for strict production environments
+const REQUIRE_REDIS_IN_PRODUCTION = process.env.REQUIRE_REDIS_IN_PRODUCTION === "true";
 
 let redisClient = null;
 let usingFallback = false;
@@ -247,8 +248,15 @@ const initPromise = initClient();
 
 async function ensureClient() {
   if (redisClient) return redisClient;
-  await initPromise;
-  return redisClient;
+  try {
+    await initPromise;
+    return redisClient;
+  } catch (err) {
+    // Redis initialization failed critically - this should only happen
+    // if REQUIRE_REDIS_IN_PRODUCTION=true and Redis connection failed
+    console.error("[redis] ensureClient: Redis initialization failed:", err.message);
+    throw new Error(`Redis not available: ${err.message}. Set REQUIRE_REDIS_IN_PRODUCTION=false to use fallback.`);
+  }
 }
 
 // Key helpers and JSON helpers
