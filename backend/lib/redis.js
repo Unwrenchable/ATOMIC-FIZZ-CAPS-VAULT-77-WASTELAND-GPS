@@ -226,7 +226,7 @@ async function initClient() {
     const connectWithTimeout = Promise.race([
       client.connect(),
       new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Redis connection timeout after 10 seconds')), 10000)
+        setTimeout(() => reject(new Error('Redis connection timed out after 10 seconds')), 10000)
       )
     ]);
 
