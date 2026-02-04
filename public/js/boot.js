@@ -121,15 +121,33 @@
     // NOTE: Quest initialization moved to main.js initGame() to ensure proper load order
     // Quest system needs player state to be fully initialized first
 
-    // Trigger the courier NPC dialogue for first-time players
+    // Trigger the courier NPC dialogue for first-time players AFTER wallet connection
     // This shows the Fallout-style NPC dialogue with the first quest
-    // Wait for game initialization to complete via event
+    // Wait for BOTH game initialization AND wallet connection
+    let gameReady = false;
+    let walletReady = false;
+
+    function checkAndTriggerCourier() {
+      if (gameReady && walletReady) {
+        console.log("[BOOT] Game ready and wallet connected, triggering Courier dialogue");
+        setTimeout(() => {
+          triggerCourierDialogue();
+        }, 300);
+      }
+    }
+
     window.addEventListener("gameInitialized", () => {
-      // Small delay to ensure all UI is ready
-      setTimeout(() => {
-        triggerCourierDialogue();
-      }, 300);
+      console.log("[BOOT] Game initialized");
+      gameReady = true;
+      checkAndTriggerCourier();
     }, { once: true });
+
+    window.addEventListener("walletConnected", () => {
+      console.log("[BOOT] Wallet connected, ready for Courier dialogue");
+      walletReady = true;
+      checkAndTriggerCourier();
+    }, { once: true });
+
 
     // Worldmap hook
     if (window.Game?.modules?.worldmap?.onOpen) {
