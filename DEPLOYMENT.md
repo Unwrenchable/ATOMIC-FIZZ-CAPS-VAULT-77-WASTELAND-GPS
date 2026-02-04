@@ -1,11 +1,27 @@
 # Deployment Guide
 
-> 📚 **NEW: Step-by-Step Guide Available**
-> For a complete walkthrough with detailed instructions, see [Render & Vercel Deployment Guide](docs/RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
+> 📚 **Multiple Deployment Options Available**
+> - **Full Stack Vercel** (Recommended for simplicity): See [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
+> - **Split Architecture** (Vercel + Render): See [Render & Vercel Deployment Guide](docs/RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
 
-## Architecture Overview
+## Deployment Options
 
-This application uses a **unified backend** architecture with multiple frontend deployment options:
+This application supports two deployment architectures:
+
+### Option 1: Full Stack Vercel (Recommended for New Deployments)
+
+**Single platform deployment with both frontend and backend on Vercel**
+
+- ✅ **Frontend**: Static files served by Vercel CDN
+- ✅ **Backend**: Express app as Vercel Serverless Functions
+- ✅ **Benefits**: Simple setup, single platform, automatic scaling
+- ✅ **Best for**: Most use cases, especially getting started
+
+**See detailed guide**: [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
+
+### Option 2: Split Architecture (Legacy/Advanced)
+
+**Separate deployments for frontend and backend**
 
 - **Backend API** (Single Source of Truth): Deployed on Render
   - API domain: `https://api.atomicfizzcaps.xyz`
@@ -18,13 +34,14 @@ This application uses a **unified backend** architecture with multiple frontend 
   - Preview/testing (Vercel): `*.vercel.app`
   - Preview/testing (Render): `*.onrender.com`
 
+**Best for**: Need long-running tasks, WebSockets, or always-warm API responses
+
 ## ⚠️ Important: Single Game Instance
 
 **All frontend deployments connect to the SAME backend API**, which means:
-- ✅ `atomicfizzcaps.xyz` → connects to `api.atomicfizzcaps.xyz`
-- ✅ `www.atomicfizzcaps.xyz` → connects to `api.atomicfizzcaps.xyz`
-- ✅ `preview-xyz.vercel.app` → connects to `api.atomicfizzcaps.xyz`
-- ✅ `xyz.onrender.com` → connects to `api.atomicfizzcaps.xyz`
+- ✅ `atomicfizzcaps.xyz` → connects to backend API
+- ✅ `www.atomicfizzcaps.xyz` → connects to backend API
+- ✅ `preview-xyz.vercel.app` → connects to backend API
 
 This ensures:
 - **One unified game world** - all players share the same game state
@@ -33,7 +50,7 @@ This ensures:
 
 ## Domain Unification
 
-All frontend deployments (Vercel, Render, or custom domains) automatically connect to the centralized API at `https://api.atomicfizzcaps.xyz`. This ensures consistent behavior across:
+Whether using full stack Vercel or split architecture, all frontend deployments connect to a central backend API. This ensures consistent behavior across:
 - Main production site (`atomicfizzcaps.xyz`, `www.atomicfizzcaps.xyz`)
 - Vercel preview deployments (`*.vercel.app`)
 - Render deployments (`*.onrender.com`)
