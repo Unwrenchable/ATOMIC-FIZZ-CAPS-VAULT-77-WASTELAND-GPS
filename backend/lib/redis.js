@@ -202,7 +202,13 @@ async function initClient() {
     const client = createClient({
       url: REDIS_URL,
       socket: {
+        connectTimeout: 5000, // 5 second timeout for initial connection
         reconnectStrategy: (retries) => {
+          // Stop reconnecting after 3 attempts during initialization
+          if (retries >= 3) {
+            console.warn(`[redis] giving up after ${retries} reconnect attempts`);
+            return false; // Stop reconnecting
+          }
           const delay = Math.min(1000 * Math.pow(2, retries), 8000);
           console.warn(`[redis] reconnect attempt ${retries}, retrying in ${delay}ms`);
           return delay;
@@ -216,7 +222,15 @@ async function initClient() {
     client.on("reconnecting", () => console.warn("[redis] reconnecting..."));
     client.on("error", (err) => console.error("[redis] error:", err && err.message ? err.message : err));
 
-    await client.connect();
+    // Add a hard timeout wrapper to prevent hanging during initialization
+    const connectWithTimeout = Promise.race([
+      client.connect(),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Redis connection timeout after 10 seconds')), 10000)
+      )
+    ]);
+
+    await connectWithTimeout;
 
     usingFallback = false;
     redisClient = client;
