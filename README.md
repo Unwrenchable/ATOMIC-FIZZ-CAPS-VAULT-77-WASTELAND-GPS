@@ -261,7 +261,28 @@ Battle the Gamemaker in Tic-Tac-Toe on Twitter:
 
 ## 🔧 TECHNICAL SPECIFICATIONS
 
-### Architecture
+### Architecture Options
+
+#### Full Stack Vercel (Recommended)
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     ATOMIC FIZZ CAPS v1.0.1                     │
+├─────────────────────────────────────────────────────────────────┤
+│  FRONTEND (Vercel CDN)      │  BACKEND (Vercel Functions)       │
+│  • Static HTML/CSS/JS       │  • Node.js/Express API            │
+│  • Leaflet Maps             │  • Serverless Auto-scaling        │
+│  • Phantom Wallet           │  • Redis/External DB              │
+│  • PWA Support              │  • Rate Limiting & Auth           │
+├─────────────────────────────────────────────────────────────────┤
+│  TWITTER BOT (Render)       │  BLOCKCHAIN (Solana)              │
+│  • Python/Flask             │  • FIZZ SPL Token                 │
+│  • Tweepy v2 API            │  • Metaplex NFT Integration       │
+│  • Shared Redis             │  • Wormhole Bridge                │
+│  • 24/7 Uptime              │  • On-chain Programs (Anchor)     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### Split Architecture (Legacy)
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     ATOMIC FIZZ CAPS v1.0.1                     │
@@ -279,9 +300,15 @@ Battle the Gamemaker in Tic-Tac-Toe on Twitter:
 │  • 24/7 Uptime              │  • On-chain Programs (Anchor)     │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+### Deployment Guides
+- **Full Stack Vercel**: [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
+- **Split Architecture**: [DEPLOYMENT.md](DEPLOYMENT.md)
+
+```
 ╔═══════════════════════════════════════════════════════════════════╗
 ║                                                                   ║
-║   "War. War never changes. But transaction fees? Those change."   ║
+║   "War. War never changes. But deployment options? Those change." ║
 ║                                                                   ║
 ║                           — HavenTech Marketing, 2077             ║
 ║                                                                   ║

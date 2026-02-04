@@ -371,10 +371,13 @@ app.use((err, req, res, next) => {
 // ------------------------------------------------------------
 // START SERVER
 // ------------------------------------------------------------
-app.listen(PORT, () => {
-  console.log(
-    `Atomic Fizz Caps backend running on port ${PORT} (env=${NODE_ENV})`
-  );
-});
+// Only start the server if not running as a Vercel serverless function
+if (process.env.VERCEL !== '1' && require.main === module) {
+  app.listen(PORT, () => {
+    console.log(
+      `Atomic Fizz Caps backend running on port ${PORT} (env=${NODE_ENV})`
+    );
+  });
+}
 
 module.exports = app;
