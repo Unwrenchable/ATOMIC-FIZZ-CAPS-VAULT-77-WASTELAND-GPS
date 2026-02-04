@@ -335,18 +335,21 @@ async function setJSON(k, value, opts = {}) {
 }
 
 // Helper to detect and enhance authentication errors
+// This function ALWAYS throws - either the enhanced error or the original error
 function handleRedisError(err, operation) {
   const errorMsg = err && err.message ? err.message : String(err);
   const isAuthError = errorMsg.includes('NOAUTH') || errorMsg.includes('Authentication required') || errorMsg.includes('WRONGPASS');
   
   if (isAuthError) {
     const enhancedError = new Error(
-      `Redis authentication required. Update REDIS_URL to include password (format: redis://username:password@host:port). Original error: ${errorMsg}`
+      `Redis authentication required for operation '${operation}'. Update REDIS_URL to include password (format: redis://username:password@host:port). Original error: ${errorMsg}`
     );
     enhancedError.code = 'REDIS_AUTH_ERROR';
+    enhancedError.operation = operation;
     enhancedError.originalError = err;
     throw enhancedError;
   }
+  // Always re-throw the original error if not an auth error
   throw err;
 }
 
