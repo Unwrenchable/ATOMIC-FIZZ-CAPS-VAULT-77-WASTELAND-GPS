@@ -230,6 +230,8 @@
     maxContainerRetries: 10,
     containerRetryDelayMs: 200,
     mapInvalidateDelayMs: 150,
+    mapInvalidateDelayMsMobile: 400,
+    mapSecondInvalidateDelayMs: 300,
     isRetrying: false,
     
     // Detect mobile device for longer delays
@@ -320,7 +322,7 @@
 
       // Force map to recalculate size and re-render (increased delay for mobile)
       // Use longer delay on mobile devices for proper layout calculation
-      const delay = this.isMobileDevice() ? 400 : this.mapInvalidateDelayMs;
+      const delay = this.isMobileDevice() ? this.mapInvalidateDelayMsMobile : this.mapInvalidateDelayMs;
       console.log(`[worldmap] scheduling invalidateSize with ${delay}ms delay (mobile: ${this.isMobileDevice()})`);
       
       setTimeout(() => {
@@ -340,7 +342,7 @@
                   console.log('[worldmap] second invalidateSize for mobile');
                   this.map.invalidateSize(true);
                 }
-              }, 300);
+              }, this.mapSecondInvalidateDelayMs);
             }
           }
         } catch (e) {

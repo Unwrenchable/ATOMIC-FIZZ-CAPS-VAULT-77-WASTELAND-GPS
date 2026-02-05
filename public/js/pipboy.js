@@ -12,6 +12,16 @@
     radio: document.getElementById("panel-radio"),
     exchange: document.getElementById("panel-exchange"),
   };
+  
+  // Configuration constants
+  const MAP_INVALIDATE_DELAY_DESKTOP = 200;
+  const MAP_INVALIDATE_DELAY_MOBILE = 500;
+  
+  // Shared mobile detection utility
+  function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+      || window.innerWidth <= 768;
+  }
 
     // ------------------------------------------------------------
   // CORE PANEL SWITCHER
@@ -43,9 +53,7 @@
       }
 
       // Additional invalidateSize after panel switch (longer delay for mobile)
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
-        || window.innerWidth <= 768;
-      const delay = isMobile ? 500 : 200;
+      const delay = isMobileDevice() ? MAP_INVALIDATE_DELAY_MOBILE : MAP_INVALIDATE_DELAY_DESKTOP;
       
       setTimeout(() => {
         if (window.map && typeof window.map.invalidateSize === "function") {
