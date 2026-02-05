@@ -42,11 +42,17 @@
         }
       }
 
+      // Additional invalidateSize after panel switch (longer delay for mobile)
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+        || window.innerWidth <= 768;
+      const delay = isMobile ? 500 : 200;
+      
       setTimeout(() => {
         if (window.map && typeof window.map.invalidateSize === "function") {
-          window.map.invalidateSize();
+          console.log(`[PipBoy] invalidating map size after panel switch (delay: ${delay}ms)`);
+          window.map.invalidateSize(true);
         }
-      }, 200);
+      }, delay);
     }
 
     // ITEMS PANEL ACTIVATION

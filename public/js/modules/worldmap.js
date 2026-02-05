@@ -231,6 +231,12 @@
     containerRetryDelayMs: 200,
     mapInvalidateDelayMs: 150,
     isRetrying: false,
+    
+    // Detect mobile device for longer delays
+    isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+        || window.innerWidth <= 768;
+    },
 
     // --------------------------------------------------------
     // INIT
@@ -313,6 +319,10 @@
       this.renderWorldLabels();
 
       // Force map to recalculate size and re-render (increased delay for mobile)
+      // Use longer delay on mobile devices for proper layout calculation
+      const delay = this.isMobileDevice() ? 400 : this.mapInvalidateDelayMs;
+      console.log(`[worldmap] scheduling invalidateSize with ${delay}ms delay (mobile: ${this.isMobileDevice()})`);
+      
       setTimeout(() => {
         try {
           if (this.map) {
@@ -322,6 +332,16 @@
             this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7);
             this.updateOverlayVisibility(this.map.getZoom() || 7);
             this.updateMapStatus('Map online - Ready');
+            
+            // Additional invalidation for mobile devices to ensure tiles load
+            if (this.isMobileDevice()) {
+              setTimeout(() => {
+                if (this.map) {
+                  console.log('[worldmap] second invalidateSize for mobile');
+                  this.map.invalidateSize(true);
+                }
+              }, 300);
+            }
           }
         } catch (e) {
           console.error('[worldmap] error in onOpen timeout:', e);
