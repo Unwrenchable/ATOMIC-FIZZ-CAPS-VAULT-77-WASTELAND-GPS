@@ -20,7 +20,8 @@ if (REDIS_URL === "") {
   REDIS_URL = null;
 }
 const NODE_ENV = process.env.NODE_ENV || "development";
-const REQUIRE_REDIS_IN_PRODUCTION = process.env.REQUIRE_REDIS_IN_PRODUCTION !== "false";
+// Default to false for better resilience - can be set to true for strict production environments
+const REQUIRE_REDIS_IN_PRODUCTION = process.env.REQUIRE_REDIS_IN_PRODUCTION === "true";
 
 let redisClient = null;
 let usingFallback = false;
@@ -201,7 +202,13 @@ async function initClient() {
     const client = createClient({
       url: REDIS_URL,
       socket: {
+        connectTimeout: 5000, // 5 second timeout for initial connection
         reconnectStrategy: (retries) => {
+          // Stop reconnecting after 3 attempts during initialization
+          if (retries >= 3) {
+            console.warn(`[redis] giving up after ${retries} reconnect attempts`);
+            return false; // Stop reconnecting
+          }
           const delay = Math.min(1000 * Math.pow(2, retries), 8000);
           console.warn(`[redis] reconnect attempt ${retries}, retrying in ${delay}ms`);
           return delay;
@@ -215,26 +222,56 @@ async function initClient() {
     client.on("reconnecting", () => console.warn("[redis] reconnecting..."));
     client.on("error", (err) => console.error("[redis] error:", err && err.message ? err.message : err));
 
-    await client.connect();
+    // Add a hard timeout wrapper to prevent hanging during initialization
+    const connectWithTimeout = Promise.race([
+      client.connect(),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Redis connection timed out after 10 seconds')), 10000)
+      )
+    ]);
+
+    await connectWithTimeout;
 
     usingFallback = false;
     redisClient = client;
     console.log("[redis] successfully connected");
     return redisClient;
   } catch (err) {
+    const errorMsg = err && err.message ? err.message : String(err);
+    const isAuthError = errorMsg.includes('NOAUTH') || errorMsg.includes('Authentication required') || errorMsg.includes('WRONGPASS');
+    
+    // Special handling for authentication errors
+    if (isAuthError) {
+      console.error("[redis] AUTHENTICATION ERROR: Redis requires password authentication!");
+      console.error("[redis] Error:", errorMsg);
+      console.error("[redis] REDIS_URL format (masked):", REDIS_URL ? REDIS_URL.replace(/:[^:@]+@/, ':***@') : "not set");
+      console.error("[redis] ");
+      console.error("[redis] To fix this, update your REDIS_URL to include authentication:");
+      console.error("[redis]   Format: redis://username:password@host:port");
+      console.error("[redis]   Example: redis://default:your_password@localhost:6379");
+      console.error("[redis] ");
+      console.error("[redis] If Redis has no password set, you can disable it with:");
+      console.error("[redis]   redis-cli config set requirepass \"\"");
+      console.error("[redis] ");
+    }
+    
     // Emit strong warnings for production environments
     if (NODE_ENV === "production") {
       console.error("[redis] CRITICAL: Redis connection failed in production environment!");
-      console.error("[redis] Error:", err && err.message ? err.message : err);
-      console.error("[redis] REDIS_URL format (masked):", REDIS_URL ? REDIS_URL.replace(/:[^:@]+@/, ':***@') : "not set");
+      if (!isAuthError) {
+        console.error("[redis] Error:", errorMsg);
+        console.error("[redis] REDIS_URL format (masked):", REDIS_URL ? REDIS_URL.replace(/:[^:@]+@/, ':***@') : "not set");
+      }
       console.error("[redis] WARNING: Falling back to in-memory store will cause data consistency issues.");
       if (REQUIRE_REDIS_IN_PRODUCTION) {
         throw new Error("Redis connection failed in production. Fix Redis or set REQUIRE_REDIS_IN_PRODUCTION=false to override (not recommended).");
       }
     } else {
       console.error("[redis] connection failed — falling back to in-memory store");
-      console.error("[redis] Error:", err && err.message ? err.message : err);
-      console.error("[redis] REDIS_URL format (masked):", REDIS_URL ? REDIS_URL.replace(/:[^:@]+@/, ':***@') : "not set");
+      if (!isAuthError) {
+        console.error("[redis] Error:", errorMsg);
+        console.error("[redis] REDIS_URL format (masked):", REDIS_URL ? REDIS_URL.replace(/:[^:@]+@/, ':***@') : "not set");
+      }
     }
     usingFallback = true;
     redisClient = createInMemoryClient();
@@ -247,8 +284,15 @@ const initPromise = initClient();
 
 async function ensureClient() {
   if (redisClient) return redisClient;
-  await initPromise;
-  return redisClient;
+  try {
+    await initPromise;
+    return redisClient;
+  } catch (err) {
+    // Redis initialization failed critically - this should only happen
+    // if REQUIRE_REDIS_IN_PRODUCTION=true and Redis connection failed
+    console.error("[redis] ensureClient: Redis initialization failed:", err.message);
+    throw new Error(`Redis not available: ${err.message}. Set REQUIRE_REDIS_IN_PRODUCTION=false to use fallback.`);
+  }
 }
 
 // Key helpers and JSON helpers
@@ -290,48 +334,107 @@ async function setJSON(k, value, opts = {}) {
   }
 }
 
+// Helper to detect and enhance authentication errors
+// This function ALWAYS throws - either the enhanced error or the original error
+function handleRedisError(err, operation) {
+  const errorMsg = err && err.message ? err.message : String(err);
+  const isAuthError = errorMsg.includes('NOAUTH') || errorMsg.includes('Authentication required') || errorMsg.includes('WRONGPASS');
+  
+  if (isAuthError) {
+    const enhancedError = new Error(
+      `Redis authentication required for operation '${operation}'. Update REDIS_URL to include password (format: redis://username:password@host:port). Original error: ${errorMsg}`
+    );
+    enhancedError.code = 'REDIS_AUTH_ERROR';
+    enhancedError.operation = operation;
+    enhancedError.originalError = err;
+    throw enhancedError;
+  }
+  // Always re-throw the original error if not an auth error
+  throw err;
+}
+
 // Top-level wrappers expected by the rest of the codebase
 async function get(k) {
-  const c = await ensureClient();
-  return c.get(key(k));
+  try {
+    const c = await ensureClient();
+    return await c.get(key(k));
+  } catch (err) {
+    handleRedisError(err, 'get');
+  }
 }
 async function set(k, v, opts) {
-  const c = await ensureClient();
-  if (c.isFallback) return c.set(key(k), v, opts);
-  if (opts && opts.EX) return c.set(key(k), v, { EX: opts.EX });
-  return c.set(key(k), v);
+  try {
+    const c = await ensureClient();
+    if (c.isFallback) return c.set(key(k), v, opts);
+    if (opts && opts.EX) return await c.set(key(k), v, { EX: opts.EX });
+    return await c.set(key(k), v);
+  } catch (err) {
+    handleRedisError(err, 'set');
+  }
 }
 async function del(k) {
-  const c = await ensureClient();
-  return c.del(key(k));
+  try {
+    const c = await ensureClient();
+    return await c.del(key(k));
+  } catch (err) {
+    handleRedisError(err, 'del');
+  }
 }
 async function incr(k) {
-  const c = await ensureClient();
-  return c.incr(key(k));
+  try {
+    const c = await ensureClient();
+    return await c.incr(key(k));
+  } catch (err) {
+    handleRedisError(err, 'incr');
+  }
 }
 async function expire(k, s) {
-  const c = await ensureClient();
-  return c.expire(key(k), s);
+  try {
+    const c = await ensureClient();
+    return await c.expire(key(k), s);
+  } catch (err) {
+    handleRedisError(err, 'expire');
+  }
 }
 async function smembers(k) {
-  const c = await ensureClient();
-  return c.smembers(key(k));
+  try {
+    const c = await ensureClient();
+    return await c.smembers(key(k));
+  } catch (err) {
+    handleRedisError(err, 'smembers');
+  }
 }
 async function sadd(k, ...m) {
-  const c = await ensureClient();
-  return c.sadd(key(k), ...m);
+  try {
+    const c = await ensureClient();
+    return await c.sadd(key(k), ...m);
+  } catch (err) {
+    handleRedisError(err, 'sadd');
+  }
 }
 async function srem(k, ...m) {
-  const c = await ensureClient();
-  return c.srem(key(k), ...m);
+  try {
+    const c = await ensureClient();
+    return await c.srem(key(k), ...m);
+  } catch (err) {
+    handleRedisError(err, 'srem');
+  }
 }
 async function hget(k, field) {
-  const c = await ensureClient();
-  return c.hget(key(k), field);
+  try {
+    const c = await ensureClient();
+    return await c.hget(key(k), field);
+  } catch (err) {
+    handleRedisError(err, 'hget');
+  }
 }
 async function hset(k, field, value) {
-  const c = await ensureClient();
-  return c.hset(key(k), field, value);
+  try {
+    const c = await ensureClient();
+    return await c.hset(key(k), field, value);
+  } catch (err) {
+    handleRedisError(err, 'hset');
+  }
 }
 function on(ev, fn) {
   if (redisClient && typeof redisClient.on === "function") {
