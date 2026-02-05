@@ -29,18 +29,39 @@
     loadingDialogs: {},   // dialogId -> Promise
     currentDialogId: null,
     lastPanelId: null,
+    isInitialized: false,
+    escKeyHandler: null,
 
     init() {
-      // Wire dialog close button
-      document.addEventListener("DOMContentLoaded", () => {
-        const closeBtn = document.getElementById("dialogCloseBtn");
-        if (closeBtn) {
-          closeBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            this.closeDialog();
-          });
+      // Prevent double initialization
+      if (this.isInitialized) {
+        console.warn("[narrative] Already initialized, skipping");
+        return;
+      }
+      this.isInitialized = true;
+      
+      // Wire dialog close button (remove nested DOMContentLoaded - we're already in one!)
+      const closeBtn = document.getElementById("dialogCloseBtn");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          this.closeDialog();
+        });
+        console.log("[narrative] Close button wired");
+      } else {
+        console.warn("[narrative] Close button not found in DOM");
+      }
+      
+      // Add ESC key listener as backup exit method (store reference to prevent duplicates)
+      this.escKeyHandler = (e) => {
+        if (e.key === "Escape" && this.currentDialogId) {
+          console.log("[narrative] ESC pressed, closing dialogue");
+          this.closeDialog();
         }
-      });
+      };
+      document.addEventListener("keydown", this.escKeyHandler);
+      
+      console.log("[narrative] Initialized with close handlers");
     },
 
     // Public API: open dialog for an NPC id, e.g. "rex", "mother", "jax"
@@ -328,6 +349,12 @@
       const npcName = escapeHtml(dialog.npc || dialog.title || dialog.id || "Unknown");
       const npcDescription = escapeHtml(dialog.description || "");
       
+      // Update the NPC name label in the portrait area
+      const npcNameEl = document.getElementById("dialogNPCName");
+      if (npcNameEl) {
+        npcNameEl.textContent = npcName;
+      }
+      
       // Escape HTML first, then convert \n to <br> for proper line breaks
       const formattedText = escapeHtml(node.text || "").replace(/\n/g, "<br>");
 
@@ -363,6 +390,8 @@
       `;
 
       panel.innerHTML = html;
+      
+      console.log("[narrative] Rendered node:", node.id, "for NPC:", npcName);
     },
 
     showDialogPanel() {

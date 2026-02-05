@@ -780,6 +780,9 @@
       window.PLAYER_WALLET = addr;
       safeLog("Wallet connected:", addr);
 
+      // Dispatch wallet connection event for other systems (e.g., Courier dialogue)
+      window.dispatchEvent(new CustomEvent("walletConnected", { detail: { address: addr } }));
+
       // Load NFTs as soon as wallet is connected
       await refreshNFTs();
     } catch (e) {

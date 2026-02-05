@@ -121,15 +121,48 @@
     // NOTE: Quest initialization moved to main.js initGame() to ensure proper load order
     // Quest system needs player state to be fully initialized first
 
-    // Trigger the courier NPC dialogue for first-time players
+    // Trigger the courier NPC dialogue for first-time players AFTER wallet connection
     // This shows the Fallout-style NPC dialogue with the first quest
-    // Wait for game initialization to complete via event
+    // Wait for BOTH game initialization AND wallet connection
+    let gameReady = false;
+    let walletReady = false;
+
+    function triggerCourierIfReady() {
+      if (gameReady && walletReady) {
+        console.log("[BOOT] Game ready and wallet connected, triggering Courier dialogue");
+        setTimeout(() => {
+          triggerCourierDialogue();
+        }, 300);
+      }
+    }
+
+    // Check if game is already initialized (handles race condition)
+    if (window._gameInitialized) {
+      console.log("[BOOT] Game already initialized");
+      gameReady = true;
+    }
+    
+    // Check if wallet is already connected (handles race condition)
+    if (window.PLAYER_WALLET) {
+      console.log("[BOOT] Wallet already connected");
+      walletReady = true;
+    }
+
     window.addEventListener("gameInitialized", () => {
-      // Small delay to ensure all UI is ready
-      setTimeout(() => {
-        triggerCourierDialogue();
-      }, 300);
+      console.log("[BOOT] Game initialized");
+      gameReady = true;
+      triggerCourierIfReady();
     }, { once: true });
+
+    window.addEventListener("walletConnected", () => {
+      console.log("[BOOT] Wallet connected, ready for Courier dialogue");
+      walletReady = true;
+      triggerCourierIfReady();
+    }, { once: true });
+    
+    // Check immediately in case both are already ready
+    triggerCourierIfReady();
+
 
     // Worldmap hook
     if (window.Game?.modules?.worldmap?.onOpen) {

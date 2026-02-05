@@ -203,7 +203,8 @@ router.get("/nonce/:publicKey", nonceLimiter, async (req, res) => {
     return res.json({ ok: true, publicKey, nonce });
   } catch (err) {
     console.error("[auth] nonce error:", err);
-    return res.status(500).json({ ok: false, error: "Failed to generate nonce" });
+    const errorMsg = err && err.message ? err.message : "Failed to generate nonce";
+    return res.status(500).json({ ok: false, error: `Failed to generate nonce: ${errorMsg}` });
   }
 });
 

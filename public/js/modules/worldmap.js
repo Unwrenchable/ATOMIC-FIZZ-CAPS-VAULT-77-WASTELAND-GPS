@@ -230,7 +230,15 @@
     maxContainerRetries: 10,
     containerRetryDelayMs: 200,
     mapInvalidateDelayMs: 150,
+    mapInvalidateDelayMsMobile: 400,
+    mapSecondInvalidateDelayMs: 300,
     isRetrying: false,
+    
+    // Detect mobile device for longer delays
+    isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+        || window.innerWidth <= 768;
+    },
 
     // --------------------------------------------------------
     // INIT
@@ -313,6 +321,10 @@
       this.renderWorldLabels();
 
       // Force map to recalculate size and re-render (increased delay for mobile)
+      // Use longer delay on mobile devices for proper layout calculation
+      const delay = this.isMobileDevice() ? this.mapInvalidateDelayMsMobile : this.mapInvalidateDelayMs;
+      console.log(`[worldmap] scheduling invalidateSize with ${delay}ms delay (mobile: ${this.isMobileDevice()})`);
+      
       setTimeout(() => {
         try {
           if (this.map) {
@@ -322,6 +334,16 @@
             this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7);
             this.updateOverlayVisibility(this.map.getZoom() || 7);
             this.updateMapStatus('Map online - Ready');
+            
+            // Additional invalidation for mobile devices to ensure tiles load
+            if (this.isMobileDevice()) {
+              setTimeout(() => {
+                if (this.map) {
+                  console.log('[worldmap] second invalidateSize for mobile');
+                  this.map.invalidateSize(true);
+                }
+              }, this.mapSecondInvalidateDelayMs);
+            }
           }
         } catch (e) {
           console.error('[worldmap] error in onOpen timeout:', e);
@@ -1124,7 +1146,13 @@
   window.addEventListener('wristReady', () => {
     console.log('[worldmap] wristReady event received, initializing...');
     if (worldmapModule.onOpen) {
-      worldmapModule.onOpen();
+      // Use requestAnimationFrame to wait for browser reflow after hidden class is removed
+      // This ensures the container has proper dimensions before we try to initialize
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          worldmapModule.onOpen();
+        });
+      });
     }
   });
 
@@ -1132,7 +1160,13 @@
   window.addEventListener('pipboyReady', () => {
     console.log('[worldmap] pipboyReady event received, initializing (legacy)...');
     if (worldmapModule.onOpen) {
-      worldmapModule.onOpen();
+      // Use requestAnimationFrame to wait for browser reflow after hidden class is removed
+      // This ensures the container has proper dimensions before we try to initialize
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          worldmapModule.onOpen();
+        });
+      });
     }
   });
 
