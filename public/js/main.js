@@ -927,8 +927,24 @@
   // ---------------------------
 
   async function initGame() {
-    if (_gameInitialized || _gameInitializing) return;
+    // Use sessionStorage to prevent multiple initializations across tabs/windows
+    const initKey = "afc_game_initialized_" + window.location.pathname;
+    const existingInit = sessionStorage.getItem(initKey);
+    console.log("[main] Checking game initialization for", window.location.pathname, "- existing:", existingInit);
+    
+    if (existingInit) {
+      console.log("[main] Game already initialized for this context, skipping");
+      return;
+    }
+    sessionStorage.setItem(initKey, "true");
+
+    if (_gameInitialized || _gameInitializing) {
+      console.log("[main] Game already initializing or initialized, skipping");
+      return;
+    }
     _gameInitializing = true;
+    
+    console.log("[main] Starting game initialization...");
 
     try {
       loadPlayerState();
