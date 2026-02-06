@@ -266,6 +266,10 @@ safeMount("/api/xp", api("xp"));
 safeMount("/api/caps", api("caps"));
 safeMount("/api/settings", api("settings"));
 
+// NFT Scrap and Fusion features
+safeMount("/api/scrap-nft", api("scrap-nft"));
+safeMount("/api/fuse", api("fuse"));
+
 // GPS and Location features
 safeMount("/api/gps", api("gps"));
 safeMount("/api/location-claim", api("location-claim"));
