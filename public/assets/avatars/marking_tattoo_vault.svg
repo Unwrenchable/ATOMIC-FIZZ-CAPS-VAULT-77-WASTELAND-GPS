@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <g opacity="0.7" stroke="#2e5a8a" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <circle cx="95" cy="175" r="18"/>
+    <text x="95" y="182" font-size="18" text-anchor="middle" fill="#2e5a8a" font-weight="bold">77</text>
+  </g>
+</svg>
