@@ -204,7 +204,7 @@ Assets support color customization via:
 | Markings | 8 | 4.1 KB |
 | Accessories | 12 | 5.9 KB |
 | Clothing | 4 | 2.1 KB |
-| **TOTAL** | **77** | **~37 KB** |
+| **TOTAL** | **77** | **~34 KB** |
 
 ---
 
