@@ -247,6 +247,20 @@ Meet colorful characters across the wasteland:
 
 ---
 
+### 🤖 VAULT 77 OVERSEER AI *(ENHANCED!)*
+Your guide, entertainer, and occasional tormentor:
+- **2 Full Mini-Games**: Red Menace arcade shooter & Tic-Tac-Toe with AI
+- **Entertainment Systems**: Jokes, fortunes, trivia, ASCII art
+- **AI Personality**: Natural conversation (Hugging Face Mixtral-8x7B)
+- **Fallback System**: 4-tone personality without API (works perfectly!)
+- **Game Integration**: Status tracking, quest logs, map intelligence
+- **Advanced Features**: Memory system, lore database, threat analysis
+
+*📟 Complete documentation: [VAULT_77_OVERSEER_COMPLETE_GUIDE.md](VAULT_77_OVERSEER_COMPLETE_GUIDE.md)*  
+*🎮 Quick reference: [OVERSEER_COMMANDS.md](OVERSEER_COMMANDS.md)*
+
+---
+
 ### 🎮 TWITTER GAMEMAKER BOT *(NEW!)*
 Battle the Gamemaker in Tic-Tac-Toe on Twitter:
 - Interactive gameplay via Twitter mentions
