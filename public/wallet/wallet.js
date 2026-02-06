@@ -242,28 +242,47 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
   async function scrapNFT(nft) {
     const base = (window.BACKEND_URL || window.location.origin).replace(/\/+$/, "");
     try {
-      const res = await fetch(`${base}/api/scrap-nft`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mint: nft.mint })
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || data.ok === false) {
-        alert("Scrap failed.");
+      // Get wallet address
+      const walletAddress = window.web3Wallet ? window.web3Wallet.getWalletAddress() : null;
+      if (!walletAddress) {
+        alert("Wallet not connected. Please connect your wallet first.");
         return;
       }
 
-      const caps = data.caps || 0;
-      if (typeof window.updatePipBoyCaps === "function") {
-        window.updatePipBoyCaps(caps);
+      const res = await fetch(`${base}/api/scrap-nft`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nftMint: nft.mint || nft.id,
+          walletAddress: walletAddress
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) {
+        alert(`Scrap failed: ${data.error || "Unknown error"}`);
+        return;
       }
-      alert(`Scrapped for ${caps} CAPS.`);
+
+      // Update caps display
+      const newCaps = data.newCaps || 0;
+      if (typeof window.updatePipBoyCaps === "function") {
+        window.updatePipBoyCaps(newCaps);
+      }
+
+      // Show detailed scrap results
+      const scrapValue = data.scrapValue;
+      alert(`✅ Successfully scrapped ${nft.name || 'NFT'}!\n\n` +
+            `Resources gained: ${scrapValue.resources} ${scrapValue.rarity} materials\n` +
+            `Fusion Cores: +${scrapValue.fusionCores}\n` +
+            `CAPS: +${scrapValue.caps}\n\n` +
+            `Total CAPS: ${newCaps}`);
+
       closeNFTModal();
       renderNFTs();
     } catch (e) {
       safeWarn("[AFW] scrapNFT failed:", e);
-      alert("Scrap failed (network error).");
+      alert("Scrap failed (network error). Please try again.");
     }
   }
 
@@ -276,9 +295,35 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
       return;
     }
 
+    // Get all player's NFTs for selection
+    const allNFTs = window.currentNFTs || [];
+    const otherNFTs = allNFTs.filter(n => n.mint !== nft.mint);
+
+    if (otherNFTs.length === 0) {
+      body.innerHTML = `
+        <p class="error">You need at least 2 NFTs to perform fusion.</p>
+        <p>Acquire more NFTs to unlock fusion capabilities.</p>
+      `;
+      modal.classList.remove("hidden");
+      return;
+    }
+
     body.innerHTML = `
-      <p>Select another NFT in a future step to fuse with <strong>${nft.name || "this item"}</strong>.</p>
-      <p class="muted small">For now, this will call /api/fuse with a single mint.</p>
+      <p>Select NFTs to fuse with <strong>${nft.name || "this item"}</strong>:</p>
+      <div class="fusion-selection">
+        <div class="selected-nft">
+          <strong>PRIMARY:</strong> ${nft.name || nft.mint}
+        </div>
+        <div class="fusion-options">
+          ${otherNFTs.slice(0, 4).map(n => `
+            <label class="fusion-option">
+              <input type="checkbox" class="fusion-checkbox" data-mint="${n.mint}" data-name="${n.name || n.mint}">
+              ${n.name || n.mint} (${n.rarity || 'common'})
+            </label>
+          `).join('')}
+        </div>
+        <p class="muted small">Select 1-4 additional items. Higher rarity items may require fusion cores.</p>
+      </div>
     `;
 
     modal.classList.remove("hidden");
@@ -289,29 +334,74 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     }
   }
 
-  async function startFusion(nft) {
+  async function startFusion(primaryNFT) {
     const base = (window.BACKEND_URL || window.location.origin).replace(/\/+$/, "");
-    try {
-      const res = await fetch(`${base}/api/fuse`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mint: nft.mint })
-      });
 
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || data.ok === false) {
-        alert("Fusion failed.");
+    try {
+      // Get wallet address
+      const walletAddress = window.web3Wallet ? window.web3Wallet.getWalletAddress() : null;
+      if (!walletAddress) {
+        alert("Wallet not connected. Please connect your wallet first.");
         return;
       }
 
-      alert(`Fusion complete: ${data.newItem?.name || "New Item"}`);
+      // Get selected NFTs
+      const checkboxes = document.querySelectorAll('.fusion-checkbox:checked');
+      const selectedMints = Array.from(checkboxes).map(cb => cb.dataset.mint);
+
+      if (selectedMints.length === 0) {
+        alert("Please select at least one additional NFT to fuse.");
+        return;
+      }
+
+      if (selectedMints.length > 4) {
+        alert("Cannot fuse more than 5 items at once.");
+        return;
+      }
+
+      // Include primary NFT
+      const allMints = [primaryNFT.mint || primaryNFT.id, ...selectedMints];
+
+      // Determine fusion type based on number of items
+      let fusionType = 'upgrade';
+      if (allMints.length >= 4) fusionType = 'legendary';
+      else if (allMints.length >= 3) fusionType = 'modded';
+
+      const res = await fetch(`${base}/api/fuse`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nftMints: allMints,
+          walletAddress: walletAddress,
+          fusionType: fusionType
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) {
+        alert(`Fusion failed: ${data.error || "Unknown error"}`);
+        return;
+      }
+
+      // Show fusion results
+      const newItem = data.fusionResult.newItem;
+      const fusionResult = data.fusionResult;
+
+      alert(`⚛️ FUSION COMPLETE!\n\n` +
+            `New Item: ${newItem.name}\n` +
+            `Rarity: ${newItem.rarity.toUpperCase()}\n` +
+            `Level: ${newItem.level}\n` +
+            `${newItem.modded ? 'Modded: Yes (' + newItem.modifiers.map(m => m.name).join(', ') + ')\n' : ''}` +
+            `${fusionResult.fusionCoresRequired > 0 ? 'Fusion Cores Used: ' + fusionResult.fusionCoresRequired + '\n' : ''}` +
+            `\n${allMints.length} items were consumed in the fusion.`);
+
       closeNFTModal();
       const fusionModal = document.getElementById("fusion-modal");
       if (fusionModal) fusionModal.classList.add("hidden");
       renderNFTs();
     } catch (e) {
       safeWarn("[AFW] startFusion failed:", e);
-      alert("Fusion failed (network error).");
+      alert("Fusion failed (network error). Please try again.");
     }
   }
 
