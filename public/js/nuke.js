@@ -210,7 +210,7 @@
 
     async executeFusion(itemIndices) {
       const items = itemIndices.map(i => this.equippedGear[i]).filter(Boolean);
-      
+
       if (items.length < 2) {
         alert("⚠️ FUSION ERROR\n\nInsufficient items selected.");
         return;
@@ -229,20 +229,96 @@
         `;
       }
 
-      // TODO: Implement actual fusion API call when backend is ready
-      setTimeout(() => {
+      try {
+        // Get wallet address
+        let walletAddress = null;
+
+        try {
+          if (window.opener && window.opener.web3Wallet) {
+            walletAddress = window.opener.web3Wallet.getWalletAddress();
+          }
+        } catch (e) {}
+
+        if (!walletAddress) {
+          walletAddress = localStorage.getItem("fizz_wallet_address");
+        }
+
+        if (!walletAddress) {
+          throw new Error("Wallet not connected");
+        }
+
+        // Prepare fusion data
+        const nftMints = items.map(item => item.mint || item.id);
+        const fusionType = items.length >= 4 ? 'legendary' : items.length >= 3 ? 'modded' : 'upgrade';
+
+        // Call fusion API
+        const apiBase = window.API_BASE || "https://api.atomicfizzcaps.xyz";
+        const response = await fetch(`${apiBase}/api/fuse`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("fizz_auth_token") || ""}`
+          },
+          body: JSON.stringify({
+            nftMints,
+            walletAddress,
+            fusionType
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `HTTP ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        // Show success result
         if (gearList) {
+          const newItem = result.fusionResult.newItem;
           gearList.innerHTML = `
             <div class="terminal-output terminal-system">
-              ⚠️ FUSION PROTOCOL OFFLINE<br><br>
-              The Gear Fusion Chamber is currently undergoing<br>
-              maintenance by Vault-Tec technicians.<br><br>
-              Check back soon, Vault Dweller.<br><br>
-              <em>Feature coming in a future update.</em>
+              ✅ FUSION COMPLETE<br><br>
+              <strong>NEW ITEM CREATED:</strong><br>
+              ${newItem.name}<br>
+              RARITY: ${newItem.rarity.toUpperCase()}<br>
+              LEVEL: ${newItem.level}<br>
+              ${newItem.modded ? 'MODDED: Yes<br>MODIFIERS: ' + newItem.modifiers.map(m => m.name).join(', ') + '<br>' : ''}
+              <br>
+              <em>${items.length} items were consumed in the fusion process.</em><br>
+              <br>
+              ⚛️ FUSION CHAMBER READY FOR NEXT OPERATION
+            </div>
+            <div style="text-align:center; margin-top:20px;">
+              <button class="buy-btn sol-btn" onclick="location.reload()">
+                CONTINUE FUSING
+              </button>
             </div>
           `;
         }
-      }, 2000);
+
+      } catch (error) {
+        console.error("[nuke] Fusion failed:", error);
+
+        if (gearList) {
+          gearList.innerHTML = `
+            <div class="terminal-output terminal-system">
+              ❌ FUSION FAILED<br><br>
+              Error: ${error.message}<br><br>
+              Possible causes:<br>
+              • Insufficient fusion cores<br>
+              • Network connectivity issues<br>
+              • Invalid items selected<br><br>
+              <em>Please try again or contact Vault-Tec support.</em>
+            </div>
+            <div style="text-align:center; margin-top:20px;">
+              <button class="buy-btn sol-btn" onclick="location.reload()">
+                TRY AGAIN
+              </button>
+            </div>
+          `;
+        }
+      }
     }
   };
 
