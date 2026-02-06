@@ -213,9 +213,9 @@
 
       case "rm_input":
         // payload: { action: "left" | "right" | "fire" }
-        // Route to your Red Menace mini-game if/when you wire it.
-        // Example:
-        // game.redMenace && game.redMenace.handleInput(payload.action);
+        if (window.redMenace && payload && payload.action) {
+          window.redMenace.handleInput(payload.action);
+        }
         break;
 
       case "mobile_button":

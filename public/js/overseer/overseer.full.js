@@ -211,8 +211,22 @@ Overseer.handleInput = async function (raw) {
       Overseer.print("  QUEST      - Request quest log");
       Overseer.print("  WHEREAMI   - Request current location");
       Overseer.print("  CAPS       - Request CAPS balance");
-      Overseer.print("  VBOT ...   - Send message to V-BOT");
-      Overseer.print("  RM ON/OFF  - Toggle Red Menace mode (signal only)");
+      Overseer.print("");
+      Overseer.print("GAMES & ENTERTAINMENT:");
+      Overseer.print("  REDMENACE  - Play Red Menace arcade game");
+      Overseer.print("  RM         - Shortcut for Red Menace");
+      Overseer.print("  TTT START  - Play Tic-Tac-Toe vs Overseer");
+      Overseer.print("  TTT [1-9]  - Make your move");
+      Overseer.print("  GAMES      - List all mini-games");
+      Overseer.print("  JOKES      - Tell a wasteland joke");
+      Overseer.print("  FORTUNE    - Consult the oracle");
+      Overseer.print("  TRIVIA     - Test your Fallout knowledge");
+      Overseer.print("");
+      Overseer.print("SYSTEMS:");
+      Overseer.print("  ZONES      - List experimental zones");
+      Overseer.print("  BRIDGE     - Access wormhole portal");
+      Overseer.print("  NUKE       - Access testing grounds");
+      Overseer.print("  VBOT ...   - Send message to V-BOT AI");
       return;
 
     case "clear":
