@@ -407,6 +407,19 @@
       delete this.availableQuests[questId];
       this.saveAvailableQuests();
 
+      // Persist to backend if wallet is connected
+      const wallet = window.PLAYER_WALLET || null;
+      if (wallet && Game.modules?.ApiClient?.acceptQuest) {
+        try {
+          const result = await Game.modules.ApiClient.acceptQuest(wallet, questId);
+          if (!result.ok) {
+            console.warn("[quests] Backend accept failed, continuing locally");
+          }
+        } catch (e) {
+          console.warn("[quests] Backend accept error:", e);
+        }
+      }
+
       // Request quest reveal from server (if present). If not, start locally.
       try {
         const wallet = window.PLAYER_WALLET || null;
@@ -707,7 +720,7 @@
       return true;
     },
 
-    completeQuest(questId) {
+    async completeQuest(questId) {
       const q = QUESTS_DB[questId];
       const st = this.ensureQuestState(questId);
 
@@ -715,8 +728,32 @@
 
       const r = q.rewards || {};
       
-      // Award XP using unified PlayerState
-      if (r.xp) {
+      // Persist to backend if wallet is connected
+      const wallet = window.PLAYER_WALLET || null;
+      if (wallet && Game.modules?.ApiClient?.completeQuest) {
+        try {
+          const result = await Game.modules.ApiClient.completeQuest(wallet, questId, r);
+          if (result.ok && result.data?.player) {
+            // Backend returns authoritative player state - use it
+            const player = result.data.player;
+            if (Game.modules?.PlayerState) {
+              const state = Game.modules.PlayerState.getState();
+              state.xp = player.xp;
+              state.caps = player.caps;
+              state.level = player.level;
+              Game.modules.PlayerState.save();
+            }
+            console.log("[quests] Backend quest completion synced");
+          } else {
+            console.warn("[quests] Backend complete failed, continuing locally");
+          }
+        } catch (e) {
+          console.warn("[quests] Backend complete error:", e);
+        }
+      }
+      
+      // Award XP using unified PlayerState (if backend didn't handle it)
+      if (r.xp && !wallet) {
         if (Game.modules?.PlayerState?.awardXP) {
           Game.modules.PlayerState.awardXP(r.xp);
         } else {
@@ -729,8 +766,8 @@
         }
       }
       
-      // Award caps using unified PlayerState
-      if (r.caps) {
+      // Award caps using unified PlayerState (if backend didn't handle it)
+      if (r.caps && !wallet) {
         if (Game.modules?.PlayerState?.awardCaps) {
           Game.modules.PlayerState.awardCaps(r.caps);
         } else {
