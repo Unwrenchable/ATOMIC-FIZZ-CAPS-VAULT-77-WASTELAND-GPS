@@ -677,7 +677,7 @@
       }
 
       const st = this.ensureQuestState(questId);
-      if (st.state === "completed") return false;
+      if (st.state === "completed" || st.state === "active") return false;
 
       st.state = "active";
       st.currentStepIndex = 0;
@@ -801,6 +801,14 @@
           // Use unified PlayerState for proper persistence (survives reload)
           if (Game.modules?.PlayerState?.addItem) {
             Game.modules.PlayerState.addItem(itemObj, 1);
+            
+            // Auto-equip weapons for new players
+            if (itemObj.type === "weapon" && Game.modules?.PlayerState?.equipItem) {
+              setTimeout(() => {
+                Game.modules.PlayerState.equipItem(itemObj);
+                console.log("[quests] Auto-equipped weapon reward:", itemObj.name);
+              }, 100);
+            }
           } else if (Game.giveItem) {
             Game.giveItem(itemObj, 1);
           } else {
@@ -817,6 +825,15 @@
                 window.Game.player.inventory.push(itemObj);
               }
             }
+            
+            // Auto-equip weapons in legacy system
+            if (itemObj.type === "weapon" && window.Game?.player?.equipped) {
+              setTimeout(() => {
+                window.Game.player.equipped.weapon = itemObj;
+                console.log("[quests] Auto-equipped weapon reward (legacy):", itemObj.name);
+              }, 100);
+            }
+          }
             
             if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
               if (!window.PLAYER.inventory.includes(itemId)) {
