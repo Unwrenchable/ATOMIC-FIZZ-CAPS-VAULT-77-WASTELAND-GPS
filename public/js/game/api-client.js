@@ -184,6 +184,105 @@
   }
 
   /**
+   * Accept a quest (persist to backend)
+   * @param {string} wallet - Player wallet
+   * @param {string} questId - Quest ID
+   */
+  async function acceptQuest(wallet, questId) {
+    const result = await apiRequest("/api/quests/accept", {
+      method: "POST",
+      body: JSON.stringify({ wallet, questId })
+    });
+
+    if (!result.ok) {
+      showError(`Failed to accept quest: ${result.error}`);
+    } else {
+      console.log(`[API] Quest accepted: ${questId}`);
+      
+      // Sync with local state
+      if (Game.modules?.PlayerState) {
+        const state = Game.modules.PlayerState.getState();
+        if (!state.questsActive.includes(questId)) {
+          state.questsActive.push(questId);
+        }
+        Game.modules.PlayerState.save();
+      }
+      
+      // Dispatch event for UI updates
+      window.dispatchEvent(new CustomEvent("questAccepted", { 
+        detail: { questId }
+      }));
+    }
+
+    return result;
+  }
+
+  /**
+   * Complete a quest (persist to backend)
+   * @param {string} wallet - Player wallet
+   * @param {string} questId - Quest ID
+   * @param {Object} rewards - Quest rewards { xp, caps, items[] }
+   */
+  async function completeQuest(wallet, questId, rewards) {
+    const result = await apiRequest("/api/quests/complete", {
+      method: "POST",
+      body: JSON.stringify({ wallet, questId, rewards })
+    });
+
+    if (!result.ok) {
+      showError(`Failed to complete quest: ${result.error}`);
+    } else {
+      const player = result.data?.player || {};
+      console.log(`[API] Quest completed: ${questId}`);
+      
+      // Sync with local state
+      if (Game.modules?.PlayerState) {
+        const state = Game.modules.PlayerState.getState();
+        
+        // Move from active to completed
+        state.questsActive = state.questsActive.filter(q => q !== questId);
+        if (!state.questsCompleted.includes(questId)) {
+          state.questsCompleted.push(questId);
+        }
+        
+        // Update player stats from backend (authoritative)
+        if (player.xp !== undefined) state.xp = player.xp;
+        if (player.caps !== undefined) state.caps = player.caps;
+        if (player.level !== undefined) state.level = player.level;
+        
+        Game.modules.PlayerState.save();
+      }
+      
+      // Show notification
+      if (rewards && Game.modules?.worldmap?.showMapMessage) {
+        const msg = `QUEST COMPLETED!\n+${rewards.xp || 0} XP, +${rewards.caps || 0} CAPS`;
+        Game.modules.worldmap.showMapMessage(msg);
+      }
+      
+      // Dispatch event for UI updates
+      window.dispatchEvent(new CustomEvent("questCompleted", { 
+        detail: { questId, rewards, player }
+      }));
+    }
+
+    return result;
+  }
+
+  /**
+   * Get player's quest progress from backend
+   * @param {string} wallet - Player wallet
+   */
+  async function getPlayerQuests(wallet) {
+    const result = await apiRequest(`/api/quests/player/${wallet}`);
+
+    if (!result.ok && result.status !== 404) {
+      console.warn(`[API] Failed to get player quests: ${result.error}`);
+    }
+
+    return result;
+  }
+
+  /**
    * Reveal quest details (for accepted quests)
    * @param {string} wallet - Player wallet
    * @param {string} questId - Quest ID
@@ -347,7 +446,7 @@
    * @param {Object} coords - Player coordinates { lat, lng }
    */
   async function claimLocation(wallet, locationId, coords) {
-    const result = await apiRequest("/api/location-claim", {
+    const result = await apiRequest("/api/location-claim/claim", {
       method: "POST",
       body: JSON.stringify({
         wallet,
@@ -359,14 +458,79 @@
 
     if (!result.ok) {
       if (result.error?.includes("cooldown")) {
-        console.log(`[API] Location on cooldown`);
+        const cooldown = result.data?.cooldownRemaining || 0;
+        const minutes = Math.ceil(cooldown / 60);
+        showError(`Location on cooldown: ${minutes}m remaining`);
+      } else if (result.error?.includes("Too far")) {
+        showError(`Too far from location (${result.data?.distance}m / ${result.data?.required}m)`);
       } else {
         showError(`Failed to claim location: ${result.error}`);
       }
     } else {
-      // Mark as visited locally
+      // SUCCESS! Process rewards
+      const rewards = result.data?.rewards || {};
+      const player = result.data?.player || {};
+
+      console.log(`[API] Location claimed! XP: +${rewards.xp}, Caps: +${rewards.caps}, Items: ${rewards.items?.length || 0}`);
+
+      // Sync player state with backend response
       if (Game.modules?.PlayerState) {
+        const state = Game.modules.PlayerState.getState();
+        
+        // Update player stats from backend (authoritative)
+        if (player.xp !== undefined) state.xp = player.xp;
+        if (player.caps !== undefined) state.caps = player.caps;
+        if (player.level !== undefined) state.level = player.level;
+
+        // Add items to inventory
+        if (Array.isArray(rewards.items)) {
+          rewards.items.forEach(itemId => {
+            Game.modules.PlayerState.addItem({
+              id: itemId,
+              name: itemId,
+              type: "loot",
+              source: "location_claim"
+            }, 1);
+          });
+        }
+
+        // Mark as visited
         Game.modules.PlayerState.visitLocation(locationId);
+        Game.modules.PlayerState.save();
+
+        // Show notification
+        const itemText = rewards.items?.length > 0 
+          ? ` + ${rewards.items.join(", ")}`
+          : "";
+        const message = `LOCATION CLAIMED!\n+${rewards.xp} XP, +${rewards.caps} CAPS${itemText}`;
+        
+        if (Game.modules?.worldmap?.showMapMessage) {
+          Game.modules.worldmap.showMapMessage(message);
+        }
+
+        // Dispatch event for UI updates
+        window.dispatchEvent(new CustomEvent("locationClaimed", { 
+          detail: { locationId, rewards, player }
+        }));
+      } else {
+        // Fallback: update legacy PLAYER object
+        if (window.PLAYER) {
+          window.PLAYER.xp = player.xp || window.PLAYER.xp;
+          window.PLAYER.caps = player.caps || window.PLAYER.caps;
+          window.PLAYER.level = player.level || window.PLAYER.level;
+          
+          if (Array.isArray(rewards.items)) {
+            rewards.items.forEach(itemId => {
+              if (!window.PLAYER.inventory.includes(itemId)) {
+                window.PLAYER.inventory.push(itemId);
+              }
+            });
+          }
+          
+          if (!window.PLAYER.visitedLocations.includes(locationId)) {
+            window.PLAYER.visitedLocations.push(locationId);
+          }
+        }
       }
     }
 
@@ -432,6 +596,9 @@
 
     // Quests
     getQuest,
+    acceptQuest,
+    completeQuest,
+    getPlayerQuests,
     revealQuest,
     submitQuestProof,
 
