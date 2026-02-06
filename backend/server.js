@@ -352,6 +352,15 @@ app.get('/api/health', async (req, res) => {
 // ------------------------------------------------------------
 // SPA FALLBACK
 // ------------------------------------------------------------
+app.get("/overseer", (req, res) => {
+  const overseerFile = path.join(FRONTEND_DIR, "overseer.html");
+  if (fs.existsSync(overseerFile)) {
+    res.sendFile(overseerFile);
+  } else {
+    res.status(404).send("Overseer terminal not found");
+  }
+});
+
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api/")) return next();
   if (path.extname(req.path)) return next();

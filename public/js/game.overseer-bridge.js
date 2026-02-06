@@ -6,9 +6,8 @@
   "use strict";
 
   // Ensure a global game namespace exists
-  window.game = window.game || {};
-  const game = window.game;
-
+window.Game = window.Game || {};
+const Game = window.Game;
   // ========= WORLD INTERFACE =========
   // Provides window.world using real world simulation systems when available,
   // with safe fallbacks for missing implementations.
