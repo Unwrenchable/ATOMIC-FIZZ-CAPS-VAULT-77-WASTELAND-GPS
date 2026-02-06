@@ -1,5 +1,9 @@
 # 🎮 OVERSEER BOT - QUICK COMMAND REFERENCE
 
+> 📟 **For the complete Overseer experience, see: [VAULT 77 OVERSEER - THE COMPLETE GUIDE](VAULT_77_OVERSEER_COMPLETE_GUIDE.md)**
+
+---
+
 ## 🕹️ GAMES
 
 | Command | Description |
@@ -167,11 +171,19 @@ The Overseer terminal works on mobile! Use:
 
 ---
 
-## 📚 FULL DOCUMENTATION
+## 📚 DOCUMENTATION
 
-- `OVERSEER_ENHANCEMENTS.md` - Complete technical guide
+### 🌟 START HERE: THE COMPLETE GUIDE
+**[VAULT_77_OVERSEER_COMPLETE_GUIDE.md](VAULT_77_OVERSEER_COMPLETE_GUIDE.md)** - **THE FULL DEAL**
+- Complete consolidated documentation
+- Everything about games, AI, features, and systems
+- Technical architecture and developer reference
+- The definitive Overseer resource
+
+### Additional Documentation
+- `OVERSEER_ENHANCEMENTS.md` - Technical features guide
 - `HF_API_SETUP.md` - AI personality configuration
-- `OVERSEER_BOT_GUIDE.md` - Original bot documentation
+- `OVERSEER_BOT_GUIDE.md` - Original technical documentation
 
 ---
 
