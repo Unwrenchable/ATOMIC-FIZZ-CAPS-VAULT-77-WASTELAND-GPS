@@ -268,6 +268,25 @@
       }
       
       const rect = container.getBoundingClientRect();
+      console.log('[worldmap] container rect:', rect);
+      
+      // Force dimensions on mobile if CSS isn't working
+      if (this.isMobileDevice() && (rect.width === 0 || rect.height === 0)) {
+        console.log('[worldmap] forcing mobile container dimensions');
+        const panelBody = document.querySelector('#panel-map .panel-body');
+        if (panelBody) {
+          const panelRect = panelBody.getBoundingClientRect();
+          console.log('[worldmap] panel body rect:', panelRect);
+          if (panelRect.width > 0 && panelRect.height > 0) {
+            container.style.width = panelRect.width + 'px';
+            container.style.height = panelRect.height + 'px';
+            container.style.position = 'absolute';
+            container.style.top = '0';
+            container.style.left = '0';
+            console.log('[worldmap] forced container to:', container.style.width, container.style.height);
+          }
+        }
+      }
       if (rect.width === 0 || rect.height === 0) {
           // Guard against overlapping retry chains - only one retry chain can be active
           if (this.isRetrying) {
@@ -475,23 +494,36 @@
         [20, 180]     // Southeast corner (covers all locations)
       ]);
 
-      // Tiles with offline fallback
+      // Tiles with offline fallback - use OpenStreetMap for better mobile compatibility
       const satelliteTiles = L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         { 
           minZoom: 0, 
           maxZoom: 19, 
           noWrap: true,
+          attribution: '© OpenStreetMap contributors',
           errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzA1MDcwNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMDBmZjQxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+T0ZGTElORTwvdGV4dD48L3N2Zz4='
         }
       );
       
-      // Add offline detection and fallback
+      // Track tile errors - only switch to offline after multiple failures
+      let tileErrorCount = 0;
+      const maxTileErrors = 10; // Allow more tile failures on mobile
+      
       satelliteTiles.on('tileerror', (e) => {
-        console.warn('[worldmap] tile load error, using offline mode');
-        // Switch to offline canvas-based tiles if all tiles fail
-        if (!this.tiles.offline) {
+        tileErrorCount++;
+        console.warn(`[worldmap] tile load error (${tileErrorCount}/${maxTileErrors})`);
+        
+        if (tileErrorCount >= maxTileErrors && !this.tiles.offline) {
+          console.warn('[worldmap] too many tile errors, switching to offline mode');
           this.switchToOfflineMode();
+        }
+      });
+      
+      // Reset error count on successful tile loads
+      satelliteTiles.on('tileload', () => {
+        if (tileErrorCount > 0) {
+          tileErrorCount = Math.max(0, tileErrorCount - 1); // Gradually reduce error count
         }
       });
       
@@ -912,6 +944,64 @@
       
       // Show offline message
       this.showMapMessage('MAP OFFLINE - Using grid mode');
+      
+      // Show retry button
+      const retryBtn = document.getElementById('retryMapBtn');
+      if (retryBtn) {
+        retryBtn.style.display = 'block';
+        retryBtn.onclick = () => this.trySwitchToOnlineMode();
+      }
+    },
+
+    // Try to switch back to online tiles
+    trySwitchToOnlineMode() {
+      if (!this.tiles.offline) return; // Not in offline mode
+      
+      console.log('[worldmap] attempting to switch back to online tiles');
+      
+      // Create new satellite tiles
+      const satelliteTiles = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        { 
+          minZoom: 0, 
+          maxZoom: 19, 
+          noWrap: true,
+          attribution: '© OpenStreetMap contributors',
+          errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzA1MDcwNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMDBmZjQxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+T0ZGTElORTwvdGV4dD48L3N2Zz4='
+        }
+      );
+      
+      let tileErrorCount = 0;
+      const maxTileErrors = 3; // Be more lenient when trying to go back online
+      
+      satelliteTiles.on('tileerror', (e) => {
+        tileErrorCount++;
+        if (tileErrorCount >= maxTileErrors) {
+          console.warn('[worldmap] still having tile issues, staying offline');
+          this.showMapMessage('Still offline - check connection');
+        }
+      });
+      
+      satelliteTiles.on('tileload', () => {
+        // If we successfully load some tiles, switch to online mode
+        if (this.tiles.offline) {
+          console.log('[worldmap] tiles loading successfully, switching to online mode');
+          this.map.removeLayer(this.tiles.offline);
+          delete this.tiles.offline;
+          this.tiles.satellite = satelliteTiles;
+          this.showMapMessage('Map online!');
+          
+          // Hide retry button
+          const retryBtn = document.getElementById('retryMapBtn');
+          if (retryBtn) {
+            retryBtn.style.display = 'none';
+          }
+        }
+      });
+      
+      // Add the new tiles (they'll load in background)
+      satelliteTiles.addTo(this.map);
+      this.tiles.satellite = satelliteTiles;
     },
 
     // --------------------------------------------------------
