@@ -104,7 +104,7 @@
       "shirt_wasteland_gear.svg"
     ]
   },
-  "totalAssets": 82,
+  "totalAssets": 77,
   "features": {
     "colorizable": ["hair", "facialHair", "eyes", "skin"],
     "layered": true,
