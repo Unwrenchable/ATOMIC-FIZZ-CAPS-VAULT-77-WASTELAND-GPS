@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Overseer Crash Test</title>
+    <style>
+        body { font-family: monospace; background: black; color: #00ff41; }
+        #test-output { white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>Overseer Crash Prevention Test</h1>
+    <div id="test-output">Initializing test...</div>
+
+    <script>
+        let testOutput = document.getElementById('test-output');
+        let testCount = 0;
+        const maxTests = 50; // Reduced for quicker testing
+
+        function log(message) {
+            testOutput.textContent += message + '\n';
+            testOutput.scrollTop = testOutput.scrollHeight;
+            console.log(message);
+        }
+
+        // Load the Overseer iframe
+        const iframe = document.createElement('iframe');
+        iframe.src = 'http://localhost:3000/overseer.html';
+        iframe.width = '800';
+        iframe.height = '600';
+        iframe.style.border = '1px solid #00ff41';
+        document.body.appendChild(iframe);
+
+        // Wait for iframe to load
+        iframe.onload = function() {
+            log("Overseer loaded. Starting crash prevention test...");
+
+            // Monitor iframe for errors
+            iframe.contentWindow.addEventListener('error', function(e) {
+                log("CRASH DETECTED IN IFRAME: " + e.message);
+            });
+
+            // Start automated testing
+            setTimeout(runTest, 2000);
+        };
+
+        function runTest() {
+            if (testCount >= maxTests) {
+                log("Test completed successfully! No crashes detected after " + maxTests + " interactions.");
+                return;
+            }
+
+            testCount++;
+            log(`Test ${testCount}/${maxTests}`);
+
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const inputEl = iframeDoc.getElementById('input');
+                const sendBtn = iframeDoc.getElementById('send');
+
+                if (inputEl && sendBtn) {
+                    // Test various commands that could cause crashes
+                    const commands = [
+                        "hello",
+                        "help",
+                        "red menace",
+                        "status",
+                        "quit",
+                        "nukaquiz",
+                        "test answer",
+                        "quit",
+                        "maze",
+                        "north",
+                        "quit",
+                        "blackjack",
+                        "hit",
+                        "quit",
+                        "slots",
+                        "spin",
+                        "quit",
+                        "war",
+                        "draw",
+                        "quit",
+                        "texas holdem",
+                        "continue",
+                        "quit",
+                        "hack",
+                        "TEST",
+                        "quit"
+                    ];
+
+                    const randomCommand = commands[Math.floor(Math.random() * commands.length)];
+                    inputEl.value = randomCommand;
+                    sendBtn.click();
+                    log(`Sent command: ${randomCommand}`);
+                } else {
+                    log("Could not find input elements in iframe");
+                }
+            } catch (e) {
+                log("Error during test: " + e.message);
+            }
+
+            // Continue testing
+            setTimeout(runTest, 300 + Math.random() * 500);
+        }
+
+        // Global error monitoring
+        window.addEventListener('error', function(e) {
+            log("GLOBAL CRASH DETECTED: " + e.message);
+        });
+
+        window.addEventListener('unhandledrejection', function(e) {
+            log("UNHANDLED PROMISE REJECTION: " + e.reason);
+        });
+    </script>
+</body>
+</html>
