@@ -95,7 +95,7 @@ body {
     #000000 100%
   );
   
-  /* Subtle ambient animation */
+  /* Base ambient pulse animation (CRT flicker added conditionally below) */
   animation: ambient-pulse 8s ease-in-out infinite;
 }
 
@@ -1243,10 +1243,17 @@ textarea:focus {
 
 /* ============================================================
    STATIC NOISE EFFECT (OPTIONAL LAYER)
-   Note: Base64 SVG generates fractal noise texture for authenticity
+   Decoded SVG Structure (for maintenance):
+   <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+     <filter id="a" x="0" y="0">
+       <feTurbulence baseFrequency=".75" stitchTiles="stitch" type="fractalNoise"/>
+       <feColorMatrix type="saturate" values="0"/>
+     </filter>
+     <path d="M0 0h300v300H0z" filter="url(#a)" opacity=".05"/>
+   </svg>
    ============================================================ */
 :root {
-  /* Extracted noise texture as custom property for maintainability */
+  /* Base64-encoded fractal noise SVG texture */
   --noise-texture: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=');
 }
 
@@ -1268,15 +1275,19 @@ textarea:focus {
 
 /* ============================================================
    CRT FLICKER EFFECT (SUBTLE - Respects Reduced Motion)
+   Note: Adds CRT flicker animation to body element only if
+   user hasn't requested reduced motion. Base ambient-pulse
+   animation is always active (defined at line ~99).
    ============================================================ */
 @keyframes crt-flicker {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.98; }
 }
 
-/* Only apply flicker if user hasn't requested reduced motion */
+/* Only apply CRT flicker if user hasn't requested reduced motion */
 @media (prefers-reduced-motion: no-preference) {
   body {
+    /* Add CRT flicker to existing ambient-pulse animation */
     animation: crt-flicker 0.15s infinite steps(2), ambient-pulse 8s ease-in-out infinite;
   }
 }
