@@ -1281,7 +1281,7 @@ textarea:focus {
    CRT FLICKER EFFECT (SUBTLE - Respects Reduced Motion)
    Note: Adds CRT flicker animation to body element only if
    user hasn't requested reduced motion. Base ambient-pulse
-   animation is always active (defined at line ~99).
+   animation is always active (defined at lines 110 above).
    
    Accessibility Note: The opacity change is minimal (1.0 to 0.98)
    which is a 2% variation - well below the WCAG threshold for
