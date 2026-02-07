@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!--
+    NOTICE: Community project. Not an official product of any game studio.
+    Branding (Atomic Fizz, Fizz-Tec) is fictional for this prototype.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <title>FIZZ.FUN - Token Launchpad | Vault-Tec Approved</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#ff9933">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Fizz.Fun">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Fizz.Fun Launchpad">
+  <meta name="description" content="Create and launch your own Fizz Caps economy tokens. Fair launch bonding curves, Vault-Tec approved.">
+  
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://cdn.jsdelivr.net https://unpkg.com 'unsafe-inline';
+    connect-src 'self' https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://*.solana.com wss://*.solana.com https://atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com data:;
+    img-src 'self' data: https: blob:;
+    frame-src 'none';
+    object-src 'none';
+    base-uri 'self';
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="fizzfun.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  
+  <!-- API base: local dev vs production -->
+  <script src="/js/config.js"></script>
+</head>
+<body>
+  <!-- BOOT OVERLAY -->
+  <div id="boot-overlay">
+    <div class="boot-logo">🚀</div>
+    <div class="boot-line">INITIALIZING FIZZ.FUN PROTOCOL...</div>
+    <div class="boot-line">SCANNING BONDING CURVES...</div>
+    <div class="boot-line">VERIFYING CAPS LEDGER...</div>
+    <div class="boot-line">LOADING TOKEN LAUNCHPAD...</div>
+  </div>
+
+  <!-- MAIN FIZZ.FUN APP -->
+  <div id="fizzfun-app" class="crt">
+    <!-- HEADER BRANDING -->
+    <header id="fizzfun-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <span class="logo-icon">🚀</span>
+          <h1>FIZZ.FUN</h1>
+          <span class="subtitle">TOKEN LAUNCHPAD</span>
+        </div>
+        <p class="tagline">Create and launch your own Fizz Caps economy tokens.<br>
+        Fair launch bonding curves, Vault-Tec approved.</p>
+      </div>
+    </header>
+
+    <!-- NAVIGATION -->
+    <nav class="quick-nav">
+      <a href="/" class="nav-btn">☢️ WASTELAND GPS</a>
+      <a href="/wallet/" class="nav-btn">💰 WALLET</a>
+      <a href="#stats" class="nav-btn">📊 STATS</a>
+      <button id="connect-wallet-btn" class="nav-btn btn-primary">🔌 CONNECT WALLET</button>
+    </nav>
+
+    <!-- WALLET CONNECTION INDICATOR -->
+    <section id="wallet-status" class="status-card">
+      <div class="status-indicator">
+        <span class="status-dot disconnected" id="status-dot"></span>
+        <span id="wallet-address" class="mono">WALLET: DISCONNECTED</span>
+      </div>
+    </section>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast-container"></div>
+
+    <!-- MAIN CONTENT -->
+    <main id="fizzfun-content">
+      
+      <!-- ============ ACCESS STATUS ============ -->
+      <section class="card fizz-section static-noise">
+        <div class="card-header">
+          <span class="card-icon">🎫</span> YOUR ACCESS
+        </div>
+        
+        <div id="fizz-access-status" class="card-body">
+          <div class="skeleton" style="height: 60px; display: none;" id="fizz-loading"></div>
+          <div id="fizz-access-info" style="display: none;">
+            <div class="data-row">
+              <span class="data-label">YOUR TIER:</span>
+              <span id="fizz-tier" class="tier-badge">LOADING...</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">CAPS BALANCE:</span>
+              <span class="data-value" id="fizz-caps-balance">0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">CAN LAUNCH:</span>
+              <span class="data-value" id="fizz-can-launch">NO</span>
+            </div>
+            <div class="data-row" id="fizz-launch-fee-row" style="display: none;">
+              <span class="data-label">LAUNCH FEE:</span>
+              <span class="data-value" id="fizz-launch-fee">100 CAPS</span>
+            </div>
+          </div>
+          <p class="small muted" id="fizz-access-message">Connect wallet to check access...</p>
+        </div>
+      </section>
+
+      <!-- ============ TOKEN LISTING ============ -->
+      <section class="card">
+        <div class="card-header">
+          <span class="card-icon">📈</span> ACTIVE TOKENS
+        </div>
+        
+        <div class="card-body">
+          <div class="control-bar">
+            <button class="btn btn-secondary" id="fizz-sort-volume">VOLUME</button>
+            <button class="btn btn-secondary" id="fizz-sort-newest">NEWEST</button>
+            <button class="btn btn-secondary" id="fizz-sort-graduating">GRADUATING</button>
+            <button class="btn btn-secondary" id="fizz-refresh">🔄 REFRESH</button>
+          </div>
+
+          <div id="fizz-token-list" class="token-grid">
+            <div class="skeleton" style="height: 200px;"></div>
+            <div class="skeleton" style="height: 200px;"></div>
+            <div class="skeleton" style="height: 200px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TRADE PANEL ============ -->
+      <section class="card trade-panel" id="fizz-trade-section" style="display: none;">
+        <div class="card-header">
+          <span class="card-icon">💱</span> TRADE: <span id="fizz-selected-symbol">N/A</span>
+        </div>
+        
+        <div class="card-body">
+          <div id="fizz-selected-info">
+            <!-- Filled dynamically -->
+          </div>
+
+          <div class="trade-controls">
+            <button class="btn btn-buy" id="fizz-action-buy">BUY</button>
+            <button class="btn btn-sell" id="fizz-action-sell">SELL</button>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" id="fizz-input-label">SOL AMOUNT</label>
+            <input type="number" class="input-field mono" id="fizz-trade-amount" placeholder="0.0" step="0.01" min="0">
+          </div>
+
+          <div class="quote-display" id="fizz-quote" style="display: none;">
+            <!-- Quote details filled dynamically -->
+          </div>
+
+          <button class="btn btn-primary btn-block" id="fizz-execute-trade">EXECUTE TRADE</button>
+          <div id="fizz-trade-status" class="mono small muted status-message"></div>
+        </div>
+      </section>
+
+      <!-- ============ TOKEN LAUNCH FORM ============ -->
+      <section class="card launch-section" id="fizz-launch-section" style="display: none;">
+        <div class="card-header">
+          <span class="card-icon">🚀</span> LAUNCH NEW TOKEN
+        </div>
+        
+        <div class="card-body">
+          <div class="input-group">
+            <label class="input-label">TOKEN NAME</label>
+            <input type="text" class="input-field mono" id="fizz-launch-name" placeholder="My Wasteland Token" maxlength="32">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">SYMBOL</label>
+            <input type="text" class="input-field mono" id="fizz-launch-symbol" placeholder="MWT" maxlength="10" style="text-transform: uppercase;">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">METADATA URI</label>
+            <input type="text" class="input-field mono" id="fizz-launch-uri" placeholder="https://..." maxlength="200">
+          </div>
+
+          <button class="btn btn-primary btn-block" id="fizz-execute-launch">🚀 LAUNCH TOKEN</button>
+          <div id="fizz-launch-status" class="mono small muted status-message"></div>
+        </div>
+      </section>
+
+      <!-- ============ PROTOCOL STATS ============ -->
+      <section class="card" id="stats">
+        <div class="card-header">
+          <span class="card-icon">📊</span> PROTOCOL STATS
+        </div>
+        <div class="card-body" id="fizz-stats">
+          <div class="data-row">
+            <span class="data-label">TOTAL TOKENS LAUNCHED:</span>
+            <span class="data-value" id="fizz-stat-tokens">0</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">TOTAL VOLUME:</span>
+            <span class="data-value" id="fizz-stat-volume">0 SOL</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">CAPS BURNED:</span>
+            <span class="data-value" id="fizz-stat-caps">0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- BUY USDC BUTTON -->
+      <div class="action-section">
+        <button id="buy-usdc-button" class="btn btn-special">💰 BUY USDC (MOONPAY)</button>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <p class="small muted">FIZZ.FUN - FAIR LAUNCH TOKEN PROTOCOL</p>
+      <p class="small muted">Powered by Atomic Fizz Caps • Vault-Tec Approved</p>
+      <p class="small muted">Community project. Not affiliated with any game studio.</p>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="fizzfun.js"></script>
+</body>
+</html>
