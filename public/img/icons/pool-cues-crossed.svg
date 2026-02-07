@@ -1,20 +1,20 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Left cue (bottom-left to top-right) -->
-  <line x1="2" y1="22" x2="22" y2="2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <line x1="2" y1="22" x2="22" y2="2" stroke="#00ff41" stroke-width="2" stroke-linecap="round"/>
   <!-- Left cue tip -->
-  <circle cx="21" cy="3" r="1.5" fill="white"/>
+  <circle cx="21" cy="3" r="1.5" fill="#0a1a0a"/>
   <!-- Left cue grip detail -->
-  <line x1="4" y1="20" x2="6" y2="18" stroke="white" stroke-width="1" opacity="0.5"/>
+  <line x1="4" y1="20" x2="6" y2="18" stroke="#0a1a0a" stroke-width="1" opacity="0.5"/>
   
   <!-- Right cue (bottom-right to top-left) -->
-  <line x1="22" y1="22" x2="2" y2="2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <line x1="22" y1="22" x2="2" y2="2" stroke="#00ff41" stroke-width="2" stroke-linecap="round"/>
   <!-- Right cue tip -->
-  <circle cx="3" cy="3" r="1.5" fill="white"/>
+  <circle cx="3" cy="3" r="1.5" fill="#0a1a0a"/>
   <!-- Right cue grip detail -->
-  <line x1="20" y1="20" x2="18" y2="18" stroke="white" stroke-width="1" opacity="0.5"/>
+  <line x1="20" y1="20" x2="18" y2="18" stroke="#0a1a0a" stroke-width="1" opacity="0.5"/>
   
   <!-- Center 8-ball at intersection -->
-  <circle cx="12" cy="12" r="3.5" fill="currentColor"/>
-  <circle cx="12" cy="12" r="1.5" fill="white"/>
-  <text x="12" y="13.2" text-anchor="middle" font-family="Arial, sans-serif" font-size="2.5" font-weight="bold" fill="currentColor">8</text>
+  <circle cx="12" cy="12" r="3.5" fill="#00ff41"/>
+  <circle cx="12" cy="12" r="1.5" fill="#0a1a0a"/>
+  <text x="12" y="13.2" text-anchor="middle" font-family="Arial, sans-serif" font-size="2.5" font-weight="bold" fill="#00ff41">8</text>
 </svg>

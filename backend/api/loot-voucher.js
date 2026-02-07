@@ -6,15 +6,20 @@ const serializeVoucherMessage = require("../lib/gps").serializeVoucherMessage;
 // Helper: robust bs58 loader that works with different package shapes
 function loadBs58() {
   try {
-    const b = require("bs58");
-    if (b && typeof b.decode === "function" && typeof b.encode === "function") {
-      return b;
+    // Try bs58 first (may export default)
+    let b = require("bs58");
+    if (b) {
+      if (typeof b.encode === "function" && typeof b.decode === "function") return b;
+      if (b.default && typeof b.default.encode === "function" && typeof b.default.decode === "function") return b.default;
     }
+
+    // Fallback to base-x
     const baseX = require("base-x");
     const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-    return baseX(BASE58);
+    const codec = typeof baseX === 'function' ? baseX(BASE58) : (baseX && baseX.default ? baseX.default(BASE58) : null);
+    if (codec && typeof codec.encode === "function" && typeof codec.decode === "function") return codec;
   } catch (err) {
-    throw new Error("Base58 library not available: " + err.message);
+    throw new Error("Base58 library not available: " + err.message + ". Install 'bs58' or 'base-x'.");
   }
 }
 
@@ -30,7 +35,7 @@ function safeDecodeBase58(str, name = "key") {
   }
 }
 
-const USE_KMS = process.env.NODE_ENV === "production";
+const USE_KMS = !!process.env.KMS_SIGNING_KEY_ID;  // Use KMS only if explicitly configured
 let SERVER_KEYPAIR = null;
 let KEY_INIT_ERROR = null;
 
@@ -40,10 +45,12 @@ let KEY_INIT_ERROR = null;
  */
 function initServerKey() {
   if (USE_KMS) {
-    console.log("[loot-voucher] running in production mode; will use KMS for signing");
+    console.log("[loot-voucher] KMS_SIGNING_KEY_ID configured; will use AWS KMS for signing");
+    console.log("[loot-voucher] Note: AWS KMS costs $1+/month. See docs/LOCAL_SIGNING_SETUP.md for FREE alternative");
     return;
   }
 
+  console.log("[loot-voucher] Using FREE local signing (see docs/LOCAL_SIGNING_SETUP.md)");
   const secretEnv = process.env.SERVER_SECRET_KEY;
 
   // Check if key is present

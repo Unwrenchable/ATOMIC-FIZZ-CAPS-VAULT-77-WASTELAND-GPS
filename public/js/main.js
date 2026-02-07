@@ -31,6 +31,9 @@
     caps: 0,
     level: 1
   };
+  
+  // Expose PLAYER globally for quest module and other systems to sync
+  window.PLAYER = PLAYER;
 
   // ---------------------------
   // ON-CHAIN NFT STATE
@@ -104,7 +107,7 @@
   const CONFIG = {
     defaultCenter: [36.1699, -115.1398],
     defaultZoom: 10,
-    apiBase: window.BACKEND_URL || window.location.origin
+    apiBase: window.API_BASE || window.BACKEND_URL || window.location.origin
   };
 
   function attachMapReference() {
@@ -501,6 +504,9 @@
 
     const quests = window.DATA.quests || [];
 
+    // Get available quests from the quest module
+    const available = Game.modules?.quests?.getAvailableQuests?.() || [];
+
     const active = PLAYER.questsActive
       .map(id => quests.find(q => q && (q.id === id || q.slug === id)))
       .filter(Boolean);
@@ -520,6 +526,26 @@
       `;
     };
 
+    const renderAvailableQuest = (q) => {
+      const name = q.name || q.title || q.id || q.slug || "Quest";
+      const desc = q.description || q.flavor || "";
+      const message = q.offer?.message || "";
+      return `
+        <div class="pip-entry available-quest">
+          <strong style="color: #ffaa00;">⚠️ ${name}</strong><br>
+          <span>${message || desc}</span><br>
+          <div style="margin-top: 8px;">
+            <button class="pipboy-button-small quest-accept-btn" data-quest-id="${q.id}">ACCEPT</button>
+            <button class="pipboy-button-small quest-decline-btn" data-quest-id="${q.id}" style="margin-left: 8px;">DECLINE</button>
+          </div>
+        </div>
+      `;
+    };
+
+    const availableHtml = available.length
+      ? available.map(q => renderAvailableQuest(q)).join("")
+      : "";
+
     const activeHtml = active.length
       ? active.map(q => renderQuest(q, "active")).join("")
       : "<p>No active quests.</p>";
@@ -529,11 +555,33 @@
       : "<p>No completed quests.</p>";
 
     panel.innerHTML = `
+      ${availableHtml ? `<h2>Available Quests</h2>${availableHtml}` : ''}
       <h2>Active Quests</h2>
       ${activeHtml}
       <h2>Completed</h2>
       ${doneHtml}
     `;
+
+    // Attach event listeners for accept/decline buttons
+    panel.querySelectorAll(".quest-accept-btn").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const questId = e.target.getAttribute("data-quest-id");
+        if (Game.modules?.quests?.acceptQuest) {
+          await Game.modules.quests.acceptQuest(questId);
+          renderQuestsPanel(); // Re-render to show updated state
+        }
+      });
+    });
+
+    panel.querySelectorAll(".quest-decline-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const questId = e.target.getAttribute("data-quest-id");
+        if (Game.modules?.quests?.declineQuest) {
+          Game.modules.quests.declineQuest(questId);
+          renderQuestsPanel(); // Re-render to show updated state
+        }
+      });
+    });
   }
 
   function updateHUD() {
@@ -644,10 +692,56 @@
   // WALLET + MINT
   // ---------------------------
 
+  // Helper function to get Phantom provider (handles in-app browser delay)
+  async function getPhantomProvider(maxWaitMs = 3000) {
+    // Check immediate availability
+    if (window.solana?.isPhantom) {
+      return window.solana;
+    }
+    // Also check newer provider location
+    if (window.phantom?.solana?.isPhantom) {
+      return window.phantom.solana;
+    }
+
+    // In Phantom's in-app browser, provider may take a moment to inject
+    return new Promise((resolve) => {
+      const startTime = Date.now();
+      const checkInterval = 100; // ms
+
+      function check() {
+        if (window.solana?.isPhantom) {
+          resolve(window.solana);
+          return;
+        }
+        if (window.phantom?.solana?.isPhantom) {
+          resolve(window.phantom.solana);
+          return;
+        }
+        if (Date.now() - startTime < maxWaitMs) {
+          setTimeout(check, checkInterval);
+        } else {
+          resolve(null); // Timeout - provider not found
+        }
+      }
+
+      check();
+    });
+  }
+
   async function connectWallet() {
-    const provider = window.solana;
-    if (!provider || !provider.isPhantom) {
-      alert("Please install Phantom wallet");
+    // Wait for Phantom provider (handles in-app browser timing)
+    const provider = await getPhantomProvider();
+    
+    if (!provider) {
+      // Check if we're in a browser that might be Phantom but provider isn't ready
+      const userAgent = navigator.userAgent || "";
+      const isPhantomBrowser = userAgent.toLowerCase().includes("phantom");
+      
+      if (isPhantomBrowser) {
+        alert("Phantom wallet is loading. Please try again in a moment.");
+      } else {
+        alert("Please install Phantom wallet.\n\nVisit https://phantom.app to install.");
+      }
       return;
     }
 
@@ -685,6 +779,9 @@
       connectedWallet = true;
       window.PLAYER_WALLET = addr;
       safeLog("Wallet connected:", addr);
+
+      // Dispatch wallet connection event for other systems (e.g., Courier dialogue)
+      window.dispatchEvent(new CustomEvent("walletConnected", { detail: { address: addr } }));
 
       // Load NFTs as soon as wallet is connected
       await refreshNFTs();
@@ -830,12 +927,45 @@
   // ---------------------------
 
   async function initGame() {
-    if (_gameInitialized || _gameInitializing) return;
+    // Use sessionStorage to prevent multiple initializations across tabs/windows
+    const initKey = "afc_game_initialized_" + window.location.pathname;
+    const existingInit = sessionStorage.getItem(initKey);
+    console.log("[main] Checking game initialization for", window.location.pathname, "- existing:", existingInit);
+    
+    if (existingInit) {
+      console.log("[main] Game already initialized for this context, skipping");
+      return;
+    }
+    sessionStorage.setItem(initKey, "true");
+
+    if (_gameInitialized || _gameInitializing) {
+      console.log("[main] Game already initializing or initialized, skipping");
+      return;
+    }
     _gameInitializing = true;
+    
+    console.log("[main] Starting game initialization...");
 
     try {
       loadPlayerState();
       await loadAllData();
+
+      // Initialize quest module FIRST to give starter gear (vault jumpsuit, etc)
+      if (
+        window.Game &&
+        Game.modules &&
+        Game.modules.quests &&
+        typeof Game.modules.quests.init === "function"
+      ) {
+        // Pass DATA as gameState for quest module to use
+        Game.modules.quests.init(window.DATA);
+        safeLog("Quest module initialized with starter gear");
+        
+        // Verify equipped items (quest module sets Game.player.equipped directly)
+        if (Game.player && Game.player.equipped && Game.player.equipped.armor) {
+          safeLog("Player equipped armor verified:", Game.player.equipped.armor.name);
+        }
+      }
 
       // Initialize mintables module if present
       if (
@@ -886,6 +1016,9 @@
       _gameInitialized = true;
       safeLog("Game initialized successfully");
 
+      // Dispatch event to signal game is ready (for boot.js courier dialogue)
+      window.dispatchEvent(new Event("gameInitialized"));
+
       // Start the world simulation loop once game is ready
       if (window.overseerGameLoop && typeof window.overseerGameLoop.start === "function") {
         window.overseerGameLoop.start();
@@ -918,5 +1051,14 @@
     if (gpsLocked) {
       startGeolocationWatch();
     }
+  });
+
+  // Listen for quest events to update the quests panel
+  window.addEventListener("questOffered", () => {
+    renderQuestsPanel();
+  });
+
+  window.addEventListener("questAccepted", () => {
+    renderQuestsPanel();
   });
 })();

@@ -1,11 +1,25 @@
 /**
  * Fizz.fun API Routes
- * Token launchpad for the Atomic Fizz Caps ecosystem
+ * ═══════════════════════════════════════════════════════════════
+ * TOKEN LAUNCHPAD for the Atomic Fizz Caps ecosystem
+ * Think: pump.fun but integrated into the FIZZ ecosystem
+ * ═══════════════════════════════════════════════════════════════
+ * 
+ * IMPORTANT: Fizz.fun is SEPARATE from the main AFC token!
+ * - AFC Token = Main ecosystem token (fixed supply, treasury holds it)
+ * - Fizz.fun = Launchpad where CAPS holders can create NEW tokens
+ * 
+ * How it supports the ecosystem:
+ * - CAPS holders get access to launch tokens
+ * - Trading fees go to the treasury
+ * - Increases utility and demand for CAPS
  * 
  * Features:
- * - CAPS holders can launch tokens
- * - Anyone can trade with SOL (no CAPS required)
+ * - CAPS holders can launch tokens (need 1000+ CAPS)
+ * - Anyone can trade with SOL (no CAPS required to trade)
  * - Admins can launch with USDC (pre-mainnet bootstrap)
+ * - Bonding curve mechanics (like pump.fun)
+ * - Graduation to Raydium at 85 SOL
  */
 
 const router = require("express").Router();
@@ -14,8 +28,9 @@ const { Program, AnchorProvider, BN } = require("@coral-xyz/anchor");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
 
 // Configuration
+// Use CAPS_MINT or fall back to TOKEN_MINT (both refer to the CAPS SPL token)
 const FIZZ_FUN_PROGRAM_ID = new PublicKey(process.env.FIZZ_FUN_PROGRAM_ID || "FizzFun111111111111111111111111111111111111");
-const CAPS_MINT = new PublicKey(process.env.CAPS_MINT || "CAPSxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+const CAPS_MINT = new PublicKey(process.env.CAPS_MINT || process.env.TOKEN_MINT || "CAPSxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 const TREASURY = new PublicKey(process.env.TREASURY_WALLET || "TREASxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
 // Constants matching the Solana program

@@ -11,10 +11,10 @@
     V18
     H6
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Pickaxe handle -->
-  <rect x="11" y="6" width="2" height="8" transform="rotate(-20 12 10)" fill="currentColor"/>
+  <rect x="11" y="6" width="2" height="8" transform="rotate(-20 12 10)" fill="#00ff41"/>
 
   <!-- Pickaxe head -->
   <path d="
@@ -23,9 +23,9 @@
     L15.5 6.5
     L9.5 8.5
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Entrance cutout -->
-  <rect x="10" y="12" width="4" height="6" fill="white"/>
+  <rect x="10" y="12" width="4" height="6" fill="#0a1a0a"/>
 
 </svg>

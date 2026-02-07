@@ -10,8 +10,16 @@ Game.ui.renderInventory = function () {
   const tabs = document.getElementById("inventoryTabs");
   if (!body || !tabs) return;
 
-  // FIX: Only show what the player actually owns
-  const items = Game.player.inventory || [];
+  // Get items from PlayerState if available, otherwise fallback
+  let items = [];
+  if (Game.modules?.PlayerState?.getInventory) {
+    items = Game.modules.PlayerState.getInventory();
+  } else {
+    items = Game.player.inventory || [];
+  }
+
+  // Get equipped items
+  const equipped = Game.player.equipped || {};
 
   // Group items by type
   const groups = {
@@ -58,30 +66,45 @@ Game.ui.renderInventory = function () {
       div.className = "inventory-item";
 
       let stats = "";
+      let isEquipped = false;
 
       if (item.type === "weapon") {
-        stats = `DMG: ${item.damage} • ${item.category.toUpperCase()}`;
+        stats = `DMG: ${item.damage || 'N/A'} • ${item.category?.toUpperCase() || 'UNKNOWN'}`;
+        isEquipped = equipped.weapon && equipped.weapon.id === item.id;
       } else if (item.type === "armor") {
-        stats = `ARMOR: ${item.armor} • SLOT: ${item.slot.toUpperCase()}`;
+        stats = `ARMOR: ${item.armor || 'N/A'} • SLOT: ${item.slot?.toUpperCase() || 'UNKNOWN'}`;
+        isEquipped = equipped.armor && equipped.armor.id === item.id;
       }
 
-      // ⭐ ADDED: Equip button
+      // Show equipped status
+      const equippedText = isEquipped ? " [EQUIPPED]" : "";
+      
+      // Equip/Unequip button
+      const buttonText = isEquipped ? "UNEQUIP" : "EQUIP";
+      const buttonClass = isEquipped ? "unequip-btn" : "equip-btn";
+
       div.innerHTML = `
-        <div class="inv-name">${item.name}</div>
+        <div class="inv-name">${item.name}${equippedText}</div>
         <div class="inv-meta">${stats}</div>
-        <button class="equip-btn" data-item-id="${item.id}">EQUIP</button>
+        <button class="${buttonClass}" data-item-id="${item.id}">${buttonText}</button>
       `;
 
       body.appendChild(div);
     });
 
-    // ⭐ ADDED: Equip button handler
-    document.querySelectorAll(".equip-btn").forEach(btn => {
+    // Equip/Unequip button handler
+    document.querySelectorAll(".equip-btn, .unequip-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const id = btn.getAttribute("data-item-id");
-        const item = Game.player.inventory.find(i => i.id === id);
+        const item = items.find(i => i.id === id);
         if (item) {
-          Game.equipItem(item);
+          if (btn.classList.contains("unequip-btn")) {
+            Game.unequipItem(item.type === "weapon" ? "weapon" : "armor");
+          } else {
+            Game.equipItem(item);
+          }
+          // Re-render after equip/unequip
+          setTimeout(() => Game.ui.renderInventory(), 100);
         }
       });
     });

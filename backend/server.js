@@ -30,28 +30,39 @@ console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 // ------------------------------------------------------------
 
 // --- CORS setup (safe, env-driven) ---
-// Parse FRONTEND_ORIGIN env var into an array of allowed origins.
-// Accepts comma-separated values. Example:
-// FRONTEND_ORIGIN="https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000"
-const rawOrigins = (process.env.FRONTEND_ORIGIN || 'https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, http://localhost:3000, https://*.vercel.app').split(/\s*,\s*/);
+// Includes all deployment environments: main domains, Vercel previews, and Render hosting
+// Critical production domains are ALWAYS allowed to prevent accidental lockout
+const criticalOrigins = [
+  "https://www.atomicfizzcaps.xyz",
+  "https://atomicfizzcaps.xyz"
+];
+
+const defaultOrigins = [
+  "http://localhost:3000",
+  "https://*.vercel.app",
+  "https://*.onrender.com"
+];
+
+// Merge critical origins with env-configured or default origins
+const envOrigins = process.env.FRONTEND_ORIGIN 
+  ? process.env.FRONTEND_ORIGIN.split(/\s*,\s*/).map(s => s.trim()).filter(Boolean)
+  : defaultOrigins;
+
+// Combine critical origins with environment origins, removing duplicates
+const allowedOrigins = [...new Set([...criticalOrigins, ...envOrigins])];
 
 function wildcardToRegex(pattern) {
-  // turn https://*.vercel.app into ^https?:\/\/[^\/]+\.vercel\.app(:\d+)?$
-  // Escape backslashes first, then dots, then replace wildcards
   const escaped = pattern
     .replace(/^https?:\/\//, '')
     .replace(/\\/g, '\\\\')
     .replace(/\./g, '\\.')
-    .replace(/\*/g, '[^\\/]+');
+    .replace(/\*/g, '[a-zA-Z0-9-]+');  // SECURITY FIX: Only allow valid hostname characters (alphanumeric and hyphens)
   return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
 }
 
-const allowedOrigins = rawOrigins.map(s => s.trim()).filter(Boolean);
-
 const corsOptions = {
   origin: function(origin, callback) {
-    // allow server-to-server or curl requests with no origin
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); // server-side/curl requests
     const ok = allowedOrigins.some(pattern => {
       if (pattern.includes('*')) {
         return wildcardToRegex(pattern).test(origin);
@@ -67,6 +78,9 @@ const corsOptions = {
   credentials: true,
   maxAge: 86400
 };
+
+// Log configured CORS origins on startup for debugging
+console.log('[server] CORS configured with origins:', allowedOrigins.join(', '));
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
@@ -84,11 +98,72 @@ app.use(
   })
 );
 
-// Security headers
+// Security headers with proper CSP configuration
+// CSP allows the necessary external resources while maintaining security
 app.use(
   helmet({
-    contentSecurityPolicy: false, // static SPA handles its own CSP if needed
-    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'", // Required for inline scripts in index.html
+          "https://unpkg.com",
+          "https://cdn.jsdelivr.net",
+          "https://www.gstatic.com",
+          "https://api.phantom.app",
+          "https://*.phantom.app",
+          "https://wallet.phantom.app",
+          "https://*.walletconnect.com",
+          "https://*.walletconnect.org"
+        ],
+        connectSrc: [
+          "'self'",
+          "https://unpkg.com",
+          "https://server.arcgisonline.com",
+          "https://*.arcgisonline.com",
+          "https://*.tile.openstreetmap.org",
+          "https://*.basemaps.cartocdn.com",
+          "https://atomicfizzcaps.xyz",
+          "https://www.atomicfizzcaps.xyz",
+          "https://api.atomicfizzcaps.xyz",
+          "https://*.onrender.com",
+          "https://*.vercel.app",
+          "https://api.mainnet-beta.solana.com",
+          "https://api.devnet.solana.com",
+          "https://api-inference.huggingface.co",
+          "https://api.phantom.app",
+          "https://*.phantom.app",
+          "https://wallet.phantom.app",
+          "https://*.walletconnect.com",
+          "https://*.walletconnect.org",
+          "https://*.infura.io",
+          "https://polygon-rpc.com",
+          "https://mainnet.infura.io",
+          "wss://api.mainnet-beta.solana.com",
+          "wss://api.devnet.solana.com",
+          "wss://*.walletconnect.com",
+          "wss://*.walletconnect.org"
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'", // Required for dynamic styles
+          "https://fonts.googleapis.com",
+          "https://unpkg.com"
+        ],
+        imgSrc: ["'self'", "data:", "https:", "blob:"],
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com",
+          "data:"
+        ],
+        mediaSrc: ["'self'", "data:", "https:"],
+        objectSrc: ["'none'"],
+        frameSrc: ["'self'"],
+        baseUri: ["'self'"]
+      }
+    },
+    crossOriginEmbedderPolicy: false, // Keep disabled for external resource compatibility
   })
 );
 
@@ -114,29 +189,14 @@ app.use(
   })
 );
 
-app.use(
-  "/js",
-  express.static(path.join(FRONTEND_DIR, "js"), {
-    maxAge: NODE_ENV === "production" ? "1h" : 0,
-  })
-);
-app.use(
-  "/css",
-  express.static(path.join(FRONTEND_DIR, "css"), {
-    maxAge: NODE_ENV === "production" ? "1h" : 0,
-  })
-);
-app.use(
-  "/images",
-  express.static(path.join(FRONTEND_DIR, "images"), {
-    maxAge: NODE_ENV === "production" ? "1h" : 0,
-  })
-);
-app.use(
-  "/wallet",
-  express.static(path.join(FRONTEND_DIR, "wallet"), {
-    maxAge: NODE_ENV === "production" ? "1h" : 0,
-  })
+// Subdirectories
+["js","css","images","wallet"].forEach(dir =>
+  app.use(
+    `/${dir}`,
+    express.static(path.join(FRONTEND_DIR, dir), {
+      maxAge: NODE_ENV === "production" ? "1h" : 0,
+    })
+  )
 );
 
 // ------------------------------------------------------------
@@ -178,30 +238,51 @@ try {
 }
 
 // ------------------------------------------------------------
-// API ROUTES
+// API ROUTES (Game loop, admin, wallet, etc)
+// Any that aren't in /api/<name> or have custom logic should have a real router here.
 // ------------------------------------------------------------
 const api = (file) => path.join(__dirname, "api", file);
 
 // Core API endpoints
 safeMount("/api/loot-voucher", api("loot-voucher"));
-safeMount("/api/mintables", api("mintables"));
-safeMount("/api/caps", api("caps"));
+safeMount("/api/mintables", api("mintables"));  // Your mintables router - serves mintables.json
+// Minimal dev-only mint endpoint (mounted here so frontend claim flow works)
+safeMount("/api/mint-item", api("mint-item"));
+// Expose frontend config for client-side personality (overseer)
+safeMount("/api/config/frontend", api("frontend-config"));
+// Mount quest secrets API (server-side secret validation + lore reveals)
+safeMount('/api/quest-secrets', api('quest-secrets'));
+// Server-side quest store (placeholders + reveal endpoint)
+safeMount('/api/quests-store', api('quests-store'));
+safeMount("/api/scavenger", api("scavenger"));  // Add a scavenger router if needed, otherwise use JSON proxy below!
+safeMount("/api/locations", api("locations"));  // routes/api/locations.js: serves locations.json
+
+// Additional game APIs
+safeMount("/api/player", api("player"));
+safeMount("/api/player-nfts", api("player-nfts"));
+safeMount("/api/quests", api("quests"));
+safeMount("/api/redeem-voucher", api("redeem-voucher"));
 safeMount("/api/xp", api("xp"));
+safeMount("/api/caps", api("caps"));
+safeMount("/api/settings", api("settings"));
+
+// NFT Scrap and Fusion features
+safeMount("/api/scrap-nft", api("scrap-nft"));
+safeMount("/api/fuse", api("fuse"));
+
+// GPS and Location features
 safeMount("/api/gps", api("gps"));
+safeMount("/api/location-claim", api("location-claim"));
 safeMount("/api/cooldowns", api("cooldowns"));
 safeMount("/api/rotation", api("rotation"));
-safeMount("/api/quests", api("quests"));
+
+// Quest endings
 safeMount("/api/quest-endings", api("quest-endings"));
-safeMount("/api/player", api("player"));
-safeMount("/api/location-claim", api("location-claim"));
 
-// Add locations endpoint (frontend expects /api/locations)
-safeMount("/api/locations", api("locations"));
+// Fizz Fun token launcher
+safeMount("/api/fizz-fun", api("fizz-fun"));
 
-// Frontend configuration endpoint (exposes safe config values from env vars)
-safeMount("/api/config/frontend", api("frontend-config"));
-
-// Admin panel routes
+// Admin/advanced panel routes
 safeMount("/api/admin/player", api("adminPlayer"));
 safeMount("/api/admin/mintables", api("adminMintables"));
 safeMount("/api/admin/keys", api("keys-admin"));
@@ -211,11 +292,10 @@ safeMount("/api/wallet", path.join(__dirname, "routes", "wallet"));
 
 // ------------------------------------------------------------
 // GENERIC STATIC JSON PROXY (fallback for /api/<name>)
-// Serves public/data/<name>.json for simple API endpoints.
-// This is mounted AFTER explicit routers so explicit handlers take precedence.
+// If you have `public/data/settings.json`, `public/data/scavenger.json`, etc.
+// This will handle them automatically if no route is more specific.
 // ------------------------------------------------------------
 app.use("/api", (req, res, next) => {
-  // Only handle GET requests for top-level names like /api/settings or /api/locations
   if (req.method !== "GET") return next();
   const parts = req.path.split("/").filter(Boolean);
   if (parts.length !== 1) return next(); // only handle /api/<name>
@@ -237,46 +317,18 @@ app.use("/api", (req, res, next) => {
 });
 
 // ------------------------------------------------------------
-// FUTURE FEATURE ENDPOINTS
-// ------------------------------------------------------------
-app.post("/api/nuke-gear", (req, res) => {
-  res.json({
-    success: false,
-    error: "NUKE GEAR system offline (future update)",
-  });
-});
-
-app.post("/api/bridge/solana-to-evm", (req, res) => {
-  res.json({
-    success: false,
-    error: "BRIDGE system offline (future update)",
-  });
-});
-
-app.post("/api/bridge/evm-to-solana", (req, res) => {
-  res.json({
-    success: false,
-    error: "BRIDGE system offline (future update)",
-  });
-});
-
-// ------------------------------------------------------------
 // HEALTH CHECK
 // ------------------------------------------------------------
-// Add health endpoint for smoke checks
 app.get('/api/health', async (req, res) => {
   try {
-    // Try to load redis module to check its status
     let redisOk = false;
     try {
       const redisModule = require('./lib/redis');
       if (redisModule && redisModule.client) {
         const client = redisModule.client;
-        // Check if client is connected (node-redis v4 has isReady property)
         redisOk = client.isReady || client.status === 'ready' || client.status === 'connected';
       }
     } catch (e) {
-      // redis module not available or error loading it
       redisOk = false;
     }
 
@@ -298,8 +350,17 @@ app.get('/api/health', async (req, res) => {
 });
 
 // ------------------------------------------------------------
-// SPA FALLBACK (React/Leaflet Frontend)
+// SPA FALLBACK
 // ------------------------------------------------------------
+app.get("/overseer", (req, res) => {
+  const overseerFile = path.join(FRONTEND_DIR, "overseer.html");
+  if (fs.existsSync(overseerFile)) {
+    res.sendFile(overseerFile);
+  } else {
+    res.status(404).send("Overseer terminal not found");
+  }
+});
+
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api/")) return next();
   if (path.extname(req.path)) return next();
@@ -323,10 +384,13 @@ app.use((err, req, res, next) => {
 // ------------------------------------------------------------
 // START SERVER
 // ------------------------------------------------------------
-app.listen(PORT, () => {
-  console.log(
-    `Atomic Fizz Caps backend running on port ${PORT} (env=${NODE_ENV})`
-  );
-});
+// Only start the server if not running as a Vercel serverless function
+if (process.env.VERCEL !== '1' && require.main === module) {
+  app.listen(PORT, () => {
+    console.log(
+      `Atomic Fizz Caps backend running on port ${PORT} (env=${NODE_ENV})`
+    );
+  });
+}
 
 module.exports = app;

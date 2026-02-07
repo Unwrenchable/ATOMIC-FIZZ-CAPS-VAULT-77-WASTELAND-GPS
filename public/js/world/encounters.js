@@ -35,29 +35,42 @@
   // Main encounter roll
   // ------------------------------------------------------------
   function rollEncounter() {
+    // Guard: ensure world state is available
+    if (!WorldState || !Regions) {
+      return { type: "none", reason: "world_not_ready" };
+    }
+
     const regionId = WorldState.currentRegion;
     const region = Regions.get(regionId);
-    const weather = Weather.getCurrent();
-    const factionId = Factions.getControl(regionId);
-    const rep = Factions.getReputation(factionId);
-    const repStatus = Factions.reputationLabel(rep, factionId);
+    
+    // Guard: ensure region exists
+    if (!region) {
+      return { type: "none", reason: "no_region" };
+    }
+
+    const weather = Weather?.getCurrent?.() || { type: "clear" };
+    const factionId = Factions?.getControl?.(regionId);
+    const rep = Factions?.getReputation?.(factionId) || 0;
+    const repStatus = Factions?.reputationLabel?.(rep, factionId) || "NEUTRAL";
 
     // ------------------------------------------------------------
     // 1. Timeline Distortion Check
     // ------------------------------------------------------------
-    if (Timeline.isUnstable(regionId)) {
-      if (Math.random() < Timeline.distortionChance(regionId)) {
-        return Timeline.rollEcho(regionId);
+    if (Timeline?.isUnstable?.(regionId)) {
+      if (Math.random() < (Timeline?.distortionChance?.(regionId) || 0)) {
+        const echo = Timeline?.rollEcho?.(regionId);
+        if (echo) return echo;
       }
     }
 
     // ------------------------------------------------------------
     // 2. Anomaly Encounter Check
     // ------------------------------------------------------------
-    const anomalyLevel = Math.max(0, Math.min(1, WorldState.getAnomalyLevel(regionId)));
+    const anomalyLevel = Math.max(0, Math.min(1, WorldState.getAnomalyLevel?.(regionId) || 0));
     if (anomalyLevel > 0.3) {
       if (Math.random() < anomalyLevel * 0.25) {
-        return Anomalies.roll(regionId, weather);
+        const anomalyResult = Anomalies?.roll?.(regionId, weather);
+        if (anomalyResult) return anomalyResult;
       }
     }
 
@@ -65,31 +78,31 @@
     // 3. Micro‑Quest Check
     // ------------------------------------------------------------
     if (Math.random() < (region.questChance || 0.1)) {
-      return {
-        type: "microquest",
-        quest: Microquests.generate(regionId, weather, factionId)
-      };
+      const quest = Microquests?.generate?.(regionId, weather, factionId);
+      if (quest) {
+        return {
+          type: "microquest",
+          quest
+        };
+      }
     }
 
     // ------------------------------------------------------------
     // 4. Faction Patrols / Hostility
     // ------------------------------------------------------------
-    if (repStatus === "HOSTILE" && Math.random() < region.threat * 0.6) {
-      const enemies = Traits.applyToGroup(
-        Regions.pickEnemies(regionId),
-        region,
-        weather
-      );
+    if (repStatus === "HOSTILE" && Math.random() < (region.threat || 0.5) * 0.6) {
+      const baseEnemies = Regions.pickEnemies?.(regionId) || [];
+      const enemies = Traits?.applyToGroup?.(baseEnemies, region, weather) || baseEnemies;
 
       return {
         type: "combat",
         faction: factionId,
         enemies,
-        loot: Loot.generateLoot({
+        loot: Loot?.generateLoot?.({
           regionId,
           factionId,
-          npcTraits: enemies.map(e => e.traits)
-        }),
+          npcTraits: enemies.map(e => e.traits || [])
+        }) || [],
         modifier: "hostile_faction"
       };
     }
@@ -105,27 +118,24 @@
     // ------------------------------------------------------------
     // 5. Region Encounter Weights
     // ------------------------------------------------------------
-    const encounterType = weightedPick(region.encounters);
+    const encounterType = weightedPick(region.encounters || {});
 
     switch (encounterType) {
       case "raiders":
       case "mutants":
       case "scavengers":
       case "wildlife": {
-        const enemies = Traits.applyToGroup(
-          Regions.pickEnemies(regionId, encounterType),
-          region,
-          weather
-        );
+        const regionalEnemies = Regions.pickEnemies?.(regionId, encounterType) || [];
+        const enemies = Traits?.applyToGroup?.(regionalEnemies, region, weather) || regionalEnemies;
 
         return {
           type: "combat",
           enemies,
-          loot: Loot.generateLoot({
+          loot: Loot?.generateLoot?.({
             regionId,
             factionId,
-            npcTraits: enemies.map(e => e.traits)
-          }),
+            npcTraits: enemies.map(e => e.traits || [])
+          }) || [],
           modifier: "regional"
         };
       }
@@ -133,28 +143,28 @@
       case "travelers":
         return {
           type: "traveler",
-          npc: Traits.applyToNpc(
-            Regions.pickTraveler(regionId),
+          npc: Traits?.applyToNpc?.(
+            Regions.pickTraveler?.(regionId) || {},
             region,
             weather
-          ),
+          ) || {},
           message: "A traveler approaches."
         };
 
       case "merchant":
         return {
           type: "merchant",
-          merchant: Regions.pickMerchant(regionId),
+          merchant: Regions.pickMerchant?.(regionId) || {},
           message: "A merchant flags you down."
         };
 
       case "anomaly":
-        return Anomalies.roll(regionId, weather);
+        return Anomalies?.roll?.(regionId, weather) || { type: "ambient_anomaly" };
 
       case "event":
         return {
           type: "event",
-          event: Regions.pickEvent(regionId)
+          event: Regions.pickEvent?.(regionId) || {}
         };
     }
 

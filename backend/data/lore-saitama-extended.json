@@ -1,0 +1,21 @@
+{
+  "scammer_stories": [
+    {
+      "id": "story_russ_1",
+      "title": "Vanish at Midnight",
+      "body": "Russ posted a goodbye at 02:14 and then deleted his entire profile. Small transfers appeared to cold wallets shortly after."
+    },
+    {
+      "id": "story_forum_moderator",
+      "title": "Moderator in Pocket",
+      "body": "A moderator who defended the team had off-chain chats with several whales. Receipts surfaced later.",
+      "tag": "moderator"
+    }
+  ],
+  "tutorials": {
+    "crypto_101": {
+      "title": "Wallet Basics",
+      "steps": ["Create a test wallet","Send a small tx","Inspect tx on a block explorer"]
+    }
+  }
+}

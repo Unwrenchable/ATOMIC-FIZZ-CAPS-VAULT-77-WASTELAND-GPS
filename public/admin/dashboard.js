@@ -2,7 +2,7 @@
 const token = localStorage.getItem("adminSession");
 
 if (!token) {
-  window.location.href = "/admin/index.html";
+  window.location.href = "/admin";
 }
 
 // --- PANEL SWITCHING ---
@@ -33,7 +33,7 @@ document.getElementById("adminLogoutBtn").addEventListener("click", async () => 
   }
 
   localStorage.removeItem("adminSession");
-  window.location.href = "/admin/index.html";
+  window.location.href = "/admin";
 });
 
 // ============================================================================

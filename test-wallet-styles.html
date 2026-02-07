@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎨 Wallet Style Showcase - Atomic Fizz Caps</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="public/wallet/wallet.css">
+  <style>
+    body {
+      padding: 4rem 2rem;
+    }
+    .showcase-section {
+      margin-bottom: 5rem;
+    }
+    .showcase-title {
+      font-size: 4rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--vault-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.3rem;
+      text-shadow: 0 0 20px var(--vault-gold);
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .demo-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div id="wallet-branding">
+    <h1>ATOMIC FIZZ WALLET</h1>
+    <p class="small muted">🎨 EPIC STYLE SHOWCASE • VAULT-TEC CERTIFIED</p>
+  </div>
+
+  <!-- SECTION: CARDS -->
+  <section class="showcase-section">
+    <h2 class="showcase-title">📦 WALLET CARDS</h2>
+    
+    <div class="demo-grid">
+      <!-- Standard Card -->
+      <div class="wallet-card">
+        <div class="wallet-card-header">
+          <span class="card-icon">💎</span> STANDARD CARD
+        </div>
+        <div class="data-row">
+          <span class="data-label">Balance</span>
+          <span class="balance-value">1,234.56 AFC</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Status</span>
+          <span class="data-value">Active</span>
+        </div>
+        <p class="small muted">Hover me to see effects!</p>
+      </div>
+
+      <!-- Neon Glow Card -->
+      <div class="wallet-card neon-glow">
+        <div class="wallet-card-header">
+          <span class="card-icon">⭐</span> NEON GLOW CARD
+        </div>
+        <div class="data-row">
+          <span class="data-label">Special</span>
+          <span class="balance-value">999.99 SOL</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Rarity</span>
+          <span class="data-value">Legendary</span>
+        </div>
+        <p class="small muted">Gold border with pulse!</p>
+      </div>
+
+      <!-- Game Banner -->
+      <div class="wallet-card game-banner">
+        <div class="wallet-card-header">
+          <span class="card-icon">🎮</span> GAME BANNER
+        </div>
+        <div class="data-row">
+          <span class="data-label">Quests</span>
+          <span class="data-value">12 Active</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Rewards</span>
+          <span class="balance-value">5,000 CAPS</span>
+        </div>
+        <p class="small muted">Diagonal pattern overlay!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: BUTTONS -->
+  <section class="showcase-section">
+    <h2 class="showcase-title">🔘 BUTTON STYLES</h2>
+    
+    <div class="demo-buttons">
+      <button class="btn">STANDARD BUTTON</button>
+      <button class="btn">HOVER ME ☢️</button>
+      <button class="btn">CLICK ME</button>
+      <button class="btn" disabled>DISABLED</button>
+    </div>
+
+    <div class="demo-buttons" style="margin-top: 2rem;">
+      <a href="#" class="btn play-game-btn" style="width: 100%; max-width: 600px;">
+        ☢️ EPIC GAME BUTTON ☢️
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION: TABS -->
+  <section class="showcase-section">
+    <h2 class="showcase-title">📑 TAB NAVIGATION</h2>
+    
+    <div class="wallet-tabs">
+      <button class="wallet-tab active">📊 DASHBOARD</button>
+      <button class="wallet-tab">💰 TOKENS</button>
+      <button class="wallet-tab">🔄 SWAP</button>
+      <button class="wallet-tab">🎨 NFTs</button>
+      <button class="wallet-tab">🔒 STAKING</button>
+      <button class="wallet-tab">🚀 FIZZ.FUN</button>
+      <button class="wallet-tab">🌉 BRIDGE</button>
+    </div>
+
+    <div class="wallet-card">
+      <p>Click tabs to see hover effects! Active tab has gold text and glow.</p>
+    </div>
+  </section>
+
+  <!-- SECTION: DATA ROWS -->
+  <section class="showcase-section">
+    <h2 class="showcase-title">📊 DATA DISPLAY</h2>
+    
+    <div class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">💼</span> PORTFOLIO OVERVIEW
+      </div>
+      <div class="data-row">
+        <span class="data-label">Total Value</span>
+        <span class="balance-value">$42,069.00</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">SOL Balance</span>
+        <span class="data-value">123.456 SOL</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">AFC Holdings</span>
+        <span class="balance-value">1,000,000 AFC</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Staked Amount</span>
+        <span class="data-value">500,000 AFC</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Vault Tier</span>
+        <span class="data-value">👑 OVERSEER</span>
+      </div>
+      <p class="small muted" style="margin-top: 1rem;">Hover over rows to see effects!</p>
+    </div>
+  </section>
+
+  <!-- SECTION: SWAP INTERFACE -->
+  <section class="showcase-section">
+    <h2 class="showcase-title">🔄 SWAP INTERFACE</h2>
+    
+    <div class="wallet-card neon-glow">
+      <div class="wallet-card-header">
+        <span class="card-icon">🔄</span> INSTANT SWAP
+      </div>
+      
+      <div class="swap-container">
+        <div class="swap-input-group">
+          <label class="swap-label" for="demo-swap-from-token">FROM (Select Token)</label>
+          <div class="swap-row">
+            <select class="swap-select" id="demo-swap-from-token">
+              <option>SOL</option>
+              <option>USDC</option>
+              <option>AFC</option>
+            </select>
+            <input type="number" id="demo-swap-from" class="swap-input mono" placeholder="0.00" value="10.5">
+          </div>
+          <div class="swap-balance small muted">Balance: 123.456 SOL</div>
+        </div>
+
+        <div class="swap-arrow">⇅</div>
+
+        <div class="swap-input-group">
+          <label class="swap-label" for="demo-swap-to-token">TO (Select Token)</label>
+          <div class="swap-row">
+            <select class="swap-select" id="demo-swap-to-token">
+              <option>AFC</option>
+              <option>SOL</option>
+              <option>USDC</option>
+            </select>
+            <input type="number" id="demo-swap-to" class="swap-input mono" placeholder="0.00" value="52,500" readonly>
+          </div>
+          <div class="swap-balance small muted">You'll receive ~52,500 AFC</div>
+        </div>
+
+        <button class="btn" style="width: 100%; margin-top: 2rem;">🔄 EXECUTE SWAP</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: STAKING TIERS -->
+  <section class="showcase-section">
+    <h2 class="showcase-title">🏆 STAKING TIERS</h2>
+    
+    <div class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">🎖️</span> TIER STRUCTURE
+      </div>
+      <div class="tier-list">
+        <div class="tier-item">
+          <span class="tier-name">🥉 WASTELANDER</span>
+          <span class="tier-req">1,000+ AFC</span>
+          <span class="tier-perk">Launch tokens on Fizz.fun</span>
+        </div>
+        <div class="tier-item">
+          <span class="tier-name">🥈 VETERAN</span>
+          <span class="tier-req">10,000+ AFC</span>
+          <span class="tier-perk">50% reduced launch fees</span>
+        </div>
+        <div class="tier-item">
+          <span class="tier-name">🥇 ELITE</span>
+          <span class="tier-req">100,000+ AFC</span>
+          <span class="tier-perk">Early access to launches</span>
+        </div>
+        <div class="tier-item">
+          <span class="tier-name">👑 OVERSEER</span>
+          <span class="tier-req">1,000,000+ AFC</span>
+          <span class="tier-perk">Governance voting rights</span>
+        </div>
+      </div>
+      <p class="small muted" style="margin-top: 1.5rem;">Hover over tiers to see slide effect!</p>
+    </div>
+  </section>
+
+  <!-- SECTION: INPUT FIELDS -->
+  <section class="showcase-section">
+    <h2 class="showcase-title">⌨️ INPUT FIELDS</h2>
+    
+    <div class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">📝</span> FORM ELEMENTS
+      </div>
+      
+      <div class="entry">
+        <label for="demo-text-input">Text Input</label>
+        <input type="text" id="demo-text-input" placeholder="Enter wallet address..." value="Hp3e...x7mK">
+      </div>
+
+      <div class="entry">
+        <label for="demo-number-input">Number Input</label>
+        <input type="number" id="demo-number-input" placeholder="0.00" value="123.456">
+      </div>
+
+      <div class="entry">
+        <label for="demo-select">Select Dropdown</label>
+        <select id="demo-select">
+          <option>Solana</option>
+          <option>Ethereum</option>
+          <option>Polygon</option>
+          <option>BSC</option>
+        </select>
+      </div>
+
+      <button class="btn">SUBMIT</button>
+      <p class="small muted" style="margin-top: 1rem;">Focus inputs to see green glow!</p>
+    </div>
+  </section>
+
+  <!-- SECTION: LOADING STATES -->
+  <section class="showcase-section">
+    <h2 class="showcase-title">⏳ LOADING STATES</h2>
+    
+    <div class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">⌛</span> SKELETON LOADERS
+      </div>
+      <div class="skeleton" style="height: 60px; margin-bottom: 1rem;"></div>
+      <div class="skeleton" style="height: 40px; margin-bottom: 1rem;"></div>
+      <div class="skeleton" style="height: 80px;"></div>
+      <p class="small muted" style="margin-top: 1.5rem;">Animated gradient pulse effect!</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="wallet-card" style="text-align: center; margin-top: 5rem;">
+    <div class="wallet-card-header" style="justify-content: center;">
+      <span class="card-icon">☢️</span>
+    </div>
+    <h2 style="font-size: 3rem; margin-bottom: 1rem;">VAULT-TEC CERTIFIED</h2>
+    <p class="small muted">All styles feature CRT scanlines, radioactive glow, and terminal authenticity</p>
+    <p class="small muted">Hover, click, and interact to see epic animations!</p>
+    <div style="margin-top: 2rem;">
+      <a href="/public/wallet/index.html" class="btn" style="margin: 0 1rem;">
+        🔙 BACK TO WALLET
+      </a>
+      <a href="/" class="btn play-game-btn" style="margin: 0 1rem;">
+        🎮 PLAY GAME
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Add click handlers to tabs for demo
+    document.querySelectorAll('.wallet-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.wallet-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+
+    console.log('📟 OVERSEER: Style showcase loaded successfully! ☢️');
+  </script>
+
+</body>
+</html>

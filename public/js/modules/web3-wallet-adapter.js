@@ -11,7 +11,6 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
-  // Security utilities
   const securityUtils = {
     // Sanitize wallet address to prevent XSS - preserves valid address characters
     sanitizeAddress(address) {
@@ -73,6 +72,51 @@
     }
   };
 
+  // Constants
+  // Timeout for Phantom provider injection in in-app browser
+  // 3000ms chosen based on testing - typically injects within 100-500ms but allowing
+  // extra time for slower devices/connections while keeping user wait reasonable
+  const PHANTOM_PROVIDER_TIMEOUT = 3000;
+
+  /**
+   * Wait for Phantom provider to be injected into the page.
+   * 
+   * In Phantom's in-app browser, the provider object (window.solana or window.phantom.solana)
+   * is injected asynchronously after the page loads. This function polls for the provider
+   * to become available, waiting up to the specified timeout period.
+   * 
+   * @param {number} timeoutMs - Maximum time to wait for provider in milliseconds
+   * @returns {Promise<Object|null>} Phantom provider object if found, null if timeout
+   */
+  async function waitForPhantomProvider(timeoutMs = PHANTOM_PROVIDER_TIMEOUT) {
+    // Check if already available
+    if (window.solana?.isPhantom) return window.solana;
+    if (window.phantom?.solana?.isPhantom) return window.phantom.solana;
+    
+    // Wait for provider to inject
+    return new Promise((resolve) => {
+      const startTime = Date.now();
+      const checkInterval = 100;
+      
+      function pollForProvider() {
+        if (window.solana?.isPhantom) {
+          resolve(window.solana);
+          return;
+        }
+        if (window.phantom?.solana?.isPhantom) {
+          resolve(window.phantom.solana);
+          return;
+        }
+        if (Date.now() - startTime < timeoutMs) {
+          setTimeout(pollForProvider, checkInterval);
+        } else {
+          resolve(null);
+        }
+      }
+      pollForProvider();
+    });
+  }
+
   const web3WalletAdapter = {
     loaded: false,
     connected: false,
@@ -82,26 +126,73 @@
     connectionAttempts: 0,
     maxConnectionAttempts: 3,
 
+    // Helper functions for wallet detection
+    _isMetaMaskInstalled() {
+      if (!window.ethereum) return false;
+      // If multiple providers exist, check the array
+      if (window.ethereum.providers?.length) {
+        return window.ethereum.providers.some(p => p.isMetaMask);
+      }
+      // Single provider case
+      return window.ethereum.isMetaMask === true;
+    },
+
+    _isCoinbaseInstalled() {
+      if (!window.ethereum) return false;
+      // If multiple providers exist, check the array
+      if (window.ethereum.providers?.length) {
+        return window.ethereum.providers.some(p => p.isCoinbaseWallet);
+      }
+      // Single provider case
+      return window.ethereum.isCoinbaseWallet === true;
+    },
+
     // Supported wallet providers
     providers: {
       phantom: {
         name: "Phantom",
         icon: "👻",
         chain: "solana",
-        check: () => window.solana && window.solana.isPhantom,
+        check: () => (window.solana && window.solana.isPhantom) || (window.phantom?.solana?.isPhantom),
         connect: async function() {
           if (!securityUtils.rateLimit('phantom_connect', 2000)) {
             throw new Error('Please wait before trying again');
           }
           try {
-            const resp = await window.solana.connect();
+            // Wait for Phantom provider to inject (handles in-app browser timing)
+            const provider = await waitForPhantomProvider();
+            
+            if (!provider) {
+              // Check if we're in Phantom's in-app browser via user agent
+              // Note: User agent detection is not 100% reliable but provides better UX
+              // Phantom's in-app browser typically includes "Phantom" in the UA string
+              const userAgent = navigator.userAgent || "";
+              const isPhantomBrowser = userAgent.toLowerCase().includes("phantom");
+              
+              if (isPhantomBrowser) {
+                throw new Error('Phantom wallet is loading. Please try again in a moment.');
+              } else {
+                // Offer to open Phantom install page
+                const shouldInstall = confirm(
+                  'Phantom wallet not detected!\n\n' +
+                  'Phantom is a browser extension wallet for Solana.\n\n' +
+                  'Would you like to open the Phantom website to install it?'
+                );
+                if (shouldInstall) {
+                  window.open('https://phantom.app', '_blank');
+                }
+                throw new Error('Phantom wallet not installed. Please install it from https://phantom.app and refresh this page.');
+              }
+            }
+            
+            const resp = await provider.connect();
             const address = resp.publicKey.toString();
             if (!securityUtils.isValidSolanaAddress(address)) {
               throw new Error('Invalid wallet address received');
             }
             return {
               address: securityUtils.sanitizeAddress(address),
-              provider: window.solana
+              provider: provider
             };
           } catch (error) {
             throw new Error(`Phantom connection failed: ${error.message}`);
@@ -119,6 +210,19 @@
             throw new Error('Please wait before trying again');
           }
           try {
+            // Check if Solflare is installed
+            if (!window.solflare || !window.solflare.isSolflare) {
+              const shouldInstall = confirm(
+                'Solflare wallet not detected!\n\n' +
+                'Solflare is a browser extension wallet for Solana.\n\n' +
+                'Would you like to open the Solflare website to install it?'
+              );
+              if (shouldInstall) {
+                window.open('https://solflare.com/', '_blank');
+              }
+              throw new Error('Solflare not installed. Please install it from https://solflare.com and refresh this page.');
+            }
+            
             await window.solflare.connect();
             const address = window.solflare.publicKey.toString();
             if (!securityUtils.isValidSolanaAddress(address)) {
@@ -138,15 +242,24 @@
         name: "WalletConnect",
         icon: "🔗",
         chain: "multi",
-        check: () => window.WalletConnectProvider !== undefined,
+        check: () => true, // Always show as available option
         connect: async function() {
           if (!securityUtils.rateLimit('walletconnect_connect', 2000)) {
             throw new Error('Please wait before trying again');
           }
           try {
-            // Use WalletConnect v2
+            // Check if WalletConnect library is loaded
             if (!window.WalletConnectProvider) {
-              throw new Error("WalletConnect not loaded. Add script: https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider");
+              // Guide user to install or refresh
+              const userChoice = confirm(
+                "WalletConnect library is not loaded.\n\n" +
+                "Please refresh the page to load WalletConnect.\n\n" +
+                "Click OK to refresh now, or Cancel to try a different wallet."
+              );
+              if (userChoice) {
+                window.location.reload();
+              }
+              throw new Error("WalletConnect library not loaded");
             }
             
             const provider = new window.WalletConnectProvider({
@@ -181,12 +294,25 @@
         name: "MetaMask",
         icon: "🦊",
         chain: "evm",
-        check: () => window.ethereum && window.ethereum.isMetaMask,
+        check: () => web3WalletAdapter._isMetaMaskInstalled(),
         connect: async function() {
           if (!securityUtils.rateLimit('metamask_connect', 2000)) {
             throw new Error('Please wait before trying again');
           }
           try {
+            // Check if MetaMask is installed
+            if (!web3WalletAdapter._isMetaMaskInstalled()) {
+              const shouldInstall = confirm(
+                'MetaMask wallet not detected!\n\n' +
+                'MetaMask is a browser extension wallet for Ethereum and other EVM chains.\n\n' +
+                'Would you like to open the MetaMask website to install it?'
+              );
+              if (shouldInstall) {
+                window.open('https://metamask.io/download/', '_blank');
+              }
+              throw new Error('MetaMask not installed. Please install it from https://metamask.io and refresh this page.');
+            }
+            
             const accounts = await window.ethereum.request({ 
               method: 'eth_requestAccounts' 
             });
@@ -210,12 +336,25 @@
         name: "Coinbase Wallet",
         icon: "💼",
         chain: "evm",
-        check: () => window.ethereum && window.ethereum.isCoinbaseWallet,
+        check: () => web3WalletAdapter._isCoinbaseInstalled(),
         connect: async function() {
           if (!securityUtils.rateLimit('coinbase_connect', 2000)) {
             throw new Error('Please wait before trying again');
           }
           try {
+            // Check if Coinbase Wallet is installed
+            if (!web3WalletAdapter._isCoinbaseInstalled()) {
+              const shouldInstall = confirm(
+                'Coinbase Wallet not detected!\n\n' +
+                'Coinbase Wallet is a browser extension wallet for Ethereum and other EVM chains.\n\n' +
+                'Would you like to open the Coinbase Wallet website to install it?'
+              );
+              if (shouldInstall) {
+                window.open('https://www.coinbase.com/wallet', '_blank');
+              }
+              throw new Error('Coinbase Wallet not installed. Please install it from https://www.coinbase.com/wallet and refresh this page.');
+            }
+            
             const accounts = await window.ethereum.request({ 
               method: 'eth_requestAccounts' 
             });
@@ -309,23 +448,19 @@
     getAvailableWallets() {
       const available = [];
       
+      // Always show these popular wallets as options
+      const alwaysShow = ['phantom', 'walletconnect', 'integrated'];
+      
       for (const [key, provider] of Object.entries(this.providers)) {
-        if (provider.check()) {
+        // Always show popular wallets, or show if detected
+        if (alwaysShow.includes(key) || provider.check()) {
           available.push({
             key,
             name: provider.name,
-            icon: provider.icon
+            icon: provider.icon,
+            detected: provider.check()
           });
         }
-      }
-
-      // Always show integrated wallet
-      if (!available.find(w => w.key === 'integrated')) {
-        available.push({
-          key: 'integrated',
-          name: this.providers.integrated.name,
-          icon: this.providers.integrated.icon
-        });
       }
 
       return available;
@@ -336,8 +471,10 @@
       
       let message = "🔗 CONNECT WALLET\n\nSelect a wallet provider:\n\n";
       available.forEach((wallet, i) => {
-        message += `[${i + 1}] ${wallet.icon} ${wallet.name}\n`;
+        const status = wallet.detected ? "✅" : "⚠️";
+        message += `[${i + 1}] ${wallet.icon} ${wallet.name} ${status}\n`;
       });
+      message += `\n✅ = Detected\n⚠️ = Not detected (will prompt to install)\n`;
       message += `\n[0] Cancel\n\nEnter number (0-${available.length}):`;
 
       const choice = prompt(message);
@@ -384,18 +521,23 @@
 
         console.log(`[web3-wallet] Connecting to ${provider.name}...`);
 
-        // Check if provider is available
-        if (!provider.check()) {
-          if (walletType === 'phantom') {
-            alert(`${provider.name} not detected!\n\nPlease install Phantom wallet:\nhttps://phantom.app/`);
-          } else if (walletType === 'metamask') {
-            alert(`${provider.name} not detected!\n\nPlease install MetaMask:\nhttps://metamask.io/`);
-          } else if (walletType === 'walletconnect') {
-            alert(`WalletConnect library not loaded.\n\nPlease refresh the page.`);
-          } else {
-            alert(`${provider.name} not available.\n\nPlease install the wallet extension.`);
+        // For Phantom, try to connect even if check() returns false initially
+        // (handles in-app browser timing where provider injects after page load)
+        if (walletType === 'phantom') {
+          // Skip the check() for Phantom - the connect() method will wait for provider
+          // This handles the in-app browser case where provider isn't immediately available
+        } else {
+          // Check if provider is available for other wallets
+          if (!provider.check()) {
+            if (walletType === 'metamask') {
+              alert(`${provider.name} not detected!\n\nPlease install MetaMask:\nhttps://metamask.io/`);
+            } else if (walletType === 'walletconnect') {
+              alert(`WalletConnect library not loaded.\n\nPlease refresh the page.`);
+            } else {
+              alert(`${provider.name} not available.\n\nPlease install the wallet extension.`);
+            }
+            return false;
           }
-          return false;
         }
 
         // Connect to wallet

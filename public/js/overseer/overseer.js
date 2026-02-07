@@ -5,7 +5,7 @@
   "use strict";
 
   // ---------------------------------------------------------------------------
-  // GLOBAL OUTPUT FUNCTION (required by lore, memory, threat, etc.)
+  // GLOBAL OUTPUT FUNCTIONS (required by lore, memory, threat, etc.)
   // ---------------------------------------------------------------------------
   window.overseerSay = function (text) {
     if (window.overseer && typeof window.overseer.print === "function") {
@@ -13,6 +13,17 @@
     } else {
       console.log("[OVERSEER]", text);
     }
+  };
+
+  // Print multiple lines at once
+  window.overseerSayBlock = function (lines) {
+    if (!Array.isArray(lines)) return;
+    lines.forEach(line => window.overseerSay(line));
+  };
+
+  // Print an error message with visual distinction
+  window.overseerError = function (text) {
+    window.overseerSay("ERROR: " + text);
   };
 
   // ---------------------------------------------------------------------------

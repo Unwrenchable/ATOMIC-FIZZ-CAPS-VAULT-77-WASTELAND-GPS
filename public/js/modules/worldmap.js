@@ -5,7 +5,7 @@
   if (!Game.modules) Game.modules = {};
 
   // ============================================================
-  // ICON FALLBACK MAPPING (Enhanced for Fallout authenticity)
+  // ICON FALLBACK MAPPING (Enhanced for Afterfall authenticity)
   // Maps iconKey values that don't have SVG files to existing icons
   // ============================================================
   const ICON_FALLBACK_MAP = {
@@ -16,6 +16,8 @@
     'settler': 'settlement',
     'wastelander': 'ghost',
     'survivor': 'player',
+    'npc': 'ghost',
+    'character': 'player',
     
     // Factions without dedicated icons
     'followers': 'medical',
@@ -28,6 +30,8 @@
     'legion_faction': 'legion',
     'gunners': 'raider',
     'super_mutants': 'enemy',
+    'mutant': 'enemy',
+    'hostile': 'enemy',
     
     // Trading/Commerce
     'trader': 'trading',
@@ -35,6 +39,8 @@
     'vendor': 'shop',
     'caravan_stop': 'caravan',
     'general_store': 'store',
+    'marketplace': 'market',
+    'bazaar': 'market',
     
     // Location types without dedicated icons
     'office': 'city',
@@ -43,6 +49,7 @@
     'industrial': 'factory',
     'research': 'lab',
     'science': 'lab',
+    'laboratory': 'lab',
     'medical_center': 'hospital',
     'clinic_building': 'clinic',
     'military_base': 'military',
@@ -61,10 +68,17 @@
     'inn': 'motel',
     'bar_tavern': 'bar',
     'saloon': 'bar',
+    'pub': 'bar',
+    'tavern': 'bar',
+    'pool_hall': '8ball',
+    'billiards': '8ball',
+    'poolhall': '8ball',
     'restaurant_cafe': 'restaurant',
     'food': 'restaurant',
+    'diner_old': 'diner',
     'church_chapel': 'church',
     'religious': 'religion',
+    'chapel': 'church',
     'cemetery_graveyard': 'cemetery',
     'grave': 'graveyard',
     'farm_field': 'farm',
@@ -81,6 +95,7 @@
     'power_plant': 'power',
     'nuclear': 'reactor',
     'radiation': 'rad',
+    'radioactive': 'rad',
     'danger_zone': 'danger',
     'hazard': 'danger',
     'warning': 'danger',
@@ -95,16 +110,27 @@
     'quest_marker': 'quest',
     'mission': 'quest',
     'objective': 'quest',
+    'task': 'quest',
     'sidequest_marker': 'sidequest',
     'loot_cache': 'loot',
     'treasure': 'loot',
     'stash': 'loot',
     'supply_depot': 'supply',
     'resources': 'supply',
+    'supplies': 'supply',
     'tools': 'toolbox',
     'workshop': 'toolbox',
     'scrap': 'scrapyard',
     'junk': 'junkyard',
+    'building': 'facility',
+    'structure': 'facility',
+    'location': 'poi',
+    'place': 'poi',
+    'site': 'poi',
+    'area': 'wasteland',
+    'zone': 'wasteland',
+    'region': 'wilderness',
+    'marker': 'poi',
     
     // Null/Invalid fallback
     'null': 'poi',
@@ -112,7 +138,8 @@
     '': 'poi',
     'unknown': 'poi',
     'default': 'poi',
-    'generic': 'poi'
+    'generic': 'poi',
+    'none': 'poi'
   };
 
   // Get valid icon name with fallback
@@ -122,29 +149,59 @@
     }
     return ICON_FALLBACK_MAP[iconKey] || iconKey;
   }
+  
+  // Create icon HTML with automatic fallback to poi.svg on error
+  // This ensures no POI ever shows as a broken image or default Leaflet marker
+  function createIconHTML(iconName, size = 32) {
+    return `<img src="/img/icons/${iconName}.svg" 
+            onerror="this.onerror=null; this.src='/img/icons/poi.svg';" 
+            style="width:${size}px;height:${size}px;display:block;" 
+            alt="${iconName}" />`;
+  }
 
   // safeFetchJSON: returns parsed JSON or null and logs diagnostics
   async function safeFetchJSON(url, opts = {}) {
     try {
-      const res = await fetch(url, opts);
+      // Normalize input: accept strings or simple objects containing a URL
+      let input = url;
+      if (typeof input === 'object' && input !== null) {
+        if (typeof input.url === 'string') input = input.url;
+        else if (typeof input.file === 'string') input = input.file;
+        else if (typeof input.path === 'string') input = input.path;
+        else {
+          console.warn('[safeFetchJSON] received non-string input, returning null', input);
+          return null;
+        }
+      }
+
+      if (typeof input !== 'string') {
+        console.warn('[safeFetchJSON] invalid URL type, returning null', input);
+        return null;
+      }
+
+      const fullUrl = input.startsWith('/api/') ? `${window.API_BASE}${input}` : input;
+      const res = await fetch(fullUrl, opts);
       if (!res.ok) {
         const text = await res.text().catch(() => "");
-        console.warn(`[safeFetchJSON] ${url} returned ${res.status} ${res.statusText}`, text.slice(0, 500));
+        console.warn(`[safeFetchJSON] ${input} returned ${res.status} ${res.statusText}`, text.slice(0, 500));
         return null;
       }
+
+      // Try parsing JSON safely
       const text = await res.text();
       if (!text) {
-        console.warn(`[safeFetchJSON] ${url} returned empty body`);
+        console.warn(`[safeFetchJSON] ${input} returned empty body`);
         return null;
       }
+
       try {
         return JSON.parse(text);
       } catch (err) {
-        console.warn(`[safeFetchJSON] ${url} returned invalid JSON (first 200 chars):`, text.slice(0, 200));
+        console.warn(`[safeFetchJSON] ${input} returned invalid JSON (first 200 chars):`, text.slice(0, 200));
         return null;
       }
     } catch (err) {
-      console.error(`[safeFetchJSON] failed to fetch ${url}:`, err && err.message ? err.message : err);
+      console.error(`[safeFetchJSON] failed to fetch ${typeof url === 'string' ? url : JSON.stringify(url)}:`, err && err.message ? err.message : err);
       return null;
     }
   }
@@ -167,6 +224,21 @@
     explorationMode: false,  // When true, disables auto-snap completely
     followTimeout: null,
     followDelay: 5000,
+    
+    // Mobile fix: retry configuration and state for container dimension check
+    containerRetryCount: 0,
+    maxContainerRetries: 10,
+    containerRetryDelayMs: 200,
+    mapInvalidateDelayMs: 150,
+    mapInvalidateDelayMsMobile: 400,
+    mapSecondInvalidateDelayMs: 300,
+    isRetrying: false,
+    
+    // Detect mobile device for longer delays
+    isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+        || window.innerWidth <= 768;
+    },
 
     // --------------------------------------------------------
     // INIT
@@ -179,8 +251,68 @@
       this.loadWorldOverlays();
     },
 
+    // Helper method to reset retry state
+    resetRetryState() {
+      this.containerRetryCount = 0;
+      this.isRetrying = false;
+    },
+
     onOpen() {
       console.log('[worldmap] onOpen called');
+      
+      // CRITICAL FOR MOBILE: Check if map container has dimensions before proceeding
+      const container = document.getElementById("mapContainer");
+      if (!container) {
+        console.warn('[worldmap] mapContainer element not found in DOM - cannot initialize map');
+        return;
+      }
+      
+      const rect = container.getBoundingClientRect();
+      console.log('[worldmap] container rect:', rect);
+      
+      // Force dimensions on mobile if CSS isn't working
+      if (this.isMobileDevice() && (rect.width === 0 || rect.height === 0)) {
+        console.log('[worldmap] forcing mobile container dimensions');
+        const panelBody = document.querySelector('#panel-map .panel-body');
+        if (panelBody) {
+          const panelRect = panelBody.getBoundingClientRect();
+          console.log('[worldmap] panel body rect:', panelRect);
+          if (panelRect.width > 0 && panelRect.height > 0) {
+            container.style.width = panelRect.width + 'px';
+            container.style.height = panelRect.height + 'px';
+            container.style.position = 'absolute';
+            container.style.top = '0';
+            container.style.left = '0';
+            console.log('[worldmap] forced container to:', container.style.width, container.style.height);
+          }
+        }
+      }
+      if (rect.width === 0 || rect.height === 0) {
+          // Guard against overlapping retry chains - only one retry chain can be active
+          if (this.isRetrying) {
+            console.warn('[worldmap] retry already in progress, skipping duplicate call');
+            return;
+          }
+          
+          if (this.containerRetryCount < this.maxContainerRetries) {
+            this.containerRetryCount++;
+            this.isRetrying = true;
+            console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), retry', this.containerRetryCount, '/', this.maxContainerRetries);
+            setTimeout(() => {
+              // Reset flag immediately before retry - this allows the retry to proceed
+              // but still blocks any external calls during the timeout
+              this.isRetrying = false;
+              this.onOpen();
+            }, this.containerRetryDelayMs);
+            return;
+          } else {
+            console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
+            this.resetRetryState(); // Reset for future attempts
+          }
+        } else {
+          console.log('[worldmap] container dimensions OK (width:', rect.width, 'height:', rect.height, ')');
+          this.resetRetryState(); // Reset on success
+        }
       
       // Initialize map if not yet created (happens after boot screen)
       if (!this.map) {
@@ -207,21 +339,35 @@
 
       this.renderWorldLabels();
 
-      // Force map to recalculate size and re-render
+      // Force map to recalculate size and re-render (increased delay for mobile)
+      // Use longer delay on mobile devices for proper layout calculation
+      const delay = this.isMobileDevice() ? this.mapInvalidateDelayMsMobile : this.mapInvalidateDelayMs;
+      console.log(`[worldmap] scheduling invalidateSize with ${delay}ms delay (mobile: ${this.isMobileDevice()})`);
+      
       setTimeout(() => {
         try {
           if (this.map) {
             console.log('[worldmap] invalidating map size and recentering...');
-            this.map.invalidateSize();
+            this.map.invalidateSize(true); // 'true' for animated resize
             const pos = this.gs.player.position;
             this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7);
             this.updateOverlayVisibility(this.map.getZoom() || 7);
             this.updateMapStatus('Map online - Ready');
+            
+            // Additional invalidation for mobile devices to ensure tiles load
+            if (this.isMobileDevice()) {
+              setTimeout(() => {
+                if (this.map) {
+                  console.log('[worldmap] second invalidateSize for mobile');
+                  this.map.invalidateSize(true);
+                }
+              }, this.mapSecondInvalidateDelayMs);
+            }
           }
         } catch (e) {
           console.error('[worldmap] error in onOpen timeout:', e);
         }
-      }, 100);
+      }, this.mapInvalidateDelayMs);
     },
 
     // --------------------------------------------------------
@@ -254,10 +400,10 @@
       }
       
       // Check if container is visible (not hidden by boot screen)
-      const pipboyScreen = document.getElementById('pipboyScreen');
-      if (pipboyScreen && pipboyScreen.classList.contains('hidden')) {
-        console.log('[worldmap] waiting for pipboyScreen to be visible...');
-        // Will be called by onOpen() when pipboyReady event fires
+      const wristScreen = document.getElementById('pipboyScreen') || document.getElementById('wristScreen');
+      if (wristScreen && wristScreen.classList.contains('hidden')) {
+        console.log('[worldmap] waiting for wristScreen to be visible...');
+        // Will be called by onOpen() when wristReady event fires
         return;
       }
       
@@ -283,26 +429,56 @@
           attributionControl: false,
           worldCopyJump: false,
           preferCanvas: true, // Better performance
-          // Mobile touch settings - prevent gestures from propagating
+          // Mobile touch settings - enable all touch interactions
           tap: true,
           tapTolerance: 15,
           touchZoom: true,
           dragging: true,
-          bounceAtZoomLimits: false
+          bounceAtZoomLimits: false,
+          // Additional mobile-friendly settings
+          scrollWheelZoom: true,
+          doubleClickZoom: true,
+          boxZoom: true,
+          keyboard: true,
+          // Inertia for smooth pan on mobile
+          inertia: true,
+          inertiaDeceleration: 3000,
+          inertiaMaxSpeed: 1500
         });
         console.log('[worldmap] Leaflet map object created successfully');
         
         // Prevent touch events from propagating outside map container (mobile swipe fix)
-        // Only stop propagation, don't prevent default as Leaflet needs those events
+        // This stops touch gestures from bubbling up to parent elements
+        // which could cause page scroll/navigation. We use passive: true to allow
+        // the browser to handle touch gestures smoothly - Leaflet handles its own events.
         container.addEventListener('touchstart', (e) => {
           e.stopPropagation();
         }, { passive: true });
+        
         container.addEventListener('touchmove', (e) => {
           e.stopPropagation();
         }, { passive: true });
+        
         container.addEventListener('touchend', (e) => {
           e.stopPropagation();
         }, { passive: true });
+        
+        // Also prevent any parent scrolling/gestures from interfering
+        const panelBody = document.querySelector('#panel-map .panel-body');
+        if (panelBody) {
+          panelBody.addEventListener('touchstart', (e) => {
+            // Only stop propagation if touch is on the map container
+            if (container.contains(e.target) || e.target === container) {
+              e.stopPropagation();
+            }
+          }, { passive: true });
+          
+          panelBody.addEventListener('touchmove', (e) => {
+            if (container.contains(e.target) || e.target === container) {
+              e.stopPropagation();
+            }
+          }, { passive: true });
+        }
         
       } catch (e) {
         console.error('[worldmap] failed to create map:', e);
@@ -318,32 +494,45 @@
         [20, 180]     // Southeast corner (covers all locations)
       ]);
 
-      // Tiles with offline fallback
+      // Tiles with offline fallback - use OpenStreetMap for better mobile compatibility
       const satelliteTiles = L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         { 
           minZoom: 0, 
           maxZoom: 19, 
           noWrap: true,
+          attribution: '© OpenStreetMap contributors',
           errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzA1MDcwNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMDBmZjQxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+T0ZGTElORTwvdGV4dD48L3N2Zz4='
         }
       );
       
-      // Add offline detection and fallback
+      // Track tile errors - only switch to offline after multiple failures
+      let tileErrorCount = 0;
+      const maxTileErrors = 10; // Allow more tile failures on mobile
+      
       satelliteTiles.on('tileerror', (e) => {
-        console.warn('[worldmap] tile load error, using offline mode');
-        // Switch to offline canvas-based tiles if all tiles fail
-        if (!this.tiles.offline) {
+        tileErrorCount++;
+        console.warn(`[worldmap] tile load error (${tileErrorCount}/${maxTileErrors})`);
+        
+        if (tileErrorCount >= maxTileErrors && !this.tiles.offline) {
+          console.warn('[worldmap] too many tile errors, switching to offline mode');
           this.switchToOfflineMode();
+        }
+      });
+      
+      // Reset error count on successful tile loads
+      satelliteTiles.on('tileload', () => {
+        if (tileErrorCount > 0) {
+          tileErrorCount = Math.max(0, tileErrorCount - 1); // Gradually reduce error count
         }
       });
       
       satelliteTiles.addTo(this.map);
       this.tiles = { satellite: satelliteTiles };
 
-      // Start view
+      // Start view - use zoom 15 initially (will snap to 18 when GPS locks)
       const pos = this.gs.player.position;
-      this.map.setView([pos.lat, pos.lng], 7);
+      this.map.setView([pos.lat, pos.lng], 15);
       
       // Update map status
       this.updateMapStatus('Initializing map...');
@@ -376,14 +565,16 @@
             // Use iconKey (from data) or icon (fallback) with proper fallback mapping
             const rawIconKey = poi.iconKey || poi.icon || 'poi';
             const iconName = getValidIcon(rawIconKey);
-            const icon = L.icon({
-              iconUrl: `/img/icons/${iconName}.svg`,
+            
+            // Create icon with fallback error handling using shared helper
+            const iconDiv = L.divIcon({
+              className: 'pipboy-poi-marker',
+              html: createIconHTML(iconName, 32),
               iconSize: [32, 32],
-              iconAnchor: [16, 16],
-              className: 'poi-marker'
+              iconAnchor: [16, 16]
             });
             
-            const marker = L.marker([poi.lat, poi.lng], { icon });
+            const marker = L.marker([poi.lat, poi.lng], { icon: iconDiv });
             
             // Enhanced popup with Fallout-style info
             const rarityColor = {
@@ -459,13 +650,18 @@
 
     // Initialize map control buttons
     initExplorationControls() {
+      console.log('[worldmap] Initializing exploration controls...');
       const exploreBtn = document.getElementById('exploreToggleBtn');
       if (exploreBtn) {
+        console.log('[worldmap] Explore button found, attaching event listener');
         exploreBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
+          console.log('[worldmap] Explore button clicked, toggling mode');
           this.toggleExplorationMode();
         });
+      } else {
+        console.warn('[worldmap] exploreToggleBtn element not found in DOM');
       }
     },
 
@@ -502,6 +698,7 @@
     // Toggle exploration mode - allows free map browsing without snap-back
     toggleExplorationMode() {
       this.explorationMode = !this.explorationMode;
+      console.log(`[worldmap] Exploration mode ${this.explorationMode ? 'ENABLED' : 'DISABLED'}`);
       
       // Clear any pending follow timeout
       if (this.followTimeout) {
@@ -511,9 +708,18 @@
       
       // Update UI button if it exists
       const btn = document.getElementById('exploreToggleBtn');
+      const textEl = document.getElementById('exploreText');
       if (btn) {
-        btn.textContent = this.explorationMode ? '📍 RETURN TO PLAYER' : '🔍 EXPLORE MAP';
         btn.classList.toggle('exploration-active', this.explorationMode);
+        // Update the text span if it exists, otherwise update button directly
+        if (textEl) {
+          textEl.textContent = this.explorationMode ? 'RETURN TO PLAYER' : 'EXPLORE MAP';
+        } else {
+          btn.textContent = this.explorationMode ? 'RETURN TO PLAYER' : 'EXPLORE MAP';
+        }
+        console.log('[worldmap] Button updated, exploration mode:', this.explorationMode);
+      } else {
+        console.warn('[worldmap] Could not find exploreToggleBtn to update');
       }
       
       // Show status message
@@ -541,7 +747,19 @@
       if (this.explorationMode && !fromGPS) return;
       const pos = this.gs.player.position;
       if (!fromGPS && !this.autoFollowEnabled) return;
-      this.map.panTo([pos.lat, pos.lng], { animate: true });
+      
+      // Use setView with zoom 18 for close-up view (about 400 feet above)
+      // This feels like being right above the player
+      const closeZoom = 18; // GPS locked view - close-up
+      const currentZoom = this.map.getZoom() || 15; // Fallback to 15 if not initialized
+      
+      // When GPS updates, snap to player with close zoom
+      if (fromGPS) {
+        this.map.setView([pos.lat, pos.lng], closeZoom, { animate: true });
+      } else {
+        // Manual centering preserves current zoom level
+        this.map.setView([pos.lat, pos.lng], currentZoom, { animate: true });
+      }
     },
 
     // --------------------------------------------------------
@@ -726,6 +944,64 @@
       
       // Show offline message
       this.showMapMessage('MAP OFFLINE - Using grid mode');
+      
+      // Show retry button
+      const retryBtn = document.getElementById('retryMapBtn');
+      if (retryBtn) {
+        retryBtn.style.display = 'block';
+        retryBtn.onclick = () => this.trySwitchToOnlineMode();
+      }
+    },
+
+    // Try to switch back to online tiles
+    trySwitchToOnlineMode() {
+      if (!this.tiles.offline) return; // Not in offline mode
+      
+      console.log('[worldmap] attempting to switch back to online tiles');
+      
+      // Create new satellite tiles
+      const satelliteTiles = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        { 
+          minZoom: 0, 
+          maxZoom: 19, 
+          noWrap: true,
+          attribution: '© OpenStreetMap contributors',
+          errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzA1MDcwNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMDBmZjQxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+T0ZGTElORTwvdGV4dD48L3N2Zz4='
+        }
+      );
+      
+      let tileErrorCount = 0;
+      const maxTileErrors = 3; // Be more lenient when trying to go back online
+      
+      satelliteTiles.on('tileerror', (e) => {
+        tileErrorCount++;
+        if (tileErrorCount >= maxTileErrors) {
+          console.warn('[worldmap] still having tile issues, staying offline');
+          this.showMapMessage('Still offline - check connection');
+        }
+      });
+      
+      satelliteTiles.on('tileload', () => {
+        // If we successfully load some tiles, switch to online mode
+        if (this.tiles.offline) {
+          console.log('[worldmap] tiles loading successfully, switching to online mode');
+          this.map.removeLayer(this.tiles.offline);
+          delete this.tiles.offline;
+          this.tiles.satellite = satelliteTiles;
+          this.showMapMessage('Map online!');
+          
+          // Hide retry button
+          const retryBtn = document.getElementById('retryMapBtn');
+          if (retryBtn) {
+            retryBtn.style.display = 'none';
+          }
+        }
+      });
+      
+      // Add the new tiles (they'll load in background)
+      satelliteTiles.addTo(this.map);
+      this.tiles.satellite = satelliteTiles;
     },
 
     // --------------------------------------------------------
@@ -792,11 +1068,13 @@
       // Use SVG icon from the icon field, with proper fallback mapping for missing icons
       const rawIconKey = loc.icon || loc.iconKey || 'poi';
       const iconName = getValidIcon(rawIconKey);
-      const icon = L.icon({
-        iconUrl: `/img/icons/${iconName}.svg`,
+      
+      // Create divIcon with embedded image and onerror handler using shared helper
+      const icon = L.divIcon({
+        className: `pipboy-poi-marker poi-marker-${rarity}`,
+        html: createIconHTML(iconName, 28),
         iconSize: [28, 28],
-        iconAnchor: [14, 14],
-        className: `poi-marker poi-marker-${rarity}`
+        iconAnchor: [14, 14]
       });
 
       const marker = L.marker([loc.lat, loc.lng], { icon });
@@ -954,14 +1232,33 @@
 
   Game.modules.worldmap = worldmapModule;
 
-  // Listen for pipboyReady event instead of DOMContentLoaded
-  // This ensures map initializes AFTER boot screen is hidden
-  window.addEventListener('pipboyReady', () => {
-    console.log('[worldmap] pipboyReady event received, initializing...');
+  // Listen for wristReady and pipboyReady events to initialize map
+  window.addEventListener('wristReady', () => {
+    console.log('[worldmap] wristReady event received, initializing...');
     if (worldmapModule.onOpen) {
-      worldmapModule.onOpen();
+      // Use requestAnimationFrame to wait for browser reflow after hidden class is removed
+      // This ensures the container has proper dimensions before we try to initialize
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          worldmapModule.onOpen();
+        });
+      });
     }
   });
 
-  console.log('[worldmap] module loaded, waiting for pipboyReady event');
+  // Legacy support
+  window.addEventListener('pipboyReady', () => {
+    console.log('[worldmap] pipboyReady event received, initializing (legacy)...');
+    if (worldmapModule.onOpen) {
+      // Use requestAnimationFrame to wait for browser reflow after hidden class is removed
+      // This ensures the container has proper dimensions before we try to initialize
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          worldmapModule.onOpen();
+        });
+      });
+    }
+  });
+
+  console.log('[worldmap] module loaded, waiting for wristReady / pipboyReady events');
 })();

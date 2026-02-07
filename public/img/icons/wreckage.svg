@@ -1,6 +1,6 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Destroyed structure -->
-  <path d="M4 20 L6 14 L8 16 L10 10 L12 14 L14 8 L16 12 L18 6 L20 20 Z" fill="currentColor"/>
-  <circle cx="8" cy="18" r="1" fill="white"/>
-  <circle cx="16" cy="17" r="1.5" fill="white"/>
+  <path d="M4 20 L6 14 L8 16 L10 10 L12 14 L14 8 L16 12 L18 6 L20 20 Z" fill="#00ff41"/>
+  <circle cx="8" cy="18" r="1" fill="#0a1a0a"/>
+  <circle cx="16" cy="17" r="1.5" fill="#0a1a0a"/>
 </svg>

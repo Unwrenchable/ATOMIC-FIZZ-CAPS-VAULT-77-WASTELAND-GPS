@@ -7,7 +7,7 @@
     C10.5 18 13.5 18 15 16
     C17 14 17 11 16 9
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Tied top -->
   <path d="
@@ -16,10 +16,10 @@
     L15 9
     H9
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Knot cutout -->
-  <rect x="11" y="8" width="2" height="1" fill="white"/>
+  <rect x="11" y="8" width="2" height="1" fill="#0a1a0a"/>
 
   <!-- Seam cutout -->
   <path d="

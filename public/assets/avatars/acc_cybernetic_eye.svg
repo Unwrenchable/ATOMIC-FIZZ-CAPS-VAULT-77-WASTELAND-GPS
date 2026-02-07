@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <!-- Cybernetic metal gradients -->
+    <radialGradient id="cyberMetal" cx="40%" cy="40%">
+      <stop offset="0%" stop-color="#5a5a5a"/>
+      <stop offset="50%" stop-color="#3a3a3a"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
+    </radialGradient>
+    <!-- Glowing LED core -->
+    <radialGradient id="ledGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#ff4444"/>
+      <stop offset="40%" stop-color="#ff0000"/>
+      <stop offset="70%" stop-color="#aa0000" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#880000" stop-opacity="0.3"/>
+    </radialGradient>
+    <!-- Scanner beam -->
+    <linearGradient id="scanBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff0000" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#ff0000" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ff0000" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer housing/frame -->
+  <circle cx="156" cy="120" r="18" fill="url(#cyberMetal)" stroke="#0a0a0a" stroke-width="2" opacity="0.95"/>
+  
+  <!-- Panel lines and segments -->
+  <g opacity="0.7" stroke="#4a4a4a" stroke-width="1" fill="none">
+    <path d="M156 102v36"/>
+    <path d="M138 120h36"/>
+    <circle cx="156" cy="120" r="14"/>
+    <circle cx="156" cy="120" r="10"/>
+  </g>
+  
+  <!-- Inner mechanics/lens housing -->
+  <circle cx="156" cy="120" r="14" fill="#1a1a1a" opacity="0.9"/>
+  
+  <!-- Lens/optical element -->
+  <circle cx="156" cy="120" r="10" fill="#2a0000" opacity="0.95"/>
+  
+  <!-- LED/power indicator (glowing red) -->
+  <circle cx="156" cy="120" r="7" fill="url(#ledGlow)"/>
+  
+  <!-- Central targeting reticle -->
+  <circle cx="156" cy="120" r="4" fill="#ff4444" opacity="0.9"/>
+  
+  <!-- Brightest center point -->
+  <circle cx="156" cy="120" r="2" fill="#ff6666"/>
+  
+  <!-- Crosshair targeting system -->
+  <g opacity="0.8" stroke="#ff3333" stroke-width="1.2" fill="none">
+    <path d="M156 113v14"/>
+    <path d="M149 120h14"/>
+    <circle cx="156" cy="120" r="5"/>
+  </g>
+  
+  <!-- Mounting brackets/screws -->
+  <g fill="#2a2a2a">
+    <circle cx="150" cy="108" r="2"/>
+    <circle cx="162" cy="108" r="2"/>
+    <circle cx="150" cy="132" r="2"/>
+    <circle cx="162" cy="132" r="2"/>
+  </g>
+  
+  <!-- Screw heads detail -->
+  <g opacity="0.6" stroke="#1a1a1a" stroke-width="0.8">
+    <path d="M149 108l2 0"/>
+    <path d="M161 108l2 0"/>
+    <path d="M149 132l2 0"/>
+    <path d="M161 132l2 0"/>
+  </g>
+  
+  <!-- Diagnostic grid overlay -->
+  <g opacity="0.3" stroke="#4a4a4a" stroke-width="0.5" fill="none">
+    <path d="M150 114l12 12M168 114l-12 12"/>
+    <circle cx="156" cy="120" r="8"/>
+  </g>
+  
+  <!-- Wiring/connection points -->
+  <g opacity="0.6" stroke="#5a5a5a" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <path d="M144 118c-3-2-6-4-8-6"/>
+    <path d="M143 122c-4 0-7 1-10 3"/>
+  </g>
+  
+  <!-- Circuitry traces -->
+  <g opacity="0.4" stroke="#6a6a6a" stroke-width="0.8" fill="none">
+    <path d="M147 112c-2-1-4-2-6-2"/>
+    <path d="M147 128c-2 1-4 2-6 2"/>
+    <path d="M165 112c2-1 4-2 6-2"/>
+  </g>
+  
+  <!-- Status LEDs (small indicators) -->
+  <g fill="#00ff00" opacity="0.7">
+    <circle cx="148" cy="110" r="0.8"/>
+    <circle cx="164" cy="110" r="0.8"/>
+  </g>
+  
+  <!-- Scanner beam effect -->
+  <ellipse cx="156" cy="120" rx="8" ry="2" fill="url(#scanBeam)" opacity="0.6" transform="rotate(45 156 120)"/>
+  
+  <!-- Highlight/reflection on metal -->
+  <path d="M150 108c2-2 4-3 6-3" fill="none" stroke="#7a7a7a" 
+        stroke-width="1.5" opacity="0.6" stroke-linecap="round"/>
+  
+  <!-- Damage/weathering -->
+  <g opacity="0.3">
+    <ellipse cx="151" cy="115" rx="2" ry="1" fill="#2a2a2a"/>
+    <path d="M160 126l3 2" stroke="#2a2a2a" stroke-width="0.8" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Glow effect around entire assembly -->
+  <circle cx="156" cy="120" r="20" fill="none" stroke="#ff0000" stroke-width="0.5" opacity="0.2"/>
+  <circle cx="156" cy="120" r="22" fill="none" stroke="#ff0000" stroke-width="0.3" opacity="0.1"/>
+</svg>

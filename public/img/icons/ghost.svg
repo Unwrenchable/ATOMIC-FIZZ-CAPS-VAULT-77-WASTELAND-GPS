@@ -12,17 +12,17 @@
     V9
     C17 6 15 4 12 4
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Eyes -->
-  <circle cx="10" cy="9" r="1" fill="white"/>
-  <circle cx="14" cy="9" r="1" fill="white"/>
+  <circle cx="10" cy="9" r="1" fill="#0a1a0a"/>
+  <circle cx="14" cy="9" r="1" fill="#0a1a0a"/>
 
   <!-- Mouth -->
   <path d="
     M11 12
     C11 13 13 13 13 12
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
 </svg>

@@ -29,18 +29,39 @@
     loadingDialogs: {},   // dialogId -> Promise
     currentDialogId: null,
     lastPanelId: null,
+    isInitialized: false,
+    escKeyHandler: null,
 
     init() {
-      // Wire dialog close button
-      document.addEventListener("DOMContentLoaded", () => {
-        const closeBtn = document.getElementById("dialogCloseBtn");
-        if (closeBtn) {
-          closeBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            this.closeDialog();
-          });
+      // Prevent double initialization
+      if (this.isInitialized) {
+        console.warn("[narrative] Already initialized, skipping");
+        return;
+      }
+      this.isInitialized = true;
+      
+      // Wire dialog close button (remove nested DOMContentLoaded - we're already in one!)
+      const closeBtn = document.getElementById("dialogCloseBtn");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          this.closeDialog();
+        });
+        console.log("[narrative] Close button wired");
+      } else {
+        console.warn("[narrative] Close button not found in DOM");
+      }
+      
+      // Add ESC key listener as backup exit method (store reference to prevent duplicates)
+      this.escKeyHandler = (e) => {
+        if (e.key === "Escape" && this.currentDialogId) {
+          console.log("[narrative] ESC pressed, closing dialogue");
+          this.closeDialog();
         }
-      });
+      };
+      document.addEventListener("keydown", this.escKeyHandler);
+      
+      console.log("[narrative] Initialized with close handlers");
     },
 
     // Public API: open dialog for an NPC id, e.g. "rex", "mother", "jax"
@@ -143,12 +164,59 @@
         });
       }
 
-      // Offer quest if present
-      if (node.offers_quest && Game.modules && Game.modules.main && typeof Game.modules.main.activateQuest === "function") {
-        try {
-          Game.modules.main.activateQuest(node.offers_quest);
-        } catch (e) {
-          console.error("narrative: failed to activate quest", node.offers_quest, e);
+      // Offer quest if present - try multiple quest systems for compatibility
+      if (node.offers_quest) {
+        const questId = node.offers_quest;
+        let questActivated = false;
+        
+        // Try the unified quests module first (newer system)
+        if (Game.modules?.quests) {
+          try {
+            // Accept the quest if it's available, otherwise start it directly
+            if (Game.modules.quests.availableQuests?.[questId]) {
+              Game.modules.quests.acceptQuest(questId);
+              questActivated = true;
+              console.log("[narrative] Quest accepted via unified quests module:", questId);
+            } else {
+              Game.modules.quests.startQuest(questId);
+              questActivated = true;
+              console.log("[narrative] Quest started via unified quests module:", questId);
+            }
+          } catch (e) {
+            console.warn("[narrative] unified quests module failed:", e);
+          }
+        }
+        
+        // Fallback to Game.quests (also points to quests module)
+        if (!questActivated && Game.quests) {
+          try {
+            if (Game.quests.availableQuests?.[questId]) {
+              Game.quests.acceptQuest(questId);
+              questActivated = true;
+              console.log("[narrative] Quest accepted via Game.quests:", questId);
+            } else {
+              Game.quests.startQuest(questId);
+              questActivated = true;
+              console.log("[narrative] Quest started via Game.quests:", questId);
+            }
+          } catch (e) {
+            console.warn("[narrative] Game.quests failed:", e);
+          }
+        }
+        
+        // Final fallback to main.js activateQuest (legacy system)
+        if (!questActivated && Game.modules?.main?.activateQuest) {
+          try {
+            Game.modules.main.activateQuest(questId);
+            questActivated = true;
+            console.log("[narrative] Quest activated via main module:", questId);
+          } catch (e) {
+            console.error("[narrative] failed to activate quest via main:", questId, e);
+          }
+        }
+        
+        if (!questActivated) {
+          console.warn("[narrative] Could not activate quest - no quest system available:", questId);
         }
       }
 
@@ -281,6 +349,12 @@
       const npcName = escapeHtml(dialog.npc || dialog.title || dialog.id || "Unknown");
       const npcDescription = escapeHtml(dialog.description || "");
       
+      // Update the NPC name label in the portrait area
+      const npcNameEl = document.getElementById("dialogNPCName");
+      if (npcNameEl) {
+        npcNameEl.textContent = npcName;
+      }
+      
       // Escape HTML first, then convert \n to <br> for proper line breaks
       const formattedText = escapeHtml(node.text || "").replace(/\n/g, "<br>");
 
@@ -316,6 +390,8 @@
       `;
 
       panel.innerHTML = html;
+      
+      console.log("[narrative] Rendered node:", node.id, "for NPC:", npcName);
     },
 
     showDialogPanel() {

@@ -29,7 +29,7 @@ async function adminLogin() {
     statusEl.textContent = "Login successful";
 
     // Redirect to dashboard (next step)
-    window.location.href = "/admin/dashboard.html";
+    window.location.href = "/admin/dashboard";
 
   } catch (err) {
     console.error(err);

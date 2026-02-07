@@ -1,5 +1,5 @@
 /* ============================================================
-   ROOT LAYOUT — PIP-BOY 3000 (NEW VEGAS STYLE)
+   ROOT LAYOUT — WRIST UI 3000 (AFTERFALL STYLE)
    ============================================================ */
 
 html, body {
@@ -251,6 +251,9 @@ body.pipboy-mode {
   width: 100%;
   height: 100%;
   background: transparent;
+  /* Touch-action allows pan and pinch-zoom gestures */
+  touch-action: pan-x pan-y pinch-zoom !important;
+  pointer-events: auto !important;
 }
 
 #mapContainer .leaflet-tile {
@@ -322,45 +325,60 @@ body.pipboy-mode {
 
 /* ============================================================
    MAP INTERACTION FIX
+   Enables touch gestures (pan, pinch-zoom) on mobile devices
+   while preventing page-level swipe/scroll interference
    ============================================================ */
 
 #mapContainer {
   pointer-events: auto !important;
-  touch-action: none !important;
+  /* Allow Leaflet to handle its own touch gestures - don't override */
   -webkit-user-select: none;
   user-select: none;
+  /* Prevent scroll chaining to parent containers */
+  overscroll-behavior: contain;
 }
 
-/* Leaflet container handles its own touch actions - allow pan and pinch-zoom */
-#mapContainer .leaflet-container {
-  touch-action: pan-x pan-y pinch-zoom !important;
+/* Leaflet panes and tile layers should allow touch through */
+#mapContainer .leaflet-pane,
+#mapContainer .leaflet-tile-pane,
+#mapContainer .leaflet-overlay-pane {
+  /* Let Leaflet handle touch - don't override */
   pointer-events: auto !important;
 }
 
 /* Map panel should not interfere with map touch events */
 #panel-map {
   overflow: hidden !important;
-  touch-action: none !important;
+  /* Allow touch to pass through to map - don't override Leaflet */
 }
 
 #panel-map .panel-body {
   overflow: hidden !important;
-  touch-action: none !important;
+  /* Let Leaflet control touch behavior */
+  overscroll-behavior: contain;
 }
 
 /* Prevent parent elements from capturing touch events */
 .pipboy-map {
-  touch-action: none !important;
+  /* Let Leaflet handle map gestures */
   -webkit-overflow-scrolling: auto !important;
+  overscroll-behavior: contain;
+}
+
+/* Ensure radFlash and other overlays don't block touches */
+#radFlash,
+#mapContainer::before,
+#mapContainer::after {
+  pointer-events: none !important;
 }
 
 .leaflet-control-container { display: none; }
 
 /* ============================================================
-   PIPBOY BUTTONS - FALLOUT THEMED
+   WRIST UI BUTTONS - AFTERFALL THEMED
    ============================================================ */
 
-/* Base button style - Vault-Tec terminal aesthetic */
+/* Base button style - HavenTech terminal aesthetic */
 button,
 .pipboy-button,
 .pipboy-button-small {
@@ -669,4 +687,28 @@ input[type="reset"]:hover {
 .starter-gear-item::before {
   content: "• ";
   color: #00ff41;
+}
+
+/* ============================================================
+   QUEST PANEL STYLES
+   ============================================================ */
+
+.pip-entry {
+  margin-bottom: 12px;
+  padding: 8px;
+  background: rgba(0, 255, 65, 0.05);
+  border-radius: 4px;
+}
+
+.pip-entry.active {
+  border-left: 3px solid #00ff41;
+}
+
+.pip-entry.done {
+  opacity: 0.6;
+}
+
+.pip-entry.available-quest {
+  border-left: 3px solid #ffaa00;
+  background: rgba(255, 170, 0, 0.05);
 }

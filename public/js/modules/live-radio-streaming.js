@@ -73,7 +73,7 @@
     async checkLiveStatus() {
       // Check API for current live stream status
       try {
-        const response = await fetch('/api/radio/live-status');
+        const response = await fetch(`${window.API_BASE}/api/radio/live-status`);
         if (response.ok) {
           const data = await response.json();
           if (data.isLive) {
@@ -88,7 +88,7 @@
     setupEventListeners() {
       // Server-sent events for live stream updates
       if (window.EventSource) {
-        const eventSource = new EventSource('/api/radio/live-events');
+        const eventSource = new EventSource(`${window.API_BASE}/api/radio/live-events`);
         
         eventSource.addEventListener('stream-started', (e) => {
           const data = JSON.parse(e.data);
@@ -355,7 +355,7 @@
       };
 
       // Send to server
-      fetch('/api/radio/live-chat', {
+      fetch(`${window.API_BASE}/api/radio/live-chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(chatMessage)
@@ -554,7 +554,7 @@
 
       // Send to server to start live stream for all players
       try {
-        const response = await fetch('/api/radio/start-live', {
+        const response = await fetch(`${window.API_BASE}/api/radio/start-live`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url, type, metadata })
@@ -580,7 +580,7 @@
 
     async adminEndStream() {
       try {
-        const response = await fetch('/api/radio/end-live', {
+        const response = await fetch(`${window.API_BASE}/api/radio/end-live`, {
           method: 'POST'
         });
 

@@ -8,7 +8,7 @@
     L14 6
     L21 18
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Cave mouth cutout -->
   <path d="
@@ -16,7 +16,7 @@
     C10 15 11 13 12 13
     C13 13 14 15 14 18
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <!-- Inner cave depth cutout -->
   <path d="
@@ -24,6 +24,6 @@
     C11 16 11.5 15 12 15
     C12.5 15 13 16 13 18
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
 </svg>

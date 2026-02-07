@@ -90,11 +90,26 @@
 .cc-main {
   display: flex;
   min-height: 500px;
+  max-height: calc(100vh - 200px);
+  overflow: hidden;
 }
 
 @media (max-width: 768px) {
   .cc-main {
     flex-direction: column;
+    max-height: none;
+    overflow: visible;
+  }
+  
+  .cc-options-panel {
+    max-height: 60vh;
+    overflow: hidden;
+  }
+  
+  .cc-options-content {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(60vh - 100px);
   }
 }
 
@@ -219,6 +234,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: 0;
 }
 
 /* Category tabs */
@@ -258,7 +274,10 @@
 .cc-options-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 8px;
+  min-height: 0;
+  max-height: 100%;
 }
 
 /* Option category section */

@@ -1,6 +1,7 @@
 [
-  { "id": "humming_resonator", "name": "Humming Resonator", "type": "quest", "tags": ["humming_one"] },
-  { "id": "anomaly_stabilizer", "name": "Anomaly Stabilizer", "type": "quest", "tags": ["anomaly"] },
-  { "id": "signal_triangulator", "name": "Signal Triangulator", "type": "quest", "tags": ["signal"] },
-  { "id": "vault_override_chip", "name": "Vault Override Chip", "type": "quest", "tags": ["vault"] }
+  { "id": "humming_resonator", "name": "Humming Resonator", "type": "questItem", "tags": ["humming_one"] },
+  { "id": "anomaly_stabilizer", "name": "Anomaly Stabilizer", "type": "questItem", "tags": ["anomaly"] },
+  { "id": "signal_triangulator", "name": "Signal Triangulator", "type": "questItem", "tags": ["signal"] },
+  { "id": "vault_override_chip", "name": "Vault Override Chip", "type": "questItem", "tags": ["vault"] },
+  { "id": "pru_stabilizer_shard", "name": "PRU Stabilizer Shard", "type": "questItem", "description": "A fragment of temporal stabilization technology. Resonates with faint echoes of divergent timelines.", "tags": ["wake_up", "pru", "timeline"] }
 ]

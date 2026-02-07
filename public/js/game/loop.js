@@ -30,14 +30,24 @@
   // Region Change Handler
   // ------------------------------------------------------------
   function handleRegionChange() {
+    // Guard: ensure WorldState and Regions are available with required methods
+    if (!WorldState || typeof WorldState.getRegion !== "function") {
+      return;
+    }
+    if (!Regions || typeof Regions.get !== "function") {
+      return;
+    }
+
     const regionId = WorldState.getRegion();
     if (regionId !== lastRegion) {
       lastRegion = regionId;
 
       const region = Regions.get(regionId);
 
-      // Weather reacts to region
-      Weather.updateWeather(region);
+      // Weather reacts to region (guard: Weather may not be available)
+      if (Weather && typeof Weather.updateWeather === "function") {
+        Weather.updateWeather(region);
+      }
 
       // Overseer reacts to region change
       if (window.overseer && typeof window.overseer.handleGameEvent === "function") {
@@ -64,30 +74,57 @@
   // World Tick
   // ------------------------------------------------------------
   function worldTick() {
+    // Guard: ensure WorldState is available and has the required method
+    if (!WorldState || typeof WorldState.getRegion !== "function") {
+      return;
+    }
+
     const regionId = WorldState.getRegion();
+
+    // Guard: ensure Regions is available before using it
+    if (!Regions || typeof Regions.get !== "function") {
+      return;
+    }
+
     const region = Regions.get(regionId);
 
     // 1. Region change detection
     handleRegionChange();
 
-    // 2. Weather tick
-    Weather.tick(region);
+    // 2. Weather update (guard: Weather may not be available)
+    // Note: tick() is preferred if available, otherwise fall back to updateWeather()
+    if (Weather) {
+      if (typeof Weather.tick === "function") {
+        Weather.tick(region);
+      } else if (typeof Weather.updateWeather === "function") {
+        Weather.updateWeather(region);
+      }
+    }
 
-    // 3. Timeline instability tick
-    if (Math.random() < 0.05) {
+    // 3. Timeline instability tick (guard: methods may not exist)
+    const hasInstabilityMethods =
+      typeof WorldState.getGlobalInstability === "function" &&
+      typeof WorldState.setGlobalInstability === "function";
+    if (hasInstabilityMethods && Math.random() < 0.05) {
       const instability = WorldState.getGlobalInstability() + 0.01;
       WorldState.setGlobalInstability(instability);
     }
 
-    // 4. Anomaly drift
-    const anomaly = WorldState.getAnomalyLevel(regionId);
-    if (Math.random() < 0.1) {
-      const drift = Math.max(0, Math.min(1, anomaly + (Math.random() * 0.1 - 0.05)));
-      WorldState.setAnomalyLevel(regionId, drift);
+    // 4. Anomaly drift (guard: methods may not exist)
+    const hasAnomalyMethods =
+      typeof WorldState.getAnomalyLevel === "function" &&
+      typeof WorldState.setAnomalyLevel === "function";
+    if (hasAnomalyMethods) {
+      const anomaly = WorldState.getAnomalyLevel(regionId);
+      if (Math.random() < 0.1) {
+        const drift = Math.max(0, Math.min(1, anomaly + (Math.random() * 0.1 - 0.05)));
+        WorldState.setAnomalyLevel(regionId, drift);
+      }
     }
 
-    // 5. Random encounter
-    if (Math.random() < ENCOUNTER_CHANCE) {
+    // 5. Random encounter (guard: Encounters may not be available)
+    const canRollEncounter = Encounters && typeof Encounters.rollEncounter === "function";
+    if (canRollEncounter && Math.random() < ENCOUNTER_CHANCE) {
       const encounter = Encounters.rollEncounter();
       const key = getEncounterKey(encounter);
       const now = Date.now();

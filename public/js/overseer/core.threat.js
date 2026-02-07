@@ -63,7 +63,7 @@
       return THREAT_LEVELS[4];
     },
 
-    scan() {
+    async scan() {
       const encounters = window.encounters;
       if (!encounters || !encounters.getNearbyEncounter) {
         overseerSay("Threat scanner offline. Encounter subsystem not linked.");
@@ -81,7 +81,10 @@
         overseerSay(`Danger Rating: ${encounter.danger}`);
       }
 
-      overseerSay(personality.speak());
+      if (personality && typeof personality.speak === "function") {
+        const line = await personality.speak("threat assessment");
+        overseerSay(line);
+      }
       return level.id;
     },
 
@@ -103,7 +106,7 @@
   if (!window.overseerHandlers) window.overseerHandlers = {};
   const handlers = window.overseerHandlers;
 
-  handlers.threat = function (args) {
+  handlers.threat = async function (args) {
     const sub = (args[0] || "").toLowerCase();
 
     if (!sub) {
@@ -115,7 +118,7 @@
     }
 
     if (sub === "scan") {
-      threatApi.scan();
+      await threatApi.scan();
       return;
     }
 
@@ -123,7 +126,10 @@
       const level = threatApi.randomThreat();
       overseerSay(`Simulated Threat Level: ${level.label}`);
       overseerSay(level.description);
-      overseerSay(personality.speak());
+      if (personality && typeof personality.speak === "function") {
+        const line = await personality.speak("threat simulation");
+        overseerSay(line);
+      }
       return;
     }
 

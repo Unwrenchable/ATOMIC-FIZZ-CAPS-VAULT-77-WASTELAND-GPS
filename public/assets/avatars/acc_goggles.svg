@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <!-- Goggle lens gradient (tinted) -->
+    <radialGradient id="goggleLens" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#8a6a4a"/>
+      <stop offset="60%" stop-color="#6a4a2a"/>
+      <stop offset="100%" stop-color="#4a2a0a"/>
+    </radialGradient>
+    <!-- Frame metal gradient -->
+    <linearGradient id="frameGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#5a5a5a"/>
+      <stop offset="50%" stop-color="#7a7a7a"/>
+      <stop offset="100%" stop-color="#5a5a5a"/>
+    </linearGradient>
+    <!-- Leather strap -->
+    <linearGradient id="strapGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a3a2a"/>
+      <stop offset="100%" stop-color="#3a2a1a"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Left goggle assembly -->
+  <!-- Outer frame/rim -->
+  <circle cx="100" cy="120" r="20" fill="url(#frameGrad)" stroke="#3a3a3a" stroke-width="2"/>
+  
+  <!-- Inner lens mount -->
+  <circle cx="100" cy="120" r="17" fill="url(#goggleLens)" stroke="#2a2a2a" stroke-width="1.5"/>
+  
+  <!-- Lens surface reflection -->
+  <ellipse cx="95" cy="115" rx="8" ry="10" fill="#ffffff" opacity="0.25"/>
+  <ellipse cx="92" cy="113" rx="4" ry="5" fill="#ffffff" opacity="0.4"/>
+  
+  <!-- Lens scratches -->
+  <g opacity="0.3" stroke="#8a8a8a" stroke-width="0.8" fill="none" stroke-linecap="round">
+    <path d="M90 115l8 6"/>
+    <path d="M105 125l-6 -4"/>
+  </g>
+  
+  <!-- Lens rivets/screws -->
+  <circle cx="92" cy="108" r="2" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="0.8"/>
+  <circle cx="108" cy="108" r="2" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="0.8"/>
+  <circle cx="92" cy="132" r="2" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="0.8"/>
+  <circle cx="108" cy="132" r="2" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="0.8"/>
+  
+  <!-- Right goggle assembly -->
+  <!-- Outer frame/rim -->
+  <circle cx="156" cy="120" r="20" fill="url(#frameGrad)" stroke="#3a3a3a" stroke-width="2"/>
+  
+  <!-- Inner lens mount -->
+  <circle cx="156" cy="120" r="17" fill="url(#goggleLens)" stroke="#2a2a2a" stroke-width="1.5"/>
+  
+  <!-- Lens surface reflection -->
+  <ellipse cx="151" cy="115" rx="8" ry="10" fill="#ffffff" opacity="0.25"/>
+  <ellipse cx="148" cy="113" rx="4" ry="5" fill="#ffffff" opacity="0.4"/>
+  
+  <!-- Lens scratches -->
+  <g opacity="0.3" stroke="#8a8a8a" stroke-width="0.8" fill="none" stroke-linecap="round">
+    <path d="M146 116l8 5"/>
+    <path d="M161 126l-6 -5"/>
+  </g>
+  
+  <!-- Lens rivets/screws -->
+  <circle cx="148" cy="108" r="2" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="0.8"/>
+  <circle cx="164" cy="108" r="2" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="0.8"/>
+  <circle cx="148" cy="132" r="2" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="0.8"/>
+  <circle cx="164" cy="132" r="2" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="0.8"/>
+  
+  <!-- Bridge connecting goggles -->
+  <rect x="118" y="117" width="20" height="6" fill="url(#frameGrad)" stroke="#3a3a3a" stroke-width="1.5" rx="2"/>
+  
+  <!-- Bridge rivets -->
+  <circle cx="122" cy="120" r="1.5" fill="#4a4a4a"/>
+  <circle cx="134" cy="120" r="1.5" fill="#4a4a4a"/>
+  
+  <!-- Left side strap attachment -->
+  <rect x="72" y="116" width="10" height="8" fill="url(#frameGrad)" stroke="#2a2a2a" stroke-width="1" rx="1"/>
+  <circle cx="77" cy="120" r="2" fill="#3a3a3a"/>
+  
+  <!-- Right side strap attachment -->
+  <rect x="174" y="116" width="10" height="8" fill="url(#frameGrad)" stroke="#2a2a2a" stroke-width="1" rx="1"/>
+  <circle cx="179" cy="120" r="2" fill="#3a3a3a"/>
+  
+  <!-- Head strap (left side) -->
+  <path d="M75 108c-6-3-12-6-18-8c-5-2-10-4-14-5" 
+        fill="none" stroke="url(#strapGrad)" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Head strap (right side) -->
+  <path d="M181 108c6-3 12-6 18-8c5-2 10-4 14-5" 
+        fill="none" stroke="url(#strapGrad)" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Strap stitching detail -->
+  <g opacity="0.5" stroke="#2a1a0a" stroke-width="0.8" fill="none">
+    <path d="M45 96l2 0M50 98l2 0M55 100l2 0M60 102l2 0M65 104l2 0"/>
+    <path d="M211 96l-2 0M206 98l-2 0M201 100l-2 0M196 102l-2 0M191 104l-2 0"/>
+  </g>
+  
+  <!-- Weathering on frame -->
+  <g opacity="0.3" fill="#3a3a3a">
+    <ellipse cx="95" cy="105" rx="2" ry="1.5"/>
+    <ellipse cx="161" cy="107" rx="2.5" ry="1.5"/>
+    <ellipse cx="105" cy="135" rx="2" ry="1"/>
+  </g>
+  
+  <!-- Additional realism: dust/dirt on lenses -->
+  <g opacity="0.15" fill="#4a3a2a">
+    <circle cx="97" cy="123" r="1.5"/>
+    <circle cx="103" cy="118" r="1"/>
+    <circle cx="153" cy="124" r="1.5"/>
+    <circle cx="159" cy="117" r="1"/>
+  </g>
+  
+  <!-- Glare highlights on metal frame -->
+  <g opacity="0.6" stroke="#a0a0a0" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <path d="M90 105c3-2 6-3 10-3"/>
+    <path d="M146 105c3-2 6-3 10-3"/>
+  </g>
+</svg>
