@@ -1,8 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <path d="M62 82c10-22 40-38 84-28 28 6 44 20 50 40 4 14-2 28-10 36-10 10-26 14-44 12-24-2-44-10-60-22-14-10-22-24-20-38z" fill="#3b2b24"/>
-  <path d="M75 98c-8 6-12 14-10 24 2 8 8 14 18 16" stroke="#2b1b14" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <path d="M181 98c8 6 12 14 10 24-2 8-8 14-18 16" stroke="#2b1b14" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <circle cx="95" cy="88" r="3" fill="#4a3a2a"/>
-  <circle cx="128" cy="80" r="3" fill="#4a3a2a"/>
-  <circle cx="161" cy="88" r="3" fill="#4a3a2a"/>
+  <defs>
+    <linearGradient id="wastelandHair" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a3a2a"/>
+      <stop offset="100%" stop-color="#2a1a0a"/>
+    </linearGradient>
+  </defs>
+  <path d="M75 85c-5-8-8-16-8-24c0-8 3-14 8-18c5-4 12-6 20-6c6 0 12 1 18 4c6 3 12 8 16 14c4 6 8 14 10 22c2 8 3 16 3 24v25c-2-3-4-6-8-8c-4-2-8-3-12-3c-6 0-12 2-16 6c-4 4-8 10-10 16c-2-6-6-12-10-16c-4-4-10-6-16-6c-4 0-8 1-12 3c-4 2-6 5-8 8v-25c0-8 1-16 3-24c2-8 6-16 10-22c4-6 10-11 16-14c6-3 12-4 18-4c8 0 15 2 20 6c5 4 8 10 8 18c0 8-3 16-8 24h-6c5-6 7-13 7-20c0-6-2-11-6-14c-4-3-9-5-15-5c-5 0-10 1-15 3c-5 2-9 6-13 11c-4 5-7 11-9 18c-2 7-3 14-3 21v18z" fill="url(#wastelandHair)" stroke="#1a0a00" stroke-width="1.5"/>
+  <g opacity="0.3" stroke="#1a0a00" stroke-width="0.8" fill="none">
+    <path d="M90 70c2 10 3 20 3 30"/>
+    <path d="M105 65c1 12 2 24 2 36"/>
+    <path d="M151 65c-1 12-2 24-2 36"/>
+    <path d="M166 70c-2 10-3 20-3 30"/>
+  </g>
 </svg>

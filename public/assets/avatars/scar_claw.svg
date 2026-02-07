@@ -1,12 +1,97 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <g stroke="#9a7a6a" stroke-width="2.5" opacity="0.8" fill="none" stroke-linecap="round">
-    <path d="M95 110c4 6 6 12 4 18"/>
-    <path d="M110 115c2 8 0 16-4 22"/>
-    <path d="M125 118c0 10-4 18-10 24"/>
+  <defs>
+    <!-- Scar tissue gradient -->
+    <linearGradient id="scarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c8a88a" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#b8988a" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#a8887a" stop-opacity="0.7"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Main claw scar - three parallel slashes -->
+  
+  <!-- Scar 1 (deepest, center) -->
+  <!-- Wound depth/shadow -->
+  <path d="M96 108c3 6 5 12 6 18c1 6 1 12 0 18c-1 6-3 12-6 18" 
+        fill="none" stroke="#8a6a5a" stroke-width="4" opacity="0.4" 
+        stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Main scar tissue -->
+  <path d="M95 110c4 6 6 12 7 18c1 6 1 12 0 18c-1 6-3 12-7 18" 
+        fill="none" stroke="url(#scarGrad)" stroke-width="3.5" 
+        stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Scar edge highlight (raised tissue) -->
+  <path d="M94 112c3 5 5 11 6 17c1 6 1 11 0 17c-1 6-3 12-6 17" 
+        fill="none" stroke="#d8b89a" stroke-width="1.2" opacity="0.6" 
+        stroke-linecap="round"/>
+  
+  <!-- Scar detail - stitching marks or healed tissue -->
+  <g opacity="0.5" stroke="#9a7a6a" stroke-width="0.8" fill="none">
+    <path d="M93 118l2 0"/>
+    <path d="M92 126l2 -1"/>
+    <path d="M92 134l2 0"/>
+    <path d="M93 142l2 1"/>
+    <path d="M95 150l2 0"/>
   </g>
-  <g stroke="#c8a88a" stroke-width="1" opacity="0.6" fill="none" stroke-linecap="round">
-    <path d="M96 112c3 5 5 10 3 15"/>
-    <path d="M111 117c2 7 0 14-3 19"/>
-    <path d="M126 120c0 8-3 15-8 20"/>
+  
+  <!-- Scar 2 (left slash, shallower) -->
+  <path d="M108 112c3 8 4 16 3 24c-1 8-4 16-8 22" 
+        fill="none" stroke="#9a7a6a" stroke-width="3" opacity="0.5" 
+        stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <path d="M110 115c2 7 3 14 2 21c-1 7-3 14-7 20" 
+        fill="none" stroke="url(#scarGrad)" stroke-width="2.5" opacity="0.8" 
+        stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Scar edge -->
+  <path d="M111 117c2 6 3 13 2 19c-1 6-3 13-6 18" 
+        fill="none" stroke="#d8b89a" stroke-width="0.8" opacity="0.5" 
+        stroke-linecap="round"/>
+  
+  <!-- Detail marks -->
+  <g opacity="0.4" stroke="#9a7a6a" stroke-width="0.6" fill="none">
+    <path d="M108 122l1 0"/>
+    <path d="M107 132l1 0"/>
+    <path d="M105 142l1 0"/>
+    <path d="M103 152l1 0"/>
   </g>
+  
+  <!-- Scar 3 (right slash, shallowest) -->
+  <path d="M122 115c1 10 0 20-4 28c-2 4-5 8-8 10" 
+        fill="none" stroke="#9a7a6a" stroke-width="2.5" opacity="0.4" 
+        stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <path d="M123 118c0 9-1 18-4 25c-2 4-4 7-7 9" 
+        fill="none" stroke="url(#scarGrad)" stroke-width="2" opacity="0.7" 
+        stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Scar edge -->
+  <path d="M124 120c0 8-1 16-3 23c-1 3-3 6-6 8" 
+        fill="none" stroke="#d8b89a" stroke-width="0.6" opacity="0.4" 
+        stroke-linecap="round"/>
+  
+  <!-- Detail marks -->
+  <g opacity="0.3" stroke="#9a7a6a" stroke-width="0.5" fill="none">
+    <path d="M122 128l1 0"/>
+    <path d="M120 138l1 0"/>
+    <path d="M117 148l1 0"/>
+  </g>
+  
+  <!-- Additional realism: small skin tears at scar edges -->
+  <g opacity="0.6" fill="#a8887a">
+    <ellipse cx="93" cy="113" rx="1" ry="2" transform="rotate(-15 93 113)"/>
+    <ellipse cx="90" cy="143" rx="1.5" ry="2.5" transform="rotate(20 90 143)"/>
+    <ellipse cx="95" cy="157" rx="1" ry="2" transform="rotate(-10 95 157)"/>
+  </g>
+  
+  <!-- Faded edges (older scar healing) -->
+  <g opacity="0.2" stroke="#c8a88a" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <path d="M90 108c5 8 8 16 9 24c1 8 0 16-2 24"/>
+    <path d="M105 110c4 10 5 20 3 30c-2 10-6 18-12 24"/>
+    <path d="M118 113c2 12 1 24-3 34"/>
+  </g>
+  
+  <!-- Discoloration around wound (bruising/healing) -->
+  <ellipse cx="105" cy="135" rx="22" ry="35" fill="#a8887a" opacity="0.08" transform="rotate(-20 105 135)"/>
 </svg>

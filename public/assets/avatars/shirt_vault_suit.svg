@@ -1,7 +1,100 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <path d="M64 200c10-22 36-36 60-36s50 14 60 36v28H64v-28z" fill="#2e5a8a"/>
-  <path d="M90 172c8 4 44 6 74 0" stroke="#1e4a7a" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <circle cx="90" cy="180" r="8" fill="#f0c040"/>
-  <text x="90" y="184" font-size="10" text-anchor="middle" fill="#2e5a8a" font-weight="bold">77</text>
-  <path d="M100 185h56" stroke="#1e4a7a" stroke-width="2" fill="none"/>
+  <defs>
+    <!-- Vault suit blue gradient -->
+    <linearGradient id="vaultBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a7ab8"/>
+      <stop offset="50%" stop-color="#3a6aa8"/>
+      <stop offset="100%" stop-color="#2a5a98"/>
+    </linearGradient>
+    <!-- Yellow accent gradient -->
+    <radialGradient id="yellowAccent" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#ffd860"/>
+      <stop offset="100%" stop-color="#f0c040"/>
+    </radialGradient>
+    <!-- Metal zipper gradient -->
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a0a0a0"/>
+      <stop offset="50%" stop-color="#d0d0d0"/>
+      <stop offset="100%" stop-color="#a0a0a0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Main vault suit body -->
+  <path d="M64 198c8-18 28-32 50-34c4-0.5 8-0.5 14-0.5c6 0 10 0 14 0.5c22 2 42 16 50 34v32H64v-32z" 
+        fill="url(#vaultBlue)" stroke="#1a4a88" stroke-width="2"/>
+  
+  <!-- Shoulder seams with stitching detail -->
+  <path d="M88 170c6 2 16 4 26 5" fill="none" stroke="#2a5a98" stroke-width="2" stroke-linecap="round"/>
+  <path d="M168 170c-6 2-16 4-26 5" fill="none" stroke="#2a5a98" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Stitching dots on seams -->
+  <g fill="#1a4a88" opacity="0.6">
+    <circle cx="90" cy="171" r="1"/>
+    <circle cx="96" cy="172" r="1"/>
+    <circle cx="102" cy="173" r="1"/>
+    <circle cx="108" cy="174" r="1"/>
+    <circle cx="166" cy="171" r="1"/>
+    <circle cx="160" cy="172" r="1"/>
+    <circle cx="154" cy="173" r="1"/>
+    <circle cx="148" cy="174" r="1"/>
+  </g>
+  
+  <!-- Collar -->
+  <path d="M90 170c4-2 8-4 14-5c4-1 8-1 12-1c4 0 8 0 12 1c6 1 10 3 14 5" 
+        fill="none" stroke="#1a4a88" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Center zipper -->
+  <path d="M128 178v50" stroke="url(#metalGrad)" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Zipper teeth detail -->
+  <g opacity="0.8" stroke="#909090" stroke-width="1">
+    <path d="M126 180l4 0M126 186l4 0M126 192l4 0M126 198l4 0M126 204l4 0M126 210l4 0M126 216l4 0M126 222l4 0"/>
+  </g>
+  
+  <!-- Zipper pull -->
+  <circle cx="128" cy="180" r="3" fill="url(#metalGrad)" stroke="#707070" stroke-width="1"/>
+  <path d="M128 180l0 6" stroke="#909090" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Vault 77 badge/patch -->
+  <circle cx="95" cy="190" r="10" fill="url(#yellowAccent)" stroke="#d0a030" stroke-width="1.5"/>
+  
+  <!-- Vault 77 number on badge -->
+  <text x="95" y="194" font-family="monospace" font-size="9" font-weight="bold" 
+        text-anchor="middle" fill="#2a5a98">77</text>
+  
+  <!-- Vault-Tec logo suggestion (simplified gear) -->
+  <g opacity="0.3" stroke="#1a4a88" stroke-width="0.8" fill="none">
+    <circle cx="95" cy="190" r="8"/>
+    <path d="M87 190h16M95 182v16"/>
+  </g>
+  
+  <!-- Panel lines for tech/utility look -->
+  <path d="M108 185v40M148 185v40" stroke="#2a5a98" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  
+  <!-- Chest pockets/utility panels -->
+  <rect x="110" y="195" width="14" height="12" fill="none" stroke="#1a4a88" stroke-width="1.5" rx="2" opacity="0.7"/>
+  <rect x="132" y="195" width="14" height="12" fill="none" stroke="#1a4a88" stroke-width="1.5" rx="2" opacity="0.7"/>
+  
+  <!-- Pocket flaps -->
+  <path d="M111 200h12M133 200h12" stroke="#2a5a98" stroke-width="1" opacity="0.6"/>
+  
+  <!-- Belt/waist detail -->
+  <path d="M70 220c15-2 35-3 58-3c23 0 43 1 58 3" stroke="#1a4a88" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Belt buckle suggestion -->
+  <rect x="123" y="218" width="10" height="5" fill="url(#metalGrad)" stroke="#707070" stroke-width="0.8" rx="1"/>
+  
+  <!-- Wear and tear - scratches -->
+  <g opacity="0.2" stroke="#1a4a88" stroke-width="1" stroke-linecap="round">
+    <path d="M115 212l8 4"/>
+    <path d="M145 208l-6 3"/>
+    <path d="M100 225l5 0"/>
+  </g>
+  
+  <!-- Fabric creases for realism -->
+  <g opacity="0.15" stroke="#1a4a88" stroke-width="1" fill="none" stroke-linecap="round">
+    <path d="M75 205c8 3 15 5 23 6"/>
+    <path d="M181 205c-8 3-15 5-23 6"/>
+    <path d="M85 215c12 2 25 3 43 3c18 0 31-1 43-3"/>
+  </g>
 </svg>

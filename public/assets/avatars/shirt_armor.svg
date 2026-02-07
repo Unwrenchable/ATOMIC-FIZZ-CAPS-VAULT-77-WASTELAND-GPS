@@ -1,10 +1,120 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <path d="M64 200c10-22 36-36 60-36s50 14 60 36v28H64v-28z" fill="#4a3a2a"/>
-  <path d="M90 172c8 4 44 6 74 0" stroke="#3a2a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <g opacity="0.6">
-    <rect x="75" y="175" width="12" height="18" fill="#5a4a3a" rx="2"/>
-    <rect x="169" y="175" width="12" height="18" fill="#5a4a3a" rx="2"/>
-    <path d="M100 178h56M100 186h56" stroke="#3a2a1a" stroke-width="1.5" fill="none"/>
+  <defs>
+    <!-- Armor metal gradient -->
+    <linearGradient id="metalArmor" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6a5a4a"/>
+      <stop offset="40%" stop-color="#5a4a3a"/>
+      <stop offset="60%" stop-color="#4a3a2a"/>
+      <stop offset="100%" stop-color="#3a2a1a"/>
+    </linearGradient>
+    <!-- Leather/padding gradient -->
+    <linearGradient id="leatherPad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5a4433"/>
+      <stop offset="100%" stop-color="#4a3423"/>
+    </linearGradient>
+    <!-- Metal shine -->
+    <linearGradient id="metalShine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#808080" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#b0b0b0" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#808080" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Main armor chest piece -->
+  <path d="M64 195c8-16 24-28 44-32c6-1 12-2 20-2c8 0 14 1 20 2c20 4 36 16 44 32v35H64v-35z" 
+        fill="url(#metalArmor)" stroke="#2a1a0a" stroke-width="2"/>
+  
+  <!-- Shoulder pauldrons (armor plates) -->
+  <ellipse cx="85" cy="175" rx="18" ry="22" fill="url(#metalArmor)" stroke="#2a1a0a" stroke-width="1.8"/>
+  <ellipse cx="171" cy="175" rx="18" ry="22" fill="url(#metalArmor)" stroke="#2a1a0a" stroke-width="1.8"/>
+  
+  <!-- Pauldron rivets -->
+  <g fill="#3a2a1a" opacity="0.8">
+    <circle cx="82" cy="168" r="2"/>
+    <circle cx="88" cy="168" r="2"/>
+    <circle cx="82" cy="182" r="2"/>
+    <circle cx="88" cy="182" r="2"/>
+    <circle cx="168" cy="168" r="2"/>
+    <circle cx="174" cy="168" r="2"/>
+    <circle cx="168" cy="182" r="2"/>
+    <circle cx="174" cy="182" r="2"/>
   </g>
-  <circle cx="128" cy="182" r="6" fill="#6a5a4a"/>
+  
+  <!-- Leather straps -->
+  <path d="M90 170c6 2 16 4 24 5" fill="none" stroke="url(#leatherPad)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M166 170c-6 2-16 4-24 5" fill="none" stroke="url(#leatherPad)" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Strap buckles -->
+  <rect x="112" y="168" width="8" height="6" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="1" rx="1"/>
+  <rect x="136" y="168" width="8" height="6" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="1" rx="1"/>
+  
+  <!-- Chest plate segments (overlapping armor) -->
+  <path d="M80 190c12-8 28-12 48-12c20 0 36 4 48 12" 
+        fill="url(#metalArmor)" stroke="#1a0a00" stroke-width="1.5" opacity="0.9"/>
+  
+  <path d="M85 200c10-6 24-10 43-10c19 0 33 4 43 10" 
+        fill="url(#metalArmor)" stroke="#1a0a00" stroke-width="1.5" opacity="0.85"/>
+  
+  <path d="M90 210c8-4 20-6 38-6c18 0 30 2 38 6" 
+        fill="url(#metalArmor)" stroke="#1a0a00" stroke-width="1.5" opacity="0.8"/>
+  
+  <!-- Rivets on chest plates -->
+  <g fill="#2a2a2a" opacity="0.7">
+    <circle cx="85" cy="192" r="1.5"/>
+    <circle cx="128" cy="190" r="1.5"/>
+    <circle cx="171" cy="192" r="1.5"/>
+    <circle cx="90" cy="202" r="1.5"/>
+    <circle cx="128" cy="200" r="1.5"/>
+    <circle cx="166" cy="202" r="1.5"/>
+    <circle cx="95" cy="212" r="1.5"/>
+    <circle cx="128" cy="210" r="1.5"/>
+    <circle cx="161" cy="212" r="1.5"/>
+  </g>
+  
+  <!-- Metal shine/reflections -->
+  <g opacity="0.4" stroke="url(#metalShine)" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M75 188c15-6 32-9 53-9c21 0 38 3 53 9"/>
+    <path d="M80 198c13-5 28-7 48-7c20 0 35 2 48 7"/>
+  </g>
+  
+  <!-- Battle damage - dents and scratches -->
+  <g opacity="0.5" stroke="#2a1a0a" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <path d="M95 185c3 2 6 3 9 3"/>
+    <path d="M152 187c-3 1-6 2-9 2"/>
+    <path d="M115 205l8 4"/>
+    <path d="M141 208l-7 3"/>
+  </g>
+  
+  <!-- Scratches on armor -->
+  <g opacity="0.3" stroke="#6a5a4a" stroke-width="0.8" fill="none" stroke-linecap="round">
+    <path d="M100 195l12 8"/>
+    <path d="M145 197l-10 6"/>
+    <path d="M110 215l8 5"/>
+  </g>
+  
+  <!-- Center chest reinforcement plate -->
+  <rect x="118" y="195" width="20" height="25" fill="url(#metalArmor)" 
+        stroke="#1a0a00" stroke-width="1.5" rx="2" opacity="0.9"/>
+  
+  <!-- Reinforcement plate rivets -->
+  <circle cx="123" cy="200" r="1.5" fill="#2a2a2a"/>
+  <circle cx="133" cy="200" r="1.5" fill="#2a2a2a"/>
+  <circle cx="123" cy="215" r="1.5" fill="#2a2a2a"/>
+  <circle cx="133" cy="215" r="1.5" fill="#2a2a2a"/>
+  
+  <!-- Belt/waist armor -->
+  <path d="M70 220c15-2 35-3 58-3c23 0 43 1 58 3" 
+        stroke="url(#leatherPad)" stroke-width="5" stroke-linecap="round"/>
+  
+  <!-- Belt buckle (metal) -->
+  <rect x="120" y="217" width="16" height="8" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="1" rx="2"/>
+  <circle cx="128" cy="221" r="2" fill="#2a2a2a"/>
+  
+  <!-- Weathering and rust spots -->
+  <g opacity="0.3" fill="#6a4a3a">
+    <ellipse cx="92" cy="194" rx="3" ry="2"/>
+    <ellipse cx="165" cy="198" rx="2.5" ry="2"/>
+    <ellipse cx="105" cy="212" rx="2" ry="1.5"/>
+    <ellipse cx="148" cy="215" rx="3" ry="2"/>
+  </g>
 </svg>

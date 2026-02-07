@@ -1,10 +1,107 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <g opacity="0.6">
-    <path d="M70 115c10 8 16 18 16 30s-6 22-16 30" fill="#9a6a4a" opacity="0.4"/>
-    <path d="M186 115c-10 8-16 18-16 30s6 22 16 30" fill="#9a6a4a" opacity="0.4"/>
-    <ellipse cx="85" cy="135" rx="20" ry="28" fill="#8a5a3a" opacity="0.3"/>
-    <ellipse cx="171" cy="135" rx="20" ry="28" fill="#8a5a3a" opacity="0.3"/>
-    <path d="M95 108c8 4 14 10 18 18" stroke="#7a4a2a" stroke-width="2" opacity="0.5" fill="none"/>
-    <path d="M161 108c-8 4-14 10-18 18" stroke="#7a4a2a" stroke-width="2" opacity="0.5" fill="none"/>
+  <defs>
+    <!-- Radiation burn gradients -->
+    <radialGradient id="burnCore" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#8a4a2a"/>
+      <stop offset="50%" stop-color="#9a5a3a"/>
+      <stop offset="100%" stop-color="#7a3a1a" stop-opacity="0.5"/>
+    </radialGradient>
+    <radialGradient id="burnEdge" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#aa6a4a" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#9a5a3a" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#8a4a2a" stop-opacity="0.3"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- LEFT SIDE RADIATION DAMAGE -->
+  <!-- Main burn area -->
+  <path d="M70 115c10 8 16 18 16 30s-6 22-16 30" fill="url(#burnCore)" opacity="0.7"/>
+  
+  <!-- Outer discoloration -->
+  <ellipse cx="78" cy="135" rx="25" ry="35" fill="url(#burnEdge)"/>
+  
+  <!-- Deep tissue damage -->
+  <ellipse cx="85" cy="135" rx="18" ry="26" fill="#8a5a3a" opacity="0.6"/>
+  
+  <!-- Scarred/textured areas -->
+  <g opacity="0.5" fill="#7a4a2a">
+    <ellipse cx="75" cy="125" rx="8" ry="12"/>
+    <ellipse cx="82" cy="142" rx="10" ry="14"/>
+    <ellipse cx="78" cy="155" rx="7" ry="10"/>
+  </g>
+  
+  <!-- Radiation pattern (uneven damage) -->
+  <path d="M95 108c8 4 14 10 18 18" stroke="#9a6a4a" stroke-width="2.5" opacity="0.6" fill="none" stroke-linecap="round"/>
+  
+  <!-- Blister/keloid formations -->
+  <g opacity="0.7" stroke="#aa7a5a" stroke-width="1.5" fill="none">
+    <path d="M72 120c3 2 5 5 6 8"/>
+    <path d="M68 135c4 0 7 2 9 5"/>
+    <path d="M73 148c2-3 5-5 8-6"/>
+  </g>
+  
+  <!-- Mottled skin texture -->
+  <g opacity="0.4" fill="#9a6a4a">
+    <circle cx="77" cy="118" r="2"/>
+    <circle cx="83" cy="123" r="1.5"/>
+    <circle cx="80" cy="130" r="2.5"/>
+    <circle cx="86" cy="138" r="1.8"/>
+    <circle cx="82" cy="147" r="2.2"/>
+    <circle cx="77" cy="153" r="1.6"/>
+  </g>
+  
+  <!-- RIGHT SIDE RADIATION DAMAGE -->
+  <!-- Main burn area -->
+  <path d="M186 115c-10 8-16 18-16 30s6 22 16 30" fill="url(#burnCore)" opacity="0.7"/>
+  
+  <!-- Outer discoloration -->
+  <ellipse cx="178" cy="135" rx="25" ry="35" fill="url(#burnEdge)"/>
+  
+  <!-- Deep tissue damage -->
+  <ellipse cx="171" cy="135" rx="18" ry="26" fill="#8a5a3a" opacity="0.6"/>
+  
+  <!-- Scarred/textured areas -->
+  <g opacity="0.5" fill="#7a4a2a">
+    <ellipse cx="181" cy="125" rx="8" ry="12"/>
+    <ellipse cx="174" cy="142" rx="10" ry="14"/>
+    <ellipse cx="178" cy="155" rx="7" ry="10"/>
+  </g>
+  
+  <!-- Radiation pattern -->
+  <path d="M161 108c-8 4-14 10-18 18" stroke="#9a6a4a" stroke-width="2.5" opacity="0.6" fill="none" stroke-linecap="round"/>
+  
+  <!-- Blister/keloid formations -->
+  <g opacity="0.7" stroke="#aa7a5a" stroke-width="1.5" fill="none">
+    <path d="M184 120c-3 2-5 5-6 8"/>
+    <path d="M188 135c-4 0-7 2-9 5"/>
+    <path d="M183 148c-2-3-5-5-8-6"/>
+  </g>
+  
+  <!-- Mottled skin texture -->
+  <g opacity="0.4" fill="#9a6a4a">
+    <circle cx="179" cy="118" r="2"/>
+    <circle cx="173" cy="123" r="1.5"/>
+    <circle cx="176" cy="130" r="2.5"/>
+    <circle cx="170" cy="138" r="1.8"/>
+    <circle cx="174" cy="147" r="2.2"/>
+    <circle cx="179" cy="153" r="1.6"/>
+  </g>
+  
+  <!-- Radiation veining (spreading damage) -->
+  <g opacity="0.3" stroke="#8a5a3a" stroke-width="1.2" fill="none" stroke-linecap="round">
+    <path d="M85 125c-5-4-8-8-10-12"/>
+    <path d="M80 140c-6 0-10-2-14-5"/>
+    <path d="M85 155c-4 4-7 8-10 11"/>
+    <path d="M171 125c5-4 8-8 10-12"/>
+    <path d="M176 140c6 0 10-2 14-5"/>
+    <path d="M171 155c4 4 7 8 10 11"/>
+  </g>
+  
+  <!-- Necrotic spots (severe damage areas) -->
+  <g opacity="0.5" fill="#6a3a1a">
+    <ellipse cx="82" cy="128" rx="3" ry="4"/>
+    <ellipse cx="78" cy="145" rx="2.5" ry="3.5"/>
+    <ellipse cx="174" cy="128" rx="3" ry="4"/>
+    <ellipse cx="178" cy="145" rx="2.5" ry="3.5"/>
   </g>
 </svg>
