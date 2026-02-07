@@ -9,7 +9,7 @@
     V11
     C18 7 16 4 12 4
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Crest cutout -->
   <path d="
@@ -18,10 +18,10 @@
     V6
     H9
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <!-- Eye slit cutout -->
-  <rect x="9" y="11" width="6" height="1.5" fill="white"/>
+  <rect x="9" y="11" width="6" height="1.5" fill="#0a1a0a"/>
 
   <!-- Cheek guard -->
   <path d="
@@ -30,7 +30,7 @@
     H10
     V15
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <path d="
     M18 15
@@ -38,6 +38,6 @@
     H14
     V15
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
 </svg>

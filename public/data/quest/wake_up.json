@@ -46,7 +46,7 @@
   ],
   "reward": {
     "xp": 50,
-    "items": ["pru_stabilizer_shard"]
+    "items": ["pru_stabilizer_shard", "vault77_sidearm"]
   },
   "onComplete": "wake_up_npc_intro"
 }

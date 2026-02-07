@@ -22,6 +22,8 @@ const Game = window.Game;
     'settler': 'settlement',
     'wastelander': 'ghost',
     'survivor': 'player',
+    'npc': 'ghost',
+    'character': 'player',
     
     // Factions without dedicated icons
     'followers': 'medical',
@@ -34,6 +36,8 @@ const Game = window.Game;
     'legion_faction': 'legion',
     'gunners': 'raider',
     'super_mutants': 'enemy',
+    'mutant': 'enemy',
+    'hostile': 'enemy',
     
     // Trading/Commerce
     'trader': 'trading',
@@ -41,6 +45,8 @@ const Game = window.Game;
     'vendor': 'shop',
     'caravan_stop': 'caravan',
     'general_store': 'store',
+    'marketplace': 'market',
+    'bazaar': 'market',
     
     // Location types without dedicated icons
     'office': 'city',
@@ -49,6 +55,7 @@ const Game = window.Game;
     'industrial': 'factory',
     'research': 'lab',
     'science': 'lab',
+    'laboratory': 'lab',
     'medical_center': 'hospital',
     'clinic_building': 'clinic',
     'military_base': 'military',
@@ -67,10 +74,17 @@ const Game = window.Game;
     'inn': 'motel',
     'bar_tavern': 'bar',
     'saloon': 'bar',
+    'pub': 'bar',
+    'tavern': 'bar',
+    'pool_hall': '8ball',
+    'billiards': '8ball',
+    'poolhall': '8ball',
     'restaurant_cafe': 'restaurant',
     'food': 'restaurant',
+    'diner_old': 'diner',
     'church_chapel': 'church',
     'religious': 'religion',
+    'chapel': 'church',
     'cemetery_graveyard': 'cemetery',
     'grave': 'graveyard',
     'farm_field': 'farm',
@@ -87,6 +101,7 @@ const Game = window.Game;
     'power_plant': 'power',
     'nuclear': 'reactor',
     'radiation': 'rad',
+    'radioactive': 'rad',
     'danger_zone': 'danger',
     'hazard': 'danger',
     'warning': 'danger',
@@ -101,16 +116,27 @@ const Game = window.Game;
     'quest_marker': 'quest',
     'mission': 'quest',
     'objective': 'quest',
+    'task': 'quest',
     'sidequest_marker': 'sidequest',
     'loot_cache': 'loot',
     'treasure': 'loot',
     'stash': 'loot',
     'supply_depot': 'supply',
     'resources': 'supply',
+    'supplies': 'supply',
     'tools': 'toolbox',
     'workshop': 'toolbox',
     'scrap': 'scrapyard',
     'junk': 'junkyard',
+    'building': 'facility',
+    'structure': 'facility',
+    'location': 'poi',
+    'place': 'poi',
+    'site': 'poi',
+    'area': 'wasteland',
+    'zone': 'wasteland',
+    'region': 'wilderness',
+    'marker': 'poi',
     
     // Null/Invalid fallback
     'null': 'poi',
@@ -118,7 +144,8 @@ const Game = window.Game;
     '': 'poi',
     'unknown': 'poi',
     'default': 'poi',
-    'generic': 'poi'
+    'generic': 'poi',
+    'none': 'poi'
   };
 
   // Get valid icon name with fallback
@@ -128,9 +155,18 @@ const Game = window.Game;
     }
     return ICON_FALLBACK_MAP[iconKey] || iconKey;
   }
+  
+  // Create icon HTML with automatic fallback to poi.svg on error
+  // This ensures no POI ever shows as a broken image or default Leaflet marker
+  function createIconHTML(iconName, size = 24) {
+    return `<img src="/img/icons/${iconName}.svg" 
+            onerror="this.onerror=null; this.src='/img/icons/poi.svg';" 
+            style="width:${size}px;height:${size}px;display:block;" 
+            alt="${iconName}" />`;
+  }
 
   // ------------------------------------------------------------
-  // ICON FACTORY (SVG icons from /img/icons/*.svg)
+  // ICON FACTORY (SVG icons from /img/icons/*.svg with error handling)
   // ------------------------------------------------------------
   function createIcon(poi) {
     const rarityClass =
@@ -144,7 +180,7 @@ const Game = window.Game;
 
     return L.divIcon({
       className: `pipboy-marker pipboy-marker-svg ${rarityClass}`,
-      html: `<img src="/img/icons/${iconName}.svg" />`,
+      html: createIconHTML(iconName, 24),
       iconSize: [24, 24],
       iconAnchor: [12, 12]
     });

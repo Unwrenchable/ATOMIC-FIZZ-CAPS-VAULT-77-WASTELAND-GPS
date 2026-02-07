@@ -1,13 +1,13 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Church building -->
-  <rect x="5" y="10" width="14" height="10" fill="currentColor"/>
+  <rect x="5" y="10" width="14" height="10" fill="#00ff41"/>
   <!-- Steeple -->
-  <polygon points="12,2 8,10 16,10" fill="currentColor"/>
+  <polygon points="12,2 8,10 16,10" fill="#00ff41"/>
   <!-- Cross on top -->
-  <rect x="11" y="3" width="2" height="4" fill="white"/>
-  <rect x="10" y="4" width="4" height="2" fill="white"/>
+  <rect x="11" y="3" width="2" height="4" fill="#0a1a0a"/>
+  <rect x="10" y="4" width="4" height="2" fill="#0a1a0a"/>
   <!-- Door -->
-  <path d="M10 20 L10 15 Q12 13 14 15 L14 20 Z" fill="white"/>
+  <path d="M10 20 L10 15 Q12 13 14 15 L14 20 Z" fill="#0a1a0a"/>
   <!-- Window -->
-  <circle cx="12" cy="13" r="1.5" fill="white"/>
+  <circle cx="12" cy="13" r="1.5" fill="#0a1a0a"/>
 </svg>

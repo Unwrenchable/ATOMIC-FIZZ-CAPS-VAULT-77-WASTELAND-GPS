@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!--
+      NOTICE: This is a community fan project. NOT affiliated with any
+      commercial game studio or trademark owner. Assets, names and
+      references are used for creative purposes only.
+    -->
     <meta charset="utf-8" />
-    <title>ATOMIC FIZZ CAPS • Pip‑Boy 3000</title>
+    <title>ATOMIC FIZZ CAPS • Wrist UI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
     
     <!-- PWA Meta Tags - Enables app-like experience -->
@@ -19,11 +24,17 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/favicon.png" />
 
-    <!-- Content Security Policy to allow external resources -->
+    <!-- Content Security Policy to allow external resources
+         Note: 'unsafe-eval' is required for:
+         - Phantom Wallet SDK (uses eval for dynamic code generation)
+         - WalletConnect (uses eval in their connection protocol)
+         - Leaflet mapping library (uses Function constructor for some operations)
+         This is a known limitation of these Web3 wallet libraries.
+         All other CSP directives remain strict for XSS protection. -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
-      script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org 'unsafe-inline';
-      connect-src 'self' https://unpkg.com https://server.arcgisonline.com https://*.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org https://*.infura.io https://polygon-rpc.com https://mainnet.infura.io wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com wss://*.walletconnect.com wss://*.walletconnect.org;
+      script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org https://vercel.live 'unsafe-inline' 'unsafe-eval';
+      connect-src 'self' https://unpkg.com https://server.arcgisonline.com https://*.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://*.onrender.com https://*.vercel.app https://vercel.live https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org https://*.infura.io https://polygon-rpc.com https://mainnet.infura.io wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com wss://*.walletconnect.com wss://*.walletconnect.org;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
       img-src 'self' data: https: blob:;
       font-src 'self' https://fonts.gstatic.com data:;
@@ -33,13 +44,7 @@
       base-uri 'self';">
 
     <!-- API base: local dev vs production -->
-    <script>
-      window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.github.dev'))
-        ? 'http://localhost:3001'
-        : 'https://api.atomicfizzcaps.xyz';
-      // Also set BACKEND_URL for compatibility with existing code
-      window.BACKEND_URL = window.API_BASE;
-    </script>
+    <script src="/js/config.js"></script>
 
     <!-- Leaflet core CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
@@ -59,18 +64,23 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
     <script src="https://unpkg.com/topojson-client@3" defer></script>
 
-    <!-- Turf UMD (fixes exports is not defined) -->
-    <script src="https://unpkg.com/@turf/turf@6.5.0/dist/turf.min.js" defer></script>
+    <!-- Turf UMD (fixes exports is not defined) - loaded synchronously for fogOfWar.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js" defer></script>
     
     <!-- WalletConnect for universal wallet support -->
     <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js" defer></script>
 
+    <!-- PixiJS + DragonBones runtime for animated 2D avatars -->
+    <!-- Note: dragonbones-pixi@5.7.0 was discontinued. Using pixi5-dragonbones@5.7.0-2b as replacement -->
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@6.5.8/dist/pixi.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/pixi5-dragonbones@5.7.0-2b/dragonBones.js" defer></script>
+
     <!-- AuthClient must be available before inline wallet code -->
     <script src="/js/authClient.js" defer></script>
 
-    <!-- Vault-Tec Security Module (DevTools Guard) -->
+    <!-- Security Module (DevTools Guard) -->
     <script src="/js/modules/devtools-guard.js" defer></script>
 
     <!-- Web3 Wallet Adapter (universal wallet support) -->
@@ -115,7 +125,7 @@
               <!-- HEADER -->
               <div class="pipboy-header">
                 <div>
-                  <span class="pipboy-title">PIP‑BOY 3000</span>
+                  <span class="pipboy-title">WRIST UI</span>
                   <span class="pipboy-subtitle">ATOMIC FIZZ CAPS</span>
                 </div>
 
@@ -158,7 +168,13 @@
                     </div>
 
                     <div class="map-controls">
-                      <button id="exploreToggleBtn" class="pipboy-button-small map-control-btn">🔍 EXPLORE MAP</button>
+                      <button id="exploreToggleBtn" class="map-control-btn">
+                        <div id="exploreDot" class="explore-dot"></div>
+                        <span id="exploreText">EXPLORE MAP</span>
+                      </button>
+                      <button id="retryMapBtn" class="map-control-btn" style="display: none;">
+                        <span>RETRY MAP</span>
+                      </button>
                     </div>
 
                     <div class="gps-badge" id="gpsBadge">
@@ -175,6 +191,8 @@
                     <!-- Character Portrait Preview -->
                     <div id="characterPortraitPreview" style="text-align:center; margin-bottom:12px;">
                       <div id="statPortraitSvg" style="width:80px; height:100px; margin:0 auto; border:1px solid #00ff41; background:rgba(0,20,10,0.8);"></div>
+                      <!-- DragonBones stage (hidden by default) -->
+                      <div id="dragonbonesStage" style="width:80px; height:100px; margin:0 auto; display:none;"></div>
                     </div>
                     
                     <div class="panel-row">
@@ -311,48 +329,54 @@
                 <div id="panel-dialog" class="pipboy-panel" style="display:none;">
                   <div class="panel-header">DIALOG</div>
                   <div class="panel-body">
-                    <div id="dialogBody" class="dialog-body"></div>
-                    <button id="dialogCloseBtn" class="pipboy-button-small" style="margin-top:12px;">CLOSE</button>
+                    <div style="display:flex; gap:10px; align-items:flex-start;">
+                      <div style="width:120px; text-align:center;">
+                        <div id="dialogPortraitContainer" style="width:100px; height:120px; border:1px solid #00ff41; background:rgba(0,20,10,0.6);"></div>
+                        <div id="dialogNPCName" style="margin-top:6px; color:#ffaa00; font-weight:bold;">NPC</div>
+                      </div>
+                      <div style="flex:1;">
+                        <div id="dialogBody" class="dialog-body"></div>
+                        <div style="margin-top:8px;"><button id="dialogCloseBtn" class="pipboy-button-small">CLOSE</button></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <!-- RADIO PANEL -->
                 <div id="panel-radio" class="pipboy-panel">
                   <div class="panel-header">RADIO</div>
-                  <div class="panel-body">
-                    <div id="radioStations">
+                  <div class="panel-body" style="overflow-y: auto; max-height: calc(100vh - 280px);">
+                    <div id="radioControls">
                       <button class="pipboy-button-small" id="radioCycleBtn">CYCLE STATION</button>
                       <div id="currentStation">NO SIGNAL</div>
                     </div>
 
                     <div class="panel-divider"></div>
 
-                    <div id="terminalSection" style="display:none;">
+                    <div id="terminalSection">
                       <div class="panel-header">OVERSEER TERMINAL</div>
-                      <button class="pipboy-button" id="openOverseerTerminal">OPEN TERMINAL</button>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Access the Vault 77 Overseer AI for assistance, intel, and wasteland guidance.</p>
+                      <button class="pipboy-button" id="openOverseerTerminal">📟 OPEN TERMINAL</button>
                     </div>
 
                     <div class="panel-divider"></div>
 
+                    <!-- NUKE FUSION CHAMBER -->
                     <div id="nukeSection">
-                      <div class="panel-header" style="color:#ffaa00;">⚠️ NUKE TESTING GROUNDS</div>
-                      <div style="padding:10px; background:rgba(255,0,0,0.1); border:1px solid #ff0000; margin:10px 0;">
-                        <div style="font-size:0.9em; opacity:0.9;">Destroy unwanted gear for CAPS</div>
-                        <div style="font-size:0.8em; margin-top:5px; color:#ff6666;">🔒 SYSTEM LOCKED - Awaiting Admin Activation</div>
-                      </div>
-                      <button class="pipboy-button" id="openNukeTerminal" disabled style="opacity:0.5; cursor:not-allowed;">🔒 NUKE (COMING SOON)</button>
+                      <div class="panel-header">⚛️ GEAR FUSION CHAMBER</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Combine NFT gear to create powerful fusion items. Requires connected wallet.</p>
+                      <button class="pipboy-button" id="openNukeTerminal">☢️ OPEN FUSION CHAMBER</button>
                     </div>
 
                     <div class="panel-divider"></div>
 
+                    <!-- CROSS-CHAIN BRIDGE -->
                     <div id="bridgeSection">
-                      <div class="panel-header" style="color:#00ffff;">🌀 WORMHOLE BRIDGE</div>
-                      <div style="padding:10px; background:rgba(0,100,255,0.1); border:1px solid #0088ff; margin:10px 0;">
-                        <div style="font-size:0.9em; opacity:0.9;">Cross-chain asset portal</div>
-                        <div style="font-size:0.8em; margin-top:5px; color:#66bbff;">🔒 SYSTEM LOCKED - Awaiting Admin Activation</div>
-                      </div>
-                      <button class="pipboy-button" id="openBridgeTerminal" disabled style="opacity:0.5; cursor:not-allowed;">🔒 BRIDGE (COMING SOON)</button>
+                      <div class="panel-header">🌀 WORMHOLE BRIDGE</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Transfer tokens across chains via the interdimensional portal.</p>
+                      <button class="pipboy-button" id="openBridgeTerminal">🌉 OPEN BRIDGE PORTAL</button>
                     </div>
+
                   </div>
                 </div>
 
@@ -374,9 +398,9 @@
 
               <!-- FOOTER -->
               <div class="pipboy-footer">
-                <div class="footer-left">VAULT‑TEC INDUSTRIES</div>
+                <div class="footer-left">FIZZTEC INDUSTRIES</div>
                 <div class="footer-center">WASTELAND GPS</div>
-                <div class="footer-right">REV 77</div>
+                <div class="footer-right">REV 1</div>
               </div>
 
             </div>
@@ -393,6 +417,29 @@
     <!-- CORE GAME ENGINE (plain scripts; correct paths) -->
     <script src="/js/radioPlayer.js" defer></script>
     <script src="/js/main.js" defer></script>
+
+    <!-- WORLD SIMULATION SYSTEM (in dependency order) -->
+    <!-- These provide window.overseer* globals for world state, encounters, NPCs -->
+    <script src="/js/world/state.js" defer></script>
+    <script src="/js/world/factions.js" defer></script>
+    <script src="/js/world/regions.js" defer></script>
+    <script src="/js/world/npc_traits.js" defer></script>
+    <script src="/js/world/timeline.js" defer></script>
+    <script src="/js/world/weather.js" defer></script>
+    <script src="/js/world/anomalies.js" defer></script>
+    <script src="/js/world/loot.js" defer></script>
+    <script src="/js/world/microquests.js" defer></script>
+    <script src="/js/world/encounters.js" defer></script>
+
+    <!-- GAME/WORLD BRIDGE (provides window.world using real implementations) -->
+    <script src="/js/game.overseer-bridge.js" defer></script>
+
+    <!-- UNIFIED PLAYER STATE & ACTIONS (must load before modules) -->
+    <script src="/js/game/player-state.js" defer></script>
+    <script src="/js/game/api-client.js" defer></script>
+    <script src="/js/game/inventory-actions.js" defer></script>
+    <script src="/js/game/equip-actions.js" defer></script>
+    <script src="/js/game/loop.js" defer></script>
 
     <!-- GAME MODULES (IIFE scripts attached to window.Game) -->
     <!-- Core Systems -->
@@ -420,6 +467,7 @@
     <script src="/js/modules/worldmap.js" defer></script>
     
     <!-- Map Overlays & Features -->
+    <script src="/js/modules/worldWeather.js" defer></script>
     <script src="/js/modules/fogOfWar.js" defer></script>
     <script src="/js/modules/weatherOverlay.js" defer></script>
     <script src="/js/modules/radiationZones.js" defer></script>
@@ -438,6 +486,8 @@
     <script src="/js/modules/inventory-loader.js" defer></script>
     <script src="/js/modules/inventory-ui.js" defer></script>
     <script src="/js/modules/quest-ui.js" defer></script>
+    <script src="/js/modules/npc-registry.js" defer></script>
+    <script src="/js/modules/npc-portraits.js" defer></script>
     
     <!-- Character Creator & Fallout 4 Dialogue Systems -->
     <script src="/js/modules/character-creator.js" defer></script>
@@ -492,7 +542,7 @@
             "top=" + top
           ].join(",");
 
-          window.open("/overseer.html", "overseer_terminal", features);
+          window.open("/overseer", "overseer_terminal", features);
         }
 
         function openNukePopup() {
@@ -518,7 +568,7 @@
             "top=" + top
           ].join(",");
 
-          window.open("/nuke.html", "nuke_terminal", features);
+          window.open("/nuke", "nuke_terminal", features);
         }
 
         function openBridgePopup() {
@@ -544,7 +594,7 @@
             "top=" + top
           ].join(",");
 
-          window.open("/bridge.html", "bridge_terminal", features);
+          window.open("/bridge", "bridge_terminal", features);
         }
 
         if (btn) {

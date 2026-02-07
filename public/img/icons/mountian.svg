@@ -6,7 +6,7 @@
     L10 7
     L16 18
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Secondary peak -->
   <path d="
@@ -14,7 +14,7 @@
     L15 11
     L20 18
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Snow caps -->
   <path d="
@@ -22,13 +22,13 @@
     L11 9
     L9 9
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <path d="
     M15 11
     L16 13
     L14 13
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
 </svg>

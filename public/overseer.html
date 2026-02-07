@@ -6,6 +6,18 @@
 
   <title>OVERSEER TERMINAL // RESTRICTED ACCESS</title>
 
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    connect-src 'self' https://api.atomicfizzcaps.xyz https://api-inference.huggingface.co https://api.mainnet-beta.solana.com https://api.devnet.solana.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https: blob:;
+    font-src 'self' https://fonts.gstatic.com data:;
+    object-src 'none';
+    frame-src 'self';
+    base-uri 'self';">
+
   <!-- Pip‑Boy Terminal Font -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
@@ -61,15 +73,32 @@
 
   </div>
 
+  <!-- API config for backend calls -->
+  <script src="/js/config.js"></script>
+
   <!-- Terminal Engine (handles rendering / input wiring) -->
   <script src="/js/overseer/overseer.full.js"></script>
 
   <!-- Game Bridge (handles terminal commands and responses) -->
   <script src="/js/game.overseer-bridge.js"></script>
 
-  <!-- Personality + Custom Commands (must load BEFORE overseer.js) -->
+  <!-- CORE AI ENGINES (must load BEFORE overseer.js brain) -->
   <script src="/js/overseer/core.personality.js"></script>
+  <script src="/js/overseer/core.memory.js"></script>
+  <script src="/js/overseer/core.lore.js"></script>
+  <script src="/js/overseer/core.faction.js"></script>
+  <script src="/js/overseer/core.threat.js"></script>
+  <script src="/js/overseer/core.weather.js"></script>
+  <script src="/js/overseer/core.worldstate.js"></script>
+  <script src="/js/overseer/core.commands.js"></script>
+  <script src="/js/overseer/core.quest_mapintel.js"></script>
+
+  <!-- Custom Commands Extension -->
   <script src="/js/overseer/handlers.js"></script>
+
+  <!-- Mini-Games -->
+  <script src="/js/overseer/game.redmenace.js"></script>
+  <script src="/js/overseer/game.tictactoe.js"></script>
 
   <!-- Unified Overseer Brain (attaches engines + commands) -->
   <script src="/js/overseer/overseer.js"></script>

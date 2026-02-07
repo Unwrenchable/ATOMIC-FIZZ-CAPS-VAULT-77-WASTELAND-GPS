@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="romanNose" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d8b890"/>
+      <stop offset="100%" stop-color="#c8a880"/>
+    </linearGradient>
+  </defs>
+  <path d="M126 130c1-3 1-6 1-8c0-2 1-4 2-5c1 1 2 3 2 5c0 2 0 5 1 8l-2 0z" fill="url(#romanNose)" opacity="0.7"/>
+  <path d="M122 135c1-2 2-4 4-5c1-1 2-1 4-1s3 0 4 1c2 1 3 3 4 5l-4 18c-1 3-2 5-4 6c-2 1-4 1-6 0c-2-1-3-3-4-6z" fill="url(#romanNose)" stroke="#a89070" stroke-width="1.5" stroke-linejoin="round"/>
+  <ellipse cx="123" cy="156" rx="3" ry="4" fill="#9a8070" opacity="0.6"/>
+  <ellipse cx="133" cy="156" rx="3" ry="4" fill="#9a8070" opacity="0.6"/>
+  <path d="M128 125v30" fill="none" stroke="#b89878" stroke-width="1.2" opacity="0.4"/>
+</svg>

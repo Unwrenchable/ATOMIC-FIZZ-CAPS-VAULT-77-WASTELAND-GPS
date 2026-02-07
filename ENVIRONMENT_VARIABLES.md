@@ -1,0 +1,352 @@
+# 📟 VAULT-TEC ENVIRONMENT VARIABLES REFERENCE
+
+**☢️ ATOMIC FIZZ CAPS - Vault 77 Configuration Protocol ☢️**
+
+This document provides a comprehensive alphabetical reference of all environment variables used in the Atomic Fizz Caps wasteland GPS crypto game.
+
+---
+
+## 📋 ALPHABETICAL REFERENCE
+
+### ADMIN_PASSWORD
+- **Type**: String
+- **Required**: Yes (for admin functionality)
+- **Description**: Plain-text admin password for backend authentication (compared using timing-safe comparison)
+- **Example**: `your_secure_password_here`
+- **Security**: Store securely in environment variables, never commit to version control. The backend uses constant-time comparison to prevent timing attacks.
+
+### ADMIN_SESSION_TTL_SECONDS
+- **Type**: Integer
+- **Required**: No
+- **Default**: 86400 (24 hours)
+- **Description**: Time-to-live for admin session tokens in seconds
+- **Example**: `86400`
+
+### ADMIN_USERNAME
+- **Type**: String
+- **Required**: Yes (for admin functionality)
+- **Description**: Username for admin authentication
+- **Example**: `admin`
+- **Security**: Do not use default usernames in production
+
+### ADMIN_WALLETS
+- **Type**: String (comma-separated)
+- **Required**: Yes (for admin functionality)
+- **Description**: Comma-separated list of Solana wallet addresses with admin privileges
+- **Example**: `wallet1PubKey...,wallet2PubKey...`
+
+### AUDIT_S3_BUCKET
+- **Type**: String
+- **Required**: No (optional for logging)
+- **Description**: AWS S3 bucket name for audit log storage
+- **Example**: `your-audit-bucket`
+- **Note**: Only needed if implementing AWS-based audit logging
+
+### AWS_REGION
+- **Type**: String
+- **Required**: No (only if using AWS KMS)
+- **Default**: `us-west-2`
+- **Description**: AWS region for KMS signing operations
+- **Example**: `us-west-2`
+
+### CAPS_MINT
+- **Type**: String
+- **Required**: Yes (for CAPS ecosystem features)
+- **Description**: Solana token mint address for CAPS (Atomic Fizz Caps SPL token)
+- **Example**: `CapsToken1111111111111111111111111111111111`
+- **Note**: Same as TOKEN_MINT - CAPS is the primary token for the ecosystem
+
+### CLIENT_ORIGIN
+- **Type**: String
+- **Required**: No
+- **Default**: `http://localhost:3000`
+- **Description**: Origin URL of the client application for CORS configuration
+- **Example**: `https://www.atomicfizzcaps.xyz`
+
+### COOLDOWN_PREFIX
+- **Type**: String
+- **Required**: No
+- **Default**: `cooldown:`
+- **Description**: Redis key prefix for cooldown tracking
+- **Example**: `cooldown:`
+
+### COOLDOWN_SECONDS
+- **Type**: Integer
+- **Required**: No
+- **Default**: 60
+- **Description**: Default cooldown duration in seconds for general actions
+- **Example**: `60`
+
+### COOLDOWNS_FAIL_SAFE
+- **Type**: String (enum)
+- **Required**: No
+- **Default**: `deny`
+- **Description**: Fail-safe behavior when cooldown checks fail (`allow` or `deny`)
+- **Example**: `deny`
+- **Options**: `allow`, `deny`
+
+### FRONTEND_ORIGIN
+- **Type**: String (comma-separated)
+- **Required**: Yes
+- **Description**: Allowed frontend origins for CORS. Supports wildcards.
+- **Example**: `https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, https://*.vercel.app, https://*.onrender.com`
+
+### FIZZ_FUN_PROGRAM_ID
+- **Type**: String
+- **Required**: No (only if using Fizz.fun launchpad)
+- **Description**: Solana program ID for the Fizz.fun token launchpad (part of CAPS ecosystem)
+- **Example**: `FizzFun111111111111111111111111111111111111`
+- **Note**: Token launchpad feature for CAPS holders to create new tokens with bonding curves
+
+### GAME_VAULT_SECRET
+- **Type**: String
+- **Required**: Yes
+- **Description**: Secret key for game vault cryptographic operations
+- **Example**: Base58 encoded 64-byte secret
+- **Security**: Use cryptographically secure random generation
+
+### GPS_DISTANCE_LIMIT
+- **Type**: Integer
+- **Required**: No
+- **Default**: 1000 (meters)
+- **Description**: Maximum distance in meters a player can be from a location to claim it
+- **Example**: `1000`
+
+### GPS_SECRET
+- **Type**: String
+- **Required**: Yes
+- **Description**: Secret key for GPS coordinate signing and verification
+- **Example**: Base58 encoded secret
+- **Security**: Use cryptographically secure random generation
+
+### HELIUS_API_KEY
+- **Type**: String
+- **Required**: No (optional for enhanced NFT features)
+- **Description**: Helius API key for advanced Solana NFT fetching capabilities
+- **Example**: `your-helius-api-key`
+
+### HF_API_KEY
+- **Type**: String
+- **Required**: Yes (for Overseer AI)
+- **Description**: Hugging Face API key for AI personality features
+- **Example**: `hf_xxxxxxxxxxxxxxxxxxxxx`
+
+### HF_MODEL
+- **Type**: String
+- **Required**: No
+- **Default**: `mistralai/Mixtral-8x7B-Instruct-v0.1`
+- **Description**: Hugging Face model identifier for Overseer AI responses
+- **Example**: `mistralai/Mixtral-8x7B-Instruct-v0.1`
+
+### KMS_SIGNING_ALGORITHM
+- **Type**: String
+- **Required**: No (only if using AWS KMS)
+- **Default**: `ECDSA_SHA_256` (for ECC_SECG_P256K1 keys, most compatible)
+- **Description**: AWS KMS signing algorithm to use with your key
+- **Options**:
+  - `ECDSA_SHA_256` - For ECC_SECG_P256K1 keys (recommended - most compatible)
+  - `ED25519_SHA_512` - For ECC_NIST_EDWARDS25519 keys (newer, faster, requires recent AWS SDK)
+- **Example**: `ECDSA_SHA_256`
+- **Note**: Must match your KMS key spec. See [docs/AWS_KMS_SETUP.md](docs/AWS_KMS_SETUP.md) for details
+
+### KMS_SIGNING_KEY_ID
+- **Type**: String
+- **Required**: No (only if using AWS KMS)
+- **Description**: AWS KMS key ARN for signing operations
+- **Example**: `arn:aws:kms:us-west-2:123456789012:key/abcd-efgh`
+- **Setup Guide**: See [docs/AWS_KMS_SETUP.md](docs/AWS_KMS_SETUP.md) for complete instructions on creating and retrieving your KMS key ARN
+
+### LOOT_COOLDOWN_SECONDS
+- **Type**: Integer
+- **Required**: No
+- **Default**: 300 (5 minutes)
+- **Description**: Cooldown duration in seconds between loot claims at the same location
+- **Example**: `300`
+
+### MODEL
+- **Type**: String
+- **Required**: No
+- **Description**: Alias for HF_MODEL (alternative model specification)
+- **Example**: `mistralai/Mixtral-8x7B-Instruct-v0.1`
+
+### NEXT_PUBLIC_BACKEND_URL
+- **Type**: String
+- **Required**: Yes
+- **Description**: Public-facing backend API URL (used by frontend)
+- **Example**: `https://api.atomicfizzcaps.xyz`
+
+### NODE_ENV
+- **Type**: String (enum)
+- **Required**: No
+- **Default**: `development`
+- **Description**: Node.js environment mode
+- **Example**: `production`
+- **Options**: `development`, `production`, `test`
+
+### PORT
+- **Type**: Integer
+- **Required**: No
+- **Default**: 3000
+- **Description**: Port number for the backend server
+- **Example**: `3000`
+
+### REDIS_URL
+- **Type**: String
+- **Required**: Yes (in production)
+- **Description**: Redis connection URL for state management and caching
+- **Format**: `redis://[username]:[password]@[host]:[port]` or `rediss://[username]:[password]@[host]:[port]` (for TLS)
+- **Valid Examples**:
+  - ✅ `redis://default:password@localhost:6379` (standard connection)
+  - ✅ `rediss://default:password@redis.example.com:6380` (TLS/SSL connection)
+  - ✅ `redis://user:pass@redis-12345.render.com:6379` (cloud Redis)
+- **Invalid Examples** (will be rejected):
+  - ❌ `http://localhost:6379` (wrong protocol - use redis:// not http://)
+  - ❌ `https://redis.example.com:6379` (wrong protocol - use rediss:// not https://)
+  - ❌ `localhost:6379` (missing protocol)
+- **Validation**: 
+  - URL must start with `redis://` or `rediss://` protocol
+  - Leading/trailing whitespace is automatically trimmed
+  - Invalid protocols (e.g., `http://`, `https://`) will be rejected with clear error message
+- **Note**: The system will fall back to in-memory storage if Redis connection fails, but this is NOT recommended for production as it causes data loss on restarts and inconsistency in multi-instance deployments
+
+### REQUIRE_REDIS_IN_PRODUCTION
+- **Type**: Boolean
+- **Required**: No
+- **Default**: `true`
+- **Description**: Whether to require Redis connection in production mode
+- **Example**: `true`
+
+### SERVER_SECRET_KEY
+- **Type**: String
+- **Required**: Yes
+- **Description**: Base58-encoded 64-byte secret key for server-side cryptographic operations
+- **Example**: Base58 encoded 64-byte value
+- **Security**: Generate using cryptographically secure random source
+
+### SOLANA_RPC
+- **Type**: String
+- **Required**: Yes
+- **Description**: Solana RPC endpoint URL
+- **Example**: `https://api.devnet.solana.com` (devnet) or `https://api.mainnet-beta.solana.com` (mainnet)
+
+### STRICT_REPLAY_PROTECTION
+- **Type**: Boolean
+- **Required**: No
+- **Default**: `true`
+- **Description**: Enable strict replay attack protection for signed messages
+- **Example**: `true`
+
+### TOKEN_MINT
+- **Type**: String
+- **Required**: Yes
+- **Description**: Solana token mint address for CAPS tokens (Atomic Fizz Caps SPL token)
+- **Example**: `CapsToken1111111111111111111111111111111111`
+- **Note**: Alias for CAPS_MINT - both refer to the same CAPS token mint address
+
+### TREASURY_WALLET
+- **Type**: String
+- **Required**: Yes (for CAPS ecosystem features)
+- **Description**: Treasury wallet address for the CAPS ecosystem (receives fees, manages liquidity)
+- **Example**: `Treasury1111111111111111111111111111111111`
+- **Note**: Used by Fizz.fun and other ecosystem features for fee collection
+
+### VOUCHER_KEY
+- **Type**: String
+- **Required**: Yes
+- **Description**: Key identifier for voucher signing operations
+- **Example**: `v1`
+
+### VOUCHER_SECRET
+- **Type**: String
+- **Required**: Yes
+- **Description**: Secret key for voucher generation and validation
+- **Example**: Base58 encoded secret
+- **Security**: Use cryptographically secure random generation
+
+### VOUCHER_TTL_SECONDS
+- **Type**: Integer
+- **Required**: No
+- **Default**: 3600 (1 hour)
+- **Description**: Time-to-live for vouchers in seconds
+- **Example**: `3600`
+
+### XP_KEY
+- **Type**: String
+- **Required**: Yes
+- **Description**: Key identifier for XP calculation operations
+- **Example**: `xp_v1`
+
+### XP_RATE
+- **Type**: Number
+- **Required**: No
+- **Default**: 1.0
+- **Description**: Experience point multiplier rate
+- **Example**: `1.5`
+
+### XP_SECRET
+- **Type**: String
+- **Required**: Yes
+- **Description**: Secret key for XP signing and verification
+- **Example**: Base58 encoded secret
+- **Security**: Use cryptographically secure random generation
+
+---
+
+## 🔐 SECURITY BEST PRACTICES
+
+Per Vault-Tec Protocol 77-S (Security):
+
+1. **Never commit real secrets** to version control
+2. **Use strong random generation** for all secret keys (crypto.getRandomValues())
+3. **Rotate secrets regularly** in production environments
+4. **Use environment-specific values** (different secrets for dev/staging/production)
+5. **Enable STRICT_REPLAY_PROTECTION** in production
+6. **Hash admin passwords** with SHA-256 or stronger
+7. **Limit ADMIN_WALLETS** to only necessary addresses
+8. **Use KMS** for production signing operations when possible
+
+---
+
+## 📝 QUICK SETUP CHECKLIST
+
+For the good of the Vault, ensure you have configured:
+
+- [x] **REDIS_URL** - Required for player state
+- [x] **SERVER_SECRET_KEY** - 64-byte Base58 secret
+- [x] **SOLANA_RPC** - Your Solana network endpoint
+- [x] **TOKEN_MINT** - Your FIZZ token address
+- [x] **NEXT_PUBLIC_BACKEND_URL** - Your API domain
+- [x] **FRONTEND_ORIGIN** - Your frontend domain(s)
+- [x] **GPS_SECRET** - GPS signing secret
+- [x] **VOUCHER_SECRET** - Voucher signing secret
+- [x] **XP_SECRET** - XP signing secret
+- [x] **GAME_VAULT_SECRET** - Game vault secret
+- [x] **HF_API_KEY** - Hugging Face API key (for AI)
+- [x] **ADMIN_USERNAME** - Admin username
+- [x] **ADMIN_PASSWORD_HASH** - Hashed admin password
+- [x] **ADMIN_WALLETS** - Admin wallet addresses
+
+---
+
+## 📚 RELATED DOCUMENTATION
+
+- [Deployment Guide](DEPLOYMENT.md)
+- [Render & Vercel Step-by-Step Setup](docs/RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
+- [Backend .env.example](backend/.env.example)
+- [Root .env.example](.env.example)
+- [Testing Guide](TESTING_GUIDE.md)
+
+---
+
+**📟 OVERSEER MESSAGE:**
+
+> "All environment variables have been cataloged and secured per Vault-Tec regulations.
+> Remember: A well-configured Vault is a safe Vault.
+> 
+> Stay safe out there, Vault Dweller. ☢️"
+
+---
+
+*Document Version: 1.0*  
+*Last Updated: 2026-01-29*  
+*Classification: VAULT-TEC CONFIDENTIAL*

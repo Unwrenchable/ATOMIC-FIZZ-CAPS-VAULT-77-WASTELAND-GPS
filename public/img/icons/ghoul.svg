@@ -10,26 +10,26 @@
     V10
     C18 6.5 15.5 4 12 4
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Eyes -->
-  <circle cx="9.5" cy="10" r="1.2" fill="white"/>
-  <circle cx="14.5" cy="10" r="1.2" fill="white"/>
+  <circle cx="9.5" cy="10" r="1.2" fill="#0a1a0a"/>
+  <circle cx="14.5" cy="10" r="1.2" fill="#0a1a0a"/>
 
   <!-- Cheek indent cutouts -->
   <path d="
     M8.5 12.5
     C9.5 13.2 10.5 13.2 11 12.5
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <path d="
     M13 12.5
     C13.5 13.2 14.5 13.2 15.5 12.5
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <!-- Mouth line -->
-  <rect x="10" y="14.5" width="4" height="1" fill="white"/>
+  <rect x="10" y="14.5" width="4" height="1" fill="#0a1a0a"/>
 
 </svg>

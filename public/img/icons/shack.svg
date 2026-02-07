@@ -1,12 +1,12 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Simple shack/hut -->
-  <rect x="5" y="12" width="14" height="8" fill="currentColor"/>
+  <rect x="5" y="12" width="14" height="8" fill="#00ff41"/>
   <!-- Slanted roof -->
-  <polygon points="4,12 12,6 20,12" fill="currentColor"/>
+  <polygon points="4,12 12,6 20,12" fill="#00ff41"/>
   <!-- Door -->
-  <rect x="10" y="14" width="4" height="6" fill="white"/>
+  <rect x="10" y="14" width="4" height="6" fill="#0a1a0a"/>
   <!-- Window -->
-  <rect x="6" y="14" width="3" height="3" fill="white"/>
+  <rect x="6" y="14" width="3" height="3" fill="#0a1a0a"/>
   <!-- Chimney -->
-  <rect x="15" y="5" width="2" height="4" fill="currentColor"/>
+  <rect x="15" y="5" width="2" height="4" fill="#00ff41"/>
 </svg>

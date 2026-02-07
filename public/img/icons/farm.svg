@@ -8,7 +8,7 @@
     V18
     H5
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Barn body -->
   <path d="
@@ -18,15 +18,15 @@
     V18
     H11
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Barn door cutout -->
-  <rect x="13" y="14" width="4" height="4" fill="white"/>
+  <rect x="13" y="14" width="4" height="4" fill="#0a1a0a"/>
 
   <!-- Barn window cutout -->
-  <rect x="14" y="11" width="2" height="2" fill="white"/>
+  <rect x="14" y="11" width="2" height="2" fill="#0a1a0a"/>
 
   <!-- Silo band cutout -->
-  <rect x="6" y="9" width="3" height="1" fill="white"/>
+  <rect x="6" y="9" width="3" height="1" fill="#0a1a0a"/>
 
 </svg>

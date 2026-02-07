@@ -1,13 +1,13 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Library/books building -->
-  <rect x="4" y="8" width="16" height="12" fill="currentColor"/>
+  <rect x="4" y="8" width="16" height="12" fill="#00ff41"/>
   <!-- Columns -->
-  <rect x="6" y="10" width="2" height="8" fill="white"/>
-  <rect x="11" y="10" width="2" height="8" fill="white"/>
-  <rect x="16" y="10" width="2" height="8" fill="white"/>
+  <rect x="6" y="10" width="2" height="8" fill="#0a1a0a"/>
+  <rect x="11" y="10" width="2" height="8" fill="#0a1a0a"/>
+  <rect x="16" y="10" width="2" height="8" fill="#0a1a0a"/>
   <!-- Triangular roof -->
-  <polygon points="3,8 12,3 21,8" fill="currentColor"/>
+  <polygon points="3,8 12,3 21,8" fill="#00ff41"/>
   <!-- Book detail -->
-  <rect x="9" y="14" width="1" height="3" fill="currentColor"/>
-  <rect x="14" y="14" width="1" height="3" fill="currentColor"/>
+  <rect x="9" y="14" width="1" height="3" fill="#00ff41"/>
+  <rect x="14" y="14" width="1" height="3" fill="#00ff41"/>
 </svg>
