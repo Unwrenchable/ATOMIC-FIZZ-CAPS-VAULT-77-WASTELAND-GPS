@@ -1243,14 +1243,20 @@ textarea:focus {
 
 /* ============================================================
    STATIC NOISE EFFECT (OPTIONAL LAYER)
+   Note: Base64 SVG generates fractal noise texture for authenticity
    ============================================================ */
+:root {
+  /* Extracted noise texture as custom property for maintainability */
+  --noise-texture: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=');
+}
+
 .static-noise::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   opacity: 0.03;
-  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=');
+  background-image: var(--noise-texture);
   animation: noise-shift 0.2s steps(10) infinite;
   mix-blend-mode: overlay;
 }
@@ -1261,15 +1267,18 @@ textarea:focus {
 }
 
 /* ============================================================
-   CRT FLICKER EFFECT (SUBTLE)
+   CRT FLICKER EFFECT (SUBTLE - Respects Reduced Motion)
    ============================================================ */
 @keyframes crt-flicker {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.98; }
 }
 
-body {
-  animation: crt-flicker 0.15s infinite steps(2), ambient-pulse 8s ease-in-out infinite;
+/* Only apply flicker if user hasn't requested reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    animation: crt-flicker 0.15s infinite steps(2), ambient-pulse 8s ease-in-out infinite;
+  }
 }
 
 /* ============================================================
