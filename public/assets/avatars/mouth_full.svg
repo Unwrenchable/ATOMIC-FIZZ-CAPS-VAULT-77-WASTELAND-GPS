@@ -1,5 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <ellipse cx="128" cy="160" rx="24" ry="6" fill="#8a5a4a" opacity="0.8"/>
-  <path d="M104 158h48" stroke="#6a3a2a" stroke-width="2" stroke-linecap="round"/>
-  <ellipse cx="128" cy="162" rx="22" ry="4" fill="#7a4a3a" opacity="0.6"/>
+  <defs>
+    <linearGradient id="lipGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c8788a"/>
+      <stop offset="50%" stop-color="#b8687a"/>
+      <stop offset="100%" stop-color="#a8586a"/>
+    </linearGradient>
+  </defs>
+  <path d="M108 165c4-3 8-5 12-5h4c4 0 8 2 12 5c2 1 4 3 4 5c0 3-2 5-4 7c-4 3-8 5-12 5h-4c-4 0-8-2-12-5c-2-2-4-4-4-7c0-2 2-4 4-5z" fill="url(#lipGrad)" stroke="#88485a" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M110 170c3-2 6-3 10-3h6c4 0 7 1 10 3" fill="none" stroke="#d8989a" stroke-width="1" opacity="0.6"/>
+  <path d="M112 170c3-1 6-2 9-2h4c3 0 6 1 9 2" fill="none" stroke="#884858" stroke-width="1.2" opacity="0.8"/>
+  <ellipse cx="118" cy="168" rx="3" ry="2" fill="#b8687a" opacity="0.5"/>
+  <ellipse cx="138" cy="168" rx="3" ry="2" fill="#b8687a" opacity="0.5"/>
 </svg>
