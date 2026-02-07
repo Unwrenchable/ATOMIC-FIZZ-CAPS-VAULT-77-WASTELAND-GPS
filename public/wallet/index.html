@@ -83,7 +83,7 @@
     <button class="wallet-tab" data-tab="swap">🔄 SWAP</button>
     <button class="wallet-tab" data-tab="nfts">🎨 NFTs</button>
     <button class="wallet-tab" data-tab="staking">🔒 STAKING</button>
-    <button class="wallet-tab" data-tab="fizzfun">🚀 FIZZ.FUN</button>
+    <a href="/fizzfun/" class="wallet-tab wallet-tab-link">🚀 FIZZ.FUN</a>
     <button class="wallet-tab" data-tab="bridge">🌉 BRIDGE</button>
   </div>
 
@@ -160,6 +160,7 @@
       </div>
       <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
         <a href="/" class="btn">🎮 PLAY GAME</a>
+        <a href="/fizzfun/" class="btn">🚀 FIZZ.FUN</a>
         <a href="/exchange" class="btn">💱 EXCHANGE</a>
         <a href="/bridge" class="btn">🌀 BRIDGE</a>
         <a href="/donate" class="btn">❤️ DONATE</a>
@@ -406,9 +407,27 @@
     </section>
   </div>
 
-  <!-- ============ TAB: FIZZ.FUN ============ -->
-  <div class="tab-content terminal-boot" id="tab-fizzfun">
-    <!-- FIZZ.FUN HEADER -->
+  <!-- ============ TAB: FIZZ.FUN (NOW STANDALONE - Link in navigation) ============ -->
+  <!-- FIZZ.FUN has been moved to its own page at /fizzfun/ -->
+  <!-- Keep this stub for backwards compatibility but direct users to standalone page -->
+  <div class="tab-content terminal-boot" id="tab-fizzfun" style="display: none;">
+    <section class="wallet-card fizz-fun-section static-noise">
+      <div class="wallet-card-header">
+        <span class="card-icon">🚀</span> FIZZ.FUN TOKEN LAUNCHPAD - NOW STANDALONE!
+      </div>
+      <div class="wallet-card" style="padding: 3rem; text-align: center;">
+        <p style="font-size: 2rem; margin-bottom: 2rem;">🚀 FIZZ.FUN is now its own dedicated page! 🚀</p>
+        <p style="margin-bottom: 2rem;">Experience the full token launchpad on its standalone site.</p>
+        <a href="/fizzfun/" class="btn" style="font-size: 2rem; padding: 2rem 3rem; display: inline-block;">
+          🚀 GO TO FIZZ.FUN 🚀
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- OLD FIZZ.FUN CONTENT ARCHIVED BELOW - Can be removed in future cleanup -->
+  <!--
+  <div class="tab-content terminal-boot" id="tab-fizzfun-old">
     <section class="wallet-card fizz-fun-section static-noise">
       <div class="wallet-card-header">
         <span class="card-icon">🚀</span> FIZZ.FUN TOKEN LAUNCHPAD
@@ -536,6 +555,8 @@
 
     <button id="buy-usdc-button" class="btn" style="width: 100%; margin-top: 1.5rem;">💰 BUY USDC (MOONPAY)</button>
   </div>
+  --> 
+  <!-- END OF ARCHIVED FIZZ.FUN CONTENT -->
 
   <!-- ============ TAB: BRIDGE ============ -->
   <div class="tab-content terminal-boot" id="tab-bridge">

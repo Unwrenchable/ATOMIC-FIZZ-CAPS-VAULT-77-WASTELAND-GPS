@@ -728,6 +728,23 @@ button:disabled {
   text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
 }
 
+/* Wallet tab link (for external pages like FIZZ.FUN) */
+.wallet-tab-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: var(--fizz-orange-dim);
+  color: var(--fizz-orange);
+}
+
+.wallet-tab-link:hover {
+  border-color: var(--fizz-orange);
+  color: var(--fizz-orange-bright);
+  background: rgba(255, 153, 51, 0.1);
+  box-shadow: 0 0 15px rgba(255, 153, 51, 0.3);
+}
+
 /* ============================================================
    TAB CONTENT PANELS
    ============================================================ */
