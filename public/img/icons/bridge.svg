@@ -1,6 +1,6 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Bridge structure -->
-  <rect x="2" y="14" width="20" height="3" fill="currentColor"/>
-  <path d="M4 14 L4 8 L8 8 L8 14 M16 14 L16 8 L20 8 L20 14" fill="currentColor"/>
-  <path d="M8 8 Q12 4 16 8" fill="none" stroke="currentColor" stroke-width="2"/>
+  <rect x="2" y="14" width="20" height="3" fill="#00ff41"/>
+  <path d="M4 14 L4 8 L8 8 L8 14 M16 14 L16 8 L20 8 L20 14" fill="#00ff41"/>
+  <path d="M8 8 Q12 4 16 8" fill="none" stroke="#00ff41" stroke-width="2"/>
 </svg>

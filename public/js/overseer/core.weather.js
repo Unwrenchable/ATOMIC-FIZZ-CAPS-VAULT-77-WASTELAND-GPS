@@ -79,7 +79,7 @@
       return WEATHER_EVENTS.map((w) => `${w.id} — ${w.name}`);
     },
 
-    triggerWeather(id) {
+    async triggerWeather(id) {
       const weather = this.getWeatherById(id);
       if (!weather) {
         overseerSay(`No weather event found with ID '${id}'.`);
@@ -88,15 +88,21 @@
       overseerSay(`Weather Event: ${weather.name}`);
       overseerSay(weather.description);
       weather.effect();
-      overseerSay(personality.speak());
+      if (personality && typeof personality.speak === "function") {
+        const line = await personality.speak("weather event");
+        overseerSay(line);
+      }
     },
 
-    triggerRandomWeather() {
+    async triggerRandomWeather() {
       const weather = this.getRandomWeather();
       overseerSay(`Weather Event: ${weather.name}`);
       overseerSay(weather.description);
       weather.effect();
-      overseerSay(personality.speak());
+      if (personality && typeof personality.speak === "function") {
+        const line = await personality.speak("weather event");
+        overseerSay(line);
+      }
       return weather.id;
     },
   };
@@ -110,7 +116,7 @@
   if (!window.overseerHandlers) window.overseerHandlers = {};
   const handlers = window.overseerHandlers;
 
-  handlers.weather = function (args) {
+  handlers.weather = async function (args) {
     const sub = (args[0] || "").toLowerCase();
 
     if (!sub) {
@@ -133,12 +139,12 @@
         overseerSay("Specify a weather event ID.");
         return;
       }
-      weatherApi.triggerWeather(id);
+      await weatherApi.triggerWeather(id);
       return;
     }
 
     if (sub === "random") {
-      weatherApi.triggerRandomWeather();
+      await weatherApi.triggerRandomWeather();
       return;
     }
 

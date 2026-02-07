@@ -1,0 +1,51 @@
+# Vercel Ignore File
+# Files and directories to exclude from Vercel deployment
+
+# Rust/Solana program files (not needed for web deployment)
+programs/
+target/
+Anchor.toml
+Cargo.toml
+Cargo.lock
+
+# Build tools and scripts (not needed in production)
+scripts/
+docs/
+workers/
+solana/
+
+# Test files
+tests/
+*.test.js
+test-*.js
+test-*.html
+
+# Development files
+.env.example
+.env.testnet
+docker-compose.yml
+render.yaml
+
+# Documentation (keep essential ones)
+OVERSEER_BOT_GUIDE.md
+OVERSEER_BOT_INVESTIGATION_SUMMARY.md
+TESTING_GUIDE.md
+TESTING_INSTRUCTIONS.md
+TESTNET_DEPLOYMENT_GUIDE.md
+IMPLEMENTATION_SUMMARY.md
+DEPLOYMENT_MANIFEST.md
+
+# Generation scripts
+generate-*.js
+create-*.js
+merge-*.js
+integrate_world.js
+verify-*.js
+
+# Node modules will be installed during build
+node_modules/
+
+# Git files
+.git/
+.github/
+.gitignore

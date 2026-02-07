@@ -52,7 +52,31 @@
 
       // Load saved exploration
       this.revealed = this.loadState();
-      this.revealed.forEach(poly => this.revealLayer.addData(poly));
+      // Rehydrate saved reveal data (support GeoJSON features and circle fallbacks)
+      this.revealed.forEach(entry => {
+        try {
+          if (!entry) return;
+          if (entry.type === 'circle' && Array.isArray(entry.center)) {
+            const lat = entry.center[0];
+            const lng = entry.center[1];
+            const radius = entry.radius || this.revealRadius;
+            const circle = L.circle([lat, lng], {
+              pane: 'fogPane',
+              radius: radius,
+              color: '#000',
+              weight: 0,
+              fillOpacity: 1,
+              className: 'fog-reveal'
+            });
+            this.revealLayer.addLayer(circle);
+          } else if (entry.type === 'Feature' || entry.geometry) {
+            // assume GeoJSON Feature
+            this.revealLayer.addData(entry);
+          }
+        } catch (e) {
+          console.warn('fogOfWar: failed to rehydrate reveal entry', e && e.message ? e.message : e);
+        }
+      });
 
       this.injectStyles();
       this.patchMovement(worldmap);
@@ -94,14 +118,26 @@
       if (this.lastPos && this.lastPos.distanceTo(newPos) < 10) return;
       this.lastPos = newPos;
 
-      // Create reveal circle polygon using Turf.js
-      const circle = turf.circle([lng, lat], this.revealRadius / 1000, {
-        steps: 32,
-        units: "kilometers"
-      });
+      // Create reveal circle polygon using Turf.js if available
+      if (typeof turf === 'undefined' || !turf || typeof turf.circle !== 'function') {
+        if (!this._warnedMissingTurf) {
+          console.warn('fogOfWar: turf.js not available; reveal disabled');
+          this._warnedMissingTurf = true;
+        }
+        return;
+      }
 
-      this.revealed.push(circle);
-      this.revealLayer.addData(circle);
+      try {
+        const circle = turf.circle([lng, lat], this.revealRadius / 1000, {
+          steps: 32,
+          units: "kilometers"
+        });
+
+        this.revealed.push(circle);
+        this.revealLayer.addData(circle);
+      } catch (e) {
+        console.warn('fogOfWar: failed to create reveal circle', e && e.message ? e.message : e);
+      }
 
       // Save to localStorage
       this.saveState();
@@ -134,8 +170,7 @@
 
   Game.modules.fogOfWar = fogModule;
 
-  // Wait for map-ready event instead of DOMContentLoaded
-  // This ensures the map exists before we try to create fog overlay
+  // Wait for map-ready event to ensure the map exists before creating fog overlay
   window.addEventListener("map-ready", () => {
     // Small delay to ensure map is fully initialized
     setTimeout(() => {
@@ -145,18 +180,5 @@
         console.error("fogOfWar: init failed", e);
       }
     }, 700);
-  });
-  
-  // Fallback: also try on DOMContentLoaded with a longer delay
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => {
-      if (!fogModule.fogPane) {
-        try {
-          fogModule.init();
-        } catch (e) {
-          console.error("fogOfWar: fallback init failed", e);
-        }
-      }
-    }, 3000);
   });
 })();

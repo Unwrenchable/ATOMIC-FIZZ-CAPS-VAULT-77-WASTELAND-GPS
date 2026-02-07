@@ -1,58 +1,106 @@
 # Deployment Guide
 
-## Architecture Overview
+> 📚 **Multiple Deployment Options Available**
+> - **Full Stack Vercel** (Recommended for simplicity): See [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
+> - **Split Architecture** (Vercel + Render): See [Render & Vercel Deployment Guide](docs/RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
 
-This application uses a split deployment architecture:
+## Deployment Options
 
-- **Frontend**: Deployed on Vercel
-  - Primary domain: `https://www.atomicfizzcaps.xyz`
-  - Preview/testing: `*.vercel.app`
-- **Backend API**: Deployed on Render
+This application supports two deployment architectures:
+
+### Option 1: Full Stack Vercel (Recommended for New Deployments)
+
+**Single platform deployment with both frontend and backend on Vercel**
+
+- ✅ **Frontend**: Static files served by Vercel CDN
+- ✅ **Backend**: Express app as Vercel Serverless Functions
+- ✅ **Benefits**: Simple setup, single platform, automatic scaling
+- ✅ **Best for**: Most use cases, especially getting started
+
+**See detailed guide**: [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
+
+### Option 2: Split Architecture (Legacy/Advanced)
+
+**Separate deployments for frontend and backend**
+
+- **Backend API** (Single Source of Truth): Deployed on Render
   - API domain: `https://api.atomicfizzcaps.xyz`
+  - **All game state, quests, player data managed here**
+  - **Single shared database** (Redis/PostgreSQL)
+  
+- **Frontend** (Multiple deployments all connect to same backend):
+  - Primary domain: `https://www.atomicfizzcaps.xyz` (Vercel)
+  - Also: `https://atomicfizzcaps.xyz` (Vercel)
+  - Preview/testing (Vercel): `*.vercel.app`
+  - Preview/testing (Render): `*.onrender.com`
+
+**Best for**: Need long-running tasks, WebSockets, or always-warm API responses
+
+## ⚠️ Important: Single Game Instance
+
+**All frontend deployments connect to the SAME backend API**, which means:
+- ✅ `atomicfizzcaps.xyz` → connects to backend API
+- ✅ `www.atomicfizzcaps.xyz` → connects to backend API
+- ✅ `preview-xyz.vercel.app` → connects to backend API
+
+This ensures:
+- **One unified game world** - all players share the same game state
+- **Consistent player progress** - your progress works across all frontend URLs
+- **Centralized game logic** - quests, items, economy all managed in one place
+
+## Domain Unification
+
+Whether using full stack Vercel or split architecture, all frontend deployments connect to a central backend API. This ensures consistent behavior across:
+- Main production site (`atomicfizzcaps.xyz`, `www.atomicfizzcaps.xyz`)
+- Vercel preview deployments (`*.vercel.app`)
+- Render deployments (`*.onrender.com`)
 
 ## Configuration
 
-### Frontend (Vercel)
+### Frontend (Vercel/Render)
 
 The frontend automatically detects its environment and configures the backend URL:
 
-**File**: `public/index.html`
+**File**: `public/js/config.js`
 ```javascript
-window.API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.github.dev'))
-  ? 'http://localhost:3001'
-  : 'https://api.atomicfizzcaps.xyz';
-window.BACKEND_URL = window.API_BASE;
+// Local development (localhost, Codespaces) -> http://localhost:3000
+// All production/preview environments -> https://api.atomicfizzcaps.xyz
 ```
 
-**Local development**: Points to `http://localhost:3001`  
-**Production**: Points to `https://api.atomicfizzcaps.xyz`
+**Local development**: Points to `http://localhost:3000`  
+**Production/Preview**: Points to `https://api.atomicfizzcaps.xyz`
 
 ### Backend (Render)
 
-The backend is configured to accept requests from the frontend domains:
+The backend is configured to accept requests from all frontend domains:
 
 **File**: `backend/server.js`
 ```javascript
-const FRONTEND_ORIGIN =
-  process.env.FRONTEND_ORIGIN ||
-  "https://www.atomicfizzcaps.xyz, http://localhost:3000, http://127.0.0.1:3000";
+// Default CORS origins include:
+// - https://www.atomicfizzcaps.xyz
+// - https://atomicfizzcaps.xyz  
+// - http://localhost:3000
+// - https://*.vercel.app (Vercel previews)
+// - https://*.onrender.com (Render previews)
 ```
 
-The CORS configuration also automatically allows any `*.vercel.app` domain for preview deployments.
+The CORS configuration automatically allows any `*.vercel.app` and `*.onrender.com` domain for preview deployments.
 
 ### Environment Variables
+
+**📋 For a complete alphabetical reference of all environment variables, see [ENVIRONMENT_VARIABLES.md](ENVIRONMENT_VARIABLES.md)**
 
 #### Backend (Render)
 
 Set these environment variables in your Render service dashboard:
 
 - `NODE_ENV=production`
-- `FRONTEND_ORIGIN` (recommended: `https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, https://*.vercel.app, http://localhost:3000`)
-  - The backend now supports wildcard patterns like `https://*.vercel.app` for Vercel preview deployments
+- `FRONTEND_ORIGIN` (recommended: `https://www.atomicfizzcaps.xyz, https://atomicfizzcaps.xyz, https://*.vercel.app, https://*.onrender.com, http://localhost:3000`)
+  - The backend supports wildcard patterns like `https://*.vercel.app` and `https://*.onrender.com` for preview deployments
   - Multiple origins can be comma-separated
 - `REDIS_URL` (required for player state)
-- `PLAYER_AUTH_SECRET` (required for authentication)
-- Other service-specific variables (see `backend/.env.example`)
+- `SERVER_SECRET_KEY` (required for authentication)
+- Other service-specific variables (see `backend/.env.example` or [ENVIRONMENT_VARIABLES.md](ENVIRONMENT_VARIABLES.md))
 
 **Note**: If using Cloudflare proxy, temporarily disable it during CORS verification to ensure proper origin headers are sent.
 

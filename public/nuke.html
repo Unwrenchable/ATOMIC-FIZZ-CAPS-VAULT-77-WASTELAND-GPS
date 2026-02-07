@@ -5,11 +5,11 @@
     <title>NUKE GEAR • ATOMIC FIZZ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Content Security Policy to allow external resources -->
+    <!-- Content Security Policy: 'unsafe-eval' required for Solana web3.js dynamic code -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
-      script-src 'self' https://unpkg.com https://cdn.jsdelivr.net 'unsafe-inline';
-      connect-src 'self' https://unpkg.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
+      script-src 'self' https://unpkg.com https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval';
+      connect-src 'self' https://unpkg.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://rpc.ankr.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       img-src 'self' data: https: blob:;
       font-src 'self' https://fonts.gstatic.com data:;
@@ -19,24 +19,37 @@
 
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/terminal.css" />
+    
+    <!-- API base: local dev vs production -->
+    <script src="/js/config.js"></script>
 </head>
 <body>
-    <div class="terminal-screen crt">
-        <h1>GEAR FUSION CHAMBER</h1>
-        
-        <div style="text-align:center; margin: 10px 0 20px; opacity: 0.8;">
-            WARNING: PERMANENT DESTRUCTION • NO UNDO
+    <!-- MAIN TERMINAL WRAPPER -->
+    <div class="terminal-wrap">
+
+        <!-- Header -->
+        <div class="terminal-header">
+            ⚛️ GEAR FUSION CHAMBER
         </div>
 
-        <div id="gearList">
+        <!-- Community project notice -->
+        <!-- Not an official or commercial product; branding is fictional -->
+        <div class="terminal-output terminal-system">
+            ⚠️ WARNING: PERMANENT DESTRUCTION • NO UNDO
+        </div>
+
+        <!-- Gear list area -->
+        <div id="gearList" class="terminal-output">
             Loading equipped gear...
         </div>
 
-        <div style="text-align:center; margin-top:30px;">
-            <button class="buy-btn sol-btn" id="backBtn">
-                RETURN TO PIP-BOY
+        <!-- Back button -->
+        <div style="margin-top: 18px; text-align: right;">
+            <button class="terminal-button" id="backBtn">
+                RETURN TO WRIST UI
             </button>
         </div>
+
     </div>
 
     <!-- Solana utilities -->

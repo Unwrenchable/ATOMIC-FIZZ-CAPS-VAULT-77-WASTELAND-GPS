@@ -1,15 +1,15 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <!-- Ship/boat -->
-  <path d="M2 16 L4 20 L20 20 L22 16 Q12 14 2 16 Z" fill="currentColor"/>
+  <path d="M2 16 L4 20 L20 20 L22 16 Q12 14 2 16 Z" fill="#00ff41"/>
   <!-- Hull -->
-  <rect x="6" y="10" width="12" height="6" fill="currentColor"/>
+  <rect x="6" y="10" width="12" height="6" fill="#00ff41"/>
   <!-- Cabin -->
-  <rect x="8" y="6" width="8" height="4" fill="currentColor"/>
+  <rect x="8" y="6" width="8" height="4" fill="#00ff41"/>
   <!-- Smoke stack -->
-  <rect x="14" y="3" width="3" height="3" fill="currentColor"/>
+  <rect x="14" y="3" width="3" height="3" fill="#00ff41"/>
   <!-- Porthole -->
-  <circle cx="12" cy="12" r="1.5" fill="white"/>
+  <circle cx="12" cy="12" r="1.5" fill="#0a1a0a"/>
   <!-- Windows -->
-  <rect x="9" y="7" width="2" height="2" fill="white"/>
-  <rect x="13" y="7" width="2" height="2" fill="white"/>
+  <rect x="9" y="7" width="2" height="2" fill="#0a1a0a"/>
+  <rect x="13" y="7" width="2" height="2" fill="#0a1a0a"/>
 </svg>

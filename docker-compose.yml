@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:7
+    container_name: afc_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  backend:
+    image: node:20
+    container_name: afc_backend
+    working_dir: /usr/src/app/backend
+    volumes:
+      - ./:/usr/src/app
+    command: sh -c "cd backend && npm install --no-audit --no-fund && NODE_ENV=development node server.js"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+
+  worker:
+    image: node:20
+    container_name: afc_worker
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+    command: sh -c "cd backend && npm install --no-audit --no-fund && node ../workers/mint_worker_stream2.js"
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+      - backend

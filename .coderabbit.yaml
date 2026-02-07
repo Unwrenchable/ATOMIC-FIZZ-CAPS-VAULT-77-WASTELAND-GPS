@@ -1,4 +1,0 @@
-# CodeRabbit configuration
-# Disables the review status message for bot users
-reviews:
-  review_status: false

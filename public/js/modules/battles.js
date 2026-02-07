@@ -99,23 +99,64 @@
     },
 
     // --------------------------------------------------------
-    // Rewards
+    // Rewards - uses unified PlayerState for proper persistence
     // --------------------------------------------------------
     applyRewards(encounter) {
       const r = encounter.rewards || {};
-      this.gs.player.xp += r.xp || 0;
-      this.gs.player.caps += r.caps || 0;
+      
+      // Award XP - use unified PlayerState
+      if (r.xp) {
+        if (Game.modules?.PlayerState?.awardXP) {
+          Game.modules.PlayerState.awardXP(r.xp);
+        } else {
+          this.gs.player.xp = (this.gs.player.xp || 0) + r.xp;
+        }
+      }
+      
+      // Award caps - use unified PlayerState
+      if (r.caps) {
+        if (Game.modules?.PlayerState?.awardCaps) {
+          Game.modules.PlayerState.awardCaps(r.caps);
+        } else {
+          this.gs.player.caps = (this.gs.player.caps || 0) + r.caps;
+        }
+      }
 
+      // Award items - use unified system for proper persistence
       (r.items || []).forEach((itemId) => {
-        const item =
-          ITEMS_DB.weapons.find((x) => x.id === itemId) ||
-          ITEMS_DB.ammo.find((x) => x.id === itemId) ||
-          ITEMS_DB.armor.find((x) => x.id === itemId) ||
-          ITEMS_DB.consumables.find((x) => x.id === itemId) ||
-          ITEMS_DB.questItems.find((x) => x.id === itemId);
+        // Try to resolve item from items database
+        let item = null;
+        
+        if (typeof ITEMS_DB !== 'undefined') {
+          item =
+            ITEMS_DB.weapons?.find((x) => x.id === itemId) ||
+            ITEMS_DB.ammo?.find((x) => x.id === itemId) ||
+            ITEMS_DB.armor?.find((x) => x.id === itemId) ||
+            ITEMS_DB.consumables?.find((x) => x.id === itemId) ||
+            ITEMS_DB.questItems?.find((x) => x.id === itemId);
+        }
+        
+        // If not found, try Game.player.items
+        if (!item && Game.player?.items) {
+          item = Game.player.items.find(i => i.id === itemId);
+        }
 
-        if (item) Game.modules.inventory.addItem(item, 1);
+        // Fallback: create basic item object
+        if (!item) {
+          item = { id: itemId, name: itemId, type: 'loot' };
+        }
+
+        // Use unified PlayerState for proper persistence
+        if (Game.modules?.PlayerState?.addItem) {
+          Game.modules.PlayerState.addItem(item, 1);
+        } else if (Game.giveItem) {
+          Game.giveItem(item, 1);
+        } else if (Game.modules?.inventory?.addItem) {
+          Game.modules.inventory.addItem(item, 1);
+        }
       });
+      
+      console.log(`[Battle] Rewards applied: ${r.xp || 0} XP, ${r.caps || 0} caps, ${(r.items || []).length} items`);
     },
 
     // --------------------------------------------------------

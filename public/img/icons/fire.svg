@@ -8,7 +8,7 @@
     C10.5 12.5 9 11 9 9
     C9 7 11 5 12 3
     Z
-  " fill="currentColor"/>
+  " fill="#00ff41"/>
 
   <!-- Inner flame cutout -->
   <path d="
@@ -18,7 +18,7 @@
     C11.5 11.7 11 11 11 10
     C11 9 11.3 8 12 7
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
   <!-- Base glow cutout -->
   <path d="
@@ -26,6 +26,6 @@
     C10 15.5 11 17 12 17
     C13 17 14 15.5 14 14
     Z
-  " fill="white"/>
+  " fill="#0a1a0a"/>
 
 </svg>
