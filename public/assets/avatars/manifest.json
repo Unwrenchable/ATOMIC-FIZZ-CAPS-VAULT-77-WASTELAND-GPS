@@ -1,12 +1,127 @@
 {
-  "name": "afc-avatar-pack-svg-v1",
-  "description": "Small curated SVG layered avatar pack. Low footprint, easy to compose client-side.",
+  "name": "afc-avatar-pack-svg-v2-complete",
+  "version": "2.0.0",
+  "description": "Complete SVG layered avatar pack for Atomic Fizz Caps Vault 77. Wasteland aesthetic, low footprint, client-side composable.",
+  "theme": "Post-apocalyptic Fallout-style wasteland survivor",
+  "viewBox": "0 0 256 256",
+  "layerOrder": ["head", "eyes", "nose", "mouth", "hair", "facialHair", "scars", "markings", "accessories", "shirt"],
   "parts": {
-    "head": ["head_base.svg"],
-    "eyes": ["eyes_set1.svg"],
-    "hair": ["hair_short.svg","hair_long.svg"],
-    "shirt": ["shirt_jacket.svg"]
+    "head": [
+      "head_base.svg",
+      "head_round.svg",
+      "head_square.svg",
+      "head_heart.svg",
+      "head_oblong.svg",
+      "head_diamond.svg"
+    ],
+    "eyes": [
+      "eyes_set1.svg",
+      "eyes_almond.svg",
+      "eyes_round.svg",
+      "eyes_hooded.svg",
+      "eyes_downturned.svg",
+      "eyes_upturned.svg",
+      "eyes_monolid.svg",
+      "eyes_deepset.svg"
+    ],
+    "nose": [
+      "nose_straight.svg",
+      "nose_roman.svg",
+      "nose_snub.svg",
+      "nose_button.svg",
+      "nose_aquiline.svg",
+      "nose_wide.svg",
+      "nose_narrow.svg"
+    ],
+    "mouth": [
+      "mouth_thin.svg",
+      "mouth_full.svg",
+      "mouth_wide.svg",
+      "mouth_small.svg",
+      "mouth_heartshaped.svg"
+    ],
+    "hair": [
+      "hair_bald.svg",
+      "hair_buzzcut.svg",
+      "hair_short.svg",
+      "hair_medium.svg",
+      "hair_long.svg",
+      "hair_mohawk.svg",
+      "hair_ponytail.svg",
+      "hair_braids.svg",
+      "hair_dreads.svg",
+      "hair_slickedback.svg",
+      "hair_wasteland.svg"
+    ],
+    "facialHair": [
+      "beard_stubble.svg",
+      "beard_goatee.svg",
+      "beard_full.svg",
+      "beard_mustache.svg",
+      "beard_mutton.svg",
+      "beard_vandyke.svg",
+      "beard_wasteland.svg"
+    ],
+    "scars": [
+      "scar_cheek_left.svg",
+      "scar_cheek_right.svg",
+      "scar_brow.svg",
+      "scar_lip.svg",
+      "scar_forehead.svg",
+      "scar_burn_left.svg",
+      "scar_burn_right.svg",
+      "scar_claw.svg",
+      "scar_bullet.svg"
+    ],
+    "markings": [
+      "marking_tribal.svg",
+      "marking_warpaint.svg",
+      "marking_freckles.svg",
+      "marking_moles.svg",
+      "marking_radiation_burns.svg",
+      "marking_circuitry.svg",
+      "marking_tattoo_vault.svg",
+      "marking_tattoo_faction.svg"
+    ],
+    "accessories": [
+      "acc_eyepatch_left.svg",
+      "acc_eyepatch_right.svg",
+      "acc_glasses.svg",
+      "acc_sunglasses.svg",
+      "acc_goggles.svg",
+      "acc_bandana.svg",
+      "acc_respirator.svg",
+      "acc_earring_left.svg",
+      "acc_earring_right.svg",
+      "acc_earrings_both.svg",
+      "acc_nose_ring.svg",
+      "acc_cybernetic_eye.svg"
+    ],
+    "shirt": [
+      "shirt_jacket.svg",
+      "shirt_vault_suit.svg",
+      "shirt_armor.svg",
+      "shirt_wasteland_gear.svg"
+    ]
   },
-  "license": "CC0 or original - created for this project",
-  "notes": "These SVGs are intentionally simple, stylistically muted, and small in file size. Use as layered assets in the avatar composer."
+  "totalAssets": 77,
+  "features": {
+    "colorizable": ["hair", "facialHair", "eyes", "skin"],
+    "layered": true,
+    "transparent": true,
+    "optimized": true
+  },
+  "styleGuide": {
+    "palette": "Earthy, muted wasteland colors",
+    "lineStyle": "Simple paths with minimal detail",
+    "fileSize": "Optimized for web performance",
+    "compatibility": "Modern browsers, SVG 1.1+"
+  },
+  "usage": {
+    "compositing": "Layer SVGs in order specified by layerOrder array",
+    "colorization": "Apply fill/stroke colors via CSS or inline styles",
+    "scaling": "Maintain 256x256 viewBox for best results"
+  },
+  "license": "CC0 or original - created for Atomic Fizz Caps Vault 77 project",
+  "notes": "Complete asset library for wasteland survivor character creation. All SVGs use consistent styling, transparent backgrounds, and layering-friendly design. Includes race-specific options (ghoul burns, synth circuitry, vault tattoos)."
 }
