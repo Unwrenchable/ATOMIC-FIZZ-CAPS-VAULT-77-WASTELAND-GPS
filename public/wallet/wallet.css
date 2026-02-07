@@ -51,6 +51,17 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
+  
+  /* Static Noise Texture (Base64-encoded fractal noise SVG)
+     Decoded structure for maintenance:
+     <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+       <filter id="a" x="0" y="0">
+         <feTurbulence baseFrequency=".75" stitchTiles="stitch" type="fractalNoise"/>
+         <feColorMatrix type="saturate" values="0"/>
+       </filter>
+       <path d="M0 0h300v300H0z" filter="url(#a)" opacity=".05"/>
+     </svg> */
+  --noise-texture: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=');
 }
 
 /* ============================================================
@@ -1243,20 +1254,8 @@ textarea:focus {
 
 /* ============================================================
    STATIC NOISE EFFECT (OPTIONAL LAYER)
-   Decoded SVG Structure (for maintenance):
-   <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
-     <filter id="a" x="0" y="0">
-       <feTurbulence baseFrequency=".75" stitchTiles="stitch" type="fractalNoise"/>
-       <feColorMatrix type="saturate" values="0"/>
-     </filter>
-     <path d="M0 0h300v300H0z" filter="url(#a)" opacity=".05"/>
-   </svg>
+   Note: --noise-texture variable is defined in main :root block
    ============================================================ */
-:root {
-  /* Base64-encoded fractal noise SVG texture */
-  --noise-texture: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=');
-}
-
 .static-noise::after {
   content: "";
   position: absolute;
