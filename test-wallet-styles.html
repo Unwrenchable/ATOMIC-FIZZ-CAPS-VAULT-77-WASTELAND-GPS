@@ -179,14 +179,14 @@
       
       <div class="swap-container">
         <div class="swap-input-group">
-          <label class="swap-label">FROM</label>
+          <label class="swap-label" for="demo-swap-from">FROM</label>
           <div class="swap-row">
-            <select class="swap-select">
+            <select class="swap-select" id="demo-swap-from-token" aria-label="Select token to swap from">
               <option>SOL</option>
               <option>USDC</option>
               <option>AFC</option>
             </select>
-            <input type="number" class="swap-input mono" placeholder="0.00" value="10.5">
+            <input type="number" id="demo-swap-from" class="swap-input mono" placeholder="0.00" value="10.5" aria-label="Amount to swap from">
           </div>
           <div class="swap-balance small muted">Balance: 123.456 SOL</div>
         </div>
@@ -194,14 +194,14 @@
         <div class="swap-arrow">⇅</div>
 
         <div class="swap-input-group">
-          <label class="swap-label">TO</label>
+          <label class="swap-label" for="demo-swap-to">TO</label>
           <div class="swap-row">
-            <select class="swap-select">
+            <select class="swap-select" id="demo-swap-to-token" aria-label="Select token to swap to">
               <option>AFC</option>
               <option>SOL</option>
               <option>USDC</option>
             </select>
-            <input type="number" class="swap-input mono" placeholder="0.00" value="52,500" readonly>
+            <input type="number" id="demo-swap-to" class="swap-input mono" placeholder="0.00" value="52,500" readonly aria-label="Amount you will receive">
           </div>
           <div class="swap-balance small muted">You'll receive ~52,500 AFC</div>
         </div>
@@ -255,18 +255,18 @@
       </div>
       
       <div class="entry">
-        <label>Text Input</label>
-        <input type="text" placeholder="Enter wallet address..." value="Hp3e...x7mK">
+        <label for="demo-text-input">Text Input</label>
+        <input type="text" id="demo-text-input" placeholder="Enter wallet address..." value="Hp3e...x7mK">
       </div>
 
       <div class="entry">
-        <label>Number Input</label>
-        <input type="number" placeholder="0.00" value="123.456">
+        <label for="demo-number-input">Number Input</label>
+        <input type="number" id="demo-number-input" placeholder="0.00" value="123.456">
       </div>
 
       <div class="entry">
-        <label>Select Dropdown</label>
-        <select>
+        <label for="demo-select">Select Dropdown</label>
+        <select id="demo-select">
           <option>Solana</option>
           <option>Ethereum</option>
           <option>Polygon</option>
