@@ -1,5 +1,94 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <ellipse cx="152" cy="108" rx="6" ry="8" fill="#8a6a5a" opacity="0.5"/>
-  <path d="M148 105c2-3 4-4 8-4s6 1 8 4" stroke="#9a7a6a" stroke-width="2" opacity="0.7" fill="none" stroke-linecap="round"/>
-  <path d="M150 107c1-2 3-3 6-3s5 1 6 3" stroke="#c8a88a" stroke-width="1" opacity="0.6" fill="none" stroke-linecap="round"/>
+  <defs>
+    <!-- Bullet wound crater gradient -->
+    <radialGradient id="bulletHole" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#6a4a3a"/>
+      <stop offset="40%" stop-color="#8a6a5a"/>
+      <stop offset="70%" stop-color="#a8887a"/>
+      <stop offset="100%" stop-color="#c8a88a" stop-opacity="0.3"/>
+    </radialGradient>
+    <!-- Scar tissue around wound -->
+    <radialGradient id="scarTissue" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#b8988a" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#b8988a" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#a8887a" stop-opacity="0.7"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Bullet entry wound - right side of face/temple area -->
+  
+  <!-- Impact zone - discoloration/bruising -->
+  <ellipse cx="154" cy="106" rx="12" ry="10" fill="url(#scarTissue)" opacity="0.4"/>
+  
+  <!-- Crater/depression from bullet -->
+  <ellipse cx="153" cy="107" rx="6.5" ry="7" fill="url(#bulletHole)" opacity="0.8"/>
+  
+  <!-- Main wound opening -->
+  <ellipse cx="153" cy="107" rx="4" ry="5" fill="#6a4a3a" opacity="0.9"/>
+  
+  <!-- Deep center (darkest part of wound) -->
+  <ellipse cx="153" cy="107" rx="2" ry="2.5" fill="#3a2a1a"/>
+  
+  <!-- Raised scar tissue rim around wound -->
+  <ellipse cx="153" cy="107" rx="6" ry="6.5" fill="none" stroke="#b8988a" 
+           stroke-width="1.5" opacity="0.7"/>
+  
+  <!-- Irregular wound edge (bullet wounds aren't perfect circles) -->
+  <path d="M149 105c1-2 2-2 4-2c2 0 3 1 4 2c1 1 1 3 1 5c0 2-1 3-2 4c-1 1-2 2-4 2c-2 0-3-1-4-2c-1-1-2-2-2-4c0-2 1-4 2-5z" 
+        fill="none" stroke="#9a7a6a" stroke-width="0.8" opacity="0.6"/>
+  
+  <!-- Skin tearing/ragged edges -->
+  <g opacity="0.6" stroke="#8a6a5a" stroke-width="1.2" fill="none">
+    <path d="M147 107c1 0 2-1 2-2"/>
+    <path d="M159 107c-1 0-2 1-2 2"/>
+    <path d="M153 102c0 1-1 2-2 2"/>
+    <path d="M153 112c0-1 1-2 2-2"/>
+  </g>
+  
+  <!-- Radiating stress lines from impact -->
+  <g opacity="0.4" stroke="#a8887a" stroke-width="0.8" fill="none" stroke-linecap="round">
+    <path d="M147 103c-2-2-3-4-4-6"/>
+    <path d="M145 108c-3-1-6-1-8-1"/>
+    <path d="M146 113c-2 2-4 4-6 5"/>
+    <path d="M159 103c2-2 3-4 4-6"/>
+    <path d="M161 108c3-1 6-1 8-1"/>
+    <path d="M160 113c2 2 4 4 6 5"/>
+  </g>
+  
+  <!-- Discoloration/bruising around wound -->
+  <g opacity="0.15" fill="#7a5a4a">
+    <ellipse cx="148" cy="104" rx="3" ry="4"/>
+    <ellipse cx="158" cy="104" rx="3" ry="4"/>
+    <ellipse cx="153" cy="113" rx="4" ry="3"/>
+  </g>
+  
+  <!-- Keloid scarring (raised tissue) -->
+  <g opacity="0.5" fill="none" stroke="#c8a88a" stroke-width="1">
+    <path d="M150 105c1-1 2-1 3-1c1 0 2 0 3 1"/>
+    <path d="M150 109c1 1 2 1 3 1c1 0 2 0 3-1"/>
+  </g>
+  
+  <!-- Old stitching marks (if treated) -->
+  <g opacity="0.4" stroke="#9a7a6a" stroke-width="0.6" fill="none">
+    <path d="M149 105l1 0M149 107l1 0M149 109l1 0"/>
+    <path d="M156 105l1 0M156 107l1 0M156 109l1 0"/>
+  </g>
+  
+  <!-- Powder burn stippling around wound (if close range) -->
+  <g opacity="0.3" fill="#4a3a2a">
+    <circle cx="147" cy="102" r="0.6"/>
+    <circle cx="151" cy="101" r="0.5"/>
+    <circle cx="155" cy="102" r="0.6"/>
+    <circle cx="158" cy="104" r="0.5"/>
+    <circle cx="159" cy="108" r="0.6"/>
+    <circle cx="158" cy="111" r="0.5"/>
+    <circle cx="155" cy="113" r="0.6"/>
+    <circle cx="151" cy="114" r="0.5"/>
+    <circle cx="147" cy="112" r="0.6"/>
+    <circle cx="145" cy="108" r="0.5"/>
+  </g>
+  
+  <!-- Highlight on raised scar edge (catches light) -->
+  <path d="M150 104c1-1 2-1 3-1" fill="none" stroke="#e8d8c8" 
+        stroke-width="0.8" opacity="0.5" stroke-linecap="round"/>
 </svg>

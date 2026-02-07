@@ -1,6 +1,102 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <path d="M118 45c-6 0-10 4-10 10v60c0 6 4 10 10 10h20c6 0 10-4 10-10V55c0-6-4-10-10-10h-20z" fill="#3b2b24"/>
-  <path d="M115 45c-4-8-10-12-18-12-6 0-10 4-12 10-2 8 2 16 10 20 6 3 14 2 20-4v-14z" fill="#3b2b24"/>
-  <path d="M141 45c4-8 10-12 18-12 6 0 10 4 12 10 2 8-2 16-10 20-6 3-14 2-20-4v-14z" fill="#3b2b24"/>
-  <ellipse cx="128" cy="52" rx="24" ry="8" fill="#2b1b14"/>
+  <defs>
+    <!-- Hair gradient for depth -->
+    <linearGradient id="mohawkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a3a2a"/>
+      <stop offset="50%" stop-color="#3a2a1a"/>
+      <stop offset="100%" stop-color="#2a1a0a"/>
+    </linearGradient>
+    <!-- Highlight for hair strands -->
+    <linearGradient id="hairHighlight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#5a4a3a" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#6a5a4a" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#5a4a3a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Shaved sides shadow/stubble -->
+  <ellipse cx="85" cy="95" rx="18" ry="35" fill="#2a1a0a" opacity="0.3"/>
+  <ellipse cx="171" cy="95" rx="18" ry="35" fill="#2a1a0a" opacity="0.3"/>
+  
+  <!-- Stubble texture on sides -->
+  <g opacity="0.4" fill="#1a0a00">
+    <circle cx="80" cy="85" r="0.5"/>
+    <circle cx="84" cy="88" r="0.5"/>
+    <circle cx="78" cy="92" r="0.5"/>
+    <circle cx="82" cy="96" r="0.5"/>
+    <circle cx="85" cy="100" r="0.5"/>
+    <circle cx="176" cy="85" r="0.5"/>
+    <circle cx="172" cy="88" r="0.5"/>
+    <circle cx="178" cy="92" r="0.5"/>
+    <circle cx="174" cy="96" r="0.5"/>
+    <circle cx="171" cy="100" r="0.5"/>
+  </g>
+  
+  <!-- Main mohawk center strip -->
+  <path d="M118 35c-2-3-2-8 0-12c1-2 3-4 5-5c2-1 5-1 10-1c5 0 8 0 10 1c2 1 4 3 5 5c2 4 2 9 0 12l0 0
+           c-1 6-2 14-2 22c0 8 1 16 2 24c1 8 2 16 2 24c0 8-1 16-2 24c-1 8-2 14-3 18
+           h-14
+           c-1-4-2-10-3-18c-1-8-2-16-2-24c0-8 1-16 2-24c1-8 2-16 2-24c0-8-1-16-2-22z" 
+        fill="url(#mohawkGrad)" stroke="#1a0a00" stroke-width="1.5"/>
+  
+  <!-- Individual hair spikes for epic detail -->
+  <!-- Spike 1 (tallest, center-left) -->
+  <path d="M120 40c1-8 2-14 4-18c2-4 4-6 8-6c4 0 6 2 8 6c2 4 3 10 4 18" 
+        fill="#3a2a1a" stroke="#2a1a0a" stroke-width="1.2" stroke-linejoin="miter"/>
+  
+  <!-- Spike 2 (center-right) -->
+  <path d="M123 45c0-6 1-11 3-14c1-2 3-4 6-4c3 0 5 2 6 4c2 3 3 8 3 14" 
+        fill="#4a3a2a" stroke="#2a1a0a" stroke-width="1" stroke-linejoin="miter"/>
+  
+  <!-- Spike 3 (front) -->
+  <path d="M125 52c0-5 1-9 2-11c1-2 2-3 5-3c3 0 4 1 5 3c1 2 2 6 2 11" 
+        fill="#3a2a1a" stroke="#2a1a0a" stroke-width="0.8" stroke-linejoin="miter"/>
+  
+  <!-- Additional spikes going back -->
+  <path d="M120 58c0-4 1-7 2-9c1-1 2-2 4-2c2 0 3 1 4 2c1 2 2 5 2 9" 
+        fill="#2a1a0a" stroke="#1a0a00" stroke-width="0.8" opacity="0.9"/>
+  
+  <path d="M121 70c0-4 1-6 2-8c1-1 2-2 4-2c2 0 3 1 4 2c1 2 2 4 2 8" 
+        fill="#3a2a1a" stroke="#2a1a0a" stroke-width="0.8" opacity="0.85"/>
+  
+  <path d="M122 82c0-3 1-5 2-7c1-1 2-2 3-2c1 0 2 1 3 2c1 2 1 4 2 7" 
+        fill="#2a1a0a" stroke="#1a0a00" stroke-width="0.8" opacity="0.8"/>
+  
+  <path d="M123 94c0-3 1-5 2-6c0-1 1-2 3-2c2 0 2 1 3 2c1 1 2 3 2 6" 
+        fill="#3a2a1a" stroke="#2a1a0a" stroke-width="0.7" opacity="0.75"/>
+  
+  <!-- Hair strand highlights for dimension -->
+  <g opacity="0.3" stroke="url(#hairHighlight)" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <path d="M122 45v60"/>
+    <path d="M128 42v65"/>
+    <path d="M134 45v60"/>
+  </g>
+  
+  <!-- Individual hair texture lines -->
+  <g opacity="0.25" stroke="#1a0a00" stroke-width="0.5" fill="none">
+    <path d="M125 50c0 8-1 16-1 24"/>
+    <path d="M131 50c0 8 1 16 1 24"/>
+    <path d="M119 55c0 10-1 20-2 30"/>
+    <path d="M137 55c0 10 1 20 2 30"/>
+  </g>
+  
+  <!-- Gel/product shine effect -->
+  <path d="M126 48c2-4 4-6 6-6c2 0 4 2 6 6" fill="none" stroke="#6a5a4a" 
+        stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+  
+  <!-- Tips highlighting (bleached or colored tips effect) -->
+  <g opacity="0.5">
+    <path d="M120 35c2-3 4-5 8-6c4-1 8 0 12 1" fill="none" stroke="#7a6a5a" 
+          stroke-width="2" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Base/scalp connection detail -->
+  <ellipse cx="128" cy="108" rx="12" ry="6" fill="#2a1a0a" opacity="0.6"/>
+  
+  <!-- Wasteland grit - small imperfections -->
+  <g opacity="0.3" fill="#8a7a6a">
+    <circle cx="124" cy="65" r="0.8"/>
+    <circle cx="132" cy="72" r="0.6"/>
+    <circle cx="127" cy="85" r="0.7"/>
+  </g>
 </svg>
