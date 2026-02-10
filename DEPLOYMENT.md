@@ -3,6 +3,7 @@
 > 📚 **Multiple Deployment Options Available**
 > - **Full Stack Vercel** (Recommended for simplicity): See [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
 > - **Split Architecture** (Vercel + Render): See [Render & Vercel Deployment Guide](docs/RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
+> - **Moving to Organization?** See [ORGANIZATION_MIGRATION_GUIDE.md](ORGANIZATION_MIGRATION_GUIDE.md) 🔄
 
 ## Deployment Options
 
