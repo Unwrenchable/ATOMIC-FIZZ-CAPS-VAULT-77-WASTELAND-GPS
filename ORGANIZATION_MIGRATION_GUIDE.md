@@ -1,5 +1,7 @@
 # Repository Organization Migration Guide
 
+> **Note:** This guide uses `atomicfizzcaps.xyz` as an example domain throughout. Replace this with your actual domain name if different.
+
 ## ✅ YES - Your Site Will Continue to Work!
 
 When you move your repository to an organization, **your site will continue to be served** as long as you follow the configuration steps below. The deployment is based on Vercel and Render services, not on the GitHub repository location.
