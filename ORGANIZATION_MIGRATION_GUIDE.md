@@ -47,7 +47,7 @@ Your deployment infrastructure is **already organization-ready**:
 1. **Transfer the repository** to the organization:
    - Go to repository Settings → General → Danger Zone → Transfer ownership
    - Follow GitHub's transfer process
-   - The repository URL will change from `github.com/old-owner/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS` to `github.com/new-org/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS`
+   - The repository URL will change from `github.com/old-owner/your-repo-name` to `github.com/new-org/your-repo-name`
 
 ### After Moving the Repository
 
