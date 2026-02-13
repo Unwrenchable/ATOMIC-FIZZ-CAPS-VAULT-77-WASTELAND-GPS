@@ -15,5 +15,8 @@
     "node-fetch": "^2.7.0",
     "redis": "^5.10.0",
     "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
   }
 }
