@@ -142,6 +142,7 @@
         if (!this.gs.quests) this.gs.quests = {};
         if (!this.gs.player) this.gs.player = { xp: 0, caps: 0 };
         if (!this.gs.inventory) this.gs.inventory = { weapons: [], armor: [], consumables: [], ammo: [], tools: [], questItems: [] };
+        this.loadQuestState(); // CRITICAL: Load saved quest state
         this.loadAvailableQuests();
         this.giveStarterGear(); // This checks its own flag
         return;
@@ -152,6 +153,9 @@
       if (!this.gs.quests) this.gs.quests = {};
       if (!this.gs.player) this.gs.player = { xp: 0, caps: 0 };
       if (!this.gs.inventory) this.gs.inventory = { weapons: [], armor: [], consumables: [], ammo: [], tools: [], questItems: [] };
+      
+      // Load saved quest state (CRITICAL FIX)
+      this.loadQuestState();
       
       // Load saved available quests
       this.loadAvailableQuests();
@@ -669,6 +673,79 @@
       return this.gs.quests[questId];
     },
 
+    // ============================================================
+    // QUEST STATE PERSISTENCE - CRITICAL FIX
+    // ============================================================
+    // Save quest state to localStorage for persistence across reloads
+    saveQuestState() {
+      try {
+        // Save to unified player state if available
+        if (Game.modules?.PlayerState) {
+          const state = Game.modules.PlayerState.getState();
+          // Ensure questObjectives exists in unified state
+          if (!state.questObjectives) state.questObjectives = {};
+          
+          // Sync all quest states to unified player state
+          Object.keys(this.gs.quests).forEach(questId => {
+            const questState = this.gs.quests[questId];
+            state.questObjectives[questId] = questState;
+            
+            // Update active/completed arrays
+            if (questState.state === 'active' && !state.questsActive.includes(questId)) {
+              state.questsActive.push(questId);
+            }
+            if (questState.state === 'completed' && !state.questsCompleted.includes(questId)) {
+              state.questsCompleted.push(questId);
+              // Remove from active if present
+              state.questsActive = state.questsActive.filter(q => q !== questId);
+            }
+          });
+          
+          Game.modules.PlayerState.save();
+          console.log("[quests] Quest state saved via PlayerState");
+        }
+        
+        // Also save to legacy storage for backward compatibility
+        const legacyState = {
+          quests: this.gs.quests,
+          questsActive: Object.keys(this.gs.quests).filter(q => this.gs.quests[q].state === 'active'),
+          questsCompleted: Object.keys(this.gs.quests).filter(q => this.gs.quests[q].state === 'completed')
+        };
+        localStorage.setItem('afc_quest_state', JSON.stringify(legacyState));
+        console.log("[quests] Quest state saved to localStorage");
+        
+      } catch (e) {
+        console.error("[quests] Failed to save quest state:", e);
+      }
+    },
+
+    // Load quest state from localStorage on init
+    loadQuestState() {
+      try {
+        // Try unified player state first
+        if (Game.modules?.PlayerState) {
+          const state = Game.modules.PlayerState.getState();
+          if (state.questObjectives && Object.keys(state.questObjectives).length > 0) {
+            this.gs.quests = state.questObjectives;
+            console.log("[quests] Quest state loaded from PlayerState");
+            return;
+          }
+        }
+        
+        // Fallback to legacy storage
+        const saved = localStorage.getItem('afc_quest_state');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (data.quests) {
+            this.gs.quests = data.quests;
+            console.log("[quests] Quest state loaded from localStorage");
+          }
+        }
+      } catch (e) {
+        console.warn("[quests] Failed to load quest state:", e);
+      }
+    },
+
     startQuest(questId) {
       const q = QUESTS_DB[questId];
       if (!q) {
@@ -688,6 +765,9 @@
           st.objectives[obj] = false;
         });
       }
+
+      // CRITICAL FIX: Save quest state after starting
+      this.saveQuestState();
 
       console.log("[quests] Quest started:", questId);
       return true;
@@ -710,6 +790,9 @@
 
       st.objectives[objectiveId] = true;
       console.log("[quests] Objective complete:", questId, "→", objectiveId);
+
+      // CRITICAL FIX: Save quest state after objective completion
+      this.saveQuestState();
 
       // Check if all objectives are done
       const allDone = q.order.every(obj => st.objectives[obj]);
@@ -833,8 +916,8 @@
                 console.log("[quests] Auto-equipped weapon reward (legacy):", itemObj.name);
               }, 100);
             }
-          }
             
+            // FIXED: Removed extra closing brace - sync with PLAYER inventory
             if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
               if (!window.PLAYER.inventory.includes(itemId)) {
                 window.PLAYER.inventory.push(itemId);
@@ -845,6 +928,9 @@
           console.log("[quests] Rewarded item:", itemObj);
         });
       }
+
+      // CRITICAL FIX: Save quest state after completion
+      this.saveQuestState();
 
       console.log("[quests] Quest completed:", questId);
       
@@ -904,6 +990,9 @@
 
       st.currentStepIndex++;
 
+      // CRITICAL FIX: Save quest state after advancing step
+      this.saveQuestState();
+
       // Quest complete
       if (st.currentStepIndex >= q.steps.length) {
         st.state = "completed";
@@ -931,6 +1020,9 @@
           window.PLAYER.xp = (window.PLAYER.xp || 0) + (r.xp || 0);
           window.PLAYER.caps = (window.PLAYER.caps || 0) + (r.caps || 0);
         }
+
+        // Save quest completion state
+        this.saveQuestState();
 
         return true;
       }
