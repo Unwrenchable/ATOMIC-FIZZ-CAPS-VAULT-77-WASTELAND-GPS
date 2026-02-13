@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Persistence Test - Vault 77</title>
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      border-bottom: 2px solid #00ff00;
+      padding-bottom: 10px;
+    }
+    .test-section {
+      background: #1a1a1a;
+      border: 1px solid #00ff00;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .test-section h2 {
+      color: #00ff00;
+      margin-top: 0;
+    }
+    button {
+      background: #003300;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+    }
+    button:hover {
+      background: #004400;
+    }
+    button:active {
+      background: #001100;
+    }
+    .output {
+      background: #000;
+      border: 1px solid #00ff00;
+      padding: 10px;
+      margin: 10px 0;
+      min-height: 100px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 12px;
+    }
+    .success { color: #00ff00; }
+    .error { color: #ff0000; }
+    .warning { color: #ffff00; }
+    .info { color: #00ffff; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+    th, td {
+      border: 1px solid #00ff00;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #003300;
+    }
+    tr:nth-child(even) {
+      background: #0a0a0a;
+    }
+    .equipped {
+      color: #ffff00;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>📟 VAULT 77 - INVENTORY PERSISTENCE TEST TERMINAL</h1>
+  
+  <div class="test-section">
+    <h2>🔧 System Status</h2>
+    <div id="systemStatus" class="output"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>📦 Test Actions</h2>
+    <button onclick="addTestItems()">Add Test Items</button>
+    <button onclick="addStackable()">Add Stackable (x5)</button>
+    <button onclick="equipWeapon()">Equip Weapon</button>
+    <button onclick="equipArmor()">Equip Armor</button>
+    <button onclick="removeItem()">Remove Item</button>
+    <button onclick="clearInventory()">Clear All</button>
+    <button onclick="location.reload()">Reload Page (Test Persistence)</button>
+  </div>
+
+  <div class="test-section">
+    <h2>📋 Current Inventory</h2>
+    <div id="inventoryDisplay"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>🛡️ Equipped Items</h2>
+    <div id="equippedDisplay"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>💾 localStorage Data</h2>
+    <button onclick="showLocalStorage()">Show Raw Data</button>
+    <button onclick="clearLocalStorage()">Clear localStorage</button>
+    <div id="storageDisplay" class="output"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>📊 Test Log</h2>
+    <div id="testLog" class="output"></div>
+  </div>
+
+  <!-- Load game modules -->
+  <script src="/js/game/player-state.js" defer></script>
+  <script src="/js/game/inventory-actions.js" defer></script>
+  <script src="/js/game/equip-actions.js" defer></script>
+
+  <script>
+    // Test data
+    const testItems = {
+      weapon: { id: 'laser_rifle', name: 'AER9 Laser Rifle', type: 'weapon', damage: 45, category: 'energy' },
+      armor: { id: 'combat_armor', name: 'Combat Armor', type: 'armor', armor: 50, slot: 'armor' },
+      consumable: { id: 'stimpak', name: 'Stimpak', type: 'consumable', stackable: true },
+      ammo: { id: 'energy_cell', name: 'Energy Cell', type: 'ammo', stackable: true }
+    };
+
+    function log(message, type = 'info') {
+      const logDiv = document.getElementById('testLog');
+      const timestamp = new Date().toLocaleTimeString();
+      const colorClass = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
+      logDiv.innerHTML = `<div class="${colorClass}">[${timestamp}] ${message}</div>` + logDiv.innerHTML;
+    }
+
+    function updateDisplays() {
+      updateSystemStatus();
+      updateInventoryDisplay();
+      updateEquippedDisplay();
+    }
+
+    function updateSystemStatus() {
+      const statusDiv = document.getElementById('systemStatus');
+      const hasPlayerState = typeof Game !== 'undefined' && Game.modules?.PlayerState;
+      const hasInventory = Game?.player?.inventory;
+      const hasEquipped = Game?.player?.equipped;
+      
+      statusDiv.innerHTML = `
+        <div class="${hasPlayerState ? 'success' : 'error'}">PlayerState Module: ${hasPlayerState ? '✓ LOADED' : '✗ NOT LOADED'}</div>
+        <div class="${hasInventory ? 'success' : 'error'}">Game.player.inventory: ${hasInventory ? '✓ INITIALIZED' : '✗ UNDEFINED'}</div>
+        <div class="${hasEquipped ? 'success' : 'error'}">Game.player.equipped: ${hasEquipped ? '✓ INITIALIZED' : '✗ UNDEFINED'}</div>
+        <div class="info">Inventory Count: ${Game?.player?.inventory?.length || 0} items</div>
+        <div class="info">localStorage Key: afc_unified_player_state_v2</div>
+      `;
+    }
+
+    function updateInventoryDisplay() {
+      const invDiv = document.getElementById('inventoryDisplay');
+      if (!Game?.modules?.PlayerState) {
+        invDiv.innerHTML = '<div class="error">PlayerState not loaded yet</div>';
+        return;
+      }
+
+      const inventory = Game.modules.PlayerState.getInventory();
+      
+      if (inventory.length === 0) {
+        invDiv.innerHTML = '<div class="warning">Inventory is empty</div>';
+        return;
+      }
+
+      let html = '<table><tr><th>Item</th><th>Type</th><th>Quantity</th><th>Details</th></tr>';
+      inventory.forEach(item => {
+        const qty = item.quantity || 1;
+        const details = item.damage ? `DMG: ${item.damage}` : item.armor ? `ARM: ${item.armor}` : '-';
+        html += `<tr>
+          <td>${item.name}</td>
+          <td>${item.type}</td>
+          <td>${qty}</td>
+          <td>${details}</td>
+        </tr>`;
+      });
+      html += '</table>';
+      invDiv.innerHTML = html;
+    }
+
+    function updateEquippedDisplay() {
+      const eqDiv = document.getElementById('equippedDisplay');
+      if (!Game?.player?.equipped) {
+        eqDiv.innerHTML = '<div class="error">Equipped not initialized</div>';
+        return;
+      }
+
+      const equipped = Game.player.equipped;
+      let html = '<table><tr><th>Slot</th><th>Item</th></tr>';
+      
+      ['weapon', 'armor', 'head', 'accessory'].forEach(slot => {
+        const item = equipped[slot];
+        html += `<tr>
+          <td>${slot.toUpperCase()}</td>
+          <td class="${item ? 'equipped' : ''}">${item ? item.name : '(empty)'}</td>
+        </tr>`;
+      });
+      
+      html += '</table>';
+      eqDiv.innerHTML = html;
+    }
+
+    function addTestItems() {
+      if (!Game?.giveItem) {
+        log('Game.giveItem not available', 'error');
+        return;
+      }
+      
+      Game.giveItem(testItems.weapon, 1);
+      Game.giveItem(testItems.armor, 1);
+      Game.giveItem(testItems.consumable, 3);
+      
+      log('Added weapon, armor, and 3x stimpak', 'success');
+      updateDisplays();
+    }
+
+    function addStackable() {
+      if (!Game?.giveItem) {
+        log('Game.giveItem not available', 'error');
+        return;
+      }
+      
+      Game.giveItem(testItems.ammo, 5);
+      log('Added 5x Energy Cells', 'success');
+      updateDisplays();
+    }
+
+    function equipWeapon() {
+      if (!Game?.equipItem) {
+        log('Game.equipItem not available', 'error');
+        return;
+      }
+      
+      const weapon = Game.modules.PlayerState?.getItem('laser_rifle');
+      if (!weapon) {
+        log('Weapon not in inventory - add items first', 'warning');
+        return;
+      }
+      
+      Game.equipItem(weapon);
+      log('Equipped ' + weapon.name, 'success');
+      updateDisplays();
+    }
+
+    function equipArmor() {
+      if (!Game?.equipItem) {
+        log('Game.equipItem not available', 'error');
+        return;
+      }
+      
+      const armor = Game.modules.PlayerState?.getItem('combat_armor');
+      if (!armor) {
+        log('Armor not in inventory - add items first', 'warning');
+        return;
+      }
+      
+      Game.equipItem(armor);
+      log('Equipped ' + armor.name, 'success');
+      updateDisplays();
+    }
+
+    function removeItem() {
+      if (!Game?.removeItem) {
+        log('Game.removeItem not available', 'error');
+        return;
+      }
+      
+      const inventory = Game.modules.PlayerState?.getInventory();
+      if (!inventory || inventory.length === 0) {
+        log('Inventory is empty', 'warning');
+        return;
+      }
+      
+      const firstItem = inventory[0];
+      Game.removeItem(firstItem.id, 1);
+      log('Removed 1x ' + firstItem.name, 'success');
+      updateDisplays();
+    }
+
+    function clearInventory() {
+      if (!Game?.modules?.PlayerState) {
+        log('PlayerState not available', 'error');
+        return;
+      }
+      
+      const inventory = Game.modules.PlayerState.getInventory();
+      inventory.forEach(item => {
+        Game.removeItem(item.id, item.quantity || 1);
+      });
+      
+      log('Cleared all items', 'success');
+      updateDisplays();
+    }
+
+    function showLocalStorage() {
+      const storageDiv = document.getElementById('storageDisplay');
+      const data = localStorage.getItem('afc_unified_player_state_v2');
+      
+      if (!data) {
+        storageDiv.innerHTML = '<div class="warning">No saved state found</div>';
+        return;
+      }
+      
+      try {
+        const parsed = JSON.parse(data);
+        storageDiv.innerHTML = '<pre>' + JSON.stringify(parsed, null, 2) + '</pre>';
+        log('Displayed localStorage data', 'info');
+      } catch (e) {
+        storageDiv.innerHTML = '<div class="error">Failed to parse: ' + e.message + '</div>';
+        log('Failed to parse localStorage: ' + e.message, 'error');
+      }
+    }
+
+    function clearLocalStorage() {
+      if (confirm('Clear all localStorage data? This will reset inventory on reload.')) {
+        localStorage.removeItem('afc_unified_player_state_v2');
+        localStorage.removeItem('afc_player_state_v1');
+        localStorage.removeItem('afc_equipped_items');
+        log('Cleared localStorage', 'warning');
+        document.getElementById('storageDisplay').innerHTML = '<div class="warning">localStorage cleared</div>';
+      }
+    }
+
+    // Auto-update on load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        updateDisplays();
+        log('Test terminal initialized', 'success');
+        
+        // Check if we have persisted data
+        const hasData = localStorage.getItem('afc_unified_player_state_v2');
+        if (hasData) {
+          log('Found persisted data from previous session', 'info');
+        } else {
+          log('No persisted data - starting fresh', 'info');
+        }
+      }, 500);
+    });
+
+    // Auto-refresh displays every 2 seconds
+    setInterval(updateDisplays, 2000);
+  </script>
+</body>
+</html>
