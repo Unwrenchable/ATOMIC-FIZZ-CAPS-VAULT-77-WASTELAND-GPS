@@ -212,8 +212,10 @@
     tiles: null,
     playerMarker: null,
     poiMarkers: [],
+    poiMarkersCache: new Map(), // Cache markers by POI ID to prevent recreation
     locations: [],
     locationsLoaded: false,
+    poisLoaded: false, // Track if static POIs from poi.json are already loaded
 
     prevPlayerPosition: null,
     labelLayer: null,
@@ -543,62 +545,81 @@
 
       // --------------------------------------------------------
       // LOAD POIs (SVG ICONS) - safe, handles grouped structure
+      // Only load once to prevent duplicates
       // --------------------------------------------------------
-      (async () => {
-        const poiData = await safeFetchJSON("/data/poi.json");
-        if (!poiData) return;
-        
-        // Flatten grouped POI structure (strip, freeside, outer_vegas, etc.)
-        const allPois = [];
-        if (typeof poiData === 'object') {
-          Object.values(poiData).forEach(group => {
-            if (Array.isArray(group)) {
-              allPois.push(...group);
+      if (!this.poisLoaded) {
+        (async () => {
+          const poiData = await safeFetchJSON("/data/poi.json");
+          if (!poiData) return;
+          
+          // Flatten grouped POI structure (strip, freeside, outer_vegas, etc.)
+          const allPois = [];
+          if (typeof poiData === 'object' && !Array.isArray(poiData)) {
+            Object.values(poiData).forEach(group => {
+              if (Array.isArray(group)) {
+                allPois.push(...group);
+              }
+            });
+          } else if (Array.isArray(poiData)) {
+            allPois.push(...poiData);
+          }
+          
+          allPois.forEach(poi => {
+            try {
+              // Validate required fields
+              if (!poi.id || poi.lat == null || poi.lng == null) {
+                console.warn("[worldmap] skipping invalid POI", poi);
+                return;
+              }
+              
+              // Check if marker already exists in cache
+              if (this.poiMarkersCache.has(poi.id)) {
+                return; // Skip, already loaded
+              }
+              
+              // Use iconKey (from data) or icon (fallback) with proper fallback mapping
+              const rawIconKey = poi.iconKey || poi.icon || 'poi';
+              const iconName = getValidIcon(rawIconKey);
+              
+              // Create icon with fallback error handling using shared helper
+              const iconDiv = L.divIcon({
+                className: 'pipboy-poi-marker',
+                html: createIconHTML(iconName, 32),
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+              });
+              
+              const marker = L.marker([poi.lat, poi.lng], { icon: iconDiv });
+              marker._pipboyData = poi; // Store POI data on marker
+              
+              // Enhanced popup with Fallout-style info
+              const rarityColor = {
+                common: '#00ff41',
+                rare: '#00d4ff',
+                epic: '#d900ff',
+                legendary: '#ffaa00'
+              }[poi.rarity] || '#00ff41';
+              
+              marker.bindPopup(`
+                <div style="color: ${rarityColor}; font-family: monospace;">
+                  <b>${poi.name}</b><br>
+                  <small>LVL ${poi.lvl || '?'} • ${(poi.rarity || 'UNKNOWN').toUpperCase()}</small>
+                </div>
+              `);
+              
+              marker.addTo(this.map);
+              
+              // Cache the marker to prevent recreation
+              this.poiMarkersCache.set(poi.id, marker);
+            } catch (e) {
+              console.warn("[worldmap] failed to add POI", poi && poi.id, e && e.message ? e.message : e);
             }
           });
-        } else if (Array.isArray(poiData)) {
-          allPois.push(...poiData);
-        }
-        
-        allPois.forEach(poi => {
-          try {
-            // Use iconKey (from data) or icon (fallback) with proper fallback mapping
-            const rawIconKey = poi.iconKey || poi.icon || 'poi';
-            const iconName = getValidIcon(rawIconKey);
-            
-            // Create icon with fallback error handling using shared helper
-            const iconDiv = L.divIcon({
-              className: 'pipboy-poi-marker',
-              html: createIconHTML(iconName, 32),
-              iconSize: [32, 32],
-              iconAnchor: [16, 16]
-            });
-            
-            const marker = L.marker([poi.lat, poi.lng], { icon: iconDiv });
-            
-            // Enhanced popup with Fallout-style info
-            const rarityColor = {
-              common: '#00ff41',
-              rare: '#00d4ff',
-              epic: '#d900ff',
-              legendary: '#ffaa00'
-            }[poi.rarity] || '#00ff41';
-            
-            marker.bindPopup(`
-              <div style="color: ${rarityColor}; font-family: monospace;">
-                <b>${poi.name}</b><br>
-                <small>LVL ${poi.lvl || '?'} • ${(poi.rarity || 'UNKNOWN').toUpperCase()}</small>
-              </div>
-            `);
-            
-            marker.addTo(this.map);
-          } catch (e) {
-            console.warn("[worldmap] failed to add POI", poi && poi.id, e && e.message ? e.message : e);
-          }
-        });
-        
-        console.log(`[worldmap] loaded ${allPois.length} POI markers`);
-      })();
+          
+          this.poisLoaded = true;
+          console.log(`[worldmap] loaded ${allPois.length} static POI markers from poi.json`);
+        })();
+      }
 
       // --------------------------------------------------------
       // LOAD HIGHWAYS (TopoJSON) - safe
@@ -1036,22 +1057,72 @@
 
     renderPOIMarkers() {
       if (!this.map) return;
+      
+      // Create a set of current location IDs for efficient lookup
+      const currentLocationIds = new Set((this.locations || []).map(loc => loc.id).filter(id => id));
+      
+      // Remove markers that are no longer in the locations list
+      const markersToRemove = [];
       this.poiMarkers.forEach(m => {
-        try {
-          if (m.marker && this.map.hasLayer(m.marker)) this.map.removeLayer(m.marker);
-        } catch (e) {}
+        if (m.loc && m.loc.id && !currentLocationIds.has(m.loc.id)) {
+          markersToRemove.push(m);
+        }
       });
-      this.poiMarkers = [];
+      
+      markersToRemove.forEach(m => {
+        try {
+          if (m.marker && this.map.hasLayer(m.marker)) {
+            this.map.removeLayer(m.marker);
+            if (m.loc && m.loc.id) {
+              this.poiMarkersCache.delete(m.loc.id);
+            }
+          }
+        } catch (e) {
+          console.warn("[worldmap] failed to remove POI marker", e);
+        }
+      });
+      
+      // Update poiMarkers array to only include markers still on map
+      this.poiMarkers = this.poiMarkers.filter(m => 
+        !markersToRemove.includes(m)
+      );
 
+      // Add or update markers for current locations
       (this.locations || []).forEach((loc, idx) => {
         try {
+          // Validate required fields
+          if (!loc.id || loc.lat == null || loc.lng == null) {
+            console.warn("[worldmap] skipping invalid location", loc);
+            return;
+          }
+          
+          // Check if marker already exists in cache
+          if (this.poiMarkersCache.has(loc.id)) {
+            // Marker already exists, check if it needs updating
+            const cachedMarker = this.poiMarkersCache.get(loc.id);
+            const cachedData = cachedMarker._pipboyData;
+            
+            // Only update if position changed
+            if (cachedData && (cachedData.lat !== loc.lat || cachedData.lng !== loc.lng)) {
+              cachedMarker.setLatLng([loc.lat, loc.lng]);
+              cachedMarker._pipboyData = loc;
+            }
+            return; // Skip creation, marker already exists
+          }
+          
+          // Create new marker
           const marker = this.createPOIMarker(loc, idx);
           marker.addTo(this.map);
+          
+          // Cache the marker
+          this.poiMarkersCache.set(loc.id, marker);
           this.poiMarkers.push({ marker, loc });
         } catch (e) {
           console.warn("[worldmap] failed to create POI marker", loc && loc.id, e && e.message ? e.message : e);
         }
       });
+      
+      console.log(`[worldmap] POI markers: ${this.poiMarkers.length} dynamic + ${this.poiMarkersCache.size - this.poiMarkers.length} static`);
     },
 
     createPOIMarker(loc, idx) {
