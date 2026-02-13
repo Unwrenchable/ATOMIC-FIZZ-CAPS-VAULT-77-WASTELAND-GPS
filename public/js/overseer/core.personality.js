@@ -88,9 +88,9 @@
     // Ensure config is loaded before making API calls
     await loadConfig();
 
-    // If no API key configured, skip AI request and use fallback
-    if (!HF_API_KEY) {
-      console.warn("[Overseer] HF_API_KEY not configured, using fallback responses");
+    // If no API key configured or placeholder value, skip AI request and use fallback
+    if (!HF_API_KEY || HF_API_KEY === '<YOUR_HF_API_KEY>' || HF_API_KEY === 'your-huggingface-api-key') {
+      console.warn("[Overseer] HF_API_KEY not configured or using placeholder value, using fallback responses");
       return null;
     }
 
