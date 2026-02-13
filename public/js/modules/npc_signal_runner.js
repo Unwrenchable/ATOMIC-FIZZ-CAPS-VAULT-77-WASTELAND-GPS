@@ -55,7 +55,7 @@
     // AI dialogue configuration
     aiConfig: {
       enabled: true,
-      useForAllNodes: false, // If true, attempts AI for all nodes; if false, only nodes marked with useAI
+      useForAllNodes: false, // If true, attempts AI for all nodes (increases API costs); if false, only nodes marked with useAI
       systemPrompt: "You are The Signal Runner, a cryptic but caring guide in a post-apocalyptic wasteland. You track displaced consciousnesses across timelines. Speak in short, mysterious sentences with hints of deeper knowledge. You work with (but don't fully trust) an AI called the Overseer. Keep responses under 50 words.",
       maxTokens: 60,
       temperature: 0.8
