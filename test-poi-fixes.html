@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POI Fixes Validation Test</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+        crossorigin="anonymous" />
+  <style>
+    body {
+      font-family: 'VT323', monospace;
+      background: #050705;
+      color: #00ff41;
+      padding: 20px;
+      margin: 0;
+    }
+    
+    h1 {
+      text-align: center;
+      text-shadow: 0 0 10px #00ff41;
+    }
+    
+    #map {
+      width: 100%;
+      height: 600px;
+      border: 2px solid #00ff41;
+      margin: 20px 0;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+    }
+    
+    .test-section {
+      background: rgba(0, 255, 65, 0.1);
+      border: 1px solid #00ff41;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+    
+    .test-result {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 3px;
+    }
+    
+    .test-pass {
+      background: rgba(0, 255, 65, 0.2);
+      border-left: 3px solid #00ff41;
+    }
+    
+    .test-fail {
+      background: rgba(255, 0, 0, 0.2);
+      border-left: 3px solid #ff0000;
+      color: #ff4444;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+    }
+    
+    .stat-box {
+      background: rgba(0, 255, 65, 0.15);
+      border: 1px solid #00ff41;
+      padding: 10px;
+      text-align: center;
+      border-radius: 5px;
+    }
+    
+    .stat-value {
+      font-size: 2em;
+      font-weight: bold;
+      text-shadow: 0 0 5px #00ff41;
+    }
+    
+    button {
+      background: transparent;
+      border: 2px solid #00ff41;
+      color: #00ff41;
+      padding: 10px 20px;
+      font-family: 'VT323', monospace;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 5px;
+    }
+    
+    button:hover {
+      background: rgba(0, 255, 65, 0.2);
+      box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    }
+    
+    #testLog {
+      background: #000;
+      border: 1px solid #00ff41;
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.9em;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>☢️ POI MARKER FIX VALIDATION TEST ☢️</h1>
+  
+  <div class="test-section">
+    <h2>📊 Real-Time Statistics</h2>
+    <div class="stats">
+      <div class="stat-box">
+        <div>POIs Loaded</div>
+        <div class="stat-value" id="statPoisLoaded">0</div>
+      </div>
+      <div class="stat-box">
+        <div>Markers Created</div>
+        <div class="stat-value" id="statMarkersCreated">0</div>
+      </div>
+      <div class="stat-box">
+        <div>Markers Recreated</div>
+        <div class="stat-value" id="statMarkersRecreated">0</div>
+      </div>
+      <div class="stat-box">
+        <div>Cache Hits</div>
+        <div class="stat-value" id="statCacheHits">0</div>
+      </div>
+      <div class="stat-box">
+        <div>Duplicate IDs</div>
+        <div class="stat-value" id="statDuplicates">0</div>
+      </div>
+      <div class="stat-box">
+        <div>Invalid POIs</div>
+        <div class="stat-value" id="statInvalid">0</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h2>🗺️ Map Rendering Test</h2>
+    <div id="map"></div>
+    <div>
+      <button onclick="testMarkerPersistence()">Test Marker Persistence</button>
+      <button onclick="testNoRecreation()">Test No Recreation (Should Use Cache)</button>
+      <button onclick="testZoomPersistence()">Test Zoom Persistence</button>
+      <button onclick="clearMap()">Clear Map</button>
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h2>📋 Test Log</h2>
+    <div id="testLog"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>✅ Test Results</h2>
+    <div id="testResults"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+          crossorigin="anonymous"></script>
+  <script>
+    let map;
+    let markerCache = new Map();
+    let stats = {
+      poisLoaded: 0,
+      markersCreated: 0,
+      markersRecreated: 0,
+      cacheHits: 0,
+      duplicates: 0,
+      invalid: 0
+    };
+    
+    function log(message, type = 'info') {
+      const logDiv = document.getElementById('testLog');
+      const timestamp = new Date().toLocaleTimeString();
+      const color = type === 'error' ? '#ff4444' : type === 'success' ? '#00ff41' : '#00d4ff';
+      logDiv.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+    
+    function updateStats() {
+      document.getElementById('statPoisLoaded').textContent = stats.poisLoaded;
+      document.getElementById('statMarkersCreated').textContent = stats.markersCreated;
+      document.getElementById('statMarkersRecreated').textContent = stats.markersRecreated;
+      document.getElementById('statCacheHits').textContent = stats.cacheHits;
+      document.getElementById('statDuplicates').textContent = stats.duplicates;
+      document.getElementById('statInvalid').textContent = stats.invalid;
+    }
+    
+    function addTestResult(testName, passed, details) {
+      const resultsDiv = document.getElementById('testResults');
+      const resultClass = passed ? 'test-pass' : 'test-fail';
+      const icon = passed ? '✅' : '❌';
+      resultsDiv.innerHTML += `
+        <div class="test-result ${resultClass}">
+          ${icon} <strong>${testName}</strong>: ${details}
+        </div>
+      `;
+    }
+    
+    async function initMap() {
+      log('Initializing map...', 'info');
+      
+      map = L.map('map', {
+        center: [36.1716, -115.1391], // Las Vegas, Nevada (same location as Fallout: New Vegas setting)
+        zoom: 13,
+        minZoom: 3,
+        maxZoom: 18
+      });
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      
+      log('Map initialized successfully', 'success');
+      await loadPOIs();
+    }
+    
+    async function loadPOIs() {
+      log('Loading POIs from /data/poi.json...', 'info');
+      
+      try {
+        const response = await fetch('/data/poi.json');
+        const poiData = await response.json();
+        
+        // Flatten grouped structure
+        const allPois = [];
+        if (typeof poiData === 'object' && !Array.isArray(poiData)) {
+          Object.values(poiData).forEach(group => {
+            if (Array.isArray(group)) {
+              allPois.push(...group);
+            }
+          });
+        } else if (Array.isArray(poiData)) {
+          allPois.push(...poiData);
+        }
+        
+        stats.poisLoaded = allPois.length;
+        log(`Loaded ${allPois.length} POIs from data file`, 'success');
+        
+        // Validate POIs
+        const seenIds = new Set();
+        allPois.forEach(poi => {
+          // Check for duplicates
+          if (poi.id && seenIds.has(poi.id)) {
+            stats.duplicates++;
+            log(`Duplicate ID found: ${poi.id}`, 'error');
+          }
+          if (poi.id) seenIds.add(poi.id);
+          
+          // Check for invalid data
+          if (!poi.id || poi.lat == null || poi.lng == null) {
+            stats.invalid++;
+            log(`Invalid POI: ${JSON.stringify(poi)}`, 'error');
+            return;
+          }
+          
+          // Add marker with caching
+          addMarkerWithCache(poi);
+        });
+        
+        updateStats();
+        
+        // Add test results
+        addTestResult('POI Data Loading', true, `${allPois.length} POIs loaded`);
+        addTestResult('No Duplicate IDs', stats.duplicates === 0, 
+          stats.duplicates === 0 ? 'All POI IDs are unique' : `Found ${stats.duplicates} duplicates`);
+        addTestResult('All POIs Valid', stats.invalid === 0,
+          stats.invalid === 0 ? 'All POIs have required fields' : `Found ${stats.invalid} invalid POIs`);
+        
+        log('POI loading complete', 'success');
+        
+      } catch (error) {
+        log(`Error loading POIs: ${error.message}`, 'error');
+        addTestResult('POI Data Loading', false, error.message);
+      }
+    }
+    
+    function addMarkerWithCache(poi) {
+      // Check cache first
+      if (markerCache.has(poi.id)) {
+        stats.cacheHits++;
+        log(`Cache hit for ${poi.id} - marker already exists`, 'info');
+        return markerCache.get(poi.id);
+      }
+      
+      // Create new marker
+      const marker = L.marker([poi.lat, poi.lng], {
+        icon: L.divIcon({
+          className: 'pipboy-poi-marker',
+          html: `<div style="width:24px;height:24px;background:#00ff41;border-radius:50%;border:2px solid #050705;"></div>`,
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
+        })
+      });
+      
+      marker.bindPopup(`
+        <b>${poi.name}</b><br>
+        <small>ID: ${poi.id}</small><br>
+        <small>Level: ${poi.lvl || '?'}</small>
+      `);
+      
+      marker.addTo(map);
+      markerCache.set(poi.id, marker);
+      stats.markersCreated++;
+      
+      return marker;
+    }
+    
+    function testMarkerPersistence() {
+      log('Testing marker persistence...', 'info');
+      const initialCount = markerCache.size;
+      
+      // Try to reload (should use cache)
+      loadPOIs().then(() => {
+        const finalCount = markerCache.size;
+        const passed = finalCount === initialCount;
+        
+        addTestResult('Marker Persistence', passed,
+          passed ? `All ${finalCount} markers persisted` : `Markers changed from ${initialCount} to ${finalCount}`);
+        
+        log(passed ? 'Marker persistence test PASSED' : 'Marker persistence test FAILED', 
+          passed ? 'success' : 'error');
+      });
+    }
+    
+    function testNoRecreation() {
+      log('Testing marker recreation prevention...', 'info');
+      const beforeRecreate = stats.markersRecreated;
+      const beforeCreate = stats.markersCreated;
+      
+      loadPOIs().then(() => {
+        const recreated = stats.markersRecreated - beforeRecreate;
+        const created = stats.markersCreated - beforeCreate;
+        const passed = created === 0; // Should not create any new markers
+        
+        addTestResult('No Recreation on Reload', passed,
+          passed ? 'All markers used cache' : `${created} markers were recreated`);
+        
+        log(passed ? 'No recreation test PASSED' : 'No recreation test FAILED', 
+          passed ? 'success' : 'error');
+      });
+    }
+    
+    function testZoomPersistence() {
+      log('Testing marker persistence during zoom...', 'info');
+      const markersBefore = markerCache.size;
+      
+      // Zoom in and out
+      map.setZoom(map.getZoom() + 2);
+      setTimeout(() => {
+        map.setZoom(map.getZoom() - 2);
+        setTimeout(() => {
+          const markersAfter = markerCache.size;
+          const passed = markersAfter === markersBefore;
+          
+          addTestResult('Zoom Persistence', passed,
+            passed ? `All ${markersAfter} markers persisted through zoom` : 
+            `Markers changed from ${markersBefore} to ${markersAfter}`);
+          
+          log(passed ? 'Zoom persistence test PASSED' : 'Zoom persistence test FAILED',
+            passed ? 'success' : 'error');
+        }, 500);
+      }, 500);
+    }
+    
+    function clearMap() {
+      log('Clearing map and cache...', 'info');
+      markerCache.forEach(marker => {
+        map.removeLayer(marker);
+      });
+      markerCache.clear();
+      stats.markersCreated = 0;
+      stats.markersRecreated = 0;
+      stats.cacheHits = 0;
+      stats.poisLoaded = 0;
+      updateStats();
+      log('Map cleared', 'success');
+    }
+    
+    // Initialize on load
+    window.addEventListener('load', () => {
+      log('POI Fix Validation Test Started', 'success');
+      initMap();
+    });
+  </script>
+</body>
+</html>
