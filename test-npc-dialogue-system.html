@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPC Dialogue System Test - Vault 77</title>
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #33ff33;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      border-bottom: 2px solid #33ff33;
+      padding-bottom: 10px;
+    }
+    
+    .test-section {
+      background: #1a1a1a;
+      border: 2px solid #33ff33;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    
+    .test-section h2 {
+      color: #00ff00;
+      margin-top: 0;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 3px;
+      margin-left: 10px;
+      font-weight: bold;
+    }
+    
+    .status.pass {
+      background: #003300;
+      color: #00ff00;
+    }
+    
+    .status.fail {
+      background: #330000;
+      color: #ff0000;
+    }
+    
+    .status.warning {
+      background: #333300;
+      color: #ffff00;
+    }
+    
+    .test-item {
+      margin: 10px 0;
+      padding: 10px;
+      background: #0f0f0f;
+      border-left: 3px solid #33ff33;
+    }
+    
+    button {
+      background: #003300;
+      color: #00ff00;
+      border: 2px solid #00ff00;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+    
+    button:hover {
+      background: #004400;
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .log-output {
+      background: #000;
+      border: 1px solid #33ff33;
+      padding: 10px;
+      margin: 10px 0;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 12px;
+    }
+    
+    .log-entry {
+      margin: 2px 0;
+    }
+    
+    .log-entry.info { color: #00ffff; }
+    .log-entry.success { color: #00ff00; }
+    .log-entry.error { color: #ff0000; }
+    .log-entry.warning { color: #ffff00; }
+  </style>
+</head>
+<body>
+  <h1>📟 VAULT 77 - NPC DIALOGUE SYSTEM TEST</h1>
+  
+  <div class="test-section">
+    <h2>System Status</h2>
+    <div id="system-status"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>1. HuggingFace API Configuration</h2>
+    <div id="hf-api-status"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>2. Signal Runner Integration</h2>
+    <div id="signal-runner-status"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>3. FO4 Dialogue System</h2>
+    <div id="fo4-status"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>4. Dialogue Tree Progression</h2>
+    <div id="tree-status"></div>
+    <button id="test-dialogue-btn">Test Dialogue Progression</button>
+  </div>
+  
+  <div class="test-section">
+    <h2>Test Console Log</h2>
+    <div id="log-output" class="log-output"></div>
+    <button id="clear-log-btn">Clear Log</button>
+  </div>
+  
+  <!-- Load dependencies -->
+  <script src="/js/modules/fo4-dialogue.js"></script>
+  <script src="/js/modules/npc_signal_runner.js"></script>
+  <script src="/js/overseer/core.personality.js"></script>
+  
+  <script>
+    // Test logging system
+    const logOutput = document.getElementById('log-output');
+    
+    function log(message, type = 'info') {
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logOutput.appendChild(entry);
+      logOutput.scrollTop = logOutput.scrollHeight;
+      console.log(`[TEST] ${message}`);
+    }
+    
+    document.getElementById('clear-log-btn').addEventListener('click', () => {
+      logOutput.innerHTML = '';
+    });
+    
+    // Initialize Game object
+    if (!window.Game) window.Game = {};
+    if (!Game.modules) Game.modules = {};
+    
+    // Run tests
+    async function runTests() {
+      log('Starting NPC Dialogue System Tests...', 'info');
+      
+      // Test 1: Check HF API Configuration
+      await testHFAPI();
+      
+      // Test 2: Check Signal Runner Module
+      await testSignalRunner();
+      
+      // Test 3: Check FO4 Dialogue System
+      await testFO4Dialogue();
+      
+      // Test 4: Check Dialogue Tree Structure
+      await testDialogueTree();
+      
+      log('All tests complete!', 'success');
+    }
+    
+    async function testHFAPI() {
+      const statusDiv = document.getElementById('hf-api-status');
+      log('Testing HuggingFace API configuration...', 'info');
+      
+      try {
+        // Try to load config
+        const res = await fetch('/api/config/frontend');
+        if (res.ok) {
+          const config = await res.json();
+          const hfKey = config.overseer?.hfApiKey || '';
+          
+          let status = 'PASS';
+          let statusClass = 'pass';
+          let message = '';
+          
+          if (!hfKey || hfKey === '<YOUR_HF_API_KEY>' || hfKey === 'your-huggingface-api-key') {
+            status = 'WARNING';
+            statusClass = 'warning';
+            message = 'HF API key not configured or using placeholder. AI will use fallback responses.';
+            log('HF API Key: Using placeholder - AI disabled', 'warning');
+          } else {
+            message = 'HF API key configured properly. AI enabled.';
+            log('HF API Key: Configured properly', 'success');
+          }
+          
+          statusDiv.innerHTML = `
+            <div class="test-item">
+              <strong>Configuration Status:</strong>
+              <span class="status ${statusClass}">${status}</span>
+              <p>${message}</p>
+              <p><small>Overseer Personality: ${window.overseerPersonality ? '✓ Loaded' : '✗ Not loaded'}</small></p>
+            </div>
+          `;
+        } else {
+          throw new Error('Failed to fetch config');
+        }
+      } catch (err) {
+        log('Failed to check HF API: ' + err.message, 'error');
+        statusDiv.innerHTML = `
+          <div class="test-item">
+            <strong>Configuration Status:</strong>
+            <span class="status fail">FAIL</span>
+            <p>Could not load configuration: ${err.message}</p>
+          </div>
+        `;
+      }
+    }
+    
+    async function testSignalRunner() {
+      const statusDiv = document.getElementById('signal-runner-status');
+      log('Testing Signal Runner module...', 'info');
+      
+      const tests = {
+        'Module loaded': !!Game.modules.SignalRunner,
+        'Has beginConversation method': !!Game.modules.SignalRunner?.beginConversation,
+        'Has _startFO4Dialogue method': !!Game.modules.SignalRunner?._startFO4Dialogue,
+        'Has _convertTreeToFO4Format method': !!Game.modules.SignalRunner?._convertTreeToFO4Format,
+        'Has _getNPCLine method': !!Game.modules.SignalRunner?._getNPCLine,
+        'Has _generateAIDialogue method': !!Game.modules.SignalRunner?._generateAIDialogue,
+        'AI config present': !!Game.modules.SignalRunner?.aiConfig,
+      };
+      
+      let html = '';
+      let allPassed = true;
+      
+      for (const [test, passed] of Object.entries(tests)) {
+        const status = passed ? 'PASS' : 'FAIL';
+        const statusClass = passed ? 'pass' : 'fail';
+        html += `
+          <div class="test-item">
+            ${test}: <span class="status ${statusClass}">${status}</span>
+          </div>
+        `;
+        
+        if (!passed) allPassed = false;
+        log(`Signal Runner - ${test}: ${passed ? 'PASS' : 'FAIL'}`, passed ? 'success' : 'error');
+      }
+      
+      statusDiv.innerHTML = html;
+      
+      if (allPassed) {
+        log('Signal Runner module: All tests passed', 'success');
+      } else {
+        log('Signal Runner module: Some tests failed', 'error');
+      }
+    }
+    
+    async function testFO4Dialogue() {
+      const statusDiv = document.getElementById('fo4-status');
+      log('Testing FO4 Dialogue system...', 'info');
+      
+      const tests = {
+        'Module loaded': !!Game.modules.FO4Dialogue,
+        'Has startDialogue method': !!Game.modules.FO4Dialogue?.startDialogue,
+        'Has _displayNode method': !!Game.modules.FO4Dialogue?._displayNode,
+        'Has _goToNode method': !!Game.modules.FO4Dialogue?._goToNode,
+        'Has _selectResponse method': !!Game.modules.FO4Dialogue?._selectResponse,
+        'Has init method': !!Game.modules.FO4Dialogue?.init,
+      };
+      
+      let html = '';
+      let allPassed = true;
+      
+      for (const [test, passed] of Object.entries(tests)) {
+        const status = passed ? 'PASS' : 'FAIL';
+        const statusClass = passed ? 'pass' : 'fail';
+        html += `
+          <div class="test-item">
+            ${test}: <span class="status ${statusClass}">${status}</span>
+          </div>
+        `;
+        
+        if (!passed) allPassed = false;
+        log(`FO4 Dialogue - ${test}: ${passed ? 'PASS' : 'FAIL'}`, passed ? 'success' : 'error');
+      }
+      
+      statusDiv.innerHTML = html;
+      
+      if (allPassed) {
+        log('FO4 Dialogue system: All tests passed', 'success');
+      } else {
+        log('FO4 Dialogue system: Some tests failed', 'error');
+      }
+    }
+    
+    async function testDialogueTree() {
+      const statusDiv = document.getElementById('tree-status');
+      log('Testing dialogue tree structure...', 'info');
+      
+      try {
+        const response = await fetch('/data/npc/npc_signal_runner.json');
+        const npcData = await response.json();
+        const tree = npcData.conversationTree;
+        
+        const tests = {
+          'Conversation tree exists': !!tree,
+          'Root node exists': !!tree.root,
+          'Root has options': tree.root?.options?.length > 0,
+          'Multiple nodes defined': Object.keys(tree).length > 5,
+          'End nodes defined': Object.values(tree).some(n => n.completes),
+        };
+        
+        let html = '';
+        let allPassed = true;
+        
+        for (const [test, passed] of Object.entries(tests)) {
+          const status = passed ? 'PASS' : 'FAIL';
+          const statusClass = passed ? 'pass' : 'fail';
+          html += `
+            <div class="test-item">
+              ${test}: <span class="status ${statusClass}">${status}</span>
+            </div>
+          `;
+          
+          if (!passed) allPassed = false;
+          log(`Dialogue Tree - ${test}: ${passed ? 'PASS' : 'FAIL'}`, passed ? 'success' : 'error');
+        }
+        
+        html += `
+          <div class="test-item">
+            <strong>Tree Statistics:</strong>
+            <ul style="margin: 5px 0 0 20px;">
+              <li>Total nodes: ${Object.keys(tree).length}</li>
+              <li>Root options: ${tree.root?.options?.length || 0}</li>
+              <li>AI-enabled nodes: ${Object.values(tree).filter(n => n.useAI).length}</li>
+              <li>Completion nodes: ${Object.values(tree).filter(n => n.completes).length}</li>
+            </ul>
+          </div>
+        `;
+        
+        statusDiv.innerHTML = html;
+        
+        if (allPassed) {
+          log('Dialogue tree: All tests passed', 'success');
+        } else {
+          log('Dialogue tree: Some tests failed', 'error');
+        }
+      } catch (err) {
+        log('Failed to load dialogue tree: ' + err.message, 'error');
+        statusDiv.innerHTML = `
+          <div class="test-item">
+            <strong>Error:</strong>
+            <span class="status fail">FAIL</span>
+            <p>${err.message}</p>
+          </div>
+        `;
+      }
+    }
+    
+    // Test dialogue progression button
+    document.getElementById('test-dialogue-btn').addEventListener('click', async () => {
+      log('Testing dialogue progression...', 'info');
+      
+      if (!Game.modules.SignalRunner) {
+        log('ERROR: Signal Runner not loaded', 'error');
+        return;
+      }
+      
+      if (!Game.modules.FO4Dialogue) {
+        log('ERROR: FO4 Dialogue not loaded', 'error');
+        return;
+      }
+      
+      try {
+        // Initialize FO4 Dialogue if not already done
+        if (!Game.modules.FO4Dialogue.overlayEl) {
+          Game.modules.FO4Dialogue.init();
+          log('Initialized FO4 Dialogue system', 'info');
+        }
+        
+        // Test tree conversion
+        const tree = await fetch('/data/npc/npc_signal_runner.json')
+          .then(r => r.json())
+          .then(d => d.conversationTree);
+        
+        log('Converting conversation tree to FO4 format...', 'info');
+        const fo4Data = await Game.modules.SignalRunner._convertTreeToFO4Format(tree);
+        
+        log(`Converted ${fo4Data.nodes.length} nodes`, 'success');
+        log(`First node text: "${fo4Data.nodes[0].text.substring(0, 50)}..."`, 'info');
+        log(`First node has ${fo4Data.nodes[0].responses.length} response options`, 'info');
+        
+        alert('✓ Dialogue tree conversion successful!\n\nCheck console log for details.');
+      } catch (err) {
+        log('Dialogue progression test failed: ' + err.message, 'error');
+        alert('✗ Test failed: ' + err.message);
+      }
+    });
+    
+    // System status summary
+    function updateSystemStatus() {
+      const statusDiv = document.getElementById('system-status');
+      statusDiv.innerHTML = `
+        <div class="test-item">
+          <strong>📡 Vault 77 NPC Dialogue System</strong>
+          <ul style="margin: 5px 0 0 20px;">
+            <li>Game object: ${window.Game ? '✓' : '✗'}</li>
+            <li>Signal Runner: ${Game.modules?.SignalRunner ? '✓' : '✗'}</li>
+            <li>FO4 Dialogue: ${Game.modules?.FO4Dialogue ? '✓' : '✗'}</li>
+            <li>Overseer Personality: ${window.overseerPersonality ? '✓' : '✗'}</li>
+          </ul>
+        </div>
+      `;
+    }
+    
+    // Wait for modules to load, then run tests
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        updateSystemStatus();
+        runTests();
+      }, 500);
+    });
+  </script>
+</body>
+</html>
