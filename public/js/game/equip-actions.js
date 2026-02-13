@@ -3,7 +3,8 @@
 
 window.Game = window.Game || {};
 Game.player = Game.player || {};
-Game.player.equipped = Game.player.equipped || {};
+// Don't initialize equipped object - let PlayerState manage it
+// Game.player.equipped will be set by PlayerState.syncGamePlayerReferences()
 
 /**
  * Equip an item to the player
@@ -39,6 +40,11 @@ Game.equipItem = function (itemOrId) {
   }
 
   // Fallback: direct equip
+  // Ensure equipped object exists
+  if (!Game.player.equipped) {
+    Game.player.equipped = {};
+  }
+  
   // Determine slot based on item type
   let slot = "accessory";
   if (item.type === "weapon") slot = "weapon";
@@ -85,7 +91,15 @@ Game.equipItem = function (itemOrId) {
  * @param {string} slot - Slot to unequip (weapon, armor, head, accessory)
  */
 Game.unequipItem = function(slot) {
-  if (!slot || !Game.player.equipped[slot]) return false;
+  if (!slot) return false;
+  
+  // Ensure equipped object exists
+  if (!Game.player.equipped) {
+    Game.player.equipped = {};
+    return false;
+  }
+  
+  if (!Game.player.equipped[slot]) return false;
 
   const item = Game.player.equipped[slot];
   Game.player.equipped[slot] = null;
@@ -110,6 +124,9 @@ Game.unequipItem = function(slot) {
  * @param {string} slot - Slot to check
  */
 Game.getEquipped = function(slot) {
+  if (!Game.player.equipped) {
+    Game.player.equipped = {};
+  }
   return Game.player.equipped[slot] || null;
 };
 
@@ -121,6 +138,9 @@ Game.loadEquippedItems = function() {
     const saved = localStorage.getItem("afc_equipped_items");
     if (saved) {
       const equipped = JSON.parse(saved);
+      if (!Game.player.equipped) {
+        Game.player.equipped = {};
+      }
       Game.player.equipped = { ...Game.player.equipped, ...equipped };
       console.log("[Equipment] Loaded equipped items");
     }
@@ -129,5 +149,17 @@ Game.loadEquippedItems = function() {
   }
 };
 
-// Auto-load on script execution
-Game.loadEquippedItems();
+// Auto-load on script execution (only if PlayerState hasn't initialized)
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    // Only load if PlayerState hasn't already set equipped
+    if (!Game.player.equipped || Object.keys(Game.player.equipped).length === 0) {
+      Game.loadEquippedItems();
+    }
+  });
+} else {
+  // Only load if PlayerState hasn't already set equipped
+  if (!Game.player.equipped || Object.keys(Game.player.equipped).length === 0) {
+    Game.loadEquippedItems();
+  }
+}

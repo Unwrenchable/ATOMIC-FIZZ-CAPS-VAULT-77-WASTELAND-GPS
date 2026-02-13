@@ -55,6 +55,7 @@
     // AI dialogue configuration
     aiConfig: {
       enabled: true,
+      useForAllNodes: false, // If true, attempts AI for all nodes (increases API costs); if false, only nodes marked with useAI
       systemPrompt: "You are The Signal Runner, a cryptic but caring guide in a post-apocalyptic wasteland. You track displaced consciousnesses across timelines. Speak in short, mysterious sentences with hints of deeper knowledge. You work with (but don't fully trust) an AI called the Overseer. Keep responses under 50 words.",
       maxTokens: 60,
       temperature: 0.8
@@ -186,12 +187,17 @@
       
       // Load conversation tree from NPC data or use defaults
       const tree = this.npcData?.conversationTree || this._getDefaultConversationTree();
+      
+      // Use FO4Dialogue system if available
+      if (Game.modules.FO4Dialogue) {
+        console.log("[Signal Runner] Using FO4Dialogue system");
+        await this._startFO4Dialogue(tree);
+        return;
+      }
+      
+      // Fallback to simple dialogue
       const rootNode = tree.root;
-      
-      // Get NPC line (potentially AI-generated)
       const npcLine = await this._getNPCLine(rootNode);
-      
-      // Display dialogue (integrate with your dialogue UI system)
       this._displayDialogue(npcLine, rootNode.options);
     },
 
@@ -199,10 +205,19 @@
     // Get NPC dialogue line (AI or fallback)
     // ------------------------------------------------------------
     async _getNPCLine(node) {
-      // If AI is enabled and node supports it, try AI generation
-      if (this.aiConfig.enabled && node.useAI) {
+      // Check if AI should be used for this node
+      const shouldUseAI = this.aiConfig.enabled && (
+        this.aiConfig.useForAllNodes || 
+        node.useAI === true
+      );
+      
+      if (shouldUseAI) {
         const aiLine = await this._generateAIDialogue(node.aiPromptContext || node.npc_line);
-        if (aiLine) return aiLine;
+        if (aiLine) {
+          console.log("[Signal Runner] Using AI-generated dialogue");
+          return aiLine;
+        }
+        console.log("[Signal Runner] AI generation failed, using static line");
       }
       
       // Return static line
@@ -213,38 +228,110 @@
     // Generate AI-powered dialogue using Overseer personality
     // ------------------------------------------------------------
     async _generateAIDialogue(context) {
-      // Use Overseer personality if available
-      if (window.overseerPersonality?.speak) {
-        try {
-          const prompt = "[Context: " + context + "] Respond as The Signal Runner:";
-          const response = await window.overseerPersonality.speak(prompt);
-          if (response) {
-            return response;
-          }
-        } catch (err) {
-          console.warn("[Signal Runner] AI dialogue generation failed:", err);
+      // Check if Overseer personality is available
+      if (!window.overseerPersonality?.speak) {
+        console.log("[Signal Runner] Overseer personality not available for AI dialogue");
+        return null;
+      }
+      
+      try {
+        const prompt = "[Context: " + context + "] Respond as The Signal Runner - cryptic, mysterious, caring guide in the wasteland:";
+        console.log("[Signal Runner] Requesting AI dialogue...");
+        const response = await window.overseerPersonality.speak(prompt);
+        if (response) {
+          console.log("[Signal Runner] AI dialogue received:", response.substring(0, 50) + "...");
+          return response;
         }
+      } catch (err) {
+        console.warn("[Signal Runner] AI dialogue generation error:", err);
       }
       
       return null;
     },
 
     // ------------------------------------------------------------
-    // Display dialogue to player (integrate with UI system)
+    // Start FO4-style dialogue with full tree conversion
+    // ------------------------------------------------------------
+    async _startFO4Dialogue(tree) {
+      // Convert Signal Runner conversation tree to FO4Dialogue format
+      const dialogueData = await this._convertTreeToFO4Format(tree);
+      
+      // Create NPC object for FO4Dialogue
+      const npcObject = {
+        id: this.id,
+        name: this.name,
+        type: 'story_npc',
+        position: this.currentPosition
+      };
+      
+      // Start FO4Dialogue
+      Game.modules.FO4Dialogue.startDialogue(npcObject, dialogueData, () => {
+        this._onConversationComplete('wake_up_npc_intro');
+        this._endConversation();
+      });
+    },
+
+    // ------------------------------------------------------------
+    // Convert conversation tree to FO4Dialogue format
+    // ------------------------------------------------------------
+    async _convertTreeToFO4Format(tree) {
+      const nodes = [];
+      
+      // Process each node in the tree
+      for (const [nodeId, nodeData] of Object.entries(tree)) {
+        // Get NPC line (with AI if enabled)
+        const npcLine = await this._getNPCLine(nodeData);
+        
+        // Convert to FO4 format
+        const fo4Node = {
+          id: nodeId,
+          text: npcLine,
+          responses: []
+        };
+        
+        // Convert options to FO4 responses
+        if (nodeData.options && nodeData.options.length > 0) {
+          fo4Node.responses = nodeData.options.map(opt => ({
+            text: opt.player_choice,
+            next: opt.next,
+            tone: this._determineTone(opt.player_choice)
+          }));
+        } else if (nodeData.completes) {
+          // End node
+          fo4Node.responses = [{
+            text: '[END]',
+            end: true
+          }];
+        }
+        
+        // Handle quest completion flags
+        if (nodeData.completes) {
+          fo4Node.set_flags = [nodeData.completes];
+        }
+        
+        nodes.push(fo4Node);
+      }
+      
+      return { nodes };
+    },
+
+    // ------------------------------------------------------------
+    // Determine dialogue tone from player choice text
+    // ------------------------------------------------------------
+    _determineTone(text) {
+      const lowerText = text.toLowerCase();
+      if (lowerText.includes('?')) return 'question';
+      if (lowerText.includes('thank') || lowerText.includes('please')) return 'friendly';
+      if (lowerText.includes('angry') || lowerText.includes('!')) return 'aggressive';
+      if (lowerText.includes('nothing') || lowerText.includes('silence')) return 'neutral';
+      return 'neutral';
+    },
+
+    // ------------------------------------------------------------
+    // Display dialogue to player (fallback for simple UI)
     // ------------------------------------------------------------
     _displayDialogue(npcLine, options) {
       console.log("[Signal Runner] \"" + npcLine + "\"");
-      
-      // If Game has a dialogue UI, use it
-      if (Game.modules.dialogueUI?.show) {
-        Game.modules.dialogueUI.show({
-          speaker: this.name,
-          text: npcLine,
-          options: options,
-          onSelect: (choice) => this._handlePlayerChoice(choice)
-        });
-        return;
-      }
       
       // Fallback: simple alert-based dialogue
       if (options && options.length > 0) {

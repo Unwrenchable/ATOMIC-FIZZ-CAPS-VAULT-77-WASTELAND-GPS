@@ -590,6 +590,14 @@
   }
 
   /**
+   * Get inventory array
+   * @returns {Array} Copy of inventory array
+   */
+  function getInventory() {
+    return _state.inventory || [];
+  }
+
+  /**
    * Give item from NPC to player (unified method)
    * @param {Object} item - Item to give
    * @param {string} npcName - Name of NPC giving item
@@ -616,6 +624,7 @@
   const PlayerState = {
     init,
     getState,
+    getInventory,
     addItem,
     removeItem,
     hasItem,
