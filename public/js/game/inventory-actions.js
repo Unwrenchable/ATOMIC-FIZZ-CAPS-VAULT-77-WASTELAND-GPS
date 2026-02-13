@@ -3,7 +3,8 @@
 
 window.Game = window.Game || {};
 Game.player = Game.player || {};
-Game.player.inventory = Game.player.inventory || [];
+// Don't initialize inventory array - let PlayerState manage it
+// Game.player.inventory will be set by PlayerState.syncGamePlayerReferences()
 
 /**
  * Give an item to the player (unified method)
@@ -38,6 +39,11 @@ Game.giveItem = function (item, quantity = 1) {
 
   // Fallback: direct inventory manipulation (won't persist properly)
   console.warn("[giveItem] PlayerState not loaded - item may not persist");
+  
+  // Ensure Game.player.inventory exists
+  if (!Game.player.inventory) {
+    Game.player.inventory = [];
+  }
   
   // Add to Game.player.inventory
   const existing = Game.player.inventory.find(i => i.id === item.id);
@@ -102,7 +108,12 @@ Game.removeItem = function(itemId, quantity = 1) {
     return Game.modules.PlayerState.removeItem(itemId, quantity);
   }
 
-  // Fallback
+  // Fallback - ensure inventory exists
+  if (!Game.player.inventory) {
+    Game.player.inventory = [];
+    return false;
+  }
+  
   const idx = Game.player.inventory.findIndex(i => i.id === itemId);
   if (idx === -1) return false;
 
@@ -133,7 +144,11 @@ Game.hasItem = function(itemId, quantity = 1) {
     return Game.modules.PlayerState.hasItem(itemId, quantity);
   }
 
-  // Fallback
+  // Fallback - ensure inventory exists
+  if (!Game.player.inventory) {
+    return false;
+  }
+  
   const item = Game.player.inventory.find(i => i.id === itemId);
   if (!item) return false;
   return (item.quantity || 1) >= quantity;
