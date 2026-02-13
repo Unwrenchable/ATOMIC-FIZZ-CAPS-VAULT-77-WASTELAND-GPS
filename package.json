@@ -5,7 +5,7 @@
   "main": "backend/server.js",
   "type": "commonjs",
   "engines": {
-    "node": ">=18.0.0 <=20.999.999"
+    "node": ">=18.0.0 <=25.999.999"
   },
   "scripts": {
     "start": "node backend/server.js",
