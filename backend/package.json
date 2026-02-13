@@ -28,7 +28,7 @@
     "nodemon": "^3.1.0"
   },
   "engines": {
-    "node": ">=18 <=25"
+    "node": "20.x"
   },
   "license": "MIT"
 }
