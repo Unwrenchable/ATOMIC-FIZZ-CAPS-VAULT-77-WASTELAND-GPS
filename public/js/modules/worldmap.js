@@ -268,67 +268,46 @@
         console.warn('[worldmap] mapContainer element not found in DOM - cannot initialize map');
         return;
       }
-      
-      const rect = container.getBoundingClientRect();
-      console.log('[worldmap] container rect:', rect);
-      
-      // Force dimensions on mobile if CSS isn't working
+
+      // Ensure container sizing is correct before map loads
+      let rect = container.getBoundingClientRect();
       if (this.isMobileDevice() && (rect.width === 0 || rect.height === 0)) {
-        console.log('[worldmap] forcing mobile container dimensions');
         const panelBody = document.querySelector('#panel-map .panel-body');
         if (panelBody) {
           const panelRect = panelBody.getBoundingClientRect();
-          console.log('[worldmap] panel body rect:', panelRect);
           if (panelRect.width > 0 && panelRect.height > 0) {
             container.style.width = panelRect.width + 'px';
             container.style.height = panelRect.height + 'px';
             container.style.position = 'absolute';
             container.style.top = '0';
             container.style.left = '0';
-            console.log('[worldmap] forced container to:', container.style.width, container.style.height);
           }
         }
+        // Recalculate rect after forced sizing
+        rect = container.getBoundingClientRect();
       }
+
+      // Only proceed if container has valid dimensions
       if (rect.width === 0 || rect.height === 0) {
-          // Guard against overlapping retry chains - only one retry chain can be active
-          if (this.isRetrying) {
-            console.warn('[worldmap] retry already in progress, skipping duplicate call');
-            return;
-          }
-          
-          if (this.containerRetryCount < this.maxContainerRetries) {
-            this.containerRetryCount++;
-            this.isRetrying = true;
-            console.warn('[worldmap] container has no dimensions (width:', rect.width, 'height:', rect.height, '), retry', this.containerRetryCount, '/', this.maxContainerRetries);
-            setTimeout(() => {
-              // Reset flag immediately before retry - this allows the retry to proceed
-              // but still blocks any external calls during the timeout
-              this.isRetrying = false;
-              this.onOpen();
-            }, this.containerRetryDelayMs);
-            return;
-          } else {
-            console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
-            this.resetRetryState(); // Reset for future attempts
-          }
+        if (this.containerRetryCount < this.maxContainerRetries) {
+          this.containerRetryCount++;
+          setTimeout(() => this.onOpen(), this.containerRetryDelayMs);
+          return;
         } else {
-          console.log('[worldmap] container dimensions OK (width:', rect.width, 'height:', rect.height, ')');
-          this.resetRetryState(); // Reset on success
+          console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
         }
-      
+      } else {
+        this.resetRetryState();
+      }
+
       // Initialize map if not yet created (happens after boot screen)
       if (!this.map) {
-        console.log('[worldmap] map not initialized, initializing now...');
         this.init(window.DATA || {});
       }
-      
-      // If map still isn't created, something went wrong
       if (!this.map) {
-        console.error('[worldmap] map failed to initialize');
         this.updateMapStatus('Map initialization failed - check console');
         return;
       }
-      
       if (!this.locationsLoaded) {
         this.loadLocations();
       } else {
@@ -338,38 +317,16 @@
       this.ensurePlayerPosition();
       this.initPlayerMarker();
       this.centerOnPlayer(true);
-
       this.renderWorldLabels();
 
-      // Force map to recalculate size and re-render (increased delay for mobile)
-      // Use longer delay on mobile devices for proper layout calculation
-      const delay = this.isMobileDevice() ? this.mapInvalidateDelayMsMobile : this.mapInvalidateDelayMs;
-      console.log(`[worldmap] scheduling invalidateSize with ${delay}ms delay (mobile: ${this.isMobileDevice()})`);
-      
-      setTimeout(() => {
-        try {
-          if (this.map) {
-            console.log('[worldmap] invalidating map size and recentering...');
-            this.map.invalidateSize(true); // 'true' for animated resize
-            const pos = this.gs.player.position;
-            this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7);
-            this.updateOverlayVisibility(this.map.getZoom() || 7);
-            this.updateMapStatus('Map online - Ready');
-            
-            // Additional invalidation for mobile devices to ensure tiles load
-            if (this.isMobileDevice()) {
-              setTimeout(() => {
-                if (this.map) {
-                  console.log('[worldmap] second invalidateSize for mobile');
-                  this.map.invalidateSize(true);
-                }
-              }, this.mapSecondInvalidateDelayMs);
-            }
-          }
-        } catch (e) {
-          console.error('[worldmap] error in onOpen timeout:', e);
-        }
-      }, this.mapInvalidateDelayMs);
+      // Only one invalidateSize call for mobile, after sizing is confirmed
+      if (this.map) {
+        this.map.invalidateSize(true);
+        const pos = this.gs.player.position;
+        this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7);
+        this.updateOverlayVisibility(this.map.getZoom() || 7);
+        this.updateMapStatus('Map online - Ready');
+      }
     },
 
     // --------------------------------------------------------
