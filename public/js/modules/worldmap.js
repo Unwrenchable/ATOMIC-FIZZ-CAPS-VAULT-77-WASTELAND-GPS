@@ -506,75 +506,96 @@
       // --------------------------------------------------------
       if (!this.poisLoaded) {
         (async () => {
-          const poiData = await safeFetchJSON("/data/poi.json");
-          if (!poiData) return;
-          
-          // Flatten grouped POI structure (strip, freeside, outer_vegas, etc.)
-          const allPois = [];
-          if (typeof poiData === 'object' && !Array.isArray(poiData)) {
-            Object.values(poiData).forEach(group => {
-              if (Array.isArray(group)) {
-                allPois.push(...group);
+          try {
+            const poiData = await safeFetchJSON("/data/poi.json");
+            if (!poiData) {
+              console.error("[worldmap] POI data failed to load or is empty! Check /data/poi.json and network tab.");
+              this.showMapMessage('Failed to load map locations. Try refreshing.');
+              return;
+            }
+            // Flatten grouped POI structure (strip, freeside, outer_vegas, etc.)
+            const allPois = [];
+            if (typeof poiData === 'object' && !Array.isArray(poiData)) {
+              Object.entries(poiData).forEach(([groupName, group]) => {
+                if (Array.isArray(group)) {
+                  allPois.push(...group);
+                } else {
+                  console.warn(`[worldmap] POI group '${groupName}' is not an array`, group);
+                }
+              });
+            } else if (Array.isArray(poiData)) {
+              allPois.push(...poiData);
+            } else {
+              console.error("[worldmap] POI data is not an object or array", poiData);
+              this.showMapMessage('Map locations data format error.');
+              return;
+            }
+            let markerCount = 0;
+            allPois.forEach(poi => {
+              try {
+                // Validate required fields
+                if (!poi.id || poi.lat == null || poi.lng == null) {
+                  console.warn("[worldmap] skipping invalid POI", poi);
+                  return;
+                }
+                // Check if marker already exists in cache
+                if (this.poiMarkersCache.has(poi.id)) {
+                  return; // Skip, already loaded
+                }
+                // Use iconKey (from data) or icon (fallback) with proper fallback mapping
+                const rawIconKey = poi.iconKey || poi.icon || 'poi';
+                const iconName = getValidIcon(rawIconKey);
+                // Check if icon exists in /img/icons/
+                const iconPath = `/img/icons/${iconName}.svg`;
+                fetch(iconPath, { method: 'HEAD' }).then(resp => {
+                  if (!resp.ok) {
+                    console.warn(`[worldmap] Icon missing: ${iconPath}`);
+                  }
+                }).catch(() => {
+                  console.warn(`[worldmap] Icon fetch failed: ${iconPath}`);
+                });
+                // Create icon with fallback error handling using shared helper
+                const iconDiv = L.divIcon({
+                  className: 'pipboy-poi-marker',
+                  html: createIconHTML(iconName, 32),
+                  iconSize: [32, 32],
+                  iconAnchor: [16, 16]
+                });
+                const marker = L.marker([poi.lat, poi.lng], { icon: iconDiv });
+                marker._pipboyData = poi; // Store POI data on marker
+                // Enhanced popup with Fallout-style info
+                const rarityColor = {
+                  common: '#00ff41',
+                  rare: '#00d4ff',
+                  epic: '#d900ff',
+                  legendary: '#ffaa00'
+                }[poi.rarity] || '#00ff41';
+                marker.bindPopup(`
+                  <div style="color: ${rarityColor}; font-family: monospace;">
+                    <b>${poi.name}</b><br>
+                    <small>LVL ${poi.lvl || '?'} • ${(poi.rarity || 'UNKNOWN').toUpperCase()}</small>
+                  </div>
+                `);
+                marker.addTo(this.map);
+                // Cache the marker to prevent recreation
+                this.poiMarkersCache.set(poi.id, marker);
+                markerCount++;
+              } catch (e) {
+                console.error("[worldmap] failed to add POI", poi && poi.id, e && e.message ? e.message : e);
+                this.showMapMessage('Error rendering a map location.');
               }
             });
-          } else if (Array.isArray(poiData)) {
-            allPois.push(...poiData);
-          }
-          
-          allPois.forEach(poi => {
-            try {
-              // Validate required fields
-              if (!poi.id || poi.lat == null || poi.lng == null) {
-                console.warn("[worldmap] skipping invalid POI", poi);
-                return;
-              }
-              
-              // Check if marker already exists in cache
-              if (this.poiMarkersCache.has(poi.id)) {
-                return; // Skip, already loaded
-              }
-              
-              // Use iconKey (from data) or icon (fallback) with proper fallback mapping
-              const rawIconKey = poi.iconKey || poi.icon || 'poi';
-              const iconName = getValidIcon(rawIconKey);
-              
-              // Create icon with fallback error handling using shared helper
-              const iconDiv = L.divIcon({
-                className: 'pipboy-poi-marker',
-                html: createIconHTML(iconName, 32),
-                iconSize: [32, 32],
-                iconAnchor: [16, 16]
-              });
-              
-              const marker = L.marker([poi.lat, poi.lng], { icon: iconDiv });
-              marker._pipboyData = poi; // Store POI data on marker
-              
-              // Enhanced popup with Fallout-style info
-              const rarityColor = {
-                common: '#00ff41',
-                rare: '#00d4ff',
-                epic: '#d900ff',
-                legendary: '#ffaa00'
-              }[poi.rarity] || '#00ff41';
-              
-              marker.bindPopup(`
-                <div style="color: ${rarityColor}; font-family: monospace;">
-                  <b>${poi.name}</b><br>
-                  <small>LVL ${poi.lvl || '?'} • ${(poi.rarity || 'UNKNOWN').toUpperCase()}</small>
-                </div>
-              `);
-              
-              marker.addTo(this.map);
-              
-              // Cache the marker to prevent recreation
-              this.poiMarkersCache.set(poi.id, marker);
-            } catch (e) {
-              console.warn("[worldmap] failed to add POI", poi && poi.id, e && e.message ? e.message : e);
+            this.poisLoaded = true;
+            if (markerCount === 0) {
+              this.showMapMessage('No map locations found.');
+              console.warn('[worldmap] No POI markers created from poi.json');
+            } else {
+              console.log(`[worldmap] loaded ${markerCount} static POI markers from poi.json`);
             }
-          });
-          
-          this.poisLoaded = true;
-          console.log(`[worldmap] loaded ${allPois.length} static POI markers from poi.json`);
+          } catch (err) {
+            console.error('[worldmap] POI loading error:', err && err.message ? err.message : err);
+            this.showMapMessage('Failed to load map locations.');
+          }
         })();
       }
 
