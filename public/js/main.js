@@ -826,6 +826,143 @@
   // ---------------------------
 
   function initUI() {
+    // --- CRAFTING & CLAIM IN EXCHANGE PANEL ---
+    const exchangePanel = document.getElementById("panel-exchange");
+    const exchangeContent = document.getElementById("exchangeContent");
+    function renderExchangeCraftingSection() {
+      if (!exchangeContent) return;
+      // Find or create crafting section
+      let craftingSection = document.getElementById("exchangeCraftingSection");
+      if (!craftingSection) {
+        craftingSection = document.createElement("div");
+        craftingSection.id = "exchangeCraftingSection";
+        exchangeContent.appendChild(craftingSection);
+      }
+      const recipes = (Game.modules.recipes && Game.modules.recipes.listAll && Game.modules.recipes.listAll()) || [];
+      if (!recipes.length) {
+        craftingSection.innerHTML = '<div class="panel-divider"></div><h3>Crafting Recipes</h3><p>No recipes available.</p>';
+      } else {
+        let html = '<div class="panel-divider"></div><h3>Crafting Recipes</h3>';
+        html += '<ul style="list-style:none;padding:0;">';
+        recipes.forEach(r => {
+          html += `<li style="margin-bottom:12px;border-bottom:1px solid #222;padding-bottom:8px;">
+            <strong>${r.name || r.id}</strong><br/>
+            <span style='font-size:12px;opacity:0.7;'>${r.description || ''}</span><br/>
+            <span>Requires: </span>
+            ${r.inputs.map(inp => `${inp.amount}x ${inp.id}`).join(', ')}<br/>
+            <button class="pipboy-button-small" data-craft="${r.id}">Craft</button>
+          </li>`;
+        });
+        html += '</ul>';
+        craftingSection.innerHTML = html;
+      }
+      // Wire up buttons
+      Array.from(craftingSection.querySelectorAll('[data-craft]')).forEach(btn => {
+        btn.onclick = function() {
+          const recipeId = this.getAttribute('data-craft');
+          if (!Game.modules.crafting.canCraft(recipeId)) {
+            alert('Missing ingredients!');
+            return;
+          }
+          const item = Game.modules.crafting.craft(recipeId);
+          if (item) {
+            alert('Crafted: ' + (item.name || item.id));
+            renderExchangeCraftingSection();
+          } else {
+            alert('Crafting failed.');
+          }
+        };
+      });
+    }
+
+    function renderExchangeClaimSection() {
+      if (!exchangeContent) return;
+      let claimSection = document.getElementById("exchangeClaimSection");
+      if (!claimSection) {
+        claimSection = document.createElement("div");
+        claimSection.id = "exchangeClaimSection";
+        exchangeContent.insertBefore(claimSection, exchangeContent.firstChild);
+      }
+      let html = '<div class="panel-divider"></div><h3>Claim Mintable Item</h3>';
+      html += '<button id="claimMintablesExchange" class="pipboy-button" style="width:100%;margin-bottom:10px;">CLAIM NEARBY ITEM</button>';
+      html += '<div id="claimStatusExchange" style="margin-top:6px;font-size:12px;opacity:0.8;"></div>';
+      claimSection.innerHTML = html;
+
+      // Button logic
+      const claimBtn = document.getElementById("claimMintablesExchange");
+      const claimStatus = document.getElementById("claimStatusExchange");
+      function updateClaimButtonState() {
+        const walletConnected = window.connectedWallet || window.PLAYER_WALLET;
+        // Use geolocation and POI distance if available, else fallback to true
+        let inRange = true;
+        if (window.Game && Game.player && Game.player.position && window.Game.nearbyPOI) {
+          // Example: check if player is within 50 meters of a POI
+          const playerPos = Game.player.position;
+          const poi = Game.nearbyPOI;
+          if (poi && poi.lat && poi.lng && playerPos.lat && playerPos.lng) {
+            const R = 6371e3; // meters
+            const toRad = deg => deg * Math.PI / 180;
+            const dLat = toRad(poi.lat - playerPos.lat);
+            const dLng = toRad(poi.lng - playerPos.lng);
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(toRad(playerPos.lat)) * Math.cos(toRad(poi.lat)) *
+                      Math.sin(dLng/2) * Math.sin(dLng/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const dist = R * c;
+            inRange = dist < 50; // 50 meters
+          }
+        }
+        if (claimBtn) {
+          claimBtn.disabled = !(walletConnected && inRange);
+          claimBtn.textContent = walletConnected ? (inRange ? "CLAIM NEARBY ITEM" : "OUT OF RANGE") : "CONNECT WALLET";
+        }
+      }
+      window.addEventListener("walletConnected", updateClaimButtonState);
+      window.addEventListener("playerMoved", updateClaimButtonState);
+      updateClaimButtonState();
+      if (claimBtn) {
+        claimBtn.onclick = async () => {
+          if (claimBtn.disabled) return;
+          const originalText = claimBtn.textContent;
+          claimBtn.textContent = "CLAIMING...";
+          claimBtn.disabled = true;
+          claimStatus.textContent = "Processing claim...";
+          try {
+            await claimMintableFromServer();
+            claimBtn.textContent = "CLAIMED!";
+            claimStatus.textContent = "Item claimed and added to your inventory.";
+            setTimeout(() => {
+              claimBtn.textContent = originalText;
+              claimStatus.textContent = "";
+              updateClaimButtonState();
+            }, 2000);
+          } catch (e) {
+            claimBtn.textContent = "ERROR";
+            claimStatus.textContent = "Claim failed. Please try again.";
+            setTimeout(() => {
+              claimBtn.textContent = originalText;
+              claimStatus.textContent = "";
+              updateClaimButtonState();
+            }, 2000);
+          }
+        };
+      }
+    }
+
+    // Render both sections when EXCHANGE tab is opened
+    const exchangeTabBtn = document.querySelector('[data-pipboy-tab="panel-exchange"]');
+    if (exchangeTabBtn) {
+      exchangeTabBtn.addEventListener('click', () => {
+        renderExchangeClaimSection();
+        renderExchangeCraftingSection();
+      });
+    }
+    // Optionally, render immediately if EXCHANGE is default
+    if (exchangePanel && exchangePanel.classList.contains('active')) {
+      renderExchangeClaimSection();
+      renderExchangeCraftingSection();
+    }
+    // ...existing code...
     const bound = new Set();
 
     function once(id, fn) {
@@ -886,14 +1023,7 @@
     once("connectWalletHUD", connectWallet);
     once("connectWalletStat", connectWallet);
 
-    // New Pip-Boy claim button in STAT panel
-    once("claimMintablesStat", () => {
-      if (!connectedWallet && !window.PLAYER_WALLET) {
-        alert("Connect your wallet first.");
-        return;
-      }
-      claimMintableFromServer();
-    });
+    // ...existing code...
 
     // GPS badge click toggles GPS lock
     once("gpsBadge", () => {
