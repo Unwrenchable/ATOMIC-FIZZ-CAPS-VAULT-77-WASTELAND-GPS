@@ -101,6 +101,13 @@
 
     <style>
       body.pipboy-mode { background:#000; color:#00ffae; }
+        .panel-divider {
+          width: 100%;
+          height: 2px;
+          background: linear-gradient(90deg, #444 0%, #222 100%);
+          margin: 18px 0 12px 0;
+          border-radius: 1px;
+        }
     </style>
   </head>
 
@@ -141,6 +148,8 @@
               </div>
 
               <!-- TABS -->
+
+
               <div class="pipboy-tabs">
                 <button class="pipboy-tab active" data-pipboy-tab="panel-map">MAP</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-stat">STAT</button>
@@ -149,6 +158,7 @@
                 <button class="pipboy-tab" data-pipboy-tab="panel-radio">RADIO</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-exchange">EXCHANGE</button>
               </div>
+
 
               <!-- MAIN PANELS -->
               <div class="pipboy-main">

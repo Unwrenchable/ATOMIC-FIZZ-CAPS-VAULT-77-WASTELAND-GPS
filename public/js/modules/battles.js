@@ -182,35 +182,64 @@
         <p><strong>Enemy:</strong> ${enemy.id}</p>
         <p><strong>Enemy HP:</strong> ${this.state.enemyHp[0]}</p>
         <p><strong>Your HP:</strong> ${this.gs.player.hp}</p>
-
-        <button id="battleAttackBtn">Attack</button>
+        <div id="battleOptions">
+          <button id="battleAttackBtn">Attack</button>
+          <button id="battleFleeBtn">Flee</button>
+        </div>
+        <div id="battleMsg" style="margin-top:10px;color:#ff0;"></div>
       `;
 
-      const btn = document.getElementById("battleAttackBtn");
-      if (btn) {
-        btn.onclick = () => {
+      const attackBtn = document.getElementById("battleAttackBtn");
+      const fleeBtn = document.getElementById("battleFleeBtn");
+      const msgDiv = document.getElementById("battleMsg");
+
+      if (attackBtn) {
+        attackBtn.onclick = () => {
           const res = this.playerAttack();
           if (!res.success) {
-            alert(res.reason === "NO_AMMO" ? "Out of ammo!" : "No weapon equipped!");
+            msgDiv.textContent = res.reason === "NO_AMMO" ? "Out of ammo!" : "No weapon equipped! Try to flee!";
             return;
           }
-
+          msgDiv.textContent = `You hit the enemy for ${res.damage} damage!`;
           const end = this.checkBattleEnd();
           if (end === "WIN") {
-            alert("Enemy defeated!");
+            msgDiv.textContent = "Enemy defeated!";
             this.applyRewards(this.state.encounter);
             this.state = null;
-            this.updateUI();
+            setTimeout(() => this.updateUI(), 1200);
             return;
           }
-
-          this.enemyAttack();
-
-          const end2 = this.checkBattleEnd();
-          if (end2 === "LOSE") {
-            alert("You died!");
+          setTimeout(() => {
+            const enemyRes = this.enemyAttack();
+            msgDiv.textContent = `Enemy attacks for ${enemyRes.damage} damage!`;
+            const end2 = this.checkBattleEnd();
+            if (end2 === "LOSE") {
+              msgDiv.textContent = "You died!";
+              this.state = null;
+              setTimeout(() => this.updateUI(), 1200);
+            }
+          }, 800);
+        };
+      }
+      if (fleeBtn) {
+        fleeBtn.onclick = () => {
+          // 50% chance to escape
+          if (Math.random() < 0.5) {
+            msgDiv.textContent = "You escaped!";
             this.state = null;
-            this.updateUI();
+            setTimeout(() => this.updateUI(), 1200);
+          } else {
+            msgDiv.textContent = "Failed to escape! Enemy attacks!";
+            setTimeout(() => {
+              const enemyRes = this.enemyAttack();
+              msgDiv.textContent = `Enemy attacks for ${enemyRes.damage} damage!`;
+              const end2 = this.checkBattleEnd();
+              if (end2 === "LOSE") {
+                msgDiv.textContent = "You died!";
+                this.state = null;
+                setTimeout(() => this.updateUI(), 1200);
+              }
+            }, 800);
           }
         };
       }
