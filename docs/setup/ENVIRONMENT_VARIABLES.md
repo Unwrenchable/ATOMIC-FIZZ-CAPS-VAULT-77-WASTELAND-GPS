@@ -93,10 +93,11 @@ This document provides a comprehensive alphabetical reference of all environment
 
 ### FIZZ_FUN_PROGRAM_ID
 - **Type**: String
-- **Required**: No (only if using Fizz.fun launchpad)
-- **Description**: Solana program ID for the Fizz.fun token launchpad (part of CAPS ecosystem)
-- **Example**: `FizzFun111111111111111111111111111111111111`
-- **Note**: Token launchpad feature for CAPS holders to create new tokens with bonding curves
+- **Required**: No — defaults to `CAPS_MINT` / `TOKEN_MINT` (unified ecosystem)
+- **Description**: Solana program ID for the Fizz.fun token launchpad. When not set, Fizz.fun automatically uses the CAPS SPL token mint address (`CAPS_MINT`) as its program identifier, so the entire ecosystem operates under one unified on-chain address.
+- **Default**: Same as `CAPS_MINT` / `TOKEN_MINT`
+- **When to override**: Only set this if you deploy a separate, standalone Fizz.fun on-chain program at a different address.
+- **Note**: This unified design means you only need to configure `CAPS_MINT` to activate both the CAPS token and the Fizz.fun launchpad.
 
 ### GAME_VAULT_SECRET
 - **Type**: String

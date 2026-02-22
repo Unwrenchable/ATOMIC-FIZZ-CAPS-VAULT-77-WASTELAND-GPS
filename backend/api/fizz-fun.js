@@ -28,9 +28,11 @@ const { Program, AnchorProvider, BN } = require("@coral-xyz/anchor");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
 
 // Configuration
-// Use CAPS_MINT or fall back to TOKEN_MINT (both refer to the CAPS SPL token)
-// These are lazily resolved so a missing env var produces a clear startup error
-// rather than crashing at import time with an opaque Base58 decode failure.
+// Fizz.fun uses a unified ecosystem design:
+//   FIZZ_FUN_PROGRAM_ID defaults to CAPS_MINT / TOKEN_MINT when not explicitly set.
+// This means you only need ONE address configured (your CAPS SPL token mint) and
+// Fizz.fun will automatically operate under that same identifier.
+// Set FIZZ_FUN_PROGRAM_ID explicitly only if you deploy a separate on-chain program.
 function requirePublicKey(envName, ...fallbackEnvNames) {
   const value = [envName, ...fallbackEnvNames].map(n => process.env[n]).find(Boolean);
   if (!value) {
@@ -42,14 +44,20 @@ function requirePublicKey(envName, ...fallbackEnvNames) {
 
 let FIZZ_FUN_PROGRAM_ID = null, CAPS_MINT = null, TREASURY = null;
 try {
-  FIZZ_FUN_PROGRAM_ID = requirePublicKey("FIZZ_FUN_PROGRAM_ID");
+  // Resolve CAPS_MINT first — it is required and anchors the whole ecosystem.
   CAPS_MINT = requirePublicKey("CAPS_MINT", "TOKEN_MINT");
   TREASURY = requirePublicKey("TREASURY_WALLET");
+  // FIZZ_FUN_PROGRAM_ID defaults to the already-validated CAPS_MINT PublicKey,
+  // unifying the ecosystem under one address.
+  // Set FIZZ_FUN_PROGRAM_ID explicitly only for a separate on-chain program.
+  FIZZ_FUN_PROGRAM_ID = process.env.FIZZ_FUN_PROGRAM_ID
+    ? new PublicKey(process.env.FIZZ_FUN_PROGRAM_ID)
+    : CAPS_MINT;
 } catch (err) {
   if (process.env.NODE_ENV === "production") {
     // In production, missing Solana config is a fatal error — log clearly so ops can act.
     console.error("[fizz-fun] FATAL: Solana addresses not configured:", err.message);
-    console.error("[fizz-fun] Set FIZZ_FUN_PROGRAM_ID, CAPS_MINT, and TREASURY_WALLET then restart.");
+    console.error("[fizz-fun] Set CAPS_MINT (and TREASURY_WALLET) then restart.");
   } else {
     console.warn("[fizz-fun] Solana addresses not configured:", err.message);
     console.warn("[fizz-fun] Fizz.fun routes will return 503 until env vars are set.");
@@ -70,7 +78,7 @@ const ADMIN_WALLETS = (process.env.ADMIN_WALLETS || "").split(",").filter(Boolea
 function requireConfig(req, res, next) {
   if (!FIZZ_FUN_PROGRAM_ID || !CAPS_MINT || !TREASURY) {
     return res.status(503).json({
-      error: "Fizz.fun is not configured. Set FIZZ_FUN_PROGRAM_ID, CAPS_MINT, and TREASURY_WALLET environment variables."
+      error: "Fizz.fun is not configured. Set CAPS_MINT and TREASURY_WALLET environment variables."
     });
   }
   next();
