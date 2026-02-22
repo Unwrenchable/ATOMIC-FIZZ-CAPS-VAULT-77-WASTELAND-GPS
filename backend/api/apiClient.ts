@@ -1,4 +1,7 @@
 // game-ui/lib/apiClient.ts
+/// <reference types="node" />
+import process from 'process';
+
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
 async function request<T>(
