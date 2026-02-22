@@ -13,6 +13,11 @@
   "ui": {
     "theme": "pipboy",
     "defaultZoom": 13,
-    "mapCenter": [36.1699, -115.1398]
+    "mapCenter": [36.1699, -115.1398],
+    // if you provide custom tiles under /tiles/world_overview, the map will
+    // display them at zoom levels <= this value.  Set to 19 (or any high
+    // number) to keep the overview active at all zooms.  Omit or set to null
+    // to disable and always use online tiles.
+    "overviewMaxZoom": 19
   }
 }
