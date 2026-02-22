@@ -900,7 +900,7 @@
   window.state = state;
   window.addMessage = addMessage;
 
-})();
+  function sendToGame(type, payload) {
     window.dispatchEvent(
       new CustomEvent("overseer:command", {
         detail: { type, payload }
@@ -912,7 +912,9 @@
 
   window.addEventListener("game:event", function (e) {
     const data = e.detail || {};
-    Overseer.handleGameEvent(data);
+    Promise.resolve(Overseer.handleGameEvent(data)).catch(function (err) {
+      console.warn("[Overseer] handleGameEvent error:", err.message);
+    });
   });
 
   Overseer.handleGameEvent = function (data) {
@@ -1141,7 +1143,7 @@ Overseer.handleInput = async function (raw) {
       Overseer.print(reply);
     } catch (err) {
       Overseer.print("AI CORE ERROR: SIGNAL CORRUPTED");
-      console.error("Overseer AI error:", err);
+      console.warn("[Overseer] AI personality error (using fallback):", err.message);
     }
     return;
   }
