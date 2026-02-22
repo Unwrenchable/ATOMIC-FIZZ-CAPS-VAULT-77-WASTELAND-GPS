@@ -22,6 +22,7 @@ Initial setup, API keys, and environment configuration.
 - [AWS_KMS_SETUP.md](setup/AWS_KMS_SETUP.md) - AWS Key Management Service setup
 - [DOCUMENTATION_INDEX.md](setup/DOCUMENTATION_INDEX.md) - Previous documentation index
 - [ENVIRONMENT_VARIABLES.md](setup/ENVIRONMENT_VARIABLES.md) - Complete environment variable reference
+- [HF_API_KEY_SHARING_GUIDE.md](setup/HF_API_KEY_SHARING_GUIDE.md) - 🔑 Guide to sharing HF API keys across repos
 - [HF_API_SETUP.md](setup/HF_API_SETUP.md) - Hugging Face API configuration
 - [LOCAL_SIGNING_SETUP.md](setup/LOCAL_SIGNING_SETUP.md) - Local transaction signing setup
 - [VERIFY_PRODUCTION_HF_KEY.md](setup/VERIFY_PRODUCTION_HF_KEY.md) - Production HF key verification
@@ -115,8 +116,8 @@ Development summaries, fixes, testing guides, and implementation reports.
 
 ## 📊 Documentation Statistics
 
-- **Total Documents**: 64 markdown files
-- **Setup Guides**: 7 files
+- **Total Documents**: 65 markdown files
+- **Setup Guides**: 8 files
 - **Deployment Guides**: 10 files
 - **Feature Documentation**: 13 files
 - **Development Reports**: 33 files
