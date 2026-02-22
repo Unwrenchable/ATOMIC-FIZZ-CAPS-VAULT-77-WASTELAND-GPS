@@ -1141,7 +1141,7 @@ Overseer.handleInput = async function (raw) {
       Overseer.print(reply);
     } catch (err) {
       Overseer.print("AI CORE ERROR: SIGNAL CORRUPTED");
-      console.error("Overseer AI error:", err);
+      console.warn("[Overseer] AI personality error (using fallback):", err.message);
     }
     return;
   }
