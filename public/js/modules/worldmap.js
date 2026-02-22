@@ -529,34 +529,23 @@
 
       const satelliteTiles = L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        { 
-          minZoom: 0, 
-          maxZoom: 19, 
+        {
+          minZoom: 0,
+          maxZoom: 19,
           noWrap: true,
-          attribution: '© OpenStreetMap contributors',
-          errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzA1MDcwNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMDBmZjQxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+T0ZGTElORTwvdGV4dD48L3N2Zz4='
+          attribution: '© OpenStreetMap contributors'
+          // No errorTileUrl - let failed tiles be transparent instead of black
         }
       );
-      
-      // Track tile errors - only switch to offline after multiple failures
-      let tileErrorCount = 0;
-      const maxTileErrors = 10; // Allow more tile failures on mobile
-      
+
+      // Log tile errors for debugging but don't automatically switch to offline mode
       satelliteTiles.on('tileerror', (e) => {
-        tileErrorCount++;
-        console.warn(`[worldmap] tile load error (${tileErrorCount}/${maxTileErrors})`);
-        
-        if (tileErrorCount >= maxTileErrors && !this.tiles.offline) {
-          console.warn('[worldmap] too many tile errors, switching to offline mode');
-          this.switchToOfflineMode();
-        }
+        console.warn('[worldmap] tile load error:', e.coords, e.tile.src);
       });
-      
-      // Reset error count on successful tile loads
+
+      // Log successful tile loads
       satelliteTiles.on('tileload', () => {
-        if (tileErrorCount > 0) {
-          tileErrorCount = Math.max(0, tileErrorCount - 1); // Gradually reduce error count
-        }
+        // Tiles loading successfully
       });
 
       // Add both layers; overview is added but hidden by zoom handler below
@@ -1057,24 +1046,24 @@
     // Try to switch back to online tiles
     trySwitchToOnlineMode() {
       if (!this.tiles.offline) return; // Not in offline mode
-      
+
       console.log('[worldmap] attempting to switch back to online tiles');
-      
+
       // Create new satellite tiles
       const satelliteTiles = L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        { 
-          minZoom: 0, 
-          maxZoom: 19, 
+        {
+          minZoom: 0,
+          maxZoom: 19,
           noWrap: true,
-          attribution: '© OpenStreetMap contributors',
-          errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzA1MDcwNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMDBmZjQxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+T0ZGTElORTwvdGV4dD48L3N2Zz4='
+          attribution: '© OpenStreetMap contributors'
+          // No errorTileUrl - let failed tiles be transparent
         }
       );
-      
+
       let tileErrorCount = 0;
       const maxTileErrors = 3; // Be more lenient when trying to go back online
-      
+
       satelliteTiles.on('tileerror', (e) => {
         tileErrorCount++;
         if (tileErrorCount >= maxTileErrors) {
@@ -1082,7 +1071,7 @@
           this.showMapMessage('Still offline - check connection');
         }
       });
-      
+
       satelliteTiles.on('tileload', () => {
         // If we successfully load some tiles, switch to online mode
         if (this.tiles.offline) {
@@ -1091,7 +1080,7 @@
           delete this.tiles.offline;
           this.tiles.satellite = satelliteTiles;
           this.showMapMessage('Map online!');
-          
+
           // Hide retry button
           const retryBtn = document.getElementById('retryMapBtn');
           if (retryBtn) {
@@ -1099,7 +1088,7 @@
           }
         }
       });
-      
+
       // Add the new tiles (they'll load in background)
       satelliteTiles.addTo(this.map);
       this.tiles.satellite = satelliteTiles;
