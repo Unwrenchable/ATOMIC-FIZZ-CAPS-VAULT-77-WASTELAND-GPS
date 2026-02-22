@@ -1,26 +1,15 @@
 # Deployment Guide
 
-> 📚 **Multiple Deployment Options Available**
-> - **Full Stack Vercel** (Recommended for simplicity): See [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
-> - **Split Architecture** (Vercel + Render): See [Render & Vercel Deployment Guide](docs/RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
+> 📚 **Deployment Architecture**
+> - **Split Architecture** (Vercel + Render) - **CURRENT/RECOMMENDED**: See [Render & Vercel Deployment Guide](RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
+> - **Full Stack Vercel** (Historical - not currently used): See [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
 > - **Moving to Organization?** See [ORGANIZATION_MIGRATION_GUIDE.md](ORGANIZATION_MIGRATION_GUIDE.md) 🔄
 
-## Deployment Options
+## Current Deployment Architecture
 
-This application supports two deployment architectures:
+This application uses **Split Architecture** for optimal mobile performance and persistent map functionality:
 
-### Option 1: Full Stack Vercel (Recommended for New Deployments)
-
-**Single platform deployment with both frontend and backend on Vercel**
-
-- ✅ **Frontend**: Static files served by Vercel CDN
-- ✅ **Backend**: Express app as Vercel Serverless Functions
-- ✅ **Benefits**: Simple setup, single platform, automatic scaling
-- ✅ **Best for**: Most use cases, especially getting started
-
-**See detailed guide**: [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
-
-### Option 2: Split Architecture (Legacy/Advanced)
+### Split Architecture (Current - Recommended for Mobile)
 
 **Separate deployments for frontend and backend**
 
@@ -35,7 +24,21 @@ This application supports two deployment architectures:
   - Preview/testing (Vercel): `*.vercel.app`
   - Preview/testing (Render): `*.onrender.com`
 
-**Best for**: Need long-running tasks, WebSockets, or always-warm API responses
+**Best for**: Mobile gameplay with persistent map state, WebSocket support, and always-on backend
+
+**Why Split Architecture for Mobile:**
+- ✅ **Persistent backend server** (not serverless) eliminates cold starts that can break map state
+- ✅ **WebSocket support** for real-time updates
+- ✅ **Always-warm API** responses for better mobile experience
+- ✅ **Consistent state management** across sessions
+
+**See detailed guide**: [RENDER_VERCEL_DEPLOYMENT_GUIDE.md](RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
+
+### Historical: Full Stack Vercel (Not Currently Used)
+
+The application previously used full-stack Vercel deployment with serverless functions, but this was rolled back due to mobile map persistence issues. Serverless functions have cold starts and limited WebSocket support, which caused problems with mobile map state.
+
+**See historical documentation**: [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
 
 ## ⚠️ Important: Single Game Instance
 
