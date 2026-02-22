@@ -3,7 +3,9 @@
 const fetch = require("node-fetch");
 
 const HELIUS_API_KEY = process.env.HELIUS_API_KEY;
-const RPC = `https://devnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
+// Determine Helius cluster from SOLANA_NETWORK env var (mainnet-beta → mainnet, else devnet)
+const HELIUS_CLUSTER = (process.env.SOLANA_NETWORK || "devnet") === "mainnet-beta" ? "mainnet" : "devnet";
+const RPC = `https://${HELIUS_CLUSTER}.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
 
 async function fetchNFTsForWallet(wallet) {
   if (!HELIUS_API_KEY) {
