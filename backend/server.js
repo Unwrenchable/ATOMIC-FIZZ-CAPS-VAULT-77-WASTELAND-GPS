@@ -279,6 +279,9 @@ safeMount("/api/rotation", api("rotation"));
 // Quest endings
 safeMount("/api/quest-endings", api("quest-endings"));
 
+// Overseer AI proxy (Hugging Face / OpenAI compatible)
+safeMount("/api/overseer", api("overseer-proxy"));
+
 // Fizz Fun token launcher
 safeMount("/api/fizz-fun", api("fizz-fun"));
 

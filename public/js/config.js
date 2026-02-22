@@ -22,21 +22,21 @@
 (function() {
   const hostname = window.location.hostname;
   
-  // Local development environments
-  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
-  const isCodespace = hostname.endsWith('.github.dev') || hostname.endsWith('.preview.app.github.dev');
+  // Local development environments (same-origin)
+  const isLocalhostOrigin = hostname === 'localhost' || hostname === '127.0.0.1';
   
-  if (isLocalhost || isCodespace) {
-    // Local dev or GitHub Codespaces: point to local backend
+  if (isLocalhostOrigin) {
+    // Local dev on localhost: point to local backend
     window.API_BASE = 'http://localhost:3000';
     // Use devnet for local development
     window.SOLANA_RPC = 'https://api.devnet.solana.com';
   } else {
-    // Production/preview environments on Vercel or custom domains:
-    // Use relative paths for API calls - they'll be handled by:
+    // Production/preview/cross-origin environments:
+    // Use relative paths for API calls to avoid CSP connect-src issues
     // - Vercel serverless functions if deployed as full stack
     // - External proxy if configured in vercel.json
-    window.API_BASE = '';  // Empty string means relative paths
+    // - Same-origin backend if served behind reverse proxy
+    window.API_BASE = '/api';  // Relative path - safe from CSP
     // Use mainnet for production
     window.SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
   }
