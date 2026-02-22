@@ -15,8 +15,10 @@
 **HAVENTECH CORPORATION**  
 *"Building a Brighter Tomorrow, Yesterday."*
 
-📅 **January 2077** (Reissued 2026)  
+📅 **January 2077** (Reissued 2026)
 📍 **Vault‑77, Mojave Exclusion Zone**
+
+> 📚 **[Complete Documentation Index](docs/DOCS_INDEX.md)** - All guides organized by category for easy navigation
 
 ---
 
@@ -256,8 +258,8 @@ Your guide, entertainer, and occasional tormentor:
 - **Game Integration**: Status tracking, quest logs, map intelligence
 - **Advanced Features**: Memory system, lore database, threat analysis
 
-*📟 Complete documentation: [VAULT_77_OVERSEER_COMPLETE_GUIDE.md](VAULT_77_OVERSEER_COMPLETE_GUIDE.md)*  
-*🎮 Quick reference: [OVERSEER_COMMANDS.md](OVERSEER_COMMANDS.md)*
+*📟 Complete documentation: [VAULT_77_OVERSEER_COMPLETE_GUIDE.md](docs/features/VAULT_77_OVERSEER_COMPLETE_GUIDE.md)*
+*🎮 Quick reference: [OVERSEER_COMMANDS.md](docs/features/OVERSEER_COMMANDS.md)*
 
 ---
 
@@ -316,10 +318,10 @@ Battle the Gamemaker in Tic-Tac-Toe on Twitter:
 ```
 
 ### Deployment Guides
-- **Quick Start (5 min)**: [VERCEL_QUICKSTART.md](VERCEL_QUICKSTART.md) ⚡
-- **Full Stack Vercel**: [VERCEL_FULL_STACK_DEPLOYMENT.md](VERCEL_FULL_STACK_DEPLOYMENT.md)
-- **Split Architecture**: [DEPLOYMENT.md](DEPLOYMENT.md)
-- **Organization Migration**: [ORGANIZATION_MIGRATION_GUIDE.md](ORGANIZATION_MIGRATION_GUIDE.md) 🔄
+- **Quick Start (5 min)**: [VERCEL_QUICKSTART.md](docs/deployment/VERCEL_QUICKSTART.md) ⚡
+- **Full Stack Vercel**: [VERCEL_FULL_STACK_DEPLOYMENT.md](docs/deployment/VERCEL_FULL_STACK_DEPLOYMENT.md)
+- **Split Architecture**: [DEPLOYMENT.md](docs/deployment/DEPLOYMENT.md)
+- **Organization Migration**: [ORGANIZATION_MIGRATION_GUIDE.md](docs/deployment/ORGANIZATION_MIGRATION_GUIDE.md) 🔄
 
 ```
 ╔═══════════════════════════════════════════════════════════════════╗
