@@ -384,20 +384,22 @@
         console.error('[worldmap] mapContainer not found in DOM');
         return;
       }
-      
-      // Check if container is visible (not hidden by boot screen)
-      const wristScreen = document.getElementById('pipboyScreen') || document.getElementById('wristScreen');
-      if (wristScreen && wristScreen.classList.contains('hidden')) {
-        console.log('[worldmap] waiting for wristScreen to be visible...');
-        // Will be called by onOpen() when wristReady event fires
-        return;
-      }
-      
+
       // Check if Leaflet is loaded
       if (typeof L === 'undefined') {
         console.error('[worldmap] Leaflet library not loaded, retrying...');
         setTimeout(() => this.initMap(), 500); // Retry after 500ms
         return;
+      }
+
+      // Check if container is visible (not hidden by boot screen)
+      // On mobile, we want to initialize the map even if not visible yet
+      // because the ResizeObserver and retry logic in onOpen() will handle it
+      const wristScreen = document.getElementById('pipboyScreen') || document.getElementById('wristScreen');
+      if (wristScreen && wristScreen.classList.contains('hidden')) {
+        console.log('[worldmap] pipboy screen not yet visible, but continuing with map init (mobile-friendly)');
+        // Don't return early - continue with initialization
+        // The onOpen() method will handle proper sizing via ResizeObserver
       }
 
       console.log('[worldmap] initializing map...');
