@@ -28,10 +28,41 @@ const { Program, AnchorProvider, BN } = require("@coral-xyz/anchor");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
 
 // Configuration
-// Use CAPS_MINT or fall back to TOKEN_MINT (both refer to the CAPS SPL token)
-const FIZZ_FUN_PROGRAM_ID = new PublicKey(process.env.FIZZ_FUN_PROGRAM_ID || "FizzFun111111111111111111111111111111111111");
-const CAPS_MINT = new PublicKey(process.env.CAPS_MINT || process.env.TOKEN_MINT || "CAPSxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-const TREASURY = new PublicKey(process.env.TREASURY_WALLET || "TREASxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+// Fizz.fun uses a unified ecosystem design:
+//   FIZZ_FUN_PROGRAM_ID defaults to CAPS_MINT / TOKEN_MINT when not explicitly set.
+// This means you only need ONE address configured (your CAPS SPL token mint) and
+// Fizz.fun will automatically operate under that same identifier.
+// Set FIZZ_FUN_PROGRAM_ID explicitly only if you deploy a separate on-chain program.
+function requirePublicKey(envName, ...fallbackEnvNames) {
+  const value = [envName, ...fallbackEnvNames].map(n => process.env[n]).find(Boolean);
+  if (!value) {
+    const names = [envName, ...fallbackEnvNames].join(" / ");
+    throw new Error(`[fizz-fun] Missing required environment variable(s): ${names}`);
+  }
+  return new PublicKey(value);
+}
+
+let FIZZ_FUN_PROGRAM_ID = null, CAPS_MINT = null, TREASURY = null;
+try {
+  // Resolve CAPS_MINT first — it is required and anchors the whole ecosystem.
+  CAPS_MINT = requirePublicKey("CAPS_MINT", "TOKEN_MINT");
+  TREASURY = requirePublicKey("TREASURY_WALLET");
+  // FIZZ_FUN_PROGRAM_ID defaults to the already-validated CAPS_MINT PublicKey,
+  // unifying the ecosystem under one address.
+  // Set FIZZ_FUN_PROGRAM_ID explicitly only for a separate on-chain program.
+  FIZZ_FUN_PROGRAM_ID = process.env.FIZZ_FUN_PROGRAM_ID
+    ? new PublicKey(process.env.FIZZ_FUN_PROGRAM_ID)
+    : CAPS_MINT;
+} catch (err) {
+  if (process.env.NODE_ENV === "production") {
+    // In production, missing Solana config is a fatal error — log clearly so ops can act.
+    console.error("[fizz-fun] FATAL: Solana addresses not configured:", err.message);
+    console.error("[fizz-fun] Set CAPS_MINT (and TREASURY_WALLET) then restart.");
+  } else {
+    console.warn("[fizz-fun] Solana addresses not configured:", err.message);
+    console.warn("[fizz-fun] Fizz.fun routes will return 503 until env vars are set.");
+  }
+}
 
 // Constants matching the Solana program
 const VIRTUAL_SOL = 30_000_000_000; // 30 SOL in lamports
@@ -43,10 +74,20 @@ const FEE_BPS = 100; // 1%
 // Admin wallets (from env, comma-separated)
 const ADMIN_WALLETS = (process.env.ADMIN_WALLETS || "").split(",").filter(Boolean);
 
+// Guard: return 503 if required Solana addresses are not configured
+function requireConfig(req, res, next) {
+  if (!FIZZ_FUN_PROGRAM_ID || !CAPS_MINT || !TREASURY) {
+    return res.status(503).json({
+      error: "Fizz.fun is not configured. Set CAPS_MINT and TREASURY_WALLET environment variables."
+    });
+  }
+  next();
+}
+
 /**
  * Check if a wallet can access Fizz.fun features
  */
-router.get("/api/fizz-fun/access/:wallet", async (req, res) => {
+router.get("/api/fizz-fun/access/:wallet", requireConfig, async (req, res) => {
     try {
         const { wallet } = req.params;
         const walletPubkey = new PublicKey(wallet);
@@ -94,12 +135,12 @@ router.get("/api/fizz-fun/access/:wallet", async (req, res) => {
 /**
  * Get all tokens on Fizz.fun
  */
-router.get("/api/fizz-fun/tokens", async (req, res) => {
+router.get("/api/fizz-fun/tokens", requireConfig, async (req, res) => {
     try {
         const { sort = "volume", limit = 50 } = req.query;
         
         // Fetch all bonding curves from chain (simplified - in production use indexer)
-        const tokens = await fetchAllTokens();
+        let tokens = await fetchAllTokens();
         
         // Sort
         if (sort === "volume") {
@@ -124,7 +165,7 @@ router.get("/api/fizz-fun/tokens", async (req, res) => {
 /**
  * Get single token details
  */
-router.get("/api/fizz-fun/token/:mint", async (req, res) => {
+router.get("/api/fizz-fun/token/:mint", requireConfig, async (req, res) => {
     try {
         const { mint } = req.params;
         const mintPubkey = new PublicKey(mint);
@@ -157,7 +198,7 @@ router.get("/api/fizz-fun/token/:mint", async (req, res) => {
 /**
  * Calculate buy quote
  */
-router.get("/api/fizz-fun/quote/buy", async (req, res) => {
+router.get("/api/fizz-fun/quote/buy", requireConfig, async (req, res) => {
     try {
         const { mint, solAmount } = req.query;
         
@@ -195,7 +236,7 @@ router.get("/api/fizz-fun/quote/buy", async (req, res) => {
 /**
  * Calculate sell quote
  */
-router.get("/api/fizz-fun/quote/sell", async (req, res) => {
+router.get("/api/fizz-fun/quote/sell", requireConfig, async (req, res) => {
     try {
         const { mint, tokenAmount } = req.query;
         
@@ -232,7 +273,7 @@ router.get("/api/fizz-fun/quote/sell", async (req, res) => {
 /**
  * Admin: Launch token with USDC (pre-mainnet bootstrap)
  */
-router.post("/api/fizz-fun/admin/launch", async (req, res) => {
+router.post("/api/fizz-fun/admin/launch", requireConfig, async (req, res) => {
     try {
         const { wallet, name, symbol, uri, signature } = req.body;
         
@@ -273,7 +314,7 @@ router.post("/api/fizz-fun/admin/launch", async (req, res) => {
 /**
  * Get protocol stats
  */
-router.get("/api/fizz-fun/stats", async (req, res) => {
+router.get("/api/fizz-fun/stats", requireConfig, async (req, res) => {
     try {
         // Fetch config from chain
         const stats = await fetchProtocolStats();
@@ -298,7 +339,7 @@ router.get("/api/fizz-fun/stats", async (req, res) => {
  */
 async function getCapsBalance(wallet) {
     try {
-        const connection = new Connection(process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com");
+        const connection = new Connection(process.env.SOLANA_RPC || process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com");
         const ata = await getAssociatedTokenAddress(CAPS_MINT, wallet);
         const balance = await connection.getTokenAccountBalance(ata);
         return parseInt(balance.value.amount);
@@ -360,7 +401,7 @@ async function fetchAllTokens() {
  */
 async function fetchTokenDetails(mint) {
     try {
-        const connection = new Connection(process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com");
+        const connection = new Connection(process.env.SOLANA_RPC || process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com");
         
         // Derive bonding curve PDA
         const [bondingCurve] = PublicKey.findProgramAddressSync(

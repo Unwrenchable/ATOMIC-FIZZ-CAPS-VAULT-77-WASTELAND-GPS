@@ -8,8 +8,18 @@ import { Program, AnchorProvider, BN } from '@coral-xyz/anchor';
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 // Program constants
-export const FIZZ_FUN_PROGRAM_ID = new PublicKey(process.env.FIZZ_FUN_PROGRAM_ID || 'FizzFun111111111111111111111111111111111111');
-export const CAPS_MINT = new PublicKey(process.env.CAPS_MINT || 'CAPSxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+// FIZZ_FUN_PROGRAM_ID defaults to the CAPS SPL token mint address, unifying the
+// Fizz.fun launchpad with the base token in one ecosystem address.
+// Set FIZZ_FUN_PROGRAM_ID explicitly only if deploying a separate on-chain program.
+function resolvePublicKey(...envNames: string[]): PublicKey {
+  const value = envNames.map(n => process.env[n]).find(Boolean);
+  if (!value) throw new Error(`[fizz-fun/client] Missing required env var(s): ${envNames.join(' / ')}`);
+  return new PublicKey(value);
+}
+export const CAPS_MINT = resolvePublicKey('CAPS_MINT', 'TOKEN_MINT');
+export const FIZZ_FUN_PROGRAM_ID = process.env.FIZZ_FUN_PROGRAM_ID
+  ? new PublicKey(process.env.FIZZ_FUN_PROGRAM_ID)
+  : CAPS_MINT;
 
 // Bonding curve constants
 export const TOTAL_SUPPLY = 1_000_000_000_000_000_000n; // 1B with 9 decimals

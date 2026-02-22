@@ -97,19 +97,37 @@
         return;
       }
 
-      // TODO: Implement actual blockchain NFT fetching
-      // For now, simulate checking for NFTs
       console.log("[nft-integration] Checking NFTs for wallet:", this.walletAddress);
-      
-      // Simulate checking rebuild_special_token
-      // In production, this would query Solana blockchain for NFTs owned by wallet
+
+      // Try to fetch NFTs from the backend API (Helius-backed)
+      try {
+        const apiBase = window.API_BASE || window.BACKEND_URL || "";
+        const res = await fetch(`${apiBase}/api/player-nfts?wallet=${encodeURIComponent(this.walletAddress)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.ok && Array.isArray(data.nfts)) {
+            // Build a counts map keyed by NFT id/mint
+            const counts = {};
+            for (const nft of data.nfts) {
+              const id = nft.mint || nft.id;
+              if (id) counts[id] = (counts[id] || 0) + 1;
+            }
+            this.ownedNFTs = counts;
+            console.log("[nft-integration] NFTs loaded from backend:", data.count);
+            this.updateUI();
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("[nft-integration] Backend NFT fetch failed, falling back to localStorage:", e.message);
+      }
+
+      // Fallback: initialise to empty and load from localStorage (dev/offline mode)
       this.ownedNFTs = {
-        rebuild_special_token: 0, // Count of tokens owned
+        rebuild_special_token: 0,
         fast_travel_pass: 0,
-        // ... other NFTs
       };
 
-      // Temporary: Check localStorage for debugging/testing
       const storedNFTs = localStorage.getItem(`nfts_${this.walletAddress}`);
       if (storedNFTs) {
         try {
@@ -119,7 +137,7 @@
         }
       }
 
-      console.log("[nft-integration] Owned NFTs:", this.ownedNFTs);
+      console.log("[nft-integration] Owned NFTs (local fallback):", this.ownedNFTs);
       this.updateUI();
     },
 

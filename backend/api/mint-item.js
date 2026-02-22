@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
+const crypto = require('crypto');
 const { redis, key } = require('../lib/redis');
 const EventEmitter = require('events');
 
@@ -53,7 +54,7 @@ router.post('/', async (req, res) => {
         // increment and set expiry (24h)
         await redis.set(walletKey, String(cur + 1), { EX: 24 * 3600 });
 
-        const prodItemId = `mint-${Date.now()}-${Math.floor(Math.random()*10000)}`;
+        const prodItemId = `mint-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
 
         // Audit record in Redis (list)
         const audit = {

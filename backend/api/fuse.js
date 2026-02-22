@@ -6,8 +6,16 @@
 
 const express = require("express");
 const router = express.Router();
+const crypto = require("crypto");
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
+
+// Cryptographically-secure helpers
+// Returns a random integer in [min, max) using crypto.randomInt
+function secureRandInt(min, max) {
+  return crypto.randomInt(min, max);
+}
+
 
 // Rate limiting for fusion operations
 const fuseLimiter = require("express-rate-limit")({
@@ -138,7 +146,7 @@ function calculateFusion(nfts, fusionType) {
   // Generate new item properties
   const baseItem = nfts[0]; // Use first item as base
   const newItem = {
-    id: `fused_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    id: `fused_${Date.now()}_${crypto.randomBytes(5).toString("hex")}`,
     name: generateFusedName(nfts, fusionType),
     type: baseItem.type || 'weapon',
     rarity: newRarity,
@@ -174,7 +182,7 @@ function generateFusedName(nfts, fusionType) {
   };
 
   const prefix = prefixes[fusionType] || prefixes.upgrade;
-  const randomPrefix = prefix[Math.floor(Math.random() * prefix.length)];
+  const randomPrefix = prefix[secureRandInt(0, prefix.length)];
 
   return `${randomPrefix} ${baseName}`;
 }
@@ -190,10 +198,11 @@ function combineStats(nfts) {
     });
   });
 
-  // Apply fusion bonuses (20-50% increase)
+  // Apply fusion bonuses (20-50% increase) — randomInt(200,501) gives an integer in [200,500]
+  // representing the bonus percentage * 1000, avoiding floating-point bias.
   Object.keys(combinedStats).forEach(stat => {
-    const bonus = 0.2 + Math.random() * 0.3; // 20-50% bonus
-    combinedStats[stat] = Math.floor(combinedStats[stat] * (1 + bonus));
+    const bonusPermille = crypto.randomInt(200, 501); // 200–500 (= 20%–50%)
+    combinedStats[stat] = Math.floor(combinedStats[stat] * (1000 + bonusPermille) / 1000);
   });
 
   return combinedStats;
@@ -216,7 +225,7 @@ function generateModifiers(itemCount) {
   const selectedModifiers = [];
 
   for (let i = 0; i < modifierCount; i++) {
-    const randomIndex = Math.floor(Math.random() * possibleModifiers.length);
+    const randomIndex = secureRandInt(0, possibleModifiers.length);
     selectedModifiers.push(possibleModifiers[randomIndex]);
     possibleModifiers.splice(randomIndex, 1); // Remove to avoid duplicates
   }
