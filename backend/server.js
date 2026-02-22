@@ -37,10 +37,15 @@ const criticalOrigins = [
   "https://atomicfizzcaps.xyz"
 ];
 
-const defaultOrigins = [
-  "http://localhost:3000",
+// Always included regardless of FRONTEND_ORIGIN env var (required for Vercel preview and Render deployments)
+const permanentPatterns = [
   "https://*.vercel.app",
   "https://*.onrender.com"
+];
+
+const defaultOrigins = [
+  "http://localhost:3000",
+  ...permanentPatterns
 ];
 
 // Merge critical origins with env-configured or default origins
@@ -48,8 +53,8 @@ const envOrigins = process.env.FRONTEND_ORIGIN
   ? process.env.FRONTEND_ORIGIN.split(/\s*,\s*/).map(s => s.trim()).filter(Boolean)
   : defaultOrigins;
 
-// Combine critical origins with environment origins, removing duplicates
-const allowedOrigins = [...new Set([...criticalOrigins, ...envOrigins])];
+// Combine critical origins, permanent patterns, and environment origins, removing duplicates
+const allowedOrigins = [...new Set([...criticalOrigins, ...permanentPatterns, ...envOrigins])];
 
 function wildcardToRegex(pattern) {
   const escaped = pattern
