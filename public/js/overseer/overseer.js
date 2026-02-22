@@ -84,13 +84,21 @@
 
       // AI‑powered speak()
       Terminal.say = async () => {
-        const line = await Personality.speak();
-        overseerSay(line);
+        try {
+          const line = await Personality.speak();
+          overseerSay(line);
+        } catch (err) {
+          console.warn("[Overseer] say() error, suppressing:", err.message);
+        }
       };
 
       Terminal.react = async (ctx = "") => {
-        const line = await Personality.speak(ctx);
-        overseerSay(line);
+        try {
+          const line = await Personality.speak(ctx);
+          overseerSay(line);
+        } catch (err) {
+          console.warn("[Overseer] react() error, suppressing:", err.message);
+        }
       };
     },
 
