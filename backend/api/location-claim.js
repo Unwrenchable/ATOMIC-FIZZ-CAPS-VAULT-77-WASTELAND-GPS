@@ -9,8 +9,14 @@ const rateLimit = require("express-rate-limit");
 const router = express.Router();
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
 
 const { redis, key } = require("../lib/redis");
+
+// Cryptographically-secure random integer in [min, max)
+function secureRandInt(min, max) {
+  return crypto.randomInt(min, max);
+}
 
 // Load locations data for distance validation and rewards
 let LOCATIONS = [];
@@ -52,25 +58,26 @@ function generateLoot(location) {
   // Base rewards by tier
   switch (tier) {
     case 1:
-      rewards.xp = 10 + Math.floor(Math.random() * 15);
-      rewards.caps = 5 + Math.floor(Math.random() * 10);
+      rewards.xp = 10 + secureRandInt(0, 15);
+      rewards.caps = 5 + secureRandInt(0, 10);
       break;
     case 2:
-      rewards.xp = 20 + Math.floor(Math.random() * 25);
-      rewards.caps = 10 + Math.floor(Math.random() * 20);
+      rewards.xp = 20 + secureRandInt(0, 25);
+      rewards.caps = 10 + secureRandInt(0, 20);
       break;
     case 3:
-      rewards.xp = 40 + Math.floor(Math.random() * 40);
-      rewards.caps = 20 + Math.floor(Math.random() * 30);
+      rewards.xp = 40 + secureRandInt(0, 40);
+      rewards.caps = 20 + secureRandInt(0, 30);
       break;
     default:
-      rewards.xp = 5 + Math.floor(Math.random() * 10);
-      rewards.caps = 2 + Math.floor(Math.random() * 8);
+      rewards.xp = 5 + secureRandInt(0, 10);
+      rewards.caps = 2 + secureRandInt(0, 8);
   }
 
-  // Random item drop chance (30% for tier 1, 50% for tier 2, 70% for tier 3)
-  const dropChance = tier === 1 ? 0.3 : tier === 2 ? 0.5 : 0.7;
-  if (Math.random() < dropChance) {
+  // Random item drop chance: use integer roll out of 100 to avoid float bias.
+  // dropChance: tier1=30%, tier2=50%, tier3=70%
+  const dropThreshold = tier === 1 ? 30 : tier === 2 ? 50 : 70;
+  if (secureRandInt(0, 100) < dropThreshold) {
     // Common loot pool
     const commonLoot = [
       "stimpak",
@@ -85,20 +92,19 @@ function generateLoot(location) {
       "ammo_556"
     ];
     
-    // Rare loot for higher tiers
-    if (tier >= 2 && Math.random() < 0.3) {
+    // Rare loot for higher tiers (30% chance)
+    if (tier >= 2 && secureRandInt(0, 10) < 3) {
       const rareLoot = ["weapon_parts", "armor_plates", "pre_war_money", "nuka_cola"];
-      rewards.items.push(rareLoot[Math.floor(Math.random() * rareLoot.length)]);
+      rewards.items.push(rareLoot[secureRandInt(0, rareLoot.length)]);
     } else {
-      rewards.items.push(commonLoot[Math.floor(Math.random() * commonLoot.length)]);
+      rewards.items.push(commonLoot[secureRandInt(0, commonLoot.length)]);
     }
   }
 
-  // Location-specific bonus loot
+  // Location-specific bonus loot (50% chance)
   if (location.loot && Array.isArray(location.loot)) {
-    // 50% chance to get location-specific loot
-    if (Math.random() < 0.5 && location.loot.length > 0) {
-      const bonusItem = location.loot[Math.floor(Math.random() * location.loot.length)];
+    if (secureRandInt(0, 2) === 0 && location.loot.length > 0) {
+      const bonusItem = location.loot[secureRandInt(0, location.loot.length)];
       if (!rewards.items.includes(bonusItem)) {
         rewards.items.push(bonusItem);
       }
