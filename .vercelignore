@@ -49,3 +49,6 @@ node_modules/
 .git/
 .github/
 .gitignore
+
+# TypeScript files not used in production (frontend-only)
+backend/api/apiClient.ts
