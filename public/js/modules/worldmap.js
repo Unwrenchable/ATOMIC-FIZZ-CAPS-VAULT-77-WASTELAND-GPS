@@ -227,16 +227,27 @@
     followTimeout: null,
     followDelay: 5000,
     
-    // Mobile fix: retry configuration and state for container dimension check
+    // ------------------------------------------------------------------
+    // SIZE/RESIZE HELPERS
+    // ------------------------------------------------------------------
+    // Legacy retry logic used during initial map open when the container
+    // sometimes reports 0×0 on mobile.  In practice a ResizeObserver is now
+    // used to automatically invalidate the map any time the container size
+    // changes, so these counters are mostly retained for backwards
+    // compatibility and diagnostic logging.
     containerRetryCount: 0,
     maxContainerRetries: 10,
     containerRetryDelayMs: 200,
+
+    // delays used by pipboy.js when invalidating after a panel switch
     mapInvalidateDelayMs: 150,
     mapInvalidateDelayMsMobile: 400,
     mapSecondInvalidateDelayMs: 300,
-    isRetrying: false,
-    
-    // Detect mobile device for longer delays
+
+    // optional ResizeObserver instance attached to mapContainer
+    resizeObserver: null,
+
+    // Returns true for phones/tablets (same logic as pipboy.js)
     isMobileDevice() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
         || window.innerWidth <= 768;
@@ -259,42 +270,58 @@
       this.isRetrying = false;
     },
 
+    // --------------------------------------------------------
+    // OBSERVERS
+    // --------------------------------------------------------
+    // Automatically refresh the map whenever its container changes size.
+    // On mobile the panel-body flex layout may take a moment to settle, and
+    // relying solely on manual invalidation/delays lead to race conditions
+    // where a zero‑height tile canvas is created and never redrawn.  A
+    // ResizeObserver guarantees we always catch the transition to a nonzero
+    // size.
+    setupResizeObserver(container) {
+      if (this.resizeObserver || typeof ResizeObserver === 'undefined') return;
+      try {
+        this.resizeObserver = new ResizeObserver((entries) => {
+          for (const entry of entries) {
+            const { width, height } = entry.contentRect;
+            if (width > 0 && height > 0 && this.map) {
+              console.log('[worldmap] container resized, invalidating map');
+              this.map.invalidateSize();
+            }
+          }
+        });
+        this.resizeObserver.observe(container);
+      } catch (e) {
+        console.warn('[worldmap] ResizeObserver not available, falling back to retry logic', e);
+      }
+    },
+
     onOpen() {
       console.log('[worldmap] onOpen called');
       
-      // CRITICAL FOR MOBILE: Check if map container has dimensions before proceeding
+      // CRITICAL FOR MOBILE: the panel can be flex‑collapsed or still
+      // animating when onOpen is called, which means the map container may
+      // report 0×0.  Leaflet will happily build a zero‑sized canvas and
+      // never repaint it.  We handle this in two ways:
+      //  1. setupResizeObserver (called during initMap) watches the element
+      //     and invalidates the map whenever it obtains a real size.
+      //  2. a simple retry loop keeps re-entering onOpen until the container
+      //     reports nonzero dimensions (with a maximum attempt count).
       const container = document.getElementById("mapContainer");
       if (!container) {
         console.warn('[worldmap] mapContainer element not found in DOM - cannot initialize map');
         return;
       }
 
-      // Ensure container sizing is correct before map loads
-      let rect = container.getBoundingClientRect();
-      if (this.isMobileDevice() && (rect.width === 0 || rect.height === 0)) {
-        const panelBody = document.querySelector('#panel-map .panel-body');
-        if (panelBody) {
-          const panelRect = panelBody.getBoundingClientRect();
-          if (panelRect.width > 0 && panelRect.height > 0) {
-            container.style.width = panelRect.width + 'px';
-            container.style.height = panelRect.height + 'px';
-            container.style.position = 'absolute';
-            container.style.top = '0';
-            container.style.left = '0';
-          }
-        }
-        // Recalculate rect after forced sizing
-        rect = container.getBoundingClientRect();
-      }
-
-      // Only proceed if container has valid dimensions
+      const rect = container.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) {
         if (this.containerRetryCount < this.maxContainerRetries) {
           this.containerRetryCount++;
           setTimeout(() => this.onOpen(), this.containerRetryDelayMs);
           return;
         } else {
-          console.error('[worldmap] container failed to gain dimensions after', this.maxContainerRetries, 'retries - proceeding anyway');
+          console.error('[worldmap] container still zero after', this.maxContainerRetries, 'retries; continuing anyway');
         }
       } else {
         this.resetRetryState();
@@ -405,6 +432,18 @@
           inertiaMaxSpeed: 1500
         });
         console.log('[worldmap] Leaflet map object created successfully');
+        // once the map exists we can watch the container; this will trigger
+        // invalidateSize any time the panel resizes (orientation change,
+        // keyboard showing/hiding, etc.).  It’s safe to call repeatedly.
+        this.setupResizeObserver(container);
+        // also react to orientation changes (some mobile browsers don't
+        // fire a resize event when the virtual keyboard shows/hides, etc.)
+        window.addEventListener('orientationchange', () => {
+          if (this.map) {
+            console.log('[worldmap] orientationchange -> invalidating map');
+            this.map.invalidateSize();
+          }
+        });
         
         // Prevent touch events from propagating outside map container (mobile swipe fix)
         // This stops touch gestures from bubbling up to parent elements

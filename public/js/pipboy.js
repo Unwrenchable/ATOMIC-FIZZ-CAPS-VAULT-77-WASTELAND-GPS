@@ -54,13 +54,17 @@
 
       // Additional invalidateSize after panel switch (longer delay for mobile)
       const delay = isMobileDevice() ? MAP_INVALIDATE_DELAY_MOBILE : MAP_INVALIDATE_DELAY_DESKTOP;
+      const secondDelay = delay + (isMobileDevice() ? 300 : 150);
       
-      setTimeout(() => {
+      function doInvalidate() {
         if (window.map && typeof window.map.invalidateSize === "function") {
-          console.log(`[PipBoy] invalidating map size after panel switch (delay: ${delay}ms)`);
+          console.log(`[PipBoy] invalidating map size after panel switch`);
           window.map.invalidateSize(true);
         }
-      }, delay);
+      }
+      
+      setTimeout(doInvalidate, delay);
+      setTimeout(doInvalidate, secondDelay);
     }
 
     // ITEMS PANEL ACTIVATION
