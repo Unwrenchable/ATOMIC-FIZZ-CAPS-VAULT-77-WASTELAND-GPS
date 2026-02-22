@@ -2,21 +2,12 @@
   "version": 2,
   "buildCommand": null,
   "devCommand": null,
-  "installCommand": "npm install && cd backend && npm install",
+  "installCommand": null,
   "framework": null,
   "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
     {
       "source": "/(.*)",
       "headers": [
@@ -33,12 +24,6 @@
           "value": "1; mode=block"
         }
       ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/api"
     }
   ]
 }
