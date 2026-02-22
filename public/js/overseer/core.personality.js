@@ -28,8 +28,14 @@
         }
         configLoaded = true;
         console.log("[Overseer] Configuration loaded from backend");
+      } else {
+        // Mark as loaded even if response wasn't ok to prevent repeated failures
+        configLoaded = true;
+        console.warn(`[Overseer] Failed to load config: HTTP ${res.status}`);
       }
     } catch (err) {
+      // Mark as loaded even on error to prevent repeated failures
+      configLoaded = true;
       console.warn("[Overseer] Failed to load config from backend:", err.message);
     }
   }
@@ -114,15 +120,21 @@
         }
       );
 
+      if (!res.ok) {
+        console.warn(`[Overseer] Hugging Face API returned HTTP ${res.status}, using fallback responses`);
+        return null;
+      }
+
       const data = await res.json();
 
       if (Array.isArray(data) && data[0]?.generated_text) {
         return data[0].generated_text.trim();
       }
 
+      console.warn("[Overseer] Unexpected response format from Hugging Face API, using fallback responses");
       return null;
     } catch (err) {
-      console.error("Overseer AI error:", err);
+      console.warn("[Overseer] Failed to connect to Hugging Face API, using fallback responses:", err.message);
       return null;
     }
   }
