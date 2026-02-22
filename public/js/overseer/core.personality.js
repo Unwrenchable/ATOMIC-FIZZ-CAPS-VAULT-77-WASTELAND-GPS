@@ -91,16 +91,16 @@
   // AI REQUEST
   // -------------------------------------------------------------
   async function askAI(prompt) {
-    // Ensure config is loaded before making API calls
-    await loadConfig();
-
-    // If no API key configured or placeholder value, skip AI request and use fallback
-    if (!HF_API_KEY || HF_API_KEY === '<YOUR_HF_API_KEY>' || HF_API_KEY === 'your-huggingface-api-key') {
-      console.warn("[Overseer] HF_API_KEY not configured or using placeholder value, using fallback responses");
-      return null;
-    }
-
     try {
+      // Ensure config is loaded before making API calls
+      await loadConfig();
+
+      // If no API key configured or placeholder value, skip AI request and use fallback
+      if (!HF_API_KEY || HF_API_KEY === '<YOUR_HF_API_KEY>' || HF_API_KEY === 'your-huggingface-api-key') {
+        console.warn("[Overseer] HF_API_KEY not configured or using placeholder value, using fallback responses");
+        return null;
+      }
+
       const res = await fetch(
         `https://api-inference.huggingface.co/models/${MODEL}`,
         {
