@@ -493,6 +493,38 @@
       ]);
 
       // Tiles with offline fallback - use OpenStreetMap for better mobile compatibility
+      // and custom overview tiles when available.
+
+      // create overview layer pointing at local tiles; may 404 if assets absent.
+      // we don't want the whole map to show ugly error-tiles, so watch for
+      // failures and drop the layer if the first tile request fails.
+      let overviewTiles = null;
+      try {
+        overviewTiles = L.tileLayer("/tiles/world_overview/{z}/{x}/{y}.png", {
+          minZoom: 0,
+          maxZoom: 4,
+          noWrap: true,
+          errorTileUrl: '' // silent errors
+        });
+
+        // auto-disable if any tile errors occur (assume missing directory)
+        const disableOnError = () => {
+          console.warn('[worldmap] overview tile failed to load, disabling layer');
+          if (overviewTiles && this.map && this.map.hasLayer(overviewTiles)) {
+            this.map.removeLayer(overviewTiles);
+          }
+          overviewTiles = null;
+        };
+        overviewTiles.on('tileerror', disableOnError);
+        overviewTiles.on('tileload', () => {
+          // first successful tile is enough to keep the layer alive
+          overviewTiles.off('tileerror', disableOnError);
+        });
+      } catch (e) {
+        console.warn('[worldmap] overviewTiles could not be created', e);
+        overviewTiles = null;
+      }
+
       const satelliteTiles = L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         { 
@@ -524,9 +556,38 @@
           tileErrorCount = Math.max(0, tileErrorCount - 1); // Gradually reduce error count
         }
       });
-      
+
+      // Add both layers; overview is added but hidden by zoom handler below
       satelliteTiles.addTo(this.map);
+      if (overviewTiles) overviewTiles.addTo(this.map);
+      
       this.tiles = { satellite: satelliteTiles };
+      if (overviewTiles) this.tiles.overview = overviewTiles;
+
+      // if we have overview tiles, swap based on a configurable zoom threshold
+      if (overviewTiles) {
+        // allow author to tune via settings (load defaults if missing)
+        const thresh =
+          (window.DATA && window.DATA.settings && window.DATA.settings.ui &&
+            typeof window.DATA.settings.ui.overviewMaxZoom === 'number')
+            ? window.DATA.settings.ui.overviewMaxZoom
+            : 19; // by default show overview at all zooms if available
+
+        const updateBaseLayerForZoom = () => {
+          if (!this.map) return;
+          const z = this.map.getZoom();
+          if (z <= thresh) {
+            if (!this.map.hasLayer(overviewTiles)) this.map.addLayer(overviewTiles);
+            if (this.map.hasLayer(satelliteTiles)) this.map.removeLayer(satelliteTiles);
+          } else {
+            if (!this.map.hasLayer(satelliteTiles)) this.map.addLayer(satelliteTiles);
+            if (this.map.hasLayer(overviewTiles)) this.map.removeLayer(overviewTiles);
+          }
+          this.updateOverlayVisibility(z);
+        };
+        this.map.on('zoomend', updateBaseLayerForZoom);
+        updateBaseLayerForZoom();
+      }
 
       // Start view - use zoom 15 initially (will snap to 18 when GPS locks)
       const pos = this.gs.player.position;
