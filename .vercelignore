@@ -1,5 +1,11 @@
 # Vercel Ignore File
 # Files and directories to exclude from Vercel deployment
+# This configuration is for split architecture deployment where:
+# - Vercel serves only the static frontend (public/ directory)
+# - Backend is deployed separately on Render
+
+# Backend directory (deployed separately on Render)
+backend/
 
 # Rust/Solana program files (not needed for web deployment)
 programs/

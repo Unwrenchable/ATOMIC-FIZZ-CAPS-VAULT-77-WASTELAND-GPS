@@ -326,13 +326,18 @@ body {
 
   /* Adjust map height on mobile - ensure sufficient space for map to render */
   .pipboy-map {
-    height: 60vh;
+    height: calc(100vh - 140px);
     min-height: var(--mobile-map-min-height);
   }
 
-  /* MOBILE MAP FIX - ensure panel-body has minimum height */
+  /* MOBILE MAP FIX - ensure panel-body and mapContainer have minimum height */
   #panel-map .panel-body {
-    min-height: var(--mobile-map-min-height);
+    min-height: calc(100vh - 140px);
+  }
+
+  #mapContainer {
+    height: calc(100vh - 140px) !important;
+    min-height: var(--mobile-map-min-height) !important;
   }
 
   /* MOBILE MAP TOUCH FIX - enable map gestures while preventing page scroll */
