@@ -318,10 +318,11 @@
       if (rect.width === 0 || rect.height === 0) {
         if (this.containerRetryCount < this.maxContainerRetries) {
           this.containerRetryCount++;
+          console.log(`[worldmap] container has no dimensions (width: ${rect.width} height: ${rect.height}), retry ${this.containerRetryCount} / ${this.maxContainerRetries}`);
           setTimeout(() => this.onOpen(), this.containerRetryDelayMs);
           return;
         } else {
-          console.error('[worldmap] container still zero after', this.maxContainerRetries, 'retries; continuing anyway');
+          console.error(`[worldmap] container failed to gain dimensions after ${this.maxContainerRetries} retries - proceeding anyway`);
         }
       } else {
         this.resetRetryState();
@@ -329,9 +330,11 @@
 
       // Initialize map if not yet created (happens after boot screen)
       if (!this.map) {
+        console.log('[worldmap] map not initialized, initializing now...');
         this.init(window.DATA || {});
       }
       if (!this.map) {
+        console.error('[worldmap] map failed to initialize');
         this.updateMapStatus('Map initialization failed - check console');
         return;
       }
