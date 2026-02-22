@@ -55,14 +55,16 @@
       // Additional invalidateSize after panel switch (longer delay for mobile)
       const delay = isMobileDevice() ? MAP_INVALIDATE_DELAY_MOBILE : MAP_INVALIDATE_DELAY_DESKTOP;
       const secondDelay = delay + (isMobileDevice() ? 300 : 150);
-      
+
       function doInvalidate() {
-        if (window.map && typeof window.map.invalidateSize === "function") {
+        // Check both window.map and Game.modules.worldmap.map
+        const mapInstance = window.map || (Game.modules?.worldmap?.map);
+        if (mapInstance && typeof mapInstance.invalidateSize === "function") {
           console.log(`[PipBoy] invalidating map size after panel switch`);
-          window.map.invalidateSize(true);
+          mapInstance.invalidateSize(true);
         }
       }
-      
+
       setTimeout(doInvalidate, delay);
       setTimeout(doInvalidate, secondDelay);
     }

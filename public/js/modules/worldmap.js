@@ -537,7 +537,7 @@
           // No errorTileUrl - let failed tiles be transparent instead of black
         }
       );
-      
+
       // Track tile errors - switch to offline only when we're actually
       // offline or after a lot of failures.  Mobile connections can drop
       // randomly and trigger the grid even though network returns later.
@@ -548,31 +548,6 @@
       satelliteTiles.on('tileerror', (e) => {
         tileErrorCount++;
         console.warn(`[worldmap] tile load error (${tileErrorCount}/${maxTileErrors})`, e.coords, e.tile && e.tile.src);
-        // only enter offline mode if the browser believes it's offline or
-        // we've passed the threshold; prevents spurious grid when network is OK
-        if ((tileErrorCount >= maxTileErrors || !navigator.onLine) && !this.tiles.offline) {
-          console.warn('[worldmap] too many tile errors or offline, switching to offline mode');
-          this.switchToOfflineMode();
-        }
-      });
-
-      // Reset error count on successful tile loads
-      satelliteTiles.on('tileload', () => {
-        if (tileErrorCount > 0) {
-          tileErrorCount = Math.max(0, tileErrorCount - 1);
-        }
-      });
-      
-      // Track tile errors - switch to offline only when we're actually
-      // offline or after a lot of failures.  Mobile connections can drop
-      // randomly and trigger the grid even though network returns later.
-      let tileErrorCount = 0;
-      const baseThreshold = 10;
-      const maxTileErrors = this.isMobileDevice() ? baseThreshold * 3 : baseThreshold;
-
-      satelliteTiles.on('tileerror', (e) => {
-        tileErrorCount++;
-        console.warn(`[worldmap] tile load error (${tileErrorCount}/${maxTileErrors})`);
         // only enter offline mode if the browser believes it's offline or
         // we've passed the threshold; prevents spurious grid when network is OK
         if ((tileErrorCount >= maxTileErrors || !navigator.onLine) && !this.tiles.offline) {
