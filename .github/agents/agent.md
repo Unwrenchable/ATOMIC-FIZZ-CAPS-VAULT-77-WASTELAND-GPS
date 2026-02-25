@@ -1,92 +1,202 @@
-# FizzSwap — Agent Guidance
+# ☢️ ATOMIC FIZZ CAPS — Agent Guidance
 
-Use this file to orient yourself before suggesting changes to FizzSwap.
+Use this file to orient yourself before suggesting changes to the
+Atomic Fizz Caps Vault-77 Wasteland GPS game.
 
-## Project overview
+## Project Overview
 
-FizzSwap (`fizzdex`) is a multi-chain DEX that supports atomic swaps across
-EVM-compatible chains, Solana, and XRP. It is the official DEX for the
-ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS ecosystem.
+**Atomic Fizz Caps** is a Fallout-themed, GPS-based crypto geo-game at
+**https://www.atomicfizzcaps.xyz**. Players explore real-world locations,
+claim GPS Points of Interest (POIs) via Solana wallet signatures, earn FIZZ
+SPL tokens, battle enemies, craft items, join factions, and chat with the
+Vault 77 Overseer AI.
 
-## Repository layout
+This is **NOT** a DEX, swap protocol, or naming service. Ignore any FizzSwap
+or DEX-related context from other sources.
+
+---
+
+## Repository Layout
 
 ```
-/                        # Root: Hardhat + TypeScript (EVM contracts & tests)
-├── contracts/           # Solidity contracts (EVM)
-├── programs/            # Anchor program workspace
-│   └── fizzdex-solana/  # Rust/Anchor Solana program (Cargo.toml here)
-├── scripts/             # Hardhat deploy scripts (deploy-evm.ts, etc.)
-├── src/                 # TypeScript utilities / chain adapters
-├── test/                # Hardhat/Mocha test files
-├── relayer/             # Standalone Node.js relayer service
-│   └── src/             # TypeScript source for relayer
-└── web/                 # Vite + React frontend
-    └── src/             # App.tsx (single-component DEX UI), styles.css
+/
+├── backend/               # Node.js 20 + Express 4 API server
+│   ├── server.js          # Main entry point
+│   ├── routes/            # API route modules (CommonJS)
+│   ├── lib/               # Shared utilities (redis, walletVerify, loot, etc.)
+│   ├── middleware/        # Express middleware (auth, adminAuth)
+│   ├── api/               # Additional API modules
+│   ├── data/              # Static data files
+│   └── tools/             # Backend tools
+├── public/                # Vanilla HTML/CSS/JS frontend (Vercel CDN)
+│   ├── index.html         # Main Pip-Boy map interface
+│   ├── overseer.html      # Vault 77 Overseer AI terminal
+│   ├── exchange.html      # Scavenger Exchange
+│   ├── nuke.html / nuke-portal.html  # NUKE fusion system
+│   ├── bridge.html / bridge-portal.html  # Wormhole bridge
+│   ├── admin/             # Admin panel (password protected)
+│   ├── wallet/            # Wallet management
+│   ├── fizzfun/           # Fizz.fun standalone page
+│   ├── css/               # Pip-Boy green terminal stylesheets
+│   ├── js/                # Frontend JS modules
+│   │   ├── main.js / boot.js     # Entry + boot sequence
+│   │   ├── map/                  # Leaflet POI marker rendering
+│   │   ├── game/                 # Game loop, inventory, player state
+│   │   ├── overseer/             # Overseer AI terminal system
+│   │   └── modules/              # Feature modules (battles, crafting, etc.)
+│   └── vendor/            # Third-party libraries
+├── programs/              # Anchor/Rust Solana programs
+├── solana/                # Solana program tests
+├── workers/               # Background workers (NFT minting)
+├── scripts/               # Utility scripts
+├── docs/                  # Project documentation
+│   ├── DOCS_INDEX.md
+│   ├── features/          # Feature-specific guides
+│   └── deployment/        # Deployment guides
+├── .env.example           # Environment variable template (no secrets)
+├── package.json           # Root package (backend entry)
+├── vercel.json            # Vercel: serves public/, rewrites /api/* → backend
+├── render.yaml            # Render: backend API service config
+└── docker-compose.yml     # Docker (optional)
 ```
+
+---
 
 ## Toolchain
 
 | Layer | Tool |
 |-------|------|
-| EVM contracts | Solidity 0.8.20+, Hardhat 2.17, OpenZeppelin 5 |
-| TypeScript compilation | `tsc` (root), `tsc -p tsconfig.json` (relayer) |
-| Contract testing | Hardhat + Mocha + Chai |
-| Linting | ESLint with `@typescript-eslint` |
-| Frontend build | Vite 5 + React 18 |
-| Solana program | Rust + `cargo build-bpf` |
-| Containerisation | Docker + docker-compose |
+| Runtime | Node.js 20 LTS |
+| Backend framework | Express 4.22 (CommonJS — use `require()`, not `import`) |
+| Frontend | Vanilla HTML5/CSS3/JavaScript — NO React, NO TypeScript |
+| Maps | Leaflet.js 1.9.4 |
+| Database | Redis (ioredis 5.4) — falls back to in-memory store |
+| Blockchain | Solana via `@solana/web3.js` 1.98, `@solana/spl-token` |
+| Wallet auth | tweetnacl + bs58 (signature verification) |
+| NFTs | Metaplex, Helius API (optional) |
+| Cross-chain | Wormhole bridge |
+| AI | Hugging Face Inference API (Mixtral-8x7B-Instruct-v0.1) |
+| Security | Helmet, express-rate-limit, CORS allowlist |
+| Process manager | nodemon (dev), node (prod) |
+| Linting | ESLint 9 + eslint-config-prettier |
+| Formatting | Prettier |
 
-## Root `package.json` scripts
+---
 
-```
-build              tsc
-test               hardhat test
-lint               eslint . --ext .ts,.js
-compile-contracts  hardhat compile
-deploy-evm         hardhat run scripts/deploy-evm.ts
-build-solana       cargo build-bpf --manifest-path=programs/fizzdex-solana/Cargo.toml
-relayer:init-mappings  node relayer/init-mappings.js
-```
+## Root `package.json` Scripts
 
-## Relayer scripts (`relayer/package.json`)
-
-```
-start        ts-node src/index.ts
-build        tsc -p tsconfig.json
-start:prod   node dist/index.js
-```
-
-## Web scripts (`web/package.json`)
-
-```
-dev      vite
-build    vite build
-preview  vite preview
+```bash
+npm start          # node backend/server.js  (production)
+npm run dev        # nodemon backend/server.js  (development, auto-reload)
+npm run lint       # eslint .
+npm run format     # prettier --write .
+npm test           # (no tests yet — placeholder)
 ```
 
-## Key conventions
+---
 
-- **Security**: All state-changing Solidity functions use reentrancy guards;
-  Solidity 0.8.20+ for overflow protection. See `SECURITY.md`.
-- **Chain adapter pattern**: `src/chain-adapter.ts` exports an `IChainAdapter`
-  interface that every chain integration must implement.
-- **Frontend env vars**: Vite convention — prefix with `VITE_`. Declared in
-  `web/src/vite-env.d.ts`. Available vars: `VITE_SOLANA_RPC`,
-  `VITE_SOLANA_PROGRAM_ID`, `VITE_RELAYER_URL`. Template: `web/.env.example`.
-- **Browser polyfills**: `vite-plugin-node-polyfills` supplies Buffer/process/
-  crypto shims. The web UI uses the Web Crypto API (not Node's `crypto`).
-- **Single-component UI**: All state and logic lives in `web/src/App.tsx`.
-  Four tabs: swap / pool / fizzcaps / bridge.
-- **Secrets**: Never committed. Use `.env` files (git-ignored). Templates are
-  `.env.example` files.
+## Key Conventions
 
-## Things to watch out for
+### Backend (Node.js/Express)
+- **CommonJS only** — `require()` / `module.exports`. No ES module `import`.
+- **Entry point**: `backend/server.js`. All routes are registered here.
+- **Route files** live in `backend/routes/`. Each exports an Express Router.
+- **Shared logic** lives in `backend/lib/`. Import from there, not inline.
+- **Redis key prefix**: All keys use `afw:` prefix (e.g., `afw:player:wallet123`).
+  Set via `REDIS_PREFIX` env var.
+- **Redis fallback**: `backend/lib/redis.js` falls back to in-memory store if
+  Redis is unavailable. Do not assume Redis is always available.
+- **CORS**: Managed in `backend/server.js`. Always includes `atomicfizzcaps.xyz`,
+  `*.vercel.app`, `*.onrender.com`.
+- **Wallet verification**: All player-mutating endpoints MUST verify a Solana
+  wallet signature using `backend/lib/walletVerify.js` (tweetnacl + bs58).
+- **Admin auth**: Admin routes use constant-time password comparison to prevent
+  timing attacks. See `backend/middleware/adminAuth.js`.
+- **Rate limiting**: Applied globally and per-route via `express-rate-limit`.
 
-- `minOut` is currently hardcoded to `0` in swap logic — slippage is not
-  enforced on-chain even though the UI shows fee/slippage info.
-- The web bundle will emit a large-chunk warning (>500 KB) from ethers +
-  `@solana/web3.js` — this is expected.
-- Vercel deployment is configured via `vercel.json` at the root; build command
-  is `cd web && npm install && npm run build`; output dir is `web/dist`.
-- `relayer-mappings.json` is git-ignored (generated at runtime by
-  `relayer:init-mappings`).
+### Frontend (Vanilla JS)
+- **No framework** — plain HTML, CSS, JavaScript. No build step needed.
+- **Pip-Boy theme** — all UI must maintain green terminal aesthetic (CRT effects,
+  scanlines, radioactive glow, monospace fonts).
+- **Secure randomness** — use `crypto.getRandomValues()`, never `Math.random()`.
+- **localStorage** — all stored data must be base64-encoded at minimum.
+- **Phantom wallet** — wallet integration via `public/js/modules/web3-wallet-adapter.js`.
+- **API calls** — use `fetch('/api/...')`. Vercel rewrites `/api/*` to the
+  backend API at `api.atomicfizzcaps.xyz`.
+- **Map** — Leaflet.js with custom Fallout-themed tile overlays.
+- **PWA** — service worker (`sw.js`) and `manifest.json` enable offline support.
+
+### Security
+- **No secrets in code** — all secrets in `.env` (git-ignored). Template: `.env.example`.
+- **Timing-safe comparisons** — admin passwords use `crypto.timingSafeEqual`.
+- **Input validation** — use `express-validator` on all API inputs.
+- **HMAC signing** — vouchers, GPS claims, and XP use HMAC-signed tokens.
+- **Fallout authenticity** — all game content must be lore-consistent with
+  the Fallout universe.
+
+---
+
+## Deployment
+
+### Frontend (Vercel)
+- `vercel.json` at repo root configures static serving.
+- `outputDirectory: "public"` — entire `public/` dir is served as CDN.
+- `cleanUrls: true` — `.html` extension stripped from URLs.
+- `/api/*` rewrites to `https://api.atomicfizzcaps.xyz/api/*` (backend).
+- No build command — pure static files, no compilation needed.
+
+### Backend (Render)
+- `render.yaml` configures the Render web service.
+- Root dir: `backend/`, build: `npm install`, start: `node server.js`.
+- Health check: `GET /api/health`.
+- API available at `https://api.atomicfizzcaps.xyz`.
+
+### CI/CD (GitHub Actions)
+- **Manual Vercel deploy**: `.github/workflows/` — deploys to Vercel on demand.
+- **API smoke test**: Runs on push to `main`, checks `GET /api/health`.
+
+---
+
+## Environment Variables (Key Ones)
+
+See `.env.example` for the full list. Never commit `.env` files.
+
+| Variable | Purpose |
+|----------|---------|
+| `PORT` | Backend port (default: 3000) |
+| `NODE_ENV` | `development` or `production` |
+| `REDIS_URL` | Redis connection (must start with `redis://` or `rediss://`) |
+| `ADMIN_USERNAME` | Admin panel username |
+| `ADMIN_PASSWORD` | Admin panel password (timing-safe comparison) |
+| `ADMIN_WALLETS` | Comma-separated admin wallet addresses |
+| `HF_API_KEY` | Hugging Face API key for Overseer AI |
+| `HF_MODEL` | HF model (default: `mistralai/Mixtral-8x7B-Instruct-v0.1`) |
+| `HELIUS_API_KEY` | Helius API key (optional, for NFT features) |
+| `FRONTEND_ORIGIN` | Allowed CORS origins (comma-separated) |
+| `GAME_VAULT_SECRET` | Base58 secret for game HMAC signing |
+| `GPS_SECRET` | Base58 secret for GPS claim signing |
+| `VOUCHER_SECRET` | Base58 secret for loot vouchers |
+| `XP_SECRET` | Base58 secret for XP signing |
+| `COOLDOWN_SECONDS` | Default cooldown (seconds) between claims |
+| `GPS_DISTANCE_LIMIT` | Max distance (meters) for GPS claim |
+
+---
+
+## Things to Watch Out For
+
+- **Redis URL format**: Must use `redis://` or `rediss://` protocol. The server
+  rejects HTTP/HTTPS URLs for Redis (common misconfiguration).
+- **No build step for frontend**: `public/` is served as-is by Vercel. Do not
+  introduce a build process without updating `vercel.json`.
+- **CommonJS only in backend**: Adding `import` statements will break the server.
+- **Wallet verification is required**: Skipping signature verification on
+  player-mutating routes is a security vulnerability.
+- **Admin password comparison**: Must use `crypto.timingSafeEqual` — never
+  use `===` for password comparisons.
+- **Overseer AI fallback**: If `HF_API_KEY` is not set, the Overseer uses
+  pre-programmed fallback responses (still functional).
+- **Redis prefix**: Always use `afw:` prefix for Redis keys to avoid namespace
+  collisions.
+- **CORS wildcard**: The CORS wildcard matching for `*.vercel.app` only allows
+  valid hostname characters (alphanumeric + hyphens). This is intentional
+  (security fix).
