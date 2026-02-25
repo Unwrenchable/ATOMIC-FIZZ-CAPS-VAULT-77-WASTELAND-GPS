@@ -387,11 +387,6 @@
     _onConversationComplete(completionId) {
       console.log("[Signal Runner] Conversation completed: " + completionId);
       
-      // Trigger quest completion if applicable
-      if (Game.quests?.completeObjective) {
-        Game.quests.completeObjective('wake_up', 'npc_arrives');
-      }
-      
       // Fire custom event
       window.dispatchEvent(new CustomEvent('npc_conversation_complete', {
         detail: { npcId: this.id, completionId: completionId }
