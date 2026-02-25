@@ -276,8 +276,18 @@
       
       // Center point
       const cx = size / 2;
-      const cy = size * 0.45;
+      // Push cy down enough so the crown of the tallest face shape (oblong,
+      // heightMod 1.2 → faceHeight 120) sits at least ~12 px inside the viewBox.
+      // At size=240 this was 0.45 (108), leaving oval/oblong crowns clipped.
+      const cy = size * 0.55;
       
+      // Hair back-layer — drawn FIRST so it sits behind the face skin.
+      // Long/flowing styles need a large ellipse that hangs down behind the head.
+      if (['long', 'medium', 'ponytail', 'braids', 'dreads'].includes(app.hairStyle)) {
+        const hairLength = app.hairStyle === 'long' ? 80 : 50;
+        svg += `<ellipse cx="${cx}" cy="${cy - 20}" rx="${faceWidth + 15}" ry="${faceHeight + hairLength}" fill="${hairColor.color}"/>`;
+      }
+
       // Neck — tapered column with subtle bottom shadow
       svg += `<path d="M${cx-18},${cy+faceHeight*0.55} C${cx-22},${cy+faceHeight*0.7} ${cx-20},${cy+faceHeight*1.05} ${cx-14},${cy+faceHeight*1.2} L${cx+14},${cy+faceHeight*1.2} C${cx+20},${cy+faceHeight*1.05} ${cx+22},${cy+faceHeight*0.7} ${cx+18},${cy+faceHeight*0.55} Z" fill="${skinColor}"/>`;
       // Neck/jaw junction shadow
@@ -322,13 +332,7 @@
         });
       }
       
-      // Hair (back layer for longer styles)
-      if (['long', 'medium', 'ponytail', 'braids', 'dreads'].includes(app.hairStyle)) {
-        const hairLength = app.hairStyle === 'long' ? 80 : 50;
-        svg += `<ellipse cx="${cx}" cy="${cy - 20}" rx="${faceWidth + 15}" ry="${faceHeight + hairLength}" fill="${hairColor.color}"/>`;
-      }
-      
-      // Hair (top layer)
+      // Hair (top layer — cap sits on top of the face skin)
       if (app.hairStyle !== 'bald') {
         const hairTop = cy - faceHeight * 0.85;
         
@@ -461,27 +465,71 @@
         }
       }
       
-      // Facial hair
+      // Facial hair — anchored to face geometry so every style sits correctly
+      // regardless of faceShape.  chinY is the bottom of the face silhouette;
+      // lipBotY is just below the lower lip; fhH is the space between them.
       if (app.facialHair && app.facialHair !== 'none') {
         const beardColor = this._darkenColor(hairColor.color, 10);
+        const chinY    = cy + faceHeight;       // bottom of chin
+        const lipBotY  = mouthY + 8;           // bottom of lower lip
+        const fhH      = chinY - lipBotY;       // chin-to-lip distance
         switch (app.facialHair) {
-          case 'stubble':
-            svg += `<ellipse cx="${cx}" cy="${mouthY + 15}" rx="35" ry="20" fill="${beardColor}" opacity="0.3"/>`;
+          case 'stubble': {
+            // Two translucent ellipses across the lower face for a grain effect
+            svg += `<ellipse cx="${cx}" cy="${lipBotY + fhH * 0.45}" rx="${faceWidth * 0.78}" ry="${fhH * 0.62}" fill="${beardColor}" opacity="0.22"/>`;
+            svg += `<ellipse cx="${cx}" cy="${lipBotY + fhH * 0.30}" rx="${faceWidth * 0.55}" ry="${fhH * 0.38}" fill="${beardColor}" opacity="0.14"/>`;
             break;
-          case 'goatee':
-            svg += `<ellipse cx="${cx}" cy="${mouthY + 20}" rx="20" ry="25" fill="${beardColor}"/>`;
+          }
+          case 'mustache': {
+            // Sits above the upper lip — centred between nose tip and mouth
+            const muY = mouthY - 5;
+            svg += `<ellipse cx="${cx}" cy="${muY}" rx="${faceWidth * 0.35}" ry="${Math.max(5, faceHeight * 0.045)}" fill="${beardColor}" opacity="0.95"/>`;
+            // Lighter inner volume stripe
+            svg += `<ellipse cx="${cx}" cy="${muY - 1}" rx="${faceWidth * 0.20}" ry="${Math.max(2.5, faceHeight * 0.022)}" fill="${beardColor}" opacity="0.42"/>`;
             break;
-          case 'fullbeard':
-          case 'wastelandbeard':
-            svg += `<ellipse cx="${cx}" cy="${mouthY + 25}" rx="50" ry="40" fill="${beardColor}"/>`;
+          }
+          case 'goatee': {
+            const gCy = lipBotY + fhH * 0.48;
+            svg += `<ellipse cx="${cx}" cy="${gCy}" rx="${faceWidth * 0.22}" ry="${fhH * 0.55}" fill="${beardColor}" opacity="0.95"/>`;
+            // Lighter inner volume
+            svg += `<ellipse cx="${cx}" cy="${gCy - 2}" rx="${faceWidth * 0.12}" ry="${fhH * 0.32}" fill="${beardColor}" opacity="0.48"/>`;
+            // Thin strip connecting goatee to the lower lip
+            svg += `<ellipse cx="${cx}" cy="${lipBotY + 2}" rx="${faceWidth * 0.14}" ry="${Math.max(4, faceHeight * 0.04)}" fill="${beardColor}" opacity="0.78"/>`;
             break;
-          case 'mustache':
-            svg += `<ellipse cx="${cx}" cy="${mouthY - 5}" rx="25" ry="8" fill="${beardColor}"/>`;
+          }
+          case 'fullbeard': {
+            const bCy = lipBotY + fhH * 0.52;
+            // Wide jaw coverage
+            svg += `<ellipse cx="${cx}" cy="${bCy}" rx="${faceWidth * 0.85}" ry="${fhH * 0.62}" fill="${beardColor}" opacity="0.90"/>`;
+            // Denser centre
+            svg += `<ellipse cx="${cx}" cy="${bCy - 2}" rx="${faceWidth * 0.52}" ry="${fhH * 0.46}" fill="${beardColor}" opacity="0.52"/>`;
+            // Mustache strip
+            svg += `<ellipse cx="${cx}" cy="${mouthY - 5}" rx="${faceWidth * 0.38}" ry="${Math.max(5, faceHeight * 0.045)}" fill="${beardColor}" opacity="0.85"/>`;
             break;
-          case 'mutton':
-            svg += `<ellipse cx="${cx - 45}" cy="${mouthY + 10}" rx="15" ry="30" fill="${beardColor}"/>`;
-            svg += `<ellipse cx="${cx + 45}" cy="${mouthY + 10}" rx="15" ry="30" fill="${beardColor}"/>`;
+          }
+          case 'wastelandbeard': {
+            // Larger and rougher than fullbeard — extends to sides of jaw
+            const wCy = lipBotY + fhH * 0.55;
+            svg += `<ellipse cx="${cx}" cy="${wCy}" rx="${faceWidth * 1.00}" ry="${fhH * 0.72}" fill="${beardColor}" opacity="0.92"/>`;
+            svg += `<ellipse cx="${cx}" cy="${wCy - 4}" rx="${faceWidth * 0.68}" ry="${fhH * 0.52}" fill="${beardColor}" opacity="0.48"/>`;
+            // Mustache
+            svg += `<ellipse cx="${cx}" cy="${mouthY - 5}" rx="${faceWidth * 0.42}" ry="${Math.max(6, faceHeight * 0.05)}" fill="${beardColor}" opacity="0.90"/>`;
+            // Sparse side wisps
+            svg += `<ellipse cx="${cx - faceWidth * 0.55}" cy="${lipBotY + fhH * 0.28}" rx="${faceWidth * 0.28}" ry="${fhH * 0.36}" fill="${beardColor}" opacity="0.32"/>`;
+            svg += `<ellipse cx="${cx + faceWidth * 0.55}" cy="${lipBotY + fhH * 0.28}" rx="${faceWidth * 0.28}" ry="${fhH * 0.36}" fill="${beardColor}" opacity="0.32"/>`;
             break;
+          }
+          case 'mutton': {
+            // Sideburn strips along the outer jaw — positioned at faceWidth*0.78
+            const mCy  = cy + fhH * 0.18;
+            const mRx  = faceWidth * 0.22;
+            const mRy  = fhH * 0.70;
+            svg += `<ellipse cx="${cx - faceWidth * 0.78}" cy="${mCy}" rx="${mRx}" ry="${mRy}" fill="${beardColor}" opacity="0.92"/>`;
+            svg += `<ellipse cx="${cx + faceWidth * 0.78}" cy="${mCy}" rx="${mRx}" ry="${mRy}" fill="${beardColor}" opacity="0.92"/>`;
+            // Thin mustache to bridge the gap
+            svg += `<ellipse cx="${cx}" cy="${mouthY - 5}" rx="${faceWidth * 0.28}" ry="${Math.max(4, faceHeight * 0.04)}" fill="${beardColor}" opacity="0.80"/>`;
+            break;
+          }
         }
       }
       
