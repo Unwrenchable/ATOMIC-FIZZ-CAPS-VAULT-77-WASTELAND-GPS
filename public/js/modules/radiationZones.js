@@ -19,9 +19,9 @@
         return;
       }
 
-      // Create pane BELOW fog but ABOVE faction borders
+      // Create pane BELOW fog (420) but ABOVE faction borders (350) and encounter heat (400)
       const pane = worldmap.map.createPane("radZonePane");
-      pane.style.zIndex = 500;
+      pane.style.zIndex = 410;
       pane.style.pointerEvents = "none";
 
       this.layer = L.geoJSON([], {

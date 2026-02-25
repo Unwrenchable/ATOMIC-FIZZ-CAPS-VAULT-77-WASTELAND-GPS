@@ -239,6 +239,8 @@
     maxContainerRetries: 10,
     containerRetryDelayMs: 200,
     _pendingOnOpen: false,
+    _retryTimeoutId: null,     // tracks the pending retry setTimeout so it can be cancelled
+    _loadingLocations: false,  // guard against concurrent loadLocations() calls
 
     // delays used by pipboy.js when invalidating after a panel switch
     mapInvalidateDelayMs: 150,
@@ -261,7 +263,8 @@
       this.gs = gameState || window.DATA || {};
       this.ensurePlayerPosition();
       this.initMap();
-      this.loadLocations();
+      // loadLocations() is always called by onOpen() immediately after init(),
+      // so we do not call it here to avoid a redundant concurrent fetch.
       this.loadWorldOverlays();
     },
 
@@ -269,6 +272,10 @@
     resetRetryState() {
       this.containerRetryCount = 0;
       this.isRetrying = false;
+      if (this._retryTimeoutId !== null) {
+        clearTimeout(this._retryTimeoutId);
+        this._retryTimeoutId = null;
+      }
     },
 
     // --------------------------------------------------------
@@ -328,7 +335,7 @@
         if (this.containerRetryCount < this.maxContainerRetries) {
           this.containerRetryCount++;
           console.log(`[worldmap] container has no dimensions (width: ${rect.width} height: ${rect.height}), retry ${this.containerRetryCount} / ${this.maxContainerRetries}`);
-          setTimeout(() => this.onOpen(), this.containerRetryDelayMs);
+          this._retryTimeoutId = setTimeout(() => this.onOpen(), this.containerRetryDelayMs);
           return;
         } else {
           console.warn(`[worldmap] container failed to gain dimensions after ${this.maxContainerRetries} retries - waiting for ResizeObserver`);
@@ -337,6 +344,9 @@
           return;
         }
       } else {
+        // Container has valid dimensions – cancel any pending retry and clear the
+        // pending-onOpen flag so the ResizeObserver does not fire an extra onOpen().
+        this._pendingOnOpen = false;
         this.resetRetryState();
       }
 
@@ -1132,12 +1142,16 @@
     // LOCATIONS + POI MARKERS
     // --------------------------------------------------------
     async loadLocations() {
+      // Prevent concurrent loads – a previous call is already in-flight.
+      if (this._loadingLocations) return;
+      this._loadingLocations = true;
       try {
         // try API first
         const apiLocations = await safeFetchJSON("/api/locations");
         if (Array.isArray(apiLocations) && apiLocations.length) {
           this.locations = apiLocations;
           this.locationsLoaded = true;
+          this._loadingLocations = false;
           this.renderPOIMarkers();
           return;
         }
@@ -1155,6 +1169,7 @@
         this.locations = [];
       }
       this.locationsLoaded = true;
+      this._loadingLocations = false;
       this.renderPOIMarkers();
     },
 
