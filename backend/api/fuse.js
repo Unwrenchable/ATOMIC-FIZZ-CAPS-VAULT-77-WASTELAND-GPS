@@ -41,9 +41,9 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
       });
     }
 
-    // Get player data
-    const playerKey = key("player", walletAddress);
-    const playerData = await redis.get(playerKey);
+    // Get player data  — key must match the hSet format used by player.js
+    const playerKey = key(`player:${walletAddress}`);
+    const playerData = await redis.hget(playerKey, "profile");
 
     if (!playerData) {
       return res.status(404).json({ error: "Player not found" });
@@ -95,8 +95,8 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
       player.scrapResources.fusionCores -= fusionResult.fusionCoresRequired;
     }
 
-    // Save updated player data
-    await redis.set(playerKey, JSON.stringify(player));
+    // Save updated player data — use hset to match the hash format used by player.js
+    await redis.hset(playerKey, "profile", JSON.stringify(player));
 
     // Log the fusion operation
     const fusionLogKey = key("fusion_log", Date.now());
