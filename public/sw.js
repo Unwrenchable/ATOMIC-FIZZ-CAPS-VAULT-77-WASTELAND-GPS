@@ -1,7 +1,7 @@
 // Service Worker for Atomic Fizz Caps PWA
 // Enables offline functionality and app-like experience
 
-const CACHE_NAME = 'atomic-fizz-caps-v1';
+const CACHE_NAME = 'atomic-fizz-caps-v2';
 const OFFLINE_URL = '/';
 
 // Assets to cache on install

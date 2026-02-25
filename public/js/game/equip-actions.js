@@ -57,16 +57,8 @@ Game.equipItem = function (itemOrId) {
   if (item.type === "weapon") {
     if (Game.modules?.quests?.completeObjective) {
       Game.modules.quests.completeObjective("wake_up", "equip_weapon");
-      Game.modules.quests.completeObjective("wake_up", "equip_item");
     } else if (Game.quests?.completeObjective) {
       Game.quests.completeObjective("wake_up", "equip_weapon");
-      Game.quests.completeObjective("wake_up", "equip_item");
-    }
-  } else if (item.type === "armor") {
-    if (Game.modules?.quests?.completeObjective) {
-      Game.modules.quests.completeObjective("wake_up", "equip_item");
-    } else if (Game.quests?.completeObjective) {
-      Game.quests.completeObjective("wake_up", "equip_item");
     }
   }
 

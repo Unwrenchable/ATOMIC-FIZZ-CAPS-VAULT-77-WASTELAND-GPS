@@ -230,11 +230,40 @@
       // Background
       svg += `<rect width="100%" height="100%" fill="#0a1a0a"/>`;
       
-      // Vignette gradient
+      // Vignette gradient + skin texture filter + portrait-specific eye/iris gradients
       svg += `<defs>
         <radialGradient id="vignette">
           <stop offset="60%" stop-color="transparent"/>
           <stop offset="100%" stop-color="rgba(0,0,0,0.6)"/>
+        </radialGradient>
+        <filter id="skinTex" x="0%" y="0%" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" result="noise"/>
+          <feColorMatrix type="saturate" values="0" result="gray"/>
+          <feBlend in="SourceGraphic" in2="gray" mode="multiply" result="blended"/>
+          <feComposite in="blended" in2="SourceGraphic" operator="in"/>
+        </filter>
+        <radialGradient id="eyeWhiteP" cx="40%" cy="38%">
+          <stop offset="0%"   stop-color="#fffff5"/>
+          <stop offset="60%"  stop-color="#f5f2e0"/>
+          <stop offset="100%" stop-color="#ddd8c0"/>
+        </radialGradient>
+        <radialGradient id="irisDepth" cx="35%" cy="30%">
+          <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.38"/>
+          <stop offset="28%"  stop-color="${eyeColor.color}"/>
+          <stop offset="72%"  stop-color="${this._darkenColor(eyeColor.color, 20)}"/>
+          <stop offset="100%" stop-color="${this._darkenColor(eyeColor.color, 42)}"/>
+        </radialGradient>
+        <radialGradient id="pupilDepth" cx="36%" cy="30%">
+          <stop offset="0%"   stop-color="#2a2a2a"/>
+          <stop offset="100%" stop-color="#000000"/>
+        </radialGradient>
+        <radialGradient id="noseTipHL" cx="50%" cy="40%">
+          <stop offset="0%"   stop-color="rgba(255,255,255,0.28)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+        <radialGradient id="templeShad" cx="50%" cy="50%">
+          <stop offset="0%"   stop-color="rgba(0,0,0,0.22)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
         </radialGradient>
         ${eyeGlow ? `<filter id="glow">
           <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -249,11 +278,25 @@
       const cx = size / 2;
       const cy = size * 0.45;
       
-      // Neck
-      svg += `<ellipse cx="${cx}" cy="${cy + faceHeight * 0.6}" rx="25" ry="40" fill="${skinColor}"/>`;
-      
-      // Face base
-      svg += `<ellipse cx="${cx}" cy="${cy}" rx="${faceWidth}" ry="${faceHeight}" fill="${skinColor}"/>`;
+      // Neck — tapered column with subtle bottom shadow
+      svg += `<path d="M${cx-18},${cy+faceHeight*0.55} C${cx-22},${cy+faceHeight*0.7} ${cx-20},${cy+faceHeight*1.05} ${cx-14},${cy+faceHeight*1.2} L${cx+14},${cy+faceHeight*1.2} C${cx+20},${cy+faceHeight*1.05} ${cx+22},${cy+faceHeight*0.7} ${cx+18},${cy+faceHeight*0.55} Z" fill="${skinColor}"/>`;
+      // Neck/jaw junction shadow
+      svg += `<ellipse cx="${cx}" cy="${cy+faceHeight*0.62}" rx="20" ry="7" fill="rgba(0,0,0,0.22)"/>`;
+
+      // Face base — 5-point anatomical silhouette (wider temples, defined jaw/chin)
+      svg += `<path d="
+        M ${cx},${cy-faceHeight}
+        C ${cx+faceWidth*0.85},${cy-faceHeight*0.95} ${cx+faceWidth},${cy-faceHeight*0.38} ${cx+faceWidth*0.9},${cy+faceHeight*0.18}
+        C ${cx+faceWidth*0.74},${cy+faceHeight*0.60} ${cx+faceWidth*0.30},${cy+faceHeight*0.90} ${cx},${cy+faceHeight}
+        C ${cx-faceWidth*0.30},${cy+faceHeight*0.90} ${cx-faceWidth*0.74},${cy+faceHeight*0.60} ${cx-faceWidth*0.9},${cy+faceHeight*0.18}
+        C ${cx-faceWidth},${cy-faceHeight*0.38} ${cx-faceWidth*0.85},${cy-faceHeight*0.95} ${cx},${cy-faceHeight}
+        Z" fill="${skinColor}" filter="url(#skinTex)"/>`;
+
+      // Temple / cheekbone shadows for 3-D depth
+      svg += `<ellipse cx="${cx-faceWidth*0.76}" cy="${cy}" rx="${faceWidth*0.38}" ry="${faceHeight*0.52}" fill="url(#templeShad)"/>`;
+      svg += `<ellipse cx="${cx+faceWidth*0.76}" cy="${cy}" rx="${faceWidth*0.38}" ry="${faceHeight*0.52}" fill="url(#templeShad)"/>`;
+      // Subtle under-chin / jaw darkening
+      svg += `<ellipse cx="${cx}" cy="${cy+faceHeight*0.82}" rx="${faceWidth*0.55}" ry="${faceHeight*0.18}" fill="rgba(0,0,0,0.10)"/>`;
       
       // Ghoul texture - use deterministic positions based on appearance hash
       if (app.race === 'ghoul') {
@@ -307,56 +350,115 @@
         }
       }
       
-      // Eyes
+      // Eyes — fully detailed with almond whites, iris depth, pupil, catchlights, lash lines
       const eyeY = cy - 10;
       const eyeSpacing = 25;
       const eyeWidth = 18;
       const eyeHeight = app.eyeShape === 'round' ? 14 : 10;
-      
-      // Eye whites
-      svg += `<ellipse cx="${cx - eyeSpacing}" cy="${eyeY}" rx="${eyeWidth}" ry="${eyeHeight}" fill="#f8f8f8"/>`;
-      svg += `<ellipse cx="${cx + eyeSpacing}" cy="${eyeY}" rx="${eyeWidth}" ry="${eyeHeight}" fill="#f8f8f8"/>`;
-      
-      // Iris/pupils
-      const pupilSize = 8;
+      const irisR = 8;
+      const pupilR = 4;
       const irisFilter = eyeGlow ? ' filter="url(#glow)"' : '';
-      svg += `<circle cx="${cx - eyeSpacing}" cy="${eyeY}" r="${pupilSize}" fill="${eyeColor.color}"${irisFilter}/>`;
-      svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="${pupilSize}" fill="${eyeColor.color}"${irisFilter}/>`;
+
+      // Helper to build one detailed eye at (ex, ey)
+      const buildEye = (ex, ey, isRight) => {
+        const ew = eyeWidth, eh = eyeHeight;
+        // Socket shadow
+        let e = `<ellipse cx="${ex}" cy="${ey}" rx="${ew+4}" ry="${eh+3}" fill="rgba(0,0,0,0.13)"/>`;
+        // Eye white — almond path
+        e += `<path d="M${ex-ew},${ey} Q${ex-ew*0.4},${ey-eh*1.15} ${ex},${ey-eh*0.85} Q${ex+ew*0.4},${ey-eh*1.15} ${ex+ew},${ey} Q${ex+ew*0.4},${ey+eh*0.65} ${ex},${ey+eh*0.65} Q${ex-ew*0.4},${ey+eh*0.65} ${ex-ew},${ey} Z" fill="url(#eyeWhiteP)"/>`;
+        // Upper eyelid crease
+        e += `<path d="M${ex-ew},${ey} Q${ex},${ey-eh*1.3} ${ex+ew},${ey}" fill="none" stroke="${this._darkenColor(skinColor, 14)}" stroke-width="1" stroke-linecap="round" opacity="0.45"/>`;
+        // Iris
+        e += `<circle cx="${ex}" cy="${ey}" r="${irisR}"${irisFilter} fill="url(#irisDepth)"/>`;
+        // Limbal ring
+        e += `<circle cx="${ex}" cy="${ey}" r="${irisR}" fill="none" stroke="${this._darkenColor(eyeColor.color, 50)}" stroke-width="1.8" opacity="0.72"/>`;
+        // Pupil
+        e += `<circle cx="${ex}" cy="${ey}" r="${pupilR}" fill="url(#pupilDepth)"/>`;
+        // Catchlights
+        const clSign = isRight ? 1 : 1;
+        e += `<circle cx="${ex + irisR*0.36}" cy="${ey - irisR*0.42}" r="2.0" fill="#ffffff" opacity="0.90"/>`;
+        e += `<circle cx="${ex - irisR*0.22}" cy="${ey + irisR*0.32}" r="1.0" fill="#ffffff" opacity="0.50"/>`;
+        // Upper lash line
+        e += `<path d="M${ex-ew},${ey} Q${ex},${ey-eh*1.25} ${ex+ew},${ey}" fill="none" stroke="#181210" stroke-width="2.4" stroke-linecap="round" opacity="0.88"/>`;
+        // Lower lash line
+        e += `<path d="M${ex-ew*0.88},${ey+eh*0.32} Q${ex},${ey+eh*0.70} ${ex+ew*0.88},${ey+eh*0.32}" fill="none" stroke="#2a2018" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>`;
+        // Tear duct hint
+        const tdx = isRight ? ex + ew*0.92 : ex - ew*0.92;
+        e += `<ellipse cx="${tdx}" cy="${ey+2}" rx="2.8" ry="2.1" fill="#d8a898" opacity="0.40"/>`;
+        return e;
+      };
+
+      svg += buildEye(cx - eyeSpacing, eyeY, false);
+      svg += buildEye(cx + eyeSpacing, eyeY, true);
       
-      // Pupils
-      svg += `<circle cx="${cx - eyeSpacing}" cy="${eyeY}" r="4" fill="#000"/>`;
-      svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="4" fill="#000"/>`;
-      
-      // Eyebrows
+      // Eyebrows — arched path with hair-texture inner stroke
       const browY = eyeY - 18;
-      svg += `<line x1="${cx - eyeSpacing - 12}" y1="${browY}" x2="${cx - eyeSpacing + 12}" y2="${browY - 2}" stroke="${hairColor.color}" stroke-width="4" stroke-linecap="round"/>`;
-      svg += `<line x1="${cx + eyeSpacing - 12}" y1="${browY - 2}" x2="${cx + eyeSpacing + 12}" y2="${browY}" stroke="${hairColor.color}" stroke-width="4" stroke-linecap="round"/>`;
+      // Left brow
+      svg += `<path d="M${cx-eyeSpacing-14},${browY+3} Q${cx-eyeSpacing-2},${browY-8} ${cx-eyeSpacing+14},${browY+2}" fill="none" stroke="${hairColor.color}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+      svg += `<path d="M${cx-eyeSpacing-11},${browY+2} Q${cx-eyeSpacing-2},${browY-4} ${cx-eyeSpacing+11},${browY+1}" fill="none" stroke="${hairColor.color}" stroke-width="1.2" stroke-linecap="round" opacity="0.48"/>`;
+      // Right brow (mirrored arch)
+      svg += `<path d="M${cx+eyeSpacing-14},${browY+2} Q${cx+eyeSpacing+2},${browY-8} ${cx+eyeSpacing+14},${browY+3}" fill="none" stroke="${hairColor.color}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+      svg += `<path d="M${cx+eyeSpacing-11},${browY+1} Q${cx+eyeSpacing+2},${browY-4} ${cx+eyeSpacing+11},${browY+2}" fill="none" stroke="${hairColor.color}" stroke-width="1.2" stroke-linecap="round" opacity="0.48"/>`;
       
-      // Nose
+      // Nose — bridge, nostrils, tip highlight
       const noseY = cy + 15;
-      svg += `<path d="M${cx} ${eyeY + 10} L${cx - 8} ${noseY + 10} Q${cx} ${noseY + 15} ${cx + 8} ${noseY + 10} L${cx} ${eyeY + 10}" fill="none" stroke="${this._darkenColor(skinColor, 20)}" stroke-width="2"/>`;
+      const nsTone = this._darkenColor(skinColor, 22);
+      const nsDeep = this._darkenColor(skinColor, 38);
+      // Bridge sides — descending curves
+      svg += `<path d="M${cx-4},${eyeY+10} C${cx-5},${noseY+2} ${cx-8},${noseY+8} ${cx-10},${noseY+13}" fill="none" stroke="${nsTone}" stroke-width="1.6" stroke-linecap="round" opacity="0.55"/>`;
+      svg += `<path d="M${cx+4},${eyeY+10} C${cx+5},${noseY+2} ${cx+8},${noseY+8} ${cx+10},${noseY+13}" fill="none" stroke="${nsTone}" stroke-width="1.6" stroke-linecap="round" opacity="0.55"/>`;
+      // Nose bottom curve / tip
+      svg += `<path d="M${cx-10},${noseY+13} Q${cx},${noseY+20} ${cx+10},${noseY+13}" fill="none" stroke="${nsTone}" stroke-width="2.2" stroke-linecap="round"/>`;
+      // Nostril shadows — small angled ellipses
+      svg += `<ellipse cx="${cx-10}" cy="${noseY+15}" rx="4.5" ry="3" fill="${nsDeep}" opacity="0.48" transform="rotate(-14 ${cx-10} ${noseY+15})"/>`;
+      svg += `<ellipse cx="${cx+10}" cy="${noseY+15}" rx="4.5" ry="3" fill="${nsDeep}" opacity="0.48" transform="rotate(14 ${cx+10} ${noseY+15})"/>`;
+      // Bridge highlight
+      svg += `<path d="M${cx},${eyeY+12} L${cx},${noseY+9}" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2.2" stroke-linecap="round"/>`;
+      // Nose tip highlight
+      svg += `<ellipse cx="${cx}" cy="${noseY+12}" rx="5" ry="4" fill="url(#noseTipHL)"/>`;
       
-      // Mouth
+      // Mouth — Bezier cupid's bow upper lip + fuller lower lip with highlight
       const mouthY = cy + 40;
       const mouthWidth = app.mouthType === 'wide' ? 30 : (app.mouthType === 'small' ? 15 : 22);
-      
-      // Expression-based mouth
+      const lipDark  = this._darkenColor(skinColor, 28);
+      const lipMid   = this._darkenColor(skinColor, 18);
+      const lipLight = this._darkenColor(skinColor, 8);
+
+      // Philtrum — two faint guide strokes above lip center
+      svg += `<path d="M${cx-4},${mouthY-9} L${cx-2},${mouthY-2}" fill="none" stroke="${this._darkenColor(skinColor, 20)}" stroke-width="1.0" stroke-linecap="round" opacity="0.38"/>`;
+      svg += `<path d="M${cx+4},${mouthY-9} L${cx+2},${mouthY-2}" fill="none" stroke="${this._darkenColor(skinColor, 20)}" stroke-width="1.0" stroke-linecap="round" opacity="0.38"/>`;
+
+      // Expression-based mouth with Bezier paths
       switch (app.expression) {
-        case 'friendly':
-          svg += `<path d="M${cx - mouthWidth} ${mouthY} Q${cx} ${mouthY + 15} ${cx + mouthWidth} ${mouthY}" fill="none" stroke="#8B4513" stroke-width="3" stroke-linecap="round"/>`;
+        case 'friendly': {
+          // Cupid's bow upper lip
+          svg += `<path d="M${cx-mouthWidth},${mouthY} Q${cx-mouthWidth*0.55},${mouthY-7} ${cx},${mouthY-4} Q${cx+mouthWidth*0.55},${mouthY-7} ${cx+mouthWidth},${mouthY}" fill="${lipDark}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
+          // Fuller lower lip (smile)
+          svg += `<path d="M${cx-mouthWidth},${mouthY} Q${cx},${mouthY+17} ${cx+mouthWidth},${mouthY}" fill="${lipMid}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
+          // Lower lip center highlight
+          svg += `<path d="M${cx-mouthWidth*0.45},${mouthY+8} Q${cx},${mouthY+13} ${cx+mouthWidth*0.45},${mouthY+8}" fill="none" stroke="${lipLight}" stroke-width="1" stroke-linecap="round" opacity="0.50"/>`;
           break;
+        }
         case 'stern':
-        case 'determined':
-          svg += `<line x1="${cx - mouthWidth}" y1="${mouthY}" x2="${cx + mouthWidth}" y2="${mouthY}" stroke="#8B4513" stroke-width="3" stroke-linecap="round"/>`;
+        case 'determined': {
+          svg += `<path d="M${cx-mouthWidth},${mouthY} Q${cx-mouthWidth*0.55},${mouthY-6} ${cx},${mouthY-3} Q${cx+mouthWidth*0.55},${mouthY-6} ${cx+mouthWidth},${mouthY}" fill="${lipDark}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
+          svg += `<path d="M${cx-mouthWidth},${mouthY} Q${cx},${mouthY+6} ${cx+mouthWidth},${mouthY}" fill="${lipMid}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
           break;
-        case 'smirking':
-          svg += `<path d="M${cx - mouthWidth} ${mouthY + 3} Q${cx} ${mouthY} ${cx + mouthWidth} ${mouthY - 5}" fill="none" stroke="#8B4513" stroke-width="3" stroke-linecap="round"/>`;
+        }
+        case 'smirking': {
+          svg += `<path d="M${cx-mouthWidth},${mouthY+4} Q${cx-mouthWidth*0.4},${mouthY-5} ${cx},${mouthY-3} Q${cx+mouthWidth*0.4},${mouthY-6} ${cx+mouthWidth},${mouthY-6}" fill="${lipDark}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
+          svg += `<path d="M${cx-mouthWidth},${mouthY+4} Q${cx},${mouthY+7} ${cx+mouthWidth},${mouthY-6}" fill="${lipMid}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
           break;
-        case 'weary':
-          svg += `<path d="M${cx - mouthWidth} ${mouthY - 3} Q${cx} ${mouthY + 5} ${cx + mouthWidth} ${mouthY - 3}" fill="none" stroke="#8B4513" stroke-width="3" stroke-linecap="round"/>`;
+        }
+        case 'weary': {
+          svg += `<path d="M${cx-mouthWidth},${mouthY-4} Q${cx-mouthWidth*0.55},${mouthY-8} ${cx},${mouthY-5} Q${cx+mouthWidth*0.55},${mouthY-8} ${cx+mouthWidth},${mouthY-4}" fill="${lipDark}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
+          svg += `<path d="M${cx-mouthWidth},${mouthY-4} Q${cx},${mouthY+7} ${cx+mouthWidth},${mouthY-4}" fill="${lipMid}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
           break;
-        default:
-          svg += `<line x1="${cx - mouthWidth}" y1="${mouthY}" x2="${cx + mouthWidth}" y2="${mouthY}" stroke="#8B4513" stroke-width="3" stroke-linecap="round"/>`;
+        }
+        default: {
+          svg += `<path d="M${cx-mouthWidth},${mouthY} Q${cx-mouthWidth*0.55},${mouthY-6} ${cx},${mouthY-3} Q${cx+mouthWidth*0.55},${mouthY-6} ${cx+mouthWidth},${mouthY}" fill="${lipDark}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
+          svg += `<path d="M${cx-mouthWidth},${mouthY} Q${cx},${mouthY+6} ${cx+mouthWidth},${mouthY}" fill="${lipMid}" stroke="${lipDark}" stroke-width="1.4" stroke-linecap="round"/>`;
+        }
       }
       
       // Facial hair
@@ -458,7 +560,7 @@
     // Fallback portrait when options not loaded
     _generateFallbackPortrait(appearance, size) {
       const app = appearance || { gender: 'male', expression: 'neutral' };
-      const genderIcons = { male: '👨', female: '👩', nonbinary: '🧑' };
+      const genderIcons = { male: '👨', female: '👩' };
       const icon = genderIcons[app.gender] || '🧑';
       
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
