@@ -164,14 +164,10 @@
     triggerCourierIfReady();
 
 
-    // Worldmap hook
-    if (window.Game?.modules?.worldmap?.onOpen) {
-      try {
-        Game.modules.worldmap.onOpen();
-      } catch (err) {
-        console.warn("[BOOT] worldmap.onOpen failed:", err);
-      }
-    }
+    // NOTE: worldmap.onOpen() is triggered via the wristReady event listener
+    // inside worldmap.js (double-rAF, after the container has dimensions).
+    // A direct call here would race against that async path and could fire
+    // before the pipboyScreen container has non-zero dimensions.
 
     // Update stats if available
     if (window.Game?.ui?.updateStatPanel) {
