@@ -336,7 +336,6 @@ body {
   }
 
   #mapContainer {
-    height: calc(100vh - 140px) !important;
     min-height: var(--mobile-map-min-height) !important;
   }
 
