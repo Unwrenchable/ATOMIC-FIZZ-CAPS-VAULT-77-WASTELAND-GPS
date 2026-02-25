@@ -1,4 +1,4 @@
-# FizzSwap — Agent Memory
+# ☢️ ATOMIC FIZZ CAPS — Agent Memory
 
 > **WARNING — NO SECRETS ALLOWED.**
 > This file is committed to version control. It must never contain private
@@ -9,70 +9,115 @@ All additions must be reviewed in a pull request before merging to `main`.
 
 ---
 
-## Template sections
+## Project Identity
 
-Use the sections below as a starting point. Add entries in reverse-chronological
-order (newest first) within each section.
+**Atomic Fizz Caps** is a Fallout-themed GPS-based crypto geo-game at
+**https://www.atomicfizzcaps.xyz** (API: **https://api.atomicfizzcaps.xyz**).
 
----
-
-## Toolchain decisions
-
-<!-- Record why specific tools/versions were chosen or pinned. -->
-
-- Hardhat pinned to `2.17.4` to match the `@nomicfoundation/hardhat-toolbox`
-  `3.0.0` peer dependency range.
-- Solidity `^0.8.20` chosen for built-in overflow checks and `PUSH0` opcode
-  support on mainnet.
-- Vite 5 chosen for the web frontend for fast HMR and native ESM support.
-- `vite-plugin-node-polyfills` added because `@solana/web3.js` and `ethers`
-  depend on Node built-ins (Buffer, crypto) that are absent in the browser.
+**NOT** a DEX, swap protocol, or naming service. Any older agent files
+referencing "FizzSwap", "fizzdex", or a "naming service" are incorrect and
+should be ignored in favour of this file and the updated agent docs.
 
 ---
 
-## Commands that worked
+## Toolchain Decisions
 
-<!-- Copy-paste the exact command and note the date / context. -->
+_(Newest first within each section)_
+
+- **Node.js 20 LTS** — selected for long-term support; matches Render and
+  Vercel's Node 20 runtime.
+- **CommonJS (`"type": "commonjs"`)** — entire backend uses `require()` /
+  `module.exports`. Do not introduce ES module `import` in backend files.
+- **Vanilla HTML/CSS/JS frontend** — no framework, no TypeScript, no build
+  step. Editing `public/` files takes effect immediately.
+- **ioredis 5.4** — chosen over the `redis` package for better reconnect
+  handling and cluster support. The `redis` package is also listed in
+  `package.json` for compatibility.
+- **In-memory Redis fallback** — `backend/lib/redis.js` falls back to an
+  in-memory store when `REDIS_URL` is not set or Redis is unavailable.
+  Data is lost on server restart. Never rely on fallback in production.
+- **tweetnacl + bs58** — used for Solana wallet signature verification instead
+  of `@solana/web3.js` alone, for a smaller backend dependency footprint.
+- **express-rate-limit** — rate limiting applied globally and per-route.
+  Redis store used in production; memory store in development.
+- **Helmet** — applied as global middleware for security headers.
+- **Leaflet 1.9.4** — vendored in `public/vendor/` for offline/CDN-free use.
+- **Hugging Face Mixtral-8x7B-Instruct-v0.1** — chosen as Overseer AI model
+  for good instruction-following and Fallout tone adaptability.
+
+---
+
+## Commands That Worked
 
 | Date | Command | Notes |
 |------|---------|-------|
-| — | `npm run compile-contracts` | Compiles all Solidity contracts via Hardhat |
-| — | `npm run test` | Runs Hardhat/Mocha test suite |
-| — | `npm run build` | Compiles root TypeScript |
-| — | `cd relayer && npm run build` | Compiles relayer TypeScript |
-| — | `cd web && npm run build` | Produces `web/dist/` via Vite |
-| — | `npm run build-solana` | Requires Rust + BPF toolchain installed |
+| — | `npm run dev` | Dev server with nodemon auto-reload (port 3000) |
+| — | `npm start` | Production server start |
+| — | `npm run lint` | ESLint across the project |
+| — | `npm run format` | Prettier formatting |
+| — | `curl http://localhost:3000/api/health` | Health check endpoint |
+| — | `redis-cli keys "afw:*"` | List all game Redis keys |
+| — | `redis-cli ping` | Verify Redis connection |
 
 ---
 
-## Architecture notes
+## Architecture Notes
 
-<!-- High-level decisions that affect multiple files. -->
-
-- Universal chain adapter pattern: every chain integration implements the
-  `IChainAdapter` interface in `src/chain-adapter.ts`.
-- Relayer is a standalone Express service (`relayer/src/index.ts`); it bridges
-  EVM and Solana swap events.
-- Web UI is intentionally a single-component app (`web/src/App.tsx`) for
-  simplicity; no component splitting or custom hooks at this time.
-- Vercel hosts the frontend; `vercel.json` at the repo root configures the
-  build and SPA rewrites.
+- **Frontend served from `public/`** — Vercel serves this directory as a CDN.
+  `vercel.json` sets `outputDirectory: "public"` and `cleanUrls: true`.
+  No build step required.
+- **API at `api.atomicfizzcaps.xyz`** — Vercel rewrites `/api/*` requests to
+  `https://api.atomicfizzcaps.xyz/api/*` via `vercel.json` rewrites config.
+- **Backend at Render** — `render.yaml` configures the Render web service.
+  Root dir: `backend/`, start: `node server.js`. Health check: `/api/health`.
+- **Redis key prefix** — All Redis keys use `afw:` prefix (from `REDIS_PREFIX`
+  env var). Format: `afw:<category>:<identifier>`.
+- **CORS allowlist** — hardcoded critical origins: `https://www.atomicfizzcaps.xyz`,
+  `https://atomicfizzcaps.xyz`. Permanent patterns: `*.vercel.app`,
+  `*.onrender.com`. Additional origins via `FRONTEND_ORIGIN` env var.
+- **Overseer AI** — Backend proxy at `/api/overseer-proxy` forwards requests
+  to Hugging Face. 4-tone personality fallback works without `HF_API_KEY`.
+- **GitHub Actions** — two workflows: (1) manual Vercel deploy, (2) API smoke
+  test on push to `main` that checks `GET https://api.atomicfizzcaps.xyz/api/health`.
+- **Wormhole bridge** — Cross-chain FIZZ token bridging integrated at
+  `/bridge.html` and `/bridge-portal.html`. Supports 35+ chains.
+- **Twitter Gamemaker bot** — Python/Flask + Tweepy, runs on Render, uses
+  shared Redis infrastructure. Separate from the main JS codebase.
+- **PWA support** — `public/sw.js` service worker + `public/manifest.json`.
+  Enables offline gameplay and mobile home screen install.
 
 ---
 
 ## Gotchas
 
-<!-- Things that tripped up a developer or AI assistant. -->
+_(Things that tripped up a developer or AI assistant)_
 
-- `relayer-mappings.json` is generated at runtime and is git-ignored. Run
-  `npm run relayer:init-mappings` before starting the relayer for the first
-  time.
-- The large-chunk Vite warning (>500 KB) is expected and benign.
-- `minOut = 0` in swap logic means slippage is not enforced on-chain; do not
-  assume the UI's fee/slippage display has any on-chain effect.
-- Solana program source lives under `programs/fizzdex-solana/` (not `contracts/solana/`).
-  `cargo build-bpf` targets `programs/fizzdex-solana/Cargo.toml`.
+- **Redis URL protocol**: `REDIS_URL` is validated on startup. Any URL not
+  starting with `redis://` or `rediss://` is rejected with an error log.
+  A common mistake is using `http://` or `https://` for Redis URLs.
+- **No build step for frontend**: `public/` is pure static files. Do not add
+  webpack, Vite, or any bundler without also updating `vercel.json`.
+- **CommonJS in backend**: Adding `import` statements to backend files causes
+  a runtime error since `package.json` uses `"type": "commonjs"`.
+- **Wallet verification is mandatory**: Skipping `walletVerify.verifySignature()`
+  on player-mutating endpoints is a critical security vulnerability.
+- **Admin password timing attack**: Must use `crypto.timingSafeEqual()` for
+  password comparison. Never use `===` for secret comparison.
+- **Overseer fallback**: If `HF_API_KEY` is missing or the HF API is down,
+  the Overseer uses pre-programmed fallback responses — still functional.
+- **Redis in-memory fallback**: The fallback store loses all data on server
+  restart. Fine for development, catastrophic for production.
+- **CORS wildcard security fix**: The `*.vercel.app` wildcard only allows
+  valid hostname characters (alphanumeric + hyphens). The regex was
+  intentionally tightened to prevent subdomain injection attacks.
+- **Cooldown keys**: POI claim cooldowns stored as `afw:cooldown:<wallet>:<poi_id>`.
+  Check `COOLDOWN_SECONDS` env var for the default cooldown duration.
+- **GPS distance**: The maximum claim distance is controlled by
+  `GPS_DISTANCE_LIMIT` env var (in meters). Default is 1000m.
+- **localStorage encoding**: All game state in localStorage must be
+  base64-encoded. Raw JSON storage is a security anti-pattern here.
 
 ---
 
 _Add new entries above the relevant section. Keep entries concise._
+_This file is version-controlled — never add secrets or credentials._
