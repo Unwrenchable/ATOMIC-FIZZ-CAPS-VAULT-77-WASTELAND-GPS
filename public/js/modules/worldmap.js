@@ -1071,14 +1071,14 @@
 
       console.log('[worldmap] attempting to switch back to online tiles');
 
-      // Create new satellite tiles
+      // Create new satellite tiles (same Esri imagery as initial setup)
       const satelliteTiles = L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         {
           minZoom: 0,
           maxZoom: 19,
           noWrap: true,
-          attribution: '© OpenStreetMap contributors'
+          attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
           // No errorTileUrl - let failed tiles be transparent
         }
       );
