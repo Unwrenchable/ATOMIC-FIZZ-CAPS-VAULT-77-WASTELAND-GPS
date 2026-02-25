@@ -397,8 +397,8 @@
     _dirty = true;
     saveToStorage();
     
-    // Quest hook for equipping
-    if (Game.modules?.quests?.completeObjective) {
+    // Quest hook: only fire equip_weapon when a weapon is actually equipped
+    if (slot === "weapon" && Game.modules?.quests?.completeObjective) {
       Game.modules.quests.completeObjective("wake_up", "equip_weapon");
     }
     
