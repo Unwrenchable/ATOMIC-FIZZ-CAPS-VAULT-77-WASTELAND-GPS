@@ -560,7 +560,7 @@
     // Fallback portrait when options not loaded
     _generateFallbackPortrait(appearance, size) {
       const app = appearance || { gender: 'male', expression: 'neutral' };
-      const genderIcons = { male: '👨', female: '👩', nonbinary: '🧑' };
+      const genderIcons = { male: '👨', female: '👩' };
       const icon = genderIcons[app.gender] || '🧑';
       
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
