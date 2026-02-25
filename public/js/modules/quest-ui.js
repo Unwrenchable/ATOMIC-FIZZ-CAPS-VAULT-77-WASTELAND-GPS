@@ -52,7 +52,9 @@ Game.ui.renderQuest = function () {
         const completed = st.objectives?.[objId] === true;
         const checkmark = completed ? "☑" : "☐";
         const completedClass = completed ? "completed" : "";
-        html += `<div class="quest-objective ${completedClass}">${checkmark} ${obj.text}</div>`;
+        // obj.text may be undefined in legacy format — fall back to the objective ID
+        const objText = (obj && obj.text) ? obj.text : objId.replace(/_/g, " ");
+        html += `<div class="quest-objective ${completedClass}">${checkmark} ${objText}</div>`;
       });
       html += `</div>`;
     }

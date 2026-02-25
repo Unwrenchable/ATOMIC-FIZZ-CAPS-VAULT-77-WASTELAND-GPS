@@ -426,11 +426,11 @@
 
       // Request quest reveal from server (if present). If not, start locally.
       try {
-        const wallet = window.PLAYER_WALLET || null;
+        const revealWallet = window.PLAYER_WALLET || null;
         const res = await fetch(`/api/quests-store/reveal`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ wallet, questId })
+          body: JSON.stringify({ wallet: revealWallet, questId })
         });
         const json = await res.json();
         if (json && json.ok && json.quest) {
@@ -971,10 +971,14 @@
         if (!hasItem) return false;
       }
 
-      // Location requirement
+      // Location requirement — guard against worldmap not being ready
       if (req.location) {
+        if (!Game.modules.worldmap || typeof Game.modules.worldmap.getNearbyPOIs !== "function") {
+          console.warn("[quests] worldmap.getNearbyPOIs not available for location check");
+          return false;
+        }
         const nearby = Game.modules.worldmap.getNearbyPOIs(500);
-        const atLoc = nearby.some(n => n.poi.id === req.location);
+        const atLoc = nearby.some(n => n.poi && n.poi.id === req.location);
         if (!atLoc) return false;
       }
 

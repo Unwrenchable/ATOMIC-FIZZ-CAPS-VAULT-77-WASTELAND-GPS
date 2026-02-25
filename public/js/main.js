@@ -260,8 +260,8 @@
   }
 
   function addCaps(amount) {
-    if (!amount) return;
-    PLAYER.caps += amount;
+    if (typeof amount !== "number" || !Number.isFinite(amount) || amount === 0) return;
+    PLAYER.caps = Math.max(0, PLAYER.caps + amount);
 
     // Sync to world simulation player caps
     if (window.overseerWorldState && window.overseerWorldState.player) {
@@ -277,7 +277,16 @@
     if (PLAYER.xp >= needed) {
       PLAYER.xp -= needed;
       PLAYER.level += 1;
-      alert(`LEVEL UP! You are now level ${PLAYER.level}`);
+      // Use non-blocking notification instead of alert()
+      if (window.Game?.modules?.worldmap?.showMapMessage) {
+        Game.modules.worldmap.showMapMessage(`⬆ LEVEL UP! You are now Level ${PLAYER.level}!`);
+      } else {
+        const lvlToast = document.createElement("div");
+        lvlToast.style.cssText = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,20,0,0.95);border:2px solid #00ff41;padding:20px 32px;font-family:monospace;font-size:22px;color:#00ff41;z-index:99999;text-align:center;pointer-events:none;";
+        lvlToast.textContent = `⬆ LEVEL UP! Level ${PLAYER.level}`;
+        document.body.appendChild(lvlToast);
+        setTimeout(() => lvlToast.remove(), 3000);
+      }
     }
   }
 
@@ -919,6 +928,14 @@
       }
       window.addEventListener("walletConnected", updateClaimButtonState);
       window.addEventListener("playerMoved", updateClaimButtonState);
+      // Store cleanup references on the element to prevent duplicate listeners
+      if (claimBtn) {
+        // Remove any previously added listeners before adding new ones
+        if (claimBtn._walletListener) window.removeEventListener("walletConnected", claimBtn._walletListener);
+        if (claimBtn._movedListener) window.removeEventListener("playerMoved", claimBtn._movedListener);
+        claimBtn._walletListener = updateClaimButtonState;
+        claimBtn._movedListener = updateClaimButtonState;
+      }
       updateClaimButtonState();
       if (claimBtn) {
         claimBtn.onclick = async () => {

@@ -107,7 +107,8 @@
 
       const rarityMod = this.rarityMultipliers[rarity] || 1.0;
       const scarcityMod = this.getScarcityModifier();
-      const repMod = this.getReputationModifier(merchant.factionId);
+      // Guard: merchant may be null/undefined (e.g., loot drops, direct grants)
+      const repMod = merchant ? this.getReputationModifier(merchant.factionId) : 1.0;
       const weatherMod = this.getWeatherModifier();
       const timeMod = this.getTimeModifier();
 
@@ -134,7 +135,8 @@
 
       const rarityMod = this.rarityMultipliers[rarity] || 1.0;
       const scarcityMod = this.getScarcityModifier();
-      const repMod = this.getReputationModifier(merchant.factionId);
+      // Guard: merchant may be null/undefined
+      const repMod = merchant ? this.getReputationModifier(merchant.factionId) : 1.0;
       const weatherMod = this.getWeatherModifier();
       const timeMod = this.getTimeModifier();
 

@@ -85,9 +85,8 @@
     craft(recipeId) {
       const recipes = Game.modules.recipes;
       const mintables = Game.modules.mintables;
-      const inventory = Game.modules.inventory;
 
-      if (!recipes || !recipes.loaded || !mintables || !mintables.loaded || !inventory) {
+      if (!recipes || !recipes.loaded || !mintables || !mintables.loaded) {
         console.warn("crafting: dependencies not ready");
         return null;
       }
@@ -117,8 +116,32 @@
         crafted: true
       };
 
-      // Add to inventory
-      inventory.add(craftedItem, recipe.outputAmount || 1);
+      // Add to inventory — use available inventory system
+      const qty = recipe.outputAmount || 1;
+      if (Game.modules?.PlayerState?.addItem) {
+        Game.modules.PlayerState.addItem(craftedItem, qty);
+      } else if (Game.giveItem) {
+        Game.giveItem(craftedItem, qty);
+      } else {
+        // Fallback: push directly into gameState.inventory
+        const inv = this.gs.inventory;
+        if (!inv) {
+          console.warn("crafting: no inventory target available");
+          return null;
+        }
+        const category =
+          craftedItem.type === "weapon" ? "weapons" :
+          craftedItem.type === "armor" ? "armor" :
+          craftedItem.type === "ammo" ? "ammo" :
+          craftedItem.type === "consumable" ? "consumables" : "misc";
+        if (!inv[category]) inv[category] = [];
+        const existing = inv[category].find(i => i.id === craftedItem.id);
+        if (existing) {
+          existing.amount = (existing.amount || 1) + qty;
+        } else {
+          inv[category].push({ ...craftedItem, amount: qty });
+        }
+      }
 
       return craftedItem;
     }
