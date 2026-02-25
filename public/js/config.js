@@ -3,17 +3,21 @@
 // IMPORTANT: This configuration uses split architecture:
 //
 // 1. Split Architecture (Production):
-//    - Frontend: Vercel static hosting
-//    - Backend: External server on Render (api.atomicfizzcaps.xyz)
-//    - API calls point to external URL
+//    - Frontend: Vercel static hosting at atomicfizzcaps.xyz
+//    - Backend: Render persistent server at api.atomicfizzcaps.xyz
+//    - Vercel proxies /api/* requests to the backend via vercel.json rewrites
+//    - API calls use relative paths ('') so they work the same on:
+//        * Vercel (proxy rewrites /api/* → backend)
+//        * Render (backend is on the same server, handles /api/* directly)
 //
 // 2. Local Development:
 //    - Frontend: Any static server
 //    - Backend: Local Express server on localhost:3000
 //    - API calls point to http://localhost:3000
 //
-// This split architecture ensures the backend runs on a persistent server
-// (not serverless) for better mobile map persistence and WebSocket support.
+// This unified relative-path approach means the frontend and API always
+// appear to be on the same origin, eliminating CORS for browser calls and
+// keeping the persistent Render backend handling all real work.
 // ============================================================
 (function() {
   const hostname = window.location.hostname;
@@ -28,9 +32,10 @@
     // Use devnet for local development
     window.SOLANA_RPC = 'https://api.devnet.solana.com';
   } else {
-    // Production/preview environments:
-    // Point to external backend API on Render
-    window.API_BASE = 'https://api.atomicfizzcaps.xyz';
+    // Production/preview environments (Vercel or Render):
+    // Use relative paths — Vercel proxies /api/* to the backend via rewrites,
+    // and Render serves the backend directly on the same origin.
+    window.API_BASE = '';
     // Use mainnet for production
     window.SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
   }
@@ -41,7 +46,7 @@
 
   // Log configuration for debugging
   console.log('[Config] Frontend:', hostname);
-  console.log('[Config] Backend API:', window.API_BASE);
+  console.log('[Config] Backend API:', window.API_BASE || '(same origin)');
   console.log('[Config] Solana RPC:', window.SOLANA_RPC);
-  console.log('[Config] Mode: Split architecture (Vercel + Render)');
+  console.log('[Config] Mode: Split architecture (Vercel + Render, relative API paths)');
 })();
