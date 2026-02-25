@@ -1,37 +1,17 @@
 {
   "id": "wake_up",
   "name": "Wake Up",
-  "description": "A distorted signal cut through the boot sequence. Something is wrong with this timeline. Stabilize your anchor and get your bearings.",
+  "description": "You awaken in the wasteland wearing your jumpsuit. A courier has arrived with an urgent message.",
   "objectives": [
-    {
-      "id": "open_pipboy",
-      "text": "Open your Pip‑Boy",
-      "completeOn": "pipboy_opened"
-    },
-    {
-      "id": "switch_tabs",
-      "text": "Cycle through the Pip‑Boy tabs",
-      "completeOn": "tabs_cycled"
-    },
-    {
-      "id": "pick_item",
-      "text": "Pick up an item",
-      "completeOn": "item_picked"
-    },
-    {
-      "id": "open_stats",
-      "text": "Open the STAT panel",
-      "completeOn": "stat_opened"
-    },
     {
       "id": "open_inventory",
       "text": "Open your inventory",
       "completeOn": "inventory_opened"
     },
     {
-      "id": "equip_item",
-      "text": "Equip an item",
-      "completeOn": "item_equipped"
+      "id": "equip_weapon",
+      "text": "Equip your sidearm",
+      "completeOn": "weapon_equipped"
     },
     {
       "id": "turn_on_radio",
@@ -46,7 +26,8 @@
   ],
   "reward": {
     "xp": 50,
-    "items": ["pru_stabilizer_shard", "vault77_sidearm"]
+    "caps": 25,
+    "items": ["pru_stabilizer_shard"]
   },
   "onComplete": "wake_up_npc_intro"
 }

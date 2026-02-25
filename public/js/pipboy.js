@@ -102,9 +102,6 @@
     if (!key) return;
     const panelKey = key.replace("panel-", ""); // FIXED
     setActivePanel(panelKey);
-
-    // QUEST HOOK: Wake Up → switch_tabs
-    Game.quests?.completeObjective("wake_up", "switch_tabs");
   });
 });
 
