@@ -566,6 +566,13 @@
         }
       });
 
+      // Set initial view FIRST — marks the map as loaded so that subsequent
+      // addTo() calls immediately invoke layer.onAdd(), which creates
+      // layer._container.  Without this, updateBaseLayerForZoom fires during
+      // setView and crashes on layer._container.parentNode (undefined).
+      const pos = this.gs.player.position;
+      this.map.setView([pos.lat, pos.lng], 15);
+
       // Add both layers; overview is added but hidden by zoom handler below
       satelliteTiles.addTo(this.map);
       if (overviewTiles) overviewTiles.addTo(this.map);
@@ -585,6 +592,7 @@
         const updateBaseLayerForZoom = () => {
           if (!this.map) return;
           const z = this.map.getZoom();
+          if (isNaN(z)) return;
           if (z <= thresh) {
             if (!this.map.hasLayer(overviewTiles)) this.map.addLayer(overviewTiles);
             if (this.map.hasLayer(satelliteTiles)) this.map.removeLayer(satelliteTiles);
@@ -597,10 +605,6 @@
         this.map.on('zoomend', updateBaseLayerForZoom);
         updateBaseLayerForZoom();
       }
-
-      // Start view - use zoom 15 initially (will snap to 18 when GPS locks)
-      const pos = this.gs.player.position;
-      this.map.setView([pos.lat, pos.lng], 15);
       
       // Update map status
       this.updateMapStatus('Initializing map...');
