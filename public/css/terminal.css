@@ -1,56 +1,113 @@
 /* ============================================================
    terminal.css — Overseer Terminal (Fallout‑Authentic Edition)
-   Matches Pip‑Boy CRT, glow, scanlines, and retro hardware feel
+   Full Pip‑Boy CRT: bezel, scanlines, phosphor glow, message bubbles
    ============================================================ */
 
 :root {
-  --bg: #000;
-  --text: #0f0;
-  --text-dim: #0c0;
-  --accent: #0f9;
-  --accent-soft: #0a4;
-  --panel: rgba(0, 20, 0, 0.85);
-  --panel-border: #0f0;
-  --focus: rgba(0, 255, 0, 0.15);
-  --radius: 6px;
-  --font: 'VT323', monospace;
+  --bg:            #000;
+  --bg-deep:       #020602;
+  --text:          #00ff66;
+  --text-bright:   #00ff88;
+  --text-dim:      #00aa44;
+  --text-muted:    #007733;
+  --accent:        #00ffaa;
+  --accent-soft:   #004422;
+  --player-color:  #ffcc00;
+  --panel:         rgba(0, 18, 6, 0.92);
+  --panel-border:  #00ff66;
+  --gold:          #ffcc00;
+  --focus:         rgba(0, 255, 102, 0.1);
+  --radius:        6px;
+  --font:          'VT323', monospace;
+  --scanline-gap:  3px;
 }
 
-/* Reset + base */
-* {
-  box-sizing: border-box;
-}
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
+/* ── Page base ─────────────────────────────────────────────── */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+  min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
+  font-size: 20px;
   display: flex;
   flex-direction: column;
-
-  /* CRT subtle flicker */
-  animation: crt-flicker 4s infinite steps(1);
+  overflow: hidden;
 }
 
-/* Terminal container */
+/* Full-viewport CRT phosphor bloom */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(0, 255, 102, 0.12) 0%,
+    rgba(0, 255, 102, 0.04) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: bloom-breathe 6s ease-in-out infinite;
+}
+
+@keyframes bloom-breathe {
+  0%, 100% { opacity: 0.8; }
+  50%       { opacity: 1;   }
+}
+
+/* Persistent scanline overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent var(--scanline-gap)
+  );
+  pointer-events: none;
+  z-index: 9999;
+  animation: scanline-drift 12s linear infinite;
+}
+
+@keyframes scanline-drift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(var(--scanline-gap)); }
+}
+
+/* ── CRT bezel wrapper ─────────────────────────────────────── */
 .terminal-wrap {
   flex: 1;
-  padding: 16px;
+  margin: 14px;
+  padding: 20px 18px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
   background: var(--panel);
   border: 2px solid var(--panel-border);
-  border-radius: var(--radius);
-  margin: 12px;
-  overflow-y: auto;
-  line-height: 1.4;
-  font-size: 20px;
-
-  /* CRT scanlines */
+  border-radius: 10px;
+  box-shadow:
+    0 0 0 6px #020902,
+    0 0 0 8px #0a1a0a,
+    0 0 40px rgba(0, 255, 102, 0.35),
+    inset 0 0 30px rgba(0, 255, 102, 0.04);
   position: relative;
+  overflow: hidden;
+  z-index: 1;
+
+  animation: crt-flicker 5s infinite steps(1);
 }
 
+/* Inner scanline set (tighter inside the panel) */
 .terminal-wrap::before {
   content: "";
   position: absolute;
@@ -58,53 +115,147 @@ html, body {
   pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(0, 255, 0, 0.05) 0px,
-    rgba(0, 255, 0, 0.05) 1px,
-    transparent 2px,
-    transparent 4px
+    rgba(0, 255, 102, 0.03) 0px,
+    rgba(0, 255, 102, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
   );
-  opacity: 0.25;
-  z-index: 5;
+  z-index: 2;
 }
 
-/* Header */
+/* Vignette corners */
+.terminal-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 3;
+}
+
+/* ── Header ────────────────────────────────────────────────── */
 .terminal-header {
   text-align: center;
-  padding-bottom: 12px;
-  margin-bottom: 12px;
-  border-bottom: 2px solid var(--panel-border);
-  font-size: 26px;
-  letter-spacing: 2px;
-
-  /* Glow */
-  text-shadow: 0 0 6px rgba(0, 255, 0, 0.6);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--text-muted);
+  font-size: clamp(18px, 4vw, 28px);
+  letter-spacing: 3px;
+  color: var(--text-bright);
+  text-shadow:
+    0 0 6px rgba(0, 255, 102, 0.8),
+    0 0 16px rgba(0, 255, 102, 0.4);
+  position: relative;
+  z-index: 4;
+  flex-shrink: 0;
 }
 
-/* Output text */
+/* Vault-Tec corner brackets on header */
+.terminal-header::before,
+.terminal-header::after {
+  content: "◤";
+  color: var(--gold);
+  font-size: 14px;
+  opacity: 0.6;
+  position: absolute;
+  top: 2px;
+}
+.terminal-header::before { left: 0; }
+.terminal-header::after  { right: 0; transform: scaleX(-1); }
+
+/* ── System info line ──────────────────────────────────────── */
+.terminal-output.terminal-system {
+  color: var(--text-muted);
+  font-size: 0.85em;
+  border-left: 2px solid var(--text-muted);
+  padding-left: 8px;
+  opacity: 0.75;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 4;
+}
+
+/* ── Chat / log area ───────────────────────────────────────── */
+#chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 4;
+}
+
+/* Message bubbles */
+.message {
+  max-width: 90%;
+  padding: 6px 12px;
+  border-radius: 4px;
+  line-height: 1.45;
+  word-break: break-word;
+  font-size: clamp(16px, 2.5vw, 20px);
+}
+
+/* Player messages — gold, right-aligned */
+.message.player {
+  align-self: flex-end;
+  background: rgba(255, 204, 0, 0.08);
+  border: 1px solid rgba(255, 204, 0, 0.4);
+  color: var(--player-color);
+  text-shadow: 0 0 6px rgba(255, 204, 0, 0.5);
+}
+
+/* Overseer messages — green, left-aligned */
+.message.overseer {
+  align-self: flex-start;
+  background: rgba(0, 255, 102, 0.05);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  color: var(--text-bright);
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.5);
+}
+
+/* System messages (game events) */
+.message.system {
+  align-self: center;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+/* ── Output (non-chat) ─────────────────────────────────────── */
 .terminal-output {
   white-space: pre-wrap;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   color: var(--text);
-  text-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
+  text-shadow: 0 0 4px rgba(0, 255, 102, 0.4);
+  position: relative;
+  z-index: 4;
 }
 
-/* Dimmed system messages */
-.terminal-system {
-  color: var(--text-dim);
-  opacity: 0.8;
-  text-shadow: 0 0 2px rgba(0, 255, 0, 0.2);
-}
-
-/* Input line */
+/* ── Input row ─────────────────────────────────────────────── */
 .terminal-input-line {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--text-muted);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 4;
 }
 
 .terminal-prompt {
   color: var(--accent);
-  text-shadow: 0 0 4px rgba(0, 255, 0, 0.5);
+  text-shadow: 0 0 6px rgba(0, 255, 170, 0.7);
+  flex-shrink: 0;
+  user-select: none;
 }
 
 .terminal-input {
@@ -112,74 +263,102 @@ html, body {
   background: transparent;
   border: none;
   outline: none;
-  color: var(--text);
+  color: var(--text-bright);
   font-family: var(--font);
-  font-size: 20px;
-  padding: 4px;
-  text-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
+  font-size: clamp(16px, 2.5vw, 20px);
+  padding: 4px 6px;
+  caret-color: var(--text-bright);
+  text-shadow: 0 0 5px rgba(0, 255, 102, 0.6);
+}
+
+.terminal-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
 }
 
 .terminal-input:focus {
   background: var(--focus);
+  border-radius: 3px;
 }
 
-/* Buttons */
+/* ── Buttons ───────────────────────────────────────────────── */
 .terminal-button {
-  margin-top: 16px;
-  padding: 8px 14px;
+  padding: 7px 14px;
+  margin-top: 0;
   background: transparent;
-  border: 2px solid var(--accent);
-  color: var(--accent);
+  border: 1px solid var(--text-dim);
+  color: var(--text-dim);
   font-family: var(--font);
-  font-size: 20px;
+  font-size: clamp(15px, 2vw, 18px);
   border-radius: var(--radius);
   cursor: pointer;
-  text-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
+  text-shadow: 0 0 4px rgba(0, 255, 102, 0.3);
+  transition: all 0.15s ease;
+  letter-spacing: 1px;
 }
 
 .terminal-button:hover {
-  background: var(--accent-soft);
-  color: #000;
-  text-shadow: none;
+  background: rgba(0, 255, 102, 0.12);
+  border-color: var(--text-bright);
+  color: var(--text-bright);
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
 }
 
-/* Scrollbar (Pip‑Boy style) */
-.terminal-wrap::-webkit-scrollbar {
-  width: 8px;
+.terminal-button:active {
+  transform: scale(0.97);
 }
 
-.terminal-wrap::-webkit-scrollbar-thumb {
+/* SEND button — highlighted */
+#send {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 8px rgba(0, 255, 170, 0.3);
+}
+
+#send:hover {
   background: var(--accent);
+  color: #000;
+  box-shadow: 0 0 16px rgba(0, 255, 170, 0.6);
 }
 
-.terminal-wrap::-webkit-scrollbar-track {
-  background: #020;
+/* ── Scrollbar ─────────────────────────────────────────────── */
+#chat::-webkit-scrollbar { width: 6px; }
+#chat::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 3px;
 }
+#chat::-webkit-scrollbar-track { background: transparent; }
 
-/* Mobile adjustments */
+/* ── Mobile ────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .terminal-wrap {
-    margin: 8px;
-    padding: 12px;
-    font-size: 18px;
+    margin: 6px;
+    padding: 14px 12px 8px;
   }
+  .terminal-header { font-size: 18px; letter-spacing: 1px; }
+  .terminal-button { font-size: 15px; padding: 6px 10px; }
+}
 
-  .terminal-header {
-    font-size: 22px;
-  }
+/* ── CRT flicker ───────────────────────────────────────────── */
+@keyframes crt-flicker {
+  0%   { opacity: 1; }
+  96%  { opacity: 1; }
+  97%  { opacity: 0.94; }
+  98%  { opacity: 1; }
+  99%  { opacity: 0.91; }
+  100% { opacity: 1; }
+}
 
-  .terminal-input {
-    font-size: 18px;
+/* ── Accessibility ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-/* ============================================================
-   CRT EFFECTS
-   ============================================================ */
-
-@keyframes crt-flicker {
-  0% { opacity: 1; }
-  98% { opacity: 1; }
-  99% { opacity: 0.92; }
-  100% { opacity: 1; }
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

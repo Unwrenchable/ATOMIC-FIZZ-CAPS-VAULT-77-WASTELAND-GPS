@@ -25,16 +25,7 @@ Game.giveItem = function (item, quantity = 1) {
 
   // Use PlayerState if available (persists to localStorage)
   if (Game.modules?.PlayerState?.addItem) {
-    const success = Game.modules.PlayerState.addItem(item, quantity);
-    if (success) {
-      // QUEST HOOK: Wake Up → pick_item
-      if (Game.modules?.quests?.completeObjective) {
-        Game.modules.quests.completeObjective("wake_up", "pick_item");
-      } else if (Game.quests?.completeObjective) {
-        Game.quests.completeObjective("wake_up", "pick_item");
-      }
-    }
-    return success;
+    return Game.modules.PlayerState.addItem(item, quantity);
   }
 
   // Fallback: direct inventory manipulation (won't persist properly)
@@ -58,11 +49,6 @@ Game.giveItem = function (item, quantity = 1) {
     if (!window.PLAYER.inventory.includes(item.id)) {
       window.PLAYER.inventory.push(item.id);
     }
-  }
-
-  // QUEST HOOK: Wake Up → pick_item
-  if (Game.quests?.completeObjective) {
-    Game.quests.completeObjective("wake_up", "pick_item");
   }
 
   // Trigger UI refresh

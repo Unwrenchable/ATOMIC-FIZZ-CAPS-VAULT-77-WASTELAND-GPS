@@ -945,6 +945,11 @@
           }
         }
       }, 150);
+
+      // Also drive the SMIL fallback talking animation
+      if (Game.modules?.Dragon?.startTalking) {
+        Game.modules.Dragon.startTalking();
+      }
     },
 
     _stopLipSync() {
@@ -960,6 +965,11 @@
         } catch (e) {
           // Silent fail
         }
+      }
+
+      // Also stop the SMIL fallback talking animation
+      if (Game.modules?.Dragon?.stopTalking) {
+        Game.modules.Dragon.stopTalking();
       }
     },
 
