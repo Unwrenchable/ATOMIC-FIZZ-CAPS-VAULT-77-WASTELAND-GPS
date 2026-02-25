@@ -238,6 +238,7 @@
     containerRetryCount: 0,
     maxContainerRetries: 10,
     containerRetryDelayMs: 200,
+    _pendingOnOpen: false,
 
     // delays used by pipboy.js when invalidating after a panel switch
     mapInvalidateDelayMs: 150,
@@ -285,9 +286,15 @@
         this.resizeObserver = new ResizeObserver((entries) => {
           for (const entry of entries) {
             const { width, height } = entry.contentRect;
-            if (width > 0 && height > 0 && this.map) {
-              console.log('[worldmap] container resized, invalidating map');
-              this.map.invalidateSize();
+            if (width > 0 && height > 0) {
+              if (this._pendingOnOpen) {
+                this._pendingOnOpen = false;
+                console.log('[worldmap] container gained dimensions, resuming onOpen');
+                this.onOpen();
+              } else if (this.map) {
+                console.log('[worldmap] container resized, invalidating map');
+                this.map.invalidateSize();
+              }
             }
           }
         });
@@ -308,6 +315,8 @@
       //     and invalidates the map whenever it obtains a real size.
       //  2. a simple retry loop keeps re-entering onOpen until the container
       //     reports nonzero dimensions (with a maximum attempt count).
+      //  3. if retries are exhausted, _pendingOnOpen is set and a ResizeObserver
+      //     is attached early so onOpen is replayed as soon as dimensions arrive.
       const container = document.getElementById("mapContainer");
       if (!container) {
         console.warn('[worldmap] mapContainer element not found in DOM - cannot initialize map');
@@ -322,7 +331,10 @@
           setTimeout(() => this.onOpen(), this.containerRetryDelayMs);
           return;
         } else {
-          console.error(`[worldmap] container failed to gain dimensions after ${this.maxContainerRetries} retries - proceeding anyway`);
+          console.warn(`[worldmap] container failed to gain dimensions after ${this.maxContainerRetries} retries - waiting for ResizeObserver`);
+          this._pendingOnOpen = true;
+          this.setupResizeObserver(container);
+          return;
         }
       } else {
         this.resetRetryState();
