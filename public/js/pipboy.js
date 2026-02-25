@@ -102,9 +102,6 @@
     if (!key) return;
     const panelKey = key.replace("panel-", ""); // FIXED
     setActivePanel(panelKey);
-
-    // QUEST HOOK: Wake Up → switch_tabs
-    Game.quests?.completeObjective("wake_up", "switch_tabs");
   });
 });
 
@@ -115,6 +112,7 @@
   (function enableSwipeTabs() {
     let startX = 0;
     let endX = 0;
+    let touchStartedOnMap = false;
     const threshold = 50;
 
     function activateTabByIndex(i) {
@@ -128,9 +126,11 @@
 
     document.addEventListener("touchstart", (e) => {
       startX = e.touches[0].clientX;
+      touchStartedOnMap = !!(e.target && e.target.closest && e.target.closest('#mapContainer'));
     });
 
     document.addEventListener("touchend", (e) => {
+      if (touchStartedOnMap) return;
       endX = e.changedTouches[0].clientX;
       const diff = endX - startX;
 

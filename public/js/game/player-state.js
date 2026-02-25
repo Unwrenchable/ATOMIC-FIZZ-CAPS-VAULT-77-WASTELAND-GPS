@@ -400,7 +400,6 @@
     // Quest hook for equipping
     if (Game.modules?.quests?.completeObjective) {
       Game.modules.quests.completeObjective("wake_up", "equip_weapon");
-      Game.modules.quests.completeObjective("wake_up", "equip_item");
     }
     
     console.log(`[PlayerState] Equipped ${item.name} in ${slot} slot`);

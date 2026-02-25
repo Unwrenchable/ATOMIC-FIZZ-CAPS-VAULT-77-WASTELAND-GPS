@@ -173,50 +173,108 @@
         this.armatureDisplay = armatureDisplay;
         return armatureDisplay;
       } catch (e) {
-        // Fallback: create a simple composed portrait sprite and a blink animation
+        // Fallback: create an animated SVG portrait using SMIL (no Pixi dependency)
         try {
-          const container = new PIXI.Container();
-          container.x = 0; container.y = 0;
+          const stageEl = this.stageEl || document.getElementById('dragonbonesStage');
+          const W = this.app ? this.app.view.width : 240;
+          const H = this.app ? this.app.view.height : 300;
 
-          // Compose SVG using existing composer parts as a data URL
+          // Compose SVG using existing avatar composer
           const parts = { head: 'head_base.svg', eyes: 'eyes_set1.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' };
           const dataUrl = await Game.Avatar.compose(parts);
 
-          const sprite = PIXI.Sprite.from(dataUrl);
-          // fit sprite to view
-          const scale = Math.min(this.app.view.width / sprite.texture.width, this.app.view.height / sprite.texture.height);
-          sprite.scale.set(scale);
-          sprite.x = (this.app.view.width - sprite.width) / 2;
-          sprite.y = (this.app.view.height - sprite.height) / 2;
+          // Outer wrapper — positioned over the Pixi canvas
+          const container = document.createElement('div');
+          container.id = 'dbFallbackPortrait';
+          container.style.cssText = `position:absolute;top:0;left:0;width:${W}px;height:${H}px;overflow:hidden;pointer-events:none;`;
 
-          container.addChild(sprite);
+          // Portrait base image
+          const img = document.createElement('img');
+          img.src = dataUrl;
+          img.style.cssText = `width:100%;height:100%;display:block;object-fit:contain;`;
+          container.appendChild(img);
 
-          // simple blink: overlay a semi-opaque rectangle over eyes area periodically
-          const blink = new PIXI.Graphics();
-          const bw = sprite.width * 0.5;
-          const bh = sprite.height * 0.12;
-          const bx = sprite.x + sprite.width * 0.25;
-          const by = sprite.y + sprite.height * 0.35;
-          blink.beginFill(0x041f04);
-          blink.drawRect(bx, by, bw, bh);
-          blink.endFill();
-          blink.alpha = 0; // start invisible
-          container.addChild(blink);
+          // Inject breathing keyframes once
+          if (!document.getElementById('dbFallbackStyles')) {
+            const breatheStyle = document.createElement('style');
+            breatheStyle.id = 'dbFallbackStyles';
+            breatheStyle.textContent = `@keyframes dbBreathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.004)}}#dbFallbackPortrait img{transform-origin:50% 85%;animation:dbBreathe 4s ease-in-out infinite;}`;
+            document.head.appendChild(breatheStyle);
+          }
 
-          this.app.stage.addChild(container);
+          // SVG overlay for SMIL-driven blink + mouth animations
+          const ns = 'http://www.w3.org/2000/svg';
+          const svgOverlay = document.createElementNS(ns, 'svg');
+          svgOverlay.setAttribute('xmlns', ns);
+          svgOverlay.setAttribute('width', '100%');
+          svgOverlay.setAttribute('height', '100%');
+          svgOverlay.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;';
+
+          // ── Blink rect (covers eye zone, normally height=0) ──
+          const eyeRect = document.createElementNS(ns, 'rect');
+          eyeRect.setAttribute('x', '18%');
+          eyeRect.setAttribute('y', '33%');
+          eyeRect.setAttribute('width', '64%');
+          eyeRect.setAttribute('height', '0');
+          eyeRect.setAttribute('rx', '5');
+          eyeRect.setAttribute('fill', 'rgba(28,22,16,0.93)');
+          const blinkAnim = document.createElementNS(ns, 'animate');
+          blinkAnim.setAttribute('attributeName', 'height');
+          blinkAnim.setAttribute('values', '0;12%;0');
+          blinkAnim.setAttribute('dur', '0.10s');
+          blinkAnim.setAttribute('begin', 'indefinite');
+          blinkAnim.id = 'dbBlinkAnim';
+          eyeRect.appendChild(blinkAnim);
+          svgOverlay.appendChild(eyeRect);
+
+          // ── Mouth rect (lip-sync, height toggles when talking) ──
+          const mouthRect = document.createElementNS(ns, 'rect');
+          mouthRect.setAttribute('x', '32%');
+          mouthRect.setAttribute('y', '62%');
+          mouthRect.setAttribute('width', '36%');
+          mouthRect.setAttribute('height', '1');
+          mouthRect.setAttribute('rx', '4');
+          mouthRect.setAttribute('fill', 'rgba(18,10,8,0.78)');
+          const mouthAnim = document.createElementNS(ns, 'animate');
+          mouthAnim.setAttribute('attributeName', 'height');
+          mouthAnim.setAttribute('values', '1;7;1');
+          mouthAnim.setAttribute('dur', '0.15s');
+          mouthAnim.setAttribute('repeatCount', 'indefinite');
+          mouthAnim.setAttribute('begin', 'indefinite');
+          mouthRect.appendChild(mouthAnim);
+          svgOverlay.appendChild(mouthRect);
+
+          container.appendChild(svgOverlay);
+
+          // Attach overlay to stage element (on top of Pixi canvas)
+          if (stageEl) {
+            stageEl.style.position = 'relative';
+            stageEl.appendChild(container);
+          }
+
           this.armatureDisplay = container;
 
-          // blink timer
-          let blinkTimeout = null;
-          function doBlink() {
-            blink.alpha = 1;
-            setTimeout(() => { blink.alpha = 0; scheduleBlink(); }, 120);
-          }
-          function scheduleBlink() { blinkTimeout = setTimeout(doBlink, 2000 + Math.random() * 3000); }
+          // Periodic blink scheduler
+          let blinkTimer = null;
+          const scheduleBlink = () => {
+            const delay = 3000 + Math.random() * 2200;
+            blinkTimer = setTimeout(() => {
+              try { blinkAnim.beginElement(); } catch (_) {}
+              scheduleBlink();
+            }, delay);
+          };
           scheduleBlink();
 
-          // attach stop function for cleanup
-          container._blinkTimeout = blinkTimeout;
+          // Cleanup
+          container._cleanup = () => {
+            if (blinkTimer) clearTimeout(blinkTimer);
+            try { mouthAnim.endElement(); } catch (_) {}
+            container.remove();
+          };
+
+          // Per-container talking controls (also wired via Module methods below)
+          container.startTalking = () => { try { mouthAnim.beginElement(); } catch (_) {} };
+          container.stopTalking  = () => { try { mouthAnim.endElement();   } catch (_) {} };
 
           return container;
         } catch (ex) {
@@ -228,6 +286,19 @@
 
   Game.modules.Dragon = Module;
   
+  // startTalking / stopTalking delegate to the current armatureDisplay
+  // (works for both real DragonBones armature and the SMIL fallback div)
+  Game.modules.Dragon.startTalking = function () {
+    if (this.armatureDisplay && typeof this.armatureDisplay.startTalking === 'function') {
+      this.armatureDisplay.startTalking();
+    }
+  };
+  Game.modules.Dragon.stopTalking = function () {
+    if (this.armatureDisplay && typeof this.armatureDisplay.stopTalking === 'function') {
+      this.armatureDisplay.stopTalking();
+    }
+  };
+
   // Expose variation generator for external use (e.g., SVG tinting)
   Game.modules.Dragon.getRandomVariation = getRandomVariation;
 })();
