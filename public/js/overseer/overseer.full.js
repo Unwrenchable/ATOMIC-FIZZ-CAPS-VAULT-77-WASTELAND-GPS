@@ -4,6 +4,38 @@
 (function () {
   "use strict";
 
+  // ========= OVERSEER OBJECT — declared here so all code below can reference it =========
+  var Overseer = window.overseer || {};
+  Overseer.history = Overseer.history || [];
+  Overseer.historyIndex = 0;
+  Overseer.initialized = false;
+
+  // print() — write a line to the chat pane
+  Overseer.print = function (text) {
+    var chatEl = document.getElementById("chat");
+    if (!chatEl) return;
+    var div = document.createElement("div");
+    div.className = "message overseer";
+    div.innerHTML = String(text);
+    chatEl.appendChild(div);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  };
+
+  // clear() — wipe the chat pane
+  Overseer.clear = function () {
+    var chatEl = document.getElementById("chat");
+    if (chatEl) chatEl.innerHTML = "";
+  };
+
+  // focusInput() — re-focus the text field
+  Overseer.focusInput = function () {
+    var inputEl = document.getElementById("input");
+    if (inputEl) { try { inputEl.focus(); } catch (e) {} }
+  };
+
+  // expose early so deferred callbacks (timeouts) can use it
+  window.overseer = Overseer;
+
   // ========= CRASH PREVENTION GLOBALS =========
   const MAX_MESSAGES = 50; // Limit chat history to prevent memory leaks
   const MAX_GAME_TIMEOUT = 30000; // 30 seconds max per game turn
@@ -82,13 +114,7 @@
     limitMessages(); // Prevent memory leaks
   }
 
-  /* ------------------------- Input handling ------------------------- */
-  if (send) send.addEventListener('click', processInput);
-  if (input) {
-    input.addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') processInput();
-    });
-  }
+  /* ------------------------- Input handling (routed through Overseer.handleInput) ------------------------- */
 
   function processInput() {
     if (!input) return;
@@ -1128,7 +1154,15 @@ Overseer.handleInput = async function (raw) {
       return;
   }
 
-  // 2. Overseer.js command extensions (bridge to handlers.js)
+  // 2. Quit active game
+  if (cmd === "quit" && state.gameActive) {
+    cleanup();
+    state.gameActive = null;
+    addMessage("Session terminated. Back to chat.", "overseer");
+    return;
+  }
+
+  // 2b. Overseer.js command extensions (bridge to handlers.js)
   const handlers = window.overseerHandlers || {};
   if (handlers[cmd]) {
     // Handlers may be async, so await them
@@ -1136,21 +1170,34 @@ Overseer.handleInput = async function (raw) {
     return;
   }
 
-  // 3. AI fallback — ANY unknown input goes to the Overseer AI
-  if (window.overseerPersonality && typeof window.overseerPersonality.speak === "function") {
-    try {
-      const reply = await window.overseerPersonality.speak(line);
-      Overseer.print(reply);
-    } catch (err) {
-      Overseer.print("AI CORE ERROR: SIGNAL CORRUPTED");
-      console.warn("[Overseer] AI personality error (using fallback):", err.message);
-    }
-    return;
+  // 3. Jax Harlan narrative + terminal mini-games (generateResponse)
+  //    This handles the story conversation AND starts/routes internal games.
+  const narrativeReply = generateResponse(line.toLowerCase());
+  if (narrativeReply && narrativeReply.length) {
+    addTimeout(function () {
+      addMessage(narrativeReply, "overseer");
+    }, 600 + Math.random() * 600);
   }
 
-  // 4. Final fallback (should never hit unless AI missing)
-  Overseer.print("UNKNOWN COMMAND: " + cmd.toUpperCase());
-  Overseer.print("TYPE 'HELP' FOR A LIST OF COMMANDS.");
+  // Route ongoing game input to the appropriate handler
+  const gDelay = 800 + Math.random() * 600;
+  if (state.gameActive === 'hacking') {
+    addTimeout(function () { addMessage(safeCall(handleHackingGuess, line.toUpperCase()), "overseer"); }, gDelay);
+  } else if (state.gameActive === 'redmenace') {
+    addTimeout(function () { addMessage(safeCall(handleRedMenaceInput, line), "overseer"); }, gDelay);
+  } else if (state.gameActive === 'nukaquiz') {
+    addTimeout(function () { addMessage(safeCall(handleNukaQuiz, line), "overseer"); }, gDelay);
+  } else if (state.gameActive === 'maze') {
+    addTimeout(function () { addMessage(safeCall(handleMaze, line), "overseer"); }, gDelay);
+  } else if (state.gameActive === 'blackjack') {
+    addTimeout(function () { addMessage(safeCall(handleBlackjack, line), "overseer"); }, gDelay);
+  } else if (state.gameActive === 'slots') {
+    addTimeout(function () { addMessage(safeCall(handleSlotsInput, line), "overseer"); }, gDelay);
+  } else if (state.gameActive === 'war') {
+    addTimeout(function () { addMessage(safeCall(handleWar, line), "overseer"); }, gDelay);
+  } else if (state.gameActive === 'texasholdem') {
+    addTimeout(function () { addMessage(safeCall(handleTexasHoldem, line), "overseer"); }, gDelay);
+  }
 };
 
 
