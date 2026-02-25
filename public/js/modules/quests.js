@@ -1044,7 +1044,7 @@
 
     // UI hook
     onOpen() {
-      const container = document.getElementById("tab-quests");
+      const container = document.getElementById("questBody");
       if (!container) return;
 
       container.innerHTML = "";
