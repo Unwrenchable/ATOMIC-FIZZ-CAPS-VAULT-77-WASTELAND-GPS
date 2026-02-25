@@ -252,7 +252,7 @@ body.pipboy-mode {
   height: 100%;
   background: transparent;
   /* Touch-action allows pan and pinch-zoom gestures */
-  touch-action: pan-x pan-y pinch-zoom !important;
+  touch-action: none !important;
   pointer-events: auto !important;
 }
 
