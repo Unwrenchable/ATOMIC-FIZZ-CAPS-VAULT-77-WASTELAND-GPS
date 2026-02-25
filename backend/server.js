@@ -113,8 +113,10 @@ app.use(
         scriptSrc: [
           "'self'",
           "'unsafe-inline'", // Required for inline scripts in index.html
+          "'unsafe-eval'", // Required for Solana web3.js dynamic code
           "https://unpkg.com",
           "https://cdn.jsdelivr.net",
+          "https://vercel.live",
           "https://www.gstatic.com",
           "https://api.phantom.app",
           "https://*.phantom.app",
