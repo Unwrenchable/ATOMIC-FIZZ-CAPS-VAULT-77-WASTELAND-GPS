@@ -619,12 +619,18 @@
           (window.DATA && window.DATA.settings && window.DATA.settings.ui &&
             typeof window.DATA.settings.ui.overviewMaxZoom === 'number')
             ? window.DATA.settings.ui.overviewMaxZoom
-            : 19; // by default show overview at all zooms if available
+            : 4; // default matches overview tiles' own maxZoom so satellite shows at normal zoom levels
 
         const updateBaseLayerForZoom = () => {
           if (!this.map) return;
           const z = this.map.getZoom();
           if (isNaN(z)) return;
+          // If overview tiles were disabled (e.g. via disableOnError), always show satellite.
+          if (!overviewTiles) {
+            if (!this.map.hasLayer(satelliteTiles)) this.map.addLayer(satelliteTiles);
+            this.updateOverlayVisibility(z);
+            return;
+          }
           if (z <= thresh) {
             if (!this.map.hasLayer(overviewTiles)) this.map.addLayer(overviewTiles);
             if (this.map.hasLayer(satelliteTiles)) this.map.removeLayer(satelliteTiles);

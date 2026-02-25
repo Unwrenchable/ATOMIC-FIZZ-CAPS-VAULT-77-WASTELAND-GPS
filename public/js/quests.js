@@ -37,26 +37,20 @@
       id: "wake_up",
       name: "Wake Up",
       type: "objectives",
-      description: "You awaken in the wasteland. Something is wrong.",
+      description: "You awaken in the wasteland wearing your jumpsuit. Get your bearings.",
       objectives: {
-        open_inventory: {},
-        switch_tabs: {},
-        pick_item: {},
-        equip_item: {},
-        turn_on_radio: {},
-        open_map: {},
-        npc_arrives: {}
+        open_inventory: { text: "Open your inventory" },
+        equip_weapon: { text: "Equip your sidearm" },
+        turn_on_radio: { text: "Tune into local radio" },
+        open_map: { text: "Check your map" }
       },
       order: [
         "open_inventory",
-        "switch_tabs",
-        "pick_item",
-        "equip_item",
+        "equip_weapon",
         "turn_on_radio",
-        "open_map",
-        "npc_arrives"
+        "open_map"
       ],
-      rewards: { xp: 50, caps: 10 }
+      rewards: { xp: 50, caps: 25 }
     }
   };
 
@@ -181,19 +175,6 @@
 
     st.objectives[objectiveId] = true;
     console.log(`[Quests] Objective complete: ${questId} → ${objectiveId}`);
-
-    // SCRIPTED ENCOUNTER HOOK
-    if (questId === "wake_up" && objectiveId === "open_map") {
-      if (Game.modules?.npcEncounter) {
-        Game.modules.npcEncounter.triggerEncounter("signal_runner", {
-          spawnRadius: 50,
-          dialogId: "wake_up_intro",
-          onComplete: () => {
-            completeObjective("wake_up", "npc_arrives");
-          }
-        });
-      }
-    }
 
     // Check if all objectives are done
     const allDone = q.order.every(obj => st.objectives[obj]);
