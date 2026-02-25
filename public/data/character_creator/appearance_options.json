@@ -4,8 +4,7 @@
 
   "genders": [
     { "id": "male", "name": "Male", "icon": "👨" },
-    { "id": "female", "name": "Female", "icon": "👩" },
-    { "id": "nonbinary", "name": "Non-Binary", "icon": "🧑" }
+    { "id": "female", "name": "Female", "icon": "👩" }
   ],
 
   "races": [
