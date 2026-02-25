@@ -1,7 +1,7 @@
 // public/js/authClient.js
 
 // Requires bs58 to be included in your HTML:
-// <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/bs58.min.js"></script>
+// <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
 
 // Use window.API_BASE if available (set in index.html), otherwise default to relative path
 // This allows direct API calls in production and Vercel rewrite fallback in dev
