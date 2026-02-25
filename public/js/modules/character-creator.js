@@ -284,8 +284,10 @@
       // Hair back-layer — drawn FIRST so it sits behind the face skin.
       // Long/flowing styles need a large ellipse that hangs down behind the head.
       if (['long', 'medium', 'ponytail', 'braids', 'dreads'].includes(app.hairStyle)) {
-        const hairLength = app.hairStyle === 'long' ? 80 : 50;
-        svg += `<ellipse cx="${cx}" cy="${cy - 20}" rx="${faceWidth + 15}" ry="${faceHeight + hairLength}" fill="${hairColor.color}"/>`;
+        const isLong = app.hairStyle === 'long';
+        const hairBackRy  = isLong ? faceHeight * 1.15 : faceHeight * 0.95;
+        const hairBackCy  = cy - faceHeight * (isLong ? 0.15 : 0.22);
+        svg += `<ellipse cx="${cx}" cy="${hairBackCy}" rx="${faceWidth + 12}" ry="${hairBackRy}" fill="${hairColor.color}"/>`;
       }
 
       // Neck — tapered column with subtle bottom shadow
@@ -333,24 +335,28 @@
       }
       
       // Hair (top layer — cap sits on top of the face skin)
+      // All positions are relative to headCrown (cy - faceHeight) so the hair
+      // never sinks deep into the face regardless of face shape / heightMod.
       if (app.hairStyle !== 'bald') {
-        const hairTop = cy - faceHeight * 0.85;
-        
+        const headCrown = cy - faceHeight;
+
         switch (app.hairStyle) {
           case 'buzzcut':
-            svg += `<ellipse cx="${cx}" cy="${hairTop + 20}" rx="${faceWidth - 5}" ry="30" fill="${hairColor.color}"/>`;
+            // Very tight buzz — sits like a cap right at the crown
+            svg += `<ellipse cx="${cx}" cy="${headCrown + faceHeight * 0.10}" rx="${faceWidth * 0.95}" ry="${faceHeight * 0.22}" fill="${hairColor.color}"/>`;
             break;
           case 'short':
-            svg += `<ellipse cx="${cx}" cy="${hairTop + 15}" rx="${faceWidth + 5}" ry="40" fill="${hairColor.color}"/>`;
+            svg += `<ellipse cx="${cx}" cy="${headCrown + faceHeight * 0.12}" rx="${faceWidth + 3}" ry="${faceHeight * 0.28}" fill="${hairColor.color}"/>`;
             break;
           case 'mohawk':
-            svg += `<rect x="${cx - 8}" y="${hairTop - 20}" width="16" height="60" rx="4" fill="${hairColor.color}"/>`;
+            svg += `<rect x="${cx - 8}" y="${headCrown - 38}" width="16" height="55" rx="4" fill="${hairColor.color}"/>`;
             break;
           case 'slickedback':
-            svg += `<ellipse cx="${cx}" cy="${hairTop + 25}" rx="${faceWidth + 10}" ry="35" fill="${hairColor.color}"/>`;
+            svg += `<ellipse cx="${cx}" cy="${headCrown + faceHeight * 0.08}" rx="${faceWidth + 10}" ry="${faceHeight * 0.22}" fill="${hairColor.color}"/>`;
             break;
           default:
-            svg += `<ellipse cx="${cx}" cy="${hairTop + 15}" rx="${faceWidth + 8}" ry="45" fill="${hairColor.color}"/>`;
+            // wasteland / long / medium / ponytail / braids / dreads top cap
+            svg += `<ellipse cx="${cx}" cy="${headCrown + faceHeight * 0.14}" rx="${faceWidth + 7}" ry="${faceHeight * 0.32}" fill="${hairColor.color}"/>`;
         }
       }
       
