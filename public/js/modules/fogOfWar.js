@@ -26,13 +26,18 @@
         return;
       }
 
-      // Create fog pane - z-index below weather (450) so weather effects show above fog
+      // Create fog pane - z-index below weather (450) so weather effects show above fog.
+      // isolation:isolate is required so that the mix-blend-mode:destination-out on the
+      // reveal layer only composites against the fog rectangle within this pane, not the
+      // entire map below it.
       this.fogPane = worldmap.map.createPane("fogPane");
       this.fogPane.style.zIndex = 420;
       this.fogPane.style.pointerEvents = "none";
+      this.fogPane.style.isolation = "isolate";
 
-      // Full fog overlay - reduced opacity from 0.75 to 0.55 for better visibility
-      this.fogLayer = L.rectangle(worldmap.map.getBounds(), {
+      // Full fog overlay covering the entire world so it stays dark when the player
+      // pans or zooms out beyond the initial viewport.
+      this.fogLayer = L.rectangle([[-90, -180], [90, 180]], {
         pane: "fogPane",
         color: "#000",
         weight: 0,
