@@ -241,6 +241,7 @@
     _pendingOnOpen: false,
     _retryTimeoutId: null,     // tracks the pending retry setTimeout so it can be cancelled
     _loadingLocations: false,  // guard against concurrent loadLocations() calls
+    _hasBeenOpened: false,     // true after the first successful map render; prevents zoom-18 snap on every tab switch
 
     // delays used by pipboy.js when invalidating after a panel switch
     mapInvalidateDelayMs: 150,
@@ -368,14 +369,23 @@
 
       this.ensurePlayerPosition();
       this.initPlayerMarker();
-      this.centerOnPlayer(true);
+
+      // Only snap to zoom 18 on the very first open.  On subsequent tab
+      // switches we just invalidate the size so Leaflet repaints without
+      // resetting the user's current zoom level.
+      if (!this._hasBeenOpened) {
+        this._hasBeenOpened = true;
+        this.centerOnPlayer(true); // zoom-18 GPS snap – first open only
+      }
+
       this.renderWorldLabels();
 
-      // Only one invalidateSize call for mobile, after sizing is confirmed
+      // Invalidate size so Leaflet repaints correctly after display:none → block.
+      // The redundant setView that previously followed this call has been removed:
+      // centerOnPlayer() (above) already called setView on first open, and on
+      // subsequent opens we deliberately do NOT want to override the user's zoom.
       if (this.map) {
         this.map.invalidateSize(true);
-        const pos = this.gs.player.position;
-        this.map.setView([pos.lat, pos.lng], this.map.getZoom() || 7);
         this.updateOverlayVisibility(this.map.getZoom() || 7);
         this.updateMapStatus('Map online - Ready');
       }

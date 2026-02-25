@@ -44,7 +44,15 @@
       // QUEST HOOK: Wake Up → open_map
       Game.quests?.completeObjective("wake_up", "open_map");
 
-      if (window.Game && Game.modules?.worldmap) {
+      // Only call onOpen() when the Pip-Boy screen itself is visible.
+      // At script startup (line below module body) setActivePanel("map") is
+      // called while pipboyScreen still has the `hidden` class (display:none),
+      // so the map container has 0×0 dimensions.  Firing onOpen() then starts
+      // the 10-retry loop for nothing; the wristReady event in worldmap.js
+      // will properly trigger onOpen() after the boot screen dismisses.
+      const pipboyScreenEl = document.getElementById('pipboyScreen');
+      const screenVisible = !pipboyScreenEl || !pipboyScreenEl.classList.contains('hidden');
+      if (screenVisible && window.Game && Game.modules?.worldmap) {
         try {
           Game.modules.worldmap.onOpen();
         } catch (e) {

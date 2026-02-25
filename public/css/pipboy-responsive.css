@@ -324,9 +324,13 @@ body {
     min-width: unset;
   }
 
-  /* Adjust map height on mobile - ensure sufficient space for map to render */
+  /* Adjust map height on mobile.
+     NOTE: do NOT set an explicit height here.  #mapContainer uses
+     position:absolute with top/bottom:0 to fill its parent, so an
+     explicit height on .pipboy-map creates an over-constrained layout
+     where `bottom` is ignored and the container may be clipped.
+     min-height is enough to prevent total collapse on very short viewports. */
   .pipboy-map {
-    height: calc(100vh - 140px);
     min-height: var(--mobile-map-min-height);
   }
 
@@ -411,8 +415,9 @@ body {
     height: calc(100% - 14rem);
   }
 
+  /* Same rationale as portrait: let position:absolute inset fill the parent.
+     A fixed height would over-constrain the layout in landscape too. */
   .pipboy-map {
-    height: 50vh;
     min-height: 25rem;
   }
 }
