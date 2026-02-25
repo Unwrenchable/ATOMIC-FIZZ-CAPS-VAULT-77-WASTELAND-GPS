@@ -78,13 +78,17 @@
       return this.items.filter(predicateFn);
     },
 
-    // Basic roll using baseStats + rollRanges
+    // Basic roll using baseStats + rollRanges — uses crypto random per project standard
     rollStats(baseStats = {}, rollRanges = {}) {
       const rolled = { ...baseStats };
 
       Object.keys(rollRanges).forEach(stat => {
         const [min, max] = rollRanges[stat];
-        const delta = Math.random() * (max - min) + min;
+        // Use crypto to get a uniform float in [0, 1)
+        const randBuf = new Uint32Array(1);
+        crypto.getRandomValues(randBuf);
+        const rand = randBuf[0] / 0x100000000;
+        const delta = rand * (max - min) + min;
         const baseVal = baseStats[stat] ?? 0;
         if (Number.isInteger(baseVal) && Number.isInteger(min) && Number.isInteger(max)) {
           rolled[stat] = baseVal + Math.round(delta);
@@ -96,10 +100,12 @@
       return rolled;
     },
 
-    // Optionally roll a variant (for weapons mostly)
+    // Optionally roll a variant (for weapons mostly) — uses crypto random
     rollVariant(item) {
       if (!item || !Array.isArray(item.variants) || !item.variants.length) return null;
-      const idx = Math.floor(Math.random() * item.variants.length);
+      const randBuf = new Uint32Array(1);
+      crypto.getRandomValues(randBuf);
+      const idx = randBuf[0] % item.variants.length;
       return item.variants[idx];
     }
   };
