@@ -78,7 +78,9 @@
     bootTextEl.textContent += frames[index] + "\n";
     index++;
 
-    const delay = 40 + Math.random() * 50;
+    const randBuf = new Uint32Array(1);
+    crypto.getRandomValues(randBuf);
+    const delay = 40 + (randBuf[0] % 51); // 40–90ms, uniform integer
     setTimeout(typeNext, delay);
   }
 
@@ -246,7 +248,9 @@ function startLoadingSequence() {
   let percent = 0;
 
   function step() {
-    percent += Math.floor(Math.random() * 15) + 5;
+    const stepRoll = new Uint32Array(1);
+    crypto.getRandomValues(stepRoll);
+    percent += (stepRoll[0] % 15) + 5; // 5–19% per step
     if (percent > 100) percent = 100;
 
     bar.style.width = percent + "%";

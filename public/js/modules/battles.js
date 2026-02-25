@@ -14,6 +14,32 @@
     init(gameState) {
       this.gs = gameState;
       this.state = null;
+      // Ensure player has an hp field (not initialized elsewhere)
+      if (this.gs && this.gs.player && typeof this.gs.player.hp !== "number") {
+        this.gs.player.hp = 100;
+        this.gs.player.maxHp = 100;
+      }
+    },
+
+    // --------------------------------------------------------
+    // Spend ammo from gameState inventory (no separate inventory module)
+    // --------------------------------------------------------
+    _spendAmmo(ammoType, amount) {
+      const inv = this.gs && this.gs.inventory;
+      if (!inv || !Array.isArray(inv.ammo)) return false;
+
+      const ammoItem = inv.ammo.find(a => a.id === ammoType || a.type === ammoType);
+      if (!ammoItem) return false;
+
+      const currentAmount = ammoItem.amount || ammoItem.quantity || 0;
+      if (currentAmount < amount) return false;
+
+      if (ammoItem.amount !== undefined) {
+        ammoItem.amount -= amount;
+      } else {
+        ammoItem.quantity -= amount;
+      }
+      return true;
     },
 
     // --------------------------------------------------------
@@ -45,10 +71,8 @@
         return { success: true, damage: weapon.damage };
       }
 
-      const ok = Game.modules.inventory.spendAmmo(
-        weapon.ammoType,
-        weapon.ammoPerShot || 1
-      );
+      // Spend ammo from gameState.inventory.ammo (no separate inventory module)
+      const ok = this._spendAmmo(weapon.ammoType, weapon.ammoPerShot || 1);
 
       if (!ok) {
         return { success: false, reason: "NO_AMMO" };
@@ -76,6 +100,12 @@
 
       const enemy = this.state.encounter.enemies[0];
       const dmg = enemy.damage || 3;
+
+      // Guard: ensure player.hp is initialized
+      if (typeof this.gs.player.hp !== "number") {
+        this.gs.player.hp = 100;
+        this.gs.player.maxHp = 100;
+      }
 
       this.gs.player.hp -= dmg;
       if (this.gs.player.hp < 0) this.gs.player.hp = 0;
@@ -223,8 +253,10 @@
       }
       if (fleeBtn) {
         fleeBtn.onclick = () => {
-          // 50% chance to escape
-          if (Math.random() < 0.5) {
+          // 50% chance to escape — use crypto random per project standard
+          const fleeRoll = new Uint32Array(1);
+          crypto.getRandomValues(fleeRoll);
+          if (fleeRoll[0] < 0x80000000) {
             msgDiv.textContent = "You escaped!";
             this.state = null;
             setTimeout(() => this.updateUI(), 1200);

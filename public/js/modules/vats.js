@@ -125,7 +125,10 @@
   }
 
   async function executeShot(shot) {
-    const roll = Math.random();
+    // Use cryptographically secure random for combat hit determination
+    const rollArr = new Uint32Array(1);
+    crypto.getRandomValues(rollArr);
+    const roll = rollArr[0] / 0xFFFFFFFF;
     const hit = roll <= shot.hitChance;
 
     if (hit) {
@@ -161,8 +164,10 @@
     // Cripple limb if applicable
     if (bodyPart.id !== 'torso' && bodyPart.id !== 'head') {
       if (!enemy.crippledLimbs) enemy.crippledLimbs = {};
-      
-      if (Math.random() < 0.3) {
+
+      const crippleRoll = new Uint32Array(1);
+      crypto.getRandomValues(crippleRoll);
+      if (crippleRoll[0] / 0xFFFFFFFF < 0.3) {
         enemy.crippledLimbs[bodyPart.id] = true;
         console.log(`[VATS] ${enemy.name}'s ${bodyPart.name} is crippled!`);
       }
@@ -171,9 +176,8 @@
     // Check for death
     if (enemy.health <= 0) {
       console.log(`[VATS] ${enemy.name} is dead!`);
-      if (window.Game && window.Game.modules && window.Game.modules.npcEncounter) {
-        window.Game.modules.npcEncounter.removeEnemy(enemy.id);
-      }
+      // npcEncounter does not have a removeEnemy method — dispatch an event instead
+      window.dispatchEvent(new CustomEvent('enemyDefeated', { detail: { enemyId: enemy.id } }));
     }
   }
 

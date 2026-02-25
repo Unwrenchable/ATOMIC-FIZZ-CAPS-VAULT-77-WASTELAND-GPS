@@ -161,7 +161,8 @@
       console.log("[NPC Encounter] NPC approaching player...");
 
       const interval = setInterval(() => {
-        if (!Game.modules.worldmap) {
+        // Clear interval if encounter was cancelled or NPC is gone
+        if (!this.activeEncounter || !Game.modules.worldmap) {
           clearInterval(interval);
           return;
         }
@@ -182,6 +183,11 @@
           this._beginDialog(npc);
         }
       }, 1000);
+
+      // Store interval reference so _finishEncounter can clear it
+      if (this.activeEncounter) {
+        this.activeEncounter._approachInterval = interval;
+      }
     },
 
     // ------------------------------------------------------------
@@ -310,6 +316,12 @@
       console.log("[NPC Encounter] Encounter complete");
 
       const enc = this.activeEncounter;
+
+      // Clear any pending approach interval before nulling the encounter
+      if (enc && enc._approachInterval) {
+        clearInterval(enc._approachInterval);
+      }
+
       this.activeEncounter = null;
 
       if (enc && typeof enc.onComplete === "function") {

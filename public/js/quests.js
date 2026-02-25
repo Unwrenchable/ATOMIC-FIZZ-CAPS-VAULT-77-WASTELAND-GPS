@@ -2,7 +2,10 @@
 // Quest data + engine (steps + objectives)
 
 (function () {
-  const gs = window.gameState;
+  // Defer gs resolution to avoid capturing undefined at load time
+  function getGs() {
+    return window.gameState || {};
+  }
 
   // ------------------------------------------------------------
   // QUEST DATABASE
@@ -61,6 +64,8 @@
   // INTERNAL HELPERS
   // ------------------------------------------------------------
   function ensureQuestState(questId) {
+    const gs = getGs();
+    if (!gs.quests) gs.quests = {};
     if (!gs.quests[questId]) {
       gs.quests[questId] = {
         state: "not_started",
@@ -105,6 +110,7 @@
   }
 
   function checkStepCompletion(questId) {
+    const gs = getGs();
     const q = QUESTS_DB[questId];
     const st = ensureQuestState(questId);
     if (!q || q.type !== "steps" || st.state !== "active") return false;
@@ -116,19 +122,24 @@
 
     // Item requirement
     if (req.item) {
+      const inv = gs.inventory || {};
       const hasItem =
-        gs.inventory.questItems.some(i => i.id === req.item) ||
-        gs.inventory.consumables.some(i => i.id === req.item) ||
-        gs.inventory.weapons.some(i => i.id === req.item) ||
-        gs.inventory.ammo.some(i => i.id === req.item);
+        (inv.questItems || []).some(i => i.id === req.item) ||
+        (inv.consumables || []).some(i => i.id === req.item) ||
+        (inv.weapons || []).some(i => i.id === req.item) ||
+        (inv.ammo || []).some(i => i.id === req.item);
 
       if (!hasItem) return false;
     }
 
-    // Location requirement
+    // Location requirement — guard against missing world module
     if (req.location) {
+      if (!window.world || typeof window.world.getNearbyPOIs !== "function") {
+        console.warn("[Quests] window.world.getNearbyPOIs not available for location check");
+        return false;
+      }
       const nearby = window.world.getNearbyPOIs(500);
-      const atLoc = nearby.some(n => n.poi.id === req.location);
+      const atLoc = nearby.some(n => n.poi && n.poi.id === req.location);
       if (!atLoc) return false;
     }
 
@@ -195,14 +206,16 @@
   // COMPLETE QUEST
   // ------------------------------------------------------------
   function completeQuest(questId) {
+    const gs = getGs();
     const q = QUESTS_DB[questId];
     const st = ensureQuestState(questId);
 
     st.state = "completed";
 
     const r = q.rewards || {};
-    gs.player.xp += r.xp || 0;
-    gs.player.caps += r.caps || 0;
+    if (!gs.player) gs.player = { xp: 0, caps: 0 };
+    gs.player.xp = (gs.player.xp || 0) + (r.xp || 0);
+    gs.player.caps = (gs.player.caps || 0) + (r.caps || 0);
 
     console.log(`[Quests] Quest completed: ${questId}`);
   }
