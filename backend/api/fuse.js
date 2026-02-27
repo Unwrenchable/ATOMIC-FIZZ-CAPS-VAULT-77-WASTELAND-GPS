@@ -76,7 +76,7 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
     // Calculate fusion result
     const fusionResult = calculateFusion(nftsToFuse, fusionType);
 
-    // BUG FIX: Check fusion core balance BEFORE modifying inventory.
+    // BUG FIX: Check and deduct fusion core balance BEFORE modifying inventory.
     // Previously the core check happened after items had already been removed and
     // the new item pushed, leaving the in-memory player object in an inconsistent
     // state if we returned an error (even though the data wasn't saved yet).
@@ -87,6 +87,9 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
           error: `Insufficient fusion cores. Required: ${fusionResult.fusionCoresRequired}, Available: ${player.scrapResources.fusionCores}`
         });
       }
+      // Deduct here — after the balance check passes but before inventory is modified,
+      // so the entire state change is consistent in one place.
+      player.scrapResources.fusionCores -= fusionResult.fusionCoresRequired;
     }
 
     // Remove fused NFTs from inventory
@@ -96,11 +99,6 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
 
     // Add fused result to inventory
     player.inventory.push(fusionResult.newItem);
-
-    // Deduct fusion cores
-    if (fusionResult.fusionCoresRequired > 0) {
-      player.scrapResources.fusionCores -= fusionResult.fusionCoresRequired;
-    }
 
     // Save updated player data — use hset to match the hash format used by player.js
     await redis.hset(playerKey, "profile", JSON.stringify(player));
