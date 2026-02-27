@@ -58,15 +58,11 @@ async function verifyPassword(inputPassword, storedPassword) {
   // This ensures constant-time comparison even for plain text passwords
   // Note: This is only for backward compatibility; production should use bcrypt hashes
   try {
-    // Create a temporary bcrypt hash of the stored plain text and compare
-    const tempHash = await bcrypt.hash(storedPassword, 10);
-    const plainMatch = await bcrypt.compare(inputPassword, tempHash);
-    
-    // Also do a direct comparison since the hash is random
-    // We need to check if the input matches the stored plain text
-    const directMatch = inputPassword === storedPassword;
-    
-    return directMatch;
+    // BUG FIX: previously computed bcrypt.compare(inputPassword, hash(storedPassword))
+    // into `plainMatch` but then returned `directMatch = inputPassword === storedPassword`
+    // — a non-constant-time comparison vulnerable to timing attacks, and `plainMatch`
+    // was silently ignored. Now use safeCompareNonPassword for constant-time comparison.
+    return safeCompareNonPassword(inputPassword, storedPassword);
   } catch (err) {
     console.error("[adminAuth] plain text comparison error:", err);
     return false;
