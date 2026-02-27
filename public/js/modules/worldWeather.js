@@ -55,19 +55,27 @@
     return worldState.weather;
   }
 
+  // Cryptographically-secure random float in [0, 1)
+  // BUG FIX: replaces Math.random() with crypto.getRandomValues() per project policy
+  function secureRandom() {
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    return arr[0] / 0x100000000;
+  }
+
   // Update global weather (called every tick or every few seconds)
   function updateGlobalWeather(worldState) {
     const weather = ensureWeather(worldState);
 
-    const roll = Math.random();
+    const roll = secureRandom();
 
     // Chance to shift global weather
     if (roll < 0.02) {
-      weather.global = GLOBAL_WEATHER[Math.floor(Math.random() * GLOBAL_WEATHER.length)];
+      weather.global = GLOBAL_WEATHER[Math.floor(secureRandom() * GLOBAL_WEATHER.length)];
     }
 
     // Radiation storm front logic
-    if (!weather.radStormFront && Math.random() < 0.005) {
+    if (!weather.radStormFront && secureRandom() < 0.005) {
       // Start a rad storm sweeping across the world
       weather.radStormFront = {
         continent: pickRandomContinent(),
@@ -76,7 +84,7 @@
       };
     } else if (weather.radStormFront) {
       // Storm intensifies or dissipates (mutually exclusive)
-      const stormRoll = Math.random();
+      const stormRoll = secureRandom();
       if (stormRoll < 0.1) {
         weather.radStormFront.intensity++;
       } else if (stormRoll < 0.15) {
@@ -101,7 +109,7 @@
     }
     
     const pool = BIOME_WEATHER[biome] || ["clear"];
-    return pool[Math.floor(Math.random() * pool.length)];
+    return pool[Math.floor(secureRandom() * pool.length)];
   }
 
   // Determine weather at a specific location
@@ -147,7 +155,7 @@
       "australia",
       "antarctica"
     ];
-    return continents[Math.floor(Math.random() * continents.length)];
+    return continents[Math.floor(secureRandom() * continents.length)];
   }
 
   // Store interval ID for cleanup

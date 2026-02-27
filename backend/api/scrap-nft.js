@@ -28,8 +28,12 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     }
 
     // Verify NFT ownership (simplified - in production would check Solana)
-    const playerKey = key("player", walletAddress);
-    const playerData = await redis.get(playerKey);
+    // BUG FIX: was calling key("player", walletAddress) — key() only accepts one
+    // argument so walletAddress was ignored, returning "afw:player" (wrong key).
+    // Also used redis.get/set (string commands) instead of redis.hget/hset (hash
+    // commands), so no player data was ever found. Corrected below.
+    const playerKey = key(`player:${walletAddress}`);
+    const playerData = await redis.hget(playerKey, "profile");
 
     if (!playerData) {
       return res.status(404).json({ error: "Player not found" });
@@ -72,7 +76,7 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     player.caps = (player.caps || 0) + scrapValue.caps;
 
     // Save updated player data
-    await redis.set(playerKey, JSON.stringify(player));
+    await redis.hset(playerKey, "profile", JSON.stringify(player));
 
     // Log the scrap operation
     const scrapLogKey = key("scrap_log", Date.now());
@@ -139,8 +143,9 @@ router.get("/resources/:walletAddress", authMiddleware, async (req, res) => {
   try {
     const { walletAddress } = req.params;
 
-    const playerKey = key("player", walletAddress);
-    const playerData = await redis.get(playerKey);
+    // BUG FIX: same wrong key and wrong Redis command as the scrap endpoint above
+    const playerKey = key(`player:${walletAddress}`);
+    const playerData = await redis.hget(playerKey, "profile");
 
     if (!playerData) {
       return res.status(404).json({ error: "Player not found" });
