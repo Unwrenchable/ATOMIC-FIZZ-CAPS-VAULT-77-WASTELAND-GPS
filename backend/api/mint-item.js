@@ -37,7 +37,16 @@ router.post('/', async (req, res) => {
       // Require admin secret for production. This prevents public abuse.
       const adminSecret = process.env.ADMIN_MINT_SECRET || '';
       const supplied = req.headers['x-admin-mint'] || req.body.adminSecret;
-      if (!adminSecret || !supplied || supplied !== adminSecret) {
+      // BUG FIX: was using `supplied !== adminSecret` which is vulnerable to timing
+      // attacks (an attacker can measure response time to enumerate the secret byte
+      // by byte). Use crypto.timingSafeEqual on SHA-256 digests for constant-time
+      // comparison, mirroring the pattern used in quests-store.js.
+      const secretOk = adminSecret && supplied && (() => {
+        const h1 = crypto.createHash('sha256').update(String(adminSecret)).digest();
+        const h2 = crypto.createHash('sha256').update(String(supplied)).digest();
+        return crypto.timingSafeEqual(h1, h2);
+      })();
+      if (!secretOk) {
         console.warn('[mint-item] blocked production mint attempt - missing or invalid admin secret');
         return res.status(403).json({ ok: false, error: 'forbidden' });
       }

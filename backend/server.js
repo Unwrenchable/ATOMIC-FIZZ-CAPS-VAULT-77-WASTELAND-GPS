@@ -310,7 +310,7 @@ app.use("/api", (req, res, next) => {
   const parts = req.path.split("/").filter(Boolean);
   if (parts.length !== 1) return next(); // only handle /api/<name>
   const name = parts[0];
-  if (!/^[a-z0-9_\-]+$/.test(name)) return next();
+  if (!/^[a-z0-9_-]+$/.test(name)) return next();
   const file = path.join(FRONTEND_DIR, "data", `${name}.json`);
   fs.stat(file, (err, stat) => {
     if (err || !stat.isFile()) return next();

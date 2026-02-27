@@ -87,7 +87,7 @@ function requireConfig(req, res, next) {
 /**
  * Check if a wallet can access Fizz.fun features
  */
-router.get("/api/fizz-fun/access/:wallet", requireConfig, async (req, res) => {
+router.get("/access/:wallet", requireConfig, async (req, res) => {
     try {
         const { wallet } = req.params;
         const walletPubkey = new PublicKey(wallet);
@@ -135,7 +135,7 @@ router.get("/api/fizz-fun/access/:wallet", requireConfig, async (req, res) => {
 /**
  * Get all tokens on Fizz.fun
  */
-router.get("/api/fizz-fun/tokens", requireConfig, async (req, res) => {
+router.get("/tokens", requireConfig, async (req, res) => {
     try {
         const { sort = "volume", limit = 50 } = req.query;
         
@@ -165,7 +165,7 @@ router.get("/api/fizz-fun/tokens", requireConfig, async (req, res) => {
 /**
  * Get single token details
  */
-router.get("/api/fizz-fun/token/:mint", requireConfig, async (req, res) => {
+router.get("/token/:mint", requireConfig, async (req, res) => {
     try {
         const { mint } = req.params;
         const mintPubkey = new PublicKey(mint);
@@ -198,7 +198,7 @@ router.get("/api/fizz-fun/token/:mint", requireConfig, async (req, res) => {
 /**
  * Calculate buy quote
  */
-router.get("/api/fizz-fun/quote/buy", requireConfig, async (req, res) => {
+router.get("/quote/buy", requireConfig, async (req, res) => {
     try {
         const { mint, solAmount } = req.query;
         
@@ -236,7 +236,7 @@ router.get("/api/fizz-fun/quote/buy", requireConfig, async (req, res) => {
 /**
  * Calculate sell quote
  */
-router.get("/api/fizz-fun/quote/sell", requireConfig, async (req, res) => {
+router.get("/quote/sell", requireConfig, async (req, res) => {
     try {
         const { mint, tokenAmount } = req.query;
         
@@ -273,7 +273,7 @@ router.get("/api/fizz-fun/quote/sell", requireConfig, async (req, res) => {
 /**
  * Admin: Launch token with USDC (pre-mainnet bootstrap)
  */
-router.post("/api/fizz-fun/admin/launch", requireConfig, async (req, res) => {
+router.post("/admin/launch", requireConfig, async (req, res) => {
     try {
         const { wallet, name, symbol, uri, signature } = req.body;
         
@@ -314,7 +314,7 @@ router.post("/api/fizz-fun/admin/launch", requireConfig, async (req, res) => {
 /**
  * Get protocol stats
  */
-router.get("/api/fizz-fun/stats", requireConfig, async (req, res) => {
+router.get("/stats", requireConfig, async (req, res) => {
     try {
         // Fetch config from chain
         const stats = await fetchProtocolStats();
