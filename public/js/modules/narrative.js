@@ -369,6 +369,12 @@
         this._activateQuest(node.offers_quest);
       }
 
+      // Handle item grants from NPC dialogue nodes
+      // Format: grant_items: [{ id, name, type, ... }] or grant_items: ["item_id"]
+      if (Array.isArray(node.grant_items) && node.grant_items.length > 0) {
+        this._grantDialogItems(node.grant_items, node.grant_from || dialog.npcName || "NPC");
+      }
+
       // End dialogue if node is terminal
       if (node.end) {
         this._typewriterRender(node.text || "", dialog, null, () => this.closeDialog());
@@ -376,6 +382,33 @@
       }
 
       this.renderNode(node, dialog);
+    },
+
+    // ============================================================
+    // NPC ITEM GRANT HELPER
+    // ============================================================
+    _grantDialogItems(items, npcName) {
+      if (!Array.isArray(items) || !items.length) return;
+
+      items.forEach(function (item) {
+        var itemObj;
+        if (typeof item === "string") {
+          // Try to resolve from items database; fall back to minimal placeholder
+          var found = Game.player && Array.isArray(Game.player.items) &&
+            Game.player.items.find(function (i) { return i.id === item; });
+          itemObj = found ? { ...found, quantity: 1 } : { id: item, name: item, type: "questItem", quantity: 1 };
+        } else {
+          itemObj = { ...item, quantity: item.quantity || 1 };
+        }
+
+        // Use unified PlayerState for persistence
+        if (Game.modules && Game.modules.PlayerState && Game.modules.PlayerState.receiveItemFromNPC) {
+          Game.modules.PlayerState.receiveItemFromNPC(itemObj, npcName);
+        } else if (Game.giveItem) {
+          Game.giveItem(itemObj, itemObj.quantity || 1);
+          console.log("[narrative] " + npcName + " gave: " + itemObj.name);
+        }
+      });
     },
 
     // ============================================================

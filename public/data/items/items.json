@@ -1,7 +1,4 @@
 [
-  /* ===========================
-     WEAPONS — BALLISTIC
-     =========================== */
   {
     "id": "vault77_sidearm",
     "name": "Vault 77 Security Sidearm",
@@ -35,10 +32,6 @@
     "value": 65,
     "description": "A heavy, improvised pistol built from scrap and stubbornness."
   },
-
-  /* ===========================
-     WEAPONS — ENERGY / PRU TECH
-     =========================== */
   {
     "id": "pru_resonance_emitter",
     "name": "PRU Resonance Emitter",
@@ -61,10 +54,6 @@
     "value": 180,
     "description": "A PRU‑grade plasma tool repurposed into a devastating energy spear."
   },
-
-  /* ===========================
-     WEAPONS — MELEE / JAX / VEGAS
-     =========================== */
   {
     "id": "jax_reinforced_gloves",
     "name": "Jax’s Reinforced Gloves",
@@ -95,10 +84,6 @@
     "value": 20,
     "description": "A leather sling designed to launch cueballs with painful accuracy."
   },
-
-  /* ===========================
-     WEAPONS — ATOMIC FIZZ PROTOTYPES
-     =========================== */
   {
     "id": "fizz_spark_wrench",
     "name": "Fizz‑Spark Wrench",
@@ -119,10 +104,6 @@
     "value": 18,
     "description": "A shattered Fizz bottle fused into a jagged cutting tool."
   },
-
-  /* ===========================
-     ARMOR — VAULT / PRU / WASTELAND
-     =========================== */
   {
     "id": "vault77_jumpsuit",
     "name": "Vault 77 Jumpsuit",
@@ -163,47 +144,143 @@
     "value": 45,
     "description": "Light armor pieced together from casino backroom scraps."
   },
-
-  /* ===========================
-     AMMO
-     =========================== */
-  { "id": "ammo_9mm", "name": "9mm Rounds", "type": "ammo", "weight": 0.01, "value": 1 },
-  { "id": "ammo_556", "name": "5.56mm Rounds", "type": "ammo", "weight": 0.01, "value": 1 },
-  { "id": "ammo_44", "name": ".44 Rounds", "type": "ammo", "weight": 0.01, "value": 2 },
-  { "id": "ammo_ecell", "name": "Energy Cells", "type": "ammo", "weight": 0.02, "value": 3 },
-  { "id": "ammo_plasma", "name": "Plasma Cartridges", "type": "ammo", "weight": 0.03, "value": 4 },
-
-  /* ===========================
-     CONSUMABLES
-     =========================== */
-  { "id": "stimpak", "name": "Stimpak", "type": "consumable", "heal": 30, "weight": 0.1, "value": 75 },
-  { "id": "radaway", "name": "RadAway", "type": "consumable", "heal": 0, "weight": 0.2, "value": 60 },
-  { "id": "dirty_water", "name": "Dirty Water", "type": "consumable", "heal": 5, "weight": 0.5, "value": 5 },
-
-  /* ===========================
-     TOOLS
-     =========================== */
-  { "id": "bobby_pin", "name": "Bobby Pin", "type": "tool", "durability": 3, "weight": 0.01, "value": 1 },
-  { "id": "wrench", "name": "Wrench", "type": "tool", "durability": 25, "weight": 2.0, "value": 10 },
-  { "id": "geiger_counter", "name": "Geiger Counter", "type": "tool", "durability": 40, "weight": 3.0, "value": 35 },
-
-  /* ===========================
-     JUNK / CRAFTING
-     =========================== */
-  { "id": "scrap_metal", "name": "Scrap Metal", "type": "junk", "weight": 0.5, "value": 2 },
-  { "id": "adhesive", "name": "Adhesive", "type": "junk", "weight": 0.1, "value": 4 },
-  { "id": "circuit_board", "name": "Circuit Board", "type": "junk", "weight": 0.3, "value": 12 },
-
-  /* ===========================
-     HOLOTAPES / NOTES / KEYS
-     =========================== */
-  { "id": "pru_log_01", "name": "PRU Log: Initial Signal", "type": "holotape", "weight": 0, "value": 0 },
-  { "id": "map_fragment", "name": "Map Fragment", "type": "note", "weight": 0, "value": 0 },
-  { "id": "vault_keycard", "name": "Vault Keycard", "type": "key", "weight": 0, "value": 0 },
-
-  /* ===========================
-     QUEST ITEMS / WORLD LOGIC
-     =========================== */
-  { "id": "humming_resonator", "name": "Humming Resonator", "type": "quest", "weight": 0, "value": 0 },
-  { "id": "region_unlock_token", "name": "Region Unlock Token", "type": "logic", "weight": 0, "value": 0 }
+  {
+    "id": "ammo_9mm",
+    "name": "9mm Rounds",
+    "type": "ammo",
+    "weight": 0.01,
+    "value": 1
+  },
+  {
+    "id": "ammo_556",
+    "name": "5.56mm Rounds",
+    "type": "ammo",
+    "weight": 0.01,
+    "value": 1
+  },
+  {
+    "id": "ammo_44",
+    "name": ".44 Rounds",
+    "type": "ammo",
+    "weight": 0.01,
+    "value": 2
+  },
+  {
+    "id": "ammo_ecell",
+    "name": "Energy Cells",
+    "type": "ammo",
+    "weight": 0.02,
+    "value": 3
+  },
+  {
+    "id": "ammo_plasma",
+    "name": "Plasma Cartridges",
+    "type": "ammo",
+    "weight": 0.03,
+    "value": 4
+  },
+  {
+    "id": "stimpak",
+    "name": "Stimpak",
+    "type": "consumable",
+    "heal": 30,
+    "weight": 0.1,
+    "value": 75
+  },
+  {
+    "id": "radaway",
+    "name": "RadAway",
+    "type": "consumable",
+    "heal": 0,
+    "weight": 0.2,
+    "value": 60
+  },
+  {
+    "id": "dirty_water",
+    "name": "Dirty Water",
+    "type": "consumable",
+    "heal": 5,
+    "weight": 0.5,
+    "value": 5
+  },
+  {
+    "id": "bobby_pin",
+    "name": "Bobby Pin",
+    "type": "tool",
+    "durability": 3,
+    "weight": 0.01,
+    "value": 1
+  },
+  {
+    "id": "wrench",
+    "name": "Wrench",
+    "type": "tool",
+    "durability": 25,
+    "weight": 2.0,
+    "value": 10
+  },
+  {
+    "id": "geiger_counter",
+    "name": "Geiger Counter",
+    "type": "tool",
+    "durability": 40,
+    "weight": 3.0,
+    "value": 35
+  },
+  {
+    "id": "scrap_metal",
+    "name": "Scrap Metal",
+    "type": "junk",
+    "weight": 0.5,
+    "value": 2
+  },
+  {
+    "id": "adhesive",
+    "name": "Adhesive",
+    "type": "junk",
+    "weight": 0.1,
+    "value": 4
+  },
+  {
+    "id": "circuit_board",
+    "name": "Circuit Board",
+    "type": "junk",
+    "weight": 0.3,
+    "value": 12
+  },
+  {
+    "id": "pru_log_01",
+    "name": "PRU Log: Initial Signal",
+    "type": "holotape",
+    "weight": 0,
+    "value": 0
+  },
+  {
+    "id": "map_fragment",
+    "name": "Map Fragment",
+    "type": "note",
+    "weight": 0,
+    "value": 0
+  },
+  {
+    "id": "vault_keycard",
+    "name": "Vault Keycard",
+    "type": "key",
+    "weight": 0,
+    "value": 0
+  },
+  {
+    "id": "humming_resonator",
+    "name": "Humming Resonator",
+    "type": "quest",
+    "weight": 0,
+    "value": 0
+  },
+  {
+    "id": "region_unlock_token",
+    "name": "Region Unlock Token",
+    "type": "logic",
+    "weight": 0,
+    "value": 0
+  }
 ]
