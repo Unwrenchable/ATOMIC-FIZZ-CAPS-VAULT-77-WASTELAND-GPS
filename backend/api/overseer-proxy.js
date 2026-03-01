@@ -2,6 +2,11 @@
 const express = require('express');
 const router = express.Router();
 
+// Maximum prompt length allowed. Prevents clients sending multi-megabyte
+// payloads that would be forwarded verbatim to the upstream AI provider,
+// causing unnecessary token consumption or denial-of-service.
+const MAX_PROMPT_LENGTH = 2000;
+
 function normalizeOutput(json) {
   if (!json) return '';
   if (Array.isArray(json)) {
@@ -18,7 +23,22 @@ function normalizeOutput(json) {
 }
 
 router.post('/ask', async (req, res) => {
-  const prompt = (req.body && req.body.prompt) || '';
+  const rawPrompt = (req.body && req.body.prompt) || '';
+
+  // BUG FIX: validate prompt type and enforce length limit before forwarding to
+  // the AI provider. Without this check a malicious client could send a
+  // multi-megabyte string, consuming upstream API quota or causing OOM.
+  if (typeof rawPrompt !== 'string') {
+    return res.status(400).json({ error: 'invalid_prompt' });
+  }
+  if (rawPrompt.length > MAX_PROMPT_LENGTH) {
+    return res.status(400).json({ error: 'prompt_too_long', maxLength: MAX_PROMPT_LENGTH });
+  }
+  const prompt = rawPrompt.trim();
+  if (!prompt) {
+    return res.status(400).json({ error: 'empty_prompt' });
+  }
+
   const apiKey = process.env.AI_API_KEY;
   const proxyUrl = process.env.AI_PROXY_URL || '';
   const model = process.env.AI_MODEL || '';

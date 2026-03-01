@@ -50,7 +50,10 @@ router.post('/check', async (req, res) => {
     if (!ok) return res.json({ ok: false, matched: false });
 
     // Mark as revealed for this wallet (so client can't re-request unlimited times)
-    const revealKey = key(`secret:revealed:${wallet}:${questId}`);
+    // BUG FIX: was key(`secret:revealed:...`) which double-prefixes the key when
+    // passed to redis.set() (the wrapper already adds the afw: prefix internally).
+    // Use a plain string so the wrapper adds exactly one prefix.
+    const revealKey = `secret:revealed:${wallet}:${questId}`;
     await redis.set(revealKey, JSON.stringify({ revealedAt: Date.now() }), { EX: 30 * 24 * 3600 });
 
     // Audit and return minimal lore text
