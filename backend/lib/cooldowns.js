@@ -22,7 +22,11 @@ async function check(player, action) {
     }
   }
 
-  await redis.set(key, now);
+  // BUG FIX: was calling redis.set(key, now) without an expiry, leaving cooldown
+  // keys in Redis permanently (they only "expire" logically when the 5s diff passes,
+  // but the key is never cleaned up). Add EX so keys self-clean after the cooldown
+  // window (10 seconds — slightly longer than the 5s threshold for safety).
+  await redis.set(key, now.toString(), { EX: 10 });
   return { ok: true };
 }
 

@@ -76,6 +76,22 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
     // Calculate fusion result
     const fusionResult = calculateFusion(nftsToFuse, fusionType);
 
+    // BUG FIX: Check and deduct fusion core balance BEFORE modifying inventory.
+    // Previously the core check happened after items had already been removed and
+    // the new item pushed, leaving the in-memory player object in an inconsistent
+    // state if we returned an error (even though the data wasn't saved yet).
+    if (fusionResult.fusionCoresRequired > 0) {
+      player.scrapResources = player.scrapResources || { fusionCores: 0 };
+      if (player.scrapResources.fusionCores < fusionResult.fusionCoresRequired) {
+        return res.status(400).json({
+          error: `Insufficient fusion cores. Required: ${fusionResult.fusionCoresRequired}, Available: ${player.scrapResources.fusionCores}`
+        });
+      }
+      // Deduct here — after the balance check passes but before inventory is modified,
+      // so the entire state change is consistent in one place.
+      player.scrapResources.fusionCores -= fusionResult.fusionCoresRequired;
+    }
+
     // Remove fused NFTs from inventory
     for (const index of indicesToRemove) {
       player.inventory.splice(index, 1);
@@ -84,22 +100,13 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
     // Add fused result to inventory
     player.inventory.push(fusionResult.newItem);
 
-    // Deduct fusion cores if required
-    if (fusionResult.fusionCoresRequired > 0) {
-      player.scrapResources = player.scrapResources || { fusionCores: 0 };
-      if (player.scrapResources.fusionCores < fusionResult.fusionCoresRequired) {
-        return res.status(400).json({
-          error: `Insufficient fusion cores. Required: ${fusionResult.fusionCoresRequired}, Available: ${player.scrapResources.fusionCores}`
-        });
-      }
-      player.scrapResources.fusionCores -= fusionResult.fusionCoresRequired;
-    }
-
     // Save updated player data — use hset to match the hash format used by player.js
     await redis.hset(playerKey, "profile", JSON.stringify(player));
 
     // Log the fusion operation
-    const fusionLogKey = key("fusion_log", Date.now());
+    // BUG FIX: key("fusion_log", Date.now()) — key() only accepts one argument so
+    // Date.now() was ignored, all logs clobbered the same "afw:fusion_log" key.
+    const fusionLogKey = key(`fusion_log:${Date.now()}`);
     await redis.set(fusionLogKey, JSON.stringify({
       walletAddress,
       nftMints,

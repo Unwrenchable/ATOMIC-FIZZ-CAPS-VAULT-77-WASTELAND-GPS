@@ -46,9 +46,19 @@
     // Create a new battle state from an encounter
     // --------------------------------------------------------
     start(encounter) {
+      // BUG FIX: validate that encounter and its enemies exist before accessing
+      // encounter.enemies[0]. Previously would throw TypeError if enemies was
+      // undefined or an empty array.
+      if (!encounter || !Array.isArray(encounter.enemies) || encounter.enemies.length === 0) {
+        console.error("[Battle] Cannot start: invalid encounter or no enemies", encounter);
+        return;
+      }
+
       this.state = {
         encounter,
-        enemyHp: [encounter.enemies[0].hp || 20] // fallback
+        // BUG FIX: was only tracking enemies[0] HP. Now tracks HP for all enemies
+        // so multi-enemy encounters don't silently ignore enemies after the first.
+        enemyHp: encounter.enemies.map(e => (typeof e.hp === 'number' ? e.hp : 20))
       };
 
       console.log("Battle started:", encounter);

@@ -20,7 +20,11 @@ const SECRET_DEFS = {
       if (!proof) return false;
       // Example: if proof.type === 'token' and token matches a stored value in Redis
       if (proof.type === 'token' && proof.value) {
-        const stored = await redis.get(key(`secret:token:${proof.value}`));
+        // BUG FIX: was redis.get(key(`secret:token:...`)) — since the wrapper's get()
+        // internally calls key(), this double-prefixed to afw:afw:secret:token:... while
+        // quests-store.js writes tokens via redis.set("secret:token:...", ...) which
+        // results in afw:secret:token:... Keys never matched, token proofs always failed.
+        const stored = await redis.get(`secret:token:${proof.value}`);
         return !!stored;
       }
       // Example: location-based proof
