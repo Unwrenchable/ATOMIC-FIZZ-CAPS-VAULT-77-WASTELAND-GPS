@@ -171,8 +171,12 @@ router.post('/prove', proveRateLimiter, async (req, res) => {
 
       if (stored) {
         // mark quest proof for player
+        // BUG FIX: previously stored `{ provenAt, proof }` which embeds the raw
+        // proof.value (secret token) into Redis. If Redis is compromised, all
+        // secret tokens would be exposed. Only persist audit metadata, not the
+        // sensitive token value itself.
         const k = key(`quests:proof:${wallet}:${questId}`);
-        await redis.set(k, JSON.stringify({ provenAt: Date.now(), proof }), { EX: 30 * 24 * 3600 });
+        await redis.set(k, JSON.stringify({ provenAt: Date.now(), proofType: proof.type }), { EX: 30 * 24 * 3600 });
         return res.json({ ok: true, proven: true });
       }
 
@@ -184,7 +188,8 @@ router.post('/prove', proveRateLimiter, async (req, res) => {
       // For example, vault77 location proof
       if (questId === 'saitama_main_arc' && proof.id === 'vault77') {
         const k = key(`quests:proof:${wallet}:${questId}`);
-        await redis.set(k, JSON.stringify({ provenAt: Date.now(), proof }), { EX: 30 * 24 * 3600 });
+        // BUG FIX: same as token proof above — only store audit metadata, not the raw proof.
+        await redis.set(k, JSON.stringify({ provenAt: Date.now(), proofType: proof.type }), { EX: 30 * 24 * 3600 });
         return res.json({ ok: true, proven: true });
       }
       return res.status(400).json({ ok: false, proven: false, error: 'invalid_location' });

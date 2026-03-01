@@ -9,6 +9,7 @@ const rateLimit = require("express-rate-limit");
 const router = express.Router();
 
 const { redis, key } = require("../lib/redis");
+const { authMiddleware } = require("../lib/auth");
 
 const DEFAULT_SPECIAL = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
 
@@ -105,23 +106,40 @@ router.get("/:wallet", playerLimiter, async (req, res) => {
 
 // ------------------------------------------------------------
 // POST /api/player/special/update
+// BUG FIX: Added authMiddleware so only the authenticated player can update
+// their own SPECIAL stats.  Previously any caller could overwrite any wallet's
+// SPECIAL by supplying an arbitrary wallet address in the request body.
 // ------------------------------------------------------------
-router.post("/special/update", playerLimiter, async (req, res) => {
+router.post("/special/update", authMiddleware, playerLimiter, async (req, res) => {
   try {
-    const { wallet, special } = req.body;
-
-    if (!wallet || typeof wallet !== "string" || wallet.length > 128) {
-      return res.status(400).json({ ok: false, error: "Invalid wallet" });
-    }
+    // BUG FIX: wallet comes from the verified session, not req.body
+    const wallet = req.player.wallet;
+    const { special } = req.body;
 
     if (!special || typeof special !== "object") {
       return res.status(400).json({ ok: false, error: "Invalid special object" });
     }
 
+    // Validate each SPECIAL stat is in [1, 10] range
+    const SPECIAL_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
+    for (const stat of SPECIAL_KEYS) {
+      const val = special[stat];
+      if (val !== undefined) {
+        if (typeof val !== "number" || !Number.isFinite(val) || val < 1 || val > 10) {
+          return res.status(400).json({ ok: false, error: `Invalid SPECIAL value for ${stat}` });
+        }
+      }
+    }
+
     const profile = await loadProfile(wallet);
     if (!profile) return res.status(404).json({ ok: false, error: "not found" });
 
-    profile.special = special;
+    // Only update recognised SPECIAL keys to avoid arbitrary property injection
+    const sanitizedSpecial = {};
+    SPECIAL_KEYS.forEach(k => {
+      sanitizedSpecial[k] = typeof special[k] === "number" ? Math.min(10, Math.max(1, Math.floor(special[k]))) : (profile.special?.[k] ?? 5);
+    });
+    profile.special = sanitizedSpecial;
     await saveProfile(wallet, profile);
 
     return res.json({ ok: true, profile });
@@ -133,14 +151,13 @@ router.post("/special/update", playerLimiter, async (req, res) => {
 
 // ------------------------------------------------------------
 // POST /api/player/terminal/unlock
+// BUG FIX: Added authMiddleware so only the authenticated player can unlock
+// their own terminal.  Previously any caller could unlock any wallet's terminal.
 // ------------------------------------------------------------
-router.post("/terminal/unlock", playerLimiter, async (req, res) => {
+router.post("/terminal/unlock", authMiddleware, playerLimiter, async (req, res) => {
   try {
-    const { wallet } = req.body;
-
-    if (!wallet || typeof wallet !== "string" || wallet.length > 128) {
-      return res.status(400).json({ ok: false, error: "Invalid wallet" });
-    }
+    // BUG FIX: wallet comes from the verified session, not req.body
+    const wallet = req.player.wallet;
 
     const profile = await loadProfile(wallet);
     if (!profile) return res.status(404).json({ ok: false, error: "not found" });
@@ -157,14 +174,11 @@ router.post("/terminal/unlock", playerLimiter, async (req, res) => {
 
 // ------------------------------------------------------------
 // POST /api/player/respec
+// BUG FIX: Added authMiddleware – wallet from session, not body.
 // ------------------------------------------------------------
-router.post("/respec", playerLimiter, async (req, res) => {
+router.post("/respec", authMiddleware, playerLimiter, async (req, res) => {
   try {
-    const { wallet } = req.body;
-
-    if (!wallet || typeof wallet !== "string" || wallet.length > 128) {
-      return res.status(400).json({ ok: false, error: "Invalid wallet" });
-    }
+    const wallet = req.player.wallet;
 
     const profile = await loadProfile(wallet);
     if (!profile) return res.status(404).json({ ok: false, error: "not found" });
