@@ -390,7 +390,7 @@
 
       messageEl.innerHTML = `
         <span class="chat-timestamp">[${time}]</span>
-        <span class="chat-username">${message.username}:</span>
+        <span class="chat-username">${this.escapeHtml(message.username)}:</span>
         <span class="chat-text">${this.escapeHtml(message.message)}</span>
       `;
 

@@ -6,8 +6,11 @@
 
 const express = require("express");
 const router = express.Router();
+const crypto = require("crypto");
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
+
+const SCRAP_LOG_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
 
 // Rate limiting for scrap operations
 const scrapLimiter = require("express-rate-limit")({
@@ -19,19 +22,19 @@ const scrapLimiter = require("express-rate-limit")({
 // Scrap an NFT for resources
 router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
   try {
-    const { nftMint, walletAddress } = req.body;
+    const { nftMint } = req.body;
+    // SECURITY FIX: use wallet from verified session, not from req.body.walletAddress.
+    // Previously an authenticated player could specify any wallet and scrap (destroy)
+    // another player's NFTs — a classic IDOR exploit.
+    const walletAddress = req.player.wallet;
 
-    if (!nftMint || !walletAddress) {
+    if (!nftMint || typeof nftMint !== "string" || nftMint.length > 128) {
       return res.status(400).json({
-        error: "Missing required fields: nftMint, walletAddress"
+        error: "Missing or invalid nftMint"
       });
     }
 
     // Verify NFT ownership (simplified - in production would check Solana)
-    // BUG FIX: was calling key("player", walletAddress) — key() only accepts one
-    // argument so walletAddress was ignored, returning "afw:player" (wrong key).
-    // Also used redis.get/set (string commands) instead of redis.hget/hset (hash
-    // commands), so no player data was ever found. Corrected below.
     const playerKey = key(`player:${walletAddress}`);
     const playerData = await redis.hget(playerKey, "profile");
 
@@ -46,7 +49,7 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
       item.mint === nftMint || item.id === nftMint
     );
 
-    if (nftIndex === -1) {
+    if (nftIndex === undefined || nftIndex === -1) {
       return res.status(404).json({ error: "NFT not found in inventory" });
     }
 
@@ -59,18 +62,24 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     player.inventory.splice(nftIndex, 1);
 
     // Add scrap resources to player
-    player.scrapResources = player.scrapResources || {
-      common: 0,
-      uncommon: 0,
-      rare: 0,
-      epic: 0,
-      legendary: 0,
-      fusionCores: 0
-    };
+    // SECURITY FIX: initialise with explicit allowed keys and only write into
+    // known rarity slots. Previously `player.scrapResources[rarity]` was
+    // written directly using a rarity string taken from stored NFT data —
+    // if that string was "__proto__" or "constructor", it would pollute the
+    // object prototype (prototype pollution).
+    const ALLOWED_RARITIES = ["common", "uncommon", "rare", "epic", "legendary"];
+    if (!player.scrapResources) {
+      player.scrapResources = { common: 0, uncommon: 0, rare: 0, epic: 0, legendary: 0, fusionCores: 0 };
+    }
 
-    const rarity = (nft.rarity || 'common').toLowerCase();
-    player.scrapResources[rarity] += scrapValue.resources;
-    player.scrapResources.fusionCores += scrapValue.fusionCores;
+    const rarity = (nft.rarity || "common").toLowerCase();
+    if (ALLOWED_RARITIES.includes(rarity)) {
+      player.scrapResources[rarity] = (player.scrapResources[rarity] || 0) + scrapValue.resources;
+    } else {
+      // Unknown rarity: treat as common
+      player.scrapResources.common = (player.scrapResources.common || 0) + scrapValue.resources;
+    }
+    player.scrapResources.fusionCores = (player.scrapResources.fusionCores || 0) + scrapValue.fusionCores;
 
     // Update player caps reward
     player.caps = (player.caps || 0) + scrapValue.caps;
@@ -79,15 +88,17 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     await redis.hset(playerKey, "profile", JSON.stringify(player));
 
     // Log the scrap operation
-    const scrapLogKey = key("scrap_log", Date.now());
+    // SECURITY FIX: key("scrap_log", Date.now()) — key() only accepts ONE argument;
+    // Date.now() was silently ignored, so every scrap operation wrote to the same
+    // "afw:scrap_log" key, clobbering all previous logs. Use a template literal.
+    const scrapLogKey = `scrap_log:${Date.now()}:${crypto.randomBytes(8).toString("hex")}`;
     await redis.set(scrapLogKey, JSON.stringify({
       walletAddress,
       nftMint,
       nftName: nft.name,
       scrapValue,
       timestamp: new Date().toISOString()
-    }));
-    await redis.expire(scrapLogKey, 60 * 60 * 24 * 30); // 30 days
+    }), { EX: SCRAP_LOG_TTL_SECONDS }); // set with TTL atomically
 
     res.json({
       success: true,
@@ -138,12 +149,16 @@ function calculateScrapValue(nft) {
   };
 }
 
-// Get player's scrap resources
+// Get player's scrap resources — own wallet only
 router.get("/resources/:walletAddress", authMiddleware, async (req, res) => {
   try {
     const { walletAddress } = req.params;
 
-    // BUG FIX: same wrong key and wrong Redis command as the scrap endpoint above
+    // SECURITY FIX: prevent one player from reading another player's resource data.
+    if (walletAddress !== req.player.wallet) {
+      return res.status(403).json({ error: "Forbidden: can only view your own resources" });
+    }
+
     const playerKey = key(`player:${walletAddress}`);
     const playerData = await redis.hget(playerKey, "profile");
 

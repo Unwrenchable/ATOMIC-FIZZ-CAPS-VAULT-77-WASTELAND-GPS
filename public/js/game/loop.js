@@ -71,6 +71,20 @@
   }
 
   // ------------------------------------------------------------
+  // Secure RNG helper
+  // BUG FIX: replaced all Math.random() calls with crypto.getRandomValues()
+  // per coding standards ("No Math.random()"). Math.random() is a pseudo-RNG
+  // that is not cryptographically secure and can be predictable in some
+  // JavaScript engine implementations; crypto.getRandomValues() uses the
+  // browser's CSPRNG, making tick rolls unguessable by external observers.
+  // ------------------------------------------------------------
+  const _rngBuf = new Uint32Array(1); // reused buffer — avoids per-call allocation
+  function _secureRandom() {
+    crypto.getRandomValues(_rngBuf);
+    return _rngBuf[0] / 0x100000000; // float in [0, 1)
+  }
+
+  // ------------------------------------------------------------
   // World Tick
   // ------------------------------------------------------------
   function worldTick() {
@@ -105,7 +119,7 @@
     const hasInstabilityMethods =
       typeof WorldState.getGlobalInstability === "function" &&
       typeof WorldState.setGlobalInstability === "function";
-    if (hasInstabilityMethods && Math.random() < 0.05) {
+    if (hasInstabilityMethods && _secureRandom() < 0.05) {
       const instability = WorldState.getGlobalInstability() + 0.01;
       WorldState.setGlobalInstability(instability);
     }
@@ -116,15 +130,15 @@
       typeof WorldState.setAnomalyLevel === "function";
     if (hasAnomalyMethods) {
       const anomaly = WorldState.getAnomalyLevel(regionId);
-      if (Math.random() < 0.1) {
-        const drift = Math.max(0, Math.min(1, anomaly + (Math.random() * 0.1 - 0.05)));
+      if (_secureRandom() < 0.1) {
+        const drift = Math.max(0, Math.min(1, anomaly + (_secureRandom() * 0.1 - 0.05)));
         WorldState.setAnomalyLevel(regionId, drift);
       }
     }
 
     // 5. Random encounter (guard: Encounters may not be available)
     const canRollEncounter = Encounters && typeof Encounters.rollEncounter === "function";
-    if (canRollEncounter && Math.random() < ENCOUNTER_CHANCE) {
+    if (canRollEncounter && _secureRandom() < ENCOUNTER_CHANCE) {
       const encounter = Encounters.rollEncounter();
       const key = getEncounterKey(encounter);
       const now = Date.now();

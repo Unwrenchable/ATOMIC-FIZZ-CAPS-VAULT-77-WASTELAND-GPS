@@ -12,12 +12,12 @@
   // The jumpsuit is already equipped (player wakes up wearing it)
   // ============================================================
   const STARTER_GEAR = [
-    { id: "vault77_sidearm", name: "Security Sidearm", type: "weapon", equipped: false },
-    { id: "vault77_jumpsuit", name: "Wasteland Jumpsuit", type: "armor", equipped: true },
-    { id: "stimpak", name: "Stimpak", type: "consumable", quantity: 3 },
-    { id: "dirty_water", name: "Dirty Water", type: "consumable", quantity: 2 },
-    { id: "bobby_pin", name: "Bobby Pin", type: "tool", quantity: 5 },
-    { id: "ammo_9mm", name: "9mm Rounds", type: "ammo", quantity: 24 }
+    { id: "vault77_sidearm", name: "Vault 77 Security Sidearm", type: "weapon", category: "pistol", damage: 22, ammoType: "ammo_9mm", weight: 3.2, value: 55, description: "Standard-issue sidearm carried by Vault 77 security personnel.", equipped: false },
+    { id: "vault77_jumpsuit", name: "Vault 77 Jumpsuit", type: "armor", slot: "chest", armor: 5, weight: 2, value: 15, description: "Standard-issue blue and yellow jumpsuit. Minimal protection, surprisingly comfortable.", equipped: true },
+    { id: "stimpak", name: "Stimpak", type: "consumable", heal: 30, weight: 0.1, value: 75, quantity: 3 },
+    { id: "dirty_water", name: "Dirty Water", type: "consumable", heal: 5, weight: 0.5, value: 5, quantity: 2 },
+    { id: "bobby_pin", name: "Bobby Pin", type: "tool", durability: 3, weight: 0.01, value: 1, quantity: 5 },
+    { id: "ammo_9mm", name: "9mm Rounds", type: "ammo", weight: 0.01, value: 1, quantity: 24 }
   ];
 
   // ============================================================
@@ -264,6 +264,33 @@
       localStorage.setItem(starterKey, "true");
       this.starterGearGiven = true;
       this.saveEquippedItems();
+
+      // Sync starter gear into PlayerState so inventory-ui.js can display and
+      // equip items (PlayerState is the source of truth for the flat inventory).
+      if (Game.modules?.PlayerState?.addItem) {
+        STARTER_GEAR.forEach(function (item) {
+          const invItem = {
+            id: item.id,
+            name: item.name,
+            type: item.type,
+            quantity: item.quantity || 1,
+            damage: item.damage,
+            armor: item.armor,
+            category: item.category,
+            slot: item.slot,
+            ammoType: item.ammoType,
+            weight: item.weight,
+            value: item.value,
+            description: item.description
+          };
+          Game.modules.PlayerState.addItem(invItem, item.quantity || 1);
+          // Auto-equip items flagged as equipped at start (jumpsuit)
+          if (item.equipped) {
+            Game.modules.PlayerState.equipItem(invItem);
+          }
+        });
+        console.log("[quests] Starter gear synced into PlayerState");
+      }
 
       // Dispatch event for UI to update
       window.dispatchEvent(new CustomEvent("inventoryUpdated", { detail: { reason: "starter_gear" } }));

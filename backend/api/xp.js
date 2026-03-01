@@ -25,6 +25,12 @@ const xpLimiter = rateLimit({
 // ------------------------------------------------------------
 // POST /api/xp/award
 // ------------------------------------------------------------
+// Maximum XP a player may award themselves per API call.
+// Keeps the endpoint useful for legitimate game events (quest completion,
+// exploration bonuses, etc.) while preventing a player from awarding
+// themselves astronomical amounts in a single request.
+const MAX_XP_PER_AWARD = 500;
+
 router.post("/award", authMiddleware, xpLimiter, async (req, res) => {
   try {
     const { amount } = req.body;
@@ -32,16 +38,19 @@ router.post("/award", authMiddleware, xpLimiter, async (req, res) => {
 
     // -----------------------------
     // Input validation
+    // SECURITY FIX: cap was 1,000,000 — far too high for a player-callable
+    // endpoint.  An authenticated player could award themselves a million XP
+    // per request (10 req/10s = 10M XP/s).  Capped to MAX_XP_PER_AWARD.
     // -----------------------------
     if (
       typeof amount !== "number" ||
       !Number.isFinite(amount) ||
       amount <= 0 ||
-      amount > 1_000_000
+      amount > MAX_XP_PER_AWARD
     ) {
       return res
         .status(400)
-        .json({ ok: false, error: "Invalid XP amount" });
+        .json({ ok: false, error: `Invalid XP amount (max ${MAX_XP_PER_AWARD})` });
     }
 
     if (!player || !player.wallet || typeof player.wallet !== "string") {
