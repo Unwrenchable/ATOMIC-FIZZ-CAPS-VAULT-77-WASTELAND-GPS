@@ -2,6 +2,14 @@ const express = require("express");
 const path = require("path");
 const router = express.Router();
 const { redis, key } = require("../lib/redis");
+const { authMiddleware } = require("../lib/auth");
+
+// Maximum rewards allowed per quest completion (server-side caps)
+// Prevents a client from self-awarding unlimited XP/caps by injecting values.
+const MAX_QUEST_XP   = 1000;
+const MAX_QUEST_CAPS = 500;
+// Maximum number of item IDs a client may claim per quest reward
+const MAX_QUEST_ITEMS = 5;
 
 // GET /api/quests - Return quests.json data
 router.get("/", (req, res) => {
@@ -15,13 +23,14 @@ router.get("/", (req, res) => {
 });
 
 // POST /api/quests/accept - Accept a quest
-router.post("/accept", async (req, res) => {
+// BUG FIX: added authMiddleware so only authenticated players can accept quests
+// on their own account.  Previously any caller could accept quests for any wallet.
+router.post("/accept", authMiddleware, async (req, res) => {
   try {
-    const { wallet, questId } = req.body;
-
-    if (!wallet || typeof wallet !== "string") {
-      return res.status(400).json({ ok: false, error: "Invalid wallet" });
-    }
+    // BUG FIX: use wallet from the verified session, not the untrusted request body.
+    // The body may contain an arbitrary wallet address supplied by a malicious client.
+    const wallet = req.player.wallet;
+    const { questId } = req.body;
 
     if (!questId || typeof questId !== "string") {
       return res.status(400).json({ ok: false, error: "Invalid quest ID" });
@@ -78,13 +87,18 @@ router.post("/accept", async (req, res) => {
 });
 
 // POST /api/quests/complete - Complete a quest
-router.post("/complete", async (req, res) => {
+// BUG FIX (CRITICAL): Added authMiddleware and reward validation.
+// Previously any caller could (1) complete quests for any wallet and
+// (2) self-award unlimited XP/caps/items by supplying arbitrary reward values
+// in the request body.  Fixes applied:
+//   a) authMiddleware – wallet comes from the verified session, not the body.
+//   b) reward caps   – XP ≤ MAX_QUEST_XP, caps ≤ MAX_QUEST_CAPS.
+//   c) item limit    – at most MAX_QUEST_ITEMS item IDs accepted from the client;
+//      each item ID must be a non-empty string ≤ 64 chars (no raw HTML/scripts).
+router.post("/complete", authMiddleware, async (req, res) => {
   try {
-    const { wallet, questId, rewards } = req.body;
-
-    if (!wallet || typeof wallet !== "string") {
-      return res.status(400).json({ ok: false, error: "Invalid wallet" });
-    }
+    const wallet = req.player.wallet;
+    const { questId, rewards } = req.body;
 
     if (!questId || typeof questId !== "string") {
       return res.status(400).json({ ok: false, error: "Invalid quest ID" });
@@ -119,10 +133,12 @@ router.post("/complete", async (req, res) => {
     player.quests.completedAt = player.quests.completedAt || {};
     player.quests.completedAt[questId] = Date.now();
 
-    // Award rewards if provided
-    if (rewards) {
-      if (rewards.xp) {
-        player.xp = (player.xp || 0) + rewards.xp;
+    // Award rewards if provided — with server-side caps to prevent exploit
+    if (rewards && typeof rewards === "object") {
+      if (typeof rewards.xp === "number" && rewards.xp > 0) {
+        // BUG FIX: cap XP to server-enforced maximum per quest completion
+        const xpToAward = Math.min(Math.floor(rewards.xp), MAX_QUEST_XP);
+        player.xp = (player.xp || 0) + xpToAward;
         // Check for level up
         const xpPerLevel = 100;
         while (player.xp >= player.level * xpPerLevel) {
@@ -130,12 +146,18 @@ router.post("/complete", async (req, res) => {
           player.level += 1;
         }
       }
-      if (rewards.caps) {
-        player.caps = (player.caps || 0) + rewards.caps;
+      if (typeof rewards.caps === "number" && rewards.caps > 0) {
+        // BUG FIX: cap caps to server-enforced maximum per quest completion
+        const capsToAward = Math.min(Math.floor(rewards.caps), MAX_QUEST_CAPS);
+        player.caps = (player.caps || 0) + capsToAward;
       }
-      if (rewards.items && Array.isArray(rewards.items)) {
+      if (Array.isArray(rewards.items)) {
         if (!player.inventory) player.inventory = [];
-        rewards.items.forEach(itemId => {
+        // BUG FIX: limit number of items and validate each item ID
+        const validItems = rewards.items
+          .filter(id => typeof id === "string" && id.length > 0 && id.length <= 64 && /^[a-zA-Z0-9_-]+$/.test(id))
+          .slice(0, MAX_QUEST_ITEMS);
+        validItems.forEach(itemId => {
           const existing = player.inventory.find(i => i.id === itemId);
           if (existing) {
             existing.quantity = (existing.quantity || 1) + 1;
