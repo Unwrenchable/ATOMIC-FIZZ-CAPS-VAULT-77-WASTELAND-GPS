@@ -6,6 +6,7 @@
 
 const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
+const { authMiddleware } = require("../lib/auth");
 const { chooseEnding } = require("../lib/quests");
 
 // ------------------------------------------------------------
@@ -21,18 +22,19 @@ const endingLimiter = rateLimit({
 
 // ------------------------------------------------------------
 // POST /api/quest-endings/
+// SECURITY FIX: added authMiddleware — previously any unauthenticated caller
+// could POST any wallet address and trigger quest endings for any player,
+// altering progression state without owning the account.
 // ------------------------------------------------------------
-router.post("/", endingLimiter, async (req, res) => {
+router.post("/", authMiddleware, endingLimiter, async (req, res) => {
   try {
-    const { player, questId, endingId } = req.body;
+    // SECURITY FIX: player wallet from verified session, not from req.body.player
+    const player = req.player.wallet;
+    const { questId, endingId } = req.body;
 
     // -----------------------------
     // Input validation
     // -----------------------------
-    if (!player || typeof player !== "string" || player.length > 128) {
-      return res.status(400).json({ ok: false, error: "Invalid player" });
-    }
-
     if (!questId || typeof questId !== "string" || questId.length > 128) {
       return res.status(400).json({ ok: false, error: "Invalid questId" });
     }
@@ -45,7 +47,7 @@ router.post("/", endingLimiter, async (req, res) => {
     // Execute ending selection
     // -----------------------------
     const result = await chooseEnding(
-      player.trim(),
+      player,
       questId.trim(),
       endingId.trim()
     );
