@@ -305,11 +305,20 @@
       return false;
     }
 
-    // Check if stackable item already exists
+    // Check if item already exists
     const existing = _state.inventory.find(i => i.id === item.id);
     
-    if (existing && (item.stackable !== false)) {
-      // Stack the item
+    // Weapons and armor are unique — never stack or duplicate
+    const isUnique = item.type === "weapon" || item.type === "armor";
+
+    if (existing) {
+      if (isUnique || item.stackable === false) {
+        // Already owned and non-stackable — skip silently.
+        // No save needed since inventory is unchanged.
+        console.log(`[PlayerState] ${item.name} already owned, skipping duplicate`);
+        return true;
+      }
+      // Stack consumable / ammo / tool etc.
       existing.quantity = (existing.quantity || 1) + quantity;
       console.log(`[PlayerState] Stacked ${quantity}x ${item.name} (total: ${existing.quantity})`);
     } else {

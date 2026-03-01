@@ -793,11 +793,32 @@
         });
       }
 
+      // For the wake_up quest: auto-complete objectives that are already satisfied
+      // (e.g. player may have equipped the sidearm from starter gear before accepting)
+      if (questId === "wake_up") {
+        this._checkWakeUpPrecompletedObjectives(st);
+      }
+
       // CRITICAL FIX: Save quest state after starting
       this.saveQuestState();
 
       console.log("[quests] Quest started:", questId);
       return true;
+    },
+
+    // For objective-based quests (like wake_up)
+    // Check objectives that may already be satisfied before the quest was formally started
+    _checkWakeUpPrecompletedObjectives(st) {
+      try {
+        const psState = Game.modules?.PlayerState?.getState?.();
+        // equip_weapon: already equipped something?
+        if (psState && psState.equipped && psState.equipped.weapon) {
+          st.objectives.equip_weapon = true;
+          console.log("[quests] wake_up: equip_weapon pre-completed (weapon already equipped)");
+        }
+      } catch (e) {
+        console.warn("[quests] wake_up pre-check failed:", e);
+      }
     },
 
     // For objective-based quests (like wake_up)
@@ -840,6 +861,7 @@
       
       // Persist to backend if wallet is connected
       const wallet = window.PLAYER_WALLET || null;
+      let backendAppliedRewards = false;
       if (wallet && Game.modules?.ApiClient?.completeQuest) {
         try {
           const result = await Game.modules.ApiClient.completeQuest(wallet, questId, r);
@@ -853,6 +875,7 @@
               state.level = player.level;
               Game.modules.PlayerState.save();
             }
+            backendAppliedRewards = true;
             console.log("[quests] Backend quest completion synced");
           } else {
             console.warn("[quests] Backend complete failed, continuing locally");
@@ -862,8 +885,8 @@
         }
       }
       
-      // Award XP using unified PlayerState (if backend didn't handle it)
-      if (r.xp && !wallet) {
+      // Award XP locally — only if backend didn't already handle it
+      if (!backendAppliedRewards && r.xp) {
         if (Game.modules?.PlayerState?.awardXP) {
           Game.modules.PlayerState.awardXP(r.xp);
         } else {
@@ -876,8 +899,8 @@
         }
       }
       
-      // Award caps using unified PlayerState (if backend didn't handle it)
-      if (r.caps && !wallet) {
+      // Award caps locally — only if backend didn't already handle it
+      if (!backendAppliedRewards && r.caps) {
         if (Game.modules?.PlayerState?.awardCaps) {
           Game.modules.PlayerState.awardCaps(r.caps);
         } else {
@@ -958,6 +981,13 @@
 
       // CRITICAL FIX: Save quest state after completion
       this.saveQuestState();
+
+      // Set GAME_STATE flag for narrative system (enables courier_quest_complete / siren_quest_complete nodes)
+      if (questId === "wake_up") {
+        if (window.GAME_STATE && window.GAME_STATE.flags) {
+          window.GAME_STATE.flags.wake_up_complete = true;
+        }
+      }
 
       console.log("[quests] Quest completed:", questId);
       
