@@ -767,6 +767,15 @@
         dialogPanel.style.display = "none";
       }
 
+      // If closing the Siren dialogue, chain to Courier dialogue for first-time players
+      if (closingDialogId === "dialog_siren") {
+        if (typeof window._bootTriggerCourierDialogue === "function") {
+          setTimeout(() => {
+            window._bootTriggerCourierDialogue();
+          }, 400);
+        }
+      }
+
       // If closing the courier dialogue, start the wake_up quest
       if (closingDialogId === "dialog_courier") {
         if (Game.modules?.quests?.startQuest) {
