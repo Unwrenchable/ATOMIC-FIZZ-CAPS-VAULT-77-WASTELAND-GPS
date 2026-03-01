@@ -123,18 +123,27 @@
     // NOTE: Quest initialization moved to main.js initGame() to ensure proper load order
     // Quest system needs player state to be fully initialized first
 
-    // Trigger the courier NPC dialogue for first-time players AFTER wallet connection
-    // This shows the Fallout-style NPC dialogue with the first quest
-    // Wait for BOTH game initialization AND wallet connection
+    // Trigger the Siren NPC dialogue for first-time players as soon as the game is ready.
+    // Siren is the first NPC contact — no wallet connection required.
+    // The Courier (Pip) dialogue is chained automatically after Siren closes.
     let gameReady = false;
-    let walletReady = false;
 
-    function triggerCourierIfReady() {
-      if (gameReady && walletReady) {
-        console.log("[BOOT] Game ready and wallet connected, triggering Courier dialogue");
-        setTimeout(() => {
-          triggerCourierDialogue();
-        }, 300);
+    function triggerSirenIfReady() {
+      if (gameReady) {
+        console.log("[BOOT] Game ready, scheduling Siren dialogue");
+        // Poll until the narrative module is available (guards against load-order races)
+        let attempts = 0;
+        const MAX_ATTEMPTS = 20;
+        const pollInterval = setInterval(() => {
+          attempts++;
+          if (window.Game?.modules?.narrative?.openByDialogId) {
+            clearInterval(pollInterval);
+            triggerSirenDialogue();
+          } else if (attempts >= MAX_ATTEMPTS) {
+            clearInterval(pollInterval);
+            console.warn("[BOOT] Narrative module not ready after polling, skipping Siren dialogue");
+          }
+        }, 200);
       }
     }
 
@@ -143,27 +152,15 @@
       console.log("[BOOT] Game already initialized");
       gameReady = true;
     }
-    
-    // Check if wallet is already connected (handles race condition)
-    if (window.PLAYER_WALLET) {
-      console.log("[BOOT] Wallet already connected");
-      walletReady = true;
-    }
 
     window.addEventListener("gameInitialized", () => {
       console.log("[BOOT] Game initialized");
       gameReady = true;
-      triggerCourierIfReady();
-    }, { once: true });
-
-    window.addEventListener("walletConnected", () => {
-      console.log("[BOOT] Wallet connected, ready for Courier dialogue");
-      walletReady = true;
-      triggerCourierIfReady();
+      triggerSirenIfReady();
     }, { once: true });
     
-    // Check immediately in case both are already ready
-    triggerCourierIfReady();
+    // Check immediately in case game is already ready
+    triggerSirenIfReady();
 
 
     // NOTE: worldmap.onOpen() is triggered via the wristReady event listener
@@ -182,7 +179,46 @@
   }
 
   // -----------------------------
-  // COURIER NPC DIALOGUE TRIGGER
+  // SIREN NPC DIALOGUE TRIGGER (First contact — no wallet required)
+  // -----------------------------
+  function triggerSirenDialogue() {
+    // Check if we've already seen the Siren intro
+    const sirenKey = "afc_siren_intro_seen";
+    if (localStorage.getItem(sirenKey)) {
+      console.log("[BOOT] Siren intro already seen, skipping");
+      // For returning players: still try to trigger the courier if they haven't seen it
+      triggerCourierDialogue();
+      return;
+    }
+
+    // Open the Siren NPC dialogue
+    if (window.Game?.modules?.narrative?.openByDialogId) {
+      try {
+        Game.modules.narrative.openByDialogId("dialog_siren");
+        console.log("[BOOT] Siren dialogue opened");
+        
+        // Mark as seen
+        localStorage.setItem(sirenKey, "true");
+        
+        // Also mark the flag in GAME_STATE for the narrative system
+        if (window.GAME_STATE && window.GAME_STATE.flags) {
+          window.GAME_STATE.flags.siren_intro_seen = true;
+        }
+        // Note: Courier dialogue will be triggered by narrative.js when Siren's dialog closes
+      } catch (err) {
+        console.warn("[BOOT] Failed to open Siren dialogue:", err);
+        // Fallback: try courier directly
+        triggerCourierDialogue();
+      }
+    } else {
+      console.warn("[BOOT] narrative module not available for Siren dialogue");
+      // Fallback: try courier directly
+      triggerCourierDialogue();
+    }
+  }
+
+  // -----------------------------
+  // COURIER NPC DIALOGUE TRIGGER (chained after Siren, or standalone for returning players)
   // -----------------------------
   function triggerCourierDialogue() {
     // Check if we've already seen the courier intro
@@ -212,6 +248,9 @@
       console.warn("[BOOT] narrative module not available for courier dialogue");
     }
   }
+
+  // Expose triggerCourierDialogue so narrative.js can chain it after Siren closes
+  window._bootTriggerCourierDialogue = triggerCourierDialogue;
 
 
   function onContinue() {
