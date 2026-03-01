@@ -339,6 +339,16 @@ body::after {
   .terminal-button { font-size: 15px; padding: 6px 10px; }
 }
 
+/* ── Typing indicator ──────────────────────────────────────── */
+.typing-indicator {
+  opacity: 0.7;
+  letter-spacing: 2px;
+}
+.typing-dot {
+  display: inline-block;
+  transition: opacity 0.2s;
+}
+
 /* ── CRT flicker ───────────────────────────────────────────── */
 @keyframes crt-flicker {
   0%   { opacity: 1; }

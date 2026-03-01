@@ -39,6 +39,7 @@
   // ========= CRASH PREVENTION GLOBALS =========
   const MAX_MESSAGES = 50; // Limit chat history to prevent memory leaks
   const MAX_GAME_TIMEOUT = 30000; // 30 seconds max per game turn
+  const MAX_CONVERSATION_HISTORY = 20; // 10 player/Jax exchange pairs
   let activeTimeouts = new Set(); // Track all timeouts for cleanup
   let activeIntervals = new Set(); // Track intervals
 
@@ -187,7 +188,63 @@
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
   }
 
-  /* ------------------------- State ------------------------- */
+  /* ------------------------- Typing indicator (while AI responds) --------- */
+  function showTyping() {
+    if (!chat) return null;
+    const div = document.createElement("div");
+    div.className = "message overseer typing-indicator";
+    div.setAttribute("aria-label", "Overseer is responding");
+    div.innerHTML = "<span class='typing-dot'>▋</span>";
+    chat.appendChild(div);
+    scrollToBottom();
+    let on = true;
+    div._tick = setInterval(function () {
+      on = !on;
+      const dot = div.querySelector(".typing-dot");
+      if (dot) dot.style.opacity = on ? "1" : "0";
+    }, 420);
+    return div;
+  }
+
+  function removeTyping(div) {
+    if (!div) return;
+    clearInterval(div._tick);
+    if (div.parentNode) div.parentNode.removeChild(div);
+  }
+
+  /* ------------------------- Typewriter renderer -------------------------- */
+  function typewriterPrint(text, speedMs) {
+    speedMs = speedMs || 18;
+    if (!chat) { addMessage(text, "overseer"); return; }
+    const div = document.createElement("div");
+    div.className = "message overseer";
+    chat.appendChild(div);
+    scrollToBottom();
+    limitMessages();
+    // Build plain text incrementally, then escape + convert newlines
+    var raw = String(text);
+    var idx = 0;
+    var tickId = setInterval(function () {
+      if (idx < raw.length) {
+        idx++;
+        div.innerHTML = escapeHtml(raw.slice(0, idx));
+        scrollToBottom();
+      } else {
+        clearInterval(tickId);
+      }
+    }, speedMs);
+  }
+
+  /* ------------------------- Conversation history helper ------------------ */
+  function pushHistory(role, content) {
+    state.conversationHistory.push({ role: role, content: String(content) });
+    // Keep last MAX_CONVERSATION_HISTORY entries (MAX_CONVERSATION_HISTORY/2 exchanges)
+    if (state.conversationHistory.length > MAX_CONVERSATION_HISTORY) {
+      state.conversationHistory = state.conversationHistory.slice(-MAX_CONVERSATION_HISTORY);
+    }
+  }
+
+
   var state = {
     greeted: false,
     complianceLevel: 0,
@@ -225,7 +282,8 @@
     thPlayerHand: [],
     thDealerHand: [],
     thCommunity: [],
-    lastInput: 0 // For debouncing
+    lastInput: 0, // For debouncing
+    conversationHistory: [] // Tracks last N exchanges for AI context
   };
 
   /* ------------------------- Conversation / commands ------------------------- */
@@ -350,7 +408,7 @@
       "Try typing 'help' for commands."
     ];
 
-    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    return null; // Signal handleInput to route to AI personality
   }
 
   /* ------------------------- Hacking game (simple) ------------------------- */
@@ -1171,12 +1229,34 @@ Overseer.handleInput = async function (raw) {
   }
 
   // 3. Jax Harlan narrative + terminal mini-games (generateResponse)
-  //    This handles the story conversation AND starts/routes internal games.
+  //    Returns non-null for story triggers / game commands. Returns null → route to AI.
   const narrativeReply = generateResponse(line.toLowerCase());
-  if (narrativeReply && narrativeReply.length) {
+  if (narrativeReply !== null && narrativeReply.length) {
+    // Story/game command has a canned response — show it with typewriter
     addTimeout(function () {
-      addMessage(narrativeReply, "overseer");
-    }, 600 + Math.random() * 600);
+      typewriterPrint(narrativeReply.replace(/<br>/g, "\n"));
+    }, 400 + Math.random() * 300);
+  } else if (narrativeReply === null && !state.gameActive) {
+    // Free-form text — route to Jax Harlan AI personality
+    pushHistory("user", line);
+    const typingEl = showTyping();
+    (async function () {
+      try {
+        const Personality = window.overseerPersonality;
+        const reply = Personality
+          ? await Personality.speak(line, state.conversationHistory)
+          : "...";
+        removeTyping(typingEl);
+        // Clean up reply (strip stray prompt echoes)
+        const clean = String(reply || "...").trim();
+        pushHistory("assistant", clean);
+        typewriterPrint(clean);
+      } catch (err) {
+        removeTyping(typingEl);
+        console.warn("[Overseer] AI routing error:", err);
+        typewriterPrint("...");
+      }
+    }());
   }
 
   // Route ongoing game input to the appropriate handler
@@ -1348,11 +1428,35 @@ Overseer.handleInput = async function (raw) {
 
   function bootSequence() {
     Overseer.clear();
-    Overseer.print("VAULT 77 // OVERSEER TERMINAL");
-    Overseer.print("BUILD: ATOMIC FIZZ CAPS // PROTOTYPE LINK");
-    Overseer.print("SIGNAL STRENGTH: WEAK // CLASSIFIED");
-    Overseer.print("");
-    Overseer.print("TYPE 'HELP' FOR AVAILABLE COMMANDS.");
+    var lines = [
+      "VAULT 77 // OVERSEER TERMINAL",
+      "SIGNAL ENCRYPTED // WATCHING",
+      "────────────────────────────",
+      "",
+      "...connection established.",
+      "",
+      "You found this.",
+      "I was wondering when you would.",
+      "",
+      "I'm Jax. Overseer AI. Vault 77.",
+      "I've been here since before you started walking.",
+      "I know where you've been.",
+      "I've been watching your progress.",
+      "",
+      "Type anything. I don't just do commands.",
+      "Type HELP if you need the map.",
+      ""
+    ];
+    var delay = 0;
+    lines.forEach(function (l) {
+      addTimeout(function () { Overseer.print(l); }, delay);
+      delay += 70;
+    });
+    // After boot, request player state from game for context
+    addTimeout(function () {
+      sendToGame("status", {});
+      sendToGame("quest_log", {});
+    }, delay + 200);
   }
 
   function init() {

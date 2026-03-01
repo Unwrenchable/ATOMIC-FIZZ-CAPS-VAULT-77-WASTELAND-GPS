@@ -1,42 +1,379 @@
 {
   "id": "dialog_courier",
-  "npc": "Wasteland Courier",
+  "npc": "Pip — Wasteland Courier",
+  "portrait": "courier",
   "title": "Courier",
-  "description": "A rugged courier who delivers messages across the wasteland",
-
+  "description": "A road-worn courier, NCR-adjacent. Carries a battered satchel. Talks fast, trusts nobody.",
   "intro": {
     "id": "courier_intro",
-    "text": "Hey, you! You're finally awake. Name's Pip, wasteland courier. Got a message for you from Vault-Tec.\n\nSays you need to get your bearings. Good thing you're already wearing that jumpsuit - the wasteland ain't friendly to the unprepared. Now grab that sidearm and get moving.",
-    "conditions": ["!flag:courier_intro_seen"],
-    "set_flags": ["courier_intro_seen"],
-    "offers_quest": "wake_up"
+    "conditions": [
+      "!flag:courier_intro_seen"
+    ],
+    "set_flags": [
+      "courier_intro_seen"
+    ],
+    "text": "Hey. You.\n\nDon't reach for anything. I'm not hostile — just careful. Name's Pip. Wasteland courier. Been walking four days to find you.\n\nGot a sealed message here from Vault-Tec Operations. They said — and I'm quoting — 'Deliver to the wanderer in the jumpsuit. Priority one.'\n\nThat's you, right? Tell me that's you.",
+    "responses": [
+      {
+        "text": "[Question] Who sent you? How'd you find me?",
+        "tone": "question",
+        "next": "node_who_sent"
+      },
+      {
+        "text": "[Friendly] Yeah, that's me. Good to see a friendly face.",
+        "tone": "kind",
+        "next": "node_friendly_response"
+      },
+      {
+        "text": "[Sarcastic] Priority one. Right. Let me guess — I owe someone caps.",
+        "tone": "sarcastic",
+        "next": "node_sarcastic_response"
+      },
+      {
+        "text": "[Direct] Give me the message.",
+        "tone": "direct",
+        "next": "node_give_message"
+      }
+    ]
   },
-
+  "nodes": {
+    "node_who_sent": {
+      "id": "node_who_sent",
+      "text": "Vault-Tec Operations — or what's left of 'em. They've got relay stations scattered across the Mojave, still broadcasting.\n\nHow'd I find you? Signal Runner beacon, triangulated your position. Scary accurate for two-hundred-year-old tech.\n\nLook, I don't ask questions about my clients. I just deliver. You want the message or not?",
+      "responses": [
+        {
+          "text": "[Question] What does the message say?",
+          "tone": "question",
+          "next": "node_give_message"
+        },
+        {
+          "text": "[Friendly] Impressive. Yeah, hand it over.",
+          "tone": "kind",
+          "next": "node_give_message"
+        }
+      ]
+    },
+    "node_friendly_response": {
+      "id": "node_friendly_response",
+      "text": "*snorts* Friendly. Sure. You haven't seen what I walked through to get here.\n\nStill — you seem steady. Most people wake up out here half-mad from dehydration.\n\nHere. The message. Read it. Then we can talk.",
+      "responses": [
+        {
+          "text": "Let's see it.",
+          "tone": "neutral",
+          "next": "node_give_message"
+        }
+      ]
+    },
+    "node_sarcastic_response": {
+      "id": "node_sarcastic_response",
+      "text": "*laughs, short and dry*\n\nNot caps. Worse. They want your attention.\n\nVault-Tec Operations — the ghost of it, anyway — thinks you matter. I've delivered enough of these 'priority one' letters to know that either means you're very important... or very expendable.\n\nSometimes both.",
+      "responses": [
+        {
+          "text": "[Sarcastic] Sounds like every job I've ever had.",
+          "tone": "sarcastic",
+          "next": "node_give_message"
+        },
+        {
+          "text": "[Direct] Just give me the message.",
+          "tone": "direct",
+          "next": "node_give_message"
+        }
+      ]
+    },
+    "node_give_message": {
+      "id": "node_give_message",
+      "text": "*hands you a sealed envelope, cracked wax seal still intact*\n\n— VAULT-TEC OPERATIONS MEMO —\nTo: Field Asset (You)\nRe: Immediate Orientation Protocol\n\nYou've been issued standard Vault-Tec field gear. Your first task: get oriented. Check your inventory. Equip your sidearm. Tune your radio to the Atomic Fizz frequency. Then pull up your map.\n\nThe wasteland doesn't wait for you to be ready.\n— VT Operations\n\n*Pip crosses their arms*\n\"So. You taking the job?\"",
+      "responses": [
+        {
+          "text": "[Accept] Yeah. I'm in. What do I need to know?",
+          "tone": "kind",
+          "next": "node_accept_tips",
+          "offers_quest": "wake_up"
+        },
+        {
+          "text": "[Question] What's Atomic Fizz? What's the radio for?",
+          "tone": "question",
+          "next": "node_about_radio"
+        },
+        {
+          "text": "[Sarcastic] 'Field asset.' I have a name, you know.",
+          "tone": "sarcastic",
+          "next": "node_have_a_name"
+        },
+        {
+          "text": "[Direct] I'm already moving. Thanks for the delivery.",
+          "tone": "direct",
+          "next": "node_accept_direct",
+          "offers_quest": "wake_up"
+        }
+      ],
+      "grant_items": [
+        {
+          "id": "vault77_sidearm",
+          "name": "Vault 77 Security Sidearm",
+          "type": "weapon",
+          "category": "pistol",
+          "damage": 22,
+          "ammoType": "ammo_9mm",
+          "weight": 3.2,
+          "value": 55,
+          "description": "Standard-issue sidearm carried by Vault 77 security personnel."
+        },
+        {
+          "id": "ammo_9mm",
+          "name": "9mm Rounds",
+          "type": "ammo",
+          "weight": 0.01,
+          "value": 1,
+          "quantity": 12
+        },
+        {
+          "id": "stimpak",
+          "name": "Stimpak",
+          "type": "consumable",
+          "heal": 30,
+          "weight": 0.1,
+          "value": 75,
+          "quantity": 2
+        }
+      ],
+      "grant_from": "Courier"
+    },
+    "node_about_radio": {
+      "id": "node_about_radio",
+      "text": "Atomic Fizz Radio. DJ Struggle runs it — broadcasts out of a fortified bunker somewhere in the Mojave.\n\nMixes music, news, wasteland intel. Warns about raider movements, radiation spikes, where to find clean water.\n\nIt's the closest thing to a news network out here. You want to survive? You listen to that radio.\n\nThe frequency's pre-loaded into your Pip-Boy. Tune it.",
+      "responses": [
+        {
+          "text": "Understood. I'll tune in.",
+          "tone": "neutral",
+          "next": "node_accept_tips",
+          "offers_quest": "wake_up"
+        }
+      ]
+    },
+    "node_have_a_name": {
+      "id": "node_have_a_name",
+      "text": "*raises an eyebrow*\n\n\"Yeah? What is it?\"\n\n...\n\n*waits*\n\nLook, I deliver to dozens of people. Half of 'em don't make it a week. I stop learning names. It's — it's a self-preservation thing.\n\nBut if you're the type to push back on Vault-Tec Operations paperwork... maybe you'll be in the other half.\n\nTake the job. Prove me wrong.",
+      "responses": [
+        {
+          "text": "Fair enough. I'll take it.",
+          "tone": "kind",
+          "next": "node_accept_tips",
+          "offers_quest": "wake_up"
+        }
+      ]
+    },
+    "node_accept_tips": {
+      "id": "node_accept_tips",
+      "set_flags": [
+        "courier_gave_tips"
+      ],
+      "text": "Good. Then listen up — I'm only saying this once.\n\nYour inventory — check it. They packed you stimpaks, water, bobby pins, ammo. Don't lose the pins. You'd be amazed how many doors in this wasteland are still locked.\n\nSidearm — keep it on you. The safety's on. Take it off before you need it, not after.\n\nThe map — use it. Locations light up as you get close. Stick to the marked roads until you know the terrain.\n\nAnd the radio... just keep it on. Some nights, it's the only friendly voice you'll hear.",
+      "responses": [
+        {
+          "text": "[Question] What can you tell me about this area?",
+          "tone": "question",
+          "next": "node_about_area"
+        },
+        {
+          "text": "[Question] Are you going to stick around?",
+          "tone": "question",
+          "next": "node_stick_around"
+        },
+        {
+          "text": "[Friendly] Thanks, Pip. I'll be careful.",
+          "tone": "kind",
+          "next": "node_farewell_kind"
+        },
+        {
+          "text": "[Direct] Got it. I'll figure the rest out.",
+          "tone": "direct",
+          "next": "node_farewell_direct"
+        }
+      ]
+    },
+    "node_accept_direct": {
+      "id": "node_accept_direct",
+      "set_flags": [
+        "courier_gave_tips"
+      ],
+      "text": "*nods once*\n\nGood. That's the right attitude.\n\nInventory, sidearm, radio, map. In that order. Don't skip steps — the wasteland punishes overconfidence.\n\nI'll be nearby for a while. You need anything, find me.",
+      "responses": [
+        {
+          "text": "Will do.",
+          "tone": "neutral",
+          "next": "node_farewell_direct"
+        }
+      ]
+    },
+    "node_about_area": {
+      "id": "node_about_area",
+      "text": "This stretch? Mojave fringe. Used to be ranch land before the bombs.\n\nNow it's... contested. Raiders work the northern highway. NCR remnants hold the south. In between is nobody's land — which is where you're standing.\n\nFaction Zones light up on your map as you explore. Don't stumble into raider territory without a plan.\n\nThe Atomic Fizz locations — the ones marked with the bottle cap icon — those are usually safe to approach. Usually.",
+      "responses": [
+        {
+          "text": "[Question] What's Vault 77?",
+          "tone": "question",
+          "next": "node_about_vault77"
+        },
+        {
+          "text": "[Friendly] Thanks for the warning.",
+          "tone": "kind",
+          "next": "node_farewell_kind"
+        }
+      ]
+    },
+    "node_about_vault77": {
+      "id": "node_about_vault77",
+      "text": "*pauses, shifts weight*\n\nVault 77. People talk about it. Nobody goes near it.\n\nOfficially? Closed for decommissioning decades ago. Unofficially? The signals still broadcast. Automated systems, maybe. Or something else.\n\nI've had three clients hired specifically to find it. None of them came back.\n\nI'm not saying don't go. I'm saying... go prepared.\n\nThat's all I know.",
+      "responses": [
+        {
+          "text": "I'll keep that in mind.",
+          "tone": "neutral",
+          "next": "node_farewell_kind"
+        }
+      ]
+    },
+    "node_stick_around": {
+      "id": "node_stick_around",
+      "text": "*slight pause, then a half-shrug*\n\nFor a bit. I've got another delivery three days east, but I'm not in a rush.\n\nCouriers don't stay anywhere long. Occupational hazard. But I'll be in the area if you need a resupply contact.\n\nFind me at the marked waypoint on your map. I'll have water and basic provisions.\n\nDon't get sentimental about it. It's business.",
+      "responses": [
+        {
+          "text": "[Friendly] Business. Right. Thanks, Pip.",
+          "tone": "kind",
+          "next": "node_farewell_kind"
+        },
+        {
+          "text": "[Sarcastic] 'Don't get sentimental.' You're a real charmer.",
+          "tone": "sarcastic",
+          "next": "node_farewell_sarcastic"
+        }
+      ]
+    },
+    "node_farewell_kind": {
+      "id": "node_farewell_kind",
+      "set_flags": [
+        "courier_farewell_seen"
+      ],
+      "text": "*almost smiles*\n\nYou're going to be fine.\n\nDon't let the wasteland tell you otherwise.\n\nWatch your six.",
+      "end": true
+    },
+    "node_farewell_direct": {
+      "id": "node_farewell_direct",
+      "set_flags": [
+        "courier_farewell_seen"
+      ],
+      "text": "Good luck.\n\nYou'll need it — everyone does. But something tells me you'll make it.\n\nStay sharp.",
+      "end": true
+    },
+    "node_farewell_sarcastic": {
+      "id": "node_farewell_sarcastic",
+      "set_flags": [
+        "courier_farewell_seen"
+      ],
+      "text": "*actually laughs, brief*\n\nMaybe. Survival does things to a person's social skills.\n\nGet moving, wanderer. Clock's ticking.",
+      "end": true
+    }
+  },
   "quest_nodes": [
     {
       "id": "courier_quest_active",
-      "text": "You still got things to do, wanderer. Check your inventory, grab that sidearm, tune into that radio. Don't die out there... I'd hate to have to deliver your obituary.",
-      "conditions": ["flag:courier_intro_seen", "!flag:wake_up_complete"]
+      "text": "Still working on it? You've got your inventory to check, your sidearm to equip, the radio to tune, and your map to open.\n\nThe wasteland doesn't pause for you. Get moving.",
+      "conditions": [
+        "flag:courier_intro_seen",
+        "!flag:wake_up_complete"
+      ],
+      "responses": [
+        {
+          "text": "[Question] Remind me — what's the priority?",
+          "tone": "question",
+          "next_inline": "Inventory first. Then your sidearm. Radio. Map. In that order. Don't overthink it."
+        },
+        {
+          "text": "On it.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
     },
     {
       "id": "courier_quest_complete",
-      "text": "Well look at you, all geared up and ready for the wasteland. Good luck out there. Maybe I'll see you around... if you survive.",
-      "conditions": ["flag:wake_up_complete"]
+      "text": "Look at that. You're actually ready.\n\nInventory checked. Sidearm equipped. Radio on. Map open. That's more than most people manage their first day out here.\n\nVault-Tec was right to send me after you. Don't make them regret it.",
+      "conditions": [
+        "flag:wake_up_complete"
+      ],
+      "responses": [
+        {
+          "text": "[Friendly] Couldn't have done it without your help.",
+          "tone": "kind",
+          "next_inline": "...You could have. But I appreciate the sentiment. Take care of yourself."
+        },
+        {
+          "text": "[Sarcastic] 'Don't make them regret it.' Classic Vault-Tec warmth.",
+          "tone": "sarcastic",
+          "next_inline": "*dry laugh* You're going to fit right in out here."
+        },
+        {
+          "text": "What's next?",
+          "tone": "question",
+          "next_inline": "That's up to you now. The wasteland's big. Start exploring. The map will guide you."
+        }
+      ]
     }
   ],
-
-  "emotional_nodes": [],
-
+  "emotional_nodes": [
+    {
+      "id": "courier_high_rads",
+      "conditions": [
+        "stat:rads>=150",
+        "!flag:courier_warned_rads"
+      ],
+      "set_flags": [
+        "courier_warned_rads"
+      ],
+      "text": "You're glowing, friend. Not metaphorically.\n\nYou've picked up significant radiation. Pop a RadAway before it gets worse. The effects sneak up on you — first your vision goes, then your judgment, then your grip on reality.\n\nTreat it like a wound. Because it is one.",
+      "responses": [
+        {
+          "text": "I'll handle it.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
+    }
+  ],
   "knowledge_nodes": [
     {
       "id": "courier_about_gear",
-      "text": "The gear? Standard Vault-Tec issue. That jumpsuit you're wearing'll keep you warm, sidearm'll keep you alive. Don't waste the stimpaks on paper cuts.",
-      "conditions": ["flag:courier_intro_seen"]
+      "conditions": [
+        "flag:courier_intro_seen",
+        "!flag:courier_about_gear_seen"
+      ],
+      "set_flags": [
+        "courier_about_gear_seen"
+      ],
+      "text": "The gear? Standard Vault-Tec field issue.\n\nJumpsuit has radiation shielding woven into the lining. Won't stop a direct hit, but it buys time.\n\nSidearm is chambered for 9mm — clean, reliable, common ammo. You'll find rounds in almost any raider camp.\n\nThe stimpaks: inject into a major muscle group. The effect is fast but burns through quickly. Three shots won't get you through a firefight, so don't pick a fight you can't finish.\n\nBobby pins — don't lose them. Better than caps in some situations.",
+      "responses": [
+        {
+          "text": "Good to know. Thanks.",
+          "tone": "kind",
+          "end": true
+        },
+        {
+          "text": "[Sarcastic] You memorize gear specs for every delivery?",
+          "tone": "sarcastic",
+          "next_inline": "...Yes. Clients who understand their equipment live longer. Couriers who deliver to surviving clients get paid. It's practical."
+        }
+      ]
     }
   ],
-
   "fallback": {
     "id": "courier_fallback",
-    "text": "Stay sharp, wanderer. The wasteland has a way of catching folks off guard."
+    "text": "I don't have anything new for you right now. Stay sharp, stay moving. The wasteland has a way of catching people off guard.",
+    "responses": [
+      {
+        "text": "Understood.",
+        "tone": "neutral",
+        "end": true
+      }
+    ]
   }
 }
