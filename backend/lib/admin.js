@@ -23,9 +23,12 @@ function isAdminWallet(wallet) {
 async function issueNonce(wallet) {
   if (!wallet) throw new Error("missing wallet");
   const nonce = crypto.randomBytes(24).toString("hex");
-  const key = `admin:nonce:${wallet}`;
-  // Short TTL: 5 minutes
-  await redis.set(key, nonce, "EX", 300);
+  const k = `admin:nonce:${wallet}`;
+  // SECURITY FIX: previously `redis.set(k, nonce, "EX", 300)` — the redis
+  // wrapper's set() only accepts 3 parameters (k, v, opts-object); the
+  // positional "EX" string was passed as opts and 300 was silently dropped.
+  // The nonce was stored WITHOUT an expiry and could be replayed indefinitely.
+  await redis.set(k, nonce, { EX: 300 });
   return nonce;
 }
 

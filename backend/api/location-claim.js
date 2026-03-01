@@ -12,6 +12,7 @@ const fs = require("fs");
 const crypto = require("crypto");
 
 const { redis, key } = require("../lib/redis");
+const { authMiddleware } = require("../lib/auth");
 
 // Cryptographically-secure random integer in [min, max)
 function secureRandInt(min, max) {
@@ -127,19 +128,21 @@ const claimLimiter = rateLimit({
 
 // ------------------------------------------------------------
 // POST /api/location-claim/claim
+// SECURITY FIX: added authMiddleware — previously any unauthenticated caller
+// could post any wallet address and claim locations on behalf of any player,
+// receiving XP, caps, and items for free.  Wallet is now sourced from the
+// verified session; the body wallet field is ignored.
 // ------------------------------------------------------------
-router.post("/claim", claimLimiter, async (req, res) => {
+router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
   try {
-    const { wallet, poiId, locationId, playerLat, playerLng } = req.body;
+    // SECURITY FIX: wallet from verified session, NOT from req.body.
+    const wallet = req.player.wallet;
+    const { poiId, locationId, playerLat, playerLng } = req.body;
     const locId = locationId || poiId; // Support both field names
 
     // -----------------------------
     // Input validation
     // -----------------------------
-    if (!wallet || typeof wallet !== "string" || wallet.length > 128) {
-      return res.status(400).json({ ok: false, error: "Invalid wallet" });
-    }
-
     if (!locId || typeof locId !== "string" || locId.length > 128) {
       return res.status(400).json({ ok: false, error: "Invalid location ID" });
     }

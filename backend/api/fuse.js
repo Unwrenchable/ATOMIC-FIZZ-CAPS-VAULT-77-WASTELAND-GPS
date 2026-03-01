@@ -27,11 +27,15 @@ const fuseLimiter = require("express-rate-limit")({
 // Fuse multiple NFTs together
 router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
   try {
-    const { nftMints, walletAddress, fusionType = 'upgrade' } = req.body;
+    const { nftMints, fusionType = 'upgrade' } = req.body;
+    // SECURITY FIX: use wallet from verified session, not from req.body.walletAddress.
+    // Previously an authenticated player could set walletAddress to any other
+    // player's address and fuse (destroy) their NFTs — a classic IDOR exploit.
+    const walletAddress = req.player.wallet;
 
-    if (!nftMints || !Array.isArray(nftMints) || nftMints.length < 2 || !walletAddress) {
+    if (!nftMints || !Array.isArray(nftMints) || nftMints.length < 2) {
       return res.status(400).json({
-        error: "Missing required fields: nftMints (array, min 2 items), walletAddress"
+        error: "Missing required fields: nftMints (array, min 2 items)"
       });
     }
 
@@ -39,6 +43,13 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
       return res.status(400).json({
         error: "Cannot fuse more than 5 items at once"
       });
+    }
+
+    // Validate each mint ID is a non-empty string (prevent object injection)
+    for (const mint of nftMints) {
+      if (typeof mint !== "string" || mint.length === 0 || mint.length > 128) {
+        return res.status(400).json({ error: "Invalid NFT mint ID" });
+      }
     }
 
     // Get player data  — key must match the hSet format used by player.js
