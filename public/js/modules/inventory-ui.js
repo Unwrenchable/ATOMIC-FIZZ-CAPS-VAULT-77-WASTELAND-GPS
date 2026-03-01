@@ -3,6 +3,18 @@
 window.Game = window.Game || {};
 Game.ui = Game.ui || {};
 
+// BUG FIX: escapeHtml helper to prevent XSS when inserting item data into innerHTML.
+// Item names, stats, and IDs come from game data and could contain HTML if tampered with.
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 Game.ui.renderInventory = function () {
   Game.quests?.completeObjective("wake_up", "open_inventory");
 
@@ -69,10 +81,11 @@ Game.ui.renderInventory = function () {
       let isEquipped = false;
 
       if (item.type === "weapon") {
-        stats = `DMG: ${item.damage || 'N/A'} • ${item.category?.toUpperCase() || 'UNKNOWN'}`;
+        // BUG FIX: escape item fields before interpolating into innerHTML to prevent XSS
+        stats = `DMG: ${escapeHtml(item.damage != null ? item.damage : 'N/A')} • ${escapeHtml(item.category ? item.category.toUpperCase() : 'UNKNOWN')}`;
         isEquipped = equipped.weapon && equipped.weapon.id === item.id;
       } else if (item.type === "armor") {
-        stats = `ARMOR: ${item.armor || 'N/A'} • SLOT: ${item.slot?.toUpperCase() || 'UNKNOWN'}`;
+        stats = `ARMOR: ${escapeHtml(item.armor != null ? item.armor : 'N/A')} • SLOT: ${escapeHtml(item.slot ? item.slot.toUpperCase() : 'UNKNOWN')}`;
         isEquipped = equipped.armor && equipped.armor.id === item.id;
       }
 
@@ -83,10 +96,11 @@ Game.ui.renderInventory = function () {
       const buttonText = isEquipped ? "UNEQUIP" : "EQUIP";
       const buttonClass = isEquipped ? "unequip-btn" : "equip-btn";
 
+      // BUG FIX: escape item.name and item.id before inserting into innerHTML
       div.innerHTML = `
-        <div class="inv-name">${item.name}${equippedText}</div>
+        <div class="inv-name">${escapeHtml(item.name)}${equippedText}</div>
         <div class="inv-meta">${stats}</div>
-        <button class="${buttonClass}" data-item-id="${item.id}">${buttonText}</button>
+        <button class="${buttonClass}" data-item-id="${escapeHtml(item.id)}">${buttonText}</button>
       `;
 
       body.appendChild(div);
