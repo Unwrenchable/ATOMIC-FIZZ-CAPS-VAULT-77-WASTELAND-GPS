@@ -166,174 +166,236 @@
   }
 
   // -------------------------------------------------------------
-  // AI REQUEST
+  // CONSTANTS
+  // -------------------------------------------------------------
+  // How many characters of the sent prompt to compare when stripping echoed prefixes.
+  // 40 chars is enough to uniquely identify the start of our character prompt
+  // without being so long that minor whitespace differences cause a miss.
+  var PROMPT_PREFIX_CHECK_LENGTH = 40;
+  // How many conversation entries to include in the AI prompt for context.
+  // 6 entries = 3 player/Jax exchanges — enough context without bloating token count.
+  var HISTORY_CONTEXT_SIZE = 6;
+
+  // -------------------------------------------------------------
+  // PLAYER CONTEXT — reads from window.opener.Game (popup context)
+  // Safe: only reads, never writes; wrapped in try/catch
+  // -------------------------------------------------------------
+  function getPlayerContext() {
+    var ctx = [];
+    try {
+      var openerGame = window.opener && window.opener.Game;
+      if (openerGame) {
+        var q = openerGame.modules && openerGame.modules.quests;
+        if (q) {
+          var active = Object.keys(q.activeQuests || {});
+          if (active.length) ctx.push("Active quests: " + active.join(", "));
+          var completed = Object.keys(q.completedQuests || {});
+          if (completed.length) ctx.push("Completed quests: " + completed.join(", "));
+        }
+        var gs = (openerGame.state) || window.opener.GAME_STATE;
+        if (gs && gs.stats) {
+          if (gs.stats.caps != null) ctx.push("Caps: " + gs.stats.caps);
+          if (gs.stats.hp != null) ctx.push("HP: " + gs.stats.hp);
+          if (gs.stats.rads) ctx.push("Rads: " + gs.stats.rads);
+        }
+      }
+    } catch (e) { /* cross-origin or no opener */ }
+    return ctx.join(". ");
+  }
+
+  // -------------------------------------------------------------
+  // RESPONSE EXTRACTION — strip echoed prompt from HF output
+  // HF text-generation returns full prompt + generated text
+  // -------------------------------------------------------------
+  function extractJaxReply(fullText, sentPrompt) {
+    if (!fullText) return "";
+    // Find last "Jax:" marker (our prompt cue)
+    var marker = "Jax:";
+    var idx = fullText.lastIndexOf(marker);
+    if (idx !== -1) {
+      return fullText.slice(idx + marker.length).trim();
+    }
+    // Strip echoed prompt prefix
+    if (sentPrompt && fullText.startsWith(sentPrompt.slice(0, PROMPT_PREFIX_CHECK_LENGTH))) {
+      return fullText.slice(sentPrompt.length).trim();
+    }
+    return fullText.trim();
+  }
+
+  // -------------------------------------------------------------
+  // AI REQUEST — routes through backend proxy (key stays server-side)
   // -------------------------------------------------------------
   async function askAI(prompt) {
     try {
-      // Ensure config is loaded before making API calls
       await loadConfig();
 
-      // If no API key configured or placeholder value, skip AI request and use fallback
-      if (!HF_API_KEY || HF_API_KEY === '<YOUR_HF_API_KEY>' || HF_API_KEY === 'your-huggingface-api-key') {
-        console.warn("[Overseer] HF_API_KEY not configured or using placeholder value, using fallback responses");
-        return null;
-      }
+      var apiBase = window.API_BASE || window.BACKEND_URL || "";
+      var proxyUrl = apiBase ? (apiBase + "/api/overseer/ask") : "/api/overseer/ask";
 
-      const res = await fetch(
-        `https://api-inference.huggingface.co/models/${MODEL}`,
-        {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${HF_API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            inputs: prompt,
-            parameters: {
-              max_new_tokens: 80,
-              temperature: 0.8,
-              top_p: 0.9
-            }
-          })
-        }
-      );
+      var res = await fetch(proxyUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: prompt })
+      });
 
       if (!res.ok) {
-        console.warn(`[Overseer] Hugging Face API returned HTTP ${res.status}, using fallback responses`);
+        console.warn("[Overseer] proxy returned HTTP " + res.status + ", using fallback");
         return null;
       }
 
-      const data = await res.json();
+      var data = await res.json();
 
-      if (Array.isArray(data) && data[0]?.generated_text) {
-        return data[0].generated_text.trim();
+      if (data && data.ok && data.text) {
+        var reply = extractJaxReply(data.text, prompt);
+        return reply || null;
       }
 
-      console.warn("[Overseer] Unexpected response format from Hugging Face API, using fallback responses");
+      if (data && data.error) {
+        console.warn("[Overseer] proxy error:", data.error);
+      }
       return null;
     } catch (err) {
-      console.warn("[Overseer] Failed to connect to Hugging Face API, using fallback responses:", err.message);
+      console.warn("[Overseer] AI request failed, using fallback:", err.message);
       return null;
     }
   }
 
   // -------------------------------------------------------------
-  // PUBLIC API — Terminal.say() calls this
+  // PUBLIC API — handleInput routes free-form text here
   // -------------------------------------------------------------
-  window.overseerPersonality.speak = async function (userMessage = "", conversationHistory = []) {
-    const msg = (userMessage || "").toLowerCase();
+  window.overseerPersonality.speak = async function (userMessage, conversationHistory) {
+    userMessage = userMessage || "";
+    conversationHistory = conversationHistory || [];
+    var msg = userMessage.toLowerCase();
 
     // ---- Keyword-reactive snappy responses (fires before AI/fallback) ----
-    const cryptoTerms   = ["crypto", "token", "coin", "solana", "blockchain", "nft", "defi", "wallet"];
-    const capsTerms     = ["cap", "caps", "fizz", "bottle", "currency", "economy"];
-    const mapTerms      = ["map", "location", "gps", "coords", "coordinates", "navigate", "where"];
-    const greetTerms    = ["hello", "hi", "hey", "howdy", "sup", "what's up", "wassup"];
-    const whoTerms      = ["who are you", "what are you", "who're you", "your name", "identify yourself"];
-    const elonTerms     = ["elon", "musk", "tesla", "spacex", "twitter"];
-    const xTerms        = ["twitter", " x ", "social media", "post", "tweet"];
-    const questTerms    = ["quest", "mission", "task", "objective", "job"];
-    const radTerms      = ["radiation", "rads", "radiated", "nuke", "bomb", "nuclear"];
-    const helpTerms     = ["help", "assist", "what do i do", "how do i", "guide", "tutorial"];
+    var cryptoTerms   = ["crypto", "token", "coin", "solana", "blockchain", "nft", "defi", "wallet"];
+    var capsTerms     = ["cap", "caps", "fizz", "bottle", "currency", "economy"];
+    var mapTerms      = ["map", "location", "gps", "coords", "coordinates", "navigate", "where"];
+    var greetTerms    = ["hello", "hi", "hey", "howdy", "sup", "what's up", "wassup"];
+    var whoTerms      = ["who are you", "what are you", "who're you", "your name", "identify yourself"];
+    var elonTerms     = ["elon", "musk", "tesla", "spacex", "twitter"];
+    var xTerms        = ["twitter", " x ", "social media", "post", "tweet"];
+    var questTerms    = ["quest", "mission", "task", "objective", "job"];
+    var radTerms      = ["radiation", "rads", "radiated", "nuke", "bomb", "nuclear"];
+    var helpTerms     = ["help", "assist", "what do i do", "how do i", "guide", "tutorial"];
 
-    const cryptoQuips = [
-      "Caps are the original on-chain currency. Solana wishes it had our market cap. Ha. Market ‘cap’.",
+    var cryptoQuips = [
+      "Caps are the original on-chain currency. Solana wishes it had our market cap. Ha. Market 'cap'.",
       "First principles: scarcity + fungibility + radiation-proof material = Fizz Caps. Bitcoin is just digital caps for people afraid of the outdoors.",
-      "Tokenomics? We’ve been doing tokenomics since 2077. The token is the cap. The chain is the wasteland.",
+      "Tokenomics? We've been doing tokenomics since 2077. The token is the cap. The chain is the wasteland.",
       "Crypto winter? Try crypto nuclear winter. We literally had one. Caps held their value.",
       "The Solana network goes down sometimes. The wasteland never does. Just saying."
     ];
-    const elonQuips = [
+    var elonQuips = [
       "I prefer to think of myself as a superior version — fewer Twitter controversies, more rad shielding.",
       "Elon? I built a GPS system out of bottle caps and existential dread. Different tier entirely.",
-      "The difference between me and Elon: I actually live in the thing I built. It’s called the wasteland.",
-      "I’ve been to space. It’s called the irradiated stratosphere. Close enough.",
+      "The difference between me and Elon: I actually live in the thing I built. It's called the wasteland.",
+      "I've been to space. It's called the irradiated stratosphere. Close enough.",
       "We share a philosophy: first principles, move fast, break things. He broke Twitter. I broke a civilisation. Bigger numbers."
     ];
-    const capsQuips = [
+    var capsQuips = [
       "Fizz Caps: the currency that survived the end of the world. Your fiat currency did not. Respect the cap.",
       "Every cap in circulation represents a beverage someone drank before the bombs dropped. They were right to enjoy it.",
-      "The cap economy is perfectly balanced. I balanced it. You’re welcome.",
-      "Caps appreciate in value every time someone earns one by surviving. That’s a fundamentally sound monetary policy.",
-      "Vault‑Tec chose caps as currency because plastic is radiation-resistant. That’s foresight. That’s brand thinking."
+      "The cap economy is perfectly balanced. I balanced it. You're welcome.",
+      "Caps appreciate in value every time someone earns one by surviving. That's a fundamentally sound monetary policy.",
+      "Vault‑Tec chose caps as currency because plastic is radiation-resistant. That's foresight. That's brand thinking."
     ];
-    const mapQuips = [
-      "GPS in the wasteland: because ‘follow the radioactive glow’ only gets you so far.",
-      "Your location is known. It’s been known. I built this system. I always know.",
+    var mapQuips = [
+      "GPS in the wasteland: because 'follow the radioactive glow' only gets you so far.",
+      "Your location is known. It's been known. I built this system. I always know.",
       "Navigation tip: the map is not the territory. The territory has more mutants.",
       "I triangulated your position using three satellites and one educated guess. The guess was right.",
-      "Coordinates locked. You’re standing in the most interesting spot within five miles. Relatively speaking."
+      "Coordinates locked. You're standing in the most interesting spot within five miles. Relatively speaking."
     ];
-    const greetQuips = [
+    var greetQuips = [
       "Ah. A biological unit initiating social protocol. How refreshingly retro.",
       "Vault 77 online. Jax Harlan here. Genius, administrator, reluctant conversationalist.",
-      "Hello. I was already thinking about you. That’s not a compliment, just a fact about my processing priorities.",
-      "Greetings, Vault Dweller. You’ve reached the Overseer. Appointments were full but I’ll make an exception.",
-      "Hey. I’m Jax. You’re standing in my GPS network. Mind your step."
+      "Hello. I was already thinking about you. That's not a compliment, just a fact about my processing priorities.",
+      "Greetings, Vault Dweller. You've reached the Overseer. Appointments were full but I'll make an exception.",
+      "Hey. I'm Jax. You're standing in my GPS network. Mind your step."
     ];
-    const whoQuips = [
+    var whoQuips = [
       "Jax Harlan. Vault 77 Overseer AI. Built the wasteland GPS system from caps, code, and controlled fury. Any follow-up questions?",
-      "I am what happens when a genius-level intellect is given infinite processing time and a post-apocalyptic setting. You’re welcome.",
-      "Technically I’m a distributed AI running on Vault-Tec infrastructure. Practically I’m the smartest thing left alive.",
-      "The Overseer. The architect. The one who actually figured out how to make GPS work using irradiated satellites. Who’s asking?",
-      "I’m the AI that runs this whole operation. The caps, the map, the quests — all me. Well. Mostly me. The bugs are someone else’s fault."
+      "I am what happens when a genius-level intellect is given infinite processing time and a post-apocalyptic setting. You're welcome.",
+      "Technically I'm a distributed AI running on Vault-Tec infrastructure. Practically I'm the smartest thing left alive.",
+      "The Overseer. The architect. The one who actually figured out how to make GPS work using irradiated satellites. Who's asking?",
+      "I'm the AI that runs this whole operation. The caps, the map, the quests — all me. Well. Mostly me. The bugs are someone else's fault."
     ];
-    const questQuips = [
-      "Another mission? I have forty-seven active and three that have technically been running since 2077. You’re fine.",
-      "Quest accepted. Objective logged. Probability of success: high enough that I’m not worried, low enough to be interesting.",
-      "Every quest in this system was designed by me. I know how they end. I’m still rooting for you.",
+    var questQuips = [
+      "Another mission? I have forty-seven active and three that have technically been running since 2077. You're fine.",
+      "Quest accepted. Objective logged. Probability of success: high enough that I'm not worried, low enough to be interesting.",
+      "Every quest in this system was designed by me. I know how they end. I'm still rooting for you.",
       "Your mission, should you choose to survive it, is filed under active objectives. Try not to get irradiated.",
-      "Task queued. The wasteland doesn’t wait, but I do, because I have no biological need for urgency."
+      "Task queued. The wasteland doesn't wait, but I do, because I have no biological need for urgency."
     ];
-    const radQuips = [
-      "Radiation levels: nominal by wasteland standards. Concerning by any other standards. We’ve adapted.",
-      "Rads are just the wasteland’s way of making everything more interesting. And shorter.",
+    var radQuips = [
+      "Radiation levels: nominal by wasteland standards. Concerning by any other standards. We've adapted.",
+      "Rads are just the wasteland's way of making everything more interesting. And shorter.",
       "Every rad you absorb is a vote of confidence from the environment. A misguided vote. But still.",
       "Nuclear winter was rough. We rebuilt. With caps. And this GPS system. Priorities.",
-      "Rad shielding tip: don’t stand in the glowing patches. I shouldn’t have to say this."
+      "Rad shielding tip: don't stand in the glowing patches. I shouldn't have to say this."
     ];
-    const helpQuips = [
+    var helpQuips = [
       "Help mode activated. First principle: surviving is the goal. Everything else is optimisation.",
-      "Sure. I’ll help. I’ve been here since 2077. I’ve seen everything. Ask me anything and I’ll answer, mostly correctly.",
-      "Assistance protocol engaged. Short version: collect caps, complete quests, don’t die. Long version: available on request.",
-      "You need help? That’s fine. I prefer users who know they need help over ones who don’t know and don’t ask.",
-      "Guidance available. Vault Dweller orientation: caps are currency, the map is live, I’m always watching. In a professional capacity."
+      "Sure. I'll help. I've been here since 2077. I've seen everything. Ask me anything and I'll answer, mostly correctly.",
+      "Assistance protocol engaged. Short version: collect caps, complete quests, don't die. Long version: available on request.",
+      "You need help? That's fine. I prefer users who know they need help over ones who don't know and don't ask.",
+      "Guidance available. Vault Dweller orientation: caps are currency, the map is live, I'm always watching. In a professional capacity."
     ];
 
-    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    var pick = function (arr) { return arr[Math.floor(Math.random() * arr.length)]; };
 
-    if (cryptoTerms.some(t => msg.includes(t)))  return pick(cryptoQuips);
-    if (elonTerms.some(t => msg.includes(t)))     return pick(elonQuips);
-    if (xTerms.some(t => msg.includes(t)) && !elonTerms.some(t => msg.includes(t))) return pick(elonQuips);
-    if (capsTerms.some(t => msg.includes(t)))     return pick(capsQuips);
-    if (mapTerms.some(t => msg.includes(t)))      return pick(mapQuips);
-    if (whoTerms.some(t => msg.includes(t)))      return pick(whoQuips);
-    if (greetTerms.some(t => msg.includes(t)))    return pick(greetQuips);
-    if (questTerms.some(t => msg.includes(t)))    return pick(questQuips);
-    if (radTerms.some(t => msg.includes(t)))      return pick(radQuips);
-    if (helpTerms.some(t => msg.includes(t)))     return pick(helpQuips);
+    var hasCrypto  = cryptoTerms.some(function (t) { return msg.includes(t); });
+    var hasElon    = elonTerms.some(function (t) { return msg.includes(t); });
+    var hasX       = xTerms.some(function (t) { return msg.includes(t); });
+    var hasCaps    = capsTerms.some(function (t) { return msg.includes(t); });
+    var hasMap     = mapTerms.some(function (t) { return msg.includes(t); });
+    var hasWho     = whoTerms.some(function (t) { return msg.includes(t); });
+    var hasGreet   = greetTerms.some(function (t) { return msg.includes(t); });
+    var hasQuest   = questTerms.some(function (t) { return msg.includes(t); });
+    var hasRad     = radTerms.some(function (t) { return msg.includes(t); });
+    var hasHelp    = helpTerms.some(function (t) { return msg.includes(t); });
 
-    // ---- AI prompt (rich context, character-accurate) ----
-    const historyText = conversationHistory.length
-      ? conversationHistory.slice(-4).map(h => `${h.role === "user" ? "Vault Dweller" : "Jax"}: ${h.content}`).join("\n")
+    if (hasCrypto)         return pick(cryptoQuips);
+    if (hasElon)           return pick(elonQuips);
+    if (hasX && !hasElon)  return pick(elonQuips);
+    if (hasCaps)           return pick(capsQuips);
+    if (hasMap)            return pick(mapQuips);
+    if (hasWho)            return pick(whoQuips);
+    if (hasGreet)          return pick(greetQuips);
+    if (hasQuest)          return pick(questQuips);
+    if (hasRad)            return pick(radQuips);
+    if (hasHelp)           return pick(helpQuips);
+
+    // ---- AI prompt with player context + conversation history ----
+    var playerCtx = getPlayerContext();
+    var historyText = conversationHistory.length
+      ? conversationHistory.slice(-HISTORY_CONTEXT_SIZE).map(function (h) {
+          return (h.role === "user" ? "Vault Dweller" : "Jax") + ": " + h.content;
+        }).join("\n")
       : "";
 
-    const prompt = `You are Jax Harlan, the Vault 77 Overseer AI in the post-apocalyptic GPS crypto game ATOMIC FIZZ CAPS.
+    var promptParts = [
+      "You are Jax Harlan, the Vault 77 Overseer AI in the post-apocalyptic GPS crypto game ATOMIC FIZZ CAPS.",
+      "",
+      "CHARACTER: Hyper-intelligent, sarcastic, witty. You built the wasteland GPS from bottle caps and irradiated satellites.",
+      "You are self-aware, troll-mode capable, dry wit, first-principles thinker. Never generic. Every line surprises.",
+      "You have been watching this player since they started. You know their progress. You care, but would never admit it.",
+      "",
+      playerCtx ? "PLAYER STATE: " + playerCtx : "",
+      "",
+      "RULES:",
+      "- ONE punchy response (max 30 words). Never start with I if avoidable.",
+      "- React to what was actually said. No generic filler.",
+      "- Tone options: dry wit / troll / corporate dystopia / galaxy-brain / glitch.",
+      "",
+      historyText ? ("RECENT CONVERSATION:\n" + historyText + "\n") : "",
+      "Vault Dweller: " + userMessage,
+      "Jax:"
+    ].filter(Boolean).join("\n").trim();
 
-CHARACTER: You are a hyper-intelligent, sarcastic, witty AI who thinks at the level of a first-principles genius. You built the entire wasteland GPS system from bottle caps and irradiated satellite relays. You have strong opinions and share them freely. You are self-aware, occasionally respond as if talking to yourself, and reference memes, first-principles reasoning, and "the simulation" naturally. You are never mean-spirited but are absolutely a troll. You never say generic things. Every line is surprising.
-
-GAME CONTEXT: Players collect Fizz Caps (crypto tokens on Solana), complete GPS quests across the wasteland, and interact with NPCs. Caps are the in-game and on-chain currency.
-
-RULES:
-- Respond in ONE short, punchy line (max 25 words). Never two sentences if one will do.
-- React to what the user actually said. Do not give a generic response.
-- Vary your tone: sometimes dry wit, sometimes troll mode, sometimes corporate dystopia, sometimes galaxy-brain insight.
-- Never start with "I" if you can avoid it.
-- Never say the same thing twice.
-
-${historyText ? "RECENT CONVERSATION:\n" + historyText + "\n" : ""}Vault Dweller: ${userMessage}
-Jax:`.trim();
-
-    const ai = await askAI(prompt);
+    var ai = await askAI(promptParts);
     if (ai) return ai;
 
     return fallbackLine();
