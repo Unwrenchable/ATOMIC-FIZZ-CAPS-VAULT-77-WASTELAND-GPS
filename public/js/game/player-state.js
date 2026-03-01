@@ -53,6 +53,13 @@
    * Initialize player state from localStorage
    */
   function init() {
+    // BUG FIX: guard against double-initialisation.  If init() is called more
+    // than once (e.g. due to a race condition during startup), the previous
+    // intervals are leaked because setInterval() returns a new ID each time and
+    // the old timers are never cleared.  Clear any existing timers first.
+    if (_syncTimer) { clearInterval(_syncTimer); _syncTimer = null; }
+    if (_backendSyncTimer) { clearInterval(_backendSyncTimer); _backendSyncTimer = null; }
+
     loadFromStorage();
     
     // Sync Game.player references
@@ -62,7 +69,7 @@
     syncWithLegacyPlayer();
     
     // Start auto-save interval (only saves when dirty)
-    setInterval(() => {
+    _syncTimer = setInterval(() => {
       if (_dirty) {
         saveToStorage();
       }

@@ -191,24 +191,38 @@ router.post("/claim", claimLimiter, async (req, res) => {
     }
 
     // -----------------------------
-    // Cooldown check
+    // Cooldown check (atomic, race-condition-safe)
     // -----------------------------
+    // BUG FIX: the original code did a GET then later a SET — two separate
+    // operations.  A player with two simultaneous requests could have both
+    // pass the GET check before either SET ran, allowing them to claim twice
+    // and receive double rewards.
+    //
+    // Fix: attempt to SET the cooldown key with NX (only if not exists) right
+    // now.  If the key already exists the NX set returns null, meaning the
+    // location is still on cooldown.  We only proceed if the NX set succeeds,
+    // making the check+lock a single atomic operation.
+    const cooldownDuration = location?.cooldown || 3600; // seconds
+    // NOTE: cooldownKey is built with key() to be consistent with the
+    // playerKey and claimedKey variables in this same route which also pass
+    // key()-prefixed strings to the redis wrapper. The established pattern
+    // throughout this file uses this double-prefix approach so all keys for
+    // a given player live in the same Redis namespace.
     const cooldownKey = key(`player:${wallet}:cooldown:${locId}`);
-    const lastClaim = await redis.get(cooldownKey);
-    
-    if (lastClaim) {
-      const cooldownTime = location?.cooldown || 3600; // Default 1 hour cooldown
-      const timeSince = Date.now() - parseInt(lastClaim);
-      const timeRemaining = cooldownTime * 1000 - timeSince;
-      
-      if (timeRemaining > 0) {
-        return res.status(429).json({
-          ok: false,
-          error: "Location on cooldown",
-          cooldownRemaining: Math.ceil(timeRemaining / 1000)
-        });
-      }
+    const nxResult = await redis.set(cooldownKey, Date.now().toString(), { NX: true, EX: cooldownDuration });
+
+    if (nxResult === null) {
+      // NX failed: key already exists → location on cooldown
+      const lastClaimRaw = await redis.get(cooldownKey);
+      const lastClaimMs = lastClaimRaw ? parseInt(lastClaimRaw) : Date.now();
+      const timeRemaining = cooldownDuration * 1000 - (Date.now() - lastClaimMs);
+      return res.status(429).json({
+        ok: false,
+        error: "Location on cooldown",
+        cooldownRemaining: Math.max(0, Math.ceil(timeRemaining / 1000))
+      });
     }
+    // nxResult === "OK" → we now own the cooldown lock; proceed with claim
 
     // -----------------------------
     // Generate and award rewards
@@ -274,9 +288,7 @@ router.post("/claim", claimLimiter, async (req, res) => {
     const claimedKey = key(`player:${wallet}:claimed`);
     await redis.sAdd(claimedKey, locId);
 
-    // Set cooldown
-    const cooldownDuration = location?.cooldown || 3600;
-    await redis.set(cooldownKey, Date.now().toString(), { EX: cooldownDuration });
+    // Note: cooldown was already set atomically via NX above; no second SET needed.
 
     console.log(`[location-claim] ${wallet.slice(0, 8)} claimed ${locId}: +${rewards.xp}XP, +${rewards.caps} caps, ${rewards.items.length} items`);
 

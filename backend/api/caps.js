@@ -13,6 +13,7 @@
 const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
 const { awardCapsToPlayer, getCapsBalance } = require("../lib/caps");
+const { authMiddleware } = require("../lib/auth");
 
 // Per-route limiter: caps awarding should be controlled
 const capsAwardLimiter = rateLimit({
@@ -24,16 +25,16 @@ const capsAwardLimiter = rateLimit({
 });
 
 // POST /api/caps/award - Award in-game caps to a player
-router.post("/award", capsAwardLimiter, async (req, res) => {
+// BUG FIX: Added authMiddleware so only authenticated sessions can award caps
+// to their own wallet.  Previously any anonymous caller could POST with any
+// wallet address and amount, awarding unlimited caps to any player.
+router.post("/award", authMiddleware, capsAwardLimiter, async (req, res) => {
   try {
-    const { player, amount } = req.body;
-
-    // Basic validation
-    if (!player || typeof player !== "string" || player.length > 128) {
-      return res
-        .status(400)
-        .json({ ok: false, error: "Invalid or missing player" });
-    }
+    // BUG FIX: use wallet from the verified session rather than from req.body
+    // to prevent a player awarding caps to a different (victim) wallet.
+    // authMiddleware guarantees req.player.wallet is a non-empty, validated string.
+    const player = req.player.wallet;
+    const { amount } = req.body;
 
     if (
       typeof amount !== "number" ||
@@ -46,7 +47,7 @@ router.post("/award", capsAwardLimiter, async (req, res) => {
         .json({ ok: false, error: "Invalid amount" });
     }
 
-    const result = await awardCapsToPlayer(player.trim(), amount);
+    const result = await awardCapsToPlayer(player, amount);
 
     return res.json({ 
       ok: true, 
@@ -61,15 +62,12 @@ router.post("/award", capsAwardLimiter, async (req, res) => {
 
 // POST /api/caps/mint - Legacy endpoint (alias for /award)
 // Kept for backward compatibility
-router.post("/mint", capsAwardLimiter, async (req, res) => {
+// BUG FIX: Added authMiddleware, same as /award above.
+router.post("/mint", authMiddleware, capsAwardLimiter, async (req, res) => {
   try {
-    const { player, amount } = req.body;
-
-    if (!player || typeof player !== "string" || player.length > 128) {
-      return res
-        .status(400)
-        .json({ ok: false, error: "Invalid or missing player" });
-    }
+    // BUG FIX: use wallet from the verified session, not req.body.player
+    const player = req.player.wallet;
+    const { amount } = req.body;
 
     if (
       typeof amount !== "number" ||
@@ -82,7 +80,7 @@ router.post("/mint", capsAwardLimiter, async (req, res) => {
         .json({ ok: false, error: "Invalid amount" });
     }
 
-    const result = await awardCapsToPlayer(player.trim(), amount);
+    const result = await awardCapsToPlayer(player, amount);
 
     return res.json({ 
       ok: true, 
