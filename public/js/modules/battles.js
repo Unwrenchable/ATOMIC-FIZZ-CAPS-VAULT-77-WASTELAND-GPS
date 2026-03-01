@@ -68,27 +68,53 @@
     },
 
     // --------------------------------------------------------
+    // Get player SPECIAL stats (reads from PlayerState or fallback)
+    // --------------------------------------------------------
+    _getSpecial() {
+      if (Game.modules?.PlayerState?.getSpecial) {
+        return Game.modules.PlayerState.getSpecial();
+      }
+      return (
+        (this.gs && this.gs.player && this.gs.player.special) ||
+        (window.PLAYER && window.PLAYER.special) ||
+        { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 }
+      );
+    },
+
+    // --------------------------------------------------------
     // Player attack logic
     // --------------------------------------------------------
     fireEquippedWeapon() {
-      const weapon = this.gs.player.equipped.weapon;
+      const weapon = this.gs.player.equipped && this.gs.player.equipped.weapon;
+      // Fallback to PlayerState equipped weapon if gs doesn't have one
       if (!weapon) {
+        const ps = Game.modules?.PlayerState?.getState?.();
+        if (ps && ps.equipped && ps.equipped.weapon) {
+          this.gs.player.equipped = this.gs.player.equipped || {};
+          this.gs.player.equipped.weapon = ps.equipped.weapon;
+        }
+      }
+      const equippedWeapon = (this.gs.player.equipped && this.gs.player.equipped.weapon) || null;
+      if (!equippedWeapon) {
         return { success: false, reason: "NO_WEAPON" };
       }
 
       // Melee or infinite ammo
-      if (!weapon.ammoType) {
-        return { success: true, damage: weapon.damage };
+      if (!equippedWeapon.ammoType) {
+        // Strength adds +1 damage per 2 points above 5 for melee weapons
+        const special = this._getSpecial();
+        const strBonus = Math.max(0, Math.floor((special.S - 5) / 2));
+        return { success: true, damage: (equippedWeapon.damage || 10) + strBonus, weapon: equippedWeapon };
       }
 
       // Spend ammo from gameState.inventory.ammo (no separate inventory module)
-      const ok = this._spendAmmo(weapon.ammoType, weapon.ammoPerShot || 1);
+      const ok = this._spendAmmo(equippedWeapon.ammoType, equippedWeapon.ammoPerShot || 1);
 
       if (!ok) {
         return { success: false, reason: "NO_AMMO" };
       }
 
-      return { success: true, damage: weapon.damage };
+      return { success: true, damage: equippedWeapon.damage || 10, weapon: equippedWeapon };
     },
 
     playerAttack() {
@@ -103,18 +129,30 @@
     },
 
     // --------------------------------------------------------
-    // Enemy attack logic
+    // Enemy attack logic (Endurance reduces damage; armor subtracts flat DR)
     // --------------------------------------------------------
     enemyAttack() {
       if (!this.state) return;
 
       const enemy = this.state.encounter.enemies[0];
-      const dmg = enemy.damage || 3;
+      let dmg = enemy.damage || 3;
 
       // Guard: ensure player.hp is initialized
       if (typeof this.gs.player.hp !== "number") {
         this.gs.player.hp = 100;
         this.gs.player.maxHp = 100;
+      }
+
+      // Endurance damage reduction: each point above 5 reduces damage by 1 (min 1)
+      const special = this._getSpecial();
+      const endBonus = Math.max(0, special.E - 5);
+      dmg = Math.max(1, dmg - endBonus);
+
+      // Armor damage reduction
+      const armorItem = (this.gs.player.equipped && this.gs.player.equipped.armor) ||
+        (Game.modules?.PlayerState?.getState?.()?.equipped?.armor);
+      if (armorItem && typeof armorItem.armor === 'number') {
+        dmg = Math.max(1, dmg - Math.floor(armorItem.armor / 5));
       }
 
       this.gs.player.hp -= dmg;
@@ -211,22 +249,78 @@
       if (!container) return;
 
       if (!this.state) {
-        container.innerHTML = `<p>No active battle.</p>`;
+        // No active battle - show player readiness stats
+        const equipped = this.gs.player.equipped || {};
+        const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);
+        const armor = equipped.armor || (Game.modules?.PlayerState?.getState?.()?.equipped?.armor);
+        const special = this._getSpecial();
+        const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;
+        const maxHp = (typeof this.gs.player.maxHp === 'number') ? this.gs.player.maxHp : 100;
+        const hpPct = Math.max(0, Math.min(100, Math.round(hp / maxHp * 100)));
+
+        container.innerHTML = `
+          <div class="battle-idle">
+            <div class="battle-status-header">// COMBAT READINESS //</div>
+            <div class="battle-stat-row">
+              <span class="battle-label">HP</span>
+              <span class="battle-bar-wrap"><span class="battle-bar" style="width:${hpPct}%"></span></span>
+              <span class="battle-val">${hp} / ${maxHp}</span>
+            </div>
+            <div class="battle-stat-row">
+              <span class="battle-label">WEAPON</span>
+              <span class="battle-val">${weapon ? `${weapon.name} (DMG: ${weapon.damage || '?'})` : '<em>None equipped</em>'}</span>
+            </div>
+            <div class="battle-stat-row">
+              <span class="battle-label">ARMOR</span>
+              <span class="battle-val">${armor ? `${armor.name} (AR: ${armor.armor || '?'})` : '<em>None equipped</em>'}</span>
+            </div>
+            <div class="battle-special-row">
+              ${['S','P','E','C','I','A','L'].map(k => `<span class="battle-special-cell"><span class="bs-key">${k}</span><span class="bs-val">${special[k] || 5}</span></span>`).join('')}
+            </div>
+            <div class="battle-idle-note">No active encounter. Roam the wasteland to trigger combat.</div>
+          </div>
+        `;
         return;
       }
 
       const enemy = this.state.encounter.enemies[0];
+      const special = this._getSpecial();
+      const equipped = this.gs.player.equipped || {};
+      const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);
+      const armor = equipped.armor || (Game.modules?.PlayerState?.getState?.()?.equipped?.armor);
+      const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;
+      const maxHp = (typeof this.gs.player.maxHp === 'number') ? this.gs.player.maxHp : 100;
+      const hpPct = Math.max(0, Math.min(100, Math.round(hp / maxHp * 100)));
+      const enemyHpPct = Math.max(0, Math.min(100, Math.round(this.state.enemyHp[0] / (enemy.hp || 20) * 100)));
 
       container.innerHTML = `
-        <h2>Battle</h2>
-        <p><strong>Enemy:</strong> ${enemy.id}</p>
-        <p><strong>Enemy HP:</strong> ${this.state.enemyHp[0]}</p>
-        <p><strong>Your HP:</strong> ${this.gs.player.hp}</p>
-        <div id="battleOptions">
-          <button id="battleAttackBtn">Attack</button>
-          <button id="battleFleeBtn">Flee</button>
+        <div class="battle-active">
+          <div class="battle-combatant">
+            <div class="battle-label-header">ENEMY</div>
+            <div class="battle-enemy-name">${enemy.name || enemy.id}</div>
+            <div class="battle-stat-row">
+              <span class="battle-bar-wrap enemy"><span class="battle-bar enemy-bar" style="width:${enemyHpPct}%"></span></span>
+              <span class="battle-val">${this.state.enemyHp[0]} / ${enemy.hp || 20} HP</span>
+            </div>
+          </div>
+          <div class="battle-vs">VS</div>
+          <div class="battle-combatant">
+            <div class="battle-label-header">YOU</div>
+            <div class="battle-stat-row">
+              <span class="battle-bar-wrap"><span class="battle-bar" style="width:${hpPct}%"></span></span>
+              <span class="battle-val">${hp} / ${maxHp} HP</span>
+            </div>
+            <div class="battle-gear-line">${weapon ? `⚔ ${weapon.name}` : '⚔ Unarmed'} ${armor ? ` | 🛡 ${armor.name}` : ''}</div>
+            <div class="battle-special-row compact">
+              ${['S','P','E','C','I','A','L'].map(k => `<span class="battle-special-cell"><span class="bs-key">${k}</span><span class="bs-val">${special[k] || 5}</span></span>`).join('')}
+            </div>
+          </div>
+          <div id="battleOptions" class="battle-options">
+            <button id="battleAttackBtn" class="pipboy-button">⚔ ATTACK</button>
+            <button id="battleFleeBtn" class="pipboy-button">🏃 FLEE</button>
+          </div>
+          <div id="battleMsg" class="battle-msg"></div>
         </div>
-        <div id="battleMsg" style="margin-top:10px;color:#ff0;"></div>
       `;
 
       const attackBtn = document.getElementById("battleAttackBtn");
@@ -240,10 +334,10 @@
             msgDiv.textContent = res.reason === "NO_AMMO" ? "Out of ammo!" : "No weapon equipped! Try to flee!";
             return;
           }
-          msgDiv.textContent = `You hit the enemy for ${res.damage} damage!`;
+          msgDiv.textContent = `You hit ${enemy.name || enemy.id} for ${res.damage} damage!`;
           const end = this.checkBattleEnd();
           if (end === "WIN") {
-            msgDiv.textContent = "Enemy defeated!";
+            msgDiv.textContent = `${enemy.name || enemy.id} defeated!`;
             this.applyRewards(this.state.encounter);
             this.state = null;
             setTimeout(() => this.updateUI(), 1200);
@@ -251,22 +345,25 @@
           }
           setTimeout(() => {
             const enemyRes = this.enemyAttack();
-            msgDiv.textContent = `Enemy attacks for ${enemyRes.damage} damage!`;
+            msgDiv.textContent = `${enemy.name || enemy.id} attacks for ${enemyRes.damage} damage!`;
             const end2 = this.checkBattleEnd();
             if (end2 === "LOSE") {
-              msgDiv.textContent = "You died!";
+              msgDiv.textContent = "You have been defeated. Respawning...";
               this.state = null;
-              setTimeout(() => this.updateUI(), 1200);
+              setTimeout(() => this.updateUI(), 1500);
             }
           }, 800);
         };
       }
       if (fleeBtn) {
         fleeBtn.onclick = () => {
-          // 50% chance to escape — use crypto random per project standard
+          // Agility improves flee chance: base 50% + 5% per Agility above 5
+          const agiBonus = Math.max(0, special.A - 5) * 5;
+          // Multiply before dividing to preserve integer precision
+          const fleeThreshold = Math.floor((50 + agiBonus) * 0xFFFFFFFF / 100);
           const fleeRoll = new Uint32Array(1);
           crypto.getRandomValues(fleeRoll);
-          if (fleeRoll[0] < 0x80000000) {
+          if (fleeRoll[0] < fleeThreshold) {
             msgDiv.textContent = "You escaped!";
             this.state = null;
             setTimeout(() => this.updateUI(), 1200);
@@ -274,12 +371,12 @@
             msgDiv.textContent = "Failed to escape! Enemy attacks!";
             setTimeout(() => {
               const enemyRes = this.enemyAttack();
-              msgDiv.textContent = `Enemy attacks for ${enemyRes.damage} damage!`;
+              msgDiv.textContent = `${enemy.name || enemy.id} attacks for ${enemyRes.damage} damage!`;
               const end2 = this.checkBattleEnd();
               if (end2 === "LOSE") {
-                msgDiv.textContent = "You died!";
+                msgDiv.textContent = "You have been defeated. Respawning...";
                 this.state = null;
-                setTimeout(() => this.updateUI(), 1200);
+                setTimeout(() => this.updateUI(), 1500);
               }
             }, 800);
           }

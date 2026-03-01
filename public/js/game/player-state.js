@@ -35,6 +35,9 @@
     level: 1,
     xp: 0,
     caps: 0,
+    // SPECIAL stats — default 5 in each attribute (Fallout standard mid-point)
+    // S=Strength, P=Perception, E=Endurance, C=Charisma, I=Intelligence, A=Agility, L=Luck
+    special: { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 },
     // Visited locations for map
     visitedLocations: [],
     // Timestamps
@@ -115,6 +118,15 @@
         if (!Array.isArray(_state.questsActive)) _state.questsActive = [];
         if (!Array.isArray(_state.questsCompleted)) _state.questsCompleted = [];
         if (!Array.isArray(_state.visitedLocations)) _state.visitedLocations = [];
+        // Ensure SPECIAL object exists with defaults for any missing keys
+        if (!_state.special || typeof _state.special !== 'object') {
+          _state.special = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
+        } else {
+          const SPECIAL_DEFAULTS = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
+          Object.keys(SPECIAL_DEFAULTS).forEach(k => {
+            if (typeof _state.special[k] !== 'number') _state.special[k] = SPECIAL_DEFAULTS[k];
+          });
+        }
         
         console.log("[PlayerState] Loaded from storage");
       } else {
@@ -258,6 +270,11 @@
     Game.player.level = _state.level;
     Game.player.xp = _state.xp;
     Game.player.caps = _state.caps;
+    Game.player.special = _state.special;
+    // Also sync to window.PLAYER.special for VATS and legacy modules
+    if (window.PLAYER) {
+      window.PLAYER.special = _state.special;
+    }
   }
 
   /**
@@ -643,6 +660,15 @@
     visitLocation,
     syncWithBackend,
     receiveItemFromNPC,
+    getSpecial: function () { return _state ? { ..._state.special } : { S:5,P:5,E:5,C:5,I:5,A:5,L:5 }; },
+    setSpecial: function (key, value) {
+      if (!_state || !_state.special) return;
+      if (typeof value !== 'number') return;
+      _state.special[key] = Math.max(1, Math.min(10, Math.round(value)));
+      _dirty = true;
+      syncGamePlayerReferences();
+      saveToStorage();
+    },
     save: saveToStorage,
     load: loadFromStorage
   };
