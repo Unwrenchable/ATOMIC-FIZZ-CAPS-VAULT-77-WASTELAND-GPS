@@ -78,10 +78,10 @@
   // JavaScript engine implementations; crypto.getRandomValues() uses the
   // browser's CSPRNG, making tick rolls unguessable by external observers.
   // ------------------------------------------------------------
+  const _rngBuf = new Uint32Array(1); // reused buffer — avoids per-call allocation
   function _secureRandom() {
-    const buf = new Uint32Array(1);
-    crypto.getRandomValues(buf);
-    return buf[0] / 0x100000000; // float in [0, 1)
+    crypto.getRandomValues(_rngBuf);
+    return _rngBuf[0] / 0x100000000; // float in [0, 1)
   }
 
   // ------------------------------------------------------------
