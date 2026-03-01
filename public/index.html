@@ -340,13 +340,15 @@
                   <div class="panel-header">DIALOG</div>
                   <div class="panel-body">
                     <div style="display:flex; gap:10px; align-items:flex-start;">
-                      <div style="width:120px; text-align:center;">
-                        <div id="dialogPortraitContainer" style="width:100px; height:120px; border:1px solid #00ff41; background:rgba(0,20,10,0.6);"></div>
-                        <div id="dialogNPCName" style="margin-top:6px; color:#ffaa00; font-weight:bold;">NPC</div>
+                      <div style="width:120px; text-align:center; flex-shrink:0;">
+                        <div id="dialogPortraitContainer" style="width:100px; height:120px; border:1px solid #00ff41; background:rgba(0,20,10,0.6); display:flex; align-items:center; justify-content:center; font-size:40px;">🧍</div>
+                        <div id="dialogNPCName" style="margin-top:6px; color:#ffaa00; font-weight:bold; font-size:11px; word-break:break-word;">NPC</div>
                       </div>
-                      <div style="flex:1;">
-                        <div id="dialogBody" class="dialog-body"></div>
-                        <div style="margin-top:8px;"><button id="dialogCloseBtn" class="pipboy-button-small">CLOSE</button></div>
+                      <div style="flex:1; overflow-y:auto; max-height:calc(100vh - 260px);">
+                        <div id="dialogBody" class="dialog-body" style="font-size:13px; line-height:1.5;"></div>
+                        <div style="margin-top:10px; border-top:1px solid rgba(0,255,65,0.15); padding-top:8px;">
+                          <button id="dialogCloseBtn" class="pipboy-button-small" style="opacity:0.5; font-size:10px;">[ ESC ] CLOSE</button>
+                        </div>
                       </div>
                     </div>
                   </div>
