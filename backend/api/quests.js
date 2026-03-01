@@ -137,7 +137,7 @@ router.post("/complete", authMiddleware, async (req, res) => {
     if (rewards && typeof rewards === "object") {
       if (typeof rewards.xp === "number" && rewards.xp > 0) {
         // BUG FIX: cap XP to server-enforced maximum per quest completion
-        const xpToAward = Math.min(Math.floor(rewards.xp), MAX_QUEST_XP);
+        const xpToAward = Math.min(Math.max(0, Math.floor(rewards.xp)), MAX_QUEST_XP);
         player.xp = (player.xp || 0) + xpToAward;
         // Check for level up
         const xpPerLevel = 100;
@@ -148,7 +148,7 @@ router.post("/complete", authMiddleware, async (req, res) => {
       }
       if (typeof rewards.caps === "number" && rewards.caps > 0) {
         // BUG FIX: cap caps to server-enforced maximum per quest completion
-        const capsToAward = Math.min(Math.floor(rewards.caps), MAX_QUEST_CAPS);
+        const capsToAward = Math.min(Math.max(0, Math.floor(rewards.caps)), MAX_QUEST_CAPS);
         player.caps = (player.caps || 0) + capsToAward;
       }
       if (Array.isArray(rewards.items)) {

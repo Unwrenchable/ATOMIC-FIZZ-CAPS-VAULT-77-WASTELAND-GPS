@@ -137,7 +137,11 @@ router.post("/special/update", authMiddleware, playerLimiter, async (req, res) =
     // Only update recognised SPECIAL keys to avoid arbitrary property injection
     const sanitizedSpecial = {};
     SPECIAL_KEYS.forEach(k => {
-      sanitizedSpecial[k] = typeof special[k] === "number" ? Math.min(10, Math.max(1, Math.floor(special[k]))) : (profile.special?.[k] ?? 5);
+      const raw = special[k];
+      const val = typeof raw === "number"
+        ? Math.min(10, Math.max(1, Math.floor(raw)))
+        : (profile.special?.[k] ?? 5);
+      sanitizedSpecial[k] = val;
     });
     profile.special = sanitizedSpecial;
     await saveProfile(wallet, profile);
