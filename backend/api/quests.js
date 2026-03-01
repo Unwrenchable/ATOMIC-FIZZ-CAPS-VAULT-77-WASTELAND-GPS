@@ -36,9 +36,14 @@ router.post("/accept", async (req, res) => {
     }
 
     const player = JSON.parse(playerData);
-    if (!player.quests) {
-      player.quests = { active: [], completed: [] };
+    // BUG FIX: player.quests is initialised as {} by player.js/create, so
+    // `!player.quests` is false (truthy object) but player.quests.active is
+    // undefined, causing TypeError on .includes(). Normalise both arrays.
+    if (!player.quests || typeof player.quests !== 'object') {
+      player.quests = {};
     }
+    if (!Array.isArray(player.quests.active)) player.quests.active = [];
+    if (!Array.isArray(player.quests.completed)) player.quests.completed = [];
 
     // Check if quest already completed or active
     if (player.quests.completed.includes(questId)) {
@@ -94,9 +99,13 @@ router.post("/complete", async (req, res) => {
     }
 
     const player = JSON.parse(playerData);
-    if (!player.quests) {
-      player.quests = { active: [], completed: [] };
+    // BUG FIX: same quests normalisation as /accept — player.quests may be {} (not null)
+    // so the old `if (!player.quests)` guard was insufficient.
+    if (!player.quests || typeof player.quests !== 'object') {
+      player.quests = {};
     }
+    if (!Array.isArray(player.quests.active)) player.quests.active = [];
+    if (!Array.isArray(player.quests.completed)) player.quests.completed = [];
 
     // Check if quest is active
     if (!player.quests.active.includes(questId)) {

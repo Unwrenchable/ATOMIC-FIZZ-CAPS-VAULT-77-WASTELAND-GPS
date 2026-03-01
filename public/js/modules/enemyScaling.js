@@ -35,7 +35,9 @@
         if (repStatus === "hostile") lvl += 1;
 
         // Elite tiers
-        const eliteRoll = Math.random();
+        // BUG FIX: was using Math.random() for combat outcome RNG — must use
+        // crypto.getRandomValues() per project security policy.
+        const eliteRoll = this.secureRandom();
         let elite = false;
         let eliteTier = 0;
 
@@ -55,10 +57,10 @@
         let mutationType = null;
 
         if (weather?.type === "rad_storm") {
-          if (Math.random() < 0.25) {
+          if (this.secureRandom() < 0.25) {
             mutated = true;
 
-            const mRoll = Math.random();
+            const mRoll = this.secureRandom();
             if (mRoll < 0.33) mutationType = "glowing";
             else if (mRoll < 0.66) mutationType = "feral";
             else mutationType = "unstable";
@@ -84,12 +86,26 @@
     },
 
     // --------------------------------------------------------
-    // Utility
+    // Cryptographically-secure random float in [0, 1)
+    // BUG FIX: replaces Math.random() with crypto.getRandomValues()
+    // --------------------------------------------------------
+    secureRandom() {
+      const arr = new Uint32Array(1);
+      crypto.getRandomValues(arr);
+      // Divide by 2^32 to get a float in [0, 1)
+      return arr[0] / 0x100000000;
+    },
+
+    // --------------------------------------------------------
+    // Cryptographically-secure integer in [min, max] inclusive
+    // BUG FIX: replaces Math.random() with crypto.getRandomValues()
     // --------------------------------------------------------
     randomInRange(min, max) {
       const lo = Math.min(min, max);
       const hi = Math.max(min, max);
-      return Math.floor(Math.random() * (hi - lo + 1)) + lo;
+      const arr = new Uint32Array(1);
+      crypto.getRandomValues(arr);
+      return Math.floor((arr[0] / 0x100000000) * (hi - lo + 1)) + lo;
     }
   };
 

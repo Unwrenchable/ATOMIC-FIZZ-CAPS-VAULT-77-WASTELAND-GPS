@@ -69,7 +69,10 @@
         const playerPos = Game.modules.worldmap.getPlayerPosition();
         if (playerPos) {
           // Spawn at a distance from player
-          const angle = Math.random() * Math.PI * 2;
+          // BUG FIX: replaced Math.random() with crypto.getRandomValues()
+          const angleArr = new Uint32Array(1);
+          crypto.getRandomValues(angleArr);
+          const angle = (angleArr[0] / 0x100000000) * Math.PI * 2;
           const dist = options.spawnRadius || 50;
           spawnPos = {
             lat: playerPos.lat + (Math.cos(angle) * dist) / METERS_PER_DEGREE,
@@ -113,8 +116,11 @@
       // Check for Signal Runner module first
       if (npcId === "signal_runner" && Game.modules.SignalRunner) {
         const playerPos = Game.modules.worldmap?.getPlayerPosition() || { lat: 36.1699, lng: -115.1398 };
-        const angle = Math.random() * Math.PI * 2;
-        const dist = Math.random() * radius;
+        // BUG FIX: replaced Math.random() with crypto.getRandomValues()
+        const rndArr = new Uint32Array(2);
+        crypto.getRandomValues(rndArr);
+        const angle = (rndArr[0] / 0x100000000) * Math.PI * 2;
+        const dist = (rndArr[1] / 0x100000000) * radius;
         const spawnPos = {
           lat: playerPos.lat + (Math.cos(angle) * dist) / METERS_PER_DEGREE,
           lng: playerPos.lng + (Math.sin(angle) * dist) / METERS_PER_DEGREE
@@ -134,8 +140,11 @@
       }
 
       // Random offset around player
-      const angle = Math.random() * Math.PI * 2;
-      const dist = Math.random() * radius;
+      // BUG FIX: replaced Math.random() with crypto.getRandomValues()
+      const rndArr = new Uint32Array(2);
+      crypto.getRandomValues(rndArr);
+      const angle = (rndArr[0] / 0x100000000) * Math.PI * 2;
+      const dist = (rndArr[1] / 0x100000000) * radius;
 
       const spawnPos = {
         lat: playerPos.lat + (Math.cos(angle) * dist) / METERS_PER_DEGREE,
@@ -298,9 +307,13 @@
 
         // Add glitch dialog for special NPCs
         if (npc.dialog.glitch) {
+          // BUG FIX: replaced Math.random() with crypto.getRandomValues()
+          const rndIdx = new Uint32Array(1);
+          crypto.getRandomValues(rndIdx);
+          const glitchIdx = rndIdx[0] % npc.dialog.glitch.length;
           dialogue.nodes.push({
             id: 'glitch',
-            text: npc.dialog.glitch[Math.floor(Math.random() * npc.dialog.glitch.length)],
+            text: npc.dialog.glitch[glitchIdx],
             responses: [{ text: 'What?', next: 'intro' }]
           });
         }

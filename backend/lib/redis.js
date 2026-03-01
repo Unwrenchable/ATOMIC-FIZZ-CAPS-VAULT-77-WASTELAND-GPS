@@ -50,6 +50,10 @@ function createInMemoryClient() {
     },
     async set(key, value, opts) {
       const val = toStr(value);
+      // BUG FIX: honour NX option (set only if Not eXists) for replay protection
+      if (opts && opts.NX && store.has(key)) {
+        return null; // NX: key already exists, do not overwrite
+      }
       store.set(key, val);
       if (opts && opts.EX) {
         setTimeout(() => store.delete(key), Number(opts.EX) * 1000);
@@ -366,7 +370,10 @@ async function set(k, v, opts) {
   try {
     const c = await ensureClient();
     if (c.isFallback) return c.set(key(k), v, opts);
-    if (opts && opts.EX) return await c.set(key(k), v, { EX: opts.EX });
+    // BUG FIX: previously only forwarded { EX: opts.EX }, silently dropping NX and
+    // any other option flags. This broke atomic "set if not exists" used for voucher
+    // replay protection in redeem-voucher.js. Now forward the full opts object.
+    if (opts) return await c.set(key(k), v, opts);
     return await c.set(key(k), v);
   } catch (err) {
     handleRedisError(err, 'set');
