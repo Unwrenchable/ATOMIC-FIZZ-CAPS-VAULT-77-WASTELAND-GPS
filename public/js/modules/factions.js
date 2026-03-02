@@ -18,7 +18,7 @@
 
       try {
         // Adjust path if needed
-        const res = await fetch("factions.json");
+        const res = await fetch("/data/factions.json");
         this.factions = await res.json();
         this.buildIndex();
         this.loaded = true;

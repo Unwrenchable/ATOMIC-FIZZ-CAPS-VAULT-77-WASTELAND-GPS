@@ -44,7 +44,7 @@
       pools.forEach(arr => {
         arr.forEach(item => {
           if (item.id === req.id) {
-            count += item.amount || 1;
+            count += item.quantity ?? item.amount ?? 1;
           }
         });
       });
@@ -70,12 +70,17 @@
           const item = arr[i];
           if (item.id !== req.id) continue;
 
-          const stack = item.amount || 1;
+          const stack = item.quantity ?? item.amount ?? 1;
           if (stack <= toRemove) {
             toRemove -= stack;
             arr.splice(i, 1);
           } else {
-            item.amount = stack - toRemove;
+            // BUG-008: use 'in' check so write matches read precedence even when quantity===0
+            if ('quantity' in item) {
+              item.quantity = stack - toRemove;
+            } else {
+              item.amount = stack - toRemove;
+            }
             toRemove = 0;
           }
         }
