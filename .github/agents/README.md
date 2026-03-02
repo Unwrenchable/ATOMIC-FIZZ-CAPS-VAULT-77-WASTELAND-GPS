@@ -34,6 +34,7 @@ Those references in older agent files are wrong and must be ignored.
 | `web3-specialist.md` | Solana / Phantom wallet / FIZZ token expert |
 | `wasteland-assistant.md` | Game mechanics, battle system, crafting, economy assistant |
 | `my-agent.agent.md` | Vault 77 Overseer personality agent (used in AI chat) |
+| `game-tester.md` | Master QA agent — simulates 1,000 worldwide players, finds bugs & exploits |
 | `memory.md` | Persistent decisions, gotchas, verified commands |
 | `tasks.md` | **Active task queue — check before starting work on shared files** |
 
