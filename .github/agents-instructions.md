@@ -1,0 +1,287 @@
+# ☢️ Vault-77 Agent Network: Networked Group Mind
+
+> **Vault-Tec Classification: UNCLASSIFIED / ALL AGENTS**  
+> Central coordination document for all AI coding agents operating on the
+> **Atomic Fizz Caps** Wasteland GPS game repository.  
+> Read this file first, then `.github/agents/README.md` and `.github/agents/agent.md` before making any changes.
+
+---
+
+## 1. Repository Initialization Checklist
+
+Before making any changes, verify the following:
+
+- [ ] **Source code organized**: `backend/` (API), `public/` (frontend), `programs/` (Solana), `workers/`, `scripts/`, `docs/`
+- [ ] **Dependencies declared**: `package.json` at repo root lists all Node.js dependencies
+- [ ] **Environment template present**: `.env.example` lists all required env vars (no secrets)
+- [ ] **Linter configured**: `eslint.config.mjs` + `.github/workflows/` for CI
+- [ ] **CI workflows active**: `.github/workflows/smoke-test.yml` (API health on push to `main`), `.github/workflows/manual-vercel-deploy.yml`
+- [ ] **Backend entry point**: `backend/server.js` starts Express and mounts all routes via `safeMount()`
+- [ ] **Redis operational**: `backend/lib/redis.js` — falls back to in-memory store if Redis unreachable
+- [ ] **Frontend static**: `public/` — vanilla HTML/CSS/JS, no build step, served as-is by Vercel
+
+---
+
+## 2. Agent Peer Discovery
+
+Agents operating on this repository discover each other through the following:
+
+### Registry (`.github/agents/` directory)
+
+| Agent File | Role |
+|------------|------|
+| `README.md` | Top-level orientation — read first |
+| `agent.md` | Repo structure, toolchain, conventions |
+| `bootstrap.md` | Local setup guide |
+| `fullstack-dev.md` | Full-stack master agent (Node/Express + vanilla JS + Solana) |
+| `web3-specialist.md` | Solana / Phantom wallet / FIZZ token expert |
+| `SwapAssistant.md` | Game mechanics, battle system, crafting, economy |
+| `my-agent.agent.md` | Vault 77 Overseer personality agent |
+| `memory.md` | Persistent decisions, verified commands, gotchas |
+
+### Peer Discovery Protocol
+
+1. **Read `README.md` first** — confirms project identity (Atomic Fizz Caps GPS game, NOT a DEX).
+2. **Check `memory.md`** — contains verified facts, tested commands, and architecture decisions from prior agent runs.
+3. **Check `agent.md`** — confirms toolchain and conventions before writing code.
+4. **Task routing** — route specialized tasks to the appropriate agent file (e.g., Solana changes → `web3-specialist.md`, AI/Overseer → `my-agent.agent.md`).
+
+---
+
+## 3. Communication Formats
+
+### Message Format: JSON
+
+All inter-agent communication (task handoffs, state updates, bug reports) uses structured JSON:
+
+```json
+{
+  "event_id": "<unique-uuid-v4>",
+  "timestamp": "<ISO-8601>",
+  "source_agent": "<agent-file-name>",
+  "target_agent": "<agent-file-name | 'broadcast'>",
+  "event_type": "<task_update | bug_report | state_sync | broadcast>",
+  "payload": {
+    "description": "<human-readable summary>",
+    "affected_files": ["<path/to/file>"],
+    "status": "<pending | in_progress | complete | failed>",
+    "error": "<error message if status=failed | null>"
+  }
+}
+```
+
+### Event Types
+
+| Type | When to Use |
+|------|-------------|
+| `task_update` | Progress on a specific implementation task |
+| `bug_report` | Discovered defect with reproduction steps |
+| `state_sync` | Sharing shared memory / `memory.md` updates |
+| `broadcast` | System-wide notification (e.g., "Level overhaul ready") |
+
+---
+
+## 4. Agent Synchronization Protocols
+
+### 4.1 Event-Driven Model
+
+Agents communicate via an event queue. Every event **must** carry a unique identifier.
+
+**Emit pattern (broadcast example):**
+```json
+{
+  "event_id": "evt-a7f3c2e1-9b44-4d2a-ae12-00deadbeef77",
+  "event_type": "broadcast",
+  "payload": {
+    "description": "Map system overhaul complete — POI rendering refactored.",
+    "affected_files": ["public/js/map/poi-renderer.js"],
+    "status": "complete"
+  }
+}
+```
+
+**Listener callback pattern:**
+- `onTaskComplete(eventId)` — triggered when a task event with `status: "complete"` is received
+- `onBugReport(eventId)` — triggered when a `bug_report` event arrives; routes to the fix queue
+- `onStateSync(eventId)` — merges incoming `memory.md` updates into shared context
+
+### 4.2 Unique Event Identifiers
+
+Every event **must** include a `event_id` using UUID v4 format: `evt-<uuid>`.
+
+- In Node.js backend: use `crypto.randomUUID()` (Node 15.6+)
+- In browser frontend: use `crypto.randomUUID()` or `crypto.getRandomValues()` — never `Math.random()`
+
+### 4.3 Shared Memory (Group Mind)
+
+Agents maintain a shared context via `memory.md`:
+
+1. **Read**: Before starting a task, read `memory.md` for prior decisions.
+2. **Write**: After completing a task, append new facts using this format:
+
+```markdown
+### [YYYY-MM-DD] <Short fact title>
+- **What**: <one-line description>
+- **Why**: <rationale>
+- **Verified**: <tested command or evidence>
+```
+
+3. **Merge conflicts**: If two agents update `memory.md` simultaneously, prefer the more recent entry with verified test evidence.
+
+### 4.4 Convergence Rules
+
+- Agents must NOT make isolated decisions on shared systems (Redis keys, auth flow, CORS config).
+- Any change to `backend/lib/redis.js`, `backend/lib/walletVerify.js`, or `backend/server.js` requires a note in `memory.md`.
+- If an agent reaches a conflicting state, it emits a `state_sync` event and waits for the group mind to reconcile.
+
+---
+
+## 5. Failure Mitigation Strategies
+
+### 5.1 Redis Unavailability
+
+- `backend/lib/redis.js` auto-falls back to an in-memory store.
+- Agents should not assume Redis is always available.
+- On Redis failure: log the error, continue with in-memory fallback, emit a `bug_report` event.
+
+### 5.2 Hugging Face AI Timeout
+
+- `backend/api/overseer-proxy.js` proxies HF requests.
+- On timeout or 5xx from HF: return fallback personality response from `core.personality.js`.
+- Agents modifying the Overseer must preserve the fallback path.
+
+### 5.3 Solana RPC Failure
+
+- Frontend wallet operations degrade gracefully — show error banner, preserve local state.
+- Never mutate player state on the backend without a verified Solana signature (`backend/lib/walletVerify.js`).
+- On RPC failure: surface a clear user error in the Pip-Boy UI (no silent failures).
+
+### 5.4 GPS Claim Failures
+
+- Claims require HMAC-signed GPS tokens (`GPS_SECRET`).
+- On invalid GPS token: return `403` with a Fallout-flavoured message, do not write to Redis.
+- Agents modifying GPS claim logic must test with both valid and invalid token cases.
+
+### 5.5 CI / Smoke Test Failure
+
+- If `GET https://api.atomicfizzcaps.xyz/api/health` returns non-2xx:
+  1. Check Render deploy logs for backend startup errors.
+  2. Verify `REDIS_URL` uses `redis://` or `rediss://` protocol (not `http://`).
+  3. Check for missing env vars (compare against `.env.example`).
+  4. Roll back the last deploy if the issue cannot be diagnosed in < 15 minutes.
+
+---
+
+## 6. GitHub Copilot Integration Workflow
+
+### 6.1 Task Prompt Embedding
+
+Agents and Copilot tasks should embed intent in comment blocks so context is preserved:
+
+```javascript
+// TASK: [bug] Fix double-prefix in Redis key for quest-secrets
+// AFFECTED: backend/api/quest-secrets.js
+// STEPS:
+//   1. Remove key() call at callsite — redis wrapper calls key() internally
+//   2. Pass bare string: `player:${wallet}:quest:${questId}`
+//   3. Verify with: node -e "require('./backend/lib/redis').get('test')"
+// STATUS: pending
+```
+
+### 6.2 Copilot Coding Agent Rules
+
+When GitHub Copilot coding agent is invoked on this repository:
+
+1. **Read this file first**, then `.github/agents/README.md` and `.github/agents/agent.md`.
+2. **Make minimal changes** — surgical edits only; do not refactor unrelated code.
+3. **Match the stack**: CommonJS in backend, vanilla JS in frontend, no TypeScript.
+4. **Security invariants** (never violate):
+   - All RNG via `crypto.getRandomValues()` (browser) or `crypto.randomBytes()` (Node) — never `Math.random()`
+   - All player-mutating routes MUST call `walletVerify.verifySignature()`
+   - Admin passwords MUST use `crypto.timingSafeEqual()`
+   - No secrets committed to any file — use `.env` (git-ignored)
+5. **Before committing**: run `npm run lint` and verify the smoke-test path (`GET /api/health`) is unbroken.
+6. **After committing**: update `memory.md` if a new convention was established or a gotcha was discovered.
+
+### 6.3 Routing Logic for Efficiency
+
+| Task Category | Agent / File to Use |
+|---------------|---------------------|
+| Backend API route bug | `agent.md` + `backend/api/<route>.js` |
+| Redis key / data bug | `memory.md` (check double-prefix gotcha) + `backend/lib/redis.js` |
+| Wallet / auth security | `web3-specialist.md` + `backend/lib/walletVerify.js` |
+| Frontend UI / Pip-Boy | `agent.md` + `public/js/` |
+| Overseer AI dialogue | `my-agent.agent.md` + `public/js/overseer/` |
+| Game mechanics | `SwapAssistant.md` + `public/js/modules/` |
+| Solana program | `web3-specialist.md` + `programs/` |
+| NFT minting | `web3-specialist.md` + `workers/` |
+| Deployment / infra | `bootstrap.md` + `render.yaml` / `vercel.json` |
+
+---
+
+## 7. Key Workflows
+
+### 7.1 New Feature Workflow
+
+```
+1. Read memory.md → check for prior decisions on the feature area
+2. Read agent.md  → confirm conventions
+3. Branch from main
+4. Implement minimal change (surgical edit)
+5. npm run lint → fix any issues
+6. Manual smoke test → verify /api/health + affected endpoint
+7. Update memory.md → record any new gotcha or verified command
+8. Open PR → CI smoke test validates on merge
+```
+
+### 7.2 Bug Fix Workflow
+
+```
+1. Reproduce the bug → document repro steps
+2. Emit bug_report event (see §3) → update task queue
+3. Trace to root cause (grep, glob, view tools)
+4. Fix smallest possible code surface
+5. Verify fix does not break adjacent functionality
+6. npm run lint
+7. Update memory.md if it was a recurring class of bug
+8. PR → CI green → merge
+```
+
+### 7.3 Memory Sync Workflow
+
+```
+After any non-trivial change:
+  agent proposes memory.md addition
+    → human reviews (no secrets, content accurate)
+      → merge into memory.md
+        → all future agents pick it up
+```
+
+---
+
+## 8. API Endpoint Quick Reference
+
+| Method | Path | Auth Required |
+|--------|------|---------------|
+| GET | `/api/health` | No |
+| POST | `/api/location-claim` | Wallet sig |
+| GET | `/api/locations` | No |
+| GET/POST | `/api/player` | Wallet sig (POST) |
+| GET | `/api/caps` | No |
+| GET | `/api/xp` | No |
+| POST | `/api/gps` | HMAC |
+| POST | `/api/overseer-proxy` | No |
+| GET | `/api/mintables` | No |
+| POST | `/api/mint-item` | Wallet sig |
+| POST | `/api/loot-voucher` | Wallet sig |
+| POST | `/api/redeem-voucher` | Wallet sig |
+| POST | `/api/fuse` | Wallet sig |
+| GET | `/api/frontend-config` | No |
+| GET | `/api/quests` | No |
+| POST | `/api/quests-store` | Wallet sig |
+
+---
+
+*☢️ Per Vault-Tec Regulation 77-D: All agents must read this document before
+coordinating on any cross-system change. The wasteland rewards preparation.
+Rads rising. What's your move, smoothskin? ☢️*
