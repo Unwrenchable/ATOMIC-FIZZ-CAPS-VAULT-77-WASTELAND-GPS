@@ -332,11 +332,35 @@ body::after {
 /* ── Mobile ────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .terminal-wrap {
-    margin: 6px;
-    padding: 14px 12px 8px;
+    margin: 4px;
+    padding: 10px 10px 6px;
+    /* Allow natural height so keyboard doesn't crush layout */
+    min-height: 0;
   }
-  .terminal-header { font-size: 18px; letter-spacing: 1px; }
-  .terminal-button { font-size: 15px; padding: 6px 10px; }
+  .terminal-header { font-size: 16px; letter-spacing: 1px; }
+  .terminal-button { font-size: 16px; padding: 10px 14px; }
+
+  /* Larger send button for thumb-friendly tapping */
+  #send { min-width: 64px; min-height: 44px; }
+
+  /* Bigger input tap target */
+  .terminal-input { font-size: 18px; padding: 8px 6px; min-height: 44px; }
+
+  /* Chat: enable momentum scroll on iOS */
+  #chat {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Tighter message bubbles on small screens */
+  .message { max-width: 95%; font-size: 17px; }
+}
+
+/* Safe area insets for notched/home-bar devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .terminal-input-line {
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
 }
 
 /* ── Typing indicator ──────────────────────────────────────── */
