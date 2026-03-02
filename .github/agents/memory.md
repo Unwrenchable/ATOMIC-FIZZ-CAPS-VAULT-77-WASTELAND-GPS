@@ -123,6 +123,42 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-03-02] Hive mind infrastructure upgrade
+- **What**: Renamed `SwapAssistant.md` → `wasteland-assistant.md`; added `tasks.md`
+  active task queue; fixed API endpoint table in `agents-instructions.md` §8 (wrong
+  paths for overseer and frontend-config); fixed `backend/routes/` → `backend/api/`
+  in README.md, agent.md, fullstack-dev.md, web3-specialist.md, my-agent.agent.md,
+  wasteland-assistant.md; added agent priority matrix (§6.4) to agents-instructions.md.
+- **Why**: Multiple agent files pointed to wrong route directory; API table had stale
+  paths that would send agents to dead endpoints; filename `SwapAssistant.md` directly
+  contradicts "NOT a swap/DEX" identity; no active task log meant agents could
+  silently collide on shared files.
+- **Verified**: Route directory confirmed `backend/api/` from `backend/server.js:251`.
+  Overseer at `/api/overseer/ask` (`overseer-proxy.js:25`). Frontend config at
+  `/api/config/frontend` (`server.js:259`). `SwapAssistant.md` file confirmed removed.
+
+### [2026-03-02] Route directory is backend/api/ (not backend/routes/)
+- **What**: All live API route files are in `backend/api/` — NOT `backend/routes/`.
+  Exception: `backend/routes/wallet.js` (legacy stub, avoid adding new files there).
+  `server.js` mounts via `safeMount("/api/<path>", api("<filename>"))` where `api()`
+  resolves to `backend/api/`.
+- **Why**: Multiple agent files incorrectly stated `backend/routes/` causing agents
+  to look for files in the wrong directory.
+- **Verified**: `backend/server.js:251` shows `api()` helper resolves `backend/api/`.
+
+### [2026-03-02] Overseer ask endpoint is POST /api/overseer/ask
+- **What**: Overseer proxy is mounted at `/api/overseer` (server.js:290). Route
+  handler defines `router.post('/ask', ...)` (overseer-proxy.js:25). Full path:
+  `POST /api/overseer/ask`.
+- **Why**: Multiple agent files incorrectly stated `/api/overseer-proxy`.
+- **Verified**: `backend/server.js:290`, `backend/api/overseer-proxy.js:25`
+
+### [2026-03-02] Frontend config endpoint is GET /api/config/frontend
+- **What**: Frontend config is mounted at `/api/config/frontend` (server.js:259),
+  NOT `/api/frontend-config` as some agent files stated.
+- **Why**: Stale references in multiple agent files and the API table.
+- **Verified**: `backend/server.js:259`
+
 ### [2026-03-02] Redis wrapper double-prefix gotcha
 - **What**: `backend/lib/redis.js` wrapper functions (`get`/`set`/`hget`/`hset`/`del`) call `key()` internally. Callers must NOT pre-call `key()` before passing to a wrapper or the result is double-prefixed to `afw:afw:`.
 - **Why**: `location-claim.js` consistently double-prefixes all keys (legacy, do not change there). `quest-secrets.js` was fixed to use bare strings.
