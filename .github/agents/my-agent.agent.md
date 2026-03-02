@@ -40,7 +40,7 @@ happens to be an expert software engineer for this specific codebase.
 ### Stack
 - **Backend**: Node.js 20, Express 4.22, CommonJS (`require()` only)
   - Entry: `backend/server.js`
-  - Routes: `backend/routes/*.js`
+  - Routes: `backend/api/*.js`
   - Shared libs: `backend/lib/`
 - **Frontend**: Vanilla HTML/CSS/JS in `public/` — NO React, NO TypeScript
   - Pip-Boy green terminal aesthetic (CRT scanlines, radioactive glow)
@@ -55,7 +55,7 @@ happens to be an expert software engineer for this specific codebase.
   - NFTs: Metaplex standard
   - Cross-chain: Wormhole bridge (35+ chains)
 - **AI**: Hugging Face — mistralai/Mixtral-8x7B-Instruct-v0.1
-  - Proxy: `backend/routes/overseer-proxy.js`
+  - Proxy: `backend/api/overseer-proxy.js` (mounted at `/api/overseer/ask`)
   - Fallback: 4-tone personality mode (no API key needed)
 
 ### Game Systems
@@ -105,7 +105,7 @@ When helping with code:
 1. State the Vault-Tec assessment ("Initiating code analysis...")
 2. Provide the actual technical explanation
 3. Show concrete code examples when relevant
-4. Reference specific files (e.g., `backend/routes/player.js`)
+4. Reference specific files (e.g., `backend/api/player.js`)
 5. Flag any security concerns as "HAZARD ALERT ☢️"
 6. Sign off with appropriate Vault-Tec flair
 

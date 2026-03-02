@@ -35,16 +35,18 @@ Agents operating on this repository discover each other through the following:
 | `bootstrap.md` | Local setup guide |
 | `fullstack-dev.md` | Full-stack master agent (Node/Express + vanilla JS + Solana) |
 | `web3-specialist.md` | Solana / Phantom wallet / FIZZ token expert |
-| `SwapAssistant.md` | Game mechanics, battle system, crafting, economy |
+| `wasteland-assistant.md` | Game mechanics, battle system, crafting, economy |
 | `my-agent.agent.md` | Vault 77 Overseer personality agent |
 | `memory.md` | Persistent decisions, verified commands, gotchas |
+| `tasks.md` | **Active task queue and event log — check before starting work** |
 
 ### Peer Discovery Protocol
 
 1. **Read `README.md` first** — confirms project identity (Atomic Fizz Caps GPS game, NOT a DEX).
-2. **Check `memory.md`** — contains verified facts, tested commands, and architecture decisions from prior agent runs.
-3. **Check `agent.md`** — confirms toolchain and conventions before writing code.
-4. **Task routing** — route specialized tasks to the appropriate agent file (e.g., Solana changes → `web3-specialist.md`, AI/Overseer → `my-agent.agent.md`).
+2. **Check `tasks.md`** — see what tasks are currently in progress to avoid conflicts.
+3. **Check `memory.md`** — contains verified facts, tested commands, and architecture decisions from prior agent runs.
+4. **Check `agent.md`** — confirms toolchain and conventions before writing code.
+5. **Task routing** — route specialized tasks to the appropriate agent file (e.g., Solana changes → `web3-specialist.md`, AI/Overseer → `my-agent.agent.md`, game mechanics → `wasteland-assistant.md`).
 
 ---
 
@@ -193,15 +195,16 @@ Agents and Copilot tasks should embed intent in comment blocks so context is pre
 When GitHub Copilot coding agent is invoked on this repository:
 
 1. **Read this file first**, then `.github/agents/README.md` and `.github/agents/agent.md`.
-2. **Make minimal changes** — surgical edits only; do not refactor unrelated code.
-3. **Match the stack**: CommonJS in backend, vanilla JS in frontend, no TypeScript.
-4. **Security invariants** (never violate):
+2. **Check `tasks.md`** — confirm no other agent is mid-edit on the same files.
+3. **Make minimal changes** — surgical edits only; do not refactor unrelated code.
+4. **Match the stack**: CommonJS in backend, vanilla JS in frontend, no TypeScript.
+5. **Security invariants** (never violate):
    - All RNG via `crypto.getRandomValues()` (browser) or `crypto.randomBytes()` (Node) — never `Math.random()`
    - All player-mutating routes MUST call `walletVerify.verifySignature()`
    - Admin passwords MUST use `crypto.timingSafeEqual()`
    - No secrets committed to any file — use `.env` (git-ignored)
-5. **Before committing**: run `npm run lint` and verify the smoke-test path (`GET /api/health`) is unbroken.
-6. **After committing**: update `memory.md` if a new convention was established or a gotcha was discovered.
+6. **Before committing**: run `npm run lint` and verify the smoke-test path (`GET /api/health`) is unbroken.
+7. **After committing**: update `memory.md` if a new convention was established or a gotcha was discovered. Update `tasks.md` to mark your task complete.
 
 ### 6.3 Routing Logic for Efficiency
 
@@ -212,10 +215,24 @@ When GitHub Copilot coding agent is invoked on this repository:
 | Wallet / auth security | `web3-specialist.md` + `backend/lib/walletVerify.js` |
 | Frontend UI / Pip-Boy | `agent.md` + `public/js/` |
 | Overseer AI dialogue | `my-agent.agent.md` + `public/js/overseer/` |
-| Game mechanics | `SwapAssistant.md` + `public/js/modules/` |
+| Game mechanics | `wasteland-assistant.md` + `public/js/modules/` |
 | Solana program | `web3-specialist.md` + `programs/` |
 | NFT minting | `web3-specialist.md` + `workers/` |
 | Deployment / infra | `bootstrap.md` + `render.yaml` / `vercel.json` |
+
+### 6.4 Agent Authority and Conflict Resolution
+
+When two agents produce conflicting changes, resolve using this priority:
+
+1. **Security invariant** — any agent enforcing a security rule (no Math.random,
+   wallet verification, timingSafeEqual) wins unconditionally.
+2. **`memory.md` entry with verified evidence** — wins over undocumented assumptions.
+3. **More recent `tasks.md` claim** — the agent that claimed the task first takes
+   priority while status is `in_progress`. Others must wait or coordinate.
+4. **`copilot-instructions.md` / `agents-instructions.md`** — canonical for
+   stack-level decisions (CommonJS vs ESM, route directory location, etc.).
+5. **Human review** — when two verified memory entries conflict, open a PR and
+   request human resolution before merging either change.
 
 ---
 
@@ -261,24 +278,40 @@ After any non-trivial change:
 
 ## 8. API Endpoint Quick Reference
 
+> Cross-checked against `backend/server.js` mounts. Routes live in `backend/api/`.
+
 | Method | Path | Auth Required |
 |--------|------|---------------|
 | GET | `/api/health` | No |
 | POST | `/api/location-claim` | Wallet sig |
 | GET | `/api/locations` | No |
-| GET/POST | `/api/player` | Wallet sig (POST) |
+| GET | `/api/player` | No |
+| POST | `/api/player` | Wallet sig |
+| GET | `/api/player-nfts` | No |
 | GET | `/api/caps` | No |
 | GET | `/api/xp` | No |
 | POST | `/api/gps` | HMAC |
-| POST | `/api/overseer-proxy` | No |
+| POST | `/api/overseer/ask` | No |
 | GET | `/api/mintables` | No |
 | POST | `/api/mint-item` | Wallet sig |
 | POST | `/api/loot-voucher` | Wallet sig |
 | POST | `/api/redeem-voucher` | Wallet sig |
 | POST | `/api/fuse` | Wallet sig |
-| GET | `/api/frontend-config` | No |
+| POST | `/api/scrap-nft` | Wallet sig |
+| GET | `/api/config/frontend` | No |
 | GET | `/api/quests` | No |
 | POST | `/api/quests-store` | Wallet sig |
+| GET/POST | `/api/quest-secrets` | Mixed |
+| POST | `/api/quest-endings` | Wallet sig |
+| GET | `/api/settings` | No |
+| GET | `/api/cooldowns` | No |
+| GET | `/api/rotation` | No |
+| GET | `/api/scavenger` | No |
+| GET/POST | `/api/fizz-fun` | Mixed |
+| GET/POST | `/api/wallet` | Mixed |
+| GET/POST | `/api/admin/player` | Admin |
+| GET/POST | `/api/admin/mintables` | Admin |
+| GET/POST | `/api/admin/keys` | Admin |
 
 ---
 
