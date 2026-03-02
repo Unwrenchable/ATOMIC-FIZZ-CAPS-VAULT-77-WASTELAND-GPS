@@ -44,6 +44,13 @@
     mysterious: ["encrypted_chip", "strange_relic"]
   };
 
+  // Secure RNG: use browser CSPRNG instead of predictable Math.random()
+  const _rngBuf = new Uint32Array(1);
+  function _secureRandom() {
+    crypto.getRandomValues(_rngBuf);
+    return _rngBuf[0] / 0x100000000;
+  }
+
   // ------------------------------------------------------------
   // Weighted rarity roll
   // ------------------------------------------------------------
@@ -69,7 +76,7 @@
 
     // Normalize
     const total = Object.values(weights).reduce((a, b) => a + b, 0);
-    let roll = Math.random() * total;
+    let roll = _secureRandom() * total;
 
     for (const [rarity, weight] of Object.entries(weights)) {
       if (roll < weight) return rarity;
@@ -116,7 +123,7 @@
     }
 
     // Timeline distortions
-    if (timelineUnstable && Math.random() < 0.25) {
+    if (timelineUnstable && _secureRandom() < 0.25) {
       loot.push("echo_item");
     }
 
@@ -134,7 +141,7 @@
   // ------------------------------------------------------------
   function pick(arr) {
     if (!arr || arr.length === 0) return null;
-    return arr[Math.floor(Math.random() * arr.length)];
+    return arr[Math.floor(_secureRandom() * arr.length)];
   }
 
   // ------------------------------------------------------------

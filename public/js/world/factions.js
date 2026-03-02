@@ -98,6 +98,13 @@
     return A.enemies && A.enemies.includes(factionB);
   }
 
+  // Secure RNG: use browser CSPRNG instead of predictable Math.random()
+  const _rngBuf = new Uint32Array(1);
+  function _secureRandom() {
+    crypto.getRandomValues(_rngBuf);
+    return _rngBuf[0] / 0x100000000;
+  }
+
   // ------------------------------------------------------------
   // Patrol Logic
   // ------------------------------------------------------------
@@ -108,7 +115,7 @@
     const f = getFaction(factionId);
     if (!f || !f.patrolChance) return null;
 
-    if (Math.random() < f.patrolChance) {
+    if (_secureRandom() < f.patrolChance) {
       return {
         type: "patrol",
         faction: factionId,

@@ -12,13 +12,20 @@
   const Timeline = window.overseerTimeline;
   const WorldState = window.overseerWorldState;
 
+  // Secure RNG: use browser CSPRNG instead of predictable Math.random()
+  const _rngBuf = new Uint32Array(1);
+  function _secureRandom() {
+    crypto.getRandomValues(_rngBuf);
+    return _rngBuf[0] / 0x100000000;
+  }
+
   // ------------------------------------------------------------
   // Weighted pick helper
   // ------------------------------------------------------------
   function weightedPick(weights) {
     const entries = Object.entries(weights);
     const total = entries.reduce((sum, [, w]) => sum + w, 0);
-    let roll = Math.random() * total;
+    let roll = _secureRandom() * total;
 
     for (const [key, weight] of entries) {
       if (roll < weight) return key;
