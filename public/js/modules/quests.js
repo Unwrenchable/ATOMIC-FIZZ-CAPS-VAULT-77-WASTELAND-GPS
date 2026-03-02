@@ -341,6 +341,12 @@
 
     // Trigger a quest delivered by NPC
     triggerNPCQuestDelivery(questId) {
+      // BUG-020: Guard — defer if narrative module isn't ready yet
+      if (typeof Game.modules?.narrative?.openByDialogId !== 'function') {
+        window.addEventListener('narrativeReady', () => this.triggerNPCQuestDelivery(questId), { once: true });
+        return false;
+      }
+
       const quest = QUESTS_DB[questId];
       if (!quest || quest.triggerType !== "npc") return false;
 

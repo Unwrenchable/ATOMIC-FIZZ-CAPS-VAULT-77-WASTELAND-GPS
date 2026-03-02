@@ -15,8 +15,8 @@ const xp = require("../lib/xp");
 // Per-route limiter (XP is value-bearing)
 // ------------------------------------------------------------
 const xpLimiter = rateLimit({
-  windowMs: 10 * 1000,
-  max: 10,
+  windowMs: 60 * 1000,  // 1 minute window
+  max: 3,               // max 3 XP award calls per minute (1500 XP/min max)
   message: { ok: false, error: "Too many XP award requests" },
   standardHeaders: true,
   legacyHeaders: false,
