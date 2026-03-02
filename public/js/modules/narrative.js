@@ -530,11 +530,11 @@
         const starterGear = Game.modules.quests.STARTER_GEAR;
         starterGearHtml = `
           <div class="starter-gear-list" style="margin-top:10px; border-top:1px solid rgba(0,255,65,0.3); padding-top:8px;">
-            <div style="color:#ffaa00; margin-bottom:6px; font-size:11px;">📦 YOUR STARTING GEAR</div>
+            <div style="color:#ffaa00; margin-bottom:6px; font-size:clamp(12px, 2vw, 13px);">📦 YOUR STARTING GEAR</div>
             ${starterGear.map(item => {
               const safeName = escapeHtml(item.name);
               const qty = item.quantity ? ` ×${item.quantity}` : "";
-              return `<div class="starter-gear-item" style="font-size:11px; padding:2px 0;">${safeName}${qty}</div>`;
+              return `<div class="starter-gear-item" style="font-size:clamp(12px, 2vw, 13px); padding:2px 0;">${safeName}${qty}</div>`;
             }).join("")}
           </div>
         `;
@@ -545,7 +545,7 @@
         <div class="dialog-header-row" style="margin-bottom:4px;">
           <span class="dialog-npc-name" style="color:#ffaa00; font-weight:bold;">${npcName}</span>
         </div>
-        ${npcDescription ? `<div class="dialog-npc-desc" style="font-size:11px; opacity:0.6; margin-bottom:6px;">${npcDescription}</div>` : ""}
+        ${npcDescription ? `<div class="dialog-npc-desc" style="font-size:clamp(12px, 2vw, 13px); opacity:0.9; margin-bottom:6px;">${npcDescription}</div>` : ""}
         <div class="dialog-divider" style="border-top:1px solid rgba(0,255,65,0.3); margin-bottom:8px;"></div>
         <div id="nrrTextArea" class="dialog-text" style="white-space:pre-wrap; min-height:4em;"></div>
         ${starterGearHtml}
@@ -625,10 +625,13 @@
         const closeText = node.end ? "[END CONVERSATION]" : "[ Continue ]";
         container.innerHTML = `
           <button class="nrr-choice-btn" data-action="close"
-            style="width:100%; text-align:left; padding:7px 10px; margin:2px 0;
+            style="width:100%; text-align:left; padding:12px 10px; margin:2px 0;
                    background:transparent; border:1px solid rgba(0,255,65,0.25);
-                   color:#888; font-family:inherit; font-size:12px; cursor:pointer;
-                   transition:background 0.15s;">
+                   color:#888; font-family:inherit; font-size:13px; cursor:pointer;
+                   min-height:44px; transition:background 0.15s;"
+            ontouchstart="this.style.background='rgba(0,255,65,0.15)'"
+            ontouchend="this.style.background='transparent'"
+            ontouchcancel="this.style.background='transparent'">
             ${escapeHtml(closeText)}
           </button>`;
         container.querySelector("[data-action='close']").addEventListener("click", () => this.closeDialog());
@@ -641,12 +644,15 @@
         const safeText = escapeHtml(resp.text || "");
         choiceHtml += `
           <button class="nrr-choice-btn" data-idx="${i}"
-            style="display:block; width:100%; text-align:left; padding:7px 10px; margin:2px 0;
+            style="display:block; width:100%; text-align:left; padding:12px 10px; margin:2px 0;
                    background:transparent; border:1px solid rgba(0,255,65,0.2);
-                   color:${color}; font-family:inherit; font-size:12px; cursor:pointer;
-                   transition:background 0.15s, border-color 0.15s;"
+                   color:${color}; font-family:inherit; font-size:13px; cursor:pointer;
+                   min-height:44px; transition:background 0.15s, border-color 0.15s;"
             onmouseover="this.style.background='rgba(0,255,65,0.08)';this.style.borderColor='rgba(0,255,65,0.5)';"
-            onmouseout="this.style.background='transparent';this.style.borderColor='rgba(0,255,65,0.2)';">
+            onmouseout="this.style.background='transparent';this.style.borderColor='rgba(0,255,65,0.2)';"
+            ontouchstart="this.style.background='rgba(0,255,65,0.15)'"
+            ontouchend="this.style.background='transparent'"
+            ontouchcancel="this.style.background='transparent'">
             ${safeText}
           </button>`;
       });
