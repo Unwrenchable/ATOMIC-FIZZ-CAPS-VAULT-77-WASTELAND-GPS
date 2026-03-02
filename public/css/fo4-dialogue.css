@@ -178,6 +178,8 @@
   border-top: 2px solid rgba(0, 255, 65, 0.4);
   padding: 24px 5% 80px;
   min-height: 200px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Speaker indicator */
@@ -537,8 +539,8 @@
 
 .fo4-dialogue-close {
   position: absolute;
-  top: 70px;
-  right: 20px;
+  top: max(70px, calc(60px + env(safe-area-inset-top, 0px)));
+  right: max(20px, env(safe-area-inset-right, 0px));
   z-index: 9999;
   background: rgba(20, 0, 0, 0.8);
   border: 2px solid rgba(255, 68, 68, 0.7);
@@ -747,7 +749,14 @@
   }
 
   .fo4-response-area {
-    bottom: 70px;
+    /* Switch to document flow on small phones so content scrolls
+       naturally instead of being clipped behind the absolute-positioned
+       dialogue box padding area */
+    position: relative;
+    bottom: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: 40vh;
   }
 
   .fo4-response-option {
@@ -872,7 +881,8 @@
       transparent 4px,
       rgba(0, 255, 0, 0.03) 6px
     );
-  animation: radiation-static 0.1s infinite;
+  animation: radiation-static 0.3s infinite;
+  will-change: opacity;
   pointer-events: none;
   z-index: 10;
 }
@@ -880,6 +890,13 @@
 @keyframes radiation-static {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 0.6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fo4-portrait-frame.ghoul::before {
+    animation: none;
+    opacity: 0.3;
+  }
 }
 
 /* Synth/Robot scan line effect */
