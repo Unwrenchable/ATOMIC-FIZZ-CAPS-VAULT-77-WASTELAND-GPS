@@ -198,9 +198,13 @@ router.post("/complete", authMiddleware, async (req, res) => {
 });
 
 // GET /api/quests/player/:wallet - Get player's quest progress
-router.get("/player/:wallet", async (req, res) => {
+router.get("/player/:wallet", authMiddleware, async (req, res) => {
   try {
     const { wallet } = req.params;
+    // BUG-010: Only allow players to see their own quest data (IDOR fix)
+    if (wallet !== req.player.wallet && req.player.role !== 'admin') {
+      return res.status(403).json({ ok: false, error: 'Forbidden' });
+    }
 
     if (!wallet || typeof wallet !== "string") {
       return res.status(400).json({ ok: false, error: "Invalid wallet" });
