@@ -397,7 +397,7 @@
       // Add center indicator
       const center = document.createElement('div');
       center.className = 'fo4-wheel-center';
-      center.textContent = 'WASD';
+      center.textContent = ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 'TAP' : 'WASD';
       wheel.appendChild(center);
 
       // Position mapping for diamond layout
@@ -416,7 +416,7 @@
         if (response.speechCheck || response.skillCheck) {
           const check = response.speechCheck || response.skillCheck;
           const difficulty = check.difficulty || 'medium';
-          innerHTML += `<span class="fo4-speech-badge ${difficulty}" style="font-size: 8px; margin: 2px 0;">[CHECK]</span>`;
+          innerHTML += `<span class="fo4-speech-badge ${difficulty}" style="font-size: 11px; margin: 2px 0;">[CHECK]</span>`;
         }
         
         innerHTML += `<span>${response.text || 'Continue'}</span>`;

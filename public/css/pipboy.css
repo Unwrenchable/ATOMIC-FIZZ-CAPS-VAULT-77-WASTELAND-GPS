@@ -837,3 +837,49 @@ input[type="reset"]:hover {
   opacity: 0.5;
   font-size: 0.85em;
 }
+
+/* ============================================================
+   BOOT SCREEN (BUG-008)
+   ============================================================ */
+#bootScreen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 9999;
+}
+#bootText {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: clamp(10px, 2.5vw, 16px);
+  color: #00ff41;
+  white-space: pre-wrap;
+  overflow: hidden;
+  max-width: 100vw;
+  text-align: center;
+  padding: 0 12px;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   MAP LOG OVERLAY (BUG-002)
+   ============================================================ */
+.map-log {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  color: #00ff41;
+  font-size: 11px;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  min-height: 0;
+  line-height: 1.4;
+}
+.map-log:empty {
+  display: none;
+}
