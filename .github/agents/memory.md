@@ -119,5 +119,65 @@ _(Things that tripped up a developer or AI assistant)_
 
 ---
 
+## Verified Facts from Agent Sessions
+
+_(Confirmed by agent runs — newest first)_
+
+### [2026-03-02] Redis wrapper double-prefix gotcha
+- **What**: `backend/lib/redis.js` wrapper functions (`get`/`set`/`hget`/`hset`/`del`) call `key()` internally. Callers must NOT pre-call `key()` before passing to a wrapper or the result is double-prefixed to `afw:afw:`.
+- **Why**: `location-claim.js` consistently double-prefixes all keys (legacy, do not change there). `quest-secrets.js` was fixed to use bare strings.
+- **Verified**: `backend/lib/redis.js:361-455`, `backend/api/location-claim.js:211,237,288`, `backend/api/quest-secrets.js:27,57`
+
+### [2026-03-02] Redis set() opts format
+- **What**: `set(k, v, opts)` takes opts as an **object** `{ EX: 300 }`. Positional ioredis syntax `set(k, v, 'EX', 300)` silently drops the 4th arg through the wrapper.
+- **Why**: The wrapper signature differs from raw ioredis.
+- **Verified**: `backend/lib/redis.js:369-380`, `backend/lib/admin.js:27-31`
+
+### [2026-03-02] Player profile Redis format
+- **What**: Player profiles stored as hash: `key(`player:${wallet}`)` with `redis.hget/hset(playerKey, "profile", data)`.
+- **Why**: hget/hset for profile field, not plain get/set.
+- **Verified**: `backend/api/fuse.js:44-46,99`, `backend/api/quests.js:31-32,89-90,179-180`
+
+### [2026-03-02] authMiddleware + wallet source (IDOR prevention)
+- **What**: All player-mutating routes MUST use `authMiddleware` AND source wallet from `req.player.wallet` — **never** from `req.body`. Using `req.body.wallet` without a session check is an IDOR vulnerability.
+- **Why**: Session-bound wallet prevents a player forging another's wallet address in the request body.
+- **Verified**: `backend/api/fuse.js:31-34`, `backend/api/scrap-nft.js:24-27`, `backend/api/quest-endings.js:31-32`, `backend/api/location-claim.js:136-139`
+
+### [2026-03-02] API routes location
+- **What**: Actual route files for the game live in `backend/api/` (not `backend/routes/`). `server.js` mounts them via `safeMount("/api/<path>", api("<filename>"))` where `api()` resolves to `backend/api/`.
+- **Why**: Older docs and agent files reference `backend/routes/`; that dir may have stubs but the live files are in `backend/api/`.
+- **Verified**: `backend/server.js:251`, `backend/api/` directory listing
+
+### [2026-03-02] NPC dialog grant_items system
+- **What**: Dialog nodes support `grant_items: [itemObj|"id"]` and `grant_from: "NPC Name"` — handled by `_grantDialogItems()` in `narrative.js` which calls `PlayerState.receiveItemFromNPC()`.
+- **Why**: Pattern used in Courier and Siren NPC dialogs.
+- **Verified**: `public/js/modules/narrative.js:390-415`, `public/data/narrative/dialog_courier.json:node_give_message`
+
+### [2026-03-02] PlayerState.addItem() unique-item guard
+- **What**: Weapons and armor are non-stackable/non-duplicable in `addItem()`. Consumables/ammo/tools stack. This prevents duplicate sidearms from STARTER_GEAR + NPC `grant_items`.
+- **Verified**: `public/js/game/player-state.js:308-332`
+
+### [2026-03-02] Siren NPC is first in chain
+- **What**: Siren (Signal Runner, radio contact) is the first NPC. `dialog_siren.json` uses `narrative.js` intro/nodes/quest_nodes format. Auto-triggers at `gameReady` via `boot.js` poll-retry. Chains to Courier dialog on close.
+- **Verified**: `public/data/narrative/dialog_siren.json`, `public/js/boot.js:131-153`
+
+### [2026-03-02] Overseer AI routing pipeline
+- **What**: `generateResponse()` returns `null` for fallbacks → `handleInput` calls `overseerPersonality.speak(line, conversationHistory)`. Uses backend proxy `/api/overseer/ask` (not direct HF). `getPlayerContext()` reads `window.opener.Game`.
+- **Verified**: `public/js/overseer/overseer.full.js:232-354`, `public/js/overseer/core.personality.js:168-400`
+
+### [2026-03-02] Secure RNG convention
+- **What**: `Math.random()` is forbidden for any game-critical logic. Browser: `crypto.getRandomValues()` with `Uint32Array`. Node: `crypto.randomBytes()`.
+- **Verified**: `public/js/modules/vats.js:128-131`, `public/js/modules/battles.js:256-259`, `public/js/boot.js:81-83`
+
+### [2026-03-02] XSS prevention with escapeHtml()
+- **What**: All user-supplied text must pass through `escapeHtml()` before being inserted into `innerHTML`. Pattern: create temp div → set `.textContent` → return `.innerHTML`.
+- **Verified**: `public/js/modules/narrative.js:20-24`, `public/js/overseer/overseer.full.js:186-188`
+
+### [2026-03-02] bs58 CDN global pattern
+- **What**: Frontend pages that need bs58 load it as a global via `https://unpkg.com/bs58@6.0.0/dist/index.min.js`. No npm install for frontend.
+- **Verified**: `public/index.html:63-81`, `public/exchange.html:119-122`
+
+---
+
 _Add new entries above the relevant section. Keep entries concise._
 _This file is version-controlled — never add secrets or credentials._
