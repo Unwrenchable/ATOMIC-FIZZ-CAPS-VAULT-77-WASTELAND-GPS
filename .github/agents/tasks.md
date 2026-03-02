@@ -45,6 +45,17 @@ _No active tasks. The wasteland is quiet — for now._
 
 ## Completed Tasks
 
+### [2026-03-02] Task: Add WastelandQA game-tester agent
+- **Agent**: copilot
+- **Files**: `.github/agents/game-tester.md`, `.github/agents/README.md`,
+  `.github/agents/tasks.md`
+- **Status**: `complete`
+- **What**: Created `WastelandQA` master game-tester agent simulating 1,000
+  concurrent worldwide players across 7 archetypes. Covers 12 game systems
+  with structured bug report format, exploit severity matrix, and 5-phase
+  testing methodology. Updated README agent table and tasks log.
+- **Verified**: File created, README table updated, no secrets committed.
+
 ### [2026-03-02] Task: Hive mind infrastructure upgrade
 - **Agent**: copilot
 - **Files**: `.github/agents-instructions.md`, `.github/agents/tasks.md`,
