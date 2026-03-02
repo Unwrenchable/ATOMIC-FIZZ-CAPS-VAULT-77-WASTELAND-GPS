@@ -975,11 +975,6 @@
     window.addEventListener('beforeunload', cleanup);
   })();
 
-  /* ------------------------- Initial greeting ------------------------- */
-  window.addEventListener('load', function () {
-    addMessage("Static... *crackle*...<br><br>A voice?<br><br>This is Jax Harlan... or what's left of him.<br><br>Been alone a long time.<br><br>You... you're real, aren't you?<br><br>Speak.", "overseer");
-  });
-
   /* ------------------------- Expose state for controls ------------------------- */
   window.state = state;
   window.addMessage = addMessage;
@@ -1423,6 +1418,8 @@ Overseer.handleInput = async function (raw) {
       const raw = Overseer.inputEl.value;
       Overseer.inputEl.value = "";
       Overseer.handleInput(raw);
+      // Refocus input so user can keep typing without re-tapping on mobile
+      try { Overseer.inputEl.focus(); } catch (e) {}
     });
   }
 

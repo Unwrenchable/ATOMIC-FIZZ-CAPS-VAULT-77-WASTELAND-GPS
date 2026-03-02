@@ -173,8 +173,8 @@
   // without being so long that minor whitespace differences cause a miss.
   var PROMPT_PREFIX_CHECK_LENGTH = 40;
   // How many conversation entries to include in the AI prompt for context.
-  // 6 entries = 3 player/Jax exchanges — enough context without bloating token count.
-  var HISTORY_CONTEXT_SIZE = 6;
+  // 10 entries = 5 player/Jax exchanges — more context for better conversational flow.
+  var HISTORY_CONTEXT_SIZE = 10;
 
   // -------------------------------------------------------------
   // PLAYER CONTEXT — reads from window.opener.Game (popup context)
@@ -357,16 +357,30 @@
     var hasRad     = radTerms.some(function (t) { return msg.includes(t); });
     var hasHelp    = helpTerms.some(function (t) { return msg.includes(t); });
 
-    if (hasCrypto)         return pick(cryptoQuips);
-    if (hasElon)           return pick(elonQuips);
-    if (hasX && !hasElon)  return pick(elonQuips);
-    if (hasCaps)           return pick(capsQuips);
-    if (hasMap)            return pick(mapQuips);
-    if (hasWho)            return pick(whoQuips);
-    if (hasGreet)          return pick(greetQuips);
-    if (hasQuest)          return pick(questQuips);
-    if (hasRad)            return pick(radQuips);
-    if (hasHelp)           return pick(helpQuips);
+    // Keyword shortcuts work great for short direct commands ("help", "map", "hi").
+    // When the user types a longer conversational message OR we have history, let the
+    // AI handle it so Jax can actually respond to what was *said* in context.
+    var wordCount = msg.trim().split(/\s+/).filter(Boolean).length;
+    var hasHistory = conversationHistory.length >= 2;
+    var isShort = wordCount <= 3;
+
+    // Topic-specific shortcuts fire for short commands OR when there's no conversation yet
+    if (isShort || !hasHistory) {
+      if (hasCrypto)         return pick(cryptoQuips);
+      if (hasElon)           return pick(elonQuips);
+      if (hasX && !hasElon)  return pick(elonQuips);
+      if (hasCaps)           return pick(capsQuips);
+      if (hasMap)            return pick(mapQuips);
+      if (hasWho)            return pick(whoQuips);
+    }
+
+    // Generic conversational shortcuts (greet/help/quest/rad) only for short fresh messages
+    if (isShort && !hasHistory) {
+      if (hasGreet)          return pick(greetQuips);
+      if (hasQuest)          return pick(questQuips);
+      if (hasRad)            return pick(radQuips);
+      if (hasHelp)           return pick(helpQuips);
+    }
 
     // ---- AI prompt with player context + conversation history ----
     var playerCtx = getPlayerContext();
@@ -386,11 +400,13 @@
       playerCtx ? "PLAYER STATE: " + playerCtx : "",
       "",
       "RULES:",
-      "- ONE punchy response (max 30 words). Never start with I if avoidable.",
-      "- React to what was actually said. No generic filler.",
+      "- ONE punchy response (max 40 words). Never start with I if avoidable.",
+      "- DIRECTLY address what the player just said. No topic changes. No generic filler.",
+      "- If the player asked a question, answer it (briefly, in character).",
       "- Tone options: dry wit / troll / corporate dystopia / galaxy-brain / glitch.",
+      "- Never repeat phrases from earlier in this conversation.",
       "",
-      historyText ? ("RECENT CONVERSATION:\n" + historyText + "\n") : "",
+      historyText ? ("RECENT CONVERSATION (use this as context — do NOT repeat the last Jax line):\n" + historyText + "\n") : "",
       "Vault Dweller: " + userMessage,
       "Jax:"
     ].filter(Boolean).join("\n").trim();
