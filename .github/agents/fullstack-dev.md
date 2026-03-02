@@ -71,7 +71,16 @@ This is **NOT** a DEX, swap protocol, or naming service.
 /
 ├── backend/
 │   ├── server.js          # Express entry point
-│   ├── routes/            # API route handlers (CommonJS)
+│   ├── api/               # API route handlers (CommonJS)
+│   │   ├── locations.js / location-claim.js / gps.js
+│   │   ├── player.js / caps.js / xp.js
+│   │   ├── quests.js / quests-store.js / quest-endings.js / quest-secrets.js
+│   │   ├── loot-voucher.js / redeem-voucher.js / mint-item.js / mintables.js
+│   │   ├── scrap-nft.js / player-nfts.js / fuse.js / scavenger.js
+│   │   ├── overseer-proxy.js  # HF AI proxy (mounted at /api/overseer)
+│   │   ├── frontend-config.js # (mounted at /api/config/frontend)
+│   │   ├── cooldowns.js / rotation.js / settings.js / fizz-fun.js
+│   │   └── adminPlayer.js / adminMintables.js / keys-admin.js
 │   ├── lib/               # Shared utilities
 │   │   ├── redis.js           # Redis + in-memory fallback
 │   │   ├── walletVerify.js    # Solana sig verification (tweetnacl)
@@ -163,7 +172,7 @@ This is **NOT** a DEX, swap protocol, or naming service.
 ### Backend — Node.js/Express
 
 - **Entry point**: `backend/server.js` (CommonJS, `require()` only)
-- **Route files**: Each in `backend/routes/`, exports `express.Router()`
+- **Route files**: Each in `backend/api/`, exports `express.Router()`
 - **Shared libs**: `backend/lib/` — always import from here, never inline
 - **Redis**: `backend/lib/redis.js` — all keys prefixed `afw:`
 - **Wallet auth**: `backend/lib/walletVerify.js` — tweetnacl + bs58

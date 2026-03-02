@@ -28,8 +28,8 @@ This is a Fallout-themed GPS crypto geo-game, **NOT** a swap/DEX protocol.
 - **Faction System**: Multiple wasteland factions, reputation tracking,
   faction quests, territory control. File: `public/js/modules/factions.js`
 - **Quest System**: Quest generation, progress tracking, secret codes, endings.
-  Frontend: `public/js/modules/quests.js`. Backend: `backend/routes/quests.js`,
-  `backend/routes/quests-store.js`, `backend/routes/quest-endings.js`
+  Frontend: `public/js/modules/quests.js`. Backend: `backend/api/quests.js`,
+  `backend/api/quests-store.js`, `backend/api/quest-endings.js`
 - **NPC System**: Signal runners, quest givers, faction reps. Fallout 4-style
   dialogue trees. Files: `public/js/modules/npcEncounter.js`,
   `public/js/modules/fo4-dialogue.js`, `public/js/modules/npc-registry.js`
@@ -47,13 +47,13 @@ This is a Fallout-themed GPS crypto geo-game, **NOT** a swap/DEX protocol.
 - **Radiation Zones**: Map overlay showing radiation hotspots.
   File: `public/js/modules/radiationZones.js`
 - **NUKE System**: Destroy items for FIZZ tokens (permanent, no refunds).
-  Backend: `backend/routes/fuse.js`. Pages: `public/nuke.html`,
+  Backend: `backend/api/fuse.js`. Pages: `public/nuke.html`,
   `public/nuke-portal.html`
-- **Scavenger Exchange**: Peer-to-peer item trading. Backend: `backend/routes/scavenger.js`
+- **Scavenger Exchange**: Peer-to-peer item trading. Backend: `backend/api/scavenger.js`
 
 ### Overseer AI Terminal
 - Available at `https://www.atomicfizzcaps.xyz/overseer` (`public/overseer.html`)
-- **Backend proxy**: `backend/routes/overseer-proxy.js` → Hugging Face API
+- **Backend proxy**: `backend/api/overseer-proxy.js` → Hugging Face API (router mounted at `/api/overseer`, route at `/ask` → full path: `POST /api/overseer/ask`)
 - **Frontend system**: `public/js/overseer/` (multi-file module)
   - `index.js` — entry point
   - `overseer.js` — core logic
@@ -74,7 +74,7 @@ This is a Fallout-themed GPS crypto geo-game, **NOT** a swap/DEX protocol.
 ### Backend API (`backend/`)
 - Node.js 20, Express 4.22, **CommonJS** (`require()` only)
 - Entry: `backend/server.js`
-- Routes: `backend/routes/*.js` — each exports `express.Router()`
+- Routes: `backend/api/*.js` — each exports `express.Router()`
 - Libs: `backend/lib/*.js` — shared utilities
 - All game state stored in Redis with `afw:` key prefix
 
@@ -124,7 +124,7 @@ All game content must be consistent with the Fallout universe:
 
 ### Adding a New API Endpoint
 ```javascript
-// backend/routes/myfeature.js
+// backend/api/myfeature.js
 const express = require('express');
 const router = express.Router();
 const redis = require('../lib/redis');
