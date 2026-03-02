@@ -131,7 +131,7 @@
     }
     const e2 = get(npc.id);
     if (e2 && e2.type === 'svg') {
-      container.innerHTML = `<img src="${e2.url}" style="width:100px;height:120px;" alt="portrait"/>`;
+      container.innerHTML = `<img src="${e2.url}" style="width:100%;height:100%;object-fit:contain;display:block;" alt="portrait"/>`;
     }
   }
 

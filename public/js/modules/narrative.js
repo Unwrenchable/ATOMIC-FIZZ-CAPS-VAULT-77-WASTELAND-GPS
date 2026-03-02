@@ -31,6 +31,7 @@
     lastPanelId: null,
     isInitialized: false,
     escKeyHandler: null,
+    _currentNPCPortrait: null,  // animated portrait element for current dialog
 
     init() {
       // Prevent double initialization
@@ -457,11 +458,23 @@
       let idx = 0;
       let done = false;
 
+      // Start NPC talking animation
+      if (this._currentNPCPortrait && typeof this._currentNPCPortrait.startTalking === "function") {
+        try { this._currentNPCPortrait.startTalking(); } catch (_) {}
+      }
+
+      const stopTalking = () => {
+        if (this._currentNPCPortrait && typeof this._currentNPCPortrait.stopTalking === "function") {
+          try { this._currentNPCPortrait.stopTalking(); } catch (_) {}
+        }
+      };
+
       const skipToEnd = () => {
         if (done) return;
         done = true;
         clearInterval(this._typewriterTick);
         textArea.textContent = text.replace(/\\n/g, "\n");
+        stopTalking();
         if (onDone) onDone();
       };
 
@@ -483,6 +496,7 @@
           clearInterval(this._typewriterTick);
           panel.removeEventListener("click", skipHandler);
           document.removeEventListener("keydown", skipHandler);
+          stopTalking();
           if (onDone) onDone();
         }
       }, 22); // ms per character — Fallout NV pace
@@ -561,7 +575,19 @@
       let idx = 0;
       let skipDone = false;
 
+      // Start NPC talking animation
+      if (this._currentNPCPortrait && typeof this._currentNPCPortrait.startTalking === "function") {
+        try { this._currentNPCPortrait.startTalking(); } catch (_) {}
+      }
+
+      const stopTalking = () => {
+        if (this._currentNPCPortrait && typeof this._currentNPCPortrait.stopTalking === "function") {
+          try { this._currentNPCPortrait.stopTalking(); } catch (_) {}
+        }
+      };
+
       const showChoices = () => {
+        stopTalking();
         if (!choiceArea) return;
         this._renderChoices(choiceArea, node, dialog);
       };
@@ -762,6 +788,141 @@
       // Show dialog panel
       dialogPanel.style.display = "block";
       dialogPanel.classList.add("active");
+
+      // Load animated NPC portrait for this dialog
+      const dialog = this.dialogs[this.currentDialogId];
+      if (dialog) {
+        this._loadNPCPortrait(dialog);
+      }
+    },
+
+    // ============================================================
+    // NPC PORTRAIT LOADER — builds animated SMIL portrait in dialog
+    // ============================================================
+    // Per-NPC avatar part presets (head/eyes/hair/shirt from avatar SVG system)
+    _NPC_PARTS: {
+      siren:   { head: "head_round.svg",  eyes: "eyes_almond.svg",  hair: "hair_long.svg",       shirt: "shirt_wasteland_gear.svg" },
+      courier: { head: "head_square.svg", eyes: "eyes_deepset.svg", hair: "hair_short.svg",      shirt: "shirt_jacket.svg"         },
+      pip:     { head: "head_square.svg", eyes: "eyes_deepset.svg", hair: "hair_short.svg",      shirt: "shirt_jacket.svg"         },
+      default: { head: "head_base.svg",   eyes: "eyes_set1.svg",    hair: "hair_short.svg",      shirt: "shirt_jacket.svg"         }
+    },
+
+    async _loadNPCPortrait(dialog) {
+      const container = document.getElementById("dialogPortraitContainer");
+      if (!container) return;
+
+      // Clean up previous portrait
+      if (this._currentNPCPortrait && typeof this._currentNPCPortrait._cleanup === "function") {
+        this._currentNPCPortrait._cleanup();
+      }
+      this._currentNPCPortrait = null;
+      container.innerHTML = '<span style="font-size:48px;opacity:0.4;">⏳</span>';
+
+      const portraitId = (dialog.portrait || "").toLowerCase();
+      const parts = this._NPC_PARTS[portraitId] || this._NPC_PARTS.default;
+
+      // Build an animated SMIL portrait using the avatar SVG system + SMIL overlays.
+      // This gives us NPC-specific appearance (correct hair/eyes/shirt) plus
+      // idle breathing, periodic blink, and talking lip-sync animations — no Pixi needed.
+      if (window.Game?.Avatar?.compose) {
+        try {
+          const svgUrl = await Game.Avatar.compose(parts);
+          container.innerHTML = "";
+          container.style.position = "relative";
+          container.style.overflow = "hidden";
+
+          // Base portrait image
+          const img = document.createElement("img");
+          img.src = svgUrl;
+          img.alt = escapeHtml(dialog.npc || "NPC");
+          img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block;transform-origin:50% 85%;animation:nrrBreathe 4s ease-in-out infinite;";
+          container.appendChild(img);
+
+          // Inject breathing keyframe once
+          if (!document.getElementById("nrrPortraitStyles")) {
+            const s = document.createElement("style");
+            s.id = "nrrPortraitStyles";
+            s.textContent = "@keyframes nrrBreathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.004)}}";
+            document.head.appendChild(s);
+          }
+
+          // SMIL SVG overlay for blink + talking animations
+          const ns = "http://www.w3.org/2000/svg";
+          const svgOverlay = document.createElementNS(ns, "svg");
+          svgOverlay.setAttribute("xmlns", ns);
+          svgOverlay.setAttribute("width", "100%");
+          svgOverlay.setAttribute("height", "100%");
+          svgOverlay.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;";
+
+          // Blink rect (covers eye zone, normally height=0)
+          const eyeRect = document.createElementNS(ns, "rect");
+          eyeRect.setAttribute("x", "18%");
+          eyeRect.setAttribute("y", "32%");
+          eyeRect.setAttribute("width", "64%");
+          eyeRect.setAttribute("height", "0");
+          eyeRect.setAttribute("rx", "4");
+          eyeRect.setAttribute("fill", "rgba(10,16,10,0.92)");
+          const blinkAnim = document.createElementNS(ns, "animate");
+          blinkAnim.setAttribute("attributeName", "height");
+          blinkAnim.setAttribute("values", "0;10%;0");
+          blinkAnim.setAttribute("dur", "0.12s");
+          blinkAnim.setAttribute("begin", "indefinite");
+          blinkAnim.id = "nrrBlinkAnim_" + portraitId;
+          eyeRect.appendChild(blinkAnim);
+          svgOverlay.appendChild(eyeRect);
+
+          // Mouth rect (lip-sync — toggles while talking)
+          const mouthRect = document.createElementNS(ns, "rect");
+          mouthRect.setAttribute("x", "30%");
+          mouthRect.setAttribute("y", "62%");
+          mouthRect.setAttribute("width", "40%");
+          mouthRect.setAttribute("height", "1");
+          mouthRect.setAttribute("rx", "4");
+          mouthRect.setAttribute("fill", "rgba(18,10,8,0.80)");
+          const mouthAnim = document.createElementNS(ns, "animate");
+          mouthAnim.setAttribute("attributeName", "height");
+          mouthAnim.setAttribute("values", "1;7;2;8;1");
+          mouthAnim.setAttribute("dur", "0.18s");
+          mouthAnim.setAttribute("repeatCount", "indefinite");
+          mouthAnim.setAttribute("begin", "indefinite");
+          mouthRect.appendChild(mouthAnim);
+          svgOverlay.appendChild(mouthRect);
+
+          container.appendChild(svgOverlay);
+
+          // Periodic blink scheduler
+          let blinkTimer = null;
+          const scheduleBlink = () => {
+            // 3–6 second intervals
+            const rnd = new Uint32Array(1);
+            crypto.getRandomValues(rnd);
+            const delay = 3000 + (rnd[0] % 3000);
+            blinkTimer = setTimeout(() => {
+              try { blinkAnim.beginElement(); } catch (_) {}
+              scheduleBlink();
+            }, delay);
+          };
+          scheduleBlink();
+
+          const portrait = {
+            startTalking() { try { mouthAnim.beginElement(); } catch (_) {} },
+            stopTalking()  { try { mouthAnim.endElement();   } catch (_) {} },
+            _cleanup() {
+              if (blinkTimer) clearTimeout(blinkTimer);
+              try { mouthAnim.endElement(); } catch (_) {}
+            }
+          };
+
+          this._currentNPCPortrait = portrait;
+          return;
+        } catch (e) {
+          console.warn("[narrative] SMIL portrait failed:", e?.message || e);
+        }
+      }
+
+      // Final fallback — plain emoji
+      container.innerHTML = '<span style="font-size:64px;">🧍</span>';
+      this._currentNPCPortrait = null;
     },
 
     closeDialog() {
@@ -784,9 +945,16 @@
 
       // If closing the courier dialogue, start the wake_up quest
       if (closingDialogId === "dialog_courier") {
-        if (Game.modules?.quests?.startQuest) {
+        if (Game.modules?.quests) {
           try {
-            Game.modules.quests.startQuest("wake_up");
+            const qm = Game.modules.quests;
+            // If wake_up is in availableQuests, go through acceptQuest (cleans up the offer entry).
+            // Otherwise call startQuest directly (first-time player path from Courier dialog).
+            if (qm.availableQuests?.wake_up) {
+              qm.acceptQuest("wake_up");
+            } else {
+              qm.startQuest("wake_up");
+            }
             console.log("[narrative] Wake up quest started after courier dialogue");
           } catch (err) {
             console.warn("[narrative] Failed to start wake_up quest:", err);
@@ -805,6 +973,19 @@
         const tab = document.querySelector(`.pipboy-tab[data-pipboy-tab="${restoreId}"]`);
         if (tab) tab.classList.add("active");
       }
+
+      // Clean up NPC portrait (stop animations, reset container)
+      if (this._currentNPCPortrait) {
+        if (typeof this._currentNPCPortrait.stopTalking === "function") {
+          try { this._currentNPCPortrait.stopTalking(); } catch (_) {}
+        }
+        if (typeof this._currentNPCPortrait._cleanup === "function") {
+          try { this._currentNPCPortrait._cleanup(); } catch (_) {}
+        }
+        this._currentNPCPortrait = null;
+      }
+      const portraitContainer = document.getElementById("dialogPortraitContainer");
+      if (portraitContainer) portraitContainer.innerHTML = '<span style="font-size:64px;">🧍</span>';
 
       this.currentDialogId = null;
       this.lastPanelId = null;
