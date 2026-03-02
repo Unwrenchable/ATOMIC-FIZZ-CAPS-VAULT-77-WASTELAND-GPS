@@ -12,6 +12,13 @@
   const Weather = window.overseerWeather;
   const Regions = window.overseerRegions;
 
+  // Secure RNG: use browser CSPRNG instead of predictable Math.random()
+  const _rngBuf = new Uint32Array(1);
+  function _secureRandom() {
+    crypto.getRandomValues(_rngBuf);
+    return _rngBuf[0] / 0x100000000;
+  }
+
   // ------------------------------------------------------------
   // Trait definitions
   // ------------------------------------------------------------
@@ -78,7 +85,7 @@
   function pickRandomTraits(count = 1) {
     const traits = [];
     for (let i = 0; i < count; i++) {
-      const t = TRAIT_LIST[Math.floor(Math.random() * TRAIT_LIST.length)];
+      const t = TRAIT_LIST[Math.floor(_secureRandom() * TRAIT_LIST.length)];
       if (!traits.includes(t.id)) traits.push(t.id);
     }
     return traits;
@@ -88,7 +95,7 @@
   // Apply traits to a single NPC
   // ------------------------------------------------------------
   function applyToNpc(npc, region, weather) {
-    const traitIds = pickRandomTraits(Math.random() < 0.2 ? 2 : 1);
+    const traitIds = pickRandomTraits(_secureRandom() < 0.2 ? 2 : 1);
     npc.traits = traitIds;
 
     traitIds.forEach(id => {

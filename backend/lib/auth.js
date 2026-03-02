@@ -320,6 +320,7 @@ router.get("/me", authMiddleware, async (req, res) => {
 
 module.exports = {
   authMiddleware,
+  getSession,
   isAdmin,
   router,
 };

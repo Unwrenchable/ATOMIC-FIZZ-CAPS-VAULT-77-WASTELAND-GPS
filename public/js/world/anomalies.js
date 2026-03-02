@@ -13,6 +13,13 @@
   const Weather = window.overseerWeather;
   const Timeline = window.overseerTimeline;
 
+  // Secure RNG: use browser CSPRNG instead of predictable Math.random()
+  const _rngBuf = new Uint32Array(1);
+  function _secureRandom() {
+    crypto.getRandomValues(_rngBuf);
+    return _rngBuf[0] / 0x100000000;
+  }
+
   // ------------------------------------------------------------
   // Anomaly encounter templates
   // ------------------------------------------------------------
@@ -58,7 +65,7 @@
       generate(region, weather) {
         return {
           type: "anomaly_storm",
-          intensity: Math.floor(Math.random() * 3) + 1,
+          intensity: Math.floor(_secureRandom() * 3) + 1,
           description: "A surge of unstable energy erupts across the region."
         };
       }
@@ -70,7 +77,7 @@
   // ------------------------------------------------------------
   function weightedPick(entries) {
     const total = entries.reduce((sum, e) => sum + e.weight, 0);
-    let roll = Math.random() * total;
+    let roll = _secureRandom() * total;
 
     for (const entry of entries) {
       if (roll < entry.weight) return entry;
