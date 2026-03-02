@@ -41,8 +41,8 @@ or RainbowKit as primary tools. The primary blockchain is **Solana**.
 ```
 /
 ├── backend/
-│   ├── routes/
-│   │   ├── wallet.js          # Wallet endpoints
+│   ├── api/               # API route handlers (one file per endpoint group)
+│   │   ├── wallet.js          # Wallet endpoints (also legacy backend/routes/wallet.js)
 │   │   ├── caps.js            # FIZZ/CAPS balance queries
 │   │   ├── mint-item.js       # NFT item minting
 │   │   ├── mintables.js       # Mintable item catalog
@@ -140,10 +140,10 @@ SOLANA_RPC_URL=<rpc_url>            # Solana RPC endpoint
 ## NFT System (Metaplex)
 
 - Item NFTs use the Metaplex standard
-- Minting handled by `backend/routes/mint-item.js`
-- Player NFT inventory fetched via `backend/routes/player-nfts.js`
+- Minting handled by `backend/api/mint-item.js`
+- Player NFT inventory fetched via `backend/api/player-nfts.js`
 - Helius API used for NFT metadata resolution (optional)
-- NFT scrapping via `backend/routes/scrap-nft.js` (burns NFT, awards FIZZ)
+- NFT scrapping via `backend/api/scrap-nft.js` (burns NFT, awards FIZZ)
 
 ### Key environment variable:
 ```bash
@@ -166,7 +166,7 @@ HELIUS_API_KEY=<your_helius_api_key>  # Optional — enables NFT metadata
 
 - Players burn unwanted items/NFTs for FIZZ tokens
 - UI at `/nuke.html` and `/nuke-portal.html`
-- Backend route: `backend/routes/fuse.js`
+- Backend route: `backend/api/fuse.js`
 - Permanent — no refunds after fusion
 
 ---
@@ -175,7 +175,7 @@ HELIUS_API_KEY=<your_helius_api_key>  # Optional — enables NFT metadata
 
 - Peer-to-peer item trading via Solana
 - UI at `/exchange.html`
-- Backend route: `backend/routes/scavenger.js`
+- Backend route: `backend/api/scavenger.js`
 
 ---
 
@@ -194,22 +194,22 @@ HELIUS_API_KEY=<your_helius_api_key>  # Optional — enables NFT metadata
 ## Common Tasks
 
 ### Adding a New Wallet-Authenticated Endpoint
-1. Create route file in `backend/routes/`
+1. Create route file in `backend/api/`
 2. Import and call `walletVerify.verifySignature()` before any state change
 3. Return 401 if verification fails
 4. Register route in `backend/server.js`
 
 ### Checking Player FIZZ Balance
 - Frontend: `GET /api/caps?wallet=<publicKey>`
-- Backend: `backend/routes/caps.js` → `backend/lib/caps.js`
+- Backend: `backend/api/caps.js` → `backend/lib/caps.js`
 
 ### Minting an Item NFT
 - Backend: `POST /api/mint-item` with `{ wallet, itemId, signature }`
-- Route: `backend/routes/mint-item.js`
+- Route: `backend/api/mint-item.js`
 
 ### Fetching Player NFTs
 - Backend: `GET /api/player-nfts?wallet=<publicKey>`
-- Route: `backend/routes/player-nfts.js` (uses Helius if available)
+- Route: `backend/api/player-nfts.js` (uses Helius if available)
 
 ---
 
