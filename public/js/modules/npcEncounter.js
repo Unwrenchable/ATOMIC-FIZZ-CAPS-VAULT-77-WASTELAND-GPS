@@ -527,7 +527,7 @@
         border: 1px solid ${whisper ? 'rgba(255, 170, 0, 0.3)' : 'rgba(0, 255, 65, 0.5)'};
         padding: 12px 20px;
         font-family: 'Consolas', monospace;
-        font-size: ${whisper ? '11px' : '13px'};
+        font-size: ${whisper ? 'clamp(11px, 2vw, 12px)' : '13px'};
         color: ${whisper ? '#ffaa00' : '#00ff41'};
         text-shadow: 0 0 5px currentColor;
         z-index: 9000;

@@ -982,7 +982,7 @@
              data-value="${opt.id}" data-property="${property}">
           ${opt.icon ? `<span class="option-icon">${opt.icon}</span>` : ''}
           <span class="option-name">${opt.name}</span>
-          ${showDesc && opt.description ? `<span style="font-size:9px;opacity:0.6;display:block;margin-top:2px;">${opt.description}</span>` : ''}
+          ${showDesc && opt.description ? `<span style="font-size:clamp(11px, 1.5vw, 13px);opacity:0.8;display:block;margin-top:2px;">${opt.description}</span>` : ''}
         </div>
       `).join('');
 

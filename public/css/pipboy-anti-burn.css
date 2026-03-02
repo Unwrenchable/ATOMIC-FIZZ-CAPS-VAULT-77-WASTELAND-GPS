@@ -1,6 +1,19 @@
-/* Prevent static burn-in by drifting the entire Pip-Boy screen */
-#pipboyScreen {
+/* Prevent static burn-in by drifting the cosmetic overlay elements */
+.pipboy-noise,
+.pipboy-scanlines {
   animation: pip-drift 18s ease-in-out infinite alternate;
+}
+
+/* Add will-change hint and stacking isolation to #pipboyScreen */
+#pipboyScreen {
+  will-change: transform;
+}
+
+/* Isolate Leaflet map container from any ancestor transforms so
+   touch hit-testing remains accurate */
+#map, #leaflet-map, .leaflet-container {
+  transform: translate3d(0, 0, 0);
+  isolation: isolate;
 }
 
 @keyframes pip-drift {
@@ -9,25 +22,6 @@
   50%  { transform: translate(-1px, 1px); }
   75%  { transform: translate(1px, 1px); }
   100% { transform: translate(-1px, -1px); }
-}
-/* Scanline shimmer to prevent static retention */
-.map-crt::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0,255,0,0.04) 0px,
-    rgba(0,255,0,0.04) 2px,
-    rgba(0,0,0,0) 3px
-  );
-  pointer-events: none;
-  animation: pip-scan-shimmer 6s linear infinite;
-}
-
-@keyframes pip-scan-shimmer {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(3px); }
 }
 /* Scanline shimmer to prevent static retention */
 .map-crt::before {

@@ -1287,7 +1287,7 @@
 
       // Bind persistent tooltip (location label) that's always visible at higher zoom
       marker.bindTooltip(
-        `<span style="color: ${rarityColor}; font-family: 'VT323', monospace; font-size: 12px; text-shadow: 0 0 4px ${rarityColor};">${loc.name || 'Unknown'}</span>`,
+        `<span style="color: ${rarityColor}; font-family: 'VT323', monospace; font-size: clamp(11px, 2vw, 13px); text-shadow: 0 0 4px ${rarityColor};">${loc.name || 'Unknown'}</span>`,
         {
           permanent: false,
           direction: 'top',
