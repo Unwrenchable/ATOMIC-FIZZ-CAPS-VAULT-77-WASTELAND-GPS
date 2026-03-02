@@ -7,6 +7,12 @@
 (function () {
   "use strict";
 
+  function escapeHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = String(str == null ? "" : str);
+    return d.innerHTML;
+  }
+
   const NukeGear = {
     loaded: false,
     equippedGear: [],
@@ -70,7 +76,7 @@
       gearList.innerHTML = `
         <div class="terminal-output terminal-system">
           🔄 SCANNING EQUIPPED GEAR FOR WALLET<br>
-          ${walletAddress.slice(0, 8)}...${walletAddress.slice(-6)}
+          ${escapeHtml(walletAddress.slice(0, 8))}...${escapeHtml(walletAddress.slice(-6))}
         </div>
       `;
 
@@ -108,7 +114,7 @@
           <div class="terminal-output terminal-system">
             ⚠️ SIGNAL INTERFERENCE<br><br>
             Could not retrieve gear data. The wasteland comms are unstable.<br>
-            Error: ${err.message || "Unknown"}<br><br>
+            Error: ${escapeHtml(err.message || "Unknown")}<br><br>
             <em>Feature coming soon...</em>
           </div>
         `;
@@ -124,12 +130,13 @@
       `;
 
       items.forEach((item, index) => {
-        const name = item.name || item.id || `GEAR #${index + 1}`;
-        const rarity = item.rarity || "COMMON";
-        const type = item.type || "UNKNOWN";
+        const name = escapeHtml(item.name || item.id || `GEAR #${index + 1}`);
+        const rarity = escapeHtml(item.rarity || "COMMON");
+        const type = escapeHtml(item.type || "UNKNOWN");
+        const itemId = escapeHtml(item.id || index);
 
         html += `
-          <div class="gear-item" data-item-id="${item.id || index}">
+          <div class="gear-item" data-item-id="${itemId}">
             <div class="terminal-output">
               ${index + 1}. <strong>${name}</strong><br>
               &nbsp;&nbsp;&nbsp;TYPE: ${type.toUpperCase()}<br>
@@ -276,14 +283,20 @@
         // Show success result
         if (gearList) {
           const newItem = result.fusionResult.newItem;
+          const newItemName = escapeHtml(newItem.name);
+          const newItemRarity = escapeHtml(newItem.rarity);
+          const newItemLevel = escapeHtml(newItem.level);
+          const moddedLine = newItem.modded
+            ? `MODDED: Yes<br>MODIFIERS: ${newItem.modifiers.map(m => escapeHtml(m.name)).join(", ")}<br>`
+            : "";
           gearList.innerHTML = `
             <div class="terminal-output terminal-system">
               ✅ FUSION COMPLETE<br><br>
               <strong>NEW ITEM CREATED:</strong><br>
-              ${newItem.name}<br>
-              RARITY: ${newItem.rarity.toUpperCase()}<br>
-              LEVEL: ${newItem.level}<br>
-              ${newItem.modded ? 'MODDED: Yes<br>MODIFIERS: ' + newItem.modifiers.map(m => m.name).join(', ') + '<br>' : ''}
+              ${newItemName}<br>
+              RARITY: ${newItemRarity.toUpperCase()}<br>
+              LEVEL: ${newItemLevel}<br>
+              ${moddedLine}
               <br>
               <em>${items.length} items were consumed in the fusion process.</em><br>
               <br>
@@ -304,7 +317,7 @@
           gearList.innerHTML = `
             <div class="terminal-output terminal-system">
               ❌ FUSION FAILED<br><br>
-              Error: ${error.message}<br><br>
+              Error: ${escapeHtml(error.message)}<br><br>
               Possible causes:<br>
               • Insufficient fusion cores<br>
               • Network connectivity issues<br>
