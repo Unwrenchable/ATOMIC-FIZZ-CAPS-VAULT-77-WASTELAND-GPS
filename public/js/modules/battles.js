@@ -22,6 +22,16 @@
     },
 
     // --------------------------------------------------------
+    // Shared respawn logic: restore 30% HP, 10% caps penalty
+    // --------------------------------------------------------
+    _applyRespawnPenalty() {
+      this.gs.player.hp = Math.max(1, Math.ceil((this.gs.player.maxHp || 100) * 0.3));
+      if (this.gs.player.caps > 0) {
+        this.gs.player.caps = Math.floor((this.gs.player.caps || 0) * 0.9);
+      }
+    },
+
+    // --------------------------------------------------------
     // Spend ammo from gameState inventory (no separate inventory module)
     // --------------------------------------------------------
     _spendAmmo(ammoType, amount) {
@@ -58,7 +68,9 @@
         encounter,
         // BUG FIX: was only tracking enemies[0] HP. Now tracks HP for all enemies
         // so multi-enemy encounters don't silently ignore enemies after the first.
-        enemyHp: encounter.enemies.map(e => (typeof e.hp === 'number' ? e.hp : 20))
+        enemyHp: encounter.enemies.map(e => (typeof e.hp === 'number' ? e.hp : 20)),
+        // BUG-004: track which enemy is currently being targeted
+        activeEnemyIndex: 0
       };
 
       console.log("Battle started:", encounter);
@@ -123,7 +135,16 @@
       const res = this.fireEquippedWeapon();
       if (!res.success) return res;
 
-      this.state.enemyHp[0] -= res.damage;
+      // BUG-004: damage the active enemy, not always index 0
+      const idx = this.state.activeEnemyIndex ?? 0;
+      this.state.enemyHp[idx] -= res.damage;
+
+      // If the active enemy just died, advance to the next live enemy (search from 0)
+      if (this.state.enemyHp[idx] <= 0) {
+        const nextIdx = this.state.enemyHp.findIndex(hp => hp > 0);
+        this.state.activeEnemyIndex = nextIdx !== -1 ? nextIdx : idx;
+      }
+
       this.updateUI();
       return res;
     },
@@ -168,7 +189,8 @@
     checkBattleEnd() {
       if (!this.state) return null;
 
-      const enemyDead = this.state.enemyHp[0] <= 0;
+      // BUG-004: win only when ALL enemies are dead
+      const enemyDead = this.state.enemyHp.every(hp => hp <= 0);
       const playerDead = this.gs.player.hp <= 0;
 
       if (enemyDead) return "WIN";
@@ -283,7 +305,8 @@
         return;
       }
 
-      const enemy = this.state.encounter.enemies[0];
+      // BUG-004: display the currently active enemy, not always index 0
+      const enemy = this.state.encounter.enemies[this.state.activeEnemyIndex ?? 0];
       const special = this._getSpecial();
       const equipped = this.gs.player.equipped || {};
       const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);
@@ -341,6 +364,7 @@
             this.applyRewards(this.state.encounter);
             this.state = null;
             setTimeout(() => this.updateUI(), 1200);
+            window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'WIN' } }));
             return;
           }
           setTimeout(() => {
@@ -350,7 +374,10 @@
             if (end2 === "LOSE") {
               msgDiv.textContent = "You have been defeated. Respawning...";
               this.state = null;
+              // BUG-003: Restore HP to 30% and apply caps penalty on death
+              this._applyRespawnPenalty();
               setTimeout(() => this.updateUI(), 1500);
+              window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
             }
           }, 800);
         };
@@ -376,7 +403,10 @@
               if (end2 === "LOSE") {
                 msgDiv.textContent = "You have been defeated. Respawning...";
                 this.state = null;
+                // BUG-003: Restore HP to 30% and apply caps penalty on death
+                this._applyRespawnPenalty();
                 setTimeout(() => this.updateUI(), 1500);
+                window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
               }
             }, 800);
           }

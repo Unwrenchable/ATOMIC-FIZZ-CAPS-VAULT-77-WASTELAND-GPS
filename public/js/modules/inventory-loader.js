@@ -59,7 +59,7 @@ window.gameState.inventory = window.gameState.inventory || {
         inv.weapons.push(item);
         break;
       case "ammo":
-        inv.ammo.push({ ...item, amount: item.amount || 0 });
+        inv.ammo.push({ ...item, quantity: item.quantity ?? item.amount ?? 0 });
         break;
       case "armor":
         inv.armor.push(item);
