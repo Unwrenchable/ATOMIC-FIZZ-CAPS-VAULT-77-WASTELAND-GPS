@@ -100,7 +100,8 @@ npm test           # (no tests yet — placeholder)
 ### Backend (Node.js/Express)
 - **CommonJS only** — `require()` / `module.exports`. No ES module `import`.
 - **Entry point**: `backend/server.js`. All routes are registered here.
-- **Route files** live in `backend/routes/`. Each exports an Express Router.
+- **Route files** live in `backend/api/`. Each exports an Express Router.
+  (Exception: `backend/routes/wallet.js` is a legacy stub — avoid adding new files there.)
 - **Shared logic** lives in `backend/lib/`. Import from there, not inline.
 - **Redis key prefix**: All keys use `afw:` prefix (e.g., `afw:player:wallet123`).
   Set via `REDIS_PREFIX` env var.
