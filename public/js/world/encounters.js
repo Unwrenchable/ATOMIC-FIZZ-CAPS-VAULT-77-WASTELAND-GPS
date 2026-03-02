@@ -18,6 +18,13 @@
   const WorldState = window.overseerWorldState;
   const Traits = window.overseerNpcTraits;
 
+  // Secure RNG: use browser CSPRNG instead of predictable Math.random()
+  const _rngBuf = new Uint32Array(1);
+  function _secureRandom() {
+    crypto.getRandomValues(_rngBuf);
+    return _rngBuf[0] / 0x100000000;
+  }
+
   // ------------------------------------------------------------
   // Ambient flavor
   // ------------------------------------------------------------
@@ -28,7 +35,7 @@
       `Discarded gear bearing ${faction} colors lies half‑buried.`,
       `A cairn marked with ${faction} sigils watches over the wastes.`
     ];
-    return lines[Math.floor(Math.random() * lines.length)];
+    return lines[Math.floor(_secureRandom() * lines.length)];
   }
 
   // ------------------------------------------------------------
@@ -57,7 +64,7 @@
     // 1. Timeline Distortion Check
     // ------------------------------------------------------------
     if (Timeline?.isUnstable?.(regionId)) {
-      if (Math.random() < (Timeline?.distortionChance?.(regionId) || 0)) {
+      if (_secureRandom() < (Timeline?.distortionChance?.(regionId) || 0)) {
         const echo = Timeline?.rollEcho?.(regionId);
         if (echo) return echo;
       }
@@ -68,7 +75,7 @@
     // ------------------------------------------------------------
     const anomalyLevel = Math.max(0, Math.min(1, WorldState.getAnomalyLevel?.(regionId) || 0));
     if (anomalyLevel > 0.3) {
-      if (Math.random() < anomalyLevel * 0.25) {
+      if (_secureRandom() < anomalyLevel * 0.25) {
         const anomalyResult = Anomalies?.roll?.(regionId, weather);
         if (anomalyResult) return anomalyResult;
       }
@@ -77,7 +84,7 @@
     // ------------------------------------------------------------
     // 3. Micro‑Quest Check
     // ------------------------------------------------------------
-    if (Math.random() < (region.questChance || 0.1)) {
+    if (_secureRandom() < (region.questChance || 0.1)) {
       const quest = Microquests?.generate?.(regionId, weather, factionId);
       if (quest) {
         return {
@@ -90,7 +97,7 @@
     // ------------------------------------------------------------
     // 4. Faction Patrols / Hostility
     // ------------------------------------------------------------
-    if (repStatus === "HOSTILE" && Math.random() < (region.threat || 0.5) * 0.6) {
+    if (repStatus === "HOSTILE" && _secureRandom() < (region.threat || 0.5) * 0.6) {
       const baseEnemies = Regions.pickEnemies?.(regionId) || [];
       const enemies = Traits?.applyToGroup?.(baseEnemies, region, weather) || baseEnemies;
 
@@ -107,7 +114,7 @@
       };
     }
 
-    if (repStatus === "ALLY" && Math.random() < 0.25) {
+    if (repStatus === "ALLY" && _secureRandom() < 0.25) {
       return {
         type: "ally_patrol",
         faction: factionId,
@@ -171,7 +178,7 @@
     // ------------------------------------------------------------
     // 6. Ambient
     // ------------------------------------------------------------
-    if (Math.random() < 0.2) {
+    if (_secureRandom() < 0.2) {
       return {
         type: "ambient",
         description: rollAmbientFor(region, factionId)
@@ -190,7 +197,7 @@
   function weightedPick(weights) {
     const entries = Object.entries(weights);
     const total = entries.reduce((sum, [, w]) => sum + w, 0);
-    let roll = Math.random() * total;
+    let roll = _secureRandom() * total;
 
     for (const [key, weight] of entries) {
       if (roll < weight) return key;

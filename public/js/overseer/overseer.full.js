@@ -99,6 +99,13 @@
 
   if (input) try { input.focus(); } catch (e) {}
 
+  // Secure RNG: use browser CSPRNG for all game-critical randomness
+  var _rngBuf = new Uint32Array(1);
+  function _secureRandom() {
+    crypto.getRandomValues(_rngBuf);
+    return _rngBuf[0] / 0x100000000;
+  }
+
   function scrollToBottom() {
     if (!chat) return;
     chat.scrollTop = chat.scrollHeight;
@@ -459,9 +466,9 @@
     var baseCount = 3 + Math.floor(state.rmWave * 0.8);
     var enemies = [];
     for (var i = 0; i < baseCount; i++) {
-      var hp = Math.max(5, Math.round((6 + Math.random() * 6) * state.rmDifficultyScale));
-      var dmg = Math.max(1, Math.round((1 + Math.random() * 2) * state.rmDifficultyScale));
-      var speed = 1 + Math.floor(Math.random() * 2);
+      var hp = Math.max(5, Math.round((6 + _secureRandom() * 6) * state.rmDifficultyScale));
+      var dmg = Math.max(1, Math.round((1 + _secureRandom() * 2) * state.rmDifficultyScale));
+      var speed = 1 + Math.floor(_secureRandom() * 2);
       enemies.push({ id: state.rmNextEnemyId++, hp: hp, maxHp: hp, dmg: dmg, speed: speed, progress: 0 });
     }
     state.rmEnemies = enemies;
@@ -547,7 +554,7 @@
       for (var k = state.rmEnemies.length - 1; k >= 0; k--) {
         if (state.rmEnemies[k].hp <= 0) {
           killed++;
-          state.rmScrap += 8 + Math.floor(Math.random() * 6);
+          state.rmScrap += 8 + Math.floor(_secureRandom() * 6);
           state.rmEnemies.splice(k, 1);
         }
       }
@@ -574,7 +581,7 @@
       target.hp -= t2.dmg;
       t2.durability -= 1;
       if (target.hp <= 0) {
-        state.rmScrap += 8 + Math.floor(Math.random() * 6);
+        state.rmScrap += 8 + Math.floor(_secureRandom() * 6);
         state.rmEnemies.splice(targetIndex, 1);
       }
     }
@@ -602,9 +609,9 @@
     if (state.rmEnemies.length === 0) {
       state.rmWaveInProgress = false;
       state.rmWave += 1;
-      state.rmScrap += 10 + Math.floor(Math.random() * 10);
+      state.rmScrap += 10 + Math.floor(_secureRandom() * 10);
       addMessage("Wave cleared! Scrap bonus awarded. Preparing next wave...", "overseer");
-      addTimeout(function () { if (state.gameActive === 'redmenace') startRmWave(); }, 900 + Math.random() * 900);
+      addTimeout(function () { if (state.gameActive === 'redmenace') startRmWave(); }, 900 + _secureRandom() * 900);
     }
   }
 
@@ -659,8 +666,8 @@
   /* ------------------------- Blackjack (simple) ------------------------- */
   function startBlackjack() {
     state.gameActive = 'blackjack';
-    state.bjPlayer = Math.floor(Math.random() * 11) + 10;
-    state.bjDealer = Math.floor(Math.random() * 11) + 10;
+    state.bjPlayer = Math.floor(_secureRandom() * 11) + 10;
+    state.bjDealer = Math.floor(_secureRandom() * 11) + 10;
     state.bjTurn = 'player';
     addMessage("BLACKJACK started. Type 'hit' or 'stand'. Your total: " + state.bjPlayer, "overseer");
   }
@@ -669,12 +676,12 @@
     if (state.gameActive !== 'blackjack') return "No blackjack session active.";
     var cmd = (text || "").toLowerCase();
     if (cmd.indexOf('hit') !== -1) {
-      state.bjPlayer += Math.floor(Math.random() * 10) + 1;
+      state.bjPlayer += Math.floor(_secureRandom() * 10) + 1;
       if (state.bjPlayer > 21) { state.gameActive = null; return "You busted with " + state.bjPlayer + ". House wins."; }
       return "You hit. Total: " + state.bjPlayer;
     }
     if (cmd.indexOf('stand') !== -1) {
-      while (state.bjDealer < 17) state.bjDealer += Math.floor(Math.random() * 10) + 1;
+      while (state.bjDealer < 17) state.bjDealer += Math.floor(_secureRandom() * 10) + 1;
       var result = "Dealer: " + state.bjDealer + " • You: " + state.bjPlayer + ". ";
       if (state.bjDealer > 21 || state.bjPlayer > state.bjDealer) { state.player.caps += 50; return result + "You win! CAPS +50."; }
       else if (state.bjDealer === state.bjPlayer) result += "Push.";
@@ -696,7 +703,7 @@
     var cmd = (text || "").toLowerCase();
     if (cmd.indexOf('spin') !== -1) {
       var symbols = ['🍒','🔔','7','🍊'];
-      var r = [symbols[Math.floor(Math.random()*symbols.length)], symbols[Math.floor(Math.random()*symbols.length)], symbols[Math.floor(Math.random()*symbols.length)]];
+      var r = [symbols[Math.floor(_secureRandom()*symbols.length)], symbols[Math.floor(_secureRandom()*symbols.length)], symbols[Math.floor(_secureRandom()*symbols.length)]];
       var res = r.join(' ');
       if (r[0] === r[1] && r[1] === r[2]) { state.player.caps += 100; return "Spin: " + res + " — JACKPOT! CAPS +100"; }
       return "Spin: " + res + " — No win.";
@@ -774,7 +781,7 @@
       }
     }
     for (var i = deck.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
+      var j = Math.floor(_secureRandom() * (i + 1));
       var tmp = deck[i]; deck[i] = deck[j]; deck[j] = tmp;
     }
     return deck;

@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit');
 const crypto = require('crypto');
 const { redis, key } = require('../lib/redis');
 const EventEmitter = require('events');
+const { getSession } = require('../lib/auth');
 
 // Local event bus to emit mint requests for on-chain workers to pick up
 const mintBus = new EventEmitter();
@@ -17,14 +18,42 @@ router.mintBus = mintBus;
 const limiter = rateLimit({ windowMs: 10*1000, max: 8, standardHeaders: true, legacyHeaders: false });
 router.use(limiter);
 
+// Optional session attachment: populate req.player if a valid session header is present.
+// Does not block the request if no session exists (auth is enforced per-env below).
+async function tryAttachSession(req, res, next) {
+  try {
+    const header = req.headers['authorization'] || req.headers['x-session-id'];
+    if (header) {
+      let sessionId = header;
+      if (typeof header === 'string' && header.toLowerCase().startsWith('bearer ')) {
+        sessionId = header.slice(7).trim();
+      }
+      if (sessionId && typeof sessionId === 'string' && sessionId.length <= 256) {
+        const session = await getSession(sessionId);
+        if (session && session.wallet) {
+          req.player = { wallet: session.wallet, sessionId };
+        }
+      }
+    }
+  } catch (_) { /* non-fatal */ }
+  next();
+}
+
+router.use(tryAttachSession);
+
 // POST /api/mint-item
-// body: { wallet?: string }
-// Behavior:
-// - In development (NODE_ENV !== 'production') this returns a fake minted item so the frontend flow works.
-// - In production this endpoint requires an admin secret header `X-ADMIN-MINT` matching ADMIN_MINT_SECRET env var.
+// Authenticated: wallet sourced from verified session (req.player.wallet).
+// Unauthenticated in dev: falls back to body/query wallet for tooling convenience,
+//   but production always requires admin secret AND authenticated session wallet.
 router.post('/', async (req, res) => {
   try {
-    const wallet = (req.body && req.body.wallet) || req.query.wallet || 'dev_wallet';
+    // Prefer authenticated session wallet to prevent IDOR (attacker supplying arbitrary wallet)
+    let wallet;
+    if (req.player && req.player.wallet) {
+      wallet = req.player.wallet;
+    } else {
+      wallet = (req.body && req.body.wallet) || req.query.wallet || 'dev_wallet';
+    }
 
     // Simple validation to avoid abuse
     if (typeof wallet !== 'string' || wallet.length > 128) {
