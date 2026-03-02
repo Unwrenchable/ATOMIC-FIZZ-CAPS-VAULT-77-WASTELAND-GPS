@@ -32,9 +32,10 @@ Those references in older agent files are wrong and must be ignored.
 | `bootstrap.md` | Step-by-step local setup guide |
 | `fullstack-dev.md` | Full-stack master agent with complete project context |
 | `web3-specialist.md` | Solana / Phantom wallet / FIZZ token expert |
-| `SwapAssistant.md` | Game mechanics, battle system, crafting, economy assistant |
+| `wasteland-assistant.md` | Game mechanics, battle system, crafting, economy assistant |
 | `my-agent.agent.md` | Vault 77 Overseer personality agent (used in AI chat) |
 | `memory.md` | Persistent decisions, gotchas, verified commands |
+| `tasks.md` | **Active task queue — check before starting work on shared files** |
 
 ---
 
@@ -69,7 +70,7 @@ Those references in older agent files are wrong and must be ignored.
 /
 ├── backend/               # Node.js Express API server
 │   ├── server.js          # Entry point — starts Express, loads all routes
-│   ├── routes/            # API route handlers
+│   ├── api/               # API route handlers (one file per endpoint group)
 │   │   ├── locations.js       # POI management
 │   │   ├── location-claim.js  # GPS claim logic
 │   │   ├── gps.js             # GPS verification
@@ -88,7 +89,7 @@ Those references in older agent files are wrong and must be ignored.
 │   │   ├── fuse.js            # NUKE/fusion system
 │   │   ├── scrap-nft.js       # NFT scrapping
 │   │   ├── player-nfts.js     # Player NFT inventory
-│   │   ├── overseer-proxy.js  # HF AI proxy
+│   │   ├── overseer-proxy.js  # HF AI proxy (mounted at /api/overseer)
 │   │   ├── cooldowns.js       # Cooldown tracking
 │   │   ├── rotation.js        # POI rotation
 │   │   ├── settings.js        # Player settings
@@ -96,7 +97,7 @@ Those references in older agent files are wrong and must be ignored.
 │   │   ├── adminPlayer.js     # Admin player tools
 │   │   ├── adminMintables.js  # Admin item tools
 │   │   ├── keys-admin.js      # Key management admin
-│   │   ├── frontend-config.js # Frontend config delivery
+│   │   ├── frontend-config.js # Frontend config (mounted at /api/config/frontend)
 │   │   ├── static-json-proxy.js # Static data proxy
 │   │   └── wallet.js          # Wallet endpoints
 │   ├── lib/               # Shared libraries
@@ -297,14 +298,15 @@ Those references in older agent files are wrong and must be ignored.
 ## Memory Loop
 
 ```
-Code change ──► agent proposes memory.md update ──► PR review ──► merge
-                                                         │
-                                               Human verifies no secrets
-                                               and content is accurate
+Code change ──► update tasks.md (mark complete) ──► propose memory.md update ──► PR review ──► merge
+                                                                                       │
+                                                                              Human verifies no secrets
+                                                                              and content is accurate
 ```
 
 Over time `memory.md` accumulates decisions, tested commands, and architecture
 notes that make every subsequent AI interaction faster and more accurate.
+`tasks.md` keeps in-flight work visible so agents don't step on each other.
 
 ---
 
