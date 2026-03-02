@@ -342,13 +342,13 @@
                 <div id="panel-dialog" class="pipboy-panel" style="display:none;">
                   <div class="panel-header">DIALOG</div>
                   <div class="panel-body">
-                    <div style="display:flex; gap:10px; align-items:flex-start;">
-                      <div style="width:120px; text-align:center; flex-shrink:0;">
-                        <div id="dialogPortraitContainer" style="width:100px; height:120px; border:1px solid #00ff41; background:rgba(0,20,10,0.6); display:flex; align-items:center; justify-content:center; font-size:40px;">🧍</div>
-                        <div id="dialogNPCName" style="margin-top:6px; color:#ffaa00; font-weight:bold; font-size:11px; word-break:break-word;">NPC</div>
+                    <div style="display:flex; gap:12px; align-items:flex-start;">
+                      <div style="width:clamp(120px,30%,180px); text-align:center; flex-shrink:0;">
+                        <div id="dialogPortraitContainer" style="width:100%; aspect-ratio:3/4; min-height:160px; border:1px solid #00ff41; background:rgba(0,20,10,0.6); display:flex; align-items:center; justify-content:center; font-size:64px; overflow:hidden; position:relative;">🧍</div>
+                        <div id="dialogNPCName" style="margin-top:6px; color:#ffaa00; font-weight:bold; font-size:clamp(11px,3vw,13px); word-break:break-word;">NPC</div>
                       </div>
-                      <div style="flex:1; overflow-y:auto; max-height:calc(100dvh - 260px);">
-                        <div id="dialogBody" class="dialog-body" style="font-size:13px; line-height:1.5;"></div>
+                      <div style="flex:1; overflow-y:auto; max-height:calc(100dvh - 220px);">
+                        <div id="dialogBody" class="dialog-body" style="font-size:clamp(12px,3vw,14px); line-height:1.6;"></div>
                         <div style="margin-top:10px; border-top:1px solid rgba(0,255,65,0.15); padding-top:8px;">
                           <button id="dialogCloseBtn" class="pipboy-button-small" style="min-height:44px; font-size:13px; opacity:0.85;">✕ CLOSE</button>
                         </div>

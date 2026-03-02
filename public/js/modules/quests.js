@@ -163,18 +163,14 @@
       // Give starter gear on first init (checks localStorage internally)
       this.giveStarterGear();
       
-      // Auto-trigger the wake_up quest courier ONLY on first load (new players)
-      // Check localStorage to avoid retriggering for returning players
-      const wakeUpKey = "afc_wake_up_triggered";
-      if (!localStorage.getItem(wakeUpKey)) {
-        const triggered = this.triggerNPCQuestDelivery("wake_up");
-        if (triggered) {
-          localStorage.setItem(wakeUpKey, "true");
-        }
-      }
+      // NOTE: The wake_up quest is triggered naturally by the Courier dialogue in boot.js.
+      // narrative.js closeDialog() calls startQuest("wake_up") when dialog_courier closes.
+      // We do NOT pre-trigger it here to avoid duplicate toasts and premature display
+      // (before the boot screen clears and the map initialises).
       
       // Re-show notifications for any available quests that were persisted
-      // Use sessionStorage to track shown notifications (once per browser session)
+      // (e.g. returning players who hadn't yet accepted an offered quest).
+      // Use sessionStorage so notifications show at most once per browser session.
       Object.keys(this.availableQuests).forEach(questId => {
         const shownKey = `afc_quest_notif_shown_${questId}`;
         if (!sessionStorage.getItem(shownKey)) {
@@ -579,11 +575,11 @@
       }
       
       // Create a visual notification toast that doesn't rely on other modules
-      this.showQuestToast(quest.name, offer.message);
+      this.showQuestToast(quest.name, offer.message, "📜 NEW QUEST AVAILABLE");
     },
     
     // Simple toast notification for quest offers
-    showQuestToast(questName, message) {
+    showQuestToast(questName, message, header) {
       // Check if toast container exists, create if not
       let toastContainer = document.getElementById("quest-toast-container");
       if (!toastContainer) {
@@ -613,12 +609,15 @@
         box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
         animation: questToastIn 0.3s ease-out;
       `;
+
+      const safeHeader = header || "📜 QUEST STARTED";
+      const safeName = questName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const safeMsg  = (message || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       
       toast.innerHTML = `
-        <div style="font-size: 14px; color: #ffaa00; margin-bottom: 6px;">📜 NEW QUEST AVAILABLE</div>
-        <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${questName}</div>
-        <div style="font-size: 13px; opacity: 0.85;">${message}</div>
-        <div style="margin-top: 8px; font-size: 12px; color: #aaa;">Check QUESTS tab to accept</div>
+        <div style="font-size: 14px; color: #ffaa00; margin-bottom: 6px;">${safeHeader}</div>
+        <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${safeName}</div>
+        <div style="font-size: 13px; opacity: 0.85;">${safeMsg}</div>
       `;
       
       // Add CSS animation if not present
@@ -809,6 +808,14 @@
       this.saveQuestState();
 
       console.log("[quests] Quest started:", questId);
+
+      // Show quest started notification (toast + map message)
+      this.showQuestToast(q.name, q.description || "New quest added to your log.", "📜 QUEST STARTED");
+      window.dispatchEvent(new CustomEvent("questStarted", { detail: { questId, questName: q.name } }));
+      if (Game.modules?.worldmap?.showMapMessage) {
+        Game.modules.worldmap.showMapMessage(`QUEST STARTED: ${q.name}`);
+      }
+
       return true;
     },
 
@@ -996,11 +1003,73 @@
       }
 
       console.log("[quests] Quest completed:", questId);
+
+      // Show QUEST COMPLETE notification
+      this.showQuestCompletionToast(q.name, r);
+
+      // Dispatch event so other modules (quest-ui, HUD) can update
+      window.dispatchEvent(new CustomEvent("questCompleted", {
+        detail: { questId, questName: q.name, rewards: r }
+      }));
+
+      // Map message for immediate feedback
+      if (Game.modules?.worldmap?.showMapMessage) {
+        Game.modules.worldmap.showMapMessage(`QUEST COMPLETE: ${q.name}`);
+      }
       
       // Trigger inventory UI refresh
       if (window.Game?.hooks?.onInventoryUpdated) {
         window.Game.hooks.onInventoryUpdated();
       }
+    },
+
+    showQuestCompletionToast(questName, rewards) {
+      let toastContainer = document.getElementById("quest-toast-container");
+      if (!toastContainer) {
+        toastContainer = document.createElement("div");
+        toastContainer.id = "quest-toast-container";
+        toastContainer.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 10000;
+          max-width: 350px;
+        `;
+        document.body.appendChild(toastContainer);
+      }
+
+      const toast = document.createElement("div");
+      toast.className = "quest-toast quest-complete-toast";
+      toast.style.cssText = `
+        background: rgba(5, 20, 5, 0.97);
+        border: 2px solid #ffaa00;
+        border-radius: 4px;
+        padding: 14px 18px;
+        margin-bottom: 10px;
+        color: #ffaa00;
+        font-family: 'VT323', 'Share Tech Mono', monospace;
+        box-shadow: 0 0 24px rgba(255, 170, 0, 0.4);
+        animation: questToastIn 0.3s ease-out;
+      `;
+
+      const rewardLines = [];
+      if (rewards?.xp)   rewardLines.push(`+${rewards.xp} XP`);
+      if (rewards?.caps) rewardLines.push(`+${rewards.caps} CAPS`);
+      if (rewards?.items?.length) rewardLines.push(`Items: ${rewards.items.join(", ")}`);
+
+      const safeQuestName = questName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      toast.innerHTML = `
+        <div style="font-size: 16px; color: #ffaa00; margin-bottom: 4px; font-weight: bold;">✓ QUEST COMPLETE</div>
+        <div style="font-size: 20px; font-weight: bold; margin-bottom: 6px;">${safeQuestName}</div>
+        ${rewardLines.length ? `<div style="font-size: 13px; color: #00ff41; opacity: 0.9;">${rewardLines.join(" · ")}</div>` : ""}
+      `;
+
+      toastContainer.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = "questToastOut 0.3s ease-out forwards";
+        setTimeout(() => toast.remove(), 300);
+      }, 6000);
     },
 
     getCurrentStep(questId) {
