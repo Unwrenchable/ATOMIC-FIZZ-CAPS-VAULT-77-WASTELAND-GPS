@@ -49,6 +49,8 @@
     VATS.targetingMode = true;
     VATS.targets = nearbyEnemies;
     VATS.queuedShots = [];
+    // BUG-012: Reset AP to full at the start of each new encounter
+    VATS.actionPoints = VATS.maxActionPoints;
     
     // Pause game time
     if (window.Game && window.Game.pause) {
@@ -176,7 +178,15 @@
     // Check for death
     if (enemy.health <= 0) {
       console.log(`[VATS] ${enemy.name} is dead!`);
-      // npcEncounter does not have a removeEnemy method — dispatch an event instead
+      // BUG-022: Remove dead enemy from target list and cancel queued shots against it
+      // Guard: only filter by id if enemy.id is defined to avoid silent failures
+      if (enemy.id !== undefined) {
+        VATS.targets = VATS.targets.filter(t => t.id !== enemy.id);
+        VATS.queuedShots = VATS.queuedShots.filter(s => s.enemy.id !== enemy.id);
+      } else {
+        VATS.targets = VATS.targets.filter(t => t !== enemy);
+        VATS.queuedShots = VATS.queuedShots.filter(s => s.enemy !== enemy);
+      }
       window.dispatchEvent(new CustomEvent('enemyDefeated', { detail: { enemyId: enemy.id } }));
     }
   }
@@ -313,6 +323,13 @@
     queueShot: queueShot,
     isActive: () => VATS.enabled
   };
+
+  // BUG-016: Clean up VATS overlay if battle ends without going through exitVATS
+  window.addEventListener('battleEnd', function() {
+    if (VATS.enabled) {
+      exitVATS();
+    }
+  });
 
   console.log('[VATS] Module loaded');
 })();
