@@ -1,5 +1,19 @@
 # Copilot Instructions — Atomic Fizz Caps / Vault-77 Wasteland GPS
 
+## Agent Network / Hive Mind
+
+**Read `.github/agents-instructions.md` first** before making any changes.
+That document is the primary coordination file for all AI agents (Copilot included) operating on this repository. It defines:
+- Agent peer discovery and task routing
+- Inter-agent communication format (JSON event schema)
+- Shared memory protocol via `.github/agents/memory.md`
+- Convergence rules for shared systems (Redis, auth, CORS)
+- GitHub Copilot integration workflow and security invariants
+
+After reading `agents-instructions.md`, check `.github/agents/memory.md` for verified facts and recent decisions, then `.github/agents/agent.md` for conventions before writing any code.
+
+---
+
 ## Project Identity
 This repo is **Atomic Fizz Caps** (`atomicfizzcaps.xyz`) — a Fallout-themed GPS crypto geo-game built on Solana. Players explore real-world GPS locations, claim POIs, earn FIZZ tokens, battle creatures, craft gear, and chat with an Overseer AI. This is **not** a DEX, swap protocol, or naming service. Any FizzSwap/fizzdex references in code are outdated.
 
