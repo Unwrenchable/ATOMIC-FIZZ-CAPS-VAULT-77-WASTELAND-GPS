@@ -4,8 +4,8 @@
 /* Live Indicator */
 .rex-live-indicator {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: max(20px, calc(10px + env(safe-area-inset-top, 0px)));
+  right: max(20px, env(safe-area-inset-right, 0px));
   background: rgba(0, 0, 0, 0.9);
   border: 2px solid #ff0000;
   border-radius: 8px;
@@ -282,8 +282,8 @@
 /* Admin Controls */
 .rex-admin-controls {
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: max(20px, calc(10px + env(safe-area-inset-top, 0px)));
+  left: max(20px, env(safe-area-inset-left, 0px));
   width: 400px;
   background: rgba(0, 0, 0, 0.95);
   border: 2px solid #ffaa00;
@@ -661,5 +661,16 @@
 @media (min-width: 769px) and (max-width: 1024px) {
   .radio-dial {
     height: 45px;
+  }
+}
+
+/* ============================================================
+   NARROW PHONE FIX — 320px screens (BUG-009)
+   ============================================================ */
+@media (max-width: 400px) {
+  .rex-live-chat {
+    width: calc(100vw - 20px);
+    right: 10px;
+    left: 10px;
   }
 }
