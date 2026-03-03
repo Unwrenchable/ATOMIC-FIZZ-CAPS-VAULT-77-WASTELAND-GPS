@@ -481,5 +481,357 @@
     "value": 0,
     "tradeable": false,
     "description": "An Enclave-era security chip recovered near the Nevada Test and Training Range perimeter. Clearance level: BEYOND BLACK. Access granted to: REDACTED. Authorized by: REDACTED. The data stored on this chip has been overwritten seven times. The eighth overwrite is what you found. It still carries a ghost of something in the memory substrate. Your Pip-Boy reads it as a single word: RUN."
+  },
+  {
+    "id": "serum_adrenal_reaction",
+    "name": "Adrenal Reaction Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 800,
+    "description": "A concentrated hormonal activator in a pre-war needle. Guaranteed adrenal mutation on injection.",
+    "applies_mutation": "mutation_adrenal_reaction",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_bird_bones",
+    "name": "Bird Bones Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 400,
+    "description": "Skeletal density reducer. Side effects: hollow feeling, tendency to look at heights.",
+    "applies_mutation": "mutation_bird_bones",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_carnivore",
+    "name": "Carnivore Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 350,
+    "description": "Digestive enzyme replacement. Best injected before a meal rather than after.",
+    "applies_mutation": "mutation_carnivore",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_chameleon",
+    "name": "Chameleon Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 1200,
+    "description": "Extremely rare pigmentation activator. The syringe changes color as you hold it. That's not a good sign.",
+    "applies_mutation": "mutation_chameleon",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_electrically_charged",
+    "name": "Electrically Charged Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 600,
+    "description": "Static charge activator. Comes with complementary rubber gloves that will definitely not help.",
+    "applies_mutation": "mutation_electrically_charged",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_empath",
+    "name": "Empath Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 550,
+    "description": "Neural sensitizer. Users report feeling everything more intensely. Everything. Including their companion's stubbed toe.",
+    "applies_mutation": "mutation_empath",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_eagle_eyes",
+    "name": "Eagle Eyes Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 600,
+    "description": "Ocular enhancement serum. May cause temporary double vision, then permanent single vision across very long distances.",
+    "applies_mutation": "mutation_eagle_eyes",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_grounded",
+    "name": "Grounded Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 600,
+    "description": "Earth-charge conductor. Safe to inject during a thunderstorm. Not recommended.",
+    "applies_mutation": "mutation_grounded",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_herbivore",
+    "name": "Herbivore Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 350,
+    "description": "Enzymatic inverter. Comes with a small packet of mixed greens from the old world. They're still technically food.",
+    "applies_mutation": "mutation_herbivore",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_herd_mentality",
+    "name": "Herd Mentality Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 400,
+    "description": "Social amplifier. Best results when injected in company. Worse results when you're alone at 3am wondering what the point is.",
+    "applies_mutation": "mutation_herd_mentality",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_marsupial",
+    "name": "Marsupial Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 450,
+    "description": "Structural redistribution compound. Warning: urge to carry everything in a pouch is a known side effect.",
+    "applies_mutation": "mutation_marsupial",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_plague_walker",
+    "name": "Plague Walker Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 900,
+    "description": "Bacterial colonization agent. Do not inject near friends. Actually, don't inject near anyone.",
+    "applies_mutation": "mutation_plague_walker",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_scaly_skin",
+    "name": "Scaly Skin Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 550,
+    "description": "Dermal hardener. The scales start small. They get less small over several days.",
+    "applies_mutation": "mutation_scaly_skin",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_speed_demon",
+    "name": "Speed Demon Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 500,
+    "description": "Metabolic accelerator. Do not inject and then try to have a slow breakfast. You won't manage it.",
+    "applies_mutation": "mutation_speed_demon",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_talons",
+    "name": "Talons Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 400,
+    "description": "Keratin stimulator. Typing this label was the last easy thing the writer did.",
+    "applies_mutation": "mutation_talons",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_twisted_muscles",
+    "name": "Twisted Muscles Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 650,
+    "description": "Fiber-density maximizer. Expect to hear uncomfortable sounds for 24 hours post-injection.",
+    "applies_mutation": "mutation_twisted_muscles",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_unstable_isotope",
+    "name": "Unstable Isotope Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 750,
+    "description": "Radioactive cell activator. Comes in a lead-lined container for a reason.",
+    "applies_mutation": "mutation_unstable_isotope",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_healing_factor",
+    "name": "Healing Factor Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 1000,
+    "description": "Cellular regeneration activator. Rare, effective, and slightly unnerving to watch work.",
+    "applies_mutation": "mutation_healing_factor",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_glass_cannon",
+    "name": "Glass Cannon Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 950,
+    "description": "Offensive amplifier. Maximum aggression. Minimum self-preservation. Some might call this unwise.",
+    "applies_mutation": "mutation_glass_cannon",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_rad_sponge",
+    "name": "Rad Sponge Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 900,
+    "description": "Radiation processing activator. The syringe itself is mildly radioactive. This tracks.",
+    "applies_mutation": "mutation_rad_sponge",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_suppressant",
+    "name": "Mutation Suppressant",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 1500,
+    "description": "Removes one mutation at random from your active stack. Developed by Vault-Tec. Counterintuitively, this was the ethical part of the program.",
+    "applies_mutation": null,
+    "removes_mutation": true,
+    "stackable": true
+  },
+  {
+    "id": "keycard_nuclear_alpha",
+    "name": "Nuclear Keycard — Alpha",
+    "type": "keycard",
+    "weight": 0.1,
+    "value": 2000,
+    "tradeable": true,
+    "description": "A three-inch metal card with embedded authentication chip. Designed to survive nuclear blast within 500m and still function. Still warm from where someone tried to hold onto it.",
+    "stackable": false
+  },
+  {
+    "id": "keycard_nuclear_bravo",
+    "name": "Nuclear Keycard — Bravo",
+    "type": "keycard",
+    "weight": 0.1,
+    "value": 2000,
+    "tradeable": true,
+    "description": "Military authentication key, Brotherhood of Steel manufacture. Heavy encryption, biometric secondary lock that's been bypassed with what appears to be a paperclip.",
+    "stackable": false
+  },
+  {
+    "id": "keycard_nuclear_charlie",
+    "name": "Nuclear Keycard — Charlie",
+    "type": "keycard",
+    "weight": 0.1,
+    "value": 2000,
+    "tradeable": true,
+    "description": "Enclave-manufactured authentication key. The Enclave seal is embossed on the front. The back says, in very small print: 'Property of the Enclave. If found, please destroy America responsibly.'",
+    "stackable": false
+  },
+  {
+    "id": "launch_code_fragment",
+    "name": "Launch Code Fragment",
+    "type": "questItem",
+    "weight": 0.0,
+    "value": 0,
+    "tradeable": false,
+    "description": "A 2-character alphanumeric fragment of the current week's nuclear launch code. Worthless alone. With the other 3 pieces, it authorizes the end of someone's day.",
+    "stackable": false
+  },
+  {
+    "id": "flux_violet",
+    "name": "Violet Flux",
+    "type": "crafting_material",
+    "weight": 0.1,
+    "value": 300,
+    "description": "Irradiated casino carpet fibers fused by nuclear heat. Only harvestable during an active nuke zone. Crafting: radiation weapon mods, glowing armor paint.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "flux_cobalt",
+    "name": "Cobalt Flux",
+    "type": "crafting_material",
+    "weight": 0.1,
+    "value": 300,
+    "description": "Irradiated desert sand compacted by blast pressure into blue-glowing granules. Only harvestable during nuke zone. Crafting: energy weapon power cells, radiation-enhanced ammunition.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "flux_yellowcake",
+    "name": "Yellowcake Flux",
+    "type": "crafting_material",
+    "weight": 0.2,
+    "value": 350,
+    "description": "Uranium compound irradiated from Vault-Tec storage. Only available during nuke zone. Crafting: nuclear keycards (partial component), experimental armor plating.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "flux_crimson",
+    "name": "Crimson Flux",
+    "type": "crafting_material",
+    "weight": 0.1,
+    "value": 300,
+    "description": "Colorado River water crystallized by nuclear blast. Only during nuke zone. Crafting: water weapons, contamination grenades.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "irradiated_glass",
+    "name": "Irradiated Casino Glass",
+    "type": "crafting_material",
+    "weight": 0.3,
+    "value": 150,
+    "description": "Fused glass from casino windows, still faintly warm. Nuke zone only. Crafting: glowing bottles, irradiated lens mods.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "scorched_flowers",
+    "name": "Scorched Blast Blossom",
+    "type": "crafting_material",
+    "weight": 0.05,
+    "value": 200,
+    "description": "Desert wildflowers that only bloom in nuclear aftermath. Nuke zone only. Crafting: nuclear stimpaks, mutation catalysts.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "molten_concrete",
+    "name": "Molten Concrete Shard",
+    "type": "crafting_material",
+    "weight": 1.0,
+    "value": 100,
+    "description": "Dam concrete fused at nuclear temperatures. Nuke zone only. Crafting: heavy weapon attachments, fortification materials.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "irradiated_polymer",
+    "name": "Irradiated Polymer",
+    "type": "crafting_material",
+    "weight": 0.2,
+    "value": 250,
+    "description": "Vault-Tec composite material irradiated to structural enhancement. Nuke zone only. Crafting: powered armor upgrades.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "nuclear_stimpak",
+    "name": "Nuclear Stimpak",
+    "type": "consumable",
+    "weight": 0.3,
+    "value": 800,
+    "description": "A stimpak synthesized with irradiated plant compounds. Heals 150 HP over 10 seconds but also delivers 25 rads. Worth it. Probably. Craftable from Scorched Blast Blossom + standard stimpak components.",
+    "nuke_zone_only": false
   }
 ]

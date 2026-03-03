@@ -1,0 +1,219 @@
+{
+  "version": "1.0",
+  "description": "Fallout 76-inspired nuke silo system for Atomic Fizz Caps. Players collect nuclear keycards by completing quests and finding them in the world. Once a player has 3 keycards AND has decrypted the launch code (an 8-character alphanumeric code distributed in pieces across the map), they can launch a tactical nuke at any GPS-defined zone. Nuke zones persist for 3 hours and grant access to unique mutated loot, crafting materials, and boss encounters unavailable elsewhere.",
+  "mechanic_overview": {
+    "keycard_collection": "Nuclear keycards are rare drops from high-level enemies, quest rewards, and geo-fence locations. Each keycard is single-use per launch.",
+    "launch_codes": "An 8-character launch code is generated weekly. Fragments (2-char pieces) are distributed across 4 locations. Players must collect all 4 fragments and combine them.",
+    "launch_sequence": "Requires: 3 keycards + complete 8-char code + reaching a silo terminal in-game (GPS location). Launch targets a GPS zone of player's choice.",
+    "nuke_zone_effects": "Active nuke zone (3 hours): unique boss spawns, mutated loot, high radiation, accessible only to players with RadAway and adequate radiation resistance.",
+    "keycard_note": "Keycards do not stack — each is a unique item. Spending 3 launches a nuke. Keycards can be traded between players."
+  },
+  "silos": [
+    {
+      "id": "silo_alpha",
+      "name": "Vault-Tec Silo Alpha",
+      "codename": "THE MONUMENT",
+      "lat": 36.2500,
+      "lng": -115.0000,
+      "radiusMeters": 100,
+      "description": "A pre-war missile installation concealed beneath what appeared to be a water treatment facility east of Las Vegas. The Poseidon Energy logos on the outside are the tell — no utility company needed that much reinforced concrete.",
+      "terminal_lore": "FACILITY DESIGNATION: ALPHA-SEVEN. STATUS: DORMANT. AUTHORIZATION SEQUENCE: AWAITING. NOTE: The automated launch protocols are still active. The system does not know the war is over. Please do not tell it.",
+      "faction_claim": "contested"
+    },
+    {
+      "id": "silo_bravo",
+      "name": "Iron Curtain Installation Bravo",
+      "codename": "THE FOUNDRY",
+      "lat": 36.8500,
+      "lng": -114.7000,
+      "radiusMeters": 100,
+      "description": "Military installation carved into the Nevada mountains. Exterior detonations have collapsed the main entrance but the launch bay is intact — accessible only through a flooded service tunnel.",
+      "terminal_lore": "FACILITY DESIGNATION: BRAVO-TWELVE. AUTHORIZATION STATUS: THREE-KEY PROTOCOL. Note from former overseer: If you're reading this, the war happened. Launch only in response to active threat. Define 'active threat' carefully. I didn't.",
+      "faction_claim": "brotherhood_adjacent"
+    },
+    {
+      "id": "silo_charlie",
+      "name": "Enclave Installation Charlie",
+      "codename": "THE NEEDLE",
+      "lat": 35.9000,
+      "lng": -115.5000,
+      "radiusMeters": 100,
+      "description": "A thin, reinforced launch shaft sunk into Mojave bedrock. Enclave tech, post-war construction — someone built this after the bombs fell using salvaged pre-war components. The targeting system uses satellite link that somehow still functions.",
+      "terminal_lore": "ENCLAVE CONTINUITY INSTALLATION CHARLIE. PRIORITY: AMERICA FIRST, LAST, ALWAYS. Launch authorization requires three senior Enclave officers. There are no senior Enclave officers remaining. System has defaulted to civilian authorization protocol. God help us all.",
+      "faction_claim": "enclave_remnants"
+    }
+  ],
+  "nuke_zones": [
+    {
+      "id": "zone_strip_ruins",
+      "name": "The Irradiated Strip",
+      "targetable": true,
+      "center_lat": 36.1699,
+      "center_lng": -115.1398,
+      "radius_km": 2.5,
+      "description": "The casino district of Las Vegas, irradiated. Even the ghouls put on their best suits to loot this zone.",
+      "active_effects": {
+        "radiation_rads_per_minute": 15,
+        "enemy_health_multiplier": 1.5,
+        "loot_quality_tier": "nuke_zone"
+      },
+      "unique_bosses": [
+        {
+          "id": "boss_casino_baron",
+          "name": "The Irradiated Casino Baron",
+          "description": "A pre-war casino magnate turned Glowing One who still believes he runs the house. He does. The house is on fire.",
+          "loot_table": ["nuke_caps_haul", "glowing_playing_cards", "irradiated_poker_chip_stack"],
+          "spawn_chance": 0.4
+        }
+      ],
+      "unique_loot": ["irradiated_caps_stash", "glowing_neon_sign", "nuclear_casino_chip", "mutated_gecko_hide", "strip_survivor_holotape"],
+      "mutated_crafting_materials": [
+        { "id": "flux_violet", "name": "Violet Flux", "description": "Irradiated casino carpet fibers fused by nuclear heat. Crafting: radiation weapons mod, glowing armor paint." },
+        { "id": "irradiated_glass", "name": "Irradiated Casino Glass", "description": "Fused glass from casino windows, still faintly warm. Crafting: glowing bottles, irradiated lens mod." }
+      ]
+    },
+    {
+      "id": "zone_desert_wastes",
+      "name": "The Scorched Flats",
+      "targetable": true,
+      "center_lat": 36.4000,
+      "center_lng": -115.3000,
+      "radius_km": 3.0,
+      "description": "Open desert turned nuclear hellscape. Creatures here have absorbed enough radiation to glow, mutate, and get angry about it.",
+      "active_effects": {
+        "radiation_rads_per_minute": 20,
+        "enemy_health_multiplier": 2.0,
+        "loot_quality_tier": "nuke_zone"
+      },
+      "unique_bosses": [
+        {
+          "id": "boss_scorched_queen_beta",
+          "name": "Scorched Radscorpion Queen",
+          "description": "An Emperor Radscorpion variant that absorbed the full blast. Now she's radioactive, territorial, and the size of a small building.",
+          "loot_table": ["scorched_queen_carapace", "nuke_zone_venom_gland", "royal_stinger"],
+          "spawn_chance": 0.6
+        }
+      ],
+      "unique_loot": ["scorched_desert_glass", "nuke_flower_seeds", "mutated_yucca_fruit", "scorched_earth_soil"],
+      "mutated_crafting_materials": [
+        { "id": "flux_cobalt", "name": "Cobalt Flux", "description": "Irradiated desert sand compacted by blast pressure into blue-glowing granules. Crafting: energy weapon power cells, radiation-enhanced ammunition." },
+        { "id": "scorched_flowers", "name": "Scorched Blast Blossom", "description": "Desert wildflowers that only bloom in nuclear aftermath. Crafting: nuclear stimpaks (heal + rads), mutation catalysts." }
+      ]
+    },
+    {
+      "id": "zone_vault_district",
+      "name": "The Vault Cluster",
+      "targetable": true,
+      "center_lat": 36.0000,
+      "center_lng": -114.9000,
+      "radius_km": 2.0,
+      "description": "The cluster of Vault-Tec installations north of the city. Nuking this zone activates ancient automated defense systems and shakes loose pre-war tech that's been sealed since 2077.",
+      "active_effects": {
+        "radiation_rads_per_minute": 12,
+        "enemy_health_multiplier": 1.8,
+        "loot_quality_tier": "nuke_zone"
+      },
+      "unique_bosses": [
+        {
+          "id": "boss_rogue_overseer_bot",
+          "name": "Irradiated Overseer Mk. III",
+          "description": "A prototype Vault-Tec Overseer robot that was sealed in the complex and activated by the blast. It has opinions about your vault assignment.",
+          "loot_table": ["vault_tec_override_chip", "overseer_mk3_core", "classified_experiment_data"],
+          "spawn_chance": 0.5
+        }
+      ],
+      "unique_loot": ["vault_tec_test_kit", "irradiated_experiment_notes", "pre_war_data_core", "sealed_vault_food"],
+      "mutated_crafting_materials": [
+        { "id": "flux_yellowcake", "name": "Yellowcake Flux", "description": "Uranium compound extracted from Vault-Tec's experimental storage. Crafting: nuclear keycards (partial), experimental armor plating." },
+        { "id": "irradiated_polymer", "name": "Irradiated Polymer", "description": "Vault-Tec composite material irradiated to structural enhancement. Crafting: powered armor upgrades, radiation-sealed containers." }
+      ]
+    },
+    {
+      "id": "zone_hoover_dam",
+      "name": "The Burning Dam",
+      "targetable": true,
+      "center_lat": 36.0160,
+      "center_lng": -114.7378,
+      "radius_km": 1.5,
+      "description": "Hoover Dam, post-nuclear strike. The concrete is cracked, the turbines are molten, and the Colorado River has become something you really shouldn't swim in. Amazing bass fishing though.",
+      "active_effects": {
+        "radiation_rads_per_minute": 18,
+        "enemy_health_multiplier": 1.7,
+        "loot_quality_tier": "nuke_zone"
+      },
+      "unique_bosses": [
+        {
+          "id": "boss_molten_deathclaw",
+          "name": "Molten Deathclaw Alpha",
+          "description": "A Deathclaw that was at the dam when it was nuked. The radiation didn't kill it. The radiation made it considerably worse.",
+          "loot_table": ["molten_deathclaw_claw", "irradiated_dam_core", "fused_concrete_shard"],
+          "spawn_chance": 0.7
+        }
+      ],
+      "unique_loot": ["dam_turbine_component", "irradiated_colorado_water", "ncr_war_medal", "legion_irradiated_coin"],
+      "mutated_crafting_materials": [
+        { "id": "flux_crimson", "name": "Crimson Flux", "description": "Irradiated Colorado River water crystallized by the blast. Crafting: radiation water weapons, contamination grenades, nuke zone survival kits." },
+        { "id": "molten_concrete", "name": "Molten Concrete Shard", "description": "Dam concrete fused at nuclear temperatures. Incredibly dense. Crafting: heavy weapon attachments, fortification materials." }
+      ]
+    }
+  ],
+  "keycards": [
+    {
+      "id": "keycard_nuclear_alpha",
+      "name": "Nuclear Keycard — Alpha",
+      "type": "keycard",
+      "weight": 0.1,
+      "value": 2000,
+      "tradeable": true,
+      "silo": "silo_alpha",
+      "description": "A three-inch metal card with embedded authentication chip. Designed to survive nuclear blast within 500m and still function. Still warm from where someone tried to hold onto it.",
+      "acquisition": ["high_level_enemy_drop", "quest_reward", "nuke_zone_loot"]
+    },
+    {
+      "id": "keycard_nuclear_bravo",
+      "name": "Nuclear Keycard — Bravo",
+      "type": "keycard",
+      "weight": 0.1,
+      "value": 2000,
+      "tradeable": true,
+      "silo": "silo_bravo",
+      "description": "Military authentication key, Brotherhood of Steel manufacture. Heavy encryption, biometric secondary lock that's been bypassed with what appears to be a paperclip.",
+      "acquisition": ["brotherhood_quest", "high_level_enemy_drop", "nuke_zone_loot"]
+    },
+    {
+      "id": "keycard_nuclear_charlie",
+      "name": "Nuclear Keycard — Charlie",
+      "type": "keycard",
+      "weight": 0.1,
+      "value": 2000,
+      "tradeable": true,
+      "silo": "silo_charlie",
+      "description": "Enclave-manufactured authentication key. The Enclave seal is embossed on the front. The back says, in very small print: 'Property of the Enclave. If found, please destroy America responsibly.'",
+      "acquisition": ["enclave_quest", "ancient_wonders_reward", "high_level_enemy_drop"]
+    },
+    {
+      "id": "launch_code_fragment",
+      "name": "Launch Code Fragment",
+      "type": "questItem",
+      "weight": 0.0,
+      "value": 0,
+      "tradeable": false,
+      "description": "A 2-character alphanumeric fragment of the current week's nuclear launch code. Worthless alone. With the other 3 pieces, it authorizes the end of someone's day.",
+      "acquisition": ["hidden_cache", "quest_completion", "nuke_zone_terminal"]
+    }
+  ],
+  "launch_code_system": {
+    "rotation": "weekly",
+    "format": "8 alphanumeric characters (e.g. X7-K2-9A-M4)",
+    "fragments": 4,
+    "fragment_length": 2,
+    "distribution": "Fragments hidden in different map zones each week. Zone locations rotate. Players must find and share intel.",
+    "community_mechanic": "Launch codes reward community cooperation — sharing fragments, coordinating strikes, claiming loot windows.",
+    "note": "Server generates code on Monday 00:00 UTC. Fragment locations are seeded from the code hash. Code expires Sunday 23:59 UTC."
+  },
+  "nuke_zone_duration_hours": 3,
+  "nuke_zone_warning_minutes": 5,
+  "nuke_zone_min_radiation_resist_to_enter": 100,
+  "keycard_cost_per_launch": 3,
+  "reward_note": "Unique flux materials and irradiated items only drop while the nuke zone is active. After 3 hours, the zone reverts to normal. Survivors keep their loot."
+}
