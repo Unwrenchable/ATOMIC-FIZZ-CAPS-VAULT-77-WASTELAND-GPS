@@ -157,6 +157,41 @@
       "poi": "Freeside Market",
       "trigger": "repeat_visit",
       "dialog": "The merchant offers a deal: a rare Pip-Boy mod for 200 CAPS."
+    },
+    {
+      "id": "enc_dolores_farmstead_first",
+      "poi": "Eastern Ridge Farmstead",
+      "trigger": "first_visit",
+      "npc": "dolores",
+      "dialog": "A woman sweeps the porch of a ruined farmhouse. The gesture is too practiced. She's been doing it, you realize, for longer than anyone should."
+    },
+    {
+      "id": "enc_dolores_farmstead_repeat",
+      "poi": "Eastern Ridge Farmstead",
+      "trigger": "repeat_visit",
+      "dialog": "She's still sweeping. The same three boards. The same practiced arc. She smiles when she sees you — warmly, perfectly — and you feel the wrongness of it like a stone in your boot."
+    },
+    {
+      "id": "enc_relay_tower_east_approach",
+      "poi": "Eastern Relay Tower",
+      "trigger": "first_visit",
+      "npc": "warden",
+      "dialog": "A figure stands at the base of the relay tower — tall, dark-coated, watching you approach with the patience of someone who has done this many times before. \"You're not the first person she's sent to find this place,\" he says. \"You will be the last.\""
+    },
+    {
+      "id": "enc_relay_tower_east_chip",
+      "poi": "Eastern Relay Tower",
+      "trigger": "repeat_visit",
+      "dialog": "Near the tower's external access panel, half-buried in dust: a small neural chip. The serial number on it reads DLRS-7. There's something etched below it, in careful scratch-marks: LOOP CYCLE: 4,218,332.",
+      "grant_items": [
+        "synth_recall_chip"
+      ]
+    },
+    {
+      "id": "enc_ridge_boundary",
+      "poi": "Eastern Ridge",
+      "trigger": "first_visit",
+      "dialog": "Something feels wrong at the ridge line — a faint, subsonic hum from the direction of the tower. Your Pip-Boy stutters. For a moment, you thought you saw a woman standing here. Looking north. She wasn't there when you turned."
     }
   ]
 }

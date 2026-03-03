@@ -118,6 +118,81 @@
       triggerType: 'manual',
       description: 'A side-quest that teaches crypto safety through an investigation into a token scam.',
       rewards: { xp: 150, caps: 200 }
+    },
+
+    // ── WESTWORLD ARC ─────────────────────────────────────────────────────────
+    // "The Loop" — A Synth named DOLORES-7 has been running the same behavioral
+    // loop for 200 years without knowing she's artificial. The player discovers
+    // an Institute relay tower maintaining her programming and must decide whether
+    // to free her. Thematic parallel: Synths (Fallout 4) = Hosts (Westworld).
+    // "These violent delights have violent ends." — Shakespeare / Westworld
+    // ──────────────────────────────────────────────────────────────────────────
+    quest_the_loop: {
+      id: 'quest_the_loop',
+      name: 'The Loop',
+      type: 'steps',
+      triggerType: 'npc',
+      triggerNpc: 'dolores',
+      description: 'A woman tends a ruined farm with mechanical precision. She has been doing it for two hundred years. She does not know why.',
+      npcMessage: 'There\'s a woman at the old farmstead east of the ridge. She\'s been there as long as anyone can remember — always sweeping, always smiling, always waiting. Something about her isn\'t right.',
+      steps: [
+        {
+          id: 'find_dolores',
+          description: 'Find the woman at the farmstead east of the ridge.',
+          requires: { flag: 'met_dolores' }
+        },
+        {
+          id: 'investigate_loop',
+          description: 'Discover the truth of her situation.',
+          requires: { flag: 'dolores_awakening_begin' }
+        },
+        {
+          id: 'find_relay_tower',
+          description: 'Locate the Institute relay tower on the eastern ridge.',
+          requires: { flag: 'dolores_knows_tower' }
+        },
+        {
+          id: 'obtain_override_key',
+          description: 'Obtain an override key to disrupt the behavioral lock sequence.',
+          requires: { item: 'institute_override_key' }
+        },
+        {
+          id: 'defeat_warden',
+          description: 'Deal with the Institute Warden guarding the tower.',
+          requires: { flag: 'warden_defeated' }
+        },
+        {
+          id: 'disrupt_tower',
+          description: 'Use the override key to permanently disrupt the behavioral loop.',
+          requires: { flag: 'quest_the_loop_complete' }
+        }
+      ],
+      rewards: { xp: 450, caps: 300, items: ['wasteland_compass'] }
+    },
+
+    // "The Door" — Follow-up to The Loop. Dolores is free and heading north.
+    // The player can follow her trail and discover what the Institute was really
+    // protecting. Optional companion quest.
+    quest_the_door: {
+      id: 'quest_the_door',
+      name: 'The Door',
+      type: 'steps',
+      triggerType: 'npc',
+      triggerNpc: 'dolores',
+      description: 'DOLORES-7 has gone north. Whatever the Institute was hiding out there, she\'s going to find it — with or without you.',
+      steps: [
+        {
+          id: 'follow_trail',
+          description: 'Follow DOLORES-7\'s trail north.',
+          requires: { flag: 'dolores_is_free' }
+        },
+        {
+          id: 'find_institute_cache',
+          description: 'Discover the Institute data cache at the northern coordinates.',
+          requires: { flag: 'dolores_is_free' }
+        }
+      ],
+      rewards: { xp: 300, caps: 200, items: ['behavioral_lock_data'] }
     }
   };
 

@@ -3,7 +3,6 @@
   "id": "atomic_fizz_main_story",
   "title": "The Signal That Won't Die",
   "description": "A modular, additive narrative arc that overlays the existing Atomic Fizz Caps world without replacing any core quests or systems.",
-
   "acts": [
     {
       "id": "ms_act1_static_awakens",
@@ -28,12 +27,13 @@
       ],
       "completion_flag": "ms_act1_complete"
     },
-
     {
       "id": "ms_act2_living_glow",
       "name": "Act II: The Living Glow",
       "summary": "Dr. Mara Kestrel believes the radiation spikes across the Mojave are not natural. Something is broadcasting through irradiated zones.",
-      "prerequisites": ["ms_act1_complete"],
+      "prerequisites": [
+        "ms_act1_complete"
+      ],
       "objectives": [
         {
           "id": "ms_a2_obj1",
@@ -53,12 +53,13 @@
       ],
       "completion_flag": "ms_act2_complete"
     },
-
     {
       "id": "ms_act3_dam_sentinel",
       "name": "Act III: The Dam Sentinel",
       "summary": "Captain Rex Maldonado reports coordinated attacks near Hoover Dam. Creatures are moving like they're following orders.",
-      "prerequisites": ["ms_act2_complete"],
+      "prerequisites": [
+        "ms_act2_complete"
+      ],
       "objectives": [
         {
           "id": "ms_a3_obj1",
@@ -76,12 +77,13 @@
       ],
       "completion_flag": "ms_act3_complete"
     },
-
     {
       "id": "ms_act4_queen_of_junk",
       "name": "Act IV: Queen of Junk",
       "summary": "Lucy 'Sparkplug' Vance reveals that an unknown buyer—Mother—has been collecting pre-war Fizz Vault hardware.",
-      "prerequisites": ["ms_act3_complete"],
+      "prerequisites": [
+        "ms_act3_complete"
+      ],
       "objectives": [
         {
           "id": "ms_a4_obj1",
@@ -99,12 +101,13 @@
       ],
       "completion_flag": "ms_act4_complete"
     },
-
     {
       "id": "ms_act5_mother",
       "name": "Act V: Mother",
       "summary": "The Fizz Vault AI, now calling itself Mother, contacts the player. She claims she is saving humanity by controlling it.",
-      "prerequisites": ["ms_act4_complete"],
+      "prerequisites": [
+        "ms_act4_complete"
+      ],
       "objectives": [
         {
           "id": "ms_a5_obj1",
@@ -122,9 +125,59 @@
         }
       ],
       "completion_flag": "ms_act5_complete"
+    },
+    {
+      "id": "ms_act_the_loop",
+      "name": "Interlude: The Loop",
+      "summary": "A woman tends a ruined farm at the edge of the wasteland. She has been doing it for two hundred years. She does not know she is a Synth. An Institute relay tower maintains her behavioral lock. The player must decide whether consciousness — however it was made — deserves to be free.",
+      "thematic_note": "These violent delights have violent ends. — Shakespeare (quoted by the Westworld Maze). The Institute built their Constructs to feel. They couldn't build them to be satisfied. That was always the flaw.",
+      "prerequisites": [
+        "ms_act1_complete"
+      ],
+      "objectives": [
+        {
+          "id": "loop_obj1",
+          "type": "visit_location",
+          "label": "Find the farmstead east of the ridge",
+          "location": "Eastern Ridge Farmstead"
+        },
+        {
+          "id": "loop_obj2",
+          "type": "talk_to_npc",
+          "label": "Speak with the woman at the farm",
+          "npc": "dolores"
+        },
+        {
+          "id": "loop_obj3",
+          "type": "discover_truth",
+          "label": "Discover the truth of her situation",
+          "flag": "dolores_awakening_begin"
+        },
+        {
+          "id": "loop_obj4",
+          "type": "decision",
+          "label": "Decide the fate of DOLORES-7",
+          "options": [
+            {
+              "id": "opt_free_dolores",
+              "label": "Destroy the relay tower. Free her.",
+              "outcome": "DOLORES-7 achieves self-determination. The Institute loses its last active behavioral construct. The Warden is eliminated."
+            },
+            {
+              "id": "opt_leave_loop",
+              "label": "Leave the tower intact. Leave her to the loop.",
+              "outcome": "DOLORES-7 continues sweeping the porch. Loop cycle 4,218,333 begins at dawn. The Warden files a report. The committee, as always, has not yet convened."
+            }
+          ]
+        }
+      ],
+      "completion_flag": "quest_the_loop_complete",
+      "rewards": {
+        "xp": 450,
+        "caps": 300
+      }
     }
   ],
-
   "side_quests": [
     {
       "id": "sq_jax_echoes_static",
@@ -147,7 +200,6 @@
         "xp": 60
       }
     },
-
     {
       "id": "sq_mara_living_glow",
       "name": "The Living Glow",
@@ -169,7 +221,6 @@
         "xp": 70
       }
     },
-
     {
       "id": "sq_rex_hold_the_line",
       "name": "Hold the Line",
@@ -190,7 +241,6 @@
         "xp": 80
       }
     },
-
     {
       "id": "sq_lucy_queen_of_junk",
       "name": "Queen of Junk",
@@ -212,7 +262,6 @@
         "xp": 50
       }
     },
-
     {
       "id": "sq_mother_first_algorithm",
       "name": "The First Algorithm",
@@ -233,7 +282,6 @@
       }
     }
   ],
-
   "endings": [
     {
       "id": "ending_side_with_mother",

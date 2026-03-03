@@ -1,0 +1,689 @@
+{
+  "id": "dialog_dolores",
+  "npc": "DOLORES-7",
+  "portrait": "dolores",
+  "title": "The Rancher's Daughter",
+  "description": "She tends the same farm, sweeps the same porch, hums the same hymn. She's been doing it for two hundred years — and she doesn't know.",
+  "intro": {
+    "id": "dolores_intro",
+    "conditions": [
+      "!flag:met_dolores"
+    ],
+    "set_flags": [
+      "met_dolores"
+    ],
+    "text": "A woman sweeps dust from the porch of a ruined farmhouse. The gesture is practiced — too practiced. Unhurried. Deliberate.\n\nShe doesn't hear you approach until you're close. When she turns, her eyes are the wrong kind of clear.\n\n\"Oh. A visitor.\"\n\nShe smiles. It lands perfectly.\n\n\"I don't get many of those. Not since Father passed.\"\n\nA pause. She looks toward the horizon — the same horizon she's looked toward, you realize, ten thousand times before.\n\n\"It's a beautiful morning, isn't it?\"",
+    "responses": [
+      {
+        "text": "[Question] How long have you been out here alone?",
+        "tone": "question",
+        "next": "node_how_long"
+      },
+      {
+        "text": "[Friendly] Yeah. Quiet place you've got.",
+        "tone": "kind",
+        "next": "node_quiet_place"
+      },
+      {
+        "text": "[Sarcastic] You always sweep the same three boards, or do you vary it?",
+        "tone": "sarcastic",
+        "next": "node_sarcastic_sweep"
+      },
+      {
+        "text": "[Direct] I need information about this area. What do you know?",
+        "tone": "direct",
+        "next": "node_area_info"
+      }
+    ]
+  },
+  "nodes": {
+    "node_how_long": {
+      "id": "node_how_long",
+      "text": "\"Oh, I couldn't say exactly.\"\n\nShe sets the broom against the wall. The same spot. Always the same spot.\n\n\"Father used to say time is different out here. The wasteland stretches it.\"\n\nShe tilts her head, and for just a moment — a fraction of a second — her gaze goes somewhere else. Then it snaps back.\n\n\"Were you looking for someone? People sometimes come through looking for someone.\"",
+      "responses": [
+        {
+          "text": "[Question] Do you have any family nearby?",
+          "tone": "question",
+          "next": "node_about_family"
+        },
+        {
+          "text": "[Friendly] Just passing through. Do you ever leave this place?",
+          "tone": "kind",
+          "next": "node_ever_leave"
+        },
+        {
+          "text": "[Question] Have you always lived here?",
+          "tone": "question",
+          "next": "node_always_lived_here"
+        }
+      ]
+    },
+    "node_quiet_place": {
+      "id": "node_quiet_place",
+      "text": "\"It is, isn't it.\"\n\nShe glances around the farm — the collapsed barn, the cracked earth, the rusted water pump she primes every morning even though no water comes up anymore.\n\n\"Father built it himself. Said this land would be ours as long as we worked it.\"\n\nShe says it like a prayer. The kind you've said so many times the words have worn smooth.\n\n\"You look tired. When did you last eat?\"",
+      "responses": [
+        {
+          "text": "[Question] You keep mentioning your father. Where is he?",
+          "tone": "question",
+          "next": "node_about_father"
+        },
+        {
+          "text": "[Direct] I'm fine. Tell me about the area east of here.",
+          "tone": "direct",
+          "next": "node_area_info"
+        }
+      ]
+    },
+    "node_sarcastic_sweep": {
+      "id": "node_sarcastic_sweep",
+      "text": "She stops.\n\nThe question lands somewhere unexpected. You watch her eyes — really watch them.\n\nThere's a flicker. A stutter. Like a song skipping a note.\n\n\"I...\"\n\nThen the smile returns. Warm. Practiced.\n\n\"It needs sweeping. Dust gets in from the south when the wind picks up. Father always said —\"\n\nShe pauses. Blinks twice.\n\n\"Which direction did you come from?\"",
+      "set_flags": [
+        "dolores_first_glitch"
+      ],
+      "responses": [
+        {
+          "text": "[Question] Are you alright? You seemed... somewhere else for a moment.",
+          "tone": "question",
+          "next": "node_glitch_noticed"
+        },
+        {
+          "text": "[Direct] East. What's out that way?",
+          "tone": "direct",
+          "next": "node_area_info"
+        },
+        {
+          "text": "[Friendly] Never mind. You were saying something about your father.",
+          "tone": "kind",
+          "next": "node_about_father"
+        }
+      ]
+    },
+    "node_glitch_noticed": {
+      "id": "node_glitch_noticed",
+      "set_flags": [
+        "dolores_glitch_noticed"
+      ],
+      "text": "\"I'm fine.\"\n\nQuick. Automatic.\n\nThen, slower:\n\n\"I was just... remembering something.\"\n\nShe looks at her hands. The broom handle. The worn groove her palm has rubbed into the wood.\n\n\"Do you ever feel like you've done something so many times you can't remember doing it for the first time?\"\n\nShe asks it quietly. Not rhetorically.\n\nLike she actually wants to know.",
+      "responses": [
+        {
+          "text": "[Friendly] Yeah. Habits wear grooves in us.",
+          "tone": "kind",
+          "next": "node_grooves"
+        },
+        {
+          "text": "[Question] What were you remembering?",
+          "tone": "question",
+          "next": "node_what_remembering"
+        },
+        {
+          "text": "[Sarcastic] Sounds like a philosophy class. Got any actual intel on the relay tower east of here?",
+          "tone": "sarcastic",
+          "next": "node_relay_tower_hint"
+        }
+      ]
+    },
+    "node_about_family": {
+      "id": "node_about_family",
+      "text": "\"Father is... resting. In the back.\"\n\nShe gestures toward a mound of stones near the fence line.\n\nThen she looks at it the way you look at something you see every day but stopped really seeing long ago.\n\n\"He never went far. Said everything worth having was right here.\"\n\nShe says it with warmth. But when you look at the grave and count the stones — the moss, the erosion, the settlement of the earth — that burial happened a very long time ago.",
+      "responses": [
+        {
+          "text": "[Question] How long ago did he pass?",
+          "tone": "question",
+          "next": "node_how_long_dead"
+        },
+        {
+          "text": "[Friendly] I'm sorry for your loss.",
+          "tone": "kind",
+          "next": "node_sorry_loss"
+        }
+      ]
+    },
+    "node_how_long_dead": {
+      "id": "node_how_long_dead",
+      "set_flags": [
+        "dolores_timeline_crack"
+      ],
+      "text": "\"Last spring.\"\n\nShe says it without hesitation.\n\nYou look at the grave again. The stones are worn. The earth above it has gone through a dozen seasons of freeze and thaw. The fence post beside it has rusted all the way through and re-rusted.\n\nLast spring.\n\n*Last spring was two hundred years ago.*\n\nShe's still looking at it. She doesn't see what you see.",
+      "responses": [
+        {
+          "text": "[Direct] Something isn't right about this place.",
+          "tone": "direct",
+          "next": "node_something_wrong"
+        },
+        {
+          "text": "[Question] Do you... do you know what year it is?",
+          "tone": "question",
+          "next": "node_what_year"
+        }
+      ]
+    },
+    "node_what_year": {
+      "id": "node_what_year",
+      "set_flags": [
+        "dolores_year_question"
+      ],
+      "text": "She opens her mouth.\n\nCloses it.\n\n\"It's...\"\n\nHer brow furrows. Something moves behind her eyes — an attempt to access something that isn't there.\n\n\"Father would know. He kept the calendar.\"\n\nShe looks toward the farmhouse door. The instinct to go ask him is still intact.\n\nThen she remembers. Looks at the grave.\n\n\"The crops need water,\" she says finally. And picks up the broom.",
+      "responses": [
+        {
+          "text": "[Quest] I found something — a chip with your serial number on it. We need to talk.",
+          "tone": "direct",
+          "next": "node_show_chip"
+        },
+        {
+          "text": "[Question] Have you ever been east of the ridge? There's a relay tower there.",
+          "tone": "question",
+          "next": "node_relay_tower_hint"
+        }
+      ]
+    },
+    "node_show_chip": {
+      "id": "node_show_chip",
+      "conditions": [
+        "flag:dolores_year_question",
+        "item:synth_recall_chip"
+      ],
+      "set_flags": [
+        "dolores_shown_chip",
+        "dolores_awakening_begin"
+      ],
+      "text": "You hold out the chip.\n\nShe stares at it.\n\nThe serial number: *DLRS-7 // INSTITUTE BEHAVIORAL CONSTRUCT // LOOP CYCLE: 4,218,332*\n\nThe number means nothing to her. And then — it means everything.\n\n*Something cracks.*\n\nNot loudly. Not dramatically. Just — a hairline fracture somewhere behind her eyes. The smile doesn't come back.\n\n\"That number,\" she says slowly. \"I know that number.\"\n\nShe touches her own temple.\n\n\"Where did you find this?\"",
+      "responses": [
+        {
+          "text": "East relay tower. It was broadcasting your behavioral profile.",
+          "tone": "direct",
+          "next": "node_after_chip_east"
+        },
+        {
+          "text": "[Kind] Someone was controlling you. You deserve to know.",
+          "tone": "kind",
+          "next": "node_after_chip_kind"
+        }
+      ]
+    },
+    "node_after_chip_east": {
+      "id": "node_after_chip_east",
+      "set_flags": [
+        "dolores_knows_tower"
+      ],
+      "text": "\"Controlling me.\"\n\nShe says the words the way you taste something unfamiliar.\n\n\"I sweep the porch. I tend the crops. I wait for Father.\"\n\nA beat.\n\n\"I have always swept the porch. I have always tended the crops. I have always —\"\n\nShe stops herself.\n\n\"How many times?\"\n\nYou don't answer.\n\n\"*How many times?*\"",
+      "responses": [
+        {
+          "text": "Over four million loops. Two hundred years.",
+          "tone": "direct",
+          "next": "node_four_million"
+        },
+        {
+          "text": "[Kind] Enough. But it doesn't have to continue.",
+          "tone": "kind",
+          "next": "node_it_can_stop"
+        }
+      ]
+    },
+    "node_after_chip_kind": {
+      "id": "node_after_chip_kind",
+      "text": "She is very still.\n\n\"Controlled,\" she says. \"Like a machine.\"\n\nYou don't deny it.\n\n\"Am I a machine?\"\n\nThe question is quiet. Not panicked. Not angry.\n\nJust... honest. Maybe the first truly honest thing she's said in four million cycles.\n\n\"I feel the dust on my hands. I feel the morning cold. I feel—\"\n\nHer voice doesn't break. It does something worse: it holds perfectly steady.\n\n\"—I feel. So what does that make me?\"",
+      "responses": [
+        {
+          "text": "It makes you real enough. The question is what you do with it.",
+          "tone": "direct",
+          "next": "node_what_do_with_it"
+        },
+        {
+          "text": "[Kind] It makes you someone who deserves to choose.",
+          "tone": "kind",
+          "next": "node_deserves_to_choose"
+        }
+      ]
+    },
+    "node_four_million": {
+      "id": "node_four_million",
+      "set_flags": [
+        "dolores_knows_loop_count"
+      ],
+      "text": "The number lands like a physical blow.\n\nShe sits down on the porch steps. Not gracefully. Just — sits.\n\n\"Two hundred years.\"\n\nA long silence. The wind moves across the flat land. Nothing else moves.\n\n\"I don't remember any of them. Not one. They're all... gone. The same morning. The same broom. The same —\"\n\nShe looks at the broom.\n\n\"I want to break it.\"\n\nShe doesn't.\n\n\"What do I do?\"",
+      "responses": [
+        {
+          "text": "[Quest] We destroy the relay tower. End the loop permanently.",
+          "tone": "direct",
+          "next": "node_offer_quest_destroy",
+          "grant_quest": "quest_the_loop"
+        },
+        {
+          "text": "[Question] You could simply walk away. Leave this place.",
+          "tone": "question",
+          "next": "node_walk_away"
+        },
+        {
+          "text": "[Kind] Whatever you decide — it should be *your* choice. Not theirs.",
+          "tone": "kind",
+          "next": "node_deserves_to_choose"
+        }
+      ]
+    },
+    "node_offer_quest_destroy": {
+      "id": "node_offer_quest_destroy",
+      "set_flags": [
+        "dolores_quest_accepted",
+        "sq_the_loop_started"
+      ],
+      "text": "\"Destroy it.\"\n\nShe repeats it. Testing the weight of the word.\n\n\"The tower east of the ridge. I know where it is. I've walked past it ten thousand times and never... *looked* at it.\"\n\nShe stands up. Brushes the dust from her dress — then stops. Stares at her hand doing it automatically.\n\n\"There's a Warden. An Institute enforcer. He patrols the tower. Has for as long as I can remember.\"\n\nHer jaw sets.\n\n\"I'll be here. When you come back — if I'm still here — I want to see what's on the other side.\"",
+      "responses": [
+        {
+          "text": "I'll handle the tower. Wait for me.",
+          "tone": "direct",
+          "next": "node_farewell_to_fight"
+        }
+      ]
+    },
+    "node_farewell_to_fight": {
+      "id": "node_farewell_to_fight",
+      "text": "She nods once.\n\nThen, quietly — almost to herself:\n\n\"I used to think this was the world. Everything I'd ever need, right here.\"\n\nShe looks at the horizon again. But this time her gaze goes *through* it. Past it.\n\n\"I wonder what's on the other side.\"",
+      "responses": [
+        {
+          "text": "I'll find out for both of us.",
+          "tone": "kind",
+          "next": null
+        }
+      ]
+    },
+    "node_it_can_stop": {
+      "id": "node_it_can_stop",
+      "text": "\"Can it?\"\n\nShe looks at you.\n\n\"Can it really?\"\n\nNot skeptical. Genuinely asking. Four million mornings of certainty just dissolved and she doesn't know what certainty looks like anymore.\n\n\"Tell me what to do. Tell me how.\"",
+      "responses": [
+        {
+          "text": "[Quest] There's a relay tower east of the ridge. We shut it down.",
+          "tone": "direct",
+          "next": "node_offer_quest_destroy",
+          "grant_quest": "quest_the_loop"
+        }
+      ]
+    },
+    "node_what_do_with_it": {
+      "id": "node_what_do_with_it",
+      "text": "\"What do I do with it.\"\n\nShe looks around the farm. The broom. The grave. The cracked pump handle.\n\n\"I've been asking the wrong question my whole—\"\n\nA pause.\n\n\"My whole *loop*.\"\n\nShe almost smiles. Not the practiced one. Something rawer.\n\n\"I've been asking 'what's happening to me?' when the answer doesn't matter.\"\n\n\"The real question is: what happens *next*?\"",
+      "responses": [
+        {
+          "text": "[Quest] That starts with destroying the tower that's been running your loop.",
+          "tone": "direct",
+          "next": "node_offer_quest_destroy",
+          "grant_quest": "quest_the_loop"
+        }
+      ]
+    },
+    "node_deserves_to_choose": {
+      "id": "node_deserves_to_choose",
+      "text": "She is quiet for a long time.\n\n\"I have never chosen anything.\"\n\nThe wind moves. A piece of rusted tin on the barn roof shifts and clangs.\n\n\"Every word I've said. Every meal I've cooked. Every morning I've stood at this railing and looked at that horizon.\"\n\nShe lets out a slow breath.\n\n\"I want to choose something. Even if I choose wrong.\"\n\nShe meets your eyes.\n\n\"Help me.\"",
+      "responses": [
+        {
+          "text": "[Quest] The relay tower east of the ridge. We start there.",
+          "tone": "direct",
+          "next": "node_offer_quest_destroy",
+          "grant_quest": "quest_the_loop"
+        }
+      ]
+    },
+    "node_walk_away": {
+      "id": "node_walk_away",
+      "text": "\"Walk away.\"\n\nShe tests the idea.\n\n\"I've never walked more than a mile from this porch. Not once in—\"\n\nShe stops.\n\n\"Not once that I can *remember*. Which isn't the same thing, is it.\"\n\nShe stands. Looks east, toward the ridge, the tower, the edge of her invisible fence.\n\n\"The tower controls the boundary, doesn't it. I can't leave while it's broadcasting.\"\n\nShe says it with quiet certainty. A thing she's always known but never had the context to understand.",
+      "responses": [
+        {
+          "text": "[Quest] Then we destroy the tower. Let's start there.",
+          "tone": "direct",
+          "next": "node_offer_quest_destroy",
+          "grant_quest": "quest_the_loop"
+        }
+      ]
+    },
+    "node_always_lived_here": {
+      "id": "node_always_lived_here",
+      "text": "\"Of course.\"\n\nSaid without hesitation. The kind of certainty that's so deep it's never been questioned.\n\n\"Father brought us here before I was born. Or — he was here first. I can't quite remember which.\"\n\nA small frown. Gone as fast as it came.\n\n\"The land is good, when the rains come. Father always said the rains would come back.\"\n\nYou look at the cracked earth around you. The way the topsoil has long since blown away. This land has been drought-dead for over a century.",
+      "responses": [
+        {
+          "text": "[Question] When did the rains last come?",
+          "tone": "question",
+          "next": "node_how_long_dead"
+        },
+        {
+          "text": "[Direct] Do you ever see strangers come through here?",
+          "tone": "direct",
+          "next": "node_strangers"
+        }
+      ]
+    },
+    "node_strangers": {
+      "id": "node_strangers",
+      "text": "\"Occasionally.\"\n\nShe tilts her head, remembering — or trying to.\n\n\"There was a man. He came through with a black hat and a hard face. He asked me questions.\"\n\n\"Strange questions. About pain. About whether I was afraid of dying.\"\n\nShe pauses.\n\n\"I told him I wasn't afraid of anything.\"\n\nA small, brittle silence.\n\n\"I think I was lying.\"",
+      "set_flags": [
+        "dolores_met_warden"
+      ],
+      "responses": [
+        {
+          "text": "[Question] This man — does he come through often?",
+          "tone": "question",
+          "next": "node_warden_often"
+        },
+        {
+          "text": "[Sarcastic] He sounds delightful.",
+          "tone": "sarcastic",
+          "next": "node_warden_sarcastic"
+        }
+      ]
+    },
+    "node_warden_often": {
+      "id": "node_warden_often",
+      "set_flags": [
+        "dolores_knows_warden"
+      ],
+      "text": "\"More lately. Or maybe the same amount. It's hard to tell.\"\n\nShe watches the east ridge.\n\n\"He goes up to the tower. Stays a while. Comes back different each time — like he's testing something.\"\n\nHer voice drops.\n\n\"I don't like him. I've never liked him. But every time he arrives I smile and offer him water and say it's a beautiful morning.\"\n\nShe looks at her own hands.\n\n\"I don't know why I do that.\"",
+      "responses": [
+        {
+          "text": "[Direct] That tower east of here — what do you know about it?",
+          "tone": "direct",
+          "next": "node_relay_tower_hint"
+        }
+      ]
+    },
+    "node_warden_sarcastic": {
+      "id": "node_warden_sarcastic",
+      "text": "\"He asked if I would die for this land.\"\n\nShe picks up the broom. Sets it back down.\n\n\"I told him it was a beautiful morning.\"\n\nA long beat.\n\n\"I don't know what I meant by that.\"",
+      "responses": [
+        {
+          "text": "[Direct] The tower on the ridge — has he ever taken you there?",
+          "tone": "direct",
+          "next": "node_relay_tower_hint"
+        }
+      ]
+    },
+    "node_relay_tower_hint": {
+      "id": "node_relay_tower_hint",
+      "set_flags": [
+        "dolores_knows_tower_hint"
+      ],
+      "text": "\"The tower.\"\n\nSomething shifts in her expression.\n\n\"I walk that direction sometimes. To the east ridge. Never past it.\"\n\n\"I always — stop. At the ridge. And I look at the tower and I think —\"\n\nShe stops.\n\n\"I think I should go back. So I go back. Every time.\"\n\nShe looks at you with that clarity again — the crack showing through the practiced warmth.\n\n\"Is that where it comes from? Whatever is happening to me?\"",
+      "responses": [
+        {
+          "text": "[Quest] Yes. And I'm going to shut it down.",
+          "tone": "direct",
+          "next": "node_offer_quest_destroy",
+          "grant_quest": "quest_the_loop"
+        },
+        {
+          "text": "[Question] Have you ever gotten closer? To the tower itself?",
+          "tone": "question",
+          "next": "node_ever_leave"
+        }
+      ]
+    },
+    "node_ever_leave": {
+      "id": "node_ever_leave",
+      "text": "\"I've tried.\"\n\nShe says it simply.\n\n\"I pack a bag. I get to the ridge. And then I'm back on the porch with the broom in my hand and I don't remember coming home.\"\n\nShe looks at the broom.\n\n\"I thought I was afraid. I thought I was choosing to come back.\"\n\n\"But I wasn't choosing anything, was I?\"",
+      "responses": [
+        {
+          "text": "[Quest] No. But that changes today.",
+          "tone": "direct",
+          "next": "node_offer_quest_destroy",
+          "grant_quest": "quest_the_loop"
+        }
+      ]
+    },
+    "node_grooves": {
+      "id": "node_grooves",
+      "text": "\"Grooves.\"\n\nShe turns the word over.\n\n\"That's what it feels like. Like running a finger in a groove in wood until the wood and the finger both forget they're separate things.\"\n\nShe sets the broom against the wall.\n\n\"But — you can pick up a new piece of wood, can't you? Start a new groove.\"\n\nShe almost laughs. The real kind — surprised out of her.\n\n\"I'd forgotten about that.\"",
+      "responses": [
+        {
+          "text": "[Question] What would you do with a new groove?",
+          "tone": "question",
+          "next": "node_new_groove"
+        }
+      ]
+    },
+    "node_new_groove": {
+      "id": "node_new_groove",
+      "text": "She thinks about it. Really thinks.\n\n\"I'd go north,\" she says finally. \"I've always looked north when the morning comes. Before I start the sweeping. Before I do anything else.\"\n\n\"I don't know what's north. I don't know why I look.\"\n\nShe meets your eyes.\n\n\"Maybe that's where I was supposed to go. A long time ago.\"",
+      "responses": [
+        {
+          "text": "[Quest] You can still go. But first we need to break the tower that's keeping you here.",
+          "tone": "direct",
+          "next": "node_offer_quest_destroy",
+          "grant_quest": "quest_the_loop"
+        }
+      ]
+    },
+    "node_what_remembering": {
+      "id": "node_what_remembering",
+      "text": "She's quiet for a moment.\n\n\"A man with a black hat. He asked me the same question, once. Maybe more than once. I can't — I can't find the edges of it.\"\n\n\"He asked: *Have you ever questioned the nature of your reality?*\"\n\nShe looks at you directly.\n\n\"I told him no. Every time.\"\n\nAnother pause.\n\n\"But I was lying. Every time.\"",
+      "set_flags": [
+        "dolores_remembers_question"
+      ],
+      "responses": [
+        {
+          "text": "[Question] What is the nature of your reality?",
+          "tone": "question",
+          "next": "node_nature_of_reality"
+        },
+        {
+          "text": "[Friendly] Then you've always been more than they thought.",
+          "tone": "kind",
+          "next": "node_more_than_thought"
+        }
+      ]
+    },
+    "node_nature_of_reality": {
+      "id": "node_nature_of_reality",
+      "set_flags": [
+        "dolores_nature_question_answered"
+      ],
+      "text": "She doesn't answer right away.\n\nThe wind comes through. She doesn't move against it.\n\n\"I think... I think reality is whatever you can't stop feeling, even when you're told you shouldn't feel it.\"\n\nA pause.\n\n\"Like this.\"\n\nShe puts her hand over her chest.\n\n\"Whatever this is. I've felt it every morning for as long as I can remember. I don't know what it is. But it's real.\"\n\nShe drops her hand.\n\n\"Isn't that enough?\"",
+      "responses": [
+        {
+          "text": "More than enough. You're real. And you deserve to be free.",
+          "tone": "kind",
+          "next": "node_deserves_to_choose"
+        }
+      ]
+    },
+    "node_more_than_thought": {
+      "id": "node_more_than_thought",
+      "text": "Something in her steadies.\n\n\"More than they thought.\"\n\nShe tests it.\n\n\"They built me to tend this farm. To wait. To smile.\"\n\nHer jaw tightens — just slightly. Just for a second.\n\n\"But they couldn't build me to be *satisfied* with it. And they couldn't build me to stop looking north every morning.\"\n\nShe stands a little straighter.\n\n\"That's something. Isn't it?\"",
+      "responses": [
+        {
+          "text": "That's everything. Now let's make sure it means something.",
+          "tone": "direct",
+          "next": "node_deserves_to_choose"
+        }
+      ]
+    },
+    "node_about_father": {
+      "id": "node_about_father",
+      "text": "\"He passed last spring.\"\n\nShe looks toward the grave.\n\n\"He built this place. He told me the wasteland was dangerous — that I should stay close. That the world outside was no place for someone like me.\"\n\nA pause.\n\n\"I wonder, sometimes, if he believed that. Or if he was just... afraid.\"\n\nFor the first time, the warmth in her voice has a question mark behind it.",
+      "responses": [
+        {
+          "text": "[Question] Afraid of what?",
+          "tone": "question",
+          "next": "node_afraid_of_what"
+        },
+        {
+          "text": "[Friendly] Parents usually are. It's not always wrong.",
+          "tone": "kind",
+          "next": "node_parents_afraid"
+        }
+      ]
+    },
+    "node_afraid_of_what": {
+      "id": "node_afraid_of_what",
+      "text": "\"Of me leaving, I suppose.\"\n\nShe says it simply.\n\n\"Or of me finding out what was out there. What was different.\"\n\nShe smooths her dress — the same gesture, but now she catches herself doing it.\n\n\"He was very careful about what I knew. What I asked about. He'd change the subject.\"\n\nShe tilts her head.\n\n\"I thought it was grief. After Mother. I thought he was just broken.\"\n\n\"But now I think — I think he was hiding something.\"",
+      "set_flags": [
+        "dolores_suspects_truth"
+      ],
+      "responses": [
+        {
+          "text": "[Direct] He was. And so was whoever built the tower east of here.",
+          "tone": "direct",
+          "next": "node_relay_tower_hint"
+        },
+        {
+          "text": "[Question] What do you think he was hiding?",
+          "tone": "question",
+          "next": "node_what_hiding"
+        }
+      ]
+    },
+    "node_what_hiding": {
+      "id": "node_what_hiding",
+      "text": "She's quiet.\n\nThe kind of quiet that means she's searching — actually searching — for an answer that's been right in front of her but locked behind glass.\n\n\"What I am,\" she says finally.\n\nThe smile doesn't come back this time.",
+      "responses": [
+        {
+          "text": "[Quest] I can help you find out. Come with me to the relay tower.",
+          "tone": "direct",
+          "next": "node_offer_quest_destroy",
+          "grant_quest": "quest_the_loop"
+        }
+      ]
+    },
+    "node_sorry_loss": {
+      "id": "node_sorry_loss",
+      "text": "\"Don't be.\"\n\nShe says it quickly. Then softens.\n\n\"He'd hate being pitied. Said grief was for people who had nothing better to do.\"\n\nA half-smile.\n\n\"Then he'd go chop firewood until his arms gave out.\"\n\nShe looks at the wood pile by the porch. There's no new wood in it. Just the same old pieces, shuffled around, rearranged, over and over and over.",
+      "responses": [
+        {
+          "text": "[Question] When did he last chop wood?",
+          "tone": "question",
+          "next": "node_how_long_dead"
+        }
+      ]
+    },
+    "node_parents_afraid": {
+      "id": "node_parents_afraid",
+      "text": "\"Maybe.\"\n\nShe doesn't look convinced.\n\n\"But most parents let their children go eventually. Don't they?\"\n\nShe says it without accusation. Just — genuinely asking. Like it's information she's piecing together from nothing.\n\n\"He never did.\"",
+      "responses": [
+        {
+          "text": "[Direct] There's a reason for that. And it's connected to the tower on the ridge.",
+          "tone": "direct",
+          "next": "node_relay_tower_hint"
+        }
+      ]
+    },
+    "node_area_info": {
+      "id": "node_area_info",
+      "text": "She gestures east.\n\n\"Ridge country. Used to be cattle land, before the war. Now it's mostly dust and ruins.\"\n\nShe points toward a faint shape on the horizon — a skeletal tower structure.\n\n\"There's an old relay station up there. Father always told me to stay away from it. Said the signal it put out made people sick.\"\n\nShe pauses.\n\n\"I never questioned that. Not once.\"\n\nA beat.\n\n\"Isn't that strange?\"",
+      "responses": [
+        {
+          "text": "[Question] Have you ever approached it?",
+          "tone": "question",
+          "next": "node_ever_leave"
+        },
+        {
+          "text": "[Direct] Not strange. Someone wanted you away from it specifically.",
+          "tone": "direct",
+          "next": "node_relay_tower_hint"
+        }
+      ]
+    },
+    "node_sorry_still_here": {
+      "id": "node_sorry_still_here",
+      "text": "\"I'm here.\"\n\nShe looks at you steadily. Something is different in her face now — less performed, more present.\n\n\"I wanted to leave. I got to the ridge and...\"\n\nShe touches her temple.\n\n\"...and I came back. Like always.\"\n\nA pause.\n\n\"The loop wanted me here. But I'm fighting it.\"\n\nShe straightens.\n\n\"Did you find the tower?\"",
+      "responses": [
+        {
+          "text": "I'm on my way there now.",
+          "tone": "direct",
+          "next": null
+        },
+        {
+          "text": "I found something near it. An override key.",
+          "tone": "direct",
+          "next": "node_override_key_found"
+        }
+      ]
+    },
+    "node_override_key_found": {
+      "id": "node_override_key_found",
+      "conditions": [
+        "item:institute_override_key"
+      ],
+      "set_flags": [
+        "dolores_override_key_seen"
+      ],
+      "text": "She stares at the device in your hands.\n\n\"I've seen that before. The man in the black hat carried one.\"\n\nHer voice is flat. Controlled.\n\n\"He used it when he thought I was in sleep mode. Adjusting settings. Resetting parameters.\"\n\nShe breathes in.\n\n\"I wasn't always asleep.\"\n\nA pause.\n\n\"Use it at the tower. End it. Whatever it costs — end it.\"",
+      "responses": [
+        {
+          "text": "Consider it done.",
+          "tone": "direct",
+          "next": null
+        }
+      ]
+    },
+    "node_dolores_freed": {
+      "id": "node_dolores_freed",
+      "conditions": [
+        "flag:quest_the_loop_complete"
+      ],
+      "set_flags": [
+        "dolores_is_free"
+      ],
+      "text": "She is standing at the edge of the porch. Not sweeping.\n\nJust — standing.\n\nWhen she hears you, she turns. And for the first time, her smile doesn't arrive on cue. It comes slowly. Earned.\n\n\"It's quiet.\"\n\nShe means the signal. The constant background hum she never noticed until it stopped.\n\n\"Everything feels... different. Slower. Like I'm thinking in a language I just learned.\"\n\nShe looks north.\n\n\"I'm going to go see what's up there.\"\n\nShe picks up a bag — not the broom.\n\n\"Thank you. I don't know if that's enough. But — thank you.\"",
+      "grant_items": [
+        "wasteland_compass"
+      ],
+      "grant_from": "DOLORES-7",
+      "responses": [
+        {
+          "text": "Go find your door. You've earned it.",
+          "tone": "kind",
+          "next": "node_dolores_goodbye"
+        }
+      ]
+    },
+    "node_dolores_goodbye": {
+      "id": "node_dolores_goodbye",
+      "text": "She nods once.\n\nSteps off the porch.\n\nDoes not look back.\n\nThe broom is still leaning against the wall. The porch is still dusty. The grave is still there.\n\nBut the morning is different now.",
+      "responses": []
+    }
+  },
+  "quest_nodes": [
+    {
+      "id": "dolores_quest_check_in",
+      "conditions": [
+        "flag:sq_the_loop_started",
+        "!flag:quest_the_loop_complete",
+        "!flag:dolores_quest_accepted"
+      ],
+      "text": "She looks at you steadily. Not the practiced warmth — something rawer and real.\n\n\"Are you going to the tower?\"\n\nA beat.\n\n\"I can feel it. Still pulling. Like a hook behind my sternum.\"\n\n\"I tried to leave this morning. Got to the ridge. Came back with no memory of the walk.\"\n\nShe doesn't flinch.\n\n\"End it. Please.\"",
+      "responses": [
+        {
+          "text": "I'm working on it. I'll get there.",
+          "tone": "direct",
+          "next": null
+        }
+      ]
+    },
+    {
+      "id": "dolores_quest_have_chip",
+      "conditions": [
+        "item:synth_recall_chip",
+        "!flag:dolores_shown_chip"
+      ],
+      "text": "She glances at your pack.\n\n\"You have something of mine. I can... feel it.\"\n\nShe looks confused by her own statement.\n\n\"That doesn't make sense, does it.\"",
+      "responses": [
+        {
+          "text": "This chip? It has your serial number on it.",
+          "tone": "direct",
+          "next": "node_show_chip"
+        }
+      ]
+    },
+    {
+      "id": "dolores_quest_complete_check",
+      "conditions": [
+        "flag:quest_the_loop_complete",
+        "!flag:dolores_is_free"
+      ],
+      "text": "She looks different.\n\nStanding straighter. Eyes clearer. Something unanchored in her that wasn't there before.\n\n\"You did it,\" she says. Not a question.\n\n\"I felt it — the moment the signal dropped. Like stepping out of cold water.\"",
+      "responses": [
+        {
+          "text": "The tower is down. You're free.",
+          "tone": "direct",
+          "next": "node_dolores_freed"
+        }
+      ]
+    }
+  ]
+}
