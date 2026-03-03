@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
 const router = express.Router();
 const { redis, key } = require('../lib/redis');
+const { authMiddleware } = require('../lib/auth');
 
 // SECURITY: Constant-time comparison to prevent timing attacks
 // Uses SHA-256 hashing to ensure both length and content comparison are constant-time
@@ -145,11 +146,15 @@ router.get('/lore/:tag', async (req, res) => {
   return res.status(404).json({ ok: false, error: 'unknown' });
 });
 
-// Accept proofs for quests that require verification. Body: { wallet, questId, proof }
-router.post('/prove', proveRateLimiter, async (req, res) => {
+// Accept proofs for quests that require verification.
+// SECURITY: authMiddleware ensures only authenticated players can submit proofs,
+// and wallet is taken from the verified session (req.player.wallet) to prevent
+// IDOR (one player marking quest progress for any wallet via req.body).
+router.post('/prove', authMiddleware, proveRateLimiter, async (req, res) => {
   try {
-    const { wallet, questId, proof } = req.body || {};
-    if (!wallet || !questId || !proof) return res.status(400).json({ ok: false, error: 'missing' });
+    const wallet = req.player.wallet;
+    const { questId, proof } = req.body || {};
+    if (!questId || !proof) return res.status(400).json({ ok: false, error: 'missing' });
 
     // SECURITY: Do not log proof values as they contain secret tokens
     console.log('[quests-store] prove request', { wallet, questId, proofType: proof?.type });
@@ -202,18 +207,19 @@ router.post('/prove', proveRateLimiter, async (req, res) => {
   }
 });
 
-// Public: get detailed quest for a player when server validates (requires wallet/session id in body)
-router.post('/reveal', questRateLimiter, async (req, res) => {
+// Reveal full quest details for the authenticated player.
+// SECURITY: authMiddleware + wallet from session prevents IDOR.
+router.post('/reveal', authMiddleware, questRateLimiter, async (req, res) => {
   try {
-    const { wallet, questId } = req.body || {};
-    if (!wallet || !questId) return res.status(400).json({ ok: false, error: 'missing' });
+    const wallet = req.player.wallet;
+    const { questId } = req.body || {};
+    if (!questId) return res.status(400).json({ ok: false, error: 'missing' });
 
     const raw = await redis.get(QUESTS_KEY);
     const store = raw ? JSON.parse(raw) : {};
     const q = store[questId];
     if (!q) return res.status(404).json({ ok: false, error: 'unknown' });
 
-    // Simple policy: reveal full details for now. In future add checks (player progress, tokens, proofs)
     // Mark reveal in redis for audit
     const revealKey = key(`quests:revealed:${wallet}:${questId}`);
     await redis.set(revealKey, JSON.stringify({ revealedAt: Date.now() }), { EX: 30 * 24 * 3600 });

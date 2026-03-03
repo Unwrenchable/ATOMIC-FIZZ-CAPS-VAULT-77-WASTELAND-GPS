@@ -1,6 +1,7 @@
 // backend/api/overseer-proxy.js — HF/OpenAI-aware Overseer AI proxy
 const express = require('express');
 const router = express.Router();
+const { authMiddleware } = require('../lib/auth');
 
 // Maximum prompt length allowed. Prevents clients sending multi-megabyte
 // payloads that would be forwarded verbatim to the upstream AI provider,
@@ -22,7 +23,9 @@ function normalizeOutput(json) {
   return JSON.stringify(json);
 }
 
-router.post('/ask', async (req, res) => {
+// SECURITY: authMiddleware prevents unauthenticated callers from consuming
+// AI API quota. Without this, bots could drain the API key allowance.
+router.post('/ask', authMiddleware, async (req, res) => {
   const rawPrompt = (req.body && req.body.prompt) || '';
 
   // BUG FIX: validate prompt type and enforce length limit before forwarding to
@@ -72,7 +75,7 @@ router.post('/ask', async (req, res) => {
     }
   } catch (err) {
     console.error('[overseer-proxy] error', err);
-    return res.status(500).json({ error: 'proxy_failed', message: err.message });
+    return res.status(500).json({ error: 'proxy_failed' });
   }
 });
 

@@ -7,6 +7,12 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  function escapeHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = String(str == null ? "" : str);
+    return d.innerHTML;
+  }
+
   const battleModule = {
     gs: null,
     state: null,
@@ -290,11 +296,11 @@
             </div>
             <div class="battle-stat-row">
               <span class="battle-label">WEAPON</span>
-              <span class="battle-val">${weapon ? `${weapon.name} (DMG: ${weapon.damage || '?'})` : '<em>None equipped</em>'}</span>
+              <span class="battle-val">${weapon ? `${escapeHtml(weapon.name)} (DMG: ${weapon.damage || '?'})` : '<em>None equipped</em>'}</span>
             </div>
             <div class="battle-stat-row">
               <span class="battle-label">ARMOR</span>
-              <span class="battle-val">${armor ? `${armor.name} (AR: ${armor.armor || '?'})` : '<em>None equipped</em>'}</span>
+              <span class="battle-val">${armor ? `${escapeHtml(armor.name)} (AR: ${armor.armor || '?'})` : '<em>None equipped</em>'}</span>
             </div>
             <div class="battle-special-row">
               ${['S','P','E','C','I','A','L'].map(k => `<span class="battle-special-cell"><span class="bs-key">${k}</span><span class="bs-val">${special[k] || 5}</span></span>`).join('')}
@@ -306,7 +312,8 @@
       }
 
       // BUG-004: display the currently active enemy, not always index 0
-      const enemy = this.state.encounter.enemies[this.state.activeEnemyIndex ?? 0];
+      const activeIdx = this.state.activeEnemyIndex ?? 0;
+      const enemy = this.state.encounter.enemies[activeIdx];
       const special = this._getSpecial();
       const equipped = this.gs.player.equipped || {};
       const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);
@@ -314,16 +321,18 @@
       const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;
       const maxHp = (typeof this.gs.player.maxHp === 'number') ? this.gs.player.maxHp : 100;
       const hpPct = Math.max(0, Math.min(100, Math.round(hp / maxHp * 100)));
-      const enemyHpPct = Math.max(0, Math.min(100, Math.round(this.state.enemyHp[0] / (enemy.hp || 20) * 100)));
+      // BUG-001 FIX: use activeIdx not hardcoded 0
+      const activeEnemyHp = this.state.enemyHp[activeIdx];
+      const enemyHpPct = Math.max(0, Math.min(100, Math.round(activeEnemyHp / (enemy.hp || 20) * 100)));
 
       container.innerHTML = `
         <div class="battle-active">
           <div class="battle-combatant">
             <div class="battle-label-header">ENEMY</div>
-            <div class="battle-enemy-name">${enemy.name || enemy.id}</div>
+            <div class="battle-enemy-name">${escapeHtml(enemy.name || enemy.id)}</div>
             <div class="battle-stat-row">
               <span class="battle-bar-wrap enemy"><span class="battle-bar enemy-bar" style="width:${enemyHpPct}%"></span></span>
-              <span class="battle-val">${this.state.enemyHp[0]} / ${enemy.hp || 20} HP</span>
+              <span class="battle-val">${activeEnemyHp} / ${enemy.hp || 20} HP</span>
             </div>
           </div>
           <div class="battle-vs">VS</div>
@@ -333,7 +342,7 @@
               <span class="battle-bar-wrap"><span class="battle-bar" style="width:${hpPct}%"></span></span>
               <span class="battle-val">${hp} / ${maxHp} HP</span>
             </div>
-            <div class="battle-gear-line">${weapon ? `⚔ ${weapon.name}` : '⚔ Unarmed'} ${armor ? ` | 🛡 ${armor.name}` : ''}</div>
+            <div class="battle-gear-line">${weapon ? `⚔ ${escapeHtml(weapon.name)}` : '⚔ Unarmed'} ${armor ? ` | 🛡 ${escapeHtml(armor.name)}` : ''}</div>
             <div class="battle-special-row compact">
               ${['S','P','E','C','I','A','L'].map(k => `<span class="battle-special-cell"><span class="bs-key">${k}</span><span class="bs-val">${special[k] || 5}</span></span>`).join('')}
             </div>

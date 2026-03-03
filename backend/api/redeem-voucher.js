@@ -6,6 +6,7 @@ const { authMiddleware } = require("../lib/auth");
 const gps = require("../lib/gps"); // serializeVoucherMessage, verifyVoucherSignature
 const caps = require("../lib/caps"); // mintCapsToPlayer
 const redis = require("../lib/redis"); // use the shared redis wrapper
+const { getKeyMeta } = require("../lib/keys"); // load signing keys from Redis
 
 const VOUCHER_USED_KEY = (voucherId) => `voucher:used:${voucherId}`; // value: JSON { usedBy, usedAt, tx }
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -20,13 +21,12 @@ if (!redis || typeof redis.set !== "function") {
   }
 }
 
-const PUBLIC_KEYS = {
-  // example: "v1": "base58pubkey..."
-  // populate at startup or via admin API
-};
-
-function getPublicKeyForKeyId(keyId) {
-  return PUBLIC_KEYS[keyId] || null;
+// Resolve public key for a keyId by querying the keys service (Redis-backed).
+// Returns the base58-encoded public key, or null if the key is unknown/inactive.
+async function getPublicKeyForKeyId(keyId) {
+  const meta = await getKeyMeta(keyId);
+  if (!meta || meta.status !== "active") return null;
+  return meta.publicKey || meta.publicKeyBase58 || null;
 }
 
 // Mounted at /api/redeem-voucher (server mounts this file at /api/<name>)
@@ -60,8 +60,8 @@ router.post("/redeem-voucher", authMiddleware, async (req, res) => {
       return res.status(400).json({ error: "Unsupported signature format" });
     }
 
-    // 2) Resolve public key for keyId
-    const pubKeyBase58 = getPublicKeyForKeyId(keyId);
+    // 2) Resolve public key for keyId (async — reads from Redis via keys service)
+    const pubKeyBase58 = await getPublicKeyForKeyId(keyId);
     if (!pubKeyBase58) return res.status(400).json({ error: "Unknown signing key" });
 
     // 3) Recreate message and verify signature
@@ -101,7 +101,9 @@ router.post("/redeem-voucher", authMiddleware, async (req, res) => {
       }
 
       const usedKey = VOUCHER_USED_KEY(voucherId);
-      const value = JSON.stringify({ usedBy: player, usedAt: Date.now() });
+      // SECURITY: only store wallet address in audit log, not the full player session
+      // object (which would include sessionId, allowing session hijacking from Redis).
+      const value = JSON.stringify({ usedBy: player.wallet, usedAt: Date.now() });
       const ttlSecondsValue = Number(ttl) + 60; // keep a buffer
 
       // Support both node-redis and fallback wrappers:
@@ -139,12 +141,12 @@ router.post("/redeem-voucher", authMiddleware, async (req, res) => {
       || process.env.DEFAULT_LOOT_CAPS
       || 100
     );
-    const mintResult = await caps.mintCapsToPlayer(player, amount);
+    const mintResult = await caps.mintCapsToPlayer(player.wallet, amount);
 
-    // 7) Audit success (store tx/signature in used key)
+    // 7) Audit success — store wallet only, not full session object
     if (redis && typeof redis.set === "function") {
       const usedKey = VOUCHER_USED_KEY(voucherId);
-      await redis.set(usedKey, JSON.stringify({ usedBy: player, usedAt: Date.now(), mintResult }), { EX: Number(ttl) + 60 });
+      await redis.set(usedKey, JSON.stringify({ usedBy: player.wallet, usedAt: Date.now(), mintResult }), { EX: Number(ttl) + 60 });
     }
 
     return res.json({ ok: true, voucherId, minted: amount, mintResult });
