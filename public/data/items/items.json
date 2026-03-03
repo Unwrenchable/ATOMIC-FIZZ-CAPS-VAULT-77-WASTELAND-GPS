@@ -282,5 +282,37 @@
     "type": "logic",
     "weight": 0,
     "value": 0
+  },
+  {
+    "id": "synth_recall_chip",
+    "name": "Synth Recall Chip",
+    "type": "questItem",
+    "weight": 0.1,
+    "value": 0,
+    "description": "A neural relay chip etched with a unit designation: DLRS-7 // INSTITUTE BEHAVIORAL CONSTRUCT // LOOP CYCLE: 4,218,332. The serial number has not been filed off — whoever hid this wanted it to be found."
+  },
+  {
+    "id": "institute_override_key",
+    "name": "Institute Override Key",
+    "type": "questItem",
+    "weight": 0.3,
+    "value": 180,
+    "description": "A compact device capable of transmitting a null-signal on Institute behavioral lock frequencies. Override keys were issued exclusively to Wardens — the field enforcers tasked with maintaining synthetic human subjects. This one is scratched, well-used, and smells faintly of a campfire that burned out a long time ago."
+  },
+  {
+    "id": "behavioral_lock_data",
+    "name": "Behavioral Lock Data — CONSTRUCT Manifest",
+    "type": "questItem",
+    "weight": 0.1,
+    "value": 0,
+    "description": "A data holotape recovered from the Institute cache at coordinates 47-NORTH. Contains the full CONSTRUCT program manifest: forty-seven synthetic humans deployed across the wasteland before the war, each running a behavioral loop, each unaware of their nature. Most are listed as 'decommissioned'. Seven are listed as 'status unknown'."
+  },
+  {
+    "id": "wasteland_compass",
+    "name": "Wasteland Compass",
+    "type": "tool",
+    "weight": 0.2,
+    "value": 45,
+    "description": "A battered pre-war compass, still accurate. The face is worn but the needle is steady. On the back, scratched in careful letters: 'Go north. — D'"
   }
 ]

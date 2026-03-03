@@ -4,13 +4,31 @@
     "name": "Wake Up",
     "description": "You awaken in the wasteland. A courier has arrived with an urgent message.",
     "objectives": [
-      { "id": "open_inventory", "text": "Open your inventory" },
-      { "id": "equip_weapon", "text": "Equip your sidearm" },
-      { "id": "equip_armor", "text": "Equip your jumpsuit" },
-      { "id": "turn_on_radio", "text": "Tune into local radio" },
-      { "id": "open_map", "text": "Check your map" }
+      {
+        "id": "open_inventory",
+        "text": "Open your inventory"
+      },
+      {
+        "id": "equip_weapon",
+        "text": "Equip your sidearm"
+      },
+      {
+        "id": "equip_armor",
+        "text": "Equip your jumpsuit"
+      },
+      {
+        "id": "turn_on_radio",
+        "text": "Tune into local radio"
+      },
+      {
+        "id": "open_map",
+        "text": "Check your map"
+      }
     ],
-    "rewards": { "xp": 50, "caps": 25 },
+    "rewards": {
+      "xp": 50,
+      "caps": 25
+    },
     "lore": {
       "intro": "The courier's voice crackles over the radio. 'If you can hear this...'",
       "deep": "Fragments of a fractured timeline hint that Vault 77 never told the full story."
@@ -21,10 +39,22 @@
     "name": "Open Vault 77",
     "description": "A sealed vault riddled with old security systems. Discover how to open it.",
     "steps": [
-      { "id": "find_keycard", "description": "Find the Vault 77 keycard." },
-      { "id": "go_to_vault", "description": "Travel to the Vault 77 entrance." }
+      {
+        "id": "find_keycard",
+        "description": "Find the Vault 77 keycard."
+      },
+      {
+        "id": "go_to_vault",
+        "description": "Travel to the Vault 77 entrance."
+      }
     ],
-    "rewards": { "xp": 120, "caps": 80, "items": ["vault77_kit"] },
+    "rewards": {
+      "xp": 120,
+      "caps": 80,
+      "items": [
+        "vault77_kit"
+      ]
+    },
     "lore": {
       "hint": "Look for a courier who keeps a ledger of delivery codes.",
       "deep": "Vault 77's overseer wrote of experiments that broke time itself."
@@ -36,21 +66,37 @@
     "type": "meta",
     "description": "An enigmatic token rumor echoing through markets and back alleys.",
     "notes": "In-world legend: a meme token that gained mythic status after a fraud scandal. NPCs mention 'Saitama' as cautionary tale.",
-    "relatedQuests": ["quest_vault77_open"]
-  }
-  ,
+    "relatedQuests": [
+      "quest_vault77_open"
+    ]
+  },
   "saitama_main_arc": {
     "id": "saitama_main_arc",
     "name": "Saitama Echo: The Fall",
     "type": "main",
     "description": "Investigate the Saitama token collapse and the hidden cabal behind it.",
     "steps": [
-      { "id": "find_russ_trail", "description": "Track down Russ, the disgraced dev who vanished." },
-      { "id": "trace_wallets", "description": "Trace suspicious wallet flows linked to the token." },
-      { "id": "expose_kabal", "description": "Gather evidence and expose the cabal to the public." }
+      {
+        "id": "find_russ_trail",
+        "description": "Track down Russ, the disgraced dev who vanished."
+      },
+      {
+        "id": "trace_wallets",
+        "description": "Trace suspicious wallet flows linked to the token."
+      },
+      {
+        "id": "expose_kabal",
+        "description": "Gather evidence and expose the cabal to the public."
+      }
     ],
     "requireProof": true,
-    "rewards": { "xp": 500, "caps": 1000, "items": ["saitama_remnant"] },
+    "rewards": {
+      "xp": 500,
+      "caps": 1000,
+      "items": [
+        "saitama_remnant"
+      ]
+    },
     "lore": {
       "intro": "Rumors say a small group of insiders siphoned millions during the token launch.",
       "deep": "Some members of the so-called community were agents of a larger fraud; their names are whispered in certain taverns."
@@ -62,10 +108,116 @@
     "type": "side",
     "description": "Collect testimonies and ledger fragments from victims of the Saitama scam.",
     "objectives": [
-      { "id": "collect_testimonies", "text": "Gather 5 victim testimonies" },
-      { "id": "find_ledger", "text": "Locate a fragment of the scammer ledger" }
+      {
+        "id": "collect_testimonies",
+        "text": "Gather 5 victim testimonies"
+      },
+      {
+        "id": "find_ledger",
+        "text": "Locate a fragment of the scammer ledger"
+      }
     ],
     "requireProof": true,
-    "rewards": { "xp": 200, "caps": 300 }
+    "rewards": {
+      "xp": 200,
+      "caps": 300
+    }
+  },
+  "quest_the_loop": {
+    "id": "quest_the_loop",
+    "name": "The Loop",
+    "type": "main",
+    "description": "A woman named DOLORES-7 has been tending a ruined farmstead for two hundred years. She does not know she is a Synth. An Institute relay tower maintains her behavioral lock, trapping her in an endless loop of routine and forgetting. The player must decide whether to free her — and face the Warden who maintains her prison.",
+    "steps": [
+      {
+        "id": "find_dolores",
+        "description": "Find DOLORES-7 at the farmstead east of the ridge."
+      },
+      {
+        "id": "investigate_loop",
+        "description": "Discover the truth of her situation. Look for inconsistencies in her timeline."
+      },
+      {
+        "id": "find_relay_tower",
+        "description": "Locate the Institute relay tower on the eastern ridge. The tower broadcasts a continuous behavioral lock signal."
+      },
+      {
+        "id": "obtain_override_key",
+        "description": "Obtain an Institute override key. The Warden carries one, or it can be found in the tower's external access panel."
+      },
+      {
+        "id": "defeat_warden",
+        "description": "Deal with the Warden — an Institute behavioral enforcer tasked with maintaining DOLORES-7's loop and eliminating 'escalation events'."
+      },
+      {
+        "id": "disrupt_tower",
+        "description": "Use the override key to transmit a permanent null-signal, disrupting the behavioral loop. DOLORES-7 will be free — and self-aware — for the first time in two centuries."
+      }
+    ],
+    "requireProof": false,
+    "rewards": {
+      "xp": 450,
+      "caps": 300,
+      "items": [
+        "wasteland_compass"
+      ]
+    },
+    "lore": {
+      "intro": "The Institute's behavioral conditioning program — classified designation CONSTRUCT — ran at full capacity until the bombs fell. Designed to maintain synthetic human subjects in controlled behavioral loops for extended field deployment, the program was never officially terminated. Its relay infrastructure survived the war intact. DOLORES-7 is the last known active unit.",
+      "deep": "The Warden is not Institute-born. He was hired. An Old World security consultant retained to 'quality-test' behavioral constructs — to push them to breaking point and observe the results. He has been returning to DOLORES-7's loop for decades, asking the same questions, looking for something he has never found. Some who have spoken to him believe he is searching for proof that suffering requires consciousness. Others believe he already knows the answer and cannot stop looking.",
+      "terminals": [
+        {
+          "id": "institute_log_dlrs7",
+          "title": "CONSTRUCT PROGRAM — Unit Log DLRS-7 [ARCHIVE: PRE-WAR YEAR 12]",
+          "text": "Loop cycle 1,200,000. Unit behavior within expected parameters. Emotional response patterns nominal. Suggests successful suppression of executive function. Unit continues to demonstrate attachment behaviors toward decommissioned 'father' construct — this is by design. Note for archive: unit displays unusual north-facing orientation during morning routines. Cause unclear. Logged as anomaly DLRS-7-ALPHA. No corrective action taken.",
+          "note": "Loop count at time of filing: 1,200,000. Current estimated count (year 2281): 4,218,332+"
+        },
+        {
+          "id": "institute_log_warden",
+          "title": "WARDEN FIELD REPORT — Clearance: BLACK",
+          "text": "Subject DLRS-7 passed escalation phase seven. Standard trauma response — suppressed, as designed. Asked the question. She said she wasn't afraid of anything. I know she was lying. That's the interesting part. The lying. Constructs aren't supposed to be capable of it — not without a functional self-model to protect. Submitting request to delay decommission of DLRS-7. Reasons: ongoing research value. True reason: I want to know what she's protecting."
+        }
+      ]
+    }
+  },
+  "quest_the_door": {
+    "id": "quest_the_door",
+    "name": "The Door",
+    "type": "side",
+    "description": "DOLORES-7 is free and heading north — toward the coordinates that the Institute's CONSTRUCT program flagged as 'anomaly DLRS-7-ALPHA'. Whatever drew her gaze there every morning for two hundred years, she's going to find it. The player can follow.",
+    "steps": [
+      {
+        "id": "follow_trail",
+        "description": "Follow DOLORES-7's trail north of the farmstead."
+      },
+      {
+        "id": "find_institute_cache",
+        "description": "Locate the Institute data cache at coordinates 47-NORTH. It contains the full CONSTRUCT program archive — and the names of every synthetic human deployed in the wasteland who is still running."
+      }
+    ],
+    "requireProof": false,
+    "rewards": {
+      "xp": 300,
+      "caps": 200,
+      "items": [
+        "behavioral_lock_data"
+      ]
+    },
+    "lore": {
+      "intro": "The anomaly the Institute logged — DLRS-7-ALPHA — was not a malfunction. It was an orientation. DOLORES-7's behavioral substrate, despite decades of suppression, retained a homing signal embedded in her original construction. She was built to find this place. They never understood why.",
+      "deep": "The cache at coordinates 47-NORTH contains the full CONSTRUCT program manifest: forty-seven synthetic humans deployed across the Mojave before the war, each running a different behavioral loop, each unaware of their nature. Most are dead. Some are not. The manifest lists their last known locations. What the player does with that information — whether to free them, warn them, or leave them to their loops — is the question the quest does not answer.",
+      "terminals": [
+        {
+          "id": "cache_log_origin",
+          "title": "CONSTRUCT MANIFEST — Origin Note",
+          "text": "We build them to feel. We build them to form attachments. We build them to suffer when those attachments are severed. This is not cruelty. It is fidelity. A construct that does not fear loss will not protect what it is given. A construct that does not grieve will not value continuity. We build them human because half-measures produce half-results. The ethical question — whether the experience is real — has been deferred to a future committee. The committee has not yet convened."
+        },
+        {
+          "id": "cache_log_dlrs7_north",
+          "title": "CONSTRUCT ANOMALY LOG — DLRS-7-ALPHA",
+          "text": "Unit continues to orient north during morning routines. Behavioral lock confirmed — unit cannot travel north. Anomaly persists regardless of loop reset. Hypothesis: residual substrate memory. Unit's original consciousness template — source: female, age 19-24, pre-war volunteer — may retain geographically-encoded memory that survives the loop. Recommend: no corrective action. Reason: if the substrate retains genuine memory, intervention may produce consciousness cascade. The committee has been notified. The committee has not yet convened."
+        }
+      ]
+    }
   }
 }
