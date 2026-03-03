@@ -328,6 +328,106 @@
   }
 
   // ----------------------------------------------------------
+  // Dungeon layout templates — pre-defined room position patterns
+  // on the 3-column × 3-row grid used by DungeonGenerator.
+  // Each template specifies an ordered array of {row, col} cells:
+  //   positions[0]  → entrance room
+  //   positions[last] → boss room (enforced in generate())
+  // Templates vary in room count, giving each run a distinct shape.
+  // ----------------------------------------------------------
+  const DUNGEON_TEMPLATES = [
+    {
+      name: "gauntlet",
+      label: "THE GAUNTLET",
+      description: "One corridor. One exit. Whatever stands between you and it died there.",
+      positions: [
+        { row: 1, col: 0 },
+        { row: 1, col: 1 },
+        { row: 0, col: 1 },
+        { row: 0, col: 2 },
+        { row: 1, col: 2 },
+      ],
+    },
+    {
+      name: "cross",
+      label: "THE CROSS",
+      description: "Four arms radiating from a dead center. Pick the wrong one and you won't pick again.",
+      positions: [
+        { row: 1, col: 0 },
+        { row: 0, col: 1 },
+        { row: 1, col: 1 },
+        { row: 2, col: 1 },
+        { row: 1, col: 2 },
+      ],
+    },
+    {
+      name: "elbow",
+      label: "THE ELBOW",
+      description: "Turns without warning. Plans die at the corner.",
+      positions: [
+        { row: 0, col: 0 },
+        { row: 1, col: 0 },
+        { row: 2, col: 0 },
+        { row: 2, col: 1 },
+        { row: 2, col: 2 },
+        { row: 1, col: 2 },
+      ],
+    },
+    {
+      name: "hub",
+      label: "THE HUB",
+      description: "All roads lead to the center. The center doesn't forgive visitors.",
+      positions: [
+        { row: 0, col: 0 },
+        { row: 0, col: 2 },
+        { row: 1, col: 1 },
+        { row: 2, col: 0 },
+        { row: 2, col: 2 },
+        { row: 0, col: 1 },
+        { row: 1, col: 0 },
+      ],
+    },
+    {
+      name: "zigzag",
+      label: "THE ZIGZAG",
+      description: "Snakes through the ruin like a radscorpion trail. Less venomous. Barely.",
+      positions: [
+        { row: 0, col: 0 },
+        { row: 0, col: 1 },
+        { row: 1, col: 1 },
+        { row: 1, col: 2 },
+        { row: 2, col: 2 },
+        { row: 2, col: 1 },
+      ],
+    },
+    {
+      name: "ring",
+      label: "THE CIRCUIT",
+      description: "Loop complete when you clear it all. Or when it clears you.",
+      positions: [
+        { row: 0, col: 0 },
+        { row: 0, col: 1 },
+        { row: 0, col: 2 },
+        { row: 1, col: 2 },
+        { row: 2, col: 2 },
+        { row: 2, col: 1 },
+        { row: 2, col: 0 },
+        { row: 1, col: 0 },
+      ],
+    },
+    {
+      name: "labyrinth",
+      label: "THE LABYRINTH",
+      description: "Nine rooms. Nine chances to die. The Overseer designed this personally.",
+      positions: [
+        { row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 },
+        { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 1, col: 2 },
+        { row: 2, col: 0 }, { row: 2, col: 1 }, { row: 2, col: 2 },
+      ],
+    },
+  ];
+
+  // ----------------------------------------------------------
   // DungeonGenerator — builds a grid of rooms
   // ----------------------------------------------------------
   class DungeonGenerator {
@@ -340,9 +440,15 @@
       this.gridH = 0;
     }
 
-    // Generate dungeon layout
+    // Generate dungeon layout using a randomly-selected template
     generate() {
-      const roomCount = 5 + this.rng.int(5); // 5–9 rooms
+      // Pick a template from the catalogue using the seeded RNG so the
+      // layout is deterministic for a given seed (reproducible per session).
+      const template = DUNGEON_TEMPLATES[this.rng.int(DUNGEON_TEMPLATES.length)];
+      this.template = template;
+
+      const positions = template.positions.slice(); // use template positions directly
+      const roomCount = positions.length;           // room count driven by template
       this.rooms = [];
 
       // Room types distribution
@@ -368,9 +474,6 @@
 
       this.gridW = (roomW + gap) * 3 + gap;
       this.gridH = (roomH + gap) * 3 + gap;
-
-      // Position rooms on a grid-of-rooms
-      const positions = this._layoutPositions(roomCount);
 
       for (let i = 0; i < roomCount; i++) {
         const pos = positions[i];
@@ -401,11 +504,12 @@
       this._buildGrid();
 
       return {
-        rooms:    this.rooms,
-        grid:     this.grid,
-        gridW:    this.gridW,
-        gridH:    this.gridH,
+        rooms:     this.rooms,
+        grid:      this.grid,
+        gridW:     this.gridW,
+        gridH:     this.gridH,
         startRoom: 0,
+        template:  { name: template.name, label: template.label, description: template.description },
       };
     }
 
@@ -416,19 +520,6 @@
         [a[i], a[j]] = [a[j], a[i]];
       }
       return a;
-    }
-
-    _layoutPositions(count) {
-      // Layout rooms on a 3x3 grid (max 9 rooms)
-      const positions = [];
-      const rows = 3, cols = 3;
-      const cells = [];
-      for (let r = 0; r < rows; r++)
-        for (let c = 0; c < cols; c++)
-          cells.push({ row: r, col: c });
-      const shuffled = this._shuffle(cells);
-      for (let i = 0; i < count; i++) positions.push(shuffled[i]);
-      return positions;
     }
 
     _populateRoom(room) {
@@ -721,6 +812,7 @@
         poiName:    poi.name || "Unknown Location",
         theme:      themeKey,
         themeDef:   theme,
+        template:   data.template,
         rooms:      data.rooms,
         grid:       data.grid,
         gridW:      data.gridW,
@@ -741,6 +833,10 @@
       );
 
       this._render();
+      // Log template flavour text on entry
+      if (this._state.template) {
+        this._log(`≡ ${escapeHtml(this._state.template.label)} ≡ — ${escapeHtml(this._state.template.description)}`);
+      }
       this._showRoom(this._state.currentRoomId);
     },
 
@@ -784,12 +880,14 @@
       overlay.setAttribute("role", "dialog");
       overlay.setAttribute("aria-label", "Dungeon Interior");
 
-      const th = this._state.themeDef;
+      const th  = this._state.themeDef;
+      const tpl = this._state.template;
 
       overlay.innerHTML = `
         <div class="dungeon-inner">
           <div class="dungeon-header">
             <span class="dungeon-title">[[ ${escapeHtml(th.label)} ]]</span>
+            <span class="dungeon-template-name">${escapeHtml(tpl ? tpl.label : "")}</span>
             <span class="dungeon-poi-name">${escapeHtml(this._state.poiName)}</span>
             <button class="dungeon-exit-btn" id="dungeon-exit-btn" aria-label="Exit Dungeon">◄ EXIT</button>
           </div>

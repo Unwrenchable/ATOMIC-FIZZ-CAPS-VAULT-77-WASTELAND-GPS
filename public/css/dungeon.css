@@ -92,6 +92,16 @@
   opacity: 0.85;
 }
 
+.dungeon-template-name {
+  font-size: 0.75rem;
+  color: #ffcc00;
+  text-shadow: 0 0 6px #ffcc00;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  flex: 1;
+  text-align: center;
+}
+
 .dungeon-exit-btn {
   background: transparent;
   border: 1px solid #ff4400;
