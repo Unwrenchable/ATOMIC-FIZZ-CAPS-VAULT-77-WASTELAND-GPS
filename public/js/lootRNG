@@ -1,6 +1,34 @@
 // lootRNG.js — Atomic Fizz Caps loot roller
 // Works with existing mintables.json structure (non-breaking)
 
+// SECURITY: all RNG uses crypto module (Node.js) to prevent prediction.
+// Never use Math.random() for game-economy rolls.
+const nodeCrypto = (typeof require !== 'undefined') ? require('crypto') : null;
+
+/**
+ * Returns a cryptographically secure random float in [0, 1).
+ * Uses Node.js crypto.randomBytes() (server-side) or
+ * crypto.getRandomValues() (browser-side).
+ */
+function secureRandFloat() {
+  if (nodeCrypto) {
+    // Node.js path
+    const buf = nodeCrypto.randomBytes(4);
+    return buf.readUInt32BE(0) / 0x100000000;
+  }
+  // Browser path
+  const arr = new Uint32Array(1);
+  crypto.getRandomValues(arr);
+  return arr[0] / 0x100000000;
+}
+
+/**
+ * Returns a cryptographically secure random integer in [0, n).
+ */
+function secureRandInt(n) {
+  return Math.floor(secureRandFloat() * n);
+}
+
 // Rarity ordering and weights
 const RARITY_ORDER = ["common", "rare", "epic", "legendary"];
 
@@ -32,7 +60,7 @@ const RARITY_MULTIPLIERS = {
 function pickRarityBucket(weights) {
   const entries = Object.entries(weights);
   const total = entries.reduce((sum, [, w]) => sum + w, 0);
-  let roll = Math.random() * total;
+  let roll = secureRandFloat() * total;
 
   for (const [rarity, weight] of entries) {
     if (roll < weight) return rarity;
@@ -50,10 +78,10 @@ function pickBaseItem(mintables) {
   const candidates = mintables.filter((i) => i.rarity === bucket);
 
   if (candidates.length === 0) {
-    return mintables[Math.floor(Math.random() * mintables.length)];
+    return mintables[secureRandInt(mintables.length)];
   }
 
-  return candidates[Math.floor(Math.random() * candidates.length)];
+  return candidates[secureRandInt(candidates.length)];
 }
 
 function maybeApplyVariant(baseItem) {
@@ -63,11 +91,11 @@ function maybeApplyVariant(baseItem) {
   }
 
   // 30% chance to roll a variant
-  if (Math.random() > 0.30) {
+  if (secureRandFloat() > 0.30) {
     return { variant: null, variantLabel: "" };
   }
 
-  const variant = variants[Math.floor(Math.random() * variants.length)];
+  const variant = variants[secureRandInt(variants.length)];
   return {
     variant,
     variantLabel: variant.modifier || ""
@@ -85,11 +113,11 @@ function rollRarityUpgrade(baseRarity, variant) {
   const baseChance = RARITY_UPGRADE_CHANCES[baseRarity] || 0;
 
   // Single-step upgrade
-  if (Math.random() < baseChance && idx < RARITY_ORDER.length - 1) {
+  if (secureRandFloat() < baseChance && idx < RARITY_ORDER.length - 1) {
     rarity = RARITY_ORDER[idx + 1];
   } else if (
     baseRarity === "legendary" &&
-    Math.random() < (RARITY_UPGRADE_CHANCES.legendary || 0)
+    secureRandFloat() < (RARITY_UPGRADE_CHANCES.legendary || 0)
   ) {
     isGodTier = true;
   }
@@ -112,7 +140,7 @@ function rollItemStats(baseItem, variant, rarity) {
   // Roll within per-stat ranges
   for (const key of Object.keys(ranges)) {
     const [min, max] = ranges[key];
-    const bonus = Math.floor(Math.random() * (max - min + 1)) + min;
+    const bonus = Math.floor(secureRandFloat() * (max - min + 1)) + min;
     finalStats[key] = (finalStats[key] || 0) + bonus;
   }
 

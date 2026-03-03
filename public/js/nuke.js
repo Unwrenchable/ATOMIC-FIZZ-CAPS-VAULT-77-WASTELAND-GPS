@@ -81,9 +81,10 @@
       `;
 
       try {
-        // Attempt to fetch player's equipped gear from API
+        // BUG-002 FIX: /api/player/:wallet/inventory does not exist.
+        // Use the correct /api/player/:wallet endpoint and extract profile.inventory.
         const apiBase = window.API_BASE || "https://api.atomicfizzcaps.xyz";
-        const response = await fetch(`${apiBase}/api/player/${walletAddress}/inventory`, {
+        const response = await fetch(`${apiBase}/api/player/${walletAddress}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" }
         });
@@ -93,7 +94,8 @@
         }
 
         const data = await response.json();
-        const equippedItems = (data.inventory || []).filter(item => item.equipped);
+        const inventory = data.profile?.inventory || data.inventory || [];
+        const equippedItems = inventory.filter(item => item.equipped);
 
         if (equippedItems.length === 0) {
           gearList.innerHTML = `
@@ -264,7 +266,8 @@
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("fizz_auth_token") || ""}`
+            // BUG-009 FIX: auth system stores session under "sessionId", not "fizz_auth_token"
+            "Authorization": `Bearer ${localStorage.getItem("sessionId") || ""}`
           },
           body: JSON.stringify({
             nftMints,
