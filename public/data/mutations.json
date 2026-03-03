@@ -1,0 +1,402 @@
+{
+  "version": "1.0",
+  "description": "Fallout 76-inspired mutation system for Atomic Fizz Caps. Mutations are permanent (or semi-permanent) stat changes caused by radiation exposure or serum injection. Each mutation has a benefit AND a drawback — there are no pure upgrades. Serums apply a specific mutation reliably; raw radiation exposure applies a random one.",
+  "mechanic_note": "Mutations stack up to 5 active at once. Removing a mutation requires a Mutation Suppressant serum or visiting a decontamination shower at a settlement. Some mutations conflict with each other. The Starched Genes perk (from leveling) makes mutations permanent and prevents new ones from overwriting.",
+  "mutations": [
+    {
+      "id": "mutation_adrenal_reaction",
+      "name": "Adrenal Reaction",
+      "description": "Your adrenal glands have mutated to produce a combat-grade hormonal surge when you're injured.",
+      "benefit": "+damage scales with missing HP — up to +50% damage at 20% HP. Adrenaline rush on kill: +10% speed for 5 seconds.",
+      "drawback": "-50 max HP. You burn out fast.",
+      "effects": {
+        "damage_scale_low_hp": true,
+        "max_hp_bonus": -50,
+        "kill_speed_burst": 0.10,
+        "kill_speed_duration_s": 5
+      },
+      "serum_id": "serum_adrenal_reaction",
+      "rad_chance": 0.08,
+      "conflicts": ["mutation_empath"],
+      "icon": "💉",
+      "rarity": "uncommon"
+    },
+    {
+      "id": "mutation_bird_bones",
+      "name": "Bird Bones",
+      "description": "Your skeletal density has reduced dramatically, redistributing mass.",
+      "benefit": "+4 Agility. Falling damage reduced 50%. Movement silent (+15% stealth).",
+      "drawback": "-4 Strength. Carrying capacity -30 lbs.",
+      "effects": {
+        "agility_bonus": 4,
+        "strength_bonus": -4,
+        "carry_weight_bonus": -30,
+        "fall_damage_reduction": 0.50,
+        "stealth_bonus": 0.15
+      },
+      "serum_id": "serum_bird_bones",
+      "rad_chance": 0.06,
+      "conflicts": ["mutation_grounded", "mutation_unstable_isotope"],
+      "icon": "🦅",
+      "rarity": "common"
+    },
+    {
+      "id": "mutation_carnivore",
+      "name": "Carnivore",
+      "description": "Your digestive system has mutated to extract nutrients only from meat. Vegetables are actively harmful.",
+      "benefit": "Meat restores double HP and AP. Cooked meat grants a 10% damage bonus for 30 minutes. Never hungry while eating meat.",
+      "drawback": "Plant-based food causes nausea (-2 Agility for 10 min). Vegetable items have zero nutritional value.",
+      "effects": {
+        "meat_heal_multiplier": 2.0,
+        "meat_damage_bonus": 0.10,
+        "meat_damage_duration_min": 30,
+        "plant_food_agility_penalty": -2,
+        "plant_food_duration_min": 10
+      },
+      "serum_id": "serum_carnivore",
+      "rad_chance": 0.07,
+      "conflicts": ["mutation_herbivore"],
+      "icon": "🥩",
+      "rarity": "common"
+    },
+    {
+      "id": "mutation_chameleon",
+      "name": "Chameleon",
+      "description": "Your skin can shift pigmentation to match your surroundings when you're still.",
+      "benefit": "While standing still and unencumbered: full invisibility. Enemies cannot target you. Sneak attacks deal +50% damage.",
+      "drawback": "Effect cancels immediately on movement. Wearing armor reduces duration by 50%.",
+      "effects": {
+        "invisibility_while_still": true,
+        "sneak_damage_bonus": 0.50,
+        "armor_duration_penalty": 0.50
+      },
+      "serum_id": "serum_chameleon",
+      "rad_chance": 0.04,
+      "conflicts": [],
+      "icon": "🦎",
+      "rarity": "rare"
+    },
+    {
+      "id": "mutation_electrically_charged",
+      "name": "Electrically Charged",
+      "description": "Your body generates static charge from movement.",
+      "benefit": "10% chance to shock attackers on melee hit (15 damage). +20% energy weapon damage.",
+      "drawback": "5% chance to shock yourself when using energy weapons (-10 HP). Chance increases in rain.",
+      "effects": {
+        "shock_attacker_chance": 0.10,
+        "shock_damage": 15,
+        "energy_weapon_bonus": 0.20,
+        "self_shock_chance": 0.05,
+        "self_shock_damage": 10
+      },
+      "serum_id": "serum_electrically_charged",
+      "rad_chance": 0.06,
+      "conflicts": ["mutation_grounded"],
+      "icon": "⚡",
+      "rarity": "uncommon"
+    },
+    {
+      "id": "mutation_empath",
+      "name": "Empath",
+      "description": "Your nervous system has developed hyperreactive mirror neurons.",
+      "benefit": "Companions take 25% less damage while you're with them. +5% experience from companion interactions.",
+      "drawback": "You take 33% of any damage your companion receives. Companion pain reduces your accuracy.",
+      "effects": {
+        "companion_damage_reduction": 0.25,
+        "companion_xp_bonus": 0.05,
+        "shared_damage_fraction": 0.33
+      },
+      "serum_id": "serum_empath",
+      "rad_chance": 0.05,
+      "conflicts": ["mutation_adrenal_reaction"],
+      "icon": "💜",
+      "rarity": "uncommon"
+    },
+    {
+      "id": "mutation_eagle_eyes",
+      "name": "Eagle Eyes",
+      "description": "Your visual cortex and eye structure have mutated for extreme long-range sight.",
+      "benefit": "+4 Perception. +25% critical hit damage. Ranged weapons have +30% effective range.",
+      "drawback": "-4 Strength. Close-range targets harder to track (-15% accuracy within 10m).",
+      "effects": {
+        "perception_bonus": 4,
+        "strength_bonus": -4,
+        "crit_damage_bonus": 0.25,
+        "ranged_range_bonus": 0.30,
+        "close_range_accuracy_penalty": -0.15
+      },
+      "serum_id": "serum_eagle_eyes",
+      "rad_chance": 0.06,
+      "conflicts": [],
+      "icon": "👁️",
+      "rarity": "uncommon"
+    },
+    {
+      "id": "mutation_grounded",
+      "name": "Grounded",
+      "description": "Your body has become hyperconductive to earth charge, dissipating electrical buildup.",
+      "benefit": "+100 energy resistance. Immune to paralysis. Electric attacks deal 50% less damage to you.",
+      "drawback": "-50% energy weapon damage output. Lightning strikes target you in storms.",
+      "effects": {
+        "energy_resistance_bonus": 100,
+        "paralysis_immunity": true,
+        "incoming_energy_damage_reduction": 0.50,
+        "energy_weapon_damage_penalty": -0.50
+      },
+      "serum_id": "serum_grounded",
+      "rad_chance": 0.06,
+      "conflicts": ["mutation_electrically_charged", "mutation_bird_bones"],
+      "icon": "🌍",
+      "rarity": "uncommon"
+    },
+    {
+      "id": "mutation_herbivore",
+      "name": "Herbivore",
+      "description": "Your digestive chemistry has inverted — plant fiber is now the only thing your gut can process.",
+      "benefit": "Plant foods restore double HP and AP. Cooked plants grant +2 Intelligence for 30 minutes.",
+      "drawback": "Meat and protein causes illness (-2 Strength for 10 min). Protein items have zero nutritional value.",
+      "effects": {
+        "plant_heal_multiplier": 2.0,
+        "plant_int_bonus": 2,
+        "plant_int_duration_min": 30,
+        "meat_food_strength_penalty": -2,
+        "meat_food_duration_min": 10
+      },
+      "serum_id": "serum_herbivore",
+      "rad_chance": 0.07,
+      "conflicts": ["mutation_carnivore"],
+      "icon": "🌿",
+      "rarity": "common"
+    },
+    {
+      "id": "mutation_herd_mentality",
+      "name": "Herd Mentality",
+      "description": "Your social brain has rewired to draw strength from proximity to others.",
+      "benefit": "+2 to all SPECIAL stats while grouped with companions or other players in the same zone.",
+      "drawback": "-2 to all SPECIAL stats when alone. Solo play becomes systematically harder.",
+      "effects": {
+        "grouped_special_bonus": 2,
+        "solo_special_penalty": -2
+      },
+      "serum_id": "serum_herd_mentality",
+      "rad_chance": 0.05,
+      "conflicts": [],
+      "icon": "👥",
+      "rarity": "common"
+    },
+    {
+      "id": "mutation_marsupial",
+      "name": "Marsupial",
+      "description": "You've developed a secondary abdominal pouch and dramatically enhanced leg musculature.",
+      "benefit": "+20 carrying capacity. Jump height doubled. Fall damage reduced by 25%.",
+      "drawback": "-4 Intelligence. Problem-solving instincts replaced with bounce instincts.",
+      "effects": {
+        "carry_weight_bonus": 20,
+        "jump_height_multiplier": 2.0,
+        "fall_damage_reduction": 0.25,
+        "intelligence_bonus": -4
+      },
+      "serum_id": "serum_marsupial",
+      "rad_chance": 0.07,
+      "conflicts": [],
+      "icon": "🦘",
+      "rarity": "common"
+    },
+    {
+      "id": "mutation_plague_walker",
+      "name": "Plague Walker",
+      "description": "Your body hosts a concentrated ecosystem of beneficial mutant bacteria.",
+      "benefit": "Poison damage scales with disease count — more diseases you carry, more toxic your attacks. Immune to disease effects (you're the disease now).",
+      "drawback": "Companions take periodic disease damage from proximity (1 disease stack per 4 hours). Settlers won't trade with you.",
+      "effects": {
+        "disease_immunity": true,
+        "poison_damage_from_diseases": true,
+        "companion_disease_spread": true,
+        "settler_trade_penalty": true
+      },
+      "serum_id": "serum_plague_walker",
+      "rad_chance": 0.04,
+      "conflicts": ["mutation_empath"],
+      "icon": "☣️",
+      "rarity": "rare"
+    },
+    {
+      "id": "mutation_scaly_skin",
+      "name": "Scaly Skin",
+      "description": "Your dermis has keratinized into overlapping protective scales.",
+      "benefit": "+50 damage resistance. +25 radiation resistance. Shrug off small arms fire.",
+      "drawback": "-1 Agility. Worn armor provides 15% less protection (doesn't fit over scales).",
+      "effects": {
+        "damage_resistance_bonus": 50,
+        "radiation_resistance_bonus": 25,
+        "agility_bonus": -1,
+        "armor_effectiveness_penalty": -0.15
+      },
+      "serum_id": "serum_scaly_skin",
+      "rad_chance": 0.06,
+      "conflicts": [],
+      "icon": "🐊",
+      "rarity": "uncommon"
+    },
+    {
+      "id": "mutation_speed_demon",
+      "name": "Speed Demon",
+      "description": "Your metabolism has gone into overdrive.",
+      "benefit": "+20% movement speed. Reload speed +30%. Actions cost 10% less AP.",
+      "drawback": "Hunger and thirst deplete 50% faster. Food items restore 25% less. Stimulants have 50% reduced duration.",
+      "effects": {
+        "move_speed_bonus": 0.20,
+        "reload_speed_bonus": 0.30,
+        "ap_cost_reduction": 0.10,
+        "hunger_thirst_rate": 1.50,
+        "food_restore_penalty": -0.25,
+        "stimulant_duration_penalty": -0.50
+      },
+      "serum_id": "serum_speed_demon",
+      "rad_chance": 0.07,
+      "conflicts": [],
+      "icon": "💨",
+      "rarity": "common"
+    },
+    {
+      "id": "mutation_talons",
+      "name": "Talons",
+      "description": "Your fingernails have grown into dense keratin claws capable of tearing through light armor.",
+      "benefit": "Unarmed attacks deal +25 damage. Claws ignore 20% of enemy armor.",
+      "drawback": "Fine manipulation is harder: lockpicking difficulty +1 tier. Reloading weapons takes 15% longer.",
+      "effects": {
+        "unarmed_damage_bonus": 25,
+        "armor_penetration": 0.20,
+        "lockpick_difficulty_tier": 1,
+        "reload_speed_penalty": -0.15
+      },
+      "serum_id": "serum_talons",
+      "rad_chance": 0.06,
+      "conflicts": [],
+      "icon": "🐾",
+      "rarity": "common"
+    },
+    {
+      "id": "mutation_twisted_muscles",
+      "name": "Twisted Muscles",
+      "description": "Your muscle fiber has mutated into denser, more powerful configurations — grotesquely so.",
+      "benefit": "+4 Strength. Melee damage +25%. Chance to cripple enemy limbs on melee hits (15%).",
+      "drawback": "-4 Agility. Guns have 50% worse accuracy (your hands shake constantly).",
+      "effects": {
+        "strength_bonus": 4,
+        "agility_bonus": -4,
+        "melee_damage_bonus": 0.25,
+        "limb_cripple_chance": 0.15,
+        "gun_accuracy_penalty": -0.50
+      },
+      "serum_id": "serum_twisted_muscles",
+      "rad_chance": 0.06,
+      "conflicts": ["mutation_bird_bones"],
+      "icon": "💪",
+      "rarity": "uncommon"
+    },
+    {
+      "id": "mutation_unstable_isotope",
+      "name": "Unstable Isotope",
+      "description": "Your cells have become mildly radioactive. You glow faintly in the dark.",
+      "benefit": "Melee attackers take 10 radiation damage on hit. Radaway restores +50 HP alongside rads. Ghouls won't attack you unprovoked.",
+      "drawback": "Stealth is nearly impossible (you glow). Radiation weapons deal 25% more damage to you. Decontamination zones hurt.",
+      "effects": {
+        "melee_attacker_rad_damage": 10,
+        "radaway_hp_bonus": 50,
+        "ghoul_passive": true,
+        "stealth_penalty": -0.50,
+        "incoming_rad_weapon_damage": 1.25
+      },
+      "serum_id": "serum_unstable_isotope",
+      "rad_chance": 0.05,
+      "conflicts": ["mutation_bird_bones"],
+      "icon": "☢️",
+      "rarity": "rare"
+    },
+    {
+      "id": "mutation_healing_factor",
+      "name": "Healing Factor",
+      "description": "Your cellular regeneration rate has increased dramatically.",
+      "benefit": "Regenerate 2 HP per minute passively. Stimpaks act faster (2 second use time). Resting heals +50% more HP.",
+      "drawback": "Chems and stimpaks are 55% less effective (your body metabolizes them too fast). Radiation resistance -25.",
+      "effects": {
+        "hp_regen_per_minute": 2,
+        "stimpak_use_time_seconds": 2,
+        "rest_heal_bonus": 0.50,
+        "chem_effectiveness_penalty": -0.55,
+        "radiation_resistance_bonus": -25
+      },
+      "serum_id": "serum_healing_factor",
+      "rad_chance": 0.05,
+      "conflicts": [],
+      "icon": "❤️",
+      "rarity": "rare"
+    },
+    {
+      "id": "mutation_glass_cannon",
+      "name": "Glass Cannon",
+      "description": "Your attack cells have become hyperactive at the cost of everything protective.",
+      "benefit": "+30% all damage output. Critical hit chance +15%.",
+      "drawback": "-50% all damage resistance. You hit hard. You also go down hard.",
+      "effects": {
+        "damage_output_bonus": 0.30,
+        "crit_chance_bonus": 0.15,
+        "damage_resistance_penalty": -0.50
+      },
+      "serum_id": "serum_glass_cannon",
+      "rad_chance": 0.04,
+      "conflicts": ["mutation_scaly_skin", "mutation_grounded"],
+      "icon": "💥",
+      "rarity": "rare"
+    },
+    {
+      "id": "mutation_rad_sponge",
+      "name": "Rad Sponge",
+      "description": "Your immune system treats radiation as a nutrient.",
+      "benefit": "Radiation exposure restores HP (1 HP per 5 rads absorbed). Immune to radiation sickness effects. Rad-contaminated food is safe to eat.",
+      "drawback": "Radiation no longer reduces max HP but does accumulate — at 1000 rads your mutation destabilizes and you gain a random second mutation.",
+      "effects": {
+        "rad_heals_hp": true,
+        "rad_sick_immunity": true,
+        "contaminated_food_safe": true,
+        "rad_cascade_at": 1000
+      },
+      "serum_id": "serum_rad_sponge",
+      "rad_chance": 0.04,
+      "conflicts": [],
+      "icon": "🧬",
+      "rarity": "rare"
+    }
+  ],
+  "serums": [
+    { "id": "serum_adrenal_reaction",     "name": "Adrenal Reaction Serum",     "applies": "mutation_adrenal_reaction",     "type": "serum", "weight": 0.1, "value": 800,  "description": "A concentrated hormonal activator in a pre-war needle. Guaranteed adrenal mutation on injection." },
+    { "id": "serum_bird_bones",           "name": "Bird Bones Serum",           "applies": "mutation_bird_bones",           "type": "serum", "weight": 0.1, "value": 400,  "description": "Skeletal density reducer. Side effects: hollow feeling, tendency to look at heights." },
+    { "id": "serum_carnivore",            "name": "Carnivore Serum",            "applies": "mutation_carnivore",            "type": "serum", "weight": 0.1, "value": 350,  "description": "Digestive enzyme replacement. Best injected before a meal rather than after." },
+    { "id": "serum_chameleon",            "name": "Chameleon Serum",            "applies": "mutation_chameleon",            "type": "serum", "weight": 0.1, "value": 1200, "description": "Extremely rare pigmentation activator. The syringe changes color as you hold it. That's not a good sign." },
+    { "id": "serum_electrically_charged", "name": "Electrically Charged Serum", "applies": "mutation_electrically_charged", "type": "serum", "weight": 0.1, "value": 600,  "description": "Static charge activator. Comes with complementary rubber gloves that will definitely not help." },
+    { "id": "serum_empath",              "name": "Empath Serum",              "applies": "mutation_empath",              "type": "serum", "weight": 0.1, "value": 550,  "description": "Neural sensitizer. Users report feeling everything more intensely. Everything. Including their companion's stubbed toe." },
+    { "id": "serum_eagle_eyes",          "name": "Eagle Eyes Serum",          "applies": "mutation_eagle_eyes",          "type": "serum", "weight": 0.1, "value": 600,  "description": "Ocular enhancement serum. May cause temporary double vision, then permanent single vision across very long distances." },
+    { "id": "serum_grounded",            "name": "Grounded Serum",            "applies": "mutation_grounded",            "type": "serum", "weight": 0.1, "value": 600,  "description": "Earth-charge conductor. Safe to inject during a thunderstorm. Not recommended." },
+    { "id": "serum_herbivore",           "name": "Herbivore Serum",           "applies": "mutation_herbivore",           "type": "serum", "weight": 0.1, "value": 350,  "description": "Enzymatic inverter. Comes with a small packet of mixed greens from the old world. They're still technically food." },
+    { "id": "serum_herd_mentality",      "name": "Herd Mentality Serum",      "applies": "mutation_herd_mentality",      "type": "serum", "weight": 0.1, "value": 400,  "description": "Social amplifier. Best results when injected in company. Worse results when you're alone at 3am wondering what the point is." },
+    { "id": "serum_marsupial",           "name": "Marsupial Serum",           "applies": "mutation_marsupial",           "type": "serum", "weight": 0.1, "value": 450,  "description": "Structural redistribution compound. Warning: urge to carry everything in a pouch is a known side effect." },
+    { "id": "serum_plague_walker",       "name": "Plague Walker Serum",       "applies": "mutation_plague_walker",       "type": "serum", "weight": 0.1, "value": 900,  "description": "Bacterial colonization agent. Do not inject near friends. Actually, don't inject near anyone." },
+    { "id": "serum_scaly_skin",          "name": "Scaly Skin Serum",          "applies": "mutation_scaly_skin",          "type": "serum", "weight": 0.1, "value": 550,  "description": "Dermal hardener. The scales start small. They get less small over several days." },
+    { "id": "serum_speed_demon",         "name": "Speed Demon Serum",         "applies": "mutation_speed_demon",         "type": "serum", "weight": 0.1, "value": 500,  "description": "Metabolic accelerator. Do not inject and then try to have a slow breakfast. You won't manage it." },
+    { "id": "serum_talons",              "name": "Talons Serum",              "applies": "mutation_talons",              "type": "serum", "weight": 0.1, "value": 400,  "description": "Keratin stimulator. Typing this label was the last easy thing the writer did." },
+    { "id": "serum_twisted_muscles",     "name": "Twisted Muscles Serum",     "applies": "mutation_twisted_muscles",     "type": "serum", "weight": 0.1, "value": 650,  "description": "Fiber-density maximizer. Expect to hear uncomfortable sounds for 24 hours post-injection." },
+    { "id": "serum_unstable_isotope",    "name": "Unstable Isotope Serum",    "applies": "mutation_unstable_isotope",    "type": "serum", "weight": 0.1, "value": 750,  "description": "Radioactive cell activator. Comes in a lead-lined container for a reason." },
+    { "id": "serum_healing_factor",      "name": "Healing Factor Serum",      "applies": "mutation_healing_factor",      "type": "serum", "weight": 0.1, "value": 1000, "description": "Cellular regeneration activator. Rare, effective, and slightly unnerving to watch work." },
+    { "id": "serum_glass_cannon",        "name": "Glass Cannon Serum",        "applies": "mutation_glass_cannon",        "type": "serum", "weight": 0.1, "value": 950,  "description": "Offensive amplifier. Maximum aggression. Minimum self-preservation. Some might call this unwise." },
+    { "id": "serum_rad_sponge",          "name": "Rad Sponge Serum",          "applies": "mutation_rad_sponge",          "type": "serum", "weight": 0.1, "value": 900,  "description": "Radiation processing activator. The syringe itself is mildly radioactive. This tracks." },
+    { "id": "serum_suppressant",         "name": "Mutation Suppressant",      "applies": null,                           "type": "serum", "weight": 0.1, "value": 1500, "description": "Removes one mutation at random from your active stack. Developed by Vault-Tec. Counterintuitively, this was the ethical part of the program.", "removes_mutation": true }
+  ],
+  "radiation_exposure_rules": {
+    "threshold_for_random_mutation": 300,
+    "mutation_chance_at_threshold": 0.15,
+    "additional_chance_per_100_rads_over": 0.05,
+    "max_mutations": 5,
+    "note": "When player's radiation exceeds threshold and rolls successfully, a random mutation from the list is applied. If mutation conflicts with an active one, it is rerolled once."
+  }
+}
