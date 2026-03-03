@@ -282,6 +282,7 @@ safeMount("/api/gps", api("gps"));
 safeMount("/api/camp", api("camp"));
 safeMount("/api/geofence", api("geofence"));
 safeMount("/api/location-claim", api("location-claim"));
+safeMount("/api/dungeon", api("dungeon"));
 
 // Companions, Mutations, Nukes
 safeMount("/api/companions", api("companions"));
