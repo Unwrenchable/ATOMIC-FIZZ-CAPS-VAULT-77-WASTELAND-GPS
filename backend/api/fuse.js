@@ -114,9 +114,8 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
     // Save updated player data — use hset to match the hash format used by player.js
     await redis.hset(playerKey, "profile", JSON.stringify(player));
 
-    // Log the fusion operation
-    // BUG FIX: key("fusion_log", Date.now()) — key() only accepts one argument so
-    // Date.now() was ignored, all logs clobbered the same "afw:fusion_log" key.
+    // Log the fusion operation with atomic TTL — single SET with EX option avoids
+    // a race condition where the server could crash between SET and EXPIRE.
     const fusionLogKey = key(`fusion_log:${Date.now()}`);
     await redis.set(fusionLogKey, JSON.stringify({
       walletAddress,
@@ -124,8 +123,7 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
       fusionType,
       fusionResult,
       timestamp: new Date().toISOString()
-    }));
-    await redis.expire(fusionLogKey, 60 * 60 * 24 * 30); // 30 days
+    }), { EX: 60 * 60 * 24 * 30 }); // 30 days
 
     res.json({
       success: true,
