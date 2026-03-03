@@ -314,5 +314,172 @@
     "weight": 0.2,
     "value": 45,
     "description": "A battered pre-war compass, still accurate. The face is worn but the needle is steady. On the back, scratched in careful letters: 'Go north. — D'"
+  },
+  {
+    "id": "geofence_atomic_museum_badge",
+    "name": "Atomic Museum Holotag",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "atomic_museum_las_vegas",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A commemorative holotag issued by the Atomic Testing Museum's terminal to verified on-site visitors. Serial numbered. Non-transferable. The pre-war Museum of Technology called these 'certificates of witness' — proof you stood where history was made."
+  },
+  {
+    "id": "geofence_trinity_trinitite",
+    "name": "Trinity Trinitite Shard",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "trinity_site",
+    "weight": 0.2,
+    "value": 0,
+    "tradeable": false,
+    "rads": 1,
+    "description": "Green glass formed when the desert sand fused at the first nuclear detonation, July 16, 1945. This shard was found at the exact coordinates where the world changed. It emits 1 rad/hour — low enough to carry, high enough to remember. There is nowhere else on Earth this could have been found."
+  },
+  {
+    "id": "geofence_greenbrier_vault_key",
+    "name": "Project Greek Island Vault Access Card",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "greenbrier_bunker",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A Congressional bunker access card — one of the cards that would have admitted a Senator or Representative to the underground facility beneath the Greenbrier resort in the event of nuclear war. Decommissioned in 1992 when a journalist revealed the bunker's existence. The bunker was never used. Whether that is luck or failure depends on your politics."
+  },
+  {
+    "id": "geofence_cheyenne_signal_tape",
+    "name": "NORAD Emergency Broadcast Tape — CONDITION ZEBRA",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "cheyenne_mountain",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A data tape recovered near the Cheyenne Mountain facility. CONDITION ZEBRA was the alert status for 'enemy nuclear strike confirmed, decision period zero.' The contents of this tape have been classified for over seventy years. The label is handwritten. The handwriting is steady."
+  },
+  {
+    "id": "geofence_titan_launch_key",
+    "name": "Titan II Launch Authorization Key",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "titan_missile_museum",
+    "weight": 0.2,
+    "value": 0,
+    "tradeable": false,
+    "description": "One of two keys required to authorize a Titan II ICBM launch. Both keys had to be turned simultaneously by two separate crew members in adjacent stations, specifically designed so that no single person could launch alone. You only have one. The other one is still out there."
+  },
+  {
+    "id": "geofence_minuteman_ops_manual",
+    "name": "Minuteman III Launch Sequence Manual",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "minuteman_missile_site",
+    "weight": 0.3,
+    "value": 0,
+    "tradeable": false,
+    "description": "A laminated launch procedure manual for the Minuteman III ICBM system, recovered from the Delta-09 launch facility. Every page has been redacted by the Air Force except the last. The last page reads: IN THE EVENT OF LAUNCH, PRAY."
+  },
+  {
+    "id": "geofence_manhattan_project_pin",
+    "name": "Manhattan Project Site Y Lapel Pin",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "los_alamos_museum",
+    "weight": 0.05,
+    "value": 0,
+    "tradeable": false,
+    "description": "A reproduction of the identification pins worn by Manhattan Project scientists at Los Alamos — Site Y. Without this pin you couldn't move between restricted zones. With it, you could walk past a guard into any building where the world was being redesigned. The original wearers knew what they were building. They built it anyway."
+  },
+  {
+    "id": "geofence_b_reactor_fuel_rod",
+    "name": "B Reactor Fuel Rod Casing",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "b_reactor_hanford",
+    "weight": 0.5,
+    "value": 0,
+    "tradeable": false,
+    "description": "A decommissioned aluminum fuel rod casing from the world's first full-scale nuclear reactor — B Reactor, Hanford Site. Empty and safe. But it processed uranium that became the plutonium core of the first nuclear weapon ever detonated. It's warm to the touch. Probably just the sun."
+  },
+  {
+    "id": "geofence_nts_dosimeter",
+    "name": "Nevada Test Site Radiation Dosimeter",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "nevada_test_site_visitor",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "rads": 0,
+    "description": "A film badge dosimeter assigned to a Nevada Test Site technician, registration date redacted. The film has been developed. The result is blacked out — not redacted, just... overexposed. The badge is registered to a name that was classified in 1963 and remains so. The badge number, however, is still visible: NTS-928."
+  },
+  {
+    "id": "geofence_smithsonian_holotape",
+    "name": "Smithsonian Pre-War Archive Holotape",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "smithsonian_air_space",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A Smithsonian Institution audio holotape — a docent recording explaining the Enola Gay exhibit, recorded sometime before the war. The docent describes the aircraft's mission in measured, careful language, the kind used by someone aware of the weight of the subject. She has no way of knowing that the aircraft behind her represents a category of weapon that will eventually be used one final time."
+  },
+  {
+    "id": "geofence_airforce_mission_patch",
+    "name": "509th Composite Group Mission Patch",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "wright_patterson_afb_museum",
+    "weight": 0.05,
+    "value": 0,
+    "tradeable": false,
+    "description": "A mission patch from the 509th Composite Group — the only World War II unit authorized to drop nuclear weapons. The patch carries a date on the reverse. It is a date you recognize. There is a line between history and catastrophe, and this patch sat at that line. One patch per mission. The patch count is higher than the official record."
+  },
+  {
+    "id": "geofence_bethesda_vault_tec_id",
+    "name": "Vault-Tec Employee ID — Design Division",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "fallout_shelter_gaming_pilgrimage",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A Vault-Tec employee identification badge, Design Division, issued at the company's pre-war headquarters. The photo slot has a placeholder image — a yellow smiley face. The name reads: OVERSEER CANDIDATE. The expiration date is: UNTIL FURTHER NOTICE. The back reads: Welcome to Vault-Tec. Don't ask about the experiment parameters."
+  },
+  {
+    "id": "geofence_reactor_access_badge",
+    "name": "Nuclear Power Plant Contractor Badge",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "diablo_canyon_nuclear_plant",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A contractor access badge from a coastal nuclear facility — VISITOR, ESCORTED ACCESS ONLY. The 'escorted' part has been scratched out with a ballpoint pen and replaced with 'hah.' The facility is on a fault line. The reactor is still running. The badge doesn't mention either fact."
+  },
+  {
+    "id": "geofence_roswell_alien_fragment",
+    "name": "Roswell Anomalous Alloy Fragment",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "roswell_museum",
+    "weight": 0.3,
+    "value": 0,
+    "tradeable": false,
+    "description": "A fragment of metallic alloy, composition unknown, recovered near Roswell, NM. It is slightly lighter than it should be for its volume. It is slightly warmer than ambient temperature at all times. Your Pip-Boy cannot identify the material. Your Pip-Boy is not programmed for this material. No one was."
+  },
+  {
+    "id": "geofence_area51_clearance_chip",
+    "name": "Enclave Beyond-Black Security Clearance Chip",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "area_51_perimeter",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "An Enclave-era security chip recovered near the Nevada Test and Training Range perimeter. Clearance level: BEYOND BLACK. Access granted to: REDACTED. Authorized by: REDACTED. The data stored on this chip has been overwritten seven times. The eighth overwrite is what you found. It still carries a ghost of something in the memory substrate. Your Pip-Boy reads it as a single word: RUN."
   }
 ]
