@@ -1,0 +1,49 @@
+[
+  {
+    "name": "safe",
+    "tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search"
+    ],
+    "write": false,
+    "network": false,
+    "secrets": "none",
+    "notes": "Read-only analysis profile for low-risk tasks"
+  },
+  {
+    "name": "balanced",
+    "tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "write": true,
+    "network": false,
+    "secrets": "masked",
+    "notes": "Default profile for implementation inside a repo"
+  },
+  {
+    "name": "power",
+    "tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal",
+      "github_repo",
+      "runSubagent"
+    ],
+    "write": true,
+    "network": true,
+    "secrets": "scoped",
+    "notes": "Expanded profile for cross-repo research and orchestration"
+  }
+]
