@@ -12,6 +12,12 @@
   // Approximate meters per degree of latitude/longitude at mid-latitudes
   const METERS_PER_DEGREE = 111111;
 
+  function escapeHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = String(str == null ? "" : str);
+    return d.innerHTML;
+  }
+
   const npcEncounter = {
     activeEncounter: null,
     ambientNPCs: [], // Track background NPCs for ambient comments
@@ -538,8 +544,8 @@
       `;
       
       popup.innerHTML = `
-        <div style="font-weight: bold; margin-bottom: 4px; opacity: 0.7;">${name}</div>
-        <div>${text}</div>
+        <div style="font-weight: bold; margin-bottom: 4px; opacity: 0.7;">${escapeHtml(name)}</div>
+        <div>${escapeHtml(text)}</div>
       `;
       
       // Add animation

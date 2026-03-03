@@ -10,12 +10,12 @@
 // See the distinction in backend/lib/caps.js
 // ------------------------------------------------------------
 
+const crypto = require("crypto");
 const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
 const { awardCapsToPlayer, getCapsBalance } = require("../lib/caps");
-const { authMiddleware } = require("../lib/auth");
 
-// Per-route limiter: caps awarding should be controlled
+// Per-route limiter for admin caps endpoints
 const capsAwardLimiter = rateLimit({
   windowMs: 10 * 1000,
   max: 5,
@@ -24,17 +24,33 @@ const capsAwardLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// POST /api/caps/award - Award in-game caps to a player
-// BUG FIX: Added authMiddleware so only authenticated sessions can award caps
-// to their own wallet.  Previously any anonymous caller could POST with any
-// wallet address and amount, awarding unlimited caps to any player.
-router.post("/award", authMiddleware, capsAwardLimiter, async (req, res) => {
+// Verify the request carries a valid ADMIN_MINT_SECRET header.
+// Uses constant-time comparison to prevent timing attacks.
+function requireAdminSecret(req, res, next) {
+  const adminSecret = process.env.ADMIN_MINT_SECRET || "";
+  const supplied = req.headers["x-admin-mint"] || req.body?.adminSecret || "";
+  if (!adminSecret || !supplied) {
+    return res.status(403).json({ ok: false, error: "Forbidden" });
+  }
+  const h1 = crypto.createHash("sha256").update(String(adminSecret)).digest();
+  const h2 = crypto.createHash("sha256").update(String(supplied)).digest();
+  if (!crypto.timingSafeEqual(h1, h2)) {
+    return res.status(403).json({ ok: false, error: "Forbidden" });
+  }
+  next();
+}
+
+// POST /api/caps/award - Admin-only: award in-game caps to a specific wallet.
+// SECURITY: requires ADMIN_MINT_SECRET header. Players must never be able to
+// call this endpoint directly — caps are awarded server-side as a side-effect
+// of verified game events (quest completion, location claim, battle victory).
+router.post("/award", requireAdminSecret, capsAwardLimiter, async (req, res) => {
   try {
-    // BUG FIX: use wallet from the verified session rather than from req.body
-    // to prevent a player awarding caps to a different (victim) wallet.
-    // authMiddleware guarantees req.player.wallet is a non-empty, validated string.
-    const player = req.player.wallet;
-    const { amount } = req.body;
+    const { wallet, amount } = req.body;
+
+    if (!wallet || typeof wallet !== "string" || wallet.length > 128) {
+      return res.status(400).json({ ok: false, error: "Invalid wallet" });
+    }
 
     if (
       typeof amount !== "number" ||
@@ -47,7 +63,7 @@ router.post("/award", authMiddleware, capsAwardLimiter, async (req, res) => {
         .json({ ok: false, error: "Invalid amount" });
     }
 
-    const result = await awardCapsToPlayer(player, amount);
+    const result = await awardCapsToPlayer(wallet, amount);
 
     return res.json({ 
       ok: true, 
@@ -60,14 +76,14 @@ router.post("/award", authMiddleware, capsAwardLimiter, async (req, res) => {
   }
 });
 
-// POST /api/caps/mint - Legacy endpoint (alias for /award)
-// Kept for backward compatibility
-// BUG FIX: Added authMiddleware, same as /award above.
-router.post("/mint", authMiddleware, capsAwardLimiter, async (req, res) => {
+// POST /api/caps/mint - Admin-only alias for /award (kept for backward compat)
+router.post("/mint", requireAdminSecret, capsAwardLimiter, async (req, res) => {
   try {
-    // BUG FIX: use wallet from the verified session, not req.body.player
-    const player = req.player.wallet;
-    const { amount } = req.body;
+    const { wallet, amount } = req.body;
+
+    if (!wallet || typeof wallet !== "string" || wallet.length > 128) {
+      return res.status(400).json({ ok: false, error: "Invalid wallet" });
+    }
 
     if (
       typeof amount !== "number" ||
@@ -80,7 +96,7 @@ router.post("/mint", authMiddleware, capsAwardLimiter, async (req, res) => {
         .json({ ok: false, error: "Invalid amount" });
     }
 
-    const result = await awardCapsToPlayer(player, amount);
+    const result = await awardCapsToPlayer(wallet, amount);
 
     return res.json({ 
       ok: true, 
