@@ -1,4 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <path d="M68 85c4-18 18-28 36-32 10-2 24-2 36 0 18 4 32 14 36 32 3 12 2 18 0 22-4 8-12 12-18 14-14 4-32 6-54 4-18-2-32-8-36-18-2-6-2-14 0-22z" fill="#2b2414" opacity="0.6"/>
-  <ellipse cx="128" cy="88" rx="50" ry="18" fill="#2b2414" opacity="0.4"/>
+  <!--
+    BUZZCUT: Super-short crew cut. Thin cap that follows the skull contour
+    exactly. Small stipple dots for the "stubble" feel.
+    Head: cx=128 cy=135 rx=72 ry=90. Crown y=45, hairline y≈92.
+  -->
+  <defs>
+    <linearGradient id="buzz_capGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%"   stop-color="#A07248"/>
+      <stop offset="100%" stop-color="#6B3E22"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Hair cap: thin layer from hairline (y≈92) arching over the crown (y≈43) -->
+  <!-- Outer edge follows skull + ~6 px offset; inner edge IS the hairline band -->
+  <path d="
+    M 66,92
+    Q 55,66  71,50
+    Q 96,36  128,35
+    Q 160,36  185,50
+    Q 201,66  190,92
+    Q 170,85  128,83
+    Q 86,85   66,92
+    Z"
+    fill="url(#buzz_capGrad)"/>
+
+  <!-- Dark crown root shadow for depth -->
+  <ellipse cx="128" cy="59" rx="50" ry="14" fill="#3D2010" opacity="0.18"/>
+
+  <!-- Crown highlight — shows the round skull shape under very short hair -->
+  <path d="M 101,52 Q 114,44 128,42 Q 142,44 155,52"
+        fill="none" stroke="#C08050" stroke-width="3"
+        stroke-linecap="round" opacity="0.55"/>
+
+  <!-- Hairline edge shadow (the 'line' of the buzz) -->
+  <path d="M 66,92 Q 86,87 128,85 Q 170,87 190,92"
+        fill="none" stroke="#3D2010" stroke-width="2"
+        stroke-linecap="round" opacity="0.55"/>
+
+  <!-- Stipple dots — simulates cropped stubble texture -->
+  <g fill="#3D2010" opacity="0.38">
+    <circle cx="85"  cy="77" r="1.3"/>
+    <circle cx="93"  cy="71" r="1.1"/>
+    <circle cx="102" cy="66" r="1.3"/>
+    <circle cx="112" cy="62" r="1.1"/>
+    <circle cx="122" cy="59" r="1.3"/>
+    <circle cx="132" cy="58" r="1.1"/>
+    <circle cx="142" cy="60" r="1.3"/>
+    <circle cx="152" cy="64" r="1.1"/>
+    <circle cx="161" cy="69" r="1.3"/>
+    <circle cx="169" cy="75" r="1.1"/>
+
+    <circle cx="79"  cy="84" r="1.1"/>
+    <circle cx="90"  cy="79" r="1.3"/>
+    <circle cx="107" cy="74" r="1.1"/>
+    <circle cx="120" cy="71" r="1.3"/>
+    <circle cx="134" cy="71" r="1.1"/>
+    <circle cx="149" cy="74" r="1.3"/>
+    <circle cx="166" cy="80" r="1.1"/>
+    <circle cx="177" cy="85" r="1.3"/>
+  </g>
 </svg>

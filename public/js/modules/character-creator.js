@@ -281,13 +281,95 @@
       // At size=240 this was 0.45 (108), leaving oval/oblong crowns clipped.
       const cy = size * 0.55;
       
-      // Hair back-layer — drawn FIRST so it sits behind the face skin.
-      // Long/flowing styles need a large ellipse that hangs down behind the head.
+      // ── Hair back-layer ─────────────────────────────────────────────────────
+      // Drawn FIRST so panels sit behind the face/neck skin.
+      // Each flowing style uses proper Bezier panel paths instead of a blob ellipse.
       if (['long', 'medium', 'ponytail', 'braids', 'dreads'].includes(app.hairStyle)) {
-        const isLong = app.hairStyle === 'long';
-        const hairBackRy  = isLong ? faceHeight * 1.15 : faceHeight * 0.95;
-        const hairBackCy  = cy - faceHeight * (isLong ? 0.15 : 0.22);
-        svg += `<ellipse cx="${cx}" cy="${hairBackCy}" rx="${faceWidth + 12}" ry="${hairBackRy}" fill="${hairColor.color}"/>`;
+        const hBL_hc  = cy - faceHeight;               // headCrown
+        const hBL_fw  = faceWidth;
+        const hBL_fh  = faceHeight;
+        const hBL_col = hairColor.color;
+        const hBL_dk  = this._darkenColor(hBL_col, 30);
+        const hBL_dk2 = this._darkenColor(hBL_col, 48);
+        const hBL_lt  = this._lightenColor(hBL_col, 12);
+        const hBL_pt  = hBL_hc + hBL_fh * 0.52;       // panel origin (ear level)
+
+        if (app.hairStyle === 'long') {
+          // Two wide panels flowing well past the bottom of the frame
+          svg += `<path d="M${cx-hBL_fw*0.90},${hBL_pt} Q${cx-hBL_fw*1.12},${cy+hBL_fh*0.18} ${cx-hBL_fw*1.06},${cy+hBL_fh*0.85} Q${cx-hBL_fw*0.92},${cy+hBL_fh*1.38} ${cx-hBL_fw*0.62},${cy+hBL_fh*1.75} L${cx-hBL_fw*0.18},${cy+hBL_fh*1.80} Q${cx-hBL_fw*0.52},${cy+hBL_fh*1.38} ${cx-hBL_fw*0.55},${cy+hBL_fh*0.85} Q${cx-hBL_fw*0.58},${cy+hBL_fh*0.28} ${cx-hBL_fw*0.88},${hBL_pt} Z" fill="${hBL_dk}"/>`;
+          svg += `<path d="M${cx+hBL_fw*0.90},${hBL_pt} Q${cx+hBL_fw*1.12},${cy+hBL_fh*0.18} ${cx+hBL_fw*1.06},${cy+hBL_fh*0.85} Q${cx+hBL_fw*0.92},${cy+hBL_fh*1.38} ${cx+hBL_fw*0.62},${cy+hBL_fh*1.75} L${cx+hBL_fw*0.18},${cy+hBL_fh*1.80} Q${cx+hBL_fw*0.52},${cy+hBL_fh*1.38} ${cx+hBL_fw*0.55},${cy+hBL_fh*0.85} Q${cx+hBL_fw*0.58},${cy+hBL_fh*0.28} ${cx+hBL_fw*0.88},${hBL_pt} Z" fill="${hBL_dk}"/>`;
+          // Strand lines
+          svg += `<path d="M${cx-hBL_fw*0.88},${hBL_pt+10} Q${cx-hBL_fw*1.05},${cy+hBL_fh*0.50} ${cx-hBL_fw*0.95},${cy+hBL_fh*1.18}" fill="none" stroke="${hBL_dk2}" stroke-width="1.5" stroke-linecap="round" opacity="0.48"/>`;
+          svg += `<path d="M${cx-hBL_fw*0.70},${hBL_pt+5} Q${cx-hBL_fw*0.82},${cy+hBL_fh*0.50} ${cx-hBL_fw*0.72},${cy+hBL_fh*1.28}" fill="none" stroke="${hBL_dk2}" stroke-width="1" stroke-linecap="round" opacity="0.38"/>`;
+          svg += `<path d="M${cx+hBL_fw*0.88},${hBL_pt+10} Q${cx+hBL_fw*1.05},${cy+hBL_fh*0.50} ${cx+hBL_fw*0.95},${cy+hBL_fh*1.18}" fill="none" stroke="${hBL_dk2}" stroke-width="1.5" stroke-linecap="round" opacity="0.48"/>`;
+          svg += `<path d="M${cx+hBL_fw*0.70},${hBL_pt+5} Q${cx+hBL_fw*0.82},${cy+hBL_fh*0.50} ${cx+hBL_fw*0.72},${cy+hBL_fh*1.28}" fill="none" stroke="${hBL_dk2}" stroke-width="1" stroke-linecap="round" opacity="0.38"/>`;
+
+        } else if (app.hairStyle === 'medium') {
+          // Side panels extending to jaw level
+          svg += `<path d="M${cx-hBL_fw*0.90},${hBL_pt} Q${cx-hBL_fw*1.10},${cy} ${cx-hBL_fw*1.00},${cy+hBL_fh*0.48} Q${cx-hBL_fw*0.76},${cy+hBL_fh*0.75} ${cx-hBL_fw*0.48},${cy+hBL_fh*0.85} L${cx-hBL_fw*0.28},${cy+hBL_fh*0.85} Q${cx-hBL_fw*0.58},${cy+hBL_fh*0.72} ${cx-hBL_fw*0.62},${cy+hBL_fh*0.48} Q${cx-hBL_fw*0.72},${cy} ${cx-hBL_fw*0.88},${hBL_pt} Z" fill="${hBL_dk}"/>`;
+          svg += `<path d="M${cx+hBL_fw*0.90},${hBL_pt} Q${cx+hBL_fw*1.10},${cy} ${cx+hBL_fw*1.00},${cy+hBL_fh*0.48} Q${cx+hBL_fw*0.76},${cy+hBL_fh*0.75} ${cx+hBL_fw*0.48},${cy+hBL_fh*0.85} L${cx+hBL_fw*0.28},${cy+hBL_fh*0.85} Q${cx+hBL_fw*0.58},${cy+hBL_fh*0.72} ${cx+hBL_fw*0.62},${cy+hBL_fh*0.48} Q${cx+hBL_fw*0.72},${cy} ${cx+hBL_fw*0.88},${hBL_pt} Z" fill="${hBL_dk}"/>`;
+          svg += `<path d="M${cx-hBL_fw*0.85},${hBL_pt+8} Q${cx-hBL_fw*1.02},${cy+hBL_fh*0.24} ${cx-hBL_fw*0.92},${cy+hBL_fh*0.58}" fill="none" stroke="${hBL_dk2}" stroke-width="1.2" stroke-linecap="round" opacity="0.44"/>`;
+          svg += `<path d="M${cx+hBL_fw*0.85},${hBL_pt+8} Q${cx+hBL_fw*1.02},${cy+hBL_fh*0.24} ${cx+hBL_fw*0.92},${cy+hBL_fh*0.58}" fill="none" stroke="${hBL_dk2}" stroke-width="1.2" stroke-linecap="round" opacity="0.44"/>`;
+
+        } else if (app.hairStyle === 'ponytail') {
+          // Flat back panel + tapered ponytail hanging down
+          svg += `<path d="M${cx-hBL_fw*0.82},${hBL_pt} Q${cx-hBL_fw*0.92},${cy-hBL_fh*0.12} ${cx-hBL_fw*0.84},${cy+hBL_fh*0.22} L${cx+hBL_fw*0.84},${cy+hBL_fh*0.22} Q${cx+hBL_fw*0.92},${cy-hBL_fh*0.12} ${cx+hBL_fw*0.82},${hBL_pt} Q${cx+hBL_fw*0.55},${hBL_pt-10} ${cx},${hBL_pt-12} Q${cx-hBL_fw*0.55},${hBL_pt-10} ${cx-hBL_fw*0.82},${hBL_pt} Z" fill="${hBL_dk}"/>`;
+          // Ponytail body — tapered cylindrical shape
+          svg += `<path d="M${cx-12},${cy+hBL_fh*0.22} Q${cx-16},${cy+hBL_fh*0.65} ${cx-10},${cy+hBL_fh*1.12} Q${cx-6},${cy+hBL_fh*1.32} ${cx},${cy+hBL_fh*1.38} Q${cx+6},${cy+hBL_fh*1.32} ${cx+10},${cy+hBL_fh*1.12} Q${cx+16},${cy+hBL_fh*0.65} ${cx+12},${cy+hBL_fh*0.22} Z" fill="${hBL_col}"/>`;
+          // Scrunchie band
+          svg += `<rect x="${cx-14}" y="${cy+hBL_fh*0.22}" width="28" height="8" rx="3" fill="${hBL_dk2}" opacity="0.82"/>`;
+          svg += `<rect x="${cx-14}" y="${cy+hBL_fh*0.22}" width="28" height="4" rx="2" fill="${hBL_lt}" opacity="0.28"/>`;
+          // Tail strand lines
+          svg += `<path d="M${cx-4},${cy+hBL_fh*0.30} Q${cx-6},${cy+hBL_fh*0.82} ${cx-3},${cy+hBL_fh*1.22}" fill="none" stroke="${hBL_dk2}" stroke-width="1.2" stroke-linecap="round" opacity="0.48"/>`;
+          svg += `<path d="M${cx+4},${cy+hBL_fh*0.30} Q${cx+6},${cy+hBL_fh*0.82} ${cx+3},${cy+hBL_fh*1.22}" fill="none" stroke="${hBL_dk2}" stroke-width="1.2" stroke-linecap="round" opacity="0.48"/>`;
+
+        } else if (app.hairStyle === 'braids') {
+          // Two hanging braids with alternating weave marks
+          const bHW  = Math.max(7, hBL_fw * 0.10);
+          const bTop = cy + hBL_fh * 0.12;
+          const bBot = cy + hBL_fh * 1.32;
+          const bLen = bBot - bTop;
+          [cx - hBL_fw * 0.42, cx + hBL_fw * 0.42].forEach(bx => {
+            // Braid body (tapered tube)
+            svg += `<path d="M${bx-bHW},${bTop} Q${bx-bHW-3},${bTop+bLen*0.45} ${bx-bHW+2},${bBot-10} Q${bx},${bBot+8} ${bx+bHW-2},${bBot-10} Q${bx+bHW+3},${bTop+bLen*0.45} ${bx+bHW},${bTop} Z" fill="${hBL_col}"/>`;
+            // Alternating diagonal weave marks (11 segments, evenly spaced)
+            for (let segIdx = 0; segIdx < 11; segIdx++) {
+              const wy  = bTop + bLen * (segIdx / 11);
+              const whn = bLen / 11;
+              if (segIdx % 2 === 0) {
+                svg += `<path d="M${bx-bHW},${wy} Q${bx},${wy+whn*0.35} ${bx+bHW},${wy+whn*0.65}" fill="none" stroke="${hBL_dk2}" stroke-width="1.4" stroke-linecap="round" opacity="0.55"/>`;
+              } else {
+                svg += `<path d="M${bx-bHW},${wy+whn*0.65} Q${bx},${wy+whn*0.35} ${bx+bHW},${wy}" fill="none" stroke="${hBL_dk2}" stroke-width="1.4" stroke-linecap="round" opacity="0.55"/>`;
+              }
+            }
+            // Tie at top + rounded tip
+            svg += `<rect x="${bx-bHW}" y="${bTop-4}" width="${bHW*2}" height="7" rx="3" fill="${hBL_dk2}" opacity="0.82"/>`;
+            svg += `<path d="M${bx-bHW+2},${bBot-8} Q${bx},${bBot+8} ${bx+bHW-2},${bBot-8}" fill="${hBL_dk2}" opacity="0.72"/>`;
+          });
+
+        } else if (app.hairStyle === 'dreads') {
+          // Five fat dreadlocks with knotted wrap rings
+          const dTop = cy + hBL_fh * 0.14;
+          const dCfg = [
+            { x: cx - hBL_fw * 0.68, w: 8,  len: hBL_fh * 1.05 },
+            { x: cx - hBL_fw * 0.36, w: 10, len: hBL_fh * 1.28 },
+            { x: cx,                  w: 9,  len: hBL_fh * 1.18 },
+            { x: cx + hBL_fw * 0.36, w: 10, len: hBL_fh * 1.28 },
+            { x: cx + hBL_fw * 0.68, w: 8,  len: hBL_fh * 1.05 },
+          ];
+          dCfg.forEach(d => {
+            const dBot = dTop + d.len;
+            svg += `<path d="M${d.x-d.w},${dTop} Q${d.x-d.w-4},${dTop+d.len*0.35} ${d.x-d.w+3},${dTop+d.len*0.65} Q${d.x-d.w-1},${dBot-8} ${d.x},${dBot} Q${d.x+d.w+1},${dBot-8} ${d.x+d.w-3},${dTop+d.len*0.65} Q${d.x+d.w+4},${dTop+d.len*0.35} ${d.x+d.w},${dTop} Z" fill="${hBL_col}"/>`;
+            // Wrap rings suggesting knotted/wrapped texture
+            const wrapCount = Math.max(3, Math.floor(d.len / 20));
+            for (let wrapIdx = 1; wrapIdx <= wrapCount; wrapIdx++) {
+              const wy = dTop + d.len * (wrapIdx / (wrapCount + 1));
+              svg += `<ellipse cx="${d.x}" cy="${wy}" rx="${d.w-1}" ry="3.5" fill="${hBL_dk2}" opacity="0.44"/>`;
+              svg += `<ellipse cx="${d.x}" cy="${wy}" rx="${d.w-3}" ry="1.5" fill="${hBL_lt}" opacity="0.14"/>`;
+            }
+            svg += `<ellipse cx="${d.x}" cy="${dBot}" rx="${d.w-2}" ry="5" fill="${hBL_dk2}" opacity="0.65"/>`;
+          });
+        }
       }
 
       // Neck — tapered column with subtle bottom shadow
@@ -334,29 +416,171 @@
         });
       }
       
-      // Hair (top layer — cap sits on top of the face skin)
-      // All positions are relative to headCrown (cy - faceHeight) so the hair
-      // never sinks deep into the face regardless of face shape / heightMod.
+      // ── Hair top cap ─────────────────────────────────────────────────────────
+      // Drawn ON TOP of the face skin. Bezier paths for each style give a
+      // unique silhouette. All coords are relative to headCrown so proportions
+      // scale correctly with all face shapes.
       if (app.hairStyle !== 'bald') {
-        const headCrown = cy - faceHeight;
+        const hc  = cy - faceHeight;   // headCrown
+        const fw  = faceWidth;
+        const fh  = faceHeight;
+        const hCol  = hairColor.color;
+        const hDk   = this._darkenColor(hCol, 28);
+        const hDk2  = this._darkenColor(hCol, 48);
+        const hLt   = this._lightenColor(hCol, 15);
 
         switch (app.hairStyle) {
-          case 'buzzcut':
-            // Very tight buzz — sits like a cap right at the crown
-            svg += `<ellipse cx="${cx}" cy="${headCrown + faceHeight * 0.10}" rx="${faceWidth * 0.95}" ry="${faceHeight * 0.22}" fill="${hairColor.color}"/>`;
+          case 'buzzcut': {
+            // Very tight cap — sits like a thin skin on the skull
+            const hlY = hc + fh * 0.58;
+            svg += `<path d="M${cx-fw*0.82},${hlY} Q${cx-fw*1.00},${hc+fh*0.20} ${cx-fw*0.72},${hc+fh*0.04} Q${cx-fw*0.28},${hc-fh*0.02} ${cx},${hc-fh*0.02} Q${cx+fw*0.28},${hc-fh*0.02} ${cx+fw*0.72},${hc+fh*0.04} Q${cx+fw*1.00},${hc+fh*0.20} ${cx+fw*0.82},${hlY} Q${cx+fw*0.60},${hlY-8} ${cx},${hlY-10} Q${cx-fw*0.60},${hlY-8} ${cx-fw*0.82},${hlY} Z" fill="${hCol}"/>`;
+            svg += `<path d="M${cx-fw*0.35},${hc+fh*0.12} Q${cx},${hc-fh*0.03} ${cx+fw*0.35},${hc+fh*0.12}" fill="none" stroke="${hLt}" stroke-width="2.5" stroke-linecap="round" opacity="0.50"/>`;
+            svg += `<path d="M${cx-fw*0.82},${hlY} Q${cx-fw*0.60},${hlY-6} ${cx},${hlY-8} Q${cx+fw*0.60},${hlY-6} ${cx+fw*0.82},${hlY}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>`;
+            // Stipple dots — stubble texture
+            [{dx:-0.55,dy:0.42},{dx:-0.35,dy:0.34},{dx:-0.15,dy:0.29},{dx:0.06,dy:0.27},{dx:0.26,dy:0.30},{dx:0.48,dy:0.36},{dx:0.64,dy:0.44}].forEach(d => {
+              svg += `<circle cx="${cx+fw*d.dx}" cy="${hc+fh*d.dy}" r="1.2" fill="${hDk}" opacity="0.40"/>`;
+            });
             break;
-          case 'short':
-            svg += `<ellipse cx="${cx}" cy="${headCrown + faceHeight * 0.12}" rx="${faceWidth + 3}" ry="${faceHeight * 0.28}" fill="${hairColor.color}"/>`;
+          }
+
+          case 'short': {
+            // Classic short cut with side-sweep texture
+            const hlY = hc + fh * 0.65;
+            svg += `<path d="M${cx-fw*0.88},${hlY} Q${cx-fw*1.06},${hc+fh*0.28} ${cx-fw*0.76},${hc+fh*0.04} Q${cx-fw*0.28},${hc-fh*0.05} ${cx},${hc-fh*0.05} Q${cx+fw*0.28},${hc-fh*0.05} ${cx+fw*0.76},${hc+fh*0.04} Q${cx+fw*1.06},${hc+fh*0.28} ${cx+fw*0.88},${hlY} Q${cx+fw*0.65},${hlY-12} ${cx},${hlY-14} Q${cx-fw*0.65},${hlY-12} ${cx-fw*0.88},${hlY} Z" fill="${hCol}"/>`;
+            // Temple bulk
+            svg += `<path d="M${cx-fw*0.88},${hlY} Q${cx-fw*0.98},${hlY+14} ${cx-fw*0.88},${hlY+26} Q${cx-fw*0.82},${hlY+18} ${cx-fw*0.78},${hlY} Z" fill="${hDk}" opacity="0.55"/>`;
+            svg += `<path d="M${cx+fw*0.88},${hlY} Q${cx+fw*0.98},${hlY+14} ${cx+fw*0.88},${hlY+26} Q${cx+fw*0.82},${hlY+18} ${cx+fw*0.78},${hlY} Z" fill="${hDk}" opacity="0.55"/>`;
+            svg += `<path d="M${cx-fw*0.40},${hc+fh*0.10} Q${cx},${hc-fh*0.05} ${cx+fw*0.40},${hc+fh*0.10}" fill="none" stroke="${hLt}" stroke-width="3" stroke-linecap="round" opacity="0.48"/>`;
+            // Side-sweep texture arcs
+            [0.36, 0.46, 0.54, 0.60].forEach(t => {
+              svg += `<path d="M${cx-fw*0.62},${hc+fh*t} Q${cx-fw*0.10},${hc+fh*(t-0.08)} ${cx+fw*0.58},${hc+fh*(t+0.03)}" fill="none" stroke="${hDk}" stroke-width="1.1" stroke-linecap="round" opacity="0.32"/>`;
+            });
+            svg += `<path d="M${cx-fw*0.88},${hlY} Q${cx-fw*0.65},${hlY-10} ${cx},${hlY-12} Q${cx+fw*0.65},${hlY-10} ${cx+fw*0.88},${hlY}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>`;
             break;
-          case 'mohawk':
-            svg += `<rect x="${cx - 8}" y="${headCrown - 38}" width="16" height="55" rx="4" fill="${hairColor.color}"/>`;
+          }
+
+          case 'medium': {
+            // Medium cap; side panels already drawn in back layer
+            const hlY = hc + fh * 0.67;
+            svg += `<path d="M${cx-fw*0.90},${hlY} Q${cx-fw*1.08},${hc+fh*0.32} ${cx-fw*0.78},${hc+fh*0.04} Q${cx-fw*0.28},${hc-fh*0.05} ${cx},${hc-fh*0.06} Q${cx+fw*0.28},${hc-fh*0.05} ${cx+fw*0.78},${hc+fh*0.04} Q${cx+fw*1.08},${hc+fh*0.32} ${cx+fw*0.90},${hlY} Q${cx+fw*0.65},${hlY-14} ${cx},${hlY-16} Q${cx-fw*0.65},${hlY-14} ${cx-fw*0.90},${hlY} Z" fill="${hCol}"/>`;
+            svg += `<path d="M${cx-fw*0.40},${hc+fh*0.10} Q${cx},${hc-fh*0.06} ${cx+fw*0.40},${hc+fh*0.10}" fill="none" stroke="${hLt}" stroke-width="3" stroke-linecap="round" opacity="0.44"/>`;
+            svg += `<path d="M${cx-fw*0.65},${hc+fh*0.35} Q${cx-fw*0.82},${hc+fh*0.50} ${cx-fw*0.86},${hlY-5}" fill="none" stroke="${hDk}" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/>`;
+            svg += `<path d="M${cx+fw*0.65},${hc+fh*0.35} Q${cx+fw*0.82},${hc+fh*0.50} ${cx+fw*0.86},${hlY-5}" fill="none" stroke="${hDk}" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/>`;
+            svg += `<path d="M${cx-fw*0.90},${hlY} Q${cx-fw*0.65},${hlY-12} ${cx},${hlY-14} Q${cx+fw*0.65},${hlY-12} ${cx+fw*0.90},${hlY}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>`;
             break;
-          case 'slickedback':
-            svg += `<ellipse cx="${cx}" cy="${headCrown + faceHeight * 0.08}" rx="${faceWidth + 10}" ry="${faceHeight * 0.22}" fill="${hairColor.color}"/>`;
+          }
+
+          case 'long': {
+            // Long — top cap with center part; flowing panels in back layer
+            const hlY = hc + fh * 0.68;
+            svg += `<path d="M${cx-fw*0.90},${hlY} Q${cx-fw*1.08},${hc+fh*0.32} ${cx-fw*0.78},${hc+fh*0.04} Q${cx-fw*0.24},${hc-fh*0.06} ${cx},${hc-fh*0.07} Q${cx+fw*0.24},${hc-fh*0.06} ${cx+fw*0.78},${hc+fh*0.04} Q${cx+fw*1.08},${hc+fh*0.32} ${cx+fw*0.90},${hlY} Q${cx+fw*0.65},${hlY-16} ${cx},${hlY-18} Q${cx-fw*0.65},${hlY-16} ${cx-fw*0.90},${hlY} Z" fill="${hCol}"/>`;
+            // Center part line
+            svg += `<path d="M${cx},${hc-fh*0.06} L${cx},${hlY-18}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>`;
+            // Crown highlights flanking part
+            svg += `<path d="M${cx-fw*0.42},${hc+fh*0.12} Q${cx-fw*0.12},${hc-fh*0.04} ${cx-fw*0.02},${hc+fh*0.08}" fill="none" stroke="${hLt}" stroke-width="2.5" stroke-linecap="round" opacity="0.46"/>`;
+            svg += `<path d="M${cx+fw*0.42},${hc+fh*0.12} Q${cx+fw*0.12},${hc-fh*0.04} ${cx+fw*0.02},${hc+fh*0.08}" fill="none" stroke="${hLt}" stroke-width="2.5" stroke-linecap="round" opacity="0.46"/>`;
+            svg += `<path d="M${cx-fw*0.90},${hlY} Q${cx-fw*0.65},${hlY-14} ${cx},${hlY-16} Q${cx+fw*0.65},${hlY-14} ${cx+fw*0.90},${hlY}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>`;
             break;
-          default:
-            // wasteland / long / medium / ponytail / braids / dreads top cap
-            svg += `<ellipse cx="${cx}" cy="${headCrown + faceHeight * 0.14}" rx="${faceWidth + 7}" ry="${faceHeight * 0.32}" fill="${hairColor.color}"/>`;
+          }
+
+          case 'mohawk': {
+            // Shaved sides + spiky center strip
+            const mohW  = Math.max(9, fw * 0.13);
+            const mBase = hc + fh * 0.52;
+            const mTip  = hc - fh * 0.28;
+            // Shaved-side shadow (subtle stubble)
+            svg += `<ellipse cx="${cx-fw*0.58}" cy="${hc+fh*0.38}" rx="${fw*0.42}" ry="${fh*0.44}" fill="${hDk2}" opacity="0.15"/>`;
+            svg += `<ellipse cx="${cx+fw*0.58}" cy="${hc+fh*0.38}" rx="${fw*0.42}" ry="${fh*0.44}" fill="${hDk2}" opacity="0.15"/>`;
+            // Stubble dots
+            [{dx:-0.72,dy:0.28},{dx:-0.58,dy:0.38},{dx:-0.68,dy:0.48},{dx:-0.52,dy:0.20},
+             {dx: 0.72,dy:0.28},{dx: 0.58,dy:0.38},{dx: 0.68,dy:0.48},{dx: 0.52,dy:0.20}].forEach(d => {
+              svg += `<circle cx="${cx+fw*d.dx}" cy="${hc+fh*d.dy}" r="1.1" fill="${hDk2}" opacity="0.30"/>`;
+            });
+            // Main mohawk strip — narrow, rises to spike tip
+            svg += `<path d="M${cx-mohW},${mBase} Q${cx-mohW-3},${mBase-fh*0.20} ${cx-mohW+1},${mBase-fh*0.44} Q${cx-mohW-2},${mBase-fh*0.60} ${cx-mohW+4},${mBase-fh*0.76} L${cx-3},${mTip+6} L${cx},${mTip} L${cx+3},${mTip+6} L${cx+mohW-4},${mBase-fh*0.76} Q${cx+mohW+2},${mBase-fh*0.60} ${cx+mohW-1},${mBase-fh*0.44} Q${cx+mohW+3},${mBase-fh*0.20} ${cx+mohW},${mBase} Z" fill="${hCol}"/>`;
+            // Center spine highlight
+            svg += `<path d="M${cx},${mTip} L${cx},${mBase}" fill="none" stroke="${hLt}" stroke-width="2" stroke-linecap="round" opacity="0.40"/>`;
+            // Tip gleam
+            svg += `<path d="M${cx-3},${mTip+10} L${cx},${mTip} L${cx+3},${mTip+10}" fill="none" stroke="${hLt}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>`;
+            // Side edge shading
+            svg += `<path d="M${cx-mohW},${mBase} Q${cx-mohW-2},${mBase-fh*0.50} ${cx-mohW+2},${mTip+12}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>`;
+            svg += `<path d="M${cx+mohW},${mBase} Q${cx+mohW+2},${mBase-fh*0.50} ${cx+mohW-2},${mTip+12}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>`;
+            svg += `<path d="M${cx-mohW},${mBase} Q${cx},${mBase+5} ${cx+mohW},${mBase}" fill="none" stroke="${hDk}" stroke-width="2.5" stroke-linecap="round" opacity="0.60"/>`;
+            break;
+          }
+
+          case 'ponytail': {
+            // Smooth flat cap pulled tightly back; tail is in the back layer
+            const hlY = hc + fh * 0.60;
+            svg += `<path d="M${cx-fw*0.85},${hlY} Q${cx-fw*1.02},${hc+fh*0.22} ${cx-fw*0.72},${hc+fh*0.03} Q${cx-fw*0.22},${hc-fh*0.06} ${cx},${hc-fh*0.07} Q${cx+fw*0.22},${hc-fh*0.06} ${cx+fw*0.72},${hc+fh*0.03} Q${cx+fw*1.02},${hc+fh*0.22} ${cx+fw*0.85},${hlY} Q${cx+fw*0.65},${hlY-10} ${cx},${hlY-12} Q${cx-fw*0.65},${hlY-10} ${cx-fw*0.85},${hlY} Z" fill="${hCol}"/>`;
+            // Wide pomade-like shine (pulled-back tension)
+            svg += `<path d="M${cx-fw*0.55},${hc+fh*0.14} Q${cx},${hc-fh*0.05} ${cx+fw*0.55},${hc+fh*0.14}" fill="none" stroke="${hLt}" stroke-width="4" stroke-linecap="round" opacity="0.52"/>`;
+            // Back-sweep texture lines
+            [0.24, 0.37, 0.48, 0.56].forEach(t => {
+              svg += `<path d="M${cx-fw*0.80},${hc+fh*t} Q${cx-fw*0.40},${hc+fh*(t-0.05)} ${cx+fw*0.80},${hc+fh*t}" fill="none" stroke="${hDk}" stroke-width="1" stroke-linecap="round" opacity="0.28"/>`;
+            });
+            svg += `<path d="M${cx-fw*0.85},${hlY} Q${cx-fw*0.65},${hlY-9} ${cx},${hlY-11} Q${cx+fw*0.65},${hlY-9} ${cx+fw*0.85},${hlY}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>`;
+            break;
+          }
+
+          case 'braids': {
+            // Braided top cap with center part; braid bodies in back layer
+            const hlY = hc + fh * 0.66;
+            svg += `<path d="M${cx-fw*0.90},${hlY} Q${cx-fw*1.08},${hc+fh*0.30} ${cx-fw*0.78},${hc+fh*0.04} Q${cx-fw*0.28},${hc-fh*0.05} ${cx},${hc-fh*0.06} Q${cx+fw*0.28},${hc-fh*0.05} ${cx+fw*0.78},${hc+fh*0.04} Q${cx+fw*1.08},${hc+fh*0.30} ${cx+fw*0.90},${hlY} Q${cx+fw*0.65},${hlY-13} ${cx},${hlY-15} Q${cx-fw*0.65},${hlY-13} ${cx-fw*0.90},${hlY} Z" fill="${hCol}"/>`;
+            // Center part
+            svg += `<path d="M${cx},${hc-fh*0.05} L${cx},${hlY-15}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.48"/>`;
+            svg += `<path d="M${cx-fw*0.38},${hc+fh*0.11} Q${cx-fw*0.12},${hc-fh*0.04} ${cx-fw*0.02},${hc+fh*0.06}" fill="none" stroke="${hLt}" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>`;
+            svg += `<path d="M${cx+fw*0.38},${hc+fh*0.11} Q${cx+fw*0.12},${hc-fh*0.04} ${cx+fw*0.02},${hc+fh*0.06}" fill="none" stroke="${hLt}" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>`;
+            svg += `<path d="M${cx-fw*0.90},${hlY} Q${cx-fw*0.65},${hlY-11} ${cx},${hlY-13} Q${cx+fw*0.65},${hlY-11} ${cx+fw*0.90},${hlY}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>`;
+            break;
+          }
+
+          case 'dreads': {
+            // Dreads top cap; dread bodies in back layer
+            const hlY = hc + fh * 0.66;
+            svg += `<path d="M${cx-fw*0.90},${hlY} Q${cx-fw*1.08},${hc+fh*0.30} ${cx-fw*0.78},${hc+fh*0.04} Q${cx-fw*0.28},${hc-fh*0.05} ${cx},${hc-fh*0.06} Q${cx+fw*0.28},${hc-fh*0.05} ${cx+fw*0.78},${hc+fh*0.04} Q${cx+fw*1.08},${hc+fh*0.30} ${cx+fw*0.90},${hlY} Q${cx+fw*0.65},${hlY-13} ${cx},${hlY-15} Q${cx-fw*0.65},${hlY-13} ${cx-fw*0.90},${hlY} Z" fill="${hCol}"/>`;
+            svg += `<path d="M${cx-fw*0.38},${hc+fh*0.12} Q${cx},${hc-fh*0.05} ${cx+fw*0.38},${hc+fh*0.12}" fill="none" stroke="${hLt}" stroke-width="3" stroke-linecap="round" opacity="0.42"/>`;
+            svg += `<path d="M${cx-fw*0.90},${hlY} Q${cx-fw*0.65},${hlY-11} ${cx},${hlY-13} Q${cx+fw*0.65},${hlY-11} ${cx+fw*0.90},${hlY}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>`;
+            break;
+          }
+
+          case 'slickedback': {
+            // Very flat cap, dramatically swept backward with pomade shine
+            const hlY = hc + fh * 0.57;
+            svg += `<path d="M${cx-fw*0.88},${hlY} Q${cx-fw*1.05},${hc+fh*0.18} ${cx-fw*0.70},${hc+fh*0.02} Q${cx-fw*0.22},${hc-fh*0.06} ${cx},${hc-fh*0.07} Q${cx+fw*0.22},${hc-fh*0.06} ${cx+fw*0.70},${hc+fh*0.02} Q${cx+fw*1.05},${hc+fh*0.18} ${cx+fw*0.88},${hlY} Q${cx+fw*0.62},${hlY-6} ${cx},${hlY-7} Q${cx-fw*0.62},${hlY-6} ${cx-fw*0.88},${hlY} Z" fill="${hCol}"/>`;
+            // Root shadow (hair flattened tight)
+            svg += `<ellipse cx="${cx}" cy="${hc+fh*0.48}" rx="${fw*0.62}" ry="${fh*0.10}" fill="${hDk}" opacity="0.20"/>`;
+            // Wide pomade shine
+            svg += `<path d="M${cx-fw*0.62},${hc+fh*0.11} Q${cx},${hc-fh*0.05} ${cx+fw*0.62},${hc+fh*0.11}" fill="none" stroke="${hLt}" stroke-width="5.5" stroke-linecap="round" opacity="0.54"/>`;
+            svg += `<path d="M${cx-fw*0.58},${hc+fh*0.13} Q${cx},${hc-fh*0.03} ${cx+fw*0.58},${hc+fh*0.13}" fill="none" stroke="${hLt}" stroke-width="2" stroke-linecap="round" opacity="0.32"/>`;
+            // Back-sweep texture lines
+            [0.20, 0.30, 0.40, 0.50].forEach(t => {
+              svg += `<path d="M${cx-fw*0.84},${hc+fh*t} Q${cx-fw*0.42},${hc+fh*(t-0.06)} ${cx+fw*0.56},${hc+fh*t}" fill="none" stroke="${hDk}" stroke-width="1.2" stroke-linecap="round" opacity="0.36"/>`;
+            });
+            svg += `<path d="M${cx-fw*0.88},${hlY} Q${cx-fw*0.62},${hlY-5} ${cx},${hlY-6} Q${cx+fw*0.62},${hlY-5} ${cx+fw*0.88},${hlY}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>`;
+            break;
+          }
+
+          case 'wasteland':
+          default: {
+            // Messy, matted, asymmetric post-apoc hair
+            const hlY = hc + fh * 0.68;
+            // Jagged irregular cap outline
+            svg += `<path d="M${cx-fw*0.88},${hlY} Q${cx-fw*1.08},${hc+fh*0.32} ${cx-fw*0.82},${hc+fh*0.08} Q${cx-fw*0.65},${hc-fh*0.02} ${cx-fw*0.38},${hc-fh*0.06} Q${cx-fw*0.18},${hc-fh*0.10} ${cx},${hc-fh*0.08} Q${cx+fw*0.12},${hc-fh*0.12} ${cx+fw*0.28},${hc-fh*0.08} Q${cx+fw*0.50},${hc-fh*0.02} ${cx+fw*0.68},${hc+fh*0.06} Q${cx+fw*0.90},${hc+fh*0.20} ${cx+fw*0.92},${hlY} Q${cx+fw*0.68},${hlY-10} ${cx+fw*0.20},${hlY-17} Q${cx},${hlY-15} ${cx-fw*0.20},${hlY-19} Q${cx-fw*0.55},${hlY-12} ${cx-fw*0.88},${hlY} Z" fill="${hCol}"/>`;
+            // Wild sticking-out wisps
+            svg += `<path d="M${cx-fw*0.88},${hc+fh*0.40} Q${cx-fw*1.22},${hc+fh*0.15} ${cx-fw*1.12},${hc}" fill="none" stroke="${hCol}" stroke-width="3.5" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx-fw*0.70},${hc+fh*0.22} Q${cx-fw*0.96},${hc+fh*0.04} ${cx-fw*0.88},${hc-fh*0.12}" fill="none" stroke="${hCol}" stroke-width="2.5" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx+fw*0.82},${hc+fh*0.35} Q${cx+fw*1.16},${hc+fh*0.18} ${cx+fw*1.06},${hc+fh*0.02}" fill="none" stroke="${hCol}" stroke-width="3" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx-fw*0.10},${hc-fh*0.08} Q${cx+fw*0.06},${hc-fh*0.26} ${cx-fw*0.08},${hc-fh*0.36}" fill="none" stroke="${hCol}" stroke-width="2.5" stroke-linecap="round"/>`;
+            // Dark matted patches
+            svg += `<path d="M${cx-fw*0.26},${hc+fh*0.30} Q${cx+fw*0.10},${hc+fh*0.25} ${cx+fw*0.40},${hc+fh*0.35}" fill="none" stroke="${hDk}" stroke-width="3.5" stroke-linecap="round" opacity="0.32"/>`;
+            svg += `<path d="M${cx-fw*0.55},${hc+fh*0.18} Q${cx-fw*0.30},${hc+fh*0.14} ${cx-fw*0.08},${hc+fh*0.20}" fill="none" stroke="${hDk}" stroke-width="3" stroke-linecap="round" opacity="0.28"/>`;
+            // Muted highlight (dirty, no shine)
+            svg += `<path d="M${cx-fw*0.30},${hc+fh*0.15} Q${cx+fw*0.08},${hc} ${cx+fw*0.35},${hc+fh*0.12}" fill="none" stroke="${hLt}" stroke-width="2" stroke-linecap="round" opacity="0.22"/>`;
+            // Jagged hairline
+            svg += `<path d="M${cx-fw*0.88},${hlY} Q${cx-fw*0.65},${hlY-8} ${cx-fw*0.20},${hlY-14} Q${cx},${hlY-12} ${cx+fw*0.28},${hlY-16} Q${cx+fw*0.60},${hlY-10} ${cx+fw*0.92},${hlY}" fill="none" stroke="${hDk}" stroke-width="1.5" stroke-linecap="round" opacity="0.48"/>`;
+            break;
+          }
         }
       }
       
@@ -632,6 +856,15 @@
       const R = Math.max(0, (num >> 16) - amt);
       const G = Math.max(0, ((num >> 8) & 0x00FF) - amt);
       const B = Math.max(0, (num & 0x0000FF) - amt);
+      return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+    },
+
+    _lightenColor(hex, percent) {
+      const num = parseInt(hex.replace('#', ''), 16);
+      const amt = Math.round(2.55 * percent);
+      const R = Math.min(255, (num >> 16) + amt);
+      const G = Math.min(255, ((num >> 8) & 0x00FF) + amt);
+      const B = Math.min(255, (num & 0x0000FF) + amt);
       return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
     },
 
