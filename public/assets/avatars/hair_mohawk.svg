@@ -1,102 +1,105 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!--
+    MOHAWK: SHAVED SIDES with a central strip of upright spiky hair.
+    Shaved areas shown as subtle stubble shadow. The center strip
+    is narrow (~20 px) and rises to distinct spike tips.
+    Strip base is at y≈100, spikes reach up to y≈6.
+  -->
   <defs>
-    <!-- Hair gradient for depth -->
-    <linearGradient id="mohawkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#4a3a2a"/>
-      <stop offset="50%" stop-color="#3a2a1a"/>
-      <stop offset="100%" stop-color="#2a1a0a"/>
+    <linearGradient id="moh_grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#B07848"/>
+      <stop offset="45%"  stop-color="#7A4A22"/>
+      <stop offset="100%" stop-color="#3D2010"/>
     </linearGradient>
-    <!-- Highlight for hair strands -->
-    <linearGradient id="hairHighlight" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#5a4a3a" stop-opacity="0"/>
-      <stop offset="50%" stop-color="#6a5a4a" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#5a4a3a" stop-opacity="0"/>
+    <linearGradient id="moh_hilite" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#C08850" stop-opacity="0"/>
+      <stop offset="50%"  stop-color="#C08850" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#C08850" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  
-  <!-- Shaved sides shadow/stubble -->
-  <ellipse cx="85" cy="95" rx="18" ry="35" fill="#2a1a0a" opacity="0.3"/>
-  <ellipse cx="171" cy="95" rx="18" ry="35" fill="#2a1a0a" opacity="0.3"/>
-  
-  <!-- Stubble texture on sides -->
-  <g opacity="0.4" fill="#1a0a00">
-    <circle cx="80" cy="85" r="0.5"/>
-    <circle cx="84" cy="88" r="0.5"/>
-    <circle cx="78" cy="92" r="0.5"/>
-    <circle cx="82" cy="96" r="0.5"/>
-    <circle cx="85" cy="100" r="0.5"/>
-    <circle cx="176" cy="85" r="0.5"/>
-    <circle cx="172" cy="88" r="0.5"/>
-    <circle cx="178" cy="92" r="0.5"/>
-    <circle cx="174" cy="96" r="0.5"/>
-    <circle cx="171" cy="100" r="0.5"/>
+
+  <!-- Shaved-side shadows — just a hint of stubble shadow on each temple -->
+  <path d="
+    M 58,97
+    Q 50,72  68,52
+    Q 82,42  98,40
+    Q 88,52  82,68
+    Q 72,80  68,97
+    Z"
+    fill="#2A1808" opacity="0.22"/>
+  <path d="
+    M 198,97
+    Q 206,72  188,52
+    Q 174,42  158,40
+    Q 168,52  174,68
+    Q 184,80  188,97
+    Z"
+    fill="#2A1808" opacity="0.22"/>
+
+  <!-- Stubble dots on shaved sides -->
+  <g fill="#2A1808" opacity="0.30">
+    <!-- Left side -->
+    <circle cx="72"  cy="66" r="1.4"/>
+    <circle cx="78"  cy="72" r="1.2"/>
+    <circle cx="68"  cy="78" r="1.4"/>
+    <circle cx="76"  cy="82" r="1.2"/>
+    <circle cx="82"  cy="88" r="1.4"/>
+    <circle cx="72"  cy="60" r="1.1"/>
+    <circle cx="86"  cy="76" r="1.2"/>
+    <!-- Right side -->
+    <circle cx="184" cy="66" r="1.4"/>
+    <circle cx="178" cy="72" r="1.2"/>
+    <circle cx="188" cy="78" r="1.4"/>
+    <circle cx="180" cy="82" r="1.2"/>
+    <circle cx="174" cy="88" r="1.4"/>
+    <circle cx="184" cy="60" r="1.1"/>
+    <circle cx="170" cy="76" r="1.2"/>
   </g>
-  
-  <!-- Main mohawk center strip -->
-  <path d="M118 35c-2-3-2-8 0-12c1-2 3-4 5-5c2-1 5-1 10-1c5 0 8 0 10 1c2 1 4 3 5 5c2 4 2 9 0 12l0 0
-           c-1 6-2 14-2 22c0 8 1 16 2 24c1 8 2 16 2 24c0 8-1 16-2 24c-1 8-2 14-3 18
-           h-14
-           c-1-4-2-10-3-18c-1-8-2-16-2-24c0-8 1-16 2-24c1-8 2-16 2-24c0-8-1-16-2-22z" 
-        fill="url(#mohawkGrad)" stroke="#1a0a00" stroke-width="1.5"/>
-  
-  <!-- Individual hair spikes for epic detail -->
-  <!-- Spike 1 (tallest, center-left) -->
-  <path d="M120 40c1-8 2-14 4-18c2-4 4-6 8-6c4 0 6 2 8 6c2 4 3 10 4 18" 
-        fill="#3a2a1a" stroke="#2a1a0a" stroke-width="1.2" stroke-linejoin="miter"/>
-  
-  <!-- Spike 2 (center-right) -->
-  <path d="M123 45c0-6 1-11 3-14c1-2 3-4 6-4c3 0 5 2 6 4c2 3 3 8 3 14" 
-        fill="#4a3a2a" stroke="#2a1a0a" stroke-width="1" stroke-linejoin="miter"/>
-  
-  <!-- Spike 3 (front) -->
-  <path d="M125 52c0-5 1-9 2-11c1-2 2-3 5-3c3 0 4 1 5 3c1 2 2 6 2 11" 
-        fill="#3a2a1a" stroke="#2a1a0a" stroke-width="0.8" stroke-linejoin="miter"/>
-  
-  <!-- Additional spikes going back -->
-  <path d="M120 58c0-4 1-7 2-9c1-1 2-2 4-2c2 0 3 1 4 2c1 2 2 5 2 9" 
-        fill="#2a1a0a" stroke="#1a0a00" stroke-width="0.8" opacity="0.9"/>
-  
-  <path d="M121 70c0-4 1-6 2-8c1-1 2-2 4-2c2 0 3 1 4 2c1 2 2 4 2 8" 
-        fill="#3a2a1a" stroke="#2a1a0a" stroke-width="0.8" opacity="0.85"/>
-  
-  <path d="M122 82c0-3 1-5 2-7c1-1 2-2 3-2c1 0 2 1 3 2c1 2 1 4 2 7" 
-        fill="#2a1a0a" stroke="#1a0a00" stroke-width="0.8" opacity="0.8"/>
-  
-  <path d="M123 94c0-3 1-5 2-6c0-1 1-2 3-2c2 0 2 1 3 2c1 1 2 3 2 6" 
-        fill="#3a2a1a" stroke="#2a1a0a" stroke-width="0.7" opacity="0.75"/>
-  
-  <!-- Hair strand highlights for dimension -->
-  <g opacity="0.3" stroke="url(#hairHighlight)" stroke-width="1.5" fill="none" stroke-linecap="round">
-    <path d="M122 45v60"/>
-    <path d="M128 42v65"/>
-    <path d="M134 45v60"/>
-  </g>
-  
-  <!-- Individual hair texture lines -->
-  <g opacity="0.25" stroke="#1a0a00" stroke-width="0.5" fill="none">
-    <path d="M125 50c0 8-1 16-1 24"/>
-    <path d="M131 50c0 8 1 16 1 24"/>
-    <path d="M119 55c0 10-1 20-2 30"/>
-    <path d="M137 55c0 10 1 20 2 30"/>
-  </g>
-  
-  <!-- Gel/product shine effect -->
-  <path d="M126 48c2-4 4-6 6-6c2 0 4 2 6 6" fill="none" stroke="#6a5a4a" 
-        stroke-width="2" opacity="0.4" stroke-linecap="round"/>
-  
-  <!-- Tips highlighting (bleached or colored tips effect) -->
-  <g opacity="0.5">
-    <path d="M120 35c2-3 4-5 8-6c4-1 8 0 12 1" fill="none" stroke="#7a6a5a" 
-          stroke-width="2" stroke-linecap="round"/>
-  </g>
-  
-  <!-- Base/scalp connection detail -->
-  <ellipse cx="128" cy="108" rx="12" ry="6" fill="#2a1a0a" opacity="0.6"/>
-  
-  <!-- Wasteland grit - small imperfections -->
-  <g opacity="0.3" fill="#8a7a6a">
-    <circle cx="124" cy="65" r="0.8"/>
-    <circle cx="132" cy="72" r="0.6"/>
-    <circle cx="127" cy="85" r="0.7"/>
-  </g>
+
+  <!--
+    Mohawk strip: 20 px wide (x: 118–138).
+    Body runs from scalp (y≈103) up through to triple spike tips.
+    Left spike: x~120, center spike: x=128, right spike: x~136.
+  -->
+  <path d="
+    M 118,103
+    Q 116,82  117,62
+    Q 117,46  119,32
+    L 121,18
+    L 124,8
+    L 128,2
+    L 132,8
+    L 135,18
+    L 137,32
+    Q 139,46  139,62
+    Q 140,82  138,103
+    Z"
+    fill="url(#moh_grad)" stroke="#3D2010" stroke-width="1"/>
+
+  <!-- Secondary spike shoulders for a richer silhouette -->
+  <path d="M 118,55 Q 115,38 118,22 Q 119,34 118,50" fill="#5A3520" opacity="0.7"/>
+  <path d="M 138,55 Q 141,38 138,22 Q 137,34 138,50" fill="#5A3520" opacity="0.7"/>
+
+  <!-- Center-spine highlight (gel shine) -->
+  <path d="M 128,4 L 128,100"
+        fill="none" stroke="url(#moh_hilite)" stroke-width="3"
+        stroke-linecap="round"/>
+
+  <!-- Edge shadow lines along the sides of the strip -->
+  <path d="M 118,103 Q 116,78 118,42"
+        fill="none" stroke="#3D2010" stroke-width="1.5"
+        stroke-linecap="round" opacity="0.55"/>
+  <path d="M 138,103 Q 140,78 138,42"
+        fill="none" stroke="#3D2010" stroke-width="1.5"
+        stroke-linecap="round" opacity="0.55"/>
+
+  <!-- Tip highlight — bright edge on the tallest spike -->
+  <path d="M 125,14 Q 127,6 128,2 Q 129,6 131,14"
+        fill="none" stroke="#C08855" stroke-width="2"
+        stroke-linecap="round" opacity="0.60"/>
+
+  <!-- Scalp connection seam -->
+  <path d="M 118,103 Q 123,100 128,99 Q 133,100 138,103"
+        fill="none" stroke="#3D2010" stroke-width="2.5"
+        stroke-linecap="round" opacity="0.65"/>
 </svg>
