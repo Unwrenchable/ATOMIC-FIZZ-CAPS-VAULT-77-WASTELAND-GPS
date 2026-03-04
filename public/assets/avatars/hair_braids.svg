@@ -1,5 +1,123 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <path d="M64 80c8-24 44-44 96-24 22 8 36 24 40 44 2 10-6 22-10 26-6 6-18 12-34 10-20-2-34-6-56-6s-46 2-62-10c-8-6-16-24-14-40z" fill="#3b2b24"/>
-  <path d="M78 110c-2 8-4 18-4 28 0 12 0 24 2 34 1 8 4 12 8 12s8-4 10-12" stroke="#3b2b24" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <path d="M178 110c2 8 4 18 4 28 0 12 0 24-2 34-1 8-4 12-8 12s-8-4-10-12" stroke="#3b2b24" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!--
+    BRAIDS: Two distinct thick braids hanging down with the characteristic
+    alternating crosshatch weave pattern. Top cap shows hair parted and
+    swept to both sides. Braids are clearly distinguishable from dreads.
+  -->
+  <defs>
+    <linearGradient id="brd_capGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#9A6A40"/>
+      <stop offset="100%" stop-color="#5A3220"/>
+    </linearGradient>
+    <linearGradient id="brd_braidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#7A4A28"/>
+      <stop offset="100%" stop-color="#3A1808"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LEFT BRAID body — at x≈88 -->
+  <path d="
+    M 76,118
+    Q 73,140  75,162
+    Q 77,184  76,206
+    Q 80,218  88,222
+    Q 96,218  100,206
+    Q 99,184  101,162
+    Q 103,140  100,118
+    Z"
+    fill="url(#brd_braidGrad)"/>
+
+  <!-- LEFT BRAID weave marks (alternating diagonal crosshatch) -->
+  <g fill="none" stroke="#3D2010" stroke-width="1.6"
+     stroke-linecap="round" opacity="0.60">
+    <path d="M 76,122 Q 88,127 100,122"/>
+    <path d="M 76,130 Q 88,125 100,130"/>
+    <path d="M 76,138 Q 88,143 100,138"/>
+    <path d="M 76,146 Q 88,141 100,146"/>
+    <path d="M 76,154 Q 88,159 100,154"/>
+    <path d="M 76,162 Q 88,157 100,162"/>
+    <path d="M 76,170 Q 88,175 100,170"/>
+    <path d="M 76,178 Q 88,173 100,178"/>
+    <path d="M 76,186 Q 88,191 100,186"/>
+    <path d="M 76,194 Q 88,189 100,194"/>
+    <path d="M 76,202 Q 88,207 100,202"/>
+  </g>
+  <!-- Left braid highlight line (center spine) -->
+  <path d="M 88,120 L 88,216"
+        fill="none" stroke="#A06838" stroke-width="2"
+        stroke-linecap="round" opacity="0.30"/>
+  <!-- Left braid tip -->
+  <path d="M 78,208 Q 83,220 88,222 Q 93,220 98,208"
+        fill="#2A1008" opacity="0.8"/>
+  <!-- Left braid tie -->
+  <rect x="78" y="115" width="22" height="7" rx="3"
+        fill="#3D2010" opacity="0.80"/>
+
+  <!-- RIGHT BRAID body — at x≈168 -->
+  <path d="
+    M 156,118
+    Q 153,140  155,162
+    Q 157,184  156,206
+    Q 160,218  168,222
+    Q 176,218  180,206
+    Q 179,184  181,162
+    Q 183,140  180,118
+    Z"
+    fill="url(#brd_braidGrad)"/>
+
+  <!-- RIGHT BRAID weave marks -->
+  <g fill="none" stroke="#3D2010" stroke-width="1.6"
+     stroke-linecap="round" opacity="0.60">
+    <path d="M 156,122 Q 168,127 180,122"/>
+    <path d="M 156,130 Q 168,125 180,130"/>
+    <path d="M 156,138 Q 168,143 180,138"/>
+    <path d="M 156,146 Q 168,141 180,146"/>
+    <path d="M 156,154 Q 168,159 180,154"/>
+    <path d="M 156,162 Q 168,157 180,162"/>
+    <path d="M 156,170 Q 168,175 180,170"/>
+    <path d="M 156,178 Q 168,173 180,178"/>
+    <path d="M 156,186 Q 168,191 180,186"/>
+    <path d="M 156,194 Q 168,189 180,194"/>
+    <path d="M 156,202 Q 168,207 180,202"/>
+  </g>
+  <!-- Right braid highlight -->
+  <path d="M 168,120 L 168,216"
+        fill="none" stroke="#A06838" stroke-width="2"
+        stroke-linecap="round" opacity="0.30"/>
+  <!-- Right braid tip -->
+  <path d="M 158,208 Q 163,220 168,222 Q 173,220 178,208"
+        fill="#2A1008" opacity="0.8"/>
+  <!-- Right braid tie -->
+  <rect x="158" y="115" width="22" height="7" rx="3"
+        fill="#3D2010" opacity="0.80"/>
+
+  <!-- Top cap: parted center, swept to sides toward braids -->
+  <path d="
+    M 58,102
+    Q 48,68  68,48
+    Q 94,32  128,30
+    Q 162,32  188,48
+    Q 208,68  198,102
+    Q 178,90  128,87
+    Q 78,90   58,102
+    Z"
+    fill="url(#brd_capGrad)"/>
+
+  <!-- Center part -->
+  <path d="M 128,30 L 128,102"
+        fill="none" stroke="#3D2010" stroke-width="1.8"
+        stroke-linecap="round" opacity="0.50"/>
+
+  <!-- Crown highlights (flanking part) -->
+  <path d="M 88,48  Q 107,38 127,36"
+        fill="none" stroke="#B87848" stroke-width="3"
+        stroke-linecap="round" opacity="0.48"/>
+  <path d="M 168,48 Q 149,38 129,36"
+        fill="none" stroke="#B87848" stroke-width="3"
+        stroke-linecap="round" opacity="0.48"/>
+
+  <!-- Hairline shadow -->
+  <path d="M 58,102 Q 78,93 128,90 Q 178,93 198,102"
+        fill="none" stroke="#3D2010" stroke-width="2"
+        stroke-linecap="round" opacity="0.50"/>
 </svg>
