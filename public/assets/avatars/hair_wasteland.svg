@@ -1,15 +1,97 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!--
+    WASTELAND SURVIVOR: Matted, wild, disheveled post-apoc hair.
+    Asymmetric silhouette. Jagged irregular edges. Random strands sticking
+    out. No shine (matte, dirty look). Two-tone matted patches.
+  -->
   <defs>
-    <linearGradient id="wastelandHair" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#4a3a2a"/>
-      <stop offset="100%" stop-color="#2a1a0a"/>
+    <linearGradient id="wst_grad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%"   stop-color="#8A5A38"/>
+      <stop offset="60%"  stop-color="#5A3520"/>
+      <stop offset="100%" stop-color="#2A1208"/>
     </linearGradient>
   </defs>
-  <path d="M75 85c-5-8-8-16-8-24c0-8 3-14 8-18c5-4 12-6 20-6c6 0 12 1 18 4c6 3 12 8 16 14c4 6 8 14 10 22c2 8 3 16 3 24v25c-2-3-4-6-8-8c-4-2-8-3-12-3c-6 0-12 2-16 6c-4 4-8 10-10 16c-2-6-6-12-10-16c-4-4-10-6-16-6c-4 0-8 1-12 3c-4 2-6 5-8 8v-25c0-8 1-16 3-24c2-8 6-16 10-22c4-6 10-11 16-14c6-3 12-4 18-4c8 0 15 2 20 6c5 4 8 10 8 18c0 8-3 16-8 24h-6c5-6 7-13 7-20c0-6-2-11-6-14c-4-3-9-5-15-5c-5 0-10 1-15 3c-5 2-9 6-13 11c-4 5-7 11-9 18c-2 7-3 14-3 21v18z" fill="url(#wastelandHair)" stroke="#1a0a00" stroke-width="1.5"/>
-  <g opacity="0.3" stroke="#1a0a00" stroke-width="0.8" fill="none">
-    <path d="M90 70c2 10 3 20 3 30"/>
-    <path d="M105 65c1 12 2 24 2 36"/>
-    <path d="M151 65c-1 12-2 24-2 36"/>
-    <path d="M166 70c-2 10-3 20-3 30"/>
+
+  <!-- Messy sticking-out wisps — drawn first behind main cap -->
+  <!-- Left wild strands -->
+  <path d="M 64,92  Q 36,74  30,54"
+        fill="none" stroke="#5A3520" stroke-width="4"
+        stroke-linecap="round"/>
+  <path d="M 68,78  Q 45,55  48,36"
+        fill="none" stroke="#6A4228" stroke-width="3"
+        stroke-linecap="round"/>
+  <path d="M 78,62  Q 62,38  70,20"
+        fill="none" stroke="#5A3520" stroke-width="2.5"
+        stroke-linecap="round"/>
+  <!-- Right wild strands -->
+  <path d="M 192,88 Q 218,72 228,52"
+        fill="none" stroke="#5A3520" stroke-width="3.5"
+        stroke-linecap="round"/>
+  <path d="M 180,65 Q 200,46  194,26"
+        fill="none" stroke="#6A4228" stroke-width="2.5"
+        stroke-linecap="round"/>
+  <!-- Top center wisp -->
+  <path d="M 118,34 Q 110,16 118,6"
+        fill="none" stroke="#6A4228" stroke-width="3"
+        stroke-linecap="round"/>
+  <path d="M 140,38 Q 152,22 146,8"
+        fill="none" stroke="#5A3520" stroke-width="2"
+        stroke-linecap="round"/>
+
+  <!-- Main cap: jagged, irregular, asymmetric path -->
+  <!--
+    Left side is messier and droopier than right.
+    Multiple jags and bumps in the outline.
+  -->
+  <path d="
+    M 56,106
+    Q 44,76   60,52
+    Q 72,36   90,28
+    Q 108,20  96,16
+    Q 100,10  110,12
+    Q 118,8   114,22
+    Q 120,18  124,28
+    Q 128,22  132,28
+    Q 138,20  142,26
+    Q 140,14  148,10
+    Q 158,8   154,20
+    Q 162,16  162,28
+    Q 168,18  176,26
+    Q 188,30  198,46
+    Q 212,64  200,104
+    Q 182,92  150,88
+    Q 128,85  110,88
+    Q 85,92   56,106
+    Z"
+    fill="url(#wst_grad)"/>
+
+  <!-- Matted dark patches (dirty, clumped hair) -->
+  <path d="M 78,64  Q 96,56  118,55"
+        fill="none" stroke="#3D2010" stroke-width="5"
+        stroke-linecap="round" opacity="0.35"/>
+  <path d="M 145,58 Q 165,55 182,64"
+        fill="none" stroke="#3D2010" stroke-width="4"
+        stroke-linecap="round" opacity="0.30"/>
+  <path d="M 88,82  Q 110,76 135,77"
+        fill="none" stroke="#3D2010" stroke-width="5"
+        stroke-linecap="round" opacity="0.28"/>
+
+  <!-- Dull highlight (no shine, just faint light-catch) -->
+  <path d="M 96,46 Q 116,37 136,40"
+        fill="none" stroke="#9A6A40" stroke-width="3"
+        stroke-linecap="round" opacity="0.28"/>
+
+  <!-- Hairline edge — irregular and jagged -->
+  <path d="M 56,106 Q 72,96 100,90 Q 128,87 156,91 Q 180,95 200,104"
+        fill="none" stroke="#3D2010" stroke-width="2"
+        stroke-linecap="round" opacity="0.48"/>
+
+  <!-- Surface clump / mat texture lines -->
+  <g fill="none" stroke="#3D2010" stroke-width="1.4"
+     stroke-linecap="round" opacity="0.30">
+    <path d="M 70,70 Q 82,62 96,60"/>
+    <path d="M 160,62 Q 174,60 186,68"/>
+    <path d="M 90,88 Q 112,82 130,82"/>
+    <path d="M 148,84 Q 166,82 178,88"/>
   </g>
 </svg>
