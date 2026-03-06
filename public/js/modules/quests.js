@@ -299,10 +299,11 @@
           case "armor":
             if (!this.gs.inventory.armor) this.gs.inventory.armor = [];
             this.gs.inventory.armor.push(invItem);
-            // If marked as equipped (jumpsuit), set it on the player
+            // If marked as equipped (jumpsuit), set it on the correct body slot
             if (item.equipped) {
-              Game.player.equipped.armor = invItem;
-              console.log("[quests] Player starts with equipped armor:", invItem.name);
+              const armorSlot = item.slot || "chest";
+              Game.player.equipped[armorSlot] = invItem;
+              console.log("[quests] Player starts with equipped armor:", invItem.name, "slot:", armorSlot);
             }
             break;
           case "consumable":
@@ -383,17 +384,20 @@
         const saved = localStorage.getItem("afc_equipped_items");
         if (saved) {
           const equipped = JSON.parse(saved);
+          // Migrate old generic "armor" key → "chest"
+          if (equipped.armor && !equipped.chest) equipped.chest = equipped.armor;
+          delete equipped.armor;
           Game.player.equipped = equipped;
           console.log("[quests] Restored equipped items for returning player:", equipped);
         } else {
-          // No saved equipped items - give them the default jumpsuit
-          // This handles the edge case where flag was set but equipped wasn't saved
+          // No saved equipped items - give them the default jumpsuit in chest slot
           const jumpsuit = STARTER_GEAR.find(item => item.type === "armor" && item.equipped);
-          if (jumpsuit && !Game.player.equipped.armor) {
-            Game.player.equipped.armor = {
+          if (jumpsuit && !Game.player.equipped.chest) {
+            Game.player.equipped.chest = {
               id: jumpsuit.id,
               name: jumpsuit.name,
               type: jumpsuit.type,
+              slot: jumpsuit.slot || "chest",
               quantity: 1,
               equipped: true
             };
