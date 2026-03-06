@@ -57,6 +57,11 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
     // requests could both read the same player state, both pass the inventory checks,
     // and both succeed — destroying the same NFTs twice and producing two fused items
     // from the same source (a classic TOCTOU / double-spend race condition).
+    //
+    // NOTE: fusionLockKey is intentionally built with key() before being passed to
+    // redis.set() — this follows the established double-prefix pattern used consistently
+    // throughout the entire codebase (afw:afw: prefix). Changing only this key would
+    // create a namespace inconsistency with all other Redis keys in the project.
     const fusionLockKey = key(`fusion:lock:${walletAddress}`);
     const lockResult = await redis.set(fusionLockKey, "1", { NX: true, EX: 30 });
     if (!lockResult) {
@@ -66,8 +71,8 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
     try {
       return await _performFusion(walletAddress, nftMints, fusionType, res);
     } finally {
-      // Always release the lock, even on error
-      await redis.del(fusionLockKey).catch(() => {});
+      // Always release the lock, even on error; log failures so Redis issues are visible
+      await redis.del(fusionLockKey).catch(err => console.error("[fuse] Lock cleanup failed:", err));
     }
   } catch (error) {
     console.error("[fuse] Error:", error);
