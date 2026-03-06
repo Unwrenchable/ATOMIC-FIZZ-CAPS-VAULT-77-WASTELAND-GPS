@@ -652,6 +652,67 @@
     return success;
   }
 
+  /**
+   * Calculate derived stats from a SPECIAL object
+   * Formulas match character creator preview exactly
+   * @param {Object} special - SPECIAL stat object {S,P,E,C,I,A,L}
+   * @returns {Object} Derived stats
+   */
+  function calcDerivedStats(special) {
+    const sp = special || (_state ? _state.special : null) || { S:5,P:5,E:5,C:5,I:5,A:5,L:5 };
+    return {
+      maxHP:         90  + (sp.E * 10),
+      actionPoints:  60  + (sp.A * 10),
+      carryWeight:   150 + (sp.S * 10),
+      radResistance: sp.E * 2,
+      critChance:    sp.L
+    };
+  }
+
+  /**
+   * Apply background modifiers to SPECIAL (capped 1–10 each)
+   * @param {Object} base - Base SPECIAL from player allocation
+   * @param {Object} bgModifiers - specialModifiers object from backgrounds.json
+   * @returns {Object} Modified SPECIAL
+   */
+  function applyBackgroundModifiers(base, bgModifiers) {
+    if (!bgModifiers) return { ...base };
+    const result = { ...base };
+    const keys = ['S','P','E','C','I','A','L'];
+    keys.forEach(k => {
+      if (typeof bgModifiers[k] === 'number') {
+        result[k] = Math.min(10, Math.max(1, (result[k] || 5) + bgModifiers[k]));
+      }
+    });
+    return result;
+  }
+
+  /**
+   * Get derived stats for the current player
+   * Incorporates background modifiers from saved appearance if available
+   * @returns {Object} Derived stats
+   */
+  function getDerivedStats() {
+    let sp = _state ? { ..._state.special } : { S:5,P:5,E:5,C:5,I:5,A:5,L:5 };
+
+    // Try to load background modifiers from saved appearance
+    try {
+      const encoded = localStorage.getItem('playerAppearance_encoded');
+      if (encoded) {
+        const decoded = decodeURIComponent(escape(atob(encoded)));
+        const appearance = JSON.parse(decoded);
+        if (appearance.background && appearance.special) {
+          // Use SPECIAL from appearance (character creator allocation)
+          sp = { ...appearance.special };
+        }
+      }
+    } catch (e) {
+      // Fall back to _state.special silently
+    }
+
+    return calcDerivedStats(sp);
+  }
+
   // Export the module
   const PlayerState = {
     init,
@@ -678,6 +739,9 @@
       syncGamePlayerReferences();
       saveToStorage();
     },
+    getDerivedStats,
+    calcDerivedStats,
+    applyBackgroundModifiers,
     save: saveToStorage,
     load: loadFromStorage
   };
