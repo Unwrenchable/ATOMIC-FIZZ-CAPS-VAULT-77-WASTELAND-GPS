@@ -914,3 +914,156 @@ input[type="reset"]:hover {
 .gf-item-city { font-size: 10px; color: #556655; margin-bottom: 4px; }
 .gf-item-collected { font-size: 11px; color: #00ff41; }
 .gf-item-lore { font-size: 10px; color: #445544; line-height: 1.4; font-style: italic; }
+
+/* ============================================================
+   INVENTORY PANEL — Pip-Boy ITEMS tab
+   ============================================================ */
+
+/* Tab bar */
+.inv-tabs-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 8px 4px;
+  border-bottom: 1px solid rgba(0,255,65,0.2);
+  background: rgba(0,0,0,0.3);
+}
+
+.inv-tab {
+  background: transparent;
+  color: #00ff41;
+  border: 1px solid rgba(0,255,65,0.3);
+  padding: 4px 8px;
+  font-family: 'VT323', monospace;
+  font-size: clamp(11px, 2.5vw, 13px);
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.15s, border-color 0.15s;
+}
+.inv-tab:hover { background: rgba(0,255,65,0.1); border-color: #00ff41; }
+.inv-tab.active {
+  background: rgba(0,255,65,0.18);
+  border-color: #00ff41;
+  color: #aaff88;
+}
+
+/* Item cards */
+.inventory-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-bottom: 1px solid rgba(0,255,65,0.1);
+  font-size: clamp(12px, 2.5vw, 14px);
+}
+.inventory-item:hover { background: rgba(0,255,65,0.04); }
+
+.inv-name {
+  flex: 1;
+  color: #00ff41;
+  font-weight: bold;
+  font-size: clamp(12px, 2.5vw, 14px);
+}
+
+.inv-meta {
+  color: #668866;
+  font-size: clamp(10px, 2vw, 12px);
+  min-width: 90px;
+  text-align: right;
+}
+
+.inv-empty {
+  padding: 20px 12px;
+  color: #556655;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* Equip / Unequip buttons on item cards */
+.equip-btn,
+.unequip-btn {
+  background: transparent;
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  font-family: 'VT323', monospace;
+  font-size: 12px;
+  padding: 3px 8px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  min-height: 28px;
+  touch-action: manipulation;
+  transition: background 0.15s;
+}
+.equip-btn:hover { background: rgba(0,255,65,0.15); }
+.unequip-btn { border-color: #ffaa00; color: #ffaa00; }
+.unequip-btn:hover { background: rgba(255,170,0,0.12); }
+
+/* ============================================================
+   EQUIP SCREEN (Fallout paperdoll)
+   ============================================================ */
+.equip-screen-header {
+  padding: 8px 10px 4px;
+}
+.equip-screen-title {
+  color: #aaff88;
+  font-size: clamp(12px, 2.5vw, 14px);
+  letter-spacing: 2px;
+  border-bottom: 1px solid rgba(0,255,65,0.25);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+/* Each equipment slot row */
+.equip-slot-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(0,255,65,0.08);
+  font-size: clamp(12px, 2.5vw, 14px);
+}
+.equip-slot-row.equip-slot-filled {
+  background: rgba(0,255,65,0.04);
+}
+
+.equip-slot-label {
+  width: 90px;
+  flex-shrink: 0;
+  color: #668866;
+  font-size: clamp(11px, 2vw, 13px);
+  letter-spacing: 1px;
+}
+
+.equip-slot-item {
+  flex: 1;
+  color: #00ff41;
+  font-size: clamp(12px, 2.5vw, 14px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.equip-slot-row:not(.equip-slot-filled) .equip-slot-item {
+  color: #334433;
+  font-style: italic;
+}
+
+.equip-slot-empty-btn {
+  background: transparent;
+  border: 1px solid #334433;
+  color: #334433;
+  font-family: 'VT323', monospace;
+  font-size: 12px;
+  padding: 3px 8px;
+  cursor: default;
+  letter-spacing: 1px;
+  min-height: 28px;
+}
+
+.equip-screen-hint {
+  padding: 12px 10px;
+  color: #445544;
+  font-size: clamp(10px, 2vw, 12px);
+  font-style: italic;
+}
