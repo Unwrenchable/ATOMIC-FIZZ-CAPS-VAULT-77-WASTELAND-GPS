@@ -119,36 +119,53 @@
   // ------------------------------------------------------------
   (function enableSwipeTabs() {
     let startX = 0;
+    let startY = 0;
     let endX = 0;
+    let endY = 0;
     let touchStartedOnMap = false;
-    const threshold = 50;
+    let touchStartTime = 0;
+    // Increased threshold (100px) to prevent accidental tab switches.
+    // Swipe must also be predominantly horizontal (horiz > vertical) to
+    // avoid triggering when the user is scrolling panel content.
+    const threshold = 100;
 
     function activateTabByIndex(i) {
       const tab = tabs[i];
       if (!tab) return;
-      const key = tab.getAttribute("data-pipboy-tab"); // FIXED
+      const key = tab.getAttribute("data-pipboy-tab");
       if (!key) return;
-      const panelKey = key.replace("panel-", ""); // FIXED
+      const panelKey = key.replace("panel-", "");
       setActivePanel(panelKey);
     }
 
     document.addEventListener("touchstart", (e) => {
       startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      touchStartTime = Date.now();
       touchStartedOnMap = !!(e.target && e.target.closest && e.target.closest('#mapContainer'));
     });
 
     document.addEventListener("touchend", (e) => {
       if (touchStartedOnMap) return;
       endX = e.changedTouches[0].clientX;
-      const diff = endX - startX;
+      endY = e.changedTouches[0].clientY;
+      const diffX = endX - startX;
+      const diffY = endY - startY;
+      const elapsed = Date.now() - touchStartTime;
+
+      // Ignore long-press or slow drags (> 600ms)
+      if (elapsed > 600) return;
+
+      // Swipe must be more horizontal than vertical to avoid scroll conflicts
+      if (Math.abs(diffX) <= Math.abs(diffY)) return;
 
       const activeIndex = tabs.findIndex((t) =>
         t.classList.contains("active")
       );
 
-      if (diff > threshold && activeIndex > 0) {
+      if (diffX > threshold && activeIndex > 0) {
         activateTabByIndex(activeIndex - 1);
-      } else if (diff < -threshold && activeIndex < tabs.length - 1) {
+      } else if (diffX < -threshold && activeIndex < tabs.length - 1) {
         activateTabByIndex(activeIndex + 1);
       }
     });
