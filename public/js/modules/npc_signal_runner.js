@@ -414,7 +414,12 @@
       if (!lines || lines.length === 0) {
         return "...";
       }
-      return lines[Math.floor(Math.random() * lines.length)];
+      // BUG FIX: use crypto.getRandomValues() for consistent RNG policy
+      // (Math.random() was predictable; dialogue selection affects player experience
+      // and should follow the project-wide secure RNG convention).
+      const arr = new Uint32Array(1);
+      crypto.getRandomValues(arr);
+      return lines[Math.floor((arr[0] / 0x100000000) * lines.length)];
     },
 
     // ------------------------------------------------------------

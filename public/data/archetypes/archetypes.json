@@ -36,4 +36,8 @@
         "Keep your head down. Raiders like this stretch."
       ],
       "lootPool": ["food_ration", "small_caps"],
-      "behaviorPattern": "static_local
+      "behaviorPattern": "static_local",
+      "regionPool": "vegas_outskirts"
+    }
+  ]
+}
