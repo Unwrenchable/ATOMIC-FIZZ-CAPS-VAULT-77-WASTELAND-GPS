@@ -457,6 +457,18 @@
       // Neck/jaw junction shadow
       svg += `<ellipse cx="${cx}" cy="${cy+faceHeight*0.62}" rx="20" ry="7" fill="rgba(0,0,0,0.22)"/>`;
 
+      // Ears — drawn before face base so skin silhouette slightly overlaps inner edges
+      const earDk  = this._darkenColor(skinColor, 25);
+      const earCy  = cy - faceHeight * 0.08;
+      const earRx  = Math.max(6, faceWidth * 0.09);
+      const earRy  = Math.max(12, faceHeight * 0.19);
+      // Left ear
+      svg += `<ellipse cx="${cx - faceWidth * 0.94}" cy="${earCy}" rx="${earRx}" ry="${earRy}" fill="${skinColor}"/>`;
+      svg += `<ellipse cx="${cx - faceWidth * 0.88}" cy="${earCy + 2}" rx="${earRx * 0.55}" ry="${earRy * 0.52}" fill="${earDk}" opacity="0.40"/>`;
+      // Right ear
+      svg += `<ellipse cx="${cx + faceWidth * 0.94}" cy="${earCy}" rx="${earRx}" ry="${earRy}" fill="${skinColor}"/>`;
+      svg += `<ellipse cx="${cx + faceWidth * 0.88}" cy="${earCy + 2}" rx="${earRx * 0.55}" ry="${earRy * 0.52}" fill="${earDk}" opacity="0.40"/>`;
+
       // Face base — 5-point anatomical silhouette (wider temples, defined jaw/chin)
       svg += `<path d="
         M ${cx},${cy-faceHeight}
@@ -471,8 +483,13 @@
       svg += `<ellipse cx="${cx+faceWidth*0.76}" cy="${cy}" rx="${faceWidth*0.38}" ry="${faceHeight*0.52}" fill="url(#templeShad)"/>`;
       // Subtle under-chin / jaw darkening
       svg += `<ellipse cx="${cx}" cy="${cy+faceHeight*0.82}" rx="${faceWidth*0.55}" ry="${faceHeight*0.18}" fill="rgba(0,0,0,0.10)"/>`;
-      
-      // Ghoul texture - use deterministic positions based on appearance hash
+      // Forehead ambient highlight — top-lit for 3-D depth
+      svg += `<ellipse cx="${cx}" cy="${cy - faceHeight * 0.56}" rx="${faceWidth * 0.50}" ry="${faceHeight * 0.26}" fill="rgba(255,255,255,0.07)"/>`;
+      // Cheekbone catch-lights
+      svg += `<ellipse cx="${cx - faceWidth * 0.50}" cy="${cy + faceHeight * 0.13}" rx="${faceWidth * 0.20}" ry="${faceHeight * 0.12}" fill="rgba(255,255,255,0.06)"/>`;
+      svg += `<ellipse cx="${cx + faceWidth * 0.50}" cy="${cy + faceHeight * 0.13}" rx="${faceWidth * 0.20}" ry="${faceHeight * 0.12}" fill="rgba(255,255,255,0.06)"/>`;
+
+      // Ghoul texture — use deterministic positions based on appearance hash
       if (app.race === 'ghoul') {
         // Generate consistent patches using simple hash from appearance
         const hashStr = `${app.skinTone}${app.faceShape}${app.hairStyle}`;
@@ -843,26 +860,33 @@
         }
       }
       
-      // Scars
+      // Scars — drawn with a raised highlight + dark groove for realism
       if (app.scar && app.scar !== 'none') {
-        const scarColor = this._darkenColor(skinColor, 30);
+        const scarDark  = this._darkenColor(skinColor, 35);
+        const scarLight = this._lightenColor(skinColor, 20);
+        const drawScar = (x1, y1, x2, y2, w = 2.5) => {
+          // Dark groove
+          svg += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${scarDark}" stroke-width="${w + 1}" stroke-linecap="round" opacity="0.85"/>`;
+          // Raised highlight shifted slightly
+          svg += `<line x1="${x1 + 1}" y1="${y1 - 1}" x2="${x2 + 1}" y2="${y2 - 1}" stroke="${scarLight}" stroke-width="${w * 0.55}" stroke-linecap="round" opacity="0.42"/>`;
+        };
         switch (app.scar) {
           case 'cheek_left':
-            svg += `<line x1="${cx - 50}" y1="${cy}" x2="${cx - 30}" y2="${cy + 20}" stroke="${scarColor}" stroke-width="3" stroke-linecap="round"/>`;
+            drawScar(cx - 50, cy, cx - 30, cy + 20);
             break;
           case 'cheek_right':
-            svg += `<line x1="${cx + 50}" y1="${cy}" x2="${cx + 30}" y2="${cy + 20}" stroke="${scarColor}" stroke-width="3" stroke-linecap="round"/>`;
+            drawScar(cx + 50, cy, cx + 30, cy + 20);
             break;
           case 'brow':
-            svg += `<line x1="${cx - 35}" y1="${browY - 5}" x2="${cx - 15}" y2="${browY + 5}" stroke="${scarColor}" stroke-width="3" stroke-linecap="round"/>`;
+            drawScar(cx - 35, browY - 5, cx - 15, browY + 5);
             break;
           case 'lip':
-            svg += `<line x1="${cx - 5}" y1="${mouthY - 8}" x2="${cx + 5}" y2="${mouthY + 8}" stroke="${scarColor}" stroke-width="2" stroke-linecap="round"/>`;
+            drawScar(cx - 5, mouthY - 8, cx + 5, mouthY + 8, 2);
             break;
           case 'claw':
-            svg += `<line x1="${cx - 40}" y1="${cy - 20}" x2="${cx - 20}" y2="${cy + 30}" stroke="${scarColor}" stroke-width="2"/>`;
-            svg += `<line x1="${cx - 30}" y1="${cy - 20}" x2="${cx - 10}" y2="${cy + 30}" stroke="${scarColor}" stroke-width="2"/>`;
-            svg += `<line x1="${cx - 20}" y1="${cy - 20}" x2="${cx}" y2="${cy + 30}" stroke="${scarColor}" stroke-width="2"/>`;
+            drawScar(cx - 40, cy - 20, cx - 20, cy + 30, 2);
+            drawScar(cx - 30, cy - 20, cx - 10, cy + 30, 2);
+            drawScar(cx - 20, cy - 20, cx,       cy + 30, 2);
             break;
         }
       }
@@ -870,38 +894,83 @@
       // Accessories
       if (app.accessory && app.accessory !== 'none') {
         switch (app.accessory) {
-          case 'eyepatch_left':
-            svg += `<ellipse cx="${cx - eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 5}" ry="${eyeHeight + 5}" fill="#1a1a1a"/>`;
-            svg += `<line x1="${cx - eyeSpacing - 30}" y1="${eyeY - 15}" x2="${cx - eyeSpacing + 30}" y2="${eyeY - 15}" stroke="#333" stroke-width="3"/>`;
+          case 'eyepatch_left': {
+            svg += `<ellipse cx="${cx - eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 5}" ry="${eyeHeight + 5}" fill="#1a1205"/>`;
+            svg += `<ellipse cx="${cx - eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 3}" ry="${eyeHeight + 3}" fill="#0d0d0d" stroke="#3a3020" stroke-width="1.5"/>`;
+            // Strap
+            svg += `<path d="M${cx - eyeSpacing - eyeWidth - 4},${eyeY - 12} L${cx - 95},${eyeY - 8}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx - eyeSpacing + eyeWidth + 4},${eyeY - 12} L${cx + 10},${eyeY - 12}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
             break;
-          case 'eyepatch_right':
-            svg += `<ellipse cx="${cx + eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 5}" ry="${eyeHeight + 5}" fill="#1a1a1a"/>`;
-            svg += `<line x1="${cx + eyeSpacing - 30}" y1="${eyeY - 15}" x2="${cx + eyeSpacing + 30}" y2="${eyeY - 15}" stroke="#333" stroke-width="3"/>`;
+          }
+          case 'eyepatch_right': {
+            svg += `<ellipse cx="${cx + eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 5}" ry="${eyeHeight + 5}" fill="#1a1205"/>`;
+            svg += `<ellipse cx="${cx + eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 3}" ry="${eyeHeight + 3}" fill="#0d0d0d" stroke="#3a3020" stroke-width="1.5"/>`;
+            svg += `<path d="M${cx + eyeSpacing + eyeWidth + 4},${eyeY - 12} L${cx + 95},${eyeY - 8}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx + eyeSpacing - eyeWidth - 4},${eyeY - 12} L${cx - 10},${eyeY - 12}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
             break;
-          case 'glasses':
-            svg += `<circle cx="${cx - eyeSpacing}" cy="${eyeY}" r="${eyeWidth + 3}" fill="none" stroke="#333" stroke-width="2"/>`;
-            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="${eyeWidth + 3}" fill="none" stroke="#333" stroke-width="2"/>`;
-            svg += `<line x1="${cx - eyeSpacing + eyeWidth + 3}" y1="${eyeY}" x2="${cx + eyeSpacing - eyeWidth - 3}" y2="${eyeY}" stroke="#333" stroke-width="2"/>`;
+          }
+          case 'glasses': {
+            const gR = eyeWidth + 4;
+            svg += `<circle cx="${cx - eyeSpacing}" cy="${eyeY}" r="${gR}" fill="rgba(180,200,220,0.12)" stroke="#555" stroke-width="2"/>`;
+            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="${gR}" fill="rgba(180,200,220,0.12)" stroke="#555" stroke-width="2"/>`;
+            // Bridge
+            svg += `<line x1="${cx - eyeSpacing + gR}" y1="${eyeY - 2}" x2="${cx + eyeSpacing - gR}" y2="${eyeY - 2}" stroke="#555" stroke-width="2"/>`;
+            // Temple arms
+            svg += `<line x1="${cx - eyeSpacing - gR}" y1="${eyeY - 3}" x2="${cx - eyeSpacing - gR - 22}" y2="${eyeY + 5}" stroke="#555" stroke-width="2" stroke-linecap="round"/>`;
+            svg += `<line x1="${cx + eyeSpacing + gR}" y1="${eyeY - 3}" x2="${cx + eyeSpacing + gR + 22}" y2="${eyeY + 5}" stroke="#555" stroke-width="2" stroke-linecap="round"/>`;
+            // Lens glare
+            svg += `<path d="M${cx - eyeSpacing - gR + 4},${eyeY - gR + 5} Q${cx - eyeSpacing},${eyeY - gR + 3} ${cx - eyeSpacing + gR - 4},${eyeY - gR + 8}" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx + eyeSpacing - gR + 4},${eyeY - gR + 5} Q${cx + eyeSpacing},${eyeY - gR + 3} ${cx + eyeSpacing + gR - 4},${eyeY - gR + 8}" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>`;
             break;
-          case 'goggles':
-            svg += `<rect x="${cx - 55}" y="${eyeY - 15}" width="110" height="30" rx="5" fill="none" stroke="#555" stroke-width="3"/>`;
-            svg += `<circle cx="${cx - eyeSpacing}" cy="${eyeY}" r="20" fill="rgba(150,200,255,0.3)" stroke="#666" stroke-width="2"/>`;
-            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="20" fill="rgba(150,200,255,0.3)" stroke="#666" stroke-width="2"/>`;
+          }
+          case 'goggles': {
+            svg += `<rect x="${cx - 58}" y="${eyeY - 16}" width="116" height="32" rx="6" fill="rgba(60,50,30,0.85)" stroke="#555" stroke-width="2.5"/>`;
+            svg += `<circle cx="${cx - eyeSpacing}" cy="${eyeY}" r="18" fill="rgba(100,180,255,0.25)" stroke="#666" stroke-width="2"/>`;
+            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="18" fill="rgba(100,180,255,0.25)" stroke="#666" stroke-width="2"/>`;
+            // Goggle glare
+            svg += `<path d="M${cx - eyeSpacing - 10},${eyeY - 9} Q${cx - eyeSpacing},${eyeY - 13} ${cx - eyeSpacing + 10},${eyeY - 9}" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx + eyeSpacing - 10},${eyeY - 9} Q${cx + eyeSpacing},${eyeY - 13} ${cx + eyeSpacing + 10},${eyeY - 9}" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-linecap="round"/>`;
+            // Side strap
+            svg += `<line x1="${cx - 58}" y1="${eyeY}" x2="${cx - 90}" y2="${eyeY}" stroke="#444" stroke-width="4" stroke-linecap="round"/>`;
+            svg += `<line x1="${cx + 58}" y1="${eyeY}" x2="${cx + 90}" y2="${eyeY}" stroke="#444" stroke-width="4" stroke-linecap="round"/>`;
             break;
-          case 'bandana':
-            svg += `<rect x="${cx - faceWidth - 10}" y="${cy - faceHeight - 10}" width="${(faceWidth + 10) * 2}" height="25" fill="#8B0000"/>`;
+          }
+          case 'bandana': {
+            // Bandana over the nose/mouth area
+            const bnY = cy + 5;
+            svg += `<path d="M${cx - faceWidth * 0.9},${bnY - 8} Q${cx},${bnY - 14} ${cx + faceWidth * 0.9},${bnY - 8} L${cx + faceWidth * 0.85},${bnY + 22} Q${cx},${bnY + 26} ${cx - faceWidth * 0.85},${bnY + 22} Z" fill="#7a1010"/>`;
+            // Fabric fold lines
+            svg += `<path d="M${cx - faceWidth * 0.6},${bnY} Q${cx},${bnY - 4} ${cx + faceWidth * 0.6},${bnY}" fill="none" stroke="#5a0a0a" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>`;
+            svg += `<path d="M${cx - faceWidth * 0.7},${bnY + 12} Q${cx},${bnY + 8} ${cx + faceWidth * 0.7},${bnY + 12}" fill="none" stroke="#5a0a0a" stroke-width="1" stroke-linecap="round" opacity="0.45"/>`;
             break;
-          case 'cybernetic_eye':
-            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="${eyeWidth}" fill="#1a1a1a"/>`;
-            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="8" fill="#ff0000" filter="url(#glow)"/>`;
-            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="3" fill="#ff4444"/>`;
+          }
+          case 'cybernetic_eye': {
+            // Replace right eye with glowing cybernetic implant
+            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="${eyeWidth + 2}" fill="#0a0505"/>`;
+            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="${eyeWidth - 1}" fill="#1a0505" stroke="#440000" stroke-width="1.5"/>`;
+            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="8" fill="#cc0000" filter="url(#glow)" opacity="0.9"/>`;
+            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="4" fill="#ff2020"/>`;
+            // Scan lines
+            svg += `<line x1="${cx + eyeSpacing - 10}" y1="${eyeY}" x2="${cx + eyeSpacing + 10}" y2="${eyeY}" stroke="rgba(255,0,0,0.3)" stroke-width="1"/>`;
+            // Implant ring
+            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="${eyeWidth + 1}" fill="none" stroke="#660000" stroke-width="2"/>`;
+            svg += `<circle cx="${cx + eyeSpacing - 1}" cy="${eyeY - 6}" r="2" fill="#333" opacity="0.7"/>`;
             break;
+          }
         }
       }
       
-      // Synth circuitry marking
+      // Synth circuitry marking — visible circuit traces on temple/cheek
       if (app.race === 'synth' || app.marking === 'circuitry') {
-        svg += `<path d="M${cx + 40} ${cy - 30} L${cx + 50} ${cy - 20} L${cx + 45} ${cy} L${cx + 55} ${cy + 20}" fill="none" stroke="rgba(0,200,255,0.5)" stroke-width="1"/>`;
+        const cktColor = 'rgba(0,200,255,0.55)';
+        // Right temple circuit traces
+        svg += `<path d="M${cx + faceWidth * 0.62},${cy - faceHeight * 0.35} L${cx + faceWidth * 0.74},${cy - faceHeight * 0.22} L${cx + faceWidth * 0.68},${cy} L${cx + faceWidth * 0.76},${cy + faceHeight * 0.22}" fill="none" stroke="${cktColor}" stroke-width="1.2"/>`;
+        // Branch nodes
+        svg += `<circle cx="${cx + faceWidth * 0.74}" cy="${cy - faceHeight * 0.22}" r="2" fill="${cktColor}"/>`;
+        svg += `<circle cx="${cx + faceWidth * 0.68}" cy="${cy}" r="2" fill="${cktColor}"/>`;
+        // Horizontal branches
+        svg += `<line x1="${cx + faceWidth * 0.68}" y1="${cy}" x2="${cx + faceWidth * 0.88}" y2="${cy - faceHeight * 0.04}" stroke="${cktColor}" stroke-width="0.9"/>`;
+        svg += `<line x1="${cx + faceWidth * 0.74}" y1="${cy - faceHeight * 0.22}" x2="${cx + faceWidth * 0.90}" y2="${cy - faceHeight * 0.30}" stroke="${cktColor}" stroke-width="0.9"/>`;
       }
       
       // Vignette overlay
