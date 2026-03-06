@@ -1,0 +1,58 @@
+[
+  {
+    "id": "vault_dweller",
+    "name": "Vault Dweller",
+    "description": "Born and raised in a vault. You know pre-war technology but not the wasteland.",
+    "flavor": "\"The vault door opens. You blink at the sun for the first time. It's bigger than you imagined.\"",
+    "specialModifiers": { "I": 1, "E": -1 }
+  },
+  {
+    "id": "wasteland_wanderer",
+    "name": "Wasteland Wanderer",
+    "description": "Raised in the open wastes. Tough and fast but rough around the edges.",
+    "flavor": "\"Home is wherever you dig a shallow grave. You've dug a lot of them.\"",
+    "specialModifiers": { "E": 1, "A": 1, "C": -1 }
+  },
+  {
+    "id": "tribal",
+    "name": "Tribal",
+    "description": "Pre-war knowledge is foreign to you, but your instincts are razor-sharp.",
+    "flavor": "\"The spirits speak through the static. The metal gods are just old machines. But your spear is real.\"",
+    "specialModifiers": { "S": 1, "P": 1, "I": -2 }
+  },
+  {
+    "id": "prewar_professional",
+    "name": "Pre-War Professional",
+    "description": "You remember the world before. Knowledge costs mobility.",
+    "flavor": "\"You filed TPS reports. You attended meetings. Then the bombs fell and none of it mattered.\"",
+    "specialModifiers": { "I": 2, "P": 1, "S": -2, "E": -1 }
+  },
+  {
+    "id": "soldier",
+    "name": "Soldier",
+    "description": "Military training forged you. Combat-ready but institutionalized.",
+    "flavor": "\"They trained the fear out of you. They trained a lot of things out of you. Some of them you miss.\"",
+    "specialModifiers": { "S": 1, "E": 1, "C": -1, "I": -1 }
+  },
+  {
+    "id": "raider_turncoat",
+    "name": "Raider Turncoat",
+    "description": "You ran with bad crowds. Strength and speed remain; trust does not.",
+    "flavor": "\"You've done things. The wasteland made you do them. That's what you tell yourself, anyway.\"",
+    "specialModifiers": { "S": 2, "A": 1, "C": -2 }
+  },
+  {
+    "id": "scavenger",
+    "name": "Scavenger",
+    "description": "A lifetime of finding things others missed. Eyes sharp, body worn.",
+    "flavor": "\"One man's irradiated rubble is another man's treasure. You are that other man.\"",
+    "specialModifiers": { "P": 2, "L": 1, "S": -1, "E": -1 }
+  },
+  {
+    "id": "synth_fugitive",
+    "name": "Synth Fugitive",
+    "description": "Institute-built, self-liberated. Brilliant but hunted.",
+    "flavor": "\"The Institute says you aren't real. You've been running long enough to disagree.\"",
+    "specialModifiers": { "I": 2, "P": 1, "C": -1, "E": -1 }
+  }
+]

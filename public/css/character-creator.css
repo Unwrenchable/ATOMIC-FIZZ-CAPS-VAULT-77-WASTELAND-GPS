@@ -700,3 +700,393 @@
   0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 65, 0.3); }
   50% { box-shadow: 0 0 15px rgba(0, 255, 65, 0.5); }
 }
+
+/* ============================================================
+   S.P.E.C.I.A.L. TAB STYLES
+   ============================================================ */
+
+.cc-special-content,
+.cc-background-content,
+.cc-traits-content {
+  padding: 10px 0;
+}
+
+/* Points banner */
+.cc-special-points-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(0,255,65,0.08);
+  border: 1px solid #00ff41;
+  border-radius: 4px;
+  margin-bottom: 14px;
+  font-family: 'Courier New', monospace;
+}
+
+.cc-sp-label {
+  color: #00aa2a;
+  font-size: clamp(11px,1.5vw,13px);
+  letter-spacing: 0.08em;
+}
+
+.cc-sp-value {
+  color: #00ff41;
+  font-size: clamp(18px,2.5vw,22px);
+  font-weight: bold;
+  min-width: 2ch;
+  text-align: center;
+}
+
+/* Individual stat rows */
+.cc-special-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.cc-special-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(0,20,0,0.6);
+  border: 1px solid #003300;
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+
+.cc-special-row:hover {
+  border-color: #00aa2a;
+}
+
+.cc-sp-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.cc-sp-abbr {
+  color: #00ff41;
+  font-size: clamp(12px,1.8vw,15px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+}
+
+.cc-sp-name {
+  color: #00cc33;
+  font-size: clamp(10px,1.4vw,12px);
+  font-family: 'Courier New', monospace;
+}
+
+.cc-sp-desc {
+  color: #008822;
+  font-size: clamp(9px,1.2vw,11px);
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* +/- controls */
+.cc-sp-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-sp-btn {
+  width: 28px;
+  height: 28px;
+  background: #001a00;
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cc-sp-btn:hover:not(:disabled) {
+  background: #00ff41;
+  color: #001a00;
+}
+
+.cc-sp-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.cc-sp-num {
+  color: #00ff41;
+  font-size: clamp(14px,2vw,18px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  min-width: 2ch;
+  text-align: center;
+}
+
+/* Dot bar */
+.cc-sp-dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.cc-sp-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #006600;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.cc-sp-dot.filled {
+  background: #00ff41;
+  border-color: #00ff41;
+  box-shadow: 0 0 4px rgba(0,255,65,0.5);
+}
+
+/* Derived stats preview */
+.cc-derived-stats {
+  padding: 12px;
+  background: rgba(0,10,0,0.7);
+  border: 1px solid #003300;
+  border-radius: 4px;
+}
+
+.cc-derived-title {
+  color: #00aa2a;
+  font-size: clamp(10px,1.3vw,12px);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.12em;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.cc-derived-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.cc-derived-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px;
+  background: rgba(0,255,65,0.04);
+  border: 1px solid #002200;
+  border-radius: 3px;
+}
+
+.cc-derived-label {
+  color: #008822;
+  font-size: clamp(8px,1.1vw,10px);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.07em;
+  text-align: center;
+}
+
+.cc-derived-val {
+  color: #00ff41;
+  font-size: clamp(14px,1.8vw,16px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================================
+   BACKGROUND TAB STYLES
+   ============================================================ */
+
+.cc-bg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cc-bg-card {
+  padding: 12px 14px;
+  background: rgba(0,15,0,0.7);
+  border: 1px solid #003300;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cc-bg-card:hover {
+  border-color: #00aa2a;
+  background: rgba(0,30,0,0.8);
+}
+
+.cc-bg-card.selected {
+  border-color: #00ff41;
+  background: rgba(0,255,65,0.06);
+  box-shadow: 0 0 8px rgba(0,255,65,0.2);
+}
+
+.cc-bg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cc-bg-name {
+  color: #00ff41;
+  font-size: clamp(12px,1.7vw,14px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.cc-bg-desc {
+  color: #00aa2a;
+  font-size: clamp(10px,1.3vw,12px);
+  font-family: 'Courier New', monospace;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.cc-bg-flavor {
+  color: #007722;
+  font-size: clamp(9px,1.2vw,11px);
+  font-family: 'Courier New', monospace;
+  font-style: italic;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #002200;
+  line-height: 1.4;
+}
+
+.cc-bg-mods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* SPECIAL modifier tags (shared across background + traits) */
+.cc-mod-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: clamp(9px,1.2vw,11px);
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+}
+
+.cc-mod-pos {
+  background: rgba(0,200,0,0.15);
+  color: #00ff41;
+  border: 1px solid #00aa2a;
+}
+
+.cc-mod-neg {
+  background: rgba(200,0,0,0.15);
+  color: #ff4444;
+  border: 1px solid #aa2222;
+}
+
+/* ============================================================
+   TRAITS TAB STYLES
+   ============================================================ */
+
+.cc-traits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cc-trait-card {
+  padding: 12px 14px;
+  background: rgba(0,15,0,0.7);
+  border: 1px solid #003300;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cc-trait-card:hover {
+  border-color: #00aa2a;
+  background: rgba(0,30,0,0.8);
+}
+
+.cc-trait-card.selected {
+  border-color: #00ff41;
+  background: rgba(0,255,65,0.06);
+  box-shadow: 0 0 8px rgba(0,255,65,0.2);
+}
+
+.cc-trait-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.cc-trait-name {
+  color: #00ff41;
+  font-size: clamp(12px,1.7vw,14px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.cc-trait-badge {
+  background: #00ff41;
+  color: #001a00;
+  font-size: clamp(9px,1.1vw,11px);
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+}
+
+.cc-trait-desc {
+  color: #00aa2a;
+  font-size: clamp(10px,1.3vw,12px);
+  font-family: 'Courier New', monospace;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.cc-trait-effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+/* Responsive: on small screens collapse dots to fewer */
+@media (max-width: 600px) {
+  .cc-special-row {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .cc-sp-dots {
+    grid-column: 1 / -1;
+  }
+  .cc-sp-dot {
+    width: 8px;
+    height: 8px;
+  }
+  .cc-derived-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
