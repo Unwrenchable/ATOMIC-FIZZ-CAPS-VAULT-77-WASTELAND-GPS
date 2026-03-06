@@ -313,6 +313,17 @@
     },
 
     onOpen() {
+      // If a pending retry timeout exists, this is a fresh external call (the
+      // retry-loop callback always nulls _retryTimeoutId before calling onOpen,
+      // so a non-null value here means an outside caller pre-empted the chain).
+      // Cancel the stale timer and start with a clean retry counter so the new
+      // call gets a full set of retries.
+      if (this._retryTimeoutId !== null) {
+        clearTimeout(this._retryTimeoutId);
+        this._retryTimeoutId = null;
+        this.containerRetryCount = 0;
+      }
+
       console.log('[worldmap] onOpen called');
       
       // CRITICAL FOR MOBILE: the panel can be flex‑collapsed or still
@@ -336,7 +347,10 @@
         if (this.containerRetryCount < this.maxContainerRetries) {
           this.containerRetryCount++;
           console.log(`[worldmap] container has no dimensions (width: ${rect.width} height: ${rect.height}), retry ${this.containerRetryCount} / ${this.maxContainerRetries}`);
-          this._retryTimeoutId = setTimeout(() => this.onOpen(), this.containerRetryDelayMs);
+          this._retryTimeoutId = setTimeout(() => {
+            this._retryTimeoutId = null; // Mark as consumed before re-entering
+            this.onOpen();
+          }, this.containerRetryDelayMs);
           return;
         } else {
           console.warn(`[worldmap] container failed to gain dimensions after ${this.maxContainerRetries} retries - waiting for ResizeObserver`);
