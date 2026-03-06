@@ -41,6 +41,16 @@ async function tryAttachSession(req, res, next) {
 
 router.use(tryAttachSession);
 
+// Timing-safe comparison of the admin mint secret.
+// Returns true if `supplied` matches ADMIN_MINT_SECRET env var.
+function checkAdminSecret(supplied) {
+  const adminSecret = process.env.ADMIN_MINT_SECRET || '';
+  if (!adminSecret || !supplied) return false;
+  const h1 = crypto.createHash('sha256').update(String(adminSecret)).digest();
+  const h2 = crypto.createHash('sha256').update(String(supplied)).digest();
+  return crypto.timingSafeEqual(h1, h2);
+}
+
 // POST /api/mint-item
 // Authenticated: wallet sourced from verified session (req.player.wallet).
 // Admin minting: always requires ADMIN_MINT_SECRET header in all environments.
@@ -50,14 +60,8 @@ router.post('/', async (req, res) => {
     // Unauthenticated callers must supply the admin secret.
     if (!req.player || !req.player.wallet) {
       // Allow admin-authenticated minting without a player session
-      const adminSecret = process.env.ADMIN_MINT_SECRET || '';
       const supplied = req.headers['x-admin-mint'] || (req.body && req.body.adminSecret);
-      const secretOk = adminSecret && supplied && (() => {
-        const h1 = crypto.createHash('sha256').update(String(adminSecret)).digest();
-        const h2 = crypto.createHash('sha256').update(String(supplied)).digest();
-        return crypto.timingSafeEqual(h1, h2);
-      })();
-      if (!secretOk) {
+      if (!checkAdminSecret(supplied)) {
         return res.status(401).json({ ok: false, error: 'authentication_required' });
       }
     }
@@ -83,18 +87,8 @@ router.post('/', async (req, res) => {
 
     if (NODE_ENV === 'production') {
       // Require admin secret for production mints. This prevents public abuse.
-      const adminSecret = process.env.ADMIN_MINT_SECRET || '';
       const supplied = req.headers['x-admin-mint'] || req.body.adminSecret;
-      // BUG FIX: was using `supplied !== adminSecret` which is vulnerable to timing
-      // attacks (an attacker can measure response time to enumerate the secret byte
-      // by byte). Use crypto.timingSafeEqual on SHA-256 digests for constant-time
-      // comparison, mirroring the pattern used in quests-store.js.
-      const secretOk = adminSecret && supplied && (() => {
-        const h1 = crypto.createHash('sha256').update(String(adminSecret)).digest();
-        const h2 = crypto.createHash('sha256').update(String(supplied)).digest();
-        return crypto.timingSafeEqual(h1, h2);
-      })();
-      if (!secretOk) {
+      if (!checkAdminSecret(supplied)) {
         console.warn('[mint-item] blocked production mint attempt - missing or invalid admin secret');
         return res.status(403).json({ ok: false, error: 'forbidden' });
       }
