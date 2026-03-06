@@ -58,7 +58,9 @@ Game.ui.renderInventory = function () {
   };
 
   items.forEach(item => {
-    if (groups[item.type]) groups[item.type].push(item);
+    // Normalise legacy "questItem" type to "quest" so items land in the correct group
+    const type = item.type === "questItem" ? "quest" : item.type;
+    if (groups[type]) groups[type].push(item);
   });
 
   // ── Build tab buttons ──────────────────────────────────────────
@@ -71,8 +73,9 @@ Game.ui.renderInventory = function () {
   equipTab.onclick = () => { setActiveTab(equipTab); renderEquipScreen(); };
   tabs.appendChild(equipTab);
 
-  // Item category tabs
+  // Item category tabs — only show tabs that have at least one item
   Object.keys(groups).forEach(type => {
+    if (groups[type].length === 0) return;
     const btn = document.createElement("div");
     btn.className = "inv-tab";
     btn.innerText = type.toUpperCase();
