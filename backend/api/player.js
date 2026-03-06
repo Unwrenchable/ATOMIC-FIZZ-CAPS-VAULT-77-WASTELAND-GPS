@@ -51,7 +51,7 @@ async function saveProfile(wallet, profile) {
 // ------------------------------------------------------------
 router.post("/create", playerLimiter, async (req, res) => {
   try {
-    const { wallet, name } = req.body;
+    const { wallet, name, special: incomingSpecial, background, traits } = req.body;
 
     if (!wallet || typeof wallet !== "string" || wallet.length > 128) {
       return res.status(400).json({ ok: false, error: "Invalid wallet" });
@@ -62,9 +62,71 @@ router.post("/create", playerLimiter, async (req, res) => {
       return res.json({ ok: true, profile: existing });
     }
 
+    // ----------------------------------------------------------
+    // Validate and sanitise SPECIAL allocation
+    // Rules: each stat must be 1–10, total points ≤ 28 (7 base + 21 spend)
+    // ----------------------------------------------------------
+    const SPECIAL_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
+    // Max total = 7 minimum (1 each) + 21 allocation points.
+    // Individual stat cap of 10 is enforced per-stat in the loop below (line 83-84)
+    // before the sum check, so {S:1,...,L:22} is rejected by the per-stat guard first.
+    const MAX_SPECIAL_TOTAL = 28;
+
+    let chosenSpecial = { ...DEFAULT_SPECIAL };
+
+    if (incomingSpecial && typeof incomingSpecial === "object") {
+      let valid = true;
+      let total = 0;
+      const candidate = {};
+
+      for (const stat of SPECIAL_KEYS) {
+        const raw = incomingSpecial[stat];
+        if (raw === undefined || raw === null) {
+          candidate[stat] = 1; // default min if stat absent
+        } else if (typeof raw !== "number" || !Number.isFinite(raw) ||
+                   raw < 1 || raw > 10 || Math.floor(raw) !== raw) {
+          valid = false;
+          break;
+        } else {
+          candidate[stat] = Math.floor(raw);
+        }
+        total += candidate[stat];
+      }
+
+      if (valid && total <= MAX_SPECIAL_TOTAL) {
+        chosenSpecial = candidate;
+      } else {
+        console.log("[player] create: incoming SPECIAL invalid (total=%d, valid=%s), using default", total, valid);
+        // Silently fall back — don't error the player out of creation
+      }
+    }
+
+    // ----------------------------------------------------------
+    // Validate background (string from known list, or null)
+    // We accept any short alphanumeric+underscore string — full
+    // validation of IDs against the data file is not done server-
+    // side here (it lives in public/data) but we sanitise strictly.
+    // ----------------------------------------------------------
+    let chosenBackground = null;
+    if (typeof background === "string" && /^[a-z0-9_]{1,64}$/.test(background)) {
+      chosenBackground = background;
+    }
+
+    // ----------------------------------------------------------
+    // Validate traits (array of max 2 short alphanumeric strings)
+    // ----------------------------------------------------------
+    let chosenTraits = [];
+    if (Array.isArray(traits)) {
+      chosenTraits = traits
+        .filter(t => typeof t === "string" && /^[a-z0-9_]{1,64}$/.test(t))
+        .slice(0, 2);
+    }
+
     const profile = {
       name: typeof name === "string" && name.trim().length > 0 ? name.trim() : "WANDERER",
-      special: { ...DEFAULT_SPECIAL },
+      special: chosenSpecial,
+      background: chosenBackground,
+      traits: chosenTraits,
       level: 1,
       xp: 0,
       caps: 0,
