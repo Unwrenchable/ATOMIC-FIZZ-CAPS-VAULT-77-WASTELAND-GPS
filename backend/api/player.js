@@ -49,14 +49,12 @@ async function saveProfile(wallet, profile) {
 // ------------------------------------------------------------
 // POST /api/player/create
 // ------------------------------------------------------------
-router.post("/create", playerLimiter, async (req, res) => {
+router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
   try {
-    const { wallet, name, special: incomingSpecial, background, traits } = req.body;
-
-    if (!wallet || typeof wallet !== "string" || wallet.length > 128) {
-      return res.status(400).json({ ok: false, error: "Invalid wallet" });
-    }
-
+    // BUG FIX: wallet sourced from verified session, not req.body, to prevent
+    // an attacker from pre-creating a profile for a wallet they don't own.
+    const wallet = req.player.wallet;
+    const { name, special: incomingSpecial, background, traits } = req.body;
     const existing = await loadProfile(wallet);
     if (existing) {
       return res.json({ ok: true, profile: existing });
