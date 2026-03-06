@@ -41,18 +41,41 @@ async function tryAttachSession(req, res, next) {
 
 router.use(tryAttachSession);
 
+// Timing-safe comparison of the admin mint secret.
+// Returns true if `supplied` matches ADMIN_MINT_SECRET env var.
+function checkAdminSecret(supplied) {
+  const adminSecret = process.env.ADMIN_MINT_SECRET || '';
+  if (!adminSecret || !supplied) return false;
+  const h1 = crypto.createHash('sha256').update(String(adminSecret)).digest();
+  const h2 = crypto.createHash('sha256').update(String(supplied)).digest();
+  return crypto.timingSafeEqual(h1, h2);
+}
+
 // POST /api/mint-item
 // Authenticated: wallet sourced from verified session (req.player.wallet).
-// Unauthenticated in dev: falls back to body/query wallet for tooling convenience,
-//   but production always requires admin secret AND authenticated session wallet.
+// Admin minting: always requires ADMIN_MINT_SECRET header in all environments.
 router.post('/', async (req, res) => {
   try {
-    // Prefer authenticated session wallet to prevent IDOR (attacker supplying arbitrary wallet)
+    // Always source wallet from the verified session to prevent IDOR.
+    // Unauthenticated callers must supply the admin secret.
+    if (!req.player || !req.player.wallet) {
+      // Allow admin-authenticated minting without a player session
+      const supplied = req.headers['x-admin-mint'] || (req.body && req.body.adminSecret);
+      if (!checkAdminSecret(supplied)) {
+        return res.status(401).json({ ok: false, error: 'authentication_required' });
+      }
+    }
+
+    // Prefer authenticated session wallet to prevent IDOR
     let wallet;
     if (req.player && req.player.wallet) {
       wallet = req.player.wallet;
     } else {
-      wallet = (req.body && req.body.wallet) || req.query.wallet || 'dev_wallet';
+      // Admin path: wallet from body (validated by admin secret above)
+      wallet = (req.body && req.body.wallet) || req.query.wallet;
+      if (!wallet) {
+        return res.status(400).json({ ok: false, error: 'wallet_required' });
+      }
     }
 
     // Simple validation to avoid abuse
@@ -63,19 +86,9 @@ router.post('/', async (req, res) => {
     const NODE_ENV = process.env.NODE_ENV || 'development';
 
     if (NODE_ENV === 'production') {
-      // Require admin secret for production. This prevents public abuse.
-      const adminSecret = process.env.ADMIN_MINT_SECRET || '';
+      // Require admin secret for production mints. This prevents public abuse.
       const supplied = req.headers['x-admin-mint'] || req.body.adminSecret;
-      // BUG FIX: was using `supplied !== adminSecret` which is vulnerable to timing
-      // attacks (an attacker can measure response time to enumerate the secret byte
-      // by byte). Use crypto.timingSafeEqual on SHA-256 digests for constant-time
-      // comparison, mirroring the pattern used in quests-store.js.
-      const secretOk = adminSecret && supplied && (() => {
-        const h1 = crypto.createHash('sha256').update(String(adminSecret)).digest();
-        const h2 = crypto.createHash('sha256').update(String(supplied)).digest();
-        return crypto.timingSafeEqual(h1, h2);
-      })();
-      if (!secretOk) {
+      if (!checkAdminSecret(supplied)) {
         console.warn('[mint-item] blocked production mint attempt - missing or invalid admin secret');
         return res.status(403).json({ ok: false, error: 'forbidden' });
       }

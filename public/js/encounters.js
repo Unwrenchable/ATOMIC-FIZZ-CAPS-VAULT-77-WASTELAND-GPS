@@ -33,6 +33,14 @@
     },
   ];
 
+  // Secure RNG: never use Math.random() for game-economic outcomes.
+  function secureRandom() {
+    const buf = new Uint32Array(1);
+    crypto.getRandomValues(buf);
+    // Use 2^32 (not 2^32-1) so result is in [0, 1) — strictly less than 1.
+    return buf[0] / 0x100000000;
+  }
+
   function biomeFromRegion(regionId) {
     switch (regionId) {
       case "rad_zone":
@@ -50,7 +58,7 @@
 
     const biome = biomeFromRegion(region.id);
     const lvl = gs.player.level;
-    const roll = Math.random();
+    const roll = secureRandom();
 
     const candidates = ENCOUNTERS.filter(
       (e) =>

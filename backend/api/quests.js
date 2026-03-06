@@ -104,92 +104,106 @@ router.post("/complete", authMiddleware, async (req, res) => {
       return res.status(400).json({ ok: false, error: "Invalid quest ID" });
     }
 
-    // Get player profile
-    const playerKey = key(`player:${wallet}`);
-    let playerData = await redis.hget(playerKey, "profile");
-    
-    if (!playerData) {
-      return res.status(404).json({ ok: false, error: "Player not found" });
+    // Distributed lock: prevent concurrent completion of the same quest
+    // by the same wallet (race-condition / double-reward attack).
+    const lockKey = `quest:complete:lock:${wallet}:${questId}`;
+    const lockResult = await redis.set(lockKey, "1", { NX: true, EX: 15 });
+    if (!lockResult) {
+      return res.status(409).json({ ok: false, error: "Quest completion already in progress" });
     }
 
-    const player = JSON.parse(playerData);
-    // BUG FIX: same quests normalisation as /accept — player.quests may be {} (not null)
-    // so the old `if (!player.quests)` guard was insufficient.
-    if (!player.quests || typeof player.quests !== 'object') {
-      player.quests = {};
-    }
-    if (!Array.isArray(player.quests.active)) player.quests.active = [];
-    if (!Array.isArray(player.quests.completed)) player.quests.completed = [];
+    try {
+      // Get player profile
+      const playerKey = key(`player:${wallet}`);
+      let playerData = await redis.hget(playerKey, "profile");
+      
+      if (!playerData) {
+        return res.status(404).json({ ok: false, error: "Player not found" });
+      }
 
-    // Check if quest is active
-    if (!player.quests.active.includes(questId)) {
-      return res.status(400).json({ ok: false, error: "Quest not active" });
-    }
+      const player = JSON.parse(playerData);
+      // BUG FIX: same quests normalisation as /accept — player.quests may be {} (not null)
+      // so the old `if (!player.quests)` guard was insufficient.
+      if (!player.quests || typeof player.quests !== 'object') {
+        player.quests = {};
+      }
+      if (!Array.isArray(player.quests.active)) player.quests.active = [];
+      if (!Array.isArray(player.quests.completed)) player.quests.completed = [];
 
-    // Move from active to completed
-    player.quests.active = player.quests.active.filter(q => q !== questId);
-    player.quests.completed.push(questId);
-    
-    player.quests.completedAt = player.quests.completedAt || {};
-    player.quests.completedAt[questId] = Date.now();
+      // Check if quest is active
+      if (!player.quests.active.includes(questId)) {
+        return res.status(400).json({ ok: false, error: "Quest not active" });
+      }
 
-    // Award rewards if provided — with server-side caps to prevent exploit
-    if (rewards && typeof rewards === "object") {
-      if (typeof rewards.xp === "number" && rewards.xp > 0) {
-        // BUG FIX: cap XP to server-enforced maximum per quest completion
-        const xpToAward = Math.min(Math.max(0, Math.floor(rewards.xp)), MAX_QUEST_XP);
-        player.xp = (player.xp || 0) + xpToAward;
-        // Check for level up
-        const xpPerLevel = 100;
-        while (player.xp >= player.level * xpPerLevel) {
-          player.xp -= player.level * xpPerLevel;
-          player.level += 1;
+      // Move from active to completed
+      player.quests.active = player.quests.active.filter(q => q !== questId);
+      player.quests.completed.push(questId);
+      
+      player.quests.completedAt = player.quests.completedAt || {};
+      player.quests.completedAt[questId] = Date.now();
+
+      // Award rewards if provided — with server-side caps to prevent exploit
+      if (rewards && typeof rewards === "object") {
+        if (typeof rewards.xp === "number" && rewards.xp > 0) {
+          // BUG FIX: cap XP to server-enforced maximum per quest completion
+          const xpToAward = Math.min(Math.max(0, Math.floor(rewards.xp)), MAX_QUEST_XP);
+          player.xp = (player.xp || 0) + xpToAward;
+          // Check for level up
+          const xpPerLevel = 100;
+          while (player.xp >= player.level * xpPerLevel) {
+            player.xp -= player.level * xpPerLevel;
+            player.level += 1;
+          }
+        }
+        if (typeof rewards.caps === "number" && rewards.caps > 0) {
+          // BUG FIX: cap caps to server-enforced maximum per quest completion
+          const capsToAward = Math.min(Math.max(0, Math.floor(rewards.caps)), MAX_QUEST_CAPS);
+          player.caps = (player.caps || 0) + capsToAward;
+        }
+        if (Array.isArray(rewards.items)) {
+          if (!player.inventory) player.inventory = [];
+          // BUG FIX: limit number of items and validate each item ID
+          const validItems = rewards.items
+            .filter(id => typeof id === "string" && id.length > 0 && id.length <= 64 && /^[a-zA-Z0-9_-]+$/.test(id))
+            .slice(0, MAX_QUEST_ITEMS);
+          validItems.forEach(itemId => {
+            const existing = player.inventory.find(i => i.id === itemId);
+            if (existing) {
+              existing.quantity = (existing.quantity || 1) + 1;
+            } else {
+              player.inventory.push({
+                id: itemId,
+                name: itemId,
+                quantity: 1,
+                obtainedAt: Date.now(),
+                source: "quest_reward"
+              });
+            }
+          });
         }
       }
-      if (typeof rewards.caps === "number" && rewards.caps > 0) {
-        // BUG FIX: cap caps to server-enforced maximum per quest completion
-        const capsToAward = Math.min(Math.max(0, Math.floor(rewards.caps)), MAX_QUEST_CAPS);
-        player.caps = (player.caps || 0) + capsToAward;
-      }
-      if (Array.isArray(rewards.items)) {
-        if (!player.inventory) player.inventory = [];
-        // BUG FIX: limit number of items and validate each item ID
-        const validItems = rewards.items
-          .filter(id => typeof id === "string" && id.length > 0 && id.length <= 64 && /^[a-zA-Z0-9_-]+$/.test(id))
-          .slice(0, MAX_QUEST_ITEMS);
-        validItems.forEach(itemId => {
-          const existing = player.inventory.find(i => i.id === itemId);
-          if (existing) {
-            existing.quantity = (existing.quantity || 1) + 1;
-          } else {
-            player.inventory.push({
-              id: itemId,
-              name: itemId,
-              quantity: 1,
-              obtainedAt: Date.now(),
-              source: "quest_reward"
-            });
-          }
-        });
-      }
+
+      // Save player profile
+      await redis.hset(playerKey, "profile", JSON.stringify(player));
+
+      console.log(`[quests] ${wallet.slice(0, 8)} completed quest: ${questId}`);
+
+      return res.json({
+        ok: true,
+        questId,
+        active: player.quests.active,
+        completed: player.quests.completed,
+        player: {
+          xp: player.xp,
+          caps: player.caps,
+          level: player.level
+        }
+      });
+
+    } finally {
+      // Release the lock regardless of success or failure
+      await redis.del(lockKey).catch(() => {});
     }
-
-    // Save player profile
-    await redis.hset(playerKey, "profile", JSON.stringify(player));
-
-    console.log(`[quests] ${wallet.slice(0, 8)} completed quest: ${questId}`);
-
-    return res.json({
-      ok: true,
-      questId,
-      active: player.quests.active,
-      completed: player.quests.completed,
-      player: {
-        xp: player.xp,
-        caps: player.caps,
-        level: player.level
-      }
-    });
 
   } catch (err) {
     console.error("[api/quests/complete] error:", err);
