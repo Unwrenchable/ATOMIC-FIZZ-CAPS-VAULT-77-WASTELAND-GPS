@@ -67,7 +67,10 @@ router.post("/create", playerLimiter, async (req, res) => {
     // Rules: each stat must be 1–10, total points ≤ 28 (7 base + 21 spend)
     // ----------------------------------------------------------
     const SPECIAL_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
-    const MAX_SPECIAL_TOTAL = 28; // 7 stats × min 1 each = 7, + 21 spend points
+    // Max total = 7 minimum (1 each) + 21 allocation points.
+    // Individual stat cap of 10 is enforced per-stat in the loop below (line 83-84)
+    // before the sum check, so {S:1,...,L:22} is rejected by the per-stat guard first.
+    const MAX_SPECIAL_TOTAL = 28;
 
     let chosenSpecial = { ...DEFAULT_SPECIAL };
 

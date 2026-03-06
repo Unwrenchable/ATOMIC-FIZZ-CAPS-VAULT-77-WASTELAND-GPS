@@ -693,6 +693,11 @@
    * @returns {Object} Derived stats
    */
   function getDerivedStats() {
+    // Fallback uses 5-per-stat (the pre-character-creator default) for returning
+    // players who loaded before the SPECIAL allocator was introduced. New players
+    // going through character creation will have appearance.special written with
+    // their chosen allocation (starting from 1-per-stat) and that path is taken
+    // in the try block below.
     let sp = _state ? { ..._state.special } : { S:5,P:5,E:5,C:5,I:5,A:5,L:5 };
 
     // Try to load background modifiers from saved appearance
