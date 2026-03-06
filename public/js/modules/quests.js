@@ -1017,7 +1017,7 @@
           // Create item object with full metadata if available
           const itemObj = itemDef 
             ? { ...itemDef, quantity: 1 } 
-            : { id: itemId, name: itemId, type: "questItem", quantity: 1 };
+            : { id: itemId, name: itemId, type: "quest", quantity: 1 };
           
           if (!itemDef) {
             console.warn(`[quests] Item '${itemId}' not found in items database, using fallback`);
