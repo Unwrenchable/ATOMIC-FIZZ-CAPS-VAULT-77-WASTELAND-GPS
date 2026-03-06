@@ -172,14 +172,13 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     );
 
     if (!location) {
-      console.warn(`[location-claim] Location not found: ${locId}`);
-      // Still allow claim but with minimal rewards
+      return res.status(404).json({ ok: false, error: "Location not found" });
     }
 
     // -----------------------------
     // Distance check
     // -----------------------------
-    if (location && typeof location.lat === "number" && typeof location.lng === "number") {
+    if (typeof location.lat === "number" && typeof location.lng === "number") {
       const distance = getDistance(playerLat, playerLng, location.lat, location.lng);
       const maxDistance = location.claimRadius || 100; // Default 100m radius
 
