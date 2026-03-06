@@ -8,6 +8,20 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // BUG FIX (HIGH): escapeHtml helper — NPC dialogue data (response.text, response.label,
+  // response.tone, check.stat) is inserted into innerHTML without sanitization.
+  // Dialogue JSON could contain HTML if tampered with (supply-chain attack, admin edit),
+  // allowing stored XSS to execute in any player's browser.
+  function escapeHtml(str) {
+    if (str == null) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   // Dialogue system module
   const FO4Dialogue = {
     isOpen: false,
@@ -356,20 +370,25 @@
         btn.className = 'fo4-response-option';
         
         // Build response HTML with speech check if present
+        // BUG FIX: escape all user-visible strings before inserting into innerHTML
         let innerHTML = `<span class="fo4-response-key">${index + 1}</span>`;
         
         // Add speech check badge
         if (response.speechCheck || response.skillCheck) {
           const check = response.speechCheck || response.skillCheck;
-          const difficulty = check.difficulty || 'medium';
-          const stat = check.stat || 'charisma';
-          innerHTML += `<span class="fo4-speech-badge ${difficulty}">[${stat.toUpperCase()}]</span>`;
+          // BUG FIX: validate difficulty against an allowlist before use as a CSS class name.
+          // escapeHtml() alone doesn't prevent class-name injection breaking CSS selectors.
+          const VALID_DIFFICULTIES = ['easy', 'medium', 'hard', 'very_hard', 'impossible'];
+          const rawDifficulty = (check.difficulty || 'medium').toLowerCase();
+          const difficulty = VALID_DIFFICULTIES.includes(rawDifficulty) ? rawDifficulty : 'medium';
+          const stat = escapeHtml((check.stat || 'charisma').toUpperCase());
+          innerHTML += `<span class="fo4-speech-badge ${difficulty}">[${stat}]</span>`;
         }
         
-        innerHTML += `<span class="fo4-response-text">${response.text || response.label || 'Continue'}</span>`;
+        innerHTML += `<span class="fo4-response-text">${escapeHtml(response.text || response.label || 'Continue')}</span>`;
         
         if (response.tone) {
-          innerHTML += `<span class="fo4-response-tone">[${response.tone}]</span>`;
+          innerHTML += `<span class="fo4-response-tone">[${escapeHtml(response.tone)}]</span>`;
         }
         
         btn.innerHTML = innerHTML;
@@ -415,11 +434,15 @@
         // Add speech check if present
         if (response.speechCheck || response.skillCheck) {
           const check = response.speechCheck || response.skillCheck;
-          const difficulty = check.difficulty || 'medium';
+          // BUG FIX: validate difficulty against allowlist before use as a CSS class name
+          const VALID_DIFFICULTIES = ['easy', 'medium', 'hard', 'very_hard', 'impossible'];
+          const rawDiff = (check.difficulty || 'medium').toLowerCase();
+          const difficulty = VALID_DIFFICULTIES.includes(rawDiff) ? rawDiff : 'medium';
           innerHTML += `<span class="fo4-speech-badge ${difficulty}" style="font-size: 11px; margin: 2px 0;">[CHECK]</span>`;
         }
         
-        innerHTML += `<span>${response.text || 'Continue'}</span>`;
+        // BUG FIX: escape response text before inserting into innerHTML
+        innerHTML += `<span>${escapeHtml(response.text || 'Continue')}</span>`;
         
         btn.innerHTML = innerHTML;
         btn.addEventListener('click', () => this._selectResponse(response));

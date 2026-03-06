@@ -62,7 +62,7 @@
     { "id": 3, "objective": "investigate_sabotage", "desc": "Someone wants war." },
     { "id": 4, "objective": "final_decision", "desc": "Shape the Commonwealth's future." },
     { "id": 5, "objective": "complete", "desc": "Democracy wins... or loses." }
-  },
+  ],
 
   "faction_positions": {
     "ncr": {

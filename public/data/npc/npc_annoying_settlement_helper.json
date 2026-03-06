@@ -146,7 +146,7 @@
         "Convince him he's earned a 'Presidential Medal of Settlement Services'"
       ],
       "outcome": "Garrison retires to a remote settlement, still sends mail (can be ignored)",
-      "karma": +50,
+      "karma": 50,
       "reward": "Peace and quiet"
     },
     

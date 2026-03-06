@@ -179,7 +179,9 @@ Game.ui.renderInventory = function () {
                               : (item.description ? item.description.slice(0, 40) : "");
         isEquipped = !!(equipped.aid && equipped.aid.id === item.id);
       } else {
-        const qty = item.quantity || item.amount || 1;
+        // BUG FIX: use nullish coalescing so that a quantity of 0 is preserved
+        // (not silently promoted to 1 by the || operator treating 0 as falsy).
+        const qty = item.quantity != null ? item.quantity : (item.amount != null ? item.amount : 1);
         statsText = qty > 1 ? "QTY: " + qty
                             : (item.description ? item.description.slice(0, 40) : "");
       }
