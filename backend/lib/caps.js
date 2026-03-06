@@ -174,8 +174,16 @@ async function transferCaps(fromWallet, toWallet, amount) {
     throw new Error("Invalid transfer amount");
   }
 
+  // Distributed lock: prevent TOCTOU race condition where two concurrent
+  // transferCaps calls both pass the balance check before either deducts.
+  const lockKey = `caps:transfer:lock:${fromWallet}`;
+  const lockResult = await redis.set(lockKey, "1", { NX: true, EX: 10 });
+  if (!lockResult) {
+    throw new Error("Transfer already in progress — please retry");
+  }
+
   try {
-    // Get sender balance
+    // Get sender balance (re-read inside the lock)
     const fromBalance = await getCapsBalance(fromWallet);
     if (fromBalance < amount) {
       throw new Error("Insufficient caps");
@@ -216,9 +224,9 @@ async function transferCaps(fromWallet, toWallet, amount) {
       fromBalance: fromProfile.caps,
       toBalance: toProfile.caps
     };
-  } catch (err) {
-    console.error("[caps] transferCaps error:", err);
-    throw err;
+  } finally {
+    // Always release the lock, even on error
+    await redis.del(lockKey).catch(() => {});
   }
 }
 
