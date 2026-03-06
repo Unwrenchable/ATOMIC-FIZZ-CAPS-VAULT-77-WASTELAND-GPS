@@ -39,7 +39,12 @@ Game.equipItem = function (itemOrId) {
     return Game.modules.PlayerState.equipItem(item);
   }
 
-  // Fallback: direct equip
+  // Fallback: direct equip — quest items cannot be equipped
+  if (item.type === "quest" || item.type === "questItem") {
+    console.warn("[equipItem] Cannot equip quest item:", item.name);
+    return false;
+  }
+
   // Ensure equipped object exists
   if (!Game.player.equipped) {
     Game.player.equipped = {};
