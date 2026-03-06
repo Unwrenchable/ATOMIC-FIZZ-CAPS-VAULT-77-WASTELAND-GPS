@@ -12,8 +12,58 @@
   // Appearance options data (loaded from JSON)
   let appearanceOptions = null;
 
+  // Backgrounds data (loaded from JSON)
+  let backgroundsData = null;
+
+  // Perks/traits data (loaded from JSON)
+  let perksData = null;
+
   // Current character appearance state
   let currentAppearance = null;
+
+  // ============================================================
+  // SECURITY: HTML escape helper — MUST be used before any
+  // user-supplied text is inserted via innerHTML
+  // ============================================================
+  function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /**
+   * Format a numeric perk/trait effect value for display.
+   * Fractional values (|val| < 1) are converted to percentages.
+   * Whole values are rendered as-is (e.g. 4, -15).
+   * @param {number} val
+   * @returns {string}
+   */
+  function formatEffectValue(val) {
+    if (typeof val !== 'number') return String(val);
+    if (Math.abs(val) > 0 && Math.abs(val) < 1) {
+      return (val * 100).toFixed(0) + '%';
+    }
+    return String(val);
+  }
+
+  // SPECIAL stat metadata
+  const SPECIAL_STATS = [
+    { key: 'S', label: 'Strength',     abbr: 'STR', desc: 'Melee damage, carry weight' },
+    { key: 'P', label: 'Perception',   abbr: 'PER', desc: 'Attack accuracy, environmental awareness' },
+    { key: 'E', label: 'Endurance',    abbr: 'END', desc: 'Max HP, radiation resistance' },
+    { key: 'C', label: 'Charisma',     abbr: 'CHR', desc: 'Prices, companion morale, speech checks' },
+    { key: 'I', label: 'Intelligence', abbr: 'INT', desc: 'Crafting, hacking, XP gain' },
+    { key: 'A', label: 'Agility',      abbr: 'AGI', desc: 'Action points, sneaking, reload speed' },
+    { key: 'L', label: 'Luck',         abbr: 'LCK', desc: 'Critical hit chance, random events' }
+  ];
+
+  const SPECIAL_TOTAL_POINTS = 21;
+  const SPECIAL_MIN = 1;
+  const SPECIAL_MAX = 10;
 
   // Character Creator Module
   const CharacterCreator = {
@@ -26,19 +76,33 @@
     // ============================================================
     async init() {
       try {
-        // Load appearance options
-        const response = await fetch('/data/character_creator/appearance_options.json');
-        appearanceOptions = await response.json();
-        
+        // Load all data in parallel
+        const [appearanceRes, backgroundsRes, perksRes] = await Promise.all([
+          fetch('/data/character_creator/appearance_options.json'),
+          fetch('/data/character_creator/backgrounds.json'),
+          fetch('/data/perks.json')
+        ]);
+
+        appearanceOptions = await appearanceRes.json();
+        backgroundsData   = await backgroundsRes.json();
+        perksData         = await perksRes.json();
+
         // Set default appearance
         currentAppearance = { ...appearanceOptions.defaultAppearance };
         currentAppearance.name = "Wanderer";
-        
-        console.log("[CharacterCreator] Initialized with", Object.keys(appearanceOptions).length, "option categories");
-        
+
+        // Initialise SPECIAL allocation (each stat starts at 1, 21 points to spend)
+        currentAppearance.special       = { S:1, P:1, E:1, C:1, I:1, A:1, L:1 };
+        currentAppearance.specialPoints = SPECIAL_TOTAL_POINTS;
+        currentAppearance.background    = null;
+        currentAppearance.selectedTraits = [];
+
+        console.log("[CharacterCreator] Initialized with", Object.keys(appearanceOptions).length, "option categories,",
+          backgroundsData.length, "backgrounds,", perksData.traits.length, "traits");
+
         // Create the overlay element (hidden by default)
         this._createOverlay();
-        
+
         return true;
       } catch (err) {
         console.error("[CharacterCreator] Failed to initialize:", err);
@@ -58,6 +122,13 @@
 
       if (existingAppearance) {
         currentAppearance = { ...existingAppearance };
+        // Ensure SPECIAL fields are present for legacy saved appearances
+        if (!currentAppearance.special) {
+          currentAppearance.special       = { S:1, P:1, E:1, C:1, I:1, A:1, L:1 };
+          currentAppearance.specialPoints = SPECIAL_TOTAL_POINTS;
+        }
+        if (!currentAppearance.background)      currentAppearance.background = null;
+        if (!currentAppearance.selectedTraits)  currentAppearance.selectedTraits = [];
       }
 
       this.onSaveCallback = onSave;
@@ -914,6 +985,9 @@
                 <button class="cc-tab" data-category="eyes">EYES</button>
                 <button class="cc-tab" data-category="details">DETAILS</button>
                 <button class="cc-tab" data-category="extras">EXTRAS</button>
+                <button class="cc-tab" data-category="special">S.P.E.C.I.A.L.</button>
+                <button class="cc-tab" data-category="background">BACKGROUND</button>
+                <button class="cc-tab" data-category="traits">TRAITS</button>
               </div>
 
               <!-- Options Content -->
@@ -1042,6 +1116,24 @@
                     <div class="cc-option-grid" id="ccVoiceGrid"></div>
                   </div>
                 </div>
+
+                <!-- S.P.E.C.I.A.L. Section -->
+                <div class="cc-category-section" data-category="special">
+                  <div class="cc-section-title">S.P.E.C.I.A.L. ATTRIBUTES</div>
+                  <div id="ccSpecialContent" class="cc-special-content"></div>
+                </div>
+
+                <!-- Background Section -->
+                <div class="cc-category-section" data-category="background">
+                  <div class="cc-section-title">ORIGIN BACKGROUND</div>
+                  <div id="ccBackgroundContent" class="cc-background-content"></div>
+                </div>
+
+                <!-- Traits Section -->
+                <div class="cc-category-section" data-category="traits">
+                  <div class="cc-section-title">CHARACTER TRAITS <span style="font-size:0.75em;opacity:0.7;">(SELECT UP TO 2)</span></div>
+                  <div id="ccTraitsContent" class="cc-traits-content"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -1096,9 +1188,14 @@
           this.onSaveCallback(currentAppearance);
         }
         
-        // Dispatch event
+        // Dispatch event with full character data including SPECIAL, background, traits
         window.dispatchEvent(new CustomEvent('characterCreated', { 
-          detail: { appearance: currentAppearance }
+          detail: {
+            appearance:     currentAppearance,
+            special:        { ...currentAppearance.special },
+            background:     currentAppearance.background,
+            selectedTraits: [...(currentAppearance.selectedTraits || [])]
+          }
         }));
         
         this.close();
@@ -1123,6 +1220,11 @@
           document.querySelectorAll('.cc-category-section').forEach(section => {
             section.classList.toggle('active', section.dataset.category === category);
           });
+
+          // Render dynamic tabs on first activation
+          if (category === 'special')    this._renderSpecialTab();
+          if (category === 'background') this._renderBackgroundTab();
+          if (category === 'traits')     this._renderTraitsTab();
         }
       });
     },
@@ -1265,6 +1367,245 @@
           swatch.classList.add('selected');
           
           this._updatePreview();
+        });
+      });
+    },
+
+    // ============================================================
+    // RENDER S.P.E.C.I.A.L. TAB
+    // ============================================================
+    _renderSpecialTab() {
+      const container = document.getElementById('ccSpecialContent');
+      if (!container) return;
+
+      const sp   = currentAppearance.special;
+      const pts  = currentAppearance.specialPoints;
+      const used = SPECIAL_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
+      const remaining = SPECIAL_TOTAL_POINTS - used;
+      currentAppearance.specialPoints = remaining;
+
+      // Build derived stats (using base SPECIAL only — background applied on save)
+      const derived = this._calcDerived(sp);
+
+      let html = `
+        <div class="cc-special-points-banner">
+          <span class="cc-sp-label">POINTS REMAINING:</span>
+          <span class="cc-sp-value" id="ccSpPoints">${remaining}</span>
+        </div>
+        <div class="cc-special-rows" id="ccSpecialRows">
+      `;
+
+      SPECIAL_STATS.forEach(stat => {
+        const val   = sp[stat.key];
+        const dots  = Array.from({length: 10}, (_, i) => `<span class="cc-sp-dot${i < val ? ' filled' : ''}"></span>`).join('');
+        html += `
+          <div class="cc-special-row" data-stat="${escapeHtml(stat.key)}">
+            <div class="cc-sp-meta">
+              <span class="cc-sp-abbr">${escapeHtml(stat.abbr)}</span>
+              <span class="cc-sp-name">${escapeHtml(stat.label)}</span>
+              <span class="cc-sp-desc">${escapeHtml(stat.desc)}</span>
+            </div>
+            <div class="cc-sp-controls">
+              <button class="cc-sp-btn cc-sp-minus" data-stat="${escapeHtml(stat.key)}" ${val <= SPECIAL_MIN ? 'disabled' : ''}>−</button>
+              <span class="cc-sp-num" id="ccSp${escapeHtml(stat.key)}">${val}</span>
+              <button class="cc-sp-btn cc-sp-plus" data-stat="${escapeHtml(stat.key)}" ${val >= SPECIAL_MAX || remaining <= 0 ? 'disabled' : ''}>+</button>
+            </div>
+            <div class="cc-sp-dots" id="ccSpDots${escapeHtml(stat.key)}">${dots}</div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+
+      // Derived stats preview
+      html += `
+        <div class="cc-derived-stats">
+          <div class="cc-derived-title">── DERIVED STATISTICS ──</div>
+          <div class="cc-derived-grid" id="ccDerivedGrid">
+            <div class="cc-derived-item"><span class="cc-derived-label">MAX HP</span><span class="cc-derived-val" id="ccDerMaxHP">${derived.maxHP}</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">ACTION POINTS</span><span class="cc-derived-val" id="ccDerAP">${derived.actionPoints}</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">CARRY WEIGHT</span><span class="cc-derived-val" id="ccDerCW">${derived.carryWeight}</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">RAD RESISTANCE</span><span class="cc-derived-val" id="ccDerRR">${derived.radResistance}%</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">CRIT CHANCE</span><span class="cc-derived-val" id="ccDerCC">${derived.critChance}%</span></div>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+
+      // Bind +/- buttons
+      container.querySelectorAll('.cc-sp-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const statKey = btn.dataset.stat;
+          const isDelta = btn.classList.contains('cc-sp-plus') ? 1 : -1;
+          this._adjustSpecial(statKey, isDelta);
+        });
+      });
+    },
+
+    // Adjust a single SPECIAL stat by delta (+1 or -1)
+    _adjustSpecial(statKey, delta) {
+      const sp  = currentAppearance.special;
+      const cur = sp[statKey];
+      const used = SPECIAL_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
+      const remaining = SPECIAL_TOTAL_POINTS - used;
+
+      const newVal = cur + delta;
+      if (newVal < SPECIAL_MIN || newVal > SPECIAL_MAX) return;
+      if (delta > 0 && remaining <= 0) return;
+
+      sp[statKey] = newVal;
+      const newUsed = SPECIAL_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
+      const newRemaining = SPECIAL_TOTAL_POINTS - newUsed;
+      currentAppearance.specialPoints = newRemaining;
+
+      // Partial re-render (update only changed elements, not full re-render)
+      const numEl  = document.getElementById(`ccSp${statKey}`);
+      const dotsEl = document.getElementById(`ccSpDots${statKey}`);
+      const ptsBanner = document.getElementById('ccSpPoints');
+      if (numEl)  numEl.textContent = newVal;
+      if (dotsEl) dotsEl.innerHTML  = Array.from({length: 10}, (_, i) =>
+        `<span class="cc-sp-dot${i < newVal ? ' filled' : ''}"></span>`).join('');
+      if (ptsBanner) ptsBanner.textContent = newRemaining;
+
+      // Update button states for all stats
+      SPECIAL_STATS.forEach(s => {
+        const v    = sp[s.key];
+        const minB = document.querySelector(`.cc-sp-minus[data-stat="${s.key}"]`);
+        const maxB = document.querySelector(`.cc-sp-plus[data-stat="${s.key}"]`);
+        if (minB) minB.disabled = (v <= SPECIAL_MIN);
+        if (maxB) maxB.disabled = (v >= SPECIAL_MAX || newRemaining <= 0);
+      });
+
+      // Update derived stats preview
+      const derived = this._calcDerived(sp);
+      const safe = id => { const el = document.getElementById(id); if (el) el.textContent = ''; return el; };
+      const set  = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      set('ccDerMaxHP',  derived.maxHP);
+      set('ccDerAP',     derived.actionPoints);
+      set('ccDerCW',     derived.carryWeight);
+      set('ccDerRR',     derived.radResistance + '%');
+      set('ccDerCC',     derived.critChance + '%');
+    },
+
+    // Calculate derived stats from a SPECIAL object
+    _calcDerived(sp) {
+      return {
+        maxHP:        90 + (sp.E * 10),
+        actionPoints: 60 + (sp.A * 10),
+        carryWeight:  150 + (sp.S * 10),
+        radResistance: sp.E * 2,
+        critChance:    sp.L
+      };
+    },
+
+    // ============================================================
+    // RENDER BACKGROUND TAB
+    // ============================================================
+    _renderBackgroundTab() {
+      const container = document.getElementById('ccBackgroundContent');
+      if (!container || !backgroundsData) return;
+
+      let html = `<div class="cc-bg-list">`;
+
+      backgroundsData.forEach(bg => {
+        const isSelected = currentAppearance.background === bg.id;
+
+        // Build SPECIAL modifier tags (green for +, red for -)
+        let modTags = '';
+        if (bg.specialModifiers) {
+          Object.entries(bg.specialModifiers).forEach(([stat, val]) => {
+            const sign  = val > 0 ? '+' : '';
+            const color = val > 0 ? 'cc-mod-pos' : 'cc-mod-neg';
+            modTags += `<span class="cc-mod-tag ${color}">${escapeHtml(stat)}${sign}${val}</span>`;
+          });
+        }
+
+        html += `
+          <div class="cc-bg-card${isSelected ? ' selected' : ''}" data-bg-id="${escapeHtml(bg.id)}">
+            <div class="cc-bg-header">
+              <span class="cc-bg-name">${escapeHtml(bg.name)}</span>
+              <div class="cc-bg-mods">${modTags}</div>
+            </div>
+            <div class="cc-bg-desc">${escapeHtml(bg.description)}</div>
+            ${isSelected ? `<div class="cc-bg-flavor">${escapeHtml(bg.flavor)}</div>` : ''}
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+
+      container.querySelectorAll('.cc-bg-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const bgId = card.dataset.bgId;
+          currentAppearance.background = (currentAppearance.background === bgId) ? null : bgId;
+          this._renderBackgroundTab(); // Re-render to show/hide flavor text
+        });
+      });
+    },
+
+    // ============================================================
+    // RENDER TRAITS TAB
+    // ============================================================
+    _renderTraitsTab() {
+      const container = document.getElementById('ccTraitsContent');
+      if (!container || !perksData || !perksData.traits) return;
+
+      const selected = currentAppearance.selectedTraits || [];
+      let html = `<div class="cc-traits-list">`;
+
+      perksData.traits.forEach(trait => {
+        const isSelected = selected.includes(trait.id);
+
+        // Categorise effects: SPECIAL bonuses vs other effects
+        let effectTags = '';
+        const SPECIAL_KEYS = ['S','P','E','C','I','A','L'];
+        Object.entries(trait.effects || {}).forEach(([key, val]) => {
+          if (SPECIAL_KEYS.includes(key)) {
+            const sign  = val > 0 ? '+' : '';
+            const color = val > 0 ? 'cc-mod-pos' : 'cc-mod-neg';
+            effectTags += `<span class="cc-mod-tag ${color}">${escapeHtml(key)}${sign}${val}</span>`;
+          } else if (typeof val === 'number') {
+            const sign  = val > 0 ? '+' : '';
+            const color = val > 0 ? 'cc-mod-pos' : 'cc-mod-neg';
+            const label = key.replace(/_/g, ' ').toUpperCase();
+            effectTags += `<span class="cc-mod-tag ${color}">${escapeHtml(label)}: ${sign}${escapeHtml(formatEffectValue(val))}</span>`;
+          }
+        });
+
+        html += `
+          <div class="cc-trait-card${isSelected ? ' selected' : ''}" data-trait-id="${escapeHtml(trait.id)}">
+            <div class="cc-trait-header">
+              <span class="cc-trait-name">${escapeHtml(trait.name)}</span>
+              ${isSelected ? '<span class="cc-trait-badge">✓ ACTIVE</span>' : ''}
+            </div>
+            <div class="cc-trait-desc">${escapeHtml(trait.description)}</div>
+            <div class="cc-trait-effects">${effectTags}</div>
+            ${isSelected ? `<div class="cc-bg-flavor">${escapeHtml(trait.flavor)}</div>` : ''}
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+
+      container.querySelectorAll('.cc-trait-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const traitId = card.dataset.traitId;
+          let sel = [...(currentAppearance.selectedTraits || [])];
+
+          if (sel.includes(traitId)) {
+            // Deselect
+            sel = sel.filter(t => t !== traitId);
+          } else {
+            // Select — if already 2, drop the oldest
+            if (sel.length >= 2) sel.shift();
+            sel.push(traitId);
+          }
+
+          currentAppearance.selectedTraits = sel;
+          this._renderTraitsTab(); // Re-render to update UI
         });
       });
     },

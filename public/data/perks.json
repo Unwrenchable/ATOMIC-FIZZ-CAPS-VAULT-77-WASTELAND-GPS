@@ -1,130 +1,689 @@
 {
   "perks": [
     {
-      "id": "bloody_mess",
-      "name": "Bloody Mess",
-      "description": "More violent death animations. +5% damage to all weapons.",
+      "id": "iron_fist",
+      "name": "Iron Fist",
+      "description": "Channel your chi to unleash devastating fury! Punching attacks do increasing amounts of damage.",
+      "flavor": "\"Your fists are registered as deadly weapons. The wasteland just does not know it yet.\"",
+      "required_special": {
+        "stat": "S",
+        "min": 1
+      },
       "level_required": 1,
-      "effects": { "damage_multiplier": 1.05 },
-      "flavor": "You leave a trail of carnage wherever you go."
+      "effects": {
+        "unarmed_damage_bonus": 0.2
+      }
     },
     {
-      "id": "iron_lung",
-      "name": "Iron Lung",
-      "description": "Radiation resistance +15%. Better breathing in contaminated areas.",
-      "level_required": 3,
-      "effects": { "rad_resistance": 0.15 },
-      "flavor": "Your lungs are adapted to the wasteland air."
+      "id": "big_leagues",
+      "name": "Big Leagues",
+      "description": "Swing for the fences! Do increased damage with melee weapons.",
+      "flavor": "\"Out here, a baseball bat is not just for sport. It is for settling arguments.\"",
+      "required_special": {
+        "stat": "S",
+        "min": 2
+      },
+      "level_required": 1,
+      "effects": {
+        "melee_damage_bonus": 0.2
+      }
     },
     {
-      "id": "scavenger",
-      "name": "Scavenger",
-      "description": "+20% chance to find extra loot when scavenging.",
-      "level_required": 2,
-      "effects": { "loot_bonus": 0.20 },
-      "flavor": "You have a knack for finding the good stuff."
-    },
-    {
-      "id": "road_warrior",
-      "name": "Road Warrior",
-      "description": "Move 25% faster on the world map.",
-      "level_required": 4,
-      "effects": { "speed_multiplier": 1.25 },
-      "flavor": "The wasteland is your highway."
-    },
-    {
-      "id": "caps_collector",
-      "name": "Caps Collector",
-      "description": "+10% caps from all sources.",
-      "level_required": 2,
-      "effects": { "caps_multiplier": 1.10 },
-      "flavor": "Every cap counts in the wasteland."
-    },
-    {
-      "id": "rad_child",
-      "name": "Rad Child",
-      "description": "Regenerate health while irradiated.",
-      "level_required": 6,
-      "effects": { "rad_regen": true },
-      "flavor": "Radiation is your friend."
+      "id": "armorer",
+      "name": "Armorer",
+      "description": "Access to base level and Rank 1 armor mods. Protect yourself from the dangers of the wasteland.",
+      "flavor": "\"A good set of armor is the difference between a close call and a closed coffin.\"",
+      "required_special": {
+        "stat": "S",
+        "min": 3
+      },
+      "level_required": 1,
+      "effects": {
+        "armor_mod_access": 1
+      }
     },
     {
       "id": "strong_back",
       "name": "Strong Back",
-      "description": "+50 carry weight capacity.",
-      "level_required": 2,
-      "effects": { "carry_weight": 50 },
-      "flavor": "You can carry more gear."
+      "description": "What are you, part pack mule? Gain +25 to carry weight.",
+      "flavor": "\"You can carry the weight of the world. Good thing nobody else is going to.\"",
+      "required_special": {
+        "stat": "S",
+        "min": 4
+      },
+      "level_required": 1,
+      "effects": {
+        "carry_weight": 25
+      }
+    },
+    {
+      "id": "steady_aim",
+      "name": "Steady Aim",
+      "description": "Stay in the fight! Hip-fire accuracy is improved when firing any gun.",
+      "flavor": "\"Steady hands, steady nerves. Everything else is already dead.\"",
+      "required_special": {
+        "stat": "S",
+        "min": 5
+      },
+      "level_required": 1,
+      "effects": {
+        "hip_fire_accuracy": 0.2
+      }
+    },
+    {
+      "id": "heavy_gunner",
+      "name": "Heavy Gunner",
+      "description": "Your back might ache, but your enemies will hurt more. Heavy guns do +20% damage.",
+      "flavor": "\"Some problems require a minigun. Most problems, actually.\"",
+      "required_special": {
+        "stat": "S",
+        "min": 6
+      },
+      "level_required": 1,
+      "effects": {
+        "heavy_gun_damage_bonus": 0.2
+      }
+    },
+    {
+      "id": "pickpocket",
+      "name": "Pickpocket",
+      "description": "Picking pockets is now 25% easier. You have quick hands and a quicker conscience.",
+      "flavor": "\"The hand is quicker than the eye. The wasteland taught you that.\"",
+      "required_special": {
+        "stat": "P",
+        "min": 1
+      },
+      "level_required": 1,
+      "effects": {
+        "pickpocket_bonus": 0.25
+      }
+    },
+    {
+      "id": "rifleman",
+      "name": "Rifleman",
+      "description": "Attacks with non-automatic rifles do +20% damage.",
+      "flavor": "\"One shot. One kill. The math is simple.\"",
+      "required_special": {
+        "stat": "P",
+        "min": 2
+      },
+      "level_required": 1,
+      "effects": {
+        "rifle_damage_bonus": 0.2
+      }
+    },
+    {
+      "id": "awareness",
+      "name": "Awareness",
+      "description": "Gain detailed information about enemies weaknesses and resistances.",
+      "flavor": "\"Know your enemy. Then shoot them in the weak spot.\"",
+      "required_special": {
+        "stat": "P",
+        "min": 3
+      },
+      "level_required": 1,
+      "effects": {
+        "enemy_info": true
+      }
     },
     {
       "id": "locksmith",
       "name": "Locksmith",
-      "description": "Unlock containers of all difficulty levels.",
-      "level_required": 5,
-      "effects": { "lockpick_bonus": 100 },
-      "flavor": "No lock can keep you out."
+      "description": "Access to base level and Rank 1 locks. Your nimble fingers can open all but the toughest locks.",
+      "flavor": "\"No lock can keep you out. Or keep you in. That is important too.\"",
+      "required_special": {
+        "stat": "P",
+        "min": 4
+      },
+      "level_required": 1,
+      "effects": {
+        "lockpick_bonus": 1
+      }
+    },
+    {
+      "id": "night_person",
+      "name": "Night Person",
+      "description": "A night owl by nature, you gain +2 Intelligence and +2 Perception between 6PM and 6AM.",
+      "flavor": "\"The wasteland sleeps. You do not. This is your advantage.\"",
+      "required_special": {
+        "stat": "P",
+        "min": 5
+      },
+      "level_required": 1,
+      "effects": {
+        "night_int_bonus": 2,
+        "night_per_bonus": 2
+      }
+    },
+    {
+      "id": "concentrated_fire",
+      "name": "Concentrated Fire",
+      "description": "Focus fire to gain increasing accuracy and damage for each consecutive hit.",
+      "flavor": "\"Every bullet that lands makes the next one more likely. Focus.\"",
+      "required_special": {
+        "stat": "P",
+        "min": 6
+      },
+      "level_required": 1,
+      "effects": {
+        "focus_fire_bonus": 0.1
+      }
+    },
+    {
+      "id": "toughness",
+      "name": "Toughness",
+      "description": "What does not kill you makes you stronger. Permanently gain +10 Damage Resistance.",
+      "flavor": "\"They have thrown everything at you. You are still standing.\"",
+      "required_special": {
+        "stat": "E",
+        "min": 1
+      },
+      "level_required": 1,
+      "effects": {
+        "damage_resistance": 10
+      }
+    },
+    {
+      "id": "lead_belly",
+      "name": "Lead Belly",
+      "description": "Your digestive tract has adapted to the wasteland. Take less radiation from eating or drinking.",
+      "flavor": "\"Irradiated water builds character. And mutations. Mostly mutations.\"",
+      "required_special": {
+        "stat": "E",
+        "min": 2
+      },
+      "level_required": 1,
+      "effects": {
+        "food_rad_resistance": 0.5
+      }
+    },
+    {
+      "id": "life_giver",
+      "name": "Life Giver",
+      "description": "Infuse your cells with renewable energy! Gain an additional +20 maximum Health.",
+      "flavor": "\"You refuse to die. The wasteland finds this both impressive and annoying.\"",
+      "required_special": {
+        "stat": "E",
+        "min": 3
+      },
+      "level_required": 1,
+      "effects": {
+        "max_hp_bonus": 20
+      }
+    },
+    {
+      "id": "rad_resistant",
+      "name": "Rad Resistant",
+      "description": "Exposure to the wasteland has made you more resilient. Gain +10 Radiation Resistance.",
+      "flavor": "\"Glowing in the dark is only cool for so long. Then it is just sad.\"",
+      "required_special": {
+        "stat": "E",
+        "min": 4
+      },
+      "level_required": 1,
+      "effects": {
+        "rad_resistance": 10
+      }
+    },
+    {
+      "id": "adamantium_skeleton",
+      "name": "Adamantium Skeleton",
+      "description": "Your skeleton has been reinforced. Your limbs take 30% less damage.",
+      "flavor": "\"You have broken every bone in your body. Once. They set harder.\"",
+      "required_special": {
+        "stat": "E",
+        "min": 5
+      },
+      "level_required": 1,
+      "effects": {
+        "limb_damage_resistance": 0.3
+      }
+    },
+    {
+      "id": "ghoulish",
+      "name": "Ghoulish",
+      "description": "Radiation has transformed your body. Radiation heals you, and feral ghouls see you as kin.",
+      "flavor": "\"The ghouls do not see a smoothskin. They see family.\"",
+      "required_special": {
+        "stat": "E",
+        "min": 6
+      },
+      "level_required": 1,
+      "effects": {
+        "rad_heals": true,
+        "ghoul_neutral": true
+      }
+    },
+    {
+      "id": "cap_collector",
+      "name": "Cap Collector",
+      "description": "You can haggle better prices. Vendors pay more for your junk.",
+      "flavor": "\"Every cap has a story. You know all the best stories.\"",
+      "required_special": {
+        "stat": "C",
+        "min": 1
+      },
+      "level_required": 1,
+      "effects": {
+        "vendor_price_bonus": 0.1,
+        "caps_multiplier": 1.1
+      }
+    },
+    {
+      "id": "lady_killer",
+      "name": "Lady Killer / Black Widow",
+      "description": "Twice the lethality, twice the charm. Do +5% damage to the opposite gender.",
+      "flavor": "\"They never see it coming. That is rather the point.\"",
+      "required_special": {
+        "stat": "C",
+        "min": 2
+      },
+      "level_required": 1,
+      "effects": {
+        "gender_damage_bonus": 0.05
+      }
+    },
+    {
+      "id": "lone_wanderer",
+      "name": "Lone Wanderer",
+      "description": "When adventuring alone, take 15% less damage and carry weight increases by 50.",
+      "flavor": "\"No companions, no problems. Also no one to share the glory.\"",
+      "required_special": {
+        "stat": "C",
+        "min": 3
+      },
+      "level_required": 1,
+      "effects": {
+        "solo_damage_resistance": 0.15,
+        "solo_carry_weight": 50
+      }
+    },
+    {
+      "id": "attack_dog",
+      "name": "Attack Dog",
+      "description": "Your faithful companion is ever more loyal. In combat, your dog can hold an enemy.",
+      "flavor": "\"Good dog. Very good dog. Now fetch the raider.\"",
+      "required_special": {
+        "stat": "C",
+        "min": 4
+      },
+      "level_required": 1,
+      "effects": {
+        "companion_combat_bonus": true
+      }
+    },
+    {
+      "id": "local_leader",
+      "name": "Local Leader",
+      "description": "As the leader of settlements, you can establish supply lines between them.",
+      "flavor": "\"Everyone needs a boss. You have decided it is going to be you.\"",
+      "required_special": {
+        "stat": "C",
+        "min": 5
+      },
+      "level_required": 1,
+      "effects": {
+        "supply_lines": true
+      }
+    },
+    {
+      "id": "intimidation",
+      "name": "Intimidation",
+      "description": "Time to show everyone who is boss. Intimidate foes to pacify them or make them fight for you.",
+      "flavor": "\"You do not need to be the strongest. You just need them to think you are.\"",
+      "required_special": {
+        "stat": "C",
+        "min": 6
+      },
+      "level_required": 1,
+      "effects": {
+        "intimidate": true
+      }
+    },
+    {
+      "id": "vans",
+      "name": "V.A.N.S.",
+      "description": "Vault-Tec Assisted Navigation System highlights the path to your target.",
+      "flavor": "\"Vault-Tec made navigation idiot-proof. The idiots keep finding new ways to get lost.\"",
+      "required_special": {
+        "stat": "I",
+        "min": 1
+      },
+      "level_required": 1,
+      "effects": {
+        "navigation_assist": true
+      }
+    },
+    {
+      "id": "medic",
+      "name": "Medic",
+      "description": "Stimpaks and RadAway restore more lost health and radiation.",
+      "flavor": "\"First do no harm. Then do a lot of harm. Then fix it.\"",
+      "required_special": {
+        "stat": "I",
+        "min": 2
+      },
+      "level_required": 1,
+      "effects": {
+        "stimpak_heal_bonus": 0.3,
+        "radaway_bonus": 0.3
+      }
+    },
+    {
+      "id": "gun_nut",
+      "name": "Gun Nut",
+      "description": "Access to base level and Rank 1 gun mods. Keep your weapons in tip-top shape.",
+      "flavor": "\"A clean gun is a happy gun. Happy guns make other people very unhappy.\"",
+      "required_special": {
+        "stat": "I",
+        "min": 3
+      },
+      "level_required": 1,
+      "effects": {
+        "gun_mod_access": 1
+      }
+    },
+    {
+      "id": "hacker",
+      "name": "Hacker",
+      "description": "Knowledge of computer encryption allows you to hack terminals.",
+      "flavor": "\"The old world locks its secrets behind 200-year-old passwords. Good thing you are smarter than that.\"",
+      "required_special": {
+        "stat": "I",
+        "min": 4
+      },
+      "level_required": 1,
+      "effects": {
+        "hack_access": 1
+      }
+    },
+    {
+      "id": "scrapper",
+      "name": "Scrapper",
+      "description": "Recycle more materials when scrapping weapons and armor.",
+      "flavor": "\"Every destroyed enemy is just raw materials waiting to be discovered.\"",
+      "required_special": {
+        "stat": "I",
+        "min": 5
+      },
+      "level_required": 1,
+      "effects": {
+        "scrap_bonus": 0.5
+      }
     },
     {
       "id": "science",
       "name": "Science!",
-      "description": "Hack terminals and craft advanced tech.",
-      "level_required": 5,
-      "effects": { "science_bonus": 50 },
-      "flavor": "Knowledge is power."
+      "description": "Access to base level and Rank 1 high-tech mods. Put the science back in nuclear science.",
+      "flavor": "\"Knowledge is power. Specifically, the power to build a nuclear-powered coffee maker.\"",
+      "required_special": {
+        "stat": "I",
+        "min": 6
+      },
+      "level_required": 1,
+      "effects": {
+        "science_mod_access": 1
+      }
     },
     {
-      "id": "sniper",
-      "name": "Sniper",
-      "description": "+25% accuracy with ranged weapons.",
-      "level_required": 7,
-      "effects": { "accuracy_bonus": 0.25 },
-      "flavor": "One shot, one kill."
+      "id": "gunslinger",
+      "name": "Gunslinger",
+      "description": "Channel the spirit of the old west! Non-automatic pistols do +20% damage.",
+      "flavor": "\"Fast draw, faster thinking. The wasteland rewards both.\"",
+      "required_special": {
+        "stat": "A",
+        "min": 1
+      },
+      "level_required": 1,
+      "effects": {
+        "pistol_damage_bonus": 0.2
+      }
     },
     {
-      "id": "ghoul_friend",
-      "name": "Ghoul Whisperer",
-      "description": "Ghouls are less hostile. +10% XP from ghoul encounters.",
-      "level_required": 4,
-      "effects": { "ghoul_reputation": 50, "ghoul_xp_bonus": 0.10 },
-      "flavor": "You understand the smoothskins... and the not-so-smooth."
+      "id": "commando",
+      "name": "Commando",
+      "description": "Your military training pays off. Attacks with automatic weapons do +20% damage.",
+      "flavor": "\"Full auto is the language of diplomacy in the wasteland.\"",
+      "required_special": {
+        "stat": "A",
+        "min": 2
+      },
+      "level_required": 1,
+      "effects": {
+        "auto_damage_bonus": 0.2
+      }
+    },
+    {
+      "id": "sneak",
+      "name": "Sneak",
+      "description": "Become whisper quiet and hard to detect while sneaking.",
+      "flavor": "\"The best ambush is the one they never see coming. Literally.\"",
+      "required_special": {
+        "stat": "A",
+        "min": 3
+      },
+      "level_required": 1,
+      "effects": {
+        "sneak_bonus": 0.25
+      }
+    },
+    {
+      "id": "mister_sandman",
+      "name": "Mister Sandman",
+      "description": "An intimate acquaintance with death gives you the ability to instantly kill sleeping targets.",
+      "flavor": "\"Sweet dreams. End of dreams.\"",
+      "required_special": {
+        "stat": "A",
+        "min": 4
+      },
+      "level_required": 1,
+      "effects": {
+        "sleep_kill": true
+      }
+    },
+    {
+      "id": "action_boy_girl",
+      "name": "Action Boy / Action Girl",
+      "description": "There is no time to waste! Action Points regenerate 25% faster.",
+      "flavor": "\"Sleep is for the dead. You are not dead yet. Keep moving.\"",
+      "required_special": {
+        "stat": "A",
+        "min": 5
+      },
+      "level_required": 1,
+      "effects": {
+        "ap_regen_bonus": 0.25
+      }
+    },
+    {
+      "id": "moving_target",
+      "name": "Moving Target",
+      "description": "Get +25 Damage Resistance and +25 Energy Resistance when sprinting.",
+      "flavor": "\"A moving target is a living target. Philosophy through physics.\"",
+      "required_special": {
+        "stat": "A",
+        "min": 6
+      },
+      "level_required": 1,
+      "effects": {
+        "sprint_resistance": 25
+      }
     },
     {
       "id": "fortune_finder",
       "name": "Fortune Finder",
-      "description": "Find more caps in containers.",
-      "level_required": 3,
-      "effects": { "caps_find_bonus": 0.30 },
-      "flavor": "Caps just seem to find their way to you."
+      "description": "You hear the jingle in your pockets. Find more caps in containers throughout the wasteland.",
+      "flavor": "\"Caps just seem to find their way to you. You are not complaining.\"",
+      "required_special": {
+        "stat": "L",
+        "min": 1
+      },
+      "level_required": 1,
+      "effects": {
+        "caps_find_bonus": 0.3
+      }
+    },
+    {
+      "id": "scrounger",
+      "name": "Scrounger",
+      "description": "The luck of the draw! You will find more ammo in containers throughout the wasteland.",
+      "flavor": "\"Ammunition finds you. You have never questioned this.\"",
+      "required_special": {
+        "stat": "L",
+        "min": 2
+      },
+      "level_required": 1,
+      "effects": {
+        "ammo_find_bonus": 0.5
+      }
+    },
+    {
+      "id": "bloody_mess",
+      "name": "Bloody Mess",
+      "description": "Do +5% damage with all attacks. Enemies often explode when killed.",
+      "flavor": "\"You leave a trail of carnage wherever you go. People talk.\"",
+      "required_special": {
+        "stat": "L",
+        "min": 3
+      },
+      "level_required": 1,
+      "effects": {
+        "damage_multiplier": 1.05,
+        "gory_deaths": true
+      }
+    },
+    {
+      "id": "mysterious_stranger",
+      "name": "Mysterious Stranger",
+      "description": "The Mysterious Stranger will appear occasionally in V.A.T.S. to lend a hand.",
+      "flavor": "\"Nobody knows who he is. He shows up, does the job, tips his hat, and disappears. Respectable.\"",
+      "required_special": {
+        "stat": "L",
+        "min": 4
+      },
+      "level_required": 1,
+      "effects": {
+        "mysterious_stranger": true
+      }
+    },
+    {
+      "id": "idiot_savant",
+      "name": "Idiot Savant",
+      "description": "You are not stupid! Just differently smart. Randomly receive 3x XP from any action.",
+      "flavor": "\"Genius is often indistinguishable from luck. You have stopped trying to tell the difference.\"",
+      "required_special": {
+        "stat": "L",
+        "min": 5
+      },
+      "level_required": 1,
+      "effects": {
+        "random_xp_triple": true
+      }
+    },
+    {
+      "id": "better_criticals",
+      "name": "Better Criticals",
+      "description": "Advanced training for enhanced lethality. Critical hits do 50% more damage.",
+      "flavor": "\"Some people have all the luck. You have better luck than all of them.\"",
+      "required_special": {
+        "stat": "L",
+        "min": 6
+      },
+      "level_required": 1,
+      "effects": {
+        "crit_damage_multiplier": 1.5
+      }
     }
   ],
   "traits": [
     {
-      "id": "vault_dweller",
+      "id": "gifted",
+      "name": "Gifted",
+      "description": "+1 to all SPECIAL attributes. Perk bonuses are -10% effective \u2014 raw talent edges out training.",
+      "flavor": "\"Natural ability is a gift. Training is a choice. You chose birth.\"",
+      "effects": {
+        "S": 1,
+        "P": 1,
+        "E": 1,
+        "C": 1,
+        "I": 1,
+        "A": 1,
+        "L": 1,
+        "perk_effectiveness": -0.1
+      }
+    },
+    {
+      "id": "fast_shot",
+      "name": "Fast Shot",
+      "description": "Costs 1 less AP per shot in V.A.T.S. -25% accuracy. You shoot first, aim later.",
+      "flavor": "\"Ready, fire, aim. In that order.\"",
+      "effects": {
+        "ap_cost_reduction": 1,
+        "accuracy": -0.25
+      }
+    },
+    {
+      "id": "bloody_mess_trait",
+      "name": "Bloody Mess",
+      "description": "+5% damage with all weapons. Gory death animations always play.",
+      "flavor": "\"You do not mean to cause carnage. It just follows you.\"",
+      "effects": {
+        "damage_multiplier": 1.05,
+        "gore_always": true
+      }
+    },
+    {
+      "id": "vault_dweller_trait",
       "name": "Vault Dweller",
-      "description": "+1 INT, -1 END. You spent your life underground.",
-      "effects": { "I": 1, "E": -1 },
-      "flavor": "The vault raised you, for better or worse."
+      "description": "+1 INT, +1 PER, -1 END, -1 STR. Born underground, adapted to fluorescent light.",
+      "flavor": "\"The vault raised you. The wasteland is trying to kill you. Progress.\"",
+      "effects": {
+        "I": 1,
+        "P": 1,
+        "E": -1,
+        "S": -1
+      }
     },
     {
-      "id": "wasteland_survivor",
+      "id": "wasteland_survivor_trait",
       "name": "Wasteland Survivor",
-      "description": "+1 END, +1 A, -1 C. Born in the wastes.",
-      "effects": { "E": 1, "A": 1, "C": -1 },
-      "flavor": "The wasteland is your home."
+      "description": "+1 END, +1 AGI, -1 CHR. The wastes made you hard and antisocial.",
+      "flavor": "\"Pretty words are for vaults. Out here, deeds do the talking.\"",
+      "effects": {
+        "E": 1,
+        "A": 1,
+        "C": -1
+      }
     },
     {
-      "id": "tech_specialist",
-      "name": "Tech Specialist",
-      "description": "+2 INT, -1 S, -1 P. You prefer machines to people.",
-      "effects": { "I": 2, "S": -1, "P": -1 },
-      "flavor": "Technology is your passion."
+      "id": "heavy_handed",
+      "name": "Heavy Handed",
+      "description": "+4 melee damage. Melee crit multiplier -30%. You hit hard but imprecisely.",
+      "flavor": "\"Subtlety is overrated. Mostly by people who cannot bench-press a Brahmin.\"",
+      "effects": {
+        "melee_damage_flat": 4,
+        "melee_crit_mult": -0.3
+      }
     },
     {
-      "id": "born_fighter",
-      "name": "Born Fighter",
-      "description": "+2 S, -1 INT, -1 C. Strength over smarts.",
-      "effects": { "S": 2, "I": -1, "C": -1 },
-      "flavor": "You solve problems with your fists."
+      "id": "kamikaze",
+      "name": "Kamikaze",
+      "description": "+5 Action Points. -15 Damage Threshold. Speed over safety.",
+      "flavor": "\"You move fast. You die fast. Currently the first one is winning.\"",
+      "effects": {
+        "action_points_bonus": 5,
+        "damage_threshold": -15
+      }
+    },
+    {
+      "id": "four_eyes",
+      "name": "Four Eyes",
+      "description": "+1 PER when wearing any eyewear. -1 base PER without glasses.",
+      "flavor": "\"The world is blurry without them. With them, you see everything. Especially danger.\"",
+      "effects": {
+        "perception_with_eyewear": 1,
+        "base_perception_penalty": -1
+      }
     }
   ]
 }
