@@ -4,6 +4,24 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // BUG FIX: Cryptographically-secure random float in [0, 1) replacing Math.random().
+  // NPC spawn chance and NPC selection directly affect economic outcomes (which NPCs
+  // players encounter, what quests become available, what loot they can access).
+  // Using Math.random() here is predictable and violates the project security policy.
+  function secureRandom() {
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    return arr[0] / 0x100000000;
+  }
+
+  // BUG FIX: Cryptographically-secure integer in [0, max) replacing Math.floor(Math.random() * max).
+  function secureRandIndex(max) {
+    if (max <= 0) return 0;
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    return Math.floor((arr[0] / 0x100000000) * max);
+  }
+
   const npcSpawnModule = {
     npcs: [],
     loaded: false,
@@ -56,7 +74,7 @@
                   try { window.NPCPortraits.preloadSVG(npc); } catch (e) {}
                   // If NPC provides armatureBase, try DragonBones preload in background
                   // If NPC has appearance data, randomly assign the demo armature for variety (demo only)
-                  if (!npc.armatureBase && npc.appearance && Math.random() < 0.25) {
+                  if (!npc.armatureBase && npc.appearance && secureRandom() < 0.25) {
                     npc.armatureBase = '/assets/dragonbones/demo/hero';
                   }
                   if (npc.armatureBase) {
@@ -101,11 +119,11 @@
 
       if (matchingNPCs.length === 0) return null;
 
-      // Random chance to spawn NPC
-      if (Math.random() > this.spawnChance) return null;
+      // BUG FIX: use secure RNG — NPC spawn/selection affects economic outcomes
+      if (secureRandom() > this.spawnChance) return null;
 
-      // Pick random NPC from matching ones
-      const npc = matchingNPCs[Math.floor(Math.random() * matchingNPCs.length)];
+      // Pick random NPC from matching ones using secure RNG
+      const npc = matchingNPCs[secureRandIndex(matchingNPCs.length)];
       
       console.log(`[npcSpawn] NPC encounter: ${npc.name} at ${location.name}`);
       
@@ -138,7 +156,7 @@
       // Handle both 'dialog' and 'dialogPool' structures
       const dialogArray = npc.dialogPool || npc.dialog || [];
       const dialog = dialogArray.length > 0
-        ? dialogArray[Math.floor(Math.random() * dialogArray.length)]
+        ? dialogArray[secureRandIndex(dialogArray.length)]
         : "...";
 
       const message = `${npc.name} approaches you.\n\n"${dialog}"`;

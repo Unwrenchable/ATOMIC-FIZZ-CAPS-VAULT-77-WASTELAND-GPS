@@ -52,6 +52,36 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
       }
     }
 
+    // BUG FIX (CRITICAL): Acquire a per-wallet distributed lock before reading or
+    // modifying the player's inventory.  Without this lock, two concurrent fusion
+    // requests could both read the same player state, both pass the inventory checks,
+    // and both succeed — destroying the same NFTs twice and producing two fused items
+    // from the same source (a classic TOCTOU / double-spend race condition).
+    //
+    // NOTE: fusionLockKey is intentionally built with key() before being passed to
+    // redis.set() — this follows the established double-prefix pattern used consistently
+    // throughout the entire codebase (afw:afw: prefix). Changing only this key would
+    // create a namespace inconsistency with all other Redis keys in the project.
+    const fusionLockKey = key(`fusion:lock:${walletAddress}`);
+    const lockResult = await redis.set(fusionLockKey, "1", { NX: true, EX: 30 });
+    if (!lockResult) {
+      return res.status(409).json({ error: "A fusion operation is already in progress for this wallet. Please wait." });
+    }
+
+    try {
+      return await _performFusion(walletAddress, nftMints, fusionType, res);
+    } finally {
+      // Always release the lock, even on error; log failures so Redis issues are visible
+      await redis.del(fusionLockKey).catch(err => console.error("[fuse] Lock cleanup failed:", err));
+    }
+  } catch (error) {
+    console.error("[fuse] Error:", error);
+    res.status(500).json({ error: "Internal server error during fusion operation" });
+  }
+});
+
+// Inner fusion implementation (called only while holding the fusion lock)
+async function _performFusion(walletAddress, nftMints, fusionType, res) {
     // Get player data  — key must match the hSet format used by player.js
     const playerKey = key(`player:${walletAddress}`);
     const playerData = await redis.hget(playerKey, "profile");
@@ -132,12 +162,7 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
       newInventory: player.inventory,
       remainingResources: player.scrapResources
     });
-
-  } catch (error) {
-    console.error("[fuse] Error:", error);
-    res.status(500).json({ error: "Internal server error during fusion operation" });
-  }
-});
+}
 
 // Calculate fusion result based on input NFTs
 function calculateFusion(nfts, fusionType) {

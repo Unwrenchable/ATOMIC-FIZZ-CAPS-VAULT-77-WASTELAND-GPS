@@ -7,6 +7,20 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // BUG FIX (HIGH): escapeHtml helper added to prevent XSS when quest names,
+  // descriptions, offer messages, and lore strings are inserted into innerHTML.
+  // Quest data comes from JSON files which could be tampered with (supply-chain
+  // attack, admin SSRF, etc.) — all user-visible strings must be escaped.
+  function escapeHtml(str) {
+    if (str == null) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   // ============================================================
   // STARTER GEAR - Items players begin with
   // The jumpsuit is already equipped (player wakes up wearing it)
@@ -595,11 +609,18 @@
         modal.style.zIndex = 9999;
         modal.style.maxWidth = '600px';
         modal.style.color = '#9fe88d';
+        // BUG FIX: escape all lore data (title, body, tutorial steps) before inserting
+        // into innerHTML. Lore JSON is fetched from the server and could contain HTML
+        // if tampered with via supply-chain attack or admin misconfiguration.
+        const loreTitle = escapeHtml(lore.scammer_stories && lore.scammer_stories[0] ? lore.scammer_stories[0].title : 'Saitama Echo');
+        const loreBody  = escapeHtml(lore.scammer_stories && lore.scammer_stories[0] ? lore.scammer_stories[0].body  : 'Investigate the token and learn to be cautious.');
+        const tutorialSteps = (lore.tutorials && lore.tutorials.crypto_101 && lore.tutorials.crypto_101.steps || [])
+          .map(s => `<li>${escapeHtml(s)}</li>`).join('');
         modal.innerHTML = `
-          <h2 style="color:#ffaa00">${lore.scammer_stories && lore.scammer_stories[0] ? lore.scammer_stories[0].title : 'Saitama Echo'}</h2>
-          <p>${lore.scammer_stories && lore.scammer_stories[0] ? lore.scammer_stories[0].body : 'Investigate the token and learn to be cautious.'}</p>
+          <h2 style="color:#ffaa00">${loreTitle}</h2>
+          <p>${loreBody}</p>
           <h3 style="color:#00ff41">Tutorial: Wallet Basics</h3>
-          <ol>${(lore.tutorials && lore.tutorials.crypto_101 && lore.tutorials.crypto_101.steps || []).map(s => `<li>${s}</li>`).join('')}</ol>
+          <ol>${tutorialSteps}</ol>
           <div style="text-align:right; margin-top:12px;"><button id="closeLearningBtn" class="pipboy-button-small">CLOSE</button></div>
         `;
 
@@ -1266,17 +1287,19 @@
         const div = document.createElement("div");
         div.className = "quest-entry";
 
+        // BUG FIX: escape quest name, description, and state before inserting into innerHTML
         div.innerHTML = `
-          <h3>${q.name}</h3>
-          <p>${q.description}</p>
-          <p>Status: <strong>${st.state}</strong></p>
+          <h3>${escapeHtml(q.name)}</h3>
+          <p>${escapeHtml(q.description)}</p>
+          <p>Status: <strong>${escapeHtml(st.state)}</strong></p>
         `;
 
         if (st.state === "active") {
           const step = this.getCurrentStep(q.id);
           if (step) {
+            // BUG FIX: escape step description before inserting into innerHTML
             div.innerHTML += `
-              <p>Current Step: ${step.description}</p>
+              <p>Current Step: ${escapeHtml(step.description)}</p>
             `;
           }
         }
@@ -1295,13 +1318,14 @@
         availableList.forEach(q => {
           const questDiv = document.createElement("div");
           questDiv.className = "quest-entry quest-available";
+          // BUG FIX: escape name, message, description, and id before inserting into innerHTML
           questDiv.innerHTML = `
-            <h3 style="color: #ffaa00;">${q.name}</h3>
-            <p>${q.offer.message}</p>
-            <p><em>${q.description}</em></p>
+            <h3 style="color: #ffaa00;">${escapeHtml(q.name)}</h3>
+            <p>${escapeHtml(q.offer.message)}</p>
+            <p><em>${escapeHtml(q.description)}</em></p>
             <div class="quest-actions" style="margin-top: 8px;">
-              <button class="pipboy-button-small quest-accept-btn" data-quest-id="${q.id}">ACCEPT</button>
-              <button class="pipboy-button-small quest-decline-btn" data-quest-id="${q.id}" style="margin-left: 8px; opacity: 0.7;">DECLINE</button>
+              <button class="pipboy-button-small quest-accept-btn" data-quest-id="${escapeHtml(q.id)}">ACCEPT</button>
+              <button class="pipboy-button-small quest-decline-btn" data-quest-id="${escapeHtml(q.id)}" style="margin-left: 8px; opacity: 0.7;">DECLINE</button>
             </div>
           `;
           availableQuestsSection.appendChild(questDiv);
