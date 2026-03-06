@@ -1410,12 +1410,15 @@
       const container = document.getElementById(containerId);
       if (!container) return;
 
+      // BUG FIX: escape all option fields before inserting into innerHTML.
+      // opt.id, opt.icon, opt.name, and opt.description come from game data JSON
+      // files which could contain HTML if tampered with.
       container.innerHTML = options.map(opt => `
         <div class="cc-option-item ${currentAppearance[property] === opt.id ? 'selected' : ''}" 
-             data-value="${opt.id}" data-property="${property}">
-          ${opt.icon ? `<span class="option-icon">${opt.icon}</span>` : ''}
-          <span class="option-name">${opt.name}</span>
-          ${showDesc && opt.description ? `<span style="font-size:clamp(11px, 1.5vw, 13px);opacity:0.8;display:block;margin-top:2px;">${opt.description}</span>` : ''}
+             data-value="${escapeHtml(opt.id)}" data-property="${escapeHtml(property)}">
+          ${opt.icon ? `<span class="option-icon">${escapeHtml(opt.icon)}</span>` : ''}
+          <span class="option-name">${escapeHtml(opt.name)}</span>
+          ${showDesc && opt.description ? `<span style="font-size:clamp(11px, 1.5vw, 13px);opacity:0.8;display:block;margin-top:2px;">${escapeHtml(opt.description)}</span>` : ''}
         </div>
       `).join('');
 
