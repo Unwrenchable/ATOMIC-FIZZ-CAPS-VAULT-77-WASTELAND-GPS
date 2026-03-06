@@ -3,6 +3,15 @@
   "use strict";
 
   // ---------------------------
+  // XSS PREVENTION HELPER
+  // ---------------------------
+  function escapeHtml(s) {
+    const d = document.createElement("div");
+    d.textContent = String(s == null ? "" : s);
+    return d.innerHTML;
+  }
+
+  // ---------------------------
   // GLOBAL DATA
   // ---------------------------
   window.DATA = window.DATA || {
@@ -443,8 +452,8 @@
       const entries = PLAYER.inventory
         .map(id => {
           const item = resolveItemById(id);
-          const name = item.name || item.id || item.slug || id;
-          const desc = item.description || "";
+          const name = escapeHtml(item.name || item.id || item.slug || id);
+          const desc = escapeHtml(item.description || "");
           return `
           <div class="pip-entry">
             <strong>${name}</strong><br>
@@ -461,17 +470,15 @@
     if (NFT_STATE.list.length > 0) {
       const nftEntries = NFT_STATE.list
         .map(nft => {
-          const name = nft.name || "Unnamed NFT";
-          const mint = nft.mint || nft.id || "Unknown mint";
+          const name = escapeHtml(nft.name || "Unnamed NFT");
+          const mint = escapeHtml(nft.mint || nft.id || "Unknown mint");
           const attrs = Array.isArray(nft.attributes)
             ? nft.attributes.slice(0, 3)
             : [];
           const attrsHtml = attrs
             .map(
               a =>
-                `<div class="pip-attr"><span>${a.trait_type || "Trait"}:</span> ${
-                  a.value
-                }</div>`
+                `<div class="pip-attr"><span>${escapeHtml(a.trait_type || "Trait")}:</span> ${escapeHtml(a.value)}</div>`
             )
             .join("");
 
@@ -525,10 +532,10 @@
       .filter(Boolean);
 
     const renderQuest = (q, extraClass) => {
-      const name = q.name || q.title || q.id || q.slug || "Quest";
-      const desc = q.description || q.flavor || "";
+      const name = escapeHtml(q.name || q.title || q.id || q.slug || "Quest");
+      const desc = escapeHtml(q.description || q.flavor || "");
       return `
-        <div class="pip-entry ${extraClass || ""}">
+        <div class="pip-entry ${escapeHtml(extraClass || "")}">
           <strong>${name}</strong><br>
           <span>${desc}</span>
         </div>
@@ -536,16 +543,17 @@
     };
 
     const renderAvailableQuest = (q) => {
-      const name = q.name || q.title || q.id || q.slug || "Quest";
-      const desc = q.description || q.flavor || "";
-      const message = q.offer?.message || "";
+      const name = escapeHtml(q.name || q.title || q.id || q.slug || "Quest");
+      const desc = escapeHtml(q.description || q.flavor || "");
+      const message = escapeHtml(q.offer?.message || "");
+      const questId = escapeHtml(q.id);
       return `
         <div class="pip-entry available-quest">
           <strong style="color: #ffaa00;">⚠️ ${name}</strong><br>
           <span>${message || desc}</span><br>
           <div style="margin-top: 8px;">
-            <button class="pipboy-button-small quest-accept-btn" data-quest-id="${q.id}">ACCEPT</button>
-            <button class="pipboy-button-small quest-decline-btn" data-quest-id="${q.id}" style="margin-left: 8px;">DECLINE</button>
+            <button class="pipboy-button-small quest-accept-btn" data-quest-id="${questId}">ACCEPT</button>
+            <button class="pipboy-button-small quest-decline-btn" data-quest-id="${questId}" style="margin-left: 8px;">DECLINE</button>
           </div>
         </div>
       `;

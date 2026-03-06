@@ -104,6 +104,14 @@ router.post("/complete", authMiddleware, async (req, res) => {
       return res.status(400).json({ ok: false, error: "Invalid quest ID" });
     }
 
+    // Distributed lock: prevent concurrent completion of the same quest
+    // by the same wallet (race-condition / double-reward attack).
+    const lockKey = `quest:complete:lock:${wallet}:${questId}`;
+    const lockResult = await redis.set(lockKey, "1", { NX: true, EX: 15 });
+    if (!lockResult) {
+      return res.status(409).json({ ok: false, error: "Quest completion already in progress" });
+    }
+
     // Get player profile
     const playerKey = key(`player:${wallet}`);
     let playerData = await redis.hget(playerKey, "profile");
