@@ -187,24 +187,30 @@ app.use((req, res, next) => {
 });
 
 // ------------------------------------------------------------
-// STATIC FRONTEND
+// STATIC FRONTEND (local dev only)
 // ------------------------------------------------------------
-app.use(
-  express.static(FRONTEND_DIR, {
-    maxAge: NODE_ENV === "production" ? "1h" : 0,
-    etag: true,
-  })
-);
-
-// Subdirectories
-["js","css","images","wallet"].forEach(dir =>
+// In production, the frontend is served by Vercel at atomicfizzcaps.xyz.
+// Serving static files here too would create a second "instance" of the
+// game running off the API subdomain (api.atomicfizzcaps.xyz), which breaks
+// the split architecture and confuses users. Local dev still needs it.
+if (NODE_ENV !== "production") {
   app.use(
-    `/${dir}`,
-    express.static(path.join(FRONTEND_DIR, dir), {
-      maxAge: NODE_ENV === "production" ? "1h" : 0,
+    express.static(FRONTEND_DIR, {
+      maxAge: 0,
+      etag: true,
     })
-  )
-);
+  );
+
+  // Subdirectories
+  ["js","css","images","wallet"].forEach(dir =>
+    app.use(
+      `/${dir}`,
+      express.static(path.join(FRONTEND_DIR, dir), {
+        maxAge: 0,
+      })
+    )
+  );
+}
 
 // ------------------------------------------------------------
 // SAFE MOUNT HELPER
@@ -370,7 +376,28 @@ app.get('/api/health', async (req, res) => {
 // ------------------------------------------------------------
 // SPA FALLBACK
 // ------------------------------------------------------------
+// In production, the frontend lives on Vercel. Redirect any non-API,
+// non-file request to the Vercel frontend rather than serving a
+// second copy of the game from the API subdomain.
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://atomicfizzcaps.xyz";
+
+if (NODE_ENV === "production" && !process.env.FRONTEND_URL) {
+  console.warn("[server] FRONTEND_URL env var not set — using default:", FRONTEND_URL);
+}
+
+// Safely redirect to the Vercel frontend. Validates the path to prevent
+// open-redirect attacks (path is already parsed by Express but we guard anyway).
+function redirectToFrontend(req, res) {
+  // req.path is always a root-relative path from Express, but strip any
+  // leading double-slashes that could be interpreted as protocol-relative URLs.
+  const safePath = "/" + req.path.replace(/^\/+/, "").replace(/:\/\//, "");
+  return res.redirect(301, `${FRONTEND_URL}${safePath}`);
+}
+
 app.get("/overseer", (req, res) => {
+  if (NODE_ENV === "production") {
+    return redirectToFrontend(req, res);
+  }
   const overseerFile = path.join(FRONTEND_DIR, "overseer.html");
   if (fs.existsSync(overseerFile)) {
     res.sendFile(overseerFile);
@@ -382,6 +409,10 @@ app.get("/overseer", (req, res) => {
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api/")) return next();
   if (path.extname(req.path)) return next();
+  if (NODE_ENV === "production") {
+    // Redirect to Vercel frontend — prevents a second game instance on the API subdomain
+    return redirectToFrontend(req, res);
+  }
   const indexFile = path.join(FRONTEND_DIR, "index.html");
   if (fs.existsSync(indexFile)) {
     res.sendFile(indexFile);
