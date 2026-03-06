@@ -12,10 +12,14 @@ window.Pipboy = window.Pipboy || {};
   }
 
   async function apiCreateProfile(wallet, name) {
+    const sessionId = localStorage.getItem("sessionId") || "";
     const res = await fetch(`${window.API_BASE}/api/player/create`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ wallet, name }),
+      headers: {
+        "Content-Type": "application/json",
+        ...(sessionId ? { Authorization: `Bearer ${sessionId}` } : {}),
+      },
+      body: JSON.stringify({ name }),
     });
     const data = await res.json();
     if (!data.ok) throw new Error("create failed");
