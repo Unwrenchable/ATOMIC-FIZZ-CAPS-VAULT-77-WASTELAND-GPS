@@ -444,6 +444,12 @@
       return false;
     }
 
+    // Quest items cannot be equipped — they are key items only
+    if (item.type === "quest" || item.type === "questItem") {
+      console.warn("[PlayerState] Cannot equip quest item:", item.name);
+      return false;
+    }
+
     // Determine slot based on item type and slot field (Fallout-style)
     let slot = null;
     if (item.type === "weapon") slot = "weapon";
