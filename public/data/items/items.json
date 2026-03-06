@@ -132,7 +132,7 @@
     "armor": 14,
     "weight": 9,
     "value": 110,
-    "description": "A protective suit designed for anomaly‑exposed environments."
+    "description": "A protective suit designed for anomaly-exposed environments."
   },
   {
     "id": "vegas_scavenger_leathers",
@@ -143,6 +143,96 @@
     "weight": 7,
     "value": 45,
     "description": "Light armor pieced together from casino backroom scraps."
+  },
+  {
+    "id": "vault77_helmet",
+    "name": "Vault 77 Security Helmet",
+    "type": "armor",
+    "slot": "head",
+    "armor": 8,
+    "weight": 3,
+    "value": 40,
+    "description": "Standard-issue Vault 77 security helmet. Protects the noggin from debris and deathclaw claws alike."
+  },
+  {
+    "id": "scavenger_goggles",
+    "name": "Scavenger Goggles",
+    "type": "armor",
+    "slot": "head",
+    "armor": 4,
+    "weight": 0.5,
+    "value": 20,
+    "description": "Jury-rigged goggles cobbled from pre-war safety equipment. Scratched lenses included."
+  },
+  {
+    "id": "combat_helmet",
+    "name": "Combat Helmet",
+    "type": "armor",
+    "slot": "head",
+    "armor": 12,
+    "weight": 4,
+    "value": 75,
+    "description": "Military-grade helmet recovered from a ruined NCR outpost."
+  },
+  {
+    "id": "leather_arm_guards",
+    "name": "Leather Arm Guards",
+    "type": "armor",
+    "slot": "arms",
+    "armor": 4,
+    "weight": 1.5,
+    "value": 18,
+    "description": "Strips of brahmin leather wrapped around the forearms. Better than nothing."
+  },
+  {
+    "id": "metal_arm_plates",
+    "name": "Metal Arm Plates",
+    "type": "armor",
+    "slot": "arms",
+    "armor": 9,
+    "weight": 4,
+    "value": 55,
+    "description": "Salvaged sheet metal bolted to old arm-guards. Rattles, but holds."
+  },
+  {
+    "id": "vault_arm_wraps",
+    "name": "Vault-Tec Arm Wraps",
+    "type": "armor",
+    "slot": "arms",
+    "armor": 6,
+    "weight": 2,
+    "value": 30,
+    "description": "Reinforced jumpsuit sleeves re-purposed as arm protection."
+  },
+  {
+    "id": "leather_leg_guards",
+    "name": "Leather Leg Guards",
+    "type": "armor",
+    "slot": "legs",
+    "armor": 4,
+    "weight": 2,
+    "value": 18,
+    "description": "Brahmin leather strapped around the shins. Keeps the rad-roaches off."
+  },
+  {
+    "id": "metal_shin_plates",
+    "name": "Metal Shin Plates",
+    "type": "armor",
+    "slot": "legs",
+    "armor": 9,
+    "weight": 5,
+    "value": 55,
+    "description": "Welded scrap metal shin-guards worn by veteran wasteland fighters."
+  },
+  {
+    "id": "vault_leg_wraps",
+    "name": "Vault-Tec Leg Wraps",
+    "type": "armor",
+    "slot": "legs",
+    "armor": 6,
+    "weight": 2.5,
+    "value": 30,
+    "description": "Repurposed jumpsuit leg panels worn for extra protection."
   },
   {
     "id": "ammo_9mm",

@@ -20,12 +20,15 @@
   const DEFAULT_STATE = {
     // Inventory: full item objects (not just IDs)
     inventory: [],
-    // Equipped items by slot
+    // Equipped items by slot — Fallout-style named slots
     equipped: {
-      weapon: null,
-      armor: null,
-      head: null,
-      accessory: null
+      weapon: null,    // right-hand weapon
+      head: null,      // helmet / hat
+      chest: null,     // body armor / suit
+      arms: null,      // arm armor
+      legs: null,      // leg armor
+      aid: null,       // quick-use consumable
+      accessory: null  // misc / quest items
     },
     // Quest state
     questsActive: [],
@@ -118,6 +121,21 @@
         if (!Array.isArray(_state.questsActive)) _state.questsActive = [];
         if (!Array.isArray(_state.questsCompleted)) _state.questsCompleted = [];
         if (!Array.isArray(_state.visitedLocations)) _state.visitedLocations = [];
+        // Ensure equipped object has all Fallout-style slots (migrate old "armor" → "chest")
+        const EQ_DEFAULTS = { weapon: null, head: null, chest: null, arms: null, legs: null, aid: null, accessory: null };
+        if (!_state.equipped || typeof _state.equipped !== "object") {
+          _state.equipped = { ...EQ_DEFAULTS };
+        } else {
+          // Migrate legacy generic "armor" slot to "chest"
+          if (_state.equipped.armor && !_state.equipped.chest) {
+            _state.equipped.chest = _state.equipped.armor;
+          }
+          delete _state.equipped.armor;
+          // Fill missing slots with null
+          Object.keys(EQ_DEFAULTS).forEach(k => {
+            if (!(k in _state.equipped)) _state.equipped[k] = null;
+          });
+        }
         // Ensure SPECIAL object exists with defaults for any missing keys
         if (!_state.special || typeof _state.special !== 'object') {
           _state.special = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
@@ -204,12 +222,19 @@
         console.log("[PlayerState] Merged legacy storage");
       }
       
-      // Legacy equipped items
+      // Legacy equipped items — migrate old "armor" key → "chest"
       const equippedRaw = localStorage.getItem("afc_equipped_items");
       if (equippedRaw) {
         const equipped = JSON.parse(equippedRaw);
         if (equipped.weapon && !_state.equipped.weapon) _state.equipped.weapon = equipped.weapon;
-        if (equipped.armor && !_state.equipped.armor) _state.equipped.armor = equipped.armor;
+        // Migrate old generic "armor" slot → "chest"
+        const legacyArmor = equipped.armor || equipped.chest;
+        if (legacyArmor && !_state.equipped.chest) _state.equipped.chest = legacyArmor;
+        if (equipped.head && !_state.equipped.head) _state.equipped.head = equipped.head;
+        if (equipped.arms && !_state.equipped.arms) _state.equipped.arms = equipped.arms;
+        if (equipped.legs && !_state.equipped.legs) _state.equipped.legs = equipped.legs;
+        if (equipped.aid && !_state.equipped.aid) _state.equipped.aid = equipped.aid;
+        if (equipped.accessory && !_state.equipped.accessory) _state.equipped.accessory = equipped.accessory;
         _dirty = true;
       }
       
@@ -419,10 +444,11 @@
       return false;
     }
 
-    // Determine slot based on item type
+    // Determine slot based on item type and slot field (Fallout-style)
     let slot = null;
     if (item.type === "weapon") slot = "weapon";
-    else if (item.type === "armor") slot = "armor";
+    else if (item.type === "armor") slot = item.slot || "chest"; // use item.slot (head/chest/arms/legs)
+    else if (item.type === "consumable") slot = "aid";
     else if (item.slot) slot = item.slot;
     else slot = "accessory";
 
@@ -438,6 +464,24 @@
     console.log(`[PlayerState] Equipped ${item.name} in ${slot} slot`);
     triggerInventoryUpdate();
     
+    return true;
+  }
+
+  /**
+   * Unequip an item from a slot
+   * @param {string} slot - Slot to clear (weapon, head, chest, arms, legs, aid, accessory)
+   */
+  function unequipItem(slot) {
+    if (!slot || !_state) return false;
+    if (!_state.equipped[slot]) return false;
+
+    const item = _state.equipped[slot];
+    _state.equipped[slot] = null;
+    _dirty = true;
+    saveToStorage();
+
+    console.log(`[PlayerState] Unequipped ${item.name} from ${slot} slot`);
+    triggerInventoryUpdate();
     return true;
   }
 
@@ -728,6 +772,7 @@
     hasItem,
     getItem,
     equipItem,
+    unequipItem,
     awardXP,
     awardCaps,
     activateQuest,

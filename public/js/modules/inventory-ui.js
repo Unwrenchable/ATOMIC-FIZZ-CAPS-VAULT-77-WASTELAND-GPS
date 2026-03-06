@@ -1,4 +1,4 @@
-// inventory-ui.js — Pip‑Boy ITEMS panel with category tabs
+// inventory-ui.js — Pip‑Boy ITEMS panel with category tabs + Fallout-style EQUIP screen
 
 window.Game = window.Game || {};
 Game.ui = Game.ui || {};
@@ -15,6 +15,16 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+// Fallout-style equipment slots displayed in the EQUIP tab (paperdoll order)
+const EQUIP_SLOTS = [
+  { key: "weapon", label: "WEAPON", icon: "🔫" },
+  { key: "head",   label: "HEAD",   icon: "⛑" },
+  { key: "chest",  label: "CHEST",  icon: "🦺" },
+  { key: "arms",   label: "ARMS",   icon: "🥊" },
+  { key: "legs",   label: "LEGS",   icon: "👖" },
+  { key: "aid",    label: "AID",    icon: "💉" },
+];
+
 Game.ui.renderInventory = function () {
   Game.quests?.completeObjective("wake_up", "open_inventory");
 
@@ -30,8 +40,8 @@ Game.ui.renderInventory = function () {
     items = Game.player.inventory || [];
   }
 
-  // Get equipped items
-  const equipped = Game.player.equipped || {};
+  // Get equipped items (prefer PlayerState, fall back to Game.player.equipped)
+  const equipped = (Game.modules?.PlayerState?.getState?.()?.equipped) || Game.player.equipped || {};
 
   // Group items by type
   const groups = {
@@ -51,76 +61,159 @@ Game.ui.renderInventory = function () {
     if (groups[item.type]) groups[item.type].push(item);
   });
 
-  // Build tab buttons
+  // ── Build tab buttons ──────────────────────────────────────────
   tabs.innerHTML = "";
+
+  // EQUIP tab first (Pip-Boy paperdoll)
+  const equipTab = document.createElement("div");
+  equipTab.className = "inv-tab active";
+  equipTab.innerText = "EQUIP";
+  equipTab.onclick = () => { setActiveTab(equipTab); renderEquipScreen(); };
+  tabs.appendChild(equipTab);
+
+  // Item category tabs
   Object.keys(groups).forEach(type => {
     const btn = document.createElement("div");
     btn.className = "inv-tab";
     btn.innerText = type.toUpperCase();
-    btn.onclick = () => renderCategory(type);
+    btn.onclick = () => { setActiveTab(btn); renderCategory(type); };
     tabs.appendChild(btn);
   });
 
-  // Default: show weapons
-  renderCategory("weapon");
+  function setActiveTab(activeBtn) {
+    tabs.querySelectorAll(".inv-tab").forEach(t => t.classList.remove("active"));
+    activeBtn.classList.add("active");
+  }
 
+  // Default view: EQUIP screen
+  renderEquipScreen();
+
+  // ── EQUIP SCREEN (Fallout paperdoll) ──────────────────────────
+  function renderEquipScreen() {
+    body.innerHTML = "";
+
+    const header = document.createElement("div");
+    header.className = "equip-screen-header";
+    header.innerHTML = '<div class="equip-screen-title">[ EQUIPPED ITEMS ]</div>';
+    body.appendChild(header);
+
+    EQUIP_SLOTS.forEach(function(slotDef) {
+      const item = equipped[slotDef.key] || null;
+      const row = document.createElement("div");
+      row.className = "equip-slot-row" + (item ? " equip-slot-filled" : "");
+
+      const slotLabel = document.createElement("div");
+      slotLabel.className = "equip-slot-label";
+      slotLabel.textContent = slotDef.icon + " " + slotDef.label;
+
+      const slotItem = document.createElement("div");
+      slotItem.className = "equip-slot-item";
+      slotItem.textContent = item ? item.name : "---";
+
+      const slotBtn = document.createElement("button");
+      if (item) {
+        slotBtn.className = "unequip-btn";
+        slotBtn.textContent = "REMOVE";
+        slotBtn.addEventListener("click", function() {
+          if (Game.modules?.PlayerState?.unequipItem) Game.modules.PlayerState.unequipItem(slotDef.key);
+          else if (Game.unequipItem) Game.unequipItem(slotDef.key);
+          setTimeout(function() { Game.ui.renderInventory(); }, 80);
+        });
+      } else {
+        slotBtn.className = "equip-slot-empty-btn";
+        slotBtn.textContent = "EMPTY";
+        slotBtn.disabled = true;
+      }
+
+      row.appendChild(slotLabel);
+      row.appendChild(slotItem);
+      row.appendChild(slotBtn);
+      body.appendChild(row);
+    });
+
+    const hint = document.createElement("div");
+    hint.className = "equip-screen-hint";
+    hint.textContent = "Browse WEAPON / ARMOR / CONSUMABLE tabs to equip items.";
+    body.appendChild(hint);
+  }
+
+  // ── CATEGORY VIEW ─────────────────────────────────────────────
   function renderCategory(type) {
     const list = groups[type];
     body.innerHTML = "";
 
     if (!list.length) {
-      body.innerHTML = "<div>No items in this category.</div>";
+      const empty = document.createElement("div");
+      empty.className = "inv-empty";
+      empty.textContent = "No " + type + " items in inventory.";
+      body.appendChild(empty);
       return;
     }
 
-    list.forEach(item => {
+    list.forEach(function(item) {
       const div = document.createElement("div");
       div.className = "inventory-item";
 
-      let stats = "";
+      let statsText = "";
       let isEquipped = false;
+      let itemSlot = null;
+      const canEquip = (item.type === "weapon" || item.type === "armor" || item.type === "consumable");
 
       if (item.type === "weapon") {
-        // BUG FIX: escape item fields before interpolating into innerHTML to prevent XSS
-        stats = `DMG: ${escapeHtml(item.damage != null ? item.damage : 'N/A')} • ${escapeHtml(item.category ? item.category.toUpperCase() : 'UNKNOWN')}`;
-        isEquipped = equipped.weapon && equipped.weapon.id === item.id;
+        statsText = "DMG: " + (item.damage != null ? item.damage : "N/A") +
+                    " \u2022 " + (item.category ? item.category.toUpperCase() : "UNKNOWN");
+        isEquipped = !!(equipped.weapon && equipped.weapon.id === item.id);
+        itemSlot = "weapon";
       } else if (item.type === "armor") {
-        stats = `ARMOR: ${escapeHtml(item.armor != null ? item.armor : 'N/A')} • SLOT: ${escapeHtml(item.slot ? item.slot.toUpperCase() : 'UNKNOWN')}`;
-        isEquipped = equipped.armor && equipped.armor.id === item.id;
+        // Use item.slot (head/chest/arms/legs) for the correct equipment slot
+        itemSlot = item.slot || "chest";
+        statsText = "DR: " + (item.armor != null ? item.armor : "N/A") +
+                    " \u2022 SLOT: " + itemSlot.toUpperCase();
+        isEquipped = !!(equipped[itemSlot] && equipped[itemSlot].id === item.id);
+      } else if (item.type === "consumable") {
+        itemSlot = "aid";
+        statsText = item.heal ? "HEAL: +" + item.heal + " HP"
+                              : (item.description ? item.description.slice(0, 40) : "");
+        isEquipped = !!(equipped.aid && equipped.aid.id === item.id);
+      } else {
+        const qty = item.quantity || item.amount || 1;
+        statsText = qty > 1 ? "QTY: " + qty
+                            : (item.description ? item.description.slice(0, 40) : "");
       }
 
-      // Show equipped status
-      const equippedText = isEquipped ? " [EQUIPPED]" : "";
-      
-      // Equip/Unequip button
-      const buttonText = isEquipped ? "UNEQUIP" : "EQUIP";
-      const buttonClass = isEquipped ? "unequip-btn" : "equip-btn";
+      const nameEl = document.createElement("div");
+      nameEl.className = "inv-name";
+      nameEl.textContent = item.name + (isEquipped ? " [EQUIPPED]" : "");
 
-      // BUG FIX: escape item.name and item.id before inserting into innerHTML
-      div.innerHTML = `
-        <div class="inv-name">${escapeHtml(item.name)}${equippedText}</div>
-        <div class="inv-meta">${stats}</div>
-        <button class="${buttonClass}" data-item-id="${escapeHtml(item.id)}">${buttonText}</button>
-      `;
+      const metaEl = document.createElement("div");
+      metaEl.className = "inv-meta";
+      metaEl.textContent = statsText;
+
+      div.appendChild(nameEl);
+      div.appendChild(metaEl);
+
+      if (canEquip) {
+        const btn = document.createElement("button");
+        btn.className = isEquipped ? "unequip-btn" : "equip-btn";
+        btn.dataset.itemId = item.id;
+        btn.textContent = isEquipped ? "UNEQUIP" : "EQUIP";
+        btn.addEventListener("click", function() {
+          if (btn.classList.contains("unequip-btn")) {
+            const slot = item.type === "weapon" ? "weapon"
+                       : item.type === "consumable" ? "aid"
+                       : (item.slot || "chest");
+            if (Game.modules?.PlayerState?.unequipItem) Game.modules.PlayerState.unequipItem(slot);
+            else if (Game.unequipItem) Game.unequipItem(slot);
+          } else {
+            if (Game.modules?.PlayerState?.equipItem) Game.modules.PlayerState.equipItem(item);
+            else if (Game.equipItem) Game.equipItem(item);
+          }
+          setTimeout(function() { Game.ui.renderInventory(); }, 80);
+        });
+        div.appendChild(btn);
+      }
 
       body.appendChild(div);
-    });
-
-    // Equip/Unequip button handler
-    document.querySelectorAll(".equip-btn, .unequip-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-item-id");
-        const item = items.find(i => i.id === id);
-        if (item) {
-          if (btn.classList.contains("unequip-btn")) {
-            Game.unequipItem(item.type === "weapon" ? "weapon" : "armor");
-          } else {
-            Game.equipItem(item);
-          }
-          // Re-render after equip/unequip
-          setTimeout(() => Game.ui.renderInventory(), 100);
-        }
-      });
     });
   }
 };

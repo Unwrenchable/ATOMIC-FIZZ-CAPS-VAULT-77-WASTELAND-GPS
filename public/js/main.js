@@ -1117,8 +1117,12 @@
         safeLog("Quest module initialized with starter gear");
         
         // Verify equipped items (quest module sets Game.player.equipped directly)
-        if (Game.player && Game.player.equipped && Game.player.equipped.armor) {
-          safeLog("Player equipped armor verified:", Game.player.equipped.armor.name);
+        if (Game.player && Game.player.equipped) {
+          const eq = Game.player.equipped;
+          const armorSlots = ["chest", "head", "arms", "legs"];
+          armorSlots.forEach(s => {
+            if (eq[s]) safeLog("Player equipped " + s + ":", eq[s].name);
+          });
         }
       }
 
