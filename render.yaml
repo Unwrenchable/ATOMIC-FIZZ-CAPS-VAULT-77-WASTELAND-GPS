@@ -22,6 +22,11 @@ services:
       - key: NODE_ENV
         value: production
 
+      # The canonical frontend URL (Vercel). Non-API requests to the API subdomain
+      # are redirected here so the backend doesn't serve a second copy of the game.
+      - key: FRONTEND_URL
+        value: https://atomicfizzcaps.xyz
+
       # NOTE: Sensitive environment variables (REDIS_URL,
       # SERVER_SECRET_KEY, etc.) should be configured through the
       # Render Dashboard for security. This file only configures
