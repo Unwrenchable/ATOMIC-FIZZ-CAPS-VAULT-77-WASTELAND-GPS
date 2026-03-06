@@ -37,7 +37,8 @@
   function secureRandom() {
     const buf = new Uint32Array(1);
     crypto.getRandomValues(buf);
-    return buf[0] / 0xFFFFFFFF;
+    // Use 2^32 (not 2^32-1) so result is in [0, 1) — strictly less than 1.
+    return buf[0] / 0x100000000;
   }
 
   function biomeFromRegion(regionId) {
