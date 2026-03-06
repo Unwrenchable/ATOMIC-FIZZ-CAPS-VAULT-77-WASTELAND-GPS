@@ -376,7 +376,11 @@
         // Add speech check badge
         if (response.speechCheck || response.skillCheck) {
           const check = response.speechCheck || response.skillCheck;
-          const difficulty = escapeHtml(check.difficulty || 'medium');
+          // BUG FIX: validate difficulty against an allowlist before use as a CSS class name.
+          // escapeHtml() alone doesn't prevent class-name injection breaking CSS selectors.
+          const VALID_DIFFICULTIES = ['easy', 'medium', 'hard', 'very_hard', 'impossible'];
+          const rawDifficulty = (check.difficulty || 'medium').toLowerCase();
+          const difficulty = VALID_DIFFICULTIES.includes(rawDifficulty) ? rawDifficulty : 'medium';
           const stat = escapeHtml((check.stat || 'charisma').toUpperCase());
           innerHTML += `<span class="fo4-speech-badge ${difficulty}">[${stat}]</span>`;
         }
@@ -430,8 +434,10 @@
         // Add speech check if present
         if (response.speechCheck || response.skillCheck) {
           const check = response.speechCheck || response.skillCheck;
-          // BUG FIX: escape difficulty before use as class name and HTML content
-          const difficulty = escapeHtml(check.difficulty || 'medium');
+          // BUG FIX: validate difficulty against allowlist before use as a CSS class name
+          const VALID_DIFFICULTIES = ['easy', 'medium', 'hard', 'very_hard', 'impossible'];
+          const rawDiff = (check.difficulty || 'medium').toLowerCase();
+          const difficulty = VALID_DIFFICULTIES.includes(rawDiff) ? rawDiff : 'medium';
           innerHTML += `<span class="fo4-speech-badge ${difficulty}" style="font-size: 11px; margin: 2px 0;">[CHECK]</span>`;
         }
         
