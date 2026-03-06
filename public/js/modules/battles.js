@@ -175,11 +175,21 @@
       const endBonus = Math.max(0, special.E - 5);
       dmg = Math.max(1, dmg - endBonus);
 
-      // Armor damage reduction
-      const armorItem = (this.gs.player.equipped && this.gs.player.equipped.armor) ||
-        (Game.modules?.PlayerState?.getState?.()?.equipped?.armor);
-      if (armorItem && typeof armorItem.armor === 'number') {
-        dmg = Math.max(1, dmg - Math.floor(armorItem.armor / 5));
+      // Armor damage reduction — check all body armor slots (chest, head, arms, legs)
+      const ARMOR_SLOTS = ["chest", "head", "arms", "legs"];
+      const psEquipped = Game.modules?.PlayerState?.getState?.()?.equipped || {};
+      const playerEquipped = this.gs.player.equipped || {};
+      let totalArmor = 0;
+      let bestArmorItem = null;
+      ARMOR_SLOTS.forEach(s => {
+        const a = playerEquipped[s] || psEquipped[s];
+        if (a && typeof a.armor === "number") {
+          totalArmor += a.armor;
+          if (!bestArmorItem || a.armor > (bestArmorItem.armor || 0)) bestArmorItem = a;
+        }
+      });
+      if (totalArmor > 0) {
+        dmg = Math.max(1, dmg - Math.floor(totalArmor / 5));
       }
 
       this.gs.player.hp -= dmg;
@@ -280,7 +290,14 @@
         // No active battle - show player readiness stats
         const equipped = this.gs.player.equipped || {};
         const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);
-        const armor = equipped.armor || (Game.modules?.PlayerState?.getState?.()?.equipped?.armor);
+        // Aggregate armor across all body slots for UI display
+        const psEq = Game.modules?.PlayerState?.getState?.()?.equipped || {};
+        const armorSlots = ["chest", "head", "arms", "legs"];
+        const armorPieces = armorSlots.map(s => equipped[s] || psEq[s]).filter(Boolean);
+        const totalArmorRating = armorPieces.reduce((sum, a) => sum + (a.armor || 0), 0);
+        const armorDisplay = armorPieces.length
+          ? `${armorPieces.map(a => escapeHtml(a.name)).join(", ")} (AR: ${totalArmorRating})`
+          : "<em>None equipped</em>";
         const special = this._getSpecial();
         const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;
         const maxHp = (typeof this.gs.player.maxHp === 'number') ? this.gs.player.maxHp : 100;
@@ -300,7 +317,7 @@
             </div>
             <div class="battle-stat-row">
               <span class="battle-label">ARMOR</span>
-              <span class="battle-val">${armor ? `${escapeHtml(armor.name)} (AR: ${armor.armor || '?'})` : '<em>None equipped</em>'}</span>
+              <span class="battle-val">${armorDisplay}</span>
             </div>
             <div class="battle-special-row">
               ${['S','P','E','C','I','A','L'].map(k => `<span class="battle-special-cell"><span class="bs-key">${k}</span><span class="bs-val">${special[k] || 5}</span></span>`).join('')}
@@ -317,7 +334,14 @@
       const special = this._getSpecial();
       const equipped = this.gs.player.equipped || {};
       const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);
-      const armor = equipped.armor || (Game.modules?.PlayerState?.getState?.()?.equipped?.armor);
+      // Aggregate armor across all body slots
+      const psEq2 = Game.modules?.PlayerState?.getState?.()?.equipped || {};
+      const armorSlots2 = ["chest", "head", "arms", "legs"];
+      const activeArmorPieces = armorSlots2.map(s => equipped[s] || psEq2[s]).filter(Boolean);
+      const activeTotalAR = activeArmorPieces.reduce((sum, a) => sum + (a.armor || 0), 0);
+      const activeArmorLabel = activeArmorPieces.length
+        ? `${activeArmorPieces.map(a => escapeHtml(a.name)).join(", ")} (AR: ${activeTotalAR})`
+        : "<em>None</em>";
       const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;
       const maxHp = (typeof this.gs.player.maxHp === 'number') ? this.gs.player.maxHp : 100;
       const hpPct = Math.max(0, Math.min(100, Math.round(hp / maxHp * 100)));
@@ -342,7 +366,7 @@
               <span class="battle-bar-wrap"><span class="battle-bar" style="width:${hpPct}%"></span></span>
               <span class="battle-val">${hp} / ${maxHp} HP</span>
             </div>
-            <div class="battle-gear-line">${weapon ? `⚔ ${escapeHtml(weapon.name)}` : '⚔ Unarmed'} ${armor ? ` | 🛡 ${escapeHtml(armor.name)}` : ''}</div>
+            <div class="battle-gear-line">${weapon ? `⚔ ${escapeHtml(weapon.name)}` : '⚔ Unarmed'}${activeArmorPieces.length ? ` | 🛡 AR:${activeTotalAR}` : ''}</div>
             <div class="battle-special-row compact">
               ${['S','P','E','C','I','A','L'].map(k => `<span class="battle-special-cell"><span class="bs-key">${k}</span><span class="bs-val">${special[k] || 5}</span></span>`).join('')}
             </div>
