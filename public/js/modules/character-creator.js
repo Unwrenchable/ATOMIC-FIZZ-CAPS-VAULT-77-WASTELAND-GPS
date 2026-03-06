@@ -458,16 +458,17 @@
       svg += `<ellipse cx="${cx}" cy="${cy+faceHeight*0.62}" rx="20" ry="7" fill="rgba(0,0,0,0.22)"/>`;
 
       // Ears — drawn before face base so skin silhouette slightly overlaps inner edges
-      const earDk  = this._darkenColor(skinColor, 25);
-      const earCy  = cy - faceHeight * 0.08;
-      const earRx  = Math.max(6, faceWidth * 0.09);
-      const earRy  = Math.max(12, faceHeight * 0.19);
+      const earDk       = this._darkenColor(skinColor, 25);
+      const earCy       = cy - faceHeight * 0.08;
+      const earRx       = Math.max(6, faceWidth * 0.09);
+      const earRy       = Math.max(12, faceHeight * 0.19);
+      const earInnerOff = earRy * 0.12; // proportional inner-shadow vertical offset
       // Left ear
       svg += `<ellipse cx="${cx - faceWidth * 0.94}" cy="${earCy}" rx="${earRx}" ry="${earRy}" fill="${skinColor}"/>`;
-      svg += `<ellipse cx="${cx - faceWidth * 0.88}" cy="${earCy + 2}" rx="${earRx * 0.55}" ry="${earRy * 0.52}" fill="${earDk}" opacity="0.40"/>`;
+      svg += `<ellipse cx="${cx - faceWidth * 0.88}" cy="${earCy + earInnerOff}" rx="${earRx * 0.55}" ry="${earRy * 0.52}" fill="${earDk}" opacity="0.40"/>`;
       // Right ear
       svg += `<ellipse cx="${cx + faceWidth * 0.94}" cy="${earCy}" rx="${earRx}" ry="${earRy}" fill="${skinColor}"/>`;
-      svg += `<ellipse cx="${cx + faceWidth * 0.88}" cy="${earCy + 2}" rx="${earRx * 0.55}" ry="${earRy * 0.52}" fill="${earDk}" opacity="0.40"/>`;
+      svg += `<ellipse cx="${cx + faceWidth * 0.88}" cy="${earCy + earInnerOff}" rx="${earRx * 0.55}" ry="${earRy * 0.52}" fill="${earDk}" opacity="0.40"/>`;
 
       // Face base — 5-point anatomical silhouette (wider temples, defined jaw/chin)
       svg += `<path d="
@@ -893,20 +894,23 @@
       
       // Accessories
       if (app.accessory && app.accessory !== 'none') {
+        // Helper: distance from face edge to portrait edge (for strap endpoints)
+        const strapEdgeL = cx - faceWidth * 1.15;
+        const strapEdgeR = cx + faceWidth * 1.15;
         switch (app.accessory) {
           case 'eyepatch_left': {
             svg += `<ellipse cx="${cx - eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 5}" ry="${eyeHeight + 5}" fill="#1a1205"/>`;
             svg += `<ellipse cx="${cx - eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 3}" ry="${eyeHeight + 3}" fill="#0d0d0d" stroke="#3a3020" stroke-width="1.5"/>`;
-            // Strap
-            svg += `<path d="M${cx - eyeSpacing - eyeWidth - 4},${eyeY - 12} L${cx - 95},${eyeY - 8}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
-            svg += `<path d="M${cx - eyeSpacing + eyeWidth + 4},${eyeY - 12} L${cx + 10},${eyeY - 12}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
+            // Strap — left side goes to face edge, right side crosses nose bridge
+            svg += `<path d="M${cx - eyeSpacing - eyeWidth - 4},${eyeY - eyeHeight} L${strapEdgeL},${eyeY - eyeHeight * 0.5}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx - eyeSpacing + eyeWidth + 4},${eyeY - eyeHeight} L${cx + faceWidth * 0.10},${eyeY - eyeHeight}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
             break;
           }
           case 'eyepatch_right': {
             svg += `<ellipse cx="${cx + eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 5}" ry="${eyeHeight + 5}" fill="#1a1205"/>`;
             svg += `<ellipse cx="${cx + eyeSpacing}" cy="${eyeY}" rx="${eyeWidth + 3}" ry="${eyeHeight + 3}" fill="#0d0d0d" stroke="#3a3020" stroke-width="1.5"/>`;
-            svg += `<path d="M${cx + eyeSpacing + eyeWidth + 4},${eyeY - 12} L${cx + 95},${eyeY - 8}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
-            svg += `<path d="M${cx + eyeSpacing - eyeWidth - 4},${eyeY - 12} L${cx - 10},${eyeY - 12}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx + eyeSpacing + eyeWidth + 4},${eyeY - eyeHeight} L${strapEdgeR},${eyeY - eyeHeight * 0.5}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx + eyeSpacing - eyeWidth - 4},${eyeY - eyeHeight} L${cx - faceWidth * 0.10},${eyeY - eyeHeight}" stroke="#3a3020" stroke-width="3" stroke-linecap="round"/>`;
             break;
           }
           case 'glasses': {
@@ -915,24 +919,28 @@
             svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="${gR}" fill="rgba(180,200,220,0.12)" stroke="#555" stroke-width="2"/>`;
             // Bridge
             svg += `<line x1="${cx - eyeSpacing + gR}" y1="${eyeY - 2}" x2="${cx + eyeSpacing - gR}" y2="${eyeY - 2}" stroke="#555" stroke-width="2"/>`;
-            // Temple arms
-            svg += `<line x1="${cx - eyeSpacing - gR}" y1="${eyeY - 3}" x2="${cx - eyeSpacing - gR - 22}" y2="${eyeY + 5}" stroke="#555" stroke-width="2" stroke-linecap="round"/>`;
-            svg += `<line x1="${cx + eyeSpacing + gR}" y1="${eyeY - 3}" x2="${cx + eyeSpacing + gR + 22}" y2="${eyeY + 5}" stroke="#555" stroke-width="2" stroke-linecap="round"/>`;
+            // Temple arms — extend proportionally to face edge
+            const armLen = faceWidth * 0.30;
+            svg += `<line x1="${cx - eyeSpacing - gR}" y1="${eyeY - 3}" x2="${cx - eyeSpacing - gR - armLen}" y2="${eyeY + armLen * 0.22}" stroke="#555" stroke-width="2" stroke-linecap="round"/>`;
+            svg += `<line x1="${cx + eyeSpacing + gR}" y1="${eyeY - 3}" x2="${cx + eyeSpacing + gR + armLen}" y2="${eyeY + armLen * 0.22}" stroke="#555" stroke-width="2" stroke-linecap="round"/>`;
             // Lens glare
             svg += `<path d="M${cx - eyeSpacing - gR + 4},${eyeY - gR + 5} Q${cx - eyeSpacing},${eyeY - gR + 3} ${cx - eyeSpacing + gR - 4},${eyeY - gR + 8}" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>`;
             svg += `<path d="M${cx + eyeSpacing - gR + 4},${eyeY - gR + 5} Q${cx + eyeSpacing},${eyeY - gR + 3} ${cx + eyeSpacing + gR - 4},${eyeY - gR + 8}" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>`;
             break;
           }
           case 'goggles': {
-            svg += `<rect x="${cx - 58}" y="${eyeY - 16}" width="116" height="32" rx="6" fill="rgba(60,50,30,0.85)" stroke="#555" stroke-width="2.5"/>`;
-            svg += `<circle cx="${cx - eyeSpacing}" cy="${eyeY}" r="18" fill="rgba(100,180,255,0.25)" stroke="#666" stroke-width="2"/>`;
-            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="18" fill="rgba(100,180,255,0.25)" stroke="#666" stroke-width="2"/>`;
+            const ggW = eyeSpacing + eyeWidth + 6;  // half-width of goggle frame
+            const ggH = Math.max(14, eyeHeight + 6); // frame half-height
+            svg += `<rect x="${cx - ggW * 2}" y="${eyeY - ggH}" width="${ggW * 4}" height="${ggH * 2}" rx="6" fill="rgba(60,50,30,0.85)" stroke="#555" stroke-width="2.5"/>`;
+            const lensR = Math.max(14, eyeWidth + 2);
+            svg += `<circle cx="${cx - eyeSpacing}" cy="${eyeY}" r="${lensR}" fill="rgba(100,180,255,0.25)" stroke="#666" stroke-width="2"/>`;
+            svg += `<circle cx="${cx + eyeSpacing}" cy="${eyeY}" r="${lensR}" fill="rgba(100,180,255,0.25)" stroke="#666" stroke-width="2"/>`;
             // Goggle glare
-            svg += `<path d="M${cx - eyeSpacing - 10},${eyeY - 9} Q${cx - eyeSpacing},${eyeY - 13} ${cx - eyeSpacing + 10},${eyeY - 9}" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-linecap="round"/>`;
-            svg += `<path d="M${cx + eyeSpacing - 10},${eyeY - 9} Q${cx + eyeSpacing},${eyeY - 13} ${cx + eyeSpacing + 10},${eyeY - 9}" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-linecap="round"/>`;
-            // Side strap
-            svg += `<line x1="${cx - 58}" y1="${eyeY}" x2="${cx - 90}" y2="${eyeY}" stroke="#444" stroke-width="4" stroke-linecap="round"/>`;
-            svg += `<line x1="${cx + 58}" y1="${eyeY}" x2="${cx + 90}" y2="${eyeY}" stroke="#444" stroke-width="4" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx - eyeSpacing - lensR * 0.55},${eyeY - lensR * 0.62} Q${cx - eyeSpacing},${eyeY - lensR * 0.88} ${cx - eyeSpacing + lensR * 0.55},${eyeY - lensR * 0.62}" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-linecap="round"/>`;
+            svg += `<path d="M${cx + eyeSpacing - lensR * 0.55},${eyeY - lensR * 0.62} Q${cx + eyeSpacing},${eyeY - lensR * 0.88} ${cx + eyeSpacing + lensR * 0.55},${eyeY - lensR * 0.62}" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-linecap="round"/>`;
+            // Side straps — scale to face width
+            svg += `<line x1="${cx - ggW * 2}" y1="${eyeY}" x2="${strapEdgeL}" y2="${eyeY}" stroke="#444" stroke-width="4" stroke-linecap="round"/>`;
+            svg += `<line x1="${cx + ggW * 2}" y1="${eyeY}" x2="${strapEdgeR}" y2="${eyeY}" stroke="#444" stroke-width="4" stroke-linecap="round"/>`;
             break;
           }
           case 'bandana': {

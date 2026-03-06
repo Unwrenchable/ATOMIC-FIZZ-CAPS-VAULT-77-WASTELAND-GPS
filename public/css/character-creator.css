@@ -758,8 +758,8 @@
     border-radius: 0;
     border-left: none;
     border-right: none;
-    min-height: 100dvh;
-    min-height: 100vh; /* fallback */
+    min-height: 100vh;   /* fallback for older browsers */
+    min-height: 100dvh;  /* dynamic viewport height for mobile with toolbars */
   }
 
   /* ── Compact header ─────────────────────────────────── */
