@@ -27,6 +27,32 @@
   display: none;
 }
 
+/* CRT phosphor scanline overlay — subtle horizontal lines */
+.character-creator-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.055) 0px,
+    rgba(0, 0, 0, 0.055) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Vignette — dark radial edges for CRT monitor feel */
+.character-creator-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.65) 100%);
+  pointer-events: none;
+  z-index: 9998;
+}
+
 .character-creator-container {
   width: 100%;
   max-width: 1200px;
@@ -44,20 +70,68 @@
    ============================================================ */
 
 .cc-header {
-  background: linear-gradient(to right, rgba(0, 255, 65, 0.15), rgba(0, 100, 30, 0.1));
+  background: linear-gradient(to right, rgba(0, 40, 10, 0.98), rgba(0, 25, 8, 0.95));
   padding: 16px 24px;
-  border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+  border-bottom: 2px solid rgba(0, 255, 65, 0.4);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Left group: seal + title stacked */
+.cc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Vault-Tec Cog Seal — CSS-only circular badge */
+.cc-vault-seal {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #ffcc00;
+  background: rgba(255, 204, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(255, 204, 0, 0.35), inset 0 0 10px rgba(0,0,0,0.5);
+  position: relative;
+  flex-shrink: 0;
+  outline: 3px dashed rgba(255, 204, 0, 0.30);
+  outline-offset: 5px;
+}
+
+.cc-seal-number {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffcc00;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.8);
+  letter-spacing: 0.05em;
+}
+
+/* Vault-Tec amber info strip below header */
+.cc-vault-bar {
+  background: rgba(255, 204, 0, 0.07);
+  border-bottom: 1px solid rgba(255, 204, 0, 0.20);
+  padding: 5px 24px;
+  font-size: 10px;
+  color: #cc9900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-variant: small-caps;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+}
+
 .cc-title {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  text-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
+  letter-spacing: 0.3em;
+  color: #ffcc00;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.7), 0 0 20px rgba(255, 204, 0, 0.3);
 }
 
 .cc-subtitle {
@@ -153,8 +227,8 @@
   position: relative;
   overflow: hidden;
   box-shadow: 
-    0 0 20px rgba(0, 255, 65, 0.2),
-    inset 0 0 40px rgba(0, 0, 0, 0.8);
+    inset 0 0 20px rgba(0,0,0,0.8),
+    0 0 15px rgba(0,255,65,0.3);
 }
 
 /* CRT scanline overlay */
@@ -204,6 +278,51 @@
   text-align: center;
 }
 
+/* Pip-Boy dweller label below portrait */
+.cc-pip-label {
+  margin-top: 8px;
+  font-size: 9px;
+  color: #00aa2a;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+  opacity: 0.75;
+  text-align: center;
+}
+
+/* Vault assignment block in preview panel */
+.cc-vault-assignment {
+  margin-top: 10px;
+  padding: 8px 6px 4px;
+  border-top: 1px solid rgba(0, 255, 65, 0.18);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cc-va-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  padding: 0 2px;
+}
+
+.cc-va-label {
+  color: #006622;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-va-val {
+  color: #00ff41;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 10px;
+}
+
 /* Randomize button */
 .cc-randomize-btn {
   margin-top: 20px;
@@ -251,23 +370,28 @@
   background: transparent;
   border: 1px solid rgba(0, 255, 65, 0.4);
   color: #00ff41;
-  padding: 8px 16px;
+  padding: 10px 14px;
   cursor: pointer;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   transition: all 0.2s ease;
+  border-radius: 2px;
+  font-weight: bold;
 }
 
 .cc-tab:hover {
-  background: rgba(0, 255, 65, 0.1);
+  background: rgba(0, 255, 65, 0.15);
+  border-color: rgba(0, 255, 65, 0.7);
 }
 
 .cc-tab.active {
-  background: rgba(0, 255, 65, 0.2);
+  background: #00ff41;
   border-color: #00ff41;
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+  color: #001a00;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+  font-weight: bold;
 }
 
 /* Options content area */
@@ -514,9 +638,9 @@
 }
 
 .cc-confirm-btn {
-  background: rgba(0, 255, 65, 0.2);
-  border: 2px solid #00ff41;
-  color: #00ff41;
+  background: #ffcc00;
+  border: 2px solid #ff9900;
+  color: #1a0a00;
   padding: 12px 32px;
   cursor: pointer;
   font-family: inherit;
@@ -525,13 +649,19 @@
   text-transform: uppercase;
   letter-spacing: 0.15em;
   transition: all 0.2s ease;
-  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+  animation: vault-enter-pulse 2s ease-in-out infinite;
 }
 
 .cc-confirm-btn:hover {
-  background: rgba(0, 255, 65, 0.3);
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+  background: #ffe033;
+  border-color: #ffcc00;
+  box-shadow: 0 0 25px rgba(255, 204, 0, 0.6);
   transform: translateY(-2px);
+}
+
+@keyframes vault-enter-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 204, 0, 0.3); }
+  50%       { box-shadow: 0 0 20px rgba(255, 204, 0, 0.6); }
 }
 
 /* ============================================================
@@ -605,6 +735,14 @@
   background: rgba(0, 255, 65, 0.6);
 }
 
+/* Amber scrollbar thumb when on SPECIAL / Background / Traits tabs */
+.cc-special-content::-webkit-scrollbar-thumb,
+.cc-background-content::-webkit-scrollbar-thumb,
+.cc-traits-content::-webkit-scrollbar-thumb {
+  background: #886600;
+  border-radius: 4px;
+}
+
 /* ============================================================
    RESPONSIVE ADJUSTMENTS
    ============================================================ */
@@ -674,7 +812,13 @@
 }
 
 .character-creator-container {
-  animation: cc-fade-in 0.3s ease-out;
+  animation: cc-fade-in 0.3s ease-out, phosphor-burn 8s ease-in-out 0.3s infinite;
+  will-change: opacity;
+}
+
+@keyframes phosphor-burn {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.97; }
 }
 
 /* Terminal flicker effect for header */
@@ -699,6 +843,17 @@
 @keyframes selection-glow {
   0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 65, 0.3); }
   50% { box-shadow: 0 0 15px rgba(0, 255, 65, 0.5); }
+}
+
+/* Vault entry flash — white screen burst before closing */
+@keyframes vault-flash {
+  0%   { background: rgba(0, 0, 0, 0.95); }
+  18%  { background: rgba(255, 255, 255, 0.65); }
+  100% { background: rgba(0, 0, 0, 0.95); }
+}
+
+.cc-entering-vault {
+  animation: vault-flash 0.4s ease-out forwards !important;
 }
 
 /* ============================================================
@@ -748,14 +903,71 @@
 
 .cc-special-row {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 48px 1fr auto auto;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
+  padding: 10px 10px;
   background: rgba(0,20,0,0.6);
   border: 1px solid #003300;
   border-radius: 4px;
   transition: border-color 0.2s;
+}
+
+/* Vault Boy bobblehead SVG icon */
+.cc-sp-vaultboy {
+  display: block;
+  flex-shrink: 0;
+  opacity: 0.82;
+  filter: drop-shadow(0 0 3px rgba(0,255,65,0.4));
+  transition: opacity 0.2s, filter 0.2s;
+}
+
+.cc-special-row:hover .cc-sp-vaultboy {
+  opacity: 1;
+  filter: drop-shadow(0 0 6px rgba(0,255,65,0.7));
+}
+
+/* SPECIAL stat amber progress bar */
+.cc-sp-bar {
+  height: 3px;
+  background: rgba(0,255,65,0.1);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.cc-sp-bar-fill {
+  height: 100%;
+  background: #ffcc00;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* "You're SPECIAL!" intro banner */
+.cc-special-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  background: rgba(255, 204, 0, 0.04);
+  border: 1px solid rgba(255, 204, 0, 0.15);
+  border-radius: 4px;
+}
+
+.cc-si-book {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  line-height: 1;
+}
+
+.cc-si-text {
+  font-size: 11px;
+  color: #cc9900;
+  font-style: italic;
+  font-family: 'Courier New', monospace;
+  line-height: 1.5;
 }
 
 .cc-special-row:hover {
@@ -917,6 +1129,14 @@
   gap: 8px;
 }
 
+/* Shared amber left-border accent for selectable cards */
+.cc-bg-card:hover,
+.cc-bg-card.selected,
+.cc-trait-card:hover,
+.cc-trait-card.selected {
+  border-left: 3px solid #ffcc00;
+}
+
 .cc-bg-card {
   padding: 12px 14px;
   background: rgba(0,15,0,0.7);
@@ -927,7 +1147,6 @@
 }
 
 .cc-bg-card:hover {
-  border-color: #00aa2a;
   background: rgba(0,30,0,0.8);
 }
 
@@ -935,6 +1154,11 @@
   border-color: #00ff41;
   background: rgba(0,255,65,0.06);
   box-shadow: 0 0 8px rgba(0,255,65,0.2);
+}
+
+.cc-bg-card.selected .cc-bg-name::before {
+  content: "► ";
+  color: #ffcc00;
 }
 
 .cc-bg-header {
@@ -1022,7 +1246,6 @@
 }
 
 .cc-trait-card:hover {
-  border-color: #00aa2a;
   background: rgba(0,30,0,0.8);
 }
 
@@ -1030,6 +1253,11 @@
   border-color: #00ff41;
   background: rgba(0,255,65,0.06);
   box-shadow: 0 0 8px rgba(0,255,65,0.2);
+}
+
+.cc-trait-card.selected .cc-trait-name::before {
+  content: "► ";
+  color: #ffcc00;
 }
 
 .cc-trait-header {

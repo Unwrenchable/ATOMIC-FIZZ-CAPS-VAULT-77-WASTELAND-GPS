@@ -134,6 +134,15 @@
       this.onSaveCallback = onSave;
       this.isOpen = true;
       this.overlayEl.classList.remove('hidden');
+
+      // Generate unique vault assignment number (cosmetic only)
+      const _vArr = new Uint32Array(1);
+      crypto.getRandomValues(_vArr);
+      const _unitNum = String(_vArr[0] % 90000 + 10000); // always 5 digits: 10000–99999
+      setTimeout(() => {
+        const _unitEl = document.getElementById('ccVaultUnit');
+        if (_unitEl) _unitEl.textContent = _unitNum;
+      }, 50);
       this._renderOptions();
       this._updatePreview();
       // Provide DragonBones quick toggle if runtime available
@@ -955,12 +964,16 @@
         <div class="character-creator-container">
           <!-- Header -->
           <div class="cc-header">
-            <div>
-              <div class="cc-title">CHARACTER CREATION</div>
-              <div class="cc-subtitle">VAULT-TEC PERSONNEL FILE</div>
+            <div class="cc-header-left">
+              <div class="cc-vault-seal" aria-hidden="true"><span class="cc-seal-number">77</span></div>
+              <div>
+                <div class="cc-title">CHARACTER CREATION</div>
+                <div class="cc-subtitle">VAULT-TEC PERSONNEL FILE · UNIT #<span id="ccVaultUnit">???</span></div>
+              </div>
             </div>
-            <button class="cc-close-btn" id="ccCloseBtn">✕ CANCEL</button>
+            <button class="cc-close-btn" id="ccCloseBtn">✕ ABORT</button>
           </div>
+          <div class="cc-vault-bar">VAULT-TEC CORPORATION · VAULT 77 · PERSONNEL ASSIGNMENT TERMINAL · YEAR 2277</div>
 
           <!-- Main Content -->
           <div class="cc-main">
@@ -970,8 +983,13 @@
               <div class="cc-portrait-container">
                 <div class="cc-portrait-svg" id="ccPortraitSvg"></div>
               </div>
+              <div class="cc-pip-label">VAULT DWELLER</div>
               <div class="cc-preview-name" id="ccPreviewName">WANDERER</div>
               <div class="cc-preview-stats" id="ccPreviewStats">HUMAN • ADULT</div>
+              <div class="cc-vault-assignment">
+                <div class="cc-va-row"><span class="cc-va-label">STATUS</span><span class="cc-va-val" id="ccVaStatus">PENDING</span></div>
+                <div class="cc-va-row"><span class="cc-va-label">VAULT</span><span class="cc-va-val">77</span></div>
+              </div>
               <button class="cc-randomize-btn" id="ccRandomizeBtn">🎲 RANDOMIZE</button>
             </div>
 
@@ -979,15 +997,15 @@
             <div class="cc-options-panel">
               <!-- Category Tabs -->
               <div class="cc-category-tabs" id="ccCategoryTabs">
-                <button class="cc-tab active" data-category="identity">IDENTITY</button>
-                <button class="cc-tab" data-category="face">FACE</button>
-                <button class="cc-tab" data-category="hair">HAIR</button>
-                <button class="cc-tab" data-category="eyes">EYES</button>
-                <button class="cc-tab" data-category="details">DETAILS</button>
-                <button class="cc-tab" data-category="extras">EXTRAS</button>
-                <button class="cc-tab" data-category="special">S.P.E.C.I.A.L.</button>
-                <button class="cc-tab" data-category="background">BACKGROUND</button>
-                <button class="cc-tab" data-category="traits">TRAITS</button>
+                <button class="cc-tab active" data-category="identity">01 IDENTITY</button>
+                <button class="cc-tab" data-category="face">02 FACE</button>
+                <button class="cc-tab" data-category="hair">03 HAIR</button>
+                <button class="cc-tab" data-category="eyes">04 EYES</button>
+                <button class="cc-tab" data-category="details">05 DETAILS</button>
+                <button class="cc-tab" data-category="extras">06 EXTRAS</button>
+                <button class="cc-tab" data-category="special">07 S.P.E.C.I.A.L.</button>
+                <button class="cc-tab" data-category="background">08 BACKGROUND</button>
+                <button class="cc-tab" data-category="traits">09 TRAITS</button>
               </div>
 
               <!-- Options Content -->
@@ -1143,7 +1161,7 @@
             <div class="cc-footer-left">
               <button class="cc-reset-btn" id="ccResetBtn">RESET TO DEFAULT</button>
             </div>
-            <button class="cc-confirm-btn" id="ccConfirmBtn">CONFIRM</button>
+            <button class="cc-confirm-btn" id="ccConfirmBtn">► ENTER VAULT</button>
           </div>
         </div>
       `;
@@ -1198,7 +1216,10 @@
           }
         }));
         
-        this.close();
+        // Brief vault-entry flash before closing
+        this.overlayEl.classList.add('cc-entering-vault');
+        setTimeout(() => { this.close(); }, 400);
+        return;
       });
 
       // Name input
@@ -1387,7 +1408,25 @@
       // Build derived stats (using base SPECIAL only — background applied on save)
       const derived = this._calcDerived(sp);
 
+      // Inline Vault Boy bobblehead icon with stat letter overlay
+      const vaultBoyIcon = (abbr) => `
+        <svg class="cc-sp-vaultboy" viewBox="0 0 40 50" width="40" height="50" aria-hidden="true">
+          <circle cx="20" cy="14" r="12" fill="none" stroke="#00ff41" stroke-width="1.5"/>
+          <text x="20" y="19" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#00ff41">${escapeHtml(abbr)}</text>
+          <rect x="12" y="27" width="16" height="2" rx="1" fill="#00ff41" opacity="0.6"/>
+          <rect x="8" y="30" width="6" height="12" rx="2" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
+          <rect x="26" y="30" width="6" height="12" rx="2" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
+          <rect x="14" y="29" width="12" height="18" rx="2" fill="none" stroke="#00ff41" stroke-width="1.5"/>
+          <rect x="14" y="47" width="5" height="3" rx="1" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
+          <rect x="21" y="47" width="5" height="3" rx="1" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
+        </svg>
+      `;
+
       let html = `
+        <div class="cc-special-intro">
+          <span class="cc-si-book">📖</span>
+          <span class="cc-si-text">"Every human being is born with <strong>S.P.E.C.I.A.L.</strong> attributes. These core values define your every action in the wasteland."</span>
+        </div>
         <div class="cc-special-points-banner">
           <span class="cc-sp-label">POINTS REMAINING:</span>
           <span class="cc-sp-value" id="ccSpPoints">${remaining}</span>
@@ -1400,10 +1439,12 @@
         const dots  = Array.from({length: 10}, (_, i) => `<span class="cc-sp-dot${i < val ? ' filled' : ''}"></span>`).join('');
         html += `
           <div class="cc-special-row" data-stat="${escapeHtml(stat.key)}">
+            ${vaultBoyIcon(stat.abbr)}
             <div class="cc-sp-meta">
               <span class="cc-sp-abbr">${escapeHtml(stat.abbr)}</span>
               <span class="cc-sp-name">${escapeHtml(stat.label)}</span>
               <span class="cc-sp-desc">${escapeHtml(stat.desc)}</span>
+              <div class="cc-sp-bar"><div class="cc-sp-bar-fill" id="ccSpBar${escapeHtml(stat.key)}" style="width:${val * 10}%"></div></div>
             </div>
             <div class="cc-sp-controls">
               <button class="cc-sp-btn cc-sp-minus" data-stat="${escapeHtml(stat.key)}" ${val <= SPECIAL_MIN ? 'disabled' : ''}>−</button>
@@ -1462,10 +1503,12 @@
       // Partial re-render (update only changed elements, not full re-render)
       const numEl  = document.getElementById(`ccSp${statKey}`);
       const dotsEl = document.getElementById(`ccSpDots${statKey}`);
+      const barEl  = document.getElementById(`ccSpBar${statKey}`);
       const ptsBanner = document.getElementById('ccSpPoints');
       if (numEl)  numEl.textContent = newVal;
       if (dotsEl) dotsEl.innerHTML  = Array.from({length: 10}, (_, i) =>
         `<span class="cc-sp-dot${i < newVal ? ' filled' : ''}"></span>`).join('');
+      if (barEl)  barEl.style.width = `${newVal * 10}%`;
       if (ptsBanner) ptsBanner.textContent = newRemaining;
 
       // Update button states for all stats
