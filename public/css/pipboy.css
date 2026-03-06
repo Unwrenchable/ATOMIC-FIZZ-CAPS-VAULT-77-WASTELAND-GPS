@@ -187,9 +187,7 @@ body.pipboy-mode {
   pointer-events: auto;
 }
 
-.pipboy-panel.has-compass {
-  position: relative;
-}
+/* .has-compass: no-op class kept for JS feature detection */
 
 /* General panel-body - scrollable content area */
 .panel-body {
