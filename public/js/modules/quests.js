@@ -203,7 +203,7 @@
         {
           id: 'find_institute_cache',
           description: 'Discover the Institute data cache at the northern coordinates.',
-          requires: { flag: 'dolores_is_free' }
+          requires: { flag: 'dolores_cache_found' }
         }
       ],
       rewards: { xp: 300, caps: 200, items: ['behavioral_lock_data'] }
@@ -710,9 +710,9 @@
         animation: questToastIn 0.3s ease-out;
       `;
 
-      const safeHeader = header || "📜 QUEST STARTED";
-      const safeName = questName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      const safeMsg  = (message || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const safeHeader = escapeHtml(header || "📜 QUEST STARTED");
+      const safeName = escapeHtml(questName || "");
+      const safeMsg  = escapeHtml(message || "");
       
       toast.innerHTML = `
         <div style="font-size: 14px; color: #ffaa00; margin-bottom: 6px;">${safeHeader}</div>
@@ -1155,9 +1155,9 @@
       const rewardLines = [];
       if (rewards?.xp)   rewardLines.push(`+${rewards.xp} XP`);
       if (rewards?.caps) rewardLines.push(`+${rewards.caps} CAPS`);
-      if (rewards?.items?.length) rewardLines.push(`Items: ${rewards.items.join(", ")}`);
+      if (rewards?.items?.length) rewardLines.push(`Items: ${rewards.items.map(id => escapeHtml(String(id))).join(", ")}`);
 
-      const safeQuestName = questName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const safeQuestName = escapeHtml(questName || "");
       toast.innerHTML = `
         <div style="font-size: 16px; color: #ffaa00; margin-bottom: 4px; font-weight: bold;">✓ QUEST COMPLETE</div>
         <div style="font-size: 20px; font-weight: bold; margin-bottom: 6px;">${safeQuestName}</div>
@@ -1191,14 +1191,18 @@
 
       const req = step.requires || {};
 
-      // Item requirement
+      // Item requirement — search all inventory categories
       if (req.item) {
         const inv = this.gs.inventory;
         const hasItem =
-          inv.questItems.some(i => i.id === req.item) ||
-          inv.consumables.some(i => i.id === req.item) ||
-          inv.weapons.some(i => i.id === req.item) ||
-          inv.ammo.some(i => i.id === req.item);
+          inv.questItems?.some(i => i.id === req.item) ||
+          inv.consumables?.some(i => i.id === req.item) ||
+          inv.weapons?.some(i => i.id === req.item) ||
+          inv.ammo?.some(i => i.id === req.item) ||
+          inv.tools?.some(i => i.id === req.item) ||
+          inv.junk?.some(i => i.id === req.item) ||
+          inv.misc?.some(i => i.id === req.item) ||
+          inv.armor?.some(i => i.id === req.item);
 
         if (!hasItem) return false;
       }
@@ -1212,6 +1216,12 @@
         const nearby = Game.modules.worldmap.getNearbyPOIs(500);
         const atLoc = nearby.some(n => n.poi && n.poi.id === req.location);
         if (!atLoc) return false;
+      }
+
+      // Flag requirement — check GAME_STATE flags set by narrative.js
+      if (req.flag) {
+        const flagValue = window.GAME_STATE?.flags?.[req.flag];
+        if (!flagValue) return false;
       }
 
       return true;
@@ -1229,37 +1239,10 @@
       // CRITICAL FIX: Save quest state after advancing step
       this.saveQuestState();
 
-      // Quest complete
+      // Quest complete — delegate to completeQuest() for unified reward handling
+      // (avoids double-crediting gs.player XP/caps AND window.PLAYER XP/caps)
       if (st.currentStepIndex >= q.steps.length) {
-        st.state = "completed";
-
-        const r = q.rewards || {};
-        this.gs.player.xp += r.xp || 0;
-        this.gs.player.caps += r.caps || 0;
-
-        // Give item rewards and sync with main.js PLAYER inventory
-        (r.items || []).forEach(itemId => {
-          // Add to quest module inventory
-          if (!this.gs.inventory.questItems) this.gs.inventory.questItems = [];
-          this.gs.inventory.questItems.push({ id: itemId, name: itemId, quantity: 1 });
-          
-          // Sync with main.js PLAYER inventory
-          if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
-            if (!window.PLAYER.inventory.includes(itemId)) {
-              window.PLAYER.inventory.push(itemId);
-            }
-          }
-        });
-        
-        // Sync XP and caps with main.js PLAYER state
-        if (window.PLAYER) {
-          window.PLAYER.xp = (window.PLAYER.xp || 0) + (r.xp || 0);
-          window.PLAYER.caps = (window.PLAYER.caps || 0) + (r.caps || 0);
-        }
-
-        // Save quest completion state
-        this.saveQuestState();
-
+        this.completeQuest(questId);
         return true;
       }
 
