@@ -246,7 +246,7 @@
           "text": "[Quest] We destroy the relay tower. End the loop permanently.",
           "tone": "direct",
           "next": "node_offer_quest_destroy",
-          "grant_quest": "quest_the_loop"
+          "offers_quest": "quest_the_loop"
         },
         {
           "text": "[Question] You could simply walk away. Leave this place.",
@@ -294,7 +294,7 @@
           "text": "[Quest] There's a relay tower east of the ridge. We shut it down.",
           "tone": "direct",
           "next": "node_offer_quest_destroy",
-          "grant_quest": "quest_the_loop"
+          "offers_quest": "quest_the_loop"
         }
       ]
     },
@@ -306,7 +306,7 @@
           "text": "[Quest] That starts with destroying the tower that's been running your loop.",
           "tone": "direct",
           "next": "node_offer_quest_destroy",
-          "grant_quest": "quest_the_loop"
+          "offers_quest": "quest_the_loop"
         }
       ]
     },
@@ -318,7 +318,7 @@
           "text": "[Quest] The relay tower east of the ridge. We start there.",
           "tone": "direct",
           "next": "node_offer_quest_destroy",
-          "grant_quest": "quest_the_loop"
+          "offers_quest": "quest_the_loop"
         }
       ]
     },
@@ -330,7 +330,7 @@
           "text": "[Quest] Then we destroy the tower. Let's start there.",
           "tone": "direct",
           "next": "node_offer_quest_destroy",
-          "grant_quest": "quest_the_loop"
+          "offers_quest": "quest_the_loop"
         }
       ]
     },
@@ -405,7 +405,7 @@
           "text": "[Quest] Yes. And I'm going to shut it down.",
           "tone": "direct",
           "next": "node_offer_quest_destroy",
-          "grant_quest": "quest_the_loop"
+          "offers_quest": "quest_the_loop"
         },
         {
           "text": "[Question] Have you ever gotten closer? To the tower itself?",
@@ -422,7 +422,7 @@
           "text": "[Quest] No. But that changes today.",
           "tone": "direct",
           "next": "node_offer_quest_destroy",
-          "grant_quest": "quest_the_loop"
+          "offers_quest": "quest_the_loop"
         }
       ]
     },
@@ -445,7 +445,7 @@
           "text": "[Quest] You can still go. But first we need to break the tower that's keeping you here.",
           "tone": "direct",
           "next": "node_offer_quest_destroy",
-          "grant_quest": "quest_the_loop"
+          "offers_quest": "quest_the_loop"
         }
       ]
     },
@@ -536,7 +536,7 @@
           "text": "[Quest] I can help you find out. Come with me to the relay tower.",
           "tone": "direct",
           "next": "node_offer_quest_destroy",
-          "grant_quest": "quest_the_loop"
+          "offers_quest": "quest_the_loop"
         }
       ]
     },
@@ -682,6 +682,65 @@
           "text": "The tower is down. You're free.",
           "tone": "direct",
           "next": "node_dolores_freed"
+        }
+      ]
+    },
+    {
+      "id": "dolores_report_warden",
+      "conditions": [
+        "flag:dolores_knows_tower",
+        "item:institute_override_key",
+        "!flag:warden_defeated"
+      ],
+      "text": "She watches the ridge.\n\n\"The Warden was there,\" she says quietly. \"I could sense him. Always the same route. Same patrol. Same dead eyes.\"\n\nShe turns to you.\n\n\"Did you deal with him?\"",
+      "responses": [
+        {
+          "text": "The Warden is down. The tower is next.",
+          "tone": "direct",
+          "set_flags": ["warden_defeated"],
+          "next": null
+        },
+        {
+          "text": "Not yet. Still planning my approach.",
+          "tone": "sarcastic",
+          "next": null
+        }
+      ]
+    },
+    {
+      "id": "dolores_report_tower_destroyed",
+      "conditions": [
+        "flag:warden_defeated",
+        "!flag:quest_the_loop_complete"
+      ],
+      "text": "She presses her fingertips together. Waiting.\n\n\"The tower,\" she says. \"You used it?\"\n\nShe looks east — toward the ridge — and her eyes go distant for a moment.\n\n\"It's still broadcasting. I can feel it. Like a hook.\"\n\nA pause.\n\n\"Tell me when it's done.\"",
+      "responses": [
+        {
+          "text": "The override key worked. The tower is down. It's done.",
+          "tone": "direct",
+          "set_flags": ["quest_the_loop_complete"],
+          "next": "node_dolores_freed"
+        },
+        {
+          "text": "I'm working on it.",
+          "tone": "kind",
+          "next": null
+        }
+      ]
+    },
+    {
+      "id": "dolores_cache_discovered",
+      "conditions": [
+        "flag:dolores_is_free",
+        "!flag:dolores_cache_found"
+      ],
+      "text": "A signal. Fragmented. Originating from the northern coordinates she walked toward.\n\nSomething is transmitting from whatever the Institute buried up there.\n\nYour Pip-Boy logs the coordinates.",
+      "responses": [
+        {
+          "text": "I'll investigate the cache site.",
+          "tone": "direct",
+          "set_flags": ["dolores_cache_found"],
+          "next": null
         }
       ]
     }
