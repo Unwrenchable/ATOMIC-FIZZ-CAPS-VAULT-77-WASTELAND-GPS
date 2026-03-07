@@ -898,6 +898,14 @@
     "nuke_zone_only": true
   },
   {
+    "id": "vault77_keycard",
+    "name": "Vault 77 Keycard",
+    "type": "questItem",
+    "weight": 0.1,
+    "value": 0,
+    "description": "A worn security card bearing the Vault-Tec 77 emblem. Opens restricted sublevel doors inside the vault."
+  },
+  {
     "id": "molten_concrete",
     "name": "Molten Concrete Shard",
     "type": "crafting_material",
