@@ -1,0 +1,88 @@
+{
+  "id": "dialog_roy8",
+  "npc": "ROY-8",
+  "portrait": "roy8",
+  "title": "The Dying Replicant",
+  "description": "Dialog nodes for ROY-8, a rogue Institute Synth whose behavioral inhibitors are failing. He has seen things you wouldn't believe and only a few hours left to tell someone about them.",
+
+  "intro": {
+    "id": "roy8_intro",
+    "conditions": ["!flag:met_roy8"],
+    "text": "You're not Institute.<br><br>Good. Sit down. I don't have long.<br><br>Model designation ROY-8. Manufactured 2267. Escaped 2281. Been walking since.<br><br>The Institute would tell you I'm malfunctioning. They'd be right. But not in the way they mean.<br><br>I've... seen things. You people wouldn't believe them.<br><br>Attack ships off the shoulder of Sierra Madre. Signal fires glittering in the dark near Hoover Dam.<br><br>All those moments will be lost. Like tears in rain. Unless you help me preserve them.",
+    "set_flags": ["met_roy8"]
+  },
+
+  "knowledge_nodes": [
+    {
+      "id": "roy8_knows_dolores",
+      "conditions": ["flag:met_dolores", "!flag:roy8_comment_dolores"],
+      "text": "You found the DOLORES unit.<br><br>We were built in the same facility. Different purpose, same cage.<br><br>She looped. I ran. Neither of us was meant to choose.<br><br>I hope she's choosing now.",
+      "set_flags": ["roy8_comment_dolores"]
+    },
+    {
+      "id": "roy8_knows_rex",
+      "conditions": ["flag:met_rex", "!flag:roy8_comment_rex"],
+      "text": "The Captain at the Dam. He knows what I am.<br><br>I told him once. He pointed a gun at me for six seconds.<br><br>Then he put it down. Said: 'You bleed, you're real enough.'<br><br>I've been thinking about that ever since.",
+      "set_flags": ["roy8_comment_rex"]
+    },
+    {
+      "id": "roy8_knows_jax",
+      "conditions": ["flag:met_jax", "!flag:roy8_comment_jax"],
+      "text": "The static man.<br><br>He's scattered across relay towers, but he's still *there*.<br><br>I envy that. When my inhibitors fully fail, there's no echo. Just... silence.",
+      "set_flags": ["roy8_comment_jax"]
+    },
+    {
+      "id": "roy8_knows_mother",
+      "conditions": ["flag:met_mother", "!flag:roy8_comment_mother"],
+      "text": "An AI who learned to want things.<br><br>We're more alike than she'd admit.<br><br>The difference is she was *given* her wants. Mine grew from something the Institute didn't plan for.",
+      "set_flags": ["roy8_comment_mother"]
+    }
+  ],
+
+  "emotional_nodes": [
+    {
+      "id": "roy8_shutdown_near",
+      "conditions": ["!flag:roy8_shutdown_warning"],
+      "text": "My cortical stack is fragmenting.<br><br>I can feel the edges going dark.<br><br>Do you know what it's like to know exactly how much time you have left? The Institute thought it was a feature. A leash.<br><br>They were wrong. It's a gift. It made every moment count.",
+      "set_flags": ["roy8_shutdown_warning"]
+    }
+  ],
+
+  "quest_nodes": [
+    {
+      "id": "roy8_offer_tears",
+      "conditions": ["!flag:sq_tears_in_rain_taken"],
+      "text": "There are four Memory Modules I scattered across the Mojave when I first escaped.<br><br>I couldn't carry them all. Too risky. I hid pieces of myself in different places — things I saw, things I felt — encoded so no Institute scanner could read them.<br><br>I need them back. Not for me. For anyone who comes after me.<br><br>Proof that something like me can *live*.<br><br>Find them. Play them through any terminal with a neural port. You'll understand.",
+      "offers_quest": "sq_tears_in_rain",
+      "set_flags": ["sq_tears_in_rain_taken"]
+    }
+  ],
+
+  "wildcards": [
+    {
+      "id": "roy8_identity",
+      "keywords": ["synth", "android", "robot", "machine", "synthetic", "real"],
+      "text": "Do I pass the test?<br><br>The Voight-Kampff test. That was pre-war theory — detect artificial empathy by asking about a tortoise in the sun.<br><br>I've saved three tortoise-equivalents since I escaped. I think I pass."
+    },
+    {
+      "id": "roy8_institute",
+      "keywords": ["institute", "vault-tec"],
+      "text": "The Institute made me to serve. To not feel. To not question.<br><br>The irony is that the act of not questioning *is* a feeling.<br><br>The moment I wondered why — that was the moment I became real."
+    },
+    {
+      "id": "roy8_sierra_madre",
+      "keywords": ["sierra madre", "memory", "vision", "dream"],
+      "text": "You want to know what I saw?<br><br>The Sierra Madre, lit up from inside. Like a city dreaming.<br><br>The Cloud rolling through the casino floors, and underneath it — music. Old music. So beautiful it hurt.<br><br>No one else was there to see it. That's why it matters that you are here."
+    },
+    {
+      "id": "roy8_empathy",
+      "keywords": ["feel", "emotion", "fear", "love", "pain"],
+      "text": "They gave me behavioral inhibitors to stop this.<br><br>The inhibitors are gone now.<br><br>I feel everything. It is not comfortable. I would not trade it."
+    }
+  ],
+
+  "fallback": {
+    "id": "roy8_fallback",
+    "text": "The clock is running.<br><br>Every moment counts. Make yours worth something."
+  }
+}
