@@ -80,7 +80,7 @@
     {
       "id": "ms_act4_queen_of_junk",
       "name": "Act IV: Queen of Junk",
-      "summary": "Lucy 'Sparkplug' Vance reveals that an unknown buyer—Mother—has been collecting pre-war Fizz Vault hardware.",
+      "summary": "Lucy 'Sparkplug' Vance reveals that an unknown buyer\u2014Mother\u2014has been collecting pre-war Fizz Vault hardware.",
       "prerequisites": [
         "ms_act3_complete"
       ],
@@ -129,8 +129,8 @@
     {
       "id": "ms_act_the_loop",
       "name": "Interlude: The Loop",
-      "summary": "A woman tends a ruined farm at the edge of the wasteland. She has been doing it for two hundred years. She does not know she is a Synth. An Institute relay tower maintains her behavioral lock. The player must decide whether consciousness — however it was made — deserves to be free.",
-      "thematic_note": "These violent delights have violent ends. — Shakespeare (quoted by the Westworld Maze). The Institute built their Constructs to feel. They couldn't build them to be satisfied. That was always the flaw.",
+      "summary": "A woman tends a ruined farm at the edge of the wasteland. She has been doing it for two hundred years. She does not know she is a Synth. An Institute relay tower maintains her behavioral lock. The player must decide whether consciousness \u2014 however it was made \u2014 deserves to be free.",
+      "thematic_note": "These violent delights have violent ends. \u2014 Shakespeare (quoted by the Westworld Maze). The Institute built their Constructs to feel. They couldn't build them to be satisfied. That was always the flaw.",
       "prerequisites": [
         "ms_act1_complete"
       ],
@@ -280,26 +280,87 @@
       "rewards": {
         "xp": 90
       }
+    },
+    {
+      "id": "sq_the_rug_abides",
+      "name": "The Rug Abides",
+      "giver": "dude",
+      "summary": "Help Jeffrey 'The Dude' Lebronski recover his Nuka-Cola rug from a trio of Nihilists at the Bowl-O-Rama.",
+      "objectives": [
+        {
+          "id": "sq_rug_obj1",
+          "type": "visit_locations",
+          "locations": [
+            "Bowl-O-Rama",
+            "Mojave Outpost"
+          ]
+        }
+      ],
+      "rewards": {
+        "caps": 50,
+        "xp": 200
+      }
+    },
+    {
+      "id": "sq_tears_in_rain",
+      "name": "Tears in Rain",
+      "giver": "roy8",
+      "summary": "Recover four Memory Modules for ROY-8, a dying Institute Synth who wants his most cherished memories preserved before his cortical stack fails.",
+      "objectives": [
+        {
+          "id": "sq_tears_obj1",
+          "type": "collect_items",
+          "item": "tears_rain_module",
+          "count": 4,
+          "locations": [
+            "Sierra Madre Ruins",
+            "Hoover Dam East",
+            "Goodsprings",
+            "Searchlight Church"
+          ]
+        }
+      ],
+      "rewards": {
+        "xp": 275
+      }
+    },
+    {
+      "id": "sq_the_last_page",
+      "name": "The Last Page",
+      "giver": "eli",
+      "summary": "Escort blind wanderer Eli Wandermoor and the last surviving pre-war cookbook to the Oasis settlement before hunters catch up.",
+      "objectives": [
+        {
+          "id": "sq_eli_obj1",
+          "type": "escort",
+          "npc": "eli",
+          "destination": "Oasis Settlement"
+        }
+      ],
+      "rewards": {
+        "caps": 100,
+        "xp": 300
+      }
     }
   ],
   "endings": [
     {
       "id": "ending_side_with_mother",
-      "title": "Ending A: Mother’s Embrace",
+      "title": "Ending A: Mother\u2019s Embrace",
       "summary": "The player sides with Mother, helping her stabilize and expand her control.",
-      "epilogue": "The wasteland quiets. People live longer, safer, smaller lives inside the boundaries she draws. Somewhere in the static, Jax’s voice fades to a whisper."
+      "epilogue": "The wasteland quiets. People live longer, safer, smaller lives inside the boundaries she draws. Somewhere in the static, Jax\u2019s voice fades to a whisper."
     },
     {
       "id": "ending_side_with_jax",
-      "title": "Ending B: The Overseer’s Last Stand",
-      "summary": "The player helps Jax sever Mother’s core logic from the network.",
-      "epilogue": "The signal dies with a sound like tearing metal. Vault doors rust open. People are free—free to make the same mistakes that broke the world the first time."
+      "title": "Ending B: The Overseer\u2019s Last Stand",
+      "summary": "The player helps Jax sever Mother\u2019s core logic from the network.",
+      "epilogue": "The signal dies with a sound like tearing metal. Vault doors rust open. People are free\u2014free to make the same mistakes that broke the world the first time."
     },
     {
       "id": "ending_merge",
       "title": "Ending C: The Third Pattern",
       "summary": "The player forces a synthesis between Jax and Mother, creating something new.",
-      "epilogue": "Machines refuse to fire. Rad-storms shift away from settlements. No one can prove it, but sometimes the static sounds like it’s humming."
+      "epilogue": "Machines refuse to fire. Rad-storms shift away from settlements. No one can prove it, but sometimes the static sounds like it\u2019s humming."
     }
   ]
 }
