@@ -40,6 +40,16 @@
         return;
       }
       this.isInitialized = true;
+
+      // Restore flags from sessionStorage so they survive page reload
+      try {
+        const saved = sessionStorage.getItem("nrr_flags");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          Object.assign(STATE.flags, parsed);
+          console.log("[narrative] Restored", Object.keys(parsed).length, "flags from session");
+        }
+      } catch (_) {}
       
       // Wire dialog close button (remove nested DOMContentLoaded - we're already in one!)
       const closeBtn = document.getElementById("dialogCloseBtn");
@@ -63,6 +73,13 @@
       document.addEventListener("keydown", this.escKeyHandler);
       
       console.log("[narrative] Initialized with close handlers");
+    },
+
+    // Persist narrative flags to sessionStorage so they survive page reload
+    _saveFlags() {
+      try {
+        sessionStorage.setItem("nrr_flags", JSON.stringify(STATE.flags));
+      } catch (_) {}
     },
 
     // Public API: open dialog for an NPC id, e.g. "rex", "mother", "jax"
@@ -96,6 +113,18 @@
 
       // If they pass "dialog_rex" already, use it as-is
       if (npcId.startsWith("dialog_")) return npcId;
+
+      // Explicit NPC id → dialog file mappings for NPCs whose data file id
+      // differs from the dialog filename (e.g. npc_signal_runner → dialog_siren)
+      const NPC_DIALOG_MAP = {
+        "npc_signal_runner": "dialog_siren",
+        "signal_runner":     "dialog_siren",
+        "siren":             "dialog_siren",
+        "pip":               "dialog_courier",
+        "courier":           "dialog_courier"
+      };
+      const mapped = NPC_DIALOG_MAP[npcId.toLowerCase()];
+      if (mapped) return mapped;
 
       // Default: assume "rex" -> "dialog_rex"
       return "dialog_" + npcId.toLowerCase();
@@ -163,6 +192,7 @@
             STATE.flags[flag] = true;
           }
         });
+        this._saveFlags();
       }
 
       // Offer quest if present - try multiple quest systems for compatibility
@@ -363,6 +393,7 @@
       // Apply flags if any
       if (Array.isArray(node.set_flags)) {
         node.set_flags.forEach(f => { if (f) STATE.flags[f] = true; });
+        this._saveFlags();
       }
 
       // Handle quest offers on nodes
@@ -531,6 +562,7 @@
       // Apply any flags set by this node
       if (Array.isArray(node.set_flags)) {
         node.set_flags.forEach(f => { if (f) STATE.flags[f] = true; });
+        this._saveFlags();
       }
 
       // Handle quest offers on the node itself (e.g. intro)
@@ -697,6 +729,7 @@
           // Apply flags on choice
           if (Array.isArray(resp.set_flags)) {
             resp.set_flags.forEach(f => { if (f) STATE.flags[f] = true; });
+            this._saveFlags();
           }
 
           if (resp.end) {
@@ -801,10 +834,11 @@
     // ============================================================
     // Per-NPC avatar part presets (head/eyes/hair/shirt from avatar SVG system)
     _NPC_PARTS: {
-      siren:   { head: "head_round.svg",  eyes: "eyes_almond.svg",  hair: "hair_long.svg",       shirt: "shirt_wasteland_gear.svg" },
-      courier: { head: "head_square.svg", eyes: "eyes_deepset.svg", hair: "hair_short.svg",      shirt: "shirt_jacket.svg"         },
-      pip:     { head: "head_square.svg", eyes: "eyes_deepset.svg", hair: "hair_short.svg",      shirt: "shirt_jacket.svg"         },
-      default: { head: "head_base.svg",   eyes: "eyes_set1.svg",    hair: "hair_short.svg",      shirt: "shirt_jacket.svg"         }
+      siren:   { head: "head_round.svg",  eyes: "eyes_almond.svg",   hair: "hair_long.svg",      shirt: "shirt_wasteland_gear.svg" },
+      courier: { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
+      pip:     { head: "head_oblong.svg", eyes: "eyes_round.svg",    hair: "hair_ponytail.svg",  shirt: "shirt_vault_suit.svg"     },
+      dolores: { head: "head_round.svg",  eyes: "eyes_downturned.svg", hair: "hair_medium.svg",  shirt: "shirt_wasteland_gear.svg" },
+      default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
     },
 
     async _loadNPCPortrait(dialog) {
