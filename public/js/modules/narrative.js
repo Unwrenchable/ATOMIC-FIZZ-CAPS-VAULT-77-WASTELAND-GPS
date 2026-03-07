@@ -121,7 +121,15 @@
         "signal_runner":     "dialog_siren",
         "siren":             "dialog_siren",
         "pip":               "dialog_courier",
-        "courier":           "dialog_courier"
+        "courier":           "dialog_courier",
+        "dude":              "dialog_dude",
+        "the_dude":          "dialog_dude",
+        "lebronski":         "dialog_dude",
+        "roy8":              "dialog_roy8",
+        "roy-8":             "dialog_roy8",
+        "replicant":         "dialog_roy8",
+        "eli":               "dialog_eli",
+        "eli_wandermoor":    "dialog_eli"
       };
       const mapped = NPC_DIALOG_MAP[npcId.toLowerCase()];
       if (mapped) return mapped;
@@ -838,6 +846,9 @@
       courier: { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
       pip:     { head: "head_oblong.svg", eyes: "eyes_round.svg",    hair: "hair_ponytail.svg",  shirt: "shirt_vault_suit.svg"     },
       dolores: { head: "head_round.svg",  eyes: "eyes_downturned.svg", hair: "hair_medium.svg",  shirt: "shirt_wasteland_gear.svg" },
+      dude:    { head: "head_round.svg",  eyes: "eyes_set1.svg",     hair: "hair_medium.svg",    shirt: "shirt_wasteland_gear.svg" },
+      roy8:    { head: "head_square.svg", eyes: "eyes_almond.svg",   hair: "hair_short.svg",     shirt: "shirt_vault_suit.svg"     },
+      eli:     { head: "head_base.svg",   eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
       default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
     },
 

@@ -1,0 +1,62 @@
+{
+  "id": "quest_the_last_page",
+  "name": "The Last Page",
+  "type": "side",
+  "triggerNpc": "eli",
+  "description": "A blind wanderer named Eli Wandermoor carries the last surviving pre-war cookbook from the Capital Wasteland. He needs an escort to deliver it to the struggling Oasis settlement three days west. People are hunting him for it.",
+  "lore": "In 2076, a librarian named Constance Whitfield saw the writing on the wall. She spent her final pre-war year compiling every accessible food preparation document into a single handwritten volume: growing guides, preservation techniques, emergency nutrition from any available source. The book survived because Eli's shelter survived. Eli survived because he was inside the library basement when the bombs fell. He has been walking west for eleven years because a note in the book said to.",
+  "objectives": [
+    {
+      "id": "meet_eli",
+      "description": "Speak with Eli Wandermoor and agree to escort him",
+      "requires": { "flag": "met_eli" },
+      "reward": { "xp": 15 }
+    },
+    {
+      "id": "clear_canyon_road",
+      "description": "Scout the canyon pass ahead — Eli heard three ambush parties use it, and his ears haven't been wrong yet",
+      "reward": { "xp": 45 }
+    },
+    {
+      "id": "survive_ambush",
+      "description": "Protect Eli from hunters at the old highway rest stop — they believe the book is a Vault-Tec code",
+      "reward": { "xp": 60 }
+    },
+    {
+      "id": "reach_oasis",
+      "description": "Escort Eli to the Oasis settlement without losing the cookbook",
+      "reward": { "xp": 80 }
+    },
+    {
+      "id": "deliver_the_book",
+      "description": "Ensure the cookbook is placed in the hands of the Oasis settlement leader",
+      "reward": { "xp": 100, "item": "the_last_cookbook", "caps": 100 }
+    }
+  ],
+  "rewards": {
+    "xp": 300,
+    "caps": 100,
+    "items": ["the_last_cookbook"],
+    "narrative": "The Oasis settlement receives the cookbook. Within weeks, their diet improves. Eli rests for the first time in eleven years. He says he doesn't know what to do now. Someone hands him a bowl of something warm. He says it's the best thing he's ever tasted. He can't see what's in it."
+  },
+  "endings": [
+    {
+      "id": "ending_delivered",
+      "description": "The book reaches the Oasis settlement. Eli stays to teach what he knows. The settlement thrives.",
+      "reward": "Oasis Ally status — settlement traders offer 10% discount and share food intel",
+      "consequence": "Eli becomes the settlement's first teacher. He never walks west again. He doesn't need to."
+    },
+    {
+      "id": "ending_copied",
+      "description": "You convinced Eli to let the settlement copy the book before he continued walking. The original moves on. The knowledge stays.",
+      "reward": "Cookbook Copy — a craftable recipe item unlocking three new camp-cooking recipes",
+      "consequence": "Eli nods and keeps walking. He says: 'I always knew it wasn't about the paper.'"
+    },
+    {
+      "id": "ending_stolen",
+      "description": "The hunters succeeded. The book is gone. Eli doesn't rage — he sits down and starts reciting from memory.",
+      "reward": "None — but Eli's oral recitation, if recorded, becomes a rare holotape collectible",
+      "consequence": "The hunters sell the book to a collector in New Vegas who never reads it. Eli's voice spreads further than the pages ever would have."
+    }
+  ]
+}
