@@ -1,0 +1,62 @@
+{
+  "id": "quest_the_rug_abides",
+  "name": "The Rug Abides",
+  "type": "side",
+  "triggerNpc": "dude",
+  "description": "A man named The Dude lost his Nuka-Cola-patterned rug to a trio of Nihilists holed up in the pre-war Bowl-O-Rama. He just wants it back. It really tied the shelter together.",
+  "lore": "Before the war, bowling alleys were temples of blue-collar leisure. The Bowl-O-Rama south of the Mojave Outpost was one of the last to close. Three self-described Nihilists now occupy it as a base — not because it's strategic, but because it proves nothing matters. The Dude disagrees. The rug matters.",
+  "objectives": [
+    {
+      "id": "meet_the_dude",
+      "description": "Talk to Jeffrey 'The Dude' Lebronski",
+      "requires": { "flag": "met_dude" },
+      "reward": { "xp": 10 }
+    },
+    {
+      "id": "find_bowl_o_rama",
+      "description": "Locate the Bowl-O-Rama south of the Mojave Outpost",
+      "requires": { "flag": "sq_the_rug_abides_taken" },
+      "reward": { "xp": 25 }
+    },
+    {
+      "id": "deal_with_nihilists",
+      "description": "Deal with the Nihilists — through diplomacy, intimidation, or caps. They believe in nothing, so threaten or buy them out of it.",
+      "reward": { "xp": 50 }
+    },
+    {
+      "id": "recover_the_rug",
+      "description": "Recover The Dude's Nuka-Cola rug",
+      "reward": { "xp": 40, "item": "dudes_rug" }
+    },
+    {
+      "id": "return_to_the_dude",
+      "description": "Return the rug to The Dude",
+      "reward": { "xp": 75, "caps": 50 }
+    }
+  ],
+  "rewards": {
+    "xp": 200,
+    "caps": 50,
+    "items": ["dudes_rug"]
+  },
+  "endings": [
+    {
+      "id": "ending_return_rug",
+      "description": "You returned the rug. The Dude abides. The shelter is complete again.",
+      "reward": "The Dude's Blessing: +5% Caps from all trades for 24 hours",
+      "consequence": "The Dude sets up a small trade post and occasionally leaves Nuka-Cola bottles at rest spots across the Mojave."
+    },
+    {
+      "id": "ending_kept_rug",
+      "description": "You kept the rug for yourself. It really does tie the shelter together.",
+      "reward": "The Dude's Rug (home decoration, +morale stat when in shelter)",
+      "consequence": "The Dude sighs, says 'Yeah, well... that's just like, your opinion, man,' and wanders off east."
+    },
+    {
+      "id": "ending_sold_rug",
+      "description": "You sold the rug to a pre-war collector.",
+      "reward": "150 Caps",
+      "consequence": "The Dude says he's not even angry. He's sad. He says it a lot of times. It doesn't seem true."
+    }
+  ]
+}
