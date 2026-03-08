@@ -12,7 +12,7 @@
       "id": "enc_dam_signal_spike",
       "poi": "Hoover Dam",
       "trigger": "repeat_visit",
-      "dialog": "Your Pip-Boy crackles. A burst of static forms a pattern — almost like coordinates."
+      "dialog": "Your Pip-Boy crackles. A burst of static forms a pattern \u2014 almost like coordinates."
     },
     {
       "id": "enc_glow_warning",
@@ -54,7 +54,7 @@
       "id": "enc_deathclaw_promontory_shadow",
       "poi": "Deathclaw Promontory",
       "trigger": "first_visit",
-      "dialog": "A shadow crosses the ridge — too large, too fast. You are not alone."
+      "dialog": "A shadow crosses the ridge \u2014 too large, too fast. You are not alone."
     },
     {
       "id": "enc_deathclaw_promontory_ambush",
@@ -72,7 +72,7 @@
       "id": "enc_trinity_site_signal",
       "poi": "Trinity Site",
       "trigger": "repeat_visit",
-      "dialog": "Your Pip-Boy picks up a faint signal — rhythmic, deliberate, almost like Morse code."
+      "dialog": "Your Pip-Boy picks up a faint signal \u2014 rhythmic, deliberate, almost like Morse code."
     },
     {
       "id": "enc_los_alamos_lab_alarm",
@@ -96,7 +96,7 @@
       "id": "enc_chernobyl_pripyat_figure",
       "poi": "Chernobyl Pripyat",
       "trigger": "repeat_visit",
-      "dialog": "A figure stands in a window for a moment — then vanishes when you blink."
+      "dialog": "A figure stands in a window for a moment \u2014 then vanishes when you blink."
     },
     {
       "id": "enc_fukushima_daiichi_warning",
@@ -120,19 +120,19 @@
       "id": "enc_black_mountain_static",
       "poi": "Black Mountain",
       "trigger": "repeat_visit",
-      "dialog": "The static forms a voice — faint, broken, familiar. Jax?"
+      "dialog": "The static forms a voice \u2014 faint, broken, familiar. Jax?"
     },
     {
       "id": "enc_goodsprings_saloon_note",
       "poi": "Goodsprings Saloon",
       "trigger": "first_visit",
-      "dialog": "A scrap of paper sits on the bar: \"DON'T TOUCH THE HUMMING CRATE — SPARKPLUG\"."
+      "dialog": "A scrap of paper sits on the bar: \"DON'T TOUCH THE HUMMING CRATE \u2014 SPARKPLUG\"."
     },
     {
       "id": "enc_goodsprings_saloon_rumor",
       "poi": "Goodsprings Saloon",
       "trigger": "repeat_visit",
-      "dialog": "A drunk mutters about a hidden stash under the floorboards — might be worth a look."
+      "dialog": "A drunk mutters about a hidden stash under the floorboards \u2014 might be worth a look."
     },
     {
       "id": "enc_nipton_trading_post_smoke",
@@ -150,7 +150,7 @@
       "id": "enc_freeside_market_whisper",
       "poi": "Freeside Market",
       "trigger": "first_visit",
-      "dialog": "A merchant whispers: \"Someone’s buying up pre-war tech. Paying in caps and silence.\""
+      "dialog": "A merchant whispers: \"Someone\u2019s buying up pre-war tech. Paying in caps and silence.\""
     },
     {
       "id": "enc_freeside_market_deal",
@@ -169,14 +169,14 @@
       "id": "enc_dolores_farmstead_repeat",
       "poi": "Eastern Ridge Farmstead",
       "trigger": "repeat_visit",
-      "dialog": "She's still sweeping. The same three boards. The same practiced arc. She smiles when she sees you — warmly, perfectly — and you feel the wrongness of it like a stone in your boot."
+      "dialog": "She's still sweeping. The same three boards. The same practiced arc. She smiles when she sees you \u2014 warmly, perfectly \u2014 and you feel the wrongness of it like a stone in your boot."
     },
     {
       "id": "enc_relay_tower_east_approach",
       "poi": "Eastern Relay Tower",
       "trigger": "first_visit",
       "npc": "warden",
-      "dialog": "A figure stands at the base of the relay tower — tall, dark-coated, watching you approach with the patience of someone who has done this many times before. \"You're not the first person she's sent to find this place,\" he says. \"You will be the last.\""
+      "dialog": "A figure stands at the base of the relay tower \u2014 tall, dark-coated, watching you approach with the patience of someone who has done this many times before. \"You're not the first person she's sent to find this place,\" he says. \"You will be the last.\""
     },
     {
       "id": "enc_relay_tower_east_chip",
@@ -191,7 +191,102 @@
       "id": "enc_ridge_boundary",
       "poi": "Eastern Ridge",
       "trigger": "first_visit",
-      "dialog": "Something feels wrong at the ridge line — a faint, subsonic hum from the direction of the tower. Your Pip-Boy stutters. For a moment, you thought you saw a woman standing here. Looking north. She wasn't there when you turned."
+      "dialog": "Something feels wrong at the ridge line \u2014 a faint, subsonic hum from the direction of the tower. Your Pip-Boy stutters. For a moment, you thought you saw a woman standing here. Looking north. She wasn't there when you turned."
+    },
+    {
+      "id": "enc_elvis_goodsprings",
+      "poi": "Goodsprings",
+      "trigger": "first_visit",
+      "dialog": "A settler at the well gestures toward the southern hills. \"Saw him again last night. White jumpsuit. Sequins catching the moonlight. Just standing there on the ridge, real quiet.\" She pauses. \"I know how it sounds. But it wasn't a ghoul. Ghouls don't have sideburns like that.\""
+    },
+    {
+      "id": "enc_elvis_novac",
+      "poi": "Novac",
+      "trigger": "first_visit",
+      "dialog": "A handwritten note is pinned to the dino's tail: \"KING SIGHTING - 3 NIGHTS IN A ROW - SOUTHEAST RIDGE - HE WAVED - I WAVED BACK - SIGNED, DEFINITELY NOT CRAZY\""
+    },
+    {
+      "id": "enc_elvis_freeside",
+      "poi": "Freeside Market",
+      "trigger": "first_visit",
+      "dialog": "The busker on the corner is playing something old and slow on a battered guitar. He stops when you approach. \"You seen the King around? Not the Kings. The King. White suit. Black hair. Voice like warm gravel and whiskey.\" He looks south. \"He comes through sometimes. Listens for a while. Tips better than anyone.\""
+    },
+    {
+      "id": "enc_elvis_strip_gate",
+      "poi": "New Vegas Strip",
+      "trigger": "first_visit",
+      "dialog": "A securitron pauses its patrol at the Strip gate and swivels toward you. \"Query: Have you observed an individual approximately 1.9 meters tall, white sequined suit, hair product above regulatory quantity?\" It waits. \"No reason. He is simply on the watch list. Positive watch list. Mr. House's request.\""
+    },
+    {
+      "id": "enc_elvis_boulderCity",
+      "poi": "Boulder City",
+      "trigger": "repeat_visit",
+      "dialog": "Scrawled on a concrete blast wall in blue paint: 'THE KING LIVES' with a crude silhouette of a man mid-hip-swivel. Below it, someone has added in careful handwriting: 'Confirmed. Boulder City. 0300 hours. He sang one song and walked west.' Below that, a third hand: 'He's real. I swear it.'"
+    },
+    {
+      "id": "enc_dev_terminal_cain",
+      "poi": "Hoover Dam",
+      "trigger": "first_visit",
+      "dialog": "A dusty terminal in the control room shows an old personnel file: CAIN, T. - VAULT-TEC SYSTEMS ARCHITECT - STATUS: RESIGNED - NOTE: 'The experiment parameters are ethically problematic and I refuse to continue. I'm building something better.' The resignation date is 2073. The file was never archived."
+    },
+    {
+      "id": "enc_dev_terminal_boyarsky",
+      "poi": "Lucky 38",
+      "trigger": "first_visit",
+      "dialog": "Behind a broken panel in the Lucky 38's penthouse archive, you find a framed design sketch \u2014 hand-drawn, pre-war \u2014 labeled 'WASTELAND AESTHETIC PROPOSAL v.1' by 'L. BOYARSKY, ART DIRECTION'. It depicts a man in a Pip-Boy watching a nuclear mushroom cloud. The expression on the man's face is complicated. The sketch is beautiful."
+    },
+    {
+      "id": "enc_dev_note_avellone",
+      "poi": "Vault 22",
+      "trigger": "first_visit",
+      "dialog": "Folded inside a dead scientist's notebook: a handwritten letter signed 'C. Avellone, Narrative Division, Vault-Tec.' It reads: 'If someone reads this after everything ends \u2014 the story was always about the people. Not the bombs. Not the vaults. Not the factions. The people make the story. I hope someone out there is still telling them.'"
+    },
+    {
+      "id": "enc_dev_holotape_urquhart",
+      "poi": "Black Mountain",
+      "trigger": "first_visit",
+      "dialog": "A pre-war holotape in a rusted broadcaster's booth, labeled 'FEARGUS URQUHART - VAULT-TEC EXECUTIVE MEMO, 2075'. The playback is partially corrupted, but audible: '...the vaults are not just shelters. They are a canvas. If we do this right, whatever comes out of them in a hundred years will be something new. Something... interesting. I'm genuinely excited to see what happens.' Static. End of recording."
+    },
+    {
+      "id": "enc_dev_plaque_taylor",
+      "poi": "Glow",
+      "trigger": "first_visit",
+      "dialog": "Half-buried under irradiated rubble, a commemorative plaque: 'WASTELAND DEVELOPMENT PROJECT \u2014 LEAD DESIGNER: C. TAYLOR \u2014 THIS INSTALLATION REPRESENTS THE FIRST ATTEMPT TO MODEL POST-NUCLEAR HUMAN ADAPTATION UNDER CONTROLLED CONDITIONS. WE BELIEVE IN THE RESILIENCE OF THE HUMAN SPIRIT.' The irony of the location is not lost on you."
+    },
+    {
+      "id": "enc_barney_ridgeroad",
+      "poi": "Boulder City",
+      "trigger": "first_visit",
+      "npc": "barney",
+      "dialog": "A figure stands at the crest of the road ahead \u2014 enormous, fur-clad, carrying what appears to be a repurposed pre-war fire axe. He raises it in greeting, or possibly challenge. It's a fine line with this one."
+    },
+    {
+      "id": "enc_padre_mojave",
+      "poi": "Freeside Market",
+      "trigger": "repeat_visit",
+      "npc": "padre",
+      "dialog": "A man in tattered robes sits on an overturned crate beside the market, distributing something from a pack. He notices you. 'Water and stimpaks, no charge. Sit if you need to.' He means it."
+    },
+    {
+      "id": "enc_doc_cabinet",
+      "poi": "Nipton Trading Post",
+      "trigger": "first_visit",
+      "npc": "doc",
+      "dialog": "An unmistakably blue cabinet stands beside the trading post \u2014 battered, pre-war, painted in a shade that doesn't quite match anything else in the Mojave palette. A brass plate on the door reads: POLICE PUBLIC CALL BOX. The door is ajar. From inside comes the sound of someone making tea."
+    },
+    {
+      "id": "enc_stilgar_deep_sand",
+      "poi": "Dead Wind Cavern",
+      "trigger": "first_visit",
+      "npc": "stilgar",
+      "dialog": "A figure rises from the sand where no person should have been \u2014 silent, unannounced, perfectly still. He watches you with patience that reads as either calm or threat. Then: 'You are loud. Come. There is shade.' He disappears back into a depression in the rock as naturally as water drains."
+    },
+    {
+      "id": "enc_erich_ridge",
+      "poi": "Eastern Ridge",
+      "trigger": "repeat_visit",
+      "npc": "erich",
+      "dialog": "An ancient ghoul sits on a rock at the ridge, looking west. His glow is faint \u2014 so long-lived that even the radiation seems accustomed to him. He doesn't turn when you approach. 'I was watching the same view,' he says, 'in a place that doesn't exist anymore. Different sky. Same quiet. Same feeling that it won't last.'"
     }
   ]
 }
