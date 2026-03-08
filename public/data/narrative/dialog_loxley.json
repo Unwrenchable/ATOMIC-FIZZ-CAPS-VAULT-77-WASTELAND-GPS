@@ -1,0 +1,111 @@
+{
+  "id": "dialog_loxley",
+  "npc": "Robin \"Loxley\" Hood",
+  "portrait": "loxley",
+  "title": "The Wasteland's Merry Outlaw",
+  "description": "Dialog nodes for Loxley, a charismatic wasteland thief who robs the rich caravans and distributes the spoils to squatter settlements. He dresses in pre-war camouflage with an absurdly maintained felt hat, speaks in an exaggerated mock-British accent, and insists he is fighting for a more equitable post-apocalypse.",
+
+  "intro": {
+    "id": "loxley_intro",
+    "conditions": ["!flag:met_loxley"],
+    "text": "Hail, good traveller! I am Loxley — Robin of Loxley, if you prefer the full verse of it.<br><br>Some call us thieves. We prefer 'wealth redistribution specialists.'<br><br>The Crimson Caravan passes through this stretch twice a month. Fat shipments. Brahmin-bowed under the weight of it. And the folk in the squatter camps along the Mojave? Starving.<br><br>The maths are simple. Even the post-apocalypse can do the maths.",
+    "set_flags": ["met_loxley"]
+  },
+
+  "knowledge_nodes": [
+    {
+      "id": "loxley_knows_rex",
+      "conditions": ["flag:met_rex", "!flag:loxley_comment_rex"],
+      "text": "The Captain at the Dam? Yes, he's had us in his sights before.<br><br>We move faster than his patrols. The Merry Men are nothing if not fleet-footed.<br><br>He is not wrong to pursue us. He simply lacks the proper cause.",
+      "set_flags": ["loxley_comment_rex"]
+    },
+    {
+      "id": "loxley_knows_lucy",
+      "conditions": ["flag:met_lucy", "!flag:loxley_comment_lucy"],
+      "text": "The Scavenger Queen? Brilliant woman.<br><br>We have a mutual arrangement — I don't rob her caravans; she doesn't tell the Dam where we camp.<br><br>A satisfying detente.",
+      "set_flags": ["loxley_comment_lucy"]
+    },
+    {
+      "id": "loxley_knows_dude",
+      "conditions": ["flag:met_dude", "!flag:loxley_comment_dude"],
+      "text": "The abiding one? Yes, I've shared a fire with him.<br><br>A man of deep philosophical conviction and almost heroic passivity.<br><br>He gave me a bottle of something warm and told me the Wasteland abides. I found that... oddly useful.",
+      "set_flags": ["loxley_comment_dude"]
+    },
+    {
+      "id": "loxley_knows_arnie",
+      "conditions": ["flag:met_arnie", "!flag:loxley_comment_arnie"],
+      "text": "You have met Arnold Black? A formidable individual.<br><br>He accompanied us on one redistribution. The Merry Men were very quiet afterward.<br><br>He said something about being back, then simply... left. We believed him.",
+      "set_flags": ["loxley_comment_arnie"]
+    },
+    {
+      "id": "loxley_knows_kenny",
+      "conditions": ["flag:met_kenny", "!flag:loxley_comment_kenny"],
+      "text": "Ah, the little orange-hooded one.<br><br>He wandered into our camp bleeding from something he could not name and left the next morning on a mule that wasn't his.<br><br>We were genuinely unsure if we should be worried or impressed.",
+      "set_flags": ["loxley_comment_kenny"]
+    }
+  ],
+
+  "emotional_nodes": [
+    {
+      "id": "loxley_player_broke",
+      "conditions": ["stat:caps<=10", "!flag:loxley_gave_alms"],
+      "text": "You look like one of the folk I rob *for*, not *from*.<br><br>Here. Take these. Consider it a redistribution in your favour.",
+      "grant_items": [{ "id": "stimpak", "name": "Stimpak", "type": "aid", "quantity": 1 }],
+      "set_flags": ["loxley_gave_alms"]
+    },
+    {
+      "id": "loxley_player_rich",
+      "conditions": ["stat:caps>=3000", "!flag:loxley_eyed_rich"],
+      "text": "My, my.<br><br>You are rather... prosperous for a wanderer.<br><br>You needn't worry. I only take from those who take from others first. But I am watching your accounting very closely.",
+      "set_flags": ["loxley_eyed_rich"]
+    }
+  ],
+
+  "quest_nodes": [
+    {
+      "id": "loxley_offer_rob_the_rich",
+      "conditions": ["!flag:sq_loxley_rob_the_rich_taken"],
+      "text": "A Crimson Caravan shipment is coming through Nipton Road in two days' time.<br><br>Medical supplies, grain, water chips. Enough for three settlements. All of it bound for a fortified estate outside of Primm — a man named Harwick who charges triple for anything he doesn't simply hoard.<br><br>I need someone who can ride point. My Merry Men are... enthusiastic, but subtlety is not their shield.<br><br>Help us stop the caravan, separate the goods, and see them to Freeside and the squatter camps along Route 15. No killing unless they shoot first.<br><br>Harwick will be furious. I find I sleep very well despite that.",
+      "offers_quest": "sq_loxley_rob_the_rich",
+      "set_flags": ["sq_loxley_rob_the_rich_taken"]
+    }
+  ],
+
+  "wildcards": [
+    {
+      "id": "loxley_thieving",
+      "keywords": ["steal", "thief", "rob", "crime", "outlaw"],
+      "text": "We prefer 'liberating undervalued resources from those with excessive surplus.'<br><br>But yes. In the old world's tongue — thieving. Quite good at it."
+    },
+    {
+      "id": "loxley_merry_men",
+      "keywords": ["merry men", "crew", "gang", "group", "followers"],
+      "text": "Little John is seven feet tall and afraid of scorpions. Friar Tuck eats twice his weight and quotes pre-war scripture at gunpoint. Maid Marion runs our intelligence network and has better aim than any of us.<br><br>Merry? Perhaps not always. But ours."
+    },
+    {
+      "id": "loxley_british",
+      "keywords": ["accent", "british", "english", "talk", "speak"],
+      "text": "Ah, you noticed.<br><br>Pre-war Europe was not entirely glassed. Some culture survived the fires.<br><br>Mine is mostly affected, I'll confess. But it helps the legend."
+    },
+    {
+      "id": "loxley_sheriff",
+      "keywords": ["sheriff", "law", "militia", "guard", "authority"],
+      "text": "The Sheriff of Nottingham, in my experience, is whoever controls the local water supply and the heaviest calibre weapon.<br><br>Out here, that rotates roughly every season."
+    },
+    {
+      "id": "loxley_hat",
+      "keywords": ["hat", "cap", "clothes", "outfit", "fashion"],
+      "text": "The hat is non-negotiable.<br><br>It has survived two deathclaw attacks, a radstorm, and a casino bouncer in Freeside.<br><br>The hat stays."
+    },
+    {
+      "id": "loxley_caravan",
+      "keywords": ["caravan", "crimson", "trade", "merchant"],
+      "text": "Crimson Caravan prices their water at four caps the bottle in a drought.<br><br>In a settlement with twelve children and a broken well.<br><br>I find their redistribution ethic unconvincing."
+    }
+  ],
+
+  "fallback": {
+    "id": "loxley_fallback",
+    "text": "A merry day to you, traveller.<br><br>Watch your pockets on the Nipton Road — though if you need what's in them, do come find me."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "id": "dialog_kenny",
+  "npc": "Kenny",
+  "portrait": "kenny",
+  "title": "The Unkillable Fool",
+  "description": "Dialog nodes for Kenny — a small, perpetually orange-hooded wanderer who has survived every conceivable wasteland fatality, often multiple times in the same week. He speaks in a muffled voice that is almost entirely incomprehensible, yet somehow conveys meaning. When he dies — and he will — nearby NPCs invariably cry out 'They killed Kenny! Those bastards!' He always comes back.",
+
+  "intro": {
+    "id": "kenny_intro",
+    "conditions": ["!flag:met_kenny"],
+    "text": "Mmfgh mmpph mrrph!<br><br>(He is alive. Somehow. The orange hood is singed on one side and there is a radscorpion barb still lodged in the shoulder padding. He waves at you with his good arm, grinning.)<br><br>Mffm mph-mph mrrph!<br><br>(He points at himself, then at you, then at the road ahead. The meaning is unmistakable: he wants to travel with you.)<br><br>Mrrph.",
+    "set_flags": ["met_kenny"]
+  },
+
+  "knowledge_nodes": [
+    {
+      "id": "kenny_knows_dude",
+      "conditions": ["flag:met_dude", "!flag:kenny_comment_dude"],
+      "text": "Mmph! Mph mmrph mffgh.<br><br>(He mimes a man lying on the ground staring at the sky, then gives a thumbs-up.)<br><br>Mmfph.",
+      "set_flags": ["kenny_comment_dude"]
+    },
+    {
+      "id": "kenny_knows_arnie",
+      "conditions": ["flag:met_arnie", "!flag:kenny_comment_arnie"],
+      "text": "Mmpf! MRRPH mffm mmph!<br><br>(His eyes go wide. He mimes something enormous walking. Then he mimes being crushed. Then he points at himself and shrugs, as if to say 'it happened and I lived.')<br><br>Mfph.",
+      "set_flags": ["kenny_comment_arnie"]
+    },
+    {
+      "id": "kenny_knows_loxley",
+      "conditions": ["flag:met_loxley", "!flag:kenny_comment_loxley"],
+      "text": "Mmpf! Mmrph-mmpf mph mfgh!<br><br>(He acts out a very dramatic hat tip, then mimes giving something to an invisible small child.)<br><br>Mffph mph mmpf.",
+      "set_flags": ["kenny_comment_loxley"]
+    },
+    {
+      "id": "kenny_knows_rex",
+      "conditions": ["flag:met_rex", "!flag:kenny_comment_rex"],
+      "text": "Mrph! Mph mrrph!<br><br>(He snaps to attention like a soldier, then immediately trips over a rock and gets back up, still at attention.)<br><br>Mffm.",
+      "set_flags": ["kenny_comment_rex"]
+    }
+  ],
+
+  "emotional_nodes": [
+    {
+      "id": "kenny_near_death",
+      "conditions": ["stat:hp<=20", "!flag:kenny_survived_again"],
+      "text": "MFFGH!<br><br>(Kenny produces a pre-war first aid pamphlet from somewhere inside his hood and holds it up to you — upside-down — with great urgency.)<br><br>Mmrph? Mfph mmpf!",
+      "set_flags": ["kenny_survived_again"]
+    },
+    {
+      "id": "kenny_player_lucky",
+      "conditions": ["stat:caps>=500", "!flag:kenny_noticed_caps"],
+      "text": "Mmpf mph mrrph!<br><br>(He looks at your caps pouch with an expression of pure wonder, then pats the empty area where his own caps would be with a philosophical shrug.)<br><br>Mfph.",
+      "set_flags": ["kenny_noticed_caps"]
+    }
+  ],
+
+  "quest_nodes": [
+    {
+      "id": "kenny_offer_escort",
+      "conditions": ["!flag:sq_kenny_escort_taken"],
+      "text": "Mmpf-mmrph mph mfgh mrrph!<br><br>(He unfolds a piece of paper. It's a hand-drawn map — surprisingly detailed — showing a route from here to New Vegas, via Boulder City and Novac. He points to a spot marked with a small orange hood drawing.)<br><br>Mmrph! Mph mffm mmpf mrrph!<br><br>(He mimes walking, then falling, then getting back up, then falling again. Then he points at you with a questioning look. Will you escort him?)<br><br>Mfph?",
+      "offers_quest": "sq_kenny_escort",
+      "set_flags": ["sq_kenny_escort_taken"]
+    }
+  ],
+
+  "wildcards": [
+    {
+      "id": "kenny_death",
+      "keywords": ["die", "dead", "kill", "danger", "survive", "alive"],
+      "text": "Mmpf-mfph mrrph!<br><br>(He holds up eight fingers. Eight times. Then adds two more fingers. Ten deaths survived, apparently. He seems genuinely unsure of the count.)<br><br>Mfph mmrph."
+    },
+    {
+      "id": "kenny_hood",
+      "keywords": ["hood", "clothes", "orange", "hat", "outfit"],
+      "text": "Mmrph!<br><br>(He is deeply offended. He pulls the hood tighter. This hood has clearly survived more than he has.)<br><br>Mmpf mrrph mfph!"
+    },
+    {
+      "id": "kenny_speech",
+      "keywords": ["speak", "talk", "say", "understand", "words", "voice"],
+      "text": "Mmpf.<br><br>(He says something very earnest and clearly important. You catch none of it. He sighs through the hood.)<br><br>Mmrph mfph. Mmrph."
+    },
+    {
+      "id": "kenny_caps",
+      "keywords": ["caps", "trade", "money", "buy", "sell"],
+      "text": "Mfph!<br><br>(He checks his pockets. His pockets are conspicuously empty. He holds them inside-out to confirm.)<br><br>Mmrph mmpf mfgh.<br><br>(He makes a gesture that translates roughly as: the wasteland is expensive and he has not figured that out yet.)"
+    },
+    {
+      "id": "kenny_wasteland",
+      "keywords": ["wasteland", "outside", "dangerous", "world"],
+      "text": "MMPF MRRPH!<br><br>(He gestures broadly at the landscape with what appears to be genuine enthusiasm for all of it: the ruins, the radiation, the deathclaws in the distance.)<br><br>Mfph mmrph mmpf!<br><br>(He is, somehow, having a good time.)"
+    }
+  ],
+
+  "fallback": {
+    "id": "kenny_fallback",
+    "text": "Mfph.<br><br>(He gives a small wave and tugs his orange hood down.)<br><br>Mmrph."
+  }
+}
