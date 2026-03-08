@@ -36,6 +36,24 @@
       "conditions": ["flag:met_dolores", "!flag:dude_comment_dolores"],
       "text": "You met the woman at the farmstead?<br><br>Two hundred years of the same morning... man.<br><br>The Dude's had some rough mornings, but that's... that's just not cool.",
       "set_flags": ["dude_comment_dolores"]
+    },
+    {
+      "id": "dude_knows_loxley",
+      "conditions": ["flag:met_loxley", "!flag:dude_comment_loxley"],
+      "text": "The guy with the hat?<br><br>He gave me a wheel of brahmin cheese once. Said it was 'redistributed.' I didn't ask from where.<br><br>Man believed in something. That's... that's not nothing.",
+      "set_flags": ["dude_comment_loxley"]
+    },
+    {
+      "id": "dude_knows_arnie",
+      "conditions": ["flag:met_arnie", "!flag:dude_comment_arnie"],
+      "text": "Arnold? The big guy?<br><br>He sat in that chair over there. Chair survived. The Dude was surprised.<br><br>Said he'd be back. The Dude believes him. The chair does too.",
+      "set_flags": ["dude_comment_arnie"]
+    },
+    {
+      "id": "dude_knows_kenny",
+      "conditions": ["flag:met_kenny", "!flag:dude_comment_kenny"],
+      "text": "Oh, the little orange-hooded dude?<br><br>Man, he got eaten by a giant radscorpion right in front of me. Right *in front of me*, man.<br><br>He was back the next afternoon. Still waving. Still orange.<br><br>The Dude abides. But that dude *really* abides.",
+      "set_flags": ["dude_comment_kenny"]
     }
   ],
 

@@ -1,0 +1,62 @@
+{
+  "id": "quest_sq_kenny_escort",
+  "name": "Oh My God, They Killed Kenny",
+  "type": "side",
+  "triggerNpc": "kenny",
+  "description": "Kenny has drawn a surprisingly competent hand-drawn map of a route from the Mojave Outpost to New Vegas via Boulder City and Novac. He wants your help getting there. He has survived the journey four times previously. You have no idea how. The route takes three days on foot through three separate zones of active rad-wildlife, raider camps, and one stretch of highway that is statistically the most dangerous in the Mojave. Kenny seems excited about this.",
+  "lore": "Kenny has been found alive in places that should have been fatal — under a radscorpion, inside a collapsed building, floating face-down in the Colorado (he was apparently napping) — so many times that the phrase 'They killed Kenny!' has become something of a dark jest among the Mojave wanderers who know of him. He always comes back. Medics in Novac have treated him six times. They have named a suturing technique after him. They are not proud of this.",
+  "objectives": [
+    {
+      "id": "meet_kenny",
+      "description": "Meet Kenny",
+      "requires": { "flag": "met_kenny" },
+      "reward": { "xp": 10 }
+    },
+    {
+      "id": "agree_to_escort",
+      "description": "Agree to escort Kenny to New Vegas",
+      "requires": { "flag": "sq_kenny_escort_taken" },
+      "reward": { "xp": 10 }
+    },
+    {
+      "id": "boulder_city",
+      "description": "Survive the first leg — the highway stretch to Boulder City (radscorpions, raiders, one very determined deathclaw)",
+      "reward": { "xp": 50 }
+    },
+    {
+      "id": "novac",
+      "description": "Reach Novac — where the medics will inevitably treat Kenny for something he encountered along the way",
+      "reward": { "xp": 50 }
+    },
+    {
+      "id": "new_vegas",
+      "description": "Arrive in New Vegas with Kenny still alive",
+      "reward": { "xp": 80, "item": "kennys_lucky_hood_scrap" }
+    }
+  ],
+  "rewards": {
+    "xp": 200,
+    "caps": 60,
+    "items": ["kennys_lucky_hood_scrap"]
+  },
+  "endings": [
+    {
+      "id": "ending_success",
+      "description": "Kenny arrives in New Vegas alive. He gives you a small piece of his orange hood — singed but intact — and says something that sounds grateful. You nod. He disappears into Freeside. A week later you hear he got into a dispute with a Freeside gang, died, and came back the next morning.",
+      "reward": "Kenny's Lucky Hood Scrap (unique luck-boosting accessory) + 60 Caps",
+      "consequence": "New Vegas locals begin telling stories about the immortal orange-hooded wanderer. Freeside gang morale drops slightly."
+    },
+    {
+      "id": "ending_kenny_died_en_route",
+      "description": "Kenny died en route. You said the words — 'Oh my God, they killed Kenny! You bastards!' — because it seemed like the thing to do. He showed up in New Vegas two days later anyway, slightly confused about how he got there.",
+      "reward": "40 Caps + a strange sense that death is more flexible than you thought",
+      "consequence": "Kenny settles in New Vegas. The medics in Novac claim he still owes them three sutures. He does not appear to be aware of this."
+    },
+    {
+      "id": "ending_abandoned",
+      "description": "You left Kenny to fend for himself. He was found alive by a trade caravan a week later, having apparently walked to New Vegas via a completely different route that should have been impossible.",
+      "reward": "Nothing",
+      "consequence": "Kenny bears no grudge. He waves cheerfully if you see him in New Vegas. This is somehow worse."
+    }
+  ]
+}
