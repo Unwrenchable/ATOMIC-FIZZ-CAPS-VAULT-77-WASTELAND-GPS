@@ -219,5 +219,54 @@
         }
       ]
     }
+  },
+  "quest_red_signals": {
+    "id": "quest_red_signals",
+    "name": "Red Signals",
+    "description": "A propaganda pamphlet from a downed Propagandabot points to a still-active Soviet broadcast on 66.6 MHz. Someone is out there.",
+    "type": "steps",
+    "lore": {
+      "intro": "The pamphlet is water-damaged but the frequency is still legible: 66.6 MHz. Hand-stamped in red.",
+      "deep": "The Communist Automation Directive was never cancelled. It was just never told the war ended."
+    },
+    "rewards": {
+      "xp": 150,
+      "caps": 75
+    }
+  },
+  "quest_iron_curtain": {
+    "id": "quest_iron_curtain",
+    "name": "Iron Curtain",
+    "description": "COMMISSAR-9 has identified the Red Star Outpost. Clear the Propagandabot patrols and Assaultron sentinels. Get the keycard to Vault Zero.",
+    "type": "steps",
+    "lore": {
+      "intro": "The outpost has been running autonomous patrols for over two hundred years. The robots don't know the war is over.",
+      "deep": "The Assaultron sentinels at the checkpoint were built to stop deserters. No one ever came back to desert."
+    },
+    "rewards": {
+      "xp": 350,
+      "caps": 200,
+      "items": [
+        "red_star_keycard"
+      ]
+    }
+  },
+  "quest_vault_zero": {
+    "id": "quest_vault_zero",
+    "name": "Vault Zero",
+    "description": "The Communist Automation Directive's crown jewel: a robot factory running 211 years past its expiration date. Breach it. Fight through it. Shut it down.",
+    "type": "steps",
+    "lore": {
+      "intro": "The vault hums below the relay station. It has never stopped humming.",
+      "deep": "The Vault Zero Commissar has been running the Directive alone for over two centuries. It never questioned the orders. It never stopped producing. It never asked why."
+    },
+    "rewards": {
+      "xp": 600,
+      "caps": 400,
+      "items": [
+        "commissar_badge",
+        "soviet_pulse_rifle"
+      ]
+    }
   }
 }
