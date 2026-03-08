@@ -57,7 +57,6 @@
       "type": "spoken",
       "text": "There's something wedged under the rocks. Paper. Old. Human."
     },
-
     "overseer_panic": {
       "type": "spoken",
       "text": "Travis— wait— don't touch him yet— I'm not ready."
@@ -82,7 +81,6 @@
       "type": "spoken",
       "text": "I don't know what comes next... but I'm ready."
     },
-
     "overseer_memory_glitch_01": {
       "type": "glitch",
       "text": "J—Jax—J77—error—memory—"
@@ -95,7 +93,6 @@
       "type": "glitch",
       "text": "Subject J77. Neural echo detected. Fragment unstable."
     },
-
     "overseer_endingA": {
       "type": "spoken",
       "text": "Thank you... for letting him rest. For letting me rest."
@@ -108,5 +105,11 @@
       "type": "spoken",
       "text": "He's alive. I'm alive. I don't know what that means... but I'm ready."
     }
-  }
+  },
+  "mood": "tense",
+  "personality": [
+    "Authoritarian",
+    "Watchful",
+    "Haunted"
+  ]
 }

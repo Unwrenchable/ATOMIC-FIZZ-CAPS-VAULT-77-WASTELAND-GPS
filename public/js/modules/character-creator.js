@@ -70,6 +70,8 @@
     isOpen: false,
     overlayEl: null,
     onSaveCallback: null,
+    _novaNameTimer: null,
+    _novaSpecialTimer: null,
 
     // ============================================================
     // INITIALIZATION
@@ -145,6 +147,13 @@
       }, 50);
       this._renderOptions();
       this._updatePreview();
+
+      // Nova-7 greeting on open
+      this._novaGuide.show(
+        "Welcome to Vault-Tec Personnel Assignment. I am NOVA-7, your character assignment AI. " +
+        "Please complete all sections. Failure to do so will be noted in your permanent file."
+      );
+
       // Provide DragonBones quick toggle if runtime available
       const dbToggle = document.createElement('button');
       dbToggle.textContent = 'Use Animated Preview';
@@ -1026,6 +1035,51 @@
     },
 
     // ============================================================
+    // NOVA-7 GUIDE — Vault-Tec AI companion for character creator
+    // ============================================================
+    _novaGuide: {
+      panel: null,
+
+      _buildPanel() {
+        if (this.panel) return;
+        const p = document.createElement('div');
+        p.className = 'nova-guide-panel hidden';
+        p.id = 'novaGuidePanel';
+        p.innerHTML = `
+          <div class="nova-guide-header">
+            <span style="font-size:18px;line-height:1;">🤖</span>
+            <span class="nova-guide-name">NOVA-7</span>
+          </div>
+          <div class="nova-guide-text" id="novaGuideText"></div>
+        `;
+        this.panel = p;
+        return p;
+      },
+
+      show(text) {
+        if (!this.panel) return;
+        const textEl = this.panel.querySelector('#novaGuideText');
+        if (textEl) textEl.textContent = text;
+        this.panel.classList.remove('hidden');
+      },
+
+      hide() {
+        if (!this.panel) return;
+        this.panel.classList.add('hidden');
+      }
+    },
+
+    _buildNovaPanel() {
+      const container = this.overlayEl ? this.overlayEl.querySelector('.character-creator-container') : null;
+      if (!container) return;
+      const panel = this._novaGuide._buildPanel();
+      if (panel) {
+        container.style.position = 'relative';
+        container.appendChild(panel);
+      }
+    },
+
+    // ============================================================
     // CREATE THE UI OVERLAY
     // ============================================================
     _createOverlay() {
@@ -1246,6 +1300,9 @@
       document.body.appendChild(overlay);
       this.overlayEl = overlay;
 
+      // Build Nova-7 guide panel
+      this._buildNovaPanel();
+
       // Bind events
       this._bindEvents();
     },
@@ -1258,7 +1315,12 @@
       document.getElementById('ccCloseBtn').addEventListener('click', () => this.close());
 
       // Randomize button
-      document.getElementById('ccRandomizeBtn').addEventListener('click', () => this.randomize());
+      document.getElementById('ccRandomizeBtn').addEventListener('click', () => {
+        this.randomize();
+        this._novaGuide.show(
+          "Randomization protocol engaged. Results are... statistically defensible."
+        );
+      });
 
       // Reset button
       document.getElementById('ccResetBtn').addEventListener('click', () => {
@@ -1303,6 +1365,16 @@
       document.getElementById('ccNameInput').addEventListener('input', (e) => {
         currentAppearance.name = e.target.value;
         document.getElementById('ccPreviewName').textContent = e.target.value || "WANDERER";
+        // Nova comment on name change (debounced to 800ms)
+        clearTimeout(this._novaNameTimer);
+        this._novaNameTimer = setTimeout(() => {
+          const name = e.target.value.trim();
+          if (name) {
+            this._novaGuide.show(
+              "File updated. Biometric tags recalibrated. Welcome, " + escapeHtml(name) + ". Please proceed."
+            );
+          }
+        }, 800);
       });
 
       // Category tabs
@@ -1609,6 +1681,32 @@
       set('ccDerCW',     derived.carryWeight);
       set('ccDerRR',     derived.radResistance + '%');
       set('ccDerCC',     derived.critChance + '%');
+
+      // Nova comment on SPECIAL allocation (debounced)
+      clearTimeout(this._novaSpecialTimer);
+      this._novaSpecialTimer = setTimeout(() => {
+        // High values for key stats trigger specific Nova commentary
+        if (statKey === 'S' && newVal >= 7) {
+          this._novaGuide.show("Structural integrity confirmed. You will break things. Vault-Tec is fine with this.");
+        } else if (statKey === 'I' && newVal >= 7) {
+          this._novaGuide.show("Intellectual profile noted. Try not to outsmart the Overseer. Again.");
+        } else if (statKey === 'C' && newVal >= 7) {
+          this._novaGuide.show("Social aptitude flagged. Please use your powers for authorized negotiations only.");
+        } else if (statKey === 'P' && newVal >= 7) {
+          this._novaGuide.show("Perception elevated. Vault-Tec recommends not pointing that out to other dwellers.");
+        } else if (statKey === 'E' && newVal >= 7) {
+          this._novaGuide.show("Endurance profile: above average. Radiation damage still applies. Just slower.");
+        } else if (statKey === 'A' && newVal >= 7) {
+          this._novaGuide.show("Agility confirmed exceptional. Please do not use this to skip orientation.");
+        } else if (statKey === 'L' && newVal >= 7) {
+          this._novaGuide.show("Luck stat flagged. Vault-Tec does not endorse luck as a survival strategy. And yet.");
+        } else {
+          const allEqual = SPECIAL_STATS.every(s => sp[s.key] === sp[SPECIAL_STATS[0].key]);
+          if (allEqual) {
+            this._novaGuide.show("Balanced allocation noted. Vault-Tec describes this as 'adequately mediocre.' Congratulations.");
+          }
+        }
+      }, 600);
     },
 
     // Calculate derived stats from a SPECIAL object
@@ -1664,6 +1762,15 @@
           const bgId = card.dataset.bgId;
           currentAppearance.background = (currentAppearance.background === bgId) ? null : bgId;
           this._renderBackgroundTab(); // Re-render to show/hide flavor text
+          // Nova comment on background selection
+          if (currentAppearance.background) {
+            const selectedBg = backgroundsData.find(b => b.id === currentAppearance.background);
+            if (selectedBg) {
+              this._novaGuide.show(
+                escapeHtml(selectedBg.name) + ": A solid history. Vault-Tec endorses your survival probability at [REDACTED]%."
+              );
+            }
+          }
         });
       });
     },
@@ -1729,6 +1836,13 @@
 
           currentAppearance.selectedTraits = sel;
           this._renderTraitsTab(); // Re-render to update UI
+
+          // Nova comment on trait selection
+          if (sel.length > 0) {
+            this._novaGuide.show(
+              "Trait acquisition confirmed. Side effects are not Vault-Tec's legal responsibility."
+            );
+          }
         });
       });
     },

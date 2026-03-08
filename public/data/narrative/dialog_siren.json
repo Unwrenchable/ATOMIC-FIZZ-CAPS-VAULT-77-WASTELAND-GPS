@@ -6,8 +6,12 @@
   "description": "A voice through static. She found you before you even knew you were lost.",
   "intro": {
     "id": "siren_intro",
-    "conditions": ["!flag:siren_intro_seen"],
-    "set_flags": ["siren_intro_seen"],
+    "conditions": [
+      "!flag:siren_intro_seen"
+    ],
+    "set_flags": [
+      "siren_intro_seen"
+    ],
     "text": "...\n...\n\n[Your Pip-Boy crackles. The static resolves into a voice.]\n\n\"You're awake. Good. We were getting worried.\"\n\nCalm. Certain. Tinged with something that sounds like relief.\n\n\"My name is Siren. I'm a Signal Runner — I track displaced consciousnesses across the wasteland. Yours lit up like a flare in the dark the moment you opened your eyes.\"\n\n\"You're alive. You're oriented. That's step one. Now let's get you moving.\"",
     "responses": [
       {
@@ -84,7 +88,9 @@
     "node_what_to_do": {
       "id": "node_what_to_do",
       "offers_quest": "wake_up",
-      "set_flags": ["siren_gave_orientation"],
+      "set_flags": [
+        "siren_gave_orientation"
+      ],
       "text": "\"Four things. Do them in order.\"\n\n\"One: open your inventory. Confirm your gear made it. You should have a jumpsuit on — that's standard issue. The rest should be there.\"\n\n\"Two: equip your sidearm. A courier named Pip is en route with your weapon and supplies — she'll find you. When she arrives, check in with her.\"\n\n\"Three: tune your Pip-Boy radio to Atomic Fizz. DJ Struggle broadcasts local intel — raider movements, rad spikes, safe zones. Survival information.\"\n\n\"Four: check your map. Know where you are before you move.\"\n\n\"That's the job. Ready?\"",
       "responses": [
         {
@@ -192,13 +198,17 @@
     },
     "node_farewell_kind": {
       "id": "node_farewell_kind",
-      "set_flags": ["siren_farewell_seen"],
+      "set_flags": [
+        "siren_farewell_seen"
+      ],
       "text": "\"Good. You've got this.\"\n\nA beat of static.\n\n\"I'll be monitoring your signal. If you go dark, I'll notice.\"\n\n\"That's not a threat — it's a promise. You're not alone out here.\"\n\n\"Siren out.\"",
       "end": true
     },
     "node_farewell_direct": {
       "id": "node_farewell_direct",
-      "set_flags": ["siren_farewell_seen"],
+      "set_flags": [
+        "siren_farewell_seen"
+      ],
       "text": "\"Good. Don't waste time.\"\n\n\"I'll be on this frequency. Signal me if you run into trouble you can't handle.\"\n\n\"Siren out.\"",
       "end": true
     }
@@ -256,7 +266,9 @@
         "stat:rads>=150",
         "!flag:siren_warned_rads"
       ],
-      "set_flags": ["siren_warned_rads"],
+      "set_flags": [
+        "siren_warned_rads"
+      ],
       "text": "\"Your Pip-Boy's reading elevated radiation. That's not a stat you let climb.\"\n\n\"RadAway — use it. Radiation damage is cumulative and it affects your judgment before you realize it's happening.\"\n\n\"I've watched people walk into firefights with 400 rads because they thought they felt fine.\"\n\n\"They didn't.\"",
       "responses": [
         {
@@ -274,7 +286,9 @@
         "flag:siren_intro_seen",
         "!flag:siren_explained_fizz"
       ],
-      "set_flags": ["siren_explained_fizz"],
+      "set_flags": [
+        "siren_explained_fizz"
+      ],
       "text": "\"The Atomic Fizz network — you're going to hear that term a lot.\"\n\n\"Pre-war soda brand. Post-war it became something else: a claim system. GPS coordinates, bottle cap locations, resource nodes.\"\n\n\"It's part economy, part territory map. The FIZZ token runs through it — think of it as a ledger of who controls what.\"\n\n\"It matters because the people who play the game well eat. The people who ignore it tend to be the ones I pick up signals from after the fact.\"",
       "responses": [
         {
@@ -300,5 +314,11 @@
         "end": true
       }
     ]
-  }
+  },
+  "mood": "neutral",
+  "personality": [
+    "Precise",
+    "Cautious",
+    "Reliable"
+  ]
 }

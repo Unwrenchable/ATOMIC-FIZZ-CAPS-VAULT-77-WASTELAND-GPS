@@ -4,96 +4,167 @@
   "portrait": "default",
   "title": "The Soldier Who Refused to Forget",
   "description": "Dialog nodes for Erich — one of the oldest ghouls in the Mojave, so old that his memories predate the Great War by more than a century. Exposed to early pre-war radiation experiments, he has spent two hundred years unable to die and unable to forget. He fought in a different war, in a different century, in the mud and wire of trenches that the bombs have since erased. He does not hate. He does not glory. He simply remembers, and what he remembers has made him very quiet about very loud things.",
-
   "intro": {
     "id": "erich_intro",
-    "conditions": ["!flag:met_erich"],
+    "conditions": [
+      "!flag:met_erich"
+    ],
     "text": "Sit down, if you want.<br><br>I don't chase off company. Haven't for a long time.<br><br>My name is Erich. I've been in the Mojave since... well, since there was a Mojave worth naming. Before that I was somewhere else. A long time ago in a war that nobody left alive remembers except me.<br><br>I outlived that war. I outlived the peace that followed. I outlived the next war, and the next. And then the bombs fell in 2077 and I outlived that too.<br><br>Sit. I'll tell you what I know about surviving things that were supposed to kill everyone.",
-    "set_flags": ["met_erich"]
+    "set_flags": [
+      "met_erich"
+    ]
   },
-
   "knowledge_nodes": [
     {
       "id": "erich_knows_rex",
-      "conditions": ["flag:met_rex", "!flag:erich_comment_rex"],
+      "conditions": [
+        "flag:met_rex",
+        "!flag:erich_comment_rex"
+      ],
       "text": "The Captain at the Dam. Yes.<br><br>I've known a hundred captains. Most of them were good men who believed in the cause, right until the cause consumed them.<br><br>Rex is different. He knows what he's fighting *for*. Not against — for. That distinction saves lives. It takes longer to learn than anything I can teach.",
-      "set_flags": ["erich_comment_rex"]
+      "set_flags": [
+        "erich_comment_rex"
+      ]
     },
     {
       "id": "erich_knows_arnie",
-      "conditions": ["flag:met_arnie", "!flag:erich_comment_arnie"],
+      "conditions": [
+        "flag:met_arnie",
+        "!flag:erich_comment_arnie"
+      ],
       "text": "The large one chasing the machine?<br><br>I met soldiers like Arnold in every war. Men who believed that if you were strong enough and determined enough, the machine could be beaten on pure will.<br><br>Sometimes they were right. That's the cruel part — sometimes they were right.",
-      "set_flags": ["erich_comment_arnie"]
+      "set_flags": [
+        "erich_comment_arnie"
+      ]
     },
     {
       "id": "erich_knows_loxley",
-      "conditions": ["flag:met_loxley", "!flag:erich_comment_loxley"],
+      "conditions": [
+        "flag:met_loxley",
+        "!flag:erich_comment_loxley"
+      ],
       "text": "The thief with the mission. Loxley.<br><br>In the old war, we called them partisans. Some stole supplies for civilians. Some just stole. Loxley seems to be the first kind.<br><br>The difference matters. The difference is the whole thing.",
-      "set_flags": ["erich_comment_loxley"]
+      "set_flags": [
+        "erich_comment_loxley"
+      ]
     },
     {
       "id": "erich_knows_barney",
-      "conditions": ["flag:met_barney", "!flag:erich_comment_barney"],
+      "conditions": [
+        "flag:met_barney",
+        "!flag:erich_comment_barney"
+      ],
       "text": "Barney Black. Yes, I've seen him pass through.<br><br>He reminds me of men from the older wars — the ones who fought for personal glory as much as cause. Not cruel, but... loud in a way that gets people killed.<br><br>He'll either learn that or he won't. Some do. Some don't. The wasteland is unsentimental about which.",
-      "set_flags": ["erich_comment_barney"]
+      "set_flags": [
+        "erich_comment_barney"
+      ]
     }
   ],
-
   "emotional_nodes": [
     {
       "id": "erich_player_rads",
-      "conditions": ["stat:rads>=100", "!flag:erich_rad_warning"],
+      "conditions": [
+        "stat:rads>=100",
+        "!flag:erich_rad_warning"
+      ],
       "text": "Your rads are showing. I can see it in the way you hold yourself.<br><br>I was the first generation exposed to heavy radiation, back when no one knew what it would do. They called us the 'radiation volunteers.' We didn't volunteer.<br><br>What it did to me was... this. Two centuries of this. Take the RadAway. Don't become what I became by accident.",
-      "set_flags": ["erich_rad_warning"]
+      "set_flags": [
+        "erich_rad_warning"
+      ]
     },
     {
       "id": "erich_player_young",
-      "conditions": ["stat:hp>=80", "!flag:erich_noted_youth"],
+      "conditions": [
+        "stat:hp>=80",
+        "!flag:erich_noted_youth"
+      ],
       "text": "You're still in good shape. Good.<br><br>I was too, once. For a very long time, actually — radiation slows a lot of things down.<br><br>Don't waste it on causes that aren't worth dying for. I've buried too many people who didn't get to ask that question first.",
-      "set_flags": ["erich_noted_youth"]
+      "set_flags": [
+        "erich_noted_youth"
+      ]
     }
   ],
-
   "quest_nodes": [
     {
       "id": "erich_offer_last_letter",
-      "conditions": ["!flag:sq_erich_last_letter_taken"],
+      "conditions": [
+        "!flag:sq_erich_last_letter_taken"
+      ],
       "text": "I have a letter. Written before the bombs. 1918, to be exact — in a language most people here have never heard spoken.<br><br>I've been carrying it for over a hundred years and I never delivered it. The man it was meant for is gone. The country it was meant for is gone. The war it came from is gone.<br><br>But there is a pre-war archive — deep in one of the old university libraries south of the ruins. Sealed. Climate-controlled. Preserved.<br><br>I want that letter put somewhere it will be found. Not read. Just... preserved. Evidence that someone lived. That there was a before.<br><br>I can't go myself. Too conspicuous. Too slow. Too much history walking around on two legs.<br><br>Will you take it?",
       "offers_quest": "sq_erich_last_letter",
-      "set_flags": ["sq_erich_last_letter_taken"]
+      "set_flags": [
+        "sq_erich_last_letter_taken"
+      ]
     }
   ],
-
   "wildcards": [
     {
       "id": "erich_old_war",
-      "keywords": ["war", "fight", "battle", "trench", "soldier", "old war"],
+      "keywords": [
+        "war",
+        "fight",
+        "battle",
+        "trench",
+        "soldier",
+        "old war"
+      ],
       "text": "The first war I fought, we lived in trenches. Mud and wire and waiting.<br><br>You learn things in trenches that no one teaches in peacetime. How to sleep in noise. How to eat without tasting. How to look at the man beside you and know, without being told, what he needs.<br><br>The bombs took the trenches. They took the mud. They left the lesson."
     },
     {
       "id": "erich_quiet",
-      "keywords": ["quiet", "silence", "peace", "still", "alone"],
+      "keywords": [
+        "quiet",
+        "silence",
+        "peace",
+        "still",
+        "alone"
+      ],
       "text": "There was a phrase, once. A writer used it — 'all quiet on the Western Front.' He meant it as irony. The front was never quiet. Quiet meant something worse was coming.<br><br>Out here the quiet means something different. The quiet out here is honest. When nothing's trying to kill you, nothing's trying to kill you.<br><br>I've learned to tell the difference. It took eighty years."
     },
     {
       "id": "erich_dying",
-      "keywords": ["die", "death", "end", "survive", "live", "immortal"],
+      "keywords": [
+        "die",
+        "death",
+        "end",
+        "survive",
+        "live",
+        "immortal"
+      ],
       "text": "I've tried to die. Not on purpose — just by placing myself where dying was statistically certain.<br><br>It never worked.<br><br>At some point I stopped trying. The wasteland has more need of people who remember than people who forget. I'll stay until it doesn't."
     },
     {
       "id": "erich_young_people",
-      "keywords": ["young", "new", "settler", "generation", "future", "hope"],
+      "keywords": [
+        "young",
+        "new",
+        "settler",
+        "generation",
+        "future",
+        "hope"
+      ],
       "text": "The young ones who grew up post-war — they're something different.<br><br>They don't carry the before. They only have the now. For a long time I thought that was a loss. Now I think it might be the only way to build something that lasts.<br><br>Memory is a weight. They can carry the future instead."
     },
     {
       "id": "erich_hate",
-      "keywords": ["hate", "enemy", "revenge", "anger", "grudge"],
+      "keywords": [
+        "hate",
+        "enemy",
+        "revenge",
+        "anger",
+        "grudge"
+      ],
       "text": "I spent the first fifty years angry. At the generals. At the politicians. At the scientists. At the men who made the decisions that made the wars that made the bombs.<br><br>Anger is expensive. I ran out eventually.<br><br>What's left is just... resolve. To outlast the things that shouldn't have happened. To remember them clearly, without flinching. To make sure someone knows."
     }
   ],
-
   "fallback": {
     "id": "erich_fallback",
     "text": "Come back when you have time. I have nothing but time.<br><br>That's not as good as it sounds."
-  }
+  },
+  "mood": "tense",
+  "personality": [
+    "Stoic",
+    "Haunted",
+    "Steadfast"
+  ]
 }
