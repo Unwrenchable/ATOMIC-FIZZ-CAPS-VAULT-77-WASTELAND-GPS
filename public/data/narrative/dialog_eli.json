@@ -4,85 +4,141 @@
   "portrait": "eli",
   "title": "The Last Reader",
   "description": "Dialog nodes for Eli Wandermoor, a blind wasteland wanderer who has crossed three territories on foot to deliver the last surviving pre-war cookbook to a struggling settlement. He does not know why he was chosen. He only knows he was told to walk west.",
-
   "intro": {
     "id": "eli_intro",
-    "conditions": ["!flag:met_eli"],
+    "conditions": [
+      "!flag:met_eli"
+    ],
     "text": "I can hear you just fine.<br><br>No. Don't apologize. Most people think blind means helpless.<br><br>I've walked from what used to be the Capital Wasteland to here. Alone. Carrying something that needs to reach the Oasis settlement before I do.<br><br>Name's Eli. I carry the book. That's all you need to know for now.",
-    "set_flags": ["met_eli"]
+    "set_flags": [
+      "met_eli"
+    ]
   },
-
   "knowledge_nodes": [
     {
       "id": "eli_knows_mara",
-      "conditions": ["flag:met_mara", "!flag:eli_comment_mara"],
+      "conditions": [
+        "flag:met_mara",
+        "!flag:eli_comment_mara"
+      ],
       "text": "The Rad-Witch. She tried to take the book to 'study the binding material.'<br><br>I told her the binding was the least important part.<br><br>She didn't understand. Most people don't. Not yet.",
-      "set_flags": ["eli_comment_mara"]
+      "set_flags": [
+        "eli_comment_mara"
+      ]
     },
     {
       "id": "eli_knows_rex",
-      "conditions": ["flag:met_rex", "!flag:eli_comment_rex"],
+      "conditions": [
+        "flag:met_rex",
+        "!flag:eli_comment_rex"
+      ],
       "text": "The Captain gave me safe passage past the Dam.<br><br>He asked what was in the book. I told him: everything people forgot about feeding each other.<br><br>He was quiet for a long time. Then he let me through.",
-      "set_flags": ["eli_comment_rex"]
+      "set_flags": [
+        "eli_comment_rex"
+      ]
     },
     {
       "id": "eli_knows_lucy",
-      "conditions": ["flag:met_lucy", "!flag:eli_comment_lucy"],
+      "conditions": [
+        "flag:met_lucy",
+        "!flag:eli_comment_lucy"
+      ],
       "text": "Sparkplug offered to trade me six pre-war components for the book.<br><br>I said: what good are components if you don't know how to cook what you grow?<br><br>She laughed. Then she gave me directions for free.",
-      "set_flags": ["eli_comment_lucy"]
+      "set_flags": [
+        "eli_comment_lucy"
+      ]
     },
     {
       "id": "eli_knows_dolores",
-      "conditions": ["flag:met_dolores", "!flag:eli_comment_dolores"],
+      "conditions": [
+        "flag:met_dolores",
+        "!flag:eli_comment_dolores"
+      ],
       "text": "The woman at the farmstead?<br><br>She offered me breakfast. Same breakfast, same words, same smile — the third time, I realized nothing had changed.<br><br>I left before the fourth morning. Some loops aren't mine to break.",
-      "set_flags": ["eli_comment_dolores"]
+      "set_flags": [
+        "eli_comment_dolores"
+      ]
     }
   ],
-
   "emotional_nodes": [
     {
       "id": "eli_asked_about_blindness",
-      "conditions": ["!flag:eli_blind_explained"],
+      "conditions": [
+        "!flag:eli_blind_explained"
+      ],
       "text": "I wasn't always blind.<br><br>I saw the flash. I was inside when the bombs fell — a library basement outside what used to be Baltimore.<br><br>When I came out... color was gone. Light was a blur. But I could still read by touch for a few years. Long enough to memorize every page.<br><br>Now I carry it. Here.<br><br>*presses a hand over his chest*<br><br>And here.<br><br>*touches the satchel at his side*",
-      "set_flags": ["eli_blind_explained"]
+      "set_flags": [
+        "eli_blind_explained"
+      ]
     }
   ],
-
   "quest_nodes": [
     {
       "id": "eli_offer_escort",
-      "conditions": ["!flag:sq_the_last_page_taken"],
+      "conditions": [
+        "!flag:sq_the_last_page_taken"
+      ],
       "text": "I'm close. The Oasis settlement is three days west on my count — two if I'm wrong about a canyon I heard about.<br><br>I've been hunted. Three times now. People who think the book is a weapon, or a map, or a code.<br><br>It's a cookbook. That's all. The collected food knowledge of pre-war America, compiled by a librarian in 2076 who knew what was coming.<br><br>The settlement at Oasis is starving slowly. Not from lack of food — from lack of knowing how to use what they have.<br><br>I need one more pair of eyes. Or rather — one pair of eyes. Walk with me?",
       "offers_quest": "sq_the_last_page",
-      "set_flags": ["sq_the_last_page_taken"]
+      "set_flags": [
+        "sq_the_last_page_taken"
+      ]
     }
   ],
-
   "wildcards": [
     {
       "id": "eli_the_book",
-      "keywords": ["book", "cookbook", "recipe", "food", "cooking"],
+      "keywords": [
+        "book",
+        "cookbook",
+        "recipe",
+        "food",
+        "cooking"
+      ],
       "text": "It's more than recipes.<br><br>It's the knowledge of how to *feed people*. How to stretch three ingredients into five meals. How to make Brahmin liver taste like something worth living for.<br><br>Knowledge dies when no one writes it down. Someone wrote it down."
     },
     {
       "id": "eli_walking",
-      "keywords": ["walk", "road", "travel", "journey", "distance"],
+      "keywords": [
+        "walk",
+        "road",
+        "travel",
+        "journey",
+        "distance"
+      ],
       "text": "I kept walking west.<br><br>That was the instruction I was given — I don't know by whom, not really — and I've followed it for eleven years.<br><br>West. Always west."
     },
     {
       "id": "eli_violence",
-      "keywords": ["fight", "battle", "weapon", "gun", "kill"],
+      "keywords": [
+        "fight",
+        "battle",
+        "weapon",
+        "gun",
+        "kill"
+      ],
       "text": "I don't want to fight.<br><br>But I've buried six men who tried to take this book.<br><br>Walking blind sharpens the other senses considerably."
     },
     {
       "id": "eli_faith",
-      "keywords": ["faith", "believe", "hope", "god", "purpose"],
+      "keywords": [
+        "faith",
+        "believe",
+        "hope",
+        "god",
+        "purpose"
+      ],
       "text": "You ask me what keeps me walking?<br><br>I believe there is a settlement that needs what I carry. That's enough.<br><br>Purpose doesn't require proof. You just move toward it."
     }
   ],
-
   "fallback": {
     "id": "eli_fallback",
     "text": "I need to keep moving.<br><br>The book doesn't deliver itself."
-  }
+  },
+  "mood": "neutral",
+  "personality": [
+    "Scholarly",
+    "Patient",
+    "Perceptive"
+  ]
 }
