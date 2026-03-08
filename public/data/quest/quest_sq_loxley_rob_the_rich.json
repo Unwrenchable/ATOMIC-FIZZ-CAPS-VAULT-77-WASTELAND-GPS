@@ -1,0 +1,67 @@
+{
+  "id": "quest_sq_loxley_rob_the_rich",
+  "name": "Rob the Rich",
+  "type": "side",
+  "triggerNpc": "loxley",
+  "description": "Loxley, the self-styled Robin Hood of the Mojave, needs a capable point-rider to intercept a Crimson Caravan shipment bound for Harwick — a price-gouging merchant who hoards vital supplies while nearby settlements starve. Loxley intends to redirect the goods to Freeside and the squatter camps along Route 15.",
+  "lore": "Long before the bombs fell, stories circulated of a Saxon outlaw who robbed from the wealthy nobility and gave to the rural poor. Somewhere in the irradiated Mojave, that legend found fertile soil. Loxley's Merry Men number fewer than a dozen, but their reputation for hitting caravans without casualties — and the subsequent floods of food into struggling camps — has made them something approaching heroes in the squatter warrens. The Crimson Caravan Company does not share this assessment.",
+  "objectives": [
+    {
+      "id": "meet_loxley",
+      "description": "Talk to Loxley",
+      "requires": { "flag": "met_loxley" },
+      "reward": { "xp": 10 }
+    },
+    {
+      "id": "find_caravan_route",
+      "description": "Locate the Crimson Caravan shipment on Nipton Road",
+      "requires": { "flag": "sq_loxley_rob_the_rich_taken" },
+      "reward": { "xp": 30 }
+    },
+    {
+      "id": "intercept_caravan",
+      "description": "Intercept the caravan — through negotiation, distraction, or force. No killing unless fired upon.",
+      "reward": { "xp": 60 }
+    },
+    {
+      "id": "separate_goods",
+      "description": "Separate the hoarded supplies from Harwick's legitimate cargo",
+      "reward": { "xp": 30 }
+    },
+    {
+      "id": "deliver_to_freeside",
+      "description": "Deliver the redirected supplies to Freeside and the Route 15 squatter camps",
+      "reward": { "xp": 80, "item": "merry_man_token" }
+    },
+    {
+      "id": "report_to_loxley",
+      "description": "Report back to Loxley",
+      "reward": { "xp": 40, "caps": 80 }
+    }
+  ],
+  "rewards": {
+    "xp": 250,
+    "caps": 80,
+    "items": ["merry_man_token"]
+  },
+  "endings": [
+    {
+      "id": "ending_success_peaceful",
+      "description": "You talked down the caravan guards and redirected the goods without bloodshed. Loxley names you an honorary Merry Man.",
+      "reward": "Merry Man Token (reputation item) + 80 Caps",
+      "consequence": "Crimson Caravan begins routing their Nipton Road shipments with heavier armed escorts. Squatter camp morale improves for two weeks."
+    },
+    {
+      "id": "ending_success_combat",
+      "description": "You fought off the caravan guards. The goods reach the camps, but Crimson Caravan puts a bounty on Loxley's head.",
+      "reward": "Merry Man Token + 80 Caps, but Crimson Caravan caravans will now be hostile on sight",
+      "consequence": "Loxley is forced to relocate his camp south. He is philosophical about it."
+    },
+    {
+      "id": "ending_betray_loxley",
+      "description": "You tipped off Harwick's men. Loxley narrowly escaped capture. The goods go to Harwick.",
+      "reward": "200 Caps from Harwick",
+      "consequence": "Loxley disappears from the Mojave. Squatter camps receive nothing. Harwick quadruples his water prices."
+    }
+  ]
+}

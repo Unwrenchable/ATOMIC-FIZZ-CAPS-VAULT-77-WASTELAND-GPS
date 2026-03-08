@@ -35,6 +35,24 @@
       "conditions": ["flag:met_mother", "!flag:lucy_comment_mother"],
       "text": "Mother talked to you?<br><br>Yeah, she tried recruiting me once. I told her I don’t work for machines unless they pay in chips.",
       "set_flags": ["lucy_comment_mother"]
+    },
+    {
+      "id": "lucy_knows_loxley",
+      "conditions": ["flag:met_loxley", "!flag:lucy_comment_loxley"],
+      "text": "Oh, the hat man. Robin Hood of the Mojave, he calls himself.<br><br>I've got a deal with him — he skips my stock, I skip his name when the Dam asks.<br><br>He's good for business. Indirectly.",
+      "set_flags": ["lucy_comment_loxley"]
+    },
+    {
+      "id": "lucy_knows_arnie",
+      "conditions": ["flag:met_arnie", "!flag:lucy_comment_arnie"],
+      "text": "Arnold Black? Sold him a blender once. Pre-war. Fully functional.<br><br>He didn't even blink at the price. Just nodded, tucked it under one arm, and said 'I'll be back.'<br><br>He came back. Bought two more. I have questions I know I shouldn't ask.",
+      "set_flags": ["lucy_comment_arnie"]
+    },
+    {
+      "id": "lucy_knows_kenny",
+      "conditions": ["flag:met_kenny", "!flag:lucy_comment_kenny"],
+      "text": "Oh, Kenny. The hood kid.<br><br>He traded me a handful of pre-war coins for a stimpak. Coins were worthless. Stimpak cost me twelve caps.<br><br>Then he got eaten by a fire ant on the way out the door. Came back the next morning for his change.<br><br>I gave him the change.",
+      "set_flags": ["lucy_comment_kenny"]
     }
   ],
 
