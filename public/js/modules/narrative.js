@@ -860,6 +860,10 @@
       if (dialog) {
         this._loadNPCPortrait(dialog);
         this._updateNPCInfoPanel(dialog);
+        // Hook: prime NPC video module if available
+        if (typeof Game !== 'undefined' && Game.modules && Game.modules.NpcVideo) {
+          Game.modules.NpcVideo.prepare(dialog);
+        }
       }
     },
 
@@ -1095,7 +1099,12 @@
     closeDialog() {
       const dialogPanel = document.getElementById("panel-dialog");
       const closingDialogId = this.currentDialogId;
-      
+
+      // Hook: clear NPC video module before hiding the panel
+      if (typeof Game !== 'undefined' && Game.modules && Game.modules.NpcVideo) {
+        Game.modules.NpcVideo.clear();
+      }
+
       if (dialogPanel) {
         dialogPanel.classList.remove("active");
         dialogPanel.style.display = "none";
