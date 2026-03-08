@@ -218,7 +218,7 @@
       "dialog": "A securitron pauses its patrol at the Strip gate and swivels toward you. \"Query: Have you observed an individual approximately 1.9 meters tall, white sequined suit, hair product above regulatory quantity?\" It waits. \"No reason. He is simply on the watch list. Positive watch list. Mr. House's request.\""
     },
     {
-      "id": "enc_elvis_boulderCity",
+      "id": "enc_elvis_boulder_city",
       "poi": "Boulder City",
       "trigger": "repeat_visit",
       "dialog": "Scrawled on a concrete blast wall in blue paint: 'THE KING LIVES' with a crude silhouette of a man mid-hip-swivel. Below it, someone has added in careful handwriting: 'Confirmed. Boulder City. 0300 hours. He sang one song and walked west.' Below that, a third hand: 'He's real. I swear it.'"
