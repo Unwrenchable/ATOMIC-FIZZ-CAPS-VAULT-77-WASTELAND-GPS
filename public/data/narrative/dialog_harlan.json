@@ -29,5 +29,11 @@
       "type": "spoken",
       "text": "I ain't what I used to be... but I still remember my boy."
     }
-  }
+  },
+  "mood": "tense",
+  "personality": [
+    "Determined",
+    "Grief-stricken",
+    "Unyielding"
+  ]
 }

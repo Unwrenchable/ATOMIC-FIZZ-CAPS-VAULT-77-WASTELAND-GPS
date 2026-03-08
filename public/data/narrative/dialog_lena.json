@@ -57,5 +57,11 @@
       "type": "spoken",
       "text": "The wasteland doesn't give back what it takes. But sometimes... it gives you something new."
     }
-  }
+  },
+  "mood": "friendly",
+  "personality": [
+    "Perceptive",
+    "Warm",
+    "Adaptable"
+  ]
 }

@@ -859,6 +859,94 @@
       const dialog = this.dialogs[this.currentDialogId];
       if (dialog) {
         this._loadNPCPortrait(dialog);
+        this._updateNPCInfoPanel(dialog);
+      }
+    },
+
+    // ============================================================
+    // NPC LIVING STATE — visit counter, mood, relationship, traits
+    // ============================================================
+    _updateNPCInfoPanel(dialog) {
+      if (!dialog) return;
+
+      // --- Visit counter (sessionStorage) ---
+      // currentDialogId is always set before showDialogPanel() calls this method
+      const visitKey = "nrr_visits_" + this.currentDialogId;
+      let visits = 0;
+      try {
+        visits = parseInt(sessionStorage.getItem(visitKey) || "0", 10);
+        // Increment AFTER reading so relationship is based on prior visit count
+        sessionStorage.setItem(visitKey, String(visits + 1));
+      } catch (_) {}
+
+      // --- Role / title ---
+      const roleEl = document.getElementById("dialogNPCRole");
+      if (roleEl) {
+        const role = dialog.title || "";
+        roleEl.textContent = escapeHtml(role);
+        roleEl.style.display = role ? "" : "none";
+      }
+
+      // --- Relationship badge (based on visits before this one) ---
+      const relEl = document.getElementById("dialogRelationship");
+      if (relEl) {
+        let label, color, bg;
+        if (visits === 0) {
+          label = "FIRST MEETING";
+          color = "#7fd4f5";
+          bg = "rgba(127,212,245,0.1)";
+        } else if (visits <= 2) {
+          label = "ACQUAINTANCE";
+          color = "#00ff41";
+          bg = "rgba(0,255,65,0.08)";
+        } else if (visits <= 5) {
+          label = "FAMILIAR";
+          color = "#ffaa00";
+          bg = "rgba(255,170,0,0.1)";
+        } else {
+          label = "TRUSTED ALLY";
+          color = "#ff7744";
+          bg = "rgba(255,119,68,0.12)";
+        }
+        relEl.textContent = label;
+        relEl.style.color = color;
+        relEl.style.background = bg;
+        relEl.style.border = "1px solid " + color;
+        relEl.style.display = "inline-block";
+      }
+
+      // --- Mood indicator ---
+      const moodEl = document.getElementById("dialogNPCMood");
+      if (moodEl) {
+        const moodMap = {
+          neutral:    { color: "#888888", label: "Neutral" },
+          friendly:   { color: "#00ff41", label: "Friendly" },
+          suspicious: { color: "#ffaa00", label: "Suspicious" },
+          hostile:    { color: "#ff3333", label: "Hostile" },
+          tense:      { color: "#ffdd00", label: "Tense" },
+          excited:    { color: "#7fd4f5", label: "Excited" }
+        };
+        const mood = (dialog.mood || "neutral").toLowerCase();
+        const moodData = moodMap[mood] || moodMap.neutral;
+        moodEl.innerHTML =
+          '<span class="npc-mood-dot" style="background:' + moodData.color + ';box-shadow:0 0 4px ' + moodData.color + '80;"></span>' +
+          '<span style="color:' + moodData.color + ';">' + escapeHtml(moodData.label) + '</span>';
+        moodEl.style.display = "flex";
+      }
+
+      // --- Personality trait badges ---
+      const traitsEl = document.getElementById("dialogNPCTraits");
+      if (traitsEl) {
+        const traits = Array.isArray(dialog.personality) ? dialog.personality : [];
+        if (traits.length > 0) {
+          traitsEl.innerHTML = traits
+            .map(t => '<span class="npc-trait-badge">' + escapeHtml(String(t)) + '</span>')
+            .join("");
+          traitsEl.style.display = "flex";
+        } else {
+          traitsEl.innerHTML = "";
+          traitsEl.style.display = "none";
+        }
       }
     },
 
@@ -1065,6 +1153,12 @@
       }
       const portraitContainer = document.getElementById("dialogPortraitContainer");
       if (portraitContainer) portraitContainer.innerHTML = '<span style="font-size:64px;">🧍</span>';
+
+      // Clear NPC info panel elements
+      ["dialogNPCRole", "dialogNPCMood", "dialogRelationship", "dialogNPCTraits"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.innerHTML = ""; el.style.display = "none"; }
+      });
 
       this.currentDialogId = null;
       this.lastPanelId = null;

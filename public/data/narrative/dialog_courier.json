@@ -375,5 +375,11 @@
         "end": true
       }
     ]
-  }
+  },
+  "mood": "friendly",
+  "personality": [
+    "Resourceful",
+    "Direct",
+    "Trustworthy"
+  ]
 }
