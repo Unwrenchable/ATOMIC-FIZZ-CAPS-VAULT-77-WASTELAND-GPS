@@ -1067,3 +1067,106 @@ input[type="reset"]:hover {
   font-size: clamp(10px, 2vw, 12px);
   font-style: italic;
 }
+
+/* ============================================================
+   NPC LIVING STATE PANEL
+   ============================================================ */
+#dialogNPCRole {
+  font-size: 11px;
+  color: rgba(0,255,65,0.6);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#dialogNPCMood {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  margin-top: 4px;
+  text-transform: uppercase;
+  justify-content: center;
+}
+
+.npc-mood-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+#dialogRelationship {
+  margin-top: 4px;
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#dialogNPCTraits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 5px;
+  justify-content: center;
+}
+
+.npc-trait-badge {
+  font-size: 9px;
+  padding: 1px 4px;
+  border: 1px solid rgba(0,255,65,0.35);
+  border-radius: 2px;
+  color: rgba(0,255,65,0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* ============================================================
+   NOVA GUIDE PANEL (Character Creator)
+   ============================================================ */
+.nova-guide-panel {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  width: 200px;
+  background: rgba(0,15,8,0.92);
+  border: 1px solid #00ff41;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-family: inherit;
+  z-index: 10;
+  box-shadow: 0 0 12px rgba(0,255,65,0.2);
+  transition: opacity 0.3s ease;
+}
+
+.nova-guide-panel.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nova-guide-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(0,255,65,0.25);
+  padding-bottom: 5px;
+}
+
+.nova-guide-name {
+  color: #ffaa00;
+  font-weight: bold;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nova-guide-text {
+  color: rgba(0,255,65,0.9);
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}

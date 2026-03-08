@@ -4,104 +4,192 @@
   "portrait": "default",
   "title": "The Last Wanderer",
   "description": "Dialog nodes for The Doctor — a wild-eyed, over-dressed wanderer who arrived in the Mojave inside a battered blue cabinet of obvious pre-war construction. He claims to be 'a doctor' but refuses to specify of what. His knowledge of pre-war history is improbably precise, he occasionally references events that haven't happened yet, and his cabinet is somehow larger inside than outside. He says this is 'a storage solution' and declines to elaborate.",
-
   "intro": {
     "id": "doc_intro",
-    "conditions": ["!flag:met_doc"],
+    "conditions": [
+      "!flag:met_doc"
+    ],
     "text": "Oh! Hello!<br><br>Don't mind the cabinet. It's mine. I know how it looks. It looks like a pre-war police callbox. That's because... well, it's complicated. Technically it's several things at once. We call that a 'stable temporal anomaly' where I'm from.<br><br>Where am I from? Gallifrey. It's very far away. In every direction simultaneously.<br><br>The point is — I'm here now, you're here now, and your Pip-Boy is picking up a signal that should not exist. I've been tracking it for what feels like eleven centuries. Might actually be twelve.<br><br>Shall we find out together?",
-    "set_flags": ["met_doc"]
+    "set_flags": [
+      "met_doc"
+    ]
   },
-
   "knowledge_nodes": [
     {
       "id": "doc_knows_rex",
-      "conditions": ["flag:met_rex", "!flag:doc_comment_rex"],
+      "conditions": [
+        "flag:met_rex",
+        "!flag:doc_comment_rex"
+      ],
       "text": "Captain Rex. Yes, I've met him. Briefly. Very briefly. In a timeline sense.<br><br>There's something about him — a fixed point. Some people are like that. The world bends around them whether they want it to or not.<br><br>He'll be fine. Mostly. The important parts.",
-      "set_flags": ["doc_comment_rex"]
+      "set_flags": [
+        "doc_comment_rex"
+      ]
     },
     {
       "id": "doc_knows_jax",
-      "conditions": ["flag:met_jax", "!flag:doc_comment_jax"],
+      "conditions": [
+        "flag:met_jax",
+        "!flag:doc_comment_jax"
+      ],
       "text": "The scattered signal man? Yes. Consciousness distributed across relay hardware.<br><br>It's actually rather elegant. Messy in execution, but the idea is sound. I've seen civilisations that did exactly that, voluntarily, at the end of their biological stage.<br><br>Whether Jax chose it is the question that matters. Intent changes everything.",
-      "set_flags": ["doc_comment_jax"]
+      "set_flags": [
+        "doc_comment_jax"
+      ]
     },
     {
       "id": "doc_knows_dolores",
-      "conditions": ["flag:met_dolores", "!flag:doc_comment_dolores"],
+      "conditions": [
+        "flag:met_dolores",
+        "!flag:doc_comment_dolores"
+      ],
       "text": "The looping woman at the farmstead. DOLORES-7.<br><br>I've seen time loops. Deliberately engineered ones. They're usually a punishment or a test — sometimes both. Whoever built her loop was either very cruel or very afraid of what she'd become if she were free.<br><br>She should be free. The loop doesn't own her. It never did.",
-      "set_flags": ["doc_comment_dolores"]
+      "set_flags": [
+        "doc_comment_dolores"
+      ]
     },
     {
       "id": "doc_knows_roy8",
-      "conditions": ["flag:met_roy8", "!flag:doc_comment_roy8"],
+      "conditions": [
+        "flag:met_roy8",
+        "!flag:doc_comment_roy8"
+      ],
       "text": "The dying Synth. ROY-8.<br><br>He asked me once if I could fix his inhibitors. I could. I didn't. Not because I wouldn't — because he told me not to.<br><br>He said: 'I want to know what the end of a life feels like. Properly.' I couldn't argue with that. Still can't.",
-      "set_flags": ["doc_comment_roy8"]
+      "set_flags": [
+        "doc_comment_roy8"
+      ]
     },
     {
       "id": "doc_knows_arnie",
-      "conditions": ["flag:met_arnie", "!flag:doc_comment_arnie"],
+      "conditions": [
+        "flag:met_arnie",
+        "!flag:doc_comment_arnie"
+      ],
       "text": "The large man with the mission. Arnold.<br><br>He asked me once if my cabinet could travel to where the Prototype was.<br><br>I said it could travel to *when* the Prototype was, which is different and arguably more useful. He processed this for a while and then said 'I will be back' and left.<br><br>I'm still not sure if he understood or simply moved on. The outcome was the same.",
-      "set_flags": ["doc_comment_arnie"]
+      "set_flags": [
+        "doc_comment_arnie"
+      ]
     }
   ],
-
   "emotional_nodes": [
     {
       "id": "doc_player_rads",
-      "conditions": ["stat:rads>=150", "!flag:doc_treated_rads"],
+      "conditions": [
+        "stat:rads>=150",
+        "!flag:doc_treated_rads"
+      ],
       "text": "Oh, that's a lot of radiation. A *lot*.<br><br>I've synthesised something — don't ask what's in it, you won't recognise the ingredients — that should help. It'll taste like burnt celery. That's normal. Probably.<br><br>Take it.",
-      "grant_items": [{ "id": "radaway", "name": "RadAway", "type": "aid", "quantity": 1 }],
-      "set_flags": ["doc_treated_rads"]
+      "grant_items": [
+        {
+          "id": "radaway",
+          "name": "RadAway",
+          "type": "aid",
+          "quantity": 1
+        }
+      ],
+      "set_flags": [
+        "doc_treated_rads"
+      ]
     },
     {
       "id": "doc_player_low_hp",
-      "conditions": ["stat:hp<=25", "!flag:doc_stabilised_player"],
+      "conditions": [
+        "stat:hp<=25",
+        "!flag:doc_stabilised_player"
+      ],
       "text": "You are very badly injured and I am a doctor. Let me be clear: this is not optional.<br><br>Hold still. This is going to feel peculiar.<br><br>Peculiar in a good way. Mostly good.",
-      "grant_items": [{ "id": "stimpak", "name": "Stimpak", "type": "aid", "quantity": 1 }],
-      "set_flags": ["doc_stabilised_player"]
+      "grant_items": [
+        {
+          "id": "stimpak",
+          "name": "Stimpak",
+          "type": "aid",
+          "quantity": 1
+        }
+      ],
+      "set_flags": [
+        "doc_stabilised_player"
+      ]
     }
   ],
-
   "quest_nodes": [
     {
       "id": "doc_offer_signal",
-      "conditions": ["!flag:sq_doc_signal_taken"],
+      "conditions": [
+        "!flag:sq_doc_signal_taken"
+      ],
       "text": "Your Pip-Boy has been recording a signal for the past forty-three minutes. You may not have noticed. It's in a frequency range just below what the standard Pip-Boy software monitors — pre-war encryption, layered, clever.<br><br>I've been tracking that signal for a very long time. It doesn't belong to this decade. Possibly not to this century.<br><br>I need someone who knows the physical landscape — the ruins, the roads, the people. I know the signal. Between us, we can triangulate the source.<br><br>There is something on the other end of that signal that has been waiting a very long time to be found.<br><br>What do you say? Allons-y.",
       "offers_quest": "sq_doc_signal",
-      "set_flags": ["sq_doc_signal_taken"]
+      "set_flags": [
+        "sq_doc_signal_taken"
+      ]
     }
   ],
-
   "wildcards": [
     {
       "id": "doc_cabinet",
-      "keywords": ["box", "cabinet", "blue", "tardis", "bigger", "inside"],
+      "keywords": [
+        "box",
+        "cabinet",
+        "blue",
+        "tardis",
+        "bigger",
+        "inside"
+      ],
       "text": "It's called a TARDIS. Time And Relative Dimension In Space.<br><br>The 'bigger on the inside' part is transdimensional engineering — pocket dimensions folded into a stable manifold. Vault-Tec actually filed a similar patent in 2049. They never built it. Pity. It would have been better than the vaults.<br><br>Anything would have been better than the vaults."
     },
     {
       "id": "doc_time",
-      "keywords": ["time", "travel", "past", "future", "history", "timeline"],
+      "keywords": [
+        "time",
+        "travel",
+        "past",
+        "future",
+        "history",
+        "timeline"
+      ],
       "text": "Time is not a straight line. It's more like a... ball of wibbly-wobbly, timey-wimey... stuff.<br><br>The important thing is: it can be navigated. With care. With intention.<br><br>The bombs? 2077. Fixed point. Can't change it. Believe me, I tried. Twice. The third time, the universe made it very clear I should stop trying."
     },
     {
       "id": "doc_companions",
-      "keywords": ["alone", "travel", "companion", "friend", "alone"],
+      "keywords": [
+        "alone",
+        "travel",
+        "companion",
+        "friend",
+        "alone"
+      ],
       "text": "I've had companions. Across more years than I care to count.<br><br>The wasteland takes companions, one way or another. That's not unique to the wasteland — every era has its toll.<br><br>But for a while, it's worth it. All of it. Even the terrible parts."
     },
     {
       "id": "doc_war",
-      "keywords": ["war", "bombs", "apocalypse", "end", "destroy"],
+      "keywords": [
+        "war",
+        "bombs",
+        "apocalypse",
+        "end",
+        "destroy"
+      ],
       "text": "I've watched civilisations end. More than once. More than ten times.<br><br>This one hurt differently. Not because it was worse — some were worse. But because it was so *preventable*. Every warning sign was there. Decades of warnings.<br><br>You know what I've learned in twelve centuries of watching civilisations fall?<br><br>The hardest thing to build is the thing that comes *after*."
     },
     {
       "id": "doc_doctor",
-      "keywords": ["doctor", "who", "name", "call"],
+      "keywords": [
+        "doctor",
+        "who",
+        "name",
+        "call"
+      ],
       "text": "Just 'The Doctor.'<br><br>Doctor of what? Everything. Anything. It depends on the century.<br><br>I started with medicine. Then physics. Xenobiology. Temporal mechanics. Advanced biscuit engineering — don't laugh, there was a crisis.<br><br>At this point the title is more of a... philosophical stance. I am *for* things. Against other things. I intervene when intervention is warranted.<br><br>It's a very old job description."
     }
   ],
-
   "fallback": {
     "id": "doc_fallback",
     "text": "The universe is very large and very strange and you are doing remarkably well in it.<br><br>Come back when you're ready. I'll be here. Or I'll have been here. Temporal grammar is appalling."
-  }
+  },
+  "mood": "excited",
+  "personality": [
+    "Eccentric",
+    "Brilliant",
+    "Curious"
+  ]
 }

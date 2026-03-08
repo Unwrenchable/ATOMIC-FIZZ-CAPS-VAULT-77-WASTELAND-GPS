@@ -57,5 +57,11 @@
       "type": "spoken",
       "text": "Vault-Tec wanted to prove consciousness could be relocated. They succeeded. Horrifically."
     }
-  }
+  },
+  "mood": "neutral",
+  "personality": [
+    "Analytical",
+    "Mysterious",
+    "Detached"
+  ]
 }
