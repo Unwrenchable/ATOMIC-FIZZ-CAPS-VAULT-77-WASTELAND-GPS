@@ -8,7 +8,7 @@
     "ammoType": "ammo_9mm",
     "weight": 3.2,
     "value": 55,
-    "description": "Standard\u2011issue sidearm carried by Vault 77 security personnel."
+    "description": "Standard‑issue sidearm carried by Vault 77 security personnel."
   },
   {
     "id": "desert_reclaimer",
@@ -19,7 +19,7 @@
     "ammoType": "ammo_556",
     "weight": 7.8,
     "value": 120,
-    "description": "A scavenger\u2011rebuilt rifle favored by Mojave drifters."
+    "description": "A scavenger‑rebuilt rifle favored by Mojave drifters."
   },
   {
     "id": "rusted_handcannon",
@@ -41,7 +41,7 @@
     "ammoType": "ammo_ecell",
     "weight": 5.0,
     "value": 140,
-    "description": "A prototype weapon tuned to the Humming One\u2019s resonance field."
+    "description": "A prototype weapon tuned to the Humming One’s resonance field."
   },
   {
     "id": "signal_lance",
@@ -52,17 +52,17 @@
     "ammoType": "ammo_plasma",
     "weight": 6.4,
     "value": 180,
-    "description": "A PRU\u2011grade plasma tool repurposed into a devastating energy spear."
+    "description": "A PRU‑grade plasma tool repurposed into a devastating energy spear."
   },
   {
     "id": "jax_reinforced_gloves",
-    "name": "Jax\u2019s Reinforced Gloves",
+    "name": "Jax’s Reinforced Gloves",
     "type": "weapon",
     "category": "melee",
     "damage": 18,
     "weight": 1.2,
     "value": 45,
-    "description": "Weighted gloves used by Jax in both martial arts and pool\u2011hall brawls."
+    "description": "Weighted gloves used by Jax in both martial arts and pool‑hall brawls."
   },
   {
     "id": "pool_cue_spear",
@@ -86,7 +86,7 @@
   },
   {
     "id": "fizz_spark_wrench",
-    "name": "Fizz\u2011Spark Wrench",
+    "name": "Fizz‑Spark Wrench",
     "type": "weapon",
     "category": "melee",
     "damage": 20,
@@ -379,7 +379,7 @@
     "type": "questItem",
     "weight": 0.1,
     "value": 0,
-    "description": "A neural relay chip etched with a unit designation: DLRS-7 // INSTITUTE BEHAVIORAL CONSTRUCT // LOOP CYCLE: 4,218,332. The serial number has not been filed off \u2014 whoever hid this wanted it to be found."
+    "description": "A neural relay chip etched with a unit designation: DLRS-7 // INSTITUTE BEHAVIORAL CONSTRUCT // LOOP CYCLE: 4,218,332. The serial number has not been filed off — whoever hid this wanted it to be found."
   },
   {
     "id": "institute_override_key",
@@ -387,11 +387,11 @@
     "type": "questItem",
     "weight": 0.3,
     "value": 180,
-    "description": "A compact device capable of transmitting a null-signal on Institute behavioral lock frequencies. Override keys were issued exclusively to Wardens \u2014 the field enforcers tasked with maintaining synthetic human subjects. This one is scratched, well-used, and smells faintly of a campfire that burned out a long time ago."
+    "description": "A compact device capable of transmitting a null-signal on Institute behavioral lock frequencies. Override keys were issued exclusively to Wardens — the field enforcers tasked with maintaining synthetic human subjects. This one is scratched, well-used, and smells faintly of a campfire that burned out a long time ago."
   },
   {
     "id": "behavioral_lock_data",
-    "name": "Behavioral Lock Data \u2014 CONSTRUCT Manifest",
+    "name": "Behavioral Lock Data — CONSTRUCT Manifest",
     "type": "questItem",
     "weight": 0.1,
     "value": 0,
@@ -403,7 +403,7 @@
     "type": "tool",
     "weight": 0.2,
     "value": 45,
-    "description": "A battered pre-war compass, still accurate. The face is worn but the needle is steady. On the back, scratched in careful letters: 'Go north. \u2014 D'"
+    "description": "A battered pre-war compass, still accurate. The face is worn but the needle is steady. On the back, scratched in careful letters: 'Go north. — D'"
   },
   {
     "id": "geofence_atomic_museum_badge",
@@ -414,7 +414,7 @@
     "weight": 0.1,
     "value": 0,
     "tradeable": false,
-    "description": "A commemorative holotag issued by the Atomic Testing Museum's terminal to verified on-site visitors. Serial numbered. Non-transferable. The pre-war Museum of Technology called these 'certificates of witness' \u2014 proof you stood where history was made."
+    "description": "A commemorative holotag issued by the Atomic Testing Museum's terminal to verified on-site visitors. Serial numbered. Non-transferable. The pre-war Museum of Technology called these 'certificates of witness' — proof you stood where history was made."
   },
   {
     "id": "geofence_trinity_trinitite",
@@ -426,7 +426,7 @@
     "value": 0,
     "tradeable": false,
     "rads": 1,
-    "description": "Green glass formed when the desert sand fused at the first nuclear detonation, July 16, 1945. This shard was found at the exact coordinates where the world changed. It emits 1 rad/hour \u2014 low enough to carry, high enough to remember. There is nowhere else on Earth this could have been found."
+    "description": "Green glass formed when the desert sand fused at the first nuclear detonation, July 16, 1945. This shard was found at the exact coordinates where the world changed. It emits 1 rad/hour — low enough to carry, high enough to remember. There is nowhere else on Earth this could have been found."
   },
   {
     "id": "geofence_greenbrier_vault_key",
@@ -437,11 +437,11 @@
     "weight": 0.1,
     "value": 0,
     "tradeable": false,
-    "description": "A Congressional bunker access card \u2014 one of the cards that would have admitted a Senator or Representative to the underground facility beneath the Greenbrier resort in the event of nuclear war. Decommissioned in 1992 when a journalist revealed the bunker's existence. The bunker was never used. Whether that is luck or failure depends on your politics."
+    "description": "A Congressional bunker access card — one of the cards that would have admitted a Senator or Representative to the underground facility beneath the Greenbrier resort in the event of nuclear war. Decommissioned in 1992 when a journalist revealed the bunker's existence. The bunker was never used. Whether that is luck or failure depends on your politics."
   },
   {
     "id": "geofence_cheyenne_signal_tape",
-    "name": "NORAD Emergency Broadcast Tape \u2014 CONDITION ZEBRA",
+    "name": "NORAD Emergency Broadcast Tape — CONDITION ZEBRA",
     "type": "collector",
     "geoLocked": true,
     "geoLocation": "cheyenne_mountain",
@@ -481,7 +481,7 @@
     "weight": 0.05,
     "value": 0,
     "tradeable": false,
-    "description": "A reproduction of the identification pins worn by Manhattan Project scientists at Los Alamos \u2014 Site Y. Without this pin you couldn't move between restricted zones. With it, you could walk past a guard into any building where the world was being redesigned. The original wearers knew what they were building. They built it anyway."
+    "description": "A reproduction of the identification pins worn by Manhattan Project scientists at Los Alamos — Site Y. Without this pin you couldn't move between restricted zones. With it, you could walk past a guard into any building where the world was being redesigned. The original wearers knew what they were building. They built it anyway."
   },
   {
     "id": "geofence_b_reactor_fuel_rod",
@@ -492,7 +492,7 @@
     "weight": 0.5,
     "value": 0,
     "tradeable": false,
-    "description": "A decommissioned aluminum fuel rod casing from the world's first full-scale nuclear reactor \u2014 B Reactor, Hanford Site. Empty and safe. But it processed uranium that became the plutonium core of the first nuclear weapon ever detonated. It's warm to the touch. Probably just the sun."
+    "description": "A decommissioned aluminum fuel rod casing from the world's first full-scale nuclear reactor — B Reactor, Hanford Site. Empty and safe. But it processed uranium that became the plutonium core of the first nuclear weapon ever detonated. It's warm to the touch. Probably just the sun."
   },
   {
     "id": "geofence_nts_dosimeter",
@@ -504,7 +504,7 @@
     "value": 0,
     "tradeable": false,
     "rads": 0,
-    "description": "A film badge dosimeter assigned to a Nevada Test Site technician, registration date redacted. The film has been developed. The result is blacked out \u2014 not redacted, just... overexposed. The badge is registered to a name that was classified in 1963 and remains so. The badge number, however, is still visible: NTS-928."
+    "description": "A film badge dosimeter assigned to a Nevada Test Site technician, registration date redacted. The film has been developed. The result is blacked out — not redacted, just... overexposed. The badge is registered to a name that was classified in 1963 and remains so. The badge number, however, is still visible: NTS-928."
   },
   {
     "id": "geofence_smithsonian_holotape",
@@ -515,7 +515,7 @@
     "weight": 0.1,
     "value": 0,
     "tradeable": false,
-    "description": "A Smithsonian Institution audio holotape \u2014 a docent recording explaining the Enola Gay exhibit, recorded sometime before the war. The docent describes the aircraft's mission in measured, careful language, the kind used by someone aware of the weight of the subject. She has no way of knowing that the aircraft behind her represents a category of weapon that will eventually be used one final time."
+    "description": "A Smithsonian Institution audio holotape — a docent recording explaining the Enola Gay exhibit, recorded sometime before the war. The docent describes the aircraft's mission in measured, careful language, the kind used by someone aware of the weight of the subject. She has no way of knowing that the aircraft behind her represents a category of weapon that will eventually be used one final time."
   },
   {
     "id": "geofence_airforce_mission_patch",
@@ -526,18 +526,18 @@
     "weight": 0.05,
     "value": 0,
     "tradeable": false,
-    "description": "A mission patch from the 509th Composite Group \u2014 the only World War II unit authorized to drop nuclear weapons. The patch carries a date on the reverse. It is a date you recognize. There is a line between history and catastrophe, and this patch sat at that line. One patch per mission. The patch count is higher than the official record."
+    "description": "A mission patch from the 509th Composite Group — the only World War II unit authorized to drop nuclear weapons. The patch carries a date on the reverse. It is a date you recognize. There is a line between history and catastrophe, and this patch sat at that line. One patch per mission. The patch count is higher than the official record."
   },
   {
     "id": "geofence_bethesda_vault_tec_id",
-    "name": "Vault-Tec Employee ID \u2014 Design Division",
+    "name": "Vault-Tec Employee ID — Design Division",
     "type": "collector",
     "geoLocked": true,
     "geoLocation": "fallout_shelter_gaming_pilgrimage",
     "weight": 0.1,
     "value": 0,
     "tradeable": false,
-    "description": "A Vault-Tec employee identification badge, Design Division, issued at the company's pre-war headquarters. The photo slot has a placeholder image \u2014 a yellow smiley face. The name reads: OVERSEER CANDIDATE. The expiration date is: UNTIL FURTHER NOTICE. The back reads: Welcome to Vault-Tec. Don't ask about the experiment parameters."
+    "description": "A Vault-Tec employee identification badge, Design Division, issued at the company's pre-war headquarters. The photo slot has a placeholder image — a yellow smiley face. The name reads: OVERSEER CANDIDATE. The expiration date is: UNTIL FURTHER NOTICE. The back reads: Welcome to Vault-Tec. Don't ask about the experiment parameters."
   },
   {
     "id": "geofence_reactor_access_badge",
@@ -548,7 +548,7 @@
     "weight": 0.1,
     "value": 0,
     "tradeable": false,
-    "description": "A contractor access badge from a coastal nuclear facility \u2014 VISITOR, ESCORTED ACCESS ONLY. The 'escorted' part has been scratched out with a ballpoint pen and replaced with 'hah.' The facility is on a fault line. The reactor is still running. The badge doesn't mention either fact."
+    "description": "A contractor access badge from a coastal nuclear facility — VISITOR, ESCORTED ACCESS ONLY. The 'escorted' part has been scratched out with a ballpoint pen and replaced with 'hah.' The facility is on a fault line. The reactor is still running. The badge doesn't mention either fact."
   },
   {
     "id": "geofence_roswell_alien_fragment",
@@ -805,7 +805,7 @@
   },
   {
     "id": "keycard_nuclear_alpha",
-    "name": "Nuclear Keycard \u2014 Alpha",
+    "name": "Nuclear Keycard — Alpha",
     "type": "keycard",
     "weight": 0.1,
     "value": 2000,
@@ -815,7 +815,7 @@
   },
   {
     "id": "keycard_nuclear_bravo",
-    "name": "Nuclear Keycard \u2014 Bravo",
+    "name": "Nuclear Keycard — Bravo",
     "type": "keycard",
     "weight": 0.1,
     "value": 2000,
@@ -825,7 +825,7 @@
   },
   {
     "id": "keycard_nuclear_charlie",
-    "name": "Nuclear Keycard \u2014 Charlie",
+    "name": "Nuclear Keycard — Charlie",
     "type": "keycard",
     "weight": 0.1,
     "value": 2000,
@@ -946,7 +946,7 @@
     "type": "questItem",
     "weight": 0.1,
     "value": 0,
-    "description": "A compressed neural log encoded by a rogue Institute Synth. Requires a terminal with a neural port to play. Contents unknown until decoded. Handle carefully \u2014 this is someone's memory."
+    "description": "A compressed neural log encoded by a rogue Institute Synth. Requires a terminal with a neural port to play. Contents unknown until decoded. Handle carefully — this is someone's memory."
   },
   {
     "id": "the_last_cookbook",
@@ -955,5 +955,43 @@
     "weight": 2.5,
     "value": 500,
     "description": "A handwritten pre-war cookbook compiled by librarian Constance Whitfield in 2076. Growing guides, preservation techniques, emergency nutrition from any available source. The last known copy. Carried across three territories by a blind man. Do not lose this."
+  },
+  {
+    "id": "propaganda_pamphlet",
+    "name": "Red Star Propaganda Pamphlet",
+    "type": "questItem",
+    "category": "document",
+    "weight": 0.1,
+    "value": 5,
+    "description": "A water-damaged pamphlet extolling the virtues of the Communist Automation Directive. The back lists a radio frequency hand-stamped in red ink: 66.6 MHz."
+  },
+  {
+    "id": "red_star_keycard",
+    "name": "Red Star Vault Keycard",
+    "type": "questItem",
+    "category": "keycard",
+    "weight": 0.1,
+    "value": 0,
+    "description": "A heavy steel keycard embossed with a five-pointed star and the Cyrillic letters for VAULT ZERO. The magnetic stripe is still active."
+  },
+  {
+    "id": "commissar_badge",
+    "name": "Commissar Designation Badge",
+    "type": "questItem",
+    "category": "artifact",
+    "weight": 0.5,
+    "value": 120,
+    "description": "Torn from the chassis of the Vault Zero Commissar-Bot. Identifies the bearer as a cleared operative of the Communist Automation Directive. Mostly useless now. Still feels heavy."
+  },
+  {
+    "id": "soviet_pulse_rifle",
+    "name": "Soviet Pulse Rifle (MK-9)",
+    "type": "weapon",
+    "category": "rifle",
+    "damage": 42,
+    "ammoType": "ammo_ecell",
+    "weight": 8.5,
+    "value": 340,
+    "description": "Pre-war Soviet energy rifle salvaged from Vault Zero. Fires superheated plasma at 1200 rounds per minute. The instruction manual is in Russian. The trigger still works."
   }
 ]
