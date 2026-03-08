@@ -139,7 +139,22 @@
         "dutch":             "dialog_arnie",
         "arnold_black":      "dialog_arnie",
         "kenny":             "dialog_kenny",
-        "kenny_mccormick":   "dialog_kenny"
+        "kenny_mccormick":   "dialog_kenny",
+        "barney":            "dialog_barney",
+        "barney_black":      "dialog_barney",
+        "conan":             "dialog_barney",
+        "doc":               "dialog_doc",
+        "the_doctor":        "dialog_doc",
+        "doctor_who":        "dialog_doc",
+        "erich":             "dialog_erich",
+        "bats":              "dialog_bats",
+        "the_bat":           "dialog_bats",
+        "batman":            "dialog_bats",
+        "stilgar":           "dialog_stilgar",
+        "fremen":            "dialog_stilgar",
+        "padre":             "dialog_padre",
+        "father_cain":       "dialog_padre",
+        "priest":            "dialog_padre"
       };
       const mapped = NPC_DIALOG_MAP[npcId.toLowerCase()];
       if (mapped) return mapped;
@@ -862,6 +877,12 @@
       loxley:  { head: "head_base.svg",   eyes: "eyes_almond.svg",   hair: "hair_medium.svg",    shirt: "shirt_wasteland_gear.svg" },
       arnie:   { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
       kenny:   { head: "head_round.svg",  eyes: "eyes_round.svg",    hair: "hair_short.svg",     shirt: "shirt_vault_suit.svg"     },
+      barney:  { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
+      bats:    { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
+      doc:     { head: "head_oblong.svg", eyes: "eyes_almond.svg",   hair: "hair_medium.svg",    shirt: "shirt_jacket.svg"         },
+      erich:   { head: "head_base.svg",   eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_wasteland_gear.svg" },
+      stilgar: { head: "head_square.svg", eyes: "eyes_almond.svg",   hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
+      padre:   { head: "head_round.svg",  eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
       default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
     },
 

@@ -1,0 +1,106 @@
+{
+  "id": "dialog_barney",
+  "npc": "Barney Black",
+  "portrait": "barney",
+  "title": "The Barbarian of Vault 9",
+  "description": "Dialog nodes for Barney Black — Arnold's older brother and the undisputed physical specimen of Vault 9. Where Arnold broke door frames, Barney broke the Vault's structural load-bearing walls. He emerged from the shelter wearing only fur pelts traded from a radscorpion merchant and carrying a pre-war claymore that he insists was 'forged by fate.' He has adopted the philosophy of a battered pre-war action figure collection — something about lamenting, crushing enemies, and what is best in life.",
+
+  "intro": {
+    "id": "barney_intro",
+    "conditions": ["!flag:met_barney"],
+    "text": "Halt, stranger.<br><br>I am Barney Black. I came from the Vault. I broke its walls when I left — not the door, the *walls*.<br><br>My brother went north chasing a machine. I go where battle calls. The wasteland calls constantly.<br><br>What is best in life? To crush your enemies. To see them flee before you. To hear the lamentations of their pack brahmin.<br><br>That is what is best. I have confirmed this through extensive fieldwork.",
+    "set_flags": ["met_barney"]
+  },
+
+  "knowledge_nodes": [
+    {
+      "id": "barney_knows_arnie",
+      "conditions": ["flag:met_arnie", "!flag:barney_comment_arnie"],
+      "text": "You have met my brother Arnold.<br><br>He is the smaller one. Quieter. He says 'I will be back' and means it as a simple statement of fact.<br><br>When I say I will return, I mean it as a declaration of conquest.<br><br>Arnold was always the subtle one. There can be only one subtle Black. I was never meant for subtlety.",
+      "set_flags": ["barney_comment_arnie"]
+    },
+    {
+      "id": "barney_knows_rex",
+      "conditions": ["flag:met_rex", "!flag:barney_comment_rex"],
+      "text": "The Captain at the Dam. A soldier's soldier.<br><br>He watched me cross the Colorado on foot during a radstorm and said nothing for a very long time.<br><br>Then he said: 'I'll need a report on that.' I respect that. A man who wants documentation is a man who plans to survive.",
+      "set_flags": ["barney_comment_rex"]
+    },
+    {
+      "id": "barney_knows_loxley",
+      "conditions": ["flag:met_loxley", "!flag:barney_comment_loxley"],
+      "text": "The thief with the hat. Loxley.<br><br>He robs from the powerful and gives to the weak. I understand this. The strong *should* provide for the weak. It is the natural order.<br><br>I simply prefer a more direct form of wealth redistribution. One that involves a claymore.",
+      "set_flags": ["barney_comment_loxley"]
+    },
+    {
+      "id": "barney_knows_dude",
+      "conditions": ["flag:met_dude", "!flag:barney_comment_dude"],
+      "text": "The abiding one?<br><br>I spent an afternoon with him near a burnt-out trading post. He lay on the ground. I sat beside him. He said nothing for a long time.<br><br>Then he said: 'You are also on a quest, man.'<br><br>He was not wrong.",
+      "set_flags": ["barney_comment_dude"]
+    },
+    {
+      "id": "barney_knows_kenny",
+      "conditions": ["flag:met_kenny", "!flag:barney_comment_kenny"],
+      "text": "The orange-hooded one?<br><br>I saw him fall into a ravine and emerge three hours later with a handful of bottle caps and no visible injuries.<br><br>He waved at me. I waved back. Some destinies cannot be explained. They can only be respected.",
+      "set_flags": ["barney_comment_kenny"]
+    }
+  ],
+
+  "emotional_nodes": [
+    {
+      "id": "barney_player_low_hp",
+      "conditions": ["stat:hp<=30", "!flag:barney_gave_aid"],
+      "text": "You are wounded. This is unacceptable.<br><br>In battle, a warrior tends to the injured first. The dead can wait.<br><br>Here. My last stimpak. I will find more by taking them from those who misuse them.",
+      "grant_items": [{ "id": "stimpak", "name": "Stimpak", "type": "aid", "quantity": 1 }],
+      "set_flags": ["barney_gave_aid"]
+    },
+    {
+      "id": "barney_player_strong",
+      "conditions": ["stat:hp>=90", "!flag:barney_noted_strength"],
+      "text": "You are in peak condition.<br><br>Good. I dislike partners who slow me down. Arnold makes the same complaint, I am told.<br><br>It runs in the family.",
+      "set_flags": ["barney_noted_strength"]
+    }
+  ],
+
+  "quest_nodes": [
+    {
+      "id": "barney_offer_what_is_best",
+      "conditions": ["!flag:sq_barney_what_is_best_taken"],
+      "text": "There is a warlord. Calls himself 'The Thulsa.' Controls the eastern trade road with a cult of followers who believe he has mystical power.<br><br>He does not have mystical power. He has a very large gun and bad people with loyalty bought by fear.<br><br>I intend to break his operation. Drive his followers into the wasteland. Hear their lamentations.<br><br>Then I will liberate the caravan merchants he has been taxing at sword's width.<br><br>You look capable. Come. We will settle this the old way.",
+      "offers_quest": "sq_barney_what_is_best",
+      "set_flags": ["sq_barney_what_is_best_taken"]
+    }
+  ],
+
+  "wildcards": [
+    {
+      "id": "barney_what_is_best",
+      "keywords": ["best", "life", "purpose", "meaning", "goal"],
+      "text": "What is best in life?<br><br>To crush your enemies. To see them driven before you. To hear the lamentations of their pack brahmin.<br><br>This is not philosophy. It is empirical observation confirmed over seventeen years of wasteland fieldwork."
+    },
+    {
+      "id": "barney_vault",
+      "keywords": ["vault", "underground", "shelter", "home"],
+      "text": "Vault 9. Forty years underground.<br><br>The Overseer tried to maintain order through a points system for good behaviour. I disagreed with the point allocation for 'unauthorised structural modifications.'<br><br>I left when the exit ramp proved too narrow. I widened it. With my shoulder."
+    },
+    {
+      "id": "barney_claymore",
+      "keywords": ["sword", "weapon", "claymore", "blade", "fight"],
+      "text": "This was the Overseer's emergency fire-axe. I repurposed it over six months in the Vault's machine shop.<br><br>The pre-war action figures my father kept called this sort of blade a 'power sword.' I call it what it is: a very large sharp thing that solves problems.<br><br>It has solved forty-seven problems this year alone."
+    },
+    {
+      "id": "barney_philosophy",
+      "keywords": ["war", "battle", "fight", "combat", "conflict"],
+      "text": "War never changes. That is what the pre-war terminal said.<br><br>I think that is only partly true. The *weapons* change. The *locations* change. The *factions* change.<br><br>But the part where a determined person with a large blade decides an outcome — that part has been consistent throughout recorded history. I find this comforting."
+    },
+    {
+      "id": "barney_fur",
+      "keywords": ["clothes", "armor", "outfit", "pelt", "fur"],
+      "text": "Radscorpion chitin and brahmin hide, mostly. Lined with the fur of something I do not have a name for.<br><br>It attacked me near Boulder City. I won. It was warm. I made use of it.<br><br>In the Vault, I wore a jumpsuit. The jumpsuit did not survive the first week. The fur is doing better."
+    }
+  ],
+
+  "fallback": {
+    "id": "barney_fallback",
+    "text": "The wasteland tests you every day.<br><br>Good. If the wasteland is testing you, it means you are still alive to be tested.<br><br>Come back when you have something worth discussing."
+  }
+}
