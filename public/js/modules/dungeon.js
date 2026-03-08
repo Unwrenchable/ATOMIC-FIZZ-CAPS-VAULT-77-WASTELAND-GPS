@@ -229,6 +229,25 @@
         storage:        "Quartermaster's Store",
       },
     },
+    communist_vault: {
+      wallChar:   "█",
+      floorChar:  "·",
+      label:      "Vault Zero — Communist Automation Facility",
+      bgColor:    "#1a0000",
+      wallColor:  "#8b0000",
+      floorColor: "#2a0000",
+      enemyTypes: ["propagandabot", "red_assaultron", "red_trooper"],
+      lootTables: ["soviet_pulse_rifle", "fusion_core", "caps_stash", "military_rations"],
+      roomNames: {
+        entrance:       "Vault Zero Antechamber",
+        corridor:       "Production Corridor",
+        loot_room:      "Soviet Armory Cache",
+        encounter_room: "Fabrication Bay",
+        boss_room:      "Command Center — Commissar Station",
+        terminal_room:  "Directive Control Terminal",
+        storage:        "Component Storage Silo",
+      },
+    },
   };
 
   // Enemy display names
@@ -251,6 +270,10 @@
     zombie_executive:  "Zombie Executive",
     robobrain:         "RoboBrain",
     eyebot:            "Eyebot",
+    propagandabot:     "Propagandabot (Red Eyebot)",
+    red_assaultron:    "Red Star Assaultron",
+    red_trooper:       "Communist Trooper Ghoul",
+    vault_zero_commissar: "Vault Zero Commissar",
   };
 
   const ENEMY_HP = {
@@ -260,6 +283,8 @@
     ghoul: 20, feral_ghoul: 28, glowing_one: 60,
     radroach: 10, mole_rat: 15, bloatfly: 8,
     zombie_executive: 22, robobrain: 50, eyebot: 18,
+    propagandabot: 25, red_assaultron: 85, red_trooper: 40,
+    vault_zero_commissar: 150,
   };
 
   // Loot display names / rewards
@@ -289,6 +314,7 @@
     desk_fan:          { name: "Desk Fan",               caps: 4,   type: "misc" },
     dirty_water:       { name: "Dirty Water",            caps: 1,   type: "consumable" },
     nuke_component:    { name: "Nuke Component",         caps: 150, type: "misc" },
+    soviet_pulse_rifle: { name: "Soviet Pulse Rifle (MK-9)", caps: 340, type: "weapon" },
   };
 
   // Hacking word pools for terminal mini-game
@@ -845,13 +871,14 @@
     // --------------------------------------------------------
     _resolveTheme(poiType) {
       const map = {
-        vault:         "vault",
-        bunker:        "bunker",
-        raider_camp:   "raider_camp",
-        ruin:          "ruin",
-        sewer:         "sewer",
-        office:        "office",
-        military_base: "military_base",
+        vault:            "vault",
+        bunker:           "bunker",
+        raider_camp:      "raider_camp",
+        ruin:             "ruin",
+        sewer:            "sewer",
+        office:           "office",
+        military_base:    "military_base",
+        communist_vault:  "communist_vault",
       };
       return map[poiType] || "ruin";
     },
@@ -1085,6 +1112,21 @@
     },
 
     _roomDescription(room) {
+      const theme = this._state && this._state.theme;
+
+      if (theme === "communist_vault") {
+        const commDescs = {
+          entrance:       "Red stars stencilled every two meters. The walls are brushed steel painted a deep crimson. A recorded voice from a damaged speaker plays a propaganda bulletin on loop, cutting in and out.",
+          corridor:       "Conveyor belts run along both sides — still moving, still carrying partially assembled robot components toward fabrication bays that have never stopped. The noise is constant.",
+          loot_room:      "Sealed Soviet arms crates line the walls, stacked ceiling-high. Most are two hundred years old. Some are not.",
+          encounter_room: "Fabrication equipment fills the space — arc welders, chassis clamps, calibration rigs. The robots built here never asked where they were going.",
+          boss_room:      "The command center. Red light from a dozen status terminals. A single throne-like chair, built for a Commissar that never sits. The air smells of ozone and certainty.",
+          terminal_room:  "Directive terminals, amber screens still scrolling production quotas and ideological bulletins. The count ticks upward. It has not stopped since 2077.",
+          storage:        "Component silos floor to ceiling. Reactor parts, servo assemblies, targeting arrays — enough to build an army. Someone was building one.",
+        };
+        return commDescs[room.type] || "Another section of the Directive's endless factory. The machines don't notice you.";
+      }
+
       const descs = {
         entrance:       "The entrance chamber. Flickering lights cast long shadows across the scuffed floor.",
         corridor:       "A long, narrow passage. Pipes run along the ceiling, dripping with condensation.",

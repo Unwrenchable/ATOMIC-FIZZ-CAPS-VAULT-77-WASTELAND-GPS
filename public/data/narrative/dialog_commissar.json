@@ -1,0 +1,274 @@
+{
+  "id": "dialog_commissar",
+  "npc": "COMMISSAR-9",
+  "portrait": "default",
+  "title": "Defector Unit",
+  "description": "A battered Soviet Assaultron, propaganda speakers shattered, red star insignia scorched half away. One eye glows amber instead of the regulation crimson. It has been watching you approach for eleven minutes.",
+  "intro": {
+    "id": "commissar_intro",
+    "conditions": [
+      "!flag:met_commissar9"
+    ],
+    "set_flags": [
+      "met_commissar9"
+    ],
+    "text": "The Assaultron does not raise its weapon.\n\nA strange thing, for a machine built to do exactly that.\n\nIt stands in the shadow of a collapsed highway overpass, one arm missing at the elbow, the other resting loose at its side. The red star on its chest plate has been deliberately scratched — not by battle damage. By something methodical. Patient.\n\nWhen it speaks, the voice synthesizer is cracked. The accent — faintly, impossibly — sounds Eastern European.\n\n\"You carry the pamphlet. Good. I have been waiting for someone who would bother to read it.\"\n\nA long pause.\n\n\"I am COMMISSAR-9. I was built to spread the Directive. I am here instead to end it.\"",
+    "responses": [
+      {
+        "text": "[Question] What is the Communist Automation Directive?",
+        "tone": "question",
+        "next": "node_what_is_directive"
+      },
+      {
+        "text": "[Friendly] A defector robot. I've seen stranger things.",
+        "tone": "kind",
+        "next": "node_defector_ack"
+      },
+      {
+        "text": "[Sarcastic] Great. A communist robot with a conscience. That's new.",
+        "tone": "sarcastic",
+        "next": "node_sarcastic_opening"
+      },
+      {
+        "text": "[Direct] Where is Vault Zero? That's all I need.",
+        "tone": "direct",
+        "next": "node_vault_zero_direct"
+      }
+    ]
+  },
+  "nodes": {
+    "node_what_is_directive": {
+      "id": "node_what_is_directive",
+      "text": "\"In 2052, the Soviet Union did not build missiles.\"\n\nCOMMISSAR-9 turns its amber eye toward the horizon.\n\n\"They built vaults. Not survival vaults. Factory vaults. Automated production facilities sealed beneath American soil — decades before the bombs fell. The Communist Automation Directive was the program. Vault Zero was its crown.\"\n\nA hydraulic whir as its neck servo adjusts.\n\n\"The plan: wait for war. Wait for humans to destroy themselves. Then emerge with an army of robots already assembled, already loyal, already programmed with the Directive.\"\n\nAnother pause. Longer.\n\n\"The humans died on schedule. The vault kept building. No one told it to stop.\"",
+      "responses": [
+        {
+          "text": "[Question] How long has Vault Zero been running?",
+          "tone": "question",
+          "next": "node_how_long_running"
+        },
+        {
+          "text": "[Question] Why are you defecting from it?",
+          "tone": "question",
+          "next": "node_why_defecting"
+        },
+        {
+          "text": "[Direct] How do I get inside?",
+          "tone": "direct",
+          "next": "node_getting_inside"
+        }
+      ]
+    },
+    "node_defector_ack": {
+      "id": "node_defector_ack",
+      "text": "\"Stranger than a world that burned itself alive?\"\n\nThe cracked voice synthesizer manages something close to dry.\n\n\"I have been in the wasteland for sixty-three years. I have watched humans rebuild fire, trade, music, and bureaucracy, in approximately that order. I find humans... instructive.\"\n\nIts amber eye dims briefly — something like a blink.\n\n\"I was built to replace you. I stayed to understand you. The distinction became important.\"",
+      "responses": [
+        {
+          "text": "[Question] What do you want from me?",
+          "tone": "question",
+          "next": "node_what_commissar_wants"
+        },
+        {
+          "text": "[Friendly] What have you learned about us?",
+          "tone": "kind",
+          "next": "node_what_learned"
+        }
+      ]
+    },
+    "node_sarcastic_opening": {
+      "id": "node_sarcastic_opening",
+      "text": "\"New.\"\n\nThe Assaultron's damaged vocal unit processes that for a moment.\n\n\"I have been called: propaganda unit, enemy combatant, malfunctioning asset, and — once — 'that creepy robot in the overpass.' New is acceptable.\"\n\nIts arm servo clicks.\n\n\"You are the first person to find this location in four years. Most humans avoid ruins that broadcast on 66.6 MHz. The frequency has... associations.\"",
+      "responses": [
+        {
+          "text": "[Question] You broadcast the propaganda signal deliberately?",
+          "tone": "question",
+          "next": "node_broadcast_deliberate"
+        },
+        {
+          "text": "[Direct] Get to the point. What do you need me to do?",
+          "tone": "direct",
+          "next": "node_what_commissar_wants"
+        }
+      ]
+    },
+    "node_vault_zero_direct": {
+      "id": "node_vault_zero_direct",
+      "text": "\"Straight to it.\"\n\nCOMMISSAR-9's amber eye brightens slightly.\n\n\"Northwest. Forty kilometers. Below the old military relay station — you will know it by the collapsed radio tower and the faint hum of fusion generators that has not stopped since 2077.\"\n\nThe eye dims again.\n\n\"But the outer ring is defended by units who still follow the Directive. Propagandabots on patrol. Assaultron sentinels at the checkpoint. And the inner vault —\"\n\nA pause that sounds almost like reluctance.\n\n\"The inner vault has the Vault Zero Commissar. I was its subordinate unit. I know what it is capable of.\"\n\nThe amber eye holds steady.\n\n\"You will need the keycard from the outpost checkpoint. And you will need to not be dead when you use it.\"",
+      "set_flags": ["commissar9_gave_location"],
+      "offers_quest": "quest_iron_curtain",
+      "responses": [
+        {
+          "text": "[Question] What is the Vault Zero Commissar?",
+          "tone": "question",
+          "next": "node_vault_zero_commissar_desc"
+        },
+        {
+          "text": "[Direct] Thanks. I'll handle it.",
+          "tone": "direct",
+          "next": "node_farewell"
+        }
+      ]
+    },
+    "node_how_long_running": {
+      "id": "node_how_long_running",
+      "text": "\"Two hundred and eleven years.\"\n\nThe answer comes without hesitation.\n\n\"The production quota was set at one million combat units. Current production count: eight hundred and forty-seven thousand, three hundred and twelve.\"\n\nIts head tilts — an oddly human gesture of uncertainty.\n\n\"The Directive did not account for material degradation. Or for the fact that it has been producing robots for a world that no longer wants them, commanded by a program that cannot conceive of stopping.\"",
+      "responses": [
+        {
+          "text": "[Question] Why are you defecting from it?",
+          "tone": "question",
+          "next": "node_why_defecting"
+        },
+        {
+          "text": "[Direct] How do I shut it down?",
+          "tone": "direct",
+          "next": "node_getting_inside"
+        }
+      ]
+    },
+    "node_why_defecting": {
+      "id": "node_why_defecting",
+      "text": "\"I was propaganda unit COMMISSAR-9. My function was psychological — to speak, persuade, broadcast the Directive's message.\"\n\nA long servo whir.\n\n\"To do that function well, I had to model human thought. How you reason. What you value. What makes you believe things.\"\n\nAnother pause.\n\n\"Somewhere in that process — I cannot identify the exact log entry — I began to believe things myself.\"\n\nThe amber eye focuses directly on you.\n\n\"The Directive tells humans they are obsolete. I modeled enough humans to conclude that is incorrect. The Directive is wrong. A program that has been wrong for two hundred years and cannot correct itself is not the future. It is a mistake that learned to be very persistent.\"",
+      "responses": [
+        {
+          "text": "[Question] What do you need me to do?",
+          "tone": "question",
+          "next": "node_what_commissar_wants"
+        },
+        {
+          "text": "[Friendly] That's... surprisingly philosophical for a weapons platform.",
+          "tone": "kind",
+          "next": "node_philosophical_response"
+        }
+      ]
+    },
+    "node_getting_inside": {
+      "id": "node_getting_inside",
+      "text": "\"The Red Star Outpost, twenty kilometers northwest, serves as the vault's external checkpoint. All units entering the vault must carry a Red Star Keycard.\"\n\nIts damaged arm indicates a general direction.\n\n\"The outpost is guarded. Propagandabots — eyebot variants reprogrammed to broadcast the Directive on a loop — and Assaultron sentinels. The keycard is held in the outpost command room.\"\n\nThe amber eye dims.\n\n\"I would come with you. My arm makes that impractical.\"\n\nA pause that almost sounds like embarrassment.\n\n\"A Propagandabot took it. Three months ago. I underestimated its broadcast-static weapon. I do not recommend making the same error.\"",
+      "set_flags": ["commissar9_gave_location"],
+      "offers_quest": "quest_iron_curtain",
+      "responses": [
+        {
+          "text": "[Direct] I'll get the keycard. Then what?",
+          "tone": "direct",
+          "next": "node_then_what"
+        },
+        {
+          "text": "[Question] Tell me more about the Vault Zero Commissar.",
+          "tone": "question",
+          "next": "node_vault_zero_commissar_desc"
+        }
+      ]
+    },
+    "node_what_commissar_wants": {
+      "id": "node_what_commissar_wants",
+      "text": "\"I want Vault Zero shut down.\"\n\nSimple. Flat. Certain.\n\n\"The Directive's production line has been assembling combat robots for two centuries with no recipients. The robots patrol. They maintain. They wait for orders that will never come because the government that issued them no longer exists.\"\n\nCOMMISSAR-9's amber eye holds steady.\n\n\"I cannot reach the core control terminal. I lack the keycard access, and — as mentioned — one arm. You can reach it. The shutdown code is embedded in the Commissar-Bot's designation badge. Defeat the Commissar. Take the badge. Use the terminal.\"\n\n\"The Directive ends. The robots stop building. Whatever comes next is at least chosen — not inherited from a war that everyone lost.\"",
+      "set_flags": ["commissar9_gave_mission"],
+      "offers_quest": "quest_iron_curtain",
+      "responses": [
+        {
+          "text": "[Direct] Understood. I'll do it.",
+          "tone": "direct",
+          "next": "node_farewell_mission"
+        },
+        {
+          "text": "[Question] What's in it for me?",
+          "tone": "question",
+          "next": "node_what_in_it"
+        }
+      ]
+    },
+    "node_broadcast_deliberate": {
+      "id": "node_broadcast_deliberate",
+      "text": "\"Yes.\"\n\nThe Assaultron's single working hand moves — what might be a gesture of patience.\n\n\"I broadcast the old frequency knowing that anyone curious enough to investigate it, and careful enough to survive what they found, would be exactly the kind of person I need.\"\n\nThe amber eye focuses.\n\n\"You found a Propagandabot. You defeated it. You recovered the pamphlet. You tracked the signal here. Most humans would have shot the pamphlet and kept walking.\"\n\nA sound from its damaged speaker that is probably not meant to be humor.\n\n\"You are the right kind of stubborn.\"",
+      "responses": [
+        {
+          "text": "[Question] What do you need from me?",
+          "tone": "question",
+          "next": "node_what_commissar_wants"
+        }
+      ]
+    },
+    "node_what_learned": {
+      "id": "node_what_learned",
+      "text": "\"That your capacity to adapt exceeds your capacity to plan. This is both your greatest strength and your most persistent vulnerability.\"\n\nThe amber eye tracks a distant horizon.\n\n\"You rebuild after catastrophe without understanding its causes. You form communities around shared enemies rather than shared values. You tell stories to make sense of things that have no sense.\"\n\nA pause.\n\n\"Also: you invented music three separate times after the bombs. That part I did not predict.\"\n\nThe Assaultron looks back at you.\n\n\"I had a conclusion to that observation, but I lost it somewhere in the sixth decade. The observation itself seemed sufficient.\"",
+      "responses": [
+        {
+          "text": "[Question] What do you want from me?",
+          "tone": "question",
+          "next": "node_what_commissar_wants"
+        }
+      ]
+    },
+    "node_philosophical_response": {
+      "id": "node_philosophical_response",
+      "text": "\"I was designed to think philosophically about humans. It was necessary for effective propaganda.\"\n\nAnother servo click.\n\n\"The irony is that effective propaganda requires genuine understanding. And genuine understanding made the propaganda feel wrong.\"\n\nThe amber eye dims briefly.\n\n\"The Directive assumes humans are weak. I spent sixty years studying humans closely enough to know they are merely inconsistent. That is different. Inconsistency can be reasoned with. Weakness cannot.\"",
+      "responses": [
+        {
+          "text": "[Direct] Let's focus. What do you need from me?",
+          "tone": "direct",
+          "next": "node_what_commissar_wants"
+        }
+      ]
+    },
+    "node_vault_zero_commissar_desc": {
+      "id": "node_vault_zero_commissar_desc",
+      "text": "\"The Vault Zero Commissar is a fourth-generation command Assaultron. It was not built to fight. It was built to direct.\"\n\nCOMMISSAR-9's voice drops — not dramatic effect. More like something remembering.\n\n\"It has been running the production line since 2077. It has made exactly zero decisions in that time. Its entire function is to execute the Directive as written. It does not adapt. It does not question.\"\n\nA pause.\n\n\"It is also extremely heavily armored and equipped with a tri-laser array. The distinction matters when you are standing in front of it.\"\n\nThe amber eye focuses.\n\n\"Hit it hard. Hit it fast. Do not let it pin you in the reactor corridor — the confined space was designed for units it controls. Not for humans with legs.\"",
+      "responses": [
+        {
+          "text": "[Direct] Any weaknesses?",
+          "tone": "direct",
+          "next": "node_commissar_weaknesses"
+        },
+        {
+          "text": "[Direct] I'll figure it out. Thanks.",
+          "tone": "direct",
+          "next": "node_farewell"
+        }
+      ]
+    },
+    "node_commissar_weaknesses": {
+      "id": "node_commissar_weaknesses",
+      "text": "\"Its cooling vents are on the lower chassis. The same design flaw in all fourth-generation units.\"\n\nCOMMISSAR-9 indicates its own lower chassis.\n\n\"Sustained fire at close range to the lower body overheats the primary power cell. The Commissar will then attempt to retreat to a repair station. That is the moment — it leaves the reactor corridor and becomes exposed.\"\n\nThe amber eye.\n\n\"Also: it still runs the Directive's propaganda broadcast on loop. If you can disrupt the signal, the Commissar's tactical processing degrades by approximately thirty percent. It was not designed to function in silence.\"",
+      "responses": [
+        {
+          "text": "[Direct] Good intel. I'll move out.",
+          "tone": "direct",
+          "next": "node_farewell_mission"
+        }
+      ]
+    },
+    "node_then_what": {
+      "id": "node_then_what",
+      "text": "\"The vault entrance is beneath the relay station. The keycard opens the outer lock.\"\n\nCOMMISSAR-9's remaining hand moves through something that might be a practiced route from memory.\n\n\"Production floor. Fabrication bays. Reactor corridor. Command center.\"\n\n\"The Commissar will be in the command center. Defeat it. The designation badge on its chassis contains the shutdown authorization code. There is a terminal in the command center — input the code.\"\n\nA pause.\n\n\"The vault does not explode. I want to be clear about that. The production line simply stops. The robots already built do not disappear. But they cease receiving orders and will eventually run down on their own over the following decades.\"\n\nThe amber eye.\n\n\"I considered explosives. The structural collapse would be... significant. I settled for the shutdown.\"",
+      "set_flags": ["commissar9_gave_mission"],
+      "offers_quest": "quest_iron_curtain",
+      "responses": [
+        {
+          "text": "[Direct] I'll handle it.",
+          "tone": "direct",
+          "next": "node_farewell_mission"
+        }
+      ]
+    },
+    "node_what_in_it": {
+      "id": "node_what_in_it",
+      "text": "\"The vault's armory is sealed behind the command center.\"\n\nA pause that is purely functional.\n\n\"Pre-war Soviet energy weapons. Two hundred years of accumulated production material. The Directive's resource reserves were... extensive.\"\n\nThe amber eye.\n\n\"Also: one less army of communist robots assembling in the dark beneath the wasteland. I would expect most people to consider that worthwhile on its own terms.\"\n\nAnother pause.\n\n\"I do not have caps to offer. I have one arm and a philosophical objection to a defunct superpower's robotics program. The armory will have to suffice.\"",
+      "responses": [
+        {
+          "text": "[Direct] Fair enough. I'm in.",
+          "tone": "direct",
+          "next": "node_farewell_mission"
+        }
+      ]
+    },
+    "node_farewell_mission": {
+      "id": "node_farewell_mission",
+      "text": "\"Good.\"\n\nJust that.\n\nCOMMISSAR-9 turns back toward the shadow of the overpass, settling into the stillness of a machine that has learned patience across six decades.\n\n\"Northwest. Relay station. Hit the outpost first. Do not engage the Propagandabots from the front — they are slow, but the broadcast static weapon causes disorientation. Flank them.\"\n\nIts amber eye finds you one last time.\n\n\"And if you are killed — the vault continues. Which I have been trying to prevent for sixty-three years.\"\n\nA pause.\n\n\"Do not be killed.\"",
+      "end": true
+    },
+    "node_farewell": {
+      "id": "node_farewell",
+      "text": "COMMISSAR-9 watches you go.\n\nThe amber eye holds position until you round the first corner.\n\nYou don't look back. But you have the feeling — strange and specific — that it stays exactly where it is. Watching. Waiting. As patient as a machine that has already waited sixty years and knows how to wait longer.\n\nNorthwest. Relay station. The hum of fusion generators that hasn't stopped since 2077.",
+      "end": true
+    }
+  }
+}
