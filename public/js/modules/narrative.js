@@ -154,7 +154,12 @@
         "fremen":            "dialog_stilgar",
         "padre":             "dialog_padre",
         "father_cain":       "dialog_padre",
-        "priest":            "dialog_padre"
+        "priest":            "dialog_padre",
+        "commissar_9":       "dialog_commissar",
+        "commissar9":        "dialog_commissar",
+        "commissar-9":       "dialog_commissar",
+        "commissar":         "dialog_commissar",
+        "red_commissar":     "dialog_commissar"
       };
       const mapped = NPC_DIALOG_MAP[npcId.toLowerCase()];
       if (mapped) return mapped;
