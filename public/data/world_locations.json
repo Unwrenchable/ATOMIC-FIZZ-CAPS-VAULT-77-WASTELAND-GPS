@@ -11999,6 +11999,30 @@
       "faction": "deepwatch",
       "type": "normal",
       "lore": "Gary Vault Annex. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. The ice groans underfoot, swallowing older footprints and the wreckage they once marked."
+    },
+    {
+      "id": "red_star_outpost",
+      "name": "Red Star Outpost",
+      "lat": 36.1069,
+      "lng": -115.1775,
+      "lvl": 15,
+      "rarity": "rare",
+      "biome": "desert",
+      "faction": "communist_directive",
+      "type": "communist_vault",
+      "lore": "A pre-war Soviet checkpoint facility, still running autonomous patrols. Propagandabots circle the perimeter. Assaultron sentinels guard the command room. The keycard to Vault Zero is inside."
+    },
+    {
+      "id": "vault_zero",
+      "name": "Vault Zero — Communist Automation Facility",
+      "lat": 36.175,
+      "lng": -115.31,
+      "lvl": 20,
+      "rarity": "legendary",
+      "biome": "desert",
+      "faction": "communist_directive",
+      "type": "communist_vault",
+      "lore": "The Communist Automation Directive's crown jewel. A robot factory sealed beneath the Mojave since 2041, still running, still building, still waiting for orders from a government that no longer exists."
     }
   ],
   "by_continent": {

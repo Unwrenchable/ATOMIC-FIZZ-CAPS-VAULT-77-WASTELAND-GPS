@@ -207,6 +207,120 @@
         }
       ],
       rewards: { xp: 300, caps: 200, items: ['behavioral_lock_data'] }
+    },
+
+    // ── RED MENACE ARC ────────────────────────────────────────────────────────
+    // Three-part questline exploring the Communist Automation Directive:
+    // a pre-war Soviet program to build robot armies beneath American soil and
+    // emerge after the nuclear exchange to claim the ruins.  The vaults are
+    // still running.  Nobody told them to stop.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // "Red Signals" — A crashed Propagandabot drops a propaganda pamphlet.
+    // The pamphlet lists a radio frequency.  Following it leads to COMMISSAR-9,
+    // a defecting Soviet Assaultron who knows where Vault Zero is.
+    quest_red_signals: {
+      id: 'quest_red_signals',
+      name: 'Red Signals',
+      type: 'steps',
+      triggerType: 'item',
+      triggerItem: 'propaganda_pamphlet',
+      description: 'You recovered a pre-war Soviet propaganda pamphlet from a downed Propagandabot. The back lists a radio frequency: 66.6 MHz. Something is still broadcasting out there.',
+      npcMessage: 'You found a Red Star propaganda pamphlet. Someone — or something — is still broadcasting the Communist Automation Directive. Find the source.',
+      steps: [
+        {
+          id: 'find_pamphlet',
+          description: 'Pick up the Red Star propaganda pamphlet.',
+          requires: { item: 'propaganda_pamphlet' }
+        },
+        {
+          id: 'follow_signal',
+          description: 'Tune to 66.6 MHz and follow the broadcast to its source.',
+          requires: { flag: 'met_commissar9' }
+        },
+        {
+          id: 'meet_commissar9',
+          description: 'Speak with COMMISSAR-9, the defector unit under the overpass.',
+          requires: { flag: 'commissar9_gave_mission' }
+        }
+      ],
+      rewards: { xp: 150, caps: 75 }
+    },
+
+    // "Iron Curtain" — Raid the Red Star Outpost to obtain the vault keycard.
+    // The outpost is defended by Propagandabots and Assaultron sentinels.
+    quest_iron_curtain: {
+      id: 'quest_iron_curtain',
+      name: 'Iron Curtain',
+      type: 'steps',
+      triggerType: 'npc',
+      triggerNpc: 'commissar_9',
+      description: 'COMMISSAR-9 has identified the Red Star Outpost — the external checkpoint for Vault Zero. Fight through it, get the Red Star Keycard, and open the vault.',
+      npcMessage: 'COMMISSAR-9 has sent you northwest. The Red Star Outpost guards the only keycard to Vault Zero. Clear it.',
+      steps: [
+        {
+          id: 'find_outpost',
+          description: 'Locate the Red Star Outpost northwest of the relay highway.',
+          requires: { flag: 'red_star_outpost_found' }
+        },
+        {
+          id: 'clear_propagandabots',
+          description: 'Destroy the Propagandabot patrol units defending the outpost perimeter.',
+          requires: { flag: 'propagandabots_cleared' }
+        },
+        {
+          id: 'defeat_sentinel',
+          description: 'Fight through the Assaultron sentinels guarding the command room.',
+          requires: { flag: 'outpost_sentinels_defeated' }
+        },
+        {
+          id: 'retrieve_keycard',
+          description: 'Recover the Red Star Keycard from the outpost command room.',
+          requires: { item: 'red_star_keycard' }
+        }
+      ],
+      rewards: { xp: 350, caps: 200, items: ['red_star_keycard'] }
+    },
+
+    // "Vault Zero" — Breach the Communist Automation Vault, fight through the
+    // robot factory floor, defeat the Vault Zero Commissar, and use its
+    // designation badge to input the shutdown code.
+    quest_vault_zero: {
+      id: 'quest_vault_zero',
+      name: 'Vault Zero',
+      type: 'steps',
+      triggerType: 'item',
+      triggerItem: 'red_star_keycard',
+      description: 'The Red Star Keycard opens Vault Zero — the crown jewel of the Communist Automation Directive. Inside: a robot factory that has been running for two hundred years. Find the Commissar. Shut it down.',
+      npcMessage: 'You have the keycard. Vault Zero is open. End the Directive.',
+      steps: [
+        {
+          id: 'enter_vault_zero',
+          description: 'Use the Red Star Keycard to open Vault Zero beneath the relay station.',
+          requires: { flag: 'vault_zero_entered' }
+        },
+        {
+          id: 'cross_production_floor',
+          description: 'Fight through the automated production floor and fabrication bays.',
+          requires: { flag: 'production_floor_cleared' }
+        },
+        {
+          id: 'reach_reactor_corridor',
+          description: 'Navigate the reactor corridor to the Vault Zero command center.',
+          requires: { flag: 'reactor_corridor_cleared' }
+        },
+        {
+          id: 'defeat_vault_commissar',
+          description: 'Destroy the Vault Zero Commissar — the fourth-generation command Assaultron running the factory.',
+          requires: { flag: 'vault_commissar_defeated' }
+        },
+        {
+          id: 'use_shutdown_terminal',
+          description: 'Input the shutdown code from the Commissar\'s designation badge into the command terminal.',
+          requires: { flag: 'directive_shutdown' }
+        }
+      ],
+      rewards: { xp: 600, caps: 400, items: ['commissar_badge', 'soviet_pulse_rifle'] }
     }
   };
 
