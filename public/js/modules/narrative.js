@@ -129,7 +129,17 @@
         "roy-8":             "dialog_roy8",
         "replicant":         "dialog_roy8",
         "eli":               "dialog_eli",
-        "eli_wandermoor":    "dialog_eli"
+        "eli_wandermoor":    "dialog_eli",
+        "loxley":            "dialog_loxley",
+        "robin":             "dialog_loxley",
+        "robin_loxley":      "dialog_loxley",
+        "hood":              "dialog_loxley",
+        "arnie":             "dialog_arnie",
+        "arnold":            "dialog_arnie",
+        "dutch":             "dialog_arnie",
+        "arnold_black":      "dialog_arnie",
+        "kenny":             "dialog_kenny",
+        "kenny_mccormick":   "dialog_kenny"
       };
       const mapped = NPC_DIALOG_MAP[npcId.toLowerCase()];
       if (mapped) return mapped;
@@ -849,6 +859,9 @@
       dude:    { head: "head_round.svg",  eyes: "eyes_set1.svg",     hair: "hair_medium.svg",    shirt: "shirt_wasteland_gear.svg" },
       roy8:    { head: "head_square.svg", eyes: "eyes_almond.svg",   hair: "hair_short.svg",     shirt: "shirt_vault_suit.svg"     },
       eli:     { head: "head_base.svg",   eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
+      loxley:  { head: "head_base.svg",   eyes: "eyes_almond.svg",   hair: "hair_medium.svg",    shirt: "shirt_wasteland_gear.svg" },
+      arnie:   { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
+      kenny:   { head: "head_round.svg",  eyes: "eyes_round.svg",    hair: "hair_short.svg",     shirt: "shirt_vault_suit.svg"     },
       default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
     },
 

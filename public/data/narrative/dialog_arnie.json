@@ -1,0 +1,111 @@
+{
+  "id": "dialog_arnie",
+  "npc": "Arnold \"Dutch\" Black",
+  "portrait": "arnie",
+  "title": "The Last Vault Enforcer",
+  "description": "Dialog nodes for Arnold Black, known as Dutch — a colossal Vault-bred fighter who broke out of Vault 9 after drawing the short straw on the wasteland survey team. His vocabulary is blunt, his grip is crushing, and his pre-war sensibilities run toward action and very loud impact. His brother Barney stayed behind, allegedly to become something of a barbarian.",
+
+  "intro": {
+    "id": "arnie_intro",
+    "conditions": ["!flag:met_arnie"],
+    "text": "You.<br><br>Stop right there.<br><br>I am Arnold Black. They called me Dutch in the Vault. I broke seven door frames on the way out. I am told this is a record.<br><br>I am looking for the machine that leveled Searchlight Station. Pre-war combat prototype. Still walking. Still shooting.<br><br>Come with me if you want to live.",
+    "set_flags": ["met_arnie"]
+  },
+
+  "knowledge_nodes": [
+    {
+      "id": "arnie_knows_rex",
+      "conditions": ["flag:met_rex", "!flag:arnie_comment_rex"],
+      "text": "The Captain at the Dam. Yes. A soldier.<br><br>We ran patrol together three nights outside Boulder City.<br><br>He did not say much. I respected that. He was also the only one who could keep pace.",
+      "set_flags": ["arnie_comment_rex"]
+    },
+    {
+      "id": "arnie_knows_lucy",
+      "conditions": ["flag:met_lucy", "!flag:arnie_comment_lucy"],
+      "text": "Sparkplug. The scavenger.<br><br>She tried to sell me a 'rare pre-war relic.' It was a blender.<br><br>I kept it. I used it. It worked.",
+      "set_flags": ["arnie_comment_lucy"]
+    },
+    {
+      "id": "arnie_knows_dude",
+      "conditions": ["flag:met_dude", "!flag:arnie_comment_dude"],
+      "text": "The Dude. I met him near the Outpost.<br><br>He was lying on the ground looking at the sky. Said he was thinking.<br><br>I waited for him to finish. It took forty minutes.",
+      "set_flags": ["arnie_comment_dude"]
+    },
+    {
+      "id": "arnie_knows_loxley",
+      "conditions": ["flag:met_loxley", "!flag:arnie_comment_loxley"],
+      "text": "The one with the hat. Loxley.<br><br>He robs caravans for poor people. I understand the logic.<br><br>My brother Barney would have just taken everything and called it tribute. Loxley has more restraint than Barney.",
+      "set_flags": ["arnie_comment_loxley"]
+    },
+    {
+      "id": "arnie_knows_kenny",
+      "conditions": ["flag:met_kenny", "!flag:arnie_comment_kenny"],
+      "text": "The small one who keeps nearly dying.<br><br>He got hit by a radscorpion tail, fell off a cliff, and was struck by lightning in a radstorm.<br><br>All in one afternoon. He was back the next morning. I find this disturbing and also impressive.",
+      "set_flags": ["arnie_comment_kenny"]
+    }
+  ],
+
+  "emotional_nodes": [
+    {
+      "id": "arnie_player_low_hp",
+      "conditions": ["stat:hp<=30", "!flag:arnie_gave_stimpak"],
+      "text": "You are bleeding in a way that I find inefficient.<br><br>Take this.<br><br>I will be back.",
+      "grant_items": [{ "id": "stimpak", "name": "Stimpak", "type": "aid", "quantity": 2 }],
+      "set_flags": ["arnie_gave_stimpak"]
+    },
+    {
+      "id": "arnie_player_strong",
+      "conditions": ["stat:hp>=90", "!flag:arnie_comment_strong"],
+      "text": "You are in good condition.<br><br>Good. Weak partners slow me down.<br><br>We can talk about the machine now.",
+      "set_flags": ["arnie_comment_strong"]
+    }
+  ],
+
+  "quest_nodes": [
+    {
+      "id": "arnie_offer_ill_be_back",
+      "conditions": ["!flag:sq_arnie_ill_be_back_taken"],
+      "text": "Vault-Tec Prototype Unit Seven. Pre-war autonomous combat chassis. Active since 2058. Self-repairing. Never confirmed destroyed.<br><br>Three weeks ago it hit Searchlight Station. Two weeks ago it appeared outside Boulder City. Last week — a water caravan on Route 93. Gone. Thirty people.<br><br>I have tracked it as far as the Black Mountain transmitter array. But it does not stay in one place.<br><br>I need eyes while I chase it down. You move quietly. I do not.<br><br>Help me find the machine. I will handle the rest.<br><br>It will not see me coming. And if it does — I will be back.",
+      "offers_quest": "sq_arnie_ill_be_back",
+      "set_flags": ["sq_arnie_ill_be_back_taken"]
+    }
+  ],
+
+  "wildcards": [
+    {
+      "id": "arnie_ill_be_back",
+      "keywords": ["leave", "go", "leaving", "goodbye", "back", "return"],
+      "text": "I will be back.<br><br>I always come back."
+    },
+    {
+      "id": "arnie_terminator_ref",
+      "keywords": ["machine", "robot", "cyborg", "prototype", "unit"],
+      "text": "The machine has no feelings. No pain. No fear.<br><br>It does not stop. It does not sleep. It will not negotiate or beg or rest.<br><br>Neither will I."
+    },
+    {
+      "id": "arnie_brother_barney",
+      "keywords": ["brother", "barney", "family", "vault", "conan"],
+      "text": "My brother Barney remained in the Vault.<br><br>He is stronger than me. Faster than me. More dramatic than me, which I did not think possible.<br><br>He took our father's pre-war action figure collection and has been living by its philosophy ever since. Something about crushing enemies and what is best in life.<br><br>I worry about him."
+    },
+    {
+      "id": "arnie_strength",
+      "keywords": ["strong", "strength", "big", "size", "muscle"],
+      "text": "In the Vault, I broke seventeen chairs over nineteen years.<br><br>The Overseer said it was a design flaw. I said it was a weight distribution problem.<br><br>We were both right."
+    },
+    {
+      "id": "arnie_come_with_me",
+      "keywords": ["trust", "help", "partner", "together", "survive"],
+      "text": "Come with me if you want to live.<br><br>This is not theatre. This is tactical advice."
+    },
+    {
+      "id": "arnie_hasta_la_vista",
+      "keywords": ["enemy", "hostile", "kill", "destroy", "eliminate"],
+      "text": "I have a saying for moments like that. Pre-war action film. Very famous line.<br><br>Hasta la vista, baby.<br><br>It means goodbye. Permanent goodbye."
+    }
+  ],
+
+  "fallback": {
+    "id": "arnie_fallback",
+    "text": "I will be back.<br><br>Do not wander far while I am gone."
+  }
+}
