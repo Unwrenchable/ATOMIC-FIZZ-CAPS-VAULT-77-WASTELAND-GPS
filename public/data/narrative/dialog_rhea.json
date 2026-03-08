@@ -53,5 +53,11 @@
       "type": "spoken",
       "text": "Vault-Tec built horrors. But sometimes, the wasteland builds something new out of the wreckage."
     }
-  }
+  },
+  "mood": "friendly",
+  "personality": [
+    "Practical",
+    "Defiant",
+    "Sharp"
+  ]
 }

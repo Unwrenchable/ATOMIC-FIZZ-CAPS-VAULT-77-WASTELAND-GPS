@@ -37,5 +37,11 @@
       "type": "ending",
       "text": "*the body reaches toward the terminal voice, a broken sound escaping: '...me...' *"
     }
-  }
+  },
+  "mood": "tense",
+  "personality": [
+    "Broken",
+    "Instinctual",
+    "Lost"
+  ]
 }

@@ -167,5 +167,11 @@
   "fallback": {
     "id": "jax_fallback",
     "text": "Signal's holding... barely.<br><br>You still out there?"
-  }
+  },
+  "mood": "tense",
+  "personality": [
+    "Analytical",
+    "Fragmented",
+    "Resolute"
+  ]
 }

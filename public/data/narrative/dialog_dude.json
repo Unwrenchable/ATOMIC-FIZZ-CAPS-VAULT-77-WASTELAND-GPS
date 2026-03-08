@@ -4,114 +4,191 @@
   "portrait": "dude",
   "title": "The Abiding Wanderer",
   "description": "Dialog nodes for Jeffrey 'The Dude' Lebronski, a permanently-mellowed drifter who just wants his Nuka-Cola-branded rug back. It really tied the shelter together.",
-
   "intro": {
     "id": "dude_intro",
-    "conditions": ["!flag:met_dude"],
+    "conditions": [
+      "!flag:met_dude"
+    ],
     "text": "Hey, hey — whoa.<br><br>Take it easy, man. Take it easy.<br><br>Name's Lebronski. Jeffrey Lebronski. But The Dude'll do. Or His Dudeness, or Duder, or El Duderino, if you're not into the whole brevity thing.<br><br>You haven't seen a rug around here, have you? Tan. Pre-war. Had a Nuka-Cola bottle pattern on it. It really tied the shelter together.",
-    "set_flags": ["met_dude"]
+    "set_flags": [
+      "met_dude"
+    ]
   },
-
   "knowledge_nodes": [
     {
       "id": "dude_knows_rex",
-      "conditions": ["flag:met_rex", "!flag:dude_comment_rex"],
+      "conditions": [
+        "flag:met_rex",
+        "!flag:dude_comment_rex"
+      ],
       "text": "The Captain? Yeah, met him once at the Dam.<br><br>Seemed like a very un-Dude-like dude.<br><br>Very... tense. The Dude does not do tense.",
-      "set_flags": ["dude_comment_rex"]
+      "set_flags": [
+        "dude_comment_rex"
+      ]
     },
     {
       "id": "dude_knows_lucy",
-      "conditions": ["flag:met_lucy", "!flag:dude_comment_lucy"],
+      "conditions": [
+        "flag:met_lucy",
+        "!flag:dude_comment_lucy"
+      ],
       "text": "Sparkplug? Oh she's all right. Tried to trade me something for the rug once.<br><br>Wrong rug, man. Not the one that tied the shelter together.",
-      "set_flags": ["dude_comment_lucy"]
+      "set_flags": [
+        "dude_comment_lucy"
+      ]
     },
     {
       "id": "dude_knows_mara",
-      "conditions": ["flag:met_mara", "!flag:dude_comment_mara"],
+      "conditions": [
+        "flag:met_mara",
+        "!flag:dude_comment_mara"
+      ],
       "text": "The Rad-Witch? Yeah well... that's just like, her opinion, man.<br><br>Radiation as a *language*. The Dude respects that. Mostly.",
-      "set_flags": ["dude_comment_mara"]
+      "set_flags": [
+        "dude_comment_mara"
+      ]
     },
     {
       "id": "dude_knows_dolores",
-      "conditions": ["flag:met_dolores", "!flag:dude_comment_dolores"],
+      "conditions": [
+        "flag:met_dolores",
+        "!flag:dude_comment_dolores"
+      ],
       "text": "You met the woman at the farmstead?<br><br>Two hundred years of the same morning... man.<br><br>The Dude's had some rough mornings, but that's... that's just not cool.",
-      "set_flags": ["dude_comment_dolores"]
+      "set_flags": [
+        "dude_comment_dolores"
+      ]
     },
     {
       "id": "dude_knows_loxley",
-      "conditions": ["flag:met_loxley", "!flag:dude_comment_loxley"],
+      "conditions": [
+        "flag:met_loxley",
+        "!flag:dude_comment_loxley"
+      ],
       "text": "The guy with the hat?<br><br>He gave me a wheel of brahmin cheese once. Said it was 'redistributed.' I didn't ask from where.<br><br>Man believed in something. That's... that's not nothing.",
-      "set_flags": ["dude_comment_loxley"]
+      "set_flags": [
+        "dude_comment_loxley"
+      ]
     },
     {
       "id": "dude_knows_arnie",
-      "conditions": ["flag:met_arnie", "!flag:dude_comment_arnie"],
+      "conditions": [
+        "flag:met_arnie",
+        "!flag:dude_comment_arnie"
+      ],
       "text": "Arnold? The big guy?<br><br>He sat in that chair over there. Chair survived. The Dude was surprised.<br><br>Said he'd be back. The Dude believes him. The chair does too.",
-      "set_flags": ["dude_comment_arnie"]
+      "set_flags": [
+        "dude_comment_arnie"
+      ]
     },
     {
       "id": "dude_knows_kenny",
-      "conditions": ["flag:met_kenny", "!flag:dude_comment_kenny"],
+      "conditions": [
+        "flag:met_kenny",
+        "!flag:dude_comment_kenny"
+      ],
       "text": "Oh, the little orange-hooded dude?<br><br>Man, he got eaten by a giant radscorpion right in front of me. Right *in front of me*, man.<br><br>He was back the next afternoon. Still waving. Still orange.<br><br>The Dude abides. But that dude *really* abides.",
-      "set_flags": ["dude_comment_kenny"]
+      "set_flags": [
+        "dude_comment_kenny"
+      ]
     }
   ],
-
   "emotional_nodes": [
     {
       "id": "dude_player_low_caps",
-      "conditions": ["stat:caps<=10", "!flag:dude_comment_broke"],
+      "conditions": [
+        "stat:caps<=10",
+        "!flag:dude_comment_broke"
+      ],
       "text": "You're broke, huh?<br><br>Yeah. The Dude knows that feeling.<br><br>Sometimes all you've got is your rug. And then someone takes that too.",
-      "set_flags": ["dude_comment_broke"]
+      "set_flags": [
+        "dude_comment_broke"
+      ]
     },
     {
       "id": "dude_player_high_rads",
-      "conditions": ["stat:rads>=200", "!flag:dude_comment_rads"],
+      "conditions": [
+        "stat:rads>=200",
+        "!flag:dude_comment_rads"
+      ],
       "text": "Man, you are *glowing*.<br><br>I've had some wild nights but that is something else.<br><br>Have a Nuka-Cola. It helps. Probably.",
-      "set_flags": ["dude_comment_rads"]
+      "set_flags": [
+        "dude_comment_rads"
+      ]
     }
   ],
-
   "quest_nodes": [
     {
       "id": "dude_offer_rug",
-      "conditions": ["!flag:sq_the_rug_abides_taken"],
+      "conditions": [
+        "!flag:sq_the_rug_abides_taken"
+      ],
       "text": "Look, man. I need a favor.<br><br>Three Nihilists — yeah, Nihilists, they believe in nothing — they took my rug. My *good* rug.<br><br>They're holed up in the old Bowl-O-Rama south of here. Pre-war bowling alley. Last I heard.<br><br>They don't care about the rug. That's what burns me. They just did it to prove a point about *nothingness*.<br><br>Help me get it back and... man, I don't know. I'll owe you one. The Dude always pays his debts.",
       "offers_quest": "sq_the_rug_abides",
-      "set_flags": ["sq_the_rug_abides_taken"]
+      "set_flags": [
+        "sq_the_rug_abides_taken"
+      ]
     }
   ],
-
   "wildcards": [
     {
       "id": "dude_nihilists",
-      "keywords": ["nihilist", "nihilism", "nothing", "meaningless"],
+      "keywords": [
+        "nihilist",
+        "nihilism",
+        "nothing",
+        "meaningless"
+      ],
       "text": "Nihilists... say what you want about the tenets of National Anarchy, Dude, at least it's an ethos."
     },
     {
       "id": "dude_bowling",
-      "keywords": ["bowling", "bowl", "lane", "pins", "alley"],
+      "keywords": [
+        "bowling",
+        "bowl",
+        "lane",
+        "pins",
+        "alley"
+      ],
       "text": "The Bowl-O-Rama. Pre-war perfection.<br><br>You find a working lane out there, you let The Dude know.<br><br>Strikes don't care about the apocalypse."
     },
     {
       "id": "dude_caps",
-      "keywords": ["caps", "money", "trade"],
+      "keywords": [
+        "caps",
+        "money",
+        "trade"
+      ],
       "text": "Caps. Yeah.<br><br>The Dude doesn't have many. Never did.<br><br>But I've got a rug. Or I did."
     },
     {
       "id": "dude_rug",
-      "keywords": ["rug", "carpet", "shelter"],
+      "keywords": [
+        "rug",
+        "carpet",
+        "shelter"
+      ],
       "text": "That rug... it really tied the shelter together.<br><br>Pre-war Nuka-Cola bottle pattern. Soft pile. Probably the last one in the Mojave.<br><br>The Nihilists don't even *want* it. They just took it."
     },
     {
       "id": "dude_wasteland",
-      "keywords": ["wasteland", "apocalypse", "war", "bombs"],
+      "keywords": [
+        "wasteland",
+        "apocalypse",
+        "war",
+        "bombs"
+      ],
       "text": "Yeah, well. The Wasteland abides.<br><br>The Dude abides too.<br><br>We've got that in common."
     }
   ],
-
   "fallback": {
     "id": "dude_fallback",
     "text": "Yeah, well... The Dude abides.<br><br>Take it easy, man."
-  }
+  },
+  "mood": "friendly",
+  "personality": [
+    "Laid-back",
+    "Philosophical",
+    "Unflappable"
+  ]
 }

@@ -697,7 +697,9 @@
         {
           "text": "The Warden is down. The tower is next.",
           "tone": "direct",
-          "set_flags": ["warden_defeated"],
+          "set_flags": [
+            "warden_defeated"
+          ],
           "next": null
         },
         {
@@ -718,7 +720,9 @@
         {
           "text": "The override key worked. The tower is down. It's done.",
           "tone": "direct",
-          "set_flags": ["quest_the_loop_complete"],
+          "set_flags": [
+            "quest_the_loop_complete"
+          ],
           "next": "node_dolores_freed"
         },
         {
@@ -739,10 +743,18 @@
         {
           "text": "I'll investigate the cache site.",
           "tone": "direct",
-          "set_flags": ["dolores_cache_found"],
+          "set_flags": [
+            "dolores_cache_found"
+          ],
           "next": null
         }
       ]
     }
+  ],
+  "mood": "neutral",
+  "personality": [
+    "Methodical",
+    "Enduring",
+    "Melancholic"
   ]
 }
