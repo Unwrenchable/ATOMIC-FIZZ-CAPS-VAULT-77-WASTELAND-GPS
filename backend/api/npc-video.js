@@ -17,6 +17,7 @@ const CACHE_TTL_SECONDS = 86400; // 24 hours
 const MAX_NPC_NAME_LENGTH = 60;
 const MAX_DIALOG_TEXT_LENGTH = 200;
 const PROMPT_DIALOG_TRUNCATE = 150;
+const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '16', 10);
 const POLL_INTERVAL_MS = 5000;
 const POLL_MAX_ATTEMPTS = 6; // 6 × 5 s = 30 s max
 
@@ -36,6 +37,28 @@ function sanitiseForPrompt(str, maxLen) {
     .slice(0, maxLen);
 }
 
+function truncateWords(str, maxWords) {
+  const words = String(str || '').trim().split(/\s+/).filter(Boolean);
+  return words.slice(0, maxWords).join(' ');
+}
+
+function pickVoiceProfile(npcId) {
+  const voices = [
+    'voice: raspy baritone, gravelly wasteland cadence',
+    'voice: clipped military cadence, firm and direct',
+    'voice: calm medic tone, measured and reassuring',
+    'voice: fast-talking scavenger, nervous edge',
+    'voice: charismatic trader patter, sly and smooth',
+    'voice: stern elder tone, deliberate and low',
+    'voice: cheerful but eerie vault-tec cadence',
+    'voice: rough outlaw drawl, dry sarcasm',
+  ];
+  let hash = 0;
+  const key = String(npcId || 'unknown_npc');
+  for (let i = 0; i < key.length; i++) hash = ((hash << 5) - hash + key.charCodeAt(i)) | 0;
+  return voices[Math.abs(hash) % voices.length];
+}
+
 // Validate npcId — alphanumeric, underscores and hyphens only, length 1-80
 function isValidNpcId(id) {
   return typeof id === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(id);
@@ -44,14 +67,21 @@ function isValidNpcId(id) {
 // ----------------------------------------------------------------
 // Build the Fallout-themed prompt
 // ----------------------------------------------------------------
-function buildPrompt(npcName, portrait, dialogText) {
+function buildPrompt(npcId, npcName, portrait, dialogText) {
+  const safeNpcId   = sanitiseForPrompt(npcId, 80).toLowerCase();
   const safeName    = sanitiseForPrompt(npcName,   MAX_NPC_NAME_LENGTH);
   const safePortrait = portrait ? sanitiseForPrompt(String(portrait), 100) : 'rugged wasteland survivor';
-  const safeDialog  = sanitiseForPrompt(dialogText, PROMPT_DIALOG_TRUNCATE);
+  const safeDialog  = truncateWords(sanitiseForPrompt(dialogText, 220), MAX_SPEECH_WORDS);
+  const voiceProfile = pickVoiceProfile(safeNpcId);
 
   return (
     `Wasteland NPC named ${safeName}, ${safePortrait} appearance, ` +
-    `speaking in post-apocalyptic Fallout style, saying "${safeDialog}", ` +
+    `identity lock character_id=${safeNpcId}; keep the exact same person in every clip with this character_id ` +
+    `(same face structure, hair/facial hair, age, skin tone, body type, signature outfit and accessories), ` +
+    `never redesign or swap actor identity, ` +
+    `${voiceProfile}; keep this exact voice profile for character_id=${safeNpcId} in every scene, ` +
+    `speaking in post-apocalyptic Fallout style with exactly one concise line under ${MAX_SPEECH_WORDS} words: "${safeDialog}", ` +
+    `fit full delivery naturally in 8 seconds and avoid trailing unfinished sentence, ` +
     `8 seconds, retro Pip-Boy green tint, moody lighting`
   ).slice(0, 2000); // hard cap for upstream safety
 }
@@ -163,7 +193,7 @@ router.post('/generate', authMiddleware, async (req, res) => {
   }
 
   // --- Build prompt ---
-  const prompt = buildPrompt(npcName, portrait, dialogText);
+  const prompt = buildPrompt(npcId, npcName, portrait, dialogText);
 
   // --- Call xAI video generation API ---
   let videoUrl;
@@ -175,7 +205,7 @@ router.post('/generate', authMiddleware, async (req, res) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'aurora',
+        model: process.env.GROK_VIDEO_MODEL || 'grok-imagine-video',
         prompt,
         duration_seconds: 8,
         aspect_ratio: '3:4',
