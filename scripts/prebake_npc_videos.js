@@ -62,7 +62,7 @@ const ASPECT        = process.env.GROK_VIDEO_ASPECT || '3:4';
 const RESOLUTION    = process.env.GROK_VIDEO_RESOLUTION || '720p';
 const SKIP_EXISTING = process.env.SKIP_EXISTING !== '0';
 const ONE_PER_NPC   = process.env.ONE_PER_NPC === '1';
-const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '16', 10);
+const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '20', 10);
 const INCLUDE_ENDGAME_NPCS = process.env.INCLUDE_ENDGAME_NPCS === '1';
 
 // R2 config
@@ -106,6 +106,106 @@ function sanitise(str, maxLen) {
 function truncateWords(str, maxWords) {
   var words = String(str || '').trim().split(/\s+/).filter(Boolean);
   return words.slice(0, maxWords).join(' ');
+}
+
+/**
+ * Truncate a string to at most maxWords words, preferring a natural
+ * sentence boundary (period / exclamation / question mark) over a hard cut.
+ * Falls back to plain word truncation when no sentence boundary is found.
+ */
+function truncateAtSentence(str, maxWords) {
+  var words = String(str || '').trim().split(/\s+/).filter(Boolean);
+  if (words.length <= maxWords) return words.join(' ');
+
+  var candidate = words.slice(0, maxWords).join(' ');
+  // Walk backwards to find the last sentence-ending punctuation
+  var lastEnd = -1;
+  for (var i = candidate.length - 1; i >= 0; i--) {
+    if (/[.!?]/.test(candidate[i])) { lastEnd = i; break; }
+  }
+  if (lastEnd > 0) {
+    var upToEnd = candidate.slice(0, lastEnd + 1).trim();
+    // Accept the sentence boundary only if it gives us a meaningful fragment (≥ 4 words)
+    if (upToEnd.split(/\s+/).length >= 4) return upToEnd;
+  }
+  return candidate;
+}
+
+/**
+ * Extract a short, clean speech line from a dialog node's text field.
+ *
+ * Dialog texts contain a mix of:
+ *   - [Stage directions in brackets]
+ *   - *Action cues in asterisks*
+ *   - Narrator / atmosphere prose
+ *   - "Actual NPC dialogue in double-quotes"
+ *   - Ellipsis-only pause lines ("...", "…")
+ *
+ * Strategy (in priority order):
+ *   1. Pull the first one or two quoted speech segments ("…").
+ *   2. Fall back to the first non-empty, non-ellipsis paragraph.
+ * Then truncate at a sentence boundary rather than mid-word.
+ *
+ * @param {string} rawText - The full node text from the dialog JSON.
+ * @param {number} maxWords - Maximum word budget.
+ * @returns {string} A clean, short speech line ready for the video prompt.
+ */
+function extractVideoSpeech(rawText, maxWords) {
+  // Normalise HTML line-break tags to newlines
+  var text = String(rawText || '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<[^>]+>/g, '');
+
+  // Strip [bracketed stage directions]
+  text = text.replace(/\[[^\]]{0,200}?\]/g, '');
+
+  // Strip (parenthetical stage directions) — Kenny-style action cues
+  text = text.replace(/\([^)]{5,200}?\)/g, '');
+
+  // Strip *asterisk action cues*
+  text = text.replace(/\*[^*]{0,200}?\*/g, '');
+
+  // --- Strategy 1: extract quoted NPC speech ---
+  var quotedParts = [];
+  var quoteRe = /"([^"]{3,200})"/g;
+  var m;
+  while ((m = quoteRe.exec(text)) !== null) {
+    var part = m[1].replace(/[\n\r]+/g, ' ').trim();
+    if (part.length > 3) quotedParts.push(part);
+    if (quotedParts.length >= 2) break; // two sentences is enough
+  }
+
+  if (quotedParts.length > 0) {
+    var combined = quotedParts.join(' ').replace(/\s+/g, ' ').trim();
+    return truncateAtSentence(combined, maxWords);
+  }
+
+  // --- Strategy 2: accumulate the first few non-empty, non-ellipsis paragraphs ---
+  // Paragraphs are separated by newlines (normalised from <br><br> or \n\n).
+  // We combine paragraphs until we reach the word budget.  When the current
+  // accumulated count is below 1/3 of the budget, we always pull in the next
+  // paragraph (letting truncateAtSentence clip it) so short openers like
+  // "Hey. You." are extended with the following content rather than kept alone.
+  var paragraphs = text.split(/\n+/).map(function (s) { return s.trim(); });
+  var accumulated = [];
+  var wordCount = 0;
+  var minWords = Math.ceil(maxWords / 3); // must exceed this before stopping
+  for (var j = 0; j < paragraphs.length; j++) {
+    var p = paragraphs[j];
+    if (!p || p.length <= 1 || /^[.…\s]+$/.test(p)) continue;
+    var pWords = p.split(/\s+/).filter(Boolean).length;
+    if (wordCount + pWords > maxWords && wordCount >= minWords) break;
+    accumulated.push(p);
+    wordCount += pWords;
+    if (wordCount >= maxWords) break;
+  }
+
+  if (accumulated.length > 0) {
+    return truncateAtSentence(accumulated.join(' '), maxWords);
+  }
+
+  // Last-resort: sanitise the whole thing and truncate
+  return truncateAtSentence(text.replace(/[\n\r]+/g, ' ').trim(), maxWords);
 }
 
 function pickVoiceProfile(npcKey) {
@@ -179,7 +279,7 @@ function buildNodePrompt(npcId, dialog, nodeId, nodeText) {
   var personality = Array.isArray(dialog.personality)
     ? dialog.personality.slice(0, 3).join(', ')
     : '';
-  var speech = truncateWords(sanitise(stripHtml(nodeText), 220), MAX_SPEECH_WORDS);
+  var speech = extractVideoSpeech(nodeText, MAX_SPEECH_WORDS);
   var voiceProfile = pickVoiceProfile(npcKey);
 
   return (
