@@ -1,0 +1,33 @@
+{
+  "servers": {
+    "vault77-game": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["mcp/vault77-server.js"],
+      "env": {
+        "VAULT77_API_URL": "${VAULT77_API_URL:-https://api.atomicfizzcaps.xyz}",
+        "VAULT77_API_KEY": "${VAULT77_API_KEY:-}"
+      }
+    },
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github@2025.4.8"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem@2026.1.14",
+        "${workspaceFolder}/backend",
+        "${workspaceFolder}/public",
+        "${workspaceFolder}/docs",
+        "${workspaceFolder}/mcp"
+      ]
+    }
+  }
+}
