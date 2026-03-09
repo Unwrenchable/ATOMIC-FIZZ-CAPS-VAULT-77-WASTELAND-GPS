@@ -151,10 +151,13 @@ function truncateAtSentence(str, maxWords) {
  * @returns {string} A clean, short speech line ready for the video prompt.
  */
 function extractVideoSpeech(rawText, maxWords) {
-  // Normalise HTML line-break tags to newlines
-  var text = String(rawText || '')
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<[^>]+>/g, '');
+  // Strip all HTML from the raw dialog text before any further processing.
+  // Step 1: convert <br> line-break tags to newlines.
+  // Step 2: remove every remaining angle-bracket character — this definitively
+  //         eliminates any HTML injection surface including malformed/nested markup.
+  var text = String(rawText || '');
+  text = text.replace(/<br\s*\/?>/gi, '\n');
+  text = text.replace(/</g, '').replace(/>/g, '');
 
   // Strip [bracketed stage directions]
   text = text.replace(/\[[^\]]{0,200}?\]/g, '');
