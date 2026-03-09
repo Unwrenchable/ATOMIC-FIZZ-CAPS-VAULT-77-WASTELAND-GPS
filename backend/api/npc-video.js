@@ -15,9 +15,9 @@ const XAI_VIDEO_URL = 'https://api.x.ai/v1/videos/generations';
 const XAI_POLL_URL = (jobId) => `https://api.x.ai/v1/videos/generations/${encodeURIComponent(jobId)}`;
 const CACHE_TTL_SECONDS = 86400; // 24 hours
 const MAX_NPC_NAME_LENGTH = 60;
-const MAX_DIALOG_TEXT_LENGTH = 200;
+const MAX_DIALOG_TEXT_LENGTH = 800;
 const PROMPT_DIALOG_TRUNCATE = 150;
-const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '16', 10);
+const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '20', 10);
 const POLL_INTERVAL_MS = 5000;
 const POLL_MAX_ATTEMPTS = 6; // 6 × 5 s = 30 s max
 
@@ -40,6 +40,91 @@ function sanitiseForPrompt(str, maxLen) {
 function truncateWords(str, maxWords) {
   const words = String(str || '').trim().split(/\s+/).filter(Boolean);
   return words.slice(0, maxWords).join(' ');
+}
+
+/**
+ * Truncate a string to at most maxWords words, preferring a natural
+ * sentence boundary over a hard mid-word cut.
+ */
+function truncateAtSentence(str, maxWords) {
+  const words = String(str || '').trim().split(/\s+/).filter(Boolean);
+  if (words.length <= maxWords) return words.join(' ');
+
+  const candidate = words.slice(0, maxWords).join(' ');
+  let lastEnd = -1;
+  for (let i = candidate.length - 1; i >= 0; i--) {
+    if (/[.!?]/.test(candidate[i])) { lastEnd = i; break; }
+  }
+  if (lastEnd > 0) {
+    const upToEnd = candidate.slice(0, lastEnd + 1).trim();
+    if (upToEnd.split(/\s+/).length >= 4) return upToEnd;
+  }
+  return candidate;
+}
+
+/**
+ * Extract a short, video-ready speech line from a raw dialog node text.
+ *
+ * Dialog nodes contain mixed content: [stage directions], *action cues*,
+ * narrator prose, and the actual NPC dialogue in "double quotes".
+ * This function extracts the first 1-2 quoted speech segments, then falls
+ * back to the first clean paragraph, then truncates at a sentence boundary.
+ */
+function extractVideoSpeech(rawText, maxWords) {
+  // Strip all HTML from the raw dialog text before any further processing.
+  // Step 1: convert <br> line-break tags to newlines.
+  // Step 2: remove every remaining angle-bracket character — this definitively
+  //         eliminates any HTML injection surface including malformed/nested markup.
+  let text = String(rawText || '');
+  text = text.replace(/<br\s*\/?>/gi, '\n');
+  text = text.replace(/</g, '').replace(/>/g, '');
+
+  // Strip [bracketed stage directions]
+  text = text.replace(/\[[^\]]{0,200}?\]/g, '');
+
+  // Strip (parenthetical stage directions) — Kenny-style action cues
+  text = text.replace(/\([^)]{5,200}?\)/g, '');
+
+  // Strip *asterisk action cues*
+  text = text.replace(/\*[^*]{0,200}?\*/g, '');
+
+  // Strategy 1: pull quoted NPC speech "like this"
+  const quotedParts = [];
+  const quoteRe = /"([^"]{3,200})"/g;
+  let m;
+  while ((m = quoteRe.exec(text)) !== null) {
+    const part = m[1].replace(/[\n\r]+/g, ' ').trim();
+    if (part.length > 3) quotedParts.push(part);
+    if (quotedParts.length >= 2) break;
+  }
+
+  if (quotedParts.length > 0) {
+    const combined = quotedParts.join(' ').replace(/\s+/g, ' ').trim();
+    return truncateAtSentence(combined, maxWords);
+  }
+
+  // Strategy 2: accumulate the first few non-empty, non-ellipsis paragraphs up
+  // to the word budget.  When accumulated count is below 1/3 of the budget,
+  // always pull in the next paragraph (let truncateAtSentence clip it) so
+  // short openers like "Hey. You." get extended with the following content.
+  const paragraphs = text.split(/\n+/).map((s) => s.trim());
+  const accumulated = [];
+  let wordCount = 0;
+  const minWords = Math.ceil(maxWords / 3);
+  for (const p of paragraphs) {
+    if (!p || p.length <= 1 || /^[.…\s]+$/.test(p)) continue;
+    const pWords = p.split(/\s+/).filter(Boolean).length;
+    if (wordCount + pWords > maxWords && wordCount >= minWords) break;
+    accumulated.push(p);
+    wordCount += pWords;
+    if (wordCount >= maxWords) break;
+  }
+
+  if (accumulated.length > 0) {
+    return truncateAtSentence(accumulated.join(' '), maxWords);
+  }
+
+  return truncateAtSentence(text.replace(/[\n\r]+/g, ' ').trim(), maxWords);
 }
 
 function pickVoiceProfile(npcId) {
@@ -71,7 +156,7 @@ function buildPrompt(npcId, npcName, portrait, dialogText) {
   const safeNpcId   = sanitiseForPrompt(npcId, 80).toLowerCase();
   const safeName    = sanitiseForPrompt(npcName,   MAX_NPC_NAME_LENGTH);
   const safePortrait = portrait ? sanitiseForPrompt(String(portrait), 100) : 'rugged wasteland survivor';
-  const safeDialog  = truncateWords(sanitiseForPrompt(dialogText, 220), MAX_SPEECH_WORDS);
+  const safeDialog  = extractVideoSpeech(dialogText, MAX_SPEECH_WORDS);
   const voiceProfile = pickVoiceProfile(safeNpcId);
 
   return (
