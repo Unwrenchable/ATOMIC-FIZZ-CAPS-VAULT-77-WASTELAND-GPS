@@ -22,6 +22,7 @@ Initial setup, API keys, and environment configuration.
 - [AWS_KMS_SETUP.md](setup/AWS_KMS_SETUP.md) - AWS Key Management Service setup
 - [DOCUMENTATION_INDEX.md](setup/DOCUMENTATION_INDEX.md) - Previous documentation index
 - [ENVIRONMENT_VARIABLES.md](setup/ENVIRONMENT_VARIABLES.md) - Complete environment variable reference
+- [GROK_SETUP.md](setup/GROK_SETUP.md) - ☢️ **xAI Grok setup — start here to enable Grok AI**
 - [HF_API_KEY_SHARING_GUIDE.md](setup/HF_API_KEY_SHARING_GUIDE.md) - 🔑 Guide to sharing HF API keys across repos
 - [HF_API_SETUP.md](setup/HF_API_SETUP.md) - Hugging Face API configuration
 - [LOCAL_SIGNING_SETUP.md](setup/LOCAL_SIGNING_SETUP.md) - Local transaction signing setup
@@ -99,7 +100,8 @@ Development summaries, fixes, testing guides, and implementation reports.
 1. Start with [VERCEL_QUICKSTART.md](deployment/VERCEL_QUICKSTART.md) for fastest setup
 2. Or use [DEPLOYMENT.md](deployment/DEPLOYMENT.md) for split architecture
 3. Configure using [ENVIRONMENT_VARIABLES.md](setup/ENVIRONMENT_VARIABLES.md)
-4. Troubleshoot with [DEPLOYMENT_FIX_SUMMARY.md](deployment/DEPLOYMENT_FIX_SUMMARY.md)
+4. Enable Grok AI with [GROK_SETUP.md](setup/GROK_SETUP.md) ☢️
+5. Troubleshoot with [DEPLOYMENT_FIX_SUMMARY.md](deployment/DEPLOYMENT_FIX_SUMMARY.md)
 
 ### For Understanding Features:
 1. [README.md](../README.md) - Overview of all features
@@ -116,8 +118,8 @@ Development summaries, fixes, testing guides, and implementation reports.
 
 ## 📊 Documentation Statistics
 
-- **Total Documents**: 65 markdown files
-- **Setup Guides**: 8 files
+- **Total Documents**: 66 markdown files
+- **Setup Guides**: 9 files
 - **Deployment Guides**: 10 files
 - **Feature Documentation**: 13 files
 - **Development Reports**: 33 files
