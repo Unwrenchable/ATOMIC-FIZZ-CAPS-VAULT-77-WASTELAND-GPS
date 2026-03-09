@@ -1,7 +1,8 @@
-// backend/api/overseer-proxy.js — HF/OpenAI-aware Overseer AI proxy
+// backend/api/overseer-proxy.js — HF/OpenAI/xAI Grok-aware Overseer AI proxy
 const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../lib/auth');
+const grok = require('../lib/grok');
 
 // Maximum prompt length allowed. Prevents clients sending multi-megabyte
 // payloads that would be forwarded verbatim to the upstream AI provider,
@@ -42,20 +43,33 @@ router.post('/ask', authMiddleware, async (req, res) => {
     return res.status(400).json({ error: 'empty_prompt' });
   }
 
-  const apiKey = process.env.AI_API_KEY;
+  const xaiKey  = process.env.XAI_API_KEY || '';
+  const aiKey   = process.env.AI_API_KEY  || '';
   const proxyUrl = process.env.AI_PROXY_URL || '';
-  const model = process.env.AI_MODEL || '';
+  const model    = process.env.AI_MODEL || '';
 
-  if (!apiKey) return res.status(400).json({ error: 'missing_api_key' });
+  // Priority: xAI Grok → HF → OpenAI-compatible
+  const useGrok = xaiKey.length > 0;
+  const useHF   = !useGrok && (aiKey.startsWith('hf_') || proxyUrl.includes('huggingface.co'));
+
+  if (!useGrok && !aiKey) {
+    return res.status(400).json({ error: 'missing_api_key' });
+  }
 
   try {
-    const useHF = apiKey.startsWith('hf_') || proxyUrl.includes('huggingface.co');
-
-    if (useHF) {
+    if (useGrok) {
+      // xAI Grok path — OpenAI-compatible, uses lib/grok.js for consistency
+      const text = await grok.generateWithGrok(prompt, {
+        model      : model || grok.DEFAULT_TEXT_MODEL,
+        jsonMode   : false,
+        temperature: 0.85,
+      });
+      return res.json({ ok: true, text });
+    } else if (useHF) {
       const hfUrl = proxyUrl || `https://api-inference.huggingface.co/models/${model || 'gpt2'}`;
       const r = await fetch(hfUrl, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        headers: { Authorization: `Bearer ${aiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ inputs: prompt })
       });
       const json = await r.json();
@@ -66,7 +80,7 @@ router.post('/ask', authMiddleware, async (req, res) => {
       const body = { model: model || 'gpt-4o-mini', messages: [{ role: 'user', content: prompt }], max_tokens: 800 };
       const r = await fetch(openaiUrl, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        headers: { Authorization: `Bearer ${aiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
       const json = await r.json();
