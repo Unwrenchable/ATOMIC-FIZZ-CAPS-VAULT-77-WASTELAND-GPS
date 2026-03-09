@@ -14,7 +14,7 @@ const XAI_VIDEO_URL = `${XAI_BASE_URL}/videos/generations`;
 
 const DEFAULT_TEXT_MODEL = 'grok-3';
 const DEFAULT_IMAGE_MODEL = 'grok-2-image';
-const DEFAULT_VIDEO_MODEL = 'grok-2-image'; // video model alias
+const DEFAULT_VIDEO_MODEL = 'aurora'; // xAI video generation model
 
 const OVERSEER_SYSTEM_PROMPT =
   'You are the Vault 77 Overseer AI: sarcastic, witty, dry humor mixed with Vault-Tec corporate cheer. ' +
