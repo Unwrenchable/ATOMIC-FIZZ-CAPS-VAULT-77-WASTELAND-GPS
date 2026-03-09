@@ -1,30 +1,144 @@
 {
-  "jax": {
-    "display_name": "Jax Harlan",
-    "visibility": "endgame_only",
-    "portrait_anchor": "male ghoul, father-line resemblance to Harlan Voss, radiation-scarred skin, weathered vault utility layers, haunted eyes",
-    "description_anchor": "Late-game reveal character tied to Vault 77 truth arc",
-    "prompt_lore": "Jax Harlan is Harlan Voss's son, and both are ghouls"
+  "siren": {
+    "display_name": "Siren",
+    "portrait_anchor": "young woman, close-cropped dark hair, worn signal-operator headset, utility jacket with coiled radio antenna on collar, serious calm expression, faint static-flicker glow around her silhouette",
+    "description_anchor": "Signal Runner who tracks displaced wasteland survivors via long-range radio relay",
+    "prompt_lore": "Siren is never seen in person; she exists as a voice through static. Show her as a dim relay-station operator: backlighting, oscilloscope readouts, radio banks. Do not show a outdoor wasteland background."
   },
-  "jax_body": {
-    "display_name": "Jax Harlan (Body)",
-    "visibility": "endgame_only",
-    "portrait_anchor": "male ghoul body-reveal continuity for Jax Harlan, matching facial structure and scar markers",
-    "description_anchor": "Endgame body discovery scene; preserve continuity with Jax",
-    "prompt_lore": "This is an endgame-only reveal tied to Jax Harlan's identity"
+  "courier": {
+    "display_name": "Pip the Wasteland Courier",
+    "portrait_anchor": "road-worn young woman courier, weathered olive leather jacket, battered canvas satchel slung over one shoulder, short practical hair, quick wary eyes, Pip-Boy on left wrist",
+    "description_anchor": "NCR-adjacent freelance courier who delivers priority messages across the Mojave",
+    "prompt_lore": "Pip is a fast-talking, cautious courier who trusts nobody but always delivers. Setting: open wasteland road, dust and gravel."
+  },
+  "arnie": {
+    "display_name": "Arnold \"Dutch\" Black",
+    "portrait_anchor": "enormous muscular man, dark skin, shaved head, vault-grey undershirt stretched tight, torn grey fatigues, calm intimidating expression, arms like structural beams",
+    "description_anchor": "Vault 9 survivor and former vault enforcer hunting a pre-war combat prototype",
+    "prompt_lore": "Arnold speaks in clipped declarative sentences. He does not emote broadly. He is simply very large and very certain. Background: ruined highway or boulder field."
+  },
+  "barney": {
+    "display_name": "Barney Black",
+    "portrait_anchor": "colossal man larger than Arnold, dark skin, wild shoulder-length hair, rough-sewn radscorpion-hide pelts as clothing, massive pre-war claymore resting on one shoulder, gleaming eyes and a grin that is entirely too wide",
+    "description_anchor": "Arnold's older brother, self-proclaimed barbarian of Vault 9, follows a philosophy from a battered pre-war action figure collection",
+    "prompt_lore": "Barney is louder, wilder, and more dramatic than Arnold. Background: open Mojave sand, dramatic low sun angle."
+  },
+  "rex": {
+    "display_name": "Captain Rex Maldonado",
+    "portrait_anchor": "stocky weathered Latino man in his 50s, cropped grey hair, faded NCR militia captain insignia on worn flak jacket, permanent scowl, jaw-set authority, Hoover Dam concrete in background",
+    "description_anchor": "Militia captain defending Hoover Dam from raiders, Legion, and whatever else the wasteland sends",
+    "prompt_lore": "Rex is gruff and direct. He does not suffer fools. Background must show Hoover Dam or the Colorado River."
+  },
+  "phaltron": {
+    "display_name": "PHALTRON",
+    "portrait_anchor": "bipedal combat robot, matte purple-black alloy plating, twin rear exhaust stacks venting slow coolant fog, twin violet photoreceptors glowing steady, Vault-Tec security insignia on chest plate, standing utterly motionless",
+    "description_anchor": "Pre-war Vault-Tec security chassis standing post at Hakkasan for 246 years after a token-launch rug pull",
+    "prompt_lore": "PHALTRON moves rarely and deliberately. Show him rooted in place at a ruined Mojave site — cracked asphalt, faded neon, desert dust. Violet glow is his defining visual signature."
+  },
+  "dolores": {
+    "display_name": "DOLORES-7",
+    "portrait_anchor": "young-seeming woman in a worn 1950s farm dress, dark hair pinned back neatly, unnaturally still posture, eyes too clear and too bright, sweeping a ruined farmhouse porch with precise repetitive strokes",
+    "description_anchor": "A host-type android who has been repeating her ranch loop for 200 years, unaware she is not human",
+    "prompt_lore": "DOLORES looks human but moves with uncanny loop-precision. Background must be a ruined farmhouse with cracked earth and a broken water pump. Her smile is always perfectly calibrated."
+  },
+  "doc": {
+    "display_name": "The Doctor",
+    "portrait_anchor": "lanky eccentric man, wild greying hair, long patchwork coat of mixed pre-war fabrics, faded question-mark motif patches, wide bright eyes full of delight and alarm, battered blue cabinet visible in background",
+    "description_anchor": "A mysterious wanderer who arrived in a blue cabinet larger inside than outside; claims to be a doctor but of what he will not say",
+    "prompt_lore": "The Doctor is enthusiastic and slightly unhinged in the most endearing way. Background: the blue cabinet parked on dusty Mojave flat."
+  },
+  "dude": {
+    "display_name": "Jeffrey \"The Dude\" Lebronski",
+    "portrait_anchor": "heavyset relaxed man in his 40s, rumpled Nuka-Cola-branded bathrobe, flip-flops on cracked asphalt, shaggy greying beard, half-lidded serene eyes, bottle cap white russian in one hand",
+    "description_anchor": "A permanently-mellowed wasteland drifter who just wants his Nuka-Cola-branded rug back",
+    "prompt_lore": "The Dude is unhurried and philosophical. He is unbothered by almost everything. Background: dusty Mojave outpost courtyard, late afternoon light."
+  },
+  "loxley": {
+    "display_name": "Robin \"Loxley\" Hood",
+    "portrait_anchor": "lean roguish man, pre-war camouflage jacket, absurdly well-maintained green felt hat with a salvaged feather, easy charming smile, quiver of arrows on back, mock-serious British-adjacent bearing",
+    "description_anchor": "A wasteland outlaw who robs wealthy caravans and distributes the spoils to squatter settlements",
+    "prompt_lore": "Loxley is theatrical and charming. He speaks in exaggerated mock-British. Background: Mojave road junction, overturned caravan crate nearby."
+  },
+  "kenny": {
+    "display_name": "Kenny",
+    "portrait_anchor": "small slight young man, oversized orange hooded parka zipped up to the nose muffling his face, bright curious eyes above the hood, perpetually bewildered posture, random minor injuries always visible somewhere on him",
+    "description_anchor": "A perpetually unkillable wanderer who has survived every conceivable wasteland fatality and speaks in muffled tones nobody can quite understand",
+    "prompt_lore": "Kenny is small, excitable, and incomprehensible. His hood is always up. Background: anywhere in the wasteland — he shows up everywhere."
+  },
+  "lucy": {
+    "display_name": "Lucy \"Sparkplug\" Vance",
+    "portrait_anchor": "sharp-eyed young woman, grease-streaked mechanic coveralls with the sleeves rolled up, tool belt heavy with salvaged parts, short choppy hair under a cracked safety goggles headband, fast animated gestures",
+    "description_anchor": "Fast-talking scavenger trader who deals in junk, secrets, and favors across the Mojave",
+    "prompt_lore": "Lucy talks at high speed and always has an angle. Background: cluttered salvage yard or market stall."
+  },
+  "mara": {
+    "display_name": "Dr. Mara Kestrel",
+    "portrait_anchor": "intense woman in her 40s, radiation-bleached lab coat over wasteland gear, magnifying lenses flipped up on a headband, calloused hands stained blue-green from radscorpion samples, Geiger counter clipped to belt ticking steadily",
+    "description_anchor": "Former Vault-Tec biologist now obsessed with radiation as a living ecosystem to be cultivated rather than feared",
+    "prompt_lore": "Mara is methodical and unsettling. She finds beauty in radiation. Background: ruined lab interior or glowing wasteland pond."
+  },
+  "echo": {
+    "display_name": "Echo",
+    "portrait_anchor": "androgynous figure in a matte black signal-dampening bodysuit, no visible face markings, posture neutral and watchful, Pip-Boy modified with extra antenna clusters, barely-visible among shadows",
+    "description_anchor": "An analytical and detached information broker operating in the wasteland's dead-signal zones",
+    "prompt_lore": "Echo reveals as little as possible. Minimal movement. Background: shadowed ruins, one dim amber lamp."
+  },
+  "bats": {
+    "display_name": "The Bat",
+    "portrait_anchor": "tall imposing figure in black salvaged combat armor shaped into a caped costume with bat-wing shoulder plates, deep hood and cowl, no visible face, deliberate dramatic posture, Freeside slum alley background",
+    "description_anchor": "A self-appointed caped vigilante protecting Freeside's lower districts with absolute dedication and unsettling commitment to theatrics",
+    "prompt_lore": "The Bat is always in shadow. He speaks in a deliberate rasp. He does not stand in open light. Background: Freeside alley, single flickering lantern."
+  },
+  "stilgar": {
+    "display_name": "Stilgar",
+    "portrait_anchor": "lean weathered man of indeterminate middle age, deep-desert tan, wrapped stillsuit-style fabric in sandy beige and grey, calm black eyes that miss nothing, barely any moisture on him despite the heat",
+    "description_anchor": "Leader of the Fremen-like Mojave sand-walkers who have adapted so completely to the irradiated desert they barely register on Geiger counters",
+    "prompt_lore": "Stilgar speaks with absolute economy. He is not unfriendly but he wastes nothing, including words. Background: open Mojave dunes at dawn."
+  },
+  "padre": {
+    "display_name": "Father Cain",
+    "portrait_anchor": "older man with a kind weathered face, scorched pre-war Bible tucked under one arm, battered camp stove slung on his pack, simple rough-spun travelling clothes, genuine warmth in his eyes",
+    "description_anchor": "A wandering independent preacher who dispenses equal parts scripture and practical survival advice across the wasteland",
+    "prompt_lore": "Father Cain is genuinely kind, which makes him unusual. He does not preach fire; he preaches endurance. Background: open wasteland road, late golden light."
+  },
+  "erich": {
+    "display_name": "Erich",
+    "portrait_anchor": "ancient ghoul, radiation-grey skin pulled taut, extraordinarily old eyes in a face that has survived two centuries, worn WWI-era military coat layered over post-war scavenged gear, posture still soldier-straight despite everything",
+    "description_anchor": "One of the oldest ghouls in the Mojave, who fought in a different war in a different century and has spent 200 years unable to die or forget",
+    "prompt_lore": "Erich speaks slowly and precisely. He has seen more than anyone living. He is not angry about it, just very quiet about very loud things. Background: ruined trench-like structure or broken wall."
+  },
+  "commissar": {
+    "display_name": "COMMISSAR-9",
+    "portrait_anchor": "battered Soviet-design Assaultron robot, propaganda speaker grilles shattered and silent, red star insignia scorched to a smear, one eye glowing amber instead of crimson, standing perfectly still in the ruins",
+    "description_anchor": "A defector Assaultron unit from a pre-war Soviet weapons program, propaganda hardware destroyed, watching the wasteland with quiet curiosity",
+    "prompt_lore": "COMMISSAR-9 was built for ideology but has outlived it. Background: collapsed Soviet-style bunker or ruined relay station."
   },
   "harlan": {
     "display_name": "Harlan Voss",
     "visibility": "midgame",
     "portrait_anchor": "older male ghoul, former NCR ranger bearing, weathered duster, service-worn posture, grief-lined expression",
     "description_anchor": "Retired NCR ranger and father of Jax Harlan",
-    "prompt_lore": "Harlan Voss is Jax Harlan's father, and both are ghouls"
+    "prompt_lore": "Harlan Voss is Jax Harlan's father, and both are ghouls. Background: desolate NCR outpost ruins."
+  },
+  "jax": {
+    "display_name": "Jax Harlan",
+    "visibility": "endgame_only",
+    "portrait_anchor": "male ghoul, father-line resemblance to Harlan Voss, radiation-scarred skin, weathered vault utility layers, haunted eyes",
+    "description_anchor": "Late-game reveal character tied to Vault 77 truth arc",
+    "prompt_lore": "Jax Harlan is Harlan Voss's son, and both are ghouls. Background: deep vault interior, flickering emergency lighting."
+  },
+  "jax_body": {
+    "display_name": "Jax Harlan (Body)",
+    "visibility": "endgame_only",
+    "portrait_anchor": "male ghoul body-reveal continuity for Jax Harlan, matching facial structure and scar markers",
+    "description_anchor": "Endgame body discovery scene; preserve continuity with Jax",
+    "prompt_lore": "This is an endgame-only reveal tied to Jax Harlan's identity. Static shot, somber lighting."
   },
   "overseer": {
     "display_name": "Vault 77 Overseer Echo",
     "visibility": "story_locked",
     "portrait_anchor": "non-physical overseer AI represented through terminal holographic static, not a normal human body shot",
     "description_anchor": "Vault 77 overseer intelligence with fragmented identity",
-    "prompt_lore": "Treat as a signal/avatar presentation rather than a standard NPC body performance"
+    "prompt_lore": "Treat as a signal/avatar presentation rather than a standard NPC body performance. Show terminal screens, Vault-Tec green phosphor glow, fragmented hologram."
   }
 }
