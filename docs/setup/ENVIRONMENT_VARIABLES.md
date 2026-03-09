@@ -139,6 +139,15 @@ This document provides a comprehensive alphabetical reference of all environment
 - **Description**: Hugging Face model identifier for Overseer AI responses
 - **Example**: `mistralai/Mixtral-8x7B-Instruct-v0.1`
 
+### XAI_API_KEY
+- **Type**: String
+- **Required**: No (optional — enables Grok AI as the primary Overseer provider)
+- **Description**: xAI API key for Grok text generation, image generation, and NPC video clips via the Grok Imagine API. When set, the Overseer proxy uses Grok instead of Hugging Face. Get your key at https://console.x.ai/
+- **Example**: `xai-xxxxxxxxxxxxxxxxxxxx`
+- **Priority**: When present, takes priority over `HF_API_KEY` and `AI_API_KEY`
+- **Setup guide**: [docs/setup/GROK_SETUP.md](GROK_SETUP.md)
+- **Security**: Never commit to version control. Store in Render / Vercel environment variables.
+
 ### KMS_SIGNING_ALGORITHM
 - **Type**: String
 - **Required**: No (only if using AWS KMS)
@@ -312,6 +321,8 @@ Per Vault-Tec Protocol 77-S (Security):
 
 For the good of the Vault, ensure you have configured:
 
+> **Legend**: `[x]` = required for basic deployment · `[ ]` = optional enhancement
+
 - [x] **REDIS_URL** - Required for player state
 - [x] **SERVER_SECRET_KEY** - 64-byte Base58 secret
 - [x] **SOLANA_RPC** - Your Solana network endpoint
@@ -322,7 +333,8 @@ For the good of the Vault, ensure you have configured:
 - [x] **VOUCHER_SECRET** - Voucher signing secret
 - [x] **XP_SECRET** - XP signing secret
 - [x] **GAME_VAULT_SECRET** - Game vault secret
-- [x] **HF_API_KEY** - Hugging Face API key (for AI)
+- [x] **HF_API_KEY** - Hugging Face API key (AI fallback; used if XAI_API_KEY not set)
+- [ ] **XAI_API_KEY** - xAI Grok API key (optional — upgrades Overseer to Grok AI; see [GROK_SETUP.md](GROK_SETUP.md))
 - [x] **ADMIN_USERNAME** - Admin username
 - [x] **ADMIN_PASSWORD_HASH** - Hashed admin password
 - [x] **ADMIN_WALLETS** - Admin wallet addresses
@@ -333,6 +345,7 @@ For the good of the Vault, ensure you have configured:
 
 - [Deployment Guide](DEPLOYMENT.md)
 - [Render & Vercel Step-by-Step Setup](docs/RENDER_VERCEL_DEPLOYMENT_GUIDE.md)
+- [Grok (xAI) Setup Guide](GROK_SETUP.md)
 - [Backend .env.example](backend/.env.example)
 - [Root .env.example](.env.example)
 - [Testing Guide](TESTING_GUIDE.md)

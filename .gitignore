@@ -104,3 +104,6 @@ data-archive/
 *legacy*
 *archive*
 *experimental*
+
+# --- Grok-generated output files (do not commit) ---
+generated_npcs_grok.json
