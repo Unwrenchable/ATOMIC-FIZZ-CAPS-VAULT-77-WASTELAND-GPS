@@ -12,7 +12,7 @@
     "dev": "nodemon backend/server.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "echo \"No tests yet\" && exit 0",
+    "test": "node tests/grok.test.js && node tests/cors_config.test.js",
     "mcp:install": "cd mcp && npm install",
     "mcp:start": "node mcp/vault77-server.js"
   },
