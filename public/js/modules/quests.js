@@ -52,8 +52,8 @@
       id: "wake_up",
       name: "Wake Up",
       type: "objectives",
-      triggerType: "npc",           // Delivered by NPC courier
-      triggerNpc: "courier_pip",    // The courier NPC who delivers this quest
+      triggerType: "npc",           // Delivered by Siren (Signal Runner)
+      triggerNpc: "siren",          // Siren delivers this quest during first contact
       description: "You awaken in the wasteland wearing your jumpsuit. A courier has arrived with an urgent message.",
       npcMessage: "Hey, you! You're finally awake. Got a message for you from Operations. Says you need to get your bearings. Check your gear, tune your radio, and figure out where you are. The wasteland ain't friendly to the unprepared.",
       objectives: {
@@ -366,8 +366,8 @@
       // Give starter gear on first init (checks localStorage internally)
       this.giveStarterGear();
       
-      // NOTE: The wake_up quest is triggered naturally by the Courier dialogue in boot.js.
-      // narrative.js closeDialog() calls startQuest("wake_up") when dialog_courier closes.
+      // NOTE: The wake_up quest is triggered by Siren's dialogue (dialog_siren.json, node_what_to_do).
+      // Siren offers it via offers_quest during her orientation briefing.
       // We do NOT pre-trigger it here to avoid duplicate toasts and premature display
       // (before the boot screen clears and the map initialises).
       
