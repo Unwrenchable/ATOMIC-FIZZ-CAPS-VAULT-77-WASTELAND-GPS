@@ -1,0 +1,94 @@
+{
+  "_readme": "Pre-baked NPC video manifest. Run `node scripts/prebake_npc_videos.js` to populate. Maps npcId → { nodeId: CDN path }. Videos auto-play per dialog node — no xAI calls at runtime.",
+  "_version": 2,
+  "_generated": "2026-03-09T14:41:15.024Z",
+  "npcs": {
+    "arnie": {
+      "arnie_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/arnie_arnie_intro.mp4",
+      "arnie_fallback": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/arnie_arnie_fallback.mp4",
+      "arnie_knows_rex": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/arnie_arnie_knows_rex.mp4",
+      "arnie_knows_lucy": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/arnie_arnie_knows_lucy.mp4"
+    },
+    "barney": {
+      "barney_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/barney_barney_intro.mp4"
+    },
+    "bats": {
+      "bats_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/bats_bats_intro.mp4"
+    },
+    "commissar": {
+      "commissar_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/commissar_commissar_intro.mp4"
+    },
+    "courier": {
+      "courier_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/courier_courier_intro.mp4"
+    },
+    "doc": {
+      "doc_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/doc_doc_intro.mp4"
+    },
+    "dolores": {
+      "dolores_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/dolores_dolores_intro.mp4"
+    },
+    "dude": {
+      "dude_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/dude_dude_intro.mp4"
+    },
+    "echo": {
+      "echo_auto_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/echo_echo_auto_intro.mp4"
+    },
+    "eli": {
+      "eli_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/eli_eli_intro.mp4"
+    },
+    "erich": {
+      "erich_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/erich_erich_intro.mp4"
+    },
+    "harlan": {
+      "harlan_auto_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/harlan_harlan_auto_intro.mp4"
+    },
+    "jax": {
+      "jax_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/jax_jax_intro.mp4"
+    },
+    "jax_body": {
+      "jax_body_auto_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/jax_body_jax_body_auto_intro.mp4"
+    },
+    "kenny": {
+      "kenny_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/kenny_kenny_intro.mp4"
+    },
+    "lena": {
+      "lena_auto_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/lena_lena_auto_intro.mp4"
+    },
+    "loxley": {
+      "loxley_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/loxley_loxley_intro.mp4"
+    },
+    "lucy": {
+      "lucy_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/lucy_lucy_intro.mp4"
+    },
+    "mara": {
+      "mara_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/mara_mara_intro.mp4"
+    },
+    "mother": {
+      "mother_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/mother_mother_intro.mp4"
+    },
+    "overseer": {
+      "overseer_auto_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/overseer_overseer_auto_intro.mp4"
+    },
+    "padre": {
+      "padre_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/padre_padre_intro.mp4"
+    },
+    "phaltron": {
+      "phaltron_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/phaltron_phaltron_intro.mp4"
+    },
+    "rex": {
+      "rex_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/rex_rex_intro.mp4"
+    },
+    "rhea": {
+      "rhea_auto_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/rhea_rhea_auto_intro.mp4"
+    },
+    "roy8": {
+      "roy8_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/roy8_roy8_intro.mp4"
+    },
+    "siren": {
+      "siren_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/siren_siren_intro.mp4"
+    },
+    "stilgar": {
+      "stilgar_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/stilgar_stilgar_intro.mp4"
+    }
+  }
+}

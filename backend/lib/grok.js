@@ -13,8 +13,8 @@ const XAI_IMAGE_URL = `${XAI_BASE_URL}/images/generations`;
 const XAI_VIDEO_URL = `${XAI_BASE_URL}/videos/generations`;
 
 const DEFAULT_TEXT_MODEL = 'grok-3';
-const DEFAULT_IMAGE_MODEL = 'grok-2-image';
-const DEFAULT_VIDEO_MODEL = 'aurora'; // xAI video generation model
+const DEFAULT_IMAGE_MODEL = process.env.GROK_IMAGE_MODEL || 'grok-imagine-image';
+const DEFAULT_VIDEO_MODEL = process.env.GROK_VIDEO_MODEL || 'grok-imagine-video';
 
 const OVERSEER_SYSTEM_PROMPT =
   'You are the Vault 77 Overseer AI: sarcastic, witty, dry humor mixed with Vault-Tec corporate cheer. ' +
@@ -193,7 +193,7 @@ async function generateImage(prompt, opts = {}) {
   const {
     model = DEFAULT_IMAGE_MODEL,
     n     = 1,
-    size  = '1024x1024',
+    size,
   } = opts;
 
   const apiKey    = getApiKey();
@@ -205,7 +205,12 @@ async function generateImage(prompt, opts = {}) {
       Authorization : `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ model, prompt: safePrompt, n, size }),
+    body: JSON.stringify({
+      model,
+      prompt: safePrompt,
+      n,
+      ...(size ? { size } : {}),
+    }),
   });
 
   if (!res.ok) {
@@ -231,7 +236,7 @@ async function generateImage(prompt, opts = {}) {
  * @returns {Promise<string>} Video URL.
  */
 async function _pollVideoJob(jobId, apiKey) {
-  const pollUrl = `${XAI_VIDEO_URL}/${encodeURIComponent(jobId)}`;
+  const pollUrl = `${XAI_BASE_URL}/videos/${encodeURIComponent(jobId)}`;
 
   for (let attempt = 0; attempt < POLL_MAX_ATTEMPTS; attempt++) {
     // Add a small jitter to avoid thundering herd in batch scripts
@@ -253,7 +258,10 @@ async function _pollVideoJob(jobId, apiKey) {
 
     const pollJson = await pollRes.json();
 
-    // Direct URL — done
+    // Current xAI shape
+    if (pollJson.video && typeof pollJson.video.url === 'string') return pollJson.video.url;
+
+    // Backward-compatible shapes
     if (pollJson.url && typeof pollJson.url === 'string') return pollJson.url;
     if (Array.isArray(pollJson.data) && pollJson.data[0]?.url) return pollJson.data[0].url;
 
@@ -321,6 +329,12 @@ async function generateVideo(prompt, opts = {}) {
   if (json.job_id && typeof json.job_id === 'string') {
     console.log(`[grok] async video job ${json.job_id} started — polling…`);
     return _pollVideoJob(json.job_id, apiKey);
+  }
+
+  // Current xAI async shape
+  if (json.request_id && typeof json.request_id === 'string') {
+    console.log(`[grok] async video request ${json.request_id} started — polling…`);
+    return _pollVideoJob(json.request_id, apiKey);
   }
 
   throw new Error('[grok] video generation returned no URL or job_id');

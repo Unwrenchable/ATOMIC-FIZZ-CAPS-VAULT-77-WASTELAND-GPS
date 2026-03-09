@@ -108,3 +108,10 @@ data-archive/
 # --- Grok-generated output files (do not commit) ---
 generated_npcs_grok.json
 test_videos_output.json
+
+# --- Pre-baked NPC videos ---
+# Small sets (e.g. one NPC ~50MB): commit MP4s and Vercel CDN serves them automatically.
+# Large sets (all NPCs ~1GB+): host on Cloudflare R2/S3 and update paths in npc-videos.json.
+# Uncomment the lines below to exclude MP4s from git if using external hosting:
+# public/videos/npc/*.mp4
+# public/videos/npc/*.webm

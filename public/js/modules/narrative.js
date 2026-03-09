@@ -159,7 +159,11 @@
         "commissar9":        "dialog_commissar",
         "commissar-9":       "dialog_commissar",
         "commissar":         "dialog_commissar",
-        "red_commissar":     "dialog_commissar"
+        "red_commissar":     "dialog_commissar",
+        "phaltron":          "dialog_phaltron",
+        "phal":              "dialog_phaltron",
+        "hakkasan_guardian": "dialog_phaltron",
+        "hakkasan_bot":      "dialog_phaltron"
       };
       const mapped = NPC_DIALOG_MAP[npcId.toLowerCase()];
       if (mapped) return mapped;
@@ -696,6 +700,11 @@
       }, 22);
 
       console.log("[narrative] Rendered node:", node.id, "for NPC:", npcName);
+
+      // Hook: play per-node video if NpcVideo module is loaded
+      if (typeof Game !== 'undefined' && Game.modules && Game.modules.NpcVideo) {
+        Game.modules.NpcVideo.playForNode(node, dialog);
+      }
     },
 
     // ============================================================
@@ -798,6 +807,11 @@
       if (!panel) { this.closeDialog(); return; }
 
       if (this._typewriterTick) { clearInterval(this._typewriterTick); this._typewriterTick = null; }
+
+      // Hook: play a video for inline replies using a synthetic node
+      if (typeof Game !== 'undefined' && Game.modules && Game.modules.NpcVideo) {
+        Game.modules.NpcVideo.playForNode({ id: 'inline_reply', text: text || '' }, dialog);
+      }
 
       const npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
       const rawText = (text || "").replace(/<br\s*\/?>/gi, "\n");
