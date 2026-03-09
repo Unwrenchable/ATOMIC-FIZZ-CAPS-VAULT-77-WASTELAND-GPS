@@ -845,10 +845,12 @@
         this.lastPanelId = activePanel ? activePanel.id : "panel-map";
       }
 
-      // Hide all panels
+      // Hide all panels — use class-based hiding to preserve pipboy.js tab-switch state
       document.querySelectorAll(".pipboy-panel").forEach((el) => {
         el.classList.remove("active");
-        el.style.display = "none";
+        if (el.id !== "panel-dialog") {
+          el.classList.add("hidden");
+        }
       });
 
       // Deactivate all tabs
@@ -856,8 +858,10 @@
         btn.classList.remove("active");
       });
 
-      // Show dialog panel
-      dialogPanel.style.display = "block";
+      // Show dialog panel — clear any inline display so CSS flex layout applies
+      // (avoids layout bugs from display:block overriding .pipboy-panel { display:flex })
+      dialogPanel.style.display = "";
+      dialogPanel.classList.remove("hidden");
       dialogPanel.classList.add("active");
 
       // Load animated NPC portrait for this dialog
@@ -1112,7 +1116,8 @@
 
       if (dialogPanel) {
         dialogPanel.classList.remove("active");
-        dialogPanel.style.display = "none";
+        dialogPanel.classList.add("hidden");
+        dialogPanel.style.display = "";
       }
 
       // If closing the Siren dialogue, chain to Courier dialogue for first-time players
@@ -1124,30 +1129,16 @@
         }
       }
 
-      // If closing the courier dialogue, start the wake_up quest
-      if (closingDialogId === "dialog_courier") {
-        if (Game.modules?.quests) {
-          try {
-            const qm = Game.modules.quests;
-            // If wake_up is in availableQuests, go through acceptQuest (cleans up the offer entry).
-            // Otherwise call startQuest directly (first-time player path from Courier dialog).
-            if (qm.availableQuests?.wake_up) {
-              qm.acceptQuest("wake_up");
-            } else {
-              qm.startQuest("wake_up");
-            }
-            console.log("[narrative] Wake up quest started after courier dialogue");
-          } catch (err) {
-            console.warn("[narrative] Failed to start wake_up quest:", err);
-          }
-        }
-      }
-
       // Restore previous panel/tab
       const restoreId = this.lastPanelId || "panel-map";
       const restorePanel = document.getElementById(restoreId);
       if (restorePanel) {
-        restorePanel.style.display = "block";
+        // Remove hidden class that showDialogPanel() added to all panels,
+        // so pipboy.js tab-switch system can properly control visibility again
+        document.querySelectorAll(".pipboy-panel").forEach(el => {
+          if (el.id !== "panel-dialog") el.classList.remove("hidden");
+        });
+
         restorePanel.classList.add("active");
 
         // Activate matching tab (if any)

@@ -87,8 +87,7 @@
         {
           "text": "[Accept] Yeah. I'm in. What do I need to know?",
           "tone": "kind",
-          "next": "node_accept_tips",
-          "offers_quest": "wake_up"
+          "next": "node_accept_tips"
         },
         {
           "text": "[Question] What's Atomic Fizz? What's the radio for?",
@@ -103,8 +102,7 @@
         {
           "text": "[Direct] I'm already moving. Thanks for the delivery.",
           "tone": "direct",
-          "next": "node_accept_direct",
-          "offers_quest": "wake_up"
+          "next": "node_accept_direct"
         }
       ],
       "grant_items": [
@@ -146,8 +144,7 @@
         {
           "text": "Understood. I'll tune in.",
           "tone": "neutral",
-          "next": "node_accept_tips",
-          "offers_quest": "wake_up"
+          "next": "node_accept_tips"
         }
       ]
     },
@@ -158,8 +155,7 @@
         {
           "text": "Fair enough. I'll take it.",
           "tone": "kind",
-          "next": "node_accept_tips",
-          "offers_quest": "wake_up"
+          "next": "node_accept_tips"
         }
       ]
     },
