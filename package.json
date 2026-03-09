@@ -12,7 +12,9 @@
     "dev": "nodemon backend/server.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "echo \"No tests yet\" && exit 0"
+    "test": "echo \"No tests yet\" && exit 0",
+    "mcp:install": "cd mcp && npm install",
+    "mcp:start": "node mcp/vault77-server.js"
   },
   "keywords": [
     "solana",
