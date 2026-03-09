@@ -175,9 +175,9 @@ router.post('/generate', authMiddleware, async (req, res) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'grok-2-image',
+        model: 'aurora',
         prompt,
-        duration: 8,
+        duration_seconds: 8,
         aspect_ratio: '3:4',
         resolution: '720p',
       }),

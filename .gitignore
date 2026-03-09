@@ -107,3 +107,4 @@ data-archive/
 
 # --- Grok-generated output files (do not commit) ---
 generated_npcs_grok.json
+test_videos_output.json
