@@ -15,7 +15,13 @@
 
 'use strict';
 
-require('dotenv').config();
+try {
+  require('dotenv').config();
+} catch (_) {
+  // dotenv not installed — run `npm install` in the project root.
+  // Environment variables may already be set via the shell; continue.
+  console.warn('[generate_with_grok] dotenv not found — run `npm install` to load .env files automatically.');
+}
 
 const fs   = require('fs');
 const path = require('path');
