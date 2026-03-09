@@ -1,0 +1,30 @@
+{
+  "jax": {
+    "display_name": "Jax Harlan",
+    "visibility": "endgame_only",
+    "portrait_anchor": "male ghoul, father-line resemblance to Harlan Voss, radiation-scarred skin, weathered vault utility layers, haunted eyes",
+    "description_anchor": "Late-game reveal character tied to Vault 77 truth arc",
+    "prompt_lore": "Jax Harlan is Harlan Voss's son, and both are ghouls"
+  },
+  "jax_body": {
+    "display_name": "Jax Harlan (Body)",
+    "visibility": "endgame_only",
+    "portrait_anchor": "male ghoul body-reveal continuity for Jax Harlan, matching facial structure and scar markers",
+    "description_anchor": "Endgame body discovery scene; preserve continuity with Jax",
+    "prompt_lore": "This is an endgame-only reveal tied to Jax Harlan's identity"
+  },
+  "harlan": {
+    "display_name": "Harlan Voss",
+    "visibility": "midgame",
+    "portrait_anchor": "older male ghoul, former NCR ranger bearing, weathered duster, service-worn posture, grief-lined expression",
+    "description_anchor": "Retired NCR ranger and father of Jax Harlan",
+    "prompt_lore": "Harlan Voss is Jax Harlan's father, and both are ghouls"
+  },
+  "overseer": {
+    "display_name": "Vault 77 Overseer Echo",
+    "visibility": "story_locked",
+    "portrait_anchor": "non-physical overseer AI represented through terminal holographic static, not a normal human body shot",
+    "description_anchor": "Vault 77 overseer intelligence with fragmented identity",
+    "prompt_lore": "Treat as a signal/avatar presentation rather than a standard NPC body performance"
+  }
+}

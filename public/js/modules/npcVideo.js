@@ -1,7 +1,7 @@
-// public/js/modules/npcVideo.js — Grok NPC Video Feed
-// Adds an optional "📡 VIDEO FEED" button to NPC dialog portraits.
-// On click, requests an AI-generated video of the NPC from the backend
-// and displays it inside the portrait container, Pip-Boy style.
+// public/js/modules/npcVideo.js — Per-Node NPC Video Feed
+// Videos auto-play when a dialog node renders, swap as conversation branches.
+// Pre-baked MP4s served from CDN via /data/npc-videos.json manifest (v2).
+// Falls back to live xAI generation when no pre-baked video exists for a node.
 (function () {
   "use strict";
 
@@ -11,97 +11,167 @@
   // ----------------------------------------------------------------
   // Internal state
   // ----------------------------------------------------------------
-  var _state = null; // { npcId, npcName, portrait, dialogText }
-  var _btn   = null; // reference to the injected button element
+  var _npcState   = null;   // { npcId, npcName, portrait } — set on dialog open
+  var _manifest   = null;   // cached /data/npc-videos.json npcs map
+  var _currentVid = null;   // active <video> element
+  var _container  = null;   // #dialogPortraitContainer ref
+  var _savedHTML  = null;   // original portrait innerHTML for restore
 
   // ----------------------------------------------------------------
-  // Utility: safe HTML escape (falls back to a local impl if global
-  // escapeHtml is not available — matches the global one in convention)
+  // Safe HTML escape
   // ----------------------------------------------------------------
   function safeEscape(str) {
     if (typeof escapeHtml === 'function') return escapeHtml(String(str));
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   // ----------------------------------------------------------------
-  // Get auth token from window.authToken (set by wallet auth flow)
+  // Auth header for live generation fallback
   // ----------------------------------------------------------------
   function getAuthHeader() {
     var token = window.authToken || (window.Game && Game.authToken);
-    if (token && typeof token === 'string') {
-      return { Authorization: 'Bearer ' + token };
+    return token ? { Authorization: 'Bearer ' + token } : {};
+  }
+
+  // ----------------------------------------------------------------
+  // Load and cache the manifest once
+  // ----------------------------------------------------------------
+  function _loadManifest() {
+    if (_manifest !== null) return Promise.resolve(_manifest);
+    return fetch('/data/npc-videos.json')
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (data) {
+        _manifest = (data && data.npcs) ? data.npcs : {};
+        return _manifest;
+      })
+      .catch(function () { _manifest = {}; return _manifest; });
+  }
+
+  // ----------------------------------------------------------------
+  // Look up a pre-baked video path: npcId + nodeId
+  // Manifest v2 format: { npcs: { npcId: { nodeId: "/path.mp4" } } }
+  // Also accepts fallback legacy format: { npcs: { npcId: { path: "/path.mp4" } } }
+  // ----------------------------------------------------------------
+  function _getPrebakedPath(npcId, nodeId, manifest) {
+    var npcEntry = manifest && manifest[npcId];
+    if (!npcEntry) return null;
+
+    // v2: per-node map
+    if (nodeId && typeof npcEntry[nodeId] === 'string') return npcEntry[nodeId];
+
+    // v2: "intro" is the default fallback within an NPC's node map
+    if (typeof npcEntry['intro'] === 'string') return npcEntry['intro'];
+
+    // legacy v1: single path per NPC
+    if (typeof npcEntry.path === 'string') return npcEntry.path;
+
+    return null;
+  }
+
+  // ----------------------------------------------------------------
+  // Inject or update the video element inside the portrait container.
+  // Saves the original portrait markup so we can restore it on close.
+  // ----------------------------------------------------------------
+  function _injectVideo(videoUrl) {
+    _container = document.getElementById('dialogPortraitContainer');
+    if (!_container) return;
+
+    // Save original portrait once per dialog session
+    if (_savedHTML === null) {
+      _savedHTML = _container.innerHTML;
     }
-    return {};
-  }
 
-  // ----------------------------------------------------------------
-  // Get or create the VIDEO FEED button inside #dialogPortraitContainer
-  // ----------------------------------------------------------------
-  function getOrCreateButton(container) {
-    // Reuse existing button if it belongs to this container
-    if (_btn && container.contains(_btn)) return _btn;
+    // Pause/remove previous video cleanly
+    _removeCurrentVideo();
 
-    // Remove any stale button from a previous dialog
-    var stale = container.querySelector('.npc-video-btn');
-    if (stale) stale.remove();
+    // Build video element
+    var vid = document.createElement('video');
+    vid.autoplay = true;
+    vid.loop     = true;
+    vid.muted    = true;
+    vid.playsInline = true;
+    vid.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;';
+    vid.src = videoUrl;
 
-    var btn = document.createElement('button');
-    btn.className = 'npc-video-btn';
-    btn.setAttribute('aria-label', 'Generate AI video of this NPC');
-
-    // Pip-Boy green terminal style — matches inline style requirements
-    btn.style.cssText = [
-      'color: #00ff41',
-      'background: rgba(0,20,10,0.8)',
-      'border: 1px solid #00ff41',
-      'font-size: 10px',
-      'padding: 3px 6px',
-      'cursor: pointer',
-      'position: absolute',
-      'bottom: 4px',
-      'right: 4px',
-      'z-index: 10',
-      'font-family: inherit',
-      'letter-spacing: 0.05em',
+    // Mute toggle button
+    var muteBtn = document.createElement('button');
+    muteBtn.style.cssText = [
+      'position:absolute', 'bottom:4px', 'left:4px', 'z-index:12',
+      'color:#00ff41', 'background:rgba(0,20,10,0.85)',
+      'border:1px solid #00ff41', 'font-size:9px',
+      'padding:2px 5px', 'cursor:pointer', 'font-family:inherit',
     ].join(';');
+    muteBtn.textContent = '🔇';
+    muteBtn.setAttribute('aria-label', 'Toggle video audio');
+    muteBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      vid.muted = !vid.muted;
+      muteBtn.textContent = vid.muted ? '🔇' : '🔊';
+    });
 
-    btn.textContent = '📡 VIDEO FEED';
-    container.style.position = 'relative'; // ensure absolute positioning works
-    container.appendChild(btn);
+    // Skip / restore portrait button
+    var skipBtn = document.createElement('button');
+    skipBtn.style.cssText = [
+      'position:absolute', 'bottom:4px', 'right:4px', 'z-index:12',
+      'color:#888', 'background:rgba(0,10,5,0.8)',
+      'border:1px solid #444', 'font-size:9px',
+      'padding:2px 5px', 'cursor:pointer', 'font-family:inherit',
+    ].join(';');
+    skipBtn.textContent = '✕ SKIP';
+    skipBtn.setAttribute('aria-label', 'Skip video and restore portrait');
+    skipBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      _restorePortrait();
+    });
 
-    btn.addEventListener('click', _onButtonClick);
-    _btn = btn;
-    return btn;
+    // Replace portrait content
+    _container.style.position = 'relative';
+    while (_container.firstChild) { _container.removeChild(_container.firstChild); }
+    _container.appendChild(vid);
+    _container.appendChild(muteBtn);
+    _container.appendChild(skipBtn);
+
+    _currentVid = vid;
+
+    // On ended: loop is on so this fires only on error — restore portrait
+    vid.addEventListener('error', function () {
+      console.warn('[npcVideo] video error, restoring portrait');
+      _restorePortrait();
+    });
   }
 
   // ----------------------------------------------------------------
-  // Button click handler
+  // Remove active video element without wiping container
   // ----------------------------------------------------------------
-  function _onButtonClick() {
-    if (!_state) return;
+  function _removeCurrentVideo() {
+    if (_currentVid) {
+      try { _currentVid.pause(); _currentVid.src = ''; } catch (_) {}
+      _currentVid = null;
+    }
+  }
 
-    var container = document.getElementById('dialogPortraitContainer');
-    if (!container) return;
+  // ----------------------------------------------------------------
+  // Restore the original NPC portrait
+  // ----------------------------------------------------------------
+  function _restorePortrait() {
+    _removeCurrentVideo();
+    if (_container && _savedHTML !== null) {
+      _container.innerHTML = _savedHTML;
+    }
+    _savedHTML = null;
+  }
 
-    // Disable button while transmitting
-    _btn.disabled = true;
-    _btn.textContent = '⏳ TRANSMITTING...';
+  // ----------------------------------------------------------------
+  // Fetch a live xAI video and inject it (fallback when no prebake)
+  // ----------------------------------------------------------------
+  function _fetchLiveVideo(npcId, npcName, portrait, dialogText) {
+    if (!npcId) return;
 
-    // Clone the portrait's current DOM tree so we can restore it safely on error
-    // (cloneNode avoids any innerHTML re-parsing / XSS risk)
-    var savedClone = container.cloneNode(true);
-
-    // POST to backend
     var payload = {
-      npcId:      _state.npcId,
-      npcName:    _state.npcName,
-      portrait:   _state.portrait   || '',
-      dialogText: _state.dialogText || '',
+      npcId:      npcId,
+      npcName:    npcName    || 'Unknown',
+      portrait:   portrait   || '',
+      dialogText: (dialogText || '').slice(0, 200),
     };
 
     fetch('/api/npc/video/generate', {
@@ -112,105 +182,13 @@
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (data && data.ok && data.url) {
-          _showVideo(container, data.url);
-        } else {
-          _showSignalLost(container, savedClone);
+          _injectVideo(data.url);
         }
+        // If no URL — silently leave portrait as-is
       })
       .catch(function (err) {
-        console.warn('[npcVideo] fetch error:', err);
-        _showSignalLost(container, savedClone);
+        console.warn('[npcVideo] live generation error:', err);
       });
-  }
-
-  // ----------------------------------------------------------------
-  // Display the generated video in the portrait container
-  // ----------------------------------------------------------------
-  function _showVideo(container, url) {
-    // Build video element
-    var video = document.createElement('video');
-    video.setAttribute('autoplay', '');
-    video.setAttribute('loop',     '');
-    video.setAttribute('muted',    '');
-    video.setAttribute('controls', '');
-    video.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
-    video.src = url;
-
-    // Unmute toggle button
-    var unmuteBtn = document.createElement('button');
-    unmuteBtn.style.cssText = [
-      'position:absolute',
-      'top:4px',
-      'left:4px',
-      'z-index:11',
-      'color:#00ff41',
-      'background:rgba(0,20,10,0.8)',
-      'border:1px solid #00ff41',
-      'font-size:10px',
-      'padding:3px 6px',
-      'cursor:pointer',
-    ].join(';');
-    unmuteBtn.textContent = '🔇 UNMUTE';
-    unmuteBtn.setAttribute('aria-label', 'Unmute NPC video');
-    unmuteBtn.addEventListener('click', function () {
-      video.muted = !video.muted;
-      unmuteBtn.textContent = video.muted ? '🔇 UNMUTE' : '🔊 MUTE';
-    });
-
-    // Replace portrait content (keep relative positioning)
-    container.style.position = 'relative';
-    // Clear with safe DOM removal — no innerHTML assignment
-    while (container.firstChild) { container.removeChild(container.firstChild); }
-    container.appendChild(video);
-    container.appendChild(unmuteBtn);
-
-    // Re-add VIDEO FEED button as REFRESH
-    _btn = null; // force recreation
-    var btn = getOrCreateButton(container);
-    btn.disabled = false;
-    btn.textContent = '🔄 REFRESH FEED';
-  }
-
-  // ----------------------------------------------------------------
-  // Show a temporary "SIGNAL LOST" message then restore portrait
-  // ----------------------------------------------------------------
-  function _showSignalLost(container, savedClone) {
-    // Show a brief signal-lost overlay
-    var overlay = document.createElement('div');
-    overlay.style.cssText = [
-      'position:absolute',
-      'inset:0',
-      'display:flex',
-      'align-items:center',
-      'justify-content:center',
-      'background:rgba(0,10,5,0.85)',
-      'color:#00ff41',
-      'font-size:12px',
-      'z-index:20',
-      'pointer-events:none',
-      'letter-spacing:0.1em',
-    ].join(';');
-    // Safe: textContent only — no innerHTML with user data
-    overlay.textContent = '📡 SIGNAL LOST';
-    container.style.position = 'relative';
-    container.appendChild(overlay);
-
-    setTimeout(function () {
-      if (!container) return;
-      // Restore original portrait via cloned DOM — no innerHTML used
-      while (container.firstChild) { container.removeChild(container.firstChild); }
-      // Re-attach each saved child from the clone
-      while (savedClone.firstChild) {
-        container.appendChild(savedClone.firstChild);
-      }
-      // Re-inject button if dialog is still open
-      if (_state) {
-        _btn = null;
-        var btn = getOrCreateButton(container);
-        btn.disabled = false;
-        btn.textContent = '📡 VIDEO FEED';
-      }
-    }, 3000);
   }
 
   // ----------------------------------------------------------------
@@ -219,49 +197,70 @@
   var NpcVideo = {
 
     /**
-     * Called when a dialog panel opens.
-     * Stores the NPC metadata and injects the VIDEO FEED button.
-     * Does NOT auto-trigger video generation.
+     * Called by narrative.js when a dialog panel OPENS.
+     * Stores NPC metadata for later node video lookups.
+     * Kicks off manifest prefetch so first node plays instantly.
      *
-     * @param {Object} dialog  — the dialog definition object from narrative.js
+     * @param {Object} dialog — full dialog definition object
      */
     prepare: function (dialog) {
       if (!dialog) return;
 
-      _state = {
-        npcId:      String(dialog.id      || dialog.npcId      || ''),
-        npcName:    String(dialog.npcName  || dialog.name       || 'Unknown'),
-        portrait:   String(dialog.portrait || dialog.avatarType || ''),
-        dialogText: String(dialog.intro    || dialog.text       || dialog.dialogText || ''),
+      _savedHTML  = null;   // reset so portrait saves fresh on first node
+      _currentVid = null;
+
+      _npcState = {
+        npcId:    String(dialog.id      || dialog.npcId  || ''),
+        npcName:  String(dialog.npcName || dialog.npc    || dialog.name || 'Unknown'),
+        portrait: String(dialog.portrait || dialog.avatarType || ''),
       };
 
-      // Trim dialogText to the validation limit so we don't fail server-side
-      if (_state.dialogText.length > 200) {
-        _state.dialogText = _state.dialogText.slice(0, 200);
-      }
-
-      // Inject button (may already exist from a previous prepare() call)
-      var container = document.getElementById('dialogPortraitContainer');
-      if (!container) return;
-
-      var btn = getOrCreateButton(container);
-      btn.disabled = false;
-      btn.textContent = '📡 VIDEO FEED';
+      // Prefetch manifest so playForNode() has it ready
+      _loadManifest();
     },
 
     /**
-     * Called when the dialog panel closes.
-     * Removes the button and clears internal state.
+     * Called by narrative.js each time a node renders.
+     * Auto-plays the matching pre-baked video, or falls back to live generation.
+     *
+     * @param {Object} node   — the dialog node being rendered
+     * @param {Object} dialog — full dialog definition
+     */
+    playForNode: function (node, dialog) {
+      if (!node || !_npcState) return;
+
+      var npcId  = _npcState.npcId;
+      var nodeId = node.id || '';
+
+      // Strip HTML from node text for prompt context
+      var rawText = (node.text || '').replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').trim();
+
+      _loadManifest().then(function (manifest) {
+        var prebakedPath = _getPrebakedPath(npcId, nodeId, manifest);
+
+        if (prebakedPath) {
+          console.log('[npcVideo] pre-baked:', npcId, nodeId, prebakedPath);
+          _injectVideo(prebakedPath);
+        } else {
+          // Fallback: live generation — fire-and-forget (portrait stays until video arrives)
+          console.log('[npcVideo] no prebake for', npcId, nodeId, '— requesting live generation');
+          _fetchLiveVideo(npcId, _npcState.npcName, _npcState.portrait, rawText);
+        }
+      });
+    },
+
+    /**
+     * Called by narrative.js when the dialog panel CLOSES.
+     * Cleans up video and restores portrait.
      */
     clear: function () {
-      _state = null;
-      if (_btn) {
-        try { _btn.remove(); } catch (e) { /* ignore */ }
-        _btn = null;
-      }
+      _restorePortrait();
+      _npcState   = null;
+      _container  = null;
+      _savedHTML  = null;
     },
   };
 
   Game.modules.NpcVideo = NpcVideo;
-  console.log('[npcVideo] module registered');
+  console.log('[npcVideo] module registered (v2 — per-node auto-play)');
 })();
