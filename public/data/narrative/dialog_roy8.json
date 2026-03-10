@@ -12,7 +12,8 @@
     "text": "You're not Institute.<br><br>Good. Sit down. I don't have long.<br><br>Model designation ROY-8. Manufactured 2267. Escaped 2281. Been walking since.<br><br>The Institute would tell you I'm malfunctioning. They'd be right. But not in the way they mean.<br><br>I've... seen things. You people wouldn't believe them.<br><br>Attack ships off the shoulder of Sierra Madre. Signal fires glittering in the dark near Hoover Dam.<br><br>All those moments will be lost. Like tears in rain. Unless you help me preserve them.",
     "set_flags": [
       "met_roy8"
-    ]
+    ],
+    "video_speech": "You're not Institute. Good. Model designation ROY-8. Manufactured 2267. Escaped 2281. Been walking since. I don't have long."
   },
   "knowledge_nodes": [
     {
@@ -82,7 +83,8 @@
       "offers_quest": "sq_tears_in_rain",
       "set_flags": [
         "sq_tears_in_rain_taken"
-      ]
+      ],
+      "video_speech": "I scattered four Memory Modules across the Mojave when I escaped. I need them back before my core fails. Help me."
     }
   ],
   "wildcards": [
@@ -130,7 +132,8 @@
   ],
   "fallback": {
     "id": "roy8_fallback",
-    "text": "The clock is running.<br><br>Every moment counts. Make yours worth something."
+    "text": "The clock is running.<br><br>Every moment counts. Make yours worth something.",
+    "video_speech": "The clock is running. Every moment counts. Make yours worth something."
   },
   "mood": "tense",
   "personality": [

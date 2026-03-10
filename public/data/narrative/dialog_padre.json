@@ -12,7 +12,8 @@
     "text": "Peace be with you, traveller.<br><br>I know. You're surprised. Most people out here don't lead with that.<br><br>My name is Father Cain — yes, like the biblical one. My mother had a sense of humour and a lot of faith that it would work out. Mostly it has.<br><br>I walk the Mojave. All of it, as far as I can manage. I offer what I can — medicine, food, a listening ear — and I ask nothing in return except that people extend the same courtesy to the next person they meet who needs it.<br><br>The world ended. The obligation to one another did not.",
     "set_flags": [
       "met_padre"
-    ]
+    ],
+    "video_speech": "Peace be with you, traveller. My name is Father Cain. I know — like the biblical one. My mother had a sense of humour."
   },
   "knowledge_nodes": [
     {
@@ -121,7 +122,8 @@
       "offers_quest": "sq_padre_good_word",
       "set_flags": [
         "sq_padre_good_word_taken"
-      ]
+      ],
+      "video_speech": "A settlement south of Boulder City — thirty people — went quiet six months ago. I need someone to find out why. I can't go alone."
     }
   ],
   "wildcards": [
@@ -184,7 +186,8 @@
   ],
   "fallback": {
     "id": "padre_fallback",
-    "text": "Safe travels, stranger. And if they're not safe — well.<br><br>That's what the stimpaks are for."
+    "text": "Safe travels, stranger. And if they're not safe — well.<br><br>That's what the stimpaks are for.",
+    "video_speech": "Safe travels, stranger. And if they're not safe — well. That's what the stimpaks are for."
   },
   "mood": "friendly",
   "personality": [

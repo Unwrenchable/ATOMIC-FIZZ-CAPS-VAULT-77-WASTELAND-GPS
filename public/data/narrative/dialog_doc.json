@@ -9,6 +9,7 @@
     "conditions": [
       "!flag:met_doc"
     ],
+    "video_speech": "Oh! Hello! I'm The Doctor. Your Pip-Boy is picking up a signal that should not exist. Shall we find out together?",
     "text": "Oh! Hello!<br><br>Don't mind the cabinet. It's mine. I know how it looks. It looks like a pre-war police callbox. That's because... well, it's complicated. Technically it's several things at once. We call that a 'stable temporal anomaly' where I'm from.<br><br>Where am I from? Gallifrey. It's very far away. In every direction simultaneously.<br><br>The point is — I'm here now, you're here now, and your Pip-Boy is picking up a signal that should not exist. I've been tracking it for what feels like eleven centuries. Might actually be twelve.<br><br>Shall we find out together?",
     "set_flags": [
       "met_doc"
@@ -117,6 +118,7 @@
       "conditions": [
         "!flag:sq_doc_signal_taken"
       ],
+      "video_speech": "Your Pip-Boy has been recording a pre-war signal it shouldn't have. I've been tracking it for centuries. I need someone who knows the landscape. Allons-y.",
       "text": "Your Pip-Boy has been recording a signal for the past forty-three minutes. You may not have noticed. It's in a frequency range just below what the standard Pip-Boy software monitors — pre-war encryption, layered, clever.<br><br>I've been tracking that signal for a very long time. It doesn't belong to this decade. Possibly not to this century.<br><br>I need someone who knows the physical landscape — the ruins, the roads, the people. I know the signal. Between us, we can triangulate the source.<br><br>There is something on the other end of that signal that has been waiting a very long time to be found.<br><br>What do you say? Allons-y.",
       "offers_quest": "sq_doc_signal",
       "set_flags": [
@@ -184,6 +186,7 @@
   ],
   "fallback": {
     "id": "doc_fallback",
+    "video_speech": "The universe is very large and very strange and you are doing remarkably well in it. Come back when you're ready.",
     "text": "The universe is very large and very strange and you are doing remarkably well in it.<br><br>Come back when you're ready. I'll be here. Or I'll have been here. Temporal grammar is appalling."
   },
   "mood": "excited",

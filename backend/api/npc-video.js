@@ -17,7 +17,7 @@ const CACHE_TTL_SECONDS = 86400; // 24 hours
 const MAX_NPC_NAME_LENGTH = 60;
 const MAX_DIALOG_TEXT_LENGTH = 800;
 const PROMPT_DIALOG_TRUNCATE = 150;
-const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '20', 10);
+const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '22', 10);
 const POLL_INTERVAL_MS = 5000;
 const POLL_MAX_ATTEMPTS = 6; // 6 × 5 s = 30 s max
 
@@ -152,11 +152,14 @@ function isValidNpcId(id) {
 // ----------------------------------------------------------------
 // Build the Fallout-themed prompt
 // ----------------------------------------------------------------
-function buildPrompt(npcId, npcName, portrait, dialogText) {
+function buildPrompt(npcId, npcName, portrait, dialogText, videoSpeech) {
   const safeNpcId   = sanitiseForPrompt(npcId, 80).toLowerCase();
   const safeName    = sanitiseForPrompt(npcName,   MAX_NPC_NAME_LENGTH);
   const safePortrait = portrait ? sanitiseForPrompt(String(portrait), 100) : 'rugged wasteland survivor';
-  const safeDialog  = extractVideoSpeech(dialogText, MAX_SPEECH_WORDS);
+  // Use pre-written video_speech if provided; otherwise extract from dialog text
+  const safeDialog  = videoSpeech
+    ? truncateAtSentence(sanitiseForPrompt(String(videoSpeech), 300), MAX_SPEECH_WORDS)
+    : extractVideoSpeech(dialogText, MAX_SPEECH_WORDS);
   const voiceProfile = pickVoiceProfile(safeNpcId);
 
   return (
@@ -165,8 +168,9 @@ function buildPrompt(npcId, npcName, portrait, dialogText) {
     `(same face structure, hair/facial hair, age, skin tone, body type, signature outfit and accessories), ` +
     `never redesign or swap actor identity, ` +
     `${voiceProfile}; keep this exact voice profile for character_id=${safeNpcId} in every scene, ` +
-    `speaking in post-apocalyptic Fallout style with exactly one concise line under ${MAX_SPEECH_WORDS} words: "${safeDialog}", ` +
-    `fit full delivery naturally in 8 seconds and avoid trailing unfinished sentence, ` +
+    `speaking in post-apocalyptic Fallout style, delivering this complete line: "${safeDialog}", ` +
+    `must complete the full sentence before the clip ends — no trailing words cut off — ` +
+    `fit delivery naturally within 8 seconds at a measured wasteland pace, ` +
     `8 seconds, retro Pip-Boy green tint, moody lighting`
   ).slice(0, 2000); // hard cap for upstream safety
 }
@@ -221,7 +225,7 @@ async function pollForVideoUrl(jobId, apiKey) {
 // POST /generate
 // ----------------------------------------------------------------
 router.post('/generate', authMiddleware, async (req, res) => {
-  const { npcId, npcName, portrait, dialogText } = req.body || {};
+  const { npcId, npcName, portrait, dialogText, videoSpeech } = req.body || {};
 
   // --- Input validation ---
   if (!isValidNpcId(npcId)) {
@@ -278,7 +282,7 @@ router.post('/generate', authMiddleware, async (req, res) => {
   }
 
   // --- Build prompt ---
-  const prompt = buildPrompt(npcId, npcName, portrait, dialogText);
+  const prompt = buildPrompt(npcId, npcName, portrait, dialogText, videoSpeech);
 
   // --- Call xAI video generation API ---
   let videoUrl;

@@ -11,7 +11,8 @@
     "text": "Well, look at you — fresh out of a Vault or just bad at not dying?<br><br>Name’s Lucy. Most folks call me Sparkplug. The smart ones call me when something breaks.",
     "set_flags": [
       "met_lucy"
-    ]
+    ],
+    "video_speech": "Name's Lucy — Sparkplug to the smart ones. Fresh out of a Vault or just bad at not dying?"
   },
   "knowledge_nodes": [
     {
@@ -126,7 +127,8 @@
       "offers_quest": "sq_lucy_queen_of_junk",
       "set_flags": [
         "sq_lucy_queen_of_junk_taken"
-      ]
+      ],
+      "video_speech": "Someone lifted a crate of my best pre-war parts. Parts that still hum. I need a runner who can track them down without getting shot."
     }
   ],
   "wildcards": [
@@ -180,7 +182,8 @@
   ],
   "fallback": {
     "id": "lucy_fallback",
-    "text": "Come back when you’ve got more stories or more junk. Preferably both."
+    "text": "Come back when you’ve got more stories or more junk. Preferably both.",
+    "video_speech": "Come back when you've got more stories or more junk. Preferably both."
   },
   "mood": "excited",
   "personality": [

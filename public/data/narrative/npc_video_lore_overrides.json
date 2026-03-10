@@ -81,7 +81,8 @@
     "display_name": "Echo",
     "portrait_anchor": "androgynous figure in a matte black signal-dampening bodysuit, no visible face markings, posture neutral and watchful, Pip-Boy modified with extra antenna clusters, barely-visible among shadows",
     "description_anchor": "An analytical and detached information broker operating in the wasteland's dead-signal zones",
-    "prompt_lore": "Echo reveals as little as possible. Minimal movement. Background: shadowed ruins, one dim amber lamp."
+    "prompt_lore": "Echo reveals as little as possible. Minimal movement. Background: shadowed ruins, one dim amber lamp.",
+    "default_video_speech": "You brought something interesting. Biological signatures like this don't just happen. I'm listening."
   },
   "bats": {
     "display_name": "The Bat",
@@ -118,7 +119,8 @@
     "visibility": "midgame",
     "portrait_anchor": "older male ghoul, former NCR ranger bearing, weathered duster, service-worn posture, grief-lined expression",
     "description_anchor": "Retired NCR ranger and father of Jax Harlan",
-    "prompt_lore": "Harlan Voss is Jax Harlan's father, and both are ghouls. Background: desolate NCR outpost ruins."
+    "prompt_lore": "Harlan Voss is Jax Harlan's father, and both are ghouls. Background: desolate NCR outpost ruins.",
+    "default_video_speech": "This is NCR Ranger Harlan Voss. If you're hearing this, I'm still looking for my boy. Jax, if you're out there — I won't stop."
   },
   "jax": {
     "display_name": "Jax Harlan",

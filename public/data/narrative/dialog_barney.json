@@ -9,6 +9,7 @@
     "conditions": [
       "!flag:met_barney"
     ],
+    "video_speech": "I am Barney Black. I left the Vault through its walls — not the door, the walls. What is best in life? To crush your enemies.",
     "text": "Halt, stranger.<br><br>I am Barney Black. I came from the Vault. I broke its walls when I left — not the door, the *walls*.<br><br>My brother went north chasing a machine. I go where battle calls. The wasteland calls constantly.<br><br>What is best in life? To crush your enemies. To see them flee before you. To hear the lamentations of their pack brahmin.<br><br>That is what is best. I have confirmed this through extensive fieldwork.",
     "set_flags": [
       "met_barney"
@@ -109,6 +110,7 @@
       "conditions": [
         "!flag:sq_barney_what_is_best_taken"
       ],
+      "video_speech": "There is a warlord who controls the eastern trade road through fear and firepower. I intend to break his operation. Come.",
       "text": "There is a warlord. Calls himself 'The Thulsa.' Controls the eastern trade road with a cult of followers who believe he has mystical power.<br><br>He does not have mystical power. He has a very large gun and bad people with loyalty bought by fear.<br><br>I intend to break his operation. Drive his followers into the wasteland. Hear their lamentations.<br><br>Then I will liberate the caravan merchants he has been taxing at sword's width.<br><br>You look capable. Come. We will settle this the old way.",
       "offers_quest": "sq_barney_what_is_best",
       "set_flags": [
@@ -174,6 +176,7 @@
   ],
   "fallback": {
     "id": "barney_fallback",
+    "video_speech": "The wasteland tests you every day. Come back when you have something worth discussing.",
     "text": "The wasteland tests you every day.<br><br>Good. If the wasteland is testing you, it means you are still alive to be tested.<br><br>Come back when you have something worth discussing."
   },
   "mood": "hostile",
