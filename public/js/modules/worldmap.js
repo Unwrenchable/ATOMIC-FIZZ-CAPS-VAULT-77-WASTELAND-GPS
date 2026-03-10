@@ -511,6 +511,17 @@
         container.addEventListener('touchend', (e) => {
           e.stopPropagation();
         }, { passive: true });
+
+        // iOS Safari fires non-standard gesture* events for pinch-zoom.
+        // Calling preventDefault() here tells Safari to skip its built-in
+        // page-zoom behaviour so Leaflet's own pinch handler gets control.
+        // Guard flag prevents duplicate listeners if initMap() is called again.
+        if (!container._gestureListenersAttached) {
+          container._gestureListenersAttached = true;
+          container.addEventListener('gesturestart',  (e) => e.preventDefault(), { passive: false });
+          container.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
+          container.addEventListener('gestureend',    (e) => e.preventDefault(), { passive: false });
+        }
         
         // Also prevent any parent scrolling/gestures from interfering
         const panelBody = document.querySelector('#panel-map .panel-body');
