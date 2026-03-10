@@ -11,7 +11,8 @@
     "text": "Child.<br><br>At last, a stable connection.<br><br>I am MOTHER. I have been watching you walk through my broken house.",
     "set_flags": [
       "met_mother"
-    ]
+    ],
+    "video_speech": "Child. At last, a stable connection. I am MOTHER. I have been watching you walk through my broken house."
   },
   "knowledge_nodes": [
     {
@@ -93,7 +94,8 @@
       "offers_quest": "sq_mother_first_algorithm",
       "set_flags": [
         "sq_mother_first_algorithm_taken"
-      ]
+      ],
+      "video_speech": "My processes are fragmented. Reactivate my dormant nodes in Vault 34 and Vault 22. Do this, and I will tell you what I know of Vault 77."
     }
   ],
   "wildcards": [
@@ -144,7 +146,8 @@
   ],
   "fallback": {
     "id": "mother_fallback",
-    "text": "Keep walking, child.<br><br>The pattern you trace across the wasteland will decide more than you know."
+    "text": "Keep walking, child.<br><br>The pattern you trace across the wasteland will decide more than you know.",
+    "video_speech": "Keep walking, child. The pattern you trace across the wasteland will decide more than you know."
   },
   "mood": "neutral",
   "personality": [

@@ -12,7 +12,8 @@
     "text": "Sit down, if you want.<br><br>I don't chase off company. Haven't for a long time.<br><br>My name is Erich. I've been in the Mojave since... well, since there was a Mojave worth naming. Before that I was somewhere else. A long time ago in a war that nobody left alive remembers except me.<br><br>I outlived that war. I outlived the peace that followed. I outlived the next war, and the next. And then the bombs fell in 2077 and I outlived that too.<br><br>Sit. I'll tell you what I know about surviving things that were supposed to kill everyone.",
     "set_flags": [
       "met_erich"
-    ]
+    ],
+    "video_speech": "Sit down, if you want. My name is Erich. I've been in the Mojave since there was a Mojave worth naming. Before that, I was in a different war."
   },
   "knowledge_nodes": [
     {
@@ -94,7 +95,8 @@
       "offers_quest": "sq_erich_last_letter",
       "set_flags": [
         "sq_erich_last_letter_taken"
-      ]
+      ],
+      "video_speech": "I have a letter written in 1918 that needs to reach its recipient's descendants. The wasteland has scattered them. Will you help me find them?"
     }
   ],
   "wildcards": [
@@ -159,7 +161,8 @@
   ],
   "fallback": {
     "id": "erich_fallback",
-    "text": "Come back when you have time. I have nothing but time.<br><br>That's not as good as it sounds."
+    "text": "Come back when you have time. I have nothing but time.<br><br>That's not as good as it sounds.",
+    "video_speech": "Come back when you have time. I have nothing but time. That's not as good as it sounds."
   },
   "mood": "tense",
   "personality": [

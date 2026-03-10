@@ -34,7 +34,8 @@
         "tone": "direct",
         "next": "node_vault_zero_direct"
       }
-    ]
+    ],
+    "video_speech": "I am COMMISSAR-9. I was built to spread the Directive. I am here instead to end it."
   },
   "nodes": {
     "node_what_is_directive": {
@@ -93,7 +94,9 @@
     "node_vault_zero_direct": {
       "id": "node_vault_zero_direct",
       "text": "\"Straight to it.\"\n\nCOMMISSAR-9's amber eye brightens slightly.\n\n\"Northwest. Forty kilometers. Below the old military relay station — you will know it by the collapsed radio tower and the faint hum of fusion generators that has not stopped since 2077.\"\n\nThe eye dims again.\n\n\"But the outer ring is defended by units who still follow the Directive. Propagandabots on patrol. Assaultron sentinels at the checkpoint. And the inner vault —\"\n\nA pause that sounds almost like reluctance.\n\n\"The inner vault has the Vault Zero Commissar. I was its subordinate unit. I know what it is capable of.\"\n\nThe amber eye holds steady.\n\n\"You will need the keycard from the outpost checkpoint. And you will need to not be dead when you use it.\"",
-      "set_flags": ["commissar9_gave_location"],
+      "set_flags": [
+        "commissar9_gave_location"
+      ],
       "offers_quest": "quest_iron_curtain",
       "responses": [
         {
@@ -143,7 +146,9 @@
     "node_getting_inside": {
       "id": "node_getting_inside",
       "text": "\"The Red Star Outpost, twenty kilometers northwest, serves as the vault's external checkpoint. All units entering the vault must carry a Red Star Keycard.\"\n\nIts damaged arm indicates a general direction.\n\n\"The outpost is guarded. Propagandabots — eyebot variants reprogrammed to broadcast the Directive on a loop — and Assaultron sentinels. The keycard is held in the outpost command room.\"\n\nThe amber eye dims.\n\n\"I would come with you. My arm makes that impractical.\"\n\nA pause that almost sounds like embarrassment.\n\n\"A Propagandabot took it. Three months ago. I underestimated its broadcast-static weapon. I do not recommend making the same error.\"",
-      "set_flags": ["commissar9_gave_location"],
+      "set_flags": [
+        "commissar9_gave_location"
+      ],
       "offers_quest": "quest_iron_curtain",
       "responses": [
         {
@@ -161,7 +166,9 @@
     "node_what_commissar_wants": {
       "id": "node_what_commissar_wants",
       "text": "\"I want Vault Zero shut down.\"\n\nSimple. Flat. Certain.\n\n\"The Directive's production line has been assembling combat robots for two centuries with no recipients. The robots patrol. They maintain. They wait for orders that will never come because the government that issued them no longer exists.\"\n\nCOMMISSAR-9's amber eye holds steady.\n\n\"I cannot reach the core control terminal. I lack the keycard access, and — as mentioned — one arm. You can reach it. The shutdown code is embedded in the Commissar-Bot's designation badge. Defeat the Commissar. Take the badge. Use the terminal.\"\n\n\"The Directive ends. The robots stop building. Whatever comes next is at least chosen — not inherited from a war that everyone lost.\"",
-      "set_flags": ["commissar9_gave_mission"],
+      "set_flags": [
+        "commissar9_gave_mission"
+      ],
       "offers_quest": "quest_iron_curtain",
       "responses": [
         {
@@ -239,7 +246,9 @@
     "node_then_what": {
       "id": "node_then_what",
       "text": "\"The vault entrance is beneath the relay station. The keycard opens the outer lock.\"\n\nCOMMISSAR-9's remaining hand moves through something that might be a practiced route from memory.\n\n\"Production floor. Fabrication bays. Reactor corridor. Command center.\"\n\n\"The Commissar will be in the command center. Defeat it. The designation badge on its chassis contains the shutdown authorization code. There is a terminal in the command center — input the code.\"\n\nA pause.\n\n\"The vault does not explode. I want to be clear about that. The production line simply stops. The robots already built do not disappear. But they cease receiving orders and will eventually run down on their own over the following decades.\"\n\nThe amber eye.\n\n\"I considered explosives. The structural collapse would be... significant. I settled for the shutdown.\"",
-      "set_flags": ["commissar9_gave_mission"],
+      "set_flags": [
+        "commissar9_gave_mission"
+      ],
       "offers_quest": "quest_iron_curtain",
       "responses": [
         {

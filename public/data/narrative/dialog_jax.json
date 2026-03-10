@@ -11,7 +11,8 @@
     "text": "Static... *crackle*... you again?<br><br>No. First time for you, isn't it.<br><br>Name's Jax Harlan. Or what's left of him.<br><br>The Mojave's loud, but the quiet parts are worse.",
     "set_flags": [
       "met_jax"
-    ]
+    ],
+    "video_speech": "Name's Jax Harlan. Or what's left of him. The Mojave's loud, but the quiet parts are worse."
   },
   "knowledge_nodes": [
     {
@@ -115,7 +116,8 @@
       "offers_quest": "sq_jax_echoes_static",
       "set_flags": [
         "sq_jax_echoes_static_taken"
-      ]
+      ],
+      "video_speech": "Pieces of me are scattered in old towers across the Mojave — memories that won't stay dead. Help me bring them back."
     }
   ],
   "wildcards": [
@@ -166,7 +168,8 @@
   ],
   "fallback": {
     "id": "jax_fallback",
-    "text": "Signal's holding... barely.<br><br>You still out there?"
+    "text": "Signal's holding... barely.<br><br>You still out there?",
+    "video_speech": "Signal's holding... barely. You still out there?"
   },
   "mood": "tense",
   "personality": [

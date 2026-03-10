@@ -1,7 +1,7 @@
 {
   "_readme": "Pre-baked NPC video manifest. Run `node scripts/prebake_npc_videos.js` to populate. Maps npcId → { nodeId: CDN path }. Videos auto-play per dialog node — no xAI calls at runtime.",
   "_version": 2,
-  "_generated": "2026-03-09T14:41:15.024Z",
+  "_generated": "2026-03-10T11:27:02.290Z",
   "npcs": {
     "arnie": {
       "arnie_intro": "https://pub-e4fda8f12ddc45ce941a525ec714be92.r2.dev/npc/arnie_arnie_intro.mp4",

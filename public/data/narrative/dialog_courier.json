@@ -12,6 +12,7 @@
     "set_flags": [
       "courier_intro_seen"
     ],
+    "video_speech": "Name's Pip. Wasteland courier. I've walked four days to find you. Got a priority message from Vault-Tec.",
     "text": "Hey. You.\n\nDon't reach for anything. I'm not hostile — just careful. Name's Pip. Wasteland courier. Been walking four days to find you.\n\nGot a sealed message here from Vault-Tec Operations. They said — and I'm quoting — 'Deliver to the wanderer in the jumpsuit. Priority one.'\n\nThat's you, right? Tell me that's you.",
     "responses": [
       {
@@ -363,6 +364,7 @@
   ],
   "fallback": {
     "id": "courier_fallback",
+    "video_speech": "Stay sharp, stay moving. The wasteland catches people off guard.",
     "text": "I don't have anything new for you right now. Stay sharp, stay moving. The wasteland has a way of catching people off guard.",
     "responses": [
       {
