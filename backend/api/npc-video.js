@@ -17,6 +17,9 @@ const CACHE_TTL_SECONDS = 86400; // 24 hours
 const MAX_NPC_NAME_LENGTH = 60;
 const MAX_DIALOG_TEXT_LENGTH = 800;
 const PROMPT_DIALOG_TRUNCATE = 150;
+// MAX_SPEECH_WORDS: fallback word cap for extracted dialog text (when video_speech is absent).
+// 22 words ≈ 110 WPM (measured Fallout-style delivery) × 8 seconds, leaving room for pauses.
+// Keep hand-written video_speech under 15 words for the best single-breath delivery.
 const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '22', 10);
 const POLL_INTERVAL_MS = 5000;
 const POLL_MAX_ATTEMPTS = 6; // 6 × 5 s = 30 s max

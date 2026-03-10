@@ -33,7 +33,9 @@
 //   Add "video_speech": "exact line to speak" to any dialog node and the
 //   prebake script will use it directly instead of guessing from the node text.
 //   This is the recommended way to ensure videos sound right.
-//   Keep video_speech under 15 words for comfortable 8-second delivery.
+//   Keep video_speech under 15 words for best results — that's the sweet spot for
+//   8-second delivery. The hard extraction fallback cap is 22 words (set by
+//   NPC_VIDEO_MAX_WORDS) to allow slightly longer natural sentences when needed.
 //
 // R2 setup (one-time):
 //   1. dash.cloudflare.com → R2 → Create bucket "atomicfizz-videos"
@@ -80,6 +82,9 @@ const ONE_PER_NPC   = process.env.ONE_PER_NPC === '1';
 // KEY_NODES_ONLY: generate only intro, quest offer nodes, and fallback per NPC (default: true).
 // Set ALL_NODES=1 to generate every dialog branch node.
 const KEY_NODES_ONLY = process.env.ALL_NODES !== '1';
+// MAX_SPEECH_WORDS: fallback word cap for extracted dialog text (when video_speech is absent).
+// 22 words ≈ 110 WPM (Fallout-paced delivery) × 8 seconds, with room for pauses.
+// Hand-written video_speech values are best kept under 15 words for clean single-breath clips.
 const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '22', 10);
 const INCLUDE_ENDGAME_NPCS = process.env.INCLUDE_ENDGAME_NPCS === '1';
 
