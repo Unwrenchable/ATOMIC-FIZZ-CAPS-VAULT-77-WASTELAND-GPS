@@ -9,6 +9,7 @@
     "conditions": [
       "!flag:met_kenny"
     ],
+    "video_speech": "Mmfgh mmpph mrrph! Mffm mph-mph mrrph!",
     "text": "Mmfgh mmpph mrrph!<br><br>(He is alive. Somehow. The orange hood is singed on one side and there is a radscorpion barb still lodged in the shoulder padding. He waves at you with his good arm, grinning.)<br><br>Mffm mph-mph mrrph!<br><br>(He points at himself, then at you, then at the road ahead. The meaning is unmistakable: he wants to travel with you.)<br><br>Mrrph.",
     "set_flags": [
       "met_kenny"
@@ -90,6 +91,7 @@
       "conditions": [
         "!flag:sq_kenny_escort_taken"
       ],
+      "video_speech": "Mmpf-mmrph mph mfgh mrrph! Mmrph! Mfph?",
       "text": "Mmpf-mmrph mph mfgh mrrph!<br><br>(He unfolds a piece of paper. It's a hand-drawn map — surprisingly detailed — showing a route from here to New Vegas, via Boulder City and Novac. He points to a spot marked with a small orange hood drawing.)<br><br>Mmrph! Mph mffm mmpf mrrph!<br><br>(He mimes walking, then falling, then getting back up, then falling again. Then he points at you with a questioning look. Will you escort him?)<br><br>Mfph?",
       "offers_quest": "sq_kenny_escort",
       "set_flags": [
@@ -157,6 +159,7 @@
   ],
   "fallback": {
     "id": "kenny_fallback",
+    "video_speech": "Mfph. Mmrph.",
     "text": "Mfph.<br><br>(He gives a small wave and tugs his orange hood down.)<br><br>Mmrph."
   },
   "mood": "excited",

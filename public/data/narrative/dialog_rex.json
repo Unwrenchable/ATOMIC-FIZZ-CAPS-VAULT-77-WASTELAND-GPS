@@ -8,6 +8,7 @@
     "conditions": [
       "!flag:met_rex"
     ],
+    "video_speech": "Name's Captain Rex Maldonado. I keep Hoover Dam standing — stone and people both. Who are you?",
     "text": "Stop right there.<br><br>This line is for fighters, not tourists.<br><br>Name’s Captain Rex Maldonado. I keep Hoover Dam from falling apart — stone and people both.",
     "set_flags": [
       "met_rex"
@@ -122,6 +123,7 @@
       "conditions": [
         "!flag:sq_rex_hold_the_line_taken"
       ],
+      "video_speech": "You want to help? Good. Clear the deathclaw hotspots around the Dam, and maybe I start trusting you.",
       "text": "You want to help? Good.<br><br>We’ve got hotspots around the Dam crawling with things that shouldn’t be walking.<br><br>Dead Wind Cavern. Deathclaw Promontory.<br><br>Clear them out, and maybe I start trusting you.",
       "offers_quest": "sq_rex_hold_the_line",
       "set_flags": [
@@ -167,6 +169,7 @@
   ],
   "fallback": {
     "id": "rex_fallback",
+    "video_speech": "You still here. Then we still have work to do.",
     "text": "You still here. Then we still have work to do."
   },
   "mood": "suspicious",
