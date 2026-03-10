@@ -9,6 +9,7 @@
     "conditions": [
       "!flag:met_arnie"
     ],
+    "video_speech": "I am Arnold Black. They called me Dutch in the Vault. Come with me if you want to live.",
     "text": "You.<br><br>Stop right there.<br><br>I am Arnold Black. They called me Dutch in the Vault. I broke seven door frames on the way out. I am told this is a record.<br><br>I am looking for the machine that leveled Searchlight Station. Pre-war combat prototype. Still walking. Still shooting.<br><br>Come with me if you want to live.",
     "set_flags": [
       "met_arnie"
@@ -109,6 +110,7 @@
       "conditions": [
         "!flag:sq_arnie_ill_be_back_taken"
       ],
+      "video_speech": "I'm tracking a pre-war combat prototype — autonomous, self-repairing, still killing. I need eyes. Help me find it.",
       "text": "Vault-Tec Prototype Unit Seven. Pre-war autonomous combat chassis. Active since 2058. Self-repairing. Never confirmed destroyed.<br><br>Three weeks ago it hit Searchlight Station. Two weeks ago it appeared outside Boulder City. Last week — a water caravan on Route 93. Gone. Thirty people.<br><br>I have tracked it as far as the Black Mountain transmitter array. But it does not stay in one place.<br><br>I need eyes while I chase it down. You move quietly. I do not.<br><br>Help me find the machine. I will handle the rest.<br><br>It will not see me coming. And if it does — I will be back.",
       "offers_quest": "sq_arnie_ill_be_back",
       "set_flags": [
@@ -187,6 +189,7 @@
   ],
   "fallback": {
     "id": "arnie_fallback",
+    "video_speech": "I will be back. Do not wander far while I am gone.",
     "text": "I will be back.<br><br>Do not wander far while I am gone."
   },
   "mood": "tense",

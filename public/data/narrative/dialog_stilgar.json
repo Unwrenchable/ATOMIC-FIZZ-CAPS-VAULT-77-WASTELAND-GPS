@@ -12,7 +12,8 @@
     "text": "You are loud.<br><br>Your boots make sound on the sand at forty meters. Your Pip-Boy emits interference at sixty. We heard you coming from the ridge.<br><br>You are not from the deep desert. This is obvious and not an insult.<br><br>I am Stilgar. We are the Fremen of the Mojave. We live in the desert, not beside it. We do not fight the wasteland. We do not hide from it. We have learned to read it the way you read a map.<br><br>You have something in your pack that is reacting to the mineral deposits south of here. I would like to know what it is, and why you are carrying it.",
     "set_flags": [
       "met_stilgar"
-    ]
+    ],
+    "video_speech": "You are loud. Your boots make sound on the sand at forty meters. You are not from the deep desert. That is not an insult. Yet."
   },
   "knowledge_nodes": [
     {
@@ -102,7 +103,8 @@
       "offers_quest": "sq_stilgar_spice_run",
       "set_flags": [
         "sq_stilgar_spice_run_taken"
-      ]
+      ],
+      "video_speech": "We harvest a substance from the deep irradiated zones. Valuable. Someone is disrupting our runners. We need an outsider."
     }
   ],
   "wildcards": [
@@ -163,7 +165,8 @@
   ],
   "fallback": {
     "id": "stilgar_fallback",
-    "text": "The desert is listening.<br><br>Come back when you have something worth saying to it."
+    "text": "The desert is listening.<br><br>Come back when you have something worth saying to it.",
+    "video_speech": "The desert is listening. Come back when you have something worth saying to it."
   },
   "mood": "neutral",
   "personality": [

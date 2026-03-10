@@ -12,6 +12,7 @@
     "set_flags": [
       "siren_intro_seen"
     ],
+    "video_speech": "You're awake. Good. I'm Siren — I track displaced survivors. Let's get you moving.",
     "text": "...\n...\n\n[Your Pip-Boy crackles. The static resolves into a voice.]\n\n\"You're awake. Good. We were getting worried.\"\n\nCalm. Certain. Tinged with something that sounds like relief.\n\n\"My name is Siren. I'm a Signal Runner — I track displaced consciousnesses across the wasteland. Yours lit up like a flare in the dark the moment you opened your eyes.\"\n\n\"You're alive. You're oriented. That's step one. Now let's get you moving.\"",
     "responses": [
       {
@@ -306,6 +307,7 @@
   ],
   "fallback": {
     "id": "siren_fallback",
+    "video_speech": "Signal's clear on my end. Don't forget: inventory, sidearm, radio, map.",
     "text": "\"Signal's clear on my end. You need something, I'm listening.\"\n\nA brief crackle.\n\n\"Don't forget: inventory, sidearm, radio, map. And keep your rads down.\"",
     "responses": [
       {

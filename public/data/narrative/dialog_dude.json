@@ -9,6 +9,7 @@
     "conditions": [
       "!flag:met_dude"
     ],
+    "video_speech": "Hey, hey — whoa. Take it easy, man. Name's Lebronski. The Dude'll do. You haven't seen my rug around here, have you?",
     "text": "Hey, hey — whoa.<br><br>Take it easy, man. Take it easy.<br><br>Name's Lebronski. Jeffrey Lebronski. But The Dude'll do. Or His Dudeness, or Duder, or El Duderino, if you're not into the whole brevity thing.<br><br>You haven't seen a rug around here, have you? Tan. Pre-war. Had a Nuka-Cola bottle pattern on it. It really tied the shelter together.",
     "set_flags": [
       "met_dude"
@@ -123,6 +124,7 @@
       "conditions": [
         "!flag:sq_the_rug_abides_taken"
       ],
+      "video_speech": "Three Nihilists took my rug, man. My good rug. They're at the old bowling alley south of here. Help me get it back.",
       "text": "Look, man. I need a favor.<br><br>Three Nihilists — yeah, Nihilists, they believe in nothing — they took my rug. My *good* rug.<br><br>They're holed up in the old Bowl-O-Rama south of here. Pre-war bowling alley. Last I heard.<br><br>They don't care about the rug. That's what burns me. They just did it to prove a point about *nothingness*.<br><br>Help me get it back and... man, I don't know. I'll owe you one. The Dude always pays his debts.",
       "offers_quest": "sq_the_rug_abides",
       "set_flags": [
@@ -183,6 +185,7 @@
   ],
   "fallback": {
     "id": "dude_fallback",
+    "video_speech": "Yeah, well... The Dude abides. Take it easy, man.",
     "text": "Yeah, well... The Dude abides.<br><br>Take it easy, man."
   },
   "mood": "friendly",

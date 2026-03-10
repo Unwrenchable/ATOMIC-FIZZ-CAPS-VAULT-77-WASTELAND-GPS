@@ -11,7 +11,8 @@
     "text": "Stop. Don’t move.<br><br>I want to see how the Geiger counter reacts to you.<br><br>Hmm. Interesting baseline.<br><br>I’m Dr. Mara Kestrel. Try not to die while I’m watching.",
     "set_flags": [
       "met_mara"
-    ]
+    ],
+    "video_speech": "Stop. Don't move. I'm Dr. Mara Kestrel. I want to see how the Geiger counter reacts to you. Hmm. Interesting baseline."
   },
   "knowledge_nodes": [
     {
@@ -93,7 +94,8 @@
       "offers_quest": "sq_mara_living_glow",
       "set_flags": [
         "sq_mara_living_glow_taken"
-      ]
+      ],
+      "video_speech": "I need samples from the places where the world refuses to stay dead — glowing zones, irradiated pools. Will you collect them for me?"
     }
   ],
   "wildcards": [
@@ -136,7 +138,8 @@
   ],
   "fallback": {
     "id": "mara_fallback",
-    "text": "If you’re not here to bleed, glow, or study, then you’re wasting both our time."
+    "text": "If you’re not here to bleed, glow, or study, then you’re wasting both our time.",
+    "video_speech": "If you're not here to bleed, glow, or study, then you're wasting both our time."
   },
   "mood": "suspicious",
   "personality": [

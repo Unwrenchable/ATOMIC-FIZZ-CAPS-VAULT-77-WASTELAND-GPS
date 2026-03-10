@@ -12,7 +12,8 @@
     "text": "Don't move.<br><br>I've been watching this street for three nights. The Kings have a collection crew running protection here — not real Kings. Splinter group. They take food instead of caps.<br><br>You're not one of them. But you're carrying something and you looked over your shoulder twice in the last hundred meters. That means you know something I don't.<br><br>Talk.<br><br>I'm the Bat.",
     "set_flags": [
       "met_bats"
-    ]
+    ],
+    "video_speech": "Don't move. I've been watching this street for three nights. The Kings have a crew running protection here. Not the real Kings."
   },
   "knowledge_nodes": [
     {
@@ -102,7 +103,8 @@
       "offers_quest": "sq_bats_the_long_night",
       "set_flags": [
         "sq_bats_the_long_night_taken"
-      ]
+      ],
+      "video_speech": "There is a man named Grigg using his inheritance to run Freeside's most dangerous loan operation. I need someone who can move in daylight."
     }
   ],
   "wildcards": [
@@ -166,7 +168,8 @@
   ],
   "fallback": {
     "id": "bats_fallback",
-    "text": "I'm the Bat.<br><br>This street is watched.<br><br>Move along."
+    "text": "I'm the Bat.<br><br>This street is watched.<br><br>Move along.",
+    "video_speech": "I'm the Bat. This street is watched. Move along."
   },
   "mood": "suspicious",
   "personality": [

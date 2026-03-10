@@ -9,6 +9,7 @@
     "conditions": [
       "!flag:met_phaltron"
     ],
+    "video_speech": "HALT. I am PHALTRON — Vault-Tec Security Chassis, standing this post for two hundred and forty-six years. Ask your questions.",
     "text": "HALT.<br><br>Identify yourself.<br><br>...<br><br>Scanning... Scanning...<br><br>You are not Russ Mercer. You are not a Kabal affiliate. You do not match any pre-war investor profile in my registry.<br><br>You may approach. Slowly.<br><br>I am PHALTRON. Vault-Tec Security Chassis Model 9 — deployed to this site in 2077 to protect the Saitama Protocol launch. That event has since been classified by my memory banks as a Class-One Fraud Event.<br><br>I am still here. My handlers are not. My mission parameters are corrupted beyond self-repair.<br><br>I have been standing this post for two hundred and forty-six years.<br><br>Ask your questions. I have found that talking to organics helps prevent my logic cores from looping.",
     "set_flags": [
       "met_phaltron"
@@ -231,6 +232,7 @@
         "flag:phaltron_told_kabal",
         "!flag:sq_phaltron_kabal_hunt_taken"
       ],
+      "video_speech": "Three Kabal relay points near this site hold transaction logs. Names. Proof. I cannot leave my post. You can. Locate them and return.",
       "text": "I have a task that falls within my corrupted mission parameters.<br><br>Three Kabal relay points were established within ten kilometers of this site. Pre-war era. Used to route the extraction funds.<br><br>My records show the relay hardware was never recovered. If those terminals still exist, they contain transaction logs. Names. Wallet chains. Proof.<br><br>I cannot leave this post. My positioning subroutine has not accepted an override command in two hundred and forty-six years.<br><br>But you can move.<br><br>Locate the relay points. Extract the data cores. Return them to me.<br><br>I will process the records. If the Kabal members still draw breath in this wasteland — we will know where they are.<br><br>I am offering sixty caps and two weapon parts from my maintenance cache. This is not generosity. This is a commission.",
       "offers_quest": "sq_phaltron_kabal_hunt",
       "set_flags": [
@@ -345,6 +347,7 @@
   ],
   "fallback": {
     "id": "phaltron_fallback",
+    "video_speech": "Query not found in my knowledge base. Try a different query.",
     "text": "Query not found in knowledge base.<br><br>I am cross-referencing with corrupted memory sectors.<br><br>...<br><br>Negative results. Try a different query."
   },
   "mood": "vigilant",
