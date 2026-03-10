@@ -243,6 +243,9 @@ body.pipboy-mode {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  /* Pass all touch events to Leaflet - prevents browser from intercepting
+     pinch-to-zoom before Leaflet's handlers can process them */
+  touch-action: none;
 }
 
 #mapContainer .leaflet-container {

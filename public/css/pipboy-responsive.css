@@ -302,8 +302,9 @@ body {
   }
 
   .pipboy-main {
-    /* More vertical space on mobile */
-    height: calc(100% - 18rem);
+    /* Match desktop dvh-based calc so the map fills the correct height on mobile */
+    height: calc(100vh - 140px);
+    height: calc(100dvh - 140px);
   }
 
   .pipboy-footer {
@@ -334,10 +335,9 @@ body {
     min-height: var(--mobile-map-min-height);
   }
 
-  /* MOBILE MAP FIX - ensure panel-body and mapContainer have minimum height */
-  #panel-map .panel-body {
-    min-height: calc(100vh - 140px);
-  }
+  /* #panel-map .panel-body uses flex:1 to fill available space.
+     A fixed min-height here would exceed the parent's constrained height and
+     cause the map to overflow/clip on mobile — so we let flex handle it. */
 
   #mapContainer {
     min-height: var(--mobile-map-min-height) !important;
@@ -352,7 +352,8 @@ body {
     overscroll-behavior: contain !important;
   }
 
-  /* Leaflet handles its own gestures - allow pan and pinch-zoom */
+  /* Leaflet and its container handle all gestures (pan + pinch-zoom) */
+  #mapContainer,
   #mapContainer .leaflet-container {
     touch-action: none !important;
     pointer-events: auto !important;
@@ -376,7 +377,8 @@ body {
   }
 
   .pipboy-main {
-    height: calc(100% - 16rem);
+    height: calc(100vh - 140px);
+    height: calc(100dvh - 140px);
   }
 }
 
@@ -412,7 +414,11 @@ body {
 
 @media screen and (max-width: 768px) and (orientation: landscape) {
   .pipboy-main {
-    height: calc(100% - 14rem);
+    /* In landscape the header collapses to a single shorter row and the
+       tabs wrap less, so fewer px are consumed by chrome elements.
+       100px accounts for the reduced header (~40px) + tabs (~30px) + footer (~30px). */
+    height: calc(100vh - 100px);
+    height: calc(100dvh - 100px);
   }
 
   /* Same rationale as portrait: let position:absolute inset fill the parent.
