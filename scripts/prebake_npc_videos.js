@@ -11,6 +11,15 @@
 //   # or with .env:
 //   node scripts/prebake_npc_videos.js
 //
+//   # Default: KEY_NODES_ONLY mode — generates intro + quest offers + fallback per NPC (~3 nodes each)
+//   # This cuts API costs by ~80% vs generating every dialog branch.
+//
+//   # Generate every dialog node (full set — expensive):
+//   ALL_NODES=1 node scripts/prebake_npc_videos.js
+//
+//   # Generate only one video per NPC (intro-preferred):
+//   ONE_PER_NPC=1 node scripts/prebake_npc_videos.js
+//
 //   # Generate only specific NPCs:
 //   NPC_FILTER=phaltron,arnie node scripts/prebake_npc_videos.js
 //
@@ -19,6 +28,12 @@
 //
 //   # Skip R2 upload (save locally only, for testing):
 //   NO_UPLOAD=1 node scripts/prebake_npc_videos.js
+//
+// Dialog node video_speech field:
+//   Add "video_speech": "exact line to speak" to any dialog node and the
+//   prebake script will use it directly instead of guessing from the node text.
+//   This is the recommended way to ensure videos sound right.
+//   Keep video_speech under 15 words for comfortable 8-second delivery.
 //
 // R2 setup (one-time):
 //   1. dash.cloudflare.com → R2 → Create bucket "atomicfizz-videos"
@@ -62,7 +77,10 @@ const ASPECT        = process.env.GROK_VIDEO_ASPECT || '3:4';
 const RESOLUTION    = process.env.GROK_VIDEO_RESOLUTION || '720p';
 const SKIP_EXISTING = process.env.SKIP_EXISTING !== '0';
 const ONE_PER_NPC   = process.env.ONE_PER_NPC === '1';
-const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '20', 10);
+// KEY_NODES_ONLY: generate only intro, quest offer nodes, and fallback per NPC (default: true).
+// Set ALL_NODES=1 to generate every dialog branch node.
+const KEY_NODES_ONLY = process.env.ALL_NODES !== '1';
+const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '22', 10);
 const INCLUDE_ENDGAME_NPCS = process.env.INCLUDE_ENDGAME_NPCS === '1';
 
 // R2 config
@@ -229,35 +247,59 @@ function pickVoiceProfile(npcKey) {
 
 /**
  * Collect the key nodes to generate videos for from a dialog file.
- * Returns array of { nodeId, text } objects.
+ * In KEY_NODES_ONLY mode (default): intro, quest offer nodes, fallback only.
+ * In ALL_NODES mode (ALL_NODES=1): every dialog branch node.
+ * Returns array of { nodeId, text, videoSpeech } objects.
  */
 function collectNodes(npcId, dialog) {
   var nodes = [];
 
   function addNode(node) {
     if (!node || !node.id) return;
-    nodes.push({ nodeId: node.id, text: node.text || '' });
+    nodes.push({
+      nodeId: node.id,
+      text: node.text || '',
+      videoSpeech: node.video_speech || null,
+    });
   }
 
-  // Always include intro
-  if (dialog.intro) addNode(dialog.intro);
+  if (ONE_PER_NPC || KEY_NODES_ONLY) {
+    // Always include intro
+    if (dialog.intro) addNode(dialog.intro);
 
-  // Fallback node
-  if (dialog.fallback) addNode(dialog.fallback);
-
-  // Knowledge, emotional, quest nodes — these are the branching paths
-  var sections = ['knowledge_nodes', 'emotional_nodes', 'quest_nodes'];
-  sections.forEach(function (key) {
-    if (Array.isArray(dialog[key])) {
-      dialog[key].forEach(addNode);
-    }
-  });
-
-  // Nodes map (if present)
-  if (dialog.nodes && typeof dialog.nodes === 'object') {
-    Object.keys(dialog.nodes).forEach(function (id) {
-      addNode(dialog.nodes[id]);
+    // Quest offer nodes (contain offers_quest) — essential for quest flow
+    var sections = ['knowledge_nodes', 'emotional_nodes', 'quest_nodes'];
+    sections.forEach(function (key) {
+      if (Array.isArray(dialog[key])) {
+        dialog[key].forEach(function (n) {
+          if (KEY_NODES_ONLY && !n.offers_quest) return; // only quest offers in key mode
+          addNode(n);
+        });
+      }
     });
+
+    // Fallback node
+    if (dialog.fallback) addNode(dialog.fallback);
+
+    if (ONE_PER_NPC) {
+      // Collapse to single intro-preferred node
+      var chosen =
+        nodes.find(function (n) { return /intro/i.test(String(n.nodeId || '')); }) ||
+        nodes[0];
+      nodes = chosen ? [chosen] : [];
+    }
+  } else {
+    // ALL_NODES mode — include everything
+    if (dialog.intro) addNode(dialog.intro);
+    if (dialog.fallback) addNode(dialog.fallback);
+    var allSections = ['knowledge_nodes', 'emotional_nodes', 'quest_nodes'];
+    allSections.forEach(function (key) {
+      if (Array.isArray(dialog[key])) { dialog[key].forEach(addNode); }
+    });
+    if (dialog.nodes && typeof dialog.nodes === 'object') {
+      Object.keys(dialog.nodes).forEach(function (id) { addNode(dialog.nodes[id]); });
+    }
+    if (Array.isArray(dialog.wildcards)) { dialog.wildcards.forEach(addNode); }
   }
 
   // Deduplicate by nodeId
@@ -271,8 +313,13 @@ function collectNodes(npcId, dialog) {
 
 /**
  * Build a Fallout-themed video prompt for a specific dialog node.
+ * @param {string} npcId
+ * @param {object} dialog
+ * @param {string} nodeId
+ * @param {string} nodeText  - Raw node text (used when videoSpeech is absent)
+ * @param {string|null} videoSpeech - Pre-written speech line; takes priority over extraction
  */
-function buildNodePrompt(npcId, dialog, nodeId, nodeText) {
+function buildNodePrompt(npcId, dialog, nodeId, nodeText, videoSpeech) {
   var lore       = NPC_LORE_OVERRIDES[npcId] || {};
   var npcKey     = sanitise(npcId || dialog.id || dialog.npc || 'unknown_npc', 60).toLowerCase();
   var name       = sanitise(lore.display_name || dialog.npc || dialog.id || 'Unknown NPC', 60);
@@ -282,7 +329,10 @@ function buildNodePrompt(npcId, dialog, nodeId, nodeText) {
   var personality = Array.isArray(dialog.personality)
     ? dialog.personality.slice(0, 3).join(', ')
     : '';
-  var speech = extractVideoSpeech(nodeText, MAX_SPEECH_WORDS);
+  // Use pre-written video_speech when available; otherwise extract from raw text
+  var speech = videoSpeech
+    ? truncateAtSentence(sanitise(videoSpeech, 300), MAX_SPEECH_WORDS)
+    : extractVideoSpeech(nodeText, MAX_SPEECH_WORDS);
   var voiceProfile = pickVoiceProfile(npcKey);
 
   return (
@@ -295,8 +345,7 @@ function buildNodePrompt(npcId, dialog, nodeId, nodeText) {
     `${voiceProfile}. Keep this exact voice profile for character_id=${npcKey} in every scene. ` +
     (desc ? `Character: ${desc}. ` : '') +
     `Mood: ${mood}${personality ? ', personality: ' + personality : ''}. ` +
-    (speech ? `Speaking exactly one concise line under ${MAX_SPEECH_WORDS} words: "${speech}". ` : '') +
-    `Fit full delivery naturally within ${DURATION} seconds; avoid trailing unfinished sentence. ` +
+    (speech ? `NPC delivers this complete line: "${speech}". Must finish the full sentence before the clip ends — no words cut off. Deliver at a measured wasteland pace within ${DURATION} seconds. ` : '') +
     `Pip-Boy green terminal tint, moody wasteland lighting, retro 1950s aesthetic.`
   ).slice(0, 2000);
 }
@@ -442,6 +491,8 @@ async function main() {
   console.log(`   Storage: ${USE_R2 ? `Cloudflare R2 (${R2_BUCKET_NAME})` : 'Local only (NO_UPLOAD=1 or R2 not configured)'}`);
   console.log(`   Duration: ${DURATION}s  |  Aspect: ${ASPECT}  |  Resolution: ${RESOLUTION}`);
   if (ONE_PER_NPC) console.log('   Mode: One video per NPC (intro-preferred)');
+  else if (KEY_NODES_ONLY) console.log('   Mode: Key nodes only — intro + quest offers + fallback (set ALL_NODES=1 for all)');
+  else console.log('   Mode: All dialog nodes (ALL_NODES=1)');
   if (NPC_FILTER) console.log(`   Filter: ${NPC_FILTER.join(', ')}`);
   console.log('');
 
@@ -473,7 +524,7 @@ async function main() {
   let skipped   = 0;
   let failed    = 0;
 
-  // Build a flat list of all (npcId, nodeId, nodeText) work items
+  // Build a flat list of all (npcId, nodeId, nodeText, videoSpeech) work items
   const workItems = [];
   for (const { npcId, dialog } of discovered) {
     const lore = NPC_LORE_OVERRIDES[npcId] || {};
@@ -483,33 +534,28 @@ async function main() {
     }
 
     const nodes = collectNodes(npcId, dialog);
-    if (ONE_PER_NPC) {
-      const chosen =
-        nodes.find((n) => /intro/i.test(String(n.nodeId || ''))) ||
-        nodes[0];
-      if (chosen) {
-        workItems.push({ npcId, dialog, nodeId: chosen.nodeId, nodeText: chosen.text });
-      } else {
-        // Some dialog files only define metadata; synthesize one intro line.
-        workItems.push({
-          npcId,
-          dialog,
-          nodeId: `${npcId}_auto_intro`,
-          nodeText: dialog.description || `${dialog.npc || npcId} introduces themselves in the wasteland.`,
-        });
-      }
+    if (nodes.length === 0) {
+      // Dialog file has no standard content nodes — synthesize one intro line from description
+      // Use lore default_video_speech if set, which is ideal for entries-format dialog files
+      workItems.push({
+        npcId,
+        dialog,
+        nodeId: `${npcId}_auto_intro`,
+        nodeText: dialog.description || `${dialog.npc || npcId} introduces themselves in the wasteland.`,
+        videoSpeech: lore.default_video_speech || null,
+      });
       continue;
     }
 
-    for (const { nodeId, text } of nodes) {
-      workItems.push({ npcId, dialog, nodeId, nodeText: text });
+    for (const { nodeId, text, videoSpeech } of nodes) {
+      workItems.push({ npcId, dialog, nodeId, nodeText: text, videoSpeech });
     }
   }
 
   console.log(`   Total nodes to generate: ${workItems.length}\n`);
 
   for (let i = 0; i < workItems.length; i++) {
-    const { npcId, dialog, nodeId, nodeText } = workItems[i];
+    const { npcId, dialog, nodeId, nodeText, videoSpeech } = workItems[i];
     const videoFile = `${npcId}_${nodeId}.mp4`;
     const videoPath = path.join(VIDEO_OUT_DIR, videoFile);
     const r2Key     = `npc/${videoFile}`;
@@ -537,7 +583,7 @@ async function main() {
       continue;
     }
 
-    const prompt = buildNodePrompt(npcId, dialog, nodeId, nodeText);
+    const prompt = buildNodePrompt(npcId, dialog, nodeId, nodeText, videoSpeech);
 
     if (DRY_RUN) {
       console.log(`→ DRY RUN — prompt (${prompt.length} chars)`);

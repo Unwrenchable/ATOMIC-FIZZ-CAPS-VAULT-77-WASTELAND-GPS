@@ -12,7 +12,8 @@
     "text": "I can hear you just fine.<br><br>No. Don't apologize. Most people think blind means helpless.<br><br>I've walked from what used to be the Capital Wasteland to here. Alone. Carrying something that needs to reach the Oasis settlement before I do.<br><br>Name's Eli. I carry the book. That's all you need to know for now.",
     "set_flags": [
       "met_eli"
-    ]
+    ],
+    "video_speech": "I can hear you just fine. Don't apologize. I walked here from the Capital Wasteland alone, carrying something that needs delivering."
   },
   "knowledge_nodes": [
     {
@@ -82,7 +83,8 @@
       "offers_quest": "sq_the_last_page",
       "set_flags": [
         "sq_the_last_page_taken"
-      ]
+      ],
+      "video_speech": "I'm three days from the Oasis settlement — two if I've got the canyon right. I need someone with eyes. Will you walk with me?"
     }
   ],
   "wildcards": [
@@ -133,7 +135,8 @@
   ],
   "fallback": {
     "id": "eli_fallback",
-    "text": "I need to keep moving.<br><br>The book doesn't deliver itself."
+    "text": "I need to keep moving.<br><br>The book doesn't deliver itself.",
+    "video_speech": "I need to keep moving. The book doesn't deliver itself."
   },
   "mood": "neutral",
   "personality": [

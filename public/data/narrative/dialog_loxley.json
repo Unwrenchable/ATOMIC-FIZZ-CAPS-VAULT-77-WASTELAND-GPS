@@ -9,6 +9,7 @@
     "conditions": [
       "!flag:met_loxley"
     ],
+    "video_speech": "Hail! I am Loxley — wealth redistribution specialist. The Crimson Caravan grows fat while the squatter camps starve. The maths are simple.",
     "text": "Hail, good traveller! I am Loxley — Robin of Loxley, if you prefer the full verse of it.<br><br>Some call us thieves. We prefer 'wealth redistribution specialists.'<br><br>The Crimson Caravan passes through this stretch twice a month. Fat shipments. Brahmin-bowed under the weight of it. And the folk in the squatter camps along the Mojave? Starving.<br><br>The maths are simple. Even the post-apocalypse can do the maths.",
     "set_flags": [
       "met_loxley"
@@ -109,6 +110,7 @@
       "conditions": [
         "!flag:sq_loxley_rob_the_rich_taken"
       ],
+      "video_speech": "A Crimson Caravan shipment hits Nipton Road in two days — medical supplies meant for a hoarder named Harwick. Help us redirect it to those who actually need it.",
       "text": "A Crimson Caravan shipment is coming through Nipton Road in two days' time.<br><br>Medical supplies, grain, water chips. Enough for three settlements. All of it bound for a fortified estate outside of Primm — a man named Harwick who charges triple for anything he doesn't simply hoard.<br><br>I need someone who can ride point. My Merry Men are... enthusiastic, but subtlety is not their shield.<br><br>Help us stop the caravan, separate the goods, and see them to Freeside and the squatter camps along Route 15. No killing unless they shoot first.<br><br>Harwick will be furious. I find I sleep very well despite that.",
       "offers_quest": "sq_loxley_rob_the_rich",
       "set_flags": [
@@ -185,6 +187,7 @@
   ],
   "fallback": {
     "id": "loxley_fallback",
+    "video_speech": "A merry day to you, traveller. Watch your pockets on the Nipton Road — though if you need what's in them, find me.",
     "text": "A merry day to you, traveller.<br><br>Watch your pockets on the Nipton Road — though if you need what's in them, do come find me."
   },
   "mood": "friendly",
