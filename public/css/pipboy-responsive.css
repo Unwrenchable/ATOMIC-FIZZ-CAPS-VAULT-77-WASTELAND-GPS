@@ -134,13 +134,8 @@ body {
    ============================================================ */
 
 .pipboy-main {
+  /* Use responsive padding; height/overflow is managed by flex in pipboy.css */
   padding: clamp(0.8rem, 1.5vw, 1.5rem);
-  /* Adjust height to account for header/footer */
-  height: calc(100% - clamp(12rem, 20vh, 20rem));
-  overflow-y: auto;
-  overflow-x: hidden;
-  /* Smooth scrolling on mobile */
-  -webkit-overflow-scrolling: touch;
 }
 
 .pipboy-panel {
@@ -195,6 +190,7 @@ body {
   font-size: clamp(1rem, 1.3vw, 1.3rem);
   flex-wrap: wrap;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
 /* ============================================================
@@ -302,9 +298,7 @@ body {
   }
 
   .pipboy-main {
-    /* Match desktop dvh-based calc so the map fills the correct height on mobile */
-    height: calc(100vh - 140px);
-    height: calc(100dvh - 140px);
+    /* Height is now controlled by flex: 1 in pipboy.css — no override needed */
   }
 
   .pipboy-footer {
@@ -375,11 +369,6 @@ body {
   html {
     font-size: 58%; /* Medium base for tablets */
   }
-
-  .pipboy-main {
-    height: calc(100vh - 140px);
-    height: calc(100dvh - 140px);
-  }
 }
 
 /* ============================================================
@@ -413,14 +402,6 @@ body {
    ============================================================ */
 
 @media screen and (max-width: 768px) and (orientation: landscape) {
-  .pipboy-main {
-    /* In landscape the header collapses to a single shorter row and the
-       tabs wrap less, so fewer px are consumed by chrome elements.
-       100px accounts for the reduced header (~40px) + tabs (~30px) + footer (~30px). */
-    height: calc(100vh - 100px);
-    height: calc(100dvh - 100px);
-  }
-
   /* Same rationale as portrait: let position:absolute inset fill the parent.
      A fixed height would over-constrain the layout in landscape too. */
   .pipboy-map {
@@ -619,8 +600,7 @@ body {
   }
 
   .pipboy-main {
-    height: 100vh;
-    height: 100dvh;
+    /* With header/tabs/footer hidden, flex: 1 fills the entire CRT */
     padding: 0;
   }
 
@@ -718,7 +698,7 @@ body {
   }
 
   .pipboy-main {
-    height: calc(100% - 10rem);
+    /* Height managed by flex: 1 in pipboy.css */
     padding: 4px;
   }
 
