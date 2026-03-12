@@ -470,7 +470,7 @@
           // Try to resolve from items database; fall back to minimal placeholder
           var found = Game.player && Array.isArray(Game.player.items) &&
             Game.player.items.find(function (i) { return i.id === item; });
-          itemObj = found ? { ...found, quantity: 1 } : { id: item, name: item, type: "questItem", quantity: 1 };
+          itemObj = found ? { ...found, quantity: 1 } : { id: item, name: item, type: "quest", quantity: 1 };
         } else {
           itemObj = { ...item, quantity: item.quantity || 1 };
         }
