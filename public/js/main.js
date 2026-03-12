@@ -220,12 +220,25 @@
       if (fromMintables) return fromMintables;
     }
 
-    const items = window.DATA.mintables || [];
-    return (
-      items.find(
-        i => i && (i.id === id || i.slug === id || i.mintableId === id)
-      ) || { name: id, description: "" }
+    const mintables = window.DATA.mintables || [];
+    const fromMintablesData = mintables.find(
+      i => i && (i.id === id || i.slug === id || i.mintableId === id)
     );
+    if (fromMintablesData) return fromMintablesData;
+
+    // Check the items database (loaded by inventory-loader.js)
+    if (window.Game && Game.player && Array.isArray(Game.player.items)) {
+      const fromDb = Game.player.items.find(i => i && i.id === id);
+      if (fromDb) return fromDb;
+    }
+
+    // Check the player's actual PlayerState inventory for full item objects
+    if (window.Game && Game.modules?.PlayerState?.getItem) {
+      const fromState = Game.modules.PlayerState.getItem(id);
+      if (fromState) return fromState;
+    }
+
+    return { name: id, description: "" };
   }
 
   function givePlayerItemById(itemId) {
