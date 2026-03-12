@@ -406,6 +406,18 @@
     _dirty = true;
     saveToStorage();
     syncGamePlayerReferences();
+
+    // Sync removal to legacy PLAYER.inventory (array of ID strings)
+    if (window.PLAYER && Array.isArray(window.PLAYER.inventory)) {
+      const stillHas = _state.inventory.some(i => i.id === itemId);
+      if (!stillHas) {
+        const legacyIdx = window.PLAYER.inventory.indexOf(itemId);
+        if (legacyIdx !== -1) {
+          window.PLAYER.inventory.splice(legacyIdx, 1);
+        }
+      }
+    }
+
     triggerInventoryUpdate();
     
     return true;
