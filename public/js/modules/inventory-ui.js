@@ -43,7 +43,9 @@ Game.ui.renderInventory = function () {
   // Get equipped items (prefer PlayerState, fall back to Game.player.equipped)
   const equipped = (Game.modules?.PlayerState?.getState?.()?.equipped) || Game.player.equipped || {};
 
-  // Group items by type
+  // Group items by type.
+  // Quest-type items are intentionally excluded here — they belong in the QUEST
+  // panel (quest-ui.js) and must not pollute the ITEMS tab.
   const groups = {
     weapon: [],
     armor: [],
@@ -53,14 +55,13 @@ Game.ui.renderInventory = function () {
     junk: [],
     key: [],
     note: [],
-    holotape: [],
-    quest: []
+    holotape: []
   };
 
   items.forEach(item => {
-    // Normalise legacy "questItem" type to "quest" so items land in the correct group
-    const type = item.type === "questItem" ? "quest" : item.type;
-    if (groups[type]) groups[type].push(item);
+    // Skip quest items entirely — they are rendered in the QUEST panel.
+    if (item.type === "quest" || item.type === "questItem") return;
+    if (groups[item.type]) groups[item.type].push(item);
   });
 
   // ── Build tab buttons ──────────────────────────────────────────
