@@ -1305,20 +1305,29 @@
 
       const req = step.requires || {};
 
-      // Item requirement — search all inventory categories
+      // Item requirement — search PlayerState (primary) and legacy inventory categories
       if (req.item) {
-        const inv = this.gs.inventory;
-        const hasItem =
-          inv.questItems?.some(i => i.id === req.item) ||
-          inv.consumables?.some(i => i.id === req.item) ||
-          inv.weapons?.some(i => i.id === req.item) ||
-          inv.ammo?.some(i => i.id === req.item) ||
-          inv.tools?.some(i => i.id === req.item) ||
-          inv.junk?.some(i => i.id === req.item) ||
-          inv.misc?.some(i => i.id === req.item) ||
-          inv.armor?.some(i => i.id === req.item);
-
-        if (!hasItem) return false;
+        // Check unified PlayerState first (primary inventory store)
+        const psHas = Game.modules?.PlayerState?.hasItem
+          ? Game.modules.PlayerState.hasItem(req.item)
+          : false;
+        if (!psHas) {
+          // Fallback: search legacy categorised inventory structure
+          if (!Game.modules?.PlayerState?.hasItem) {
+            console.warn("[quests] PlayerState.hasItem unavailable, using legacy inventory fallback");
+          }
+          const inv = this.gs.inventory;
+          const legacyHas =
+            inv.questItems?.some(i => i.id === req.item) ||
+            inv.consumables?.some(i => i.id === req.item) ||
+            inv.weapons?.some(i => i.id === req.item) ||
+            inv.ammo?.some(i => i.id === req.item) ||
+            inv.tools?.some(i => i.id === req.item) ||
+            inv.junk?.some(i => i.id === req.item) ||
+            inv.misc?.some(i => i.id === req.item) ||
+            inv.armor?.some(i => i.id === req.item);
+          if (!legacyHas) return false;
+        }
       }
 
       // Location requirement — guard against worldmap not being ready
