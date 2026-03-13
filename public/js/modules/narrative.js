@@ -163,7 +163,17 @@
         "phaltron":          "dialog_phaltron",
         "phal":              "dialog_phaltron",
         "hakkasan_guardian": "dialog_phaltron",
-        "hakkasan_bot":      "dialog_phaltron"
+        "hakkasan_bot":      "dialog_phaltron",
+        "annie":             "dialog_annie",
+        "little_ember":      "dialog_annie",
+        "ember":             "dialog_annie",
+        "warbucks":          "dialog_warbucks",
+        "warmcaps":          "dialog_warbucks",
+        "warren_capston":    "dialog_warbucks",
+        "daddy_warmcaps":    "dialog_warbucks",
+        "hannigan":          "dialog_hannigan",
+        "iron_nan":          "dialog_hannigan",
+        "nan_hannigan":      "dialog_hannigan"
       };
       const mapped = NPC_DIALOG_MAP[npcId.toLowerCase()];
       if (mapped) return mapped;

@@ -142,5 +142,23 @@
     "portrait_anchor": "non-physical overseer AI represented through terminal holographic static, not a normal human body shot",
     "description_anchor": "Vault 77 overseer intelligence with fragmented identity",
     "prompt_lore": "Treat as a signal/avatar presentation rather than a standard NPC body performance. Show terminal screens, Vault-Tec green phosphor glow, fragmented hologram."
+  },
+  "annie": {
+    "display_name": "Little Ember",
+    "portrait_anchor": "center top",
+    "description_anchor": "bottom left",
+    "prompt_lore": "Little Ember is a 12-year-old wasteland orphan with flame-red hair, soot-smudged skin, and a patched Vault-Tec jumpsuit two sizes too big. She clutches a pre-war locket and speaks with scrappy, hard-won optimism."
+  },
+  "warbucks": {
+    "display_name": "Warren B. Capston",
+    "portrait_anchor": "center top",
+    "description_anchor": "bottom right",
+    "prompt_lore": "Warren B. Capston — called Warmcaps — is a massive bald man in pre-war executive corporate armor. Former Vault-Tec arms division chief turned wasteland caravan lord. His expression is a ledger balanced to the penny."
+  },
+  "hannigan": {
+    "display_name": "Nan Hannigan",
+    "portrait_anchor": "center top",
+    "description_anchor": "bottom left",
+    "prompt_lore": "Nan Hannigan is the warden of Hannigan's House orphanage, a raider-adjacent labor boss who runs orphaned children as a scavenging operation. She's perpetually drunk on Nuka-Moonshine, mean as a radscorpion, and smells like both."
   }
 }
