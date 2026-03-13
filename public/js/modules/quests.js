@@ -321,6 +321,100 @@
         }
       ],
       rewards: { xp: 600, caps: 400, items: ['commissar_badge', 'soviet_pulse_rifle'] }
+    },
+
+    // ── TOMORROW'S WASTELAND ARC ──────────────────────────────────────────────
+    // A Fallout rendition of the Annie story. Orphan girl, obscenely rich arms
+    // dealer, and the cruellest orphanage warden this side of the Glowing Sea.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    quest_little_ember: {
+      id: 'quest_little_ember',
+      name: 'Little Ember',
+      type: 'steps',
+      triggerType: 'npc',
+      triggerNpc: 'little_ember',
+      description: 'A flame-haired girl calling herself Little Ember approached you near the ruins of a pre-war orphanage. She claims Hannigan\'s House is a slave-labor camp for children. She needs an adult the wasteland will actually listen to.',
+      npcMessage: 'Little Ember has approached you. She\'s got a plan, a locket, and a group of orphans depending on her. She needs your help finding someone powerful enough to take on Iron Nan.',
+      steps: [
+        {
+          id: 'meet_little_ember',
+          description: 'Speak with Little Ember at the ruins of Hannigan\'s House.',
+          requires: { flag: 'met_annie' }
+        },
+        {
+          id: 'learn_about_warmcaps',
+          description: 'Learn what Ember knows about Warmcaps — the richest man in the wasteland.',
+          requires: { flag: 'annie_told_warmcaps_story' }
+        },
+        {
+          id: 'find_the_mansion',
+          description: 'Locate Warmcaps\' fortified mansion to the north.',
+          requires: { flag: 'warmcaps_mansion_found' }
+        }
+      ],
+      rewards: { xp: 150, caps: 75 }
+    },
+
+    quest_caps_daddy: {
+      id: 'quest_caps_daddy',
+      name: 'Caps Daddy',
+      type: 'steps',
+      triggerType: 'npc',
+      triggerNpc: 'little_ember',
+      description: 'Little Ember believes that if Warmcaps — Warren B. Capston, the wealthiest caravan lord in the region — could meet her, he\'d help the orphans. She\'s probably wrong. You\'re going anyway.',
+      npcMessage: 'Ember has asked you to introduce her to Warmcaps. The man doesn\'t do charity. But she\'s not asking for charity — she\'s asking for a deal.',
+      steps: [
+        {
+          id: 'introduce_ember_to_warmcaps',
+          description: 'Bring Little Ember\'s story to Warren B. Capston at The Mansion.',
+          requires: { flag: 'annie_sent_to_warmcaps' }
+        },
+        {
+          id: 'warmcaps_agrees',
+          description: 'Convince Warmcaps to take Ember in temporarily.',
+          requires: { flag: 'warmcaps_agreed_to_help' }
+        },
+        {
+          id: 'deliver_warmcaps_letter',
+          description: 'Deliver Warmcaps\' letter of sponsorship to the orphan camp.',
+          requires: { flag: 'warmcaps_letter_prepared' }
+        }
+      ],
+      rewards: { xp: 250, caps: 150, items: ['warmcaps_letter_of_marque'] }
+    },
+
+    quest_tomorrows_wasteland: {
+      id: 'quest_tomorrows_wasteland',
+      name: 'Tomorrow\'s Wasteland',
+      type: 'steps',
+      triggerType: 'npc',
+      triggerNpc: 'warmcaps',
+      description: 'Iron Nan Hannigan has kidnapped Little Ember and is hiding her somewhere in the Hannigan\'s House ruins. Warmcaps is furious — and fury from a man with that many hired guns is a useful thing. Go get Ember back.',
+      npcMessage: 'Warmcaps is enraged. Ember has been taken by Iron Nan. Take Warmcaps\' letter of marque, rally the caravan guards, and bring her home — or whatever counts as home in this hellhole.',
+      steps: [
+        {
+          id: 'track_hannigan',
+          description: 'Track Iron Nan Hannigan to her hiding place inside Hannigan\'s House.',
+          requires: { flag: 'hannigan_tracked' }
+        },
+        {
+          id: 'free_the_orphans',
+          description: 'Free the orphan children from Hannigan\'s locked quarters.',
+          requires: { flag: 'orphans_freed' }
+        },
+        {
+          id: 'confront_hannigan',
+          description: 'Confront Iron Nan — buy her off, intimidate her, or put her down.',
+          requires: { flag: 'hannigan_confronted' }
+        },
+        {
+          id: 'rescue_ember',
+          description: 'Bring Little Ember safely back to Warmcaps\' Mansion.',
+          requires: { flag: 'ember_rescued' }
+        }
+      ],
+      rewards: { xp: 500, caps: 350, items: ['ember_locket', 'orphan_caravan_deed'] }
     }
   };
 
