@@ -1,0 +1,464 @@
+{
+  "id": "dialog_annie",
+  "npc": "LITTLE EMBER",
+  "portrait": "annie",
+  "title": "The Orphan of the Ashes",
+  "description": "Red-haired, soot-smudged, wearing a patched Vault-Tec jumpsuit two sizes too big. She's small. She's alone. She's watching you with eyes that have seen too much and still, somehow, haven't given up.",
+  "intro": {
+    "id": "annie_intro",
+    "conditions": ["!flag:met_annie"],
+    "set_flags": ["met_annie"],
+    "video_speech": "Hey. You. With the Pip-Boy. Don't go yet. I need to talk to you.",
+    "text": "You hear her before you see her — a scuff of boot on rubble, the rustle of cloth too large for the body wearing it.\n\nShe drops from a crumbled wall section and lands in a crouch, one hand on the ground, watching you with the wariness of a kid who has been burned before. Literally, if the scar on her forearm is anything to go by.\n\nFlame-red hair. Soot on her nose. A Vault-Tec jumpsuit stitched and re-stitched so many times the original seams are a memory.\n\nAnd a look in her eyes that says she has done the math on you and hasn't decided the answer yet.\n\n\"Hey. You. With the Pip-Boy.\"\n\nShe straightens up. She can't be more than twelve. She holds her ground like someone ten years older.\n\n\"Don't go yet. I need to talk to you.\"",
+    "responses": [
+      {
+        "text": "[Question] Who are you? What are you doing out here alone?",
+        "tone": "question",
+        "next": "node_who_are_you"
+      },
+      {
+        "text": "[Friendly] Easy. I'm not going anywhere. What do you need?",
+        "tone": "kind",
+        "next": "node_whats_the_plan"
+      },
+      {
+        "text": "[Sarcastic] Great. A kid in the ruins. That's always a good sign.",
+        "tone": "sarcastic",
+        "next": "node_sarcastic_open"
+      },
+      {
+        "text": "[Direct] I don't have time. Make it quick.",
+        "tone": "direct",
+        "next": "node_make_it_quick"
+      }
+    ]
+  },
+  "nodes": {
+    "node_who_are_you": {
+      "id": "node_who_are_you",
+      "text": "She squares her jaw. Not offended — she expected the question.\n\n\"They call me Little Ember. Or just Ember. Take your pick.\"\n\nShe jerks a thumb at the crumbling brick facade behind her — what used to be a pre-war building with a sign that now reads only: HANNIG—'S H—SE.\n\n\"I grew up in there. We all did. Me and the others.\"\n\nA pause. She says the next part like she's said it to herself a hundred times.\n\n\"It used to be an orphanage. Now it's more like a... work camp. With Nan Hannigan running it.\"\n\nHer jaw tightens.\n\n\"She keeps us scavenging junk for her to sell. Kids work better in tight spaces. Smaller hands. Smaller rations, too — she works that out in her favor every time.\"",
+      "responses": [
+        {
+          "text": "[Question] Who is Nan Hannigan?",
+          "tone": "question",
+          "next": "node_about_hannigan"
+        },
+        {
+          "text": "[Question] How many of you are there?",
+          "tone": "question",
+          "next": "node_the_other_kids"
+        },
+        {
+          "text": "[Friendly] And you got out?",
+          "tone": "kind",
+          "next": "node_the_escape"
+        }
+      ]
+    },
+    "node_sarcastic_open": {
+      "id": "node_sarcastic_open",
+      "text": "She gives you a look that could strip paint.\n\n\"Yeah. A kid in the ruins. Very observant. You want a medal for that?\"\n\nShe crosses her arms — a gesture that would look tough if the sleeves weren't flopping over her hands.\n\n\"My name's Ember. And I'm not just a kid in the ruins. I'm the kid who got twelve orphans out of a labor camp and kept them alive for three weeks on nothing but scavenged Blamco and determination.\"\n\nThe look cools into something assessing.\n\n\"So you can walk away if you want. But the nearest water source that isn't irradiated is four clicks north, there's a raider camp between here and there, and I happen to know a shortcut.\"\n\nA beat.\n\n\"I could use a travel partner. You could use a guide. We could help each other. Or you can keep being sarcastic to children in the wasteland. Your call.\"",
+      "responses": [
+        {
+          "text": "[Friendly] All right. I'm listening. What's the situation?",
+          "tone": "kind",
+          "next": "node_whats_the_plan"
+        },
+        {
+          "text": "[Question] Twelve orphans. Where are they now?",
+          "tone": "question",
+          "next": "node_the_other_kids"
+        }
+      ]
+    },
+    "node_make_it_quick": {
+      "id": "node_make_it_quick",
+      "text": "She doesn't flinch.\n\n\"Fine. Quick version.\"\n\nShe holds up a hand and ticks off fingers. She has to roll up her sleeve to reach her knuckles.\n\n\"Hannigan's House. Pre-war orphanage. Now a kid labor camp run by a drunk raider named Nan Hannigan who makes children scavenge junk for her. Twelve kids. One girl — me — who got most of them out. We've been hiding for three weeks. We need an adult the wasteland will actually listen to. We need Warmcaps.\"\n\nShe drops her hand.\n\n\"That's the quick version. The long version has more detail about how bad the Nuka-Moonshine smell is. You want the long version?\"",
+      "responses": [
+        {
+          "text": "[Question] Who is Warmcaps?",
+          "tone": "question",
+          "next": "node_about_warmcaps"
+        },
+        {
+          "text": "[Question] What happened at the orphanage?",
+          "tone": "question",
+          "next": "node_hannigans_house"
+        },
+        {
+          "text": "[Friendly] Yeah. I've got time. Tell me everything.",
+          "tone": "kind",
+          "next": "node_her_situation"
+        }
+      ]
+    },
+    "node_her_situation": {
+      "id": "node_her_situation",
+      "text": "She sits on the rubble wall — still watching the approaches, still ready to run. She's never fully relaxed. You get the feeling she's been like this for years.\n\n\"Nan Hannigan took over the orphanage about four years ago. She's not — she's not Brotherhood, not Raiders exactly. She's something worse. She's a businesswoman.\"\n\nShe says the word like it has teeth.\n\n\"Kids are useful to scavengers. Small, fast, can fit in collapsed spaces adults can't. Nan figured that out and built a whole operation around it. Gives us just enough food to work. Docks our rations if we come back light.\"\n\nShe pulls at a thread on her sleeve.\n\n\"Three weeks ago she tried to send Pickle — he's eight — into a collapsed sub-basement with a structural crack. I said no. She said Pickle goes or we all eat half-portions for a month.\"\n\nA pause.\n\n\"I grabbed Pickle and we ran. Got eight of the twelve out that night. Four more made it the next day.\"",
+      "responses": [
+        {
+          "text": "[Question] Why Warmcaps specifically? What can he do?",
+          "tone": "question",
+          "next": "node_about_warmcaps"
+        },
+        {
+          "text": "[Question] What about the locket you're wearing?",
+          "tone": "question",
+          "next": "node_the_locket"
+        },
+        {
+          "text": "[Friendly] That took guts. All of you could have been caught.",
+          "tone": "kind",
+          "next": "node_the_escape"
+        }
+      ]
+    },
+    "node_hannigans_house": {
+      "id": "node_hannigans_house",
+      "text": "She looks back at the ruins.\n\n\"Pre-war orphanage. Used to be run by actual caretakers — there's a register inside, names going back to 2063. Kids who grew up there and moved on.\"\n\nHer voice goes flat.\n\n\"Then the war. Then decades of nothing. Then Nan Hannigan showed up with six hired guns and a crate of Nuka-Moonshine and decided it made a good operation base.\"\n\nShe taps the patched Vault-Tec logo on her chest.\n\n\"We didn't have a choice about being there. You don't choose to be an orphan. And once you're inside the House, Nan makes sure you understand that leaving isn't an option she's offering.\"\n\nShe looks at you.\n\n\"She still has four kids in there. The ones who didn't make it out. She's not going to just let them go because I asked nicely.\"",
+      "responses": [
+        {
+          "text": "[Question] Who is Nan Hannigan? What's her story?",
+          "tone": "question",
+          "next": "node_about_hannigan"
+        },
+        {
+          "text": "[Direct] Then we need leverage. That's where Warmcaps comes in?",
+          "tone": "direct",
+          "next": "node_warmcaps_story"
+        },
+        {
+          "text": "[Question] Four kids still inside. Can't we just go get them?",
+          "tone": "question",
+          "next": "node_why_not_direct"
+        }
+      ]
+    },
+    "node_about_hannigan": {
+      "id": "node_about_hannigan",
+      "text": "Her lip curls. Not quite disgust. Something more tired than that.\n\n\"Nan Hannigan. Used to be a caravan trader, from what I've pieced together. Decent enough, maybe, before the Mojave ate through whatever decent she had.\"\n\nShe picks up a pebble. Doesn't throw it anywhere. Just holds it.\n\n\"She drinks Nuka-Moonshine like it owes her something. Which might explain the mood she's always in. She's not stupid — that's what makes her dangerous. She knows exactly what she's doing. She just doesn't care that it's wrong.\"\n\nThe pebble gets set down carefully on the rubble, like she's putting something back.\n\n\"She'll report us to the local trading post. Say we stole from the orphanage. Say we're runaways. Nobody's going to take a bunch of kids' word against a licensed trader with hired muscle.\"\n\nShe looks up.\n\n\"Nobody except maybe someone who has more money and more muscle than Nan does.\"",
+      "responses": [
+        {
+          "text": "[Question] And that's Warmcaps.",
+          "tone": "question",
+          "next": "node_about_warmcaps"
+        },
+        {
+          "text": "[Friendly] She sounds like a piece of work.",
+          "tone": "kind",
+          "next": "node_hannigan_understatement"
+        }
+      ]
+    },
+    "node_hannigan_understatement": {
+      "id": "node_hannigan_understatement",
+      "text": "\"That's one way to put it.\"\n\nSomething flickers across her face — dark, dry humor that doesn't quite make it to a smile.\n\n\"She once docked Pickle's rations for a week because he sneezed on the scrap he brought back. Said it contaminated the merchandise.\"\n\nShe pauses.\n\n\"Pickle is eight years old. Nan Hannigan docked food from an eight-year-old for sneezing.\"\n\nA long silence.\n\n\"So yeah. Piece of work is one way to put it.\"",
+      "responses": [
+        {
+          "text": "[Question] Tell me about Warmcaps.",
+          "tone": "question",
+          "next": "node_about_warmcaps"
+        },
+        {
+          "text": "[Question] The other kids — where are they now?",
+          "tone": "question",
+          "next": "node_the_other_kids"
+        }
+      ]
+    },
+    "node_the_other_kids": {
+      "id": "node_the_other_kids",
+      "text": "Something shifts in her face. Still guarded, but softer.\n\n\"Twelve of us got out. They're hidden in the collapsed section about half a kilometer north of here — I found a basement that still has a roof. For now.\"\n\nShe starts listing them on her fingers.\n\n\"Pickle is eight, scared of loud noises, incredibly good at finding water. Rust is ten, built like a pre-war fire hydrant, barely speaks, fiercely loyal. Ember — not me, the other Ember, we were both named for the same fire — she's fourteen, runs fastest.\"\n\nShe keeps going. Nine, eleven, thirteen. Little biographies rattled off with the precision of someone who has taken this inventory before and will take it again.\n\n\"They're depending on me. I told them I'd fix it.\"\n\nShe meets your eyes.\n\n\"I don't break promises to people who are depending on me.\"",
+      "responses": [
+        {
+          "text": "[Question] And the four still inside?",
+          "tone": "question",
+          "next": "node_kids_still_inside"
+        },
+        {
+          "text": "[Friendly] You're keeping twelve kids alive out here. That's impressive.",
+          "tone": "kind",
+          "next": "node_keeping_them_alive"
+        }
+      ]
+    },
+    "node_kids_still_inside": {
+      "id": "node_kids_still_inside",
+      "text": "Her jaw tightens. This one costs her something.\n\n\"Grit. Wren. Mole. And Soot.\"\n\nShe says the names quietly.\n\n\"Mole refused to come — she's scared of the open wasteland, never been outside the House since she was dropped off as an infant. We couldn't carry her; she fought us off. Wren twisted her ankle halfway to the wall and couldn't keep pace. Grit and Soot went back for her and got caught before I could reach them.\"\n\nA long silence.\n\n\"Nan knows she's got leverage now. That's not an accident. She's smart enough to have figured out that the four inside are worth more to her than a pile of scavenged junk.\"\n\nShe looks at the ground.\n\n\"I'm not leaving without them. I'm just also not stupid enough to go back in there without a plan that actually works.\"",
+      "responses": [
+        {
+          "text": "[Question] So the plan is Warmcaps. Walk me through it.",
+          "tone": "question",
+          "next": "node_warmcaps_story"
+        },
+        {
+          "text": "[Direct] What do you need from me specifically?",
+          "tone": "direct",
+          "next": "node_whats_the_plan"
+        }
+      ]
+    },
+    "node_about_warmcaps": {
+      "id": "node_about_warmcaps",
+      "text": "Her expression changes — not admiration exactly. More like a trader appraising something she knows is expensive.\n\n\"Warren B. Capston. They call him Warmcaps. Used to be Vault-Tec arms division — some kind of executive, before the world ended. Now he runs the biggest caravan operation between here and the Mojave.\"\n\nShe says it like she's read the dossier. Maybe she has — she seems like the type to spend her evenings compiling intelligence instead of sleeping.\n\n\"Operates out of a fortified mansion to the north. Has more hired guns than most settlements have citizens. Trades in everything — medicine, weapons, pre-war tech. People say he collects things. Expensive things. Strange things.\"\n\nShe pauses.\n\n\"People also say he's got no heart. I think that's wrong. I think he's got a heart — it's just buried under about six layers of corporate shell armor and a ledger book.\"\n\nA look that is very much the look of someone who has decided to bet on a hunch.\n\n\"I think if someone made the right case to him, he'd help.\"",
+      "set_flags": ["annie_told_warmcaps_story"],
+      "responses": [
+        {
+          "text": "[Question] Why would he help? What's in it for him?",
+          "tone": "question",
+          "next": "node_warmcaps_angle"
+        },
+        {
+          "text": "[Question] How do you know so much about him?",
+          "tone": "question",
+          "next": "node_warmcaps_research"
+        },
+        {
+          "text": "[Direct] You want me to go talk to Warmcaps for you.",
+          "tone": "direct",
+          "next": "node_intro_warmcaps"
+        }
+      ]
+    },
+    "node_warmcaps_angle": {
+      "id": "node_warmcaps_angle",
+      "text": "\"Nan Hannigan has been undercutting his caravan routes for years. Using kid labor to keep her scavenging costs low — she can undercut prices he can't match without cutting his own margins.\"\n\nShe says this like she's presenting a business case. Which she is.\n\n\"So it's not charity. It's competition. Nan Hannigan is bad for his bottom line. If Warmcaps shuts her down, he removes a competitor. And he gets the credit for liberating twelve orphans from a labor camp.\"\n\nShe raises an eyebrow.\n\n\"That's good press in any settlement. Even a bald arms dealer needs good press sometimes.\"\n\nA small pause — the closest thing to a smile she's offered.\n\n\"I'm not asking for charity. I'm offering him a deal. That's the language I think he speaks.\"",
+      "responses": [
+        {
+          "text": "[Friendly] That's actually pretty smart.",
+          "tone": "kind",
+          "next": "node_whats_the_plan"
+        },
+        {
+          "text": "[Direct] All right. I'll go talk to him.",
+          "tone": "direct",
+          "next": "node_intro_warmcaps"
+        }
+      ]
+    },
+    "node_warmcaps_research": {
+      "id": "node_warmcaps_research",
+      "text": "\"Nan's filing system is terrible. She keeps ledgers.\"\n\nShe says it matter-of-factly.\n\n\"I spent three years memorizing everything she wrote down. Suppliers, competitors, pricing, routes. I figured — someday that information would be useful to someone. Or as leverage.\"\n\nShe adjusts her locket — a small reflex action, like touching it reassures her.\n\n\"Warmcaps' name comes up in her ledgers twelve times. Never in a good way. He's everything she wants to be — bigger, better-supplied, better-protected. She resents him the way you resent the person at the top of a hill you're still climbing.\"\n\nShe looks up.\n\n\"Which means he's the one person in the region she'd actually have to listen to.\"",
+      "responses": [
+        {
+          "text": "[Question] And the locket — what's that about?",
+          "tone": "question",
+          "next": "node_the_locket"
+        },
+        {
+          "text": "[Direct] Okay. I'll go find Warmcaps.",
+          "tone": "direct",
+          "next": "node_intro_warmcaps"
+        }
+      ]
+    },
+    "node_the_locket": {
+      "id": "node_the_locket",
+      "text": "Her hand goes to it reflexively when you mention it. A small brass locket on a knotted wire — the original chain is long gone.\n\nShe doesn't open it.\n\n\"My parents left it with me. When they... when they brought me to the House.\"\n\nA beat.\n\n\"I was two. I don't remember them. But I remember this.\"\n\nShe does open it, then — just a crack, just long enough for you to see: two names, scratched into the inner surface. Not engraved. Scratched, with something sharp, by someone who didn't have a lot of time.\n\nThen she closes it.\n\n\"Vault registry names. Both of them. That means they were vault residents somewhere. Which means there's a record. Which means if I can ever get access to Vault-Tec's pre-war registry databases...\"\n\nShe trails off. Then:\n\n\"One thing at a time. First the kids. Then maybe, one day, the names.\"",
+      "responses": [
+        {
+          "text": "[Friendly] That's a good reason to keep fighting.",
+          "tone": "kind",
+          "next": "node_whats_the_plan"
+        },
+        {
+          "text": "[Question] Do you actually believe you'll find them?",
+          "tone": "question",
+          "next": "node_belief"
+        }
+      ]
+    },
+    "node_belief": {
+      "id": "node_belief",
+      "text": "She thinks about that for a real second. Doesn't give you the automatic answer.\n\n\"I don't know.\"\n\nHonest. Quiet.\n\n\"The wasteland doesn't owe anyone a happy ending. I know that better than most people my age probably should.\"\n\nShe looks at the locket in her palm.\n\n\"But they scratched those names in there in the last seconds they had with me. That means they wanted me to have a name to look for. That means they expected me to be alive long enough to look.\"\n\nShe closes her fingers around it.\n\n\"So I figure — I owe it to them to still be alive. To still be looking.\"\n\nA breath.\n\n\"After I get the kids out. Then I look.\"",
+      "responses": [
+        {
+          "text": "[Direct] Then let's focus on getting the kids out. What's the plan?",
+          "tone": "direct",
+          "next": "node_whats_the_plan"
+        }
+      ]
+    },
+    "node_the_escape": {
+      "id": "node_the_escape",
+      "text": "\"We had about forty seconds once I decided.\"\n\nShe says it like she's narrating someone else's story.\n\n\"Nan was asleep — passed out on Nuka-Moonshine is more accurate. Three of her hired guns were on rotation at the north end. That left the east side clear for maybe a minute.\"\n\nShe pauses.\n\n\"I'd been watching the rotation for two months. Memorizing it. Waiting for the right night.\"\n\nA ghost of something crosses her face — pride, maybe, or the aftermath of pure adrenaline finally metabolized.\n\n\"We moved quiet. I carried Pickle because he's too little to keep up. Rust held the door. We were out and into the ruins before anyone noticed.\"\n\nShe tilts her head.\n\n\"Six didn't make it that night. Two more got out the next morning when Nan's guards did a sweep and didn't cover the drainage culvert.\"\n\nA breath.\n\n\"We're still four short of everyone. That's why I need Warmcaps.\"",
+      "responses": [
+        {
+          "text": "[Question] What do you need me to do exactly?",
+          "tone": "question",
+          "next": "node_whats_the_plan"
+        },
+        {
+          "text": "[Question] Tell me more about Warmcaps.",
+          "tone": "question",
+          "next": "node_about_warmcaps"
+        }
+      ]
+    },
+    "node_why_not_direct": {
+      "id": "node_why_not_direct",
+      "text": "\"Four armed adults with holdout weapons, a reinforced door, and Nan with a shotgun she keeps under her desk.\"\n\nShe says it flatly.\n\n\"I counted them. Twice. You'd need at least two people with heavy weapons and a distraction, and even then there's a good chance someone gets shot.\"\n\nShe looks at you — assessing, measuring.\n\n\"Could you do it? Maybe. But you'd be shooting up an orphanage. That's the kind of thing that follows a person around in their reputation. And there might be a cleaner way.\"\n\nShe clasps her hands together.\n\n\"Warmcaps has enough hired guns that Nan wouldn't shoot at them. That's the difference. She's mean, not suicidal.\"",
+      "responses": [
+        {
+          "text": "[Direct] All right. Warmcaps it is. Tell me how to find him.",
+          "tone": "direct",
+          "next": "node_intro_warmcaps"
+        }
+      ]
+    },
+    "node_keeping_them_alive": {
+      "id": "node_keeping_them_alive",
+      "text": "She blinks once. Like she hadn't thought of it that way.\n\n\"It's just — it's just what you do. When someone is depending on you.\"\n\nShe looks north, toward where the hidden basement is. Too far to see but she knows the direction the way you know where your heartbeat is.\n\n\"Pickle cried the first night. Said he wanted to go back.\"\n\nShe's quiet for a moment.\n\n\"I told him: we can't go back. But we can make something better. And I sat with him until he stopped crying.\"\n\nAnother quiet beat.\n\n\"Then I cried by myself where no one could see me, because someone had to be the grown-up and I was the only one available.\"\n\nShe meets your eyes.\n\n\"I'm twelve. I'm real tired.\"",
+      "responses": [
+        {
+          "text": "[Friendly] Then let me help. I'll talk to Warmcaps.",
+          "tone": "kind",
+          "next": "node_intro_warmcaps"
+        },
+        {
+          "text": "[Direct] What exactly do you need Warmcaps to do?",
+          "tone": "direct",
+          "next": "node_warmcaps_story"
+        }
+      ]
+    },
+    "node_whats_the_plan": {
+      "id": "node_whats_the_plan",
+      "text": "She straightens up. This is the part she's rehearsed.\n\n\"Warmcaps — Warren B. Capston — runs the biggest caravan operation in this half of the wasteland out of a fortified mansion to the north. He has resources. He has hired muscle. He has a grudge against Nan Hannigan eating into his trading margins.\"\n\nShe ticks it off on her fingers.\n\n\"I need someone to go to him. Make the case. Nan Hannigan running a kid labor camp is worth shutting down — for him as a business move, and because it's the right thing, and sometimes those two things line up.\"\n\nShe meets your eyes squarely.\n\n\"I can't go myself. She's looking for me. A stranger with a Pip-Boy walking up to Warmcaps' front gate has a much better shot than a twelve-year-old with a warrant on her head.\"\n\nA breath.\n\n\"Will you go?\"",
+      "responses": [
+        {
+          "text": "[Friendly] Yeah. I'll go talk to Warmcaps.",
+          "tone": "kind",
+          "next": "node_intro_warmcaps"
+        },
+        {
+          "text": "[Question] What do I say to him?",
+          "tone": "question",
+          "next": "node_what_to_say"
+        },
+        {
+          "text": "[Sarcastic] I'm a stranger. Why would he listen to me?",
+          "tone": "sarcastic",
+          "next": "node_why_listen"
+        }
+      ]
+    },
+    "node_what_to_say": {
+      "id": "node_what_to_say",
+      "text": "\"Tell him about the kids. Tell him about Nan Hannigan. Tell him she's been running a labor operation that keeps her scavenging costs below market — undercutting his routes by feeding children instead of paying adult wages.\"\n\nShe takes a breath.\n\n\"Tell him there are twelve kids hiding in the ruins east of the old trade post. Tell him four are still inside. Tell him a twelve-year-old girl organized a jailbreak with a forty-second window and is asking him, as a fellow businessperson, to close the deal.\"\n\nA pause.\n\n\"Tell him Ember sends her regards. He won't know who that is yet. But he will.\"",
+      "set_flags": ["annie_sent_to_warmcaps"],
+      "responses": [
+        {
+          "text": "[Direct] I'll find him.",
+          "tone": "direct",
+          "next": "node_farewell"
+        }
+      ]
+    },
+    "node_why_listen": {
+      "id": "node_why_listen",
+      "text": "\"Because you've got a Pip-Boy and a working firearm and you're standing upright in the wasteland, which already puts you in the top fifteen percent of people worth talking to.\"\n\nShe says it with a completely straight face.\n\n\"Warmcaps talks to traders. Couriers. People who look like they can handle themselves. He doesn't talk to beggars. He doesn't talk to raider liaisons.\"\n\nShe looks you up and down.\n\n\"You'll get an audience. What you do with it is up to you.\"\n\nA pause.\n\n\"Just — tell him the truth. The whole truth. He'll respect that more than a pitch, I think.\"",
+      "set_flags": ["annie_sent_to_warmcaps"],
+      "responses": [
+        {
+          "text": "[Friendly] All right. I'll go find Warmcaps.",
+          "tone": "kind",
+          "next": "node_farewell"
+        }
+      ]
+    },
+    "node_intro_warmcaps": {
+      "id": "node_intro_warmcaps",
+      "text": "Something shifts in her expression. Relief, maybe. Cautious.\n\n\"North of here. Follow the old highway past the collapsed overpass — you'll see a compound with pre-war perimeter fencing that's been heavily reinforced. That's The Mansion.\"\n\nShe reaches into her jumpsuit and produces a scrap of paper — a rough hand-drawn map, more accurate than it has any right to be from a twelve-year-old.\n\n\"Tell him Nan Hannigan has been running an illegal labor operation out of a licensed orphanage permit. Tell him about the undercutting. Tell him about the kids.\"\n\nShe presses the map into your hand.\n\n\"And tell him — tell him Ember sent you. He won't know the name. But when he hears the rest of it, he'll remember it.\"",
+      "set_flags": ["annie_sent_to_warmcaps"],
+      "responses": [
+        {
+          "text": "[Friendly] I'll find him. I'll make the case.",
+          "tone": "kind",
+          "next": "node_farewell"
+        },
+        {
+          "text": "[Direct] On my way.",
+          "tone": "direct",
+          "next": "node_farewell"
+        }
+      ]
+    },
+    "node_warmcaps_story": {
+      "id": "node_warmcaps_story",
+      "text": "\"He started as Vault-Tec arms division — a VP, from what I pieced together from Nan's pre-war corporate ledgers that she uses as scrap paper without reading.\"\n\nShe straightens up.\n\n\"After the war he used the vault's emergency supply depot to seed the first caravan. Traded munitions for food, food for protection, protection for more caps. Compound interest on chaos.\"\n\nShe says the last phrase like she read it somewhere and liked it.\n\n\"Now he runs three caravan routes, a private security force, and a fortified compound he actually calls The Mansion. He's not Brotherhood. He's not NCR. He's just... extremely wealthy and very organized. In the wasteland, that's the same as being a government.\"\n\nShe glances north.\n\n\"He's got a robot assistant named GRACY. Keeps his schedule. Screens visitors. If you can get past GRACY, you can get an audience.\"",
+      "set_flags": ["annie_told_warmcaps_story"],
+      "responses": [
+        {
+          "text": "[Question] How do I get past the robot?",
+          "tone": "question",
+          "next": "node_gracy_tip"
+        },
+        {
+          "text": "[Direct] I'll figure it out. Where is The Mansion?",
+          "tone": "direct",
+          "next": "node_intro_warmcaps"
+        }
+      ]
+    },
+    "node_gracy_tip": {
+      "id": "node_gracy_tip",
+      "text": "\"GRACY screens by appointment. Obviously you don't have one.\"\n\nA small, dry pause.\n\n\"But she — it — also has a secondary protocol for Urgent Commercial Matters. Which is Warmcaps speak for 'news that affects the bottom line.'\"\n\nShe tilts her head.\n\n\"Tell GRACY it concerns Hannigan's House, the orphanage licensing fraud, and trade route interference. Those are all commercial matters. That should get you through the outer gate at least.\"\n\nShe looks you over again.\n\n\"And don't be weird about the robot. GRACY's been running household management and appointment scheduling for decades. She's very... thorough.\"",
+      "responses": [
+        {
+          "text": "[Direct] Got it. I'll head north.",
+          "tone": "direct",
+          "next": "node_farewell"
+        },
+        {
+          "text": "[Friendly] Anything else I should know?",
+          "tone": "kind",
+          "next": "node_final_advice"
+        }
+      ]
+    },
+    "node_final_advice": {
+      "id": "node_final_advice",
+      "text": "She thinks for a moment.\n\n\"Warmcaps doesn't like being pitied. Don't frame it as charity. Frame it as opportunity.\"\n\nAnother moment.\n\n\"He's bald. Don't mention it. I don't think he's sensitive about it, but it seems like the kind of thing that could get a conversation off on the wrong foot.\"\n\nA pause.\n\n\"Also — if you see his robot assistant GRACY, be polite to her. She keeps track of rudeness and I'm told it affects scheduling.\"\n\nShe fixes you with a look that is somehow both very young and very, very old.\n\n\"Bring back good news. The kids are counting on it. And I'm — I'm counting on it too.\"",
+      "responses": [
+        {
+          "text": "[Friendly] I'll come back with good news.",
+          "tone": "kind",
+          "next": "node_farewell"
+        },
+        {
+          "text": "[Direct] I'll do what I can.",
+          "tone": "direct",
+          "next": "node_farewell"
+        }
+      ]
+    },
+    "node_farewell": {
+      "id": "node_farewell",
+      "text": "She watches you go the way she watches everything — cataloguing exits, reading angles, assessing threat vectors that she's learned to read before she learned to read.\n\nWhen you're about ten meters out, she calls after you.\n\n\"Hey.\"\n\nYou look back.\n\n\"The world's gonna be better tomorrow.\"\n\nShe says it without irony. Like she believes it as a matter of survival requirement.\n\n\"It has to be.\"",
+      "end": true
+    }
+  },
+  "quest_nodes": [
+    {
+      "id": "annie_offers_caps_daddy",
+      "conditions": ["flag:met_annie", "!flag:quest_caps_daddy_active"],
+      "text": "She squares herself up to her full height — which is not very much, but she makes it count.\n\n\"I need you to go to Warmcaps. Formally. Like — as a representative. Someone who can walk up to that gate and get an audience.\"\n\nShe reaches into her jumpsuit and pulls out a folded scrap of paper. A map, hand-drawn and surprisingly accurate.\n\n\"I can't go. I'm a twelve-year-old orphan with a labor charge Nan's put on me. But you can go.\"\n\nShe holds out the map.\n\n\"Twelve kids. Four still inside. I need Warmcaps' help, and I need it before Nan moves them or — or decides they're more trouble than they're worth.\"\n\nA breath. The first time she's sounded her age.\n\n\"Please.\"",
+      "offers_quest": "quest_caps_daddy",
+      "set_flags": ["quest_caps_daddy_active", "annie_sent_to_warmcaps"],
+      "video_speech": "I need you to go to Warmcaps for me. There are twelve kids counting on this. Please.",
+      "responses": [
+        {
+          "text": "[Friendly] I'll go. Consider it done.",
+          "tone": "kind",
+          "next": "node_farewell"
+        },
+        {
+          "text": "[Direct] I'll do it. Give me the map.",
+          "tone": "direct",
+          "next": "node_farewell"
+        }
+      ]
+    }
+  ]
+}
