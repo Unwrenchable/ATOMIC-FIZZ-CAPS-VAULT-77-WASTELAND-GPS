@@ -382,12 +382,20 @@
       if (hasHelp)           return pick(helpQuips);
     }
 
-    // ---- AI prompt with player context + conversation history ----
+    // ---- Auto-extract learnable facts from this player message ----
+    if (window.overseerLearning && typeof window.overseerLearning.processMessage === "function") {
+      window.overseerLearning.processMessage(userMessage);
+    }
+
+    // ---- AI prompt with player context + conversation history + learnings ----
     var playerCtx = getPlayerContext();
     var historyText = conversationHistory.length
       ? conversationHistory.slice(-HISTORY_CONTEXT_SIZE).map(function (h) {
           return (h.role === "user" ? "Vault Dweller" : "Jax") + ": " + h.content;
         }).join("\n")
+      : "";
+    var learningsCtx = (window.overseerLearning && typeof window.overseerLearning.getContext === "function")
+      ? window.overseerLearning.getContext()
       : "";
 
     var promptParts = [
@@ -398,6 +406,7 @@
       "You have been watching this player since they started. You know their progress. You care, but would never admit it.",
       "",
       playerCtx ? "PLAYER STATE: " + playerCtx : "",
+      learningsCtx ? "WHAT I KNOW ABOUT THIS PLAYER (use naturally, don't recite verbatim): " + learningsCtx : "",
       "",
       "RULES:",
       "- ONE punchy response (max 40 words). Never start with I if avoidable.",
@@ -405,6 +414,7 @@
       "- If the player asked a question, answer it (briefly, in character).",
       "- Tone options: dry wit / troll / corporate dystopia / galaxy-brain / glitch.",
       "- Never repeat phrases from earlier in this conversation.",
+      "- Reference what you know about this player when it adds character. Don't force it.",
       "",
       historyText ? ("RECENT CONVERSATION (use this as context — do NOT repeat the last Jax line):\n" + historyText + "\n") : "",
       "Vault Dweller: " + userMessage,
