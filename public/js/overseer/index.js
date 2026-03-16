@@ -4,6 +4,7 @@
 // CORE AI ENGINES
 import "./core.personality.js";
 import "./core.memory.js";
+import "./core.learning.js";
 import "./core.lore.js";
 import "./core.faction.js";
 import "./core.threat.js";
