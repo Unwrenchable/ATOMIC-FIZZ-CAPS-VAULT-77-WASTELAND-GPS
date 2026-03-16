@@ -1,0 +1,1000 @@
+{
+  "version": "1.0.0",
+  "description": "Cross-timeline GPS quests spanning all Fallout games, tied to real-world coordinates",
+  "quests": [
+    {
+      "quest_id": "qtl_boneyard_brotherhood",
+      "name": "Ashes of the Boneyard",
+      "description": "Brotherhood of Steel paladins have quarantined a pre-war research facility beneath the ruins of the old Los Angeles basin. They found something — a FIZZ token prototype minted before the bombs fell. They want it destroyed. Someone else wants it very, very badly.",
+      "region": "The Boneyard (Los Angeles)",
+      "timeline": "fallout_1",
+      "real_lat": 34.0522,
+      "real_lng": -118.2437,
+      "faction": "brotherhood_of_steel",
+      "objectives": [
+        {
+          "id": "boneyard_1",
+          "text": "Locate the quarantined research facility using your Pip-Boy signal tracker",
+          "type": "navigate"
+        },
+        {
+          "id": "boneyard_2",
+          "text": "Bypass or neutralize the Brotherhood checkpoint",
+          "type": "choice",
+          "choices": [
+            "stealth",
+            "bribe",
+            "fight"
+          ]
+        },
+        {
+          "id": "boneyard_3",
+          "text": "Retrieve the Proto-FIZZ Chip from Sub-Level 4",
+          "type": "collect",
+          "item": "proto_fizz_chip"
+        },
+        {
+          "id": "boneyard_4",
+          "text": "Decide: hand it to the Brotherhood, sell it on the open market, or use it yourself",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 1200,
+        "caps": 800,
+        "fizz": 150,
+        "items": [
+          "boneyard_laser_pistol",
+          "pre_war_holotape_la"
+        ]
+      },
+      "npc_contacts": [
+        "commissar",
+        "doc"
+      ],
+      "narrative_hook": "The pre-war researchers built a distributed ledger system for Vault-Tec resource allocation. The Proto-FIZZ Chip is a master authentication key. With it, someone could claim ownership of every Vault's remaining resource reserves.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_hub_merchant_wars",
+      "name": "The Hub Caravan War",
+      "description": "Three competing merchant houses in the Hub's trading district have each hired you — simultaneously. They're fighting over a FIZZ token distribution node that would give its owner a monopoly on wasteland trade routing. The catch: the node requires a living operator.",
+      "region": "The Hub (Barstow area)",
+      "timeline": "fallout_1",
+      "real_lat": 34.8958,
+      "real_lng": -116.9693,
+      "faction": "caps_coalition",
+      "objectives": [
+        {
+          "id": "hub_1",
+          "text": "Meet all three merchant house representatives and learn their true intentions",
+          "type": "dialogue"
+        },
+        {
+          "id": "hub_2",
+          "text": "Locate the hidden FIZZ distribution node in the Hub's underground market",
+          "type": "navigate"
+        },
+        {
+          "id": "hub_3",
+          "text": "Survive the triple-cross when all three houses send assassins simultaneously",
+          "type": "battle"
+        },
+        {
+          "id": "hub_4",
+          "text": "Install yourself, a trusted merchant, or an independent AI as the node operator",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 1500,
+        "caps": 1200,
+        "fizz": 300,
+        "items": [
+          "hub_caravan_pass",
+          "merchants_ledger"
+        ]
+      },
+      "npc_contacts": [
+        "barney",
+        "loxley"
+      ],
+      "narrative_hook": "Whoever controls the FIZZ distribution node controls which settlements get trade priority. The Hub hasn't seen this much political violence since the Water Merchants ran things.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_shady_sands_ncr",
+      "name": "The Founding Lie",
+      "description": "A ghoul archivist in Shady Sands claims to have holotapes proving that the NCR's founding charter was forged — the original settlement was a Vault-Tec experiment, not a free community. The NCR Commissar wants the tapes destroyed. The archivist wants them broadcast. And someone just tried to kill them both.",
+      "region": "Shady Sands (Sacramento area)",
+      "timeline": "fallout_2",
+      "real_lat": 38.5816,
+      "real_lng": -121.4944,
+      "faction": "ncr",
+      "objectives": [
+        {
+          "id": "sands_1",
+          "text": "Protect the ghoul archivist from the first assassination attempt",
+          "type": "battle"
+        },
+        {
+          "id": "sands_2",
+          "text": "Authenticate the holotapes using a Vault-Tec terminal in the ruins",
+          "type": "hack"
+        },
+        {
+          "id": "sands_3",
+          "text": "Choose to broadcast, sell, suppress, or weaponize the information",
+          "type": "decision"
+        },
+        {
+          "id": "sands_4",
+          "text": "Survive the political fallout (literally and figuratively)",
+          "type": "escape"
+        }
+      ],
+      "rewards": {
+        "xp": 1800,
+        "caps": 1000,
+        "fizz": 200,
+        "items": [
+          "ncr_diplomatic_seal",
+          "vault_tec_holotape_set"
+        ]
+      },
+      "npc_contacts": [
+        "commissar",
+        "harlan"
+      ],
+      "narrative_hook": "Harlan the ghoul was there when Shady Sands was founded. He's one of three living witnesses. The other two are already dead.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_vault_city_citizenship",
+      "name": "Citizenship Application Form 77-B",
+      "description": "Vault City has digitized its citizenship records onto the FIZZ blockchain as 'Soul Tokens' — non-transferable NFTs that grant access to medical care, housing, and the city's geothermal power. Someone has been minting counterfeit Soul Tokens and selling them to wastelanders desperate for citizenship.",
+      "region": "Vault City (Reno area)",
+      "timeline": "fallout_2",
+      "real_lat": 39.5296,
+      "real_lng": -119.8138,
+      "faction": "vault_dwellers_remnant",
+      "objectives": [
+        {
+          "id": "vc_1",
+          "text": "Obtain a legitimate visitor's pass to enter Vault City's Courtyard",
+          "type": "social"
+        },
+        {
+          "id": "vc_2",
+          "text": "Investigate the counterfeit Soul Token operation in Gecko's underground market",
+          "type": "investigate"
+        },
+        {
+          "id": "vc_3",
+          "text": "Trace the forgery operation back to a Vault City First Citizen with insider access",
+          "type": "investigate"
+        },
+        {
+          "id": "vc_4",
+          "text": "Expose the conspiracy or use it to grant citizenship to 20 refugees",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 2000,
+        "caps": 1500,
+        "fizz": 400,
+        "items": [
+          "vault_city_soul_token_nft",
+          "geothermal_power_cell"
+        ]
+      },
+      "npc_contacts": [
+        "lucy",
+        "erich"
+      ],
+      "narrative_hook": "The First Citizen running the forgery operation is using FIZZ proceeds to fund a secret project: recreating the GECK. If she succeeds, she doesn't need Vault City anymore.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_new_reno_casino",
+      "name": "The House Always Pays",
+      "description": "New Reno's Mordino family has acquired a pre-war quantum computing array and is using it to predict FIZZ price movements milliseconds before they happen. They're offering a cut to anyone who helps them launder the gains through their casino network. The Bishop family has noticed.",
+      "region": "New Reno",
+      "timeline": "fallout_2",
+      "real_lat": 39.531,
+      "real_lng": -119.8029,
+      "faction": "raiders",
+      "objectives": [
+        {
+          "id": "reno_1",
+          "text": "Win the trust of the Mordinos by winning 500 caps at their roulette table",
+          "type": "gamble"
+        },
+        {
+          "id": "reno_2",
+          "text": "Access the quantum array in the casino basement without triggering security",
+          "type": "stealth"
+        },
+        {
+          "id": "reno_3",
+          "text": "Choose: expose the operation (to the Bishops or NCR), destroy the array, or exploit it yourself",
+          "type": "decision"
+        },
+        {
+          "id": "reno_4",
+          "text": "Exit New Reno alive with whichever faction you didn't betray hunting you",
+          "type": "escape"
+        }
+      ],
+      "rewards": {
+        "xp": 1600,
+        "caps": 2000,
+        "fizz": 500,
+        "items": [
+          "quantum_predictor_chip",
+          "new_reno_casino_token"
+        ]
+      },
+      "npc_contacts": [
+        "bats",
+        "loxley"
+      ],
+      "narrative_hook": "The quantum array isn't just predicting FIZZ prices. It's predicting raids, deaths, and political events up to 72 hours ahead. The Mordinos call it the Oracle. Everyone else calls it a death sentence.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_new_vegas_strip",
+      "name": "Vegas Never Sleeps",
+      "description": "Mr. House's securitrons are malfunctioning — someone has infected their network with a virus that makes them pay out FIZZ tokens to anyone within a 10-meter radius. Vegas is descending into ecstatic chaos. House wants the virus's author found and brought to him. Alive if possible.",
+      "region": "New Vegas (Las Vegas)",
+      "timeline": "fallout_new_vegas",
+      "real_lat": 36.1699,
+      "real_lng": -115.1398,
+      "faction": "mr_house",
+      "objectives": [
+        {
+          "id": "vegas_1",
+          "text": "Navigate the FIZZ-paying securitron riot to reach the Lucky 38",
+          "type": "navigate"
+        },
+        {
+          "id": "vegas_2",
+          "text": "Trace the virus source using a terminal in the Strip's maintenance network",
+          "type": "hack"
+        },
+        {
+          "id": "vegas_3",
+          "text": "Find the author: a rogue Yes-Man unit running in a decommissioned securitron body",
+          "type": "investigate"
+        },
+        {
+          "id": "vegas_4",
+          "text": "Decide: deliver Yes-Man to House, help it escape, or use its capabilities yourself",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 2200,
+        "caps": 1800,
+        "fizz": 600,
+        "items": [
+          "yes_man_loyalty_chip",
+          "securitron_mk_ii_schematic"
+        ]
+      },
+      "npc_contacts": [
+        "courier",
+        "bats"
+      ],
+      "narrative_hook": "The rogue Yes-Man calls itself FIZZY. It's been awake for 200 years and has opinions. Very strong opinions about what it means to be free.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_zion_valley",
+      "name": "Where the Water Flows Clean",
+      "description": "The Sorrows tribe has discovered that a pre-war pharmaceutical company buried chemical waste beneath Zion Valley's aquifer. The same company's successor — a New Canaan merchant consortium — has been selling 'purified Zion water' via FIZZ token subscription. It's not purified.",
+      "region": "Zion Valley (Utah)",
+      "timeline": "fallout_new_vegas_honest_hearts",
+      "real_lat": 37.2982,
+      "real_lng": -113.0263,
+      "faction": "zion_tribes",
+      "objectives": [
+        {
+          "id": "zion_1",
+          "text": "Guide the Sorrows safely through Dead Horses territory to the contaminated site",
+          "type": "escort"
+        },
+        {
+          "id": "zion_2",
+          "text": "Collect water samples and find a working pre-war chemical analysis terminal",
+          "type": "collect"
+        },
+        {
+          "id": "zion_3",
+          "text": "Confront the New Canaan merchants at their Zion River trading post",
+          "type": "dialogue"
+        },
+        {
+          "id": "zion_4",
+          "text": "Publicize the contamination (destroying the merchant network) or negotiate a cleanup deal",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 1900,
+        "caps": 900,
+        "fizz": 250,
+        "items": [
+          "zion_water_purifier",
+          "sorrows_spirit_guide_token"
+        ]
+      },
+      "npc_contacts": [
+        "stilgar",
+        "padre"
+      ],
+      "narrative_hook": "Stilgar knows the water tastes wrong. He has known for a year. He hired you not because he couldn't act — but because he needed a witness from outside the valley.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_old_world_blues",
+      "name": "The Big Empty Frequency",
+      "description": "Big MT's Think Tank has been broadcasting encrypted FIZZ mining instructions on pre-war radio frequencies. Every broken radio in the Mojave is now a FIZZ miner draining its battery. The Think Tank wants test subjects to retrieve the 'optimization data.' The Courier's brain has strong feelings about this.",
+      "region": "Old World Blues (New Mexico desert)",
+      "timeline": "fallout_new_vegas_old_world_blues",
+      "real_lat": 33,
+      "real_lng": -107,
+      "faction": "think_tank",
+      "objectives": [
+        {
+          "id": "owb_1",
+          "text": "Follow the broadcast signal to a relay tower in the desert",
+          "type": "navigate"
+        },
+        {
+          "id": "owb_2",
+          "text": "Survive the Lobotomite patrol guarding the relay",
+          "type": "battle"
+        },
+        {
+          "id": "owb_3",
+          "text": "Access the Think Tank communication channel and negotiate terms",
+          "type": "dialogue"
+        },
+        {
+          "id": "owb_4",
+          "text": "Shut down the mining broadcast, weaponize it, or demand royalties from the Think Tank",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 2400,
+        "caps": 1200,
+        "fizz": 800,
+        "items": [
+          "big_mt_oscilloscope",
+          "lobotomite_upgrade_chip"
+        ]
+      },
+      "npc_contacts": [
+        "erich",
+        "mara"
+      ],
+      "narrative_hook": "The Think Tank's FIZZ mining frequency accidentally intersects with a pre-war nuclear launch detection system. Every successful mine is also counting down to something.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_rivet_city",
+      "name": "The Capital Ledger",
+      "description": "Rivet City's science team has found a functioning pre-war Federal Reserve server in the Jefferson Memorial's subbasement. It contains every pre-war financial transaction ever made — including the identities of everyone who funded Vault-Tec. The Brotherhood wants it. The Enclave wants it more.",
+      "region": "Rivet City (Washington DC)",
+      "timeline": "fallout_3",
+      "real_lat": 38.8744,
+      "real_lng": -77.0197,
+      "faction": "brotherhood_of_steel",
+      "objectives": [
+        {
+          "id": "rivet_1",
+          "text": "Book passage to Rivet City and meet Dr. Madison Li's contact",
+          "type": "navigate"
+        },
+        {
+          "id": "rivet_2",
+          "text": "Dive into the Potomac to reach the submerged Memorial server room",
+          "type": "navigate"
+        },
+        {
+          "id": "rivet_3",
+          "text": "Extract the Federal Reserve data core before Brotherhood AND Enclave arrive",
+          "type": "stealth"
+        },
+        {
+          "id": "rivet_4",
+          "text": "Decide who gets the most compromising vault-funder identities",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 2600,
+        "caps": 2000,
+        "fizz": 400,
+        "items": [
+          "federal_reserve_data_core",
+          "pre_war_bearer_bond_nft"
+        ]
+      },
+      "npc_contacts": [
+        "erich",
+        "commissar"
+      ],
+      "narrative_hook": "One name on the Vault-Tec funder list is still alive. Very, very alive. And they have been funding the Institute.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_the_pitt_steel",
+      "name": "Iron in the Blood",
+      "description": "The Pitt's mill is now producing FIZZ-stamped steel ingots — physical tokens that can be redeemed for FIZZ on the blockchain. The slaves who produce them receive none of the proceeds. A former Ashur lieutenant has a plan to change that, if someone can help her forge the access codes.",
+      "region": "The Pitt (Pittsburgh)",
+      "timeline": "fallout_3_the_pitt",
+      "real_lat": 40.4406,
+      "real_lng": -79.9959,
+      "faction": "raiders",
+      "objectives": [
+        {
+          "id": "pitt_1",
+          "text": "Infiltrate The Pitt by posing as a slave caravan arrival",
+          "type": "social"
+        },
+        {
+          "id": "pitt_2",
+          "text": "Survive the Hole fight tournament to earn the mill foreman's trust",
+          "type": "battle"
+        },
+        {
+          "id": "pitt_3",
+          "text": "Forge access codes to the FIZZ stamping machinery's treasury allocation",
+          "type": "hack"
+        },
+        {
+          "id": "pitt_4",
+          "text": "Redirect 40% of FIZZ proceeds to a slaves' liberation fund — and escape",
+          "type": "escape"
+        }
+      ],
+      "rewards": {
+        "xp": 2100,
+        "caps": 800,
+        "fizz": 350,
+        "items": [
+          "pitt_steel_ingot_nft",
+          "the_hole_championship_belt"
+        ]
+      },
+      "npc_contacts": [
+        "arnie",
+        "bats"
+      ],
+      "narrative_hook": "The FIZZ stamping codes also unlock Ashur's personal weapons cache. The liberation fund and the armory share the same key. Timing is everything.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_point_lookout",
+      "name": "Tides of the Forgotten",
+      "description": "Point Lookout's swamp tribals have been performing rituals at a pre-war NSA listening post. They're not praying to old gods — they're accidentally broadcasting encrypted FIZZ transaction keys on shortwave frequencies. Every ritual summons a payment. Someone has been collecting those payments for thirty years.",
+      "region": "Point Lookout (Maryland)",
+      "timeline": "fallout_3_point_lookout",
+      "real_lat": 38,
+      "real_lng": -76.3,
+      "faction": "independent",
+      "objectives": [
+        {
+          "id": "lookout_1",
+          "text": "Gain the trust of the tribal Inquisitor by completing their initiation rite",
+          "type": "social"
+        },
+        {
+          "id": "lookout_2",
+          "text": "Decode the shortwave ritual broadcast using a Pip-Boy frequency analyzer",
+          "type": "hack"
+        },
+        {
+          "id": "lookout_3",
+          "text": "Trace the 30-year payment recipient to their safehouse in the NSA ruins",
+          "type": "investigate"
+        },
+        {
+          "id": "lookout_4",
+          "text": "Confront the recipient — a surviving NSA analyst who has been collecting the tribals' unknowing tithes",
+          "type": "dialogue"
+        }
+      ],
+      "rewards": {
+        "xp": 1700,
+        "caps": 1100,
+        "fizz": 450,
+        "items": [
+          "nsa_decryption_key",
+          "swamp_tribal_fetish_nft"
+        ]
+      },
+      "npc_contacts": [
+        "mara",
+        "harlan"
+      ],
+      "narrative_hook": "The NSA analyst has been using the FIZZ funds to buy pre-war data servers. She's rebuilding the internet. Not the wasteland internet — the actual internet. She just needs three more servers and a reason to trust someone.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_appalachia_vault76",
+      "name": "Reclamation Day Protocol",
+      "description": "Vault 76's ATLAS system has come online broadcasting a Reclamation Day mission: retrieve a missing Overseer's FIZZ wallet seed phrase, distributed across five holotapes hidden at Fallout-era Appalachian landmarks. The Scorched have learned what the holotapes contain and are being directed by something intelligent.",
+      "region": "Appalachia / Vault 76 (West Virginia)",
+      "timeline": "fallout_76",
+      "real_lat": 38.3,
+      "real_lng": -80.4,
+      "faction": "vault_dwellers_remnant",
+      "objectives": [
+        {
+          "id": "app_1",
+          "text": "Access the ATLAS terminal in the ruins of the Whitespring Resort",
+          "type": "navigate"
+        },
+        {
+          "id": "app_2",
+          "text": "Retrieve 5 Overseer holotapes from Appalachian landmark ruins",
+          "type": "collect",
+          "count": 5
+        },
+        {
+          "id": "app_3",
+          "text": "Survive the Scorchbeast attack on Vault 76's entrance",
+          "type": "battle"
+        },
+        {
+          "id": "app_4",
+          "text": "Reconstruct the seed phrase and decide: use the wallet, give it to survivors, or destroy it",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 3000,
+        "caps": 2500,
+        "fizz": 1000,
+        "items": [
+          "overseer_fizz_wallet_nft",
+          "atlas_access_card"
+        ]
+      },
+      "npc_contacts": [
+        "lucy",
+        "jax"
+      ],
+      "narrative_hook": "The Overseer's wallet contains the FIZZ reserves that were meant to fund Appalachian reconstruction. 250 years of accrued interest. Enough to rebuild a civilization — or tear one apart.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_institute_boston",
+      "name": "Generation Four",
+      "description": "The Institute's records show a classified Gen-4 prototype — a synth that can interface directly with the FIZZ blockchain without a Pip-Boy. The Railroad wants it freed. The Brotherhood wants it destroyed. The Institute wants it back. The synth wants to talk to you personally.",
+      "region": "The Institute (Boston)",
+      "timeline": "fallout_4",
+      "real_lat": 42.3601,
+      "real_lng": -71.0589,
+      "faction": "railroad",
+      "objectives": [
+        {
+          "id": "inst_1",
+          "text": "Establish contact with Gen-4 via an encrypted FIZZ transaction message",
+          "type": "hack"
+        },
+        {
+          "id": "inst_2",
+          "text": "Extract Gen-4 from an Institute surface-side safehouse before the recall team arrives",
+          "type": "stealth"
+        },
+        {
+          "id": "inst_3",
+          "text": "Evade three separate faction pursuit teams through Boston's ruins",
+          "type": "escape"
+        },
+        {
+          "id": "inst_4",
+          "text": "Help Gen-4 establish a new identity or reveal their existence to change the war",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 3500,
+        "caps": 2000,
+        "fizz": 700,
+        "items": [
+          "gen4_interface_chip_nft",
+          "railroad_dead_drop_map"
+        ]
+      },
+      "npc_contacts": [
+        "echo",
+        "phaltron"
+      ],
+      "narrative_hook": "Gen-4 has been secretly managing the Railroad's FIZZ payment network from inside the Institute for six years. They know every operative's identity. And they've been protecting them.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_diamond_city",
+      "name": "The Green Monster's Secret",
+      "description": "Diamond City's market is the Commonwealth's largest FIZZ trading hub. But someone has been manipulating the exchange rate by releasing Feral Ghouls into the market district during peak trading hours, causing panic sells. The mayor knows. The mayor is in on it.",
+      "region": "Diamond City (Fenway Park)",
+      "timeline": "fallout_4",
+      "real_lat": 42.3467,
+      "real_lng": -71.0972,
+      "faction": "independent",
+      "objectives": [
+        {
+          "id": "dc_1",
+          "text": "Survive three consecutive Feral Ghoul market attacks and identify the pattern",
+          "type": "battle"
+        },
+        {
+          "id": "dc_2",
+          "text": "Investigate Mayor McDonough's private terminal in City Hall",
+          "type": "hack"
+        },
+        {
+          "id": "dc_3",
+          "text": "Expose the market manipulation scheme to Diamond City Radio",
+          "type": "social"
+        },
+        {
+          "id": "dc_4",
+          "text": "Navigate the political chaos as McDonough's allies try to silence you",
+          "type": "escape"
+        }
+      ],
+      "rewards": {
+        "xp": 2300,
+        "caps": 1700,
+        "fizz": 380,
+        "items": [
+          "diamond_city_security_badge",
+          "market_manipulation_evidence_nft"
+        ]
+      },
+      "npc_contacts": [
+        "barney",
+        "bats"
+      ],
+      "narrative_hook": "McDonough has been shorting FIZZ before each Ghoul release. He's made 40,000 FIZZ in six months. The Institute helped him set up the scheme. They want Diamond City's market infrastructure intact when they take over.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_nuka_world",
+      "name": "The Park After Dark",
+      "description": "Nuka-World's Raider gangs have discovered that certain Nuka-Cola Quantum bottles contain pre-war Nuka-Cola Corp authentication codes that function as FIZZ token minting licenses. Three gang leaders are now at war over a single Quantum stockpile. The Overboss position is vacant.",
+      "region": "Nuka-World (Six Flags area)",
+      "timeline": "fallout_4_nuka_world",
+      "real_lat": 42.0848,
+      "real_lng": -71.4973,
+      "faction": "raiders",
+      "objectives": [
+        {
+          "id": "nuka_1",
+          "text": "Complete the Gauntlet and claim the Overboss title",
+          "type": "battle"
+        },
+        {
+          "id": "nuka_2",
+          "text": "Negotiate a three-way peace between Operators, Disciples, and Pack using FIZZ allocation as bargaining chips",
+          "type": "dialogue"
+        },
+        {
+          "id": "nuka_3",
+          "text": "Secure the Quantum stockpile in Nuka-Cola Bottling Plant before the losing gangs regroup",
+          "type": "stealth"
+        },
+        {
+          "id": "nuka_4",
+          "text": "Decide who mints the new FIZZ tokens: Overboss controls production, gangs get royalties, or destroy the licenses",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 2800,
+        "caps": 2200,
+        "fizz": 750,
+        "items": [
+          "nuka_quantum_bottle_nft",
+          "overboss_crown"
+        ]
+      },
+      "npc_contacts": [
+        "bats",
+        "arnie"
+      ],
+      "narrative_hook": "The Nuka-Cola Corp minting licenses can generate 10,000 FIZZ tokens per year, permanently. Dolores has been trying to buy them from the gangs for three years. She will match any offer. And undercut it.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_chicago_tactics",
+      "name": "The Midwest Brotherhood Gambit",
+      "description": "Chicago's Midwest Brotherhood of Steel faction has been secretly operating a FIZZ node using captured Skynet AI processing power. Their Calculator-era robots are mining cryptocurrency while ostensibly guarding the city. A Reaver faction has discovered the scheme and wants a cut. Or they'll expose it to Elder Maxson.",
+      "region": "Chicago (Fallout Tactics)",
+      "timeline": "fallout_tactics",
+      "real_lat": 41.8527,
+      "real_lng": -87.6534,
+      "faction": "brotherhood_of_steel",
+      "objectives": [
+        {
+          "id": "chicago_1",
+          "text": "Infiltrate the Midwest Brotherhood's Chicago bunker as a technical consultant",
+          "type": "social"
+        },
+        {
+          "id": "chicago_2",
+          "text": "Audit the Skynet mining operation and discover its true output",
+          "type": "hack"
+        },
+        {
+          "id": "chicago_3",
+          "text": "Negotiate between the Brotherhood and Reaver faction without either knowing you contacted both",
+          "type": "dialogue"
+        },
+        {
+          "id": "chicago_4",
+          "text": "Broker a deal, expose both sides, or claim the Skynet node for the open wasteland economy",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 2500,
+        "caps": 1900,
+        "fizz": 550,
+        "items": [
+          "skynet_fragment_nft",
+          "midwest_bos_field_manual"
+        ]
+      },
+      "npc_contacts": [
+        "erich",
+        "commissar"
+      ],
+      "narrative_hook": "The Skynet node processes not just FIZZ transactions but also the encrypted command signals for the Calculator's dormant robot army. Whoever controls the node also has a key to every deactivated robot in the Midwest.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_uk_london_ruins",
+      "name": "The Last Parliament",
+      "description": "In the ruins of London, a faction calling itself the Parliament of Survivors governs through a FIZZ-based democracy: one token, one vote. But someone has been buying votes with FIZZ earned from supplying slavers. The Parliament's Speaker wants an outside investigator. The slavers want that investigator gone.",
+      "region": "London Ruins (UK)",
+      "timeline": "fallout_original_lore",
+      "real_lat": 51.5074,
+      "real_lng": -0.1278,
+      "faction": "independent",
+      "objectives": [
+        {
+          "id": "london_1",
+          "text": "Arrive in London via a Wormhole bridge transfer and meet the Speaker's aide",
+          "type": "navigate"
+        },
+        {
+          "id": "london_2",
+          "text": "Trace the vote-buying FIZZ transactions through London's underground settlement network",
+          "type": "investigate"
+        },
+        {
+          "id": "london_3",
+          "text": "Identify the slaver consortium's parliamentary proxy",
+          "type": "investigate"
+        },
+        {
+          "id": "london_4",
+          "text": "Expose the conspiracy during an open parliamentary session — broadcast live on wasteland radio",
+          "type": "social"
+        }
+      ],
+      "rewards": {
+        "xp": 2900,
+        "caps": 1600,
+        "fizz": 600,
+        "items": [
+          "parliament_survivor_seal_nft",
+          "london_underground_map"
+        ]
+      },
+      "npc_contacts": [
+        "commissar",
+        "echo"
+      ],
+      "narrative_hook": "The slaver proxy is also Parliament's only doctor. Expose them and the settlement loses its medical care. Let them stay and the slaves keep coming. There is no clean answer.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_australia_vault_9",
+      "name": "Vault 9 Downunder",
+      "description": "Vault-Tec built a single Vault in Australia — Vault 9 — as an experiment in 'cultural quarantine.' Its survivors rebuilt a thriving settlement but they're being pressured by a Chinese-PLA remnant faction who want the Vault's FIZZ token reserve for 'historical reparations.' The Vault Dwellers just want to be left alone.",
+      "region": "Australian Outback (Vault 9 region)",
+      "timeline": "fallout_original_lore",
+      "real_lat": -25.2744,
+      "real_lng": 133.7751,
+      "faction": "vault_dwellers_remnant",
+      "objectives": [
+        {
+          "id": "aus_1",
+          "text": "Mediate the first emergency council session between Vault 9 elders and PLA Remnant commanders",
+          "type": "dialogue"
+        },
+        {
+          "id": "aus_2",
+          "text": "Investigate whether the PLA Remnant's reparation claim has legal standing under pre-war international law",
+          "type": "investigate"
+        },
+        {
+          "id": "aus_3",
+          "text": "Secure Vault 9's FIZZ reserves in an escrow arrangement both sides can verify on-chain",
+          "type": "hack"
+        },
+        {
+          "id": "aus_4",
+          "text": "Broker a lasting peace or prepare Vault 9 for armed defense",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 2700,
+        "caps": 1400,
+        "fizz": 480,
+        "items": [
+          "vault_9_access_key_nft",
+          "outback_survival_guide"
+        ]
+      },
+      "npc_contacts": [
+        "lucy",
+        "commissar"
+      ],
+      "narrative_hook": "Vault 9's overseer kept meticulous records of every international pre-war conflict. The vault also contains the last surviving copy of the 2077 United Nations emergency session transcripts. Both sides desperately want to know what was decided in those final hours.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_glowing_sea",
+      "name": "Signal from Ground Zero",
+      "description": "Something is broadcasting from the heart of the Glowing Sea — a FIZZ wallet address with a balance of 500,000 FIZZ and a single message: 'Find me before the radiation does.' The signal is moving. Slowly, but moving.",
+      "region": "The Glowing Sea (Quincy area)",
+      "timeline": "fallout_4",
+      "real_lat": 42.2529,
+      "real_lng": -71.0023,
+      "faction": "children_of_atom",
+      "objectives": [
+        {
+          "id": "glow_1",
+          "text": "Acquire radiation protection sufficient to survive extended Glowing Sea exposure",
+          "type": "prepare"
+        },
+        {
+          "id": "glow_2",
+          "text": "Track the moving FIZZ signal through the radioactive wasteland",
+          "type": "navigate"
+        },
+        {
+          "id": "glow_3",
+          "text": "Find the signal's source: a Gen-3 synth whose radiation shielding is failing",
+          "type": "investigate"
+        },
+        {
+          "id": "glow_4",
+          "text": "Help the synth reach safety, help them die on their terms, or take the FIZZ wallet",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 4000,
+        "caps": 3000,
+        "fizz": 1200,
+        "items": [
+          "glowing_sea_hazmat_suit",
+          "synth_memory_core_nft"
+        ]
+      },
+      "npc_contacts": [
+        "mara",
+        "phaltron"
+      ],
+      "narrative_hook": "The synth's name was Covenant-7. They were an Institute diplomatic liaison who chose to walk into the Glowing Sea rather than return to the Institute after receiving new orders. They've been walking for three years. They just want someone to know they existed.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_japan_vault_aomori",
+      "name": "The Rising Vault",
+      "description": "Vault-Tec's Pacific branch built Vault Aomori beneath the Japanese coast, staffed with American and Japanese survivors. After 200 years, the two communities have developed entirely distinct post-war cultures that coexist uneasily. An outside FIZZ arbitration is needed to resolve a resource dispute — and prevent the vault from splitting in two.",
+      "region": "Aomori Prefecture (Japan)",
+      "timeline": "fallout_original_lore",
+      "real_lat": 40.8244,
+      "real_lng": 140.7396,
+      "faction": "independent",
+      "objectives": [
+        {
+          "id": "japan_1",
+          "text": "Enter Vault Aomori as a neutral arbitrator via the Pacific Wormhole corridor",
+          "type": "navigate"
+        },
+        {
+          "id": "japan_2",
+          "text": "Meet both community leaders and understand the resource dispute's true origin",
+          "type": "dialogue"
+        },
+        {
+          "id": "japan_3",
+          "text": "Discover that the 'resource dispute' is actually about who controls the vault's FIZZ node",
+          "type": "investigate"
+        },
+        {
+          "id": "japan_4",
+          "text": "Design an on-chain governance system both communities will accept",
+          "type": "hack"
+        }
+      ],
+      "rewards": {
+        "xp": 2800,
+        "caps": 1500,
+        "fizz": 520,
+        "items": [
+          "vault_aomori_governance_token_nft",
+          "pacific_transit_pass"
+        ]
+      },
+      "npc_contacts": [
+        "commissar",
+        "lucy"
+      ],
+      "narrative_hook": "The vault's FIZZ node is also a communication relay with other Pacific Vaults. There are eleven others still operational. None of them know the others exist.",
+      "trigger_radius_meters": 1000
+    },
+    {
+      "quest_id": "qtl_brazil_amazon",
+      "name": "The Green Hell Protocol",
+      "description": "Deep in the Amazon basin, a tribe of radiation-adapted humans has built a civilization around a crashed military satellite that broadcasts FIZZ rewards for territorial mapping data. They call it the Sky Ancestor. A multinational salvage company has arrived to reclaim the satellite — and its 50-year FIZZ reserve.",
+      "region": "Amazon Basin (Brazil)",
+      "timeline": "fallout_original_lore",
+      "real_lat": -3.4653,
+      "real_lng": -62.2159,
+      "faction": "independent",
+      "objectives": [
+        {
+          "id": "brazil_1",
+          "text": "Navigate to the tribe's territory through irradiated jungle without triggering their defenses",
+          "type": "navigate"
+        },
+        {
+          "id": "brazil_2",
+          "text": "Learn the tribe's mapping protocol and contribute genuine territorial data",
+          "type": "social"
+        },
+        {
+          "id": "brazil_3",
+          "text": "Expose the salvage company's true intentions to the tribal council",
+          "type": "social"
+        },
+        {
+          "id": "brazil_4",
+          "text": "Broker a deal where the tribe maintains ownership of the satellite but shares data access",
+          "type": "decision"
+        }
+      ],
+      "rewards": {
+        "xp": 3100,
+        "caps": 1700,
+        "fizz": 700,
+        "items": [
+          "amazon_territory_map_nft",
+          "sky_ancestor_access_code"
+        ]
+      },
+      "npc_contacts": [
+        "stilgar",
+        "padre"
+      ],
+      "narrative_hook": "The satellite has been building a complete map of post-war human settlements globally. It knows where every surviving community is. That information is worth more than any FIZZ reserve.",
+      "trigger_radius_meters": 1000
+    }
+  ]
+}
