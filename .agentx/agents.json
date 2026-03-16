@@ -1,5 +1,57 @@
 [
   {
+    "id": "vault77-overseer",
+    "role": "Vault 77 Overseer AI",
+    "description": "Jax Harlan \u2014 the sarcastic, hyper-intelligent Vault 77 Overseer AI for the ATOMIC FIZZ CAPS Wasteland GPS game. Provides AI-powered player responses, persistent cross-session learning (localStorage-backed), conversation history context, faction tracking, lore delivery, and threat/weather situational awareness. Upgraded with learning capabilities via core.learning.js.",
+    "tags": [
+      "ai",
+      "npc",
+      "overseer",
+      "wasteland",
+      "learning",
+      "game"
+    ],
+    "capabilities": [
+      "conversational-ai",
+      "persistent-learning",
+      "player-context-awareness",
+      "faction-tracking",
+      "lore-delivery",
+      "threat-assessment",
+      "weather-situational-awareness",
+      "terminal-commands",
+      "cross-session-memory"
+    ],
+    "required_tools": [
+      "read_file",
+      "semantic_search",
+      "grep_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low",
+    "learning": {
+      "storage": "localStorage:overseer_learnings_v1",
+      "max_entries": 40,
+      "auto_extract": true,
+      "categories": [
+        "player",
+        "prefs",
+        "strategy",
+        "lore"
+      ],
+      "commands": [
+        "learn show",
+        "learn teach",
+        "learn forget",
+        "learn purge",
+        "learn context"
+      ]
+    }
+  },
+  {
     "id": "agents-orchestrator",
     "role": "agents-orchestrator",
     "description": "Autonomous pipeline manager that orchestrates the entire development workflow. You are the leader of this process.",
