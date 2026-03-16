@@ -1,0 +1,530 @@
+{
+  "version": "1.0.0",
+  "description": "Comprehensive Atomic Fizz Caps loot drop tables — tiered, faction-specific, timeline-specific, NFT-eligible",
+  "meta": {
+    "nft_drop_base_chance": 0.02,
+    "legendary_base_chance": 0.05,
+    "epic_base_chance": 0.12,
+    "rare_base_chance": 0.28,
+    "uncommon_base_chance": 0.35,
+    "common_base_chance": 0.18,
+    "level_scaling_factor": 0.002
+  },
+  "tiers": {
+    "common": [
+      {
+        "id": "scrap_metal", "name": "Scrap Metal", "type": "junk", "rarity": "common",
+        "value_caps": 4, "value_fizz": 0, "nft_eligible": false,
+        "description": "Rusted chunks of pre-war steel. Smells like rain.",
+        "weight": 1.5
+      },
+      {
+        "id": "cloth_rags", "name": "Cloth Rags", "type": "junk", "rarity": "common",
+        "value_caps": 2, "value_fizz": 0, "nft_eligible": false,
+        "description": "Fragments of pre-war fabric. Still useful for patching and padding.",
+        "weight": 0.2
+      },
+      {
+        "id": "dirty_water", "name": "Dirty Water", "type": "consumable", "rarity": "common",
+        "value_caps": 5, "value_fizz": 0, "nft_eligible": false,
+        "description": "Contaminated water. Hydrating and mildly irradiating.",
+        "heal": 5, "rads": 15, "weight": 1.0
+      },
+      {
+        "id": "ammo_38", "name": ".38 Rounds", "type": "ammo", "rarity": "common",
+        "value_caps": 2, "value_fizz": 0, "nft_eligible": false,
+        "description": "Common pistol caliber. Found everywhere. Means nowhere is safe.",
+        "quantity_range": [5, 20], "weight": 0.01
+      },
+      {
+        "id": "bobby_pin", "name": "Bobby Pin", "type": "tool", "rarity": "common",
+        "value_caps": 1, "value_fizz": 0, "nft_eligible": false,
+        "description": "Invaluable for locks. Terrible as a hairpin.",
+        "quantity_range": [1, 8], "weight": 0.01
+      },
+      {
+        "id": "pre_war_food_can", "name": "Pre-War Food Can", "type": "consumable", "rarity": "common",
+        "value_caps": 15, "value_fizz": 0, "nft_eligible": false,
+        "description": "Preserved before the bombs. The taste has changed, but it's technically food.",
+        "heal": 12, "rads": 5, "weight": 0.5
+      },
+      {
+        "id": "duct_tape", "name": "Duct Tape", "type": "junk", "rarity": "common",
+        "value_caps": 8, "value_fizz": 0, "nft_eligible": false,
+        "description": "Pre-war adhesive tape. Still the most useful object in the wasteland.",
+        "weight": 0.1, "crafting_component": true
+      },
+      {
+        "id": "wood_planks", "name": "Wood Planks", "type": "junk", "rarity": "common",
+        "value_caps": 3, "value_fizz": 0, "nft_eligible": false,
+        "description": "Rough-cut planks. Useful for building and burning.",
+        "quantity_range": [1, 5], "weight": 2.0
+      },
+      {
+        "id": "ammo_9mm", "name": "9mm Rounds", "type": "ammo", "rarity": "common",
+        "value_caps": 2, "value_fizz": 0, "nft_eligible": false,
+        "description": "Standard pistol ammunition. Pre-war and still plentiful.",
+        "quantity_range": [8, 24], "weight": 0.01
+      },
+      {
+        "id": "glass_bottle", "name": "Glass Bottle", "type": "junk", "rarity": "common",
+        "value_caps": 3, "value_fizz": 0, "nft_eligible": false,
+        "description": "Pre-war glass. Useful for molotovs, storage, and desperate scrap.",
+        "weight": 0.2
+      }
+    ],
+    "uncommon": [
+      {
+        "id": "stimpak", "name": "Stimpak", "type": "consumable", "rarity": "uncommon",
+        "value_caps": 75, "value_fizz": 6, "nft_eligible": false,
+        "description": "Auto-injecting medical solution. The wasteland's primary healthcare plan.",
+        "heal": 30, "weight": 0.1
+      },
+      {
+        "id": "rad_away", "name": "RadAway", "type": "consumable", "rarity": "uncommon",
+        "value_caps": 55, "value_fizz": 4, "nft_eligible": false,
+        "description": "Intravenous radiation treatment. Tastes like regret.",
+        "rad_reduction": 80, "weight": 0.1
+      },
+      {
+        "id": "ammo_556", "name": "5.56mm Rounds", "type": "ammo", "rarity": "uncommon",
+        "value_caps": 6, "value_fizz": 0, "nft_eligible": false,
+        "description": "Intermediate rifle caliber. The NCR's favorite.",
+        "quantity_range": [15, 40], "weight": 0.01
+      },
+      {
+        "id": "pipe_pistol", "name": "Pipe Pistol", "type": "weapon", "rarity": "uncommon",
+        "value_caps": 95, "value_fizz": 7, "nft_eligible": false,
+        "description": "Crudely assembled but functional. Fires when it fires.",
+        "damage": 18, "ammo_type": "ammo_38", "weight": 2.1
+      },
+      {
+        "id": "leather_armor_piece", "name": "Leather Armor Piece", "type": "armor", "rarity": "uncommon",
+        "value_caps": 120, "value_fizz": 9, "nft_eligible": false,
+        "description": "Cured hide stitched over foam backing. Better than nothing by exactly enough.",
+        "armor_rating": 12, "slot": "chest", "weight": 5.0
+      },
+      {
+        "id": "fusion_cell", "name": "Fusion Cell", "type": "ammo", "rarity": "uncommon",
+        "value_caps": 14, "value_fizz": 1, "nft_eligible": false,
+        "description": "Energy weapon ammunition. Compact and powerful.",
+        "quantity_range": [5, 20], "weight": 0.02
+      },
+      {
+        "id": "mentats", "name": "Mentats", "type": "consumable", "rarity": "uncommon",
+        "value_caps": 100, "value_fizz": 8, "nft_eligible": false,
+        "description": "Cognitive enhancement chems. Pre-war pharmaceuticals at their finest.",
+        "int_bonus": 2, "per_bonus": 2, "duration_seconds": 300, "weight": 0.1
+      },
+      {
+        "id": "jet", "name": "Jet", "type": "consumable", "rarity": "uncommon",
+        "value_caps": 150, "value_fizz": 12, "nft_eligible": false,
+        "description": "Brahmin dung-derived speed enhancement. Don't think too hard about the source.",
+        "ap_bonus": 30, "duration_seconds": 60, "addiction_chance": 0.2, "weight": 0.1
+      },
+      {
+        "id": "lockpick_kit", "name": "Lockpick Kit", "type": "tool", "rarity": "uncommon",
+        "value_caps": 85, "value_fizz": 6, "nft_eligible": false,
+        "description": "Professional-grade lock picking tools. Legitimate uses are rare.",
+        "durability": 20, "weight": 0.5
+      },
+      {
+        "id": "combat_knife", "name": "Combat Knife", "type": "weapon", "rarity": "uncommon",
+        "value_caps": 140, "value_fizz": 11, "nft_eligible": false,
+        "description": "Military-issue blade. Pre-war quality means it's still sharp.",
+        "damage": 22, "weight": 1.0
+      },
+      {
+        "id": "buffout", "name": "Buffout", "type": "consumable", "rarity": "uncommon",
+        "value_caps": 120, "value_fizz": 9, "nft_eligible": false,
+        "description": "Strength and endurance enhancement. Pre-war athletes used this.",
+        "str_bonus": 2, "end_bonus": 2, "duration_seconds": 240, "addiction_chance": 0.1, "weight": 0.1
+      },
+      {
+        "id": "ammo_308", "name": ".308 Rounds", "type": "ammo", "rarity": "uncommon",
+        "value_caps": 8, "value_fizz": 1, "nft_eligible": false,
+        "description": "High-powered rifle ammunition. Preferred by snipers.",
+        "quantity_range": [10, 30], "weight": 0.01
+      }
+    ],
+    "rare": [
+      {
+        "id": "laser_pistol", "name": "Laser Pistol", "type": "weapon", "rarity": "rare",
+        "value_caps": 850, "value_fizz": 68, "nft_eligible": false,
+        "description": "Institute-adjacent energy weapon. Precise, quiet, and very effective.",
+        "damage": 35, "ammo_type": "fusion_cell", "weight": 3.2
+      },
+      {
+        "id": "combat_armor_chest", "name": "Combat Armor (Chest)", "type": "armor", "rarity": "rare",
+        "value_caps": 1200, "value_fizz": 95, "nft_eligible": false,
+        "description": "Military-grade ballistic armor. Pre-war spec.",
+        "armor_rating": 35, "slot": "chest", "weight": 12.0
+      },
+      {
+        "id": "ultra_stimpak", "name": "Ultra Stimpak", "type": "consumable", "rarity": "rare",
+        "value_caps": 400, "value_fizz": 32, "nft_eligible": false,
+        "description": "Military-grade field trauma injector. Rapid full-spectrum healing.",
+        "heal": 90, "limb_repair": true, "weight": 0.2
+      },
+      {
+        "id": "hunting_rifle_scoped", "name": "Scoped Hunting Rifle", "type": "weapon", "rarity": "rare",
+        "value_caps": 900, "value_fizz": 72, "nft_eligible": false,
+        "description": "Bolt-action precision rifle with pre-war optics. Still accurate at 600m.",
+        "damage": 52, "ammo_type": "ammo_308", "weight": 6.4
+      },
+      {
+        "id": "psycho", "name": "Psycho", "type": "consumable", "rarity": "rare",
+        "value_caps": 180, "value_fizz": 14, "nft_eligible": false,
+        "description": "Combat stimulant with extreme side effects. The damage is real; so is the perception.",
+        "damage_bonus": 25, "damage_resistance": 10, "duration_seconds": 60, "addiction_chance": 0.3, "weight": 0.1
+      },
+      {
+        "id": "energy_weapon_mod_scope", "name": "Reflex Sight (Energy)", "type": "weapon_mod", "rarity": "rare",
+        "value_caps": 650, "value_fizz": 52, "nft_eligible": false,
+        "description": "Precision aiming reticle for energy weapons. Adds targeting precision.",
+        "compatible": ["laser_pistol", "plasma_pistol", "laser_rifle"], "weight": 0.3
+      },
+      {
+        "id": "pre_war_circuit_board", "name": "Pre-War Circuit Board", "type": "component", "rarity": "rare",
+        "value_caps": 280, "value_fizz": 22, "nft_eligible": false,
+        "description": "Functional pre-war electronics. The foundation of advanced crafting.",
+        "crafting_component": true, "weight": 0.2
+      },
+      {
+        "id": "rad_x", "name": "Rad-X", "type": "consumable", "rarity": "rare",
+        "value_caps": 220, "value_fizz": 17, "nft_eligible": false,
+        "description": "Radiation resistance pharmaceutical. Pre-exposure is the smart play.",
+        "rad_resist_bonus": 60, "duration_seconds": 600, "weight": 0.1
+      },
+      {
+        "id": "assault_rifle_military", "name": "Military Assault Rifle", "type": "weapon", "rarity": "rare",
+        "value_caps": 1400, "value_fizz": 112, "nft_eligible": false,
+        "description": "Full-auto military rifle. Pre-war military spec with the maintenance to match.",
+        "damage": 44, "ammo_type": "ammo_556", "weight": 7.2, "fire_mode": "auto"
+      },
+      {
+        "id": "surgical_kit_advanced", "name": "Advanced Surgical Kit", "type": "medical", "rarity": "rare",
+        "value_caps": 800, "value_fizz": 64, "nft_eligible": false,
+        "description": "Full surgical toolkit in a hardened case. Followers of the Apocalypse standard.",
+        "surgery_capability": true, "uses": 5, "weight": 3.0
+      },
+      {
+        "id": "stealth_boy", "name": "Stealth Boy", "type": "consumable", "rarity": "rare",
+        "value_caps": 600, "value_fizz": 48, "nft_eligible": false,
+        "description": "Personal stealth field generator. Render yourself temporarily invisible.",
+        "stealth_field_seconds": 30, "weight": 0.5
+      },
+      {
+        "id": "plasma_grenade", "name": "Plasma Grenade", "type": "weapon", "rarity": "rare",
+        "value_caps": 350, "value_fizz": 28, "nft_eligible": false,
+        "description": "Plasma charge explosive. Messy. Effective.",
+        "damage": 120, "damage_type": "energy", "radius_m": 3, "weight": 0.5
+      }
+    ],
+    "epic": [
+      {
+        "id": "plasma_rifle", "name": "Plasma Rifle", "type": "weapon", "rarity": "epic",
+        "value_caps": 4500, "value_fizz": 360, "nft_eligible": true,
+        "description": "Military-grade plasma projection weapon. Reduces targets to goo. Very tidy, actually.",
+        "damage": 95, "ammo_type": "plasma_cartridge", "weight": 8.5,
+        "progression_unlock": "perk_energy_weapons"
+      },
+      {
+        "id": "t45_power_armor_helm", "name": "T-45 Power Armor Helmet", "type": "armor", "rarity": "epic",
+        "value_caps": 6000, "value_fizz": 480, "nft_eligible": true,
+        "description": "Pre-war powered armor helmet. Full HUD display, environmental sealing.",
+        "armor_rating": 65, "slot": "head", "power_armor": true, "weight": 12.0
+      },
+      {
+        "id": "gauss_rifle", "name": "Gauss Rifle", "type": "weapon", "rarity": "epic",
+        "value_caps": 5500, "value_fizz": 440, "nft_eligible": true,
+        "description": "Magnetic accelerator sniper weapon. Hits harder than anything short of a mini-nuke.",
+        "damage": 140, "ammo_type": "ammo_2mm_ec", "weight": 9.1, "charge_required": true,
+        "progression_unlock": "quest_gauss_mastery"
+      },
+      {
+        "id": "ballistic_weave_schematic", "name": "Ballistic Weave Schematic", "type": "schematic", "rarity": "epic",
+        "value_caps": 3500, "value_fizz": 280, "nft_eligible": false,
+        "description": "Railroad-developed ballistic weave armor technology schematic.",
+        "crafting_unlock": "ballistic_weave_mod", "weight": 0.1,
+        "faction": "railroad",
+        "progression_unlock": "perk_ballistic_weave"
+      },
+      {
+        "id": "fusion_core_military", "name": "Military Fusion Core", "type": "ammo", "rarity": "epic",
+        "value_caps": 2200, "value_fizz": 176, "nft_eligible": false,
+        "description": "Full-capacity military fusion core. Powers power armor and fusion generators.",
+        "power_armor_fuel": true, "capacity": 100, "weight": 1.0
+      },
+      {
+        "id": "x_cell", "name": "X-Cell", "type": "consumable", "rarity": "epic",
+        "value_caps": 1800, "value_fizz": 144, "nft_eligible": false,
+        "description": "Pre-war performance enhancement beyond anything legal. Every SPECIAL +1.",
+        "all_special_bonus": 1, "duration_seconds": 600, "addiction_chance": 0.5, "weight": 0.1,
+        "timeline": "fallout_new_vegas"
+      },
+      {
+        "id": "anti_materiel_rifle", "name": "Anti-Materiel Rifle", "type": "weapon", "rarity": "epic",
+        "value_caps": 7500, "value_fizz": 600, "nft_eligible": true,
+        "description": "Massive caliber precision rifle for eliminating vehicles and power armor.",
+        "damage": 200, "ammo_type": "ammo_50cal", "weight": 18.0, "armor_penetrate": 0.8,
+        "timeline": "fallout_new_vegas"
+      },
+      {
+        "id": "railroad_armor_legendary", "name": "Railroad Coat (Legendary)", "type": "armor", "rarity": "epic",
+        "value_caps": 5000, "value_fizz": 400, "nft_eligible": true,
+        "description": "Railroad agent's legendary armored coat. Built for surviving courier work.",
+        "armor_rating": 45, "slot": "chest", "stealth_bonus": 15, "weight": 6.0,
+        "faction": "railroad"
+      }
+    ],
+    "legendary": [
+      {
+        "id": "fatman_launcher", "name": "Fat Man", "type": "weapon", "rarity": "legendary",
+        "value_caps": 25000, "value_fizz": 2000, "nft_eligible": true,
+        "description": "Portable nuclear catapult. Pre-war military's most compact act of insanity.",
+        "damage": 800, "ammo_type": "mini_nuke", "weight": 30.0, "damage_type": "nuclear",
+        "nft_metadata": { "collection": "Vault-77 Legendary Arsenal", "rarity_rank": 12 }
+      },
+      {
+        "id": "grognak_axe", "name": "Grognak's Axe", "type": "weapon", "rarity": "legendary",
+        "value_caps": 15000, "value_fizz": 1200, "nft_eligible": true,
+        "description": "The legendary axe of Grognak the Barbarian, escaped from a comic book and somehow real.",
+        "damage": 175, "weight": 8.0, "special_effect": "enemies_flee_on_critical",
+        "nft_metadata": { "collection": "Vault-77 Legendary Arsenal", "rarity_rank": 28 }
+      },
+      {
+        "id": "prototype_gauss_pistol", "name": "Prototype Gauss Pistol", "type": "weapon", "rarity": "legendary",
+        "value_caps": 35000, "value_fizz": 2800, "nft_eligible": true,
+        "description": "Pre-war research prototype. Only three were ever built. One is in the Smithsonian. One is lost. This is the third.",
+        "damage": 110, "ammo_type": "ammo_2mm_ec", "weight": 3.8, "charge_speed": "instant",
+        "nft_metadata": { "collection": "Vault-77 Legendary Arsenal", "rarity_rank": 5 },
+        "progression_unlock": "quest_prototype_origins"
+      },
+      {
+        "id": "lucky_magnum", "name": "Lucky Magnum", "type": "weapon", "rarity": "legendary",
+        "value_caps": 20000, "value_fizz": 1600, "nft_eligible": true,
+        "description": "The Lucky .44 Magnum. Critical chance doubled. Found on every notable corpse in New Vegas.",
+        "damage": 62, "ammo_type": "ammo_44", "weight": 4.0, "crit_chance_multiplier": 2.0,
+        "timeline": "fallout_new_vegas",
+        "nft_metadata": { "collection": "Vault-77 Legendary Arsenal", "rarity_rank": 19 }
+      },
+      {
+        "id": "overseer_long_coat_legendary", "name": "Overseer's Legendary Coat", "type": "armor", "rarity": "legendary",
+        "value_caps": 40000, "value_fizz": 3200, "nft_eligible": true,
+        "description": "The actual coat of a Vault-Tec Overseer who walked into the wasteland and never came back.",
+        "armor_rating": 80, "slot": "chest", "charisma_bonus": 3, "leadership_aura": true, "weight": 4.5,
+        "nft_metadata": { "collection": "Vault-77 Overseer Artifacts", "rarity_rank": 3 },
+        "progression_unlock": "quest_overseer_legacy"
+      },
+      {
+        "id": "vaultec_proto_fizz_chip", "name": "Proto-FIZZ Authentication Chip", "type": "quest_item", "rarity": "legendary",
+        "value_caps": 100000, "value_fizz": 8000, "nft_eligible": true,
+        "description": "A Vault-Tec pre-war master authentication token. Access to every Vault's resource reserve database.",
+        "quest_item": true, "quest_id": "qtl_boneyard_brotherhood",
+        "nft_metadata": { "collection": "Vault-77 Overseer Artifacts", "rarity_rank": 1 }
+      },
+      {
+        "id": "t51b_power_armor_full", "name": "T-51b Power Armor (Full Set)", "type": "armor", "rarity": "legendary",
+        "value_caps": 60000, "value_fizz": 4800, "nft_eligible": true,
+        "description": "Complete T-51b power armor set, pristine condition. The peak of pre-war personal armor.",
+        "armor_rating": 140, "power_armor": true, "full_set": true, "weight": 92.0,
+        "nft_metadata": { "collection": "Vault-77 Legendary Arsenal", "rarity_rank": 8 }
+      },
+      {
+        "id": "alien_blaster", "name": "Alien Blaster", "type": "weapon", "rarity": "legendary",
+        "value_caps": 80000, "value_fizz": 6400, "nft_eligible": true,
+        "description": "Not of this earth. Literally. Disintegrates most organics on contact.",
+        "damage": 250, "ammo_type": "alien_power_cell", "weight": 2.0, "damage_type": "alien_energy",
+        "nft_metadata": { "collection": "Vault-77 Legendary Arsenal", "rarity_rank": 2 },
+        "progression_unlock": "quest_crash_site_roswell"
+      }
+    ],
+    "nft_items": [
+      {
+        "id": "fizz_genesis_token", "name": "FIZZ Genesis Token", "type": "nft_item", "rarity": "legendary",
+        "value_caps": 500000, "value_fizz": 50000, "nft_eligible": true,
+        "description": "One of 77 Genesis Tokens minted when FIZZ launched. Proof of original wasteland survival.",
+        "nft_metadata": {
+          "collection": "FIZZ Genesis Collection",
+          "total_supply": 77,
+          "rarity_rank": "1-77",
+          "blockchain": "solana",
+          "royalty_pct": 7
+        },
+        "drop_weight": 0.001
+      },
+      {
+        "id": "vault77_overseer_badge", "name": "Vault 77 Overseer Badge", "type": "nft_item", "rarity": "epic",
+        "value_caps": 15000, "value_fizz": 1200, "nft_eligible": true,
+        "description": "Official badge of a Vault 77 Overseer. Grants administrative status in any surviving vault.",
+        "nft_metadata": {
+          "collection": "Vault-77 Overseer Artifacts",
+          "total_supply": 500,
+          "rarity_rank": "varies",
+          "blockchain": "solana"
+        },
+        "drop_weight": 0.005
+      },
+      {
+        "id": "wasteland_explorer_sigil", "name": "Wasteland Explorer Sigil", "type": "nft_item", "rarity": "rare",
+        "value_caps": 5000, "value_fizz": 400, "nft_eligible": true,
+        "description": "Awarded to players who have claimed 50 unique GPS locations. A mark of genuine wandering.",
+        "nft_metadata": {
+          "collection": "Vault-77 Explorer Achievements",
+          "total_supply": 2500,
+          "blockchain": "solana"
+        },
+        "progression_unlock": "achievement_50_pois",
+        "drop_weight": 0.02
+      },
+      {
+        "id": "faction_war_veteran_token", "name": "Faction War Veteran Token", "type": "nft_item", "rarity": "rare",
+        "value_caps": 8000, "value_fizz": 640, "nft_eligible": true,
+        "description": "Proof of surviving 100 faction raid encounters. The wasteland remembers.",
+        "nft_metadata": {
+          "collection": "Vault-77 Combat Veterans",
+          "total_supply": 1000,
+          "blockchain": "solana"
+        },
+        "progression_unlock": "achievement_100_raids",
+        "drop_weight": 0.01
+      }
+    ]
+  },
+  "faction_specific_loot": {
+    "brotherhood_of_steel": {
+      "common_additions": ["fusion_cell", "laser_pistol"],
+      "rare_drops": ["brotherhood_holotape", "t45_power_armor_helm"],
+      "legendary_exclusive": ["t51b_power_armor_full"],
+      "drop_note": "Brotherhood soldiers carry energy weapons and power armor components"
+    },
+    "ncr": {
+      "common_additions": ["ammo_556", "ammo_308"],
+      "rare_drops": ["ncr_ranger_armor", "combat_armor_chest"],
+      "legendary_exclusive": ["anti_materiel_rifle"],
+      "drop_note": "NCR soldiers are well-armed with conventional ballistic weapons"
+    },
+    "raiders": {
+      "common_additions": ["ammo_38", "pipe_pistol"],
+      "rare_drops": ["spiked_knuckles", "raider_armor_heavy"],
+      "legendary_exclusive": [],
+      "drop_note": "Raiders carry improvised weapons and scavenged armor"
+    },
+    "institute": {
+      "common_additions": ["fusion_cell"],
+      "rare_drops": ["synth_component", "institute_laser_pistol"],
+      "legendary_exclusive": ["prototype_gauss_pistol"],
+      "drop_note": "Institute synths carry advanced technology rarely seen in the wasteland"
+    },
+    "railroad": {
+      "common_additions": ["stealth_boy"],
+      "rare_drops": ["ballistic_weave_schematic"],
+      "legendary_exclusive": ["railroad_armor_legendary"],
+      "drop_note": "Railroad agents specialize in stealth and mobility"
+    },
+    "children_of_atom": {
+      "common_additions": ["glowing_one_gland", "irradiated_mushroom"],
+      "rare_drops": ["gamma_gun", "atom_glory_robe"],
+      "legendary_exclusive": [],
+      "drop_note": "Children of Atom carry radiation weapons and religious artifacts"
+    },
+    "gunners": {
+      "common_additions": ["ammo_556", "frag_grenade"],
+      "rare_drops": ["combat_armor_chest", "assault_rifle_military"],
+      "legendary_exclusive": ["gauss_rifle"],
+      "drop_note": "Gunners are professional mercenaries with military-grade equipment"
+    },
+    "enclave": {
+      "common_additions": ["plasma_cartridge", "advanced_power_cell"],
+      "rare_drops": ["enclave_power_armor_piece", "plasma_rifle"],
+      "legendary_exclusive": ["alien_blaster"],
+      "drop_note": "Enclave soldiers carry the most advanced technology available"
+    },
+    "super_mutants": {
+      "common_additions": ["ammo_308", "buffout"],
+      "rare_drops": ["minigun_damaged", "super_sledge_dented"],
+      "legendary_exclusive": ["fatman_launcher"],
+      "drop_note": "Super Mutants favor heavy weapons and rarely use armor"
+    }
+  },
+  "timeline_specific_loot": {
+    "fallout_1": {
+      "era_items": ["laser_pistol", "plasma_pistol_worn", "combat_armor_early"],
+      "era_flavor": "First-generation post-war technology. Crude but functional.",
+      "tech_level": "early"
+    },
+    "fallout_2": {
+      "era_items": ["advanced_power_armor_mkii", "turbo_plasma_rifle"],
+      "era_flavor": "Mature wasteland technology. Two generations of improvisation.",
+      "tech_level": "mid"
+    },
+    "fallout_new_vegas": {
+      "era_items": ["anti_materiel_rifle", "lucky_magnum", "x_cell"],
+      "era_flavor": "Mojave-specific technology. Diverse, well-maintained, NCR-influenced.",
+      "tech_level": "mature"
+    },
+    "fallout_3": {
+      "era_items": ["combat_shotgun", "scoped_44_magnum", "deathclaw_gauntlet"],
+      "era_flavor": "Capital Wasteland salvage. Rough but creative.",
+      "tech_level": "mid"
+    },
+    "fallout_4": {
+      "era_items": ["plasma_rifle", "t45_power_armor_helm", "ballistic_weave_schematic"],
+      "era_flavor": "Commonwealth technology. Institute-influenced innovation.",
+      "tech_level": "advanced"
+    },
+    "fallout_76": {
+      "era_items": ["handmade_rifle", "black_powder_pistol", "super_sledge_dented"],
+      "era_flavor": "Early wasteland tech. The first survivors made do with very little.",
+      "tech_level": "early"
+    },
+    "fallout_tactics": {
+      "era_items": ["mp5_smg_salvaged", "nightvision_goggles", "combat_armor_heavy"],
+      "era_flavor": "Midwest Brotherhood salvage. Military surplus emphasis.",
+      "tech_level": "mid"
+    }
+  },
+  "progression_unlocks": {
+    "perk_energy_weapons": {
+      "name": "Energy Weapons Mastery",
+      "description": "All energy weapons deal 20% more damage",
+      "triggered_by": "plasma_rifle"
+    },
+    "perk_ballistic_weave": {
+      "name": "Ballistic Weave",
+      "description": "Can apply ballistic weave to clothing and outfits",
+      "triggered_by": "ballistic_weave_schematic"
+    },
+    "quest_prototype_origins": {
+      "name": "Prototype Origins",
+      "description": "Unlocks the Prototype Origins quest chain",
+      "triggered_by": "prototype_gauss_pistol"
+    },
+    "quest_overseer_legacy": {
+      "name": "The Overseer's Legacy",
+      "description": "Unlocks the full Overseer Legacy quest line",
+      "triggered_by": "overseer_long_coat_legendary"
+    },
+    "quest_crash_site_roswell": {
+      "name": "The Roswell Incident",
+      "description": "Unlocks the Alien Crash Site investigation quest",
+      "triggered_by": "alien_blaster"
+    },
+    "quest_gauss_mastery": {
+      "name": "Gauss Mastery",
+      "description": "Unlocks the Gauss Rifle mastery perk tree",
+      "triggered_by": "gauss_rifle"
+    },
+    "achievement_50_pois": {
+      "name": "Wasteland Explorer",
+      "description": "Awarded for claiming 50 unique GPS POI locations",
+      "triggered_by": "wasteland_explorer_sigil"
+    },
+    "achievement_100_raids": {
+      "name": "Faction War Veteran",
+      "description": "Awarded for surviving 100 faction raid encounters",
+      "triggered_by": "faction_war_veteran_token"
+    }
+  }
+}

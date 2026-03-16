@@ -306,6 +306,9 @@ safeMount("/api/overseer", api("overseer-proxy"));
 // NPC video generation via xAI Grok
 safeMount("/api/npc/video", api("npc-video"));
 
+// NPC xAI context endpoint (profile + dynamic encounter generation)
+safeMount("/api/npc-context", api("npc-context"));
+
 // Fizz Fun token launcher
 safeMount("/api/fizz-fun", api("fizz-fun"));
 
