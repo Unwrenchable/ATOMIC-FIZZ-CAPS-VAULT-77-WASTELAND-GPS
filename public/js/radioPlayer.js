@@ -222,6 +222,8 @@
 
       if (this.config.stations.length > 0) {
         this.currentStationId = this.config.stations[0].id;
+        // Show station name immediately even before tracks are loaded
+        this._updateStationDisplay();
       }
 
       setTimeout(() => this.start(), 1000);
@@ -240,13 +242,23 @@
       this._updateStationDisplay();
       if (!station || !station.ready) {
         console.warn("[Radio] No ready station to start");
+        // Show "press play" hint if station is not yet ready
+        const label = document.getElementById("currentStation");
+        if (label && (!label.textContent || label.textContent === "NO SIGNAL")) {
+          const firstMeta = this.config.stations[0];
+          if (firstMeta) {
+            label.textContent = `${firstMeta.name} | ${firstMeta.frequency} FM`;
+          }
+        }
         return;
       }
 
       console.log(`[Radio] Starting station: ${station.name}`);
 
       // ⭐ QUEST HOOK: Wake Up → turn_on_radio
-      Game.quests?.completeObjective("wake_up", "turn_on_radio");
+      if (window.Game && window.Game.quests && typeof window.Game.quests.completeObjective === "function") {
+        window.Game.quests.completeObjective("wake_up", "turn_on_radio");
+      }
 
       this._playNext();
     }
@@ -310,7 +322,11 @@
       const label = document.getElementById("currentStation");
       if (!label) return;
       const station = this.currentStation;
-      label.textContent = station?.name || "NO SIGNAL";
+      if (station) {
+        label.textContent = `${station.name} | ${station.frequency} FM`;
+      } else {
+        label.textContent = "PRESS PLAY TO START BROADCAST";
+      }
     }
 
     // ------------------------------------------------------------
@@ -423,7 +439,20 @@
         this.inactiveAudio = active;
       });
 
-      inactive.play().catch(e => console.warn("[Radio] Play error:", e));
+      inactive.play().catch(e => {
+        console.warn("[Radio] Play error (autoplay blocked?):", e);
+        // Update display to prompt user to click play
+        const label = document.getElementById("currentStation");
+        if (label) label.textContent = "▶ PRESS PLAY TO START BROADCAST";
+        // Add a one-shot interaction-to-play fallback; { once: true } handles automatic cleanup
+        const startOnInteraction = () => {
+          inactive.play().catch(() => {});
+          this._updateStationDisplay(); // restore proper station label
+        };
+        ["click", "keydown", "touchstart"].forEach(evt =>
+          document.addEventListener(evt, startOnInteraction, { once: true })
+        );
+      });
     }
 
     _crossfade(fromAudio, toAudio, onComplete) {
