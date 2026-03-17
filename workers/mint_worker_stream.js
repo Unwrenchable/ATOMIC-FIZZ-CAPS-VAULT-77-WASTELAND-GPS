@@ -2,6 +2,7 @@
 // Consumes Redis Stream `afw:mint:queue:stream` via XREADGROUP consumer group semantics
 // For demo: creates consumer group 'mint_workers' and consumer id from hostname
 
+const crypto = require('crypto');
 const os = require('os');
 const { redis, key } = require('../backend/lib/redis');
 
@@ -26,7 +27,7 @@ async function processStreamEntry(id, data) {
     console.log('[mint_worker_stream] processing job', id, job);
 
     // Simulate on-chain mint signing using stub
-    const tx = { txId: `tx-${Date.now()}-${Math.floor(Math.random()*10000)}`, status: 'success' };
+    const tx = { txId: `tx-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`, status: 'success' };
 
     // Update audit record
     const auditKey = job.auditKey;

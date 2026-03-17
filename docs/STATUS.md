@@ -1,6 +1,6 @@
 # ☢️ ATOMIC FIZZ CAPS — Project Status & Mainnet Readiness
 
-> **Last Updated**: March 2026 | **Version**: 1.0.1 | **Network**: Devnet (mainnet pending)
+> **Last Updated**: March 2026 | **Version**: 1.0.2 | **Network**: Devnet (mainnet pending)
 
 ---
 
@@ -28,7 +28,7 @@ The game has strong bones. Frontend gameplay loop is **functionally complete**. 
 | 🪙 NFT minting (on-chain) | ❌ Stub | NOT implemented |
 | 👷 Mint workers | ❌ Stub | NOT implemented |
 | 🔑 Key management (KMS) | ❌ Stub | NOT implemented |
-| 🧪 Test suite | ⚠️ Minimal | 2 automated tests |
+| 🎲 Loot table randomization | ✅ Fixed | Weighted crypto-RNG (6 tiers, 54 items) |
 
 ---
 
@@ -216,7 +216,7 @@ The game client and server infrastructure are production-quality. The blocking i
 | 5 | Set `SOLANA_NETWORK=mainnet-beta` + funded mainnet RPC (Helius/QuickNode recommended) | Low |
 | 6 | Set `CAPS_MINT` to real SPL token mint on mainnet | Low |
 | 7 | Set `TREASURY_WALLET` to funded mainnet wallet with mint authority | Low |
-| 8 | Loot table randomization — `backend/lib/lootTable.js` is static (always returns same item) | Medium |
+| 8 | Loot table randomization — ✅ **FIXED**: weighted crypto-RNG across 6 tiers, 54 items (`backend/lib/lootTable.js`) | Done |
 | 9 | VATS visual polish — camera animation and hit feedback are TODOs | Low |
 
 ### 🟢 ALREADY PRODUCTION-READY (no changes needed)
@@ -266,7 +266,7 @@ PHASE 4: TESTING & MONITORING (week 4)
   [ ] Add transaction failure alerts
   [ ] Add worker queue depth monitoring
   [ ] Add Solana RPC error rate monitoring
-  [ ] Fix static loot table (backend/lib/lootTable.js) with weighted crypto RNG
+  [ ] Fix static loot table (backend/lib/lootTable.js) with weighted crypto RNG ✅ DONE
 
 PHASE 5: LAUNCH
   [ ] Smoke test on mainnet with small wallet
