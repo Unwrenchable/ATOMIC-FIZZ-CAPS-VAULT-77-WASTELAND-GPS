@@ -444,14 +444,14 @@
         // Update display to prompt user to click play
         const label = document.getElementById("currentStation");
         if (label) label.textContent = "▶ PRESS PLAY TO START BROADCAST";
-        // Add a one-shot click-to-play fallback; { once: true } handles automatic cleanup
+        // Add a one-shot interaction-to-play fallback; { once: true } handles automatic cleanup
         const startOnInteraction = () => {
           inactive.play().catch(() => {});
           this._updateStationDisplay(); // restore proper station label
         };
-        document.addEventListener("click", startOnInteraction, { once: true });
-        document.addEventListener("keydown", startOnInteraction, { once: true });
-        document.addEventListener("touchstart", startOnInteraction, { once: true });
+        ["click", "keydown", "touchstart"].forEach(evt =>
+          document.addEventListener(evt, startOnInteraction, { once: true })
+        );
       });
     }
 

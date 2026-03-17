@@ -147,7 +147,7 @@
 
   function giveStimpak() {
     const item = {
-      id: "stimpak_dev",
+      id: "stimpak",
       name: "Stimpak",
       type: "aid",
       effect: "heal",
