@@ -897,11 +897,19 @@
         console.warn('[worldmap] Could not find exploreToggleBtn to update');
       }
       
-      // Show status message
+      // Show status message and adjust view
       if (this.explorationMode) {
-        this.showMapMessage('EXPLORATION MODE: Map will not snap back to player');
+        // Zoom out to a route-planning level so players can see the broader area
+        if (this.map) {
+          const currentZoom = this.map.getZoom();
+          if (currentZoom > 13) {
+            this.map.setZoom(10, { animate: true });
+          }
+        }
+        this.showMapMessage('EXPLORE MODE: Pan freely to plan your route');
       } else {
         this.showMapMessage('Following player position');
+        this.autoFollowEnabled = true;
         this.centerOnPlayer(true);
       }
       
@@ -918,8 +926,9 @@
 
     centerOnPlayer(fromGPS = false) {
       if (!this.map) return;
-      // Don't auto-center if in exploration mode (unless manually triggered)
-      if (this.explorationMode && !fromGPS) return;
+      // In exploration mode, never auto-center the map regardless of source
+      // (GPS updates still move the player marker but the view stays free)
+      if (this.explorationMode) return;
       const pos = this.gs.player.position;
       if (!fromGPS && !this.autoFollowEnabled) return;
       
