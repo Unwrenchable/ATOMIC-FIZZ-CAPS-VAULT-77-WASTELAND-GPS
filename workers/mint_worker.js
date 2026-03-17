@@ -2,6 +2,7 @@
 // Simple worker that processes items from the Redis list `afw:mint:queue:list`.
 // It demonstrates safe dequeue (RPOP/LPOP), processes job, marks audit with fake tx
 
+const crypto = require('crypto');
 const { redis, key } = require('../backend/lib/redis');
 
 async function processJob(job) {
@@ -12,7 +13,7 @@ async function processJob(job) {
   // Mark audit record with simulated tx
   const auditKey = job.auditKey;
   const tx = {
-    txId: `tx-${Date.now()}-${Math.floor(Math.random()*10000)}`,
+    txId: `tx-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
     mintedAt: Date.now(),
     status: 'success'
   };
