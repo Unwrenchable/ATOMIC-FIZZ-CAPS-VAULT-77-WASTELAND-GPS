@@ -6,6 +6,13 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // Secure RNG — no Math.random() for game-critical paths
+  function _secureRand() {
+    const buf = new Uint32Array(1);
+    crypto.getRandomValues(buf);
+    return buf[0] / 0x100000000;
+  }
+
   // Randomization presets for NPC variety
   const NPC_TINTS = [
     0xFFFFFF, // normal
@@ -132,7 +139,7 @@
       if (!this.factory) throw new Error('factory not loaded');
 
       // Get randomized variation based on NPC ID
-      const variation = getRandomVariation(npcId || 'default_' + Math.random());
+      const variation = getRandomVariation(npcId || 'default_' + _secureRand());
 
       // cleanup previous
       if (this.armatureDisplay) {
@@ -158,7 +165,7 @@
         } else {
           // no animations exported -> we'll apply a small runtime idle bob using PIXI ticker
           // to make the portrait feel alive without authoring animations
-          let t = Math.random() * Math.PI * 2; // randomize starting phase
+          let t = _secureRand() * Math.PI * 2; // randomize starting phase
           const bobAmount = variation.idleBob;
           armatureDisplay._idleTicker = (delta) => {
             t += 0.05 * variation.animSpeed * (delta || 1);
@@ -257,7 +264,7 @@
           // Periodic blink scheduler
           let blinkTimer = null;
           const scheduleBlink = () => {
-            const delay = 3000 + Math.random() * 2200;
+            const delay = 3000 + _secureRand() * 2200;
             blinkTimer = setTimeout(() => {
               try { blinkAnim.beginElement(); } catch (_) {}
               scheduleBlink();

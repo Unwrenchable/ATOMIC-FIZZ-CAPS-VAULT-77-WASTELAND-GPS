@@ -6,6 +6,13 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // Secure RNG — no Math.random() for game-critical paths
+  function _secureRand() {
+    const buf = new Uint32Array(1);
+    crypto.getRandomValues(buf);
+    return buf[0] / 0x100000000;
+  }
+
   // ============================================================
   // STRUGGLE QUIPS MODULE
   // ============================================================
@@ -268,7 +275,7 @@
 
     pickRandom(arr) {
       if (!arr || arr.length === 0) return null;
-      return arr[Math.floor(Math.random() * arr.length)];
+      return arr[Math.floor(_secureRand() * arr.length)];
     },
 
     // Reset hack fail counter (call when player succeeds)
