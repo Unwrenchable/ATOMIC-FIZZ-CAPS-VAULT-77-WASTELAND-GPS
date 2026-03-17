@@ -993,12 +993,15 @@
       exchangeTabBtn.addEventListener('click', () => {
         renderExchangeClaimSection();
         renderExchangeCraftingSection();
+        // Re-render demo exchange (caps may have changed)
+        renderDemoExchange();
       });
     }
     // Optionally, render immediately if EXCHANGE is default
     if (exchangePanel && exchangePanel.classList.contains('active')) {
       renderExchangeClaimSection();
       renderExchangeCraftingSection();
+      renderDemoExchange();
     }
     // ...existing code...
     const bound = new Set();
@@ -1091,6 +1094,425 @@
   }
 
   // ---------------------------
+  // STARTER PACK
+  // ---------------------------
+
+  const STARTER_PACK_KEY = "afc_starter_pack_granted";
+
+  const STARTER_PACK_ITEMS = [
+    {
+      id: "stimpak",
+      name: "Stimpak",
+      type: "aid",
+      effect: "heal",
+      healAmt: 25,
+      rarity: "common",
+      quantity: 2,
+      weight: 0.5,
+      description: "A pre-war medical injector. Heals 25 HP."
+    },
+    {
+      id: "radaway",
+      name: "RadAway",
+      type: "aid",
+      effect: "radflush",
+      rarity: "common",
+      quantity: 1,
+      weight: 0.5,
+      description: "Flushes radiation from your system."
+    },
+    {
+      id: "rusty_pistol",
+      name: "Rusty 10mm Pistol",
+      type: "weapon",
+      damage: 15,
+      rarity: "common",
+      quantity: 1,
+      weight: 2.5,
+      description: "A battered pistol from before the war."
+    }
+  ];
+
+  function grantStarterPack() {
+    if (localStorage.getItem(STARTER_PACK_KEY)) return; // already granted
+    localStorage.setItem(STARTER_PACK_KEY, "true");
+
+    // Give starter caps + XP (additive — reward is on top of whatever they already have)
+    PLAYER.caps = (PLAYER.caps || 0) + 50;
+    PLAYER.xp = (PLAYER.xp || 0) + 10;
+
+    // Add items to inventory
+    STARTER_PACK_ITEMS.forEach(function (item) {
+      // Try unified addItem API first
+      if (window.Game && window.Game.player && typeof window.Game.player.addItem === "function") {
+        try {
+          window.Game.player.addItem(item);
+          return;
+        } catch (e) {
+          safeWarn("[StarterPack] addItem failed:", e.message);
+        }
+      }
+      // Fallback: push item id/name string into local PLAYER.inventory
+      const key = item.id || item.name;
+      if (!PLAYER.inventory.includes(key)) {
+        PLAYER.inventory.push(key);
+      }
+    });
+
+    savePlayerState();
+    updateHUD();
+    renderInventoryPanel();
+
+    // Show toast notification
+    showStarterPackToast();
+    safeLog("[StarterPack] Starter pack granted to new player");
+  }
+
+  function showStarterPackToast() {
+    const toast = document.createElement("div");
+    toast.id = "starterPackToast";
+    toast.innerHTML = [
+      "✦ STARTER PACK RECEIVED ✦",
+      '<div class="toast-items">',
+      "2× Stimpak | 1× RadAway | Rusty 10mm Pistol<br/>",
+      "50 CAPS | 10 XP",
+      "</div>"
+    ].join("");
+    document.body.appendChild(toast);
+    setTimeout(function () { toast.remove(); }, 4000);
+  }
+
+  // ---------------------------
+  // WEATHER SYSTEM
+  // ---------------------------
+
+  const WEATHER_TYPES = ["Clear", "Cloudy", "Ash Storm", "Rad Storm", "Fog"];
+  let _currentWeather = "Clear";
+  let _weatherTick = 0;
+  let _weatherInterval = null;
+  let _radFromWeather = 0; // accumulated radiation from weather (per-minute basis)
+
+  // +2 rads/minute converted to per-second rate (weatherTick runs every ~1s)
+  const RAD_STORM_RATE_PER_SECOND = 2 / 60;
+  // Rotate weather every 5 minutes (300 ticks @ 1s interval)
+  const WEATHER_ROTATION_TICKS = 300;
+
+  function pickNewWeather() {
+    const rng = new Uint32Array(1);
+    crypto.getRandomValues(rng);
+    _currentWeather = WEATHER_TYPES[rng[0] % WEATHER_TYPES.length];
+    window.currentWeather = _currentWeather;
+    updateWeatherDisplay();
+    safeLog("[Weather] New weather:", _currentWeather);
+  }
+
+  function updateWeatherDisplay() {
+    const el = document.getElementById("stat-weather");
+    if (el) el.textContent = _currentWeather;
+  }
+
+  function weatherTick() {
+    _weatherTick++;
+
+    // Apply radiation from Rad Storm
+    if (_currentWeather === "Rad Storm") {
+      _radFromWeather += RAD_STORM_RATE_PER_SECOND;
+      if (_radFromWeather >= 1) {
+        const radGain = Math.floor(_radFromWeather);
+        _radFromWeather -= radGain;
+        // Increment player radiation (if stored)
+        if (!PLAYER.radiation) PLAYER.radiation = 0;
+        PLAYER.radiation = Math.min(100, PLAYER.radiation + radGain);
+        updateRadDisplay();
+      }
+    } else {
+      _radFromWeather = 0; // reset accumulator on non-rad weather
+    }
+
+    // Rotate weather every 5 minutes (WEATHER_ROTATION_TICKS @ 1s interval)
+    if (_weatherTick % WEATHER_ROTATION_TICKS === 0) {
+      pickNewWeather();
+    }
+  }
+
+  function updateRadDisplay() {
+    const radBar = document.getElementById("stat-rad-bar");
+    const radLabel = document.getElementById("stat-rad-label");
+    if (radBar) radBar.style.width = (PLAYER.radiation || 0) + "%";
+    if (radLabel) radLabel.textContent = Math.round(PLAYER.radiation || 0) + "%";
+  }
+
+  function startWeatherSystem() {
+    // Seed initial weather from world module if available
+    if (window.Game && window.Game.modules && window.Game.modules.worldWeather &&
+        window.Game.modules.worldWeather.getCurrent) {
+      try {
+        const ww = window.Game.modules.worldWeather.getCurrent();
+        if (ww && ww.type) {
+          _currentWeather = ww.type;
+          window.currentWeather = _currentWeather;
+        }
+      } catch (e) { /* ignore */ }
+    }
+    // Also check window.currentWeather if already set
+    if (window.currentWeather && typeof window.currentWeather === "string") {
+      _currentWeather = window.currentWeather;
+    }
+
+    updateWeatherDisplay();
+
+    // Tick every second for radiation, rotate every 5 minutes
+    if (_weatherInterval) clearInterval(_weatherInterval);
+    _weatherInterval = setInterval(weatherTick, 1000);
+    safeLog("[Weather] Weather system started. Current:", _currentWeather);
+  }
+
+  // ---------------------------
+  // MAP SCAN ENHANCEMENT
+  // ---------------------------
+
+  const WASTELAND_DISCOVERIES = [
+    { name: "The Crimson Dunes",       flavor: "A sea of blood-red sand hides pre-war secrets beneath." },
+    { name: "Ruined Vault 77",         flavor: "The blast doors hang open. Something left — or got in." },
+    { name: "Dead Wind Cavern",        flavor: "A low moan echoes from deep within the darkness." },
+    { name: "Abandoned Settlement",    flavor: "Scorch marks and scattered caps tell a grim story." },
+    { name: "Radiation Crater",        flavor: "The Geiger counter screams. Valuable ore glints below." },
+    { name: "Old Gas Station",         flavor: "Faded neon flickers: 'NUKA-COLA — 10¢'. A relic." },
+    { name: "Scavenger's Camp",        flavor: "Still-warm embers. Someone was just here." },
+    { name: "The Glowing Sea",         flavor: "The air shimmers with sickly light. Proceed with caution." },
+    { name: "Desert Outpost Alpha",    flavor: "Brotherhood tags and scorched concrete. Long abandoned." },
+    { name: "Collapsed Highway",       flavor: "Miles of cracked asphalt, rusted cars, and bones." }
+  ];
+
+  const MAP_SCAN_KEY = "afc_map_discoveries";
+  let _mapDiscoveries = [];
+
+  function loadMapDiscoveries() {
+    try {
+      const raw = localStorage.getItem(MAP_SCAN_KEY);
+      if (raw) _mapDiscoveries = JSON.parse(raw) || [];
+    } catch (e) { _mapDiscoveries = []; }
+  }
+
+  function saveMapDiscoveries() {
+    try { localStorage.setItem(MAP_SCAN_KEY, JSON.stringify(_mapDiscoveries)); } catch (e) {}
+  }
+
+  function initMapScanEnhancement() {
+    const exploreBtn = document.getElementById("exploreToggleBtn");
+    if (!exploreBtn) return;
+
+    loadMapDiscoveries();
+
+    exploreBtn.addEventListener("click", function () {
+      // Only trigger discovery if we just switched to explore mode
+      // (worldmap.js toggles the text to "RETURN TO PLAYER" after click)
+      const textEl = document.getElementById("exploreText");
+      const currentText = textEl ? textEl.textContent : exploreBtn.textContent;
+
+      // If worldmap toggled it to "RETURN TO PLAYER", we are now exploring → show scan
+      // We use a short delay to check after worldmap.js has processed the click
+      setTimeout(function () {
+        const afterText = textEl ? textEl.textContent : exploreBtn.textContent;
+        const nowExploring = afterText && afterText.indexOf("RETURN") !== -1;
+        if (nowExploring) {
+          runMapScan();
+        }
+      }, 100);
+    });
+
+    safeLog("[MapScan] Map scan enhancement active");
+  }
+
+  function runMapScan() {
+    const mapLog = document.getElementById("mapLog");
+    const mapStatus = document.getElementById("mapStatus");
+
+    if (mapStatus) mapStatus.textContent = "SCANNING...";
+
+    // Show scanning animation in mapLog
+    if (mapLog) {
+      const scanEntry = document.createElement("div");
+      scanEntry.style.cssText = "color:#00ff41;font-size:12px;animation:header-flicker 0.6s infinite;";
+      scanEntry.textContent = "[ SCANNING REGION... ]";
+      mapLog.prepend(scanEntry);
+
+      // After 2–3 seconds, discover a location
+      const rng = new Uint32Array(1);
+      crypto.getRandomValues(rng);
+      const delayMs = 2000 + (rng[0] % 1001); // 2000–3000ms
+
+      setTimeout(function () {
+        scanEntry.remove();
+        discoverRandomLocation(mapLog, mapStatus);
+      }, delayMs);
+    } else {
+      // No mapLog — just discover after delay
+      const rng = new Uint32Array(1);
+      crypto.getRandomValues(rng);
+      setTimeout(function () { discoverRandomLocation(null, mapStatus); }, 2000 + (rng[0] % 1001));
+    }
+  }
+
+  function discoverRandomLocation(mapLog, mapStatus) {
+    // Pick an undiscovered location first; fall back to any if all discovered
+    const undiscovered = WASTELAND_DISCOVERIES.filter(function (d) {
+      return !_mapDiscoveries.includes(d.name);
+    });
+    const pool = undiscovered.length ? undiscovered : WASTELAND_DISCOVERIES;
+
+    const rng = new Uint32Array(1);
+    crypto.getRandomValues(rng);
+    const loc = pool[rng[0] % pool.length];
+
+    const isNew = !_mapDiscoveries.includes(loc.name);
+    if (isNew) {
+      _mapDiscoveries.push(loc.name);
+      saveMapDiscoveries();
+      markLocationVisited(loc.name);
+      addXP(5);
+    }
+
+    const prefix = isNew ? "★ DISCOVERED:" : "REVISITED:";
+
+    // Update map status
+    if (mapStatus) {
+      mapStatus.textContent = isNew ? "LOCATION FOUND" : "AREA SCANNED";
+    }
+
+    // Log the discovery
+    if (mapLog) {
+      const entry = document.createElement("div");
+      entry.style.cssText = "border-bottom:1px solid rgba(0,255,65,0.15);padding:6px 0;font-size:12px;";
+      entry.innerHTML = [
+        '<span style="color:#ffcc44;font-weight:bold;">' + escapeHtml(prefix) + " " + escapeHtml(loc.name) + "</span><br/>",
+        '<span style="opacity:0.7;">' + escapeHtml(loc.flavor) + "</span>",
+        isNew ? '<br/><span style="color:#00ff41;font-size:11px;">+5 XP — New discovery logged</span>' : ""
+      ].join("");
+      mapLog.prepend(entry);
+    }
+
+    safeLog("[MapScan]", prefix, loc.name);
+  }
+
+  // ---------------------------
+  // DEMO EXCHANGE (walletless)
+  // ---------------------------
+
+  const DEMO_SHOP_ITEMS = [
+    {
+      id: "stimpak",
+      name: "Stimpak",
+      cost: 20,
+      description: "Heals 25 HP. Essential for wasteland survival.",
+      item: { id: "stimpak", name: "Stimpak", type: "aid", effect: "heal", healAmt: 25, rarity: "common", quantity: 1, weight: 0.5 }
+    },
+    {
+      id: "radaway",
+      name: "RadAway",
+      cost: 30,
+      description: "Flushes radiation. Use after entering hot zones.",
+      item: { id: "radaway", name: "RadAway", type: "aid", effect: "radflush", rarity: "common", quantity: 1, weight: 0.5 }
+    },
+    {
+      id: "nuka_cola",
+      name: "Nuka-Cola",
+      cost: 10,
+      description: "Classic pre-war soft drink. Restores 10 HP and 5 AP.",
+      item: { id: "nuka_cola", name: "Nuka-Cola", type: "aid", effect: "heal", healAmt: 10, rarity: "common", quantity: 1, weight: 0.5 }
+    },
+    {
+      id: "bobby_pin",
+      name: "Bobby Pin (x5)",
+      cost: 15,
+      description: "Useful for lockpicking. A wasteland staple.",
+      item: { id: "bobby_pin", name: "Bobby Pin", type: "misc", rarity: "common", quantity: 5, weight: 0.1 }
+    },
+    {
+      id: "scrap_metal",
+      name: "Scrap Metal",
+      cost: 5,
+      description: "Salvaged steel. Useful for crafting repairs.",
+      item: { id: "scrap_metal", name: "Scrap Metal", type: "component", rarity: "common", quantity: 1, weight: 1.0 }
+    }
+  ];
+
+  function renderDemoExchange() {
+    const scavengerItems = document.getElementById("scavengerItems");
+    if (!scavengerItems) return;
+
+    let html = '<div style="margin-bottom:8px;font-size:11px;opacity:0.7;">Browse wasteland goods — no wallet required.</div>';
+    html += '<div id="demoExchangeStatus"></div>';
+
+    DEMO_SHOP_ITEMS.forEach(function (shopItem) {
+      html += [
+        '<div class="demo-shop-item">',
+        '  <div class="demo-shop-item-info">',
+        '    <div class="demo-shop-item-name">' + escapeHtml(shopItem.name) + "</div>",
+        '    <div class="demo-shop-item-desc">' + escapeHtml(shopItem.description) + "</div>",
+        '    <div class="demo-shop-item-cost">⚙ ' + shopItem.cost + " CAPS</div>",
+        "  </div>",
+        '  <button class="demo-shop-buy-btn" data-shop-id="' + escapeHtml(shopItem.id) + '">BUY</button>',
+        "</div>"
+      ].join("");
+    });
+
+    scavengerItems.innerHTML = html;
+
+    // Wire buy buttons
+    scavengerItems.querySelectorAll(".demo-shop-buy-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const shopId = this.getAttribute("data-shop-id");
+        const shopItem = DEMO_SHOP_ITEMS.find(function (s) { return s.id === shopId; });
+        if (!shopItem) return;
+
+        const statusEl = document.getElementById("demoExchangeStatus");
+
+        if (PLAYER.caps < shopItem.cost) {
+          if (statusEl) {
+            statusEl.className = "demo-shop-status";
+            statusEl.textContent = "INSUFFICIENT CAPS — you need " + shopItem.cost + " CAPS.";
+            setTimeout(function () { statusEl.textContent = ""; }, 3000);
+          }
+          return;
+        }
+
+        // Deduct caps and add item
+        PLAYER.caps = Math.max(0, PLAYER.caps - shopItem.cost);
+        savePlayerState();
+
+        // Try to add item via unified API
+        if (window.Game && window.Game.player && typeof window.Game.player.addItem === "function") {
+          try {
+            // Use structuredClone for a deep copy to prevent mutations affecting the shop catalog
+            const itemCopy = typeof structuredClone === "function"
+              ? structuredClone(shopItem.item)
+              : JSON.parse(JSON.stringify(shopItem.item));
+            window.Game.player.addItem(itemCopy);
+          } catch (e) {
+            PLAYER.inventory.push(shopItem.id);
+            savePlayerState();
+          }
+        } else {
+          PLAYER.inventory.push(shopItem.id);
+          savePlayerState();
+        }
+
+        updateHUD();
+        renderInventoryPanel();
+
+        if (statusEl) {
+          statusEl.className = "demo-shop-status ok";
+          statusEl.textContent = "✓ " + shopItem.name + " added to inventory.";
+          setTimeout(function () { statusEl.textContent = ""; }, 3000);
+        }
+
+        safeLog("[DemoExchange] Purchased:", shopItem.name, "for", shopItem.cost, "caps");
+      });
+    });
+  }
+
+  // ---------------------------
   // GAME INIT
   // ---------------------------
 
@@ -1169,6 +1591,28 @@
       renderInventoryPanel();
       renderQuestsPanel();
       updateHUD();
+
+      // Grant starter pack to new players (boot.js sets window._isNewGame)
+      if (window._isNewGame === true) {
+        grantStarterPack();
+      } else {
+        // Also grant if no starter pack has ever been given (upgrade path)
+        if (!localStorage.getItem(STARTER_PACK_KEY)) {
+          // Only grant if player has very little progress (xp === 0 && caps < 10)
+          if (PLAYER.xp === 0 && PLAYER.caps < 10) {
+            grantStarterPack();
+          }
+        }
+      }
+
+      // Start weather system
+      startWeatherSystem();
+
+      // Hook up map scan enhancement
+      initMapScanEnhancement();
+
+      // Render demo exchange (walletless shop)
+      renderDemoExchange();
 
       // Sync caps into world simulation player state
       if (window.overseerWorldState && window.overseerWorldState.player) {
