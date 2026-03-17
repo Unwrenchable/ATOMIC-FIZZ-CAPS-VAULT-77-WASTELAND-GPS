@@ -223,9 +223,11 @@ test("server.js includes atomicfizzcaps.xyz in CORS allowlist", () => {
 test("server.js uses explicit origin allowlist (not wildcard *)", () => {
   const src = readFile("backend/server.js");
   assert.ok(src, "backend/server.js must exist");
-  // Should not have `origin: '*'` or `origin: true` as a blanket allow-all
+  // Must not use `origin: '*'` or `origin: true` (blanket allow-all patterns)
   const hasWildcardStar = /origin\s*:\s*['"]?\*['"]?/.test(src);
   assert.ok(!hasWildcardStar, "CORS must not use wildcard * as origin");
+  const hasOriginTrue = /origin\s*:\s*true\b/.test(src);
+  assert.ok(!hasOriginTrue, "CORS must not use origin: true (blanket allow-all)");
 });
 
 test("Helmet middleware is applied", () => {
@@ -258,21 +260,27 @@ for (const { file, adminOnly } of IDOR_FILES) {
         hasSessionWallet,
         `${file} must use req.player.wallet for player-mutating operations`
       );
+
+      // No unguarded wallet-from-body patterns in non-admin routes (comments are OK)
+      const suspiciousLines = src
+        .split("\n")
+        .filter((l) => {
+          const trimmed = l.trim();
+          if (trimmed.startsWith("//") || trimmed.startsWith("*")) return false;
+          // Direct assignment: const wallet = req.body.wallet / req.body?.wallet
+          if (/(?:const|let|var)\s+wallet\s*=\s*req\.body(?:\?)?\.wallet/.test(l)) return true;
+          // Destructuring: const { wallet } = req.body
+          if (/(?:const|let|var)\s*\{[^}]*\bwallet\b[^}]*\}\s*=\s*req\.body/.test(l)) return true;
+          return false;
+        });
+      assert.strictEqual(
+        suspiciousLines.length,
+        0,
+        `${file} must not assign wallet from req.body without admin guard`
+      );
     }
-    // No unguarded req.body.wallet on non-admin routes (comments are OK)
-    const suspiciousLines = src
-      .split("\n")
-      .filter((l) => {
-        const trimmed = l.trim();
-        if (trimmed.startsWith("//") || trimmed.startsWith("*")) return false;
-        // flag if we see req.body.wallet assigned to a const/let/var wallet used downstream
-        return /(?:const|let|var)\s+wallet\s*=\s*req\.body\.wallet/.test(l);
-      });
-    assert.strictEqual(
-      suspiciousLines.length,
-      0,
-      `${file} must not assign wallet from req.body.wallet without admin guard`
-    );
+    // Admin-only files are allowed to accept wallet from req.body — their routes
+    // are protected by requireAdminSecret / adminAuth middleware, not authMiddleware.
   });
 }
 
