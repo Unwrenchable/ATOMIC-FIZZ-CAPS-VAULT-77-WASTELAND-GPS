@@ -84,7 +84,7 @@ server.tool(
   { wallet: z.string().min(32).max(88).describe("Solana wallet address (base58)") },
   async ({ wallet }) => {
     try {
-      const data = await apiFetch(`/api/player?wallet=${encodeURIComponent(wallet)}`);
+      const data = await apiFetch(`/api/player/${encodeURIComponent(wallet)}`);
       return textResult(data);
     } catch (err) {
       return errorResult(err);
@@ -214,8 +214,21 @@ server.tool(
   },
   async ({ id }) => {
     try {
-      const path = id ? `/api/quests?id=${encodeURIComponent(id)}` : "/api/quests";
-      const data = await apiFetch(path);
+      const data = await apiFetch("/api/quests");
+      if (id) {
+        // Filter client-side — backend returns full quests.json without server-side id filtering
+        let quest;
+        if (Array.isArray(data)) {
+          quest = data.find((q) => q.id === id);
+        } else if (typeof data === "object" && data !== null) {
+          // quests.json may be a keyed object { questId: {...} }
+          quest = data[id] || Object.values(data).find((q) => q && q.id === id);
+        }
+        if (!quest) {
+          return errorResult(new Error(`Quest "${id}" not found`));
+        }
+        return textResult(quest);
+      }
       return textResult(data);
     } catch (err) {
       return errorResult(err);
@@ -237,7 +250,7 @@ server.tool(
   async ({ wallet, poi_id }) => {
     try {
       const data = await apiFetch(
-        `/api/cooldowns?wallet=${encodeURIComponent(wallet)}&poi=${encodeURIComponent(poi_id)}`
+        `/api/cooldowns/status?wallet=${encodeURIComponent(wallet)}&poi=${encodeURIComponent(poi_id)}`
       );
       return textResult(data);
     } catch (err) {

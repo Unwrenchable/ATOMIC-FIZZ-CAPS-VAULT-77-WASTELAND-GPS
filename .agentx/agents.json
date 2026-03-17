@@ -2,14 +2,15 @@
   {
     "id": "vault77-overseer",
     "role": "Vault 77 Overseer AI",
-    "description": "Jax Harlan \u2014 the sarcastic, hyper-intelligent Vault 77 Overseer AI for the ATOMIC FIZZ CAPS Wasteland GPS game. Provides AI-powered player responses, persistent cross-session learning (localStorage-backed), conversation history context, faction tracking, lore delivery, and threat/weather situational awareness. Upgraded with learning capabilities via core.learning.js.",
+    "description": "Jax Harlan — the sarcastic, hyper-intelligent Vault 77 Overseer AI for the ATOMIC FIZZ CAPS Wasteland GPS game. Provides AI-powered player responses, persistent cross-session learning (localStorage-backed), conversation history context, faction tracking, lore delivery, and threat/weather situational awareness. Upgraded with learning capabilities via core.learning.js.",
     "tags": [
       "ai",
       "npc",
       "overseer",
       "wasteland",
       "learning",
-      "game"
+      "game",
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS"
     ],
     "capabilities": [
       "conversational-ai",
@@ -50,6 +51,170 @@
         "learn context"
       ]
     }
+  },
+  {
+    "id": "vault77-fullstack-dev",
+    "role": "Vault-77 Full-Stack Master Developer",
+    "description": "Ultimate full-stack engineer for the Atomic Fizz Caps Vault-77 Wasteland GPS game. Deep expertise in Node.js/Express backend (CommonJS), vanilla JS frontend, Solana blockchain, Redis (ioredis), Leaflet maps, Pip-Boy UI, and all game systems. Mounts routes via safeMount() in backend/server.js. Reads .github/agents/memory.md before every change. Delivers production-ready code.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "fullstack",
+      "javascript",
+      "node",
+      "solana",
+      "redis",
+      "game",
+      "engineering"
+    ],
+    "capabilities": [
+      "backend-api-development",
+      "frontend-vanilla-js",
+      "solana-integration",
+      "redis-data-modeling",
+      "express-routing",
+      "game-systems",
+      "security-hardening",
+      "mcp-server-development"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "vault77-game-tester",
+    "role": "Vault-77 Master QA Game Tester",
+    "description": "Master-level game tester and QA engineer for the Atomic Fizz Caps Vault-77 Wasteland GPS game. Simulates 1000 concurrent worldwide players across all skill levels. Identifies bugs, edge cases, exploits, balance issues, and performance bottlenecks. Reports findings in structured bug reports with reproduction steps, severity ratings, and suggested fixes. Uses tests/playtest-agent.js and tests/concurrent-load-test.js.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "testing",
+      "qa",
+      "game",
+      "security",
+      "performance"
+    ],
+    "capabilities": [
+      "load-testing",
+      "exploit-detection",
+      "balance-analysis",
+      "api-testing",
+      "bug-reporting",
+      "concurrent-player-simulation",
+      "edge-case-discovery"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "vault77-wasteland-assistant",
+    "role": "Vault-77 Wasteland Game Systems Expert",
+    "description": "Game mechanics expert for the Atomic Fizz Caps Wasteland GPS game. Specializes in battle system (V.A.T.S.), crafting, loot tables, faction reputation, quest scripting, NPC dialog (narrative.js), dungeon generation, Overseer AI personality, and item economy. Knows the full dialog node format and grant_items system. References public/data/ JSON files.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "game",
+      "mechanics",
+      "npc",
+      "quests",
+      "loot",
+      "economy"
+    ],
+    "capabilities": [
+      "battle-system-design",
+      "npc-dialog-scripting",
+      "quest-creation",
+      "loot-table-balancing",
+      "dungeon-generation",
+      "item-economy",
+      "faction-design",
+      "overseer-ai-configuration"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "vault77-web3-specialist",
+    "role": "Vault-77 Web3 & Solana Specialist",
+    "description": "Solana/Phantom wallet, FIZZ SPL token, NFT (Metaplex), and Wormhole cross-chain bridge expert for the Atomic Fizz Caps game. Handles wallet signature verification (tweetnacl + bs58), token distribution (treasury model — fixed supply, no minting), NFT minting flows, and the Fizz.fun token launchpad. Knows the wallet auth flow: GET /api/wallet/nonce/:publicKey then POST /api/wallet/verify.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "solana",
+      "web3",
+      "nft",
+      "defi",
+      "blockchain",
+      "security"
+    ],
+    "capabilities": [
+      "solana-wallet-integration",
+      "spl-token-management",
+      "nft-minting",
+      "wormhole-bridge",
+      "wallet-signature-verification",
+      "fizz-fun-launchpad",
+      "treasury-distribution"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "vault77-mcp-server",
+    "role": "Vault-77 MCP Server Agent",
+    "description": "Model Context Protocol server that exposes live Vault-77 game data to AI assistants (VS Code Copilot, Claude Desktop, etc.). Tools: check_api_health, get_player_profile, get_leaderboard, list_locations, list_items, get_game_config, get_quest_definitions, get_cooldown_status, get_rotation, get_faction_data. ESM module in mcp/vault77-server.js, run separately from the CommonJS backend.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "mcp",
+      "ai-integration",
+      "api",
+      "game"
+    ],
+    "capabilities": [
+      "mcp-tool-provision",
+      "live-game-data",
+      "player-profile-lookup",
+      "leaderboard",
+      "cooldown-status",
+      "quest-definitions",
+      "location-data"
+    ],
+    "required_tools": [
+      "read_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "safe",
+    "risk_level": "low"
   },
   {
     "id": "agents-orchestrator",

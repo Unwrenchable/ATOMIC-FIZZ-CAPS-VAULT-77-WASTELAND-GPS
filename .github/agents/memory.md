@@ -123,6 +123,26 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-03-17] MCP Server bug fixes + new backend endpoints
+- **What**: Fixed 4 broken MCP tools in `mcp/vault77-server.js`:
+  1. `get_player_profile` — URL was `?wallet=` query param; fixed to `/api/player/:wallet` path param.
+  2. `get_quest_definitions` — Backend ignores `?id=` filter; MCP now filters client-side after fetching all quests.
+  3. `get_cooldown_status` — Backend had no GET route; MCP now calls new `GET /api/cooldowns/status?wallet=&poi=`.
+  4. `get_leaderboard` — Backend had no leaderboard endpoint; MCP calls new `GET /api/caps/leaderboard?metric=&limit=`.
+- **New endpoints added**:
+  - `GET /api/caps/leaderboard` — scans `player:*` Redis keys, returns top N players sorted by caps/xp/claims.
+  - `GET /api/cooldowns/status` — public (no-auth) cooldown check for POI claims; reads `player:{wallet}:cooldown:{poi}` key.
+- **redis.js** — Added `keys(pattern)` wrapper (with fallback in-memory support) and exported it.
+- **Verified**: Tests pass. All files load cleanly with Node.
+
+### [2026-03-17] .agentx/agents.json upgraded with Vault-77 agents
+- **What**: Added 5 Vault-77 specific agents to `.agentx/agents.json`:
+  `vault77-fullstack-dev`, `vault77-game-tester`, `vault77-wasteland-assistant`,
+  `vault77-web3-specialist`, `vault77-mcp-server`. Updated `vault77-overseer` tags.
+- **Why**: These agents existed in `.github/agents/` markdown files but were missing from the
+  agent registry used by the `agentx` CLI (https://github.com/Unwrenchable/agent-tools).
+- **Verified**: JSON validates cleanly.
+
 ### [2026-03-02] Hive mind infrastructure upgrade
 - **What**: Renamed `SwapAssistant.md` → `wasteland-assistant.md`; added `tasks.md`
   active task queue; fixed API endpoint table in `agents-instructions.md` §8 (wrong
