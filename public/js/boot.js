@@ -253,9 +253,143 @@
   window._bootTriggerCourierDialogue = triggerCourierDialogue;
 
 
+  // -----------------------------
+  // NEW GAME / CONTINUE LOGIC
+  // -----------------------------
+
+  /**
+   * Checks localStorage for meaningful player progress.
+   * Returns true if the player has XP > 0, caps > 0, or any inventory items.
+   */
+  function hasMeaningfulSave() {
+    try {
+      // Check unified player state (player-state.js, v2)
+      const v2Raw = localStorage.getItem("afc_unified_player_state_v2");
+      if (v2Raw) {
+        const v2 = JSON.parse(v2Raw);
+        if (v2 && typeof v2 === "object") {
+          if ((v2.xp > 0) || (v2.caps > 0) || (Array.isArray(v2.inventory) && v2.inventory.length > 0)) {
+            return true;
+          }
+        }
+      }
+      // Check legacy player state (main.js, v1)
+      const v1Raw = localStorage.getItem("afc_player_state_v1");
+      if (v1Raw) {
+        const v1 = JSON.parse(v1Raw);
+        if (v1 && typeof v1 === "object") {
+          if ((v1.xp > 0) || (v1.caps > 0) || (Array.isArray(v1.inventory) && v1.inventory.length > 0)) {
+            return true;
+          }
+        }
+      }
+    } catch (e) {
+      // Ignore parse errors — treat as no save
+    }
+    return false;
+  }
+
+  /**
+   * Show the new game / continue overlay screen.
+   * Resolves with "continue" or "new".
+   */
+  function showNewGameScreen(hasSave) {
+    return new Promise(function (resolve) {
+      // Build overlay
+      const overlay = document.createElement("div");
+      overlay.id = "newGameOverlay";
+
+      // Scanline decoration
+      const scanlines = document.createElement("div");
+      scanlines.className = "ng-scanlines";
+      overlay.appendChild(scanlines);
+
+      const title = document.createElement("h2");
+      title.textContent = hasSave ? "VAULT DWELLER DETECTED" : "ENTERING THE WASTELAND";
+      overlay.appendChild(title);
+
+      const sub = document.createElement("div");
+      sub.className = "ng-subtitle";
+      sub.textContent = hasSave
+        ? "Previous save data found. Continue your journey?"
+        : "No prior data found. Initialising new vault dweller...";
+      overlay.appendChild(sub);
+
+      const btnContainer = document.createElement("div");
+      btnContainer.className = "ng-buttons";
+
+      if (hasSave) {
+        const continueBtn = document.createElement("button");
+        continueBtn.className = "ng-btn ng-continue";
+        continueBtn.textContent = "▶ CONTINUE";
+        continueBtn.addEventListener("click", function () {
+          overlay.remove();
+          resolve("continue");
+        });
+        btnContainer.appendChild(continueBtn);
+
+        const newBtn = document.createElement("button");
+        newBtn.className = "ng-btn ng-danger";
+        newBtn.textContent = "⚠ NEW GAME (erase save)";
+        newBtn.addEventListener("click", function () {
+          if (confirm("Erase existing save and start fresh? This cannot be undone.")) {
+            // Clear AFC save keys
+            const toRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const k = localStorage.key(i);
+              if (k && k.startsWith("afc")) toRemove.push(k);
+            }
+            toRemove.forEach(function (k) { localStorage.removeItem(k); });
+            overlay.remove();
+            resolve("new");
+          }
+        });
+        btnContainer.appendChild(newBtn);
+
+        const saveInfo = document.createElement("div");
+        saveInfo.className = "ng-save-info";
+        saveInfo.textContent = "Your exploration data, caps, and items are saved locally on this device.";
+        overlay.appendChild(btnContainer);
+        overlay.appendChild(saveInfo);
+      } else {
+        // No save — auto-proceed after brief delay but show the overlay
+        const autoBtn = document.createElement("button");
+        autoBtn.className = "ng-btn ng-continue";
+        autoBtn.textContent = "▶ BEGIN";
+        autoBtn.addEventListener("click", function () {
+          overlay.remove();
+          resolve("new");
+        });
+        btnContainer.appendChild(autoBtn);
+        overlay.appendChild(btnContainer);
+
+        // Auto-start after 2.5 seconds for walletless visitors
+        setTimeout(function () {
+          if (document.getElementById("newGameOverlay")) {
+            overlay.remove();
+            resolve("new");
+          }
+        }, 2500);
+      }
+
+      document.body.appendChild(overlay);
+    });
+  }
+
   function onContinue() {
-  // Start a short loading sequence before activating the Pip‑Boy
-  startLoadingSequence();
+    // Remove the key/click listeners immediately to prevent double-fire
+    window.removeEventListener("keydown", onContinue);
+    window.removeEventListener("click", onContinue);
+    window.removeEventListener("touchstart", onContinue);
+
+    const save = hasMeaningfulSave();
+
+    // Show new game / continue screen, then start the loading sequence
+    showNewGameScreen(save).then(function (choice) {
+      // Flag whether this is a fresh start so initGame() can grant starter pack
+      window._isNewGame = (choice === "new");
+      startLoadingSequence();
+    });
 }
 
 // -----------------------------
