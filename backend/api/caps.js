@@ -14,6 +14,7 @@ const crypto = require("crypto");
 const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
 const { awardCapsToPlayer, getCapsBalance } = require("../lib/caps");
+const { redis, key } = require("../lib/redis");
 
 // Per-route limiter for admin caps endpoints
 const capsAwardLimiter = rateLimit({
@@ -106,6 +107,56 @@ router.post("/mint", requireAdminSecret, capsAwardLimiter, async (req, res) => {
   } catch (err) {
     console.error("[caps] mint error:", err);
     return res.status(500).json({ ok: false, error: "Failed to award caps" });
+  }
+});
+
+// GET /api/caps/leaderboard - Public leaderboard ranked by caps, xp, or claims
+router.get("/leaderboard", async (req, res) => {
+  try {
+    const metric = ["caps", "xp", "claims"].includes(req.query.metric) ? req.query.metric : "caps";
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 10));
+
+    // Scan all player profile keys.  redis.keys() applies the afw: prefix internally,
+    // so returned keys look like "afw:player:<wallet>".  We strip the prefix to get
+    // the bare key for hget() (which re-applies the prefix).
+    const PREFIX = key(""); // e.g. "afw:"
+    const PLAYER_PREFIX = `${PREFIX}player:`; // e.g. "afw:player:"
+    const playerKeys = await redis.keys("player:*");
+    const entries = [];
+
+    for (const fullKey of (playerKeys || [])) {
+      try {
+        if (!fullKey.startsWith(PLAYER_PREFIX)) continue; // skip unexpected key shapes
+        const wallet  = fullKey.slice(PLAYER_PREFIX.length);
+        const bareKey = `player:${wallet}`; // bare key for hget() to prefix internally
+        if (!wallet) continue;
+        const raw = await redis.hget(bareKey, "profile");
+        if (!raw) continue;
+        const profile = JSON.parse(raw);
+        const score =
+          metric === "xp"
+            ? (typeof profile.xp === "number" ? profile.xp : 0)
+            : metric === "claims"
+            ? (Array.isArray(profile.claimed) ? profile.claimed.length : 0)
+            : (typeof profile.caps === "number" ? profile.caps : 0);
+        entries.push({
+          wallet,
+          name: profile.name || "WANDERER",
+          level: profile.level || 1,
+          score,
+        });
+      } catch (profileErr) {
+        console.warn("[caps] leaderboard: skipping malformed profile for key", fullKey, profileErr.message);
+      }
+    }
+
+    entries.sort((a, b) => b.score - a.score);
+    const top = entries.slice(0, limit).map((e, i) => ({ rank: i + 1, ...e }));
+
+    return res.json({ ok: true, metric, leaderboard: top });
+  } catch (err) {
+    console.error("[caps] leaderboard error:", err);
+    return res.status(500).json({ ok: false, error: "Failed to fetch leaderboard" });
   }
 });
 
