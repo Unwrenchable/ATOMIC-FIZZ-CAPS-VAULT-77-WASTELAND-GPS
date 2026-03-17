@@ -1137,9 +1137,9 @@
     if (localStorage.getItem(STARTER_PACK_KEY)) return; // already granted
     localStorage.setItem(STARTER_PACK_KEY, "true");
 
-    // Give starter caps + XP
-    PLAYER.caps = Math.max(PLAYER.caps, 50);
-    PLAYER.xp = Math.max(PLAYER.xp, 10);
+    // Give starter caps + XP (additive — reward is on top of whatever they already have)
+    PLAYER.caps = (PLAYER.caps || 0) + 50;
+    PLAYER.xp = (PLAYER.xp || 0) + 10;
 
     // Add items to inventory
     STARTER_PACK_ITEMS.forEach(function (item) {
@@ -1192,6 +1192,11 @@
   let _weatherInterval = null;
   let _radFromWeather = 0; // accumulated radiation from weather (per-minute basis)
 
+  // +2 rads/minute converted to per-second rate (weatherTick runs every ~1s)
+  const RAD_STORM_RATE_PER_SECOND = 2 / 60;
+  // Rotate weather every 5 minutes (300 ticks @ 1s interval)
+  const WEATHER_ROTATION_TICKS = 300;
+
   function pickNewWeather() {
     const rng = new Uint32Array(1);
     crypto.getRandomValues(rng);
@@ -1209,9 +1214,9 @@
   function weatherTick() {
     _weatherTick++;
 
-    // Apply radiation from Rad Storm (approximately +2 per minute = +2/60 per second tick)
+    // Apply radiation from Rad Storm
     if (_currentWeather === "Rad Storm") {
-      _radFromWeather += 2 / 60; // per second increment (called every ~1s)
+      _radFromWeather += RAD_STORM_RATE_PER_SECOND;
       if (_radFromWeather >= 1) {
         const radGain = Math.floor(_radFromWeather);
         _radFromWeather -= radGain;
@@ -1224,8 +1229,8 @@
       _radFromWeather = 0; // reset accumulator on non-rad weather
     }
 
-    // Rotate weather every 5 minutes (300 ticks @ 1s interval)
-    if (_weatherTick % 300 === 0) {
+    // Rotate weather every 5 minutes (WEATHER_ROTATION_TICKS @ 1s interval)
+    if (_weatherTick % WEATHER_ROTATION_TICKS === 0) {
       pickNewWeather();
     }
   }
