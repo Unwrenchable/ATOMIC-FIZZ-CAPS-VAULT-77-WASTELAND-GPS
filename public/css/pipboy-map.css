@@ -457,6 +457,11 @@
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  /* Prevent 300ms tap delay on mobile */
+  touch-action: manipulation;
+  /* Minimum touch target for accessibility */
+  min-height: 36px;
+  min-width: 44px;
 }
 
 .map-control-btn:hover {
