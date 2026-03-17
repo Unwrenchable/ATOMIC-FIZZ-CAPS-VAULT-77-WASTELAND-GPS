@@ -1182,3 +1182,320 @@ input[type="reset"]:hover {
   line-height: 1.5;
   white-space: pre-wrap;
 }
+
+/* ============================================================
+   DEV MODE + GLITCH EFFECTS
+   ============================================================ */
+
+/* CSS custom property for controlling flicker/glitch speed */
+:root {
+  --flicker-speed: 2.2s;
+  --glitch-speed: 0.4s;
+}
+
+/* Enhanced scanline flicker — references --flicker-speed */
+.pipboy-scanlines {
+  animation: scanline-flicker var(--flicker-speed) infinite ease-in-out;
+}
+
+/* Subtle flickering text-shadow on header and panel headers */
+.pipboy-header {
+  animation: header-flicker 4s infinite ease-in-out;
+}
+
+.panel-header {
+  animation: header-flicker 5s infinite ease-in-out;
+  animation-delay: 0.7s;
+}
+
+@keyframes header-flicker {
+  0%, 92%, 100% {
+    text-shadow: 0 0 4px rgba(0,255,65,0.4), 0 0 10px rgba(0,255,65,0.15);
+    opacity: 1;
+  }
+  94% {
+    text-shadow: 0 0 8px rgba(0,255,65,0.9), 0 0 20px rgba(0,255,65,0.5);
+    opacity: 0.85;
+  }
+  96% {
+    text-shadow: 0 0 2px rgba(0,255,65,0.2);
+    opacity: 0.95;
+  }
+}
+
+/* ============================================================
+   PIPBOY GLITCH ANIMATION CLASS
+   Toggle with window._devMode or CSS class on .pipboy-crt
+   ============================================================ */
+
+@keyframes pipboy-glitch {
+  0% {
+    clip-path: inset(40% 0 61% 0);
+    transform: translate(-4px, 0) skewX(-0.5deg);
+  }
+  5% {
+    clip-path: inset(92% 0 1% 0);
+    transform: translate(4px, 0);
+  }
+  10% {
+    clip-path: inset(43% 0 1% 0);
+    transform: translate(3px, 0) skewX(0.3deg);
+  }
+  15% {
+    clip-path: inset(25% 0 58% 0);
+    transform: translate(-4px, 0);
+  }
+  20% {
+    clip-path: inset(54% 0 7% 0);
+    transform: translate(2px, 2px);
+  }
+  25%, 100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes pipboy-glitch-color {
+  0%, 90%, 100% { filter: none; }
+  91% { filter: hue-rotate(90deg) saturate(2); }
+  93% { filter: hue-rotate(-60deg) brightness(1.3); }
+  95% { filter: hue-rotate(30deg); }
+}
+
+/* Main glitch class — applied to .pipboy-crt when glitch is active */
+.pipboy-glitch {
+  animation-name: pipboy-glitch-color;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-delay: var(--glitch-speed);
+  position: relative;
+}
+
+.pipboy-glitch::before,
+.pipboy-glitch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0.08;
+}
+
+.pipboy-glitch::before {
+  animation-name: pipboy-glitch;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-delay: var(--glitch-speed);
+  background: rgba(0,255,65,0.05);
+  mix-blend-mode: screen;
+}
+
+.pipboy-glitch::after {
+  animation-name: pipboy-glitch;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-delay: calc(var(--glitch-speed) + 0.15s);
+  background: rgba(255,0,100,0.03);
+  mix-blend-mode: screen;
+}
+
+/* ============================================================
+   NEW GAME / CONTINUE OVERLAY SCREEN
+   ============================================================ */
+
+#newGameOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,10,0,0.97);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 88888;
+  font-family: Consolas, "Courier New", monospace;
+  color: #9fe88d;
+  text-align: center;
+  padding: 24px;
+}
+
+#newGameOverlay h2 {
+  font-size: clamp(18px, 4vw, 28px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(0,255,65,0.6);
+  margin-bottom: 8px;
+}
+
+#newGameOverlay .ng-subtitle {
+  font-size: clamp(11px, 2vw, 14px);
+  opacity: 0.6;
+  margin-bottom: 32px;
+}
+
+#newGameOverlay .ng-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 280px;
+}
+
+#newGameOverlay .ng-btn {
+  background: rgba(0,255,65,0.08);
+  border: 2px solid rgba(0,255,65,0.6);
+  color: #9fe88d;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: clamp(14px, 3vw, 17px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+#newGameOverlay .ng-btn:hover,
+#newGameOverlay .ng-btn:focus {
+  background: rgba(0,255,65,0.2);
+  box-shadow: 0 0 16px rgba(0,255,65,0.5);
+  outline: none;
+}
+
+#newGameOverlay .ng-btn.ng-continue {
+  border-color: #00ff41;
+  color: #00ff41;
+  font-size: clamp(16px, 3.5vw, 20px);
+}
+
+#newGameOverlay .ng-btn.ng-danger {
+  border-color: rgba(255,80,80,0.5);
+  color: rgba(255,120,120,0.8);
+  font-size: 12px;
+  padding: 8px;
+}
+
+#newGameOverlay .ng-save-info {
+  margin-top: 24px;
+  font-size: 11px;
+  opacity: 0.45;
+  max-width: 260px;
+  line-height: 1.6;
+}
+
+#newGameOverlay .ng-scanlines {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.3) 1px, transparent 2px);
+  background-size: 100% 3px;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* ============================================================
+   DEMO EXCHANGE PANEL
+   ============================================================ */
+
+.demo-shop-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,255,65,0.12);
+}
+
+.demo-shop-item:last-child {
+  border-bottom: none;
+}
+
+.demo-shop-item-info {
+  flex: 1;
+}
+
+.demo-shop-item-name {
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+.demo-shop-item-desc {
+  font-size: 11px;
+  opacity: 0.65;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.demo-shop-item-cost {
+  font-size: 12px;
+  color: #ffcc44;
+  margin-top: 4px;
+}
+
+.demo-shop-buy-btn {
+  background: rgba(0,255,65,0.1);
+  border: 1px solid rgba(0,255,65,0.5);
+  color: #9fe88d;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 11px;
+  padding: 5px 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.demo-shop-buy-btn:hover {
+  background: rgba(0,255,65,0.25);
+  box-shadow: 0 0 6px rgba(0,255,65,0.3);
+}
+
+.demo-shop-buy-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: rgba(255,80,80,0.4);
+}
+
+.demo-shop-status {
+  font-size: 11px;
+  color: #ff4444;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.demo-shop-status.ok {
+  color: #00ff41;
+}
+
+/* Starter pack received toast */
+#starterPackToast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,15,0,0.97);
+  border: 2px solid #00ff41;
+  padding: 24px 36px;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 16px;
+  color: #00ff41;
+  z-index: 99999;
+  text-align: center;
+  pointer-events: none;
+  box-shadow: 0 0 30px rgba(0,255,65,0.5);
+  letter-spacing: 0.1em;
+  animation: toastFadeIn 0.3s ease-out;
+}
+
+@keyframes toastFadeIn {
+  from { opacity: 0; transform: translate(-50%, -60%); }
+  to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+#starterPackToast .toast-items {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 8px;
+  line-height: 1.7;
+}
