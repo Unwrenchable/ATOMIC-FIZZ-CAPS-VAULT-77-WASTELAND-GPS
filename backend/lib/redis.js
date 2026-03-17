@@ -162,6 +162,18 @@ function createInMemoryClient() {
       hashes.set(key, h);
       return 1;
     },
+    // Key pattern scan — returns all keys from all stores matching a simple glob
+    // (only the '*' wildcard is supported, e.g. "afw:player:*")
+    async keys(pattern) {
+      const regex = new RegExp(
+        "^" + pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*") + "$"
+      );
+      const matched = new Set();
+      for (const k of store.keys()) { if (regex.test(k)) matched.add(k); }
+      for (const k of hashes.keys()) { if (regex.test(k)) matched.add(k); }
+      for (const k of sets.keys()) { if (regex.test(k)) matched.add(k); }
+      return Array.from(matched);
+    },
     on() { /* noop for events */ },
     quit() { return Promise.resolve(); },
     ping() { return Promise.resolve("PONG"); }
@@ -443,6 +455,25 @@ async function hset(k, field, value) {
     handleRedisError(err, 'hset');
   }
 }
+/**
+ * Scan keys matching a glob pattern.  The pattern should NOT include the
+ * Redis key prefix — it is prepended automatically (same convention as
+ * every other wrapper in this module).  Only the '*' wildcard is supported.
+ *
+ * Example:  keys("player:*")  →  finds all  afw:player:* keys
+ *
+ * Returns an array of raw Redis key strings (with prefix).
+ * Caution: avoid on large datasets in production; prefer SCAN iterators.
+ */
+async function keys(pattern) {
+  try {
+    const c = await ensureClient();
+    const prefixed = key(pattern);
+    return await c.keys(prefixed);
+  } catch (err) {
+    handleRedisError(err, 'keys');
+  }
+}
 function on(ev, fn) {
   if (redisClient && typeof redisClient.on === "function") {
     redisClient.on(ev, fn);
@@ -477,6 +508,7 @@ module.exports = {
   srem,
   hget,
   hset,
+  keys,
   on,
   quit,
   ping,
@@ -505,6 +537,7 @@ const redisWrapper = {
   srem,
   hget,
   hset,
+  keys,
   on,
   quit,
   ping,
