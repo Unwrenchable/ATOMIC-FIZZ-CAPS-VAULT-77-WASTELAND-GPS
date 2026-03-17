@@ -359,6 +359,25 @@ body {
     touch-action: auto !important;
     pointer-events: auto !important;
   }
+
+  /* MOBILE MAP CONTROLS - larger touch targets for fingers */
+  .map-control-btn {
+    min-height: 44px;
+    padding: 8px 14px;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .map-controls {
+    bottom: 12px;
+    left: 12px;
+    gap: 10px;
+  }
+
+  .explore-dot {
+    width: 10px;
+    height: 10px;
+  }
 }
 
 /* ============================================================
@@ -406,6 +425,13 @@ body {
      A fixed height would over-constrain the layout in landscape too. */
   .pipboy-map {
     min-height: 25rem;
+  }
+
+  /* Compact map controls in landscape to avoid overlapping the map too much */
+  .map-control-btn {
+    min-height: 40px;
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }
 
