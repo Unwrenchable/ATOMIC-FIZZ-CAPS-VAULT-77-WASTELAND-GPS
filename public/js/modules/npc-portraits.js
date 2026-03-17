@@ -4,6 +4,13 @@
 (function () {
   if (!window.NPCPortraits) window.NPCPortraits = {};
 
+  // Secure RNG — no Math.random() for game-critical paths
+  function _secureRand() {
+    var buf = new Uint32Array(1);
+    crypto.getRandomValues(buf);
+    return buf[0] / 0x100000000;
+  }
+
   const cache = new Map();
 
   async function preloadSVG(npc) {
@@ -70,7 +77,7 @@
           const texture = PIXI.Texture.from(svgUrl);
           const frames = [texture, texture, texture];
           const anim = new PIXI.AnimatedSprite(frames);
-          anim.animationSpeed = 0.12 + Math.random() * 0.08;
+          anim.animationSpeed = 0.12 + _secureRand() * 0.08;
           anim.play();
           anim.x = Game.modules.Dragon.app.view.width / 2 - anim.width / 2;
           anim.y = Game.modules.Dragon.app.view.height - anim.height - 10;
