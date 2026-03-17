@@ -8,7 +8,7 @@
 
   // Secure RNG — no Math.random() for game-critical paths
   function _secureRand() {
-    var buf = new Uint32Array(1);
+    const buf = new Uint32Array(1);
     crypto.getRandomValues(buf);
     return buf[0] / 0x100000000;
   }
