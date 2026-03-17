@@ -8,12 +8,18 @@ Welcome to the complete documentation for the Atomic Fizz Caps Vault 77 Wastelan
 
 **New to the project?** Start here:
 - [README](../README.md) - Main project overview and features
+- [STATUS.md](STATUS.md) - ☢️ **Current project status & mainnet readiness assessment**
 - [VERCEL_QUICKSTART](deployment/VERCEL_QUICKSTART.md) - 5-minute deployment guide
 - [ENVIRONMENT_VARIABLES](setup/ENVIRONMENT_VARIABLES.md) - Required configuration
 
 ---
 
 ## 📁 Documentation Categories
+
+### 📊 Project Status
+Current state and mainnet readiness.
+
+- [STATUS.md](STATUS.md) - ☢️ **Full project status report and mainnet launch checklist**
 
 ### 🔧 Setup & Configuration
 Initial setup, API keys, and environment configuration.
@@ -118,7 +124,8 @@ Development summaries, fixes, testing guides, and implementation reports.
 
 ## 📊 Documentation Statistics
 
-- **Total Documents**: 66 markdown files
+- **Total Documents**: 67 markdown files
+- **Status Reports**: 1 file
 - **Setup Guides**: 9 files
 - **Deployment Guides**: 10 files
 - **Feature Documentation**: 13 files
@@ -135,6 +142,6 @@ Development summaries, fixes, testing guides, and implementation reports.
 
 ---
 
-**Last Updated**: February 2026
+**Last Updated**: March 2026
 
 ☢️ **Stay radiated, wastelanders!** ☢️
