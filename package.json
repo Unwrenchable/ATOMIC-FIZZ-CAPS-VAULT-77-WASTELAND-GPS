@@ -13,6 +13,9 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "node tests/grok.test.js && node tests/cors_config.test.js",
+    "test:load": "node tests/concurrent-load-test.js",
+    "test:load:full": "node tests/concurrent-load-test.js --players 1000 --batch-size 50",
+    "test:playtest": "node tests/playtest-agent.js",
     "mcp:install": "cd mcp && npm install",
     "mcp:start": "node mcp/vault77-server.js"
   },
