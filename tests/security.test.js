@@ -266,9 +266,7 @@ for (const { file, adminOnly } of IDOR_FILES) {
         const trimmed = l.trim();
         if (trimmed.startsWith("//") || trimmed.startsWith("*")) return false;
         // flag if we see req.body.wallet assigned to a const/let/var wallet used downstream
-        return /const wallet\s*=\s*req\.body\.wallet/.test(l) ||
-               /let wallet\s*=\s*req\.body\.wallet/.test(l) ||
-               /var wallet\s*=\s*req\.body\.wallet/.test(l);
+        return /(?:const|let|var)\s+wallet\s*=\s*req\.body\.wallet/.test(l);
       });
     assert.strictEqual(
       suspiciousLines.length,
