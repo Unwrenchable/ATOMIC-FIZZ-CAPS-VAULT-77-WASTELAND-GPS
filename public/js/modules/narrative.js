@@ -173,7 +173,10 @@
         "daddy_warmcaps":    "dialog_warbucks",
         "hannigan":          "dialog_hannigan",
         "iron_nan":          "dialog_hannigan",
-        "nan_hannigan":      "dialog_hannigan"
+        "nan_hannigan":      "dialog_hannigan",
+        "bless":             "dialog_bless",
+        "wasteland_healer":  "dialog_bless",
+        "healer":            "dialog_bless"
       };
       const mapped = NPC_DIALOG_MAP[npcId.toLowerCase()];
       if (mapped) return mapped;
@@ -247,60 +250,9 @@
         this._saveFlags();
       }
 
-      // Offer quest if present - try multiple quest systems for compatibility
+      // Offer quest if present — delegate to _activateQuest to avoid duplication
       if (node.offers_quest) {
-        const questId = node.offers_quest;
-        let questActivated = false;
-        
-        // Try the unified quests module first (newer system)
-        if (Game.modules?.quests) {
-          try {
-            // Accept the quest if it's available, otherwise start it directly
-            if (Game.modules.quests.availableQuests?.[questId]) {
-              Game.modules.quests.acceptQuest(questId);
-              questActivated = true;
-              console.log("[narrative] Quest accepted via unified quests module:", questId);
-            } else {
-              Game.modules.quests.startQuest(questId);
-              questActivated = true;
-              console.log("[narrative] Quest started via unified quests module:", questId);
-            }
-          } catch (e) {
-            console.warn("[narrative] unified quests module failed:", e);
-          }
-        }
-        
-        // Fallback to Game.quests (also points to quests module)
-        if (!questActivated && Game.quests) {
-          try {
-            if (Game.quests.availableQuests?.[questId]) {
-              Game.quests.acceptQuest(questId);
-              questActivated = true;
-              console.log("[narrative] Quest accepted via Game.quests:", questId);
-            } else {
-              Game.quests.startQuest(questId);
-              questActivated = true;
-              console.log("[narrative] Quest started via Game.quests:", questId);
-            }
-          } catch (e) {
-            console.warn("[narrative] Game.quests failed:", e);
-          }
-        }
-        
-        // Final fallback to main.js activateQuest (legacy system)
-        if (!questActivated && Game.modules?.main?.activateQuest) {
-          try {
-            Game.modules.main.activateQuest(questId);
-            questActivated = true;
-            console.log("[narrative] Quest activated via main module:", questId);
-          } catch (e) {
-            console.error("[narrative] failed to activate quest via main:", questId, e);
-          }
-        }
-        
-        if (!questActivated) {
-          console.warn("[narrative] Could not activate quest - no quest system available:", questId);
-        }
+        this._activateQuest(node.offers_quest);
       }
 
       this.renderNode(node, dialog);
@@ -615,11 +567,6 @@
       if (Array.isArray(node.set_flags)) {
         node.set_flags.forEach(f => { if (f) STATE.flags[f] = true; });
         this._saveFlags();
-      }
-
-      // Handle quest offers on the node itself (e.g. intro)
-      if (node.offers_quest) {
-        this._activateQuest(node.offers_quest);
       }
 
       // Check if this is the courier intro and we should show starter gear
@@ -1008,6 +955,7 @@
       erich:   { head: "head_base.svg",   eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_wasteland_gear.svg" },
       stilgar: { head: "head_square.svg", eyes: "eyes_almond.svg",   hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
       padre:   { head: "head_round.svg",  eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
+      bless:   { head: "head_round.svg",  eyes: "eyes_almond.svg",   hair: "hair_medium.svg",    shirt: "shirt_jacket.svg"         },
       default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
     },
 
