@@ -704,7 +704,25 @@
           _lastQuestCheckAt = now;
         }
       },
-      err => safeWarn("Geolocation error:", err),
+      err => {
+        safeWarn("Geolocation error:", err);
+        if (err.code === 1) { // PERMISSION_DENIED
+          const permBanner = document.createElement("div");
+          permBanner.id = "gps-permission-banner";
+          // Accessible colors: high-contrast dark background, white text (avoids red-green blindness)
+          permBanner.style.cssText = "position:fixed;top:0;left:0;right:0;background:#1a1a00;color:#ffe066;border-bottom:2px solid #ffe066;font-family:monospace;text-align:center;padding:10px 8px;z-index:9999;font-size:13px;";
+          // Platform-aware instructions
+          const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+          const isAndroid = /android/i.test(navigator.userAgent);
+          let instructions = "go to browser Settings → Site Settings → Location and set to Allow.";
+          if (isIOS) instructions = "go to iPhone Settings → Privacy → Location Services → your browser and set to While Using.";
+          else if (isAndroid) instructions = "tap the lock icon in your browser address bar → Permissions → Location → Allow.";
+          permBanner.textContent = "⚠️ GPS REQUIRED — To explore the Wasteland, " + instructions;
+          if (!document.getElementById("gps-permission-banner")) {
+            document.body.appendChild(permBanner);
+          }
+        }
+      },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
     );
   }
@@ -876,11 +894,11 @@
         html += '<ul style="list-style:none;padding:0;">';
         recipes.forEach(r => {
           html += `<li style="margin-bottom:12px;border-bottom:1px solid #222;padding-bottom:8px;">
-            <strong>${r.name || r.id}</strong><br/>
-            <span style='font-size:12px;opacity:0.7;'>${r.description || ''}</span><br/>
+            <strong>${escapeHtml(r.name || r.id)}</strong><br/>
+            <span style='font-size:12px;opacity:0.7;'>${escapeHtml(r.description || '')}</span><br/>
             <span>Requires: </span>
-            ${r.inputs.map(inp => `${inp.amount}x ${inp.id}`).join(', ')}<br/>
-            <button class="pipboy-button-small" data-craft="${r.id}">Craft</button>
+            ${r.inputs.map(inp => `${escapeHtml(String(inp.amount))}x ${escapeHtml(inp.id)}`).join(', ')}<br/>
+            <button class="pipboy-button-small" data-craft="${escapeHtml(r.id)}">Craft</button>
           </li>`;
         });
         html += '</ul>';
