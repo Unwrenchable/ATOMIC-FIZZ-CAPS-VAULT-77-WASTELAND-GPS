@@ -10,7 +10,7 @@ const { redis, key } = require("../lib/redis");
 // Solana base58 wallet address: 32-44 alphanumeric chars (no 0, O, I, l)
 const WALLET_RE = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
 // POI IDs are short alphanumeric/hyphen/underscore strings
-const POI_RE = /^[a-zA-Z0-9_\-]{1,128}$/;
+const POI_RE = /^[a-zA-Z0-9_-]{1,128}$/;
 
 // GET /api/cooldowns/status — public endpoint to check POI claim cooldown for a wallet.
 // No auth required: cooldown state is not sensitive (it just tells you if a POI is claimable).

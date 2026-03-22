@@ -6,7 +6,7 @@
   "use strict";
 
   // XSS helper
-  function escapeHtml(str) {
+  function _escapeHtml(str) {
     const d = document.createElement("div");
     d.textContent = String(str == null ? "" : str);
     return d.innerHTML;
