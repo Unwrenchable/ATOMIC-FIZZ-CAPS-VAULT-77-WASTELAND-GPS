@@ -12,8 +12,8 @@
   const Weather = window.overseerWeather;
   const Encounters = window.overseerEncounters;
   const Regions = window.overseerRegions;
-  const Timeline = window.overseerTimeline;
-  const Anomalies = window.overseerAnomalies;
+  const _Timeline = window.overseerTimeline;
+  const _Anomalies = window.overseerAnomalies;
 
   // ------------------------------------------------------------
   // CONFIG

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { redis, key } = require('../lib/redis');
+const { redis } = require('../lib/redis');
 
 // This router handles server-side secret checks for quests.
 // The idea: client asks the server whether a secret objective has been satisfied

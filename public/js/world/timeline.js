@@ -17,7 +17,7 @@
   const ECHO_EVENTS = {
     ghost_npc: {
       weight: 1,
-      generate(region) {
+      generate(_region) {
         return {
           type: "echo_ghost",
           description: `A ghostly figure repeats a moment from another timeline in ${region.name}.`,
@@ -28,7 +28,7 @@
 
     loop_event: {
       weight: 1,
-      generate(region) {
+      generate(_region) {
         return {
           type: "time_loop",
           description: `A moment repeats itself in ${region.name}. You feel déjà vu.`,
@@ -39,7 +39,7 @@
 
     flicker_weather: {
       weight: 1,
-      generate(region) {
+      generate(_region) {
         return {
           type: "weather_flicker",
           description: `The sky flickers between states. Time is unstable here.`,
@@ -107,7 +107,7 @@
     ];
 
     const event = weightedPick(pool);
-    const result = event.generate(region);
+    const result = event.generate(_region);
 
     // Notify Overseer
     if (window.overseer && typeof window.overseer.handleGameEvent === "function") {

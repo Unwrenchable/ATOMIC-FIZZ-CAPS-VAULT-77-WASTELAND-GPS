@@ -11,10 +11,10 @@
   const WorldState = window.overseerWorldState;
   const Regions = window.overseerRegions;
   const Factions = window.overseerFaction;
-  const Weather = window.overseerWeather;
+  const _Weather = window.overseerWeather;
   const Timeline = window.overseerTimeline;
-  const Anomalies = window.overseerAnomalies;
-  const Traits = window.overseerNpcTraits;
+  const _Anomalies = window.overseerAnomalies;
+  const _Traits = window.overseerNpcTraits;
 
   // ------------------------------------------------------------
   // Quest Templates
@@ -22,7 +22,7 @@
   const QUESTS = {
     traveler_help: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "traveler_help",
           title: "Help a Stranded Traveler",
@@ -39,7 +39,7 @@
 
     caravan_defense: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "caravan_defense",
           title: "Defend a Caravan",
@@ -56,7 +56,7 @@
 
     anomaly_scan: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "anomaly_scan",
           title: "Scan Anomaly Field",
@@ -73,7 +73,7 @@
 
     weather_rescue: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "weather_rescue",
           title: "Weather Rescue",
@@ -90,7 +90,7 @@
 
     timeline_echo: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "timeline_echo",
           title: "Investigate Timeline Echo",
