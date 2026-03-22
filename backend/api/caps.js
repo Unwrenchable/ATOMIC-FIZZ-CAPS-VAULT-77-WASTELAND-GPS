@@ -151,7 +151,14 @@ router.get("/leaderboard", async (req, res) => {
     }
 
     entries.sort((a, b) => b.score - a.score);
-    const top = entries.slice(0, limit).map((e, i) => ({ rank: i + 1, ...e }));
+    const top = entries.slice(0, limit).map((e, i) => ({
+      rank: i + 1,
+      ...e,
+      // Truncate wallet to first 4 + last 4 chars for privacy (e.g. "5Ht7...dKmZ")
+      wallet: e.wallet.length > 10
+        ? `${e.wallet.slice(0, 4)}...${e.wallet.slice(-4)}`
+        : e.wallet,
+    }));
 
     return res.json({ ok: true, metric, leaderboard: top });
   } catch (err) {

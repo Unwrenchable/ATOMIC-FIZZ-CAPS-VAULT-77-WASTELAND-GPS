@@ -67,7 +67,7 @@
     // EVENT HANDLERS
     // ============================================================
 
-    onHackFailed(event) {
+    onHackFailed(_event) {
       this.hackFailCount++;
       
       if (!this.quipsData || !this.canShowQuip()) return;
@@ -104,7 +104,7 @@
       }
     },
 
-    onPlayerDied(event) {
+    onPlayerDied(_event) {
       if (!this.quipsData) return;
 
       const quips = this.quipsData.death_respawn_quips;
@@ -116,11 +116,11 @@
       }
     },
 
-    onBattleStarted(event) {
+    onBattleStarted(_event) {
       this.battleStartTime = Date.now();
     },
 
-    onBattleEnded(event) {
+    onBattleEnded(_event) {
       this.battleStartTime = null;
     },
 

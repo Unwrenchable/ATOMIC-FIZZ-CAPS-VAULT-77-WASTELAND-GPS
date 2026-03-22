@@ -40,11 +40,28 @@
   // UTILS
   // ============================================================
 
-  const randInt = (min, max) =>
-    Math.floor(Math.random() * (max - min + 1)) + min;
+  // CSPRNG helpers — radio track selection must not use Math.random() per project policy
+  // Uses rejection-sampling to avoid modulo bias (consistent with core.weather.js, core.threat.js)
+  function _secureRandInt(min, max) {
+    const range = max - min + 1;
+    if (range <= 0) return min;
+    // Rejection-sampling: discard values in the biased tail region
+    const limit = Math.floor(0x100000000 / range) * range; // largest multiple of range ≤ 2^32
+    let val;
+    const arr = new Uint32Array(1);
+    do {
+      crypto.getRandomValues(arr);
+      val = arr[0];
+    } while (val >= limit);
+    return min + (val % range);
+  }
 
-  const pickRandom = arr =>
-    !arr || !arr.length ? null : arr[Math.floor(Math.random() * arr.length)];
+  const randInt = (min, max) => _secureRandInt(min, max);
+
+  const pickRandom = arr => {
+    if (!arr || !arr.length) return null;
+    return arr[_secureRandInt(0, arr.length - 1)];
+  };
 
   const safeFetchJSON = async (url, fallback = null) => {
     try {

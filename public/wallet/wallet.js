@@ -948,15 +948,16 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
           case "polygon":
           case "bnb":
           case "avalanche":
-          case "base":
+          case "base": {
             const chain = window.chains.find(c => c.chain === token.chain);
             if (chain) {
               bal = await fetchErc20Balance(chain.rpc, pubkey, token.contract);
             }
             break;
+          }
 
           case "sui":
-          case "aptos":
+          case "aptos": {
             const moveChain = window.chains.find(c => c.chain === token.chain);
             if (moveChain) {
               bal = await fetchMoveTokenBalance(
@@ -967,6 +968,7 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
               );
             }
             break;
+          }
 
           default:
             bal = "—";

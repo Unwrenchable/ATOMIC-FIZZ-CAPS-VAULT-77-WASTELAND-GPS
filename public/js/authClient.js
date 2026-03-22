@@ -120,7 +120,7 @@ class AuthClient {
       nonceRes = await fetch(`${authUrl}/nonce/${publicKey}`);
     } catch (fetchError) {
       // Network error during fetch
-      throw new Error(AuthClient.AUTH_SERVICE_UNAVAILABLE);
+      throw new Error(AuthClient.AUTH_SERVICE_UNAVAILABLE, { cause: fetchError });
     }
     
     const nonceJson = await safeJsonParse(nonceRes);
@@ -147,7 +147,7 @@ class AuthClient {
       });
     } catch (fetchError) {
       // Network error during fetch
-      throw new Error(AuthClient.AUTH_SERVICE_UNAVAILABLE);
+      throw new Error(AuthClient.AUTH_SERVICE_UNAVAILABLE, { cause: fetchError });
     }
 
     const verifyJson = await safeJsonParse(verifyRes);

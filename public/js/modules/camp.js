@@ -15,7 +15,7 @@
   // Constants
   // ----------------------------------------------------------
   const LS_KEY          = "afc_camp_data";
-  const REST_COOLDOWN_MS = 6 * 3600 * 1000; // 6 hours in ms
+  const _REST_COOLDOWN_MS = 6 * 3600 * 1000; // 6 hours in ms
   const REST_RADIUS_M   = 500;
 
   // ----------------------------------------------------------

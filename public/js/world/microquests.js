@@ -11,10 +11,10 @@
   const WorldState = window.overseerWorldState;
   const Regions = window.overseerRegions;
   const Factions = window.overseerFaction;
-  const Weather = window.overseerWeather;
+  const _Weather = window.overseerWeather;
   const Timeline = window.overseerTimeline;
-  const Anomalies = window.overseerAnomalies;
-  const Traits = window.overseerNpcTraits;
+  const _Anomalies = window.overseerAnomalies;
+  const _Traits = window.overseerNpcTraits;
 
   // ------------------------------------------------------------
   // Quest Templates
@@ -22,11 +22,11 @@
   const QUESTS = {
     traveler_help: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "traveler_help",
           title: "Help a Stranded Traveler",
-          description: `A lone traveler is stuck in ${region.name}. They need assistance.`,
+          description: `A lone traveler is stuck in ${_region.name}. They need assistance.`,
           steps: [
             "Approach the traveler",
             "Provide aid or supplies",
@@ -39,11 +39,11 @@
 
     caravan_defense: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "caravan_defense",
           title: "Defend a Caravan",
-          description: `A caravan under ${faction.name} protection is being stalked near ${region.name}.`,
+          description: `A caravan under ${_faction.name} protection is being stalked near ${_region.name}.`,
           steps: [
             "Locate the caravan",
             "Defend against attackers",
@@ -56,11 +56,11 @@
 
     anomaly_scan: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "anomaly_scan",
           title: "Scan Anomaly Field",
-          description: `Strange readings detected in ${region.name}. Investigate the anomaly.`,
+          description: `Strange readings detected in ${_region.name}. Investigate the anomaly.`,
           steps: [
             "Travel to the anomaly site",
             "Deploy scanning device",
@@ -73,11 +73,11 @@
 
     weather_rescue: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "weather_rescue",
           title: "Weather Rescue",
-          description: `Severe ${weather.type} conditions have stranded survivors in ${region.name}.`,
+          description: `Severe ${_weather.type} conditions have stranded survivors in ${_region.name}.`,
           steps: [
             "Reach the stranded group",
             "Provide shelter or supplies",
@@ -90,11 +90,11 @@
 
     timeline_echo: {
       weight: 1,
-      generate(region, faction, weather) {
+      generate(_region, _faction, _weather) {
         return {
           id: "timeline_echo",
           title: "Investigate Timeline Echo",
-          description: `A temporal distortion has appeared in ${region.name}. Echoes of past events are repeating.`,
+          description: `A temporal distortion has appeared in ${_region.name}. Echoes of past events are repeating.`,
           steps: [
             "Locate the echo",
             "Observe the distortion",

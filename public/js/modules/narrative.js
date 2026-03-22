@@ -533,7 +533,7 @@
       if (!panel) { if (onDone) onDone(); return; }
 
       // Re-render the static frame (name, header) but leave text area blank
-      const npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
+      const _npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
       panel.innerHTML = `<div id="nrrTextArea" class="dialog-text" style="min-height:4em;white-space:pre-wrap;"></div>`;
 
       const textArea = document.getElementById("nrrTextArea");
@@ -823,7 +823,7 @@
         Game.modules.NpcVideo.playForNode({ id: 'inline_reply', text: text || '' }, dialog);
       }
 
-      const npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
+      const _npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
       const rawText = (text || "").replace(/<br\s*\/?>/gi, "\n");
       panel.innerHTML = `
         <div style="color:#ffaa00; font-weight:bold; margin-bottom:6px;">${npcName}</div>
@@ -1150,6 +1150,15 @@
           setTimeout(() => {
             window._bootTriggerCourierDialogue();
           }, 400);
+        }
+      }
+
+      // If closing the Courier dialogue, show the GPS/map tutorial for first-time players
+      if (closingDialogId === "dialog_courier") {
+        if (typeof window._bootShowMapTutorial === "function") {
+          setTimeout(() => {
+            window._bootShowMapTutorial();
+          }, 600);
         }
       }
 

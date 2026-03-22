@@ -8,9 +8,9 @@
 (function () {
   "use strict";
 
-  const WorldState = window.overseerWorldState;
-  const Weather = window.overseerWeather;
-  const Regions = window.overseerRegions;
+  const _WorldState = window.overseerWorldState;
+  const _Weather = window.overseerWeather;
+  const _Regions = window.overseerRegions;
 
   // Secure RNG: use browser CSPRNG instead of predictable Math.random()
   const _rngBuf = new Uint32Array(1);
@@ -111,7 +111,7 @@
       }
 
       // Anomaly affinity
-      if (t.anomalyAffinity && WorldState.getAnomalyLevel(region.id) > 0.3) {
+      if (t.anomalyAffinity && _WorldState.getAnomalyLevel(region.id) > 0.3) {
         npc.atk += 1;
         npc.hp += 2;
       }

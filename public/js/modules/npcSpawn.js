@@ -135,7 +135,7 @@
     },
 
     // Trigger NPC to seek out player
-    triggerNPCApproach(npc, location) {
+    triggerNPCApproach(npc, _location) {
       if (!Game.modules.npcEncounter) {
         console.warn("[npcSpawn] npcEncounter module not available");
         this.showNPCDialog(npc);

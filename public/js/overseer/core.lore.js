@@ -8,6 +8,14 @@
 
   const personality = window.overseerPersonality;
 
+  // Unbiased CSPRNG integer in [0, n) using rejection sampling
+  function _secureRandInt(n) {
+    const buf = new Uint32Array(1);
+    const limit = (Math.floor(0x100000000 / n) * n) >>> 0;
+    do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
+    return buf[0] % n;
+  }
+
   // -------------------------------------------------------------------------
   // LORE DATABASE
   // -------------------------------------------------------------------------
@@ -132,7 +140,7 @@
     getRandomLore(category) {
       const list = LORE_DB[category];
       if (!list || !list.length) return null;
-      return list[Math.floor(Math.random() * list.length)];
+      return list[_secureRandInt(list.length)];
     },
 
     getLoreById(id) {

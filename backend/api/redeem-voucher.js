@@ -1,7 +1,7 @@
 // backend/api/redeem-voucher.js
 const router = require("express").Router();
 const bs58 = require("bs58");
-const nacl = require("tweetnacl");
+// nacl reserved for future signature ops (tweetnacl)
 const { authMiddleware } = require("../lib/auth");
 const gps = require("../lib/gps"); // serializeVoucherMessage, verifyVoucherSignature
 const caps = require("../lib/caps"); // mintCapsToPlayer
@@ -33,7 +33,7 @@ async function getPublicKeyForKeyId(keyId) {
 router.post("/redeem-voucher", authMiddleware, async (req, res) => {
   try {
     const player = req.player;
-    const { voucher, serverKey } = req.body;
+    const { voucher } = req.body;
     // voucher: { voucherId, keyId, lootId, latitude, longitude, timestamp, ttlSeconds, locationHint }
     // serverKey: optional base58 public key (not trusted unless matches server registry)
 

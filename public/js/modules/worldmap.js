@@ -605,7 +605,7 @@
       const baseThreshold = 10;
       const maxTileErrors = this.isMobileDevice() ? baseThreshold * 3 : baseThreshold;
 
-      satelliteTiles.on('tileerror', (e) => {
+      satelliteTiles.on('tileerror', (_e) => {
         tileErrorCount++;
         console.warn(`[worldmap] tile load error (${tileErrorCount}/${maxTileErrors})`, e.coords, e.tile && e.tile.src);
         // only enter offline mode if the browser believes it's offline or
@@ -1057,7 +1057,7 @@
       });
     },
 
-    updateOverlayVisibility(zoom) {
+    updateOverlayVisibility(_zoom) {
       // labels always visible for now
     },
 
@@ -1158,7 +1158,7 @@
       let tileErrorCount = 0;
       const maxTileErrors = 3; // Be more lenient when trying to go back online
 
-      satelliteTiles.on('tileerror', (e) => {
+      satelliteTiles.on('tileerror', (_e) => {
         tileErrorCount++;
         if (tileErrorCount >= maxTileErrors) {
           console.warn('[worldmap] still having tile issues, staying offline');

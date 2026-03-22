@@ -17,10 +17,10 @@
   const ECHO_EVENTS = {
     ghost_npc: {
       weight: 1,
-      generate(region) {
+      generate(_region) {
         return {
           type: "echo_ghost",
-          description: `A ghostly figure repeats a moment from another timeline in ${region.name}.`,
+          description: `A ghostly figure repeats a moment from another timeline in ${_region.name}.`,
           reward: "echo_shard"
         };
       }
@@ -28,10 +28,10 @@
 
     loop_event: {
       weight: 1,
-      generate(region) {
+      generate(_region) {
         return {
           type: "time_loop",
-          description: `A moment repeats itself in ${region.name}. You feel déjà vu.`,
+          description: `A moment repeats itself in ${_region.name}. You feel déjà vu.`,
           effect: "repeat_next_encounter"
         };
       }
@@ -39,7 +39,7 @@
 
     flicker_weather: {
       weight: 1,
-      generate(region) {
+      generate(_region) {
         return {
           type: "weather_flicker",
           description: `The sky flickers between states. Time is unstable here.`,

@@ -161,7 +161,8 @@
     enemyAttack() {
       if (!this.state) return;
 
-      const enemy = this.state.encounter.enemies[0];
+      const idx = this.state.activeEnemyIndex ?? 0;
+      const enemy = this.state.encounter.enemies[idx];
       let dmg = enemy.damage || 3;
 
       // Guard: ensure player.hp is initialized
@@ -339,7 +340,7 @@
       const armorSlots2 = ["chest", "head", "arms", "legs"];
       const activeArmorPieces = armorSlots2.map(s => equipped[s] || psEq2[s]).filter(Boolean);
       const activeTotalAR = activeArmorPieces.reduce((sum, a) => sum + (a.armor || 0), 0);
-      const activeArmorLabel = activeArmorPieces.length
+      const _activeArmorLabel = activeArmorPieces.length
         ? `${activeArmorPieces.map(a => escapeHtml(a.name)).join(", ")} (AR: ${activeTotalAR})`
         : "<em>None</em>";
       const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;
@@ -400,6 +401,9 @@
             window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'WIN' } }));
             return;
           }
+          // Disable attack + flee buttons during enemy turn to prevent post-death input window
+          attackBtn.disabled = true;
+          if (fleeBtn) fleeBtn.disabled = true;
           setTimeout(() => {
             const enemyRes = this.enemyAttack();
             msgDiv.textContent = `${enemy.name || enemy.id} attacks for ${enemyRes.damage} damage!`;
@@ -411,6 +415,12 @@
               this._applyRespawnPenalty();
               setTimeout(() => this.updateUI(), 1500);
               window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
+            } else {
+              // Re-enable buttons only if battle is still active
+              if (this.state) {
+                attackBtn.disabled = false;
+                if (fleeBtn) fleeBtn.disabled = false;
+              }
             }
           }, 800);
         };

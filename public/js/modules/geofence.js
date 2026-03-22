@@ -41,7 +41,7 @@
   // ----------------------------------------------------------
   // Haversine distance in meters (mirrors server-side calc)
   // ----------------------------------------------------------
-  function haversineMeters(lat1, lng1, lat2, lng2) {
+  function _haversineMeters(lat1, lng1, lat2, lng2) {
     const R = 6_371_000;
     const toRad = d => d * Math.PI / 180;
     const dLat = toRad(lat2 - lat1);
@@ -91,7 +91,7 @@
   // ----------------------------------------------------------
   // Geo-fence prompt card (shown when player is at a site)
   // ----------------------------------------------------------
-  function showGeofencePrompt(location, distanceM) {
+  function _showGeofencePrompt(location, distanceM) {
     // Remove any existing prompt
     const old = document.getElementById("gf-prompt-card");
     if (old) old.remove();

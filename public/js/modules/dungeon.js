@@ -40,7 +40,7 @@
     return arr[0] / 0x100000000;
   }
 
-  function cryptoRandBool(chance) {
+  function _cryptoRandBool(chance) {
     // Returns true with `chance` probability (0..1)
     return cryptoRandFloat() < chance;
   }
@@ -524,7 +524,7 @@
       }
 
       // Connect adjacent rooms with doors
-      this._connectRooms(positions, roomW, roomH, gap);
+      this._connectRooms(positions, _roomW, _roomH, _gap);
 
       // Build ASCII grid
       this._buildGrid();
@@ -601,7 +601,7 @@
       }
     }
 
-    _connectRooms(positions, roomW, roomH, gap) {
+    _connectRooms(positions, _roomW, _roomH, _gap) {
       // Build adjacency: rooms sharing edges in the grid get connected
       const posMap = new Map();
       positions.forEach((p, i) => posMap.set(`${p.row},${p.col}`, i));
@@ -680,7 +680,7 @@
         if (room.enemies.length > 0)     this.grid[cy][cx] = TILES.ENEMY;
 
         // Draw corridor connections (doors) on the walls
-        for (const [dir, door] of Object.entries(room.doors)) {
+        for (const [_dir, door] of Object.entries(room.doors)) {
           const toRoom = this.rooms[door.to];
           this._drawCorridor(room, toRoom, dir, door.type);
         }
@@ -688,13 +688,13 @@
     }
 
     _drawCorridor(roomA, roomB, dir, doorType) {
-      const [dy, dx] = DIRS[dir];
+      const [_dy, _dx] = DIRS[dir];
       let startX, startY, endX, endY;
 
       const midAy = roomA.y + Math.floor(roomA.h / 2);
       const midAx = roomA.x + Math.floor(roomA.w / 2);
-      const midBy = roomB.y + Math.floor(roomB.h / 2);
-      const midBx = roomB.x + Math.floor(roomB.w / 2);
+      const _midBy = roomB.y + Math.floor(roomB.h / 2);
+      const _midBx = roomB.x + Math.floor(roomB.w / 2);
 
       if (dir === "N" || dir === "S") {
         // Vertical corridor
@@ -1037,7 +1037,7 @@
       const hp      = player.hp     ?? 100;
       const maxHp   = player.maxHp  ?? 100;
       const caps    = player.caps   ?? 0;
-      const xp      = player.xp    ?? 0;
+      const _xp      = player.xp    ?? 0;
       const special = player.special || {};
       const agility = special.A     ?? 5;
       const intel   = special.I     ?? 5;
@@ -1199,7 +1199,7 @@
       if (termBtnEl) termBtnEl.addEventListener("click", () => this._handleTerminalDoor(room, null));
 
       const examBtnEl = actEl.querySelector("#dungeon-examine-btn");
-      if (examBtnEl) examBtnEl.addEventListener("click", () => this._handleExamine(room));
+      if (examBtnEl) examBtnEl.addEventListener("click", () => this._handleExamine(_room));
     },
 
     // --------------------------------------------------------
@@ -1543,7 +1543,7 @@
     // --------------------------------------------------------
     // Examine action
     // --------------------------------------------------------
-    _handleExamine(room) {
+    _handleExamine(_room) {
       const flavours = [
         "Radiation readings are within acceptable parameters. Barely.",
         "Scorch marks on the walls suggest a firefight happened here long ago.",
@@ -1567,7 +1567,7 @@
 
       // Find and open the door in fromRoom → toRoom
       for (const room of rooms) {
-        for (const [dir, door] of Object.entries(room.doors)) {
+        for (const [_dir, door] of Object.entries(room.doors)) {
           if ((room.id === fromRoomId && door.to === toRoomId) ||
               (room.id === toRoomId && door.to === fromRoomId)) {
             door.type = "open";

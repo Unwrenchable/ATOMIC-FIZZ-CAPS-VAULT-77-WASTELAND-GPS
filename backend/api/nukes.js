@@ -49,7 +49,7 @@ const ZONE_DURATION_MS     = (NUKE_DATA.nuke_zone_duration_hours || 3) * 3600 * 
 const KEYCARDS_REQUIRED    = NUKE_DATA.keycard_cost_per_launch || 3;
 const LAUNCH_CODE_LENGTH   = 8;
 const SILO_LAUNCH_RADIUS_M = 200; // must be within 200m of silo to launch
-const WALLET_MAX           = 128;
+const _WALLET_MAX           = 128;
 
 // ------------------------------------------------------------
 // Rate limiters

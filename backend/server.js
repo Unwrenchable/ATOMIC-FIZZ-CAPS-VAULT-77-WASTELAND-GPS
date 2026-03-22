@@ -91,7 +91,7 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 // JSON body limit
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({ limit: "64kb" }));
 
 // Global rate limiting (coarse)
 app.use(
@@ -278,6 +278,7 @@ safeMount("/api/redeem-voucher", api("redeem-voucher"));
 safeMount("/api/xp", api("xp"));
 safeMount("/api/caps", api("caps"));
 safeMount("/api/settings", api("settings"));
+safeMount("/api/crafting", api("crafting"));
 
 // NFT Scrap and Fusion features
 safeMount("/api/scrap-nft", api("scrap-nft"));

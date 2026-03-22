@@ -11,7 +11,7 @@ function safeDecodeBase58(str, name = "key") {
   try {
     return bs58.decode(str);
   } catch (err) {
-    throw new Error(`${name} decode failed: ${err.message}`);
+    throw new Error(`${name} decode failed: ${err.message}`, { cause: err });
   }
 }
 

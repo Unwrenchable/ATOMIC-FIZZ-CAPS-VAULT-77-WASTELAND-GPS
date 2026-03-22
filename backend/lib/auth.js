@@ -37,7 +37,7 @@ function loadBs58() {
     const codec = baseX(BASE58);
     if (codec && typeof codec.encode === "function" && typeof codec.decode === "function") return codec;
   } catch (err) {
-    throw new Error("Base58 library not available: " + err.message + ". Install 'bs58' or 'base-x' in your project.");
+    throw new Error("Base58 library not available: " + err.message + ". Install 'bs58' or 'base-x' in your project.", { cause: err });
   }
 }
 
@@ -52,8 +52,7 @@ function safeDecodeBase58(str, name = "value") {
   try {
     return bs58.decode(str);
   } catch (err) {
-    throw new Error(`${name} decode failed: ${err.message}`);
-  }
+    throw new Error(`${name} decode failed: ${err.message}`, { cause: err });  }
 }
 
 // ------------------------------------------------------------

@@ -8,10 +8,10 @@
 (function () {
   "use strict";
 
-  const WorldState = window.overseerWorldState;
+  const _WorldState = window.overseerWorldState;
   const Regions = window.overseerRegions;
-  const Weather = window.overseerWeather;
-  const Timeline = window.overseerTimeline;
+  const _Weather = window.overseerWeather;
+  const _Timeline = window.overseerTimeline;
 
   // Secure RNG: use browser CSPRNG instead of predictable Math.random()
   const _rngBuf = new Uint32Array(1);
@@ -26,12 +26,12 @@
   const ANOMALY_EVENTS = {
     glitch_mob: {
       weight: 1,
-      generate(region, weather) {
+      generate(_region, _weather) {
         return {
           type: "anomaly_combat",
           enemies: [
-            { id: "glitch_beast", lvl: region.threat * 10 + 3 },
-            { id: "static_walker", lvl: region.threat * 10 + 2 }
+            { id: "glitch_beast", lvl: _region.threat * 10 + 3 },
+            { id: "static_walker", lvl: _region.threat * 10 + 2 }
           ],
           description: "Reality flickers. Glitch‑touched creatures phase into view."
         };
@@ -40,7 +40,7 @@
 
     distortion_field: {
       weight: 1,
-      generate(region, weather) {
+      generate(_region, _weather) {
         return {
           type: "anomaly_field",
           effect: "distortion",
@@ -51,7 +51,7 @@
 
     echo_ghost: {
       weight: 1,
-      generate(region, weather) {
+      generate(_region, _weather) {
         return {
           type: "timeline_echo",
           description: "A ghostly figure repeats a moment from another timeline.",
@@ -62,7 +62,7 @@
 
     anomaly_storm: {
       weight: 1,
-      generate(region, weather) {
+      generate(_region, _weather) {
         return {
           type: "anomaly_storm",
           intensity: Math.floor(_secureRandom() * 3) + 1,
@@ -91,8 +91,8 @@
   // ------------------------------------------------------------
   function roll(regionId, weather) {
     const region = Regions.get(regionId);
-    const anomalyLevel = WorldState.getAnomalyLevel(regionId);
-    const timelineUnstable = Timeline.isUnstable(regionId);
+    const anomalyLevel = _WorldState.getAnomalyLevel(regionId);
+    const timelineUnstable = _Timeline.isUnstable(regionId);
 
     let pool = [];
 

@@ -4,10 +4,18 @@
 (function () {
   if (!window.overseerPersonality) window.overseerPersonality = {};
 
+  // Unbiased CSPRNG integer in [0, n) using rejection sampling
+  function _secureRandInt(n) {
+    const buf = new Uint32Array(1);
+    const limit = (Math.floor(0x100000000 / n) * n) >>> 0;
+    do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
+    return buf[0] % n;
+  }
+
   // -------------------------------------------------------------
   // CONFIG — LOADED FROM BACKEND (environment variables)
   // -------------------------------------------------------------
-  let HF_API_KEY = "";
+  let _HF_API_KEY = "";
   let MODEL = "mistralai/Mixtral-8x7B-Instruct-v0.1";
   let configLoaded = false;
 
@@ -23,7 +31,7 @@
       if (res.ok) {
         const config = await res.json();
         if (config.overseer) {
-          HF_API_KEY = config.overseer.hfApiKey || "";
+          _HF_API_KEY = config.overseer.hfApiKey || "";
           MODEL = config.overseer.hfModel || MODEL;
         }
         configLoaded = true;
@@ -149,7 +157,7 @@
   };
 
   function pickTone() {
-    const roll = Math.random();
+    const roll = (crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000);
     if (roll < 0.05) return "glitch";
     if (roll < 0.14) return "hyper_troll";
     if (roll < 0.28) return "sarcastic";
@@ -162,7 +170,7 @@
   function fallbackLine() {
     const tone = pickTone();
     const pool = fallbackTones[tone];
-    return pool[Math.floor(Math.random() * pool.length)];
+    return pool[_secureRandInt(pool.length)];
   }
 
   // -------------------------------------------------------------
@@ -344,7 +352,7 @@
       "Guidance available. Vault Dweller orientation: caps are currency, the map is live, I'm always watching. In a professional capacity."
     ];
 
-    var pick = function (arr) { return arr[Math.floor(Math.random() * arr.length)]; };
+    var pick = function (arr) { return arr[_secureRandInt(arr.length)]; };
 
     var hasCrypto  = cryptoTerms.some(function (t) { return msg.includes(t); });
     var hasElon    = elonTerms.some(function (t) { return msg.includes(t); });

@@ -181,8 +181,7 @@
         return armatureDisplay;
       } catch (e) {
         // Fallback: create an animated SVG portrait using SMIL (no Pixi dependency)
-        try {
-          const stageEl = this.stageEl || document.getElementById('dragonbonesStage');
+        const stageEl = this.stageEl || document.getElementById('dragonbonesStage');
           const W = this.app ? this.app.view.width : 240;
           const H = this.app ? this.app.view.height : 300;
 
@@ -284,9 +283,6 @@
           container.stopTalking  = () => { try { mouthAnim.endElement();   } catch (_) {} };
 
           return container;
-        } catch (ex) {
-          throw ex;
-        }
       }
     }
   };

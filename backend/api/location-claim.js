@@ -26,9 +26,15 @@ try {
   if (fs.existsSync(locFile)) {
     LOCATIONS = JSON.parse(fs.readFileSync(locFile, "utf8"));
     console.log(`[location-claim] Loaded ${LOCATIONS.length} locations`);
+  } else {
+    console.error("[location-claim] CRITICAL: locations.json not found — all claims will return 404");
   }
 } catch (e) {
-  console.warn("[location-claim] Failed to load locations.json:", e.message);
+  console.error("[location-claim] CRITICAL: Failed to load locations.json:", e.message, "— all claims will return 404");
+}
+// Health check: warn loudly at startup if locations list is empty
+if (LOCATIONS.length === 0) {
+  console.error("[location-claim] STARTUP WARNING: LOCATIONS list is empty. POI claiming is non-functional.");
 }
 
 // Helper: Calculate distance between two coordinates in meters
@@ -48,7 +54,7 @@ function getDistance(lat1, lng1, lat2, lng2) {
 // Helper: Generate loot for a location based on tier
 function generateLoot(location) {
   const tier = location.tier || 1;
-  const locType = location.type || "wasteland";
+  const _locType = location.type || "wasteland";
   
   const rewards = {
     xp: 0,

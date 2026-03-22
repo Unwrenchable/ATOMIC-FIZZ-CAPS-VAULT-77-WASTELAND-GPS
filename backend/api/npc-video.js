@@ -40,7 +40,7 @@ function sanitiseForPrompt(str, maxLen) {
     .slice(0, maxLen);
 }
 
-function truncateWords(str, maxWords) {
+function _truncateWords(str, maxWords) {
   const words = String(str || '').trim().split(/\s+/).filter(Boolean);
   return words.slice(0, maxWords).join(' ');
 }

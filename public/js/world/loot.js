@@ -9,11 +9,11 @@
   "use strict";
 
   const WorldState = window.overseerWorldState;
-  const Regions = window.overseerRegions;
+  const _Regions = window.overseerRegions;
   const Factions = window.overseerFaction;
   const Timeline = window.overseerTimeline;
-  const Anomalies = window.overseerAnomalies;
-  const Traits = window.overseerNpcTraits;
+  const _Anomalies = window.overseerAnomalies;
+  const _Traits = window.overseerNpcTraits;
 
   // ------------------------------------------------------------
   // Base loot pools
@@ -90,7 +90,7 @@
   // Main loot generator
   // ------------------------------------------------------------
   function generateLoot({ regionId, factionId, npcTraits = [] }) {
-    const region = Regions.get(regionId);
+    const region = _Regions.get(regionId);
     const faction = Factions.getFaction(factionId);
     const anomalyLevel = WorldState.getAnomalyLevel(regionId);
     const weather = WorldState.getWeather();
