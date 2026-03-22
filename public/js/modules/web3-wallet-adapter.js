@@ -466,31 +466,122 @@
       return available;
     },
 
+    // ============================================================
+    // PIP-BOY WALLET SELECTOR MODAL
+    // Replaces the native browser prompt() with a proper modal.
+    // ============================================================
     async showWalletSelector() {
       const available = this.getAvailableWallets();
-      
-      let message = "🔗 CONNECT WALLET\n\nSelect a wallet provider:\n\n";
-      available.forEach((wallet, i) => {
-        const status = wallet.detected ? "✅" : "⚠️";
-        message += `[${i + 1}] ${wallet.icon} ${wallet.name} ${status}\n`;
+
+      return new Promise((resolve) => {
+        // Remove any stale modal
+        const stale = document.getElementById('walletSelectorModal');
+        if (stale) stale.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'walletSelectorModal';
+        modal.style.cssText = [
+          'position:fixed', 'inset:0', 'z-index:99999',
+          'display:flex', 'align-items:center', 'justify-content:center',
+          'background:rgba(0,0,0,0.88)',
+          'font-family:"Consolas","Courier New",monospace'
+        ].join(';');
+
+        const walletRows = available.map(w => {
+          const detected = w.detected
+            ? '<span style="color:#00ff41;font-size:11px;">✓ DETECTED</span>'
+            : '<span style="color:#ff6600;font-size:11px;">⚠ NOT INSTALLED</span>';
+          return `
+            <button data-wallet="${w.key}" style="
+              display:flex;align-items:center;gap:12px;width:100%;
+              background:rgba(0,255,65,0.06);border:1px solid rgba(0,255,65,0.3);
+              color:#00ff41;padding:10px 14px;margin-bottom:8px;cursor:pointer;
+              font-family:inherit;font-size:14px;letter-spacing:0.08em;
+              transition:background 0.15s;text-align:left;
+            ">
+              <span style="font-size:22px;line-height:1;">${w.icon}</span>
+              <span style="flex:1;">${w.name}</span>
+              ${detected}
+            </button>`;
+        }).join('');
+
+        modal.innerHTML = `
+          <div style="
+            background:#020d02;border:2px solid #00ff41;
+            box-shadow:0 0 30px rgba(0,255,65,0.25);
+            padding:24px 28px;max-width:380px;width:90%;
+            position:relative;
+          ">
+            <div style="text-align:center;margin-bottom:18px;">
+              <div style="color:#00ff41;font-size:18px;letter-spacing:0.15em;font-weight:bold;">⬡ CONNECT WALLET ⬡</div>
+              <div style="color:#008822;font-size:11px;letter-spacing:0.1em;margin-top:4px;">VAULT-TEC AUTHENTICATION TERMINAL</div>
+            </div>
+            <div id="walletOptionsList">${walletRows}</div>
+            <button id="walletSelectorCancel" style="
+              width:100%;background:transparent;border:1px solid rgba(255,100,0,0.4);
+              color:#ff6600;padding:8px;cursor:pointer;font-family:inherit;
+              font-size:12px;letter-spacing:0.1em;margin-top:4px;
+            ">✕ CANCEL</button>
+            <div style="color:#004400;font-size:10px;text-align:center;margin-top:12px;letter-spacing:0.06em;">
+              ✓ DETECTED = wallet extension found &nbsp;|&nbsp; ⚠ = will prompt to install
+            </div>
+          </div>`;
+
+        document.body.appendChild(modal);
+
+        // Hover highlight
+        modal.querySelectorAll('[data-wallet]').forEach(btn => {
+          btn.addEventListener('mouseover', () => { btn.style.background = 'rgba(0,255,65,0.14)'; });
+          btn.addEventListener('mouseout', () => { btn.style.background = 'rgba(0,255,65,0.06)'; });
+          btn.addEventListener('click', () => {
+            modal.remove();
+            resolve(btn.dataset.wallet);
+          });
+        });
+
+        document.getElementById('walletSelectorCancel').addEventListener('click', () => {
+          modal.remove();
+          resolve(null);
+        });
+
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) { modal.remove(); resolve(null); }
+        });
+
+        // Close on Escape
+        const onKey = (e) => {
+          if (e.key === 'Escape') { modal.remove(); resolve(null); document.removeEventListener('keydown', onKey); }
+        };
+        document.addEventListener('keydown', onKey);
       });
-      message += `\n✅ = Detected\n⚠️ = Not detected (will prompt to install)\n`;
-      message += `\n[0] Cancel\n\nEnter number (0-${available.length}):`;
+    },
 
-      const choice = prompt(message);
-      const choiceNum = parseInt(choice, 10);
+    // ============================================================
+    // SHOW INLINE STATUS TOAST (replaces alert() for connect result)
+    // ============================================================
+    _showConnectToast(message, isError = false) {
+      const existing = document.getElementById('walletConnectToast');
+      if (existing) existing.remove();
 
-      if (choiceNum === 0 || !choice) {
-        return null;
-      }
-
-      if (choiceNum < 1 || choiceNum > available.length) {
-        alert("Invalid choice");
-        return null;
-      }
-
-      const selected = available[choiceNum - 1];
-      return selected.key;
+      const toast = document.createElement('div');
+      toast.id = 'walletConnectToast';
+      toast.style.cssText = [
+        'position:fixed', 'bottom:24px', 'left:50%',
+        'transform:translateX(-50%)',
+        'z-index:99998',
+        `background:${isError ? '#1a0000' : '#011501'}`,
+        `border:1px solid ${isError ? '#ff4444' : '#00ff41'}`,
+        `color:${isError ? '#ff6666' : '#00ff41'}`,
+        'padding:10px 20px', 'font-family:"Consolas","Courier New",monospace',
+        'font-size:13px', 'letter-spacing:0.08em',
+        'box-shadow:0 0 16px rgba(0,255,65,0.2)',
+        'max-width:90vw', 'text-align:center',
+        'pointer-events:none',
+      ].join(';');
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4000);
     },
 
     async connect(walletType = null) {
@@ -530,11 +621,11 @@
           // Check if provider is available for other wallets
           if (!provider.check()) {
             if (walletType === 'metamask') {
-              alert(`${provider.name} not detected!\n\nPlease install MetaMask:\nhttps://metamask.io/`);
+              this._showConnectToast(`MetaMask not detected. Install from metamask.io then refresh.`, true);
             } else if (walletType === 'walletconnect') {
-              alert(`WalletConnect library not loaded.\n\nPlease refresh the page.`);
+              this._showConnectToast(`WalletConnect library not loaded. Please refresh the page.`, true);
             } else {
-              alert(`${provider.name} not available.\n\nPlease install the wallet extension.`);
+              this._showConnectToast(`${provider.name} not available. Install the wallet extension.`, true);
             }
             return false;
           }
@@ -567,9 +658,9 @@
         console.log(`[web3-wallet] Connected to ${provider.name}:`, this.getShortAddress());
 
         if (result.isNew) {
-          alert(`✅ New ${provider.name} Generated!\n\nAddress: ${this.getShortAddress()}\n\nYour wallet has been created and saved locally.\n\n⚠️ IMPORTANT: This is a local wallet. For real transactions, connect an external wallet like Phantom.`);
+          this._showConnectToast(`⬡ New ${provider.name} created — ${this.getShortAddress()} — local wallet only`);
         } else {
-          alert(`✅ Connected to ${provider.name}!\n\nAddress: ${this.getShortAddress()}`);
+          this._showConnectToast(`⬡ Connected: ${provider.name} — ${this.getShortAddress()}`);
         }
 
         this.dispatchConnectionEvent();
@@ -577,10 +668,11 @@
 
       } catch (error) {
         console.error("[web3-wallet] Connection failed:", error);
-        alert(`Wallet connection failed:\n\n${error.message}`);
+        this._showConnectToast(`Connection failed: ${error.message}`, true);
         return false;
       }
     },
+
 
     async hashAddress(address) {
       // Create a simple hash of the address for verification
@@ -706,7 +798,7 @@
 
     async generateNewWallet() {
       if (!this.canGenerateNewWallet()) {
-        alert("New wallet generation is only available with Fizz Caps Wallet.\n\nTo generate a new wallet, disconnect and select 'Fizz Caps Wallet' when connecting.");
+        this._showConnectToast('New wallet generation only available with Fizz Caps Wallet.', true);
         return false;
       }
 
@@ -737,18 +829,14 @@
           console.warn('[web3-wallet] Could not save wallet preference');
         }
 
-        alert(
-          "✅ NEW WALLET GENERATED!\n\n" +
-          `Address: ${this.getShortAddress()}\n\n` +
-          "Your new wallet is ready to use!"
-        );
+        this._showConnectToast(`⬡ New wallet generated — ${this.getShortAddress()}`);
 
         this.dispatchConnectionEvent();
         return true;
 
       } catch (error) {
         console.error("[web3-wallet] Wallet generation failed:", error);
-        alert(`Failed to generate new wallet:\n\n${error.message}`);
+        this._showConnectToast(`Failed to generate new wallet: ${error.message}`, true);
         return false;
       }
     },
