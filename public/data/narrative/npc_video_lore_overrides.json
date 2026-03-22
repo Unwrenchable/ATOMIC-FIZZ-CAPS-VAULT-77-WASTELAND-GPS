@@ -160,5 +160,12 @@
     "portrait_anchor": "center top",
     "description_anchor": "bottom left",
     "prompt_lore": "Nan Hannigan is the warden of Hannigan's House orphanage, a raider-adjacent labor boss who runs orphaned children as a scavenging operation. She's perpetually drunk on Nuka-Moonshine, mean as a radscorpion, and smells like both."
+  },
+  "bless": {
+    "display_name": "Bless",
+    "portrait_anchor": "center top",
+    "description_anchor": "bottom left",
+    "default_video_speech": "How are your rads? Be honest — I'll know if you're lying.",
+    "prompt_lore": "Bless is a Vault-Tec trained healer who escaped Vault 19. She wears a patched pre-war medical jacket over a Vault-Tec utility uniform, with medical tools looped through a handmade sash at her waist. Her hands are steady and her expression is focused but kind — someone who has learned to assess a situation quickly. Background: ruined urban wasteland, dusk lighting, subtle radiation glow in the distance."
   }
 }

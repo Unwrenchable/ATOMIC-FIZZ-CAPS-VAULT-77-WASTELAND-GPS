@@ -1,0 +1,509 @@
+{
+  "id": "dialog_bless",
+  "npc": "Bless",
+  "portrait": "bless",
+  "title": "Wasteland Healer",
+  "description": "She moves through the ruins like radiation through concrete — quietly, inevitably. People say she's been touched by something. She doesn't correct them.",
+  "intro": {
+    "id": "bless_intro",
+    "conditions": [
+      "!flag:met_bless"
+    ],
+    "set_flags": [
+      "met_bless"
+    ],
+    "video_speech": "They said this wasteland takes everything. I say it gives back — just not in ways anyone expects. Sit. Let me look at those wounds.",
+    "text": "She doesn't move away when you approach. That alone is unusual.\n\nHer gear is patchwork — pre-war medical jacket over Vault-Tec issue fatigues, tools looped through a handmade sash. Her hands don't shake. Wasteland healers' hands always shake eventually.\n\nHers don't.\n\n\"You're leaking in three places and your rads are elevated.\"\n\nShe says it like weather. No panic, no pity.\n\n\"Sit down. I'm not asking.\"",
+    "responses": [
+      {
+        "text": "[Friendly] I appreciate the concern. Who are you?",
+        "tone": "kind",
+        "next": "node_who_is_bless"
+      },
+      {
+        "text": "[Question] How can you tell I'm irradiated just by looking?",
+        "tone": "question",
+        "next": "node_rad_sensing"
+      },
+      {
+        "text": "[Sarcastic] 'Not asking.' Everyone out here has demands.",
+        "tone": "sarcastic",
+        "next": "node_sarcastic_demands"
+      },
+      {
+        "text": "[Direct] Fine. Patch me up. What do you need?",
+        "tone": "direct",
+        "next": "node_patch_up"
+      }
+    ]
+  },
+  "nodes": {
+    "node_who_is_bless": {
+      "id": "node_who_is_bless",
+      "text": "\"Bless.\" She starts working on your first wound without waiting for you to sit.\n\n\"Used to have a longer name. Vault designation, unit number, the whole bureaucratic trail. Doesn't matter anymore.\"\n\nA practiced pull of medical thread.\n\n\"Out here people need something they can call when they're bleeding. So. Bless.\"\n\n\"You can decide later if it's a name or a job description.\"",
+      "responses": [
+        {
+          "text": "[Kind] Where did you learn to do this?",
+          "tone": "kind",
+          "next": "node_medical_background"
+        },
+        {
+          "text": "[Question] Are you aligned with any faction?",
+          "tone": "question",
+          "next": "node_faction_alignment"
+        },
+        {
+          "text": "Fair enough. Thanks for the patch.",
+          "tone": "neutral",
+          "next": "node_patch_up"
+        }
+      ]
+    },
+    "node_rad_sensing": {
+      "id": "node_rad_sensing",
+      "text": "A brief pause. Not offense — more like she's deciding how much to explain.\n\n\"Practice. Long enough out here, you start reading bodies the way you read terrain.\"\n\n\"Your skin color at the capillaries. The tremor in your hands you think is adrenaline. The way your eyes are slightly too bright.\"\n\n\"It's 200 rads, give or take. Not dangerous yet. Would be, in another few hours without treatment.\"\n\nShe uncaps a RadAway without looking.\n\n\"Which is why we're here.\"",
+      "responses": [
+        {
+          "text": "[Question] You've seen a lot of radiation sickness.",
+          "tone": "question",
+          "next": "node_radiation_experience"
+        },
+        {
+          "text": "Start the treatment. I'm listening.",
+          "tone": "neutral",
+          "next": "node_patch_up"
+        }
+      ]
+    },
+    "node_sarcastic_demands": {
+      "id": "node_sarcastic_demands",
+      "text": "She doesn't look up from her supply kit.\n\n\"My demand is that you don't die in front of me. I have a policy about that.\"\n\nA beat.\n\n\"I've been out here since the early days. Watched people refuse help out of pride and end up as a data point in someone else's cautionary tale.\"\n\n\"I'm not interested in adding you to that list. So.\"\n\nShe holds up a stimpak.\n\n\"Still not asking.\"",
+      "responses": [
+        {
+          "text": "[Sarcastic] You win. I'll take the stimpak.",
+          "tone": "sarcastic",
+          "next": "node_patch_up"
+        },
+        {
+          "text": "Fair. What do I owe you?",
+          "tone": "neutral",
+          "next": "node_payment"
+        }
+      ]
+    },
+    "node_patch_up": {
+      "id": "node_patch_up",
+      "text": "She works quickly. You notice she keeps a running count under her breath — supplies, dosages, time — a healer's arithmetic.\n\n\"Three stitches, one RadAway, basic stim.\"\n\nShe leans back.\n\n\"You'll feel it tomorrow. That's normal — your body's recalibrating. Don't push hard for four hours or the stitches will pull.\"\n\nA long look at the wasteland around you.\n\n\"You're not local. New arrival, or someone who wandered further than planned?\"\n\nShe asks it without judgment. Just data collection.",
+      "set_flags": [
+        "bless_patched_player"
+      ],
+      "grant_items": [
+        { "id": "stimpak", "name": "Stimpak", "type": "consumable", "quantity": 1 }
+      ],
+      "grant_from": "Bless",
+      "responses": [
+        {
+          "text": "[Friendly] New arrival. Still figuring out the territory.",
+          "tone": "kind",
+          "next": "node_new_arrival"
+        },
+        {
+          "text": "[Question] What should I know about this area?",
+          "tone": "question",
+          "next": "node_local_intel"
+        },
+        {
+          "text": "[Direct] I'm moving through. Any threats I should know?",
+          "tone": "direct",
+          "next": "node_local_intel"
+        },
+        {
+          "text": "What do I owe you?",
+          "tone": "neutral",
+          "next": "node_payment"
+        }
+      ]
+    },
+    "node_medical_background": {
+      "id": "node_medical_background",
+      "text": "\"Vault-Tec Medical Program. Level 3 certification before the doors opened.\"\n\nNo pride in it. Just fact.\n\n\"Inside, I was treating vitamin deficiencies and psychosomatic anxiety. Outside, it's shrapnel and radiation burns and things the medical texts didn't cover.\"\n\nShe starts on the second wound.\n\n\"The wasteland is a better teacher than any program. Faster, anyway.\"",
+      "responses": [
+        {
+          "text": "[Kind] Are there other healers out here?",
+          "tone": "kind",
+          "next": "node_other_healers"
+        },
+        {
+          "text": "What Vault were you from?",
+          "tone": "question",
+          "next": "node_vault_origin"
+        }
+      ]
+    },
+    "node_faction_alignment": {
+      "id": "node_faction_alignment",
+      "text": "\"No.\"\n\nFlat. Clear.\n\n\"Every faction out here wants healers as assets. Tools for their agenda.\"\n\nShe caps the RadAway and moves on to the sutures.\n\n\"I treat people who need it. Regardless of insignia. That makes me useful to everyone and owned by no one.\"\n\nA pause.\n\n\"Which is the only way to survive long-term out here with your conscience intact.\"",
+      "responses": [
+        {
+          "text": "[Kind] That's a difficult position to hold.",
+          "tone": "kind",
+          "next": "node_difficult_independence"
+        },
+        {
+          "text": "I respect that.",
+          "tone": "neutral",
+          "next": "node_patch_up"
+        }
+      ]
+    },
+    "node_radiation_experience": {
+      "id": "node_radiation_experience",
+      "text": "\"More than I'd prefer to count.\"\n\nShe works the RadAway into your IV line without flinching.\n\n\"The thing about radiation is it lies. Makes you feel fine right up until it doesn't.\"\n\n\"I've lost people who insisted they were fine. After, always after.\"\n\nA quiet pause.\n\n\"Don't be one of those.\"",
+      "responses": [
+        {
+          "text": "Understood. I'll watch my rads.",
+          "tone": "neutral",
+          "next": "node_patch_up"
+        }
+      ]
+    },
+    "node_payment": {
+      "id": "node_payment",
+      "text": "She shakes her head.\n\n\"Nothing. Not from you.\"\n\nShe starts packing her kit.\n\n\"I have a theory: the wasteland works on a ledger. You help people when you can, the math works out eventually.\"\n\nA look at you — assessing something beyond physical damage.\n\n\"You're going to help people. Maybe not intentionally. But I've been reading people long enough to know the ones who end up mattering.\"\n\n\"Consider this an investment.\"",
+      "responses": [
+        {
+          "text": "[Kind] Thank you. I won't waste the investment.",
+          "tone": "kind",
+          "next": "node_farewell_warm"
+        },
+        {
+          "text": "[Sarcastic] High stakes for a stimpak.",
+          "tone": "sarcastic",
+          "next": "node_payment_sarcastic"
+        }
+      ]
+    },
+    "node_payment_sarcastic": {
+      "id": "node_payment_sarcastic",
+      "text": "Something crosses her face — not quite a smile.\n\n\"The stimpak's just the cost of doing business.\"\n\nShe snaps her kit shut.\n\n\"The investment is in whatever you do with the next year. Or five.\"\n\n\"I've been wrong before. But not often.\"\n\n\"Don't make me regret the RadAway.\"",
+      "responses": [
+        {
+          "text": "I'll try not to.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
+    },
+    "node_new_arrival": {
+      "id": "node_new_arrival",
+      "text": "She nods once. No judgment.\n\n\"The territory's rough north of the old rail line. Raider activity — organized, which is worse than random. The Atomic Fizz claim points are relatively safe approach zones.\"\n\n\"Follow the Pip-Boy signals. They were set up for exactly this situation.\"\n\nShe stands and brushes dust from her jacket.\n\n\"Talk to the courier if you find her. Pip. She knows this area better than most.\"\n\n\"And watch your rads. First sign of trouble: come find me.\"",
+      "set_flags": [
+        "bless_gave_orientation"
+      ],
+      "responses": [
+        {
+          "text": "[Question] Where can I find you again?",
+          "tone": "question",
+          "next": "node_find_bless"
+        },
+        {
+          "text": "Understood. Thank you.",
+          "tone": "kind",
+          "next": "node_farewell_warm"
+        }
+      ]
+    },
+    "node_local_intel": {
+      "id": "node_local_intel",
+      "text": "\"North side has raider camps — three that I know of, possibly a fourth.\"\n\nShe rattles it off without hesitation. She keeps this updated.\n\n\"East past the rail bridge there's a settlement. They don't trust strangers but they trade. Approach slow and announce yourself.\"\n\n\"The anomalies — the places where the air feels wrong and your Pip-Boy glitches — avoid those until you're better equipped.\"\n\nShe pauses.\n\n\"And keep your rads under 300. I can fix a lot. Not everything.\"",
+      "responses": [
+        {
+          "text": "Good intel. I'll keep it in mind.",
+          "tone": "neutral",
+          "next": "node_farewell_practical"
+        },
+        {
+          "text": "[Question] What are the anomalies?",
+          "tone": "question",
+          "next": "node_anomaly_intel"
+        }
+      ]
+    },
+    "node_anomaly_intel": {
+      "id": "node_anomaly_intel",
+      "text": "A long pause. She weighs something.\n\n\"Honestly? I don't know. And I know enough to be concerned about that.\"\n\n\"Pre-war, Vault-Tec was experimenting with resonance fields — broadcast signals that interact with the nervous system. The anomalies feel similar.\"\n\n\"I've treated three people who walked through them. Two recovered. One...\"\n\nShe stops.\n\n\"One is still explaining the same memory on a loop to anyone who'll listen.\"\n\n\"So. Avoid the anomalies.\"",
+      "responses": [
+        {
+          "text": "Understood. Avoided.",
+          "tone": "neutral",
+          "next": "node_farewell_practical"
+        }
+      ]
+    },
+    "node_other_healers": {
+      "id": "node_other_healers",
+      "text": "\"Doc Hannigan, if you can find her. She works the eastern settlements — good with trauma, not great with bedside manner.\"\n\n\"There's a Brotherhood Scribe two sectors north. Won't treat anyone not aligned with them.\"\n\n\"Past that, you're looking at self-treatment and hope.\"\n\nShe finishes the last suture.\n\n\"Which is why I'm still here and not somewhere comfortable.\"",
+      "responses": [
+        {
+          "text": "What about you? Do you have a camp?",
+          "tone": "question",
+          "next": "node_find_bless"
+        },
+        {
+          "text": "Good to know. Thanks.",
+          "tone": "neutral",
+          "next": "node_farewell_practical"
+        }
+      ]
+    },
+    "node_vault_origin": {
+      "id": "node_vault_origin",
+      "text": "Her hands pause for just a moment.\n\n\"19. The one that wasn't supposed to open.\"\n\nShe doesn't elaborate. Her hands resume their work.\n\n\"Whatever experiment they were running — I was the control group. The one that wasn't supposed to know there was an experiment.\"\n\nA short silence.\n\n\"I found out. Then I left.\"\n\n\"The wasteland was less surprising than Vault-Tec's documentation.\"",
+      "responses": [
+        {
+          "text": "[Kind] I'm sorry. That sounds like a betrayal.",
+          "tone": "kind",
+          "next": "node_vault_betrayal"
+        },
+        {
+          "text": "What was the experiment?",
+          "tone": "question",
+          "next": "node_experiment_details"
+        }
+      ]
+    },
+    "node_vault_betrayal": {
+      "id": "node_vault_betrayal",
+      "text": "\"Yes.\"\n\nSimple. Not a wound anymore — just a fact she carries.\n\n\"But it taught me something: the only reliable thing is the person in front of you.\"\n\n\"Systems fail. Institutions lie. People—\"\n\nShe ties off the last suture with practiced precision.\n\n\"People can surprise you. When they choose to.\"\n\nShe meets your eyes for the first time.\n\n\"I try to choose to.\"",
+      "responses": [
+        {
+          "text": "That's... a better philosophy than most out here.",
+          "tone": "kind",
+          "next": "node_farewell_warm"
+        },
+        {
+          "text": "I'll try to live up to that.",
+          "tone": "neutral",
+          "next": "node_farewell_warm"
+        }
+      ]
+    },
+    "node_experiment_details": {
+      "id": "node_experiment_details",
+      "text": "A long, considering look.\n\n\"Community cohesion under resource scarcity. How many people needed to die before the survivors organized.\"\n\nFlat. Clinical.\n\n\"I found the documentation in the Overseer's office after they were done with us.\"\n\n\"The answer, in case you're wondering, was 23%. Once the population dropped below 77% of starting capacity, the remainder either organized or turned on each other within 72 hours.\"\n\nShe repacks her kit.\n\n\"Vault-Tec wrote it up as a success.\"",
+      "responses": [
+        {
+          "text": "[Shocked] That's horrifying.",
+          "tone": "kind",
+          "next": "node_vault_betrayal"
+        },
+        {
+          "text": "And now you're out here fixing what they broke.",
+          "tone": "neutral",
+          "next": "node_vault_betrayal"
+        }
+      ]
+    },
+    "node_difficult_independence": {
+      "id": "node_difficult_independence",
+      "text": "\"Some days.\"\n\nA brief, honest answer.\n\n\"Raiders have tried to draft me twice. Settled communities have offered me safe housing in exchange for exclusivity. The Brotherhood sent a formal request.\"\n\nShe snaps a supply case closed.\n\n\"I said no to all of them. It costs — comfort, security.\"\n\nA glance at the horizon.\n\n\"But I sleep without wondering who I turned away to maintain my employment contract.\"\n\n\"That's worth something.\"",
+      "responses": [
+        {
+          "text": "It is. Thank you for sticking to it.",
+          "tone": "kind",
+          "next": "node_farewell_warm"
+        },
+        {
+          "text": "What keeps you safe without a faction?",
+          "tone": "question",
+          "next": "node_safety_without_faction"
+        }
+      ]
+    },
+    "node_safety_without_faction": {
+      "id": "node_safety_without_faction",
+      "text": "\"Reputation. And the fact that everyone knows I'll treat their enemies too.\"\n\nShe almost smiles.\n\n\"Hard to put a bounty on someone when you might need them next week.\"\n\nShe stands, smoothing her jacket.\n\n\"Also I'm very good at not being where trouble expects me to be.\"\n\n\"Comes from years of practice.\"",
+      "responses": [
+        {
+          "text": "Sound logic. Take care of yourself out here.",
+          "tone": "kind",
+          "next": "node_farewell_warm"
+        }
+      ]
+    },
+    "node_find_bless": {
+      "id": "node_find_bless",
+      "text": "\"I move. But I check the same three relay points every 48 hours — there's one near the old water treatment facility, one by the Atomic Fizz claim point at the eastern plaza, and one at the ruined church on the highway.\"\n\nShe touches the Pip-Boy on your wrist briefly — just a tap, and a new marker appears.\n\n\"That's the claim point marker. I'm usually within a few hundred meters.\"\n\n\"Leave a signal flare if it's urgent. I'll find you before the injury does.\"",
+      "set_flags": [
+        "bless_location_known"
+      ],
+      "responses": [
+        {
+          "text": "Thank you. I'll remember that.",
+          "tone": "kind",
+          "next": "node_farewell_warm"
+        }
+      ]
+    },
+    "node_farewell_warm": {
+      "id": "node_farewell_warm",
+      "set_flags": [
+        "bless_farewell_seen"
+      ],
+      "video_speech": "Stay low, keep your rads down, and don't be too proud to ask for help. The wasteland doesn't reward martyrs.",
+      "text": "She gathers her pack with the efficient movements of someone who's done it a thousand times in a hurry.\n\n\"Stay low. Keep your rads down.\"\n\nA pause.\n\n\"And don't be too proud to ask for help when you need it. The wasteland doesn't reward martyrs.\"\n\n\"It rewards survivors.\"\n\nShe's moving before the sentence is finished.",
+      "end": true
+    },
+    "node_farewell_practical": {
+      "id": "node_farewell_practical",
+      "set_flags": [
+        "bless_farewell_seen"
+      ],
+      "video_speech": "Watch the rads. Find cover before dark. If you need me again, leave a signal flare near the claim points.",
+      "text": "\"Watch the rads. Find cover before dark.\"\n\nShe's already looking at the horizon, calculating something.\n\n\"If you need me again — signal flare near the claim points. I check them regularly.\"\n\nShe moves. Fast and quiet, which explains how she's survived this long.",
+      "end": true
+    }
+  },
+  "quest_nodes": [
+    {
+      "id": "bless_offers_supply_run",
+      "conditions": [
+        "flag:met_bless",
+        "!flag:sq_bless_supply_taken"
+      ],
+      "offers_quest": "sq_bless_supply_run",
+      "set_flags": [
+        "sq_bless_supply_taken"
+      ],
+      "video_speech": "I'm running low on RadAway and medical supplies. If you're heading toward the settlements, I could use a resupply run.",
+      "text": "She's inventorying her kit when you arrive. Methodically, without looking up.\n\n\"RadAway, stimpaks, suture thread.\" She marks tallies. \"I'm running low on all three.\"\n\nA pause.\n\n\"The settlement to the east trades medical supplies. I can't leave my patrol area long enough to go myself.\"\n\nShe looks up finally.\n\n\"You're heading that direction anyway, or you wouldn't be here. I'll compensate you for the trouble.\""
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "bless_player_low_hp",
+      "conditions": [
+        "stat:hp<=25",
+        "flag:met_bless"
+      ],
+      "text": "She takes one look at you and starts moving before you've said a word.\n\n\"Stop. Don't take another step.\"\n\nHer tone leaves no room for argument.\n\n\"You're running on nothing. Sit down before the wasteland decides for you.\"",
+      "responses": [
+        {
+          "text": "I've been better.",
+          "tone": "neutral",
+          "next": "node_patch_up"
+        }
+      ]
+    },
+    {
+      "id": "bless_high_rads",
+      "conditions": [
+        "stat:rads>=300",
+        "flag:met_bless",
+        "!flag:bless_warned_rads"
+      ],
+      "set_flags": [
+        "bless_warned_rads"
+      ],
+      "text": "She notices before you've even spoken.\n\n\"300 rads. That's not a number I negotiate with.\"\n\nShe's already reaching for the RadAway.\n\n\"Where have you been?\"",
+      "responses": [
+        {
+          "text": "Somewhere I shouldn't have been.",
+          "tone": "neutral",
+          "next": "node_patch_up"
+        }
+      ]
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "bless_on_healing",
+      "keywords": ["heal", "medicine", "doctor", "injury", "hurt", "wounded"],
+      "text": "\"Medicine out here is math.\"\n\nShe doesn't elaborate immediately.\n\n\"Supplies. Time. Severity. What's available versus what's needed.\"\n\n\"The hard part isn't the treatment. It's making the numbers work.\""
+    },
+    {
+      "id": "bless_on_vault_tec",
+      "keywords": ["vault", "vault-tec", "overseer"],
+      "text": "\"Vault-Tec built the problem and sold the solution.\"\n\nFlat. No anger — she's past anger.\n\n\"The vaults kept some people alive. That's not nothing.\"\n\nA beat.\n\n\"It's also not forgiveness.\""
+    },
+    {
+      "id": "bless_on_factions",
+      "keywords": ["faction", "brotherhood", "raiders", "ncr", "enclave"],
+      "text": "\"Every faction thinks they're the exception.\"\n\nShe checks a bandage without looking up.\n\n\"The one that finally figured out how to be decent to everyone would win in three months.\"\n\n\"None of them have figured it out yet.\"",
+      "responses": [
+        {
+          "text": "That's... probably accurate.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
+    },
+    {
+      "id": "bless_on_death",
+      "keywords": ["death", "dead", "dying", "kill", "killed"],
+      "text": "\"People die out here.\"\n\nSimple. Not callous.\n\n\"I've made peace with the ones I couldn't save. Took a while.\"\n\nShe sets down her tools for a moment.\n\n\"The ones that stay with you are the ones where you had what you needed and still lost. Those teach you the most.\"\n\nShe picks her tools back up.\n\n\"Learn from them. Don't drown in them.\""
+    },
+    {
+      "id": "bless_on_fizz",
+      "keywords": ["fizz", "caps", "token", "economy"],
+      "text": "\"The Atomic Fizz network is interesting.\"\n\nShe considers it clinically.\n\n\"Pre-war branding repurposed into a functional economy. The FIZZ token's actually more stable than most factions' credit systems.\"\n\n\"I use it to trade for medical supplies. It works.\"\n\nA pause.\n\n\"Which makes it more reliable than most things out here.\"",
+      "responses": [
+        {
+          "text": "Practical endorsement.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
+    }
+  ],
+  "knowledge_nodes": [
+    {
+      "id": "bless_knows_siren",
+      "conditions": [
+        "flag:met_bless",
+        "flag:siren_intro_seen",
+        "!flag:bless_comment_siren"
+      ],
+      "set_flags": ["bless_comment_siren"],
+      "text": "\"Siren found you.\"\n\nNot a question.\n\n\"She's good at her job. The Signal Runners do important work — most survivors who make it through the first week had Siren or someone like her talking them through it.\"\n\nShe resumes her inventory.\n\n\"Trust her signal. She doesn't broadcast empty.\""
+    },
+    {
+      "id": "bless_knows_doc",
+      "conditions": [
+        "flag:met_bless",
+        "flag:met_doc",
+        "!flag:bless_comment_doc"
+      ],
+      "set_flags": ["bless_comment_doc"],
+      "text": "\"You've spoken with the Doctor.\"\n\nShe files something without elaborating.\n\n\"Good diagnostician. Unorthodox methods.\"\n\nA pause.\n\n\"We have a professional relationship. We don't always agree on protocol.\"\n\n\"But he keeps people alive. That's the job.\""
+    },
+    {
+      "id": "bless_knows_mara",
+      "conditions": [
+        "flag:met_bless",
+        "flag:met_mara",
+        "!flag:bless_comment_mara"
+      ],
+      "set_flags": ["bless_comment_mara"],
+      "text": "\"Dr. Kestrel.\"\n\nHer voice takes on a careful neutrality.\n\n\"Brilliant. Genuinely. Also operating with an ethical framework that I can't entirely endorse.\"\n\nShe seems to weigh how much to say.\n\n\"She keeps excellent data. Her research may matter, long term.\"\n\n\"I just don't want to be a subject in it.\"",
+      "responses": [
+        {
+          "text": "That seems wise.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
+    }
+  ],
+  "fallback": {
+    "id": "bless_fallback",
+    "video_speech": "How are your rads? Be honest — I'll know if you're lying.",
+    "text": "She looks up from her work with the focused attention of someone used to assessing people quickly.\n\n\"How are your rads?\"\n\nA beat.\n\n\"Be honest. I'll know if you're not.\""
+  },
+  "mood": "focused",
+  "personality": [
+    "Precise",
+    "Empathetic",
+    "Uncompromising"
+  ]
+}
