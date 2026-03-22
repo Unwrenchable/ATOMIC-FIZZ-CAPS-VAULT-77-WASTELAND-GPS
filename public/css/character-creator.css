@@ -418,9 +418,20 @@
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+/* Section hint text — Fallout-flavored guidance under each section title */
+.cc-section-hint {
+  font-size: 11px;
+  color: #008822;
+  letter-spacing: 0.06em;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  font-style: italic;
+  opacity: 0.85;
 }
 
 /* Option group */
