@@ -30,24 +30,21 @@
       const inv = this.gs.inventory;
       if (!inv) return false;
 
-      // Simple approach: check all categories depending on type
-      const pools = [
-        inv.weapons,
-        inv.armor,
-        inv.consumables,
-        inv.misc,
-        inv.questItems,
-        inv.ammo
-      ].filter(Boolean);
+      // Handle both flat array (player-state.js) and legacy category-object structure
+      const items = Array.isArray(inv)
+        ? inv
+        : [].concat(
+            inv.weapons || [],
+            inv.armor || [],
+            inv.consumables || [],
+            inv.misc || [],
+            inv.questItems || [],
+            inv.ammo || []
+          );
 
-      let count = 0;
-      pools.forEach(arr => {
-        arr.forEach(item => {
-          if (item.id === req.id) {
-            count += item.quantity ?? item.amount ?? 1;
-          }
-        });
-      });
+      const count = items
+        .filter(i => i && i.id === req.id)
+        .reduce((sum, i) => sum + (i.quantity ?? i.amount ?? 1), 0);
 
       return count >= (req.amount || 1);
     },

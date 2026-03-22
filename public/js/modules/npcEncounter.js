@@ -594,4 +594,23 @@
   };
 
   Game.modules.npcEncounter = npcEncounter;
+
+  // Pause ambient monitoring when the tab is hidden to prevent battery drain,
+  // resume it when the tab becomes visible again.
+  // Guard flag ensures this listener is only registered once even if the
+  // module script is evaluated multiple times (e.g., hot-reload scenarios).
+  if (!window._npcEncounterVisibilityBound) {
+    window._npcEncounterVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        if (Game.modules.npcEncounter && Game.modules.npcEncounter.stopAmbientMonitoring) {
+          Game.modules.npcEncounter.stopAmbientMonitoring();
+        }
+      } else {
+        if (Game.modules.npcEncounter && Game.modules.npcEncounter.startAmbientMonitoring) {
+          Game.modules.npcEncounter.startAmbientMonitoring();
+        }
+      }
+    });
+  }
 })();

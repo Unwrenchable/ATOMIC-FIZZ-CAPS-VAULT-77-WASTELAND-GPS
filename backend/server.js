@@ -91,7 +91,7 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 // JSON body limit
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({ limit: "64kb" }));
 
 // Global rate limiting (coarse)
 app.use(

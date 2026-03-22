@@ -154,10 +154,10 @@
         addTimeout(function () {
           addMessage(response, "overseer");
           scrollToBottom();
-        }, 800 + Math.random() * 900);
+        }, 800 + (crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000) * 900);
       }
 
-      var gameDelay = 900 + Math.random() * 900;
+      var gameDelay = 900 + (crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000) * 900;
       if (state.gameActive === 'hacking') {
         addTimeout(function () { addMessage(safeCall(handleHackingGuess, text.toUpperCase()), "overseer"); }, gameDelay);
       } else if (state.gameActive === 'redmenace') {
@@ -1239,7 +1239,7 @@ Overseer.handleInput = async function (raw) {
     // Story/game command has a canned response — show it with typewriter
     addTimeout(function () {
       typewriterPrint(narrativeReply.replace(/<br>/g, "\n"));
-    }, 400 + Math.random() * 300);
+    }, 400 + (crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000) * 300);
   } else if (narrativeReply === null && !state.gameActive) {
     // Free-form text — route to Jax Harlan AI personality
     pushHistory("user", line);
@@ -1264,7 +1264,7 @@ Overseer.handleInput = async function (raw) {
   }
 
   // Route ongoing game input to the appropriate handler
-  const gDelay = 800 + Math.random() * 600;
+  const gDelay = 800 + (crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000) * 600;
   if (state.gameActive === 'hacking') {
     addTimeout(function () { addMessage(safeCall(handleHackingGuess, line.toUpperCase()), "overseer"); }, gDelay);
   } else if (state.gameActive === 'redmenace') {
