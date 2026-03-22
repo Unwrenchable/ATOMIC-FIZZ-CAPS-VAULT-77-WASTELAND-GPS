@@ -418,13 +418,13 @@
 
       if (type === 'twitch') {
         const channel = url.split('/').pop();
-        const domain = window.location.hostname;
+        const _domain = window.location.hostname;
         embed.src = this.config.twitch.embedUrl
           .replace('{CHANNEL}', channel)
           .replace('{DOMAIN}', domain);
       } else if (type === 'youtube') {
         const videoId = this.extractYouTubeId(url);
-        const domain = window.location.hostname;
+        const _domain = window.location.hostname;
         embed.src = this.config.youtube.embedUrl
           .replace('{VIDEO_ID}', videoId);
       }
@@ -441,7 +441,7 @@
     },
 
     extractYouTubeId(url) {
-      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
       const match = url.match(regExp);
       return (match && match[2].length === 11) ? match[2] : null;
     },

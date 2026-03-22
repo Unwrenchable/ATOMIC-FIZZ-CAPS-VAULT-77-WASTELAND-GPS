@@ -253,9 +253,6 @@
       _state.lastSaved = Date.now();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(_state));
       
-      // Also update legacy storage for backward compatibility
-      updateLegacyStorage();
-      
       _dirty = false;
     } catch (e) {
       console.error("[PlayerState] Failed to save:", e);
@@ -263,11 +260,17 @@
   }
 
   /**
-   * Update legacy storage for backward compatibility
+   * Update legacy storage — DEPRECATED.
+   * Previously called on every save, creating three competing localStorage keys
+   * (afc_unified_player_state_v2, afc_player_state_v1, afc_equipped_items).
+   * A partial write during tab-kill could desync them. Now afc_unified_player_state_v2
+   * is the single source of truth. This function is retained only for the one-time
+   * migration in mergeLegacyStorage() and should not be called on saves.
+  // eslint-disable-next-line no-unused-vars
    */
   function updateLegacyStorage() {
     try {
-      // Update legacy main.js format
+      // Write legacy main.js format — kept only for external code that may still read it
       const legacyPayload = {
         inventory: _state.inventory.map(i => i.id),
         questsActive: _state.questsActive,
@@ -279,7 +282,7 @@
       };
       localStorage.setItem("afc_player_state_v1", JSON.stringify(legacyPayload));
       
-      // Update equipped items
+      // Write equipped items
       localStorage.setItem("afc_equipped_items", JSON.stringify(_state.equipped));
     } catch (e) {
       // Ignore legacy sync errors
@@ -463,7 +466,7 @@
     }
 
     // Determine slot based on item type and slot field (Fallout-style)
-    let slot = null;
+    let slot;
     if (item.type === "weapon") slot = "weapon";
     else if (item.type === "armor") slot = item.slot || "chest"; // use item.slot (head/chest/arms/legs)
     else if (item.type === "consumable") slot = "aid";

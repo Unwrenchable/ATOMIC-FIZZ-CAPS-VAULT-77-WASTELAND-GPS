@@ -8,7 +8,7 @@
 (function () {
   "use strict";
 
-  const WorldState = window.overseerWorldState;
+  const _WorldState = window.overseerWorldState;
   const Factions = window.overseerFaction;
 
   // ------------------------------------------------------------

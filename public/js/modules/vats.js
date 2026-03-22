@@ -147,7 +147,7 @@
     }
   }
 
-  function calculateDamage(bodyPart, enemy) {
+  function calculateDamage(bodyPart, _enemy) {
     // Safely get base damage with proper fallback
     let baseDamage = 20; // Default damage
     
@@ -302,7 +302,7 @@
     // TODO: Visual feedback
   }
 
-  function showMissMarker(enemy) {
+  function showMissMarker(_enemy) {
     console.log(`[VATS] Miss marker`);
     // TODO: Visual feedback
   }

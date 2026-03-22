@@ -312,6 +312,7 @@
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   function completeQuest(questId) {
     if (!questId) return;
     if (!PLAYER.questsActive.includes(questId)) return;
@@ -704,7 +705,25 @@
           _lastQuestCheckAt = now;
         }
       },
-      err => safeWarn("Geolocation error:", err),
+      err => {
+        safeWarn("Geolocation error:", err);
+        if (err.code === 1) { // PERMISSION_DENIED
+          const permBanner = document.createElement("div");
+          permBanner.id = "gps-permission-banner";
+          // Accessible colors: high-contrast dark background, white text (avoids red-green blindness)
+          permBanner.style.cssText = "position:fixed;top:0;left:0;right:0;background:#1a1a00;color:#ffe066;border-bottom:2px solid #ffe066;font-family:monospace;text-align:center;padding:10px 8px;z-index:9999;font-size:13px;";
+          // Platform-aware instructions
+          const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+          const isAndroid = /android/i.test(navigator.userAgent);
+          let instructions = "go to browser Settings → Site Settings → Location and set to Allow.";
+          if (isIOS) instructions = "go to iPhone Settings → Privacy → Location Services → your browser and set to While Using.";
+          else if (isAndroid) instructions = "tap the lock icon in your browser address bar → Permissions → Location → Allow.";
+          permBanner.textContent = "⚠️ GPS REQUIRED — To explore the Wasteland, " + instructions;
+          if (!document.getElementById("gps-permission-banner")) {
+            document.body.appendChild(permBanner);
+          }
+        }
+      },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
     );
   }
@@ -876,11 +895,11 @@
         html += '<ul style="list-style:none;padding:0;">';
         recipes.forEach(r => {
           html += `<li style="margin-bottom:12px;border-bottom:1px solid #222;padding-bottom:8px;">
-            <strong>${r.name || r.id}</strong><br/>
-            <span style='font-size:12px;opacity:0.7;'>${r.description || ''}</span><br/>
+            <strong>${escapeHtml(r.name || r.id)}</strong><br/>
+            <span style='font-size:12px;opacity:0.7;'>${escapeHtml(r.description || '')}</span><br/>
             <span>Requires: </span>
-            ${r.inputs.map(inp => `${inp.amount}x ${inp.id}`).join(', ')}<br/>
-            <button class="pipboy-button-small" data-craft="${r.id}">Craft</button>
+            ${r.inputs.map(inp => `${escapeHtml(String(inp.amount))}x ${escapeHtml(inp.id)}`).join(', ')}<br/>
+            <button class="pipboy-button-small" data-craft="${escapeHtml(r.id)}">Craft</button>
           </li>`;
         });
         html += '</ul>';
@@ -888,18 +907,27 @@
       }
       // Wire up buttons
       Array.from(craftingSection.querySelectorAll('[data-craft]')).forEach(btn => {
-        btn.onclick = function() {
+        btn.onclick = async function() {
           const recipeId = this.getAttribute('data-craft');
           if (!Game.modules.crafting.canCraft(recipeId)) {
             alert('Missing ingredients!');
             return;
           }
-          const item = Game.modules.crafting.craft(recipeId);
-          if (item) {
-            alert('Crafted: ' + (item.name || item.id));
-            renderExchangeCraftingSection();
-          } else {
-            alert('Crafting failed.');
+          this.disabled = true;
+          this.textContent = 'Crafting...';
+          try {
+            const item = await Game.modules.crafting.craftAsync(recipeId);
+            if (item) {
+              alert('Crafted: ' + (item.name || item.id));
+              renderExchangeCraftingSection();
+            } else {
+              alert('Crafting failed.');
+            }
+          } catch (err) {
+            alert(err.message || 'Crafting failed.');
+          } finally {
+            this.disabled = false;
+            this.textContent = 'Craft';
           }
         };
       });
@@ -1308,7 +1336,7 @@
       // Only trigger discovery if we just switched to explore mode
       // (worldmap.js toggles the text to "RETURN TO PLAYER" after click)
       const textEl = document.getElementById("exploreText");
-      const currentText = textEl ? textEl.textContent : exploreBtn.textContent;
+      const _currentText = textEl ? textEl.textContent : exploreBtn.textContent;
 
       // If worldmap toggled it to "RETURN TO PLAYER", we are now exploring → show scan
       // We use a short delay to check after worldmap.js has processed the click

@@ -38,7 +38,7 @@
 
   // ========= CRASH PREVENTION GLOBALS =========
   const MAX_MESSAGES = 50; // Limit chat history to prevent memory leaks
-  const MAX_GAME_TIMEOUT = 30000; // 30 seconds max per game turn
+  const _MAX_GAME_TIMEOUT = 30000; // 30 seconds max per game turn
   const MAX_CONVERSATION_HISTORY = 20; // 10 player/Jax exchange pairs
   let activeTimeouts = new Set(); // Track all timeouts for cleanup
   let activeIntervals = new Set(); // Track intervals
@@ -95,7 +95,7 @@
 
   var chat = document.getElementById('chat');
   var input = document.getElementById('input');
-  var send = document.getElementById('send');
+  var _send = document.getElementById('send');
 
   if (input) try { input.focus(); } catch (e) {}
 
@@ -124,7 +124,7 @@
 
   /* ------------------------- Input handling (routed through Overseer.handleInput) ------------------------- */
 
-  function processInput() {
+  function _processInput() {
     if (!input) return;
     var text = input.value.trim();
     if (!text) return;
@@ -154,10 +154,10 @@
         addTimeout(function () {
           addMessage(response, "overseer");
           scrollToBottom();
-        }, 800 + Math.random() * 900);
+        }, 800 + (crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000) * 900);
       }
 
-      var gameDelay = 900 + Math.random() * 900;
+      var gameDelay = 900 + (crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000) * 900;
       if (state.gameActive === 'hacking') {
         addTimeout(function () { addMessage(safeCall(handleHackingGuess, text.toUpperCase()), "overseer"); }, gameDelay);
       } else if (state.gameActive === 'redmenace') {
@@ -402,7 +402,7 @@
       return "Yeah... ace mechanic once.<br><br>Could make any engine run again.<br><br>No machine too busted.<br><br>People came from all over.<br><br>Then everything changed.<br><br>The world. Me.";
     }
 
-    var fallbacks = [
+    var _fallbacks = [
       "Signal's holding... barely.",
       "You still out there?",
       "Some things stay broken forever.",
@@ -512,16 +512,16 @@
       if (parts.length < 2) return "Specify turret id to upgrade, e.g., 'upgrade 1'.";
       var tid = parseInt(parts[1], 10);
       if (isNaN(tid)) return "Invalid turret id.";
-      var turret = null;
-      for (var i = 0; i < state.rmTurrets.length; i++) { if (state.rmTurrets[i].id === tid) { turret = state.rmTurrets[i]; break; } }
-      if (!turret) return "No turret with id " + tid + ".";
-      var costU = 40 + (turret.level - 1) * 20;
+      var upgradeTurret = null;
+      for (var i = 0; i < state.rmTurrets.length; i++) { if (state.rmTurrets[i].id === tid) { upgradeTurret = state.rmTurrets[i]; break; } }
+      if (!upgradeTurret) return "No turret with id " + tid + ".";
+      var costU = 40 + (upgradeTurret.level - 1) * 20;
       if (state.rmScrap < costU) return "Not enough scrap to upgrade turret " + tid + ". Need " + costU + ".";
       state.rmScrap -= costU;
-      turret.level += 1;
-      turret.dmg = Math.round(turret.dmg * 1.35);
-      turret.durability = turret.durability + 10;
-      return "Upgraded turret [" + tid + "] to level " + turret.level + ". Scrap left: " + state.rmScrap + ".";
+      upgradeTurret.level += 1;
+      upgradeTurret.dmg = Math.round(upgradeTurret.dmg * 1.35);
+      upgradeTurret.durability = upgradeTurret.durability + 10;
+      return "Upgraded turret [" + tid + "] to level " + upgradeTurret.level + ". Scrap left: " + state.rmScrap + ".";
     }
 
     if (cmd === 'repair') {
@@ -600,7 +600,7 @@
     }
 
     if (state.rmBaseHp <= 0) {
-      var finalScore = state.rmScrap + (state.rmWave * 10);
+      var _finalScore = state.rmScrap + (state.rmWave * 10);
       state.gameActive = null;
       addMessage("Base destroyed. Game over. Final scrap: " + state.rmScrap + " • Waves survived: " + state.rmWave, "overseer");
       return;
@@ -835,7 +835,7 @@
   }
 
   /* ------------------------- Utilities ------------------------- */
-  function updateHPBar() {
+  function _updateHPBar() {
     try {
       var el = document.getElementById('capsDisplay');
       if (el) el.textContent = String(state.player.caps);
@@ -843,7 +843,7 @@
     console.log("CAPS updated to:", state.player.caps);
   }
 
-  function playSfx(id, volume) {
+  function _playSfx(id, volume) {
     console.log("Playing sound:", id, "volume:", volume || 0.4);
   }
 
@@ -887,8 +887,8 @@
           var respU = safeCall(handleRedMenaceInput, 'upgrade ' + tid);
           addMessage(respU, 'overseer'); return;
         }
-        var resp = safeCall(handleRedMenaceInput, cmd);
-        addMessage(resp, 'overseer'); return;
+        var rmResp = safeCall(handleRedMenaceInput, cmd);
+        addMessage(rmResp, 'overseer'); return;
       }
 
       if (g === 'nukaquiz') {
@@ -974,7 +974,7 @@
       buildLayoutFor(g);
     }
 
-    var refreshInterval = addInterval(refreshControls, 500);
+    var _refreshInterval = addInterval(refreshControls, 500);
     window.__mgcRefresh = refreshControls;
     refreshControls();
 
@@ -1136,13 +1136,15 @@ Overseer.handleInput = async function (raw) {
   Overseer.print("> " + line);
 
   const parts = line.split(" ");
-  const cmd = parts[0].toLowerCase();
+  // Strip leading "/" so Telegram/Discord-style commands like "/start" work identically to "start"
+  const cmd = parts[0].toLowerCase().replace(/^\//, "");
   const args = parts.slice(1);
 
   // 1. Known terminal commands (game-side)
   switch (cmd) {
     case "help":
       Overseer.print("AVAILABLE COMMANDS:");
+      Overseer.print("  START      - New player orientation & quick-start guide");
       Overseer.print("  HELP       - Show this help screen");
       Overseer.print("  CLEAR      - Clear terminal buffer");
       Overseer.print("  STATUS     - Request player status");
@@ -1237,7 +1239,7 @@ Overseer.handleInput = async function (raw) {
     // Story/game command has a canned response — show it with typewriter
     addTimeout(function () {
       typewriterPrint(narrativeReply.replace(/<br>/g, "\n"));
-    }, 400 + Math.random() * 300);
+    }, 400 + (crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000) * 300);
   } else if (narrativeReply === null && !state.gameActive) {
     // Free-form text — route to Jax Harlan AI personality
     pushHistory("user", line);
@@ -1262,7 +1264,7 @@ Overseer.handleInput = async function (raw) {
   }
 
   // Route ongoing game input to the appropriate handler
-  const gDelay = 800 + Math.random() * 600;
+  const gDelay = 800 + (crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000) * 600;
   if (state.gameActive === 'hacking') {
     addTimeout(function () { addMessage(safeCall(handleHackingGuess, line.toUpperCase()), "overseer"); }, gDelay);
   } else if (state.gameActive === 'redmenace') {
