@@ -20,7 +20,7 @@
       generate(_region) {
         return {
           type: "echo_ghost",
-          description: `A ghostly figure repeats a moment from another timeline in ${region.name}.`,
+          description: `A ghostly figure repeats a moment from another timeline in ${_region.name}.`,
           reward: "echo_shard"
         };
       }
@@ -31,7 +31,7 @@
       generate(_region) {
         return {
           type: "time_loop",
-          description: `A moment repeats itself in ${region.name}. You feel déjà vu.`,
+          description: `A moment repeats itself in ${_region.name}. You feel déjà vu.`,
           effect: "repeat_next_encounter"
         };
       }
@@ -107,7 +107,7 @@
     ];
 
     const event = weightedPick(pool);
-    const result = event.generate(_region);
+    const result = event.generate(region);
 
     // Notify Overseer
     if (window.overseer && typeof window.overseer.handleGameEvent === "function") {

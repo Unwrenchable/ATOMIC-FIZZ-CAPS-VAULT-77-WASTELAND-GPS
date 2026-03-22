@@ -109,7 +109,7 @@ try {
 // -----------------------------------------------------------------------
 
 /** Strip HTML tags from dialog text for use in prompts */
-function stripHtml(str) {
+function _stripHtml(str) {
   return String(str || '')
     .replace(/<br\s*\/?>/gi, ' ')
     .replace(/<[^>]+>/g, '')
@@ -126,7 +126,7 @@ function sanitise(str, maxLen) {
     .slice(0, maxLen);
 }
 
-function truncateWords(str, maxWords) {
+function _truncateWords(str, maxWords) {
   var words = String(str || '').trim().split(/\s+/).filter(Boolean);
   return words.slice(0, maxWords).join(' ');
 }

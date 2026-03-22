@@ -418,13 +418,13 @@
 
       if (type === 'twitch') {
         const channel = url.split('/').pop();
-        const domain = window.location.hostname;
+        const _domain = window.location.hostname;
         embed.src = this.config.twitch.embedUrl
           .replace('{CHANNEL}', channel)
           .replace('{DOMAIN}', domain);
       } else if (type === 'youtube') {
         const videoId = this.extractYouTubeId(url);
-        const domain = window.location.hostname;
+        const _domain = window.location.hostname;
         embed.src = this.config.youtube.embedUrl
           .replace('{VIDEO_ID}', videoId);
       }

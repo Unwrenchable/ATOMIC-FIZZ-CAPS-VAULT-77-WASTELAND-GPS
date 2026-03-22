@@ -65,7 +65,7 @@ const playerSaveBtn = document.getElementById("adminPlayerSaveBtn");
 const playerResetBtn = document.getElementById("adminPlayerResetBtn");
 
 let currentPlayerWallet = null;
-let currentPlayerProfile = null;
+_currentPlayerProfile = null; // reserved for admin profile display
 
 // --- SECURE ADMIN FETCH WRAPPER ---
 async function adminFetch(path, options = {}) {
