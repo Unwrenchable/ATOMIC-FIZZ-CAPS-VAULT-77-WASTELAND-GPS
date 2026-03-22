@@ -540,7 +540,7 @@
       const threshold = thresholds[difficulty] || thresholds.medium;
       
       // Calculate success chance
-      let successChance = threshold.baseChance;
+      let successChance;
       
       // Stat bonus: each point above threshold adds 10%
       if (statValue >= threshold.required) {

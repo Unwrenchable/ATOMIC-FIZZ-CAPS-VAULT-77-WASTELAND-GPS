@@ -33,7 +33,7 @@ Game.ui.renderInventory = function () {
   if (!body || !tabs) return;
 
   // Get items from PlayerState if available, otherwise fallback
-  let items = [];
+  let items;
   if (Game.modules?.PlayerState?.getInventory) {
     items = Game.modules.PlayerState.getInventory();
   } else {
@@ -158,16 +158,15 @@ Game.ui.renderInventory = function () {
       const div = document.createElement("div");
       div.className = "inventory-item";
 
-      let statsText = "";
+      let statsText;
       let isEquipped = false;
-      let itemSlot = null;
+      let itemSlot;
       const canEquip = (item.type === "weapon" || item.type === "armor" || item.type === "consumable");
 
       if (item.type === "weapon") {
         statsText = "DMG: " + (item.damage != null ? item.damage : "N/A") +
                     " \u2022 " + (item.category ? item.category.toUpperCase() : "UNKNOWN");
         isEquipped = !!(equipped.weapon && equipped.weapon.id === item.id);
-        itemSlot = "weapon";
       } else if (item.type === "armor") {
         // Use item.slot (head/chest/arms/legs) for the correct equipment slot
         itemSlot = item.slot || "chest";
@@ -175,7 +174,6 @@ Game.ui.renderInventory = function () {
                     " \u2022 SLOT: " + itemSlot.toUpperCase();
         isEquipped = !!(equipped[itemSlot] && equipped[itemSlot].id === item.id);
       } else if (item.type === "consumable") {
-        itemSlot = "aid";
         statsText = item.heal ? "HEAL: +" + item.heal + " HP"
                               : (item.description ? item.description.slice(0, 40) : "");
         isEquipped = !!(equipped.aid && equipped.aid.id === item.id);

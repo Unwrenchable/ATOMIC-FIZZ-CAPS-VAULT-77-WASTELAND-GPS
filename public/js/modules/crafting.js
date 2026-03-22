@@ -126,7 +126,7 @@
         }
       } catch (err) {
         // Re-throw with user-friendly prefix so UI can display it
-        throw new Error("Crafting failed: " + (err.message || "server error"));
+        throw new Error("Crafting failed: " + (err.message || "server error"), { cause: err });
       }
 
       // ---- Server approved — complete craft locally ----

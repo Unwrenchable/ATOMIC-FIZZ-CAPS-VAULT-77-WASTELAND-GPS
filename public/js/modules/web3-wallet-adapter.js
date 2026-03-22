@@ -195,7 +195,7 @@
               provider: provider
             };
           } catch (error) {
-            throw new Error(`Phantom connection failed: ${error.message}`);
+            throw new Error(`Phantom connection failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -233,7 +233,7 @@
               provider: window.solflare
             };
           } catch (error) {
-            throw new Error(`Solflare connection failed: ${error.message}`);
+            throw new Error(`Solflare connection failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -285,7 +285,7 @@
               provider: provider
             };
           } catch (error) {
-            throw new Error(`WalletConnect failed: ${error.message}`);
+            throw new Error(`WalletConnect failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -327,7 +327,7 @@
               provider: window.ethereum
             };
           } catch (error) {
-            throw new Error(`MetaMask connection failed: ${error.message}`);
+            throw new Error(`MetaMask connection failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -369,7 +369,7 @@
               provider: window.ethereum
             };
           } catch (error) {
-            throw new Error(`Coinbase Wallet connection failed: ${error.message}`);
+            throw new Error(`Coinbase Wallet connection failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -696,7 +696,7 @@
         
       } catch (error) {
         console.error("[web3-wallet] Wallet generation failed:", error);
-        throw new Error('Failed to generate secure wallet. Please try again.');
+        throw new Error('Failed to generate secure wallet. Please try again.', { cause: error });
       }
     },
 
