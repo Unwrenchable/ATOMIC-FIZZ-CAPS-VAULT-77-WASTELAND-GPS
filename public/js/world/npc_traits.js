@@ -8,9 +8,9 @@
 (function () {
   "use strict";
 
-  const WorldState = window.overseerWorldState;
-  const Weather = window.overseerWeather;
-  const Regions = window.overseerRegions;
+  const _WorldState = window.overseerWorldState;
+  const _Weather = window.overseerWeather;
+  const _Regions = window.overseerRegions;
 
   // Secure RNG: use browser CSPRNG instead of predictable Math.random()
   const _rngBuf = new Uint32Array(1);

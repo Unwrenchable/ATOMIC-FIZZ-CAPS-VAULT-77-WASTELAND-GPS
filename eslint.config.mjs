@@ -95,11 +95,37 @@ export default [
         baseX: "readonly",
         nacl: "readonly",     // tweetnacl
         solanaWeb3: "readonly",
+        AbortController: "readonly",
+        AbortSignal: "readonly",
+        CSS: "readonly",
+        CSSStyleSheet: "readonly",
+        // Browser Web APIs
+        requestAnimationFrame: "readonly",
+        cancelAnimationFrame: "readonly",
+        performance: "readonly",
+        screen: "readonly",
+        orientation: "readonly",
+        atob: "readonly",
+        btoa: "readonly",
+        structuredClone: "readonly",
+        queueMicrotask: "readonly",
+        // Third-party CDN globals
+        L: "readonly",        // Leaflet
+        bs58: "readonly",     // bs58 / base-x
+        baseX: "readonly",
+        nacl: "readonly",     // tweetnacl
+        solanaWeb3: "readonly",
+        PIXI: "readonly",     // PixiJS
+        turf: "readonly",     // Turf.js geospatial
+        topojson: "readonly", // TopoJSON
+        dragonBones: "readonly", // DragonBones animation
         // Game globals
         Game: "writable",
+        game: "writable",
         PLAYER: "readonly",
         ITEMS_DB: "readonly",
         GAME_STATE: "writable",
+        gameState: "writable",
         NPCRegistry: "readonly",
         NPCPortraits: "readonly",
         API_BASE: "readonly",
@@ -107,10 +133,27 @@ export default [
         safeWarn: "readonly",
         safeError: "readonly",
         escapeHtml: "readonly",
+        // Overseer terminal API (loaded via overseer.full.js)
+        overseerSay: "readonly",
+        overseerSayBlock: "readonly",
+        overseerWarn: "readonly",
+        overseerError: "readonly",
+        Overseer: "writable",
+        // Misc browser globals not in ESLint's default browser env list
+        loadBaseItems: "readonly",
+        html: "writable",
+        item: "writable",
       },
     },
     rules: {
-      "no-unused-vars": "warn",
+      // Warn on unused vars but ignore:
+      //   • caught error params (e, err, ex, _e — intentional swallow-errors)
+      //   • underscore-prefixed args/vars (conventional "intentionally unused")
+      "no-unused-vars": ["warn", {
+        "caughtErrors": "none",
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+      }],
       "no-undef": "warn",
       // Allow empty catch blocks — many intentional error-swallowing patterns exist
       // in the codebase (e.g. try { el.focus() } catch(e) {}).

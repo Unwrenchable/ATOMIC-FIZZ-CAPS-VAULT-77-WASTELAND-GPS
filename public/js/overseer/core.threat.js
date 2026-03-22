@@ -6,7 +6,7 @@
   if (!window.overseerThreat) window.overseerThreat = {};
 
   const personality = window.overseerPersonality;
-  const memory = window.overseerMemoryApi;
+  const _memory = window.overseerMemoryApi;
 
   // Unbiased CSPRNG integer in [0, n) using rejection sampling
   function _secureRandInt(n) {

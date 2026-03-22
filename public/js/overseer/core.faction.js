@@ -6,7 +6,7 @@
   if (!window.overseerFaction) window.overseerFaction = {};
 
   const personality = window.overseerPersonality;
-  const memory = window.overseerMemoryApi;
+  const _memory = window.overseerMemoryApi;
 
   // -------------------------------------------------------------------------
   // FACTION DEFINITIONS

@@ -54,7 +54,7 @@ function getDistance(lat1, lng1, lat2, lng2) {
 // Helper: Generate loot for a location based on tier
 function generateLoot(location) {
   const tier = location.tier || 1;
-  const locType = location.type || "wasteland";
+  const _locType = location.type || "wasteland";
   
   const rewards = {
     xp: 0,
