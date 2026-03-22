@@ -567,7 +567,7 @@
       const toast = document.createElement('div');
       toast.id = 'walletConnectToast';
       toast.style.cssText = [
-        'position:fixed', 'bottom:24px', 'left:50%',
+        'position:fixed', 'bottom:calc(24px + env(safe-area-inset-bottom, 0px))', 'left:50%',
         'transform:translateX(-50%)',
         'z-index:99998',
         `background:${isError ? '#1a0000' : '#011501'}`,
