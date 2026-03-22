@@ -1106,6 +1106,25 @@
           </div>
           <div class="cc-vault-bar">VAULT-TEC CORPORATION · VAULT 77 · PERSONNEL ASSIGNMENT TERMINAL · YEAR 2277</div>
 
+          <!-- Onboarding instruction strip -->
+          <div class="cc-onboarding-strip" id="ccOnboardingStrip" style="
+            background:rgba(0,255,65,0.06);
+            border-bottom:1px solid rgba(0,255,65,0.2);
+            padding:8px 16px;
+            font-size:12px;
+            color:#008822;
+            letter-spacing:0.07em;
+            text-align:center;
+            position:relative;
+          ">
+            <span id="ccOnboardingText">▶ STEP 01 — Enter your name and define your identity. Work through each tab left-to-right. Use RANDOMIZE to generate a full character instantly.</span>
+            <button id="ccOnboardingDismiss" style="
+              position:absolute;right:10px;top:50%;transform:translateY(-50%);
+              background:transparent;border:none;color:#004400;cursor:pointer;
+              font-size:14px;padding:2px 6px;
+            " title="Dismiss">✕</button>
+          </div>
+
           <!-- Main Content -->
           <div class="cc-main">
             <!-- Preview Panel -->
@@ -1144,6 +1163,7 @@
                 <!-- Identity Section -->
                 <div class="cc-category-section active" data-category="identity">
                   <div class="cc-section-title">IDENTITY</div>
+                  <div class="cc-section-hint">Your name, presentation, and form. This is how the wasteland will know you.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">NAME</div>
@@ -1174,6 +1194,7 @@
                 <!-- Face Section -->
                 <div class="cc-category-section" data-category="face">
                   <div class="cc-section-title">FACE</div>
+                  <div class="cc-section-hint">Facial features determine how NPCs react to you on first sight. No wrong choices — survivors come in all shapes.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">SKIN TONE</div>
@@ -1204,6 +1225,7 @@
                 <!-- Hair Section -->
                 <div class="cc-category-section" data-category="hair">
                   <div class="cc-section-title">HAIR</div>
+                  <div class="cc-section-hint">The wasteland makes styling difficult. Choose something you can maintain with a knife and limited water.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">HAIR STYLE</div>
@@ -1224,6 +1246,7 @@
                 <!-- Eyes Section -->
                 <div class="cc-category-section" data-category="eyes">
                   <div class="cc-section-title">EYES</div>
+                  <div class="cc-section-hint">Eyes are the first thing people read. Choose wisely — or don't. The wasteland doesn't care either way.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">EYE SHAPE</div>
@@ -1239,6 +1262,7 @@
                 <!-- Details Section -->
                 <div class="cc-category-section" data-category="details">
                   <div class="cc-section-title">DETAILS</div>
+                  <div class="cc-section-hint">Scars and markings are optional — but out here, most people have at least one story written on their skin.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">SCARS</div>
@@ -1254,6 +1278,7 @@
                 <!-- Extras Section -->
                 <div class="cc-category-section" data-category="extras">
                   <div class="cc-section-title">EXTRAS</div>
+                  <div class="cc-section-hint">Accessories and voice. These affect how NPCs perceive you before you speak.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">ACCESSORIES</div>
@@ -1269,18 +1294,21 @@
                 <!-- S.P.E.C.I.A.L. Section -->
                 <div class="cc-category-section" data-category="special">
                   <div class="cc-section-title">S.P.E.C.I.A.L. ATTRIBUTES</div>
+                  <div class="cc-section-hint">You have 21 points to distribute across 7 attributes. Minimum 1 per attribute, maximum 10. These affect combat, dialogue options, and crafting. You can rebalance at a Vault-Tec terminal later — costs caps.</div>
                   <div id="ccSpecialContent" class="cc-special-content"></div>
                 </div>
 
                 <!-- Background Section -->
                 <div class="cc-category-section" data-category="background">
                   <div class="cc-section-title">ORIGIN BACKGROUND</div>
+                  <div class="cc-section-hint">Where you came from changes what you know. Backgrounds grant starting bonuses, faction rep modifiers, and unique dialogue options. Choose what fits your play style.</div>
                   <div id="ccBackgroundContent" class="cc-background-content"></div>
                 </div>
 
                 <!-- Traits Section -->
                 <div class="cc-category-section" data-category="traits">
                   <div class="cc-section-title">CHARACTER TRAITS <span style="font-size:0.75em;opacity:0.7;">(SELECT UP TO 2)</span></div>
+                  <div class="cc-section-hint">Traits are double-edged. Every benefit comes with a drawback. Vault-Tec calls this "balanced incentive design." Survivors call it "the wasteland tax."</div>
                   <div id="ccTraitsContent" class="cc-traits-content"></div>
                 </div>
               </div>
@@ -1391,12 +1419,39 @@
             section.classList.toggle('active', section.dataset.category === category);
           });
 
+          // Update onboarding strip step text
+          const stepHints = {
+            identity:   '▶ STEP 01 — Enter your name and choose your identity. Name is required.',
+            face:       '▶ STEP 02 — Choose your facial features. These appear in NPC dialogue and your Pip-Boy file.',
+            hair:       '▶ STEP 03 — Select your hair style and color. Facial hair options included.',
+            eyes:       '▶ STEP 04 — Eye shape and color. Small details, big personality.',
+            details:    '▶ STEP 05 — Optional scars and markings. The wasteland leaves marks.',
+            extras:     '▶ STEP 06 — Accessories and voice type. Affects NPC first impressions.',
+            special:    '▶ STEP 07 — S.P.E.C.I.A.L. attributes. 21 points across 7 stats. Min 1, max 10.',
+            background: '▶ STEP 08 — Origin background. Grants starting bonuses and faction modifiers.',
+            traits:     '▶ STEP 09 — Character traits (up to 2). Every benefit has a drawback. Choose carefully.',
+          };
+          const hintEl = document.getElementById('ccOnboardingText');
+          const strip = document.getElementById('ccOnboardingStrip');
+          if (hintEl && strip && strip.style.display !== 'none') {
+            hintEl.textContent = stepHints[category] || '▶ Customize your character.';
+          }
+
           // Render dynamic tabs on first activation
           if (category === 'special')    this._renderSpecialTab();
           if (category === 'background') this._renderBackgroundTab();
           if (category === 'traits')     this._renderTraitsTab();
         }
       });
+
+      // Onboarding dismiss
+      const dismissBtn = document.getElementById('ccOnboardingDismiss');
+      if (dismissBtn) {
+        dismissBtn.addEventListener('click', () => {
+          const strip = document.getElementById('ccOnboardingStrip');
+          if (strip) strip.style.display = 'none';
+        });
+      }
     },
 
     // ============================================================
