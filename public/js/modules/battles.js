@@ -161,7 +161,8 @@
     enemyAttack() {
       if (!this.state) return;
 
-      const enemy = this.state.encounter.enemies[0];
+      const idx = this.state.activeEnemyIndex ?? 0;
+      const enemy = this.state.encounter.enemies[idx];
       let dmg = enemy.damage || 3;
 
       // Guard: ensure player.hp is initialized

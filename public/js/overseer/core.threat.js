@@ -8,6 +8,14 @@
   const personality = window.overseerPersonality;
   const memory = window.overseerMemoryApi;
 
+  // Unbiased CSPRNG integer in [0, n) using rejection sampling
+  function _secureRandInt(n) {
+    const buf = new Uint32Array(1);
+    const limit = (Math.floor(0x100000000 / n) * n) >>> 0;
+    do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
+    return buf[0] % n;
+  }
+
   // -------------------------------------------------------------------------
   // THREAT LEVEL DEFINITIONS
   // -------------------------------------------------------------------------
@@ -91,7 +99,7 @@
     randomThreat() {
       const fake = {
         name: "Unknown Hostile",
-        danger: Math.floor(Math.random() * 7),
+        danger: _secureRandInt(7),
       };
       return this.analyze(fake);
     },

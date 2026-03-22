@@ -4,7 +4,16 @@
 window.overseerHandlers = {
 
   start() {
-    const delay = (fn, ms) => setTimeout(fn, ms);
+    // Cancel any in-flight timers from a previous /start call
+    if (window._startTimers) {
+      window._startTimers.forEach(id => clearTimeout(id));
+    }
+    window._startTimers = [];
+    const delay = (fn, ms) => {
+      const id = setTimeout(fn, ms);
+      window._startTimers.push(id);
+      return id;
+    };
 
     overseerSay("> VAULT 77 // ATOMIC FIZZ CAPS INITIATIVE");
     overseerSay("> ────────────────────────────────────────");
