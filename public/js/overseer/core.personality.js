@@ -15,7 +15,7 @@
   // -------------------------------------------------------------
   // CONFIG — LOADED FROM BACKEND (environment variables)
   // -------------------------------------------------------------
-  let HF_API_KEY = "";
+  let _HF_API_KEY = "";
   let MODEL = "mistralai/Mixtral-8x7B-Instruct-v0.1";
   let configLoaded = false;
 
