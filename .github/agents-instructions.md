@@ -37,6 +37,11 @@ Agents operating on this repository discover each other through the following:
 | `web3-specialist.md` | Solana / Phantom wallet / FIZZ token expert |
 | `wasteland-assistant.md` | Game mechanics, battle system, crafting, economy |
 | `my-agent.agent.md` | Vault 77 Overseer personality agent |
+| `game-creative-director.agent.md` | Creative vision, MDA conflicts, scope arbitration |
+| `game-designer.agent.md` | GDD authoring, balancing, sink/faucet economy design |
+| `game-technical-director.agent.md` | Architecture, ADRs, performance budgets, tech decisions |
+| `gameplay-programmer.agent.md` | Feature implementation, data-driven design, state machines |
+| `cybersecurity-expert.agent.md` | OWASP audits, CVE triage, security remediations |
 | `memory.md` | Persistent decisions, verified commands, gotchas |
 | `tasks.md` | **Active task queue and event log — check before starting work** |
 
@@ -216,6 +221,11 @@ When GitHub Copilot coding agent is invoked on this repository:
 | Frontend UI / Pip-Boy | `agent.md` + `public/js/` |
 | Overseer AI dialogue | `my-agent.agent.md` + `public/js/overseer/` |
 | Game mechanics | `wasteland-assistant.md` + `public/js/modules/` |
+| Game design / balancing | `game-designer.agent.md` + `docs/` |
+| Creative vision / MDA | `game-creative-director.agent.md` |
+| Architecture / ADRs | `game-technical-director.agent.md` |
+| Gameplay feature implementation | `gameplay-programmer.agent.md` + `public/js/modules/` |
+| Security audit / CVE triage | `cybersecurity-expert.agent.md` |
 | Solana program | `web3-specialist.md` + `programs/` |
 | NFT minting | `web3-specialist.md` + `workers/` |
 | Deployment / infra | `bootstrap.md` + `render.yaml` / `vercel.json` |
