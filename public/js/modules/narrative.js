@@ -1153,6 +1153,15 @@
         }
       }
 
+      // If closing the Courier dialogue, show the GPS/map tutorial for first-time players
+      if (closingDialogId === "dialog_courier") {
+        if (typeof window._bootShowMapTutorial === "function") {
+          setTimeout(() => {
+            window._bootShowMapTutorial();
+          }, 600);
+        }
+      }
+
       // Restore previous panel/tab
       const restoreId = this.lastPanelId || "panel-map";
       const restorePanel = document.getElementById(restoreId);
