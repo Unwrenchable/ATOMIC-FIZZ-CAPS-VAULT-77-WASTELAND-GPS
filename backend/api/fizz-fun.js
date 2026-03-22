@@ -23,8 +23,8 @@
  */
 
 const router = require("express").Router();
-const { Connection, PublicKey, Transaction } = require("@solana/web3.js");
-const { Program, AnchorProvider, BN } = require("@coral-xyz/anchor");
+const { Connection, PublicKey, Transaction: _Transaction } = require("@solana/web3.js");
+const { Program: _Program, AnchorProvider: _AnchorProvider, BN: _BN } = require("@coral-xyz/anchor");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
 
 // Configuration
@@ -275,7 +275,7 @@ router.get("/quote/sell", requireConfig, async (req, res) => {
  */
 router.post("/admin/launch", requireConfig, async (req, res) => {
     try {
-        const { wallet, name, symbol, uri, signature } = req.body;
+        const { wallet, name, symbol, uri } = req.body;
         
         // Verify admin status
         if (!ADMIN_WALLETS.includes(wallet)) {

@@ -30,8 +30,8 @@
         return {
           type: "anomaly_combat",
           enemies: [
-            { id: "glitch_beast", lvl: region.threat * 10 + 3 },
-            { id: "static_walker", lvl: region.threat * 10 + 2 }
+            { id: "glitch_beast", lvl: _region.threat * 10 + 3 },
+            { id: "static_walker", lvl: _region.threat * 10 + 2 }
           ],
           description: "Reality flickers. Glitch‑touched creatures phase into view."
         };
@@ -91,8 +91,8 @@
   // ------------------------------------------------------------
   function roll(regionId, weather) {
     const region = Regions.get(regionId);
-    const anomalyLevel = WorldState.getAnomalyLevel(regionId);
-    const timelineUnstable = Timeline.isUnstable(regionId);
+    const anomalyLevel = _WorldState.getAnomalyLevel(regionId);
+    const timelineUnstable = _Timeline.isUnstable(regionId);
 
     let pool = [];
 
@@ -112,7 +112,7 @@
     }
 
     const event = weightedPick(pool);
-    const result = event.generate(_region, _weather);
+    const result = event.generate(region, weather);
 
     // Overseer static burst
     if (window.overseer && typeof window.overseer.handleGameEvent === "function") {

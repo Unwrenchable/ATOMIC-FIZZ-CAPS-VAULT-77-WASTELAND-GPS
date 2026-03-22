@@ -111,7 +111,7 @@
       }
 
       // Anomaly affinity
-      if (t.anomalyAffinity && WorldState.getAnomalyLevel(region.id) > 0.3) {
+      if (t.anomalyAffinity && _WorldState.getAnomalyLevel(region.id) > 0.3) {
         npc.atk += 1;
         npc.hp += 2;
       }

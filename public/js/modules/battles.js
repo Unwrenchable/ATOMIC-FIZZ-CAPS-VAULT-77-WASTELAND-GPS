@@ -340,7 +340,7 @@
       const armorSlots2 = ["chest", "head", "arms", "legs"];
       const activeArmorPieces = armorSlots2.map(s => equipped[s] || psEq2[s]).filter(Boolean);
       const activeTotalAR = activeArmorPieces.reduce((sum, a) => sum + (a.armor || 0), 0);
-      const activeArmorLabel = activeArmorPieces.length
+      const _activeArmorLabel = activeArmorPieces.length
         ? `${activeArmorPieces.map(a => escapeHtml(a.name)).join(", ")} (AR: ${activeTotalAR})`
         : "<em>None</em>";
       const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;

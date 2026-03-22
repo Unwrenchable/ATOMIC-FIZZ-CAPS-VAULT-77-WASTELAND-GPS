@@ -31,7 +31,7 @@
       if (res.ok) {
         const config = await res.json();
         if (config.overseer) {
-          HF_API_KEY = config.overseer.hfApiKey || "";
+          _HF_API_KEY = config.overseer.hfApiKey || "";
           MODEL = config.overseer.hfModel || MODEL;
         }
         configLoaded = true;

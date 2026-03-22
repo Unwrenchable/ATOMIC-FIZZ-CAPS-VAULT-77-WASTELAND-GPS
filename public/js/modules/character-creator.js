@@ -297,7 +297,7 @@
       const skinTone = appearanceOptions.skinTones.find(s => s.id === app.skinTone) || appearanceOptions.skinTones[3];
       const hairColor = appearanceOptions.hairColors.find(h => h.id === app.hairColor) || appearanceOptions.hairColors[2];
       const eyeColor = appearanceOptions.eyeColors.find(e => e.id === app.eyeColor) || appearanceOptions.eyeColors[0];
-      const race = appearanceOptions.races.find(r => r.id === app.race) || appearanceOptions.races[0];
+      const _race = appearanceOptions.races.find(r => r.id === app.race) || appearanceOptions.races[0];
       const faceShape = appearanceOptions.faceShapes.find(f => f.id === app.faceShape) || appearanceOptions.faceShapes[0];
       
       // Adjust skin color for ghouls
@@ -516,7 +516,7 @@
           { dx: -0.35, dy: -0.1, r: 7 },
           { dx: 0.05, dy: 0.25, r: 9 }
         ];
-        patchPositions.forEach((pos, i) => {
+        patchPositions.forEach((pos, _i) => {
           const px = cx + pos.dx * faceWidth;
           const py = cy + pos.dy * faceHeight;
           svg += `<circle cx="${px}" cy="${py}" r="${pos.r}" fill="rgba(80,60,40,0.3)"/>`;
@@ -716,7 +716,7 @@
         // Pupil
         e += `<circle cx="${ex}" cy="${ey}" r="${pupilR}" fill="url(#pupilDepth)"/>`;
         // Catchlights
-        const clSign = isRight ? 1 : 1;
+        const _clSign = isRight ? 1 : 1;
         e += `<circle cx="${ex + irisR*0.36}" cy="${ey - irisR*0.42}" r="2.0" fill="#ffffff" opacity="0.90"/>`;
         e += `<circle cx="${ex - irisR*0.22}" cy="${ey + irisR*0.32}" r="1.0" fill="#ffffff" opacity="0.50"/>`;
         // Upper lash line
@@ -1552,7 +1552,7 @@
       if (!container) return;
 
       const sp   = currentAppearance.special;
-      const pts  = currentAppearance.specialPoints;
+      const _pts  = currentAppearance.specialPoints;
       const used = SPECIAL_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
       const remaining = SPECIAL_TOTAL_POINTS - used;
       currentAppearance.specialPoints = remaining;
@@ -1674,7 +1674,7 @@
 
       // Update derived stats preview
       const derived = this._calcDerived(sp);
-      const safe = id => { const el = document.getElementById(id); if (el) el.textContent = ''; return el; };
+      const _safe = id => { const el = document.getElementById(id); if (el) el.textContent = ''; return el; };
       const set  = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
       set('ccDerMaxHP',  derived.maxHP);
       set('ccDerAP',     derived.actionPoints);
@@ -1861,7 +1861,7 @@
       document.getElementById('ccPreviewName').textContent = currentAppearance.name || "WANDERER";
 
       // Update stats
-      const race = appearanceOptions.races.find(r => r.id === currentAppearance.race);
+      const _race = appearanceOptions.races.find(r => r.id === currentAppearance.race);
       const age = appearanceOptions.ageRanges.find(a => a.id === currentAppearance.ageRange);
       document.getElementById('ccPreviewStats').textContent = 
         `${race?.name || 'Human'} • ${age?.name || 'Adult'}`;

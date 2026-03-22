@@ -215,7 +215,7 @@
 
       // Need faction and player info
       const factions   = Game.modules.factions;
-      const world      = Game.modules.world;
+      const _world      = Game.modules.world;
       const playerState = window.PlayerState || (window.Game && Game.playerState);
 
       if (!factions || !playerState) return null;
@@ -431,10 +431,10 @@
     },
 
     // ----------------------------------------------------------------
-    // completeRaid(raidData, playerState) → loot array
+    // completeRaid(raidData, _playerState) → loot array
     // Awards loot based on raid type and player performance.
     // ----------------------------------------------------------------
-    completeRaid(raidData, playerState) {
+    completeRaid(raidData, _playerState) {
       if (!raidData) return [];
 
       raidData.status = 'completed';

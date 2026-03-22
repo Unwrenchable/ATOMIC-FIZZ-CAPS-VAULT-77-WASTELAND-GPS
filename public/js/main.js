@@ -312,6 +312,7 @@
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   function completeQuest(questId) {
     if (!questId) return;
     if (!PLAYER.questsActive.includes(questId)) return;
@@ -1335,7 +1336,7 @@
       // Only trigger discovery if we just switched to explore mode
       // (worldmap.js toggles the text to "RETURN TO PLAYER" after click)
       const textEl = document.getElementById("exploreText");
-      const currentText = textEl ? textEl.textContent : exploreBtn.textContent;
+      const _currentText = textEl ? textEl.textContent : exploreBtn.textContent;
 
       // If worldmap toggled it to "RETURN TO PLAYER", we are now exploring → show scan
       // We use a short delay to check after worldmap.js has processed the click

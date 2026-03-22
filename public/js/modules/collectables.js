@@ -44,8 +44,8 @@
     applyCollectibleEffects(item) {
       if (!item.tags) return;
 
-      const world = Game.modules.world;
-      const inventory = Game.modules.inventory;
+      const _world = Game.modules.world;
+      const _inventory = Game.modules.inventory;
 
       // Example: magazines give stat bonuses
       if (item.tags.includes("magazine")) {

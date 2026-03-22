@@ -275,7 +275,7 @@
 
       // Handle barter option
       if (node.barter && Game.economy) {
-        this._showBarterOption(node);
+        this._showBarterOption(_node);
       }
 
       // Handle rumor system
@@ -568,7 +568,7 @@
     // ============================================================
     // SHOW SPEECH CHECK RESULT
     // ============================================================
-    _showSpeechCheckResult(success, difficulty) {
+    _showSpeechCheckResult(success, _difficulty) {
       const result = document.createElement('div');
       result.className = `fo4-speech-result ${success ? 'success' : 'failure'}`;
       result.textContent = success ? '✓ SUCCESS' : '✗ FAILED';
@@ -768,7 +768,7 @@
             await Game.modules.Dragon.loadArmatureJSON(this.currentNPC.armatureBase);
             
             // Get variation for this NPC
-            const variation = Game.modules.Dragon.getRandomVariation(this.currentNPC.id || 'default');
+            const _variation = Game.modules.Dragon.getRandomVariation(this.currentNPC.id || 'default');
             
             this.currentDragonBonesDisplay = await Game.modules.Dragon.createArmatureDisplay(
               this.currentNPC.armatureName || 'hero',
@@ -856,7 +856,7 @@
     // GENERATE FALLBACK PORTRAIT SVG
     // When CharacterCreator isn't loaded, generate a simple Pip-Boy style portrait
     // ============================================================
-    _generateFallbackPortraitSVG(type, size = 160, npcData = null) {
+    _generateFallbackPortraitSVG(type, _size = 160, npcData = null) {
       const isNPC = type === 'npc';
       const primaryColor = isNPC ? '#ffaa00' : '#00ff41';
       const secondaryColor = isNPC ? '#cc8800' : '#00cc33';
@@ -1117,7 +1117,7 @@
     // ============================================================
     // BARTER SYSTEM
     // ============================================================
-    _showBarterOption(node) {
+    _showBarterOption(_node) {
       // Add a barter response option dynamically
       setTimeout(() => {
         const responseArea = this.overlayEl.querySelector('.fo4-response-area');

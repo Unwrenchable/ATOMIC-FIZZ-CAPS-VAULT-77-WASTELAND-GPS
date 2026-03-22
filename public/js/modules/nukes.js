@@ -15,7 +15,7 @@
 
   const API_BASE       = window.API_BASE || "https://api.atomicfizzcaps.xyz";
   const LS_ACTIVE      = "afc_nuke_zones_active";   // [{ id, name, expiresAt, ... }]
-  const LS_CODE_STATUS = "afc_nuke_code_status";    // fragment zone info
+  const _LS_CODE_STATUS = "afc_nuke_code_status";    // fragment zone info
   const CHECK_INTERVAL = 60_000;                    // poll active zones every 60s
 
   // ----------------------------------------------------------

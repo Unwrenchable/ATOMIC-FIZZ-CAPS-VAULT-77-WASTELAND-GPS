@@ -20,7 +20,7 @@
   // ----------------------------------------------------------------
   // Safe HTML escape
   // ----------------------------------------------------------------
-  function safeEscape(str) {
+  function _safeEscape(str) {
     if (typeof escapeHtml === 'function') return escapeHtml(String(str));
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
@@ -226,7 +226,7 @@
      * @param {Object} node   — the dialog node being rendered
      * @param {Object} dialog — full dialog definition
      */
-    playForNode: function (node, dialog) {
+    playForNode: function (node, _dialog) {
       if (!node || !_npcState) return;
 
       var npcId  = _npcState.npcId;

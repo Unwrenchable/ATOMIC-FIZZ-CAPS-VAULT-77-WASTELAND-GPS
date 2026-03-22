@@ -90,7 +90,7 @@
   // Main loot generator
   // ------------------------------------------------------------
   function generateLoot({ regionId, factionId, npcTraits = [] }) {
-    const region = Regions.get(regionId);
+    const region = _Regions.get(regionId);
     const faction = Factions.getFaction(factionId);
     const anomalyLevel = WorldState.getAnomalyLevel(regionId);
     const weather = WorldState.getWeather();

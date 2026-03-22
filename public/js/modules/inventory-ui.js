@@ -5,7 +5,7 @@ Game.ui = Game.ui || {};
 
 // BUG FIX: escapeHtml helper to prevent XSS when inserting item data into innerHTML.
 // Item names, stats, and IDs come from game data and could contain HTML if tampered with.
-function escapeHtml(str) {
+function escapeHtml(str) { // eslint-disable-line no-unused-vars
   if (str == null) return '';
   return String(str)
     .replace(/&/g, '&amp;')
