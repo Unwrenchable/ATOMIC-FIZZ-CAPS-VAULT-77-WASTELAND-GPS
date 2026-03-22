@@ -1136,13 +1136,15 @@ Overseer.handleInput = async function (raw) {
   Overseer.print("> " + line);
 
   const parts = line.split(" ");
-  const cmd = parts[0].toLowerCase();
+  // Strip leading "/" so Telegram/Discord-style commands like "/start" work identically to "start"
+  const cmd = parts[0].toLowerCase().replace(/^\//, "");
   const args = parts.slice(1);
 
   // 1. Known terminal commands (game-side)
   switch (cmd) {
     case "help":
       Overseer.print("AVAILABLE COMMANDS:");
+      Overseer.print("  START      - New player orientation & quick-start guide");
       Overseer.print("  HELP       - Show this help screen");
       Overseer.print("  CLEAR      - Clear terminal buffer");
       Overseer.print("  STATUS     - Request player status");

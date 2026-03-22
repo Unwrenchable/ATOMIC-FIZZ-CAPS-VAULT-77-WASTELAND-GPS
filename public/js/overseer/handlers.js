@@ -3,6 +3,47 @@
 
 window.overseerHandlers = {
 
+  start() {
+    const delay = (fn, ms) => setTimeout(fn, ms);
+
+    overseerSay("> VAULT 77 // ATOMIC FIZZ CAPS INITIATIVE");
+    overseerSay("> ────────────────────────────────────────");
+    overseerSay("");
+    delay(() => {
+      overseerSay("> WELCOME TO THE ATOMIC FIZZ CAPS PROGRAM.");
+      overseerSay("> YOU ARE ONE OF FEW SURVIVORS CHOSEN FOR THIS INITIATIVE.");
+      overseerSay("");
+    }, 500);
+    delay(() => {
+      overseerSay("> HOW THIS WORKS:");
+      overseerSay(">  1. EXPLORE real GPS locations in the wasteland");
+      overseerSay(">  2. CLAIM Points of Interest to earn FIZZ tokens (Solana)");
+      overseerSay(">  3. LOOT gear, fight creatures, complete quests");
+      overseerSay(">  4. LEVEL UP your survivor rank and build reputation");
+      overseerSay("");
+    }, 1500);
+    delay(() => {
+      overseerSay("> QUICK COMMANDS TO GET STARTED:");
+      overseerSay(">  status    - Check your current stats & location");
+      overseerSay(">  quest     - View your active quest log");
+      overseerSay(">  inventory - See what you're carrying");
+      overseerSay(">  map       - Scan nearby Points of Interest");
+      overseerSay(">  caps      - Check your FIZZ cap balance");
+      overseerSay("");
+    }, 2800);
+    delay(() => {
+      overseerSay("> ENTERTAINMENT:");
+      overseerSay(">  games     - List all mini-games");
+      overseerSay(">  jokes     - Wasteland humor (questionable quality)");
+      overseerSay(">  fortune   - Consult the oracle");
+      overseerSay("");
+    }, 4000);
+    delay(() => {
+      overseerSay("> Type HELP anytime for the full command list.");
+      overseerSay("> The wasteland doesn't wait, smoothskin. Get moving.");
+    }, 5200);
+  },
+
   zones() {
     overseerSay("EXPERIMENTAL ZONES:");
     overseerSay(" - WORMHOLE BRIDGE (LOCKED)");
