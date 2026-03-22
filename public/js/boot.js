@@ -252,6 +252,71 @@
   // Expose triggerCourierDialogue so narrative.js can chain it after Siren closes
   window._bootTriggerCourierDialogue = triggerCourierDialogue;
 
+  // Expose tutorial trigger so narrative.js can call it after courier dialogue ends
+  window._bootShowMapTutorial = showMapTutorial;
+
+  // -----------------------------
+  // MAP / GPS WALK TUTORIAL (shown once after intro dialogues complete)
+  // Explains the core "walk to POI, claim it" Pokémon GO loop
+  // -----------------------------
+  function showMapTutorial() {
+    const tutorialKey = "afc_map_tutorial_seen";
+    if (localStorage.getItem(tutorialKey)) return;
+
+    const overlay = document.createElement("div");
+    overlay.id = "map-tutorial-overlay";
+    overlay.style.cssText = [
+      "position:fixed",
+      "inset:0",
+      "background:rgba(0,0,0,0.85)",
+      "color:#00ff41",
+      "font-family:monospace",
+      "z-index:10000",
+      "display:flex",
+      "flex-direction:column",
+      "align-items:center",
+      "justify-content:center",
+      "padding:24px",
+      "text-align:center",
+    ].join(";");
+
+    overlay.innerHTML = `
+      <div style="max-width:420px;border:1px solid #00ff41;padding:24px;background:#0a0a0a;">
+        <div style="font-size:22px;letter-spacing:3px;margin-bottom:16px;">☢ WASTELAND SURVIVAL BRIEFING ☢</div>
+        <div style="font-size:13px;line-height:1.8;margin-bottom:20px;">
+          <p>📍 <strong>GRANT GPS ACCESS</strong><br>Your Pip-Boy needs real-world GPS to scan the Wasteland.</p>
+          <p>🗺 <strong>OPEN THE MAP TAB</strong><br>Your position appears as a green dot. POI markers show nearby locations to claim.</p>
+          <p>🚶 <strong>WALK TO A POI</strong><br>Get within <strong>50 meters</strong> of a marker. The CLAIM button activates when you're close enough.</p>
+          <p>🔫 <strong>CLAIM IT</strong><br>Tap CLAIM to earn FIZZ caps and XP. Watch for enemy encounters!</p>
+          <p>⏱ <strong>COOLDOWN APPLIES</strong><br>Each location has a cooldown timer before it can be re-claimed.</p>
+        </div>
+        <div style="font-size:11px;color:#88bb88;margin-bottom:20px;">
+          "The Wasteland doesn't come to you, smoothskin. Move your boots." — Overseer AI
+        </div>
+        <button id="map-tutorial-close" style="background:#00ff41;color:#000;border:none;padding:10px 28px;font-family:monospace;font-size:14px;letter-spacing:2px;cursor:pointer;font-weight:bold;">
+          [ UNDERSTOOD — OPEN MAP ]
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    localStorage.setItem(tutorialKey, "true");
+
+    document.getElementById("map-tutorial-close").onclick = function () {
+      overlay.remove();
+      // Auto-switch to the map tab so the player can immediately see the GPS dot
+      const mapTabBtn = document.querySelector('[data-tab="map"], [data-panel="map"], #tab-map, .pip-tab[data-target="panel-map"]');
+      if (mapTabBtn) mapTabBtn.click();
+    };
+
+    // Also dismiss on outside click
+    overlay.addEventListener("click", function (e) {
+      if (e.target === overlay) {
+        overlay.remove();
+      }
+    });
+  }
+
 
   // -----------------------------
   // NEW GAME / CONTINUE LOGIC

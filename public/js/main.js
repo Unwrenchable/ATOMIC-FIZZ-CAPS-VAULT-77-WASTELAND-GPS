@@ -906,18 +906,27 @@
       }
       // Wire up buttons
       Array.from(craftingSection.querySelectorAll('[data-craft]')).forEach(btn => {
-        btn.onclick = function() {
+        btn.onclick = async function() {
           const recipeId = this.getAttribute('data-craft');
           if (!Game.modules.crafting.canCraft(recipeId)) {
             alert('Missing ingredients!');
             return;
           }
-          const item = Game.modules.crafting.craft(recipeId);
-          if (item) {
-            alert('Crafted: ' + (item.name || item.id));
-            renderExchangeCraftingSection();
-          } else {
-            alert('Crafting failed.');
+          this.disabled = true;
+          this.textContent = 'Crafting...';
+          try {
+            const item = await Game.modules.crafting.craftAsync(recipeId);
+            if (item) {
+              alert('Crafted: ' + (item.name || item.id));
+              renderExchangeCraftingSection();
+            } else {
+              alert('Crafting failed.');
+            }
+          } catch (err) {
+            alert(err.message || 'Crafting failed.');
+          } finally {
+            this.disabled = false;
+            this.textContent = 'Craft';
           }
         };
       });

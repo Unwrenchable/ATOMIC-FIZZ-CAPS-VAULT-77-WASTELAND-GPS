@@ -401,6 +401,9 @@
             window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'WIN' } }));
             return;
           }
+          // Disable attack + flee buttons during enemy turn to prevent post-death input window
+          attackBtn.disabled = true;
+          if (fleeBtn) fleeBtn.disabled = true;
           setTimeout(() => {
             const enemyRes = this.enemyAttack();
             msgDiv.textContent = `${enemy.name || enemy.id} attacks for ${enemyRes.damage} damage!`;
@@ -412,6 +415,12 @@
               this._applyRespawnPenalty();
               setTimeout(() => this.updateUI(), 1500);
               window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
+            } else {
+              // Re-enable buttons only if battle is still active
+              if (this.state) {
+                attackBtn.disabled = false;
+                if (fleeBtn) fleeBtn.disabled = false;
+              }
             }
           }, 800);
         };
