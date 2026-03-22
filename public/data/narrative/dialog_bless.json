@@ -97,9 +97,7 @@
       "set_flags": [
         "bless_patched_player"
       ],
-      "grant_items": [
-        { "id": "stimpak", "name": "Stimpak", "type": "consumable", "quantity": 1 }
-      ],
+      "grant_items": ["stimpak"],
       "grant_from": "Bless",
       "responses": [
         {
