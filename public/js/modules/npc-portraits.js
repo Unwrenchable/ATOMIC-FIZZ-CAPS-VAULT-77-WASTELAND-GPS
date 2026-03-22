@@ -104,7 +104,7 @@
 
   async function showInDialog(npc, opts = {}) {
     // opts.containerId or opts.containerElement can be provided
-    let container = null;
+    let container;
     if (opts.containerElement) container = opts.containerElement;
     else if (opts.containerId) container = document.getElementById(opts.containerId);
     else container = document.getElementById('dialogPortraitContainer');

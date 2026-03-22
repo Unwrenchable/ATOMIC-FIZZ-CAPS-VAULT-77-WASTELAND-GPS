@@ -512,16 +512,16 @@
       if (parts.length < 2) return "Specify turret id to upgrade, e.g., 'upgrade 1'.";
       var tid = parseInt(parts[1], 10);
       if (isNaN(tid)) return "Invalid turret id.";
-      var turret = null;
-      for (var i = 0; i < state.rmTurrets.length; i++) { if (state.rmTurrets[i].id === tid) { turret = state.rmTurrets[i]; break; } }
-      if (!turret) return "No turret with id " + tid + ".";
-      var costU = 40 + (turret.level - 1) * 20;
+      var upgradeTurret = null;
+      for (var i = 0; i < state.rmTurrets.length; i++) { if (state.rmTurrets[i].id === tid) { upgradeTurret = state.rmTurrets[i]; break; } }
+      if (!upgradeTurret) return "No turret with id " + tid + ".";
+      var costU = 40 + (upgradeTurret.level - 1) * 20;
       if (state.rmScrap < costU) return "Not enough scrap to upgrade turret " + tid + ". Need " + costU + ".";
       state.rmScrap -= costU;
-      turret.level += 1;
-      turret.dmg = Math.round(turret.dmg * 1.35);
-      turret.durability = turret.durability + 10;
-      return "Upgraded turret [" + tid + "] to level " + turret.level + ". Scrap left: " + state.rmScrap + ".";
+      upgradeTurret.level += 1;
+      upgradeTurret.dmg = Math.round(upgradeTurret.dmg * 1.35);
+      upgradeTurret.durability = upgradeTurret.durability + 10;
+      return "Upgraded turret [" + tid + "] to level " + upgradeTurret.level + ". Scrap left: " + state.rmScrap + ".";
     }
 
     if (cmd === 'repair') {
@@ -887,8 +887,8 @@
           var respU = safeCall(handleRedMenaceInput, 'upgrade ' + tid);
           addMessage(respU, 'overseer'); return;
         }
-        var resp = safeCall(handleRedMenaceInput, cmd);
-        addMessage(resp, 'overseer'); return;
+        var rmResp = safeCall(handleRedMenaceInput, cmd);
+        addMessage(rmResp, 'overseer'); return;
       }
 
       if (g === 'nukaquiz') {

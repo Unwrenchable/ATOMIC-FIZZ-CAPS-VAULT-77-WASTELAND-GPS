@@ -465,7 +465,7 @@
     }
 
     // Determine slot based on item type and slot field (Fallout-style)
-    let slot = null;
+    let slot;
     if (item.type === "weapon") slot = "weapon";
     else if (item.type === "armor") slot = item.slot || "chest"; // use item.slot (head/chest/arms/legs)
     else if (item.type === "consumable") slot = "aid";

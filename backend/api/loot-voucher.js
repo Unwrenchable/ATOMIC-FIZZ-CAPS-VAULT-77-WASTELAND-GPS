@@ -19,7 +19,7 @@ function loadBs58() {
     const codec = typeof baseX === 'function' ? baseX(BASE58) : (baseX && baseX.default ? baseX.default(BASE58) : null);
     if (codec && typeof codec.encode === "function" && typeof codec.decode === "function") return codec;
   } catch (err) {
-    throw new Error("Base58 library not available: " + err.message + ". Install 'bs58' or 'base-x'.");
+    throw new Error("Base58 library not available: " + err.message + ". Install 'bs58' or 'base-x'.", { cause: err });
   }
 }
 
@@ -31,8 +31,7 @@ function safeDecodeBase58(str, name = "key") {
   try {
     return bs58.decode(str);
   } catch (err) {
-    throw new Error(`${name} decode failed: ${err.message}`);
-  }
+    throw new Error(`${name} decode failed: ${err.message}`, { cause: err });  }
 }
 
 const USE_KMS = !!process.env.KMS_SIGNING_KEY_ID;  // Use KMS only if explicitly configured
