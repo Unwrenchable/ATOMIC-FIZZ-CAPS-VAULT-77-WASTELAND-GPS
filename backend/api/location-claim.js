@@ -26,9 +26,15 @@ try {
   if (fs.existsSync(locFile)) {
     LOCATIONS = JSON.parse(fs.readFileSync(locFile, "utf8"));
     console.log(`[location-claim] Loaded ${LOCATIONS.length} locations`);
+  } else {
+    console.error("[location-claim] CRITICAL: locations.json not found — all claims will return 404");
   }
 } catch (e) {
-  console.warn("[location-claim] Failed to load locations.json:", e.message);
+  console.error("[location-claim] CRITICAL: Failed to load locations.json:", e.message, "— all claims will return 404");
+}
+// Health check: warn loudly at startup if locations list is empty
+if (LOCATIONS.length === 0) {
+  console.error("[location-claim] STARTUP WARNING: LOCATIONS list is empty. POI claiming is non-functional.");
 }
 
 // Helper: Calculate distance between two coordinates in meters
