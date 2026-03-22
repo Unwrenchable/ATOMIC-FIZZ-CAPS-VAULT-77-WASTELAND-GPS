@@ -280,7 +280,7 @@ async function initClient() {
       }
       console.error("[redis] WARNING: Falling back to in-memory store will cause data consistency issues.");
       if (REQUIRE_REDIS_IN_PRODUCTION) {
-        throw new Error("Redis connection failed in production. Fix Redis or set REQUIRE_REDIS_IN_PRODUCTION=false to override (not recommended).");
+        throw new Error("Redis connection failed in production. Fix Redis or set REQUIRE_REDIS_IN_PRODUCTION=false to override (not recommended).", { cause: err });
       }
     } else {
       console.error("[redis] connection failed — falling back to in-memory store");
@@ -307,7 +307,7 @@ async function ensureClient() {
     // Redis initialization failed critically - this should only happen
     // if REQUIRE_REDIS_IN_PRODUCTION=true and Redis connection failed
     console.error("[redis] ensureClient: Redis initialization failed:", err.message);
-    throw new Error(`Redis not available: ${err.message}. Set REQUIRE_REDIS_IN_PRODUCTION=false to use fallback.`);
+    throw new Error(`Redis not available: ${err.message}. Set REQUIRE_REDIS_IN_PRODUCTION=false to use fallback.`, { cause: err });
   }
 }
 

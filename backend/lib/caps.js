@@ -72,7 +72,7 @@ async function getCapsBalance(wallet) {
     return typeof profile.caps === "number" ? profile.caps : DEFAULT_CAPS;
   } catch (err) {
     console.error("[caps] getCapsBalance error:", err);
-    throw new Error("Failed to get caps balance");
+    throw new Error("Failed to get caps balance", { cause: err });
   }
 }
 
@@ -150,7 +150,7 @@ async function awardCapsToPlayer(wallet, amount) {
     };
   } catch (err) {
     console.error("[caps] awardCapsToPlayer error:", err);
-    throw new Error("Failed to award caps");
+    throw new Error("Failed to award caps", { cause: err });
   }
 }
 
