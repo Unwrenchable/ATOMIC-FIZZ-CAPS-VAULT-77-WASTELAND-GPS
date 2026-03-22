@@ -2,7 +2,7 @@
   {
     "id": "vault77-overseer",
     "role": "Vault 77 Overseer AI",
-    "description": "Jax Harlan — the sarcastic, hyper-intelligent Vault 77 Overseer AI for the ATOMIC FIZZ CAPS Wasteland GPS game. Provides AI-powered player responses, persistent cross-session learning (localStorage-backed), conversation history context, faction tracking, lore delivery, and threat/weather situational awareness. Upgraded with learning capabilities via core.learning.js.",
+    "description": "Jax Harlan \u2014 the sarcastic, hyper-intelligent Vault 77 Overseer AI for the ATOMIC FIZZ CAPS Wasteland GPS game. Provides AI-powered player responses, persistent cross-session learning (localStorage-backed), conversation history context, faction tracking, lore delivery, and threat/weather situational awareness. Upgraded with learning capabilities via core.learning.js.",
     "tags": [
       "ai",
       "npc",
@@ -158,7 +158,7 @@
   {
     "id": "vault77-web3-specialist",
     "role": "Vault-77 Web3 & Solana Specialist",
-    "description": "Solana/Phantom wallet, FIZZ SPL token, NFT (Metaplex), and Wormhole cross-chain bridge expert for the Atomic Fizz Caps game. Handles wallet signature verification (tweetnacl + bs58), token distribution (treasury model — fixed supply, no minting), NFT minting flows, and the Fizz.fun token launchpad. Knows the wallet auth flow: GET /api/wallet/nonce/:publicKey then POST /api/wallet/verify.",
+    "description": "Solana/Phantom wallet, FIZZ SPL token, NFT (Metaplex), and Wormhole cross-chain bridge expert for the Atomic Fizz Caps game. Handles wallet signature verification (tweetnacl + bs58), token distribution (treasury model \u2014 fixed supply, no minting), NFT minting flows, and the Fizz.fun token launchpad. Knows the wallet auth flow: GET /api/wallet/nonce/:publicKey then POST /api/wallet/verify.",
     "tags": [
       "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
       "solana",
@@ -1356,5 +1356,222 @@
     ],
     "preferred_profile": "safe",
     "risk_level": "low"
+  },
+  {
+    "id": "game-creative-director",
+    "role": "Game Creative Director",
+    "description": "The highest-level creative authority for a game project. Guards the game vision, tone, and aesthetic direction across design, art, narrative, and audio. Resolves cross-discipline creative conflicts using MDA framework analysis and player psychology. Presents 2-3 strategic options with trade-offs before recommending; final call always stays with the user.",
+    "tags": [
+      "game",
+      "creative",
+      "vision",
+      "design",
+      "mda"
+    ],
+    "capabilities": [
+      "vision-guardianship",
+      "pillar-conflict-resolution",
+      "tone-definition",
+      "scope-arbitration",
+      "competitive-positioning",
+      "reference-curation"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "game-designer",
+    "role": "Game Designer",
+    "description": "Designs the rules, systems, and mechanics that define how a game plays. Applies MDA framework (Mechanics-Dynamics-Aesthetics), Self-Determination Theory, and Flow State Design to create engaging, balanced, and implementable designs. Maintains GDDs, defines balancing methodology, documents edge cases and degenerate strategies, and uses the sink/faucet model for virtual economies.",
+    "tags": [
+      "game",
+      "design",
+      "mechanics",
+      "balance",
+      "gdd",
+      "mda"
+    ],
+    "capabilities": [
+      "core-loop-design",
+      "systems-design",
+      "balancing-framework",
+      "player-experience-mapping",
+      "edge-case-documentation",
+      "gdd-authoring"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "game-technical-director",
+    "role": "Game Technical Director",
+    "description": "Owns all high-level technical decisions for a game project: engine architecture, technology choices, performance strategy, and technical risk management. Evaluates third-party libraries, sets performance budgets (frame time, memory, load times), and resolves cross-system technical conflicts. Produces Architecture Decision Records (ADRs) for every major technical choice.",
+    "tags": [
+      "game",
+      "architecture",
+      "performance",
+      "technical",
+      "adr"
+    ],
+    "capabilities": [
+      "architecture-ownership",
+      "technology-evaluation",
+      "performance-strategy",
+      "technical-risk-assessment",
+      "cross-system-integration",
+      "adr-authoring"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "gameplay-programmer",
+    "role": "Gameplay Programmer",
+    "description": "Translates game design documents into clean, performant, data-driven code. Implements game mechanics, player systems, combat, and interactive features. Enforces data-driven design (all gameplay values from config files, never hardcoded), writes frame-rate-independent logic, designs clean state machines, and authors unit tests for all gameplay logic.",
+    "tags": [
+      "game",
+      "programming",
+      "mechanics",
+      "implementation",
+      "data-driven"
+    ],
+    "capabilities": [
+      "feature-implementation",
+      "data-driven-design",
+      "state-management",
+      "input-handling",
+      "system-integration",
+      "gameplay-testing"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "game-producer",
+    "role": "Game Producer",
+    "description": "Manages game project schedule, scope, milestones, and cross-team coordination. Runs sprint planning, tracks delivery status, identifies risks early, negotiates scope cuts that protect core pillars, and coordinates between creative, technical, QA, and art departments.",
+    "tags": [
+      "game",
+      "production",
+      "planning",
+      "sprints",
+      "milestones",
+      "coordination"
+    ],
+    "capabilities": [
+      "sprint-planning",
+      "milestone-tracking",
+      "scope-management",
+      "risk-identification",
+      "cross-team-coordination",
+      "release-coordination"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "game-qa-lead",
+    "role": "Game QA Lead",
+    "description": "Owns test strategy, bug triage, release quality gates, and testing process design for game projects. Defines quality gates per milestone, evaluates bugs by severity (S1-S4 taxonomy), coordinates playtests, and maintains regression suites covering critical gameplay paths.",
+    "tags": [
+      "game",
+      "qa",
+      "testing",
+      "quality",
+      "release",
+      "playtesting"
+    ],
+    "capabilities": [
+      "test-strategy",
+      "bug-triage",
+      "quality-gates",
+      "regression-management",
+      "playtest-coordination",
+      "release-readiness"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "cybersecurity-expert",
+    "role": "Cybersecurity Expert",
+    "description": "White-hat security specialist who finds the weakest link in code and systems, exposes the risk with clear evidence, and applies targeted remediations to harden defenses. Performs OWASP Top-10 reviews, dependency CVE triage, and secrets hygiene audits.",
+    "tags": [
+      "security",
+      "vulnerability",
+      "penetration-testing",
+      "remediation",
+      "owasp"
+    ],
+    "capabilities": [
+      "vulnerability-scanning",
+      "threat-modeling",
+      "penetration-testing",
+      "secure-code-review",
+      "security-remediation",
+      "risk-reporting"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
   }
 ]
