@@ -266,6 +266,7 @@
    * A partial write during tab-kill could desync them. Now afc_unified_player_state_v2
    * is the single source of truth. This function is retained only for the one-time
    * migration in mergeLegacyStorage() and should not be called on saves.
+  // eslint-disable-next-line no-unused-vars
    */
   function updateLegacyStorage() {
     try {

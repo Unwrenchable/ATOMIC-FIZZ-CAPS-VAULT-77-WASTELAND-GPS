@@ -38,7 +38,7 @@
 
   // ========= CRASH PREVENTION GLOBALS =========
   const MAX_MESSAGES = 50; // Limit chat history to prevent memory leaks
-  const MAX_GAME_TIMEOUT = 30000; // 30 seconds max per game turn
+  const _MAX_GAME_TIMEOUT = 30000; // 30 seconds max per game turn
   const MAX_CONVERSATION_HISTORY = 20; // 10 player/Jax exchange pairs
   let activeTimeouts = new Set(); // Track all timeouts for cleanup
   let activeIntervals = new Set(); // Track intervals
@@ -95,7 +95,7 @@
 
   var chat = document.getElementById('chat');
   var input = document.getElementById('input');
-  var send = document.getElementById('send');
+  var _send = document.getElementById('send');
 
   if (input) try { input.focus(); } catch (e) {}
 
@@ -124,7 +124,7 @@
 
   /* ------------------------- Input handling (routed through Overseer.handleInput) ------------------------- */
 
-  function processInput() {
+  function _processInput() {
     if (!input) return;
     var text = input.value.trim();
     if (!text) return;
@@ -402,7 +402,7 @@
       return "Yeah... ace mechanic once.<br><br>Could make any engine run again.<br><br>No machine too busted.<br><br>People came from all over.<br><br>Then everything changed.<br><br>The world. Me.";
     }
 
-    var fallbacks = [
+    var _fallbacks = [
       "Signal's holding... barely.",
       "You still out there?",
       "Some things stay broken forever.",
@@ -600,7 +600,7 @@
     }
 
     if (state.rmBaseHp <= 0) {
-      var finalScore = state.rmScrap + (state.rmWave * 10);
+      var _finalScore = state.rmScrap + (state.rmWave * 10);
       state.gameActive = null;
       addMessage("Base destroyed. Game over. Final scrap: " + state.rmScrap + " • Waves survived: " + state.rmWave, "overseer");
       return;
@@ -835,7 +835,7 @@
   }
 
   /* ------------------------- Utilities ------------------------- */
-  function updateHPBar() {
+  function _updateHPBar() {
     try {
       var el = document.getElementById('capsDisplay');
       if (el) el.textContent = String(state.player.caps);
@@ -843,7 +843,7 @@
     console.log("CAPS updated to:", state.player.caps);
   }
 
-  function playSfx(id, volume) {
+  function _playSfx(id, volume) {
     console.log("Playing sound:", id, "volume:", volume || 0.4);
   }
 
@@ -974,7 +974,7 @@
       buildLayoutFor(g);
     }
 
-    var refreshInterval = addInterval(refreshControls, 500);
+    var _refreshInterval = addInterval(refreshControls, 500);
     window.__mgcRefresh = refreshControls;
     refreshControls();
 
