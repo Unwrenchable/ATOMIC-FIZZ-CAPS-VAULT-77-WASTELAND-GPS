@@ -739,7 +739,7 @@
         "flag:dolores_is_free",
         "!flag:dolores_cache_found"
       ],
-      "text": "A signal. Fragmented. Originating from the northern coordinates she walked toward.\n\nSomething is transmitting from whatever the Institute buried up there.\n\nYour Pip-Boy logs the coordinates.",
+      "text": "A signal. Fragmented. Originating from the northern coordinates she walked toward.\n\nSomething is transmitting from whatever the Institute buried up there.\n\nYour Pocket-Boy logs the coordinates.",
       "responses": [
         {
           "text": "I'll investigate the cache site.",

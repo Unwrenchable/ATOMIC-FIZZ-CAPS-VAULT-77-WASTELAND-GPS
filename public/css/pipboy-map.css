@@ -41,7 +41,7 @@
   height: 32px !important;
   min-width: 32px;
   min-height: 32px;
-  /* SVGs now have native Pip-Boy green (#00ff41) - add subtle glow for visibility */
+  /* SVGs now have native Pocket-Boy green (#00ff41) - add subtle glow for visibility */
   filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
 }
 
@@ -52,7 +52,7 @@
   padding: 4px;
 }
 
-/* Player marker - bright cyan like Pip-Boy cursor (contained glow) */
+/* Player marker - bright cyan like Pocket-Boy cursor (contained glow) */
 .leaflet-marker-icon[src*="player"],
 .player-marker {
   z-index: 1000 !important;
@@ -206,7 +206,7 @@
 
 /* Compass widget (#pipboyCompass) – styled inline by compass.js */
 
-/* Map controls - Pip-Boy button style */
+/* Map controls - Pocket-Boy button style */
 .leaflet-control-zoom a {
   background: rgba(0, 0, 0, 0.9) !important;
   color: #00ff41 !important;
@@ -285,7 +285,7 @@
   }
 }
 
-/* Player trail - breadcrumb dots like Pip-Boy */
+/* Player trail - breadcrumb dots like Pocket-Boy */
 .player-trail-dot {
   width: 6px;
   height: 6px;
@@ -376,7 +376,7 @@
 
 /* Ensure all SVG icons are visible on dark background */
 .leaflet-marker-icon img[src$=".svg"] {
-  /* SVGs now have native Pip-Boy green - just add subtle glow */
+  /* SVGs now have native Pocket-Boy green - just add subtle glow */
   filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
 }
 
