@@ -41,14 +41,17 @@ async function awardXp(player, amount) {
   const profile = JSON.parse(raw);
   profile.xp = (profile.xp || 0) + amount;
   
-  // Check for level up (100 XP per level)
+  // Check for level up (100 XP per level; capped at MAX_LEVEL — BUG-014 FIX)
   const xpPerLevel = 100;
+  const MAX_LEVEL = 100;
   let leveledUp = false;
-  while (profile.xp >= profile.level * xpPerLevel) {
+  while (profile.xp >= profile.level * xpPerLevel && profile.level < MAX_LEVEL) {
     profile.xp -= profile.level * xpPerLevel;
     profile.level++;
     leveledUp = true;
   }
+  // Once at max level, stop accumulating banked XP
+  if (profile.level >= MAX_LEVEL) profile.xp = 0;
 
   await redis.hset(profileKey, "profile", JSON.stringify(profile));
   

@@ -243,6 +243,19 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
 
     // Get or create player profile
     const playerKey = key(`player:${wallet}`);
+
+    // BUG-007 FIX: profile update is a non-atomic read-modify-write.
+    // Use a per-wallet profile lock so concurrent claims on different POIs
+    // don't overwrite each other's reward writes.
+    const profileLockKey = `profile:lock:${wallet}`;
+    const lockResult = await redis.set(profileLockKey, "1", { NX: true, EX: 10 });
+    if (!lockResult) {
+      // Release the cooldown NX lock so the player can retry
+      await redis.del(cooldownKey).catch(() => {});
+      return res.status(409).json({ ok: false, error: "Concurrent update in progress — please retry" });
+    }
+
+    try {
     let playerData = await redis.hget(playerKey, "profile");
     
     if (!playerData) {
@@ -261,24 +274,29 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
 
     const player = JSON.parse(playerData);
 
+    // BUG-008 FIX: enforce inventory size limit — prevent unbounded growth
+    const MAX_INVENTORY_SIZE = 200;
+
     // Award XP and caps
     player.xp = (player.xp || 0) + rewards.xp;
     player.caps = (player.caps || 0) + rewards.caps;
 
-    // Check for level up
+    // Check for level up (BUG-014 FIX: cap at MAX_LEVEL=100)
     const xpPerLevel = 100;
-    while (player.xp >= player.level * xpPerLevel) {
+    const MAX_LEVEL = 100;
+    while (player.xp >= player.level * xpPerLevel && player.level < MAX_LEVEL) {
       player.xp -= player.level * xpPerLevel;
       player.level += 1;
     }
+    if (player.level >= MAX_LEVEL) player.xp = 0;
 
-    // Add items to inventory
+    // Add items to inventory (BUG-008 FIX: respect inventory cap)
     if (!player.inventory) player.inventory = [];
     rewards.items.forEach(itemId => {
       const existing = player.inventory.find(i => i.id === itemId);
       if (existing) {
         existing.quantity = (existing.quantity || 1) + 1;
-      } else {
+      } else if (player.inventory.length < MAX_INVENTORY_SIZE) {
         player.inventory.push({
           id: itemId,
           name: itemId,
@@ -291,6 +309,14 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
 
     // Save player profile
     await redis.hset(playerKey, "profile", JSON.stringify(player));
+
+    } finally {
+      await redis.del(profileLockKey).catch(() => {});
+    }
+
+    // Re-read for response (safe — we just wrote it)
+    const savedData = await redis.hget(playerKey, "profile");
+    const savedPlayer = savedData ? JSON.parse(savedData) : {};
 
     // Mark location as claimed
     const claimedKey = key(`player:${wallet}:claimed`);
@@ -309,9 +335,9 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
         items: rewards.items
       },
       player: {
-        xp: player.xp,
-        caps: player.caps,
-        level: player.level
+        xp: savedPlayer.xp,
+        caps: savedPlayer.caps,
+        level: savedPlayer.level
       },
       cooldown: cooldownDuration
     });

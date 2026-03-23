@@ -311,6 +311,193 @@ test("overseer.full.js defines a secure RNG helper", () => {
 
 // ─── Summary ──────────────────────────────────────────────────────────────
 
+// ─── 9. Playtest Bug Fixes ────────────────────────────────────────────────
+
+console.log("\n[9] Playtest bug fixes (BUG-001 through BUG-020)");
+
+test("BUG-001: redeem-voucher route is mounted at '/' not '/redeem-voucher'", () => {
+  const src = readFile("backend/api/redeem-voucher.js");
+  assert.ok(src, "backend/api/redeem-voucher.js must exist");
+  // Must NOT use doubled route path
+  assert.ok(
+    !src.includes('router.post("/redeem-voucher"'),
+    "redeem-voucher.js must not re-declare /redeem-voucher path (causes 404 double-path)"
+  );
+  // Must use root route
+  assert.ok(
+    src.includes('router.post("/",') || src.includes("router.post('/',"),
+    "redeem-voucher.js must register POST at '/'"
+  );
+});
+
+test("BUG-002: XP award endpoint requires admin role", () => {
+  const src = readFile("backend/api/xp.js");
+  assert.ok(src, "backend/api/xp.js must exist");
+  assert.ok(
+    src.includes('player.role !== "admin"') || src.includes("player.role !== 'admin'"),
+    "xp.js /award endpoint must require admin role to prevent self-award exploit"
+  );
+});
+
+test("BUG-003: quest rewards loaded from server data not client body", () => {
+  const src = readFile("backend/api/quests.js");
+  assert.ok(src, "backend/api/quests.js must exist");
+  // Must load quest definitions at startup
+  assert.ok(
+    src.includes("QUEST_MAP") && src.includes("QUEST_DATA_DIR"),
+    "quests.js must build QUEST_MAP from server-side quest data directory"
+  );
+  // Must use server rewards, not req.body rewards
+  assert.ok(
+    src.includes("serverRewards"),
+    "quests.js must use serverRewards from QUEST_MAP, not client-provided reward values"
+  );
+});
+
+test("BUG-004: chooseEnding() syncs player profile with quest state", () => {
+  const src = readFile("backend/lib/quests.js");
+  assert.ok(src, "backend/lib/quests.js must exist");
+  assert.ok(
+    src.includes("hget") && src.includes("hset"),
+    "lib/quests.js chooseEnding() must read/write player profile hash to sync completed quests"
+  );
+});
+
+test("BUG-005: leaderboard scans double-prefixed player keys", () => {
+  const src = readFile("backend/api/caps.js");
+  assert.ok(src, "backend/api/caps.js must exist");
+  // Must use key(key("")) or key() before keys() call
+  assert.ok(
+    src.includes('redis.keys(key("player:*"))') || src.includes("redis.keys(key('player:*'))"),
+    "caps.js leaderboard must scan with key(key()) double-prefix to find actual player profiles"
+  );
+});
+
+test("BUG-006: cooldowns status uses correct key prefix (matches location-claim write)", () => {
+  const src = readFile("backend/api/cooldowns.js");
+  assert.ok(src, "backend/api/cooldowns.js must exist");
+  // Must pre-call key() before redis.get() to match double-prefix written by location-claim
+  assert.ok(
+    src.includes('redis.get(key(') ,
+    "cooldowns.js must pre-call key() to match the double-prefixed cooldown key written by location-claim.js"
+  );
+});
+
+test("BUG-007: location-claim uses per-wallet profile lock for concurrent writes", () => {
+  const src = readFile("backend/api/location-claim.js");
+  assert.ok(src, "backend/api/location-claim.js must exist");
+  assert.ok(
+    src.includes("profileLockKey") || src.includes("profile:lock:"),
+    "location-claim.js must use a per-wallet profile lock to prevent race-condition reward loss"
+  );
+});
+
+test("BUG-008: inventory size limit enforced in location-claim and quests", () => {
+  const locSrc = readFile("backend/api/location-claim.js");
+  const questsSrc = readFile("backend/api/quests.js");
+  assert.ok(locSrc, "backend/api/location-claim.js must exist");
+  assert.ok(questsSrc, "backend/api/quests.js must exist");
+  assert.ok(
+    locSrc.includes("MAX_INVENTORY_SIZE"),
+    "location-claim.js must enforce MAX_INVENTORY_SIZE"
+  );
+  assert.ok(
+    questsSrc.includes("MAX_INVENTORY_SIZE"),
+    "quests.js must enforce MAX_INVENTORY_SIZE"
+  );
+});
+
+test("BUG-009: quests-store QUESTS_KEY uses bare string (no double-prefix)", () => {
+  const src = readFile("backend/api/quests-store.js");
+  assert.ok(src, "backend/api/quests-store.js must exist");
+  assert.ok(
+    !src.includes("const QUESTS_KEY = key("),
+    "quests-store.js QUESTS_KEY must be a bare string, not pre-prefixed with key()"
+  );
+});
+
+test("BUG-010: no Math.random() in overseer handlers", () => {
+  const src = readFile("public/js/overseer/handlers.js");
+  assert.ok(src, "public/js/overseer/handlers.js must exist");
+  // Strip single-line comments before searching for Math.random() usage
+  const codeOnly = src.split('\n').filter(line => !line.trim().startsWith('//') && !line.trim().startsWith('*')).join('\n');
+  assert.ok(
+    !codeOnly.includes("Math.random()"),
+    "handlers.js must not use Math.random() in code — use crypto.getRandomValues() instead"
+  );
+});
+
+test("BUG-014: max player level cap enforced in lib/xp.js", () => {
+  const src = readFile("backend/lib/xp.js");
+  assert.ok(src, "backend/lib/xp.js must exist");
+  assert.ok(
+    src.includes("MAX_LEVEL"),
+    "lib/xp.js must enforce a MAX_LEVEL cap on level-up loop"
+  );
+});
+
+test("BUG-015: quest accept validates questId against known quest data", () => {
+  const src = readFile("backend/api/quests.js");
+  assert.ok(src, "backend/api/quests.js must exist");
+  assert.ok(
+    src.includes("QUEST_MAP.has(questId)") || src.includes("QUEST_MAP.get(questId)"),
+    "quests.js must validate questId against QUEST_MAP (server-side quest definitions)"
+  );
+});
+
+test("BUG-017: no Math.random() in mini-game files", () => {
+  const files = [
+    "public/js/overseer/game.tictactoe.js",
+    "public/js/overseer/game.redmenace.js",
+  ];
+  for (const f of files) {
+    const src = readFile(f);
+    assert.ok(src, `${f} must exist`);
+    assert.ok(
+      !src.includes("Math.random()"),
+      `${f} must not use Math.random() — use crypto.getRandomValues() instead`
+    );
+  }
+});
+
+test("BUG-018: battle WIN disables buttons before clearing state", () => {
+  const src = readFile("public/js/modules/battles.js");
+  assert.ok(src, "public/js/modules/battles.js must exist");
+  // The attackBtn.disabled = true line must appear BEFORE this.state = null in the WIN branch
+  const winIdx = src.indexOf('end === "WIN"');
+  assert.ok(winIdx !== -1, "battles.js must have a WIN check");
+  const disableIdx = src.indexOf("attackBtn.disabled = true", winIdx);
+  const stateNullIdx = src.indexOf("this.state = null", winIdx);
+  assert.ok(
+    disableIdx !== -1 && stateNullIdx !== -1 && disableIdx < stateNullIdx,
+    "battles.js must disable attackBtn BEFORE clearing this.state on WIN to prevent flee-after-victory crash"
+  );
+});
+
+test("BUG-019: VATS exits when all targets eliminated during shot execution", () => {
+  const src = readFile("public/js/modules/vats.js");
+  assert.ok(src, "public/js/modules/vats.js must exist");
+  assert.ok(
+    src.includes("VATS.targets.length === 0") && src.includes("exitVATS()"),
+    "vats.js must call exitVATS() when all targets are eliminated to prevent blank VATS overlay"
+  );
+});
+
+test("BUG-020: crafting.js _craft() is internal; craft() no longer public", () => {
+  const src = readFile("public/js/modules/crafting.js");
+  assert.ok(src, "public/js/modules/crafting.js must exist");
+  assert.ok(
+    src.includes("_craft(recipeId)"),
+    "crafting.js must rename craft() to _craft() to prevent direct console bypass of server validation"
+  );
+  assert.ok(
+    !src.includes("\n    craft(recipeId)"),
+    "crafting.js must not expose public craft() method"
+  );
+});
+
+// ─── Summary ──────────────────────────────────────────────────────────────
+
 console.log("\n─────────────────────────────────────────");
 console.log(`Results: ${passed} passed, ${failed} failed`);
 if (failures.length > 0) {

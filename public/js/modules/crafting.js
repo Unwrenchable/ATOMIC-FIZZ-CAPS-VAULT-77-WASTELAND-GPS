@@ -130,10 +130,13 @@
       }
 
       // ---- Server approved — complete craft locally ----
-      return this.craft(recipeId);
+      return this._craft(recipeId);
     },
 
-    craft(recipeId) {
+    // BUG-020 FIX: renamed from craft() to _craft() to prevent direct console
+    // invocation bypassing server validation. craftAsync() is the only public
+    // entry point; _craft() is called internally after server approval.
+    _craft(recipeId) {
       const recipes = Game.modules.recipes;
       const mintables = Game.modules.mintables;
 

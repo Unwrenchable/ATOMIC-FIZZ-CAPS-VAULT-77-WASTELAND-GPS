@@ -178,7 +178,9 @@
       const corners = [0, 2, 6, 8];
       const availableCorners = corners.filter(i => this.board[i] === null);
       if (availableCorners.length > 0) {
-        return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+        const rnd = new Uint32Array(1);
+        crypto.getRandomValues(rnd);
+        return availableCorners[rnd[0] % availableCorners.length];
       }
 
       // 5. Take any available space
@@ -186,7 +188,9 @@
       for (let i = 0; i < 9; i++) {
         if (this.board[i] === null) available.push(i);
       }
-      return available[Math.floor(Math.random() * available.length)];
+      const rnd2 = new Uint32Array(1);
+      crypto.getRandomValues(rnd2);
+      return available[rnd2[0] % available.length];
     },
 
     // Check if symbol has won
