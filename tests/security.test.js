@@ -378,7 +378,7 @@ test("BUG-006: cooldowns status uses correct key prefix (matches location-claim 
   assert.ok(src, "backend/api/cooldowns.js must exist");
   // Must pre-call key() before redis.get() to match double-prefix written by location-claim
   assert.ok(
-    src.includes('redis.get(key(') ,
+    src.includes('redis.get(key('),
     "cooldowns.js must pre-call key() to match the double-prefixed cooldown key written by location-claim.js"
   );
 });
@@ -491,7 +491,7 @@ test("BUG-020: crafting.js _craft() is internal; craft() no longer public", () =
     "crafting.js must rename craft() to _craft() to prevent direct console bypass of server validation"
   );
   assert.ok(
-    !src.includes("\n    craft(recipeId)"),
+    !/^\s*craft\(recipeId\)/m.test(src),
     "crafting.js must not expose public craft() method"
   );
 });
