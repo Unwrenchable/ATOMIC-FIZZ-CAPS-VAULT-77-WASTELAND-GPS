@@ -17,7 +17,10 @@ function safeCompare(a, b) {
 }
 
 // Key for storing quests JSON
-const QUESTS_KEY = key('quests:store');
+// BUG-009 FIX: removed key() call — the redis wrapper adds the prefix
+// internally, so pre-calling key() caused a double-prefix (afw:afw:quests:store).
+// Using the bare string keeps the key at the expected afw:quests:store namespace.
+const QUESTS_KEY = 'quests:store';
 
 // ------------------------------------------------------------
 // Rate limiters for sensitive endpoints

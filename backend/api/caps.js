@@ -116,12 +116,16 @@ router.get("/leaderboard", async (req, res) => {
     const metric = ["caps", "xp", "claims"].includes(req.query.metric) ? req.query.metric : "caps";
     const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 10));
 
-    // Scan all player profile keys.  redis.keys() applies the afw: prefix internally,
-    // so returned keys look like "afw:player:<wallet>".  We strip the prefix to get
-    // the bare key for hget() (which re-applies the prefix).
-    const PREFIX = key(""); // e.g. "afw:"
-    const PLAYER_PREFIX = `${PREFIX}player:`; // e.g. "afw:player:"
-    const playerKeys = await redis.keys("player:*");
+    // BUG-005 FIX: Player profiles are stored at the double-prefixed key
+    // "afw:afw:player:<wallet>" because all callers use key() before passing
+    // to the redis wrapper (which also adds the prefix internally).
+    // The old code scanned "afw:player:*" and found nothing.
+    // Fix: pass key("player:*") = "afw:player:*" to redis.keys(), which
+    // internally prefixes to "afw:afw:player:*" — matching actual storage.
+    const playerKeys = await redis.keys(key("player:*"));
+    // Returned keys: ["afw:afw:player:<wallet>", ...]
+    // Strip "afw:afw:player:" to get the wallet address.
+    const PLAYER_PREFIX = key(key("")) + "player:"; // e.g. "afw:afw:player:"
     const entries = [];
 
     for (const fullKey of (playerKeys || [])) {
