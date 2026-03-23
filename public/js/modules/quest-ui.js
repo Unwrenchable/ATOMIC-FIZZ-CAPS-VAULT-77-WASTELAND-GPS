@@ -1,4 +1,4 @@
-// quest-ui.js — Pip-Boy QUESTS panel renderer
+// quest-ui.js — Pocket-Boy QUESTS panel renderer
 
 window.Game = window.Game || {};
 Game.ui = Game.ui || {};

@@ -448,7 +448,7 @@
           ]
         },
         what_to_do: {
-          npc_line: "First things first. Check your Pip-Boy. Inventory, map, radio. Get your bearings. Then start moving.",
+          npc_line: "First things first. Check your Pocket-Boy. Inventory, map, radio. Get your bearings. Then start moving.",
           options: [
             { player_choice: "Got it.", next: "end_positive" }
           ]

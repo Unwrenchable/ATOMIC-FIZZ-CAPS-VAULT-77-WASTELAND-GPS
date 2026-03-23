@@ -8,8 +8,8 @@
     "id": "annie_intro",
     "conditions": ["!flag:met_annie"],
     "set_flags": ["met_annie"],
-    "video_speech": "Hey. You. With the Pip-Boy. Don't go yet. I need to talk to you.",
-    "text": "You hear her before you see her — a scuff of boot on rubble, the rustle of cloth too large for the body wearing it.\n\nShe drops from a crumbled wall section and lands in a crouch, one hand on the ground, watching you with the wariness of a kid who has been burned before. Literally, if the scar on her forearm is anything to go by.\n\nFlame-red hair. Soot on her nose. A Vault-Tec jumpsuit stitched and re-stitched so many times the original seams are a memory.\n\nAnd a look in her eyes that says she has done the math on you and hasn't decided the answer yet.\n\n\"Hey. You. With the Pip-Boy.\"\n\nShe straightens up. She can't be more than twelve. She holds her ground like someone ten years older.\n\n\"Don't go yet. I need to talk to you.\"",
+    "video_speech": "Hey. You. With the Pocket-Boy. Don't go yet. I need to talk to you.",
+    "text": "You hear her before you see her — a scuff of boot on rubble, the rustle of cloth too large for the body wearing it.\n\nShe drops from a crumbled wall section and lands in a crouch, one hand on the ground, watching you with the wariness of a kid who has been burned before. Literally, if the scar on her forearm is anything to go by.\n\nFlame-red hair. Soot on her nose. A Vault-Tec jumpsuit stitched and re-stitched so many times the original seams are a memory.\n\nAnd a look in her eyes that says she has done the math on you and hasn't decided the answer yet.\n\n\"Hey. You. With the Pocket-Boy.\"\n\nShe straightens up. She can't be more than twelve. She holds her ground like someone ten years older.\n\n\"Don't go yet. I need to talk to you.\"",
     "responses": [
       {
         "text": "[Question] Who are you? What are you doing out here alone?",
@@ -324,7 +324,7 @@
     },
     "node_whats_the_plan": {
       "id": "node_whats_the_plan",
-      "text": "She straightens up. This is the part she's rehearsed.\n\n\"Warmcaps — Warren B. Capston — runs the biggest caravan operation in this half of the wasteland out of a fortified mansion to the north. He has resources. He has hired muscle. He has a grudge against Nan Hannigan eating into his trading margins.\"\n\nShe ticks it off on her fingers.\n\n\"I need someone to go to him. Make the case. Nan Hannigan running a kid labor camp is worth shutting down — for him as a business move, and because it's the right thing, and sometimes those two things line up.\"\n\nShe meets your eyes squarely.\n\n\"I can't go myself. She's looking for me. A stranger with a Pip-Boy walking up to Warmcaps' front gate has a much better shot than a twelve-year-old with a warrant on her head.\"\n\nA breath.\n\n\"Will you go?\"",
+      "text": "She straightens up. This is the part she's rehearsed.\n\n\"Warmcaps — Warren B. Capston — runs the biggest caravan operation in this half of the wasteland out of a fortified mansion to the north. He has resources. He has hired muscle. He has a grudge against Nan Hannigan eating into his trading margins.\"\n\nShe ticks it off on her fingers.\n\n\"I need someone to go to him. Make the case. Nan Hannigan running a kid labor camp is worth shutting down — for him as a business move, and because it's the right thing, and sometimes those two things line up.\"\n\nShe meets your eyes squarely.\n\n\"I can't go myself. She's looking for me. A stranger with a Pocket-Boy walking up to Warmcaps' front gate has a much better shot than a twelve-year-old with a warrant on her head.\"\n\nA breath.\n\n\"Will you go?\"",
       "responses": [
         {
           "text": "[Friendly] Yeah. I'll go talk to Warmcaps.",
@@ -357,7 +357,7 @@
     },
     "node_why_listen": {
       "id": "node_why_listen",
-      "text": "\"Because you've got a Pip-Boy and a working firearm and you're standing upright in the wasteland, which already puts you in the top fifteen percent of people worth talking to.\"\n\nShe says it with a completely straight face.\n\n\"Warmcaps talks to traders. Couriers. People who look like they can handle themselves. He doesn't talk to beggars. He doesn't talk to raider liaisons.\"\n\nShe looks you up and down.\n\n\"You'll get an audience. What you do with it is up to you.\"\n\nA pause.\n\n\"Just — tell him the truth. The whole truth. He'll respect that more than a pitch, I think.\"",
+      "text": "\"Because you've got a Pocket-Boy and a working firearm and you're standing upright in the wasteland, which already puts you in the top fifteen percent of people worth talking to.\"\n\nShe says it with a completely straight face.\n\n\"Warmcaps talks to traders. Couriers. People who look like they can handle themselves. He doesn't talk to beggars. He doesn't talk to raider liaisons.\"\n\nShe looks you up and down.\n\n\"You'll get an audience. What you do with it is up to you.\"\n\nA pause.\n\n\"Just — tell him the truth. The whole truth. He'll respect that more than a pitch, I think.\"",
       "set_flags": ["annie_sent_to_warmcaps"],
       "responses": [
         {

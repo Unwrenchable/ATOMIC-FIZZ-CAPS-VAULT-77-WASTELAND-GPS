@@ -7,7 +7,7 @@
   },
   "courier": {
     "display_name": "Pip the Wasteland Courier",
-    "portrait_anchor": "road-worn young woman courier, weathered olive leather jacket, battered canvas satchel slung over one shoulder, short practical hair, quick wary eyes, Pip-Boy on left wrist",
+    "portrait_anchor": "road-worn young woman courier, weathered olive leather jacket, battered canvas satchel slung over one shoulder, short practical hair, quick wary eyes, Pocket-Boy on left wrist",
     "description_anchor": "NCR-adjacent freelance courier who delivers priority messages across the Mojave",
     "prompt_lore": "Pip is a fast-talking, cautious courier who trusts nobody but always delivers. Setting: open wasteland road, dust and gravel."
   },
@@ -79,7 +79,7 @@
   },
   "echo": {
     "display_name": "Echo",
-    "portrait_anchor": "androgynous figure in a matte black signal-dampening bodysuit, no visible face markings, posture neutral and watchful, Pip-Boy modified with extra antenna clusters, barely-visible among shadows",
+    "portrait_anchor": "androgynous figure in a matte black signal-dampening bodysuit, no visible face markings, posture neutral and watchful, Pocket-Boy modified with extra antenna clusters, barely-visible among shadows",
     "description_anchor": "An analytical and detached information broker operating in the wasteland's dead-signal zones",
     "prompt_lore": "Echo reveals as little as possible. Minimal movement. Background: shadowed ruins, one dim amber lamp.",
     "default_video_speech": "You brought something interesting. Biological signatures like this don't just happen. I'm listening."

@@ -1,4 +1,4 @@
-// inventory-ui.js — Pip‑Boy ITEMS panel with category tabs + Fallout-style EQUIP screen
+// inventory-ui.js — Pocket-Boy ITEMS panel with category tabs + Fallout-style EQUIP screen
 
 window.Game = window.Game || {};
 Game.ui = Game.ui || {};
@@ -67,7 +67,7 @@ Game.ui.renderInventory = function () {
   // ── Build tab buttons ──────────────────────────────────────────
   tabs.innerHTML = "";
 
-  // EQUIP tab first (Pip-Boy paperdoll)
+  // EQUIP tab first (Pocket-Boy paperdoll)
   const equipTab = document.createElement("div");
   equipTab.className = "inv-tab active";
   equipTab.innerText = "EQUIP";
