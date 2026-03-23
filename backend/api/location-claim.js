@@ -13,6 +13,7 @@ const crypto = require("crypto");
 
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
+const { applyXpToProfile } = require("../lib/xp");
 
 // Cryptographically-secure random integer in [min, max)
 function secureRandInt(min, max) {
@@ -277,18 +278,9 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     // BUG-008 FIX: enforce inventory size limit — prevent unbounded growth
     const MAX_INVENTORY_SIZE = 200;
 
-    // Award XP and caps
-    player.xp = (player.xp || 0) + rewards.xp;
+    // Award XP and caps — use shared applyXpToProfile() for consistent level-up logic
     player.caps = (player.caps || 0) + rewards.caps;
-
-    // Check for level up (BUG-014 FIX: cap at MAX_LEVEL=100)
-    const xpPerLevel = 100;
-    const MAX_LEVEL = 100;
-    while (player.xp >= player.level * xpPerLevel && player.level < MAX_LEVEL) {
-      player.xp -= player.level * xpPerLevel;
-      player.level += 1;
-    }
-    if (player.level >= MAX_LEVEL) player.xp = 0;
+    applyXpToProfile(player, rewards.xp);
 
     // Add items to inventory (BUG-008 FIX: respect inventory cap)
     if (!player.inventory) player.inventory = [];
