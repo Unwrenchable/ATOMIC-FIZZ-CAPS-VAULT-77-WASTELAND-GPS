@@ -1,6 +1,15 @@
 // /js/overseer/handlers.js
 // Custom Overseer Commands (experimental zones, etc.)
 
+// BUG-010 FIX: replace Math.random() with crypto.getRandomValues() for
+// consistent CSPRNG usage across the codebase.
+function _secureChoice(arr) {
+  if (!arr || arr.length === 0) return undefined;
+  const idx = new Uint32Array(1);
+  crypto.getRandomValues(idx);
+  return arr[idx[0] % arr.length];
+}
+
 window.overseerHandlers = {
 
   start() {
@@ -164,7 +173,7 @@ window.overseerHandlers = {
       "Why don't mirelurks share food? They're too SHELLFISH!",
       "What's Overseer's favorite dance? The ROBOT... obviously."
     ];
-    const joke = jokes[Math.floor(Math.random() * jokes.length)];
+    const joke = _secureChoice(jokes);
     overseerSay("> RETRIEVING JOKE FROM DATABASE...");
     setTimeout(() => overseerSay(joke), 800);
   },
@@ -182,7 +191,7 @@ window.overseerHandlers = {
       "THE STARS ALIGN. YOUR CRITICAL HIT CHANCE INCREASES.",
       "I FORESEE... A VERY LARGE EXPLOSION. DUCK."
     ];
-    const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+    const fortune = _secureChoice(fortunes);
     overseerSay("> CONSULTING THE WASTELAND ORACLE...");
     overseerSay("> INTERPRETING RADSTORM PATTERNS...");
     setTimeout(() => {
@@ -220,7 +229,7 @@ window.overseerHandlers = {
       }
     ];
     
-    const question = questions[Math.floor(Math.random() * questions.length)];
+    const question = _secureChoice(questions);
     overseerSay("> FALLOUT LORE TRIVIA:");
     overseerSay("> " + question.q);
     overseerSay("> TYPE YOUR ANSWER OR 'hint' FOR A CLUE");
