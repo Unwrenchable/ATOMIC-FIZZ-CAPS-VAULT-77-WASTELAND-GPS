@@ -77,8 +77,8 @@ async function chooseEnding(playerId, questId, endingId) {
   // BUG-004 FIX: also sync the player profile hash so the quest is removed
   // from quests.active and added to quests.completed in the profile.
   try {
-    const profileKey = key(`player:${playerId}`);
-    const raw = await redis.hget(profileKey, "profile");
+    const playerProfileKey = key(`player:${playerId}`);
+    const raw = await redis.hget(playerProfileKey, "profile");
     if (raw) {
       const profile = JSON.parse(raw);
       if (!profile.quests || typeof profile.quests !== "object") profile.quests = {};
@@ -90,7 +90,7 @@ async function chooseEnding(playerId, questId, endingId) {
         profile.quests.completed.push(questId);
         profile.quests.completedAt = profile.quests.completedAt || {};
         profile.quests.completedAt[questId] = Date.now();
-        await redis.hset(profileKey, "profile", JSON.stringify(profile));
+        await redis.hset(playerProfileKey, "profile", JSON.stringify(profile));
       }
     }
   } catch (profileErr) {

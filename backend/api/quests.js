@@ -4,6 +4,7 @@ const fs = require("fs");
 const router = express.Router();
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
+const { applyXpToProfile, MAX_LEVEL } = require("../lib/xp");
 
 // -----------------------------------------------------------------------
 // BUG-003 FIX: Load quest definitions from server-side data at startup.
@@ -55,8 +56,7 @@ const MAX_QUEST_ITEMS = 5;
 // Maximum inventory size — no unbounded growth (BUG-008 FIX)
 const MAX_INVENTORY_SIZE = 200;
 
-// Maximum player level (BUG-014 FIX)
-const MAX_LEVEL = 100;
+// MAX_LEVEL is imported from lib/xp (shared constant — BUG-014 FIX)
 
 // GET /api/quests - Return quests.json data
 router.get("/", (req, res) => {
@@ -200,14 +200,8 @@ router.post("/complete", authMiddleware, async (req, res) => {
       // Award server-defined rewards (BUG-003 FIX: no client-provided reward values)
       if (typeof serverRewards.xp === "number" && serverRewards.xp > 0) {
         const xpToAward = Math.min(Math.max(0, Math.floor(serverRewards.xp)), MAX_QUEST_XP);
-        player.xp = (player.xp || 0) + xpToAward;
-        // Check for level up (BUG-014 FIX: cap at MAX_LEVEL)
-        const xpPerLevel = 100;
-        while (player.xp >= player.level * xpPerLevel && player.level < MAX_LEVEL) {
-          player.xp -= player.level * xpPerLevel;
-          player.level += 1;
-        }
-        if (player.level >= MAX_LEVEL) player.xp = 0; // stop accumulating past cap
+        // Use shared applyXpToProfile() to avoid duplicating level-up logic (review fix)
+        applyXpToProfile(player, xpToAward);
       }
       if (typeof serverRewards.caps === "number" && serverRewards.caps > 0) {
         const capsToAward = Math.min(Math.max(0, Math.floor(serverRewards.caps)), MAX_QUEST_CAPS);
