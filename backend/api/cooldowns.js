@@ -26,9 +26,14 @@ router.get("/status", async (req, res) => {
       return res.status(400).json({ ok: false, error: "Missing or invalid poi" });
     }
 
-    // POI claim cooldown key: afw:player:{wallet}:cooldown:{poi}
-    // NOTE: redis.get() applies the afw: prefix internally via key() — pass bare string
-    const raw = await redis.get(`player:${wallet}:cooldown:${poi}`);
+    // BUG-006 FIX: key namespace mismatch between cooldowns.js (reader) and
+    // location-claim.js (writer).  location-claim.js pre-calls key() before
+    // passing to redis.set(), so the cooldown is stored at the double-prefixed
+    // path "afw:afw:player:{wallet}:cooldown:{poi}".
+    // This endpoint was reading with bare string → single-prefix path
+    // "afw:player:{wallet}:cooldown:{poi}" which never matched. Now we
+    // pre-call key() here too so both read and write hit the same path.
+    const raw = await redis.get(key(`player:${wallet}:cooldown:${poi}`));
     const onCooldown = raw !== null && raw !== undefined;
 
     // secondsRemaining: null when on cooldown but TTL is unknown (key will auto-expire via Redis EX)

@@ -197,7 +197,9 @@
       if (aliveEnemies.length === 0) return;
 
       // Random enemy fires
-      const shooter = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+      const rnd = new Uint32Array(1);
+      crypto.getRandomValues(rnd);
+      const shooter = aliveEnemies[rnd[0] % aliveEnemies.length];
       this.missiles.push({
         x: shooter.x + shooter.width / 2 - 2,
         y: shooter.y + shooter.height,

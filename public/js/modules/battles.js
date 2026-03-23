@@ -394,6 +394,11 @@
           msgDiv.textContent = `You hit ${enemy.name || enemy.id} for ${res.damage} damage!`;
           const end = this.checkBattleEnd();
           if (end === "WIN") {
+            // BUG-018 FIX: disable buttons immediately on WIN to prevent
+            // flee-after-victory crash (this.state is null, enemyAttack() would
+            // throw because this.state.encounter is undefined).
+            attackBtn.disabled = true;
+            if (fleeBtn) fleeBtn.disabled = true;
             msgDiv.textContent = `${enemy.name || enemy.id} defeated!`;
             this.applyRewards(this.state.encounter);
             this.state = null;

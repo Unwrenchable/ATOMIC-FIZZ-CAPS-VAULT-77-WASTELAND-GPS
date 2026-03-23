@@ -1,15 +1,62 @@
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const router = express.Router();
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
+const { applyXpToProfile, MAX_LEVEL } = require("../lib/xp");
 
-// Maximum rewards allowed per quest completion (server-side caps)
-// Prevents a client from self-awarding unlimited XP/caps by injecting values.
-const MAX_QUEST_XP   = 1000;
-const MAX_QUEST_CAPS = 500;
-// Maximum number of item IDs a client may claim per quest reward
+// -----------------------------------------------------------------------
+// BUG-003 FIX: Load quest definitions from server-side data at startup.
+// Quest rewards must come from server-defined data, not from the client.
+// BUG-015 FIX: Validate questId against known quest IDs.
+// -----------------------------------------------------------------------
+const QUEST_DATA_DIR = path.join(__dirname, "..", "..", "public", "data", "quest");
+const QUEST_MAP = new Map(); // questId -> quest definition
+
+(function loadQuestData() {
+  try {
+    if (!fs.existsSync(QUEST_DATA_DIR)) {
+      console.warn("[api/quests] Quest data directory not found:", QUEST_DATA_DIR);
+      return;
+    }
+    const files = fs.readdirSync(QUEST_DATA_DIR).filter(f => f.endsWith(".json"));
+    for (const file of files) {
+      try {
+        const raw = fs.readFileSync(path.join(QUEST_DATA_DIR, file), "utf8");
+        const quest = JSON.parse(raw);
+        if (quest && quest.id) {
+          QUEST_MAP.set(quest.id, quest);
+        }
+      } catch (e) {
+        console.warn("[api/quests] Failed to load quest file:", file, e.message);
+      }
+    }
+    // Also load top-level quests.json (array format)
+    const topLevel = path.join(__dirname, "..", "..", "public", "data", "quests.json");
+    if (fs.existsSync(topLevel)) {
+      const arr = JSON.parse(fs.readFileSync(topLevel, "utf8"));
+      if (Array.isArray(arr)) {
+        arr.forEach(q => { if (q && q.id) QUEST_MAP.set(q.id, q); });
+      }
+    }
+    console.log(`[api/quests] Loaded ${QUEST_MAP.size} quest definitions`);
+  } catch (e) {
+    console.error("[api/quests] Failed to load quest data:", e.message);
+  }
+})();
+
+// Maximum rewards allowed per quest completion (server-side hard caps as a last resort)
+// BUG-003 FIX: actual rewards now come from QUEST_MAP, not from the client.
+const MAX_QUEST_XP   = 500;
+const MAX_QUEST_CAPS = 250;
+// Maximum number of item IDs a quest may grant
 const MAX_QUEST_ITEMS = 5;
+
+// Maximum inventory size — no unbounded growth (BUG-008 FIX)
+const MAX_INVENTORY_SIZE = 200;
+
+// MAX_LEVEL is imported from lib/xp (shared constant — BUG-014 FIX)
 
 // GET /api/quests - Return quests.json data
 router.get("/", (req, res) => {
@@ -36,7 +83,12 @@ router.post("/accept", authMiddleware, async (req, res) => {
       return res.status(400).json({ ok: false, error: "Invalid quest ID" });
     }
 
-    // Get player profile
+    // BUG-015 FIX: validate quest ID against server-known quests.
+    // Unknown quest IDs can't be accepted — prevents phantom quest injection.
+    if (QUEST_MAP.size > 0 && !QUEST_MAP.has(questId)) {
+      return res.status(400).json({ ok: false, error: "Unknown quest" });
+    }
+
     const playerKey = key(`player:${wallet}`);
     let playerData = await redis.hget(playerKey, "profile");
     
@@ -88,21 +140,26 @@ router.post("/accept", authMiddleware, async (req, res) => {
 
 // POST /api/quests/complete - Complete a quest
 // BUG FIX (CRITICAL): Added authMiddleware and reward validation.
-// Previously any caller could (1) complete quests for any wallet and
-// (2) self-award unlimited XP/caps/items by supplying arbitrary reward values
-// in the request body.  Fixes applied:
-//   a) authMiddleware – wallet comes from the verified session, not the body.
-//   b) reward caps   – XP ≤ MAX_QUEST_XP, caps ≤ MAX_QUEST_CAPS.
-//   c) item limit    – at most MAX_QUEST_ITEMS item IDs accepted from the client;
-//      each item ID must be a non-empty string ≤ 64 chars (no raw HTML/scripts).
+// BUG-003 FIX: Rewards now come from server-defined quest data, not client body.
+// BUG-015 FIX: questId validated against known quest definitions.
 router.post("/complete", authMiddleware, async (req, res) => {
   try {
     const wallet = req.player.wallet;
-    const { questId, rewards } = req.body;
+    const { questId } = req.body;
 
     if (!questId || typeof questId !== "string") {
       return res.status(400).json({ ok: false, error: "Invalid quest ID" });
     }
+
+    // BUG-015 FIX: validate quest ID against server-known quests.
+    if (QUEST_MAP.size > 0 && !QUEST_MAP.has(questId)) {
+      return res.status(400).json({ ok: false, error: "Unknown quest" });
+    }
+
+    // BUG-003 FIX: load rewards from server-side quest definition.
+    // Ignores any rewards provided by the client.
+    const questDef = QUEST_MAP.get(questId);
+    const serverRewards = questDef?.reward || questDef?.rewards || {};
 
     // Distributed lock: prevent concurrent completion of the same quest
     // by the same wallet (race-condition / double-reward attack).
@@ -122,8 +179,6 @@ router.post("/complete", authMiddleware, async (req, res) => {
       }
 
       const player = JSON.parse(playerData);
-      // BUG FIX: same quests normalisation as /accept — player.quests may be {} (not null)
-      // so the old `if (!player.quests)` guard was insufficient.
       if (!player.quests || typeof player.quests !== 'object') {
         player.quests = {};
       }
@@ -142,31 +197,24 @@ router.post("/complete", authMiddleware, async (req, res) => {
       player.quests.completedAt = player.quests.completedAt || {};
       player.quests.completedAt[questId] = Date.now();
 
-      // Award rewards if provided — with server-side caps to prevent exploit
-      if (rewards && typeof rewards === "object") {
-        if (typeof rewards.xp === "number" && rewards.xp > 0) {
-          // BUG FIX: cap XP to server-enforced maximum per quest completion
-          const xpToAward = Math.min(Math.max(0, Math.floor(rewards.xp)), MAX_QUEST_XP);
-          player.xp = (player.xp || 0) + xpToAward;
-          // Check for level up
-          const xpPerLevel = 100;
-          while (player.xp >= player.level * xpPerLevel) {
-            player.xp -= player.level * xpPerLevel;
-            player.level += 1;
-          }
-        }
-        if (typeof rewards.caps === "number" && rewards.caps > 0) {
-          // BUG FIX: cap caps to server-enforced maximum per quest completion
-          const capsToAward = Math.min(Math.max(0, Math.floor(rewards.caps)), MAX_QUEST_CAPS);
-          player.caps = (player.caps || 0) + capsToAward;
-        }
-        if (Array.isArray(rewards.items)) {
-          if (!player.inventory) player.inventory = [];
-          // BUG FIX: limit number of items and validate each item ID
-          const validItems = rewards.items
-            .filter(id => typeof id === "string" && id.length > 0 && id.length <= 64 && /^[a-zA-Z0-9_-]+$/.test(id))
-            .slice(0, MAX_QUEST_ITEMS);
-          validItems.forEach(itemId => {
+      // Award server-defined rewards (BUG-003 FIX: no client-provided reward values)
+      if (typeof serverRewards.xp === "number" && serverRewards.xp > 0) {
+        const xpToAward = Math.min(Math.max(0, Math.floor(serverRewards.xp)), MAX_QUEST_XP);
+        // Use shared applyXpToProfile() to avoid duplicating level-up logic (review fix)
+        applyXpToProfile(player, xpToAward);
+      }
+      if (typeof serverRewards.caps === "number" && serverRewards.caps > 0) {
+        const capsToAward = Math.min(Math.max(0, Math.floor(serverRewards.caps)), MAX_QUEST_CAPS);
+        player.caps = (player.caps || 0) + capsToAward;
+      }
+      if (Array.isArray(serverRewards.items)) {
+        if (!player.inventory) player.inventory = [];
+        // BUG-008 FIX: enforce inventory size limit
+        const slotsAvailable = Math.max(0, MAX_INVENTORY_SIZE - player.inventory.length);
+        const validItems = serverRewards.items
+          .filter(id => typeof id === "string" && id.length > 0 && id.length <= 64 && /^[a-zA-Z0-9_-]+$/.test(id))
+          .slice(0, Math.min(MAX_QUEST_ITEMS, slotsAvailable));
+        validItems.forEach(itemId => {
             const existing = player.inventory.find(i => i.id === itemId);
             if (existing) {
               existing.quantity = (existing.quantity || 1) + 1;
@@ -181,7 +229,6 @@ router.post("/complete", authMiddleware, async (req, res) => {
             }
           });
         }
-      }
 
       // Save player profile
       await redis.hset(playerKey, "profile", JSON.stringify(player));

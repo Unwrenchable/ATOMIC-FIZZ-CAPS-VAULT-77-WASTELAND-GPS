@@ -1,6 +1,7 @@
 // backend/api/redeem-voucher.js
 const router = require("express").Router();
 const bs58 = require("bs58");
+const rateLimit = require("express-rate-limit");
 // nacl reserved for future signature ops (tweetnacl)
 const { authMiddleware } = require("../lib/auth");
 const gps = require("../lib/gps"); // serializeVoucherMessage, verifyVoucherSignature
@@ -11,6 +12,16 @@ const { getKeyMeta } = require("../lib/keys"); // load signing keys from Redis
 const VOUCHER_USED_KEY = (voucherId) => `voucher:used:${voucherId}`; // value: JSON { usedBy, usedAt, tx }
 const NODE_ENV = process.env.NODE_ENV || "development";
 const STRICT_REPLAY_PROTECTION = process.env.STRICT_REPLAY_PROTECTION !== "false";
+
+// Rate limiter: voucher redemption is value-bearing; cap at 10 per 5 minutes per IP
+// to mitigate flooding and enumeration attacks (CodeQL js/missing-rate-limiting fix).
+const redeemLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 10,
+  message: { ok: false, error: "Too many redemption requests — slow down, Vault Dweller" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Validate Redis availability at startup
 if (!redis || typeof redis.set !== "function") {
@@ -30,7 +41,9 @@ async function getPublicKeyForKeyId(keyId) {
 }
 
 // Mounted at /api/redeem-voucher (server mounts this file at /api/<name>)
-router.post("/redeem-voucher", authMiddleware, async (req, res) => {
+// BUG-001 FIX: route was "/redeem-voucher" causing effective URL to be
+// /api/redeem-voucher/redeem-voucher (404 for every client call).  Corrected to "/".
+router.post("/", redeemLimiter, authMiddleware, async (req, res) => {
   try {
     const player = req.player;
     const { voucher } = req.body;
