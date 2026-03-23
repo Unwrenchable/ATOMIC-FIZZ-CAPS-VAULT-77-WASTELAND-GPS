@@ -47,7 +47,7 @@ window.gameState.inventory = window.gameState.inventory || {
     }
   }
 
-  // Populate Game.player.items for Pip‑Boy UI
+  // Populate Game.player.items for Pocket-Boy UI
   Game.player.items = allItems;
 
   // Populate legacy inventory structure

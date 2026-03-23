@@ -305,7 +305,7 @@
     },
     
     "scavenger_exchange_integration": {
-      "location": "Main hub, accessible via Pip-Boy ITEMS > EXCHANGE",
+      "location": "Main hub, accessible via Pocket-Boy ITEMS > EXCHANGE",
       "features": [
         "Browse all NFT categories",
         "Filter by rarity, price, utility",

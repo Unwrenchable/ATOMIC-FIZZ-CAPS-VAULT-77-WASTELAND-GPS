@@ -351,7 +351,7 @@ function buildNodePrompt(npcId, dialog, nodeId, nodeText, videoSpeech) {
     (desc ? `Character: ${desc}. ` : '') +
     `Mood: ${mood}${personality ? ', personality: ' + personality : ''}. ` +
     (speech ? `NPC delivers this complete line: "${speech}". Must finish the full sentence before the clip ends — no words cut off. Deliver at a measured wasteland pace within ${DURATION} seconds. ` : '') +
-    `Pip-Boy green terminal tint, moody wasteland lighting, retro 1950s aesthetic.`
+    `Pocket-Boy green terminal tint, moody wasteland lighting, retro 1950s aesthetic.`
   ).slice(0, 2000);
 }
 

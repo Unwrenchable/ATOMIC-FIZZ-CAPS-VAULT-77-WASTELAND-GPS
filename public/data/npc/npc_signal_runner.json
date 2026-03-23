@@ -28,7 +28,7 @@
       "signal-patterns",
       "overseer-protocols",
       "wasteland-navigation",
-      "pip-boy-systems"
+      "pocket-boy-systems"
     ],
     "anomalyAwareness": 0.95
   },
@@ -61,7 +61,7 @@
     "player_confused": [
       "Questions later. First, you need to get your bearings.",
       "I know it's disorienting. Trust me, I've seen it before.",
-      "Your Pip-Boy should still work. Start there."
+      "Your Pocket-Boy should still work. Start there."
     ],
     "guidance": [
       "Check your inventory. Make sure everything made the jump with you.",
@@ -159,7 +159,7 @@
       ]
     },
     "silence": {
-      "npc_line": "Quiet type, huh? That's fine. Actions speak louder out here anyway. Your Pip-Boy will guide you. I'll be watching.",
+      "npc_line": "Quiet type, huh? That's fine. Actions speak louder out here anyway. Your Pocket-Boy will guide you. I'll be watching.",
       "options": [
         {
           "player_choice": "[Nod]",
@@ -265,7 +265,7 @@
       ]
     },
     "next_steps": {
-      "npc_line": "First things first. Check your Pip-Boy. Inventory, map, radio. Get your bearings. Then start moving. Standing still is a death sentence out here.",
+      "npc_line": "First things first. Check your Pocket-Boy. Inventory, map, radio. Get your bearings. Then start moving. Standing still is a death sentence out here.",
       "options": [
         {
           "player_choice": "Got it. Thanks.",
@@ -287,7 +287,7 @@
       ]
     },
     "tracking_warning": {
-      "npc_line": "Yes. Not everyone out here is friendly. Keep your signal low when you can. The Pip-Boy helps mask it somewhat.",
+      "npc_line": "Yes. Not everyone out here is friendly. Keep your signal low when you can. The Pocket-Boy helps mask it somewhat.",
       "options": [
         {
           "player_choice": "I'll be careful.",
@@ -305,7 +305,7 @@
       ]
     },
     "survivors_info": {
-      "npc_line": "Plenty. Settlements, factions, traders. Some friendly, some not. Your Pip-Boy radio can help you find the good ones.",
+      "npc_line": "Plenty. Settlements, factions, traders. Some friendly, some not. Your Pocket-Boy radio can help you find the good ones.",
       "options": [
         {
           "player_choice": "I'll keep that in mind.",

@@ -109,7 +109,7 @@
     ].join(";");
 
     card.innerHTML = [
-      '<div style="font-size:10px;opacity:0.6;margin-bottom:4px;">// PIP-BOY SIGNAL DETECTED //</div>',
+      '<div style="font-size:10px;opacity:0.6;margin-bottom:4px;">// POCKET-BOY SIGNAL DETECTED //</div>',
       '<div style="font-size:14px;font-weight:bold;margin-bottom:6px;">',
         escapeHtml(location.name), "</div>",
       '<div style="font-size:11px;opacity:0.7;margin-bottom:8px;">',
@@ -378,7 +378,7 @@
   }
 
   // ----------------------------------------------------------
-  // Collector panel renderer (for Pip-Boy UI integration)
+  // Collector panel renderer (for Pocket-Boy UI integration)
   // ----------------------------------------------------------
   function renderCollectorPanel(containerId) {
     const container = document.getElementById(containerId);

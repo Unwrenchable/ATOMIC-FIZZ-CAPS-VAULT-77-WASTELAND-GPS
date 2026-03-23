@@ -58,7 +58,7 @@
       // Compact circular compass rose widget
       const widget = document.createElement("div");
       widget.id = "pipboyCompass";
-      widget.setAttribute("aria-label", "Pip-Boy compass");
+      widget.setAttribute("aria-label", "Pocket-Boy compass");
       widget.innerHTML = `
         <svg id="pipboyCompassSvg" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"
              role="img" aria-label="Compass rose showing player heading">

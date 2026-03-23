@@ -284,7 +284,7 @@
       <div style="max-width:420px;border:1px solid #00ff41;padding:24px;background:#0a0a0a;">
         <div style="font-size:22px;letter-spacing:3px;margin-bottom:16px;">☢ WASTELAND SURVIVAL BRIEFING ☢</div>
         <div style="font-size:13px;line-height:1.8;margin-bottom:20px;">
-          <p>📍 <strong>GRANT GPS ACCESS</strong><br>Your Pip-Boy needs real-world GPS to scan the Wasteland.</p>
+          <p>📍 <strong>GRANT GPS ACCESS</strong><br>Your Pocket-Boy needs real-world GPS to scan the Wasteland.</p>
           <p>🗺 <strong>OPEN THE MAP TAB</strong><br>Your position appears as a green dot. POI markers show nearby locations to claim.</p>
           <p>🚶 <strong>WALK TO A POI</strong><br>Get within <strong>50 meters</strong> of a marker. The CLAIM button activates when you're close enough.</p>
           <p>🔫 <strong>CLAIM IT</strong><br>Tap CLAIM to earn FIZZ caps and XP. Watch for enemy encounters!</p>
@@ -458,7 +458,7 @@
 }
 
 // -----------------------------
-// LOADING SEQUENCE BEFORE PIP‑BOY
+// LOADING SEQUENCE BEFORE POCKET-BOY
 // -----------------------------
 function startLoadingSequence() {
   // Prevent double‑trigger

@@ -320,7 +320,7 @@
       "portrait": "radcat",
       "rarity": "rare",
       "isPet": true,
-      "description": "A feral cat that wandered into a Pip-Boy radiation test chamber decades ago and wandered out something fundamentally different. Three eyes, double lifespan, and a purr that registers on Geiger counters. Aggressively friendly.",
+      "description": "A feral cat that wandered into a Pocket-Boy radiation test chamber decades ago and wandered out something fundamentally different. Three eyes, double lifespan, and a purr that registers on Geiger counters. Aggressively friendly.",
       "voice": "Purrs. Occasionally hisses at things that turn out to be hostile four minutes later.",
       "trust_requirement": 1,
       "trust_actions": {
