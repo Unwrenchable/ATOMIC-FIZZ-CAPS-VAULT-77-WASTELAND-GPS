@@ -178,8 +178,7 @@
     // Check for death
     if (enemy.health <= 0) {
       console.log(`[VATS] ${enemy.name} is dead!`);
-      // BUG-022: Remove dead enemy from target list and cancel queued shots against it
-      // Guard: only filter by id if enemy.id is defined to avoid silent failures
+      // Remove dead enemy from target list and cancel queued shots against it
       if (enemy.id !== undefined) {
         VATS.targets = VATS.targets.filter(t => t.id !== enemy.id);
         VATS.queuedShots = VATS.queuedShots.filter(s => s.enemy.id !== enemy.id);
@@ -188,6 +187,11 @@
         VATS.queuedShots = VATS.queuedShots.filter(s => s.enemy !== enemy);
       }
       window.dispatchEvent(new CustomEvent('enemyDefeated', { detail: { enemyId: enemy.id } }));
+      // BUG-019 FIX: auto-exit VATS when last target is eliminated mid-queue
+      // to prevent a blank VATS overlay with no selectable targets.
+      if (VATS.targets.length === 0 && VATS.enabled) {
+        exitVATS();
+      }
     }
   }
 

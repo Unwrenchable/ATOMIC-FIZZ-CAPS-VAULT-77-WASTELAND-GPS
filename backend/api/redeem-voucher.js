@@ -30,7 +30,9 @@ async function getPublicKeyForKeyId(keyId) {
 }
 
 // Mounted at /api/redeem-voucher (server mounts this file at /api/<name>)
-router.post("/redeem-voucher", authMiddleware, async (req, res) => {
+// BUG-001 FIX: route was "/redeem-voucher" causing effective URL to be
+// /api/redeem-voucher/redeem-voucher (404 for every client call).  Corrected to "/".
+router.post("/", authMiddleware, async (req, res) => {
   try {
     const player = req.player;
     const { voucher } = req.body;
