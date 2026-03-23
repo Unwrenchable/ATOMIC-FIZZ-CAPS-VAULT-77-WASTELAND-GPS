@@ -239,7 +239,7 @@
     },
 
     tuneInToLive() {
-      // Open radio tab in Pip-Boy
+      // Open radio tab in Pocket-Boy
       if (window.Game.modules.pipboy) {
         Game.modules.pipboy.openTab('radio');
       }
@@ -254,7 +254,7 @@
       const title = metadata.title || "REX IS LIVE!";
       const message = `Fizzmaster Rex is broadcasting LIVE right now! Tune in to Atomic Fizz Radio!`;
 
-      // Pip-Boy notification
+      // Pocket-Boy notification
       if (window.Game.modules.notifications) {
         Game.modules.notifications.show({
           title: title,

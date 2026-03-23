@@ -68,7 +68,7 @@
     },
 
     styleForFaction(factionId) {
-      // Pip‑Boy green
+      // Pocket-Boy green
       const base = "#00ff41";
 
       // Optional: customize per faction

@@ -48,13 +48,13 @@
     {
       "id": "ending_preserved",
       "description": "You played all four modules. ROY-8 experienced his memories again and transmitted them as a broadcast before shutting down.",
-      "reward": "Signal Trace: ROY-8's last broadcast plays on your Pip-Boy radio as a random ambient track — fragments of things he saw.",
+      "reward": "Signal Trace: ROY-8's last broadcast plays on your Pocket-Boy radio as a random ambient track — fragments of things he saw.",
       "consequence": "The broadcast is received by three different parties: a scavenger who weeps and doesn't know why, an Institute retrieval team that realizes they've lost something irreplaceable, and Jax, who adds the signal to his relay network permanently."
     },
     {
       "id": "ending_incomplete",
       "description": "You recovered some modules but ROY-8's cortical stack failed before all could be played.",
-      "reward": "Partial memory recovery — the Pip-Boy logs two of the four recorded experiences",
+      "reward": "Partial memory recovery — the Pocket-Boy logs two of the four recorded experiences",
       "consequence": "ROY-8 goes silent. The Institute retrieval team recovers what remains. The two missing memories are gone."
     },
     {

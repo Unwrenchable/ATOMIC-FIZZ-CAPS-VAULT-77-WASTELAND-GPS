@@ -702,7 +702,7 @@
     }
     
     try {
-      console.log("[Radio] Pip‑Boy ready → starting AtomicFizzRadioPlayer");
+      console.log("[Radio] Pocket-Boy ready → starting AtomicFizzRadioPlayer");
       window._radioPlayer = new AtomicFizzRadioPlayer(RADIO_CONFIG);
     } catch (e) {
       console.warn("[Radio] Failed to start radio player:", e);

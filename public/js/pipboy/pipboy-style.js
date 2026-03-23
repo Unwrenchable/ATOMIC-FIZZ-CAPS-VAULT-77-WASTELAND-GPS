@@ -1,11 +1,11 @@
 // pipboy-style.js
-// Pip-Boy style configuration and theming utilities
+// Pocket-Boy style configuration and theming utilities
 // ------------------------------------------------------------
 
 (function () {
   "use strict";
 
-  // Default Pip-Boy color themes
+  // Default Pocket-Boy color themes
   const PIPBOY_THEMES = {
     green: { primary: "#00ff00", secondary: "#003300", accent: "#00cc00" },
     amber: { primary: "#ffb000", secondary: "#331a00", accent: "#cc8800" },
@@ -17,7 +17,7 @@
   let currentTheme = "green";
 
   /**
-   * Get current Pip-Boy theme colors
+   * Get current Pocket-Boy theme colors
    * @returns {Object} Theme color object
    */
   function getTheme() {
@@ -25,7 +25,7 @@
   }
 
   /**
-   * Set Pip-Boy theme
+   * Set Pocket-Boy theme
    * @param {string} themeName - Theme name (green, amber, blue, white)
    */
   function setTheme(themeName) {

@@ -993,7 +993,7 @@
       // Vignette overlay
       svg += `<rect width="100%" height="100%" fill="url(#vignette)"/>`;
       
-      // Pip-Boy green tint overlay
+      // Pocket-Boy green tint overlay
       svg += `<rect width="100%" height="100%" fill="rgba(0,255,65,0.05)"/>`;
       
       svg += `</svg>`;
@@ -1422,7 +1422,7 @@
           // Update onboarding strip step text
           const stepHints = {
             identity:   '▶ STEP 01 — Enter your name and choose your identity. Name is required.',
-            face:       '▶ STEP 02 — Choose your facial features. These appear in NPC dialogue and your Pip-Boy file.',
+            face:       '▶ STEP 02 — Choose your facial features. These appear in NPC dialogue and your Pocket-Boy file.',
             hair:       '▶ STEP 03 — Select your hair style and color. Facial hair options included.',
             eyes:       '▶ STEP 04 — Eye shape and color. Small details, big personality.',
             details:    '▶ STEP 05 — Optional scars and markings. The wasteland leaves marks.',

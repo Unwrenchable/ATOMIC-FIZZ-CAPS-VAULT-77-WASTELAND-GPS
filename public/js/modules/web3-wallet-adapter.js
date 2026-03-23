@@ -467,7 +467,7 @@
     },
 
     // ============================================================
-    // PIP-BOY WALLET SELECTOR MODAL
+    // POCKET-BOY WALLET SELECTOR MODAL
     // Replaces the native browser prompt() with a proper modal.
     // ============================================================
     async showWalletSelector() {

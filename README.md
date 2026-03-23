@@ -30,7 +30,7 @@ HavenTech is proud (and legally obligated) to announce the relaunch of its groun
 
 Originally conceived as a promotional tie‑in for the failed soft drink **Atomic Fizz™**, the caps have since become the de facto currency of the Mojave, thanks to their durability, collectability, and faint but comforting luminescence.
 
-Today, Vault‑Tec is thrilled to unveil the **Vault‑77 Wasteland GPS**, a Pip‑Boy–powered scavenging platform that allows survivors to:
+Today, Vault‑Tec is thrilled to unveil the **Vault‑77 Wasteland GPS**, a Pocket-Boy–powered scavenging platform that allows survivors to:
 
 - 🗺️ **Explore irradiated ruins** (real GPS, real danger)
 - 📍 **Claim real‑world locations** (because colonialism never died)
@@ -63,7 +63,7 @@ Vault‑Tec spokesperson **Dr. Harold Fizzworth**, speaking through a heavily fi
 ## 🎮 KEY FEATURES OF THE ATOMIC FIZZ CAPS PROGRAM
 
 ### ☢️ WASTELAND GPS
-Navigate the Mojave using a state‑of‑the‑art Pip‑Boy interface.
+Navigate the Mojave using a state‑of‑the‑art Pocket-Boy interface.
 - Real GPS-based exploration
 - Fog of War discovery system
 - Custom Leaflet map with Fallout-themed overlays
@@ -232,7 +232,7 @@ Procedurally generated events as you explore:
 - Live streaming radio stations
 - Fallout-inspired ambiance
 - DJ commentary (recordings found in the rubble)
-- Toggle on/off from Pip‑Boy
+- Toggle on/off from Pocket-Boy
 
 *Music to scavenge by.*
 

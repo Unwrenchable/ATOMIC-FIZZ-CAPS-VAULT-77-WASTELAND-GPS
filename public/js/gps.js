@@ -1,5 +1,5 @@
 // public/js/gps.js
-// Stable GPS wrapper for Pip‑Boy + Worldmap
+// Stable GPS wrapper for Pocket-Boy + Worldmap
 
 window.Game = window.Game || {};
 

@@ -267,7 +267,7 @@ body.pipboy-mode {
 }
 
 #mapContainer .leaflet-tile {
-  /* Increased brightness from 0.55 to 0.85 for better visibility while maintaining Pip-Boy aesthetic */
+  /* Increased brightness from 0.55 to 0.85 for better visibility while maintaining Pocket-Boy aesthetic */
   filter: brightness(0.85) contrast(1.2) saturate(0.6) hue-rotate(85deg);
 }
 
@@ -284,7 +284,7 @@ body.pipboy-mode {
   z-index: 40;
 }
 
-/* CRT overlay - reduced opacity for better visibility while maintaining Pip-Boy feel */
+/* CRT overlay - reduced opacity for better visibility while maintaining Pocket-Boy feel */
 #mapContainer::after {
   content: "";
   position: absolute;
@@ -417,7 +417,7 @@ button,
   font-size: 14px;
 }
 
-/* Hover state - amber glow like Pip-Boy selections */
+/* Hover state - amber glow like Pocket-Boy selections */
 button:hover,
 .pipboy-button:hover,
 .pipboy-button-small:hover {
@@ -522,7 +522,7 @@ button.success:hover,
     0 0 20px rgba(0, 212, 255, 0.5);
 }
 
-/* Make sure all buttons inherit Pip-Boy theming */
+/* Make sure all buttons inherit Pocket-Boy theming */
 input[type="button"],
 input[type="submit"],
 input[type="reset"] {
@@ -928,7 +928,7 @@ input[type="reset"]:hover {
 .gf-item-lore { font-size: 10px; color: #445544; line-height: 1.4; font-style: italic; }
 
 /* ============================================================
-   INVENTORY PANEL — Pip-Boy ITEMS tab
+   INVENTORY PANEL — Pocket-Boy ITEMS tab
    ============================================================ */
 
 /* Tab bar */

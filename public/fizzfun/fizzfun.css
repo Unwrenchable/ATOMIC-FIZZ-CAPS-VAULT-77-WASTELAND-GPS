@@ -1,14 +1,14 @@
 /* ============================================================
    FIZZ.FUN TOKEN LAUNCHPAD — STANDALONE VERSION
    Vault-Tec Certified Token Launch Terminal
-   With Full Pip-Boy CRT Effects & Radioactive Glow
+   With Full Pocket-Boy CRT Effects & Radioactive Glow
    ============================================================ */
 
 /* ============================================================
    ROOT VARIABLES — WASTELAND COLOR PALETTE
    ============================================================ */
 :root {
-  /* Pip-Boy Green Spectrum */
+  /* Pocket-Boy Green Spectrum */
   --pipboy-green: #00ff66;
   --pipboy-green-bright: #00ff88;
   --pipboy-green-dim: #00cc55;

@@ -38,7 +38,7 @@ const NPC_PROFILES = {
       'She uses radio/comm jargon naturally (copy, over, come in, signal strength). She always sounds certain even when she is not.',
     backstory:
       'Former Followers of the Apocalypse field comms officer who went independent after losing her unit ' +
-      'in a radio-blackout ambush. Now tracks displaced survivors across the wasteland using a custom Pip-Boy array. ' +
+      'in a radio-blackout ambush. Now tracks displaced survivors across the wasteland using a custom Pocket-Boy array. ' +
       'She believes information is the most valuable currency after water.',
     xai_voice_style: 'terse, professional, faintly warm, radio-operator cadence',
     dialogue_file   : 'dialog_siren.json',

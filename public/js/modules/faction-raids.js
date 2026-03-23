@@ -58,7 +58,7 @@
       unit_names     : ['Raider Psycho', 'Raider Grunt', 'Raider Leader', 'Raider Veteran'],
       boss_names     : ['Raider Warlord', 'The Butcher', 'Scar Face'],
       raid_flavor    : [
-        'A raider war party has spotted your Pip-Boy signal and wants what you\'re carrying.',
+        'A raider war party has spotted your Pocket-Boy signal and wants what you\'re carrying.',
         'Raiders are converging on your position. Someone put a bounty on you.',
         'A raider convoy has diverted from its route. You\'re the new target.',
       ],

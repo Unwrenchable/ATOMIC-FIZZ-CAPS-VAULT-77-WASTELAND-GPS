@@ -74,7 +74,7 @@
         "description": "Massive gear door with Vault-Tec logo",
         "required": true,
         "enemies": ["radroaches", "feral_ghouls"],
-        "loot": ["vault_jumpsuits", "pip_boys", "basic_supplies"]
+        "loot": ["vault_jumpsuits", "pocket_boys", "basic_supplies"]
       },
       {
         "id": "atrium",

@@ -17,7 +17,7 @@ FIZZ.FUN is the token launchpad for the Atomic Fizz Caps ecosystem. It allows us
 
 ### `index.html`
 Standalone HTML page with:
-- Full Pip-Boy/wasteland theme
+- Full Pocket-Boy/wasteland theme
 - Boot sequence animation
 - Wallet connection UI
 - All fizz.fun sections (access, tokens, trade, launch, stats)
@@ -33,7 +33,7 @@ JavaScript functionality:
 
 ### `fizzfun.css`
 Complete styling:
-- Pip-Boy green/orange color palette
+- Pocket-Boy green/orange color palette
 - CRT scanline effects
 - Radioactive glow animations
 - Fully responsive design
@@ -61,7 +61,7 @@ Linked from:
 
 ### Color Palette
 - **Primary**: Fizz Orange (`#ff9933`)
-- **Secondary**: Pip-Boy Green (`#00ff66`)
+- **Secondary**: Pocket-Boy Green (`#00ff66`)
 - **Accent**: Vault Gold (`#ffcc00`)
 - **Background**: Dark wasteland tones
 
