@@ -1,7 +1,7 @@
 // nuke.js
 // ------------------------------------------------------------
 // Gear Fusion Chamber - NFT gear destruction/fusion interface
-// Opens from RADIO > Nuke section in main Pip-Boy UI
+// Opens from RADIO > Nuke section in main Pocket-Boy UI
 // ------------------------------------------------------------
 
 (function () {

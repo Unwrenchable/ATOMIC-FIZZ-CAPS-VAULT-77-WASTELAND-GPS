@@ -308,7 +308,7 @@
   },
   
   "visual_indicators": {
-    "karma_display": "Pip-Boy STATUS screen shows current karma level and title",
+    "karma_display": "Pocket-Boy STATUS screen shows current karma level and title",
     "faction_reputation": "Color-coded reputation bars (red=hostile, yellow=cautious, green=friendly)",
     "npc_reactions": "NPCs comment on your reputation when you approach",
     "quest_markers": "Locked quests show karma requirement in red",

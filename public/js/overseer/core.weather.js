@@ -56,7 +56,7 @@
       description: "High-energy solar activity detected.",
       severity: 3,
       effect() {
-        overseerSay("Solar flare detected. Expect sensor interference and possible Pip-Boy glitches.");
+        overseerSay("Solar flare detected. Expect sensor interference and possible Pocket-Boy glitches.");
       },
     },
     {

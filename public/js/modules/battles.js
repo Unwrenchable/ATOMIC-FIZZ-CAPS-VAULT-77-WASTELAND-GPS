@@ -81,7 +81,7 @@
 
       console.log("Battle started:", encounter);
 
-      // If you have a Pip-Boy battle tab, update it here
+      // If you have a Pocket-Boy battle tab, update it here
       this.updateUI();
     },
 

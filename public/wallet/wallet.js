@@ -227,10 +227,10 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     if (modal) modal.classList.add("hidden");
   }
 
-  // EQUIP → Pip-Boy
+  // EQUIP → Pocket-Boy
   function equipNFT(nft) {
     if (typeof window.updatePipBoyEquipment !== "function") {
-      alert("Pip-Boy not connected.");
+      alert("Pocket-Boy not connected.");
       return;
     }
     window.updatePipBoyEquipment(nft);
@@ -1245,7 +1245,7 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
       }
     }
 
-    // Push perks into Pip‑Boy / Overseer if available
+    // Push perks into Pocket-Boy / Overseer if available
     if (typeof window.updatePipBoyPerks === "function") {
       window.updatePipBoyPerks(perks);
     }
@@ -1565,7 +1565,7 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
   function triggerQuestEvent(code, message) {
     console.log("[QUEST EVENT]", code, message);
 
-    // Pip‑Boy UI hook
+    // Pocket-Boy UI hook
     if (typeof window.updatePipBoyQuestLog === "function") {
       window.updatePipBoyQuestLog({ code, message, time: Date.now() });
     }

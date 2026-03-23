@@ -158,7 +158,7 @@ window.overseerHandlers = {
       "What's a super mutant's favorite game? SMASH BROTHERS.",
       "Why don't ghouls ever get lonely? They're always in DE-COMPOSING company!",
       "What do you call a deathclaw with no teeth? A GUMMY BEAR... still terrifying.",
-      "Why was the Pip-Boy so popular? It had ALL the apps... before the apocalypse.",
+      "Why was the Pocket-Boy so popular? It had ALL the apps... before the apocalypse.",
       "What's a robot's favorite type of music? HEAVY METAL... literally.",
       "How do you know if a synth is lying? Their PROGRAMMING SHOWS.",
       "Why don't mirelurks share food? They're too SHELLFISH!",
@@ -209,7 +209,7 @@ window.overseerHandlers = {
         hint: "Check this terminal's header"
       },
       {
-        q: "What company made the Pip-Boy?",
+        q: "What company made the Pocket-Boy?",
         a: "RobCo Industries",
         hint: "They also made Protectrons"
       },

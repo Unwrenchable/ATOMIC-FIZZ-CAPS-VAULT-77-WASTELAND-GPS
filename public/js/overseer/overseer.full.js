@@ -305,7 +305,7 @@
     }
 
     if (input.indexOf('help') !== -1 || input.indexOf('games') !== -1 || input.indexOf('commands') !== -1) {
-      return "Available commands:<br><br>• 'hack' - Terminal password cracker<br>• 'red menace' - Arcade defense<br>• 'nukaquiz' - Trivia challenge<br>• 'maze' - Pip-Boy escape<br>• 'blackjack' - Card game<br>• 'slots' - One-armed bandit<br>• 'war' - Classic card game<br>• 'texas holdem' - Poker<br>• 'quit' - Exit any game<br>• 'hello' - Greet me<br>• Just talk... I listen.";
+      return "Available commands:<br><br>• 'hack' - Terminal password cracker<br>• 'red menace' - Arcade defense<br>• 'nukaquiz' - Trivia challenge<br>• 'maze' - Pocket-Boy escape<br>• 'blackjack' - Card game<br>• 'slots' - One-armed bandit<br>• 'war' - Classic card game<br>• 'texas holdem' - Poker<br>• 'quit' - Exit any game<br>• 'hello' - Greet me<br>• Just talk... I listen.";
     }
 
     // Prevent starting new game if one is active

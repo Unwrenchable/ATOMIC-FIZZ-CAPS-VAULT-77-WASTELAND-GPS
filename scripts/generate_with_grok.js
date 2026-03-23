@@ -82,7 +82,7 @@ async function bulkGenerate() {
       const seed = npc.videoPromptSeed || `${npc.name}, ${npc.appearance || 'wasteland survivor'}`;
       const videoPrompt =
         `Fallout retro animated style, 8-second clip: ${seed}. ` +
-        `Wasteland background, radiation glow, gritty 1950s filter, Pip-Boy green tint.`;
+        `Wasteland background, radiation glow, gritty 1950s filter, Pocket-Boy green tint.`;
 
       try {
         const videoUrl = await generateVideo(videoPrompt, {

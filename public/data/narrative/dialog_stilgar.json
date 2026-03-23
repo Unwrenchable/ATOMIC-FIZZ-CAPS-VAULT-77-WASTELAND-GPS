@@ -9,7 +9,7 @@
     "conditions": [
       "!flag:met_stilgar"
     ],
-    "text": "You are loud.<br><br>Your boots make sound on the sand at forty meters. Your Pip-Boy emits interference at sixty. We heard you coming from the ridge.<br><br>You are not from the deep desert. This is obvious and not an insult.<br><br>I am Stilgar. We are the Fremen of the Mojave. We live in the desert, not beside it. We do not fight the wasteland. We do not hide from it. We have learned to read it the way you read a map.<br><br>You have something in your pack that is reacting to the mineral deposits south of here. I would like to know what it is, and why you are carrying it.",
+    "text": "You are loud.<br><br>Your boots make sound on the sand at forty meters. Your Pocket-Boy emits interference at sixty. We heard you coming from the ridge.<br><br>You are not from the deep desert. This is obvious and not an insult.<br><br>I am Stilgar. We are the Fremen of the Mojave. We live in the desert, not beside it. We do not fight the wasteland. We do not hide from it. We have learned to read it the way you read a map.<br><br>You have something in your pack that is reacting to the mineral deposits south of here. I would like to know what it is, and why you are carrying it.",
     "set_flags": [
       "met_stilgar"
     ],

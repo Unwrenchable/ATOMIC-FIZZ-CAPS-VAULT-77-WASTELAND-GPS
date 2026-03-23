@@ -88,7 +88,7 @@
     {
       "id": "quest_stuck_1",
       "triggers_after": "30 minutes same area",
-      "quip": "Hey friend, you've been wandering that same area for a while. Lost? Or just enjoying the scenery? If it's the former, try checking your Pip-Boy map.",
+      "quip": "Hey friend, you've been wandering that same area for a while. Lost? Or just enjoying the scenery? If it's the former, try checking your Pocket-Boy map.",
       "tone": "helpful"
     },
     {

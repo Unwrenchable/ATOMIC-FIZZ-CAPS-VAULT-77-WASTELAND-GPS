@@ -104,7 +104,7 @@
     "sign_offs": [
       "This is Fizzmaster Rex, signing off. Stay safe out there, wastelanders.",
       "Remember: stay atomic, stay alive, and stay tuned.",
-      "Until next time, this is Rex. Keep your pip-boy close and your trigger finger closer.",
+      "Until next time, this is Rex. Keep your pocket-boy close and your trigger finger closer.",
       "The wasteland's dangerous, but you're tougher. Rex out.",
       "🔴 That's all for tonight's live show! Thanks for hanging out with me. See you next time!"
     ],
@@ -123,7 +123,7 @@
       "reward": "Unique 'Radio Hunter' achievement, special Rex collectible"
     },
     "call_in_system": {
-      "description": "During LIVE broadcasts, players can 'call in' via chat interface integrated with Pip-Boy radio",
+      "description": "During LIVE broadcasts, players can 'call in' via chat interface integrated with Pocket-Boy radio",
       "features": [
         "Text chat appears on radio screen",
         "Rex responds to select messages live",
@@ -166,7 +166,7 @@
       "stream_sources_supported": ["Twitch", "YouTube Live", "Custom RTMP", "Direct audio stream"],
       "chat_integration": true,
       "live_indicator": "🔴 LIVE badge on radio UI",
-      "notification": "All players get Pip-Boy notification when Rex goes live"
+      "notification": "All players get Pocket-Boy notification when Rex goes live"
     }
   },
   "voice_acting_notes": {
