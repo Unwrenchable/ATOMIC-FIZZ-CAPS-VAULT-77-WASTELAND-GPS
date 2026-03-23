@@ -174,7 +174,7 @@ function buildPrompt(npcId, npcName, portrait, dialogText, videoSpeech) {
     `speaking in post-apocalyptic Fallout style, delivering this complete line: "${safeDialog}", ` +
     `must complete the full sentence before the clip ends — no trailing words cut off — ` +
     `fit delivery naturally within 8 seconds at a measured wasteland pace, ` +
-    `8 seconds, retro Pip-Boy green tint, moody lighting`
+    `8 seconds, retro Pocket-Boy green tint, moody lighting`
   ).slice(0, 2000); // hard cap for upstream safety
 }
 

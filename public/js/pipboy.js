@@ -1,5 +1,5 @@
 // pipboy.js
-// Pip‑Boy shell: tabs, panel switching, swipe navigation, routing
+// Pocket-Boy shell: tabs, panel switching, swipe navigation, routing
 
 (function () {
   // Correct selector + correct attribute
@@ -44,7 +44,7 @@
       // QUEST HOOK: Wake Up → open_map
       Game.quests?.completeObjective("wake_up", "open_map");
 
-      // Only call onOpen() when the Pip-Boy screen itself is visible.
+      // Only call onOpen() when the Pocket-Boy screen itself is visible.
       // At script startup (line below module body) setActivePanel("map") is
       // called while pipboyScreen still has the `hidden` class (display:none),
       // so the map container has 0×0 dimensions.  Firing onOpen() then starts

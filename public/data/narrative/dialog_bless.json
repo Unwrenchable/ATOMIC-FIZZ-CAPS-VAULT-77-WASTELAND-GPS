@@ -194,7 +194,7 @@
     },
     "node_new_arrival": {
       "id": "node_new_arrival",
-      "text": "She nods once. No judgment.\n\n\"The territory's rough north of the old rail line. Raider activity — organized, which is worse than random. The Atomic Fizz claim points are relatively safe approach zones.\"\n\n\"Follow the Pip-Boy signals. They were set up for exactly this situation.\"\n\nShe stands and brushes dust from her jacket.\n\n\"Talk to the courier if you find her. Pip. She knows this area better than most.\"\n\n\"And watch your rads. First sign of trouble: come find me.\"",
+      "text": "She nods once. No judgment.\n\n\"The territory's rough north of the old rail line. Raider activity — organized, which is worse than random. The Atomic Fizz claim points are relatively safe approach zones.\"\n\n\"Follow the Pocket-Boy signals. They were set up for exactly this situation.\"\n\nShe stands and brushes dust from her jacket.\n\n\"Talk to the courier if you find her. Pip. She knows this area better than most.\"\n\n\"And watch your rads. First sign of trouble: come find me.\"",
       "set_flags": [
         "bless_gave_orientation"
       ],
@@ -213,7 +213,7 @@
     },
     "node_local_intel": {
       "id": "node_local_intel",
-      "text": "\"North side has raider camps — three that I know of, possibly a fourth.\"\n\nShe rattles it off without hesitation. She keeps this updated.\n\n\"East past the rail bridge there's a settlement. They don't trust strangers but they trade. Approach slow and announce yourself.\"\n\n\"The anomalies — the places where the air feels wrong and your Pip-Boy glitches — avoid those until you're better equipped.\"\n\nShe pauses.\n\n\"And keep your rads under 300. I can fix a lot. Not everything.\"",
+      "text": "\"North side has raider camps — three that I know of, possibly a fourth.\"\n\nShe rattles it off without hesitation. She keeps this updated.\n\n\"East past the rail bridge there's a settlement. They don't trust strangers but they trade. Approach slow and announce yourself.\"\n\n\"The anomalies — the places where the air feels wrong and your Pocket-Boy glitches — avoid those until you're better equipped.\"\n\nShe pauses.\n\n\"And keep your rads under 300. I can fix a lot. Not everything.\"",
       "responses": [
         {
           "text": "Good intel. I'll keep it in mind.",
@@ -331,7 +331,7 @@
     },
     "node_find_bless": {
       "id": "node_find_bless",
-      "text": "\"I move. But I check the same three relay points every 48 hours — there's one near the old water treatment facility, one by the Atomic Fizz claim point at the eastern plaza, and one at the ruined church on the highway.\"\n\nShe touches the Pip-Boy on your wrist briefly — just a tap, and a new marker appears.\n\n\"That's the claim point marker. I'm usually within a few hundred meters.\"\n\n\"Leave a signal flare if it's urgent. I'll find you before the injury does.\"",
+      "text": "\"I move. But I check the same three relay points every 48 hours — there's one near the old water treatment facility, one by the Atomic Fizz claim point at the eastern plaza, and one at the ruined church on the highway.\"\n\nShe touches the Pocket-Boy on your wrist briefly — just a tap, and a new marker appears.\n\n\"That's the claim point marker. I'm usually within a few hundred meters.\"\n\n\"Leave a signal flare if it's urgent. I'll find you before the injury does.\"",
       "set_flags": [
         "bless_location_known"
       ],

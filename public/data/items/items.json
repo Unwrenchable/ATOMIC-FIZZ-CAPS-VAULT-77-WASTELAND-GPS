@@ -559,7 +559,7 @@
     "weight": 0.3,
     "value": 0,
     "tradeable": false,
-    "description": "A fragment of metallic alloy, composition unknown, recovered near Roswell, NM. It is slightly lighter than it should be for its volume. It is slightly warmer than ambient temperature at all times. Your Pip-Boy cannot identify the material. Your Pip-Boy is not programmed for this material. No one was."
+    "description": "A fragment of metallic alloy, composition unknown, recovered near Roswell, NM. It is slightly lighter than it should be for its volume. It is slightly warmer than ambient temperature at all times. Your Pocket-Boy cannot identify the material. Your Pocket-Boy is not programmed for this material. No one was."
   },
   {
     "id": "geofence_area51_clearance_chip",
@@ -570,7 +570,7 @@
     "weight": 0.1,
     "value": 0,
     "tradeable": false,
-    "description": "An Enclave-era security chip recovered near the Nevada Test and Training Range perimeter. Clearance level: BEYOND BLACK. Access granted to: REDACTED. Authorized by: REDACTED. The data stored on this chip has been overwritten seven times. The eighth overwrite is what you found. It still carries a ghost of something in the memory substrate. Your Pip-Boy reads it as a single word: RUN."
+    "description": "An Enclave-era security chip recovered near the Nevada Test and Training Range perimeter. Clearance level: BEYOND BLACK. Access granted to: REDACTED. Authorized by: REDACTED. The data stored on this chip has been overwritten seven times. The eighth overwrite is what you found. It still carries a ghost of something in the memory substrate. Your Pocket-Boy reads it as a single word: RUN."
   },
   {
     "id": "serum_adrenal_reaction",

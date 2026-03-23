@@ -854,7 +854,7 @@
 
     // ============================================================
     // GENERATE FALLBACK PORTRAIT SVG
-    // When CharacterCreator isn't loaded, generate a simple Pip-Boy style portrait
+    // When CharacterCreator isn't loaded, generate a simple Pocket-Boy style portrait
     // ============================================================
     _generateFallbackPortraitSVG(type, _size = 160, npcData = null) {
       const isNPC = type === 'npc';
@@ -890,7 +890,7 @@
             </pattern>
           </defs>
           
-          <!-- Background with Pip-Boy style -->
+          <!-- Background with Pocket-Boy style -->
           <rect width="100%" height="100%" fill="#0a1a0a"/>
           
           <!-- Grid overlay -->
@@ -908,7 +908,7 @@
           <!-- Scanlines overlay -->
           <rect width="100%" height="100%" fill="url(#scanlines-${uniqueId})" opacity="0.3"/>
           
-          <!-- Corner brackets for that Pip-Boy feel -->
+          <!-- Corner brackets for that Pocket-Boy feel -->
           <path d="M 8 20 L 8 8 L 20 8" fill="none" stroke="${primaryColor}" stroke-width="2"/>
           <path d="M ${viewSize-20} 8 L ${viewSize-8} 8 L ${viewSize-8} 20" fill="none" stroke="${primaryColor}" stroke-width="2"/>
           <path d="M 8 ${viewSize-20} L 8 ${viewSize-8} L 20 ${viewSize-8}" fill="none" stroke="${primaryColor}" stroke-width="2"/>
@@ -1064,7 +1064,7 @@
         
         if (accept && Game.quests) {
           Game.quests.startQuest(questId);
-          this.showQuestUpdate('NEW QUEST', `${questId} added to your Pip-Boy`);
+          this.showQuestUpdate('NEW QUEST', `${questId} added to your Pocket-Boy`);
         }
       }, 500);
     },

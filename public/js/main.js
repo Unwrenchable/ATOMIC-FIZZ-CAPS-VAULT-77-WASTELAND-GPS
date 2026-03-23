@@ -448,7 +448,7 @@
   }
 
   // ---------------------------
-  // PANELS RENDERING (Pip-Boy panels)
+  // PANELS RENDERING (Pocket-Boy panels)
   // ---------------------------
 
   function renderInventoryPanel() {
@@ -528,7 +528,7 @@
   }
 
   function renderQuestsPanel() {
-    // New Pip-Boy layout uses questBody
+    // New Pocket-Boy layout uses questBody
     const panel = document.getElementById("questBody");
     if (!panel) return;
 
@@ -631,7 +631,7 @@
       xpFill.style.width = `${Math.min(100, (PLAYER.xp / needed) * 100)}%`;
     }
 
-    // STAT panel in Pip-Boy
+    // STAT panel in Pocket-Boy
     const statLevel = document.getElementById("stat-level");
     const statXP = document.getElementById("stat-xp");
     const statCaps = document.getElementById("stat-caps");
@@ -799,7 +799,7 @@
       const addr = provider.publicKey.toBase58();
       const label = `${addr.slice(0, 4)}...${addr.slice(-4)}`;
 
-      // New Pip-Boy buttons
+      // New Pocket-Boy buttons
       const btnHUD = document.getElementById("connectWalletHUD");
       const btnStat = document.getElementById("connectWalletStat");
 
@@ -1088,7 +1088,7 @@
       }
     });
 
-    // New Pip-Boy wallet buttons
+    // New Pocket-Boy wallet buttons
     once("connectWalletHUD", connectWallet);
     once("connectWalletStat", connectWallet);
 
@@ -1679,9 +1679,9 @@
   // BOOT EVENTS
   // ---------------------------
 
-  // Fired by boot.js when Pip-Boy is fully visible
+  // Fired by boot.js when Pocket-Boy is fully visible
   window.addEventListener("pipboyReady", () => {
-    safeLog("Pip-Boy ready");
+    safeLog("Pocket-Boy ready");
     initGame();
   });
 

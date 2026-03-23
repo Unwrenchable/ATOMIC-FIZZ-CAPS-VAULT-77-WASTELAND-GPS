@@ -12,7 +12,7 @@
       "id": "enc_dam_signal_spike",
       "poi": "Hoover Dam",
       "trigger": "repeat_visit",
-      "dialog": "Your Pip-Boy crackles. A burst of static forms a pattern \u2014 almost like coordinates."
+      "dialog": "Your Pocket-Boy crackles. A burst of static forms a pattern \u2014 almost like coordinates."
     },
     {
       "id": "enc_glow_warning",
@@ -72,7 +72,7 @@
       "id": "enc_trinity_site_signal",
       "poi": "Trinity Site",
       "trigger": "repeat_visit",
-      "dialog": "Your Pip-Boy picks up a faint signal \u2014 rhythmic, deliberate, almost like Morse code."
+      "dialog": "Your Pocket-Boy picks up a faint signal \u2014 rhythmic, deliberate, almost like Morse code."
     },
     {
       "id": "enc_los_alamos_lab_alarm",
@@ -102,7 +102,7 @@
       "id": "enc_fukushima_daiichi_warning",
       "poi": "Fukushima Daiichi",
       "trigger": "first_visit",
-      "dialog": "Your Pip-Boy flashes a radiation warning so intense it nearly overloads the screen."
+      "dialog": "Your Pocket-Boy flashes a radiation warning so intense it nearly overloads the screen."
     },
     {
       "id": "enc_fukushima_daiichi_core",
@@ -156,7 +156,7 @@
       "id": "enc_freeside_market_deal",
       "poi": "Freeside Market",
       "trigger": "repeat_visit",
-      "dialog": "The merchant offers a deal: a rare Pip-Boy mod for 200 CAPS."
+      "dialog": "The merchant offers a deal: a rare Pocket-Boy mod for 200 CAPS."
     },
     {
       "id": "enc_dolores_farmstead_first",
@@ -191,7 +191,7 @@
       "id": "enc_ridge_boundary",
       "poi": "Eastern Ridge",
       "trigger": "first_visit",
-      "dialog": "Something feels wrong at the ridge line \u2014 a faint, subsonic hum from the direction of the tower. Your Pip-Boy stutters. For a moment, you thought you saw a woman standing here. Looking north. She wasn't there when you turned."
+      "dialog": "Something feels wrong at the ridge line \u2014 a faint, subsonic hum from the direction of the tower. Your Pocket-Boy stutters. For a moment, you thought you saw a woman standing here. Looking north. She wasn't there when you turned."
     },
     {
       "id": "enc_elvis_goodsprings",
@@ -233,7 +233,7 @@
       "id": "enc_dev_terminal_boyarsky",
       "poi": "Lucky 38",
       "trigger": "first_visit",
-      "dialog": "Behind a broken panel in the Lucky 38's penthouse archive, you find a framed design sketch \u2014 hand-drawn, pre-war \u2014 labeled 'WASTELAND AESTHETIC PROPOSAL v.1' by 'L. BOYARSKY, ART DIRECTION'. It depicts a man in a Pip-Boy watching a nuclear mushroom cloud. The expression on the man's face is complicated. The sketch is beautiful."
+      "dialog": "Behind a broken panel in the Lucky 38's penthouse archive, you find a framed design sketch \u2014 hand-drawn, pre-war \u2014 labeled 'WASTELAND AESTHETIC PROPOSAL v.1' by 'L. BOYARSKY, ART DIRECTION'. It depicts a man in a Pocket-Boy watching a nuclear mushroom cloud. The expression on the man's face is complicated. The sketch is beautiful."
     },
     {
       "id": "enc_dev_note_avellone",
