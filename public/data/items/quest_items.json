@@ -3,5 +3,9 @@
   { "id": "anomaly_stabilizer", "name": "Anomaly Stabilizer", "type": "questItem", "tags": ["anomaly"] },
   { "id": "signal_triangulator", "name": "Signal Triangulator", "type": "questItem", "tags": ["signal"] },
   { "id": "vault_override_chip", "name": "Vault Override Chip", "type": "questItem", "tags": ["vault"] },
-  { "id": "pru_stabilizer_shard", "name": "PRU Stabilizer Shard", "type": "questItem", "description": "A fragment of temporal stabilization technology. Resonates with faint echoes of divergent timelines.", "tags": ["wake_up", "pru", "timeline"] }
+  { "id": "pru_stabilizer_shard", "name": "PRU Stabilizer Shard", "type": "questItem", "description": "A fragment of temporal stabilization technology. Resonates with faint echoes of divergent timelines.", "tags": ["wake_up", "pru", "timeline"] },
+  { "id": "item_vault77_keycard", "name": "Vault 77 Keycard", "type": "questItem", "description": "A worn keycard stamped with the Vault-Tec logo. The access codes are still readable.", "tags": ["harlan", "vault77"] },
+  { "id": "item_harlan_note", "name": "Harlan's Note", "type": "questItem", "description": "A handwritten note from Harlan. The ink is faded but the urgency is still there.", "tags": ["harlan", "echoes"] },
+  { "id": "item_vault77_keyfragment", "name": "Vault 77 Key Fragment", "type": "questItem", "description": "A broken fragment of a Vault 77 access key. Harlan's last trail leads here.", "tags": ["harlan", "vault77", "keyfragment"] },
+  { "id": "item_harlan_finalnote", "name": "Harlan's Final Note", "type": "questItem", "description": "The last message Harlan left behind. Whatever he found in Vault 77, he didn't come back to describe it.", "tags": ["harlan", "lasttrail"] }
 ]

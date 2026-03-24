@@ -5,9 +5,7 @@
   "difficulty": "very_hard",
   "level_required": 15,
   "fractured_timeline_context": "The Institute (FO4, 2287) and the Enclave (FO2/FO3, 2241/2277) both exist simultaneously. Both consider themselves humanity's best hope. Both have advanced technology. Both are supremacists who view wastelanders as inferior. Now they've discovered each other - and they're NOT friends.",
-  
   "premise": "The Institute's Father and the Enclave's Colonel Autumn have entered a cold war over who represents 'true humanity.' The Institute sees the Enclave as barbaric fascists. The Enclave sees synths as abominations. You're caught in the middle of a technological arms race between two of the wasteland's most dangerous factions.",
-
   "stages": [
     {
       "id": "stage1_first_contact",
@@ -16,11 +14,19 @@
       "objectives": [
         {
           "text": "Infiltrate the Institute (via relay or Vault 77 connection)",
-          "optional_approaches": ["Use Jax Voss's glitching to phase in", "Hack a relay", "Get synth escort"]
+          "optional_approaches": [
+            "Use Jax Voss's glitching to phase in",
+            "Hack a relay",
+            "Get synth escort"
+          ]
         },
         {
           "text": "Infiltrate Enclave base (Raven Rock or Adams AFB ruins)",
-          "optional_approaches": ["Steal Enclave uniform", "Use Harlan Voss's old NCR connections", "Vertibird hijack"]
+          "optional_approaches": [
+            "Steal Enclave uniform",
+            "Use Harlan Voss's old NCR connections",
+            "Vertibird hijack"
+          ]
         },
         {
           "text": "Report findings to both factions (or betray one)"
@@ -56,16 +62,13 @@
       ]
     }
   ],
-
   "endings": {
     "ending_institute_victory": "Institute eliminates Enclave, synths everywhere",
     "ending_enclave_victory": "Enclave nukes the Institute, pure humanity restored",
     "ending_mutual_destruction": "Both factions destroy each other, wasteland is free",
     "ending_unholy_alliance": "You convince them to ally - worst timeline, dystopian nightmare"
   },
-
   "cross_timeline_meta": "This quest only exists because timelines are fractured. FO4's Institute and FO2/FO3's Enclave never coexisted in canon. That's what makes this special.",
-
   "rewards": {
     "xp": 4000,
     "unique_items": [
@@ -73,5 +76,6 @@
       "X-01 Power Armor with Institute mods",
       "Courser Coat with Enclave stealth field"
     ]
-  }
+  },
+  "description": "Remnants of the Enclave and Institute agents are both hunting the same pre-war data cache. Whichever side gets it first will reshape the wasteland's balance of power — unless you get there third."
 }
