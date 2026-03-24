@@ -4,7 +4,7 @@
   "portrait": "echo",
   "title": "The Analyst",
   "description": "A voice behind a terminal. She does not offer a last name. She offers data, precisely delivered, with a detachment that might be professional or might be self-protection.",
-  "backstory": "Echo was a pre-war Institute diagnostic specialist — one of the researchers who designed the neural mapping protocols that became Project J-77. She left the Institute in 2275 after she understood what the project actually was. She has spent the years since reverse-engineering what was done to Jax, working from stolen data and a conscience that won't let her stop. She does not discuss her past. The data she carries says enough.",
+  "backstory": "Echo was an Institute diagnostic specialist (Department of Applied Neurology) — one of the researchers who designed the neural mapping protocols that became Project J-77. She left the Institute in 2275 after she understood what the project actually was. She has spent the years since reverse-engineering what was done to Jax, working from stolen data and a conscience that won't let her stop. She does not discuss her past. The data she carries says enough.",
   "entries": {
     "echo_intro": {
       "type": "spoken",

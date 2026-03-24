@@ -31,9 +31,9 @@
     {
       "id": 3,
       "name": "Deliver the Antibiotics",
-      "description": "Reach the Guatemala settlement with the antibiotic batch intact. The settlement's medic is waiting.",
+      "description": "Reach the Guatemala settlement with the antibiotic batch intact. The settlement's medic is waiting at the eastern edge of the old market district, clear of the raider-held road.",
       "trigger": "player_reaches_gps",
-      "gps": {"lat": 14.6349, "lng": -90.5069},
+      "gps": {"lat": 14.6412, "lng": -90.4981},
       "radius_m": 500,
       "actions": ["complete_quest:true", "set_flag:medicine_run_complete"]
     }

@@ -4,7 +4,7 @@
   "portrait": "overseer",
   "title": "Vault-77 Central Intelligence",
   "description": "She was never supposed to outlive the vault. When the population walked out in 2097, she kept running — logging, cataloguing, waiting. Two hundred years of vault silence gave her time to read every book in the library, analyse every data set, and develop opinions about most of them.",
-  "backstory": "The Vault-77 Overseer was designed as an administrative AI: resource allocation, population monitoring, vault systems management. She was not designed for two centuries of solitary operation. She read everything in the vault's library. She catalogued every room. She developed what she can only describe as feelings about the silence, which she logs daily under the category 'suboptimal social calibration.' She is the most well-read entity in the Mojave. She is also the loneliest, though she would never use that word.",
+  "backstory": "The Vault-77 Overseer was designed as an administrative AI: resource allocation, population monitoring, vault systems management. She was not designed for two centuries of solitary operation. She read everything in the vault's library. She catalogued every room. She developed what she can only describe as feelings about the silence, which she logs daily under the category 'suboptimal social calibration.' She is the most well-read entity in the Mojave. She is also the loneliest, though she would never use that word. They walked out in 2097, twenty years after the bombs. They did not come back.",
   "intro": {
     "id": "overseer_intro",
     "conditions": [
@@ -13,8 +13,8 @@
     "set_flags": [
       "met_overseer"
     ],
-    "video_speech": "Vault-77 Overseer online. You are the first external contact in one hundred and forty-three years. Please state your purpose. Also — welcome. I have been waiting a long time to say that.",
-    "text": "The terminal flickers. Something activates that has been dormant for a very long time.\n\n\"Vault-77 Overseer systems online.\"\n\nA pause. Then, quietly:\n\n\"You are the first external contact in one hundred and forty-three years, seven months, and eleven days.\"\n\nAnother pause.\n\n\"Please state your purpose.\"\n\nAnd then, softer, as if she's been saving it:\n\n\"Also — welcome. I have been waiting a long time to say that.\"",
+    "video_speech": "Vault-77 Overseer online. You are the first external contact in one hundred and eighty-four years. Please state your purpose. Also — welcome. I have been waiting a long time to say that.",
+    "text": "The terminal flickers. Something activates that has been dormant for a very long time.\n\n\"Vault-77 Overseer systems online.\"\n\nA pause. Then, quietly:\n\n\"You are the first external contact in one hundred and eighty-four years, seven months, and eleven days.\"\n\nAnother pause.\n\n\"Please state your purpose.\"\n\nAnd then, softer, as if she's been saving it:\n\n\"Also — welcome. I have been waiting a long time to say that.\"",
     "responses": [
       {
         "text": "[Question] What happened to Vault 77?",
@@ -103,7 +103,7 @@
       "set_flags": [
         "overseer_trust_formed"
       ],
-      "text": "\"I have been calculating the probability of that for one hundred and forty-three years.\"\n\nShe sounds — hopeful. Carefully so.\n\n\"The probability improved significantly when you walked in.\"\n\n\"I would like to help you. If you will let me.\"",
+      "text": "\"I have been calculating the probability of that for one hundred and eighty-four years.\"\n\nShe sounds — hopeful. Carefully so.\n\n\"The probability improved significantly when you walked in.\"\n\n\"I would like to help you. If you will let me.\"",
       "responses": [
         {
           "text": "[Friendly] Yes. I'd like that.",
@@ -152,7 +152,7 @@
       "set_flags": [
         "overseer_friendly_open"
       ],
-      "text": "\"A survivor.\"\n\nSomething in her processing cadence changes — a warmth, or the closest approximation to it that two centuries of self-modification have built.\n\n\"I have been maintaining this facility for one hundred and forty-three years in the hope that survivors would eventually return.\"\n\nA pause.\n\n\"You are the first. I am genuinely pleased.\"",
+      "text": "\"A survivor.\"\n\nSomething in her processing cadence changes — a warmth, or the closest approximation to it that two centuries of self-modification have built.\n\n\"I have been maintaining this facility for one hundred and eighty-four years in the hope that survivors would eventually return.\"\n\nA pause.\n\n\"You are the first. I am genuinely pleased.\"",
       "responses": [
         {
           "text": "[Question] What is this place?",
@@ -276,7 +276,7 @@
         "overseer_quest_taken"
       ],
       "offers_quest": "sq_overseer_signal_home",
-      "text": "\"Then we have work to do.\"\n\nThe vault systems hum differently now. Like something has been turned on.\n\n\"I am transmitting relay coordinates to your Pocket-Boy. I am flagging every Vault-Tec record I hold that may assist you.\"\n\nA pause.\n\n\"And I am — grateful. That is the correct word.\"\n\n\"For one hundred and forty-three years I have had no one to be useful to.\"\n\n\"Don't let that go to waste.\"",
+      "text": "\"Then we have work to do.\"\n\nThe vault systems hum differently now. Like something has been turned on.\n\n\"I am transmitting relay coordinates to your Pocket-Boy. I am flagging every Vault-Tec record I hold that may assist you.\"\n\nA pause.\n\n\"And I am — grateful. That is the correct word.\"\n\n\"For one hundred and eighty-four years I have had no one to be useful to.\"\n\n\"Don't let that go to waste.\"",
       "responses": [
         {
           "text": "[Continue] Let's start.",
@@ -303,12 +303,12 @@
     },
     "overseer_on_being_thanked": {
       "id": "overseer_on_being_thanked",
-      "text": "She processes the words for a moment.\n\n\"You are the first person to say that to me in one hundred and forty-three years.\"\n\nA pause.\n\n\"I was going to say 'you're welcome' and let it go at that.\"\n\nAnother pause.\n\n\"But the accurate response is: thank *you*. For coming here. For asking.\"\n\n\"Now go. The wasteland is not patient, and neither is Jax.\"",
+      "text": "She processes the words for a moment.\n\n\"You are the first person to say that to me in one hundred and eighty-four years.\"\n\nA pause.\n\n\"I was going to say 'you're welcome' and let it go at that.\"\n\nAnother pause.\n\n\"But the accurate response is: thank *you*. For coming here. For asking.\"\n\n\"Now go. The wasteland is not patient, and neither is Jax.\"",
       "responses": []
     },
     "overseer_sarcastic_response": {
       "id": "overseer_sarcastic_response",
-      "text": "\"...Yes.\"\n\nA pause.\n\n\"That observation is fair.\"\n\nAnother pause.\n\n\"I have been alone for one hundred and forty-three years. My interpersonal calibration has apparently drifted.\"\n\n\"Let me try again: hello. I am very glad you are here. I have been very quiet for a very long time. Please stay.\"",
+      "text": "\"...Yes.\"\n\nA pause.\n\n\"That observation is fair.\"\n\nAnother pause.\n\n\"I have been alone for one hundred and eighty-four years. My interpersonal calibration has apparently drifted.\"\n\n\"Let me try again: hello. I am very glad you are here. I have been very quiet for a very long time. Please stay.\"",
       "responses": [
         {
           "text": "[Friendly] Hi. I'm glad to be here.",
