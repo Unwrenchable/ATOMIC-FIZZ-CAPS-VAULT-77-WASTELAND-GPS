@@ -1,0 +1,49 @@
+{
+  "id": "pacific_vault_connection",
+  "name": "Pacific Vault Signal",
+  "type": "global",
+  "region": "Pacific_Ocean",
+  "npc_giver": "global_singapore_data_broker",
+  "description": "The Coordinator has been intercepting fragments of a Vault-Tec signal from somewhere in the Pacific. It matches no known vault coordinates. She needs someone to triangulate the source by physically visiting three Pacific island waypoints.",
+  "gps_requirement": {
+    "region": "Pacific Ocean",
+    "real_lat": 10.0000,
+    "real_lng": 160.0000,
+    "radius_km": 2000
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Visit Waypoint One — Marshall Islands",
+      "description": "The first triangulation point is in the Marshall Islands region. The Coordinator's signal analysis puts a strong source bearing from this location.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 7.1315, "lng": 171.1845},
+      "radius_m": 5000,
+      "actions": ["spawn:item_triangulation_reading_01", "set_flag:pacific_waypoint_01_visited", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Visit Waypoint Two — Federated States of Micronesia",
+      "description": "The second triangulation point. Cross-referencing with the first reading will narrow the source coordinates significantly.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 6.8874, "lng": 158.2150},
+      "radius_m": 5000,
+      "actions": ["spawn:item_triangulation_reading_02", "set_flag:pacific_waypoint_02_visited", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Visit Waypoint Three and Locate Source",
+      "description": "The third and final triangulation point. With all three readings, the Coordinator can pinpoint the vault signal source.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 8.9266, "lng": 151.1700},
+      "radius_m": 5000,
+      "actions": ["spawn:item_pacific_vault_coordinates", "complete_quest:true", "set_flag:pacific_vault_located"]
+    }
+  ],
+  "rewards": {
+    "xp": 450,
+    "caps": 200,
+    "fizz": 40,
+    "items": ["item_pacific_vault_coordinates"]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "id": "african_coastal_network",
+  "name": "The Coastal Chain",
+  "type": "global",
+  "region": "West_Africa_Coast",
+  "npc_giver": "global_cape_town_lighthouse",
+  "description": "Lighthouse coordinates survival signals along the African Atlantic coast. Three relay beacons need repair or replacement. Without them, settlements between Cape Town and Lagos lose their only emergency warning network.",
+  "gps_requirement": {
+    "region": "West African Coast",
+    "real_lat": 0.0000,
+    "real_lng": 5.0000,
+    "radius_km": 3000
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Repair Beacon Point Alpha — Namibia Coast",
+      "description": "The first beacon is on the Namibian coast near old Walvis Bay. It's been silent for six months. Lighthouse suspects physical damage rather than power failure.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -22.9576, "lng": 14.5052},
+      "radius_m": 2000,
+      "actions": ["set_flag:beacon_alpha_repaired", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Repair Beacon Point Beta — Angola Coast",
+      "description": "The second beacon in Angola has been transmitting corrupted data. The Lighthouse needs clean signal restored — the settlement nearby depends on it for storm warning.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -8.8368, "lng": 13.2343},
+      "radius_m": 2000,
+      "actions": ["set_flag:beacon_beta_repaired", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Repair Beacon Point Gamma — Nigeria Coast",
+      "description": "The northern end of the coastal chain — a beacon near old Lagos that guards the approaches to the largest surviving West African settlement.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 6.4541, "lng": 3.3947},
+      "radius_m": 2000,
+      "actions": ["complete_quest:true", "set_flag:coastal_chain_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 350,
+    "caps": 150,
+    "fizz": 25,
+    "items": ["item_lighthouse_signal_key"]
+  }
+}
