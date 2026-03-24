@@ -4,6 +4,7 @@
   "portrait": "courier",
   "title": "Courier",
   "description": "A road-worn courier, NCR-adjacent. Carries a battered satchel. Talks fast, trusts nobody.",
+  "backstory": "The wasteland's most reliable courier doesn't remember much before the road — a deliberate choice, they'll tell you, after a job went wrong in a way they don't discuss. What they kept is this: every trade route from here to the Colorado, every settlement's preferred currency, and the name of every kid who's traded them scrap for a delivered message. Pip has seen the best and worst the wasteland can produce. They keep running anyway.",
   "intro": {
     "id": "courier_intro",
     "conditions": [

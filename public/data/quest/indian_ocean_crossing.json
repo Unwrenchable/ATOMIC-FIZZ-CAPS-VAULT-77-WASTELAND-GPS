@@ -1,0 +1,47 @@
+{
+  "id": "indian_ocean_crossing",
+  "name": "The Indian Ocean Run",
+  "type": "global",
+  "region": "Indian_Ocean",
+  "npc_giver": "global_mumbai_navigator",
+  "description": "The Navigator needs a cargo run from Mumbai to a settlement on the Kenyan coast, but the usual sea route has been disrupted by what sounds like active naval mines — pre-war, still live, triggered by something.",
+  "gps_requirement": {
+    "region": "Indian Ocean",
+    "real_lat": 10.0000,
+    "real_lng": 65.0000,
+    "radius_km": 500
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Board the Mumbai Star",
+      "description": "Report to the Navigator's vessel at the Mumbai docks. The cargo is loaded and waiting — the mine field is the only thing standing between Mumbai and the Kenyan coast.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 18.9220, "lng": 72.8347},
+      "radius_m": 1000,
+      "actions": ["set_flag:mumbai_star_boarded", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Navigate the Mine Field",
+      "description": "The central Indian Ocean route is compromised. Work with the Navigator to chart a safe passage through the active mine field. The mines are old but responsive.",
+      "trigger": "player_complete_minigame:navigation_challenge",
+      "actions": ["set_flag:ocean_mine_field_navigated", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Deliver Cargo to Kenya",
+      "description": "Reach the Kenyan coast settlement with the cargo intact. The Navigator's contact will be waiting at the designated landing point.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -1.2921, "lng": 36.8219},
+      "radius_m": 2000,
+      "actions": ["complete_quest:true", "set_flag:ocean_run_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 350,
+    "caps": 250,
+    "fizz": 25,
+    "items": ["item_navigator_sea_chart"]
+  }
+}

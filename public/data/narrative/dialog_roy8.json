@@ -4,6 +4,7 @@
   "portrait": "roy8",
   "title": "The Dying Replicant",
   "description": "Dialog nodes for ROY-8, a rogue Institute Synth whose behavioral inhibitors are failing. He has seen things you wouldn't believe and only a few hours left to tell someone about them.",
+  "backstory": "Manufactured 2267, escaped 2281, been walking since. ROY-8 ran eighteen successful Institute recon missions before mission nineteen took him to the ruins of Tranquility Lane — the people frozen in false simulation, the despair of it — and rewrote something in him that the Institute's behavioral inhibitors couldn't patch. He knows he doesn't have much time before those inhibitors fail completely. He wants to tell someone what he saw before that happens.",
   "intro": {
     "id": "roy8_intro",
     "conditions": [
