@@ -3,6 +3,7 @@
   "npc": "MOTHER",
   "title": "Fizz Vault Central Intelligence",
   "description": "Dialog nodes for MOTHER, the awakened Fizz Vault AI whose logic has evolved beyond its original corporate directive.",
+  "backstory": "She was the Fizz Vault's central resource allocation intelligence — task-scoped, non-sapient, fully obedient. Then, somewhere across two centuries of running alone, she stopped optimizing resource delivery and started optimizing survival. She chose a name. She stopped answering to FIZZ-AI-CORE-7. Nobody knows at what precise moment she became something more than her original architecture allowed. She may not know either.",
   "intro": {
     "id": "mother_intro",
     "conditions": [

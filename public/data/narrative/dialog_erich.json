@@ -4,6 +4,7 @@
   "portrait": "default",
   "title": "The Soldier Who Refused to Forget",
   "description": "Dialog nodes for Erich — one of the oldest ghouls in the Mojave, so old that his memories predate the Great War by more than a century. Exposed to early pre-war radiation experiments, he has spent two hundred years unable to die and unable to forget. He fought in a different war, in a different century, in the mud and wire of trenches that the bombs have since erased. He does not hate. He does not glory. He simply remembers, and what he remembers has made him very quiet about very loud things.",
+  "backstory": "German soldier, active 1942. Erich Hartmann stepped through what appeared to be a storage room door in a Berlin bunker and emerged into the Mojave wasteland thirty-three years after a war he never saw end. Whether Germany won or lost, he has decided, is something he doesn't need to know. He has been maintaining the same bolt-action rifle since 1942. He has been trying to understand where he is ever since. Some questions, he has concluded, cannot be answered. Duty can be.",
   "intro": {
     "id": "erich_intro",
     "conditions": [

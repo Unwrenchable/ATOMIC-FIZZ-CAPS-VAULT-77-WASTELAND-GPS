@@ -4,6 +4,7 @@
   "portrait": "phaltron",
   "title": "Hakkasan Guardian",
   "description": "PHALTRON is a bipedal combat chassis — purple-black alloy plating, twin exhaust stacks venting coolant fog, photoreceptors locked in a permanent violet glow. Originally a pre-war Vault-Tec security prototype deployed to guard the Hakkasan launch site during the Saitama token event in Old Vegas. The rug pull left him with corrupted mission parameters and no handler. He's been standing post ever since, waiting for orders that will never come — and watching everyone who shows up very, very carefully.",
+  "backstory": "PHALTRON is the security intelligence of the Hakkasan underground complex — a pre-war nightclub bunker that its architects never expected to become the last functioning entertainment venue in the Western wasteland. He has been managing the floor, the membership, and the atmosphere since 2080. He takes the assignment extremely seriously. The music must not stop. The atmosphere must not fail. The wasteland has very different priorities. PHALTRON does not share them.",
   "intro": {
     "id": "phaltron_intro",
     "conditions": [

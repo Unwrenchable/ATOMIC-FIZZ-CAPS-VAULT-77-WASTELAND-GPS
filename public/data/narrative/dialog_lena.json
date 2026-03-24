@@ -1,5 +1,10 @@
 {
   "id": "dialog_lena",
+  "npc": "Lena Voss",
+  "portrait": "lena",
+  "title": "The Runner",
+  "description": "She moves like someone who has learned to be in a place and out of it before anyone notices she was there. She has Harlan Voss's eyes — sharp, patient, not easily surprised.",
+  "backstory": "Lena Voss is Harlan Voss's niece, though she resists being defined by his grief. She grew up in Freeside and built a career as a runner — someone who knows everyone, goes anywhere, and keeps secrets for a living. She found out about Jax and Project J-77 three years ago through a Republic intelligence contact. She has been quietly assembling the truth ever since, waiting for someone with the right questions to finally arrive.",
   "entries": {
     "lena_intro_meet": {
       "type": "spoken",

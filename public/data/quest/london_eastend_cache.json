@@ -1,0 +1,45 @@
+{
+  "id": "london_eastend_cache",
+  "name": "East End Dead Drop",
+  "type": "global",
+  "region": "London_Ruins_UK",
+  "npc_giver": "global_london_madame_vex",
+  "description": "A pre-war intelligence cache was hidden in East London before the bombs. Vex has the coordinates but can't retrieve it herself — the East End is crawling with a territorial gang called the Cinder Boys.",
+  "gps_requirement": {
+    "region": "East London, United Kingdom",
+    "real_lat": 51.5155,
+    "real_lng": -0.0556,
+    "radius_km": 50
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Reach the East End",
+      "description": "Travel to the East London ruins where the dead drop was buried before the war.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 51.5155, "lng": -0.0556},
+      "radius_m": 600,
+      "actions": ["set_flag:eastend_site_reached", "spawn:enemy_cinder_boys_patrol", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Deal with the Cinder Boys",
+      "description": "The Cinder Boys control the block. Neutralize the patrol or find a way to slip past them — the cache location is in their territory.",
+      "trigger": "enemy_cleared:cinder_boys_patrol",
+      "actions": ["set_flag:eastend_cinder_boys_dealt", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Recover the Cache",
+      "description": "Find and dig up the buried intelligence cache from the marked location. Return the contents to Madame Vex.",
+      "trigger": "player_search_area",
+      "actions": ["spawn:item_eastend_intel_cache", "complete_quest:true", "set_flag:eastend_cache_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 300,
+    "caps": 200,
+    "fizz": 20,
+    "items": ["item_eastend_intel_cache"]
+  }
+}

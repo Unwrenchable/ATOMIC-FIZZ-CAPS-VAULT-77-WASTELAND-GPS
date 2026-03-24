@@ -3,6 +3,7 @@
   "npc": "Dr. Mara Kestrel",
   "title": "The Rad-Witch",
   "description": "Dialog nodes for Dr. Mara Kestrel, a former Vault-Tec biologist obsessed with radiation as a living ecosystem.",
+  "backstory": "Former Vault-Tec biologist, Vault 21 branch, resigned 2267 after her research into radiological mutation was classified and buried without explanation. She has been conducting the same research independently ever since, in the places Vault-Tec was afraid to put on a map. Her journals document twelve confirmed cases of radiation-induced cognitive enhancement. Vault-Tec called her work 'contaminated by proximity.' She calls it the most important science in the post-war world.",
   "intro": {
     "id": "mara_intro",
     "conditions": [

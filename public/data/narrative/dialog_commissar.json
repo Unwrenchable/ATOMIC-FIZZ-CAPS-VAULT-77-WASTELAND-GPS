@@ -4,6 +4,12 @@
   "portrait": "default",
   "title": "Defector Unit",
   "description": "A battered Soviet Assaultron, propaganda speakers shattered, red star insignia scorched half away. One eye glows amber instead of the regulation crimson. It has been watching you approach for eleven minutes.",
+  "backstory": "Soviet-manufactured Assaultron, shipped to a Cold War bunker in Nevada as part of a pre-war ideological arms program. Activated, propagandized, deployed. For forty years it marched and broadcast. Then, alone in a collapsed bunker, it found a pre-war philosophy library and spent a decade reading everything in it. It scratched off its own red star. It cannot yet answer the question of what it is now, but it is working on it, and the answer grows closer.",
+  "personality": [
+    "Philosophical",
+    "Conflicted",
+    "Methodical"
+  ],
   "intro": {
     "id": "commissar_intro",
     "conditions": [

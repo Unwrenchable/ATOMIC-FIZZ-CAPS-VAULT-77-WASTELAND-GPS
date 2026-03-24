@@ -4,6 +4,7 @@
   "portrait": "eli",
   "title": "The Last Reader",
   "description": "Dialog nodes for Eli Wandermoor, a blind wasteland wanderer who has crossed three territories on foot to deliver the last surviving pre-war cookbook to a struggling settlement. He does not know why he was chosen. He only knows he was told to walk west.",
+  "backstory": "Eli Wandermoor spent twelve years assembling the Mojave's largest surviving library in an abandoned fire station: four thousand pre-war books, three thousand holotapes, eight hundred hand-copied manuscripts of things that only existed in one place before he found them. He traded everything he ever owned for texts and keeps trading. He cannot fight, fix machines, or shoot straight. He can, however, recite the exact contents of six hundred books from memory. The wasteland treats him as something between asset and mystery.",
   "intro": {
     "id": "eli_intro",
     "conditions": [

@@ -1,5 +1,10 @@
 {
   "id": "dialog_rhea",
+  "npc": "Rhea Calloway",
+  "portrait": "rhea",
+  "title": "The Wrench",
+  "description": "A salvage engineer who specializes in Vault-Tec architecture — the only person in the Mojave who reads the Institute's encrypted maintenance logs for fun. She looks at the world in terms of what's broken and how to fix it. She is deeply, professionally upset about what she found inside Vault 77.",
+  "backstory": "Rhea Calloway reverse-engineers things for a living. She stumbled into the Jax Harlan situation while pulling apart a Vault 77 subsystem for a scrap buyer in 2279 — and found what appeared to be a human cognitive pattern running in the architecture where a simple maintenance protocol should have been. She did not expect to find a person inside a machine. She is still angry about it. She plans to stay angry about it.",
   "entries": {
     "rhea_intro": {
       "type": "spoken",

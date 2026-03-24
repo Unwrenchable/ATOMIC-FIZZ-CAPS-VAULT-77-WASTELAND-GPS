@@ -1,24 +1,21 @@
 {
   "id": "q_synth_friend",
   "name": "A Friend in Need, or a Spy Indeed?",
+  "description": "A synth has been living as a wasteland scavenger for years — loyal, competent, and deeply trusted. When evidence surfaces that they may be an Institute spy, you must decide: investigate the truth or protect a friend.",
   "type": "main",
   "region": "commonwealth_echo",
   "subregion": "timeline_overlap",
-
   "giver": "npc_lucky_scavenger",
-
   "start_conditions": {
     "min_level": 15,
     "location": "scavenger_camp"
   },
-
   "npc_links": [
     "npc_lucky_scavenger",
     "npc_synth_hunter",
     "npc_institute_contact",
     "npc_railroad_agent"
   ],
-
   "map_markers": [
     {
       "id": "marker_scavenger_camp",
@@ -31,7 +28,6 @@
       "stage": "discover_truth"
     }
   ],
-
   "objectives": [
     {
       "id": "meet_scavenger",
@@ -42,13 +38,21 @@
     {
       "id": "observe_luck",
       "desc": "Go on scavenging runs and witness their unnatural luck.",
-      "events": ["survives_ambush", "finds_quantum", "perfect_deals"]
+      "events": [
+        "survives_ambush",
+        "finds_quantum",
+        "perfect_deals"
+      ]
     },
     {
       "id": "discover_truth",
       "desc": "Discover evidence that your friend is an Institute Synth.",
       "poi": "hidden_relay_station",
-      "evidence": ["synth_component", "institute_recordings", "behavioral_analysis"]
+      "evidence": [
+        "synth_component",
+        "institute_recordings",
+        "behavioral_analysis"
+      ]
     },
     {
       "id": "confront_friend",
@@ -67,16 +71,38 @@
       ]
     }
   ],
-
   "stages": [
-    { "id": 0, "objective": "meet_scavenger", "desc": "Form an unlikely friendship." },
-    { "id": 1, "objective": "observe_luck", "desc": "Their luck seems... impossible." },
-    { "id": 2, "objective": "discover_truth", "desc": "Uncover the synthetic secret." },
-    { "id": 3, "objective": "confront_friend", "desc": "The moment of truth arrives." },
-    { "id": 4, "objective": "make_decision", "desc": "Choose between friendship and duty." },
-    { "id": 5, "objective": "complete", "desc": "The price of humanity is paid." }
+    {
+      "id": 0,
+      "objective": "meet_scavenger",
+      "desc": "Form an unlikely friendship."
+    },
+    {
+      "id": 1,
+      "objective": "observe_luck",
+      "desc": "Their luck seems... impossible."
+    },
+    {
+      "id": 2,
+      "objective": "discover_truth",
+      "desc": "Uncover the synthetic secret."
+    },
+    {
+      "id": 3,
+      "objective": "confront_friend",
+      "desc": "The moment of truth arrives."
+    },
+    {
+      "id": 4,
+      "objective": "make_decision",
+      "desc": "Choose between friendship and duty."
+    },
+    {
+      "id": 5,
+      "objective": "complete",
+      "desc": "The price of humanity is paid."
+    }
   ],
-
   "synth_profile": {
     "designation": "Infiltrator Unit C7-92",
     "mission": "Study wasteland behavior, report to Institute",
@@ -84,63 +110,129 @@
     "memory": "Believes they are human with pre-war childhood memories",
     "awareness": "Currently unaware of synth nature"
   },
-
   "choices": {
     "protect_identity": {
       "desc": "Help your friend hide from Synth hunters and protect their secret.",
-      "requirements": { "charisma": 8, "stealth": 65 },
+      "requirements": {
+        "charisma": 8,
+        "stealth": 65
+      },
       "consequences": {
-        "faction_rep": { "railroad": 80, "institute": -60, "synth_hunters": -80 },
-        "rewards": { "xp": 900, "caps": 500, "items": ["synth_disguise_kit", "loyal_companion"] },
-        "unlock": ["synth_safehouse", "loyal_synth_companion"],
+        "faction_rep": {
+          "railroad": 80,
+          "institute": -60,
+          "synth_hunters": -80
+        },
+        "rewards": {
+          "xp": 900,
+          "caps": 500,
+          "items": [
+            "synth_disguise_kit",
+            "loyal_companion"
+          ]
+        },
+        "unlock": [
+          "synth_safehouse",
+          "loyal_synth_companion"
+        ],
         "outcome": "You protect your friend. They remain free. Hunters pursue. A bond stronger than programming forms."
       }
     },
     "turn_them_in": {
       "desc": "Turn them in to Synth hunters for a massive reward.",
-      "requirements": { "morality": "neutral_or_evil" },
+      "requirements": {
+        "morality": "neutral_or_evil"
+      },
       "consequences": {
-        "faction_rep": { "synth_hunters": 100, "railroad": -100, "institute": -40 },
-        "rewards": { "xp": 700, "caps": 2000, "items": ["bounty_hunter_badge", "synth_detector"] },
+        "faction_rep": {
+          "synth_hunters": 100,
+          "railroad": -100,
+          "institute": -40
+        },
+        "rewards": {
+          "xp": 700,
+          "caps": 2000,
+          "items": [
+            "bounty_hunter_badge",
+            "synth_detector"
+          ]
+        },
         "karma": -600,
         "outcome": "You betray your friend for caps. They're deactivated. You're wealthy but haunted. Trust is currency you can't buy back."
       }
     },
     "help_free_them": {
       "desc": "Help them discover the truth about their programming and achieve true freedom.",
-      "requirements": { "intelligence": 8, "science": 80, "hacking": 75 },
+      "requirements": {
+        "intelligence": 8,
+        "science": 80,
+        "hacking": 75
+      },
       "consequences": {
-        "faction_rep": { "railroad": 100, "institute": -100, "settlers": 40 },
-        "rewards": { "xp": 1000, "caps": 400, "items": ["freed_synth_chip", "institute_secrets", "true_freedom_data"] },
-        "unlock": ["synth_liberation", "institute_sabotage"],
+        "faction_rep": {
+          "railroad": 100,
+          "institute": -100,
+          "settlers": 40
+        },
+        "rewards": {
+          "xp": 1000,
+          "caps": 400,
+          "items": [
+            "freed_synth_chip",
+            "institute_secrets",
+            "true_freedom_data"
+          ]
+        },
+        "unlock": [
+          "synth_liberation",
+          "institute_sabotage"
+        ],
         "outcome": "You hack their programming. They're free - truly conscious. The Institute's greatest failure becomes their greatest creation."
       }
     },
     "use_for_intel": {
       "desc": "Use your knowledge to extract Institute intelligence while maintaining friendship.",
-      "requirements": { "deception": 85, "intelligence": 7 },
+      "requirements": {
+        "deception": 85,
+        "intelligence": 7
+      },
       "consequences": {
-        "faction_rep": { "intelligence_network": 70, "institute": -50, "railroad": -30 },
-        "rewards": { "xp": 850, "caps": 800, "items": ["institute_intel", "double_agent_codes"] },
-        "unlock": ["institute_access", "double_agent_network"],
+        "faction_rep": {
+          "intelligence_network": 70,
+          "institute": -50,
+          "railroad": -30
+        },
+        "rewards": {
+          "xp": 850,
+          "caps": 800,
+          "items": [
+            "institute_intel",
+            "double_agent_codes"
+          ]
+        },
+        "unlock": [
+          "institute_access",
+          "double_agent_network"
+        ],
         "outcome": "You walk the line between friend and spy. Intelligence flows. But at what cost to your soul?"
       }
     }
   },
-
   "rewards": {
     "xp": 900,
     "caps": 500
   },
-
   "factions": {
-    "affected": ["Institute", "Railroad", "Synth_Hunters", "Settlers"]
+    "affected": [
+      "Institute",
+      "Railroad",
+      "Synth_Hunters",
+      "Settlers"
+    ]
   },
-
   "next_quests": [
     "quest_synth_uprising",
     "quest_institute_infiltration"
   ],
-
   "notes": "Explores synth consciousness and humanity. Friendship vs duty. Timeline collision brings Institute tech to different regions."
 }

@@ -4,10 +4,21 @@
   "portrait": "hannigan",
   "title": "Iron Nan of Hannigan's House",
   "description": "A heavyset woman in her fifties, hair the color of dirty dishwater pinned into a knot that's fighting a losing battle against gravity. She wears a licensed trader's vest over pre-war work clothes, both stained with Nuka-Moonshine rings and the residue of a life lived at the intersection of commerce and cruelty. She's looking at you the way she looks at everything: calculating what it's worth.",
+  "backstory": "Nan Hannigan's grandmother built Hannigan's House from a collapsed Nuka-Cola bottling plant in 2145. Nan inherited the building, the still, and the ledger book recording every debt owed to every Hannigan since. She doesn't forget. She doesn't forgive debts. She doesn't sleep more than four hours a night, which she maintains is all any businesswoman needs. The NCR tried to regulate Hannigan's House twice. Both times she showed them the ledger. Both times they left.",
+  "personality": [
+    "Sharp",
+    "Mercenary",
+    "Unforgiving"
+  ],
   "intro": {
     "id": "hannigan_intro",
-    "conditions": ["!flag:met_hannigan"],
-    "set_flags": ["met_hannigan", "hannigan_tracked"],
+    "conditions": [
+      "!flag:met_hannigan"
+    ],
+    "set_flags": [
+      "met_hannigan",
+      "hannigan_tracked"
+    ],
     "video_speech": "Well, look at that. A visitor. You're either lost or you've got business. Which is it, stranger?",
     "text": "You smell her before you see her — Nuka-Moonshine and old cigarette smoke and the particular scent of someone who has decided that bathing is optional when you own the only water purifier in your establishment.\n\nShe's heavyset, maybe fifty-something, with the kind of face that was probably pleasant twenty years and a lot of bad decisions ago. Now it's set into the permanent expression of a woman doing math — specifically, calculating what everything is worth and whether she can get more.\n\nShe's sitting at a table covered in ledger books, a bottle of Nuka-Moonshine within easy reach, her licensed trader's vest covered in official-looking pins that she is absolutely wearing because they make her look legitimate.\n\nWhen she sees you, she doesn't react with surprise. She reacts with assessment.\n\n\"Well, look at that.\" Her voice has the particular lilt of someone who learned to be charming and has since weaponized it. \"A visitor. You're either lost or you've got business.\"\n\nShe smiles. It doesn't quite reach her eyes, but it's a very professional smile.\n\n\"Which is it, stranger?\"",
     "responses": [
@@ -232,7 +243,11 @@
     },
     "node_bribe_accepted": {
       "id": "node_bribe_accepted",
-      "set_flags": ["hannigan_bribed", "hannigan_confronted", "orphans_freed"],
+      "set_flags": [
+        "hannigan_bribed",
+        "hannigan_confronted",
+        "orphans_freed"
+      ],
       "text": "She holds your gaze for three full seconds. Counting something.\n\n\"Smart.\"\n\nShe pockets the caps without counting them — she'll count them later, but not in front of you. That's a power move. She knows you know it.\n\n\"Grit. Wren. Mole. Soot.\"\n\nShe calls into the back. A guard appears. She speaks quietly. Two minutes later, four children emerge, blinking, each carrying a small bundle of possessions. They look at you. They look at Hannigan.\n\nThey don't run. They walk, carefully, toward you.\n\nHannigan watches them go with the expression of someone closing a line item.\n\n\"The warrant will be withdrawn by nightfall. You were never here.\" A pause. \"The girl Ember — if she comes back around causing trouble, that's a different conversation. One we won't have with caps.\"",
       "responses": [
         {
@@ -277,7 +292,10 @@
     "node_warmcaps_ultimatum": {
       "id": "node_warmcaps_ultimatum",
       "text": "She thinks. Actually thinks — you can see her working through it.\n\n\"Capston sends an unscheduled representative. No letter of marque, no official notice, just — \" She gestures at you. \"This.\"\n\nShe folds her hands on the desk.\n\n\"Capston has enough leverage with trade authority that he could pull my license. I know that. He knows I know that.\"\n\nA long pause.\n\n\"Fine.\" The word lands flat. Not a defeat — more like a strategic withdrawal. \"The children are released. The warrant disappears. I will require written confirmation from Capston's operation that my license remains intact and that no charges are being filed.\"\n\nShe meets your eyes.\n\n\"And I want this out of my building tonight. I don't want Capston's people here past sundown.\"",
-      "set_flags": ["hannigan_confronted", "orphans_freed"],
+      "set_flags": [
+        "hannigan_confronted",
+        "orphans_freed"
+      ],
       "responses": [
         {
           "text": "[Direct] Done. The kids go now. I'll relay your terms to Warmcaps.",
