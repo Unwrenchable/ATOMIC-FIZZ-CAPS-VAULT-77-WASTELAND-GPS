@@ -1,0 +1,101 @@
+{
+  "id": "dialog_mira_vale",
+  "npc": "Mira Vale",
+  "portrait": "mira_vale",
+  "title": "The Freeside Medic",
+  "description": "A compact woman in a patched-up field coat, hands perpetually stained with iodine and grime. She does not look up when you enter. Her workspace — a repurposed desk littered with medical supplies — is organized with the precision of someone who has learned that chaos costs lives.",
+  "backstory": "Mira Vale came up through the Followers of the Apocalypse's outer circuit before she decided ideology was a luxury the injured couldn't afford. She set up her clinic in Freeside independently, trading services for caps, supplies, and the occasional piece of information. She has patched up Jax Voss more times than she cares to count, and each time she pretended it was professional obligation. She keeps a tally on a scrap of paper in her coat pocket. She never lets anyone see it.",
+  "intro": {
+    "id": "mira_vale_intro",
+    "conditions": ["!flag:met_mira_vale"],
+    "set_flags": ["met_mira_vale"],
+    "video_speech": "Sit down before you bleed on my floor. I just cleaned that.",
+    "text": "She doesn't look up from the suture she's tying.<br><br>\"Sit down before you bleed on my floor. I just cleaned that.\"<br><br>A pause. She cuts the thread, sets the needle aside, finally looks at you.<br><br>\"Mira Vale. I fix things. If you're here for conversation, you've got the wrong address.\"",
+    "responses": [
+      {"text": "[Question] You know someone named Jax Voss?", "tone": "question", "next": "mira_knows_jax"},
+      {"text": "[Friendly] You do good work. This clinic's kept Freeside alive.", "tone": "kind", "next": "mira_clinic_compliment"},
+      {"text": "[Sarcastic] Charming bedside manner. You run a masterclass?", "tone": "sarcastic", "next": "mira_sarcastic_manner"},
+      {"text": "[Direct] I need medical supplies and I need them fast.", "tone": "direct", "next": "mira_quest_medrun"}
+    ]
+  },
+  "knowledge_nodes": [
+    {
+      "id": "mira_knows_jax",
+      "conditions": ["!flag:mira_comment_jax"],
+      "text": "She goes still for a moment. Just a moment.<br><br>\"Yeah. I know him.\"<br><br>She turns back to her supplies, sorting instruments with slightly more attention than they require.<br><br>\"He's a walking incident report. Shows up, gets hurt, leaves before I can tell him to stop getting hurt.\"<br><br>She sets a scalpel down too hard.<br><br>\"I've got a tally somewhere.\"",
+      "set_flags": ["mira_comment_jax"]
+    },
+    {
+      "id": "mira_knows_lena",
+      "conditions": ["flag:met_lena_cross", "!flag:mira_comment_lena"],
+      "text": "\"Lena Cross.\" A beat. \"She came through here once, asking about Jax. Wouldn't say why.\"<br><br>She picks up a fresh bandage and starts rolling it with practiced efficiency.<br><br>\"Seems like a lot of people are asking about Jax these days. That worries me.\"",
+      "set_flags": ["mira_comment_lena"]
+    },
+    {
+      "id": "mira_clinic_compliment",
+      "conditions": ["!flag:mira_clinic_praised"],
+      "text": "She stops. Looks at you sideways.<br><br>\"You don't have to say things like that.\"<br><br>A pause. Something softens very briefly in her jaw.<br><br>\"But... the water filtration broke last month and half of Freeside still came through the door. So. I suppose it is something.\"",
+      "set_flags": ["mira_clinic_praised"]
+    },
+    {
+      "id": "mira_sarcastic_manner",
+      "conditions": ["!flag:mira_sarcasm_flag"],
+      "text": "She gives you a look that could strip paint.<br><br>\"I have excellent bedside manner for people who are unconscious.\"<br><br>She picks up a forceps and gestures at the door.<br><br>\"The rest of you lot seem to prefer the ones who smile and let you die slowly. I'm not one of those.\"",
+      "set_flags": ["mira_sarcasm_flag"]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "mira_jax_missing",
+      "conditions": ["flag:jax_signal_active", "!flag:mira_jax_worry"],
+      "text": "She doesn't speak for a moment after you mention it.<br><br>\"He's still... broadcasting?\"<br><br>She exhales through her nose. Sets down what she's holding.<br><br>\"I always thought that was a figure of speech.\"<br><br>Her hand goes to her coat pocket — where the tally is.",
+      "set_flags": ["mira_jax_worry"]
+    },
+    {
+      "id": "mira_player_injured",
+      "conditions": ["stat:hp<=40", "!flag:mira_hp_remark"],
+      "text": "She looks up before you say a word.<br><br>\"You're dripping.\"<br><br>She's already reaching for gauze.<br><br>\"Sit. Now. Before you pass out and I have to drag you.\"",
+      "set_flags": ["mira_hp_remark"]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "mira_quest_medrun",
+      "conditions": ["!flag:side_nv_medrun_taken"],
+      "text": "\"I need supplies.\" She crosses her arms. \"So does everyone else. The problem is the road through the East Freeside corridor — two raider camps set up on the only route to the caravan depot.\"<br><br>\"I've got three patients who'll die without what's on that run. You look capable. You interested?\"",
+      "offers_quest": "side_nv_medrun",
+      "set_flags": ["side_nv_medrun_taken"],
+      "video_speech": "I need a courier who won't get shot. The road's raider-held and my patients can't wait."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "mira_healing",
+      "keywords": ["heal", "patch", "bandage", "wound"],
+      "text": "\"I can patch holes. I can't fix the reasons people keep making them.\"<br><br>She snaps a cap onto a Med-X injector with perhaps more force than necessary."
+    },
+    {
+      "id": "mira_followers",
+      "keywords": ["followers", "apocalypse", "doctors"],
+      "text": "\"I trained with the Followers. Left when they started using words like 'sustainable infrastructure' instead of just treating people.\"<br><br>\"The ideology's fine. The paperwork was going to kill someone.\"",
+      "video_speech": "I trained with the Followers. Left when the ideology got in the way of the patients."
+    },
+    {
+      "id": "mira_freeside",
+      "keywords": ["freeside", "slum", "east"],
+      "text": "\"Don't call it a slum to my patients. They live there. So do I.\"<br><br>She sets her jaw. \"It's where the people are who need the most help. That's where I stay.\""
+    },
+    {
+      "id": "mira_raider",
+      "keywords": ["raider", "gang", "east freeside"],
+      "text": "\"They leave my clinic alone. I leave them alone.\"<br><br>\"But they don't leave my supply routes alone. And that's the part I can't forgive.\""
+    }
+  ],
+  "fallback": {
+    "id": "mira_vale_fallback",
+    "text": "\"I'm busy. If you're not bleeding, come back later. If you are — sit down and stop wasting time.\"",
+    "video_speech": "I'm busy. Bleeding or not, there's a protocol."
+  },
+  "mood": "guarded",
+  "personality": ["Professionally detached", "Secretly warm", "Quietly determined"]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "cairo_library_of_bones",
+  "name": "The Library of Bones",
+  "type": "global",
+  "region": "Cairo_Ruins_Egypt",
+  "npc_giver": "global_cairo_sphinx",
+  "description": "The Sphinx sends you to recover texts from a pre-war library sealed inside a Cairo government complex. The library is intact — but so are its guardians, who have been protecting it in the only way they know how for two hundred years.",
+  "gps_requirement": {
+    "region": "Cairo, Egypt",
+    "real_lat": 30.0444,
+    "real_lng": 31.2357,
+    "radius_km": 50
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Reach the Cairo Government Complex",
+      "description": "Travel to the sealed government complex in central Cairo where the pre-war library is located. The Sphinx warns the approach is watched.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 30.0444, "lng": 31.2357},
+      "radius_m": 800,
+      "actions": ["set_flag:cairo_complex_reached", "spawn:enemy_library_guardians", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Navigate the Guardians",
+      "description": "The guardians have protected this place for two centuries. They can be reasoned with, bypassed, or confronted — the Sphinx recommends the first option if at all possible.",
+      "trigger": "player_progress:guardians_navigated",
+      "actions": ["set_flag:cairo_guardians_navigated", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Recover the Texts",
+      "description": "Enter the sealed library and recover the historical records the Sphinx designated. Handle them carefully — they are among the last intact pre-war documents in North Africa.",
+      "trigger": "player_collect:item_cairo_historical_record",
+      "actions": ["spawn:item_cairo_historical_record", "complete_quest:true", "set_flag:library_of_bones_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 400,
+    "caps": 100,
+    "fizz": 30,
+    "items": ["item_cairo_historical_record"]
+  }
+}

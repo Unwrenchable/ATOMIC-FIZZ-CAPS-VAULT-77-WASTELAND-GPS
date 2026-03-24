@@ -1,0 +1,47 @@
+{
+  "id": "scandinavian_settlement_network",
+  "name": "Nordic Network",
+  "type": "global",
+  "region": "Scandinavia",
+  "npc_giver": "global_stockholm_vault_keeper",
+  "description": "Sigrid's vault community has built supply relationships with five Scandinavian settlements, but two have gone quiet. She needs someone to visit each settlement, determine their status, and re-establish contact if possible.",
+  "gps_requirement": {
+    "region": "Scandinavia",
+    "real_lat": 62.0000,
+    "real_lng": 15.0000,
+    "radius_km": 500
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Visit the Oslo Settlement",
+      "description": "Travel to the Oslo ruins where one of Sigrid's partner settlements has gone quiet. Determine whether the silence is technical failure or something more serious.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 59.9139, "lng": 10.7522},
+      "radius_m": 1000,
+      "actions": ["spawn:item_oslo_settlement_status", "set_flag:oslo_settlement_visited", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Visit the Copenhagen Settlement",
+      "description": "Cross into Denmark to find the Copenhagen settlement. It was the most productive of Sigrid's supply partners — its silence is the most alarming.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 55.6761, "lng": 12.5683},
+      "radius_m": 1000,
+      "actions": ["spawn:item_copenhagen_settlement_status", "set_flag:copenhagen_settlement_visited", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Report Back to Sigrid",
+      "description": "Return to Stockholm with a full account of both settlements' status. Sigrid will need to make decisions about the network based on what you've found.",
+      "trigger": "player_returns:global_stockholm_vault_keeper",
+      "actions": ["complete_quest:true", "set_flag:nordic_network_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 350,
+    "caps": 200,
+    "fizz": 25,
+    "items": ["item_nordic_network_report"]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": "southeast_asia_data_network",
+  "name": "The Data Network",
+  "type": "global",
+  "region": "South_China_Sea",
+  "npc_giver": "global_singapore_data_broker",
+  "description": "The Coordinator's Southeast Asian data brokerage relies on three relay nodes across the region. A typhoon has knocked out the Singapore-to-Manila link. Physical repair is required at the node site.",
+  "gps_requirement": {
+    "region": "South China Sea",
+    "real_lat": 14.0000,
+    "real_lng": 116.0000,
+    "radius_km": 500
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Travel to the Node Site",
+      "description": "The damaged relay node is located on a small island in the South China Sea. The Coordinator's charts show the typhoon came through approximately three weeks ago.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 14.0000, "lng": 116.0000},
+      "radius_m": 5000,
+      "actions": ["set_flag:node_site_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Assess the Damage",
+      "description": "Inspect the relay hardware. The typhoon may have done physical structural damage, or the surge may have corrupted the firmware. Assess what kind of repair is needed.",
+      "trigger": "player_investigate_area",
+      "actions": ["spawn:item_relay_damage_assessment", "set_flag:node_damage_assessed", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Repair or Replace the Node",
+      "description": "Using the Coordinator's repair kit and what you've found locally, restore the Singapore-to-Manila relay link. If the hardware is beyond repair, install the backup unit she provided.",
+      "trigger": "player_complete_objective:relay_node_restored",
+      "actions": ["complete_quest:true", "set_flag:data_network_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 350,
+    "caps": 200,
+    "fizz": 30,
+    "items": ["item_coordinator_data_chip"]
+  }
+}

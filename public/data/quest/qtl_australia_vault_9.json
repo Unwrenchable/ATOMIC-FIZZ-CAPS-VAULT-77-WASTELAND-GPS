@@ -1,0 +1,45 @@
+{
+  "id": "qtl_australia_vault_9",
+  "name": "Vault 9 Revisited",
+  "type": "global",
+  "region": "Central_Australia",
+  "npc_giver": "global_sydney_ironbark",
+  "description": "Ironbark has located what appears to be the southern hemisphere's only Vault-Tec installation near Alice Springs. The vault may still be sealed, or its inhabitants may have already emerged. Either way, it's worth checking.",
+  "gps_requirement": {
+    "region": "Northern Territory, Australia",
+    "real_lat": -23.6980,
+    "real_lng": 133.8807,
+    "radius_km": 100
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Cross the Outback",
+      "description": "The trek from Sydney to Alice Springs through the irradiated Outback is no small thing. Navigate the wasteland terrain, water rationing critical in the deep interior.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -23.6980, "lng": 133.8807},
+      "radius_m": 3000,
+      "actions": ["set_flag:alice_springs_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Find the Vault Entrance",
+      "description": "Ironbark's coordinates put the vault entrance in the red rock formation northwest of the old township. Search the area carefully — the entrance won't be obvious.",
+      "trigger": "player_search_area",
+      "actions": ["spawn:item_vault9_exterior_terminal_log", "set_flag:vault9_entrance_found", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Investigate Vault Status",
+      "description": "Determine whether Vault 9 is still sealed, already open, or somewhere in between. Document what you find and report back to Ironbark in Sydney.",
+      "trigger": "player_investigate_area",
+      "actions": ["spawn:item_vault9_status_report", "complete_quest:true", "set_flag:vault9_revisited_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 400,
+    "caps": 250,
+    "fizz": 20,
+    "items": ["item_vault9_status_report"]
+  }
+}
