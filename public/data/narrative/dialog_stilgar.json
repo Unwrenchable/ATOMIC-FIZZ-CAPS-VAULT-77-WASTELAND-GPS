@@ -4,6 +4,7 @@
   "portrait": "default",
   "title": "Leader of the Sand-Walkers",
   "description": "Dialog nodes for Stilgar — leader of a desert survival collective who calls themselves the Fremen of the Mojave. They have adapted to the irradiated desert so completely that they barely register on Geiger counters, move in total silence across open sand, and harvest moisture from the air with a method nobody outside their group understands. Stilgar speaks with absolute economy of words and treats the wasteland not as a danger to be survived but as a home to be understood. He is suspicious of outsiders and deeply patient with everything else.",
+  "backstory": "Leader of the Sand-Walkers — a tribe built around the philosophy that the wasteland is not ruins to be endured but a desert to be read. Stilgar's people came from a pre-war community of Dune scholars who took their texts seriously enough to build an entire culture around them. He does not waste water. He does not waste words. He has kept his people alive through three faction wars, two radstorms, and one incident with a deathclaw that no one in the tribe will discuss.",
   "intro": {
     "id": "stilgar_intro",
     "conditions": [

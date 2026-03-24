@@ -4,6 +4,7 @@
   "portrait": "siren",
   "title": "Signal Runner",
   "description": "A voice through static. She found you before you even knew you were lost.",
+  "backstory": "Siren never explains where she broadcasts from. She never has a face — only a voice, a frequency, and an uncanny ability to find people who are lost in every way the wasteland can make you lost. Before the bombs she was an emergency dispatch operator. After the bombs she decided that was still the job. The frequency has never gone dead. She has never explained how. She fields the calls.",
   "intro": {
     "id": "siren_intro",
     "conditions": [

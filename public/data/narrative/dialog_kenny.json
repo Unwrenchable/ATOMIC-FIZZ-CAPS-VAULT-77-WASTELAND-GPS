@@ -4,6 +4,7 @@
   "portrait": "kenny",
   "title": "The Unkillable Fool",
   "description": "Dialog nodes for Kenny — a small, perpetually orange-hooded wanderer who has survived every conceivable wasteland fatality, often multiple times in the same week. He speaks in a muffled voice that is almost entirely incomprehensible, yet somehow conveys meaning. When he dies — and he will — nearby NPCs invariably cry out 'They killed Kenny! Those bastards!' He always comes back.",
+  "backstory": "Kenny has died eleven documented times in three years: radscorpion sting, deathclaw encounter, his own grenade, cliff fall, brahmin stampede, lightning strike during radstorm, exploding stove, and three separate raider ambushes. He woke up from all of them with a mild headache and inexplicable optimism. Nobody knows why the wasteland keeps giving him back. Kenny doesn't ask. He keeps doing dangerous things with cheerful confidence and a conviction that today will probably work out.",
   "intro": {
     "id": "kenny_intro",
     "conditions": [

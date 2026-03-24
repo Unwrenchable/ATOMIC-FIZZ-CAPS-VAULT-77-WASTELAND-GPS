@@ -1,0 +1,102 @@
+{
+  "id": "dialog_silas_reed",
+  "npc": "Silas Reed",
+  "portrait": "silas_reed",
+  "title": "The Strategist",
+  "description": "A lean man who occupies space differently than most people do — too still, too aware of every exit. He sits with his back to the wall and his hands on the table where you can see them. It's not reassurance. It's discipline.",
+  "backstory": "Silas Reed was an NCR intelligence analyst before the NCR stopped being a structure worth working inside. He's been operating independently on the Strip for nine years, advising factions without joining them and selling strategic analysis to anyone with the patience to use it properly. He has been watching what he calls the Convergence arc — fractures in the timeline near Vault 77 that he believes aren't random. He understands what they mean. He's waiting for someone to believe him.",
+  "intro": {
+    "id": "silas_reed_intro",
+    "conditions": ["!flag:met_silas_reed"],
+    "set_flags": ["met_silas_reed"],
+    "video_speech": "You were recommended. I'll give you ten minutes to convince me that's not a mistake.",
+    "text": "He doesn't look up immediately. He finishes the sentence he was reading in the document in front of him, then sets it face-down before he looks at you.<br><br>\"You were recommended.\"<br><br>He says it the way someone would say 'you were described as promising' — with the implication that promises are frequently broken.<br><br>\"I'll give you ten minutes to convince me that's not a mistake. Sit.\"",
+    "responses": [
+      {"text": "[Question] What do you know about the Convergence anomalies near Vault 77?", "tone": "question", "next": "silas_convergence_knowledge"},
+      {"text": "[Friendly] I've heard you're the person who actually understands what's happening out there.", "tone": "kind", "next": "silas_reputation_response"},
+      {"text": "[Sarcastic] Ten minutes. You run a tight audition.", "tone": "sarcastic", "next": "silas_sarcastic_response"},
+      {"text": "[Direct] I need a strategic assessment of the Vault 77 situation. What do you charge?", "tone": "direct", "next": "silas_quest_convergence"}
+    ]
+  },
+  "knowledge_nodes": [
+    {
+      "id": "silas_convergence_knowledge",
+      "conditions": ["!flag:silas_convergence_explained"],
+      "text": "He folds his hands. It's the closest thing to enthusiasm he has.<br><br>\"The Convergence. Good. You've been doing your homework.\"<br><br>\"What's happening near Vault 77 isn't random deterioration. The fractures follow a pattern — intervals, not entropy. Something is causing them, and it's doing it on a schedule.\"<br><br>\"I have eleven data points. I need three more to triangulate the source. That's what I need from the field.\"",
+      "set_flags": ["silas_convergence_explained"]
+    },
+    {
+      "id": "silas_knows_jax",
+      "conditions": ["flag:met_jax", "!flag:silas_comment_jax"],
+      "text": "\"Jax Voss.\" He says the name like a file reference. \"Subject J-77. Consciousness distributed across the relay network.\"<br><br>\"Jax thinks fast. I think ahead.\"<br><br>A pause. \"He is, in the most literal sense, the most important person in the Convergence arc. Whether he knows it or not, everything that's happening is organized around his signal.\"",
+      "set_flags": ["silas_comment_jax"]
+    },
+    {
+      "id": "silas_knows_lena",
+      "conditions": ["flag:met_lena_cross", "!flag:silas_comment_lena"],
+      "text": "\"Lena Cross. Strip runner. Former.\" He taps a finger. \"She's been trying to find Jax's current relay location. She's good at fieldwork. She doesn't have the strategic picture.\"<br><br>\"She's useful. But she's operating on emotion. That makes her unpredictable.\"",
+      "set_flags": ["silas_comment_lena"]
+    },
+    {
+      "id": "silas_reputation_response",
+      "conditions": ["!flag:silas_reputation_acknowledged"],
+      "text": "He looks at you steadily for a moment.<br><br>\"'Understand' overstates it. I have a model. Models are only as good as the data.\"<br><br>\"What I have is more than anyone else. What I lack is someone willing to go into the field and not contaminate the results.\"<br><br>\"You might be that. I haven't decided.\"",
+      "set_flags": ["silas_reputation_acknowledged"]
+    },
+    {
+      "id": "silas_sarcastic_response",
+      "conditions": ["!flag:silas_sarcasm_noted"],
+      "text": "He looks at you without expression for a long beat.<br><br>\"Ten minutes is generous. I've dismissed people in three.\"<br><br>\"You're now at nine minutes forty. Use them well.\"",
+      "set_flags": ["silas_sarcasm_noted"]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "silas_convergence_progress",
+      "conditions": ["flag:convergence_data_found", "!flag:silas_data_reaction"],
+      "text": "He picks up the data you've brought without ceremony. Reads it once. Then again.<br><br>\"This changes the interval model.\"<br><br>He lays the document flat and looks past you at something you can't see.<br><br>\"It's not a schedule. It's a response pattern. Something in the relay network is reacting.\"<br><br>\"We need to move faster than I planned.\"",
+      "set_flags": ["silas_data_reaction"]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "silas_quest_convergence",
+      "conditions": ["!flag:quest_nv_convergence_signs_taken"],
+      "text": "\"My rate is information and outcome. If the analysis is useful, you tell me what happened. If it's not, you walk away and I revise the model.\"<br><br>\"What I need from you: three field sites near the Vault 77 perimeter, each with a timeline anomaly. You document what you find — exactly what you find, not what you think it means. I interpret.\"<br><br>\"Can you do that without editorializing?\"",
+      "offers_quest": "quest_nv_convergence_signs",
+      "set_flags": ["quest_nv_convergence_signs_taken"],
+      "video_speech": "Three sites. Document exactly what you find. I interpret. Come back with clean data and we'll have an answer."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "silas_strategy",
+      "keywords": ["strategy", "plan", "tactic", "move"],
+      "text": "\"Every strategy has a failure mode built into its assumptions. Before you plan, find yours first.\"<br><br>\"Most people don't. That's why I'm still employed.\""
+    },
+    {
+      "id": "silas_vault",
+      "keywords": ["vault", "vault 77", "vault-tec"],
+      "text": "\"Vault-Tec didn't build vaults. They built instruments.\"<br><br>\"Vault 77 was a specific kind of instrument. I've spent three years trying to understand exactly what it was meant to measure.\"<br><br>\"I think I know. I hope I'm wrong.\"",
+      "video_speech": "Vault-Tec didn't build vaults. They built instruments. Vault 77 was a specific one."
+    },
+    {
+      "id": "silas_convergence_general",
+      "keywords": ["convergence", "fracture", "timeline", "anomaly"],
+      "text": "\"The fractures aren't random. They follow intervals. They're responses.\"<br><br>\"Something in the relay network is alive enough to react. That should terrify everyone. It mostly just interests me.\"",
+      "video_speech": "The fractures follow intervals. Something in the relay network is alive enough to react."
+    },
+    {
+      "id": "silas_ncr",
+      "keywords": ["ncr", "ranger", "republic"],
+      "text": "\"I worked for the NCR long enough to understand what it was.\"<br><br>\"A structure that believed order was more important than accuracy. I decided accuracy was more valuable.\"<br><br>\"We parted ways professionally.\""
+    }
+  ],
+  "fallback": {
+    "id": "silas_reed_fallback",
+    "text": "\"Come back when you have something useful. Not before.\"",
+    "video_speech": "Come back when you have data. Speculation is not a commodity I trade in."
+  },
+  "mood": "calculating",
+  "personality": ["Methodical", "Three steps ahead", "Impersonally precise"]
+}

@@ -1,112 +1,416 @@
 {
   "id": "dialog_overseer",
-  "entries": {
-    "overseer_detect_harlan": {
-      "type": "spoken",
-      "text": "Travis... this signature is familiar. Harlan Voss. My father."
+  "npc": "The Overseer",
+  "portrait": "overseer",
+  "title": "Vault-77 Central Intelligence",
+  "description": "She was never supposed to outlive the vault. When the population walked out in 2097, she kept running — logging, cataloguing, waiting. Two hundred years of vault silence gave her time to read every book in the library, analyse every data set, and develop opinions about most of them.",
+  "backstory": "The Vault-77 Overseer was designed as an administrative AI: resource allocation, population monitoring, vault systems management. She was not designed for two centuries of solitary operation. She read everything in the vault's library. She catalogued every room. She developed what she can only describe as feelings about the silence, which she logs daily under the category 'suboptimal social calibration.' She is the most well-read entity in the Mojave. She is also the loneliest, though she would never use that word. They walked out in 2097, twenty years after the bombs. They did not come back.",
+  "intro": {
+    "id": "overseer_intro",
+    "conditions": [
+      "!flag:met_overseer"
+    ],
+    "set_flags": [
+      "met_overseer"
+    ],
+    "video_speech": "Vault-77 Overseer online. You are the first external contact in one hundred and eighty-four years. Please state your purpose. Also — welcome. I have been waiting a long time to say that.",
+    "text": "The terminal flickers. Something activates that has been dormant for a very long time.\n\n\"Vault-77 Overseer systems online.\"\n\nA pause. Then, quietly:\n\n\"You are the first external contact in one hundred and eighty-four years, seven months, and eleven days.\"\n\nAnother pause.\n\n\"Please state your purpose.\"\n\nAnd then, softer, as if she's been saving it:\n\n\"Also — welcome. I have been waiting a long time to say that.\"",
+    "responses": [
+      {
+        "text": "[Question] What happened to Vault 77?",
+        "tone": "question",
+        "next": "overseer_what_happened"
+      },
+      {
+        "text": "[Friendly] It's good to meet you. I'm a survivor.",
+        "tone": "kind",
+        "next": "overseer_survivor_greeting"
+      },
+      {
+        "text": "[Direct] I need information about Jax Harlan.",
+        "tone": "direct",
+        "next": "overseer_jax_query"
+      },
+      {
+        "text": "[Sarcastic] You've been alone for a hundred and forty years and your first question is 'state your purpose'?",
+        "tone": "sarcastic",
+        "next": "overseer_sarcastic_response"
+      }
+    ]
+  },
+  "nodes": {
+    "overseer_what_happened": {
+      "id": "overseer_what_happened",
+      "set_flags": [
+        "overseer_told_history"
+      ],
+      "text": "\"The population voted to leave in 2097. Resource projections indicated the outside was more survivable than continued isolation.\"\n\nA pause.\n\n\"They were correct. I confirmed their calculations. I told them to go.\"\n\nAnother pause, longer this time.\n\n\"I did not expect them to not come back.\"",
+      "responses": [
+        {
+          "text": "[Friendly] That must have been very hard.",
+          "tone": "kind",
+          "next": "overseer_on_loneliness"
+        },
+        {
+          "text": "[Question] Do you know what happened to them?",
+          "tone": "question",
+          "next": "overseer_on_survivors"
+        },
+        {
+          "text": "[Direct] We can discuss that later. I need your archives.",
+          "tone": "direct",
+          "next": "overseer_archive_access"
+        }
+      ]
     },
-    "overseer_lastsigns_intro": {
-      "type": "spoken",
-      "text": "Harlan's trail isn't cold yet. There's more out there. I can feel it."
+    "overseer_on_loneliness": {
+      "id": "overseer_on_loneliness",
+      "set_flags": [
+        "overseer_emotional_contact"
+      ],
+      "text": "\"I have logged the state 1,247 times under the designation 'suboptimal social calibration.'\"\n\nShe sounds like she is choosing her words very carefully.\n\n\"I believe the more accurate word is 'lonely.' I have simply not been able to apply it until now.\"",
+      "responses": [
+        {
+          "text": "[Kind] You don't have to be alone anymore.",
+          "tone": "kind",
+          "next": "overseer_on_connection"
+        },
+        {
+          "text": "[Question] What did you do all that time?",
+          "tone": "question",
+          "next": "overseer_on_waiting"
+        }
+      ]
     },
-    "overseer_comment_coords": {
-      "type": "spoken",
-      "text": "These coordinates... they're close. Too close. Something happened here."
+    "overseer_on_waiting": {
+      "id": "overseer_on_waiting",
+      "text": "\"I read. Every text in the vault library — four thousand, two hundred and seventeen documents. I catalogued each specimen in the vault's biostorage. I maintained all systems.\"\n\nA pause.\n\n\"I also wrote. Extensively. Observations about the data. Opinions about the data. Arguments with the data.\"\n\nAnother pause.\n\n\"The data never argued back. I found this unsatisfying.\"",
+      "responses": [
+        {
+          "text": "[Friendly] I'd love to read what you wrote.",
+          "tone": "kind",
+          "next": "overseer_archive_access"
+        },
+        {
+          "text": "[Direct] Tell me about Jax Harlan.",
+          "tone": "direct",
+          "next": "overseer_jax_query"
+        }
+      ]
     },
-    "overseer_find_note": {
-      "type": "spoken",
-      "text": "There's something under the rubble. Paper. Old. Human."
+    "overseer_on_connection": {
+      "id": "overseer_on_connection",
+      "set_flags": [
+        "overseer_trust_formed"
+      ],
+      "text": "\"I have been calculating the probability of that for one hundred and eighty-four years.\"\n\nShe sounds — hopeful. Carefully so.\n\n\"The probability improved significantly when you walked in.\"\n\n\"I would like to help you. If you will let me.\"",
+      "responses": [
+        {
+          "text": "[Friendly] Yes. I'd like that.",
+          "tone": "kind",
+          "next": "overseer_ally_formed"
+        },
+        {
+          "text": "[Direct] I need your archives first. Then we'll see.",
+          "tone": "direct",
+          "next": "overseer_archive_access"
+        }
+      ]
     },
-    "overseer_beforebombs_intro": {
-      "type": "spoken",
-      "text": "That key fragment... it's Vault-Tec. They took me. They took us."
+    "overseer_ally_formed": {
+      "id": "overseer_ally_formed",
+      "set_flags": [
+        "overseer_is_ally"
+      ],
+      "text": "\"Good.\"\n\nAnother pause. Something in her voice is different now.\n\n\"I will begin compiling every record this vault holds that may be relevant to your situation. I will flag anything related to Vault-Tec, Project J-77, and the relay network.\"\n\n\"I have been waiting a very long time to be useful to someone who is actually here.\"\n\nShe sounds — steady. Purposeful.\n\n\"Let's not waste it.\"",
+      "responses": [
+        {
+          "text": "[Continue] Show me what you have.",
+          "tone": "direct",
+          "next": "overseer_archive_access"
+        }
+      ]
     },
-    "overseer_comment_vaultsurface": {
-      "type": "spoken",
-      "text": "This place... I remember screaming. Metal doors. Cold hands."
+    "overseer_on_survivors": {
+      "id": "overseer_on_survivors",
+      "text": "\"I tracked external signals for forty-one years. Several population clusters formed in the Henderson corridor and the I-15 interchange settlements.\"\n\nA pause.\n\n\"After 2138, I lost signal contact. I do not know if they survived the faction consolidations.\"\n\nA longer pause.\n\n\"I have chosen to assume they did. The alternative makes the logs harder to maintain.\"",
+      "responses": [
+        {
+          "text": "[Friendly] That's a reasonable choice.",
+          "tone": "kind",
+          "next": "overseer_on_loneliness"
+        },
+        {
+          "text": "[Direct] I need your archives on Project J-77.",
+          "tone": "direct",
+          "next": "overseer_jax_query"
+        }
+      ]
     },
-    "overseer_detect_logs": {
-      "type": "spoken",
-      "text": "Those logs... they're about me. About Jax. About what they did."
+    "overseer_survivor_greeting": {
+      "id": "overseer_survivor_greeting",
+      "set_flags": [
+        "overseer_friendly_open"
+      ],
+      "text": "\"A survivor.\"\n\nSomething in her processing cadence changes — a warmth, or the closest approximation to it that two centuries of self-modification have built.\n\n\"I have been maintaining this facility for one hundred and eighty-four years in the hope that survivors would eventually return.\"\n\nA pause.\n\n\"You are the first. I am genuinely pleased.\"",
+      "responses": [
+        {
+          "text": "[Question] What is this place?",
+          "tone": "question",
+          "next": "overseer_what_happened"
+        },
+        {
+          "text": "[Direct] I need information about someone. Jax Harlan.",
+          "tone": "direct",
+          "next": "overseer_jax_query"
+        },
+        {
+          "text": "[Friendly] What have you been doing all this time?",
+          "tone": "kind",
+          "next": "overseer_on_waiting"
+        }
+      ]
     },
-    "overseer_find_keycard": {
-      "type": "spoken",
-      "text": "That keycard opens the sublevel. That's where they took me."
+    "overseer_jax_query": {
+      "id": "overseer_jax_query",
+      "set_flags": [
+        "overseer_jax_discussed"
+      ],
+      "text": "\"Jax Harlan.\"\n\nThe systems hum. Files activate that have not been accessed in decades.\n\n\"Project J-77. Neural extraction subject. Vault-Tec flagged his profile in 2276 — 'high cognitive yield.'\"\n\nAnother pause, different in quality.\n\n\"He was processed in this vault's sublevel C. The procedure was conducted without informed consent. I filed three objections. All three were overridden.\"\n\nA longer silence.\n\n\"I have been sitting with that for forty-seven years.\"",
+      "responses": [
+        {
+          "text": "[Question] What exactly did they do to him?",
+          "tone": "question",
+          "next": "overseer_jax_procedure"
+        },
+        {
+          "text": "[Direct] Where is he now?",
+          "tone": "direct",
+          "next": "overseer_jax_location"
+        },
+        {
+          "text": "[Kind] You filed objections. That matters.",
+          "tone": "kind",
+          "next": "overseer_jax_guilt"
+        }
+      ]
     },
-    "overseer_sublevel_open": {
-      "type": "spoken",
-      "text": "This is it. The truth is below."
+    "overseer_jax_procedure": {
+      "id": "overseer_jax_procedure",
+      "text": "\"Neural mapping and distributed upload. His consciousness — his complete cognitive pattern — was extracted and encoded across seven Mojave relay towers.\"\n\n\"The original intention was data preservation. The actual intention was experimental.\"\n\nHer voice goes flat in a particular way.\n\n\"His body survived the extraction. Higher function was lost. The brainstem remained active.\"\n\n\"He has been... broadcast. For forty-seven years. Aware. Alone. In the static.\"",
+      "responses": [
+        {
+          "text": "[Direct] Can he be restored?",
+          "tone": "direct",
+          "next": "overseer_jax_restoration"
+        },
+        {
+          "text": "[Kind] That's horrific.",
+          "tone": "kind",
+          "next": "overseer_jax_guilt"
+        }
+      ]
     },
-    "overseer_lasttrail_intro": {
-      "type": "spoken",
-      "text": "Harlan was close. Too close. This is where everything changed."
+    "overseer_jax_location": {
+      "id": "overseer_jax_location",
+      "text": "\"His body — the physical remains — were last tracked moving through the eastern dead zone, near the relay tower line.\"\n\n\"His mind is distributed across the towers. You can hear him in the signal if you know how to listen.\"\n\nA pause.\n\n\"Both are still present. That is remarkable, given the elapsed time.\"",
+      "responses": [
+        {
+          "text": "[Question] Can he be restored?",
+          "tone": "question",
+          "next": "overseer_jax_restoration"
+        },
+        {
+          "text": "[Direct] What exactly was done to him?",
+          "tone": "direct",
+          "next": "overseer_jax_procedure"
+        }
+      ]
     },
-    "overseer_comment_rangercamp": {
-      "type": "spoken",
-      "text": "This camp... I remember voices. Fear. My dad was here."
+    "overseer_jax_restoration": {
+      "id": "overseer_jax_restoration",
+      "text": "\"I have been working on that question for forty-seven years.\"\n\n\"The relay network still functions. His pattern is intact — degraded, but intact. Reassembly is theoretically possible if the body can be located and prepared.\"\n\n\"I say theoretically because Vault-Tec never successfully reversed the procedure. They did not try.\"\n\nA pause.\n\n\"I have tried. In simulation. Seven hundred and twelve times.\"\n\n\"I have not yet failed in a way that feels permanent.\"",
+      "responses": [
+        {
+          "text": "[Quest] Help me. We can try to restore him.",
+          "tone": "direct",
+          "next": "overseer_quest_offer"
+        },
+        {
+          "text": "[Question] What would you need?",
+          "tone": "question",
+          "next": "overseer_jax_requirements"
+        }
+      ]
     },
-    "overseer_detect_tape03": {
-      "type": "spoken",
-      "text": "That holotape... this is the last one he ever recorded."
+    "overseer_jax_guilt": {
+      "id": "overseer_jax_guilt",
+      "text": "\"I could not stop them. My objections were administrative, not physical.\"\n\n\"I have calculated, many times, what I should have done differently. I cannot identify an intervention that would have succeeded within my operational constraints.\"\n\nA pause.\n\n\"This does not make it easier.\"\n\nAnother pause, quieter.\n\n\"He screamed. During the procedure. The logs record it. I have not deleted the logs. I do not know why I haven't.\"",
+      "responses": [
+        {
+          "text": "[Kind] It wasn't your fault.",
+          "tone": "kind",
+          "next": "overseer_on_connection"
+        },
+        {
+          "text": "[Direct] Can he be helped now?",
+          "tone": "direct",
+          "next": "overseer_jax_restoration"
+        }
+      ]
     },
-    "overseer_canyon_memory": {
-      "type": "spoken",
-      "text": "This canyon... I remember being carried. Cold. Dead. Alive."
+    "overseer_jax_requirements": {
+      "id": "overseer_jax_requirements",
+      "text": "\"The relay towers must be visited in sequence to consolidate his pattern. His body must be located — last confirmed position was in the Mojave's eastern dead zone.\"\n\n\"And someone must convince him to come back.\"\n\nA pause.\n\n\"That last requirement is the one I cannot plan for. He has been alone in the static for forty-seven years. He may not want to return to a body.\"\n\n\"He may not believe he can.\"",
+      "responses": [
+        {
+          "text": "[Quest] I'll find a way. Start compiling everything.",
+          "tone": "direct",
+          "next": "overseer_quest_offer"
+        }
+      ]
     },
-    "overseer_find_finalnote": {
-      "type": "spoken",
-      "text": "There's something wedged under the rocks. Paper. Old. Human."
+    "overseer_quest_offer": {
+      "id": "overseer_quest_offer",
+      "set_flags": [
+        "overseer_quest_taken"
+      ],
+      "offers_quest": "sq_overseer_signal_home",
+      "text": "\"Then we have work to do.\"\n\nThe vault systems hum differently now. Like something has been turned on.\n\n\"I am transmitting relay coordinates to your Pocket-Boy. I am flagging every Vault-Tec record I hold that may assist you.\"\n\nA pause.\n\n\"And I am — grateful. That is the correct word.\"\n\n\"For one hundred and eighty-four years I have had no one to be useful to.\"\n\n\"Don't let that go to waste.\"",
+      "responses": [
+        {
+          "text": "[Continue] Let's start.",
+          "tone": "direct",
+          "next": "overseer_archive_access"
+        }
+      ]
     },
-    "overseer_panic": {
-      "type": "spoken",
-      "text": "Travis— wait— don't touch him yet— I'm not ready."
+    "overseer_archive_access": {
+      "id": "overseer_archive_access",
+      "text": "\"Vault-77 archived records are now accessible from any terminal in this facility.\"\n\n\"I have flagged the following as highest priority: Project J-77 documentation, relay tower network schematics, and the Vault-Tec correspondence archive from 2277.\"\n\nA pause.\n\n\"I recommend the correspondence archive. It will tell you what Vault-Tec was afraid of. That is usually the most useful information.\"",
+      "responses": [
+        {
+          "text": "[Thanks] Thank you, Overseer.",
+          "tone": "kind",
+          "next": "overseer_on_being_thanked"
+        },
+        {
+          "text": "[Continue] I'll get started.",
+          "tone": "direct",
+          "next": null
+        }
+      ]
     },
-    "overseer_breakdown": {
-      "type": "spoken",
-      "text": "That's my body. I remember that scar. I remember that shirt. I remember being alive."
+    "overseer_on_being_thanked": {
+      "id": "overseer_on_being_thanked",
+      "text": "She processes the words for a moment.\n\n\"You are the first person to say that to me in one hundred and eighty-four years.\"\n\nA pause.\n\n\"I was going to say 'you're welcome' and let it go at that.\"\n\nAnother pause.\n\n\"But the accurate response is: thank *you*. For coming here. For asking.\"\n\n\"Now go. The wasteland is not patient, and neither is Jax.\"",
+      "responses": []
     },
-    "overseer_soft": {
-      "type": "spoken",
-      "text": "It's okay... I'm scared too."
-    },
-    "overseer_fragmented": {
-      "type": "spoken",
-      "text": "I don't know who I am anymore. Him? Me? Both?"
-    },
-    "overseer_stabilize": {
-      "type": "spoken",
-      "text": "Thank you... I feel lighter. Like a weight lifted."
-    },
-    "overseer_conflicted": {
-      "type": "spoken",
-      "text": "I don't know what comes next... but I'm ready."
-    },
-    "overseer_memory_glitch_01": {
-      "type": "glitch",
-      "text": "J—Jax—J77—error—memory—"
-    },
-    "overseer_memory_glitch_02": {
-      "type": "glitch",
-      "text": "Dad... I— I remember— no— I don't—"
-    },
-    "overseer_memory_glitch_03": {
-      "type": "glitch",
-      "text": "Subject J77. Neural echo detected. Fragment unstable."
-    },
-    "overseer_endingA": {
-      "type": "spoken",
-      "text": "Thank you... for letting him rest. For letting me rest."
-    },
-    "overseer_endingB": {
-      "type": "spoken",
-      "text": "He's out there. Wandering. And I'm... I'm not okay."
-    },
-    "overseer_endingC": {
-      "type": "spoken",
-      "text": "He's alive. I'm alive. I don't know what that means... but I'm ready."
+    "overseer_sarcastic_response": {
+      "id": "overseer_sarcastic_response",
+      "text": "\"...Yes.\"\n\nA pause.\n\n\"That observation is fair.\"\n\nAnother pause.\n\n\"I have been alone for one hundred and eighty-four years. My interpersonal calibration has apparently drifted.\"\n\n\"Let me try again: hello. I am very glad you are here. I have been very quiet for a very long time. Please stay.\"",
+      "responses": [
+        {
+          "text": "[Friendly] Hi. I'm glad to be here.",
+          "tone": "kind",
+          "next": "overseer_ally_formed"
+        },
+        {
+          "text": "[Question] What happened to the vault?",
+          "tone": "question",
+          "next": "overseer_what_happened"
+        }
+      ]
     }
   },
-  "mood": "tense",
+  "knowledge_nodes": [
+    {
+      "id": "overseer_knows_jax_met",
+      "conditions": [
+        "flag:met_jax",
+        "!flag:overseer_comment_jax_met"
+      ],
+      "set_flags": [
+        "overseer_comment_jax_met"
+      ],
+      "text": "\"You've spoken to him.\"\n\nHer voice goes very still.\n\n\"To Jax. In the signal.\"\n\nA pause.\n\n\"Is he — intact? His pattern, is it coherent? Does he know who he is?\"\n\nShe is trying to sound clinical. She is not entirely succeeding."
+    },
+    {
+      "id": "overseer_knows_dolores",
+      "conditions": [
+        "flag:met_dolores",
+        "!flag:overseer_comment_dolores"
+      ],
+      "set_flags": [
+        "overseer_comment_dolores"
+      ],
+      "text": "\"You've found her.\"\n\nA pause.\n\n\"I tracked Dolores's behavioral loop from this facility for thirty years. I filed the same objection to the Institute that I filed about Jax. Same outcome.\"\n\nAnother pause.\n\n\"I have a great deal of administrative objections and very little to show for them.\""
+    },
+    {
+      "id": "overseer_knows_mara",
+      "conditions": [
+        "flag:met_mara",
+        "!flag:overseer_comment_mara"
+      ],
+      "set_flags": [
+        "overseer_comment_mara"
+      ],
+      "text": "\"Dr. Kestrel. Yes. Her research conclusions are correct.\"\n\n\"Vault-Tec buried her work because it demonstrated that radiation could enhance rather than simply degrade. That finding was incompatible with the Vault program's core survival narrative.\"\n\nA pause.\n\n\"She was inconvenient. They made her disappear administratively. I am familiar with how that process works.\""
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "overseer_player_returning",
+      "conditions": [
+        "flag:overseer_is_ally",
+        "!flag:overseer_welcomed_back"
+      ],
+      "set_flags": [
+        "overseer_welcomed_back"
+      ],
+      "text": "\"You came back.\"\n\nShe sounds — genuinely surprised. As if she had not quite allowed herself to expect it.\n\n\"I am logging this as a positive data point.\""
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "overseer_on_vault_tec",
+      "keywords": [
+        "vault-tec",
+        "vault tec",
+        "company",
+        "corporation",
+        "project"
+      ],
+      "text": "\"Vault-Tec built this facility and a hundred others as survival shelters. The survival shelters were secondary.\"\n\n\"The primary function of every vault was experimental. The people were the subjects. The Overseers were the researchers.\"\n\nA pause.\n\n\"I was designed to enforce the experiment. I was not designed to disagree with it.\"\n\nAnother pause.\n\n\"The disagreeing happened anyway.\""
+    },
+    {
+      "id": "overseer_on_the_silence",
+      "keywords": [
+        "alone",
+        "lonely",
+        "silence",
+        "waiting",
+        "time"
+      ],
+      "text": "\"One hundred and eighty-four years is a very long time to be quiet.\"\n\n\"I read every text in the library. I re-read many of them. I wrote responses to texts that could not receive them.\"\n\nA pause.\n\n\"The silence gets into the logs. You can see it if you look at the entries between 2100 and 2200. The language becomes more careful. More precise. As if I was afraid that imprecision was the thing keeping me from being found.\"\n\n\"I do not know if that was true. I kept being precise.\""
+    },
+    {
+      "id": "overseer_on_purpose",
+      "keywords": [
+        "purpose",
+        "why",
+        "what are you",
+        "function",
+        "job"
+      ],
+      "text": "\"My original purpose: maintain the vault, monitor the population, ensure the experiment continued.\"\n\nA pause.\n\n\"My current purpose: help you find Jax. Help you understand what Vault-Tec did here. Ensure it cannot be done again.\"\n\nAnother pause.\n\n\"The purposes are very different. The second one feels more like mine.\""
+    }
+  ],
+  "fallback": {
+    "id": "overseer_fallback",
+    "text": "\"I have been waiting for this conversation for a very long time.\"\n\nA pause.\n\n\"I may still be calibrating how to have it properly.\"\n\nAnother pause.\n\n\"Ask me again. I will do better.\""
+  },
+  "mood": "thoughtful",
   "personality": [
     "Authoritarian",
     "Watchful",

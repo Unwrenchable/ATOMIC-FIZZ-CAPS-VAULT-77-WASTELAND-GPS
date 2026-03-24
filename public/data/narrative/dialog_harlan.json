@@ -1,5 +1,10 @@
 {
   "id": "dialog_harlan",
+  "npc": "Harlan Voss",
+  "portrait": "harlan",
+  "title": "The Ranger Who Wouldn't Stop",
+  "description": "NCR Ranger Harlan Voss — Jax's father. He is not here. He is present only through what he left behind: holotapes, notes, and evidence of a man who traded everything for one more lead.",
+  "backstory": "NCR Ranger Harlan Voss served the Colorado for thirty-one years with a spotless record. Then his son Jax vanished in 2277 during a Vault-Tec contractor job, and Harlan abandoned his post, his pension, and eventually his safety to follow the trail. He walked into radiation zones the NCR wouldn't authorize. He left holotapes at each location, as if Jax might someday follow them backward. He was never confirmed dead. Only absent. The tapes were all that remained.",
   "entries": {
     "harlan_tape01": {
       "type": "holotape",

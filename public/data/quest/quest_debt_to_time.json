@@ -1,17 +1,15 @@
 {
   "id": "q_debt_to_time",
   "name": "A Debt to Time",
+  "description": "A merchant in the market district owes a debt that predates the Great War. Track down the creditor, resolve two centuries of compound interest, and decide who really owns what.",
   "type": "side",
   "region": "market_district",
   "subregion": "underground_market",
-
   "giver": "npc_concerned_citizen",
-
   "start_conditions": {
     "min_level": 8,
     "location": "market_square"
   },
-
   "npc_links": [
     "npc_concerned_citizen",
     "npc_memory_merchant",
@@ -19,7 +17,6 @@
     "npc_addicted_customer",
     "npc_wasteland_sheriff"
   ],
-
   "map_markers": [
     {
       "id": "marker_memory_shop",
@@ -27,13 +24,16 @@
       "stage": "find_merchant"
     }
   ],
-
   "objectives": [
     {
       "id": "investigate_death",
       "desc": "Investigate the death of a memory tech addict.",
       "poi": "overdose_location",
-      "evidence": ["memory_device", "medical_report", "witness_statements"]
+      "evidence": [
+        "memory_device",
+        "medical_report",
+        "witness_statements"
+      ]
     },
     {
       "id": "find_merchant",
@@ -64,16 +64,38 @@
       ]
     }
   ],
-
   "stages": [
-    { "id": 0, "objective": "investigate_death", "desc": "Look into the suspicious death." },
-    { "id": 1, "objective": "find_merchant", "desc": "Track down the memory dealer." },
-    { "id": 2, "objective": "confront_merchant", "desc": "Get answers from the merchant." },
-    { "id": 3, "objective": "meet_customers", "desc": "Understand the addiction." },
-    { "id": 4, "objective": "make_decision", "desc": "Choose between justice and mercy." },
-    { "id": 5, "objective": "complete", "desc": "The past has a price." }
+    {
+      "id": 0,
+      "objective": "investigate_death",
+      "desc": "Look into the suspicious death."
+    },
+    {
+      "id": 1,
+      "objective": "find_merchant",
+      "desc": "Track down the memory dealer."
+    },
+    {
+      "id": 2,
+      "objective": "confront_merchant",
+      "desc": "Get answers from the merchant."
+    },
+    {
+      "id": 3,
+      "objective": "meet_customers",
+      "desc": "Understand the addiction."
+    },
+    {
+      "id": 4,
+      "objective": "make_decision",
+      "desc": "Choose between justice and mercy."
+    },
+    {
+      "id": 5,
+      "objective": "complete",
+      "desc": "The past has a price."
+    }
   ],
-
   "memory_tech_info": {
     "device": "Neural Resonance Implant",
     "function": "Allows users to experience pre-war memories through brainwave recordings",
@@ -86,62 +108,127 @@
     ],
     "appeal": "Escape harsh wasteland reality, experience pre-war comfort and safety"
   },
-
   "choices": {
     "expose_merchant": {
       "desc": "Expose the merchant's illegal operation to the authorities and their customers.",
-      "requirements": { "charisma": 6, "investigation_skill": 50 },
+      "requirements": {
+        "charisma": 6,
+        "investigation_skill": 50
+      },
       "consequences": {
-        "faction_rep": { "law": 60, "addicts": -80, "merchants": -40 },
-        "rewards": { "xp": 650, "caps": 400, "items": ["sheriff_badge", "bounty_reward"] },
+        "faction_rep": {
+          "law": 60,
+          "addicts": -80,
+          "merchants": -40
+        },
+        "rewards": {
+          "xp": 650,
+          "caps": 400,
+          "items": [
+            "sheriff_badge",
+            "bounty_reward"
+          ]
+        },
         "outcome": "The merchant is arrested. Addicts riot in protest. The memory devices are confiscated. Some customers die from withdrawal."
       }
     },
     "spare_for_access": {
       "desc": "Spare the merchant in exchange for exclusive access to the memory technology.",
-      "requirements": { "intelligence": 7, "morality": "neutral" },
+      "requirements": {
+        "intelligence": 7,
+        "morality": "neutral"
+      },
       "consequences": {
-        "faction_rep": { "merchants": 40, "law": -30, "addicts": 20 },
-        "rewards": { "xp": 600, "caps": 300, "items": ["memory_device", "exclusive_memories", "merchant_favor"] },
-        "unlock": ["memory_access", "rare_pre_war_knowledge"],
+        "faction_rep": {
+          "merchants": 40,
+          "law": -30,
+          "addicts": 20
+        },
+        "rewards": {
+          "xp": 600,
+          "caps": 300,
+          "items": [
+            "memory_device",
+            "exclusive_memories",
+            "merchant_favor"
+          ]
+        },
+        "unlock": [
+          "memory_access",
+          "rare_pre_war_knowledge"
+        ],
         "outcome": "The merchant continues operating. You gain access to rare pre-war memories. More people will die, but you have what you wanted."
       }
     },
     "destroy_technology": {
       "desc": "Destroy all memory devices and technology to prevent further deaths.",
-      "requirements": { "combat_skill": 60, "morality": "good" },
+      "requirements": {
+        "combat_skill": 60,
+        "morality": "good"
+      },
       "consequences": {
-        "faction_rep": { "law": 40, "addicts": -100, "followers_apocalypse": 50 },
-        "rewards": { "xp": 700, "caps": 200, "items": ["destroyer_reputation", "clean_conscience"] },
+        "faction_rep": {
+          "law": 40,
+          "addicts": -100,
+          "followers_apocalypse": 50
+        },
+        "rewards": {
+          "xp": 700,
+          "caps": 200,
+          "items": [
+            "destroyer_reputation",
+            "clean_conscience"
+          ]
+        },
         "outcome": "The technology is destroyed. Addicts are devastated but alive. The merchant escapes. Pre-war memories are lost forever."
       }
     },
     "take_over_business": {
       "desc": "Kill the merchant and take over the profitable memory trade yourself.",
-      "requirements": { "combat_skill": 65, "morality": "evil", "science": 50 },
+      "requirements": {
+        "combat_skill": 65,
+        "morality": "evil",
+        "science": 50
+      },
       "consequences": {
-        "faction_rep": { "merchants": -60, "criminals": 70, "addicts": -40 },
-        "rewards": { "xp": 750, "caps": 2000, "items": ["memory_shop_deed", "memory_tech", "blood_money"] },
-        "unlock": ["memory_business", "blackmarket_connections"],
+        "faction_rep": {
+          "merchants": -60,
+          "criminals": 70,
+          "addicts": -40
+        },
+        "rewards": {
+          "xp": 750,
+          "caps": 2000,
+          "items": [
+            "memory_shop_deed",
+            "memory_tech",
+            "blood_money"
+          ]
+        },
+        "unlock": [
+          "memory_business",
+          "blackmarket_connections"
+        ],
         "karma": -500,
         "outcome": "You profit from addiction. The business thrives under new management. Your conscience withers like the wasteland."
       }
     }
   },
-
   "rewards": {
     "xp": 650,
     "caps": 400
   },
-
   "factions": {
-    "affected": ["Law_Enforcement", "Merchants", "Addicts", "Followers_of_Apocalypse"]
+    "affected": [
+      "Law_Enforcement",
+      "Merchants",
+      "Addicts",
+      "Followers_of_Apocalypse"
+    ]
   },
-
   "next_quests": [
     "quest_memory_conspiracy",
     "quest_withdrawal_crisis"
   ],
-
   "notes": "A quest exploring addiction, escapism, and the ethics of profiting from others' desperation in the wasteland."
 }
