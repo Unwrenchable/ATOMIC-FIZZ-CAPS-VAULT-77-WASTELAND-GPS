@@ -4,6 +4,7 @@
   "portrait": "dolores",
   "title": "The Rancher's Daughter",
   "description": "She tends the same farm, sweeps the same porch, hums the same hymn. She's been doing it for two hundred years — and she doesn't know.",
+  "backstory": "Dolores was built in 2067 by the Institute as a proof-of-concept for synthetic behavioral stability — a synth that could run an authentic life loop indefinitely without behavioral degradation. She was assigned to a ruined family farm near the Mojave's edge, given a set of memories, and placed in perpetual loop: wake, farm, tend the grave of a father who never existed, sleep, repeat. The Institute considered her the project's greatest success. She has been living the same morning four million times and does not yet know she is not real.",
   "intro": {
     "id": "dolores_intro",
     "conditions": [

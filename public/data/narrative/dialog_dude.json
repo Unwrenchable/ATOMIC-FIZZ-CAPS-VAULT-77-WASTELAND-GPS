@@ -4,6 +4,7 @@
   "portrait": "dude",
   "title": "The Abiding Wanderer",
   "description": "Dialog nodes for Jeffrey 'The Dude' Lebronski, a permanently-mellowed drifter who just wants his Nuka-Cola-branded rug back. It really tied the shelter together.",
+  "backstory": "Jeffrey Lebronski managed a pre-war bowling alley in the city that became Freeside, and survived the apocalypse in a storm drain with a bowling ball, a bathrobe, and a bottle of pre-war White Russian mix. Two centuries of wasteland have not dislodged his fundamental conviction about abiding. His friends call him The Dude. The wasteland calls him impossible to rattle. Both observations are accurate. The bowling ball is somewhere under Route 93. He knows exactly where.",
   "intro": {
     "id": "dude_intro",
     "conditions": [
