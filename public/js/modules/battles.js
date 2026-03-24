@@ -332,6 +332,10 @@
       // BUG-004: display the currently active enemy, not always index 0
       const activeIdx = this.state.activeEnemyIndex ?? 0;
       const enemy = this.state.encounter.enemies[activeIdx];
+      if (!enemy) {
+        console.error("[Battle] updateUI: no enemy at index", activeIdx, "— state may be corrupted");
+        return;
+      }
       const special = this._getSpecial();
       const equipped = this.gs.player.equipped || {};
       const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);

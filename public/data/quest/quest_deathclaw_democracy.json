@@ -5,19 +5,25 @@
   "difficulty": "medium",
   "level_required": 12,
   "fractured_timeline_context": "Deathclaws from FO1's intelligent talking deathclaws (Vault 13), FO3's feral ones, FO4's nest-protecting mothers, and FO76's cryptid variants all exist at once. One group is intelligent. The others are not. Conflict ensues.",
-
   "premise": "Goris (FO2 intelligent deathclaw companion) survives in this timeline. He's discovered that some FO1-era deathclaws retained intelligence while others devolved. He wants to restore intelligence to ALL deathclaws. Humanity is... not thrilled.",
-
   "stages": [
     {
       "id": "stage1_goris_plea",
       "name": "A Claw Extended",
       "description": "Goris contacts you through Harlan Voss (who remembers intelligent deathclaws from old NCR reports). Goris wants to create serum to restore intelligence to feral deathclaws.",
       "objectives": [
-        {"text": "Meet Goris at Quarry Junction (dangerous)"},
-        {"text": "Protect Goris from deathclaw hunters"},
-        {"text": "Help gather FEV samples from Mariposa/Institute"},
-        {"text": "Test serum on one feral deathclaw"}
+        {
+          "text": "Meet Goris at Quarry Junction (dangerous)"
+        },
+        {
+          "text": "Protect Goris from deathclaw hunters"
+        },
+        {
+          "text": "Help gather FEV samples from Mariposa/Institute"
+        },
+        {
+          "text": "Test serum on one feral deathclaw"
+        }
       ],
       "outcome": "First feral deathclaw regains intelligence, can speak, remembers being intelligent centuries ago. Emotional moment."
     },
@@ -68,7 +74,6 @@
       }
     }
   ],
-
   "endings": {
     "ending_deathclaw_nation": {
       "name": "The Scaled Republic",
@@ -91,16 +96,13 @@
       "gameplay": "No more deathclaws, massive karma loss, haunted by choice."
     }
   },
-
   "meta_note": "FO2 had intelligent talking deathclaws. Most players never experienced them. This quest brings them back and asks: should ALL deathclaws be intelligent? Heavy moral weight.",
-
   "goris_dialogue": {
     "if_player_helps": "You have shown that humans and deathclaws can be allies. My people will remember this.",
     "if_player_betrays": "I thought you were different. I was wrong about humans. I was wrong about you.",
     "on_success": "For the first time in generations, deathclaws have a future that isn't just survival. Thank you.",
     "on_extinction": "You could have saved us. You chose not to. I hope you can live with that."
   },
-
   "rewards": {
     "xp": 3500,
     "unique_items": [
@@ -109,5 +111,6 @@
       "Intelligent Deathclaw Linguistics Book (lore item)"
     ],
     "potential_companion": "Goris (intelligent deathclaw from FO2 joins permanently if you help him)"
-  }
+  },
+  "description": "An unusual pack of deathclaws has been observed meeting at fixed intervals — almost like they're deliberating. Investigate whether something is evolving in the wasteland's apex predators."
 }

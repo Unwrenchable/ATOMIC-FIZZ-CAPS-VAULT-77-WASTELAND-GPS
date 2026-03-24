@@ -158,6 +158,25 @@
         }
       ]
     },
+    "node_something_wrong": {
+      "id": "node_something_wrong",
+      "set_flags": [
+        "dolores_anomaly_noted"
+      ],
+      "text": "She stops sweeping.\n\nDoesn't turn around. Just stops.\n\n\"Something's always wrong out here.\"\n\nHer voice is flat. Like she's said it before. Many times.\n\nThen, slower:\n\n\"The fence post rusted through again last month. I keep meaning to replace it. I just...\"\n\nShe looks at the grave. The worn stones. The earth that has weathered too many seasons.\n\n\"I forget what year I bought the post.\"\n\nShe says it like it should be a small thing.",
+      "responses": [
+        {
+          "text": "[Question] Do you... do you know what year it is?",
+          "tone": "question",
+          "next": "node_what_year"
+        },
+        {
+          "text": "[Quest] I found something — a chip with your serial number on it. We need to talk.",
+          "tone": "direct",
+          "next": "node_show_chip"
+        }
+      ]
+    },
     "node_what_year": {
       "id": "node_what_year",
       "set_flags": [

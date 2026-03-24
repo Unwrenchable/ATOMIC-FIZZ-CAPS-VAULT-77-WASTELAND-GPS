@@ -5,20 +5,28 @@
   "difficulty": "medium",
   "level_required": 8,
   "fractured_timeline_context": "Super mutants from ALL Fallout games exist simultaneously: The Master's Army (FO1), Vault 87 mutants (FO3), Institute FEV mutants (FO4), and Appalachian mutants (FO76). They've realized they're all cousins created by different FEV strains. Now they want to unite.",
-
   "premise": "Marcus (FO2 super mutant companion) has called a summit of all super mutant leaders. Fawkes (FO3), Strong (FO4), Grahm (FO76), and others attend. They're tired of being hunted. They want to create the first Super Mutant Nation. Will you help or hinder them?",
-
   "stages": [
     {
       "id": "stage1_marcus_vision",
       "name": "A Dream of Unity",
       "description": "Marcus from Jacobstown has a radical idea: unite ALL super mutants regardless of intelligence level or origin. Recruit peaceful mutants, educate violent ones, create a society.",
       "objectives": [
-        {"text": "Meet Marcus at Jacobstown"},
-        {"text": "Recruit Fawkes (FO3 intelligent mutant)"},
-        {"text": "Recruit Strong (FO4 mutant seeking 'milk of human kindness')"},
-        {"text": "Recruit Grahm (FO76 friendly merchant mutant)"},
-        {"text": "Convince hostile mutant leaders (Speech checks or combat)"}
+        {
+          "text": "Meet Marcus at Jacobstown"
+        },
+        {
+          "text": "Recruit Fawkes (FO3 intelligent mutant)"
+        },
+        {
+          "text": "Recruit Strong (FO4 mutant seeking 'milk of human kindness')"
+        },
+        {
+          "text": "Recruit Grahm (FO76 friendly merchant mutant)"
+        },
+        {
+          "text": "Convince hostile mutant leaders (Speech checks or combat)"
+        }
       ]
     },
     {
@@ -44,7 +52,6 @@
       }
     }
   ],
-
   "endings": {
     "ending_mutant_nation": {
       "name": "The Green Republic",
@@ -67,9 +74,7 @@
       "gameplay": "Mutant content removed, huge rewards from BoS/Enclave, karma loss."
     }
   },
-
   "cross_timeline_magic": "This quest celebrates how EVERY Fallout game created different FEV mutants. Now they all meet and compare origin stories. It's absurd and beautiful.",
-
   "companion_reactions": {
     "fawkes": "Overjoyed - finally a chance at mutant dignity",
     "strong": "Confused - is this 'milk of human kindness'?",
@@ -77,7 +82,6 @@
     "jax_voss": "Fascinated by mutant timeline convergence",
     "harlan_voss": "Skeptical but willing to try"
   },
-
   "rewards": {
     "xp": 2500,
     "unique_items": [
@@ -86,5 +90,6 @@
       "FEV Inoculation (permanent rad resistance boost)"
     ],
     "unlocks": "Super Mutant companions from all games become recruitable"
-  }
+  },
+  "description": "Factions across timelines have called a truce. Super mutants from three different wasteland regions are convening in a single location. Help or hinder what may be the most bizarre peace summit in post-war history."
 }
