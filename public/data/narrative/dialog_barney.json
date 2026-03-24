@@ -4,6 +4,7 @@
   "portrait": "barney",
   "title": "The Barbarian of Vault 9",
   "description": "Dialog nodes for Barney Black — Arnold's older brother and the undisputed physical specimen of Vault 9. Where Arnold broke door frames, Barney broke the Vault's structural load-bearing walls. He emerged from the shelter wearing only fur pelts traded from a radscorpion merchant and carrying a pre-war claymore that he insists was 'forged by fate.' He has adopted the philosophy of a battered pre-war action figure collection — something about lamenting, crushing enemies, and what is best in life.",
+  "backstory": "Arnold's older brother by three years, and the only thing in Vault 9 more dangerous than Arnold. Where Arnold developed restraint, Barney arrived at radically different conclusions from the same pre-war action figures — specifically that what is best in life is the crushing of enemies. He widened Vault 9's exit corridor with his shoulder when the standard-width door became an insult to his frame. He wanders the wasteland with a repurposed fire-axe and a worldview that has been empirically tested against forty-seven problems.",
   "intro": {
     "id": "barney_intro",
     "conditions": [

@@ -4,6 +4,7 @@
   "portrait": "default",
   "title": "The Dark Wanderer",
   "description": "Dialog nodes for The Bat — a grim, caped vigilante who has appointed himself protector of Freeside's lower districts. He wears salvaged black combat armor shaped into something resembling pre-war theatrical costume, speaks in a deliberate rasp, and has an unsettling commitment to the dramatic. His real name is unknown. He has filed no paperwork. Freeside's residents find him terrifying and reassuring in almost equal measure.",
+  "backstory": "Nobody knows his real name. Freeside records show a 'B. Wayne' who registered as a licensed trader in 2267, paid his fees on time for eight months, and then disappeared from every official document. What appeared in his place haunted Freeside's lower districts, appearing at the scenes of crimes in hand-shaped salvaged combat armor. He doesn't talk about what happened before. He talks about justice — which, in the wasteland, is rarer and more valuable than clean water.",
   "intro": {
     "id": "bats_intro",
     "conditions": [
