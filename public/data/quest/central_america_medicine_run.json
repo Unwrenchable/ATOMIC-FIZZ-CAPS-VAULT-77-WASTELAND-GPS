@@ -1,0 +1,47 @@
+{
+  "id": "central_america_medicine_run",
+  "name": "The Medicine Run",
+  "type": "global",
+  "region": "Guatemala_Central_America",
+  "npc_giver": "global_mexico_city_chems_cook",
+  "description": "La Cocinera has synthesized a batch of antibiotics badly needed by a settlement in what used to be Guatemala. The road is controlled by a raider faction. She needs a courier who won't flinch.",
+  "gps_requirement": {
+    "region": "Guatemala",
+    "real_lat": 14.6349,
+    "real_lng": -90.5069,
+    "radius_km": 100
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Pick Up the Medicine",
+      "description": "Collect La Cocinera's antibiotic batch from her Mexico City laboratory. She'll brief you on the road conditions and what to expect from the raider faction controlling the pass.",
+      "trigger": "player_collect:item_cocinera_antibiotic_batch",
+      "actions": ["spawn:item_cocinera_antibiotic_batch", "set_flag:medicine_collected", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Navigate the Raider Road",
+      "description": "The route through the old Mexico-Guatemala corridor is held by a raider faction called the Asphalt Saints. They tax all goods — or destroy them. Find a way through.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 14.6349, "lng": -90.5069},
+      "radius_m": 5000,
+      "actions": ["spawn:enemy_asphalt_saints_checkpoint", "set_flag:raider_road_navigated", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Deliver the Antibiotics",
+      "description": "Reach the Guatemala settlement with the antibiotic batch intact. The settlement's medic is waiting.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 14.6349, "lng": -90.5069},
+      "radius_m": 500,
+      "actions": ["complete_quest:true", "set_flag:medicine_run_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 300,
+    "caps": 150,
+    "fizz": 20,
+    "items": ["item_cocinera_antibiotic_batch"]
+  }
+}

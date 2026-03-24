@@ -1,0 +1,52 @@
+{
+  "id": "russian_vault_program",
+  "name": "The Soviet Vaults",
+  "type": "global",
+  "region": "Ural_Mountains_Russia",
+  "npc_giver": "global_moscow_archivist",
+  "description": "The Archivist has found documentation suggesting the Soviet government ran a parallel vault program before the war. The entrances are listed in the documents she's recovered. One appears to be in the Urals — accessible, but uncontacted for two hundred years.",
+  "gps_requirement": {
+    "region": "Ural Mountains, Russia",
+    "real_lat": 56.8431,
+    "real_lng": 60.6454,
+    "radius_km": 200
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Travel to the Urals",
+      "description": "Leave Moscow and head east into the Ural Mountain range. The Archivist's documents indicate the vault entrance is in a specific mountain pass that was used as a pre-war military supply route.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 56.8431, "lng": 60.6454},
+      "radius_m": 5000,
+      "actions": ["set_flag:urals_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Find the Vault Entrance",
+      "description": "The Soviet vault entrance is marked in the Archivist's documents as 'Object 77-S.' Search the mountain pass for the concealed entrance — it was built to survive nuclear strike and remain invisible from the air.",
+      "trigger": "player_search_area",
+      "actions": ["spawn:item_soviet_vault_exterior_log", "set_flag:soviet_vault_found", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Make Contact",
+      "description": "The vault shows signs of habitation. Announce your presence carefully — inhabitants who have been sealed for two hundred years may not react predictably to the outside world.",
+      "trigger": "player_attempt_contact:soviet_vault_inhabitants",
+      "actions": ["set_flag:soviet_vault_contact_made", "unlock_stage:4"]
+    },
+    {
+      "id": 4,
+      "name": "Report to the Archivist",
+      "description": "Return to Moscow with what you've learned. The Archivist needs a full account before she decides what to do with the information.",
+      "trigger": "player_returns:global_moscow_archivist",
+      "actions": ["spawn:item_soviet_vault_schematics", "complete_quest:true", "set_flag:soviet_vaults_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 500,
+    "caps": 300,
+    "fizz": 40,
+    "items": ["item_soviet_vault_schematics"]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "nile_dam_crisis",
+  "name": "The Dam That Held",
+  "type": "global",
+  "region": "Aswan_Egypt",
+  "npc_giver": "global_cairo_sphinx",
+  "description": "The Aswan Dam survived the bombs but its control systems are failing. The Sphinx has been watching it for fifty years. If it goes, the Nile Valley settlements go with it. The Sphinx needs someone to go in and manually stabilize what can be stabilized.",
+  "gps_requirement": {
+    "region": "Aswan, Egypt",
+    "real_lat": 24.0889,
+    "real_lng": 32.8998,
+    "radius_km": 80
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Travel to Aswan",
+      "description": "Head south from Cairo along the Nile Valley to reach Aswan and the dam complex. The Sphinx has arranged a guide for the first section of the journey.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 24.0889, "lng": 32.8998},
+      "radius_m": 2000,
+      "actions": ["set_flag:aswan_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Access the Dam Control Systems",
+      "description": "The main control facility is partially flooded and structurally compromised. Find a safe route in and locate the primary stabilization terminals.",
+      "trigger": "player_reaches_area:dam_control_room",
+      "actions": ["set_flag:dam_controls_accessed", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Stabilize the Primary Systems",
+      "description": "The Sphinx's notes describe three critical systems that must be manually reset. Work through each one before the cascade failure progresses further.",
+      "trigger": "player_complete_tasks:dam_systems_stabilized",
+      "actions": ["set_flag:dam_systems_stable", "unlock_stage:4"]
+    },
+    {
+      "id": 4,
+      "name": "Report Back to the Sphinx",
+      "description": "Return to Cairo and report the dam's status to the Sphinx. The Nile Valley settlements will need to know how much time they have.",
+      "trigger": "player_returns:global_cairo_sphinx",
+      "actions": ["complete_quest:true", "set_flag:nile_dam_crisis_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 500,
+    "caps": 300,
+    "fizz": 40,
+    "items": ["item_aswan_engineering_report"]
+  }
+}

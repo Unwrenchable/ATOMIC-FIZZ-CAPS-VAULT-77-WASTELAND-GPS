@@ -1,0 +1,108 @@
+{
+  "id": "dialog_lena_cross",
+  "npc": "Lena Cross",
+  "portrait": "lena_cross",
+  "title": "The Strip Runner",
+  "description": "Quick, practical, perpetually in motion — she moves through the Strip like someone who knows every shortcut and is always late for the one that matters. She stops for you like she's already assessed whether it's worth it, and the fact that she stopped means she decided it is.",
+  "backstory": "Lena Cross has been running the Strip since she was fifteen — courier work, information drops, occasional jobs that don't have formal names. She's good at it in the way that comes from needing to be. She met Jax Voss four years before his disappearance, during a job that went sideways in a way that would have gotten her killed. She doesn't talk about the specifics. She says Jax stepped in. She says she'd have done the same. She's been looking for him since he vanished, piecing together relay signal fragments and whispers from the underground, building a map of where Jax's distributed consciousness has been broadcasting from. She's close. She's been close for a year. She won't say she's scared to find the answer.",
+  "intro": {
+    "id": "lena_cross_intro",
+    "conditions": ["!flag:met_lena_cross"],
+    "set_flags": ["met_lena_cross"],
+    "video_speech": "I know who you are. I've been watching the same threads you're pulling on. Let's not waste time pretending we're strangers.",
+    "text": "She doesn't offer a hand. She evaluates you with the precise economy of someone who has about forty-five seconds before her next job needs to start.<br><br>\"I know who you are. I've been watching the same threads you're pulling on.\"<br><br>A quick nod at the bench beside her. \"Sit or don't, I'm talking either way. I'm Lena Cross. Strip runner. And I'm going to guess you're here about Jax.\"",
+    "responses": [
+      {"text": "[Question] How well did you know Jax before everything happened?", "tone": "question", "next": "lena_how_she_knew_jax"},
+      {"text": "[Friendly] You've clearly been working this longer than I have. I'd rather work together than compete.", "tone": "kind", "next": "lena_partnership_offer"},
+      {"text": "[Sarcastic] You've got quite an intelligence network for a courier.", "tone": "sarcastic", "next": "lena_sarcasm_response"},
+      {"text": "[Direct] The signal echoes. I need coordinates. What do you have?", "tone": "direct", "next": "lena_quest_lostsignal"}
+    ]
+  },
+  "knowledge_nodes": [
+    {
+      "id": "lena_how_she_knew_jax",
+      "conditions": ["!flag:lena_jax_backstory_told"],
+      "text": "She's quiet for a moment. Just a moment — she keeps these short.<br><br>\"He was good at walking into the middle of someone else's problem and making it his.\"<br><br>A pause. \"I had a job go bad near the Westside corridor. Three people who shouldn't have been there were waiting for me. Jax came in from nowhere. Didn't have to. Didn't even know me.\"<br><br>She looks across the Strip, not at you. \"I never told him what that meant to me. By the time I thought I should, he was gone.\"<br><br>\"I'm not going to get the chance again without doing something about it.\"",
+      "set_flags": ["lena_jax_backstory_told"]
+    },
+    {
+      "id": "lena_knows_signal_widow",
+      "conditions": ["flag:met_signal_widow", "!flag:lena_widow_comment"],
+      "text": "\"The Signal Widow.\" She nods. \"I know about her. She's been picking up his frequencies from the ridge.\"<br><br>\"I've been tracking the relay tower network from this end. She's tracking from out there. If we can cross-reference—\"<br><br>Her expression sharpens. \"That might actually get us a fix on his current relay.\"",
+      "set_flags": ["lena_widow_comment"]
+    },
+    {
+      "id": "lena_knows_nova",
+      "conditions": ["flag:met_nova_lane", "!flag:lena_nova_comment"],
+      "text": "\"Nova Lane. Yeah.\" A flicker of something — grudging respect, maybe. \"She's been gathering intel on FizzCo's interest in the relay towers. That connects.\"<br><br>\"We're not exactly friends, but we're working the same problem from different directions.\"<br><br>\"Don't tell her I said that.\"",
+      "set_flags": ["lena_nova_comment"]
+    },
+    {
+      "id": "lena_partnership_offer",
+      "conditions": ["!flag:lena_partnership_response"],
+      "text": "She looks at you for a beat longer than usual.<br><br>\"I've been at this alone for two years. Anyone else who wanted in either wanted credit or got scared off.\"<br><br>Another beat. \"You're still standing here. And you found the same threads I did independently.\"<br><br>\"Fine.\" She doesn't smile, but something in her jaw relaxes by a fraction. \"Together.\"",
+      "set_flags": ["lena_partnership_response"]
+    },
+    {
+      "id": "lena_sarcasm_response",
+      "conditions": ["!flag:lena_sarcasm_noted"],
+      "text": "\"I run things across the Strip. Information moves the same as packages.\"<br><br>She doesn't seem bothered. \"Most couriers don't pay attention to what they're carrying. I do. It adds up.\"",
+      "set_flags": ["lena_sarcasm_noted"]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "lena_signal_confirmed",
+      "conditions": ["flag:jax_signal_active", "!flag:lena_signal_confirmation"],
+      "text": "She stands up straight from wherever she was leaning. Just slightly. The tell is in the shoulders.<br><br>\"It's active.\"<br><br>A long pause — longer than her usual ones.<br><br>\"I knew it was still broadcasting. I've been mapping it for a year and people kept telling me I was reading artifacts.\"<br><br>She exhales once. \"Okay. Then we don't have time to be slow about this.\"",
+      "set_flags": ["lena_signal_confirmation"]
+    },
+    {
+      "id": "lena_fizzco_threat",
+      "conditions": ["flag:fizzco_active", "!flag:lena_fizzco_warn"],
+      "text": "\"FizzCo's after him. And now they're after you.\"<br><br>She says it flatly, without drama. \"They've been monitoring the relay tower frequencies. If they figure out what the signal is — and they're smart enough to — they'll try to suppress it.\"<br><br>\"We need to move faster than their analysts. That means now.\"",
+      "set_flags": ["lena_fizzco_warn"]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "lena_quest_lostsignal",
+      "conditions": ["!flag:side_jax_lostsignal_taken"],
+      "text": "She pulls out a battered notebook — actual paper, actual handwriting, painstakingly organized — and opens it to a map covered in marked relay tower positions and signal strength annotations.<br><br>\"I've got seventeen confirmed broadcast points. Four of them have recent timestamps — within the last three weeks. That means his signal has been consolidating.\"<br><br>She taps three locations. \"These three need physical confirmation. Someone needs to go to each one, verify the relay hardware, pull the timestamp logs.\"<br><br>\"I'd go myself but I'm—\" A pause. \"I've got a conflict that keeps me on the Strip right now.\"<br><br>She looks at you. \"Will you go?\"",
+      "offers_quest": "side_jax_lostsignal",
+      "set_flags": ["side_jax_lostsignal_taken"],
+      "video_speech": "Three relay towers. Go to each one, verify the hardware, pull the timestamp logs. We need to know where Jax's signal has been most recently."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "lena_running",
+      "keywords": ["run", "courier", "job", "strip"],
+      "text": "\"Running the Strip teaches you things. Every faction, every power structure, every back door and side arrangement.\"<br><br>\"I know this city better than most people who were born in it. That's the job.\"",
+      "video_speech": "Running the Strip teaches you who actually runs things. The ledger and the reality are never the same."
+    },
+    {
+      "id": "lena_jax_general",
+      "keywords": ["jax", "vault 77", "signal", "consciousness"],
+      "text": "\"He's still out there. Distributed, broadcasting, fighting to stay coherent across a relay network that wasn't built to carry a person.\"<br><br>She closes the notebook. \"I'm going to find him before it stops being possible.\""
+    },
+    {
+      "id": "lena_drink",
+      "keywords": ["drink", "bar", "caps", "pay"],
+      "text": "\"He still owes me a drink.\"<br><br>A fraction of something that might, in the right light, be a smile. \"That's technically why I have to find him. Outstanding debt.\"",
+      "video_speech": "He still owes me a drink. That's technically why I have to find him."
+    },
+    {
+      "id": "lena_fizzco_general",
+      "keywords": ["fizzco", "corporation", "enemy"],
+      "text": "\"FizzCo's interested in the relay network for reasons that aren't good for anyone who isn't FizzCo.\"<br><br>\"Whatever Jax has become — they want either to use it or stop it. Both of those options are bad for him.\""
+    }
+  ],
+  "fallback": {
+    "id": "lena_cross_fallback",
+    "text": "\"I'm on the clock. Either make it quick or come back when you've got something concrete.\"",
+    "video_speech": "I'm on the clock. Come back when you've got something concrete."
+  },
+  "mood": "urgent",
+  "personality": ["Quick and competent", "Emotionally guarded", "Loyal beyond words"]
+}
