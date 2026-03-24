@@ -773,7 +773,7 @@
       const _npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
       const rawText = (text || "").replace(/<br\s*\/?>/gi, "\n");
       panel.innerHTML = `
-        <div style="color:#ffaa00; font-weight:bold; margin-bottom:6px;">${npcName}</div>
+        <div style="color:#ffaa00; font-weight:bold; margin-bottom:6px;">${_npcName}</div>
         <div id="nrrInlineText" style="white-space:pre-wrap; min-height:2em;"></div>
         <div id="nrrInlineBtn" style="margin-top:12px;"></div>`;
 

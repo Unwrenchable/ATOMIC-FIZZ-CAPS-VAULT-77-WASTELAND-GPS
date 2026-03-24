@@ -12,15 +12,15 @@ const ADMIN_SESSION_PREFIX = "admin:sess:";
 function safeCompareNonPassword(a, b) {
   const strA = String(a || "");
   const strB = String(b || "");
-  
-  // Ensure both strings are the same length for timing safety
-  const maxLen = Math.max(strA.length, strB.length);
-  const bufA = Buffer.alloc(maxLen);
-  const bufB = Buffer.alloc(maxLen);
-  
-  bufA.write(strA);
-  bufB.write(strB);
-  
+
+  // Return false immediately when lengths differ — mismatched lengths can never be equal.
+  // NOTE: this leaks length information, but for non-secret usernames this is acceptable.
+  // All password comparisons must use bcrypt.compare() via verifyPassword().
+  if (strA.length !== strB.length) return false;
+
+  const bufA = Buffer.from(strA, "utf8");
+  const bufB = Buffer.from(strB, "utf8");
+
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
