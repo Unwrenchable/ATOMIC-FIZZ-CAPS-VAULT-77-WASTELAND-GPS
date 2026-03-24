@@ -1,9 +1,9 @@
 {
   "id": "dialog_jax",
-  "npc": "Jax Harlan",
-  "title": "The Overseer",
-  "description": "Modular dialog nodes for Jax Harlan, the fragmented mechanic whose consciousness echoes through Mojave relay towers.",
-  "backstory": "Born 2261, died in 2277, didn't stay dead. Jax was a brilliant mechanic who took a Vault-Tec contractor job to pay for his father's ranger medical bills — and Vault-Tec had other plans for someone of his 'high cognitive yield.' Project J-77 extracted his neural map under the pretext of 'personality archiving' and distributed his consciousness across the Mojave relay tower network. His body lived on as a hollow ghoul. His mind lived on in the static. He's been both, and neither, ever since.",
+  "npc": "Jax Voss",
+  "title": "The Fragmented Signal",
+  "description": "Modular dialog nodes for Jax Voss, the fragmented mechanic whose consciousness echoes through Mojave relay towers.",
+  "backstory": "Born 2261 to NCR Ranger Harlan Voss, died in 2277, didn't stay dead. Jax Voss was a brilliant mechanic who took a Vault-Tec contractor job to pay for his father's mounting medical bills — and Vault-Tec had other plans for someone of his 'high cognitive yield.' Project J-77 extracted his neural map under the pretext of 'personality archiving' and distributed his consciousness across the Mojave relay tower network. His body lived on as a hollow ghoul. His mind lived on in the static. He's been both, and neither, ever since.",
   "intro": {
     "id": "jax_intro",
     "conditions": [
