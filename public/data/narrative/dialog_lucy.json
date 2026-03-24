@@ -3,6 +3,7 @@
   "npc": "Lucy \"Sparkplug\" Vance",
   "title": "The Scavenger Queen",
   "description": "Dialog nodes for Lucy Vance, the fast-talking scavenger queen who trades junk, secrets, and favors across the Mojave.",
+  "backstory": "Grew up in the Vegas Strip's underground service corridors, learning to fix everything that kept the towers running. Left at nineteen when it became clear the towers would never pay her what she was worth. Spent the decade after building the Mojave's most reliable scavenging network. She can identify any pre-war machine by the sound it makes when it's dying. She says that's her most valuable skill. She's right.",
   "intro": {
     "id": "lucy_intro",
     "conditions": [

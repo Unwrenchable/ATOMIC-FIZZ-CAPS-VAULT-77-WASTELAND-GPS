@@ -4,6 +4,7 @@
   "portrait": "default",
   "title": "The Last Wanderer",
   "description": "Dialog nodes for The Doctor — a wild-eyed, over-dressed wanderer who arrived in the Mojave inside a battered blue cabinet of obvious pre-war construction. He claims to be 'a doctor' but refuses to specify of what. His knowledge of pre-war history is improbably precise, he occasionally references events that haven't happened yet, and his cabinet is somehow larger inside than outside. He says this is 'a storage solution' and declines to elaborate.",
+  "backstory": "Three medical degrees, three pre-war universities, and one hospital that burned in 2085 — that's when Ellison Vance stopped using his name and started being just 'The Doctor.' He's been walking the Mojave ever since with a black bag full of pre-war instruments and a medical philosophy shaped by four decades of treating impossible cases. He called himself 'The Last Wanderer' when a patient asked why he kept moving. He couldn't remember where he'd been trying to go. He still can't.",
   "intro": {
     "id": "doc_intro",
     "conditions": [

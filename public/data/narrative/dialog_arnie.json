@@ -4,6 +4,7 @@
   "portrait": "arnie",
   "title": "The Last Vault Enforcer",
   "description": "Dialog nodes for Arnold Black, known as Dutch — a colossal Vault-bred fighter who broke out of Vault 9 after drawing the short straw on the wasteland survey team. His vocabulary is blunt, his grip is crushing, and his pre-war sensibilities run toward action and very loud impact. His brother Barney stayed behind, allegedly to become something of a barbarian.",
+  "backstory": "Born as Vault 9's heaviest recorded infant, Arnold Black spent forty years as the vault's de facto enforcer, mediator, and the reason the exit corridor needed reinforcing. His father's collection of pre-war action figures — chrome bodybuilders, muscled screen heroes — became his philosophical library. He left the vault when Vault-Tec Prototype Unit Seven destroyed Searchlight Station and killed twelve people he'd sworn to protect. He has not stopped moving since.",
   "intro": {
     "id": "arnie_intro",
     "conditions": [

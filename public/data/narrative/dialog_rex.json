@@ -3,6 +3,7 @@
   "npc": "Captain Rex Maldonado",
   "title": "The Dam Sentinel",
   "description": "Dialog nodes for Captain Rex Maldonado, the gruff militia leader defending Hoover Dam from coordinated threats.",
+  "backstory": "Twenty-three years at Hoover Dam. Rex arrived as a fresh NCR Ranger recruit and watched the politics, the water, and the people around him shift and fail, while the dam held. He decided the dam was the only commitment worth making in a world that had stopped making sense — an objective, holdable, defensible thing. He has since turned down three promotions, four retirement offers, and what may have been a marriage proposal. The dam is the job.",
   "intro": {
     "id": "rex_intro",
     "conditions": [

@@ -4,6 +4,7 @@
   "portrait": "bless",
   "title": "Wasteland Healer",
   "description": "She moves through the ruins like radiation through concrete — quietly, inevitably. People say she's been touched by something. She doesn't correct them.",
+  "backstory": "No origin. No documentation. No faction. Bless appeared in Jacobstown twelve years ago with a medical kit and a knowledge of wasteland herbalism that no university ever published. She has been walking the Mojave's worst places ever since, patching what can be patched and sitting with what can't. The wasteland has tried to kill her seventeen confirmed times. She keeps coming back. She says there is always someone who needs the next stimpak.",
   "intro": {
     "id": "bless_intro",
     "conditions": [
@@ -97,7 +98,9 @@
       "set_flags": [
         "bless_patched_player"
       ],
-      "grant_items": ["stimpak"],
+      "grant_items": [
+        "stimpak"
+      ],
       "grant_from": "Bless",
       "responses": [
         {
@@ -416,17 +419,34 @@
   "wildcards": [
     {
       "id": "bless_on_healing",
-      "keywords": ["heal", "medicine", "doctor", "injury", "hurt", "wounded"],
+      "keywords": [
+        "heal",
+        "medicine",
+        "doctor",
+        "injury",
+        "hurt",
+        "wounded"
+      ],
       "text": "\"Medicine out here is math.\"\n\nShe doesn't elaborate immediately.\n\n\"Supplies. Time. Severity. What's available versus what's needed.\"\n\n\"The hard part isn't the treatment. It's making the numbers work.\""
     },
     {
       "id": "bless_on_vault_tec",
-      "keywords": ["vault", "vault-tec", "overseer"],
+      "keywords": [
+        "vault",
+        "vault-tec",
+        "overseer"
+      ],
       "text": "\"Vault-Tec built the problem and sold the solution.\"\n\nFlat. No anger — she's past anger.\n\n\"The vaults kept some people alive. That's not nothing.\"\n\nA beat.\n\n\"It's also not forgiveness.\""
     },
     {
       "id": "bless_on_factions",
-      "keywords": ["faction", "brotherhood", "raiders", "ncr", "enclave"],
+      "keywords": [
+        "faction",
+        "brotherhood",
+        "raiders",
+        "ncr",
+        "enclave"
+      ],
       "text": "\"Every faction thinks they're the exception.\"\n\nShe checks a bandage without looking up.\n\n\"The one that finally figured out how to be decent to everyone would win in three months.\"\n\n\"None of them have figured it out yet.\"",
       "responses": [
         {
@@ -438,12 +458,23 @@
     },
     {
       "id": "bless_on_death",
-      "keywords": ["death", "dead", "dying", "kill", "killed"],
+      "keywords": [
+        "death",
+        "dead",
+        "dying",
+        "kill",
+        "killed"
+      ],
       "text": "\"People die out here.\"\n\nSimple. Not callous.\n\n\"I've made peace with the ones I couldn't save. Took a while.\"\n\nShe sets down her tools for a moment.\n\n\"The ones that stay with you are the ones where you had what you needed and still lost. Those teach you the most.\"\n\nShe picks her tools back up.\n\n\"Learn from them. Don't drown in them.\""
     },
     {
       "id": "bless_on_fizz",
-      "keywords": ["fizz", "caps", "token", "economy"],
+      "keywords": [
+        "fizz",
+        "caps",
+        "token",
+        "economy"
+      ],
       "text": "\"The Atomic Fizz network is interesting.\"\n\nShe considers it clinically.\n\n\"Pre-war branding repurposed into a functional economy. The FIZZ token's actually more stable than most factions' credit systems.\"\n\n\"I use it to trade for medical supplies. It works.\"\n\nA pause.\n\n\"Which makes it more reliable than most things out here.\"",
       "responses": [
         {
@@ -462,7 +493,9 @@
         "flag:siren_intro_seen",
         "!flag:bless_comment_siren"
       ],
-      "set_flags": ["bless_comment_siren"],
+      "set_flags": [
+        "bless_comment_siren"
+      ],
       "text": "\"Siren found you.\"\n\nNot a question.\n\n\"She's good at her job. The Signal Runners do important work — most survivors who make it through the first week had Siren or someone like her talking them through it.\"\n\nShe resumes her inventory.\n\n\"Trust her signal. She doesn't broadcast empty.\""
     },
     {
@@ -472,7 +505,9 @@
         "flag:met_doc",
         "!flag:bless_comment_doc"
       ],
-      "set_flags": ["bless_comment_doc"],
+      "set_flags": [
+        "bless_comment_doc"
+      ],
       "text": "\"You've spoken with the Doctor.\"\n\nShe files something without elaborating.\n\n\"Good diagnostician. Unorthodox methods.\"\n\nA pause.\n\n\"We have a professional relationship. We don't always agree on protocol.\"\n\n\"But he keeps people alive. That's the job.\""
     },
     {
@@ -482,7 +517,9 @@
         "flag:met_mara",
         "!flag:bless_comment_mara"
       ],
-      "set_flags": ["bless_comment_mara"],
+      "set_flags": [
+        "bless_comment_mara"
+      ],
       "text": "\"Dr. Kestrel.\"\n\nHer voice takes on a careful neutrality.\n\n\"Brilliant. Genuinely. Also operating with an ethical framework that I can't entirely endorse.\"\n\nShe seems to weigh how much to say.\n\n\"She keeps excellent data. Her research may matter, long term.\"\n\n\"I just don't want to be a subject in it.\"",
       "responses": [
         {

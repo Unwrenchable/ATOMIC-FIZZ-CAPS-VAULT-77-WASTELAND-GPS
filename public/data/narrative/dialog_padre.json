@@ -4,6 +4,7 @@
   "portrait": "default",
   "title": "Wandering Priest of the Apocalypse",
   "description": "Dialog nodes for Father Cain — a wandering preacher who carries a scorched pre-war Bible and a battered camp stove. He is not affiliated with the Church of the Atom, the Followers of the Apocalypse, or any organization he is aware of. He believes the bombs were a judgement, that the wasteland is a purgatory, and that the path forward requires the same virtues that were required before: charity, endurance, and not stealing other people's food. He dispenses wisdom with equal parts scripture and practical survival advice, and he is one of the genuinely kind people in the Mojave.",
+  "backstory": "Ordained twice: once before the bombs, by a denomination that no longer exists; and once by himself, in the ruins of a Vegas wedding chapel, having concluded that the authority to minister could be self-granted when alternatives were unavailable. He has been walking a circuit of wasteland settlements for thirty years, offering what comfort can be given and what hard truths are necessary. His pre-war Bible has forty years of margin notes in four colors of scavenged pen.",
   "intro": {
     "id": "padre_intro",
     "conditions": [
