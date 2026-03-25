@@ -350,6 +350,12 @@
       existing.quantity = (existing.quantity || 1) + quantity;
       console.log(`[PlayerState] Stacked ${quantity}x ${item.name} (total: ${existing.quantity})`);
     } else {
+      const MAX_INVENTORY_SIZE = 200;
+      // Enforce inventory size cap before adding a new slot
+      if (_state.inventory.length >= MAX_INVENTORY_SIZE) {
+        console.warn(`[PlayerState] Inventory full (${MAX_INVENTORY_SIZE} items) — cannot add ${item.name}`);
+        return false;
+      }
       // Add new item
       const newItem = {
         ...item,
@@ -517,7 +523,8 @@
     
     // Check for level up (100 XP per level)
     const xpPerLevel = 100;
-    while (_state.xp >= _state.level * xpPerLevel) {
+    const MAX_LEVEL = 100;
+    while (_state.xp >= _state.level * xpPerLevel && _state.level < MAX_LEVEL) {
       _state.xp -= _state.level * xpPerLevel;
       _state.level++;
       console.log(`[PlayerState] LEVEL UP! Now level ${_state.level}`);
@@ -539,7 +546,7 @@
    * @param {number} amount - Caps to award
    */
   function awardCaps(amount) {
-    if (typeof amount !== "number") return;
+    if (typeof amount !== "number" || !Number.isFinite(amount)) return;
     
     _state.caps = Math.max(0, _state.caps + amount);
     _dirty = true;
