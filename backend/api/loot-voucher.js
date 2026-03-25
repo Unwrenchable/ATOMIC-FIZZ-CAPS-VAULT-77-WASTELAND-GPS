@@ -2,6 +2,7 @@
 const router = require("express").Router();
 const nacl = require("tweetnacl");
 const serializeVoucherMessage = require("../lib/gps").serializeVoucherMessage;
+const { authMiddleware } = require("../lib/auth");
 
 // Helper: robust bs58 loader that works with different package shapes
 function loadBs58() {
@@ -88,7 +89,10 @@ function initServerKey() {
 initServerKey();
 
 // Mounted at /api/loot-voucher
-router.post("/", async (req, res) => {
+// BUG-008 FIX: added authMiddleware — previously any unauthenticated caller
+// could generate signed vouchers, which could be used with the redemption
+// endpoint to claim loot without being an authenticated player.
+router.post("/", authMiddleware, async (req, res) => {
   try {
     const lootId = 1n;
     const latitude = 36.1699;

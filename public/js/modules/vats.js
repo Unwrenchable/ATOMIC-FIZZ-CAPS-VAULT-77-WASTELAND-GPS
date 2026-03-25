@@ -62,6 +62,13 @@
   }
 
   function exitVATS() {
+    // BUG-011 FIX: refund AP for any shots that were queued but never executed.
+    // Previously cancelling VATS after queuing shots permanently spent the AP.
+    for (const shot of VATS.queuedShots) {
+      VATS.actionPoints = Math.min(VATS.maxActionPoints, VATS.actionPoints + shot.apCost);
+    }
+    VATS.queuedShots = [];
+
     VATS.enabled = false;
     VATS.targetingMode = false;
     VATS.targets = [];

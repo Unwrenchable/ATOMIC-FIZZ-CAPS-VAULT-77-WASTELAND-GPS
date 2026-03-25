@@ -376,9 +376,21 @@
     // ============================================================
     // BRANCHING NAVIGATION — navigate to a named node in dialog.nodes map
     // ============================================================
-    _goToNode(nodeId, dialog) {
+    _goToNode(nodeId, dialog, _visited) {
       if (!dialog) dialog = this.dialogs[this.currentDialogId];
       if (!dialog) return;
+
+      // BUG-009 FIX: detect circular dialog loops. The _visited set tracks nodes
+      // seen in the current synchronous traversal chain (auto-advance paths).
+      // Each user click starts a fresh chain via _renderChoices → _goToNode.
+      // If the same node appears twice in one chain, log an error and close.
+      if (!_visited) _visited = new Set();
+      if (_visited.has(nodeId)) {
+        console.error("[narrative] Circular dialog loop detected at node:", nodeId, "— closing dialog");
+        this.closeDialog();
+        return;
+      }
+      _visited.add(nodeId);
 
       // Check dialog.nodes map first, then fall back to searching all node arrays
       const nodesMap = dialog.nodes || {};

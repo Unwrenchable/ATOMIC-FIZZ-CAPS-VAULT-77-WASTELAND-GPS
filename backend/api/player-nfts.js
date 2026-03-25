@@ -3,14 +3,14 @@
 const express = require("express");
 const router = express.Router();
 const { fetchNFTsForWallet } = require("../lib/nfts");
+const { authMiddleware } = require("../lib/auth");
 
-router.get("/", async (req, res) => {
+// BUG-003 FIX: added authMiddleware — previously any unauthenticated caller
+// could enumerate any wallet's on-chain NFT holdings via the ?wallet= query param.
+// Wallet is now sourced from the verified session (req.player.wallet) to prevent IDOR.
+router.get("/", authMiddleware, async (req, res) => {
   try {
-    const wallet = req.query.wallet;
-
-    if (!wallet) {
-      return res.status(400).json({ ok: false, error: "Missing wallet parameter" });
-    }
+    const wallet = req.player.wallet;
 
     // Fetch NFTs from devnet via Helius
     const chainNFTs = await fetchNFTsForWallet(wallet);
@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
     console.error("[api/player-nfts] error:", err);
     res.status(500).json({
       ok: false,
-      error: err.message || "Failed to fetch player NFTs"
+      error: "Failed to fetch player NFTs"
     });
   }
 });
