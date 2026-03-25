@@ -100,7 +100,10 @@
     // Final price calculation
     // --------------------------------------------------------
     calculateBuyPrice(item, merchant) {
-      if (!item) return 0;
+      if (!item) {
+        console.warn('[economy] calculateBuyPrice called with null item');
+        return Infinity; // force UI to show item as unavailable, not free
+      }
 
       const base = item.baseValue || 10;
       const rarity = item.rarity || "common";
