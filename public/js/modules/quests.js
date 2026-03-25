@@ -1273,8 +1273,8 @@
         }
       }
       
-      // Give item rewards using unified PlayerState for proper persistence
-      if (r.items && Array.isArray(r.items)) {
+      // Give item rewards locally — only if backend didn't already handle it
+      if (!backendAppliedRewards && r.items && Array.isArray(r.items)) {
         r.items.forEach(itemId => {
           // Look up item definition from loaded items database
           let itemDef = null;
