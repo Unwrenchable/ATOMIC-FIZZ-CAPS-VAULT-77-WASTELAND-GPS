@@ -133,16 +133,11 @@
     if (!chat) return;
     var div = document.createElement('div');
     div.className = "message " + sender;
-    // SEC-001 FIX: game-generated "overseer" messages (mini-game output,
-    // static responses) intentionally use <br> for line breaks and are
-    // safe static strings.  Player-typed text is always pre-escaped by
-    // the _processInput() caller (escapeHtml(text)).  We preserve that
-    // design here but add a safety net: escape anything that isn't already
-    // HTML (i.e. doesn't start with a tag or contain known safe tags).
-    // Static game responses that embed <br> tags are kept as-is;
-    // unknown or user-origin content is fully escaped.
-    // Simpler approach: always escape — static <br> responses still display
-    // correctly since escapeHtml leaves printable text intact.
+    // SEC-001 FIX: Always escape all content before inserting into innerHTML.
+    // Static game responses that previously relied on <br> for line breaks
+    // will render the escaped text instead, which is acceptable for security.
+    // Player-typed text was already pre-escaped by the caller; double-escaping
+    // is harmless since escapeHtml is idempotent on already-safe text.
     div.innerHTML = _overseerEscapeHtml(text);
     chat.appendChild(div);
     scrollToBottom();

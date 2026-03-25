@@ -297,13 +297,18 @@ router.get("/quote/sell", requireConfig, fizzReadLimiter, async (req, res) => {
  * instead of req.body, preventing an attacker from self-reporting an admin
  * wallet address without actually owning it.
  */
-router.post("/admin/launch", requireConfig, authMiddleware, async (req, res) => {
+router.post("/admin/launch", requireConfig, authMiddleware, fizzWriteLimiter, async (req, res) => {
     try {
         // SEC-004 FIX: wallet from verified session — never from req.body
         const wallet = req.player.wallet;
         const { name, symbol, uri } = req.body;
         
         // Verify admin status
+        if (ADMIN_WALLETS.length === 0) {
+            // SEC-004 FIX: warn loudly if ADMIN_WALLETS is not configured —
+            // a missing env var would silently deny all admin requests.
+            console.warn('[fizz-fun] ADMIN_WALLETS env var is empty — /admin/launch will always be denied');
+        }
         if (!ADMIN_WALLETS.includes(wallet)) {
             return res.status(403).json({ error: "Not authorized as admin" });
         }
