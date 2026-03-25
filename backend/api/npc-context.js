@@ -114,7 +114,7 @@ router.get('/:npcId/encounter', authMiddleware, encounterLimiter, async (req, re
     return res.json({ npc_id: npcId, region, level, faction, narrative });
   } catch (err) {
     console.error('[npc-context] generateDynamicEncounter error:', err.message);
-    return res.status(500).json({ error: 'Encounter generation failed', detail: err.message });
+    return res.status(500).json({ error: 'Encounter generation failed' });
   }
 });
 

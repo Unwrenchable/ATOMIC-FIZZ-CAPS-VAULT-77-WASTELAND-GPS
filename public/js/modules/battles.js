@@ -44,6 +44,12 @@
       const inv = this.gs && this.gs.inventory;
       if (!inv || !Array.isArray(inv.ammo)) return false;
 
+      // BUG-019 FIX: treat amount <= 0 as "free fire" — no ammo required.
+      // This prevents weapons with ammoPerShot:0 (or null) from falsely failing
+      // the ammo check.  The call site already converts 0 with `|| 1`, but this
+      // guard adds a second layer so the function stays correct if called directly.
+      if (!amount || amount <= 0) return true;
+
       const ammoItem = inv.ammo.find(a => a.id === ammoType || a.type === ammoType);
       if (!ammoItem) return false;
 

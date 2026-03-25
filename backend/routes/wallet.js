@@ -2,6 +2,10 @@
 // ------------------------------------------------------------
 // Atomic Fizz Caps – Wallet Authentication Route
 // Solana signature verification + Redis session storage
+//
+// SEC-002 FIX: sessions now use the same key namespace and JSON
+// format as lib/auth.js so tokens from either auth path are
+// accepted by authMiddleware without a JSON parse error.
 // ------------------------------------------------------------
 const rateLimit = require("express-rate-limit");
 
@@ -16,6 +20,7 @@ const walletLimiter = rateLimit({
 const express = require("express");
 const router = express.Router();
 const redis = require("../lib/redis");
+const { storeSession } = require("../lib/auth");
 const nacl = require("tweetnacl");
 const bs58 = require("bs58");
 const { v4: uuidv4 } = require("uuid");
@@ -71,10 +76,10 @@ router.post("/verify", walletLimiter, async (req, res) => {
     return res.status(401).json({ success: false, error: "Invalid signature" });
   }
 
-  // Create session
+  // Create session — store in auth:session:* namespace with JSON payload
+  // so authMiddleware can verify tokens from either auth path.
   const sessionId = uuidv4();
-
-  await redis.set(`wallet:session:${sessionId}`, publicKey, { EX: 86400 });
+  await storeSession(sessionId, { wallet: publicKey, createdAt: Date.now() });
 
   // Cleanup nonce
   await redis.del(`wallet:nonce:${publicKey}`);
@@ -91,14 +96,15 @@ router.post("/verify", walletLimiter, async (req, res) => {
 // ------------------------------------------------------------
 router.get("/session/:sessionId", walletLimiter, async (req, res) => {
   const { sessionId } = req.params;
+  const { getSession } = require("../lib/auth");
 
-  const wallet = await redis.get(`wallet:session:${sessionId}`);
+  const session = await getSession(sessionId);
 
-  if (!wallet) {
+  if (!session || !session.wallet) {
     return res.json({ success: false, valid: false });
   }
 
-  res.json({ success: true, valid: true, wallet });
+  res.json({ success: true, valid: true, wallet: session.wallet });
 });
 
 module.exports = router;

@@ -62,9 +62,9 @@ function selectTier(meta, playerLevel) {
   const level = typeof playerLevel === "number" && playerLevel > 0 ? playerLevel : DEFAULT_PLAYER_LEVEL;
   const scale = meta.level_scaling_factor || 0;
 
-  const nft     = (meta.nft_drop_base_chance    || 0.02) + scale * level;
-  const leg     = (meta.legendary_base_chance    || 0.05) + scale * level;
-  const epic    = (meta.epic_base_chance         || 0.12) + scale * level;
+  const nft     = Math.min(0.15, (meta.nft_drop_base_chance    || 0.02) + scale * level);
+  const leg     = Math.min(0.25, (meta.legendary_base_chance    || 0.05) + scale * level);
+  const epic    = Math.min(0.35, (meta.epic_base_chance         || 0.12) + scale * level);
   const rare    = (meta.rare_base_chance         || 0.28);
   const uncommon= (meta.uncommon_base_chance     || 0.35);
   const common  = (meta.common_base_chance       || 0.18);
