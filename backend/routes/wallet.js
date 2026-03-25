@@ -35,6 +35,18 @@ router.get("/nonce/:publicKey", walletLimiter, async (req, res) => {
     return res.status(400).json({ success: false, error: "Missing publicKey" });
   }
 
+  // SECURITY FIX: validate publicKey is a valid base58 Solana address before
+  // using it as a Redis key component. Without this check an attacker could
+  // inject arbitrary strings (e.g. containing colons or newlines) into the
+  // Redis key namespace, potentially colliding with other keys.
+  // Solana ed25519 public keys base58-encode to 32-50 characters.
+  if (typeof publicKey !== "string" || publicKey.length < 32 || publicKey.length > 50) {
+    return res.status(400).json({ success: false, error: "Invalid publicKey length" });
+  }
+  if (!/^[1-9A-HJ-NP-Za-km-z]+$/.test(publicKey)) {
+    return res.status(400).json({ success: false, error: "Invalid publicKey format" });
+  }
+
   const nonce = uuidv4();
 
   await redis.set(`wallet:nonce:${publicKey}`, nonce, { EX: 300 });

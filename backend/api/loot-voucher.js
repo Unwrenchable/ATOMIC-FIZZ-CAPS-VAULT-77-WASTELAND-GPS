@@ -1,8 +1,20 @@
 // backend/api/loot-voucher.js
 const router = require("express").Router();
 const nacl = require("tweetnacl");
-const serializeVoucherMessage = require("../lib/gps").serializeVoucherMessage;
+const rateLimit = require("express-rate-limit");
 const { authMiddleware } = require("../lib/auth");
+const serializeVoucherMessage = require("../lib/gps").serializeVoucherMessage;
+
+// SECURITY FIX: rate-limit voucher generation — each successful call produces a
+// signed voucher that can be redeemed for CAPS.  Without a rate limit a single
+// unauthenticated caller could flood the endpoint and harvest many vouchers.
+const voucherIssueLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5,              // 5 vouchers per minute per IP
+  message: { ok: false, error: "Too many voucher requests — slow down, Vault Dweller" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Helper: robust bs58 loader that works with different package shapes
 function loadBs58() {
@@ -92,7 +104,9 @@ initServerKey();
 // BUG-008 FIX: added authMiddleware — previously any unauthenticated caller
 // could generate signed vouchers, which could be used with the redemption
 // endpoint to claim loot without being an authenticated player.
-router.post("/", authMiddleware, async (req, res) => {
+// SECURITY FIX: require authentication (authMiddleware) so only signed-in players
+// can request vouchers, and rate-limit to 5/min to prevent bulk voucher harvesting.
+router.post("/", voucherIssueLimiter, authMiddleware, async (req, res) => {
   try {
     const lootId = 1n;
     const latitude = 36.1699;
