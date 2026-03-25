@@ -9,9 +9,35 @@
 
 const express = require('express');
 const router  = express.Router();
+const rateLimit = require('express-rate-limit');
 
+const { authMiddleware } = require('../lib/auth');
 const { buildNPCContext, generateDynamicEncounter, prepareCharacterCast } =
   require('../lib/npc-xai-context');
+
+// SEC-013 FIX: Rate-limit all NPC context endpoints to prevent unauthenticated
+// callers from draining xAI / HuggingFace API quota.
+// The encounter endpoint calls generateDynamicEncounter → Grok API; without a
+// limit an attacker could exhaust the API key with trivial requests.
+const npcContextLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 20,
+  message: { error: 'Too many NPC context requests' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Stricter limiter for the AI-backed encounter endpoint (each request costs tokens)
+// SEC-013 FIX: key by authenticated wallet address instead of IP to prevent
+// one wallet from exhausting quota for all users behind the same NAT/proxy.
+const encounterLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  keyGenerator: (req) => (req.player && req.player.wallet) || req.ip,
+  message: { error: 'Too many encounter generation requests — slow down, Vault Dweller' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Simple input sanitizer — strips characters that cannot appear in an NPC id
 function sanitizeId(raw) {
@@ -22,7 +48,7 @@ function sanitizeId(raw) {
 // GET /api/npc-context
 // Returns the full character cast (all NPC profiles).
 // -----------------------------------------------------------------------
-router.get('/', (req, res) => {
+router.get('/', npcContextLimiter, (req, res) => {
   try {
     const cast = prepareCharacterCast();
     return res.json({ cast, total: cast.length });
@@ -40,7 +66,7 @@ router.get('/', (req, res) => {
 //   ?faction=<string> player faction id
 //   ?region=<string>  current region name
 // -----------------------------------------------------------------------
-router.get('/:npcId', (req, res) => {
+router.get('/:npcId', npcContextLimiter, (req, res) => {
   const npcId = sanitizeId(req.params.npcId);
   if (!npcId) {
     return res.status(400).json({ error: 'npcId is required' });
@@ -65,12 +91,15 @@ router.get('/:npcId', (req, res) => {
 // -----------------------------------------------------------------------
 // GET /api/npc-context/:npcId/encounter
 // Generates a dynamic AI-powered encounter narrative for the NPC's region.
+// SEC-013 FIX: Requires authentication (authMiddleware) AND a strict rate
+// limiter (encounterLimiter) because each call hits the xAI / HF API and
+// consumes paid tokens.  Previously unauthenticated with no per-route limit.
 // Query params:
 //   ?level=<number>
 //   ?region=<string>
 //   ?faction=<string>  hostile faction id
 // -----------------------------------------------------------------------
-router.get('/:npcId/encounter', async (req, res) => {
+router.get('/:npcId/encounter', authMiddleware, encounterLimiter, async (req, res) => {
   const npcId = sanitizeId(req.params.npcId);
   if (!npcId) {
     return res.status(400).json({ error: 'npcId is required' });
@@ -85,7 +114,7 @@ router.get('/:npcId/encounter', async (req, res) => {
     return res.json({ npc_id: npcId, region, level, faction, narrative });
   } catch (err) {
     console.error('[npc-context] generateDynamicEncounter error:', err.message);
-    return res.status(500).json({ error: 'Encounter generation failed', detail: err.message });
+    return res.status(500).json({ error: 'Encounter generation failed' });
   }
 });
 

@@ -115,6 +115,16 @@ router.post("/accept", authMiddleware, async (req, res) => {
       return res.status(400).json({ ok: false, error: "Quest already active" });
     }
 
+    // BUG-013 FIX: enforce a maximum number of simultaneously active quests to
+    // prevent unbounded profile JSON growth and Redis storage inflation.
+    const MAX_ACTIVE_QUESTS = 10;
+    if (player.quests.active.length >= MAX_ACTIVE_QUESTS) {
+      return res.status(400).json({
+        ok: false,
+        error: `Maximum ${MAX_ACTIVE_QUESTS} active quests — complete or abandon one first`,
+      });
+    }
+
     // Add to active quests
     player.quests.active.push(questId);
     player.quests.acceptedAt = player.quests.acceptedAt || {};

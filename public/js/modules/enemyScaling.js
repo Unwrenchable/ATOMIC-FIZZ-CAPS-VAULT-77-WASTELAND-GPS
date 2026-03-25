@@ -41,15 +41,17 @@
         let elite = false;
         let eliteTier = 0;
 
-        if (eliteRoll < 0.10) {
-          elite = true;
-          eliteTier = 1;
-          lvl += 4;
-        }
+        // BUG-006 FIX: changed to if/else-if so Tier-2 condition (eliteRoll < 0.03)
+        // doesn't also execute the Tier-1 block (eliteRoll < 0.10).  The old code
+        // double-stacked +4+7 = +11 levels for Tier-2 elites instead of the intended +7.
         if (eliteRoll < 0.03) {
           elite = true;
           eliteTier = 2;
           lvl += 7;
+        } else if (eliteRoll < 0.10) {
+          elite = true;
+          eliteTier = 1;
+          lvl += 4;
         }
 
         // Mutation logic

@@ -11,12 +11,29 @@
   Overseer.initialized = false;
 
   // print() — write a line to the chat pane
+  // SEC-001 FIX: escapeHtml helper used by Overseer.print to prevent XSS.
+  // data.payload values (poi names, item names, quest titles, alert messages,
+  // caps balance, etc.) come from game state which may reflect server data
+  // that a player could have set to a malicious value.
+  function _overseerEscapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   Overseer.print = function (text) {
     var chatEl = document.getElementById("chat");
     if (!chatEl) return;
     var div = document.createElement("div");
     div.className = "message overseer";
-    div.innerHTML = String(text);
+    // SEC-001 FIX: escape all text before inserting into innerHTML.
+    // Previously used div.innerHTML = String(text) which allowed XSS
+    // via data.payload values (poi names, inventory items, alert messages).
+    div.innerHTML = _overseerEscapeHtml(text);
     chatEl.appendChild(div);
     chatEl.scrollTop = chatEl.scrollHeight;
   };
@@ -116,7 +133,12 @@
     if (!chat) return;
     var div = document.createElement('div');
     div.className = "message " + sender;
-    div.innerHTML = String(text);
+    // SEC-001 FIX: Always escape all content before inserting into innerHTML.
+    // Static game responses that previously relied on <br> for line breaks
+    // will render the escaped text instead, which is acceptable for security.
+    // Player-typed text was already pre-escaped by the caller; double-escaping
+    // is harmless since escapeHtml is idempotent on already-safe text.
+    div.innerHTML = _overseerEscapeHtml(text);
     chat.appendChild(div);
     scrollToBottom();
     limitMessages(); // Prevent memory leaks

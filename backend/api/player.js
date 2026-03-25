@@ -120,8 +120,26 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
         .slice(0, 2);
     }
 
+    // ----------------------------------------------------------
+    // Validate and sanitise player name
+    // Allow alphanumeric, spaces, hyphens, underscores, and periods only.
+    // This prevents stored XSS via leaderboard/Overseer terminal display
+    // and blocks homograph/injection attacks (SEC-005 FIX).
+    // Max 32 characters.
+    // ----------------------------------------------------------
+    let chosenName = "WANDERER";
+    if (typeof name === "string") {
+      const trimmed = name.trim();
+      if (trimmed.length > 0) {
+        chosenName = trimmed
+          .replace(/[^a-zA-Z0-9\s\-_.]/g, "")
+          .slice(0, 32)
+          .trim() || "WANDERER";
+      }
+    }
+
     const profile = {
-      name: typeof name === "string" && name.trim().length > 0 ? name.trim() : "WANDERER",
+      name: chosenName,
       special: chosenSpecial,
       background: chosenBackground,
       traits: chosenTraits,
