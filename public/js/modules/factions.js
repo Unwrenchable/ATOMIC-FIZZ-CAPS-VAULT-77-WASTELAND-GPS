@@ -54,7 +54,13 @@
 
     adjustReputation(worldState, factionId, delta) {
       if (Game.modules.world && Game.modules.world.reputation) {
-        return Game.modules.world.reputation.adjust(worldState, factionId, delta);
+        const result = Game.modules.world.reputation.adjust(worldState, factionId, delta);
+        // BUG-020 FIX: clamp score to [-100, 100] so unbounded farming doesn't
+        // create floating-point anomalies or break future threshold comparisons.
+        if (result && typeof result.score === 'number') {
+          result.score = Math.max(-100, Math.min(100, result.score));
+        }
+        return result;
       }
       return null;
     },

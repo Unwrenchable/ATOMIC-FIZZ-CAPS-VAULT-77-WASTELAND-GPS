@@ -63,7 +63,7 @@ router.post("/update", authMiddleware, gpsLimiter, async (req, res) => {
     console.error("[api/gps] update error:", err?.message || err);
     return res
       .status(400)
-      .json({ ok: false, error: err.message || "Failed to update GPS" });
+      .json({ ok: false, error: "Failed to update GPS" });
   }
 });
 

@@ -270,12 +270,20 @@ router.post("/verify", verifyLimiter, async (req, res) => {
 });
 
 // GET /api/auth/session/:sessionId
-router.get("/session/:sessionId", async (req, res) => {
+// SEC-011 FIX: require the caller to be authenticated AND to be looking up
+// their own session — prevents any leaked session ID from being used to
+// deanonymize wallet addresses.
+router.get("/session/:sessionId", authMiddleware, async (req, res) => {
   try {
     const { sessionId } = req.params;
 
     if (!sessionId || typeof sessionId !== "string" || sessionId.length > 256) {
       return res.status(400).json({ ok: false, error: "Invalid sessionId" });
+    }
+
+    // Only allow a session to look itself up — no cross-session enumeration.
+    if (sessionId !== req.player.sessionId) {
+      return res.status(403).json({ ok: false, error: "Forbidden" });
     }
 
     const session = await getSession(sessionId);

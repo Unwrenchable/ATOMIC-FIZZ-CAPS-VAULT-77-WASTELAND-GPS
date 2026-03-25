@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { redis } = require('../lib/redis');
+const { authMiddleware } = require('../lib/auth');
 
 // This router handles server-side secret checks for quests.
 // The idea: client asks the server whether a secret objective has been satisfied
@@ -38,10 +39,13 @@ const SECRET_DEFS = {
   }
 };
 
-router.post('/check', async (req, res) => {
+// BUG-004 FIX: added authMiddleware — previously any unauthenticated caller could
+// probe or permanently mark quest secrets for any wallet by supplying wallet in body.
+router.post('/check', authMiddleware, async (req, res) => {
   try {
-    const { wallet, questId, proof } = req.body || {};
-    if (!wallet || !questId) return res.status(400).json({ ok: false, error: 'missing' });
+    const wallet = req.player.wallet; // from verified session — never from req.body (IDOR)
+    const { questId, proof } = req.body || {};
+    if (!questId) return res.status(400).json({ ok: false, error: 'missing' });
 
     const def = SECRET_DEFS[questId];
     if (!def) return res.status(404).json({ ok: false, error: 'unknown_secret' });
