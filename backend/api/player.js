@@ -122,17 +122,17 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
 
     // ----------------------------------------------------------
     // Validate and sanitise player name
-    // Max 32 characters, alphanumeric + common punctuation only
-    // (no HTML/script chars). Prevents stored XSS in leaderboard
-    // and Overseer terminal display (SEC-005 FIX).
+    // Allow alphanumeric, spaces, hyphens, underscores, and periods only.
+    // This prevents stored XSS via leaderboard/Overseer terminal display
+    // and blocks homograph/injection attacks (SEC-005 FIX).
+    // Max 32 characters.
     // ----------------------------------------------------------
     let chosenName = "WANDERER";
     if (typeof name === "string") {
       const trimmed = name.trim();
       if (trimmed.length > 0) {
-        // Strip HTML-special chars, limit to 32 chars
         chosenName = trimmed
-          .replace(/[<>"'&]/g, "")
+          .replace(/[^a-zA-Z0-9\s\-_.]/g, "")
           .slice(0, 32)
           .trim() || "WANDERER";
       }

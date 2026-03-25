@@ -28,9 +28,12 @@ const npcContextLimiter = rateLimit({
 });
 
 // Stricter limiter for the AI-backed encounter endpoint (each request costs tokens)
+// SEC-013 FIX: key by authenticated wallet address instead of IP to prevent
+// one wallet from exhausting quota for all users behind the same NAT/proxy.
 const encounterLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 5,
+  keyGenerator: (req) => (req.player && req.player.wallet) || req.ip,
   message: { error: 'Too many encounter generation requests — slow down, Vault Dweller' },
   standardHeaders: true,
   legacyHeaders: false,
