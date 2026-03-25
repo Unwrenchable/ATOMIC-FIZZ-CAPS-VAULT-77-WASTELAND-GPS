@@ -120,8 +120,26 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
         .slice(0, 2);
     }
 
+    // ----------------------------------------------------------
+    // Validate and sanitise player name
+    // Max 32 characters, alphanumeric + common punctuation only
+    // (no HTML/script chars). Prevents stored XSS in leaderboard
+    // and Overseer terminal display (SEC-005 FIX).
+    // ----------------------------------------------------------
+    let chosenName = "WANDERER";
+    if (typeof name === "string") {
+      const trimmed = name.trim();
+      if (trimmed.length > 0) {
+        // Strip HTML-special chars, limit to 32 chars
+        chosenName = trimmed
+          .replace(/[<>"'&]/g, "")
+          .slice(0, 32)
+          .trim() || "WANDERER";
+      }
+    }
+
     const profile = {
-      name: typeof name === "string" && name.trim().length > 0 ? name.trim() : "WANDERER",
+      name: chosenName,
       special: chosenSpecial,
       background: chosenBackground,
       traits: chosenTraits,
