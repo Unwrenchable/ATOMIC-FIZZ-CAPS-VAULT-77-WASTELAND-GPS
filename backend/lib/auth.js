@@ -327,7 +327,14 @@ router.get("/me", authMiddleware, async (req, res) => {
 
 module.exports = {
   authMiddleware,
+  generateNonce,
+  generateSessionId,
+  storeNonce,
+  getNonce,
+  deleteNonce,
+  storeSession,
   getSession,
+  deleteSession,
   isAdmin,
   router,
 };
