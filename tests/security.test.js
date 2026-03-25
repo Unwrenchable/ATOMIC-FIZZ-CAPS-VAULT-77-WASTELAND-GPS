@@ -668,6 +668,106 @@ test("NEW-015: npc-context.js does not leak raw error details (SEC-009 fix)", ()
   );
 });
 
+test("BUG-021: dungeon.js _connectRooms call site uses declared variable names (not _roomW/_roomH/_gap)", () => {
+  const src = readFile("public/js/modules/dungeon.js");
+  assert.ok(src, "public/js/modules/dungeon.js must exist");
+  assert.ok(
+    src.includes("_connectRooms(positions, roomW, roomH, gap)"),
+    "dungeon.js must pass declared roomW/roomH/gap (not undeclared _roomW/_roomH/_gap) at the _connectRooms call site"
+  );
+});
+
+test("BUG-022: dungeon.js hub template has no disconnected island room", () => {
+  const src = readFile("public/js/modules/dungeon.js");
+  assert.ok(src, "public/js/modules/dungeon.js must exist");
+  const hubMatch = src.match(/name:\s*["']hub["'][\s\S]*?positions:\s*\[([\s\S]*?)\]/);
+  assert.ok(hubMatch, "dungeon.js must contain a 'hub' template with positions array");
+  assert.ok(
+    !hubMatch[1].includes("row: 2, col: 2"),
+    "hub template must not contain isolated room at (2,2) — it had zero door connections"
+  );
+});
+
+test("BUG-023: crafting.js consumeIngredient handles flat-array inventory (PlayerState format)", () => {
+  const src = readFile("public/js/modules/crafting.js");
+  assert.ok(src, "public/js/modules/crafting.js must exist");
+  assert.ok(
+    src.includes("Array.isArray(inv)"),
+    "crafting.js consumeIngredient must handle flat-array inventory to prevent free infinite crafting"
+  );
+});
+
+test("BUG-024: quests.js item rewards gated by backendAppliedRewards flag", () => {
+  const src = readFile("public/js/modules/quests.js");
+  assert.ok(src, "public/js/modules/quests.js must exist");
+  assert.ok(
+    src.includes("!backendAppliedRewards && r.items"),
+    "quests.js must guard item reward delivery with !backendAppliedRewards to prevent double-award"
+  );
+});
+
+test("BUG-025: player-state.js awardCaps guards against NaN (isFinite check)", () => {
+  const src = readFile("public/js/game/player-state.js");
+  assert.ok(src, "public/js/game/player-state.js must exist");
+  assert.ok(
+    src.includes("Number.isFinite(amount)"),
+    "player-state.js awardCaps must use Number.isFinite to reject NaN — typeof NaN === 'number' passes naive guard"
+  );
+});
+
+test("BUG-026: player-state.js awardXP enforces MAX_LEVEL cap in frontend", () => {
+  const src = readFile("public/js/game/player-state.js");
+  assert.ok(src, "public/js/game/player-state.js must exist");
+  assert.ok(
+    src.includes("_state.level < MAX_LEVEL"),
+    "player-state.js awardXP must enforce MAX_LEVEL cap to prevent level > 100 in frontend"
+  );
+});
+
+test("BUG-027: player-state.js addItem enforces MAX_INVENTORY_SIZE (200) cap", () => {
+  const src = readFile("public/js/game/player-state.js");
+  assert.ok(src, "public/js/game/player-state.js must exist");
+  assert.ok(
+    src.includes("MAX_INVENTORY_SIZE"),
+    "player-state.js addItem must enforce inventory size cap to prevent unbounded localStorage growth"
+  );
+  assert.ok(
+    src.includes("_state.inventory.length >= MAX_INVENTORY_SIZE"),
+    "player-state.js addItem must check inventory length against MAX_INVENTORY_SIZE before adding new slot"
+  );
+});
+
+test("BUG-028: location-claim.js claimRadius 0 uses typeof check (not falsy ||)", () => {
+  const src = readFile("backend/api/location-claim.js");
+  assert.ok(src, "backend/api/location-claim.js must exist");
+  assert.ok(
+    src.includes("typeof location.claimRadius === 'number'"),
+    "location-claim.js must use typeof check for claimRadius so 0 is not treated as falsy (100m default)"
+  );
+});
+
+test("BUG-029: npcEncounter.js ambient comments use two independent random values", () => {
+  const src = readFile("public/js/modules/npcEncounter.js");
+  assert.ok(src, "public/js/modules/npcEncounter.js must exist");
+  assert.ok(
+    src.includes("randBuf[1] % comments.length"),
+    "npcEncounter.js ambient comment must use a second independent random value for index selection"
+  );
+});
+
+test("BUG-030: crafting backend daily limit uses atomic INCR-before-check (no TOCTOU) in craft handler", () => {
+  const src = readFile("backend/api/crafting.js");
+  assert.ok(src, "backend/api/crafting.js must exist");
+  assert.ok(
+    src.includes("await redis.incr(countKey)") && src.includes("await redis.decr(countKey)"),
+    "crafting.js daily limit must use atomic INCR-before-check with DECR rollback to prevent TOCTOU race"
+  );
+  assert.ok(
+    src.includes("newCount > maxPerDay"),
+    "crafting.js daily limit enforcement must check newCount from INCR (not a pre-read todayCount)"
+  );
+});
+
 // ─── Summary ──────────────────────────────────────────────────────────────
 
 console.log("\n─────────────────────────────────────────");

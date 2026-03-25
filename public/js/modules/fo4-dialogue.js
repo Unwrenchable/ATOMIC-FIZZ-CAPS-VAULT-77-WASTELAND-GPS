@@ -1214,15 +1214,25 @@
     // SHOW QUEST UPDATE
     // ============================================================
     showQuestUpdate(title, text) {
+      // SECURITY FIX: title and text may come from quest IDs, reward values, or
+      // NPC dialogue data.  Build the DOM safely without innerHTML interpolation
+      // to prevent stored-XSS if any upstream data contains HTML.
       const notification = document.createElement('div');
       notification.className = 'fo4-quest-update';
-      notification.innerHTML = `
-        <div class="fo4-quest-update-title">${title}</div>
-        <div class="fo4-quest-update-text">${text}</div>
-      `;
-      
+
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'fo4-quest-update-title';
+      titleDiv.textContent = title;
+
+      const textDiv = document.createElement('div');
+      textDiv.className = 'fo4-quest-update-text';
+      textDiv.textContent = text;
+
+      notification.appendChild(titleDiv);
+      notification.appendChild(textDiv);
+
       document.body.appendChild(notification);
-      
+
       setTimeout(() => {
         notification.remove();
       }, 3000);
