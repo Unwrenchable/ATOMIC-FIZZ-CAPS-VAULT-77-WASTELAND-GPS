@@ -314,6 +314,27 @@ safeMount("/api/npc-context", api("npc-context"));
 safeMount("/api/fizz-fun", api("fizz-fun"));
 
 // Admin/advanced panel routes
+// SECURITY FIX: mount the admin login/logout handlers as explicit HTTP routes.
+// Previously adminLoginHandler and adminLogoutHandler were exported from
+// adminAuth.js but never attached to any route, making the admin panel
+// completely inaccessible (broken) and leaving the login endpoint as a 404.
+try {
+  const {
+    adminLoginHandler,
+    adminLogoutHandler,
+    adminRateLimiter,
+    adminLoginRateLimiter,
+  } = require("./middleware/adminAuth");
+
+  // POST /api/admin/login  — rate-limited (5 attempts / 15 min)
+  app.post("/api/admin/login",  adminLoginRateLimiter, adminLoginHandler);
+  // POST /api/admin/logout — standard rate limit
+  app.post("/api/admin/logout", adminRateLimiter,      adminLogoutHandler);
+  console.log("[server] mounted admin login/logout at /api/admin/login, /api/admin/logout");
+} catch (err) {
+  console.warn("[server] failed to mount admin login/logout:", err && err.message);
+}
+
 safeMount("/api/admin/player", api("adminPlayer"));
 safeMount("/api/admin/mintables", api("adminMintables"));
 safeMount("/api/admin/keys", api("keys-admin"));

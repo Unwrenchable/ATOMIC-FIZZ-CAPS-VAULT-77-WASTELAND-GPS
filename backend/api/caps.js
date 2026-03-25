@@ -126,17 +126,25 @@ router.get("/leaderboard", async (req, res) => {
     // Returned keys: ["afw:afw:player:<wallet>", ...]
     // Strip "afw:afw:player:" to get the wallet address.
     const PLAYER_PREFIX = key(key("")) + "player:"; // e.g. "afw:afw:player:"
-    const entries = [];
 
-    for (const fullKey of (playerKeys || [])) {
+    // Collect wallet addresses first, then fetch all profiles in parallel
+    // to avoid N+1 sequential Redis round-trips.
+    const wallets = (playerKeys || [])
+      .filter(k => k.startsWith(PLAYER_PREFIX))
+      .map(k => k.slice(PLAYER_PREFIX.length))
+      .filter(Boolean);
+
+    const rawProfiles = await Promise.all(
+      wallets.map(w => redis.hget(key(`player:${w}`), "profile").catch(() => null))
+    );
+
+    const entries = [];
+    for (let idx = 0; idx < wallets.length; idx++) {
       try {
-        if (!fullKey.startsWith(PLAYER_PREFIX)) continue; // skip unexpected key shapes
-        const wallet  = fullKey.slice(PLAYER_PREFIX.length);
-        const bareKey = `player:${wallet}`; // bare key for hget() to prefix internally
-        if (!wallet) continue;
-        const raw = await redis.hget(bareKey, "profile");
+        const raw = rawProfiles[idx];
         if (!raw) continue;
         const profile = JSON.parse(raw);
+        const wallet = wallets[idx];
         const score =
           metric === "xp"
             ? (typeof profile.xp === "number" ? profile.xp : 0)
@@ -150,7 +158,7 @@ router.get("/leaderboard", async (req, res) => {
           score,
         });
       } catch (profileErr) {
-        console.warn("[caps] leaderboard: skipping malformed profile for key", fullKey, profileErr.message);
+        console.warn("[caps] leaderboard: skipping malformed profile for wallet", wallets[idx], profileErr.message);
       }
     }
 

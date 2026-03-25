@@ -51,6 +51,30 @@
 
     consumeIngredient(req) {
       const inv = this.gs.inventory;
+      let toRemove = req.amount || 1;
+
+      // Handle flat-array inventory (PlayerState canonical format)
+      if (Array.isArray(inv)) {
+        for (let i = inv.length - 1; i >= 0 && toRemove > 0; i--) {
+          const item = inv[i];
+          if (!item || item.id !== req.id) continue;
+          const stack = item.quantity ?? item.amount ?? 1;
+          if (stack <= toRemove) {
+            toRemove -= stack;
+            inv.splice(i, 1);
+          } else {
+            if ('quantity' in item) {
+              item.quantity = stack - toRemove;
+            } else {
+              item.amount = stack - toRemove;
+            }
+            toRemove = 0;
+          }
+        }
+        return;
+      }
+
+      // Category-object fallback (legacy inventory format)
       const pools = [
         inv.weapons,
         inv.armor,
@@ -59,8 +83,6 @@
         inv.questItems,
         inv.ammo
       ].filter(Boolean);
-
-      let toRemove = req.amount || 1;
 
       for (const arr of pools) {
         for (let i = arr.length - 1; i >= 0 && toRemove > 0; i--) {
@@ -72,7 +94,6 @@
             toRemove -= stack;
             arr.splice(i, 1);
           } else {
-            // BUG-008: use 'in' check so write matches read precedence even when quantity===0
             if ('quantity' in item) {
               item.quantity = stack - toRemove;
             } else {

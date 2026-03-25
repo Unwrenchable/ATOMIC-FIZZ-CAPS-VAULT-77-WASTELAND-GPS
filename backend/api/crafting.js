@@ -89,7 +89,11 @@ router.post("/craft", craftingLimiter, authMiddleware, async (req, res) => {
     }
 
     // 2. Level requirement check (read from Redis player profile)
-    const profileRaw = await redis.hget(`player:${wallet}`, "profile");
+    // SECURITY FIX: use key(`player:${wallet}`) to match the double-prefix
+    // naming convention used throughout the codebase.  Without key() the hget
+    // call reads from 'afw:player:<wallet>' instead of 'afw:afw:player:<wallet>',
+    // returning null and defaulting to level 1 — bypassing all level gates.
+    const profileRaw = await redis.hget(key(`player:${wallet}`), "profile");
     const profile = profileRaw ? JSON.parse(profileRaw) : null;
     const playerLevel = profile?.level ?? 1;
     const requiredLevel = recipe.requiresLevel ?? 1;
@@ -116,13 +120,21 @@ router.post("/craft", craftingLimiter, authMiddleware, async (req, res) => {
       }
     }
 
-    // 4. Daily craft limit check — read current count first
+    // 4. Daily craft limit check — use atomic INCR to avoid TOCTOU race condition.
+    // Increment first; if we exceed the limit, decrement and reject.
+    // This ensures concurrent requests never both pass the check before either increments.
     const maxPerDay = recipe.maxPerDay ?? Infinity;
     let countKey = null;
     if (maxPerDay !== Infinity) {
       countKey = craftCountKey(wallet, recipeId);
-      const todayCount = parseInt((await redis.get(countKey)) || "0", 10);
-      if (todayCount >= maxPerDay) {
+      const newCount = await redis.incr(countKey);
+      if (newCount === 1) {
+        // First craft today — set expiry (25 hours covers UTC day rollover)
+        await redis.expire(countKey, 90000);
+      }
+      if (newCount > maxPerDay) {
+        // Over limit — undo the increment and reject
+        await redis.decr(countKey);
         return res.status(429).json({
           ok: false,
           error: `Daily limit reached (${maxPerDay}/day for ${recipe.name || recipeId})`,
@@ -137,16 +149,6 @@ router.post("/craft", craftingLimiter, authMiddleware, async (req, res) => {
     if ((recipe.cooldownSeconds ?? 0) > 0) {
       // TTL = cooldown + 60s buffer
       await redis.set(cdKey, String(now), { EX: (recipe.cooldownSeconds + 60) });
-    }
-
-    // Atomically increment daily count using INCR (prevents race-condition double-craft)
-    // Set TTL on first increment only (25 hours covers UTC day rollover)
-    if (countKey !== null) {
-      const newCount = await redis.incr(countKey);
-      if (newCount === 1) {
-        // First craft today — set expiry
-        await redis.expire(countKey, 90000);
-      }
     }
 
     return res.json({

@@ -26,6 +26,7 @@ const router = require("express").Router();
 const { Connection, PublicKey, Transaction: _Transaction } = require("@solana/web3.js");
 const { Program: _Program, AnchorProvider: _AnchorProvider, BN: _BN } = require("@coral-xyz/anchor");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
+const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
 
 // Configuration
 // Fizz.fun uses a unified ecosystem design:
@@ -273,14 +274,16 @@ router.get("/quote/sell", requireConfig, async (req, res) => {
 /**
  * Admin: Launch token with USDC (pre-mainnet bootstrap)
  */
-router.post("/admin/launch", requireConfig, async (req, res) => {
+router.post("/admin/launch", requireConfig, adminRateLimiter, requireAdmin, async (req, res) => {
     try {
-        const { wallet, name, symbol, uri } = req.body;
-        
-        // Verify admin status
-        if (!ADMIN_WALLETS.includes(wallet)) {
-            return res.status(403).json({ error: "Not authorized as admin" });
-        }
+        const { name, symbol, uri } = req.body;
+
+        // SECURITY FIX: wallet is no longer accepted from req.body.
+        // Previously any caller who knew (or guessed) an admin wallet address could
+        // bypass this check because wallet addresses are publicly visible on-chain.
+        // The route now requires a valid admin Bearer session (requireAdmin middleware)
+        // which was already validated via username+password login.
+        // The wallet field is now informational only (logged from session context).
         
         // Validate inputs
         if (!name || name.length > 32) {
@@ -294,7 +297,7 @@ router.post("/admin/launch", requireConfig, async (req, res) => {
         }
         
         // Log admin action (for transparency)
-        console.log(`[fizz-fun] Admin launch: ${wallet} launching ${symbol}`);
+        console.log(`[fizz-fun] Admin launch by authenticated admin: ${symbol}`);
         
         // In production: verify USDC payment and call create_token_admin
         // For now, return transaction to be signed by admin

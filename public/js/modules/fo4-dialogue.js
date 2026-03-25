@@ -932,12 +932,16 @@
     _showAffinityChange(npcName, amount) {
       const popup = document.createElement('div');
       popup.className = `fo4-affinity-popup ${amount < 0 ? 'negative' : ''}`;
-      
-      const text = amount > 0 
-        ? `${npcName} liked that.` 
+
+      // SECURITY FIX: npcName comes from companion/NPC data that could contain
+      // HTML special characters. Use textContent for the safe parts and build
+      // the DOM node without innerHTML interpolation to prevent XSS.
+      const textDiv = document.createElement('div');
+      textDiv.className = 'fo4-affinity-text';
+      textDiv.textContent = amount > 0
+        ? `${npcName} liked that.`
         : `${npcName} disliked that.`;
-      
-      popup.innerHTML = `<div class="fo4-affinity-text">${text}</div>`;
+      popup.appendChild(textDiv);
       
       document.body.appendChild(popup);
       
@@ -1196,15 +1200,25 @@
     // SHOW QUEST UPDATE
     // ============================================================
     showQuestUpdate(title, text) {
+      // SECURITY FIX: title and text may come from quest IDs, reward values, or
+      // NPC dialogue data.  Build the DOM safely without innerHTML interpolation
+      // to prevent stored-XSS if any upstream data contains HTML.
       const notification = document.createElement('div');
       notification.className = 'fo4-quest-update';
-      notification.innerHTML = `
-        <div class="fo4-quest-update-title">${title}</div>
-        <div class="fo4-quest-update-text">${text}</div>
-      `;
-      
+
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'fo4-quest-update-title';
+      titleDiv.textContent = title;
+
+      const textDiv = document.createElement('div');
+      textDiv.className = 'fo4-quest-update-text';
+      textDiv.textContent = text;
+
+      notification.appendChild(titleDiv);
+      notification.appendChild(textDiv);
+
       document.body.appendChild(notification);
-      
+
       setTimeout(() => {
         notification.remove();
       }, 3000);
