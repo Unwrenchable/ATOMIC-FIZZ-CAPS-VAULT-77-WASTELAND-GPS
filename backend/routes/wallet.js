@@ -19,11 +19,17 @@ const walletLimiter = rateLimit({
 
 const express = require("express");
 const router = express.Router();
-const redis = require("../lib/redis");
-const { storeSession } = require("../lib/auth");
 const nacl = require("tweetnacl");
 const bs58 = require("bs58");
-const { v4: uuidv4 } = require("uuid");
+const {
+  storeSession,
+  getSession,
+  generateNonce,
+  generateSessionId,
+  storeNonce,
+  getNonce,
+  deleteNonce,
+} = require("../lib/auth");
 
 // ------------------------------------------------------------
 // Generate a nonce for the wallet to sign
@@ -47,11 +53,11 @@ router.get("/nonce/:publicKey", walletLimiter, async (req, res) => {
     return res.status(400).json({ success: false, error: "Invalid publicKey format" });
   }
 
-  const nonce = uuidv4();
+  const nonce = generateNonce();
 
-  await redis.set(`wallet:nonce:${publicKey}`, nonce, { EX: 300 });
+  await storeNonce(publicKey, nonce);
 
-  res.json({ success: true, nonce });
+  res.json({ ok: true, nonce });
 });
 
 // ------------------------------------------------------------
@@ -64,7 +70,7 @@ router.post("/verify", walletLimiter, async (req, res) => {
     return res.status(400).json({ success: false, error: "Missing fields" });
   }
 
-  const nonce = await redis.get(`wallet:nonce:${publicKey}`);
+  const nonce = await getNonce(publicKey);
 
   if (!nonce) {
     return res.status(400).json({ success: false, error: "Nonce expired" });
@@ -79,7 +85,7 @@ router.post("/verify", walletLimiter, async (req, res) => {
     return res.status(400).json({ success: false, error: "Invalid encoding" });
   }
 
-  const msgBytes = Buffer.from(nonce);
+  const msgBytes = Buffer.from(`Atomic Fizz Caps login: ${nonce}`, "utf8");
 
   // Verify signature
   const valid = nacl.sign.detached.verify(msgBytes, sigBytes, pubKeyBytes);
@@ -90,15 +96,15 @@ router.post("/verify", walletLimiter, async (req, res) => {
 
   // Create session — store in auth:session:* namespace with JSON payload
   // so authMiddleware can verify tokens from either auth path.
-  const sessionId = uuidv4();
+  const sessionId = generateSessionId();
   await storeSession(sessionId, { wallet: publicKey, createdAt: Date.now() });
 
   // Cleanup nonce
-  await redis.del(`wallet:nonce:${publicKey}`);
+  await deleteNonce(publicKey);
 
   res.json({
-    success: true,
-    session: sessionId,
+    ok: true,
+    sessionId,
     wallet: publicKey,
   });
 });
@@ -108,7 +114,6 @@ router.post("/verify", walletLimiter, async (req, res) => {
 // ------------------------------------------------------------
 router.get("/session/:sessionId", walletLimiter, async (req, res) => {
   const { sessionId } = req.params;
-  const { getSession } = require("../lib/auth");
 
   const session = await getSession(sessionId);
 
