@@ -768,6 +768,82 @@ test("BUG-030: crafting backend daily limit uses atomic INCR-before-check (no TO
   );
 });
 
+// ─── Playtest Security Hardening (wallet.js + nuke.js) ───────────────────
+
+console.log("\n[10] Wallet route security hardening (playtest fixes)");
+
+test("SEC-WALLET-001: wallet.js verify handler is wrapped in outer try/catch", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  // Outer try/catch prevents nacl exceptions from crashing the server
+  assert.ok(
+    src.includes('[wallet] verify error') &&
+    src.includes("Verification failed"),
+    "wallet.js verify handler must have outer try/catch with error logging"
+  );
+});
+
+test("SEC-WALLET-002: wallet.js verify validates pubKey and signature byte lengths before nacl call", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  assert.ok(
+    src.includes("pubKeyBytes.length !== 32") && src.includes("sigBytes.length !== 64"),
+    "wallet.js must validate pubKeyBytes.length === 32 and sigBytes.length === 64 before nacl call"
+  );
+});
+
+test("SEC-WALLET-003: wallet.js verify validates input length bounds", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  assert.ok(
+    src.includes("signature.length > 512"),
+    "wallet.js verify must enforce max signature length of 512 chars to prevent DoS"
+  );
+});
+
+test("SEC-WALLET-004: wallet.js session endpoint requires authMiddleware (no unauthenticated wallet lookup)", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  assert.ok(
+    src.includes("authMiddleware"),
+    "wallet.js session route must include authMiddleware"
+  );
+  // Self-only enforcement: sessionId !== req.player.sessionId must be present
+  assert.ok(
+    src.includes("sessionId !== req.player.sessionId"),
+    "wallet.js session route must enforce self-only lookup: sessionId !== req.player.sessionId"
+  );
+  assert.ok(
+    src.includes("Forbidden"),
+    "wallet.js session route must return 403 Forbidden for cross-session lookup attempts"
+  );
+});
+
+test("SEC-WALLET-005: wallet.js nonce is deleted BEFORE session is created (reduces TOCTOU window)", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  // deleteNonce must appear before storeSession in the verify handler
+  const deleteIdx = src.indexOf("deleteNonce(publicKey)");
+  const storeIdx  = src.indexOf("storeSession(sessionId");
+  assert.ok(
+    deleteIdx !== -1 && storeIdx !== -1 && deleteIdx < storeIdx,
+    "wallet.js must deleteNonce() before storeSession() to reduce TOCTOU race window"
+  );
+});
+
+test("SEC-WALLET-006: nuke.js reads wallet from 'wallet' key (matches authClient.js storage)", () => {
+  const src = readFile("public/js/nuke.js");
+  assert.ok(src, "public/js/nuke.js must exist");
+  assert.ok(
+    !src.includes("fizz_wallet_address"),
+    "nuke.js must not read stale 'fizz_wallet_address' localStorage key — use 'wallet' key written by authClient.js"
+  );
+  assert.ok(
+    src.includes('localStorage.getItem("wallet")'),
+    "nuke.js must read wallet address from localStorage key 'wallet' (set by authClient.saveSession)"
+  );
+});
+
 // ─── Summary ──────────────────────────────────────────────────────────────
 
 console.log("\n─────────────────────────────────────────");

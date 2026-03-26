@@ -51,7 +51,9 @@ async function safeJsonParse(response) {
 }
 
 class AuthClient {
-  constructor() {
+  constructor(options = {}) {
+    // apiBase is read from window.API_BASE (set by /js/config.js).
+    // The options argument is accepted for forward compatibility.
     this.state = {
       wallet: null,
       sessionId: null,

@@ -4,7 +4,7 @@ const fs = require("fs");
 const router = express.Router();
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
-const { applyXpToProfile, MAX_LEVEL } = require("../lib/xp");
+const { applyXpToProfile, MAX_LEVEL: _MAX_LEVEL } = require("../lib/xp");
 
 // -----------------------------------------------------------------------
 // BUG-003 FIX: Load quest definitions from server-side data at startup.
