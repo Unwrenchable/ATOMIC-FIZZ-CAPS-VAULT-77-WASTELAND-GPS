@@ -117,6 +117,97 @@
     });
   }
 
+  /**
+   * Show a non-blocking Pip-Boy styled confirmation dialog.
+   * Returns a Promise that resolves to true (OK) or false (Cancel).
+   * Falls back to native confirm() if DOM is not available.
+   *
+   * @param {string} message - Message text to display
+   * @param {string} [okLabel='OK']
+   * @param {string} [cancelLabel='CANCEL']
+   * @returns {Promise<boolean>}
+   */
+  function pipboyConfirm(message, okLabel, cancelLabel) {
+    okLabel = okLabel || 'OK';
+    cancelLabel = cancelLabel || 'CANCEL';
+
+    // Fall back to native confirm if document is unavailable
+    if (typeof document === 'undefined') {
+      return Promise.resolve(confirm(message));
+    }
+
+    return new Promise(function (resolve) {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = [
+        'position:fixed', 'inset:0', 'z-index:999999',
+        'display:flex', 'align-items:center', 'justify-content:center',
+        'background:rgba(0,10,0,0.85)', 'font-family:"Courier New",monospace',
+        'padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0)',
+        'padding-bottom:env(safe-area-inset-bottom,0)',
+        'box-sizing:border-box'
+      ].join(';');
+
+      const box = document.createElement('div');
+      box.style.cssText = [
+        'background:#001900', 'border:2px solid #00ff66',
+        'border-radius:8px', 'padding:1.5rem 1.25rem',
+        'max-width:min(90vw,420px)', 'width:100%',
+        'box-shadow:0 0 24px rgba(0,255,102,0.35)',
+        'color:#00ff66', 'text-shadow:0 0 6px #00ff66',
+        'font-size:0.95rem', 'line-height:1.5',
+        'white-space:pre-wrap', 'word-break:break-word'
+      ].join(';');
+
+      const msgEl = document.createElement('p');
+      msgEl.style.cssText = 'margin:0 0 1.25rem';
+      msgEl.textContent = message;
+
+      const btnRow = document.createElement('div');
+      btnRow.style.cssText = 'display:flex;gap:0.75rem;justify-content:flex-end';
+
+      function makeBtn(label, primary) {
+        const btn = document.createElement('button');
+        btn.textContent = label;
+        btn.style.cssText = [
+          'font-family:"Courier New",monospace', 'font-size:0.9rem',
+          'cursor:pointer', 'border-radius:4px',
+          'min-height:44px', 'min-width:80px',
+          'padding:0.5rem 1rem', 'touch-action:manipulation',
+          primary
+            ? 'background:#00ff66;color:#001900;border:2px solid #00ff66'
+            : 'background:transparent;color:#00ff66;border:2px solid #00ff66'
+        ].join(';');
+        return btn;
+      }
+
+      const cancelBtn = makeBtn(cancelLabel, false);
+      const okBtn = makeBtn(okLabel, true);
+
+      function cleanup(result) {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        resolve(result);
+      }
+
+      cancelBtn.addEventListener('click', function () { cleanup(false); });
+      okBtn.addEventListener('click', function () { cleanup(true); });
+
+      // Also dismiss on overlay backdrop click
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) cleanup(false);
+      });
+
+      btnRow.appendChild(cancelBtn);
+      btnRow.appendChild(okBtn);
+      box.appendChild(msgEl);
+      box.appendChild(btnRow);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      // Focus OK button for keyboard/assistive-tech users
+      okBtn.focus();
+    });
+  }
+
   const web3WalletAdapter = {
     loaded: false,
     connected: false,
@@ -147,6 +238,44 @@
       return window.ethereum.isCoinbaseWallet === true;
     },
 
+    /**
+     * Detect if the user is on a mobile device.
+     * Prefers the modern navigator.userAgentData API, falls back to
+     * touch-capability detection, then UA string matching.
+     * @returns {boolean}
+     */
+    _isMobileDevice() {
+      // Modern API (Chromium 90+): structured UA client hints
+      if (navigator.userAgentData && typeof navigator.userAgentData.mobile === 'boolean') {
+        return navigator.userAgentData.mobile;
+      }
+      // Feature detection: touch capability is a reliable mobile indicator
+      if ('maxTouchPoints' in navigator && navigator.maxTouchPoints > 0) {
+        return true;
+      }
+      // Legacy UA string fallback
+      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent || '');
+    },
+
+    /**
+     * Generate a Phantom universal-link / deeplink to open the game inside
+     * Phantom's in-app browser on mobile.
+     * Only uses origin + pathname to avoid leaking / forwarding user-controlled
+     * query params and hash fragments through the deeplink.
+     * Reference: https://docs.phantom.app/phantom-deeplinks/provider-methods/connect
+     * @returns {string} deeplink URL
+     */
+    _buildPhantomDeeplink() {
+      // Intentionally exclude query string and hash: they may contain user-controlled
+      // data that could be exploited within Phantom's in-app browser context.
+      const safePath = window.location.origin + window.location.pathname;
+      const encodedUrl = encodeURIComponent(safePath);
+      // Uses the HTTPS universal-link scheme (https://phantom.app/ul/browse/...)
+      // which works on both iOS and Android and gracefully falls back to the
+      // App Store / Play Store when Phantom is not installed.
+      return `https://phantom.app/ul/browse/${encodedUrl}?ref=${encodeURIComponent(window.location.origin)}`;
+    },
+
     // Supported wallet providers
     providers: {
       phantom: {
@@ -168,11 +297,26 @@
               // Phantom's in-app browser typically includes "Phantom" in the UA string
               const userAgent = navigator.userAgent || "";
               const isPhantomBrowser = userAgent.toLowerCase().includes("phantom");
-              
+
               if (isPhantomBrowser) {
                 throw new Error('Phantom wallet is loading. Please try again in a moment.');
+              } else if (web3WalletAdapter._isMobileDevice()) {
+                // On mobile: redirect to Phantom's in-app browser via universal link.
+                // Use pipboyConfirm (non-blocking, mobile-friendly) instead of native confirm().
+                const deeplink = web3WalletAdapter._buildPhantomDeeplink();
+                const confirmed = await pipboyConfirm(
+                  'Phantom wallet not detected in your browser.\n\n' +
+                  'Tap OPEN PHANTOM to launch this site inside the Phantom app\'s built-in browser so you can connect your wallet.\n\n' +
+                  '(Install Phantom from your app store if you haven\'t already.)',
+                  'OPEN PHANTOM',
+                  'CANCEL'
+                );
+                if (confirmed) {
+                  window.location.href = deeplink;
+                }
+                throw new Error('Redirecting to Phantom app. If nothing happened, install Phantom from your app store.');
               } else {
-                // Offer to open Phantom install page
+                // Desktop: Offer to open Phantom install page
                 const shouldInstall = confirm(
                   'Phantom wallet not detected!\n\n' +
                   'Phantom is a browser extension wallet for Solana.\n\n' +

@@ -945,3 +945,32 @@
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
+
+/* === MOBILE SAFE-AREA & DYNAMIC VIEWPORT FIXES === */
+@supports (height: 100dvh) {
+  .fo4-dialogue-overlay,
+  #fo4-dialogue-overlay {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .fo4-dialogue-overlay,
+  #fo4-dialogue-overlay {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .fo4-dialogue-choices,
+  .dialogue-choices {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .fo4-choice-btn,
+  .dialogue-choice {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+}

@@ -268,6 +268,7 @@ safeMount('/api/quest-secrets', api('quest-secrets'));
 // Server-side quest store (placeholders + reveal endpoint)
 safeMount('/api/quests-store', api('quests-store'));
 safeMount("/api/scavenger", api("scavenger"));  // Add a scavenger router if needed, otherwise use JSON proxy below!
+safeMount("/api/exchange", api("exchange"));    // Scavenger Exchange: trade listings (GET/POST/buy/cancel)
 safeMount("/api/locations", api("locations"));  // routes/api/locations.js: serves locations.json
 
 // Additional game APIs
