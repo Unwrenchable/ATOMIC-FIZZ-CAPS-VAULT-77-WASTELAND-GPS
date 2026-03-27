@@ -1499,3 +1499,35 @@ input[type="reset"]:hover {
   margin-top: 8px;
   line-height: 1.7;
 }
+
+/* === MOBILE: DYNAMIC VIEWPORT HEIGHT FALLBACK === */
+/* Overrides static 100vh with 100dvh on browsers that support it          */
+/* This prevents fixed elements being hidden behind mobile browser toolbars */
+@supports (height: 100dvh) {
+  .pipboy-screen,
+  .pipboy-frame,
+  #pipboy-screen,
+  #pipboy-frame,
+  #pipboy-main,
+  .pipboy-main,
+  body.pipboy-active {
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+  }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pipboy-status-bar,
+  #pipboy-status-bar,
+  .pipboy-bottom-bar,
+  #bottom-bar {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+
+  .pipboy-tab-bar,
+  #tab-bar,
+  .pipboy-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

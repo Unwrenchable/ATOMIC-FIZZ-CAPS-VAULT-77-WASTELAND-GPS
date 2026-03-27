@@ -907,3 +907,29 @@
 .dungeon-room-info.has-threats {
   animation: encounter-pulse 1.8s ease-in-out infinite;
 }
+
+/* === MOBILE SAFE-AREA & DYNAMIC VIEWPORT FIXES === */
+@supports (height: 100dvh) {
+  .dungeon-overlay,
+  #dungeon-overlay,
+  .dungeon-modal {
+    max-height: 100dvh;
+  }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .dungeon-overlay,
+  #dungeon-overlay {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .dungeon-action-btn,
+  .dungeon-btn,
+  .dungeon-controls button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+}
