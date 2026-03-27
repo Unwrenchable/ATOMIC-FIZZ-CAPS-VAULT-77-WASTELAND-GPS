@@ -127,25 +127,45 @@
     init();
   }
 
-  // Re-init if new panels are dynamically added — wire full behaviour, not just touch listeners
+  // Re-init if new panels are dynamically added — wire full behaviour, not just touch listeners.
+  // Debounced to avoid per-frame overhead on pages with frequent DOM updates.
   if (typeof MutationObserver !== 'undefined') {
-    const observer = new MutationObserver(function (mutations) {
-      for (const mutation of mutations) {
-        for (const node of mutation.addedNodes) {
-          if (node.nodeType !== 1) continue;
+    var _mutationTimer = null;
+    var _pendingNodes = [];
 
-          // Wire [data-swipe-tabs] on the node itself and any descendants
-          if (node.dataset && node.dataset.swipeTabs) wireSwipeTabsOnElement(node);
-          if (node.querySelectorAll) {
-            node.querySelectorAll('[data-swipe-tabs]').forEach(wireSwipeTabsOnElement);
-          }
+    function _processPendingNodes() {
+      _mutationTimer = null;
+      var nodes = _pendingNodes.splice(0);
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        if (node.nodeType !== 1) continue;
 
-          // Wire [data-swipe-dismiss] on the node itself and any descendants
-          if (node.dataset && node.dataset.swipeDismiss !== undefined) wireSwipeDismissOnElement(node);
-          if (node.querySelectorAll) {
-            node.querySelectorAll('[data-swipe-dismiss]').forEach(wireSwipeDismissOnElement);
-          }
+        // Wire [data-swipe-tabs] on the node itself and any descendants
+        if (node.dataset && node.dataset.swipeTabs) wireSwipeTabsOnElement(node);
+        if (node.querySelectorAll) {
+          node.querySelectorAll('[data-swipe-tabs]').forEach(wireSwipeTabsOnElement);
         }
+
+        // Wire [data-swipe-dismiss] on the node itself and any descendants
+        if (node.dataset && node.dataset.swipeDismiss !== undefined) wireSwipeDismissOnElement(node);
+        if (node.querySelectorAll) {
+          node.querySelectorAll('[data-swipe-dismiss]').forEach(wireSwipeDismissOnElement);
+        }
+      }
+    }
+
+    var observer = new MutationObserver(function (mutations) {
+      for (var mi = 0; mi < mutations.length; mi++) {
+        var added = mutations[mi].addedNodes;
+        for (var ni = 0; ni < added.length; ni++) {
+          _pendingNodes.push(added[ni]);
+        }
+      }
+      if (_mutationTimer === null) {
+        // Process on next idle frame — debounces rapid successive mutations
+        _mutationTimer = typeof requestAnimationFrame !== 'undefined'
+          ? requestAnimationFrame(_processPendingNodes)
+          : setTimeout(_processPendingNodes, 0);
       }
     });
     observer.observe(document.body || document.documentElement, { childList: true, subtree: true });

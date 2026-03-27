@@ -240,24 +240,39 @@
 
     /**
      * Detect if the user is on a mobile device.
+     * Prefers the modern navigator.userAgentData API, falls back to
+     * touch-capability detection, then UA string matching.
      * @returns {boolean}
      */
     _isMobileDevice() {
+      // Modern API (Chromium 90+): structured UA client hints
+      if (navigator.userAgentData && typeof navigator.userAgentData.mobile === 'boolean') {
+        return navigator.userAgentData.mobile;
+      }
+      // Feature detection: touch capability is a reliable mobile indicator
+      if ('maxTouchPoints' in navigator && navigator.maxTouchPoints > 0) {
+        return true;
+      }
+      // Legacy UA string fallback
       return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent || '');
     },
 
     /**
      * Generate a Phantom universal-link / deeplink to open the game inside
      * Phantom's in-app browser on mobile.
+     * Only uses origin + pathname to avoid leaking / forwarding user-controlled
+     * query params and hash fragments through the deeplink.
      * Reference: https://docs.phantom.app/phantom-deeplinks/provider-methods/connect
      * @returns {string} deeplink URL
      */
     _buildPhantomDeeplink() {
-      const encodedUrl = encodeURIComponent(window.location.href);
+      // Intentionally exclude query string and hash: they may contain user-controlled
+      // data that could be exploited within Phantom's in-app browser context.
+      const safePath = window.location.origin + window.location.pathname;
+      const encodedUrl = encodeURIComponent(safePath);
       // Uses the HTTPS universal-link scheme (https://phantom.app/ul/browse/...)
-      // which works on both iOS and Android. The phantom:// deep-link scheme is
-      // also supported but the HTTPS form is preferred as it gracefully falls back
-      // to the App Store / Play Store when Phantom is not installed.
+      // which works on both iOS and Android and gracefully falls back to the
+      // App Store / Play Store when Phantom is not installed.
       return `https://phantom.app/ul/browse/${encodedUrl}?ref=${encodeURIComponent(window.location.origin)}`;
     },
 
