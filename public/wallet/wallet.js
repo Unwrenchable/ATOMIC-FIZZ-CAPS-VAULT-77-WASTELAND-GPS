@@ -12,6 +12,26 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
   function safeWarn(...args) { try { console.warn(...args); } catch (e) {} }
 
   // ------------------------------------------------------------
+  // XSS PREVENTION
+  // ------------------------------------------------------------
+  function escapeHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = String(str == null ? "" : str);
+    return d.innerHTML;
+  }
+  // Validate that an image URL is safe to use in an src attribute.
+  // Only allow https://, http://, and relative paths. Block javascript: and data: URIs
+  // from untrusted external sources (NFT images can be set by arbitrary creators).
+  function safeSrcUrl(url) {
+    if (!url || typeof url !== "string") return null;
+    const trimmed = url.trim();
+    // Only allow https://, http://, or root-relative paths.
+    // Reject javascript:, data:, and other potentially dangerous schemes.
+    if (/^https?:\/\//i.test(trimmed) || /^\/[^/]/i.test(trimmed)) return trimmed;
+    return null;
+  }
+
+  // ------------------------------------------------------------
   // CONSTANTS
   // ------------------------------------------------------------
   const SOL_DECIMALS = 9;
@@ -136,8 +156,8 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
         const item = resolveItemById(id);
         return `
           <div class="entry">
-            <strong>${item.name}</strong><br>
-            <span>${item.description || ""}</span>
+            <strong>${escapeHtml(item.name)}</strong><br>
+            <span>${escapeHtml(item.description || "")}</span>
           </div>
         `;
       })
@@ -162,14 +182,14 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     nftsEl.innerHTML = list
       .slice(0, 20)
       .map((nft, i) => {
-        const name = nft.name || "Unnamed NFT";
-        const mint = nft.mint || "Unknown Mint";
-        const img = nft.image || null;
-        const rarity = (nft.rarity || "common").toLowerCase();
+        const name = escapeHtml(nft.name || "Unnamed NFT");
+        const mint = escapeHtml(nft.mint || "Unknown Mint");
+        const imgSrc = safeSrcUrl(nft.image);
+        const rarity = escapeHtml((nft.rarity || "common").toLowerCase());
 
         return `
           <div class="entry nft-entry rarity-${rarity}" data-nft-index="${i}">
-            ${img ? `<img src="${img}" class="nft-thumb">` : ""}
+            ${imgSrc ? `<img src="${imgSrc}" class="nft-thumb">` : ""}
             <div class="nft-info">
               <strong>${name}</strong><br>
               <span class="mono small">${mint}</span>
@@ -198,14 +218,14 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     const body = document.getElementById("nft-modal-body");
     if (!modal || !body) return;
 
-    const name = nft.name || "Unnamed NFT";
-    const mint = nft.mint || "Unknown Mint";
-    const img = nft.image || null;
-    const rarity = (nft.rarity || "common").toLowerCase();
-    const desc = nft.description || nft.lore || "No description available.";
+    const name = escapeHtml(nft.name || "Unnamed NFT");
+    const mint = escapeHtml(nft.mint || "Unknown Mint");
+    const imgSrc = safeSrcUrl(nft.image);
+    const rarity = escapeHtml((nft.rarity || "common").toLowerCase());
+    const desc = escapeHtml(nft.description || nft.lore || "No description available.");
 
     body.innerHTML = `
-      ${img ? `<img src="${img}">` : ""}
+      ${imgSrc ? `<img src="${imgSrc}">` : ""}
       <div class="nft-name rarity-${rarity}">${name}</div>
       <div class="nft-mint mono small">${mint}</div>
       <div class="nft-desc">${desc}</div>
@@ -309,16 +329,16 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     }
 
     body.innerHTML = `
-      <p>Select NFTs to fuse with <strong>${nft.name || "this item"}</strong>:</p>
+      <p>Select NFTs to fuse with <strong>${escapeHtml(nft.name || "this item")}</strong>:</p>
       <div class="fusion-selection">
         <div class="selected-nft">
-          <strong>PRIMARY:</strong> ${nft.name || nft.mint}
+          <strong>PRIMARY:</strong> ${escapeHtml(nft.name || nft.mint)}
         </div>
         <div class="fusion-options">
           ${otherNFTs.slice(0, 4).map(n => `
             <label class="fusion-option">
-              <input type="checkbox" class="fusion-checkbox" data-mint="${n.mint}" data-name="${n.name || n.mint}">
-              ${n.name || n.mint} (${n.rarity || 'common'})
+              <input type="checkbox" class="fusion-checkbox" data-mint="${escapeHtml(n.mint)}" data-name="${escapeHtml(n.name || n.mint)}">
+              ${escapeHtml(n.name || n.mint)} (${escapeHtml(n.rarity || 'common')})
             </label>
           `).join('')}
         </div>
@@ -1771,9 +1791,9 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
           : "0.000000000";
         
         return `
-          <div class="token-card" data-mint="${token.mint}">
-            <div class="token-symbol">${token.symbol || "TKN"}</div>
-            <div class="token-name">${token.name || "Token"}</div>
+          <div class="token-card" data-mint="${escapeHtml(token.mint)}">
+            <div class="token-symbol">${escapeHtml(token.symbol || "TKN")}</div>
+            <div class="token-name">${escapeHtml(token.name || "Token")}</div>
             <div class="token-stats">
               <div class="token-stat-row">
                 <span>Price:</span>
@@ -1840,15 +1860,15 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
           <div class="wallet-card" style="padding: 1rem;">
             <div class="data-row">
               <span class="data-label">NAME:</span>
-              <span class="data-value">${token.name}</span>
+              <span class="data-value">${escapeHtml(token.name)}</span>
             </div>
             <div class="data-row">
               <span class="data-label">PRICE:</span>
-              <span class="data-value">${token.priceFormatted}</span>
+              <span class="data-value">${escapeHtml(token.priceFormatted)}</span>
             </div>
             <div class="data-row">
               <span class="data-label">MARKET CAP:</span>
-              <span class="data-value">${token.marketCapFormatted}</span>
+              <span class="data-value">${escapeHtml(token.marketCapFormatted)}</span>
             </div>
             <div class="data-row">
               <span class="data-label">PROGRESS:</span>

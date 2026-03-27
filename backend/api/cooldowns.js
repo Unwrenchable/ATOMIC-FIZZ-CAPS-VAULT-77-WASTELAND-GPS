@@ -36,8 +36,14 @@ router.get("/status", async (req, res) => {
     const raw = await redis.get(key(`player:${wallet}:cooldown:${poi}`));
     const onCooldown = raw !== null && raw !== undefined;
 
-    // secondsRemaining: null when on cooldown but TTL is unknown (key will auto-expire via Redis EX)
-    const secondsRemaining = onCooldown ? null : 0;
+    // Return the actual remaining TTL so the frontend can show a countdown.
+    // ttl() returns -2 (key gone), -1 (no expiry), or seconds remaining.
+    // We use the same double-prefixed key path as the writer (location-claim.js).
+    let secondsRemaining = 0;
+    if (onCooldown) {
+      const rawTtl = await redis.ttl(`player:${wallet}:cooldown:${poi}`);
+      secondsRemaining = rawTtl > 0 ? rawTtl : null;
+    }
 
     return res.json({ ok: true, onCooldown, secondsRemaining });
   } catch (err) {
