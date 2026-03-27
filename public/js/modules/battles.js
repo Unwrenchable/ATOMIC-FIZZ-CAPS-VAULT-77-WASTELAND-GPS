@@ -76,6 +76,14 @@
         return;
       }
 
+      // BUG-016 FIX: a player stored with hp <= 0 (dead state) must be
+      // respawned before a new battle begins.  Without this guard the battle
+      // loop starts with a dead player, and the "player dead" check fires only
+      // after the first enemy attack — causing a silent one-turn ghost state.
+      if (this.gs && this.gs.player && (this.gs.player.hp || 0) <= 0) {
+        this._applyRespawnPenalty();
+      }
+
       this.state = {
         encounter,
         // BUG FIX: was only tracking enemies[0] HP. Now tracks HP for all enemies

@@ -69,12 +69,18 @@ async function verifyPassword(inputPassword, storedPassword) {
   }
 }
 
-async function createAdminSession() {
+async function createAdminSession(req) {
   const id = crypto.randomUUID();
-  const key = ADMIN_SESSION_PREFIX + id;
-  const ttl = parseInt(process.env.ADMIN_SESSION_TTL_SECONDS || "86400", 10);
+  const k = ADMIN_SESSION_PREFIX + id;
+  const ttlSeconds = parseInt(process.env.ADMIN_SESSION_TTL_SECONDS || "86400", 10);
 
-  await redis.set(key, "1", { EX: ttl });
+  // Store session metadata for security auditing (creation time, originating IP, user agent)
+  const meta = JSON.stringify({
+    createdAt: Date.now(),
+    ip: req ? (req.ip || req.headers["x-forwarded-for"] || "") : "",
+    ua: req ? (req.headers["user-agent"] || "") : "",
+  });
+  await redis.set(k, meta, { EX: ttlSeconds });
   return id;
 }
 
@@ -116,7 +122,7 @@ async function adminLoginHandler(req, res) {
       return res.status(401).json({ ok: false, error: "invalid_admin_credentials" });
     }
 
-    const sessionId = await createAdminSession();
+    const sessionId = await createAdminSession(req);
     console.log("[adminAuth] Admin session created");
     return res.json({ ok: true, token: sessionId });
   } catch (err) {

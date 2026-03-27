@@ -10,6 +10,7 @@ const router = express.Router();
 
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
+const { checkNFTOwnership } = require("../lib/nfts");
 
 const DEFAULT_SPECIAL = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
 
@@ -265,8 +266,13 @@ router.post("/respec", authMiddleware, playerLimiter, async (req, res) => {
     const profile = await loadProfile(wallet);
     if (!profile) return res.status(404).json({ ok: false, error: "not found" });
 
-    // TODO: real NFT check
-    const ownsToken = false;
+    // Check actual NFT ownership via Helius API.
+    // RESPEC_TOKEN_MINT env var must be set to the mint address of the recalibration token.
+    // When HELIUS_API_KEY or RESPEC_TOKEN_MINT is absent the feature is disabled gracefully.
+    const RESPEC_TOKEN_MINT = process.env.RESPEC_TOKEN_MINT || "";
+    const ownsToken = RESPEC_TOKEN_MINT
+      ? await checkNFTOwnership(wallet, RESPEC_TOKEN_MINT)
+      : false;
     if (!ownsToken) {
       return res.status(403).json({ ok: false, error: "no recalibration token" });
     }
