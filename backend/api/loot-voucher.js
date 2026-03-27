@@ -109,10 +109,22 @@ initServerKey();
 router.post("/", voucherIssueLimiter, authMiddleware, async (req, res) => {
   try {
     const lootId = 1n;
-    const latitude = 36.1699;
-    const longitude = -115.1398;
+
+    // Accept player GPS coordinates from request body; reject missing or out-of-range values.
+    const { latitude: rawLat, longitude: rawLng, locationHint: rawHint } = req.body || {};
+    const latitude = Number(rawLat);
+    const longitude = Number(rawLng);
+    if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90) {
+      return res.status(400).json({ ok: false, error: "invalid_latitude" });
+    }
+    if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
+      return res.status(400).json({ ok: false, error: "invalid_longitude" });
+    }
+
     const timestamp = BigInt(Math.floor(Date.now() / 1000));
-    const locationHint = "Vault 77 — Sector C";
+    const locationHint = (typeof rawHint === "string")
+      ? rawHint.replace(/[^\w\s.,!-]/g, "").trim().slice(0, 64)
+      : "Wasteland — Unknown Sector";
 
     const unsignedVoucher = { lootId, latitude, longitude, timestamp, locationHint };
     const message = serializeVoucherMessage(unsignedVoucher);
@@ -122,9 +134,9 @@ router.post("/", voucherIssueLimiter, authMiddleware, async (req, res) => {
 
     if (USE_KMS) {
       const { signMessageWithKms } = require("../lib/kmsSigner");
-      const { keyIdUsed, signatureBytes: sigBuf } = await signMessageWithKms(Buffer.from(message));
+      const { signatureBytes: sigBuf } = await signMessageWithKms(Buffer.from(message));
       signatureBytes = sigBuf;
-      serverKeyInfo = keyIdUsed;
+      // Do not expose KMS key ARN/ID to the client — omit serverKey for KMS path
     } else {
       if (!SERVER_KEYPAIR) {
         // Provide detailed error message for debugging misconfigured environments
@@ -140,15 +152,19 @@ router.post("/", voucherIssueLimiter, authMiddleware, async (req, res) => {
       serverKeyInfo = bs58.encode(Buffer.from(SERVER_KEYPAIR.publicKey));
     }
 
-    res.json({
+    const responsePayload = {
       lootId: lootId.toString(),
       latitude,
       longitude,
       timestamp: timestamp.toString(),
       locationHint,
       serverSignature: Array.from(signatureBytes),
-      serverKey: serverKeyInfo,
-    });
+    };
+    // Only include serverKey on local-keypair path (public key is safe to expose).
+    // KMS path omits it to avoid leaking AWS infrastructure identifiers.
+    if (serverKeyInfo) responsePayload.serverKey = serverKeyInfo;
+
+    res.json(responsePayload);
   } catch (err) {
     console.error("[loot-voucher] error:", err && err.stack ? err.stack : err);
     res.status(500).json({ error: "Failed to generate voucher" });
