@@ -1,7 +1,10 @@
 // Service Worker for Atomic Fizz Caps PWA
 // Enables offline functionality and app-like experience
-
-const CACHE_NAME = 'atomic-fizz-caps-v2';
+//
+// CACHE_VERSION: bump this string on every production deploy to invalidate
+// stale assets for all returning users.  Format: v{semver}-{YYYYMMDD}
+const CACHE_VERSION = 'v1.0.1-20260327';
+const CACHE_NAME = `atomic-fizz-caps-${CACHE_VERSION}`;
 const OFFLINE_URL = '/';
 
 // Assets to cache on install
@@ -55,6 +58,28 @@ self.addEventListener('fetch', (event) => {
 
   // Skip cross-origin requests
   if (!event.request.url.startsWith(self.location.origin)) return;
+
+  const url = new URL(event.request.url);
+  const isScript = url.pathname.endsWith('.js');
+  const isCss = url.pathname.endsWith('.css');
+  const isHtml = event.request.mode === 'navigate' || url.pathname.endsWith('.html');
+
+  // Network-first for JS, CSS, and HTML navigation: ensures deploys propagate
+  // immediately without users needing to manually clear the cache.
+  if (isScript || isCss || isHtml) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200 && response.type === 'basic') {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(OFFLINE_URL))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {

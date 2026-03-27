@@ -275,7 +275,7 @@
 
       // Handle barter option
       if (node.barter && Game.economy) {
-        this._showBarterOption(_node);
+        this._showBarterOption(node);
       }
 
       // Handle rumor system
