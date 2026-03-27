@@ -36,6 +36,7 @@ function createInMemoryClient() {
   const hashes = new Map(); // key -> Map(field -> value)
   const lists = new Map(); // key -> Array
   const streams = new Map(); // key -> Array of { id, data }
+  const expiry = new Map(); // key -> epoch ms when key expires
   let streamSeq = 0;
 
   function toStr(v) {
@@ -56,7 +57,9 @@ function createInMemoryClient() {
       }
       store.set(key, val);
       if (opts && opts.EX) {
-        setTimeout(() => store.delete(key), Number(opts.EX) * 1000);
+        const ttlMs = Number(opts.EX) * 1000;
+        expiry.set(key, Date.now() + ttlMs);
+        setTimeout(() => { store.delete(key); expiry.delete(key); }, ttlMs);
       }
       return "OK";
     },
@@ -125,12 +128,29 @@ function createInMemoryClient() {
     },
     async expire(key, seconds) {
       if (!store.has(key) && !hashes.has(key) && !sets.has(key)) return 0;
+      const ttlMs = Number(seconds) * 1000;
+      expiry.set(key, Date.now() + ttlMs);
       setTimeout(() => {
         store.delete(key);
         hashes.delete(key);
         sets.delete(key);
-      }, Number(seconds) * 1000);
+        expiry.delete(key);
+      }, ttlMs);
       return 1;
+    },
+    async ttl(key) {
+      if (!store.has(key) && !hashes.has(key) && !sets.has(key)) return -2; // key does not exist
+      if (!expiry.has(key)) return -1; // key exists but has no expiry
+      const remaining = Math.ceil((expiry.get(key) - Date.now()) / 1000);
+      if (remaining <= 0) {
+        // Key has expired but setTimeout hasn't fired yet — clean up now
+        store.delete(key);
+        hashes.delete(key);
+        sets.delete(key);
+        expiry.delete(key);
+        return -2;
+      }
+      return remaining;
     },
     async smembers(key) {
       const s = sets.get(key);
@@ -474,6 +494,20 @@ async function keys(pattern) {
     handleRedisError(err, 'keys');
   }
 }
+/**
+ * Return the remaining TTL of a key in seconds.
+ * Returns -2 if the key does not exist, -1 if the key has no expiry.
+ * The caller should pass a bare (non-prefixed) key — the prefix is added here.
+ */
+async function ttl(k) {
+  try {
+    const c = await ensureClient();
+    return await c.ttl(key(k));
+  } catch (err) {
+    handleRedisError(err, 'ttl');
+    return -2;
+  }
+}
 function on(ev, fn) {
   if (redisClient && typeof redisClient.on === "function") {
     redisClient.on(ev, fn);
@@ -509,6 +543,7 @@ module.exports = {
   hget,
   hset,
   keys,
+  ttl,
   on,
   quit,
   ping,
@@ -538,6 +573,7 @@ const redisWrapper = {
   hget,
   hset,
   keys,
+  ttl,
   on,
   quit,
   ping,

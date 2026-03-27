@@ -418,7 +418,7 @@
 
       if (type === 'twitch') {
         const channel = url.split('/').pop();
-        const _domain = window.location.hostname;
+        const domain = window.location.hostname;
         embed.src = this.config.twitch.embedUrl
           .replace('{CHANNEL}', channel)
           .replace('{DOMAIN}', domain);
