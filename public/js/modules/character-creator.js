@@ -1916,7 +1916,7 @@
       document.getElementById('ccPreviewName').textContent = currentAppearance.name || "WANDERER";
 
       // Update stats
-      const _race = appearanceOptions.races.find(r => r.id === currentAppearance.race);
+      const race = appearanceOptions.races.find(r => r.id === currentAppearance.race);
       const age = appearanceOptions.ageRanges.find(a => a.id === currentAppearance.ageRange);
       document.getElementById('ccPreviewStats').textContent = 
         `${race?.name || 'Human'} • ${age?.name || 'Adult'}`;

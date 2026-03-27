@@ -680,7 +680,7 @@
         if (room.enemies.length > 0)     this.grid[cy][cx] = TILES.ENEMY;
 
         // Draw corridor connections (doors) on the walls
-        for (const [_dir, door] of Object.entries(room.doors)) {
+        for (const [dir, door] of Object.entries(room.doors)) {
           const toRoom = this.rooms[door.to];
           this._drawCorridor(room, toRoom, dir, door.type);
         }
@@ -1199,7 +1199,7 @@
       if (termBtnEl) termBtnEl.addEventListener("click", () => this._handleTerminalDoor(room, null));
 
       const examBtnEl = actEl.querySelector("#dungeon-examine-btn");
-      if (examBtnEl) examBtnEl.addEventListener("click", () => this._handleExamine(_room));
+      if (examBtnEl) examBtnEl.addEventListener("click", () => this._handleExamine(room));
     },
 
     // --------------------------------------------------------

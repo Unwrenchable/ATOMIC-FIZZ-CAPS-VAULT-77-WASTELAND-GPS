@@ -605,7 +605,7 @@
       const baseThreshold = 10;
       const maxTileErrors = this.isMobileDevice() ? baseThreshold * 3 : baseThreshold;
 
-      satelliteTiles.on('tileerror', (_e) => {
+      satelliteTiles.on('tileerror', (e) => {
         tileErrorCount++;
         console.warn(`[worldmap] tile load error (${tileErrorCount}/${maxTileErrors})`, e.coords, e.tile && e.tile.src);
         // only enter offline mode if the browser believes it's offline or

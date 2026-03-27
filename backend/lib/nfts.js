@@ -51,5 +51,19 @@ async function fetchNFTsForWallet(wallet) {
 }
 
 module.exports = {
-  fetchNFTsForWallet
+  fetchNFTsForWallet,
+  /**
+   * Check whether a wallet owns at least one NFT with the given mint address.
+   * Returns false (not an error) when HELIUS_API_KEY is absent so callers can
+   * gate the feature cleanly via env var.
+   */
+  async checkNFTOwnership(wallet, mintAddress) {
+    if (!HELIUS_API_KEY || !mintAddress) return false;
+    try {
+      const nfts = await fetchNFTsForWallet(wallet);
+      return nfts.some((nft) => nft.mint === mintAddress);
+    } catch {
+      return false;
+    }
+  },
 };
