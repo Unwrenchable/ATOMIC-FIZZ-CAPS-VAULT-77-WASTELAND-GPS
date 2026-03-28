@@ -241,7 +241,11 @@
         }
       }));
 
-      this.showInEncounterFeed(`💬 ${companionName}: "${text}"`, 'companion-dialog');
+      // Use shared global escapeHtml (exported by main.js); inline fallback for safety
+      const _esc = window.escapeHtml || (s => String(s == null ? '' : s).replace(/[<>"'&]/g, c => ({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','&':'&amp;'}[c])));
+      const safeName = _esc(companionName);
+      const safeText = _esc(text);
+      this.showInEncounterFeed(`💬 ${safeName}: "${safeText}"`, 'companion-dialog');
     },
 
     showInEncounterFeed(message, className) {
@@ -250,7 +254,8 @@
 
       const div = document.createElement('div');
       div.className = `feed-item ${className}`;
-      div.innerHTML = message;
+      // Safe: callers either use textContent-safe strings or escape themselves above
+      div.textContent = message;
       div.style.cssText = 'color: #ffcc00; padding: 8px; margin: 4px 0; border-left: 3px solid #ffcc00; background: rgba(255,204,0,0.1);';
       
       feed.insertBefore(div, feed.firstChild);

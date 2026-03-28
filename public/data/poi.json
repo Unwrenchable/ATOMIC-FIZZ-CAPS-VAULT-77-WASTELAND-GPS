@@ -107,6 +107,42 @@
       "region": "strip",
       "game": "fnv",
       "source": "canon"
+    },
+    {
+      "id": "gomorrah_casino_fnv",
+      "name": "Gomorrah Casino",
+      "lat": 36.11,
+      "lng": -115.172,
+      "lvl": 10,
+      "rarity": "epic",
+      "iconKey": "ruins",
+      "region": "vegas_strip",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "ultra_luxe_casino_fnv",
+      "name": "Ultra-Luxe Casino",
+      "lat": 36.0972,
+      "lng": -115.1787,
+      "lvl": 11,
+      "rarity": "epic",
+      "iconKey": "ruins",
+      "region": "vegas_strip",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "new_vegas_strip_fnv",
+      "name": "New Vegas Strip",
+      "lat": 36.11274,
+      "lng": -115.174301,
+      "lvl": 10,
+      "rarity": "epic",
+      "iconKey": "town",
+      "region": "vegas_strip",
+      "game": "fnv",
+      "source": "canon"
     }
   ],
   "freeside": [
@@ -645,6 +681,30 @@
       "region": "fnv_factions",
       "game": "fnv",
       "source": "canon"
+    },
+    {
+      "id": "camp_mccarran_fnv",
+      "name": "Camp McCarran",
+      "lat": 36.0801,
+      "lng": -115.1522,
+      "lvl": 8,
+      "rarity": "rare",
+      "iconKey": "military",
+      "region": "fnv_factions",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "hidden_valley_bunker_fnv",
+      "name": "Hidden Valley Bunker",
+      "lat": 36.2,
+      "lng": -115.35,
+      "lvl": 18,
+      "rarity": "epic",
+      "iconKey": "vault",
+      "region": "fnv_factions",
+      "game": "fnv",
+      "source": "canon"
     }
   ],
   "fnv_wild": [
@@ -728,6 +788,102 @@
       "lvl": 30,
       "rarity": "rare",
       "iconKey": "danger",
+      "region": "fnv_wild",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "nellis_air_force_base_fnv",
+      "name": "Nellis Air Force Base",
+      "lat": 36.2361,
+      "lng": -115.0342,
+      "lvl": 25,
+      "rarity": "epic",
+      "iconKey": "military",
+      "region": "fnv_wild",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "red_rock_canyon_fnv",
+      "name": "Red Rock Canyon",
+      "lat": 36.13514,
+      "lng": -115.4283,
+      "lvl": 8,
+      "rarity": "rare",
+      "iconKey": "mountain",
+      "region": "fnv_wild",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "vault_34_fnv",
+      "name": "Vault 34",
+      "lat": 36.175,
+      "lng": -114.75,
+      "lvl": 20,
+      "rarity": "epic",
+      "iconKey": "vault",
+      "region": "fnv_wild",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "vault_22_fnv",
+      "name": "Vault 22",
+      "lat": 36.1699,
+      "lng": -115.1398,
+      "lvl": 32,
+      "rarity": "epic",
+      "iconKey": "vault",
+      "region": "fnv_wild",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "vault_3_fnv",
+      "name": "Vault 3",
+      "lat": 36.2,
+      "lng": -115.8,
+      "lvl": 25,
+      "rarity": "rare",
+      "iconKey": "vault",
+      "region": "fnv_wild",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "vault_19_fnv",
+      "name": "Vault 19",
+      "lat": 36.1,
+      "lng": -115.9,
+      "lvl": 22,
+      "rarity": "rare",
+      "iconKey": "vault",
+      "region": "fnv_wild",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "mt_charleston_fnv",
+      "name": "Mt Charleston",
+      "lat": 36.265,
+      "lng": -115.65,
+      "lvl": 16,
+      "rarity": "epic",
+      "iconKey": "mountain",
+      "region": "fnv_wild",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "yucca_mountain_fnv",
+      "name": "Yucca Mountain",
+      "lat": 37.0,
+      "lng": -116.8,
+      "lvl": 50,
+      "rarity": "legendary",
+      "iconKey": "reactor",
       "region": "fnv_wild",
       "game": "fnv",
       "source": "canon"
@@ -2471,6 +2627,18 @@
       "region": "fo4",
       "game": "fo4",
       "source": "canon"
+    },
+    {
+      "id": "nuka_world_fo4",
+      "name": "Nuka-World",
+      "lat": 42.3,
+      "lng": -72.9,
+      "lvl": 30,
+      "rarity": "legendary",
+      "iconKey": "ruins",
+      "region": "nuclear_sites",
+      "game": "fo4",
+      "source": "canon"
     }
   ],
   "fo76": [
@@ -3231,6 +3399,30 @@
       "region": "fo1_2",
       "game": "fo2",
       "source": "canon"
+    },
+    {
+      "id": "glow_fo1",
+      "name": "Glow",
+      "lat": 35.0,
+      "lng": -115.0,
+      "lvl": 55,
+      "rarity": "legendary",
+      "iconKey": "reactor",
+      "region": "nuclear_sites",
+      "game": "fo1",
+      "source": "canon"
+    },
+    {
+      "id": "mariposa_base_fo1",
+      "name": "Mariposa Base",
+      "lat": 37.5,
+      "lng": -120.5,
+      "lvl": 45,
+      "rarity": "legendary",
+      "iconKey": "military",
+      "region": "nuclear_sites",
+      "game": "fo1",
+      "source": "canon"
     }
   ],
   "fot": [
@@ -3873,6 +4065,42 @@
       "region": "nuclear_sites",
       "game": "real",
       "source": "real"
+    },
+    {
+      "id": "chernobyl_pripyat_real",
+      "name": "Chernobyl Pripyat",
+      "lat": 51.389,
+      "lng": 30.099,
+      "lvl": 99,
+      "rarity": "legendary",
+      "iconKey": "reactor",
+      "region": "nuclear_sites",
+      "game": "real",
+      "source": "real"
+    },
+    {
+      "id": "los_alamos_lab_real",
+      "name": "Los Alamos Lab",
+      "lat": 35.875,
+      "lng": -106.3,
+      "lvl": 50,
+      "rarity": "legendary",
+      "iconKey": "reactor",
+      "region": "nuclear_sites",
+      "game": "real",
+      "source": "real"
+    },
+    {
+      "id": "trinity_site_real",
+      "name": "Trinity Site",
+      "lat": 33.677,
+      "lng": -106.475,
+      "lvl": 55,
+      "rarity": "legendary",
+      "iconKey": "reactor",
+      "region": "nuclear_sites",
+      "game": "real",
+      "source": "real"
     }
   ],
   "fot_bonus": [
@@ -4275,6 +4503,18 @@
       "region": "fo3_pitt",
       "game": "fo3",
       "source": "canon"
+    },
+    {
+      "id": "the_pitt_fo3",
+      "name": "The Pitt",
+      "lat": 40.4406,
+      "lng": -79.9959,
+      "lvl": 40,
+      "rarity": "legendary",
+      "iconKey": "ruins",
+      "region": "nuclear_sites",
+      "game": "fo3",
+      "source": "canon"
     }
   ],
   "fo3_lookout": [
@@ -4450,7 +4690,7 @@
   "fo3_broken_steel": [
     {
       "id": "citadel_brokensteel_fo3",
-      "name": "The Citadel (Post‑Purifier)",
+      "name": "The Citadel (Post\u2011Purifier)",
       "lat": 38.889,
       "lng": -77.05,
       "lvl": 25,
@@ -4850,7 +5090,7 @@
   "fo4_nuka_world": [
     {
       "id": "nuka_world_transit_center_fo4",
-      "name": "Nuka‑World Transit Center",
+      "name": "Nuka\u2011World Transit Center",
       "lat": 42.18,
       "lng": -71.9,
       "lvl": 20,
@@ -4862,7 +5102,7 @@
     },
     {
       "id": "nuka_world_gate_fo4",
-      "name": "Nuka‑World Gate",
+      "name": "Nuka\u2011World Gate",
       "lat": 42.181,
       "lng": -71.901,
       "lvl": 22,
@@ -4874,7 +5114,7 @@
     },
     {
       "id": "nuka_town_usa_fo4",
-      "name": "Nuka‑Town USA",
+      "name": "Nuka\u2011Town USA",
       "lat": 42.182,
       "lng": -71.902,
       "lvl": 25,
@@ -4886,7 +5126,7 @@
     },
     {
       "id": "market_fo4",
-      "name": "Nuka‑Town Market",
+      "name": "Nuka\u2011Town Market",
       "lat": 42.1825,
       "lng": -71.9025,
       "lvl": 25,
@@ -5042,7 +5282,7 @@
     },
     {
       "id": "nuka_cola_bottling_fo4",
-      "name": "Nuka‑Cola Bottling Plant",
+      "name": "Nuka\u2011Cola Bottling Plant",
       "lat": 42.194,
       "lng": -71.914,
       "lvl": 30,
@@ -5054,7 +5294,7 @@
     },
     {
       "id": "nuka_cola_rivers_fo4",
-      "name": "Nuka‑Cola Rivers",
+      "name": "Nuka\u2011Cola Rivers",
       "lat": 42.1945,
       "lng": -71.9145,
       "lvl": 28,
@@ -5066,7 +5306,7 @@
     },
     {
       "id": "nuka_power_plant_fo4",
-      "name": "Nuka‑World Power Plant",
+      "name": "Nuka\u2011World Power Plant",
       "lat": 42.196,
       "lng": -71.916,
       "lvl": 35,
@@ -5090,7 +5330,7 @@
     },
     {
       "id": "nuka_red_rocket_fo4",
-      "name": "Nuka‑World Red Rocket",
+      "name": "Nuka\u2011World Red Rocket",
       "lat": 42.198,
       "lng": -71.918,
       "lvl": 20,
@@ -5370,7 +5610,7 @@
     },
     {
       "id": "fort_atlas_sublevel_fo76",
-      "name": "Fort Atlas Sub‑Level",
+      "name": "Fort Atlas Sub\u2011Level",
       "lat": 39.632,
       "lng": -79.952,
       "lvl": 34,
@@ -5564,7 +5804,7 @@
     },
     {
       "id": "west_tek_research_center_fo76",
-      "name": "West‑Tek Research Center",
+      "name": "West\u2011Tek Research Center",
       "lat": 38.15,
       "lng": -80.55,
       "lvl": 50,
@@ -5576,7 +5816,7 @@
     },
     {
       "id": "west_tek_lower_labs_fo76",
-      "name": "West‑Tek Lower Labs",
+      "name": "West\u2011Tek Lower Labs",
       "lat": 38.151,
       "lng": -80.551,
       "lvl": 52,
@@ -6642,7 +6882,7 @@
     },
     {
       "id": "sr_vault96_cryostorage_fo76",
-      "name": "Vault 96 Cryo‑Storage",
+      "name": "Vault 96 Cryo\u2011Storage",
       "lat": 38.503,
       "lng": -80.303,
       "lvl": 52,
@@ -7188,7 +7428,7 @@
     },
     {
       "id": "fh_atom_shrine_fo4",
-      "name": "Atom’s Hidden Shrine",
+      "name": "Atom\u2019s Hidden Shrine",
       "lat": 44.361,
       "lng": -68.261,
       "lvl": 35,
@@ -7298,7 +7538,7 @@
     },
     {
       "id": "nw_safari_keepers_den_fo4",
-      "name": "Safari Keeper’s Den",
+      "name": "Safari Keeper\u2019s Den",
       "lat": 42.191,
       "lng": -71.911,
       "lvl": 31,
@@ -7346,7 +7586,7 @@
     },
     {
       "id": "nw_bottling_plant_lower_works_fo4",
-      "name": "Nuka‑Cola Bottling Lower Works",
+      "name": "Nuka\u2011Cola Bottling Lower Works",
       "lat": 42.195,
       "lng": -71.915,
       "lvl": 31,
@@ -7358,7 +7598,7 @@
     },
     {
       "id": "nw_bottling_plant_flavor_lab_fo4",
-      "name": "Nuka‑Cola Flavor Lab",
+      "name": "Nuka\u2011Cola Flavor Lab",
       "lat": 42.1955,
       "lng": -71.9155,
       "lvl": 33,
@@ -7370,7 +7610,7 @@
     },
     {
       "id": "nw_power_plant_aux_reactor_fo4",
-      "name": "Nuka‑World Auxiliary Reactor",
+      "name": "Nuka\u2011World Auxiliary Reactor",
       "lat": 42.197,
       "lng": -71.917,
       "lvl": 36,
@@ -7382,7 +7622,7 @@
     },
     {
       "id": "nw_power_plant_cooling_tower_fo4",
-      "name": "Nuka‑World Cooling Tower",
+      "name": "Nuka\u2011World Cooling Tower",
       "lat": 42.1975,
       "lng": -71.9175,
       "lvl": 34,
@@ -7394,7 +7634,7 @@
     },
     {
       "id": "nw_red_rocket_underground_fo4",
-      "name": "Nuka‑Red Rocket Underground",
+      "name": "Nuka\u2011Red Rocket Underground",
       "lat": 42.199,
       "lng": -71.919,
       "lvl": 23,
