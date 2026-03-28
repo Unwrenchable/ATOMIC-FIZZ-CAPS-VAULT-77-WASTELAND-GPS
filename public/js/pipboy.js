@@ -83,9 +83,9 @@
       Game.quests?.completeObjective("wake_up", "open_inventory");
 
       // Render inventory so it shows current state every time the tab opens
-      if (window.Game && Game.ui?.renderInventory) {
+      if (window.Game && window.Game.ui?.renderInventory) {
         try {
-          Game.ui.renderInventory();
+          window.Game.ui.renderInventory();
         } catch (e) {
           console.warn("[PipBoy] renderInventory failed:", e);
         }
@@ -176,7 +176,7 @@
 
       if (diffX > threshold && activeIndex > 0) {
         activateTabByIndex(activeIndex - 1);
-      } else if (diffX < -threshold && activeIndex < tabs.length - 1) {
+      } else if (diffX < -threshold && activeIndex !== -1 && activeIndex < tabs.length - 1) {
         activateTabByIndex(activeIndex + 1);
       }
     });
@@ -184,8 +184,24 @@
 
   // ------------------------------------------------------------
   // BOOT DIRECTLY INTO MAP PANEL
+  // (Honour ?tab= deep-link if present in the URL)
   // ------------------------------------------------------------
   setActivePanel("map");
+
+  // Support marketing / share links like /?tab=quests, /?tab=exchange, etc.
+  // Run after setActivePanel("map") so the map panel is always the safe fallback.
+  (function applyTabDeepLink() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab");
+      const validTabs = ["map", "stat", "items", "quests", "radio", "exchange"];
+      if (tabParam && validTabs.includes(tabParam.toLowerCase())) {
+        setActivePanel(tabParam.toLowerCase());
+      }
+    } catch (e) {
+      // Silently ignore — URLSearchParams unavailable or malformed URL
+    }
+  })();
 
   // ------------------------------------------------------------
   // SIDEBAR QUICK ACTION BUTTONS
