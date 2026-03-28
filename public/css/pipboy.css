@@ -175,6 +175,20 @@ body.pipboy-mode {
   overflow: hidden;
 }
 
+/* FOOTER — sits below .pipboy-main; flex-shrink:0 keeps it from eating map height */
+.pipboy-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-top: 1px solid rgba(159,232,141,0.15);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  opacity: 0.6;
+  z-index: 2;
+}
+
 .pipboy-panel {
   position: absolute;
   inset: 0;
@@ -237,7 +251,7 @@ body.pipboy-mode {
   position: relative;
   width: 100%;
   flex: 1;
-  min-height: 400px;
+  min-height: 200px; /* absolute floor; responsive CSS overrides this per breakpoint */
   height: 100%;
   border: 2px solid rgba(0,255,65,0.35);
   box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 12px rgba(0,255,65,0.25);
