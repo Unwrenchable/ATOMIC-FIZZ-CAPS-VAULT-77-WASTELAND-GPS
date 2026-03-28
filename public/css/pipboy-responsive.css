@@ -504,6 +504,22 @@ body {
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
+
+  /* GPS badge and map controls are absolutely positioned at the bottom of
+     the map panel — offset them so they clear the home indicator / OS nav bar */
+  .gps-badge {
+    bottom: max(10px, calc(env(safe-area-inset-bottom) + 6px));
+  }
+
+  .map-controls {
+    bottom: max(10px, calc(env(safe-area-inset-bottom) + 6px));
+  }
+
+  /* Tabs row: add bottom padding equal to the safe area so tab text never
+     hides behind an OS nav bar when the page is used as a PWA or fullscreen */
+  .pipboy-tabs {
+    padding-bottom: max(0.6rem, calc(env(safe-area-inset-bottom) + 0.4rem));
+  }
 }
 
 /* ============================================================
