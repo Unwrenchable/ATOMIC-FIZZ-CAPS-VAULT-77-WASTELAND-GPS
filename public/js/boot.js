@@ -305,7 +305,7 @@
     document.getElementById("map-tutorial-close").onclick = function () {
       overlay.remove();
       // Auto-switch to the map tab so the player can immediately see the GPS dot
-      const mapTabBtn = document.querySelector('[data-tab="map"], [data-panel="map"], #tab-map, .pip-tab[data-target="panel-map"]');
+      const mapTabBtn = document.querySelector('[data-pipboy-tab="panel-map"], [data-tab="map"], [data-panel="map"], #tab-map, .pip-tab[data-target="panel-map"]');
       if (mapTabBtn) mapTabBtn.click();
     };
 
