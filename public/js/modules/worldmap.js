@@ -4,6 +4,13 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // XSS-safe helper: escape HTML special chars before inserting into innerHTML
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = String(str == null ? '' : str);
+    return d.innerHTML;
+  }
+
   // ============================================================
   // ICON FALLBACK MAPPING (Enhanced for Afterfall authenticity)
   // Maps iconKey values that don't have SVG files to existing icons
@@ -748,8 +755,8 @@
                 }[poi.rarity] || '#00ff41';
                 marker.bindPopup(`
                   <div style="color: ${rarityColor}; font-family: monospace;">
-                    <b>${poi.name}</b><br>
-                    <small>LVL ${poi.lvl || '?'} • ${(poi.rarity || 'UNKNOWN').toUpperCase()}</small>
+                    <b>${escapeHtml(poi.name)}</b><br>
+                    <small>LVL ${escapeHtml(poi.lvl || '?')} • ${escapeHtml((poi.rarity || 'UNKNOWN').toUpperCase())}</small>
                   </div>
                 `);
                 marker.addTo(this.map);
@@ -1321,7 +1328,7 @@
 
       // Bind persistent tooltip (location label) that's always visible at higher zoom
       marker.bindTooltip(
-        `<span style="color: ${rarityColor}; font-family: 'VT323', monospace; font-size: clamp(11px, 2vw, 13px); text-shadow: 0 0 4px ${rarityColor};">${loc.name || 'Unknown'}</span>`,
+        `<span style="color: ${rarityColor}; font-family: 'VT323', monospace; font-size: clamp(11px, 2vw, 13px); text-shadow: 0 0 4px ${rarityColor};">${escapeHtml(loc.name || 'Unknown')}</span>`,
         {
           permanent: false,
           direction: 'top',
@@ -1333,8 +1340,8 @@
       // Bind popup with more details for click interaction
       marker.bindPopup(`
         <div style="color: ${rarityColor}; font-family: 'VT323', monospace;">
-          <b>${loc.name || 'Unknown Location'}</b><br>
-          <small>LVL ${loc.lvl || '?'} • ${(rarity || 'COMMON').toUpperCase()}</small>
+          <b>${escapeHtml(loc.name || 'Unknown Location')}</b><br>
+          <small>LVL ${escapeHtml(loc.lvl || '?')} • ${escapeHtml((rarity || 'COMMON').toUpperCase())}</small>
         </div>
       `);
 

@@ -10,6 +10,8 @@
     d.textContent = String(s == null ? "" : s);
     return d.innerHTML;
   }
+  // Expose globally so other modules (struggle-quips, worldmap, etc.) can use one implementation
+  window.escapeHtml = window.escapeHtml || escapeHtml;
 
   // ---------------------------
   // GLOBAL DATA

@@ -1514,34 +1514,9 @@ input[type="reset"]:hover {
   line-height: 1.7;
 }
 
-/* === MOBILE: DYNAMIC VIEWPORT HEIGHT FALLBACK === */
-/* Overrides static 100vh with 100dvh on browsers that support it          */
-/* This prevents fixed elements being hidden behind mobile browser toolbars */
-@supports (height: 100dvh) {
-  .pipboy-screen,
-  .pipboy-frame,
-  #pipboy-screen,
-  #pipboy-frame,
-  #pipboy-main,
-  .pipboy-main,
-  body.pipboy-active {
-    height: 100dvh;
-    min-height: 100dvh;
-    max-height: 100dvh;
-  }
-}
-
-@supports (padding: env(safe-area-inset-bottom)) {
-  .pipboy-status-bar,
-  #pipboy-status-bar,
-  .pipboy-bottom-bar,
-  #bottom-bar {
-    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
-  }
-
-  .pipboy-tab-bar,
-  #tab-bar,
-  .pipboy-nav {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-}
+/* === MOBILE: DYNAMIC VIEWPORT HEIGHT ===
+   Handled in pipboy-responsive.css via .pipboy-root { height: 100dvh }
+   and the @supports (padding: max(0px)) safe-area-inset block.
+   Do NOT set height: 100dvh on .pipboy-main — it uses flex:1 and must
+   only fill the remaining space after header + tabs. Forcing 100dvh here
+   pushes the GPS badge and map controls below the visible screen. */

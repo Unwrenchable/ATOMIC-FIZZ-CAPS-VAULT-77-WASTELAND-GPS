@@ -51,6 +51,30 @@
 
     consumeIngredient(req) {
       const inv = this.gs.inventory;
+
+      // Handle flat array inventory (v2 player-state format used by player-state.js)
+      if (Array.isArray(inv)) {
+        let toRemove = req.amount || 1;
+        for (let i = inv.length - 1; i >= 0 && toRemove > 0; i--) {
+          const item = inv[i];
+          if (item.id !== req.id) continue;
+          const stack = item.quantity ?? item.amount ?? 1;
+          if (stack <= toRemove) {
+            toRemove -= stack;
+            inv.splice(i, 1);
+          } else {
+            if ('quantity' in item) {
+              item.quantity = stack - toRemove;
+            } else {
+              item.amount = stack - toRemove;
+            }
+            toRemove = 0;
+          }
+        }
+        return;
+      }
+
+      // Legacy category-object inventory format
       const pools = [
         inv.weapons,
         inv.armor,

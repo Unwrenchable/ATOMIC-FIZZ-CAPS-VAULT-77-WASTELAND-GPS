@@ -126,6 +126,11 @@ function createInMemoryClient() {
       store.set(key, String(cur));
       return cur;
     },
+    async decr(key) {
+      const cur = parseInt(store.get(key) || "0", 10) - 1;
+      store.set(key, String(cur));
+      return cur;
+    },
     async expire(key, seconds) {
       if (!store.has(key) && !hashes.has(key) && !sets.has(key)) return 0;
       const ttlMs = Number(seconds) * 1000;
@@ -427,6 +432,14 @@ async function incr(k) {
     handleRedisError(err, 'incr');
   }
 }
+async function decr(k) {
+  try {
+    const c = await ensureClient();
+    return await c.decr(key(k));
+  } catch (err) {
+    handleRedisError(err, 'decr');
+  }
+}
 async function expire(k, s) {
   try {
     const c = await ensureClient();
@@ -536,6 +549,7 @@ module.exports = {
   set,
   del,
   incr,
+  decr,
   expire,
   smembers,
   sadd,
@@ -566,6 +580,7 @@ const redisWrapper = {
   set,
   del,
   incr,
+  decr,
   expire,
   smembers,
   sadd,
