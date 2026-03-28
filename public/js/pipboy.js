@@ -81,7 +81,18 @@
     if (panelKey === "items") {
       // QUEST HOOK: Wake Up → open_inventory
       Game.quests?.completeObjective("wake_up", "open_inventory");
+
+      // Render inventory so it shows current state every time the tab opens
+      if (window.Game && Game.ui?.renderInventory) {
+        try {
+          Game.ui.renderInventory();
+        } catch (e) {
+          console.warn("[PipBoy] renderInventory failed:", e);
+        }
+      }
     }
+
+    // STAT PANEL ACTIVATION — HUD is kept live by main.js; nothing extra needed here
 
     // QUESTS PANEL ACTIVATION - render quest UI
     if (panelKey === "quests") {

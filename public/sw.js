@@ -3,22 +3,86 @@
 //
 // CACHE_VERSION: bump this string on every production deploy to invalidate
 // stale assets for all returning users.  Format: v{semver}-{YYYYMMDD}
-const CACHE_VERSION = 'v1.0.1-20260327';
+const CACHE_VERSION = 'v1.0.2-20260328';
 const CACHE_NAME = `atomic-fizz-caps-${CACHE_VERSION}`;
 const OFFLINE_URL = '/';
 
 // Assets to cache on install
+// NOTE: Keep this list lean — only assets that are *essential* for a meaningful
+// offline session.  JS/CSS/HTML are network-first (see fetch handler), so they
+// update immediately on each online visit; the cached copies act as a fallback.
+// Large audio .mp3 tracks are NOT pre-cached (too large); they fall back to the
+// cache-first path and get cached the first time they are streamed.
 const PRECACHE_ASSETS = [
+  // Shell
   '/',
   '/index.html',
+  '/manifest.json',
+  '/favicon.ico',
+  '/favicon.png',
+
+  // Critical CSS
   '/css/pipboy.css',
   '/css/pipboy-map.css',
   '/css/pipboy-responsive.css',
   '/css/vats.css',
   '/css/live-radio.css',
-  '/favicon.ico',
-  '/favicon.png',
-  '/manifest.json'
+
+  // Boot / core scripts
+  '/js/config.js',
+  '/js/boot.js',
+  '/js/pipboy.js',
+  '/js/pipboy-special.js',
+  '/js/main.js',
+  '/js/radioPlayer.js',
+  '/js/gps.js',
+
+  // Core modules
+  '/js/modules/worldmap.js',
+  '/js/modules/inventory-ui.js',
+  '/js/modules/inventory-loader.js',
+  '/js/modules/quest-ui.js',
+  '/js/modules/quests.js',
+  '/js/modules/narrative.js',
+  '/js/modules/battles.js',
+  '/js/modules/crafting.js',
+  '/js/modules/factions.js',
+  '/js/modules/mintables.js',
+  '/js/modules/web3-wallet-adapter.js',
+  '/js/modules/live-radio-streaming.js',
+  '/js/modules/vats.js',
+
+  // Game engine scripts
+  '/js/game/player-state.js',
+  '/js/game/api-client.js',
+  '/js/game/inventory-actions.js',
+  '/js/game/equip-actions.js',
+  '/js/game/loop.js',
+
+  // World scripts
+  '/js/world/state.js',
+  '/js/world/factions.js',
+  '/js/world/regions.js',
+  '/js/world/npc_traits.js',
+  '/js/world/weather.js',
+  '/js/world/loot.js',
+  '/js/world/encounters.js',
+
+  // Static game data (needed for offline POI + quests)
+  '/data/poi.json',
+  '/data/fallout_pois.json',
+  '/data/locations.json',
+  '/data/items/items.json',
+  '/data/factions/factions.json',
+
+  // Radio metadata (lets the player pick a station offline;
+  // actual mp3 files stream separately and get cached on first play)
+  '/audio/radio/station.json',
+  '/audio/radio/station-mojave.json',
+  '/audio/radio/station-swing.json',
+  '/audio/radio/playlist.json',
+  '/audio/radio/playlist-mojave.json',
+  '/audio/radio/playlist-swing.json',
 ];
 
 // Install event - cache essential assets
