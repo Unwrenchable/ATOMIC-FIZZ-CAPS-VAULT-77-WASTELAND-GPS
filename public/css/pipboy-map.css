@@ -52,19 +52,26 @@
   padding: 4px;
 }
 
-/* Player marker - bright cyan like Pocket-Boy cursor (contained glow) */
-.leaflet-marker-icon[src*="player"],
+/* Player marker — L.divIcon wrapper; Leaflet controls positioning via its
+   own transform, so we never touch transform on this element. */
 .player-marker {
   z-index: 1000 !important;
   width: 40px !important;
   height: 40px !important;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.25) 0%, transparent 60%);
-  border-radius: 50%;
+  background: transparent !important;
+  border: none !important;
+  overflow: visible !important;
 }
 
-.leaflet-marker-icon[src*="player"] img,
-.player-marker img {
-  filter: brightness(1.3) saturate(1.2);
+/* Directional arrow image — rotates independently of the wrapper.
+   CSS transition gives smooth interpolation between heading updates. */
+.player-marker-arrow {
+  display: block;
+  width: 40px;
+  height: 40px;
+  transform-origin: center center;
+  transition: transform 0.25s ease-out;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 204, 0.65));
 }
 
 /* Fallout 1 style grid overlay */
