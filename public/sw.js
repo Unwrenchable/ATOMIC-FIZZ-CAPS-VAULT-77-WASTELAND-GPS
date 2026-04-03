@@ -229,20 +229,3 @@ self.addEventListener('message', (event) => {
     event.ports[0] && event.ports[0].postMessage({ online: true });
   }
 });
-
-// Broadcast online/offline transitions to all clients
-function broadcastNetworkStatus(online) {
-  self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then((clients) => {
-    clients.forEach((client) => {
-      client.postMessage({ type: 'NETWORK_STATUS', online });
-    });
-  });
-}
-
-self.addEventListener('fetch', () => {}); // already handled above
-
-// Listen for the SW to go offline / online via a failed fetch sentinel
-// (The fetch handler already covers cache fallback; these listeners give
-// proactive notifications so the UI can display a status bar.)
-self.addEventListener('online',  () => broadcastNetworkStatus(true));
-self.addEventListener('offline', () => broadcastNetworkStatus(false));

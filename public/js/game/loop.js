@@ -177,9 +177,9 @@
       } else {
         // Absolute fallback — produce a hard-coded wasteland mugger so the
         // battle system can be tested even with zero other modules loaded.
-        const now2 = Date.now();
-        if (now2 - lastEncounterAt >= ENCOUNTER_COOLDOWN_MS) {
-          lastEncounterAt = now2;
+        const fallbackNow = Date.now();
+        if (fallbackNow - lastEncounterAt >= ENCOUNTER_COOLDOWN_MS) {
+          lastEncounterAt = fallbackNow;
           handleEncounter({
             type: "combat",
             enemies: [{ id: "raider", name: "Wasteland Raider", hp: 30, damage: 8 }],
@@ -234,8 +234,8 @@
         });
 
         // Switch Pip-Boy to the COMBAT tab so the player sees the battle UI
-        var battleTabBtn = document.getElementById("battleTabBtn") ||
-                           document.querySelector('[data-pipboy-tab="panel-battle"]');
+        const battleTabBtn = document.getElementById("battleTabBtn") ||
+                             document.querySelector('[data-pipboy-tab="panel-battle"]');
         if (battleTabBtn) {
           battleTabBtn.click();
         }

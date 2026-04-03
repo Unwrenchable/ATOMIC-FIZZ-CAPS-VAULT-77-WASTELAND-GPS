@@ -298,9 +298,19 @@ if (debugClearStorageBtn) {
   debugClearStorageBtn.addEventListener("click", () => {
     if (!confirm("Clear all player data from localStorage? This cannot be undone.")) return;
     try {
-      const keys = ["afc_player_state_v1", "afc_quest_state", "afc_equipped_items", "afw_local_wallet_v1"];
-      keys.forEach(k => localStorage.removeItem(k));
-      if (debugStorageStatus) debugStorageStatus.textContent = "✓ Player localStorage cleared.";
+      // Scan for all keys matching the afc_* and afw_* namespaces used by the game,
+      // rather than a hardcoded list that could go stale as features are added.
+      const toRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && (k.startsWith("afc_") || k.startsWith("afw_"))) {
+          toRemove.push(k);
+        }
+      }
+      toRemove.forEach(k => localStorage.removeItem(k));
+      if (debugStorageStatus) {
+        debugStorageStatus.textContent = `✓ Cleared ${toRemove.length} player localStorage key(s): ${toRemove.join(", ") || "(none found)"}`;
+      }
     } catch (e) {
       if (debugStorageStatus) debugStorageStatus.textContent = "Error: " + e.message;
     }

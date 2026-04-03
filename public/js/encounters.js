@@ -107,14 +107,14 @@
           return {
             id:     e.type || "enemy",
             name:   (e.type || "enemy").replace(/_/g, " "),
-            hp:     e.hp,
-            damage: e.damage
+            hp:     typeof e.hp === "number"     ? e.hp     : 30,
+            damage: typeof e.damage === "number" ? e.damage : 8
           };
         }),
         rewards: encounter.rewards || {}
       });
     } else if (window.battle && typeof window.battle.startBattle === "function") {
-      window.battle.startBattle({ encounter, enemyHp: encounter.enemies.map(function (e) { return e.hp; }) });
+      window.battle.startBattle({ encounter, enemyHp: encounter.enemies.map(function (e) { return typeof e.hp === "number" ? e.hp : 30; }) });
     }
 
     return encounter;
