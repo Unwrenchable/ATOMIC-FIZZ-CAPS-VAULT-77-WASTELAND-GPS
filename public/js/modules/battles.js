@@ -420,7 +420,7 @@
             msgDiv.textContent = `${enemy.name || enemy.id} defeated!`;
             this.applyRewards(this.state.encounter);
             this.state = null;
-            setTimeout(() => this.updateUI(), 1200);
+            setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1200);
             window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'WIN' } }));
             return;
           }
@@ -436,7 +436,7 @@
               this.state = null;
               // BUG-003: Restore HP to 30% and apply caps penalty on death
               this._applyRespawnPenalty();
-              setTimeout(() => this.updateUI(), 1500);
+              setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1500);
               window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
             } else {
               // Re-enable buttons only if battle is still active
@@ -459,7 +459,7 @@
           if (fleeRoll[0] < fleeThreshold) {
             msgDiv.textContent = "You escaped!";
             this.state = null;
-            setTimeout(() => this.updateUI(), 1200);
+            setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1200);
           } else {
             msgDiv.textContent = "Failed to escape! Enemy attacks!";
             setTimeout(() => {
@@ -471,7 +471,7 @@
                 this.state = null;
                 // BUG-003: Restore HP to 30% and apply caps penalty on death
                 this._applyRespawnPenalty();
-                setTimeout(() => this.updateUI(), 1500);
+                setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1500);
                 window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
               }
             }, 800);

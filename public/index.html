@@ -56,6 +56,11 @@
     <link rel="stylesheet" href="/css/vats.css" />
     <link rel="stylesheet" href="/css/live-radio.css" />
     
+    <!-- Google Fonts: Oswald (used by character creator) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" />
+
     <!-- Character Creator & Dialogue CSS -->
     <link rel="stylesheet" href="/css/character-creator.css" />
     <!-- fo4-dialogue.css removed: narrative.js uses inline panel styling -->
@@ -164,7 +169,7 @@
                 <button class="pipboy-tab" data-pipboy-tab="panel-stat">STAT</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-items">ITEMS</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-quests">QUESTS</button>
-                <button class="pipboy-tab" data-pipboy-tab="panel-battle" id="battleTabBtn">⚔ COMBAT</button>
+
                 <button class="pipboy-tab" data-pipboy-tab="panel-radio">RADIO</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-exchange">EXCHANGE</button>
               </div>
@@ -889,9 +894,9 @@
             const bm = window.Game && window.Game.modules && window.Game.modules.battle;
             if (bm && typeof bm.start === 'function') {
               bm.start(enc);
-              const btn = document.getElementById('battleTabBtn') ||
-                          document.querySelector('[data-pipboy-tab="panel-battle"]');
-              if (btn) btn.click();
+              if (window.Game && window.Game.pipboy && typeof window.Game.pipboy.setActivePanel === 'function') {
+                window.Game.pipboy.setActivePanel('battle');
+              }
             } else if (tries++ < 30) {
               setTimeout(trySpawn, 100);
             }
