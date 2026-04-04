@@ -27,6 +27,7 @@ const rateLimit = require("express-rate-limit");
 const { Connection, PublicKey, Transaction: _Transaction } = require("@solana/web3.js");
 const { Program: _Program, AnchorProvider: _AnchorProvider, BN: _BN } = require("@coral-xyz/anchor");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
+const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
 
 // SEC-008 FIX: Rate limiters for Fizz.fun endpoints (previously had none)
 const fizzReadLimiter = rateLimit({
@@ -325,7 +326,7 @@ router.post("/admin/launch", requireConfig, authMiddleware, fizzWriteLimiter, as
         }
         
         // Log admin action (for transparency)
-        console.log(`[fizz-fun] Admin launch: ${wallet} launching ${symbol}`);
+        console.log(`[fizz-fun] Admin launch by authenticated admin: ${symbol}`);
         
         // In production: verify USDC payment and call create_token_admin
         // For now, return transaction to be signed by admin

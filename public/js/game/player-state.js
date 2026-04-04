@@ -333,6 +333,8 @@
       return false;
     }
 
+    const MAX_INVENTORY_SIZE = 200;
+
     // Check if item already exists
     const existing = _state.inventory.find(i => i.id === item.id);
     
@@ -350,7 +352,6 @@
       existing.quantity = (existing.quantity || 1) + quantity;
       console.log(`[PlayerState] Stacked ${quantity}x ${item.name} (total: ${existing.quantity})`);
     } else {
-      const MAX_INVENTORY_SIZE = 200;
       // Enforce inventory size cap before adding a new slot
       if (_state.inventory.length >= MAX_INVENTORY_SIZE) {
         console.warn(`[PlayerState] Inventory full (${MAX_INVENTORY_SIZE} items) — cannot add ${item.name}`);
