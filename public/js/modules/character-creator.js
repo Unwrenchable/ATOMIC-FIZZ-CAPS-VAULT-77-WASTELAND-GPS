@@ -223,9 +223,9 @@
       <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
       <ellipse cx="20" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
       <ellipse cx="30" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
-      <text x="3" y="12" font-size="9" fill="#FFD700" opacity="0.9">&#9733;</text>
-      <text x="40" y="9" font-size="7" fill="#FFD700" opacity="0.9">&#9733;</text>
-      <text x="7" y="22" font-size="6" fill="#FFD700" opacity="0.7">&#9733;</text>
+      <text x="3" y="12" font-size="9" fill="#FFD700" opacity="0.9" aria-hidden="true">&#9733;</text>
+      <text x="40" y="9" font-size="7" fill="#FFD700" opacity="0.9" aria-hidden="true">&#9733;</text>
+      <text x="7" y="22" font-size="6" fill="#FFD700" opacity="0.7" aria-hidden="true">&#9733;</text>
     </svg>`
   };
   const CharacterCreator = {
