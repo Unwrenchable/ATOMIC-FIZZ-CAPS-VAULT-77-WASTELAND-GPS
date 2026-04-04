@@ -100,6 +100,11 @@ app.use(
     max: 50,
     standardHeaders: true,
     legacyHeaders: false,
+    // Keep liveness and bootstrap config endpoints available during traffic spikes.
+    skip: (req) => {
+      const p = req.path || "";
+      return p === "/api/health" || p === "/api/config/frontend";
+    },
   })
 );
 

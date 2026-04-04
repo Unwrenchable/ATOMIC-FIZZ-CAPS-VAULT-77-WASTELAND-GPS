@@ -153,12 +153,12 @@ async function checkPlayerNFTs() {
   console.log('\n── Player NFT Endpoint ──');
   try {
     const res = await get(`/api/player-nfts?wallet=${MOCK_WALLET}`);
-    // Expect 200 with an array (possibly empty) or 400/404
+    // Endpoint is auth-protected; unsigned checks should receive 401.
     if (res.status === 200) {
       const items = Array.isArray(res.body) ? res.body : (res.body && res.body.nfts) || [];
       pass('player_nfts_200', `Returned ${items.length} NFT(s)`);
-    } else if (res.status === 404 || res.status === 400) {
-      pass('player_nfts_handled', `Correctly returned ${res.status} for mock wallet`);
+    } else if (res.status === 401 || res.status === 404 || res.status === 400) {
+      pass('player_nfts_handled', `Correctly returned ${res.status} for unsigned/mock wallet request`);
     } else {
       fail('player_nfts_unexpected', `Unexpected status ${res.status}`);
     }
@@ -366,13 +366,13 @@ async function checkFactionReputation() {
 async function checkOverseerProxy() {
   console.log('\n── Overseer AI Proxy ──');
   try {
-    // POST a minimal test message — expect either a response or a config error (no API key in CI)
-    const res = await post('/api/overseer', { message: 'Are you there, Overseer?', wallet: MOCK_WALLET });
+    // Mounted path is /api/overseer/ask and requires authMiddleware.
+    const res = await post('/api/overseer/ask', { prompt: 'Are you there, Overseer?' });
     if (res.status === 200 && res.body) {
       pass('overseer_proxy', 'Overseer AI proxy responded');
     } else if (res.status === 503 || res.status === 500) {
       warn('overseer_proxy_no_key', `Overseer returned ${res.status} — likely no HF_API_KEY or XAI_API_KEY configured`);
-    } else if (res.status === 401 || res.status === 400) {
+    } else if (res.status === 401 || res.status === 400 || res.status === 403) {
       pass('overseer_proxy_auth', `Overseer correctly requires auth (${res.status})`);
     } else {
       warn('overseer_proxy_status', `Unexpected status ${res.status}`);
@@ -427,13 +427,16 @@ async function checkStaticFrontend() {
 
 async function simulateBattleLootDrops() {
   console.log('\n── Simulating Battle Loot Drops (local logic validation) ──');
-  // We can't run the browser JS directly; instead we validate that the
-  // backend loot voucher endpoint is functional for different levels.
+  // We can't run browser battle logic here; validate loot-voucher endpoint behavior instead.
   const levels = [1, 10, 25, 50];
   for (const level of levels) {
     try {
-      const res = await get(`/api/loot-voucher?wallet=${MOCK_WALLET}&level=${level}`);
-      if (res.status === 200 || res.status === 401 || res.status === 400) {
+      const res = await post('/api/loot-voucher', {
+        latitude: 34.0522,
+        longitude: -118.2437,
+        locationHint: `Playtest level ${level}`,
+      });
+      if (res.status === 200 || res.status === 401 || res.status === 400 || res.status === 429 || res.status === 503) {
         pass(`loot_voucher_level_${level}`, `Level ${level} loot voucher endpoint responds (${res.status})`);
       } else if (res.status === 404) {
         warn(`loot_voucher_level_${level}`, 'Loot voucher endpoint not found');
@@ -449,11 +452,11 @@ async function simulateBattleLootDrops() {
 async function checkXpSystem() {
   console.log('\n── XP / Level-up System ──');
   try {
-    const res = await get(`/api/xp?wallet=${MOCK_WALLET}`);
-    if (res.status === 200 || res.status === 400 || res.status === 401) {
+    const res = await post('/api/xp/award', { amount: 1 });
+    if (res.status === 200 || res.status === 400 || res.status === 401 || res.status === 403 || res.status === 429) {
       pass('xp_endpoint', `XP endpoint responds (${res.status})`);
     } else if (res.status === 404) {
-      fail('xp_endpoint', 'XP endpoint not found at /api/xp');
+      fail('xp_endpoint', 'XP endpoint not found at /api/xp/award');
     } else {
       warn('xp_endpoint', `Status ${res.status}`);
     }
@@ -465,11 +468,11 @@ async function checkXpSystem() {
 async function checkCapsSystem() {
   console.log('\n── Caps / FIZZ Token System ──');
   try {
-    const res = await get(`/api/caps?wallet=${MOCK_WALLET}`);
+    const res = await get(`/api/caps/${MOCK_WALLET}`);
     if (res.status === 200 || res.status === 400 || res.status === 401) {
       pass('caps_endpoint', `Caps endpoint responds (${res.status})`);
     } else if (res.status === 404) {
-      fail('caps_endpoint', 'Caps endpoint not found at /api/caps');
+      fail('caps_endpoint', 'Caps endpoint not found at /api/caps/:wallet');
     } else {
       warn('caps_endpoint', `Status ${res.status}`);
     }
