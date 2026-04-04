@@ -526,17 +526,24 @@ test("BUG-023: crafting.js consumeIngredient handles flat-array inventory (Playe
   const src = readFile("public/js/modules/crafting.js");
   assert.ok(src, "public/js/modules/crafting.js must exist");
   assert.ok(
-    src.includes("Array.isArray(inv)"),
+    // Match Array.isArray(inv) specifically within the consumeIngredient method body
+    // to avoid false positives from other Array.isArray calls elsewhere in the file
+    // (e.g. hasIngredient also uses Array.isArray).
+    /consumeIngredient\s*\([^)]*\)\s*\{[\s\S]*?Array\.isArray\s*\(\s*inv\s*\)/.test(src),
     "crafting.js consumeIngredient must handle flat-array inventory to prevent free infinite crafting"
   );
 });
 
-test("BUG-024: quests.js item rewards gated by backendAppliedRewards flag", () => {
+test("BUG-024: quests.js item rewards awarded locally (client authoritative for items)", () => {
   const src = readFile("public/js/modules/quests.js");
   assert.ok(src, "public/js/modules/quests.js must exist");
   assert.ok(
-    src.includes("!backendAppliedRewards && r.items"),
-    "quests.js must guard item reward delivery with !backendAppliedRewards to prevent double-award"
+    !src.includes("!backendAppliedRewards && r.items"),
+    "quests.js must not gate item rewards on backendAppliedRewards — client is authoritative for items"
+  );
+  assert.ok(
+    src.includes("r.items && Array.isArray(r.items)"),
+    "quests.js must always apply item rewards locally regardless of backend response"
   );
 });
 
@@ -575,7 +582,7 @@ test("BUG-028: location-claim.js claimRadius 0 uses typeof check (not falsy ||)"
   const src = readFile("backend/api/location-claim.js");
   assert.ok(src, "backend/api/location-claim.js must exist");
   assert.ok(
-    src.includes("typeof location.claimRadius === 'number'"),
+    src.includes("typeof location.claimRadius === \"number\""),
     "location-claim.js must use typeof check for claimRadius so 0 is not treated as falsy (100m default)"
   );
 });

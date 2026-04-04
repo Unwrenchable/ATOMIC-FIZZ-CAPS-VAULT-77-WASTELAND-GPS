@@ -127,24 +127,33 @@ router.get("/leaderboard", async (req, res) => {
     // Strip "afw:afw:player:" to get the wallet address.
     const PLAYER_PREFIX = key(key("")) + "player:"; // e.g. "afw:afw:player:"
 
-    // Collect wallet addresses first, then fetch all profiles in parallel
-    // to avoid N+1 sequential Redis round-trips.
+    // Collect wallet addresses first, then fetch all profiles in batches to avoid
+    // bursting Redis with thousands of concurrent hget commands when there are
+    // many players. Cap total profiles scanned to a reasonable upper bound.
     const wallets = (playerKeys || [])
       .filter(k => k.startsWith(PLAYER_PREFIX))
       .map(k => k.slice(PLAYER_PREFIX.length))
       .filter(Boolean);
 
-    const rawProfiles = await Promise.all(
-      wallets.map(w => redis.hget(key(`player:${w}`), "profile").catch(() => null))
-    );
+    const SCAN_CAP = Math.min(limit * 20, 500); // never scan more than this many profiles
+    const CHUNK_SIZE = 50;
+    const cappedWallets = wallets.slice(0, SCAN_CAP);
+    const rawProfiles = [];
+    for (let i = 0; i < cappedWallets.length; i += CHUNK_SIZE) {
+      const chunk = cappedWallets.slice(i, i + CHUNK_SIZE);
+      const results = await Promise.all(
+        chunk.map(w => redis.hget(key(`player:${w}`), "profile").catch(() => null))
+      );
+      rawProfiles.push(...results);
+    }
 
     const entries = [];
-    for (let idx = 0; idx < wallets.length; idx++) {
+    for (let idx = 0; idx < cappedWallets.length; idx++) {
       try {
         const raw = rawProfiles[idx];
         if (!raw) continue;
         const profile = JSON.parse(raw);
-        const wallet = wallets[idx];
+        const wallet = cappedWallets[idx];
         const score =
           metric === "xp"
             ? (typeof profile.xp === "number" ? profile.xp : 0)
@@ -158,7 +167,7 @@ router.get("/leaderboard", async (req, res) => {
           score,
         });
       } catch (profileErr) {
-        console.warn("[caps] leaderboard: skipping malformed profile for wallet", wallets[idx], profileErr.message);
+        console.warn("[caps] leaderboard: skipping malformed profile for wallet", cappedWallets[idx], profileErr.message);
       }
     }
 
