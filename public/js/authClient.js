@@ -10,6 +10,26 @@ function getAuthApiUrl() {
   return `${base}/api/auth`;
 }
 
+function getBs58Encoder() {
+  if (typeof window.bs58 !== "undefined" && typeof window.bs58.encode === "function") {
+    return window.bs58;
+  }
+  throw new Error("Base58 encoder unavailable. Reload the page and try Phantom again.");
+}
+
+function normalizeSignedMessage(result) {
+  if (result && result.signature instanceof Uint8Array) {
+    return result.signature;
+  }
+  if (result instanceof Uint8Array) {
+    return result;
+  }
+  if (Array.isArray(result)) {
+    return Uint8Array.from(result);
+  }
+  throw new Error("Wallet returned an invalid signature payload.");
+}
+
 /**
  * Safely parse a fetch response as JSON.
  * Handles non-JSON responses (like HTML error pages) gracefully.
@@ -133,8 +153,10 @@ class AuthClient {
     const encoded = new TextEncoder().encode(message);
 
     // 2. Sign nonce (this can throw if user rejects)
-    const signature = await wallet.signMessage(encoded);
-    const signatureBase58 = bs58.encode(signature);
+    const bs58 = getBs58Encoder();
+    const signedMessage = await wallet.signMessage(encoded, "utf8");
+    const signatureBytes = normalizeSignedMessage(signedMessage);
+    const signatureBase58 = bs58.encode(signatureBytes);
 
     // 3. Verify
     let verifyRes;
