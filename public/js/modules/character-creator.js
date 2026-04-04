@@ -65,7 +65,169 @@
   const SPECIAL_MIN = 1;
   const SPECIAL_MAX = 10;
 
-  // Character Creator Module
+  // ============================================================
+  // VAULT BOY BOBBLEHEAD SVGS — unique pose per S.P.E.C.I.A.L. stat
+  // Each uses viewBox="0 0 50 60" (50×60 logical units, rendered via CSS width/height).
+  // Colors: suit #FFD700, skin #FFC48C, hair #4A3728, outline stroke #2a1a0a
+  // ============================================================
+  const VAULT_BOY_SVGS = {
+    STR: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="21" cy="12" r="1.5" fill="#2a1a0a"/>
+      <circle cx="29" cy="12" r="1.5" fill="#2a1a0a"/>
+      <path d="M21,17 Q25,21 29,17" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="15" r="2" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="15" r="2" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="8" y="27" width="7" height="12" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="35" y="18" width="7" height="11" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="39.5" cy="20" rx="5.5" ry="4.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="36" y="8" width="6" height="11" rx="3" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="20" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <ellipse cx="30" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+    </svg>`,
+
+    PER: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="13" y="9" width="11" height="8" rx="4" fill="#333" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="9" width="11" height="8" rx="4" fill="#333" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="23" y="11" width="4" height="3" rx="1" fill="#222" stroke="#2a1a0a" stroke-width="0.5"/>
+      <circle cx="18.5" cy="13" r="2.5" fill="none" stroke="#6699ff" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="31.5" cy="13" r="2.5" fill="none" stroke="#6699ff" stroke-width="0.8" opacity="0.6"/>
+      <path d="M21,19 Q25,23 29,19" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="17" r="2" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="17" r="2" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="4" y="15" width="12" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="34" y="15" width="12" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="20" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <ellipse cx="30" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+    </svg>`,
+
+    END: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="21" cy="12" r="1.5" fill="#2a1a0a"/>
+      <circle cx="29" cy="12" r="1.5" fill="#2a1a0a"/>
+      <path d="M21,17 Q25,21 29,17" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="15" r="2" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="15" r="2" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="35" y="25" width="7" height="12" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(-30 38 25)"/>
+      <rect x="8" y="25" width="7" height="12" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(25 11 25)"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(-20 20 41)"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(15 30 41)"/>
+      <line x1="3" y1="28" x2="9" y2="30" stroke="#FFD700" stroke-width="1.2" opacity="0.45"/>
+      <line x1="3" y1="32" x2="9" y2="33" stroke="#FFD700" stroke-width="1.2" opacity="0.45"/>
+      <line x1="3" y1="36" x2="9" y2="37" stroke="#FFD700" stroke-width="1.2" opacity="0.45"/>
+    </svg>`,
+
+    CHR: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="20" cy="11" r="1.5" fill="#2a1a0a"/>
+      <circle cx="30" cy="11" r="1.5" fill="#2a1a0a"/>
+      <path d="M19,17 Q25,24 31,17" fill="none" stroke="#2a1a0a" stroke-width="1.5"/>
+      <circle cx="17" cy="15" r="2.5" fill="#FF9999" opacity="0.6"/>
+      <circle cx="33" cy="15" r="2.5" fill="#FF9999" opacity="0.6"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="35" y="29" width="13" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="48" cy="32" r="3.5" fill="#FFC48C" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="47" y="28" width="2.5" height="5" rx="1" fill="#FFC48C" stroke="#2a1a0a" stroke-width="0.5"/>
+      <rect x="8" y="27" width="7" height="10" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(28 11 27)"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="20" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <ellipse cx="30" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+    </svg>`,
+
+    INT: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="15" y="9" width="9" height="7" rx="3.5" fill="none" stroke="#2a1a0a" stroke-width="1.6"/>
+      <rect x="26" y="9" width="9" height="7" rx="3.5" fill="none" stroke="#2a1a0a" stroke-width="1.6"/>
+      <rect x="23" y="11" width="4" height="3" rx="1" fill="none" stroke="#2a1a0a" stroke-width="1.2"/>
+      <line x1="15" y1="12" x2="10" y2="14" stroke="#2a1a0a" stroke-width="1.2"/>
+      <line x1="35" y1="12" x2="40" y2="14" stroke="#2a1a0a" stroke-width="1.2"/>
+      <circle cx="19.5" cy="12" r="1.2" fill="#2a1a0a" opacity="0.8"/>
+      <circle cx="30.5" cy="12" r="1.2" fill="#2a1a0a" opacity="0.8"/>
+      <path d="M21,18 Q25,22 29,18" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="16" r="1.8" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="16" r="1.8" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="11" y="34" width="28" height="18" rx="2" fill="#8B4513" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="24" y="34" width="2" height="18" fill="#6B3410"/>
+      <line x1="13" y1="38" x2="22" y2="38" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="13" y1="41" x2="22" y2="41" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="13" y1="44" x2="22" y2="44" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="28" y1="38" x2="37" y2="38" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="28" y1="41" x2="37" y2="41" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="28" y1="44" x2="37" y2="44" stroke="#CC8855" stroke-width="0.8"/>
+      <rect x="8" y="28" width="7" height="12" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(-30 11 28)"/>
+      <rect x="35" y="28" width="7" height="12" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(30 39 28)"/>
+    </svg>`,
+
+    AGI: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,10 Q15,-1 25,-1 Q35,-1 35,10" fill="#4A3728"/>
+      <circle cx="25" cy="10" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="21" cy="9" r="1.5" fill="#2a1a0a"/>
+      <circle cx="29" cy="9" r="1.5" fill="#2a1a0a"/>
+      <path d="M21,14 Q25,18 29,14" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="12" r="2" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="12" r="2" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="19" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="23" width="20" height="14" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,23 L25,27 L28,23" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="1" y="22" width="14" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="35" y="22" width="14" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="13" y="37" width="8" height="16" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(-22 17 37)"/>
+      <rect x="29" y="37" width="8" height="16" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(22 33 37)"/>
+      <line x1="41" y1="25" x2="47" y2="27" stroke="#FFD700" stroke-width="1.2" opacity="0.5"/>
+      <line x1="41" y1="29" x2="47" y2="30" stroke="#FFD700" stroke-width="1.2" opacity="0.5"/>
+      <line x1="3" y1="25" x2="9" y2="27" stroke="#FFD700" stroke-width="1.2" opacity="0.5"/>
+      <line x1="3" y1="29" x2="9" y2="30" stroke="#FFD700" stroke-width="1.2" opacity="0.5"/>
+    </svg>`,
+
+    LCK: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="21" cy="11" r="1.5" fill="#2a1a0a"/>
+      <circle cx="29" cy="11" r="1.5" fill="#2a1a0a"/>
+      <path d="M20,17 Q25,22 30,17" fill="none" stroke="#2a1a0a" stroke-width="1.2"/>
+      <circle cx="18" cy="15" r="2" fill="#FF9999" opacity="0.6"/>
+      <circle cx="32" cy="15" r="2" fill="#FF9999" opacity="0.6"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="35" y="16" width="7" height="13" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="38.5" cy="15" r="4.5" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="37" y="8" width="3" height="9" rx="1.5" fill="#FFC48C" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="8" y="27" width="7" height="12" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="20" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <ellipse cx="30" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <text x="3" y="12" font-size="9" fill="#FFD700" opacity="0.9" aria-hidden="true">&#9733;</text>
+      <text x="40" y="9" font-size="7" fill="#FFD700" opacity="0.9" aria-hidden="true">&#9733;</text>
+      <text x="7" y="22" font-size="6" fill="#FFD700" opacity="0.7" aria-hidden="true">&#9733;</text>
+    </svg>`
+  };
   const CharacterCreator = {
     isOpen: false,
     overlayEl: null,
@@ -1132,6 +1294,8 @@
               <div class="cc-preview-title">PREVIEW</div>
               <div class="cc-portrait-container">
                 <div class="cc-portrait-svg" id="ccPortraitSvg"></div>
+                <div class="cc-scan-line-portrait" aria-hidden="true"></div>
+                <div class="cc-portrait-frame" aria-hidden="true"></div>
               </div>
               <div class="cc-pip-label">VAULT DWELLER</div>
               <div class="cc-preview-name" id="ccPreviewName">WANDERER</div>
@@ -1624,23 +1788,11 @@
       // Build derived stats (using base SPECIAL only — background applied on save)
       const derived = this._calcDerived(sp);
 
-      // Inline Vault Boy bobblehead icon with stat letter overlay
-      const vaultBoyIcon = (abbr) => `
-        <svg class="cc-sp-vaultboy" viewBox="0 0 40 50" width="40" height="50" aria-hidden="true">
-          <circle cx="20" cy="14" r="12" fill="none" stroke="#00ff41" stroke-width="1.5"/>
-          <text x="20" y="19" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#00ff41">${escapeHtml(abbr)}</text>
-          <rect x="12" y="27" width="16" height="2" rx="1" fill="#00ff41" opacity="0.6"/>
-          <rect x="8" y="30" width="6" height="12" rx="2" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
-          <rect x="26" y="30" width="6" height="12" rx="2" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
-          <rect x="14" y="29" width="12" height="18" rx="2" fill="none" stroke="#00ff41" stroke-width="1.5"/>
-          <rect x="14" y="47" width="5" height="3" rx="1" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
-          <rect x="21" y="47" width="5" height="3" rx="1" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
-        </svg>
-      `;
+      // Vault Boy bobblehead icon — look up per-stat SVG from VAULT_BOY_SVGS
 
       let html = `
         <div class="cc-special-intro">
-          <span class="cc-si-book">📖</span>
+          <div class="cc-si-book-cover" aria-hidden="true"><div class="cc-si-book-title">YOU'RE</div><div class="cc-si-book-special">S.P.E.C.I.A.L.!</div></div>
           <span class="cc-si-text">"Every human being is born with <strong>S.P.E.C.I.A.L.</strong> attributes. These core values define your every action in the wasteland."</span>
         </div>
         <div class="cc-special-points-banner">
@@ -1655,7 +1807,7 @@
         const dots  = Array.from({length: 10}, (_, i) => `<span class="cc-sp-dot${i < val ? ' filled' : ''}"></span>`).join('');
         html += `
           <div class="cc-special-row" data-stat="${escapeHtml(stat.key)}">
-            ${vaultBoyIcon(stat.abbr)}
+            ${VAULT_BOY_SVGS[stat.abbr] || ''}
             <div class="cc-sp-meta">
               <span class="cc-sp-abbr">${escapeHtml(stat.abbr)}</span>
               <span class="cc-sp-name">${escapeHtml(stat.label)}</span>
