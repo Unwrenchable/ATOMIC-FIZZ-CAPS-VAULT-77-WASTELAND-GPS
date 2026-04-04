@@ -256,6 +256,10 @@ try {
 // ------------------------------------------------------------
 const api = (file) => path.join(__dirname, "api", file);
 
+// Utility / monitoring endpoints (no auth — checked by smoke tests and uptime monitors)
+safeMount("/api/ping",    api("ping"));
+safeMount("/api/version", api("version"));
+
 // Core API endpoints
 safeMount("/api/loot-voucher", api("loot-voucher"));
 safeMount("/api/mintables", api("mintables"));  // Your mintables router - serves mintables.json
@@ -301,6 +305,9 @@ safeMount("/api/rotation", api("rotation"));
 
 // Quest endings
 safeMount("/api/quest-endings", api("quest-endings"));
+
+// Survival reward claims
+safeMount("/api/claim-survival", api("claim-survival"));
 
 // Overseer AI proxy (Hugging Face / OpenAI compatible)
 safeMount("/api/overseer", api("overseer-proxy"));
