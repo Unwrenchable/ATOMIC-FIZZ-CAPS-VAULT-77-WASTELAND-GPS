@@ -209,7 +209,7 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     // -----------------------------
     if (typeof location.lat === "number" && typeof location.lng === "number") {
       const distance = getDistance(playerLat, playerLng, location.lat, location.lng);
-      const maxDistance = (typeof location.claimRadius === 'number') ? location.claimRadius : 50; // Default 50m radius — matches frontend UI
+      const maxDistance = (typeof location.claimRadius === "number") ? location.claimRadius : 50; // Default 50m radius — matches frontend UI
 
       if (distance > maxDistance) {
         return res.status(400).json({

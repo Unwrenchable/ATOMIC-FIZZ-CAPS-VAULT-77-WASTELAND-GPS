@@ -1361,6 +1361,15 @@
       // Confirm button
       document.getElementById('ccConfirmBtn').addEventListener('click', () => {
         currentAppearance.name = document.getElementById('ccNameInput').value || "Wanderer";
+
+        // Validate all S.P.E.C.I.A.L. points have been allocated before allowing confirm
+        const sp = currentAppearance.special || {};
+        const used = SPECIAL_STATS.reduce((acc, s) => acc + ((sp[s.key] || 1) - 1), 0);
+        const remaining = SPECIAL_TOTAL_POINTS - used;
+        if (remaining > 0) {
+          alert(`You have ${remaining} unspent S.P.E.C.I.A.L. point${remaining > 1 ? 's' : ''}. Allocate all points before entering the Vault.`);
+          return;
+        }
         
         // Save to localStorage using base64 encoding for data integrity
         // This stores only cosmetic game preferences (avatar visual settings)
