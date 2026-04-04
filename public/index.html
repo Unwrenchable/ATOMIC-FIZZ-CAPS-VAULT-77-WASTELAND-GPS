@@ -141,7 +141,12 @@
                 </div>
 
                 <div class="pipboy-meta">
-                  <span class="pipboy-meta-item">STATUS: ONLINE</span>
+                  <span class="pipboy-meta-item" id="networkStatusLabel">STATUS: ONLINE</span>
+                </div>
+
+                <!-- OFFLINE banner (hidden when online) -->
+                <div id="offlineBanner" style="display:none; background:#440000; color:#ff4444; font-family:Consolas,'Courier New',monospace; font-size:10px; letter-spacing:0.1em; padding:2px 8px; border-bottom:1px solid #ff4444; text-align:center;">
+                  ☢ OFFLINE MODE — data saved locally, syncs on reconnect
                 </div>
 
                 <!-- WALLET HUD (Phantom only) -->
@@ -159,6 +164,7 @@
                 <button class="pipboy-tab" data-pipboy-tab="panel-stat">STAT</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-items">ITEMS</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-quests">QUESTS</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-battle" id="battleTabBtn">⚔ COMBAT</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-radio">RADIO</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-exchange">EXCHANGE</button>
               </div>
@@ -414,6 +420,14 @@
                         <p style="opacity:0.7;">Loading wasteland inventory...</p>
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                <!-- BATTLE PANEL -->
+                <div id="panel-battle" class="pipboy-panel">
+                  <div class="panel-header">⚔ COMBAT TERMINAL</div>
+                  <div class="panel-body">
+                    <div id="tab-battle"></div>
                   </div>
                 </div>
 
@@ -752,6 +766,36 @@
             });
         });
       }
+
+      // Network status indicator — updates the GPS badge when offline/online
+      (function () {
+        const offlineBanner = document.getElementById('offlineBanner');
+
+        function setOffline(isOffline) {
+          const accText = document.getElementById('accText');
+          if (accText) {
+            accText.textContent = isOffline ? 'NET: OFFLINE' : 'GPS: ONLINE';
+          }
+          if (offlineBanner) {
+            offlineBanner.style.display = isOffline ? 'block' : 'none';
+          }
+        }
+
+        window.addEventListener('online',  () => setOffline(false));
+        window.addEventListener('offline', () => setOffline(true));
+
+        // Listen for service-worker broadcasts
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'NETWORK_STATUS') {
+              setOffline(!event.data.online);
+            }
+          });
+        }
+
+        // Reflect current state on load
+        setOffline(!navigator.onLine);
+      })();
     </script>
 
     <!-- Character Creator Integration -->
@@ -827,6 +871,34 @@
           initCharacterCreator();
         }
       })();
+    </script>
+
+    <!-- Admin test encounter hook: if the admin spawned a test battle via
+         sessionStorage, fire it after all modules load. -->
+    <script>
+      window.addEventListener('load', function () {
+        try {
+          const raw = sessionStorage.getItem('adminTestEncounter');
+          if (!raw) return;
+          sessionStorage.removeItem('adminTestEncounter');
+          const enc = JSON.parse(raw);
+          if (!enc || !Array.isArray(enc.enemies)) return;
+          // Wait up to 3 s for the battle module to initialise
+          let tries = 0;
+          function trySpawn() {
+            const bm = window.Game && window.Game.modules && window.Game.modules.battle;
+            if (bm && typeof bm.start === 'function') {
+              bm.start(enc);
+              const btn = document.getElementById('battleTabBtn') ||
+                          document.querySelector('[data-pipboy-tab="panel-battle"]');
+              if (btn) btn.click();
+            } else if (tries++ < 30) {
+              setTimeout(trySpawn, 100);
+            }
+          }
+          trySpawn();
+        } catch (_) {}
+      });
     </script>
 
   </body>

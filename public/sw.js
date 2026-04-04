@@ -3,7 +3,7 @@
 //
 // CACHE_VERSION: bump this string on every production deploy to invalidate
 // stale assets for all returning users.  Format: v{semver}-{YYYYMMDD}
-const CACHE_VERSION = 'v1.0.3-20260328';
+const CACHE_VERSION = 'v1.1.0-20260403';
 const CACHE_NAME = `atomic-fizz-caps-${CACHE_VERSION}`;
 const OFFLINE_URL = '/';
 
@@ -74,6 +74,14 @@ const PRECACHE_ASSETS = [
   '/data/locations.json',
   '/data/items/items.json',
   '/data/factions/factions.json',
+  '/data/quest/main.json',
+  '/data/narrative/dialog_siren.json',
+
+  // Encounter + battle scripts needed for offline combat
+  '/js/encounters.js',
+  '/js/world/encounters.js',
+  '/js/modules/npcEncounter.js',
+  '/js/game/loop.js',
 
   // Radio metadata (lets the player pick a station offline;
   // actual mp3 files stream separately and get cached on first play)
@@ -208,4 +216,16 @@ self.addEventListener('notificationclick', (event) => {
   event.waitUntil(
     clients.openWindow('/')
   );
+});
+
+// ------------------------------------------------------------
+// Network status broadcasting
+// Notifies all open game tabs when connectivity changes so the
+// Pip-Boy HUD can show an "OFFLINE" / "ONLINE" banner.
+// ------------------------------------------------------------
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'CHECK_NETWORK') {
+    // Reply immediately; the browser will tell us if fetch fails
+    event.ports[0] && event.ports[0].postMessage({ online: true });
+  }
 });
