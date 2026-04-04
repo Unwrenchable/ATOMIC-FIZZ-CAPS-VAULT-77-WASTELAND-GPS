@@ -990,6 +990,11 @@
       let delta = normalized - (this._markerHeading % 360);
       if (delta > 180) delta -= 360;
       if (delta < -180) delta += 360;
+
+      // Backstop dead zone: skip sub-1° changes to prevent CSS transition
+      // re-triggering on pure floating-point noise.
+      if (Math.abs(delta) < 1) return;
+
       this._markerHeading += delta;
 
       const el = this.playerMarker.getElement();
@@ -1001,8 +1006,12 @@
     setPlayerPosition(lat, lng, opts = {}) {
       const newPos = { lat, lng };
 
-      // Auto-heading from movement if no explicit heading provided
-      if (this.prevPlayerPosition && opts.heading === undefined) {
+      // Auto-heading from movement only when device compass is not active.
+      // When the compass module is running it is the heading authority; computing
+      // bearing from GPS deltas while stationary produces random spike values from
+      // sub-metre GPS drift, fighting the real compass reading and causing jitter.
+      const compassActive = window.Game?.modules?.compass?.hasInit;
+      if (this.prevPlayerPosition && opts.heading === undefined && !compassActive) {
         const h = this.computeHeading(
           this.prevPlayerPosition.lat,
           this.prevPlayerPosition.lng,
