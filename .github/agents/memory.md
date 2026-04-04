@@ -123,6 +123,16 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-04-04] Frontend config must never return HF_API_KEY
+- **What**: Removed `overseer.hfApiKey` from [backend/api/frontend-config.js](backend/api/frontend-config.js#L1). Endpoint now returns only non-secret fields (`hfModel`, `proxyEnabled`).
+- **Why**: Production probe showed `/api/config/frontend` returning a backend API key field to public clients.
+- **Verified**: Static diagnostics clean on [backend/api/frontend-config.js](backend/api/frontend-config.js).
+
+### [2026-04-04] Global limiter excludes health and frontend config
+- **What**: Updated the coarse global rate limiter in [backend/server.js](backend/server.js#L95) to skip `/api/health` and `/api/config/frontend`.
+- **Why**: Concurrent load tests were repeatedly receiving HTTP 429 on liveness/config checks, creating false high/medium findings and masking real regressions.
+- **Verified**: Change compiled cleanly (no diagnostics in [backend/server.js](backend/server.js)). Restart required for runtime validation.
+
 ### [2026-03-17] MCP Server bug fixes + new backend endpoints
 - **What**: Fixed 4 broken MCP tools in `mcp/vault77-server.js`:
   1. `get_player_profile` — URL was `?wallet=` query param; fixed to `/api/player/:wallet` path param.
