@@ -111,11 +111,14 @@ router.post("/", authMiddleware, claimLimiter, async (req, res) => {
     const reward = ENCOUNTER_REWARDS[encounterType];
 
     // Apply small random jitter (+/- 20%) so each claim feels unique.
-    const jitter = () => 1 + (crypto.randomInt(41) - 20) / 100; // 0.80 – 1.20
+    // crypto.randomInt(-20, 21) returns integers in [-20, 20] inclusive → divides cleanly.
+    const jitter = () => 1 + crypto.randomInt(-20, 21) / 100; // 0.80 – 1.20
     const capsAwarded = Math.max(1, Math.round(reward.caps * jitter()));
     const xpAwarded   = Math.max(1, Math.round(reward.xp  * jitter()));
 
     // Award caps and XP (non-blocking — failures are logged, not fatal).
+    // Note: awardCapsToPlayer takes (wallet, amount) while awardXp takes (playerObj, amount) —
+    // this is a pre-existing inconsistency in the codebase; we call each with the correct shape.
     let capsResult = null;
     let xpResult   = null;
     try {
