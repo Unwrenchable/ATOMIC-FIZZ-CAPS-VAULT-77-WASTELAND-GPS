@@ -11,6 +11,7 @@
     quests: document.getElementById("panel-quests"),
     radio: document.getElementById("panel-radio"),
     exchange: document.getElementById("panel-exchange"),
+    battle: document.getElementById("panel-battle"),
   };
   
   // Configuration constants
@@ -278,6 +279,10 @@
   // event dispatches that were causing multiple radio player
   // instances to be created (resulting in audio overlap).
   // ------------------------------------------------------------
+
+  // Expose panel switcher for other modules (e.g. battle auto-open/close)
+  if (!window.Game) window.Game = {};
+  window.Game.pipboy = { setActivePanel };
 
 })();
 
