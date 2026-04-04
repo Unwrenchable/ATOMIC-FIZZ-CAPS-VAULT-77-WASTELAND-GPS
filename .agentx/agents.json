@@ -89,6 +89,39 @@
     "risk_level": "medium"
   },
   {
+    "id": "vault77-hivemind-architect",
+    "role": "Vault-77 Hive-Mind Orchestrator",
+    "description": "Orchestrates every specialist agent in Atomic Fizz Caps so the hive mind ships like a AAA game studio. Breaks down work, routes to the right agents, syncs memory.md and tasks.md, enforces access profiles with agentx check, and drives multi-repo rollouts via agent-tools scripts.",
+    "tags": [
+      "orchestrator",
+      "multi-agent",
+      "governance",
+      "AAA",
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS"
+    ],
+    "capabilities": [
+      "task-breakdown",
+      "cross-repo-handoff",
+      "status-tracking",
+      "access-governance",
+      "agentx-rollout",
+      "ci-policy"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal",
+      "runSubagent",
+      "github_repo"
+    ],
+    "preferred_profile": "power",
+    "risk_level": "medium"
+  },
+  {
     "id": "vault77-game-tester",
     "role": "Vault-77 Master QA Game Tester",
     "description": "Master-level game tester and QA engineer for the Atomic Fizz Caps Vault-77 Wasteland GPS game. Simulates 1000 concurrent worldwide players across all skill levels. Identifies bugs, edge cases, exploits, balance issues, and performance bottlenecks. Reports findings in structured bug reports with reproduction steps, severity ratings, and suggested fixes. Uses tests/playtest-agent.js and tests/concurrent-load-test.js.",
