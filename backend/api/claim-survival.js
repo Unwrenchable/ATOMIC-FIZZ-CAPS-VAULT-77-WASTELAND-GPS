@@ -111,7 +111,7 @@ router.post("/", authMiddleware, claimLimiter, async (req, res) => {
     const reward = ENCOUNTER_REWARDS[encounterType];
 
     // Apply small random jitter (+/- 20%) so each claim feels unique.
-    // crypto.randomInt(-20, 21) returns integers in [-20, 20] inclusive → divides cleanly.
+    // crypto.randomInt(min, max) is [min, max) exclusive-upper-bound, so (-20, 21) → -20…20 → divides cleanly.
     const jitter = () => 1 + crypto.randomInt(-20, 21) / 100; // 0.80 – 1.20
     const capsAwarded = Math.max(1, Math.round(reward.caps * jitter()));
     const xpAwarded   = Math.max(1, Math.round(reward.xp  * jitter()));
