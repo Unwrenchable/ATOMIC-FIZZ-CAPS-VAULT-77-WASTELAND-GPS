@@ -496,6 +496,178 @@ test("BUG-020: crafting.js _craft() is internal; craft() no longer public", () =
   );
 });
 
+// ─── New regression tests from pre-launch audit ─────────────────────────────
+
+test("NEW-001: crafting.js uses key() wrapper for profile hget (BUG-001 fix)", () => {
+  const src = readFile("backend/api/crafting.js");
+  assert.ok(src, "backend/api/crafting.js must exist");
+  // The hget call must include key() wrapping to match the double-prefix convention
+  assert.ok(
+    src.includes("redis.hget(key(`player:${wallet}`),") ||
+    src.includes('redis.hget(key(`player:${wallet}`),'),
+    "crafting.js must use key() wrapper in hget for player profile to prevent level-gate bypass"
+  );
+  // Must NOT use bare template literal without key()
+  assert.ok(
+    !src.includes("redis.hget(`player:${wallet}`"),
+    "crafting.js must not call hget with bare key (missing key() wrapper)"
+  );
+});
+
+test("NEW-002: scrap-nft.js uses a distributed NX lock (BUG-002 fix)", () => {
+  const src = readFile("backend/api/scrap-nft.js");
+  assert.ok(src, "backend/api/scrap-nft.js must exist");
+  assert.ok(
+    src.includes("scrap:lock:") && src.includes("NX: true"),
+    "scrap-nft.js must use an NX Redis lock to prevent double-scrap race condition"
+  );
+});
+
+test("NEW-003: player-nfts.js requires authMiddleware (BUG-003 fix)", () => {
+  const src = readFile("backend/api/player-nfts.js");
+  assert.ok(src, "backend/api/player-nfts.js must exist");
+  assert.ok(
+    src.includes("authMiddleware"),
+    "player-nfts.js must use authMiddleware to prevent unauthenticated wallet enumeration"
+  );
+  assert.ok(
+    src.includes("req.player.wallet"),
+    "player-nfts.js must source wallet from req.player.wallet (not req.query)"
+  );
+});
+
+test("NEW-004: quest-secrets.js requires authMiddleware (BUG-004 fix)", () => {
+  const src = readFile("backend/api/quest-secrets.js");
+  assert.ok(src, "backend/api/quest-secrets.js must exist");
+  assert.ok(
+    src.includes("authMiddleware"),
+    "quest-secrets.js must use authMiddleware to prevent unauthenticated secret probing"
+  );
+  assert.ok(
+    src.includes("req.player.wallet"),
+    "quest-secrets.js must source wallet from req.player.wallet (not req.body)"
+  );
+});
+
+test("NEW-005: fo4-dialogue.js escapes npcName in affinity popup (BUG-005 fix)", () => {
+  const src = readFile("public/js/modules/fo4-dialogue.js");
+  assert.ok(src, "public/js/modules/fo4-dialogue.js must exist");
+  // escapeHtml must be called on npcName before inserting into the affinity popup
+  assert.ok(
+    src.includes("escapeHtml(npcName") || src.includes("safeName = escapeHtml("),
+    "fo4-dialogue.js must escape npcName in _showAffinityChange() to prevent XSS"
+  );
+});
+
+test("NEW-006: enemyScaling.js elite tier uses else-if (BUG-006 fix)", () => {
+  const src = readFile("public/js/modules/enemyScaling.js");
+  assert.ok(src, "public/js/modules/enemyScaling.js must exist");
+  // Tier-2 check (< 0.03) must be the first branch, Tier-1 (< 0.10) the else-if
+  // so they don't double-stack (+11 vs intended +7)
+  const tier2Idx = src.indexOf("eliteRoll < 0.03");
+  const tier1Idx = src.indexOf("eliteRoll < 0.10");
+  assert.ok(
+    tier2Idx !== -1 && tier1Idx !== -1 && tier2Idx < tier1Idx,
+    "enemyScaling.js must check tier-2 (< 0.03) before tier-1 (< 0.10) to avoid double-stacking level bonus"
+  );
+  assert.ok(
+    src.includes("} else if (eliteRoll < 0.10)"),
+    "enemyScaling.js must use else-if for tier-1 to prevent double-stacking with tier-2"
+  );
+});
+
+test("NEW-007: vats.js refunds AP for queued shots on cancel (BUG-011 fix)", () => {
+  const src = readFile("public/js/modules/vats.js");
+  assert.ok(src, "public/js/modules/vats.js must exist");
+  // exitVATS must refund AP before clearing queuedShots
+  assert.ok(
+    src.includes("VATS.actionPoints + shot.apCost") ||
+    src.includes("actionPoints + shot.apCost"),
+    "vats.js exitVATS() must refund AP for queued (unexecuted) shots on cancel"
+  );
+});
+
+test("NEW-008: quests.js enforces max active quest limit (BUG-013 fix)", () => {
+  const src = readFile("backend/api/quests.js");
+  assert.ok(src, "backend/api/quests.js must exist");
+  assert.ok(
+    src.includes("MAX_ACTIVE_QUESTS"),
+    "quests.js must enforce a maximum number of simultaneous active quests"
+  );
+});
+
+test("NEW-009: lootTable.js caps level-scaled tier probabilities (BUG-014 fix)", () => {
+  const src = readFile("backend/lib/lootTable.js");
+  assert.ok(src, "backend/lib/lootTable.js must exist");
+  assert.ok(
+    src.includes("Math.min(0.15,") && src.includes("Math.min(0.25,") && src.includes("Math.min(0.35,"),
+    "lootTable.js must cap nft/legendary/epic probabilities to prevent common loot from disappearing at high levels"
+  );
+});
+
+test("NEW-010: crafting.js uses NX lock for cooldown atomicity (BUG-016 fix)", () => {
+  const src = readFile("backend/api/crafting.js");
+  assert.ok(src, "backend/api/crafting.js must exist");
+  assert.ok(
+    src.includes("craft:lock:") && src.includes("NX: true"),
+    "crafting.js must use an NX lock around the cooldown check/write to prevent double-craft race condition"
+  );
+});
+
+test("NEW-011: loot-voucher.js requires authMiddleware (BUG-008 fix)", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  assert.ok(
+    src.includes("authMiddleware"),
+    "loot-voucher.js must require auth to prevent unauthenticated voucher generation"
+  );
+});
+
+test("NEW-012: auth.js session lookup requires authMiddleware (SEC-011 fix)", () => {
+  const src = readFile("backend/lib/auth.js");
+  assert.ok(src, "backend/lib/auth.js must exist");
+  // The session/:sessionId route must now use authMiddleware
+  const sessionRouteIdx = src.indexOf('router.get("/session/:sessionId"');
+  assert.ok(sessionRouteIdx !== -1, "auth.js must define GET /session/:sessionId route");
+  const routeSnippet = src.slice(sessionRouteIdx, sessionRouteIdx + 100);
+  assert.ok(
+    routeSnippet.includes("authMiddleware"),
+    "GET /session/:sessionId must require authMiddleware to prevent wallet deanonymization"
+  );
+});
+
+test("NEW-013: wallet.js sessions use auth:session namespace (SEC-002 fix)", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  // wallet.js must no longer store sessions in the incompatible wallet:session:* namespace
+  assert.ok(
+    !src.includes('"wallet:session:'),
+    "wallet.js must not store sessions in wallet:session: namespace — use storeSession() from lib/auth.js"
+  );
+  assert.ok(
+    src.includes("storeSession"),
+    "wallet.js must use storeSession() from lib/auth.js for session creation"
+  );
+});
+
+test("NEW-014: gps.js does not leak raw error messages (SEC-009 fix)", () => {
+  const src = readFile("backend/api/gps.js");
+  assert.ok(src, "backend/api/gps.js must exist");
+  assert.ok(
+    !src.includes("err.message") || !src.match(/json\([^)]*err\.message/),
+    "gps.js must not return raw err.message to clients (information disclosure)"
+  );
+});
+
+test("NEW-015: npc-context.js does not leak raw error details (SEC-009 fix)", () => {
+  const src = readFile("backend/api/npc-context.js");
+  assert.ok(src, "backend/api/npc-context.js must exist");
+  assert.ok(
+    !src.includes("detail: err.message"),
+    "npc-context.js must not return raw err.message as 'detail' field to clients"
+  );
+});
+
 test("BUG-021: dungeon.js _connectRooms call site uses declared variable names (not _roomW/_roomH/_gap)", () => {
   const src = readFile("public/js/modules/dungeon.js");
   assert.ok(src, "public/js/modules/dungeon.js must exist");
@@ -612,6 +784,82 @@ test("BUG-030: crafting backend daily limit uses atomic INCR-before-check (no TO
   assert.ok(
     src.includes("newCount > maxPerDay"),
     "crafting.js daily limit enforcement must check newCount from INCR (not a pre-read todayCount)"
+  );
+});
+
+// ─── Playtest Security Hardening (wallet.js + nuke.js) ───────────────────
+
+console.log("\n[10] Wallet route security hardening (playtest fixes)");
+
+test("SEC-WALLET-001: wallet.js verify handler is wrapped in outer try/catch", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  // Outer try/catch prevents nacl exceptions from crashing the server
+  assert.ok(
+    src.includes('[wallet] verify error') &&
+    src.includes("Verification failed"),
+    "wallet.js verify handler must have outer try/catch with error logging"
+  );
+});
+
+test("SEC-WALLET-002: wallet.js verify validates pubKey and signature byte lengths before nacl call", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  assert.ok(
+    src.includes("pubKeyBytes.length !== 32") && src.includes("sigBytes.length !== 64"),
+    "wallet.js must validate pubKeyBytes.length === 32 and sigBytes.length === 64 before nacl call"
+  );
+});
+
+test("SEC-WALLET-003: wallet.js verify validates input length bounds", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  assert.ok(
+    src.includes("signature.length > 512"),
+    "wallet.js verify must enforce max signature length of 512 chars to prevent DoS"
+  );
+});
+
+test("SEC-WALLET-004: wallet.js session endpoint requires authMiddleware (no unauthenticated wallet lookup)", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  assert.ok(
+    src.includes("authMiddleware"),
+    "wallet.js session route must include authMiddleware"
+  );
+  // Self-only enforcement: sessionId !== req.player.sessionId must be present
+  assert.ok(
+    src.includes("sessionId !== req.player.sessionId"),
+    "wallet.js session route must enforce self-only lookup: sessionId !== req.player.sessionId"
+  );
+  assert.ok(
+    src.includes("Forbidden"),
+    "wallet.js session route must return 403 Forbidden for cross-session lookup attempts"
+  );
+});
+
+test("SEC-WALLET-005: wallet.js nonce is deleted BEFORE session is created (reduces TOCTOU window)", () => {
+  const src = readFile("backend/routes/wallet.js");
+  assert.ok(src, "backend/routes/wallet.js must exist");
+  // deleteNonce must appear before storeSession in the verify handler
+  const deleteIdx = src.indexOf("deleteNonce(publicKey)");
+  const storeIdx  = src.indexOf("storeSession(sessionId");
+  assert.ok(
+    deleteIdx !== -1 && storeIdx !== -1 && deleteIdx < storeIdx,
+    "wallet.js must deleteNonce() before storeSession() to reduce TOCTOU race window"
+  );
+});
+
+test("SEC-WALLET-006: nuke.js reads wallet from 'wallet' key (matches authClient.js storage)", () => {
+  const src = readFile("public/js/nuke.js");
+  assert.ok(src, "public/js/nuke.js must exist");
+  assert.ok(
+    !src.includes("fizz_wallet_address"),
+    "nuke.js must not read stale 'fizz_wallet_address' localStorage key — use 'wallet' key written by authClient.js"
+  );
+  assert.ok(
+    src.includes('localStorage.getItem("wallet")'),
+    "nuke.js must read wallet address from localStorage key 'wallet' (set by authClient.saveSession)"
   );
 });
 

@@ -275,7 +275,7 @@
 
       // Handle barter option
       if (node.barter && Game.economy) {
-        this._showBarterOption(_node);
+        this._showBarterOption(node);
       }
 
       // Handle rumor system
@@ -930,23 +930,37 @@
     // SHOW AFFINITY CHANGE
     // ============================================================
     _showAffinityChange(npcName, amount) {
+      // BUG-005 FIX: escape npcName before inserting into innerHTML to prevent
+      // stored XSS when an NPC's name contains HTML/script tags.
+      const safeName = escapeHtml(npcName || 'NPC');
+      const text = amount > 0
+        ? `${safeName} liked that.`
+        : `${safeName} disliked that.`;
+
+      // BUG-015 FIX: cancel any running affinity timer and remove the previous
+      // popup before creating a new one so rapid dialogue choices don't stack
+      // multiple persistent popups in the DOM.
+      if (this._affinityTimer) {
+        clearTimeout(this._affinityTimer);
+        this._affinityTimer = null;
+      }
+      if (this._affinityPopup && this._affinityPopup.parentNode) {
+        this._affinityPopup.remove();
+      }
+
       const popup = document.createElement('div');
       popup.className = `fo4-affinity-popup ${amount < 0 ? 'negative' : ''}`;
+      popup.innerHTML = `<div class="fo4-affinity-text">${text}</div>`;
 
-      // SECURITY FIX: npcName comes from companion/NPC data that could contain
-      // HTML special characters. Use textContent for the safe parts and build
-      // the DOM node without innerHTML interpolation to prevent XSS.
-      const textDiv = document.createElement('div');
-      textDiv.className = 'fo4-affinity-text';
-      textDiv.textContent = amount > 0
-        ? `${npcName} liked that.`
-        : `${npcName} disliked that.`;
-      popup.appendChild(textDiv);
-      
+      this._affinityPopup = popup;
       document.body.appendChild(popup);
-      
-      setTimeout(() => {
-        popup.remove();
+
+      this._affinityTimer = setTimeout(() => {
+        if (popup.parentNode) popup.remove();
+        if (this._affinityPopup === popup) {
+          this._affinityPopup = null;
+          this._affinityTimer = null;
+        }
       }, 2000);
     },
 

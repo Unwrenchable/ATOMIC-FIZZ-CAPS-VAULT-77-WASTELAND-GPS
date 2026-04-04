@@ -89,10 +89,10 @@ router.post("/craft", craftingLimiter, authMiddleware, async (req, res) => {
     }
 
     // 2. Level requirement check (read from Redis player profile)
-    // SECURITY FIX: use key(`player:${wallet}`) to match the double-prefix
-    // naming convention used throughout the codebase.  Without key() the hget
-    // call reads from 'afw:player:<wallet>' instead of 'afw:afw:player:<wallet>',
-    // returning null and defaulting to level 1 — bypassing all level gates.
+    // BUG-001 FIX: must pre-call key() to match the double-prefix convention used
+    // by every other writer (player.js, xp.js, quests.js, etc.).  Without it the
+    // hget hits afw:player:<wallet> while all writers store at afw:afw:player:<wallet>,
+    // so profileRaw is always null and all level gates are bypassed at level 1.
     const profileRaw = await redis.hget(key(`player:${wallet}`), "profile");
     const profile = profileRaw ? JSON.parse(profileRaw) : null;
     const playerLevel = profile?.level ?? 1;
@@ -104,6 +104,17 @@ router.post("/craft", craftingLimiter, authMiddleware, async (req, res) => {
       });
     }
 
+    // BUG-016 FIX: acquire an NX lock before the cooldown check/write to close
+    // the race window where two simultaneous requests both pass step 3 (cooldown
+    // read) before either reaches step 5 (cooldown write), allowing the same
+    // recipe to be crafted twice within the same cooldown period.
+    const craftLockKey = key(`craft:lock:${wallet}:${recipeId}`);
+    const lock = await redis.set(craftLockKey, "1", { NX: true, EX: 30 });
+    if (!lock) {
+      return res.status(409).json({ ok: false, error: "Craft already in progress — try again shortly" });
+    }
+
+    try {
     // 3. Per-recipe cooldown check (seconds since last craft)
     const cdKey = craftCooldownKey(wallet, recipeId);
     const lastCraftTime = await redis.get(cdKey);
@@ -158,6 +169,9 @@ router.post("/craft", craftingLimiter, authMiddleware, async (req, res) => {
       output: recipe.output || { itemId: recipeId, qty: 1 },
       message: `Crafted ${recipe.name || recipeId} successfully`,
     });
+    } finally {
+      await redis.del(craftLockKey).catch(() => {});
+    }
   } catch (err) {
     console.error("[crafting] craft error:", err);
     return res.status(500).json({ ok: false, error: "Crafting failed" });

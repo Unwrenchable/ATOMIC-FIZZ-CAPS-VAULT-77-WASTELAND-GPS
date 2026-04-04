@@ -34,6 +34,17 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
       });
     }
 
+    // BUG-002 FIX: acquire a per-wallet NX lock before the read-modify-write
+    // to prevent a race condition where two simultaneous requests both pass the
+    // nftIndex check and both receive scrap rewards for the same NFT.
+    const scrapLockKey = key(`scrap:lock:${walletAddress}`);
+    const lock = await redis.set(scrapLockKey, "1", { NX: true, EX: 15 });
+    if (!lock) {
+      return res.status(409).json({ error: "Scrap already in progress — try again shortly" });
+    }
+
+    let scrapValue, nft;
+    try {
     // Verify NFT ownership (simplified - in production would check Solana)
     const playerKey = key(`player:${walletAddress}`);
     const playerData = await redis.hget(playerKey, "profile");
@@ -53,10 +64,10 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
       return res.status(404).json({ error: "NFT not found in inventory" });
     }
 
-    const nft = player.inventory[nftIndex];
+    nft = player.inventory[nftIndex];
 
     // Calculate scrap value based on NFT rarity and type
-    const scrapValue = calculateScrapValue(nft);
+    scrapValue = calculateScrapValue(nft);
 
     // Remove NFT from inventory
     player.inventory.splice(nftIndex, 1);
@@ -87,11 +98,11 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     // Save updated player data
     await redis.hset(playerKey, "profile", JSON.stringify(player));
 
-    // Log the scrap operation
-    // SECURITY FIX: key("scrap_log", Date.now()) — key() only accepts ONE argument;
-    // Date.now() was silently ignored, so every scrap operation wrote to the same
-    // "afw:scrap_log" key, clobbering all previous logs. Use a template literal.
-    const scrapLogKey = `scrap_log:${Date.now()}:${crypto.randomBytes(8).toString("hex")}`;
+    // Log the scrap operation.
+    // BUG-018 FIX: wrap with key() to match the double-prefix convention used
+    // by fuse.js's fusion_log, so both log families live in the same key namespace
+    // and admin tooling can scan them consistently.
+    const scrapLogKey = key(`scrap_log:${Date.now()}:${crypto.randomBytes(8).toString("hex")}`);
     await redis.set(scrapLogKey, JSON.stringify({
       walletAddress,
       nftMint,
@@ -107,6 +118,10 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
       newResources: player.scrapResources,
       newCaps: player.caps
     });
+
+    } finally {
+      await redis.del(scrapLockKey).catch(() => {});
+    }
 
   } catch (error) {
     console.error("[scrap-nft] Error:", error);

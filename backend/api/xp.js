@@ -86,7 +86,7 @@ router.post("/award", authMiddleware, xpLimiter, async (req, res) => {
 
     return res
       .status(status)
-      .json({ ok: false, error: err.message || "Failed to award XP" });
+      .json({ ok: false, error: status === 400 ? err.message : "Failed to award XP" });
   }
 });
 

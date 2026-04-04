@@ -4,7 +4,7 @@ const fs = require("fs");
 const router = express.Router();
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
-const { applyXpToProfile, MAX_LEVEL } = require("../lib/xp");
+const { applyXpToProfile, MAX_LEVEL: _MAX_LEVEL } = require("../lib/xp");
 
 // -----------------------------------------------------------------------
 // BUG-003 FIX: Load quest definitions from server-side data at startup.
@@ -113,6 +113,16 @@ router.post("/accept", authMiddleware, async (req, res) => {
 
     if (player.quests.active.includes(questId)) {
       return res.status(400).json({ ok: false, error: "Quest already active" });
+    }
+
+    // BUG-013 FIX: enforce a maximum number of simultaneously active quests to
+    // prevent unbounded profile JSON growth and Redis storage inflation.
+    const MAX_ACTIVE_QUESTS = 10;
+    if (player.quests.active.length >= MAX_ACTIVE_QUESTS) {
+      return res.status(400).json({
+        ok: false,
+        error: `Maximum ${MAX_ACTIVE_QUESTS} active quests — complete or abandon one first`,
+      });
     }
 
     // Add to active quests

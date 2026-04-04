@@ -74,7 +74,7 @@
         return;
       }
 
-      // Category-object fallback (legacy inventory format)
+      // Legacy category-object inventory format
       const pools = [
         inv.weapons,
         inv.armor,

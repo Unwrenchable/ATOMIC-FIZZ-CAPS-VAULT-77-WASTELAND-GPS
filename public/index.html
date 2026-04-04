@@ -56,10 +56,9 @@
     <link rel="stylesheet" href="/css/vats.css" />
     <link rel="stylesheet" href="/css/live-radio.css" />
     
-    <!-- Character Creator & Fallout 4 Dialogue CSS -->
+    <!-- Character Creator & Dialogue CSS -->
     <link rel="stylesheet" href="/css/character-creator.css" />
-    <!-- fo4-dialogue.css replaced by narrative.js panel styling -->
-    <!-- <link rel="stylesheet" href="/css/fo4-dialogue.css" /> -->
+    <!-- fo4-dialogue.css removed: narrative.js uses inline panel styling -->
     <link rel="stylesheet" href="/css/dungeon.css" />
 
     <!-- Third-party libs (deferred, non-module globals) -->
@@ -87,6 +86,9 @@
 
     <!-- Web3 Wallet Adapter (universal wallet support) -->
     <script src="/js/modules/web3-wallet-adapter.js" defer></script>
+    
+    <!-- Mobile Swipe Gesture Navigation -->
+    <script src="/js/modules/mobile-swipe.js" defer></script>
     
     <!-- Live Radio Streaming (Rex the DJ) -->
     <script src="/js/modules/live-radio-streaming.js" defer></script>
@@ -139,7 +141,12 @@
                 </div>
 
                 <div class="pipboy-meta">
-                  <span class="pipboy-meta-item">STATUS: ONLINE</span>
+                  <span class="pipboy-meta-item" id="networkStatusLabel">STATUS: ONLINE</span>
+                </div>
+
+                <!-- OFFLINE banner (hidden when online) -->
+                <div id="offlineBanner" style="display:none; background:#440000; color:#ff4444; font-family:Consolas,'Courier New',monospace; font-size:10px; letter-spacing:0.1em; padding:2px 8px; border-bottom:1px solid #ff4444; text-align:center;">
+                  ☢ OFFLINE MODE — data saved locally, syncs on reconnect
                 </div>
 
                 <!-- WALLET HUD (Phantom only) -->
@@ -152,11 +159,12 @@
               <!-- TABS -->
 
 
-              <div class="pipboy-tabs">
+              <div class="pipboy-tabs" data-swipe-tabs=".pipboy-tab">
                 <button class="pipboy-tab active" data-pipboy-tab="panel-map">MAP</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-stat">STAT</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-items">ITEMS</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-quests">QUESTS</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-battle" id="battleTabBtn">⚔ COMBAT</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-radio">RADIO</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-exchange">EXCHANGE</button>
               </div>
@@ -415,6 +423,14 @@
                   </div>
                 </div>
 
+                <!-- BATTLE PANEL -->
+                <div id="panel-battle" class="pipboy-panel">
+                  <div class="panel-header">⚔ COMBAT TERMINAL</div>
+                  <div class="panel-body">
+                    <div id="tab-battle"></div>
+                  </div>
+                </div>
+
               </div>
 
               <!-- FOOTER -->
@@ -475,10 +491,10 @@
     <script src="/js/modules/battles.js" defer></script>
     <script src="/js/modules/faction-raids.js" defer></script>
     <script src="/js/modules/npcSpawn.js" defer></script>
-    <!-- npcEncounter.js and npc_signal_runner.js replaced by narrative.js dialog system -->
-    <!-- <script src="/js/modules/npcEncounter.js" defer></script> -->
-    <!-- <script src="/js/modules/npc_signal_runner.js" defer></script> -->
-    
+    <!-- DEAD CODE (do not re-enable): npcEncounter.js + npc_signal_runner.js + fo4-dialogue.js
+         were superseded by narrative.js (the full FO4-style panel dialog system).
+         Files kept on disk for historical reference only. -->
+
     <!-- Quests & Narrative -->
     <script src="/js/modules/quests.js" defer></script>
     <script src="/js/modules/narrative.js" defer></script>
@@ -515,10 +531,9 @@
     <script src="/js/modules/npc-registry.js" defer></script>
     <script src="/js/modules/npc-portraits.js" defer></script>
     
-    <!-- Character Creator & Fallout 4 Dialogue Systems -->
+    <!-- Character Creator & Dialogue Systems -->
     <script src="/js/modules/character-creator.js" defer></script>
-    <!-- fo4-dialogue.js replaced by narrative.js — kept for reference only -->
-    <!-- <script src="/js/modules/fo4-dialogue.js" defer></script> -->
+    <!-- DEAD CODE: fo4-dialogue.js superseded by narrative.js (see dead-code note above) -->
     <script src="/js/modules/struggle-quips.js" defer></script>
     <script src="/js/modules/dungeon.js" defer></script>
 
@@ -751,6 +766,36 @@
             });
         });
       }
+
+      // Network status indicator — updates the GPS badge when offline/online
+      (function () {
+        const offlineBanner = document.getElementById('offlineBanner');
+
+        function setOffline(isOffline) {
+          const accText = document.getElementById('accText');
+          if (accText) {
+            accText.textContent = isOffline ? 'NET: OFFLINE' : 'GPS: ONLINE';
+          }
+          if (offlineBanner) {
+            offlineBanner.style.display = isOffline ? 'block' : 'none';
+          }
+        }
+
+        window.addEventListener('online',  () => setOffline(false));
+        window.addEventListener('offline', () => setOffline(true));
+
+        // Listen for service-worker broadcasts
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'NETWORK_STATUS') {
+              setOffline(!event.data.online);
+            }
+          });
+        }
+
+        // Reflect current state on load
+        setOffline(!navigator.onLine);
+      })();
     </script>
 
     <!-- Character Creator Integration -->
@@ -826,6 +871,34 @@
           initCharacterCreator();
         }
       })();
+    </script>
+
+    <!-- Admin test encounter hook: if the admin spawned a test battle via
+         sessionStorage, fire it after all modules load. -->
+    <script>
+      window.addEventListener('load', function () {
+        try {
+          const raw = sessionStorage.getItem('adminTestEncounter');
+          if (!raw) return;
+          sessionStorage.removeItem('adminTestEncounter');
+          const enc = JSON.parse(raw);
+          if (!enc || !Array.isArray(enc.enemies)) return;
+          // Wait up to 3 s for the battle module to initialise
+          let tries = 0;
+          function trySpawn() {
+            const bm = window.Game && window.Game.modules && window.Game.modules.battle;
+            if (bm && typeof bm.start === 'function') {
+              bm.start(enc);
+              const btn = document.getElementById('battleTabBtn') ||
+                          document.querySelector('[data-pipboy-tab="panel-battle"]');
+              if (btn) btn.click();
+            } else if (tries++ < 30) {
+              setTimeout(trySpawn, 100);
+            }
+          }
+          trySpawn();
+        } catch (_) {}
+      });
     </script>
 
   </body>

@@ -44,6 +44,12 @@
       const inv = this.gs && this.gs.inventory;
       if (!inv || !Array.isArray(inv.ammo)) return false;
 
+      // BUG-019 FIX: treat amount <= 0 as "free fire" — no ammo required.
+      // This prevents weapons with ammoPerShot:0 (or null) from falsely failing
+      // the ammo check.  The call site already converts 0 with `|| 1`, but this
+      // guard adds a second layer so the function stays correct if called directly.
+      if (!amount || amount <= 0) return true;
+
       const ammoItem = inv.ammo.find(a => a.id === ammoType || a.type === ammoType);
       if (!ammoItem) return false;
 
@@ -68,6 +74,14 @@
       if (!encounter || !Array.isArray(encounter.enemies) || encounter.enemies.length === 0) {
         console.error("[Battle] Cannot start: invalid encounter or no enemies", encounter);
         return;
+      }
+
+      // BUG-016 FIX: a player stored with hp <= 0 (dead state) must be
+      // respawned before a new battle begins.  Without this guard the battle
+      // loop starts with a dead player, and the "player dead" check fires only
+      // after the first enemy attack — causing a silent one-turn ghost state.
+      if (this.gs && this.gs.player && (this.gs.player.hp || 0) <= 0) {
+        this._applyRespawnPenalty();
       }
 
       this.state = {

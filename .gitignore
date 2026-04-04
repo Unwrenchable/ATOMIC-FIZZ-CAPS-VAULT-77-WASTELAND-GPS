@@ -14,6 +14,7 @@ package-lock.json
 .env
 .env.local
 .env.*.local
+.env.testnet
 
 # Build output
 dist/
@@ -108,6 +109,17 @@ data-archive/
 # --- Grok-generated output files (do not commit) ---
 generated_npcs_grok.json
 test_videos_output.json
+
+# --- Root-level dev/test/generator scripts (not for production serving) ---
+# These files live at the repo root for developer use only.
+/test-*.html
+/test-*.js
+/generate_*.js
+/generate-*.js
+/create-*.js
+/verify-*.js
+/merge-*.js
+/integrate_*.js
 
 # --- Pre-baked NPC videos ---
 # Small sets (e.g. one NPC ~50MB): commit MP4s and Vercel CDN serves them automatically.
