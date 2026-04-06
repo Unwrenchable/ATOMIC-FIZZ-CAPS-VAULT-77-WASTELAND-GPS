@@ -216,6 +216,9 @@
     provider: null,
     connectionAttempts: 0,
     maxConnectionAttempts: 3,
+    // Tracks provider objects that already have our event listeners attached.
+    // WeakSet avoids mutating the third-party provider object and prevents memory leaks.
+    _listenersAttached: new WeakSet(),
 
     // Helper functions for wallet detection
     _isMetaMaskInstalled() {
@@ -582,15 +585,18 @@
       // Check localStorage for previous connection
       const savedType = localStorage.getItem('web3_wallet_type');
       if (savedType && this.providers[savedType]) {
-        const provider = this.providers[savedType];
-        if (provider.check()) {
+        const providerDef = this.providers[savedType];
+        if (providerDef.check()) {
           try {
-            console.log(`[web3-wallet] Attempting silent restore for ${provider.name}`);
+            console.log(`[web3-wallet] Attempting silent restore for ${providerDef.name}`);
             // Phantom supports onlyIfTrusted — silently reconnects if the user
             // previously approved this site, with no popup shown.
             if (savedType === 'phantom') {
-              const phantomProvider = window.phantom?.solana || window.solana;
-              if (phantomProvider?.isPhantom) {
+              // Prefer window.phantom.solana (newer Phantom API), fall back to window.solana
+              const phantomProvider = (window.phantom?.solana?.isPhantom && window.phantom.solana) ||
+                                      (window.solana?.isPhantom && window.solana) ||
+                                      null;
+              if (phantomProvider) {
                 const resp = await phantomProvider.connect({ onlyIfTrusted: true });
                 const address = resp.publicKey.toString();
                 if (securityUtils.isValidSolanaAddress(address)) {
@@ -613,9 +619,10 @@
     },
 
     // Attach Phantom-specific event listeners to stay in sync with wallet state.
+    // Uses a WeakSet to avoid mutating the provider object and prevent duplicate registration.
     _attachPhantomListeners(phantomProvider) {
-      if (!phantomProvider || phantomProvider._afwListenersAttached) return;
-      phantomProvider._afwListenersAttached = true;
+      if (!phantomProvider || this._listenersAttached.has(phantomProvider)) return;
+      this._listenersAttached.add(phantomProvider);
 
       phantomProvider.on('accountChanged', (publicKey) => {
         if (publicKey) {
@@ -645,7 +652,9 @@
         try {
           localStorage.removeItem('web3_wallet_type');
           localStorage.removeItem('web3_wallet_hash');
-        } catch (_) { /* storage may be unavailable */ }
+        } catch (storageErr) {
+          console.warn('[web3-wallet] Could not clear wallet preferences on disconnect:', storageErr);
+        }
         this.dispatchConnectionEvent();
       });
     },
@@ -878,11 +887,11 @@
       } catch (error) {
         console.error("[web3-wallet] Connection failed:", error);
         // User cancellation is not a security-relevant failure — don't penalise the counter
-        const isUserCancellation = error.message && (
+        const isUserCancellation = error.code === 4001 || (error.message && (
           error.message.includes('cancelled') ||
           error.message.includes('rejected') ||
           error.message.includes('Redirecting to Phantom')
-        );
+        ));
         if (isUserCancellation) {
           this.connectionAttempts = Math.max(0, this.connectionAttempts - 1);
         }
