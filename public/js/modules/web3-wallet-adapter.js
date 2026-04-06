@@ -556,9 +556,67 @@
       
       // Check for existing wallet connection
       await this.checkExistingConnection();
+
+      // Bind Phantom provider events so account switches and
+      // user-initiated disconnects are reflected immediately in the game.
+      this._bindPhantomEvents();
       
       this.loaded = true;
       console.log("[web3-wallet] Wallet adapter ready");
+    },
+
+    /**
+     * Attach accountChanged and disconnect listeners to the Phantom provider
+     * (window.solana or window.phantom.solana) once it is available.
+     * Called from init() — safe to call even when Phantom is not installed.
+     */
+    _bindPhantomEvents() {
+      const phantom = window.phantom?.solana || (window.solana?.isPhantom ? window.solana : null);
+      if (!phantom) return;
+
+      // Phantom fires 'accountChanged' when the user switches accounts inside
+      // the extension.  New public key may be null if the user disconnects all
+      // accounts.
+      phantom.on('accountChanged', (publicKey) => {
+        if (publicKey) {
+          const newAddress = publicKey.toString();
+          if (securityUtils.isValidSolanaAddress(newAddress)) {
+            this.walletAddress = securityUtils.sanitizeAddress(newAddress);
+            console.log('[web3-wallet] Phantom account changed to:', this.getShortAddress());
+            this._showConnectToast(`⬡ Account switched: ${this.getShortAddress()}`);
+            this.dispatchConnectionEvent();
+          }
+        } else {
+          // User disconnected all accounts via the extension UI
+          console.log('[web3-wallet] Phantom account disconnected via extension');
+          this._handleExternalDisconnect();
+        }
+      });
+
+      // Phantom fires 'disconnect' when the user removes site permissions
+      phantom.on('disconnect', () => {
+        console.log('[web3-wallet] Phantom disconnected via extension');
+        this._handleExternalDisconnect();
+      });
+    },
+
+    /**
+     * Handle a disconnect initiated externally (e.g. user removes the site
+     * from Phantom's trusted-sites list or switches away from all accounts).
+     * Clears local state and notifies the rest of the game UI.
+     */
+    _handleExternalDisconnect() {
+      if (this.walletType !== 'phantom') return;
+      this.connected = false;
+      this.walletAddress = null;
+      this.walletType = null;
+      this.provider = null;
+      try {
+        localStorage.removeItem('web3_wallet_type');
+        localStorage.removeItem('web3_wallet_hash');
+      } catch (_) { /* ignore */ }
+      this._showConnectToast('Phantom wallet disconnected. Reconnect to continue.', true);
+      this.dispatchConnectionEvent();
     },
 
     async checkExistingConnection() {
@@ -577,9 +635,35 @@
       const savedType = localStorage.getItem('web3_wallet_type');
       if (savedType && this.providers[savedType]) {
         const provider = this.providers[savedType];
-        if (provider.check()) {
+
+        if (savedType === 'phantom') {
+          // For Phantom, attempt a silent trusted reconnect.
+          // connect({ onlyIfTrusted: true }) succeeds without a popup if the
+          // user previously approved this site; it rejects silently otherwise.
           try {
-            // Attempt silent reconnection
+            const phantomProvider = await waitForPhantomProvider(1500);
+            if (phantomProvider) {
+              const resp = await phantomProvider.connect({ onlyIfTrusted: true });
+              const address = resp.publicKey.toString();
+              if (securityUtils.isValidSolanaAddress(address)) {
+                this.connected = true;
+                this.walletAddress = securityUtils.sanitizeAddress(address);
+                this.walletType = 'phantom';
+                this.provider = phantomProvider;
+                console.log('[web3-wallet] Silently restored Phantom connection:', this.getShortAddress());
+                this.dispatchConnectionEvent();
+                return;
+              }
+            }
+          } catch (e) {
+            // onlyIfTrusted rejects when the site is not pre-approved — this is
+            // expected on a fresh visit; clear the stale preference.
+            console.log('[web3-wallet] Phantom silent reconnect skipped:', e.message);
+            try { localStorage.removeItem('web3_wallet_type'); } catch (_) { /* ignore */ }
+          }
+        } else if (provider.check()) {
+          try {
+            // Attempt silent reconnection for other wallets
             console.log(`[web3-wallet] Attempting to restore ${provider.name} connection`);
             // Note: Most wallets require explicit user action to reconnect
           } catch (e) {

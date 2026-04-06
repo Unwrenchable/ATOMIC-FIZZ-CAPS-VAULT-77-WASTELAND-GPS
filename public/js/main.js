@@ -743,6 +743,10 @@
   // WALLET + MINT
   // ---------------------------
 
+  // WeakMap to track which Phantom providers already have listeners attached,
+  // avoiding duplicate event registrations without mutating external objects.
+  const _phantomListenersAttached = new WeakMap();
+
   // Helper function to get Phantom provider (handles in-app browser delay)
   async function getPhantomProvider(maxWaitMs = 3000) {
     // Check immediate availability
@@ -833,6 +837,49 @@
 
       // Dispatch wallet connection event for other systems (e.g., Courier dialogue)
       window.dispatchEvent(new CustomEvent("walletConnected", { detail: { address: addr } }));
+
+      // Bind Phantom provider events so that account switches and user-initiated
+      // disconnects are reflected in the UI without requiring a page reload.
+      if (!_phantomListenersAttached.has(provider)) {
+        provider.on('accountChanged', (publicKey) => {
+          if (publicKey) {
+            const newAddr = publicKey.toBase58 ? publicKey.toBase58() : publicKey.toString();
+            const newLabel = `${newAddr.slice(0, 4)}...${newAddr.slice(-4)}`;
+            window.PLAYER_WALLET = newAddr;
+            if (btnHUD) { btnHUD.textContent = newLabel; }
+            if (btnStat) { btnStat.textContent = newLabel; }
+            if (legacyBtn) { legacyBtn.textContent = newLabel; }
+            if (walletAddressEl) walletAddressEl.textContent = `WALLET: ${newLabel}`;
+            if (statWalletEl) statWalletEl.textContent = newLabel;
+            window.dispatchEvent(new CustomEvent("walletConnected", { detail: { address: newAddr } }));
+            safeLog("Phantom account changed to:", newAddr);
+          } else {
+            // User disconnected all accounts from inside the extension
+            connectedWallet = false;
+            window.PLAYER_WALLET = null;
+            const disconnectLabel = "CONNECT";
+            if (btnHUD) { btnHUD.textContent = disconnectLabel; btnHUD.classList.remove("connected"); }
+            if (btnStat) { btnStat.textContent = disconnectLabel; btnStat.classList.remove("connected"); }
+            if (legacyBtn) { legacyBtn.textContent = disconnectLabel; legacyBtn.classList.remove("connected"); }
+            if (walletAddressEl) walletAddressEl.textContent = "WALLET: DISCONNECTED";
+            if (statWalletEl) statWalletEl.textContent = "DISCONNECTED";
+            window.dispatchEvent(new CustomEvent("walletDisconnected", {}));
+          }
+        });
+        provider.on('disconnect', () => {
+          connectedWallet = false;
+          window.PLAYER_WALLET = null;
+          const disconnectLabel = "CONNECT";
+          if (btnHUD) { btnHUD.textContent = disconnectLabel; btnHUD.classList.remove("connected"); }
+          if (btnStat) { btnStat.textContent = disconnectLabel; btnStat.classList.remove("connected"); }
+          if (legacyBtn) { legacyBtn.textContent = disconnectLabel; legacyBtn.classList.remove("connected"); }
+          if (walletAddressEl) walletAddressEl.textContent = "WALLET: DISCONNECTED";
+          if (statWalletEl) statWalletEl.textContent = "DISCONNECTED";
+          window.dispatchEvent(new CustomEvent("walletDisconnected", {}));
+          safeLog("Phantom wallet disconnected via extension");
+        });
+        _phantomListenersAttached.set(provider, true);
+      }
 
       // Load NFTs as soon as wallet is connected
       await refreshNFTs();
