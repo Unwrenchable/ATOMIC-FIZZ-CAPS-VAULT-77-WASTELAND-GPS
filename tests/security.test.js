@@ -863,6 +863,186 @@ test("SEC-WALLET-006: nuke.js reads wallet from 'wallet' key (matches authClient
   );
 });
 
+// ─── 11. Playtest & Audit Bug Fixes (BUG-031 through BUG-039 + SEC-AUDIT) ────
+
+console.log("\n[11] Playtest & audit fixes (BUG-031 through BUG-039 + SEC-AUDIT)");
+
+test("BUG-031: cooldowns.js TTL lookup uses key() wrapper (matches double-prefixed writer)", () => {
+  const src = readFile("backend/api/cooldowns.js");
+  assert.ok(src, "backend/api/cooldowns.js must exist");
+  // Must call key() around the ttl argument — not raw bare string
+  assert.ok(
+    src.includes("redis.ttl(key(") || src.match(/ttl\s*\(\s*key\s*\(/),
+    "cooldowns.js redis.ttl() must wrap key path with key() to match double-prefixed writer"
+  );
+});
+
+test("BUG-032: fizz-fun.js bonding curve uses BigInt for constant product calculations", () => {
+  const src = readFile("backend/api/fizz-fun.js");
+  assert.ok(src, "backend/api/fizz-fun.js must exist");
+  // calculateBuyReturn must use BigInt() to avoid Number.MAX_SAFE_INTEGER overflow
+  assert.ok(
+    src.includes("BigInt(") && src.includes("calculateBuyReturn"),
+    "fizz-fun.js calculateBuyReturn must use BigInt to prevent float precision loss on large trades"
+  );
+});
+
+test("BUG-033: dungeon.js /clear uses atomic NX set (no TOCTOU double-clear)", () => {
+  const src = readFile("backend/api/dungeon.js");
+  assert.ok(src, "backend/api/dungeon.js must exist");
+  // The old GET-then-SET pattern allowed concurrent double-award.
+  // The fix uses a single NX set, same as the /loot endpoint.
+  assert.ok(
+    src.includes("NX: true") || src.includes("NX:true"),
+    "dungeon.js /clear must use atomic NX set to prevent concurrent double-clear exploitation"
+  );
+  // Old vulnerable GET-then-SET must be gone
+  assert.ok(
+    !src.match(/redis\.get\(key\(clearKey\)[^)]*\)[^{]*\n[^A-Za-z]*if.*alreadyCleared/),
+    "dungeon.js /clear must not use vulnerable GET-then-SET idempotency pattern"
+  );
+});
+
+test("BUG-034: battles.js enemyAttack() returns early if active enemy is already dead", () => {
+  const src = readFile("public/js/modules/battles.js");
+  assert.ok(src, "public/js/modules/battles.js must exist");
+  // Must guard against dead enemy attacking — prevents LOSE-on-WIN state flip
+  assert.ok(
+    src.includes("ENEMY_DEAD") || src.match(/enemyHp\[idx\]\s*<=\s*0/),
+    "battles.js enemyAttack() must guard against dead enemies dealing damage after all enemies are defeated"
+  );
+});
+
+test("BUG-035: loot-voucher.js does not hardcode lootId to 1n", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  assert.ok(
+    !src.includes("const lootId = 1n") && !src.match(/lootId\s*=\s*1n\s*;/),
+    "loot-voucher.js must not hardcode lootId to 1n — every voucher had identical loot, bypassing the tier system"
+  );
+});
+
+test("BUG-036: loot-voucher.js returns { voucher, signature } structure (not flat payload)", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  // Must include voucherId and keyId so redeem-voucher.js can verify
+  assert.ok(
+    src.includes("voucherId") && src.includes("keyId"),
+    "loot-voucher.js must include voucherId and keyId in the voucher (required by redeem-voucher.js)"
+  );
+  // Must return nested { voucher: {...}, signature: [...] } structure
+  assert.ok(
+    src.includes("voucher,") || src.includes("voucher:"),
+    "loot-voucher.js must return { voucher, signature } structure matching redeem-voucher.js expectations"
+  );
+});
+
+test("BUG-036: loot-voucher.js does NOT return legacy flat serverSignature field", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  assert.ok(
+    !src.includes("serverSignature:"),
+    "loot-voucher.js must not use old flat 'serverSignature' field — use { voucher, signature } structure"
+  );
+});
+
+test("BUG-037: game loop ENCOUNTER_CHANCE is at most 0.15 (production-appropriate, not 0.55)", () => {
+  const src = readFile("public/js/game/loop.js");
+  assert.ok(src, "public/js/game/loop.js must exist");
+  // Extract the constant value and ensure it's not the 0.55 test value
+  const match = src.match(/const\s+ENCOUNTER_CHANCE\s*=\s*([\d.]+)/);
+  assert.ok(match, "public/js/game/loop.js must define ENCOUNTER_CHANCE constant");
+  const rate = parseFloat(match[1]);
+  assert.ok(
+    rate <= 0.15,
+    `ENCOUNTER_CHANCE=${rate} is too high for production; max allowed is 0.15 (was 0.55, causing battle every ~9s)`
+  );
+});
+
+test("SEC-AUDIT-001: Solana program lib.rs uses u128 for bonding curve arithmetic (not raw u64 multiply)", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // u128 cast must be present for the constant-product k = virtualSol * tokenReserve
+  // Virtual SOL (30e9) * token_reserve (800e15) = 2.4e28 > u64::MAX → panic without u128
+  assert.ok(
+    src.includes("as u128"),
+    "lib.rs bonding curve must cast to u128 before multiplying to avoid u64 overflow"
+  );
+  // Old unchecked unwrap pattern that caused the panic must be gone
+  assert.ok(
+    !src.match(/checked_mul\(curve\.token_reserve\)\.unwrap\(\)/),
+    "lib.rs must not use checked_mul(token_reserve).unwrap() — overflows u64 and panics on every trade"
+  );
+});
+
+test("SEC-AUDIT-002: Solana program ClaimLoot server_key is constrained to config.server_key", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // server_key must be address-constrained so attackers can't supply their own keypair
+  assert.ok(
+    src.includes("config.server_key"),
+    "lib.rs ClaimLoot.server_key must be constrained to config.server_key to prevent forged loot vouchers"
+  );
+});
+
+test("SEC-AUDIT-003: Solana program FizzBondingCurve struct includes graduated_at field", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // graduated_at must exist in the struct definition (was missing, causing compile error)
+  assert.ok(
+    src.includes("graduated_at"),
+    "lib.rs FizzBondingCurve must include graduated_at field (was missing — fizz_graduate set it causing compile error)"
+  );
+  // curve.symbol reference in non-comment code must be removed (field doesn't exist)
+  // Filter out comment lines before checking
+  const nonCommentLines = src.split("\n").filter(l => !l.trim().startsWith("//"));
+  const nonCommentSrc = nonCommentLines.join("\n");
+  assert.ok(
+    !nonCommentSrc.includes("curve.symbol"),
+    "lib.rs must not reference curve.symbol in code (field does not exist on FizzBondingCurve)"
+  );
+});
+
+test("SEC-AUDIT-004: Solana program FizzBuyTokens curve_token_vault has associated_token constraint", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // curve_token_vault in FizzBuyTokens must be constrained to bonding_curve's ATA
+  assert.ok(
+    src.includes("associated_token::authority = bonding_curve"),
+    "lib.rs curve_token_vault must be constrained to bonding_curve authority to prevent wrong-vault substitution"
+  );
+});
+
+test("SEC-AUDIT-005: Solana program FizzSellTokens treasury is constrained to config.treasury", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // FizzSellTokens must include config and constrain treasury address
+  // Previously config was missing and treasury had no address constraint
+  assert.ok(
+    src.includes("InvalidTreasury"),
+    "lib.rs FizzSellTokens treasury must be constrained with InvalidTreasury error to prevent fee redirection"
+  );
+});
+
+test("SEC-AUDIT-006: loot-voucher.js validates GPS proximity before signing voucher", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  assert.ok(
+    src.includes("not_near_poi") || src.includes("nearbyPOI") || src.includes("findNearbyPOI"),
+    "loot-voucher.js must check GPS proximity before signing voucher (prevents couch-farming)"
+  );
+});
+
+test("SEC-AUDIT-008: Solana program claim_loot validates voucher timestamp freshness", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // VoucherExpired error must be defined and used
+  assert.ok(
+    src.includes("VoucherExpired"),
+    "lib.rs claim_loot must validate voucher timestamp freshness with VoucherExpired error"
+  );
+});
+
 // ─── Summary ──────────────────────────────────────────────────────────────
 
 console.log("\n─────────────────────────────────────────");

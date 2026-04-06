@@ -176,6 +176,14 @@
       if (!this.state) return;
 
       const idx = this.state.activeEnemyIndex ?? 0;
+      // BUG-034 FIX: guard against a dead enemy attacking after the last kill.
+      // When all enemies are defeated activeEnemyIndex can still point at the
+      // just-killed enemy (hp <= 0). A dead enemy must never deal damage —
+      // doing so could flip a WON battle into a LOSE state.
+      if (!this.state.enemyHp || this.state.enemyHp[idx] <= 0) {
+        return { success: false, reason: "ENEMY_DEAD" };
+      }
+
       const enemy = this.state.encounter.enemies[idx];
       let dmg = enemy.damage || 3;
 
