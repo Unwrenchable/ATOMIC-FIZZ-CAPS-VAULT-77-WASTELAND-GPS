@@ -19,7 +19,11 @@
   // CONFIG
   // ------------------------------------------------------------
   const TICK_INTERVAL = 5000; // 5 seconds per world tick
-  const ENCOUNTER_CHANCE = 0.55; // 55% chance per tick — high for testing/launch visibility
+  // BUG-037 FIX: Reduced from 0.55 (55% — testing/high-visibility value) to 0.07
+  // (7% per tick) for a production-appropriate encounter rate of ~1 per 71 seconds.
+  // At 0.55 players were in back-to-back combat every ~9 seconds, making normal
+  // GPS exploration, trading, and quest work impossible.
+  const ENCOUNTER_CHANCE = 0.07; // 7% per tick ≈ 1 encounter per ~71 seconds
   const ENCOUNTER_COOLDOWN_MS = 20000; // 20 s cooldown between same-key encounters
 
   // _dynamicEncounterChance can be overridden at runtime by admin tools
