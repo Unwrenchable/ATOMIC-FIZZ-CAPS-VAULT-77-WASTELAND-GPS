@@ -1211,9 +1211,11 @@
           <div class="nova-guide-header">
             <span style="font-size:18px;line-height:1;">🤖</span>
             <span class="nova-guide-name">NOVA-7</span>
+            <button class="nova-guide-dismiss" id="novaDismissBtn" aria-label="Dismiss NOVA-7">✕</button>
           </div>
           <div class="nova-guide-text" id="novaGuideText"></div>
         `;
+        p.querySelector('#novaDismissBtn').addEventListener('click', () => this.hide());
         this.panel = p;
         return p;
       },

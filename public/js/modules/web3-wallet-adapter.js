@@ -216,6 +216,9 @@
     provider: null,
     connectionAttempts: 0,
     maxConnectionAttempts: 3,
+    // Tracks provider objects that already have our event listeners attached.
+    // WeakSet avoids mutating the third-party provider object and prevents memory leaks.
+    _listenersAttached: new WeakSet(),
 
     // Helper functions for wallet detection
     _isMetaMaskInstalled() {
@@ -334,11 +337,17 @@
             if (!securityUtils.isValidSolanaAddress(address)) {
               throw new Error('Invalid wallet address received');
             }
+            // Attach listeners so state stays in sync after connecting
+            web3WalletAdapter._attachPhantomListeners(provider);
             return {
               address: securityUtils.sanitizeAddress(address),
               provider: provider
             };
           } catch (error) {
+            // Code 4001 = user rejected the connection request — not an error worth alarming
+            if (error.code === 4001 || (error.message && error.message.toLowerCase().includes('user rejected'))) {
+              throw new Error('Connection cancelled. Tap Connect again when ready.');
+            }
             throw new Error(`Phantom connection failed: ${error.message}`, { cause: error });
           }
         }
@@ -673,6 +682,47 @@
       }
     },
 
+    // Attach Phantom-specific event listeners to stay in sync with wallet state.
+    // Uses a WeakSet to avoid mutating the provider object and prevent duplicate registration.
+    _attachPhantomListeners(phantomProvider) {
+      if (!phantomProvider || this._listenersAttached.has(phantomProvider)) return;
+      this._listenersAttached.add(phantomProvider);
+
+      phantomProvider.on('accountChanged', (publicKey) => {
+        if (publicKey) {
+          const newAddress = publicKey.toString();
+          if (securityUtils.isValidSolanaAddress(newAddress)) {
+            this.walletAddress = securityUtils.sanitizeAddress(newAddress);
+            console.log("[web3-wallet] Phantom account changed:", this.getShortAddress());
+            this.dispatchConnectionEvent();
+          }
+        } else {
+          // Phantom signals the connected account was removed — treat as disconnect
+          console.log("[web3-wallet] Phantom account removed — disconnecting");
+          this.connected = false;
+          this.walletAddress = null;
+          this.walletType = null;
+          this.provider = null;
+          this.dispatchConnectionEvent();
+        }
+      });
+
+      phantomProvider.on('disconnect', () => {
+        console.log("[web3-wallet] Phantom disconnect event received");
+        this.connected = false;
+        this.walletAddress = null;
+        this.walletType = null;
+        this.provider = null;
+        try {
+          localStorage.removeItem('web3_wallet_type');
+          localStorage.removeItem('web3_wallet_hash');
+        } catch (storageErr) {
+          console.warn('[web3-wallet] Could not clear wallet preferences on disconnect:', storageErr);
+        }
+        this.dispatchConnectionEvent();
+      });
+    },
+
     getAvailableWallets() {
       const available = [];
       
@@ -830,7 +880,11 @@
         // If no type specified, show selector
         if (!walletType) {
           walletType = await this.showWalletSelector();
-          if (!walletType) return false;
+          if (!walletType) {
+            // Cancelled by the user — not a real attempt, don't count it
+            this.connectionAttempts = Math.max(0, this.connectionAttempts - 1);
+            return false;
+          }
         }
 
         const provider = this.providers[walletType];
@@ -896,6 +950,15 @@
 
       } catch (error) {
         console.error("[web3-wallet] Connection failed:", error);
+        // User cancellation is not a security-relevant failure — don't penalise the counter
+        const isUserCancellation = error.code === 4001 || (error.message && (
+          error.message.includes('cancelled') ||
+          error.message.includes('rejected') ||
+          error.message.includes('Redirecting to Phantom')
+        ));
+        if (isUserCancellation) {
+          this.connectionAttempts = Math.max(0, this.connectionAttempts - 1);
+        }
         this._showConnectToast(`Connection failed: ${error.message}`, true);
         return false;
       }
