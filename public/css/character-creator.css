@@ -20,6 +20,8 @@
   align-items: center;
   padding: 20px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* smooth momentum scroll on iOS */
+  overscroll-behavior: contain;      /* prevent scroll chaining to background */
   font-family: "Consolas", "Courier New", monospace;
   color: #00ff41;
 }
@@ -820,6 +822,34 @@
     border-right: none;
     min-height: 100vh;   /* fallback for older browsers */
     min-height: 100dvh;  /* dynamic viewport height for mobile with toolbars */
+    overflow: visible;   /* let the overlay handle all scrolling */
+  }
+
+  /* Nova-7 floating panel becomes a slim inline banner on mobile —
+     the absolute-positioned version would block form controls */
+  .nova-guide-panel {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid rgba(0, 255, 65, 0.3);
+    border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+    box-shadow: none;
+    padding: 6px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    z-index: 5;
+  }
+
+  .nova-guide-header {
+    flex-shrink: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
   }
 
   /* ── Compact header ─────────────────────────────────── */
