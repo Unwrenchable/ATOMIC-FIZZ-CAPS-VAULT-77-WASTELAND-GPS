@@ -38,10 +38,11 @@ router.get("/status", async (req, res) => {
 
     // Return the actual remaining TTL so the frontend can show a countdown.
     // ttl() returns -2 (key gone), -1 (no expiry), or seconds remaining.
-    // We use the same double-prefixed key path as the writer (location-claim.js).
+    // BUG-031 FIX: ttl() wrapper auto-prefixes, so we must pre-call key() here too
+    // to match the double-prefixed path written by location-claim.js.
     let secondsRemaining = 0;
     if (onCooldown) {
-      const rawTtl = await redis.ttl(`player:${wallet}:cooldown:${poi}`);
+      const rawTtl = await redis.ttl(key(`player:${wallet}:cooldown:${poi}`));
       secondsRemaining = rawTtl > 0 ? rawTtl : null;
     }
 

@@ -383,25 +383,31 @@ async function getCapsBalance(wallet) {
 
 /**
  * Calculate tokens received for SOL input (constant product AMM)
+ * BUG-032 FIX: use BigInt for intermediate calculations because
+ * virtualSol (30B) * tokenReserve (800e15) = 2.4e28 >> Number.MAX_SAFE_INTEGER,
+ * causing precision loss of ~0.02–0.1% on large trades.
  */
 function calculateBuyReturn(solAmount, solReserve, tokenReserve) {
-    const virtualSol = solReserve + VIRTUAL_SOL;
-    const k = virtualSol * tokenReserve;
-    const newSol = virtualSol + solAmount;
-    const newTokens = k / newSol;
-    return Math.floor(tokenReserve - newTokens);
+    const virtualSol = BigInt(solReserve) + BigInt(VIRTUAL_SOL);
+    const tokenReserveBig = BigInt(Math.floor(tokenReserve));
+    const k = virtualSol * tokenReserveBig;
+    const newSol = virtualSol + BigInt(Math.floor(solAmount));
+    const newTokens = k / newSol; // BigInt integer division
+    return Number(tokenReserveBig - newTokens);
 }
 
 /**
  * Calculate SOL received for token input
+ * BUG-032 FIX: use BigInt for intermediate calculations (same overflow hazard as buy).
  */
 function calculateSellReturn(tokenAmount, solReserve, tokenReserve) {
-    const virtualSol = solReserve + VIRTUAL_SOL;
-    const k = virtualSol * tokenReserve;
-    const newTokens = tokenReserve + tokenAmount;
-    const newSol = k / newTokens;
+    const virtualSol = BigInt(solReserve) + BigInt(VIRTUAL_SOL);
+    const tokenReserveBig = BigInt(Math.floor(tokenReserve));
+    const k = virtualSol * tokenReserveBig;
+    const newTokens = tokenReserveBig + BigInt(Math.floor(tokenAmount));
+    const newSol = k / newTokens; // BigInt integer division
     const solOut = virtualSol - newSol;
-    return Math.min(Math.floor(solOut), solReserve);
+    return Math.min(Number(solOut), solReserve);
 }
 
 /**

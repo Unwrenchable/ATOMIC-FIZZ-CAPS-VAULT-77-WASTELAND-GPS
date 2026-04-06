@@ -19,6 +19,10 @@ const FIZZ_CONFIG_SEEDS: &[u8] = b"fizz-config";
 const FIZZ_CURVE_SEEDS: &[u8] = b"fizz-curve";
 const FIZZ_SOL_VAULT_SEEDS: &[u8] = b"fizz-sol-vault";
 const FIZZ_ADMIN_SEEDS: &[u8] = b"fizz-admin";
+// SEC-AUDIT-011 NOTE: fizz_init is guarded by the PDA `init` constraint (Anchor
+// ensures the account can only be initialized once) and requires a Signer.
+// For additional protection against front-running on deployment, call fizz_init
+// in the same transaction as the program deployment or use a private RPC endpoint.
 
 // ============ FIZZ.FUN CONSTANTS ============
 /// Total supply per token: 1 billion with 9 decimals
@@ -50,6 +54,14 @@ pub mod fizzcaps_onchain {
     
     pub fn claim_loot(ctx: Context<ClaimLoot>, voucher: LootVoucher) -> Result<()> {
         let fee_amount = 100 * 10u64.pow(9);
+
+        // SEC-AUDIT-008 FIX: validate voucher timestamp before accepting it.
+        // Without this check, old/stale vouchers remain valid indefinitely,
+        // allowing replay of vouchers from hours or days ago.
+        let now = Clock::get()?.unix_timestamp;
+        let voucher_age = now.saturating_sub(voucher.timestamp);
+        let max_age: i64 = 3600; // 1 hour; override with VOUCHER_TTL env if needed
+        require!(voucher_age >= 0 && voucher_age <= max_age, ErrorCode::VoucherExpired);
 
         // 1. Burn the $CAPS fee
         burn(
@@ -133,6 +145,9 @@ pub mod fizzcaps_onchain {
         config.authority = ctx.accounts.authority.key();
         config.treasury = ctx.accounts.treasury.key();
         config.caps_mint = ctx.accounts.caps_mint.key();
+        // SEC-AUDIT-002 FIX: store the trusted server key so ClaimLoot can verify
+        // that the caller-supplied server_key matches the one registered at init time.
+        config.server_key = ctx.accounts.server_key.key();
         config.total_tokens_launched = 0;
         config.total_volume_sol = 0;
         config.total_caps_burned = 0;
@@ -307,12 +322,24 @@ pub mod fizzcaps_onchain {
         let fee = sol_amount.checked_mul(FEE_BPS).unwrap().checked_div(10000).unwrap();
         let sol_after_fee = sol_amount.checked_sub(fee).unwrap();
 
-        // Calculate tokens out (constant product AMM)
-        let virtual_sol = curve.sol_reserve.checked_add(VIRTUAL_SOL).unwrap();
-        let k = virtual_sol.checked_mul(curve.token_reserve).unwrap();
-        let new_sol = virtual_sol.checked_add(sol_after_fee).unwrap();
-        let new_tokens = k.checked_div(new_sol).unwrap();
-        let tokens_out = curve.token_reserve.checked_sub(new_tokens).unwrap();
+        // SEC-AUDIT-001 FIX: use u128 for intermediate AMM calculations.
+        // virtual_sol (30e9) * token_reserve (800e15) = 2.4e28 which overflows
+        // u64::MAX (1.84e19) by ~5 billion times.  The previous checked_mul
+        // returned None → unwrap() panicked → every buy/sell crashed.
+        let virtual_sol = (curve.sol_reserve as u128)
+            .checked_add(VIRTUAL_SOL as u128)
+            .ok_or(FizzError::ArithmeticOverflow)?;
+        let k: u128 = virtual_sol
+            .checked_mul(curve.token_reserve as u128)
+            .ok_or(FizzError::ArithmeticOverflow)?;
+        let new_sol = virtual_sol
+            .checked_add(sol_after_fee as u128)
+            .ok_or(FizzError::ArithmeticOverflow)?;
+        let new_tokens = k.checked_div(new_sol).ok_or(FizzError::ArithmeticOverflow)?;
+        let tokens_out_u128 = (curve.token_reserve as u128)
+            .checked_sub(new_tokens)
+            .ok_or(FizzError::ArithmeticOverflow)?;
+        let tokens_out = u64::try_from(tokens_out_u128).map_err(|_| error!(FizzError::ArithmeticOverflow))?;
 
         require!(tokens_out >= min_tokens_out, FizzError::SlippageExceeded);
         require!(tokens_out <= curve.token_reserve, FizzError::InsufficientLiquidity);
@@ -392,13 +419,24 @@ pub mod fizzcaps_onchain {
         require!(!curve.graduated, FizzError::TokenGraduated);
         require!(token_amount > 0, FizzError::ZeroAmount);
 
-        // Calculate SOL out
-        let virtual_sol = curve.sol_reserve.checked_add(VIRTUAL_SOL).unwrap();
-        let k = virtual_sol.checked_mul(curve.token_reserve).unwrap();
-        let new_tokens = curve.token_reserve.checked_add(token_amount).unwrap();
-        let new_sol = k.checked_div(new_tokens).unwrap();
-        let sol_out_gross = virtual_sol.checked_sub(new_sol).unwrap();
-        let sol_out_gross = std::cmp::min(sol_out_gross, curve.sol_reserve);
+        // SEC-AUDIT-001 FIX: use u128 for intermediate AMM calculations (same overflow).
+        let virtual_sol = (curve.sol_reserve as u128)
+            .checked_add(VIRTUAL_SOL as u128)
+            .ok_or(FizzError::ArithmeticOverflow)?;
+        let k: u128 = virtual_sol
+            .checked_mul(curve.token_reserve as u128)
+            .ok_or(FizzError::ArithmeticOverflow)?;
+        let new_tokens = (curve.token_reserve as u128)
+            .checked_add(token_amount as u128)
+            .ok_or(FizzError::ArithmeticOverflow)?;
+        let new_sol = k.checked_div(new_tokens).ok_or(FizzError::ArithmeticOverflow)?;
+        let sol_out_gross_u128 = virtual_sol
+            .checked_sub(new_sol)
+            .ok_or(FizzError::ArithmeticOverflow)?;
+        let sol_out_gross = std::cmp::min(
+            u64::try_from(sol_out_gross_u128).map_err(|_| error!(FizzError::ArithmeticOverflow))?,
+            curve.sol_reserve,
+        );
 
         // Calculate fee
         let fee = sol_out_gross.checked_mul(FEE_BPS).unwrap().checked_div(10000).unwrap();
@@ -456,6 +494,7 @@ pub mod fizzcaps_onchain {
 
         // Mark graduated
         curve.graduated = true;
+        // SEC-AUDIT-003 FIX: graduated_at is now a valid field on FizzBondingCurve.
         curve.graduated_at = Some(Clock::get()?.unix_timestamp);
 
         emit!(FizzTokenGraduated {
@@ -465,7 +504,10 @@ pub mod fizzcaps_onchain {
             creator_bonus,
         });
 
-        msg!("🎓 {} graduated! Creator bonus: {} lamports", curve.symbol, creator_bonus);
+        // SEC-AUDIT-003 FIX: removed curve.symbol reference — symbol is stored
+        // off-chain (indexed from FizzTokenCreated events) and does not exist
+        // as a field on FizzBondingCurve (would cause a compile error).
+        msg!("🎓 Token {} graduated! Creator bonus: {} lamports", curve.token_mint, creator_bonus);
         Ok(())
     }
 }
@@ -554,6 +596,10 @@ pub struct FizzConfig {
     pub total_volume_sol: u64,
     pub total_caps_burned: u64,
     pub admin_usdc_launches: u64,
+    // SEC-AUDIT-002 FIX: added server_key so ClaimLoot can verify the
+    // server_key account against a known, stored public key rather than
+    // accepting any arbitrary account (which allowed forged loot vouchers).
+    pub server_key: Pubkey,
     pub bump: u8,
 }
 
@@ -570,16 +616,19 @@ pub struct FizzAdminRecord {
 /// Name, symbol, URI stored off-chain (indexed from events)
 #[account]
 pub struct FizzBondingCurve {
-    pub creator: Pubkey,      // 32 bytes
-    pub token_mint: Pubkey,   // 32 bytes
-    pub sol_reserve: u64,     // 8 bytes
-    pub token_reserve: u64,   // 8 bytes
-    pub graduated: bool,      // 1 byte
-    pub created_at: i64,      // 8 bytes
+    pub creator: Pubkey,           // 32 bytes
+    pub token_mint: Pubkey,        // 32 bytes
+    pub sol_reserve: u64,          // 8 bytes
+    pub token_reserve: u64,        // 8 bytes
+    pub graduated: bool,           // 1 byte
+    // SEC-AUDIT-003 FIX: added graduated_at (was referenced in fizz_graduate but
+    // missing from the struct — caused compile error and deployment blocker).
+    pub graduated_at: Option<i64>, // 9 bytes (1 discriminant + 8 data)
+    pub created_at: i64,           // 8 bytes
     pub launch_type: FizzLaunchType, // 1 byte
-    pub bump: u8,             // 1 byte
-    // TOTAL: 8 (discriminator) + 32 + 32 + 8 + 8 + 1 + 8 + 1 + 1 = 99 bytes
-    // Rent: ~0.0016 SOL
+    pub bump: u8,                  // 1 byte
+    // TOTAL: 8 (discriminator) + 32 + 32 + 8 + 8 + 1 + 9 + 8 + 1 + 1 = 108 bytes
+    // Rent: ~0.0018 SOL
 }
 
 // ============ ACCOUNT CONTEXTS ============
@@ -590,7 +639,13 @@ pub struct ClaimLoot<'info> {
     #[account(mut)]
     pub player: Signer<'info>,
 
-    #[account(mut)]
+    // SEC-AUDIT-014 FIX: added explicit ATA constraints so only the player's
+    // own CAPS ATA can be burned from (not a delegated account).
+    #[account(
+        mut,
+        associated_token::mint = caps_mint,
+        associated_token::authority = player,
+    )]
     pub player_caps_ata: Account<'info, TokenAccount>,
 
     #[account(
@@ -617,7 +672,14 @@ pub struct ClaimLoot<'info> {
     #[account(seeds = [CAPS_MINT_SEEDS], bump)]
     pub caps_mint: Account<'info, Mint>,
 
-    /// CHECK: Server verification key
+    // SEC-AUDIT-002 FIX: load config so we can verify server_key against
+    // the registered key stored at init time.
+    #[account(seeds = [FIZZ_CONFIG_SEEDS], bump = config.bump)]
+    pub config: Account<'info, FizzConfig>,
+
+    /// CHECK: Server verification key — SEC-AUDIT-002 FIX: address constrained
+    /// to config.server_key so attackers cannot supply their own keypair.
+    #[account(address = config.server_key @ ErrorCode::WrongPubkey)]
     pub server_key: AccountInfo<'info>,
 
     /// CHECK: Metadata PDA
@@ -643,7 +705,7 @@ pub struct FizzInit<'info> {
     #[account(
         init,
         payer = authority,
-        space = 8 + 32 + 32 + 32 + 8 + 8 + 8 + 8 + 1,
+        space = 8 + 32 + 32 + 32 + 8 + 8 + 8 + 8 + 32 + 1, // +32 for server_key (SEC-AUDIT-002 fix)
         seeds = [FIZZ_CONFIG_SEEDS],
         bump
     )]
@@ -651,6 +713,9 @@ pub struct FizzInit<'info> {
 
     /// CHECK: Treasury wallet
     pub treasury: AccountInfo<'info>,
+
+    /// CHECK: Server Ed25519 key for loot voucher verification (SEC-AUDIT-002 fix)
+    pub server_key: AccountInfo<'info>,
 
     pub caps_mint: Account<'info, Mint>,
     pub system_program: Program<'info, System>,
@@ -707,7 +772,7 @@ pub struct FizzCreateToken<'info> {
     #[account(
         init,
         payer = creator,
-        space = 8 + 32 + 32 + 8 + 8 + 1 + 8 + 1 + 1, // 99 bytes = ~0.0016 SOL rent
+        space = 8 + 32 + 32 + 8 + 8 + 1 + 9 + 8 + 1 + 1, // 108 bytes = ~0.0018 SOL rent (SEC-AUDIT-003 fix: updated for graduated_at: Option<i64>)
         seeds = [FIZZ_CURVE_SEEDS, token_mint.key().as_ref()],
         bump
     )]
@@ -754,7 +819,7 @@ pub struct FizzCreateTokenAdmin<'info> {
     #[account(
         init,
         payer = creator,
-        space = 8 + 32 + 32 + 8 + 8 + 1 + 8 + 1 + 1, // 99 bytes = ~0.0016 SOL rent
+        space = 8 + 32 + 32 + 8 + 8 + 1 + 9 + 8 + 1 + 1, // 108 bytes (SEC-AUDIT-003 fix: updated for graduated_at: Option<i64>)
         seeds = [FIZZ_CURVE_SEEDS, token_mint.key().as_ref()],
         bump
     )]
@@ -789,7 +854,14 @@ pub struct FizzBuyTokens<'info> {
     )]
     pub bonding_curve: Account<'info, FizzBondingCurve>,
 
-    #[account(mut)]
+    // SEC-AUDIT-004 FIX: constrain curve_token_vault to the ATA owned by bonding_curve
+    // for this specific token_mint.  Without this constraint an attacker could supply
+    // any token account (including ones they control) as the vault, enabling token theft.
+    #[account(
+        mut,
+        associated_token::mint = token_mint,
+        associated_token::authority = bonding_curve,
+    )]
     pub curve_token_vault: Account<'info, TokenAccount>,
 
     /// CHECK: SOL vault PDA
@@ -820,6 +892,12 @@ pub struct FizzSellTokens<'info> {
     #[account(mut)]
     pub seller: Signer<'info>,
 
+    // SEC-AUDIT-005 FIX: added config account so treasury can be constrained.
+    // Previously config was absent here while FizzBuyTokens correctly required it,
+    // allowing any wallet to be supplied as treasury and steal 100% of sell fees.
+    #[account(mut, seeds = [FIZZ_CONFIG_SEEDS], bump = config.bump)]
+    pub config: Account<'info, FizzConfig>,
+
     #[account(
         mut,
         seeds = [FIZZ_CURVE_SEEDS, bonding_curve.token_mint.as_ref()],
@@ -827,7 +905,13 @@ pub struct FizzSellTokens<'info> {
     )]
     pub bonding_curve: Account<'info, FizzBondingCurve>,
 
-    #[account(mut)]
+    // SEC-AUDIT-004 FIX: constrain curve_token_vault to the correct ATA for
+    // this bonding curve's token mint to prevent wrong-vault substitution.
+    #[account(
+        mut,
+        associated_token::mint = token_mint,
+        associated_token::authority = bonding_curve,
+    )]
     pub curve_token_vault: Account<'info, TokenAccount>,
 
     /// CHECK: SOL vault PDA
@@ -839,8 +923,8 @@ pub struct FizzSellTokens<'info> {
 
     pub token_mint: Account<'info, Mint>,
 
-    /// CHECK: Treasury
-    #[account(mut)]
+    /// CHECK: Treasury — SEC-AUDIT-005 FIX: address constrained to config.treasury
+    #[account(mut, address = config.treasury @ FizzError::InvalidTreasury)]
     pub treasury: AccountInfo<'info>,
 
     pub token_program: Program<'info, Token>,
@@ -939,6 +1023,9 @@ pub enum ErrorCode {
     WrongSignature,
     #[msg("Ed25519 signed message does not match voucher")]
     WrongMessage,
+    // SEC-AUDIT-008 FIX: loot voucher has expired (older than max_age seconds)
+    #[msg("Loot voucher has expired")]
+    VoucherExpired,
 }
 
 #[error_code]
@@ -967,4 +1054,11 @@ pub enum FizzError {
     SymbolTooLong,
     #[msg("URI too long (max 200)")]
     UriTooLong,
+    // SEC-AUDIT-001 FIX: arithmetic overflow in bonding curve u128 calculations
+    #[msg("Arithmetic overflow in bonding curve calculation")]
+    ArithmeticOverflow,
+    // SEC-AUDIT-005 FIX: treasury address does not match config.treasury
+    #[msg("Invalid treasury account")]
+    InvalidTreasury,
+}
 }

@@ -287,19 +287,21 @@ router.post("/clear", authMiddleware, clearLimiter, async (req, res) => {
       return res.status(500).json({ ok: false, error: "Session data corrupted" });
     }
 
-    // Idempotency check
+    // BUG-033 FIX: Replace GET-then-SET with a single atomic NX set to prevent
+    // TOCTOU race where two concurrent requests both pass the alreadyCleared check
+    // and each receive the full completion bonus (caps + XP double award).
     const clearKey = redisKeyClear(wallet, dungeonId);
-    const alreadyCleared = await redis.get(key(clearKey));
-    if (alreadyCleared) {
+    const clearResult = await redis.set(key(clearKey), String(Date.now()), {
+      NX: true,
+      EX: LOOT_PERSISTENCE_TTL_SECONDS,
+    });
+    if (!clearResult) {
       return res.status(409).json({
         ok: false,
         alreadyCleared: true,
         error: "Dungeon already cleared",
       });
     }
-
-    // Mark as cleared
-    await redis.set(key(clearKey), String(Date.now()), { EX: LOOT_PERSISTENCE_TTL_SECONDS });
 
     // Delete session so it can't be reused
     await redis.del(key(redisKeySession(wallet, dungeonId)));
