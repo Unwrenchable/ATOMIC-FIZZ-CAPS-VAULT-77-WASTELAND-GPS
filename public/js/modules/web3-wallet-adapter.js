@@ -334,11 +334,17 @@
             if (!securityUtils.isValidSolanaAddress(address)) {
               throw new Error('Invalid wallet address received');
             }
+            // Attach listeners so state stays in sync after connecting
+            web3WalletAdapter._attachPhantomListeners(provider);
             return {
               address: securityUtils.sanitizeAddress(address),
               provider: provider
             };
           } catch (error) {
+            // Code 4001 = user rejected the connection request — not an error worth alarming
+            if (error.code === 4001 || (error.message && error.message.toLowerCase().includes('user rejected'))) {
+              throw new Error('Connection cancelled. Tap Connect again when ready.');
+            }
             throw new Error(`Phantom connection failed: ${error.message}`, { cause: error });
           }
         }
@@ -579,14 +585,69 @@
         const provider = this.providers[savedType];
         if (provider.check()) {
           try {
-            // Attempt silent reconnection
-            console.log(`[web3-wallet] Attempting to restore ${provider.name} connection`);
-            // Note: Most wallets require explicit user action to reconnect
+            console.log(`[web3-wallet] Attempting silent restore for ${provider.name}`);
+            // Phantom supports onlyIfTrusted — silently reconnects if the user
+            // previously approved this site, with no popup shown.
+            if (savedType === 'phantom') {
+              const phantomProvider = window.phantom?.solana || window.solana;
+              if (phantomProvider?.isPhantom) {
+                const resp = await phantomProvider.connect({ onlyIfTrusted: true });
+                const address = resp.publicKey.toString();
+                if (securityUtils.isValidSolanaAddress(address)) {
+                  this.connected = true;
+                  this.walletAddress = securityUtils.sanitizeAddress(address);
+                  this.walletType = 'phantom';
+                  this.provider = phantomProvider;
+                  this._attachPhantomListeners(phantomProvider);
+                  console.log("[web3-wallet] Silent Phantom restore:", this.getShortAddress());
+                  this.dispatchConnectionEvent();
+                }
+              }
+            }
           } catch (e) {
-            console.log("[web3-wallet] Could not restore previous connection");
+            // onlyIfTrusted throws if not previously approved — that's expected, not an error
+            console.log("[web3-wallet] Silent restore skipped:", e.message);
           }
         }
       }
+    },
+
+    // Attach Phantom-specific event listeners to stay in sync with wallet state.
+    _attachPhantomListeners(phantomProvider) {
+      if (!phantomProvider || phantomProvider._afwListenersAttached) return;
+      phantomProvider._afwListenersAttached = true;
+
+      phantomProvider.on('accountChanged', (publicKey) => {
+        if (publicKey) {
+          const newAddress = publicKey.toString();
+          if (securityUtils.isValidSolanaAddress(newAddress)) {
+            this.walletAddress = securityUtils.sanitizeAddress(newAddress);
+            console.log("[web3-wallet] Phantom account changed:", this.getShortAddress());
+            this.dispatchConnectionEvent();
+          }
+        } else {
+          // Phantom signals the connected account was removed — treat as disconnect
+          console.log("[web3-wallet] Phantom account removed — disconnecting");
+          this.connected = false;
+          this.walletAddress = null;
+          this.walletType = null;
+          this.provider = null;
+          this.dispatchConnectionEvent();
+        }
+      });
+
+      phantomProvider.on('disconnect', () => {
+        console.log("[web3-wallet] Phantom disconnect event received");
+        this.connected = false;
+        this.walletAddress = null;
+        this.walletType = null;
+        this.provider = null;
+        try {
+          localStorage.removeItem('web3_wallet_type');
+          localStorage.removeItem('web3_wallet_hash');
+        } catch (_) { /* storage may be unavailable */ }
+        this.dispatchConnectionEvent();
+      });
     },
 
     getAvailableWallets() {
@@ -746,7 +807,11 @@
         // If no type specified, show selector
         if (!walletType) {
           walletType = await this.showWalletSelector();
-          if (!walletType) return false;
+          if (!walletType) {
+            // Cancelled by the user — not a real attempt, don't count it
+            this.connectionAttempts = Math.max(0, this.connectionAttempts - 1);
+            return false;
+          }
         }
 
         const provider = this.providers[walletType];
@@ -812,6 +877,15 @@
 
       } catch (error) {
         console.error("[web3-wallet] Connection failed:", error);
+        // User cancellation is not a security-relevant failure — don't penalise the counter
+        const isUserCancellation = error.message && (
+          error.message.includes('cancelled') ||
+          error.message.includes('rejected') ||
+          error.message.includes('Redirecting to Phantom')
+        );
+        if (isUserCancellation) {
+          this.connectionAttempts = Math.max(0, this.connectionAttempts - 1);
+        }
         this._showConnectToast(`Connection failed: ${error.message}`, true);
         return false;
       }
