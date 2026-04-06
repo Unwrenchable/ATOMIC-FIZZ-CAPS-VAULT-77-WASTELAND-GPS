@@ -146,7 +146,12 @@ async function initServerKey() {
     // Register the public key in the keys service so redeem-voucher.js can
     // look it up by keyId.  This is idempotent — safe to call on every restart.
     await addPublicKey(SERVER_KEY_ID, SERVER_KEY_ID, { notes: "loot-voucher server key" }).catch(e => {
-      console.warn("[loot-voucher] keys.addPublicKey failed (non-fatal):", e.message);
+      // IMPORTANT: if this fails, redeem-voucher.js cannot look up the key by
+      // keyId and all voucher redemptions will fail with "Unknown signing key".
+      // Treat as fatal during startup and set KEY_INIT_ERROR.
+      KEY_INIT_ERROR = `keys.addPublicKey failed — voucher redemption will not work: ${e.message}`;
+      console.error(`[loot-voucher] CRITICAL: ${KEY_INIT_ERROR}`);
+      SERVER_KEYPAIR = null; // disable signing until key is registered
     });
 
     console.log("[loot-voucher] SERVER_SECRET_KEY loaded successfully (dev mode)");
@@ -157,7 +162,16 @@ async function initServerKey() {
 }
 
 // Initialize key at module load (async; errors are logged, not thrown)
-initServerKey();
+// Note: initServerKey() is async — the promise is intentionally not awaited
+// here because CommonJS module load is synchronous.  The server typically
+// takes 100–200ms to bind its port; key init (local key decode + Redis write)
+// completes in < 10ms in the normal path, so no request can arrive before
+// KEY_INIT_ERROR / SERVER_KEYPAIR are set.  Any error is stored in KEY_INIT_ERROR
+// and returned as HTTP 503 to the first caller if it does arrive early.
+initServerKey().catch(err => {
+  KEY_INIT_ERROR = `initServerKey promise rejected: ${err && err.message ? err.message : err}`;
+  console.error(`[loot-voucher] CRITICAL: ${KEY_INIT_ERROR}`);
+});
 
 // Mounted at /api/loot-voucher
 // BUG-008 FIX: added authMiddleware — previously any unauthenticated caller
@@ -193,9 +207,10 @@ router.post("/", voucherIssueLimiter, authMiddleware, async (req, res) => {
       console.warn("[loot-voucher] GPS validation skipped — no POI data loaded");
     }
 
-    // BUG-035 FIX: use the lootId from the poi or generate a random one;
-    // the hardcoded `1n` meant every voucher resolved to the same loot tier.
-    const lootIdNum = crypto.randomInt(1, 1000000); // server-assigned, not client-controlled
+    // BUG-035 FIX: use the lootId from the nearby POI if it has one, falling back
+    // to a server-assigned random value. The hardcoded `1n` bypassed the entire
+    // location-based loot tier system — every player got identical loot.
+    const lootIdNum = (nearbyPOI && nearbyPOI.lootId) ? nearbyPOI.lootId : crypto.randomInt(1, 1000000);
     const lootId = String(lootIdNum);
 
     const timestamp = BigInt(Math.floor(Date.now() / 1000));

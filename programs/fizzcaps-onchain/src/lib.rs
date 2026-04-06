@@ -434,7 +434,7 @@ pub mod fizzcaps_onchain {
             .checked_sub(new_sol)
             .ok_or(FizzError::ArithmeticOverflow)?;
         let sol_out_gross = std::cmp::min(
-            u64::try_from(sol_out_gross_u128).unwrap_or(curve.sol_reserve),
+            u64::try_from(sol_out_gross_u128).map_err(|_| error!(FizzError::ArithmeticOverflow))?,
             curve.sol_reserve,
         );
 

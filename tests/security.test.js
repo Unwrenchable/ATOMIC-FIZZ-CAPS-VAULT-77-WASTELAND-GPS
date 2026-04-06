@@ -1001,6 +1001,11 @@ test("SEC-AUDIT-003: Solana program FizzBondingCurve struct includes graduated_a
     !nonCommentSrc.includes("curve.symbol"),
     "lib.rs must not reference curve.symbol in code (field does not exist on FizzBondingCurve)"
   );
+  // The fizz_graduate msg! should use curve.token_mint instead
+  assert.ok(
+    src.includes("curve.token_mint") && src.includes("graduated!"),
+    "lib.rs fizz_graduate msg! must use curve.token_mint (not curve.symbol) in graduation log"
+  );
 });
 
 test("SEC-AUDIT-004: Solana program FizzBuyTokens curve_token_vault has associated_token constraint", () => {
