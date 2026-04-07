@@ -112,7 +112,7 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     }), { EX: SCRAP_LOG_TTL_SECONDS }); // set with TTL atomically
 
     res.json({
-      success: true,
+      ok: true,
       message: `Successfully scrapped ${nft.name || 'NFT'}`,
       scrapValue,
       newResources: player.scrapResources,
