@@ -233,6 +233,8 @@ const MIN_REDEEM_AMOUNT = Number(process.env.MIN_REDEEM_CAPS || 100);
 const MAX_REDEEM_AMOUNT = Number(process.env.MAX_REDEEM_CAPS || 10_000);
 // Cooldown between redemptions per wallet (seconds) — 24 hours default
 const REDEEM_COOLDOWN_SECONDS = Number(process.env.REDEEM_COOLDOWN_SECONDS || 86400);
+// How long to retain fulfilled redemption request records in Redis (30 days)
+const REDEEM_REQUEST_TTL_SECONDS = 30 * 24 * 3600;
 
 router.post("/redeem", redeemLimiter, authMiddleware, async (req, res) => {
   try {
@@ -255,6 +257,7 @@ router.post("/redeem", redeemLimiter, authMiddleware, async (req, res) => {
 
     // Per-wallet cooldown: prevent multiple redemptions within the cooldown window.
     // Uses NX so the check + lock is atomic (no TOCTOU).
+    // The redis wrapper returns "OK" on NX success, null when the key already exists.
     const cooldownKey = key(`caps:redeem:cooldown:${wallet}`);
     const nxResult = await redis.set(cooldownKey, "1", { NX: true, EX: REDEEM_COOLDOWN_SECONDS });
     if (nxResult === null) {
@@ -269,9 +272,10 @@ router.post("/redeem", redeemLimiter, authMiddleware, async (req, res) => {
     }
 
     // Per-wallet lock: prevent concurrent redemption race condition.
+    // Same NX semantics: "OK" = acquired, null = already held by another request.
     const lockKey = key(`caps:redeem:lock:${wallet}`);
     const lockResult = await redis.set(lockKey, "1", { NX: true, EX: 15 });
-    if (!lockResult) {
+    if (lockResult === null) {
       // Release cooldown so the player can retry
       await redis.del(cooldownKey).catch(() => {});
       return res.status(409).json({ ok: false, error: "Redemption already in progress — please retry." });
@@ -315,7 +319,7 @@ router.post("/redeem", redeemLimiter, authMiddleware, async (req, res) => {
 
       // Store the request individually for lookup by requestId (30-day TTL)
       const reqKey = key(`caps:redeem:req:${requestId}`);
-      await redis.set(reqKey, JSON.stringify(requestRecord), { EX: 30 * 24 * 3600 });
+      await redis.set(reqKey, JSON.stringify(requestRecord), { EX: REDEEM_REQUEST_TTL_SECONDS });
 
       // Track in a pending-IDs set so the treasury can enumerate open requests
       const pendingSetKey = key("caps:redeem:pending");
