@@ -156,7 +156,7 @@ async function _performFusion(walletAddress, nftMints, fusionType, res) {
     }), { EX: 60 * 60 * 24 * 30 }); // 30 days
 
     res.json({
-      success: true,
+      ok: true,
       message: `Successfully fused ${nftMints.length} items`,
       fusionResult,
       newInventory: player.inventory,

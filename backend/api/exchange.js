@@ -153,12 +153,12 @@ router.post("/post-trade", authMiddleware, postLimiter, async (req, res) => {
 
   const cleanOffer = sanitizeText(offer, MAX_OFFER_LEN);
   if (!cleanOffer) {
-    return res.status(400).json({ success: false, error: "Offer item required." });
+    return res.status(400).json({ ok: false, error: "Offer item required." });
   }
 
   const price = parseFloat(priceFizz);
   if (!isFinite(price) || price < MIN_PRICE || price > MAX_PRICE) {
-    return res.status(400).json({ success: false, error: "Invalid FIZZ price." });
+    return res.status(400).json({ ok: false, error: "Invalid FIZZ price." });
   }
 
   const duration = Math.min(Math.max(parseInt(durationDays) || 3, 1), MAX_DURATION_DAYS);
@@ -183,7 +183,7 @@ router.post("/post-trade", authMiddleware, postLimiter, async (req, res) => {
   await sadd(ACTIVE_SET_KEY, tradeId);
 
   console.log(`[exchange] New item trade ${tradeId} by ${wallet.slice(0, 8)}...`);
-  return res.json({ success: true, tradeId });
+  return res.json({ ok: true, tradeId });
 });
 
 // ------------------------------------------------------------
@@ -195,16 +195,16 @@ router.post("/post-nft", authMiddleware, postLimiter, async (req, res) => {
 
   // Validate NFT mint address (Solana base58, 32–44 chars)
   if (!nftMint || typeof nftMint !== "string" || !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(nftMint)) {
-    return res.status(400).json({ success: false, error: "Invalid NFT mint address." });
+    return res.status(400).json({ ok: false, error: "Invalid NFT mint address." });
   }
 
   const price = parseFloat(priceFizz);
   if (!isFinite(price) || price < MIN_PRICE || price > MAX_PRICE) {
-    return res.status(400).json({ success: false, error: "Invalid FIZZ price." });
+    return res.status(400).json({ ok: false, error: "Invalid FIZZ price." });
   }
 
   if (!signature || typeof signature !== "string") {
-    return res.status(400).json({ success: false, error: "Signature required to list NFT." });
+    return res.status(400).json({ ok: false, error: "Signature required to list NFT." });
   }
 
   const cleanDesc = sanitizeText(description, MAX_DESCRIPTION_LEN);
@@ -227,7 +227,7 @@ router.post("/post-nft", authMiddleware, postLimiter, async (req, res) => {
   await sadd(ACTIVE_SET_KEY, tradeId);
 
   console.log(`[exchange] New NFT trade ${tradeId} (mint: ${nftMint.slice(0, 8)}) by ${wallet.slice(0, 8)}...`);
-  return res.json({ success: true, tradeId });
+  return res.json({ ok: true, tradeId });
 });
 
 // ------------------------------------------------------------
@@ -238,20 +238,20 @@ router.post("/buy-trade", authMiddleware, buyLimiter, async (req, res) => {
   const { tradeId } = req.body || {};
 
   if (!tradeId || typeof tradeId !== "string" || !/^[0-9a-f]{16}$/.test(tradeId)) {
-    return res.status(400).json({ success: false, error: "Invalid tradeId." });
+    return res.status(400).json({ ok: false, error: "Invalid tradeId." });
   }
 
   const trade = await getJSON(`exchange:trade:${tradeId}`);
   if (!trade) {
-    return res.status(404).json({ success: false, error: "Trade not found or expired." });
+    return res.status(404).json({ ok: false, error: "Trade not found or expired." });
   }
 
   if (trade.status !== "active") {
-    return res.status(400).json({ success: false, error: "This trade is no longer active." });
+    return res.status(400).json({ ok: false, error: "This trade is no longer active." });
   }
 
   if (trade.seller === buyerWallet) {
-    return res.status(400).json({ success: false, error: "You cannot buy your own trade." });
+    return res.status(400).json({ ok: false, error: "You cannot buy your own trade." });
   }
 
   // Mark as sold and remove from active set
@@ -269,7 +269,7 @@ router.post("/buy-trade", authMiddleware, buyLimiter, async (req, res) => {
   // serializedTx is intentionally absent — actual SPL token transfer is handled
   // client-side via window.solana.signAndSendTransaction for mainnet.
   return res.json({
-    success: true,
+    ok: true,
     trade,
     message: "Trade reserved. Send FIZZ payment to the seller via Phantom wallet.",
     sellerWallet: trade.seller,
@@ -285,27 +285,27 @@ router.delete("/cancel/:id", authMiddleware, async (req, res) => {
   const tradeId = req.params.id;
 
   if (!/^[0-9a-f]{16}$/.test(tradeId)) {
-    return res.status(400).json({ success: false, error: "Invalid tradeId." });
+    return res.status(400).json({ ok: false, error: "Invalid tradeId." });
   }
 
   const trade = await getJSON(`exchange:trade:${tradeId}`);
   if (!trade) {
-    return res.status(404).json({ success: false, error: "Trade not found." });
+    return res.status(404).json({ ok: false, error: "Trade not found." });
   }
 
   if (trade.seller !== wallet) {
-    return res.status(403).json({ success: false, error: "You can only cancel your own trades." });
+    return res.status(403).json({ ok: false, error: "You can only cancel your own trades." });
   }
 
   if (trade.status !== "active") {
-    return res.status(400).json({ success: false, error: "Trade is not active." });
+    return res.status(400).json({ ok: false, error: "Trade is not active." });
   }
 
   trade.status = "cancelled";
   await setJSON(`exchange:trade:${tradeId}`, trade, { EX: 3600 }); // keep 1 hr then expire
   await srem(ACTIVE_SET_KEY, tradeId);
 
-  return res.json({ success: true });
+  return res.json({ ok: true });
 });
 
 module.exports = router;

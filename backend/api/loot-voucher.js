@@ -194,8 +194,13 @@ router.post("/", voucherIssueLimiter, authMiddleware, async (req, res) => {
 
     // SEC-AUDIT-006 FIX: validate that the player is actually near a known POI
     // before signing. Skip only when locations data is unavailable (warn instead).
+    // BUG-040 FIX: declare nearbyPOI in the outer scope so it is accessible after
+    // the if/else block.  The original code used `const nearbyPOI` inside the if
+    // block; JavaScript block-scopes const/let, so `nearbyPOI` was always
+    // ReferenceError on the line below when VOUCHER_LOCATIONS was non-empty.
+    let nearbyPOI = null;
     if (VOUCHER_LOCATIONS.length > 0) {
-      const nearbyPOI = findNearbyPOI(latitude, longitude);
+      nearbyPOI = findNearbyPOI(latitude, longitude);
       if (!nearbyPOI) {
         return res.status(403).json({
           ok: false,
