@@ -23,7 +23,7 @@ const fs = require("fs");
 const rateLimit = require("express-rate-limit");
 const router = express.Router();
 
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
 
 // ------------------------------------------------------------
@@ -58,14 +58,16 @@ RECIPES.forEach(r => { if (r && r.id) RECIPE_INDEX[r.id] = r; });
 // ---- Helpers ----
 
 /** Redis key for daily craft count: player:wallet:craft:recipeId:YYYY-MM-DD */
+// BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
 function craftCountKey(wallet, recipeId) {
   const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD UTC
-  return key(`craft:${wallet}:${recipeId}:${today}`);
+  return `craft:${wallet}:${recipeId}:${today}`;
 }
 
 /** Redis key for per-recipe cooldown: player:wallet:craftcd:recipeId */
+// BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
 function craftCooldownKey(wallet, recipeId) {
-  return key(`craftcd:${wallet}:${recipeId}`);
+  return `craftcd:${wallet}:${recipeId}`;
 }
 
 // ---- Routes ----
@@ -89,11 +91,9 @@ router.post("/craft", craftingLimiter, authMiddleware, async (req, res) => {
     }
 
     // 2. Level requirement check (read from Redis player profile)
-    // BUG-001 FIX: must pre-call key() to match the double-prefix convention used
-    // by every other writer (player.js, xp.js, quests.js, etc.).  Without it the
-    // hget hits afw:player:<wallet> while all writers store at afw:afw:player:<wallet>,
-    // so profileRaw is always null and all level gates are bypassed at level 1.
-    const profileRaw = await redis.hget(key(`player:${wallet}`), "profile");
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    // Passing key()-prefixed strings resulted in double-prefixed keys (afw:afw:...).
+    const profileRaw = await redis.hget(`player:${wallet}`, "profile");
     const profile = profileRaw ? JSON.parse(profileRaw) : null;
     const playerLevel = profile?.level ?? 1;
     const requiredLevel = recipe.requiresLevel ?? 1;
@@ -108,7 +108,8 @@ router.post("/craft", craftingLimiter, authMiddleware, async (req, res) => {
     // the race window where two simultaneous requests both pass step 3 (cooldown
     // read) before either reaches step 5 (cooldown write), allowing the same
     // recipe to be crafted twice within the same cooldown period.
-    const craftLockKey = key(`craft:lock:${wallet}:${recipeId}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const craftLockKey = `craft:lock:${wallet}:${recipeId}`;
     const lock = await redis.set(craftLockKey, "1", { NX: true, EX: 30 });
     if (!lock) {
       return res.status(409).json({ ok: false, error: "Craft already in progress — try again shortly" });

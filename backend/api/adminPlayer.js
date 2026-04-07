@@ -3,7 +3,7 @@
 
 const express = require("express");
 const router = express.Router();
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
 
 // Apply admin auth and rate limiting to all routes in this router
@@ -12,9 +12,11 @@ router.use(requireAdmin);
 
 const DEFAULT_SPECIAL = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
 
+// BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+// Passing key()-prefixed strings resulted in double-prefixed keys (afw:afw:...).
 async function loadProfile(wallet) {
   try {
-    const raw = await redis.hget(key(`player:${wallet}`), "profile");
+    const raw = await redis.hget(`player:${wallet}`, "profile");
     if (!raw) return null;
     return JSON.parse(raw);
   } catch (err) {
@@ -25,7 +27,7 @@ async function loadProfile(wallet) {
 
 async function saveProfile(wallet, profile) {
   try {
-    await redis.hset(key(`player:${wallet}`), "profile", JSON.stringify(profile));
+    await redis.hset(`player:${wallet}`, "profile", JSON.stringify(profile));
   } catch (err) {
     console.error("[adminPlayer] saveProfile error:", err);
   }

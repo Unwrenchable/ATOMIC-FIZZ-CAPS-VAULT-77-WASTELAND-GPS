@@ -5,7 +5,7 @@ const express = require('express');
 const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
 const router = express.Router();
-const { redis, key } = require('../lib/redis');
+const redis = require('../lib/redis');
 const { authMiddleware } = require('../lib/auth');
 
 // SECURITY: Constant-time comparison to prevent timing attacks
@@ -183,7 +183,8 @@ router.post('/prove', authMiddleware, proveRateLimiter, async (req, res) => {
         // proof.value (secret token) into Redis. If Redis is compromised, all
         // secret tokens would be exposed. Only persist audit metadata, not the
         // sensitive token value itself.
-        const k = key(`quests:proof:${wallet}:${questId}`);
+        // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+        const k = `quests:proof:${wallet}:${questId}`;
         await redis.set(k, JSON.stringify({ provenAt: Date.now(), proofType: proof.type }), { EX: 30 * 24 * 3600 });
         return res.json({ ok: true, proven: true });
       }
@@ -195,7 +196,8 @@ router.post('/prove', authMiddleware, proveRateLimiter, async (req, res) => {
     if (proof.type === 'location' && proof.id) {
       // For example, vault77 location proof
       if (questId === 'saitama_main_arc' && proof.id === 'vault77') {
-        const k = key(`quests:proof:${wallet}:${questId}`);
+        // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+        const k = `quests:proof:${wallet}:${questId}`;
         // BUG FIX: same as token proof above — only store audit metadata, not the raw proof.
         await redis.set(k, JSON.stringify({ provenAt: Date.now(), proofType: proof.type }), { EX: 30 * 24 * 3600 });
         return res.json({ ok: true, proven: true });
@@ -224,7 +226,8 @@ router.post('/reveal', authMiddleware, questRateLimiter, async (req, res) => {
     if (!q) return res.status(404).json({ ok: false, error: 'unknown' });
 
     // Mark reveal in redis for audit
-    const revealKey = key(`quests:revealed:${wallet}:${questId}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const revealKey = `quests:revealed:${wallet}:${questId}`;
     await redis.set(revealKey, JSON.stringify({ revealedAt: Date.now() }), { EX: 30 * 24 * 3600 });
 
     return res.json({ ok: true, quest: q });

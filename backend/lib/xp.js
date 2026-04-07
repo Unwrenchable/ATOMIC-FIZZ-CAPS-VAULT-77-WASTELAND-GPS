@@ -3,7 +3,7 @@
 // Atomic Fizz Caps – XP Management Library
 // ------------------------------------------------------------
 
-const { redis, key } = require('./redis');
+const redis = require('./redis');
 
 // BUG-014 FIX: maximum player level.  Exported so callers in other modules
 // (quests.js, location-claim.js) can import instead of hard-coding the value.
@@ -45,7 +45,9 @@ async function awardXp(player, amount) {
     throw new Error("invalid XP amount");
   }
 
-  const profileKey = key(`player:${player.wallet}`);
+  // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+  // Passing key()-prefixed strings resulted in double-prefixed keys (afw:afw:...).
+  const profileKey = `player:${player.wallet}`;
   const raw = await redis.hget(profileKey, "profile");
   
   if (!raw) {
@@ -85,7 +87,8 @@ async function getXp(wallet) {
     throw new Error("missing wallet");
   }
 
-  const profileKey = key(`player:${wallet}`);
+  // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+  const profileKey = `player:${wallet}`;
   const raw = await redis.hget(profileKey, "profile");
   
   if (!raw) {

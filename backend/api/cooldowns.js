@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { authMiddleware } = require("../lib/auth");
 const cooldowns = require("../lib/cooldowns");
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 
 // Mounted at /api/cooldowns
 
@@ -26,23 +26,19 @@ router.get("/status", async (req, res) => {
       return res.status(400).json({ ok: false, error: "Missing or invalid poi" });
     }
 
-    // BUG-006 FIX: key namespace mismatch between cooldowns.js (reader) and
-    // location-claim.js (writer).  location-claim.js pre-calls key() before
-    // passing to redis.set(), so the cooldown is stored at the double-prefixed
-    // path "afw:afw:player:{wallet}:cooldown:{poi}".
-    // This endpoint was reading with bare string → single-prefix path
-    // "afw:player:{wallet}:cooldown:{poi}" which never matched. Now we
-    // pre-call key() here too so both read and write hit the same path.
-    const raw = await redis.get(key(`player:${wallet}:cooldown:${poi}`));
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    // Passing key()-prefixed strings resulted in double-prefixed keys (afw:afw:...).
+    // This caused cooldown status checks to miss the actual cooldown keys written
+    // by location-claim.js when it also used key() (or vice versa when it didn't).
+    const raw = await redis.get(`player:${wallet}:cooldown:${poi}`);
     const onCooldown = raw !== null && raw !== undefined;
 
     // Return the actual remaining TTL so the frontend can show a countdown.
     // ttl() returns -2 (key gone), -1 (no expiry), or seconds remaining.
-    // BUG-031 FIX: ttl() wrapper auto-prefixes, so we must pre-call key() here too
-    // to match the double-prefixed path written by location-claim.js.
+    // BUG FIX: removed key() wrapper — redis.ttl() adds prefix internally.
     let secondsRemaining = 0;
     if (onCooldown) {
-      const rawTtl = await redis.ttl(key(`player:${wallet}:cooldown:${poi}`));
+      const rawTtl = await redis.ttl(`player:${wallet}:cooldown:${poi}`);
       secondsRemaining = rawTtl > 0 ? rawTtl : null;
     }
 

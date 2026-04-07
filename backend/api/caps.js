@@ -14,7 +14,7 @@ const crypto = require("crypto");
 const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
 const { awardCapsToPlayer, getCapsBalance } = require("../lib/caps");
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 
 // Per-route limiter for admin caps endpoints
 const capsAwardLimiter = rateLimit({
@@ -116,16 +116,12 @@ router.get("/leaderboard", async (req, res) => {
     const metric = ["caps", "xp", "claims"].includes(req.query.metric) ? req.query.metric : "caps";
     const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 10));
 
-    // BUG-005 FIX: Player profiles are stored at the double-prefixed key
-    // "afw:afw:player:<wallet>" because all callers use key() before passing
-    // to the redis wrapper (which also adds the prefix internally).
-    // The old code scanned "afw:player:*" and found nothing.
-    // Fix: pass key("player:*") = "afw:player:*" to redis.keys(), which
-    // internally prefixes to "afw:afw:player:*" — matching actual storage.
-    const playerKeys = await redis.keys(key("player:*"));
-    // Returned keys: ["afw:afw:player:<wallet>", ...]
-    // Strip "afw:afw:player:" to get the wallet address.
-    const PLAYER_PREFIX = key(key("")) + "player:"; // e.g. "afw:afw:player:"
+    // BUG FIX: removed double-prefix pattern. Redis wrappers add afw: prefix internally.
+    // Pass raw "player:*" to redis.keys() → results in afw:player:* matching actual storage.
+    const playerKeys = await redis.keys("player:*");
+    // Returned keys: ["afw:player:<wallet>", ...]
+    // Strip "afw:player:" to get the wallet address.
+    const PLAYER_PREFIX = "afw:player:"; // e.g. "afw:player:"
 
     // Collect wallet addresses first, then fetch all profiles in batches to avoid
     // bursting Redis with thousands of concurrent hget commands when there are
@@ -142,7 +138,8 @@ router.get("/leaderboard", async (req, res) => {
     for (let i = 0; i < cappedWallets.length; i += CHUNK_SIZE) {
       const chunk = cappedWallets.slice(i, i + CHUNK_SIZE);
       const results = await Promise.all(
-        chunk.map(w => redis.hget(key(`player:${w}`), "profile").catch(() => null))
+        // BUG FIX: removed key() wrapper — redis wrappers add prefix internally.
+        chunk.map(w => redis.hget(`player:${w}`, "profile").catch(() => null))
       );
       rawProfiles.push(...results);
     }

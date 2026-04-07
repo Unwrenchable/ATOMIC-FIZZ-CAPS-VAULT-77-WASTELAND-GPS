@@ -7,7 +7,7 @@
 const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
 
 // Cryptographically-secure helpers
@@ -58,11 +58,9 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
     // and both succeed — destroying the same NFTs twice and producing two fused items
     // from the same source (a classic TOCTOU / double-spend race condition).
     //
-    // NOTE: fusionLockKey is intentionally built with key() before being passed to
-    // redis.set() — this follows the established double-prefix pattern used consistently
-    // throughout the entire codebase (afw:afw: prefix). Changing only this key would
-    // create a namespace inconsistency with all other Redis keys in the project.
-    const fusionLockKey = key(`fusion:lock:${walletAddress}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    // Passing key()-prefixed strings resulted in double-prefixed keys (afw:afw:...).
+    const fusionLockKey = `fusion:lock:${walletAddress}`;
     const lockResult = await redis.set(fusionLockKey, "1", { NX: true, EX: 30 });
     if (!lockResult) {
       return res.status(409).json({ error: "A fusion operation is already in progress for this wallet. Please wait." });
@@ -83,7 +81,8 @@ router.post("/", authMiddleware, fuseLimiter, async (req, res) => {
 // Inner fusion implementation (called only while holding the fusion lock)
 async function _performFusion(walletAddress, nftMints, fusionType, res) {
     // Get player data  — key must match the hSet format used by player.js
-    const playerKey = key(`player:${walletAddress}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const playerKey = `player:${walletAddress}`;
     const playerData = await redis.hget(playerKey, "profile");
 
     if (!playerData) {
@@ -146,7 +145,8 @@ async function _performFusion(walletAddress, nftMints, fusionType, res) {
 
     // Log the fusion operation with atomic TTL — single SET with EX option avoids
     // a race condition where the server could crash between SET and EXPIRE.
-    const fusionLogKey = key(`fusion_log:${Date.now()}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const fusionLogKey = `fusion_log:${Date.now()}`;
     await redis.set(fusionLogKey, JSON.stringify({
       walletAddress,
       nftMints,

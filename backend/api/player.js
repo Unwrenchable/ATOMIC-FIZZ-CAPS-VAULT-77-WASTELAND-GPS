@@ -8,7 +8,7 @@ const express = require("express");
 const rateLimit = require("express-rate-limit");
 const router = express.Router();
 
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
 const { checkNFTOwnership } = require("../lib/nfts");
 
@@ -27,10 +27,12 @@ const playerLimiter = rateLimit({
 
 // ------------------------------------------------------------
 // Redis helpers
+// BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+// Passing key()-prefixed strings resulted in double-prefixed keys (afw:afw:...).
 // ------------------------------------------------------------
 async function loadProfile(wallet) {
   try {
-    const raw = await redis.hGet(key(`player:${wallet}`), "profile");
+    const raw = await redis.hget(`player:${wallet}`, "profile");
     if (!raw) return null;
     return JSON.parse(raw);
   } catch (err) {
@@ -41,7 +43,7 @@ async function loadProfile(wallet) {
 
 async function saveProfile(wallet, profile) {
   try {
-    await redis.hSet(key(`player:${wallet}`), "profile", JSON.stringify(profile));
+    await redis.hset(`player:${wallet}`, "profile", JSON.stringify(profile));
   } catch (err) {
     console.error("[player] saveProfile error:", err);
   }

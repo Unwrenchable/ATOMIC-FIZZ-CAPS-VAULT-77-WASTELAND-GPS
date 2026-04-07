@@ -11,7 +11,7 @@ const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
 
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
 const { applyXpToProfile } = require("../lib/xp");
 
@@ -234,12 +234,9 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     // location is still on cooldown.  We only proceed if the NX set succeeds,
     // making the check+lock a single atomic operation.
     const cooldownDuration = location?.cooldown || 3600; // seconds
-    // NOTE: cooldownKey is built with key() to be consistent with the
-    // playerKey and claimedKey variables in this same route which also pass
-    // key()-prefixed strings to the redis wrapper. The established pattern
-    // throughout this file uses this double-prefix approach so all keys for
-    // a given player live in the same Redis namespace.
-    const cooldownKey = key(`player:${wallet}:cooldown:${locId}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    // Passing key()-prefixed strings resulted in double-prefixed keys (afw:afw:...).
+    const cooldownKey = `player:${wallet}:cooldown:${locId}`;
     const nxResult = await redis.set(cooldownKey, Date.now().toString(), { NX: true, EX: cooldownDuration });
 
     if (nxResult === null) {
@@ -265,7 +262,8 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     };
 
     // Get or create player profile
-    const playerKey = key(`player:${wallet}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const playerKey = `player:${wallet}`;
 
     // BUG-007 FIX: profile update is a non-atomic read-modify-write.
     // Use a per-wallet profile lock so concurrent claims on different POIs
@@ -333,8 +331,9 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     const savedPlayer = savedData ? JSON.parse(savedData) : {};
 
     // Mark location as claimed
-    const claimedKey = key(`player:${wallet}:claimed`);
-    await redis.sAdd(claimedKey, locId);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const claimedKey = `player:${wallet}:claimed`;
+    await redis.sadd(claimedKey, locId);
 
     // Note: cooldown was already set atomically via NX above; no second SET needed.
 

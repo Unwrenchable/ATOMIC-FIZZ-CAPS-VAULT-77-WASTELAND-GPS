@@ -16,7 +16,7 @@ const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
 
 const { authMiddleware } = require("../lib/auth");
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 const { awardCapsToPlayer } = require("../lib/caps");
 const { awardXp } = require("../lib/xp");
 
@@ -142,13 +142,14 @@ router.post("/enter", authMiddleware, enterLimiter, async (req, res) => {
       enteredAt: Date.now(),
     });
 
-    await redis.set(key(redisKeySession(wallet, dungeonId)), sessionData, { EX: SESSION_TTL_SECONDS });
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    await redis.set(redisKeySession(wallet, dungeonId), sessionData, { EX: SESSION_TTL_SECONDS });
 
     // Track this entry (for analytics / quest triggers) — non-blocking
     const entryKey = redisKeyEnter(wallet, String(poiId));
-    const existing = await redis.get(key(entryKey));
+    const existing = await redis.get(entryKey);
     const entryCount = existing ? parseInt(existing, 10) + 1 : 1;
-    await redis.set(key(entryKey), String(entryCount), { EX: ENTRY_TRACKING_TTL_SECONDS }); // 30-day window
+    await redis.set(entryKey, String(entryCount), { EX: ENTRY_TRACKING_TTL_SECONDS }); // 30-day window
 
     console.log(
       `[dungeon] enter wallet=${wallet.slice(0, 8)}... poiId=${poiId} type=${poiType} dungeonId=${dungeonId}`
@@ -191,7 +192,8 @@ router.post("/loot", authMiddleware, lootLimiter, async (req, res) => {
     }
 
     // Verify dungeon session exists for this wallet
-    const session = await redis.get(key(redisKeySession(wallet, dungeonId)));
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const session = await redis.get(redisKeySession(wallet, dungeonId));
     if (!session) {
       return res.status(403).json({ ok: false, error: "No active dungeon session" });
     }
@@ -217,7 +219,8 @@ router.post("/loot", authMiddleware, lootLimiter, async (req, res) => {
     // This prevents TOCTOU race conditions where two concurrent requests both
     // pass a GET check before either writes the SET.
     const lootKey = redisKeyLoot(wallet, dungeonId, roomIdInt);
-    const lootSetResult = await redis.set(key(lootKey), String(Date.now()), { NX: true, EX: LOOT_PERSISTENCE_TTL_SECONDS });
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const lootSetResult = await redis.set(lootKey, String(Date.now()), { NX: true, EX: LOOT_PERSISTENCE_TTL_SECONDS });
     if (!lootSetResult) {
       return res.status(409).json({
         ok: false,
@@ -275,7 +278,8 @@ router.post("/clear", authMiddleware, clearLimiter, async (req, res) => {
     }
 
     // Verify dungeon session exists
-    const sessionRaw = await redis.get(key(redisKeySession(wallet, dungeonId)));
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const sessionRaw = await redis.get(redisKeySession(wallet, dungeonId));
     if (!sessionRaw) {
       return res.status(403).json({ ok: false, error: "No active dungeon session" });
     }
@@ -291,7 +295,8 @@ router.post("/clear", authMiddleware, clearLimiter, async (req, res) => {
     // TOCTOU race where two concurrent requests both pass the alreadyCleared check
     // and each receive the full completion bonus (caps + XP double award).
     const clearKey = redisKeyClear(wallet, dungeonId);
-    const clearResult = await redis.set(key(clearKey), String(Date.now()), {
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const clearResult = await redis.set(clearKey, String(Date.now()), {
       NX: true,
       EX: LOOT_PERSISTENCE_TTL_SECONDS,
     });
@@ -304,7 +309,8 @@ router.post("/clear", authMiddleware, clearLimiter, async (req, res) => {
     }
 
     // Delete session so it can't be reused
-    await redis.del(key(redisKeySession(wallet, dungeonId)));
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    await redis.del(redisKeySession(wallet, dungeonId));
 
     // Award completion bonus based on dungeon type
     const poiType = sessionData.poiType || "ruin";

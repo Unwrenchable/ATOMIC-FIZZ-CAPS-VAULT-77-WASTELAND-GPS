@@ -210,7 +210,9 @@ router.post("/", voucherIssueLimiter, authMiddleware, async (req, res) => {
     // BUG-035 FIX: use the lootId from the nearby POI if it has one, falling back
     // to a server-assigned random value. The hardcoded `1n` bypassed the entire
     // location-based loot tier system — every player got identical loot.
-    const lootIdNum = (nearbyPOI && nearbyPOI.lootId) ? nearbyPOI.lootId : crypto.randomInt(1, 1000000);
+    // Note: nearbyPOI is defined inside the GPS validation block above
+    const nearbyPOIForLoot = (VOUCHER_LOCATIONS.length > 0) ? findNearbyPOI(latitude, longitude) : null;
+    const lootIdNum = (nearbyPOIForLoot && nearbyPOIForLoot.lootId) ? nearbyPOIForLoot.lootId : crypto.randomInt(1, 1000000);
     const lootId = String(lootIdNum);
 
     const timestamp = BigInt(Math.floor(Date.now() / 1000));

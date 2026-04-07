@@ -1,7 +1,7 @@
 // backend/api/adminMintables.js
 const express = require("express");
 const router = express.Router();
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
 
 // Apply admin auth and rate limiting to all routes in this router
@@ -9,14 +9,16 @@ router.use(adminRateLimiter);
 router.use(requireAdmin);
 
 // Load all mintables
+// BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
 async function loadMintables() {
-  const raw = await redis.get(key("mintables"));
+  const raw = await redis.get("mintables");
   return raw ? JSON.parse(raw) : [];
 }
 
 // Save all mintables
+// BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
 async function saveMintables(list) {
-  await redis.set(key("mintables"), JSON.stringify(list));
+  await redis.set("mintables", JSON.stringify(list));
 }
 
 // GET /api/admin/mintables

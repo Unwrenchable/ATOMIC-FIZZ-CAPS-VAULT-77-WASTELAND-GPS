@@ -1,10 +1,6 @@
 // backend/lib/gps.js
 
 const redis = require('./redis');
-// Import key helper so we use the same double-prefix pattern as all other modules
-// (wrapper functions internally call key(), so callers must also call key() to
-// reach the same key space as player.js, caps.js, xp.js, etc.)
-const { key: mkKey } = require('./redis');
 
 async function updateLocation(player, lat, lng) {
   if (!player || !player.wallet) {
@@ -20,10 +16,9 @@ async function updateLocation(player, lat, lng) {
     throw new Error("invalid coordinates");
   }
 
-  // BUG FIX: was using raw `player:${wallet}` key without calling mkKey(),
-  // causing data to land at afw:player:... instead of afw:afw:player:... where
-  // all other modules (player.js, caps.js, xp.js) read/write player profiles.
-  const playerKey = mkKey(`player:${player.wallet}`);
+  // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+  // Passing key()-prefixed strings resulted in double-prefixed keys (afw:afw:...).
+  const playerKey = `player:${player.wallet}`;
   const raw = await redis.hget(playerKey, "profile");
   if (!raw) throw new Error("player not found");
 

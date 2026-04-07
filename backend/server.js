@@ -287,6 +287,7 @@ safeMount("/api/quests", api("quests"));
 safeMount("/api/redeem-voucher", api("redeem-voucher"));
 safeMount("/api/xp", api("xp"));
 safeMount("/api/caps", api("caps"));
+safeMount("/api/caps/redeem", api("caps-redeem")); // Treasury redemption: convert in-game CAPS score to on-chain CAPS SPL tokens
 safeMount("/api/settings", api("settings"));
 safeMount("/api/crafting", api("crafting"));
 

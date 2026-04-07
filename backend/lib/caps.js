@@ -45,7 +45,7 @@
 // (airdrops, claims, redemptions, etc.)
 // ------------------------------------------------------------
 
-const { redis, key } = require("./redis");
+const redis = require("./redis");
 
 // Maximum in-game caps a player can hold (overflow protection)
 const MAX_CAPS = 999_999_999;
@@ -64,7 +64,11 @@ async function getCapsBalance(wallet) {
   }
 
   try {
-    const profileRaw = await redis.hget(key(`player:${wallet}`), "profile");
+    // BUG FIX: was redis.hget(key(`player:${wallet}`), ...) — double-prefix bug.
+    // The redis wrapper functions (get, hget, etc.) internally call key() to add the
+    // afw: prefix. Passing key()-prefixed strings to them results in afw:afw:... keys.
+    // Pass raw key strings to wrappers; they handle prefixing.
+    const profileRaw = await redis.hget(`player:${wallet}`, "profile");
     if (!profileRaw) {
       return DEFAULT_CAPS;
     }
@@ -99,7 +103,8 @@ async function awardCapsToPlayer(wallet, amount) {
   const safeAmount = Math.min(amount, MAX_CAPS);
 
   try {
-    const profileKey = key(`player:${wallet}`);
+    // BUG FIX: removed key() wrapper — redis.hget/hset already add the afw: prefix internally.
+    const profileKey = `player:${wallet}`;
     const profileRaw = await redis.hget(profileKey, "profile");
     
     let profile;
@@ -132,7 +137,8 @@ async function awardCapsToPlayer(wallet, amount) {
     const txId = crypto.randomBytes(16).toString("hex");
 
     // Log the transaction for audit purposes
-    const txKey = key(`caps:tx:${txId}`);
+    // BUG FIX: removed key() wrapper — redis.set already adds the afw: prefix internally.
+    const txKey = `caps:tx:${txId}`;
     await redis.set(txKey, JSON.stringify({
       wallet,
       amount: safeAmount,
@@ -190,14 +196,16 @@ async function transferCaps(fromWallet, toWallet, amount) {
     }
 
     // Deduct from sender
-    const fromProfileKey = key(`player:${fromWallet}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add prefix internally.
+    const fromProfileKey = `player:${fromWallet}`;
     const fromProfileRaw = await redis.hget(fromProfileKey, "profile");
     const fromProfile = fromProfileRaw ? JSON.parse(fromProfileRaw) : { caps: 0 };
     fromProfile.caps = Math.max(0, (fromProfile.caps || 0) - amount);
     await redis.hset(fromProfileKey, "profile", JSON.stringify(fromProfile));
 
     // Add to recipient
-    const toProfileKey = key(`player:${toWallet}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add prefix internally.
+    const toProfileKey = `player:${toWallet}`;
     const toProfileRaw = await redis.hget(toProfileKey, "profile");
     let toProfile;
     if (!toProfileRaw) {

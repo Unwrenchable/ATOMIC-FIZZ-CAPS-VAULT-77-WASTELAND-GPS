@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const router = express.Router();
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
 const { applyXpToProfile, MAX_LEVEL: _MAX_LEVEL } = require("../lib/xp");
 
@@ -89,7 +89,8 @@ router.post("/accept", authMiddleware, async (req, res) => {
       return res.status(400).json({ ok: false, error: "Unknown quest" });
     }
 
-    const playerKey = key(`player:${wallet}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const playerKey = `player:${wallet}`;
     let playerData = await redis.hget(playerKey, "profile");
     
     if (!playerData) {
@@ -181,7 +182,8 @@ router.post("/complete", authMiddleware, async (req, res) => {
 
     try {
       // Get player profile
-      const playerKey = key(`player:${wallet}`);
+      // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+      const playerKey = `player:${wallet}`;
       let playerData = await redis.hget(playerKey, "profile");
       
       if (!playerData) {
@@ -282,7 +284,8 @@ router.get("/player/:wallet", authMiddleware, async (req, res) => {
     }
 
     // Get player profile
-    const playerKey = key(`player:${wallet}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const playerKey = `player:${wallet}`;
     let playerData = await redis.hget(playerKey, "profile");
     
     if (!playerData) {

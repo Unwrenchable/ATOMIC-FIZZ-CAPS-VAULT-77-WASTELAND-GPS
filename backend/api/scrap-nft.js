@@ -7,7 +7,7 @@
 const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
-const { redis, key } = require("../lib/redis");
+const redis = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
 
 const SCRAP_LOG_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
@@ -37,7 +37,8 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     // BUG-002 FIX: acquire a per-wallet NX lock before the read-modify-write
     // to prevent a race condition where two simultaneous requests both pass the
     // nftIndex check and both receive scrap rewards for the same NFT.
-    const scrapLockKey = key(`scrap:lock:${walletAddress}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const scrapLockKey = `scrap:lock:${walletAddress}`;
     const lock = await redis.set(scrapLockKey, "1", { NX: true, EX: 15 });
     if (!lock) {
       return res.status(409).json({ error: "Scrap already in progress — try again shortly" });
@@ -46,7 +47,8 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     let scrapValue, nft;
     try {
     // Verify NFT ownership (simplified - in production would check Solana)
-    const playerKey = key(`player:${walletAddress}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const playerKey = `player:${walletAddress}`;
     const playerData = await redis.hget(playerKey, "profile");
 
     if (!playerData) {
@@ -99,10 +101,8 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     await redis.hset(playerKey, "profile", JSON.stringify(player));
 
     // Log the scrap operation.
-    // BUG-018 FIX: wrap with key() to match the double-prefix convention used
-    // by fuse.js's fusion_log, so both log families live in the same key namespace
-    // and admin tooling can scan them consistently.
-    const scrapLogKey = key(`scrap_log:${Date.now()}:${crypto.randomBytes(8).toString("hex")}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const scrapLogKey = `scrap_log:${Date.now()}:${crypto.randomBytes(8).toString("hex")}`;
     await redis.set(scrapLogKey, JSON.stringify({
       walletAddress,
       nftMint,
@@ -174,7 +174,8 @@ router.get("/resources/:walletAddress", authMiddleware, async (req, res) => {
       return res.status(403).json({ error: "Forbidden: can only view your own resources" });
     }
 
-    const playerKey = key(`player:${walletAddress}`);
+    // BUG FIX: removed key() wrapper — redis wrappers add afw: prefix internally.
+    const playerKey = `player:${walletAddress}`;
     const playerData = await redis.hget(playerKey, "profile");
 
     if (!playerData) {
