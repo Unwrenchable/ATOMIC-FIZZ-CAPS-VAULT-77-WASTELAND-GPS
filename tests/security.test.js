@@ -363,23 +363,33 @@ test("BUG-004: chooseEnding() syncs player profile with quest state", () => {
   );
 });
 
-test("BUG-005: leaderboard scans double-prefixed player keys", () => {
+test("BUG-005: leaderboard scans player keys with single afw: prefix", () => {
   const src = readFile("backend/api/caps.js");
   assert.ok(src, "backend/api/caps.js must exist");
-  // Must use key(key("")) or key() before keys() call
+  // redis.keys() adds the afw: prefix internally — pass bare "player:*" (no pre-call to key())
   assert.ok(
-    src.includes('redis.keys(key("player:*"))') || src.includes("redis.keys(key('player:*'))"),
-    "caps.js leaderboard must scan with key(key()) double-prefix to find actual player profiles"
+    src.includes('redis.keys("player:*")') || src.includes("redis.keys('player:*')"),
+    "caps.js leaderboard must pass bare 'player:*' to redis.keys() — the wrapper adds the prefix"
+  );
+  // Must NOT double-prefix by calling key() before redis.keys()
+  assert.ok(
+    !src.includes('redis.keys(key('),
+    "caps.js leaderboard must not pre-call key() before redis.keys() — that causes afw:afw: double-prefix"
   );
 });
 
-test("BUG-006: cooldowns status uses correct key prefix (matches location-claim write)", () => {
+test("BUG-006: cooldowns status uses bare key string (no double-prefix)", () => {
   const src = readFile("backend/api/cooldowns.js");
   assert.ok(src, "backend/api/cooldowns.js must exist");
-  // Must pre-call key() before redis.get() to match double-prefix written by location-claim
+  // redis.get() adds the afw: prefix internally — must NOT pre-call key() (that causes double-prefix)
   assert.ok(
-    src.includes('redis.get(key('),
-    "cooldowns.js must pre-call key() to match the double-prefixed cooldown key written by location-claim.js"
+    !src.includes('redis.get(key('),
+    "cooldowns.js must NOT pre-call key() before redis.get() — the wrapper adds the prefix internally"
+  );
+  // Must use bare template literals for cooldown key lookups
+  assert.ok(
+    src.includes('redis.get(`player:') || src.includes("redis.get(`cooldown:") || src.includes('redis.get("cooldown:') || src.includes('redis.get("player:'),
+    "cooldowns.js must use bare key strings with redis.get() — prefix is added by the wrapper"
   );
 });
 
@@ -498,19 +508,18 @@ test("BUG-020: crafting.js _craft() is internal; craft() no longer public", () =
 
 // ─── New regression tests from pre-launch audit ─────────────────────────────
 
-test("NEW-001: crafting.js uses key() wrapper for profile hget (BUG-001 fix)", () => {
+test("NEW-001: crafting.js uses bare key string for profile hget (double-prefix fix)", () => {
   const src = readFile("backend/api/crafting.js");
   assert.ok(src, "backend/api/crafting.js must exist");
-  // The hget call must include key() wrapping to match the double-prefix convention
+  // redis.hget() adds the afw: prefix internally — must pass bare template literal (no pre-call to key())
   assert.ok(
-    src.includes("redis.hget(key(`player:${wallet}`),") ||
-    src.includes('redis.hget(key(`player:${wallet}`),'),
-    "crafting.js must use key() wrapper in hget for player profile to prevent level-gate bypass"
+    src.includes("redis.hget(`player:${wallet}`") || src.includes('redis.hget("player:'),
+    "crafting.js must use bare template literal in hget for player profile (prefix added by wrapper)"
   );
-  // Must NOT use bare template literal without key()
+  // Must NOT double-prefix by calling key() before redis.hget()
   assert.ok(
-    !src.includes("redis.hget(`player:${wallet}`"),
-    "crafting.js must not call hget with bare key (missing key() wrapper)"
+    !src.includes("redis.hget(key(`player:${wallet}`)"),
+    "crafting.js must not pre-call key() before hget — that causes afw:afw: double-prefix and level-gate bypass"
   );
 });
 
@@ -867,13 +876,18 @@ test("SEC-WALLET-006: nuke.js reads wallet from 'wallet' key (matches authClient
 
 console.log("\n[11] Playtest & audit fixes (BUG-031 through BUG-039 + SEC-AUDIT)");
 
-test("BUG-031: cooldowns.js TTL lookup uses key() wrapper (matches double-prefixed writer)", () => {
+test("BUG-031: cooldowns.js TTL lookup uses bare key string (no double-prefix)", () => {
   const src = readFile("backend/api/cooldowns.js");
   assert.ok(src, "backend/api/cooldowns.js must exist");
-  // Must call key() around the ttl argument — not raw bare string
+  // redis.ttl() adds the afw: prefix internally — must NOT pre-call key() (that causes double-prefix)
   assert.ok(
-    src.includes("redis.ttl(key(") || src.match(/ttl\s*\(\s*key\s*\(/),
-    "cooldowns.js redis.ttl() must wrap key path with key() to match double-prefixed writer"
+    !src.includes("redis.ttl(key("),
+    "cooldowns.js redis.ttl() must not pre-call key() — the wrapper adds the afw: prefix internally"
+  );
+  // Must use bare template literal for ttl lookups
+  assert.ok(
+    src.includes("redis.ttl(`player:") || src.includes("redis.ttl(`cooldown:") || src.includes('redis.ttl("'),
+    "cooldowns.js must pass bare key string to redis.ttl() — prefix is added by the wrapper"
   );
 });
 
