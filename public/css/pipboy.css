@@ -1720,3 +1720,15 @@ input[type="reset"]:hover {
 #panel-battle.pipboy-panel .panel-body {
   padding: 8px;
 }
+
+/* Testnet status banner */
+.testnet-banner {
+  background: #1a1200;
+  color: #ffcc00;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  padding: 2px 8px;
+  border-bottom: 1px solid #ffcc00;
+  text-align: center;
+}

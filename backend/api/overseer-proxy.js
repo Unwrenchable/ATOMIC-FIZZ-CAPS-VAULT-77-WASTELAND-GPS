@@ -9,6 +9,35 @@ const grok = require('../lib/grok');
 // causing unnecessary token consumption or denial-of-service.
 const MAX_PROMPT_LENGTH = 2000;
 
+// In-process response cache — avoids redundant upstream calls for identical
+// prompts within a short window.  Keys are prompt strings; values are
+// { text, expiresAt }.  Cache is intentionally small and short-lived.
+const CACHE_TTL_MS    = 60 * 1000; // 60 seconds
+const CACHE_MAX_ITEMS = 200;
+const _responseCache  = new Map();
+
+function cacheGet(prompt) {
+  const entry = _responseCache.get(prompt);
+  if (!entry) return null;
+  if (Date.now() > entry.expiresAt) {
+    _responseCache.delete(prompt);
+    return null;
+  }
+  // Re-insert to maintain LRU order (Map preserves insertion order)
+  _responseCache.delete(prompt);
+  _responseCache.set(prompt, entry);
+  return entry.text;
+}
+
+function cacheSet(prompt, text) {
+  // Evict oldest entry when at capacity to bound memory usage
+  if (_responseCache.size >= CACHE_MAX_ITEMS) {
+    const firstKey = _responseCache.keys().next().value;
+    _responseCache.delete(firstKey);
+  }
+  _responseCache.set(prompt, { text, expiresAt: Date.now() + CACHE_TTL_MS });
+}
+
 function normalizeOutput(json) {
   if (!json) return '';
   if (Array.isArray(json)) {
@@ -43,6 +72,12 @@ router.post('/ask', authMiddleware, async (req, res) => {
     return res.status(400).json({ error: 'empty_prompt' });
   }
 
+  // Cache hit — return immediately without calling upstream
+  const cached = cacheGet(prompt);
+  if (cached) {
+    return res.json({ ok: true, text: cached, cached: true });
+  }
+
   const xaiKey  = process.env.XAI_API_KEY || '';
   const aiKey   = process.env.AI_API_KEY  || '';
   const proxyUrl = process.env.AI_PROXY_URL || '';
@@ -64,6 +99,7 @@ router.post('/ask', authMiddleware, async (req, res) => {
         jsonMode   : false,
         temperature: 0.85,
       });
+      cacheSet(prompt, text);
       return res.json({ ok: true, text });
     } else if (useHF) {
       const hfUrl = proxyUrl || `https://api-inference.huggingface.co/models/${model || 'gpt2'}`;
@@ -74,7 +110,8 @@ router.post('/ask', authMiddleware, async (req, res) => {
       });
       const json = await r.json();
       const text = normalizeOutput(json);
-      return res.status(r.status).json({ ok: r.status >= 200 && r.status < 300, text, raw: json });
+      if (r.ok) cacheSet(prompt, text);
+      return res.status(r.status).json({ ok: r.ok, text, raw: json });
     } else {
       const openaiUrl = proxyUrl || 'https://api.openai.com/v1/chat/completions';
       const body = { model: model || 'gpt-4o-mini', messages: [{ role: 'user', content: prompt }], max_tokens: 800 };
@@ -85,11 +122,12 @@ router.post('/ask', authMiddleware, async (req, res) => {
       });
       const json = await r.json();
       const text = normalizeOutput(json);
-      return res.status(r.status).json({ ok: r.status >= 200 && r.status < 300, text, raw: json });
+      if (r.ok) cacheSet(prompt, text);
+      return res.status(r.status).json({ ok: r.ok, text, raw: json });
     }
   } catch (err) {
     console.error('[overseer-proxy] error', err);
-    return res.status(500).json({ error: 'proxy_failed' });
+    return res.status(500).json({ ok: false, error: 'proxy_failed' });
   }
 });
 

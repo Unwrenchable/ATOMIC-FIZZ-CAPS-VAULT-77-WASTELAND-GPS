@@ -33,6 +33,60 @@
       }
     },
 
+    mojave_outskirts: {
+      id: "mojave_outskirts",
+      name: "Mojave Outskirts",
+      personality: "dusty",
+      threat: 0.25,
+      anomalyLevel: 0.05,
+      quantityMultiplier: 0.9,
+      rarityMultiplier: 0.9,
+      questChance: 0.1,
+      encounters: {
+        travelers: 0.35,
+        scavengers: 0.3,
+        wildlife: 0.2,
+        merchant: 0.1,
+        raiders: 0.05
+      }
+    },
+
+    mojave_badlands: {
+      id: "mojave_badlands",
+      name: "Mojave Badlands",
+      personality: "harsh",
+      threat: 0.65,
+      anomalyLevel: 0.15,
+      quantityMultiplier: 1.3,
+      rarityMultiplier: 1.15,
+      questChance: 0.11,
+      encounters: {
+        raiders: 0.45,
+        wildlife: 0.25,
+        mutants: 0.15,
+        scavengers: 0.1,
+        event: 0.05
+      }
+    },
+
+    mojave_salt_flats: {
+      id: "mojave_salt_flats",
+      name: "Mojave Salt Flats",
+      personality: "mysterious",
+      threat: 0.35,
+      anomalyLevel: 0.2,
+      quantityMultiplier: 1.1,
+      rarityMultiplier: 1.25,
+      questChance: 0.14,
+      encounters: {
+        scavengers: 0.3,
+        anomaly: 0.25,
+        travelers: 0.2,
+        wildlife: 0.15,
+        merchant: 0.1
+      }
+    },
+
     fizzco_basin: {
       id: "fizzco_basin",
       name: "Fizzco Basin",

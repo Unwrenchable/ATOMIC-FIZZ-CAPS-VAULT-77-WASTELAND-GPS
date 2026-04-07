@@ -37,19 +37,19 @@ const SESSION_TTL_SECONDS        = 4 * 3600;         // 4 hours
 const ENTRY_TRACKING_TTL_SECONDS = 30 * 24 * 3600;   // 30 days
 const LOOT_PERSISTENCE_TTL_SECONDS = 7 * 24 * 3600;  // 7 days
 
-// Loot reward range: 10–60 caps (base, before tier multiplier)
-const MIN_LOOT_CAPS  = 10;
-const LOOT_CAPS_RANGE = 51;  // crypto.randomInt upper bound, produces 0..50
+// Loot reward range: 15–90 caps (base, before tier multiplier) — improved looting
+const MIN_LOOT_CAPS  = 15;
+const LOOT_CAPS_RANGE = 76;  // crypto.randomInt upper bound, produces 0..75
 
-// Completion bonus by dungeon type (caps + xp)
+// Completion bonus by dungeon type (caps + xp) — improved rewards
 const COMPLETION_BONUS = {
-  vault:         { caps: 120, xp: 80 },
-  bunker:        { caps: 150, xp: 100 },
-  raider_camp:   { caps: 80,  xp: 50 },
-  ruin:          { caps: 60,  xp: 40 },
-  sewer:         { caps: 50,  xp: 35 },
-  office:        { caps: 70,  xp: 45 },
-  military_base: { caps: 180, xp: 120 },
+  vault:         { caps: 150, xp: 100 },
+  bunker:        { caps: 180, xp: 120 },
+  raider_camp:   { caps: 100, xp:  65 },
+  ruin:          { caps:  80, xp:  55 },
+  sewer:         { caps:  65, xp:  45 },
+  office:        { caps:  90, xp:  60 },
+  military_base: { caps: 220, xp: 150 },
 };
 
 // ------------------------------------------------------------------
