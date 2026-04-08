@@ -1,0 +1,275 @@
+{
+  "fo_tv": [
+    {
+      "id": "vault_33_tv",
+      "name": "Vault 33",
+      "lat": 34.3983,
+      "lng": -118.9177,
+      "lvl": 1,
+      "rarity": "epic",
+      "iconKey": "vault",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "A Vault-Tec shelter nestled in the San Gabriel Mountains. Home to Lucy MacLean and the MacLean family. The vault practices 'peaceful' isolationism \u2014 until the day raiders breach the blast doors and change everything.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol",
+        "quest_tv_ghoul_hunt"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": true
+    },
+    {
+      "id": "vault_32_tv",
+      "name": "Vault 32 \u2014 The Slaughtered Vault",
+      "lat": 34.4,
+      "lng": -118.915,
+      "lvl": 10,
+      "rarity": "epic",
+      "iconKey": "vault",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "Vault 32 stands silent and bloodstained. Raiders wearing stolen Vault 33 suits massacred the inhabitants years ago. The bodies were arranged in patterns that suggest ritual \u2014 or a message. Someone wanted Vault 33 to find out.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": true
+    },
+    {
+      "id": "vault_4_tv",
+      "name": "Vault 4 \u2014 The Ghoul's Prize",
+      "lat": 34.1083,
+      "lng": -117.2898,
+      "lvl": 15,
+      "rarity": "legendary",
+      "iconKey": "vault",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "Cooper Howard \u2014 The Ghoul \u2014 has been hunting this vault for decades. What's inside is more personal than any bounty. Vault 4 was a CAPS Protocol experimental facility, and something \u2014 or someone \u2014 from his pre-war life is still in there.",
+      "quest_hooks": [
+        "quest_tv_ghoul_hunt"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": true
+    },
+    {
+      "id": "shady_sands_ruins_tv",
+      "name": "Shady Sands Ruins \u2014 NCR Capital (Nuked)",
+      "lat": 34.1083,
+      "lng": -117.2898,
+      "lvl": 20,
+      "rarity": "legendary",
+      "iconKey": "ruins",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "Once the proud capital of the New California Republic, Shady Sands is a radioactive crater. Someone \u2014 HavenTech? Vault-Tec? \u2014 nuked it, erasing 200 years of post-war civilization-building in seconds. The CAPS Protocol data stored here was the most complete ledger in existence.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": true
+    },
+    {
+      "id": "griffith_obs_ruins_tv",
+      "name": "Griffith Observatory \u2014 Brotherhood Stronghold",
+      "lat": 34.1184,
+      "lng": -118.3004,
+      "lvl": 25,
+      "rarity": "legendary",
+      "iconKey": "military",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "The Brotherhood of Steel has fortified Griffith Observatory as their Los Angeles command post. Its original telescopes now serve as long-range spotting towers. The Brotherhood's interest in this location goes beyond strategy \u2014 old Vault-Tec CAPS relay equipment was discovered in the basement.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": false
+    },
+    {
+      "id": "death_valley_wasteland_tv",
+      "name": "The Wasteland \u2014 Death Valley",
+      "lat": 36.5054,
+      "lng": -117.0794,
+      "lvl": 5,
+      "rarity": "uncommon",
+      "iconKey": "danger",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "Death Valley is aptly named in 2296. Radiation, Deathclaws, and wandering Ghoul bounty hunters make this stretch of desert one of the most lethal in the Western wasteland. And yet \u2014 traders still cross it, because the old Vault-Tec highway runs straight through the middle.",
+      "quest_hooks": [
+        "quest_tv_ghoul_hunt"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": false
+    },
+    {
+      "id": "moldaver_powerstation_tv",
+      "name": "Moldaver's Fusion Power Station",
+      "lat": 35.8824,
+      "lng": -115.3228,
+      "lvl": 30,
+      "rarity": "legendary",
+      "iconKey": "power",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "Lee Moldaver's greatest achievement: a working cold fusion power station that HavenTech has spent decades trying to suppress. The station's energy grid runs on the same principles as the CAPS Protocol authentication system \u2014 limitless distributed power for limitless distributed currency.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": true
+    },
+    {
+      "id": "prydwen_memorial_tv",
+      "name": "The Prydwen Memorial \u2014 LA Ruins",
+      "lat": 34.0195,
+      "lng": -118.4912,
+      "lvl": 20,
+      "rarity": "rare",
+      "iconKey": "military",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "The wreckage of a Brotherhood airship \u2014 whether the original Prydwen or a successor vessel \u2014 lies half-buried in the Los Angeles rubble. Brotherhood squires make pilgrimages here. Scribes recovered what they could from the tech. What they didn't take was a sealed CAPS Protocol terminal in the cargo bay.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": false
+    },
+    {
+      "id": "cooper_ranch_ruins_tv",
+      "name": "Cooper Howard's Ranch \u2014 Pre-War Ruins",
+      "lat": 36.174,
+      "lng": -115.135,
+      "lvl": 15,
+      "rarity": "rare",
+      "iconKey": "ruins",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "The ruins of Cooper Howard's pre-war ranch. Before the bombs, this was a working cattle ranch and film set. On October 22nd, 2077, Cooper Howard was filming a Nuka-Cola commercial here when his daughter called to warn him about the vaults. Now The Ghoul returns here sometimes, to remember.",
+      "quest_hooks": [
+        "quest_tv_ghoul_hunt"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": true
+    },
+    {
+      "id": "wilzig_research_tv",
+      "name": "Siggi Wilzig's Research Station",
+      "lat": 35.2258,
+      "lng": -116.0728,
+      "lvl": 20,
+      "rarity": "rare",
+      "iconKey": "lab",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "A converted pre-war research facility where Siggi Wilzig conducted his FizzCo experiments. Now his successor, Dr. Elara Voss, continues his work \u2014 including his most dangerous secret: documentation proving that the CAPS Protocol was designed for population control, not currency.",
+      "quest_hooks": [
+        "quest_tv_ghoul_hunt"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": true
+    },
+    {
+      "id": "lucy_vault33_entrance_tv",
+      "name": "Lucy's Vault 33 Entrance",
+      "lat": 34.42,
+      "lng": -118.95,
+      "lvl": 1,
+      "rarity": "common",
+      "iconKey": "vault",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "The exterior blast doors of Vault 33, where Lucy MacLean first stepped onto the surface. The ground outside is marked with old scorch patterns from the raiders' approach. Someone scratched 'THE OUTSIDE IS REAL' into the door frame in fresh letters.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": false
+    },
+    {
+      "id": "maximus_armor_cache_tv",
+      "name": "Maximus's Power Armor Cache",
+      "lat": 34.8,
+      "lng": -118.5,
+      "lvl": 35,
+      "rarity": "legendary",
+      "iconKey": "military",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "A Brotherhood supply cache where Maximus resupplied during his assignment to retrieve the head of Siggi Wilzig. Multiple suits of T-60 armor, energy weapon cells, and \u2014 hidden in a false floor \u2014 a Brotherhood intelligence report on CAPS Protocol nodes embedded in civilian infrastructure.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": false
+    },
+    {
+      "id": "the_gulch_tv",
+      "name": "The Gulch \u2014 Raider Stronghold",
+      "lat": 36.8,
+      "lng": -116.5,
+      "lvl": 25,
+      "rarity": "rare",
+      "iconKey": "danger",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "A natural canyon system that raiders have fortified into an impregnable stronghold. The Gulch's leadership collects CAPS from travelers \u2014 but not to trade. They're running CAPS Protocol authentication nodes, acting as unauthorized FIZZ minting operations. HavenTech wants them shut down.",
+      "quest_hooks": [
+        "quest_tv_ghoul_hunt"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": false
+    },
+    {
+      "id": "haventech_hq_ruins_tv",
+      "name": "HavenTech Headquarters Ruins",
+      "lat": 33.9533,
+      "lng": -118.4099,
+      "lvl": 40,
+      "rarity": "legendary",
+      "iconKey": "lab",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "The corporate headquarters of HavenTech \u2014 Vault-Tec's surviving corporate successor. Abandoned after a catastrophic incident, the building is now a radioactive ruin guarded by malfunctioning security robots. Deep in the server room: the complete CAPS Protocol archive, including Vault 77's original source code.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": true
+    },
+    {
+      "id": "vault_31_tv",
+      "name": "Vault 31 \u2014 Norm's Cryosleep Vault",
+      "lat": 34.41,
+      "lng": -118.97,
+      "lvl": 30,
+      "rarity": "epic",
+      "iconKey": "vault",
+      "region": "fo_tv",
+      "game": "fo_tv",
+      "source": "canon_tv",
+      "description": "Vault 31: a vault where the most promising Vault-Tec executives were cryogenically preserved, waiting to be thawed when civilization was ready for them to lead it. Norm MacLean discovered what 'leadership' meant in Vault-Tec's vocabulary. The CAPS Protocol was always their plan \u2014 the vault experiment was the rehearsal.",
+      "quest_hooks": [
+        "quest_tv_surface_protocol"
+      ],
+      "era_year": 2296,
+      "timeline_bleed": true
+    }
+  ]
+}

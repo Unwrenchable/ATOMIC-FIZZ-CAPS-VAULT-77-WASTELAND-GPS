@@ -3,8 +3,12 @@
     "id": "quest_echoes_dam",
     "name": "Echoes of the Dam",
     "type": "main",
-    "poIs": ["Hoover Dam", "Lucky 38", "Helios One"],
-    "description": "Restore power to the Mojave by reactivating Hoover Dam’s turbines.",
+    "poIs": [
+      "Hoover Dam",
+      "Lucky 38",
+      "Helios One"
+    ],
+    "description": "Restore power to the Mojave by reactivating Hoover Dam\u2019s turbines.",
     "objectives": [
       "Secure Hoover Dam control room",
       "Retrieve missing turbine parts from Helios One",
@@ -35,8 +39,13 @@
     "id": "quest_vault_experiment",
     "name": "The Vault Experiment",
     "type": "main",
-    "poIs": ["Vault 3", "Vault 19", "Vault 22", "Vault 87"],
-    "description": "Investigate Mojave Vaults to uncover the truth about Vault-Tec’s experiments.",
+    "poIs": [
+      "Vault 3",
+      "Vault 19",
+      "Vault 22",
+      "Vault 87"
+    ],
+    "description": "Investigate Mojave Vaults to uncover the truth about Vault-Tec\u2019s experiments.",
     "objectives": [
       "Search Vault 3 for experiment logs",
       "Recover data from Vault 19",
@@ -46,7 +55,7 @@
     "endings": [
       {
         "id": "ending_expose",
-        "description": "You expose Vault-Tec’s crimes to the Mojave.",
+        "description": "You expose Vault-Tec\u2019s crimes to the Mojave.",
         "reward": "Vault-Tec Experimental Device",
         "consequence": "Public outrage weakens corporate remnants."
       },
@@ -68,7 +77,12 @@
     "id": "quest_nuclear_trail",
     "name": "The Nuclear Trail",
     "type": "main",
-    "poIs": ["Nevada Test Site", "Yucca Mountain", "Helios One", "Trinity Site"],
+    "poIs": [
+      "Nevada Test Site",
+      "Yucca Mountain",
+      "Helios One",
+      "Trinity Site"
+    ],
     "description": "Track down missing nuclear prototypes scattered across Mojave test facilities.",
     "objectives": [
       "Recover prototype armor at Yucca Mountain",
@@ -101,7 +115,11 @@
     "id": "quest_strip_shadows",
     "name": "Shadows of the Strip",
     "type": "main",
-    "poIs": ["Ultra-Luxe Casino", "Gomorrah Casino", "Lucky 38"],
+    "poIs": [
+      "Ultra-Luxe Casino",
+      "Gomorrah Casino",
+      "Lucky 38"
+    ],
     "description": "Uncover corruption and secrets hidden within the Strip casinos.",
     "objectives": [
       "Investigate Ultra-Luxe backrooms",
@@ -133,7 +151,11 @@
     "id": "quest_ncr_push",
     "name": "NCR Final Push",
     "type": "main",
-    "poIs": ["Camp Forlorn Hope", "Bitter Springs", "Hoover Dam"],
+    "poIs": [
+      "Camp Forlorn Hope",
+      "Bitter Springs",
+      "Hoover Dam"
+    ],
     "description": "Lead NCR forces in a decisive assault against Legion strongholds.",
     "objectives": [
       "Rally demoralized troops at Forlorn Hope",
@@ -165,7 +187,11 @@
     "id": "quest_bos_purge",
     "name": "Brotherhood Purge",
     "type": "main",
-    "poIs": ["Hidden Valley Bunker", "HELIOS One", "REPCONN HQ"],
+    "poIs": [
+      "Hidden Valley Bunker",
+      "HELIOS One",
+      "REPCONN HQ"
+    ],
     "description": "Aid or oppose the Brotherhood of Steel in their tech reclamation crusade.",
     "objectives": [
       "Infiltrate Hidden Valley bunker",
@@ -197,7 +223,11 @@
     "id": "quest_khans_alliance",
     "name": "Khan Alliance",
     "type": "main",
-    "poIs": ["Red Rock Canyon", "Boulder City", "Cottonwood Cove"],
+    "poIs": [
+      "Red Rock Canyon",
+      "Boulder City",
+      "Cottonwood Cove"
+    ],
     "description": "Forge the Great Khans into a new power or crush them.",
     "objectives": [
       "Meet Papa Khan at Red Rock",
@@ -229,7 +259,11 @@
     "id": "quest_boomers_volare",
     "name": "Volare! Reborn",
     "type": "main",
-    "poIs": ["Nellis AFB", "Lake Mead Cave", "Crashed B-29"],
+    "poIs": [
+      "Nellis AFB",
+      "Lake Mead Cave",
+      "Crashed B-29"
+    ],
     "description": "Help the Boomers achieve flight once more.",
     "objectives": [
       "Raise the B-29 from Lake Mead",
@@ -261,7 +295,11 @@
     "id": "quest_followers_aid",
     "name": "Followers' Aid",
     "type": "main",
-    "poIs": ["Old Mormon Fort", "Westside Co-op", "Aerotech Office Park"],
+    "poIs": [
+      "Old Mormon Fort",
+      "Westside Co-op",
+      "Aerotech Office Park"
+    ],
     "description": "Expand the Followers of the Apocalypse's humanitarian reach.",
     "objectives": [
       "Deliver supplies to Westside",
@@ -293,7 +331,11 @@
     "id": "quest_legion_revolt",
     "name": "Legion Revolt",
     "type": "main",
-    "poIs": ["Cottonwood Cove", "Nelson", "Fortification Hill"],
+    "poIs": [
+      "Cottonwood Cove",
+      "Nelson",
+      "Fortification Hill"
+    ],
     "description": "Incite or crush a slave uprising in Caesar's Legion.",
     "objectives": [
       "Arm slaves at Cottonwood Cove",
@@ -325,7 +367,11 @@
     "id": "quest_powder_uprising",
     "name": "Powder Uprising",
     "type": "main",
-    "poIs": ["NCR Correctional Facility", "Primm", "Vault 19"],
+    "poIs": [
+      "NCR Correctional Facility",
+      "Primm",
+      "Vault 19"
+    ],
     "description": "Lead the Powder Gangers to power or destruction.",
     "objectives": [
       "Break out NCRCF prisoners",
@@ -357,7 +403,11 @@
     "id": "quest_white_glove",
     "name": "White Glove Feast",
     "type": "main",
-    "poIs": ["Ultra-Luxe Casino", "Gomorrah", "The Tops"],
+    "poIs": [
+      "Ultra-Luxe Casino",
+      "Gomorrah",
+      "The Tops"
+    ],
     "description": "Uncover the White Glove Society's darkest secrets.",
     "objectives": [
       "Investigate Ultra-Luxe kitchen",
@@ -389,7 +439,11 @@
     "id": "quest_kings_gambit",
     "name": "Kings' Gambit",
     "type": "main",
-    "poIs": ["Freeside", "King's School of Impersonation", "The Tops"],
+    "poIs": [
+      "Freeside",
+      "King's School of Impersonation",
+      "The Tops"
+    ],
     "description": "Broker peace or war between the Kings and NCR in Freeside.",
     "objectives": [
       "Meet the King in his school",
@@ -421,7 +475,11 @@
     "id": "quest_remnants_power",
     "name": "Remnants' Power",
     "type": "main",
-    "poIs": ["Remnants Bunker", "Ranger Station Foxtrot", "Camp Golf"],
+    "poIs": [
+      "Remnants Bunker",
+      "Ranger Station Foxtrot",
+      "Camp Golf"
+    ],
     "description": "Awaken Enclave remnants for one final mission.",
     "objectives": [
       "Find bunker entrance",
@@ -453,7 +511,11 @@
     "id": "quest_nipton_ashes",
     "name": "Nipton Ashes",
     "type": "main",
-    "poIs": ["Nipton", "Nipton Road Pit Stop", "Searchlight"],
+    "poIs": [
+      "Nipton",
+      "Nipton Road Pit Stop",
+      "Searchlight"
+    ],
     "description": "Avenge or exploit the horrors of Nipton's lottery.",
     "objectives": [
       "Investigate burned town",
@@ -485,7 +547,11 @@
     "id": "quest_black_mountain",
     "name": "Black Mountain",
     "type": "main",
-    "poIs": ["Black Mountain", "Jacobstown", "REPCONN Test Site"],
+    "poIs": [
+      "Black Mountain",
+      "Jacobstown",
+      "REPCONN Test Site"
+    ],
     "description": "Resolve the super mutant/nightkin conflict at Black Mountain.",
     "objectives": [
       "Contact Tabitha",
@@ -517,7 +583,10 @@
     "id": "side_ghost_town_gunfight",
     "name": "Ghost Town Gunfight",
     "type": "side",
-    "poIs": ["Goodsprings", "Goodsprings Cemetery"],
+    "poIs": [
+      "Goodsprings",
+      "Goodsprings Cemetery"
+    ],
     "description": "Help Goodsprings defend against Powder Gangers.",
     "objectives": [
       "Rally townsfolk",
@@ -528,7 +597,10 @@
     "id": "side_three_card_bounty",
     "name": "Three-Card Bounty",
     "type": "side",
-    "poIs": ["Primm", "Mojave Outpost"],
+    "poIs": [
+      "Primm",
+      "Mojave Outpost"
+    ],
     "description": "Hunt escaped convicts.",
     "objectives": [
       "Track targets",
@@ -539,7 +611,10 @@
     "id": "side_buried_treasure",
     "name": "Buried Treasure",
     "type": "side",
-    "poIs": ["Novac", "REPCONN Test Site"],
+    "poIs": [
+      "Novac",
+      "REPCONN Test Site"
+    ],
     "description": "Follow clues to hidden cache.",
     "objectives": [
       "Find holotape",
@@ -550,7 +625,10 @@
     "id": "side_caravan_rescue",
     "name": "Caravan Rescue",
     "type": "side",
-    "poIs": ["Jean Sky Diving", "Nipton Road Pit Stop"],
+    "poIs": [
+      "Jean Sky Diving",
+      "Nipton Road Pit Stop"
+    ],
     "description": "Save caravan from mutants.",
     "objectives": [
       "Clear pit stop",
@@ -561,7 +639,10 @@
     "id": "side_lost_prospector",
     "name": "Lost Prospector",
     "type": "side",
-    "poIs": ["Sloan", "Quarry Junction"],
+    "poIs": [
+      "Sloan",
+      "Quarry Junction"
+    ],
     "description": "Find missing miner.",
     "objectives": [
       "Talk to Sloan workers",
@@ -572,7 +653,10 @@
     "id": "side_radio_repair",
     "name": "Radio Repair",
     "type": "side",
-    "poIs": ["Goodsprings", "Primm"],
+    "poIs": [
+      "Goodsprings",
+      "Primm"
+    ],
     "description": "Fix settler's radio.",
     "objectives": [
       "Find parts",
@@ -583,7 +667,10 @@
     "id": "side_fiend_heads",
     "name": "Fiend Heads",
     "type": "side",
-    "poIs": ["Vault 3", "Westside"],
+    "poIs": [
+      "Vault 3",
+      "Westside"
+    ],
     "description": "Collect fiend bounties.",
     "objectives": [
       "Clear Vault 3 leaders",
@@ -594,7 +681,10 @@
     "id": "side_nightkin_hunt",
     "name": "Nightkin Hunt",
     "type": "side",
-    "poIs": ["Black Mountain", "REPCONN HQ"],
+    "poIs": [
+      "Black Mountain",
+      "REPCONN HQ"
+    ],
     "description": "Deal with stealthy nightkin.",
     "objectives": [
       "Track to REPCONN",
@@ -605,7 +695,10 @@
     "id": "side_aba_daba",
     "name": "Aba Daba Honeymoon",
     "type": "side",
-    "poIs": ["Red Rock Drug Lab", "Crimson Caravan"],
+    "poIs": [
+      "Red Rock Drug Lab",
+      "Crimson Caravan"
+    ],
     "description": "Run chems for Khans.",
     "objectives": [
       "Deliver packages",
@@ -616,7 +709,10 @@
     "id": "side_bleed_dry",
     "name": "Bleed Me Dry",
     "type": "side",
-    "poIs": ["The Thorn", "Various burrows"],
+    "poIs": [
+      "The Thorn",
+      "Various burrows"
+    ],
     "description": "Collect creature eggs.",
     "objectives": [
       "Hunt radscorpion, cazador, deathclaw eggs"
@@ -626,7 +722,11 @@
     "id": "side_ed_e_love",
     "name": "ED-E My Love",
     "type": "side",
-    "poIs": ["Primm", "Novac", "Hidden Valley"],
+    "poIs": [
+      "Primm",
+      "Novac",
+      "Hidden Valley"
+    ],
     "description": "Upgrade broken eyebot.",
     "objectives": [
       "Trigger upgrades at locations"
@@ -636,7 +736,10 @@
     "id": "side_gi_blues",
     "name": "G.I. Blues",
     "type": "side",
-    "poIs": ["Freeside", "Atomic Wrangler"],
+    "poIs": [
+      "Freeside",
+      "Atomic Wrangler"
+    ],
     "description": "Solve Kings' troubles.",
     "objectives": [
       "Investigate attacks",
@@ -647,7 +750,10 @@
     "id": "side_heartache_number",
     "name": "Heartache by the Number",
     "type": "side",
-    "poIs": ["Mojave Outpost", "Cassidy Caravan wreckage"],
+    "poIs": [
+      "Mojave Outpost",
+      "Cassidy Caravan wreckage"
+    ],
     "description": "Help Cass avenge her caravan.",
     "objectives": [
       "Track attackers",
@@ -658,7 +764,9 @@
     "id": "side_crazy_crazy",
     "name": "Crazy, Crazy, Crazy",
     "type": "side",
-    "poIs": ["Black Mountain"],
+    "poIs": [
+      "Black Mountain"
+    ],
     "description": "Free Neil from Tabitha.",
     "objectives": [
       "Climb mountain",
@@ -669,7 +777,10 @@
     "id": "side_come_fly",
     "name": "Come Fly With Me",
     "type": "side",
-    "poIs": ["REPCONN HQ", "Novac"],
+    "poIs": [
+      "REPCONN HQ",
+      "Novac"
+    ],
     "description": "Launch ghouls into space.",
     "objectives": [
       "Clear nightkin",
@@ -680,7 +791,9 @@
     "id": "side_beyond_beef",
     "name": "Beyond the Beef",
     "type": "side",
-    "poIs": ["Ultra-Luxe"],
+    "poIs": [
+      "Ultra-Luxe"
+    ],
     "description": "Solve missing person case.",
     "objectives": [
       "Investigate disappearance",
@@ -691,7 +804,10 @@
     "id": "side_high_times",
     "name": "High Times",
     "type": "side",
-    "poIs": ["Westside", "New Vegas Medical Clinic"],
+    "poIs": [
+      "Westside",
+      "New Vegas Medical Clinic"
+    ],
     "description": "Cure addicts.",
     "objectives": [
       "Treat Hoff and Ronte"
@@ -701,7 +817,10 @@
     "id": "side_i_could_care",
     "name": "I Could Make You Care",
     "type": "side",
-    "poIs": ["188 Trading Post", "Hidden Valley"],
+    "poIs": [
+      "188 Trading Post",
+      "Hidden Valley"
+    ],
     "description": "Help Veronica question BoS.",
     "objectives": [
       "Find tech samples",
@@ -712,7 +831,9 @@
     "id": "side_forgot_remember",
     "name": "I Forgot to Remember to Forget",
     "type": "side",
-    "poIs": ["Bitter Springs"],
+    "poIs": [
+      "Bitter Springs"
+    ],
     "description": "Help Boone find peace.",
     "objectives": [
       "Night scope history",
@@ -723,7 +844,9 @@
     "id": "side_put_spell",
     "name": "I Put a Spell on You",
     "type": "side",
-    "poIs": ["Camp McCarran"],
+    "poIs": [
+      "Camp McCarran"
+    ],
     "description": "Find NCR spy.",
     "objectives": [
       "Investigate monorail sabotage"
@@ -733,7 +856,9 @@
     "id": "side_kind_town",
     "name": "My Kind of Town",
     "type": "side",
-    "poIs": ["Primm"],
+    "poIs": [
+      "Primm"
+    ],
     "description": "Install new sheriff.",
     "objectives": [
       "Choose NCR, robot, or outlaw leader"
@@ -743,7 +868,10 @@
     "id": "side_sunset_stars",
     "name": "Sunset Sarsaparilla Star",
     "type": "side",
-    "poIs": ["Sunset HQ", "Various locations"],
+    "poIs": [
+      "Sunset HQ",
+      "Various locations"
+    ],
     "description": "Collect 50 star caps.",
     "objectives": [
       "Find prize vault"
@@ -753,7 +881,9 @@
     "id": "side_boulder_blues",
     "name": "Boulder City Blues",
     "type": "side",
-    "poIs": ["Boulder City"],
+    "poIs": [
+      "Boulder City"
+    ],
     "description": "Resolve Khan hostage situation.",
     "objectives": [
       "Negotiate or fight"
@@ -763,7 +893,10 @@
     "id": "side_wheel_fortune",
     "name": "Wheel of Fortune",
     "type": "side",
-    "poIs": ["Aerotech Office Park", "Novac"],
+    "poIs": [
+      "Aerotech Office Park",
+      "Novac"
+    ],
     "description": "Help stranded travelers.",
     "objectives": [
       "Repair vehicles"
@@ -773,7 +906,11 @@
     "id": "quest_fizz_awakens",
     "name": "The Fizz Awakens",
     "type": "main",
-    "poIs": ["Vault 77", "Lucky 38 Sub-Basement", "FizzCo Research Annex"],
+    "poIs": [
+      "Vault 77",
+      "Lucky 38 Sub-Basement",
+      "FizzCo Research Annex"
+    ],
     "description": "Investigate the sudden reactivation of pre-war FizzCo systems beneath the Strip.",
     "objectives": [
       "Enter Vault 77 through the collapsed Strip tunnels",
@@ -797,7 +934,7 @@
         "id": "ending_corrupt",
         "description": "You corrupt the CapChain for personal gain.",
         "reward": "Legendary FizzCo Artifact",
-        "consequence": "You secretly control the wasteland’s economy."
+        "consequence": "You secretly control the wasteland\u2019s economy."
       }
     ]
   },
@@ -805,7 +942,11 @@
     "id": "quest_platinum_cap",
     "name": "The Platinum Cap",
     "type": "main",
-    "poIs": ["FizzCo Executive Vault", "Vault 77 Robotics Bay", "Lucky 38"],
+    "poIs": [
+      "FizzCo Executive Vault",
+      "Vault 77 Robotics Bay",
+      "Lucky 38"
+    ],
     "description": "Assemble the legendary Platinum Cap, an upgrade key capable of rewriting the wasteland economy.",
     "objectives": [
       "Recover the empty Platinum Cap Shell",
@@ -837,19 +978,23 @@
     "id": "quest_formula_77",
     "name": "Formula of 77",
     "type": "main",
-    "poIs": ["Vault 77 Chemical Lab", "FizzCo Bio-Lum Lab", "Helios One"],
+    "poIs": [
+      "Vault 77 Chemical Lab",
+      "FizzCo Bio-Lum Lab",
+      "Helios One"
+    ],
     "description": "Recreate the original Atomic Fizz formula using scattered pre-war research.",
     "objectives": [
       "Recover a sample of Atomic Fizz",
       "Find the Vault 77 Formula Page",
-      "Stabilize the mixture using Helios One’s solar arrays"
+      "Stabilize the mixture using Helios One\u2019s solar arrays"
     ],
     "endings": [
       {
         "id": "ending_perfect_fizz",
         "description": "You perfect the Atomic Fizz formula.",
         "reward": "Unlimited Atomic Fizz Crafting",
-        "consequence": "You become the Mojave’s most valuable chemist."
+        "consequence": "You become the Mojave\u2019s most valuable chemist."
       },
       {
         "id": "ending_mutated_fizz",
@@ -869,7 +1014,11 @@
     "id": "side_robot_remembered",
     "name": "The Robot That Remembered",
     "type": "side",
-    "poIs": ["Vault 77 Robotics Bay", "Westside", "Lucky 38"],
+    "poIs": [
+      "Vault 77 Robotics Bay",
+      "Westside",
+      "Lucky 38"
+    ],
     "description": "Help a damaged FizzCo courier robot recover its lost memory routines.",
     "objectives": [
       "Install the Robot Relic Core",
@@ -881,8 +1030,11 @@
     "id": "side_understrip_tunnels",
     "name": "Under-Strip Tunnels",
     "type": "side",
-    "poIs": ["Las Vegas Under-Strip", "FizzCo Distribution Hub"],
-    "description": "Explore the forgotten tunnels beneath the Strip and uncover FizzCo’s hidden infrastructure.",
+    "poIs": [
+      "Las Vegas Under-Strip",
+      "FizzCo Distribution Hub"
+    ],
+    "description": "Explore the forgotten tunnels beneath the Strip and uncover FizzCo\u2019s hidden infrastructure.",
     "objectives": [
       "Clear tunnel infestation",
       "Recover FizzCo Shipment Manifest",
@@ -893,7 +1045,10 @@
     "id": "side_oldworld_conversion",
     "name": "Old-World Conversion",
     "type": "side",
-    "poIs": ["FizzCo Accounting Vault", "Lucky 38 Sub-Basement"],
+    "poIs": [
+      "FizzCo Accounting Vault",
+      "Lucky 38 Sub-Basement"
+    ],
     "description": "Convert old-world currency into Atomic Fizz Caps using a pre-war conversion module.",
     "objectives": [
       "Recover Old-World Currency Bag",
@@ -905,7 +1060,10 @@
     "id": "side_glow_dark",
     "name": "Glow in the Dark",
     "type": "side",
-    "poIs": ["FizzCo Bio-Lum Lab", "Searchlight"],
+    "poIs": [
+      "FizzCo Bio-Lum Lab",
+      "Searchlight"
+    ],
     "description": "Investigate glowing creatures mutated by leaked Atomic Fizz prototypes.",
     "objectives": [
       "Collect glow samples",
@@ -917,13 +1075,392 @@
     "id": "side_lost_shipment",
     "name": "The Lost FizzCo Shipment",
     "type": "side",
-    "poIs": ["I-15 Ruins", "FizzCo Distribution Hub"],
+    "poIs": [
+      "I-15 Ruins",
+      "FizzCo Distribution Hub"
+    ],
     "description": "Recover a lost pre-war FizzCo shipment buried under highway rubble.",
     "objectives": [
       "Locate buried truck",
       "Retrieve intact Atomic Fizz crates",
       "Return shipment manifest"
     ]
+  },
+  {
+    "id": "quest_tv_surface_protocol",
+    "name": "Surface Protocol",
+    "type": "main",
+    "era": "fo_tv",
+    "year": 2296,
+    "region": "western_us",
+    "poIs": [
+      "vault_33_tv",
+      "wilzig_research_tv",
+      "shady_sands_ruins_tv",
+      "haventech_hq_ruins_tv"
+    ],
+    "description": "Emerge from Vault 33 into a shattered world. Follow the CAPS Protocol signal to uncover HavenTech's conspiracy \u2014 and choose the future of the FIZZ token.",
+    "objectives": [
+      "Exit Vault 33 and establish GPS bearing",
+      "Find Siggi Wilzig's Research Station",
+      "Investigate Shady Sands Ruins for HavenTech evidence",
+      "Infiltrate HavenTech Headquarters Ruins",
+      "Decide the fate of the CAPS Protocol"
+    ],
+    "fizz_reward": 500,
+    "caps_reward": 1000,
+    "xp": 5000,
+    "triggers": [
+      "proximity",
+      "npc"
+    ],
+    "start_location": "vault_33_tv",
+    "npc_giver": "dialog_ghoul_cooper",
+    "prerequisites": [],
+    "next_quests": [
+      "quest_tv_ghoul_hunt"
+    ],
+    "endings": [
+      {
+        "id": "ending_moldaver",
+        "description": "You share the CAPS data with Moldaver's fusion collective.",
+        "reward": "500 FIZZ + Fusion Power Armor",
+        "consequence": "Free energy spreads across settlements. HavenTech collapses."
+      },
+      {
+        "id": "ending_brotherhood",
+        "description": "You hand the CAPS data to the Brotherhood of Steel.",
+        "reward": "300 FIZZ + Gatling Laser",
+        "consequence": "Brotherhood controls CAPS infrastructure. Order enforced at gunpoint."
+      },
+      {
+        "id": "ending_independent",
+        "description": "You keep the CAPS data and build your own FIZZ network.",
+        "reward": "1000 FIZZ + FizzCo Overseer Perk",
+        "consequence": "You become the new architect of the CAPS Protocol."
+      }
+    ]
+  },
+  {
+    "id": "quest_tv_ghoul_hunt",
+    "name": "The Last Bounty",
+    "type": "main",
+    "era": "fo_tv",
+    "year": 2296,
+    "region": "western_us",
+    "poIs": [
+      "cooper_ranch_ruins_tv",
+      "death_valley_wasteland_tv",
+      "griffith_obs_ruins_tv",
+      "wilzig_research_tv"
+    ],
+    "description": "Cooper Howard \u2014 The Ghoul \u2014 has been hunting a FizzCo whistleblower for two centuries. Follow his trail across the Western wasteland and uncover the truth about the CAPS origin.",
+    "objectives": [
+      "Find Cooper Howard at his ranch ruins",
+      "Track Dr. Elara Voss across three wasteland locations",
+      "Discover the whistleblower's truth about CAPS",
+      "Confront HavenTech's bounty system",
+      "Make the final call: Cooper's target or the truth?"
+    ],
+    "fizz_reward": 750,
+    "caps_reward": 1500,
+    "xp": 6000,
+    "triggers": [
+      "proximity",
+      "npc"
+    ],
+    "start_location": "cooper_ranch_ruins_tv",
+    "npc_giver": "dialog_ghoul_cooper",
+    "prerequisites": [],
+    "next_quests": [],
+    "endings": [
+      {
+        "id": "ending_redemption",
+        "description": "Help Cooper find his daughter's vault.",
+        "reward": "750 FIZZ + Cooper Howard Companion",
+        "consequence": "Cooper finds peace. His daughter's vault data unlocks new FIZZ rewards."
+      },
+      {
+        "id": "ending_whistleblower",
+        "description": "Protect Dr. Voss. She releases CAPS data publicly.",
+        "reward": "500 FIZZ + Lore Archive Unlock",
+        "consequence": "The truth about HavenTech spreads across all radio frequencies."
+      },
+      {
+        "id": "ending_contract",
+        "description": "Complete the HavenTech bounty. Dr. Voss is silenced.",
+        "reward": "1000 FIZZ",
+        "consequence": "HavenTech rewards you. Every other faction loses trust."
+      }
+    ]
+  },
+  {
+    "id": "quest_fo1_boneyard_rise",
+    "name": "The Boneyard Rises",
+    "type": "main",
+    "era": "fo1",
+    "year": 2161,
+    "region": "southern_california",
+    "poIs": [
+      "shady_sands_fo1",
+      "the_hub_fo1",
+      "los_angeles_boneyard_fo1",
+      "vault_13_fo1"
+    ],
+    "description": "In 2161 Southern California, the Master's Army marches and the Hub's merchant network teeters on collapse. A pre-war CAPS relay node \u2014 the first \u2014 was buried beneath the Boneyard. Find it before the Children of the Cathedral do.",
+    "objectives": [
+      "Speak with Hub merchants about the old CAPS relay",
+      "Infiltrate the Boneyard's underground tunnels",
+      "Recover the Vault-Tec CAPS Node Alpha",
+      "Decide whether to activate or destroy the node"
+    ],
+    "fizz_reward": 300,
+    "caps_reward": 800,
+    "xp": 3000,
+    "triggers": [
+      "proximity",
+      "lore"
+    ],
+    "start_location": "the_hub_fo1",
+    "npc_giver": "dialog_vault_dweller_echo",
+    "prerequisites": [],
+    "next_quests": [],
+    "endings": [
+      {
+        "id": "ending_activate",
+        "description": "You activate CAPS Node Alpha \u2014 the Hub's trade network explodes in value.",
+        "reward": "300 FIZZ + Hub Merchant Discount",
+        "consequence": "The first above-ground CAPS network goes live in 2161."
+      },
+      {
+        "id": "ending_destroy",
+        "description": "You destroy the node to keep it from the Master.",
+        "reward": "200 FIZZ + NCR Reputation",
+        "consequence": "The Master loses a key resource. The wasteland is safer, for now."
+      },
+      {
+        "id": "ending_sell",
+        "description": "You sell the node data to a Vault City precursor faction.",
+        "reward": "500 FIZZ",
+        "consequence": "The data accelerates technological recovery but concentrates power."
+      }
+    ]
+  },
+  {
+    "id": "quest_fo2_chosen_legacy",
+    "name": "The Chosen One's Legacy",
+    "type": "main",
+    "era": "fo2",
+    "year": 2241,
+    "region": "northern_california",
+    "poIs": [
+      "arroyo_fo2",
+      "ncr_capital_fo2",
+      "new_reno_fo2",
+      "vault_city_fo2",
+      "san_francisco_shi_fo2"
+    ],
+    "description": "The Shi of San Francisco have decoded an old Vault-Tec transmission describing the CAPS Protocol. The Enclave wants it. The NCR wants it. The New Reno crime families will sell it to anyone. Get there first.",
+    "objectives": [
+      "Travel to San Francisco and meet the Shi",
+      "Decode the Vault-Tec CAPS transmission",
+      "Navigate NCR politics and New Reno crime families",
+      "Secure the CAPS data before the Enclave arrives"
+    ],
+    "fizz_reward": 350,
+    "caps_reward": 900,
+    "xp": 3500,
+    "triggers": [
+      "proximity",
+      "lore"
+    ],
+    "start_location": "arroyo_fo2",
+    "npc_giver": "dialog_vault_dweller_echo",
+    "prerequisites": [
+      "quest_fo1_boneyard_rise"
+    ],
+    "next_quests": [],
+    "endings": [
+      {
+        "id": "ending_ncr",
+        "description": "Give the transmission to the NCR. They standardize caps across California.",
+        "reward": "350 FIZZ + NCR Standing",
+        "consequence": "The NCR's currency becomes the most trusted in the wasteland."
+      },
+      {
+        "id": "ending_shi",
+        "description": "Let the Shi keep the data. They build a CAPS relay network at sea.",
+        "reward": "400 FIZZ + Shi Tech Armor",
+        "consequence": "A secret Pacific CAPS network emerges, unknown to factions."
+      },
+      {
+        "id": "ending_reno",
+        "description": "Sell it to New Reno. Crime families control the CAPS market.",
+        "reward": "600 FIZZ",
+        "consequence": "CAPS become corrupted by organized crime. Inflation follows."
+      }
+    ]
+  },
+  {
+    "id": "quest_fo3_purity_war",
+    "name": "The Purity War",
+    "type": "main",
+    "era": "fo3",
+    "year": 2277,
+    "region": "capital_wasteland",
+    "poIs": [
+      "rivet_city_fo3",
+      "jefferson_memorial_fo3",
+      "megaton_fo3",
+      "gnr_building_fo3",
+      "citadel_fo3"
+    ],
+    "description": "The Enclave is using Project Purity's water purification system to access hidden CAPS Protocol nodes embedded in the Capital Wasteland's water infrastructure. Stop them \u2014 or join them \u2014 before the clean water and the CAPS network become weapons.",
+    "objectives": [
+      "Investigate the Enclave's CAPS node extraction at Jefferson Memorial",
+      "Secure GNR Building as CAPS broadcast relay",
+      "Defend Project Purity from Enclave forces",
+      "Upload or destroy the CAPS Protocol data"
+    ],
+    "fizz_reward": 400,
+    "caps_reward": 1000,
+    "xp": 4000,
+    "triggers": [
+      "proximity",
+      "lore"
+    ],
+    "start_location": "rivet_city_fo3",
+    "npc_giver": "dialog_sole_survivor_echo",
+    "prerequisites": [],
+    "next_quests": [],
+    "endings": [
+      {
+        "id": "ending_liberty",
+        "description": "Activate Project Purity AND the CAPS node. Clean water and clean currency flow together.",
+        "reward": "400 FIZZ + Aqua Pura Supply",
+        "consequence": "The Capital Wasteland prospers. The CAPS network grows."
+      },
+      {
+        "id": "ending_enclave",
+        "description": "Let the Enclave control the CAPS node. They rebuild federal currency.",
+        "reward": "300 FIZZ + Enclave Power Armor",
+        "consequence": "Enclave gains economic power. Other factions scramble to adapt."
+      },
+      {
+        "id": "ending_destroy",
+        "description": "Destroy both Project Purity and the CAPS node to deny the Enclave.",
+        "reward": "500 FIZZ",
+        "consequence": "The Capital Wasteland loses clean water but gains freedom from corporate control."
+      }
+    ]
+  },
+  {
+    "id": "quest_fo4_synth_revelation",
+    "name": "Synth Revelation",
+    "type": "main",
+    "era": "fo4",
+    "year": 2287,
+    "region": "the_commonwealth",
+    "poIs": [
+      "diamond_city_fo4",
+      "institute_fo4",
+      "railroad_hq_fo4",
+      "prydwen_fo4",
+      "sanctuary_fo4"
+    ],
+    "description": "The Institute has been embedding CAPS Protocol tracking nodes in synth neural networks \u2014 every synth is a walking CAPS terminal. The Railroad wants to free the synths. The Brotherhood wants to destroy them. You want the CAPS data they carry.",
+    "objectives": [
+      "Investigate CAPS node anomalies in Diamond City",
+      "Infiltrate Institute CAPS research division",
+      "Choose: Railroad liberation, Brotherhood purge, or independent extraction",
+      "Extract or broadcast the synth-carried CAPS data"
+    ],
+    "fizz_reward": 450,
+    "caps_reward": 1200,
+    "xp": 4500,
+    "triggers": [
+      "proximity",
+      "npc"
+    ],
+    "start_location": "diamond_city_fo4",
+    "npc_giver": "dialog_sole_survivor_echo",
+    "prerequisites": [],
+    "next_quests": [],
+    "endings": [
+      {
+        "id": "ending_railroad",
+        "description": "Free the synths. They carry CAPS data to freedom \u2014 and share it openly.",
+        "reward": "450 FIZZ + Railroad Safe House",
+        "consequence": "Synths are free. CAPS data democratized. Institute weakened."
+      },
+      {
+        "id": "ending_brotherhood",
+        "description": "Purge the Institute with the Brotherhood. CAPS data salvaged from wreckage.",
+        "reward": "350 FIZZ + T-60 Power Armor",
+        "consequence": "Institute destroyed. Brotherhood controls recovered CAPS archives."
+      },
+      {
+        "id": "ending_minutemen",
+        "description": "Use Minutemen to neutralize the Institute peacefully. CAPS data distributed to settlements.",
+        "reward": "550 FIZZ + Minutemen General's Coat",
+        "consequence": "Commonwealth settles rebuild with CAPS infrastructure. Hope spreads."
+      }
+    ]
+  },
+  {
+    "id": "quest_fo76_first_light",
+    "name": "First Light",
+    "type": "main",
+    "era": "fo76",
+    "year": 2102,
+    "region": "appalachia",
+    "poIs": [
+      "vault_76_fo76",
+      "whitespring_fo76",
+      "flatwoods_fo76",
+      "morgantown_fo76",
+      "watoga_fo76"
+    ],
+    "description": "Reclamation Day. Vault 76 opens. Among the standard survival gear, your Pip-Boy is receiving a strange signal \u2014 fragmented CAPS Protocol data from Vault 77. Someone is trying to warn you about what you'll find on the surface. And what finds you first.",
+    "objectives": [
+      "Exit Vault 76 and triangulate the CAPS signal",
+      "Investigate Flatwoods for Responder CAPS terminal",
+      "Secure the Whitespring's Vault-Tec archive room",
+      "Decode the Vault 77 transmission at Morgantown Airport",
+      "Send a reply to Vault 77 Overseer AI"
+    ],
+    "fizz_reward": 250,
+    "caps_reward": 700,
+    "xp": 2500,
+    "triggers": [
+      "proximity",
+      "beacon"
+    ],
+    "start_location": "vault_76_fo76",
+    "npc_giver": "dialog_vault_dweller_echo",
+    "prerequisites": [],
+    "next_quests": [
+      "quest_fo3_purity_war"
+    ],
+    "endings": [
+      {
+        "id": "ending_share",
+        "description": "Broadcast the Vault 77 signal across Appalachia. All dwellers receive CAPS data.",
+        "reward": "250 FIZZ + Vault 77 Radio Frequency",
+        "consequence": "Appalachian survivors gain early CAPS network access. FizzCo protocol begins."
+      },
+      {
+        "id": "ending_secure",
+        "description": "Secure the signal for yourself. You control the CAPS bootstrap node.",
+        "reward": "400 FIZZ + CAPS Bootstrap Key",
+        "consequence": "You hold the first key to the FIZZ token network. Power and responsibility."
+      },
+      {
+        "id": "ending_destroy",
+        "description": "Destroy the transmitter. The CAPS signal dies in Appalachia.",
+        "reward": "150 FIZZ",
+        "consequence": "Appalachia develops independently. The FIZZ network is delayed by decades."
+      }
+    ]
   }
 ]
-  
