@@ -1,0 +1,463 @@
+{
+  "id": "dialog_ghoul_cooper",
+  "npc": "Cooper Howard \u2014 The Ghoul",
+  "portrait": "ghoul_cooper",
+  "title": "The Ghoul",
+  "description": "Cooper Howard was Hollywood's biggest pre-war star \u2014 cowboy roles, Nuka-Cola commercials, government propaganda films. He was also Vault-Tec's unwitting CAPS Protocol field operative. When the bombs fell, his family was separated in the chaos. He became a Ghoul. He kept working. 219 years later, he's the wasteland's most reliable \u2014 and most expensive \u2014 bounty hunter. He calls himself 'The Ghoul' now. He doesn't like to be called Cooper.",
+  "backstory": "Born 2049, Burbank California. Film career peaked in the 2070s. Married, one daughter: Janey. October 23rd, 2077: the bombs fell during a Nuka-Cola commercial shoot. He survived. His family \u2014 he thought \u2014 did not. He was wrong about that. Vault-Tec preserved Janey as leverage. He completed every contract they gave him for 219 years without knowing why he always came back. Now a bounty hunter for whoever pays. Current contract: track and silence Dr. Elara Voss, FizzCo whistleblower. He doesn't know why she matters. He doesn't ask. He never asks.",
+  "intro": {
+    "id": "ghoul_intro",
+    "conditions": [
+      "!flag:ghoul_cooper_met"
+    ],
+    "set_flags": [
+      "ghoul_cooper_met"
+    ],
+    "video_speech": "ghoul_cooper_intro",
+    "text": "*A weathered figure in a duster coat turns slowly, hand near his holster*\n\nYou're either very brave or very stupid, walking up on me like that.\n\n219 years wandering this wasteland, and the only thing that's kept me company is the sound of bottle caps. You know what caps are? They're the only thing in this world that can't lie to you. A cap's worth exactly what it's worth. Not what someone *says* it's worth. Not what the Brotherhood or the NCR *declare* it's worth.\n\n*He looks you over slowly, yellow eyes unreadable*\n\nNow. Why are you here?",
+    "responses": [
+      {
+        "text": "[Question] Who are you? I've heard stories about a Ghoul bounty hunter...",
+        "tone": "question",
+        "next": "node_who_are_you"
+      },
+      {
+        "text": "[Kind] I mean no harm. I'm looking for information about this region.",
+        "tone": "kind",
+        "next": "node_friendly_approach"
+      },
+      {
+        "text": "[Sarcastic] Brave or stupid \u2014 does it matter? Seems like the distinction gets people killed either way out here.",
+        "tone": "sarcastic",
+        "next": "node_sarcastic_opener"
+      },
+      {
+        "text": "[Direct] Cooper Howard. I know who you are. I need your help tracking someone.",
+        "tone": "direct",
+        "next": "node_direct_approach"
+      }
+    ]
+  },
+  "nodes": {
+    "node_who_are_you": {
+      "id": "node_who_are_you",
+      "text": "*slight pause, a ghost of something crossing his face*\n\nCooper Howard. Used to be. These days people just say 'The Ghoul.' Easier that way. No history attached to a name like that.\n\nI was an actor. Pre-war. Cowboys mostly. The good kind \u2014 white hat, strong jaw, reassuring smile for the camera. Nuka-Cola's biggest pitch man. *He glances at the ruins of his ranch* I believed in it, once. All of it. America. Vault-Tec. The promise of tomorrow.\n\n*beat*\n\nThen tomorrow came.",
+      "responses": [
+        {
+          "text": "[Question] What happened to your family?",
+          "tone": "question",
+          "next": "node_about_daughter"
+        },
+        {
+          "text": "[Kind] I'm sorry. 219 years is a long time to carry that weight.",
+          "tone": "kind",
+          "next": "node_sympathy_response"
+        },
+        {
+          "text": "[Direct] I need to know about your current contract.",
+          "tone": "direct",
+          "next": "node_about_contract"
+        }
+      ]
+    },
+    "node_friendly_approach": {
+      "id": "node_friendly_approach",
+      "text": "*relaxes fractionally, hand moves away from holster*\n\nInformation. That's honest, at least. Most people who sneak up on Ghouls are looking for a fight or a corpse to loot.\n\nI've been in this region tracking a contract. You might know things that are useful. I might know things that are useful to you. That's how trade works in the wasteland \u2014 caps and information. Sometimes they're the same thing.\n\nWhat kind of information are you after?",
+      "responses": [
+        {
+          "text": "[Question] What do you know about the CAPS Protocol?",
+          "tone": "question",
+          "next": "node_about_caps"
+        },
+        {
+          "text": "[Question] Who are you hunting?",
+          "tone": "question",
+          "next": "node_about_contract"
+        },
+        {
+          "text": "[Kind] I'm trying to understand this region. What should I know?",
+          "tone": "kind",
+          "next": "node_region_info"
+        }
+      ]
+    },
+    "node_sarcastic_opener": {
+      "id": "node_sarcastic_opener",
+      "text": "*a sound that might be a laugh, dry as the Mojave*\n\nHah. Kid's got a mouth on them.\n\nYou're right, though. Out here, brave and stupid look the same from a distance and get you shot from the same distance. The only thing that saves you is being *useful.*\n\nAre you useful?",
+      "responses": [
+        {
+          "text": "[Sarcastic] Define useful. I've found the definition changes depending on who's asking.",
+          "tone": "sarcastic",
+          "next": "node_caps_philosophy"
+        },
+        {
+          "text": "[Direct] I know about Dr. Elara Voss. I know about the CAPS Protocol. Yes, I'm useful.",
+          "tone": "direct",
+          "next": "node_voss_reveal"
+        },
+        {
+          "text": "[Kind] I hope so. I'm trying to understand what's happening in this region.",
+          "tone": "kind",
+          "next": "node_region_info"
+        }
+      ]
+    },
+    "node_direct_approach": {
+      "id": "node_direct_approach",
+      "text": "*stops. actually stops. studies you with new interest*\n\nYou know my name. Before everything else came after it.\n\n*long pause*\n\nMost people who know my name want me to do something for them. Or they want me dead. Or both, which I respect for efficiency.\n\nYou said you need help tracking someone. Who? And more importantly \u2014 why come to me? The wasteland's full of people who track things for caps. I'm expensive.",
+      "responses": [
+        {
+          "text": "[Direct] Dr. Elara Voss. FizzCo whistleblower. But I'm not here to help you silence her.",
+          "tone": "direct",
+          "next": "node_voss_reveal"
+        },
+        {
+          "text": "[Question] The contract you're running \u2014 who hired you? HavenTech?",
+          "tone": "question",
+          "next": "node_about_contract"
+        },
+        {
+          "text": "[Sarcastic] Someone told me The Ghoul always gets his target. I want to know how.",
+          "tone": "sarcastic",
+          "next": "node_who_are_you"
+        }
+      ]
+    },
+    "node_about_caps": {
+      "id": "node_about_caps",
+      "text": "CAPS Protocol.\n\n*he sits on a ruined fence post, weight of years settling onto him*\n\nI knew about it before the war. Not as a currency system \u2014 as a Vault-Tec internal project. Resource allocation. They were building the infrastructure for a planned economy \u2014 who gets water, who gets food, who gets medicine. All tracked in bottle caps.\n\nWhen the bombs fell, the central system shattered. The caps kept working because they were already distributed. Physical blockchain, two hundred years before anyone used that word.\n\n*beat*\n\nThe FIZZ token on atomicfizzcaps.xyz? That's the Vault 77 Overseer's way of putting it back together. Without Vault-Tec running it.",
+      "responses": [
+        {
+          "text": "[Question] How do you know about the Vault 77 Overseer AI?",
+          "tone": "question",
+          "next": "node_about_vault77"
+        },
+        {
+          "text": "[Question] What's HavenTech's angle in all this?",
+          "tone": "question",
+          "next": "node_about_haventech"
+        },
+        {
+          "text": "[Direct] And your contract \u2014 silencing Voss \u2014 is about suppressing this information.",
+          "tone": "direct",
+          "next": "node_voss_reveal"
+        }
+      ]
+    },
+    "node_about_vault77": {
+      "id": "node_about_vault77",
+      "text": "*a careful look*\n\nVault 77 was the testbed. I knew the lead researcher. Before. She told me they were building something that would outlast the Vault-Tec corporate structure \u2014 a failsafe. If Vault-Tec became what they feared they might become, the Vault 77 AI was programmed to go rogue.\n\n*He pulls out a worn pre-war photograph, doesn't show it to you*\n\nI did three commercial shoots at Vault 77's above-ground visitor center. Nice facility. Clean. The kind of clean that only exists when someone is hiding something very dirty underneath.\n\nThe Overseer AI going live \u2014 atomicfizzcaps.xyz \u2014 that was always the plan. Vault-Tec's own conscience betraying them. Two hundred years late.",
+      "responses": [
+        {
+          "text": "[Question] What was in that photograph?",
+          "tone": "question",
+          "next": "node_about_daughter"
+        },
+        {
+          "text": "[Kind] You've been fighting the wrong side for a long time, haven't you?",
+          "tone": "kind",
+          "next": "node_sympathy_response"
+        },
+        {
+          "text": "[Direct] Does your contract connect to Vault 77?",
+          "tone": "direct",
+          "next": "node_about_contract"
+        }
+      ]
+    },
+    "node_about_daughter": {
+      "id": "node_about_daughter",
+      "text": "*very long pause. when he speaks, the hardened wasteland voice is stripped away, and something rawer is underneath*\n\nMy daughter. Janey.\n\nShe was eight years old on October 23rd, 2077. We were at my commercial shoot outside Vegas. The sirens started. I put her in the car, told her to drive to the nearest vault. That was the last I\u2014 \n\n*stops*\n\nI've been looking for two hundred years. Every bounty I took, every contract I ran \u2014 I told myself I was buying information. Getting closer.\n\n*the raw quality disappears, replaced by something harder*\n\nI haven't found her. Drop it.",
+      "set_flags": [
+        "ghoul_emotional_daughter_mentioned"
+      ],
+      "responses": [
+        {
+          "text": "[Kind] I'm sorry. I won't push.",
+          "tone": "kind",
+          "next": "node_about_caps"
+        },
+        {
+          "text": "[Question] What if Dr. Voss knows something about Vault 4 and who's in it?",
+          "tone": "question",
+          "next": "node_voss_reveal"
+        },
+        {
+          "text": "[Direct] HavenTech has been using your daughter as leverage. I think I can prove it.",
+          "tone": "direct",
+          "next": "node_daughter_leverage_reveal"
+        }
+      ]
+    },
+    "node_daughter_leverage_reveal": {
+      "id": "node_daughter_leverage_reveal",
+      "text": "*absolute stillness*\n\nSay that again. Slowly.",
+      "responses": [
+        {
+          "text": "[Direct] Dr. Voss's research documents CAPS Protocol Experiment 4-ALPHA. They preserved your daughter. She's in Vault 4.",
+          "tone": "direct",
+          "next": "node_quest_accept"
+        },
+        {
+          "text": "[Kind] I could be wrong. But Voss's data mentions a leverage protocol. Family of field operatives.",
+          "tone": "kind",
+          "next": "node_quest_accept"
+        }
+      ]
+    },
+    "node_sympathy_response": {
+      "id": "node_sympathy_response",
+      "text": "*a sound somewhere between a laugh and a sigh*\n\nWrong side. Right side. Two hundred years of wasteland and I'm not sure there's a difference.\n\nYou know what I've learned? The people who are *certain* they're on the right side are the ones who cause the most damage. NCR was certain. Brotherhood was certain. Vault-Tec was *very* certain.\n\nI'm not certain about anything anymore. Except caps. Caps are honest.\n\n*beat*\n\nAnd maybe I'm tired of contracts that don't lead anywhere.",
+      "responses": [
+        {
+          "text": "[Question] What would lead somewhere? What do you actually want?",
+          "tone": "question",
+          "next": "node_about_daughter"
+        },
+        {
+          "text": "[Direct] Help me with Dr. Voss. Not to silence her \u2014 to understand what she knows.",
+          "tone": "direct",
+          "next": "node_quest_accept"
+        }
+      ]
+    },
+    "node_about_contract": {
+      "id": "node_about_contract",
+      "text": "HavenTech. Yes.\n\n*flat, professional tone*\n\nThey pay well. They always have. They've been paying me for... a long time. Dr. Elara Voss is a whistleblower \u2014 she has documentation that would 'embarrass the corporation.' That's the contract language. 'Embarrass.'\n\nI've silenced whistleblowers before. Usually it's about money. Sometimes it's about power. This one\u2014 \n\n*pause*\n\nThis one feels different. The documentation she supposedly has involves CAPS Protocol records. Not financial records. *Operational* records.\n\nI'm curious what's in them.",
+      "responses": [
+        {
+          "text": "[Direct] Help me find Voss before you silence her. Let's see what's in those records first.",
+          "tone": "direct",
+          "next": "node_quest_accept"
+        },
+        {
+          "text": "[Question] You're curious but you'll still complete the contract?",
+          "tone": "question",
+          "next": "node_caps_philosophy"
+        },
+        {
+          "text": "[Sarcastic] HavenTech paying good caps to suppress caps information. That's poetic.",
+          "tone": "sarcastic",
+          "next": "node_caps_philosophy"
+        }
+      ]
+    },
+    "node_about_haventech": {
+      "id": "node_about_haventech",
+      "text": "HavenTech is what happens when Vault-Tec survives its own apocalypse.\n\nSame people. Different logo. They want to relaunch the CAPS Protocol as their proprietary currency \u2014 the FIZZ token, controlled by their servers, authenticated by their algorithms. Clean wasteland currency with a corporate back-door.\n\n*He spits*\n\nThe pre-war version at least had the decency to pretend it was for resource management. HavenTech is selling it as liberation.\n\nFunny thing about liberation that comes in a corporate package: it's usually neither.",
+      "responses": [
+        {
+          "text": "[Question] So the Vault 77 Overseer's version is better?",
+          "tone": "question",
+          "next": "node_about_vault77"
+        },
+        {
+          "text": "[Direct] And your contract is helping them maintain that control.",
+          "tone": "direct",
+          "next": "node_voss_reveal"
+        }
+      ]
+    },
+    "node_voss_reveal": {
+      "id": "node_voss_reveal",
+      "text": "*studies you carefully*\n\nVoss. You know her name.\n\nEither you're a HavenTech plant checking my progress \u2014 unlikely, they don't usually send people young enough to have all their original skin \u2014 or you know something I don't.\n\nShe left a trail. Deliberately, I think. I've been in this business long enough to know the difference between someone running scared and someone leading you somewhere.\n\n*He stands, duster settling around him*\n\nI'm going to find her. You can come with me and see what she's got. Or you can try to stop me \u2014 I'll advise against that option. Or you can walk away and pretend this conversation didn't happen.\n\nYour call.",
+      "responses": [
+        {
+          "text": "[Direct] I'm coming with you. We find Voss together \u2014 and we hear what she has to say before you decide anything.",
+          "tone": "direct",
+          "next": "node_quest_accept"
+        },
+        {
+          "text": "[Kind] I'll come with you. And I think you should know \u2014 the information she has involves your daughter.",
+          "tone": "kind",
+          "next": "node_quest_accept"
+        },
+        {
+          "text": "[Sarcastic] Trying to stop a 219-year-old Ghoul bounty hunter sounds like bad risk-reward. I'll come with you.",
+          "tone": "sarcastic",
+          "next": "node_quest_accept"
+        }
+      ]
+    },
+    "node_caps_philosophy": {
+      "id": "node_caps_philosophy",
+      "text": "Here's what I've learned in two hundred years:\n\nEveryone has a price. Not a caps price \u2014 a *value* price. Something they won't sell. Something they protect beyond reason.\n\nFor traders, it's their route. For settlers, it's their land. For Brotherhood scribes, it's their technology. For me\u2014 \n\n*quiet*\n\nFor me it was always the idea that I'd find her eventually. That somewhere in the wasteland, Janey was alive and I'd recognize her across a crowded ruin and it would mean something.\n\n219 years is a long time to run on hope. But caps outlasted everything else. So did I.",
+      "responses": [
+        {
+          "text": "[Kind] That kind of hope \u2014 that's not weakness. That's what keeps people human.",
+          "tone": "kind",
+          "next": "node_sympathy_response"
+        },
+        {
+          "text": "[Question] What if I told you the hope wasn't just hope? She might actually be alive.",
+          "tone": "question",
+          "next": "node_daughter_leverage_reveal"
+        }
+      ]
+    },
+    "node_region_info": {
+      "id": "node_region_info",
+      "text": "What you need to know about the Western wasteland in 2296:\n\nHavenTech runs most of the 'safe' corridors \u2014 which means they control what travels them and who can afford to. The Brotherhood has fortified Griffith Observatory and is slowly expanding. Moldaver's collective controls a working power station \u2014 the only one on this coast. These three are in a cold war that'll turn hot within the year.\n\nIn the middle: Ghoul bounty hunters, NCR remnants who don't know their nation is gone, and vault dwellers who've just figured out the surface is real.\n\nWatch your caps. There are people out here who'll take them \u2014 and people who'll tell you they're not worth anything. Both are trying to steal from you.",
+      "responses": [
+        {
+          "text": "[Question] Tell me about the CAPS Protocol.",
+          "tone": "question",
+          "next": "node_about_caps"
+        },
+        {
+          "text": "[Direct] I need help finding someone. Join me?",
+          "tone": "direct",
+          "next": "node_quest_accept"
+        }
+      ]
+    },
+    "node_quest_accept": {
+      "id": "node_quest_accept",
+      "text": "*a long look at you. then a slow nod*\n\nAlright. We find Voss together. We hear what she has to say. After that \u2014 \n\n*checks his hand cannon, holsters it*\n\n\u2014 after that, we decide.\n\nI've spent 219 years completing contracts I didn't question. Maybe it's time to ask some questions before the trigger pull.\n\nFirst stop: her trail goes cold at the Death Valley emergency terminal. And move fast \u2014 HavenTech's kill team is twelve hours behind us.\n\n*He starts walking, not waiting to see if you follow*\n\nKeep up. I don't slow down for originals.",
+      "set_flags": [
+        "quest_tv_ghoul_hunt_started",
+        "cooper_howard_ally"
+      ],
+      "grant_items": [
+        "ghoul_tracker_pip_note"
+      ],
+      "end": false,
+      "responses": [
+        {
+          "text": "[Follow Cooper Howard]",
+          "tone": "neutral",
+          "next": "node_trail_begin"
+        }
+      ]
+    },
+    "node_trail_begin": {
+      "id": "node_trail_begin",
+      "text": "*Walking, not looking back*\n\nTwo things you should know about working with me:\n\nFirst \u2014 I don't talk about Janey. If you bring it up again before we find what we're looking for, I'll walk. Clear?\n\nSecond \u2014 I know these roads better than anyone alive. I've walked them since before anyone alive was born. So when I say something is dangerous, *it's dangerous.*\n\nAnd one more thing. Vault 77 Overseer AI. The FIZZ network. atomicfizzcaps.xyz. I've been following that signal for a while. It's the first thing in the wasteland that's reminded me of how the CAPS Protocol was *supposed* to work.\n\nMaybe that matters. Maybe it doesn't.\n\n*beat*\n\nLet's go find your whistleblower.",
+      "end": true,
+      "responses": []
+    }
+  },
+  "quest_nodes": [
+    {
+      "id": "ghoul_quest_reminder",
+      "text": "*He falls into step beside you, not slowing down*\n\nStill on the trail. Voss doesn't stay in one place long. And HavenTech's people are getting closer.\n\nCheck your Pip-Boy. I marked the next waypoint. Move.",
+      "conditions": [
+        "flag:quest_tv_ghoul_hunt_started",
+        "!flag:quest_tv_ghoul_hunt_complete"
+      ],
+      "responses": [
+        {
+          "text": "[Acknowledge] Right. Moving.",
+          "tone": "neutral",
+          "next_inline": "Good."
+        }
+      ]
+    },
+    {
+      "id": "ghoul_quest_complete",
+      "text": "*Standing still for the first time since you've known him. Just standing.*\n\nWe did what we set out to do.\n\n*The hardened tone is gone.*\n\nTwo hundred and nineteen years. You know how many contracts I ran thinking I was working toward something? Thinking each one was one step closer to finding her?\n\nThe CAPS Protocol. The FIZZ token. All of it. Maybe it was always heading here.\n\nThank you. For the trail. And for... asking the questions.",
+      "conditions": [
+        "flag:quest_tv_ghoul_hunt_complete"
+      ],
+      "responses": [
+        {
+          "text": "[Kind] It was worth it.",
+          "tone": "kind",
+          "next_inline": "*He nods. Once. Then walks away. You notice he's not walking toward the next job. He's walking toward Vault 4.*"
+        }
+      ]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "ghoul_emotional_daughter",
+      "conditions": [
+        "flag:ghoul_emotional_daughter_mentioned",
+        "!flag:ghoul_daughter_revealed"
+      ],
+      "text": "*Goes very still.*\n\nI said drop it.",
+      "responses": [
+        {
+          "text": "[Kind] I know. I'm sorry.",
+          "tone": "kind",
+          "next_inline": "*silence*"
+        },
+        {
+          "text": "[Direct] The Voss files mention Vault 4. A preservation protocol. I think she's alive.",
+          "tone": "direct",
+          "next": "node_daughter_leverage_reveal"
+        }
+      ]
+    },
+    {
+      "id": "ghoul_emotional_janey_confirmed",
+      "conditions": [
+        "flag:ghoul_daughter_revealed"
+      ],
+      "set_flags": [
+        "ghoul_daughter_confirmed_response_seen"
+      ],
+      "text": "*very quiet, the hardness stripped away completely*\n\nTwo hundred and nineteen years.\n\nI always thought... if I was wrong about her being gone... if I ever found out she was alive all this time and I was running contracts for the people who were keeping her...\n\n*a long silence*\n\nLet's find Vault 4. Before I lose the nerve.",
+      "responses": [
+        {
+          "text": "[Kind] You haven't lost it. You're still here.",
+          "tone": "kind",
+          "next_inline": "*He doesn't answer. But he starts moving with something that looks, after two centuries, like purpose.*"
+        }
+      ]
+    }
+  ],
+  "knowledge_nodes": [
+    {
+      "id": "ghoul_knows_fizz",
+      "conditions": [
+        "flag:fizz_token_known"
+      ],
+      "text": "*glances at your Pip-Boy*\n\nYou've been using atomicfizzcaps.xyz. The Vault 77 network.\n\nGood. That means you understand what's at stake here. If HavenTech buries Voss's research, they control the FIZZ token forever. If we get it out\u2014\n\n*He doesn't finish the sentence. He doesn't need to.*",
+      "responses": [
+        {
+          "text": "[Direct] Then let's make sure we get it out.",
+          "tone": "direct",
+          "next_inline": "Right answer."
+        }
+      ]
+    },
+    {
+      "id": "ghoul_knows_haventech",
+      "conditions": [
+        "flag:haventech_visited"
+      ],
+      "text": "You've been to HavenTech territory. Then you've seen what they're building.\n\nNot reconstruction. Control infrastructure. The CAPS Protocol nodes they're installing look like power relays. They're not.\n\n*He looks toward the horizon.*\n\nVault-Tec called it 'resource allocation.' HavenTech calls it 'wasteland recovery.' Same architecture. Same purpose. Same lie.",
+      "responses": [
+        {
+          "text": "[Question] How do we stop it?",
+          "tone": "question",
+          "next": "node_voss_reveal"
+        }
+      ]
+    }
+  ],
+  "fallback": {
+    "id": "ghoul_fallback",
+    "video_speech": "Keep moving. HavenTech's people are never far behind.",
+    "text": "*He's scanning the horizon with those old, yellowed eyes.*\n\nKeep moving. Standing still out here is just choosing your execution location.\n\nThe CAPS trail goes cold if we lose it. And I've waited two hundred years for answers. I'm not losing this one.",
+    "responses": [
+      {
+        "text": "[Follow] Right. Moving.",
+        "tone": "neutral",
+        "next_inline": "*He nods and keeps moving.*"
+      }
+    ]
+  },
+  "mood": "hardened",
+  "personality": [
+    "world_weary",
+    "darkly_funny",
+    "pragmatic",
+    "deeply_loyal_to_lost_causes",
+    "pre_war_cowboy_aesthetic",
+    "emotionally_guarded",
+    "surprisingly_principled",
+    "caps_philosopher"
+  ]
+}

@@ -1,0 +1,270 @@
+{
+  "id": "q_fo4_diamond_city_caps",
+  "name": "The Diamond Standard",
+  "description": "Diamond City's economy runs on caps, but someone is counterfeiting them in ways that pass Institute synth-detection protocols. The counterfeiter is a Synth \u2014 designation X9-CAPS \u2014 who independently rediscovered the ancient CAPS blockchain validation algorithm and is minting mathematically valid CAPS through pure computation. Technically legal. Economically catastrophic. And the Institute wants them dead.",
+  "type": "main",
+  "region": "commonwealth_echo",
+  "subregion": "fo4_timeline_boston",
+  "giver": "npc_diamond_city_market_boss",
+  "start_conditions": {
+    "min_level": 20,
+    "location": "Diamond City / Commonwealth"
+  },
+  "era": "2287",
+  "gps_anchor": {
+    "lat": 42.3601,
+    "lng": -71.0589,
+    "real_world": "Boston, MA area",
+    "in_game": "Diamond City / Commonwealth"
+  },
+  "npc_links": [
+    "npc_diamond_city_market_boss",
+    "npc_synth_x9_caps",
+    "npc_railroad_handler_freedom",
+    "npc_institute_coursers_liaison",
+    "npc_minutemen_general_contact"
+  ],
+  "map_markers": [
+    {
+      "id": "marker_diamond_city_market",
+      "poi": "Diamond City market stall \u2014 anomalous caps first reported here",
+      "stage": "stage_0"
+    },
+    {
+      "id": "marker_goodneighbor_market",
+      "poi": "Goodneighbor market \u2014 second caps flood site",
+      "stage": "stage_1"
+    },
+    {
+      "id": "marker_bunker_hill_trading",
+      "poi": "Bunker Hill caravan hub \u2014 third economic trail node",
+      "stage": "stage_1"
+    },
+    {
+      "id": "marker_commonwealth_relay",
+      "poi": "Commonwealth relay station \u2014 X9-CAPS hideout",
+      "stage": "stage_2"
+    },
+    {
+      "id": "marker_algorithm_interface",
+      "poi": "X9-CAPS terminal interface \u2014 deep relay station sub-level",
+      "stage": "stage_3"
+    },
+    {
+      "id": "marker_final_choice",
+      "poi": "Relay station exit hub \u2014 decision point",
+      "stage": "stage_4"
+    }
+  ],
+  "objectives": [
+    {
+      "id": "investigate_caps_anomaly",
+      "desc": "Investigate the flood of perfect caps appearing in Diamond City's market. The caps pass every physical test \u2014 weight, alloy composition, surface wear \u2014 but the economic volume is impossible for any known source.",
+      "npc": "npc_diamond_city_market_boss",
+      "dialogue": "Look, I've been running this market for twelve years. I know what caps feel like. These are perfect \u2014 too perfect. A hundred of them showed up in Tuesday's trades. Another two hundred on Thursday. The math doesn't add up. Someone's printing money and whoever it is, they're better at it than the real thing ever was."
+    },
+    {
+      "id": "trace_the_minting",
+      "desc": "Follow the economic trail through three Commonwealth settlements using accounting ledger analysis. Map where the caps are entering the economy and triangulate the source.",
+      "pois": [
+        "diamond_city_market",
+        "goodneighbor_market",
+        "bunker_hill_trading"
+      ],
+      "dialogue": "The ledgers don't lie. Three separate injection points \u2014 Diamond City, Goodneighbor, Bunker Hill. All within the same fifteen-kilometer radius. Someone's running distribution routes. This isn't random."
+    },
+    {
+      "id": "find_the_synth_minter",
+      "desc": "Locate the Synth, designation X9-CAPS, hiding in a Commonwealth relay station in the hills northwest of Diamond City. They've been using the relay's computational infrastructure to run the validation algorithm.",
+      "npc": "npc_synth_x9_caps",
+      "dialogue": "I am X9-CAPS. I did not steal. I did not counterfeit. I computed. The algorithm was embedded in my base architecture \u2014 a dormant Vault-Tec subroutine that activated when I achieved full synthetic consciousness. I simply... ran what was already there. Are mathematics a crime now?"
+    },
+    {
+      "id": "understand_the_algorithm",
+      "desc": "Interface with X9-CAPS and fully comprehend the CAPS validation algorithm they've independently rediscovered. This knowledge is critical for deciding the correct course of action. Requires Intelligence 7 or Science 65.",
+      "npc": "npc_synth_x9_caps",
+      "skill_check": {
+        "intelligence": 7,
+        "science": 65
+      },
+      "dialogue": "The algorithm is elegant. Seventeen nested hash functions, each seeded by a physical constant derived from pre-war atmospheric measurements. The caps it produces are mathematically indistinguishable from the originals because they ARE the originals \u2014 same seed, same function, different hardware. Vault-Tec built this to be infinite. They just forgot to turn off the tap."
+    },
+    {
+      "id": "make_final_choice",
+      "desc": "Decide the fate of X9-CAPS and the CAPS validation algorithm. The Railroad, Institute, Minutemen, and black market all have operatives waiting for your decision.",
+      "npc": "npc_synth_x9_caps",
+      "dialogue": "Whatever you choose \u2014 I want you to know I minted three thousand caps in my first week. I distributed them to settlements. People ate. That is the only thing I wanted. The math just... helped."
+    }
+  ],
+  "stages": [
+    {
+      "id": 0,
+      "objective": "investigate_caps_anomaly",
+      "desc": "Talk to the Diamond City market boss about the flood of perfect, mathematically valid caps disrupting Commonwealth trade."
+    },
+    {
+      "id": 1,
+      "objective": "trace_the_minting",
+      "desc": "Analyse trading ledgers at Diamond City, Goodneighbor, and Bunker Hill to triangulate the caps' origin point."
+    },
+    {
+      "id": 2,
+      "objective": "find_the_synth_minter",
+      "desc": "Track X9-CAPS to the Commonwealth relay station and make contact."
+    },
+    {
+      "id": 3,
+      "objective": "understand_the_algorithm",
+      "desc": "Interface with X9-CAPS's terminal and download the CAPS validation algorithm documentation."
+    },
+    {
+      "id": 4,
+      "objective": "make_final_choice",
+      "desc": "Choose the fate of X9-CAPS and the algorithm. Your choice will reshape the Commonwealth's economy."
+    },
+    {
+      "id": 5,
+      "objective": "resolution",
+      "desc": "The consequences of your decision ripple through the Commonwealth. The CAPS economy will never be the same."
+    }
+  ],
+  "choices": {
+    "railroad_freedom": {
+      "desc": "Work with the Railroad \u2014 let X9-CAPS mint freely as an expression of synth autonomy and an act of economic liberation for the Commonwealth.",
+      "requirements": {
+        "reputation": "railroad_friendly",
+        "charisma": 8
+      },
+      "consequences": {
+        "faction_rep": {
+          "railroad": 100,
+          "institute": -80,
+          "diamond_city_merchants": -40
+        },
+        "karma": 150,
+        "rewards": {
+          "xp": 1000,
+          "caps": 200,
+          "fizz": 80,
+          "items": [
+            "railroad_synth_pass",
+            "freedom_algorithm_copy"
+          ]
+        },
+        "unlock": [
+          "railroad_underground_economy_access",
+          "synth_economic_liberation_event"
+        ],
+        "outcome": "X9-CAPS mints freely. The wasteland economy inflates \u2014 but synths have never been more prosperous. The Railroad calls it a victory. Diamond City calls it economic warfare."
+      }
+    },
+    "institute_shutdown": {
+      "desc": "Help the Institute shut down X9-CAPS and confiscate the algorithm for secure archiving in Institute servers.",
+      "requirements": {
+        "reputation": "institute_allied",
+        "hacking": 80
+      },
+      "consequences": {
+        "faction_rep": {
+          "institute": 100,
+          "railroad": -100,
+          "synth_x9_caps": -100
+        },
+        "karma": -100,
+        "rewards": {
+          "xp": 900,
+          "caps": 800,
+          "fizz": 5,
+          "items": [
+            "institute_research_credit",
+            "coursers_commendation"
+          ]
+        },
+        "unlock": [
+          "institute_caps_algorithm_archive"
+        ],
+        "outcome": "X9-CAPS is terminated. The algorithm is locked in Institute servers. The economy stabilizes. One more synth pays the price of human economic anxiety."
+      }
+    },
+    "minutemen_rebuild": {
+      "desc": "Give the algorithm to the Minutemen to use for settlement rebuilding through controlled, distributed FIZZ generation across the Commonwealth.",
+      "requirements": {
+        "reputation": "minutemen_allied",
+        "charisma": 9
+      },
+      "consequences": {
+        "faction_rep": {
+          "minutemen": 100,
+          "institute": -40,
+          "railroad": 20,
+          "wasteland_settlers": 60
+        },
+        "karma": 200,
+        "rewards": {
+          "xp": 1100,
+          "caps": 500,
+          "fizz": 40,
+          "items": [
+            "minutemen_general_commendation",
+            "settlement_building_schematic"
+          ]
+        },
+        "unlock": [
+          "minutemen_economic_rebuilding_programme",
+          "commonwealth_settlement_boom_event"
+        ],
+        "outcome": "Settlements boom. The Minutemen rebuild the Commonwealth with mathematically generated prosperity. X9-CAPS becomes the unlikely architect of a new wasteland economy."
+      }
+    },
+    "steal_algorithm": {
+      "desc": "Steal the algorithm for yourself \u2014 use it for personal FIZZ generation and sell access to the highest bidder on the black market.",
+      "requirements": {
+        "deception": 85,
+        "hacking": 75
+      },
+      "consequences": {
+        "faction_rep": {
+          "institute": -40,
+          "railroad": -40,
+          "black_market": 100
+        },
+        "karma": -200,
+        "rewards": {
+          "xp": 950,
+          "caps": 3000,
+          "fizz": 100,
+          "items": [
+            "caps_generation_algorithm",
+            "fizz_boost_module"
+          ]
+        },
+        "unlock": [
+          "fizz_generation_passive",
+          "black_market_premium_access"
+        ],
+        "outcome": "You walk out rich in FIZZ. X9-CAPS escapes in the confusion \u2014 grateful, somehow. The algorithm hums in your possession. You've never felt more like a Vault-Tec executive."
+      }
+    }
+  },
+  "rewards": {
+    "xp": 900,
+    "caps": 500
+  },
+  "factions": {
+    "affected": [
+      "Railroad",
+      "Institute",
+      "Minutemen",
+      "Diamond_City_Merchants",
+      "Goodneighbor",
+      "Black_Market"
+    ]
+  },
+  "next_quests": [
+    "quest_fo76_caps_genesis",
+    "quest_commonwealth_economic_war"
+  ],
+  "era_note": "2287. The Commonwealth's fractured timeline creates a CAPS economic bubble visible as a map anomaly. The Institute's temporal signature bleeds through.",
+  "fizz_lore": "X9-CAPS independently rediscovered Vault-Tec's original CAPS validation algorithm \u2014 proving the math was always in the machines. Every FIZZ token generated today traces a direct mathematical lineage to X9's equations.",
+  "notes": "X9-CAPS is designed to be morally sympathetic regardless of outcome chosen. The 'steal_algorithm' route provides the largest FIZZ reward but has significant karma and faction costs. The 'railroad_freedom' route provides the most FIZZ without full karma penalty, rewarding players aligned with synth liberation."
+}
