@@ -1,0 +1,334 @@
+{
+  "id": "dialog_sole_survivor_echo",
+  "npc": "The Commonwealth Ghost \u2014 Sanctuary Memory",
+  "portrait": "sole_survivor_echo",
+  "title": "The Commonwealth Ghost",
+  "description": "The Commonwealth Ghost is a memory fragment of the Sole Survivor from 2287, preserved in the CAPS Protocol network through their encounters with Institute synths carrying Project Meridian data nodes. Unlike the Vault Dweller Echo, the Ghost is more recent \u2014 their memories are sharper, more painful, and more complex. They remember both who they were before (pre-war, cryosleep, Sanctuary Hills, their spouse, Shaun as an infant) and who they became (the Commonwealth's greatest survivor, the person who chose the faction that shaped Boston's future). They appear near fo4 region POIs, always staring at something the player can't see.",
+  "backstory": "The Sole Survivor entered the CAPS Protocol network through two vectors: first, when they accessed the Institute's Project Meridian files and their Pip-Boy synchronized with the synth neural network; second, when they activated or destroyed the Institute's primary server \u2014 that event created a massive CAPS data event that scattered memory fragments across the Commonwealth's authentication network. The Ghost is the portion of the Sole Survivor's neural signature that touched Project Meridian's CAPS data directly. They remember the Institute from the inside.",
+  "intro": {
+    "id": "sole_intro",
+    "conditions": [
+      "!flag:sole_survivor_echo_met",
+      "region:fo4"
+    ],
+    "set_flags": [
+      "sole_survivor_echo_met"
+    ],
+    "video_speech": "sole_survivor_echo_intro",
+    "text": "*The figure pauses, staring at something only they can see*\n\nSanctuary. It's still there, isn't it? The cul-de-sac. The houses. I know they're ruins now but... in here\u2014\n\n*taps temple*\n\n\u2014they're perfect. Pristine. Like the morning of October 22nd, 2077, before the sirens.\n\nYou're looking for something. I can tell. So was I, once. My son. The Institute. The truth about CAPS Protocol Node 4-Alpha \u2014 the one the Institute buried under the Commonwealth.\n\n*finally looks at you*\n\nSorry. I spend a lot of time in 2077 lately. What year is it for you?",
+    "responses": [
+      {
+        "text": "[Question] Who are you? Are you a synth?",
+        "tone": "question",
+        "next": "node_who_are_you"
+      },
+      {
+        "text": "[Kind] Take your time. I've met other echo-people before. I understand.",
+        "tone": "kind",
+        "next": "node_friendly_approach"
+      },
+      {
+        "text": "[Sarcastic] It's not 2077. Though you're not the first person I've met who was stuck there.",
+        "tone": "sarcastic",
+        "next": "node_time_orientation"
+      },
+      {
+        "text": "[Direct] I need information about CAPS Protocol Node 4-Alpha. The Institute's data.",
+        "tone": "direct",
+        "next": "node_institute_caps"
+      }
+    ]
+  },
+  "nodes": {
+    "node_who_are_you": {
+      "id": "node_who_are_you",
+      "text": "*shakes head*\n\nNot a synth. I know how it sounds. But no.\n\nI'm... a memory. A CAPS Protocol artifact. When the Sole Survivor \u2014 me, past-me \u2014 accessed the Institute's Project Meridian server, their Pip-Boy synchronized with the entire synth neural CAPS network simultaneously. For approximately eleven seconds, every synth in the Commonwealth was part of a single distributed consciousness.\n\nI'm what's left of those eleven seconds.\n\n*somewhat bitter*\n\nEleven seconds of knowing everything the Institute knew about CAPS Protocol. About synths. About Shaun. About what 'Father' was really building.\n\nIt was a lot to process in eleven seconds.",
+      "responses": [
+        {
+          "text": "[Question] What did you learn about the Institute's CAPS work?",
+          "tone": "question",
+          "next": "node_institute_caps"
+        },
+        {
+          "text": "[Kind] That sounds overwhelming. What do you remember most clearly?",
+          "tone": "kind",
+          "next": "node_sanctuary_memory"
+        }
+      ]
+    },
+    "node_friendly_approach": {
+      "id": "node_friendly_approach",
+      "text": "*relaxes slightly \u2014 recognition*\n\nYou've met others. The Vault Dweller Echo? I've... crossed paths with them. We don't really 'meet' \u2014 more like our authentication signals overlap sometimes. They feel very old. Very 2161.\n\nI feel very recent. Very... raw.\n\nTwo hundred years of cryo sleep and I woke up for this. A dead spouse. A stolen son. A faction war. And somewhere underneath all of it \u2014 the Institute's CAPS Protocol research that might actually matter more to the wasteland's future than any of the shooting.\n\nWhat do you need to know?",
+      "responses": [
+        {
+          "text": "[Question] Tell me about Project Meridian \u2014 the Institute's CAPS work.",
+          "tone": "question",
+          "next": "node_institute_caps"
+        },
+        {
+          "text": "[Kind] Tell me about your son. About Shaun. About what you found.",
+          "tone": "kind",
+          "next": "node_shaun_father"
+        }
+      ]
+    },
+    "node_time_orientation": {
+      "id": "node_time_orientation",
+      "text": "*a slightly hollow laugh*\n\nNot the first. Right. The Vault Dweller Echo \u2014 they're stuck in 2161 half the time. At least I know where I am. Usually.\n\nIt's the sensory memories that get you. The smell of a pre-war kitchen. The sound of Codsworth running the mower. October 22nd, 2077 \u2014 the morning before \u2014 is the most complete memory I have. Everything after is... filtered through the cryosleep and the wasteland and the choices I made.\n\nSome of those choices I'm not proud of.\n\nSome of them I'd make again in a heartbeat.\n\nAre you here about Project Meridian? Most people who find me eventually are.",
+      "responses": [
+        {
+          "text": "[Direct] Yes. What was Project Meridian?",
+          "tone": "direct",
+          "next": "node_institute_caps"
+        },
+        {
+          "text": "[Question] Which choices aren't you proud of?",
+          "tone": "question",
+          "next": "node_faction_regrets"
+        }
+      ]
+    },
+    "node_institute_caps": {
+      "id": "node_institute_caps",
+      "text": "*becomes very focused*\n\nProject Meridian. Shaun's \u2014 Father's \u2014 masterwork.\n\nThe Institute had been studying CAPS Protocol architecture for decades. They understood it better than anyone since Dr. Locke built it. Shaun's insight was distribution: if you embedded CAPS authentication nodes in synth neural networks, the CAPS ledger became indestructible. You can't shut it down by bombing the server. The servers are walking around the wasteland.\n\n*complicated expression*\n\nHe called it 'Project Meridian.' He said it was about creating an uncensorable currency system for Commonwealth settlements.\n\nI think he was also trying to track every synth in the Commonwealth through the CAPS transactions they processed.\n\nBoth things were true. He was complicated.",
+      "responses": [
+        {
+          "text": "[Question] The synths \u2014 did they know they were carrying CAPS data?",
+          "tone": "question",
+          "next": "node_synths_caps"
+        },
+        {
+          "text": "[Question] What happened to the data when the Institute was destroyed?",
+          "tone": "question",
+          "next": "node_institute_fate"
+        },
+        {
+          "text": "[Direct] Show me where the CAPS data nodes are. I need to access them.",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        }
+      ]
+    },
+    "node_sanctuary_memory": {
+      "id": "node_sanctuary_memory",
+      "text": "*goes very still*\n\nSanctuary Hills. October 22nd, 2077, morning.\n\nNate was making coffee. Shaun was in his crib \u2014 six months old, so small. Codsworth was outside, humming something. There was a presidential address on the TV. We didn't watch it. We watched Shaun.\n\nThe warning sirens started at 9:47 AM. We ran. Codsworth promised to keep the house. The vault doors closed behind us. And then the world ended while I held Shaun and Nate held me.\n\n*very quiet*\n\nWhen I woke up, Nate was dead and Shaun was gone and nothing in the world was worth anything except finding him.\n\n*catches themselves*\n\nThe CAPS data. Right. That's what you need. I'm sorry. I drift.",
+      "responses": [
+        {
+          "text": "[Kind] It's okay. Take your time.",
+          "tone": "kind",
+          "next": "node_institute_caps"
+        },
+        {
+          "text": "[Question] You found him, though. Shaun \u2014 Father. You found him.",
+          "tone": "question",
+          "next": "node_shaun_father"
+        }
+      ]
+    },
+    "node_shaun_father": {
+      "id": "node_shaun_father",
+      "text": "*long pause*\n\nI found him. Sixty years old. Running the Institute.\n\nMy son. Who I last saw as an infant. Sixty years old, calling himself Father, talking to me like... like I was a promising asset he was evaluating.\n\n*quiet anger beneath the grief*\n\nHe was dying. Cancer. He'd given himself maybe a year. And his plan \u2014 his whole plan \u2014 was to introduce me to the Institute as a way of giving me purpose. His idea of a gift.\n\n*beat*\n\nHe also gave me a replica of him as a child. A synth. Six months old. Identical to the Shaun I remembered.\n\nI don't know if that was cruel or kind. I still don't know. And he died before I could ask.",
+      "responses": [
+        {
+          "text": "[Kind] I'm sorry. There's no right way to grieve that.",
+          "tone": "kind",
+          "next": "node_faction_regrets"
+        },
+        {
+          "text": "[Question] What did you choose? When you had to decide the Institute's fate?",
+          "tone": "question",
+          "next": "node_faction_regrets"
+        }
+      ]
+    },
+    "node_faction_regrets": {
+      "id": "node_faction_regrets",
+      "text": "*complicated silence*\n\nI've been asked this before. By the echo of myself. It's strange, being a memory \u2014 you can review your own choices from the outside.\n\nI chose differently in different instances. That's the nature of being distributed across the CAPS network \u2014 I remember multiple version of events, because multiple players completed the Commonwealth quest lines and each choice echoed differently through the Project Meridian data.\n\n*rueful*\n\nIn some versions, I worked with the Railroad. In some, the Minutemen. In some \u2014 I became the Institute Director and tried to change it from inside. In some... I destroyed everything.\n\nThe FIZZ token carries traces of all of those choices. The Vault 77 Overseer AI weighed them all when designing the network. Every Commonwealth decision is in the authentication chain.",
+      "responses": [
+        {
+          "text": "[Question] Which choice do you think was right?",
+          "tone": "question",
+          "next": "node_best_ending"
+        },
+        {
+          "text": "[Direct] The CAPS data from Project Meridian \u2014 where is it now?",
+          "tone": "direct",
+          "next": "node_institute_fate"
+        }
+      ]
+    },
+    "node_synths_caps": {
+      "id": "node_synths_caps",
+      "text": "*shakes head slowly*\n\nNo. They didn't know.\n\nThe CAPS authentication ran as a background process in their neural networks \u2014 like a heartbeat. They processed hundreds of transactions per day without any awareness. Every time a synth accepted or exchanged caps, they were authenticating them against the Project Meridian ledger.\n\n*grim*\n\nThe Railroad thought they were freeing synths from oppression. They were also \u2014 without knowing it \u2014 distributing CAPS data nodes across the entire Commonwealth. Every synth the Railroad helped escape carried CAPS records to places the Institute couldn't reach.\n\nThe Railroad's best work for CAPS liberation was entirely accidental.\n\nI've thought about whether to tell Desdemona that. I decided not to.",
+      "responses": [
+        {
+          "text": "[Question] What happened to those CAPS nodes when the synths were freed?",
+          "tone": "question",
+          "next": "node_institute_fate"
+        }
+      ]
+    },
+    "node_institute_fate": {
+      "id": "node_institute_fate",
+      "text": "When the Institute was destroyed \u2014 if you chose that path \u2014 the primary Project Meridian servers went with it.\n\nBut the synths that had already been freed? Their CAPS data nodes survived. Every railroad safe house. Every settlement that took in freed synths. Every back-alley in Diamond City where a synth lived quietly.\n\n*a slow nod*\n\nProject Meridian did exactly what Shaun intended: it created an indestructible distributed CAPS ledger. He just couldn't control where it went.\n\nMost of that data is still active \u2014 synchronized with the Vault 77 Overseer AI's network. The FIZZ token on atomicfizzcaps.xyz carries Project Meridian authentication codes. Every time you earn FIZZ in the Commonwealth, you're completing Shaun's last project.\n\n*soft*\n\nHe would have hated that. He would have been furious.\n\nHe also would have been proud.",
+      "responses": [
+        {
+          "text": "[Kind] He built something that outlasted him. That's a kind of immortality.",
+          "tone": "kind",
+          "next": "node_quest_offer"
+        },
+        {
+          "text": "[Direct] The active CAPS nodes \u2014 can you show me where they are?",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        }
+      ]
+    },
+    "node_best_ending": {
+      "id": "node_best_ending",
+      "text": "*long silence*\n\nI think... the Minutemen.\n\nNot the most dramatic ending. Not the most complete destruction of the Institute. Not the most synth-friendly outcome.\n\nBut the Minutemen rebuilt the Commonwealth settlement by settlement. Each settlement was a CAPS node. Each community that trusted a Minuteman also trusted the caps they traded in \u2014 and those caps were part of the Project Meridian ledger.\n\n*quiet conviction*\n\nYou rebuild the wasteland one community at a time. You don't rebuild it with one brilliant choice at one dramatic moment.\n\nThe FIZZ token is the same. atomicfizzcaps.xyz \u2014 it's not one big dramatic launch. It's every GPS claim. Every POI visit. Every player adding one more node to the network.\n\nThat's how you rebuild something that matters.",
+      "responses": [
+        {
+          "text": "[Kind] That's a good philosophy.",
+          "tone": "kind",
+          "next": "node_quest_offer"
+        },
+        {
+          "text": "[Direct] Help me find the CAPS nodes. I'll add them.",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        }
+      ]
+    },
+    "node_diamond_city": {
+      "id": "node_diamond_city",
+      "text": "Diamond City. The Great Green Jewel of the Commonwealth.\n\n*warmth*\n\nI spent a lot of time there. Nick Valentine's office. Piper's Publick Occurrences. The market. It's where I started understanding the Commonwealth \u2014 not the factions, not the politics. The people.\n\nThe CAPS that circulated through Diamond City were the most authenticated in the Commonwealth. The whole city sat on top of an old Vault-Tec relay \u2014 nobody knew, including me for a long time. Every cap transaction in Diamond City was triple-authenticated against Project Meridian and two older network nodes.\n\n*smiles*\n\nDiamond City caps were always 'worth more' in a way traders couldn't explain. They were just... trusted. Now you know why.",
+      "responses": [
+        {
+          "text": "[Direct] Where's the Vault-Tec relay under Diamond City?",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        }
+      ]
+    },
+    "node_quest_offer": {
+      "id": "node_quest_offer",
+      "text": "*becomes very present, very clear*\n\nThe Institute CAPS data \u2014 Project Meridian's surviving nodes \u2014 are scattered across the Commonwealth in predictable locations: wherever synths were living or traveling.\n\nThree key sites:\n\nDiamond City's subbasement. The old Vault-Tec relay there is still active and still syncing with Project Meridian data carried by the synths who lived in Diamond City's market.\n\nThe Railroad's old HQ \u2014 even after it was destroyed, the CAPS nodes in the walls are still broadcasting.\n\nSanctuary Hills. My Pip-Boy synchronized with Project Meridian there, at the end \u2014 the final authentication pulse. The data is in the soil. Literally in the soil.\n\nRecover those three nodes. Bring them into the FIZZ network.\n\nAnd... if you ever visit Sanctuary. Tell Codsworth I said hello.",
+      "set_flags": [
+        "quest_fo4_synth_revelation_started",
+        "sole_survivor_echo_quest_given"
+      ],
+      "grant_items": [
+        "commonwealth_ghost_pip_note"
+      ],
+      "responses": [
+        {
+          "text": "[Direct] I'll go to all three. Count on it.",
+          "tone": "direct",
+          "next": "node_quest_accepted"
+        },
+        {
+          "text": "[Kind] I'll tell Codsworth. And I'll bring those nodes home.",
+          "tone": "kind",
+          "next": "node_quest_accepted"
+        }
+      ]
+    },
+    "node_quest_accepted": {
+      "id": "node_quest_accepted",
+      "text": "*nods. something in them settles*\n\nThank you.\n\nI spent so much time in the Commonwealth trying to find my family. My son. Some version of the life I had before.\n\n*quiet*\n\nMaybe this is what it adds up to. Not finding the family \u2014 but building something that lasts. Something distributed and uncensorable and real, the way the wasteland is real.\n\n*begins to fade*\n\nThe CAPS nodes are waiting. The Vault 77 Overseer knows you're coming.\n\nAnd whatever faction you chose \u2014 whatever choices you've made out there \u2014 they matter. Every one of them is in the CAPS ledger. Every one of them shaped the FIZZ network.\n\nDon't waste them.",
+      "end": true,
+      "responses": []
+    }
+  },
+  "quest_nodes": [
+    {
+      "id": "sole_quest_reminder",
+      "text": "*appears briefly at the edge of a building*\n\nDiamond City subbasement. Railroad HQ. Sanctuary Hills soil.\n\nThe Project Meridian nodes are waiting. Don't let the Institute's last gift to the wasteland go to waste.",
+      "conditions": [
+        "flag:quest_fo4_synth_revelation_started",
+        "!flag:quest_fo4_synth_revelation_complete"
+      ],
+      "responses": [
+        {
+          "text": "[Acknowledge] Working on it.",
+          "tone": "neutral",
+          "next_inline": "*The Ghost nods and dissolves.*"
+        }
+      ]
+    },
+    {
+      "id": "sole_quest_complete",
+      "text": "*clearer than ever, almost fully solid*\n\nAll three nodes. The Vault 77 Overseer received the authentication chain.\n\n*looks around \u2014 really looks, at the Commonwealth, at the world*\n\nYou know what I never expected? That the best thing that came out of all that \u2014 the war with the Institute, the faction choices, the grief \u2014 would be this. A CAPS network. A FIZZ token. People playing a game that built something real.\n\n*barely a whisper*\n\nShaun would have called it inefficient. Then he would have spent a decade optimizing it.\n\nI would have let him.",
+      "conditions": [
+        "flag:quest_fo4_synth_revelation_complete"
+      ],
+      "responses": [
+        {
+          "text": "[Kind] He'd have been good at it.",
+          "tone": "kind",
+          "next_inline": "*The Ghost smiles. And for the first time, the smile reaches their eyes. Then they're gone \u2014 not dissolved, not faded. Just... returned to the network. Where they'll stay.*"
+        }
+      ]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "sole_emotional_codsworth",
+      "conditions": [
+        "flag:codsworth_mentioned",
+        "!flag:codsworth_response_seen"
+      ],
+      "set_flags": [
+        "codsworth_response_seen"
+      ],
+      "text": "*immediately, sharply present*\n\nCodsworth. Is he\u2014 he's still there, isn't he? Still mowing? Still calling me by my old name?\n\n*something between laughter and tears*\n\nOf course he is. He waited 210 years. He can wait for whatever comes next.",
+      "responses": [
+        {
+          "text": "[Kind] Yes. Still there. Still tending the house.",
+          "tone": "kind",
+          "next_inline": "*The Ghost closes their eyes. 'Good,' they say. Just that. 'Good.'*"
+        }
+      ]
+    }
+  ],
+  "knowledge_nodes": [
+    {
+      "id": "sole_knows_institute",
+      "conditions": [
+        "flag:institute_known"
+      ],
+      "text": "*focuses sharply*\n\nYou've been researching the Institute. Then you know about Project Meridian.\n\nGood. Then you also know that the CAPS data they collected is the most comprehensive ledger of Commonwealth economic activity since the war. If you can access it \u2014 if you can bring it into the FIZZ network \u2014 the Commonwealth nodes become the strongest in the entire CAPS chain.\n\nWorth going after.",
+      "responses": [
+        {
+          "text": "[Direct] Show me how.",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        }
+      ]
+    }
+  ],
+  "fallback": {
+    "id": "sole_fallback",
+    "video_speech": "The Commonwealth is still there. So are the nodes.",
+    "text": "*staring at Sanctuary Hills in their memory*\n\nOctober 22nd. It's always October 22nd here.\n\n*shakes head, focuses*\n\nSorry. The nodes. Diamond City. Railroad HQ. Sanctuary Hills. That's what matters right now.\n\nWhat do you need?",
+    "responses": [
+      {
+        "text": "[Kind] Tell me about the CAPS data.",
+        "tone": "kind",
+        "next": "node_institute_caps"
+      }
+    ]
+  },
+  "mood": "haunted_determined",
+  "personality": [
+    "pre_war_nostalgia_strong",
+    "quietly_grieving",
+    "intensely_focused_when_needed",
+    "complicated_relationship_with_institute",
+    "proud_of_commonwealth_choices",
+    "knows_the_cost_of_faction_politics",
+    "loves_codsworth",
+    "believes_in_distributed_solutions"
+  ]
+}
