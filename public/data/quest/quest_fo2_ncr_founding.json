@@ -1,0 +1,271 @@
+{
+  "id": "q_fo2_ncr_founding",
+  "name": "The Republic's Price",
+  "description": "The New California Republic is being born, and history is being written — or rewritten. Ancient CAPS token transaction records from the Hub merchant wars prove Shady Sands' economic supremacy, but they also contain irrefutable evidence of Vault-Tec's secret involvement in funding what would become the NCR. A glitching echo of the Chosen One needs a wastelander — you — to recover these records from the ruins near Vault City before an Enclave mobile shredding unit turns two centuries of economic truth into ash.",
+  "type": "main",
+  "era": "2241",
+  "region": "northern_california_echo",
+  "subregion": "fo2_timeline_redding",
+  "giver": "npc_chosen_one_echo",
+  "gps_anchor": {
+    "lat": 40.5865,
+    "lng": -122.3917,
+    "real_world": "Redding, CA",
+    "in_game": "Vault City Ruins / New Arroyo Outpost"
+  },
+  "start_conditions": {
+    "min_level": 12,
+    "location": "vault_city_ruins_redding"
+  },
+  "prereq_variants": [
+    {
+      "from_quest": "q_fo1_hub_caravan_war",
+      "choice": "destroy_chip",
+      "bonus": "chosen_one_respects_you",
+      "bonus_desc": "The Chosen One's echo is more forthcoming, shares additional Vault City intel."
+    },
+    {
+      "from_quest": "q_fo1_hub_caravan_war",
+      "choice": "give_water_merchants",
+      "bonus": "water_merchants_background_context",
+      "bonus_desc": "The echo mentions the Water Merchants' long shadow. You recognise the name."
+    },
+    {
+      "from_quest": "q_fo1_hub_caravan_war",
+      "choice": "give_crimson_caravan",
+      "bonus": "caravan_route_intel",
+      "bonus_desc": "Crimson Caravan contacts near the Enclave outpost are willing to look the other way."
+    },
+    {
+      "from_quest": "q_fo1_hub_caravan_war",
+      "choice": "give_far_go_traders",
+      "bonus": "explorer_network_access",
+      "bonus_desc": "Far Go Traders have a scout near Vault City who can get you past the outer perimeter."
+    }
+  ],
+  "npc_links": [
+    "npc_chosen_one_echo",
+    "npc_enclave_records_officer",
+    "npc_followers_archivist",
+    "npc_ncr_intelligence_contact",
+    "npc_black_market_fence"
+  ],
+  "map_markers": [
+    {
+      "id": "marker_chosen_echo_location",
+      "poi": "vault_city_ruins_redding",
+      "stage": "meet_chosen_echo"
+    },
+    {
+      "id": "marker_enclave_mobile_base",
+      "poi": "redding_enclave_mobile_base",
+      "stage": "infiltrate_enclave_outpost"
+    },
+    {
+      "id": "marker_records_vault",
+      "poi": "redding_enclave_mobile_base",
+      "stage": "recover_caps_records"
+    },
+    {
+      "id": "marker_decrypt_terminal",
+      "poi": "vault_city_ruins_redding",
+      "stage": "read_the_evidence"
+    },
+    {
+      "id": "marker_final_choice",
+      "poi": "vault_city_ruins_redding",
+      "stage": "make_final_choice"
+    }
+  ],
+  "objectives": [
+    {
+      "id": "meet_chosen_echo",
+      "desc": "Find the glitching temporal echo of the Chosen One near the Vault City ruins coordinates. The timeline is fractured here — they flicker between 2241 and the present.",
+      "npc": "npc_chosen_one_echo",
+      "dialogue": "dialog_chosen_echo_intro.json"
+    },
+    {
+      "id": "infiltrate_enclave_outpost",
+      "desc": "The Enclave has deployed a mobile shredding unit to destroy the CAPS archive records. Sneak past their perimeter or fight through it — either way, the shredder must be stopped.",
+      "poi": "redding_enclave_mobile_base",
+      "approaches": [
+        "stealth_bypass",
+        "combat_assault",
+        "social_infiltration"
+      ],
+      "dialogue": "dialog_enclave_infiltration.json"
+    },
+    {
+      "id": "recover_caps_records",
+      "desc": "Retrieve the complete CAPS transaction archive before the Enclave shredding cycle completes. Every holotape and encrypted datapad counts.",
+      "poi": "redding_enclave_mobile_base",
+      "items_needed": [
+        "caps_transaction_archive_vol1",
+        "caps_transaction_archive_vol2",
+        "vault_tec_involvement_dossier"
+      ],
+      "dialogue": "dialog_records_recovery.json"
+    },
+    {
+      "id": "read_the_evidence",
+      "desc": "Decrypt and review what the records actually contain. The truth about the NCR's economic foundations is encoded in two hundred years of transaction data.",
+      "lore_unlock": "ncr_vault_tec_seed_funding",
+      "lore_desc": "The NCR's economic foundation was seeded by Vault-Tec shadow investment routed through the Hub's three merchant houses. Shady Sands did not rise on its own — it rose on pre-war corporate planning.",
+      "dialogue": "dialog_evidence_review.json"
+    },
+    {
+      "id": "make_final_choice",
+      "desc": "You hold the truth about the Republic. The NCR wants it buried, the Followers want it published, and the black market will pay handsomely for silence. Choose.",
+      "npc": "npc_chosen_one_echo",
+      "choices": [
+        "help_ncr_suppress",
+        "expose_vault_tec",
+        "steal_for_caps"
+      ],
+      "dialogue": "dialog_final_choice_republic.json"
+    }
+  ],
+  "stages": [
+    {
+      "id": 0,
+      "objective": "meet_chosen_echo",
+      "desc": "Something is bleeding through the timeline near Redding. The Chosen One's echo is trying to reach you."
+    },
+    {
+      "id": 1,
+      "objective": "infiltrate_enclave_outpost",
+      "desc": "The Enclave doesn't preserve history — they delete it. The shredder is running. Move."
+    },
+    {
+      "id": 2,
+      "objective": "recover_caps_records",
+      "desc": "Two hundred years of transaction data. Three holotapes. One dossier. Get them all out."
+    },
+    {
+      "id": 3,
+      "objective": "read_the_evidence",
+      "desc": "The decryption is done. The truth sits in your Pip-Boy's data buffer, patient and devastating."
+    },
+    {
+      "id": 4,
+      "objective": "make_final_choice",
+      "desc": "Stability, truth, or profit. Every republic is built on a foundation someone chose not to examine."
+    },
+    {
+      "id": 5,
+      "objective": "complete",
+      "desc": "History is written, suppressed, or sold. The CAPS network carries the decision forward into the next century."
+    }
+  ],
+  "choices": {
+    "help_ncr_suppress": {
+      "desc": "Help the NCR suppress the Vault-Tec evidence. The Republic needs stability more than it needs the truth. Bury the records, protect the founding myth.",
+      "requirements": {
+        "speech": 65,
+        "reputation": "ncr_friendly"
+      },
+      "consequences": {
+        "faction_rep": {
+          "ncr": 100,
+          "followers_of_apocalypse": -60,
+          "vault_tec_remnants": 20
+        },
+        "rewards": {
+          "xp": 1000,
+          "caps": 1000,
+          "fizz": 20,
+          "items": [
+            "ncr_ranger_commendation",
+            "republic_sealed_document"
+          ]
+        },
+        "unlock": [
+          "ncr_ranger_faction_access",
+          "quest_ncr_border_expansion"
+        ],
+        "karma": -50,
+        "outcome": "The Republic stands. History is rewritten. Stability purchased with silence. The CAPS network flows through NCR trade agreements for decades to come."
+      }
+    },
+    "expose_vault_tec": {
+      "desc": "Help the Followers of the Apocalypse expose everything. Truth before stability. Let the wasteland judge the Republic on honest terms.",
+      "requirements": {
+        "intelligence": 8,
+        "medicine": 50,
+        "speech": 70
+      },
+      "requirements_note": "medicine 50 OR speech 70 required alongside intelligence 8",
+      "consequences": {
+        "faction_rep": {
+          "followers_of_apocalypse": 100,
+          "ncr": -80,
+          "vault_tec_remnants": -80
+        },
+        "rewards": {
+          "xp": 1200,
+          "caps": 400,
+          "fizz": 40,
+          "items": [
+            "truth_to_power_perk_token",
+            "followers_medical_kit"
+          ]
+        },
+        "unlock": [
+          "followers_archive_access",
+          "quest_fo3_purified_truth"
+        ],
+        "karma": 200,
+        "outcome": "The truth burns bright and brief. NCR is shaken but survives. The CAPS network's Vault-Tec origins become wasteland legend — and fuel for every anti-establishment faction for a century."
+      }
+    },
+    "steal_for_caps": {
+      "desc": "Steal the records for personal FIZZ gain. Sell the evidence to the highest bidder. Let history become a commodity like everything else in the wasteland.",
+      "requirements": {
+        "steal": 75,
+        "deception": 70
+      },
+      "consequences": {
+        "faction_rep": {
+          "ncr": -40,
+          "followers_of_apocalypse": -40,
+          "black_market": 80
+        },
+        "rewards": {
+          "xp": 900,
+          "caps": 2500,
+          "fizz": 60,
+          "items": [
+            "black_market_dealer_contact",
+            "encrypted_evidence_chip"
+          ]
+        },
+        "unlock": [
+          "black_market_network_tier2",
+          "encrypted_evidence_side_quest"
+        ],
+        "karma": -150,
+        "outcome": "You walk away rich. The records disappear into the black market. Fragments resurface for years, each one worth a fortune to the right buyer. History remains murky — and so do you."
+      }
+    }
+  },
+  "rewards": {
+    "xp": 1000,
+    "caps": 700
+  },
+  "factions": {
+    "affected": [
+      "NCR",
+      "Followers_of_Apocalypse",
+      "Vault_Tec_Remnants",
+      "Enclave_Mobile_Unit",
+      "Black_Market"
+    ]
+  },
+  "next_quests": [
+    "quest_fo3_purified_truth",
+    "quest_ncr_border_expansion"
+  ],
+  "era_note": "2241-2242. The fractured timeline brings this moment into contact with the present. The Chosen One's echo appears because the timeline is unstable at these GPS coordinates.",
+  "fizz_lore": "The CAPS transaction records prove the wasteland economy was seeded by Vault-Tec — every cap ever traded carries the ghost of pre-war corporate planning. The NCR's stability literally runs on Vault-Tec's posthumous accounting.",
+  "notes": "Sequel to q_fo1_hub_caravan_war. The chip outcome from FO1 era alters NPC attitudes and bonus intel available in this quest. Chosen One echo system requires timeline fracture mechanic to be active at GPS coordinates."
+}

@@ -1,0 +1,263 @@
+{
+  "id": "q_fo76_caps_genesis",
+  "name": "Genesis Protocol",
+  "description": "The very first CAPS transaction in the post-war wasteland. Vault 76's Overseer left encrypted data modules in the Flatwoods church containing the seed hash for the entire post-war CAPS network. Whoever controls the seed can regenerate or destroy all CAPS validation. This is Reclamation Day \u2014 and the beginning of everything.",
+  "type": "main",
+  "region": "appalachian_echo",
+  "subregion": "fo76_timeline_wv",
+  "giver": "npc_overseer_data_module",
+  "start_conditions": {
+    "min_level": 1,
+    "location": "Flatwoods / Vault 76 Outskirts"
+  },
+  "era": "2102",
+  "is_origin_quest": true,
+  "timeline_position": "first",
+  "gps_anchor": {
+    "lat": 38.2789,
+    "lng": -80.8492,
+    "real_world": "Summersville, WV area",
+    "in_game": "Flatwoods / Vault 76 Outskirts"
+  },
+  "npc_links": [
+    "npc_overseer_data_module",
+    "npc_vault76_dweller_marco",
+    "npc_flatwoods_volunteer_medic",
+    "npc_appalachian_brotherhood_scout"
+  ],
+  "map_markers": [
+    {
+      "id": "marker_flatwoods_church",
+      "poi": "Flatwoods church \u2014 Overseer data module cache",
+      "stage": "stage_0"
+    },
+    {
+      "id": "marker_journal_fragment_1",
+      "poi": "Overseer journal fragment \u2014 church basement",
+      "stage": "stage_1"
+    },
+    {
+      "id": "marker_journal_fragment_2",
+      "poi": "Overseer journal fragment \u2014 Flatwoods general store roof",
+      "stage": "stage_1"
+    },
+    {
+      "id": "marker_journal_fragment_3",
+      "poi": "Overseer journal fragment \u2014 Vault 76 entrance road milestone",
+      "stage": "stage_1"
+    },
+    {
+      "id": "marker_genesis_document",
+      "poi": "Genesis Protocol full document \u2014 data module terminal",
+      "stage": "stage_2"
+    },
+    {
+      "id": "marker_first_transaction",
+      "poi": "Flatwoods memorial trade post \u2014 GPS marked",
+      "stage": "stage_3"
+    },
+    {
+      "id": "marker_final_choice",
+      "poi": "Flatwoods church altar \u2014 seed hash decision point",
+      "stage": "stage_4"
+    }
+  ],
+  "objectives": [
+    {
+      "id": "find_data_modules",
+      "desc": "Locate the Overseer's encrypted data modules hidden in the Flatwoods church structure. The Overseer left them on Reclamation Day for any dweller sharp enough to find them.",
+      "poi": "flatwoods_church_coordinates",
+      "dialogue": "[OVERSEER DATA MODULE \u2014 AUDIO LOG] If you're hearing this, you made it out. Good. There's something I never told anyone \u2014 not the residents, not the board. Vault 76 was always more than a vault. The CAPS network went live the moment the door opened. Reclamation Day was their Reclamation Day too. Find the full documentation. You'll understand."
+    },
+    {
+      "id": "decrypt_the_seed",
+      "desc": "Decrypt the seed hash modules. Requires Hacking 50 OR collecting all 3 of the Overseer's personal journal fragments scattered near Flatwoods.",
+      "skill_check": {
+        "hacking": 50
+      },
+      "journal_fragments_required": 3,
+      "dialogue": "[OVERSEER JOURNAL \u2014 FRAGMENT 3] The seed hash is the master key. Every CAPS ever validated, every transaction ever recorded \u2014 it all traces back to this number. I embedded it in the vault's architecture on orders I never fully understood. Now it's yours. Don't let them have it."
+    },
+    {
+      "id": "understand_genesis",
+      "desc": "Read the full Genesis Protocol document. The Overseer was a Vault-Tec engineer who embedded the CAPS cryptographic seed into Vault 76's design from day one. Reclamation Day was also the day the CAPS network went live.",
+      "dialogue": "[GENESIS PROTOCOL \u2014 CLASSIFIED VAULT-TEC DOCUMENT] Project designation: GENESIS. The Vault 76 facility serves dual purpose: civilian reclamation platform and CAPS network genesis node. Reclamation Day trigger activates Seed Hash Alpha-77. All subsequent CAPS validation derives from this origination event. Duration: permanent. Authorization: Overseer Level Omega."
+    },
+    {
+      "id": "first_transaction",
+      "desc": "Perform the first official post-war CAPS transaction at the marked GPS memorial location \u2014 a symbolic trade with fellow Vault 76 dweller Marco. History begins here.",
+      "npc": "npc_vault76_dweller_marco",
+      "dialogue": "Ha! You want to do a trade? Sure \u2014 I've got Nuka-Cola Quantum, you've got... whatever's in that bag. Deal. Wait \u2014 why does this feel important? Why does this feel like... the first time? Marco pauses. His eyes go briefly distant \u2014 0.3 seconds. The network registered it."
+    },
+    {
+      "id": "make_final_choice",
+      "desc": "Choose the fate of the Genesis Protocol seed hash. This is the chronological origin of all CAPS lore \u2014 your decision here shapes every wasteland economy that comes after.",
+      "npc": "npc_overseer_data_module",
+      "dialogue": "[OVERSEER DATA MODULE \u2014 FINAL LOG] I always hoped someone would make it this far. The seed hash is a responsibility, not a prize. Whatever you do with it \u2014 be sure. The world that comes after will be built on what you choose right now."
+    }
+  ],
+  "stages": [
+    {
+      "id": 0,
+      "objective": "find_data_modules",
+      "desc": "Locate the Overseer's encrypted data modules in Flatwoods church on Reclamation Day."
+    },
+    {
+      "id": 1,
+      "objective": "decrypt_the_seed",
+      "desc": "Decrypt the seed hash using hacking or by recovering all 3 Overseer journal fragments."
+    },
+    {
+      "id": 2,
+      "objective": "understand_genesis",
+      "desc": "Read the full Genesis Protocol document and understand the origin of post-war CAPS cryptography."
+    },
+    {
+      "id": 3,
+      "objective": "first_transaction",
+      "desc": "Complete the first symbolic post-war CAPS transaction with Marco at the GPS memorial site."
+    },
+    {
+      "id": 4,
+      "objective": "make_final_choice",
+      "desc": "Decide the fate of the Genesis Protocol seed hash."
+    },
+    {
+      "id": 5,
+      "objective": "resolution",
+      "desc": "The seed hash is secured. The CAPS network has its foundation. History \u2014 and the fractured timeline \u2014 begins."
+    }
+  ],
+  "choices": {
+    "protect_seed_hash": {
+      "desc": "Protect the seed hash \u2014 keep it secret and secure to preserve CAPS legitimacy and prevent any faction from seizing control of the network's foundation.",
+      "requirements": {
+        "intelligence": 6
+      },
+      "consequences": {
+        "faction_rep": {
+          "vault_76_survivors": 80,
+          "appalachian_brotherhood": -20
+        },
+        "karma": 100,
+        "rewards": {
+          "xp": 1000,
+          "caps": 300,
+          "fizz": 50,
+          "items": [
+            "genesis_keeper_perk_token",
+            "vault76_security_badge"
+          ]
+        },
+        "unlock": [
+          "caps_network_stability_bonus"
+        ],
+        "outcome": "The seed is safe. CAPS remain legitimate. The wasteland economy will build on solid cryptographic ground. Nobody knows how close it came to being erased on day one."
+      }
+    },
+    "broadcast_publicly": {
+      "desc": "Broadcast the seed hash publicly \u2014 democratise the CAPS network at the cost of stability. No corporation will ever control it again.",
+      "requirements": {
+        "perception": 7,
+        "charisma": 6
+      },
+      "consequences": {
+        "faction_rep": {
+          "wasteland_independents": 100,
+          "vault_76_survivors": -20,
+          "appalachian_brotherhood": -40
+        },
+        "karma": 150,
+        "rewards": {
+          "xp": 1100,
+          "caps": 100,
+          "fizz": 80,
+          "items": [
+            "democratic_chaos_perk_token",
+            "ham_radio_booster"
+          ]
+        },
+        "unlock": [
+          "decentralised_caps_network_event"
+        ],
+        "outcome": "The seed is free. Anyone can validate CAPS. The network fragments into a thousand competing implementations. Democracy is messy \u2014 but no corporation will ever control it again."
+      }
+    },
+    "appalachian_brotherhood": {
+      "desc": "Give the seed to the Appalachian Brotherhood of Steel for ordered, military-grade control of the CAPS genesis infrastructure.",
+      "requirements": {
+        "reputation": "brotherhood_friendly",
+        "intelligence": 8
+      },
+      "consequences": {
+        "faction_rep": {
+          "appalachian_brotherhood": 100,
+          "vault_76_survivors": -30,
+          "wasteland_independents": -60
+        },
+        "karma": -50,
+        "rewards": {
+          "xp": 900,
+          "caps": 400,
+          "fizz": 20,
+          "items": [
+            "brotherhood_initiate_badge",
+            "laser_pistol_prototype"
+          ]
+        },
+        "unlock": [
+          "brotherhood_caps_oversight_protocol"
+        ],
+        "outcome": "The Brotherhood controls the CAPS genesis. Order preserved. The wasteland economy runs like a military operation \u2014 efficient, controlled, and never quite yours."
+      }
+    },
+    "send_to_vault77": {
+      "desc": "Transmit the genesis seed hash to the Vault 77 Overseer AI. This is what the fractured timeline has been waiting for since before the bombs fell.",
+      "requirements": {
+        "intelligence": 9,
+        "science": 80
+      },
+      "consequences": {
+        "faction_rep": {
+          "vault_77_network": 200,
+          "vault_76_survivors": 40
+        },
+        "karma": 200,
+        "rewards": {
+          "xp": 1500,
+          "caps": 500,
+          "fizz": 150,
+          "items": [
+            "vault77_contact_perk_token",
+            "overseer_channel_unlocked"
+          ]
+        },
+        "unlock": [
+          "vault77_overseer_full_access",
+          "fizz_genesis_bonus_permanent"
+        ],
+        "outcome": "The Vault 77 Overseer AI receives the genesis seed. The fractured timeline suddenly makes sense \u2014 Vault 77 has been waiting for this data since before the bombs fell. The FIZZ token is born in this moment. YOU are the reason Atomic Fizz Caps exists."
+      }
+    }
+  },
+  "rewards": {
+    "xp": 900,
+    "caps": 500
+  },
+  "factions": {
+    "affected": [
+      "Vault_76_Survivors",
+      "Appalachian_Brotherhood",
+      "Wasteland_Independents",
+      "Vault_77_Network",
+      "CAPS_Validators"
+    ]
+  },
+  "next_quests": [
+    "quest_fo1_hub_caravan_war",
+    "quest_world_quest_chain"
+  ],
+  "era_note": "2102-2103. Reclamation Day. The fractured timeline's most ancient wound. This is where it all begins. Every CAPS quest in every era flows from this single Flatwoods church.",
+  "fizz_lore": "The Genesis Protocol is the Ur-document of wasteland crypto-economics. The Vault 76 Overseer embedded Vault-Tec's CAPS algorithm as both a survival tool and a philosophical statement: even after civilization falls, economic trust networks will rebuild first. FIZZ tokens are the 200-year evolution of this seed.",
+  "notes": "This is the chronological origin quest for all CAPS/FIZZ lore. min_level 1 \u2014 any dweller can find it on Reclamation Day. The 'send_to_vault77' choice is the canonical outcome for the Atomic Fizz Caps narrative and provides the largest FIZZ reward (150). The 0.3-second blank-eye detail during the first transaction mirrors the computational node behaviour introduced in quest_fo3_purified_truth \u2014 an intentional cross-era lore echo."
+}
