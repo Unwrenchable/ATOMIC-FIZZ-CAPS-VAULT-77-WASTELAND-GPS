@@ -34,10 +34,13 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
       });
     }
 
-    // BUG-002 FIX: acquire a per-wallet NX lock before the read-modify-write
-    // to prevent a race condition where two simultaneous requests both pass the
-    // nftIndex check and both receive scrap rewards for the same NFT.
-    const scrapLockKey = key(`scrap:lock:${walletAddress}`);
+    // BUG-048 FIX: use a per-NFT lock key (wallet + mint address) instead of a
+    // per-wallet lock.  The original per-wallet lock prevented ALL scrap operations
+    // for 15 seconds — even for unrelated NFTs — while only one was in flight.
+    // Using wallet+mint as the lock key prevents double-scrap of the same NFT while
+    // allowing concurrent scraps of *different* NFTs, eliminating the unnecessary
+    // serialization that was causing support tickets.
+    const scrapLockKey = key(`scrap:lock:${walletAddress}:${nftMint}`);
     const lock = await redis.set(scrapLockKey, "1", { NX: true, EX: 15 });
     if (!lock) {
       return res.status(409).json({ error: "Scrap already in progress — try again shortly" });
@@ -112,7 +115,7 @@ router.post("/", authMiddleware, scrapLimiter, async (req, res) => {
     }), { EX: SCRAP_LOG_TTL_SECONDS }); // set with TTL atomically
 
     res.json({
-      success: true,
+      ok: true,
       message: `Successfully scrapped ${nft.name || 'NFT'}`,
       scrapValue,
       newResources: player.scrapResources,

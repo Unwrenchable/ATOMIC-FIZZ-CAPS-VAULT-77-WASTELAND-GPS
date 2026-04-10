@@ -19,7 +19,11 @@
   // CONFIG
   // ------------------------------------------------------------
   const TICK_INTERVAL = 5000; // 5 seconds per world tick
-  const ENCOUNTER_CHANCE = 0.55; // 55% chance per tick — high for testing/launch visibility
+  // BUG-037 FIX: Reduced from 0.55 (55% — testing/high-visibility value) to 0.07
+  // (7% per tick) for a production-appropriate encounter rate of ~1 per 71 seconds.
+  // At 0.55 players were in back-to-back combat every ~9 seconds, making normal
+  // GPS exploration, trading, and quest work impossible.
+  const ENCOUNTER_CHANCE = 0.07; // 7% per tick ≈ 1 encounter per ~71 seconds
   const ENCOUNTER_COOLDOWN_MS = 20000; // 20 s cooldown between same-key encounters
 
   // _dynamicEncounterChance can be overridden at runtime by admin tools
@@ -272,13 +276,37 @@
   // ------------------------------------------------------------
   // Start Loop
   // ------------------------------------------------------------
+  let _loopIntervalId = null;
+
   function start() {
-    setInterval(worldTick, TICK_INTERVAL);
+    if (_loopIntervalId !== null) return; // already running
+    _loopIntervalId = setInterval(worldTick, TICK_INTERVAL);
+  }
+
+  function stopLoop() {
+    if (_loopIntervalId !== null) {
+      clearInterval(_loopIntervalId);
+      _loopIntervalId = null;
+    }
+  }
+
+  // Pause world-tick when the page is hidden to avoid burning CPU/battery
+  // while the player isn't actively in the game.
+  if (!window._gameLoopVisibilityBound) {
+    window._gameLoopVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        stopLoop();
+      } else {
+        start();
+      }
+    });
   }
 
   // Expose globally
   window.overseerGameLoop = {
     start,
+    stop: stopLoop,
     setEncounterChance(rate) {
       // Allow admin tools and test harnesses to override the encounter chance
       // at runtime without a page reload.  Rate should be a float in [0, 1].

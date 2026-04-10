@@ -5,7 +5,7 @@
 // ------------------------------------------------------------
 
 const nacl = require("tweetnacl");
-const bs58 = require("bs58");
+const { decode: bs58decode } = require("./safe-base58");
 
 function verifySignature({ publicKey, message, signature }) {
   // Validate input types and lengths before decoding to prevent DoS via huge inputs.
@@ -16,9 +16,9 @@ function verifySignature({ publicKey, message, signature }) {
   if (typeof signature !== "string" || signature.length < 85 || signature.length > 90) return false;
 
   try {
-    const pubKeyBytes = bs58.decode(publicKey);
+    const pubKeyBytes = bs58decode(publicKey);
     const msgBytes = Buffer.from(message);
-    const sigBytes = bs58.decode(signature);
+    const sigBytes = bs58decode(signature);
 
     return nacl.sign.detached.verify(msgBytes, sigBytes, pubKeyBytes);
   } catch (err) {

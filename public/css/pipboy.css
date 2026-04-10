@@ -1197,6 +1197,38 @@ input[type="reset"]:hover {
   white-space: pre-wrap;
 }
 
+.nova-guide-dismiss {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: rgba(0,255,65,0.5);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0 0 4px;
+  flex-shrink: 0;
+}
+
+.nova-guide-dismiss:hover {
+  color: #ff4444;
+}
+
+/* On mobile: pin the Nova-7 panel to the top-right corner so it never
+   sits over the sticky "ENTER VAULT" footer or blocks touch-scroll targets */
+@media (max-width: 600px) {
+  .nova-guide-panel {
+    position: fixed;
+    top: 56px;
+    right: 8px;
+    bottom: auto;
+    left: auto;
+    width: 160px;
+    font-size: 10px;
+    padding: 6px 8px;
+    z-index: 10002;
+  }
+}
+
 /* ============================================================
    DEV MODE + GLITCH EFFECTS
    ============================================================ */

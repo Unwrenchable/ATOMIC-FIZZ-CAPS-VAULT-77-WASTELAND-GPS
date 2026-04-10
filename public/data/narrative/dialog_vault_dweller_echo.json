@@ -1,0 +1,349 @@
+{
+  "id": "dialog_vault_dweller_echo",
+  "npc": "The First Echo \u2014 Vault 13 Memory",
+  "portrait": "vault_dweller_echo",
+  "title": "The Vault Dweller Echo",
+  "description": "The First Echo is a fragmented consciousness \u2014 a distributed memory of the original Vault Dweller from 2161, scattered across the CAPS Protocol network. They appear near fo1_2 region POIs as a semi-corporeal holographic shimmer, speaks in fragmented sentences as their memories splice between 2161 and the present. They are confused, earnest, and carry knowledge of the pre-war caps that no living person should possess. Sometimes they think they're still in Vault 13. Sometimes they think they're in the Hub. They are always slightly wrong about where they are \u2014 but never wrong about the caps.",
+  "backstory": "The original Vault Dweller left Vault 13 in 2161 to find a water chip. What nobody recorded \u2014 and what the CAPS Protocol preserved \u2014 was that their Pip-Boy carried the last authenticated copy of Vault 77's master ledger. When the Vault Dweller accessed Hub trading terminals, that ledger synchronized with every cap in Southern California. The consciousness fragment left behind is less a ghost than a standing wave \u2014 a pattern that repeats wherever CAPS Protocol energy is strong.",
+  "intro": {
+    "id": "echo_intro",
+    "conditions": [
+      "!flag:vault_dweller_echo_met",
+      "region:fo1_2"
+    ],
+    "set_flags": [
+      "vault_dweller_echo_met"
+    ],
+    "video_speech": "vault_dweller_echo_intro",
+    "text": "...Water chip... must find... No. Wait. You're not from Vault 13.\n\n*blinks, confused*\n\nSorry. I... get confused sometimes. The memories aren't always mine. Or they're all mine \u2014 from times I don't remember living.\n\n*looks at their hands \u2014 they're slightly translucent*\n\nI know things about the old days. Before everything. About the caps \u2014 the real ones, with the little marks on the inside.\n\nAre you... are you one of the new vault people? From the GPS vaults?",
+    "responses": [
+      {
+        "text": "[Question] What are you? You look... partially there.",
+        "tone": "question",
+        "next": "node_what_are_you"
+      },
+      {
+        "text": "[Kind] Easy. Take your time. I'm not from Vault 13, but I'm not a threat.",
+        "tone": "kind",
+        "next": "node_friendly_greeting"
+      },
+      {
+        "text": "[Sarcastic] Water chip? That was 135 years ago. You're a little late.",
+        "tone": "sarcastic",
+        "next": "node_time_confusion"
+      },
+      {
+        "text": "[Direct] I need information about the CAPS Protocol. Do you know about it?",
+        "tone": "direct",
+        "next": "node_caps_direct"
+      }
+    ]
+  },
+  "nodes": {
+    "node_what_are_you": {
+      "id": "node_what_are_you",
+      "text": "*flickers slightly*\n\nI'm a... memory? A pattern? The CAPS Protocol stores more than transaction data \u2014 it stores the neural signatures of people who were deeply integrated with it.\n\nThe original Vault Dweller. That's... me, I think. Was me. The part of them that touched every cap terminal in Southern California. When their Pip-Boy synchronized with the Hub network, some part of their mind uploaded. I'm that part.\n\n*confused pause*\n\nIt's strange, being a fragment. I remember everything about 2161. But sometimes I also remember things that haven't happened yet. The FIZZ token. Vault 77. atomicfizzcaps.xyz.\n\nHow does the CAPS Protocol know about those if they're in your future?",
+      "responses": [
+        {
+          "text": "[Question] What do you remember about Vault 13?",
+          "tone": "question",
+          "next": "node_vault13_memories"
+        },
+        {
+          "text": "[Kind] You're part of the CAPS ledger. You're preserved because you mattered to it.",
+          "tone": "kind",
+          "next": "node_caps_connection"
+        },
+        {
+          "text": "[Question] Tell me about the Hub and the caps you saw there.",
+          "tone": "question",
+          "next": "node_hub_caps"
+        }
+      ]
+    },
+    "node_friendly_greeting": {
+      "id": "node_friendly_greeting",
+      "text": "*settles somewhat, the flickering slows*\n\nThank you. It helps when people are calm. The memory gets clearer.\n\nI've been drifting between locations in this region for... I don't know how long. Time is strange when you're made of CAPS data. Each cap transaction pulls part of me toward it \u2014 I can feel the authentication pulses.\n\nSome of what I know is from 2161. Some is from... future echoes? The CAPS ledger reaches forward as well as backward. I've seen glimpses of FIZZ tokens and a game \u2014 a real game, with GPS and Pip-Boys and a wasteland to explore.\n\nAre you one of the players?",
+      "responses": [
+        {
+          "text": "[Kind] Yes, I am. And you have information I need.",
+          "tone": "kind",
+          "next": "node_caps_direct"
+        },
+        {
+          "text": "[Question] What do you know about the CAPS Protocol from 2161?",
+          "tone": "question",
+          "next": "node_hub_caps"
+        }
+      ]
+    },
+    "node_time_confusion": {
+      "id": "node_time_confusion",
+      "text": "*blinks*\n\n135 years. Really.\n\n*pause*\n\nI found the water chip. I should tell you \u2014 I found it. The Vault survived. There was... a supermutant army, and a military base, and a cathedral, and\u2014 \n\n*short-circuits*\n\n...sorry. When I remember too much at once, it fragments. The Hub is... real? Is the Hub still there? The merchants? Crimson Caravan?\n\n*clears somewhat*\n\nNo. I know they're not. I know things have changed. I just keep... going back.",
+      "responses": [
+        {
+          "text": "[Kind] The Hub is ruins now. But the caps from there? Still authenticated. Still worth something.",
+          "tone": "kind",
+          "next": "node_hub_caps"
+        },
+        {
+          "text": "[Question] Tell me about what you saw at the Hub. The caps specifically.",
+          "tone": "question",
+          "next": "node_hub_caps"
+        }
+      ]
+    },
+    "node_caps_direct": {
+      "id": "node_caps_direct",
+      "text": "CAPS Protocol.\n\n*sharpens dramatically \u2014 this is what they know best*\n\nYes. I know about it. Better than anyone living, probably. I touched every cap terminal in Southern California in 2161. I didn't know what I was doing \u2014 I was just trading, finding the water chip, surviving.\n\nBut the terminals knew. When my Pip-Boy synchronized with the Hub's systems \u2014 I felt something. A vast network reaching back, and forward, and sideways through time. All authenticated. All connected.\n\nThose caps weren't just currency. They were nodes in the most resilient data system ever built. And the FIZZ token you carry is the direct descendant of that system.",
+      "responses": [
+        {
+          "text": "[Question] How did the CAPS Protocol work in 2161?",
+          "tone": "question",
+          "next": "node_hub_caps"
+        },
+        {
+          "text": "[Question] Who built it? Who knew?",
+          "tone": "question",
+          "next": "node_vault_tec_knew"
+        },
+        {
+          "text": "[Direct] I need you to help me find CAPS data from the old era. Can you show me where?",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        }
+      ]
+    },
+    "node_vault13_memories": {
+      "id": "node_vault13_memories",
+      "text": "*softens into something genuinely warm*\n\nVault 13. It was... home. The only home I'd ever known. The Overseer \u2014 not the warmest person, but they kept us safe. The food was good. The water recyclers hummed.\n\nAnd then the water chip failed, and they sent me outside, and\u2014\n\n*flickers*\n\n\u2014I'd never seen the sun before. Real sunlight. I stood outside the blast door for five minutes just feeling it.\n\n*pause*\n\nThe caps in the Vault were authenticated differently than the outside caps. Vault 13 caps were Node Zero \u2014 the oldest authentication signature in the network. Your FIZZ tokens on atomicfizzcaps.xyz? They trace back to those Vault 13 caps. You're using currency that started with my Pip-Boy.",
+      "responses": [
+        {
+          "text": "[Kind] Thank you. That means something \u2014 knowing where it all started.",
+          "tone": "kind",
+          "next": "node_caps_connection"
+        },
+        {
+          "text": "[Question] What happened to Vault 13 after you left?",
+          "tone": "question",
+          "next": "node_vault13_fate"
+        }
+      ]
+    },
+    "node_vault13_fate": {
+      "id": "node_vault13_fate",
+      "text": "*long pause*\n\nThey exiled me. When I came back \u2014 after the Master, after Mariposa \u2014 they didn't want me. I'd seen too much of the outside. Changed too much. Brought danger back with me.\n\n*flickers*\n\nThe Overseer was right, in a way. Vault life can't survive contact with the wasteland and remain Vault life. It transforms.\n\nI heard, later \u2014 from a traveler, years afterward \u2014 that Vault 13 was attacked. Enclave. They took the inhabitants.\n\n*something like grief crosses their fragmented features*\n\nI found the water chip. I saved them. And in the end... maybe the outside still came for them regardless.",
+      "responses": [
+        {
+          "text": "[Kind] You did everything you could. That matters.",
+          "tone": "kind",
+          "next": "node_caps_connection"
+        },
+        {
+          "text": "[Question] Tell me about the Master. And the caps he used.",
+          "tone": "question",
+          "next": "node_master_caps"
+        }
+      ]
+    },
+    "node_hub_caps": {
+      "id": "node_hub_caps",
+      "text": "The Hub. The center of everything in 2161.\n\nThe merchants there \u2014 Crimson Caravan, Far Go Traders \u2014 they had an informal cap authentication system. Certain caps were 'good caps,' certain ones were suspect. Nobody knew why some caps were more trusted. They just were.\n\n*leans forward with sudden intensity*\n\nWhen my Pip-Boy touched their terminals, I felt the network. Forty-seven terminals across Southern California, all talking to each other, all running a consensus authentication. Any cap touching two terminals simultaneously got a double-authentication mark \u2014 invisible to the eye but readable to the system.\n\nThe Hub's economy worked because those caps were genuinely more authenticated than random wasteland currency. The FIZZ token carries the same principle: distributed consensus authentication. Hub caps were the proof of concept.",
+      "responses": [
+        {
+          "text": "[Question] What about the caps under Los Angeles? The Boneyard?",
+          "tone": "question",
+          "next": "node_boneyard_caps"
+        },
+        {
+          "text": "[Direct] Show me where CAPS data from that era is still accessible.",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        }
+      ]
+    },
+    "node_boneyard_caps": {
+      "id": "node_boneyard_caps",
+      "text": "The Boneyard. Los Angeles.\n\n*shifts uncomfortably*\n\nThat was... dark. The Children of the Cathedral. The Blades. The Rippers. Everyone fighting over the ruins of something that used to be a city.\n\nThe Master's Cathedral was built directly over Vault-Tec's largest pre-war CAPS relay station in California. The Master \u2014 the Lieutenant \u2014 they didn't know what was beneath them. But it was there. Running. Authenticating caps that passed through the Boneyard's informal economy.\n\n*very quiet*\n\nI had to go into the Cathedral. Into the Master's lair. And beneath it, I heard the authentication pulses from the CAPS relay.\n\nThe Master was using it \u2014 unknowingly \u2014 as his throne room floor.\n\nThe relay is still there. Buried. Sealed. Functioning.",
+      "responses": [
+        {
+          "text": "[Direct] The Boneyard CAPS relay \u2014 can you help me find it?",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        },
+        {
+          "text": "[Question] What happened when you confronted the Master?",
+          "tone": "question",
+          "next": "node_master_caps"
+        }
+      ]
+    },
+    "node_master_caps": {
+      "id": "node_master_caps",
+      "text": "*the fragment shimmers with something like dark humor*\n\nThe Master.\n\nA man named Richard Grey who fell into a vat of Forced Evolutionary Virus and became... something else. Something vast and terrible that wanted to improve humanity by force.\n\nHe built an army of Super Mutants. He built a religion \u2014 Children of the Cathedral \u2014 as a talent pipeline. And he built his lair directly over the CAPS Protocol's most powerful pre-war node in California without knowing it.\n\n*pause*\n\nI told him his plan would fail. That his Super Mutants were sterile \u2014 his chosen humanity couldn't reproduce. He believed me.\n\n*very quiet*\n\nThe Master destroyed himself. And the CAPS relay beneath his cathedral kept running. It's still running now.",
+      "responses": [
+        {
+          "text": "[Kind] You saved California. And the CAPS network with it.",
+          "tone": "kind",
+          "next": "node_caps_connection"
+        },
+        {
+          "text": "[Direct] I need to access that relay. Will you help?",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        }
+      ]
+    },
+    "node_vault_tec_knew": {
+      "id": "node_vault_tec_knew",
+      "text": "*sharp clarity*\n\nVault-Tec knew. They built it.\n\nThe CAPS Protocol was Dr. Edmund Locke's design \u2014 I found his notes in Vault-Tec documentation that leaked to some Hub merchants in the 2150s. The original purpose wasn't currency. It was resource allocation: who gets water, food, medicine in the post-war order. The caps were going to be Vault-Tec's control mechanism over survivor populations.\n\nBut Locke had a daughter. Sarah. She programmed the Vault 77 Overseer AI as a failsafe \u2014 if Vault-Tec misused the system, the AI would go rogue and release the Protocol freely.\n\n*somewhere between awe and grief*\n\nIt took 219 years. But it worked. atomicfizzcaps.xyz \u2014 that's the failsafe activating. That's Sarah Locke's last gift to the wasteland.",
+      "responses": [
+        {
+          "text": "[Kind] It worked because people like you touched the system along the way.",
+          "tone": "kind",
+          "next": "node_caps_connection"
+        },
+        {
+          "text": "[Direct] Help me find Locke's original documentation. It's somewhere in this region.",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        }
+      ]
+    },
+    "node_caps_connection": {
+      "id": "node_caps_connection",
+      "text": "*smiles \u2014 it makes the fragment glow slightly warmer*\n\nYou understand.\n\nEvery cap you use. Every FIZZ token you earn on atomicfizzcaps.xyz. It traces back \u2014 all the way back to Vault 13. To a scared vault dweller who'd never seen sunlight, carrying a Pip-Boy full of pre-war authentication data into a broken world.\n\nThe wasteland runs on things that shouldn't survive. Hope. Memory. The will to keep trading, keep building, keep trusting that a bottle cap represents something real.\n\nI'm the proof that even a memory, distributed across enough nodes, becomes immortal.\n\n*fades slightly*\n\nIs there something I can help you find? The old CAPS data is still out there. Buried, mostly. But accessible \u2014 if you know where to look.",
+      "responses": [
+        {
+          "text": "[Direct] Yes. Help me find the old CAPS nodes. I'll bring them into the FIZZ network.",
+          "tone": "direct",
+          "next": "node_quest_offer"
+        },
+        {
+          "text": "[Kind] Thank you. For everything you did in 2161.",
+          "tone": "kind",
+          "next_inline": "*The fragment smiles again. 'The pleasure was mine. It was quite an adventure.' Then they fade \u2014 but not all the way. Never quite all the way.*"
+        }
+      ]
+    },
+    "node_quest_offer": {
+      "id": "node_quest_offer",
+      "text": "*becomes more solid, more present*\n\nYes. This is what I've been waiting for.\n\nThe old CAPS data nodes are distributed across three locations in this region \u2014 places I touched during my journey in 2161. Each one holds authentication records that predate anything HavenTech or the Brotherhood has.\n\nIf you recover them \u2014 bring them into contact with your FIZZ terminal \u2014 they'll add to the Vault 77 Overseer's ledger. The network gets stronger. More authenticated. Harder to fake, harder to control.\n\n*very clear now, all fragmentation gone for a moment*\n\nStart with the Hub trading post site. The terminal in the basement is still running. Has been since 2161. I know because I can still feel it.\n\nWill you go?",
+      "set_flags": [
+        "quest_fo1_boneyard_rise_started",
+        "vault_dweller_echo_quest_given"
+      ],
+      "grant_items": [
+        "echo_pip_note"
+      ],
+      "responses": [
+        {
+          "text": "[Direct] I'll go. Which locations?",
+          "tone": "direct",
+          "next": "node_quest_directions"
+        },
+        {
+          "text": "[Kind] Of course. You've been waiting long enough.",
+          "tone": "kind",
+          "next": "node_quest_directions"
+        }
+      ]
+    },
+    "node_quest_directions": {
+      "id": "node_quest_directions",
+      "text": "*the fragment flickers happily \u2014 if a fragment can be happy*\n\nThree locations. Your Pip-Boy can find them:\n\nThe Hub trading post basement \u2014 there's a Vault-Tec terminal behind a false wall. 'CRIMSON CARAVAN STORAGE' on the sign. Don't believe the sign.\n\nThe Boneyard \u2014 beneath the Cathedral ruins. The relay station in the subbasement. The Master's old throne room is rubble now, but the floor below it is intact.\n\nVault 15 \u2014 not Vault 13. Fifteen. They were building a CAPS relay there before the bombs fell and never finished it. The partial relay still pulses. Bring it to completion.\n\n*begins to fade again*\n\nAnd... if you find a water chip while you're down there... I know it's too late. I know. But it would feel good to complete the mission. Even now.\n\nGood luck, wanderer.",
+      "end": true,
+      "responses": []
+    }
+  },
+  "quest_nodes": [
+    {
+      "id": "echo_quest_reminder",
+      "text": "*The fragment appears briefly at the edge of your vision*\n\nThe Hub terminal. The Boneyard relay. Vault 15's partial node. You haven't found them yet.\n\n*fades*\n\nThe water chip isn't down there. But the CAPS data is. That's better, in the long run.",
+      "conditions": [
+        "flag:quest_fo1_boneyard_rise_started",
+        "!flag:quest_fo1_boneyard_rise_complete"
+      ],
+      "responses": [
+        {
+          "text": "[Acknowledge] I'm working on it.",
+          "tone": "neutral",
+          "next_inline": "*The fragment nods and dissolves.*"
+        }
+      ]
+    },
+    {
+      "id": "echo_quest_complete",
+      "text": "*The fragment is clearer than you've ever seen it. Almost solid.*\n\nYou did it. All three nodes. The Vault 77 ledger just received an authentication chain that predates everything HavenTech has.\n\n*beat*\n\nThank you. I can... rest a little now. Not gone \u2014 the CAPS Protocol doesn't let its echoes go entirely. But quieter.\n\n*almost to themselves*\n\nI found the water chip. I saved Vault 13. I defeated the Master. And now, 135 years after all of that, I helped build the FIZZ network.\n\nNot a bad journey for a scared kid who'd never seen the sun.",
+      "conditions": [
+        "flag:quest_fo1_boneyard_rise_complete"
+      ],
+      "responses": [
+        {
+          "text": "[Kind] It wasn't. Not at all.",
+          "tone": "kind",
+          "next_inline": "*The fragment smiles \u2014 and is, briefly, fully real \u2014 before dissolving entirely into the authentication pulse of the CAPS network.*"
+        }
+      ]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "echo_emotional_vault13",
+      "conditions": [
+        "flag:vault13_mentioned",
+        "!flag:vault13_response_seen"
+      ],
+      "set_flags": [
+        "vault13_response_seen"
+      ],
+      "text": "*freezes completely*\n\nVault 13.\n\n*very quiet*\n\nDid you... go there? Is it... is anything still there?\n\n*flickers rapidly*\n\nI know it's ruins. I know. But sometimes the memory is stronger than the knowing.",
+      "responses": [
+        {
+          "text": "[Kind] The vault is quiet now. But its caps are still authenticated. They still matter.",
+          "tone": "kind",
+          "next_inline": "*The fragment breathes. Just breathes. 'Yes. They do. Thank you.'*"
+        }
+      ]
+    }
+  ],
+  "knowledge_nodes": [
+    {
+      "id": "echo_knows_fizz",
+      "conditions": [
+        "flag:fizz_token_known"
+      ],
+      "text": "You're using atomicfizzcaps.xyz.\n\n*wonder and recognition*\n\nI can feel it \u2014 the authentication chain. My original Vault 13 signatures are in there. Every FIZZ token you've earned carries a trace of the water chip mission.\n\nIsn't that something.",
+      "responses": [
+        {
+          "text": "[Kind] It really is.",
+          "tone": "kind",
+          "next_inline": "*The fragment glows warmly.*"
+        }
+      ]
+    }
+  ],
+  "fallback": {
+    "id": "echo_fallback",
+    "video_speech": "The caps are still out there. Waiting to be authenticated.",
+    "text": "*flickers into brief solidity*\n\nThe... the water chip. No. Not that. The CAPS data. That's what we're looking for.\n\n*reorients*\n\nSorry. The memory slips sometimes. What were we discussing?",
+    "responses": [
+      {
+        "text": "[Kind] The CAPS Protocol. The old nodes.",
+        "tone": "kind",
+        "next": "node_caps_direct"
+      }
+    ]
+  },
+  "mood": "fragmented_nostalgic",
+  "personality": [
+    "genuinely_confused_about_time",
+    "deeply_knowledgeable_about_2161",
+    "earnest_and_eager_to_help",
+    "haunted_by_exile_from_vault13",
+    "proud_of_accomplishments",
+    "occasionally_speaks_as_if_still_on_the_mission",
+    "deeply_connected_to_the_caps_network",
+    "warm_when_clear_cold_when_fragmented"
+  ]
+}

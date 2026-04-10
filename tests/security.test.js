@@ -863,6 +863,320 @@ test("SEC-WALLET-006: nuke.js reads wallet from 'wallet' key (matches authClient
   );
 });
 
+// ─── 11. Playtest & Audit Bug Fixes (BUG-031 through BUG-039 + SEC-AUDIT) ────
+
+console.log("\n[11] Playtest & audit fixes (BUG-031 through BUG-039 + SEC-AUDIT)");
+
+test("BUG-031: cooldowns.js TTL lookup uses key() wrapper (matches double-prefixed writer)", () => {
+  const src = readFile("backend/api/cooldowns.js");
+  assert.ok(src, "backend/api/cooldowns.js must exist");
+  // Must call key() around the ttl argument — not raw bare string
+  assert.ok(
+    src.includes("redis.ttl(key(") || src.match(/ttl\s*\(\s*key\s*\(/),
+    "cooldowns.js redis.ttl() must wrap key path with key() to match double-prefixed writer"
+  );
+});
+
+test("BUG-032: fizz-fun.js bonding curve uses BigInt for constant product calculations", () => {
+  const src = readFile("backend/api/fizz-fun.js");
+  assert.ok(src, "backend/api/fizz-fun.js must exist");
+  // calculateBuyReturn must use BigInt() to avoid Number.MAX_SAFE_INTEGER overflow
+  assert.ok(
+    src.includes("BigInt(") && src.includes("calculateBuyReturn"),
+    "fizz-fun.js calculateBuyReturn must use BigInt to prevent float precision loss on large trades"
+  );
+});
+
+test("BUG-033: dungeon.js /clear uses atomic NX set (no TOCTOU double-clear)", () => {
+  const src = readFile("backend/api/dungeon.js");
+  assert.ok(src, "backend/api/dungeon.js must exist");
+  // The old GET-then-SET pattern allowed concurrent double-award.
+  // The fix uses a single NX set, same as the /loot endpoint.
+  assert.ok(
+    src.includes("NX: true") || src.includes("NX:true"),
+    "dungeon.js /clear must use atomic NX set to prevent concurrent double-clear exploitation"
+  );
+  // Old vulnerable GET-then-SET must be gone
+  assert.ok(
+    !src.match(/redis\.get\(key\(clearKey\)[^)]*\)[^{]*\n[^A-Za-z]*if.*alreadyCleared/),
+    "dungeon.js /clear must not use vulnerable GET-then-SET idempotency pattern"
+  );
+});
+
+test("BUG-034: battles.js enemyAttack() returns early if active enemy is already dead", () => {
+  const src = readFile("public/js/modules/battles.js");
+  assert.ok(src, "public/js/modules/battles.js must exist");
+  // Must guard against dead enemy attacking — prevents LOSE-on-WIN state flip
+  assert.ok(
+    src.includes("ENEMY_DEAD") || src.match(/enemyHp\[idx\]\s*<=\s*0/),
+    "battles.js enemyAttack() must guard against dead enemies dealing damage after all enemies are defeated"
+  );
+});
+
+test("BUG-035: loot-voucher.js does not hardcode lootId to 1n", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  assert.ok(
+    !src.includes("const lootId = 1n") && !src.match(/lootId\s*=\s*1n\s*;/),
+    "loot-voucher.js must not hardcode lootId to 1n — every voucher had identical loot, bypassing the tier system"
+  );
+});
+
+test("BUG-036: loot-voucher.js returns { voucher, signature } structure (not flat payload)", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  // Must include voucherId and keyId so redeem-voucher.js can verify
+  assert.ok(
+    src.includes("voucherId") && src.includes("keyId"),
+    "loot-voucher.js must include voucherId and keyId in the voucher (required by redeem-voucher.js)"
+  );
+  // Must return nested { voucher: {...}, signature: [...] } structure
+  assert.ok(
+    src.includes("voucher,") || src.includes("voucher:"),
+    "loot-voucher.js must return { voucher, signature } structure matching redeem-voucher.js expectations"
+  );
+});
+
+test("BUG-036: loot-voucher.js does NOT return legacy flat serverSignature field", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  assert.ok(
+    !src.includes("serverSignature:"),
+    "loot-voucher.js must not use old flat 'serverSignature' field — use { voucher, signature } structure"
+  );
+});
+
+test("BUG-037: game loop ENCOUNTER_CHANCE is at most 0.15 (production-appropriate, not 0.55)", () => {
+  const src = readFile("public/js/game/loop.js");
+  assert.ok(src, "public/js/game/loop.js must exist");
+  // Extract the constant value and ensure it's not the 0.55 test value
+  const match = src.match(/const\s+ENCOUNTER_CHANCE\s*=\s*([\d.]+)/);
+  assert.ok(match, "public/js/game/loop.js must define ENCOUNTER_CHANCE constant");
+  const rate = parseFloat(match[1]);
+  assert.ok(
+    rate <= 0.15,
+    `ENCOUNTER_CHANCE=${rate} is too high for production; max allowed is 0.15 (was 0.55, causing battle every ~9s)`
+  );
+});
+
+test("SEC-AUDIT-001: Solana program lib.rs uses u128 for bonding curve arithmetic (not raw u64 multiply)", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // u128 cast must be present for the constant-product k = virtualSol * tokenReserve
+  // Virtual SOL (30e9) * token_reserve (800e15) = 2.4e28 > u64::MAX → panic without u128
+  assert.ok(
+    src.includes("as u128"),
+    "lib.rs bonding curve must cast to u128 before multiplying to avoid u64 overflow"
+  );
+  // Old unchecked unwrap pattern that caused the panic must be gone
+  assert.ok(
+    !src.match(/checked_mul\(curve\.token_reserve\)\.unwrap\(\)/),
+    "lib.rs must not use checked_mul(token_reserve).unwrap() — overflows u64 and panics on every trade"
+  );
+});
+
+test("SEC-AUDIT-002: Solana program ClaimLoot server_key is constrained to config.server_key", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // server_key must be address-constrained so attackers can't supply their own keypair
+  assert.ok(
+    src.includes("config.server_key"),
+    "lib.rs ClaimLoot.server_key must be constrained to config.server_key to prevent forged loot vouchers"
+  );
+});
+
+test("SEC-AUDIT-003: Solana program FizzBondingCurve struct includes graduated_at field", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // graduated_at must exist in the struct definition (was missing, causing compile error)
+  assert.ok(
+    src.includes("graduated_at"),
+    "lib.rs FizzBondingCurve must include graduated_at field (was missing — fizz_graduate set it causing compile error)"
+  );
+  // curve.symbol reference in non-comment code must be removed (field doesn't exist)
+  // Filter out comment lines before checking
+  const nonCommentLines = src.split("\n").filter(l => !l.trim().startsWith("//"));
+  const nonCommentSrc = nonCommentLines.join("\n");
+  assert.ok(
+    !nonCommentSrc.includes("curve.symbol"),
+    "lib.rs must not reference curve.symbol in code (field does not exist on FizzBondingCurve)"
+  );
+  // The fizz_graduate msg! should use curve.token_mint instead
+  assert.ok(
+    src.includes("curve.token_mint") && src.includes("graduated!"),
+    "lib.rs fizz_graduate msg! must use curve.token_mint (not curve.symbol) in graduation log"
+  );
+});
+
+test("SEC-AUDIT-004: Solana program FizzBuyTokens curve_token_vault has associated_token constraint", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // curve_token_vault in FizzBuyTokens must be constrained to bonding_curve's ATA
+  assert.ok(
+    src.includes("associated_token::authority = bonding_curve"),
+    "lib.rs curve_token_vault must be constrained to bonding_curve authority to prevent wrong-vault substitution"
+  );
+});
+
+test("SEC-AUDIT-005: Solana program FizzSellTokens treasury is constrained to config.treasury", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // FizzSellTokens must include config and constrain treasury address
+  // Previously config was missing and treasury had no address constraint
+  assert.ok(
+    src.includes("InvalidTreasury"),
+    "lib.rs FizzSellTokens treasury must be constrained with InvalidTreasury error to prevent fee redirection"
+  );
+});
+
+test("SEC-AUDIT-006: loot-voucher.js validates GPS proximity before signing voucher", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  assert.ok(
+    src.includes("not_near_poi") || src.includes("nearbyPOI") || src.includes("findNearbyPOI"),
+    "loot-voucher.js must check GPS proximity before signing voucher (prevents couch-farming)"
+  );
+});
+
+test("SEC-AUDIT-008: Solana program claim_loot validates voucher timestamp freshness", () => {
+  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  // VoucherExpired error must be defined and used
+  assert.ok(
+    src.includes("VoucherExpired"),
+    "lib.rs claim_loot must validate voucher timestamp freshness with VoucherExpired error"
+  );
+});
+
+// ─── BUG-041–048: Crypto-side playtest regression tests ────────────────────
+
+console.log("\n[12] BUG-041–048: Crypto-side playtest fixes");
+
+test("BUG-041: mint-item.js uses atomic redis.incr for daily limit (no TOCTOU)", () => {
+  const src = readFile("backend/api/mint-item.js");
+  assert.ok(src, "backend/api/mint-item.js must exist");
+  assert.ok(
+    src.includes("redis.incr(") || src.includes(".incr("),
+    "mint-item.js must use atomic redis.incr() for daily limit counter (prevents TOCTOU race)"
+  );
+  assert.ok(
+    !src.includes("redis.get(walletKey") && !src.includes("const cur = parseInt(await redis.get"),
+    "mint-item.js must NOT use non-atomic GET+SET pattern for daily limit"
+  );
+});
+
+test("BUG-041: mint-item.js rolls back incr when limit exceeded", () => {
+  const src = readFile("backend/api/mint-item.js");
+  assert.ok(src, "backend/api/mint-item.js must exist");
+  assert.ok(
+    src.includes("redis.decr("),
+    "mint-item.js must roll back (decr) the counter when the daily limit is exceeded"
+  );
+});
+
+test("BUG-042: loot-voucher.js includes caps in signed voucher (tiered rewards)", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  assert.ok(
+    src.includes("capsReward") && src.includes("caps: capsReward"),
+    "loot-voucher.js must calculate tiered CAPS reward and include it in the signed voucher"
+  );
+  assert.ok(
+    src.includes("RARITY_CAPS") || src.includes("poiRarity"),
+    "loot-voucher.js must derive CAPS reward from POI rarity"
+  );
+});
+
+test("BUG-042: redeem-voucher.js uses voucher.caps (not LOOT_ID_TO_CAPS string parse)", () => {
+  const src = readFile("backend/api/redeem-voucher.js");
+  assert.ok(src, "backend/api/redeem-voucher.js must exist");
+  assert.ok(
+    src.includes("voucher.caps"),
+    "redeem-voucher.js must use voucher.caps (signed by server) for the CAPS amount"
+  );
+  assert.ok(
+    !src.includes("LOOT_ID_TO_CAPS"),
+    "redeem-voucher.js must not use LOOT_ID_TO_CAPS comma-delimited string lookup (broken format)"
+  );
+});
+
+test("BUG-042: gps.js serializeVoucherMessage includes caps field when present", () => {
+  const src = readFile("backend/lib/gps.js");
+  assert.ok(src, "backend/lib/gps.js must exist");
+  assert.ok(
+    src.includes("voucher.caps"),
+    "gps.js serializeVoucherMessage must include caps in the signed message when present"
+  );
+});
+
+test("BUG-043: loot-voucher.js uses expanded lootId range (>= 2^40) to reduce PDA collisions", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  // Old range was 1_000_000; new range must be at least 2^40 to reduce birthday paradox risk
+  assert.ok(
+    !src.includes("randomInt(1, 1000000)"),
+    "loot-voucher.js must not use 1,000,000 lootId range (birthday paradox collision risk)"
+  );
+  assert.ok(
+    src.includes("2 ** 48") || src.includes("2**48") || src.includes("281474976710656"),
+    "loot-voucher.js must use a large lootId range (>= 2^48) to minimize PDA seed collisions"
+  );
+});
+
+test("BUG-044: redeem-voucher.js VOUCHER_USED_KEY uses redis.key() for namespace consistency", () => {
+  const src = readFile("backend/api/redeem-voucher.js");
+  assert.ok(src, "backend/api/redeem-voucher.js must exist");
+  assert.ok(
+    src.includes("redis.key(") && src.includes("voucher:used:"),
+    "redeem-voucher.js VOUCHER_USED_KEY must call redis.key() so voucher-used keys " +
+    "follow the same double-prefix namespace as all other app keys (prevents orphaned replay-protection keys)"
+  );
+});
+
+test("BUG-046: caps.js GET /:wallet has rate limiter (prevents bulk enumeration)", () => {
+  const src = readFile("backend/api/caps.js");
+  assert.ok(src, "backend/api/caps.js must exist");
+  assert.ok(
+    src.includes("capsBalanceLimiter") || src.includes("balanceLimiter"),
+    "caps.js GET /:wallet must have a rate limiter to prevent bulk wallet enumeration"
+  );
+});
+
+test("BUG-047: player-state.js awardCaps enforces MAX_CAPS ceiling (999_999_999)", () => {
+  const src = readFile("public/js/game/player-state.js");
+  assert.ok(src, "public/js/game/player-state.js must exist");
+  assert.ok(
+    src.includes("MAX_CAPS") && src.includes("999_999_999"),
+    "player-state.js awardCaps must enforce MAX_CAPS = 999_999_999 ceiling to match backend"
+  );
+  assert.ok(
+    src.includes("Math.min(") && src.includes("MAX_CAPS"),
+    "player-state.js awardCaps must use Math.min(..., MAX_CAPS) to cap the balance"
+  );
+});
+
+test("BUG-047: dungeon.js client-side caps assignment enforces MAX_CAPS ceiling", () => {
+  const src = readFile("public/js/modules/dungeon.js");
+  assert.ok(src, "public/js/modules/dungeon.js must exist");
+  assert.ok(
+    src.includes("MAX_CAPS") && src.includes("Math.min("),
+    "dungeon.js must apply Math.min(..., MAX_CAPS) when updating player.caps from API response"
+  );
+});
+
+test("BUG-048: scrap-nft.js uses per-NFT lock key (wallet+mint, not wallet-only)", () => {
+  const src = readFile("backend/api/scrap-nft.js");
+  assert.ok(src, "backend/api/scrap-nft.js must exist");
+  assert.ok(
+    src.includes("`scrap:lock:${walletAddress}:${nftMint}`"),
+    "scrap-nft.js lock must be per-NFT (wallet + nftMint) so concurrent scraps of different NFTs are not blocked"
+  );
+  assert.ok(
+    !src.includes("`scrap:lock:${walletAddress}`"),
+    "scrap-nft.js must not use wallet-only scrap lock (over-broad: blocks all scrap ops for 15s)"
+  );
+});
+
 // ─── Summary ──────────────────────────────────────────────────────────────
 
 console.log("\n─────────────────────────────────────────");
