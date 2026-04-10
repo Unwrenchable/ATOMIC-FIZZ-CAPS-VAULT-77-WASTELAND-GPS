@@ -9,7 +9,17 @@ const caps = require("../lib/caps"); // mintCapsToPlayer
 const redis = require("../lib/redis"); // use the shared redis wrapper
 const { getKeyMeta } = require("../lib/keys"); // load signing keys from Redis
 
-const VOUCHER_USED_KEY = (voucherId) => `voucher:used:${voucherId}`; // value: JSON { usedBy, usedAt, tx }
+// BUG-044 FIX: call redis.key() here so VOUCHER_USED_KEY returns a
+// single-prefixed string (e.g. "afw:voucher:used:<id>").  When passed to
+// redis.set/get the wrapper applies key() a second time, yielding the
+// double-prefixed "afw:afw:voucher:used:<id>" — the same convention as
+// every other app key (caps, players, cooldowns, etc.).  Identical to the
+// pattern used in caps.js:  const cooldownKey = key(...) → redis.set(cooldownKey).
+// Before this fix VOUCHER_USED_KEY returned the raw "voucher:used:<id>" string;
+// the wrapper's single key() call produced only "afw:voucher:used:<id>" —
+// a namespace inconsistency that would orphan replay-protection keys during
+// a targeted "afw:afw:*" flush, silently allowing voucher replay attacks.
+const VOUCHER_USED_KEY = (voucherId) => redis.key(`voucher:used:${voucherId}`);
 const NODE_ENV = process.env.NODE_ENV || "development";
 const STRICT_REPLAY_PROTECTION = process.env.STRICT_REPLAY_PROTECTION !== "false";
 
@@ -148,12 +158,19 @@ router.post("/", redeemLimiter, authMiddleware, async (req, res) => {
     }
 
     // 6) Mint CAPS or award loot atomically (call your caps mint)
-    const lootId = voucher.lootId;
-    const amount = Number(
-      process.env.LOOT_ID_TO_CAPS?.split?.(",")?.find?.((s) => s.startsWith(`${lootId}:`))?.split?.(":")[1]
-      || process.env.DEFAULT_LOOT_CAPS
-      || 100
-    );
+    // BUG-042 FIX: use the caps value signed into the voucher by the server at
+    // issue time (based on POI rarity).  This value is covered by the NaCl
+    // signature verified above and cannot be tampered by the client.
+    // Fall back to DEFAULT_LOOT_CAPS (or 100) for vouchers issued before this
+    // change that lack the caps field.
+    const rawCaps = voucher.caps !== undefined && voucher.caps !== null
+      ? Number(voucher.caps)
+      : Number(process.env.DEFAULT_LOOT_CAPS || 100);
+    // Sanity-clamp: must be a positive integer within a reasonable server-defined range.
+    const MAX_VOUCHER_CAPS = Number(process.env.MAX_VOUCHER_CAPS || 10000);
+    const amount = Number.isFinite(rawCaps) && rawCaps > 0 && rawCaps <= MAX_VOUCHER_CAPS
+      ? Math.floor(rawCaps)
+      : Number(process.env.DEFAULT_LOOT_CAPS || 100);
     const mintResult = await caps.mintCapsToPlayer(player.wallet, amount);
 
     // 7) Audit success — store wallet only, not full session object
