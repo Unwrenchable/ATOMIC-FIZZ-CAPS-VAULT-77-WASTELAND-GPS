@@ -94,16 +94,23 @@ router.post('/', async (req, res) => {
       }
       // Production flow: perform per-wallet rate limiting, audit and enqueue mint job for worker
       try {
-        // per-wallet daily limit key
+        // BUG-041 FIX: use atomic INCR instead of non-atomic GET+SET to prevent
+        // TOCTOU race where concurrent requests all read the same count, all pass
+        // the limit check, and all write count+1 — bypassing the daily cap entirely.
         const walletKey = key(`mint:count:${wallet}`);
-        const cur = parseInt(await redis.get(walletKey) || '0', 10);
         const DAILY_LIMIT = parseInt(process.env.MINT_DAILY_LIMIT || '5', 10);
-        if (cur >= DAILY_LIMIT) {
+        const newCount = await redis.incr(walletKey);
+        if (newCount === 1) {
+          // First mint of the day — set the 24h TTL atomically on first creation.
+          // If expire fails here, the key persists without TTL; best-effort is fine
+          // because the limit still applies until the key is manually cleared.
+          await redis.expire(walletKey, 24 * 3600).catch(() => {});
+        }
+        if (newCount > DAILY_LIMIT) {
+          // Roll back the increment to keep the counter accurate.
+          await redis.decr(walletKey).catch(() => {});
           return res.status(429).json({ ok: false, error: 'mint_limit_reached' });
         }
-
-        // increment and set expiry (24h)
-        await redis.set(walletKey, String(cur + 1), { EX: 24 * 3600 });
 
         const prodItemId = `mint-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
 

@@ -190,7 +190,18 @@ router.get("/leaderboard", async (req, res) => {
 });
 
 // GET /api/caps/:wallet - Get player's in-game caps balance
-router.get("/:wallet", async (req, res) => {
+// BUG-046 FIX: add rate limiting to prevent bulk wallet enumeration.
+// Without this, any script could loop over all known wallet addresses and
+// map the entire game economy in seconds.
+const capsBalanceLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 30,             // 30 balance checks per minute per IP
+  message: { ok: false, error: "Too many balance requests — slow down, Vault Dweller" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+router.get("/:wallet", capsBalanceLimiter, async (req, res) => {
   try {
     const { wallet } = req.params;
 

@@ -1048,6 +1048,135 @@ test("SEC-AUDIT-008: Solana program claim_loot validates voucher timestamp fresh
   );
 });
 
+// ─── BUG-041–048: Crypto-side playtest regression tests ────────────────────
+
+console.log("\n[12] BUG-041–048: Crypto-side playtest fixes");
+
+test("BUG-041: mint-item.js uses atomic redis.incr for daily limit (no TOCTOU)", () => {
+  const src = readFile("backend/api/mint-item.js");
+  assert.ok(src, "backend/api/mint-item.js must exist");
+  assert.ok(
+    src.includes("redis.incr(") || src.includes(".incr("),
+    "mint-item.js must use atomic redis.incr() for daily limit counter (prevents TOCTOU race)"
+  );
+  assert.ok(
+    !src.includes("redis.get(walletKey") && !src.includes("const cur = parseInt(await redis.get"),
+    "mint-item.js must NOT use non-atomic GET+SET pattern for daily limit"
+  );
+});
+
+test("BUG-041: mint-item.js rolls back incr when limit exceeded", () => {
+  const src = readFile("backend/api/mint-item.js");
+  assert.ok(src, "backend/api/mint-item.js must exist");
+  assert.ok(
+    src.includes("redis.decr("),
+    "mint-item.js must roll back (decr) the counter when the daily limit is exceeded"
+  );
+});
+
+test("BUG-042: loot-voucher.js includes caps in signed voucher (tiered rewards)", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  assert.ok(
+    src.includes("capsReward") && src.includes("caps: capsReward"),
+    "loot-voucher.js must calculate tiered CAPS reward and include it in the signed voucher"
+  );
+  assert.ok(
+    src.includes("RARITY_CAPS") || src.includes("poiRarity"),
+    "loot-voucher.js must derive CAPS reward from POI rarity"
+  );
+});
+
+test("BUG-042: redeem-voucher.js uses voucher.caps (not LOOT_ID_TO_CAPS string parse)", () => {
+  const src = readFile("backend/api/redeem-voucher.js");
+  assert.ok(src, "backend/api/redeem-voucher.js must exist");
+  assert.ok(
+    src.includes("voucher.caps"),
+    "redeem-voucher.js must use voucher.caps (signed by server) for the CAPS amount"
+  );
+  assert.ok(
+    !src.includes("LOOT_ID_TO_CAPS"),
+    "redeem-voucher.js must not use LOOT_ID_TO_CAPS comma-delimited string lookup (broken format)"
+  );
+});
+
+test("BUG-042: gps.js serializeVoucherMessage includes caps field when present", () => {
+  const src = readFile("backend/lib/gps.js");
+  assert.ok(src, "backend/lib/gps.js must exist");
+  assert.ok(
+    src.includes("voucher.caps"),
+    "gps.js serializeVoucherMessage must include caps in the signed message when present"
+  );
+});
+
+test("BUG-043: loot-voucher.js uses expanded lootId range (>= 2^40) to reduce PDA collisions", () => {
+  const src = readFile("backend/api/loot-voucher.js");
+  assert.ok(src, "backend/api/loot-voucher.js must exist");
+  // Old range was 1_000_000; new range must be at least 2^40 to reduce birthday paradox risk
+  assert.ok(
+    !src.includes("randomInt(1, 1000000)"),
+    "loot-voucher.js must not use 1,000,000 lootId range (birthday paradox collision risk)"
+  );
+  assert.ok(
+    src.includes("2 ** 48") || src.includes("2**48") || src.includes("281474976710656"),
+    "loot-voucher.js must use a large lootId range (>= 2^48) to minimize PDA seed collisions"
+  );
+});
+
+test("BUG-044: redeem-voucher.js VOUCHER_USED_KEY uses redis.key() for namespace consistency", () => {
+  const src = readFile("backend/api/redeem-voucher.js");
+  assert.ok(src, "backend/api/redeem-voucher.js must exist");
+  assert.ok(
+    src.includes("redis.key(") && src.includes("voucher:used:"),
+    "redeem-voucher.js VOUCHER_USED_KEY must call redis.key() so voucher-used keys " +
+    "follow the same double-prefix namespace as all other app keys (prevents orphaned replay-protection keys)"
+  );
+});
+
+test("BUG-046: caps.js GET /:wallet has rate limiter (prevents bulk enumeration)", () => {
+  const src = readFile("backend/api/caps.js");
+  assert.ok(src, "backend/api/caps.js must exist");
+  assert.ok(
+    src.includes("capsBalanceLimiter") || src.includes("balanceLimiter"),
+    "caps.js GET /:wallet must have a rate limiter to prevent bulk wallet enumeration"
+  );
+});
+
+test("BUG-047: player-state.js awardCaps enforces MAX_CAPS ceiling (999_999_999)", () => {
+  const src = readFile("public/js/game/player-state.js");
+  assert.ok(src, "public/js/game/player-state.js must exist");
+  assert.ok(
+    src.includes("MAX_CAPS") && src.includes("999_999_999"),
+    "player-state.js awardCaps must enforce MAX_CAPS = 999_999_999 ceiling to match backend"
+  );
+  assert.ok(
+    src.includes("Math.min(") && src.includes("MAX_CAPS"),
+    "player-state.js awardCaps must use Math.min(..., MAX_CAPS) to cap the balance"
+  );
+});
+
+test("BUG-047: dungeon.js client-side caps assignment enforces MAX_CAPS ceiling", () => {
+  const src = readFile("public/js/modules/dungeon.js");
+  assert.ok(src, "public/js/modules/dungeon.js must exist");
+  assert.ok(
+    src.includes("MAX_CAPS") && src.includes("Math.min("),
+    "dungeon.js must apply Math.min(..., MAX_CAPS) when updating player.caps from API response"
+  );
+});
+
+test("BUG-048: scrap-nft.js uses per-NFT lock key (wallet+mint, not wallet-only)", () => {
+  const src = readFile("backend/api/scrap-nft.js");
+  assert.ok(src, "backend/api/scrap-nft.js must exist");
+  assert.ok(
+    src.includes("`scrap:lock:${walletAddress}:${nftMint}`"),
+    "scrap-nft.js lock must be per-NFT (wallet + nftMint) so concurrent scraps of different NFTs are not blocked"
+  );
+  assert.ok(
+    !src.includes("`scrap:lock:${walletAddress}`"),
+    "scrap-nft.js must not use wallet-only scrap lock (over-broad: blocks all scrap ops for 15s)"
+  );
+});
+
 // ─── Summary ──────────────────────────────────────────────────────────────
 
 console.log("\n─────────────────────────────────────────");

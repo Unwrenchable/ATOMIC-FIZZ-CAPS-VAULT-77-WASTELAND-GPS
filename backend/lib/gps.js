@@ -66,6 +66,13 @@ function serializeVoucherMessage(voucher) {
     String(voucher.keyId || ""),
     String(voucher.ttlSeconds || ""),
   ];
+  // BUG-042 FIX: include caps in the signed message when present so the
+  // redemption value cannot be tampered by the client.  Conditional inclusion
+  // preserves backward-compatibility: vouchers issued before this change
+  // (which lack the caps field) still verify correctly with the old message format.
+  if (voucher.caps !== undefined && voucher.caps !== null) {
+    parts.push(String(voucher.caps));
+  }
   return Buffer.from(parts.join("|"), "utf8");
 }
 
