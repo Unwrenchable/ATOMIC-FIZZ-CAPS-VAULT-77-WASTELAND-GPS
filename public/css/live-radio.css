@@ -422,9 +422,9 @@
 }
 
 /* ============================================================
-   PIP-BOY RADIO TAB UI (Slim Horizontal Design)
+   POCKET-BOY RADIO TAB UI (Slim Horizontal Design)
    Redesigned from circular 280px jukebox dial to 50px horizontal bar
-   to match Pip-Boy minimalist CRT aesthetic
+   to match Pocket-Boy minimalist CRT aesthetic
    ============================================================ */
 
 .radio-dial-container {
@@ -672,5 +672,35 @@
     width: calc(100vw - 20px);
     right: 10px;
     left: 10px;
+  }
+}
+
+/* === MOBILE SAFE-AREA & DYNAMIC VIEWPORT FIXES === */
+@supports (height: 100dvh) {
+  .radio-player,
+  #live-radio-player,
+  .radio-overlay {
+    max-height: 100dvh;
+  }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .radio-player,
+  #live-radio-player {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+
+  .radio-controls {
+    margin-bottom: max(0.25rem, env(safe-area-inset-bottom));
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .radio-control-btn,
+  .radio-btn,
+  .radio-controls button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
   }
 }

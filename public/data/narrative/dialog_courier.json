@@ -4,6 +4,7 @@
   "portrait": "courier",
   "title": "Courier",
   "description": "A road-worn courier, NCR-adjacent. Carries a battered satchel. Talks fast, trusts nobody.",
+  "backstory": "The wasteland's most reliable courier doesn't remember much before the road — a deliberate choice, they'll tell you, after a job went wrong in a way they don't discuss. What they kept is this: every trade route from here to the Colorado, every settlement's preferred currency, and the name of every kid who's traded them scrap for a delivered message. Pip has seen the best and worst the wasteland can produce. They keep running anyway.",
   "intro": {
     "id": "courier_intro",
     "conditions": [
@@ -140,7 +141,7 @@
     },
     "node_about_radio": {
       "id": "node_about_radio",
-      "text": "Atomic Fizz Radio. DJ Struggle runs it — broadcasts out of a fortified bunker somewhere in the Mojave.\n\nMixes music, news, wasteland intel. Warns about raider movements, radiation spikes, where to find clean water.\n\nIt's the closest thing to a news network out here. You want to survive? You listen to that radio.\n\nThe frequency's pre-loaded into your Pip-Boy. Tune it.",
+      "text": "Atomic Fizz Radio. DJ Struggle runs it — broadcasts out of a fortified bunker somewhere in the Mojave.\n\nMixes music, news, wasteland intel. Warns about raider movements, radiation spikes, where to find clean water.\n\nIt's the closest thing to a news network out here. You want to survive? You listen to that radio.\n\nThe frequency's pre-loaded into your Pocket-Boy. Tune it.",
       "responses": [
         {
           "text": "Understood. I'll tune in.",

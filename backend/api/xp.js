@@ -31,16 +31,26 @@ const xpLimiter = rateLimit({
 // themselves astronomical amounts in a single request.
 const MAX_XP_PER_AWARD = 500;
 
+// BUG-002 FIX: Any authenticated player could call POST /api/xp/award to
+// farm XP at 1,500 XP/min (rate limit 3/min × MAX_XP_PER_AWARD=500).
+// All legitimate XP awards happen server-side in location-claim.js and
+// quests.js.  This endpoint is now restricted to admin-role sessions only
+// so it can still be used by privileged internal tooling, but regular
+// players can no longer self-award XP.
 router.post("/award", authMiddleware, xpLimiter, async (req, res) => {
   try {
     const { amount } = req.body;
     const player = req.player; // trusted from authMiddleware - object { wallet, role, sessionId }
 
+    // Admin-only guard — regular players must not be able to self-award XP.
+    if (!player || player.role !== "admin") {
+      return res
+        .status(403)
+        .json({ ok: false, error: "Forbidden: XP award requires admin role" });
+    }
+
     // -----------------------------
     // Input validation
-    // SECURITY FIX: cap was 1,000,000 — far too high for a player-callable
-    // endpoint.  An authenticated player could award themselves a million XP
-    // per request (10 req/10s = 10M XP/s).  Capped to MAX_XP_PER_AWARD.
     // -----------------------------
     if (
       typeof amount !== "number" ||
@@ -53,7 +63,7 @@ router.post("/award", authMiddleware, xpLimiter, async (req, res) => {
         .json({ ok: false, error: `Invalid XP amount (max ${MAX_XP_PER_AWARD})` });
     }
 
-    if (!player || !player.wallet || typeof player.wallet !== "string") {
+    if (!player.wallet || typeof player.wallet !== "string") {
       return res
         .status(400)
         .json({ ok: false, error: "Invalid player identity" });
@@ -76,7 +86,7 @@ router.post("/award", authMiddleware, xpLimiter, async (req, res) => {
 
     return res
       .status(status)
-      .json({ ok: false, error: err.message || "Failed to award XP" });
+      .json({ ok: false, error: status === 400 ? err.message : "Failed to award XP" });
   }
 });
 

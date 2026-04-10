@@ -273,3 +273,35 @@
   }
 }
 
+
+/* === MOBILE SAFE-AREA & DYNAMIC VIEWPORT FIXES === */
+@supports (height: 100dvh) {
+  .vats-overlay,
+  #vats-overlay {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .vats-overlay,
+  #vats-overlay {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .vats-controls,
+  .vats-action-bar {
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .vats-target-btn,
+  .vats-action-btn,
+  .vats-controls button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+}

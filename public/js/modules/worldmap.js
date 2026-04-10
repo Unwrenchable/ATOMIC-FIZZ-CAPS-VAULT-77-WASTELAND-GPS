@@ -4,6 +4,13 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // XSS-safe helper: escape HTML special chars before inserting into innerHTML
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = String(str == null ? '' : str);
+    return d.innerHTML;
+  }
+
   // ============================================================
   // ICON FALLBACK MAPPING (Enhanced for Afterfall authenticity)
   // Maps iconKey values that don't have SVG files to existing icons
@@ -748,8 +755,8 @@
                 }[poi.rarity] || '#00ff41';
                 marker.bindPopup(`
                   <div style="color: ${rarityColor}; font-family: monospace;">
-                    <b>${poi.name}</b><br>
-                    <small>LVL ${poi.lvl || '?'} • ${(poi.rarity || 'UNKNOWN').toUpperCase()}</small>
+                    <b>${escapeHtml(poi.name)}</b><br>
+                    <small>LVL ${escapeHtml(poi.lvl || '?')} • ${escapeHtml((poi.rarity || 'UNKNOWN').toUpperCase())}</small>
                   </div>
                 `);
                 marker.addTo(this.map);
@@ -957,11 +964,13 @@
         return;
       }
 
-      const icon = L.icon({
-        iconUrl: "/img/icons/player.svg",
+      // Use divIcon so the inner arrow can rotate independently of the
+      // outer element that Leaflet uses for lat/lng positioning (transform).
+      const icon = L.divIcon({
+        className: 'player-marker',
+        html: '<img class="player-marker-arrow" src="/img/icons/player.svg" width="40" height="40" alt="" draggable="false">',
         iconSize: [40, 40],
-        iconAnchor: [20, 20],
-        className: 'player-marker'
+        iconAnchor: [20, 20]
       });
 
       this.playerMarker = L.marker([pos.lat, pos.lng], { icon, zIndexOffset: 1000 }).addTo(this.map);
@@ -969,15 +978,40 @@
 
     setPlayerHeading(deg) {
       if (!this.playerMarker) return;
+
+      const normalized = ((deg % 360) + 360) % 360;
+      this.lastHeading = normalized;
+
+      // Accumulate rotation to take the shortest path (avoids 359°→1° going
+      // the long way round during CSS transition).
+      // Seed from the real heading on first call so there is no phantom
+      // rotation from 0° to the first actual heading received.
+      if (this._markerHeading === undefined) this._markerHeading = normalized;
+      let delta = normalized - (this._markerHeading % 360);
+      if (delta > 180) delta -= 360;
+      if (delta < -180) delta += 360;
+
+      // Backstop dead zone: skip sub-1° changes to prevent CSS transition
+      // re-triggering on pure floating-point noise.
+      if (Math.abs(delta) < 1) return;
+
+      this._markerHeading += delta;
+
       const el = this.playerMarker.getElement();
-      if (el) el.style.transform = `rotate(${deg}deg)`;
+      if (!el) return;
+      const arrow = el.querySelector('.player-marker-arrow');
+      if (arrow) arrow.style.transform = `rotate(${this._markerHeading}deg)`;
     },
 
     setPlayerPosition(lat, lng, opts = {}) {
       const newPos = { lat, lng };
 
-      // Auto-heading from movement if no explicit heading provided
-      if (this.prevPlayerPosition && opts.heading === undefined) {
+      // Auto-heading from movement only when device compass is not active.
+      // When the compass module is running it is the heading authority; computing
+      // bearing from GPS deltas while stationary produces random spike values from
+      // sub-metre GPS drift, fighting the real compass reading and causing jitter.
+      const compassActive = window.Game?.modules?.compass?.hasInit;
+      if (this.prevPlayerPosition && opts.heading === undefined && !compassActive) {
         const h = this.computeHeading(
           this.prevPlayerPosition.lat,
           this.prevPlayerPosition.lng,
@@ -1057,7 +1091,7 @@
       });
     },
 
-    updateOverlayVisibility(zoom) {
+    updateOverlayVisibility(_zoom) {
       // labels always visible for now
     },
 
@@ -1158,7 +1192,7 @@
       let tileErrorCount = 0;
       const maxTileErrors = 3; // Be more lenient when trying to go back online
 
-      satelliteTiles.on('tileerror', (e) => {
+      satelliteTiles.on('tileerror', (_e) => {
         tileErrorCount++;
         if (tileErrorCount >= maxTileErrors) {
           console.warn('[worldmap] still having tile issues, staying offline');
@@ -1321,7 +1355,7 @@
 
       // Bind persistent tooltip (location label) that's always visible at higher zoom
       marker.bindTooltip(
-        `<span style="color: ${rarityColor}; font-family: 'VT323', monospace; font-size: clamp(11px, 2vw, 13px); text-shadow: 0 0 4px ${rarityColor};">${loc.name || 'Unknown'}</span>`,
+        `<span style="color: ${rarityColor}; font-family: 'VT323', monospace; font-size: clamp(11px, 2vw, 13px); text-shadow: 0 0 4px ${rarityColor};">${escapeHtml(loc.name || 'Unknown')}</span>`,
         {
           permanent: false,
           direction: 'top',
@@ -1333,8 +1367,8 @@
       // Bind popup with more details for click interaction
       marker.bindPopup(`
         <div style="color: ${rarityColor}; font-family: 'VT323', monospace;">
-          <b>${loc.name || 'Unknown Location'}</b><br>
-          <small>LVL ${loc.lvl || '?'} • ${(rarity || 'COMMON').toUpperCase()}</small>
+          <b>${escapeHtml(loc.name || 'Unknown Location')}</b><br>
+          <small>LVL ${escapeHtml(loc.lvl || '?')} • ${escapeHtml((rarity || 'COMMON').toUpperCase())}</small>
         </div>
       `);
 

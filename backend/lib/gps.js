@@ -66,6 +66,13 @@ function serializeVoucherMessage(voucher) {
     String(voucher.keyId || ""),
     String(voucher.ttlSeconds || ""),
   ];
+  // BUG-042 FIX: include caps in the signed message when present so the
+  // redemption value cannot be tampered by the client.  Conditional inclusion
+  // preserves backward-compatibility: vouchers issued before this change
+  // (which lack the caps field) still verify correctly with the old message format.
+  if (voucher.caps !== undefined && voucher.caps !== null) {
+    parts.push(String(voucher.caps));
+  }
   return Buffer.from(parts.join("|"), "utf8");
 }
 
@@ -80,11 +87,11 @@ function serializeVoucherMessage(voucher) {
 function verifyVoucherSignature(message, signature, pubKeyBase58) {
   try {
     const nacl = require("tweetnacl");
-    const bs58 = require("bs58");
+    const { decode: bs58decode } = require("./safe-base58");
 
     let pubKeyBytes;
     if (typeof pubKeyBase58 === "string") {
-      pubKeyBytes = bs58.decode(pubKeyBase58);
+      pubKeyBytes = bs58decode(pubKeyBase58);
     } else if (pubKeyBase58 instanceof Uint8Array || Buffer.isBuffer(pubKeyBase58)) {
       pubKeyBytes = pubKeyBase58;
     } else {

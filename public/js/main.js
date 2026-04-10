@@ -10,6 +10,8 @@
     d.textContent = String(s == null ? "" : s);
     return d.innerHTML;
   }
+  // Expose globally so other modules (struggle-quips, worldmap, etc.) can use one implementation
+  window.escapeHtml = window.escapeHtml || escapeHtml;
 
   // ---------------------------
   // GLOBAL DATA
@@ -312,6 +314,7 @@
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   function completeQuest(questId) {
     if (!questId) return;
     if (!PLAYER.questsActive.includes(questId)) return;
@@ -447,7 +450,7 @@
   }
 
   // ---------------------------
-  // PANELS RENDERING (Pip-Boy panels)
+  // PANELS RENDERING (Pocket-Boy panels)
   // ---------------------------
 
   function renderInventoryPanel() {
@@ -527,7 +530,7 @@
   }
 
   function renderQuestsPanel() {
-    // New Pip-Boy layout uses questBody
+    // New Pocket-Boy layout uses questBody
     const panel = document.getElementById("questBody");
     if (!panel) return;
 
@@ -630,7 +633,7 @@
       xpFill.style.width = `${Math.min(100, (PLAYER.xp / needed) * 100)}%`;
     }
 
-    // STAT panel in Pip-Boy
+    // STAT panel in Pocket-Boy
     const statLevel = document.getElementById("stat-level");
     const statXP = document.getElementById("stat-xp");
     const statCaps = document.getElementById("stat-caps");
@@ -704,8 +707,26 @@
           _lastQuestCheckAt = now;
         }
       },
-      err => safeWarn("Geolocation error:", err),
-      { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+      err => {
+        safeWarn("Geolocation error:", err);
+        if (err.code === 1) { // PERMISSION_DENIED
+          const permBanner = document.createElement("div");
+          permBanner.id = "gps-permission-banner";
+          // Accessible colors: high-contrast dark background, white text (avoids red-green blindness)
+          permBanner.style.cssText = "position:fixed;top:0;left:0;right:0;background:#1a1a00;color:#ffe066;border-bottom:2px solid #ffe066;font-family:monospace;text-align:center;padding:10px 8px;z-index:9999;font-size:13px;";
+          // Platform-aware instructions
+          const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+          const isAndroid = /android/i.test(navigator.userAgent);
+          let instructions = "go to browser Settings → Site Settings → Location and set to Allow.";
+          if (isIOS) instructions = "go to iPhone Settings → Privacy → Location Services → your browser and set to While Using.";
+          else if (isAndroid) instructions = "tap the lock icon in your browser address bar → Permissions → Location → Allow.";
+          permBanner.textContent = "⚠️ GPS REQUIRED — To explore the Wasteland, " + instructions;
+          if (!document.getElementById("gps-permission-banner")) {
+            document.body.appendChild(permBanner);
+          }
+        }
+      },
+      { enableHighAccuracy: true, maximumAge: 15000, timeout: 10000 }
     );
   }
 
@@ -718,9 +739,26 @@
     }
   }
 
+  // Page Visibility API — stop GPS watch when the page is hidden to save
+  // battery; restart it when the page becomes visible again.
+  if (!window._mainGpsVisibilityBound) {
+    window._mainGpsVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        stopGeolocationWatch();
+      } else {
+        startGeolocationWatch();
+      }
+    });
+  }
+
   // ---------------------------
   // WALLET + MINT
   // ---------------------------
+
+  // WeakMap to track which Phantom providers already have listeners attached,
+  // avoiding duplicate event registrations without mutating external objects.
+  const _phantomListenersAttached = new WeakMap();
 
   // Helper function to get Phantom provider (handles in-app browser delay)
   async function getPhantomProvider(maxWaitMs = 3000) {
@@ -780,7 +818,7 @@
       const addr = provider.publicKey.toBase58();
       const label = `${addr.slice(0, 4)}...${addr.slice(-4)}`;
 
-      // New Pip-Boy buttons
+      // New Pocket-Boy buttons
       const btnHUD = document.getElementById("connectWalletHUD");
       const btnStat = document.getElementById("connectWalletStat");
 
@@ -812,6 +850,49 @@
 
       // Dispatch wallet connection event for other systems (e.g., Courier dialogue)
       window.dispatchEvent(new CustomEvent("walletConnected", { detail: { address: addr } }));
+
+      // Bind Phantom provider events so that account switches and user-initiated
+      // disconnects are reflected in the UI without requiring a page reload.
+      if (!_phantomListenersAttached.has(provider)) {
+        provider.on('accountChanged', (publicKey) => {
+          if (publicKey) {
+            const newAddr = publicKey.toBase58 ? publicKey.toBase58() : publicKey.toString();
+            const newLabel = `${newAddr.slice(0, 4)}...${newAddr.slice(-4)}`;
+            window.PLAYER_WALLET = newAddr;
+            if (btnHUD) { btnHUD.textContent = newLabel; }
+            if (btnStat) { btnStat.textContent = newLabel; }
+            if (legacyBtn) { legacyBtn.textContent = newLabel; }
+            if (walletAddressEl) walletAddressEl.textContent = `WALLET: ${newLabel}`;
+            if (statWalletEl) statWalletEl.textContent = newLabel;
+            window.dispatchEvent(new CustomEvent("walletConnected", { detail: { address: newAddr } }));
+            safeLog("Phantom account changed to:", newAddr);
+          } else {
+            // User disconnected all accounts from inside the extension
+            connectedWallet = false;
+            window.PLAYER_WALLET = null;
+            const disconnectLabel = "CONNECT";
+            if (btnHUD) { btnHUD.textContent = disconnectLabel; btnHUD.classList.remove("connected"); }
+            if (btnStat) { btnStat.textContent = disconnectLabel; btnStat.classList.remove("connected"); }
+            if (legacyBtn) { legacyBtn.textContent = disconnectLabel; legacyBtn.classList.remove("connected"); }
+            if (walletAddressEl) walletAddressEl.textContent = "WALLET: DISCONNECTED";
+            if (statWalletEl) statWalletEl.textContent = "DISCONNECTED";
+            window.dispatchEvent(new CustomEvent("walletDisconnected", {}));
+          }
+        });
+        provider.on('disconnect', () => {
+          connectedWallet = false;
+          window.PLAYER_WALLET = null;
+          const disconnectLabel = "CONNECT";
+          if (btnHUD) { btnHUD.textContent = disconnectLabel; btnHUD.classList.remove("connected"); }
+          if (btnStat) { btnStat.textContent = disconnectLabel; btnStat.classList.remove("connected"); }
+          if (legacyBtn) { legacyBtn.textContent = disconnectLabel; legacyBtn.classList.remove("connected"); }
+          if (walletAddressEl) walletAddressEl.textContent = "WALLET: DISCONNECTED";
+          if (statWalletEl) statWalletEl.textContent = "DISCONNECTED";
+          window.dispatchEvent(new CustomEvent("walletDisconnected", {}));
+          safeLog("Phantom wallet disconnected via extension");
+        });
+        _phantomListenersAttached.set(provider, true);
+      }
 
       // Load NFTs as soon as wallet is connected
       await refreshNFTs();
@@ -876,11 +957,11 @@
         html += '<ul style="list-style:none;padding:0;">';
         recipes.forEach(r => {
           html += `<li style="margin-bottom:12px;border-bottom:1px solid #222;padding-bottom:8px;">
-            <strong>${r.name || r.id}</strong><br/>
-            <span style='font-size:12px;opacity:0.7;'>${r.description || ''}</span><br/>
+            <strong>${escapeHtml(r.name || r.id)}</strong><br/>
+            <span style='font-size:12px;opacity:0.7;'>${escapeHtml(r.description || '')}</span><br/>
             <span>Requires: </span>
-            ${r.inputs.map(inp => `${inp.amount}x ${inp.id}`).join(', ')}<br/>
-            <button class="pipboy-button-small" data-craft="${r.id}">Craft</button>
+            ${r.inputs.map(inp => `${escapeHtml(String(inp.amount))}x ${escapeHtml(inp.id)}`).join(', ')}<br/>
+            <button class="pipboy-button-small" data-craft="${escapeHtml(r.id)}">Craft</button>
           </li>`;
         });
         html += '</ul>';
@@ -888,18 +969,27 @@
       }
       // Wire up buttons
       Array.from(craftingSection.querySelectorAll('[data-craft]')).forEach(btn => {
-        btn.onclick = function() {
+        btn.onclick = async function() {
           const recipeId = this.getAttribute('data-craft');
           if (!Game.modules.crafting.canCraft(recipeId)) {
             alert('Missing ingredients!');
             return;
           }
-          const item = Game.modules.crafting.craft(recipeId);
-          if (item) {
-            alert('Crafted: ' + (item.name || item.id));
-            renderExchangeCraftingSection();
-          } else {
-            alert('Crafting failed.');
+          this.disabled = true;
+          this.textContent = 'Crafting...';
+          try {
+            const item = await Game.modules.crafting.craftAsync(recipeId);
+            if (item) {
+              alert('Crafted: ' + (item.name || item.id));
+              renderExchangeCraftingSection();
+            } else {
+              alert('Crafting failed.');
+            }
+          } catch (err) {
+            alert(err.message || 'Crafting failed.');
+          } finally {
+            this.disabled = false;
+            this.textContent = 'Craft';
           }
         };
       });
@@ -1060,7 +1150,7 @@
       }
     });
 
-    // New Pip-Boy wallet buttons
+    // New Pocket-Boy wallet buttons
     once("connectWalletHUD", connectWallet);
     once("connectWalletStat", connectWallet);
 
@@ -1308,7 +1398,7 @@
       // Only trigger discovery if we just switched to explore mode
       // (worldmap.js toggles the text to "RETURN TO PLAYER" after click)
       const textEl = document.getElementById("exploreText");
-      const currentText = textEl ? textEl.textContent : exploreBtn.textContent;
+      const _currentText = textEl ? textEl.textContent : exploreBtn.textContent;
 
       // If worldmap toggled it to "RETURN TO PLAYER", we are now exploring → show scan
       // We use a short delay to check after worldmap.js has processed the click
@@ -1651,9 +1741,9 @@
   // BOOT EVENTS
   // ---------------------------
 
-  // Fired by boot.js when Pip-Boy is fully visible
+  // Fired by boot.js when Pocket-Boy is fully visible
   window.addEventListener("pipboyReady", () => {
-    safeLog("Pip-Boy ready");
+    safeLog("Pocket-Boy ready");
     initGame();
   });
 

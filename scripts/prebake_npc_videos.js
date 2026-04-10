@@ -109,7 +109,7 @@ try {
 // -----------------------------------------------------------------------
 
 /** Strip HTML tags from dialog text for use in prompts */
-function stripHtml(str) {
+function _stripHtml(str) {
   return String(str || '')
     .replace(/<br\s*\/?>/gi, ' ')
     .replace(/<[^>]+>/g, '')
@@ -126,7 +126,7 @@ function sanitise(str, maxLen) {
     .slice(0, maxLen);
 }
 
-function truncateWords(str, maxWords) {
+function _truncateWords(str, maxWords) {
   var words = String(str || '').trim().split(/\s+/).filter(Boolean);
   return words.slice(0, maxWords).join(' ');
 }
@@ -351,7 +351,7 @@ function buildNodePrompt(npcId, dialog, nodeId, nodeText, videoSpeech) {
     (desc ? `Character: ${desc}. ` : '') +
     `Mood: ${mood}${personality ? ', personality: ' + personality : ''}. ` +
     (speech ? `NPC delivers this complete line: "${speech}". Must finish the full sentence before the clip ends — no words cut off. Deliver at a measured wasteland pace within ${DURATION} seconds. ` : '') +
-    `Pip-Boy green terminal tint, moody wasteland lighting, retro 1950s aesthetic.`
+    `Pocket-Boy green terminal tint, moody wasteland lighting, retro 1950s aesthetic.`
   ).slice(0, 2000);
 }
 

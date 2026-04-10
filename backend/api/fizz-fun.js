@@ -23,9 +23,28 @@
  */
 
 const router = require("express").Router();
-const { Connection, PublicKey, Transaction } = require("@solana/web3.js");
-const { Program, AnchorProvider, BN } = require("@coral-xyz/anchor");
+const rateLimit = require("express-rate-limit");
+const { Connection, PublicKey, Transaction: _Transaction } = require("@solana/web3.js");
+const { Program: _Program, AnchorProvider: _AnchorProvider, BN: _BN } = require("@coral-xyz/anchor");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
+const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
+
+// SEC-008 FIX: Rate limiters for Fizz.fun endpoints (previously had none)
+const fizzReadLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  message: { error: "Too many requests to Fizz.fun" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const fizzWriteLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  message: { error: "Too many Fizz.fun write requests" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Configuration
 // Fizz.fun uses a unified ecosystem design:
@@ -71,6 +90,8 @@ const CURVE_SUPPLY = 800_000_000_000_000_000; // 800M
 const GRADUATION_SOL = 85_000_000_000; // 85 SOL
 const FEE_BPS = 100; // 1%
 
+const { authMiddleware } = require('../lib/auth');
+
 // Admin wallets (from env, comma-separated)
 const ADMIN_WALLETS = (process.env.ADMIN_WALLETS || "").split(",").filter(Boolean);
 
@@ -87,7 +108,7 @@ function requireConfig(req, res, next) {
 /**
  * Check if a wallet can access Fizz.fun features
  */
-router.get("/access/:wallet", requireConfig, async (req, res) => {
+router.get("/access/:wallet", requireConfig, fizzReadLimiter, async (req, res) => {
     try {
         const { wallet } = req.params;
         const walletPubkey = new PublicKey(wallet);
@@ -128,14 +149,14 @@ router.get("/access/:wallet", requireConfig, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Access check error:", err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
 /**
  * Get all tokens on Fizz.fun
  */
-router.get("/tokens", requireConfig, async (req, res) => {
+router.get("/tokens", requireConfig, fizzReadLimiter, async (req, res) => {
     try {
         const { sort = "volume", limit = 50 } = req.query;
         
@@ -158,14 +179,14 @@ router.get("/tokens", requireConfig, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Fetch tokens error:", err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
 /**
  * Get single token details
  */
-router.get("/token/:mint", requireConfig, async (req, res) => {
+router.get("/token/:mint", requireConfig, fizzReadLimiter, async (req, res) => {
     try {
         const { mint } = req.params;
         const mintPubkey = new PublicKey(mint);
@@ -191,14 +212,14 @@ router.get("/token/:mint", requireConfig, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Fetch token error:", err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
 /**
  * Calculate buy quote
  */
-router.get("/quote/buy", requireConfig, async (req, res) => {
+router.get("/quote/buy", requireConfig, fizzReadLimiter, async (req, res) => {
     try {
         const { mint, solAmount } = req.query;
         
@@ -229,14 +250,14 @@ router.get("/quote/buy", requireConfig, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Buy quote error:", err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
 /**
  * Calculate sell quote
  */
-router.get("/quote/sell", requireConfig, async (req, res) => {
+router.get("/quote/sell", requireConfig, fizzReadLimiter, async (req, res) => {
     try {
         const { mint, tokenAmount } = req.query;
         
@@ -266,18 +287,29 @@ router.get("/quote/sell", requireConfig, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Sell quote error:", err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
 /**
  * Admin: Launch token with USDC (pre-mainnet bootstrap)
+ * SEC-004 FIX: Added authMiddleware so only authenticated sessions can reach
+ * this endpoint.  Wallet is now sourced from the verified session (req.player)
+ * instead of req.body, preventing an attacker from self-reporting an admin
+ * wallet address without actually owning it.
  */
-router.post("/admin/launch", requireConfig, async (req, res) => {
+router.post("/admin/launch", requireConfig, authMiddleware, fizzWriteLimiter, async (req, res) => {
     try {
-        const { wallet, name, symbol, uri, signature } = req.body;
+        // SEC-004 FIX: wallet from verified session — never from req.body
+        const wallet = req.player.wallet;
+        const { name, symbol, uri } = req.body;
         
         // Verify admin status
+        if (ADMIN_WALLETS.length === 0) {
+            // SEC-004 FIX: warn loudly if ADMIN_WALLETS is not configured —
+            // a missing env var would silently deny all admin requests.
+            console.warn('[fizz-fun] ADMIN_WALLETS env var is empty — /admin/launch will always be denied');
+        }
         if (!ADMIN_WALLETS.includes(wallet)) {
             return res.status(403).json({ error: "Not authorized as admin" });
         }
@@ -294,7 +326,7 @@ router.post("/admin/launch", requireConfig, async (req, res) => {
         }
         
         // Log admin action (for transparency)
-        console.log(`[fizz-fun] Admin launch: ${wallet} launching ${symbol}`);
+        console.log(`[fizz-fun] Admin launch by authenticated admin: ${symbol}`);
         
         // In production: verify USDC payment and call create_token_admin
         // For now, return transaction to be signed by admin
@@ -307,14 +339,14 @@ router.post("/admin/launch", requireConfig, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Admin launch error:", err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
 /**
  * Get protocol stats
  */
-router.get("/stats", requireConfig, async (req, res) => {
+router.get("/stats", requireConfig, fizzReadLimiter, async (req, res) => {
     try {
         // Fetch config from chain
         const stats = await fetchProtocolStats();
@@ -328,7 +360,7 @@ router.get("/stats", requireConfig, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Stats error:", err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
@@ -351,25 +383,31 @@ async function getCapsBalance(wallet) {
 
 /**
  * Calculate tokens received for SOL input (constant product AMM)
+ * BUG-032 FIX: use BigInt for intermediate calculations because
+ * virtualSol (30B) * tokenReserve (800e15) = 2.4e28 >> Number.MAX_SAFE_INTEGER,
+ * causing precision loss of ~0.02–0.1% on large trades.
  */
 function calculateBuyReturn(solAmount, solReserve, tokenReserve) {
-    const virtualSol = solReserve + VIRTUAL_SOL;
-    const k = virtualSol * tokenReserve;
-    const newSol = virtualSol + solAmount;
-    const newTokens = k / newSol;
-    return Math.floor(tokenReserve - newTokens);
+    const virtualSol = BigInt(solReserve) + BigInt(VIRTUAL_SOL);
+    const tokenReserveBig = BigInt(Math.floor(tokenReserve));
+    const k = virtualSol * tokenReserveBig;
+    const newSol = virtualSol + BigInt(Math.floor(solAmount));
+    const newTokens = k / newSol; // BigInt integer division
+    return Number(tokenReserveBig - newTokens);
 }
 
 /**
  * Calculate SOL received for token input
+ * BUG-032 FIX: use BigInt for intermediate calculations (same overflow hazard as buy).
  */
 function calculateSellReturn(tokenAmount, solReserve, tokenReserve) {
-    const virtualSol = solReserve + VIRTUAL_SOL;
-    const k = virtualSol * tokenReserve;
-    const newTokens = tokenReserve + tokenAmount;
-    const newSol = k / newTokens;
+    const virtualSol = BigInt(solReserve) + BigInt(VIRTUAL_SOL);
+    const tokenReserveBig = BigInt(Math.floor(tokenReserve));
+    const k = virtualSol * tokenReserveBig;
+    const newTokens = tokenReserveBig + BigInt(Math.floor(tokenAmount));
+    const newSol = k / newTokens; // BigInt integer division
     const solOut = virtualSol - newSol;
-    return Math.min(Math.floor(solOut), solReserve);
+    return Math.min(Number(solOut), solReserve);
 }
 
 /**

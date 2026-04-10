@@ -4,6 +4,7 @@
   "portrait": "dolores",
   "title": "The Rancher's Daughter",
   "description": "She tends the same farm, sweeps the same porch, hums the same hymn. She's been doing it for two hundred years — and she doesn't know.",
+  "backstory": "Dolores was built in 2067 by the Institute as a proof-of-concept for synthetic behavioral stability — a synth that could run an authentic life loop indefinitely without behavioral degradation. She was assigned to a ruined family farm near the Mojave's edge, given a set of memories, and placed in perpetual loop: wake, farm, tend the grave of a father who never existed, sleep, repeat. The Institute considered her the project's greatest success. She has been living the same morning four million times and does not yet know she is not real.",
   "intro": {
     "id": "dolores_intro",
     "conditions": [
@@ -155,6 +156,25 @@
           "text": "[Question] Do you... do you know what year it is?",
           "tone": "question",
           "next": "node_what_year"
+        }
+      ]
+    },
+    "node_something_wrong": {
+      "id": "node_something_wrong",
+      "set_flags": [
+        "dolores_anomaly_noted"
+      ],
+      "text": "She stops sweeping.\n\nDoesn't turn around. Just stops.\n\n\"Something's always wrong out here.\"\n\nHer voice is flat. Like she's said it before. Many times.\n\nThen, slower:\n\n\"The fence post rusted through again last month. I keep meaning to replace it. I just...\"\n\nShe looks at the grave. The worn stones. The earth that has weathered too many seasons.\n\n\"I forget what year I bought the post.\"\n\nShe says it like it should be a small thing.",
+      "responses": [
+        {
+          "text": "[Question] Do you... do you know what year it is?",
+          "tone": "question",
+          "next": "node_what_year"
+        },
+        {
+          "text": "[Quest] I found something — a chip with your serial number on it. We need to talk.",
+          "tone": "direct",
+          "next": "node_show_chip"
         }
       ]
     },
@@ -739,7 +759,7 @@
         "flag:dolores_is_free",
         "!flag:dolores_cache_found"
       ],
-      "text": "A signal. Fragmented. Originating from the northern coordinates she walked toward.\n\nSomething is transmitting from whatever the Institute buried up there.\n\nYour Pip-Boy logs the coordinates.",
+      "text": "A signal. Fragmented. Originating from the northern coordinates she walked toward.\n\nSomething is transmitting from whatever the Institute buried up there.\n\nYour Pocket-Boy logs the coordinates.",
       "responses": [
         {
           "text": "I'll investigate the cache site.",

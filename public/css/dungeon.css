@@ -1,7 +1,7 @@
 /* public/css/dungeon.css */
 /* ------------------------------------------------------------------ */
 /* Atomic Fizz Caps — Dungeon Interior System Styles                   */
-/* Pip-Boy green terminal aesthetic, ASCII tile map, CRT effects       */
+/* Pocket-Boy green terminal aesthetic, ASCII tile map, CRT effects       */
 /* ------------------------------------------------------------------ */
 
 /* ------------------------------------------------------------------ */
@@ -906,4 +906,30 @@
 /* Class-based fallback for older browsers (toggled via JS) */
 .dungeon-room-info.has-threats {
   animation: encounter-pulse 1.8s ease-in-out infinite;
+}
+
+/* === MOBILE SAFE-AREA & DYNAMIC VIEWPORT FIXES === */
+@supports (height: 100dvh) {
+  .dungeon-overlay,
+  #dungeon-overlay,
+  .dungeon-modal {
+    max-height: 100dvh;
+  }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .dungeon-overlay,
+  #dungeon-overlay {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .dungeon-action-btn,
+  .dungeon-btn,
+  .dungeon-controls button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
 }

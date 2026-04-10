@@ -4,6 +4,7 @@
   "portrait": "loxley",
   "title": "The Wasteland's Merry Outlaw",
   "description": "Dialog nodes for Loxley, a charismatic wasteland thief who robs the rich caravans and distributes the spoils to squatter settlements. He dresses in pre-war camouflage with an absurdly maintained felt hat, speaks in an exaggerated mock-British accent, and insists he is fighting for a more equitable post-apocalypse.",
+  "backstory": "Robin Loxley doesn't use his real name. What he'll tell you is that he was born in the NCR's most prosperous settlement, raised by a family of merchants, and that he watched his entire community sold in a land deal to a corporate caravan faction in 2275. He took what he could carry and walked into the wasteland with nothing but skills and a philosophy about redistribution. He robs the rich. He gives to the poor. He has an objectively magnificent hat.",
   "intro": {
     "id": "loxley_intro",
     "conditions": [

@@ -1,7 +1,7 @@
 {
   "name": "Atomic Fizz Caps - Wasteland GPS",
   "short_name": "Fizz Caps",
-  "description": "Pip-Boy 3000 Wasteland GPS - A Fallout-themed geo-game with Solana wallet integration. Explore, scavenge, trade NFTs, and earn FIZZ tokens in the post-apocalyptic Mojave.",
+  "description": "Pocket-Boy 3000 Wasteland GPS - A Fallout-themed geo-game with Solana wallet integration. Explore, scavenge, trade NFTs, and earn FIZZ tokens in the post-apocalyptic Mojave.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#050705",

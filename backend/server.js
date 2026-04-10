@@ -91,7 +91,7 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 // JSON body limit
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({ limit: "64kb" }));
 
 // Global rate limiting (coarse)
 app.use(
@@ -100,6 +100,11 @@ app.use(
     max: 50,
     standardHeaders: true,
     legacyHeaders: false,
+    // Keep liveness and bootstrap config endpoints available during traffic spikes.
+    skip: (req) => {
+      const p = req.path || "";
+      return p === "/api/health" || p === "/api/config/frontend";
+    },
   })
 );
 
@@ -256,6 +261,10 @@ try {
 // ------------------------------------------------------------
 const api = (file) => path.join(__dirname, "api", file);
 
+// Utility / monitoring endpoints (no auth — checked by smoke tests and uptime monitors)
+safeMount("/api/ping",    api("ping"));
+safeMount("/api/version", api("version"));
+
 // Core API endpoints
 safeMount("/api/loot-voucher", api("loot-voucher"));
 safeMount("/api/mintables", api("mintables"));  // Your mintables router - serves mintables.json
@@ -268,6 +277,7 @@ safeMount('/api/quest-secrets', api('quest-secrets'));
 // Server-side quest store (placeholders + reveal endpoint)
 safeMount('/api/quests-store', api('quests-store'));
 safeMount("/api/scavenger", api("scavenger"));  // Add a scavenger router if needed, otherwise use JSON proxy below!
+safeMount("/api/exchange", api("exchange"));    // Scavenger Exchange: trade listings (GET/POST/buy/cancel)
 safeMount("/api/locations", api("locations"));  // routes/api/locations.js: serves locations.json
 
 // Additional game APIs
@@ -278,6 +288,7 @@ safeMount("/api/redeem-voucher", api("redeem-voucher"));
 safeMount("/api/xp", api("xp"));
 safeMount("/api/caps", api("caps"));
 safeMount("/api/settings", api("settings"));
+safeMount("/api/crafting", api("crafting"));
 
 // NFT Scrap and Fusion features
 safeMount("/api/scrap-nft", api("scrap-nft"));
@@ -300,6 +311,9 @@ safeMount("/api/rotation", api("rotation"));
 // Quest endings
 safeMount("/api/quest-endings", api("quest-endings"));
 
+// Survival reward claims
+safeMount("/api/claim-survival", api("claim-survival"));
+
 // Overseer AI proxy (Hugging Face / OpenAI compatible)
 safeMount("/api/overseer", api("overseer-proxy"));
 
@@ -313,6 +327,27 @@ safeMount("/api/npc-context", api("npc-context"));
 safeMount("/api/fizz-fun", api("fizz-fun"));
 
 // Admin/advanced panel routes
+// SECURITY FIX: mount the admin login/logout handlers as explicit HTTP routes.
+// Previously adminLoginHandler and adminLogoutHandler were exported from
+// adminAuth.js but never attached to any route, making the admin panel
+// completely inaccessible (broken) and leaving the login endpoint as a 404.
+try {
+  const {
+    adminLoginHandler,
+    adminLogoutHandler,
+    adminRateLimiter,
+    adminLoginRateLimiter,
+  } = require("./middleware/adminAuth");
+
+  // POST /api/admin/login  — rate-limited (5 attempts / 15 min)
+  app.post("/api/admin/login",  adminLoginRateLimiter, adminLoginHandler);
+  // POST /api/admin/logout — standard rate limit
+  app.post("/api/admin/logout", adminRateLimiter,      adminLogoutHandler);
+  console.log("[server] mounted admin login/logout at /api/admin/login, /api/admin/logout");
+} catch (err) {
+  console.warn("[server] failed to mount admin login/logout:", err && err.message);
+}
+
 safeMount("/api/admin/player", api("adminPlayer"));
 safeMount("/api/admin/mintables", api("adminMintables"));
 safeMount("/api/admin/keys", api("keys-admin"));

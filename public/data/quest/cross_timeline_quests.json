@@ -14,7 +14,7 @@
       "objectives": [
         {
           "id": "boneyard_1",
-          "text": "Locate the quarantined research facility using your Pip-Boy signal tracker",
+          "text": "Locate the quarantined research facility using your Pocket-Boy signal tracker",
           "type": "navigate"
         },
         {
@@ -495,7 +495,7 @@
         },
         {
           "id": "lookout_2",
-          "text": "Decode the shortwave ritual broadcast using a Pip-Boy frequency analyzer",
+          "text": "Decode the shortwave ritual broadcast using a Pocket-Boy frequency analyzer",
           "type": "hack"
         },
         {
@@ -576,7 +576,7 @@
     {
       "quest_id": "qtl_institute_boston",
       "name": "Generation Four",
-      "description": "The Institute's records show a classified Gen-4 prototype — a synth that can interface directly with the FIZZ blockchain without a Pip-Boy. The Railroad wants it freed. The Brotherhood wants it destroyed. The Institute wants it back. The synth wants to talk to you personally.",
+      "description": "The Institute's records show a classified Gen-4 prototype — a synth that can interface directly with the FIZZ blockchain without a Pocket-Boy. The Railroad wants it freed. The Brotherhood wants it destroyed. The Institute wants it back. The synth wants to talk to you personally.",
       "region": "The Institute (Boston)",
       "timeline": "fallout_4",
       "real_lat": 42.3601,

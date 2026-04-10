@@ -1,14 +1,14 @@
 /* ============================================================
    ATOMIC FIZZ CAPS WALLET — EPIC WASTELAND EDITION
    Vault-Tec Certified Terminal Interface
-   With Full Pip-Boy CRT Effects, Radioactive Glow, & Animations
+   With Full Pocket-Boy CRT Effects, Radioactive Glow, & Animations
    ============================================================ */
 
 /* ============================================================
    ROOT VARIABLES — WASTELAND COLOR PALETTE
    ============================================================ */
 :root {
-  /* Pip-Boy Green Spectrum */
+  /* Pocket-Boy Green Spectrum */
   --pipboy-green: #00ff66;
   --pipboy-green-bright: #00ff88;
   --pipboy-green-dim: #00cc55;
@@ -657,7 +657,7 @@ button:disabled {
 }
 
 /* ============================================================
-   WALLET TABS — PIP-BOY INTERFACE STYLE
+   WALLET TABS — POCKET-BOY INTERFACE STYLE
    ============================================================ */
 .wallet-tabs {
   display: flex;
@@ -1371,3 +1371,24 @@ textarea:focus {
    END OF EPIC WASTELAND WALLET STYLES
    Per Vault-Tec Regulations, Section 77-B
    ============================================================ */
+
+/* === ACCESSIBILITY: REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* === ACCESSIBILITY: FORCED COLORS (HIGH CONTRAST) === */
+@media (forced-colors: active) {
+  .wallet-btn,
+  .connect-btn,
+  .wallet-action-btn {
+    border: 2px solid ButtonText;
+  }
+}

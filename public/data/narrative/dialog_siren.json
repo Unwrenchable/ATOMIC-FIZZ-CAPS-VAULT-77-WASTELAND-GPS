@@ -4,6 +4,7 @@
   "portrait": "siren",
   "title": "Signal Runner",
   "description": "A voice through static. She found you before you even knew you were lost.",
+  "backstory": "Siren never explains where she broadcasts from. She never has a face — only a voice, a frequency, and an uncanny ability to find people who are lost in every way the wasteland can make you lost. Before the bombs she was an emergency dispatch operator. After the bombs she decided that was still the job. The frequency has never gone dead. She has never explained how. She fields the calls.",
   "intro": {
     "id": "siren_intro",
     "conditions": [
@@ -13,7 +14,7 @@
       "siren_intro_seen"
     ],
     "video_speech": "You're awake. Good. I'm Siren — I track displaced survivors. Let's get you moving.",
-    "text": "...\n...\n\n[Your Pip-Boy crackles. The static resolves into a voice.]\n\n\"You're awake. Good. We were getting worried.\"\n\nCalm. Certain. Tinged with something that sounds like relief.\n\n\"My name is Siren. I'm a Signal Runner — I track displaced consciousnesses across the wasteland. Yours lit up like a flare in the dark the moment you opened your eyes.\"\n\n\"You're alive. You're oriented. That's step one. Now let's get you moving.\"",
+    "text": "...\n...\n\n[Your Pocket-Boy crackles. The static resolves into a voice.]\n\n\"You're awake. Good. We were getting worried.\"\n\nCalm. Certain. Tinged with something that sounds like relief.\n\n\"My name is Siren. I'm a Signal Runner — I track displaced consciousnesses across the wasteland. Yours lit up like a flare in the dark the moment you opened your eyes.\"\n\n\"You're alive. You're oriented. That's step one. Now let's get you moving.\"",
     "responses": [
       {
         "text": "[Question] Who are you? How are you reaching me?",
@@ -40,7 +41,7 @@
   "nodes": {
     "node_who_is_siren": {
       "id": "node_who_is_siren",
-      "text": "\"Signal Runner. Think of it as... wasteland search and rescue, for people who ended up where they weren't supposed to be.\"\n\nA brief burst of static.\n\n\"I'm remote. Broadcasting through a relay tower somewhere north of your position. I can hear your Pip-Boy's ping from here — your model's got a stronger signal than most.\"\n\n\"I've been tracking anomalies in this sector for six months. You're the clearest signal I've picked up. Which either means you're important, or something went very wrong.\"\n\n\"Possibly both.\"",
+      "text": "\"Signal Runner. Think of it as... wasteland search and rescue, for people who ended up where they weren't supposed to be.\"\n\nA brief burst of static.\n\n\"I'm remote. Broadcasting through a relay tower somewhere north of your position. I can hear your Pocket-Boy's ping from here — your model's got a stronger signal than most.\"\n\n\"I've been tracking anomalies in this sector for six months. You're the clearest signal I've picked up. Which either means you're important, or something went very wrong.\"\n\n\"Possibly both.\"",
       "responses": [
         {
           "text": "[Question] What kind of anomalies? What's happening out there?",
@@ -92,7 +93,7 @@
       "set_flags": [
         "siren_gave_orientation"
       ],
-      "text": "\"Four things. Do them in order.\"\n\n\"One: open your inventory. Confirm your gear made it. You should have a jumpsuit on — that's standard issue. The rest should be there.\"\n\n\"Two: equip your sidearm. A courier named Pip is en route with your weapon and supplies — she'll find you. When she arrives, check in with her.\"\n\n\"Three: tune your Pip-Boy radio to Atomic Fizz. DJ Struggle broadcasts local intel — raider movements, rad spikes, safe zones. Survival information.\"\n\n\"Four: check your map. Know where you are before you move.\"\n\n\"That's the job. Ready?\"",
+      "text": "\"Four things. Do them in order.\"\n\n\"One: open your inventory. Confirm your gear made it. You should have a jumpsuit on — that's standard issue. The rest should be there.\"\n\n\"Two: equip your sidearm. A courier named Pip is en route with your weapon and supplies — she'll find you. When she arrives, check in with her.\"\n\n\"Three: tune your Pocket-Boy radio to Atomic Fizz. DJ Struggle broadcasts local intel — raider movements, rad spikes, safe zones. Survival information.\"\n\n\"Four: check your map. Know where you are before you move.\"\n\n\"That's the job. Ready?\"",
       "responses": [
         {
           "text": "[Friendly] Yeah. Ready. What about this courier?",
@@ -270,7 +271,7 @@
       "set_flags": [
         "siren_warned_rads"
       ],
-      "text": "\"Your Pip-Boy's reading elevated radiation. That's not a stat you let climb.\"\n\n\"RadAway — use it. Radiation damage is cumulative and it affects your judgment before you realize it's happening.\"\n\n\"I've watched people walk into firefights with 400 rads because they thought they felt fine.\"\n\n\"They didn't.\"",
+      "text": "\"Your Pocket-Boy's reading elevated radiation. That's not a stat you let climb.\"\n\n\"RadAway — use it. Radiation damage is cumulative and it affects your judgment before you realize it's happening.\"\n\n\"I've watched people walk into firefights with 400 rads because they thought they felt fine.\"\n\n\"They didn't.\"",
       "responses": [
         {
           "text": "Understood. Treating it now.",

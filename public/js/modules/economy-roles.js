@@ -98,7 +98,7 @@
       perks       : [
         { id: 'salvage_expert',   name: 'Salvage Expert',   description: '+35% components from scrapping items. Recognize rare materials instantly.' },
         { id: 'carry_weight',     name: 'Pack Rat',          description: 'Junk and scrap items weigh 50% less in your inventory.' },
-        { id: 'component_sense',  name: 'Component Sense',  description: 'Highlight scavengeable objects when Pip-Boy scanner is active.' },
+        { id: 'component_sense',  name: 'Component Sense',  description: 'Highlight scavengeable objects when Pocket-Boy scanner is active.' },
         { id: 'junk_trader',      name: 'Junk Trader',      description: '+25% sell value on scrap and component items.' },
       ],
       tradeBonuses: {
@@ -177,7 +177,7 @@
       lore        : 'Justice is expensive in the wasteland. You provide it at market rate.',
       unlockLevel : 12,
       perks       : [
-        { id: 'target_marking',   name: 'Target Marking',   description: 'Pip-Boy marks bounty targets within 500m. Last known position updated every 30s.' },
+        { id: 'target_marking',   name: 'Target Marking',   description: 'Pocket-Boy marks bounty targets within 500m. Last known position updated every 30s.' },
         { id: 'restraint_expert', name: 'Restraint Expert', description: 'Non-lethal takedowns deal no XP penalty. Captives fetch 50% more alive.' },
         { id: 'bounty_network',   name: 'Bounty Network',   description: 'Access to exclusive bounty board with high-value targets other players cannot see.' },
         { id: 'fugitive_sense',   name: 'Fugitive Sense',   description: 'Detect when a target is fleeing before they move. +2s reaction window.' },

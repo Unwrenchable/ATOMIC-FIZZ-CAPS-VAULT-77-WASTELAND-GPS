@@ -1,0 +1,95 @@
+{
+  "id": "dialog_whisperer",
+  "npc": "The Whisperer",
+  "portrait": "whisperer",
+  "title": "The Voice in the Pipes",
+  "description": "They sit in the junction where four ventilation shafts meet, one ear pressed to the metal, eyes half-open. The low hum of the Strip above moves through the pipes like a heartbeat. They look up when you arrive, and for a moment you're not sure if they're seeing you or something behind you.",
+  "backstory": "No one knows how long The Whisperer has lived in the tunnels beneath the Strip. They arrived already present, already listening, already speaking in the half-formed cadences of someone who hears more than one conversation at once. They claim the pipes carry everything — not just air and heat, but voices, echoes, fragments of transmissions that have no other path to travel. Most think they're broken. The few who have listened carefully have come away unsettled and better informed. They hear Jax's signal in the ventilation network without knowing what it is, repeating fragments of it like a child humming a song they only half-remember.",
+  "intro": {
+    "id": "whisperer_intro",
+    "conditions": ["!flag:met_whisperer"],
+    "set_flags": ["met_whisperer"],
+    "video_speech": "The pipes said you were coming. Not in words. In the way the pressure changed.",
+    "text": "They don't move from the pipe. They speak without turning their head, in a voice that is somehow both very quiet and very clear.<br><br>\"The pipes said you were coming.\"<br><br>A pause. The hum in the metal shifts frequency by a fraction.<br><br>\"Not in words. In the way the pressure changed.\"<br><br>They look up at you now, head tilted. \"You're carrying something. Not on you. Around you. A signal.\"",
+    "responses": [
+      {"text": "[Question] What do you hear in the pipes?", "tone": "question", "next": "whisperer_what_they_hear"},
+      {"text": "[Friendly] I don't think you're broken. I think you hear something real.", "tone": "kind", "next": "whisperer_belief_response"},
+      {"text": "[Sarcastic] Pressure readings and voice contact. You'd be useful in plumbing.", "tone": "sarcastic", "next": "whisperer_sarcasm_response"},
+      {"text": "[Direct] The signal you're hearing — I need to trace it to a relay tower access point.", "tone": "direct", "next": "whisperer_quest_pipes"}
+    ]
+  },
+  "knowledge_nodes": [
+    {
+      "id": "whisperer_what_they_hear",
+      "conditions": ["!flag:whisperer_explained"],
+      "text": "They press their palm flat against the pipe. The metal hums.<br><br>\"It's not one voice. It's one voice in many pieces.\"<br><br>They close their eyes. \"It says... fragments. 'Still here.' 'Still trying.' 'Can you—' and then it breaks.\"<br><br>A pause. \"It sounds like a person. But it comes from everywhere at once. Through the pipes. Through the walls. Through the ground.\"<br><br>\"I used to think it was a ghost. Now I think it's worse. Ghosts have stopped trying.\"",
+      "set_flags": ["whisperer_explained"]
+    },
+    {
+      "id": "whisperer_vault77_signal",
+      "conditions": ["flag:met_jax", "!flag:whisperer_jax_recognition"],
+      "text": "Their head tilts at an angle that makes them look briefly like a bird.<br><br>\"Vault 77.\" They say it in the same cadence as the signal. \"The voice repeats that. Sometimes. When the pipes are warm.\"<br><br>\"You found the source.\"<br><br>They look at the pipe for a long moment. \"It's a person. The voice is a person. I always thought so.\" A pause. \"I'm glad.\""  ,
+      "set_flags": ["whisperer_jax_recognition"]
+    },
+    {
+      "id": "whisperer_belief_response",
+      "conditions": ["!flag:whisperer_believed"],
+      "text": "They go very still.<br><br>The hum in the pipes does something strange — it rises slightly, then settles.<br><br>\"Thank you.\"<br><br>They say it plainly, without performance. \"Most people who believe me are the ones who've been in the tunnels long enough. You're the first one who said it first.\"",
+      "set_flags": ["whisperer_believed"]
+    },
+    {
+      "id": "whisperer_sarcasm_response",
+      "conditions": ["!flag:whisperer_sarcasm_noted"],
+      "text": "They look at you without offense. They're used to this.<br><br>\"Plumbing doesn't explain the words.\"<br><br>They press their ear back against the pipe. It hums. \"You heard that. I saw your expression change.\""  ,
+      "set_flags": ["whisperer_sarcasm_noted"]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "whisperer_signal_clear",
+      "conditions": ["flag:jax_signal_active", "!flag:whisperer_clear_signal"],
+      "text": "They press both hands to the pipe and go completely still.<br><br>\"It's—\" A breath. \"It's clearer. Right now. Right now it's clearer than—\"<br><br>They repeat something under their breath. You catch two words: 'relay' and 'northeast.'<br><br>They turn to you with wide eyes. \"It's trying to tell us where.\""  ,
+      "set_flags": ["whisperer_clear_signal"]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "whisperer_quest_pipes",
+      "conditions": ["!flag:sq_whisperer_pipes_taken"],
+      "text": "They look at the ceiling — at the network of pipes running above their head toward the Strip's surface and beyond.<br><br>\"The pipes don't stop here. They run under the whole city. Through the old foundations. Out past the Strip wall, through the maintenance tunnels, east.\"<br><br>\"I've followed them as far as I can go. There's a section I can't pass — collapsed, sealed, I can't tell. But the signal's loudest just before it.\"<br><br>\"If you can get through...\"<br><br>They tap the pipe. The hum pulses once.<br><br>\"It wants you to.\"",
+      "offers_quest": "sq_whisperer_pipes",
+      "set_flags": ["sq_whisperer_pipes_taken"],
+      "video_speech": "Follow the ventilation east. Past where I can go. The signal comes from there. The pipes will guide you."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "whisperer_pipes",
+      "keywords": ["pipe", "vent", "tunnel", "underground"],
+      "text": "\"The pipes are older than the Strip. Some of them run back to before the bombs.\"<br><br>They knock gently against the metal. \"Everything that flows through a city leaves an echo. I just know how to hear it.\""
+    },
+    {
+      "id": "whisperer_relay",
+      "keywords": ["relay", "tower", "signal", "transmission"],
+      "text": "\"The relay towers bleed into the infrastructure. Whoever built them ran connections through the old utility grid.\"<br><br>They nod slowly. \"The signal gets into the pipes from those connections. That's how I hear it. That's how it reaches me.\"",
+      "video_speech": "The relay towers bleed into the infrastructure. That's how the signal reaches me through the pipes."
+    },
+    {
+      "id": "whisperer_voice",
+      "keywords": ["voice", "speak", "words", "hear"],
+      "text": "\"Sometimes I repeat what I hear before I understand it. People think I'm broken.\"<br><br>A pause. \"I'm just... receiving. And sometimes the volume is very high.\""
+    },
+    {
+      "id": "whisperer_strip",
+      "keywords": ["strip", "above", "casino", "neon"],
+      "text": "\"It's louder underground. Everyone up there is making noise.\"<br><br>They press their ear to the pipe. \"Down here, you can hear what the noise covers up.\""
+    }
+  ],
+  "fallback": {
+    "id": "whisperer_fallback",
+    "text": "They hold up one finger and press their ear to the pipe. \"Wait,\" they say. \"It's close. I can almost—\"<br><br>The hum fades.<br><br>\"Gone. Come back when the pipes are warm.\"",
+    "video_speech": "Not now. Come back when the pipes are warm. It speaks more clearly then."
+  },
+  "mood": "eerie",
+  "personality": ["Soft-spoken", "Eerie", "Genuine beneath the strangeness"]
+}

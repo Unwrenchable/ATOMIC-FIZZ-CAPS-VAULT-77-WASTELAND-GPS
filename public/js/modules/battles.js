@@ -44,6 +44,12 @@
       const inv = this.gs && this.gs.inventory;
       if (!inv || !Array.isArray(inv.ammo)) return false;
 
+      // BUG-019 FIX: treat amount <= 0 as "free fire" — no ammo required.
+      // This prevents weapons with ammoPerShot:0 (or null) from falsely failing
+      // the ammo check.  The call site already converts 0 with `|| 1`, but this
+      // guard adds a second layer so the function stays correct if called directly.
+      if (!amount || amount <= 0) return true;
+
       const ammoItem = inv.ammo.find(a => a.id === ammoType || a.type === ammoType);
       if (!ammoItem) return false;
 
@@ -70,6 +76,14 @@
         return;
       }
 
+      // BUG-016 FIX: a player stored with hp <= 0 (dead state) must be
+      // respawned before a new battle begins.  Without this guard the battle
+      // loop starts with a dead player, and the "player dead" check fires only
+      // after the first enemy attack — causing a silent one-turn ghost state.
+      if (this.gs && this.gs.player && (this.gs.player.hp || 0) <= 0) {
+        this._applyRespawnPenalty();
+      }
+
       this.state = {
         encounter,
         // BUG FIX: was only tracking enemies[0] HP. Now tracks HP for all enemies
@@ -81,7 +95,7 @@
 
       console.log("Battle started:", encounter);
 
-      // If you have a Pip-Boy battle tab, update it here
+      // If you have a Pocket-Boy battle tab, update it here
       this.updateUI();
     },
 
@@ -161,7 +175,16 @@
     enemyAttack() {
       if (!this.state) return;
 
-      const enemy = this.state.encounter.enemies[0];
+      const idx = this.state.activeEnemyIndex ?? 0;
+      // BUG-034 FIX: guard against a dead enemy attacking after the last kill.
+      // When all enemies are defeated activeEnemyIndex can still point at the
+      // just-killed enemy (hp <= 0). A dead enemy must never deal damage —
+      // doing so could flip a WON battle into a LOSE state.
+      if (!this.state.enemyHp || this.state.enemyHp[idx] <= 0) {
+        return { success: false, reason: "ENEMY_DEAD" };
+      }
+
+      const enemy = this.state.encounter.enemies[idx];
       let dmg = enemy.damage || 3;
 
       // Guard: ensure player.hp is initialized
@@ -331,6 +354,10 @@
       // BUG-004: display the currently active enemy, not always index 0
       const activeIdx = this.state.activeEnemyIndex ?? 0;
       const enemy = this.state.encounter.enemies[activeIdx];
+      if (!enemy) {
+        console.error("[Battle] updateUI: no enemy at index", activeIdx, "— state may be corrupted");
+        return;
+      }
       const special = this._getSpecial();
       const equipped = this.gs.player.equipped || {};
       const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);
@@ -339,7 +366,7 @@
       const armorSlots2 = ["chest", "head", "arms", "legs"];
       const activeArmorPieces = armorSlots2.map(s => equipped[s] || psEq2[s]).filter(Boolean);
       const activeTotalAR = activeArmorPieces.reduce((sum, a) => sum + (a.armor || 0), 0);
-      const activeArmorLabel = activeArmorPieces.length
+      const _activeArmorLabel = activeArmorPieces.length
         ? `${activeArmorPieces.map(a => escapeHtml(a.name)).join(", ")} (AR: ${activeTotalAR})`
         : "<em>None</em>";
       const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;
@@ -393,13 +420,21 @@
           msgDiv.textContent = `You hit ${enemy.name || enemy.id} for ${res.damage} damage!`;
           const end = this.checkBattleEnd();
           if (end === "WIN") {
+            // BUG-018 FIX: disable buttons immediately on WIN to prevent
+            // flee-after-victory crash (this.state is null, enemyAttack() would
+            // throw because this.state.encounter is undefined).
+            attackBtn.disabled = true;
+            if (fleeBtn) fleeBtn.disabled = true;
             msgDiv.textContent = `${enemy.name || enemy.id} defeated!`;
             this.applyRewards(this.state.encounter);
             this.state = null;
-            setTimeout(() => this.updateUI(), 1200);
+            setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1200);
             window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'WIN' } }));
             return;
           }
+          // Disable attack + flee buttons during enemy turn to prevent post-death input window
+          attackBtn.disabled = true;
+          if (fleeBtn) fleeBtn.disabled = true;
           setTimeout(() => {
             const enemyRes = this.enemyAttack();
             msgDiv.textContent = `${enemy.name || enemy.id} attacks for ${enemyRes.damage} damage!`;
@@ -409,8 +444,14 @@
               this.state = null;
               // BUG-003: Restore HP to 30% and apply caps penalty on death
               this._applyRespawnPenalty();
-              setTimeout(() => this.updateUI(), 1500);
+              setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1500);
               window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
+            } else {
+              // Re-enable buttons only if battle is still active
+              if (this.state) {
+                attackBtn.disabled = false;
+                if (fleeBtn) fleeBtn.disabled = false;
+              }
             }
           }, 800);
         };
@@ -426,7 +467,7 @@
           if (fleeRoll[0] < fleeThreshold) {
             msgDiv.textContent = "You escaped!";
             this.state = null;
-            setTimeout(() => this.updateUI(), 1200);
+            setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1200);
           } else {
             msgDiv.textContent = "Failed to escape! Enemy attacks!";
             setTimeout(() => {
@@ -438,7 +479,7 @@
                 this.state = null;
                 // BUG-003: Restore HP to 30% and apply caps penalty on death
                 this._applyRespawnPenalty();
-                setTimeout(() => this.updateUI(), 1500);
+                setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1500);
                 window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
               }
             }, 800);

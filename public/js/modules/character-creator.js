@@ -65,7 +65,169 @@
   const SPECIAL_MIN = 1;
   const SPECIAL_MAX = 10;
 
-  // Character Creator Module
+  // ============================================================
+  // VAULT BOY BOBBLEHEAD SVGS — unique pose per S.P.E.C.I.A.L. stat
+  // Each uses viewBox="0 0 50 60" (50×60 logical units, rendered via CSS width/height).
+  // Colors: suit #FFD700, skin #FFC48C, hair #4A3728, outline stroke #2a1a0a
+  // ============================================================
+  const VAULT_BOY_SVGS = {
+    STR: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="21" cy="12" r="1.5" fill="#2a1a0a"/>
+      <circle cx="29" cy="12" r="1.5" fill="#2a1a0a"/>
+      <path d="M21,17 Q25,21 29,17" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="15" r="2" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="15" r="2" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="8" y="27" width="7" height="12" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="35" y="18" width="7" height="11" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="39.5" cy="20" rx="5.5" ry="4.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="36" y="8" width="6" height="11" rx="3" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="20" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <ellipse cx="30" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+    </svg>`,
+
+    PER: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="13" y="9" width="11" height="8" rx="4" fill="#333" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="9" width="11" height="8" rx="4" fill="#333" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="23" y="11" width="4" height="3" rx="1" fill="#222" stroke="#2a1a0a" stroke-width="0.5"/>
+      <circle cx="18.5" cy="13" r="2.5" fill="none" stroke="#6699ff" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="31.5" cy="13" r="2.5" fill="none" stroke="#6699ff" stroke-width="0.8" opacity="0.6"/>
+      <path d="M21,19 Q25,23 29,19" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="17" r="2" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="17" r="2" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="4" y="15" width="12" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="34" y="15" width="12" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="20" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <ellipse cx="30" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+    </svg>`,
+
+    END: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="21" cy="12" r="1.5" fill="#2a1a0a"/>
+      <circle cx="29" cy="12" r="1.5" fill="#2a1a0a"/>
+      <path d="M21,17 Q25,21 29,17" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="15" r="2" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="15" r="2" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="35" y="25" width="7" height="12" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(-30 38 25)"/>
+      <rect x="8" y="25" width="7" height="12" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(25 11 25)"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(-20 20 41)"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(15 30 41)"/>
+      <line x1="3" y1="28" x2="9" y2="30" stroke="#FFD700" stroke-width="1.2" opacity="0.45"/>
+      <line x1="3" y1="32" x2="9" y2="33" stroke="#FFD700" stroke-width="1.2" opacity="0.45"/>
+      <line x1="3" y1="36" x2="9" y2="37" stroke="#FFD700" stroke-width="1.2" opacity="0.45"/>
+    </svg>`,
+
+    CHR: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="20" cy="11" r="1.5" fill="#2a1a0a"/>
+      <circle cx="30" cy="11" r="1.5" fill="#2a1a0a"/>
+      <path d="M19,17 Q25,24 31,17" fill="none" stroke="#2a1a0a" stroke-width="1.5"/>
+      <circle cx="17" cy="15" r="2.5" fill="#FF9999" opacity="0.6"/>
+      <circle cx="33" cy="15" r="2.5" fill="#FF9999" opacity="0.6"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="35" y="29" width="13" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="48" cy="32" r="3.5" fill="#FFC48C" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="47" y="28" width="2.5" height="5" rx="1" fill="#FFC48C" stroke="#2a1a0a" stroke-width="0.5"/>
+      <rect x="8" y="27" width="7" height="10" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(28 11 27)"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="20" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <ellipse cx="30" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+    </svg>`,
+
+    INT: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="15" y="9" width="9" height="7" rx="3.5" fill="none" stroke="#2a1a0a" stroke-width="1.6"/>
+      <rect x="26" y="9" width="9" height="7" rx="3.5" fill="none" stroke="#2a1a0a" stroke-width="1.6"/>
+      <rect x="23" y="11" width="4" height="3" rx="1" fill="none" stroke="#2a1a0a" stroke-width="1.2"/>
+      <line x1="15" y1="12" x2="10" y2="14" stroke="#2a1a0a" stroke-width="1.2"/>
+      <line x1="35" y1="12" x2="40" y2="14" stroke="#2a1a0a" stroke-width="1.2"/>
+      <circle cx="19.5" cy="12" r="1.2" fill="#2a1a0a" opacity="0.8"/>
+      <circle cx="30.5" cy="12" r="1.2" fill="#2a1a0a" opacity="0.8"/>
+      <path d="M21,18 Q25,22 29,18" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="16" r="1.8" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="16" r="1.8" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="11" y="34" width="28" height="18" rx="2" fill="#8B4513" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="24" y="34" width="2" height="18" fill="#6B3410"/>
+      <line x1="13" y1="38" x2="22" y2="38" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="13" y1="41" x2="22" y2="41" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="13" y1="44" x2="22" y2="44" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="28" y1="38" x2="37" y2="38" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="28" y1="41" x2="37" y2="41" stroke="#CC8855" stroke-width="0.8"/>
+      <line x1="28" y1="44" x2="37" y2="44" stroke="#CC8855" stroke-width="0.8"/>
+      <rect x="8" y="28" width="7" height="12" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(-30 11 28)"/>
+      <rect x="35" y="28" width="7" height="12" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(30 39 28)"/>
+    </svg>`,
+
+    AGI: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,10 Q15,-1 25,-1 Q35,-1 35,10" fill="#4A3728"/>
+      <circle cx="25" cy="10" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="21" cy="9" r="1.5" fill="#2a1a0a"/>
+      <circle cx="29" cy="9" r="1.5" fill="#2a1a0a"/>
+      <path d="M21,14 Q25,18 29,14" fill="none" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="18.5" cy="12" r="2" fill="#FF9999" opacity="0.55"/>
+      <circle cx="31.5" cy="12" r="2" fill="#FF9999" opacity="0.55"/>
+      <rect x="22" y="19" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="23" width="20" height="14" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,23 L25,27 L28,23" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="1" y="22" width="14" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="35" y="22" width="14" height="7" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="13" y="37" width="8" height="16" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(-22 17 37)"/>
+      <rect x="29" y="37" width="8" height="16" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1" transform="rotate(22 33 37)"/>
+      <line x1="41" y1="25" x2="47" y2="27" stroke="#FFD700" stroke-width="1.2" opacity="0.5"/>
+      <line x1="41" y1="29" x2="47" y2="30" stroke="#FFD700" stroke-width="1.2" opacity="0.5"/>
+      <line x1="3" y1="25" x2="9" y2="27" stroke="#FFD700" stroke-width="1.2" opacity="0.5"/>
+      <line x1="3" y1="29" x2="9" y2="30" stroke="#FFD700" stroke-width="1.2" opacity="0.5"/>
+    </svg>`,
+
+    LCK: `<svg class="cc-sp-vaultboy" viewBox="0 0 50 60" aria-hidden="true">
+      <path d="M15,13 Q15,2 25,2 Q35,2 35,13" fill="#4A3728"/>
+      <circle cx="25" cy="13" r="10" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="21" cy="11" r="1.5" fill="#2a1a0a"/>
+      <circle cx="29" cy="11" r="1.5" fill="#2a1a0a"/>
+      <path d="M20,17 Q25,22 30,17" fill="none" stroke="#2a1a0a" stroke-width="1.2"/>
+      <circle cx="18" cy="15" r="2" fill="#FF9999" opacity="0.6"/>
+      <circle cx="32" cy="15" r="2" fill="#FF9999" opacity="0.6"/>
+      <rect x="22" y="22" width="6" height="4" fill="#FFC48C"/>
+      <rect x="15" y="26" width="20" height="15" rx="2" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <path d="M22,26 L25,30 L28,26" fill="#CC9900" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="35" y="16" width="7" height="13" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <circle cx="38.5" cy="15" r="4.5" fill="#FFC48C" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="37" y="8" width="3" height="9" rx="1.5" fill="#FFC48C" stroke="#2a1a0a" stroke-width="0.8"/>
+      <rect x="8" y="27" width="7" height="12" rx="3.5" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="16" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <rect x="26" y="41" width="8" height="15" rx="3" fill="#FFD700" stroke="#2a1a0a" stroke-width="1"/>
+      <ellipse cx="20" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <ellipse cx="30" cy="57" rx="5" ry="2" fill="#4A3728" stroke="#2a1a0a" stroke-width="0.8"/>
+      <text x="3" y="12" font-size="9" fill="#FFD700" opacity="0.9" aria-hidden="true">&#9733;</text>
+      <text x="40" y="9" font-size="7" fill="#FFD700" opacity="0.9" aria-hidden="true">&#9733;</text>
+      <text x="7" y="22" font-size="6" fill="#FFD700" opacity="0.7" aria-hidden="true">&#9733;</text>
+    </svg>`
+  };
   const CharacterCreator = {
     isOpen: false,
     overlayEl: null,
@@ -297,7 +459,7 @@
       const skinTone = appearanceOptions.skinTones.find(s => s.id === app.skinTone) || appearanceOptions.skinTones[3];
       const hairColor = appearanceOptions.hairColors.find(h => h.id === app.hairColor) || appearanceOptions.hairColors[2];
       const eyeColor = appearanceOptions.eyeColors.find(e => e.id === app.eyeColor) || appearanceOptions.eyeColors[0];
-      const race = appearanceOptions.races.find(r => r.id === app.race) || appearanceOptions.races[0];
+      const _race = appearanceOptions.races.find(r => r.id === app.race) || appearanceOptions.races[0];
       const faceShape = appearanceOptions.faceShapes.find(f => f.id === app.faceShape) || appearanceOptions.faceShapes[0];
       
       // Adjust skin color for ghouls
@@ -516,7 +678,7 @@
           { dx: -0.35, dy: -0.1, r: 7 },
           { dx: 0.05, dy: 0.25, r: 9 }
         ];
-        patchPositions.forEach((pos, i) => {
+        patchPositions.forEach((pos, _i) => {
           const px = cx + pos.dx * faceWidth;
           const py = cy + pos.dy * faceHeight;
           svg += `<circle cx="${px}" cy="${py}" r="${pos.r}" fill="rgba(80,60,40,0.3)"/>`;
@@ -716,7 +878,7 @@
         // Pupil
         e += `<circle cx="${ex}" cy="${ey}" r="${pupilR}" fill="url(#pupilDepth)"/>`;
         // Catchlights
-        const clSign = isRight ? 1 : 1;
+        const _clSign = isRight ? 1 : 1;
         e += `<circle cx="${ex + irisR*0.36}" cy="${ey - irisR*0.42}" r="2.0" fill="#ffffff" opacity="0.90"/>`;
         e += `<circle cx="${ex - irisR*0.22}" cy="${ey + irisR*0.32}" r="1.0" fill="#ffffff" opacity="0.50"/>`;
         // Upper lash line
@@ -993,7 +1155,7 @@
       // Vignette overlay
       svg += `<rect width="100%" height="100%" fill="url(#vignette)"/>`;
       
-      // Pip-Boy green tint overlay
+      // Pocket-Boy green tint overlay
       svg += `<rect width="100%" height="100%" fill="rgba(0,255,65,0.05)"/>`;
       
       svg += `</svg>`;
@@ -1049,9 +1211,11 @@
           <div class="nova-guide-header">
             <span style="font-size:18px;line-height:1;">🤖</span>
             <span class="nova-guide-name">NOVA-7</span>
+            <button class="nova-guide-dismiss" id="novaDismissBtn" aria-label="Dismiss NOVA-7">✕</button>
           </div>
           <div class="nova-guide-text" id="novaGuideText"></div>
         `;
+        p.querySelector('#novaDismissBtn').addEventListener('click', () => this.hide());
         this.panel = p;
         return p;
       },
@@ -1106,6 +1270,25 @@
           </div>
           <div class="cc-vault-bar">VAULT-TEC CORPORATION · VAULT 77 · PERSONNEL ASSIGNMENT TERMINAL · YEAR 2277</div>
 
+          <!-- Onboarding instruction strip -->
+          <div class="cc-onboarding-strip" id="ccOnboardingStrip" style="
+            background:rgba(0,255,65,0.06);
+            border-bottom:1px solid rgba(0,255,65,0.2);
+            padding:8px 16px;
+            font-size:12px;
+            color:#008822;
+            letter-spacing:0.07em;
+            text-align:center;
+            position:relative;
+          ">
+            <span id="ccOnboardingText">▶ STEP 01 — Enter your name and define your identity. Work through each tab left-to-right. Use RANDOMIZE to generate a full character instantly.</span>
+            <button id="ccOnboardingDismiss" style="
+              position:absolute;right:10px;top:50%;transform:translateY(-50%);
+              background:transparent;border:none;color:#004400;cursor:pointer;
+              font-size:14px;padding:2px 6px;
+            " title="Dismiss">✕</button>
+          </div>
+
           <!-- Main Content -->
           <div class="cc-main">
             <!-- Preview Panel -->
@@ -1113,6 +1296,8 @@
               <div class="cc-preview-title">PREVIEW</div>
               <div class="cc-portrait-container">
                 <div class="cc-portrait-svg" id="ccPortraitSvg"></div>
+                <div class="cc-scan-line-portrait" aria-hidden="true"></div>
+                <div class="cc-portrait-frame" aria-hidden="true"></div>
               </div>
               <div class="cc-pip-label">VAULT DWELLER</div>
               <div class="cc-preview-name" id="ccPreviewName">WANDERER</div>
@@ -1144,6 +1329,7 @@
                 <!-- Identity Section -->
                 <div class="cc-category-section active" data-category="identity">
                   <div class="cc-section-title">IDENTITY</div>
+                  <div class="cc-section-hint">Your name, presentation, and form. This is how the wasteland will know you.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">NAME</div>
@@ -1174,6 +1360,7 @@
                 <!-- Face Section -->
                 <div class="cc-category-section" data-category="face">
                   <div class="cc-section-title">FACE</div>
+                  <div class="cc-section-hint">Facial features determine how NPCs react to you on first sight. No wrong choices — survivors come in all shapes.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">SKIN TONE</div>
@@ -1204,6 +1391,7 @@
                 <!-- Hair Section -->
                 <div class="cc-category-section" data-category="hair">
                   <div class="cc-section-title">HAIR</div>
+                  <div class="cc-section-hint">The wasteland makes styling difficult. Choose something you can maintain with a knife and limited water.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">HAIR STYLE</div>
@@ -1224,6 +1412,7 @@
                 <!-- Eyes Section -->
                 <div class="cc-category-section" data-category="eyes">
                   <div class="cc-section-title">EYES</div>
+                  <div class="cc-section-hint">Eyes are the first thing people read. Choose wisely — or don't. The wasteland doesn't care either way.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">EYE SHAPE</div>
@@ -1239,6 +1428,7 @@
                 <!-- Details Section -->
                 <div class="cc-category-section" data-category="details">
                   <div class="cc-section-title">DETAILS</div>
+                  <div class="cc-section-hint">Scars and markings are optional — but out here, most people have at least one story written on their skin.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">SCARS</div>
@@ -1254,6 +1444,7 @@
                 <!-- Extras Section -->
                 <div class="cc-category-section" data-category="extras">
                   <div class="cc-section-title">EXTRAS</div>
+                  <div class="cc-section-hint">Accessories and voice. These affect how NPCs perceive you before you speak.</div>
                   
                   <div class="cc-option-group">
                     <div class="cc-option-label">ACCESSORIES</div>
@@ -1269,18 +1460,21 @@
                 <!-- S.P.E.C.I.A.L. Section -->
                 <div class="cc-category-section" data-category="special">
                   <div class="cc-section-title">S.P.E.C.I.A.L. ATTRIBUTES</div>
+                  <div class="cc-section-hint">You have 21 points to distribute across 7 attributes. Minimum 1 per attribute, maximum 10. These affect combat, dialogue options, and crafting. You can rebalance at a Vault-Tec terminal later — costs caps.</div>
                   <div id="ccSpecialContent" class="cc-special-content"></div>
                 </div>
 
                 <!-- Background Section -->
                 <div class="cc-category-section" data-category="background">
                   <div class="cc-section-title">ORIGIN BACKGROUND</div>
+                  <div class="cc-section-hint">Where you came from changes what you know. Backgrounds grant starting bonuses, faction rep modifiers, and unique dialogue options. Choose what fits your play style.</div>
                   <div id="ccBackgroundContent" class="cc-background-content"></div>
                 </div>
 
                 <!-- Traits Section -->
                 <div class="cc-category-section" data-category="traits">
                   <div class="cc-section-title">CHARACTER TRAITS <span style="font-size:0.75em;opacity:0.7;">(SELECT UP TO 2)</span></div>
+                  <div class="cc-section-hint">Traits are double-edged. Every benefit comes with a drawback. Vault-Tec calls this "balanced incentive design." Survivors call it "the wasteland tax."</div>
                   <div id="ccTraitsContent" class="cc-traits-content"></div>
                 </div>
               </div>
@@ -1333,6 +1527,15 @@
       // Confirm button
       document.getElementById('ccConfirmBtn').addEventListener('click', () => {
         currentAppearance.name = document.getElementById('ccNameInput').value || "Wanderer";
+
+        // Validate all S.P.E.C.I.A.L. points have been allocated before allowing confirm
+        const sp = currentAppearance.special || {};
+        const used = SPECIAL_STATS.reduce((acc, s) => acc + ((sp[s.key] || 1) - 1), 0);
+        const remaining = SPECIAL_TOTAL_POINTS - used;
+        if (remaining > 0) {
+          alert(`You have ${remaining} unspent S.P.E.C.I.A.L. point${remaining > 1 ? 's' : ''}. Allocate all points before entering the Vault.`);
+          return;
+        }
         
         // Save to localStorage using base64 encoding for data integrity
         // This stores only cosmetic game preferences (avatar visual settings)
@@ -1391,12 +1594,39 @@
             section.classList.toggle('active', section.dataset.category === category);
           });
 
+          // Update onboarding strip step text
+          const stepHints = {
+            identity:   '▶ STEP 01 — Enter your name and choose your identity. Name is required.',
+            face:       '▶ STEP 02 — Choose your facial features. These appear in NPC dialogue and your Pocket-Boy file.',
+            hair:       '▶ STEP 03 — Select your hair style and color. Facial hair options included.',
+            eyes:       '▶ STEP 04 — Eye shape and color. Small details, big personality.',
+            details:    '▶ STEP 05 — Optional scars and markings. The wasteland leaves marks.',
+            extras:     '▶ STEP 06 — Accessories and voice type. Affects NPC first impressions.',
+            special:    '▶ STEP 07 — S.P.E.C.I.A.L. attributes. 21 points across 7 stats. Min 1, max 10.',
+            background: '▶ STEP 08 — Origin background. Grants starting bonuses and faction modifiers.',
+            traits:     '▶ STEP 09 — Character traits (up to 2). Every benefit has a drawback. Choose carefully.',
+          };
+          const hintEl = document.getElementById('ccOnboardingText');
+          const strip = document.getElementById('ccOnboardingStrip');
+          if (hintEl && strip && strip.style.display !== 'none') {
+            hintEl.textContent = stepHints[category] || '▶ Customize your character.';
+          }
+
           // Render dynamic tabs on first activation
           if (category === 'special')    this._renderSpecialTab();
           if (category === 'background') this._renderBackgroundTab();
           if (category === 'traits')     this._renderTraitsTab();
         }
       });
+
+      // Onboarding dismiss
+      const dismissBtn = document.getElementById('ccOnboardingDismiss');
+      if (dismissBtn) {
+        dismissBtn.addEventListener('click', () => {
+          const strip = document.getElementById('ccOnboardingStrip');
+          if (strip) strip.style.display = 'none';
+        });
+      }
     },
 
     // ============================================================
@@ -1552,7 +1782,7 @@
       if (!container) return;
 
       const sp   = currentAppearance.special;
-      const pts  = currentAppearance.specialPoints;
+      const _pts  = currentAppearance.specialPoints;
       const used = SPECIAL_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
       const remaining = SPECIAL_TOTAL_POINTS - used;
       currentAppearance.specialPoints = remaining;
@@ -1560,23 +1790,11 @@
       // Build derived stats (using base SPECIAL only — background applied on save)
       const derived = this._calcDerived(sp);
 
-      // Inline Vault Boy bobblehead icon with stat letter overlay
-      const vaultBoyIcon = (abbr) => `
-        <svg class="cc-sp-vaultboy" viewBox="0 0 40 50" width="40" height="50" aria-hidden="true">
-          <circle cx="20" cy="14" r="12" fill="none" stroke="#00ff41" stroke-width="1.5"/>
-          <text x="20" y="19" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#00ff41">${escapeHtml(abbr)}</text>
-          <rect x="12" y="27" width="16" height="2" rx="1" fill="#00ff41" opacity="0.6"/>
-          <rect x="8" y="30" width="6" height="12" rx="2" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
-          <rect x="26" y="30" width="6" height="12" rx="2" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
-          <rect x="14" y="29" width="12" height="18" rx="2" fill="none" stroke="#00ff41" stroke-width="1.5"/>
-          <rect x="14" y="47" width="5" height="3" rx="1" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
-          <rect x="21" y="47" width="5" height="3" rx="1" fill="none" stroke="#00ff41" stroke-width="1.2" opacity="0.6"/>
-        </svg>
-      `;
+      // Vault Boy bobblehead icon — look up per-stat SVG from VAULT_BOY_SVGS
 
       let html = `
         <div class="cc-special-intro">
-          <span class="cc-si-book">📖</span>
+          <div class="cc-si-book-cover" aria-hidden="true"><div class="cc-si-book-title">YOU'RE</div><div class="cc-si-book-special">S.P.E.C.I.A.L.!</div></div>
           <span class="cc-si-text">"Every human being is born with <strong>S.P.E.C.I.A.L.</strong> attributes. These core values define your every action in the wasteland."</span>
         </div>
         <div class="cc-special-points-banner">
@@ -1591,7 +1809,7 @@
         const dots  = Array.from({length: 10}, (_, i) => `<span class="cc-sp-dot${i < val ? ' filled' : ''}"></span>`).join('');
         html += `
           <div class="cc-special-row" data-stat="${escapeHtml(stat.key)}">
-            ${vaultBoyIcon(stat.abbr)}
+            ${VAULT_BOY_SVGS[stat.abbr] || ''}
             <div class="cc-sp-meta">
               <span class="cc-sp-abbr">${escapeHtml(stat.abbr)}</span>
               <span class="cc-sp-name">${escapeHtml(stat.label)}</span>
@@ -1674,7 +1892,7 @@
 
       // Update derived stats preview
       const derived = this._calcDerived(sp);
-      const safe = id => { const el = document.getElementById(id); if (el) el.textContent = ''; return el; };
+      const _safe = id => { const el = document.getElementById(id); if (el) el.textContent = ''; return el; };
       const set  = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
       set('ccDerMaxHP',  derived.maxHP);
       set('ccDerAP',     derived.actionPoints);

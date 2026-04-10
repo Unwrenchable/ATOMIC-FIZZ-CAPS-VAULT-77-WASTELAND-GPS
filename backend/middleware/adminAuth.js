@@ -12,15 +12,15 @@ const ADMIN_SESSION_PREFIX = "admin:sess:";
 function safeCompareNonPassword(a, b) {
   const strA = String(a || "");
   const strB = String(b || "");
-  
-  // Ensure both strings are the same length for timing safety
-  const maxLen = Math.max(strA.length, strB.length);
-  const bufA = Buffer.alloc(maxLen);
-  const bufB = Buffer.alloc(maxLen);
-  
-  bufA.write(strA);
-  bufB.write(strB);
-  
+
+  // Return false immediately when lengths differ — mismatched lengths can never be equal.
+  // NOTE: this leaks length information, but for non-secret usernames this is acceptable.
+  // All password comparisons must use bcrypt.compare() via verifyPassword().
+  if (strA.length !== strB.length) return false;
+
+  const bufA = Buffer.from(strA, "utf8");
+  const bufB = Buffer.from(strB, "utf8");
+
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
@@ -69,12 +69,18 @@ async function verifyPassword(inputPassword, storedPassword) {
   }
 }
 
-async function createAdminSession() {
+async function createAdminSession(req) {
   const id = crypto.randomUUID();
-  const key = ADMIN_SESSION_PREFIX + id;
-  const ttl = parseInt(process.env.ADMIN_SESSION_TTL_SECONDS || "86400", 10);
+  const k = ADMIN_SESSION_PREFIX + id;
+  const ttlSeconds = parseInt(process.env.ADMIN_SESSION_TTL_SECONDS || "86400", 10);
 
-  await redis.set(key, "1", { EX: ttl });
+  // Store session metadata for security auditing (creation time, originating IP, user agent)
+  const meta = JSON.stringify({
+    createdAt: Date.now(),
+    ip: req ? (req.ip || req.headers["x-forwarded-for"] || "") : "",
+    ua: req ? (req.headers["user-agent"] || "") : "",
+  });
+  await redis.set(k, meta, { EX: ttlSeconds });
   return id;
 }
 
@@ -116,7 +122,7 @@ async function adminLoginHandler(req, res) {
       return res.status(401).json({ ok: false, error: "invalid_admin_credentials" });
     }
 
-    const sessionId = await createAdminSession();
+    const sessionId = await createAdminSession(req);
     console.log("[adminAuth] Admin session created");
     return res.json({ ok: true, token: sessionId });
   } catch (err) {

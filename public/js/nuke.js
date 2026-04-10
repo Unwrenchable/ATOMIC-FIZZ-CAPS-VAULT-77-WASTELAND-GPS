@@ -1,7 +1,7 @@
 // nuke.js
 // ------------------------------------------------------------
 // Gear Fusion Chamber - NFT gear destruction/fusion interface
-// Opens from RADIO > Nuke section in main Pip-Boy UI
+// Opens from RADIO > Nuke section in main Pocket-Boy UI
 // ------------------------------------------------------------
 
 (function () {
@@ -53,7 +53,7 @@
       // Fallback to localStorage
       if (!walletAddress) {
         try {
-          const stored = localStorage.getItem("fizz_wallet_address");
+          const stored = localStorage.getItem("wallet");
           if (stored) {
             walletAddress = stored;
           }
@@ -249,7 +249,7 @@
         } catch (e) {}
 
         if (!walletAddress) {
-          walletAddress = localStorage.getItem("fizz_wallet_address");
+          walletAddress = localStorage.getItem("wallet");
         }
 
         if (!walletAddress) {

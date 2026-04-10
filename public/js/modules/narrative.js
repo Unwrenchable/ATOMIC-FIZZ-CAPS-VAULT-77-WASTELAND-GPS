@@ -173,7 +173,10 @@
         "daddy_warmcaps":    "dialog_warbucks",
         "hannigan":          "dialog_hannigan",
         "iron_nan":          "dialog_hannigan",
-        "nan_hannigan":      "dialog_hannigan"
+        "nan_hannigan":      "dialog_hannigan",
+        "bless":             "dialog_bless",
+        "wasteland_healer":  "dialog_bless",
+        "healer":            "dialog_bless"
       };
       const mapped = NPC_DIALOG_MAP[npcId.toLowerCase()];
       if (mapped) return mapped;
@@ -247,60 +250,9 @@
         this._saveFlags();
       }
 
-      // Offer quest if present - try multiple quest systems for compatibility
+      // Offer quest if present — delegate to _activateQuest to avoid duplication
       if (node.offers_quest) {
-        const questId = node.offers_quest;
-        let questActivated = false;
-        
-        // Try the unified quests module first (newer system)
-        if (Game.modules?.quests) {
-          try {
-            // Accept the quest if it's available, otherwise start it directly
-            if (Game.modules.quests.availableQuests?.[questId]) {
-              Game.modules.quests.acceptQuest(questId);
-              questActivated = true;
-              console.log("[narrative] Quest accepted via unified quests module:", questId);
-            } else {
-              Game.modules.quests.startQuest(questId);
-              questActivated = true;
-              console.log("[narrative] Quest started via unified quests module:", questId);
-            }
-          } catch (e) {
-            console.warn("[narrative] unified quests module failed:", e);
-          }
-        }
-        
-        // Fallback to Game.quests (also points to quests module)
-        if (!questActivated && Game.quests) {
-          try {
-            if (Game.quests.availableQuests?.[questId]) {
-              Game.quests.acceptQuest(questId);
-              questActivated = true;
-              console.log("[narrative] Quest accepted via Game.quests:", questId);
-            } else {
-              Game.quests.startQuest(questId);
-              questActivated = true;
-              console.log("[narrative] Quest started via Game.quests:", questId);
-            }
-          } catch (e) {
-            console.warn("[narrative] Game.quests failed:", e);
-          }
-        }
-        
-        // Final fallback to main.js activateQuest (legacy system)
-        if (!questActivated && Game.modules?.main?.activateQuest) {
-          try {
-            Game.modules.main.activateQuest(questId);
-            questActivated = true;
-            console.log("[narrative] Quest activated via main module:", questId);
-          } catch (e) {
-            console.error("[narrative] failed to activate quest via main:", questId, e);
-          }
-        }
-        
-        if (!questActivated) {
-          console.warn("[narrative] Could not activate quest - no quest system available:", questId);
-        }
+        this._activateQuest(node.offers_quest);
       }
 
       this.renderNode(node, dialog);
@@ -424,9 +376,21 @@
     // ============================================================
     // BRANCHING NAVIGATION — navigate to a named node in dialog.nodes map
     // ============================================================
-    _goToNode(nodeId, dialog) {
+    _goToNode(nodeId, dialog, _visited) {
       if (!dialog) dialog = this.dialogs[this.currentDialogId];
       if (!dialog) return;
+
+      // BUG-009 FIX: detect circular dialog loops. The _visited set tracks nodes
+      // seen in the current synchronous traversal chain (auto-advance paths).
+      // Each user click starts a fresh chain via _renderChoices → _goToNode.
+      // If the same node appears twice in one chain, log an error and close.
+      if (!_visited) _visited = new Set();
+      if (_visited.has(nodeId)) {
+        console.error("[narrative] Circular dialog loop detected at node:", nodeId, "— closing dialog");
+        this.closeDialog();
+        return;
+      }
+      _visited.add(nodeId);
 
       // Check dialog.nodes map first, then fall back to searching all node arrays
       const nodesMap = dialog.nodes || {};
@@ -533,7 +497,7 @@
       if (!panel) { if (onDone) onDone(); return; }
 
       // Re-render the static frame (name, header) but leave text area blank
-      const npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
+      const _npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
       panel.innerHTML = `<div id="nrrTextArea" class="dialog-text" style="min-height:4em;white-space:pre-wrap;"></div>`;
 
       const textArea = document.getElementById("nrrTextArea");
@@ -615,11 +579,6 @@
       if (Array.isArray(node.set_flags)) {
         node.set_flags.forEach(f => { if (f) STATE.flags[f] = true; });
         this._saveFlags();
-      }
-
-      // Handle quest offers on the node itself (e.g. intro)
-      if (node.offers_quest) {
-        this._activateQuest(node.offers_quest);
       }
 
       // Check if this is the courier intro and we should show starter gear
@@ -823,10 +782,10 @@
         Game.modules.NpcVideo.playForNode({ id: 'inline_reply', text: text || '' }, dialog);
       }
 
-      const npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
+      const _npcName = escapeHtml(dialog.npc || dialog.title || "Unknown");
       const rawText = (text || "").replace(/<br\s*\/?>/gi, "\n");
       panel.innerHTML = `
-        <div style="color:#ffaa00; font-weight:bold; margin-bottom:6px;">${npcName}</div>
+        <div style="color:#ffaa00; font-weight:bold; margin-bottom:6px;">${_npcName}</div>
         <div id="nrrInlineText" style="white-space:pre-wrap; min-height:2em;"></div>
         <div id="nrrInlineBtn" style="margin-top:12px;"></div>`;
 
@@ -1008,6 +967,7 @@
       erich:   { head: "head_base.svg",   eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_wasteland_gear.svg" },
       stilgar: { head: "head_square.svg", eyes: "eyes_almond.svg",   hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
       padre:   { head: "head_round.svg",  eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
+      bless:   { head: "head_round.svg",  eyes: "eyes_almond.svg",   hair: "hair_medium.svg",    shirt: "shirt_jacket.svg"         },
       default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
     },
 
@@ -1150,6 +1110,15 @@
           setTimeout(() => {
             window._bootTriggerCourierDialogue();
           }, 400);
+        }
+      }
+
+      // If closing the Courier dialogue, show the GPS/map tutorial for first-time players
+      if (closingDialogId === "dialog_courier") {
+        if (typeof window._bootShowMapTutorial === "function") {
+          setTimeout(() => {
+            window._bootShowMapTutorial();
+          }, 600);
         }
       }
 

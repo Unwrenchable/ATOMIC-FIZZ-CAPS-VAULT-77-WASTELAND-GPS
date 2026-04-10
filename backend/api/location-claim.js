@@ -13,22 +13,51 @@ const crypto = require("crypto");
 
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
+const { applyXpToProfile } = require("../lib/xp");
 
 // Cryptographically-secure random integer in [min, max)
 function secureRandInt(min, max) {
   return crypto.randomInt(min, max);
 }
 
-// Load locations data for distance validation and rewards
+// Load locations data for distance validation and rewards.
+// Primary source: poi.json (642+ grouped POIs rendered on the map).
+// Supplement: locations.json (hand-curated entries with custom claimRadius win on ID conflict).
 let LOCATIONS = [];
 try {
+  // 1. Load and flatten the full poi.json (grouped object → flat array)
+  const poiFile = path.join(__dirname, "..", "..", "public", "data", "poi.json");
+  if (fs.existsSync(poiFile)) {
+    const poiRaw = JSON.parse(fs.readFileSync(poiFile, "utf8"));
+    const flat = Array.isArray(poiRaw)
+      ? poiRaw
+      : Object.values(poiRaw).filter(Array.isArray).flat();
+    LOCATIONS = flat.filter(p => p && p.id && p.lat != null && p.lng != null);
+    console.log(`[location-claim] Loaded ${LOCATIONS.length} locations from poi.json`);
+  } else {
+    console.error("[location-claim] poi.json not found — falling back to locations.json only");
+  }
+
+  // 2. Merge hand-curated locations.json (override matching IDs so custom claimRadius is preserved)
   const locFile = path.join(__dirname, "..", "..", "public", "data", "locations.json");
   if (fs.existsSync(locFile)) {
-    LOCATIONS = JSON.parse(fs.readFileSync(locFile, "utf8"));
-    console.log(`[location-claim] Loaded ${LOCATIONS.length} locations`);
+    const manual = JSON.parse(fs.readFileSync(locFile, "utf8"));
+    if (Array.isArray(manual) && manual.length > 0) {
+      const manualById = new Map(manual.map(l => [l.id, l]));
+      // Replace any matching entry; append any that are new
+      LOCATIONS = LOCATIONS.map(l => manualById.get(l.id) || l);
+      manual.forEach(l => {
+        if (l && l.id && !LOCATIONS.find(e => e.id === l.id)) LOCATIONS.push(l);
+      });
+      console.log(`[location-claim] Merged ${manual.length} hand-curated entries from locations.json`);
+    }
   }
 } catch (e) {
-  console.warn("[location-claim] Failed to load locations.json:", e.message);
+  console.error("[location-claim] CRITICAL: Failed to load location data:", e.message, "— all claims will return 404");
+}
+// Health check: warn loudly at startup if locations list is empty
+if (LOCATIONS.length === 0) {
+  console.error("[location-claim] STARTUP WARNING: LOCATIONS list is empty. POI claiming is non-functional.");
 }
 
 // Helper: Calculate distance between two coordinates in meters
@@ -48,7 +77,7 @@ function getDistance(lat1, lng1, lat2, lng2) {
 // Helper: Generate loot for a location based on tier
 function generateLoot(location) {
   const tier = location.tier || 1;
-  const locType = location.type || "wasteland";
+  const _locType = location.type || "wasteland";
   
   const rewards = {
     xp: 0,
@@ -180,7 +209,7 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     // -----------------------------
     if (typeof location.lat === "number" && typeof location.lng === "number") {
       const distance = getDistance(playerLat, playerLng, location.lat, location.lng);
-      const maxDistance = location.claimRadius || 100; // Default 100m radius
+      const maxDistance = (typeof location.claimRadius === "number") ? location.claimRadius : 50; // Default 50m radius — matches frontend UI
 
       if (distance > maxDistance) {
         return res.status(400).json({
@@ -237,6 +266,19 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
 
     // Get or create player profile
     const playerKey = key(`player:${wallet}`);
+
+    // BUG-007 FIX: profile update is a non-atomic read-modify-write.
+    // Use a per-wallet profile lock so concurrent claims on different POIs
+    // don't overwrite each other's reward writes.
+    const profileLockKey = `profile:lock:${wallet}`;
+    const lockResult = await redis.set(profileLockKey, "1", { NX: true, EX: 10 });
+    if (!lockResult) {
+      // Release the cooldown NX lock so the player can retry
+      await redis.del(cooldownKey).catch(() => {});
+      return res.status(409).json({ ok: false, error: "Concurrent update in progress — please retry" });
+    }
+
+    try {
     let playerData = await redis.hget(playerKey, "profile");
     
     if (!playerData) {
@@ -255,24 +297,20 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
 
     const player = JSON.parse(playerData);
 
-    // Award XP and caps
-    player.xp = (player.xp || 0) + rewards.xp;
+    // BUG-008 FIX: enforce inventory size limit — prevent unbounded growth
+    const MAX_INVENTORY_SIZE = 200;
+
+    // Award XP and caps — use shared applyXpToProfile() for consistent level-up logic
     player.caps = (player.caps || 0) + rewards.caps;
+    applyXpToProfile(player, rewards.xp);
 
-    // Check for level up
-    const xpPerLevel = 100;
-    while (player.xp >= player.level * xpPerLevel) {
-      player.xp -= player.level * xpPerLevel;
-      player.level += 1;
-    }
-
-    // Add items to inventory
+    // Add items to inventory (BUG-008 FIX: respect inventory cap)
     if (!player.inventory) player.inventory = [];
     rewards.items.forEach(itemId => {
       const existing = player.inventory.find(i => i.id === itemId);
       if (existing) {
         existing.quantity = (existing.quantity || 1) + 1;
-      } else {
+      } else if (player.inventory.length < MAX_INVENTORY_SIZE) {
         player.inventory.push({
           id: itemId,
           name: itemId,
@@ -285,6 +323,14 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
 
     // Save player profile
     await redis.hset(playerKey, "profile", JSON.stringify(player));
+
+    } finally {
+      await redis.del(profileLockKey).catch(() => {});
+    }
+
+    // Re-read for response (safe — we just wrote it)
+    const savedData = await redis.hget(playerKey, "profile");
+    const savedPlayer = savedData ? JSON.parse(savedData) : {};
 
     // Mark location as claimed
     const claimedKey = key(`player:${wallet}:claimed`);
@@ -303,9 +349,9 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
         items: rewards.items
       },
       player: {
-        xp: player.xp,
-        caps: player.caps,
-        level: player.level
+        xp: savedPlayer.xp,
+        caps: savedPlayer.caps,
+        level: savedPlayer.level
       },
       cooldown: cooldownDuration
     });

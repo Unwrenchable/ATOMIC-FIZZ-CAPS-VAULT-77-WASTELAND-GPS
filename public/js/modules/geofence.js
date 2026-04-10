@@ -41,7 +41,7 @@
   // ----------------------------------------------------------
   // Haversine distance in meters (mirrors server-side calc)
   // ----------------------------------------------------------
-  function haversineMeters(lat1, lng1, lat2, lng2) {
+  function _haversineMeters(lat1, lng1, lat2, lng2) {
     const R = 6_371_000;
     const toRad = d => d * Math.PI / 180;
     const dLat = toRad(lat2 - lat1);
@@ -91,7 +91,7 @@
   // ----------------------------------------------------------
   // Geo-fence prompt card (shown when player is at a site)
   // ----------------------------------------------------------
-  function showGeofencePrompt(location, distanceM) {
+  function _showGeofencePrompt(location, distanceM) {
     // Remove any existing prompt
     const old = document.getElementById("gf-prompt-card");
     if (old) old.remove();
@@ -109,7 +109,7 @@
     ].join(";");
 
     card.innerHTML = [
-      '<div style="font-size:10px;opacity:0.6;margin-bottom:4px;">// PIP-BOY SIGNAL DETECTED //</div>',
+      '<div style="font-size:10px;opacity:0.6;margin-bottom:4px;">// POCKET-BOY SIGNAL DETECTED //</div>',
       '<div style="font-size:14px;font-weight:bold;margin-bottom:6px;">',
         escapeHtml(location.name), "</div>",
       '<div style="font-size:11px;opacity:0.7;margin-bottom:8px;">',
@@ -364,6 +364,7 @@
   function startGPSLoop() {
     if (!navigator.geolocation) return;
     if (_checkTimer) return; // already running
+    if (document.hidden) return; // don't start while page is hidden
 
     function doCheck() {
       navigator.geolocation.getCurrentPosition(
@@ -377,8 +378,15 @@
     _checkTimer = setInterval(doCheck, CHECK_INTERVAL_MS);
   }
 
+  function stopGPSLoop() {
+    if (_checkTimer) {
+      clearInterval(_checkTimer);
+      _checkTimer = null;
+    }
+  }
+
   // ----------------------------------------------------------
-  // Collector panel renderer (for Pip-Boy UI integration)
+  // Collector panel renderer (for Pocket-Boy UI integration)
   // ----------------------------------------------------------
   function renderCollectorPanel(containerId) {
     const container = document.getElementById(containerId);
@@ -436,6 +444,9 @@
       );
     },
 
+    // Pause the background GPS-check loop (e.g. when page is hidden)
+    stopGPSLoop,
+
     // Render the collector badge panel
     renderCollectorPanel,
 
@@ -449,5 +460,18 @@
   };
 
   Game.modules.geofence = geofenceModule;
+
+  // Page Visibility API — stop GPS polling when the page is hidden to save
+  // battery; restart it when the player returns to the game.
+  if (!window._geofenceVisibilityBound) {
+    window._geofenceVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        stopGPSLoop();
+      } else {
+        startGPSLoop();
+      }
+    });
+  }
 
 })();

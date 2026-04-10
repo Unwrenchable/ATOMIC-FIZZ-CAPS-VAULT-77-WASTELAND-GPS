@@ -1,7 +1,66 @@
 // /js/overseer/handlers.js
 // Custom Overseer Commands (experimental zones, etc.)
 
+// BUG-010 FIX: replace Math.random() with crypto.getRandomValues() for
+// consistent CSPRNG usage across the codebase.
+function _secureChoice(arr) {
+  if (!arr || arr.length === 0) return undefined;
+  const idx = new Uint32Array(1);
+  crypto.getRandomValues(idx);
+  return arr[idx[0] % arr.length];
+}
+
 window.overseerHandlers = {
+
+  start() {
+    // Cancel any in-flight timers from a previous /start call
+    if (window._startTimers) {
+      window._startTimers.forEach(id => clearTimeout(id));
+    }
+    window._startTimers = [];
+    const delay = (fn, ms) => {
+      const id = setTimeout(fn, ms);
+      window._startTimers.push(id);
+      return id;
+    };
+
+    overseerSay("> VAULT 77 // ATOMIC FIZZ CAPS INITIATIVE");
+    overseerSay("> ────────────────────────────────────────");
+    overseerSay("");
+    delay(() => {
+      overseerSay("> WELCOME TO THE ATOMIC FIZZ CAPS PROGRAM.");
+      overseerSay("> YOU ARE ONE OF FEW SURVIVORS CHOSEN FOR THIS INITIATIVE.");
+      overseerSay("");
+    }, 500);
+    delay(() => {
+      overseerSay("> HOW THIS WORKS:");
+      overseerSay(">  1. EXPLORE real GPS locations in the wasteland");
+      overseerSay(">  2. CLAIM Points of Interest to earn FIZZ tokens (Solana)");
+      overseerSay(">  3. LOOT gear, fight creatures, complete quests");
+      overseerSay(">  4. LEVEL UP your survivor rank and build reputation");
+      overseerSay("");
+    }, 1500);
+    delay(() => {
+      overseerSay("> QUICK COMMANDS TO GET STARTED:");
+      overseerSay(">  status    - Check your current stats & location");
+      overseerSay(">  quest     - View your active quest log");
+      overseerSay(">  inventory - See what you're carrying");
+      overseerSay(">  map       - Scan nearby Points of Interest");
+      overseerSay(">  caps      - Check your FIZZ cap balance");
+      overseerSay("");
+    }, 2800);
+    delay(() => {
+      overseerSay("> ENTERTAINMENT:");
+      overseerSay(">  games     - List all mini-games");
+      overseerSay(">  jokes     - Wasteland humor (questionable quality)");
+      overseerSay(">  fortune   - Consult the oracle");
+      overseerSay("");
+    }, 4000);
+    delay(() => {
+      overseerSay("> Type HELP anytime for the full command list.");
+      overseerSay("> The wasteland doesn't wait, smoothskin. Get moving.");
+    }, 5200);
+  },
 
   zones() {
     overseerSay("EXPERIMENTAL ZONES:");
@@ -108,13 +167,13 @@ window.overseerHandlers = {
       "What's a super mutant's favorite game? SMASH BROTHERS.",
       "Why don't ghouls ever get lonely? They're always in DE-COMPOSING company!",
       "What do you call a deathclaw with no teeth? A GUMMY BEAR... still terrifying.",
-      "Why was the Pip-Boy so popular? It had ALL the apps... before the apocalypse.",
+      "Why was the Pocket-Boy so popular? It had ALL the apps... before the apocalypse.",
       "What's a robot's favorite type of music? HEAVY METAL... literally.",
       "How do you know if a synth is lying? Their PROGRAMMING SHOWS.",
       "Why don't mirelurks share food? They're too SHELLFISH!",
       "What's Overseer's favorite dance? The ROBOT... obviously."
     ];
-    const joke = jokes[Math.floor(Math.random() * jokes.length)];
+    const joke = _secureChoice(jokes);
     overseerSay("> RETRIEVING JOKE FROM DATABASE...");
     setTimeout(() => overseerSay(joke), 800);
   },
@@ -132,7 +191,7 @@ window.overseerHandlers = {
       "THE STARS ALIGN. YOUR CRITICAL HIT CHANCE INCREASES.",
       "I FORESEE... A VERY LARGE EXPLOSION. DUCK."
     ];
-    const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+    const fortune = _secureChoice(fortunes);
     overseerSay("> CONSULTING THE WASTELAND ORACLE...");
     overseerSay("> INTERPRETING RADSTORM PATTERNS...");
     setTimeout(() => {
@@ -159,7 +218,7 @@ window.overseerHandlers = {
         hint: "Check this terminal's header"
       },
       {
-        q: "What company made the Pip-Boy?",
+        q: "What company made the Pocket-Boy?",
         a: "RobCo Industries",
         hint: "They also made Protectrons"
       },
@@ -170,7 +229,7 @@ window.overseerHandlers = {
       }
     ];
     
-    const question = questions[Math.floor(Math.random() * questions.length)];
+    const question = _secureChoice(questions);
     overseerSay("> FALLOUT LORE TRIVIA:");
     overseerSay("> " + question.q);
     overseerSay("> TYPE YOUR ANSWER OR 'hint' FOR A CLUE");

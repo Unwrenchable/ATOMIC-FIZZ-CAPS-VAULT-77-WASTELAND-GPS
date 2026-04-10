@@ -540,7 +540,7 @@
       const threshold = thresholds[difficulty] || thresholds.medium;
       
       // Calculate success chance
-      let successChance = threshold.baseChance;
+      let successChance;
       
       // Stat bonus: each point above threshold adds 10%
       if (statValue >= threshold.required) {
@@ -568,7 +568,7 @@
     // ============================================================
     // SHOW SPEECH CHECK RESULT
     // ============================================================
-    _showSpeechCheckResult(success, difficulty) {
+    _showSpeechCheckResult(success, _difficulty) {
       const result = document.createElement('div');
       result.className = `fo4-speech-result ${success ? 'success' : 'failure'}`;
       result.textContent = success ? '✓ SUCCESS' : '✗ FAILED';
@@ -768,7 +768,7 @@
             await Game.modules.Dragon.loadArmatureJSON(this.currentNPC.armatureBase);
             
             // Get variation for this NPC
-            const variation = Game.modules.Dragon.getRandomVariation(this.currentNPC.id || 'default');
+            const _variation = Game.modules.Dragon.getRandomVariation(this.currentNPC.id || 'default');
             
             this.currentDragonBonesDisplay = await Game.modules.Dragon.createArmatureDisplay(
               this.currentNPC.armatureName || 'hero',
@@ -854,9 +854,9 @@
 
     // ============================================================
     // GENERATE FALLBACK PORTRAIT SVG
-    // When CharacterCreator isn't loaded, generate a simple Pip-Boy style portrait
+    // When CharacterCreator isn't loaded, generate a simple Pocket-Boy style portrait
     // ============================================================
-    _generateFallbackPortraitSVG(type, size = 160, npcData = null) {
+    _generateFallbackPortraitSVG(type, _size = 160, npcData = null) {
       const isNPC = type === 'npc';
       const primaryColor = isNPC ? '#ffaa00' : '#00ff41';
       const secondaryColor = isNPC ? '#cc8800' : '#00cc33';
@@ -890,7 +890,7 @@
             </pattern>
           </defs>
           
-          <!-- Background with Pip-Boy style -->
+          <!-- Background with Pocket-Boy style -->
           <rect width="100%" height="100%" fill="#0a1a0a"/>
           
           <!-- Grid overlay -->
@@ -908,7 +908,7 @@
           <!-- Scanlines overlay -->
           <rect width="100%" height="100%" fill="url(#scanlines-${uniqueId})" opacity="0.3"/>
           
-          <!-- Corner brackets for that Pip-Boy feel -->
+          <!-- Corner brackets for that Pocket-Boy feel -->
           <path d="M 8 20 L 8 8 L 20 8" fill="none" stroke="${primaryColor}" stroke-width="2"/>
           <path d="M ${viewSize-20} 8 L ${viewSize-8} 8 L ${viewSize-8} 20" fill="none" stroke="${primaryColor}" stroke-width="2"/>
           <path d="M 8 ${viewSize-20} L 8 ${viewSize-8} L 20 ${viewSize-8}" fill="none" stroke="${primaryColor}" stroke-width="2"/>
@@ -930,19 +930,37 @@
     // SHOW AFFINITY CHANGE
     // ============================================================
     _showAffinityChange(npcName, amount) {
+      // BUG-005 FIX: escape npcName before inserting into innerHTML to prevent
+      // stored XSS when an NPC's name contains HTML/script tags.
+      const safeName = escapeHtml(npcName || 'NPC');
+      const text = amount > 0
+        ? `${safeName} liked that.`
+        : `${safeName} disliked that.`;
+
+      // BUG-015 FIX: cancel any running affinity timer and remove the previous
+      // popup before creating a new one so rapid dialogue choices don't stack
+      // multiple persistent popups in the DOM.
+      if (this._affinityTimer) {
+        clearTimeout(this._affinityTimer);
+        this._affinityTimer = null;
+      }
+      if (this._affinityPopup && this._affinityPopup.parentNode) {
+        this._affinityPopup.remove();
+      }
+
       const popup = document.createElement('div');
       popup.className = `fo4-affinity-popup ${amount < 0 ? 'negative' : ''}`;
-      
-      const text = amount > 0 
-        ? `${npcName} liked that.` 
-        : `${npcName} disliked that.`;
-      
       popup.innerHTML = `<div class="fo4-affinity-text">${text}</div>`;
-      
+
+      this._affinityPopup = popup;
       document.body.appendChild(popup);
-      
-      setTimeout(() => {
-        popup.remove();
+
+      this._affinityTimer = setTimeout(() => {
+        if (popup.parentNode) popup.remove();
+        if (this._affinityPopup === popup) {
+          this._affinityPopup = null;
+          this._affinityTimer = null;
+        }
       }, 2000);
     },
 
@@ -1064,7 +1082,7 @@
         
         if (accept && Game.quests) {
           Game.quests.startQuest(questId);
-          this.showQuestUpdate('NEW QUEST', `${questId} added to your Pip-Boy`);
+          this.showQuestUpdate('NEW QUEST', `${questId} added to your Pocket-Boy`);
         }
       }, 500);
     },
@@ -1117,7 +1135,7 @@
     // ============================================================
     // BARTER SYSTEM
     // ============================================================
-    _showBarterOption(node) {
+    _showBarterOption(_node) {
       // Add a barter response option dynamically
       setTimeout(() => {
         const responseArea = this.overlayEl.querySelector('.fo4-response-area');
@@ -1196,15 +1214,25 @@
     // SHOW QUEST UPDATE
     // ============================================================
     showQuestUpdate(title, text) {
+      // SECURITY FIX: title and text may come from quest IDs, reward values, or
+      // NPC dialogue data.  Build the DOM safely without innerHTML interpolation
+      // to prevent stored-XSS if any upstream data contains HTML.
       const notification = document.createElement('div');
       notification.className = 'fo4-quest-update';
-      notification.innerHTML = `
-        <div class="fo4-quest-update-title">${title}</div>
-        <div class="fo4-quest-update-text">${text}</div>
-      `;
-      
+
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'fo4-quest-update-title';
+      titleDiv.textContent = title;
+
+      const textDiv = document.createElement('div');
+      textDiv.className = 'fo4-quest-update-text';
+      textDiv.textContent = text;
+
+      notification.appendChild(titleDiv);
+      notification.appendChild(textDiv);
+
       document.body.appendChild(notification);
-      
+
       setTimeout(() => {
         notification.remove();
       }, 3000);

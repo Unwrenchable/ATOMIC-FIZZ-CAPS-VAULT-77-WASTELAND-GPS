@@ -213,19 +213,18 @@ router.post("/loot", authMiddleware, lootLimiter, async (req, res) => {
     const baseReward   = MIN_LOOT_CAPS + crypto.randomInt(LOOT_CAPS_RANGE); // 10–60
     const capsAwarded  = Math.max(5, Math.min(MAX_LOOT_CAPS, Math.round(baseReward * tierMultiplier)));
 
-    // Idempotency: check if already looted
+    // Idempotency: atomically mark as looted (NX = only set if not already set)
+    // This prevents TOCTOU race conditions where two concurrent requests both
+    // pass a GET check before either writes the SET.
     const lootKey = redisKeyLoot(wallet, dungeonId, roomIdInt);
-    const alreadyLooted = await redis.get(key(lootKey));
-    if (alreadyLooted) {
+    const lootSetResult = await redis.set(key(lootKey), String(Date.now()), { NX: true, EX: LOOT_PERSISTENCE_TTL_SECONDS });
+    if (!lootSetResult) {
       return res.status(409).json({
         ok: false,
         alreadyLooted: true,
         error: "This room has already been looted",
       });
     }
-
-    // Mark as looted (TTL: 7 days for persistence)
-    await redis.set(key(lootKey), String(Date.now()), { EX: LOOT_PERSISTENCE_TTL_SECONDS });
 
     const xpAwarded = Math.max(5, Math.floor(capsAwarded / 6));
 
@@ -288,19 +287,21 @@ router.post("/clear", authMiddleware, clearLimiter, async (req, res) => {
       return res.status(500).json({ ok: false, error: "Session data corrupted" });
     }
 
-    // Idempotency check
+    // BUG-033 FIX: Replace GET-then-SET with a single atomic NX set to prevent
+    // TOCTOU race where two concurrent requests both pass the alreadyCleared check
+    // and each receive the full completion bonus (caps + XP double award).
     const clearKey = redisKeyClear(wallet, dungeonId);
-    const alreadyCleared = await redis.get(key(clearKey));
-    if (alreadyCleared) {
+    const clearResult = await redis.set(key(clearKey), String(Date.now()), {
+      NX: true,
+      EX: LOOT_PERSISTENCE_TTL_SECONDS,
+    });
+    if (!clearResult) {
       return res.status(409).json({
         ok: false,
         alreadyCleared: true,
         error: "Dungeon already cleared",
       });
     }
-
-    // Mark as cleared
-    await redis.set(key(clearKey), String(Date.now()), { EX: LOOT_PERSISTENCE_TTL_SECONDS });
 
     // Delete session so it can't be reused
     await redis.del(key(redisKeySession(wallet, dungeonId)));

@@ -47,7 +47,7 @@ const TEST_PROMPTS = [
     prompt:
       'Fallout retro animated style, 5-second clip: a weathered caravan trader in a battered leather duster ' +
       'stands at a makeshift market stall on a collapsed highway overpass, haggling over scrap metal and Nuka-Cola. ' +
-      'Wasteland backdrop, radiation haze, warm golden sunset, gritty 1950s filter, Pip-Boy green HUD overlay.',
+      'Wasteland backdrop, radiation haze, warm golden sunset, gritty 1950s filter, Pocket-Boy green HUD overlay.',
   },
   {
     label: 'Vault-Tec propaganda broadcast',
@@ -61,7 +61,7 @@ const TEST_PROMPTS = [
     prompt:
       'Fallout retro animated style, 5-second clip: a massive green Super Mutant warlord pounds his chest ' +
       'atop a ruined skyscraper, yelling at a crowd of raiders below. Stormy sky, lightning strikes, ' +
-      'radioactive green glow around him, gritty post-apocalyptic atmosphere, Pip-Boy green tint.',
+      'radioactive green glow around him, gritty post-apocalyptic atmosphere, Pocket-Boy green tint.',
   },
 ];
 

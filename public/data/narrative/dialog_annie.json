@@ -4,12 +4,22 @@
   "portrait": "annie",
   "title": "The Orphan of the Ashes",
   "description": "Red-haired, soot-smudged, wearing a patched Vault-Tec jumpsuit two sizes too big. She's small. She's alone. She's watching you with eyes that have seen too much and still, somehow, haven't given up.",
+  "backstory": "Orphaned at seven when her settlement fell to a raider attack that she survived by hiding in a chimney. She grew up in ruins, taught herself to read from pre-war brand signage, and learned to start fires with nothing. Wasteland rumor holds that she walked out of a burning building at age four without a mark on her — she does not confirm or deny this. She is looking for the man who owns Warmcaps now, and why he seems to know something about what happened to her parents.",
+  "personality": [
+    "Fiercely Independent",
+    "Observant",
+    "Stubborn"
+  ],
   "intro": {
     "id": "annie_intro",
-    "conditions": ["!flag:met_annie"],
-    "set_flags": ["met_annie"],
-    "video_speech": "Hey. You. With the Pip-Boy. Don't go yet. I need to talk to you.",
-    "text": "You hear her before you see her — a scuff of boot on rubble, the rustle of cloth too large for the body wearing it.\n\nShe drops from a crumbled wall section and lands in a crouch, one hand on the ground, watching you with the wariness of a kid who has been burned before. Literally, if the scar on her forearm is anything to go by.\n\nFlame-red hair. Soot on her nose. A Vault-Tec jumpsuit stitched and re-stitched so many times the original seams are a memory.\n\nAnd a look in her eyes that says she has done the math on you and hasn't decided the answer yet.\n\n\"Hey. You. With the Pip-Boy.\"\n\nShe straightens up. She can't be more than twelve. She holds her ground like someone ten years older.\n\n\"Don't go yet. I need to talk to you.\"",
+    "conditions": [
+      "!flag:met_annie"
+    ],
+    "set_flags": [
+      "met_annie"
+    ],
+    "video_speech": "Hey. You. With the Pocket-Boy. Don't go yet. I need to talk to you.",
+    "text": "You hear her before you see her — a scuff of boot on rubble, the rustle of cloth too large for the body wearing it.\n\nShe drops from a crumbled wall section and lands in a crouch, one hand on the ground, watching you with the wariness of a kid who has been burned before. Literally, if the scar on her forearm is anything to go by.\n\nFlame-red hair. Soot on her nose. A Vault-Tec jumpsuit stitched and re-stitched so many times the original seams are a memory.\n\nAnd a look in her eyes that says she has done the math on you and hasn't decided the answer yet.\n\n\"Hey. You. With the Pocket-Boy.\"\n\nShe straightens up. She can't be more than twelve. She holds her ground like someone ten years older.\n\n\"Don't go yet. I need to talk to you.\"",
     "responses": [
       {
         "text": "[Question] Who are you? What are you doing out here alone?",
@@ -201,7 +211,9 @@
     "node_about_warmcaps": {
       "id": "node_about_warmcaps",
       "text": "Her expression changes — not admiration exactly. More like a trader appraising something she knows is expensive.\n\n\"Warren B. Capston. They call him Warmcaps. Used to be Vault-Tec arms division — some kind of executive, before the world ended. Now he runs the biggest caravan operation between here and the Mojave.\"\n\nShe says it like she's read the dossier. Maybe she has — she seems like the type to spend her evenings compiling intelligence instead of sleeping.\n\n\"Operates out of a fortified mansion to the north. Has more hired guns than most settlements have citizens. Trades in everything — medicine, weapons, pre-war tech. People say he collects things. Expensive things. Strange things.\"\n\nShe pauses.\n\n\"People also say he's got no heart. I think that's wrong. I think he's got a heart — it's just buried under about six layers of corporate shell armor and a ledger book.\"\n\nA look that is very much the look of someone who has decided to bet on a hunch.\n\n\"I think if someone made the right case to him, he'd help.\"",
-      "set_flags": ["annie_told_warmcaps_story"],
+      "set_flags": [
+        "annie_told_warmcaps_story"
+      ],
       "responses": [
         {
           "text": "[Question] Why would he help? What's in it for him?",
@@ -324,7 +336,7 @@
     },
     "node_whats_the_plan": {
       "id": "node_whats_the_plan",
-      "text": "She straightens up. This is the part she's rehearsed.\n\n\"Warmcaps — Warren B. Capston — runs the biggest caravan operation in this half of the wasteland out of a fortified mansion to the north. He has resources. He has hired muscle. He has a grudge against Nan Hannigan eating into his trading margins.\"\n\nShe ticks it off on her fingers.\n\n\"I need someone to go to him. Make the case. Nan Hannigan running a kid labor camp is worth shutting down — for him as a business move, and because it's the right thing, and sometimes those two things line up.\"\n\nShe meets your eyes squarely.\n\n\"I can't go myself. She's looking for me. A stranger with a Pip-Boy walking up to Warmcaps' front gate has a much better shot than a twelve-year-old with a warrant on her head.\"\n\nA breath.\n\n\"Will you go?\"",
+      "text": "She straightens up. This is the part she's rehearsed.\n\n\"Warmcaps — Warren B. Capston — runs the biggest caravan operation in this half of the wasteland out of a fortified mansion to the north. He has resources. He has hired muscle. He has a grudge against Nan Hannigan eating into his trading margins.\"\n\nShe ticks it off on her fingers.\n\n\"I need someone to go to him. Make the case. Nan Hannigan running a kid labor camp is worth shutting down — for him as a business move, and because it's the right thing, and sometimes those two things line up.\"\n\nShe meets your eyes squarely.\n\n\"I can't go myself. She's looking for me. A stranger with a Pocket-Boy walking up to Warmcaps' front gate has a much better shot than a twelve-year-old with a warrant on her head.\"\n\nA breath.\n\n\"Will you go?\"",
       "responses": [
         {
           "text": "[Friendly] Yeah. I'll go talk to Warmcaps.",
@@ -346,7 +358,9 @@
     "node_what_to_say": {
       "id": "node_what_to_say",
       "text": "\"Tell him about the kids. Tell him about Nan Hannigan. Tell him she's been running a labor operation that keeps her scavenging costs below market — undercutting his routes by feeding children instead of paying adult wages.\"\n\nShe takes a breath.\n\n\"Tell him there are twelve kids hiding in the ruins east of the old trade post. Tell him four are still inside. Tell him a twelve-year-old girl organized a jailbreak with a forty-second window and is asking him, as a fellow businessperson, to close the deal.\"\n\nA pause.\n\n\"Tell him Ember sends her regards. He won't know who that is yet. But he will.\"",
-      "set_flags": ["annie_sent_to_warmcaps"],
+      "set_flags": [
+        "annie_sent_to_warmcaps"
+      ],
       "responses": [
         {
           "text": "[Direct] I'll find him.",
@@ -357,8 +371,10 @@
     },
     "node_why_listen": {
       "id": "node_why_listen",
-      "text": "\"Because you've got a Pip-Boy and a working firearm and you're standing upright in the wasteland, which already puts you in the top fifteen percent of people worth talking to.\"\n\nShe says it with a completely straight face.\n\n\"Warmcaps talks to traders. Couriers. People who look like they can handle themselves. He doesn't talk to beggars. He doesn't talk to raider liaisons.\"\n\nShe looks you up and down.\n\n\"You'll get an audience. What you do with it is up to you.\"\n\nA pause.\n\n\"Just — tell him the truth. The whole truth. He'll respect that more than a pitch, I think.\"",
-      "set_flags": ["annie_sent_to_warmcaps"],
+      "text": "\"Because you've got a Pocket-Boy and a working firearm and you're standing upright in the wasteland, which already puts you in the top fifteen percent of people worth talking to.\"\n\nShe says it with a completely straight face.\n\n\"Warmcaps talks to traders. Couriers. People who look like they can handle themselves. He doesn't talk to beggars. He doesn't talk to raider liaisons.\"\n\nShe looks you up and down.\n\n\"You'll get an audience. What you do with it is up to you.\"\n\nA pause.\n\n\"Just — tell him the truth. The whole truth. He'll respect that more than a pitch, I think.\"",
+      "set_flags": [
+        "annie_sent_to_warmcaps"
+      ],
       "responses": [
         {
           "text": "[Friendly] All right. I'll go find Warmcaps.",
@@ -370,7 +386,9 @@
     "node_intro_warmcaps": {
       "id": "node_intro_warmcaps",
       "text": "Something shifts in her expression. Relief, maybe. Cautious.\n\n\"North of here. Follow the old highway past the collapsed overpass — you'll see a compound with pre-war perimeter fencing that's been heavily reinforced. That's The Mansion.\"\n\nShe reaches into her jumpsuit and produces a scrap of paper — a rough hand-drawn map, more accurate than it has any right to be from a twelve-year-old.\n\n\"Tell him Nan Hannigan has been running an illegal labor operation out of a licensed orphanage permit. Tell him about the undercutting. Tell him about the kids.\"\n\nShe presses the map into your hand.\n\n\"And tell him — tell him Ember sent you. He won't know the name. But when he hears the rest of it, he'll remember it.\"",
-      "set_flags": ["annie_sent_to_warmcaps"],
+      "set_flags": [
+        "annie_sent_to_warmcaps"
+      ],
       "responses": [
         {
           "text": "[Friendly] I'll find him. I'll make the case.",
@@ -387,7 +405,9 @@
     "node_warmcaps_story": {
       "id": "node_warmcaps_story",
       "text": "\"He started as Vault-Tec arms division — a VP, from what I pieced together from Nan's pre-war corporate ledgers that she uses as scrap paper without reading.\"\n\nShe straightens up.\n\n\"After the war he used the vault's emergency supply depot to seed the first caravan. Traded munitions for food, food for protection, protection for more caps. Compound interest on chaos.\"\n\nShe says the last phrase like she read it somewhere and liked it.\n\n\"Now he runs three caravan routes, a private security force, and a fortified compound he actually calls The Mansion. He's not Brotherhood. He's not NCR. He's just... extremely wealthy and very organized. In the wasteland, that's the same as being a government.\"\n\nShe glances north.\n\n\"He's got a robot assistant named GRACY. Keeps his schedule. Screens visitors. If you can get past GRACY, you can get an audience.\"",
-      "set_flags": ["annie_told_warmcaps_story"],
+      "set_flags": [
+        "annie_told_warmcaps_story"
+      ],
       "responses": [
         {
           "text": "[Question] How do I get past the robot?",
@@ -442,10 +462,16 @@
   "quest_nodes": [
     {
       "id": "annie_offers_caps_daddy",
-      "conditions": ["flag:met_annie", "!flag:quest_caps_daddy_active"],
+      "conditions": [
+        "flag:met_annie",
+        "!flag:quest_caps_daddy_active"
+      ],
       "text": "She squares herself up to her full height — which is not very much, but she makes it count.\n\n\"I need you to go to Warmcaps. Formally. Like — as a representative. Someone who can walk up to that gate and get an audience.\"\n\nShe reaches into her jumpsuit and pulls out a folded scrap of paper. A map, hand-drawn and surprisingly accurate.\n\n\"I can't go. I'm a twelve-year-old orphan with a labor charge Nan's put on me. But you can go.\"\n\nShe holds out the map.\n\n\"Twelve kids. Four still inside. I need Warmcaps' help, and I need it before Nan moves them or — or decides they're more trouble than they're worth.\"\n\nA breath. The first time she's sounded her age.\n\n\"Please.\"",
       "offers_quest": "quest_caps_daddy",
-      "set_flags": ["quest_caps_daddy_active", "annie_sent_to_warmcaps"],
+      "set_flags": [
+        "quest_caps_daddy_active",
+        "annie_sent_to_warmcaps"
+      ],
       "video_speech": "I need you to go to Warmcaps for me. There are twelve kids counting on this. Please.",
       "responses": [
         {

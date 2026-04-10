@@ -124,6 +124,45 @@
       }
     }
     ,
+
+    // ── BLESS SIDE QUEST ──────────────────────────────────────────────────────
+    // Bless is a Vault-19 trained field medic who treats everyone regardless of
+    // faction. She runs low on supplies and needs a resupply run from the eastern
+    // settlements.
+    // ─────────────────────────────────────────────────────────────────────────
+    sq_bless_supply_run: {
+      id: "sq_bless_supply_run",
+      name: "Healer's Ledger",
+      type: "steps",
+      triggerType: "npc",
+      triggerNpc: "bless",
+      description: "The field medic Bless is running low on critical medical supplies. She needs someone to make a resupply run to the eastern settlement.",
+      npcMessage: "I'm running low on RadAway, stimpaks, and suture thread. The settlement to the east trades them — I can't leave my patrol area. Can you make the run?",
+      steps: [
+        {
+          id: "reach_settlement",
+          description: "Travel to the eastern settlement.",
+          requires: { location: "eastern_settlement" }
+        },
+        {
+          id: "trade_for_supplies",
+          description: "Trade for medical supplies.",
+          requires: { item: "medical_supplies_bundle" }
+        },
+        {
+          id: "return_to_bless",
+          description: "Return the supplies to Bless.",
+          requires: { flag: "bless_supplies_returned" }
+        }
+      ],
+      rewards: {
+        xp: 120,
+        caps: 60,
+        items: ["stimpak", "radaway"],
+        reputation: { bless: 10 }
+      }
+    }
+    ,
     // Saitama learning/side placeholder (client-side note). Full details provided by server when revealed.
     saitama_learning: {
       id: 'saitama_learning',
@@ -1234,7 +1273,7 @@
         }
       }
       
-      // Give item rewards using unified PlayerState for proper persistence
+      // Give item rewards locally — client remains authoritative for items
       if (r.items && Array.isArray(r.items)) {
         r.items.forEach(itemId => {
           // Look up item definition from loaded items database

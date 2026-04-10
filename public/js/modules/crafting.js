@@ -30,30 +30,51 @@
       const inv = this.gs.inventory;
       if (!inv) return false;
 
-      // Simple approach: check all categories depending on type
-      const pools = [
-        inv.weapons,
-        inv.armor,
-        inv.consumables,
-        inv.misc,
-        inv.questItems,
-        inv.ammo
-      ].filter(Boolean);
+      // Handle both flat array (player-state.js) and legacy category-object structure
+      const items = Array.isArray(inv)
+        ? inv
+        : [].concat(
+            inv.weapons || [],
+            inv.armor || [],
+            inv.consumables || [],
+            inv.misc || [],
+            inv.questItems || [],
+            inv.ammo || []
+          );
 
-      let count = 0;
-      pools.forEach(arr => {
-        arr.forEach(item => {
-          if (item.id === req.id) {
-            count += item.quantity ?? item.amount ?? 1;
-          }
-        });
-      });
+      const count = items
+        .filter(i => i && i.id === req.id)
+        .reduce((sum, i) => sum + (i.quantity ?? i.amount ?? 1), 0);
 
       return count >= (req.amount || 1);
     },
 
     consumeIngredient(req) {
       const inv = this.gs.inventory;
+      let toRemove = req.amount || 1;
+
+      // Handle flat-array inventory (PlayerState canonical format)
+      if (Array.isArray(inv)) {
+        for (let i = inv.length - 1; i >= 0 && toRemove > 0; i--) {
+          const item = inv[i];
+          if (!item || item.id !== req.id) continue;
+          const stack = item.quantity ?? item.amount ?? 1;
+          if (stack <= toRemove) {
+            toRemove -= stack;
+            inv.splice(i, 1);
+          } else {
+            if ('quantity' in item) {
+              item.quantity = stack - toRemove;
+            } else {
+              item.amount = stack - toRemove;
+            }
+            toRemove = 0;
+          }
+        }
+        return;
+      }
+
+      // Legacy category-object inventory format
       const pools = [
         inv.weapons,
         inv.armor,
@@ -62,8 +83,6 @@
         inv.questItems,
         inv.ammo
       ].filter(Boolean);
-
-      let toRemove = req.amount || 1;
 
       for (const arr of pools) {
         for (let i = arr.length - 1; i >= 0 && toRemove > 0; i--) {
@@ -75,7 +94,6 @@
             toRemove -= stack;
             arr.splice(i, 1);
           } else {
-            // BUG-008: use 'in' check so write matches read precedence even when quantity===0
             if ('quantity' in item) {
               item.quantity = stack - toRemove;
             } else {
@@ -87,7 +105,59 @@
       }
     },
 
-    craft(recipeId) {
+    /**
+     * craftAsync(recipeId) → Promise<craftedItem|null>
+     *
+     * Server-validated crafting flow:
+     * 1. Verify client-side prerequisites (ingredients, dependencies loaded)
+     * 2. Call POST /api/crafting/craft — server enforces level req, cooldown, daily limit
+     * 3. Only if server approves: consume ingredients locally and add crafted item
+     *
+     * Returns the crafted item object on success, null on failure.
+     * Rejects with an Error (message safe to show in UI) on server rejection.
+     */
+    async craftAsync(recipeId) {
+      const recipes = Game.modules.recipes;
+      const mintables = Game.modules.mintables;
+
+      if (!recipes || !recipes.loaded || !mintables || !mintables.loaded) {
+        throw new Error("Crafting dependencies not ready — try again in a moment");
+      }
+
+      const recipe = recipes.getById(recipeId);
+      if (!recipe) throw new Error("Unknown recipe: " + recipeId);
+      if (!this.canCraft(recipeId)) throw new Error("Missing ingredients");
+
+      // ---- Server validation ----
+      try {
+        const apiBase = window.API_BASE || "";
+        const sessionId = window.Game?.sessionId || window.sessionId || localStorage.getItem("sessionId") || "";
+        const response = await fetch(`${apiBase}/api/crafting/craft`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(sessionId ? { Authorization: `Bearer ${sessionId}` } : {}),
+          },
+          body: JSON.stringify({ recipeId }),
+        });
+
+        const data = await response.json();
+        if (!data.ok) {
+          throw new Error(data.error || "Server rejected craft");
+        }
+      } catch (err) {
+        // Re-throw with user-friendly prefix so UI can display it
+        throw new Error("Crafting failed: " + (err.message || "server error"), { cause: err });
+      }
+
+      // ---- Server approved — complete craft locally ----
+      return this._craft(recipeId);
+    },
+
+    // BUG-020 FIX: renamed from craft() to _craft() to prevent direct console
+    // invocation bypassing server validation. craftAsync() is the only public
+    // entry point; _craft() is called internally after server approval.
+    _craft(recipeId) {
       const recipes = Game.modules.recipes;
       const mintables = Game.modules.mintables;
 

@@ -37,7 +37,7 @@ function loadBs58() {
     const codec = baseX(BASE58);
     if (codec && typeof codec.encode === "function" && typeof codec.decode === "function") return codec;
   } catch (err) {
-    throw new Error("Base58 library not available: " + err.message + ". Install 'bs58' or 'base-x' in your project.");
+    throw new Error("Base58 library not available: " + err.message + ". Install 'bs58' or 'base-x' in your project.", { cause: err });
   }
 }
 
@@ -52,8 +52,7 @@ function safeDecodeBase58(str, name = "value") {
   try {
     return bs58.decode(str);
   } catch (err) {
-    throw new Error(`${name} decode failed: ${err.message}`);
-  }
+    throw new Error(`${name} decode failed: ${err.message}`, { cause: err });  }
 }
 
 // ------------------------------------------------------------
@@ -271,12 +270,20 @@ router.post("/verify", verifyLimiter, async (req, res) => {
 });
 
 // GET /api/auth/session/:sessionId
-router.get("/session/:sessionId", async (req, res) => {
+// SEC-011 FIX: require the caller to be authenticated AND to be looking up
+// their own session — prevents any leaked session ID from being used to
+// deanonymize wallet addresses.
+router.get("/session/:sessionId", authMiddleware, async (req, res) => {
   try {
     const { sessionId } = req.params;
 
     if (!sessionId || typeof sessionId !== "string" || sessionId.length > 256) {
       return res.status(400).json({ ok: false, error: "Invalid sessionId" });
+    }
+
+    // Only allow a session to look itself up — no cross-session enumeration.
+    if (sessionId !== req.player.sessionId) {
+      return res.status(403).json({ ok: false, error: "Forbidden" });
     }
 
     const session = await getSession(sessionId);
@@ -320,7 +327,14 @@ router.get("/me", authMiddleware, async (req, res) => {
 
 module.exports = {
   authMiddleware,
+  generateNonce,
+  generateSessionId,
+  storeNonce,
+  getNonce,
+  deleteNonce,
+  storeSession,
   getSession,
+  deleteSession,
   isAdmin,
   router,
 };

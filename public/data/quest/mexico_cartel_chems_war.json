@@ -1,0 +1,52 @@
+{
+  "id": "mexico_cartel_chems_war",
+  "name": "The Cartel War",
+  "type": "global",
+  "region": "Mexico_City_Mexico",
+  "npc_giver": "global_mexico_city_chems_cook",
+  "description": "Two chem cartels are fighting over La Cocinera's supply routes through Mexico City. She needs them stopped or redirected before they burn down the pharmaceutical operation that keeps three settlements alive.",
+  "gps_requirement": {
+    "region": "Mexico City, Mexico",
+    "real_lat": 19.4326,
+    "real_lng": -99.1332,
+    "radius_km": 80
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Reach Mexico City",
+      "description": "Travel to the Mexico City ruins where the two cartel factions are actively contesting La Cocinera's territory. She warns the fighting has been escalating for three weeks.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 19.4326, "lng": -99.1332},
+      "radius_m": 1000,
+      "actions": ["set_flag:mexico_city_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Identify the Cartel Leaders",
+      "description": "Locate the leaders of both factions. La Cocinera believes the war was engineered by a third party — neither cartel actually wants this fight, but neither will back down first.",
+      "trigger": "player_investigate_area",
+      "actions": ["spawn:item_cartel_intelligence_logs", "set_flag:cartel_leaders_identified", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Resolve the Conflict",
+      "description": "Use what you've learned to force or broker a ceasefire. The evidence of third-party manipulation may be enough — or may not be.",
+      "trigger": "player_complete_objective:cartel_ceasefire",
+      "actions": ["set_flag:cartel_ceasefire_achieved", "unlock_stage:4"]
+    },
+    {
+      "id": 4,
+      "name": "Protect the Supply Routes",
+      "description": "With the ceasefire in place, ensure La Cocinera's pharmaceutical supply routes are cleared and operational before returning to report.",
+      "trigger": "player_complete_objective:supply_routes_secured",
+      "actions": ["complete_quest:true", "set_flag:cartel_war_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 400,
+    "caps": 300,
+    "fizz": 30,
+    "items": ["item_cocinera_supply_authorization"]
+  }
+}

@@ -253,9 +253,6 @@
       _state.lastSaved = Date.now();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(_state));
       
-      // Also update legacy storage for backward compatibility
-      updateLegacyStorage();
-      
       _dirty = false;
     } catch (e) {
       console.error("[PlayerState] Failed to save:", e);
@@ -263,11 +260,17 @@
   }
 
   /**
-   * Update legacy storage for backward compatibility
+   * Update legacy storage — DEPRECATED.
+   * Previously called on every save, creating three competing localStorage keys
+   * (afc_unified_player_state_v2, afc_player_state_v1, afc_equipped_items).
+   * A partial write during tab-kill could desync them. Now afc_unified_player_state_v2
+   * is the single source of truth. This function is retained only for the one-time
+   * migration in mergeLegacyStorage() and should not be called on saves.
+  // eslint-disable-next-line no-unused-vars
    */
   function updateLegacyStorage() {
     try {
-      // Update legacy main.js format
+      // Write legacy main.js format — kept only for external code that may still read it
       const legacyPayload = {
         inventory: _state.inventory.map(i => i.id),
         questsActive: _state.questsActive,
@@ -279,7 +282,7 @@
       };
       localStorage.setItem("afc_player_state_v1", JSON.stringify(legacyPayload));
       
-      // Update equipped items
+      // Write equipped items
       localStorage.setItem("afc_equipped_items", JSON.stringify(_state.equipped));
     } catch (e) {
       // Ignore legacy sync errors
@@ -330,6 +333,8 @@
       return false;
     }
 
+    const MAX_INVENTORY_SIZE = 200;
+
     // Check if item already exists
     const existing = _state.inventory.find(i => i.id === item.id);
     
@@ -347,6 +352,11 @@
       existing.quantity = (existing.quantity || 1) + quantity;
       console.log(`[PlayerState] Stacked ${quantity}x ${item.name} (total: ${existing.quantity})`);
     } else {
+      // Enforce inventory size cap before adding a new slot
+      if (_state.inventory.length >= MAX_INVENTORY_SIZE) {
+        console.warn(`[PlayerState] Inventory full (${MAX_INVENTORY_SIZE} items) — cannot add ${item.name}`);
+        return false;
+      }
       // Add new item
       const newItem = {
         ...item,
@@ -463,7 +473,7 @@
     }
 
     // Determine slot based on item type and slot field (Fallout-style)
-    let slot = null;
+    let slot;
     if (item.type === "weapon") slot = "weapon";
     else if (item.type === "armor") slot = item.slot || "chest"; // use item.slot (head/chest/arms/legs)
     else if (item.type === "consumable") slot = "aid";
@@ -514,7 +524,8 @@
     
     // Check for level up (100 XP per level)
     const xpPerLevel = 100;
-    while (_state.xp >= _state.level * xpPerLevel) {
+    const MAX_LEVEL = 100;
+    while (_state.xp >= _state.level * xpPerLevel && _state.level < MAX_LEVEL) {
       _state.xp -= _state.level * xpPerLevel;
       _state.level++;
       console.log(`[PlayerState] LEVEL UP! Now level ${_state.level}`);
@@ -536,9 +547,14 @@
    * @param {number} amount - Caps to award
    */
   function awardCaps(amount) {
-    if (typeof amount !== "number") return;
-    
-    _state.caps = Math.max(0, _state.caps + amount);
+    if (typeof amount !== "number" || !Number.isFinite(amount)) return;
+    // BUG-047 FIX: cap at MAX_CAPS to match backend/lib/caps.js limit.
+    // Previously there was no ceiling, so rapid reward farming or DevTools
+    // manipulation could push the client-side balance beyond 999,999,999,
+    // causing display overflows in the Pip-Boy UI and potential bypass of
+    // client-side affordability gates.
+    const MAX_CAPS = 999_999_999;
+    _state.caps = Math.max(0, Math.min(_state.caps + amount, MAX_CAPS));
     _dirty = true;
     syncGamePlayerReferences();
     syncWithLegacyPlayer();

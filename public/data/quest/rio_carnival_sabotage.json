@@ -1,0 +1,52 @@
+{
+  "id": "rio_carnival_sabotage",
+  "name": "Sabotage at the Carnival",
+  "type": "global",
+  "region": "Rio_de_Janeiro_Brazil",
+  "npc_giver": "global_rio_carnival_ghost",
+  "description": "Someone has been poisoning the Wasteland Carnival's water supply and cutting trade supply lines before the annual festival. The Carnival Ghost suspects an organized faction. She needs it stopped before the next festival — Rio's largest neutral trading event.",
+  "gps_requirement": {
+    "region": "Rio de Janeiro, Brazil",
+    "real_lat": -22.9068,
+    "real_lng": -43.1729,
+    "radius_km": 50
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Reach Rio de Janeiro",
+      "description": "Travel to the Rio ruins where the Wasteland Carnival is being prepared. The Carnival Ghost's couriers will meet you at the festival perimeter.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -22.9068, "lng": -43.1729},
+      "radius_m": 1000,
+      "actions": ["set_flag:rio_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Investigate the Sabotage",
+      "description": "The water supply and supply routes have been systematically targeted. Find evidence of who is behind the operation — the Carnival Ghost suspects coordination, not opportunism.",
+      "trigger": "player_investigate_area",
+      "actions": ["spawn:item_sabotage_evidence_log", "set_flag:rio_sabotage_investigated", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Identify the Faction",
+      "description": "The evidence points to an organized faction. Identify them and determine whether they can be reasoned with or need to be stopped by force.",
+      "trigger": "player_use:item_sabotage_evidence_log",
+      "actions": ["set_flag:sabotage_faction_identified", "unlock_stage:4"]
+    },
+    {
+      "id": 4,
+      "name": "Stop the Operation",
+      "description": "Act before the next festival. Stop the sabotage operation and protect the Carnival's supply routes for the annual event.",
+      "trigger": "player_complete_objective:sabotage_stopped",
+      "actions": ["spawn:item_carnival_token", "complete_quest:true", "set_flag:carnival_sabotage_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 400,
+    "caps": 300,
+    "fizz": 30,
+    "items": ["item_carnival_token"]
+  }
+}

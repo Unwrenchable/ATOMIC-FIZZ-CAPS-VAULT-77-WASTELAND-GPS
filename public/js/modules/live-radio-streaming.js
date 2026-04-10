@@ -239,7 +239,7 @@
     },
 
     tuneInToLive() {
-      // Open radio tab in Pip-Boy
+      // Open radio tab in Pocket-Boy
       if (window.Game.modules.pipboy) {
         Game.modules.pipboy.openTab('radio');
       }
@@ -254,7 +254,7 @@
       const title = metadata.title || "REX IS LIVE!";
       const message = `Fizzmaster Rex is broadcasting LIVE right now! Tune in to Atomic Fizz Radio!`;
 
-      // Pip-Boy notification
+      // Pocket-Boy notification
       if (window.Game.modules.notifications) {
         Game.modules.notifications.show({
           title: title,
@@ -424,7 +424,7 @@
           .replace('{DOMAIN}', domain);
       } else if (type === 'youtube') {
         const videoId = this.extractYouTubeId(url);
-        const domain = window.location.hostname;
+        const _domain = window.location.hostname;
         embed.src = this.config.youtube.embedUrl
           .replace('{VIDEO_ID}', videoId);
       }
@@ -441,7 +441,7 @@
     },
 
     extractYouTubeId(url) {
-      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
       const match = url.match(regExp);
       return (match && match[2].length === 11) ? match[2] : null;
     },

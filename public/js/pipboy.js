@@ -1,5 +1,5 @@
 // pipboy.js
-// Pip‑Boy shell: tabs, panel switching, swipe navigation, routing
+// Pocket-Boy shell: tabs, panel switching, swipe navigation, routing
 
 (function () {
   // Correct selector + correct attribute
@@ -11,6 +11,7 @@
     quests: document.getElementById("panel-quests"),
     radio: document.getElementById("panel-radio"),
     exchange: document.getElementById("panel-exchange"),
+    battle: document.getElementById("panel-battle"),
   };
   
   // Configuration constants
@@ -44,7 +45,7 @@
       // QUEST HOOK: Wake Up → open_map
       Game.quests?.completeObjective("wake_up", "open_map");
 
-      // Only call onOpen() when the Pip-Boy screen itself is visible.
+      // Only call onOpen() when the Pocket-Boy screen itself is visible.
       // At script startup (line below module body) setActivePanel("map") is
       // called while pipboyScreen still has the `hidden` class (display:none),
       // so the map container has 0×0 dimensions.  Firing onOpen() then starts
@@ -81,7 +82,18 @@
     if (panelKey === "items") {
       // QUEST HOOK: Wake Up → open_inventory
       Game.quests?.completeObjective("wake_up", "open_inventory");
+
+      // Render inventory so it shows current state every time the tab opens
+      if (window.Game && window.Game.ui?.renderInventory) {
+        try {
+          window.Game.ui.renderInventory();
+        } catch (e) {
+          console.warn("[PipBoy] renderInventory failed:", e);
+        }
+      }
     }
+
+    // STAT PANEL ACTIVATION — HUD is kept live by main.js; nothing extra needed here
 
     // QUESTS PANEL ACTIVATION - render quest UI
     if (panelKey === "quests") {
@@ -165,7 +177,7 @@
 
       if (diffX > threshold && activeIndex > 0) {
         activateTabByIndex(activeIndex - 1);
-      } else if (diffX < -threshold && activeIndex < tabs.length - 1) {
+      } else if (diffX < -threshold && activeIndex !== -1 && activeIndex < tabs.length - 1) {
         activateTabByIndex(activeIndex + 1);
       }
     });
@@ -173,8 +185,24 @@
 
   // ------------------------------------------------------------
   // BOOT DIRECTLY INTO MAP PANEL
+  // (Honour ?tab= deep-link if present in the URL)
   // ------------------------------------------------------------
   setActivePanel("map");
+
+  // Support marketing / share links like /?tab=quests, /?tab=exchange, etc.
+  // Run after setActivePanel("map") so the map panel is always the safe fallback.
+  (function applyTabDeepLink() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab");
+      const validTabs = ["map", "stat", "items", "quests", "radio", "exchange"];
+      if (tabParam && validTabs.includes(tabParam.toLowerCase())) {
+        setActivePanel(tabParam.toLowerCase());
+      }
+    } catch (e) {
+      // Silently ignore — URLSearchParams unavailable or malformed URL
+    }
+  })();
 
   // ------------------------------------------------------------
   // SIDEBAR QUICK ACTION BUTTONS
@@ -251,6 +279,10 @@
   // event dispatches that were causing multiple radio player
   // instances to be created (resulting in audio overlap).
   // ------------------------------------------------------------
+
+  // Expose panel switcher for other modules (e.g. battle auto-open/close)
+  if (!window.Game) window.Game = {};
+  window.Game.pipboy = { setActivePanel };
 
 })();
 

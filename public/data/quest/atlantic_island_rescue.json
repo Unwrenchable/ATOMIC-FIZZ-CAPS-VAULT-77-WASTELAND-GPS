@@ -1,0 +1,45 @@
+{
+  "id": "atlantic_island_rescue",
+  "name": "Island Signal",
+  "type": "global",
+  "region": "South_Atlantic",
+  "npc_giver": "global_cape_town_lighthouse",
+  "description": "Lighthouse has been receiving a distress signal from what should be an uninhabited island in the South Atlantic. The signal has been broadcasting for forty years. Either someone has been there a very long time, or something automated has been running on their behalf.",
+  "gps_requirement": {
+    "region": "South Atlantic Ocean",
+    "real_lat": -37.1057,
+    "real_lng": -12.2776,
+    "radius_km": 300
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Sail to the Island",
+      "description": "Board a vessel from Cape Town and navigate south and west into the South Atlantic to reach the island coordinates Lighthouse has triangulated. The crossing will take time.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -37.1057, "lng": -12.2776},
+      "radius_m": 5000,
+      "actions": ["set_flag:atlantic_island_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Investigate the Signal Source",
+      "description": "The island is small but there's clearly something functional on it. Find the signal transmitter and determine whether it's automated, operated by someone still alive, or something in between.",
+      "trigger": "player_investigate_area",
+      "actions": ["spawn:item_island_signal_log", "set_flag:island_signal_investigated", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Recover or Rescue",
+      "description": "Based on what you've found — act. If someone is alive, bring them back. If the signal is automated, recover what it was broadcasting and return to Lighthouse.",
+      "trigger": "player_complete_objective:island_resolution",
+      "actions": ["spawn:item_island_signal_data", "complete_quest:true", "set_flag:island_rescue_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 400,
+    "caps": 200,
+    "fizz": 30,
+    "items": ["item_island_signal_data"]
+  }
+}

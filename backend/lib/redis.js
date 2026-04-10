@@ -36,6 +36,7 @@ function createInMemoryClient() {
   const hashes = new Map(); // key -> Map(field -> value)
   const lists = new Map(); // key -> Array
   const streams = new Map(); // key -> Array of { id, data }
+  const expiry = new Map(); // key -> epoch ms when key expires
   let streamSeq = 0;
 
   function toStr(v) {
@@ -56,7 +57,9 @@ function createInMemoryClient() {
       }
       store.set(key, val);
       if (opts && opts.EX) {
-        setTimeout(() => store.delete(key), Number(opts.EX) * 1000);
+        const ttlMs = Number(opts.EX) * 1000;
+        expiry.set(key, Date.now() + ttlMs);
+        setTimeout(() => { store.delete(key); expiry.delete(key); }, ttlMs);
       }
       return "OK";
     },
@@ -123,14 +126,36 @@ function createInMemoryClient() {
       store.set(key, String(cur));
       return cur;
     },
+    async decr(key) {
+      const cur = parseInt(store.get(key) || "0", 10) - 1;
+      store.set(key, String(cur));
+      return cur;
+    },
     async expire(key, seconds) {
       if (!store.has(key) && !hashes.has(key) && !sets.has(key)) return 0;
+      const ttlMs = Number(seconds) * 1000;
+      expiry.set(key, Date.now() + ttlMs);
       setTimeout(() => {
         store.delete(key);
         hashes.delete(key);
         sets.delete(key);
-      }, Number(seconds) * 1000);
+        expiry.delete(key);
+      }, ttlMs);
       return 1;
+    },
+    async ttl(key) {
+      if (!store.has(key) && !hashes.has(key) && !sets.has(key)) return -2; // key does not exist
+      if (!expiry.has(key)) return -1; // key exists but has no expiry
+      const remaining = Math.ceil((expiry.get(key) - Date.now()) / 1000);
+      if (remaining <= 0) {
+        // Key has expired but setTimeout hasn't fired yet — clean up now
+        store.delete(key);
+        hashes.delete(key);
+        sets.delete(key);
+        expiry.delete(key);
+        return -2;
+      }
+      return remaining;
     },
     async smembers(key) {
       const s = sets.get(key);
@@ -161,6 +186,18 @@ function createInMemoryClient() {
       h.set(field, toStr(value));
       hashes.set(key, h);
       return 1;
+    },
+    // Key pattern scan — returns all keys from all stores matching a simple glob
+    // (only the '*' wildcard is supported, e.g. "afw:player:*")
+    async keys(pattern) {
+      const regex = new RegExp(
+        "^" + pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*") + "$"
+      );
+      const matched = new Set();
+      for (const k of store.keys()) { if (regex.test(k)) matched.add(k); }
+      for (const k of hashes.keys()) { if (regex.test(k)) matched.add(k); }
+      for (const k of sets.keys()) { if (regex.test(k)) matched.add(k); }
+      return Array.from(matched);
     },
     on() { /* noop for events */ },
     quit() { return Promise.resolve(); },
@@ -268,7 +305,7 @@ async function initClient() {
       }
       console.error("[redis] WARNING: Falling back to in-memory store will cause data consistency issues.");
       if (REQUIRE_REDIS_IN_PRODUCTION) {
-        throw new Error("Redis connection failed in production. Fix Redis or set REQUIRE_REDIS_IN_PRODUCTION=false to override (not recommended).");
+        throw new Error("Redis connection failed in production. Fix Redis or set REQUIRE_REDIS_IN_PRODUCTION=false to override (not recommended).", { cause: err });
       }
     } else {
       console.error("[redis] connection failed — falling back to in-memory store");
@@ -295,7 +332,7 @@ async function ensureClient() {
     // Redis initialization failed critically - this should only happen
     // if REQUIRE_REDIS_IN_PRODUCTION=true and Redis connection failed
     console.error("[redis] ensureClient: Redis initialization failed:", err.message);
-    throw new Error(`Redis not available: ${err.message}. Set REQUIRE_REDIS_IN_PRODUCTION=false to use fallback.`);
+    throw new Error(`Redis not available: ${err.message}. Set REQUIRE_REDIS_IN_PRODUCTION=false to use fallback.`, { cause: err });
   }
 }
 
@@ -395,6 +432,14 @@ async function incr(k) {
     handleRedisError(err, 'incr');
   }
 }
+async function decr(k) {
+  try {
+    const c = await ensureClient();
+    return await c.decr(key(k));
+  } catch (err) {
+    handleRedisError(err, 'decr');
+  }
+}
 async function expire(k, s) {
   try {
     const c = await ensureClient();
@@ -443,6 +488,39 @@ async function hset(k, field, value) {
     handleRedisError(err, 'hset');
   }
 }
+/**
+ * Scan keys matching a glob pattern.  The pattern should NOT include the
+ * Redis key prefix — it is prepended automatically (same convention as
+ * every other wrapper in this module).  Only the '*' wildcard is supported.
+ *
+ * Example:  keys("player:*")  →  finds all  afw:player:* keys
+ *
+ * Returns an array of raw Redis key strings (with prefix).
+ * Caution: avoid on large datasets in production; prefer SCAN iterators.
+ */
+async function keys(pattern) {
+  try {
+    const c = await ensureClient();
+    const prefixed = key(pattern);
+    return await c.keys(prefixed);
+  } catch (err) {
+    handleRedisError(err, 'keys');
+  }
+}
+/**
+ * Return the remaining TTL of a key in seconds.
+ * Returns -2 if the key does not exist, -1 if the key has no expiry.
+ * The caller should pass a bare (non-prefixed) key — the prefix is added here.
+ */
+async function ttl(k) {
+  try {
+    const c = await ensureClient();
+    return await c.ttl(key(k));
+  } catch (err) {
+    handleRedisError(err, 'ttl');
+    return -2;
+  }
+}
 function on(ev, fn) {
   if (redisClient && typeof redisClient.on === "function") {
     redisClient.on(ev, fn);
@@ -471,12 +549,15 @@ module.exports = {
   set,
   del,
   incr,
+  decr,
   expire,
   smembers,
   sadd,
   srem,
   hget,
   hset,
+  keys,
+  ttl,
   on,
   quit,
   ping,
@@ -499,12 +580,15 @@ const redisWrapper = {
   set,
   del,
   incr,
+  decr,
   expire,
   smembers,
   sadd,
   srem,
   hget,
   hset,
+  keys,
+  ttl,
   on,
   quit,
   ping,

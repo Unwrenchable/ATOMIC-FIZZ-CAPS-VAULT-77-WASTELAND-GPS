@@ -438,10 +438,12 @@
     // Background ambient comments
     _npcAmbientComment(npc) {
       // Random chance to comment (low probability to avoid spam)
-      const random = new Uint32Array(1);
-      crypto.getRandomValues(random);
+      // Use two independent random values: one for the probability gate, one for index selection.
+      // Using the same value for both biases the index toward only the highest-range entries.
+      const randBuf = new Uint32Array(2);
+      crypto.getRandomValues(randBuf);
       
-      if (random[0] / 0xFFFFFFFF > 0.998) { // 0.2% chance per check
+      if (randBuf[0] / 0xFFFFFFFF > 0.998) { // 0.2% chance per check
         const comments = [
           "Another day in the wasteland...",
           "Think it might rain radiation?",
@@ -455,7 +457,7 @@
           "Wonder what's in those old ruins..."
         ];
         
-        const index = random[0] % comments.length;
+        const index = randBuf[1] % comments.length;
         this._showAmbientPopup(npc.name, comments[index], true);
       }
     },
@@ -594,4 +596,23 @@
   };
 
   Game.modules.npcEncounter = npcEncounter;
+
+  // Pause ambient monitoring when the tab is hidden to prevent battery drain,
+  // resume it when the tab becomes visible again.
+  // Guard flag ensures this listener is only registered once even if the
+  // module script is evaluated multiple times (e.g., hot-reload scenarios).
+  if (!window._npcEncounterVisibilityBound) {
+    window._npcEncounterVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        if (Game.modules.npcEncounter && Game.modules.npcEncounter.stopAmbientMonitoring) {
+          Game.modules.npcEncounter.stopAmbientMonitoring();
+        }
+      } else {
+        if (Game.modules.npcEncounter && Game.modules.npcEncounter.startAmbientMonitoring) {
+          Game.modules.npcEncounter.startAmbientMonitoring();
+        }
+      }
+    });
+  }
 })();

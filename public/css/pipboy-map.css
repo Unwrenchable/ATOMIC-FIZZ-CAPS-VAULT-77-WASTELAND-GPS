@@ -41,7 +41,7 @@
   height: 32px !important;
   min-width: 32px;
   min-height: 32px;
-  /* SVGs now have native Pip-Boy green (#00ff41) - add subtle glow for visibility */
+  /* SVGs now have native Pocket-Boy green (#00ff41) - add subtle glow for visibility */
   filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
 }
 
@@ -52,19 +52,26 @@
   padding: 4px;
 }
 
-/* Player marker - bright cyan like Pip-Boy cursor (contained glow) */
-.leaflet-marker-icon[src*="player"],
+/* Player marker — L.divIcon wrapper; Leaflet controls positioning via its
+   own transform, so we never touch transform on this element. */
 .player-marker {
   z-index: 1000 !important;
   width: 40px !important;
   height: 40px !important;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.25) 0%, transparent 60%);
-  border-radius: 50%;
+  background: transparent !important;
+  border: none !important;
+  overflow: visible !important;
 }
 
-.leaflet-marker-icon[src*="player"] img,
-.player-marker img {
-  filter: brightness(1.3) saturate(1.2);
+/* Directional arrow image — rotates independently of the wrapper.
+   CSS transition gives smooth interpolation between heading updates. */
+.player-marker-arrow {
+  display: block;
+  width: 40px;
+  height: 40px;
+  transform-origin: center center;
+  transition: transform 0.25s ease-out;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 204, 0.65));
 }
 
 /* Fallout 1 style grid overlay */
@@ -206,7 +213,7 @@
 
 /* Compass widget (#pipboyCompass) – styled inline by compass.js */
 
-/* Map controls - Pip-Boy button style */
+/* Map controls - Pocket-Boy button style */
 .leaflet-control-zoom a {
   background: rgba(0, 0, 0, 0.9) !important;
   color: #00ff41 !important;
@@ -285,7 +292,7 @@
   }
 }
 
-/* Player trail - breadcrumb dots like Pip-Boy */
+/* Player trail - breadcrumb dots like Pocket-Boy */
 .player-trail-dot {
   width: 6px;
   height: 6px;
@@ -376,7 +383,7 @@
 
 /* Ensure all SVG icons are visible on dark background */
 .leaflet-marker-icon img[src$=".svg"] {
-  /* SVGs now have native Pip-Boy green - just add subtle glow */
+  /* SVGs now have native Pocket-Boy green - just add subtle glow */
   filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
 }
 

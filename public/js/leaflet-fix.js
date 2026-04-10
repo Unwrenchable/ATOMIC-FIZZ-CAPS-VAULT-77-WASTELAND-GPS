@@ -1,12 +1,12 @@
 // public/js/leaflet-fix.js
-// Fix Leaflet default marker icons to use Pip-Boy style SVG instead of missing PNG files
+// Fix Leaflet default marker icons to use Pocket-Boy style SVG instead of missing PNG files
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof L !== 'undefined') {
     // Marker size constants
     const MARKER_SIZE = 24;
     const MARKER_SIZE_RETINA = MARKER_SIZE * 2;
 
-    // Generate Pip-Boy style marker SVG with contained glow (no bleed, no animation)
+    // Generate Pocket-Boy style marker SVG with contained glow (no bleed, no animation)
     function createPipboyMarkerSVG(size) {
       const center = size / 2;
       const outerR = size * 0.42;  // Outer glow ring
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pipboyMarkerSVG = createPipboyMarkerSVG(MARKER_SIZE);
     const pipboyMarkerSVG2x = createPipboyMarkerSVG(MARKER_SIZE_RETINA);
 
-    // Shadow is not needed for Pip-Boy style markers, use transparent
+    // Shadow is not needed for Pocket-Boy style markers, use transparent
     const transparentShadow = 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>');
 
     delete L.Icon.Default.prototype._getIconUrl;
@@ -38,6 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
       popupAnchor: [0, -12],
       shadowSize: [0, 0]
     });
-    console.log("[leaflet-fix] Pip-Boy style default markers configured");
+    console.log("[leaflet-fix] Pocket-Boy style default markers configured");
   }
 });

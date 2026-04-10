@@ -6,6 +6,13 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
+  // Secure RNG — no Math.random() for game-critical paths
+  function _secureRand() {
+    const buf = new Uint32Array(1);
+    crypto.getRandomValues(buf);
+    return buf[0] / 0x100000000;
+  }
+
   // ============================================================
   // STRUGGLE QUIPS MODULE
   // ============================================================
@@ -60,7 +67,7 @@
     // EVENT HANDLERS
     // ============================================================
 
-    onHackFailed(event) {
+    onHackFailed(_event) {
       this.hackFailCount++;
       
       if (!this.quipsData || !this.canShowQuip()) return;
@@ -97,7 +104,7 @@
       }
     },
 
-    onPlayerDied(event) {
+    onPlayerDied(_event) {
       if (!this.quipsData) return;
 
       const quips = this.quipsData.death_respawn_quips;
@@ -109,11 +116,11 @@
       }
     },
 
-    onBattleStarted(event) {
+    onBattleStarted(_event) {
       this.battleStartTime = Date.now();
     },
 
-    onBattleEnded(event) {
+    onBattleEnded(_event) {
       this.battleStartTime = null;
     },
 
@@ -234,7 +241,11 @@
         }
       }));
 
-      this.showInEncounterFeed(`💬 ${companionName}: "${text}"`, 'companion-dialog');
+      // Use shared global escapeHtml (exported by main.js); inline fallback for safety
+      const _esc = window.escapeHtml || (s => String(s == null ? '' : s).replace(/[<>"'&]/g, c => ({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','&':'&amp;'}[c])));
+      const safeName = _esc(companionName);
+      const safeText = _esc(text);
+      this.showInEncounterFeed(`💬 ${safeName}: "${safeText}"`, 'companion-dialog');
     },
 
     showInEncounterFeed(message, className) {
@@ -243,7 +254,8 @@
 
       const div = document.createElement('div');
       div.className = `feed-item ${className}`;
-      div.innerHTML = message;
+      // Safe: callers either use textContent-safe strings or escape themselves above
+      div.textContent = message;
       div.style.cssText = 'color: #ffcc00; padding: 8px; margin: 4px 0; border-left: 3px solid #ffcc00; background: rgba(255,204,0,0.1);';
       
       feed.insertBefore(div, feed.firstChild);
@@ -268,7 +280,7 @@
 
     pickRandom(arr) {
       if (!arr || arr.length === 0) return null;
-      return arr[Math.floor(Math.random() * arr.length)];
+      return arr[Math.floor(_secureRand() * arr.length)];
     },
 
     // Reset hack fail counter (call when player succeeds)

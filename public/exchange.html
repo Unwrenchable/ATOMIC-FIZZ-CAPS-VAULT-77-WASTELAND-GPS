@@ -82,7 +82,7 @@
     </div>
 
     <!-- List NFT Button -->
-    <button id="listNftBtn" style="display:block; margin:20px auto; padding:12px 24px; background:#00cc33; color:black; border:none; font-family:'Press Start 2P',cursive; cursor:pointer;">
+    <button id="listNftBtn" disabled style="display:block; margin:20px auto; padding:12px 24px; background:#006619; color:#00ff41; border:1px solid #00ff41; font-family:'Press Start 2P',cursive; cursor:not-allowed; opacity:0.5;">
       List My NFT for Sale/Trade
     </button>
 
@@ -118,7 +118,7 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
-  <script src="https://unpkg.com/bs58@6.0.0/dist/index.min.js"></script>
+  <script src="/js/lib/bs58.js"></script>
   <script>
     const connectBtn = document.getElementById('connectWalletBtn');
     const walletAddrEl = document.getElementById('walletAddr');
@@ -127,10 +127,17 @@
     const nftGrid = document.getElementById('nftGrid');
     let connectedWallet = null;
 
+    // XSS guard: escape text before inserting into innerHTML
+    function escapeHtml(str) {
+      const d = document.createElement('div');
+      d.textContent = String(str == null ? '' : str);
+      return d.innerHTML;
+    }
+
     // Connect Wallet
     connectBtn.addEventListener('click', async () => {
       if (!window.solana || !window.solana.isPhantom) {
-        alert('Phantom wallet not found. Please install it.');
+        alert('Phantom wallet not found. Please install it from https://phantom.app');
         return;
       }
 
@@ -139,92 +146,123 @@
         connectedWallet = window.solana.publicKey.toBase58();
         walletAddrEl.textContent = `Connected: ${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`;
         connectBtn.disabled = true;
+        // Enable NFT listing button and restore normal styling
         listNftBtn.disabled = false;
+        listNftBtn.style.background = '#00cc33';
+        listNftBtn.style.color = 'black';
+        listNftBtn.style.cursor = 'pointer';
+        listNftBtn.style.opacity = '1';
         loadTrades();
       } catch (err) {
-        console.error(err);
-        alert('Connection failed');
+        console.error('[exchange] wallet connect error:', err);
+        alert('Wallet connection failed: ' + (err.message || err));
       }
     });
 
-    // Load real trades from server
+    // Load live trades from /api/exchange/trades (public — no wallet needed)
     async function loadTrades() {
+      const tradeList = document.getElementById('tradeList');
+      tradeList.innerHTML = '<div class="trade-card"><h3>Loading trades...</h3></div>';
       try {
-        const res = await fetch('/api/trades');
+        const res = await fetch('/api/exchange/trades');
+        if (!res.ok) throw new Error(`Server returned ${res.status}`);
         const trades = await res.json();
-        const tradeList = document.getElementById('tradeList');
+
         tradeList.innerHTML = '';
 
-        if (trades.length === 0) {
-          tradeList.innerHTML = '<div class="trade-card"><h3>No active trades yet</h3></div>';
+        if (!Array.isArray(trades) || trades.length === 0) {
+          tradeList.innerHTML = '<div class="trade-card"><h3>No active trades yet. Be the first wastelander to post!</h3></div>';
           return;
         }
 
         trades.forEach(trade => {
           const card = document.createElement('div');
           card.className = 'trade-card';
+
+          const titleText = trade.type === 'nft'
+            ? 'NFT: ' + (trade.nftMint ? trade.nftMint.slice(0, 8) + '...' : 'Unknown')
+            : trade.offer;
+
+          const expires = trade.posted && trade.durationDays
+            ? new Date(Number(trade.posted) + trade.durationDays * 86400000).toLocaleString()
+            : 'Unknown';
+
           card.innerHTML = `
-            <h3>${trade.type === 'nft' ? 'NFT: ' + (trade.nftMint?.slice(0,8) + '...' || 'Unknown') : trade.offer}</h3>
-            <p class="price">${trade.priceFizz} FIZZ</p>
-            <p>${trade.description || 'No description'}</p>
-            <p>Seller: ${trade.seller.slice(0,6)}...${trade.seller.slice(-4)}</p>
-            <p>Expires: ${new Date(Number(trade.posted) + (trade.durationDays * 86400000)).toLocaleString()}</p>
-            <button class="buy-btn" data-id="${trade.id}">Buy</button>
+            <h3>${escapeHtml(titleText)}</h3>
+            <p class="price">${escapeHtml(trade.priceFizz)} FIZZ</p>
+            <p>${escapeHtml(trade.description || 'No description')}</p>
+            <p>Seller: ${escapeHtml(trade.seller ? trade.seller.slice(0,6) + '...' + trade.seller.slice(-4) : '?')}</p>
+            <p>Expires: ${escapeHtml(expires)}</p>
+            <button class="buy-btn">Buy</button>
           `;
-          card.querySelector('.buy-btn').onclick = () => buyTrade(trade.id);
+          card.querySelector('.buy-btn').addEventListener('click', () => buyTrade(trade.id));
           tradeList.appendChild(card);
         });
       } catch (err) {
-        console.error('Load trades failed:', err);
-        document.getElementById('tradeList').innerHTML = '<div class="trade-card"><h3>Error loading trades</h3></div>';
+        console.error('[exchange] Load trades failed:', err);
+        tradeList.innerHTML = '<div class="trade-card"><h3>⚠ Could not load trades. Check your connection and try again.</h3></div>';
       }
     }
 
-    // Post regular trade
+    // Post regular (item) trade — wallet required
     document.getElementById('newTradeForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!connectedWallet) return alert('Connect wallet first');
+      if (!connectedWallet) { alert('Connect your Phantom wallet first.'); return; }
 
-      const offer = document.getElementById('offerItem').value;
+      const offer = document.getElementById('offerItem').value.trim();
       const price = document.getElementById('price').value;
-      const desc = document.getElementById('description').value;
+      const desc = document.getElementById('description').value.trim();
 
       try {
-        const res = await fetch('/api/post-trade', {
+        const res = await fetch('/api/exchange/post-trade', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ wallet: connectedWallet, offer, priceFizz: price, description: desc })
+          body: JSON.stringify({ offer, priceFizz: price, description: desc })
         });
 
         const data = await res.json();
         if (data.success) {
-          alert(`Trade posted! ID: ${data.tradeId}`);
+          alert('Trade posted to the exchange! ID: ' + data.tradeId);
+          document.getElementById('newTradeForm').reset();
           loadTrades();
         } else {
-          alert('Failed: ' + data.error);
+          alert('Post failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
-        alert('Network error');
+        console.error('[exchange] post-trade error:', err);
+        alert('Network error — could not post trade.');
       }
     });
 
-    // List NFT (uses Helius DAS API - see docs/NFT_INTEGRATION_GUIDE.md)
+    // List NFT — wallet required
+    // Note: Uses mock NFT data until Helius DAS API integration is complete.
+    // See docs/NFT_INTEGRATION_GUIDE.md for the real implementation.
     listNftBtn.addEventListener('click', async () => {
-      if (!connectedWallet) return alert('Connect wallet first');
+      if (!connectedWallet) { alert('Connect your Phantom wallet first.'); return; }
 
-      // Mock NFTs - replace with real Helius DAS API fetch
-      // See docs/NFT_INTEGRATION_GUIDE.md for implementation details
       const mockNfts = [
-        { mint: 'ABC123', name: 'Pip-Boy Skin #47', image: 'https://via.placeholder.com/150/00ff41/000?text=NFT+47' },
-        { mint: 'DEF456', name: 'Vault 77 Helmet', image: 'https://via.placeholder.com/150/00ff41/000?text=Helmet' }
+        { mint: 'ABC123mint11111111111111111111111111111111', name: 'Pocket-Boy Skin #47', image: 'https://via.placeholder.com/150/00ff41/000?text=NFT+47' },
+        { mint: 'DEF456mint11111111111111111111111111111111', name: 'Vault 77 Helmet',    image: 'https://via.placeholder.com/150/00ff41/000?text=Helmet' }
       ];
 
       nftGrid.innerHTML = '';
       mockNfts.forEach(nft => {
         const card = document.createElement('div');
         card.className = 'nft-card';
-        card.innerHTML = `<img src="${nft.image}" alt="${nft.name}"><p>${nft.name}</p>`;
-        card.onclick = () => promptAndListNft(nft);
+        const img = document.createElement('img');
+        img.alt = escapeHtml(nft.name);
+        // Only allow images from known game CDN domains to prevent phishing via fake NFT images.
+        // In production this list will expand to include the Helius/Arweave/IPFS gateway.
+        const ALLOWED_IMG_ORIGINS = ['https://via.placeholder.com', 'https://arweave.net', 'https://ipfs.io'];
+        const safeImgSrc = ALLOWED_IMG_ORIGINS.some(o => nft.image && nft.image.startsWith(o + '/'))
+          ? nft.image
+          : '';
+        img.src = safeImgSrc;
+        const label = document.createElement('p');
+        label.textContent = nft.name;
+        card.appendChild(img);
+        card.appendChild(label);
+        card.addEventListener('click', () => promptAndListNft(nft));
         nftGrid.appendChild(card);
       });
 
@@ -232,22 +270,21 @@
     });
 
     async function promptAndListNft(nft) {
-      const price = prompt(`Price in FIZZ for ${nft.name}?`, "1.25");
-      if (!price) return;
+      const priceStr = prompt('Price in FIZZ for ' + nft.name + '?', '1.25');
+      if (!priceStr) return;
 
-      const desc = prompt("Description:", "");
+      const desc = prompt('Description (optional):', '') || '';
 
       try {
-        const message = `List NFT ${nft.mint} for ${price} FIZZ - ${desc}`;
-        const signed = await window.solana.signMessage(new TextEncoder().encode(message), "utf8");
+        const message = `List NFT ${nft.mint} for ${priceStr} FIZZ - ${desc}`;
+        const signed = await window.solana.signMessage(new TextEncoder().encode(message), 'utf8');
 
-        const res = await fetch('/api/post-nft', {
+        const res = await fetch('/api/exchange/post-nft', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            wallet: connectedWallet,
             nftMint: nft.mint,
-            priceFizz: price,
+            priceFizz: priceStr,
             description: desc,
             signature: bs58.encode(signed.signature)
           })
@@ -255,45 +292,63 @@
 
         const data = await res.json();
         if (data.success) {
-          alert(`NFT listed! ID: ${data.tradeId}`);
+          alert('NFT listed! Trade ID: ' + data.tradeId);
           loadTrades();
         } else {
-          alert('Failed: ' + data.error);
+          alert('List failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
-        alert('Signing failed');
+        console.error('[exchange] post-nft error:', err);
+        alert('Signing failed or network error.');
       }
     }
 
-    // Buy flow
+    // Buy a trade — wallet required
     async function buyTrade(tradeId) {
-      if (!connectedWallet) return alert('Connect wallet first');
+      if (!connectedWallet) { alert('Connect your Phantom wallet to buy trades.'); return; }
 
       try {
-        const res = await fetch('/api/buy-trade', {
+        const res = await fetch('/api/exchange/buy-trade', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ buyerWallet: connectedWallet, tradeId })
+          body: JSON.stringify({ tradeId })
         });
 
         const data = await res.json();
         if (!data.success) {
-          return alert('Buy failed: ' + data.error);
+          return alert('Buy failed: ' + (data.error || 'Unknown error'));
         }
 
-        // Sign and send the transaction with Phantom
-        const tx = Transaction.from(Buffer.from(data.serializedTx, 'base64'));
-        const signedTx = await window.solana.signAndSendTransaction(tx);
-        console.log('Buy transaction:', signedTx.signature);
-        alert(`Purchase successful! Tx: ${signedTx.signature.slice(0,8)}...`);
-        loadTrades(); // Refresh list
+        // If a serialized transaction is returned, sign and send it (mainnet FIZZ transfer)
+        if (data.serializedTx) {
+          try {
+            const { Transaction } = solanaWeb3;
+            const tx = Transaction.from(Buffer.from(data.serializedTx, 'base64'));
+            const signedTx = await window.solana.signAndSendTransaction(tx);
+            console.log('[exchange] Buy tx:', signedTx.signature);
+            alert('Purchase complete! Tx: ' + signedTx.signature.slice(0, 8) + '...');
+          } catch (txErr) {
+            console.error('[exchange] Transaction signing failed:', txErr);
+            alert('Trade reserved but FIZZ transfer failed — please send ' + data.priceFizz + ' FIZZ manually to ' + data.sellerWallet);
+          }
+        } else {
+          // Pre-mainnet: trade marked sold server-side; manual FIZZ transfer required
+          alert(
+            'Trade reserved!\n\n' +
+            'Send ' + data.priceFizz + ' FIZZ to seller:\n' +
+            data.sellerWallet + '\n\n' +
+            'On-chain settlement coming in the mainnet release.'
+          );
+        }
+
+        loadTrades();
       } catch (err) {
-        console.error('Buy error:', err);
-        alert('Buy failed');
+        console.error('[exchange] Buy error:', err);
+        alert('Buy failed — network error.');
       }
     }
 
-    // Load on page start
+    // Load trades on page start (no wallet needed to view)
     loadTrades();
   </script>
 </body>

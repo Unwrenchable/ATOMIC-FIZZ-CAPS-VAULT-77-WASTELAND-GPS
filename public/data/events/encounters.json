@@ -12,7 +12,7 @@
       "id": "enc_dam_signal_spike",
       "poi": "Hoover Dam",
       "trigger": "repeat_visit",
-      "dialog": "Your Pip-Boy crackles. A burst of static forms a pattern — almost like coordinates."
+      "dialog": "Your Pocket-Boy crackles. A burst of static forms a pattern — almost like coordinates."
     },
     {
       "id": "enc_glow_warning",
@@ -72,7 +72,7 @@
       "id": "enc_trinity_site_signal",
       "poi": "Trinity Site",
       "trigger": "repeat_visit",
-      "dialog": "Your Pip-Boy picks up a faint signal — rhythmic, deliberate, almost like Morse code."
+      "dialog": "Your Pocket-Boy picks up a faint signal — rhythmic, deliberate, almost like Morse code."
     },
     {
       "id": "enc_los_alamos_lab_alarm",
@@ -102,7 +102,7 @@
       "id": "enc_fukushima_daiichi_warning",
       "poi": "Fukushima Daiichi",
       "trigger": "first_visit",
-      "dialog": "Your Pip-Boy flashes a radiation warning so intense it nearly overloads the screen."
+      "dialog": "Your Pocket-Boy flashes a radiation warning so intense it nearly overloads the screen."
     },
     {
       "id": "enc_fukushima_daiichi_core",
@@ -156,7 +156,7 @@
       "id": "enc_freeside_market_deal",
       "poi": "Freeside Market",
       "trigger": "repeat_visit",
-      "dialog": "The merchant offers a deal: a rare Pip-Boy mod for 200 CAPS."
+      "dialog": "The merchant offers a deal: a rare Pocket-Boy mod for 200 CAPS."
     }
   ]
 }

@@ -7,7 +7,7 @@
 
   // Ensure a global game namespace exists
 window.Game = window.Game || {};
-const Game = window.Game;
+const _Game = window.Game; // eslint-disable-line no-unused-vars
   // ========= WORLD INTERFACE =========
   // Provides window.world using real world simulation systems when available,
   // with safe fallbacks for missing implementations.

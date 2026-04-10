@@ -37,6 +37,11 @@ Agents operating on this repository discover each other through the following:
 | `web3-specialist.md` | Solana / Phantom wallet / FIZZ token expert |
 | `wasteland-assistant.md` | Game mechanics, battle system, crafting, economy |
 | `my-agent.agent.md` | Vault 77 Overseer personality agent |
+| `game-creative-director.agent.md` | Creative vision, MDA conflicts, scope arbitration |
+| `game-designer.agent.md` | GDD authoring, balancing, sink/faucet economy design |
+| `game-technical-director.agent.md` | Architecture, ADRs, performance budgets, tech decisions |
+| `gameplay-programmer.agent.md` | Feature implementation, data-driven design, state machines |
+| `cybersecurity-expert.agent.md` | OWASP audits, CVE triage, security remediations |
 | `memory.md` | Persistent decisions, verified commands, gotchas |
 | `tasks.md` | **Active task queue and event log — check before starting work** |
 
@@ -216,6 +221,11 @@ When GitHub Copilot coding agent is invoked on this repository:
 | Frontend UI / Pip-Boy | `agent.md` + `public/js/` |
 | Overseer AI dialogue | `my-agent.agent.md` + `public/js/overseer/` |
 | Game mechanics | `wasteland-assistant.md` + `public/js/modules/` |
+| Game design / balancing | `game-designer.agent.md` + `docs/` |
+| Creative vision / MDA | `game-creative-director.agent.md` |
+| Architecture / ADRs | `game-technical-director.agent.md` |
+| Gameplay feature implementation | `gameplay-programmer.agent.md` + `public/js/modules/` |
+| Security audit / CVE triage | `cybersecurity-expert.agent.md` |
 | Solana program | `web3-specialist.md` + `programs/` |
 | NFT minting | `web3-specialist.md` + `workers/` |
 | Deployment / infra | `bootstrap.md` + `render.yaml` / `vercel.json` |
@@ -312,6 +322,94 @@ After any non-trivial change:
 | GET/POST | `/api/admin/player` | Admin |
 | GET/POST | `/api/admin/mintables` | Admin |
 | GET/POST | `/api/admin/keys` | Admin |
+
+---
+
+---
+
+## 9. Studio Pipeline (Concept → Ship)
+
+This is how work flows across the agent roster. Every agent knows their position in the assembly line. No freelancing, no skipping stages.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  GAME STUDIO PIPELINE — ATOMIC FIZZ CAPS / VAULT-77         │
+├──────────────┬──────────────────────────────────────────────┤
+│  Stage       │  Owner Agent(s)                              │
+├──────────────┼──────────────────────────────────────────────┤
+│ 1. Vision    │  game-creative-director                      │
+│              │  Sets scope, MDA goals, rejects scope creep  │
+├──────────────┼──────────────────────────────────────────────┤
+│ 2. Design    │  game-designer                               │
+│              │  GDD, balancing, sink/faucet economy         │
+├──────────────┼──────────────────────────────────────────────┤
+│ 3. Arch      │  game-technical-director                     │
+│              │  ADRs, tech choices, performance budgets     │
+├──────────────┼──────────────────────────────────────────────┤
+│ 4. Build     │  gameplay-programmer (game mechanics)        │
+│              │  vault77-fullstack-dev (backend + frontend)  │
+│              │  vault77-web3-specialist (Solana/NFT/CAPS)   │
+├──────────────┼──────────────────────────────────────────────┤
+│ 5. Test      │  vault77-game-tester / game-qa-lead          │
+│              │  Regression, balance, exploit checks         │
+├──────────────┼──────────────────────────────────────────────┤
+│ 6. Security  │  cybersecurity-expert                        │
+│              │  OWASP audit, CVE triage, hardening          │
+├──────────────┼──────────────────────────────────────────────┤
+│ 7. Ship      │  GitHub Copilot Task Agent                   │
+│              │  Final PR, CI green, merge to main           │
+└──────────────┴──────────────────────────────────────────────┘
+```
+
+### 9.1 Escalation Chain
+
+| Scenario | Escalate To |
+|----------|-------------|
+| Scope conflict between features | `game-creative-director` |
+| Architecture disagreement | `game-technical-director` |
+| Balance/economy concern | `game-designer` |
+| Security vulnerability found | `cybersecurity-expert` (blocks ship) |
+| Test regression found | `vault77-game-tester` + fix owner |
+| Human required | Open PR, request review — do not guess |
+
+### 9.2 GitHub Copilot ↔ TX Agents (`.agentx`) Integration
+
+The **GitHub Copilot Task Agent** (this agent) is the **integration layer** between human requests and the TX agent roster defined in `.agentx/agents.json`.
+
+**How it works:**
+1. Human issues a task via GitHub Copilot.
+2. Copilot Task Agent identifies the domain (game mechanics, backend, Solana, security, etc.).
+3. It delegates to the appropriate TX agent via the `task` tool (see §6.3 routing table).
+4. TX agent executes and returns results.
+5. Copilot Task Agent reviews, integrates, and commits.
+
+**TX Agent Registry:** `.agentx/agents.json`  
+**Active game-studio agents:** `vault77-overseer`, `vault77-fullstack-dev`, `vault77-hivemind-architect`, `vault77-game-tester`, `vault77-wasteland-assistant`, `vault77-web3-specialist`, `game-creative-director`, `game-designer`, `game-technical-director`, `gameplay-programmer`, `game-producer`, `game-qa-lead`, `cybersecurity-expert`
+
+**Scoped coding instructions for GitHub Copilot Workspace:**
+- `backend/**` → `.github/instructions/backend.instructions.md`
+- `public/**` → `.github/instructions/frontend.instructions.md`
+- `programs/**, workers/**, solana/**` → `.github/instructions/solana.instructions.md`
+
+### 9.3 Agent Authority Ladder
+
+```
+game-creative-director  ← highest creative authority
+        ↓
+game-technical-director ← highest technical authority
+        ↓
+cybersecurity-expert    ← blocks any ship on security finding
+        ↓
+game-designer           ← owns balance & economy decisions
+        ↓
+gameplay-programmer / vault77-fullstack-dev / vault77-web3-specialist
+        ↓
+vault77-game-tester / game-qa-lead
+        ↓
+GitHub Copilot Task Agent ← integration, PR, merge
+```
+
+Security invariants override **everything**. An agent enforcing a security rule (no `Math.random`, wallet verification, `timingSafeEqual`) wins unconditionally, regardless of stage.
 
 ---
 

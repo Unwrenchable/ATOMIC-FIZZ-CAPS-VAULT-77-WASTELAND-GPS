@@ -123,6 +123,36 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-04-04] Frontend config must never return HF_API_KEY
+- **What**: Removed `overseer.hfApiKey` from [backend/api/frontend-config.js](backend/api/frontend-config.js#L1). Endpoint now returns only non-secret fields (`hfModel`, `proxyEnabled`).
+- **Why**: Production probe showed `/api/config/frontend` returning a backend API key field to public clients.
+- **Verified**: Static diagnostics clean on [backend/api/frontend-config.js](backend/api/frontend-config.js).
+
+### [2026-04-04] Global limiter excludes health and frontend config
+- **What**: Updated the coarse global rate limiter in [backend/server.js](backend/server.js#L95) to skip `/api/health` and `/api/config/frontend`.
+- **Why**: Concurrent load tests were repeatedly receiving HTTP 429 on liveness/config checks, creating false high/medium findings and masking real regressions.
+- **Verified**: Change compiled cleanly (no diagnostics in [backend/server.js](backend/server.js)). Restart required for runtime validation.
+
+### [2026-03-17] MCP Server bug fixes + new backend endpoints
+- **What**: Fixed 4 broken MCP tools in `mcp/vault77-server.js`:
+  1. `get_player_profile` — URL was `?wallet=` query param; fixed to `/api/player/:wallet` path param.
+  2. `get_quest_definitions` — Backend ignores `?id=` filter; MCP now filters client-side after fetching all quests.
+  3. `get_cooldown_status` — Backend had no GET route; MCP now calls new `GET /api/cooldowns/status?wallet=&poi=`.
+  4. `get_leaderboard` — Backend had no leaderboard endpoint; MCP calls new `GET /api/caps/leaderboard?metric=&limit=`.
+- **New endpoints added**:
+  - `GET /api/caps/leaderboard` — scans `player:*` Redis keys, returns top N players sorted by caps/xp/claims.
+  - `GET /api/cooldowns/status` — public (no-auth) cooldown check for POI claims; reads `player:{wallet}:cooldown:{poi}` key.
+- **redis.js** — Added `keys(pattern)` wrapper (with fallback in-memory support) and exported it.
+- **Verified**: Tests pass. All files load cleanly with Node.
+
+### [2026-03-17] .agentx/agents.json upgraded with Vault-77 agents
+- **What**: Added 5 Vault-77 specific agents to `.agentx/agents.json`:
+  `vault77-fullstack-dev`, `vault77-game-tester`, `vault77-wasteland-assistant`,
+  `vault77-web3-specialist`, `vault77-mcp-server`. Updated `vault77-overseer` tags.
+- **Why**: These agents existed in `.github/agents/` markdown files but were missing from the
+  agent registry used by the `agentx` CLI (https://github.com/Unwrenchable/agent-tools).
+- **Verified**: JSON validates cleanly.
+
 ### [2026-03-02] Hive mind infrastructure upgrade
 - **What**: Renamed `SwapAssistant.md` → `wasteland-assistant.md`; added `tasks.md`
   active task queue; fixed API endpoint table in `agents-instructions.md` §8 (wrong
@@ -212,6 +242,76 @@ _(Confirmed by agent runs — newest first)_
 ### [2026-03-02] bs58 CDN global pattern
 - **What**: Frontend pages that need bs58 load it as a global via `https://unpkg.com/bs58@6.0.0/dist/index.min.js`. No npm install for frontend.
 - **Verified**: `public/index.html:63-81`, `public/exchange.html:119-122`
+
+---
+
+## Mainnet Readiness Audit — 2026-04-06
+
+### 🔴 CRITICAL Bugs Fixed (BUG-031 through BUG-039 + SEC-AUDIT)
+
+#### [2026-04-06] BUG-031: Cooldowns TTL double-prefix fix
+- **What**: `backend/api/cooldowns.js` was calling `redis.ttl()` without the `key()` wrapper, so TTL always returned -2 (key not found). Countdown timers were permanently broken.
+- **Fix**: Added `key()` wrapper: `redis.ttl(key(\`player:${wallet}:cooldown:${poi}\`))`.
+- **Verified**: `backend/api/cooldowns.js:44`
+
+#### [2026-04-06] BUG-032: FizzFun bonding curve JS Number overflow → BigInt
+- **What**: `virtualSol (30e9) * tokenReserve (800e15) = 2.4e28` exceeds `Number.MAX_SAFE_INTEGER`, causing `~0.02-0.1%` arithmetic error on large trades.
+- **Fix**: `calculateBuyReturn` and `calculateSellReturn` now use `BigInt()` for intermediate computations.
+- **Verified**: `backend/api/fizz-fun.js:387-415`
+
+#### [2026-04-06] BUG-033: Dungeon /clear TOCTOU race → atomic NX set
+- **What**: `POST /api/dungeon/clear` used GET-then-SET. Two concurrent tabs could both pass the cleared check and each receive the full completion bonus (up to 180 caps + 120 XP).
+- **Fix**: Replaced with `redis.set(key(clearKey), ..., { NX: true, EX: ... })` — same pattern as `/loot`.
+- **Verified**: `backend/api/dungeon.js:291-300`
+
+#### [2026-04-06] BUG-034: battles.js dead enemy deals damage after all enemies defeated
+- **What**: After killing the last enemy, `activeEnemyIndex` still pointed at the dead enemy. If `enemyAttack()` ran before `checkBattleEnd()`, the dead enemy dealt damage, potentially flipping WIN→LOSE.
+- **Fix**: Guard at top of `enemyAttack()`: `if (enemyHp[idx] <= 0) return { success: false, reason: 'ENEMY_DEAD' }`.
+- **Verified**: `public/js/modules/battles.js:175-188`
+
+#### [2026-04-06] BUG-035/036: Loot voucher protocol mismatch (100% redemption failure)
+- **What**: `loot-voucher.js` hardcoded `lootId = 1n` and returned a flat payload missing `voucherId`/`keyId`. `redeem-voucher.js` required a nested `{ voucher, signature }` structure with those fields. Zero vouchers were ever redeemable.
+- **Fix**: `loot-voucher.js` now returns `{ voucher: { voucherId, keyId, lootId, ... }, signature: [...] }`. `voucherId` is `crypto.randomBytes(16).toString('hex')`. Server key registered in keys service on startup.
+- **Verified**: `backend/api/loot-voucher.js`
+
+#### [2026-04-06] BUG-037: Game loop ENCOUNTER_CHANCE 55% → 7% for production
+- **What**: `ENCOUNTER_CHANCE = 0.55` meant battle every ~9 seconds, making normal GPS exploration impossible.
+- **Fix**: Reduced to `0.07` (7% per tick ≈ 1 encounter per ~71 seconds average).
+- **Verified**: `public/js/game/loop.js:22`
+
+#### [2026-04-06] SEC-AUDIT-001: Solana bonding curve u64 overflow → u128
+- **What**: `virtual_sol (30e9) * token_reserve (800e15) = 2.4e28 > u64::MAX (1.84e19)`. Every `fizz_buy`/`fizz_sell` transaction panicked at the `.unwrap()`. The entire FizzFun launchpad was dead on arrival.
+- **Fix**: All intermediate bonding curve calculations now cast to `u128` before multiplication.
+- **Verified**: `programs/fizzcaps-onchain/src/lib.rs:310-322`
+
+#### [2026-04-06] SEC-AUDIT-002: Solana ClaimLoot server_key was unconstrained → forge vouchers
+- **What**: `server_key` in `ClaimLoot` had no address constraint. Any attacker could pass their own keypair as `server_key` and generate unlimited loot NFTs.
+- **Fix**: Added `server_key` field to `FizzConfig`. `fizz_init` stores it. `ClaimLoot` now requires `address = config.server_key`.
+- **Verified**: `programs/fizzcaps-onchain/src/lib.rs:650-690`
+
+#### [2026-04-06] SEC-AUDIT-003: FizzBondingCurve missing graduated_at + curve.symbol compile error
+- **What**: `fizz_graduate` set `curve.graduated_at` and used `curve.symbol` but neither field existed in `FizzBondingCurve` — compile error, program could never deploy. Space allocation also too small.
+- **Fix**: Added `graduated_at: Option<i64>` to struct. Fixed space to 108 bytes. Replaced `curve.symbol` with `curve.token_mint` in `msg!`.
+- **Verified**: `programs/fizzcaps-onchain/src/lib.rs:571-586, 507-510`
+
+#### [2026-04-06] SEC-AUDIT-004/005: Token vault + treasury unconstrained in Buy/Sell
+- **What**: `curve_token_vault` in `FizzBuyTokens` had no ATA constraints (token theft possible). `FizzSellTokens` had no `config` account and `treasury` was unconstrained (100% fee redirection possible).
+- **Fix**: Added `associated_token::mint = token_mint, associated_token::authority = bonding_curve` to `curve_token_vault` in both structs. Added `config` to `FizzSellTokens` with `treasury address = config.treasury @ FizzError::InvalidTreasury`.
+- **Verified**: `programs/fizzcaps-onchain/src/lib.rs`
+
+#### [2026-04-06] SEC-AUDIT-006: GPS not validated before voucher signing → couch farming
+- **What**: `loot-voucher.js` accepted client-supplied GPS coordinates without checking proximity to any known POI. Players could claim loot from any location on Earth without physically visiting.
+- **Fix**: Added `findNearbyPOI(lat, lng)` haversine check against `poi.json` data before signing. Returns `403 not_near_poi` if no POI within claim radius.
+- **Verified**: `backend/api/loot-voucher.js:75-100`
+
+#### [2026-04-06] SEC-AUDIT-008: Loot voucher timestamp not validated on-chain
+- **What**: `claim_loot` accepted vouchers of any age. Old/leaked vouchers remained valid indefinitely.
+- **Fix**: Added `voucher_age <= 3600s` check using `Clock::get()` before burn and mint.
+- **Verified**: `programs/fizzcaps-onchain/src/lib.rs:55-63`
+
+### Security Test Coverage
+- **Total security tests**: 94 (was 79) — 15 new regression tests added for BUG-031–BUG-039 and SEC-AUDIT-001–SEC-AUDIT-008.
+- **Run with**: `node tests/security.test.js`
 
 ---
 

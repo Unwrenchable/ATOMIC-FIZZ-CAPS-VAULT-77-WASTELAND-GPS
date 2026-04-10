@@ -117,6 +117,97 @@
     });
   }
 
+  /**
+   * Show a non-blocking Pip-Boy styled confirmation dialog.
+   * Returns a Promise that resolves to true (OK) or false (Cancel).
+   * Falls back to native confirm() if DOM is not available.
+   *
+   * @param {string} message - Message text to display
+   * @param {string} [okLabel='OK']
+   * @param {string} [cancelLabel='CANCEL']
+   * @returns {Promise<boolean>}
+   */
+  function pipboyConfirm(message, okLabel, cancelLabel) {
+    okLabel = okLabel || 'OK';
+    cancelLabel = cancelLabel || 'CANCEL';
+
+    // Fall back to native confirm if document is unavailable
+    if (typeof document === 'undefined') {
+      return Promise.resolve(confirm(message));
+    }
+
+    return new Promise(function (resolve) {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = [
+        'position:fixed', 'inset:0', 'z-index:999999',
+        'display:flex', 'align-items:center', 'justify-content:center',
+        'background:rgba(0,10,0,0.85)', 'font-family:"Courier New",monospace',
+        'padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0)',
+        'padding-bottom:env(safe-area-inset-bottom,0)',
+        'box-sizing:border-box'
+      ].join(';');
+
+      const box = document.createElement('div');
+      box.style.cssText = [
+        'background:#001900', 'border:2px solid #00ff66',
+        'border-radius:8px', 'padding:1.5rem 1.25rem',
+        'max-width:min(90vw,420px)', 'width:100%',
+        'box-shadow:0 0 24px rgba(0,255,102,0.35)',
+        'color:#00ff66', 'text-shadow:0 0 6px #00ff66',
+        'font-size:0.95rem', 'line-height:1.5',
+        'white-space:pre-wrap', 'word-break:break-word'
+      ].join(';');
+
+      const msgEl = document.createElement('p');
+      msgEl.style.cssText = 'margin:0 0 1.25rem';
+      msgEl.textContent = message;
+
+      const btnRow = document.createElement('div');
+      btnRow.style.cssText = 'display:flex;gap:0.75rem;justify-content:flex-end';
+
+      function makeBtn(label, primary) {
+        const btn = document.createElement('button');
+        btn.textContent = label;
+        btn.style.cssText = [
+          'font-family:"Courier New",monospace', 'font-size:0.9rem',
+          'cursor:pointer', 'border-radius:4px',
+          'min-height:44px', 'min-width:80px',
+          'padding:0.5rem 1rem', 'touch-action:manipulation',
+          primary
+            ? 'background:#00ff66;color:#001900;border:2px solid #00ff66'
+            : 'background:transparent;color:#00ff66;border:2px solid #00ff66'
+        ].join(';');
+        return btn;
+      }
+
+      const cancelBtn = makeBtn(cancelLabel, false);
+      const okBtn = makeBtn(okLabel, true);
+
+      function cleanup(result) {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        resolve(result);
+      }
+
+      cancelBtn.addEventListener('click', function () { cleanup(false); });
+      okBtn.addEventListener('click', function () { cleanup(true); });
+
+      // Also dismiss on overlay backdrop click
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) cleanup(false);
+      });
+
+      btnRow.appendChild(cancelBtn);
+      btnRow.appendChild(okBtn);
+      box.appendChild(msgEl);
+      box.appendChild(btnRow);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      // Focus OK button for keyboard/assistive-tech users
+      okBtn.focus();
+    });
+  }
+
   const web3WalletAdapter = {
     loaded: false,
     connected: false,
@@ -125,6 +216,9 @@
     provider: null,
     connectionAttempts: 0,
     maxConnectionAttempts: 3,
+    // Tracks provider objects that already have our event listeners attached.
+    // WeakSet avoids mutating the third-party provider object and prevents memory leaks.
+    _listenersAttached: new WeakSet(),
 
     // Helper functions for wallet detection
     _isMetaMaskInstalled() {
@@ -145,6 +239,44 @@
       }
       // Single provider case
       return window.ethereum.isCoinbaseWallet === true;
+    },
+
+    /**
+     * Detect if the user is on a mobile device.
+     * Prefers the modern navigator.userAgentData API, falls back to
+     * touch-capability detection, then UA string matching.
+     * @returns {boolean}
+     */
+    _isMobileDevice() {
+      // Modern API (Chromium 90+): structured UA client hints
+      if (navigator.userAgentData && typeof navigator.userAgentData.mobile === 'boolean') {
+        return navigator.userAgentData.mobile;
+      }
+      // Feature detection: touch capability is a reliable mobile indicator
+      if ('maxTouchPoints' in navigator && navigator.maxTouchPoints > 0) {
+        return true;
+      }
+      // Legacy UA string fallback
+      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent || '');
+    },
+
+    /**
+     * Generate a Phantom universal-link / deeplink to open the game inside
+     * Phantom's in-app browser on mobile.
+     * Only uses origin + pathname to avoid leaking / forwarding user-controlled
+     * query params and hash fragments through the deeplink.
+     * Reference: https://docs.phantom.app/phantom-deeplinks/provider-methods/connect
+     * @returns {string} deeplink URL
+     */
+    _buildPhantomDeeplink() {
+      // Intentionally exclude query string and hash: they may contain user-controlled
+      // data that could be exploited within Phantom's in-app browser context.
+      const safePath = window.location.origin + window.location.pathname;
+      const encodedUrl = encodeURIComponent(safePath);
+      // Uses the HTTPS universal-link scheme (https://phantom.app/ul/browse/...)
+      // which works on both iOS and Android and gracefully falls back to the
+      // App Store / Play Store when Phantom is not installed.
+      return `https://phantom.app/ul/browse/${encodedUrl}?ref=${encodeURIComponent(window.location.origin)}`;
     },
 
     // Supported wallet providers
@@ -168,11 +300,26 @@
               // Phantom's in-app browser typically includes "Phantom" in the UA string
               const userAgent = navigator.userAgent || "";
               const isPhantomBrowser = userAgent.toLowerCase().includes("phantom");
-              
+
               if (isPhantomBrowser) {
                 throw new Error('Phantom wallet is loading. Please try again in a moment.');
+              } else if (web3WalletAdapter._isMobileDevice()) {
+                // On mobile: redirect to Phantom's in-app browser via universal link.
+                // Use pipboyConfirm (non-blocking, mobile-friendly) instead of native confirm().
+                const deeplink = web3WalletAdapter._buildPhantomDeeplink();
+                const confirmed = await pipboyConfirm(
+                  'Phantom wallet not detected in your browser.\n\n' +
+                  'Tap OPEN PHANTOM to launch this site inside the Phantom app\'s built-in browser so you can connect your wallet.\n\n' +
+                  '(Install Phantom from your app store if you haven\'t already.)',
+                  'OPEN PHANTOM',
+                  'CANCEL'
+                );
+                if (confirmed) {
+                  window.location.href = deeplink;
+                }
+                throw new Error('Redirecting to Phantom app. If nothing happened, install Phantom from your app store.');
               } else {
-                // Offer to open Phantom install page
+                // Desktop: Offer to open Phantom install page
                 const shouldInstall = confirm(
                   'Phantom wallet not detected!\n\n' +
                   'Phantom is a browser extension wallet for Solana.\n\n' +
@@ -190,12 +337,18 @@
             if (!securityUtils.isValidSolanaAddress(address)) {
               throw new Error('Invalid wallet address received');
             }
+            // Attach listeners so state stays in sync after connecting
+            web3WalletAdapter._attachPhantomListeners(provider);
             return {
               address: securityUtils.sanitizeAddress(address),
               provider: provider
             };
           } catch (error) {
-            throw new Error(`Phantom connection failed: ${error.message}`);
+            // Code 4001 = user rejected the connection request — not an error worth alarming
+            if (error.code === 4001 || (error.message && error.message.toLowerCase().includes('user rejected'))) {
+              throw new Error('Connection cancelled. Tap Connect again when ready.');
+            }
+            throw new Error(`Phantom connection failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -233,7 +386,7 @@
               provider: window.solflare
             };
           } catch (error) {
-            throw new Error(`Solflare connection failed: ${error.message}`);
+            throw new Error(`Solflare connection failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -285,7 +438,7 @@
               provider: provider
             };
           } catch (error) {
-            throw new Error(`WalletConnect failed: ${error.message}`);
+            throw new Error(`WalletConnect failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -327,7 +480,7 @@
               provider: window.ethereum
             };
           } catch (error) {
-            throw new Error(`MetaMask connection failed: ${error.message}`);
+            throw new Error(`MetaMask connection failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -369,7 +522,7 @@
               provider: window.ethereum
             };
           } catch (error) {
-            throw new Error(`Coinbase Wallet connection failed: ${error.message}`);
+            throw new Error(`Coinbase Wallet connection failed: ${error.message}`, { cause: error });
           }
         }
       },
@@ -412,9 +565,67 @@
       
       // Check for existing wallet connection
       await this.checkExistingConnection();
+
+      // Bind Phantom provider events so account switches and
+      // user-initiated disconnects are reflected immediately in the game.
+      this._bindPhantomEvents();
       
       this.loaded = true;
       console.log("[web3-wallet] Wallet adapter ready");
+    },
+
+    /**
+     * Attach accountChanged and disconnect listeners to the Phantom provider
+     * (window.solana or window.phantom.solana) once it is available.
+     * Called from init() — safe to call even when Phantom is not installed.
+     */
+    _bindPhantomEvents() {
+      const phantom = window.phantom?.solana || (window.solana?.isPhantom ? window.solana : null);
+      if (!phantom) return;
+
+      // Phantom fires 'accountChanged' when the user switches accounts inside
+      // the extension.  New public key may be null if the user disconnects all
+      // accounts.
+      phantom.on('accountChanged', (publicKey) => {
+        if (publicKey) {
+          const newAddress = publicKey.toString();
+          if (securityUtils.isValidSolanaAddress(newAddress)) {
+            this.walletAddress = securityUtils.sanitizeAddress(newAddress);
+            console.log('[web3-wallet] Phantom account changed to:', this.getShortAddress());
+            this._showConnectToast(`⬡ Account switched: ${this.getShortAddress()}`);
+            this.dispatchConnectionEvent();
+          }
+        } else {
+          // User disconnected all accounts via the extension UI
+          console.log('[web3-wallet] Phantom account disconnected via extension');
+          this._handleExternalDisconnect();
+        }
+      });
+
+      // Phantom fires 'disconnect' when the user removes site permissions
+      phantom.on('disconnect', () => {
+        console.log('[web3-wallet] Phantom disconnected via extension');
+        this._handleExternalDisconnect();
+      });
+    },
+
+    /**
+     * Handle a disconnect initiated externally (e.g. user removes the site
+     * from Phantom's trusted-sites list or switches away from all accounts).
+     * Clears local state and notifies the rest of the game UI.
+     */
+    _handleExternalDisconnect() {
+      if (this.walletType !== 'phantom') return;
+      this.connected = false;
+      this.walletAddress = null;
+      this.walletType = null;
+      this.provider = null;
+      try {
+        localStorage.removeItem('web3_wallet_type');
+        localStorage.removeItem('web3_wallet_hash');
+      } catch (_) { /* ignore */ }
+      this._showConnectToast('Phantom wallet disconnected. Reconnect to continue.', true);
+      this.dispatchConnectionEvent();
     },
 
     async checkExistingConnection() {
@@ -433,9 +644,35 @@
       const savedType = localStorage.getItem('web3_wallet_type');
       if (savedType && this.providers[savedType]) {
         const provider = this.providers[savedType];
-        if (provider.check()) {
+
+        if (savedType === 'phantom') {
+          // For Phantom, attempt a silent trusted reconnect.
+          // connect({ onlyIfTrusted: true }) succeeds without a popup if the
+          // user previously approved this site; it rejects silently otherwise.
           try {
-            // Attempt silent reconnection
+            const phantomProvider = await waitForPhantomProvider(1500);
+            if (phantomProvider) {
+              const resp = await phantomProvider.connect({ onlyIfTrusted: true });
+              const address = resp.publicKey.toString();
+              if (securityUtils.isValidSolanaAddress(address)) {
+                this.connected = true;
+                this.walletAddress = securityUtils.sanitizeAddress(address);
+                this.walletType = 'phantom';
+                this.provider = phantomProvider;
+                console.log('[web3-wallet] Silently restored Phantom connection:', this.getShortAddress());
+                this.dispatchConnectionEvent();
+                return;
+              }
+            }
+          } catch (e) {
+            // onlyIfTrusted rejects when the site is not pre-approved — this is
+            // expected on a fresh visit; clear the stale preference.
+            console.log('[web3-wallet] Phantom silent reconnect skipped:', e.message);
+            try { localStorage.removeItem('web3_wallet_type'); } catch (_) { /* ignore */ }
+          }
+        } else if (provider.check()) {
+          try {
+            // Attempt silent reconnection for other wallets
             console.log(`[web3-wallet] Attempting to restore ${provider.name} connection`);
             // Note: Most wallets require explicit user action to reconnect
           } catch (e) {
@@ -443,6 +680,47 @@
           }
         }
       }
+    },
+
+    // Attach Phantom-specific event listeners to stay in sync with wallet state.
+    // Uses a WeakSet to avoid mutating the provider object and prevent duplicate registration.
+    _attachPhantomListeners(phantomProvider) {
+      if (!phantomProvider || this._listenersAttached.has(phantomProvider)) return;
+      this._listenersAttached.add(phantomProvider);
+
+      phantomProvider.on('accountChanged', (publicKey) => {
+        if (publicKey) {
+          const newAddress = publicKey.toString();
+          if (securityUtils.isValidSolanaAddress(newAddress)) {
+            this.walletAddress = securityUtils.sanitizeAddress(newAddress);
+            console.log("[web3-wallet] Phantom account changed:", this.getShortAddress());
+            this.dispatchConnectionEvent();
+          }
+        } else {
+          // Phantom signals the connected account was removed — treat as disconnect
+          console.log("[web3-wallet] Phantom account removed — disconnecting");
+          this.connected = false;
+          this.walletAddress = null;
+          this.walletType = null;
+          this.provider = null;
+          this.dispatchConnectionEvent();
+        }
+      });
+
+      phantomProvider.on('disconnect', () => {
+        console.log("[web3-wallet] Phantom disconnect event received");
+        this.connected = false;
+        this.walletAddress = null;
+        this.walletType = null;
+        this.provider = null;
+        try {
+          localStorage.removeItem('web3_wallet_type');
+          localStorage.removeItem('web3_wallet_hash');
+        } catch (storageErr) {
+          console.warn('[web3-wallet] Could not clear wallet preferences on disconnect:', storageErr);
+        }
+        this.dispatchConnectionEvent();
+      });
     },
 
     getAvailableWallets() {
@@ -466,31 +744,122 @@
       return available;
     },
 
+    // ============================================================
+    // POCKET-BOY WALLET SELECTOR MODAL
+    // Replaces the native browser prompt() with a proper modal.
+    // ============================================================
     async showWalletSelector() {
       const available = this.getAvailableWallets();
-      
-      let message = "🔗 CONNECT WALLET\n\nSelect a wallet provider:\n\n";
-      available.forEach((wallet, i) => {
-        const status = wallet.detected ? "✅" : "⚠️";
-        message += `[${i + 1}] ${wallet.icon} ${wallet.name} ${status}\n`;
+
+      return new Promise((resolve) => {
+        // Remove any stale modal
+        const stale = document.getElementById('walletSelectorModal');
+        if (stale) stale.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'walletSelectorModal';
+        modal.style.cssText = [
+          'position:fixed', 'inset:0', 'z-index:99999',
+          'display:flex', 'align-items:center', 'justify-content:center',
+          'background:rgba(0,0,0,0.88)',
+          'font-family:"Consolas","Courier New",monospace'
+        ].join(';');
+
+        const walletRows = available.map(w => {
+          const detected = w.detected
+            ? '<span style="color:#00ff41;font-size:11px;">✓ DETECTED</span>'
+            : '<span style="color:#ff6600;font-size:11px;">⚠ NOT INSTALLED</span>';
+          return `
+            <button data-wallet="${w.key}" style="
+              display:flex;align-items:center;gap:12px;width:100%;
+              background:rgba(0,255,65,0.06);border:1px solid rgba(0,255,65,0.3);
+              color:#00ff41;padding:10px 14px;margin-bottom:8px;cursor:pointer;
+              font-family:inherit;font-size:14px;letter-spacing:0.08em;
+              transition:background 0.15s;text-align:left;
+            ">
+              <span style="font-size:22px;line-height:1;">${w.icon}</span>
+              <span style="flex:1;">${w.name}</span>
+              ${detected}
+            </button>`;
+        }).join('');
+
+        modal.innerHTML = `
+          <div style="
+            background:#020d02;border:2px solid #00ff41;
+            box-shadow:0 0 30px rgba(0,255,65,0.25);
+            padding:24px 28px;max-width:380px;width:90%;
+            position:relative;
+          ">
+            <div style="text-align:center;margin-bottom:18px;">
+              <div style="color:#00ff41;font-size:18px;letter-spacing:0.15em;font-weight:bold;">⬡ CONNECT WALLET ⬡</div>
+              <div style="color:#008822;font-size:11px;letter-spacing:0.1em;margin-top:4px;">VAULT-TEC AUTHENTICATION TERMINAL</div>
+            </div>
+            <div id="walletOptionsList">${walletRows}</div>
+            <button id="walletSelectorCancel" style="
+              width:100%;background:transparent;border:1px solid rgba(255,100,0,0.4);
+              color:#ff6600;padding:8px;cursor:pointer;font-family:inherit;
+              font-size:12px;letter-spacing:0.1em;margin-top:4px;
+            ">✕ CANCEL</button>
+            <div style="color:#004400;font-size:10px;text-align:center;margin-top:12px;letter-spacing:0.06em;">
+              ✓ DETECTED = wallet extension found &nbsp;|&nbsp; ⚠ = will prompt to install
+            </div>
+          </div>`;
+
+        document.body.appendChild(modal);
+
+        // Hover highlight
+        modal.querySelectorAll('[data-wallet]').forEach(btn => {
+          btn.addEventListener('mouseover', () => { btn.style.background = 'rgba(0,255,65,0.14)'; });
+          btn.addEventListener('mouseout', () => { btn.style.background = 'rgba(0,255,65,0.06)'; });
+          btn.addEventListener('click', () => {
+            modal.remove();
+            resolve(btn.dataset.wallet);
+          });
+        });
+
+        document.getElementById('walletSelectorCancel').addEventListener('click', () => {
+          modal.remove();
+          resolve(null);
+        });
+
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) { modal.remove(); resolve(null); }
+        });
+
+        // Close on Escape
+        const onKey = (e) => {
+          if (e.key === 'Escape') { modal.remove(); resolve(null); document.removeEventListener('keydown', onKey); }
+        };
+        document.addEventListener('keydown', onKey);
       });
-      message += `\n✅ = Detected\n⚠️ = Not detected (will prompt to install)\n`;
-      message += `\n[0] Cancel\n\nEnter number (0-${available.length}):`;
+    },
 
-      const choice = prompt(message);
-      const choiceNum = parseInt(choice, 10);
+    // ============================================================
+    // SHOW INLINE STATUS TOAST (replaces alert() for connect result)
+    // ============================================================
+    _showConnectToast(message, isError = false) {
+      const existing = document.getElementById('walletConnectToast');
+      if (existing) existing.remove();
 
-      if (choiceNum === 0 || !choice) {
-        return null;
-      }
-
-      if (choiceNum < 1 || choiceNum > available.length) {
-        alert("Invalid choice");
-        return null;
-      }
-
-      const selected = available[choiceNum - 1];
-      return selected.key;
+      const toast = document.createElement('div');
+      toast.id = 'walletConnectToast';
+      toast.style.cssText = [
+        'position:fixed', 'bottom:calc(24px + env(safe-area-inset-bottom, 0px))', 'left:50%',
+        'transform:translateX(-50%)',
+        'z-index:99998',
+        `background:${isError ? '#1a0000' : '#011501'}`,
+        `border:1px solid ${isError ? '#ff4444' : '#00ff41'}`,
+        `color:${isError ? '#ff6666' : '#00ff41'}`,
+        'padding:10px 20px', 'font-family:"Consolas","Courier New",monospace',
+        'font-size:13px', 'letter-spacing:0.08em',
+        'box-shadow:0 0 16px rgba(0,255,65,0.2)',
+        'max-width:90vw', 'text-align:center',
+        'pointer-events:none',
+      ].join(';');
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4000);
     },
 
     async connect(walletType = null) {
@@ -511,7 +880,11 @@
         // If no type specified, show selector
         if (!walletType) {
           walletType = await this.showWalletSelector();
-          if (!walletType) return false;
+          if (!walletType) {
+            // Cancelled by the user — not a real attempt, don't count it
+            this.connectionAttempts = Math.max(0, this.connectionAttempts - 1);
+            return false;
+          }
         }
 
         const provider = this.providers[walletType];
@@ -530,11 +903,11 @@
           // Check if provider is available for other wallets
           if (!provider.check()) {
             if (walletType === 'metamask') {
-              alert(`${provider.name} not detected!\n\nPlease install MetaMask:\nhttps://metamask.io/`);
+              this._showConnectToast(`MetaMask not detected. Install from metamask.io then refresh.`, true);
             } else if (walletType === 'walletconnect') {
-              alert(`WalletConnect library not loaded.\n\nPlease refresh the page.`);
+              this._showConnectToast(`WalletConnect library not loaded. Please refresh the page.`, true);
             } else {
-              alert(`${provider.name} not available.\n\nPlease install the wallet extension.`);
+              this._showConnectToast(`${provider.name} not available. Install the wallet extension.`, true);
             }
             return false;
           }
@@ -567,9 +940,9 @@
         console.log(`[web3-wallet] Connected to ${provider.name}:`, this.getShortAddress());
 
         if (result.isNew) {
-          alert(`✅ New ${provider.name} Generated!\n\nAddress: ${this.getShortAddress()}\n\nYour wallet has been created and saved locally.\n\n⚠️ IMPORTANT: This is a local wallet. For real transactions, connect an external wallet like Phantom.`);
+          this._showConnectToast(`⬡ New ${provider.name} created — ${this.getShortAddress()} — local wallet only`);
         } else {
-          alert(`✅ Connected to ${provider.name}!\n\nAddress: ${this.getShortAddress()}`);
+          this._showConnectToast(`⬡ Connected: ${provider.name} — ${this.getShortAddress()}`);
         }
 
         this.dispatchConnectionEvent();
@@ -577,10 +950,20 @@
 
       } catch (error) {
         console.error("[web3-wallet] Connection failed:", error);
-        alert(`Wallet connection failed:\n\n${error.message}`);
+        // User cancellation is not a security-relevant failure — don't penalise the counter
+        const isUserCancellation = error.code === 4001 || (error.message && (
+          error.message.includes('cancelled') ||
+          error.message.includes('rejected') ||
+          error.message.includes('Redirecting to Phantom')
+        ));
+        if (isUserCancellation) {
+          this.connectionAttempts = Math.max(0, this.connectionAttempts - 1);
+        }
+        this._showConnectToast(`Connection failed: ${error.message}`, true);
         return false;
       }
     },
+
 
     async hashAddress(address) {
       // Create a simple hash of the address for verification
@@ -696,7 +1079,7 @@
         
       } catch (error) {
         console.error("[web3-wallet] Wallet generation failed:", error);
-        throw new Error('Failed to generate secure wallet. Please try again.');
+        throw new Error('Failed to generate secure wallet. Please try again.', { cause: error });
       }
     },
 
@@ -706,7 +1089,7 @@
 
     async generateNewWallet() {
       if (!this.canGenerateNewWallet()) {
-        alert("New wallet generation is only available with Fizz Caps Wallet.\n\nTo generate a new wallet, disconnect and select 'Fizz Caps Wallet' when connecting.");
+        this._showConnectToast('New wallet generation only available with Fizz Caps Wallet.', true);
         return false;
       }
 
@@ -737,18 +1120,14 @@
           console.warn('[web3-wallet] Could not save wallet preference');
         }
 
-        alert(
-          "✅ NEW WALLET GENERATED!\n\n" +
-          `Address: ${this.getShortAddress()}\n\n` +
-          "Your new wallet is ready to use!"
-        );
+        this._showConnectToast(`⬡ New wallet generated — ${this.getShortAddress()}`);
 
         this.dispatchConnectionEvent();
         return true;
 
       } catch (error) {
         console.error("[web3-wallet] Wallet generation failed:", error);
-        alert(`Failed to generate new wallet:\n\n${error.message}`);
+        this._showConnectToast(`Failed to generate new wallet: ${error.message}`, true);
         return false;
       }
     },
