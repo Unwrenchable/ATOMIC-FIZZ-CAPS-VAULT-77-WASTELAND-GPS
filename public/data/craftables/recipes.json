@@ -86,5 +86,165 @@
     "cooldownSeconds": 1800,
     "requiresLevel": 5,
     "maxPerDay": 1
+  },
+  {
+    "id": "assemble_leather_armor",
+    "name": "Assemble Leather Armor",
+    "type": "armor_assembly",
+    "description": "Combine all six Leather Armor pieces into a full set.",
+    "inputs": [
+      {
+        "id": "leather_armor_head",
+        "amount": 1
+      },
+      {
+        "id": "leather_armor_chest",
+        "amount": 1
+      },
+      {
+        "id": "leather_armor_arm_l",
+        "amount": 1
+      },
+      {
+        "id": "leather_armor_arm_r",
+        "amount": 1
+      },
+      {
+        "id": "leather_armor_leg_l",
+        "amount": 1
+      },
+      {
+        "id": "leather_armor_leg_r",
+        "amount": 1
+      }
+    ],
+    "output": {
+      "itemId": "leather_armor_full",
+      "qty": 1
+    },
+    "tokenCost": 0,
+    "cooldownSeconds": 0,
+    "requiresLevel": 5,
+    "maxPerDay": 5
+  },
+  {
+    "id": "assemble_combat_armor",
+    "name": "Assemble Combat Armor",
+    "type": "armor_assembly",
+    "description": "Combine all six Combat Armor pieces into a full military set.",
+    "inputs": [
+      {
+        "id": "combat_armor_head",
+        "amount": 1
+      },
+      {
+        "id": "combat_armor_chest",
+        "amount": 1
+      },
+      {
+        "id": "combat_armor_arm_l",
+        "amount": 1
+      },
+      {
+        "id": "combat_armor_arm_r",
+        "amount": 1
+      },
+      {
+        "id": "combat_armor_leg_l",
+        "amount": 1
+      },
+      {
+        "id": "combat_armor_leg_r",
+        "amount": 1
+      }
+    ],
+    "output": {
+      "itemId": "combat_armor_full",
+      "qty": 1
+    },
+    "tokenCost": 0,
+    "cooldownSeconds": 0,
+    "requiresLevel": 15,
+    "maxPerDay": 2
+  },
+  {
+    "id": "assemble_t45_power_armor",
+    "name": "Assemble T-45 Power Armor",
+    "type": "armor_assembly",
+    "description": "Combine all six T-45 Power Armor pieces at the Armor Workbench.",
+    "inputs": [
+      {
+        "id": "t45_pa_head",
+        "amount": 1
+      },
+      {
+        "id": "t45_pa_chest",
+        "amount": 1
+      },
+      {
+        "id": "t45_pa_arm_l",
+        "amount": 1
+      },
+      {
+        "id": "t45_pa_arm_r",
+        "amount": 1
+      },
+      {
+        "id": "t45_pa_leg_l",
+        "amount": 1
+      },
+      {
+        "id": "t45_pa_leg_r",
+        "amount": 1
+      }
+    ],
+    "output": {
+      "itemId": "t45_power_armor_full",
+      "qty": 1
+    },
+    "tokenCost": 0,
+    "cooldownSeconds": 0,
+    "requiresLevel": 25,
+    "maxPerDay": 1
+  },
+  {
+    "id": "assemble_t51b_power_armor",
+    "name": "Assemble T-51b Power Armor",
+    "type": "armor_assembly",
+    "description": "Collect all six T-51b Power Armor pieces and forge a legend at the Armor Workbench.",
+    "inputs": [
+      {
+        "id": "t51b_pa_head",
+        "amount": 1
+      },
+      {
+        "id": "t51b_pa_chest",
+        "amount": 1
+      },
+      {
+        "id": "t51b_pa_arm_l",
+        "amount": 1
+      },
+      {
+        "id": "t51b_pa_arm_r",
+        "amount": 1
+      },
+      {
+        "id": "t51b_pa_leg_l",
+        "amount": 1
+      },
+      {
+        "id": "t51b_pa_leg_r",
+        "amount": 1
+      }
+    ],
+    "output": {
+      "itemId": "t51b_power_armor_full",
+      "qty": 1
+    },
+    "tokenCost": 0,
+    "cooldownSeconds": 0,
+    "requiresLevel": 30,
+    "maxPerDay": 1
   }
 ]

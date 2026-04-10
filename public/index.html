@@ -395,11 +395,20 @@
 
                     <div class="panel-divider"></div>
 
-                    <!-- NUKE FUSION CHAMBER -->
+                    <!-- NUKE PORTAL (BURN GEAR ONLY) -->
                     <div id="nukeSection">
-                      <div class="panel-header">⚛️ GEAR FUSION CHAMBER</div>
-                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Combine NFT gear to create powerful fusion items. Requires connected wallet.</p>
-                      <button class="pipboy-button" id="openNukeTerminal">☢️ OPEN FUSION CHAMBER</button>
+                      <div class="panel-header">☢️ NUKE PORTAL</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Destroy gear permanently for CAPS / XP. No crafting here.</p>
+                      <button class="pipboy-button" id="openNukeTerminal">☢️ NUKE PORTAL — BURN GEAR</button>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- ARMOR WORKBENCH -->
+                    <div id="workbenchSection">
+                      <div class="panel-header">🔧 ARMOR WORKBENCH</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Assemble full armor sets from collected pieces. Craft consumables &amp; gear mods.</p>
+                      <button class="pipboy-button" id="openWorkbenchTerminal">🔧 OPEN WORKBENCH</button>
                     </div>
 
                     <div class="panel-divider"></div>
@@ -561,6 +570,8 @@
         const btn = document.getElementById("openOverseerTerminal");
         const nukeSection = document.getElementById("nukeSection");
         const nukeBtn = document.getElementById("openNukeTerminal");
+        const workbenchSection = document.getElementById("workbenchSection");
+        const workbenchBtn = document.getElementById("openWorkbenchTerminal");
         const bridgeSection = document.getElementById("bridgeSection");
         const bridgeBtn = document.getElementById("openBridgeTerminal");
 
@@ -622,6 +633,32 @@
           window.open("/nuke", "nuke_terminal", features);
         }
 
+        function openWorkbenchPopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
+
+          const width = Math.min(960, Math.max(480, Math.floor(screenW * 0.8)));
+          const height = Math.min(900, Math.max(600, Math.floor(screenH * 0.85)));
+
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
+
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
+
+          window.open("/workbench", "workbench_terminal", features);
+        }
+
         function openBridgePopup() {
           const screenW = window.innerWidth || screen.width;
           const screenH = window.innerHeight || screen.height;
@@ -659,10 +696,17 @@
           nukeBtn.addEventListener("click", function (e) {
             e.preventDefault();
             if (nukeBtn.disabled) {
-              alert('⚠️ NUKE SYSTEM LOCKED\n\nThe Gear Fusion Chamber is currently disabled.\nAdmin activation required.\n\nComing soon!');
+              alert('☢️ NUKE PORTAL LOCKED\n\nThe Nuke Portal — Burn Gear is currently disabled.\nAdmin activation required.\n\nComing soon!');
             } else {
               openNukePopup();
             }
+          });
+        }
+
+        if (workbenchBtn) {
+          workbenchBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            openWorkbenchPopup();
           });
         }
 
