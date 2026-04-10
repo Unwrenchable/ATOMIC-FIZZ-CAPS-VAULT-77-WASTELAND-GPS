@@ -308,6 +308,10 @@
     if (msg) setTimeout(function () { statusEl.textContent = ''; }, 4000);
   }
 
+  // ── Constants ────────────────────────────────────────────────────────────────
+  // ── Constants ────────────────────────────────────────────────────────────────
+  var UI_REFRESH_DELAY_MS = 1200; // Delay after success to let user read status before panel reloads
+
   // ── Slot display config ──────────────────────────────────────────────────────
   const SLOT_INFO = {
     head:  { label: 'HEAD',      icon: '🪖' },
@@ -319,11 +323,15 @@
   };
 
   // ── Read player inventory from opener (Game.playerState) or localStorage ────
+  // Also syncs opener inventory to localStorage for persistence if the opener is later closed.
   function getInventory() {
     try {
       if (window.opener && window.opener.Game && window.opener.Game.playerState) {
         const inv = window.opener.Game.playerState.inventory;
-        return Array.isArray(inv) ? inv : [];
+        const arr = Array.isArray(inv) ? inv : [];
+        // Sync to localStorage so the workbench stays consistent after opener closes
+        try { localStorage.setItem('playerInventory', JSON.stringify(arr)); } catch (e) {}
+        return arr;
       }
     } catch (e) { /* cross-origin guard */ }
     try {
@@ -355,20 +363,30 @@
 
     Object.entries(armorSets).forEach(function ([setId, setDef]) {
       const pieceIds = setDef.pieceIds;
-      const haveAll = setDef.pieces.every(function (slot) {
-        return hasItem(inv, pieceIds[slot]);
+
+      // Validate that every slot in setDef.pieces has a corresponding pieceIds entry
+      const validatedPieces = setDef.pieces.filter(function (slot) {
+        if (!pieceIds[slot]) {
+          console.warn('[workbench] armor_sets.json: set "' + setId + '" piece "' + slot + '" missing from pieceIds');
+          return false;
+        }
+        return true;
       });
-      const haveCount = setDef.pieces.filter(function (slot) {
+      const haveAll = validatedPieces.length === setDef.pieces.length &&
+        validatedPieces.every(function (slot) { return hasItem(inv, pieceIds[slot]); });
+      const haveCount = validatedPieces.filter(function (slot) {
         return hasItem(inv, pieceIds[slot]);
       }).length;
 
-      // Build piece grid HTML
-      const piecesHtml = setDef.pieces.map(function (slot) {
+      // Build piece grid HTML using validatedPieces
+      const piecesHtml = validatedPieces.map(function (slot) {
         const have = hasItem(inv, pieceIds[slot]);
-        const info = SLOT_INFO[slot] || { label: slot.toUpperCase(), icon: '🔲' };
+        const info = SLOT_INFO[slot];
+        if (!info) console.warn('[workbench] SLOT_INFO missing entry for slot "' + slot + '"');
+        const display = info || { label: slot.toUpperCase(), icon: '🔲' };
         return '<div class="piece-slot' + (have ? ' have' : '') + '">' +
-          '<span class="slot-icon">' + (have ? '✅' : info.icon) + '</span>' +
-          '<span class="slot-label">' + escHtml(info.label) + '</span>' +
+          '<span class="slot-icon">' + (have ? '✅' : display.icon) + '</span>' +
+          '<span class="slot-label">' + escHtml(display.label) + '</span>' +
           '</div>';
       }).join('');
 
@@ -433,7 +451,7 @@
       if (data.ok) {
         setStatus('✅ ' + (data.message || 'Full set assembled! Check your inventory.'), '#00ff41');
         // Refresh the panel after a short delay
-        setTimeout(loadArmorSets, 1200);
+        setTimeout(loadArmorSets, UI_REFRESH_DELAY_MS);
       } else {
         setStatus('⚠️ ' + (data.error || 'Assembly failed. Try again.'), '#ff6633');
         btn.disabled = false;
@@ -470,6 +488,7 @@
     }
 
     displayRecipes.forEach(function (recipe) {
+      // Support both 'materials' (legacy recipes.json shape) and 'inputs' (armor_assembly shape)
       const materials = recipe.materials || recipe.inputs || [];
 
       const matsHtml = materials.map(function (mat) {
@@ -545,7 +564,7 @@
 
       if (data.ok) {
         setStatus('✅ ' + (data.message || 'Item crafted! Check your inventory.'), '#00ff41');
-        setTimeout(loadCraftingRecipes, 1200);
+        setTimeout(loadCraftingRecipes, UI_REFRESH_DELAY_MS);
       } else {
         setStatus('⚠️ ' + (data.error || 'Craft failed. Try again.'), '#ff6633');
         btn.disabled = false;
