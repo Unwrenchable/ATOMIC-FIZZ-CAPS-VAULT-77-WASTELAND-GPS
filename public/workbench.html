@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ARMOR WORKBENCH • ATOMIC FIZZ CAPS</title>
+
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://unpkg.com 'unsafe-inline';
+    connect-src 'self' https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https: blob:;
+    font-src 'self' https://fonts.gstatic.com data:;
+    object-src 'none';
+    frame-src 'self';
+    base-uri 'self';">
+
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      background: #050f05;
+      color: #00ff41;
+      font-family: 'VT323', monospace;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .wb-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .wb-header {
+      text-align: center;
+      border: 2px solid #00ff41;
+      padding: 12px;
+      margin-bottom: 16px;
+      background: rgba(0, 255, 65, 0.06);
+      text-shadow: 0 0 8px #00ff41;
+    }
+    .wb-header h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.1em;
+      margin: 0 0 6px;
+      color: #00ff99;
+    }
+    .wb-header p {
+      font-size: 1.2em;
+      margin: 0;
+      opacity: 0.75;
+    }
+
+    /* Tabs */
+    .wb-tabs {
+      display: flex;
+      border-bottom: 2px solid #00ff41;
+      margin-bottom: 20px;
+    }
+    .wb-tab {
+      flex: 1;
+      background: transparent;
+      border: 1px solid #00ff41;
+      border-bottom: none;
+      color: #00ff41;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.65em;
+      padding: 10px 6px;
+      cursor: pointer;
+      opacity: 0.55;
+      transition: all 0.15s;
+    }
+    .wb-tab:hover { opacity: 0.85; background: rgba(0,255,65,0.08); }
+    .wb-tab.active { opacity: 1; background: rgba(0,255,65,0.14); color: #00ff99; }
+
+    .wb-panel { display: none; }
+    .wb-panel.active { display: block; }
+
+    /* Armor Set Grid */
+    .set-list { display: flex; flex-direction: column; gap: 18px; }
+
+    .set-card {
+      border: 1px solid #00ff41;
+      background: rgba(0,255,65,0.05);
+      padding: 14px;
+    }
+    .set-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .set-name {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.75em;
+      color: #00ff99;
+    }
+    .set-tier {
+      font-size: 1em;
+      opacity: 0.6;
+      text-transform: uppercase;
+    }
+    .set-progress {
+      font-size: 1.1em;
+      color: #ffcc00;
+    }
+
+    .piece-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .piece-slot {
+      border: 1px solid #006619;
+      padding: 8px 6px;
+      text-align: center;
+      font-size: 1.1em;
+      background: rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .piece-slot.have {
+      border-color: #00ff41;
+      background: rgba(0,255,65,0.12);
+    }
+    .piece-slot .slot-label {
+      font-size: 0.85em;
+      opacity: 0.7;
+      display: block;
+      margin-top: 2px;
+    }
+    .piece-slot .slot-icon { font-size: 1.5em; }
+
+    .assemble-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #003300;
+      color: #00ff41;
+      border: 1px solid #00ff41;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.65em;
+      cursor: not-allowed;
+      opacity: 0.4;
+      transition: all 0.15s;
+    }
+    .assemble-btn.ready {
+      background: #006619;
+      opacity: 1;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,255,65,0.4);
+    }
+    .assemble-btn.ready:hover {
+      background: #00aa33;
+      color: #000;
+    }
+
+    .set-bonus {
+      font-size: 0.95em;
+      opacity: 0.65;
+      margin-top: 6px;
+    }
+    .set-bonus span { color: #a0e890; }
+
+    /* Crafting table */
+    .recipe-list { display: flex; flex-direction: column; gap: 14px; }
+    .recipe-card {
+      border: 1px solid #00ff41;
+      background: rgba(0,255,65,0.05);
+      padding: 12px;
+    }
+    .recipe-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.7em;
+      color: #00ff99;
+      margin-bottom: 8px;
+    }
+    .recipe-materials { font-size: 1.05em; margin-bottom: 8px; }
+    .recipe-mat { display: inline-block; margin-right: 10px; }
+    .recipe-mat.have { color: #00ff41; }
+    .recipe-mat.need { color: #ff6633; }
+    .craft-btn {
+      padding: 8px 18px;
+      background: #003300;
+      color: #00ff41;
+      border: 1px solid #00ff41;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.6em;
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+    .craft-btn.ready { opacity: 1; cursor: pointer; background: #006619; }
+    .craft-btn.ready:hover { background: #00aa33; color: #000; }
+
+    /* Status messages */
+    #wbStatus {
+      min-height: 24px;
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 12px;
+      color: #ffcc00;
+    }
+
+    /* Back button */
+    .back-bar {
+      text-align: right;
+      margin-top: 20px;
+    }
+    .back-btn {
+      background: transparent;
+      border: 1px solid #00ff41;
+      color: #00ff41;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.6em;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    .back-btn:hover { background: rgba(0,255,65,0.12); }
+
+    .divider { border: none; border-top: 1px solid rgba(0,255,65,0.25); margin: 14px 0; }
+  </style>
+</head>
+<body>
+
+<div class="wb-wrap">
+
+  <div class="wb-header">
+    <h1>🔧 ARMOR WORKBENCH</h1>
+    <p>Assemble full armor sets • Craft consumables &amp; gear</p>
+  </div>
+
+  <div id="wbStatus"></div>
+
+  <!-- Tabs -->
+  <div class="wb-tabs">
+    <button class="wb-tab active" data-tab="armor-workbench">🛡️ ARMOR WORKBENCH</button>
+    <button class="wb-tab" data-tab="crafting-table">⚙️ CRAFTING TABLE</button>
+  </div>
+
+  <!-- ARMOR WORKBENCH PANEL -->
+  <div class="wb-panel active" id="tab-armor-workbench">
+    <p style="font-size:1.1em; opacity:0.7; margin-bottom:14px;">
+      Collect all 6 pieces of an armor set to assemble the full set at the workbench.
+      Full sets grant bonus stats and higher trade value.
+    </p>
+    <div class="set-list" id="armorSetList">
+      <p style="opacity:0.5;">Loading armor sets...</p>
+    </div>
+  </div>
+
+  <!-- CRAFTING TABLE PANEL -->
+  <div class="wb-panel" id="tab-crafting-table">
+    <p style="font-size:1.1em; opacity:0.7; margin-bottom:14px;">
+      Craft consumables, ammo, and gear components using materials from your inventory.
+    </p>
+    <div class="recipe-list" id="craftingRecipeList">
+      <p style="opacity:0.5;">Loading recipes...</p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <div class="back-bar">
+    <button class="back-btn" id="backBtn">← RETURN TO WRIST UI</button>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── Escape helper (XSS guard) ──────────────────────────────────────────────
+  function escHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = String(str == null ? '' : str);
+    return d.innerHTML;
+  }
+
+  // ── Tab switching ───────────────────────────────────────────────────────────
+  document.querySelectorAll('.wb-tab').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.wb-tab').forEach(function (b) { b.classList.remove('active'); });
+      document.querySelectorAll('.wb-panel').forEach(function (p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      const panel = document.getElementById('tab-' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+
+  // ── Back button ─────────────────────────────────────────────────────────────
+  document.getElementById('backBtn').addEventListener('click', function () {
+    if (window.opener && !window.opener.closed) {
+      window.close();
+    } else {
+      window.location.href = '/';
+    }
+  });
+
+  // ── Status helper ────────────────────────────────────────────────────────────
+  const statusEl = document.getElementById('wbStatus');
+  function setStatus(msg, color) {
+    statusEl.style.color = color || '#ffcc00';
+    statusEl.textContent = msg;
+    if (msg) setTimeout(function () { statusEl.textContent = ''; }, 4000);
+  }
+
+  // ── Slot display config ──────────────────────────────────────────────────────
+  const SLOT_INFO = {
+    head:  { label: 'HEAD',      icon: '🪖' },
+    chest: { label: 'CHEST',     icon: '🦺' },
+    arm_l: { label: 'LEFT ARM',  icon: '💪' },
+    arm_r: { label: 'RIGHT ARM', icon: '💪' },
+    leg_l: { label: 'LEFT LEG',  icon: '🦵' },
+    leg_r: { label: 'RIGHT LEG', icon: '🦵' }
+  };
+
+  // ── Read player inventory from opener (Game.playerState) or localStorage ────
+  function getInventory() {
+    try {
+      if (window.opener && window.opener.Game && window.opener.Game.playerState) {
+        const inv = window.opener.Game.playerState.inventory;
+        return Array.isArray(inv) ? inv : [];
+      }
+    } catch (e) { /* cross-origin guard */ }
+    try {
+      const raw = localStorage.getItem('playerInventory') || localStorage.getItem('vaultInventory');
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return [];
+  }
+
+  function hasItem(inv, itemId) {
+    return inv.some(function (i) { return i && i.id === itemId; });
+  }
+
+  // ── Load armor sets and render ────────────────────────────────────────────────
+  async function loadArmorSets() {
+    let armorSets;
+    try {
+      const res = await fetch('/data/items/armor_sets.json');
+      armorSets = await res.json();
+    } catch (e) {
+      document.getElementById('armorSetList').innerHTML =
+        '<p style="color:#ff6633;">⚠️ Failed to load armor set data.</p>';
+      return;
+    }
+
+    const inv = getInventory();
+    const container = document.getElementById('armorSetList');
+    container.innerHTML = '';
+
+    Object.entries(armorSets).forEach(function ([setId, setDef]) {
+      const pieceIds = setDef.pieceIds;
+      const haveAll = setDef.pieces.every(function (slot) {
+        return hasItem(inv, pieceIds[slot]);
+      });
+      const haveCount = setDef.pieces.filter(function (slot) {
+        return hasItem(inv, pieceIds[slot]);
+      }).length;
+
+      // Build piece grid HTML
+      const piecesHtml = setDef.pieces.map(function (slot) {
+        const have = hasItem(inv, pieceIds[slot]);
+        const info = SLOT_INFO[slot] || { label: slot.toUpperCase(), icon: '🔲' };
+        return '<div class="piece-slot' + (have ? ' have' : '') + '">' +
+          '<span class="slot-icon">' + (have ? '✅' : info.icon) + '</span>' +
+          '<span class="slot-label">' + escHtml(info.label) + '</span>' +
+          '</div>';
+      }).join('');
+
+      const bonus = setDef.fullSetBonus;
+      const bonusHtml = '<div class="set-bonus">Full set bonus: ' +
+        '<span>+' + bonus.ballisticResist + ' ballistic</span> • ' +
+        '<span>+' + bonus.radResist + ' rad resist</span> • ' +
+        '<span>' + bonus.capsValue + ' CAPS value</span></div>';
+
+      const card = document.createElement('div');
+      card.className = 'set-card';
+      card.innerHTML =
+        '<div class="set-card-header">' +
+          '<span class="set-name">' + escHtml(setDef.name) + '</span>' +
+          '<span class="set-tier">' + escHtml(setDef.tier) + '</span>' +
+          '<span class="set-progress">' + haveCount + ' / 6 pieces</span>' +
+        '</div>' +
+        '<div class="piece-grid">' + piecesHtml + '</div>' +
+        bonusHtml +
+        '<button class="assemble-btn' + (haveAll ? ' ready' : '') + '" ' +
+          'data-recipe="' + escHtml(setDef.assembleRecipeId) + '" ' +
+          'data-set="' + escHtml(setId) + '"' +
+          (haveAll ? '' : ' disabled') + '>' +
+          (haveAll ? '🔧 ASSEMBLE FULL SET' : '🔒 COLLECT ALL 6 PIECES TO ASSEMBLE') +
+        '</button>';
+
+      container.appendChild(card);
+    });
+
+    // Wire up assemble buttons
+    container.querySelectorAll('.assemble-btn.ready').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        assembleSet(btn.dataset.recipe, btn.dataset.set, btn);
+      });
+    });
+  }
+
+  // ── Assemble a set (calls /api/crafting) ──────────────────────────────────────
+  async function assembleSet(recipeId, setId, btn) {
+    btn.disabled = true;
+    btn.textContent = '⚙️ ASSEMBLING...';
+    setStatus('Sending assembly request to workbench...', '#ffcc00');
+
+    try {
+      // Get auth token from opener if available
+      let authHeader = {};
+      try {
+        if (window.opener && window.opener.authToken) {
+          authHeader['Authorization'] = 'Bearer ' + window.opener.authToken;
+        }
+      } catch (e) {}
+
+      const baseUrl = (typeof window.API_BASE !== 'undefined' ? window.API_BASE : '') || '';
+      const res = await fetch(baseUrl + '/api/crafting', {
+        method: 'POST',
+        credentials: 'include',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, authHeader),
+        body: JSON.stringify({ recipeId: recipeId })
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        setStatus('✅ ' + (data.message || 'Full set assembled! Check your inventory.'), '#00ff41');
+        // Refresh the panel after a short delay
+        setTimeout(loadArmorSets, 1200);
+      } else {
+        setStatus('⚠️ ' + (data.error || 'Assembly failed. Try again.'), '#ff6633');
+        btn.disabled = false;
+        btn.textContent = '🔧 ASSEMBLE FULL SET';
+      }
+    } catch (e) {
+      setStatus('⚠️ Network error. Check your connection.', '#ff6633');
+      btn.disabled = false;
+      btn.textContent = '🔧 ASSEMBLE FULL SET';
+    }
+  }
+
+  // ── Load crafting recipes (non-armor_assembly) and render ────────────────────
+  async function loadCraftingRecipes() {
+    let recipes;
+    try {
+      const res = await fetch('/data/craftables/recipes.json');
+      recipes = await res.json();
+    } catch (e) {
+      document.getElementById('craftingRecipeList').innerHTML =
+        '<p style="color:#ff6633;">⚠️ Failed to load recipe data.</p>';
+      return;
+    }
+
+    const inv = getInventory();
+    const container = document.getElementById('craftingRecipeList');
+    container.innerHTML = '';
+
+    const displayRecipes = recipes.filter(function (r) { return r.type !== 'armor_assembly'; });
+
+    if (displayRecipes.length === 0) {
+      container.innerHTML = '<p style="opacity:0.5;">No crafting recipes available.</p>';
+      return;
+    }
+
+    displayRecipes.forEach(function (recipe) {
+      const materials = recipe.materials || recipe.inputs || [];
+
+      const matsHtml = materials.map(function (mat) {
+        const itemId = mat.itemId || mat.id;
+        const qty = mat.qty || mat.amount || 1;
+        const have = inv.filter(function (i) { return i && i.id === itemId; })
+          .reduce(function (s, i) { return s + (i.quantity || i.amount || 1); }, 0);
+        const ok = have >= qty;
+        return '<span class="recipe-mat ' + (ok ? 'have' : 'need') + '">' +
+          escHtml(itemId) + ' ×' + qty +
+          (ok ? ' ✓' : ' (' + have + ' have)') +
+          '</span>';
+      }).join('');
+
+      const canCraft = materials.every(function (mat) {
+        const itemId = mat.itemId || mat.id;
+        const qty = mat.qty || mat.amount || 1;
+        const have = inv.filter(function (i) { return i && i.id === itemId; })
+          .reduce(function (s, i) { return s + (i.quantity || i.amount || 1); }, 0);
+        return have >= qty;
+      });
+
+      const output = recipe.output || {};
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      card.innerHTML =
+        '<div class="recipe-title">' + escHtml(recipe.name) + '</div>' +
+        '<div class="recipe-materials">' + (matsHtml || '<em>No materials required</em>') + '</div>' +
+        '<div style="font-size:1em; opacity:0.65; margin-bottom:8px;">' +
+          '→ Produces: ' + escHtml(output.itemId || output.id || '?') +
+          (output.qty > 1 ? ' ×' + output.qty : '') +
+          (recipe.requiresLevel > 1 ? ' &nbsp;|&nbsp; Lvl ' + recipe.requiresLevel + '+' : '') +
+        '</div>' +
+        '<button class="craft-btn' + (canCraft ? ' ready' : '') + '" ' +
+          'data-recipe="' + escHtml(recipe.id) + '"' +
+          (canCraft ? '' : ' disabled') + '>' +
+          (canCraft ? '⚙️ CRAFT' : '🔒 MISSING MATERIALS') +
+        '</button>';
+
+      container.appendChild(card);
+    });
+
+    // Wire up craft buttons
+    container.querySelectorAll('.craft-btn.ready').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        craftItem(btn.dataset.recipe, btn);
+      });
+    });
+  }
+
+  // ── Craft an item (calls /api/crafting) ───────────────────────────────────────
+  async function craftItem(recipeId, btn) {
+    btn.disabled = true;
+    btn.textContent = '⚙️ CRAFTING...';
+    setStatus('Sending craft request...', '#ffcc00');
+
+    try {
+      let authHeader = {};
+      try {
+        if (window.opener && window.opener.authToken) {
+          authHeader['Authorization'] = 'Bearer ' + window.opener.authToken;
+        }
+      } catch (e) {}
+
+      const baseUrl = (typeof window.API_BASE !== 'undefined' ? window.API_BASE : '') || '';
+      const res = await fetch(baseUrl + '/api/crafting', {
+        method: 'POST',
+        credentials: 'include',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, authHeader),
+        body: JSON.stringify({ recipeId: recipeId })
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        setStatus('✅ ' + (data.message || 'Item crafted! Check your inventory.'), '#00ff41');
+        setTimeout(loadCraftingRecipes, 1200);
+      } else {
+        setStatus('⚠️ ' + (data.error || 'Craft failed. Try again.'), '#ff6633');
+        btn.disabled = false;
+        btn.textContent = '⚙️ CRAFT';
+      }
+    } catch (e) {
+      setStatus('⚠️ Network error.', '#ff6633');
+      btn.disabled = false;
+      btn.textContent = '⚙️ CRAFT';
+    }
+  }
+
+  // ── Init ────────────────────────────────────────────────────────────────────
+  loadArmorSets();
+  loadCraftingRecipes();
+})();
+</script>
+
+</body>
+</html>

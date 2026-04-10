@@ -215,13 +215,70 @@
         "description": "A crude handmade sidearm. Unreliable, but it shoots."
       },
       {
-        "id": "leather_armor_piece",
-        "name": "Leather Armor Piece",
+        "id": "leather_armor_head",
+        "name": "Leather Armor Helmet",
         "type": "armor",
-        "weight": 2.0,
+        "armorSet": "leather_armor",
+        "slot": "head",
+        "weight": 0.8,
         "capsValue": 35,
         "tradeable": true,
-        "description": "Padded leather armor. Better than nothing out there."
+        "description": "Padded leather headgear. Smells like the wasteland."
+      },
+      {
+        "id": "leather_armor_chest",
+        "name": "Leather Armor Chest Piece",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "chest",
+        "weight": 0.8,
+        "capsValue": 35,
+        "tradeable": true,
+        "description": "Padded leather torso guard. Better than rags."
+      },
+      {
+        "id": "leather_armor_arm_l",
+        "name": "Leather Armor Left Arm",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "arm_l",
+        "weight": 0.6,
+        "capsValue": 28,
+        "tradeable": true,
+        "description": "Left arm bracer, hand-stitched leather."
+      },
+      {
+        "id": "leather_armor_arm_r",
+        "name": "Leather Armor Right Arm",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "arm_r",
+        "weight": 0.6,
+        "capsValue": 28,
+        "tradeable": true,
+        "description": "Right arm bracer, hand-stitched leather."
+      },
+      {
+        "id": "leather_armor_leg_l",
+        "name": "Leather Armor Left Leg",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "leg_l",
+        "weight": 0.7,
+        "capsValue": 28,
+        "tradeable": true,
+        "description": "Leather leg guard, left side. Keeps the radscorpion stingers at bay."
+      },
+      {
+        "id": "leather_armor_leg_r",
+        "name": "Leather Armor Right Leg",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "leg_r",
+        "weight": 0.7,
+        "capsValue": 28,
+        "tradeable": true,
+        "description": "Leather leg guard, right side. Worn but functional."
       },
       {
         "id": "combat_knife",
@@ -271,13 +328,70 @@
         "description": "Pre-war energy sidearm. Burns clean holes through enemies."
       },
       {
-        "id": "combat_armor_chest",
-        "name": "Combat Armor (Chest)",
+        "id": "combat_armor_head",
+        "name": "Combat Armor Helmet",
         "type": "armor",
-        "weight": 2.0,
-        "capsValue": 200,
+        "armorSet": "combat_armor",
+        "slot": "head",
+        "weight": 0.5,
+        "capsValue": 100,
+        "tradeable": true,
+        "description": "Military ballistic helmet. Rated for small arms."
+      },
+      {
+        "id": "combat_armor_chest",
+        "name": "Combat Armor Chest Plate",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "chest",
+        "weight": 0.5,
+        "capsValue": 100,
         "tradeable": true,
         "description": "Military-grade torso protection. Favored by veteran mercs."
+      },
+      {
+        "id": "combat_armor_arm_l",
+        "name": "Combat Armor Left Arm",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "arm_l",
+        "weight": 0.4,
+        "capsValue": 80,
+        "tradeable": true,
+        "description": "Left arm combat plating with ceramic inserts."
+      },
+      {
+        "id": "combat_armor_arm_r",
+        "name": "Combat Armor Right Arm",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "arm_r",
+        "weight": 0.4,
+        "capsValue": 80,
+        "tradeable": true,
+        "description": "Right arm combat plating. Slight laser scoring."
+      },
+      {
+        "id": "combat_armor_leg_l",
+        "name": "Combat Armor Left Leg",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "leg_l",
+        "weight": 0.4,
+        "capsValue": 80,
+        "tradeable": true,
+        "description": "Left leg combat greave. Pre-war military surplus."
+      },
+      {
+        "id": "combat_armor_leg_r",
+        "name": "Combat Armor Right Leg",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "leg_r",
+        "weight": 0.4,
+        "capsValue": 80,
+        "tradeable": true,
+        "description": "Right leg combat greave. Still holds a polish."
       },
       {
         "id": "scoped_hunting_rifle",
@@ -410,13 +524,70 @@
         "description": "Military energy rifle firing superheated plasma bolts. Melts everything."
       },
       {
-        "id": "t45_power_armor_helmet",
+        "id": "t45_pa_head",
         "name": "T-45 Power Armor Helmet",
         "type": "armor",
-        "weight": 2.0,
-        "capsValue": 600,
+        "armorSet": "t45_power_armor",
+        "slot": "head",
+        "weight": 0.5,
+        "capsValue": 300,
         "tradeable": true,
-        "description": "Early power armor helmet. Radiation shielding and HUD display."
+        "description": "Early power armor helmet. Rad shielding and HUD display."
+      },
+      {
+        "id": "t45_pa_chest",
+        "name": "T-45 Power Armor Torso",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "chest",
+        "weight": 0.5,
+        "capsValue": 300,
+        "tradeable": true,
+        "description": "T-45 torso frame, pre-war military issue."
+      },
+      {
+        "id": "t45_pa_arm_l",
+        "name": "T-45 Power Armor Left Arm",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "arm_l",
+        "weight": 0.4,
+        "capsValue": 240,
+        "tradeable": true,
+        "description": "Left arm actuator assembly. Hydraulics intact."
+      },
+      {
+        "id": "t45_pa_arm_r",
+        "name": "T-45 Power Armor Right Arm",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "arm_r",
+        "weight": 0.4,
+        "capsValue": 240,
+        "tradeable": true,
+        "description": "Right arm actuator assembly. Grip servos functional."
+      },
+      {
+        "id": "t45_pa_leg_l",
+        "name": "T-45 Power Armor Left Leg",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "leg_l",
+        "weight": 0.4,
+        "capsValue": 240,
+        "tradeable": true,
+        "description": "Left leg actuator. Minor dents from pre-war combat."
+      },
+      {
+        "id": "t45_pa_leg_r",
+        "name": "T-45 Power Armor Right Leg",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "leg_r",
+        "weight": 0.4,
+        "capsValue": 240,
+        "tradeable": true,
+        "description": "Right leg actuator. Servo needs minor calibration."
       },
       {
         "id": "gauss_rifle",
@@ -443,7 +614,9 @@
         "weight": 1.5,
         "capsValue": 450,
         "tradeable": true,
-        "description": "Ballistic weave-lined duster. Railroad operative gear."
+        "description": "Ballistic weave-lined duster. Railroad operative gear.",
+        "slot": "full",
+        "armorSet": null
       },
       {
         "id": "ballistic_weave_schematic",
@@ -538,16 +711,75 @@
         "weight": 1.5,
         "capsValue": 2000,
         "tradeable": true,
-        "description": "Vault-Tec Overseer formal wear. Max ballistic and rad protection."
+        "description": "Vault-Tec Overseer formal wear. Max ballistic and rad protection.",
+        "slot": "full",
+        "armorSet": null
       },
       {
-        "id": "t51b_power_armor_full",
-        "name": "T-51b Power Armor (Full Set)",
+        "id": "t51b_pa_head",
+        "name": "T-51b Power Armor Helmet",
         "type": "armor",
-        "weight": 1.5,
-        "capsValue": 4500,
+        "armorSet": "t51b_power_armor",
+        "slot": "head",
+        "weight": 0.4,
+        "capsValue": 500,
         "tradeable": true,
-        "description": "The pinnacle of pre-war power armor. Full-body nuclear protection."
+        "description": "Peak pre-war power armor helmet. Sealed rad filter."
+      },
+      {
+        "id": "t51b_pa_chest",
+        "name": "T-51b Power Armor Torso",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "chest",
+        "weight": 0.4,
+        "capsValue": 500,
+        "tradeable": true,
+        "description": "T-51b torso. Enclave-grade ballistic ceramic plating."
+      },
+      {
+        "id": "t51b_pa_arm_l",
+        "name": "T-51b Power Armor Left Arm",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "arm_l",
+        "weight": 0.3,
+        "capsValue": 400,
+        "tradeable": true,
+        "description": "Left arm assembly. Still hums with servo power."
+      },
+      {
+        "id": "t51b_pa_arm_r",
+        "name": "T-51b Power Armor Right Arm",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "arm_r",
+        "weight": 0.3,
+        "capsValue": 400,
+        "tradeable": true,
+        "description": "Right arm assembly. Gatling mount compatible."
+      },
+      {
+        "id": "t51b_pa_leg_l",
+        "name": "T-51b Power Armor Left Leg",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "leg_l",
+        "weight": 0.3,
+        "capsValue": 400,
+        "tradeable": true,
+        "description": "Left leg assembly. Hydraulics mint condition."
+      },
+      {
+        "id": "t51b_pa_leg_r",
+        "name": "T-51b Power Armor Right Leg",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "leg_r",
+        "weight": 0.3,
+        "capsValue": 400,
+        "tradeable": true,
+        "description": "Right leg assembly. Final piece of a legend."
       },
       {
         "id": "alien_blaster",
