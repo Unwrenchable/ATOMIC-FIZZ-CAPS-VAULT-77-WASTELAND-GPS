@@ -1520,7 +1520,10 @@
       this._apiLoot(this._state.dungeonId, room.id).then(data => {
         if (data && data.ok && typeof data.caps === "number") {
           if (this.gs && this.gs.player) {
-            this.gs.player.caps = (this.gs.player.caps || 0) + data.caps;
+            // BUG-047 FIX: cap client-side caps at MAX_CAPS to match backend limit
+            // and prevent Pip-Boy display overflow.
+            const MAX_CAPS = 999_999_999;
+            this.gs.player.caps = Math.min((this.gs.player.caps || 0) + data.caps, MAX_CAPS);
           }
           this._log(`$ Looted: ${itemNames.join(", ")} (+${data.caps} caps, +${data.xp} XP)`);
           this._showNotification(

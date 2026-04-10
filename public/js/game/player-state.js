@@ -548,8 +548,13 @@
    */
   function awardCaps(amount) {
     if (typeof amount !== "number" || !Number.isFinite(amount)) return;
-    
-    _state.caps = Math.max(0, _state.caps + amount);
+    // BUG-047 FIX: cap at MAX_CAPS to match backend/lib/caps.js limit.
+    // Previously there was no ceiling, so rapid reward farming or DevTools
+    // manipulation could push the client-side balance beyond 999,999,999,
+    // causing display overflows in the Pip-Boy UI and potential bypass of
+    // client-side affordability gates.
+    const MAX_CAPS = 999_999_999;
+    _state.caps = Math.max(0, Math.min(_state.caps + amount, MAX_CAPS));
     _dirty = true;
     syncGamePlayerReferences();
     syncWithLegacyPlayer();
