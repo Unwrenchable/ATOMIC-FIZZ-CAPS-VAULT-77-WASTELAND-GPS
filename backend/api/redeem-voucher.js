@@ -1,6 +1,6 @@
 // backend/api/redeem-voucher.js
 const router = require("express").Router();
-const bs58 = require("bs58");
+const { decode: bs58decode } = require("../lib/safe-base58");
 const rateLimit = require("express-rate-limit");
 // nacl reserved for future signature ops (tweetnacl)
 const { authMiddleware } = require("../lib/auth");
@@ -63,7 +63,7 @@ router.post("/", redeemLimiter, authMiddleware, async (req, res) => {
     // Accept a base58-encoded signature string as well
     if (typeof signature === "string") {
       try {
-        signature = bs58.decode(signature);
+        signature = bs58decode(signature);
       } catch (e) {
         return res.status(400).json({ error: "Invalid signature encoding" });
       }

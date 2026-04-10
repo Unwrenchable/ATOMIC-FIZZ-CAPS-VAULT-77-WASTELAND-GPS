@@ -1,6 +1,6 @@
 // backend/lib/kmsSigner.js
 const { KMSClient, SignCommand, GetPublicKeyCommand } = require("@aws-sdk/client-kms");
-const bs58 = require("bs58");
+const { encode: bs58encode } = require("./safe-base58");
 
 const REGION = process.env.AWS_REGION || "us-west-2";
 const DEFAULT_SIGNING_ALG = process.env.KMS_SIGNING_ALGORITHM || "ECDSA_SHA_256";
@@ -52,7 +52,7 @@ async function signMessageWithKms(messageBuffer, keyId = null) {
   if (!res || !res.Signature) throw new Error("KMS did not return a signature");
 
   const sigBytes = Buffer.from(res.Signature);
-  const signatureBase58 = bs58.encode(sigBytes);
+  const signatureBase58 = bs58encode(sigBytes);
 
   return { keyIdUsed: useKey, signatureBase58, signatureBytes: sigBytes };
 }
@@ -68,7 +68,7 @@ async function getPublicKeyFromKms(keyId) {
   const res = await retry(() => client.send(cmd), 3, 250);
   if (!res || !res.PublicKey) throw new Error("KMS did not return public key");
   const pubDer = Buffer.from(res.PublicKey); // SPKI DER
-  const publicKeyBase58 = bs58.encode(pubDer);
+  const publicKeyBase58 = bs58encode(pubDer);
   const algorithm = res.SigningAlgorithms ? res.SigningAlgorithms.join(",") : null;
   return { keyId, publicKeyBase58, algorithm };
 }

@@ -2,7 +2,7 @@
 // Usage: node rotate_kms_key.js --newKeyArn=arn:aws:kms:... --oldKeyId=v1 --newKeyId=v2 --adminApiUrl=https://your-backend/api/keys-admin/add
 const { KMSClient, GetPublicKeyCommand } = require("@aws-sdk/client-kms");
 const fetch = require("node-fetch");
-const bs58 = require("bs58");
+const { encode: bs58encode } = require("../lib/safe-base58");
 
 const REGION = process.env.AWS_REGION || "us-west-2";
 const client = new KMSClient({ region: REGION });
@@ -50,7 +50,7 @@ async function main() {
 
   console.log("Fetching public key from KMS:", newKeyArn);
   const pub = await getPublicKey(newKeyArn);
-  const pubBase58 = bs58.encode(pub);
+  const pubBase58 = bs58encode(pub);
 
   console.log("Publishing new public key to admin API");
   await publishPublicKey(adminApiUrl, adminToken, newKeyId, pubBase58, "active");

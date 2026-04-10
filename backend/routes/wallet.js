@@ -20,7 +20,7 @@ const walletLimiter = rateLimit({
 const express = require("express");
 const router = express.Router();
 const nacl = require("tweetnacl");
-const bs58 = require("bs58");
+const { decode: bs58decode } = require("../lib/safe-base58");
 const {
   authMiddleware,
   storeSession,
@@ -84,8 +84,8 @@ router.post("/verify", walletLimiter, async (req, res) => {
     // Decode
     let pubKeyBytes, sigBytes;
     try {
-      pubKeyBytes = bs58.decode(publicKey);
-      sigBytes = bs58.decode(signature);
+      pubKeyBytes = bs58decode(publicKey);
+      sigBytes = bs58decode(signature);
     } catch (err) {
       return res.status(400).json({ ok: false, error: "Invalid encoding" });
     }
