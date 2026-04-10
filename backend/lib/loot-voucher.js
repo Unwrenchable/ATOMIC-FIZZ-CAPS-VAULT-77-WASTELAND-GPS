@@ -1,6 +1,6 @@
 // backend/lib/loot-voucher.js
 const nacl = require("tweetnacl");
-const bs58 = require("bs58");
+const { decode: bs58decode } = require("./safe-base58");
 const serializeVoucherMessage = require("./gps").serializeVoucherMessage;
 const redis = require('./redis');
 
@@ -32,7 +32,7 @@ async function validateVoucher(voucher) {
   const lootIdBig = BigInt(lootId);
   const timestampBig = BigInt(timestamp);
   const signatureBytes = Uint8Array.from(serverSignature);
-  const pubkeyBytes = bs58.decode(serverKey);
+  const pubkeyBytes = bs58decode(serverKey);
 
   // Recreate message
   const unsignedVoucher = {

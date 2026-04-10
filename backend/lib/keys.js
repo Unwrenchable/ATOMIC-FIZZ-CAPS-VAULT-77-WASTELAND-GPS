@@ -1,7 +1,7 @@
 // backend/lib/keys.js
 const assert = require("assert");
 const Redis = require("ioredis");
-const bs58 = require("bs58");
+const { decode: bs58decode } = require("./safe-base58");
 
 // Sanitize and validate REDIS_URL - trim whitespace and check protocol
 let REDIS_URL = (process.env.REDIS_URL || "").trim();
@@ -84,7 +84,7 @@ async function addPublicKey(keyId, publicKeyBase58, opts = {}) {
   assert(keyId && typeof keyId === "string", "keyId required");
   assert(publicKeyBase58 && typeof publicKeyBase58 === "string", "publicKey required");
   // validate base58 length roughly
-  bs58.decode(publicKeyBase58);
+  bs58decode(publicKeyBase58);
 
   const meta = {
     keyId,

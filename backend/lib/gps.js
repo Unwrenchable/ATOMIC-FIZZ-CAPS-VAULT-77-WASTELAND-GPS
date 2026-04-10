@@ -80,11 +80,11 @@ function serializeVoucherMessage(voucher) {
 function verifyVoucherSignature(message, signature, pubKeyBase58) {
   try {
     const nacl = require("tweetnacl");
-    const bs58 = require("bs58");
+    const { decode: bs58decode } = require("./safe-base58");
 
     let pubKeyBytes;
     if (typeof pubKeyBase58 === "string") {
-      pubKeyBytes = bs58.decode(pubKeyBase58);
+      pubKeyBytes = bs58decode(pubKeyBase58);
     } else if (pubKeyBase58 instanceof Uint8Array || Buffer.isBuffer(pubKeyBase58)) {
       pubKeyBytes = pubKeyBase58;
     } else {
