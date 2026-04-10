@@ -215,8 +215,29 @@ router.post("/", voucherIssueLimiter, authMiddleware, async (req, res) => {
     // BUG-035 FIX: use the lootId from the nearby POI if it has one, falling back
     // to a server-assigned random value. The hardcoded `1n` bypassed the entire
     // location-based loot tier system — every player got identical loot.
-    const lootIdNum = (nearbyPOI && nearbyPOI.lootId) ? nearbyPOI.lootId : crypto.randomInt(1, 1000000);
+    // BUG-043 FIX: use a 48-bit range (vs. the original 1M) to dramatically reduce
+    // the birthday-paradox collision probability for on-chain loot_mint PDA seeds.
+    const lootIdNum = (nearbyPOI && nearbyPOI.lootId) ? nearbyPOI.lootId : crypto.randomInt(1, 2 ** 48);
     const lootId = String(lootIdNum);
+
+    // BUG-042 FIX: calculate tiered CAPS reward from POI rarity and sign it into
+    // the voucher.  Previously every voucher awarded the same flat DEFAULT_LOOT_CAPS
+    // (or 100) because the LOOT_ID_TO_CAPS env var used a JSON format incompatible
+    // with the comma-delimited parser in redeem-voucher.js, and random lootIds never
+    // matched any entry anyway.  By embedding the server-calculated caps value in the
+    // signed voucher, redeem-voucher.js can simply trust voucher.caps (it is covered
+    // by the NaCl signature and cannot be tampered by the client).
+    const RARITY_CAPS = {
+      common:    parseInt(process.env.CAPS_COMMON    || "50",   10),
+      uncommon:  parseInt(process.env.CAPS_UNCOMMON  || "100",  10),
+      rare:      parseInt(process.env.CAPS_RARE      || "200",  10),
+      epic:      parseInt(process.env.CAPS_EPIC      || "500",  10),
+      legendary: parseInt(process.env.CAPS_LEGENDARY || "1000", 10),
+    };
+    const poiRarity = (nearbyPOI && nearbyPOI.rarity)
+      ? String(nearbyPOI.rarity).toLowerCase()
+      : "common";
+    const capsReward = RARITY_CAPS[poiRarity] || RARITY_CAPS.common;
 
     const timestamp = BigInt(Math.floor(Date.now() / 1000));
     const locationHint = (typeof rawHint === "string")
@@ -233,6 +254,7 @@ router.post("/", voucherIssueLimiter, authMiddleware, async (req, res) => {
       voucherId,
       keyId: SERVER_KEY_ID || "kms",
       lootId,
+      caps: capsReward,
       latitude,
       longitude,
       timestamp: timestamp.toString(),
