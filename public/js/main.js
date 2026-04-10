@@ -726,7 +726,7 @@
           }
         }
       },
-      { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+      { enableHighAccuracy: true, maximumAge: 15000, timeout: 10000 }
     );
   }
 
@@ -737,6 +737,19 @@
       gpsLocked = false;
       safeLog("GPS watch stopped");
     }
+  }
+
+  // Page Visibility API — stop GPS watch when the page is hidden to save
+  // battery; restart it when the page becomes visible again.
+  if (!window._mainGpsVisibilityBound) {
+    window._mainGpsVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        stopGeolocationWatch();
+      } else {
+        startGeolocationWatch();
+      }
+    });
   }
 
   // ---------------------------

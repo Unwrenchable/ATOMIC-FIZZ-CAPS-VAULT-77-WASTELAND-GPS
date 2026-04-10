@@ -33,6 +33,9 @@ Game.gps = {
       navigator.geolocation.clearWatch(this.watchId);
     }
 
+    // Use lower accuracy (network-based) when the page is not visible to save
+    // battery; switch back to high accuracy (GPS chip) when visible again.
+    const hidden = document.hidden;
     this.watchId = navigator.geolocation.watchPosition(
       (pos) => this.handlePosition(pos),
       (err) => {
@@ -40,8 +43,8 @@ Game.gps = {
         this.updateGPSBadge('error');
       },
       {
-        enableHighAccuracy: true,
-        maximumAge: 2000,
+        enableHighAccuracy: !hidden,
+        maximumAge: hidden ? 60000 : 10000,
         timeout: 15000
       }
     );
@@ -134,3 +137,15 @@ window.addEventListener("map-ready", () => {
   console.log("[gps] map-ready received → starting GPS");
   Game.gps.init();
 });
+
+// Page Visibility API — switch accuracy mode to save battery when the
+// page is in the background, restore full-accuracy GPS when it returns.
+if (!window._gpsVisibilityBound) {
+  window._gpsVisibilityBound = true;
+  document.addEventListener('visibilitychange', function () {
+    if (!Game.gps.ready) return;
+    // Restart the watcher so the options (enableHighAccuracy / maximumAge)
+    // are updated to reflect the new visibility state.
+    Game.gps.startWatch();
+  });
+}

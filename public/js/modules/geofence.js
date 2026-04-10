@@ -364,6 +364,7 @@
   function startGPSLoop() {
     if (!navigator.geolocation) return;
     if (_checkTimer) return; // already running
+    if (document.hidden) return; // don't start while page is hidden
 
     function doCheck() {
       navigator.geolocation.getCurrentPosition(
@@ -375,6 +376,13 @@
 
     doCheck(); // immediate first check
     _checkTimer = setInterval(doCheck, CHECK_INTERVAL_MS);
+  }
+
+  function stopGPSLoop() {
+    if (_checkTimer) {
+      clearInterval(_checkTimer);
+      _checkTimer = null;
+    }
   }
 
   // ----------------------------------------------------------
@@ -436,6 +444,9 @@
       );
     },
 
+    // Pause the background GPS-check loop (e.g. when page is hidden)
+    stopGPSLoop,
+
     // Render the collector badge panel
     renderCollectorPanel,
 
@@ -449,5 +460,18 @@
   };
 
   Game.modules.geofence = geofenceModule;
+
+  // Page Visibility API — stop GPS polling when the page is hidden to save
+  // battery; restart it when the player returns to the game.
+  if (!window._geofenceVisibilityBound) {
+    window._geofenceVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        stopGPSLoop();
+      } else {
+        startGPSLoop();
+      }
+    });
+  }
 
 })();
