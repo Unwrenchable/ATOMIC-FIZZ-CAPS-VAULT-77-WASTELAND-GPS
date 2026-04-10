@@ -9,12 +9,16 @@ const caps = require("../lib/caps"); // mintCapsToPlayer
 const redis = require("../lib/redis"); // use the shared redis wrapper
 const { getKeyMeta } = require("../lib/keys"); // load signing keys from Redis
 
-// BUG-044 FIX: pre-call redis.key() so the voucher-used keys follow the
-// same double-prefix convention ("afw:afw:voucher:used:<id>") as all other
-// application keys.  Previously the raw "voucher:used:<id>" string was passed
-// directly to redis.set/get, which then applied key() internally, producing
-// "afw:voucher:used:<id>" — a single-prefix namespace inconsistency that would
-// cause replay-protection keys to be orphaned if an admin flushed "afw:afw:*".
+// BUG-044 FIX: call redis.key() here so VOUCHER_USED_KEY returns a
+// single-prefixed string (e.g. "afw:voucher:used:<id>").  When passed to
+// redis.set/get the wrapper applies key() a second time, yielding the
+// double-prefixed "afw:afw:voucher:used:<id>" — the same convention as
+// every other app key (caps, players, cooldowns, etc.).  Identical to the
+// pattern used in caps.js:  const cooldownKey = key(...) → redis.set(cooldownKey).
+// Before this fix VOUCHER_USED_KEY returned the raw "voucher:used:<id>" string;
+// the wrapper's single key() call produced only "afw:voucher:used:<id>" —
+// a namespace inconsistency that would orphan replay-protection keys during
+// a targeted "afw:afw:*" flush, silently allowing voucher replay attacks.
 const VOUCHER_USED_KEY = (voucherId) => redis.key(`voucher:used:${voucherId}`);
 const NODE_ENV = process.env.NODE_ENV || "development";
 const STRICT_REPLAY_PROTECTION = process.env.STRICT_REPLAY_PROTECTION !== "false";
