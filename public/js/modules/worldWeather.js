@@ -160,9 +160,10 @@
 
   // Store interval ID for cleanup
   let updateIntervalId = null;
+  const WEATHER_UPDATE_INTERVAL_MS = 5000; // matches weatherOverlay interval
 
   // Auto-update loop
-  function startUpdateLoop(worldState, intervalMs = 5000) {
+  function startUpdateLoop(worldState, intervalMs = WEATHER_UPDATE_INTERVAL_MS) {
     // Prevent multiple intervals
     if (updateIntervalId !== null) {
       console.warn("[worldWeather] Update loop already running");
@@ -224,8 +225,8 @@
         // Initialize weather
         ensureWeather(worldState);
         
-        // Start automatic updates every 5 seconds (matches weatherOverlay interval)
-        startUpdateLoop(worldState, 5000);
+        // Start automatic updates (matches weatherOverlay interval)
+        startUpdateLoop(worldState, WEATHER_UPDATE_INTERVAL_MS);
         
         console.log("[worldWeather] Weather engine initialized and auto-update started");
       }
@@ -233,6 +234,28 @@
       console.warn("[worldWeather] Failed to initialize:", e.message);
     }
   });
+
+  // Page Visibility API — pause weather updates while the page is hidden so
+  // the CPU is not kept busy by timer callbacks the player cannot see.
+  if (!window._weatherVisibilityBound) {
+    window._weatherVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        weatherEngine.stopAutoUpdate();
+      } else {
+        // Re-attach worldState reference from wherever it was stored
+        try {
+          const worldmap = Game.modules.worldmap;
+          if (worldmap && worldmap.gs) {
+            const worldState = worldmap.gs.worldState || worldmap.gs;
+            weatherEngine.startAutoUpdate(worldState, WEATHER_UPDATE_INTERVAL_MS);
+          }
+        } catch (e) {
+          console.warn("[worldWeather] Failed to restart on visibility restore:", e.message);
+        }
+      }
+    });
+  }
 
   console.log("[worldWeather] Weather engine module loaded");
 })();

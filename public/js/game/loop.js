@@ -276,13 +276,37 @@
   // ------------------------------------------------------------
   // Start Loop
   // ------------------------------------------------------------
+  let _loopIntervalId = null;
+
   function start() {
-    setInterval(worldTick, TICK_INTERVAL);
+    if (_loopIntervalId !== null) return; // already running
+    _loopIntervalId = setInterval(worldTick, TICK_INTERVAL);
+  }
+
+  function stopLoop() {
+    if (_loopIntervalId !== null) {
+      clearInterval(_loopIntervalId);
+      _loopIntervalId = null;
+    }
+  }
+
+  // Pause world-tick when the page is hidden to avoid burning CPU/battery
+  // while the player isn't actively in the game.
+  if (!window._gameLoopVisibilityBound) {
+    window._gameLoopVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        stopLoop();
+      } else {
+        start();
+      }
+    });
   }
 
   // Expose globally
   window.overseerGameLoop = {
     start,
+    stop: stopLoop,
     setEncounterChance(rate) {
       // Allow admin tools and test harnesses to override the encounter chance
       // at runtime without a page reload.  Rate should be a float in [0, 1].
