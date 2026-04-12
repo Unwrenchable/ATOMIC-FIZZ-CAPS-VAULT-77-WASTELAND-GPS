@@ -9,7 +9,10 @@ async function completeQuest(playerId, questId) {
   if (!playerId) throw new Error("Missing playerId");
   if (!questId) throw new Error("Missing questId");
 
-  const setKey = `player:${playerId}:quests:completed`;
+  // Pre-call key() to match the established double-prefix pattern used across
+  // the codebase (all redis wrapper calls receive a key()-prefixed string so
+  // the wrapper's internal key() call produces the canonical afw:afw:... key).
+  const setKey = key(`player:${playerId}:quests:completed`);
   await redis.sadd(setKey, questId.toString());
 
   return { ok: true, questId };
@@ -22,7 +25,7 @@ async function unlockEnding(playerId, endingId) {
   if (!playerId) throw new Error("Missing playerId");
   if (!endingId) throw new Error("Missing endingId");
 
-  const k = `player:${playerId}:quests:endings`;
+  const k = key(`player:${playerId}:quests:endings`);
   await redis.sadd(k, endingId.toString());
 
   return { ok: true, endingId };
@@ -33,7 +36,7 @@ async function unlockEnding(playerId, endingId) {
  * BUG FIX: redis.sismember() does not exist in the wrapper; use smembers instead.
  */
 async function hasCompleted(playerId, questId) {
-  const k = `player:${playerId}:quests:completed`;
+  const k = key(`player:${playerId}:quests:completed`);
   const members = await redis.smembers(k);
   return members.includes(questId.toString()) ? 1 : 0;
 }
@@ -43,7 +46,7 @@ async function hasCompleted(playerId, questId) {
  * BUG FIX: redis.sismember() does not exist in the wrapper; use smembers instead.
  */
 async function hasEnding(playerId, endingId) {
-  const k = `player:${playerId}:quests:endings`;
+  const k = key(`player:${playerId}:quests:endings`);
   const members = await redis.smembers(k);
   return members.includes(endingId.toString()) ? 1 : 0;
 }
