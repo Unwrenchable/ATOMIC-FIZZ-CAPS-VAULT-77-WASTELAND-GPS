@@ -910,7 +910,7 @@
       });
 
       const data = await res.json();
-      if (!res.ok || !data.success) {
+      if (!res.ok || !data.ok) {
         alert("Mint failed: " + (data.error || `HTTP ${res.status}`));
         return;
       }

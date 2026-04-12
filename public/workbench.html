@@ -424,7 +424,7 @@
     });
   }
 
-  // ── Assemble a set (calls /api/crafting) ──────────────────────────────────────
+  // ── Assemble a set (calls /api/crafting/craft) ───────────────────────────────
   async function assembleSet(recipeId, setId, btn) {
     btn.disabled = true;
     btn.textContent = '⚙️ ASSEMBLING...';
@@ -440,7 +440,7 @@
       } catch (e) {}
 
       const baseUrl = (typeof window.API_BASE !== 'undefined' ? window.API_BASE : '') || '';
-      const res = await fetch(baseUrl + '/api/crafting', {
+      const res = await fetch(baseUrl + '/api/crafting/craft', {
         method: 'POST',
         credentials: 'include',
         headers: Object.assign({ 'Content-Type': 'application/json' }, authHeader),
@@ -539,7 +539,7 @@
     });
   }
 
-  // ── Craft an item (calls /api/crafting) ───────────────────────────────────────
+  // ── Craft an item (calls /api/crafting/craft) ────────────────────────────────
   async function craftItem(recipeId, btn) {
     btn.disabled = true;
     btn.textContent = '⚙️ CRAFTING...';
@@ -554,7 +554,7 @@
       } catch (e) {}
 
       const baseUrl = (typeof window.API_BASE !== 'undefined' ? window.API_BASE : '') || '';
-      const res = await fetch(baseUrl + '/api/crafting', {
+      const res = await fetch(baseUrl + '/api/crafting/craft', {
         method: 'POST',
         credentials: 'include',
         headers: Object.assign({ 'Content-Type': 'application/json' }, authHeader),

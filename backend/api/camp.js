@@ -16,6 +16,8 @@ const router = express.Router();
 
 const { authMiddleware } = require("../lib/auth");
 const { redis, key } = require("../lib/redis");
+const xp = require("../lib/xp");
+const { awardCapsToPlayer } = require("../lib/caps");
 
 // ------------------------------------------------------------
 // Constants
@@ -193,18 +195,39 @@ router.post("/rest", authMiddleware, restLimiter, async (req, res) => {
       });
     }
 
-    // --- Award bonuses (client calls /api/xp and /api/caps separately) ---
+    // --- Award bonuses server-side ---
+    // XP and caps are awarded here so the client never needs to call
+    // admin-only endpoints (/api/xp/award requires admin role, /api/caps/award
+    // requires ADMIN_MINT_SECRET). Errors are logged but don't fail the rest
+    // so the cooldown is always consumed.
     const now = Date.now();
     const nextRestAt = new Date(now + REST_COOLDOWN * 1000).toISOString();
 
     // Store cooldown – keyed on current timestamp so we can compute nextRestAt
     await redis.set(restCooldownKey, String(now), { EX: REST_COOLDOWN });
 
-    console.log(`[api/camp] Rest bonus claimed by ${wallet} at (${lat}, ${lng})`);
+    let xpAwarded = 0;
+    let capsAwarded = 0;
+
+    try {
+      await xp.awardXp(req.player, REST_XP_BONUS);
+      xpAwarded = REST_XP_BONUS;
+    } catch (xpErr) {
+      console.error("[api/camp] rest XP award failed:", xpErr?.message || xpErr);
+    }
+
+    try {
+      await awardCapsToPlayer(wallet, REST_CAPS_BONUS);
+      capsAwarded = REST_CAPS_BONUS;
+    } catch (capsErr) {
+      console.error("[api/camp] rest caps award failed:", capsErr?.message || capsErr);
+    }
+
+    console.log(`[api/camp] Rest bonus claimed by ${wallet} at (${lat}, ${lng}) — XP:${xpAwarded} Caps:${capsAwarded}`);
     return res.json({
       ok: true,
-      xpBonus:    REST_XP_BONUS,
-      capsBonus:  REST_CAPS_BONUS,
+      xpBonus:    xpAwarded,
+      capsBonus:  capsAwarded,
       nextRestAt,
     });
   } catch (err) {

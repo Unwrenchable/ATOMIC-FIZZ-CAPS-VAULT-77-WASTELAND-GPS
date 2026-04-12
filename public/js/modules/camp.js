@@ -201,8 +201,8 @@
 
     // --------------------------------------------------------
     // collectRest — geolocate then POST /api/camp/rest
-    //   On success, calls /api/xp/award and /api/caps/award (if accessible)
-    //   then shows a toast.
+    //   The backend now awards XP and caps server-side. The
+    //   response includes xpBonus and capsBonus for display only.
     // --------------------------------------------------------
     collectRest: function () {
       var self = this;
@@ -223,44 +223,13 @@
             .then(function (data) {
               if (data.ok) {
                 self._nextRestAt = data.nextRestAt;
-                // Award XP via /api/xp/award — show appropriate toast after attempt
-                fetch(apiBase() + "/api/xp/award", {
-                  method: "POST",
-                  headers: authHeaders(),
-                  body: JSON.stringify({ amount: data.xpBonus }),
-                })
-                  .then(function (r) { return r.json(); })
-                  .then(function (xpData) {
-                    if (xpData && xpData.ok) {
-                      showCampToast(
-                        "⛺ Rested! +" +
-                          data.xpBonus +
-                          " XP  +" +
-                          data.capsBonus +
-                          " Caps. Next rest: " +
-                          formatCountdown(data.nextRestAt)
-                      );
-                    } else {
-                      // Rest was recorded but XP award failed (e.g. rate-limited)
-                      showCampToast(
-                        "⛺ Rested! +" +
-                          data.capsBonus +
-                          " Caps. (XP award delayed) Next rest: " +
-                          formatCountdown(data.nextRestAt)
-                      );
-                      console.warn("[camp] XP award failed:", xpData && xpData.error);
-                    }
-                  })
-                  .catch(function (e) {
-                    // Network failure — rest was still recorded server-side
-                    showCampToast(
-                      "⛺ Rested! +" +
-                        data.capsBonus +
-                        " Caps. (XP unavailable) Next rest: " +
-                        formatCountdown(data.nextRestAt)
-                    );
-                    console.warn("[camp] XP award network error:", e);
-                  });
+                // XP and caps were awarded server-side; show what was awarded
+                var xpMsg = data.xpBonus > 0 ? " +" + data.xpBonus + " XP" : "";
+                var capsMsg = data.capsBonus > 0 ? " +" + data.capsBonus + " Caps" : "";
+                showCampToast(
+                  "⛺ Rested!" + xpMsg + capsMsg + ". Next rest: " +
+                    formatCountdown(data.nextRestAt)
+                );
               } else if (data.nextRestAt) {
                 showCampToast(
                   "Already rested. Next rest in: " + formatCountdown(data.nextRestAt),

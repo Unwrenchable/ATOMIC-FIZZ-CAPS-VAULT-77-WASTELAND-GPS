@@ -168,7 +168,7 @@ router.post('/', async (req, res) => {
 
         console.log(`[mint-item] enqueued production mint for ${wallet}: ${prodItemId}`);
 
-        return res.json({ ok: true, success: true, itemId: prodItemId, queued: true });
+        return res.json({ ok: true, itemId: prodItemId, queued: true });
       } catch (err) {
         console.error('[mint-item] production flow error:', err && err.stack ? err.stack : err);
         return res.status(500).json({ ok: false, error: 'server_error' });
@@ -188,7 +188,7 @@ router.post('/', async (req, res) => {
     // In dev we can log the action
     console.log(`[mint-item] dev mint simulated for ${wallet}: ${fakeItemId}`);
 
-    return res.json({ ok: true, success: true, itemId: fakeItemId, item: fakeItem });
+    return res.json({ ok: true, itemId: fakeItemId, item: fakeItem });
   } catch (err) {
     console.error('[mint-item] error:', err && err.stack ? err.stack : err);
     return res.status(500).json({ ok: false, error: 'server_error' });

@@ -86,10 +86,20 @@
     },
 
     setupEventListeners() {
-      // Server-sent events for live stream updates
+      // Server-sent events for live stream updates.
+      // Only connect if the endpoint is available; close immediately on error
+      // to prevent the browser from retrying every 3 s with a 404.
       if (window.EventSource) {
         const eventSource = new EventSource(`${window.API_BASE}/api/radio/live-events`);
-        
+        this._eventSource = eventSource;
+
+        eventSource.onerror = () => {
+          // If the connection fails (e.g. endpoint not yet deployed), close it
+          // right away rather than letting the browser retry indefinitely.
+          eventSource.close();
+          this._eventSource = null;
+        };
+
         eventSource.addEventListener('stream-started', (e) => {
           const data = JSON.parse(e.data);
           this.startLiveStream(data.url, data.type, data.metadata);

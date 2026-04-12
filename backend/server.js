@@ -287,6 +287,7 @@ safeMount("/api/quests", api("quests"));
 safeMount("/api/redeem-voucher", api("redeem-voucher"));
 safeMount("/api/xp", api("xp"));
 safeMount("/api/caps", api("caps"));
+safeMount("/api/transfer-fizz", api("transfer-fizz"));
 safeMount("/api/settings", api("settings"));
 safeMount("/api/crafting", api("crafting"));
 
