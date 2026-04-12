@@ -28,6 +28,47 @@
         "${workspaceFolder}/docs",
         "${workspaceFolder}/mcp"
       ]
+    },
+    "redis": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@redis/mcp-server"],
+      "env": {
+        "REDIS_URL": "${REDIS_URL:-redis://localhost:6379}"
+      }
+    },
+    "cloudflare": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@cloudflare/mcp-server-cloudflare"],
+      "env": {
+        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_API_TOKEN:-}",
+        "CLOUDFLARE_ACCOUNT_ID": "${R2_ACCOUNT_ID:-}"
+      }
+    },
+    "solana": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@sendaifun/solana-mcp-server"],
+      "env": {
+        "RPC_URL": "${SOLANA_RPC:-https://api.devnet.solana.com}"
+      }
+    },
+    "render": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "render-mcp"],
+      "env": {
+        "RENDER_API_KEY": "${RENDER_API_KEY:-}"
+      }
+    },
+    "vercel": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@vercel/mcp-adapter"],
+      "env": {
+        "VERCEL_TOKEN": "${VERCEL_TOKEN:-}"
+      }
     }
   }
 }

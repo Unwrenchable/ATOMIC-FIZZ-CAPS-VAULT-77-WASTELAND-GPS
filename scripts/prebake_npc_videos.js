@@ -112,7 +112,7 @@ try {
 function _stripHtml(str) {
   return String(str || '')
     .replace(/<br\s*\/?>/gi, ' ')
-    .replace(/<[^>]+>/g, '')
+    .replace(/[<>]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 }

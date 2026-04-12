@@ -87,11 +87,12 @@ function isValidLatLng(lat, lng) {
   );
 }
 
-// Strip angle brackets and trim to maxLen — removes individual < > characters
-// so no tag structure can survive (regex-based tag stripping is bypassable).
+// Strip angle brackets and quote characters, then trim to maxLen.
+// Removing < > " ' ` prevents the name from breaking out of HTML
+// tag or attribute context if rendered by the frontend.
 function sanitizeName(raw, maxLen) {
   const stripped = String(raw == null ? "" : raw)
-    .replace(/[<>]/g, "")
+    .replace(/[<>"'`]/g, "")
     .trim();
   return stripped.slice(0, maxLen) || "Wasteland Camp";
 }
