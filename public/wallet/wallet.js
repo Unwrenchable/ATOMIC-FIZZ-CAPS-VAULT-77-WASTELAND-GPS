@@ -535,10 +535,14 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
 
         try {
           const base = (window.BACKEND_URL || window.location.origin).replace(/\/+$/, "");
+          const sessionId = localStorage.getItem("sessionId") || "";
           const res = await fetch(`${base}/api/transfer-fizz`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ from, to, amount })
+            headers: {
+              "Content-Type": "application/json",
+              ...(sessionId ? { "Authorization": `Bearer ${sessionId}` } : {}),
+            },
+            body: JSON.stringify({ to, amount: Math.floor(amount) })
           });
 
           const data = await res.json().catch(() => ({}));
