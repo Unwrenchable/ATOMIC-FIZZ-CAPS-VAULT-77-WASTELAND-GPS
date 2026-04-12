@@ -80,10 +80,13 @@ const clearLimiter = rateLimit({
 });
 
 // ------------------------------------------------------------------
-// Redis key helpers — return raw key strings (no afw: prefix).
-// The redis wrapper functions (redis.get, redis.set, etc.) apply
-// key() internally, consistent with the pattern used across the
-// rest of the codebase (e.g. geofence.js, player.js).
+// Redis key helpers — return un-prefixed key segments.
+// IMPORTANT: All callers must pre-call key() before passing these
+// strings to redis wrapper methods (get, set, del, etc.) because
+// the wrapper also calls key() internally. This produces the
+// double-prefix pattern (afw:afw:...) used consistently across the
+// entire codebase. Omitting the pre-call would land data at the
+// single-prefix path (afw:...) where no other module would find it.
 // ------------------------------------------------------------------
 function redisKeyEnter(wallet, poiId) {
   return `dungeon:enter:${wallet}:${poiId}`;
