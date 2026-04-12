@@ -233,7 +233,7 @@
       var nodeId = node.id || '';
 
       // Strip HTML from node text for prompt context
-      var rawText = (node.text || '').replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').trim();
+      var rawText = (node.text || '').replace(/<br\s*\/?>/gi, ' ').replace(/[<>]/g, '').trim();
 
       _loadManifest().then(function (manifest) {
         var prebakedPath = _getPrebakedPath(npcId, nodeId, manifest);

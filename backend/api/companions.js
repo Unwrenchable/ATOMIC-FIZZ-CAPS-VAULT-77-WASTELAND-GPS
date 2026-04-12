@@ -49,6 +49,13 @@ const MAX_TRUST            = 6;
 const TRUST_ACTION_COOLDOWN = 60; // seconds between same trust action
 const WALLET_MAX            = 128;
 
+// Guard against prototype-polluting keys (__proto__, constructor, prototype).
+// These are not valid companion IDs and would pollute Object.prototype if used
+// as property names on the roster plain object.
+function isSafeCompanionId(id) {
+  return id !== '__proto__' && id !== 'constructor' && id !== 'prototype';
+}
+
 // ------------------------------------------------------------
 // Rate limiters
 // ------------------------------------------------------------
@@ -104,6 +111,9 @@ router.post("/trust", authMiddleware, trustLimiter, async (req, res) => {
     const { companionId, action } = req.body;
 
     if (!companionId || typeof companionId !== "string" || companionId.length > 64) {
+      return res.status(400).json({ ok: false, error: "Invalid companionId" });
+    }
+    if (!isSafeCompanionId(companionId)) {
       return res.status(400).json({ ok: false, error: "Invalid companionId" });
     }
     if (!action || typeof action !== "string" || action.length > 64) {
@@ -171,6 +181,9 @@ router.post("/recruit", authMiddleware, async (req, res) => {
     if (!companionId || typeof companionId !== "string" || companionId.length > 64) {
       return res.status(400).json({ ok: false, error: "Invalid companionId" });
     }
+    if (!isSafeCompanionId(companionId)) {
+      return res.status(400).json({ ok: false, error: "Invalid companionId" });
+    }
 
     const companion = COMPANIONS_BY_ID[companionId];
     if (!companion) return res.status(404).json({ ok: false, error: "Unknown companion" });
@@ -225,6 +238,9 @@ router.post("/dismiss", authMiddleware, async (req, res) => {
     if (!companionId || typeof companionId !== "string" || companionId.length > 64) {
       return res.status(400).json({ ok: false, error: "Invalid companionId" });
     }
+    if (!isSafeCompanionId(companionId)) {
+      return res.status(400).json({ ok: false, error: "Invalid companionId" });
+    }
 
     const rosterKey = key(`companions:roster:${wallet}`);
     const raw = await redis.get(rosterKey);
@@ -255,6 +271,9 @@ router.post("/set-active", authMiddleware, async (req, res) => {
     const { companionId } = req.body;
 
     if (!companionId || typeof companionId !== "string" || companionId.length > 64) {
+      return res.status(400).json({ ok: false, error: "Invalid companionId" });
+    }
+    if (!isSafeCompanionId(companionId)) {
       return res.status(400).json({ ok: false, error: "Invalid companionId" });
     }
 

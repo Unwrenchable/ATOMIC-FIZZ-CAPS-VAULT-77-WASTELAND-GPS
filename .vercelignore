@@ -4,6 +4,10 @@
 # - Vercel serves only the static frontend (public/ directory)
 # - Backend is deployed separately on Render
 
+# Admin panel — served by the backend at api.atomicfizzcaps.xyz/admin.
+# Excluded from Vercel so admin tools don't live on the public CDN domain.
+public/admin/
+
 # Backend directory (deployed separately on Render)
 backend/
 

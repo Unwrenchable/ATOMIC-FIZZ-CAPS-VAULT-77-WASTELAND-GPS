@@ -404,7 +404,7 @@ function _loadDialogFile(npcId) {
     const raw = fs.readFileSync(filePath, 'utf8');
     return JSON.parse(raw);
   } catch (e) {
-    console.warn(`[npc-xai-context] Could not load dialog file for ${npcId}:`, e.message);
+    console.warn('[npc-xai-context] Could not load dialog file for', String(npcId).slice(0, 64), '-', e.message);
     return null;
   }
 }

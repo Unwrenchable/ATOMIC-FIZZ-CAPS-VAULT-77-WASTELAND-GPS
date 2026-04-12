@@ -1799,7 +1799,7 @@
         </div>
         <div class="cc-special-points-banner">
           <span class="cc-sp-label">POINTS REMAINING:</span>
-          <span class="cc-sp-value" id="ccSpPoints">${remaining}</span>
+          <span class="cc-sp-value" id="ccSpPoints">${escapeHtml(remaining)}</span>
         </div>
         <div class="cc-special-rows" id="ccSpecialRows">
       `;
@@ -1833,11 +1833,11 @@
         <div class="cc-derived-stats">
           <div class="cc-derived-title">── DERIVED STATISTICS ──</div>
           <div class="cc-derived-grid" id="ccDerivedGrid">
-            <div class="cc-derived-item"><span class="cc-derived-label">MAX HP</span><span class="cc-derived-val" id="ccDerMaxHP">${derived.maxHP}</span></div>
-            <div class="cc-derived-item"><span class="cc-derived-label">ACTION POINTS</span><span class="cc-derived-val" id="ccDerAP">${derived.actionPoints}</span></div>
-            <div class="cc-derived-item"><span class="cc-derived-label">CARRY WEIGHT</span><span class="cc-derived-val" id="ccDerCW">${derived.carryWeight}</span></div>
-            <div class="cc-derived-item"><span class="cc-derived-label">RAD RESISTANCE</span><span class="cc-derived-val" id="ccDerRR">${derived.radResistance}%</span></div>
-            <div class="cc-derived-item"><span class="cc-derived-label">CRIT CHANCE</span><span class="cc-derived-val" id="ccDerCC">${derived.critChance}%</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">MAX HP</span><span class="cc-derived-val" id="ccDerMaxHP">${escapeHtml(derived.maxHP)}</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">ACTION POINTS</span><span class="cc-derived-val" id="ccDerAP">${escapeHtml(derived.actionPoints)}</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">CARRY WEIGHT</span><span class="cc-derived-val" id="ccDerCW">${escapeHtml(derived.carryWeight)}</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">RAD RESISTANCE</span><span class="cc-derived-val" id="ccDerRR">${escapeHtml(derived.radResistance)}%</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">CRIT CHANCE</span><span class="cc-derived-val" id="ccDerCC">${escapeHtml(derived.critChance)}%</span></div>
           </div>
         </div>
       `;
