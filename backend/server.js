@@ -416,6 +416,32 @@ app.get('/api/health', async (req, res) => {
 });
 
 // ------------------------------------------------------------
+// ADMIN PANEL STATIC SERVING (all environments)
+// ------------------------------------------------------------
+// The admin panel lives in public/admin/ and is served directly from
+// the backend at /admin (i.e. api.atomicfizzcaps.xyz/admin).
+// Serving it here (not via Vercel) means:
+//   1. All relative API calls in admin.js/dashboard.js (e.g. /api/admin/login)
+//      resolve to this same origin — no CORS round-trip needed.
+//   2. Admin files are kept off the public Vercel CDN domain.
+// The extensions:["html"] option lets express.static serve
+// dashboard.html for /admin/dashboard (clean URL with no .html).
+const ADMIN_DIR = path.join(FRONTEND_DIR, "admin");
+if (fs.existsSync(ADMIN_DIR)) {
+  app.use(
+    "/admin",
+    express.static(ADMIN_DIR, {
+      extensions: ["html"],
+      setHeaders(res, filePath) {
+        if (filePath.endsWith(".css")) res.type("text/css");
+        if (filePath.endsWith(".js"))  res.type("application/javascript");
+      },
+    })
+  );
+  console.log("[server] admin panel served from", ADMIN_DIR);
+}
+
+// ------------------------------------------------------------
 // SPA FALLBACK
 // ------------------------------------------------------------
 // In production, the frontend lives on Vercel. Redirect any non-API,
