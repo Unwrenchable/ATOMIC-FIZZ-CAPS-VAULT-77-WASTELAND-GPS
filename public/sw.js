@@ -74,7 +74,7 @@ const PRECACHE_ASSETS = [
   '/data/locations.json',
   '/data/items/items.json',
   '/data/factions/factions.json',
-  '/data/quest/main.json',
+  '/data/quests/quests.json',
   '/data/narrative/dialog_siren.json',
 
   // Encounter + battle scripts needed for offline combat
