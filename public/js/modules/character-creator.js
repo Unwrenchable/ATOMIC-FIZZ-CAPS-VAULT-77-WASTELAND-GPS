@@ -410,6 +410,784 @@
     },
 
     // ============================================================
+    // IMAGE UPLOAD AND ANALYSIS
+    // ============================================================
+
+    // Initialize upload functionality
+    _initUpload() {
+      const dropzone = document.getElementById('ccUploadDropzone');
+      const fileInput = document.getElementById('ccImageInput');
+      const analyzeBtn = document.getElementById('ccAnalyzeBtn');
+      const clearBtn = document.getElementById('ccClearBtn');
+      const applyBtn = document.getElementById('ccApplyAnalysisBtn');
+      const customizeBtn = document.getElementById('ccCustomizeBtn');
+
+      if (!dropzone || !fileInput) return;
+
+      // Click to open file dialog
+      dropzone.addEventListener('click', () => fileInput.click());
+
+      // Drag and drop
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-over');
+      });
+
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('drag-over');
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          this._handleFileUpload(files[0]);
+        }
+      });
+
+      // File input change
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          this._handleFileUpload(e.target.files[0]);
+        }
+      });
+
+      // Analyze button
+      if (analyzeBtn) {
+        analyzeBtn.addEventListener('click', () => this._analyzeImage());
+      }
+
+      // Clear button
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => this._clearUpload());
+      }
+
+      // Apply analysis
+      if (applyBtn) {
+        applyBtn.addEventListener('click', () => this._applyAnalysis());
+      }
+
+      // Customize further
+      if (customizeBtn) {
+        customizeBtn.addEventListener('click', () => this._switchToCustomize());
+      }
+    },
+
+    // Handle file upload
+    _handleFileUpload(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit
+        alert('File size must be less than 10MB.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this._uploadedImageData = e.target.result;
+        this._displayUploadedImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    },
+
+    // Display uploaded image
+    _displayUploadedImage(dataUrl) {
+      const preview = document.getElementById('ccUploadPreview');
+      const img = document.getElementById('ccUploadedImage');
+
+      if (preview && img) {
+        img.src = dataUrl;
+        preview.style.display = 'block';
+        document.getElementById('ccUploadDropzone').style.display = 'none';
+      }
+    },
+
+    // Analyze uploaded image
+    async _analyzeImage() {
+      if (!this._uploadedImageData) return;
+
+      try {
+        const analysis = await this._analyzeImageFeatures(this._uploadedImageData);
+        this._displayAnalysisResults(analysis);
+      } catch (error) {
+        console.error('Image analysis failed:', error);
+        alert('Failed to analyze image. Please try a different photo.');
+      }
+    },
+
+    // Analyze image features using Canvas API
+    async _analyzeImageFeatures(dataUrl) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+
+            // Analyze colors
+            const colorAnalysis = this._analyzeColors(pixels, canvas.width, canvas.height);
+
+            // Simple face detection (center region)
+            const faceRegion = this._extractFaceRegion(pixels, canvas.width, canvas.height);
+            const faceAnalysis = this._analyzeFaceFeatures(faceRegion);
+
+            // Generate appearance based on analysis
+            const appearance = this._generateAppearanceFromAnalysis(colorAnalysis, faceAnalysis);
+
+            resolve({
+              colors: colorAnalysis,
+              face: faceAnalysis,
+              generatedAppearance: appearance
+            });
+          } catch (error) {
+            reject(error);
+          }
+        };
+        img.onerror = reject;
+        img.src = dataUrl;
+      });
+    },
+
+    // Analyze colors in image
+    _analyzeColors(pixels, width, height) {
+      const colorCounts = {};
+      const sampleStep = 4; // Sample every 4th pixel for performance
+
+      for (let y = 0; y < height; y += sampleStep) {
+        for (let x = 0; x < width; x += sampleStep) {
+          const index = (y * width + x) * 4;
+          const r = pixels[index];
+          const g = pixels[index + 1];
+          const b = pixels[index + 2];
+
+          // Skip transparent/very dark pixels
+          if (r + g + b < 50) continue;
+
+          const key = `${Math.round(r/32)*32},${Math.round(g/32)*32},${Math.round(b/32)*32}`;
+          colorCounts[key] = (colorCounts[key] || 0) + 1;
+        }
+      }
+
+      // Find dominant colors
+      const sortedColors = Object.entries(colorCounts)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 5)
+        .map(([key, count]) => ({
+          rgb: key.split(',').map(Number),
+          count
+        }));
+
+      return {
+        dominant: sortedColors[0]?.rgb || [128, 128, 128],
+        palette: sortedColors
+      };
+    },
+
+    // Extract face region (simple center crop)
+    _extractFaceRegion(pixels, width, height) {
+      const faceSize = Math.min(width, height) * 0.6;
+      const startX = Math.floor((width - faceSize) / 2);
+      const startY = Math.floor((height - faceSize) / 2);
+      const facePixels = [];
+
+      for (let y = startY; y < startY + faceSize; y++) {
+        for (let x = startX; x < startX + faceSize; x++) {
+          const index = (y * width + x) * 4;
+          facePixels.push([
+            pixels[index],     // R
+            pixels[index + 1], // G
+            pixels[index + 2], // B
+            pixels[index + 3]  // A
+          ]);
+        }
+      }
+
+      return { pixels: facePixels, width: faceSize, height: faceSize };
+    },
+
+    // Analyze face features
+    _analyzeFaceFeatures(faceRegion) {
+      const { pixels } = faceRegion;
+      const totalPixels = pixels.length;
+
+      // Calculate average brightness
+      let totalBrightness = 0;
+      pixels.forEach(([r, g, b]) => {
+        totalBrightness += (r + g + b) / 3;
+      });
+      const avgBrightness = totalBrightness / totalPixels;
+
+      // Detect skin tone range
+      const skinPixels = pixels.filter(([r, g, b]) => {
+        // Simple skin tone detection (reddish/yellowish tones)
+        return r > g && r > b && r > 80;
+      });
+
+      const skinRatio = skinPixels.length / totalPixels;
+
+      // Detect hair (darker regions at top)
+      const topThird = pixels.slice(0, Math.floor(totalPixels / 3));
+      const darkPixels = topThird.filter(([r, g, b]) => (r + g + b) / 3 < 100);
+      const hairRatio = darkPixels.length / topThird.length;
+
+      return {
+        brightness: avgBrightness,
+        skinRatio: skinRatio,
+        hairRatio: hairRatio,
+        isBright: avgBrightness > 150,
+        hasDarkHair: hairRatio > 0.3,
+        hasLightSkin: skinRatio > 0.2
+      };
+    },
+
+    // Generate appearance from analysis
+    _generateAppearanceFromAnalysis(colorAnalysis, faceAnalysis) {
+      const appearance = { ...appearanceOptions.defaultAppearance };
+
+      // Determine gender (simplified - could be improved)
+      appearance.gender = Math.random() > 0.5 ? 'male' : 'female';
+
+      // Determine race
+      appearance.race = 'human'; // Default to human
+
+      // Skin tone based on analysis
+      if (faceAnalysis.hasLightSkin) {
+        appearance.skinTone = ['pale', 'fair', 'light'][Math.floor(Math.random() * 3)];
+      } else {
+        appearance.skinTone = ['medium', 'tan', 'brown'][Math.floor(Math.random() * 3)];
+      }
+
+      // Face shape (randomized based on brightness)
+      const faceShapes = appearanceOptions.faceShapes;
+      if (faceAnalysis.isBright) {
+        appearance.faceShape = faceShapes.find(s => s.id === 'round')?.id || faceShapes[0].id;
+      } else {
+        appearance.faceShape = faceShapes[Math.floor(Math.random() * faceShapes.length)].id;
+      }
+
+      // Hair style and color
+      const hairStyles = appearanceOptions.hairStyles;
+      if (faceAnalysis.hasDarkHair) {
+        appearance.hairStyle = hairStyles.find(s => ['buzzcut', 'short', 'medium'].includes(s.id))?.id || 'short';
+        appearance.hairColor = ['black', 'brown'][Math.floor(Math.random() * 2)];
+      } else {
+        appearance.hairStyle = hairStyles[Math.floor(Math.random() * hairStyles.length)].id;
+        appearance.hairColor = ['blonde', 'brown', 'red'][Math.floor(Math.random() * 3)];
+      }
+
+      // Eye color based on dominant colors
+      const [r, g, b] = colorAnalysis.dominant;
+      if (b > g && b > r) {
+        appearance.eyeColor = 'blue';
+      } else if (g > r) {
+        appearance.eyeColor = 'green';
+      } else {
+        appearance.eyeColor = 'brown';
+      }
+
+      // Randomize other features
+      appearance.eyeShape = appearanceOptions.eyeShapes[Math.floor(Math.random() * appearanceOptions.eyeShapes.length)].id;
+      appearance.noseType = appearanceOptions.noseTypes[Math.floor(Math.random() * appearanceOptions.noseTypes.length)].id;
+      appearance.mouthType = appearanceOptions.mouthTypes[Math.floor(Math.random() * appearanceOptions.mouthTypes.length)].id;
+
+      // Add some random scars/markings (30% chance)
+      if (Math.random() < 0.3) {
+        appearance.scar = appearanceOptions.scars[Math.floor(Math.random() * appearanceOptions.scars.length)].id;
+      }
+
+      return appearance;
+    },
+
+    // Display analysis results
+    _displayAnalysisResults(analysis) {
+      const resultsDiv = document.getElementById('ccAnalysisResults');
+      const gridDiv = document.getElementById('ccAnalysisGrid');
+
+      if (!resultsDiv || !gridDiv) return;
+
+      // Show color palette
+      let html = '<div class="cc-analysis-item">';
+      html += '<div class="cc-analysis-label">Detected Colors:</div>';
+      html += '<div class="cc-color-palette">';
+      analysis.colors.palette.slice(0, 3).forEach(color => {
+        const [r, g, b] = color.rgb;
+        html += `<div class="cc-color-swatch" style="background-color: rgb(${r},${g},${b})"></div>`;
+      });
+      html += '</div></div>';
+
+      // Show feature analysis
+      html += '<div class="cc-analysis-item">';
+      html += '<div class="cc-analysis-label">Face Analysis:</div>';
+      html += `<div class="cc-analysis-value">Brightness: ${Math.round(analysis.face.brightness)}</div>`;
+      html += `<div class="cc-analysis-value">Skin Ratio: ${Math.round(analysis.face.skinRatio * 100)}%</div>`;
+      html += `<div class="cc-analysis-value">Hair Ratio: ${Math.round(analysis.face.hairRatio * 100)}%</div>`;
+      html += '</div>';
+
+      // Show generated appearance
+      html += '<div class="cc-analysis-item">';
+      html += '<div class="cc-analysis-label">Generated Character:</div>';
+      html += `<div class="cc-analysis-value">Gender: ${analysis.generatedAppearance.gender}</div>`;
+      html += `<div class="cc-analysis-value">Skin: ${analysis.generatedAppearance.skinTone}</div>`;
+      html += `<div class="cc-analysis-value">Hair: ${analysis.generatedAppearance.hairStyle} (${analysis.generatedAppearance.hairColor})</div>`;
+      html += `<div class="cc-analysis-value">Eyes: ${analysis.generatedAppearance.eyeColor}</div>`;
+      html += '</div>';
+
+      gridDiv.innerHTML = html;
+      resultsDiv.style.display = 'block';
+
+      // Store analysis for later use
+      this._lastAnalysis = analysis;
+    },
+
+    // Apply analysis to current character
+    _applyAnalysis() {
+      if (!this._lastAnalysis) return;
+
+      currentAppearance = { ...this._lastAnalysis.generatedAppearance };
+      this._renderOptions();
+      this._updatePreview();
+
+      // Switch to identity tab to let them customize name
+      this._switchTab('identity');
+    },
+
+    // Switch to customize mode
+    _switchToCustomize() {
+      if (!this._lastAnalysis) return;
+
+      currentAppearance = { ...this._lastAnalysis.generatedAppearance };
+      this._renderOptions();
+      this._updatePreview();
+
+      // Switch to face tab to start customization
+      this._switchTab('face');
+    },
+
+    // Clear upload
+    _clearUpload() {
+      this._uploadedImageData = null;
+      this._lastAnalysis = null;
+
+      document.getElementById('ccUploadPreview').style.display = 'none';
+      document.getElementById('ccUploadDropzone').style.display = 'block';
+      document.getElementById('ccAnalysisResults').style.display = 'none';
+      document.getElementById('ccImageInput').value = '';
+    },
+
+    // Switch to a specific tab
+    _switchTab(category) {
+      const tabs = document.querySelectorAll('.cc-tab');
+      const sections = document.querySelectorAll('.cc-category-section');
+
+      tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.category === category);
+      });
+
+      sections.forEach(section => {
+        section.classList.toggle('active', section.dataset.category === category);
+      });
+    },
+
+    // ============================================================
+    // IMAGE UPLOAD AND ANALYSIS
+    // ============================================================
+
+    // Initialize upload functionality
+    _initUpload() {
+      const dropzone = document.getElementById('ccUploadDropzone');
+      const fileInput = document.getElementById('ccImageInput');
+      const analyzeBtn = document.getElementById('ccAnalyzeBtn');
+      const clearBtn = document.getElementById('ccClearBtn');
+      const applyBtn = document.getElementById('ccApplyAnalysisBtn');
+      const customizeBtn = document.getElementById('ccCustomizeBtn');
+
+      if (!dropzone || !fileInput) return;
+
+      // Click to open file dialog
+      dropzone.addEventListener('click', () => fileInput.click());
+
+      // Drag and drop
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-over');
+      });
+
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('drag-over');
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          this._handleFileUpload(files[0]);
+        }
+      });
+
+      // File input change
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          this._handleFileUpload(e.target.files[0]);
+        }
+      });
+
+      // Analyze button
+      if (analyzeBtn) {
+        analyzeBtn.addEventListener('click', () => this._analyzeImage());
+      }
+
+      // Clear button
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => this._clearUpload());
+      }
+
+      // Apply analysis
+      if (applyBtn) {
+        applyBtn.addEventListener('click', () => this._applyAnalysis());
+      }
+
+      // Customize further
+      if (customizeBtn) {
+        customizeBtn.addEventListener('click', () => this._switchToCustomize());
+      }
+    },
+
+    // Handle file upload
+    _handleFileUpload(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit
+        alert('File size must be less than 10MB.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this._uploadedImageData = e.target.result;
+        this._displayUploadedImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    },
+
+    // Display uploaded image
+    _displayUploadedImage(dataUrl) {
+      const preview = document.getElementById('ccUploadPreview');
+      const img = document.getElementById('ccUploadedImage');
+
+      if (preview && img) {
+        img.src = dataUrl;
+        preview.style.display = 'block';
+        document.getElementById('ccUploadDropzone').style.display = 'none';
+      }
+    },
+
+    // Analyze uploaded image
+    async _analyzeImage() {
+      if (!this._uploadedImageData) return;
+
+      try {
+        const analysis = await this._analyzeImageFeatures(this._uploadedImageData);
+        this._displayAnalysisResults(analysis);
+      } catch (error) {
+        console.error('Image analysis failed:', error);
+        alert('Failed to analyze image. Please try a different photo.');
+      }
+    },
+
+    // Analyze image features using Canvas API
+    async _analyzeImageFeatures(dataUrl) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+
+            // Analyze colors
+            const colorAnalysis = this._analyzeColors(pixels, canvas.width, canvas.height);
+
+            // Simple face detection (center region)
+            const faceRegion = this._extractFaceRegion(pixels, canvas.width, canvas.height);
+            const faceAnalysis = this._analyzeFaceFeatures(faceRegion);
+
+            // Generate appearance based on analysis
+            const appearance = this._generateAppearanceFromAnalysis(colorAnalysis, faceAnalysis);
+
+            resolve({
+              colors: colorAnalysis,
+              face: faceAnalysis,
+              generatedAppearance: appearance
+            });
+          } catch (error) {
+            reject(error);
+          }
+        };
+        img.onerror = reject;
+        img.src = dataUrl;
+      });
+    },
+
+    // Analyze colors in image
+    _analyzeColors(pixels, width, height) {
+      const colorCounts = {};
+      const sampleStep = 4; // Sample every 4th pixel for performance
+
+      for (let y = 0; y < height; y += sampleStep) {
+        for (let x = 0; x < width; x += sampleStep) {
+          const index = (y * width + x) * 4;
+          const r = pixels[index];
+          const g = pixels[index + 1];
+          const b = pixels[index + 2];
+
+          // Skip transparent/very dark pixels
+          if (r + g + b < 50) continue;
+
+          const key = `${Math.round(r/32)*32},${Math.round(g/32)*32},${Math.round(b/32)*32}`;
+          colorCounts[key] = (colorCounts[key] || 0) + 1;
+        }
+      }
+
+      // Find dominant colors
+      const sortedColors = Object.entries(colorCounts)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 5)
+        .map(([key, count]) => ({
+          rgb: key.split(',').map(Number),
+          count
+        }));
+
+      return {
+        dominant: sortedColors[0]?.rgb || [128, 128, 128],
+        palette: sortedColors
+      };
+    },
+
+    // Extract face region (simple center crop)
+    _extractFaceRegion(pixels, width, height) {
+      const faceSize = Math.min(width, height) * 0.6;
+      const startX = Math.floor((width - faceSize) / 2);
+      const startY = Math.floor((height - faceSize) / 2);
+      const facePixels = [];
+
+      for (let y = startY; y < startY + faceSize; y++) {
+        for (let x = startX; x < startX + faceSize; x++) {
+          const index = (y * width + x) * 4;
+          facePixels.push([
+            pixels[index],     // R
+            pixels[index + 1], // G
+            pixels[index + 2], // B
+            pixels[index + 3]  // A
+          ]);
+        }
+      }
+
+      return { pixels: facePixels, width: faceSize, height: faceSize };
+    },
+
+    // Analyze face features
+    _analyzeFaceFeatures(faceRegion) {
+      const { pixels } = faceRegion;
+      const totalPixels = pixels.length;
+
+      // Calculate average brightness
+      let totalBrightness = 0;
+      pixels.forEach(([r, g, b]) => {
+        totalBrightness += (r + g + b) / 3;
+      });
+      const avgBrightness = totalBrightness / totalPixels;
+
+      // Detect skin tone range
+      const skinPixels = pixels.filter(([r, g, b]) => {
+        // Simple skin tone detection (reddish/yellowish tones)
+        return r > g && r > b && r > 80;
+      });
+
+      const skinRatio = skinPixels.length / totalPixels;
+
+      // Detect hair (darker regions at top)
+      const topThird = pixels.slice(0, Math.floor(totalPixels / 3));
+      const darkPixels = topThird.filter(([r, g, b]) => (r + g + b) / 3 < 100);
+      const hairRatio = darkPixels.length / topThird.length;
+
+      return {
+        brightness: avgBrightness,
+        skinRatio: skinRatio,
+        hairRatio: hairRatio,
+        isBright: avgBrightness > 150,
+        hasDarkHair: hairRatio > 0.3,
+        hasLightSkin: skinRatio > 0.2
+      };
+    },
+
+    // Generate appearance from analysis
+    _generateAppearanceFromAnalysis(colorAnalysis, faceAnalysis) {
+      const appearance = { ...appearanceOptions.defaultAppearance };
+
+      // Determine gender (simplified - could be improved)
+      appearance.gender = Math.random() > 0.5 ? 'male' : 'female';
+
+      // Determine race
+      appearance.race = 'human'; // Default to human
+
+      // Skin tone based on analysis
+      if (faceAnalysis.hasLightSkin) {
+        appearance.skinTone = ['pale', 'fair', 'light'][Math.floor(Math.random() * 3)];
+      } else {
+        appearance.skinTone = ['medium', 'tan', 'brown'][Math.floor(Math.random() * 3)];
+      }
+
+      // Face shape (randomized based on brightness)
+      const faceShapes = appearanceOptions.faceShapes;
+      if (faceAnalysis.isBright) {
+        appearance.faceShape = faceShapes.find(s => s.id === 'round')?.id || faceShapes[0].id;
+      } else {
+        appearance.faceShape = faceShapes[Math.floor(Math.random() * faceShapes.length)].id;
+      }
+
+      // Hair style and color
+      const hairStyles = appearanceOptions.hairStyles;
+      if (faceAnalysis.hasDarkHair) {
+        appearance.hairStyle = hairStyles.find(s => ['buzzcut', 'short', 'medium'].includes(s.id))?.id || 'short';
+        appearance.hairColor = ['black', 'brown'][Math.floor(Math.random() * 2)];
+      } else {
+        appearance.hairStyle = hairStyles[Math.floor(Math.random() * hairStyles.length)].id;
+        appearance.hairColor = ['blonde', 'brown', 'red'][Math.floor(Math.random() * 3)];
+      }
+
+      // Eye color based on dominant colors
+      const [r, g, b] = colorAnalysis.dominant;
+      if (b > g && b > r) {
+        appearance.eyeColor = 'blue';
+      } else if (g > r) {
+        appearance.eyeColor = 'green';
+      } else {
+        appearance.eyeColor = 'brown';
+      }
+
+      // Randomize other features
+      appearance.eyeShape = appearanceOptions.eyeShapes[Math.floor(Math.random() * appearanceOptions.eyeShapes.length)].id;
+      appearance.noseType = appearanceOptions.noseTypes[Math.floor(Math.random() * appearanceOptions.noseTypes.length)].id;
+      appearance.mouthType = appearanceOptions.mouthTypes[Math.floor(Math.random() * appearanceOptions.mouthTypes.length)].id;
+
+      // Add some random scars/markings (30% chance)
+      if (Math.random() < 0.3) {
+        appearance.scar = appearanceOptions.scars[Math.floor(Math.random() * appearanceOptions.scars.length)].id;
+      }
+
+      return appearance;
+    },
+
+    // Display analysis results
+    _displayAnalysisResults(analysis) {
+      const resultsDiv = document.getElementById('ccAnalysisResults');
+      const gridDiv = document.getElementById('ccAnalysisGrid');
+
+      if (!resultsDiv || !gridDiv) return;
+
+      // Show color palette
+      let html = '<div class="cc-analysis-item">';
+      html += '<div class="cc-analysis-label">Detected Colors:</div>';
+      html += '<div class="cc-color-palette">';
+      analysis.colors.palette.slice(0, 3).forEach(color => {
+        const [r, g, b] = color.rgb;
+        html += `<div class="cc-color-swatch" style="background-color: rgb(${r},${g},${b})"></div>`;
+      });
+      html += '</div></div>';
+
+      // Show feature analysis
+      html += '<div class="cc-analysis-item">';
+      html += '<div class="cc-analysis-label">Face Analysis:</div>';
+      html += `<div class="cc-analysis-value">Brightness: ${Math.round(analysis.face.brightness)}</div>`;
+      html += `<div class="cc-analysis-value">Skin Ratio: ${Math.round(analysis.face.skinRatio * 100)}%</div>`;
+      html += `<div class="cc-analysis-value">Hair Ratio: ${Math.round(analysis.face.hairRatio * 100)}%</div>`;
+      html += '</div>';
+
+      // Show generated appearance
+      html += '<div class="cc-analysis-item">';
+      html += '<div class="cc-analysis-label">Generated Character:</div>';
+      html += `<div class="cc-analysis-value">Gender: ${analysis.generatedAppearance.gender}</div>`;
+      html += `<div class="cc-analysis-value">Skin: ${analysis.generatedAppearance.skinTone}</div>`;
+      html += `<div class="cc-analysis-value">Hair: ${analysis.generatedAppearance.hairStyle} (${analysis.generatedAppearance.hairColor})</div>`;
+      html += `<div class="cc-analysis-value">Eyes: ${analysis.generatedAppearance.eyeColor}</div>`;
+      html += '</div>';
+
+      gridDiv.innerHTML = html;
+      resultsDiv.style.display = 'block';
+
+      // Store analysis for later use
+      this._lastAnalysis = analysis;
+    },
+
+    // Apply analysis to current character
+    _applyAnalysis() {
+      if (!this._lastAnalysis) return;
+
+      currentAppearance = { ...this._lastAnalysis.generatedAppearance };
+      this._renderOptions();
+      this._updatePreview();
+
+      // Switch to identity tab to let them customize name
+      this._switchTab('identity');
+    },
+
+    // Switch to customize mode
+    _switchToCustomize() {
+      if (!this._lastAnalysis) return;
+
+      currentAppearance = { ...this._lastAnalysis.generatedAppearance };
+      this._renderOptions();
+      this._updatePreview();
+
+      // Switch to face tab to start customization
+      this._switchTab('face');
+    },
+
+    // Clear upload
+    _clearUpload() {
+      this._uploadedImageData = null;
+      this._lastAnalysis = null;
+
+      document.getElementById('ccUploadPreview').style.display = 'none';
+      document.getElementById('ccUploadDropzone').style.display = 'block';
+      document.getElementById('ccAnalysisResults').style.display = 'none';
+      document.getElementById('ccImageInput').value = '';
+    },
+
+    // Switch to a specific tab
+    _switchTab(category) {
+      const tabs = document.querySelectorAll('.cc-tab');
+      const sections = document.querySelectorAll('.cc-category-section');
+
+      tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.category === category);
+      });
+
+      sections.forEach(section => {
+        section.classList.toggle('active', section.dataset.category === category);
+      });
+    },
+
+    // ============================================================
     // GENERATE RANDOM NPC APPEARANCE (using cryptographically secure random)
     // ============================================================
     generateNPCAppearance(options = {}) {
@@ -448,35 +1226,195 @@
     // ============================================================
     // GENERATE RASTER PORTRAIT (PNG with overlays)
     // ============================================================
-    generatePortraitSVG(appearance, size = 240) {
+    // GENERATE DYNAMIC SVG PORTRAIT FROM COMPONENTS (ASYNC)
+    // ============================================================
+    async generatePortraitSVG(appearance, size = 240) {
       if (!appearanceOptions) {
         return this._generateFallbackPortrait(appearance, size);
       }
 
       const app = appearance || currentAppearance;
-      
-      // Select base avatar from raster manifest
-      const baseAvatar = this._selectRasterAvatar(app);
-      
-      // Build HTML with base image and overlays
-      let html = `<div class="raster-portrait" style="width:${size}px; height:${size}px; position:relative; display:flex; align-items:center; justify-content:center;">`;
-      
-      // Base avatar image
-      html += `<img src="/assets/avatars-raster/${baseAvatar.file}" 
-                   style="width:100%; height:100%; object-fit:cover; border-radius:2px;" 
-                   alt="Character Portrait">`;
-      
-      // Overlay accessories
-      const overlays = this._getAccessoryOverlays(app);
-      overlays.forEach(overlay => {
-        html += `<img src="/assets/avatars-raster/${overlay.file}" 
-                     style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;" 
-                     alt="${overlay.type}">`;
-      });
-      
-      html += `</div>`;
-      
-      return html;
+
+      try {
+        // Build SVG portrait by layering components
+        let svgContent = `<svg viewBox="0 0 256 256" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">`;
+
+        // Layer components in correct order (from manifest.json)
+        const layers = ['head', 'eyes', 'nose', 'mouth', 'hair', 'facialHair', 'scars', 'markings', 'accessories', 'shirt'];
+
+        for (const layer of layers) {
+          const componentSvg = await this._getComponentSVG(layer, app);
+          if (componentSvg) {
+            svgContent += componentSvg;
+          }
+        }
+
+        svgContent += '</svg>';
+        return svgContent;
+      } catch (error) {
+        console.error('[CharacterCreator] Failed to generate portrait:', error);
+        return this._generateFallbackPortrait(app, size);
+      }
+    },
+
+    // Get SVG content for a specific component layer
+    async _getComponentSVG(layer, appearance) {
+      let fileName = null;
+
+      switch (layer) {
+        case 'head':
+          // Map face shape to head SVG
+          if (appearance.faceShape) {
+            fileName = `head_${appearance.faceShape}.svg`;
+          } else {
+            fileName = 'head_base.svg'; // fallback
+          }
+          break;
+
+        case 'eyes':
+          // Map eye shape to eyes SVG
+          if (appearance.eyeShape) {
+            fileName = `eyes_${appearance.eyeShape}.svg`;
+          } else {
+            fileName = 'eyes_set1.svg'; // fallback
+          }
+          break;
+
+        case 'nose':
+          // Map nose type to nose SVG
+          if (appearance.noseType) {
+            fileName = `nose_${appearance.noseType}.svg`;
+          } else {
+            fileName = 'nose_straight.svg'; // fallback
+          }
+          break;
+
+        case 'mouth':
+          // Map mouth type to mouth SVG
+          if (appearance.mouthType) {
+            fileName = `mouth_${appearance.mouthType}.svg`;
+          } else {
+            fileName = 'mouth_thin.svg'; // fallback
+          }
+          break;
+
+        case 'hair':
+          // Map hair style to hair SVG
+          if (appearance.hairStyle) {
+            fileName = `hair_${appearance.hairStyle}.svg`;
+          } else {
+            fileName = 'hair_short.svg'; // fallback
+          }
+          break;
+
+        case 'facialHair':
+          // Map facial hair to beard SVG (only for males)
+          if (appearance.facialHair && appearance.facialHair !== 'none' && appearance.gender === 'male') {
+            fileName = `beard_${appearance.facialHair}.svg`;
+          }
+          break;
+
+        case 'scars':
+          // Map scar to scar SVG
+          if (appearance.scar && appearance.scar !== 'none') {
+            fileName = `scar_${appearance.scar}.svg`;
+          }
+          break;
+
+        case 'markings':
+          // Map marking to marking SVG
+          if (appearance.marking && appearance.marking !== 'none') {
+            fileName = `marking_${appearance.marking}.svg`;
+          }
+          break;
+
+        case 'accessories':
+          // Map accessory to accessory SVG
+          if (appearance.accessory && appearance.accessory !== 'none') {
+            fileName = `acc_${appearance.accessory}.svg`;
+          }
+          break;
+
+        case 'shirt':
+          // Map body type to shirt SVG (simplified)
+          if (appearance.bodyType) {
+            // For now, just use vault suit as default
+            fileName = 'shirt_vault_suit.svg';
+          }
+          break;
+      }
+
+      if (fileName) {
+        try {
+          // Load the SVG file content
+          const response = await fetch(`/assets/avatars/${fileName}`);
+          if (!response.ok) {
+            console.warn(`[CharacterCreator] SVG file not found: ${fileName}`);
+            return null;
+          }
+          const svgText = await response.text();
+
+          // Extract the SVG content (remove the <svg> wrapper and return just the inner content)
+          const parser = new DOMParser();
+          const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+          const svgElement = svgDoc.querySelector('svg');
+
+          if (svgElement) {
+            // Apply skin tone tinting for certain layers
+            let content = svgElement.innerHTML;
+
+            // Apply skin tone to head layer
+            if (layer === 'head' && appearance.skinTone) {
+              const skinToneOption = appearanceOptions.skinTones.find(st => st.id === appearance.skinTone);
+              if (skinToneOption) {
+                let skinColor = skinToneOption.color;
+                // Apply ghoul variant if race is ghoul
+                if (appearance.race === 'ghoul' && skinToneOption.ghoulVariant) {
+                  skinColor = skinToneOption.ghoulVariant;
+                }
+                // Replace common skin tone colors in gradients
+                content = content.replace(/#f0d8b8/g, skinColor); // Light skin
+                content = content.replace(/#e0c8a8/g, skinColor); // Medium skin
+                content = content.replace(/#d0b890/g, skinColor); // Dark skin
+                content = content.replace(/#d8b890/g, skinColor); // Shadow areas
+                content = content.replace(/#8a7060/g, skinColor); // Outline
+                content = content.replace(/#9a8070/g, skinColor); // Shadow outline
+                content = content.replace(/#a89070/g, skinColor); // Details
+              }
+            }
+
+            // Apply eye color to eyes layer
+            if (layer === 'eyes' && appearance.eyeColor) {
+              const eyeColorOption = appearanceOptions.eyeColors.find(ec => ec.id === appearance.eyeColor);
+              if (eyeColorOption) {
+                // Replace iris colors
+                content = content.replace(/#5a4a3a/g, eyeColorOption.color); // Outer iris
+                content = content.replace(/#1a0a00/g, eyeColorOption.color); // Inner iris
+                content = content.replace(/#2a1a0a/g, eyeColorOption.color); // Fallback
+              }
+            }
+
+            // Apply hair color to hair layer
+            if (layer === 'hair' && appearance.hairColor) {
+              const hairColorOption = appearanceOptions.hairColors.find(hc => hc.id === appearance.hairColor);
+              if (hairColorOption) {
+                // Replace common hair gradient colors
+                content = content.replace(/#B07848/g, hairColorOption.color); // Base brown
+                content = content.replace(/#7A4A22/g, hairColorOption.color); // Dark brown
+                content = content.replace(/#3D2010/g, hairColorOption.color); // Very dark
+                content = content.replace(/#C08850/g, hairColorOption.color); // Highlight
+                content = content.replace(/#4A3728/g, hairColorOption.color); // Fallback
+              }
+            }
+
+            return `<g class="avatar-layer-${layer}">${content}</g>`;
+          }
+        } catch (error) {
+          console.warn(`[CharacterCreator] Failed to load SVG ${fileName}:`, error);
+        }
+      }
+
+      return null;
     },
 
     // Select appropriate raster avatar based on appearance
@@ -505,12 +1443,12 @@
       
       // Add scar if present
       if (appearance.scar && appearance.scar !== 'none') {
-        overlays.push({ file: `scar_${appearance.scar}.png`, type: 'scar' });
+        overlays.push({ file: `scar_${appearance.scar}.svg`, type: 'scar' });
       }
       
       // Add accessories
       if (appearance.accessory && appearance.accessory !== 'none') {
-        overlays.push({ file: `acc_${appearance.accessory}.png`, type: 'accessory' });
+        overlays.push({ file: `acc_${appearance.accessory}.svg`, type: 'accessory' });
       }
       
       return overlays;
@@ -677,7 +1615,8 @@
             <div class="cc-options-panel">
               <!-- Category Tabs -->
               <div class="cc-category-tabs" id="ccCategoryTabs">
-                <button class="cc-tab active" data-category="identity">01 IDENTITY</button>
+                <button class="cc-tab active" data-category="upload">00 UPLOAD</button>
+                <button class="cc-tab" data-category="identity">01 IDENTITY</button>
                 <button class="cc-tab" data-category="face">02 FACE</button>
                 <button class="cc-tab" data-category="hair">03 HAIR</button>
                 <button class="cc-tab" data-category="eyes">04 EYES</button>
@@ -690,8 +1629,39 @@
 
               <!-- Options Content -->
               <div class="cc-options-content" id="ccOptionsContent">
+                <!-- Upload Section -->
+                <div class="cc-category-section active" data-category="upload">
+                  <div class="cc-section-title">UPLOAD PHOTO</div>
+                  <div class="cc-section-hint">Upload a photo of yourself to automatically generate a character that looks like you. The system will analyze your features and create a wasteland survivor based on your appearance.</div>
+
+                  <div class="cc-upload-area" id="ccUploadArea">
+                    <div class="cc-upload-dropzone" id="ccUploadDropzone">
+                      <div class="cc-upload-icon">📷</div>
+                      <div class="cc-upload-text">Drag & drop your photo here</div>
+                      <div class="cc-upload-subtext">or click to browse files</div>
+                      <input type="file" id="ccImageInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="cc-upload-preview" id="ccUploadPreview" style="display: none;">
+                      <img id="ccUploadedImage" alt="Your uploaded photo">
+                      <div class="cc-upload-controls">
+                        <button class="cc-upload-analyze-btn" id="ccAnalyzeBtn">🔍 ANALYZE & GENERATE</button>
+                        <button class="cc-upload-clear-btn" id="ccClearBtn">🗑️ CLEAR</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="cc-analysis-results" id="ccAnalysisResults" style="display: none;">
+                    <div class="cc-analysis-title">ANALYSIS RESULTS</div>
+                    <div class="cc-analysis-grid" id="ccAnalysisGrid"></div>
+                    <div class="cc-analysis-actions">
+                      <button class="cc-apply-analysis-btn" id="ccApplyAnalysisBtn">✅ APPLY TO CHARACTER</button>
+                      <button class="cc-customize-btn" id="ccCustomizeBtn">🎨 CUSTOMIZE FURTHER</button>
+                    </div>
+                  </div>
+                </div>
+
                 <!-- Identity Section -->
-                <div class="cc-category-section active" data-category="identity">
+                <div class="cc-category-section" data-category="identity">
                   <div class="cc-section-title">IDENTITY</div>
                   <div class="cc-section-hint">Your name, presentation, and form. This is how the wasteland will know you.</div>
                   
@@ -991,6 +1961,9 @@
           if (strip) strip.style.display = 'none';
         });
       }
+
+      // Initialize upload functionality
+      this._initUpload();
     },
 
     // ============================================================
@@ -1432,11 +2405,16 @@
     // ============================================================
     // UPDATE PREVIEW
     // ============================================================
-    _updatePreview() {
+    async _updatePreview() {
       // Update portrait SVG
       const portraitContainer = document.getElementById('ccPortraitSvg');
       if (portraitContainer) {
-        portraitContainer.innerHTML = this.generatePortraitSVG(currentAppearance, 240);
+        try {
+          portraitContainer.innerHTML = await this.generatePortraitSVG(currentAppearance, 240);
+        } catch (error) {
+          console.error('[CharacterCreator] Failed to update portrait preview:', error);
+          portraitContainer.innerHTML = this._generateFallbackPortrait(currentAppearance, 240);
+        }
       }
 
       // Update name

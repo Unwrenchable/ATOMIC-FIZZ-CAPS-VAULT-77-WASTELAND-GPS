@@ -169,6 +169,30 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
 });
 
 // ------------------------------------------------------------
+// GET /api/player (authenticated - get current player's profile)
+// ------------------------------------------------------------
+router.get("/", playerLimiter, async (req, res) => {
+  try {
+    // Check if user is authenticated
+    if (!req.player || !req.player.wallet) {
+      return res.status(401).json({ ok: false, error: "Authentication required" });
+    }
+    
+    const wallet = req.player.wallet;
+    const profile = await loadProfile(wallet);
+    
+    if (!profile) {
+      return res.status(404).json({ ok: false, error: "Profile not found. Please create a character first." });
+    }
+
+    return res.json({ ok: true, profile });
+  } catch (err) {
+    console.error("[player] load current profile error:", err);
+    return res.status(500).json({ ok: false, error: "Failed to load profile" });
+  }
+});
+
+// ------------------------------------------------------------
 // GET /api/player/:wallet
 // ------------------------------------------------------------
 router.get("/:wallet", playerLimiter, async (req, res) => {
