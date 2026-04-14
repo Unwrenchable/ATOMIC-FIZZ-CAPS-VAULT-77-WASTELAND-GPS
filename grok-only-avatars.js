@@ -21,6 +21,46 @@ class GrokOnlyAvatarGenerator {
     }
   }
 
+  async checkAvailableModels() {
+    return new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'api.x.ai',
+        port: 443,
+        path: '/v1/models',
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+        }
+      };
+
+      const req = https.request(options, (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        res.on('end', () => {
+          try {
+            const response = JSON.parse(data);
+            console.log('📋 Available models:', response);
+            resolve(response);
+          } catch (error) {
+            console.log('❌ Could not check models:', error.message);
+            resolve(null);
+          }
+        });
+      });
+
+      req.on('error', (error) => {
+        console.log('❌ Models check failed:', error.message);
+        resolve(null);
+      });
+
+      req.end();
+    });
+  }
+
   async makeGrokRequest(prompt, maxTokens = 2000) {
     return new Promise((resolve, reject) => {
       const postData = JSON.stringify({
@@ -30,7 +70,7 @@ class GrokOnlyAvatarGenerator {
             content: prompt
           }
         ],
-        model: "grok-beta",
+        model: "grok-vision-beta",
         stream: false,
         temperature: 0.8, // Higher creativity for character design
         max_tokens: maxTokens
@@ -58,12 +98,15 @@ class GrokOnlyAvatarGenerator {
         res.on('end', () => {
           try {
             const response = JSON.parse(data);
+            console.log('🔍 API Response:', JSON.stringify(response, null, 2));
             if (response.choices && response.choices[0] && response.choices[0].message) {
               resolve(response.choices[0].message.content);
             } else {
               reject(new Error('Invalid response format from Grok API'));
             }
           } catch (error) {
+            console.log('❌ JSON Parse Error:', error.message);
+            console.log('Raw response:', data);
             reject(error);
           }
         });
@@ -79,27 +122,11 @@ class GrokOnlyAvatarGenerator {
   }
 
   async generateCharacterConcept(characterType) {
-    const prompt = `You are a master Fallout game character designer with deep knowledge of the Fallout universe, character archetypes, and post-apocalyptic aesthetics. Create a detailed character concept for a ${characterType} in the Fallout universe.
+    // Since we only have image models, we'll create a simple concept and use image generation
+    const concept = `A ${characterType} in the Fallout universe, weathered by years of post-apocalyptic survival with distinctive features that tell their story of life in the wasteland.`;
 
-Requirements:
-- Age-appropriate appearance with authentic wasteland weathering
-- Detailed physical description including face, hair, eyes, build
-- Specific scars, tattoos, or distinctive features that tell a story
-- Clothing and equipment that reflects their background and survival
-- Personality traits evident in their appearance and expression
-- Backstory elements suggested by their physical condition
-
-Character Type: ${characterType}
-
-Provide a rich, detailed character description that could be used to create an authentic Fallout character portrait. Focus on visual details that would make this character feel real and lived-in.`;
-
-    try {
-      const concept = await this.makeGrokRequest(prompt, 1000);
-      return concept.trim();
-    } catch (error) {
-      console.error(`Failed to generate concept for ${characterType}:`, error.message);
-      return this.getFallbackConcept(characterType);
-    }
+    console.log(`📝 Using fallback concept for ${characterType}`);
+    return concept;
   }
 
   getFallbackConcept(characterType) {
@@ -115,25 +142,9 @@ Provide a rich, detailed character description that could be used to create an a
   }
 
   async generateASCIIArt(characterConcept) {
-    const prompt = `Based on this Fallout character description, create an ASCII art portrait that captures their essence:
-
-${characterConcept}
-
-Create a simple but evocative ASCII art representation (about 15-20 lines) that shows:
-- Basic facial structure
-- Key distinctive features (scars, hair, expression)
-- Some indication of clothing or accessories
-- A sense of their personality through the art
-
-Keep it simple but recognizable as a character portrait. Use standard ASCII characters.`;
-
-    try {
-      const ascii = await this.makeGrokRequest(prompt, 500);
-      return ascii.trim();
-    } catch (error) {
-      console.error('Failed to generate ASCII art:', error.message);
-      return this.getFallbackASCII();
-    }
+    // Skip ASCII art since we have image models
+    console.log('🎭 Skipping ASCII art (using image generation instead)');
+    return 'ASCII art not needed - using image generation';
   }
 
   getFallbackASCII() {
@@ -152,35 +163,68 @@ Keep it simple but recognizable as a character portrait. Use standard ASCII char
 `;
   }
 
-  async generateSVGAvatar(characterConcept, characterType) {
-    const prompt = `You are an expert SVG designer specializing in Fallout-style character portraits. Create an SVG avatar based on this character description:
+  async generateAvatarImage(characterType, characterConcept) {
+    const prompt = `Create a highly detailed, realistic portrait of a ${characterType} in the Fallout video game universe. ${characterConcept}
 
-${characterConcept}
+Style requirements:
+- Realistic human portrait, not cartoonish
+- Authentic Fallout wasteland aesthetic
+- Detailed facial features, scars, weathering
+- Post-apocalyptic clothing and accessories
+- High resolution, professional quality
+- Square composition, head and shoulders focus
 
-Requirements:
-- 256x256 pixel viewBox
-- Authentic Fallout color palette (muted, weathered tones)
-- Simple but recognizable character features
-- Include distinctive elements from the description
-- Scalable vector graphics
-- Clean, game-ready style
+Make this character look like they belong in the Fallout universe with realistic human features, battle damage, and wasteland survival traits.`;
 
-Generate ONLY the SVG code, no explanations or markdown. Start with <svg> and end with </svg>. Use appropriate colors for skin, hair, clothing, and background.`;
+    return new Promise((resolve, reject) => {
+      const postData = JSON.stringify({
+        prompt: prompt,
+        model: "grok-imagine-image",
+        n: 1
+      });
 
-    try {
-      const svgCode = await this.makeGrokRequest(prompt, 1500);
+      const options = {
+        hostname: 'api.x.ai',
+        port: 443,
+        path: '/v1/images/generations',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`,
+        }
+      };
 
-      // Clean up the response to extract just SVG
-      const svgMatch = svgCode.match(/<svg[\s\S]*<\/svg>/);
-      if (svgMatch) {
-        return svgMatch[0];
-      } else {
-        throw new Error('No valid SVG found in response');
-      }
-    } catch (error) {
-      console.error(`Failed to generate SVG for ${characterType}:`, error.message);
-      return this.getFallbackSVG(characterType);
-    }
+      const req = https.request(options, (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        res.on('end', () => {
+          try {
+            const response = JSON.parse(data);
+            console.log('🔍 Image API Response:', JSON.stringify(response, null, 2));
+            if (response.data && response.data[0] && response.data[0].url) {
+              resolve(response.data[0].url);
+            } else {
+              reject(new Error('Invalid image response format from Grok API'));
+            }
+          } catch (error) {
+            console.log('❌ JSON Parse Error:', error.message);
+            console.log('Raw response:', data);
+            reject(error);
+          }
+        });
+      });
+
+      req.on('error', (error) => {
+        reject(error);
+      });
+
+      req.write(postData);
+      req.end();
+    });
   }
 
   getFallbackSVG(characterType) {
@@ -227,6 +271,26 @@ Generate ONLY the SVG code, no explanations or markdown. Start with <svg> and en
     }
   }
 
+  async downloadImage(imageUrl, outputPath) {
+    return new Promise((resolve, reject) => {
+      const file = fs.createWriteStream(outputPath);
+
+      https.get(imageUrl, (response) => {
+        response.pipe(file);
+
+        file.on('finish', () => {
+          file.close();
+          console.log(`📥 Downloaded image to ${outputPath}`);
+          resolve(true);
+        });
+      }).on('error', (error) => {
+        fs.unlink(outputPath, () => {}); // Delete the file on error
+        console.log('❌ Image download failed:', error.message);
+        resolve(false);
+      });
+    });
+  }
+
   async generateAllAvatars() {
     const characterTypes = [
       'weathered male survivor',
@@ -255,21 +319,34 @@ Generate ONLY the SVG code, no explanations or markdown. Start with <svg> and en
       const ascii = await this.generateASCIIArt(concept);
       fs.writeFileSync(path.join(this.outputDir, `ascii_${avatarNum}.txt`), ascii);
 
-      // Generate SVG avatar
-      console.log('🎨 Designing SVG avatar...');
-      const svg = await this.generateSVGAvatar(concept, characterType);
-      const svgPath = path.join(this.outputDir, `avatar_${avatarNum}.svg`);
-      fs.writeFileSync(svgPath, svg);
+      // Generate avatar image using Grok's image model
+      console.log('🖼️  Generating avatar image...');
+      try {
+        const imageUrl = await this.generateAvatarImage(characterType, concept);
+        const imagePath = path.join(this.outputDir, `avatar_${avatarNum}.png`);
 
-      // Try to convert to PNG
-      console.log('🖼️  Converting to PNG...');
-      const pngPath = path.join(this.outputDir, `avatar_${avatarNum}.png`);
-      const pngSuccess = await this.convertSVGToPNG(svg, pngPath);
-
-      if (pngSuccess) {
-        console.log(`✅ Avatar ${avatarNum} complete! (SVG + PNG)`);
-      } else {
-        console.log(`✅ Avatar ${avatarNum} complete! (SVG only)`);
+        // Download the generated image
+        const imageDownloaded = await this.downloadImage(imageUrl, imagePath);
+        if (imageDownloaded) {
+          console.log(`✅ Avatar ${avatarNum} complete! (AI-generated PNG)`);
+        } else {
+          console.log(`⚠️  Avatar ${avatarNum} - image generation failed, using fallback`);
+          // Create fallback SVG and convert to PNG
+          const fallbackSvg = this.getFallbackSVG(characterType);
+          const svgPath = path.join(this.outputDir, `avatar_${avatarNum}.svg`);
+          fs.writeFileSync(svgPath, fallbackSvg);
+          const pngSuccess = await this.convertSVGToPNG(fallbackSvg, imagePath);
+          console.log(`✅ Avatar ${avatarNum} complete! (Fallback SVG + PNG)`);
+        }
+      } catch (error) {
+        console.log(`⚠️  Avatar ${avatarNum} - image generation failed: ${error.message}`);
+        // Create fallback SVG and convert to PNG
+        const fallbackSvg = this.getFallbackSVG(characterType);
+        const svgPath = path.join(this.outputDir, `avatar_${avatarNum}.svg`);
+        fs.writeFileSync(svgPath, fallbackSvg);
+        const pngPath = path.join(this.outputDir, `avatar_${avatarNum}.png`);
+        const pngSuccess = await this.convertSVGToPNG(fallbackSvg, pngPath);
+        console.log(`✅ Avatar ${avatarNum} complete! (Fallback SVG + PNG)`);
       }
     }
   }
@@ -286,6 +363,16 @@ Generate ONLY the SVG code, no explanations or markdown. Start with <svg> and en
 
     console.log('🚀 Grok-Only Avatar Generation System');
     console.log('Using ONLY your Grok API key - no extra services!');
+    console.log('');
+
+    // Check available models first
+    console.log('🔍 Checking available Grok models...');
+    const models = await this.checkAvailableModels();
+    if (models) {
+      console.log('✅ API connection successful');
+    } else {
+      console.log('⚠️  Could not check models - proceeding anyway');
+    }
     console.log('');
 
     try {
