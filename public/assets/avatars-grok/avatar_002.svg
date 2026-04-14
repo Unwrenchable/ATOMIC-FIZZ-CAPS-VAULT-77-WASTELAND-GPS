@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+      <rect width="256" height="256" fill="#2F2F2F"/>
+      <circle cx="128" cy="100" r="60" fill="#DEB887"/>
+      <circle cx="110" cy="85" r="8" fill="#000"/>
+      <circle cx="146" cy="85" r="8" fill="#000"/>
+      <ellipse cx="128" cy="110" rx="15" ry="8" fill="#000"/>
+      <path d="M80 140 Q128 180 176 140 L176 200 L80 200 Z" fill="#8B7355"/>
+      <circle cx="128" cy="70" r="25" fill="#2F1B14"/>
+      <text x="128" y="240" text-anchor="middle" fill="#0F0" font-size="12">FALLOUT</text>
+    </svg>
