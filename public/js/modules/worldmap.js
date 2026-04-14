@@ -1485,10 +1485,10 @@
       const line = document.createElement("div");
       line.textContent = text;
       log.prepend(line);
-      // Auto-remove after 4 seconds so the log doesn't accumulate and block the map
-      setTimeout(() => {
+      // Auto-remove after 5 seconds so the log doesn't accumulate and block the map
+      setTimeout(function () {
         if (line.parentNode === log) log.removeChild(line);
-      }, 4000);
+      }, 5000);
     },
 
     // --------------------------------------------------------
