@@ -82,8 +82,12 @@
 
         /* Rain particles */
         .weather-rain {
-          background-image: url('/img/weather/static.png');
-          background-size: cover;
+          background: 
+            radial-gradient(circle at 25% 25%, rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+            radial-gradient(circle at 75% 75%, rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+            radial-gradient(circle at 50% 50%, rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+            linear-gradient(45deg, transparent 40%, rgba(0, 255, 65, 0.02) 50%, transparent 60%);
+          background-size: 4px 4px, 6px 6px, 8px 8px, 20px 20px;
           opacity: 0.25;
           animation: rainFlicker 0.2s infinite;
           position: relative;

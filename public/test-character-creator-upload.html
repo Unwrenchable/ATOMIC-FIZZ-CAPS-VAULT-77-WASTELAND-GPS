@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Creator Upload Test</title>
+    <link rel="stylesheet" href="css/character-creator.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #000;
+            color: #00ff41;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #00ff41;
+            background: rgba(0, 255, 65, 0.05);
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            cursor: pointer;
+        }
+        button:hover {
+            background: rgba(0, 255, 65, 0.2);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Character Creator Image Upload Test</h1>
+
+    <div class="test-section">
+        <h2>Test Image Upload and Analysis</h2>
+        <button onclick="openCharacterCreator()">Open Character Creator</button>
+        <button onclick="testUploadFunctionality()">Test Upload Functions</button>
+        <div id="test-results" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Manual Upload Test</h2>
+        <input type="file" id="manualFileInput" accept="image/*">
+        <button onclick="testManualUpload()">Analyze Selected Image</button>
+        <div id="manual-results" class="result"></div>
+    </div>
+
+    <script type="module">
+        // Import the character creator
+        import CharacterCreator from './js/modules/character-creator.js';
+
+        window.CharacterCreator = CharacterCreator;
+
+        // Initialize
+        async function init() {
+            try {
+                await CharacterCreator.init();
+                console.log('Character Creator initialized');
+                updateResults('Character Creator initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize:', error);
+                updateResults('Failed to initialize: ' + error.message);
+            }
+        }
+
+        // Open character creator
+        function openCharacterCreator() {
+            CharacterCreator.open(null, (appearance) => {
+                console.log('Character saved:', appearance);
+                updateResults('Character saved: ' + JSON.stringify(appearance, null, 2));
+            });
+        }
+
+        // Test upload functionality
+        async function testUploadFunctionality() {
+            try {
+                // Test that upload functions exist
+                const creator = CharacterCreator;
+                const functions = [
+                    '_initUpload',
+                    '_handleFileUpload',
+                    '_analyzeImage',
+                    '_analyzeImageFeatures',
+                    '_displayAnalysisResults',
+                    '_applyAnalysis',
+                    '_switchToCustomize',
+                    '_clearUpload'
+                ];
+
+                let results = 'Testing upload functions:\n';
+                for (const func of functions) {
+                    if (typeof creator[func] === 'function') {
+                        results += `✓ ${func} exists\n`;
+                    } else {
+                        results += `✗ ${func} missing\n`;
+                    }
+                }
+
+                updateResults(results);
+            } catch (error) {
+                updateResults('Error testing functions: ' + error.message);
+            }
+        }
+
+        // Test manual upload
+        async function testManualUpload() {
+            const fileInput = document.getElementById('manualFileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                updateManualResults('No file selected');
+                return;
+            }
+
+            try {
+                updateManualResults('Analyzing image...');
+
+                // Create a data URL from the file
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const analysis = await CharacterCreator._analyzeImageFeatures(e.target.result);
+                        updateManualResults('Analysis complete:\n' + JSON.stringify(analysis, null, 2));
+                    } catch (error) {
+                        updateManualResults('Analysis failed: ' + error.message);
+                    }
+                };
+                reader.readAsDataURL(file);
+            } catch (error) {
+                updateManualResults('Upload failed: ' + error.message);
+            }
+        }
+
+        function updateResults(text) {
+            document.getElementById('test-results').textContent = text;
+        }
+
+        function updateManualResults(text) {
+            document.getElementById('manual-results').textContent = text;
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">/workspaces/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS/public/test-character-creator-upload.html
