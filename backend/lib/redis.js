@@ -13,6 +13,8 @@ let REDIS_URL = (process.env.REDIS_URL || process.env.REDIS || "").trim();
 // Validate protocol if URL is provided
 if (REDIS_URL && !REDIS_URL.startsWith("redis://") && !REDIS_URL.startsWith("rediss://")) {
   console.error(`[redis] INVALID REDIS_URL: must start with redis:// or rediss://, got: ${REDIS_URL.replace(/:[^:@]+@/, ':***@').substring(0, 50)}...`);
+  console.error(`[redis] For Redis Cloud/Redis Labs: redis://default:your_password@host:port`);
+  console.error(`[redis] For local Redis: redis://localhost:6379`);
   REDIS_URL = null; // Invalidate malformed URL
 }
 // If URL is empty after trim, set to null
@@ -289,6 +291,7 @@ async function initClient() {
       console.error("[redis] ");
       console.error("[redis] To fix this, update your REDIS_URL to include authentication:");
       console.error("[redis]   Format: redis://username:password@host:port");
+      console.error("[redis]   For Redis Cloud/Redis Labs: redis://default:your_password@host:port");
       console.error("[redis]   Example: redis://default:your_password@localhost:6379");
       console.error("[redis] ");
       console.error("[redis] If Redis has no password set, you can disable it with:");
@@ -530,6 +533,11 @@ async function quit() {
   const c = await ensureClient();
   if (c && typeof c.quit === "function") return c.quit();
   return Promise.resolve();
+}
+async function ping() {
+  const c = await ensureClient();
+  if (c && typeof c.ping === "function") return c.ping();
+  return Promise.resolve("PONG");
 }
 async function multi() {
   try {
