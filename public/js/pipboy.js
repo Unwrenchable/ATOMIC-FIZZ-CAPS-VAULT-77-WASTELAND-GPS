@@ -12,6 +12,7 @@
     radio: document.getElementById("panel-radio"),
     exchange: document.getElementById("panel-exchange"),
     battle: document.getElementById("panel-battle"),
+    companions: document.getElementById("panel-companions"),
   };
   
   // Configuration constants

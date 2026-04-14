@@ -38,9 +38,28 @@
     level: 1,
     xp: 0,
     caps: 0,
+    karma: 0,
     // SPECIAL stats — default 5 in each attribute (Fallout standard mid-point)
     // S=Strength, P=Perception, E=Endurance, C=Charisma, I=Intelligence, A=Agility, L=Luck
     special: { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 },
+    // Survival stats
+    survival: {
+      radiation: 0,    // 0-1000
+      hunger: 100,     // 0-100
+      thirst: 100,     // 0-100
+      lastUpdated: Date.now()
+    },
+    // Chem addiction levels (0-100) for each chem type
+    addiction: {
+      jet: 0,
+      psycho: 0,
+      buffout: 0,
+      mentats: 0
+    },
+    // Perks acquired by player
+    perks: [],
+    // Companions
+    companions: [],
     // Visited locations for map
     visitedLocations: [],
     // Timestamps
@@ -53,6 +72,7 @@
   let _dirty = false;
   let _syncTimer = null;
   let _backendSyncTimer = null;
+  let _survivalTimer = null;
   let _wallet = null;
 
   /**
@@ -65,6 +85,7 @@
     // the old timers are never cleared.  Clear any existing timers first.
     if (_syncTimer) { clearInterval(_syncTimer); _syncTimer = null; }
     if (_backendSyncTimer) { clearInterval(_backendSyncTimer); _backendSyncTimer = null; }
+    if (_survivalTimer) { clearInterval(_survivalTimer); _survivalTimer = null; }
 
     loadFromStorage();
     
@@ -81,12 +102,10 @@
       }
     }, AUTO_SAVE_INTERVAL);
     
-    // Start backend sync interval if wallet is connected
-    _backendSyncTimer = setInterval(() => {
-      if (_wallet) {
-        syncWithBackend(_wallet);
-      }
-    }, BACKEND_SYNC_INTERVAL);
+    // Start survival update interval (every 5 minutes)
+    _survivalTimer = setInterval(() => {
+      updateSurvival();
+    }, 5 * 60 * 1000); // 5 minutes
     
     // Listen for visibility changes to save on tab hide
     document.addEventListener("visibilitychange", () => {
@@ -121,6 +140,7 @@
         if (!Array.isArray(_state.questsActive)) _state.questsActive = [];
         if (!Array.isArray(_state.questsCompleted)) _state.questsCompleted = [];
         if (!Array.isArray(_state.visitedLocations)) _state.visitedLocations = [];
+        if (!Array.isArray(_state.perks)) _state.perks = [];
         // Ensure equipped object has all Fallout-style slots (migrate old "armor" → "chest")
         const EQ_DEFAULTS = { weapon: null, head: null, chest: null, arms: null, legs: null, aid: null, accessory: null };
         if (!_state.equipped || typeof _state.equipped !== "object") {
@@ -143,6 +163,24 @@
           const SPECIAL_DEFAULTS = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
           Object.keys(SPECIAL_DEFAULTS).forEach(k => {
             if (typeof _state.special[k] !== 'number') _state.special[k] = SPECIAL_DEFAULTS[k];
+          });
+        }
+        // Ensure survival object exists with defaults
+        if (!_state.survival || typeof _state.survival !== 'object') {
+          _state.survival = { radiation: 0, hunger: 100, thirst: 100, lastUpdated: Date.now() };
+        } else {
+          if (typeof _state.survival.radiation !== 'number') _state.survival.radiation = 0;
+          if (typeof _state.survival.hunger !== 'number') _state.survival.hunger = 100;
+          if (typeof _state.survival.thirst !== 'number') _state.survival.thirst = 100;
+          if (typeof _state.survival.lastUpdated !== 'number') _state.survival.lastUpdated = Date.now();
+        }
+        // Ensure addiction object exists with defaults
+        if (!_state.addiction || typeof _state.addiction !== 'object') {
+          _state.addiction = { jet: 0, psycho: 0, buffout: 0, mentats: 0 };
+        } else {
+          const ADDICTION_DEFAULTS = { jet: 0, psycho: 0, buffout: 0, mentats: 0 };
+          Object.keys(ADDICTION_DEFAULTS).forEach(k => {
+            if (typeof _state.addiction[k] !== 'number') _state.addiction[k] = ADDICTION_DEFAULTS[k];
           });
         }
         
@@ -306,19 +344,41 @@
   }
 
   /**
-   * Sync with legacy PLAYER object from main.js
+   * Update survival stats periodically
    */
-  function syncWithLegacyPlayer() {
-    if (window.PLAYER) {
-      // Two-way sync
-      if (_state.caps === 0 && window.PLAYER.caps) _state.caps = window.PLAYER.caps;
-      if (_state.xp === 0 && window.PLAYER.xp) _state.xp = window.PLAYER.xp;
-      if (_state.level === 1 && window.PLAYER.level) _state.level = window.PLAYER.level;
+  function updateSurvival() {
+    if (!_state || !_state.survival) return;
+    
+    const now = Date.now();
+    const lastUpdate = _state.survival.lastUpdated || now;
+    const timeDiff = now - lastUpdate;
+    
+    // Decay every 10 minutes (600000 ms)
+    const decayInterval = 10 * 60 * 1000; // 10 minutes
+    const decayCycles = Math.floor(timeDiff / decayInterval);
+    
+    if (decayCycles > 0) {
+      // Hunger and thirst decrease by 1 per cycle
+      _state.survival.hunger = Math.max(0, _state.survival.hunger - decayCycles);
+      _state.survival.thirst = Math.max(0, _state.survival.thirst - decayCycles);
+      _state.survival.lastUpdated = now;
       
-      // Keep PLAYER in sync
-      window.PLAYER.caps = _state.caps;
-      window.PLAYER.xp = _state.xp;
-      window.PLAYER.level = _state.level;
+      // Hardcore mode: death at 0 hunger or thirst
+      if (_state.survival.hunger <= 0 || _state.survival.thirst <= 0) {
+        // Set HP to 0 if player is alive
+        if (window.PLAYER && window.PLAYER.hp > 0) {
+          window.PLAYER.hp = 0;
+          console.log("[PlayerState] Player died from starvation/dehydration");
+          // Trigger death overlay or something
+          if (Game.modules?.battle?._showDeathOverlay) {
+            Game.modules.battle._showDeathOverlay();
+          }
+        }
+      }
+      
+      _dirty = true;
+      syncGamePlayerReferences();
+      triggerSurvivalUpdate();
     }
   }
 
@@ -334,6 +394,16 @@
     }
 
     const MAX_INVENTORY_SIZE = 200;
+    const itemWeight = item.weight || 0;
+    const additionalWeight = itemWeight * quantity;
+
+    // Check carry weight limit
+    const currentWeight = getTotalCarryWeight();
+    const maxWeight = getMaxCarryWeight();
+    if (currentWeight + additionalWeight > maxWeight) {
+      console.warn(`[PlayerState] Cannot add ${item.name} — would exceed carry weight limit (${currentWeight + additionalWeight}/${maxWeight})`);
+      return false;
+    }
 
     // Check if item already exists
     const existing = _state.inventory.find(i => i.id === item.id);
@@ -513,6 +583,62 @@
     return true;
   }
 
+  // Cache for armor sets data
+  let _armorSetsCache = null;
+
+  /**
+   * Get active armor set bonuses
+   * @returns {Promise<Object>} Active set bonuses { damageResist: number, ... }
+   */
+  async function getActiveSetBonuses() {
+    const bonuses = { damageResist: 0 };
+    if (!_state || !_state.equipped) return bonuses;
+
+    // Load armor sets data if not cached
+    if (!_armorSetsCache) {
+      try {
+        const response = await fetch('/data/items/armor_sets.json');
+        if (response.ok) {
+          _armorSetsCache = await response.json();
+        } else {
+          console.warn('[PlayerState] Could not load armor_sets.json for set bonuses');
+          return bonuses;
+        }
+      } catch (e) {
+        console.warn('[PlayerState] Error loading armor_sets.json:', e);
+        return bonuses;
+      }
+    }
+
+    // Check each set
+    for (const setKey in _armorSetsCache) {
+      const setData = _armorSetsCache[setKey];
+      if (!setData.pieceIds) continue;
+
+      let piecesEquipped = 0;
+      const totalPieces = Object.keys(setData.pieceIds).length;
+
+      // Check if all pieces are equipped
+      for (const slot in setData.pieceIds) {
+        const pieceId = setData.pieceIds[slot];
+        const equippedItem = _state.equipped[slot];
+        if (equippedItem && equippedItem.id === pieceId) {
+          piecesEquipped++;
+        }
+      }
+
+      // If full set equipped, apply bonuses
+      if (piecesEquipped === totalPieces && setData.fullSetBonus) {
+        if (setData.fullSetBonus.damageResist) {
+          bonuses.damageResist += setData.fullSetBonus.damageResist;
+        }
+        // Could add other bonuses here in the future
+      }
+    }
+
+    return bonuses;
+  }
+
   /**
    * Award XP to player
    * @param {number} amount - XP to award
@@ -642,6 +768,14 @@
           if (data.profile.caps !== undefined) _state.caps = data.profile.caps;
           if (data.profile.xp !== undefined) _state.xp = data.profile.xp;
           if (data.profile.level !== undefined) _state.level = data.profile.level;
+          if (data.profile.karma !== undefined) _state.karma = data.profile.karma;
+          if (data.profile.survival) {
+            // Merge survival stats, but keep local lastUpdated if more recent
+            _state.survival = { ..._state.survival, ...data.profile.survival };
+            if (data.profile.survival.lastUpdated < _state.survival.lastUpdated) {
+              _state.survival.lastUpdated = data.profile.survival.lastUpdated;
+            }
+          }
           
           syncGamePlayerReferences();
           syncWithLegacyPlayer();
@@ -675,6 +809,15 @@
   }
 
   /**
+   * Trigger survival UI update
+   */
+  function triggerSurvivalUpdate() {
+    window.dispatchEvent(new CustomEvent("survivalUpdated", {
+      detail: { survival: _state ? { ..._state.survival } : null }
+    }));
+  }
+
+  /**
    * Trigger stats UI update
    */
   function triggerStatsUpdate() {
@@ -686,6 +829,28 @@
     if (capsEl) capsEl.textContent = _state.caps;
     if (levelEl) levelEl.textContent = _state.level;
     if (xpEl) xpEl.textContent = `${_state.xp} / ${_state.level * 100}`;
+    
+    // Update survival stats
+    const radEl = document.getElementById("stat-rad-label");
+    const radBar = document.getElementById("stat-rad-bar");
+    const hungerEl = document.getElementById("stat-hunger-label");
+    const hungerBar = document.getElementById("stat-hunger-bar");
+    const thirstEl = document.getElementById("stat-thirst-label");
+    const thirstBar = document.getElementById("stat-thirst-bar");
+    
+    if (_state && _state.survival) {
+      const radPct = Math.min(100, (_state.survival.radiation / 1000) * 100);
+      if (radEl) radEl.textContent = `${Math.round(radPct)}%`;
+      if (radBar) radBar.style.width = `${radPct}%`;
+      
+      const hungerPct = (_state.survival.hunger / 100) * 100;
+      if (hungerEl) hungerEl.textContent = `${Math.round(hungerPct)}%`;
+      if (hungerBar) hungerBar.style.width = `${hungerPct}%`;
+      
+      const thirstPct = (_state.survival.thirst / 100) * 100;
+      if (thirstEl) thirstEl.textContent = `${Math.round(thirstPct)}%`;
+      if (thirstBar) thirstBar.style.width = `${thirstPct}%`;
+    }
     
     window.dispatchEvent(new CustomEvent("statsUpdated", {
       detail: { caps: _state.caps, xp: _state.xp, level: _state.level }
@@ -731,20 +896,36 @@
   }
 
   /**
-   * Calculate derived stats from a SPECIAL object
-   * Formulas match character creator preview exactly
-   * @param {Object} special - SPECIAL stat object {S,P,E,C,I,A,L}
-   * @returns {Object} Derived stats
+   * Get effective SPECIAL stats, reduced by hunger/thirst and withdrawal
+   * @returns {Object} Effective special stats
    */
-  function calcDerivedStats(special) {
-    const sp = special || (_state ? _state.special : null) || { S:5,P:5,E:5,C:5,I:5,A:5,L:5 };
-    return {
-      maxHP:         90  + (sp.E * 10),
-      actionPoints:  60  + (sp.A * 10),
-      carryWeight:   150 + (sp.S * 10),
-      radResistance: sp.E * 2,
-      critChance:    sp.L
-    };
+  function getEffectiveSpecial() {
+    if (!_state || !_state.special || !_state.survival) return { S:5,P:5,E:5,C:5,I:5,A:5,L:5 };
+    
+    const base = { ..._state.special };
+    const hunger = _state.survival.hunger;
+    const thirst = _state.survival.thirst;
+    
+    // Hunger/thirst reduce SPECIAL stats
+    // At 0 hunger/thirst, -50% reduction
+    const hungerPenalty = Math.max(0, (100 - hunger) / 200); // 0 to 0.5
+    const thirstPenalty = Math.max(0, (100 - thirst) / 200); // 0 to 0.5
+    const totalPenalty = hungerPenalty + thirstPenalty;
+    
+    // Apply withdrawal penalties
+    const withdrawalPenalties = getWithdrawalPenalties();
+    
+    const effective = {};
+    for (const key in base) {
+      let stat = base[key];
+      // Apply hunger/thirst penalty
+      stat = Math.max(1, Math.floor(stat * (1 - totalPenalty)));
+      // Apply withdrawal penalty
+      stat = Math.max(1, stat + (withdrawalPenalties[key] || 0));
+      effective[key] = stat;
+    }
+    
+    return effective;
   }
 
   /**
@@ -766,34 +947,243 @@
   }
 
   /**
-   * Get derived stats for the current player
-   * Incorporates background modifiers from saved appearance if available
-   * @returns {Object} Derived stats
+   * Get player's acquired perks
+   * @returns {Array} Array of perk IDs
    */
-  function getDerivedStats() {
-    // Fallback uses 5-per-stat (the pre-character-creator default) for returning
-    // players who loaded before the SPECIAL allocator was introduced. New players
-    // going through character creation will have appearance.special written with
-    // their chosen allocation (starting from 1-per-stat) and that path is taken
-    // in the try block below.
-    let sp = _state ? { ..._state.special } : { S:5,P:5,E:5,C:5,I:5,A:5,L:5 };
+  function getPerks() {
+    return _state ? [..._state.perks] : [];
+  }
 
-    // Try to load background modifiers from saved appearance
-    try {
-      const encoded = localStorage.getItem('playerAppearance_encoded');
-      if (encoded) {
-        const decoded = decodeURIComponent(escape(atob(encoded)));
-        const appearance = JSON.parse(decoded);
-        if (appearance.background && appearance.special) {
-          // Use SPECIAL from appearance (character creator allocation)
-          sp = { ...appearance.special };
+  /**
+   * Add a perk to player
+   * @param {string} perkId - Perk ID to add
+   */
+  function addPerk(perkId) {
+    if (!perkId || !_state) return false;
+    if (_state.perks.includes(perkId)) return true; // Already has it
+    
+    _state.perks.push(perkId);
+    _dirty = true;
+    saveToStorage();
+    
+    console.log(`[PlayerState] Perk acquired: ${perkId}`);
+    return true;
+  }
+
+  /**
+   * Check if player has a specific perk
+   * @param {string} perkId - Perk ID to check
+   * @returns {boolean} True if player has the perk
+   */
+  function hasPerk(perkId) {
+    return _state && _state.perks.includes(perkId);
+  }
+
+  /**
+   * Calculate total carry weight of inventory
+   * @returns {number} Total weight in lbs
+   */
+  function getTotalCarryWeight() {
+    if (!_state || !_state.inventory) return 0;
+    return _state.inventory.reduce((total, item) => {
+      const weight = item.weight || 0;
+      const qty = item.quantity || 1;
+      return total + (weight * qty);
+    }, 0);
+  }
+
+  /**
+   * Get maximum carry weight based on Strength stat
+   * @returns {number} Max weight in lbs (base 150 + Strength * 10)
+   */
+  function getMaxCarryWeight() {
+    if (!_state || !_state.special) return 150;
+    const strength = _state.special.S || 5;
+    return 150 + (strength * 10);
+  }
+
+  /**
+   * Use RadAway to reduce radiation
+   * @param {number} amount - Amount to reduce (default 100)
+   */
+  function useRadAway(amount = 100) {
+    if (!_state || !_state.survival) return false;
+    _state.survival.radiation = Math.max(0, _state.survival.radiation - amount);
+    _dirty = true;
+    saveToStorage();
+    triggerSurvivalUpdate();
+    console.log(`[PlayerState] Used RadAway, radiation reduced by ${amount}`);
+    return true;
+  }
+
+  /**
+   * Use a consumable item
+   * @param {Object} item - The item to use
+   * @returns {boolean} Success
+   */
+  function useItem(item) {
+    if (!item || !item.id) return false;
+    
+    // Check if item exists in inventory
+    const invItem = _state.inventory.find(i => i.id === item.id);
+    if (!invItem || (invItem.quantity || 1) <= 0) return false;
+    
+    // Handle different consumable types
+    if (item.type === 'consumable') {
+      if (item.tags && item.tags.includes('healing')) {
+        // Healing items (stimpak)
+        const healAmount = item.heal || 20;
+        if (_state.hp !== undefined) {
+          _state.hp = Math.min(_state.maxHp || 100, _state.hp + healAmount);
+        }
+        console.log(`[PlayerState] Used ${item.name}, healed ${healAmount} HP`);
+      } else if (item.tags && item.tags.includes('radiation')) {
+        // Radiation items (radaway, radx)
+        const radAmount = item.id === 'radaway' ? 100 : (item.id === 'radx' ? 50 : 0);
+        if (radAmount > 0) {
+          _state.survival.radiation = Math.max(0, _state.survival.radiation - radAmount);
+        }
+        console.log(`[PlayerState] Used ${item.name}, radiation reduced by ${radAmount}`);
+      } else if (item.tags && item.tags.includes('food')) {
+        // Food items
+        consumeFood(25);
+        console.log(`[PlayerState] Used ${item.name}, hunger restored`);
+      } else if (item.tags && item.tags.includes('drink')) {
+        // Drink items
+        consumeWater(25);
+        console.log(`[PlayerState] Used ${item.name}, thirst restored`);
+      } else if (item.tags && item.tags.includes('chem')) {
+        // Chem items - handle addiction
+        useChem(item);
+        console.log(`[PlayerState] Used chem ${item.name}`);
+      } else {
+        console.log(`[PlayerState] Used ${item.name} (unknown effect)`);
+      }
+      
+      // Remove one from inventory
+      if (invItem.quantity > 1) {
+        invItem.quantity--;
+      } else {
+        const index = _state.inventory.indexOf(invItem);
+        _state.inventory.splice(index, 1);
+      }
+      
+      _dirty = true;
+      saveToStorage();
+      triggerInventoryUpdate();
+      return true;
+    }
+    
+    return false;
+  }
+
+  /**
+   * Use a chem and handle addiction
+   * @param {Object} chem - The chem item
+   */
+  function useChem(chem) {
+    if (!chem || !chem.id || !_state.addiction) return;
+    
+    const chemType = chem.id; // jet, psycho, buffout, mentats
+    if (!(chemType in _state.addiction)) return;
+    
+    // Increase addiction level
+    const intelligence = _state.special.I || 5;
+    const baseAddictionIncrease = 10; // Base increase per use
+    const intelligenceReduction = Math.max(0, (intelligence - 5) * 2); // -2% per INT above 5
+    const addictionIncrease = Math.max(1, baseAddictionIncrease - intelligenceReduction);
+    
+    _state.addiction[chemType] = Math.min(100, _state.addiction[chemType] + addictionIncrease);
+    
+    console.log(`[PlayerState] Chem addiction for ${chemType} increased to ${_state.addiction[chemType]}`);
+    
+    // Apply immediate effects based on chem type
+    // This could be expanded with specific stat boosts
+    if (chem.id === 'jet') {
+      // Jet: temporary agility boost (could be implemented with timed effects)
+    } else if (chem.id === 'psycho') {
+      // Psycho: temporary strength boost
+    } else if (chem.id === 'buffout') {
+      // Buffout: temporary strength boost
+    } else if (chem.id === 'mentats') {
+      // Mentats: temporary intelligence boost
+    }
+  }
+
+  /**
+   * Get current addiction levels
+   * @returns {Object} Addiction levels
+   */
+  function getAddiction() {
+    return _state ? { ..._state.addiction } : { jet: 0, psycho: 0, buffout: 0, mentats: 0 };
+  }
+
+  /**
+   * Get withdrawal penalties for battles
+   * @returns {Object} Stat penalties { S: number, P: number, etc. }
+   */
+  function getWithdrawalPenalties() {
+    if (!_state || !_state.addiction) return {};
+    
+    const penalties = { S: 0, P: 0, E: 0, C: 0, I: 0, A: 0, L: 0 };
+    
+    // Check each chem for withdrawal
+    Object.keys(_state.addiction).forEach(chemType => {
+      const level = _state.addiction[chemType];
+      if (level >= 20) { // Withdrawal threshold
+        // Random stat debuffs based on chem type
+        const random = crypto.getRandomValues(new Uint32Array(1))[0] / 0xFFFFFFFF;
+        const debuff = Math.floor(random * 3) + 1; // 1-3 points
+        
+        switch (chemType) {
+          case 'jet':
+            penalties.A -= debuff; // Agility penalty
+            break;
+          case 'psycho':
+            penalties.S -= debuff; // Strength penalty
+            penalties.P -= debuff; // Perception penalty
+            break;
+          case 'buffout':
+            penalties.S -= debuff; // Strength penalty
+            penalties.E -= debuff; // Endurance penalty
+            break;
+          case 'mentats':
+            penalties.I -= debuff; // Intelligence penalty
+            penalties.P -= debuff; // Perception penalty
+            break;
         }
       }
-    } catch (e) {
-      // Fall back to _state.special silently
-    }
+    });
+    
+    return penalties;
+  }
 
-    return calcDerivedStats(sp);
+  /**
+   * Consume food to restore hunger
+   * @param {number} amount - Amount to restore (default 25)
+   */
+  function consumeFood(amount = 25) {
+    if (!_state || !_state.survival) return false;
+    _state.survival.hunger = Math.min(100, _state.survival.hunger + amount);
+    _dirty = true;
+    saveToStorage();
+    triggerSurvivalUpdate();
+    console.log(`[PlayerState] Consumed food, hunger restored by ${amount}`);
+    return true;
+  }
+
+  /**
+   * Consume water to restore thirst
+   * @param {number} amount - Amount to restore (default 25)
+   */
+  function consumeWater(amount = 25) {
+    if (!_state || !_state.survival) return false;
+    _state.survival.thirst = Math.min(100, _state.survival.thirst + amount);
+    _dirty = true;
+    saveToStorage();
+    triggerSurvivalUpdate();
+    console.log(`[PlayerState] Consumed water, thirst restored by ${amount}`);
+    return true;
   }
 
   // Export the module
@@ -807,6 +1197,7 @@
     getItem,
     equipItem,
     unequipItem,
+    getActiveSetBonuses,
     awardXP,
     awardCaps,
     activateQuest,
@@ -814,7 +1205,17 @@
     visitLocation,
     syncWithBackend,
     receiveItemFromNPC,
-    getSpecial: function () { return _state ? { ..._state.special } : { S:5,P:5,E:5,C:5,I:5,A:5,L:5 }; },
+    getSpecial: function () { return getEffectiveSpecial(); },
+    getKarma: function () { return _state ? _state.karma || 0 : 0; },
+    modifyKarma: function (delta) {
+      if (!_state) return;
+      if (typeof delta !== 'number' || !isFinite(delta)) return;
+      _state.karma = (_state.karma || 0) + delta;
+      _dirty = true;
+      syncGamePlayerReferences();
+      saveToStorage();
+      triggerStatsUpdate();
+    },
     setSpecial: function (key, value) {
       if (!_state || !_state.special) return;
       if (typeof value !== 'number') return;
@@ -823,11 +1224,25 @@
       syncGamePlayerReferences();
       saveToStorage();
     },
-    getDerivedStats,
-    calcDerivedStats,
+    getPerks,
+    addPerk,
+    hasPerk,
+    getTotalCarryWeight,
+    getMaxCarryWeight,
+    isOverEncumbered,
     applyBackgroundModifiers,
     save: saveToStorage,
-    load: loadFromStorage
+    load: loadFromStorage,
+    // Survival functions
+    getSurvival: function () { return _state ? { ..._state.survival } : { radiation: 0, hunger: 100, thirst: 100, lastUpdated: Date.now() }; },
+    useRadAway,
+    consumeFood,
+    consumeWater,
+    updateSurvival,
+    // Chem and addiction functions
+    useItem,
+    getAddiction,
+    getWithdrawalPenalties
   };
 
   // Expose globally

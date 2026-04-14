@@ -113,7 +113,8 @@ async function awardCapsToPlayer(wallet, amount) {
         caps: 0,
         claimed: [],
         quests: {},
-        inventory: []
+        inventory: [],
+        battleWins: 0,
       };
     } else {
       profile = JSON.parse(profileRaw);

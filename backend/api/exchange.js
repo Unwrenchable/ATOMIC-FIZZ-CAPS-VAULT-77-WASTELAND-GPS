@@ -23,7 +23,7 @@ const rateLimit = require("express-rate-limit");
 const router = express.Router();
 
 const { authMiddleware } = require("../lib/auth");
-const { getJSON, setJSON, sadd, srem, smembers, del } = require("../lib/redis");
+const { getJSON, setJSON, sadd, srem, smembers, del, multi, key } = require("../lib/redis");
 
 // ------------------------------------------------------------
 // Constants
@@ -254,27 +254,58 @@ router.post("/buy-trade", authMiddleware, buyLimiter, async (req, res) => {
     return res.status(400).json({ ok: false, error: "You cannot buy your own trade." });
   }
 
-  // Mark as sold and remove from active set
-  trade.status = "sold";
-  trade.buyer = buyerWallet;
-  trade.soldAt = Date.now();
+  // For item trades, deduct caps atomically
+  if (trade.type === "item") {
+    // Get buyer profile
+    const buyerKey = key(`player:${buyerWallet}`);
+    const buyerData = await getJSON(buyerKey);
+    if (!buyerData) {
+      return res.status(404).json({ ok: false, error: "Buyer profile not found." });
+    }
+    const buyerCaps = buyerData.caps || 0;
+    if (buyerCaps < trade.priceFizz) {
+      return res.status(400).json({ ok: false, error: "Insufficient caps." });
+    }
 
-  // Keep sold record for 30 days for dispute resolution
-  await setJSON(`exchange:trade:${tradeId}`, trade, { EX: 30 * 24 * 60 * 60 });
-  await srem(ACTIVE_SET_KEY, tradeId);
+    // CRITICAL-002 FIX: Use Redis transaction to deduct caps AND set reserved_by atomically
+    const tx = await multi();
+    tx.hset(buyerKey, "profile", JSON.stringify({ ...buyerData, caps: buyerCaps - trade.priceFizz }));
+    tx.set(key(`exchange:trade:${tradeId}`), JSON.stringify({ ...trade, reserved_by: buyerWallet, status: "reserved" }));
+    tx.expire(key(`exchange:trade:${tradeId}`), 30 * 24 * 60 * 60);
+    const results = await tx.exec();
 
-  console.log(`[exchange] Trade ${tradeId} sold to ${buyerWallet.slice(0, 8)}...`);
+    if (!results || results.some(r => r === null || r instanceof Error)) {
+      return res.status(500).json({ ok: false, error: "Failed to reserve trade atomically." });
+    }
 
-  // Return the trade details so the client can execute the FIZZ payment via Phantom.
-  // serializedTx is intentionally absent — actual SPL token transfer is handled
-  // client-side via window.solana.signAndSendTransaction for mainnet.
-  return res.json({
-    ok: true,
-    trade,
-    message: "Trade reserved. Send FIZZ payment to the seller via Phantom wallet.",
-    sellerWallet: trade.seller,
-    priceFizz: trade.priceFizz,
-  });
+    await srem(ACTIVE_SET_KEY, tradeId);
+
+    console.log(`[exchange] Trade ${tradeId} reserved by ${buyerWallet.slice(0, 8)}...`);
+
+    return res.json({
+      ok: true,
+      trade: { ...trade, reserved_by: buyerWallet, status: "reserved" },
+      message: "Trade reserved. Caps deducted.",
+      sellerWallet: trade.seller,
+      priceFizz: trade.priceFizz,
+    });
+  } else {
+    // For NFT trades, just reserve (payment handled client-side)
+    trade.reserved_by = buyerWallet;
+    trade.status = "reserved";
+    await setJSON(`exchange:trade:${tradeId}`, trade, { EX: 30 * 24 * 60 * 60 });
+    await srem(ACTIVE_SET_KEY, tradeId);
+
+    console.log(`[exchange] NFT Trade ${tradeId} reserved by ${buyerWallet.slice(0, 8)}...`);
+
+    return res.json({
+      ok: true,
+      trade,
+      message: "NFT trade reserved. Send FIZZ payment to the seller via Phantom wallet.",
+      sellerWallet: trade.seller,
+      priceFizz: trade.priceFizz,
+    });
+  }
 });
 
 // ------------------------------------------------------------

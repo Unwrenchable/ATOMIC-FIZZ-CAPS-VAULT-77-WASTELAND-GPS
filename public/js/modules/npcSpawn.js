@@ -94,9 +94,29 @@
       }
     },
 
+    // Get current spawn chance based on time of day (higher at night)
+    getCurrentSpawnChance() {
+      try {
+        const worldmap = Game.modules.worldmap;
+        if (worldmap && worldmap.gs && Game.modules.world?.weather) {
+          const worldState = worldmap.gs.worldState || worldmap.gs;
+          const gameTime = Game.modules.world.weather.getCurrentTime(worldState);
+          if (gameTime.isNight) {
+            return this.spawnChance * 1.5; // 50% increase at night
+          }
+        }
+      } catch (e) {
+        console.warn("[npcSpawn] Failed to get game time for spawn chance:", e.message);
+      }
+      return this.spawnChance; // Default chance
+    },
+
     // Check if an NPC should spawn at this location
     checkForNPCEncounter(location) {
       if (!this.loaded || !location || !location.id) return null;
+
+      // Get current spawn chance (higher at night)
+      const currentSpawnChance = this.getCurrentSpawnChance();
 
       // Find NPCs that can spawn at this location
       const matchingNPCs = this.npcs.filter(npc => {
@@ -120,7 +140,7 @@
       if (matchingNPCs.length === 0) return null;
 
       // BUG FIX: use secure RNG — NPC spawn/selection affects economic outcomes
-      if (secureRandom() > this.spawnChance) return null;
+      if (secureRandom() > currentSpawnChance) return null;
 
       // Pick random NPC from matching ones using secure RNG
       const npc = matchingNPCs[secureRandIndex(matchingNPCs.length)];

@@ -96,9 +96,20 @@ Game.ui.renderInventory = function () {
   function renderEquipScreen() {
     body.innerHTML = "";
 
+    // Calculate carry weight
+    const totalWeight = Game.modules?.PlayerState?.getTotalCarryWeight?.() || 0;
+    const maxWeight = Game.modules?.PlayerState?.getMaxCarryWeight?.() || 150;
+    const isOverWeight = totalWeight > maxWeight;
+    const weightClass = isOverWeight ? "weight-over-limit" : "weight-normal";
+
     const header = document.createElement("div");
     header.className = "equip-screen-header";
-    header.innerHTML = '<div class="equip-screen-title">[ EQUIPPED ITEMS ]</div>';
+    header.innerHTML = `
+      <div class="equip-screen-title">[ EQUIPPED ITEMS ]</div>
+      <div class="carry-weight-display ${weightClass}">
+        CARRY WEIGHT: ${totalWeight.toFixed(1)} / ${maxWeight} lbs
+      </div>
+    `;
     body.appendChild(header);
 
     EQUIP_SLOTS.forEach(function(slotDef) {
@@ -134,6 +145,40 @@ Game.ui.renderInventory = function () {
       row.appendChild(slotBtn);
       body.appendChild(row);
     });
+
+    // Show active set bonuses
+    const setBonusesDiv = document.createElement("div");
+    setBonusesDiv.className = "set-bonuses-section";
+    setBonusesDiv.innerHTML = `<div class="set-bonuses-title">[ ACTIVE SET BONUSES ]</div>`;
+    
+    if (Game.modules?.PlayerState?.getActiveSetBonuses) {
+      Game.modules.PlayerState.getActiveSetBonuses().then(bonuses => {
+        if (bonuses.damageResist > 0) {
+          const bonusDiv = document.createElement("div");
+          bonusDiv.className = "set-bonus-item";
+          bonusDiv.textContent = `Damage Resistance: +${bonuses.damageResist}`;
+          setBonusesDiv.appendChild(bonusDiv);
+        } else {
+          const noBonusDiv = document.createElement("div");
+          noBonusDiv.className = "set-bonuses-none";
+          noBonusDiv.textContent = "No active set bonuses";
+          setBonusesDiv.appendChild(noBonusDiv);
+        }
+      }).catch(e => {
+        console.warn('[InventoryUI] Error getting set bonuses:', e);
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "set-bonuses-error";
+        errorDiv.textContent = "Error loading set bonuses";
+        setBonusesDiv.appendChild(errorDiv);
+      });
+    } else {
+      const noBonusDiv = document.createElement("div");
+      noBonusDiv.className = "set-bonuses-none";
+      noBonusDiv.textContent = "No active set bonuses";
+      setBonusesDiv.appendChild(noBonusDiv);
+    }
+    
+    body.appendChild(setBonusesDiv);
 
     const hint = document.createElement("div");
     hint.className = "equip-screen-hint";
@@ -174,8 +219,15 @@ Game.ui.renderInventory = function () {
                     " \u2022 SLOT: " + itemSlot.toUpperCase();
         isEquipped = !!(equipped[itemSlot] && equipped[itemSlot].id === item.id);
       } else if (item.type === "consumable") {
-        statsText = item.heal ? "HEAL: +" + item.heal + " HP"
-                              : (item.description ? item.description.slice(0, 40) : "");
+        let addictionText = "";
+        if (item.tags && item.tags.includes("chem")) {
+          const addiction = Game.modules?.PlayerState?.getAddiction?.() || {};
+          const chemType = item.id;
+          const level = addiction[chemType] || 0;
+          addictionText = level > 0 ? ` \u2022 ADDICTION: ${level}%` : "";
+          if (level >= 20) addictionText += " [WITHDRAWAL]";
+        }
+        statsText = (item.heal ? "HEAL: +" + item.heal + " HP" : (item.description ? item.description.slice(0, 30) : "")) + addictionText;
         isEquipped = !!(equipped.aid && equipped.aid.id === item.id);
       } else {
         // BUG FIX: use nullish coalescing so that a quantity of 0 is preserved
@@ -215,6 +267,21 @@ Game.ui.renderInventory = function () {
           setTimeout(function() { Game.ui.renderInventory(); }, 80);
         });
         div.appendChild(btn);
+      }
+
+      // Add USE button for consumables
+      if (item.type === "consumable") {
+        const useBtn = document.createElement("button");
+        useBtn.className = "use-btn";
+        useBtn.dataset.itemId = item.id;
+        useBtn.textContent = "USE";
+        useBtn.addEventListener("click", function() {
+          if (Game.modules?.PlayerState?.useItem) {
+            Game.modules.PlayerState.useItem(item);
+            setTimeout(function() { Game.ui.renderInventory(); }, 80);
+          }
+        });
+        div.appendChild(useBtn);
       }
 
       body.appendChild(div);

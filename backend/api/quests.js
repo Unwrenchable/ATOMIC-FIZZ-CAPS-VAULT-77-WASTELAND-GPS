@@ -200,6 +200,13 @@ router.post("/complete", authMiddleware, async (req, res) => {
         return res.status(400).json({ ok: false, error: "Quest not active" });
       }
 
+      // CRITICAL-001 FIX: Store quest completion in Redis BEFORE awarding reward to prevent multiple claims
+      const completionKey = key(`quest:completed:${wallet}:${questId}`);
+      const completionResult = await redis.set(completionKey, "1", { NX: true, EX: 86400 }); // Expire in 24 hours
+      if (!completionResult) {
+        return res.status(409).json({ ok: false, error: "Quest already completed" });
+      }
+
       // Move from active to completed
       player.quests.active = player.quests.active.filter(q => q !== questId);
       player.quests.completed.push(questId);

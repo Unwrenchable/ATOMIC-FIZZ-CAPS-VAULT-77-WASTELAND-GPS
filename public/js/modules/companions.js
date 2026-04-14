@@ -14,11 +14,53 @@
   if (!window.Game.modules) window.Game.modules = {};
 
   // ----------------------------------------------------------
-  // Constants
+  // Combat and Command System (BUG-212)
   // ----------------------------------------------------------
-  const API_BASE   = window.API_BASE || "https://api.atomicfizzcaps.xyz";
-  const LS_ROSTER  = "afc_companion_roster";   // { companionId: { trust, recruited, active } }
-  const LS_CATALOG = "afc_companion_catalog";  // cached full definitions
+  const COMBAT_COMMANDS = ['follow', 'wait', 'attack'];
+  
+  // Recruitable NPCs with combat stats
+  const RECRUITABLE_NPCS = [
+    {
+      id: 'dude',
+      name: 'The Dude',
+      dialogId: 'dialog_dude',
+      stats: { hp: 80, damage: 15, armor: 5 },
+      abilities: ['melee', 'intimidate'],
+      loyalty: 50,
+      recruitCondition: 'flag:met_dude',
+      description: 'A laid-back wanderer with surprising combat skills.'
+    },
+    {
+      id: 'rex',
+      name: 'Captain Rex',
+      dialogId: 'dialog_rex',
+      stats: { hp: 120, damage: 25, armor: 15 },
+      abilities: ['rifle', 'leadership'],
+      loyalty: 70,
+      recruitCondition: 'flag:met_rex',
+      description: 'A disciplined soldier with heavy weaponry expertise.'
+    },
+    {
+      id: 'mara',
+      name: 'Dr. Mara',
+      dialogId: 'dialog_mara',
+      stats: { hp: 60, damage: 10, armor: 3 },
+      abilities: ['energy', 'healing'],
+      loyalty: 60,
+      recruitCondition: 'flag:met_mara',
+      description: 'A mysterious healer with radiation-based powers.'
+    },
+    {
+      id: 'lucy',
+      name: 'Lucy',
+      dialogId: 'dialog_lucy',
+      stats: { hp: 90, damage: 20, armor: 8 },
+      abilities: ['melee', 'repair'],
+      loyalty: 65,
+      recruitCondition: 'flag:met_lucy',
+      description: 'A skilled mechanic and fighter.'
+    }
+  ];
 
   const TRUST_LABELS = {
     0: "Stranger", 1: "Acquaintance", 2: "Associate",
@@ -240,6 +282,163 @@
       if (def?.active_perk) buffs.push({ companionId: cid, name: def.name, perk: def.active_perk });
     }
     return buffs;
+  }
+
+  // ----------------------------------------------------------
+  // Combat System Functions (BUG-212)
+  // ----------------------------------------------------------
+  
+  // Check if NPC can be recruited for combat
+  function canRecruitCombat(npcId) {
+    const npc = RECRUITABLE_NPCS.find(n => n.id === npcId);
+    if (!npc) return false;
+
+    // Check if already recruited
+    const roster = getRoster();
+    if (roster[npcId]?.recruited) return false;
+
+    // Check recruitment condition (simplified - in real implementation check flags)
+    return window.GAME_STATE?.flags?.[npc.recruitCondition.replace('flag:', '')] || false;
+  }
+
+  // Recruit companion for combat
+  async function recruitCombatCompanion(npcId) {
+    if (!canRecruitCombat(npcId)) return null;
+
+    const npc = RECRUITABLE_NPCS.find(n => n.id === npcId);
+    if (!npc) return null;
+
+    try {
+      const data = await apiPost("/api/companions/recruit", { companionId: npcId });
+      if (data.ok) {
+        const roster = getRoster();
+        if (!roster[npcId]) roster[npcId] = {};
+        roster[npcId].recruited = true;
+        roster[npcId].combatStats = { ...npc.stats };
+        roster[npcId].abilities = [...npc.abilities];
+        roster[npcId].loyalty = npc.loyalty;
+        roster[npcId].inventory = [];
+        roster[npcId].command = 'follow';
+        roster[npcId].status = 'active';
+        setRoster(roster);
+        toast(`${npc.name} has joined you as a combat companion!`, "epic");
+        return data;
+      } else {
+        toast(data.error || "Recruitment failed.", "warn");
+      }
+    } catch { toast("Connection lost.", "error"); }
+    return null;
+  }
+
+  // Dismiss combat companion
+  async function dismissCombatCompanion(companionId) {
+    try {
+      const data = await apiPost("/api/companions/dismiss", { companionId });
+      if (data.ok) {
+        const roster = getRoster();
+        if (roster[companionId]) {
+          // Return inventory items to player
+          const companion = roster[companionId];
+          if (companion.inventory) {
+            // Note: In real implementation, would need to sync with player inventory
+            companion.inventory.forEach(item => {
+              // Add to player inventory logic here
+            });
+          }
+          roster[companionId].active = false;
+          roster[companionId].status = 'dismissed';
+        }
+        setRoster(roster);
+        toast("Combat companion dismissed.", "info");
+      } else {
+        toast(data.error || "Cannot dismiss.", "warn");
+      }
+    } catch { toast("Connection lost.", "error"); }
+  }
+
+  // Set companion command
+  function setCompanionCommand(companionId, command, target = null) {
+    if (!COMBAT_COMMANDS.includes(command)) return false;
+
+    const roster = getRoster();
+    if (roster[companionId]) {
+      roster[companionId].command = command;
+      roster[companionId].target = target;
+      setRoster(roster);
+      return true;
+    }
+    return false;
+  }
+
+  // Transfer item to companion
+  function giveItemToCompanion(companionId, itemId) {
+    const roster = getRoster();
+    if (!roster[companionId] || !roster[companionId].inventory) return false;
+
+    // In real implementation, would need to check player inventory and transfer
+    // For now, just add to companion inventory
+    roster[companionId].inventory.push({ id: itemId, name: `Item ${itemId}` });
+    setRoster(roster);
+    return true;
+  }
+
+  // Take item from companion
+  function takeItemFromCompanion(companionId, itemId) {
+    const roster = getRoster();
+    if (!roster[companionId] || !roster[companionId].inventory) return false;
+
+    const itemIndex = roster[companionId].inventory.findIndex(item => item.id === itemId);
+    if (itemIndex === -1) return false;
+
+    roster[companionId].inventory.splice(itemIndex, 1);
+    setRoster(roster);
+    // In real implementation, add to player inventory
+    return true;
+  }
+
+  // Update loyalty based on player actions
+  function updateLoyalty(companionId, change) {
+    const roster = getRoster();
+    if (roster[companionId]) {
+      roster[companionId].loyalty = Math.max(0, Math.min(100, (roster[companionId].loyalty || 50) + change));
+      setRoster(roster);
+
+      // If loyalty drops too low, companion may leave
+      if (roster[companionId].loyalty < 20 && Math.random() < 0.1) {
+        dismissCombatCompanion(companionId);
+        toast(`Your companion has left due to low loyalty!`, "error");
+      }
+    }
+  }
+
+  // Get active combat companions
+  function getActiveCombatCompanions() {
+    const roster = getRoster();
+    return Object.entries(roster)
+      .filter(([id, entry]) => entry.recruited && entry.status === 'active')
+      .map(([id, entry]) => ({ id, ...entry }));
+  }
+
+  // Process companion combat turns
+  function processCombatTurn() {
+    const companions = getActiveCombatCompanions();
+    companions.forEach(companion => {
+      if (companion.combatStats.hp <= 0) return;
+
+      // Simple AI: attack if following or attacking
+      if (companion.command === 'follow' || companion.command === 'attack') {
+        // Find target (simplified - attack first enemy)
+        if (Game.modules.battles?.state?.enemies?.length > 0) {
+          const target = Game.modules.battles.state.enemies[0];
+          const damage = companion.combatStats.damage;
+          target.hp -= damage;
+
+          if (Game.modules.battles?.addToLog) {
+            Game.modules.battles.addToLog(`${companion.name || companion.id} attacks ${target.name} for ${damage} damage!`);
+          }
+        }
+      }
+    });
   }
 
   // ----------------------------------------------------------

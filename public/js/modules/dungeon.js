@@ -1161,8 +1161,11 @@
         ? `<button class="dungeon-btn btn-fight" id="dungeon-fight-btn">⚔ ENGAGE ENEMIES</button>` : "";
       const lootBtn   = hasLoot && !hasEnemies
         ? `<button class="dungeon-btn btn-loot" id="dungeon-loot-btn">$ COLLECT LOOT</button>` : "";
-      const termBtn   = isTermRoom && !cleared
-        ? `<button class="dungeon-btn btn-terminal" id="dungeon-terminal-btn">T ACCESS TERMINAL</button>` : "";
+      const termBtn   = isTermRoom
+        ? (cleared
+            ? `<button class="dungeon-btn btn-terminal" id="dungeon-terminal-btn" disabled>✓ TERMINAL ACCESSED</button>`
+            : `<button class="dungeon-btn btn-terminal" id="dungeon-terminal-btn">T ACCESS TERMINAL</button>`)
+        : "";
       const examineBtn = `<button class="dungeon-btn btn-examine" id="dungeon-examine-btn">🔍 EXAMINE</button>`;
 
       actEl.innerHTML = `
@@ -1362,8 +1365,68 @@
     // --------------------------------------------------------
     _handleTerminalDoor(room, toRoomId) {
       const intel = this._getSPECIAL("I");
-      this._hackGame = new TerminalHackGame(intel);
-      this._showTerminalPanel(toRoomId);
+
+      if (toRoomId === null) {
+        // Terminal access in terminal room
+        this._handleTerminalAccess(room);
+      } else {
+        // Door hacking
+        this._hackGame = new TerminalHackGame(intel);
+        this._showTerminalPanel(toRoomId);
+      }
+    },
+
+    _handleTerminalAccess(room) {
+      if (!window.Game || !window.Game.modules || !window.Game.modules.hacking) {
+        this._log("Terminal access module not available.");
+        return;
+      }
+
+      const intel = this._getSPECIAL("I");
+      const hacking = window.Game.modules.hacking;
+
+      hacking.showHackingInterface(
+        () => this._onTerminalAccessSuccess(room),
+        () => this._onTerminalAccessFailure(room),
+        intel
+      );
+    },
+
+    _onTerminalAccessSuccess(room) {
+      // Mark terminal as accessed
+      room.hacked = true;
+      this._state.clearedRooms.add(room.id);
+
+      // Award some caps and XP for successful hacking
+      const reward = {
+        caps: cryptoRandInt(50) + 25, // 25-74 caps
+        xp: cryptoRandInt(20) + 10    // 10-29 XP
+      };
+
+      if (this.gs && this.gs.player) {
+        this.gs.player.caps = (this.gs.player.caps || 0) + reward.caps;
+        this.gs.player.xp = (this.gs.player.xp || 0) + reward.xp;
+      }
+
+      this._log(`💻 Terminal hacked! Gained ${reward.caps} caps and ${reward.xp} XP.`);
+      this._log("Terminal data accessed. Vault security protocols bypassed.");
+
+      // Update UI
+      this._showRoom(room.id);
+    },
+
+    _onTerminalAccessFailure(room) {
+      // Trigger alarm - damage player
+      const damage = cryptoRandInt(15) + 5; // 5-19 damage
+      if (this.gs && this.gs.player) {
+        this.gs.player.hp = Math.max(0, (this.gs.player.hp || 100) - damage);
+      }
+
+      this._log(`💻 Terminal lockout! Alarm triggered. Took ${damage} damage.`);
+
+      // Update UI
+      this._showRoom(room.id);
+      this._updateHUD();
     },
 
     _showTerminalPanel(toRoomId) {

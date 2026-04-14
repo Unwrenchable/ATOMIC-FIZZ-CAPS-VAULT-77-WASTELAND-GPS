@@ -40,6 +40,7 @@
     "fullSetBonus": {
       "ballisticResist": 22,
       "radResist": 5,
+      "damageResist": 5,
       "capsValue": 600
     }
   },
@@ -62,6 +63,7 @@
     "fullSetBonus": {
       "ballisticResist": 55,
       "radResist": 30,
+      "damageResist": 10,
       "capsValue": 2500
     }
   },

@@ -748,6 +748,12 @@
             this._saveFlags();
           }
 
+          // Special action: open merchant shop
+          if (resp.action === "open_shop") {
+            this._openMerchantShop(dialog);
+            return;
+          }
+
           if (resp.end) {
             this.closeDialog();
             return;
@@ -1087,6 +1093,31 @@
       // Final fallback — plain emoji
       container.innerHTML = '<span style="font-size:64px;">🧍</span>';
       this._currentNPCPortrait = null;
+    },
+
+    // ============================================================
+    // MERCHANT SHOP INTEGRATION
+    // ============================================================
+    _openMerchantShop(dialog) {
+      // Close the dialogue panel first
+      this.closeDialog();
+
+      // Get shop data from dialog
+      const shopData = dialog.shop || {
+        name: `${dialog.npc || dialog.title || "NPC"}'s Shop`,
+        inventory: [
+          { id: "stimpack", quantity: 5 },
+          { id: "radaway", quantity: 3 },
+          { id: "ammo_9mm", quantity: 20 }
+        ]
+      };
+
+      // Open merchant shop
+      if (Game.modules?.merchant) {
+        Game.modules.merchant.openShop(dialog.id || "unknown", shopData);
+      } else {
+        console.warn("[narrative] Merchant module not available");
+      }
     },
 
     closeDialog() {

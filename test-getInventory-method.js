@@ -72,5 +72,37 @@ assert.ok(Array.isArray(Game.player.inventory), 'Game.player.inventory is not an
 assert.strictEqual(Game.player.inventory.length, 2, 'Game.player.inventory has wrong length');
 console.error('✓ Game.player.inventory synced correctly');
 
-console.error('\n✅ ALL TESTS PASSED - getInventory() working correctly!\n');
+// Test 6: Test carry weight functions
+console.error('\nTest 6: Testing carry weight functions...');
+assert.ok(Game.modules.PlayerState.getTotalCarryWeight, 'getTotalCarryWeight method not found');
+assert.ok(Game.modules.PlayerState.getMaxCarryWeight, 'getMaxCarryWeight method not found');
+assert.ok(Game.modules.PlayerState.isOverEncumbered, 'isOverEncumbered method not found');
+
+const totalWeight = Game.modules.PlayerState.getTotalCarryWeight();
+const maxWeight = Game.modules.PlayerState.getMaxCarryWeight();
+const isOver = Game.modules.PlayerState.isOverEncumbered();
+
+console.error(`Total weight: ${totalWeight}, Max weight: ${maxWeight}, Over: ${isOver}`);
+assert.strictEqual(typeof totalWeight, 'number', 'getTotalCarryWeight should return number');
+assert.strictEqual(typeof maxWeight, 'number', 'getMaxCarryWeight should return number');
+assert.strictEqual(typeof isOver, 'boolean', 'isOverEncumbered should return boolean');
+console.error('✓ Weight functions exist and return correct types');
+
+// Test 7: Test weight calculation with items
+console.error('\nTest 7: Testing weight calculation...');
+Game.modules.PlayerState.addItem({ id: 'test_weapon', name: 'Test Weapon', type: 'weapon', weight: 5.0 }, 1);
+Game.modules.PlayerState.addItem({ id: 'test_ammo', name: 'Test Ammo', type: 'ammo', weight: 0.1 }, 10);
+
+const newTotalWeight = Game.modules.PlayerState.getTotalCarryWeight();
+console.error(`New total weight: ${newTotalWeight}`);
+assert(newTotalWeight > totalWeight, 'Weight should increase after adding items');
+// Test 8: Test weight limit enforcement
+console.error('\nTest 8: Testing weight limit enforcement...');
+const heavyItem = { id: 'heavy_weapon', name: 'Heavy Weapon', type: 'weapon', weight: 195.0 };
+const addResult = Game.modules.PlayerState.addItem(heavyItem, 1);
+console.error(`Adding heavy item result: ${addResult}`);
+assert.strictEqual(addResult, false, 'Should not allow adding item that exceeds weight limit');
+console.error('✓ Weight limit enforcement working');
+
+console.error('\n✅ ALL TESTS PASSED - Weight system working correctly!\n');
 console.error('Stay safe out there, Vault Dweller. ☢️\n');
