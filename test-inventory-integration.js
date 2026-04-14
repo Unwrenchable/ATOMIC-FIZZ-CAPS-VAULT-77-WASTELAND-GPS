@@ -62,7 +62,7 @@ const armor = {
   name: 'Combat Armor',
   type: 'armor',
   armor: 50,
-  slot: 'armor'
+  slot: 'chest'
 };
 
 const consumable = {
@@ -133,8 +133,8 @@ assert.ok(Game.equipItem(armorItem), 'Failed to equip armor');
 const state = Game.modules.PlayerState.getState();
 assert.ok(state.equipped.weapon, 'Weapon not equipped');
 assert.strictEqual(state.equipped.weapon.id, 'plasma_rifle', 'Wrong weapon equipped');
-assert.ok(state.equipped.armor, 'Armor not equipped');
-assert.strictEqual(state.equipped.armor.id, 'combat_armor', 'Wrong armor equipped');
+assert.ok(state.equipped.chest, 'Armor not equipped');
+assert.strictEqual(state.equipped.chest.id, 'combat_armor', 'Wrong armor equipped');
 
 console.error('✓ Items equip correctly');
 
@@ -143,9 +143,9 @@ console.error('\nTest 5: Testing equipped items persistence...');
 const savedState2 = JSON.parse(localStorage.getItem('afc_unified_player_state_v2'));
 assert.ok(savedState2.equipped, 'Equipped not in saved state');
 assert.ok(savedState2.equipped.weapon, 'Equipped weapon not saved');
-assert.ok(savedState2.equipped.armor, 'Equipped armor not saved');
+assert.ok(savedState2.equipped.chest, 'Equipped armor not saved');
 assert.strictEqual(savedState2.equipped.weapon.id, 'plasma_rifle', 'Wrong weapon in saved state');
-assert.strictEqual(savedState2.equipped.armor.id, 'combat_armor', 'Wrong armor in saved state');
+assert.strictEqual(savedState2.equipped.chest.id, 'combat_armor', 'Wrong armor in saved state');
 
 console.error('✓ Equipped items saved to localStorage');
 
@@ -163,8 +163,8 @@ require('./public/js/game/equip-actions.js');
 const reloadedState = Game.modules.PlayerState.getState();
 assert.ok(reloadedState.equipped.weapon, 'Equipped weapon lost after reload');
 assert.strictEqual(reloadedState.equipped.weapon.id, 'plasma_rifle', 'Wrong weapon after reload');
-assert.ok(reloadedState.equipped.armor, 'Equipped armor lost after reload');
-assert.strictEqual(reloadedState.equipped.armor.id, 'combat_armor', 'Wrong armor after reload');
+assert.ok(reloadedState.equipped.chest, 'Equipped armor lost after reload');
+assert.strictEqual(reloadedState.equipped.chest.id, 'combat_armor', 'Wrong armor after reload');
 
 console.error('✓ Equipped items survive reload');
 

@@ -344,6 +344,21 @@
   }
 
   /**
+   * Sync with legacy PLAYER object if it exists
+   */
+  function syncWithLegacyPlayer() {
+    if (window.PLAYER) {
+      // Sync basic properties
+      window.PLAYER.inventory = _state.inventory;
+      window.PLAYER.equipped = _state.equipped;
+      window.PLAYER.level = _state.level;
+      window.PLAYER.xp = _state.xp;
+      window.PLAYER.caps = _state.caps;
+      window.PLAYER.special = _state.special;
+    }
+  }
+
+  /**
    * Update survival stats periodically
    */
   function updateSurvival() {
@@ -1000,6 +1015,14 @@
     if (!_state || !_state.special) return 150;
     const strength = _state.special.S || 5;
     return 150 + (strength * 10);
+  }
+
+  /**
+   * Check if player is over encumbered
+   * @returns {boolean} True if carrying more than max weight
+   */
+  function isOverEncumbered() {
+    return getTotalCarryWeight() > getMaxCarryWeight();
   }
 
   /**
