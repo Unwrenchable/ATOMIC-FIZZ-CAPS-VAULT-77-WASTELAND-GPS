@@ -1,0 +1,58 @@
+{
+  "name": "afc-avatar-pack-raster-fallout-authentic",
+  "version": "1.0.0",
+  "description": "Realistic Fallout-style raster avatar pack for Atomic Fizz Caps Vault 77. Human-like wasteland survivors with authentic post-apocalyptic grit and meme charm.",
+  "theme": "Authentic Fallout wasteland survivor portraits - human-like with meme appeal",
+  "imageSize": "256x256",
+  "format": "png",
+  "totalAvatars": 100,
+  "avatars": [
+    {
+      "id": "avatar_001",
+      "file": "avatar_001.png",
+      "description": "Weathered male survivor, scars, stubble, vault suit remnants",
+      "tags": ["male", "scarred", "stubble", "vault_tec"]
+    },
+    {
+      "id": "avatar_002",
+      "file": "avatar_002.png",
+      "description": "Female wasteland trader, goggles, braided hair, leather armor",
+      "tags": ["female", "goggles", "braids", "trader"]
+    },
+    {
+      "id": "avatar_003",
+      "file": "avatar_003.png",
+      "description": "Young male scout, buzzcut, radiation burns, pre-war jacket",
+      "tags": ["male", "young", "buzzcut", "radiation"]
+    },
+    {
+      "id": "avatar_004",
+      "file": "avatar_004.png",
+      "description": "Mature female raider, mohawk, tattoos, power armor pieces",
+      "tags": ["female", "mature", "mohawk", "raider"]
+    },
+    {
+      "id": "avatar_005",
+      "file": "avatar_005.png",
+      "description": "Elderly male vault dweller, gray hair, glasses, lab coat",
+      "tags": ["male", "elderly", "glasses", "vault"]
+    }
+  ],
+  "accessories": {
+    "hats": [
+      "hat_fedora.png",
+      "hat_hardhat.png",
+      "hat_cowboy.png"
+    ],
+    "glasses": [
+      "glasses_round.png",
+      "glasses_aviator.png",
+      "glasses_broken.png"
+    ],
+    "scars": [
+      "scar_cheek.png",
+      "scar_forehead.png",
+      "scar_burn.png"
+    ]
+  }
+}
