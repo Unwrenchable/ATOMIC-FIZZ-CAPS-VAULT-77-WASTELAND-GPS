@@ -459,11 +459,11 @@
       const baseAvatar = this._selectRasterAvatar(app);
       
       // Build HTML with base image and overlays
-      let html = `<div class="raster-portrait" style="width:${size}px; height:${size}px; position:relative;">`;
+      let html = `<div class="raster-portrait" style="width:${size}px; height:${size}px; position:relative; display:flex; align-items:center; justify-content:center;">`;
       
       // Base avatar image
       html += `<img src="/assets/avatars-raster/${baseAvatar.file}" 
-                   style="width:100%; height:100%; object-fit:cover;" 
+                   style="width:100%; height:100%; object-fit:cover; border-radius:2px;" 
                    alt="Character Portrait">`;
       
       // Overlay accessories
