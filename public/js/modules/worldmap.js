@@ -469,7 +469,7 @@
 
       try {
         this.map = L.map(container, {
-          zoomControl: false,
+          zoomControl: false,        // added manually below with topright position
           attributionControl: false,
           worldCopyJump: false,
           preferCanvas: true, // Better performance
@@ -489,6 +489,9 @@
           inertiaDeceleration: 3000,
           inertiaMaxSpeed: 1500
         });
+        // Place zoom controls top-right so they don't overlap the map control
+        // buttons (bottom-left) or GPS badge (bottom-right)
+        L.control.zoom({ position: 'topright' }).addTo(this.map);
         console.log('[worldmap] Leaflet map object created successfully');
         // once the map exists we can watch the container; this will trigger
         // invalidateSize any time the panel resizes (orientation change,
@@ -502,6 +505,19 @@
             this.map.invalidateSize();
           }
         });
+        
+        // visualViewport fires when the mobile browser chrome (address bar,
+        // keyboard) shows/hides — the regular window resize does NOT always
+        // fire in this case.  Without this, Leaflet's touch-event bounding
+        // box goes stale so touches in the newly-visible area land in dead
+        // zones and gestures stop working.
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener('resize', () => {
+            if (this.map) {
+              this.map.invalidateSize();
+            }
+          });
+        }
         
         // Prevent touch events from propagating outside map container (mobile swipe fix)
         // This stops touch gestures from bubbling up to parent elements
@@ -845,6 +861,15 @@
       } else {
         console.warn('[worldmap] exploreToggleBtn element not found in DOM');
       }
+
+      const expandBtn = document.getElementById('expandMapBtn');
+      if (expandBtn) {
+        expandBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.toggleExpandMap();
+        });
+      }
     },
 
     updateMapStatus(text) {
@@ -859,6 +884,16 @@
     // --------------------------------------------------------
     enableAutoFollow() {
       if (!this.map) return;
+
+      // Auto-enter exploration mode the moment the user starts dragging.
+      // This eliminates the frustrating 5-second snap-back: once the player
+      // intentionally moves the map, we get out of their way immediately.
+      // `dragstart` only fires on user-initiated drags, not programmatic setView.
+      this.map.on('dragstart', () => {
+        if (!this.explorationMode) {
+          this.toggleExplorationMode();
+        }
+      });
 
       this.map.on("movestart", () => {
         this.autoFollowEnabled = false;
@@ -921,6 +956,28 @@
       }
       
       return this.explorationMode;
+    },
+
+    // Toggle expand-map mode — hides the Pip-Boy header and tabs to give the
+    // map more vertical space on small screens.  The pipboy-crt element receives
+    // the .map-expanded class; CSS handles the rest.
+    toggleExpandMap() {
+      const crt = document.querySelector('.pipboy-crt');
+      if (!crt) return;
+
+      const isExpanded = crt.classList.toggle('map-expanded');
+      const btn = document.getElementById('expandMapBtn');
+      const textEl = document.getElementById('expandText');
+      if (btn) btn.classList.toggle('expand-active', isExpanded);
+      if (textEl) {
+        textEl.textContent = isExpanded ? 'COLLAPSE MAP' : 'EXPAND MAP';
+      }
+
+      // Let Leaflet recalculate its canvas now that the container has grown
+      if (this.map) {
+        // Short delay lets the CSS transition complete before invalidating
+        setTimeout(() => this.map.invalidateSize(), 50);
+      }
     },
 
     // Manually center on player (useful when in exploration mode)

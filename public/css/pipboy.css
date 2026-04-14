@@ -280,10 +280,8 @@ body.pipboy-mode {
   pointer-events: auto !important;
 }
 
-#mapContainer .leaflet-tile {
-  /* Increased brightness from 0.55 to 0.85 for better visibility while maintaining Pocket-Boy aesthetic */
-  filter: brightness(0.85) contrast(1.2) saturate(0.6) hue-rotate(85deg);
-}
+/* Per-tile filter removed: consolidated into .leaflet-tile-pane in pipboy-map.css
+   to avoid double-filtering every tile on every frame (GPU compositing fix) */
 
 /* Grid */
 #mapContainer::before {
@@ -373,13 +371,16 @@ body.pipboy-mode {
 /* Map panel should not interfere with map touch events */
 #panel-map {
   overflow: hidden !important;
-  /* Allow touch to pass through to map - don't override Leaflet */
+  /* Prevent the browser from claiming pan/zoom gestures on the map panel;
+     Leaflet's own handlers take over from #mapContainer inward */
+  touch-action: none;
 }
 
 #panel-map .panel-body {
   overflow: hidden !important;
   /* Let Leaflet control touch behavior */
   overscroll-behavior: contain;
+  touch-action: none;
 }
 
 /* Prevent parent elements from capturing touch events */
@@ -396,7 +397,40 @@ body.pipboy-mode {
   pointer-events: none !important;
 }
 
-.leaflet-control-container { display: none; }
+/* Zoom control container — intentionally visible so the +/− buttons are reachable
+   on mobile when pinch-zoom is unreliable.  Styling lives in pipboy-map.css. */
+/* .leaflet-control-container { display: none; } <-- REMOVED: restores zoom controls */
+
+/* ========================================================
+   MAP EXPANDED MODE — hides header + tabs to maximise map
+   real estate on small screens (triggered by Expand button)
+   ======================================================== */
+.map-expanded .pipboy-header,
+.map-expanded .pipboy-tabs {
+  display: none !important;
+}
+
+/* When the panel expands, the map-controls area needs slightly more bottom
+   clearance so the buttons don't sit flush against the device edge */
+.map-expanded .map-controls {
+  bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px));
+}
+.map-expanded .gps-badge {
+  bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px));
+}
+
+/* Active state for the expand button */
+.map-control-btn.expand-active {
+  background: rgba(0, 100, 200, 0.3);
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+}
+.map-control-btn.expand-active:hover {
+  background: rgba(0, 212, 255, 0.25);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.7);
+}
 
 /* ============================================================
    WRIST UI BUTTONS - AFTERFALL THEMED
