@@ -1,12 +1,1 @@
-
-     .-'''''-.
-    /         \
-   |  O   O   |
-   |    ^     |
-   |  \___/  |
-    \_____/
-     |   |
-    /     \
-   |       |
-   |  [ ]  |
-    \_____/
+ASCII art not needed - using image generation
