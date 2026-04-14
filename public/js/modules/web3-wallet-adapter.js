@@ -219,6 +219,30 @@
     // Tracks provider objects that already have our event listeners attached.
     // WeakSet avoids mutating the third-party provider object and prevents memory leaks.
     _listenersAttached: new WeakSet(),
+    // Auth integration settings
+    authEnabled: false,
+    authInstance: null,
+
+    // Enable authentication integration with backend
+    enableAuth(apiBase = null) {
+      this.authEnabled = true;
+      if (!this.authInstance) {
+        // Try to use existing AuthClient class if available
+        if (window.AuthClient) {
+          this.authInstance = new window.AuthClient({ apiBase });
+        } else {
+          console.warn('[web3-wallet] AuthClient not available for auth integration');
+          this.authEnabled = false;
+        }
+      }
+      return this.authEnabled;
+    },
+
+    // Disable authentication integration
+    disableAuth() {
+      this.authEnabled = false;
+      this.authInstance = null;
+    },
 
     // Helper functions for wallet detection
     _isMetaMaskInstalled() {
@@ -562,6 +586,12 @@
       if (this.loaded) return;
       
       console.log("[web3-wallet] Initializing universal wallet adapter");
+      
+      // Enable auth integration if AuthClient is available
+      if (window.AuthClient) {
+        this.enableAuth(window.API_BASE);
+        console.log("[web3-wallet] Auth integration enabled");
+      }
       
       // Check for existing wallet connection
       await this.checkExistingConnection();
@@ -943,6 +973,45 @@
           this._showConnectToast(`⬡ New ${provider.name} created — ${this.getShortAddress()} — local wallet only`);
         } else {
           this._showConnectToast(`⬡ Connected: ${provider.name} — ${this.getShortAddress()}`);
+        }
+
+        // Perform backend authentication if enabled (only for Solana wallets for now)
+        if (this.authEnabled && this.authInstance && this.provider && 
+            (walletType === 'phantom' || walletType === 'solflare' || walletType === 'integrated')) {
+          try {
+            console.log('[web3-wallet] Performing backend authentication...');
+            // Create a wallet object that wraps the provider's signMessage method
+            const walletForAuth = {
+              publicKey: {
+                toBase58: () => this.walletAddress
+              },
+              signMessage: async (message, encoding) => {
+                // Handle different wallet types
+                if (walletType === 'integrated') {
+                  // Integrated wallet uses sign method
+                  if (this.provider.sign) {
+                    return await this.provider.sign(message);
+                  }
+                } else {
+                  // Solana wallets use signMessage
+                  if (this.provider.signMessage) {
+                    return await this.provider.signMessage(message, encoding);
+                  }
+                }
+                
+                throw new Error(`Provider for ${walletType} does not support message signing`);
+              }
+            };
+
+            await this.authInstance.login(walletForAuth);
+            console.log('[web3-wallet] Backend authentication successful');
+            this._showConnectToast(`⬡ Authenticated with Vault-77 — Session active`);
+          } catch (authError) {
+            console.error('[web3-wallet] Backend authentication failed:', authError);
+            // Don't disconnect the wallet, but show auth failure
+            this._showConnectToast(`Wallet connected but authentication failed: ${authError.message}`, true);
+            // Continue with wallet connection even if auth fails
+          }
         }
 
         this.dispatchConnectionEvent();

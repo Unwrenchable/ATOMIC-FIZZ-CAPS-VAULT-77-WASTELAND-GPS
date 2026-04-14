@@ -738,7 +738,7 @@
         
         if (Game.modules.CharacterCreator) {
           const appearance = this.playerAppearance || Game.modules.CharacterCreator.getAppearance();
-          playerSvg.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(appearance, 160);
+          playerSvg.innerHTML = await Game.modules.CharacterCreator.generatePortraitSVG(appearance, 160);
           playerName.textContent = appearance?.name || 'WANDERER';
         } else {
           // Fallback player portrait when CharacterCreator isn't loaded
@@ -798,7 +798,7 @@
           }
 
           if (npcAppearance && Game.modules.CharacterCreator) {
-            npcSvg.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(npcAppearance, 160);
+            npcSvg.innerHTML = await Game.modules.CharacterCreator.generatePortraitSVG(npcAppearance, 160);
           } else {
             // Final fallback - generate a simple SVG portrait
             npcSvg.innerHTML = this._generateFallbackPortraitSVG('npc', 160, this.currentNPC);
