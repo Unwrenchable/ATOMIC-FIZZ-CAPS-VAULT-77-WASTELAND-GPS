@@ -393,24 +393,6 @@
         });
         btnContainer.appendChild(continueBtn);
 
-        const newBtn = document.createElement("button");
-        newBtn.className = "ng-btn ng-danger";
-        newBtn.textContent = "⚠ NEW GAME (erase save)";
-        newBtn.addEventListener("click", function () {
-          if (confirm("Erase existing save and start fresh? This cannot be undone.")) {
-            // Clear AFC save keys
-            const toRemove = [];
-            for (let i = 0; i < localStorage.length; i++) {
-              const k = localStorage.key(i);
-              if (k && k.startsWith("afc")) toRemove.push(k);
-            }
-            toRemove.forEach(function (k) { localStorage.removeItem(k); });
-            overlay.remove();
-            resolve("new");
-          }
-        });
-        btnContainer.appendChild(newBtn);
-
         const saveInfo = document.createElement("div");
         saveInfo.className = "ng-save-info";
         saveInfo.textContent = "Your exploration data, caps, and items are saved locally on this device.";

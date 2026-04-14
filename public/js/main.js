@@ -1480,6 +1480,10 @@
         isNew ? '<br/><span style="color:#00ff41;font-size:11px;">+5 XP — New discovery logged</span>' : ""
       ].join("");
       mapLog.prepend(entry);
+      // Auto-remove after 5 seconds so the log doesn't accumulate and block the map
+      setTimeout(function () {
+        if (entry.parentNode === mapLog) mapLog.removeChild(entry);
+      }, 5000);
     }
 
     safeLog("[MapScan]", prefix, loc.name);
