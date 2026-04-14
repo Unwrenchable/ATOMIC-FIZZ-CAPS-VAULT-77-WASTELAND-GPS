@@ -80,12 +80,37 @@
           background: rgba(255, 200, 100, 0.12);
         }
 
-        /* Rain static */
+        /* Rain particles */
         .weather-rain {
           background-image: url('/img/weather/static.png');
           background-size: cover;
           opacity: 0.25;
           animation: rainFlicker 0.2s infinite;
+          position: relative;
+        }
+
+        .weather-rain::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: 
+            radial-gradient(2px 4px at 20px 30px, #00ff41, transparent),
+            radial-gradient(2px 4px at 40px 70px, #00ff41, transparent),
+            radial-gradient(2px 4px at 90px 40px, #00ff41, transparent),
+            radial-gradient(2px 4px at 130px 80px, #00ff41, transparent),
+            radial-gradient(2px 4px at 160px 30px, #00ff41, transparent);
+          background-repeat: repeat;
+          background-size: 200px 100px;
+          animation: rainFall 0.5s linear infinite;
+          opacity: 0.6;
+        }
+
+        @keyframes rainFall {
+          0% { transform: translateY(-100px); }
+          100% { transform: translateY(100vh); }
         }
 
         @keyframes rainFlicker {
@@ -141,6 +166,13 @@
         if (!this.overlayEl) return;
 
         this.applyWeather(weather.type);
+
+        // Update STAT panel weather display
+        const statWeatherEl = document.getElementById("stat-weather");
+        if (statWeatherEl) {
+          const displayType = weather.type.charAt(0).toUpperCase() + weather.type.slice(1);
+          statWeatherEl.textContent = displayType;
+        }
       } catch (e) {
         // Log once to avoid spamming console during map interactions
         if (!this._warnedWeatherError) {
@@ -159,6 +191,7 @@
       el.className = ""; // reset
 
       switch (type) {
+        case "radiation storm":
         case "radstorm":
           el.classList.add("weather-radstorm");
           el.style.opacity = 1;
@@ -169,13 +202,13 @@
           el.style.opacity = 1;
           break;
 
-        case "dust":
-          el.classList.add("weather-dust");
+        case "rain":
+          el.classList.add("weather-rain");
           el.style.opacity = 1;
           break;
 
-        case "rain":
-          el.classList.add("weather-rain");
+        case "dust":
+          el.classList.add("weather-dust");
           el.style.opacity = 1;
           break;
 
@@ -184,6 +217,7 @@
           el.style.opacity = 1;
           break;
 
+        case "clear":
         default:
           el.style.opacity = 0;
       }

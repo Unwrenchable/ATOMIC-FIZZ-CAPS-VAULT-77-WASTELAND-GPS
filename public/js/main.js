@@ -1298,7 +1298,32 @@
 
   function updateWeatherDisplay() {
     const el = document.getElementById("stat-weather");
-    if (el) el.textContent = _currentWeather;
+    if (!el) return;
+
+    try {
+      const worldmap = Game.modules?.worldmap;
+      if (worldmap && worldmap.gs) {
+        const pos = worldmap.gs?.player?.position;
+        if (pos && Game.modules?.world?.weather?.at) {
+          const state = worldmap.gs.worldState || worldmap.gs;
+          const weather = Game.modules.world.weather.at(state, {
+            biome: "auto",
+            continent: "north_america",
+            lat: pos.lat,
+            lng: pos.lng
+          });
+          const weatherType = weather?.type || "clear";
+          // Capitalize first letter for display
+          el.textContent = weatherType.charAt(0).toUpperCase() + weatherType.slice(1);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("[Weather] Failed to get weather for display:", e.message);
+    }
+
+    // Fallback to old system
+    el.textContent = _currentWeather;
   }
 
   function weatherTick() {

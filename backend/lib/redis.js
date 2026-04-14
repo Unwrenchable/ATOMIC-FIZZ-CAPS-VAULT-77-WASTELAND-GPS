@@ -531,10 +531,42 @@ async function quit() {
   if (c && typeof c.quit === "function") return c.quit();
   return Promise.resolve();
 }
-async function ping() {
-  const c = await ensureClient();
-  if (c && typeof c.ping === "function") return c.ping();
-  return Promise.resolve("PONG");
+async function multi() {
+  try {
+    const c = await ensureClient();
+    if (c.isFallback) {
+      // For fallback, return a mock multi object that collects commands
+      return {
+        commands: [],
+        exec: async () => {
+          // Simple simulation: execute commands in order, but not truly atomic
+          const results = [];
+          for (const cmd of this.commands) {
+            try {
+              const result = await c[cmd.method](...cmd.args);
+              results.push(result);
+            } catch (err) {
+              results.push(err);
+            }
+          }
+          return results;
+        },
+        ...Object.fromEntries(
+          ['get', 'set', 'del', 'incr', 'decr', 'expire', 'smembers', 'sadd', 'srem', 'hget', 'hset'].map(method => [
+            method,
+            (...args) => {
+              this.commands.push({ method, args: args.map(arg => typeof arg === 'string' && arg.startsWith(PREFIX) ? arg.slice(PREFIX.length) : arg) });
+              return this;
+            }
+          ])
+        )
+      };
+    } else {
+      return c.multi();
+    }
+  } catch (err) {
+    handleRedisError(err, 'multi');
+  }
 }
 
 // Export the API expected by the codebase
@@ -561,6 +593,7 @@ module.exports = {
   on,
   quit,
   ping,
+  multi,
   // helpers
   key,
   getJSON,

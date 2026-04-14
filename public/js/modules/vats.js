@@ -20,7 +20,7 @@
     { id: 'right_leg', name: 'Right Leg', hitChance: 0.60, damageMultiplier: 0.7, apCost: 20 }
   ];
 
-  function calculateHitChance(bodyPart, distance, playerPerception, weaponAccuracy) {
+  function calculateHitChance(bodyPart, distance, playerPerception, weaponAccuracy, isSneaking = false) {
     let baseChance = bodyPart.hitChance;
     
     // Distance modifier
@@ -35,6 +35,11 @@
     // Weapon accuracy (default to 1.0 if not provided)
     const accuracy = typeof weaponAccuracy === 'number' ? weaponAccuracy : 1.0;
     baseChance *= accuracy;
+    
+    // Sneak bonus: +20% accuracy when sneaking
+    if (isSneaking) {
+      baseChance *= 1.2;
+    }
     
     return Math.min(0.95, Math.max(0.05, baseChance));
   }
@@ -93,7 +98,8 @@
       bodyPart,
       enemy.distance || 10,
       window.PLAYER?.special?.P || 5,
-      1.0
+      1.0,
+      window.Game?.modules?.battle?.state?.playerSneaking || false
     );
 
     VATS.queuedShots.push({
@@ -262,7 +268,8 @@
           part, 
           enemy.distance || 10, 
           (window.PLAYER && window.PLAYER.special && window.PLAYER.special.P) || 5, 
-          1.0
+          1.0,
+          window.Game?.modules?.battle?.state?.playerSneaking || false
         );
         
         const button = document.createElement('button');

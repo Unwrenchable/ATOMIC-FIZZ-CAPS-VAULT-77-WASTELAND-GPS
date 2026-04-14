@@ -462,9 +462,10 @@
       }
     },
 
-    // Get time-of-day appropriate greetings
+    // Get time-of-day appropriate greetings (using game time)
     _getTimeBasedGreetings() {
-      const hour = new Date().getHours();
+      const gameTime = this._getCurrentGameTime();
+      const hour = gameTime.currentHour;
       
       if (hour >= 5 && hour < 12) {
         return [
@@ -495,6 +496,27 @@
           "Night patrols are active."
         ];
       }
+    },
+
+    // Get current game time from world state
+    _getCurrentGameTime() {
+      try {
+        const worldmap = Game.modules.worldmap;
+        if (worldmap && worldmap.gs) {
+          const worldState = worldmap.gs.worldState || worldmap.gs;
+          if (Game.modules.world.weather) {
+            return Game.modules.world.weather.getCurrentTime(worldState);
+          }
+        }
+      } catch (e) {
+        console.warn("[NPC Encounter] Failed to get game time:", e.message);
+      }
+      // Fallback to real time if game time unavailable
+      const now = new Date();
+      return {
+        currentHour: now.getHours(),
+        isNight: now.getHours() < 6 || now.getHours() >= 18
+      };
     },
 
     _getHostileComment() {

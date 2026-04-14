@@ -1,12 +1,14 @@
 // worldWeather.js
 // ------------------------------------------------------------
-// Atomic Fizz Caps – Real-Time Weather + Radiation Storms
+// Atomic Fizz Caps – Real-Time Weather + Radiation Storms + Time System
 // ------------------------------------------------------------
 // Responsibilities:
 //   - Global weather state
 //   - Biome-specific weather patterns
 //   - Radiation storms that sweep across regions
 //   - Weather effects that modify encounters
+//   - Game time system: 24 minutes real time = 24 hours game day
+//   - Day/night cycle affecting gameplay
 //   - Simple update loop for your game tick
 // ------------------------------------------------------------
 
@@ -20,35 +22,44 @@
   // Weather types
   const GLOBAL_WEATHER = [
     "clear",
-    "fog",
-    "storm",
-    "radstorm",
-    "dust",
     "rain",
-    "gamma_lightning"
+    "fog",
+    "radiation storm"
   ];
 
   // Biome-local weather
   const BIOME_WEATHER = {
-    desert: ["clear", "clear", "dust", "dust"],
-    jungle: ["rain", "rain", "storm"],
-    temperate_forest: ["clear", "rain", "storm"],
-    tundra: ["clear", "fog", "storm"],
-    arctic: ["fog", "fog", "storm"],
-    mountain: ["clear", "fog", "storm"],
-    crater: ["radstorm", "radstorm", "radstorm"],
+    desert: ["clear", "clear", "rain", "rain"],
+    jungle: ["rain", "rain", "fog"],
+    temperate_forest: ["clear", "rain", "fog"],
+    tundra: ["clear", "fog", "radiation storm"],
+    arctic: ["fog", "fog", "radiation storm"],
+    mountain: ["clear", "fog", "radiation storm"],
+    crater: ["radiation storm", "radiation storm", "radiation storm"],
     industrial_zone: ["fog", "fog", "rain"],
-    urban_ruins: ["clear", "fog", "storm"],
-    oceanic: ["clear", "rain", "storm"]
+    urban_ruins: ["clear", "fog", "radiation storm"],
+    oceanic: ["clear", "rain", "fog"]
   };
 
-  // Initialize weather state
+  // Time system constants
+  const REAL_MINUTES_PER_GAME_DAY = 24; // 24 minutes real time = 24 hours game time
+  const GAME_HOURS_PER_REAL_MINUTE = 1; // 1 real minute = 1 game hour
+  const GAME_MINUTES_PER_REAL_SECOND = 1; // 1 real second = 1 game minute (for smooth updates)
+
+  // Initialize weather and time state
   function ensureWeather(worldState) {
     if (!worldState.weather) {
       worldState.weather = {
         global: "clear",
         biomeOverrides: {},
         radStormFront: null, // sweeping storm
+        lastUpdate: Date.now()
+      };
+    }
+    if (!worldState.time) {
+      worldState.time = {
+        gameStartTime: Date.now(), // real time when game started
+        totalGameHours: 0, // total hours elapsed in game time
         lastUpdate: Date.now()
       };
     }
@@ -101,6 +112,64 @@
     return weather;
   }
 
+  // Update game time
+  function updateGameTime(worldState) {
+    if (!worldState.time) {
+      worldState.time = {
+        gameStartTime: Date.now(),
+        totalGameHours: 0,
+        lastUpdate: Date.now()
+      };
+    }
+
+    const now = Date.now();
+    const timeSinceLastUpdate = (now - worldState.time.lastUpdate) / 1000; // seconds
+
+    // 1 real second = 1 game minute
+    // 60 real seconds = 60 game minutes = 1 game hour
+    const gameHoursToAdd = timeSinceLastUpdate / 60;
+
+    worldState.time.totalGameHours += gameHoursToAdd;
+    worldState.time.lastUpdate = now;
+
+    return worldState.time;
+  }
+
+  // Get current game time info
+  function getCurrentGameTime(worldState) {
+    if (!worldState.time) updateGameTime(worldState);
+
+    const totalHours = worldState.time.totalGameHours;
+    const currentHour = totalHours % 24; // 0-23
+    const currentMinute = (currentHour % 1) * 60; // fractional hour to minutes
+    const isDay = currentHour >= 6 && currentHour < 18; // 6 AM to 6 PM
+    const isNight = !isDay;
+
+    return {
+      totalHours,
+      currentHour: Math.floor(currentHour),
+      currentMinute: Math.floor(currentMinute),
+      isDay,
+      isNight,
+      timeString: formatGameTime(currentHour, currentMinute)
+    };
+  }
+
+  // Format time as HH:MM
+  function formatGameTime(hour, minute) {
+    const h = Math.floor(hour).toString().padStart(2, '0');
+    const m = Math.floor(minute).toString().padStart(2, '0');
+    return `${h}:${m}`;
+  }
+
+  // Advance time for fast travel (hours to add)
+  function advanceGameTime(worldState, hours) {
+    if (!worldState.time) updateGameTime(worldState);
+    worldState.time.totalGameHours += hours;
+    worldState.time.lastUpdate = Date.now();
+    return worldState.time;
+  }
+
   // Biome weather roll
   function getBiomeWeather(biome) {
     // Handle "auto" by defaulting to temperate_forest
@@ -122,7 +191,7 @@
       weather.radStormFront.continent === location.continent
     ) {
       return {
-        type: "radstorm",
+        type: "radiation storm",
         intensity: weather.radStormFront.intensity
       };
     }
@@ -131,8 +200,8 @@
     const biomeWeather = getBiomeWeather(location.biome);
 
     // If global weather is extreme, override
-    if (weather.global === "radstorm") {
-      return { type: "radstorm", intensity: 1 };
+    if (weather.global === "radiation storm") {
+      return { type: "radiation storm", intensity: 1 };
     }
     if (weather.global === "storm") {
       return { type: "storm" };
@@ -172,6 +241,7 @@
     
     updateIntervalId = setInterval(() => {
       updateGlobalWeather(worldState);
+      updateGameTime(worldState);
     }, intervalMs);
     
     console.log(`[worldWeather] Auto-update started (every ${intervalMs}ms)`);
@@ -200,6 +270,19 @@
 
     ensureWeather,
     
+    // Time system methods
+    updateTime(worldState) {
+      return updateGameTime(worldState);
+    },
+
+    getCurrentTime(worldState) {
+      return getCurrentGameTime(worldState);
+    },
+
+    advanceTime(worldState, hours) {
+      return advanceGameTime(worldState, hours);
+    },
+
     // Start automatic weather updates (prevents duplicate intervals)
     startAutoUpdate(worldState, intervalMs) {
       startUpdateLoop(worldState, intervalMs);
@@ -222,13 +305,13 @@
       if (worldmap && worldmap.gs) {
         const worldState = worldmap.gs.worldState || worldmap.gs;
         
-        // Initialize weather
+        // Initialize weather and time
         ensureWeather(worldState);
         
         // Start automatic updates (matches weatherOverlay interval)
         startUpdateLoop(worldState, WEATHER_UPDATE_INTERVAL_MS);
         
-        console.log("[worldWeather] Weather engine initialized and auto-update started");
+        console.log("[worldWeather] Weather and time engine initialized and auto-update started");
       }
     } catch (e) {
       console.warn("[worldWeather] Failed to initialize:", e.message);

@@ -80,7 +80,8 @@
           elite,
           eliteTier,
           mutated,
-          mutationType
+          mutationType,
+          awareness: 'unaware' // 'unaware', 'alerted', 'detected' - for stealth mechanics
         });
       }
 

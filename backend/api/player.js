@@ -147,9 +147,17 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
       level: 1,
       xp: 0,
       caps: 0,
+      karma: 0,
       claimed: [],
       quests: {},
       unlockedTerminal: false,
+      battleWins: 0,
+      survival: {
+        radiation: 0,
+        hunger: 100,
+        thirst: 100,
+        lastUpdated: Date.now()
+      }
     };
 
     await saveProfile(wallet, profile);
