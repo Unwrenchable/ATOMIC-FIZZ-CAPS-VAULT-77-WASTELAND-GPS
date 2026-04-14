@@ -17,16 +17,19 @@
   filter: contrast(1.05) brightness(1.0);
 }
 
-/* Leaflet tile layer - green/amber tint for Fallout feel */
-/* Brightness increased from 0.85 to 1.0 for better visibility */
+/* Leaflet tile layer — single-pass filter for GPU compositing (green/amber Pip-Boy tint).
+   Previously a second filter was applied per-tile in pipboy.css causing double-rendering.
+   will-change:transform promotes the pane to its own compositor layer so pinch-zoom
+   is handled on the GPU without triggering software re-rasterisation each frame. */
 .leaflet-tile-pane {
-  filter: 
-    sepia(0.25) 
-    hue-rotate(60deg) 
-    saturate(0.85) 
-    contrast(1.1)
-    brightness(1.0);
+  filter:
+    sepia(0.2)
+    hue-rotate(90deg)
+    saturate(0.55)
+    contrast(1.2)
+    brightness(0.9);
   opacity: 0.95;
+  will-change: transform;
 }
 
 /* POI Markers - Fallout style with contained glow (no bleed) */
@@ -506,4 +509,29 @@
 .map-control-btn.exploration-active .explore-dot {
   background: #00d4ff;
   box-shadow: 0 0 6px rgba(0, 212, 255, 0.8);
+}
+
+/* ============================================================================
+   LEAFLET ZOOM CONTROLS — Pip-Boy styled, touch-friendly
+   Base styles already in .leaflet-control-zoom a above.
+   These rules ensure the +/− buttons meet 48 px minimum tap target on touch
+   devices (Apple HIG / Material Design recommendation).
+   ============================================================================ */
+
+/* Touch devices: boost to 48 px minimum to hit the target comfortably */
+@media (hover: none) and (pointer: coarse) {
+  .leaflet-control-zoom a {
+    width: 48px !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    font-size: 24px !important;
+    min-height: 48px;
+  }
+}
+
+/* Position the zoom control (top-right) so it doesn't overlap the explore/expand
+   buttons (bottom-left) or the GPS badge (bottom-right) */
+.leaflet-top.leaflet-right {
+  top: 10px;
+  right: 10px;
 }
