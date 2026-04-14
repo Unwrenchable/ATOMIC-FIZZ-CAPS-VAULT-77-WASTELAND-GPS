@@ -147,6 +147,7 @@
 
                 <div class="pipboy-meta">
                   <span class="pipboy-meta-item" id="networkStatusLabel">STATUS: ONLINE</span>
+                  <span class="pipboy-meta-item" id="gameClock">00:00</span>
                 </div>
 
                 <!-- OFFLINE banner (hidden when online) -->
@@ -172,6 +173,7 @@
 
                 <button class="pipboy-tab" data-pipboy-tab="panel-radio">RADIO</button>
                 <button class="pipboy-tab" data-pipboy-tab="panel-exchange">EXCHANGE</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-companions">COMPANIONS</button>
               </div>
 
 
@@ -259,6 +261,22 @@
                     </div>
                     <div class="stat-bar stat-bar-rad">
                       <div class="stat-bar-fill" id="stat-rad-bar"></div>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">HUNGER</span>
+                      <span class="value" id="stat-hunger-label">100%</span>
+                    </div>
+                    <div class="stat-bar stat-bar-hunger">
+                      <div class="stat-bar-fill" id="stat-hunger-bar"></div>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">THIRST</span>
+                      <span class="value" id="stat-thirst-label">100%</span>
+                    </div>
+                    <div class="stat-bar stat-bar-thirst">
+                      <div class="stat-bar-fill" id="stat-thirst-bar"></div>
                     </div>
 
                     <div class="panel-divider"></div>
@@ -446,6 +464,14 @@
                   </div>
                 </div>
 
+                <!-- COMPANIONS PANEL -->
+                <div id="panel-companions" class="pipboy-panel">
+                  <div class="panel-header">🤝 COMPANIONS</div>
+                  <div class="panel-body">
+                    <div id="companions-content"></div>
+                  </div>
+                </div>
+
               </div>
 
               <!-- FOOTER -->
@@ -550,6 +576,7 @@
     <script src="/js/modules/character-creator.js" defer></script>
     <!-- DEAD CODE: fo4-dialogue.js superseded by narrative.js (see dead-code note above) -->
     <script src="/js/modules/struggle-quips.js" defer></script>
+    <script src="/js/modules/hacking.js" defer></script>
     <script src="/js/modules/dungeon.js" defer></script>
 
     <!-- POCKET-BOY UI SHELL (non-module) -->
@@ -950,6 +977,86 @@
         } catch (_) {}
       });
     </script>
+
+    <!-- LOCKPICKING OVERLAY -->
+    <div id="lockpickingOverlay" class="lockpicking-overlay hidden">
+      <div class="lockpicking-content">
+        <div class="lockpicking-header">
+          <div class="lockpicking-title">LOCKPICKING</div>
+          <div class="lockpicking-difficulty" id="lockDifficulty">EASY LOCK</div>
+        </div>
+        
+        <div class="lockpicking-game">
+          <div class="lock-cylinder">
+            <div class="cylinder-body">
+              <div class="cylinder-pins" id="cylinderPins">
+                <!-- Pins will be generated here -->
+              </div>
+              <div class="cylinder-core" id="cylinderCore"></div>
+            </div>
+          </div>
+          
+          <div class="lockpicking-controls">
+            <div class="tension-meter">
+              <div class="tension-label">TENSION</div>
+              <div class="tension-bar">
+                <div class="tension-fill" id="tensionFill"></div>
+              </div>
+              <div class="tension-value" id="tensionValue">0/100</div>
+            </div>
+            
+            <div class="pick-angle-control">
+              <div class="angle-label">PICK ANGLE</div>
+              <input type="range" id="pickAngleSlider" min="0" max="360" value="0" step="1">
+              <div class="angle-display" id="angleDisplay">0°</div>
+            </div>
+            
+            <div class="pick-button">
+              <button id="attemptPickBtn" class="pipboy-button">INSERT PICK</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lockpicking-info">
+          <div class="info-row">
+            <span>BOBBY PINS:</span>
+            <span id="bobbyPinCount">0</span>
+          </div>
+          <div class="info-row">
+            <span>SCREWDRIVERS:</span>
+            <span id="screwdriverCount">0</span>
+          </div>
+          <div class="info-row">
+            <span>DIFFICULTY:</span>
+            <span id="difficultyText">EASY</span>
+          </div>
+        </div>
+        
+        <div class="lockpicking-result" id="lockpickingResult"></div>
+        
+        <div class="lockpicking-actions">
+          <button id="cancelLockpickingBtn" class="pipboy-button-small">CANCEL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEATH OVERLAY -->
+    <div id="deathOverlay" class="death-overlay hidden">
+      <div class="death-content">
+        <div class="death-message">YOU DIED</div>
+        <div class="death-details">
+          Respawn penalty: 30% HP restored, 10% caps lost
+        </div>
+        <button id="respawnBtn" class="pipboy-button">RESPAWN</button>
+      </div>
+    </div>
+
+    <!-- MERCHANT SHOP OVERLAY -->
+    <div id="merchantOverlay" class="merchant-overlay hidden">
+      <div class="merchant-content">
+        <!-- Content will be populated by merchant.js -->
+      </div>
+    </div>
 
   </body>
 </html>

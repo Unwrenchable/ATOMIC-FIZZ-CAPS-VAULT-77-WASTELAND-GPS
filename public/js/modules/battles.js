@@ -25,6 +25,18 @@
         this.gs.player.hp = 100;
         this.gs.player.maxHp = 100;
       }
+      // Set up death overlay respawn button
+      const respawnBtn = document.getElementById('respawnBtn');
+      if (respawnBtn) {
+        respawnBtn.addEventListener('click', () => {
+          this._applyRespawnPenalty();
+          this._hideDeathOverlay();
+          this.state = null;
+          this.updateUI();
+          window.Game?.pipboy?.setActivePanel?.('map');
+          window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
+        });
+      }
     },
 
     // --------------------------------------------------------
@@ -38,8 +50,95 @@
     },
 
     // --------------------------------------------------------
-    // Spend ammo from gameState inventory (no separate inventory module)
+    // Death overlay management
     // --------------------------------------------------------
+    _showDeathOverlay() {
+      const overlay = document.getElementById('deathOverlay');
+      if (overlay) {
+        overlay.classList.remove('hidden');
+      }
+    },
+
+    _hideDeathOverlay() {
+      const overlay = document.getElementById('deathOverlay');
+      if (overlay) {
+        overlay.classList.add('hidden');
+      }
+    },
+
+    // --------------------------------------------------------
+    // Stealth mechanics
+    // --------------------------------------------------------
+    toggleSneak() {
+      if (!this.state) return;
+      this.state.playerSneaking = !this.state.playerSneaking;
+      this.updateUI();
+      console.log(`[Battle] Sneak ${this.state.playerSneaking ? 'enabled' : 'disabled'}`);
+    },
+
+    // Calculate detection chance for current enemy
+    _calculateDetectionChance() {
+      if (!this.state) return 0;
+      
+      const idx = this.state.activeEnemyIndex ?? 0;
+      const awareness = this.state.enemyAwareness[idx];
+      const special = this._getSpecial();
+      
+      // Base detection chance
+      let chance = 0.20; // 20%
+      
+      // Distance factor (assume medium range for now, can be enhanced with actual distance)
+      const distanceFactor = 0.15; // +15% for medium range
+      chance += distanceFactor;
+      
+      // Awareness state modifier
+      if (awareness === 'alerted') chance += 0.30; // +30% when alerted
+      if (awareness === 'detected') chance += 0.50; // +50% when already detected
+      
+      // Weather modifiers
+      const weather = this._getCurrentWeather();
+      if (weather === 'fog') {
+        chance += 0.25; // Fog increases detection chance by 25%
+      } else if (weather === 'rain') {
+        chance += 0.10; // Rain slightly increases detection chance by 10%
+      }
+      
+      // Agility reduction
+      const agiBonus = Math.max(0, (special.A - 5) * 0.02); // -2% per Agility above 5
+      chance = Math.max(0.05, chance - agiBonus); // Minimum 5%
+      
+      return chance;
+    },
+
+    // Roll for detection
+    _rollDetection() {
+      if (!this.state || !this.state.playerSneaking) return false;
+      
+      const chance = this._calculateDetectionChance();
+      const roll = crypto.getRandomValues(new Uint32Array(1))[0] / 0xFFFFFFFF;
+      
+      this.state.lastDetectionRoll = roll;
+      const detected = roll < chance;
+      
+      if (detected) {
+        const idx = this.state.activeEnemyIndex ?? 0;
+        this.state.enemyAwareness[idx] = 'detected';
+        console.log(`[Battle] Detected! Roll: ${(roll * 100).toFixed(1)}% vs ${(chance * 100).toFixed(1)}%`);
+      }
+      
+      return detected;
+    },
+
+    // Alert nearby enemies when detected
+    _alertNearbyEnemies() {
+      if (!this.state) return;
+      
+      const activeIdx = this.state.activeEnemyIndex ?? 0;
+      // Alert all enemies when one detects the player
+      this.state.enemyAwareness = this.state.enemyAwareness.map((_, idx) => 
+        idx === activeIdx ? 'detected' : 'alerted'
+      );
+    },
     _spendAmmo(ammoType, amount) {
       const inv = this.gs && this.gs.inventory;
       if (!inv || !Array.isArray(inv.ammo)) return false;
@@ -90,7 +189,11 @@
         // so multi-enemy encounters don't silently ignore enemies after the first.
         enemyHp: encounter.enemies.map(e => (typeof e.hp === 'number' ? e.hp : 20)),
         // BUG-004: track which enemy is currently being targeted
-        activeEnemyIndex: 0
+        activeEnemyIndex: 0,
+        // Stealth mechanics
+        playerSneaking: false,
+        enemyAwareness: encounter.enemies.map(() => 'unaware'), // 'unaware', 'alerted', 'detected'
+        lastDetectionRoll: 0
       };
 
       console.log("Battle started:", encounter);
@@ -114,6 +217,120 @@
     },
 
     // --------------------------------------------------------
+    // Get active perks from PlayerState
+    // --------------------------------------------------------
+    _getActivePerks() {
+      if (Game.modules?.PlayerState?.getPerks) {
+        return Game.modules.PlayerState.getPerks();
+      }
+      return [];
+    },
+
+    // --------------------------------------------------------
+    // Get current weather for battle modifiers
+    // --------------------------------------------------------
+    _getCurrentWeather() {
+      try {
+        const worldmap = Game.modules?.worldmap;
+        if (worldmap && worldmap.gs) {
+          const pos = worldmap.gs?.player?.position;
+          if (pos && Game.modules?.world?.weather?.at) {
+            const state = worldmap.gs.worldState || worldmap.gs;
+            const weather = Game.modules.world.weather.at(state, {
+              biome: "auto",
+              continent: "north_america",
+              lat: pos.lat,
+              lng: pos.lng
+            });
+            return weather?.type || "clear";
+          }
+        }
+      } catch (e) {
+        console.warn("[Battle] Failed to get weather:", e.message);
+      }
+      return "clear";
+    },
+
+    // --------------------------------------------------------
+    // Apply perk damage bonuses
+    // --------------------------------------------------------
+    _applyPerkDamageBonuses(baseDamage, weapon, activePerks) {
+      let damage = baseDamage;
+
+      // Iron Fist: +20% unarmed damage
+      if (activePerks.includes('iron_fist') && (!weapon || weapon.category === 'unarmed')) {
+        damage *= 1.2;
+      }
+
+      // Big Leagues: +20% melee damage
+      if (activePerks.includes('big_leagues') && weapon && weapon.category === 'melee') {
+        damage *= 1.2;
+      }
+
+      // Gunslinger: +20% pistol damage
+      if (activePerks.includes('gunslinger') && weapon && weapon.category === 'pistol') {
+        damage *= 1.2;
+      }
+
+      // Rifleman: +20% rifle damage
+      if (activePerks.includes('rifleman') && weapon && weapon.category === 'rifle') {
+        damage *= 1.2;
+      }
+
+      // Heavy Gunner: +20% heavy gun damage
+      if (activePerks.includes('heavy_gunner') && weapon && weapon.category === 'heavy') {
+        damage *= 1.2;
+      }
+
+      // Commando: +20% automatic weapon damage
+      if (activePerks.includes('commando') && weapon && weapon.category === 'automatic') {
+        damage *= 1.2;
+      }
+
+      // Bloody Mess: +5% damage with all attacks
+      if (activePerks.includes('bloody_mess')) {
+        damage *= 1.05;
+      }
+
+      return Math.floor(damage);
+    },
+
+    // --------------------------------------------------------
+    // Apply perk damage resistance
+    // --------------------------------------------------------
+    async _applyPerkDamageResistance(damage, activePerks) {
+      let dmg = damage;
+
+      // Toughness: +10 Damage Resistance
+      if (activePerks.includes('toughness')) {
+        dmg = Math.max(1, dmg - 10);
+      }
+
+      // Armor set bonuses
+      if (Game.modules?.PlayerState?.getActiveSetBonuses) {
+        try {
+          const setBonuses = await Game.modules.PlayerState.getActiveSetBonuses();
+          if (setBonuses.damageResist) {
+            dmg = Math.max(1, dmg - setBonuses.damageResist);
+          }
+        } catch (e) {
+          console.warn('[Battles] Error getting set bonuses:', e);
+        }
+      }
+
+      return dmg;
+    },
+
+    // --------------------------------------------------------
+    // Roll for critical hit based on Luck
+    // --------------------------------------------------------
+    _rollCriticalHit(luck) {
+      const critChance = 0.05 + (luck - 5) * 0.01; // Base 5%, +1% per Luck above 5
+      const roll = crypto.getRandomValues(new Uint32Array(1))[0] / 0xFFFFFFFF; // Secure random [0,1)
+      return roll < critChance;
+    },
+
+    // --------------------------------------------------------
     // Player attack logic
     // --------------------------------------------------------
     fireEquippedWeapon() {
@@ -127,8 +344,13 @@
         }
       }
       const equippedWeapon = (this.gs.player.equipped && this.gs.player.equipped.weapon) || null;
+      
+      // Allow unarmed attacks
       if (!equippedWeapon) {
-        return { success: false, reason: "NO_WEAPON" };
+        // Unarmed attack: base damage 5 + Strength bonus
+        const special = this._getSpecial();
+        const strBonus = Math.max(0, Math.floor((special.S - 5) / 2));
+        return { success: true, damage: 5 + strBonus, weapon: null };
       }
 
       // Melee or infinite ammo
@@ -152,12 +374,60 @@
     playerAttack() {
       if (!this.state) return;
 
+      // Stealth: Roll for detection before attacking
+      const wasSneaking = this.state.playerSneaking;
+      const detected = this._rollDetection();
+      
+      if (detected) {
+        this._alertNearbyEnemies();
+      }
+
       const res = this.fireEquippedWeapon();
       if (!res.success) return res;
 
+      // Calculate damage with perks and critical hits
+      let damage = res.damage;
+      const special = this._getSpecial();
+      const activePerks = this._getActivePerks();
+
+      // Apply perk bonuses
+      damage = this._applyPerkDamageBonuses(damage, res.weapon, activePerks);
+
+      // Sneak attack bonus
+      let sneakMultiplier = 1.0;
+      if (wasSneaking) {
+        if (!detected) {
+          sneakMultiplier = 2.0; // Undetected: 2x damage
+        } else {
+          sneakMultiplier = 1.5; // Detected: 1.5x damage
+        }
+        damage = Math.floor(damage * sneakMultiplier);
+      }
+
+      // Check for critical hit
+      const isCritical = this._rollCriticalHit(special.L);
+      if (isCritical) {
+        damage = Math.floor(damage * 1.5);
+      }
+
+      // Weather accuracy modifiers
+      const weather = this._getCurrentWeather();
+      let hitChance = 1.0; // Base 100% hit chance
+      if (weather === 'rain' && res.weapon && res.weapon.category !== 'melee' && res.weapon.category !== 'unarmed') {
+        hitChance = 0.85; // Rain reduces ranged accuracy by 15%
+      }
+
+      // Roll for hit
+      const hitRoll = crypto.getRandomValues(new Uint32Array(1))[0] / 0xFFFFFFFF;
+      if (hitRoll > hitChance) {
+        // Miss!
+        console.log(`[Battle] Player attack missed due to ${weather}! Roll: ${(hitRoll * 100).toFixed(1)}% vs ${(hitChance * 100).toFixed(1)}%`);
+        return { success: true, damage: 0, isCritical: false, wasSneaking, detected, sneakMultiplier, hit: false, weather };
+      }
+
       // BUG-004: damage the active enemy, not always index 0
       const idx = this.state.activeEnemyIndex ?? 0;
-      this.state.enemyHp[idx] -= res.damage;
+      this.state.enemyHp[idx] -= damage;
 
       // If the active enemy just died, advance to the next live enemy (search from 0)
       if (this.state.enemyHp[idx] <= 0) {
@@ -166,13 +436,13 @@
       }
 
       this.updateUI();
-      return res;
+      return { ...res, damage, isCritical, wasSneaking, detected, sneakMultiplier, hit: true, weather };
     },
 
     // --------------------------------------------------------
     // Enemy attack logic (Endurance reduces damage; armor subtracts flat DR)
     // --------------------------------------------------------
-    enemyAttack() {
+    async enemyAttack() {
       if (!this.state) return;
 
       const idx = this.state.activeEnemyIndex ?? 0;
@@ -215,11 +485,34 @@
         dmg = Math.max(1, dmg - Math.floor(totalArmor / 5));
       }
 
+      // Apply perk damage resistance
+      const activePerks = this._getActivePerks();
+      dmg = await this._applyPerkDamageResistance(dmg, activePerks);
+
+      // Enemy awareness: attacking alerts the enemy
+      if (this.state.enemyAwareness[idx] === 'unaware') {
+        this.state.enemyAwareness[idx] = 'alerted';
+      }
+
       this.gs.player.hp -= dmg;
       if (this.gs.player.hp < 0) this.gs.player.hp = 0;
 
+      // Weather radiation effects
+      const weather = this._getCurrentWeather();
+      let radiationDamage = 0;
+      if (weather === 'radiation storm') {
+        radiationDamage = Math.floor(dmg * 0.5); // Radiation storms add 50% of damage as radiation
+        // Apply radiation damage to player
+        if (Game.modules?.PlayerState?.applyRadiation) {
+          Game.modules.PlayerState.applyRadiation(radiationDamage);
+        } else {
+          // Fallback: increase player's radiation directly
+          this.gs.player.radiation = (this.gs.player.radiation || 0) + radiationDamage;
+        }
+      }
+
       this.updateUI();
-      return { success: true, damage: dmg };
+      return { success: true, damage: dmg, radiationDamage, weather };
     },
 
     // --------------------------------------------------------
@@ -400,15 +693,29 @@
           </div>
           <div id="battleOptions" class="battle-options">
             <button id="battleAttackBtn" class="pipboy-button">⚔ ATTACK</button>
+            <button id="battleSneakBtn" class="pipboy-button ${this.state.playerSneaking ? 'active' : ''}">👤 SNEAK ${this.state.playerSneaking ? 'ON' : 'OFF'}</button>
             <button id="battleFleeBtn" class="pipboy-button">🏃 FLEE</button>
+          </div>
+          <div id="battleStealthInfo" class="battle-stealth-info">
+            ${this.state.playerSneaking ? `
+              <div>Detection Chance: ${(this._calculateDetectionChance() * 100).toFixed(1)}%</div>
+              <div>Enemy Status: ${this.state.enemyAwareness[this.state.activeEnemyIndex] || 'unaware'}</div>
+            ` : '<div>Sneak mode disabled</div>'}
           </div>
           <div id="battleMsg" class="battle-msg"></div>
         </div>
       `;
 
       const attackBtn = document.getElementById("battleAttackBtn");
+      const sneakBtn = document.getElementById("battleSneakBtn");
       const fleeBtn = document.getElementById("battleFleeBtn");
       const msgDiv = document.getElementById("battleMsg");
+
+      if (sneakBtn) {
+        sneakBtn.onclick = () => {
+          this.toggleSneak();
+        };
+      }
 
       if (attackBtn) {
         attackBtn.onclick = () => {
@@ -417,7 +724,18 @@
             msgDiv.textContent = res.reason === "NO_AMMO" ? "Out of ammo!" : "No weapon equipped! Try to flee!";
             return;
           }
-          msgDiv.textContent = `You hit ${enemy.name || enemy.id} for ${res.damage} damage!`;
+          let message = `You hit ${enemy.name || enemy.id} for ${res.damage} damage!`;
+          if (res.wasSneaking) {
+            if (!res.detected) {
+              message = `SNEAK ATTACK! You hit ${enemy.name || enemy.id} for ${res.damage} damage!`;
+            } else {
+              message = `Detected! You hit ${enemy.name || enemy.id} for ${res.damage} damage!`;
+            }
+          }
+          if (res.isCritical) {
+            message = `CRITICAL HIT! ${message}`;
+          }
+          msgDiv.textContent = message;
           const end = this.checkBattleEnd();
           if (end === "WIN") {
             // BUG-018 FIX: disable buttons immediately on WIN to prevent
@@ -435,17 +753,13 @@
           // Disable attack + flee buttons during enemy turn to prevent post-death input window
           attackBtn.disabled = true;
           if (fleeBtn) fleeBtn.disabled = true;
-          setTimeout(() => {
-            const enemyRes = this.enemyAttack();
+          setTimeout(async () => {
+            const enemyRes = await this.enemyAttack();
             msgDiv.textContent = `${enemy.name || enemy.id} attacks for ${enemyRes.damage} damage!`;
             const end2 = this.checkBattleEnd();
             if (end2 === "LOSE") {
-              msgDiv.textContent = "You have been defeated. Respawning...";
               this.state = null;
-              // BUG-003: Restore HP to 30% and apply caps penalty on death
-              this._applyRespawnPenalty();
-              setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1500);
-              window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
+              this._showDeathOverlay();
             } else {
               // Re-enable buttons only if battle is still active
               if (this.state) {
@@ -470,17 +784,13 @@
             setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1200);
           } else {
             msgDiv.textContent = "Failed to escape! Enemy attacks!";
-            setTimeout(() => {
-              const enemyRes = this.enemyAttack();
+            setTimeout(async () => {
+              const enemyRes = await this.enemyAttack();
               msgDiv.textContent = `${enemy.name || enemy.id} attacks for ${enemyRes.damage} damage!`;
               const end2 = this.checkBattleEnd();
               if (end2 === "LOSE") {
-                msgDiv.textContent = "You have been defeated. Respawning...";
                 this.state = null;
-                // BUG-003: Restore HP to 30% and apply caps penalty on death
-                this._applyRespawnPenalty();
-                setTimeout(() => { this.updateUI(); window.Game?.pipboy?.setActivePanel?.('map'); }, 1500);
-                window.dispatchEvent(new CustomEvent('battleEnd', { detail: { result: 'LOSE' } }));
+                this._showDeathOverlay();
               }
             }, 800);
           }
