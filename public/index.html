@@ -885,8 +885,11 @@
 
           // Update portrait and name display
           function updateStatDisplay() {
+            console.log('[updateStatDisplay] Called, Game.modules.CharacterCreator:', Game?.modules?.CharacterCreator);
             if (Game?.modules?.CharacterCreator) {
               const cc = Game.modules.CharacterCreator;
+              console.log('[updateStatDisplay] cc object:', cc);
+              console.log('[updateStatDisplay] cc.loadSavedAppearance:', typeof cc.loadSavedAppearance);
 
               // Check if CharacterCreator has been initialized (has appearanceOptions)
               if (!cc.appearanceOptions) {
