@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Character Creator Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #000; color: #00ff41; }
+        .test-result { margin: 10px 0; padding: 10px; border: 1px solid #00ff41; }
+        .success { background: rgba(0, 255, 65, 0.1); }
+        .error { background: rgba(255, 0, 0, 0.1); border-color: #ff0041; }
+        button { background: #00ff41; color: #000; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; }
+        button:hover { background: #00aa41; }
+    </style>
+</head>
+<body>
+    <h1>Character Creator Functionality Test</h1>
+
+    <div id="results"></div>
+
+    <button onclick="testCharacterCreator()">Test Character Creator</button>
+    <button onclick="openCharacterCreator()">Open Character Creator</button>
+
+    <script>
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            console.log(message);
+        }
+
+        async function testCharacterCreator() {
+            try {
+                log('Testing Character Creator initialization...');
+
+                // Load the module
+                const script = document.createElement('script');
+                script.src = '/js/modules/character-creator.js';
+                document.head.appendChild(script);
+
+                await new Promise((resolve, reject) => {
+                    script.onload = resolve;
+                    script.onerror = reject;
+                });
+
+                log('Module loaded, waiting for Game object...');
+
+                // Wait for Game object
+                if (!window.Game) {
+                    window.Game = {};
+                }
+                if (!Game.modules) {
+                    Game.modules = {};
+                }
+
+                log('Initializing CharacterCreator...');
+                await Game.modules.CharacterCreator.init();
+
+                log('CharacterCreator initialized successfully!', 'success');
+                log('Appearance options loaded: ' + (Game.modules.CharacterCreator.appearanceOptions ? Object.keys(Game.modules.CharacterCreator.appearanceOptions).length : 0));
+                log('Backgrounds loaded: ' + (Game.modules.CharacterCreator.backgrounds ? Game.modules.CharacterCreator.backgrounds.length : 0));
+                log('Perks loaded: ' + (Game.modules.CharacterCreator.perks ? Game.modules.CharacterCreator.perks.length : 0));
+
+            } catch (error) {
+                log('ERROR: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+
+        function openCharacterCreator() {
+            if (Game && Game.modules && Game.modules.CharacterCreator) {
+                Game.modules.CharacterCreator.open(null, (character) => {
+                    log('Character saved: ' + JSON.stringify(character, null, 2), 'success');
+                });
+            } else {
+                log('Character Creator not initialized yet', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

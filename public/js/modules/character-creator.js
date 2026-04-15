@@ -271,12 +271,36 @@
       if (existingCharacter) {
         currentCharacter = { ...existingCharacter };
       } else {
+        // Use the complete default character structure
         currentCharacter = {
-          avatar: null,
-          special: { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 },
+          // Basic info
           name: '',
+          gender: 'male',
+          race: 'human',
           background: '',
+
+          // Appearance
+          appearance: {
+            skinTone: 'medium',
+            faceShape: 'round',
+            hairStyle: 'short',
+            hairColor: 'brown',
+            eyeShape: 'round',
+            eyeColor: 'brown',
+            noseType: 'straight',
+            mouthType: 'full',
+            scar: 'none',
+            marking: 'none',
+            accessory: 'none'
+          },
+
+          // Stats and abilities
+          special: { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 },
+          perks: [],
           traits: [],
+
+          // Avatar and evolution
+          avatar: null,
           evolution: {
             level: 1,
             experience: 0,
