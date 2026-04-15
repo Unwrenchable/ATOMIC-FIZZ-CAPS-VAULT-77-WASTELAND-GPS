@@ -886,13 +886,23 @@
           // Update portrait and name display
           function updateStatDisplay() {
             if (Game?.modules?.CharacterCreator) {
-              const appearance = Game.modules.CharacterCreator.loadSavedAppearance() 
-                || Game.modules.CharacterCreator.getAppearance();
-              
-              if (appearance && portraitContainer) {
-                portraitContainer.innerHTML = Game.modules.CharacterCreator.generatePortraitSVG(appearance, 120);
+              const cc = Game.modules.CharacterCreator;
+              let appearance = null;
+
+              // Try to load saved appearance first
+              if (typeof cc.loadSavedAppearance === 'function') {
+                appearance = cc.loadSavedAppearance();
               }
-              
+
+              // Fall back to current appearance
+              if (!appearance && typeof cc.getAppearance === 'function') {
+                appearance = cc.getAppearance();
+              }
+
+              if (appearance && portraitContainer && typeof cc.generatePortraitSVG === 'function') {
+                portraitContainer.innerHTML = cc.generatePortraitSVG(appearance, 120);
+              }
+
               if (appearance?.name && nameDisplay) {
                 nameDisplay.textContent = appearance.name;
               }
