@@ -887,6 +887,13 @@
           function updateStatDisplay() {
             if (Game?.modules?.CharacterCreator) {
               const cc = Game.modules.CharacterCreator;
+
+              // Check if CharacterCreator has been initialized (has appearanceOptions)
+              if (!cc.appearanceOptions) {
+                console.log('[CharacterCreator] Not yet initialized, skipping display update');
+                return;
+              }
+
               let appearance = null;
 
               // Try to load saved appearance first
@@ -925,6 +932,9 @@
 
           // Wait for characterCreatorOpened event which signals the module is ready
           window.addEventListener('characterCreatorOpened', updateStatDisplay);
+
+          // Listen for character creator initialization
+          window.addEventListener('characterCreatorReady', updateStatDisplay);
 
           // Also try to update display when pipboy is ready
           window.addEventListener('pipboyReady', () => {
