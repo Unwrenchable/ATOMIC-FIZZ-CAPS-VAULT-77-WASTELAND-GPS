@@ -885,11 +885,8 @@
 
           // Update portrait and name display
           function updateStatDisplay() {
-            console.log('[updateStatDisplay] Called, Game.modules.CharacterCreator:', Game?.modules?.CharacterCreator);
             if (Game?.modules?.CharacterCreator) {
               const cc = Game.modules.CharacterCreator;
-              console.log('[updateStatDisplay] cc object:', cc);
-              console.log('[updateStatDisplay] cc.loadSavedAppearance:', typeof cc.loadSavedAppearance);
 
               // Check if CharacterCreator has been initialized (has appearanceOptions)
               if (!cc.appearanceOptions) {
@@ -941,10 +938,8 @@
 
           // Also try to update display when pipboy is ready
           window.addEventListener('pipboyReady', () => {
-            // Give modules a moment to initialize after pipboy ready
-            requestAnimationFrame(() => {
-              updateStatDisplay();
-            });
+            // Don't update immediately - wait for character creator to be ready
+            console.log('[pipboyReady] Waiting for character creator initialization...');
           });
 
           // Listen for character creation events
