@@ -1700,6 +1700,17 @@
         await Game.modules.npcSpawn.init();
       }
 
+      // Initialize Character Creator module if present
+      if (
+        window.Game &&
+        Game.modules &&
+        Game.modules.CharacterCreator &&
+        typeof Game.modules.CharacterCreator.init === "function"
+      ) {
+        await Game.modules.CharacterCreator.init();
+        safeLog("Character Creator module initialized");
+      }
+
       attachMapReference();
       initUI();
 
