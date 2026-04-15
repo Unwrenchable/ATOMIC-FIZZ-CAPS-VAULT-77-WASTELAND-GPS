@@ -11,11 +11,34 @@
 
   // Character state
   let currentCharacter = {
-    avatar: null, // {type: 'grok'|'upload'|'custom', data: url|blob, evolution: {}}
-    special: { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 },
+    // Basic info
     name: '',
+    gender: 'male',
+    race: 'human',
     background: '',
+
+    // Appearance
+    appearance: {
+      skinTone: 'medium',
+      faceShape: 'round',
+      hairStyle: 'short',
+      hairColor: 'brown',
+      eyeShape: 'round',
+      eyeColor: 'brown',
+      noseType: 'straight',
+      mouthType: 'full',
+      scar: 'none',
+      marking: 'none',
+      accessory: 'none'
+    },
+
+    // Stats and abilities
+    special: { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 },
+    perks: [],
     traits: [],
+
+    // Avatar and evolution
+    avatar: null, // {type: 'grok'|'upload'|'custom', data: url|blob, evolution: {}}
     evolution: {
       level: 1,
       experience: 0,
@@ -26,8 +49,11 @@
     }
   };
 
-  // Available Grok avatars
+  // Available data
   let grokAvatars = [];
+  let appearanceOptions = {};
+  let backgrounds = [];
+  let availablePerks = [];
 
   // Evolution commands that players can use
   const EVOLUTION_COMMANDS = {
@@ -102,6 +128,43 @@
     } catch (error) {
       console.warn('[CharacterCreator] Could not load Grok avatars:', error);
       grokAvatars = [];
+    }
+  }
+
+  // Load appearance customization options
+  async function loadAppearanceOptions() {
+    try {
+      const response = await fetch('/data/character_creator/appearance_options.json');
+      appearanceOptions = await response.json();
+      console.log('[CharacterCreator] Loaded appearance options');
+    } catch (error) {
+      console.warn('[CharacterCreator] Could not load appearance options:', error);
+      appearanceOptions = {};
+    }
+  }
+
+  // Load background options
+  async function loadBackgrounds() {
+    try {
+      const response = await fetch('/data/character_creator/backgrounds.json');
+      backgrounds = await response.json();
+      console.log('[CharacterCreator] Loaded', backgrounds.length, 'backgrounds');
+    } catch (error) {
+      console.warn('[CharacterCreator] Could not load backgrounds:', error);
+      backgrounds = [];
+    }
+  }
+
+  // Load available perks
+  async function loadPerks() {
+    try {
+      const response = await fetch('/data/perks.json');
+      const data = await response.json();
+      availablePerks = data.perks || [];
+      console.log('[CharacterCreator] Loaded', availablePerks.length, 'perks');
+    } catch (error) {
+      console.warn('[CharacterCreator] Could not load perks:', error);
+      availablePerks = [];
     }
   }
 
@@ -181,9 +244,20 @@
 
     // Initialize the character creator
     async init() {
-      await loadGrokAvatars();
+      await Promise.all([
+        loadGrokAvatars(),
+        loadAppearanceOptions(),
+        loadBackgrounds(),
+        loadPerks()
+      ]);
+
+      // Assign loaded data to the object
+      this.appearanceOptions = appearanceOptions;
+      this.backgrounds = backgrounds;
+      this.perks = availablePerks;
+
       this._createOverlay();
-      console.log('[CharacterCreator] Initialized with dynamic avatar system');
+      console.log('[CharacterCreator] Initialized with full character creation system');
       return true;
     },
 
@@ -244,40 +318,95 @@
             <h2>Character Creator</h2>
             <button class="cc-close-btn" onclick="Game.modules.CharacterCreator.close()">&times;</button>
           </div>
+
           <div class="cc-content">
-            <div class="cc-avatar-section">
-              <div class="cc-avatar-preview">
-                <img id="cc-avatar-img" src="/assets/avatars-grok/avatar_001.png" alt="Character Avatar">
-                <div class="cc-avatar-overlay" id="cc-avatar-overlay"></div>
+            <!-- Left Column: Avatar & Basic Info -->
+            <div class="cc-left-column">
+              <div class="cc-avatar-section">
+                <div class="cc-avatar-preview">
+                  <img id="cc-avatar-img" src="/assets/avatars-grok/avatar_001.png" alt="Character Avatar">
+                  <div class="cc-avatar-overlay" id="cc-avatar-overlay"></div>
+                </div>
+                <div class="cc-avatar-controls">
+                  <button onclick="Game.modules.CharacterCreator._selectGrokAvatar()">Choose Grok Avatar</button>
+                  <button onclick="Game.modules.CharacterCreator._uploadPhoto()">Upload Photo</button>
+                  <button onclick="Game.modules.CharacterCreator._generateNewAvatar()">Generate New Avatar</button>
+                </div>
               </div>
-              <div class="cc-avatar-controls">
-                <button onclick="Game.modules.CharacterCreator._selectGrokAvatar()">Choose Grok Avatar</button>
-                <button onclick="Game.modules.CharacterCreator._uploadPhoto()">Upload Photo</button>
-                <button onclick="Game.modules.CharacterCreator._generateNewAvatar()">Generate New Avatar</button>
+
+              <div class="cc-basic-info">
+                <h3>Basic Information</h3>
+                <div class="cc-name-input">
+                  <label>Name:</label>
+                  <input type="text" id="cc-name-input" placeholder="Enter character name" maxlength="50">
+                </div>
+                <div class="cc-basic-selects">
+                  <div class="cc-select-group">
+                    <label>Gender:</label>
+                    <select id="cc-gender-select">${this._generateOptions(this.appearanceOptions?.genders || [], 'male')}</select>
+                  </div>
+                  <div class="cc-select-group">
+                    <label>Race:</label>
+                    <select id="cc-race-select">${this._generateOptions(this.appearanceOptions?.races || [], 'human')}</select>
+                  </div>
+                  <div class="cc-select-group">
+                    <label>Background:</label>
+                    <select id="cc-background-select">${this._generateBackgroundOptions()}</select>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="cc-stats-section">
-              <div class="cc-name-input">
-                <label>Name:</label>
-                <input type="text" id="cc-name-input" placeholder="Enter character name" maxlength="50">
+            <!-- Right Column: Customization -->
+            <div class="cc-right-column">
+              <div class="cc-tabs">
+                <button class="cc-tab active" onclick="Game.modules.CharacterCreator._switchTab('appearance')">Appearance</button>
+                <button class="cc-tab" onclick="Game.modules.CharacterCreator._switchTab('perks')">Perks</button>
+                <button class="cc-tab" onclick="Game.modules.CharacterCreator._switchTab('special')">S.P.E.C.I.A.L.</button>
+                <button class="cc-tab" onclick="Game.modules.CharacterCreator._switchTab('evolution')">Evolution</button>
               </div>
 
-              <div class="cc-special-stats">
-                <h3>S.P.E.C.I.A.L. Stats</h3>
-                <div class="cc-special-grid" id="cc-special-grid"></div>
-                <div class="cc-points-remaining">
-                  Points remaining: <span id="cc-points-remaining">21</span>
+              <div class="cc-tab-content">
+                <!-- Appearance Tab -->
+                <div id="cc-appearance-tab" class="cc-tab-panel active">
+                  <h3>Appearance Customization</h3>
+                  <div id="cc-appearance-container" class="cc-appearance-grid">
+                    <!-- Appearance options will be populated dynamically -->
+                  </div>
                 </div>
-              </div>
 
-              <div class="cc-evolution-section">
-                <h3>Character Evolution</h3>
-                <div class="cc-evolution-info">
-                  <div>Level: <span id="cc-level">1</span></div>
-                  <div>Experience: <span id="cc-experience">0</span></div>
+                <!-- Perks Tab -->
+                <div id="cc-perks-tab" class="cc-tab-panel">
+                  <h3>Available Perks</h3>
+                  <div class="cc-perks-info">
+                    <p>Select perks that match your character's SPECIAL stats and playstyle.</p>
+                    <div class="cc-perks-requirements">Perks require minimum SPECIAL stat levels to unlock.</div>
+                  </div>
+                  <div class="cc-perks-list" id="cc-perks-list"></div>
                 </div>
-                <div class="cc-evolution-commands" id="cc-evolution-commands"></div>
+
+                <!-- SPECIAL Tab -->
+                <div id="cc-special-tab" class="cc-tab-panel">
+                  <div class="cc-special-stats">
+                    <h3>S.P.E.C.I.A.L. Stats</h3>
+                    <div class="cc-special-grid" id="cc-special-grid"></div>
+                    <div class="cc-points-remaining">
+                      Points remaining: <span id="cc-points-remaining">21</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Evolution Tab -->
+                <div id="cc-evolution-tab" class="cc-tab-panel">
+                  <div class="cc-evolution-section">
+                    <h3>Character Evolution</h3>
+                    <div class="cc-evolution-info">
+                      <div>Level: <span id="cc-level">1</span></div>
+                      <div>Experience: <span id="cc-experience">0</span></div>
+                    </div>
+                    <div class="cc-evolution-commands" id="cc-evolution-commands"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -288,6 +417,36 @@
           </div>
         </div>
       `;
+
+      // Helper functions for UI generation
+      this._generateOptions = function(options, defaultValue) {
+        return options.map(option =>
+          `<option value="${option.id}" ${option.id === defaultValue ? 'selected' : ''}>${option.name}</option>`
+        ).join('');
+      };
+
+      this._generateBackgroundOptions = function() {
+        return (this.backgrounds || []).map(bg =>
+          `<option value="${bg.id}" ${bg.id === 'vault_dweller' ? 'selected' : ''}>${bg.name}</option>`
+        ).join('');
+      };
+
+      // Tab switching functionality
+      this._switchTab = function(tabName) {
+        // Update tab buttons
+        const tabs = this.overlayEl.querySelectorAll('.cc-tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+
+        const activeTab = this.overlayEl.querySelector(`[onclick*="${tabName}"]`);
+        if (activeTab) activeTab.classList.add('active');
+
+        // Update tab content
+        const panels = this.overlayEl.querySelectorAll('.cc-tab-panel');
+        panels.forEach(panel => panel.classList.remove('active'));
+
+        const activePanel = this.overlayEl.querySelector(`#cc-${tabName}-tab`);
+        if (activePanel) activePanel.classList.add('active');
+      };
 
       // Add styles
       const style = document.createElement('style');
@@ -645,6 +804,247 @@
         '.avatar-desc {',
         '  font-size: 0.8em;',
         '  line-height: 1.2;',
+        '}',
+        '',
+        '/* New Two-Column Layout */',
+        '.cc-content {',
+        '  display: flex;',
+        '  padding: 20px;',
+        '  gap: 20px;',
+        '  height: calc(100% - 140px);',
+        '}',
+        '',
+        '.cc-left-column {',
+        '  flex: 1;',
+        '  display: flex;',
+        '  flex-direction: column;',
+        '  gap: 20px;',
+        '}',
+        '',
+        '.cc-right-column {',
+        '  flex: 1;',
+        '  display: flex;',
+        '  flex-direction: column;',
+        '  gap: 15px;',
+        '}',
+        '',
+        '.cc-basic-info {',
+        '  background: rgba(0, 255, 65, 0.05);',
+        '  border: 1px solid #00ff41;',
+        '  border-radius: 4px;',
+        '  padding: 15px;',
+        '}',
+        '',
+        '.cc-basic-info h3 {',
+        '  margin: 0 0 15px 0;',
+        '  color: #00ff41;',
+        '}',
+        '',
+        '.cc-basic-selects {',
+        '  display: flex;',
+        '  flex-direction: column;',
+        '  gap: 10px;',
+        '}',
+        '',
+        '.cc-select-group {',
+        '  display: flex;',
+        '  align-items: center;',
+        '  gap: 10px;',
+        '}',
+        '',
+        '.cc-select-group label {',
+        '  min-width: 80px;',
+        '  font-weight: bold;',
+        '}',
+        '',
+        '.cc-select-group select {',
+        '  flex: 1;',
+        '  padding: 6px;',
+        '  background: #000;',
+        '  border: 1px solid #00ff41;',
+        '  color: #00ff41;',
+        '  border-radius: 4px;',
+        '}',
+        '',
+        '/* Tab System */',
+        '.cc-tabs {',
+        '  display: flex;',
+        '  gap: 2px;',
+        '  border-bottom: 1px solid #00ff41;',
+        '}',
+        '',
+        '.cc-tab {',
+        '  padding: 10px 15px;',
+        '  background: rgba(0, 255, 65, 0.1);',
+        '  border: 1px solid #00ff41;',
+        '  border-bottom: none;',
+        '  color: #00ff41;',
+        '  cursor: pointer;',
+        '  border-radius: 4px 4px 0 0;',
+        '  font-weight: bold;',
+        '}',
+        '',
+        '.cc-tab.active {',
+        '  background: rgba(0, 255, 65, 0.2);',
+        '  border-bottom: 1px solid #000;',
+        '}',
+        '',
+        '.cc-tab:hover {',
+        '  background: rgba(0, 255, 65, 0.15);',
+        '}',
+        '',
+        '.cc-tab-content {',
+        '  flex: 1;',
+        '  overflow-y: auto;',
+        '  padding: 15px 0;',
+        '}',
+        '',
+        '.cc-tab-panel {',
+        '  display: none;',
+        '}',
+        '',
+        '.cc-tab-panel.active {',
+        '  display: block;',
+        '}',
+        '',
+        '/* Appearance Customization */',
+        '.cc-appearance-grid {',
+        '  display: grid;',
+        '  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));',
+        '  gap: 10px;',
+        '}',
+        '',
+        '.cc-appearance-group {',
+        '  display: flex;',
+        '  align-items: center;',
+        '  gap: 10px;',
+        '}',
+        '',
+        '.cc-appearance-group label {',
+        '  min-width: 100px;',
+        '  font-weight: bold;',
+        '}',
+        '',
+        '.cc-appearance-group select {',
+        '  flex: 1;',
+        '  padding: 6px;',
+        '  background: #000;',
+        '  border: 1px solid #00ff41;',
+        '  color: #00ff41;',
+        '  border-radius: 4px;',
+        '}',
+        '',
+        '/* Perks System */',
+        '.cc-perks-info {',
+        '  margin-bottom: 15px;',
+        '}',
+        '',
+        '.cc-perks-requirements {',
+        '  color: #ffff41;',
+        '  font-size: 0.9em;',
+        '  margin-top: 5px;',
+        '}',
+        '',
+        '.cc-perks-list {',
+        '  max-height: 400px;',
+        '  overflow-y: auto;',
+        '}',
+        '',
+        '.cc-perk-item {',
+        '  display: flex;',
+        '  justify-content: space-between;',
+        '  align-items: flex-start;',
+        '  padding: 12px;',
+        '  margin: 8px 0;',
+        '  background: rgba(0, 255, 65, 0.05);',
+        '  border: 1px solid #00ff41;',
+        '  border-radius: 4px;',
+        '}',
+        '',
+        '.cc-perk-item.available {',
+        '  cursor: pointer;',
+        '}',
+        '',
+        '.cc-perk-item.available:hover {',
+        '  background: rgba(0, 255, 65, 0.1);',
+        '}',
+        '',
+        '.cc-perk-item.selected {',
+        '  background: rgba(0, 100, 65, 0.1);',
+        '  border-color: #00aa41;',
+        '}',
+        '',
+        '.cc-perk-item.locked {',
+        '  opacity: 0.5;',
+        '  cursor: not-allowed;',
+        '}',
+        '',
+        '.cc-perk-info {',
+        '  flex: 1;',
+        '}',
+        '',
+        '.cc-perk-name {',
+        '  font-weight: bold;',
+        '  margin-bottom: 4px;',
+        '}',
+        '',
+        '.cc-perk-desc {',
+        '  font-size: 0.9em;',
+        '  line-height: 1.3;',
+        '  margin-bottom: 6px;',
+        '}',
+        '',
+        '.cc-perk-flavor {',
+        '  font-size: 0.8em;',
+        '  font-style: italic;',
+        '  color: #aaa;',
+        '}',
+        '',
+        '.cc-perk-requirements {',
+        '  display: flex;',
+        '  align-items: center;',
+        '  gap: 10px;',
+        '  margin-top: 8px;',
+        '}',
+        '',
+        '.cc-perk-requirement {',
+        '  font-size: 0.8em;',
+        '  color: #ffff41;',
+        '}',
+        '',
+        '.cc-perk-select-btn {',
+        '  padding: 4px 8px;',
+        '  background: rgba(0, 255, 65, 0.1);',
+        '  border: 1px solid #00ff41;',
+        '  color: #00ff41;',
+        '  border-radius: 3px;',
+        '  cursor: pointer;',
+        '  font-size: 0.8em;',
+        '}',
+        '',
+        '.cc-perk-select-btn:hover {',
+        '  background: rgba(0, 255, 65, 0.2);',
+        '}',
+        '',
+        '/* Responsive */',
+        '@media (max-width: 768px) {',
+        '  .cc-content {',
+        '    flex-direction: column;',
+        '    height: auto;',
+        '  }',
+        '',
+        '  .cc-tabs {',
+        '    flex-wrap: wrap;',
+        '  }',
+        '',
+        '  .cc-tab {',
+        '    flex: 1;',
+        '    text-align: center;',
+        '  }',
+        '',
+        '  .cc-appearance-grid {',
+        '    grid-template-columns: 1fr;',
+        '  }',
         '}'
       ].join('\n');
       document.head.appendChild(style);
@@ -663,9 +1063,24 @@
         }
       }
 
-      // Update name
+      // Update basic info
       const nameInput = this.overlayEl.querySelector('#cc-name-input');
       nameInput.value = currentCharacter.name || '';
+
+      const genderSelect = this.overlayEl.querySelector('#cc-gender-select');
+      genderSelect.value = currentCharacter.gender || 'male';
+
+      const raceSelect = this.overlayEl.querySelector('#cc-race-select');
+      raceSelect.value = currentCharacter.race || 'human';
+
+      const backgroundSelect = this.overlayEl.querySelector('#cc-background-select');
+      backgroundSelect.value = currentCharacter.background || 'vault_dweller';
+
+      // Update appearance
+      this._renderAppearance();
+
+      // Update perks
+      this._renderPerks();
 
       // Update SPECIAL stats
       this._renderSpecialStats();
@@ -674,9 +1089,140 @@
       this._renderEvolution();
 
       // Add event listeners
-      nameInput.addEventListener('input', (e) => {
+      this._setupEventListeners();
+    },
+
+    // Render appearance options
+    _renderAppearance() {
+      if (!this.appearanceOptions) return;
+
+      const container = this.overlayEl.querySelector('#cc-appearance-container');
+      if (!container) return;
+
+      container.innerHTML = Object.entries(this.appearanceOptions).map(([category, options]) => `
+        <div class="cc-appearance-group">
+          <label>${category.charAt(0).toUpperCase() + category.slice(1)}:</label>
+          <select id="cc-${category}-select" onchange="Game.modules.CharacterCreator._updateAppearance('${category}', this.value)">
+            ${options.map(option => `
+              <option value="${option.id}" ${currentCharacter.appearance?.[category] === option.id ? 'selected' : ''}>
+                ${option.name}
+              </option>
+            `).join('')}
+          </select>
+        </div>
+      `).join('');
+    },
+
+    // Render perks list
+    _renderPerks() {
+      if (!this.perks) return;
+
+      const container = this.overlayEl.querySelector('#cc-perks-list');
+      if (!container) return;
+
+      container.innerHTML = this.perks.map(perk => {
+        const isSelected = currentCharacter.perks?.includes(perk.id);
+        const meetsRequirements = this._checkPerkRequirements(perk);
+        const isAvailable = meetsRequirements && !isSelected;
+        const isLocked = !meetsRequirements && !isSelected;
+
+        return `
+          <div class="cc-perk-item ${isSelected ? 'selected' : isAvailable ? 'available' : 'locked'}"
+               onclick="Game.modules.CharacterCreator._togglePerk('${perk.id}')">
+            <div class="cc-perk-info">
+              <div class="cc-perk-name">${perk.name}</div>
+              <div class="cc-perk-desc">${perk.description}</div>
+              ${perk.flavor_text ? `<div class="cc-perk-flavor">${perk.flavor_text}</div>` : ''}
+              <div class="cc-perk-requirements">
+                ${perk.required_special ? Object.entries(perk.required_special).map(([stat, value]) => `
+                  <span class="cc-perk-requirement">${stat.toUpperCase()} ${value}+</span>
+                `).join('') : ''}
+              </div>
+            </div>
+            <button class="cc-perk-select-btn" ${isLocked ? 'disabled' : ''}>
+              ${isSelected ? 'Selected' : isAvailable ? 'Select' : 'Locked'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    },
+
+    // Setup event listeners
+    _setupEventListeners() {
+      // Name input
+      const nameInput = this.overlayEl.querySelector('#cc-name-input');
+      nameInput?.addEventListener('input', (e) => {
         currentCharacter.name = e.target.value;
       });
+
+      // Basic info selects
+      const genderSelect = this.overlayEl.querySelector('#cc-gender-select');
+      genderSelect?.addEventListener('change', (e) => {
+        currentCharacter.gender = e.target.value;
+      });
+
+      const raceSelect = this.overlayEl.querySelector('#cc-race-select');
+      raceSelect?.addEventListener('change', (e) => {
+        currentCharacter.race = e.target.value;
+      });
+
+      const backgroundSelect = this.overlayEl.querySelector('#cc-background-select');
+      backgroundSelect?.addEventListener('change', (e) => {
+        currentCharacter.background = e.target.value;
+        this._applyBackgroundModifiers();
+      });
+    },
+
+    // Update appearance option
+    _updateAppearance(category, value) {
+      if (!currentCharacter.appearance) currentCharacter.appearance = {};
+      currentCharacter.appearance[category] = value;
+    },
+
+    // Toggle perk selection
+    _togglePerk(perkId) {
+      if (!currentCharacter.perks) currentCharacter.perks = [];
+
+      const perk = this.perks.find(p => p.id === perkId);
+      if (!perk || !this._checkPerkRequirements(perk)) return;
+
+      const index = currentCharacter.perks.indexOf(perkId);
+      if (index > -1) {
+        currentCharacter.perks.splice(index, 1);
+      } else {
+        currentCharacter.perks.push(perkId);
+      }
+
+      this._renderPerks();
+    },
+
+    // Check if character meets perk requirements
+    _checkPerkRequirements(perk) {
+      if (!perk.required_special) return true;
+
+      return Object.entries(perk.required_special).every(([stat, required]) => {
+        return (currentCharacter.special[stat] || 0) >= required;
+      });
+    },
+
+    // Apply background modifiers to SPECIAL stats
+    _applyBackgroundModifiers() {
+      if (!this.backgrounds || !currentCharacter.background) return;
+
+      const background = this.backgrounds.find(b => b.id === currentCharacter.background);
+      if (!background?.specialModifiers) return;
+
+      // Reset to base stats first
+      Object.keys(currentCharacter.special).forEach(stat => {
+        currentCharacter.special[stat] = Math.max(1, currentCharacter.special[stat] - (background.specialModifiers[stat] || 0));
+      });
+
+      // Apply new modifiers
+      Object.entries(background.specialModifiers).forEach(([stat, modifier]) => {
+        currentCharacter.special[stat] = Math.max(1, Math.min(10, currentCharacter.special[stat] + modifier));
+      });
+
+      this._renderSpecialStats();
     },
 
     // Render SPECIAL stats grid
