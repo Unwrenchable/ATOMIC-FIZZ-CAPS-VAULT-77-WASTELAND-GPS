@@ -1710,6 +1710,9 @@
         try {
           await Game.modules.CharacterCreator.init();
           safeLog("Character Creator module initialized");
+
+          // Dispatch event to notify that character creator is ready
+          window.dispatchEvent(new Event("characterCreatorReady"));
         } catch (error) {
           console.error("Failed to initialize Character Creator module:", error);
         }
