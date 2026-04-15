@@ -320,6 +320,9 @@ safeMount("/api/claim-survival", api("claim-survival"));
 // Overseer AI proxy (Hugging Face / OpenAI compatible)
 safeMount("/api/overseer", api("overseer-proxy"));
 
+// Grok avatar generation
+safeMount("/api/grok", api("grok/generate-avatar"));
+
 // NPC video generation via xAI Grok
 safeMount("/api/npc/video", api("npc-video"));
 
