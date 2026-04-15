@@ -332,6 +332,67 @@
       this.close();
     },
 
+    // Get the current character's appearance data
+    getAppearance() {
+      return currentCharacter || null;
+    },
+
+    // Load saved appearance from localStorage or return current
+    loadSavedAppearance() {
+      try {
+        const saved = localStorage.getItem('atomicfizz_character');
+        if (saved) {
+          const character = JSON.parse(saved);
+          return character;
+        }
+      } catch (error) {
+        console.warn('[CharacterCreator] Failed to load saved appearance:', error);
+      }
+      return null;
+    },
+
+    // Generate SVG portrait from appearance data
+    generatePortraitSVG(appearance, size = 120) {
+      if (!appearance) return '';
+
+      const { appearance: app = {} } = appearance;
+      const skinTone = app.skinTone || 'medium';
+      const faceShape = app.faceShape || 'round';
+      const hairStyle = app.hairStyle || 'short';
+      const hairColor = app.hairColor || 'brown';
+      const eyeColor = app.eyeColor || 'brown';
+
+      // Simple SVG portrait generation
+      return `
+        <svg width="${size}" height="${size}" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background -->
+          <rect width="120" height="120" fill="#1a1a1a" rx="8"/>
+
+          <!-- Face -->
+          <circle cx="60" cy="65" r="35" fill="#${skinTone === 'light' ? 'f5deb3' : skinTone === 'dark' ? '8b4513' : 'deb887'}"/>
+
+          <!-- Eyes -->
+          <circle cx="50" cy="60" r="3" fill="#${eyeColor === 'blue' ? '4169e1' : eyeColor === 'green' ? '228b22' : '8b4513'}"/>
+          <circle cx="70" cy="60" r="3" fill="#${eyeColor === 'blue' ? '4169e1' : eyeColor === 'green' ? '228b22' : '8b4513'}"/>
+
+          <!-- Nose -->
+          <ellipse cx="60" cy="70" rx="2" ry="3" fill="#${skinTone === 'light' ? 'e6c49a' : skinTone === 'dark' ? '654321' : 'c4a484'}"/>
+
+          <!-- Mouth -->
+          <path d="M 55 80 Q 60 85 65 80" stroke="#8b4513" stroke-width="2" fill="none"/>
+
+          <!-- Hair -->
+          ${hairStyle === 'long' ?
+            `<path d="M 30 45 Q 60 35 90 45 L 85 55 Q 60 45 35 55 Z" fill="#${hairColor === 'blonde' ? 'daa520' : hairColor === 'red' ? 'cd5c5c' : '654321'}"/>` :
+            `<ellipse cx="60" cy="45" rx="25" ry="15" fill="#${hairColor === 'blonde' ? 'daa520' : hairColor === 'red' ? 'cd5c5c' : '654321'}"/>`
+          }
+
+          <!-- Border -->
+          <rect width="120" height="120" fill="none" stroke="#00ff41" stroke-width="2" rx="8"/>
+        </svg>
+      `;
+    },
+
     // Create the overlay UI
     _createOverlay() {
       this.overlayEl = document.createElement('div');
