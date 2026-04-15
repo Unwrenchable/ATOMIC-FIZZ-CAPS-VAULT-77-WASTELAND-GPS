@@ -1707,8 +1707,12 @@
         Game.modules.CharacterCreator &&
         typeof Game.modules.CharacterCreator.init === "function"
       ) {
-        await Game.modules.CharacterCreator.init();
-        safeLog("Character Creator module initialized");
+        try {
+          await Game.modules.CharacterCreator.init();
+          safeLog("Character Creator module initialized");
+        } catch (error) {
+          console.error("Failed to initialize Character Creator module:", error);
+        }
       }
 
       attachMapReference();
