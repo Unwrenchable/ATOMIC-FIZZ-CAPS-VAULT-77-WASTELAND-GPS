@@ -91,7 +91,7 @@
       "lng": -115.142,
       "lvl": 20,
       "rarity": "legendary",
-      "iconKey": "casino",
+      "iconKey": "lucky38",
       "region": "strip",
       "game": "fnv",
       "source": "canon"
@@ -605,7 +605,7 @@
       "lng": -118.2437,
       "lvl": 30,
       "rarity": "rare",
-      "iconKey": "bunker",
+      "iconKey": "brotherhood",
       "region": "fnv_factions",
       "game": "fnv",
       "source": "canon"
@@ -677,7 +677,7 @@
       "lng": -115.1522,
       "lvl": 8,
       "rarity": "rare",
-      "iconKey": "military",
+      "iconKey": "military-base",
       "region": "fnv_factions",
       "game": "fnv",
       "source": "canon"
@@ -1589,7 +1589,7 @@
       "lng": -77.0365,
       "lvl": 20,
       "rarity": "epic",
-      "iconKey": "facility",
+      "iconKey": "memorial",
       "region": "fo3",
       "game": "fo3",
       "source": "canon"
@@ -1757,7 +1757,7 @@
       "lng": -77.0091,
       "lvl": 20,
       "rarity": "epic",
-      "iconKey": "ruins",
+      "iconKey": "capitol",
       "region": "fo3",
       "game": "fo3",
       "source": "canon"
@@ -2287,7 +2287,7 @@
       "lng": -71.082,
       "lvl": 15,
       "rarity": "epic",
-      "iconKey": "city",
+      "iconKey": "diamond-city",
       "region": "fo4",
       "game": "fo4",
       "source": "canon"
@@ -2395,7 +2395,7 @@
       "lng": -71.08,
       "lvl": 30,
       "rarity": "legendary",
-      "iconKey": "airship",
+      "iconKey": "prydwen",
       "region": "fo4",
       "game": "fo4",
       "source": "canon"
@@ -2431,7 +2431,7 @@
       "lng": -71.0589,
       "lvl": 40,
       "rarity": "legendary",
-      "iconKey": "facility",
+      "iconKey": "institute",
       "region": "fo4",
       "game": "fo4",
       "source": "canon"
