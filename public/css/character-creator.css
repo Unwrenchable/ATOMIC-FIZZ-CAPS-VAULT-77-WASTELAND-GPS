@@ -163,6 +163,507 @@
 }
 
 /* ============================================================
+   CONTENT LAYOUT
+   ============================================================ */
+
+.cc-content {
+  display: flex;
+  flex: 1;
+  min-height: 500px;
+  overflow: hidden;
+}
+
+.cc-left-column {
+  flex: 0 0 320px;
+  background: rgba(0, 30, 10, 0.9);
+  padding: 20px;
+  border-right: 1px solid rgba(0, 255, 65, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.cc-right-column {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   AVATAR SECTION
+   ============================================================ */
+
+.cc-avatar-section {
+  margin-bottom: 20px;
+}
+
+.cc-avatar-preview {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #00ff41;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  margin: 0 auto 10px auto;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-avatar-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.cc-avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cc-avatar-preview:hover .cc-avatar-overlay {
+  opacity: 1;
+}
+
+.cc-avatar-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cc-avatar-controls button {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-avatar-controls button:hover {
+  background: rgba(0, 255, 65, 0.2);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+/* ============================================================
+   BASIC INFO
+   ============================================================ */
+
+.cc-basic-info h3 {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-name-input {
+  margin-bottom: 15px;
+}
+
+.cc-name-input label {
+  display: block;
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-name-input input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.cc-basic-selects {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cc-select-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-select-group label {
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-select-group select {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 6px;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+
+.cc-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+}
+
+.cc-tab {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  color: #00ff41;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+  margin-right: 2px;
+}
+
+.cc-tab.active {
+  background: rgba(0, 255, 65, 0.2);
+  border-bottom-color: #00ff41;
+}
+
+.cc-tab:hover {
+  background: rgba(0, 255, 65, 0.15);
+}
+
+/* ============================================================
+   TAB CONTENT
+   ============================================================ */
+
+.cc-tab-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.cc-tab-panel {
+  display: none;
+}
+
+.cc-tab-panel.active {
+  display: block;
+}
+
+.cc-tab-panel h3 {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   APPEARANCE GRID
+   ============================================================ */
+
+.cc-appearance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.cc-appearance-category {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.cc-appearance-category h4 {
+  color: #00ff41;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-appearance-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.cc-appearance-option {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cc-appearance-option.selected {
+  background: rgba(0, 255, 65, 0.3);
+  border-color: #00ff41;
+}
+
+.cc-appearance-option:hover {
+  background: rgba(0, 255, 65, 0.2);
+}
+
+/* ============================================================
+   PERKS
+   ============================================================ */
+
+.cc-perks-info {
+  margin-bottom: 15px;
+}
+
+.cc-perks-info p {
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.cc-perks-requirements {
+  color: #ffcc00;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.cc-perks-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px;
+}
+
+.cc-perk-item {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.cc-perk-item h4 {
+  color: #ffcc00;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.cc-perk-item p {
+  color: #00ff41;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.cc-perk-requirements {
+  color: #ffaa00;
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+
+.cc-perk-select {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   SPECIAL STATS
+   ============================================================ */
+
+.cc-special-stats h3 {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-special-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.cc-special-stat {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.cc-special-stat h4 {
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-special-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.cc-special-btn {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.cc-special-btn:hover {
+  background: rgba(0, 255, 65, 0.2);
+}
+
+.cc-special-value {
+  color: #ffcc00;
+  font-size: 16px;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+}
+
+.cc-points-remaining {
+  text-align: center;
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+/* ============================================================
+   EVOLUTION
+   ============================================================ */
+
+.cc-evolution-section h3 {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-evolution-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 12px;
+}
+
+.cc-evolution-info div {
+  color: #00ff41;
+}
+
+.cc-evolution-commands {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.cc-evolution-command {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.cc-evolution-command h4 {
+  color: #ffcc00;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.cc-evolution-command p {
+  color: #00ff41;
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+
+.cc-evolution-apply {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.cc-footer {
+  background: rgba(0, 10, 5, 0.9);
+  padding: 15px 20px;
+  border-top: 1px solid rgba(0, 255, 65, 0.3);
+  display: flex;
+  justify-content: center;
+}
+
+.cc-save-btn {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-save-btn:hover {
+  background: rgba(0, 255, 65, 0.2);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+}
+
+/* ============================================================
    MAIN CONTENT AREA
    ============================================================ */
 

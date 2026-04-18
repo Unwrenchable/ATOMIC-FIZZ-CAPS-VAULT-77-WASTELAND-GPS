@@ -1154,6 +1154,19 @@
     once("connectWalletHUD", connectWallet);
     once("connectWalletStat", connectWallet);
 
+    // Character Creator button
+    once("characterCreatorBtn", () => {
+      if (Game?.modules?.CharacterCreator) {
+        Game.modules.CharacterCreator.open(null, (newAppearance) => {
+          console.log('[CharacterCreator] Saved appearance:', newAppearance);
+          // Update the display with new character data
+          updateStatDisplay();
+        });
+      } else {
+        console.warn('[CharacterCreator] Module not available');
+      }
+    });
+
     // ...existing code...
 
     // GPS badge click toggles GPS lock
@@ -1708,7 +1721,9 @@
         typeof Game.modules.CharacterCreator.init === "function"
       ) {
         try {
+          console.log('[Main] Initializing Character Creator module...');
           await Game.modules.CharacterCreator.init();
+          console.log('[Main] Character Creator module initialized successfully');
           safeLog("Character Creator module initialized");
 
           // Dispatch event to notify that character creator is ready
