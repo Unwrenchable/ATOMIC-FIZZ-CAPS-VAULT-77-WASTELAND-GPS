@@ -356,6 +356,14 @@
                       <div id="respecStatus"></div>
                     </div>
 
+                    <div class="panel-divider"></div>
+
+                    <!-- Character Creator -->
+                    <div style="margin-top:10px;">
+                      <button id="characterCreatorBtn" class="pipboy-button">CHARACTER CREATOR</button>
+                      <div id="characterCreatorStatus"></div>
+                    </div>
+
                   </div>
                 </div>
 
@@ -928,6 +936,24 @@
                 alert('Character Creator is loading...');
               }
             });
+
+            // Test if character creator is loaded
+            setTimeout(() => {
+              if (window.Game && Game.modules && Game.modules.CharacterCreator) {
+                console.log('[Test] Character Creator module is loaded');
+                // Test opening the character creator
+                console.log('[Test] Testing character creator open...');
+                try {
+                  Game.modules.CharacterCreator.open(null, (result) => {
+                    console.log('[Test] Character creator opened successfully', result);
+                  });
+                } catch (error) {
+                  console.error('[Test] Error opening character creator:', error);
+                }
+              } else {
+                console.log('[Test] Character Creator module is NOT loaded');
+              }
+            }, 2000);
           }
 
           // Wait for characterCreatorOpened event which signals the module is ready
