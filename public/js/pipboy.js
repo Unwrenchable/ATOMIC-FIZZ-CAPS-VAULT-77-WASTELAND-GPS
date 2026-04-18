@@ -94,7 +94,7 @@
       }
     }
 
-    // STAT PANEL ACTIVATION — HUD is kept live by main.js; nothing extra needed here
+    // STAT PANEL ACTIVATION — Update character stats when tab is opened
     if (panelKey === "stat") {
       // Initialize character creator only when STATS tab is first opened
       if (Game.modules?.CharacterCreator && !Game.modules.CharacterCreator._initialized) {
@@ -111,6 +111,11 @@
           });
         } catch (e) {
           console.warn("[PipBoy] Character creator init call failed:", e);
+        }
+      } else {
+        // Update stats display every time STATS tab is opened (after initialization)
+        if (window.updateStatDisplay) {
+          window.updateStatDisplay();
         }
       }
     }

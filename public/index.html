@@ -957,15 +957,7 @@
             setTimeout(() => {
               if (window.Game && Game.modules && Game.modules.CharacterCreator) {
                 console.log('[Test] Character Creator module is loaded');
-                // Test opening the character creator
-                console.log('[Test] Testing character creator open...');
-                try {
-                  Game.modules.CharacterCreator.open(null, (result) => {
-                    console.log('[Test] Character creator opened successfully', result);
-                  });
-                } catch (error) {
-                  console.error('[Test] Error opening character creator:', error);
-                }
+                // NOTE: Removed automatic test opening to prevent popup during boot
               } else {
                 console.log('[Test] Character Creator module is NOT loaded');
               }
@@ -990,10 +982,11 @@
           });
 
           // Fallback: check periodically until module is ready (max 5 seconds)
+          // NOTE: Only check for module existence, don't trigger updates during boot
           let attempts = 0;
           const checkModule = () => {
             if (Game?.modules?.CharacterCreator) {
-              updateStatDisplay();
+              console.log('[CharacterCreator] Module detected, ready for STATS tab activation');
             } else if (attempts < 10) {
               attempts++;
               setTimeout(checkModule, 500);
