@@ -12,7 +12,6 @@
     radio: document.getElementById("panel-radio"),
     exchange: document.getElementById("panel-exchange"),
     battle: document.getElementById("panel-battle"),
-    companions: document.getElementById("panel-companions"),
   };
   
   // Configuration constants
@@ -127,6 +126,21 @@
           Game.ui.renderQuest();
         } catch (e) {
           console.warn("[PipBoy] renderQuest failed:", e);
+        }
+      }
+    }
+
+    // EXCHANGE PANEL ACTIVATION - render exchange content
+    if (panelKey === "exchange") {
+      // Trigger the same initialization as the click handler
+      if (window.renderExchangeClaimSection && window.renderExchangeCraftingSection && window.renderDemoExchange) {
+        try {
+          window.renderExchangeClaimSection();
+          window.renderExchangeCraftingSection();
+          window.renderDemoExchange();
+          console.log("[PipBoy] Exchange panel initialized");
+        } catch (e) {
+          console.warn("[PipBoy] Exchange panel initialization failed:", e);
         }
       }
     }
