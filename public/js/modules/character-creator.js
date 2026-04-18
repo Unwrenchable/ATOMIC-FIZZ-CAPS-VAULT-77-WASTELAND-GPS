@@ -1492,11 +1492,7 @@
   // Also export globally for convenience
   window.CharacterCreator = CharacterCreator;
 
-  // Auto-initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => CharacterCreator.init());
-  } else {
-    CharacterCreator.init();
-  }
+  // NOTE: Character creator is now initialized when STATS tab is first opened
+  // (see pipboy.js stat panel activation)
 
 })();

@@ -50,16 +50,10 @@
         console.warn("[nuke] Could not access opener wallet:", e);
       }
 
-      // Fallback to localStorage
+      // Fallback to localStorage - REMOVED FOR SECURITY
+      // Wallet addresses should never be stored in localStorage
       if (!walletAddress) {
-        try {
-          const stored = localStorage.getItem("wallet");
-          if (stored) {
-            walletAddress = stored;
-          }
-        } catch (e) {
-          console.warn("[nuke] Could not read localStorage:", e);
-        }
+        console.warn("[nuke] Wallet not available from opener, please connect wallet first");
       }
 
       if (!walletAddress) {
@@ -249,7 +243,8 @@
         } catch (e) {}
 
         if (!walletAddress) {
-          walletAddress = localStorage.getItem("wallet");
+          // SECURITY: Wallet should not be stored in localStorage
+          console.warn("[nuke] Wallet not available from opener");
         }
 
         if (!walletAddress) {
