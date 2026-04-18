@@ -1196,6 +1196,11 @@
     safeLog("UI initialized (core controls wired)");
   }
 
+  // Expose exchange functions globally for pipboy panel activation
+  window.renderExchangeClaimSection = renderExchangeClaimSection;
+  window.renderExchangeCraftingSection = renderExchangeCraftingSection;
+  window.renderDemoExchange = renderDemoExchange;
+
   // ---------------------------
   // STARTER PACK
   // ---------------------------
