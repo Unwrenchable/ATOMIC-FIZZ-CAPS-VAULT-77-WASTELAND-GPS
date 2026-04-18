@@ -1,0 +1,11 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Memorial base -->
+  <rect x="6" y="16" width="12" height="4" fill="#00ff41"/>
+  <!-- Memorial column -->
+  <rect x="10" y="8" width="4" height="8" fill="#00ff41"/>
+  <!-- Memorial dome/top -->
+  <circle cx="12" cy="8" r="3" fill="#00ff41"/>
+  <!-- Steps -->
+  <rect x="4" y="18" width="16" height="2" fill="#00ff41"/>
+  <rect x="2" y="20" width="20" height="4" fill="#0a1a0a"/>
+</svg>
