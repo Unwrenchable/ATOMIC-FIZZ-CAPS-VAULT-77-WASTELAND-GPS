@@ -1740,7 +1740,7 @@
       renderInventoryPanel();
       renderQuestsPanel();
       updateHUD();
-      updateStatDisplay(); // Update character stats display
+      // NOTE: Character stats are updated when STATS tab is clicked, not during boot
 
       // Grant starter pack to new players (boot.js sets window._isNewGame)
       if (window._isNewGame === true) {
