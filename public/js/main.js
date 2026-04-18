@@ -1713,23 +1713,20 @@
         await Game.modules.npcSpawn.init();
       }
 
-      // Initialize Character Creator module if present
+      // Initialize Character Creator module if present (deferred loading)
       if (
         window.Game &&
         Game.modules &&
-        Game.modules.CharacterCreator &&
-        typeof Game.modules.CharacterCreator.init === "function"
+        Game.modules.CharacterCreator
       ) {
         try {
-          console.log('[Main] Initializing Character Creator module...');
-          await Game.modules.CharacterCreator.init();
-          console.log('[Main] Character Creator module initialized successfully');
-          safeLog("Character Creator module initialized");
+          console.log('[Main] Character Creator module registered (data loading deferred to STATS tab)');
+          safeLog("Character Creator module registered");
 
-          // Dispatch event to notify that character creator is ready
+          // Dispatch event to notify that character creator module is available
           window.dispatchEvent(new Event("characterCreatorReady"));
         } catch (error) {
-          console.error("Failed to initialize Character Creator module:", error);
+          console.error("Failed to register Character Creator module:", error);
         }
       }
 
