@@ -1816,8 +1816,19 @@
 
       // Get current character SPECIAL values (from character creator or defaults)
       let statValue = 5; // default
-      if (window.Game?.modules?.CharacterCreator?.currentCharacter?.special) {
-        statValue = window.Game.modules.CharacterCreator.currentCharacter.special[stat] || 5;
+      if (window.Game?.modules?.CharacterCreator) {
+        const cc = window.Game.modules.CharacterCreator;
+        // Try to get appearance from character creator
+        let appearance = null;
+        if (typeof cc.loadSavedAppearance === 'function') {
+          appearance = cc.loadSavedAppearance();
+        }
+        if (!appearance && typeof cc.getAppearance === 'function') {
+          appearance = cc.getAppearance();
+        }
+        if (appearance?.special && appearance.special[stat]) {
+          statValue = appearance.special[stat];
+        }
       }
 
       if (valueEl) valueEl.textContent = statValue;
@@ -1829,13 +1840,22 @@
 
     // Update perks display if available
     const perksContainer = document.getElementById('character-perks-list');
-    if (perksContainer && window.Game?.modules?.CharacterCreator?.currentCharacter?.perks) {
-      const currentPerks = window.Game.modules.CharacterCreator.currentCharacter.perks;
-      if (currentPerks.length > 0) {
-        perksContainer.innerHTML = currentPerks.map(perkId => {
-          // Find perk details
-          const perk = window.Game?.modules?.CharacterCreator?.perks?.find(p => p.id === perkId);
-          return perk ? `<div class="character-perk">${perk.name}</div>` : '';
+    if (perksContainer && window.Game?.modules?.CharacterCreator) {
+      const cc = window.Game.modules.CharacterCreator;
+      let appearance = null;
+      if (typeof cc.loadSavedAppearance === 'function') {
+        appearance = cc.loadSavedAppearance();
+      }
+      if (!appearance && typeof cc.getAppearance === 'function') {
+        appearance = cc.getAppearance();
+      }
+
+      if (appearance?.selectedTraits && appearance.selectedTraits.length > 0) {
+        perksContainer.innerHTML = appearance.selectedTraits.map(traitId => {
+          // Find trait details from perksData
+          const perksData = cc.getPerksData ? cc.getPerksData() : null;
+          const trait = perksData?.traits?.find(t => t.id === traitId);
+          return trait ? `<div class="character-perk">${trait.name}</div>` : '';
         }).join('');
       } else {
         perksContainer.innerHTML = '<div class="no-perks">No perks selected</div>';
@@ -1844,15 +1864,27 @@
 
     // Update character appearance preview if available
     const appearancePreview = document.getElementById('character-appearance-preview');
-    if (appearancePreview && window.Game?.modules?.CharacterCreator?.currentCharacter?.appearance) {
-      const appearance = window.Game.modules.CharacterCreator.currentCharacter.appearance;
-      let previewText = [];
-      if (appearance.hairStyle) previewText.push(`Hair: ${appearance.hairStyle}`);
-      if (appearance.eyeColor) previewText.push(`Eyes: ${appearance.eyeColor}`);
-      if (appearance.skinTone) previewText.push(`Skin: ${appearance.skinTone}`);
-      appearancePreview.innerHTML = previewText.length > 0 ?
-        previewText.join('<br>') :
-        'Default appearance';
+    if (appearancePreview && window.Game?.modules?.CharacterCreator) {
+      const cc = window.Game.modules.CharacterCreator;
+      let appearance = null;
+      if (typeof cc.loadSavedAppearance === 'function') {
+        appearance = cc.loadSavedAppearance();
+      }
+      if (!appearance && typeof cc.getAppearance === 'function') {
+        appearance = cc.getAppearance();
+      }
+
+      if (appearance) {
+        let previewText = [];
+        if (appearance.hairStyle) previewText.push(`Hair: ${appearance.hairStyle}`);
+        if (appearance.hairColor) previewText.push(`Hair Color: ${appearance.hairColor}`);
+        if (appearance.eyeColor) previewText.push(`Eyes: ${appearance.eyeColor}`);
+        if (appearance.skinTone) previewText.push(`Skin: ${appearance.skinTone}`);
+        if (appearance.faceShape) previewText.push(`Face: ${appearance.faceShape}`);
+        appearancePreview.innerHTML = previewText.length > 0 ?
+          previewText.join('<br>') :
+          'Default appearance';
+      }
     }
 
     console.log('[Stats] Stat display updated');
