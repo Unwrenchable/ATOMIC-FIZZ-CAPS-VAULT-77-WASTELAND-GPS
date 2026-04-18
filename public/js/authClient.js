@@ -87,7 +87,8 @@ class AuthClient {
 
   saveSession(sessionId, wallet) {
     localStorage.setItem("sessionId", sessionId);
-    localStorage.setItem("wallet", wallet);
+    // SECURITY: Never store wallet address in localStorage
+    // Only store sessionId for authentication
 
     this.state = {
       wallet,
@@ -98,7 +99,7 @@ class AuthClient {
 
   clearSession() {
     localStorage.removeItem("sessionId");
-    localStorage.removeItem("wallet");
+    // SECURITY: Wallet is never stored in localStorage
 
     this.state = {
       wallet: null,
@@ -109,13 +110,15 @@ class AuthClient {
 
   restoreSession() {
     const sessionId = localStorage.getItem("sessionId");
-    const wallet = localStorage.getItem("wallet");
+    // SECURITY: Wallet is never stored in localStorage
+    // Wallet state should be restored from current connection
 
-    if (sessionId && wallet) {
+    if (sessionId) {
+      // Only restore sessionId, wallet will be set when reconnected
       this.state = {
-        wallet,
+        wallet: null, // Will be set when wallet reconnects
         sessionId,
-        authenticated: true,
+        authenticated: false, // Require wallet reconnection for full auth
       };
     }
   }

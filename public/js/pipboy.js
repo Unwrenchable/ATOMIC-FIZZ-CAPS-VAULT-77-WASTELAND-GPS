@@ -95,6 +95,25 @@
     }
 
     // STAT PANEL ACTIVATION — HUD is kept live by main.js; nothing extra needed here
+    if (panelKey === "stat") {
+      // Initialize character creator only when STATS tab is first opened
+      if (Game.modules?.CharacterCreator && !Game.modules.CharacterCreator._initialized) {
+        try {
+          Game.modules.CharacterCreator.init().then(() => {
+            Game.modules.CharacterCreator._initialized = true;
+            console.log("[PipBoy] Character creator initialized on STATS tab open");
+            // Update stats display after initialization
+            if (window.updateStatDisplay) {
+              window.updateStatDisplay();
+            }
+          }).catch(err => {
+            console.warn("[PipBoy] Character creator initialization failed:", err);
+          });
+        } catch (e) {
+          console.warn("[PipBoy] Character creator init call failed:", e);
+        }
+      }
+    }
 
     // QUESTS PANEL ACTIVATION - render quest UI
     if (panelKey === "quests") {
