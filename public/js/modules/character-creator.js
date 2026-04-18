@@ -330,9 +330,18 @@
 
     // Save the current character
     save() {
+      // Save to localStorage
+      localStorage.setItem('atomicfizz_character', JSON.stringify(currentCharacter));
+
       if (this.onSaveCallback) {
         this.onSaveCallback(currentCharacter);
       }
+
+      // Update the STATS panel display
+      if (window.updateStatDisplay) {
+        window.updateStatDisplay();
+      }
+
       this.close();
     },
 
@@ -678,6 +687,11 @@
       if (!currentCharacter.appearance) currentCharacter.appearance = {};
       currentCharacter.appearance[category] = optionId;
       this._renderAppearance(); // Re-render to update selection
+
+      // Update STATS panel preview in real-time
+      if (window.updateStatDisplay) {
+        window.updateStatDisplay();
+      }
     },
 
     // Render perks list
@@ -761,6 +775,11 @@
       }
 
       this._renderPerks();
+
+      // Update STATS panel in real-time
+      if (window.updateStatDisplay) {
+        window.updateStatDisplay();
+      }
     },
 
     // Check if character meets perk requirements
@@ -853,6 +872,11 @@
 
       currentCharacter.special[stat] = newValue;
       this._renderSpecialStats();
+
+      // Update STATS panel in real-time
+      if (window.updateStatDisplay) {
+        window.updateStatDisplay();
+      }
     },
 
     // Apply evolution command
