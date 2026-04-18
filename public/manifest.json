@@ -26,49 +26,8 @@
   "categories": ["games", "entertainment", "finance"],
   "lang": "en-US",
   "dir": "ltr",
-  "prefer_related_applications": false,
-  "related_applications": [
-    {
-      "platform": "play",
-      "url": "https://play.google.com/store/apps/details?id=xyz.atomicfizzcaps.app",
-      "id": "xyz.atomicfizzcaps.app"
-    },
-    {
-      "platform": "itunes",
-      "url": "https://apps.apple.com/app/atomic-fizz-caps/id0000000000"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/img/screenshot-map.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Wasteland Map View"
-    },
-    {
-      "src": "/img/screenshot-wallet.png",
-      "sizes": "720x1280",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Atomic Fizz Wallet"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Open Map",
-      "short_name": "Map",
-      "description": "View the Wasteland Map",
-      "url": "/?tab=map",
-      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Quests",
-      "short_name": "Quests",
-      "description": "View your active quests",
-      "url": "/?tab=quests",
-      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
-    },
+  "prefer_related_applications": false
+}
     {
       "name": "Wallet",
       "short_name": "Wallet",
