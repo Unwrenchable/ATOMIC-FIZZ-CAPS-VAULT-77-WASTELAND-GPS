@@ -132,9 +132,20 @@ router.post("/", authMiddleware, claimLimiter, async (req, res) => {
       console.error("[claim-survival] xp award error:", xpErr);
     }
 
+    // Gear drop chance (20% for all encounters, but higher for combat)
+    const dropChance = encounterType === 'combat' ? 0.3 : 0.2;
+    let gearDrop = null;
+    if (crypto.randomInt(0, 100) < dropChance * 100) {
+      // Random gear: weapons or armor
+      const gearTypes = ['Power Armor T-51b', 'Combat Rifle', '10mm Pistol', 'Leather Armor'];
+      const randomGear = gearTypes[crypto.randomInt(0, gearTypes.length)];
+      gearDrop = { name: randomGear, tier: 'common' }; // Simplified
+      // TODO: Mint NFT for gear
+    }
+
     console.log(
       `[claim-survival] wallet=${wallet.slice(0, 8)}... ` +
-      `type=${encounterType} session=${sessionId} caps=${capsAwarded} xp=${xpAwarded}`
+      `type=${encounterType} session=${sessionId} caps=${capsAwarded} xp=${xpAwarded} gear=${gearDrop?.name || 'none'}`
     );
 
     return res.json({
@@ -144,6 +155,7 @@ router.post("/", authMiddleware, claimLimiter, async (req, res) => {
       encounterType,
       newCapsTotal: capsResult?.newBalance ?? null,
       leveledUp: xpResult?.leveledUp ?? false,
+      gearDrop,
       message: `You survived the ${encounterType.replace(/_/g, " ")}. Collect your scrap and move out.`,
     });
   } catch (err) {

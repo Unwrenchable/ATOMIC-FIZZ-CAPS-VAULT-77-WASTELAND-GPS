@@ -435,6 +435,13 @@
         this.state.activeEnemyIndex = nextIdx !== -1 ? nextIdx : idx;
       }
 
+      // Durability decay for weapon after successful hit
+      if (hit && res.weapon && res.weapon.slot) {
+        if (Game.modules?.PlayerState?.decayDurability) {
+          Game.modules.PlayerState.decayDurability(res.weapon.slot, 1);
+        }
+      }
+
       this.updateUI();
       return { ...res, damage, isCritical, wasSneaking, detected, sneakMultiplier, hit: true, weather };
     },
@@ -496,6 +503,13 @@
 
       this.gs.player.hp -= dmg;
       if (this.gs.player.hp < 0) this.gs.player.hp = 0;
+
+      // Durability decay for armor after taking damage
+      if (dmg > 0 && bestArmorItem && bestArmorItem.slot) {
+        if (Game.modules?.PlayerState?.decayDurability) {
+          Game.modules.PlayerState.decayDurability(bestArmorItem.slot, 1);
+        }
+      }
 
       // Weather radiation effects
       const weather = this._getCurrentWeather();
