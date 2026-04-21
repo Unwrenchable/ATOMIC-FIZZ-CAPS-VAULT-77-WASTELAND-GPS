@@ -292,6 +292,7 @@ safeMount("/api/caps", api("caps"));
 safeMount("/api/transfer-fizz", api("transfer-fizz"));
 safeMount("/api/settings", api("settings"));
 safeMount("/api/crafting", api("crafting"));
+safeMount("/api/repair", api("repair"));
 
 // NFT Scrap and Fusion features
 safeMount("/api/scrap-nft", api("scrap-nft"));
@@ -316,6 +317,9 @@ safeMount("/api/quest-endings", api("quest-endings"));
 
 // Survival reward claims
 safeMount("/api/claim-survival", api("claim-survival"));
+
+// Buy Stimpak with CAPS burn
+safeMount("/api/buy-stimpak", api("buy-stimpak"));
 
 // Overseer AI proxy (Hugging Face / OpenAI compatible)
 safeMount("/api/overseer", api("overseer-proxy"));

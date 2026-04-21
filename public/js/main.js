@@ -1005,6 +1005,7 @@
       }
       let html = '<div class="panel-divider"></div><h3>Claim Mintable Item</h3>';
       html += '<button id="claimMintablesExchange" class="pipboy-button" style="width:100%;margin-bottom:10px;">CLAIM NEARBY ITEM</button>';
+      html += '<button id="forceClaimMintablesExchange" class="pipboy-button-small" style="width:100%;margin-bottom:10px;background:#440000;color:#ff4444;">FORCE CLAIM (DEV)</button>';
       html += '<div id="claimStatusExchange" style="margin-top:6px;font-size:12px;opacity:0.8;"></div>';
       claimSection.innerHTML = html;
 
@@ -1071,6 +1072,32 @@
               claimBtn.textContent = originalText;
               claimStatus.textContent = "";
               updateClaimButtonState();
+            }, 2000);
+          }
+        };
+      }
+      const forceClaimBtn = document.getElementById("forceClaimMintablesExchange");
+      if (forceClaimBtn) {
+        forceClaimBtn.onclick = async () => {
+          if (forceClaimBtn.disabled) return;
+          const originalText = forceClaimBtn.textContent;
+          forceClaimBtn.textContent = "FORCING...";
+          forceClaimBtn.disabled = true;
+          claimStatus.textContent = "Forcing claim (dev mode)...";
+          try {
+            await claimMintableFromServer();
+            forceClaimBtn.textContent = "FORCED!";
+            claimStatus.textContent = "Item forced and added to your inventory.";
+            setTimeout(() => {
+              forceClaimBtn.textContent = originalText;
+              claimStatus.textContent = "";
+            }, 2000);
+          } catch (e) {
+            forceClaimBtn.textContent = "ERROR";
+            claimStatus.textContent = "Force claim failed. Please try again.";
+            setTimeout(() => {
+              forceClaimBtn.textContent = originalText;
+              claimStatus.textContent = "";
             }, 2000);
           }
         };
