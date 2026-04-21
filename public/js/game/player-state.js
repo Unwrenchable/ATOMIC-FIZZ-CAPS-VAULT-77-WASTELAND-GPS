@@ -30,6 +30,14 @@
       aid: null,       // quick-use consumable
       accessory: null  // misc / quest items
     },
+    // Durability for equipped items (0-100)
+    durability: {
+      weapon: 100,
+      head: 100,
+      chest: 100,
+      arms: 100,
+      legs: 100
+    },
     // Quest state
     questsActive: [],
     questsCompleted: [],
@@ -182,9 +190,15 @@
           Object.keys(ADDICTION_DEFAULTS).forEach(k => {
             if (typeof _state.addiction[k] !== 'number') _state.addiction[k] = ADDICTION_DEFAULTS[k];
           });
+        // Ensure durability object exists
+        if (!_state.durability || typeof _state.durability !== 'object') {
+          _state.durability = { weapon: 100, head: 100, chest: 100, arms: 100, legs: 100 };
+        } else {
+          const DURABILITY_DEFAULTS = { weapon: 100, head: 100, chest: 100, arms: 100, legs: 100 };
+          Object.keys(DURABILITY_DEFAULTS).forEach(k => {
+            if (typeof _state.durability[k] !== 'number') _state.durability[k] = DURABILITY_DEFAULTS[k];
+          });
         }
-        
-        console.log("[PlayerState] Loaded from storage");
       } else {
         _state = { ...DEFAULT_STATE };
         console.log("[PlayerState] Starting fresh");
@@ -395,6 +409,35 @@
       syncGamePlayerReferences();
       triggerSurvivalUpdate();
     }
+  }
+
+  /**
+   * Decay durability of equipped items on use
+   * @param {string} slot - Equipment slot (weapon, head, chest, arms, legs)
+   * @param {number} amount - Amount to decay (default 5)
+   */
+  function decayDurability(slot, amount = 5) {
+    if (!_state.durability || !_state.durability[slot]) return;
+    _state.durability[slot] = Math.max(0, _state.durability[slot] - amount);
+    _dirty = true;
+    console.log(`[PlayerState] ${slot} durability decayed by ${amount} to ${_state.durability[slot]}`);
+    if (_state.durability[slot] <= 0) {
+      // Item breaks
+      unequipItem(slot);
+      console.log(`[PlayerState] ${slot} item broke!`);
+    }
+  }
+
+  /**
+   * Repair durability of equipped item
+   * @param {string} slot - Equipment slot
+   * @param {number} amount - Amount to repair (default 25)
+   */
+  function repairDurability(slot, amount = 25) {
+    if (!_state.durability || !_state.durability[slot]) return;
+    _state.durability[slot] = Math.min(100, _state.durability[slot] + amount);
+    _dirty = true;
+    console.log(`[PlayerState] ${slot} durability repaired by ${amount} to ${_state.durability[slot]}`);
   }
 
   /**
@@ -1265,8 +1308,11 @@
     // Chem and addiction functions
     useItem,
     getAddiction,
-    getWithdrawalPenalties
-  };
+    getWithdrawalPenalties,
+    // Durability functions
+    decayDurability,
+    repairDurability,
+    getDurability: function () { return _state ? { ..._state.durability } : {}; }
 
   // Expose globally
   Game.modules.PlayerState = PlayerState;
