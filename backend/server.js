@@ -97,13 +97,13 @@ app.use(express.json({ limit: "64kb" }));
 app.use(
   rateLimit({
     windowMs: 10 * 1000,
-    max: 50,
+    max: 200,
     standardHeaders: true,
     legacyHeaders: false,
     // Keep liveness and bootstrap config endpoints available during traffic spikes.
     skip: (req) => {
       const p = req.path || "";
-      return p === "/api/health" || p === "/api/config/frontend";
+      return p === "/api/health" || p === "/api/config/frontend" || !p.startsWith('/api/');
     },
   })
 );
