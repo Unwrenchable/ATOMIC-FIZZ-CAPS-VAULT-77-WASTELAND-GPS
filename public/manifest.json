@@ -26,8 +26,8 @@
   "categories": ["games", "entertainment", "finance"],
   "lang": "en-US",
   "dir": "ltr",
-  "prefer_related_applications": false
-}
+  "prefer_related_applications": false,
+  "shortcuts": [
     {
       "name": "Wallet",
       "short_name": "Wallet",
