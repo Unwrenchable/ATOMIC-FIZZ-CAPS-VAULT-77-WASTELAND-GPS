@@ -1,4 +1,4 @@
-// game.overseer-bridge.js
+// _Game.overseer-bridge.js
 // Bridges the Overseer Terminal to the main game engine.
 // Listens for overseer:command and emits game:event back.
 
@@ -13,7 +13,7 @@ const _Game = window.Game; // eslint-disable-line no-unused-vars
   // with safe fallbacks for missing implementations.
   // Fallback order:
   // 1. Real world state (overseerWorldState + overseerRegions)
-  // 2. Player location data (game.player.location)
+  // 2. Player location data (_Game.player.location)
   // 3. Default "mojave_core" region
   window.world = window.world || {
     getCurrentRegion: function () {
@@ -26,7 +26,7 @@ const _Game = window.Game; // eslint-disable-line no-unused-vars
         return { id: regionId || "mojave_core", name: "Unknown Region" };
       }
       // Priority 2: Fallback to player location
-      const playerLoc = game.player?.location;
+      const playerLoc = _Game.player?.location;
       if (playerLoc && playerLoc.regionId) {
         return { id: playerLoc.regionId, name: playerLoc.name || "Unknown" };
       }
@@ -35,9 +35,9 @@ const _Game = window.Game; // eslint-disable-line no-unused-vars
     },
 
     getNearbyPOIs: function (radius) {
-      // Try to use game.getNearbyPOIs if available
-      if (typeof game.getNearbyPOIs === "function") {
-        return game.getNearbyPOIs(radius);
+      // Try to use _Game.getNearbyPOIs if available
+      if (typeof _Game.getNearbyPOIs === "function") {
+        return _Game.getNearbyPOIs(radius);
       }
       // Try worldmap module
       if (window.Game?.modules?.worldmap?.getNearbyPOIs) {
@@ -48,7 +48,7 @@ const _Game = window.Game; // eslint-disable-line no-unused-vars
     },
 
     getPlayerLocation: function () {
-      return game.player?.location || { id: "unknown", name: "Unknown", lat: null, lng: null };
+      return _Game.player?.location || { id: "unknown", name: "Unknown", lat: null, lng: null };
     },
 
     // Expose world simulation subsystems for advanced usage
@@ -67,7 +67,7 @@ const _Game = window.Game; // eslint-disable-line no-unused-vars
   // ========= BASIC PLAYER / WORLDSTATE STUBS =========
   // Replace these with your real implementations.
 
-  game.player = game.player || {
+  _Game.player = _Game.player || {
     hp: 100,
     rads: 0,
     caps: 0,
@@ -80,25 +80,25 @@ const _Game = window.Game; // eslint-disable-line no-unused-vars
     }
   };
 
-  game.inventory = game.inventory || [
+  _Game.inventory = _Game.inventory || [
     // "10mm Pistol",
     // "Vault 77 Jumpsuit",
     // "Stimpak"
   ];
 
-  game.quests = game.quests || {
+  _Game.quests = _Game.quests || {
     active: [
       // { id: "vault77_main_01", title: "AWAKENING", state: "active", step: "Leave the Vault." }
     ]
   };
 
-  game.getNearbyPOIs = game.getNearbyPOIs || function () {
+  _Game.getNearbyPOIs = _Game.getNearbyPOIs || function () {
     // You can wire this to your map engine using player.location and fallout_pois.json
     // Return objects shaped like: { id, name, distance }
     return [];
   };
 
-  game.vbotHandle = game.vbotHandle || function (text) {
+  _Game.vbotHandle = _Game.vbotHandle || function (text) {
     // Simple placeholder V-BOT response:
     return text
       ? "ACKNOWLEDGED: " + text
@@ -115,99 +115,99 @@ const _Game = window.Game; // eslint-disable-line no-unused-vars
     );
   }
 
-  game.sendStatusToTerminal = function () {
+  _Game.sendStatusToTerminal = function () {
     sendGameEvent("status", {
-      hp: game.player.hp,
-      rads: game.player.rads,
-      caps: game.player.caps,
-      faction: game.player.faction
+      hp: _Game.player.hp,
+      rads: _Game.player.rads,
+      caps: _Game.player.caps,
+      faction: _Game.player.faction
     });
   };
 
-  game.sendInventoryToTerminal = function () {
+  _Game.sendInventoryToTerminal = function () {
     sendGameEvent("inventory", {
-      items: game.inventory.slice()
+      items: _Game.inventory.slice()
     });
   };
 
-  game.sendMapInfoToTerminal = function () {
-    const nearby = game.getNearbyPOIs() || [];
+  _Game.sendMapInfoToTerminal = function () {
+    const nearby = _Game.getNearbyPOIs() || [];
     sendGameEvent("map_scan", { nearby });
   };
 
-  game.sendQuestLogToTerminal = function () {
-    const active = Array.isArray(game.quests.active)
-      ? game.quests.active
+  _Game.sendQuestLogToTerminal = function () {
+    const active = Array.isArray(_Game.quests.active)
+      ? _Game.quests.active
       : [];
     sendGameEvent("quest_log", { quests: active });
   };
 
-  game.sendLocationToTerminal = function () {
-    sendGameEvent("location", game.player.location || {});
+  _Game.sendLocationToTerminal = function () {
+    sendGameEvent("location", _Game.player.location || {});
   };
 
-  game.sendCapsToTerminal = function () {
-    sendGameEvent("caps", { caps: game.player.caps });
+  _Game.sendCapsToTerminal = function () {
+    sendGameEvent("caps", { caps: _Game.player.caps });
   };
 
-  game.sendVbotToTerminal = function (message) {
+  _Game.sendVbotToTerminal = function (message) {
     sendGameEvent("vbot", { message });
   };
 
-  game.sendAlertToTerminal = function (message) {
+  _Game.sendAlertToTerminal = function (message) {
     sendGameEvent("alert", { message });
   };
 
-  game.setRedMenaceMode = function (active) {
+  _Game.setRedMenaceMode = function (active) {
     sendGameEvent("rm_state", { active: !!active });
   };
 
-  game.configureMobileControls = function (config) {
+  _Game.configureMobileControls = function (config) {
     sendGameEvent("mobile_controls", config || {});
   };
 
   // ========= CORE HANDLETERMINALCOMMAND =========
 
-  game.handleTerminalCommand = function (type, payload) {
+  _Game.handleTerminalCommand = function (type, payload) {
     switch (type) {
       case "terminal_ready":
         // Terminal booted; you can push initial state here if you want.
-        game.sendStatusToTerminal();
+        _Game.sendStatusToTerminal();
         break;
 
       case "status":
-        game.sendStatusToTerminal();
+        _Game.sendStatusToTerminal();
         break;
 
       case "inventory":
-        game.sendInventoryToTerminal();
+        _Game.sendInventoryToTerminal();
         break;
 
       case "map_scan":
-        game.sendMapInfoToTerminal();
+        _Game.sendMapInfoToTerminal();
         break;
 
       case "quest_log":
-        game.sendQuestLogToTerminal();
+        _Game.sendQuestLogToTerminal();
         break;
 
       case "location":
-        game.sendLocationToTerminal();
+        _Game.sendLocationToTerminal();
         break;
 
       case "caps":
-        game.sendCapsToTerminal();
+        _Game.sendCapsToTerminal();
         break;
 
       case "vbot": {
         const text = (payload && payload.text) || "";
-        const reply = game.vbotHandle(text);
-        game.sendVbotToTerminal(reply);
+        const reply = _Game.vbotHandle(text);
+        _Game.sendVbotToTerminal(reply);
         break;
       }
 
       case "rm_mode":
-        game.setRedMenaceMode(payload && payload.active);
+        _Game.setRedMenaceMode(payload && payload.active);
         break;
 
       case "rm_input":
@@ -250,8 +250,8 @@ const _Game = window.Game; // eslint-disable-line no-unused-vars
     const type = detail.type;
     const payload = detail.payload || {};
     if (!type) return;
-    if (typeof game.handleTerminalCommand === "function") {
-      game.handleTerminalCommand(type, payload);
+    if (typeof _Game.handleTerminalCommand === "function") {
+      _Game.handleTerminalCommand(type, payload);
     }
   });
 

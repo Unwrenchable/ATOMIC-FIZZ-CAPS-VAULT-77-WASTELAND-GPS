@@ -24,6 +24,19 @@
       || window.innerWidth <= 768;
   }
 
+  // Render character portrait in STAT tab
+  function renderCharacterPortrait() {
+    if (!Game.modules?.CharacterCreator) return;
+    const savedAppearance = Game.modules.CharacterCreator.loadSavedAppearance();
+    if (savedAppearance) {
+      const svg = Game.modules.CharacterCreator.generatePortraitSVG(savedAppearance, 120);
+      const portraitDiv = document.getElementById('statPortraitSvg');
+      if (portraitDiv) {
+        portraitDiv.innerHTML = svg;
+      }
+    }
+  }
+
     // ------------------------------------------------------------
   // CORE PANEL SWITCHER
   // ------------------------------------------------------------
@@ -84,11 +97,11 @@
       Game.quests?.completeObjective("wake_up", "open_inventory");
 
       // Render inventory so it shows current state every time the tab opens
-      if (window.Game && window.Game.ui?.renderInventory) {
+      if (window.renderInventoryPanel) {
         try {
-          window.Game.ui.renderInventory();
+          window.renderInventoryPanel();
         } catch (e) {
-          console.warn("[PipBoy] renderInventory failed:", e);
+          console.warn("[PipBoy] renderInventoryPanel failed:", e);
         }
       }
     }
@@ -105,6 +118,8 @@
             if (window.updateStatDisplay) {
               window.updateStatDisplay();
             }
+            // Render character portrait
+            renderCharacterPortrait();
           }).catch(err => {
             console.warn("[PipBoy] Character creator initialization failed:", err);
           });
@@ -116,21 +131,32 @@
         if (window.updateStatDisplay) {
           window.updateStatDisplay();
         }
+        // Render character portrait
+        renderCharacterPortrait();
       }
     }
 
     // QUESTS PANEL ACTIVATION - render quest UI
     if (panelKey === "quests") {
-      if (Game.ui?.renderQuest) {
+      if (window.renderQuestsPanel) {
         try {
-          Game.ui.renderQuest();
+          window.renderQuestsPanel();
         } catch (e) {
-          console.warn("[PipBoy] renderQuest failed:", e);
+          console.warn("[PipBoy] renderQuestsPanel failed:", e);
         }
       }
     }
 
     // EXCHANGE PANEL ACTIVATION - render exchange content
+    if (panelKey === "exchange") {
+      if (window.renderDemoExchange) {
+        try {
+          window.renderDemoExchange();
+        } catch (e) {
+          console.warn("[PipBoy] renderDemoExchange failed:", e);
+        }
+      }
+    }
     if (panelKey === "exchange") {
       // Trigger the same initialization as the click handler
       if (window.renderExchangeClaimSection && window.renderExchangeCraftingSection && window.renderDemoExchange) {

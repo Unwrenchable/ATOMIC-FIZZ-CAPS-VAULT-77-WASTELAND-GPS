@@ -37,7 +37,7 @@ global.console.warn = (...args) => {
 };
 
 // Load all modules in order
-global.Game = { player: {}, modules: {}, hooks: {} };
+global.window.Game = { player: {}, modules: {}, hooks: {} };
 require('./public/js/game/player-state.js');
 require('./public/js/game/inventory-actions.js');
 require('./public/js/game/equip-actions.js');
