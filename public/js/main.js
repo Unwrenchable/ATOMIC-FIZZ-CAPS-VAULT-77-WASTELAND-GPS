@@ -1952,4 +1952,9 @@
   window.addEventListener("questAccepted", () => {
     renderQuestsPanel();
   });
+
+  // Expose render functions to window for pipboy.js
+  window.renderQuestsPanel = renderQuestsPanel;
+  window.renderInventoryPanel = renderInventoryPanel;
+  window.renderDemoExchange = renderDemoExchange;
 })();

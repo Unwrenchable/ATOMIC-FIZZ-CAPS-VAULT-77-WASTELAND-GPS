@@ -850,16 +850,16 @@ test("SEC-WALLET-005: wallet.js nonce is deleted BEFORE session is created (redu
   );
 });
 
-test("SEC-WALLET-006: nuke.js reads wallet from 'wallet' key (matches authClient.js storage)", () => {
+test("SEC-WALLET-006: nuke.js does not store wallet in localStorage (security hardening)", () => {
   const src = readFile("public/js/nuke.js");
   assert.ok(src, "public/js/nuke.js must exist");
   assert.ok(
     !src.includes("fizz_wallet_address"),
-    "nuke.js must not read stale 'fizz_wallet_address' localStorage key — use 'wallet' key written by authClient.js"
+    "nuke.js must not read stale 'fizz_wallet_address' localStorage key"
   );
   assert.ok(
-    src.includes('localStorage.getItem("wallet")'),
-    "nuke.js must read wallet address from localStorage key 'wallet' (set by authClient.saveSession)"
+    !src.includes('localStorage.getItem("wallet")'),
+    "nuke.js must not read wallet address from localStorage (security: wallet addresses never stored in localStorage)"
   );
 });
 

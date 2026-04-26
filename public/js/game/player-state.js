@@ -9,8 +9,8 @@
   "use strict";
 
   window.Game = window.Game || {};
-  Game.player = Game.player || {};
-  Game.modules = Game.modules || {};
+  window.Game.player = window.Game.player || {};
+  window.Game.modules = window.Game.modules || {};
 
   const STORAGE_KEY = "afc_unified_player_state_v2";
   const AUTO_SAVE_INTERVAL = 15000; // 15 seconds - reduced from 5s for performance
@@ -190,6 +190,7 @@
           Object.keys(ADDICTION_DEFAULTS).forEach(k => {
             if (typeof _state.addiction[k] !== 'number') _state.addiction[k] = ADDICTION_DEFAULTS[k];
           });
+        }
         // Ensure durability object exists
         if (!_state.durability || typeof _state.durability !== 'object') {
           _state.durability = { weapon: 100, head: 100, chest: 100, arms: 100, legs: 100 };
@@ -203,15 +204,12 @@
         _state = { ...DEFAULT_STATE };
         console.log("[PlayerState] Starting fresh");
       }
-      
       // Also try to load from legacy storage and merge
       mergeLegacyStorage();
-      
     } catch (e) {
       console.error("[PlayerState] Failed to load:", e);
       _state = { ...DEFAULT_STATE };
     }
-  }
 
   /**
    * Merge data from legacy storage keys
@@ -1314,15 +1312,18 @@
     repairDurability,
     getDurability: function () { return _state ? { ..._state.durability } : {}; }
 
+  };
   // Expose globally
-  Game.modules.PlayerState = PlayerState;
+  window.Game.modules.PlayerState = PlayerState;
   window.PlayerState = PlayerState;
 
   // Auto-initialize when DOM is ready
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
+  if (typeof window !== 'undefined') {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", PlayerState.init);
+    } else {
+      PlayerState.init();
+    }
   }
 
 })();
