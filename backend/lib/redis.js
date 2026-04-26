@@ -201,6 +201,26 @@ function createInMemoryClient() {
       for (const k of sets.keys()) { if (regex.test(k)) matched.add(k); }
       return Array.from(matched);
     },
+    // SCAN emulation for in-memory fallback — always returns cursor "0" (complete in one call)
+    // Signature matches ioredis: scan(cursor, "MATCH", pattern, "COUNT", count)
+    async scan(cursor, ...args) {
+      // Parse MATCH pattern from variadic args
+      let pattern = "*";
+      for (let i = 0; i < args.length - 1; i++) {
+        if (String(args[i]).toUpperCase() === "MATCH") {
+          pattern = args[i + 1];
+          break;
+        }
+      }
+      const regex = new RegExp(
+        "^" + pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*") + "$"
+      );
+      const matched = new Set();
+      for (const k of store.keys()) { if (regex.test(k)) matched.add(k); }
+      for (const k of hashes.keys()) { if (regex.test(k)) matched.add(k); }
+      for (const k of sets.keys()) { if (regex.test(k)) matched.add(k); }
+      return ["0", Array.from(matched)];
+    },
     on() { /* noop for events */ },
     quit() { return Promise.resolve(); },
     ping() { return Promise.resolve("PONG"); }
