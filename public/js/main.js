@@ -1223,11 +1223,6 @@
     safeLog("UI initialized (core controls wired)");
   }
 
-  // Expose exchange functions globally for pipboy panel activation
-  window.renderExchangeClaimSection = renderExchangeClaimSection;
-  window.renderExchangeCraftingSection = renderExchangeCraftingSection;
-  window.renderDemoExchange = renderDemoExchange;
-
   // ---------------------------
   // STARTER PACK
   // ---------------------------
@@ -1765,7 +1760,10 @@
       attachMapReference();
       initUI();
 
-      const locCountEl = document.getElementById("locations-count");
+      // Expose exchange functions globally for pipboy panel activation (after initUI)
+      window.renderExchangeClaimSection = renderExchangeClaimSection;
+      window.renderExchangeCraftingSection = renderExchangeCraftingSection;
+      window.renderDemoExchange = renderDemoExchange;
       if (locCountEl) locCountEl.textContent = window.DATA.locations.length;
 
       // Render local inventory + quests + HUD
