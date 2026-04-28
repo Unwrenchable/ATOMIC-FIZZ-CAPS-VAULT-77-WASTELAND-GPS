@@ -1,0 +1,63 @@
+[
+  {
+    "id": "stimpak_craft",
+    "name": "Stimpak",
+    "description": "Brew a healing stimpak from wasteland herbs and chems. Heals 25 HP.",
+    "inputs": [
+      { "id": "herb", "amount": 3 },
+      { "id": "chem_vial", "amount": 1 }
+    ],
+    "outputId": "stimpak",
+    "outputAmount": 1,
+    "levelRequired": 1
+  },
+  {
+    "id": "repair_kit_craft",
+    "name": "Repair Kit",
+    "description": "Cobble together a field repair kit from scrap and cloth. Repairs worn gear.",
+    "inputs": [
+      { "id": "scrap_metal", "amount": 5 },
+      { "id": "cloth_rags", "amount": 2 }
+    ],
+    "outputId": "repair_kit",
+    "outputAmount": 1,
+    "levelRequired": 1
+  },
+  {
+    "id": "turret_part_craft",
+    "name": "Turret Part",
+    "description": "Fabricate a turret component from salvaged circuits and scrap. Used in advanced crafting.",
+    "inputs": [
+      { "id": "scrap_metal", "amount": 12 },
+      { "id": "circuit_board", "amount": 2 }
+    ],
+    "outputId": "turret_part",
+    "outputAmount": 1,
+    "levelRequired": 5
+  },
+  {
+    "id": "molotov_craft",
+    "name": "Molotov Cocktail",
+    "description": "A glass bottle full of flammable liquid. Simple, effective, deadly.",
+    "inputs": [
+      { "id": "glass_bottle", "amount": 1 },
+      { "id": "cloth_rags", "amount": 1 }
+    ],
+    "outputId": "molotov",
+    "outputAmount": 1,
+    "levelRequired": 1
+  },
+  {
+    "id": "medkit_craft",
+    "name": "Wasteland Medkit",
+    "description": "A fully stocked field medkit. Contains bandages, antiseptic, and a stimpak.",
+    "inputs": [
+      { "id": "cloth_rags", "amount": 3 },
+      { "id": "stimpak", "amount": 1 },
+      { "id": "wonderglue", "amount": 1 }
+    ],
+    "outputId": "wasteland_medkit",
+    "outputAmount": 1,
+    "levelRequired": 3
+  }
+]

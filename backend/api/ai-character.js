@@ -257,7 +257,7 @@ const grokService = new GrokAICharacterService();
 // API Routes
 function setupAICharacterRoutes(app) {
   // Generate character concept
-  app.post('/api/ai-character/generate-concept', async (req, res) => {
+  app.post('/generate-concept', async (req, res) => {
     try {
       const options = req.body || {};
       const concept = await grokService.generateCharacterConcept(options);
@@ -277,7 +277,7 @@ function setupAICharacterRoutes(app) {
   });
 
   // Generate character names
-  app.post('/api/ai-character/generate-names', async (req, res) => {
+  app.post('/generate-names', async (req, res) => {
     try {
       const options = req.body || {};
       const names = await grokService.generateNames(options);
@@ -297,7 +297,7 @@ function setupAICharacterRoutes(app) {
   });
 
   // Health check
-  app.get('/api/ai-character/health', (req, res) => {
+  app.get('/health', (req, res) => {
     res.json({
       status: 'ok',
       hasApiKey: !!grokService.apiKey,
@@ -308,5 +308,11 @@ function setupAICharacterRoutes(app) {
 
 module.exports = {
   setupAICharacterRoutes,
-  GrokAICharacterService
+  GrokAICharacterService,
+  router: (() => {
+    const express = require('express');
+    const r = express.Router();
+    setupAICharacterRoutes(r);
+    return r;
+  })()
 };

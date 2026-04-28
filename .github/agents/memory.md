@@ -123,7 +123,32 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
-### [2026-04-04] Frontend config must never return HF_API_KEY
+### [2026-04-28] Pip-Boy panel render system — two tiers exist
+- **What**: Fixed `public/js/pipboy.js` to use the full-featured module renderers instead of the legacy main.js stubs.
+  - ITEMS tab: now calls `Game.ui.renderInventory()` (inventory-ui.js — category tabs + paperdoll) with fallback to `window.renderInventoryPanel()`
+  - QUESTS tab: now calls `Game.ui.renderQuest()` (quest-ui.js — objectives, accept/decline) with fallback to `window.renderQuestsPanel()`
+  - EXCHANGE tab: consolidated two duplicate `if (panelKey==="exchange")` blocks into one that calls all three exchange renderers
+  - STAT portrait: now generates at size=150 (frame height) and clips to 120×150 with `overflow:hidden` to fill the frame correctly
+- **Why**: pipboy.js was calling the simple main.js versions (`renderInventoryPanel`, `renderQuestsPanel`) which don't populate the `#inventoryTabs` category bar or show quest objectives.
+- **Verified**: 105 security tests pass; playtest agent 35/35 pass, 0 warnings.
+
+### [2026-04-28] NFT loot items need `nft_eligible: true` flag
+- **What**: Added `"nft_eligible": true` to all 8 items in the `nft_items` tier of `public/data/items/loot_tables.json`. Also copied `public/data/factions/factions.json` → `public/data/factions.json` so the playtest agent finds it at `/data/factions.json`.
+- **Why**: Playtest agent checks `item.nft_eligible` to confirm NFT drops can occur. Factions file was in a subdirectory but agent expected it at the data root.
+- **Verified**: Playtest agent went from 32 passed / 2 warnings → 35 passed / 0 warnings.
+
+### [2026-04-28] backend/api/ module exports must expose a router
+- **What**: `safeMount()` in `backend/server.js` uses `mod.router || mod.default || mod`. API modules must export a router directly or via a `.router` property — plain objects with method names are silently ignored.
+- **Why**: `backend/api/ai-character.js` exported `{ setupAICharacterRoutes, GrokAICharacterService }` causing "Router.use() requires a middleware function but got a Object" on startup.
+- **Fix pattern**: Add a `.router` property built by calling the setup function on a fresh `express.Router()` in an IIFE at the bottom of the file.
+- **Verified**: `node -e "require('./backend/api/ai-character.js')"` → OK.
+
+### [2026-04-28] Never call `new PublicKey(placeholder)` at module scope
+- **What**: `backend/api/buy-stimpak.js` crashed on load with "Non-base58 character" because `new PublicKey(process.env.CAPS_MINT || "your-caps-token-mint-address")` ran at module scope.
+- **Fix**: Lazy-initialize Solana objects in a `getSolanaConfig()` function called at request time. Return HTTP 503 if env vars are missing.
+- **Verified**: `node -e "require('./backend/api/buy-stimpak.js')"` → OK even without `CAPS_MINT` env var.
+
+
 - **What**: Removed `overseer.hfApiKey` from [backend/api/frontend-config.js](backend/api/frontend-config.js#L1). Endpoint now returns only non-secret fields (`hfModel`, `proxyEnabled`).
 - **Why**: Production probe showed `/api/config/frontend` returning a backend API key field to public clients.
 - **Verified**: Static diagnostics clean on [backend/api/frontend-config.js](backend/api/frontend-config.js).
@@ -310,8 +335,33 @@ _(Confirmed by agent runs — newest first)_
 - **Verified**: `programs/fizzcaps-onchain/src/lib.rs:55-63`
 
 ### Security Test Coverage
-- **Total security tests**: 94 (was 79) — 15 new regression tests added for BUG-031–BUG-039 and SEC-AUDIT-001–SEC-AUDIT-008.
+- **Total security tests**: 105 (was 94) — additional tests added for Pip-Boy panel fixes and inventory/quest/exchange regressions.
 - **Run with**: `node tests/security.test.js`
+- **Playtest suite**: `node tests/playtest-agent.js` → 35/35 pass, 0 warnings.
+
+---
+
+### [2025-07-02] CharacterCreator.appearanceOptions — private closure exposed via getter
+- **What**: `let appearanceOptions` in `character-creator.js` is a private closure variable (line 13). Both `pipboy.js:renderCharacterPortrait()` and `index.html:updateStatDisplay()` checked `cc.appearanceOptions` — always `undefined` — causing portrait/stat display to never render.
+- **Fix**: Added `Object.defineProperty(CharacterCreator, 'appearanceOptions', { get: () => appearanceOptions })` before the module registration line in `character-creator.js`.
+- **Verified**: `public/js/modules/character-creator.js` — portrait and STAT panel now render correctly.
+
+### [2025-07-02] recipes.json was missing — crafting panel showed "No recipes available"
+- **What**: `public/js/modules/recipes.js` fetches `/recipes.json` at init. File did not exist in `public/`. The crafting section of the Exchange panel always showed "No recipes available."
+- **Fix**: Created `public/recipes.json` with 5 recipes (stimpak, repair_kit, turret_part, molotov, medkit) using the `{ id, name, description, inputs:[{id,amount}], outputId, levelRequired }` format expected by `recipes.js` and `renderExchangeCraftingSection`.
+- **Verified**: JSON valid, all 5 recipes have required fields.
+
+### [2025-07-02] Loot economy verified balanced
+- **Drop rates** (meta): nft=1%, legendary=2.5%, epic=6%, rare=15%, uncommon=30%, common=45%.
+- **Caps values by tier**: common 1-15, uncommon 8-45, rare 45-220, epic 180-750, legendary 400-5000.
+- **NFT items**: all 8 `nft_items` tier entries have `nft_eligible: true`.
+- **Demo shop**: stimpak 20 caps, radaway 30, nuka-cola 10, bobby_pin×5 15, scrap_metal 5.
+- **Quest rewards**: tutorial 25 caps / 50 XP; main quests 200-400 caps; arc finale up to 1000 caps.
+
+### [2026-04-28] NFT DESIGN DECISION: ALL non-common drops are NFT-eligible
+- **Rule**: `uncommon`, `rare`, `epic`, `legendary`, and `nft_items` tiers all have `nft_eligible: true`. `common` tier always `nft_eligible: false`.
+- **Meaning**: Every non-common item a player finds is mintable as an on-chain NFT. Players are responsible for initiating the mint and paying the Solana gas fee. The game never auto-mints.
+- **Verified**: `public/data/items/loot_tables.json` — 77 items nft_eligible (uncommon:20, rare:20, epic:15, legendary:14, nft_items:8), common:12 items NOT eligible.
 
 ---
 
