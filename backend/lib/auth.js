@@ -237,11 +237,13 @@ router.post("/verify", verifyLimiter, async (req, res) => {
 
     const message = Buffer.from(`Atomic Fizz Caps login: ${nonce}`, "utf8");
 
-    const ok = nacl.sign.detached.verify(
-      message,
-      sigBytes,
-      pubKeyBytes
-    );
+    let ok;
+    try {
+      ok = nacl.sign.detached.verify(message, sigBytes, pubKeyBytes);
+    } catch (verifyErr) {
+      console.warn("[auth] signature verification threw (bad length or format):", verifyErr.constructor.name);
+      return res.status(401).json({ ok: false, error: "Invalid signature" });
+    }
 
     if (!ok) {
       return res.status(401).json({ ok: false, error: "Invalid signature" });
