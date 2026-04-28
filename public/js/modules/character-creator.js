@@ -1486,6 +1486,14 @@
     }
   };
 
+  // Expose private closure variable as a public getter so pipboy.js and
+  // index.html can check `cc.appearanceOptions` to determine init state.
+  Object.defineProperty(CharacterCreator, 'appearanceOptions', {
+    get: function () { return appearanceOptions; },
+    enumerable: false,
+    configurable: true
+  });
+
   // Export to Game.modules
   Game.modules.CharacterCreator = CharacterCreator;
 
