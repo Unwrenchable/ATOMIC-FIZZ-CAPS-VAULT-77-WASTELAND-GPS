@@ -163,7 +163,8 @@ class AuthClient {
       const signatureBytes = normalizeSignedMessage(signedMessage);
       signatureBase58 = bs58.encode(signatureBytes);
     } catch (signErr) {
-      if (signErr.message && signErr.message.toLowerCase().includes("unavailable")) throw signErr;
+      // Re-throw genuine setup errors (e.g. bs58 library missing)
+      if (signErr instanceof ReferenceError || signErr instanceof TypeError) throw signErr;
       throw new Error("Phantom signature request was rejected or failed. Try again, Vault Dweller.");
     }
 

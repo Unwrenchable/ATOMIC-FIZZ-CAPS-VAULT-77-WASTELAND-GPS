@@ -241,7 +241,7 @@ router.post("/verify", verifyLimiter, async (req, res) => {
     try {
       ok = nacl.sign.detached.verify(message, sigBytes, pubKeyBytes);
     } catch (verifyErr) {
-      console.warn("[auth] signature verification threw (bad length or format):", verifyErr.message);
+      console.warn("[auth] signature verification threw (bad length or format):", verifyErr.constructor.name);
       return res.status(401).json({ ok: false, error: "Invalid signature" });
     }
 
