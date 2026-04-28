@@ -30,15 +30,24 @@ const { redis, key } = require("../lib/redis");
 const SOLANA_RPC = process.env.SOLANA_RPC || "https://api.devnet.solana.com";
 const connection = new Connection(SOLANA_RPC, "confirmed");
 
-// CAPS mint (from env)
-const CAPS_MINT = new PublicKey(process.env.CAPS_MINT || "your-caps-token-mint-address");
-
-// Mint authority (from env, array of bytes)
-const MINT_AUTHORITY_SECRET = JSON.parse(process.env.MINT_AUTHORITY_PRIVATE_KEY || "[]");
-const mintAuthority = Keypair.fromSecretKey(new Uint8Array(MINT_AUTHORITY_SECRET));
-
-// Stimpak collection mints (from env)
-const STIMPAK_COLLECTION_MINT = new PublicKey(process.env.STIMPAK_COLLECTION_MINT || "your-stimpak-collection-mint");
+// CAPS mint (from env) — lazy-evaluated so missing env vars don't crash module load
+let CAPS_MINT, mintAuthority, STIMPAK_COLLECTION_MINT;
+function getSolanaConfig() {
+  if (!CAPS_MINT) {
+    if (!process.env.CAPS_MINT) throw new Error("CAPS_MINT env var not set");
+    CAPS_MINT = new PublicKey(process.env.CAPS_MINT);
+  }
+  if (!mintAuthority) {
+    const secret = JSON.parse(process.env.MINT_AUTHORITY_PRIVATE_KEY || "[]");
+    if (!secret.length) throw new Error("MINT_AUTHORITY_PRIVATE_KEY env var not set");
+    mintAuthority = Keypair.fromSecretKey(new Uint8Array(secret));
+  }
+  if (!STIMPAK_COLLECTION_MINT) {
+    if (!process.env.STIMPAK_COLLECTION_MINT) throw new Error("STIMPAK_COLLECTION_MINT env var not set");
+    STIMPAK_COLLECTION_MINT = new PublicKey(process.env.STIMPAK_COLLECTION_MINT);
+  }
+  return { CAPS_MINT, mintAuthority, STIMPAK_COLLECTION_MINT };
+}
 
 // Tier definitions
 const STIMPAK_TIERS = {
@@ -78,8 +87,17 @@ router.post("/", authMiddleware, buyLimiter, async (req, res) => {
     const tierData = STIMPAK_TIERS[tier];
     const walletPubkey = new PublicKey(wallet);
 
+    // Load Solana config — returns 503 if env vars not set
+    let solanaConfig;
+    try {
+      solanaConfig = getSolanaConfig();
+    } catch (cfgErr) {
+      return res.status(503).json({ ok: false, error: "Stimpak vending machine offline. Check back later." });
+    }
+    const { CAPS_MINT: capsMint } = solanaConfig;
+
     // Check CAPS balance
-    const capsATA = await getAssociatedTokenAddress(CAPS_MINT, walletPubkey);
+    const capsATA = await getAssociatedTokenAddress(capsMint, walletPubkey);
     let balance;
     try {
       const accountInfo = await getTokenAccountBalance(connection, capsATA);
@@ -96,7 +114,7 @@ router.post("/", authMiddleware, buyLimiter, async (req, res) => {
     }
 
     // Burn CAPS
-    const burnIx = createBurnInstruction(capsATA, CAPS_MINT, walletPubkey, tierData.burnCost);
+    const burnIx = createBurnInstruction(capsATA, capsMint, walletPubkey, tierData.burnCost);
     const tx = new Transaction().add(burnIx);
     tx.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
     tx.feePayer = walletPubkey;

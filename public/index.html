@@ -923,7 +923,8 @@
               }
 
               if (appearance && portraitContainer && typeof cc.generatePortraitSVG === 'function') {
-                portraitContainer.innerHTML = cc.generatePortraitSVG(appearance, 120);
+                const html = cc.generatePortraitSVG(appearance, 150);
+                portraitContainer.innerHTML = `<div style="width:120px;height:150px;overflow:hidden;">${html}</div>`;
               }
 
               if (appearance?.name && nameDisplay) {
