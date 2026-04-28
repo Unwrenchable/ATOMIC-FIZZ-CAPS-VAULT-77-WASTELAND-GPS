@@ -155,11 +155,17 @@ class AuthClient {
     const message = `Atomic Fizz Caps login: ${nonce}`;
     const encoded = new TextEncoder().encode(message);
 
-    // 2. Sign nonce (this can throw if user rejects)
-    const bs58 = getBs58Encoder();
-    const signedMessage = await wallet.signMessage(encoded, "utf8");
-    const signatureBytes = normalizeSignedMessage(signedMessage);
-    const signatureBase58 = bs58.encode(signatureBytes);
+    // 2. Sign nonce (user may reject — catch before touching the backend)
+    let signatureBase58;
+    try {
+      const bs58 = getBs58Encoder();
+      const signedMessage = await wallet.signMessage(encoded, "utf8");
+      const signatureBytes = normalizeSignedMessage(signedMessage);
+      signatureBase58 = bs58.encode(signatureBytes);
+    } catch (signErr) {
+      if (signErr.message && signErr.message.toLowerCase().includes("unavailable")) throw signErr;
+      throw new Error("Phantom signature request was rejected or failed. Try again, Vault Dweller.");
+    }
 
     // 3. Verify
     let verifyRes;
