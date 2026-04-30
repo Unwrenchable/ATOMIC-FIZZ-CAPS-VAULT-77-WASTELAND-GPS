@@ -99,7 +99,7 @@
 
   Game.modules.encounterHeatmap = heatmap;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("map-ready", () => {
     try {
       heatmap.init();
     } catch (e) {

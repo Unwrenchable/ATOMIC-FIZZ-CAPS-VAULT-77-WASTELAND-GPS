@@ -71,7 +71,7 @@
 
   Game.modules.trail = trailModule;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("map-ready", () => {
     try {
       trailModule.init();
     } catch (e) {
