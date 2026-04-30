@@ -1,32 +1,104 @@
 // workers/mint_worker.js
 // Simple worker that processes items from the Redis list `afw:mint:queue:list`.
-// It demonstrates safe dequeue (RPOP/LPOP), processes job, marks audit with fake tx
+// It signs loot vouchers with KMS and marks audit with signed voucher
 
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 const { redis, key } = require('../backend/lib/redis');
+const { signMessage } = require('./kms_stub');
+const anchor = require('@coral-xyz/anchor');
+
+// Load IDL
+const idlPath = path.join(__dirname, '../programs/fizzcaps-onchain/target/idl/fizzcaps_onchain.json');
+const idl = JSON.parse(fs.readFileSync(idlPath, 'utf8'));
+const coder = new anchor.Coder(idl);
+
+async function retry(fn, maxRetries = 3, delay = 1000) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      console.error(`[mint_worker] Attempt ${i + 1} failed`, err.message);
+      if (i < maxRetries - 1) await new Promise(r => setTimeout(r, delay));
+    }
+  }
+  throw new Error('Max retries reached');
+}
 
 async function processJob(job) {
   console.log('[mint_worker] processing job', job);
-  // Simulate on-chain mint: wait a bit
-  await new Promise(r => setTimeout(r, 1000));
-
-  // Mark audit record with simulated tx
-  const auditKey = job.auditKey;
-  const tx = {
-    txId: `tx-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
-    mintedAt: Date.now(),
-    status: 'success'
-  };
 
   try {
+    // Create LootVoucher
+    const loot_id = BigInt(job.itemId);
+    const voucher = {
+      loot_id: loot_id,
+      latitude: job.latitude,
+      longitude: job.longitude,
+      timestamp: Math.floor(Date.now() / 1000), // Unix timestamp in seconds
+      location_hint: job.locationHint || '',
+      server_signature: null
+    };
+
+    // Serialize voucher data for signing (without signature) using Borsh
+    const voucherData = {
+      loot_id: voucher.loot_id,
+      latitude: voucher.latitude,
+      longitude: voucher.longitude,
+      timestamp: voucher.timestamp,
+      location_hint: voucher.location_hint,
+      server_signature: new Uint8Array(64) // dummy for serialization
+    };
+    const message = coder.types.encode('LootVoucher', voucherData);
+
+    // Sign with KMS (with retries)
+    const signatureHex = await retry(() => {
+      try {
+        return signMessage(message);
+      } catch (err) {
+        throw new Error(`KMS signing failed: ${err.message}`);
+      }
+    }, 3, 1000);
+
+    // Convert hex signature to [u8;64] array
+    const sigBuffer = Buffer.from(signatureHex, 'hex');
+    if (sigBuffer.length !== 64) {
+      throw new Error(`Invalid signature length: ${sigBuffer.length}`);
+    }
+    voucher.server_signature = Array.from(sigBuffer);
+
+    // Mark audit record with signed voucher
+    const auditKey = job.auditKey;
+    const tx = {
+      txId: `signed-voucher-${loot_id}-${Date.now()}`,
+      voucher: voucher,
+      mintedAt: Date.now(),
+      status: 'signed'
+    };
+
     const raw = await redis.get(auditKey);
     const audit = raw ? JSON.parse(raw) : {};
     audit.tx = tx;
     audit.processedAt = Date.now();
     await redis.set(auditKey, JSON.stringify(audit), { EX: 7 * 24 * 3600 });
-    console.log('[mint_worker] audit updated for', job.itemId, tx.txId);
+    console.log('[mint_worker] audit updated for', loot_id, tx.txId);
   } catch (err) {
-    console.error('[mint_worker] failed to update audit', err && err.message ? err.message : err);
+    console.error('[mint_worker] failed to process job', err.message);
+    // Optionally, mark audit with error status
+    try {
+      const auditKey = job.auditKey;
+      const raw = await redis.get(auditKey);
+      const audit = raw ? JSON.parse(raw) : {};
+      audit.tx = {
+        status: 'error',
+        error: err.message,
+        processedAt: Date.now()
+      };
+      await redis.set(auditKey, JSON.stringify(audit), { EX: 7 * 24 * 3600 });
+    } catch (auditErr) {
+      console.error('[mint_worker] failed to update audit with error', auditErr.message);
+    }
   }
 }
 

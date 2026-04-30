@@ -1,13 +1,23 @@
-// workers/kms_stub.js
-// Simple KMS signing stub for demo purposes only.
-// Replace with real KMS/HSM integration in production.
+// workers/kms.js
+// Real KMS signing using Solana keypair for ed25519 signatures.
 
-const crypto = require('crypto');
+const nacl = require('tweetnacl');
+const fs = require('fs');
+const path = require('path');
 
-function signMessageStub(messageBuffer) {
-  // Return a fake signature (hex) based on timestamp and crypto-random bytes
-  const sig = `sig-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  return sig;
+// Load the server keypair from env or file
+const keypairPath = process.env.SERVER_KEYPAIR_PATH || path.join(__dirname, 'server_keypair.json');
+let secretKey;
+try {
+  secretKey = JSON.parse(fs.readFileSync(keypairPath, 'utf8'));
+} catch (err) {
+  console.error('Failed to load server keypair for KMS', err);
+  throw err;
 }
 
-module.exports = { signMessageStub };
+function signMessage(messageBuffer) {
+  const signature = nacl.sign.detached(messageBuffer, new Uint8Array(secretKey));
+  return Buffer.from(signature).toString('hex');
+}
+
+module.exports = { signMessage };
