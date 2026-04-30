@@ -96,7 +96,7 @@
 
   Game.modules.factionOverlay = factionOverlay;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("map-ready", () => {
     try {
       factionOverlay.init();
     } catch (e) {
