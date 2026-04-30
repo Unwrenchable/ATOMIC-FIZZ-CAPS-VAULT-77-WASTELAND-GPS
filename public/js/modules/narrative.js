@@ -423,6 +423,20 @@
         this._grantDialogItems(node.grant_items, node.grant_from || dialog.npcName || "NPC");
       }
 
+      // Handle POI revelations from NPC dialogue nodes
+      if (Array.isArray(node.reveal_pois) && node.reveal_pois.length > 0) {
+        node.reveal_pois.forEach(poiId => {
+          if (Game.modules && Game.modules.PlayerState && Game.modules.PlayerState.discoverPOI) {
+            Game.modules.PlayerState.discoverPOI(poiId);
+            console.log("[narrative] Revealed POI:", poiId);
+          }
+        });
+        // Refresh map if available
+        if (Game.modules.WorldMap && Game.modules.WorldMap.loadLocations) {
+          Game.modules.WorldMap.loadLocations();
+        }
+      }
+
       // End dialogue if node is terminal
       if (node.end) {
         this._typewriterRender(node.text || "", dialog, null, () => this.closeDialog());

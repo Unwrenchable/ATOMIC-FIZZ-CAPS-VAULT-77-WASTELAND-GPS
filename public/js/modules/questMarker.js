@@ -84,7 +84,7 @@
 
   Game.modules.questMarker = questMarker;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("map-ready", () => {
     try {
       questMarker.init();
     } catch (e) {

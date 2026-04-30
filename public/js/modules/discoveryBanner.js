@@ -174,7 +174,7 @@
 
   Game.modules.discoveryBanner = discovery;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("map-ready", () => {
     try {
       discovery.init();
     } catch (e) {

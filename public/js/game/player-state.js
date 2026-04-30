@@ -70,6 +70,8 @@
     companions: [],
     // Visited locations for map
     visitedLocations: [],
+    // Discovered POIs (hidden until found or revealed)
+    discoveredPOIs: [],
     // Timestamps
     lastSaved: null,
     lastSynced: null
@@ -1267,6 +1269,19 @@
     activateQuest,
     completeQuest,
     visitLocation,
+    discoverPOI: function (poiId) {
+      if (!_state) return;
+      if (!_state.discoveredPOIs) _state.discoveredPOIs = [];
+      if (!_state.discoveredPOIs.includes(poiId)) {
+        _state.discoveredPOIs.push(poiId);
+        _dirty = true;
+        saveToStorage();
+      }
+    },
+    isPOIDiscovered: function (poiId) {
+      if (!_state || !_state.discoveredPOIs) return false;
+      return _state.discoveredPOIs.includes(poiId);
+    },
     syncWithBackend,
     receiveItemFromNPC,
     getSpecial: function () { return getEffectiveSpecial(); },

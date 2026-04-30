@@ -62,7 +62,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "🔍 PUBLIC ENDPOINTS (No Auth Required)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-test_endpoint "Health Check" "GET" "/api/health"
+test_endpoint "Health Check" "GET" "/api/ping"
 test_endpoint "Mintables List" "GET" "/api/mintables"
 test_endpoint "Locations List" "GET" "/api/locations"
 test_endpoint "Quests List" "GET" "/api/quests"
