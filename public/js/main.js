@@ -1221,6 +1221,9 @@
     });
 
     safeLog("UI initialized (core controls wired)");
+    // Expose exchange render functions globally (must be inside initUI to stay in scope)
+    window.renderExchangeClaimSection = renderExchangeClaimSection;
+    window.renderExchangeCraftingSection = renderExchangeCraftingSection;
   }
 
   // ---------------------------
@@ -1760,10 +1763,6 @@
       attachMapReference();
       initUI();
 
-      // Expose exchange functions globally for pipboy panel activation (after initUI)
-      window.renderExchangeClaimSection = renderExchangeClaimSection;
-      window.renderExchangeCraftingSection = renderExchangeCraftingSection;
-      window.renderDemoExchange = renderDemoExchange;
       if (locCountEl) locCountEl.textContent = window.DATA.locations.length;
 
       // Render local inventory + quests + HUD
