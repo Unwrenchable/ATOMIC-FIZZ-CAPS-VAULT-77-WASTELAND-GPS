@@ -478,6 +478,7 @@
       overlays.forEach(overlay => {
         html += `<img src="/assets/avatars-raster/${overlay.file}" 
                      style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;" 
+                     onerror="this.style.display='none'"
                      alt="${overlay.type}">`;
       });
       
@@ -1485,6 +1486,14 @@
       return null;
     }
   };
+
+  // Expose private closure variable as a public getter so pipboy.js and
+  // index.html can check `cc.appearanceOptions` to determine init state.
+  Object.defineProperty(CharacterCreator, 'appearanceOptions', {
+    get: function () { return appearanceOptions; },
+    enumerable: false,
+    configurable: true
+  });
 
   // Export to Game.modules
   Game.modules.CharacterCreator = CharacterCreator;

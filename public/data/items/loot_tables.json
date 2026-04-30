@@ -19,7 +19,8 @@
         "weight": 3.0,
         "capsValue": 2,
         "tradeable": true,
-        "description": "Twisted hunks of pre-war steel. Useful for repairs."
+        "description": "Twisted hunks of pre-war steel. Useful for repairs.",
+        "nft_eligible": false
       },
       {
         "id": "cloth_rags",
@@ -28,7 +29,8 @@
         "weight": 2.0,
         "capsValue": 1,
         "tradeable": true,
-        "description": "Tattered fabric scraps. Every wastelander needs some."
+        "description": "Tattered fabric scraps. Every wastelander needs some.",
+        "nft_eligible": false
       },
       {
         "id": "dirty_water",
@@ -37,7 +39,8 @@
         "weight": 2.5,
         "capsValue": 3,
         "tradeable": true,
-        "description": "Irradiated water from a cracked pipe. Drink at your own risk. +1 RAD."
+        "description": "Irradiated water from a cracked pipe. Drink at your own risk. +1 RAD.",
+        "nft_eligible": false
       },
       {
         "id": "prewar_food_can",
@@ -46,7 +49,8 @@
         "weight": 2.5,
         "capsValue": 5,
         "tradeable": true,
-        "description": "200-year-old canned mystery meat. Still edible. Somehow."
+        "description": "200-year-old canned mystery meat. Still edible. Somehow.",
+        "nft_eligible": false
       },
       {
         "id": "duct_tape",
@@ -55,7 +59,8 @@
         "weight": 2.0,
         "capsValue": 3,
         "tradeable": true,
-        "description": "The glue holding the wasteland together. Literally."
+        "description": "The glue holding the wasteland together. Literally.",
+        "nft_eligible": false
       },
       {
         "id": "wood_planks",
@@ -64,7 +69,8 @@
         "weight": 2.0,
         "capsValue": 2,
         "tradeable": true,
-        "description": "Rough-cut lumber. Good for building and burning."
+        "description": "Rough-cut lumber. Good for building and burning.",
+        "nft_eligible": false
       },
       {
         "id": "glass_bottle",
@@ -73,7 +79,8 @@
         "weight": 1.5,
         "capsValue": 1,
         "tradeable": true,
-        "description": "Empty and slightly irradiated. Fill it with something."
+        "description": "Empty and slightly irradiated. Fill it with something.",
+        "nft_eligible": false
       },
       {
         "id": "bobby_pin",
@@ -82,7 +89,8 @@
         "weight": 2.0,
         "capsValue": 3,
         "tradeable": true,
-        "description": "The wastelander's universal key. Breaks often."
+        "description": "The wastelander's universal key. Breaks often.",
+        "nft_eligible": false
       },
       {
         "id": "tin_can",
@@ -91,7 +99,8 @@
         "weight": 2.0,
         "capsValue": 1,
         "tradeable": true,
-        "description": "A bent tin can. Useful for tripwire alarms or stews."
+        "description": "A bent tin can. Useful for tripwire alarms or stews.",
+        "nft_eligible": false
       },
       {
         "id": "cigarette_carton",
@@ -100,7 +109,8 @@
         "weight": 1.5,
         "capsValue": 8,
         "tradeable": true,
-        "description": "Smokes are currency in most settlements."
+        "description": "Smokes are currency in most settlements.",
+        "nft_eligible": false
       },
       {
         "id": "wonderglue",
@@ -109,7 +119,8 @@
         "weight": 1.5,
         "capsValue": 5,
         "tradeable": true,
-        "description": "Industrial adhesive. Fixes weapons, armor, and mistakes."
+        "description": "Industrial adhesive. Fixes weapons, armor, and mistakes.",
+        "nft_eligible": false
       },
       {
         "id": "bottle_caps_loose",
@@ -120,7 +131,8 @@
         "tradeable": true,
         "capsMin": 5,
         "capsMax": 25,
-        "description": "A handful of bent bottle caps \u2014 the currency of the wasteland."
+        "description": "A handful of bent bottle caps \u2014 the currency of the wasteland.",
+        "nft_eligible": false
       }
     ],
     "uncommon": [
@@ -131,7 +143,8 @@
         "weight": 2.0,
         "capsValue": 25,
         "tradeable": true,
-        "description": "Auto-inject healing compound. Standard wasteland medicine."
+        "description": "Auto-inject healing compound. Standard wasteland medicine.",
+        "nft_eligible": true
       },
       {
         "id": "radaway",
@@ -140,7 +153,8 @@
         "weight": 2.0,
         "capsValue": 20,
         "tradeable": true,
-        "description": "IV drip that flushes radiation. Tastes like regret."
+        "description": "IV drip that flushes radiation. Tastes like regret.",
+        "nft_eligible": true
       },
       {
         "id": "rad_x",
@@ -149,7 +163,8 @@
         "weight": 1.5,
         "capsValue": 15,
         "tradeable": true,
-        "description": "Prophylactic radiation blocker. Pop before entering a hot zone."
+        "description": "Prophylactic radiation blocker. Pop before entering a hot zone.",
+        "nft_eligible": true
       },
       {
         "id": "mentats",
@@ -158,7 +173,8 @@
         "weight": 1.5,
         "capsValue": 20,
         "tradeable": true,
-        "description": "Brain-enhancing chems. +INT for a limited time."
+        "description": "Brain-enhancing chems. +INT for a limited time.",
+        "nft_eligible": true
       },
       {
         "id": "buffout",
@@ -167,7 +183,8 @@
         "weight": 1.5,
         "capsValue": 20,
         "tradeable": true,
-        "description": "Muscle-boosting chem. +STR, +END. Highly addictive."
+        "description": "Muscle-boosting chem. +STR, +END. Highly addictive.",
+        "nft_eligible": true
       },
       {
         "id": "jet",
@@ -176,7 +193,8 @@
         "weight": 1.5,
         "capsValue": 18,
         "tradeable": true,
-        "description": "Methamphetamine derivative. Slows perceived time. Very addictive."
+        "description": "Methamphetamine derivative. Slows perceived time. Very addictive.",
+        "nft_eligible": true
       },
       {
         "id": "ammo_38_x20",
@@ -185,7 +203,8 @@
         "weight": 2.0,
         "capsValue": 8,
         "tradeable": true,
-        "description": "Standard .38 caliber rounds. Common in the wasteland."
+        "description": "Standard .38 caliber rounds. Common in the wasteland.",
+        "nft_eligible": true
       },
       {
         "id": "ammo_9mm_x20",
@@ -194,7 +213,8 @@
         "weight": 2.0,
         "capsValue": 10,
         "tradeable": true,
-        "description": "9mm pistol rounds. Widespread and reliable."
+        "description": "9mm pistol rounds. Widespread and reliable.",
+        "nft_eligible": true
       },
       {
         "id": "ammo_308_x10",
@@ -203,7 +223,8 @@
         "weight": 1.5,
         "capsValue": 15,
         "tradeable": true,
-        "description": "Rifle-caliber rounds. Good for hunting man and beast."
+        "description": "Rifle-caliber rounds. Good for hunting man and beast.",
+        "nft_eligible": true
       },
       {
         "id": "pipe_pistol",
@@ -212,7 +233,8 @@
         "weight": 2.0,
         "capsValue": 40,
         "tradeable": true,
-        "description": "A crude handmade sidearm. Unreliable, but it shoots."
+        "description": "A crude handmade sidearm. Unreliable, but it shoots.",
+        "nft_eligible": true
       },
       {
         "id": "leather_armor_head",
@@ -223,7 +245,8 @@
         "weight": 0.8,
         "capsValue": 35,
         "tradeable": true,
-        "description": "Padded leather headgear. Smells like the wasteland."
+        "description": "Padded leather headgear. Smells like the wasteland.",
+        "nft_eligible": true
       },
       {
         "id": "leather_armor_chest",
@@ -234,7 +257,8 @@
         "weight": 0.8,
         "capsValue": 35,
         "tradeable": true,
-        "description": "Padded leather torso guard. Better than rags."
+        "description": "Padded leather torso guard. Better than rags.",
+        "nft_eligible": true
       },
       {
         "id": "leather_armor_arm_l",
@@ -245,7 +269,8 @@
         "weight": 0.6,
         "capsValue": 28,
         "tradeable": true,
-        "description": "Left arm bracer, hand-stitched leather."
+        "description": "Left arm bracer, hand-stitched leather.",
+        "nft_eligible": true
       },
       {
         "id": "leather_armor_arm_r",
@@ -256,7 +281,8 @@
         "weight": 0.6,
         "capsValue": 28,
         "tradeable": true,
-        "description": "Right arm bracer, hand-stitched leather."
+        "description": "Right arm bracer, hand-stitched leather.",
+        "nft_eligible": true
       },
       {
         "id": "leather_armor_leg_l",
@@ -267,7 +293,8 @@
         "weight": 0.7,
         "capsValue": 28,
         "tradeable": true,
-        "description": "Leather leg guard, left side. Keeps the radscorpion stingers at bay."
+        "description": "Leather leg guard, left side. Keeps the radscorpion stingers at bay.",
+        "nft_eligible": true
       },
       {
         "id": "leather_armor_leg_r",
@@ -278,7 +305,8 @@
         "weight": 0.7,
         "capsValue": 28,
         "tradeable": true,
-        "description": "Leather leg guard, right side. Worn but functional."
+        "description": "Leather leg guard, right side. Worn but functional.",
+        "nft_eligible": true
       },
       {
         "id": "combat_knife",
@@ -287,7 +315,8 @@
         "weight": 1.5,
         "capsValue": 35,
         "tradeable": true,
-        "description": "Military-issue blade. Silent and deadly up close."
+        "description": "Military-issue blade. Silent and deadly up close.",
+        "nft_eligible": true
       },
       {
         "id": "lockpick_kit",
@@ -296,7 +325,8 @@
         "weight": 1.5,
         "capsValue": 30,
         "tradeable": true,
-        "description": "Tension wrench and picks. Opens what shouldn't be opened."
+        "description": "Tension wrench and picks. Opens what shouldn't be opened.",
+        "nft_eligible": true
       },
       {
         "id": "wasteland_medkit",
@@ -305,7 +335,8 @@
         "weight": 1.5,
         "capsValue": 45,
         "tradeable": true,
-        "description": "Bandages, antiseptic, and shrapnel tweezers. Field-assembled."
+        "description": "Bandages, antiseptic, and shrapnel tweezers. Field-assembled.",
+        "nft_eligible": true
       },
       {
         "id": "prewar_money",
@@ -314,7 +345,8 @@
         "weight": 1.5,
         "capsValue": 12,
         "tradeable": true,
-        "description": "Worthless paper dollars. Valued by collectors."
+        "description": "Worthless paper dollars. Valued by collectors.",
+        "nft_eligible": true
       }
     ],
     "rare": [
@@ -325,7 +357,8 @@
         "weight": 2.0,
         "capsValue": 150,
         "tradeable": true,
-        "description": "Pre-war energy sidearm. Burns clean holes through enemies."
+        "description": "Pre-war energy sidearm. Burns clean holes through enemies.",
+        "nft_eligible": true
       },
       {
         "id": "combat_armor_head",
@@ -336,7 +369,8 @@
         "weight": 0.5,
         "capsValue": 100,
         "tradeable": true,
-        "description": "Military ballistic helmet. Rated for small arms."
+        "description": "Military ballistic helmet. Rated for small arms.",
+        "nft_eligible": true
       },
       {
         "id": "combat_armor_chest",
@@ -347,7 +381,8 @@
         "weight": 0.5,
         "capsValue": 100,
         "tradeable": true,
-        "description": "Military-grade torso protection. Favored by veteran mercs."
+        "description": "Military-grade torso protection. Favored by veteran mercs.",
+        "nft_eligible": true
       },
       {
         "id": "combat_armor_arm_l",
@@ -358,7 +393,8 @@
         "weight": 0.4,
         "capsValue": 80,
         "tradeable": true,
-        "description": "Left arm combat plating with ceramic inserts."
+        "description": "Left arm combat plating with ceramic inserts.",
+        "nft_eligible": true
       },
       {
         "id": "combat_armor_arm_r",
@@ -369,7 +405,8 @@
         "weight": 0.4,
         "capsValue": 80,
         "tradeable": true,
-        "description": "Right arm combat plating. Slight laser scoring."
+        "description": "Right arm combat plating. Slight laser scoring.",
+        "nft_eligible": true
       },
       {
         "id": "combat_armor_leg_l",
@@ -380,7 +417,8 @@
         "weight": 0.4,
         "capsValue": 80,
         "tradeable": true,
-        "description": "Left leg combat greave. Pre-war military surplus."
+        "description": "Left leg combat greave. Pre-war military surplus.",
+        "nft_eligible": true
       },
       {
         "id": "combat_armor_leg_r",
@@ -391,7 +429,8 @@
         "weight": 0.4,
         "capsValue": 80,
         "tradeable": true,
-        "description": "Right leg combat greave. Still holds a polish."
+        "description": "Right leg combat greave. Still holds a polish.",
+        "nft_eligible": true
       },
       {
         "id": "scoped_hunting_rifle",
@@ -400,7 +439,8 @@
         "weight": 2.0,
         "capsValue": 175,
         "tradeable": true,
-        "description": "Long-range precision rifle. Deadly in the right hands."
+        "description": "Long-range precision rifle. Deadly in the right hands.",
+        "nft_eligible": true
       },
       {
         "id": "military_assault_rifle",
@@ -409,7 +449,8 @@
         "weight": 2.0,
         "capsValue": 220,
         "tradeable": true,
-        "description": "Full-auto .308 battle rifle. Pre-war military issue."
+        "description": "Full-auto .308 battle rifle. Pre-war military issue.",
+        "nft_eligible": true
       },
       {
         "id": "ultra_stimpak",
@@ -418,7 +459,8 @@
         "weight": 1.5,
         "capsValue": 75,
         "tradeable": true,
-        "description": "High-potency healing compound. Fixes critical wounds fast."
+        "description": "High-potency healing compound. Fixes critical wounds fast.",
+        "nft_eligible": true
       },
       {
         "id": "stealth_boy",
@@ -427,7 +469,8 @@
         "weight": 1.0,
         "capsValue": 120,
         "tradeable": true,
-        "description": "Personal radar-stealth device. Limited charge."
+        "description": "Personal radar-stealth device. Limited charge.",
+        "nft_eligible": true
       },
       {
         "id": "plasma_grenade_x3",
@@ -436,7 +479,8 @@
         "weight": 1.0,
         "capsValue": 90,
         "tradeable": true,
-        "description": "Three plasma grenades. Dissolves organic matter efficiently."
+        "description": "Three plasma grenades. Dissolves organic matter efficiently.",
+        "nft_eligible": true
       },
       {
         "id": "prewar_circuit_board",
@@ -445,7 +489,8 @@
         "weight": 1.5,
         "capsValue": 80,
         "tradeable": true,
-        "description": "Intact pre-war electronics. Required for advanced crafting."
+        "description": "Intact pre-war electronics. Required for advanced crafting.",
+        "nft_eligible": true
       },
       {
         "id": "advanced_surgical_kit",
@@ -454,7 +499,8 @@
         "weight": 1.5,
         "capsValue": 110,
         "tradeable": true,
-        "description": "Sterile surgical tools. For when a Stimpak just won't cut it."
+        "description": "Sterile surgical tools. For when a Stimpak just won't cut it.",
+        "nft_eligible": true
       },
       {
         "id": "fusion_cell_x12",
@@ -463,7 +509,8 @@
         "weight": 2.0,
         "capsValue": 60,
         "tradeable": true,
-        "description": "Energy cell for laser weapons. Pre-war standard issue."
+        "description": "Energy cell for laser weapons. Pre-war standard issue.",
+        "nft_eligible": true
       },
       {
         "id": "ammo_556_x30",
@@ -472,7 +519,8 @@
         "weight": 2.0,
         "capsValue": 45,
         "tradeable": true,
-        "description": "Assault rifle ammunition. Common in military caches."
+        "description": "Assault rifle ammunition. Common in military caches.",
+        "nft_eligible": true
       },
       {
         "id": "psycho",
@@ -481,7 +529,8 @@
         "weight": 1.0,
         "capsValue": 65,
         "tradeable": true,
-        "description": "Rage-inducing combat chem. +DMG, +DR, very addictive."
+        "description": "Rage-inducing combat chem. +DMG, +DR, very addictive.",
+        "nft_eligible": true
       },
       {
         "id": "caps_stash",
@@ -492,7 +541,8 @@
         "tradeable": false,
         "capsMin": 50,
         "capsMax": 150,
-        "description": "A stash of bottle caps hidden by a wastelander who didn't come back."
+        "description": "A stash of bottle caps hidden by a wastelander who didn't come back.",
+        "nft_eligible": true
       },
       {
         "id": "reflex_sight",
@@ -501,7 +551,8 @@
         "weight": 1.0,
         "capsValue": 95,
         "tradeable": true,
-        "description": "Holographic sight compatible with energy weapons."
+        "description": "Holographic sight compatible with energy weapons.",
+        "nft_eligible": true
       },
       {
         "id": "milgrade_duct_tape",
@@ -510,7 +561,8 @@
         "weight": 1.5,
         "capsValue": 55,
         "tradeable": true,
-        "description": "Industrial-spec adhesive. Far superior to civilian tape."
+        "description": "Industrial-spec adhesive. Far superior to civilian tape.",
+        "nft_eligible": true
       }
     ],
     "epic": [
@@ -521,7 +573,8 @@
         "weight": 2.0,
         "capsValue": 500,
         "tradeable": true,
-        "description": "Military energy rifle firing superheated plasma bolts. Melts everything."
+        "description": "Military energy rifle firing superheated plasma bolts. Melts everything.",
+        "nft_eligible": true
       },
       {
         "id": "t45_pa_head",
@@ -532,7 +585,8 @@
         "weight": 0.5,
         "capsValue": 300,
         "tradeable": true,
-        "description": "Early power armor helmet. Rad shielding and HUD display."
+        "description": "Early power armor helmet. Rad shielding and HUD display.",
+        "nft_eligible": true
       },
       {
         "id": "t45_pa_chest",
@@ -543,7 +597,8 @@
         "weight": 0.5,
         "capsValue": 300,
         "tradeable": true,
-        "description": "T-45 torso frame, pre-war military issue."
+        "description": "T-45 torso frame, pre-war military issue.",
+        "nft_eligible": true
       },
       {
         "id": "t45_pa_arm_l",
@@ -554,7 +609,8 @@
         "weight": 0.4,
         "capsValue": 240,
         "tradeable": true,
-        "description": "Left arm actuator assembly. Hydraulics intact."
+        "description": "Left arm actuator assembly. Hydraulics intact.",
+        "nft_eligible": true
       },
       {
         "id": "t45_pa_arm_r",
@@ -565,7 +621,8 @@
         "weight": 0.4,
         "capsValue": 240,
         "tradeable": true,
-        "description": "Right arm actuator assembly. Grip servos functional."
+        "description": "Right arm actuator assembly. Grip servos functional.",
+        "nft_eligible": true
       },
       {
         "id": "t45_pa_leg_l",
@@ -576,7 +633,8 @@
         "weight": 0.4,
         "capsValue": 240,
         "tradeable": true,
-        "description": "Left leg actuator. Minor dents from pre-war combat."
+        "description": "Left leg actuator. Minor dents from pre-war combat.",
+        "nft_eligible": true
       },
       {
         "id": "t45_pa_leg_r",
@@ -587,7 +645,8 @@
         "weight": 0.4,
         "capsValue": 240,
         "tradeable": true,
-        "description": "Right leg actuator. Servo needs minor calibration."
+        "description": "Right leg actuator. Servo needs minor calibration.",
+        "nft_eligible": true
       },
       {
         "id": "gauss_rifle",
@@ -596,7 +655,8 @@
         "weight": 2.0,
         "capsValue": 650,
         "tradeable": true,
-        "description": "Electromagnetic coilgun. Fires accelerated projectiles at devastating velocity."
+        "description": "Electromagnetic coilgun. Fires accelerated projectiles at devastating velocity.",
+        "nft_eligible": true
       },
       {
         "id": "anti_materiel_rifle",
@@ -605,7 +665,8 @@
         "weight": 1.5,
         "capsValue": 750,
         "tradeable": true,
-        "description": "Heavy .50 caliber rifle designed to destroy vehicles. And people."
+        "description": "Heavy .50 caliber rifle designed to destroy vehicles. And people.",
+        "nft_eligible": true
       },
       {
         "id": "railroad_coat",
@@ -616,7 +677,8 @@
         "tradeable": true,
         "description": "Ballistic weave-lined duster. Railroad operative gear.",
         "slot": "full",
-        "armorSet": null
+        "armorSet": null,
+        "nft_eligible": true
       },
       {
         "id": "ballistic_weave_schematic",
@@ -625,7 +687,8 @@
         "weight": 1.0,
         "capsValue": 350,
         "tradeable": true,
-        "description": "Technical blueprint for weaving ballistic fiber into clothing."
+        "description": "Technical blueprint for weaving ballistic fiber into clothing.",
+        "nft_eligible": true
       },
       {
         "id": "military_fusion_core",
@@ -634,7 +697,8 @@
         "weight": 2.0,
         "capsValue": 200,
         "tradeable": true,
-        "description": "High-capacity fusion core for power armor. Rare and valuable."
+        "description": "High-capacity fusion core for power armor. Rare and valuable.",
+        "nft_eligible": true
       },
       {
         "id": "x_cell",
@@ -643,7 +707,8 @@
         "weight": 1.0,
         "capsValue": 180,
         "tradeable": true,
-        "description": "Powerful all-stats chem. Extremely addictive. Black market only."
+        "description": "Powerful all-stats chem. Extremely addictive. Black market only.",
+        "nft_eligible": true
       },
       {
         "id": "nuka_cola_quantum",
@@ -652,7 +717,8 @@
         "weight": 1.5,
         "capsValue": 250,
         "tradeable": true,
-        "description": "Glowing blue Nuka-Cola variant. Radioactive and delicious."
+        "description": "Glowing blue Nuka-Cola variant. Radioactive and delicious.",
+        "nft_eligible": true
       },
       {
         "id": "caps_voucher",
@@ -664,7 +730,8 @@
         "capsMin": 200,
         "capsMax": 500,
         "onChain": true,
-        "description": "An authenticated in-game CAPS voucher. Redeemable for real on-chain CAPS."
+        "description": "An authenticated in-game CAPS voucher. Redeemable for real on-chain CAPS.",
+        "nft_eligible": true
       }
     ],
     "legendary": [
@@ -675,7 +742,8 @@
         "weight": 1.5,
         "capsValue": 2500,
         "tradeable": true,
-        "description": "Shoulder-mounted mini nuclear catapult. The wasteland's ultimate statement piece."
+        "description": "Shoulder-mounted mini nuclear catapult. The wasteland's ultimate statement piece.",
+        "nft_eligible": true
       },
       {
         "id": "grognaks_axe",
@@ -684,7 +752,8 @@
         "weight": 1.5,
         "capsValue": 1800,
         "tradeable": true,
-        "description": "Legendary two-handed axe from the comics. Deals massive bleed damage."
+        "description": "Legendary two-handed axe from the comics. Deals massive bleed damage.",
+        "nft_eligible": true
       },
       {
         "id": "prototype_gauss_pistol",
@@ -693,7 +762,8 @@
         "weight": 1.5,
         "capsValue": 2200,
         "tradeable": true,
-        "description": "Pre-war experimental coilgun sidearm. One of a kind."
+        "description": "Pre-war experimental coilgun sidearm. One of a kind.",
+        "nft_eligible": true
       },
       {
         "id": "lucky_magnum",
@@ -702,7 +772,8 @@
         "weight": 1.5,
         "capsValue": 1600,
         "tradeable": true,
-        "description": "A legendary .44 with impossibly high critical hit odds."
+        "description": "A legendary .44 with impossibly high critical hit odds.",
+        "nft_eligible": true
       },
       {
         "id": "overseers_legendary_coat",
@@ -713,7 +784,8 @@
         "tradeable": true,
         "description": "Vault-Tec Overseer formal wear. Max ballistic and rad protection.",
         "slot": "full",
-        "armorSet": null
+        "armorSet": null,
+        "nft_eligible": true
       },
       {
         "id": "t51b_pa_head",
@@ -724,7 +796,8 @@
         "weight": 0.4,
         "capsValue": 500,
         "tradeable": true,
-        "description": "Peak pre-war power armor helmet. Sealed rad filter."
+        "description": "Peak pre-war power armor helmet. Sealed rad filter.",
+        "nft_eligible": true
       },
       {
         "id": "t51b_pa_chest",
@@ -735,7 +808,8 @@
         "weight": 0.4,
         "capsValue": 500,
         "tradeable": true,
-        "description": "T-51b torso. Enclave-grade ballistic ceramic plating."
+        "description": "T-51b torso. Enclave-grade ballistic ceramic plating.",
+        "nft_eligible": true
       },
       {
         "id": "t51b_pa_arm_l",
@@ -746,7 +820,8 @@
         "weight": 0.3,
         "capsValue": 400,
         "tradeable": true,
-        "description": "Left arm assembly. Still hums with servo power."
+        "description": "Left arm assembly. Still hums with servo power.",
+        "nft_eligible": true
       },
       {
         "id": "t51b_pa_arm_r",
@@ -757,7 +832,8 @@
         "weight": 0.3,
         "capsValue": 400,
         "tradeable": true,
-        "description": "Right arm assembly. Gatling mount compatible."
+        "description": "Right arm assembly. Gatling mount compatible.",
+        "nft_eligible": true
       },
       {
         "id": "t51b_pa_leg_l",
@@ -768,7 +844,8 @@
         "weight": 0.3,
         "capsValue": 400,
         "tradeable": true,
-        "description": "Left leg assembly. Hydraulics mint condition."
+        "description": "Left leg assembly. Hydraulics mint condition.",
+        "nft_eligible": true
       },
       {
         "id": "t51b_pa_leg_r",
@@ -779,7 +856,8 @@
         "weight": 0.3,
         "capsValue": 400,
         "tradeable": true,
-        "description": "Right leg assembly. Final piece of a legend."
+        "description": "Right leg assembly. Final piece of a legend.",
+        "nft_eligible": true
       },
       {
         "id": "alien_blaster",
@@ -788,7 +866,8 @@
         "weight": 1.0,
         "capsValue": 3500,
         "tradeable": true,
-        "description": "Extraterrestrial sidearm firing alien power cells. Extremely rare."
+        "description": "Extraterrestrial sidearm firing alien power cells. Extremely rare.",
+        "nft_eligible": true
       },
       {
         "id": "proto_fizz_auth_chip",
@@ -797,7 +876,8 @@
         "weight": 0.8,
         "capsValue": 5000,
         "tradeable": false,
-        "description": "Vault-Tec prototype authentication chip. Opens sealed FIZZ vaults."
+        "description": "Vault-Tec prototype authentication chip. Opens sealed FIZZ vaults.",
+        "nft_eligible": true
       },
       {
         "id": "legendary_caps_cache",
@@ -809,7 +889,8 @@
         "capsMin": 500,
         "capsMax": 1500,
         "onChain": true,
-        "description": "A legendary hoard of bottle caps. The find of a lifetime."
+        "description": "A legendary hoard of bottle caps. The find of a lifetime.",
+        "nft_eligible": true
       }
     ],
     "nft_items": [
@@ -823,7 +904,8 @@
         "mintable": true,
         "edition": "legendary",
         "tradeable": true,
-        "description": "One of the first FIZZ tokens ever minted. Legendary status on-chain."
+        "description": "One of the first FIZZ tokens ever minted. Legendary status on-chain.",
+        "nft_eligible": true
       },
       {
         "id": "vault77_overseer_badge",
@@ -835,7 +917,8 @@
         "mintable": true,
         "edition": "rare",
         "tradeable": true,
-        "description": "Official Vault 77 Overseer credential. Rare authority NFT."
+        "description": "Official Vault 77 Overseer credential. Rare authority NFT.",
+        "nft_eligible": true
       },
       {
         "id": "wasteland_explorer_sigil",
@@ -847,7 +930,8 @@
         "mintable": true,
         "edition": "rare",
         "tradeable": true,
-        "description": "Sigil awarded to explorers who reach remote GPS POIs. Rare."
+        "description": "Sigil awarded to explorers who reach remote GPS POIs. Rare.",
+        "nft_eligible": true
       },
       {
         "id": "faction_war_veteran_token",
@@ -859,7 +943,8 @@
         "mintable": true,
         "edition": "epic",
         "tradeable": true,
-        "description": "Commemorates surviving faction PvP battles. Epic tier NFT."
+        "description": "Commemorates surviving faction PvP battles. Epic tier NFT.",
+        "nft_eligible": true
       },
       {
         "id": "vaulttec_collectible_card",
@@ -871,7 +956,8 @@
         "mintable": true,
         "edition": "uncommon",
         "tradeable": true,
-        "description": "Vault-Tec promotional card NFT. Collectible, redeemable for CAPS."
+        "description": "Vault-Tec promotional card NFT. Collectible, redeemable for CAPS.",
+        "nft_eligible": true
       },
       {
         "id": "wasteland_map_fragment",
@@ -884,7 +970,8 @@
         "edition": "rare",
         "tradeable": true,
         "craftable": true,
-        "description": "A fragment of a larger wasteland map NFT. Combine 4 to reveal a secret POI."
+        "description": "A fragment of a larger wasteland map NFT. Combine 4 to reveal a secret POI.",
+        "nft_eligible": true
       },
       {
         "id": "caps_chip_onchain",
@@ -896,7 +983,8 @@
         "mintable": true,
         "edition": "uncommon",
         "tradeable": true,
-        "description": "On-chain token representing 100 CAPS. Redeemable at any settlement."
+        "description": "On-chain token representing 100 CAPS. Redeemable at any settlement.",
+        "nft_eligible": true
       },
       {
         "id": "prototype_id_token",
@@ -909,7 +997,8 @@
         "edition": "mythic",
         "tradeable": true,
         "unique": true,
-        "description": "Mythic-tier identity token. Only one exists per Vault in the game world."
+        "description": "Mythic-tier identity token. Only one exists per Vault in the game world.",
+        "nft_eligible": true
       }
     ]
   },

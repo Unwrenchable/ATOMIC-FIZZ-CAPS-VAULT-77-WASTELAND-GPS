@@ -34,7 +34,7 @@
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
       script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org https://vercel.live 'unsafe-inline' 'unsafe-eval';
-      connect-src 'self' https://unpkg.com https://server.arcgisonline.com https://*.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://*.onrender.com https://*.vercel.app https://vercel.live https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org https://*.infura.io https://polygon-rpc.com https://mainnet.infura.io wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com wss://*.walletconnect.com wss://*.walletconnect.org;
+      connect-src 'self' https://unpkg.com https://server.arcgisonline.com https://*.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://*.onrender.com https://*.vercel.app https://vercel.live https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org https://*.infura.io https://polygon-rpc.com https://mainnet.infura.io wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com wss://*.walletconnect.com wss://*.walletconnect.org http://localhost:3000;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
       img-src 'self' data: https: blob:;
       font-src 'self' https://fonts.gstatic.com data:;
@@ -80,7 +80,7 @@
 
     <!-- PixiJS + DragonBones runtime for animated 2D avatars -->
     <!-- Note: dragonbones-pixi@5.7.0 was discontinued. Using pixi5-dragonbones@5.7.0-2b as replacement -->
-    <script src="https://cdn.jsdelivr.net/npm/pixi.js@6.5.8/dist/pixi.min.js" defer></script>
+    <script src="/js/vendor/pixi.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pixi5-dragonbones@5.7.0-2b/dragonBones.js" defer></script>
 
     <!-- AuthClient must be available before inline wallet code -->
@@ -923,7 +923,8 @@
               }
 
               if (appearance && portraitContainer && typeof cc.generatePortraitSVG === 'function') {
-                portraitContainer.innerHTML = cc.generatePortraitSVG(appearance, 120);
+                const html = cc.generatePortraitSVG(appearance, 150);
+                portraitContainer.innerHTML = `<div style="width:120px;height:150px;overflow:hidden;">${html}</div>`;
               }
 
               if (appearance?.name && nameDisplay) {

@@ -196,6 +196,60 @@
     .craft-btn.ready { opacity: 1; cursor: pointer; background: #006619; }
     .craft-btn.ready:hover { background: #00aa33; color: #000; }
 
+    /* Repair bay */
+    .repair-list { display: flex; flex-direction: column; gap: 14px; }
+    .repair-card {
+      border: 1px solid #00ff41;
+      background: rgba(0,255,65,0.05);
+      padding: 12px;
+    }
+    .repair-item {
+      margin-bottom: 8px;
+      font-size: 1.1em;
+    }
+    .item-name {
+      color: #00ff99;
+      font-weight: bold;
+    }
+    .item-slot {
+      opacity: 0.7;
+      margin-left: 8px;
+    }
+    .durability-bar {
+      position: relative;
+      height: 20px;
+      background: #003300;
+      border: 1px solid #006619;
+      margin-bottom: 8px;
+    }
+    .durability-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff6633 0%, #ffcc00 50%, #00ff41 100%);
+      transition: width 0.3s;
+    }
+    .durability-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.9em;
+      font-weight: bold;
+      color: #000;
+      text-shadow: 1px 1px 0px #fff;
+    }
+    .repair-btn {
+      padding: 8px 18px;
+      background: #003300;
+      color: #00ff41;
+      border: 1px solid #00ff41;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.6em;
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+    .repair-btn.ready { opacity: 1; cursor: pointer; background: #006619; }
+    .repair-btn.ready:hover { background: #00aa33; color: #000; }
+
     /* Status messages */
     #wbStatus {
       min-height: 24px;
@@ -238,6 +292,7 @@
   <!-- Tabs -->
   <div class="wb-tabs">
     <button class="wb-tab active" data-tab="armor-workbench">🛡️ ARMOR WORKBENCH</button>
+    <button class="wb-tab" data-tab="repair-bay">🔧 REPAIR BAY</button>
     <button class="wb-tab" data-tab="crafting-table">⚙️ CRAFTING TABLE</button>
   </div>
 
@@ -249,6 +304,16 @@
     </p>
     <div class="set-list" id="armorSetList">
       <p style="opacity:0.5;">Loading armor sets...</p>
+    </div>
+  </div>
+
+  <!-- REPAIR BAY PANEL -->
+  <div class="wb-panel" id="tab-repair-bay">
+    <p style="font-size:1.1em; opacity:0.7; margin-bottom:14px;">
+      Repair damaged equipment using repair kits. Equipment durability decreases with use in combat.
+    </p>
+    <div class="repair-list" id="repairList">
+      <p style="opacity:0.5;">Loading equipped items...</p>
     </div>
   </div>
 
@@ -288,6 +353,11 @@
       btn.classList.add('active');
       const panel = document.getElementById('tab-' + btn.dataset.tab);
       if (panel) panel.classList.add('active');
+
+      // Load content for specific tabs
+      if (btn.dataset.tab === 'repair-bay') {
+        loadRepairBay();
+      }
     });
   });
 
@@ -577,8 +647,130 @@
     }
   }
 
+  // ── Load repair bay (equipped items) and render ─────────────────────────────
+  async function loadRepairBay() {
+    const container = document.getElementById('repairList');
+    container.innerHTML = '';
+
+    // Get player state for equipped items and durability
+    let playerState = {};
+    try {
+      if (window.opener && window.opener.Game && window.opener.Game.playerState) {
+        playerState = window.opener.Game.playerState.getState();
+      }
+    } catch (e) {}
+
+    const equipped = playerState.equipped || {};
+    const durability = playerState.durability || {};
+    const inv = getInventory();
+
+    // Check if player has repair kits
+    const repairKits = inv.filter(i => i && i.id === 'repair_kit')
+      .reduce((sum, i) => sum + (i.quantity || 1), 0);
+
+    if (repairKits === 0) {
+      container.innerHTML = '<p style="color:#ff6633;">⚠️ No repair kits available. Craft one at the crafting table.</p>';
+      return;
+    }
+
+    const slots = ['weapon', 'chest', 'head', 'arms', 'legs'];
+    const slotLabels = {
+      weapon: 'Weapon',
+      chest: 'Chest Armor',
+      head: 'Head Armor',
+      arms: 'Arm Armor',
+      legs: 'Leg Armor'
+    };
+
+    let hasItems = false;
+    slots.forEach(slot => {
+      const item = equipped[slot];
+      if (item) {
+        hasItems = true;
+        const currentDurability = durability[slot] || 100;
+        const needsRepair = currentDurability < 100;
+
+        const card = document.createElement('div');
+        card.className = 'repair-card';
+        card.innerHTML =
+          '<div class="repair-item">' +
+            '<span class="item-name">' + escHtml(item.name) + '</span>' +
+            '<span class="item-slot">(' + slotLabels[slot] + ')</span>' +
+          '</div>' +
+          '<div class="durability-bar">' +
+            '<div class="durability-fill" style="width:' + currentDurability + '%"></div>' +
+            '<span class="durability-text">' + currentDurability + '/100</span>' +
+          '</div>' +
+          '<button class="repair-btn' + (needsRepair ? ' ready' : '') + '" ' +
+            'data-slot="' + slot + '"' +
+            (needsRepair ? '' : ' disabled') + '>' +
+            (needsRepair ? '🔧 REPAIR (+50)' : '✅ FULL DURABILITY') +
+          '</button>';
+
+        container.appendChild(card);
+      }
+    });
+
+    if (!hasItems) {
+      container.innerHTML = '<p style="opacity:0.5;">No equipped items to repair.</p>';
+      return;
+    }
+
+    // Wire up repair buttons
+    container.querySelectorAll('.repair-btn.ready').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        repairItem(btn.dataset.slot, btn);
+      });
+    });
+  }
+
+  // ── Repair an item (calls /api/repair/item) ────────────────────────────────
+  async function repairItem(slot, btn) {
+    btn.disabled = true;
+    btn.textContent = '🔧 REPAIRING...';
+    setStatus('Sending repair request...', '#ffcc00');
+
+    try {
+      let authHeader = {};
+      try {
+        if (window.opener && window.opener.authToken) {
+          authHeader['Authorization'] = 'Bearer ' + window.opener.authToken;
+        }
+      } catch (e) {}
+
+      const baseUrl = (typeof window.API_BASE !== 'undefined' ? window.API_BASE : '') || '';
+      const res = await fetch(baseUrl + '/api/repair/item', {
+        method: 'POST',
+        credentials: 'include',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, authHeader),
+        body: JSON.stringify({ slot: slot })
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        setStatus('✅ ' + (data.message || 'Item repaired!'), '#00ff41');
+        // Update player state in opener
+        try {
+          if (window.opener && window.opener.Game && window.opener.Game.playerState) {
+            window.opener.Game.playerState.syncWithBackend();
+          }
+        } catch (e) {}
+        setTimeout(loadRepairBay, UI_REFRESH_DELAY_MS);
+      } else {
+        setStatus('⚠️ ' + (data.error || 'Repair failed. Try again.'), '#ff6633');
+        btn.disabled = false;
+        btn.textContent = '🔧 REPAIR (+50)';
+      }
+    } catch (e) {
+      setStatus('⚠️ Network error.', '#ff6633');
+      btn.disabled = false;
+      btn.textContent = '🔧 REPAIR (+50)';
+    }
+  }
+
   // ── Init ────────────────────────────────────────────────────────────────────
   loadArmorSets();
+  loadRepairBay();
   loadCraftingRecipes();
 })();
 </script>

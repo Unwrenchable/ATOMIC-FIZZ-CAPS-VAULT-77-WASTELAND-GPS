@@ -137,10 +137,21 @@
       ];
 
       const promises = linked.map(async ([key, field]) => {
-        const url = station[key];
-        if (!url) return;
+        const urlOrData = station[key];
+        if (!urlOrData) return;
 
-        const data = await safeFetchJSON(url, null);
+        // Station JSON may embed data inline (object/array) instead of a URL string.
+        // Use inline data directly to avoid routing non-URL values through safeFetchJSON.
+        if (typeof urlOrData !== 'string') {
+          if (key === "dj") {
+            this.dj = urlOrData;
+          } else {
+            this[key] = Array.isArray(urlOrData) ? urlOrData : (urlOrData[field] || []);
+          }
+          return;
+        }
+
+        const data = await safeFetchJSON(urlOrData, null);
         if (!data) return;
 
         if (key === "dj") {

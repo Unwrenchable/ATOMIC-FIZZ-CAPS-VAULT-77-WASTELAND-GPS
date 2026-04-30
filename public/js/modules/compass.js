@@ -172,9 +172,9 @@
 
   Game.modules.compass = compassModule;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("map-ready", () => {
     try {
-      // Initialization is deferred; boot.js calls onPipboyReady() after setup.
+      compassModule.init();
     } catch (e) {
       console.error("[compass] init error:", e);
     }
