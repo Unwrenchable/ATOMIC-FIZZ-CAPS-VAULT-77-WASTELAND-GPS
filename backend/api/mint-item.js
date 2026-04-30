@@ -83,6 +83,15 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ ok: false, error: 'invalid_wallet' });
     }
 
+    // Validate required POI data for voucher
+    const { latitude, longitude, locationHint } = req.body;
+    if (typeof latitude !== 'number' || typeof longitude !== 'number' || typeof locationHint !== 'string') {
+      return res.status(400).json({ ok: false, error: 'invalid_poi_data' });
+    }
+    if (locationHint.length > 200) {
+      return res.status(400).json({ ok: false, error: 'location_hint_too_long' });
+    }
+
     const NODE_ENV = process.env.NODE_ENV || 'development';
 
     if (NODE_ENV === 'production') {
@@ -112,12 +121,15 @@ router.post('/', async (req, res) => {
           return res.status(429).json({ ok: false, error: 'mint_limit_reached' });
         }
 
-        const prodItemId = `mint-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
+        const prodItemId = crypto.randomBytes(8).readBigUInt64LE(0).toString();
 
         // Audit record in Redis (list)
         const audit = {
           itemId: prodItemId,
           wallet,
+          latitude,
+          longitude,
+          locationHint,
           createdAt: Date.now(),
           requestedBy: req.player ? req.player.wallet : 'admin',
           ip: req.ip || req.connection?.remoteAddress || null
@@ -128,7 +140,7 @@ router.post('/', async (req, res) => {
         // push job to a queue (Redis list) for on-chain worker to pick up
         const queueListKey = key('mint:queue:list');
         const streamKey = key('mint:queue:stream');
-        const job = { type: 'mint', itemId: prodItemId, wallet, auditKey };
+        const job = { type: 'mint', itemId: prodItemId, wallet, latitude, longitude, locationHint, auditKey };
         // Prefer Redis Stream (XADD) for robust queueing; fall back to list
         try {
           if (redis && redis.client && typeof redis.client.sendCommand === 'function') {

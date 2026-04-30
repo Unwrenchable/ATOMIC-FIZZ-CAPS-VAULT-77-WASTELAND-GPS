@@ -120,22 +120,15 @@ router.post("/", authMiddleware, buyLimiter, async (req, res) => {
     tx.feePayer = walletPubkey;
 
     // Note: In a real implementation, the frontend would sign this tx and send the signature.
-    // For now, assuming server-side signing (not recommended for production).
-    // TODO: Implement proper wallet signing flow.
+    // For now, return the serialized tx for frontend signing.
 
-    // For demo, we'll simulate the burn. In production, require signed tx from frontend.
-    // const signature = await sendAndConfirmTransaction(connection, tx, [/* wallet signer */]);
-    // Simulate success
-    const signature = `simulated-burn-${Date.now()}`;
+    // Serialize the transaction for frontend to sign
+    const serializedTx = tx.serialize({ requireAllSignatures: false }).toString('base64');
 
-    // Mint NFT (simplified - in reality, use Metaplex)
-    // TODO: Integrate Metaplex for NFT minting with metadata
+    // Simulate txId for now; in production, frontend submits and returns real signature
+    const signature = `prepared-${Date.now()}`;
 
-    // Update player state with cooldown
-    const cooldownKey = key(`player:${wallet}:cooldowns:stimpak`);
-    await redis.set(cooldownKey, Date.now() + (tierData.cooldown * 1000), { EX: tierData.cooldown });
-
-    console.log(`[buy-stimpak] wallet=${wallet.slice(0, 8)}... tier=${tier} burned=${tierData.burnCost} caps tx=${signature}`);
+    console.log(`[buy-stimpak] wallet=${wallet.slice(0, 8)}... tier=${tier} prepared burn tx for ${tierData.burnCost} caps`);
 
     return res.json({
       ok: true,
@@ -144,8 +137,8 @@ router.post("/", authMiddleware, buyLimiter, async (req, res) => {
       healAmount: tierData.healAmount,
       repairRate: tierData.repairRate,
       cooldownSeconds: tierData.cooldown,
-      txId: signature,
-      message: `Stimpak ${tier} purchased. Use it wisely, Courier.`,
+      serializedTx,
+      message: `Stimpak ${tier} transaction prepared. Sign and submit to complete purchase.`,
     });
   } catch (err) {
     console.error("[buy-stimpak] error:", err);
