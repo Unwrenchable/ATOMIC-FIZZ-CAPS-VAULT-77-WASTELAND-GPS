@@ -79,7 +79,7 @@
 
   Game.modules.lootScanner = scanner;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("map-ready", () => {
     try {
       scanner.init();
     } catch (e) {

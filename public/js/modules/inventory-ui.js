@@ -74,9 +74,9 @@ Game.ui.renderInventory = function () {
   equipTab.onclick = () => { setActiveTab(equipTab); renderEquipScreen(); };
   tabs.appendChild(equipTab);
 
-  // Item category tabs — only show tabs that have at least one item
-  Object.keys(groups).forEach(type => {
-    if (groups[type].length === 0) return;
+  // Item category tabs — show all categories, even if empty
+  const categoryOrder = ['weapon', 'armor', 'consumable', 'ammo', 'tool', 'junk', 'key', 'note', 'holotape'];
+  categoryOrder.forEach(type => {
     const btn = document.createElement("div");
     btn.className = "inv-tab";
     btn.innerText = type.toUpperCase();
