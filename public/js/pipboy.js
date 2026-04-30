@@ -24,6 +24,25 @@
       || window.innerWidth <= 768;
   }
 
+  // Render character portrait in STAT tab
+  function renderCharacterPortrait() {
+    if (!Game.modules?.CharacterCreator) return;
+    const cc = Game.modules.CharacterCreator;
+    // Only render if module is actually initialized (has appearanceOptions)
+    if (!cc.appearanceOptions) return;
+    const savedAppearance = cc.loadSavedAppearance();
+    const appearance = savedAppearance || (cc.getAppearance?.());
+    if (appearance) {
+      const portraitDiv = document.getElementById('statPortraitSvg');
+      if (portraitDiv) {
+        // Generate at 150px (height of frame) so portrait fills the 120×150 container
+        const html = cc.generatePortraitSVG(appearance, 150);
+        // Clip to container dimensions so image fills frame without overflow
+        portraitDiv.innerHTML = `<div style="width:120px;height:150px;overflow:hidden;">${html}</div>`;
+      }
+    }
+  }
+
     // ------------------------------------------------------------
   // CORE PANEL SWITCHER
   // ------------------------------------------------------------
@@ -83,13 +102,16 @@
       // QUEST HOOK: Wake Up → open_inventory
       Game.quests?.completeObjective("wake_up", "open_inventory");
 
-      // Render inventory so it shows current state every time the tab opens
-      if (window.Game && window.Game.ui?.renderInventory) {
-        try {
-          window.Game.ui.renderInventory();
-        } catch (e) {
-          console.warn("[PipBoy] renderInventory failed:", e);
+      // Prefer the full-featured inventory-ui renderer (tabs + paperdoll)
+      // Fall back to the simpler main.js renderer if unavailable
+      try {
+        if (Game.ui?.renderInventory) {
+          Game.ui.renderInventory();
+        } else if (window.renderInventoryPanel) {
+          window.renderInventoryPanel();
         }
+      } catch (e) {
+        console.warn("[PipBoy] renderInventory failed:", e);
       }
     }
 
@@ -105,6 +127,8 @@
             if (window.updateStatDisplay) {
               window.updateStatDisplay();
             }
+            // Render character portrait
+            renderCharacterPortrait();
           }).catch(err => {
             console.warn("[PipBoy] Character creator initialization failed:", err);
           });
@@ -116,32 +140,35 @@
         if (window.updateStatDisplay) {
           window.updateStatDisplay();
         }
+        // Render character portrait
+        renderCharacterPortrait();
       }
     }
 
     // QUESTS PANEL ACTIVATION - render quest UI
     if (panelKey === "quests") {
-      if (Game.ui?.renderQuest) {
-        try {
+      // Prefer full-featured quest-ui renderer (objectives, accept/decline buttons)
+      // Fall back to simpler main.js renderer
+      try {
+        if (Game.ui?.renderQuest) {
           Game.ui.renderQuest();
-        } catch (e) {
-          console.warn("[PipBoy] renderQuest failed:", e);
+        } else if (window.renderQuestsPanel) {
+          window.renderQuestsPanel();
         }
+      } catch (e) {
+        console.warn("[PipBoy] renderQuest failed:", e);
       }
     }
 
-    // EXCHANGE PANEL ACTIVATION - render exchange content
+    // EXCHANGE PANEL ACTIVATION - render all exchange sections
     if (panelKey === "exchange") {
-      // Trigger the same initialization as the click handler
-      if (window.renderExchangeClaimSection && window.renderExchangeCraftingSection && window.renderDemoExchange) {
-        try {
-          window.renderExchangeClaimSection();
-          window.renderExchangeCraftingSection();
-          window.renderDemoExchange();
-          console.log("[PipBoy] Exchange panel initialized");
-        } catch (e) {
-          console.warn("[PipBoy] Exchange panel initialization failed:", e);
-        }
+      try {
+        if (window.renderExchangeClaimSection) window.renderExchangeClaimSection();
+        if (window.renderExchangeCraftingSection) window.renderExchangeCraftingSection();
+        if (window.renderDemoExchange) window.renderDemoExchange();
+        console.log("[PipBoy] Exchange panel initialized");
+      } catch (e) {
+        console.warn("[PipBoy] Exchange panel initialization failed:", e);
       }
     }
 

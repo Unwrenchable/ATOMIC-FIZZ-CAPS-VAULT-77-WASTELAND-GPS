@@ -404,7 +404,10 @@
       setRoster(roster);
 
       // If loyalty drops too low, companion may leave
-      if (roster[companionId].loyalty < 20 && Math.random() < 0.1) {
+      // SECURITY: use crypto.getRandomValues() — Math.random() forbidden per project policy
+      const _buf = new Uint32Array(1);
+      crypto.getRandomValues(_buf);
+      if (roster[companionId].loyalty < 20 && (_buf[0] / 0x100000000) < 0.1) {
         dismissCombatCompanion(companionId);
         toast(`Your companion has left due to low loyalty!`, "error");
       }

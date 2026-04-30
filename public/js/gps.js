@@ -38,16 +38,47 @@ Game.gps = {
     const hidden = document.hidden;
     this.watchId = navigator.geolocation.watchPosition(
       (pos) => this.handlePosition(pos),
-      (err) => {
-        console.warn("[gps] Error:", err.message);
-        this.updateGPSBadge('error');
-      },
+      (err) => this.handleError(err),
       {
         enableHighAccuracy: !hidden,
         maximumAge: hidden ? 60000 : 10000,
         timeout: 15000
       }
     );
+  },
+
+  handleError(err) {
+    console.warn("[gps] Error:", err.message);
+    let status = 'error';
+    let retry = false;
+
+    switch (err.code) {
+      case err.PERMISSION_DENIED:
+        status = 'error';
+        // Don't retry on permission denied
+        break;
+      case err.POSITION_UNAVAILABLE:
+        status = 'error';
+        retry = true;
+        break;
+      case err.TIMEOUT:
+        status = 'error';
+        retry = true;
+        break;
+      default:
+        status = 'error';
+        retry = true;
+    }
+
+    this.updateGPSBadge(status);
+
+    if (retry && this.retryCount < 3) {
+      this.retryCount = (this.retryCount || 0) + 1;
+      console.log(`[gps] Retrying GPS (${this.retryCount}/3) in 2 seconds...`);
+      setTimeout(() => this.startWatch(), 2000);
+    } else {
+      this.retryCount = 0;
+    }
   },
 
   handlePosition(pos) {

@@ -15,7 +15,7 @@ services:
     rootDir: backend
     buildCommand: npm install
     startCommand: node server.js
-    healthCheckPath: /api/health
+    healthCheckPath: /api/ping
 
     # Environment-specific settings
     envVars:

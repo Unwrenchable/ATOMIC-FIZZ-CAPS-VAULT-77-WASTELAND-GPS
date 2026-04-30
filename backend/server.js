@@ -93,17 +93,54 @@ app.options('*', cors(corsOptions));
 // JSON body limit
 app.use(express.json({ limit: "64kb" }));
 
+// ------------------------------------------------------------
+// STRUCTURED REQUEST LOGGING
+// Emits one JSON log line per request: requestId, wallet hash,
+// method, path, status, latency. No PII — wallets are SHA-256
+// hashed before logging.
+// ------------------------------------------------------------
+const { createHash, randomBytes } = require("crypto");
+app.use((req, res, next) => {
+  const requestId = createHash("sha256")
+    .update(randomBytes(8))
+    .digest("hex")
+    .slice(0, 12);
+  const start = Date.now();
+  req._requestId = requestId;
+
+  res.on("finish", () => {
+    const wallet = req.headers["x-wallet"] || req.body?.wallet || "";
+    const walletHash = wallet
+      ? createHash("sha256").update(String(wallet)).digest("hex").slice(0, 8)
+      : "anonymous";
+    const logEntry = {
+      requestId,
+      ts: new Date().toISOString(),
+      method: req.method,
+      path: req.path,
+      status: res.statusCode,
+      latencyMs: Date.now() - start,
+      walletHash,
+      ip: req.ip,
+      ua: (req.headers["user-agent"] || "").slice(0, 80),
+    };
+    // Emit to stdout — consumed by Render log drains or local dev
+    console.log(JSON.stringify(logEntry));
+  });
+  next();
+});
+
 // Global rate limiting (coarse)
 app.use(
   rateLimit({
     windowMs: 10 * 1000,
-    max: 50,
+    max: 200,
     standardHeaders: true,
     legacyHeaders: false,
     // Keep liveness and bootstrap config endpoints available during traffic spikes.
     skip: (req) => {
       const p = req.path || "";
-      return p === "/api/health" || p === "/api/config/frontend";
+      return p === "/api/health" || p === "/api/config/frontend" || !p.startsWith('/api/');
     },
   })
 );
@@ -292,6 +329,7 @@ safeMount("/api/caps", api("caps"));
 safeMount("/api/transfer-fizz", api("transfer-fizz"));
 safeMount("/api/settings", api("settings"));
 safeMount("/api/crafting", api("crafting"));
+safeMount("/api/repair", api("repair"));
 
 // NFT Scrap and Fusion features
 safeMount("/api/scrap-nft", api("scrap-nft"));
@@ -316,6 +354,9 @@ safeMount("/api/quest-endings", api("quest-endings"));
 
 // Survival reward claims
 safeMount("/api/claim-survival", api("claim-survival"));
+
+// Buy Stimpak with CAPS burn
+safeMount("/api/buy-stimpak", api("buy-stimpak"));
 
 // Overseer AI proxy (Hugging Face / OpenAI compatible)
 safeMount("/api/overseer", api("overseer-proxy"));
@@ -421,6 +462,83 @@ app.get('/api/health', async (req, res) => {
       error: err.message
     });
   }
+});
+
+// ------------------------------------------------------------
+// DETAILED HEALTH CHECK (admin-gated)
+// Returns Redis connection status, Solana RPC reachability,
+// Node.js uptime, memory usage, and environment metadata.
+// Protected: requires X-Admin-Key header matching ADMIN_SECRET.
+// ------------------------------------------------------------
+app.get("/api/admin/health-detailed", async (req, res) => {
+  const adminSecret = process.env.ADMIN_SECRET || "";
+  const provided = req.headers["x-admin-key"] || "";
+  if (!adminSecret || !provided) {
+    return res.status(401).json({ ok: false, error: "Unauthorized" });
+  }
+  const secretBuf = Buffer.from(adminSecret);
+  const providedBuf = Buffer.from(provided);
+  if (secretBuf.length !== providedBuf.length) {
+    return res.status(401).json({ ok: false, error: "Unauthorized" });
+  }
+  try {
+    const { timingSafeEqual } = require("crypto");
+    if (!timingSafeEqual(secretBuf, providedBuf)) {
+      return res.status(401).json({ ok: false, error: "Unauthorized" });
+    }
+  } catch {
+    return res.status(401).json({ ok: false, error: "Unauthorized" });
+  }
+
+  // Redis status
+  let redisStatus = "unknown";
+  let redisPingMs = null;
+  try {
+    const redisLib = require("./lib/redis");
+    const redisClient = redisLib.redis || redisLib.client || redisLib;
+    const pingStart = Date.now();
+    const pong = typeof redisClient.ping === "function"
+      ? await redisClient.ping().catch(() => null)
+      : null;
+    redisPingMs = Date.now() - pingStart;
+    redisStatus = pong === "PONG" ? "ok" : "degraded";
+  } catch {
+    redisStatus = "unavailable";
+  }
+
+  // Solana RPC reachability (non-blocking, 3s timeout)
+  let solanaStatus = "not-configured";
+  const rpcUrl = process.env.SOLANA_RPC;
+  if (rpcUrl) {
+    solanaStatus = await new Promise((resolve) => {
+      const lib = rpcUrl.startsWith("https") ? require("https") : require("http");
+      const r2 = lib.request(
+        rpcUrl,
+        { method: "POST", headers: { "Content-Type": "application/json" }, timeout: 3000 },
+        (resp) => { resp.resume(); resolve(resp.statusCode < 500 ? "ok" : "degraded"); }
+      );
+      r2.on("error", () => resolve("unreachable"));
+      r2.on("timeout", () => { r2.destroy(); resolve("timeout"); });
+      r2.write(JSON.stringify({ jsonrpc: "2.0", id: 1, method: "getHealth" }));
+      r2.end();
+    });
+  }
+
+  const mem = process.memoryUsage();
+  return res.json({
+    ok: true,
+    ts: new Date().toISOString(),
+    env: NODE_ENV,
+    uptimeSeconds: Math.floor(process.uptime()),
+    redis: { status: redisStatus, pingMs: redisPingMs },
+    solana: { status: solanaStatus, rpc: rpcUrl ? rpcUrl.replace(/[?#].*$/, "***") : null },
+    memory: {
+      heapUsedMB: (mem.heapUsed / 1024 / 1024).toFixed(1),
+      heapTotalMB: (mem.heapTotal / 1024 / 1024).toFixed(1),
+      rssMB: (mem.rss / 1024 / 1024).toFixed(1),
+    },
+    node: process.version,
+  });
 });
 
 // ------------------------------------------------------------

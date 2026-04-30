@@ -9,8 +9,8 @@
   "use strict";
 
   window.Game = window.Game || {};
-  Game.player = Game.player || {};
-  Game.modules = Game.modules || {};
+  window.Game.player = window.Game.player || {};
+  window.Game.modules = window.Game.modules || {};
 
   const STORAGE_KEY = "afc_unified_player_state_v2";
   const AUTO_SAVE_INTERVAL = 15000; // 15 seconds - reduced from 5s for performance
@@ -29,6 +29,14 @@
       legs: null,      // leg armor
       aid: null,       // quick-use consumable
       accessory: null  // misc / quest items
+    },
+    // Durability for equipped items (0-100)
+    durability: {
+      weapon: 100,
+      head: 100,
+      chest: 100,
+      arms: 100,
+      legs: 100
     },
     // Quest state
     questsActive: [],
@@ -62,6 +70,8 @@
     companions: [],
     // Visited locations for map
     visitedLocations: [],
+    // Discovered POIs (hidden until found or revealed)
+    discoveredPOIs: [],
     // Timestamps
     lastSaved: null,
     lastSynced: null
@@ -183,21 +193,25 @@
             if (typeof _state.addiction[k] !== 'number') _state.addiction[k] = ADDICTION_DEFAULTS[k];
           });
         }
-        
-        console.log("[PlayerState] Loaded from storage");
+        // Ensure durability object exists
+        if (!_state.durability || typeof _state.durability !== 'object') {
+          _state.durability = { weapon: 100, head: 100, chest: 100, arms: 100, legs: 100 };
+        } else {
+          const DURABILITY_DEFAULTS = { weapon: 100, head: 100, chest: 100, arms: 100, legs: 100 };
+          Object.keys(DURABILITY_DEFAULTS).forEach(k => {
+            if (typeof _state.durability[k] !== 'number') _state.durability[k] = DURABILITY_DEFAULTS[k];
+          });
+        }
       } else {
         _state = { ...DEFAULT_STATE };
         console.log("[PlayerState] Starting fresh");
       }
-      
       // Also try to load from legacy storage and merge
       mergeLegacyStorage();
-      
     } catch (e) {
       console.error("[PlayerState] Failed to load:", e);
       _state = { ...DEFAULT_STATE };
     }
-  }
 
   /**
    * Merge data from legacy storage keys
@@ -395,6 +409,35 @@
       syncGamePlayerReferences();
       triggerSurvivalUpdate();
     }
+  }
+
+  /**
+   * Decay durability of equipped items on use
+   * @param {string} slot - Equipment slot (weapon, head, chest, arms, legs)
+   * @param {number} amount - Amount to decay (default 5)
+   */
+  function decayDurability(slot, amount = 5) {
+    if (!_state.durability || !_state.durability[slot]) return;
+    _state.durability[slot] = Math.max(0, _state.durability[slot] - amount);
+    _dirty = true;
+    console.log(`[PlayerState] ${slot} durability decayed by ${amount} to ${_state.durability[slot]}`);
+    if (_state.durability[slot] <= 0) {
+      // Item breaks
+      unequipItem(slot);
+      console.log(`[PlayerState] ${slot} item broke!`);
+    }
+  }
+
+  /**
+   * Repair durability of equipped item
+   * @param {string} slot - Equipment slot
+   * @param {number} amount - Amount to repair (default 25)
+   */
+  function repairDurability(slot, amount = 25) {
+    if (!_state.durability || !_state.durability[slot]) return;
+    _state.durability[slot] = Math.min(100, _state.durability[slot] + amount);
+    _dirty = true;
+    console.log(`[PlayerState] ${slot} durability repaired by ${amount} to ${_state.durability[slot]}`);
   }
 
   /**
@@ -1226,6 +1269,19 @@
     activateQuest,
     completeQuest,
     visitLocation,
+    discoverPOI: function (poiId) {
+      if (!_state) return;
+      if (!_state.discoveredPOIs) _state.discoveredPOIs = [];
+      if (!_state.discoveredPOIs.includes(poiId)) {
+        _state.discoveredPOIs.push(poiId);
+        _dirty = true;
+        saveToStorage();
+      }
+    },
+    isPOIDiscovered: function (poiId) {
+      if (!_state || !_state.discoveredPOIs) return false;
+      return _state.discoveredPOIs.includes(poiId);
+    },
     syncWithBackend,
     receiveItemFromNPC,
     getSpecial: function () { return getEffectiveSpecial(); },
@@ -1265,18 +1321,24 @@
     // Chem and addiction functions
     useItem,
     getAddiction,
-    getWithdrawalPenalties
-  };
+    getWithdrawalPenalties,
+    // Durability functions
+    decayDurability,
+    repairDurability,
+    getDurability: function () { return _state ? { ..._state.durability } : {}; }
 
+  };
   // Expose globally
-  Game.modules.PlayerState = PlayerState;
+  window.Game.modules.PlayerState = PlayerState;
   window.PlayerState = PlayerState;
 
   // Auto-initialize when DOM is ready
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
+  if (typeof window !== 'undefined') {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", PlayerState.init);
+    } else {
+      PlayerState.init();
+    }
   }
 
 })();

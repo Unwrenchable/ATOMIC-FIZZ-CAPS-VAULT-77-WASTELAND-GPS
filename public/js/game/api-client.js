@@ -496,7 +496,13 @@
 
         // Mark as visited
         Game.modules.PlayerState.visitLocation(locationId);
+        // Mark as discovered
+        Game.modules.PlayerState.discoverPOI(locationId);
         Game.modules.PlayerState.save();
+        // Refresh map to show newly discovered POI
+        if (Game.modules.WorldMap && Game.modules.WorldMap.loadLocations) {
+          Game.modules.WorldMap.loadLocations();
+        }
 
         // Show notification
         const itemText = rewards.items?.length > 0 

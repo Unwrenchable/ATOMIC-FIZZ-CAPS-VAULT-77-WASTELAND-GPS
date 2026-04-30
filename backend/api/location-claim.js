@@ -194,6 +194,36 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     }
 
     // -----------------------------
+    // GPS speed-of-travel spoofing detection
+    // Rejects claims where the player would have needed to travel faster
+    // than MAX_TRAVEL_SPEED_KMH to reach this location since their last claim.
+    // This detects impossible jumps (e.g. teleporting across continents).
+    // -----------------------------
+    const MAX_TRAVEL_SPEED_KMH = 120; // ~75 mph — generous upper bound for legitimate GPS
+    const lastPosKey = key(`player:${wallet}:lastpos`);
+    const lastPosRaw = await redis.get(lastPosKey).catch(() => null);
+    if (lastPosRaw) {
+      try {
+        const lastPos = JSON.parse(lastPosRaw);
+        if (lastPos && typeof lastPos.lat === "number" && typeof lastPos.lng === "number" && typeof lastPos.ts === "number") {
+          const distanceMeters = getDistance(lastPos.lat, lastPos.lng, playerLat, playerLng);
+          const elapsedSeconds = Math.max(1, (Date.now() - lastPos.ts) / 1000);
+          const speedKmh = (distanceMeters / 1000) / (elapsedSeconds / 3600);
+          if (speedKmh > MAX_TRAVEL_SPEED_KMH) {
+            console.warn(`[location-claim] GPS spoof detected wallet=${wallet} speed=${speedKmh.toFixed(1)}km/h dist=${Math.round(distanceMeters)}m elapsed=${Math.round(elapsedSeconds)}s`);
+            return res.status(400).json({
+              ok: false,
+              error: "Impossible travel speed detected — GPS spoofing suspected",
+              code: "GPS_SPOOF"
+            });
+          }
+        }
+      } catch {
+        // Corrupt lastpos data — ignore and proceed; will be overwritten below
+      }
+    }
+
+    // -----------------------------
     // Find location data
     // -----------------------------
     const location = LOCATIONS.find(loc => 
@@ -331,6 +361,15 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     // Re-read for response (safe — we just wrote it)
     const savedData = await redis.hget(playerKey, "profile");
     const savedPlayer = savedData ? JSON.parse(savedData) : {};
+
+    // Update last-known GPS position for speed-of-travel spoofing detection.
+    // Stored with a 1-hour TTL; stale positions are automatically discarded.
+    // Failures are non-fatal — a missing lastpos skips the check on the next claim.
+    redis.set(
+      lastPosKey,
+      JSON.stringify({ lat: playerLat, lng: playerLng, ts: Date.now() }),
+      { EX: 3600 }
+    ).catch((e) => console.warn("[location-claim] lastpos update failed:", e?.message));
 
     // Mark location as claimed
     const claimedKey = key(`player:${wallet}:claimed`);
