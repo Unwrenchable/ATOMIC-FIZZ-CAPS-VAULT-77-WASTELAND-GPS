@@ -410,6 +410,9 @@
         this.updateOverlayVisibility(this.map.getZoom() || 7);
         this.updateMapStatus('Map online - Ready');
       }
+
+      // Dispatch mapReady event for modules that depend on the map being initialized
+      window.dispatchEvent(new Event('map-ready'));
     },
 
     // --------------------------------------------------------
@@ -1290,7 +1293,7 @@
         // try API first
         const apiLocations = await safeFetchJSON("/api/locations");
         if (Array.isArray(apiLocations) && apiLocations.length) {
-          this.locations = apiLocations;
+          this.locations = this.filterDiscoveredLocations(apiLocations);
           this.locationsLoaded = true;
           this._loadingLocations = false;
           this.renderPOIMarkers();
@@ -1300,7 +1303,7 @@
         // fallback to static file
         const staticLocations = await safeFetchJSON("/data/locations.json");
         if (Array.isArray(staticLocations) && staticLocations.length) {
-          this.locations = staticLocations;
+          this.locations = this.filterDiscoveredLocations(staticLocations);
         } else {
           this.locations = [];
           console.warn("[worldmap] no locations available from API or static fallback");
@@ -1312,6 +1315,21 @@
       this.locationsLoaded = true;
       this._loadingLocations = false;
       this.renderPOIMarkers();
+    },
+
+    filterDiscoveredLocations(locations) {
+      return locations.filter(loc => {
+        // Always show canon locations (Fallout lore)
+        if (loc.source === "canon" || loc.source === "canon_tv") {
+          return true;
+        }
+        // For generated locations, only show if discovered
+        if (loc.source === "generated_world") {
+          return Game.modules.PlayerState.isPOIDiscovered(loc.id);
+        }
+        // Default: show if discovered or if no source (legacy)
+        return !loc.source || Game.modules.PlayerState.isPOIDiscovered(loc.id);
+      });
     },
 
     renderPOIMarkers() {
