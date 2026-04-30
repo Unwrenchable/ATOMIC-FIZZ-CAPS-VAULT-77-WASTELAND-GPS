@@ -99,10 +99,10 @@ app.use(express.json({ limit: "64kb" }));
 // method, path, status, latency. No PII — wallets are SHA-256
 // hashed before logging.
 // ------------------------------------------------------------
-const { createHash } = require("crypto");
+const { createHash, randomBytes } = require("crypto");
 app.use((req, res, next) => {
   const requestId = createHash("sha256")
-    .update(crypto.randomBytes(8))
+    .update(randomBytes(8))
     .digest("hex")
     .slice(0, 12);
   const start = Date.now();
