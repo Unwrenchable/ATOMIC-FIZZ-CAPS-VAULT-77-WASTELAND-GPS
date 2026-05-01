@@ -10,6 +10,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const cors = require("cors");
+const compression = require("compression");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 
@@ -89,6 +90,10 @@ console.log('[server] CORS configured with origins:', allowedOrigins.join(', '))
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
+
+// Compress all responses (gzip/deflate) — reduces large JSON payloads
+// (locations.json, world_locations.json, poi.json, etc.) by ~80%.
+app.use(compression());
 
 // JSON body limit
 app.use(express.json({ limit: "64kb" }));

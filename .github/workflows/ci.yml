@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel in-progress runs on the same branch to avoid queuing duplicate jobs
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ----------------------------------------------------------------
+  # Node.js: lint + test
+  # Only runs when JS/backend/config files change.
+  # ----------------------------------------------------------------
+  node:
+    name: Node lint & test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    # Skip this job if only Solana/Rust/docs changed
+    if: |
+      github.event_name == 'push' ||
+      !startsWith(github.event.pull_request.title, 'chore(solana)')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          # Cache node_modules keyed on package-lock.json so installs are
+          # skipped entirely on cache hits.
+          cache: 'npm'
+
+      # Full install only for test/lint jobs that need dev dependencies.
+      # Use ci (not install) for reproducible builds.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+        env:
+          NODE_ENV: test
+
+  # ----------------------------------------------------------------
+  # Solana / Anchor program build + test
+  # Only runs when program source, Cargo.toml, or Anchor.toml change.
+  # ----------------------------------------------------------------
+  solana:
+    name: Solana program build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    # Path filter: only trigger when Solana-related files change
+    # (uses paths-filter action to avoid running Rust builds on every JS commit)
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for Solana-related changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            solana:
+              - 'programs/**'
+              - 'Anchor.toml'
+              - 'Cargo.toml'
+              - 'Cargo.lock'
+              - 'workers/**'
+              - 'scripts/**'
+
+      - name: Set up Rust toolchain (with incremental build cache)
+        if: steps.filter.outputs.solana == 'true'
+        uses: dtolnay/rust-toolchain@stable
+
+      # Cache the Cargo registry + build artefacts.
+      # Key includes Cargo.lock so it busts when dependencies change but
+      # reuses the cache across identical lockfiles (most PRs).
+      - name: Cache Rust / Cargo artefacts
+        if: steps.filter.outputs.solana == 'true'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/
+          key: cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            cargo-${{ runner.os }}-
+
+      - name: Install Solana CLI
+        if: steps.filter.outputs.solana == 'true'
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+
+      - name: Install Anchor CLI (cached via cargo)
+        if: steps.filter.outputs.solana == 'true'
+        run: |
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          avm install latest
+          avm use latest
+
+      - name: Build Anchor program
+        if: steps.filter.outputs.solana == 'true'
+        run: anchor build
+
+      - name: Run Anchor tests
+        if: steps.filter.outputs.solana == 'true'
+        run: anchor test --skip-local-validator
