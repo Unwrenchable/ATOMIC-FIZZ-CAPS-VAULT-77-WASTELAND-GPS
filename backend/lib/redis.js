@@ -189,6 +189,13 @@ function createInMemoryClient() {
       hashes.set(key, h);
       return 1;
     },
+    async hincrby(key, field, delta) {
+      const h = hashes.get(key) || new Map();
+      const cur = parseInt(h.get(field) || "0", 10) + Number(delta);
+      h.set(field, String(cur));
+      hashes.set(key, h);
+      return cur;
+    },
     // Key pattern scan — returns all keys from all stores matching a simple glob
     // (only the '*' wildcard is supported, e.g. "afw:player:*")
     async keys(pattern) {
@@ -511,6 +518,32 @@ async function hset(k, field, value) {
     handleRedisError(err, 'hset');
   }
 }
+async function hincrby(k, field, delta) {
+  try {
+    const c = await ensureClient();
+    return await c.hincrby(key(k), field, delta);
+  } catch (err) {
+    handleRedisError(err, 'hincrby');
+  }
+}
+/**
+ * Scan keys using the Redis SCAN command.
+ * NOTE: the caller is responsible for building the full MATCH pattern
+ * (including prefix) — this wrapper does NOT add an extra prefix to the
+ * pattern, matching the convention used throughout this codebase where
+ * callers pre-call key() on scan patterns.
+ */
+async function scan(cursor, ...args) {
+  try {
+    const c = await ensureClient();
+    if (c.isFallback) {
+      return c.scan(cursor, ...args);
+    }
+    return await c.scan(cursor, ...args);
+  } catch (err) {
+    handleRedisError(err, 'scan');
+  }
+}
 /**
  * Scan keys matching a glob pattern.  The pattern should NOT include the
  * Redis key prefix — it is prepended automatically (same convention as
@@ -616,6 +649,8 @@ module.exports = {
   srem,
   hget,
   hset,
+  hincrby,
+  scan,
   keys,
   ttl,
   on,
@@ -648,6 +683,8 @@ const redisWrapper = {
   srem,
   hget,
   hset,
+  hincrby,
+  scan,
   keys,
   ttl,
   on,
@@ -662,6 +699,7 @@ const redisWrapper = {
 // camelCase aliases (e.g. hGet/hSet) for modules that use different naming
 redisWrapper.hGet = redisWrapper.hget;
 redisWrapper.hSet = redisWrapper.hset;
+redisWrapper.hIncrBy = redisWrapper.hincrby;
 redisWrapper.sMembers = redisWrapper.smembers;
 redisWrapper.sAdd = redisWrapper.sadd;
 redisWrapper.sRem = redisWrapper.srem;

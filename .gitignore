@@ -110,6 +110,15 @@ data-archive/
 generated_npcs_grok.json
 test_videos_output.json
 
+# --- Generated / runtime avatar images (served from CDN or object store) ---
+public/img/generated/
+public/img/avatars/generated/
+public/data/generated/
+
+# --- Runtime world-generation dumps (recreated by generate_world.js) ---
+public/data/world_locations.generated.json
+public/data/world_expansion.generated.json
+
 # --- Root-level dev/test/generator scripts (not for production serving) ---
 # These files live at the repo root for developer use only.
 /test-*.html
