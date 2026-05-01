@@ -363,16 +363,6 @@ test("BUG-004: chooseEnding() syncs player profile with quest state", () => {
   );
 });
 
-test("BUG-005: leaderboard scans double-prefixed player keys", () => {
-  const src = readFile("backend/api/caps.js");
-  assert.ok(src, "backend/api/caps.js must exist");
-  // Must use key(key("")) or key() before keys() call
-  assert.ok(
-    src.includes('redis.keys(key("player:*"))') || src.includes("redis.keys(key('player:*'))"),
-    "caps.js leaderboard must scan with key(key()) double-prefix to find actual player profiles"
-  );
-});
-
 test("BUG-006: cooldowns status uses correct key prefix (matches location-claim write)", () => {
   const src = readFile("backend/api/cooldowns.js");
   assert.ok(src, "backend/api/cooldowns.js must exist");

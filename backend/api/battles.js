@@ -24,27 +24,29 @@ const battleLimiter = rateLimit({
 
 // ------------------------------------------------------------
 // POST /api/battles/win
-// Records a battle win for the authenticated player
+// Records a battle win for the authenticated player.
+// Uses HINCRBY to atomically increment the dedicated battleWins
+// hash field — no full profile JSON parse/stringify round-trip.
 // ------------------------------------------------------------
 router.post("/win", authMiddleware, battleLimiter, async (req, res) => {
   try {
     const wallet = req.player.wallet;
-
     const playerKey = key(`player:${wallet}`);
-    let playerData = await redis.hget(playerKey, "profile");
 
-    if (!playerData) {
+    // Verify the player profile exists before touching the counter
+    const profileRaw = await redis.hget(playerKey, "profile");
+    if (!profileRaw) {
       return res.status(404).json({ ok: false, error: "Player not found" });
     }
 
-    const player = JSON.parse(playerData);
-    player.battleWins = (player.battleWins || 0) + 1;
+    // Atomically increment the dedicated battleWins hash field.
+    // This avoids a full JSON parse + stringify of the entire profile
+    // for every win event (which can fire up to 20 times per 10 seconds).
+    const newCount = await redis.hincrby(playerKey, "battleWins", 1);
 
-    await redis.hset(playerKey, "profile", JSON.stringify(player));
+    console.log(`[battles] ${wallet.slice(0, 8)} recorded battle win. Total: ${newCount}`);
 
-    console.log(`[battles] ${wallet.slice(0, 8)} recorded battle win. Total: ${player.battleWins}`);
-
-    return res.json({ ok: true, battleWins: player.battleWins });
+    return res.json({ ok: true, battleWins: newCount });
   } catch (err) {
     console.error("[battles] win error:", err);
     return res.status(500).json({ ok: false, error: "Failed to record battle win" });

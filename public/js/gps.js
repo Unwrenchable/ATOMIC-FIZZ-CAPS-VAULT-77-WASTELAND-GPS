@@ -10,6 +10,16 @@ Game.gps = {
   watchId: null,
   snapToPlayer: true, // Enable auto-snap to player position
 
+  // Debounce state — GPS fires every 1-3 s on mobile; we only propagate
+  // updates that cross a meaningful distance threshold OR enough time has
+  // elapsed, to avoid redundant encounter rolls and marker re-renders.
+  _lastProcessedLat: null,
+  _lastProcessedLng: null,
+  _lastProcessedTime: 0,
+  // Minimum movement (metres) OR minimum interval (ms) to trigger a full update.
+  _minMovementMetres: 10,
+  _minIntervalMs: 15000,
+
   // Called only after worldmap is ready
   init() {
     if (this.ready) return;
@@ -81,6 +91,17 @@ Game.gps = {
     }
   },
 
+  // Haversine distance in metres between two lat/lng points.
+  _distanceMetres(lat1, lng1, lat2, lng2) {
+    const R = 6371000; // Earth radius in metres
+    const toRad = d => d * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLng = toRad(lng2 - lng1);
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  },
+
   handlePosition(pos) {
     const { latitude, longitude, accuracy } = pos.coords;
 
@@ -93,6 +114,29 @@ Game.gps = {
 
     this.coords = { lat: latitude, lng: longitude };
     this.lastUpdate = Date.now();
+
+    // Debounce: skip expensive map/encounter work if the player hasn't moved
+    // more than _minMovementMetres AND the minimum interval hasn't elapsed.
+    const now = Date.now();
+    const hasPrev = this._lastProcessedLat !== null;
+    const movedEnough = hasPrev
+      ? this._distanceMetres(this._lastProcessedLat, this._lastProcessedLng, latitude, longitude) >= this._minMovementMetres
+      : true;
+    const timeElapsed = (now - this._lastProcessedTime) >= this._minIntervalMs;
+
+    if (hasPrev && !movedEnough && !timeElapsed) {
+      // Update gameState position silently so other systems can read it,
+      // but skip the heavy worldmap update + encounter rolls.
+      if (!window.gameState) window.gameState = {};
+      if (!gameState.player) gameState.player = {};
+      gameState.player.position = { lat: latitude, lng: longitude };
+      this.updateGPSBadge(accuracy < 50 ? 'good' : 'fair');
+      return;
+    }
+
+    this._lastProcessedLat = latitude;
+    this._lastProcessedLng = longitude;
+    this._lastProcessedTime = now;
 
     // Update gameState safely
     if (!window.gameState) window.gameState = {};

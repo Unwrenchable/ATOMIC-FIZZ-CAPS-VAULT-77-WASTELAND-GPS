@@ -30,9 +30,20 @@ const playerLimiter = rateLimit({
 // ------------------------------------------------------------
 async function loadProfile(wallet) {
   try {
-    const raw = await redis.hGet(key(`player:${wallet}`), "profile");
+    const playerKey = key(`player:${wallet}`);
+    const raw = await redis.hGet(playerKey, "profile");
     if (!raw) return null;
-    return JSON.parse(raw);
+    const profile = JSON.parse(raw);
+    // battleWins may be stored in a dedicated hash field (written atomically by
+    // battles.js via HINCRBY) rather than embedded in the profile JSON.
+    // Prefer the dedicated field when it exists; fall back to the JSON value for
+    // backwards-compatibility with profiles created before this change.
+    const battleWinsField = await redis.hGet(playerKey, "battleWins");
+    if (battleWinsField !== null) {
+      const val = parseInt(battleWinsField, 10);
+      profile.battleWins = isNaN(val) ? (profile.battleWins || 0) : val;
+    }
+    return profile;
   } catch (err) {
     console.error("[player] loadProfile error:", err);
     return null;
