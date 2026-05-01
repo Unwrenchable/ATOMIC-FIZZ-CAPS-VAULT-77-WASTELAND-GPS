@@ -326,7 +326,6 @@ safeMount("/api/locations", api("locations"));  // routes/api/locations.js: serv
 safeMount("/api/player", api("player"));
 safeMount("/api/player-nfts", api("player-nfts"));
 safeMount("/api/quests", api("quests"));
-safeMount("/api/leaderboard", api("leaderboard"));
 safeMount("/api/battles", api("battles"));
 safeMount("/api/redeem-voucher", api("redeem-voucher"));
 safeMount("/api/xp", api("xp"));

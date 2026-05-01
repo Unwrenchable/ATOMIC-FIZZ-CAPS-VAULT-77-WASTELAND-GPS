@@ -155,12 +155,6 @@ const SCENARIOS = [
     recordResult(r);
   },
 
-  // Leaderboard read
-  async () => {
-    const r = await request("GET", "/api/leaderboard");
-    recordResult(r);
-  },
-
   // Invalid JSON payload (server must not crash)
   async () => {
     const url = new URL("/api/auth/login", BASE_URL);
