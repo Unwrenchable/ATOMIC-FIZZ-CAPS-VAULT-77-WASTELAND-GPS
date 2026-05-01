@@ -75,6 +75,8 @@ router.get("/nearby", (req, res) => {
   const maxLng = lng + lngDelta;
 
   const nearby = allLocations.filter(loc => {
+    // Skip entries with missing or non-numeric coordinates
+    if (typeof loc.lat !== "number" || typeof loc.lng !== "number") return false;
     // Fast bounding-box pre-filter (no trig)
     if (loc.lat < minLat || loc.lat > maxLat || loc.lng < minLng || loc.lng > maxLng) return false;
     // Precise haversine check

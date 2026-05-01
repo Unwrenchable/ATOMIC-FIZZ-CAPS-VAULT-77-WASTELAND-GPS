@@ -72,9 +72,13 @@ router.get("/", leaderboardLimiter, async (req, res) => {
             // via HINCRBY) — prefer that over the value embedded in the profile JSON
             // so the two sources stay in sync.
             const battleWinsField = await redis.hget(playerKey, "battleWins");
-            const battleWins = battleWinsField !== null
-              ? parseInt(battleWinsField, 10) || 0
-              : (profile.battleWins || 0);
+            let battleWins;
+            if (battleWinsField !== null) {
+              const parsed = parseInt(battleWinsField, 10);
+              battleWins = isNaN(parsed) ? (profile.battleWins || 0) : parsed;
+            } else {
+              battleWins = profile.battleWins || 0;
+            }
             players.push({
               wallet: truncateWallet(wallet),
               name: profile.name || "WANDERER",

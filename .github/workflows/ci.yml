@@ -107,7 +107,9 @@ jobs:
       - name: Install Anchor CLI (cached via cargo)
         if: steps.filter.outputs.solana == 'true'
         run: |
-          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          if ! command -v avm &> /dev/null; then
+            cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          fi
           avm install latest
           avm use latest
 
