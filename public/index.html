@@ -155,7 +155,7 @@
                   ☢ OFFLINE MODE — data saved locally, syncs on reconnect
                 </div>
 
-                <!-- WALLET HUD (Phantom only) -->
+                <!-- WALLET HUD (Universal Web3) -->
                 <div class="wallet-hud">
                   <span id="walletAddress">WALLET: DISCONNECTED</span>
                   <button id="connectWalletHUD" class="pipboy-button-small">CONNECT</button>
@@ -817,23 +817,47 @@
             }
           }
 
-          async function connectPhantom() {
+          async function connectWallet() {
             try {
-              const provider = window.solana;
-              if (!provider || !provider.isPhantom) {
-                alert("Phantom Wallet not found.");
-                return;
+              // Use universal web3 wallet adapter if available
+              if (window.Game && window.Game.modules && window.Game.modules.web3WalletAdapter) {
+                const adapter = window.Game.modules.web3WalletAdapter;
+                const success = await adapter.connect();
+                if (success) {
+                  // Create wallet object compatible with AuthClient
+                  const wallet = {
+                    publicKey: {
+                      toBase58: () => adapter.walletAddress
+                    },
+                    signMessage: async (message, encoding) => {
+                      // Use the adapter's provider to sign
+                      if (adapter.provider && adapter.provider.signMessage) {
+                        return await adapter.provider.signMessage(message, encoding);
+                      }
+                      throw new Error('Wallet does not support message signing');
+                    }
+                  };
+                  await auth.login(wallet);
+                  await updateWalletUI();
+                }
+              } else {
+                // Fallback to Phantom-only connection
+                const provider = window.solana;
+                if (!provider || !provider.isPhantom) {
+                  alert("Phantom Wallet not found. Please install Phantom or use a compatible Solana wallet.");
+                  return;
+                }
+                await provider.connect();
+                await auth.login(provider);
+                await updateWalletUI();
               }
-              await provider.connect();
-              await auth.login(provider);
-              await updateWalletUI();
             } catch (err) {
               console.error(err);
               alert("Wallet login failed: " + (err && err.message ? err.message : err));
             }
           }
 
-          if (hudBtn) hudBtn.addEventListener("click", connectPhantom);
+          if (hudBtn) hudBtn.addEventListener("click", connectWallet);
           window.addEventListener("load", () => setTimeout(updateWalletUI, 250));
         }
 

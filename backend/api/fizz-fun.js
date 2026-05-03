@@ -371,7 +371,7 @@ router.get("/stats", requireConfig, fizzReadLimiter, async (req, res) => {
  */
 async function getCapsBalance(wallet) {
     try {
-        const connection = new Connection(process.env.SOLANA_RPC || process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com");
+        const connection = new Connection(process.env.SOLANA_RPC || process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com");
         const ata = await getAssociatedTokenAddress(CAPS_MINT, wallet);
         const balance = await connection.getTokenAccountBalance(ata);
         return parseInt(balance.value.amount);
@@ -439,7 +439,7 @@ async function fetchAllTokens() {
  */
 async function fetchTokenDetails(mint) {
     try {
-        const connection = new Connection(process.env.SOLANA_RPC || process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com");
+        const connection = new Connection(process.env.SOLANA_RPC || process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com");
         
         // Derive bonding curve PDA
         const [bondingCurve] = PublicKey.findProgramAddressSync(

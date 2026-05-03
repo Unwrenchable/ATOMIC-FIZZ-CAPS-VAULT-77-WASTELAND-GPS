@@ -67,7 +67,7 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
   // ------------------------------------------------------------
   async function fetchSolBalance(pubkey) {
     try {
-      const rpc = window.SOLANA_RPC || "https://api.devnet.solana.com";
+      const rpc = window.SOLANA_RPC || "https://api.mainnet-beta.solana.com";
       const res = await fetch(rpc, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -90,7 +90,7 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
   async function fetchFizzBalance(pubkey) {
     if (!FIZZ_MINT) return 0;
     try {
-      const rpc = window.SOLANA_RPC || "https://api.devnet.solana.com";
+      const rpc = window.SOLANA_RPC || "https://api.mainnet-beta.solana.com";
       const res = await fetch(rpc, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
