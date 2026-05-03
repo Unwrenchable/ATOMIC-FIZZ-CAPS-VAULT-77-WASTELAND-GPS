@@ -31,3 +31,18 @@ services:
       # SERVER_SECRET_KEY, etc.) should be configured through the
       # Render Dashboard for security. This file only configures
       # the deployment structure, not secrets.
+
+  # Background mint worker
+  - type: worker
+    name: atomic-fizz-caps-mint-worker
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    rootDir: .
+    buildCommand: npm install
+    startCommand: npm run worker:mint
+
+    envVars:
+      - key: NODE_ENV
+        value: production

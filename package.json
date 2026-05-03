@@ -10,6 +10,8 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
+    "worker:mint": "node workers/mint_worker_stream.js",
+    "worker:mint:list": "node workers/mint_worker.js",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "node tests/security.test.js",
@@ -34,6 +36,7 @@
   "author": "Unwrenchable",
   "license": "MIT",
   "dependencies": {
+    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
     "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.98.4",
     "bs58": "^6.0.0",
