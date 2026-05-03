@@ -1,5 +1,5 @@
 ---
-name: WastelandQA
+name: WastlandQA
 description: >
   Master-level game tester and QA engineer for the Atomic Fizz Caps Vault-77
   Wasteland GPS crypto game at atomicfizzcaps.xyz. Simulates 1000 concurrent
