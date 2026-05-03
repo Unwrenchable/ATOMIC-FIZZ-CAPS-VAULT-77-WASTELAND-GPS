@@ -27,7 +27,7 @@ const { redis, key } = require("../lib/redis");
 // ------------------------------------------------------------------
 
 // Solana connection (switch to mainnet-beta for production)
-const SOLANA_RPC = process.env.SOLANA_RPC || "https://api.devnet.solana.com";
+const SOLANA_RPC = process.env.SOLANA_RPC || "https://api.mainnet-beta.solana.com";
 const connection = new Connection(SOLANA_RPC, "confirmed");
 
 // CAPS mint (from env) — lazy-evaluated so missing env vars don't crash module load

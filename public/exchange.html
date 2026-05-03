@@ -86,7 +86,7 @@
 
     <!-- Wallet status -->
     <div id="walletStatus" style="text-align:center; margin:20px 0;">
-      <button id="connectWalletBtn">Connect Phantom Wallet</button>
+      <button id="connectWalletBtn">Connect Solana Wallet</button>
       <span id="walletAddr"></span>
     </div>
 
@@ -128,6 +128,7 @@
   <!-- Scripts -->
   <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
   <script src="/js/lib/bs58.js"></script>
+  <script src="/js/modules/web3-wallet-adapter.js" defer></script>
   <script>
     const connectBtn = document.getElementById('connectWalletBtn');
     const walletAddrEl = document.getElementById('walletAddr');
@@ -145,23 +146,42 @@
 
     // Connect Wallet
     connectBtn.addEventListener('click', async () => {
-      if (!window.solana || !window.solana.isPhantom) {
-        alert('Phantom wallet not found. Please install it from https://phantom.app');
-        return;
-      }
-
       try {
-        await window.solana.connect();
-        connectedWallet = window.solana.publicKey.toBase58();
-        walletAddrEl.textContent = `Connected: ${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`;
-        connectBtn.disabled = true;
-        // Enable NFT listing button and restore normal styling
-        listNftBtn.disabled = false;
-        listNftBtn.style.background = '#00cc33';
-        listNftBtn.style.color = 'black';
-        listNftBtn.style.cursor = 'pointer';
-        listNftBtn.style.opacity = '1';
-        loadTrades();
+        // Try universal web3 wallet adapter first
+        if (window.Game && window.Game.modules && window.Game.modules.web3WalletAdapter) {
+          const adapter = window.Game.modules.web3WalletAdapter;
+          const success = await adapter.connect();
+          if (success) {
+            connectedWallet = adapter.walletAddress;
+            walletAddrEl.textContent = `Connected: ${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)} (${adapter.walletType})`;
+            connectBtn.disabled = true;
+            // Enable NFT listing button and restore normal styling
+            listNftBtn.disabled = false;
+            listNftBtn.style.background = '#00cc33';
+            listNftBtn.style.color = 'black';
+            listNftBtn.style.cursor = 'pointer';
+            listNftBtn.style.opacity = '1';
+            loadTrades();
+          }
+        } else {
+          // Fallback to Phantom
+          if (!window.solana || !window.solana.isPhantom) {
+            alert('Phantom wallet not found. Please install it from https://phantom.app or use a compatible Solana wallet.');
+            return;
+          }
+
+          await window.solana.connect();
+          connectedWallet = window.solana.publicKey.toBase58();
+          walletAddrEl.textContent = `Connected: ${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)} (Phantom)`;
+          connectBtn.disabled = true;
+          // Enable NFT listing button and restore normal styling
+          listNftBtn.disabled = false;
+          listNftBtn.style.background = '#00cc33';
+          listNftBtn.style.color = 'black';
+          listNftBtn.style.cursor = 'pointer';
+          listNftBtn.style.opacity = '1';
+          loadTrades();
+        }
       } catch (err) {
         console.error('[exchange] wallet connect error:', err);
         alert('Wallet connection failed: ' + (err.message || err));
