@@ -1340,5 +1340,4 @@
       PlayerState.init();
     }
   }
-
 })();

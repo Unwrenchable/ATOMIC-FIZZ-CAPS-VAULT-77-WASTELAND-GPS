@@ -25,8 +25,8 @@ The game has strong bones. Frontend gameplay loop is **functionally complete**. 
 | 🌍 GPS location claiming | ✅ Complete | Production |
 | 🚀 Vercel + Render deployment | ✅ Complete | Production |
 | ⛓️ Solana program (Anchor/Rust) | ⚠️ Source only | NOT deployed |
-| 🪙 NFT minting (on-chain) | ❌ Stub | NOT implemented |
-| 👷 Mint workers | ❌ Stub | NOT implemented |
+| 🪙 NFT minting (on-chain) | ✅ Implemented | Requires signer + RPC envs |
+| 👷 Mint workers | ✅ Implemented | Deployable via Render worker |
 | 🔑 Key management (KMS) | ❌ Stub | NOT implemented |
 | 🎲 Loot table randomization | ✅ Fixed | Weighted crypto-RNG (6 tiers, 54 items) |
 
@@ -166,13 +166,15 @@ The game has strong bones. Frontend gameplay loop is **functionally complete**. 
 
 ### NFT Minting Pipeline
 
-**Status: Development stub only**
+Status: Implemented, environment-dependent.
 
-- `backend/api/mint-item.js` — returns fake mint response in all environments
-- `workers/mint_worker.js` — simulates minting with fake transaction IDs
-- `workers/mint_worker_stream.js` — Redis stream handler, also a stub
-- `workers/kms_stub.js` — AWS KMS signing is **not implemented**
-- ❌ Zero actual on-chain Solana transactions occur on mint
+- `backend/api/mint-item.js` — queues authenticated or admin-authorized mint jobs and exposes status/metadata endpoints
+- `backend/lib/nft-minting.js` — creates real 0-decimal SPL mints, Metaplex metadata, and master editions
+- `workers/mint_worker.js` — list-queue worker fallback for direct queue processing
+- `workers/mint_worker_stream.js` — Redis Stream worker used for production deployment
+- `render.yaml` — includes `atomic-fizz-caps-mint-worker` background worker service
+- `workers/kms_stub.js` — AWS KMS signing is still optional and not yet wired in
+- ✅ On-chain Solana mint transactions occur when signer and RPC env vars are configured
 
 ### Fizz.fun Token Launchpad
 
@@ -205,7 +207,7 @@ The game client and server infrastructure are production-quality. The blocking i
 | # | Blocker | Effort |
 |---|---------|--------|
 | 1 | **Anchor program not compiled/deployed** — source exists, no BPF bytecode, not on-chain | Medium |
-| 2 | **NFT minting is a stub** — `mint-item.js` returns fake responses; workers don't submit Solana txns | High |
+| 2 | **NFT minting requires signer env** — minting is implemented, but `SERVER_SECRET_KEY` or `SERVER_KEYPAIR_PATH` plus RPC config must be present in production | High |
 | 3 | **Key management not implemented** — `kms_stub.js` is a placeholder; no real wallet signing for mint authority | High |
 | 4 | **No IDL file** — required for frontend/client to call the deployed program | Low (auto-gen after anchor build) |
 
@@ -246,11 +248,11 @@ PHASE 1: ON-CHAIN PROGRAM (weeks 1–2)
   [ ] Generate IDL: anchor idl init --filepath target/idl/fizzcaps_onchain.json <PROGRAM_ID>
 
 PHASE 2: REAL NFT MINTING (weeks 2–3)
-  [ ] Implement real Solana transaction builder in mint worker
+  [x] Implement real Solana transaction builder in mint worker
   [ ] Replace kms_stub.js with real key management (AWS KMS or secure vault)
-  [ ] Test end-to-end mint flow on devnet
-  [ ] Implement proper error handling and retry logic for failed txns
-  [ ] Add transaction confirmation polling
+  [ ] Test end-to-end mint flow on devnet/mainnet with production signer
+  [x] Implement proper error handling and retry logic for failed txns
+  [x] Add transaction status polling endpoint for frontend/ops visibility
 
 PHASE 3: PRODUCTION ENVIRONMENT (week 3)
   [ ] Set SOLANA_NETWORK=mainnet-beta in Render dashboard
