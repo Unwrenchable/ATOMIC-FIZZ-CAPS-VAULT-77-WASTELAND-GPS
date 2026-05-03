@@ -5,6 +5,12 @@ const crypto = require('crypto');
 const { redis, key } = require('../lib/redis');
 const EventEmitter = require('events');
 const { getSession } = require('../lib/auth');
+const {
+  buildMetadataJson,
+  hasMintSigner,
+  normalizeLocationHint,
+  selectMintable,
+} = require('../lib/nft-minting');
 
 // Local event bus to emit mint requests for on-chain workers to pick up
 const mintBus = new EventEmitter();
@@ -12,8 +18,7 @@ const mintBus = new EventEmitter();
 router.mintBus = mintBus;
 
 // Very small dev-safe mint endpoint.
-// This does NOT perform any on-chain minting or token transfers.
-// It is intended as a development helper so the frontend "claim" flow can proceed.
+// Production mints are queued for a worker that performs the on-chain NFT mint.
 
 const limiter = rateLimit({ windowMs: 10*1000, max: 8, standardHeaders: true, legacyHeaders: false });
 router.use(limiter);
@@ -51,6 +56,94 @@ function checkAdminSecret(supplied) {
   return crypto.timingSafeEqual(h1, h2);
 }
 
+function parseOptionalCoordinate(value, min, max) {
+  if (value === undefined || value === null || value === '') return null;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < min || parsed > max) {
+    throw new Error('invalid_coordinate');
+  }
+  return parsed;
+}
+
+async function readAudit(jobId) {
+  const raw = await redis.get(`mint:audit:${jobId}`);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+async function enqueueJob(job) {
+  const queueListKey = 'mint:queue:list';
+  const queueListRedisKey = key(queueListKey);
+  const streamKey = key('mint:queue:stream');
+  const encoded = JSON.stringify(job);
+
+  try {
+    if (redis && redis.client && typeof redis.client.sendCommand === 'function') {
+      await redis.client.sendCommand(['XADD', streamKey, '*', 'data', encoded]);
+      return;
+    }
+  } catch (err) {
+    console.warn('[mint-item] XADD failed, falling back to list queue:', err.message);
+  }
+
+  try {
+    if (redis && redis.client && typeof redis.client.lPush === 'function') {
+      await redis.client.lPush(queueListRedisKey, encoded);
+      return;
+    }
+  } catch (err) {
+    console.warn('[mint-item] LPUSH failed, falling back to JSON list:', err.message);
+  }
+
+  const existing = await redis.get(queueListKey) || '[]';
+  const arr = JSON.parse(existing);
+  arr.unshift(job);
+  await redis.set(queueListKey, JSON.stringify(arr));
+}
+
+router.get('/status/:jobId', async (req, res) => {
+  try {
+    const audit = await readAudit(req.params.jobId);
+    if (!audit) {
+      return res.status(404).json({ ok: false, error: 'mint_not_found' });
+    }
+
+    return res.json({
+      ok: true,
+      jobId: audit.jobId,
+      status: audit.status || 'queued',
+      item: audit.item || null,
+      mintAddress: audit.mintAddress || null,
+      signature: audit.signature || null,
+      error: audit.error || null,
+      createdAt: audit.createdAt || null,
+      processedAt: audit.processedAt || null,
+    });
+  } catch (err) {
+    console.error('[mint-item] status lookup error:', err);
+    return res.status(500).json({ ok: false, error: 'server_error' });
+  }
+});
+
+router.get('/metadata/:jobId', async (req, res) => {
+  try {
+    const audit = await readAudit(req.params.jobId);
+    if (!audit) {
+      return res.status(404).json({ ok: false, error: 'mint_not_found' });
+    }
+
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return res.json(buildMetadataJson(audit));
+  } catch (err) {
+    console.error('[mint-item] metadata lookup error:', err);
+    return res.status(500).json({ ok: false, error: 'server_error' });
+  }
+});
+
 // POST /api/mint-item
 // Authenticated: wallet sourced from verified session (req.player.wallet).
 // Admin minting: always requires ADMIN_MINT_SECRET header in all environments.
@@ -83,124 +176,87 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ ok: false, error: 'invalid_wallet' });
     }
 
-    // Validate required POI data for voucher
-    const { latitude, longitude, locationHint } = req.body;
-    if (typeof latitude !== 'number' || typeof longitude !== 'number' || typeof locationHint !== 'string') {
+    const body = req.body || {};
+    const requestedItemId = body.itemId || body.mintableId || null;
+    const item = selectMintable(requestedItemId);
+    const locationHint = normalizeLocationHint(body.locationHint);
+    let latitude = null;
+    let longitude = null;
+
+    try {
+      latitude = parseOptionalCoordinate(body.latitude, -90, 90);
+      longitude = parseOptionalCoordinate(body.longitude, -180, 180);
+    } catch {
       return res.status(400).json({ ok: false, error: 'invalid_poi_data' });
     }
-    if (locationHint.length > 200) {
-      return res.status(400).json({ ok: false, error: 'location_hint_too_long' });
+
+    if (!hasMintSigner()) {
+      return res.status(503).json({
+        ok: false,
+        error: 'mint_signer_unavailable',
+      });
     }
 
-    const NODE_ENV = process.env.NODE_ENV || 'development';
-
-    if (NODE_ENV === 'production') {
-      // Require admin secret for production mints. This prevents public abuse.
-      const supplied = req.headers['x-admin-mint'] || req.body.adminSecret;
-      if (!checkAdminSecret(supplied)) {
-        console.warn('[mint-item] blocked production mint attempt - missing or invalid admin secret');
-        return res.status(403).json({ ok: false, error: 'forbidden' });
+    // BUG FIX: player-authenticated mints must not require the admin secret.
+    // Only the admin path without a player session requires explicit admin auth.
+    try {
+      const walletKey = `mint:count:${wallet}`;
+      const dailyLimit = parseInt(process.env.MINT_DAILY_LIMIT || '5', 10);
+      const newCount = await redis.incr(walletKey);
+      if (newCount === 1) {
+        await redis.expire(walletKey, 24 * 3600).catch(() => {});
       }
-      // Production flow: perform per-wallet rate limiting, audit and enqueue mint job for worker
-      try {
-        // BUG-041 FIX: use atomic INCR instead of non-atomic GET+SET to prevent
-        // TOCTOU race where concurrent requests all read the same count, all pass
-        // the limit check, and all write count+1 — bypassing the daily cap entirely.
-        const walletKey = key(`mint:count:${wallet}`);
-        const DAILY_LIMIT = parseInt(process.env.MINT_DAILY_LIMIT || '5', 10);
-        const newCount = await redis.incr(walletKey);
-        if (newCount === 1) {
-          // First mint of the day — set the 24h TTL atomically on first creation.
-          // If expire fails here, the key persists without TTL; best-effort is fine
-          // because the limit still applies until the key is manually cleared.
-          await redis.expire(walletKey, 24 * 3600).catch(() => {});
-        }
-        if (newCount > DAILY_LIMIT) {
-          // Roll back the increment to keep the counter accurate.
-          await redis.decr(walletKey).catch(() => {});
-          return res.status(429).json({ ok: false, error: 'mint_limit_reached' });
-        }
-
-        const prodItemId = crypto.randomBytes(8).readBigUInt64LE(0).toString();
-
-        // Audit record in Redis (list)
-        const audit = {
-          itemId: prodItemId,
-          wallet,
-          latitude,
-          longitude,
-          locationHint,
-          createdAt: Date.now(),
-          requestedBy: req.player ? req.player.wallet : 'admin',
-          ip: req.ip || req.connection?.remoteAddress || null
-        };
-        const auditKey = key(`mint:audit:${prodItemId}`);
-        await redis.set(auditKey, JSON.stringify(audit), { EX: 7 * 24 * 3600 });
-
-        // push job to a queue (Redis list) for on-chain worker to pick up
-        const queueListKey = key('mint:queue:list');
-        const streamKey = key('mint:queue:stream');
-        const job = { type: 'mint', itemId: prodItemId, wallet, latitude, longitude, locationHint, auditKey };
-        // Prefer Redis Stream (XADD) for robust queueing; fall back to list
-        try {
-          if (redis && redis.client && typeof redis.client.sendCommand === 'function') {
-            try {
-              // XADD streamKey * data <json>
-              await redis.client.sendCommand(['XADD', streamKey, '*', 'data', JSON.stringify(job)]);
-            } catch (e) {
-              // if XADD fails, try list push
-              if (typeof redis.client.lPush === 'function') {
-                await redis.client.lPush(queueListKey, JSON.stringify(job));
-              } else {
-                const existing = await redis.get(queueListKey) || '[]';
-                const arr = JSON.parse(existing);
-                arr.push(job);
-                await redis.set(queueListKey, JSON.stringify(arr));
-              }
-            }
-          } else if (redis && redis.client && typeof redis.client.lPush === 'function') {
-            await redis.client.lPush(queueListKey, JSON.stringify(job));
-          } else {
-            // fallback: store as JSON array under the key (not ideal for concurrency)
-            const existing = await redis.get(queueListKey) || '[]';
-            const arr = JSON.parse(existing);
-            arr.push(job);
-            await redis.set(queueListKey, JSON.stringify(arr));
-          }
-        } catch (e) {
-          // best-effort fallback
-          const existing = await redis.get(queueListKey) || '[]';
-          const arr = JSON.parse(existing);
-          arr.push(job);
-          await redis.set(queueListKey, JSON.stringify(arr));
-        }
-
-        // Emit local event for in-process workers
-        mintBus.emit('mint_request', job);
-
-        console.log(`[mint-item] enqueued production mint for ${wallet}: ${prodItemId}`);
-
-        return res.json({ ok: true, itemId: prodItemId, queued: true });
-      } catch (err) {
-        console.error('[mint-item] production flow error:', err && err.stack ? err.stack : err);
-        return res.status(500).json({ ok: false, error: 'server_error' });
+      if (newCount > dailyLimit) {
+        await redis.decr(walletKey).catch(() => {});
+        return res.status(429).json({ ok: false, error: 'mint_limit_reached' });
       }
+
+      const jobId = crypto.randomBytes(12).toString('hex');
+      const audit = {
+        jobId,
+        wallet,
+        item,
+        itemId: item.id,
+        latitude,
+        longitude,
+        locationHint,
+        status: 'queued',
+        createdAt: Date.now(),
+        requestedBy: req.player ? req.player.wallet : 'admin',
+        ip: req.ip || req.connection?.remoteAddress || null,
+      };
+      await redis.set(`mint:audit:${jobId}`, JSON.stringify(audit), { EX: 7 * 24 * 3600 });
+
+      const job = {
+        type: 'mint',
+        jobId,
+        wallet,
+        item,
+        itemId: item.id,
+        mintableId: item.id,
+        latitude,
+        longitude,
+        locationHint,
+        auditKey: `mint:audit:${jobId}`,
+      };
+
+      await enqueueJob(job);
+      mintBus.emit('mint_request', job);
+
+      console.log(`[mint-item] enqueued on-chain mint for ${wallet}: ${jobId} (${item.id})`);
+
+      return res.json({
+        ok: true,
+        queued: true,
+        jobId,
+        itemId: item.id,
+        item,
+        statusUrl: `/api/mint-item/status/${jobId}`,
+      });
+    } catch (err) {
+      console.error('[mint-item] mint enqueue error:', err && err.stack ? err.stack : err);
+      return res.status(500).json({ ok: false, error: 'server_error' });
     }
-
-    // Development fallback: return a fake mint result
-    const fakeItemId = `dev-item-${Date.now()}`;
-    const fakeItem = {
-      itemId: fakeItemId,
-      name: 'DEV: Starter Ration',
-      description: 'A developer-issued starter item (dev only).',
-      mintedFor: wallet,
-      mintedAt: Date.now(),
-    };
-
-    // In dev we can log the action
-    console.log(`[mint-item] dev mint simulated for ${wallet}: ${fakeItemId}`);
-
-    return res.json({ ok: true, itemId: fakeItemId, item: fakeItem });
   } catch (err) {
     console.error('[mint-item] error:', err && err.stack ? err.stack : err);
     return res.status(500).json({ ok: false, error: 'server_error' });

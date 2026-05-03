@@ -1,10 +1,9 @@
 // workers/mint_worker_stream.js
-// Consumes Redis Stream `afw:mint:queue:stream` via XREADGROUP consumer group semantics
-// For demo: creates consumer group 'mint_workers' and consumer id from hostname
+// Consumes Redis Stream `afw:mint:queue:stream` and performs the actual NFT mint.
 
-const crypto = require('crypto');
 const os = require('os');
 const { redis, key } = require('../backend/lib/redis');
+const { mintNftForJob } = require('../backend/lib/nft-minting');
 
 const STREAM_KEY = key('mint:queue:stream');
 const GROUP = 'mint_workers';
@@ -21,26 +20,31 @@ async function ensureGroup() {
 
 async function processStreamEntry(id, data) {
   try {
-    const payload = data[1]; // ['data', '{...}']
-    const jsonStr = payload[1];
+    const jsonStr = Array.isArray(data) ? data[1] : null;
+    if (!jsonStr) throw new Error('invalid_stream_payload');
     const job = JSON.parse(jsonStr);
     console.log('[mint_worker_stream] processing job', id, job);
 
-    // Simulate on-chain mint signing using stub
-    const tx = { txId: `tx-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`, status: 'success' };
+    const result = await mintNftForJob(job);
 
     // Update audit record
     const auditKey = job.auditKey;
     const raw = await redis.get(auditKey);
     const audit = raw ? JSON.parse(raw) : {};
-    audit.tx = tx;
+    audit.status = 'minted';
+    audit.item = result.item;
+    audit.itemId = result.item.id;
+    audit.mintAddress = result.mintAddress;
+    audit.signature = result.signature;
+    audit.tokenAccount = result.tokenAccount;
+    audit.metadataUri = result.metadataUri;
     audit.processedAt = Date.now();
     await redis.set(auditKey, JSON.stringify(audit), { EX: 7 * 24 * 3600 });
 
     // Acknowledge the entry
     await redis.client.sendCommand(['XACK', STREAM_KEY, GROUP, id]);
 
-    console.log('[mint_worker_stream] completed', id, tx.txId);
+    console.log('[mint_worker_stream] completed', id, result.mintAddress);
     return true;
   } catch (err) {
     console.error('[mint_worker_stream] process error', err && err.message ? err.message : err);
