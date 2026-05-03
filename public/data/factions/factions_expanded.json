@@ -1,0 +1,133 @@
+{
+  "major_factions": [
+    {
+      "id": "ncr",
+      "name": "New California Republic",
+      "short_name": "NCR",
+      "description": "The largest post-war civilization, seeking to restore democracy.",
+      "ideology": "Democracy, Law and Order, Expansion",
+      "headquarters": { "name": "Shady Sands", "lat": 36.5, "lng": -116.5 },
+      "reputation_levels": {
+        "vilified": { "min": -1000, "label": "Vilified", "hostile": true },
+        "hated": { "min": -500, "label": "Hated", "hostile": true },
+        "shunned": { "min": -250, "label": "Shunned", "hostile": false },
+        "neutral": { "min": -100, "label": "Neutral", "hostile": false },
+        "accepted": { "min": 100, "label": "Accepted", "hostile": false },
+        "liked": { "min": 250, "label": "Liked", "hostile": false, "trader_discount": 0.10 },
+        "idolized": { "min": 500, "label": "Idolized", "hostile": false, "trader_discount": 0.25, "special_access": true }
+      },
+      "benefits": {
+        "idolized": ["NCR Emergency Radio", "Ranger Combat Armor access", "25% discount at NCR vendors"]
+      },
+      "enemies": ["legion", "powder_gangers"],
+      "allies": ["brotherhood_west"]
+    },
+    {
+      "id": "legion",
+      "name": "Caesar's Legion",
+      "short_name": "Legion",
+      "description": "A brutal autocratic empire built on slavery and conquest.",
+      "ideology": "Totalitarianism, Slavery, Strength through Unity",
+      "headquarters": { "name": "The Fort", "lat": 36.0, "lng": -114.5 },
+      "reputation_levels": {
+        "vilified": { "min": -1000, "label": "Profligate", "hostile": true },
+        "hated": { "min": -500, "label": "Hated", "hostile": true },
+        "shunned": { "min": -250, "label": "Shunned", "hostile": false },
+        "neutral": { "min": -100, "label": "Neutral", "hostile": false },
+        "accepted": { "min": 100, "label": "Accepted", "hostile": false },
+        "liked": { "min": 250, "label": "Liked", "hostile": false },
+        "idolized": { "min": 500, "label": "Frumentarius", "hostile": false, "special_access": true }
+      },
+      "benefits": {
+        "idolized": ["Legion Safehouse Key", "Legion Aureus currency", "Access to Praetorian Guard"]
+      },
+      "enemies": ["ncr", "brotherhood_west"],
+      "allies": ["great_khans"]
+    },
+    {
+      "id": "brotherhood_west",
+      "name": "Brotherhood of Steel (Mojave Chapter)",
+      "short_name": "BoS",
+      "description": "Techno-religious order dedicated to preserving pre-war technology.",
+      "ideology": "Technology Preservation, Isolationism, Elite Warriors",
+      "headquarters": { "name": "Hidden Valley Bunker", "lat": 36.2, "lng": -115.5 },
+      "reputation_levels": {
+        "vilified": { "min": -1000, "label": "Vilified", "hostile": true },
+        "hated": { "min": -500, "label": "Hated", "hostile": true },
+        "shunned": { "min": -250, "label": "Shunned", "hostile": false },
+        "neutral": { "min": -100, "label": "Outsider", "hostile": false },
+        "accepted": { "min": 100, "label": "Accepted", "hostile": false },
+        "liked": { "min": 250, "label": "Initiate", "hostile": false },
+        "idolized": { "min": 500, "label": "Paladin", "hostile": false, "power_armor_access": true }
+      },
+      "benefits": {
+        "idolized": ["Power Armor Training", "Energy Weapon access", "Brotherhood Safehouse"]
+      },
+      "enemies": ["legion"],
+      "allies": ["ncr"]
+    },
+    {
+      "id": "mr_house",
+      "name": "Mr. House / New Vegas",
+      "short_name": "House",
+      "description": "The enigmatic ruler of New Vegas, a pre-war genius with plans for the future.",
+      "ideology": "Autocracy, Capitalism, Progress through Control",
+      "headquarters": { "name": "Lucky 38", "lat": 36.1700, "lng": -115.1422 },
+      "reputation_levels": {
+        "vilified": { "min": -1000, "label": "Vilified", "hostile": true },
+        "neutral": { "min": -100, "label": "Neutral", "hostile": false },
+        "liked": { "min": 250, "label": "Trusted Agent", "hostile": false },
+        "idolized": { "min": 500, "label": "House's Protégé", "hostile": false, "platinum_chip": true }
+      },
+      "benefits": {
+        "idolized": ["Presidential Suite", "Securitron Army support", "Unlimited Strip access"]
+      },
+      "enemies": [],
+      "allies": ["three_families"]
+    },
+    {
+      "id": "minutemen",
+      "name": "The Minutemen",
+      "short_name": "Minutemen",
+      "description": "Commonwealth militia dedicated to protecting settlements.",
+      "ideology": "Community Defense, Democracy, Self-Reliance",
+      "headquarters": { "name": "The Castle", "lat": 42.3, "lng": -71.0 },
+      "reputation_levels": {
+        "neutral": { "min": -100, "label": "Settler", "hostile": false },
+        "liked": { "min": 250, "label": "Minuteman", "hostile": false },
+        "idolized": { "min": 500, "label": "General", "hostile": false, "artillery_support": true }
+      },
+      "benefits": {
+        "idolized": ["Artillery Support", "Settlement Building", "Flare Gun summons"]
+      },
+      "enemies": [],
+      "allies": []
+    }
+  ],
+  "minor_factions": [
+    {
+      "id": "powder_gangers",
+      "name": "Powder Gangers",
+      "description": "Escaped convicts with a penchant for explosives.",
+      "hostile_by_default": true
+    },
+    {
+      "id": "great_khans",
+      "name": "Great Khans",
+      "description": "Nomadic raiders with a proud history.",
+      "hostile_by_default": false
+    },
+    {
+      "id": "boomers",
+      "name": "The Boomers",
+      "description": "Isolationist tribe with heavy artillery.",
+      "hostile_by_default": true
+    },
+    {
+      "id": "followers",
+      "name": "Followers of the Apocalypse",
+      "description": "Peaceful humanitarian organization.",
+      "hostile_by_default": false
+    }
+  ]
+}

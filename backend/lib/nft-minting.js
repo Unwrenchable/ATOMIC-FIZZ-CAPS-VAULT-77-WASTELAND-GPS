@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const bs58 = require("bs58");
+const fetch = require("node-fetch");
 const {
   Connection,
   Keypair,
@@ -120,6 +121,95 @@ function buildMetadataUri(jobId) {
   return `${DEFAULT_API_BASE}/api/mint-item/metadata/${encodeURIComponent(jobId)}`;
 }
 
+async function uploadMetadataToNftStorage(metadataJson) {
+  const token = process.env.NFT_STORAGE_API_KEY;
+  if (!token) return null;
+
+  const response = await fetch("https://api.nft.storage/upload", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(metadataJson),
+  });
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(`nft_storage_upload_failed:${response.status}:${text.slice(0, 180)}`);
+  }
+
+  const json = await response.json();
+  const cid = json && json.value && json.value.cid;
+  if (!cid) throw new Error("nft_storage_missing_cid");
+  return {
+    provider: "nft.storage",
+    cid,
+    uri: `https://nftstorage.link/ipfs/${cid}`,
+  };
+}
+
+async function uploadMetadataToPinata(metadataJson, jobId) {
+  const jwt = process.env.PINATA_JWT;
+  if (!jwt) return null;
+
+  const response = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      pinataMetadata: {
+        name: `afw-${jobId || Date.now()}-metadata`,
+      },
+      pinataContent: metadataJson,
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(`pinata_upload_failed:${response.status}:${text.slice(0, 180)}`);
+  }
+
+  const json = await response.json();
+  const cid = json && json.IpfsHash;
+  if (!cid) throw new Error("pinata_missing_cid");
+  return {
+    provider: "pinata",
+    cid,
+    uri: `https://gateway.pinata.cloud/ipfs/${cid}`,
+  };
+}
+
+async function resolveMetadataUri(metadataJson, jobId) {
+  // Prefer IPFS providers when configured; fallback to API-hosted JSON.
+  // This keeps minting live even if an IPFS provider has transient failures.
+  if (process.env.NFT_STORAGE_API_KEY) {
+    try {
+      const uploaded = await uploadMetadataToNftStorage(metadataJson);
+      if (uploaded) return uploaded;
+    } catch (err) {
+      console.warn("[nft-minting] NFT.Storage upload failed:", err.message);
+    }
+  }
+
+  if (process.env.PINATA_JWT) {
+    try {
+      const uploaded = await uploadMetadataToPinata(metadataJson, jobId);
+      if (uploaded) return uploaded;
+    } catch (err) {
+      console.warn("[nft-minting] Pinata upload failed:", err.message);
+    }
+  }
+
+  return {
+    provider: "api",
+    cid: null,
+    uri: buildMetadataUri(jobId),
+  };
+}
+
 function buildCollection() {
   if (!process.env.METAPLEX_COLLECTION_ADDRESS) return null;
   try {
@@ -209,7 +299,7 @@ async function mintNftForJob(job) {
   const payer = getServerSigner();
   const connection = getConnection();
   const item = job.item || selectMintable(job.itemId || job.mintableId);
-  const metadataUri = buildMetadataUri(job.jobId || job.itemId);
+  const jobId = job.jobId || job.itemId;
   const collection = buildCollection();
 
   const token = await Token.createMint(
@@ -226,6 +316,8 @@ async function mintNftForJob(job) {
 
   const { metadata, masterEdition } = getMetadataAccounts(token.publicKey);
   const metadataJson = buildMetadataJson({ ...job, item });
+  const metadataLocation = await resolveMetadataUri(metadataJson, jobId);
+  const metadataUri = metadataLocation.uri;
   const metadataTx = new Transaction().add(
     createCreateMetadataAccountV3Instruction(
       {
@@ -279,6 +371,8 @@ async function mintNftForJob(job) {
     tokenAccount: ownerTokenAccount.address.toBase58(),
     signature: metadataSignature,
     metadataUri,
+    metadataProvider: metadataLocation.provider,
+    metadataCid: metadataLocation.cid,
     metadataJson,
     item,
   };

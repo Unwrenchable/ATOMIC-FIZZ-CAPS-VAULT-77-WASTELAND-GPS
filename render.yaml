@@ -22,10 +22,40 @@ services:
       - key: NODE_ENV
         value: production
 
+      - key: SOLANA_NETWORK
+        value: mainnet-beta
+
+      - key: NEXT_PUBLIC_BACKEND_URL
+        value: https://api.atomicfizzcaps.xyz
+
       # The canonical frontend URL (Vercel). Non-API requests to the API subdomain
       # are redirected here so the backend doesn't serve a second copy of the game.
       - key: FRONTEND_URL
         value: https://atomicfizzcaps.xyz
+
+      # Secrets and environment-specific values must be set in Render Dashboard.
+      - key: SOLANA_RPC
+        sync: false
+      - key: SERVER_SECRET_KEY
+        sync: false
+      - key: ADMIN_MINT_SECRET
+        sync: false
+      - key: HELIUS_API_KEY
+        sync: false
+      - key: CAPS_MINT
+        sync: false
+      - key: TOKEN_MINT
+        sync: false
+      - key: TREASURY_WALLET
+        sync: false
+      - key: METAPLEX_COLLECTION_ADDRESS
+        sync: false
+      - key: NFT_STORAGE_API_KEY
+        sync: false
+      - key: PINATA_JWT
+        sync: false
+      - key: REDIS_URL
+        sync: false
 
       # NOTE: Sensitive environment variables (REDIS_URL,
       # SERVER_SECRET_KEY, etc.) should be configured through the
@@ -46,3 +76,33 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+
+      - key: SOLANA_NETWORK
+        value: mainnet-beta
+
+      - key: PUBLIC_API_BASE
+        value: https://api.atomicfizzcaps.xyz
+
+      - key: FRONTEND_URL
+        value: https://atomicfizzcaps.xyz
+
+      - key: SOLANA_RPC
+        sync: false
+      - key: SERVER_SECRET_KEY
+        sync: false
+      - key: HELIUS_API_KEY
+        sync: false
+      - key: CAPS_MINT
+        sync: false
+      - key: TOKEN_MINT
+        sync: false
+      - key: TREASURY_WALLET
+        sync: false
+      - key: METAPLEX_COLLECTION_ADDRESS
+        sync: false
+      - key: NFT_STORAGE_API_KEY
+        sync: false
+      - key: PINATA_JWT
+        sync: false
+      - key: REDIS_URL
+        sync: false
