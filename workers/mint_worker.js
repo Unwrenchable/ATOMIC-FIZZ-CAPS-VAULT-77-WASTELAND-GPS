@@ -32,6 +32,8 @@ async function processJob(job) {
     audit.signature = result.signature;
     audit.tokenAccount = result.tokenAccount;
     audit.metadataUri = result.metadataUri;
+    audit.metadataProvider = result.metadataProvider || 'api';
+    audit.metadataCid = result.metadataCid || null;
     audit.processedAt = Date.now();
     await redis.set(job.auditKey, JSON.stringify(audit), { EX: 7 * 24 * 3600 });
     console.log('[mint_worker] minted NFT for', job.wallet, result.mintAddress);

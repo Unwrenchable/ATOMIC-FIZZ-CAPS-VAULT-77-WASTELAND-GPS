@@ -38,6 +38,8 @@ async function processStreamEntry(id, data) {
     audit.signature = result.signature;
     audit.tokenAccount = result.tokenAccount;
     audit.metadataUri = result.metadataUri;
+    audit.metadataProvider = result.metadataProvider || 'api';
+    audit.metadataCid = result.metadataCid || null;
     audit.processedAt = Date.now();
     await redis.set(auditKey, JSON.stringify(audit), { EX: 7 * 24 * 3600 });
 
