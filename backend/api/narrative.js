@@ -75,10 +75,11 @@ router.get('/dialog/:key', dialogLimiter, (req, res) => {
 
   // Support bare NPC id (e.g. "jax") or full file name (e.g. "dialog_jax")
   const fileName = key.startsWith('dialog_') ? `${key}.json` : `dialog_${key}.json`;
-  const filePath = path.join(NARRATIVE_DIR, fileName);
+  const filePath = path.resolve(NARRATIVE_DIR, fileName);
 
   // Confirm the resolved path is still inside the narrative directory.
-  if (!filePath.startsWith(NARRATIVE_DIR + path.sep)) {
+  // path.resolve() normalises separators, preventing OS-specific bypass vectors.
+  if (!filePath.startsWith(path.resolve(NARRATIVE_DIR) + path.sep)) {
     return res.status(400).json({ error: 'Access denied.' });
   }
 
