@@ -143,6 +143,30 @@
       "region": "vegas_strip",
       "game": "fnv",
       "source": "canon"
+    },
+    {
+      "id": "strip_gate_fnv",
+      "name": "The Strip Gate",
+      "lat": 36.1147,
+      "lng": -115.1728,
+      "lvl": 15,
+      "rarity": "epic",
+      "iconKey": "ruins",
+      "region": "strip",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "vault_21_fnv",
+      "name": "Vault 21",
+      "lat": 36.1699,
+      "lng": -115.1398,
+      "lvl": 18,
+      "rarity": "rare",
+      "iconKey": "vault",
+      "region": "strip",
+      "game": "fnv",
+      "source": "canon"
     }
   ],
   "freeside": [
@@ -422,6 +446,18 @@
       "lvl": 14,
       "rarity": "rare",
       "iconKey": "town",
+      "region": "mojave_towns",
+      "game": "fnv",
+      "source": "canon"
+    },
+    {
+      "id": "hoover_dam_fnv",
+      "name": "Hoover Dam",
+      "lat": 36.016,
+      "lng": -114.738,
+      "lvl": 12,
+      "rarity": "epic",
+      "iconKey": "facility",
       "region": "mojave_towns",
       "game": "fnv",
       "source": "canon"
@@ -2106,6 +2142,18 @@
       "lvl": 18,
       "rarity": "rare",
       "iconKey": "cave",
+      "region": "fo3",
+      "game": "fo3",
+      "source": "canon"
+    },
+    {
+      "id": "mothership_zeta_fo3",
+      "name": "Mothership Zeta",
+      "lat": 0.0,
+      "lng": 0.0,
+      "lvl": 99,
+      "rarity": "legendary",
+      "iconKey": "ruins",
       "region": "fo3",
       "game": "fo3",
       "source": "canon"
@@ -4120,6 +4168,18 @@
       "lat": 33.677,
       "lng": -106.475,
       "lvl": 55,
+      "rarity": "legendary",
+      "iconKey": "reactor",
+      "region": "nuclear_sites",
+      "game": "real",
+      "source": "real"
+    },
+    {
+      "id": "area_51_gate_real",
+      "name": "Area 51 Gate",
+      "lat": 37.2431,
+      "lng": -115.793,
+      "lvl": 45,
       "rarity": "legendary",
       "iconKey": "reactor",
       "region": "nuclear_sites",
