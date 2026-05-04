@@ -307,6 +307,9 @@ const api = (file) => path.join(__dirname, "api", file);
 safeMount("/api/ping",    api("ping"));
 safeMount("/api/version", api("version"));
 
+// Narrative API — serves story acts, NPC dialog, terminals, encounters, collectibles
+safeMount("/api/narrative", api("narrative"));
+
 // Core API endpoints
 safeMount("/api/loot-voucher", api("loot-voucher"));
 safeMount("/api/mintables", api("mintables"));  // Your mintables router - serves mintables.json
