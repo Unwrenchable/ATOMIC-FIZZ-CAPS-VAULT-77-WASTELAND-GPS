@@ -149,7 +149,7 @@ router.get("/access/:wallet", requireConfig, fizzReadLimiter, async (req, res) =
         });
     } catch (err) {
         console.error("[fizz-fun] Access check error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ ok: false, error: "Internal server error" });
     }
 });
 
@@ -179,7 +179,7 @@ router.get("/tokens", requireConfig, fizzReadLimiter, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Fetch tokens error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ ok: false, error: "Internal server error" });
     }
 });
 
@@ -193,7 +193,7 @@ router.get("/token/:mint", requireConfig, fizzReadLimiter, async (req, res) => {
         
         const token = await fetchTokenDetails(mintPubkey);
         if (!token) {
-            return res.status(404).json({ error: "Token not found" });
+            return res.status(404).json({ ok: false, error: "Token not found" });
         }
         
         // Calculate current price
@@ -212,7 +212,7 @@ router.get("/token/:mint", requireConfig, fizzReadLimiter, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Fetch token error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ ok: false, error: "Internal server error" });
     }
 });
 
@@ -224,12 +224,12 @@ router.get("/quote/buy", requireConfig, fizzReadLimiter, async (req, res) => {
         const { mint, solAmount } = req.query;
         
         if (!mint || !solAmount) {
-            return res.status(400).json({ error: "Missing mint or solAmount" });
+            return res.status(400).json({ ok: false, error: "Missing mint or solAmount" });
         }
         
         const token = await fetchTokenDetails(new PublicKey(mint));
         if (!token) {
-            return res.status(404).json({ error: "Token not found" });
+            return res.status(404).json({ ok: false, error: "Token not found" });
         }
         
         const solLamports = parseFloat(solAmount) * 1e9;
@@ -250,7 +250,7 @@ router.get("/quote/buy", requireConfig, fizzReadLimiter, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Buy quote error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ ok: false, error: "Internal server error" });
     }
 });
 
@@ -262,12 +262,12 @@ router.get("/quote/sell", requireConfig, fizzReadLimiter, async (req, res) => {
         const { mint, tokenAmount } = req.query;
         
         if (!mint || !tokenAmount) {
-            return res.status(400).json({ error: "Missing mint or tokenAmount" });
+            return res.status(400).json({ ok: false, error: "Missing mint or tokenAmount" });
         }
         
         const token = await fetchTokenDetails(new PublicKey(mint));
         if (!token) {
-            return res.status(404).json({ error: "Token not found" });
+            return res.status(404).json({ ok: false, error: "Token not found" });
         }
         
         const tokensRaw = parseFloat(tokenAmount) * 1e9;
@@ -287,7 +287,7 @@ router.get("/quote/sell", requireConfig, fizzReadLimiter, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Sell quote error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ ok: false, error: "Internal server error" });
     }
 });
 
@@ -311,18 +311,18 @@ router.post("/admin/launch", requireConfig, authMiddleware, fizzWriteLimiter, as
             console.warn('[fizz-fun] ADMIN_WALLETS env var is empty — /admin/launch will always be denied');
         }
         if (!ADMIN_WALLETS.includes(wallet)) {
-            return res.status(403).json({ error: "Not authorized as admin" });
+            return res.status(403).json({ ok: false, error: "Not authorized as admin" });
         }
         
         // Validate inputs
         if (!name || name.length > 32) {
-            return res.status(400).json({ error: "Invalid name (max 32 chars)" });
+            return res.status(400).json({ ok: false, error: "Invalid name (max 32 chars)" });
         }
         if (!symbol || symbol.length > 10) {
-            return res.status(400).json({ error: "Invalid symbol (max 10 chars)" });
+            return res.status(400).json({ ok: false, error: "Invalid symbol (max 10 chars)" });
         }
         if (!uri || uri.length > 200) {
-            return res.status(400).json({ error: "Invalid URI (max 200 chars)" });
+            return res.status(400).json({ ok: false, error: "Invalid URI (max 200 chars)" });
         }
         
         // Log admin action (for transparency)
@@ -339,7 +339,7 @@ router.post("/admin/launch", requireConfig, authMiddleware, fizzWriteLimiter, as
         });
     } catch (err) {
         console.error("[fizz-fun] Admin launch error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ ok: false, error: "Internal server error" });
     }
 });
 
@@ -360,7 +360,7 @@ router.get("/stats", requireConfig, fizzReadLimiter, async (req, res) => {
         });
     } catch (err) {
         console.error("[fizz-fun] Stats error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ ok: false, error: "Internal server error" });
     }
 });
 
