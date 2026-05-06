@@ -647,12 +647,17 @@
   // GEOLOCATION
   // ---------------------------
 
+  let _gpsActiveFired = false;
   function updateGPSBadge(acc) {
     const accDot = document.getElementById("accDot");
     const accText = document.getElementById("accText");
     if (accDot && accText) {
       accText.textContent = `GPS: ${Math.round(acc)}m`;
       accDot.className = acc <= 20 ? "acc-dot acc-good" : "acc-dot";
+    }
+    if (!_gpsActiveFired) {
+      _gpsActiveFired = true;
+      window.dispatchEvent(new CustomEvent("gpsActive"));
     }
   }
 

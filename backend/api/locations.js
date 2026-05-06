@@ -40,7 +40,7 @@ router.get("/", (req, res) => {
   res.sendFile(file, (err) => {
     if (err) {
       console.error("[api/locations] sendFile error:", err);
-      res.status(500).json({ error: "Locations not available" });
+      res.status(500).json({ ok: false, error: "Locations not available" });
     }
   });
 });

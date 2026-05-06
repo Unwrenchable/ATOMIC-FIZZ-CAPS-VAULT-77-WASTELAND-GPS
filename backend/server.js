@@ -451,17 +451,19 @@ app.get('/api/health', async (req, res) => {
       redisOk = false;
     }
 
-    const ok = {
+    const health = {
+      ok: true,
       status: 'ok',
       env: process.env.NODE_ENV || 'unknown',
       time: new Date().toISOString(),
       redis: redisOk,
       solana_rpc: !!process.env.SOLANA_RPC
     };
-    res.json(ok);
+    res.json(health);
   } catch (err) {
     console.error('[health] error:', err);
     res.status(500).json({
+      ok: false,
       status: 'error',
       error: err.message
     });

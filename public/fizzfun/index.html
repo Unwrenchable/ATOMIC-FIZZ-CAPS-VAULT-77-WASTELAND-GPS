@@ -7,16 +7,16 @@
     Branding (Atomic Fizz, Fizz-Tec) is fictional for this prototype.
   -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-  <title>FIZZ.FUN - Token Launchpad | Vault-Tec Approved</title>
+  <title>FIZZ-TEC LABS — Wasteland Token Protocol | Vault 77</title>
   
   <!-- PWA Meta Tags -->
   <meta name="theme-color" content="#ff9933">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Fizz.Fun">
+  <meta name="apple-mobile-web-app-title" content="Fizz-Tec Labs">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Fizz.Fun Launchpad">
-  <meta name="description" content="Create and launch your own Fizz Caps economy tokens. Fair launch bonding curves, Vault-Tec approved.">
+  <meta name="application-name" content="Fizz-Tec Token Terminal">
+  <meta name="description" content="Vault 77 Wasteland Token Protocol. Launch your own economy tokens, trade on bonding curves, earn FIZZ CAPS. Vault-Tec certified.">
   
   <!-- Security Headers -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -49,11 +49,12 @@
 <body>
   <!-- BOOT OVERLAY -->
   <div id="boot-overlay">
-    <div class="boot-logo">🚀</div>
-    <div class="boot-line">INITIALIZING FIZZ.FUN PROTOCOL...</div>
-    <div class="boot-line">SCANNING BONDING CURVES...</div>
-    <div class="boot-line">VERIFYING CAPS LEDGER...</div>
-    <div class="boot-line">LOADING TOKEN LAUNCHPAD...</div>
+    <div class="boot-logo">☢</div>
+    <div class="boot-line">FIZZ-TEC LABS v2.7.7 — VAULT-TEC CERTIFIED</div>
+    <div class="boot-line">INITIALIZING WASTELAND TOKEN PROTOCOL...</div>
+    <div class="boot-line">LOADING BONDING CURVE LEDGER...</div>
+    <div class="boot-line">SCANNING CAPS TREASURY... OK</div>
+    <div class="boot-line">** WELCOME, WASTELANDER. PROCEED WITH CAUTION. **</div>
   </div>
 
   <!-- MAIN FIZZ.FUN APP -->
@@ -62,28 +63,29 @@
     <header id="fizzfun-header">
       <div class="header-content">
         <div class="logo-section">
-          <span class="logo-icon">🚀</span>
-          <h1>FIZZ.FUN</h1>
-          <span class="subtitle">TOKEN LAUNCHPAD</span>
+          <span class="logo-icon">☢</span>
+          <h1>FIZZ-TEC LABS</h1>
+          <span class="subtitle">WASTELAND TOKEN PROTOCOL</span>
         </div>
-        <p class="tagline">Create and launch your own Fizz Caps economy tokens.<br>
-        Fair launch bonding curves, Vault-Tec approved.</p>
+        <p class="tagline">Launch your own economy tokens. Trade on fair bonding curves.<br>
+        FIZZ CAPS required. Vault-Tec certified. Radiation exposure: minimal.</p>
+        <p class="vault-cert">[ VAULT-TEC CERTIFICATION #77-TKN — AUTHORIZED FOR WASTELAND USE ]</p>
       </div>
     </header>
 
     <!-- NAVIGATION -->
     <nav class="quick-nav">
-      <a href="/" class="nav-btn">☢️ WASTELAND GPS</a>
-      <a href="/wallet/" class="nav-btn">💰 WALLET</a>
-      <a href="#stats" class="nav-btn">📊 STATS</a>
-      <button id="connect-wallet-btn" class="nav-btn btn-primary">🔌 CONNECT WALLET</button>
+      <a href="/" class="nav-btn">☢ WASTELAND MAP</a>
+      <a href="/wallet/" class="nav-btn">◈ CAPS VAULT</a>
+      <a href="#stats" class="nav-btn">◆ LEDGER STATS</a>
+      <button id="connect-wallet-btn" class="nav-btn btn-primary">⚡ LINK WALLET</button>
     </nav>
 
     <!-- WALLET CONNECTION INDICATOR -->
     <section id="wallet-status" class="status-card">
       <div class="status-indicator">
         <span class="status-dot disconnected" id="status-dot"></span>
-        <span id="wallet-address" class="mono">WALLET: DISCONNECTED</span>
+        <span id="wallet-address" class="mono">VAULT LINK: OFFLINE</span>
       </div>
     </section>
 
@@ -96,7 +98,7 @@
       <!-- ============ ACCESS STATUS ============ -->
       <section class="card fizz-section static-noise">
         <div class="card-header">
-          <span class="card-icon">🎫</span> YOUR ACCESS
+          <span class="card-icon">◈</span> CLEARANCE LEVEL
         </div>
         
         <div id="fizz-access-status" class="card-body">
@@ -119,22 +121,22 @@
               <span class="data-value" id="fizz-launch-fee">100 CAPS</span>
             </div>
           </div>
-          <p class="small muted" id="fizz-access-message">Connect wallet to check access...</p>
+          <p class="small muted" id="fizz-access-message">Link wallet to verify wasteland clearance...</p>
         </div>
       </section>
 
       <!-- ============ TOKEN LISTING ============ -->
       <section class="card">
         <div class="card-header">
-          <span class="card-icon">📈</span> ACTIVE TOKENS
+          <span class="card-icon">◆</span> WASTELAND TOKEN EXCHANGE
         </div>
         
         <div class="card-body">
           <div class="control-bar">
-            <button class="btn btn-secondary" id="fizz-sort-volume">VOLUME</button>
-            <button class="btn btn-secondary" id="fizz-sort-newest">NEWEST</button>
-            <button class="btn btn-secondary" id="fizz-sort-graduating">GRADUATING</button>
-            <button class="btn btn-secondary" id="fizz-refresh">🔄 REFRESH</button>
+            <button class="btn btn-secondary" id="fizz-sort-volume">▶ BY VOLUME</button>
+            <button class="btn btn-secondary" id="fizz-sort-newest">▶ NEWEST</button>
+            <button class="btn btn-secondary" id="fizz-sort-graduating">▶ GRADUATING</button>
+            <button class="btn btn-secondary" id="fizz-refresh">⟳ RESCAN</button>
           </div>
 
           <div id="fizz-token-list" class="token-grid">
@@ -148,7 +150,7 @@
       <!-- ============ TRADE PANEL ============ -->
       <section class="card trade-panel" id="fizz-trade-section" style="display: none;">
         <div class="card-header">
-          <span class="card-icon">💱</span> TRADE: <span id="fizz-selected-symbol">N/A</span>
+          <span class="card-icon">⚡</span> TRADE TERMINAL: <span id="fizz-selected-symbol">--SELECT TOKEN--</span>
         </div>
         
         <div class="card-body">
@@ -157,8 +159,8 @@
           </div>
 
           <div class="trade-controls">
-            <button class="btn btn-buy" id="fizz-action-buy">BUY</button>
-            <button class="btn btn-sell" id="fizz-action-sell">SELL</button>
+            <button class="btn btn-buy" id="fizz-action-buy">▲ ACQUIRE</button>
+            <button class="btn btn-sell" id="fizz-action-sell">▼ OFFLOAD</button>
           </div>
 
           <div class="input-group">
@@ -170,7 +172,7 @@
             <!-- Quote details filled dynamically -->
           </div>
 
-          <button class="btn btn-primary btn-block" id="fizz-execute-trade">EXECUTE TRADE</button>
+          <button class="btn btn-primary btn-block" id="fizz-execute-trade">⚡ EXECUTE TRADE ORDER</button>
           <div id="fizz-trade-status" class="mono small muted status-message"></div>
         </div>
       </section>
@@ -178,26 +180,26 @@
       <!-- ============ TOKEN LAUNCH FORM ============ -->
       <section class="card launch-section" id="fizz-launch-section" style="display: none;">
         <div class="card-header">
-          <span class="card-icon">🚀</span> LAUNCH NEW TOKEN
+          <span class="card-icon">☢</span> DEPLOY NEW TOKEN
         </div>
         
         <div class="card-body">
           <div class="input-group">
-            <label class="input-label" for="fizz-launch-name">TOKEN NAME</label>
-            <input type="text" class="input-field mono" id="fizz-launch-name" placeholder="My Wasteland Token" maxlength="32">
+            <label class="input-label" for="fizz-launch-name">TOKEN DESIGNATION</label>
+            <input type="text" class="input-field mono" id="fizz-launch-name" placeholder="e.g. Nuka-Credits" maxlength="32">
           </div>
 
           <div class="input-group">
-            <label class="input-label" for="fizz-launch-symbol">SYMBOL</label>
-            <input type="text" class="input-field mono" id="fizz-launch-symbol" placeholder="MWT" maxlength="10" style="text-transform: uppercase;">
+            <label class="input-label" for="fizz-launch-symbol">CALL SIGN</label>
+            <input type="text" class="input-field mono" id="fizz-launch-symbol" placeholder="e.g. NKC" maxlength="10" style="text-transform: uppercase;">
           </div>
 
           <div class="input-group">
-            <label class="input-label" for="fizz-launch-uri">METADATA URI</label>
+            <label class="input-label" for="fizz-launch-uri">VAULT DATA URI</label>
             <input type="text" class="input-field mono" id="fizz-launch-uri" placeholder="https://..." maxlength="200">
           </div>
 
-          <button class="btn btn-primary btn-block" id="fizz-execute-launch">🚀 LAUNCH TOKEN</button>
+          <button class="btn btn-primary btn-block" id="fizz-execute-launch">☢ DEPLOY TOKEN TO WASTELAND</button>
           <div id="fizz-launch-status" class="mono small muted status-message"></div>
         </div>
       </section>
@@ -205,15 +207,15 @@
       <!-- ============ PROTOCOL STATS ============ -->
       <section class="card" id="stats">
         <div class="card-header">
-          <span class="card-icon">📊</span> PROTOCOL STATS
+          <span class="card-icon">◆</span> WASTELAND LEDGER
         </div>
         <div class="card-body" id="fizz-stats">
           <div class="data-row">
-            <span class="data-label">TOTAL TOKENS LAUNCHED:</span>
+            <span class="data-label">TOKENS DEPLOYED:</span>
             <span class="data-value" id="fizz-stat-tokens">0</span>
           </div>
           <div class="data-row">
-            <span class="data-label">TOTAL VOLUME:</span>
+            <span class="data-label">TOTAL TRADE VOLUME:</span>
             <span class="data-value" id="fizz-stat-volume">0 SOL</span>
           </div>
           <div class="data-row">
@@ -225,16 +227,16 @@
 
       <!-- BUY USDC BUTTON -->
       <div class="action-section">
-        <button id="buy-usdc-button" class="btn btn-special">💰 BUY USDC (MOONPAY)</button>
+        <button id="buy-usdc-button" class="btn btn-special">◈ PURCHASE USDC VIA MOONPAY</button>
       </div>
 
     </main>
 
     <!-- FOOTER -->
     <footer class="site-footer">
-      <p class="small muted">FIZZ.FUN - FAIR LAUNCH TOKEN PROTOCOL</p>
-      <p class="small muted">Powered by Atomic Fizz Caps • Vault-Tec Approved</p>
-      <p class="small muted">Community project. Not affiliated with any game studio.</p>
+      <p class="small muted">FIZZ-TEC LABS — WASTELAND FAIR-LAUNCH TOKEN PROTOCOL</p>
+      <p class="small muted">Powered by Atomic Fizz Caps • Vault 77 Certified • Radiation: NOMINAL</p>
+      <p class="small muted">Community project. Not affiliated with Vault-Tec Corporation or any game studio.</p>
     </footer>
 
   </div>
