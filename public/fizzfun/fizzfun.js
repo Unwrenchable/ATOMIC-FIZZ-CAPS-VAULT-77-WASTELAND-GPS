@@ -93,16 +93,16 @@
           this.address = response.publicKey.toString();
           this.isConnected = true;
           this.updateUI();
-          showToast("Phantom wallet connected!", "success");
+          showToast("Phantom vault link established!", "success");
           FizzFun.onWalletConnect(this.address);
           return this.address;
         } else {
-          showToast("Phantom wallet not found. Please install it.", "error");
+          showToast("Phantom not detected. Install it, wastelander.", "error");
           window.open("https://phantom.app/", "_blank");
         }
       } catch (err) {
         safeWarn("[Wallet] Phantom connection failed:", err);
-        showToast("Failed to connect Phantom wallet", "error");
+        showToast("Failed to link Phantom vault", "error");
       }
     },
 
@@ -110,7 +110,7 @@
       this.isConnected = false;
       this.address = null;
       this.updateUI();
-      showToast("Wallet disconnected", "warning");
+      showToast("Vault link severed", "warning");
     },
 
     updateUI() {
@@ -124,10 +124,10 @@
           statusDot.className = "status-dot connected";
         }
         if (addressEl) {
-          addressEl.textContent = `WALLET: ${shortAddr}`;
+          addressEl.textContent = `VAULT LINK: ${shortAddr}`;
         }
         if (connectBtn) {
-          connectBtn.textContent = "🔌 DISCONNECT";
+          connectBtn.textContent = "\u26a1 SEVER LINK";
           connectBtn.onclick = () => this.disconnect();
         }
       } else {
@@ -135,10 +135,10 @@
           statusDot.className = "status-dot disconnected";
         }
         if (addressEl) {
-          addressEl.textContent = "WALLET: DISCONNECTED";
+          addressEl.textContent = "VAULT LINK: OFFLINE";
         }
         if (connectBtn) {
-          connectBtn.textContent = "🔌 CONNECT WALLET";
+          connectBtn.textContent = "\u26a1 LINK WALLET";
           connectBtn.onclick = () => this.connectPhantom();
         }
       }
@@ -231,7 +231,7 @@
       if (!container) return;
 
       if (!tokens || tokens.length === 0) {
-        container.innerHTML = '<p class="muted small">No tokens launched yet. Be the first!</p>';
+        container.innerHTML = '<p class="muted small">No tokens deployed yet. Be the first wasteland entrepreneur.</p>';
         return;
       }
 
@@ -447,7 +447,7 @@
         return;
       }
       
-      showToast("Trade execution coming soon! On-chain integration in progress.", "warning");
+      showToast("Trade execution requires on-chain program deployment.", "warning");
       // TODO [HIGH PRIORITY - Phase 2]: Implement on-chain trade execution
       // Timeline: After Solana program deployment to devnet
       // Steps:
@@ -478,7 +478,7 @@
       if (statusEl) statusEl.textContent = "Launching token...";
 
       try {
-        showToast("Token launch coming soon! On-chain integration needed.", "warning");
+        showToast("Token deployment requires Solana program to go live.", "warning");
         // TODO [HIGH PRIORITY - Phase 2]: Implement on-chain token launch
         // Timeline: After Solana program deployment to devnet
         // Dependencies: Requires CAPS token deployed and program authority setup
@@ -493,7 +493,7 @@
         // 8. Refresh token list to show new token
         // 9. Clear form and show success message
         
-        if (statusEl) statusEl.textContent = "Feature coming soon!";
+        if (statusEl) statusEl.textContent = "On-chain program pending deployment.";
       } catch (err) {
         safeWarn("[Fizz.fun] Launch failed:", err);
         showToast("Launch failed", "error");
@@ -549,7 +549,7 @@
     if (refresh) refresh.addEventListener("click", () => {
       FizzFun.fetchTokens();
       FizzFun.loadStats();
-      showToast("Refreshed!", "success");
+      showToast("Caps ledger refreshed!", "success");
     });
 
     // Trade action buttons
@@ -601,7 +601,7 @@
     const buyUsdcBtn = document.getElementById("buy-usdc-button");
     if (buyUsdcBtn) {
       buyUsdcBtn.addEventListener("click", () => {
-        showToast("MoonPay integration coming soon!", "warning");
+        showToast("MoonPay integration pending.", "warning");
       });
     }
 

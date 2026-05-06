@@ -45,6 +45,13 @@ _No active tasks. The wasteland is quiet — for now._
 
 ## Completed Tasks
 
+### [2026-05-06] Task: Normalize health endpoint response shape
+- **Agent**: copilot
+- **Files**: `backend/server.js`
+- **Status**: `complete`
+- **What**: Updated `GET /api/health` to include `ok: true` on success and `ok: false` on error, while preserving existing `status`, `redis`, and `solana_rpc` fields for backward compatibility.
+- **Verified**: Diagnostics check reports no errors in `backend/server.js`.
+
 ### [2026-04-06] Task: Mainnet Readiness Audit & Playtest — Full Studio Report
 - **Agent**: copilot (game-tester + cybersecurity-expert sub-agents)
 - **Files**:

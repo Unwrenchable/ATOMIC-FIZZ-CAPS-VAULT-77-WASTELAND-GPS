@@ -184,6 +184,15 @@
                 <div id="panel-map" class="pipboy-panel active">
                   <div class="panel-header">MAP</div>
                   <div class="panel-body">
+
+                    <!-- FIRST-TIMER MISSION BRIEFING — auto-hides once GPS + wallet active -->
+                    <div id="missionBriefing" style="display:none; border:1px solid #00ff41; padding:8px 10px; margin-bottom:8px; font-size:11px; letter-spacing:0.05em; background:rgba(0,20,10,0.85);">
+                      <div style="font-weight:bold; margin-bottom:5px; font-size:12px; color:#00ff41;">⚑ MISSION BRIEFING</div>
+                      <div id="mbStep1" style="margin-bottom:4px; opacity:0.7;">▷ STEP 1 — <button onclick="document.getElementById('connectWalletHUD').click()" style="background:none;border:none;padding:0;color:#00ff41;font-family:inherit;font-size:inherit;cursor:pointer;text-decoration:underline;letter-spacing:inherit;">CONNECT WALLET</button> to earn FIZZ CAPS</div>
+                      <div id="mbStep2" style="opacity:0.7;">▷ STEP 2 — TAP <strong>EXPLORE MAP</strong> below to enable GPS &amp; reveal nearby POIs</div>
+                      <div style="margin-top:6px; text-align:right;"><button id="mbDismiss" style="background:none;border:none;padding:0;color:#556655;font-family:inherit;font-size:10px;cursor:pointer;letter-spacing:0.05em;">[ DISMISS ]</button></div>
+                    </div>
+
                     <div id="mapContainer" class="pipboy-map">
                       <div id="radFlash"></div>
                     </div>
@@ -1127,6 +1136,75 @@
         <!-- Content will be populated by merchant.js -->
       </div>
     </div>
+
+    <!-- MISSION BRIEFING CONTROLLER — shows once to first-timers, ticks off steps, auto-dismisses -->
+    <script>
+    (function () {
+      const STORAGE_KEY = "afc_mission_briefing_dismissed";
+
+      // Don't show if already permanently dismissed
+      if (localStorage.getItem(STORAGE_KEY)) return;
+
+      var el       = document.getElementById("missionBriefing");
+      var step1    = document.getElementById("mbStep1");
+      var step2    = document.getElementById("mbStep2");
+      var btnDismiss = document.getElementById("mbDismiss");
+      if (!el) return;
+
+      var walletOk = false;
+      var gpsOk    = false;
+
+      function tick(which) {
+        var checkmark = ' <span style="color:#00ff41;">✓ DONE</span>';
+        if (which === "wallet") {
+          walletOk = true;
+          step1.innerHTML = '<s style="opacity:0.4;">▷ STEP 1 — CONNECT WALLET to earn FIZZ CAPS</s>' + checkmark;
+        }
+        if (which === "gps") {
+          gpsOk = true;
+          step2.innerHTML = '<s style="opacity:0.4;">▷ STEP 2 — TAP EXPLORE MAP below to enable GPS &amp; reveal nearby POIs</s>' + checkmark;
+        }
+        if (walletOk && gpsOk) {
+          // Auto-dismiss after a short moment so player sees confirmation
+          setTimeout(dismiss, 1400);
+        }
+      }
+
+      function dismiss() {
+        localStorage.setItem(STORAGE_KEY, "1");
+        el.style.transition = "opacity 0.4s";
+        el.style.opacity = "0";
+        setTimeout(function () { el.style.display = "none"; }, 420);
+      }
+
+      btnDismiss.addEventListener("click", dismiss);
+
+      // Show the card — only on first visit
+      el.style.display = "block";
+
+      // Listen for wallet connect
+      window.addEventListener("walletConnected", function () { tick("wallet"); });
+      // Also check if already connected when game initialises
+      window.addEventListener("gameInitialized", function () {
+        if (window.connectedWallet || window.PLAYER_WALLET) tick("wallet");
+      });
+
+      // Listen for GPS becoming active (main.js fires geolocationSuccess or gpsActive)
+      window.addEventListener("gpsActive", function () { tick("gps"); });
+      // Fallback: watch accText DOM changes
+      var accTextEl = document.getElementById("accText");
+      if (accTextEl) {
+        var _obs = new MutationObserver(function () {
+          var t = accTextEl.textContent || "";
+          if (t && t.indexOf("OFFLINE") === -1 && t.indexOf("GPS") !== -1) {
+            _obs.disconnect();
+            tick("gps");
+          }
+        });
+        _obs.observe(accTextEl, { characterData: true, childList: true, subtree: true });
+      }
+    })();
+    </script>
 
   </body>
 </html>
