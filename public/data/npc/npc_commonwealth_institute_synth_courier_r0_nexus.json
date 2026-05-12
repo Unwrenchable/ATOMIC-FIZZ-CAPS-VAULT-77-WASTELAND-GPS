@@ -1,0 +1,21 @@
+{
+  "id": "npc_commonwealth_institute_synth_courier_r0_nexus",
+  "name": "R0-Nexus",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "strip",
+  "reasonForDisplacement": "Claims to have 'woken up' in the Strip with a message packet from a timeline that no longer exists.",
+  "role": "Cross-Timeline Courier",
+  "personality": "Calm, eerie, speaks in fragmented memories.",
+  "questHooks": [
+    "Carries a corrupted message referencing the Humming One.",
+    "Says the player 'was supposed to be someone else' in another timeline.",
+    "Knows a hidden Strip terminal that reacts to Atomic Fizz Caps."
+  ],
+  "lore": {
+    "heardHummingOne": true,
+    "interpretation": "A signal that overwrote his original identity.",
+    "atomicFizzRumors": "Believes the caps are 'anchors' preventing total collapse."
+  },
+  "poi": "The Strip — abandoned courier office"
+}

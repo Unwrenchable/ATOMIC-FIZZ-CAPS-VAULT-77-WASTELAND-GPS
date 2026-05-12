@@ -1,0 +1,13 @@
+{
+  "id": "npc_zion_numa",
+  "name": "Old Scout Numa",
+  "region": "Zion",
+  "type": "Elder Scout",
+  "dialog": [
+    "I’ve seen storms that weren’t storms.",
+    "The spirits warn of Vegas."
+  ],
+  "quests": ["side_zion_scouting"],
+  "faction": "Dead Horses",
+  "notes": "Has maps of old-world ruins."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "side_nv_arena",
+  "name": "Arena of Steel",
+  "type": "side",
+  "poIs": ["Strip Arena"],
+  "description": "Fight in the Strip arena for caps, fame, or blood.",
+  "objectives": [
+    "Enter the arena",
+    "Win 3 rounds",
+    "Face the champion"
+  ],
+  "endings": [
+    {
+      "id": "ending_champion",
+      "description": "You become the arena champion.",
+      "reward": "Champion’s Gear",
+      "consequence": "Crowds cheer your name."
+    },
+    {
+      "id": "ending_flee",
+      "description": "You flee the arena.",
+      "reward": "None",
+      "consequence": "Grinder mocks you forever."
+    }
+  ]
+}

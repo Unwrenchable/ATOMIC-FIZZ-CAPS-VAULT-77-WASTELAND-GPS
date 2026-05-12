@@ -1,0 +1,16 @@
+{
+  "id": "npc_boulder_city_wanderer_jonas_kerr",
+  "name": "Jonas Kerr",
+  "faction": "wanderers",
+  "homeRegion": "unknown",
+  "currentRegion": "mojave",
+  "role": "Wanderer",
+  "personality": "Quiet, observant, carries a heavy past.",
+  "description": "Jonas arrived in Boulder City without explanation. He keeps to himself, but he’s always listening — and always watching the ruins.",
+  "questHooks": [
+    "Says the ruins are 'not done collapsing'.",
+    "Carries a strange cap he refuses to talk about.",
+    "Claims he saw someone vanish into the rubble."
+  ],
+  "poi": "boulder_city_ruins_fnv"
+}

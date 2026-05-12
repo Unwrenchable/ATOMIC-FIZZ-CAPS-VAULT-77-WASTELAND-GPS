@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_appalachia_echo_019",
+  "type": "side_quest",
+  "name": "Kael Hale",
+  "region": "appalachia",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_appalachia_echo_019_dialog",
+  "lootPool": "npc_sidequest_appalachia_echo_019_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "fizzcaps_clue_02",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.75,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

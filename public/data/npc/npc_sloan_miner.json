@@ -1,0 +1,16 @@
+{
+  "id": "npc_sloan_miner",
+  "name": "Tired Miner",
+  "faction": "None",
+  "role": "Miner",
+  "type": "civilian",
+  "homeRegion": "sloan",
+  "currentRegion": "sloan",
+  "poi": "sloan_quarry_edge",
+  "dialog": {
+    "idle": [
+      "Dust gets everywhere. Even in your teeth.",
+      "We keep digging. What else can we do?"
+    ]
+  }
+}

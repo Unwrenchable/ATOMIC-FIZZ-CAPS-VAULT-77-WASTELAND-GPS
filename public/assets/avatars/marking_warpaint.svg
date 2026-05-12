@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <g opacity="0.75">
+    <path d="M75 100c8-4 16-4 22 0" fill="#8a2a2a"/>
+    <path d="M181 100c-8-4-16-4-22 0" fill="#8a2a2a"/>
+    <path d="M100 85c4-6 8-8 14-8s10 2 14 8" fill="#8a2a2a"/>
+    <path d="M142 85c4-6 8-8 14-8s10 2 14 8" fill="#8a2a2a"/>
+    <path d="M110 145h36v4h-36z" fill="#8a2a2a"/>
+    <path d="M118 150l4 10h12l4-10z" fill="#8a2a2a"/>
+  </g>
+</svg>

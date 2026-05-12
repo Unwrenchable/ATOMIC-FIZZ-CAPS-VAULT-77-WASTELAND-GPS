@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_commonwealth_echo_016",
+  "type": "side_quest",
+  "name": "Nova Lenn",
+  "region": "commonwealth",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_commonwealth_echo_016_dialog",
+  "lootPool": "npc_sidequest_commonwealth_echo_016_loot",
+  "questHooks": [
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.53,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

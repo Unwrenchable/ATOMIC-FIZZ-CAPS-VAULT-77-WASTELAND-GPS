@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_new_reno_prime-echo_017",
+  "type": "side_quest",
+  "name": "Marla Vera",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_new_reno_prime-echo_017_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-echo_017_loot",
+  "questHooks": [
+    "region_story_02",
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.87,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

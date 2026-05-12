@@ -1,0 +1,34 @@
+{
+  "name": "hero_idle_demo",
+  "armature": [
+    {
+      "name": "hero",
+      "bone": [
+        { "name": "root" }
+      ],
+      "slot": [],
+      "skin": [
+        {
+          "name": "default",
+          "slot": [
+            { "name": "head", "display": [ { "name": "head_base", "path": "head_base" } ] },
+            { "name": "hair", "display": [ { "name": "hair_short", "path": "hair_short" } ] },
+            { "name": "eyes", "display": [ { "name": "eyes_set1", "path": "eyes_set1" } ] },
+            { "name": "shirt", "display": [ { "name": "shirt_jacket", "path": "shirt_jacket" } ] }
+          ]
+        }
+      ],
+      "animation": [
+        {
+          "name": "idle",
+          "duration": 30,
+          "playTimes": 0,
+          "fadeInTime": 0,
+          "timeline": []
+        }
+      ]
+    }
+  ],
+  "version": "5.6",
+  "frameRate": 24
+}

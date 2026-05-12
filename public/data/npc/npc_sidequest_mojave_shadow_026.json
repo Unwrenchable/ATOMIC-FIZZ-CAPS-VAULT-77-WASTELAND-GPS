@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_shadow_026",
+  "type": "side_quest",
+  "name": "Lio Voss",
+  "region": "mojave",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_mojave_shadow_026_dialog",
+  "lootPool": "npc_sidequest_mojave_shadow_026_loot",
+  "questHooks": [
+    "region_story_01",
+    "timeline_warning_01",
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.81,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

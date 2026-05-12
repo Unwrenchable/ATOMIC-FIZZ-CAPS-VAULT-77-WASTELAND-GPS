@@ -1,0 +1,108 @@
+---
+# ☢️ ATOMIC FIZZ CAPS - Render Configuration
+# Vault-Tec Deployment Protocol for Backend API
+
+services:
+  # Backend API Service
+  - type: web
+    name: atomic-fizz-caps-api
+    runtime: node
+    # Free tier for development, 'starter' or higher recommended for production
+    plan: free
+    # Oregon region selected for optimal west coast latency
+    region: oregon
+    branch: main
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/ping
+
+    # Environment-specific settings
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      - key: SOLANA_NETWORK
+        value: mainnet-beta
+
+      - key: NEXT_PUBLIC_BACKEND_URL
+        value: https://api.atomicfizzcaps.xyz
+
+      # The canonical frontend URL (Vercel). Non-API requests to the API subdomain
+      # are redirected here so the backend doesn't serve a second copy of the game.
+      - key: FRONTEND_URL
+        value: https://atomicfizzcaps.xyz
+
+      # Secrets and environment-specific values must be set in Render Dashboard.
+      - key: SOLANA_RPC
+        sync: false
+      - key: SERVER_SECRET_KEY
+        sync: false
+      - key: ADMIN_MINT_SECRET
+        sync: false
+      - key: HELIUS_API_KEY
+        sync: false
+      - key: CAPS_MINT
+        sync: false
+      - key: TOKEN_MINT
+        sync: false
+      - key: TREASURY_WALLET
+        sync: false
+      - key: METAPLEX_COLLECTION_ADDRESS
+        sync: false
+      - key: NFT_STORAGE_API_KEY
+        sync: false
+      - key: PINATA_JWT
+        sync: false
+      - key: REDIS_URL
+        sync: false
+
+      # NOTE: Sensitive environment variables (REDIS_URL,
+      # SERVER_SECRET_KEY, etc.) should be configured through the
+      # Render Dashboard for security. This file only configures
+      # the deployment structure, not secrets.
+
+  # Background mint worker
+  - type: worker
+    name: atomic-fizz-caps-mint-worker
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    rootDir: .
+    buildCommand: npm install
+    startCommand: npm run worker:mint
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      - key: SOLANA_NETWORK
+        value: mainnet-beta
+
+      - key: PUBLIC_API_BASE
+        value: https://api.atomicfizzcaps.xyz
+
+      - key: FRONTEND_URL
+        value: https://atomicfizzcaps.xyz
+
+      - key: SOLANA_RPC
+        sync: false
+      - key: SERVER_SECRET_KEY
+        sync: false
+      - key: HELIUS_API_KEY
+        sync: false
+      - key: CAPS_MINT
+        sync: false
+      - key: TOKEN_MINT
+        sync: false
+      - key: TREASURY_WALLET
+        sync: false
+      - key: METAPLEX_COLLECTION_ADDRESS
+        sync: false
+      - key: NFT_STORAGE_API_KEY
+        sync: false
+      - key: PINATA_JWT
+        sync: false
+      - key: REDIS_URL
+        sync: false

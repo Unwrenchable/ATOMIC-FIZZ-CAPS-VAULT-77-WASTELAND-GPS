@@ -1,0 +1,16 @@
+{
+  "id": "npc_188_scavenger_lira_jenks",
+  "name": "Lira Jenks",
+  "faction": "scavengers",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Scavenger",
+  "personality": "Energetic, fearless, always looking for the next score.",
+  "description": "Lira digs through ruins for anything valuable. She’s convinced the Mojave still has secrets worth dying for.",
+  "questHooks": [
+    "Found a sealed crate near the quarry entrance.",
+    "Heard humming under the 188 bridge at night.",
+    "Saw someone burying something behind the trading post."
+  ],
+  "poi": "188_trading_post_fnv"
+}

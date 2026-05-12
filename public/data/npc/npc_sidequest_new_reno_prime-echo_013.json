@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_new_reno_prime-echo_013",
+  "type": "side_quest",
+  "name": "Voss Varra",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_new_reno_prime-echo_013_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-echo_013_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "fizzcaps_clue_01",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.46,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

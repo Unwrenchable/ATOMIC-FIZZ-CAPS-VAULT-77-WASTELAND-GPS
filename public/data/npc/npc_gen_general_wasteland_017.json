@@ -1,0 +1,25 @@
+{
+  "id": "npc_gen_general_wasteland_017",
+  "name": "Scout",
+  "archetype": "faction_grunt",
+  "spawnPool": [
+    "dry_lake",
+    "red_rock",
+    "highway_95",
+    "novac_outskirts"
+  ],
+  "behaviorPattern": "static_local",
+  "lootPool": [
+    "ammo_556",
+    "radio"
+  ],
+  "dialogPool": [
+    "Orders are orders.",
+    "Keep moving, citizen.",
+    "Stay alert. Trouble’s never far."
+  ],
+  "factionTag": "brotherhood_adjacent",
+  "timelineVariants": [
+    "fractured"
+  ]
+}

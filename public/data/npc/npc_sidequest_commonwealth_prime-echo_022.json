@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_commonwealth_prime-echo_022",
+  "type": "side_quest",
+  "name": "Lira Tessa",
+  "region": "commonwealth",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_commonwealth_prime-echo_022_dialog",
+  "lootPool": "npc_sidequest_commonwealth_prime-echo_022_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "timeline_warning_02",
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.39,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

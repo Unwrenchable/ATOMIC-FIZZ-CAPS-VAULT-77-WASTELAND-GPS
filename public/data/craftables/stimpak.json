@@ -1,0 +1,14 @@
+{
+  "id": "stimpak",
+  "name": "Stimpak",
+  "ingredients": [
+    { "id": "herb", "qty": 3 },
+    { "id": "chem_vial", "qty": 1 }
+  ],
+  "tokenCost": 0,
+  "output": { "id": "stimpak", "qty": 1 },
+  "cooldownSeconds": 30,
+  "requiresLevel": 1,
+  "maxPerDay": 20,
+  "sourceFile": "recipes.json"
+}

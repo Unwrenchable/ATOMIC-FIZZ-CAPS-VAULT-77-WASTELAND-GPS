@@ -1,0 +1,16 @@
+{
+  "id": "npc_bunker_patchbot_3",
+  "name": "Patch-Bot 3",
+  "faction": "rogue_robots",
+  "homeRegion": "bunker-tunnels",
+  "currentRegion": "bunker-tunnels",
+  "role": "Repair Unit",
+  "personality": "Helpful, confused, overly literal.",
+  "description": "Tries to repair everything, including people. Its diagnostics are wildly inaccurate.",
+  "questHooks": [
+    "Says it detected 'vault-grade anomalies'.",
+    "Mentions a hum that disrupts its sensors.",
+    "Claims someone reprogrammed it recently."
+  ],
+  "poi": "bunker_access_repair_bay"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_addict_01",
+  "name": "Shivering Junkie",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Lights… too bright… too loud…",
+    "Saw a man walk through a wall. I swear it."
+  ],
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": false
+}

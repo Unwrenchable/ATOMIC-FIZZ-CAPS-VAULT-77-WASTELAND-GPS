@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_appalachia_prime-echo_016",
+  "type": "side_quest",
+  "name": "Kade Rhea",
+  "region": "appalachia",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_appalachia_prime-echo_016_dialog",
+  "lootPool": "npc_sidequest_appalachia_prime-echo_016_loot",
+  "questHooks": [
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.83,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!--
+    NOTICE: Community project. Not an official product of any game studio.
+    Branding (Atomic Fizz, Fizz-Tec) is fictional for this prototype.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <title>Atomic Fizz Wallet | Vault-Tec Approved</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#00ff66">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Fizz Wallet">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Atomic Fizz Wallet">
+  
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://cdn.jsdelivr.net https://unpkg.com 'unsafe-inline';
+    connect-src 'self' https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://*.solana.com wss://*.solana.com https://atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com data:;
+    img-src 'self' data: https: blob:;
+    frame-src 'none';
+    object-src 'none';
+    base-uri 'self';
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="wallet.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  
+  <!-- API base: local dev vs production -->
+  <script src="/js/config.js"></script>
+</head>
+<body>
+  <!-- Branding note: fictional names for prototype only -->
+  <!-- Fizz-Co / Fizz-Tec branding is community-created and copy-safe -->
+<!-- BOOT OVERLAY -->
+<div id="boot-overlay">
+  <img src="branding/logo.png" id="boot-logo" alt="Loading...">
+  <div class="boot-line">INITIALIZING ATOMIC FIZZ WALLET...</div>
+  <div class="boot-line">SCANNING WASTELAND NETWORK...</div>
+  <div class="boot-line">VERIFYING CAPS LEDGER...</div>
+  <div class="boot-line">LOADING POCKET-BOY INTERFACE...</div>
+</div>
+
+<!-- MAIN WALLET APP -->
+<div id="wallet-app" class="crt">
+  <div id="wallet-branding">
+    <img src="branding/logo.png" id="wallet-logo" alt="Atomic Fizz Caps">
+    <h1>ATOMIC FIZZ WALLET</h1>
+    <p class="small muted">HavenTech Approved • Secure Cross-Chain Transactions</p>
+  </div>
+
+  <!-- WALLET CONNECTION SECTION -->
+  <section id="wallet-connect-section" class="wallet-card">
+    <h2>CONNECT WALLET</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+      <button id="afw-connect" class="btn">🔮 CONNECT PHANTOM</button>
+      <button id="afw-local" class="btn">⚡ LOCAL FIZZ WALLET</button>
+    </div>
+    <div id="afw-address" class="mono small muted">WALLET: DISCONNECTED</div>
+    <div id="afw-qr" class="mono small muted"></div>
+  </section>
+
+  <!-- TAB NAVIGATION - DeFi Portal Style -->
+  <div class="wallet-tabs">
+    <button class="wallet-tab active" data-tab="overview">📊 DASHBOARD</button>
+    <button class="wallet-tab" data-tab="tokens">💰 TOKENS</button>
+    <button class="wallet-tab" data-tab="swap">🔄 SWAP</button>
+    <button class="wallet-tab" data-tab="nfts">🎨 NFTs</button>
+    <button class="wallet-tab" data-tab="staking">🔒 STAKING</button>
+    <a href="/fizzfun/" class="wallet-tab wallet-tab-link">🚀 FIZZ.FUN</a>
+    <button class="wallet-tab" data-tab="bridge">🌉 BRIDGE</button>
+  </div>
+
+  <!-- ============ TAB: DASHBOARD ============ -->
+  <div class="tab-content active terminal-boot" id="tab-overview">
+    <!-- PLAY GAME BANNER -->
+    <section class="wallet-card game-banner">
+      <div class="wallet-card-header">
+        <span class="card-icon">🎮</span> ATOMIC FIZZ CAPS GPS GAME
+      </div>
+      <p class="small muted" style="margin-bottom: 1rem;">Explore the Wasteland, complete quests, and earn CAPS!</p>
+      <a href="/" class="btn play-game-btn" style="width: 100%; text-align: center; font-size: 1.8rem; padding: 1.5rem;">
+        ☢️ ENTER THE WASTELAND ☢️
+      </a>
+    </section>
+
+    <!-- ON-CHAIN BALANCES -->
+    <section class="wallet-card neon-glow">
+      <div class="wallet-card-header">
+        <span class="card-icon">💎</span> ON-CHAIN BALANCES
+      </div>
+      <div class="data-row">
+        <span class="data-label">SOL</span>
+        <span class="balance-value" id="afw-sol">0.000</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">FIZZ / AFC</span>
+        <span class="balance-value" id="afw-fizz">0</span>
+      </div>
+    </section>
+
+    <!-- WASTELAND STATS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">☢️</span> WASTELAND STATS
+      </div>
+      <div class="data-row">
+        <span class="data-label">IN-GAME CAPS</span>
+        <span class="balance-value" id="afw-caps">0</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">XP</span>
+        <span class="data-value" id="afw-xp">0 / 100</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">LEVEL</span>
+        <span class="data-value" id="afw-level">1</span>
+      </div>
+    </section>
+
+    <!-- ECOSYSTEM STATS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">📈</span> ECOSYSTEM OVERVIEW
+      </div>
+      <div class="data-row">
+        <span class="data-label">AFC PRICE</span>
+        <span class="data-value" id="afw-price">--</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">TOTAL HOLDERS</span>
+        <span class="data-value" id="afw-holders">--</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">MARKET CAP</span>
+        <span class="data-value" id="afw-mcap">--</span>
+      </div>
+    </section>
+
+    <!-- QUICK LINKS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">🔗</span> QUICK LINKS
+      </div>
+      <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+        <a href="/" class="btn">🎮 PLAY GAME</a>
+        <a href="/fizzfun/" class="btn">🚀 FIZZ.FUN</a>
+        <a href="/exchange" class="btn">💱 EXCHANGE</a>
+        <a href="/bridge" class="btn">🌀 BRIDGE</a>
+        <a href="/donate" class="btn">❤️ DONATE</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ TAB: TOKENS ============ -->
+  <div class="tab-content terminal-boot" id="tab-tokens">
+    <!-- AFC TOKEN (MAIN) -->
+    <section class="wallet-card neon-glow">
+      <div class="wallet-card-header">
+        <span class="card-icon">⚛️</span> ATOMIC FIZZ CAPS (AFC)
+      </div>
+      <p class="small muted" style="margin-bottom: 1rem;">The main ecosystem token - fixed supply, treasury-backed</p>
+      <div class="data-row">
+        <span class="data-label">YOUR BALANCE</span>
+        <span class="balance-value" id="afw-fizz-tokens">0</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">USD VALUE</span>
+        <span class="data-value" id="afw-fizz-usd">$0.00</span>
+      </div>
+    </section>
+
+    <!-- PARTNER TOKENS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">🪙</span> PARTNER TOKENS
+      </div>
+      <div id="partner-tokens">
+        <p class="muted small">Connect wallet to view partner token balances...</p>
+      </div>
+    </section>
+
+    <!-- MULTICHAIN BALANCES -->
+    <section class="wallet-card bridge-section">
+      <div class="wallet-card-header">
+        <span class="card-icon">🌀</span> MULTICHAIN BALANCES
+      </div>
+      <div id="chain-list">
+        <p class="muted small">Connect wallet to view cross-chain balances...</p>
+      </div>
+    </section>
+
+    <!-- CROSS-CHAIN SWAP -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">⚡</span> CROSS-CHAIN SWAP
+      </div>
+      <div id="swap-panel">
+        <p class="muted small">Connect wallet to access swapping...</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ TAB: NFTs ============ -->
+  <div class="tab-content terminal-boot" id="tab-nfts">
+    <!-- FEATURED ITEMS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">⭐</span> FEATURED ITEMS
+      </div>
+      <div id="afw-items">
+        <p class="muted">No items yet — explore the Mojave.</p>
+      </div>
+    </section>
+
+    <!-- NFT INVENTORY -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">🎨</span> ON-CHAIN NFTs
+      </div>
+      <div id="afw-nfts">
+        <p class="muted">No Atomic Fizz NFTs detected.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ TAB: SWAP ============ -->
+  <div class="tab-content terminal-boot" id="tab-swap">
+    <!-- DEX AGGREGATOR SWAP -->
+    <section class="wallet-card neon-glow">
+      <div class="wallet-card-header">
+        <span class="card-icon">🔄</span> INSTANT SWAP
+      </div>
+      <p class="small muted" style="margin-bottom: 1.5rem;">Best rates aggregated from Jupiter, Raydium, and Orca</p>
+      
+      <div class="swap-container">
+        <div class="swap-input-group">
+          <label class="swap-label">FROM</label>
+          <div class="swap-row">
+            <select id="swap-from-token" class="swap-select">
+              <option value="SOL">SOL</option>
+              <option value="USDC">USDC</option>
+              <option value="AFC">AFC</option>
+            </select>
+            <input type="number" id="swap-from-amount" class="swap-input mono" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div class="swap-balance small muted">Balance: <span id="swap-from-balance">0.00</span></div>
+        </div>
+
+        <div class="swap-arrow">⇅</div>
+
+        <div class="swap-input-group">
+          <label class="swap-label">TO</label>
+          <div class="swap-row">
+            <select id="swap-to-token" class="swap-select">
+              <option value="AFC">AFC</option>
+              <option value="SOL">SOL</option>
+              <option value="USDC">USDC</option>
+            </select>
+            <input type="number" id="swap-to-amount" class="swap-input mono" placeholder="0.00" readonly>
+          </div>
+          <div class="swap-balance small muted">You'll receive (estimated)</div>
+        </div>
+
+        <div class="swap-details" id="swap-details" style="display: none;">
+          <div class="data-row small">
+            <span>Rate</span>
+            <span id="swap-rate">--</span>
+          </div>
+          <div class="data-row small">
+            <span>Price Impact</span>
+            <span id="swap-impact">--</span>
+          </div>
+          <div class="data-row small">
+            <span>Fee</span>
+            <span id="swap-fee">--</span>
+          </div>
+        </div>
+
+        <button id="swap-execute" class="btn" style="width: 100%; margin-top: 1.5rem;">🔄 SWAP</button>
+        <div id="swap-status" class="mono small muted" style="margin-top: 1rem;"></div>
+      </div>
+    </section>
+
+    <!-- WALLET-TO-WALLET SEND -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">💸</span> SEND TOKENS
+      </div>
+
+      <div class="entry">
+        <label>Recipient Address</label>
+        <input id="afw-trade-to" class="mono" placeholder="Enter recipient wallet address">
+      </div>
+
+      <div class="entry">
+        <label>Token</label>
+        <select id="afw-send-token" class="swap-select" style="width: 100%; margin-bottom: 1rem;">
+          <option value="AFC">AFC</option>
+          <option value="SOL">SOL</option>
+        </select>
+      </div>
+
+      <div class="entry">
+        <label>Amount</label>
+        <input id="afw-trade-amount" class="mono" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+
+      <button id="afw-trade-send" class="btn">SEND</button>
+      <div id="afw-trade-status" class="mono small muted"></div>
+    </section>
+  </div>
+
+  <!-- ============ TAB: STAKING ============ -->
+  <div class="tab-content terminal-boot" id="tab-staking">
+    <!-- STAKING INFO -->
+    <section class="wallet-card neon-glow">
+      <div class="wallet-card-header">
+        <span class="card-icon">🔒</span> AFC STAKING
+      </div>
+      <p class="small muted" style="margin-bottom: 1.5rem;">Stake your AFC tokens to earn rewards and gain ecosystem perks</p>
+      
+      <div class="staking-stats">
+        <div class="data-row">
+          <span class="data-label">YOUR STAKED</span>
+          <span class="balance-value" id="staking-amount">0 AFC</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">PENDING REWARDS</span>
+          <span class="balance-value" id="staking-rewards">0 AFC</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">APY</span>
+          <span class="data-value" id="staking-apy">-- %</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">TOTAL STAKED</span>
+          <span class="data-value" id="staking-total">--</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAKE / UNSTAKE -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">⚡</span> MANAGE STAKE
+      </div>
+      
+      <div class="staking-actions" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+        <button class="btn staking-action-btn active" data-action="stake">STAKE</button>
+        <button class="btn staking-action-btn" data-action="unstake">UNSTAKE</button>
+      </div>
+
+      <div class="entry">
+        <label>Amount (AFC)</label>
+        <input id="staking-input" class="mono" type="number" min="0" step="1" placeholder="0">
+        <div class="small muted" style="margin-top: 0.5rem;">Available: <span id="staking-available">0</span> AFC</div>
+      </div>
+
+      <button id="staking-execute" class="btn" style="width: 100%;">STAKE AFC</button>
+      <div id="staking-status" class="mono small muted" style="margin-top: 1rem;"></div>
+    </section>
+
+    <!-- STAKING TIERS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">🏆</span> STAKING TIERS
+      </div>
+      <div class="tier-list">
+        <div class="tier-item">
+          <span class="tier-name">🥉 WASTELANDER</span>
+          <span class="tier-req">1,000+ AFC</span>
+          <span class="tier-perk">Launch tokens on Fizz.fun</span>
+        </div>
+        <div class="tier-item">
+          <span class="tier-name">🥈 VETERAN</span>
+          <span class="tier-req">10,000+ AFC</span>
+          <span class="tier-perk">50% reduced launch fees</span>
+        </div>
+        <div class="tier-item">
+          <span class="tier-name">🥇 ELITE</span>
+          <span class="tier-req">100,000+ AFC</span>
+          <span class="tier-perk">Early access to launches</span>
+        </div>
+        <div class="tier-item">
+          <span class="tier-name">👑 OVERSEER</span>
+          <span class="tier-req">1,000,000+ AFC</span>
+          <span class="tier-perk">Governance voting rights</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ TAB: FIZZ.FUN (NOW STANDALONE - Link in navigation) ============ -->
+  <!-- FIZZ.FUN has been moved to its own page at /fizzfun/ -->
+  <!-- Keep this stub for backwards compatibility but direct users to standalone page -->
+  <div class="tab-content terminal-boot" id="tab-fizzfun" style="display: none;">
+    <section class="wallet-card fizz-fun-section static-noise">
+      <div class="wallet-card-header">
+        <span class="card-icon">🚀</span> FIZZ.FUN TOKEN LAUNCHPAD - NOW STANDALONE!
+      </div>
+      <div class="wallet-card" style="padding: 3rem; text-align: center;">
+        <p style="font-size: 2rem; margin-bottom: 2rem;">🚀 FIZZ.FUN is now its own dedicated page! 🚀</p>
+        <p style="margin-bottom: 2rem;">Experience the full token launchpad on its standalone site.</p>
+        <a href="/fizzfun/" class="btn" style="font-size: 2rem; padding: 2rem 3rem; display: inline-block;">
+          🚀 GO TO FIZZ.FUN 🚀
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- OLD FIZZ.FUN CONTENT ARCHIVED BELOW - Can be removed in future cleanup -->
+  <!--
+  <div class="tab-content terminal-boot" id="tab-fizzfun-old">
+    <section class="wallet-card fizz-fun-section static-noise">
+      <div class="wallet-card-header">
+        <span class="card-icon">🚀</span> FIZZ.FUN TOKEN LAUNCHPAD
+      </div>
+      <p class="small muted">Create and launch your own Fizz Caps economy tokens. Fair launch bonding curves, Vault-Tec approved.</p>
+      
+      <!-- User Access Status -->
+      <div id="fizz-access-status" class="wallet-card" style="margin-top: 1.5rem;">
+        <div class="skeleton" style="height: 60px; display: none;" id="fizz-loading"></div>
+        <div id="fizz-access-info" style="display: none;">
+          <div class="data-row">
+            <span class="data-label">YOUR TIER:</span>
+            <span id="fizz-tier" class="tier-badge">LOADING...</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">CAPS BALANCE:</span>
+            <span class="data-value" id="fizz-caps-balance">0</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">CAN LAUNCH:</span>
+            <span class="data-value" id="fizz-can-launch">NO</span>
+          </div>
+          <div class="data-row" id="fizz-launch-fee-row" style="display: none;">
+            <span class="data-label">LAUNCH FEE:</span>
+            <span class="data-value" id="fizz-launch-fee">100 CAPS</span>
+          </div>
+        </div>
+        <p class="small muted" id="fizz-access-message">Connect wallet to check access...</p>
+      </div>
+    </section>
+
+    <!-- TOKEN LISTING -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">📈</span> ACTIVE TOKENS
+      </div>
+      
+      <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+        <button class="btn" id="fizz-sort-volume">VOLUME</button>
+        <button class="btn" id="fizz-sort-newest">NEWEST</button>
+        <button class="btn" id="fizz-sort-graduating">GRADUATING</button>
+        <button class="btn" id="fizz-refresh">🔄 REFRESH</button>
+      </div>
+
+      <div id="fizz-token-list" class="token-grid">
+        <div class="skeleton" style="height: 200px;"></div>
+        <div class="skeleton" style="height: 200px;"></div>
+        <div class="skeleton" style="height: 200px;"></div>
+      </div>
+    </section>
+
+    <!-- TRADE PANEL -->
+    <section class="wallet-card trade-panel" id="fizz-trade-section" style="display: none;">
+      <div class="wallet-card-header">
+        <span class="card-icon">💱</span> TRADE: <span id="fizz-selected-symbol">N/A</span>
+      </div>
+      
+      <div id="fizz-selected-info" style="margin-bottom: 1.5rem;">
+        <!-- Filled dynamically -->
+      </div>
+
+      <div class="trade-controls">
+        <button class="btn" id="fizz-action-buy">BUY</button>
+        <button class="btn" id="fizz-action-sell">SELL</button>
+      </div>
+
+      <div class="trade-input-group">
+        <label class="trade-label" id="fizz-input-label">SOL AMOUNT</label>
+        <input type="number" class="mono" id="fizz-trade-amount" placeholder="0.0" step="0.01" min="0">
+      </div>
+
+      <div class="quote-display" id="fizz-quote" style="display: none;">
+        <!-- Quote details filled dynamically -->
+      </div>
+
+      <button class="btn" id="fizz-execute-trade" style="width: 100%;">EXECUTE TRADE</button>
+      <div id="fizz-trade-status" class="mono small muted" style="margin-top: 1rem;"></div>
+    </section>
+
+    <!-- TOKEN LAUNCH FORM -->
+    <section class="wallet-card" id="fizz-launch-section" style="display: none;">
+      <div class="wallet-card-header">
+        <span class="card-icon">🚀</span> LAUNCH NEW TOKEN
+      </div>
+      
+      <div class="trade-input-group">
+        <label class="trade-label">TOKEN NAME</label>
+        <input type="text" class="mono" id="fizz-launch-name" placeholder="My Wasteland Token" maxlength="32">
+      </div>
+
+      <div class="trade-input-group">
+        <label class="trade-label">SYMBOL</label>
+        <input type="text" class="mono" id="fizz-launch-symbol" placeholder="MWT" maxlength="10" style="text-transform: uppercase;">
+      </div>
+
+      <div class="trade-input-group">
+        <label class="trade-label">METADATA URI</label>
+        <input type="text" class="mono" id="fizz-launch-uri" placeholder="https://..." maxlength="200">
+      </div>
+
+      <button class="btn" id="fizz-execute-launch" style="width: 100%;">LAUNCH TOKEN</button>
+      <div id="fizz-launch-status" class="mono small muted" style="margin-top: 1rem;"></div>
+    </section>
+
+    <!-- PROTOCOL STATS -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">📊</span> PROTOCOL STATS
+      </div>
+      <div id="fizz-stats">
+        <div class="data-row">
+          <span class="data-label">TOTAL TOKENS LAUNCHED:</span>
+          <span class="data-value" id="fizz-stat-tokens">0</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">TOTAL VOLUME:</span>
+          <span class="data-value" id="fizz-stat-volume">0 SOL</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">CAPS BURNED:</span>
+          <span class="data-value" id="fizz-stat-caps">0</span>
+        </div>
+      </div>
+    </section>
+
+    <button id="buy-usdc-button" class="btn" style="width: 100%; margin-top: 1.5rem;">💰 BUY USDC (MOONPAY)</button>
+  </div>
+  --> 
+  <!-- END OF ARCHIVED FIZZ.FUN CONTENT -->
+
+  <!-- ============ TAB: BRIDGE ============ -->
+  <div class="tab-content terminal-boot" id="tab-bridge">
+    <!-- BRIDGE INFO -->
+    <section class="wallet-card neon-glow">
+      <div class="wallet-card-header">
+        <span class="card-icon">🌉</span> CROSS-CHAIN BRIDGE
+      </div>
+      <p class="small muted" style="margin-bottom: 1.5rem;">Bridge your assets between Solana and other chains</p>
+      
+      <div class="bridge-container">
+        <div class="bridge-chain-select">
+          <div class="bridge-from">
+            <label class="bridge-label">FROM</label>
+            <select id="bridge-from-chain" class="swap-select">
+              <option value="solana">🟣 Solana</option>
+              <option value="ethereum">🔷 Ethereum</option>
+              <option value="polygon">🟪 Polygon</option>
+              <option value="bsc">🟡 BSC</option>
+            </select>
+          </div>
+          
+          <div class="bridge-arrow">→</div>
+          
+          <div class="bridge-to">
+            <label class="bridge-label">TO</label>
+            <select id="bridge-to-chain" class="swap-select">
+              <option value="ethereum">🔷 Ethereum</option>
+              <option value="solana">🟣 Solana</option>
+              <option value="polygon">🟪 Polygon</option>
+              <option value="bsc">🟡 BSC</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="entry" style="margin-top: 1.5rem;">
+          <label>Token</label>
+          <select id="bridge-token" class="swap-select" style="width: 100%;">
+            <option value="AFC">AFC</option>
+            <option value="USDC">USDC</option>
+          </select>
+        </div>
+
+        <div class="entry">
+          <label>Amount</label>
+          <input id="bridge-amount" class="mono" type="number" min="0" step="0.01" placeholder="0.00">
+        </div>
+
+        <div class="bridge-info" style="margin-top: 1rem;">
+          <div class="data-row small">
+            <span>Estimated Time</span>
+            <span id="bridge-time">~5-15 min</span>
+          </div>
+          <div class="data-row small">
+            <span>Bridge Fee</span>
+            <span id="bridge-fee">0.1%</span>
+          </div>
+        </div>
+
+        <button id="bridge-execute" class="btn" style="width: 100%; margin-top: 1.5rem;">🌉 BRIDGE TOKENS</button>
+        <div id="bridge-status" class="mono small muted" style="margin-top: 1rem;"></div>
+      </div>
+    </section>
+
+    <!-- MULTICHAIN BALANCES -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">🌐</span> YOUR MULTICHAIN BALANCES
+      </div>
+      <div id="bridge-multichain-balances">
+        <div class="chain-balance">
+          <span class="chain-name">🟣 Solana</span>
+          <span class="chain-value" id="bridge-sol-balance">-- AFC</span>
+        </div>
+        <div class="chain-balance">
+          <span class="chain-name">🔷 Ethereum</span>
+          <span class="chain-value" id="bridge-eth-balance">-- AFC</span>
+        </div>
+        <div class="chain-balance">
+          <span class="chain-name">🟪 Polygon</span>
+          <span class="chain-value" id="bridge-polygon-balance">-- AFC</span>
+        </div>
+        <div class="chain-balance">
+          <span class="chain-name">🟡 BSC</span>
+          <span class="chain-value" id="bridge-bsc-balance">-- AFC</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- BRIDGE HISTORY -->
+    <section class="wallet-card">
+      <div class="wallet-card-header">
+        <span class="card-icon">📜</span> BRIDGE HISTORY
+      </div>
+      <div id="bridge-history">
+        <p class="muted small">Connect wallet to view bridge history...</p>
+      </div>
+    </section>
+  </div>
+
+</div> <!-- END WALLET APP -->
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- NFT DETAIL POPUP -->
+<div id="nft-modal" class="modal hidden">
+  <div class="modal-content crt">
+    <button id="nft-modal-close" class="btn modal-close">CLOSE</button>
+
+    <div id="nft-modal-body">
+      <!-- Filled dynamically -->
+    </div>
+
+    <div class="modal-actions">
+      <button id="nft-equip" class="btn">EQUIP</button>
+      <button id="nft-scrap" class="btn">SCRAP</button>
+      <button id="nft-fuse" class="btn">FUSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- FUSION POPUP -->
+<div id="fusion-modal" class="modal hidden">
+  <div class="modal-content crt">
+    <button id="fusion-close" class="btn modal-close">CLOSE</button>
+    <h2>FUSION</h2>
+    <div id="fusion-body"></div>
+    <button id="fusion-start" class="btn">FUSE</button>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="/js/main.js"></script>
+<script src="/js/modules/web3-wallet-adapter.js"></script>
+<script src="wallet.js"></script>
+
+<!-- Wallet Integration Script -->
+<script>
+(function() {
+  'use strict';
+  
+  // Wait for web3Wallet to be available
+  function initWalletIntegration() {
+    if (typeof window.web3Wallet === 'undefined') {
+      setTimeout(initWalletIntegration, 100);
+      return;
+    }
+    
+    // Wire web3-wallet-adapter to wallet UI
+    const connectBtn = document.getElementById('afw-connect');
+    const localBtn = document.getElementById('afw-local');
+    
+    if (connectBtn) {
+      connectBtn.addEventListener('click', async () => {
+        try {
+          const success = await window.web3Wallet.connect('phantom');
+          if (success && window.refreshOnChain) {
+            await window.refreshOnChain(window.web3Wallet.getWalletAddress());
+          }
+        } catch (err) {
+          console.error('[Wallet] Phantom connect failed:', err);
+        }
+      });
+    }
+    
+    if (localBtn) {
+      localBtn.addEventListener('click', async () => {
+        try {
+          const success = await window.web3Wallet.connect('integrated');
+          if (success && window.refreshOnChain) {
+            await window.refreshOnChain(window.web3Wallet.getWalletAddress());
+          }
+        } catch (err) {
+          console.error('[Wallet] Integrated wallet connect failed:', err);
+        }
+      });
+    }
+    
+    // Listen for wallet state changes
+    window.addEventListener('web3WalletStateChanged', (e) => {
+      const { connected, address, type } = e.detail;
+      const addrEl = document.getElementById('afw-address');
+      
+      if (addrEl) {
+        if (connected && address) {
+          addrEl.textContent = `WALLET: ${address.slice(0, 6)}...${address.slice(-4)} (${type})`;
+          addrEl.style.color = 'var(--vault-gold)';
+        } else {
+          addrEl.textContent = 'WALLET: DISCONNECTED';
+          addrEl.style.color = '';
+        }
+      }
+      
+      // Update global PLAYER_WALLET for compatibility
+      window.PLAYER_WALLET = connected ? address : null;
+    });
+    
+    // Check for existing connection
+    if (window.web3Wallet.isConnected()) {
+      const addr = window.web3Wallet.getWalletAddress();
+      window.PLAYER_WALLET = addr;
+      if (window.refreshOnChain) {
+        window.refreshOnChain(addr);
+      }
+    }
+    
+    console.log('[Wallet] Integration initialized');
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWalletIntegration);
+  } else {
+    initWalletIntegration();
+  }
+})();
+</script>
+
+</body>
+</html>

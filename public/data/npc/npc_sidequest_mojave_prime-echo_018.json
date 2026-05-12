@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_prime-echo_018",
+  "type": "side_quest",
+  "name": "Dax Kael",
+  "region": "mojave",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_mojave_prime-echo_018_dialog",
+  "lootPool": "npc_sidequest_mojave_prime-echo_018_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.8,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

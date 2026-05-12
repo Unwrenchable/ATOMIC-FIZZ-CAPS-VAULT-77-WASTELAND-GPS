@@ -1,0 +1,414 @@
+{
+  "id": "dialog_warbucks",
+  "npc": "WARREN B. CAPSTON",
+  "portrait": "warbucks",
+  "title": "The Merchant King of the Wasteland",
+  "description": "Barrel-chested, bald as a brahmin skull, wearing pre-war executive corporate armor that costs more than most settlements. He stands at the center of a fortified compound like a man who has decided the wasteland will organize itself around him — and largely been proven right.",
+  "backstory": "Warren Capston III was the last CEO of the Warmcaps Corporate Group, a pre-war hospitality and bottlecap-trading conglomerate that survived the bombs better than most institutions because Capston had the good sense to build his headquarters forty feet underground. He emerged two years after the war with a functioning power grid, a corporate charter, and the conviction that free markets were the only path to wasteland stability. He has been proving this theory, sometimes at gunpoint, ever since.",
+  "personality": [
+    "Ruthless",
+    "Transactional",
+    "Pragmatic"
+  ],
+  "intro": {
+    "id": "warbucks_intro_annie",
+    "conditions": [
+      "!flag:met_warbucks",
+      "flag:annie_sent_to_warmcaps"
+    ],
+    "set_flags": [
+      "met_warbucks",
+      "warmcaps_mansion_found"
+    ],
+    "video_speech": "You're not on the schedule. GRACY tells me you mentioned Hannigan's House. That bought you ninety seconds. Start talking.",
+    "text": "The compound is everything she said it would be — reinforced perimeter, guards at measured intervals, pre-war aesthetics retrofitted with wasteland pragmatism. Someone with money and taste and enough cynicism about both to make them work together.\n\nThe man himself is waiting in the entrance hall. Standing, not seated. That tells you something.\n\nBarrel-chested. Bald. The corporate armor is pre-war executive-grade — the kind with integrated climate control and a Vault-Tec logo that has been carefully, deliberately removed. He holds a data-pad in one hand and reads it while you enter, which could be rudeness or power play or both.\n\nHe doesn't look up immediately.\n\n\"GRACY says you mentioned Hannigan's House.\" His voice is a low rumble, measured as caps on a scale. \"That bought you time. Most visitors don't know that name.\"\n\nHe sets the data-pad down. Now he looks at you.\n\n\"Ninety seconds. Start talking.\"",
+    "responses": [
+      {
+        "text": "[Direct] There's a girl named Ember. She organized twelve orphans out of a labor camp. She needs your help.",
+        "tone": "direct",
+        "next": "node_ember_pitch"
+      },
+      {
+        "text": "[Question] Hannigan's House is an illegal labor operation. Did you know?",
+        "tone": "question",
+        "next": "node_hannigan_exposure"
+      },
+      {
+        "text": "[Friendly] Nan Hannigan has been undercutting your trade routes. Using orphaned children to do it.",
+        "tone": "kind",
+        "next": "node_business_angle"
+      }
+    ]
+  },
+  "nodes": {
+    "node_cold_intro": {
+      "id": "node_cold_intro",
+      "conditions": [
+        "!flag:met_warbucks",
+        "!flag:annie_sent_to_warmcaps"
+      ],
+      "set_flags": [
+        "met_warbucks",
+        "warmcaps_mansion_found"
+      ],
+      "text": "The man at the center of the compound is exactly what the wasteland rumors implied: large, bald, expensively armored, and containing an expression so carefully neutral it might as well be pre-war casting.\n\nHe doesn't look up from his data-pad when you're escorted in.\n\n\"You're not on the schedule.\" Flat. Not angry. Just a statement of fact.\n\nHe sets the data-pad down and examines you the way an auditor examines a ledger. Looking for discrepancies.\n\n\"Whatever you're selling, I have a supplier. Whatever you're buying, I set the price. Whatever you're asking, there's a filing process.\" A pause. \"GRACY handles intake.\"\n\nHe picks up the data-pad again.\n\n\"Unless you have something genuinely unusual to offer. Which is the only thing that earns an unscheduled meeting.\"\n\nA pause. He's still reading.\n\n\"Well?\"",
+      "responses": [
+        {
+          "text": "[Direct] I have information about Hannigan's House. It concerns your trade routes.",
+          "tone": "direct",
+          "next": "node_hannigan_exposure"
+        },
+        {
+          "text": "[Question] I'm looking for information about an illegal operation in the region.",
+          "tone": "question",
+          "next": "node_information_trade"
+        },
+        {
+          "text": "[Friendly] I was sent by someone who needs help. She couldn't come herself.",
+          "tone": "kind",
+          "next": "node_third_party_intro"
+        }
+      ]
+    },
+    "node_ember_pitch": {
+      "id": "node_ember_pitch",
+      "text": "He listens.\n\nActually listens — not the performance of listening where a man's eyes glaze while he waits for you to finish. He listens the way an accountant listens to a numbers problem. Looking for the shape of it.\n\nWhen you're done, he is quiet for seven seconds.\n\n\"Twelve children. Four currently detained. One organizer, twelve years old, who identified the optimal escape window and executed it with a forty-second margin.\"\n\nHe says it back exactly. No notes.\n\n\"And she chose me specifically.\"\n\nNot a question.\n\n\"She did her research.\" The barest pause. \"I respect that. Research is how intelligent people navigate a world that doesn't reward intelligence often enough.\"\n\nHe sets down the data-pad.\n\n\"Tell me about Nan Hannigan's trade operation.\"",
+      "responses": [
+        {
+          "text": "[Direct] She's been undercutting your caravan routes. Cheap labor keeps her costs below market.",
+          "tone": "direct",
+          "next": "node_business_angle"
+        },
+        {
+          "text": "[Friendly] The children are the priority. But yes, there's a business case too.",
+          "tone": "kind",
+          "next": "node_human_element"
+        }
+      ]
+    },
+    "node_hannigan_exposure": {
+      "id": "node_hannigan_exposure",
+      "text": "Now he sets the data-pad down.\n\n\"I was aware of Hannigan. Not the specifics.\" A beat — precise, like he measured it. \"What are the specifics?\"\n\nWhen you lay it out — the orphanage license, the child labor, the scavenging operation, the ration docking — he doesn't react visibly. He catalogues.\n\n\"So she's running a licensed facility as cover for an unlicensed labor operation. Using children because they fit in tighter spaces and require fewer caps per unit of work.\"\n\nHe says 'unit of work' without irony. Not because he doesn't understand it's a child. Because he's thinking in operational terms and he'll allow himself to feel something about it later, privately, where nobody can see it.\n\n\"And how long has this been affecting settlement trade in the region?\"",
+      "responses": [
+        {
+          "text": "[Direct] Long enough to cut into your margins on at least three routes.",
+          "tone": "direct",
+          "next": "node_business_angle"
+        },
+        {
+          "text": "[Friendly] Long enough that twelve children needed to escape in the middle of the night.",
+          "tone": "kind",
+          "next": "node_human_element"
+        }
+      ]
+    },
+    "node_business_angle": {
+      "id": "node_business_angle",
+      "text": "The faintest narrowing of his eyes. Satisfaction, very tightly controlled.\n\n\"Three routes, yes. I have the margin variance logged. Attributed it to general economic degradation in the zone.\" He pauses. \"I was wrong. I don't like being wrong.\"\n\nHe stands. The full height of him is considerable.\n\n\"If Nan Hannigan's cost structure is based on zero-wage labor with a cover of orphanage licensing, the solution is straightforward: remove the labor. Remove the license. Remove the competitive advantage.\"\n\nHe clasps his hands behind his back.\n\n\"This is not charity. This is market correction.\"\n\nA beat that is somehow a very long distance between two words.\n\n\"...Which also results in twelve orphaned children no longer being exploited. That is an acceptable secondary outcome.\"",
+      "responses": [
+        {
+          "text": "[Friendly] You can say you want to help them. It's all right.",
+          "tone": "kind",
+          "next": "node_soft_spot"
+        },
+        {
+          "text": "[Direct] What's your plan?",
+          "tone": "direct",
+          "next": "node_warmcaps_plan"
+        },
+        {
+          "text": "[Question] What happens to the kids once Hannigan is dealt with?",
+          "tone": "question",
+          "next": "node_after_hannigan"
+        }
+      ]
+    },
+    "node_soft_spot": {
+      "id": "node_soft_spot",
+      "text": "He looks at you for a very long moment.\n\n\"What I want —\" He stops. Recalibrates. \"What I want is an efficiently functioning trade region that isn't being distorted by fraud and exploitation.\"\n\nAnother pause.\n\n\"I also —\"\n\nHe turns away slightly. A tell so small you almost miss it.\n\n\"I was in Vault-Tec arms division. We designed the weapons. We sold the contracts. We—\" He stops. \"What we did and what it produced is a record I carry and cannot put down.\"\n\nHe turns back. His face has rearranged itself back to corporate neutral. But the edges are different.\n\n\"There are twelve children hiding in ruins east of the trade post. That is a number I can do something about. I prefer doing something to not doing something.\" A breath. \"That is my answer.\"",
+      "set_flags": [
+        "warmcaps_agreed_to_help"
+      ],
+      "responses": [
+        {
+          "text": "[Friendly] I'll tell Ember you're in.",
+          "tone": "kind",
+          "next": "node_warmcaps_plan"
+        },
+        {
+          "text": "[Direct] Good. What's the operational plan?",
+          "tone": "direct",
+          "next": "node_warmcaps_plan"
+        }
+      ]
+    },
+    "node_human_element": {
+      "id": "node_human_element",
+      "text": "He looks at you. The data-pad stays down.\n\n\"I understand what you're telling me.\"\n\nQuiet. Precise.\n\n\"Nan Hannigan is exploiting orphaned children. One of them — twelve years old — organized an escape with a forty-second window and has been sheltering eleven others in the wasteland for three weeks. And she identified me as the person most likely to be able to help.\"\n\nHe picks up the data-pad. Sets it back down again.\n\n\"She's not wrong. I have the resources. I have the personnel. Nan Hannigan does not have enough hired guns to be a problem for what I can send.\"\n\nThe faintest something in his expression — so brief it's gone before you name it.\n\n\"Tell me what she needs and how to deliver it.\"",
+      "set_flags": [
+        "warmcaps_agreed_to_help"
+      ],
+      "responses": [
+        {
+          "text": "[Direct] She needs you to confront Hannigan and free the four kids still inside.",
+          "tone": "direct",
+          "next": "node_warmcaps_plan"
+        }
+      ]
+    },
+    "node_third_party_intro": {
+      "id": "node_third_party_intro",
+      "text": "He looks up from the data-pad.\n\n\"Third party. Couldn't come themselves.\" He considers. \"That's either a legitimate logistics problem or a manipulation. Tell me which.\"\n\nNo warmth. No hostility. Just the question, asked like it deserves a straight answer.\n\n\"And who, specifically, sent you.\"",
+      "responses": [
+        {
+          "text": "[Direct] A girl named Ember. She's twelve. She runs Hannigan's House orphans.",
+          "tone": "direct",
+          "next": "node_ember_pitch"
+        },
+        {
+          "text": "[Question] Have you heard of Hannigan's House? The orphanage?",
+          "tone": "question",
+          "next": "node_hannigan_exposure"
+        }
+      ]
+    },
+    "node_information_trade": {
+      "id": "node_information_trade",
+      "text": "\"Illegal operations.\" He sets the data-pad aside with the precision of a man putting a tool back in its exact position. \"I encounter them periodically. I have relationships with the relevant enforcement bodies — what passes for enforcement out here — and I report accordingly.\"\n\nHe looks at you.\n\n\"What operation, specifically. And what is your interest in it.\"",
+      "responses": [
+        {
+          "text": "[Direct] Hannigan's House. It's a child labor camp disguised as an orphanage.",
+          "tone": "direct",
+          "next": "node_hannigan_exposure"
+        }
+      ]
+    },
+    "node_warmcaps_plan": {
+      "id": "node_warmcaps_plan",
+      "text": "He moves to a table covered in maps. Pre-war survey data, overlaid with hand-annotated trade routes. He doesn't need to search — he goes straight to the relevant section.\n\n\"Hannigan's compound has four armed personnel on rotation. Outer fence is pre-war construction — serviceable deterrent against opportunists, not against organized effort.\"\n\nHe marks three positions.\n\n\"I send eight of my security detail. You go with them — you've seen the layout and Ember trusts you, which gives me an asset inside the relationship.\"\n\nHe straightens.\n\n\"We do not destroy the facility. An orphanage building, even one misused, is a resource. We remove Hannigan, remove her personnel, release the detained children, and secure the license under a proper administrative structure.\"\n\nA pause.\n\n\"GRACY will file the paperwork tonight. By morning it's a legitimate operation again.\" Another pause. \"With better management.\"",
+      "set_flags": [
+        "warmcaps_agreed_to_help"
+      ],
+      "responses": [
+        {
+          "text": "[Friendly] What about Ember and the others who got out?",
+          "tone": "kind",
+          "next": "node_ember_future"
+        },
+        {
+          "text": "[Direct] I'll deliver your letter to Ember. She needs to know you're on board.",
+          "tone": "direct",
+          "next": "node_letter_of_marque"
+        },
+        {
+          "text": "[Question] What's in it for Ember, specifically?",
+          "tone": "question",
+          "next": "node_ember_future"
+        }
+      ]
+    },
+    "node_ember_future": {
+      "id": "node_ember_future",
+      "text": "\"The girl runs a group of twelve through three weeks in the open wasteland and her first request is for a structured plan rather than improvised action.\" He doesn't phrase it as a compliment. He phrases it as an observation about an asset. \"She's wasted in an orphanage.\"\n\nHe straightens.\n\n\"The children get proper care — I will fund the facility's operational costs. Proper food. Medical supplies. Education if we can find staff who survived with enough brain cells to teach with.\"\n\nA pause.\n\n\"Ember specifically — that is her decision. I don't draft children into my operation. I don't employ them. But if she is still looking for her parents through Vault-Tec registry databases when she's eighteen and capable of operating independently, there are records in my archive that might be useful to her.\"\n\nFlat. Practical. Also, somehow, everything.\n\n\"One thing at a time.\"",
+      "set_flags": [
+        "warmcaps_agreed_to_help"
+      ],
+      "responses": [
+        {
+          "text": "[Direct] I'll carry your letter to Ember.",
+          "tone": "direct",
+          "next": "node_letter_of_marque"
+        }
+      ]
+    },
+    "node_about_mansion": {
+      "id": "node_about_mansion",
+      "text": "He glances around the compound with the proprietary ease of a man who has lived in the same building for decades.\n\n\"Pre-war executive retreat. The previous occupants had adequate taste and inadequate survival instincts.\"\n\nHe moves toward the window. Outside: perimeter fence, guards at intervals, a caravan staging area with the organized busyness of a small military logistics hub.\n\n\"I added the perimeter reinforcement. The generator array. The armory. And the filing system — the previous occupants apparently operated on institutional chaos, which explains why they are no longer operating at all.\"\n\nHe turns back.\n\n\"A structure is only as functional as its organization. I've found that applies equally to buildings and to people.\"",
+      "responses": [
+        {
+          "text": "[Question] Tell me about GRACY.",
+          "tone": "question",
+          "next": "node_about_gracy"
+        },
+        {
+          "text": "[Question] What do you actually trade?",
+          "tone": "question",
+          "next": "node_about_trade"
+        }
+      ]
+    },
+    "node_about_gracy": {
+      "id": "node_about_gracy",
+      "text": "Something in his expression shifts. Imperceptibly. But it shifts.\n\n\"GRACY is a pre-war household management unit. She was in the building when I arrived. She has been running scheduling, inventory, and administrative functions for the entirety of my operation's existence.\"\n\nHe considers.\n\n\"She is also — in a purely operational sense — the most effective administrative entity I have encountered. Human assistants require rest, have opinions about their hours, and occasionally develop loyalty problems. GRACY's loyalty is architectural.\"\n\nThe smallest pause.\n\n\"She also once told a group of armed raiders that they were 'not on the calendar' and closed the gate in their faces. They left. I have never determined whether this was a calculated risk assessment on her part or simply protocol.\"\n\nHe seems, privately, to find this satisfying.\n\n\"I have not asked.\"",
+      "responses": [
+        {
+          "text": "[Friendly] Sounds like she runs the place as much as you do.",
+          "tone": "kind",
+          "next": "node_gracy_runs_it"
+        },
+        {
+          "text": "[Question] What about your past — Vault-Tec?",
+          "tone": "question",
+          "next": "node_vault_tec_past"
+        }
+      ]
+    },
+    "node_gracy_runs_it": {
+      "id": "node_gracy_runs_it",
+      "text": "\"She does not run it.\" Absolutely flat. \"I run it. GRACY manages the administrative infrastructure that allows me to run it efficiently.\"\n\nA beat.\n\n\"This distinction is one GRACY does not herself make when speaking to visitors. Which I have corrected on seventeen separate occasions and which she continues to — \" He stops. \"— process in her own way.\"\n\nA pause.\n\n\"If GRACY told you that she 'manages operations,' that is a characterization of administrative scope, not authority.\"\n\nAnother beat.\n\n\"She screens my communications now. I've chosen to interpret this as efficiency rather than hierarchy. The practical outcome is the same.\"",
+      "responses": [
+        {
+          "text": "[Sarcastic] So she runs it.",
+          "tone": "sarcastic",
+          "next": "node_gracy_concession"
+        },
+        {
+          "text": "[Direct] Let's get back to the plan. The letter for Ember.",
+          "tone": "direct",
+          "next": "node_letter_of_marque"
+        }
+      ]
+    },
+    "node_gracy_concession": {
+      "id": "node_gracy_concession",
+      "text": "He looks at you for a very long second.\n\n\"...In a strictly functional sense, the day-to-day operation runs through her systems, yes.\"\n\nAnother long second.\n\n\"She would not appreciate you telling her that.\"",
+      "responses": [
+        {
+          "text": "[Direct] The letter. Let's talk about getting Ember out.",
+          "tone": "direct",
+          "next": "node_letter_of_marque"
+        }
+      ]
+    },
+    "node_vault_tec_past": {
+      "id": "node_vault_tec_past",
+      "text": "The compound goes quiet in a way that has nothing to do with sound.\n\n\"Vault-Tec arms division. VP of Contractor Relations from 2068 to 2077.\" He says it like reading a citation. Flat and precise. \"I sold weapons contracts to the government, managed supplier relations, and contributed to a supply chain that put functioning ordnance into the hands of soldiers on three continents.\"\n\nHe walks to the window.\n\n\"In 2077, those contracts were fulfilled in ways that were not anticipated in the original scope of work.\" A very long pause. \"I was in Vault 99 when the bombs fell. I had access because of my position. Most of the people in my supply chain did not.\"\n\nHe turns back.\n\n\"I built what I built here because it was something I could build that wasn't weapons. Caps can be exchanged for medicine, for food, for labor toward something constructive.\" A pause. \"I am aware that this does not balance the ledger. I keep building anyway.\"",
+      "responses": [
+        {
+          "text": "[Friendly] That's more honesty than most people offer.",
+          "tone": "kind",
+          "next": "node_vault_tec_response"
+        },
+        {
+          "text": "[Direct] What matters is what you do now. And right now, Ember needs help.",
+          "tone": "direct",
+          "next": "node_warmcaps_plan"
+        }
+      ]
+    },
+    "node_vault_tec_response": {
+      "id": "node_vault_tec_response",
+      "text": "\"Most people don't ask.\"\n\nHe turns back to the room. The expression on his face has settled back to its neutral professional configuration, but the edges are still slightly different.\n\n\"Honesty is a limited resource in the wasteland. I find it useful to conserve it for situations where it has operational value.\"\n\nA beat.\n\n\"This apparently qualified.\"\n\nHe picks up the data-pad.\n\n\"Now. The girl. The plan. Tell me what she needs and we'll structure a response.\"",
+      "responses": [
+        {
+          "text": "[Direct] She needs you to secure the orphanage and free the kids inside.",
+          "tone": "direct",
+          "next": "node_warmcaps_plan"
+        }
+      ]
+    },
+    "node_about_trade": {
+      "id": "node_about_trade",
+      "text": "\"Everything.\"\n\nHe says it without expansion, then expands anyway.\n\n\"Medicine, because the wasteland runs on it. Weapons, because the wasteland runs on those too and I would rather sell to people who are defending something than watch them lose to people who already have inventory. Pre-war tech, when I can verify provenance. Salvage contracts. Labor placement. Information.\"\n\nHe looks at you.\n\n\"Information is the most valuable commodity in the wasteland. It doesn't weigh anything. It doesn't rot. And the person who has it is always in a better negotiating position than the person who doesn't.\"\n\nA pause.\n\n\"Which is why a twelve-year-old who spent years memorizing her captor's ledgers and identified me as the optimal solution to her problem interests me considerably.\"",
+      "responses": [
+        {
+          "text": "[Direct] Then let's talk about getting her out of her situation.",
+          "tone": "direct",
+          "next": "node_warmcaps_plan"
+        }
+      ]
+    },
+    "node_after_hannigan": {
+      "id": "node_after_hannigan",
+      "text": "\"The orphanage license is transferable under trade law — such as trade law exists out here. I'll file the administrative transfer to a non-predatory operator.\"\n\nHe is already thinking logistics.\n\n\"The children are not cargo. I want to be precise about that. The settlement north of Hannigan's House has a medical supply agreement with my caravan — I'll extend that to include orphanage support as part of the route contract. Food, medicine, basic supplies on a quarterly cycle.\"\n\nHe pauses.\n\n\"They also need an adult who is not drunk on Nuka-Moonshine and using them as labor. Finding that person is a secondary problem. One item at a time.\"",
+      "responses": [
+        {
+          "text": "[Friendly] You've thought this through.",
+          "tone": "kind",
+          "next": "node_soft_spot"
+        },
+        {
+          "text": "[Direct] What do I tell Ember? Give me the letter.",
+          "tone": "direct",
+          "next": "node_letter_of_marque"
+        }
+      ]
+    },
+    "node_letter_of_marque": {
+      "id": "node_letter_of_marque",
+      "text": "He moves to a writing desk — actual pre-war furniture, maintained with the careful deliberateness of someone who understands that some things deserve to last.\n\nHe writes quickly. Precise block letters, no corrections.\n\nWhen he folds it, he presses his personal seal into the wax — the only piece of pre-war affectation in the entire compound.\n\n\"Letter of sponsorship. My security detail will move on Hannigan's House within forty-eight hours of your delivery to the girl.\" He holds it out. \"Also enclosed: a letter of marque from my caravan. Gives you and anyone traveling with you a thirty percent discount at any of my trading posts and priority access to my caravan routes for one year.\"\n\nA pause.\n\n\"The girl asked for help. I don't do partial help.\"\n\nHe holds the letter out.\n\n\"Get it to her. Then come back. We have an orphanage to liberate.\"",
+      "set_flags": [
+        "warmcaps_letter_prepared"
+      ],
+      "offers_quest": "quest_tomorrows_wasteland",
+      "responses": [
+        {
+          "text": "[Friendly] She's going to be glad I found you.",
+          "tone": "kind",
+          "next": "node_farewell"
+        },
+        {
+          "text": "[Direct] On my way.",
+          "tone": "direct",
+          "next": "node_farewell"
+        }
+      ]
+    },
+    "node_farewell": {
+      "id": "node_farewell",
+      "text": "He turns back to his data-pad before you've fully left the room. Not rudeness — efficiency. He has already filed this conversation, extracted the relevant operational data, and moved on to the implementation phase.\n\nAt the door, GRACY intercepts you — a trim household management robot, her photoreceptors carrying an expression that is somehow both warm and absolutely inflexible.\n\n\"You may return at any time,\" she says. \"I will place you on the preferred contact list. Your appointment window is — \" She pauses, clearly calculating. \"Open. Within reason.\"\n\nBehind you, from the direction of Warmcaps' desk, without looking up:\n\n\"GRACY.\"\n\n\"...within the standard scheduling parameters,\" GRACY revises, with the dignity of a woman who had made her point and is choosing to be gracious about it.\n\nYou leave.\n\nBehind you, twelve orphans in a basement are still counting.\"",
+      "end": true
+    }
+  },
+  "quest_nodes": [
+    {
+      "id": "warbucks_offers_rescue_quest",
+      "conditions": [
+        "flag:warmcaps_agreed_to_help",
+        "!flag:quest_tomorrows_wasteland_active"
+      ],
+      "text": "He sets everything else aside.\n\n\"Ember has been taken. Iron Nan moved faster than my forty-eight-hour window allowed for.\"\n\nHis voice is completely flat. The flat of a man who is very angry and has decided that anger is a resource to be directed, not displayed.\n\n\"GRACY has the compound's current patrol data. My security detail is staged at the north perimeter.\"\n\nHe holds out a sealed envelope — heavier than the letter of marque. Inside: a formal writ with his seal and enough caps to operate a small army for a week.\n\n\"Letter of marque. Full operational authority for the retrieval. Bring Ember back.\"\n\nA pause.\n\n\"Uninjured.\"\n\nThe single word lands like a vault door closing.\n\n\"I'll be here.\"",
+      "offers_quest": "quest_tomorrows_wasteland",
+      "set_flags": [
+        "quest_tomorrows_wasteland_active"
+      ],
+      "video_speech": "Ember has been taken. My detail is staged and ready. You have full operational authority. Bring her back — uninjured.",
+      "responses": [
+        {
+          "text": "[Direct] I'll bring her back.",
+          "tone": "direct",
+          "next": "node_farewell"
+        },
+        {
+          "text": "[Friendly] We'll get her out. All of them.",
+          "tone": "kind",
+          "next": "node_farewell"
+        }
+      ]
+    },
+    {
+      "id": "warbucks_ember_returned",
+      "conditions": [
+        "flag:hannigan_confronted",
+        "!flag:ember_rescued"
+      ],
+      "text": "He's standing when you come in.\n\nEmber is next to him — soot-smudged, slightly battered, absolutely not broken. She's holding a cup of something hot and regarding GRACY with the focused interest of someone running an ongoing analysis.\n\nWarmcaps looks at you.\n\n\"She's safe.\" He says it like closing a ledger entry. Like a number finally balancing. \"You have my thanks.\"\n\nEmber turns.\n\n\"You did it.\"\n\nThree words. She says them simply, like she always believed it and is confirming a fact rather than expressing surprise.\n\n\"I knew you would.\"\n\nWarmcaps sets something on the table — the letter of marque, countersigned. And beside it, a small brass object that catches the light.\n\n\"She asked me to give this to you. The orphanage locket.\" He pauses. \"She said you earned it.\"\n\nBehind you, somewhere in the compound, GRACY begins scheduling meals for twelve newly-arrived orphans with the precise, unhurried efficiency of a machine that has finally found a worthwhile task.",
+      "set_flags": [
+        "ember_rescued"
+      ],
+      "video_speech": "She's safe. You have my thanks. The girl said you earned this.",
+      "responses": [
+        {
+          "text": "[Friendly] She would have found a way herself. I just got there faster.",
+          "tone": "kind",
+          "next": "node_farewell"
+        },
+        {
+          "text": "[Direct] What happens to the kids now?",
+          "tone": "direct",
+          "next": "node_after_hannigan"
+        }
+      ]
+    }
+  ]
+}

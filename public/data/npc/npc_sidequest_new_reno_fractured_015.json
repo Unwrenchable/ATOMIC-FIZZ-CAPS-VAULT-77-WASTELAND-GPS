@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_new_reno_fractured_015",
+  "type": "side_quest",
+  "name": "Voss Rhea",
+  "region": "new_reno",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_new_reno_fractured_015_dialog",
+  "lootPool": "npc_sidequest_new_reno_fractured_015_loot",
+  "questHooks": [
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.56,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

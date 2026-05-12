@@ -1,0 +1,67 @@
+{
+  "id": "quest_tears_in_rain",
+  "name": "Tears in Rain",
+  "type": "side",
+  "triggerNpc": "roy8",
+  "description": "ROY-8, a rogue Institute Synth with failing inhibitors, asks you to recover four scattered Memory Modules before his cortical stack fails completely. Each module contains something he saw that no one else witnessed.",
+  "lore": "The Institute designed Memory Modules as diagnostic data recorders — compressed neural logs, readable only through a terminal with a neural port. ROY-8 repurposed his to record experiences, moments of beauty and horror the Institute never intended a Synth to notice. He scattered them to keep the Institute from purging them. Now he wants them preserved — not for himself, but as proof that something like him can truly live.",
+  "objectives": [
+    {
+      "id": "meet_roy8",
+      "description": "Speak with ROY-8 and learn about the Memory Modules",
+      "requires": { "flag": "met_roy8" },
+      "reward": { "xp": 15 }
+    },
+    {
+      "id": "module_sierra_madre",
+      "description": "Recover Memory Module Alpha — hidden at a pre-war relay tower near Sierra Madre ruins. ROY-8 saw signal fires there the night he first ran.",
+      "reward": { "xp": 40, "item": "tears_rain_module" }
+    },
+    {
+      "id": "module_dam",
+      "description": "Recover Memory Module Beta — hidden near Hoover Dam's eastern intake. ROY-8 watched the Dam lights reflected in the water during a radstorm.",
+      "reward": { "xp": 40, "item": "tears_rain_module" }
+    },
+    {
+      "id": "module_goodsprings",
+      "description": "Recover Memory Module Gamma — buried under the Goodsprings water tower. ROY-8 spent one night listening to children play and didn't understand why it mattered so much.",
+      "reward": { "xp": 40, "item": "tears_rain_module" }
+    },
+    {
+      "id": "module_searchlight",
+      "description": "Recover Memory Module Delta — inside the ruined church at Searchlight. ROY-8 found a dog there who wasn't afraid of him.",
+      "reward": { "xp": 40, "item": "tears_rain_module" }
+    },
+    {
+      "id": "play_modules",
+      "description": "Play all four Memory Modules through a terminal with a neural port — let ROY-8 witness his memories one last time",
+      "reward": { "xp": 100 }
+    }
+  ],
+  "rewards": {
+    "xp": 275,
+    "caps": 0,
+    "items": [],
+    "narrative": "ROY-8 achieves a moment of peace before his inhibitors fail. His final words are uploaded to a relay tower, where they broadcast once, then silence."
+  },
+  "endings": [
+    {
+      "id": "ending_preserved",
+      "description": "You played all four modules. ROY-8 experienced his memories again and transmitted them as a broadcast before shutting down.",
+      "reward": "Signal Trace: ROY-8's last broadcast plays on your Pocket-Boy radio as a random ambient track — fragments of things he saw.",
+      "consequence": "The broadcast is received by three different parties: a scavenger who weeps and doesn't know why, an Institute retrieval team that realizes they've lost something irreplaceable, and Jax, who adds the signal to his relay network permanently."
+    },
+    {
+      "id": "ending_incomplete",
+      "description": "You recovered some modules but ROY-8's cortical stack failed before all could be played.",
+      "reward": "Partial memory recovery — the Pocket-Boy logs two of the four recorded experiences",
+      "consequence": "ROY-8 goes silent. The Institute retrieval team recovers what remains. The two missing memories are gone."
+    },
+    {
+      "id": "ending_institute_trade",
+      "description": "You traded the Memory Modules to an Institute informant instead.",
+      "reward": "500 Caps",
+      "consequence": "The Institute purges the memories. ROY-8, somehow knowing, says nothing. His silence is worse than anything else."
+    }
+  ]
+}

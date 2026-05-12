@@ -1,0 +1,70 @@
+{
+  "id": "npc_jax_harlan_voss",
+  "name": "Harlan Voss",
+  "type": "Retired NCR Ranger",
+  "faction": "NCR (Retired)",
+  "homeRegion": "mojave-outskirts",
+  "currentRegion": "mojave-outskirts",
+  "poi": "overpass_echo_point",
+
+  "dialogueProfile": {
+    "tone": "distinct",
+    "personalityTags": [
+      "major-character",
+      "lore-carrier",
+      "emotionally-complex",
+      "ranger-veteran"
+    ],
+    "knowledge": [
+      "region",
+      "faction",
+      "rumors",
+      "triangle",
+      "local-history",
+      "vault-77",
+      "fizzco"
+    ],
+    "anomalyAwareness": 0.75
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["overpass_echo_point", "188_trading_post_fnv"],
+      "night": ["harlan_camp_hidden"],
+      "wanderChance": 0.18
+    },
+    "roaming": [
+      "mojave-outskirts",
+      "dry-lake-edge",
+      "188-overpass"
+    ],
+    "anomalySensitivity": 0.82,
+    "rareEncounter": false
+  },
+
+  "dialog": {
+    "idle": [
+      "Once a Ranger, always a Ranger. Even when the badge is gone.",
+      "Jax… that boy always ran toward danger. Must’ve gotten that from me."
+    ],
+    "serious": [
+      "The NCR thinks they own the Mojave. They don’t. Nobody does.",
+      "FizzCo’s experiments… I saw things during my service I was ordered to forget."
+    ],
+    "emotional": [
+      "Jax, if you’re hearing this… I failed you. I failed your mother.",
+      "I left the NCR to protect my family. Turns out the danger followed anyway."
+    ],
+    "ranger_memory": [
+      "The Rangers taught me to track storms, men, and lies.",
+      "Vault 77 wasn’t on any NCR map. That scared me more than anything."
+    ]
+  },
+
+  "quests": [
+    "quest_jax_familytruth",
+    "quest_nv_convergence_signs"
+  ],
+
+  "notes": "Decorated NCR Ranger veteran; left the service after uncovering classified FizzCo/Vault-Tec operations."
+}

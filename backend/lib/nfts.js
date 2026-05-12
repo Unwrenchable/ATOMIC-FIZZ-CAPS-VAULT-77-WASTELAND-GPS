@@ -1,0 +1,69 @@
+// backend/lib/nfts.js
+
+const fetch = require("node-fetch");
+
+const HELIUS_API_KEY = process.env.HELIUS_API_KEY;
+// Determine Helius cluster from SOLANA_NETWORK env var (mainnet-beta → mainnet, else devnet)
+const HELIUS_CLUSTER = (process.env.SOLANA_NETWORK || "devnet") === "mainnet-beta" ? "mainnet" : "devnet";
+const RPC = `https://${HELIUS_CLUSTER}.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
+
+async function fetchNFTsForWallet(wallet) {
+  if (!HELIUS_API_KEY) {
+    throw new Error("Missing HELIUS_API_KEY");
+  }
+
+  const url = `${RPC}`;
+  const body = {
+    jsonrpc: "2.0",
+    id: "nft-fetch",
+    method: "getAssetsByOwner",
+    params: {
+      ownerAddress: wallet,
+      page: 1,
+      limit: 1000,
+      displayOptions: {
+        showUnverifiedCollections: true,
+        showCollectionMetadata: true
+      }
+    }
+  };
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const json = await res.json();
+
+  if (!json?.result?.items) {
+    return [];
+  }
+
+  return json.result.items.map((nft) => ({
+    mint: nft.id,
+    name: nft.content?.metadata?.name || "Unknown NFT",
+    image: nft.content?.links?.image || null,
+    attributes: nft.content?.metadata?.attributes || [],
+    collection: nft.grouping || [],
+    raw: nft
+  }));
+}
+
+module.exports = {
+  fetchNFTsForWallet,
+  /**
+   * Check whether a wallet owns at least one NFT with the given mint address.
+   * Returns false (not an error) when HELIUS_API_KEY is absent so callers can
+   * gate the feature cleanly via env var.
+   */
+  async checkNFTOwnership(wallet, mintAddress) {
+    if (!HELIUS_API_KEY || !mintAddress) return false;
+    try {
+      const nfts = await fetchNFTsForWallet(wallet);
+      return nfts.some((nft) => nft.mint === mintAddress);
+    } catch {
+      return false;
+    }
+  },
+};

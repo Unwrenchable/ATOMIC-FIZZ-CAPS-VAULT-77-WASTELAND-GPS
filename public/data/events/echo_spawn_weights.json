@@ -1,0 +1,10 @@
+{
+  "weights": {
+    "echo_map_flicker": 0.5,
+    "echo_static_blip": 0.3,
+    "echo_trail_glow": 0.2,
+    "ghost_recent_scavenge": 0.4,
+    "ghost_dropped_item": 0.3,
+    "ghost_battle_residue": 0.3
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "turret_part",
+  "name": "Turret Part",
+  "ingredients": [
+    { "id": "scrap_metal", "qty": 12 },
+    { "id": "circuit", "qty": 2 }
+  ],
+  "tokenCost": 0.25,
+  "output": { "id": "turret_part", "qty": 1 },
+  "cooldownSeconds": 300,
+  "requiresLevel": 3,
+  "maxPerDay": 3,
+  "sourceFile": "recipes.json"
+}

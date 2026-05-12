@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_new_reno_shadow_021",
+  "type": "side_quest",
+  "name": "Sylas Lenn",
+  "region": "new_reno",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_new_reno_shadow_021_dialog",
+  "lootPool": "npc_sidequest_new_reno_shadow_021_loot",
+  "questHooks": [
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.75,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

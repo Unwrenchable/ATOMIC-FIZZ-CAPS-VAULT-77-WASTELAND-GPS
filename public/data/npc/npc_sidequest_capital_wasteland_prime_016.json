@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime_016",
+  "type": "side_quest",
+  "name": "Mira Lenn",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime_016_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime_016_loot",
+  "questHooks": [
+    "vegas_rumor_03",
+    "vegas_rumor_01",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.86,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

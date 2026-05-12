@@ -1,0 +1,15 @@
+{
+  "id": "npc_nv_nova_lane",
+  "name": "Nova Lane",
+  "region": "New Vegas Strip",
+  "type": "Performer / Informant",
+  "dialog": {
+    "idle": [
+      "Jax? He’s got that haunted look. Cute, though.",
+      "People tell me things. I tell Jax things. It works."
+    ]
+  },
+  "quests": ["side_nv_novasecrets"],
+  "faction": "Lucky 38",
+  "notes": "Knows secrets from VIPs; helps uncover FizzCo plots."
+}

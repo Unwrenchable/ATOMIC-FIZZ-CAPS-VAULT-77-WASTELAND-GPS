@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--
+      NOTICE: This is a community fan project. NOT affiliated with any
+      commercial game studio or trademark owner. Assets, names and
+      references are used for creative purposes only.
+    -->
+    <meta charset="utf-8" />
+    <title>ATOMIC FIZZ CAPS • Wrist UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    
+    <!-- PWA Meta Tags - Enables app-like experience -->
+    <meta name="theme-color" content="#00ff41" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Atomic Fizz" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Atomic Fizz Caps" />
+    <meta name="msapplication-TileColor" content="#050705" />
+    <meta name="msapplication-navbutton-color" content="#00ff41" />
+    
+    <!-- PWA Manifest - Enables install and hides browser URL bar -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Content Security Policy to allow external resources
+         Note: 'unsafe-eval' is required for:
+         - Phantom Wallet SDK (uses eval for dynamic code generation)
+         - WalletConnect (uses eval in their connection protocol)
+         - Leaflet mapping library (uses Function constructor for some operations)
+         This is a known limitation of these Web3 wallet libraries.
+         All other CSP directives remain strict for XSS protection. -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://www.gstatic.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org https://vercel.live 'unsafe-inline' 'unsafe-eval';
+      connect-src 'self' https://unpkg.com https://server.arcgisonline.com https://*.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://atomicfizzcaps.xyz https://www.atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://*.onrender.com https://*.vercel.app https://vercel.live https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://api.phantom.app https://*.phantom.app https://wallet.phantom.app https://*.walletconnect.com https://*.walletconnect.org https://*.infura.io https://polygon-rpc.com https://mainnet.infura.io wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com wss://*.walletconnect.com wss://*.walletconnect.org http://localhost:3000;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
+      img-src 'self' data: https: blob:;
+      font-src 'self' https://fonts.gstatic.com data:;
+      media-src 'self' data: https:;
+      object-src 'none';
+      frame-src 'self';
+      base-uri 'self';">
+
+    <!-- API base: local dev vs production -->
+    <script src="/js/config.js"></script>
+
+    <!-- Leaflet core CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+
+    <!-- Pocket-Boy UI CSS -->
+    <link rel="stylesheet" href="/css/pipboy.css" />
+    <link rel="stylesheet" href="/css/pipboy-map.css" />
+    <link rel="stylesheet" href="/css/pipboy-responsive.css" />
+    <link rel="stylesheet" href="/css/vats.css" />
+    <link rel="stylesheet" href="/css/live-radio.css" />
+    
+    <!-- Google Fonts: Oswald (used by character creator) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" />
+
+    <!-- Character Creator & Dialogue CSS -->
+    <link rel="stylesheet" href="/css/character-creator.css" />
+    <!-- fo4-dialogue.css removed: narrative.js uses inline panel styling -->
+    <link rel="stylesheet" href="/css/dungeon.css" />
+
+    <!-- Third-party libs (deferred, non-module globals) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+    <script src="https://unpkg.com/topojson-client@3" defer></script>
+
+    <!-- Turf UMD (fixes exports is not defined) - loaded synchronously for fogOfWar.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
+
+    <script src="/js/lib/bs58.js"></script>
+    
+    <!-- WalletConnect for universal wallet support -->
+    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js" defer></script>
+
+    <!-- PixiJS + DragonBones runtime for animated 2D avatars -->
+    <!-- Note: dragonbones-pixi@5.7.0 was discontinued. Using pixi5-dragonbones@5.7.0-2b as replacement -->
+    <script src="/js/vendor/pixi.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pixi5-dragonbones@5.7.0-2b/dragonBones.js" defer></script>
+
+    <!-- AuthClient must be available before inline wallet code -->
+    <script src="/js/authClient.js" defer></script>
+
+    <!-- Security Module (DevTools Guard) -->
+    <script src="/js/modules/devtools-guard.js" defer></script>
+
+    <!-- Web3 Wallet Adapter (universal wallet support) -->
+    <script src="/js/modules/web3-wallet-adapter.js" defer></script>
+    
+    <!-- Mobile Swipe Gesture Navigation -->
+    <script src="/js/modules/mobile-swipe.js" defer></script>
+    
+    <!-- Live Radio Streaming (Rex the DJ) -->
+    <script src="/js/modules/live-radio-streaming.js" defer></script>
+    
+    <!-- Cross-Chain Bridge Portal -->
+    <script src="/js/modules/bridge-portal.js" defer></script>
+    
+    <!-- Pocket-Boy SPECIAL system -->
+    <script src="/js/pipboy-special.js" defer></script>
+    <script src="/js/modules/nft-integration.js" defer></script>
+
+    <!-- Pocket-Boy styling helper (non-module) -->
+    <script src="/js/pipboy/pipboy-style.js" defer></script>
+
+    <style>
+      body.pipboy-mode { background:#000; color:#00ffae; }
+        .panel-divider {
+          width: 100%;
+          height: 2px;
+          background: linear-gradient(90deg, #444 0%, #222 100%);
+          margin: 18px 0 12px 0;
+          border-radius: 1px;
+        }
+    </style>
+  </head>
+
+  <body class="pipboy-mode">
+
+    <!-- BOOT SCREEN -->
+    <div id="bootScreen">
+      <pre id="bootText"></pre>
+    </div>
+
+    <!-- MAIN POCKET-BOY UI -->
+    <div id="pipboyScreen" class="hidden">
+      <div class="pipboy-root">
+        <div class="pipboy-bezel">
+          <div class="pipboy-frame">
+            <div class="pipboy-crt">
+
+              <!-- CRT overlays -->
+              <div class="pipboy-noise"></div>
+              <div class="pipboy-scanlines"></div>
+
+              <!-- HEADER -->
+              <div class="pipboy-header">
+                <div>
+                  <span class="pipboy-title">WRIST UI</span>
+                  <span class="pipboy-subtitle">ATOMIC FIZZ CAPS</span>
+                </div>
+
+                <div class="pipboy-meta">
+                  <span class="pipboy-meta-item" id="networkStatusLabel">STATUS: ONLINE</span>
+                  <span class="pipboy-meta-item" id="gameClock">00:00</span>
+                </div>
+
+                <!-- OFFLINE banner (hidden when online) -->
+                <div id="offlineBanner" style="display:none; background:#440000; color:#ff4444; font-family:Consolas,'Courier New',monospace; font-size:10px; letter-spacing:0.1em; padding:2px 8px; border-bottom:1px solid #ff4444; text-align:center;">
+                  ☢ OFFLINE MODE — data saved locally, syncs on reconnect
+                </div>
+
+                <!-- WALLET HUD (Universal Web3) -->
+                <div class="wallet-hud">
+                  <span id="walletAddress">WALLET: DISCONNECTED</span>
+                  <button id="connectWalletHUD" class="pipboy-button-small">CONNECT</button>
+                </div>
+              </div>
+
+              <!-- TABS -->
+
+
+              <div class="pipboy-tabs" data-swipe-tabs=".pipboy-tab">
+                <button class="pipboy-tab active" data-pipboy-tab="panel-map">MAP</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-stat">STAT</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-items">ITEMS</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-quests">QUESTS</button>
+
+                <button class="pipboy-tab" data-pipboy-tab="panel-radio">RADIO</button>
+                <button class="pipboy-tab" data-pipboy-tab="panel-exchange">EXCHANGE</button>
+              </div>
+
+
+              <!-- MAIN PANELS -->
+              <div class="pipboy-main">
+                <div id="encounterFeed" class="pip-feed"></div>
+
+                <!-- MAP PANEL -->
+                <div id="panel-map" class="pipboy-panel active">
+                  <div class="panel-header">MAP</div>
+                  <div class="panel-body">
+
+                    <!-- FIRST-TIMER MISSION BRIEFING — auto-hides once GPS + wallet active -->
+                    <div id="missionBriefing" style="display:none; border:1px solid #00ff41; padding:8px 10px; margin-bottom:8px; font-size:11px; letter-spacing:0.05em; background:rgba(0,20,10,0.85);">
+                      <div style="font-weight:bold; margin-bottom:5px; font-size:12px; color:#00ff41;">⚑ MISSION BRIEFING</div>
+                      <div id="mbStep1" style="margin-bottom:4px; opacity:0.7;">▷ STEP 1 — <button onclick="document.getElementById('connectWalletHUD').click()" style="background:none;border:none;padding:0;color:#00ff41;font-family:inherit;font-size:inherit;cursor:pointer;text-decoration:underline;letter-spacing:inherit;">CONNECT WALLET</button> to earn FIZZ CAPS</div>
+                      <div id="mbStep2" style="opacity:0.7;">▷ STEP 2 — TAP <strong>EXPLORE MAP</strong> below to enable GPS &amp; reveal nearby POIs</div>
+                      <div style="margin-top:6px; text-align:right;"><button id="mbDismiss" style="background:none;border:none;padding:0;color:#556655;font-family:inherit;font-size:10px;cursor:pointer;letter-spacing:0.05em;">[ DISMISS ]</button></div>
+                    </div>
+
+                    <div id="mapContainer" class="pipboy-map">
+                      <div id="radFlash"></div>
+                    </div>
+
+                    <!-- mapStatus retained as hidden anchor for JS status updates -->
+                    <span id="mapStatus" style="display:none;" aria-hidden="true"></span>
+
+                    <div class="map-controls">
+                      <button id="exploreToggleBtn" class="map-control-btn">
+                        <div id="exploreDot" class="explore-dot"></div>
+                        <span id="exploreText">EXPLORE MAP</span>
+                      </button>
+                      <button id="expandMapBtn" class="map-control-btn">
+                        <span id="expandText">EXPAND MAP</span>
+                      </button>
+                      <button id="retryMapBtn" class="map-control-btn" style="display: none;">
+                        <span>RETRY MAP</span>
+                      </button>
+                    </div>
+
+                    <div class="gps-badge" id="gpsBadge">
+                      <div id="accDot" class="acc-dot"></div>
+                      <div id="accText">GPS: OFFLINE</div>
+                    </div>
+
+                    <div id="mapLog" class="map-log"></div>
+                  </div>
+                </div>
+
+                <!-- STAT PANEL -->
+                <div id="panel-stat" class="pipboy-panel">
+                  <div class="panel-header">STATUS</div>
+                  <div class="panel-body">
+                    <!-- Character Portrait Preview -->
+                    <div id="characterPortraitPreview" style="text-align:center; margin-bottom:12px;">
+                      <div id="statPortraitSvg" style="width:120px; height:150px; margin:0 auto; border:1px solid #00ff41; background:rgba(0,20,10,0.8); display:flex; align-items:center; justify-content:center;"></div>
+                      <!-- DragonBones stage (hidden by default) -->
+                      <div id="dragonbonesStage" style="width:240px; height:300px; margin:0 auto; display:none;"></div>
+                    </div>
+                    
+                    <div class="panel-row">
+                      <span class="label">NAME</span>
+                      <span class="value" id="stat-name">WANDERER</span>
+                    </div>
+                    
+                    <!-- Character Creator Button -->
+                    <div style="margin:8px 0;">
+                      <button id="openCharacterCreator" class="pipboy-button-small" style="width:100%;">👤 CUSTOMIZE APPEARANCE</button>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">LEVEL</span>
+                      <span class="value" id="stat-level">1</span>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">XP</span>
+                      <span class="value" id="stat-xp">0 / 100</span>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div class="panel-row">
+                      <span class="label">HEALTH</span>
+                      <span class="value" id="stat-hp-label">100 / 100</span>
+                    </div>
+                    <div class="stat-bar">
+                      <div class="stat-bar-fill" id="stat-hp-bar"></div>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">RADIATION</span>
+                      <span class="value" id="stat-rad-label">0%</span>
+                    </div>
+                    <div class="stat-bar stat-bar-rad">
+                      <div class="stat-bar-fill" id="stat-rad-bar"></div>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">HUNGER</span>
+                      <span class="value" id="stat-hunger-label">100%</span>
+                    </div>
+                    <div class="stat-bar stat-bar-hunger">
+                      <div class="stat-bar-fill" id="stat-hunger-bar"></div>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">THIRST</span>
+                      <span class="value" id="stat-thirst-label">100%</span>
+                    </div>
+                    <div class="stat-bar stat-bar-thirst">
+                      <div class="stat-bar-fill" id="stat-thirst-bar"></div>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div class="panel-row">
+                      <span class="label">WALLET</span>
+                      <span class="value" id="stat-wallet">DISCONNECTED</span>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">FIZZ CAPS</span>
+                      <span class="value" id="stat-caps">0</span>
+                    </div>
+
+                    <!-- ATOMIC FIZZ WALLET BLOCK -->
+                    <div class="panel-divider"></div>
+                    <div id="fizzWalletBlock" style="border:1px solid #00ffae; padding:10px; margin-top:10px;">
+                      <div style="font-weight:bold; margin-bottom:6px;">ATOMIC FIZZ WALLET</div>
+                      <div>WALLET: <span id="fizzWalletAddress">—</span></div>
+                      <div>CAPS: <span id="fizzWalletCaps">0</span></div>
+                      <div>XP: <span id="fizzWalletXP">0</span></div>
+                      <div>ITEMS: <span id="fizzWalletItems">0</span></div>
+                      <div>NFTS: <span id="fizzWalletNFTs">0</span></div>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div class="panel-row">
+                      <span class="label">WEAPON</span>
+                      <span class="value" id="stat-weapon">NONE</span>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">ARMOR</span>
+                      <span class="value" id="stat-armor">NONE</span>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div class="panel-row">
+                      <span class="label">FACTION</span>
+                      <span class="value" id="stat-faction">UNALIGNED</span>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">REPUTATION</span>
+                      <span class="value" id="stat-rep">NEUTRAL</span>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">LOCATION</span>
+                      <span class="value" id="stat-location">UNKNOWN</span>
+                    </div>
+
+                    <div class="panel-row">
+                      <span class="label">WEATHER</span>
+                      <span class="value" id="stat-weather">CLEAR</span>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- SPECIAL -->
+                    <div class="panel-header" style="margin-top:10px;">SPECIAL</div>
+
+                    <div id="specialBlock">
+                      <div class="special-row"><span class="special-label">S</span><span class="special-bar" data-special-key="S"></span><span class="special-value" id="special-S">5</span></div>
+                      <div class="special-row"><span class="special-label">P</span><span class="special-bar" data-special-key="P"></span><span class="special-value" id="special-P">5</span></div>
+                      <div class="special-row"><span class="special-label">E</span><span class="special-bar" data-special-key="E"></span><span class="special-value" id="special-E">5</span></div>
+                      <div class="special-row"><span class="special-label">C</span><span class="special-bar" data-special-key="C"></span><span class="special-value" id="special-C">5</span></div>
+                      <div class="special-row"><span class="special-label">I</span><span class="special-bar" data-special-key="I"></span><span class="special-value" id="special-I">5</span></div>
+                      <div class="special-row"><span class="special-label">A</span><span class="special-bar" data-special-key="A"></span><span class="special-value" id="special-A">5</span></div>
+                      <div class="special-row"><span class="special-label">L</span><span class="special-bar" data-special-key="L"></span><span class="special-value" id="special-L">5</span></div>
+                    </div>
+
+                    <div id="respecRow" style="margin-top:10px;">
+                      <button id="respecBtn" class="pipboy-button">REBUILD SPECIAL (REQUIRES TOKEN)</button>
+                      <div id="respecStatus"></div>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- CHARACTER APPEARANCE PREVIEW -->
+                    <div class="panel-header" style="margin-top:10px;">CHARACTER APPEARANCE</div>
+                    <div id="character-appearance-preview" class="character-appearance-preview">
+                      Default appearance
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- CHARACTER PERKS -->
+                    <div class="panel-header" style="margin-top:10px;">ACTIVE PERKS</div>
+                    <div id="character-perks-list" class="character-perks-list">
+                      <div class="no-perks">No perks selected</div>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- Character Creator -->
+                    <div style="margin-top:10px;">
+                      <button id="characterCreatorBtn" class="pipboy-button">ADVANCED CHARACTER BUILDER</button>
+                      <div id="characterCreatorStatus"></div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- ITEMS PANEL -->
+                <div id="panel-items" class="pipboy-panel">
+                  <div class="panel-header">INVENTORY</div>
+                  <div id="inventoryTabs" class="inv-tabs-bar"></div>
+                  <div class="panel-body" id="inventoryList"></div>
+                </div>
+
+                <!-- QUESTS PANEL -->
+                <div id="panel-quests" class="pipboy-panel">
+                  <div class="panel-header">QUEST</div>
+                  <div class="panel-body" id="questBody"></div>
+                </div>
+
+                <!-- DIALOG PANEL -->
+                <div id="panel-dialog" class="pipboy-panel" style="display:none;">
+                  <div class="panel-header">DIALOG</div>
+                  <div class="panel-body">
+                    <div style="display:flex; gap:12px; align-items:flex-start;">
+                      <div style="width:clamp(120px,30%,180px); text-align:center; flex-shrink:0;">
+                        <div id="dialogPortraitContainer" style="width:100%; aspect-ratio:3/4; min-height:160px; border:1px solid #00ff41; background:rgba(0,20,10,0.6); display:flex; align-items:center; justify-content:center; font-size:64px; overflow:hidden; position:relative;">🧍</div>
+                        <div id="dialogNPCName" style="margin-top:6px; color:#ffaa00; font-weight:bold; font-size:clamp(11px,3vw,13px); word-break:break-word;">NPC</div>
+                        <div id="dialogNPCRole"></div>
+                        <div id="dialogNPCMood"></div>
+                        <div id="dialogRelationship"></div>
+                        <div id="dialogNPCTraits"></div>
+                      </div>
+                      <div style="flex:1; overflow-y:auto; max-height:calc(100dvh - 220px);">
+                        <div id="dialogBody" class="dialog-body" style="font-size:clamp(12px,3vw,14px); line-height:1.6;"></div>
+                        <div style="margin-top:10px; border-top:1px solid rgba(0,255,65,0.15); padding-top:8px;">
+                          <button id="dialogCloseBtn" class="pipboy-button-small" style="min-height:44px; font-size:13px; opacity:0.85;">✕ CLOSE</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- RADIO PANEL -->
+                <div id="panel-radio" class="pipboy-panel">
+                  <div class="panel-header">RADIO</div>
+                  <div class="panel-body" style="overflow-y: auto; max-height: calc(100dvh - 280px);">
+                    <div id="radioControls">
+                      <button class="pipboy-button-small" id="radioCycleBtn">CYCLE STATION</button>
+                      <div id="currentStation">NO SIGNAL</div>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <div id="terminalSection">
+                      <div class="panel-header">OVERSEER TERMINAL</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Access the Vault 77 Overseer AI for assistance, intel, and wasteland guidance.</p>
+                      <button class="pipboy-button" id="openOverseerTerminal">📟 OPEN TERMINAL</button>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- NUKE PORTAL (BURN GEAR ONLY) -->
+                    <div id="nukeSection">
+                      <div class="panel-header">☢️ NUKE PORTAL</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Destroy gear permanently for CAPS / XP. No crafting here.</p>
+                      <button class="pipboy-button" id="openNukeTerminal">☢️ NUKE PORTAL — BURN GEAR</button>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- ARMOR WORKBENCH -->
+                    <div id="workbenchSection">
+                      <div class="panel-header">🔧 ARMOR WORKBENCH</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Assemble full armor sets from collected pieces. Craft consumables &amp; gear mods.</p>
+                      <button class="pipboy-button" id="openWorkbenchTerminal">🔧 OPEN WORKBENCH</button>
+                    </div>
+
+                    <div class="panel-divider"></div>
+
+                    <!-- CROSS-CHAIN BRIDGE -->
+                    <div id="bridgeSection">
+                      <div class="panel-header">🌀 WORMHOLE BRIDGE</div>
+                      <p style="font-size: 11px; opacity: 0.7; margin-bottom: 8px;">Transfer tokens across chains via the interdimensional portal.</p>
+                      <button class="pipboy-button" id="openBridgeTerminal">🌉 OPEN BRIDGE PORTAL</button>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- EXCHANGE PANEL -->
+                <div id="panel-exchange" class="pipboy-panel">
+                  <div class="panel-header">SCAVENGER EXCHANGE</div>
+                  <div class="panel-body">
+                    <div id="exchangeContent">
+                      <p>Trade scavenged items for CAPS and rare gear.</p>
+                      <div class="panel-divider"></div>
+                      <div id="scavengerItems">
+                        <p style="opacity:0.7;">Loading wasteland inventory...</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- BATTLE PANEL -->
+                <div id="panel-battle" class="pipboy-panel">
+                  <div class="panel-header">⚔ COMBAT TERMINAL</div>
+                  <div class="panel-body">
+                    <div id="tab-battle"></div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- FOOTER -->
+              <div class="pipboy-footer">
+                <div class="footer-left">FIZZTEC INDUSTRIES</div>
+                <div class="footer-center">WASTELAND GPS</div>
+                <div class="footer-right">REV 1</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span id="locations-count" class="hidden"></span>
+
+    <!-- GLOBAL GPS (non-module) -->
+    <script src="/js/gps.js" defer></script>
+
+    <!-- CORE GAME ENGINE (plain scripts; correct paths) -->
+    <script src="/js/radioPlayer.js" defer></script>
+    <script src="/js/main.js" defer></script>
+
+    <!-- WORLD SIMULATION SYSTEM (in dependency order) -->
+    <!-- These provide window.overseer* globals for world state, encounters, NPCs -->
+    <script src="/js/world/state.js" defer></script>
+    <script src="/js/world/factions.js" defer></script>
+    <script src="/js/world/regions.js" defer></script>
+    <script src="/js/world/npc_traits.js" defer></script>
+    <script src="/js/world/timeline.js" defer></script>
+    <script src="/js/world/weather.js" defer></script>
+    <script src="/js/world/anomalies.js" defer></script>
+    <script src="/js/world/loot.js" defer></script>
+    <script src="/js/world/microquests.js" defer></script>
+    <script src="/js/world/encounters.js" defer></script>
+
+    <!-- GAME/WORLD BRIDGE (provides window.world using real implementations) -->
+    <script src="/js/game.overseer-bridge.js" defer></script>
+
+    <!-- UNIFIED PLAYER STATE & ACTIONS (must load before modules) -->
+    <script src="/js/game/player-state.js" defer></script>
+    <script src="/js/game/api-client.js" defer></script>
+    <script src="/js/game/inventory-actions.js" defer></script>
+    <script src="/js/game/equip-actions.js" defer></script>
+    <script src="/js/game/loop.js" defer></script>
+
+    <!-- GAME MODULES (IIFE scripts attached to window.Game) -->
+    <!-- Core Systems -->
+    <script src="/js/modules/economy.js" defer></script>
+    <script src="/js/modules/economy-roles.js" defer></script>
+    <script src="/js/modules/mintables.js" defer></script>
+    <script src="/js/modules/recipes.js" defer></script>
+    <script src="/js/modules/factions.js" defer></script>
+    <script src="/js/modules/enemyScaling.js" defer></script>
+    
+    <!-- Combat & Encounters -->
+    <script src="/js/modules/battles.js" defer></script>
+    <script src="/js/modules/faction-raids.js" defer></script>
+    <script src="/js/modules/npcSpawn.js" defer></script>
+    <!-- DEAD CODE (do not re-enable): npcEncounter.js + npc_signal_runner.js + fo4-dialogue.js
+         were superseded by narrative.js (the full FO4-style panel dialog system).
+         Files kept on disk for historical reference only. -->
+
+    <!-- Quests & Narrative -->
+    <script src="/js/modules/quests.js" defer></script>
+    <script src="/js/modules/narrative.js" defer></script>
+    <script src="/js/modules/npcVideo.js" defer></script>
+    
+    <!-- Crafting & Collectables -->
+    <script src="/js/modules/crafting.js" defer></script>
+    <script src="/js/modules/collectables.js" defer></script>
+
+    <!-- WORLD MAP -->
+    <script src="/js/modules/worldmap.js" defer></script>
+    <script src="/js/modules/overseerMapStyle.js" defer></script>
+    
+    <!-- Map Overlays & Features -->
+    <script src="/js/modules/worldWeather.js" defer></script>
+    <script src="/js/modules/fogOfWar.js" defer></script>
+    <script src="/js/modules/weatherOverlay.js" defer></script>
+    <script src="/js/modules/radiationZones.js" defer></script>
+    <script src="/js/modules/factionOverlay.js" defer></script>
+    <script src="/js/modules/questMarker.js" defer></script>
+    <script src="/js/modules/trail.js" defer></script>
+    <script src="/js/modules/encounterHeatmap.js" defer></script>
+    
+    <!-- UI Widgets & Helpers -->
+    <script src="/js/modules/compass.js" defer></script>
+    <script src="/js/modules/lootScanner.js" defer></script>
+    <script src="/js/modules/discoveryBanner.js" defer></script>
+    <script src="/js/modules/vats.js" defer></script>
+
+    <!-- UI MODULES -->
+    <script src="/js/modules/inventory-loader.js" defer></script>
+    <script src="/js/modules/inventory-ui.js" defer></script>
+    <script src="/js/modules/quest-ui.js" defer></script>
+    <script src="/js/modules/npc-registry.js" defer></script>
+    <script src="/js/modules/npc-portraits.js" defer></script>
+    
+    <!-- Character Creator & Dialogue Systems -->
+    <script src="/js/modules/character-creator.js" defer></script>
+    <script src="/js/modules/ai-character-creator.js" defer></script>
+    <!-- DEAD CODE: fo4-dialogue.js superseded by narrative.js (see dead-code note above) -->
+    <script src="/js/modules/struggle-quips.js" defer></script>
+    <script src="/js/modules/hacking.js" defer></script>
+    <script src="/js/modules/dungeon.js" defer></script>
+
+    <!-- POCKET-BOY UI SHELL (non-module) -->
+    <script src="/js/pipboy.js" defer></script>
+
+    <!-- BOOT SEQUENCE (non-module) -->
+    <script src="/js/boot.js" defer></script>
+
+    <!-- DEV MODE TOOLBAR (hidden until activated) -->
+    <script src="/js/devMode.js" defer></script>
+
+    <!-- KONAMI CODE EASTER EGG -->
+    <script src="/js/konami.js" defer></script>
+
+    <!-- RADIO / OVERSEER POPUP (keeps same behavior) -->
+    <script>
+      (function () {
+        const terminalSection = document.getElementById("terminalSection");
+        const btn = document.getElementById("openOverseerTerminal");
+        const nukeSection = document.getElementById("nukeSection");
+        const nukeBtn = document.getElementById("openNukeTerminal");
+        const workbenchSection = document.getElementById("workbenchSection");
+        const workbenchBtn = document.getElementById("openWorkbenchTerminal");
+        const bridgeSection = document.getElementById("bridgeSection");
+        const bridgeBtn = document.getElementById("openBridgeTerminal");
+
+        // Always show terminal section
+        if (terminalSection) terminalSection.style.display = "block";
+        
+        // Nuke and Bridge are always visible but disabled
+        // Admin can enable them later via config or wallet check
+
+        function openOverseerPopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
+
+          const width = Math.min(600, Math.max(360, Math.floor(screenW * 0.6)));
+          const height = Math.min(800, Math.max(500, Math.floor(screenH * 0.7)));
+
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
+
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
+
+          window.open("/overseer", "overseer_terminal", features);
+        }
+
+        function openNukePopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
+
+          const width = Math.min(800, Math.max(400, Math.floor(screenW * 0.8)));
+          const height = Math.min(900, Math.max(600, Math.floor(screenH * 0.8)));
+
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
+
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
+
+          window.open("/nuke", "nuke_terminal", features);
+        }
+
+        function openWorkbenchPopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
+
+          const width = Math.min(960, Math.max(480, Math.floor(screenW * 0.8)));
+          const height = Math.min(900, Math.max(600, Math.floor(screenH * 0.85)));
+
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
+
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
+
+          window.open("/workbench", "workbench_terminal", features);
+        }
+
+        function openBridgePopup() {
+          const screenW = window.innerWidth || screen.width;
+          const screenH = window.innerHeight || screen.height;
+
+          const width = Math.min(700, Math.max(400, Math.floor(screenW * 0.7)));
+          const height = Math.min(850, Math.max(600, Math.floor(screenH * 0.8)));
+
+          const left = Math.floor((screenW - width) / 2);
+          const top = Math.floor((screenH - height) / 2);
+
+          const features = [
+            "resizable=yes",
+            "scrollbars=yes",
+            "status=no",
+            "toolbar=no",
+            "menubar=no",
+            "location=no",
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top
+          ].join(",");
+
+          window.open("/bridge", "bridge_terminal", features);
+        }
+
+        if (btn) {
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            openOverseerPopup();
+          });
+        }
+
+        if (nukeBtn) {
+          nukeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            if (nukeBtn.disabled) {
+              alert('☢️ NUKE PORTAL LOCKED\n\nThe Nuke Portal — Burn Gear is currently disabled.\nAdmin activation required.\n\nComing soon!');
+            } else {
+              openNukePopup();
+            }
+          });
+        }
+
+        if (workbenchBtn) {
+          workbenchBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            openWorkbenchPopup();
+          });
+        }
+
+        if (bridgeBtn) {
+          bridgeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            if (bridgeBtn.disabled) {
+              alert('🌀 WORMHOLE BRIDGE LOCKED\n\nThe cross-chain portal is currently disabled.\nAdmin activation required.\n\nComing soon!');
+            } else {
+              openBridgePopup();
+            }
+          });
+        }
+      })();
+    </script>
+
+    <!-- WALLET LOGIN + FIZZ WALLET LOADER (waits for AuthClient) -->
+    <script>
+      (function waitForAuthClient() {
+        function ready() {
+          if (typeof AuthClient === 'undefined') {
+            return setTimeout(ready, 50);
+          }
+
+          const auth = new AuthClient({ apiBase: window.API_BASE });
+
+          const hudBtn = document.getElementById("connectWalletHUD");
+          const hudAddress = document.getElementById("walletAddress");
+
+          async function safeJson(res) {
+            const text = await res.text();
+            try { return JSON.parse(text); } catch (err) {
+              console.error("[safeJson] Non-JSON response:", text.slice(0,400));
+              throw new Error("Server did not return valid JSON");
+            }
+          }
+
+          async function updateWalletUI() {
+            try {
+              if (auth.isAuthenticated && auth.isAuthenticated()) {
+                const wallet = auth.getWallet();
+                hudAddress.textContent = "WALLET: " + wallet.slice(0, 4) + "..." + wallet.slice(-4);
+                if (hudBtn) hudBtn.style.display = "none";
+
+                const apiUrl = (window.API_BASE || "") + "/api/player";
+                const res = await auth.authedFetch(apiUrl, { method: "GET" });
+                const json = await safeJson(res);
+
+                document.getElementById("stat-wallet").textContent = wallet;
+                document.getElementById("stat-caps").textContent = json.caps || 0;
+                document.getElementById("fizzWalletAddress").textContent = wallet;
+                document.getElementById("fizzWalletCaps").textContent = json.caps || 0;
+                document.getElementById("fizzWalletXP").textContent = json.xp || 0;
+                document.getElementById("fizzWalletItems").textContent = (json.items && json.items.length) || 0;
+                document.getElementById("fizzWalletNFTs").textContent = (json.nfts && json.nfts.length) || 0;
+              } else {
+                hudAddress.textContent = "WALLET: DISCONNECTED";
+                if (hudBtn) hudBtn.style.display = "inline-block";
+              }
+            } catch (err) {
+              console.error("[updateWalletUI] error:", err);
+              hudAddress.textContent = "WALLET: DISCONNECTED";
+              if (hudBtn) hudBtn.style.display = "inline-block";
+            }
+          }
+
+          async function connectWallet() {
+            try {
+              // Use universal web3 wallet adapter if available
+              if (window.Game && window.Game.modules && window.Game.modules.web3WalletAdapter) {
+                const adapter = window.Game.modules.web3WalletAdapter;
+                const success = await adapter.connect();
+                if (success) {
+                  // Create wallet object compatible with AuthClient
+                  const wallet = {
+                    publicKey: {
+                      toBase58: () => adapter.walletAddress
+                    },
+                    signMessage: async (message, encoding) => {
+                      // Use the adapter's provider to sign
+                      if (adapter.provider && adapter.provider.signMessage) {
+                        return await adapter.provider.signMessage(message, encoding);
+                      }
+                      throw new Error('Wallet does not support message signing');
+                    }
+                  };
+                  await auth.login(wallet);
+                  await updateWalletUI();
+                }
+              } else {
+                // Fallback to Phantom-only connection
+                const provider = window.solana;
+                if (!provider || !provider.isPhantom) {
+                  alert("Phantom Wallet not found. Please install Phantom or use a compatible Solana wallet.");
+                  return;
+                }
+                await provider.connect();
+                await auth.login(provider);
+                await updateWalletUI();
+              }
+            } catch (err) {
+              console.error(err);
+              alert("Wallet login failed: " + (err && err.message ? err.message : err));
+            }
+          }
+
+          if (hudBtn) hudBtn.addEventListener("click", connectWallet);
+          window.addEventListener("load", () => setTimeout(updateWalletUI, 250));
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', ready);
+        } else {
+          ready();
+        }
+      })();
+    </script>
+
+    <!-- Service Worker Registration for PWA -->
+    <script>
+      // Register service worker for PWA functionality
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('[PWA] Service Worker registered:', registration.scope);
+            })
+            .catch((error) => {
+              console.log('[PWA] Service Worker registration failed:', error);
+            });
+        });
+      }
+
+      // Network status indicator — updates the GPS badge when offline/online
+      (function () {
+        const offlineBanner = document.getElementById('offlineBanner');
+
+        function setOffline(isOffline) {
+          const accText = document.getElementById('accText');
+          if (accText) {
+            accText.textContent = isOffline ? 'NET: OFFLINE' : 'GPS: ONLINE';
+          }
+          if (offlineBanner) {
+            offlineBanner.style.display = isOffline ? 'block' : 'none';
+          }
+        }
+
+        window.addEventListener('online',  () => setOffline(false));
+        window.addEventListener('offline', () => setOffline(true));
+
+        // Listen for service-worker broadcasts
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'NETWORK_STATUS') {
+              setOffline(!event.data.online);
+            }
+          });
+        }
+
+        // Reflect current state on load
+        setOffline(!navigator.onLine);
+      })();
+    </script>
+
+    <!-- Character Creator Integration -->
+    <script>
+      (function() {
+        function initCharacterCreator() {
+          const btn = document.getElementById('openCharacterCreator');
+          const portraitContainer = document.getElementById('statPortraitSvg');
+          const nameDisplay = document.getElementById('stat-name');
+
+          // Update portrait and name display
+          function updateStatDisplay() {
+            if (Game?.modules?.CharacterCreator) {
+              const cc = Game.modules.CharacterCreator;
+
+              // Check if CharacterCreator has been initialized (has appearanceOptions)
+              if (!cc.appearanceOptions) {
+                console.log('[CharacterCreator] Not yet initialized, skipping display update');
+                return;
+              }
+
+              let appearance = null;
+
+              // Try to load saved appearance first
+              if (typeof cc.loadSavedAppearance === 'function') {
+                appearance = cc.loadSavedAppearance();
+              }
+
+              // Fall back to current appearance
+              if (!appearance && typeof cc.getAppearance === 'function') {
+                appearance = cc.getAppearance();
+              }
+
+              if (appearance && portraitContainer && typeof cc.generatePortraitSVG === 'function') {
+                const html = cc.generatePortraitSVG(appearance, 150);
+                portraitContainer.innerHTML = `<div style="width:120px;height:150px;overflow:hidden;">${html}</div>`;
+              }
+
+              if (appearance?.name && nameDisplay) {
+                nameDisplay.textContent = appearance.name;
+              }
+            }
+          }
+
+          // Open character creator
+          if (btn) {
+            btn.addEventListener('click', () => {
+              if (Game?.modules?.CharacterCreator) {
+                Game.modules.CharacterCreator.open(null, (newAppearance) => {
+                  console.log('[CharacterCreator] Saved appearance:', newAppearance);
+                  updateStatDisplay();
+                });
+              } else {
+                alert('Character Creator is loading...');
+              }
+            });
+
+            // Test if character creator is loaded
+            setTimeout(() => {
+              if (window.Game && Game.modules && Game.modules.CharacterCreator) {
+                console.log('[Test] Character Creator module is loaded');
+                // NOTE: Removed automatic test opening to prevent popup during boot
+              } else {
+                console.log('[Test] Character Creator module is NOT loaded');
+              }
+            }, 2000);
+          }
+
+          // Wait for characterCreatorOpened event which signals the module is ready
+          window.addEventListener('characterCreatorOpened', updateStatDisplay);
+
+          // Listen for character creator initialization
+          window.addEventListener('characterCreatorReady', updateStatDisplay);
+
+          // Also try to update display when pipboy is ready
+          window.addEventListener('pipboyReady', () => {
+            // Don't update immediately - wait for character creator to be ready
+            console.log('[pipboyReady] Waiting for character creator initialization...');
+          });
+
+          // Listen for character creation events
+          window.addEventListener('characterCreated', () => {
+            updateStatDisplay();
+          });
+
+          // Fallback: check periodically until module is ready (max 5 seconds)
+          // NOTE: Only check for module existence, don't trigger updates during boot
+          let attempts = 0;
+          const checkModule = () => {
+            if (Game?.modules?.CharacterCreator) {
+              console.log('[CharacterCreator] Module detected, ready for STATS tab activation');
+            } else if (attempts < 10) {
+              attempts++;
+              setTimeout(checkModule, 500);
+            }
+          };
+          checkModule();
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initCharacterCreator);
+        } else {
+          initCharacterCreator();
+        }
+      })();
+    </script>
+
+    <!-- Admin test encounter hook: if the admin spawned a test battle via
+         sessionStorage, fire it after all modules load. -->
+    <script>
+      window.addEventListener('load', function () {
+        try {
+          const raw = sessionStorage.getItem('adminTestEncounter');
+          if (!raw) return;
+          sessionStorage.removeItem('adminTestEncounter');
+          const enc = JSON.parse(raw);
+          if (!enc || !Array.isArray(enc.enemies)) return;
+          // Wait up to 3 s for the battle module to initialise
+          let tries = 0;
+          function trySpawn() {
+            const bm = window.Game && window.Game.modules && window.Game.modules.battle;
+            if (bm && typeof bm.start === 'function') {
+              bm.start(enc);
+              if (window.Game && window.Game.pipboy && typeof window.Game.pipboy.setActivePanel === 'function') {
+                window.Game.pipboy.setActivePanel('battle');
+              }
+            } else if (tries++ < 30) {
+              setTimeout(trySpawn, 100);
+            }
+          }
+          trySpawn();
+        } catch (_) {}
+      });
+    </script>
+
+    <!-- LOCKPICKING OVERLAY -->
+    <div id="lockpickingOverlay" class="lockpicking-overlay hidden">
+      <div class="lockpicking-content">
+        <div class="lockpicking-header">
+          <div class="lockpicking-title">LOCKPICKING</div>
+          <div class="lockpicking-difficulty" id="lockDifficulty">EASY LOCK</div>
+        </div>
+        
+        <div class="lockpicking-game">
+          <div class="lock-cylinder">
+            <div class="cylinder-body">
+              <div class="cylinder-pins" id="cylinderPins">
+                <!-- Pins will be generated here -->
+              </div>
+              <div class="cylinder-core" id="cylinderCore"></div>
+            </div>
+          </div>
+          
+          <div class="lockpicking-controls">
+            <div class="tension-meter">
+              <div class="tension-label">TENSION</div>
+              <div class="tension-bar">
+                <div class="tension-fill" id="tensionFill"></div>
+              </div>
+              <div class="tension-value" id="tensionValue">0/100</div>
+            </div>
+            
+            <div class="pick-angle-control">
+              <div class="angle-label">PICK ANGLE</div>
+              <input type="range" id="pickAngleSlider" min="0" max="360" value="0" step="1">
+              <div class="angle-display" id="angleDisplay">0°</div>
+            </div>
+            
+            <div class="pick-button">
+              <button id="attemptPickBtn" class="pipboy-button">INSERT PICK</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lockpicking-info">
+          <div class="info-row">
+            <span>BOBBY PINS:</span>
+            <span id="bobbyPinCount">0</span>
+          </div>
+          <div class="info-row">
+            <span>SCREWDRIVERS:</span>
+            <span id="screwdriverCount">0</span>
+          </div>
+          <div class="info-row">
+            <span>DIFFICULTY:</span>
+            <span id="difficultyText">EASY</span>
+          </div>
+        </div>
+        
+        <div class="lockpicking-result" id="lockpickingResult"></div>
+        
+        <div class="lockpicking-actions">
+          <button id="cancelLockpickingBtn" class="pipboy-button-small">CANCEL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEATH OVERLAY -->
+    <div id="deathOverlay" class="death-overlay hidden">
+      <div class="death-content">
+        <div class="death-message">YOU DIED</div>
+        <div class="death-details">
+          Respawn penalty: 30% HP restored, 10% caps lost
+        </div>
+        <button id="respawnBtn" class="pipboy-button">RESPAWN</button>
+      </div>
+    </div>
+
+    <!-- MERCHANT SHOP OVERLAY -->
+    <div id="merchantOverlay" class="merchant-overlay hidden">
+      <div class="merchant-content">
+        <!-- Content will be populated by merchant.js -->
+      </div>
+    </div>
+
+    <!-- MISSION BRIEFING CONTROLLER — shows once to first-timers, ticks off steps, auto-dismisses -->
+    <script>
+    (function () {
+      const STORAGE_KEY = "afc_mission_briefing_dismissed";
+
+      // Don't show if already permanently dismissed
+      if (localStorage.getItem(STORAGE_KEY)) return;
+
+      var el       = document.getElementById("missionBriefing");
+      var step1    = document.getElementById("mbStep1");
+      var step2    = document.getElementById("mbStep2");
+      var btnDismiss = document.getElementById("mbDismiss");
+      if (!el) return;
+
+      var walletOk = false;
+      var gpsOk    = false;
+
+      function tick(which) {
+        var checkmark = ' <span style="color:#00ff41;">✓ DONE</span>';
+        if (which === "wallet") {
+          walletOk = true;
+          step1.innerHTML = '<s style="opacity:0.4;">▷ STEP 1 — CONNECT WALLET to earn FIZZ CAPS</s>' + checkmark;
+        }
+        if (which === "gps") {
+          gpsOk = true;
+          step2.innerHTML = '<s style="opacity:0.4;">▷ STEP 2 — TAP EXPLORE MAP below to enable GPS &amp; reveal nearby POIs</s>' + checkmark;
+        }
+        if (walletOk && gpsOk) {
+          // Auto-dismiss after a short moment so player sees confirmation
+          setTimeout(dismiss, 1400);
+        }
+      }
+
+      function dismiss() {
+        localStorage.setItem(STORAGE_KEY, "1");
+        el.style.transition = "opacity 0.4s";
+        el.style.opacity = "0";
+        setTimeout(function () { el.style.display = "none"; }, 420);
+      }
+
+      btnDismiss.addEventListener("click", dismiss);
+
+      // Show the card — only on first visit
+      el.style.display = "block";
+
+      // Listen for wallet connect
+      window.addEventListener("walletConnected", function () { tick("wallet"); });
+      // Also check if already connected when game initialises
+      window.addEventListener("gameInitialized", function () {
+        if (window.connectedWallet || window.PLAYER_WALLET) tick("wallet");
+      });
+
+      // Listen for GPS becoming active (main.js fires geolocationSuccess or gpsActive)
+      window.addEventListener("gpsActive", function () { tick("gps"); });
+      // Fallback: watch accText DOM changes
+      var accTextEl = document.getElementById("accText");
+      if (accTextEl) {
+        var _obs = new MutationObserver(function () {
+          var t = accTextEl.textContent || "";
+          if (t && t.indexOf("OFFLINE") === -1 && t.indexOf("GPS") !== -1) {
+            _obs.disconnect();
+            tick("gps");
+          }
+        });
+        _obs.observe(accTextEl, { characterData: true, childList: true, subtree: true });
+      }
+    })();
+    </script>
+
+  </body>
+</html>

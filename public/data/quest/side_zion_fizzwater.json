@@ -1,0 +1,11 @@
+{
+  "id": "side_zion_fizzwater",
+  "name": "Fizzwater",
+  "type": "side",
+  "poIs": ["Zion River", "FizzCo Hermit Shack"],
+  "description": "Investigate glowing water samples.",
+  "objectives": [
+    "Collect river samples",
+    "Return to the FizzCo Hermit"
+  ]
+}

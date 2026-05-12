@@ -1,0 +1,33 @@
+{
+  "id": "wake_up",
+  "name": "Wake Up",
+  "description": "You awaken in the wasteland wearing your jumpsuit. A courier has arrived with an urgent message.",
+  "objectives": [
+    {
+      "id": "open_inventory",
+      "text": "Open your inventory",
+      "completeOn": "inventory_opened"
+    },
+    {
+      "id": "equip_weapon",
+      "text": "Equip your sidearm",
+      "completeOn": "weapon_equipped"
+    },
+    {
+      "id": "turn_on_radio",
+      "text": "Tune into Atomic Fizz Radio",
+      "completeOn": "radio_started"
+    },
+    {
+      "id": "open_map",
+      "text": "Check your map",
+      "completeOn": "map_opened"
+    }
+  ],
+  "reward": {
+    "xp": 50,
+    "caps": 25,
+    "items": ["pru_stabilizer_shard"]
+  },
+  "onComplete": "wake_up_npc_intro"
+}

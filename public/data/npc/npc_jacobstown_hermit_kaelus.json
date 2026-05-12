@@ -1,0 +1,14 @@
+{
+  "id": "npc_jacobstown_hermit_kaelus",
+  "name": "Kaelus",
+  "faction": "unknown",
+  "role": "Hermit",
+  "personality": "Cryptic, unsettling, speaks in riddles.",
+  "description": "Kaelus lives in a shack near Jacobstown. No one knows where he came from or why he’s here.",
+  "questHooks": [
+    "Says the mountains 'remember'.",
+    "Claims something ancient sleeps beneath the ice.",
+    "Knows a hidden path to Black Mountain."
+  ],
+  "poi": "jacobstown_fnv"
+}

@@ -1,0 +1,172 @@
+{
+  "id": "quest_fractured_timeline_main",
+  "title": "The Fractured Timeline",
+  "type": "main_quest",
+  "difficulty": "legendary",
+  "level_required": 1,
+  "description": "Reality itself has shattered. The Mojave exists simultaneously with the Commonwealth, Capital Wasteland, and Appalachia. All eras of the wasteland coexist in impossible harmony. You must discover why - and whether to preserve or destroy this fractured world.",
+  
+  "lore": {
+    "summary": "A mysterious convergence has merged all Fallout timelines into a single reality. Pre-war experiments, the Institute's teleportation tech, and FizzCo's quantum resonance devices have created a temporal nexus centered in the Mojave. Players can now experience quests from 2161 (FO1), 2241 (FO2), 2277 (FO3), 2281 (FO:NV), 2287 (FO4), and 2102-2103 (FO76) all at once.",
+    "canonWarning": "This is an alternate reality fan experience. Timeline inconsistencies are intentional and part of the game's unique design.",
+    "fracturedRealityExplanation": "In this world, the Master's army marches while the Institute hunts synths. Caesar's Legion raids while the Enclave rebuilds. Brotherhood chapters from all eras coexist. Time is broken, and that's the point."
+  },
+
+  "stages": [
+    {
+      "id": "stage1_awakening",
+      "name": "Reality Fractures",
+      "description": "Strange occurrences across the wasteland: NCR soldiers report seeing Brotherhood airships that shouldn't exist, Institute synths appearing in pre-war ruins, and radio signals from multiple time periods broadcasting simultaneously.",
+      "objectives": [
+        {
+          "id": "obj1_investigate_signals",
+          "text": "Investigate temporal anomalies at 3 locations",
+          "locations": ["Helios One", "Commonwealth ruins", "Capital Wasteland relay"]
+        },
+        {
+          "id": "obj2_meet_harlan",
+          "text": "Talk to Harlan Voss about the timeline convergence",
+          "optional": true,
+          "hint": "Harlan might know something about FizzCo experiments"
+        }
+      ],
+      "rewards": {
+        "xp": 1000,
+        "caps": 500,
+        "item": "Temporal Scanner (detects timeline rifts)"
+      }
+    },
+    {
+      "id": "stage2_all_eras_unite",
+      "name": "When All Times Collide",
+      "description": "Meet representatives from every major faction across all timelines. They're all confused, scared, and trying to understand why their enemies from different eras suddenly exist.",
+      "objectives": [
+        {
+          "id": "obj1_faction_summit",
+          "text": "Attend the Fractured Timeline Summit at Hoover Dam",
+          "participants": [
+            "Elder Lyons (FO3 BoS)",
+            "Elder Maxson (FO4 BoS)", 
+            "Paladin Rahmani (FO76 BoS)",
+            "President Kimball (NCR)",
+            "Father (Institute)",
+            "Colonel Autumn (Enclave)",
+            "Caesar's Legate"
+          ]
+        },
+        {
+          "id": "obj2_choose_approach",
+          "text": "Decide your approach to the fractured timeline",
+          "choices": [
+            "Embrace chaos - let all timelines coexist",
+            "Seek to repair the fracture",
+            "Exploit the fracture for personal gain",
+            "Investigate who or what caused this"
+          ]
+        }
+      ],
+      "rewards": {
+        "xp": 2000,
+        "reputation_changes": {
+          "all_factions": 100
+        }
+      }
+    },
+    {
+      "id": "stage3_triangle_connection",
+      "name": "The Triangle's Secret",
+      "description": "Your investigation leads to Jax Voss and 'the triangle' - the anomaly system that connects your world's lore with the fractured timeline. The Humming One's code fragments might hold answers.",
+      "objectives": [
+        {
+          "id": "obj1_find_jax",
+          "text": "Locate Jax Voss in the temporal triangle",
+          "hint": "Jax exists between states - follow the static signals"
+        },
+        {
+          "id": "obj2_decode_hum",
+          "text": "Decode the Humming One's message about timeline convergence"
+        },
+        {
+          "id": "obj3_fizzco_vault77_link",
+          "text": "Discover FizzCo and Vault 77's role in the fracture"
+        }
+      ],
+      "lore_reveals": [
+        "FizzCo's quantum experiments accidentally merged timelines",
+        "Vault 77's Overseer AI predicted this convergence",
+        "The Humming One is trying to stabilize the fracture",
+        "Jax Voss exists as a living anchor point between timelines"
+      ],
+      "rewards": {
+        "xp": 3000,
+        "unique_items": [
+          "Timeline Anchor Device",
+          "Jax's Fractured Journal (lore item)"
+        ]
+      }
+    },
+    {
+      "id": "stage4_final_choice",
+      "name": "Reality's Decision",
+      "description": "You've learned the truth. The fractured timeline was created by a combination of FizzCo experiments, Institute teleportation, and Vault-Tec's secret temporal research. Now you must choose the fate of this impossible world.",
+      "objectives": [
+        {
+          "id": "obj1_final_choice",
+          "text": "Make your final decision",
+          "choices_explained": {
+            "preserve": "Keep the fractured timeline intact. All eras coexist forever. Players can experience content from FO1, FO2, FO3, FO:NV, FO4, and FO76 simultaneously.",
+            "collapse": "Collapse the timeline back to a single era. Choose which Fallout timeline becomes 'real'.",
+            "stabilize": "Use Jax Voss and the Triangle to stabilize the fracture, creating permanent bridges between eras that players can traverse.",
+            "amplify": "Break reality further. Create NEW timeline branches with content that never existed in any Fallout game."
+          }
+        }
+      ],
+      "endings": {
+        "ending_preserve": {
+          "name": "The Eternal Fracture",
+          "description": "You chose to preserve the fractured timeline. Now, wasteland residents from all eras coexist. The Master's super mutants fight alongside FO4 mutants. The Enclave from FO2 debates with FO3's Enclave. Players experience the ultimate Fallout mashup.",
+          "gameplay_impact": "All timeline-specific quests remain available forever",
+          "xp": 5000,
+          "title": "Reality Keeper"
+        },
+        "ending_collapse": {
+          "name": "The Great Reset",
+          "description": "You collapsed the timelines back to a single era. Reality returned to normal, but countless people and possibilities were erased. Only one Fallout timeline remains.",
+          "gameplay_impact": "Player chooses which game's timeline becomes canon for their playthrough",
+          "xp": 4000,
+          "title": "Timeline Reaper"
+        },
+        "ending_stabilize": {
+          "name": "The Bridged Realities",
+          "description": "Using Jax Voss and the Triangle, you stabilized the fracture into permanent portals. Players can now travel between stable timeline zones, experiencing different eras in different regions.",
+          "gameplay_impact": "Regional time-based travel system unlocked",
+          "xp": 6000,
+          "title": "Timeline Architect"
+        },
+        "ending_amplify": {
+          "name": "Chaos Unbound",
+          "description": "You shattered reality even further. Now timelines bleed into each other constantly. Deathclaws from FO1 appear in FO4's Commonwealth. Pre-war America flickers in and out of existence. Total beautiful chaos.",
+          "gameplay_impact": "Random timeline events trigger constantly, maximum content chaos",
+          "xp": 7000,
+          "title": "Reality Breaker",
+          "special_reward": "Access to 'impossible' quest content that mixes eras in absurd ways"
+        }
+      }
+    }
+  ],
+
+  "companion_reactions": {
+    "jax_voss": "Relieved - finally someone understands his fractured existence",
+    "harlan_voss": "Worried but proud - knew FizzCo experiments would cause this",
+    "jaymie_netterfield": "Confused but excited - more timelines means more treasures!",
+    "denton_marris": "Panicked - owes money to people from THREE different timelines now"
+  },
+
+  "unlocks_after_completion": [
+    "All cross-timeline faction quests",
+    "Time-specific vendor access",
+    "Era-hopping fast travel system",
+    "Unique weapons from multiple games",
+    "Mixed-era companions"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "npc_jacobstown_outsider_envoy_darin_ryle",
+  "name": "Darin Ryle",
+  "faction": "independent",
+  "role": "Envoy",
+  "personality": "Diplomatic, patient, idealistic.",
+  "description": "Darin travels between Jacobstown and nearby settlements, trying to build trust between humans and mutants.",
+  "questHooks": [
+    "Needs help delivering a message.",
+    "Fears someone is sabotaging peace efforts.",
+    "Saw smoke rising from the old ranger cabin."
+  ],
+  "poi": "jacobstown_fnv"
+}

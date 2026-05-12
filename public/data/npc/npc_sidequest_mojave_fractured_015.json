@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_mojave_fractured_015",
+  "type": "side_quest",
+  "name": "Rhea Lira",
+  "region": "mojave",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_mojave_fractured_015_dialog",
+  "lootPool": "npc_sidequest_mojave_fractured_015_loot",
+  "questHooks": [
+    "fizzcaps_clue_02",
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.57,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,116 @@
+/* Layout */
+body {
+  margin: 0;
+  background: #0d0d0d;
+  color: #e0e0e0;
+  font-family: Arial, sans-serif;
+}
+
+#adminWrapper {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+#adminSidebar {
+  width: 220px;
+  background: #1a1a1a;
+  border-right: 1px solid #333;
+  padding: 20px;
+}
+
+#adminSidebar h2 {
+  color: #00ffae;
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #222;
+  border: 1px solid #333;
+  color: #e0e0e0;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 4px;
+}
+
+.nav-btn:hover {
+  background: #333;
+}
+
+.nav-btn.danger {
+  background: #550000;
+  border-color: #770000;
+}
+
+/* Main Panel */
+#adminMain {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.panel {
+  display: none;
+}
+
+.panel.active {
+  display: block;
+}
+
+/* Player Tools */
+.player-search {
+  margin-bottom: 20px;
+}
+
+.player-search input {
+  width: 60%;
+  padding: 8px;
+  margin-right: 10px;
+}
+
+.player-details {
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.special-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  max-width: 400px;
+}
+
+.player-actions button {
+  margin-right: 10px;
+}
+.mintables-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.mintables-table th,
+.mintables-table td {
+  border: 1px solid #333;
+  padding: 8px;
+}
+
+.mintables-table input {
+  width: 100%;
+  background: #111;
+  border: 1px solid #333;
+  color: #e0e0e0;
+  padding: 4px;
+}
+
+.mintables-table button {
+  background: #550000;
+  color: #fff;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+}

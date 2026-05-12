@@ -1,0 +1,16 @@
+{
+  "id": "npc_sloan_miner_kara_dunley",
+  "name": "Kara Dunley",
+  "faction": "sloan_miners",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Miner",
+  "personality": "Shaken, quiet, avoids eye contact.",
+  "description": "Kara barely escaped a deathclaw attack. She hasn’t slept in days and refuses to go near the quarry again.",
+  "questHooks": [
+    "Saw something glowing deep in the quarry before she ran.",
+    "Claims the deathclaws are acting 'organized'.",
+    "Heard a hum under the ground right before the attack."
+  ],
+  "poi": "sloan_station_fnv"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "quest_harlan_overseer",
+  "name": "Father and Son",
+  "type": "main",
+  "poIs": ["Vault 77 Terminal", "Lucky 38"],
+  "description": "Use Harlan’s voiceprint to unlock hidden memories inside the Overseer AI.",
+  "objectives": [
+    "Play Harlan’s final holotape near the Overseer terminal",
+    "Trigger the memory sync",
+    "Survive the Overseer’s emotional glitch"
+  ],
+  "endings": [
+    {
+      "id": "ending_sync",
+      "description": "The Overseer remembers Harlan… and remembers being Jax.",
+      "reward": "Overseer Memory Fragment",
+      "consequence": "Jax’s identity stabilizes."
+    }
+  ]
+}

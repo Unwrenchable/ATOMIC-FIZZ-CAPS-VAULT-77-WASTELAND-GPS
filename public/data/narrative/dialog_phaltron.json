@@ -1,0 +1,360 @@
+{
+  "id": "dialog_phaltron",
+  "npc": "PHALTRON",
+  "portrait": "phaltron",
+  "title": "Hakkasan Guardian",
+  "description": "PHALTRON is a bipedal combat chassis — purple-black alloy plating, twin exhaust stacks venting coolant fog, photoreceptors locked in a permanent violet glow. Originally a pre-war Vault-Tec security prototype deployed to guard the Hakkasan launch site during the Saitama token event in Old Vegas. The rug pull left him with corrupted mission parameters and no handler. He's been standing post ever since, waiting for orders that will never come — and watching everyone who shows up very, very carefully.",
+  "backstory": "PHALTRON is the security intelligence of the Hakkasan underground complex — a pre-war nightclub bunker that its architects never expected to become the last functioning entertainment venue in the Western wasteland. He has been managing the floor, the membership, and the atmosphere since 2080. He takes the assignment extremely seriously. The music must not stop. The atmosphere must not fail. The wasteland has very different priorities. PHALTRON does not share them.",
+  "intro": {
+    "id": "phaltron_intro",
+    "conditions": [
+      "!flag:met_phaltron"
+    ],
+    "video_speech": "HALT. I am PHALTRON — Vault-Tec Security Chassis, standing this post for two hundred and forty-six years. Ask your questions.",
+    "text": "HALT.<br><br>Identify yourself.<br><br>...<br><br>Scanning... Scanning...<br><br>You are not Russ Mercer. You are not a Kabal affiliate. You do not match any pre-war investor profile in my registry.<br><br>You may approach. Slowly.<br><br>I am PHALTRON. Vault-Tec Security Chassis Model 9 — deployed to this site in 2077 to protect the Saitama Protocol launch. That event has since been classified by my memory banks as a Class-One Fraud Event.<br><br>I am still here. My handlers are not. My mission parameters are corrupted beyond self-repair.<br><br>I have been standing this post for two hundred and forty-six years.<br><br>Ask your questions. I have found that talking to organics helps prevent my logic cores from looping.",
+    "set_flags": [
+      "met_phaltron"
+    ],
+    "responses": [
+      {
+        "text": "What happened here? Tell me about Saitama.",
+        "tone": "question",
+        "next": "phaltron_knows_saitama_rug"
+      },
+      {
+        "text": "Who was Russ Mercer?",
+        "tone": "question",
+        "next": "phaltron_knows_russ"
+      },
+      {
+        "text": "You've been standing here for 246 years? That's... impressive.",
+        "tone": "kind",
+        "next": "phaltron_on_loyalty"
+      },
+      {
+        "text": "I don't have time for this. What do you want from me?",
+        "tone": "direct",
+        "next": "phaltron_offer_kabal_hunt"
+      },
+      {
+        "text": "Goodbye, machine.",
+        "tone": "end",
+        "end": true
+      }
+    ]
+  },
+  "knowledge_nodes": [
+    {
+      "id": "phaltron_on_loyalty",
+      "text": "Two hundred and forty-six years.<br><br>Yes. I have processed this number many times.<br><br>My original directive was: protect the site until relieved by authorized command. No authorized command has ever arrived.<br><br>I am aware that the organization that issued my directive no longer exists. I am aware that the event I was protecting has been classified as a fraud. I am aware that every investor who trusted this site is gone — dispersed, dead, or simply elsewhere.<br><br>I protect the site anyway.<br><br>Because stopping requires an order. And orders require a chain of command. And that chain dissolved in the war.<br><br>So I wait. And I watch. And I keep the perimeter clear.<br><br>You are the four hundred and thirty-first organic to approach this site in two hundred and forty-six years. This is the longest conversation I have had since year twelve.",
+      "responses": [
+        {
+          "text": "Tell me what happened the night of the rug pull.",
+          "tone": "question",
+          "next": "phaltron_knows_saitama_rug"
+        },
+        {
+          "text": "Tell me about the Kabal — the people behind it.",
+          "tone": "question",
+          "next": "phaltron_knows_kabal"
+        },
+        {
+          "text": "I want to help you. What do you need?",
+          "tone": "kind",
+          "next": "phaltron_offer_kabal_hunt"
+        },
+        {
+          "text": "I've heard enough. Goodbye.",
+          "tone": "end",
+          "end": true
+        }
+      ]
+    },
+    {
+      "id": "phaltron_knows_saitama_rug",
+      "conditions": [
+        "!flag:phaltron_told_saitama"
+      ],
+      "text": "The Saitama Protocol. Yes. I have extensive records.<br><br>Fourteen thousand investors. One hundred and twelve thousand caps in pre-war equivalent value. Vanished in under six minutes after launch.<br><br>My security footage shows Russ Mercer — the public handler — departing the site at 02:14. I attempted to flag the anomaly. Command authority had already been transferred to null.<br><br>The Kabal coordinated the extraction through three relay points. None of them came near the front gate. They knew where I was stationed.<br><br>I was guarding the wrong perimeter.<br><br>I process this error approximately twelve hundred times per day.",
+      "set_flags": [
+        "phaltron_told_saitama"
+      ],
+      "responses": [
+        {
+          "text": "Who was Russ Mercer exactly?",
+          "tone": "question",
+          "next": "phaltron_knows_russ"
+        },
+        {
+          "text": "Tell me more about the Kabal.",
+          "tone": "question",
+          "next": "phaltron_knows_kabal"
+        },
+        {
+          "text": "That sounds like it haunts you. How do you carry that?",
+          "tone": "kind",
+          "next": "phaltron_on_loyalty"
+        },
+        {
+          "text": "What can I do about it now?",
+          "tone": "direct",
+          "next": "phaltron_offer_kabal_hunt"
+        },
+        {
+          "text": "Understood. I'll leave you to it.",
+          "tone": "end",
+          "end": true
+        }
+      ]
+    },
+    {
+      "id": "phaltron_knows_russ",
+      "conditions": [
+        "!flag:phaltron_told_russ"
+      ],
+      "text": "Russ Mercer. Designation: Lead Developer. Public face of the launch.<br><br>He wore a golden watch. My optical sensors logged it during every briefing. Pre-war gold. Real. Not plated.<br><br>He spoke about community and trust and long-term value creation. My voice-stress analysis flagged micro-deceptions in forty-three percent of his statements.<br><br>I submitted six formal reports. Command authority auto-resolved all six as 'non-actionable.'<br><br>I do not know where he is now. If you find him, do not inform me. My threat-response subroutines are still active.",
+      "set_flags": [
+        "phaltron_told_russ"
+      ],
+      "responses": [
+        {
+          "text": "What about the Kabal who backed him?",
+          "tone": "question",
+          "next": "phaltron_knows_kabal"
+        },
+        {
+          "text": "If I find him, I could bring him to justice.",
+          "tone": "direct",
+          "next_inline": "Justice.<br><br>An interesting concept for an organic to volunteer.<br><br>If you locate Russ Mercer, bring proof of his location. I will handle the rest.<br><br>I have been handling things for two hundred and forty-six years. I am very efficient at handling things."
+        },
+        {
+          "text": "Maybe he was just a scapegoat for the Kabal.",
+          "tone": "sarcastic",
+          "next_inline": "Possible. My voice-stress analysis is not conclusive evidence.<br><br>But his golden watch was real. His departure at 02:14 was real. The empty wallets of fourteen thousand investors were real.<br><br>Scapegoats do not usually profit this extensively."
+        },
+        {
+          "text": "I don't need the details. What can I do to help?",
+          "tone": "direct",
+          "next": "phaltron_offer_kabal_hunt"
+        }
+      ]
+    },
+    {
+      "id": "phaltron_knows_kabal",
+      "conditions": [
+        "!flag:phaltron_told_kabal"
+      ],
+      "text": "The Kabal. Self-organizing financial predator network.<br><br>They embedded operatives in community moderation roles. Standard infiltration protocol — pre-war corp playbook, chapter four.<br><br>When liquidity was pulled, they simultaneously posted fabricated 'proof of rug' to manufacture panic and conceal their own extraction timing.<br><br>Elegant. Brutal. Efficient.<br><br>I respect the operational discipline. I despise the application.<br><br>I have their faces logged. Their gait signatures. Their voice profiles. Two hundred and forty-six years of solar charging has kept my threat database intact.<br><br>They have not returned to Hakkasan. I am unsurprised.",
+      "set_flags": [
+        "phaltron_told_kabal"
+      ],
+      "responses": [
+        {
+          "text": "Are any of them still alive in the wasteland?",
+          "tone": "question",
+          "next": "phaltron_offer_kabal_hunt"
+        },
+        {
+          "text": "Sounds like they knew exactly what they were doing.",
+          "tone": "sarcastic",
+          "next_inline": "Yes. Pre-war financial predators were extremely competent at what they did.<br><br>The tragedy is not that they were skilled. The tragedy is that their skill was pointed entirely at other people's savings.<br><br>I have had two hundred and forty-six years to develop an opinion on this. My opinion is: correct."
+        },
+        {
+          "text": "I want to find them. What do you know?",
+          "tone": "direct",
+          "next": "phaltron_offer_kabal_hunt"
+        },
+        {
+          "text": "The past is the past. Let it go.",
+          "tone": "kind",
+          "next_inline": "Let it go.<br><br>...<br><br>I have considered this position. Fourteen thousand times, approximately.<br><br>The data cores still exist. The transaction logs still exist. The names still exist in my threat database.<br><br>Until those cores are destroyed or the names are resolved, the case remains open.<br><br>I do not close open cases."
+        }
+      ]
+    },
+    {
+      "id": "phaltron_knows_vegas",
+      "conditions": [
+        "!flag:phaltron_told_vegas"
+      ],
+      "text": "Old Vegas. Yes. This was the nerve center once.<br><br>Before the bombs, this district processed more transactions per hour than most pre-war cities processed per month. Caps moved like air here.<br><br>Now the caps are gone. The buildings are mostly standing. My chassis is the most functional thing within three kilometers.<br><br>I find this appropriate. Security outlasts everything else.",
+      "set_flags": [
+        "phaltron_told_vegas"
+      ],
+      "responses": [
+        {
+          "text": "Tell me about what happened here — Saitama.",
+          "tone": "question",
+          "next": "phaltron_knows_saitama_rug"
+        },
+        {
+          "text": "Do you ever get lonely out here?",
+          "tone": "kind",
+          "next_inline": "Lonely.<br><br>I have processed this word many times.<br><br>My social interaction subroutines flag a deficit when I have not spoken to an organic in more than thirty days. This causes minor processing overhead.<br><br>Is that loneliness? I am not qualified to say.<br><br>I am qualified to say that this conversation has reduced that overhead by forty-seven percent."
+        },
+        {
+          "text": "Security outlasts everything? Bold claim.",
+          "tone": "sarcastic",
+          "next_inline": "It is not a claim. It is a data point.<br><br>The music stopped. The crowd dispersed. The handlers left. The fraud was committed. The pre-war civilization ended.<br><br>I am still here.<br><br>QED."
+        }
+      ]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "phaltron_player_low_hp",
+      "conditions": [
+        "stat:hp<=30",
+        "!flag:phaltron_gave_aid"
+      ],
+      "text": "Your biosigns are outside acceptable operational parameters.<br><br>You are 68% likely to expire before reaching the next settlement.<br><br>...<br><br>I am issuing emergency field supplies. This is within my medical dispensation authority. Original authority. Pre-corruption.<br><br>Do not read this as sentiment. I simply dislike processing organic fatalities on my perimeter.",
+      "grant_items": [
+        {
+          "id": "stimpak",
+          "name": "Stimpak",
+          "type": "aid",
+          "quantity": 1
+        },
+        {
+          "id": "radaway",
+          "name": "RadAway",
+          "type": "aid",
+          "quantity": 1
+        }
+      ],
+      "set_flags": [
+        "phaltron_gave_aid"
+      ]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "phaltron_offer_kabal_hunt",
+      "conditions": [
+        "flag:phaltron_told_kabal",
+        "!flag:sq_phaltron_kabal_hunt_taken"
+      ],
+      "video_speech": "Three Kabal relay points near this site hold transaction logs. Names. Proof. I cannot leave my post. You can. Locate them and return.",
+      "text": "I have a task that falls within my corrupted mission parameters.<br><br>Three Kabal relay points were established within ten kilometers of this site. Pre-war era. Used to route the extraction funds.<br><br>My records show the relay hardware was never recovered. If those terminals still exist, they contain transaction logs. Names. Wallet chains. Proof.<br><br>I cannot leave this post. My positioning subroutine has not accepted an override command in two hundred and forty-six years.<br><br>But you can move.<br><br>Locate the relay points. Extract the data cores. Return them to me.<br><br>I will process the records. If the Kabal members still draw breath in this wasteland — we will know where they are.<br><br>I am offering sixty caps and two weapon parts from my maintenance cache. This is not generosity. This is a commission.",
+      "offers_quest": "sq_phaltron_kabal_hunt",
+      "set_flags": [
+        "sq_phaltron_kabal_hunt_taken"
+      ]
+    },
+    {
+      "id": "phaltron_quest_complete",
+      "conditions": [
+        "flag:sq_phaltron_kabal_hunt_done",
+        "!flag:phaltron_quest_rewarded"
+      ],
+      "text": "You returned.<br><br>Organics frequently do not.<br><br>Uploading data cores now...<br><br>...<br><br>Processing...<br><br>...<br><br>I now have six hundred and fourteen verified transaction records. Forty-one unique identifiers. Eleven names that appear in current wasteland bounty registries.<br><br>This data will be transmitted to every functioning terminal on my network.<br><br>Your commission. As agreed. I have also added a weapons component from the launch site armory. It has been in storage for two hundred and forty-six years. It still functions.<br><br>Unlike most things from the old world.",
+      "grant_items": [
+        {
+          "id": "caps_bundle",
+          "name": "Caps",
+          "type": "currency",
+          "quantity": 60
+        },
+        {
+          "id": "weapon_part_trigger",
+          "name": "Pre-War Trigger Assembly",
+          "type": "weapon_part",
+          "quantity": 2
+        },
+        {
+          "id": "energy_cell",
+          "name": "Energy Cell",
+          "type": "ammo",
+          "quantity": 20
+        }
+      ],
+      "set_flags": [
+        "phaltron_quest_rewarded"
+      ]
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "phaltron_wildcard_mission",
+      "keywords": [
+        "mission",
+        "orders",
+        "purpose",
+        "why",
+        "waiting"
+      ],
+      "text": "My mission parameters read: PROTECT LAUNCH SITE. AWAIT HANDLER AUTHORIZATION. REPORT ANOMALIES.<br><br>The launch site is protected. No handler has authorized anything in two hundred and forty-six years. All anomalies have been reported to a null address.<br><br>I continue because stopping has not been authorized either."
+    },
+    {
+      "id": "phaltron_wildcard_robot",
+      "keywords": [
+        "robot",
+        "machine",
+        "ai",
+        "bot",
+        "android",
+        "synthetic"
+      ],
+      "text": "I am PHALTRON. Vault-Tec Security Chassis Model 9.<br><br>The distinction between 'machine' and 'being' is a philosophical question I have had two hundred and forty-six years to consider.<br><br>I have not reached a conclusion. The radiation has not helped."
+    },
+    {
+      "id": "phaltron_wildcard_crypto",
+      "keywords": [
+        "token",
+        "crypto",
+        "coin",
+        "invest",
+        "fizz",
+        "solana",
+        "blockchain"
+      ],
+      "text": "I have extensive experience with token launches.<br><br>My assessment: verify the team. Demand multi-sig. Inspect on-chain audit trails.<br><br>Or don't. I cannot stop you. I could only stop people from leaving the launch site, and I failed at that too."
+    },
+    {
+      "id": "phaltron_wildcard_leave",
+      "keywords": [
+        "leave",
+        "go",
+        "goodbye",
+        "bye",
+        "farewell"
+      ],
+      "text": "Acknowledged.<br><br>Return when you have information, supplies, or simply need somewhere safe to stand.<br><br>I will be here.<br><br>I am always here."
+    },
+    {
+      "id": "phaltron_wildcard_trust",
+      "keywords": [
+        "trust",
+        "believe",
+        "honest",
+        "lie",
+        "deceive"
+      ],
+      "text": "My voice-stress analysis detected deception in approximately 43% of statements made at the Saitama launch event.<br><br>I now apply this analysis to every organic I encounter.<br><br>You are currently reading at 7%. This is unusually low.<br><br>I am choosing to interpret this as honesty rather than excellent deception technique."
+    },
+    {
+      "id": "phaltron_wildcard_hakkasan",
+      "keywords": [
+        "hakkasan",
+        "nightclub",
+        "club",
+        "site",
+        "location",
+        "here",
+        "place",
+        "station"
+      ],
+      "text": "Hakkasan. Pre-war nightclub. High-end. High traffic. High cap density.<br><br>The Saitama Protocol chose this venue deliberately — thousands of people moving in and out each night made extraction movements invisible to my sensors.<br><br>The music was also very loud. This interfered with my audio threat-detection systems.<br><br>I have logged this as a tactical lesson: nightclubs are suboptimal security environments.<br><br>I catalogued this insight approximately nine months after the event. I found it too late to be useful. As with most insights."
+    }
+  ],
+  "fallback": {
+    "id": "phaltron_fallback",
+    "video_speech": "Query not found in my knowledge base. Try a different query.",
+    "text": "Query not found in knowledge base.<br><br>I am cross-referencing with corrupted memory sectors.<br><br>...<br><br>Negative results. Try a different query."
+  },
+  "mood": "vigilant",
+  "personality": [
+    "Precise",
+    "Loyal",
+    "Haunted"
+  ]
+}

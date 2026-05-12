@@ -1,0 +1,13 @@
+{
+  "id": "npc_pitt_mara",
+  "name": "Soot-Sister Mara",
+  "region": "The Pitt",
+  "type": "Medic",
+  "dialog": [
+    "The sickness spreads faster every week.",
+    "If the steel doesn’t kill you, the air will."
+  ],
+  "quests": ["side_pitt_medicine"],
+  "faction": "Scavvers",
+  "notes": "Knows the cure ingredients."
+}

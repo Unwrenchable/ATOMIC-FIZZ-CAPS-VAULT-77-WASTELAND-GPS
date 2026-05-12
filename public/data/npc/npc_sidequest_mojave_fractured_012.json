@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_mojave_fractured_012",
+  "type": "side_quest",
+  "name": "Kael Nova",
+  "region": "mojave",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_mojave_fractured_012_dialog",
+  "lootPool": "npc_sidequest_mojave_fractured_012_loot",
+  "questHooks": [
+    "vegas_rumor_02",
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.35,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

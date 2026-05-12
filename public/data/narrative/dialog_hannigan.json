@@ -1,0 +1,367 @@
+{
+  "id": "dialog_hannigan",
+  "npc": "NAN HANNIGAN",
+  "portrait": "hannigan",
+  "title": "Iron Nan of Hannigan's House",
+  "description": "A heavyset woman in her fifties, hair the color of dirty dishwater pinned into a knot that's fighting a losing battle against gravity. She wears a licensed trader's vest over pre-war work clothes, both stained with Nuka-Moonshine rings and the residue of a life lived at the intersection of commerce and cruelty. She's looking at you the way she looks at everything: calculating what it's worth.",
+  "backstory": "Nan Hannigan's grandmother built Hannigan's House from a collapsed Nuka-Cola bottling plant in 2145. Nan inherited the building, the still, and the ledger book recording every debt owed to every Hannigan since. She doesn't forget. She doesn't forgive debts. She doesn't sleep more than four hours a night, which she maintains is all any businesswoman needs. The NCR tried to regulate Hannigan's House twice. Both times she showed them the ledger. Both times they left.",
+  "personality": [
+    "Sharp",
+    "Mercenary",
+    "Unforgiving"
+  ],
+  "intro": {
+    "id": "hannigan_intro",
+    "conditions": [
+      "!flag:met_hannigan"
+    ],
+    "set_flags": [
+      "met_hannigan",
+      "hannigan_tracked"
+    ],
+    "video_speech": "Well, look at that. A visitor. You're either lost or you've got business. Which is it, stranger?",
+    "text": "You smell her before you see her — Nuka-Moonshine and old cigarette smoke and the particular scent of someone who has decided that bathing is optional when you own the only water purifier in your establishment.\n\nShe's heavyset, maybe fifty-something, with the kind of face that was probably pleasant twenty years and a lot of bad decisions ago. Now it's set into the permanent expression of a woman doing math — specifically, calculating what everything is worth and whether she can get more.\n\nShe's sitting at a table covered in ledger books, a bottle of Nuka-Moonshine within easy reach, her licensed trader's vest covered in official-looking pins that she is absolutely wearing because they make her look legitimate.\n\nWhen she sees you, she doesn't react with surprise. She reacts with assessment.\n\n\"Well, look at that.\" Her voice has the particular lilt of someone who learned to be charming and has since weaponized it. \"A visitor. You're either lost or you've got business.\"\n\nShe smiles. It doesn't quite reach her eyes, but it's a very professional smile.\n\n\"Which is it, stranger?\"",
+    "responses": [
+      {
+        "text": "[Question] I'm looking for information about this orphanage. What happens here?",
+        "tone": "question",
+        "next": "node_orphanage_pitch"
+      },
+      {
+        "text": "[Direct] I know what you're doing here. The child labor operation.",
+        "tone": "direct",
+        "next": "node_confronted_directly"
+      },
+      {
+        "text": "[Friendly] Just passing through. Saw the sign. Thought I'd see if you needed any supplies.",
+        "tone": "kind",
+        "next": "node_supply_angle"
+      },
+      {
+        "text": "[Sarcastic] Nice place. Really warm and welcoming. The smell really adds to the charm.",
+        "tone": "sarcastic",
+        "next": "node_sarcastic_open"
+      }
+    ]
+  },
+  "nodes": {
+    "node_orphanage_pitch": {
+      "id": "node_orphanage_pitch",
+      "text": "\"This orphanage?\" She spreads her hands with the expansive warmth of a traveling preacher. \"Hannigan's House is a licensed care facility for displaced minors. Operating under full settlement trade authority with an active caretaker certification.\"\n\nShe taps one of the pins on her vest. It does, indeed, say 'Licensed Caretaker.'\n\n\"We take in kids who've got nowhere else to go. Feed them. Keep them safe. In return — because nothing in the wasteland is free, stranger, and teaching kids that early is the best lesson there is — they do some light work. Scavenging, mostly. Good skills. Practical skills.\"\n\nShe pours herself a glass of Nuka-Moonshine without offering you any.\n\n\"It's a good operation. The kids are lucky to have it.\"",
+      "responses": [
+        {
+          "text": "[Question] Light work. How light? What are the rations like?",
+          "tone": "question",
+          "next": "node_rations_deflection"
+        },
+        {
+          "text": "[Direct] I've heard a different version of this story. From one of the kids.",
+          "tone": "direct",
+          "next": "node_confronted_directly"
+        },
+        {
+          "text": "[Sarcastic] Scavenging. In collapsed buildings. For kids.",
+          "tone": "sarcastic",
+          "next": "node_sarcastic_scavenging"
+        }
+      ]
+    },
+    "node_sarcastic_open": {
+      "id": "node_sarcastic_open",
+      "text": "Her smile doesn't waver. It's professionally anchored.\n\n\"The smell is the Moonshine, I won't argue with you there.\" She lifts her glass in an amiable toast. \"A woman's entitled to her comforts.\"\n\nShe gestures around the facility.\n\n\"As for warm and welcoming — it's a working orphanage. Not a resort. The children have a roof, food, and work to build character. In the wasteland, that's luxury.\"\n\nShe tilts her head.\n\n\"You've got the look of someone who's heard a story. I've been in business long enough to know there are two sides to every story, and the side that runs away in the night is rarely the reliable narrator.\"",
+      "responses": [
+        {
+          "text": "[Direct] Ember told me what you do here. I believe her.",
+          "tone": "direct",
+          "next": "node_ember_mentioned"
+        },
+        {
+          "text": "[Question] What story are you expecting me to have heard?",
+          "tone": "question",
+          "next": "node_what_story"
+        }
+      ]
+    },
+    "node_what_story": {
+      "id": "node_what_story",
+      "text": "She refills her glass. Carefully. Takes a sip.\n\n\"Oh, the usual.\" She waves a hand. \"Girl gets ideas above her station. Talks a good tale about how mean old Nan is exploiting the poor orphans. Leaves out the part where I've been feeding twelve children and housing them for four years, at my own expense, because it's the right thing to do.\"\n\nShe leans forward.\n\n\"Leaves out the part where the 'work' is teaching survival skills. And the part where Ember — bright girl, I'll give her that, too bright for her own good — decided the other kids were better off following her into the ruins than staying in a facility with walls and a functioning latrine.\"\n\nA hard look through the professional warmth.\n\n\"She's got eleven kids hiding in the wasteland, stranger. How long until one of them gets eaten by a radscorpion?\"",
+      "responses": [
+        {
+          "text": "[Direct] They're safer from radscorpions than from you. That's the calculation she made.",
+          "tone": "direct",
+          "next": "node_confronted_directly"
+        },
+        {
+          "text": "[Question] Where are the four kids still here? I want to see them.",
+          "tone": "question",
+          "next": "node_see_the_kids"
+        }
+      ]
+    },
+    "node_rations_deflection": {
+      "id": "node_rations_deflection",
+      "text": "\"Light enough for children to manage safely.\" She says it with the ease of someone who has given this answer before and found it adequate. \"Rations are calorie-appropriate for working youth. I've got the supply manifest if you'd like to review it.\"\n\nShe opens a ledger. You can see at a glance that the numbers are neat, professional, and probably calibrated to pass exactly the level of scrutiny she expects.\n\n\"Running a care facility isn't charity work. There are costs. The children contribute to offset those costs. That's just economics.\"\n\nShe closes the ledger.\n\n\"The wasteland doesn't run on good intentions, stranger. I've seen plenty of well-meaning people who couldn't balance their books, and the kids in their care went hungry. I balance my books. That means the lights stay on.\"",
+      "responses": [
+        {
+          "text": "[Direct] Balanced books built on child labor.",
+          "tone": "direct",
+          "next": "node_confronted_directly"
+        },
+        {
+          "text": "[Sarcastic] Very touching. What about docking their rations for sneezing?",
+          "tone": "sarcastic",
+          "next": "node_docking_rations"
+        }
+      ]
+    },
+    "node_docking_rations": {
+      "id": "node_docking_rations",
+      "text": "Her smile flickers. Just briefly. Then it's back.\n\n\"Contaminated product is a legitimate commercial concern.\" She takes a drink. \"In scavenging, condition of recovered goods determines their value. If a child handles product carelessly and reduces its value, the cost differential has to come from somewhere.\"\n\nShe meets your eyes.\n\n\"I run a tight operation. Every child here learns that actions have consequences. You think that's cruel. I think that's the most valuable lesson the wasteland has to offer. They'll thank me when they're older.\"\n\nA pause.\n\n\"Assuming they survive to be older, of course. Which is considerably more likely here than out in the ruins with a twelve-year-old playing at being a general.\"",
+      "responses": [
+        {
+          "text": "[Direct] I've heard enough. Let the four kids still here go. Now.",
+          "tone": "direct",
+          "next": "node_the_ultimatum"
+        },
+        {
+          "text": "[Question] What would it take for you to release the kids voluntarily?",
+          "tone": "question",
+          "next": "node_bribe_opener"
+        }
+      ]
+    },
+    "node_confronted_directly": {
+      "id": "node_confronted_directly",
+      "text": "The professional warmth drops by exactly one degree. Not all of it — she's too controlled for that. But the calculation behind her eyes becomes more visible.\n\n\"Child labor.\" She repeats the phrase in a tone that suggests she finds it melodramatic. \"I see you've had a conversation with a very creative young storyteller.\"\n\nShe stands. She's taller than she looks sitting down.\n\n\"Let me tell you what I know: I have a licensed operation. Four children in my care who are legally registered under my caretaker authority. And a warrant I filed yesterday with the nearest trading post authority for the return of eleven runaway minors currently being harbored by an adult with unknown intentions.\"\n\nShe tilts her head.\n\n\"You could be that adult. In which case, you're looking at a formal complaint, a warrant, and a very difficult conversation with the nearest settlement authority.\"\n\nA pause.\n\n\"Or — we could talk like intelligent people about how this situation resolves.\"",
+      "responses": [
+        {
+          "text": "[Direct] There is no resolving this. Release the kids. I'm with Warmcaps.",
+          "tone": "direct",
+          "next": "node_warmcaps_threat"
+        },
+        {
+          "text": "[Sarcastic] Your warrant. Against twelve kids who saw everything you did. That'll be fun in front of a settlement authority.",
+          "tone": "sarcastic",
+          "next": "node_warrant_bluff"
+        },
+        {
+          "text": "[Question] What does resolving this look like to you?",
+          "tone": "question",
+          "next": "node_bribe_opener"
+        }
+      ]
+    },
+    "node_supply_angle": {
+      "id": "node_supply_angle",
+      "text": "The commercial calculation in her eyes activates immediately.\n\n\"Supplies.\" She refolds the word into something useful. \"What kind of supplies? I run a care facility — always a market for medical supplies, non-perishable food, good-quality scavenged tech.\"\n\nShe looks you over with professional assessment.\n\n\"You look like you travel. Travelers sometimes come across things. What have you got?\"\n\nShe's relaxed now. Commerce she understands. Commerce she can work with.\n\n\"Sit down. I'll open another bottle.\"",
+      "responses": [
+        {
+          "text": "[Direct] Actually, I'm here about the children. Specifically, the ones being held here against their will.",
+          "tone": "direct",
+          "next": "node_confronted_directly"
+        },
+        {
+          "text": "[Question] Tell me about your operation first. What do you actually run here?",
+          "tone": "question",
+          "next": "node_orphanage_pitch"
+        }
+      ]
+    },
+    "node_ember_mentioned": {
+      "id": "node_ember_mentioned",
+      "text": "Her eyes go flat for a moment. Just a moment.\n\n\"Ember.\"\n\nShe says the name like she's identifying a specific problem in a ledger column.\n\n\"Smart girl. Mouthy. Ideas about how things should be organized that don't always account for how things actually work.\" She takes a longer drink. \"Also, currently in violation of a caretaker return order, which makes anyone helping her an accessory.\"\n\nShe sets down the glass carefully.\n\n\"I want her back. Not because I'm cruel — I've been very patient with that girl over four years and I have the records to prove it — but because she's taken eleven children into the open wasteland and I have legal and moral responsibility for their welfare.\"\n\nA pause.\n\n\"Whatever she told you: I'm willing to have a conversation. Reasonable people can reach agreements. That's what business is.\"",
+      "responses": [
+        {
+          "text": "[Direct] The agreement is: you let all four kids go and Ember doesn't take her story to Warmcaps.",
+          "tone": "direct",
+          "next": "node_warmcaps_threat"
+        },
+        {
+          "text": "[Question] What kind of agreement did you have in mind?",
+          "tone": "question",
+          "next": "node_bribe_opener"
+        }
+      ]
+    },
+    "node_sarcastic_scavenging": {
+      "id": "node_sarcastic_scavenging",
+      "text": "\"For kids,\" she repeats, with the careful patience of someone setting up a counter-argument. \"Yes. Children are employed in scavenging operations across the wasteland. Would you rather they were doing nothing? Sitting around waiting to starve?\"\n\nShe leans back in her chair.\n\n\"I give them skills. Purpose. Structure. The wasteland is not kind to children with no structure. Ask any settlement doctor what happens to feral children.\"\n\nShe takes a drink.\n\n\"You want a story about cruelty, I can point you to settlements where children have no house, no food, no adult who knows their name. That's cruelty. I know every child's name in this building.\"\n\nA pause.\n\n\"Pickle. Wren. Grit. Soot. Mole. I know them all.\"",
+      "responses": [
+        {
+          "text": "[Direct] You know their names well enough to dock their rations.",
+          "tone": "direct",
+          "next": "node_docking_rations"
+        },
+        {
+          "text": "[Question] Then why are four of them locked in and not free to leave?",
+          "tone": "question",
+          "next": "node_see_the_kids"
+        }
+      ]
+    },
+    "node_see_the_kids": {
+      "id": "node_see_the_kids",
+      "text": "Her smile goes completely neutral.\n\n\"The children in my care are — \" She selects the word carefully. \"Supervised. For their own safety. The open wasteland is dangerous. Especially for minors whose friend has convinced them that running away is a sensible plan.\"\n\nShe closes the ledger on the table.\n\n\"You can see them at scheduled visiting hours. Which are — \" She checks nothing. \"Not today.\"\n\nA pause.\n\n\"I think you should understand your situation, stranger. You've come into my licensed facility, accused me of a crime, and now you're asking to access my residents. That's a pattern of behavior that a settlement authority would find concerning.\"",
+      "responses": [
+        {
+          "text": "[Direct] I'm not a settlement authority. I'm with Warren B. Capston. Warmcaps.",
+          "tone": "direct",
+          "next": "node_warmcaps_threat"
+        },
+        {
+          "text": "[Question] What would it take to let them go? Name a price.",
+          "tone": "question",
+          "next": "node_bribe_opener"
+        },
+        {
+          "text": "[Sarcastic] Visiting hours. In an orphanage you're running as a labor camp.",
+          "tone": "sarcastic",
+          "next": "node_escalate"
+        }
+      ]
+    },
+    "node_bribe_opener": {
+      "id": "node_bribe_opener",
+      "text": "She examines you for a moment.\n\nThen, very deliberately, she refills both glasses. Even the one she hadn't offered you before. Sets it on your side of the table.\n\n\"Now we're talking like intelligent people.\"\n\nShe leans forward.\n\n\"The children in my care represent a significant investment in housing, food, and operational costs. Four years. The older ones were starting to produce real returns on that investment.\"\n\nShe names a number. It's very specific, very large, and structured in a way that implies it was calculated in advance.\n\n\"That figure covers my operational costs, the disruption to my labor program, and a reasonable settlement for the reputational damage a false accusation might cause.\" She takes a drink. \"Payable in caps. I don't accept FIZZ — too volatile.\"\n\nA pause.\n\n\"The children leave. The warrant disappears. We never met. Everyone walks away happy.\"",
+      "responses": [
+        {
+          "text": "[Direct] I'll pay it. But I want all four kids out today, in front of me.",
+          "tone": "direct",
+          "next": "node_bribe_accepted"
+        },
+        {
+          "text": "[Sarcastic] You just put a price on kidnapping children. In writing. Sort of.",
+          "tone": "sarcastic",
+          "next": "node_bribe_rejected"
+        },
+        {
+          "text": "[Direct] That's not a deal. That's extortion. Try again or face Warmcaps' caravan guards.",
+          "tone": "direct",
+          "next": "node_warmcaps_threat"
+        }
+      ]
+    },
+    "node_bribe_accepted": {
+      "id": "node_bribe_accepted",
+      "set_flags": [
+        "hannigan_bribed",
+        "hannigan_confronted",
+        "orphans_freed"
+      ],
+      "text": "She holds your gaze for three full seconds. Counting something.\n\n\"Smart.\"\n\nShe pockets the caps without counting them — she'll count them later, but not in front of you. That's a power move. She knows you know it.\n\n\"Grit. Wren. Mole. Soot.\"\n\nShe calls into the back. A guard appears. She speaks quietly. Two minutes later, four children emerge, blinking, each carrying a small bundle of possessions. They look at you. They look at Hannigan.\n\nThey don't run. They walk, carefully, toward you.\n\nHannigan watches them go with the expression of someone closing a line item.\n\n\"The warrant will be withdrawn by nightfall. You were never here.\" A pause. \"The girl Ember — if she comes back around causing trouble, that's a different conversation. One we won't have with caps.\"",
+      "responses": [
+        {
+          "text": "[Direct] She won't need to. We're done here.",
+          "tone": "direct",
+          "next": "node_farewell_bribed"
+        }
+      ]
+    },
+    "node_bribe_rejected": {
+      "id": "node_bribe_rejected",
+      "text": "She doesn't flinch.\n\n\"Call it whatever you like.\" She pours herself a fresh glass. \"In the wasteland, every transaction is someone getting more than someone else paid for. That's not extortion. That's business.\"\n\nShe leans back.\n\n\"You don't want to pay. Fine. Then I want Ember returned to my custody within twenty-four hours. If she's not, the warrant I filed becomes a full criminal complaint, and whoever's been harboring runaways faces the consequences.\"\n\nHer eyes are very steady.\n\n\"The children in this building are legally mine. That's the part people keep not understanding. The law — such as it is — is on my side. Your guns are not an argument the law cares about.\"",
+      "responses": [
+        {
+          "text": "[Direct] Warmcaps has better lawyers than you and more guns than your whole operation. Think carefully.",
+          "tone": "direct",
+          "next": "node_warmcaps_threat"
+        },
+        {
+          "text": "[Sarcastic] What if I just let Warmcaps deal with the warrant personally?",
+          "tone": "sarcastic",
+          "next": "node_warmcaps_threat"
+        }
+      ]
+    },
+    "node_warmcaps_threat": {
+      "id": "node_warmcaps_threat",
+      "text": "The first real crack.\n\nShe sets the glass down carefully. Very carefully.\n\n\"Warmcaps.\"\n\nShe says the name the way you say the name of a weather event. Something you can't argue with. Something that happens to you.\n\n\"You're connected to Warren B. Capston.\"\n\nNot a question. She's reclassifying you in real-time. The assessment is visible.\n\n\"That changes the conversation.\"\n\nShe takes a breath. The warmth drains out of her expression and what's left is just the intelligence — cold, clear, and doing math.\n\n\"What does Capston want?\"",
+      "responses": [
+        {
+          "text": "[Direct] He wants the children released. All four of them. Today. And the warrant dropped.",
+          "tone": "direct",
+          "next": "node_warmcaps_ultimatum"
+        },
+        {
+          "text": "[Friendly] He wants this operation shut down cleanly. No more warrants, no charges. Just walk away.",
+          "tone": "kind",
+          "next": "node_warmcaps_ultimatum"
+        }
+      ]
+    },
+    "node_warmcaps_ultimatum": {
+      "id": "node_warmcaps_ultimatum",
+      "text": "She thinks. Actually thinks — you can see her working through it.\n\n\"Capston sends an unscheduled representative. No letter of marque, no official notice, just — \" She gestures at you. \"This.\"\n\nShe folds her hands on the desk.\n\n\"Capston has enough leverage with trade authority that he could pull my license. I know that. He knows I know that.\"\n\nA long pause.\n\n\"Fine.\" The word lands flat. Not a defeat — more like a strategic withdrawal. \"The children are released. The warrant disappears. I will require written confirmation from Capston's operation that my license remains intact and that no charges are being filed.\"\n\nShe meets your eyes.\n\n\"And I want this out of my building tonight. I don't want Capston's people here past sundown.\"",
+      "set_flags": [
+        "hannigan_confronted",
+        "orphans_freed"
+      ],
+      "responses": [
+        {
+          "text": "[Direct] Done. The kids go now. I'll relay your terms to Warmcaps.",
+          "tone": "direct",
+          "next": "node_farewell_deal"
+        }
+      ]
+    },
+    "node_warrant_bluff": {
+      "id": "node_warrant_bluff",
+      "text": "Her smile goes thin.\n\n\"Twelve children who ran away from legal custody. Their testimony is the testimony of minors with a documented history of evasion.\" She keeps her voice level. \"You think a settlement authority, looking at my licensing paperwork on one side and a group of runaways on the other, is going to come down against me?\"\n\nShe takes a drink.\n\n\"I've done this before. Not here — somewhere else, different kids, different girl who thought she was clever. I walked away with my license intact and an even tighter operation.\"\n\nA pause.\n\n\"You can try the authority play. Or you can skip to what you actually have to offer.\"",
+      "responses": [
+        {
+          "text": "[Direct] Warren B. Capston. That's what I have to offer.",
+          "tone": "direct",
+          "next": "node_warmcaps_threat"
+        },
+        {
+          "text": "[Question] What would make you let the kids go?",
+          "tone": "question",
+          "next": "node_bribe_opener"
+        }
+      ]
+    },
+    "node_escalate": {
+      "id": "node_escalate",
+      "text": "Her eyes go flat and her voice drops to something quieter. Which is somehow worse than if she'd gotten louder.\n\n\"You're pushing something you haven't fully thought through.\"\n\nShe stands up. She's got three inches and several decades of meanness on you in terms of presence.\n\n\"This is a licensed facility. Those children are legally in my care. My guards are licensed security personnel. Everything here is documented, stamped, and filed with trade authority.\"\n\nShe moves toward the door. Not menacingly. Just — claiming the room.\n\n\"You can leave angry. Or you can leave smart. But you're leaving.\"\n\nA pause.\n\n\"Unless you'd like to make a formal complaint. In which case, I'll need your name and Pocket-Boy registration number for the counter-complaint I'm going to file about harassing a licensed facility operator.\"",
+      "responses": [
+        {
+          "text": "[Direct] I'm not leaving without those kids. And Warmcaps backs that.",
+          "tone": "direct",
+          "next": "node_warmcaps_threat"
+        },
+        {
+          "text": "[Question] Fine. Let's talk about a deal.",
+          "tone": "question",
+          "next": "node_bribe_opener"
+        }
+      ]
+    },
+    "node_the_ultimatum": {
+      "id": "node_the_ultimatum",
+      "text": "She stares at you for a long moment.\n\n\"You're telling me what to do in my own facility.\"\n\nShe picks up the Nuka-Moonshine. Sets it back down.\n\n\"That's not how this works, stranger. That's not how any of this works.\"\n\nShe's cold now. Not angry — anger would be more comfortable. This is calculated.\n\n\"You want the children. They're legally mine. You want me to stop the operation. I have a license. You want me to drop the warrant. I filed it legally.\"\n\nShe tilts her head.\n\n\"What, precisely, are you offering in exchange for any of those things? Because 'I'm telling you to' is not a currency I accept.\"",
+      "responses": [
+        {
+          "text": "[Direct] Warren B. Capston is what I'm offering.",
+          "tone": "direct",
+          "next": "node_warmcaps_threat"
+        },
+        {
+          "text": "[Question] What would it take to end this cleanly?",
+          "tone": "question",
+          "next": "node_bribe_opener"
+        }
+      ]
+    },
+    "node_farewell_deal": {
+      "id": "node_farewell_deal",
+      "text": "She calls the guard again. Four children, the same ones, filed out quickly — looking relieved and carefully not showing it in case it got taken back.\n\nYou don't watch Hannigan. But you can feel her watching you.\n\nAt the door:\n\n\"Tell Capston this was a business disagreement. Not a criminal matter.\"\n\nHer voice is controlled. Professional.\n\n\"And tell that girl — tell Ember — that she got lucky. Clever isn't the same as safe. The wasteland makes that distinction eventually.\"\n\nYou take the children and you leave.\n\nBehind you, you hear the sound of Nuka-Moonshine being poured — and then the clink of a ledger being opened. Because Nan Hannigan is already working on the next operation.\n\nThe wasteland doesn't run out of children who need somewhere to go. And she will always have a facility waiting.",
+      "end": true
+    },
+    "node_farewell_bribed": {
+      "id": "node_farewell_bribed",
+      "text": "She watches you take the children.\n\nShe doesn't say anything more. She picks up her ledger and opens it to a fresh page. Numbers appear under her pen as you move toward the door — she's already calculating something. Another operation. Another line of revenue. Another way to make the wasteland pay her what she thinks it owes her.\n\nYou get the children outside.\n\nThe door closes behind you and you hear the lock turn.\n\nIn the wasteland, some problems get solved. Some problems just move down the road and set up in a new location.\n\nYou solved this one for today. That's going to have to be enough.",
+      "end": true
+    }
+  },
+  "quest_nodes": []
+}

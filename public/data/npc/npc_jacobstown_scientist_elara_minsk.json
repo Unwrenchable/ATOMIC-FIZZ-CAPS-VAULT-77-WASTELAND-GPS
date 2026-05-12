@@ -1,0 +1,14 @@
+{
+  "id": "npc_jacobstown_scientist_elara_minsk",
+  "name": "Dr. Elara Minsk",
+  "faction": "jacobstown_science",
+  "role": "Geneticist",
+  "personality": "Focused, empathetic, quietly brilliant.",
+  "description": "Dr. Minsk studies super mutant biology, hoping to stabilize Nightkin mental health. She believes science can heal what war broke.",
+  "questHooks": [
+    "Needs samples from mutated wildlife.",
+    "Worries about a Nightkin who vanished into the woods.",
+    "Detected unusual radiation patterns near the lodge."
+  ],
+  "poi": "jacobstown_fnv"
+}

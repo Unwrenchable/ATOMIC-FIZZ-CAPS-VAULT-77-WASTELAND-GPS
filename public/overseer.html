@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <title>OVERSEER TERMINAL // RESTRICTED ACCESS</title>
+
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    connect-src 'self' https://api.atomicfizzcaps.xyz https://api-inference.huggingface.co https://api.mainnet-beta.solana.com https://api.devnet.solana.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https: blob:;
+    font-src 'self' https://fonts.gstatic.com data:;
+    object-src 'none';
+    frame-src 'self';
+    base-uri 'self';">
+
+  <!-- Pocket-Boy Terminal Font -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <!-- Pocket-Boy / Overseer Terminal Theme -->
+  <link rel="stylesheet" href="/css/terminal.css" />
+</head>
+
+<script>
+setInterval(async () => {
+  try {
+    const res = await fetch("/api/worldstate");
+    const data = await res.json();
+    if (data.ok && window.Overseer) {
+      Overseer.updateWorldstate(data.worldstate);
+    }
+  } catch (err) {
+    console.error("[worldstate poll]", err);
+  }
+}, 2000);
+</script>
+
+<body>
+
+  <!-- MAIN TERMINAL WRAPPER -->
+  <div class="terminal-wrap">
+
+    <!-- Header -->
+    <div class="terminal-header">
+      OVERSEER TERMINAL // RESTRICTED ACCESS
+    </div>
+
+    <!-- System line -->
+    <div class="terminal-output terminal-system">
+      SIGNAL STRENGTH: WEAK // LINKED TO POCKET-BOY 3000<br/>
+      TYPE "STATUS", "LOCATION", "SCAN", "INVENTORY", "ZONES", OR MESSAGE VBOT DIRECTLY.
+    </div>
+
+    <!-- Chat / log area -->
+    <div id="chat" class="terminal-output"></div>
+
+    <!-- Input line -->
+    <div class="terminal-input-line">
+      <span class="terminal-prompt">&gt;</span>
+      <input
+        id="input"
+        type="text"
+        class="terminal-input"
+        placeholder="TYPE COMMAND OR MESSAGE..."
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        inputmode="text"
+        enterkeyhint="send"
+      />
+      <button id="send" class="terminal-button">SEND</button>
+    </div>
+
+    <!-- Optional mini-game / Red Menace controls -->
+    <div id="rmControls" class="terminal-output" style="margin-top:16px; display:none;">
+      <span class="terminal-system">RED MENACE CONTROLS:</span><br/>
+      <button id="rmLeft" class="terminal-button">←</button>
+      <button id="rmFire" class="terminal-button">FIRE</button>
+      <button id="rmRight" class="terminal-button">→</button>
+    </div>
+
+    <!-- Close link -->
+    <div style="margin-top:18px; text-align:right;">
+      <button class="terminal-button" onclick="window.close()">CLOSE TERMINAL</button>
+    </div>
+
+  </div>
+
+  <!-- API config for backend calls -->
+  <script src="/js/config.js"></script>
+
+  <!-- Terminal Engine (handles rendering / input wiring) -->
+  <script src="/js/overseer/overseer.full.js"></script>
+
+  <!-- Game Bridge (handles terminal commands and responses) -->
+  <script src="/js/game.overseer-bridge.js"></script>
+
+  <!-- CORE AI ENGINES (must load BEFORE overseer.js brain) -->
+  <script src="/js/overseer/core.personality.js"></script>
+  <script src="/js/overseer/core.memory.js"></script>
+  <script src="/js/overseer/core.learning.js"></script>
+  <script src="/js/overseer/core.lore.js"></script>
+  <script src="/js/overseer/core.faction.js"></script>
+  <script src="/js/overseer/core.threat.js"></script>
+  <script src="/js/overseer/core.weather.js"></script>
+  <script src="/js/overseer/core.worldstate.js"></script>
+  <script src="/js/overseer/core.commands.js"></script>
+  <script src="/js/overseer/core.quest_mapintel.js"></script>
+
+  <!-- Custom Commands Extension -->
+  <script src="/js/overseer/handlers.js"></script>
+
+  <!-- Mini-Games -->
+  <script src="/js/overseer/game.redmenace.js"></script>
+  <script src="/js/overseer/game.tictactoe.js"></script>
+
+  <!-- Unified Overseer Brain (attaches engines + commands) -->
+  <script src="/js/overseer/overseer.js"></script>
+
+</body>
+
+</html>

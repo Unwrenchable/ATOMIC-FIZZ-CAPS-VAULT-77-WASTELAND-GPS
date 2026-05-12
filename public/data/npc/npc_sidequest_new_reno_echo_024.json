@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_new_reno_echo_024",
+  "type": "side_quest",
+  "name": "Nova Tessa",
+  "region": "new_reno",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_new_reno_echo_024_dialog",
+  "lootPool": "npc_sidequest_new_reno_echo_024_loot",
+  "questHooks": [
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

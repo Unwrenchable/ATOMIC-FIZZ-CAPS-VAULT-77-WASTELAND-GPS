@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_dlc_regions_fractured_013",
+  "type": "side_quest",
+  "name": "Sylas Nova",
+  "region": "dlc_regions",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_dlc_regions_fractured_013_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_fractured_013_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "anomaly_investigation_02",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.46,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

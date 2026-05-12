@@ -1,0 +1,16 @@
+{
+  "id": "npc_ridgeline_lookout_vera",
+  "name": "Lookout Vera",
+  "faction": "ridge_watch",
+  "homeRegion": "ridge-line",
+  "currentRegion": "ridge-line",
+  "role": "Scout",
+  "personality": "Sharp-eyed, paranoid, disciplined.",
+  "description": "Sees everything, trusts no one. Claims the ridge hides more than it reveals.",
+  "questHooks": [
+    "Says she saw lights moving underground.",
+    "Mentions hearing a hum echo through the cliffs.",
+    "Knows of a cave that wasn’t there last month."
+  ],
+  "poi": "ridge_line_watch_post"
+}

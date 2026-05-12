@@ -1,0 +1,52 @@
+{
+  "id": "nairobi_plague_origin",
+  "name": "What Made the Plague",
+  "type": "global",
+  "region": "Nairobi_Kenya",
+  "npc_giver": "global_nairobi_iron_mother",
+  "description": "Iron Mother has traced the manufactured plague that killed her patients to a pre-war biotech facility east of Nairobi. She needs someone to go in, recover the synthesis records, and if possible destroy the remaining stock.",
+  "gps_requirement": {
+    "region": "Nairobi, Kenya",
+    "real_lat": -1.2921,
+    "real_lng": 37.5000,
+    "radius_km": 80
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Reach the Biotech Facility",
+      "description": "Travel east of Nairobi to the pre-war biotechnology facility Iron Mother has located. She warns the facility may still have automated security.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -1.2921, "lng": 37.5000},
+      "radius_m": 1000,
+      "actions": ["set_flag:nairobi_biotech_reached", "spawn:enemy_automated_security", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Access the Synthesis Records",
+      "description": "Find the facility's research database and extract the plague synthesis records. Iron Mother needs to know who created it and what it was designed to do.",
+      "trigger": "player_access_terminal:synthesis_database",
+      "actions": ["spawn:item_plague_synthesis_records", "set_flag:nairobi_records_accessed", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Destroy the Remaining Pathogen Stock",
+      "description": "The synthesis records indicate a remaining stockpile in the facility's cold storage. Destroy it before it can spread further.",
+      "trigger": "player_destroy_target:pathogen_stockpile",
+      "actions": ["set_flag:pathogen_stockpile_destroyed", "unlock_stage:4"]
+    },
+    {
+      "id": 4,
+      "name": "Return to Iron Mother",
+      "description": "Return to Nairobi with the synthesis records and confirmation of the stockpile's destruction.",
+      "trigger": "player_returns:global_nairobi_iron_mother",
+      "actions": ["complete_quest:true", "set_flag:plague_origin_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 500,
+    "caps": 200,
+    "fizz": 40,
+    "items": ["item_plague_synthesis_records"]
+  }
+}

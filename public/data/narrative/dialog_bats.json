@@ -1,0 +1,181 @@
+{
+  "id": "dialog_bats",
+  "npc": "The Bat",
+  "portrait": "default",
+  "title": "The Dark Wanderer",
+  "description": "Dialog nodes for The Bat — a grim, caped vigilante who has appointed himself protector of Freeside's lower districts. He wears salvaged black combat armor shaped into something resembling pre-war theatrical costume, speaks in a deliberate rasp, and has an unsettling commitment to the dramatic. His real name is unknown. He has filed no paperwork. Freeside's residents find him terrifying and reassuring in almost equal measure.",
+  "backstory": "Nobody knows his real name. Freeside records show a 'B. Wayne' who registered as a licensed trader in 2267, paid his fees on time for eight months, and then disappeared from every official document. What appeared in his place haunted Freeside's lower districts, appearing at the scenes of crimes in hand-shaped salvaged combat armor. He doesn't talk about what happened before. He talks about justice — which, in the wasteland, is rarer and more valuable than clean water.",
+  "intro": {
+    "id": "bats_intro",
+    "conditions": [
+      "!flag:met_bats"
+    ],
+    "text": "Don't move.<br><br>I've been watching this street for three nights. The Kings have a collection crew running protection here — not real Kings. Splinter group. They take food instead of caps.<br><br>You're not one of them. But you're carrying something and you looked over your shoulder twice in the last hundred meters. That means you know something I don't.<br><br>Talk.<br><br>I'm the Bat.",
+    "set_flags": [
+      "met_bats"
+    ],
+    "video_speech": "Don't move. I've been watching this street for three nights. The Kings have a crew running protection here. Not the real Kings."
+  },
+  "knowledge_nodes": [
+    {
+      "id": "bats_knows_rex",
+      "conditions": [
+        "flag:met_rex",
+        "!flag:bats_comment_rex"
+      ],
+      "text": "Rex. The Captain at the Dam.<br><br>We've had professional disagreements. He operates inside a chain of command. I don't have a chain of command.<br><br>He respects results. So do I. We've reached a working arrangement that neither of us has formally acknowledged.",
+      "set_flags": [
+        "bats_comment_rex"
+      ]
+    },
+    {
+      "id": "bats_knows_loxley",
+      "conditions": [
+        "flag:met_loxley",
+        "!flag:bats_comment_loxley"
+      ],
+      "text": "Loxley. We've crossed paths.<br><br>He steals from the rich. I stop people from hurting the poor. Different methods, overlapping outcomes.<br><br>He once told me I needed to 'lighten up.' He said it while hanging upside down from a caravan harness. I chose not to respond.",
+      "set_flags": [
+        "bats_comment_loxley"
+      ]
+    },
+    {
+      "id": "bats_knows_arnie",
+      "conditions": [
+        "flag:met_arnie",
+        "!flag:bats_comment_arnie"
+      ],
+      "text": "Arnold Black. Hard to miss.<br><br>He is not subtle. Subtlety is a tool. He uses different tools. Both approaches have merit in the field.<br><br>He told me I reminded him of something from a pre-war film. He would not elaborate. I did not ask him to.",
+      "set_flags": [
+        "bats_comment_arnie"
+      ]
+    },
+    {
+      "id": "bats_knows_barney",
+      "conditions": [
+        "flag:met_barney",
+        "!flag:bats_comment_barney"
+      ],
+      "text": "Barney Black. The brother.<br><br>He is louder than Arnold. More theatrical. He announced himself to a raider camp by kicking down a wall and shouting something about enemies.<br><br>It worked. I'm not going to pretend it didn't work.",
+      "set_flags": [
+        "bats_comment_barney"
+      ]
+    },
+    {
+      "id": "bats_knows_dude",
+      "conditions": [
+        "flag:met_dude",
+        "!flag:bats_comment_dude"
+      ],
+      "text": "The Dude. Lebronski.<br><br>He asked me once if I wanted some Nuka-Cola while I was doing surveillance from a rooftop. I declined. He said 'suit yourself' and left.<br><br>He is one of the few people who doesn't try to make me explain myself. I find that restful.",
+      "set_flags": [
+        "bats_comment_dude"
+      ]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "bats_player_danger",
+      "conditions": [
+        "stat:hp<=40",
+        "!flag:bats_assisted_player"
+      ],
+      "text": "You're compromised. This is not a judgment. It's a tactical assessment.<br><br>I have a supply cache two blocks north. You need it more than I need it right now. Take what's there.<br><br>Don't thank me. Just don't make a habit of getting shot.",
+      "grant_items": [
+        {
+          "id": "stimpak",
+          "name": "Stimpak",
+          "type": "aid",
+          "quantity": 2
+        }
+      ],
+      "set_flags": [
+        "bats_assisted_player"
+      ]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "bats_offer_the_long_night",
+      "conditions": [
+        "!flag:sq_bats_the_long_night_taken"
+      ],
+      "text": "There is a man. Goes by Grigg. Pre-war banking family — at least, their descendants. He has spent the last six months buying up debt in Freeside. Every squatter owes him something.<br><br>When the debt is fully consolidated, he will own every structure south of the Strip Gate. He won't use violence. He won't have to.<br><br>I need evidence. Financial records. Correspondence. Something that proves the acquisition isn't legal under even the NCR's loose property statutes.<br><br>His operation runs out of the old Paradise Falls records building. Guarded. But not well — he thinks no one cares about paperwork enough to steal it.<br><br>Prove him wrong.",
+      "offers_quest": "sq_bats_the_long_night",
+      "set_flags": [
+        "sq_bats_the_long_night_taken"
+      ],
+      "video_speech": "There is a man named Grigg using his inheritance to run Freeside's most dangerous loan operation. I need someone who can move in daylight."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "bats_fear",
+      "keywords": [
+        "fear",
+        "scare",
+        "afraid",
+        "frightened",
+        "terror"
+      ],
+      "text": "Criminals are a superstitious, cowardly lot.<br><br>Pre-war criminals were. Post-war criminals are too. The radiation changes a lot of things. Not that.<br><br>Fear is the one thing that survived the bombs completely intact."
+    },
+    {
+      "id": "bats_why",
+      "keywords": [
+        "why",
+        "reason",
+        "purpose",
+        "mission",
+        "cause"
+      ],
+      "text": "Because someone has to.<br><br>The Kings are stretched thin. The NCR doesn't come this far south after dark. The Kings of the Strip don't care what happens below the Gate.<br><br>I have the skills. I have the time. I have the cape, which is frankly underrated as a tactical asset in low-light conditions.<br><br>So. Someone has to."
+    },
+    {
+      "id": "bats_costume",
+      "keywords": [
+        "costume",
+        "cape",
+        "bat",
+        "armor",
+        "outfit",
+        "black"
+      ],
+      "text": "The armor is modified Talon Company salvage, recut and repainted. The cape is pre-war stage fabric — synthetic, fire-resistant, non-reflective.<br><br>The bat design came from a pre-war filmstrip I found in a collapsed cinema. The character was fictional. The psychology was not.<br><br>People remember what they fear. Fear, in this case, is a resource."
+    },
+    {
+      "id": "bats_family",
+      "keywords": [
+        "family",
+        "past",
+        "history",
+        "before",
+        "who"
+      ],
+      "text": "Not relevant to what I'm doing now.<br><br>Every person out here lost someone. The question is what you do with the loss.<br><br>I chose this."
+    },
+    {
+      "id": "bats_law",
+      "keywords": [
+        "law",
+        "justice",
+        "legal",
+        "sheriff",
+        "order",
+        "crime"
+      ],
+      "text": "There are three kinds of law in the wasteland.<br><br>The kind with paper and courts, which the NCR has at the Dam and almost nowhere else. The kind with guns, which everyone has. And the kind that exists because someone decided it should.<br><br>I operate in the third category. It has the best coverage."
+    }
+  ],
+  "fallback": {
+    "id": "bats_fallback",
+    "text": "I'm the Bat.<br><br>This street is watched.<br><br>Move along.",
+    "video_speech": "I'm the Bat. This street is watched. Move along."
+  },
+  "mood": "suspicious",
+  "personality": [
+    "Brooding",
+    "Vigilant",
+    "Relentless"
+  ]
+}

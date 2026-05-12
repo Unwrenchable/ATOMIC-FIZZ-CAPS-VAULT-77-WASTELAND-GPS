@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_commonwealth_prime-echo_005",
+  "type": "side_quest",
+  "name": "Tessa Jett",
+  "region": "commonwealth",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_commonwealth_prime-echo_005_dialog",
+  "lootPool": "npc_sidequest_commonwealth_prime-echo_005_loot",
+  "questHooks": [
+    "fizzcaps_clue_02",
+    "region_story_02",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.53,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

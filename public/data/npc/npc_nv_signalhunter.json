@@ -1,0 +1,19 @@
+{
+  "id": "npc_nv_signalhunter",
+  "name": "The Signal Hunter",
+  "region": "Under-Strip",
+  "type": "Anomaly Tracker",
+  "dialog": {
+    "idle": [
+      "Something’s moving in the dark.",
+      "FizzCo bots don’t die. They reboot."
+    ],
+    "after_anomaly": [
+      "You survived. Impressive.",
+      "The pulse is getting stronger."
+    ]
+  },
+  "quests": ["quest_nv_anomalyhunt"],
+  "faction": "Independent",
+  "notes": "Triggers random Under-Strip combat events."
+}

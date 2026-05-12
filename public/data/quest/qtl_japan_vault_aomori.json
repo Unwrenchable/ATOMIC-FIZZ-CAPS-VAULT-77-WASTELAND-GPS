@@ -1,0 +1,45 @@
+{
+  "id": "qtl_japan_vault_aomori",
+  "name": "The Aomori Protocol",
+  "type": "global",
+  "region": "Aomori_Japan",
+  "npc_giver": "global_tokyo_ghost_merchant",
+  "description": "A Vault-Tec parallel project ran in northern Japan under the designation Aomori Protocol. Tanaka-san has located the vault entrance near old Aomori. The electronics inside would be worth more than a year's trading — but the vault appears to still be sealed.",
+  "gps_requirement": {
+    "region": "Aomori Prefecture, Japan",
+    "real_lat": 40.8244,
+    "real_lng": 140.7470,
+    "radius_km": 80
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Travel North to Aomori",
+      "description": "Leave the Tokyo ruins and head north through the irradiated countryside to the Aomori region. Tanaka-san warns the road is contested by territorial survivor clans.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 40.8244, "lng": 140.7470},
+      "radius_m": 2000,
+      "actions": ["set_flag:aomori_region_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Locate the Sealed Vault Entrance",
+      "description": "Search the mountainside above old Aomori for the Vault-Tec installation entrance. Tanaka-san's map coordinates are approximate — the entrance was deliberately disguised.",
+      "trigger": "player_search_area",
+      "actions": ["spawn:item_aomori_vault_exterior_log", "set_flag:aomori_vault_found", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Find an Alternative Entry Point",
+      "description": "The main door is magnetically sealed and non-responsive. Explore the surrounding mountainside for a secondary access shaft or maintenance tunnel.",
+      "trigger": "player_search_area",
+      "actions": ["spawn:item_japanese_vault_keycard", "spawn:item_pre_war_circuit_board", "complete_quest:true", "set_flag:aomori_protocol_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 350,
+    "caps": 150,
+    "fizz": 30,
+    "items": ["item_pre_war_circuit_board", "item_japanese_vault_keycard"]
+  }
+}

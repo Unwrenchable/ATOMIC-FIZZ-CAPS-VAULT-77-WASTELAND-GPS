@@ -1,0 +1,74 @@
+{
+  "id": "npc_188_signal_man",
+  "name": "The Signal-Man",
+  "faction": "None",
+  "role": "Radio Listener",
+  "type": "wanderer",
+
+  "homeRegion": "188-overpass",
+  "currentRegion": "188-overpass",
+  "poi": "188_overpass_railing",
+
+  "personality": "Quiet, focused, always listening to static. Speaks in short, clipped sentences.",
+  "description": "A drifter who camps on the 188 Overpass with a battered radio rig. Claims he hears broadcasts before they happen.",
+
+  "dialogueProfile": {
+    "tone": "low-static",
+    "personalityTags": [
+      "triangle-sensitive",
+      "radio-attuned",
+      "major-character",
+      "anomaly-listener",
+      "player-reactive"
+    ],
+    "knowledge": [
+      "triangle",
+      "dry-lake",
+      "strip-underground",
+      "lost-broadcasts",
+      "future-signals",
+      "hum-patterns"
+    ],
+    "anomalyAwareness": 0.92
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["188_overpass_railing"],
+      "night": ["188_overpass_railing"],
+      "wanderChance": 0.05
+    },
+    "roaming": [
+      "188-overpass",
+      "old-highway-route",
+      "outer-vegas-ruins"
+    ],
+    "anomalySensitivity": 0.94,
+    "rareEncounter": false
+  },
+
+  "dialog": {
+    "idle": [
+      "Static’s louder today. Means something’s shifting.",
+      "Most folks hear noise. I hear patterns."
+    ],
+    "player_present": [
+      "Your signal’s… strange. Like you’re out of phase.",
+      "Hold still. I’m trying to tune you in."
+    ],
+    "triangle_active": [
+      "There it is again. Three points. One pulse.",
+      "The Overpass is humming. You feel it too."
+    ],
+    "radio_event": [
+      "Got a broadcast from tomorrow. Happens sometimes.",
+      "Someone out there is calling for help… but not yet."
+    ]
+  },
+
+  "quests": [
+    "side_188_signaltrace"
+  ],
+
+  "notes": "The Signal-Man hears broadcasts before they occur. Reacts strongly to triangle anomalies and hum events. Lives permanently on the 188 Overpass."
+}

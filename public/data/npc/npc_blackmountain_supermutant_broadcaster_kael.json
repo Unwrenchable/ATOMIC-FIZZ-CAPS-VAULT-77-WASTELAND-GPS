@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_supermutant_broadcaster_kael",
+  "name": "Kael",
+  "faction": "black_mountain",
+  "role": "Radio Assistant",
+  "personality": "Enthusiastic, clumsy, eager to please.",
+  "description": "Kael helps Gorath run the radio station. He loves the sound of static and thinks it’s music.",
+  "questHooks": [
+    "Needs help tuning the backup transmitter.",
+    "Heard a voice in the static.",
+    "Found a broken holotape near the tower."
+  ],
+  "poi": "black_mountain_fnv"
+}

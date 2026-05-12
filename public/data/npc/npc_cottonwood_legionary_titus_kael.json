@@ -1,0 +1,14 @@
+{
+  "id": "npc_cottonwood_legionary_titus_kael",
+  "name": "Titus Kael",
+  "faction": "caesar_legion",
+  "role": "Legionary",
+  "personality": "Loyal, brutal, unquestioning.",
+  "description": "Titus enforces Legion law with ruthless efficiency. He believes mercy is weakness.",
+  "questHooks": [
+    "Wants proof of NCR infiltration.",
+    "Claims the river 'sings' before storms.",
+    "Saw a glowing object sink beneath the water."
+  ],
+  "poi": "cottonwood_cove_fnv"
+}

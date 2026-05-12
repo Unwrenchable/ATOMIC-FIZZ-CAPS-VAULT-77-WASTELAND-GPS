@@ -1,0 +1,16 @@
+{
+  "id": "npc_bouldercity_scavenger",
+  "name": "Rubble Scavenger",
+  "faction": "None",
+  "role": "Scavenger",
+  "type": "civilian",
+  "homeRegion": "boulder-city",
+  "currentRegion": "boulder-city",
+  "poi": "bouldercity_ruins",
+  "dialog": {
+    "idle": [
+      "Still finding scrap out here after all these years.",
+      "Careful where you step. Not all the rubble’s stable."
+    ]
+  }
+}

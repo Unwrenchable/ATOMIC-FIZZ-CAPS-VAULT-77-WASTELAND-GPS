@@ -1,0 +1,23 @@
+{
+  "id": "npc_jax_lena_cross",
+  "name": "Lena Cross",
+  "region": "New Vegas Strip",
+  "type": "Runner / Courier / Hacker",
+  "dialog": {
+    "idle": [
+      "Jax? Yeah, I know him. Hard to forget someone like that.",
+      "He saved my life once. Don’t tell him I said that."
+    ],
+    "teasing": [
+      "Jax always thinks he’s the smartest guy in the room.",
+      "Tell him he still owes me a drink."
+    ],
+    "serious": [
+      "If Jax is mixed up in this… it’s bad.",
+      "FizzCo’s after him. And now they’re after you."
+    ]
+  },
+  "quests": ["side_jax_lostsignal", "quest_nv_convergence_signs"],
+  "faction": "Independent",
+  "notes": "Knows Jax from before the Vault 77 incident; carries emotional weight."
+}

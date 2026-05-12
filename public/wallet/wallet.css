@@ -1,0 +1,1394 @@
+/* ============================================================
+   ATOMIC FIZZ CAPS WALLET — EPIC WASTELAND EDITION
+   Vault-Tec Certified Terminal Interface
+   With Full Pocket-Boy CRT Effects, Radioactive Glow, & Animations
+   ============================================================ */
+
+/* ============================================================
+   ROOT VARIABLES — WASTELAND COLOR PALETTE
+   ============================================================ */
+:root {
+  /* Pocket-Boy Green Spectrum */
+  --pipboy-green: #00ff66;
+  --pipboy-green-bright: #00ff88;
+  --pipboy-green-dim: #00cc55;
+  --pipboy-green-dark: #009944;
+  --pipboy-green-darker: #006633;
+  
+  /* Background Layers */
+  --pipboy-black: #0a0f0a;
+  --pipboy-bg: #0d120d;
+  --pipboy-panel: rgba(0, 30, 10, 0.85);
+  --pipboy-panel-dark: rgba(0, 15, 5, 0.95);
+  
+  /* Vault-Tec Gold Accent */
+  --vault-gold: #ffcc00;
+  --vault-gold-dim: #cc9900;
+  --vault-gold-bright: #ffdd33;
+  
+  /* Radioactive Fizz Orange */
+  --fizz-orange: #ff9933;
+  --fizz-orange-dim: #cc7722;
+  --fizz-orange-bright: #ffaa44;
+  
+  /* Danger Red (Radiation Warning) */
+  --rad-red: #ff3333;
+  --rad-red-dim: #cc2222;
+  
+  /* Success Blue (Water Chip Approved) */
+  --vault-blue: #00d4ff;
+  --vault-blue-dim: #00a8cc;
+  
+  /* CRT Effects */
+  --scanline-opacity: 0.08;
+  --glow-radius: 20px;
+  
+  /* Typography */
+  --pipboy-font: "VT323", "Courier New", monospace;
+  
+  /* Safe Area Insets for PWA */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  
+  /* Static Noise Texture (Base64-encoded fractal noise SVG)
+     Decoded structure for maintenance:
+     <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+       <filter id="a" x="0" y="0">
+         <feTurbulence baseFrequency=".75" stitchTiles="stitch" type="fractalNoise"/>
+         <feColorMatrix type="saturate" values="0"/>
+       </filter>
+       <path d="M0 0h300v300H0z" filter="url(#a)" opacity=".05"/>
+     </svg> */
+  --noise-texture: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=');
+}
+
+/* ============================================================
+   GLOBAL RESET & BASE
+   ============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%; /* 10px base for rem calculations */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--pipboy-black);
+  color: var(--pipboy-green);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.6rem, 2vw, 2rem);
+  line-height: 1.5;
+  padding: clamp(1rem, 2vw, 2rem);
+  padding-top: max(var(--safe-top), clamp(1rem, 2vw, 2rem));
+  padding-bottom: max(var(--safe-bottom), clamp(1rem, 2vw, 2rem));
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  
+  /* Base text glow */
+  text-shadow: 0 0 4px rgba(0, 255, 102, 0.6);
+  
+  /* Radial background gradient */
+  background: radial-gradient(
+    ellipse at center,
+    #1a2a1a 0%,
+    #0d120d 40%,
+    #050805 80%,
+    #000000 100%
+  );
+  
+  /* Base ambient pulse animation (CRT flicker added conditionally below) */
+  animation: ambient-pulse 8s ease-in-out infinite;
+}
+
+@keyframes ambient-pulse {
+  0%, 100% {
+    background-position: center;
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.05);
+  }
+}
+
+/* ============================================================
+   CRT SCANLINES OVERLAY
+   ============================================================ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 102, 0.03) 0px,
+    rgba(0, 255, 102, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.6;
+  animation: scanline-drift 8s linear infinite;
+}
+
+@keyframes scanline-drift {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+/* ============================================================
+   CRT RADIAL GLOW OVERLAY
+   ============================================================ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 255, 102, 0.15) 0%,
+    rgba(0, 255, 102, 0.05) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 9998;
+  animation: crt-glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes crt-glow-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* ============================================================
+   BOOT OVERLAY — VAULT-TEC STARTUP SEQUENCE
+   ============================================================ */
+#boot-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  z-index: 99999;
+  animation: boot-fadeout 3s forwards 2s;
+}
+
+#boot-logo {
+  max-width: clamp(150px, 40vw, 300px);
+  filter: drop-shadow(0 0 30px var(--pipboy-green));
+  animation: logo-pulse 2s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px var(--pipboy-green));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 40px var(--pipboy-green-bright));
+    transform: scale(1.02);
+  }
+}
+
+.boot-line {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  color: var(--pipboy-green);
+  text-shadow: 0 0 8px var(--pipboy-green);
+  letter-spacing: 0.2rem;
+  opacity: 0;
+  animation: boot-text-appear 0.5s forwards;
+}
+
+.boot-line:nth-child(2) { animation-delay: 0.3s; }
+.boot-line:nth-child(3) { animation-delay: 0.6s; }
+.boot-line:nth-child(4) { animation-delay: 0.9s; }
+.boot-line:nth-child(5) { animation-delay: 1.2s; }
+
+@keyframes boot-text-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes boot-fadeout {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ============================================================
+   MAIN WALLET APP CONTAINER
+   ============================================================ */
+#wallet-app {
+  max-width: min(1200px, calc(100vw - 4rem));
+  margin: 0 auto;
+  opacity: 0;
+  animation: app-fadein 1s forwards 3s;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes app-fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   WALLET BRANDING HEADER
+   ============================================================ */
+#wallet-branding {
+  text-align: center;
+  padding: clamp(2rem, 4vw, 4rem) 0;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  border-bottom: 3px solid var(--pipboy-green);
+  position: relative;
+  animation: border-glow 3s ease-in-out infinite;
+}
+
+@keyframes border-glow {
+  0%, 100% {
+    border-color: var(--pipboy-green);
+    box-shadow: 0 3px 15px rgba(0, 255, 102, 0.3);
+  }
+  50% {
+    border-color: var(--pipboy-green-bright);
+    box-shadow: 0 3px 25px rgba(0, 255, 102, 0.5);
+  }
+}
+
+#wallet-logo {
+  max-width: clamp(120px, 30vw, 200px);
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 20px var(--vault-gold));
+  transition: all 0.3s ease;
+}
+
+#wallet-logo:hover {
+  filter: drop-shadow(0 0 35px var(--vault-gold-bright));
+  transform: scale(1.05) rotate(2deg);
+}
+
+#wallet-branding h1 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  letter-spacing: clamp(0.2rem, 0.5vw, 0.5rem);
+  text-transform: uppercase;
+  background: linear-gradient(
+    90deg,
+    var(--pipboy-green) 0%,
+    var(--vault-gold) 50%,
+    var(--pipboy-green) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s linear infinite;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 10px var(--pipboy-green));
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+#wallet-branding .small.muted {
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+  color: var(--pipboy-green-dim);
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   WALLET CARDS — ENHANCED TERMINAL PANELS
+   ============================================================ */
+.wallet-card {
+  background: var(--pipboy-panel);
+  border: 2px solid var(--pipboy-green-dark);
+  border-radius: clamp(0.6rem, 1vw, 1rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 20px rgba(0, 255, 102, 0.15),
+    inset 0 0 40px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s ease;
+}
+
+/* Corner decorations - Vault-Tec style */
+.wallet-card::before,
+.wallet-card::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--pipboy-green);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.wallet-card::before {
+  top: 8px;
+  left: 8px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.wallet-card::after {
+  bottom: 8px;
+  right: 8px;
+  border-left: none;
+  border-top: none;
+}
+
+.wallet-card:hover {
+  border-color: var(--pipboy-green);
+  box-shadow:
+    0 0 35px rgba(0, 255, 102, 0.3),
+    inset 0 0 40px rgba(0, 255, 102, 0.05);
+  transform: translateY(-2px);
+}
+
+.wallet-card:hover::before,
+.wallet-card:hover::after {
+  opacity: 1;
+  width: 30px;
+  height: 30px;
+}
+
+/* Neon glow variant */
+.wallet-card.neon-glow {
+  border-color: var(--vault-gold);
+  box-shadow:
+    0 0 30px rgba(255, 204, 0, 0.3),
+    inset 0 0 40px rgba(0, 0, 0, 0.8);
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(255, 204, 0, 0.2),
+      inset 0 0 40px rgba(0, 0, 0, 0.8);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(255, 204, 0, 0.4),
+      inset 0 0 40px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Game banner special styling */
+.game-banner {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 153, 51, 0.1) 0%,
+    var(--pipboy-panel) 50%,
+    rgba(0, 255, 102, 0.1) 100%
+  );
+  border-color: var(--fizz-orange);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-banner::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 153, 51, 0.02) 10px,
+    rgba(255, 153, 51, 0.02) 20px
+  );
+  animation: banner-shift 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes banner-shift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(20px, 20px); }
+}
+
+/* ============================================================
+   WALLET CARD HEADERS
+   ============================================================ */
+.wallet-card-header {
+  font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(0, 255, 102, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
+}
+
+.card-icon {
+  font-size: clamp(2.2rem, 3vw, 3rem);
+  filter: drop-shadow(0 0 8px var(--vault-gold));
+  animation: icon-float 3s ease-in-out infinite;
+}
+
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ============================================================
+   DATA ROWS
+   ============================================================ */
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(0.8rem, 1.5vw, 1.2rem);
+  padding: clamp(0.8rem, 1.5vw, 1.2rem) 0;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+  transition: all 0.2s ease;
+}
+
+.data-row:hover {
+  background: rgba(0, 255, 102, 0.05);
+  padding-left: 1rem;
+  border-left: 3px solid var(--pipboy-green);
+}
+
+.data-row:last-child {
+  border-bottom: none;
+}
+
+.data-label {
+  color: var(--pipboy-green-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-size: clamp(1.4rem, 1.8vw, 1.6rem);
+}
+
+.data-value {
+  font-weight: bold;
+  color: var(--pipboy-green-bright);
+  font-size: clamp(1.6rem, 2vw, 1.8rem);
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+}
+
+.balance-value {
+  font-size: clamp(2rem, 2.5vw, 2.4rem);
+  font-weight: bold;
+  color: var(--vault-gold);
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+  animation: value-pulse 2s ease-in-out infinite;
+}
+
+@keyframes value-pulse {
+  0%, 100% {
+    text-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 204, 0, 1);
+  }
+}
+
+/* ============================================================
+   BUTTONS — EPIC VAULT-TEC TERMINALS
+   ============================================================ */
+.btn,
+button:not(.modal-close):not(.wallet-tab) {
+  display: inline-block;
+  padding: clamp(1rem, 2vw, 1.4rem) clamp(1.5rem, 3vw, 2.5rem);
+  background: rgba(0, 0, 0, 0.8);
+  color: var(--pipboy-green);
+  border: 2px solid var(--pipboy-green);
+  border-radius: 0.4rem;
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.6rem, 2vw, 2rem);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  min-height: 44px;
+  
+  /* Glow effect */
+  box-shadow:
+    0 0 15px rgba(0, 255, 102, 0.3),
+    inset 0 0 15px rgba(0, 255, 102, 0.1);
+  
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
+}
+
+/* Scanline sweep effect */
+.btn::before,
+button:not(.modal-close):not(.wallet-tab)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 102, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+/* Hover state - radioactive glow */
+.btn:hover,
+button:not(.modal-close):not(.wallet-tab):hover {
+  background: rgba(0, 255, 102, 0.15);
+  border-color: var(--pipboy-green-bright);
+  color: var(--vault-gold);
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 30px rgba(0, 255, 102, 0.6),
+    inset 0 0 20px rgba(0, 255, 102, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 12px rgba(255, 204, 0, 1);
+}
+
+.btn:hover::before,
+button:not(.modal-close):not(.wallet-tab):hover::before {
+  left: 100%;
+}
+
+/* Active/pressed state */
+.btn:active,
+button:not(.modal-close):not(.wallet-tab):active {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 20px rgba(0, 255, 102, 0.4),
+    inset 0 0 20px rgba(0, 255, 102, 0.3);
+}
+
+/* Disabled state */
+.btn:disabled,
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.6);
+  border-color: var(--pipboy-green-darker);
+  text-shadow: none;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Play game button - EPIC */
+.play-game-btn {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 51, 51, 0.2) 0%,
+    rgba(0, 0, 0, 0.8) 50%,
+    rgba(255, 153, 51, 0.2) 100%
+  );
+  border: 3px solid var(--fizz-orange);
+  font-size: clamp(2rem, 3vw, 2.8rem) !important;
+  animation: danger-pulse 2s ease-in-out infinite;
+  box-shadow:
+    0 0 40px rgba(255, 153, 51, 0.5),
+    inset 0 0 30px rgba(255, 153, 51, 0.1);
+}
+
+@keyframes danger-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 30px rgba(255, 153, 51, 0.4),
+      inset 0 0 30px rgba(255, 153, 51, 0.1);
+    border-color: var(--fizz-orange);
+  }
+  50% {
+    box-shadow:
+      0 0 50px rgba(255, 153, 51, 0.7),
+      inset 0 0 30px rgba(255, 153, 51, 0.2);
+    border-color: var(--fizz-orange-bright);
+  }
+}
+
+.play-game-btn:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 51, 51, 0.3) 0%,
+    rgba(0, 255, 102, 0.2) 50%,
+    rgba(255, 153, 51, 0.3) 100%
+  );
+  transform: translateY(-5px) scale(1.02);
+  box-shadow:
+    0 0 60px rgba(255, 153, 51, 0.8),
+    inset 0 0 40px rgba(255, 153, 51, 0.2),
+    0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================================
+   WALLET TABS — POCKET-BOY INTERFACE STYLE
+   ============================================================ */
+.wallet-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: clamp(2rem, 3vw, 3rem);
+  padding: 1rem;
+  background: var(--pipboy-panel-dark);
+  border: 2px solid var(--pipboy-green-dark);
+  border-radius: 0.6rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.wallet-tab {
+  flex: 1;
+  min-width: clamp(100px, 15vw, 140px);
+  padding: clamp(0.8rem, 1.5vw, 1.2rem) clamp(1rem, 2vw, 1.5rem);
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--pipboy-green-darker);
+  border-radius: 0.4rem;
+  color: var(--pipboy-green-dim);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.3rem, 1.8vw, 1.6rem);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-tab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(0, 255, 102, 0.1) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wallet-tab:hover {
+  border-color: var(--pipboy-green);
+  color: var(--pipboy-green-bright);
+  background: rgba(0, 255, 102, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+}
+
+.wallet-tab:hover::before {
+  opacity: 1;
+}
+
+.wallet-tab.active {
+  background: rgba(0, 255, 102, 0.15);
+  border-color: var(--pipboy-green);
+  color: var(--vault-gold);
+  box-shadow:
+    0 0 20px rgba(0, 255, 102, 0.4),
+    inset 0 0 15px rgba(0, 255, 102, 0.2);
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+}
+
+/* Wallet tab link (for external pages like FIZZ.FUN) */
+.wallet-tab-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: var(--fizz-orange-dim);
+  color: var(--fizz-orange);
+}
+
+.wallet-tab-link:hover {
+  border-color: var(--fizz-orange);
+  color: var(--fizz-orange-bright);
+  background: rgba(255, 153, 51, 0.1);
+  box-shadow: 0 0 15px rgba(255, 153, 51, 0.3);
+}
+
+/* ============================================================
+   TAB CONTENT PANELS
+   ============================================================ */
+.tab-content {
+  display: none;
+  animation: tab-fadein 0.5s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes tab-fadein {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Terminal boot effect for tab content */
+.terminal-boot {
+  position: relative;
+}
+
+.terminal-boot::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--pipboy-green),
+    transparent
+  );
+  animation: boot-scan 1s ease-out forwards;
+}
+
+@keyframes boot-scan {
+  from {
+    top: 0;
+    opacity: 1;
+  }
+  to {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   SWAP INTERFACE
+   ============================================================ */
+.swap-container {
+  background: rgba(0, 0, 0, 0.4);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 255, 102, 0.2);
+}
+
+.swap-input-group {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.swap-label {
+  display: block;
+  font-size: clamp(1.3rem, 1.8vw, 1.5rem);
+  color: var(--pipboy-green-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.swap-row {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.swap-select,
+.swap-input {
+  flex: 1;
+  padding: 1.2rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--pipboy-green-darker);
+  border-radius: 0.4rem;
+  color: var(--pipboy-green);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.6rem, 2vw, 1.8rem);
+  transition: all 0.3s ease;
+}
+
+.swap-select {
+  flex: 0 0 auto;
+  min-width: 100px;
+}
+
+.swap-input {
+  text-align: right;
+}
+
+.swap-select:focus,
+.swap-input:focus {
+  outline: none;
+  border-color: var(--pipboy-green);
+  box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+  background: rgba(0, 255, 102, 0.05);
+}
+
+.swap-balance {
+  margin-top: 0.5rem;
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+  color: var(--pipboy-green-dim);
+  text-align: right;
+}
+
+.swap-arrow {
+  text-align: center;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  color: var(--vault-gold);
+  margin: 1rem 0;
+  animation: arrow-pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px var(--vault-gold));
+}
+
+@keyframes arrow-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px var(--vault-gold));
+  }
+  50% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 20px var(--vault-gold-bright));
+  }
+}
+
+/* ============================================================
+   STAKING INTERFACE
+   ============================================================ */
+.staking-stats {
+  margin-bottom: 2rem;
+}
+
+.staking-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.staking-action-btn {
+  flex: 1;
+  min-width: 150px;
+  opacity: 0.6;
+  border-color: var(--pipboy-green-darker);
+}
+
+.staking-action-btn.active {
+  opacity: 1;
+  background: rgba(0, 255, 102, 0.15);
+  border-color: var(--pipboy-green);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+}
+
+/* Tier list styling */
+.tier-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tier-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 102, 0.2);
+  border-radius: 0.4rem;
+  transition: all 0.3s ease;
+}
+
+.tier-item:hover {
+  background: rgba(0, 255, 102, 0.05);
+  border-color: var(--pipboy-green);
+  transform: translateX(5px);
+}
+
+.tier-name {
+  font-size: clamp(1.4rem, 1.8vw, 1.6rem);
+  font-weight: bold;
+}
+
+.tier-req {
+  color: var(--vault-gold);
+  font-size: clamp(1.3rem, 1.6vw, 1.5rem);
+}
+
+.tier-perk {
+  color: var(--pipboy-green-dim);
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+  font-style: italic;
+}
+
+/* ============================================================
+   INPUT FIELDS & FORMS
+   ============================================================ */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  padding: 1.2rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--pipboy-green-darker);
+  border-radius: 0.4rem;
+  color: var(--pipboy-green);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.5rem, 2vw, 1.8rem);
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--pipboy-green);
+  box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+  background: rgba(0, 255, 102, 0.05);
+}
+
+.entry label {
+  display: block;
+  font-size: clamp(1.3rem, 1.8vw, 1.5rem);
+  color: var(--pipboy-green-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  margin-bottom: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.mono {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05rem;
+}
+
+.small {
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+}
+
+.muted {
+  color: var(--pipboy-green-dim);
+  opacity: 0.8;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ============================================================
+   TOAST NOTIFICATIONS
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  top: clamp(1rem, 2vw, 2rem);
+  right: clamp(1rem, 2vw, 2rem);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+}
+
+.toast {
+  padding: 1.5rem;
+  background: var(--pipboy-panel);
+  border: 2px solid var(--pipboy-green);
+  border-radius: 0.6rem;
+  box-shadow: 0 0 30px rgba(0, 255, 102, 0.5);
+  animation: toast-slide-in 0.5s ease;
+}
+
+@keyframes toast-slide-in {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.success {
+  border-color: var(--vault-blue);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+}
+
+.toast.error {
+  border-color: var(--rad-red);
+  box-shadow: 0 0 30px rgba(255, 51, 51, 0.5);
+}
+
+.toast.warning {
+  border-color: var(--vault-gold);
+  box-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
+}
+
+/* ============================================================
+   MODAL DIALOGS
+   ============================================================ */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  padding: 2rem;
+  backdrop-filter: blur(5px);
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  max-width: min(600px, calc(100vw - 4rem));
+  width: 100%;
+  background: var(--pipboy-panel-dark);
+  border: 3px solid var(--pipboy-green);
+  border-radius: 1rem;
+  padding: 3rem;
+  position: relative;
+  box-shadow:
+    0 0 50px rgba(0, 255, 102, 0.5),
+    inset 0 0 40px rgba(0, 0, 0, 0.8);
+  animation: modal-zoom-in 0.4s ease;
+}
+
+@keyframes modal-zoom-in {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 51, 51, 0.2);
+  border: 2px solid var(--rad-red);
+  color: var(--rad-red);
+  font-size: 1.4rem;
+}
+
+.modal-close:hover {
+  background: rgba(255, 51, 51, 0.4);
+  box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+}
+
+/* ============================================================
+   SKELETON LOADING STATES
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 102, 0.05) 0%,
+    rgba(0, 255, 102, 0.1) 50%,
+    rgba(0, 255, 102, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: 0.4rem;
+  min-height: 20px;
+}
+
+@keyframes skeleton-pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================================
+   BRIDGE & MULTICHAIN COMPONENTS
+   ============================================================ */
+.bridge-container {
+  background: rgba(0, 0, 0, 0.4);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 255, 102, 0.2);
+}
+
+.bridge-chain-select {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.bridge-from,
+.bridge-to {
+  flex: 1;
+}
+
+.bridge-arrow {
+  font-size: clamp(2.5rem, 4vw, 3rem);
+  color: var(--pipboy-green);
+  filter: drop-shadow(0 0 10px var(--pipboy-green));
+}
+
+.chain-balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 102, 0.2);
+  border-radius: 0.4rem;
+  margin-bottom: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.chain-balance:hover {
+  background: rgba(0, 255, 102, 0.05);
+  border-color: var(--pipboy-green);
+  transform: translateX(5px);
+}
+
+.chain-name {
+  font-size: clamp(1.5rem, 2vw, 1.8rem);
+  font-weight: bold;
+}
+
+.chain-value {
+  color: var(--vault-gold);
+  font-size: clamp(1.6rem, 2.2vw, 2rem);
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+/* Mobile First (phones < 480px) */
+@media screen and (max-width: 480px) {
+  html {
+    font-size: 50%;
+  }
+  
+  body {
+    padding: 1rem;
+    padding-top: max(var(--safe-top), 1rem);
+  }
+  
+  .wallet-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  
+  .wallet-tab {
+    flex: 0 0 auto;
+    min-width: 120px;
+  }
+  
+  .data-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .swap-row,
+  .bridge-chain-select,
+  .staking-actions {
+    flex-direction: column;
+  }
+}
+
+/* Small Tablets (481px - 768px) */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  html {
+    font-size: 55%;
+  }
+}
+
+/* Large Tablets / Small Laptops (769px - 1024px) */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  html {
+    font-size: 58%;
+  }
+}
+
+/* Desktop (1025px+) */
+@media screen and (min-width: 1025px) {
+  html {
+    font-size: 62.5%;
+  }
+  
+  #wallet-app {
+    max-width: 1400px;
+  }
+}
+
+/* Large Desktop / 4K (1920px+) */
+@media screen and (min-width: 1920px) {
+  html {
+    font-size: 70%;
+  }
+}
+
+/* ============================================================
+   STATIC NOISE EFFECT (OPTIONAL LAYER)
+   Note: --noise-texture variable is defined in main :root block
+   ============================================================ */
+.static-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: var(--noise-texture);
+  animation: noise-shift 0.2s steps(10) infinite;
+  mix-blend-mode: overlay;
+}
+
+@keyframes noise-shift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-10px, -10px); }
+}
+
+/* ============================================================
+   CRT FLICKER EFFECT (SUBTLE - Respects Reduced Motion)
+   Note: Adds CRT flicker animation to body element only if
+   user hasn't requested reduced motion. Base ambient-pulse
+   animation is always active (defined at lines 110 above).
+   
+   Accessibility Note: The opacity change is minimal (1.0 to 0.98)
+   which is a 2% variation - well below the WCAG threshold for
+   flashing content (50% change). This subtle effect mimics CRT
+   phosphor persistence without triggering photosensitivity.
+   ============================================================ */
+@keyframes crt-flicker {
+  from {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.98;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Only apply CRT flicker if user hasn't requested reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    /* Add CRT flicker to existing ambient-pulse animation */
+    animation: crt-flicker 0.15s infinite steps(2), ambient-pulse 8s ease-in-out infinite;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY — Reduced Motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   PRINT STYLES — VAULT-TEC REPORT FORMAT
+   ============================================================ */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  body::before,
+  body::after,
+  .wallet-card::before,
+  .wallet-card::after {
+    display: none;
+  }
+  
+  .wallet-tabs,
+  .btn,
+  button {
+    display: none;
+  }
+  
+  .wallet-card {
+    page-break-inside: avoid;
+    border: 2px solid black;
+    box-shadow: none;
+  }
+}
+
+/* ============================================================
+   END OF EPIC WASTELAND WALLET STYLES
+   Per Vault-Tec Regulations, Section 77-B
+   ============================================================ */
+
+/* === ACCESSIBILITY: REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* === ACCESSIBILITY: FORCED COLORS (HIGH CONTRAST) === */
+@media (forced-colors: active) {
+  .wallet-btn,
+  .connect-btn,
+  .wallet-action-btn {
+    border: 2px solid ButtonText;
+  }
+}
