@@ -85,6 +85,9 @@ const corsOptions = {
   maxAge: 86400
 };
 
+const repoSnapshot = require("./api/repo-snapshot");
+app.set("repoSnapshot", repoSnapshot);
+
 // Log configured CORS origins on startup for debugging
 console.log('[server] CORS configured with origins:', allowedOrigins.join(', '));
 
@@ -306,9 +309,11 @@ const api = (file) => path.join(__dirname, "api", file);
 // Utility / monitoring endpoints (no auth — checked by smoke tests and uptime monitors)
 safeMount("/api/ping",    api("ping"));
 safeMount("/api/version", api("version"));
+safeMount("/api/repo-snapshot", api("repo-snapshot"));
 
 // Narrative API — serves story acts, NPC dialog, terminals, encounters, collectibles
 safeMount("/api/narrative", api("narrative"));
+safeMount("/api/worldstate", api("worldstate"));
 
 // Core API endpoints
 safeMount("/api/loot-voucher", api("loot-voucher"));
@@ -367,9 +372,6 @@ safeMount("/api/buy-stimpak", api("buy-stimpak"));
 
 // Overseer AI proxy (Hugging Face / OpenAI compatible)
 safeMount("/api/overseer", api("overseer-proxy"));
-
-// Live worldstate (NPCs, quests, active events)
-safeMount("/api/worldstate", api("worldstate"));
 
 // AI Character Generation (Grok AI)
 safeMount("/api/ai-character", api("ai-character"));

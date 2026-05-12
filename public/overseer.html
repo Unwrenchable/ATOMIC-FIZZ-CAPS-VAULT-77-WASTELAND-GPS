@@ -25,6 +25,20 @@
   <link rel="stylesheet" href="/css/terminal.css" />
 </head>
 
+<script>
+setInterval(async () => {
+  try {
+    const res = await fetch("/api/worldstate");
+    const data = await res.json();
+    if (data.ok && window.Overseer) {
+      Overseer.updateWorldstate(data.worldstate);
+    }
+  } catch (err) {
+    console.error("[worldstate poll]", err);
+  }
+}, 2000);
+</script>
+
 <body>
 
   <!-- MAIN TERMINAL WRAPPER -->
@@ -109,4 +123,5 @@
   <script src="/js/overseer/overseer.js"></script>
 
 </body>
+
 </html>

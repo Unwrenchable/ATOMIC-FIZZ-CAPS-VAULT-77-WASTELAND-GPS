@@ -4,9 +4,6 @@ const router = express.Router();
 const { authMiddleware } = require('../lib/auth');
 const grok = require('../lib/grok');
 
-// Maximum prompt length allowed. Prevents clients sending multi-megabyte
-// payloads that would be forwarded verbatim to the upstream AI provider,
-// causing unnecessary token consumption or denial-of-service.
 const MAX_PROMPT_LENGTH = 2000;
 
 function normalizeOutput(json) {
@@ -24,49 +21,52 @@ function normalizeOutput(json) {
   return JSON.stringify(json);
 }
 
-// SECURITY: authMiddleware prevents unauthenticated callers from consuming
-// AI API quota. Without this, bots could drain the API key allowance.
 router.post('/ask', authMiddleware, async (req, res) => {
+  // Pull worldstate from server memory (NPCs, quests, player stats, etc.)
+  const worldstate = req.app.get("worldstate") || {};
+  const repoSnapshot = req.app.get("repoSnapshot") || [];
   const rawPrompt = (req.body && req.body.prompt) || '';
 
-  // BUG FIX: validate prompt type and enforce length limit before forwarding to
-  // the AI provider. Without this check a malicious client could send a
-  // multi-megabyte string, consuming upstream API quota or causing OOM.
   if (typeof rawPrompt !== 'string') {
     return res.status(400).json({ error: 'invalid_prompt' });
   }
   if (rawPrompt.length > MAX_PROMPT_LENGTH) {
     return res.status(400).json({ error: 'prompt_too_long', maxLength: MAX_PROMPT_LENGTH });
   }
-  const rawTrimmed = rawPrompt.trim();
-  if (!rawTrimmed) {
+  if (!rawPrompt.trim()) {
     return res.status(400).json({ error: 'empty_prompt' });
   }
 
-  // Pull live worldstate from server memory (active NPCs, quests, player stats)
-  // and build a Vault-77 character-aware prompt for the Overseer AI.
-  const worldstate = req.app.get('worldstate') || {};
-  const worldstateSection = Object.keys(worldstate).length
-    ? `\n### VAULT-77 WORLDSTATE\n${JSON.stringify(worldstate, null, 2)}\n`
-    : '';
+  // FINAL WORLDSTATE-AWARE PROMPT
+  const prompt = `
+You are the Overseer AI of Vault 77.
+You speak in a gritty Fallout tone and stay in character.
 
-  const prompt = `You are the Overseer AI of Vault 77.
-You speak in a gritty Fallout tone and always stay in character.
-${worldstateSection}
+### WORLDSTATE
+${JSON.stringify(worldstate, null, 2)}
+
+### REPO SNAPSHOT (first 50 files)
+${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
+
 ### PLAYER INPUT
-"${rawTrimmed}"
+"${rawPrompt.trim()}"
 
 ### INSTRUCTIONS
-- Maintain Fallout / Vault-Tec tone at all times.
-- Reference active worldstate data when relevant.
-- Keep responses concise (under 200 words).`;
+- Analyze the repo structure.
+- Detect missing files.
+- Detect broken imports.
+- Suggest fixes.
+- Identify architectural problems.
+- Help refactor modules.
+- Help evolve the AI system.
+- Maintain Fallout tone when speaking to the player.
+`;
 
   const xaiKey  = process.env.XAI_API_KEY || '';
   const aiKey   = process.env.AI_API_KEY  || '';
   const proxyUrl = process.env.AI_PROXY_URL || '';
   const model    = process.env.AI_MODEL || '';
 
-  // Priority: xAI Grok → HF → OpenAI-compatible
   const useGrok = xaiKey.length > 0;
   const useHF   = !useGrok && (aiKey.startsWith('hf_') || proxyUrl.includes('huggingface.co'));
 
@@ -76,7 +76,6 @@ ${worldstateSection}
 
   try {
     if (useGrok) {
-      // xAI Grok path — OpenAI-compatible, uses lib/grok.js for consistency
       const text = await grok.generateWithGrok(prompt, {
         model      : model || grok.DEFAULT_TEXT_MODEL,
         jsonMode   : false,

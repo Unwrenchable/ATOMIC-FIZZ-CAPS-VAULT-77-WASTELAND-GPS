@@ -32,13 +32,11 @@
     // Use devnet for local development
     window.SOLANA_RPC = 'https://api.devnet.solana.com';
   } else {
-    // Production/preview environments (Vercel or Render):
-    // Use relative paths — Vercel proxies /api/* to the backend via rewrites,
-    // and Render serves the backend directly on the same origin.
-    window.API_BASE = '';
-    // Use mainnet for production
-    window.SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
-  }
+  // Read backend URL from injected global (set in index.html or env.js)
+  window.API_BASE = window.__BACKEND_URL__ || 'https://api.atomicfizzcaps.xyz';
+  window.SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
+}
+
 
   // BACKEND_URL is an alias used by some older modules (main.js, authClient.js)
   // while newer modules use API_BASE - both point to the same endpoint
