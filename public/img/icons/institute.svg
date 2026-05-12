@@ -1,0 +1,19 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main facility -->
+  <rect x="6" y="10" width="12" height="10" fill="#00ff41"/>
+  <!-- Dome -->
+  <ellipse cx="12" cy="8" rx="8" ry="4" fill="#00ff41"/>
+  <!-- Antenna -->
+  <rect x="11.5" y="2" width="1" height="6" fill="#00ff41"/>
+  <circle cx="12" cy="2" r="1" fill="#00ff41"/>
+  <!-- Windows -->
+  <rect x="7" y="12" width="2" height="2" fill="#0a1a0a"/>
+  <rect x="10" y="12" width="2" height="2" fill="#0a1a0a"/>
+  <rect x="13" y="12" width="2" height="2" fill="#0a1a0a"/>
+  <rect x="16" y="12" width="2" height="2" fill="#0a1a0a"/>
+  <!-- Radiation symbol -->
+  <circle cx="12" cy="16" r="1" fill="#00ff41"/>
+  <path d="M12,16 L12,14 L13.5,15 A3,3 0 0 1 12,14 Z" fill="#00ff41"/>
+  <path d="M12,16 L14,15 L13,16.5 A3,3 0 0 1 14,15 Z" fill="#00ff41" transform="rotate(120 12 16)"/>
+  <path d="M12,16 L10,15 L11,16.5 A3,3 0 0 1 10,15 Z" fill="#00ff41" transform="rotate(240 12 16)"/>
+</svg>

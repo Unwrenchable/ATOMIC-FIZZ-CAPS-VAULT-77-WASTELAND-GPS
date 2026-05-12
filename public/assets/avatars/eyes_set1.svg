@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <!-- Eye white: subtle yellowish sclera -->
+    <radialGradient id="eyeWhite" cx="42%" cy="38%">
+      <stop offset="0%"   stop-color="#fffff5"/>
+      <stop offset="55%"  stop-color="#f5f2e0"/>
+      <stop offset="85%"  stop-color="#e8e0c8"/>
+      <stop offset="100%" stop-color="#d8d0b8"/>
+    </radialGradient>
+    <!-- Iris: multi-ring colored limbal -->
+    <radialGradient id="irisGrad" cx="35%" cy="30%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="22%"  stop-color="#7a8a5a"/>
+      <stop offset="55%"  stop-color="#4a5a3a"/>
+      <stop offset="78%"  stop-color="#2a3a1e"/>
+      <stop offset="100%" stop-color="#111a08"/>
+    </radialGradient>
+    <!-- Pupil depth -->
+    <radialGradient id="pupilGrad" cx="38%" cy="32%">
+      <stop offset="0%"   stop-color="#2a2a2a"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <!-- Subtle socket shadow -->
+    <radialGradient id="socketL" cx="50%" cy="50%">
+      <stop offset="0%"   stop-color="rgba(0,0,0,0.18)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </radialGradient>
+    <radialGradient id="socketR" cx="50%" cy="50%">
+      <stop offset="0%"   stop-color="rgba(0,0,0,0.18)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ═══════════════ LEFT EYE ═══════════════ -->
+  <!-- Socket shadow -->
+  <ellipse cx="100" cy="118" rx="22" ry="16" fill="url(#socketL)"/>
+
+  <!-- Eye white — almond path -->
+  <path d="M82,118 Q83,110 100,109 Q117,110 118,118 Q117,126 100,127 Q83,126 82,118 Z" fill="url(#eyeWhite)"/>
+
+  <!-- Upper eyelid skin crease -->
+  <path d="M82,118 Q91,108 100,107 Q109,108 118,118"
+        fill="none" stroke="#8a7060" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Iris -->
+  <circle cx="100" cy="118" r="8" fill="url(#irisGrad)"/>
+  <!-- Limbal ring -->
+  <circle cx="100" cy="118" r="8" fill="none" stroke="#0e1a06" stroke-width="1.8" opacity="0.75"/>
+
+  <!-- Pupil -->
+  <circle cx="100" cy="118" r="3.8" fill="url(#pupilGrad)"/>
+
+  <!-- Catchlight — large specular -->
+  <circle cx="103" cy="115"  r="2.1" fill="#ffffff" opacity="0.92"/>
+  <!-- Catchlight — small fill -->
+  <circle cx="97.5" cy="120.5" r="1.0" fill="#ffffff" opacity="0.50"/>
+
+  <!-- Upper lash line -->
+  <path d="M82,118 Q91,106 100,105 Q109,106 118,118"
+        fill="none" stroke="#181210" stroke-width="2.2" stroke-linecap="round" opacity="0.88"/>
+  <!-- Lower lash line -->
+  <path d="M84,120 Q100,128 116,120"
+        fill="none" stroke="#2a2018" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- Tear duct -->
+  <ellipse cx="82" cy="119" rx="3" ry="2.2" fill="#d89890" opacity="0.45"/>
+
+  <!-- ═══════════════ RIGHT EYE ═══════════════ -->
+  <!-- Socket shadow -->
+  <ellipse cx="156" cy="118" rx="22" ry="16" fill="url(#socketR)"/>
+
+  <!-- Eye white — almond path -->
+  <path d="M138,118 Q139,110 156,109 Q173,110 174,118 Q173,126 156,127 Q139,126 138,118 Z" fill="url(#eyeWhite)"/>
+
+  <!-- Upper eyelid skin crease -->
+  <path d="M138,118 Q147,108 156,107 Q165,108 174,118"
+        fill="none" stroke="#8a7060" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Iris -->
+  <circle cx="156" cy="118" r="8" fill="url(#irisGrad)"/>
+  <!-- Limbal ring -->
+  <circle cx="156" cy="118" r="8" fill="none" stroke="#0e1a06" stroke-width="1.8" opacity="0.75"/>
+
+  <!-- Pupil -->
+  <circle cx="156" cy="118" r="3.8" fill="url(#pupilGrad)"/>
+
+  <!-- Catchlight — large specular -->
+  <circle cx="159" cy="115"  r="2.1" fill="#ffffff" opacity="0.92"/>
+  <!-- Catchlight — small fill -->
+  <circle cx="153.5" cy="120.5" r="1.0" fill="#ffffff" opacity="0.50"/>
+
+  <!-- Upper lash line -->
+  <path d="M138,118 Q147,106 156,105 Q165,106 174,118"
+        fill="none" stroke="#181210" stroke-width="2.2" stroke-linecap="round" opacity="0.88"/>
+  <!-- Lower lash line -->
+  <path d="M140,120 Q156,128 172,120"
+        fill="none" stroke="#2a2018" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- Tear duct -->
+  <ellipse cx="174" cy="119" rx="3" ry="2.2" fill="#d89890" opacity="0.45"/>
+</svg>

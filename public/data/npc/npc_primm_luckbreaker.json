@@ -1,0 +1,16 @@
+{
+  "id": "npc_primm_luckbreaker",
+  "name": "Luck-Breaker",
+  "faction": "None",
+  "role": "Wanderer",
+  "type": "civilian",
+  "homeRegion": "primm",
+  "currentRegion": "primm",
+  "poi": "primm_roadside",
+  "dialog": {
+    "idle": [
+      "People say I’m bad luck. Maybe they’re right.",
+      "If something goes wrong, I’m usually nearby."
+    ]
+  }
+}

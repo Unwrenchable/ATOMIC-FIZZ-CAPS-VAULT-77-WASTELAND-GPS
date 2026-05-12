@@ -1,0 +1,14 @@
+{
+  "id": "npc_cottonwood_slave_handler_maro",
+  "name": "Maro",
+  "faction": "caesar_legion",
+  "role": "Slave Handler",
+  "personality": "Cruel, impatient, enjoys control.",
+  "description": "Maro oversees the slaves at Cottonwood Cove. He believes fear is the only language worth speaking.",
+  "questHooks": [
+    "A slave escaped with something valuable.",
+    "Found a metal shard humming in a slave’s bedding.",
+    "Says the slaves whisper about a 'singing ghost'."
+  ],
+  "poi": "cottonwood_cove_fnv"
+}

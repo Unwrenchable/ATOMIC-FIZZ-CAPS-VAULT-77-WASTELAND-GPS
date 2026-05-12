@@ -1,0 +1,23 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Obelisk body -->
+  <path d="
+    M10 5
+    L14 5
+    L16 19
+    H8
+    Z
+  " fill="#00ff41"/>
+
+  <!-- Capstone cutout -->
+  <path d="
+    M11 5
+    L12 3.5
+    L13 5
+    Z
+  " fill="#0a1a0a"/>
+
+  <!-- Base cutout -->
+  <rect x="9" y="17" width="6" height="1.5" fill="#0a1a0a"/>
+
+</svg>

@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_info_broker_01",
+  "name": "Whisper Dealer",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Information’s worth more than caps.",
+    "I hear things the casinos pretend don’t exist."
+  ],
+  "spawnPool": ["strip_service_corridors"],
+  "uniquePerWorld": true
+}

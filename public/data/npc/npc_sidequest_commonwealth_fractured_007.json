@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_commonwealth_fractured_007",
+  "type": "side_quest",
+  "name": "Nova Hale",
+  "region": "commonwealth",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_commonwealth_fractured_007_dialog",
+  "lootPool": "npc_sidequest_commonwealth_fractured_007_loot",
+  "questHooks": [
+    "timeline_warning_01",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.57,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

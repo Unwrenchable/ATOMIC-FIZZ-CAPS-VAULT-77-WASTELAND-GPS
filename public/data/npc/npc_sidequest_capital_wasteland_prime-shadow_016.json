@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime-shadow_016",
+  "type": "side_quest",
+  "name": "Dax Lenn",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime-shadow_016_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime-shadow_016_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.75,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

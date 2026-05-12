@@ -1,0 +1,195 @@
+{
+  "id": "dialog_lucy",
+  "npc": "Lucy \"Sparkplug\" Vance",
+  "title": "The Scavenger Queen",
+  "description": "Dialog nodes for Lucy Vance, the fast-talking scavenger queen who trades junk, secrets, and favors across the Mojave.",
+  "backstory": "Grew up in the Vegas Strip's underground service corridors, learning to fix everything that kept the towers running. Left at nineteen when it became clear the towers would never pay her what she was worth. Spent the decade after building the Mojave's most reliable scavenging network. She can identify any pre-war machine by the sound it makes when it's dying. She says that's her most valuable skill. She's right.",
+  "intro": {
+    "id": "lucy_intro",
+    "conditions": [
+      "!flag:met_lucy"
+    ],
+    "text": "Well, look at you — fresh out of a Vault or just bad at not dying?<br><br>Name’s Lucy. Most folks call me Sparkplug. The smart ones call me when something breaks.",
+    "set_flags": [
+      "met_lucy"
+    ],
+    "video_speech": "Name's Lucy — Sparkplug to the smart ones. Fresh out of a Vault or just bad at not dying?"
+  },
+  "knowledge_nodes": [
+    {
+      "id": "lucy_knows_jax",
+      "conditions": [
+        "flag:met_jax",
+        "!flag:lucy_comment_jax"
+      ],
+      "text": "You’ve been chatting with the static man?<br><br>Jax used to fix slot machines on the Strip. Now he *is* one.",
+      "set_flags": [
+        "lucy_comment_jax"
+      ]
+    },
+    {
+      "id": "lucy_knows_mara",
+      "conditions": [
+        "flag:met_mara",
+        "!flag:lucy_comment_mara"
+      ],
+      "text": "Mara? Oh yeah, the Rad-Witch.<br><br>Smart lady. Terrible bedside manner. Don’t let her poke you unless you want extra limbs.",
+      "set_flags": [
+        "lucy_comment_mara"
+      ]
+    },
+    {
+      "id": "lucy_knows_rex",
+      "conditions": [
+        "flag:met_rex",
+        "!flag:lucy_comment_rex"
+      ],
+      "text": "Rex still playing soldier at Hoover Dam?<br><br>He means well. World doesn’t care.",
+      "set_flags": [
+        "lucy_comment_rex"
+      ]
+    },
+    {
+      "id": "lucy_knows_mother",
+      "conditions": [
+        "flag:met_mother",
+        "!flag:lucy_comment_mother"
+      ],
+      "text": "Mother talked to you?<br><br>Yeah, she tried recruiting me once. I told her I don’t work for machines unless they pay in chips.",
+      "set_flags": [
+        "lucy_comment_mother"
+      ]
+    },
+    {
+      "id": "lucy_knows_loxley",
+      "conditions": [
+        "flag:met_loxley",
+        "!flag:lucy_comment_loxley"
+      ],
+      "text": "Oh, the hat man. Robin Hood of the Mojave, he calls himself.<br><br>I've got a deal with him — he skips my stock, I skip his name when the Dam asks.<br><br>He's good for business. Indirectly.",
+      "set_flags": [
+        "lucy_comment_loxley"
+      ]
+    },
+    {
+      "id": "lucy_knows_arnie",
+      "conditions": [
+        "flag:met_arnie",
+        "!flag:lucy_comment_arnie"
+      ],
+      "text": "Arnold Black? Sold him a blender once. Pre-war. Fully functional.<br><br>He didn't even blink at the price. Just nodded, tucked it under one arm, and said 'I'll be back.'<br><br>He came back. Bought two more. I have questions I know I shouldn't ask.",
+      "set_flags": [
+        "lucy_comment_arnie"
+      ]
+    },
+    {
+      "id": "lucy_knows_kenny",
+      "conditions": [
+        "flag:met_kenny",
+        "!flag:lucy_comment_kenny"
+      ],
+      "text": "Oh, Kenny. The hood kid.<br><br>He traded me a handful of pre-war coins for a stimpak. Coins were worthless. Stimpak cost me twelve caps.<br><br>Then he got eaten by a fire ant on the way out the door. Came back the next morning for his change.<br><br>I gave him the change.",
+      "set_flags": [
+        "lucy_comment_kenny"
+      ]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "lucy_player_broke",
+      "conditions": [
+        "stat:caps<=5",
+        "!flag:lucy_roasted_broke"
+      ],
+      "text": "You’re broke *and* glowing. That’s a rough combo, rookie.<br><br>Good news: I specialize in rough combos.",
+      "set_flags": [
+        "lucy_roasted_broke"
+      ]
+    },
+    {
+      "id": "lucy_player_rich",
+      "conditions": [
+        "stat:caps>=5000",
+        "!flag:lucy_comment_rich"
+      ],
+      "text": "Well damn, look at you — walking wallet with legs.<br><br>Try not to get mugged before you spend some of that with me.",
+      "set_flags": [
+        "lucy_comment_rich"
+      ]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "lucy_offer_queen",
+      "conditions": [
+        "!flag:sq_lucy_queen_of_junk_taken"
+      ],
+      "text": "Someone lifted a crate of my good stuff.<br><br>Pre-war parts. The kind that still hum when you touch them.<br><br>You track it down — Goodsprings, Nipton, Freeside — and we both walk away richer.",
+      "offers_quest": "sq_lucy_queen_of_junk",
+      "set_flags": [
+        "sq_lucy_queen_of_junk_taken"
+      ],
+      "video_speech": "Someone lifted a crate of my best pre-war parts. Parts that still hum. I need a runner who can track them down without getting shot."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "lucy_caps",
+      "keywords": [
+        "caps",
+        "trade",
+        "shop",
+        "buy",
+        "sell"
+      ],
+      "text": "CAPS, junk, secrets — it all spends the same in the right hands.<br><br>Lucky for you, those hands are mine."
+    },
+    {
+      "id": "lucy_junk",
+      "keywords": [
+        "junk",
+        "scrap",
+        "parts"
+      ],
+      "text": "Junk is just treasure that hasn’t met the right idiot yet.<br><br>And trust me, the Mojave is full of idiots."
+    },
+    {
+      "id": "lucy_strip",
+      "keywords": [
+        "strip",
+        "casino",
+        "chips"
+      ],
+      "text": "The Strip? Oh yeah, I used to run scams there.<br><br>Turns out casinos don’t like it when you win *too* much."
+    },
+    {
+      "id": "lucy_scavenger",
+      "keywords": [
+        "scavenge",
+        "scavenger",
+        "loot"
+      ],
+      "text": "Scavenging is easy.<br><br>Finding the good stuff before someone shoots you for it — that’s the art."
+    },
+    {
+      "id": "lucy_weapon",
+      "keywords": [
+        "weapon",
+        "gun",
+        "armor"
+      ],
+      "text": "If it shoots, stabs, or explodes, I can probably get you one.<br><br>Or fix the one you broke."
+    }
+  ],
+  "fallback": {
+    "id": "lucy_fallback",
+    "text": "Come back when you’ve got more stories or more junk. Preferably both.",
+    "video_speech": "Come back when you've got more stories or more junk. Preferably both."
+  },
+  "mood": "excited",
+  "personality": [
+    "Fast-talking",
+    "Resourceful",
+    "Ambitious"
+  ]
+}

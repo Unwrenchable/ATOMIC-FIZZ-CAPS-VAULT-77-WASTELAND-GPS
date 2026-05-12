@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_echo_019",
+  "type": "side_quest",
+  "name": "Tessa Joren",
+  "region": "mojave",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_mojave_echo_019_dialog",
+  "lootPool": "npc_sidequest_mojave_echo_019_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "timeline_warning_01",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.52,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

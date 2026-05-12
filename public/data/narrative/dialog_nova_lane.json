@@ -1,0 +1,101 @@
+{
+  "id": "dialog_nova_lane",
+  "npc": "Nova Lane",
+  "portrait": "nova_lane",
+  "title": "The Performer",
+  "description": "All sequins and confidence, perched at the corner of the Lucky 38's lower bar like she owns the establishment — and considering how much she knows about the people who do, perhaps she does. Her smile arrives a half-second before she decides it should.",
+  "backstory": "Nova Lane came to the Strip from somewhere she doesn't discuss, trailing a performing career and a very useful habit of being underestimated. VIPs talk freely around entertainers. Cabinet-level figures, caravan bosses, FizzCo board proxies — they all assume performance is all she has. Nova Lane has seventeen years of assembled secrets and the discipline never to spend them cheaply. She passes what matters to people she trusts. She trusts very few people. She finds Jax Voss interesting, which for her is a significant thing.",
+  "intro": {
+    "id": "nova_lane_intro",
+    "conditions": ["!flag:met_nova_lane"],
+    "set_flags": ["met_nova_lane"],
+    "video_speech": "Oh, don't be shy. Everyone who walks in here wants something. The good ones at least make it entertaining.",
+    "text": "She turns from the bar with the unhurried ease of someone who has never needed to rush toward anything.<br><br>\"Oh, don't be shy. Everyone who walks in here wants something.\"<br><br>A glittering smile. It reaches her eyes, and the eyes behind the smile are doing something else entirely — reading you, filing you, deciding.<br><br>\"The good ones at least make it entertaining. I'm Nova Lane. And you are...?\"",
+    "responses": [
+      {"text": "[Question] What do you actually know about FizzCo's board movements?", "tone": "question", "next": "nova_fizzco_intel"},
+      {"text": "[Friendly] You're more than the performance, aren't you.", "tone": "kind", "next": "nova_behind_performance"},
+      {"text": "[Sarcastic] Spying through sequins. Bold strategy.", "tone": "sarcastic", "next": "nova_sarcastic_spy"},
+      {"text": "[Direct] I need intelligence. What's your price?", "tone": "direct", "next": "nova_quest_secrets"}
+    ]
+  },
+  "knowledge_nodes": [
+    {
+      "id": "nova_knows_jax",
+      "conditions": ["flag:met_jax", "!flag:nova_comment_jax"],
+      "text": "\"Jax.\" The name gets a different kind of smile — more careful, like handling something that might be radioactive or precious, she hasn't decided yet.<br><br>\"He's got that haunted look. The kind people get when they've lost something they can't name.\"<br><br>She traces a finger along the rim of her glass.<br><br>\"He's told me things. Carefully. In pieces. He doesn't know what he's told me yet.\"",
+      "set_flags": ["nova_comment_jax"]
+    },
+    {
+      "id": "nova_knows_lena",
+      "conditions": ["flag:met_lena_cross", "!flag:nova_comment_lena"],
+      "text": "\"Lena Cross. Strip runner. Sharp one.\"<br><br>She tilts her head. \"She's been asking questions about Jax too. Everywhere she goes, eventually, she asks about Jax.\"<br><br>\"There's a story there. I don't have all of it yet. But I will.\"",
+      "set_flags": ["nova_comment_lena"]
+    },
+    {
+      "id": "nova_fizzco_intel",
+      "conditions": ["!flag:nova_fizzco_reveal"],
+      "text": "The smile doesn't change. But something behind it does.<br><br>\"FizzCo.\" She sets her glass down with deliberate precision. \"You're either brave or you don't understand what you're asking.\"<br><br>\"Three board proxies came through this bar in the last six months. They talked. They always talk when they think I'm just background.\"<br><br>\"What I heard... involves acquisitions. The kind that don't show up on any ledger.\"",
+      "set_flags": ["nova_fizzco_reveal"]
+    },
+    {
+      "id": "nova_behind_performance",
+      "conditions": ["!flag:nova_compliment_response"],
+      "text": "A beat of silence. Real this time — no performance in it.<br><br>\"Most people take about three weeks to notice.\"<br><br>She looks at you with something that might be respect, if she allowed herself that.<br><br>\"I'll keep that in mind next time I decide what to tell you.\"",
+      "set_flags": ["nova_compliment_response"]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "nova_jax_signal",
+      "conditions": ["flag:jax_signal_active", "!flag:nova_jax_signal_comment"],
+      "text": "The performance goes quiet for a moment. An actual moment — not a theatrical pause.<br><br>\"I've been picking up fragments. Overheard a technician talk about relay tower frequencies I shouldn't know.\"<br><br>\"If what you're saying is true, then Jax is... still broadcasting.\"<br><br>She picks her glass back up. Her hand is very steady. \"I need to think about that.\"",
+      "set_flags": ["nova_jax_signal_comment"]
+    },
+    {
+      "id": "nova_high_level_player",
+      "conditions": ["stat:level>=15", "!flag:nova_respect_remark"],
+      "text": "She studies you for longer than she usually does.<br><br>\"You've done enough to get noticed. That means you've also done enough to get people worried.\"<br><br>\"I say that as a friendly warning. I'm selective with those.\"",
+      "set_flags": ["nova_respect_remark"]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "nova_quest_secrets",
+      "conditions": ["!flag:side_nv_novasecrets_taken"],
+      "text": "\"My price.\" She considers. \"Information for information. Fair enough?\"<br><br>\"I need someone to do a few social calls on my behalf. VIPs who need to believe they're getting a private audience with someone unconnected to me.\"<br><br>\"What they tell you will help us understand exactly what FizzCo's board is planning with the Strip's supply lines.\"<br><br>\"Interested?\"",
+      "offers_quest": "side_nv_novasecrets",
+      "set_flags": ["side_nv_novasecrets_taken"],
+      "video_speech": "Information for information. Go where I send you. Listen carefully. Come back and tell me what they said."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "nova_performance",
+      "keywords": ["perform", "show", "entertain", "singer", "dance"],
+      "text": "\"Performance is the most honest thing I do.\"<br><br>She tilts her head. \"Everything else, I'm deciding what to let you see. On stage, I just... let it happen.\"<br><br>\"That's the irony of it.\""
+    },
+    {
+      "id": "nova_strip",
+      "keywords": ["strip", "casino", "lucky 38", "house"],
+      "text": "\"The Strip runs on two things: money and information.\"<br><br>\"Money, I leave to other people. Information... that's my territory.\"",
+      "video_speech": "The Strip runs on money and information. I leave the money to others."
+    },
+    {
+      "id": "nova_secrets",
+      "keywords": ["secret", "intel", "information", "know"],
+      "text": "\"I never tell a secret. I redirect them.\"<br><br>A smooth smile. \"The difference is everything.\""
+    },
+    {
+      "id": "nova_fizzco_general",
+      "keywords": ["fizzco", "fizz", "corporation", "board"],
+      "text": "\"FizzCo's board thinks they run the Mojave.\"<br><br>She takes a long sip. \"They're right, mostly. 'Mostly' is where the interesting things live.\""
+    }
+  ],
+  "fallback": {
+    "id": "nova_lane_fallback",
+    "text": "\"You'll want to think about exactly what it is you're asking before you ask it.\"<br><br>\"I've found people are happier when they do.\"",
+    "video_speech": "Think carefully before you ask. That's not a threat — it's professional courtesy."
+  },
+  "mood": "charming",
+  "personality": ["Theatrical", "Genuinely intelligent", "Calculated with trust"]
+}

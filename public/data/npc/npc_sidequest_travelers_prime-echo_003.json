@@ -1,0 +1,26 @@
+{
+  "id": "npc_sidequest_travelers_prime-echo_003",
+  "type": "side_quest",
+  "name": "Mara Kael",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_prime-echo_003_dialog",
+  "lootPool": "npc_sidequest_travelers_prime-echo_003_loot",
+  "questHooks": [
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.37,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "new_reno",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "new_reno",
+    "vegas_outskirts"
+  ]
+}

@@ -1,0 +1,342 @@
+// backend/lib/auth.js
+// ------------------------------------------------------------
+// Atomic Fizz Caps – Wallet Auth & Session System
+// ------------------------------------------------------------
+
+require("dotenv").config();
+
+const express = require("express");
+const rateLimit = require("express-rate-limit");
+const nacl = require("tweetnacl");
+const crypto = require("crypto");
+
+const { redis, key } = require("./redis");
+
+// Optional: comma-separated list of admin wallets
+const ADMIN_WALLETS = (process.env.ADMIN_WALLETS || "")
+  .split(",")
+  .map((w) => w.trim())
+  .filter(Boolean);
+
+// ------------------------------------------------------------
+// Base58 helpers
+// ------------------------------------------------------------
+function loadBs58() {
+  try {
+    // Try the common `bs58` package first. It may export the functions directly
+    // or under a `.default` property depending on install/build.
+    let b = require("bs58");
+    if (b) {
+      if (typeof b.encode === "function" && typeof b.decode === "function") return b;
+      if (b.default && typeof b.default.encode === "function" && typeof b.default.decode === "function") return b.default;
+    }
+
+    // Fallback to `base-x` if installed (construct a base58 codec)
+    const baseX = require("base-x");
+    const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+    const codec = baseX(BASE58);
+    if (codec && typeof codec.encode === "function" && typeof codec.decode === "function") return codec;
+  } catch (err) {
+    throw new Error("Base58 library not available: " + err.message + ". Install 'bs58' or 'base-x' in your project.", { cause: err });
+  }
+}
+
+const bs58 = loadBs58();
+
+function safeDecodeBase58(str, name = "value") {
+  if (!str || typeof str !== "string") throw new Error(`${name} missing`);
+  if (str.length > 256) throw new Error(`${name} too long`);
+  if (!/^[1-9A-HJ-NP-Za-km-z]+$/.test(str)) {
+    throw new Error(`${name} contains non-base58 characters`);
+  }
+  try {
+    return bs58.decode(str);
+  } catch (err) {
+    throw new Error(`${name} decode failed: ${err.message}`, { cause: err });  }
+}
+
+// ------------------------------------------------------------
+// Redis key helpers
+// ------------------------------------------------------------
+function nonceKey(publicKey) {
+  return key(`auth:nonce:${publicKey}`);
+}
+
+function sessionKey(sessionId) {
+  return key(`auth:session:${sessionId}`);
+}
+
+// ------------------------------------------------------------
+// Nonce + session helpers
+// ------------------------------------------------------------
+function generateNonce() {
+  return bs58.encode(crypto.randomBytes(24));
+}
+
+function generateSessionId() {
+  return bs58.encode(crypto.randomBytes(32));
+}
+
+async function storeNonce(publicKey, nonce, ttlSeconds = 300) {
+  const k = nonceKey(publicKey);
+  await redis.set(k, nonce, { EX: ttlSeconds });
+}
+
+async function getNonce(publicKey) {
+  const k = nonceKey(publicKey);
+  return redis.get(k);
+}
+
+async function deleteNonce(publicKey) {
+  const k = nonceKey(publicKey);
+  await redis.del(k);
+}
+
+async function storeSession(sessionId, payload, ttlSeconds = 60 * 60 * 24) {
+  const k = sessionKey(sessionId);
+  await redis.set(k, JSON.stringify(payload), { EX: ttlSeconds });
+}
+
+async function getSession(sessionId) {
+  const k = sessionKey(sessionId);
+  const raw = await redis.get(k);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+async function deleteSession(sessionId) {
+  const k = sessionKey(sessionId);
+  await redis.del(k);
+}
+
+// ------------------------------------------------------------
+// Auth middleware
+// ------------------------------------------------------------
+async function authMiddleware(req, res, next) {
+  try {
+    const header = req.headers["authorization"] || req.headers["x-session-id"];
+    if (!header) {
+      return res.status(401).json({ ok: false, error: "Missing session" });
+    }
+
+    let sessionId = header;
+    if (typeof header === "string" && header.toLowerCase().startsWith("bearer ")) {
+      sessionId = header.slice(7).trim();
+    }
+
+    if (!sessionId || typeof sessionId !== "string" || sessionId.length > 256) {
+      return res.status(401).json({ ok: false, error: "Invalid session" });
+    }
+
+    const session = await getSession(sessionId);
+    if (!session || !session.wallet) {
+      return res.status(401).json({ ok: false, error: "Session expired or invalid" });
+    }
+
+    const isAdminFlag =
+      ADMIN_WALLETS.length > 0 &&
+      ADMIN_WALLETS.some((w) => w.toLowerCase() === session.wallet.toLowerCase());
+
+    req.player = {
+      wallet: session.wallet,
+      role: isAdminFlag ? "admin" : "player",
+      sessionId,
+    };
+
+    next();
+  } catch (err) {
+    console.error("[auth] authMiddleware error:", err);
+    return res.status(500).json({ ok: false, error: "Auth failure" });
+  }
+}
+
+function isAdmin(req) {
+  return req && req.player && req.player.role === "admin";
+}
+
+// ------------------------------------------------------------
+// Auth router (mount at /api/auth)
+// ------------------------------------------------------------
+const router = express.Router();
+
+// Rate limiters
+const nonceLimiter = rateLimit({
+  windowMs: 10 * 1000,
+  max: 20,
+  message: { ok: false, error: "Too many nonce requests" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const verifyLimiter = rateLimit({
+  windowMs: 10 * 1000,
+  max: 10,
+  message: { ok: false, error: "Too many verify requests" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// GET /api/auth/nonce/:publicKey
+router.get("/nonce/:publicKey", nonceLimiter, async (req, res) => {
+  try {
+    const publicKey = req.params.publicKey;
+
+    if (!publicKey || typeof publicKey !== "string" || publicKey.length > 128) {
+      return res.status(400).json({ ok: false, error: "Invalid publicKey" });
+    }
+
+    // Validate base58 shape early
+    try {
+      safeDecodeBase58(publicKey, "publicKey");
+    } catch (err) {
+      return res.status(400).json({ ok: false, error: err.message });
+    }
+
+    const nonce = generateNonce();
+    await storeNonce(publicKey, nonce);
+
+    return res.json({ ok: true, publicKey, nonce });
+  } catch (err) {
+    console.error("[auth] nonce error:", err);
+    const errorMsg = err && err.message ? err.message : "Failed to generate nonce";
+    return res.status(500).json({ ok: false, error: `Failed to generate nonce: ${errorMsg}` });
+  }
+});
+
+// POST /api/auth/verify
+// body: { publicKey, signature }
+router.post("/verify", verifyLimiter, async (req, res) => {
+  try {
+    const { publicKey, signature } = req.body || {};
+
+    if (!publicKey || typeof publicKey !== "string" || publicKey.length > 128) {
+      return res.status(400).json({ ok: false, error: "Invalid publicKey" });
+    }
+
+    if (!signature || typeof signature !== "string" || signature.length > 512) {
+      return res.status(400).json({ ok: false, error: "Invalid signature" });
+    }
+
+    const nonce = await getNonce(publicKey);
+    if (!nonce) {
+      return res.status(400).json({ ok: false, error: "Nonce expired or missing" });
+    }
+
+    let pubKeyBytes;
+    let sigBytes;
+    try {
+      pubKeyBytes = safeDecodeBase58(publicKey, "publicKey");
+      sigBytes = safeDecodeBase58(signature, "signature");
+    } catch (err) {
+      return res.status(400).json({ ok: false, error: err.message });
+    }
+
+    const message = Buffer.from(`Atomic Fizz Caps login: ${nonce}`, "utf8");
+
+    let ok;
+    try {
+      ok = nacl.sign.detached.verify(message, sigBytes, pubKeyBytes);
+    } catch (verifyErr) {
+      console.warn("[auth] signature verification threw (bad length or format):", verifyErr.constructor.name);
+      return res.status(401).json({ ok: false, error: "Invalid signature" });
+    }
+
+    if (!ok) {
+      return res.status(401).json({ ok: false, error: "Invalid signature" });
+    }
+
+    // Signature valid: consume nonce and create session
+    await deleteNonce(publicKey);
+
+    const sessionId = generateSessionId();
+    const sessionPayload = {
+      wallet: publicKey,
+      createdAt: Date.now(),
+    };
+
+    await storeSession(sessionId, sessionPayload);
+
+    return res.json({
+      ok: true,
+      sessionId,
+      wallet: publicKey,
+    });
+  } catch (err) {
+    console.error("[auth] verify error:", err);
+    return res.status(500).json({ ok: false, error: "Failed to verify signature" });
+  }
+});
+
+// GET /api/auth/session/:sessionId
+// SEC-011 FIX: require the caller to be authenticated AND to be looking up
+// their own session — prevents any leaked session ID from being used to
+// deanonymize wallet addresses.
+router.get("/session/:sessionId", authMiddleware, async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+
+    if (!sessionId || typeof sessionId !== "string" || sessionId.length > 256) {
+      return res.status(400).json({ ok: false, error: "Invalid sessionId" });
+    }
+
+    // Only allow a session to look itself up — no cross-session enumeration.
+    if (sessionId !== req.player.sessionId) {
+      return res.status(403).json({ ok: false, error: "Forbidden" });
+    }
+
+    const session = await getSession(sessionId);
+    if (!session || !session.wallet) {
+      return res.status(404).json({ ok: false, error: "Session not found" });
+    }
+
+    return res.json({ ok: true, session });
+  } catch (err) {
+    console.error("[auth] session error:", err);
+    return res.status(500).json({ ok: false, error: "Failed to load session" });
+  }
+});
+
+// POST /api/auth/logout
+router.post("/logout", authMiddleware, async (req, res) => {
+  try {
+    const sessionId = req.player.sessionId;
+    if (sessionId) {
+      await deleteSession(sessionId);
+    }
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error("[auth] logout error:", err);
+    return res.status(500).json({ ok: false, error: "Failed to logout" });
+  }
+});
+
+// GET /api/auth/me
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    return res.json({
+      ok: true,
+      player: req.player,
+    });
+  } catch (err) {
+    console.error("[auth] me error:", err);
+    return res.status(500).json({ ok: false, error: "Failed to load player" });
+  }
+});
+
+module.exports = {
+  authMiddleware,
+  generateNonce,
+  generateSessionId,
+  storeNonce,
+  getNonce,
+  deleteNonce,
+  storeSession,
+  getSession,
+  deleteSession,
+  isAdmin,
+  router,
+};

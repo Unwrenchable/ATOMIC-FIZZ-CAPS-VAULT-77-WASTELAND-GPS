@@ -1,0 +1,16 @@
+{
+  "id": "npc_nellis_scrapper",
+  "name": "Airfield Scrapper",
+  "faction": "None",
+  "role": "Scrapper",
+  "type": "civilian",
+  "homeRegion": "nellis",
+  "currentRegion": "nellis",
+  "poi": "nellis_perimeter",
+  "dialog": {
+    "idle": [
+      "Old plane parts fetch good caps.",
+      "Never know what you’ll find buried in the sand."
+    ]
+  }
+}

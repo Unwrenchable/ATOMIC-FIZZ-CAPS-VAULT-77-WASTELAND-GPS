@@ -1,0 +1,11 @@
+{
+  "id": "side_divide_stormsamples",
+  "name": "Storm Samples",
+  "type": "side",
+  "poIs": ["Storm Ridge", "Divide Canyon"],
+  "description": "Collect samples from Divide storm vortices.",
+  "objectives": [
+    "Collect 3 storm cores",
+    "Return to Stormcaller Rhea"
+  ]
+}

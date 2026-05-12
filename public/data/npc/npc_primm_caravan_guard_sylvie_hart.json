@@ -1,0 +1,16 @@
+{
+  "id": "npc_primm_caravan_guard_sylvie_hart",
+  "name": "Sylvie Hart",
+  "faction": "caravans",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Caravan Guard",
+  "personality": "Tough, sarcastic, hates being stuck in Primm.",
+  "description": "Sylvie was escorting a caravan through Primm when convicts attacked. She’s been stranded ever since, waiting for NCR to clear the roads.",
+  "questHooks": [
+    "Wants help retrieving lost caravan supplies near the highway.",
+    "Says one of the crates contained a strange glowing cap.",
+    "Knows a Powder Ganger who might be willing to talk."
+  ],
+  "poi": "primm_valley_resort_fnv"
+}

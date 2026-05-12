@@ -1,0 +1,16 @@
+{
+  "id": "npc_industrial_gear_sisters",
+  "name": "The Gear-Sisters",
+  "faction": "industrial_workers",
+  "homeRegion": "industrial-belt",
+  "currentRegion": "industrial-belt",
+  "role": "Twin Mechanics",
+  "personality": "Sarcastic, synchronized, always arguing.",
+  "description": "Twin mechanics who finish each other’s sentences. They claim they can 'hear' when a machine is about to fail.",
+  "questHooks": [
+    "Say a conveyor belt started moving on its own.",
+    "Mention a sealed maintenance door nobody can open.",
+    "Heard a hum coming from a pipe that isn’t connected to anything."
+  ],
+  "poi": "industrial_belt_machine_shop"
+}

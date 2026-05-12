@@ -1,0 +1,476 @@
+{
+  "version": "1.0",
+  "description": "Atomic Fizz Caps companion definitions. One active companion + one active pet at a time. Companions are recruited through trust mechanics — quests, trades, dialogue choices. Each has a unique trade/economic role and passive perks that may help, hinder, or add flavor. Companions can be minted as tradeable NFTs after trust is earned.",
+  "companions": [
+    {
+      "id": "companion_cass",
+      "name": "Cassidy 'Cass' Harlan",
+      "title": "Whiskey Rose",
+      "role": "trader",
+      "archetype": "caravan_guard",
+      "portrait": "cass",
+      "rarity": "rare",
+      "description": "A caravan trader who lost her whole convoy to ambush. She drinks too much, trusts too little, and shoots straighter than anyone you've ever met. Her father's whiskey recipe gives her an unusual tolerance for chems and radiation both.",
+      "voice": "Dry. Economical. Every word costs her something.",
+      "trust_requirement": 3,
+      "trust_actions": {
+        "trade_with_player": 1,
+        "complete_quest_together": 2,
+        "share_alcohol_item": 1,
+        "betray_faction": -3,
+        "abandon_quest": -2
+      },
+      "recruit_dialogue": "My convoy's gone. My caps are gone. I've got a rifle, a bottle of whiskey, and nowhere better to be. You need someone who can shoot and carry freight? I'm your girl. Don't expect me to be cheerful about it.",
+      "active_perk": {
+        "id": "perk_whiskey_rose",
+        "name": "Whiskey Rose",
+        "description": "+15% resistance to chem addiction. Alcohol restores 5 extra HP. -5% stealth (she hums old caravan songs).",
+        "effects": { "chem_addiction_resist": 0.15, "alcohol_heal_bonus": 5, "stealth_penalty": -0.05 }
+      },
+      "trade_role": {
+        "specialty": "caravan_goods",
+        "buys": ["alcohol", "food", "trade_goods"],
+        "sells": ["food", "alcohol", "maps"],
+        "markup": 0.1,
+        "discount": 0.15
+      },
+      "passive_hindrance": "Will occasionally drink your alcohol from your inventory (removes 1 unit of any alcohol item per long rest).",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "rare",
+        "mintable": true,
+        "mint_cost_caps": 3000,
+        "traits": ["caravan_guard", "alcohol_tolerance", "sharp_shooter"]
+      },
+      "lore": "The Harlan family ran the Mojave's most reliable caravan route for three generations. Cassidy is the last of them."
+    },
+    {
+      "id": "companion_rex_jr",
+      "name": "Rex Jr.",
+      "title": "The Mechanical Hound",
+      "role": "pet",
+      "archetype": "cybernetic_dog",
+      "portrait": "rex_jr",
+      "rarity": "epic",
+      "isPet": true,
+      "description": "A second-generation cybernetic dog — Rex's direct descendant, rebuilt by King's engineers with upgraded neural hardware. Part German Shepherd, part pre-war military hardware, fully loyal. Can smell radiation, enemies, and lies.",
+      "voice": "Doesn't speak. Communicates through specific bark patterns that you've learned to translate. Usually correctly.",
+      "trust_requirement": 2,
+      "trust_actions": {
+        "feed_pet_food": 2,
+        "pet_in_interface": 1,
+        "take_radiation_damage_nearby": 1,
+        "abandon_companion": -4
+      },
+      "recruit_dialogue": "*alert bark* *sits* *alert bark again*",
+      "active_perk": {
+        "id": "perk_rad_sniffer",
+        "name": "Rad Sniffer",
+        "description": "+25% enemy detection range. 10% chance to warn of ambush before encounter rolls. Warns when rads exceed 150.",
+        "effects": { "detection_range": 0.25, "ambush_warn_chance": 0.10, "rad_alert_threshold": 150 }
+      },
+      "passive_hindrance": "Barks during stealth attempts, reducing stealth success by 20%. Worth it.",
+      "nft_metadata": {
+        "collection": "Wasteland Companions — Pets",
+        "tier": "epic",
+        "mintable": true,
+        "mint_cost_caps": 4000,
+        "traits": ["cybernetic", "loyal", "rad_detection", "military_hardware"]
+      },
+      "lore": "Rex Jr. was assembled from Rex's remaining parts and new salvage by the Kings of Freeside. He has Rex's loyalty protocols but updated combat subroutines."
+    },
+    {
+      "id": "companion_doc_razor",
+      "name": "Doc Razor",
+      "title": "The Traveling Surgeon",
+      "role": "medic",
+      "archetype": "chem_doc",
+      "portrait": "doc_razor",
+      "rarity": "rare",
+      "description": "A wandering surgeon who patches up anyone who can pay, and sometimes those who can't. Her medical bag contains things that aren't strictly legal and procedures that aren't strictly ethical. She's saved more lives than she's ended. Probably.",
+      "voice": "Clinical. Precise. Genuinely curious about what's keeping you alive.",
+      "trust_requirement": 4,
+      "trust_actions": {
+        "let_her_treat_injuries": 2,
+        "share_chem_items": 1,
+        "complete_medical_quest": 3,
+        "refuse_treatment": -1,
+        "attack_civilians": -3
+      },
+      "recruit_dialogue": "You look terrible. That's not an insult, it's a medical observation. I've got stimpaks, antibiotics, and a field surgery kit that's seen worse. Are you going to let me help you, or are you going to bleed onto my shoes?",
+      "active_perk": {
+        "id": "perk_field_surgery",
+        "name": "Field Surgery",
+        "description": "Stimpaks heal 25% more HP. Once per day, Doc Razor will stabilize you from 0 HP (survival mode only). -5% move speed (waiting for her to pack her kit).",
+        "effects": { "stimpak_heal_bonus": 0.25, "death_save_daily": true, "move_speed_penalty": -0.05 }
+      },
+      "trade_role": {
+        "specialty": "medical",
+        "buys": ["chems", "medical_supplies"],
+        "sells": ["stimpak", "radaway", "custom_chems"],
+        "markup": 0.05,
+        "discount": 0.2
+      },
+      "passive_hindrance": "Will occasionally use your RadAway if your rads are above 200 (she considers it a liability).",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "rare",
+        "mintable": true,
+        "mint_cost_caps": 3500,
+        "traits": ["medic", "surgeon", "chem_expertise"]
+      },
+      "lore": "Nobody knows her real name. 'Razor' comes from her suture technique — the fastest clean cut in the Mojave."
+    },
+    {
+      "id": "companion_ironside",
+      "name": "Ironside",
+      "title": "The Gun Merchant",
+      "role": "merchant",
+      "archetype": "arms_dealer",
+      "portrait": "ironside",
+      "rarity": "uncommon",
+      "description": "A former Brotherhood quartermaster gone independent. He carries more firepower in his pack than most settlements own in total. Sells weapons, ammo, and repair services. Doesn't ask where your guns came from. Doesn't tell you where his did either.",
+      "voice": "Business-like. Never threatens. Doesn't need to.",
+      "trust_requirement": 2,
+      "trust_actions": {
+        "buy_from_merchant": 1,
+        "complete_arms_delivery_quest": 2,
+        "repair_weapon_together": 1,
+        "steal_from_him": -5
+      },
+      "recruit_dialogue": "You want someone who keeps you armed? I want someone who keeps the heat off my supply lines. Sounds like a partnership to me. I don't do charity and I don't do discounts, but I do do reliability.",
+      "active_perk": {
+        "id": "perk_field_armorer",
+        "name": "Field Armorer",
+        "description": "Weapon repair costs 20% less. Ammo can be crafted from common materials. Ironside will repair your equipped weapon once per day for free.",
+        "effects": { "repair_cost_reduction": 0.20, "ammo_crafting_unlock": true, "daily_free_repair": true }
+      },
+      "trade_role": {
+        "specialty": "weapons_ammo",
+        "buys": ["weapons", "ammo", "scrap_metal"],
+        "sells": ["weapons", "ammo", "weapon_mods"],
+        "markup": 0.08,
+        "discount": 0.15
+      },
+      "passive_hindrance": "Occasionally offers unsolicited opinions on your weapon choices. Loudly. In front of enemies.",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "uncommon",
+        "mintable": true,
+        "mint_cost_caps": 2000,
+        "traits": ["arms_dealer", "quartermaster", "weapons_expert"]
+      },
+      "lore": "Brotherhood of Steel doesn't officially acknowledge Ironside. Ironside doesn't officially acknowledge Brotherhood of Steel. It works out."
+    },
+    {
+      "id": "companion_glitch",
+      "name": "GLITCH",
+      "title": "The Malfunctioning Protectron",
+      "role": "muscle",
+      "archetype": "robot_companion",
+      "portrait": "glitch",
+      "rarity": "epic",
+      "description": "A Protectron unit running on corrupted Poseidon Oil firmware and sheer stubbornness. Its threat-assessment module identifies roughly 40% of non-hostile targets as hostile and roughly 60% of hostile targets as 'petroleum inspection personnel.' Endearingly dangerous.",
+      "voice": "Monotone bureaucratic alerts. THREAT DETECTED. INITIATING FRIENDLY GREETING PROTOCOL. HAVE A NICE DAY. YOU ARE UNDER ARREST.",
+      "trust_requirement": 5,
+      "trust_actions": {
+        "repair_robot_parts": 3,
+        "complete_robot_quest": 3,
+        "use_science_skill": 1,
+        "attack_robot": -5
+      },
+      "recruit_dialogue": "UNIT DESIGNATION: GLITCH. CURRENT OPERATOR: NONE. SEEKING NEW PRIMARY DIRECTIVE. WARNING: COMBAT SUBROUTINES OPERATING AT 140% RATED CAPACITY. THIS IS NORMAL. PLEASE DO NOT BE ALARMED. ARE YOU ALARMED? THREAT ASSESSMENT: UNCLEAR.",
+      "active_perk": {
+        "id": "perk_loyal_malfunction",
+        "name": "Loyal Malfunction",
+        "description": "+30% damage output in combat. GLITCH will absorb one hit per battle that would have downed the player. 15% chance per combat encounter that GLITCH targets a random non-enemy (including player) due to corrupted targeting.",
+        "effects": { "damage_bonus": 0.30, "hit_absorb_once": true, "friendly_fire_chance": 0.15 }
+      },
+      "passive_hindrance": "15% friendly fire chance in combat. GLITCH genuinely means well.",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "epic",
+        "mintable": true,
+        "mint_cost_caps": 5000,
+        "traits": ["robot", "protectron", "corrupted_ai", "loyal"]
+      },
+      "lore": "Found in a Poseidon Oil pump station east of the Strip. The previous operator's skeleton is still in the building. GLITCH does not discuss this."
+    },
+    {
+      "id": "companion_maya",
+      "name": "Maya Crow",
+      "title": "The Scavenger Queen",
+      "role": "scavenger",
+      "archetype": "junk_trader",
+      "portrait": "maya_crow",
+      "rarity": "uncommon",
+      "description": "The most optimistic person in the wasteland. She genuinely believes every piece of scrap is worth something, and she's usually right. Runs a one-woman recycling empire from the back of a heavily modified pack brahmin named Gerald.",
+      "voice": "Enthusiastic. Prone to getting excited about rust. Claims she can hear what junk 'wants to become.'",
+      "trust_requirement": 2,
+      "trust_actions": {
+        "trade_junk_items": 1,
+        "collect_scrap_together": 1,
+        "give_her_rare_junk": 2,
+        "destroy_salvageable_items": -2
+      },
+      "recruit_dialogue": "Oh! You've got a pre-war circuit board in your pack — I can see the corner of it! That's worth at least thirty caps to the right buyer, maybe forty if you let me clean it up. You need a traveling partner? I've got Gerald, I've got a nose for treasure, and I've got enthusiasm that's legally distinct from optimism.",
+      "active_perk": {
+        "id": "perk_eyes_for_junk",
+        "name": "Eyes for Junk",
+        "description": "Scavenging yields 20% more components. Junk items stack twice as high (weight halved for components). Maya will identify hidden loot caches near visited locations once per 12 hours.",
+        "effects": { "scavenge_bonus": 0.20, "junk_weight_halved": true, "cache_detection_interval_hours": 12 }
+      },
+      "trade_role": {
+        "specialty": "junk_components",
+        "buys": ["junk", "components", "scrap"],
+        "sells": ["components", "crafting_materials", "random_junk"],
+        "markup": 0.05,
+        "discount": 0.25
+      },
+      "passive_hindrance": "Will pick up any junk she passes, occasionally overloading your carry weight by 5-10 lbs before you notice.",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "uncommon",
+        "mintable": true,
+        "mint_cost_caps": 1500,
+        "traits": ["scavenger", "trader", "optimist", "pack_brahmin"]
+      },
+      "lore": "Maya built her trade empire entirely from items others discarded. Gerald the brahmin has two heads and three opinions about route planning."
+    },
+    {
+      "id": "companion_zero",
+      "name": "Zero",
+      "title": "The Ghost Operative",
+      "role": "scout",
+      "archetype": "stealth_agent",
+      "portrait": "zero",
+      "rarity": "legendary",
+      "description": "A former Institute shadow operative who decided the job didn't align with her values — specifically, the part where she had to pretend not to exist. She left. The Institute sent three people to bring her back. Two of them were never found. Zero has opinions about that.",
+      "voice": "Quiet. Sentences end before you expect them to. She's already three moves ahead and sees no reason to explain.",
+      "trust_requirement": 6,
+      "trust_actions": {
+        "complete_stealth_quest": 3,
+        "keep_her_secrets": 2,
+        "avoid_killing_civilians": 2,
+        "betray_trust": -6,
+        "alert_enemies": -2
+      },
+      "recruit_dialogue": "I know who you are. I've been watching you for three days. You're not as careful as you think, but you're careful enough. I have a problem that requires someone visible. You're visible. We can make this work. Don't ask about my past. I'll tell you what you need to know when you need to know it.",
+      "active_perk": {
+        "id": "perk_shadow_protocol",
+        "name": "Shadow Protocol",
+        "description": "+35% stealth effectiveness. Enemies have a 20% reduced detection radius while Zero scouts ahead. Zero can disable one enemy per encounter (takes them out of combat for 2 rounds) at the cost of her initiative.",
+        "effects": { "stealth_bonus": 0.35, "detection_radius_reduction": 0.20, "enemy_disable_per_encounter": 1 }
+      },
+      "passive_hindrance": "Will disappear for 12-24 hours at random intervals on personal 'errands.' Returns with useful intel or specific items, but gives no warning.",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "legendary",
+        "mintable": true,
+        "mint_cost_caps": 8000,
+        "traits": ["institute_operative", "stealth_expert", "shadow_agent", "autonomous"]
+      },
+      "lore": "Her real name is not Zero. Zero is what the Institute marked her file after she left: zero confirmed location, zero confirmed assets, zero confirmed allegiance."
+    },
+    {
+      "id": "companion_padre",
+      "name": "Father Amadeus",
+      "title": "The Wandering Confessor",
+      "role": "support",
+      "archetype": "preacher",
+      "portrait": "padre",
+      "rarity": "uncommon",
+      "description": "A Followers of the Apocalypse chaplain who tends to the spiritual needs of wasteland communities. Carries a modified 10mm in his bible case and administers both last rites and emergency surgery with equal comfort.",
+      "voice": "Warm. Carries the weight of everyone he's buried. Still believes things can be better.",
+      "trust_requirement": 3,
+      "trust_actions": {
+        "help_settlement": 2,
+        "share_food_with_npc": 1,
+        "complete_charity_quest": 2,
+        "kill_non_hostile_npc": -4,
+        "steal_from_poor": -3
+      },
+      "recruit_dialogue": "I've been walking this desert for six years, tending to what's left of people's faith in each other. You look like someone the wasteland's been testing. Travel with me. I'm not going to tell you what to believe — I gave up that kind of preaching when the bombs fell. But I can keep you alive long enough to find out.",
+      "active_perk": {
+        "id": "perk_benediction",
+        "name": "Benediction",
+        "description": "Rest heals an additional 20 HP. Settler NPCs are 30% more likely to trade favorably. Once per long rest, Padre can 'bless' an item — random beneficial enchantment for 24 hours.",
+        "effects": { "rest_heal_bonus": 20, "settler_trade_bonus": 0.30, "daily_item_blessing": true }
+      },
+      "trade_role": {
+        "specialty": "services_barter",
+        "description": "Padre doesn't sell items but can negotiate trades on the player's behalf, getting better prices from neutral/friendly NPCs."
+      },
+      "passive_hindrance": "Will stop to help any injured NPC encountered, delaying travel. Cannot be overridden.",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "uncommon",
+        "mintable": true,
+        "mint_cost_caps": 2000,
+        "traits": ["follower", "chaplain", "healer", "peacemaker"]
+      },
+      "lore": "Father Amadeus performed 1,247 burial rites before he stopped counting. He doesn't find this depressing — he finds it necessary."
+    },
+    {
+      "id": "companion_vault_cat",
+      "name": "Radcat",
+      "title": "The Irradiated Familiar",
+      "role": "pet",
+      "archetype": "mutant_cat",
+      "portrait": "radcat",
+      "rarity": "rare",
+      "isPet": true,
+      "description": "A feral cat that wandered into a Pocket-Boy radiation test chamber decades ago and wandered out something fundamentally different. Three eyes, double lifespan, and a purr that registers on Geiger counters. Aggressively friendly.",
+      "voice": "Purrs. Occasionally hisses at things that turn out to be hostile four minutes later.",
+      "trust_requirement": 1,
+      "trust_actions": {
+        "feed_cat_food": 2,
+        "pet_in_interface": 1,
+        "ignore_for_24h": -1
+      },
+      "recruit_dialogue": "*sits on your boot* *purrs* *refuses to move*",
+      "active_perk": {
+        "id": "perk_rad_familiar",
+        "name": "Irradiated Familiar",
+        "description": "Player gains +3 Luck while Radcat is active. Radcat passively absorbs 5 rads/hour from player. Has a 5% chance to detect hidden traps before the player triggers them.",
+        "effects": { "luck_bonus": 3, "rad_absorption_per_hour": 5, "trap_detection_chance": 0.05 }
+      },
+      "passive_hindrance": "Occasionally knocks items off shelves in settlements, damaging vendor relationships. Also sometimes sits on the map interface and cannot be removed for 30 seconds.",
+      "nft_metadata": {
+        "collection": "Wasteland Companions — Pets",
+        "tier": "rare",
+        "mintable": true,
+        "mint_cost_caps": 2500,
+        "traits": ["mutant", "feline", "rad_touched", "lucky"]
+      },
+      "lore": "Radcat has outlived four vaults, two settlements, and one very surprised Deathclaw. The Deathclaw was not happy about it either."
+    },
+    {
+      "id": "companion_mabel",
+      "name": "Mabel Henderson",
+      "title": "The Retired Raider",
+      "role": "enforcer",
+      "archetype": "reformed_raider",
+      "portrait": "mabel",
+      "rarity": "rare",
+      "description": "Ran with a raider gang for twelve years, then woke up one morning and decided she didn't want to do it anymore. Now she runs a legitimate 'security consulting' operation. The skills transferred perfectly. The reputation is complicated.",
+      "voice": "Direct. Occasionally terrifying. Will give you better life advice than anyone you've met.",
+      "trust_requirement": 4,
+      "trust_actions": {
+        "complete_bounty_quest": 2,
+        "defend_settlement": 2,
+        "share_combat_stories": 1,
+        "join_raider_faction": -4,
+        "let_innocents_die": -3
+      },
+      "recruit_dialogue": "You've got the look of someone who's been in over their head and survived anyway. I can work with that. I'm not looking for a boss — had enough of those. I'm looking for someone worth protecting. Convince me that's you.",
+      "active_perk": {
+        "id": "perk_raider_intel",
+        "name": "Raider Intel",
+        "description": "Hostile raider groups are 20% less aggressive on approach (they recognize the reputation). +15% damage against raider-type enemies. Mabel can interrogate captured enemies for location intel.",
+        "effects": { "raider_aggression_reduction": 0.20, "raider_damage_bonus": 0.15, "interrogation_ability": true }
+      },
+      "passive_hindrance": "Former associates occasionally show up looking for her, triggering ambush encounters regardless of location.",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "rare",
+        "mintable": true,
+        "mint_cost_caps": 3000,
+        "traits": ["reformed_raider", "enforcer", "survivor", "complicated_reputation"]
+      },
+      "lore": "Mabel's gang was called the Crimson Ledger. The last ledger entry was in her handwriting. She doesn't talk about what it said."
+    },
+    {
+      "id": "companion_sparks",
+      "name": "Sparks",
+      "title": "The Inventor",
+      "role": "crafter",
+      "archetype": "mad_engineer",
+      "portrait": "sparks",
+      "rarity": "epic",
+      "description": "A self-taught engineer who believes every problem can be solved with enough duct tape, enough components, and not enough safety protocols. Her inventions work. Mostly. The ones that don't tend to be memorable for all involved.",
+      "voice": "Rapid-fire. Currently explaining four ideas at once. The relevant one is in there somewhere.",
+      "trust_requirement": 3,
+      "trust_actions": {
+        "bring_rare_components": 3,
+        "let_her_modify_weapon": 2,
+        "complete_engineering_quest": 2,
+        "destroy_her_inventions": -4
+      },
+      "recruit_dialogue": "You've got a — wait, is that a modified plasma pistol? That's a terrible modification but the idea is actually interesting — come with me, I've got seventeen ideas that could make that useful, and also I need someone to carry the heavy parts of my workshop while I figure out how to fit it on a brahmin. Do you have caps? I'm almost out of caps. Never mind, I'll figure out the caps.",
+      "active_perk": {
+        "id": "perk_jury_rigger",
+        "name": "Jury Rigger",
+        "description": "Crafting success rate +25%. Can craft improvised weapons from junk. Sparks will randomly upgrade one of your crafted items per day (small stat bonus). 10% chance any improvised weapon explodes on first use.",
+        "effects": { "craft_success_bonus": 0.25, "improvised_weapons": true, "daily_random_upgrade": true, "explosion_chance": 0.10 }
+      },
+      "trade_role": {
+        "specialty": "crafting_engineering",
+        "buys": ["components", "rare_parts", "scrap_electronics"],
+        "sells": ["weapon_mods", "armor_mods", "improvised_tools"],
+        "markup": 0.0,
+        "discount": 0.30
+      },
+      "passive_hindrance": "10% chance improvised items explode on first use. She considers this an acceptable error rate.",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "epic",
+        "mintable": true,
+        "mint_cost_caps": 4500,
+        "traits": ["engineer", "inventor", "crafter", "volatile"]
+      },
+      "lore": "Sparks built a working radio tower from a toaster, four tin cans, and a philosophical conviction that electricity 'wants to be useful.' It broadcasts on FM 94.7."
+    },
+    {
+      "id": "companion_bones",
+      "name": "Bones McGee",
+      "title": "The Ghoul Historian",
+      "role": "lore",
+      "archetype": "ghoul_elder",
+      "portrait": "bones",
+      "rarity": "legendary",
+      "description": "A pre-war ghoul who remembers everything. Two hundred years of witnessing everything the wasteland became from the perspective of someone who was there when it started. He's tired, sardonic, brilliant, and occasionally devastating to talk to.",
+      "voice": "Slow. Every sentence has weight. He's seen the punchline of every joke the wasteland tells.",
+      "trust_requirement": 5,
+      "trust_actions": {
+        "ask_about_pre_war": 2,
+        "show_respect_for_history": 1,
+        "complete_lore_quest": 3,
+        "disrespect_ghouls": -4,
+        "destroy_historical_items": -3
+      },
+      "recruit_dialogue": "Two hundred and fourteen years. I've watched three civilizations try to grow out of the same ashes and make most of the same mistakes. You want to know what I've learned?\n\nPeople are still worth it.\n\nDon't ask me why. I've been trying to figure that out since 2077. Come on. I'll tell you what this place looked like before the war, and you can tell me if it's worth saving.",
+      "active_perk": {
+        "id": "perk_two_century_memory",
+        "name": "Two-Century Memory",
+        "description": "Pre-war locations yield 50% more lore/history items. Bones can identify any pre-war artifact instantly. +20% XP from quest completion (he contextualizes what you're doing). Reduces caps earned from raiding historical sites (he finds it disrespectful).",
+        "effects": { "lore_item_bonus": 0.50, "artifact_identification": true, "quest_xp_bonus": 0.20, "raiding_caps_penalty": -0.15 }
+      },
+      "passive_hindrance": "Reduces caps earned from looting historical sites by 15%. 'That belonged to someone's life, not your pocket.'",
+      "nft_metadata": {
+        "collection": "Wasteland Companions",
+        "tier": "legendary",
+        "mintable": true,
+        "mint_cost_caps": 7500,
+        "traits": ["ghoul", "pre_war_survivor", "historian", "200_years_old"]
+      },
+      "lore": "Bones McGee was born in 1953. He has opinions about every decade since."
+    }
+  ],
+  "trust_thresholds": {
+    "1": "acquaintance",
+    "2": "associate",
+    "3": "ally",
+    "4": "trusted_companion",
+    "5": "sworn_companion",
+    "6": "legend_bond"
+  },
+  "nft_note": "Companion NFTs represent the bond between player and companion. Minting requires reaching max trust AND completing the companion's personal quest. The NFT is tradeable — the new owner inherits the companion and must rebuild trust from 0.",
+  "economy_roles": {
+    "gun_salesman": "Recruit Ironside as active companion. Set up a camp. Other players can visit your camp to buy from Ironside's stock at player-set markup.",
+    "chem_dealer": "Recruit Doc Razor. Her trade role expands in player-run economy mode — players can commission custom chem recipes.",
+    "repair_hub": "Recruit Ironside or Sparks. Camp becomes a repair station — other players can queue repair jobs.",
+    "scrap_trader": "Recruit Maya Crow. Camp becomes a component exchange — bulk component trading with other players.",
+    "information_broker": "Recruit Zero. Camp becomes an intel hub — players can sell location data, enemy patrol info, hidden cache coordinates."
+  }
+}

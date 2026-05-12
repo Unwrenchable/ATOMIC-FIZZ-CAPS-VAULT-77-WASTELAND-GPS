@@ -1,0 +1,164 @@
+[
+  {
+    "id": "merchant_goodsprings_basic",
+    "rollsMin": 1,
+    "rollsMax": 3,
+    "possibleItems": [
+      { "itemId": "leather_jacket", "weight": 6 },
+      { "itemId": "cloth_gloves", "weight": 8 },
+      { "itemId": "cloth_robe", "weight": 5 },
+      { "itemId": "cowboy_hat", "weight": 4 },
+      { "itemId": "cowboy_boots", "weight": 4 },
+      { "itemId": "rusted_revolver", "weight": 2 },
+      { "itemId": "rusted_knife", "weight": 3 },
+      { "itemId": "dirty_water", "weight": 10 },
+      { "itemId": "cooked_gecko_meat", "weight": 6 },
+      { "itemId": "stimpak", "weight": 1 }
+    ]
+  },
+
+  {
+    "id": "merchant_freeside_chems",
+    "rollsMin": 1,
+    "rollsMax": 3,
+    "possibleItems": [
+      { "itemId": "dirty_water", "weight": 8 },
+      { "itemId": "sarsaparilla_bottle", "weight": 6 },
+      { "itemId": "snack_cakes", "weight": 4 },
+      { "itemId": "radaway", "weight": 3 },
+      { "itemId": "stimpak", "weight": 3 },
+      { "itemId": "doctor_bag", "weight": 2 },
+      { "itemId": "ultra_stimpak", "weight": 1 }
+    ]
+  },
+
+  {
+    "id": "supply_drop_red_rock",
+    "rollsMin": 2,
+    "rollsMax": 4,
+    "possibleItems": [
+      { "itemId": "gecko_tail", "weight": 10 },
+      { "itemId": "gecko_hide", "weight": 8 },
+      { "itemId": "rusted_knife", "weight": 5 },
+      { "itemId": "pipe_pistol", "weight": 4 },
+      { "itemId": "rusted_revolver", "weight": 3 },
+      { "itemId": "cooked_gecko_meat", "weight": 6 },
+      { "itemId": "doctor_bag", "weight": 2 },
+      { "itemId": "stimpak", "weight": 3 }
+    ]
+  },
+
+  {
+    "id": "supply_drop_megaton",
+    "rollsMin": 2,
+    "rollsMax": 4,
+    "possibleItems": [
+      { "itemId": "makeshift_shield", "weight": 4 },
+      { "itemId": "leather_jacket", "weight": 6 },
+      { "itemId": "scavenger_vest", "weight": 5 },
+      { "itemId": "pipe_pistol", "weight": 4 },
+      { "itemId": "rusted_revolver", "weight": 3 },
+      { "itemId": "frag_grenade", "weight": 2 },
+      { "itemId": "stimpak", "weight": 3 },
+      { "itemId": "doctor_bag", "weight": 2 }
+    ]
+  },
+
+  {
+    "id": "storm_searchlight_loot",
+    "rollsMin": 1,
+    "rollsMax": 3,
+    "possibleItems": [
+      { "itemId": "dust_mask", "weight": 10 },
+      { "itemId": "radaway", "weight": 6 },
+      { "itemId": "dirty_water", "weight": 8 },
+      { "itemId": "sarsaparilla_bottle", "weight": 4 },
+      { "itemId": "stimpak", "weight": 3 },
+      { "itemId": "doctor_bag", "weight": 2 }
+    ]
+  },
+
+  {
+    "id": "storm_nuka_world_loot",
+    "rollsMin": 2,
+    "rollsMax": 4,
+    "possibleItems": [
+      { "itemId": "nuka_cap", "weight": 12 },
+      { "itemId": "sarsaparilla_bottle", "weight": 8 },
+      { "itemId": "snack_cakes", "weight": 6 },
+      { "itemId": "radaway", "weight": 5 },
+      { "itemId": "stimpak", "weight": 4 },
+      { "itemId": "ultra_stimpak", "weight": 2 },
+      { "itemId": "quantum_stimpak", "weight": 1 }
+    ]
+  },
+
+  {
+    "id": "hunt_gecko_rewards",
+    "rollsMin": 1,
+    "rollsMax": 3,
+    "possibleItems": [
+      { "itemId": "gecko_tail", "weight": 10 },
+      { "itemId": "gecko_hide", "weight": 8 },
+      { "itemId": "cooked_gecko_meat", "weight": 6 },
+      { "itemId": "rusted_knife", "weight": 4 },
+      { "itemId": "rusted_revolver", "weight": 2 }
+    ]
+  },
+
+  {
+    "id": "hunt_nightstalker_rewards",
+    "rollsMin": 1,
+    "rollsMax": 3,
+    "possibleItems": [
+      { "itemId": "nightstalker_fang", "weight": 10 },
+      { "itemId": "gecko_hide", "weight": 6 },
+      { "itemId": "rusted_knife", "weight": 4 },
+      { "itemId": "stimpak", "weight": 3 },
+      { "itemId": "doctor_bag", "weight": 2 }
+    ]
+  },
+
+  {
+    "id": "vault_13_anomaly_loot",
+    "rollsMin": 2,
+    "rollsMax": 4,
+    "possibleItems": [
+      { "itemId": "old_magazine", "weight": 8 },
+      { "itemId": "dusty_book", "weight": 6 },
+      { "itemId": "vault_poster", "weight": 4 },
+      { "itemId": "reinforced_vault_suit", "weight": 2 },
+      { "itemId": "ancient_vault_tablet", "weight": 1 }
+    ]
+  },
+
+  {
+    "id": "fizz_surge_nuka_world",
+    "rollsMin": 2,
+    "rollsMax": 4,
+    "possibleItems": [
+      { "itemId": "nuka_cap", "weight": 12 },
+      { "itemId": "sarsaparilla_bottle", "weight": 10 },
+      { "itemId": "snack_cakes", "weight": 8 },
+      { "itemId": "stimpak", "weight": 5 },
+      { "itemId": "ultra_stimpak", "weight": 3 },
+      { "itemId": "quantum_stimpak", "weight": 2 },
+      { "itemId": "x_cell", "weight": 1 }
+    ]
+  },
+
+  {
+    "id": "fizz_surge_new_vegas",
+    "rollsMin": 2,
+    "rollsMax": 4,
+    "possibleItems": [
+      { "itemId": "casino_chip", "weight": 12 },
+      { "itemId": "sarsaparilla_bottle", "weight": 10 },
+      { "itemId": "snack_cakes", "weight": 8 },
+      { "itemId": "stimpak", "weight": 5 },
+      { "itemId": "ultra_stimpak", "weight": 3 },
+      { "itemId": "quantum_stimpak", "weight": 2 },
+      { "itemId": "x_cell", "weight": 1 }
+    ]
+  }
+]

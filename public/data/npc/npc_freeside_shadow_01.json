@@ -1,0 +1,7 @@
+{
+  "id": "npc_freeside_shadow_01",
+  "archetype": "timeline_echo_wanderer",
+  "timelineVariants": ["shadow"],
+  "spawnPool": ["freeside_south"],
+  "uniquePerWorld": false
+}

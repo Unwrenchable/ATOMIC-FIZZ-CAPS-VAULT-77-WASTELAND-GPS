@@ -1,0 +1,23 @@
+{
+  "id": "highways_echo_001",
+  "name": "Trooper",
+  "archetype": "faction_grunt",
+  "spawnPool": [
+    "highway_93",
+    "highway_95",
+    "sloan_road"
+  ],
+  "behaviorPattern": "static_local",
+  "lootPool": [
+    "ammo_556",
+    "radio"
+  ],
+  "dialogPool": [
+    "Orders are orders.",
+    "Keep moving, citizen.",
+    "Stay alert. Trouble’s never far."
+  ],
+  "factionTag": "neutral",
+  "timeline": "echo",
+  "timelineVariants": []
+}

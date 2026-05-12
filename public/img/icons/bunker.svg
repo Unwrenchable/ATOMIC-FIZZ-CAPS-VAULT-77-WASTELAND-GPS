@@ -1,0 +1,30 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Outer bunker wall -->
+  <path d="
+    M4 8
+    L4 18
+    C4 19.5 5 21 7 21
+    H17
+    C19 21 20 19.5 20 18
+    V8
+    C20 6.5 19 5 17 5
+    H7
+    C5 5 4 6.5 4 8
+    Z
+  " fill="#00ff41"/>
+
+  <!-- Blast door frame cutout -->
+  <rect x="7" y="9" width="10" height="8" fill="#0a1a0a"/>
+
+  <!-- Blast door silhouette -->
+  <rect x="8" y="10" width="8" height="6" fill="#00ff41"/>
+
+  <!-- Horizontal vent cutouts -->
+  <rect x="9" y="11" width="6" height="1" fill="#0a1a0a"/>
+  <rect x="9" y="13" width="6" height="1" fill="#0a1a0a"/>
+
+  <!-- Door handle cutout -->
+  <rect x="12" y="14.5" width="1" height="1.5" fill="#0a1a0a"/>
+
+</svg>

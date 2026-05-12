@@ -1,0 +1,270 @@
+{
+  "id": "q_fo3_purified_truth",
+  "name": "Purified Truth",
+  "description": "Project Purity succeeded \u2014 but at a hidden cost. The water purification system contains a secondary function designed to distribute Vault-Tec CAPS transaction validator nodes through the water supply, turning every drinker into a passive computational node in the CAPS blockchain network. The Enclave knows. The Brotherhood knows. Neither wants civilians to know.",
+  "type": "main",
+  "region": "capital_wasteland_echo",
+  "subregion": "fo3_timeline_dc",
+  "giver": "npc_enclave_remnant_veronica",
+  "start_conditions": {
+    "min_level": 18,
+    "location": "Jefferson Memorial / Project Purity Site"
+  },
+  "era": "2277",
+  "gps_anchor": {
+    "lat": 38.8895,
+    "lng": -77.0353,
+    "real_world": "Washington DC area",
+    "in_game": "Jefferson Memorial / Project Purity Site"
+  },
+  "npc_links": [
+    "npc_enclave_remnant_veronica",
+    "npc_irradiated_merchant",
+    "npc_dc_scavenger",
+    "npc_former_enclave_soldier",
+    "npc_brotherhood_paladin_cover"
+  ],
+  "map_markers": [
+    {
+      "id": "marker_jefferson_memorial",
+      "poi": "Jefferson Memorial ruins \u2014 GPS anchor",
+      "stage": "stage_0"
+    },
+    {
+      "id": "marker_purity_terminals",
+      "poi": "Project Purity backup terminal bank \u2014 sub-basement",
+      "stage": "stage_1"
+    },
+    {
+      "id": "marker_irradiated_merchant",
+      "poi": "Merchant camp east of the Tidal Basin",
+      "stage": "stage_2"
+    },
+    {
+      "id": "marker_dc_scavenger",
+      "poi": "Capitol Building scavenger hideout",
+      "stage": "stage_2"
+    },
+    {
+      "id": "marker_former_enclave_soldier",
+      "poi": "Rivet City bulkhead, lower decks",
+      "stage": "stage_2"
+    },
+    {
+      "id": "marker_brotherhood_confrontation",
+      "poi": "Citadel east wing briefing room",
+      "stage": "stage_3"
+    },
+    {
+      "id": "marker_final_choice",
+      "poi": "Project Purity control chamber",
+      "stage": "stage_4"
+    }
+  ],
+  "objectives": [
+    {
+      "id": "find_veronica_steel",
+      "desc": "Locate the disillusioned Enclave remnant Veronica Steel near the Jefferson Memorial coordinates. She knows the truth about Project Purity's secondary function and is ready to break ranks.",
+      "npc": "npc_enclave_remnant_veronica",
+      "dialogue": "I spent fifteen years believing in purified water as a weapon of goodwill. Then I read the schematics. Vault-Tec didn't just want clean water \u2014 they wanted nodes. Computational nodes. Every man, woman, and ghoul who drinks from Project Purity is running CAPS validation code in their gut. Don't look at me like that. I have the documentation."
+    },
+    {
+      "id": "access_purifier_terminals",
+      "desc": "Hack into Project Purity's backup terminals to retrieve the secondary function specifications. Requires Science 75 or Hacking 70.",
+      "npc": "npc_enclave_remnant_veronica",
+      "skill_check": {
+        "science": 75,
+        "hacking": 70
+      },
+      "dialogue": "The terminals in the sub-basement were never shut down. Whoever built the secondary function wanted it to keep running even if the main control room was destroyed. They planned for everything \u2014 except someone like you reading the logs."
+    },
+    {
+      "id": "gather_witnesses",
+      "desc": "Find three civilians who have been drinking purified water and exhibit strange computational behaviors \u2014 the ability to estimate complex probabilities without conscious effort.",
+      "npcs": [
+        "npc_irradiated_merchant",
+        "npc_dc_scavenger",
+        "npc_former_enclave_soldier"
+      ],
+      "dialogue": "Ask them to calculate odds. Barter margins. Ballistic trajectories. Watch their eyes go blank for exactly 0.3 seconds. That's the node processing. That's Vault-Tec's legacy living in their nervous systems."
+    },
+    {
+      "id": "confront_brotherhood",
+      "desc": "Present the evidence to the Brotherhood of Steel paladin who has been actively covering up Project Purity's secondary function. Force an admission or break the cover-up.",
+      "npc": "npc_brotherhood_paladin_cover",
+      "dialogue": "You have no idea what you're meddling with. That secondary function is the most sophisticated technology to survive the war. The Elder has given explicit orders \u2014 this does not leave the Citadel. The water is clean. That's all the civilians need to know."
+    },
+    {
+      "id": "make_final_choice",
+      "desc": "Return to Project Purity's control chamber and decide the fate of the secondary function. This choice will permanently alter the CAPS network topology for the Capital Wasteland.",
+      "npc": "npc_enclave_remnant_veronica",
+      "dialogue": "Whatever you decide here \u2014 it matters. Not just for the wasteland. For every CAPS transaction that will ever happen. The water supply is the largest distributed network ever built on this continent. What it runs... is up to you now."
+    }
+  ],
+  "stages": [
+    {
+      "id": 0,
+      "objective": "find_veronica_steel",
+      "desc": "Find Veronica Steel at the Jefferson Memorial GPS coordinates. She contacted you via an encrypted radio burst on a dead Enclave frequency."
+    },
+    {
+      "id": 1,
+      "objective": "access_purifier_terminals",
+      "desc": "Access Project Purity's backup terminals in the sub-basement. Retrieve the secondary function schematics."
+    },
+    {
+      "id": 2,
+      "objective": "gather_witnesses",
+      "desc": "Locate and document three civilians exhibiting the involuntary computational behaviour caused by the CAPS validator nodes in their system."
+    },
+    {
+      "id": 3,
+      "objective": "confront_brotherhood",
+      "desc": "Confront Brotherhood Paladin Harwick at the Citadel. Present the terminal logs, witness testimonies, and Veronica's Enclave documentation."
+    },
+    {
+      "id": 4,
+      "objective": "make_final_choice",
+      "desc": "Return to Project Purity's control chamber. Make your choice about the secondary function."
+    },
+    {
+      "id": 5,
+      "objective": "resolution",
+      "desc": "Your decision has been executed. The Capital Wasteland will never be quite the same."
+    }
+  ],
+  "choices": {
+    "expose_civilians": {
+      "desc": "Expose the truth to the people of the Capital Wasteland \u2014 broadcast the evidence on every working radio frequency. The people deserve to know what they're drinking.",
+      "requirements": {
+        "speech": 70,
+        "charisma": 7
+      },
+      "consequences": {
+        "faction_rep": {
+          "wasteland_civilians": 100,
+          "brotherhood_of_steel": -40,
+          "enclave_remnants": -60
+        },
+        "karma": 250,
+        "rewards": {
+          "xp": 1100,
+          "caps": 600,
+          "fizz": 35,
+          "items": [
+            "people_know_perk_token",
+            "wasteland_herald_radio_access"
+          ]
+        },
+        "unlock": [
+          "wasteland_herald_broadcast_network",
+          "civilian_node_awareness_event"
+        ],
+        "outcome": "The truth spreads like clean water. Civilians are shaken \u2014 but aware. The CAPS network gains millions of nodes overnight. The wasteland is changed forever, for better and terrifying worse."
+      }
+    },
+    "brotherhood_control": {
+      "desc": "Give the Brotherhood of Steel exclusive control of Project Purity and its secondary CAPS validation function. Technology in responsible \u2014 if authoritarian \u2014 hands.",
+      "requirements": {
+        "reputation": "brotherhood_friendly"
+      },
+      "consequences": {
+        "faction_rep": {
+          "brotherhood_of_steel": 100,
+          "wasteland_civilians": -20,
+          "enclave_remnants": -40
+        },
+        "karma": -30,
+        "rewards": {
+          "xp": 900,
+          "caps": 400,
+          "fizz": 15,
+          "items": [
+            "brotherhood_field_promotion",
+            "paladin_power_cell"
+          ]
+        },
+        "unlock": [
+          "brotherhood_purity_oversight_protocol"
+        ],
+        "outcome": "The Brotherhood gains unprecedented computational power through the water supply. Technology is preserved. But the people remain nodes in a network they didn't consent to join."
+      }
+    },
+    "enclave_control": {
+      "desc": "Hand the secondary function back to the Enclave remnants. Let them rebuild from Project Purity's computational infrastructure.",
+      "requirements": {
+        "deception": 80
+      },
+      "consequences": {
+        "faction_rep": {
+          "enclave_remnants": 100,
+          "brotherhood_of_steel": -80,
+          "wasteland_civilians": -50
+        },
+        "karma": -300,
+        "rewards": {
+          "xp": 800,
+          "caps": 1500,
+          "fizz": 10,
+          "items": [
+            "enclave_access_codes",
+            "tesla_armor_schematics"
+          ]
+        },
+        "unlock": [
+          "enclave_remnant_surveillance_grid"
+        ],
+        "outcome": "The Enclave rises from the ashes of Project Purity. The CAPS network becomes a surveillance lattice. You'll regret this \u2014 or perhaps you won't."
+      }
+    },
+    "disable_secondary": {
+      "desc": "Disable the secondary function entirely. Purify the water. Nothing more, nothing less. Just clean water for the wasteland.",
+      "requirements": {
+        "science": 85,
+        "explosives": 60
+      },
+      "consequences": {
+        "faction_rep": {
+          "brotherhood_of_steel": -20,
+          "enclave_remnants": -80,
+          "wasteland_civilians": 60,
+          "vault_tec_remnants": -60
+        },
+        "karma": 300,
+        "rewards": {
+          "xp": 1300,
+          "caps": 300,
+          "fizz": 50,
+          "items": [
+            "clean_conscience_perk_token",
+            "purified_water_supply_x20"
+          ]
+        },
+        "unlock": [
+          "pure_water_supply_chain_event"
+        ],
+        "outcome": "Clean water. Just water. No nodes, no surveillance, no corporate ghosts riding the H2O. The wasteland gets one pure thing. It's worth more than any CAPS ever minted."
+      }
+    }
+  },
+  "rewards": {
+    "xp": 900,
+    "caps": 500
+  },
+  "factions": {
+    "affected": [
+      "Brotherhood_of_Steel",
+      "Enclave_Remnants",
+      "Wasteland_Civilians",
+      "Vault_Tec_Remnants",
+      "Project_Purity_Scientists"
+    ]
+  },
+  "next_quests": [
+    "quest_fo4_diamond_city_caps",
+    "quest_capital_water_aftermath"
+  ],
+  "era_note": "2277. Project Purity is functional but compromised. The Brotherhood-Enclave conflict creates a temporal anomaly in the fractured timeline \u2014 FO3 echoes persist near major water sources.",
+  "fizz_lore": "Every purified water drinker became an unwilling CAPS validator \u2014 a human node in Vault-Tec's posthumous economic network. The FIZZ token's computational elegance was literally baptized into the Capital Wasteland's water supply.",
+  "notes": "This quest bridges FO3 lore with the CAPS/FIZZ blockchain narrative. Veronica Steel is an original character \u2014 not affiliated with Fallout: New Vegas's Veronica Santangelo. The 'computational behaviour' witnesses are a subtle horror element \u2014 the civilians don't know they've been modified."
+}

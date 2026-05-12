@@ -1,0 +1,21 @@
+{
+  "id": "npc_commonwealth_institute_courser_z9_ember",
+  "name": "Courser Z9-Ember",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "divide",
+  "reasonForDisplacement": "Tracking a rogue synth when the Divide storms 'spoke' to him.",
+  "role": "Courser Operative",
+  "personality": "Intense, paranoid, convinced the Humming One is sentient.",
+  "questHooks": [
+    "Believes the Humming One is watching the player.",
+    "Thinks the Divide storms are 'breathing'.",
+    "Wants to destroy a FizzCo relay node buried under the Divide."
+  ],
+  "lore": {
+    "heardHummingOne": true,
+    "interpretation": "A living entity trapped between timelines.",
+    "atomicFizzRumors": "Fizz Caps 'whisper' when held near fracture points."
+  },
+  "poi": "The Divide — collapsed highway overlook"
+}

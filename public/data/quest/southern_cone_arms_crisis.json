@@ -1,0 +1,45 @@
+{
+  "id": "southern_cone_arms_crisis",
+  "name": "The Pampas War",
+  "type": "global",
+  "region": "Pampas_Argentina",
+  "npc_giver": "global_buenos_aires_gaucho",
+  "description": "A raider faction in the Pampas has gotten their hands on pre-war military hardware from a crashed aircraft. El Gaucho has been watching them gather strength for six months. Time to act before they hit the first settlement.",
+  "gps_requirement": {
+    "region": "Pampas, Argentina",
+    "real_lat": -35.0000,
+    "real_lng": -63.0000,
+    "radius_km": 200
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Travel to the Pampas",
+      "description": "Leave Buenos Aires and head west into the Pampas grasslands. El Gaucho's informants have tracked the raider faction to a fortified position near the old crash site.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -35.0000, "lng": -63.0000},
+      "radius_m": 5000,
+      "actions": ["set_flag:pampas_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Locate the Raider Camp",
+      "description": "Find the raider faction's fortified camp. El Gaucho warns they have more hardware than a normal raider band — approach with intelligence before commitment.",
+      "trigger": "player_reaches_area:pampas_raider_camp",
+      "actions": ["spawn:item_pampas_hardware_manifest", "set_flag:raider_camp_located", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Neutralize the Threat",
+      "description": "Stop the raider faction before they move on the first settlement. El Gaucho prefers the hardware be destroyed or secured — he'll accept whatever outcome prevents the attack.",
+      "trigger": "player_complete_objective:raider_threat_neutralized",
+      "actions": ["spawn:item_pampas_military_hardware_cache", "complete_quest:true", "set_flag:pampas_war_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 400,
+    "caps": 250,
+    "fizz": 30,
+    "items": ["item_pampas_military_hardware_cache"]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime-echo_025",
+  "type": "side_quest",
+  "name": "Voss Rhea",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime-echo_025_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime-echo_025_loot",
+  "questHooks": [
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.7,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

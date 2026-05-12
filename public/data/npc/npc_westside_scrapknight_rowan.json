@@ -1,0 +1,16 @@
+{
+  "id": "npc_westside_scrapknight_rowan",
+  "name": "Scrap-Knight Rowan",
+  "faction": "westside_collective",
+  "homeRegion": "westside",
+  "currentRegion": "westside-blocks",
+  "role": "Wasteland Defender",
+  "personality": "Honorable, dramatic, overly serious.",
+  "description": "Wears armor made from car doors and hubcaps. Treats every fight like a duel.",
+  "questHooks": [
+    "Says he heard a 'low hum' during a patrol.",
+    "Claims a stranger challenged him to a duel then vanished.",
+    "Knows of a stash hidden in a wrecked bus."
+  ],
+  "poi": "westside_scrap_arena"
+}

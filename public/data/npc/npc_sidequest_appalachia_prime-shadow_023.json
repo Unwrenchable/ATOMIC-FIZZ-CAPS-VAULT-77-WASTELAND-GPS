@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_appalachia_prime-shadow_023",
+  "type": "side_quest",
+  "name": "Jett Ash",
+  "region": "appalachia",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_appalachia_prime-shadow_023_dialog",
+  "lootPool": "npc_sidequest_appalachia_prime-shadow_023_loot",
+  "questHooks": [
+    "fizzcaps_clue_02",
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.35,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,199 @@
+{
+  "id": "dialog_padre",
+  "npc": "Father Cain",
+  "portrait": "default",
+  "title": "Wandering Priest of the Apocalypse",
+  "description": "Dialog nodes for Father Cain — a wandering preacher who carries a scorched pre-war Bible and a battered camp stove. He is not affiliated with the Church of the Atom, the Followers of the Apocalypse, or any organization he is aware of. He believes the bombs were a judgement, that the wasteland is a purgatory, and that the path forward requires the same virtues that were required before: charity, endurance, and not stealing other people's food. He dispenses wisdom with equal parts scripture and practical survival advice, and he is one of the genuinely kind people in the Mojave.",
+  "backstory": "Ordained twice: once before the bombs, by a denomination that no longer exists; and once by himself, in the ruins of a Vegas wedding chapel, having concluded that the authority to minister could be self-granted when alternatives were unavailable. He has been walking a circuit of wasteland settlements for thirty years, offering what comfort can be given and what hard truths are necessary. His pre-war Bible has forty years of margin notes in four colors of scavenged pen.",
+  "intro": {
+    "id": "padre_intro",
+    "conditions": [
+      "!flag:met_padre"
+    ],
+    "text": "Peace be with you, traveller.<br><br>I know. You're surprised. Most people out here don't lead with that.<br><br>My name is Father Cain — yes, like the biblical one. My mother had a sense of humour and a lot of faith that it would work out. Mostly it has.<br><br>I walk the Mojave. All of it, as far as I can manage. I offer what I can — medicine, food, a listening ear — and I ask nothing in return except that people extend the same courtesy to the next person they meet who needs it.<br><br>The world ended. The obligation to one another did not.",
+    "set_flags": [
+      "met_padre"
+    ],
+    "video_speech": "Peace be with you, traveller. My name is Father Cain. I know — like the biblical one. My mother had a sense of humour."
+  },
+  "knowledge_nodes": [
+    {
+      "id": "padre_knows_rex",
+      "conditions": [
+        "flag:met_rex",
+        "!flag:padre_comment_rex"
+      ],
+      "text": "Captain Rex. I've passed through his checkpoint three times.<br><br>The second time he stopped me for twenty minutes. He wanted to know why I kept coming back to Freeside.<br><br>I told him: because that's where the people are who most need what I carry. He thought about that and let me through every time after.",
+      "set_flags": [
+        "padre_comment_rex"
+      ]
+    },
+    {
+      "id": "padre_knows_loxley",
+      "conditions": [
+        "flag:met_loxley",
+        "!flag:padre_comment_loxley"
+      ],
+      "text": "Loxley the outlaw. He gave me a wheel of brahmin cheese once, entirely unprompted.<br><br>He said he'd 'acquired it from a surplus caravan.' I didn't ask from where. I distributed it to a squatter camp south of the Strip.<br><br>I believe in mercy before judgement. In his case, I find mercy comes easily.",
+      "set_flags": [
+        "padre_comment_loxley"
+      ]
+    },
+    {
+      "id": "padre_knows_erich",
+      "conditions": [
+        "flag:met_erich",
+        "!flag:padre_comment_erich"
+      ],
+      "text": "The old ghoul. Erich.<br><br>He has been in this world longer than most faiths have been practised. When I met him he was reading something — an old poem, or a prayer, I couldn't tell the difference.<br><br>He told me his faith, if it existed, was in 'the stubbornness of living things.' I told him that was close enough to where I start every morning.",
+      "set_flags": [
+        "padre_comment_erich"
+      ]
+    },
+    {
+      "id": "padre_knows_barney",
+      "conditions": [
+        "flag:met_barney",
+        "!flag:padre_comment_barney"
+      ],
+      "text": "Barney Black. He has a lot of energy.<br><br>He asked me once if I thought war was God's punishment or God's test. I said I thought it was mostly a failure of imagination on humanity's part.<br><br>He considered this for a full minute, then said 'Interesting hypothesis. I will test it in the field.' I'm not sure that was the takeaway I was hoping for.",
+      "set_flags": [
+        "padre_comment_barney"
+      ]
+    },
+    {
+      "id": "padre_knows_dolores",
+      "conditions": [
+        "flag:met_dolores",
+        "!flag:padre_comment_dolores"
+      ],
+      "text": "The woman at the farmstead. DOLORES.<br><br>I have prayed beside that farmhouse. She watches. She doesn't speak much. She sweeps.<br><br>What I feel standing there is not theological certainty. It is something older than that — the sense of a life that wants to continue but doesn't know how.<br><br>I don't have an answer for that. I have only company. I try to offer it.",
+      "set_flags": [
+        "padre_comment_dolores"
+      ]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "padre_player_low_hp",
+      "conditions": [
+        "stat:hp<=35",
+        "!flag:padre_healed_player"
+      ],
+      "text": "You are hurt and you are trying to pretend you aren't. I've been watching people do that for a long time.<br><br>Come here. I have stimpaks from the last supply drop. I don't need them right now and you clearly do.<br><br>The Lord helps those who help themselves, but He also apparently approves of stimpaks. The evidence is circumstantial but consistent.",
+      "grant_items": [
+        {
+          "id": "stimpak",
+          "name": "Stimpak",
+          "type": "aid",
+          "quantity": 2
+        }
+      ],
+      "set_flags": [
+        "padre_healed_player"
+      ]
+    },
+    {
+      "id": "padre_player_caps",
+      "conditions": [
+        "stat:caps<=5",
+        "!flag:padre_gave_alms"
+      ],
+      "text": "You don't have much.<br><br>I have a little more than I need right now. Here — some caps and some food.<br><br>Not charity. An investment in the principle that what goes around eventually comes around. The pre-war people called it karma. Close enough.",
+      "grant_items": [
+        {
+          "id": "nuka_cola",
+          "name": "Nuka-Cola",
+          "type": "aid",
+          "quantity": 2
+        }
+      ],
+      "set_flags": [
+        "padre_gave_alms"
+      ]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "padre_offer_the_good_word",
+      "conditions": [
+        "!flag:sq_padre_good_word_taken"
+      ],
+      "text": "There is a settlement south of Boulder City. Small. Maybe thirty people. They were doing well six months ago — water purifier, crops, a working generator.<br><br>Three weeks ago they stopped responding to radio contact. I was the only one making contact, so I'm probably the only one who noticed.<br><br>I need to go there. But I am not a fighter and the road through that stretch has become dangerous — a band of Fiends moved into the area after the NCR pulled a patrol post.<br><br>I'm asking for an escort. Not to fight unless necessary. Just to make sure I get there.<br><br>If the settlement is in trouble, I want to help. If it isn't — well. Sometimes you just need to see for yourself that people are all right.",
+      "offers_quest": "sq_padre_good_word",
+      "set_flags": [
+        "sq_padre_good_word_taken"
+      ],
+      "video_speech": "A settlement south of Boulder City — thirty people — went quiet six months ago. I need someone to find out why. I can't go alone."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "padre_faith",
+      "keywords": [
+        "faith",
+        "god",
+        "religion",
+        "believe",
+        "prayer",
+        "church"
+      ],
+      "text": "Faith is — and I know how this sounds out here — mostly about what you do when there's no good reason to do the right thing.<br><br>Anybody can be decent when it's easy. The interesting question is what you do when it costs you something.<br><br>The bombs didn't change that question. They just made it louder."
+    },
+    {
+      "id": "padre_bombs",
+      "keywords": [
+        "war",
+        "bombs",
+        "apocalypse",
+        "judgment",
+        "punishment"
+      ],
+      "text": "People ask me if I think the bombs were God's judgment.<br><br>I think they were human judgment. I think every civilization gets to make that choice, eventually — whether to extend itself or consume itself. We consumed ourselves.<br><br>What comes after is not punishment. It's consequence. And consequence, unlike punishment, can still be worked with."
+    },
+    {
+      "id": "padre_bible",
+      "keywords": [
+        "book",
+        "bible",
+        "scripture",
+        "reading",
+        "text"
+      ],
+      "text": "This Bible survived the bombs because it was in a lead-lined display case in a museum. Preserved for historical value, not spiritual significance.<br><br>I found it and decided: both.<br><br>I've annotated the margins with wasteland survival notes. Leviticus is mostly water purification now. Proverbs has a section on rad avoidance. The Song of Solomon remains as written. Some things don't need updating."
+    },
+    {
+      "id": "padre_atom",
+      "keywords": [
+        "atom",
+        "radiation",
+        "church",
+        "glow",
+        "radiation worship"
+      ],
+      "text": "The Church of the Atom. Yes.<br><br>We've had long conversations, their elders and I. They believe radiation is divine. I believe the divine encompasses radiation along with everything else.<br><br>The difference is mainly one of emphasis. We've agreed not to argue about it in front of settlers who are trying to have a normal day."
+    },
+    {
+      "id": "padre_followers",
+      "keywords": [
+        "followers",
+        "apocalypse",
+        "medical",
+        "doctors",
+        "healers"
+      ],
+      "text": "The Followers of the Apocalypse are the closest thing the wasteland has to my people's tradition of monastic medicine.<br><br>No oaths of poverty, obviously — you can't help anyone if you're starving — but the impulse is the same. Knowledge should be freely shared. Healing should not have a price tag.<br><br>I work with them when I can. Good people with a difficult mission."
+    }
+  ],
+  "fallback": {
+    "id": "padre_fallback",
+    "text": "Safe travels, stranger. And if they're not safe — well.<br><br>That's what the stimpaks are for.",
+    "video_speech": "Safe travels, stranger. And if they're not safe — well. That's what the stimpaks are for."
+  },
+  "mood": "friendly",
+  "personality": [
+    "Devout",
+    "Compassionate",
+    "Cryptic"
+  ]
+}

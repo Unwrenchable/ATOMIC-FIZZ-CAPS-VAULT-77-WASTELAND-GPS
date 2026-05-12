@@ -1,0 +1,15 @@
+{
+  "id": "npc_nv_echo",
+  "name": "Echo",
+  "region": "Under-Strip",
+  "type": "Hacker",
+  "dialog": {
+    "idle": [
+      "Jax and I go way back. Don’t ask how far.",
+      "FizzCo’s watching. Always watching."
+    ]
+  },
+  "quests": ["side_nv_echologs"],
+  "faction": "Independent",
+  "notes": "Knows secrets about Vault 77 and the Overseer AI."
+}

@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime-shadow_008",
+  "type": "side_quest",
+  "name": "Varra Nina",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime-shadow_008_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime-shadow_008_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.4,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

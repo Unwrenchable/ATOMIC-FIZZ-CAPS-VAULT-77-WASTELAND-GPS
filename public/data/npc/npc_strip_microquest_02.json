@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_microquest_02",
+  "name": "Broken Tourist",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "I swear I saw myself… walking the other way.",
+    "This place isn’t right. Something’s wrong with time."
+  ],
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": true
+}

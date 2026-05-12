@@ -1,0 +1,18 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main building -->
+  <rect x="6" y="10" width="12" height="8" fill="#00ff41"/>
+  <!-- Antenna tower -->
+  <rect x="11.5" y="4" width="1" height="6" fill="#00ff41"/>
+  <rect x="11" y="6" width="2" height="1" fill="#00ff41"/>
+  <!-- Radar dish -->
+  <circle cx="12" cy="4" r="2" fill="#00ff41"/>
+  <line x1="12" y1="4" x2="14" y2="2" stroke="#00ff41" stroke-width="1"/>
+  <!-- Windows -->
+  <rect x="7" y="12" width="2" height="2" fill="#0a1a0a"/>
+  <rect x="10" y="12" width="2" height="2" fill="#0a1a0a"/>
+  <rect x="13" y="12" width="2" height="2" fill="#0a1a0a"/>
+  <rect x="16" y="12" width="2" height="2" fill="#0a1a0a"/>
+  <!-- Flag pole -->
+  <rect x="18" y="6" width="1" height="8" fill="#00ff41"/>
+  <rect x="18" y="6" width="3" height="2" fill="#00ff41"/>
+</svg>

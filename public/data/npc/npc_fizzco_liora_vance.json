@@ -1,0 +1,13 @@
+{
+  "id": "npc_fizzco_liora_vance",
+  "name": "Dr. Liora Vance",
+  "region": "Mojave",
+  "type": "FizzCo Scientist",
+  "dialog": [
+    "FizzCo didn’t just make soda. We made history. And mistakes.",
+    "If the CapChain is waking up… we’re out of time."
+  ],
+  "quests": ["quest_fizz_awakens", "quest_formula_77"],
+  "faction": "FizzCo",
+  "notes": "Knows the truth about Vault 77’s experiments."
+}

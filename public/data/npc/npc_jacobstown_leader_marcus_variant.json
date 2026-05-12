@@ -1,0 +1,19 @@
+{
+  "id": "npc_jacobstown_leader_marcus_variant",
+  "name": "Garran",
+  "faction": "jacobstown",
+  "role": "Super Mutant Leader",
+  "personality": "Calm, wise, protective of his people.",
+  "description": "Garran leads Jacobstown with patience and strength. He dreams of a peaceful future for mutants, but knows the Mojave rarely allows peace.",
+  "relationships": {
+    "nightkin": "Mediator and protector",
+    "scientists": "Cautious cooperation",
+    "outsiders": "Wary but hopeful"
+  },
+  "questHooks": [
+    "Wants help negotiating with nearby settlers.",
+    "Concerned about Nightkin instability.",
+    "Reports strange wildlife behavior near the lodge."
+  ],
+  "poi": "jacobstown_fnv"
+}

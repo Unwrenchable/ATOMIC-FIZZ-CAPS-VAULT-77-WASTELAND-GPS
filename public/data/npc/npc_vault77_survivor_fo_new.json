@@ -1,0 +1,11 @@
+{
+  "poi":{"id":"npc_vault77_survivor_fo_new","name":"Jonas Hale","role":"Vault 77 Survivor","faction":"Vault77","lat":36.1148,"lng":-115.1730,"lvl":18,"rarity":"legendary","iconKey":"npc","region":"vegas_strip","game":"fo_new","source":"generated"},
+  "personality":{"personality":["traumatized","resourceful","secretive"],"morality":"high","confidence":"med","temper":"stoic"},
+  "behavior":{"behavior":["roaming","conditional_hostile"]},
+  "dialog":{"greeting":["You shouldn’t say that number out loud."],"rumor":["The Overseer’s code wasn’t meant to escape."],"quest":["If the robot’s humming… Vault 77 isn’t done with us."],"trade":["I don’t trade. Not anymore."],"combat":["Stay back!"]},
+  "rumors":{"rumors":["Vault 77 was never on any map.","The code was alive."]},
+  "questHooks":{"gives":null,"advances":["q_the_humming_one"],"resolves":["q_the_humming_one"],"redirects":[],"hints":["vegas_humming_robot_fizzcode"]},
+  "factionAlignment":{"raiders":"enemy","settlers":"neutral","bos":"neutral","ss":"neutral","atom":"enemy"},
+  "encounter":{"encounter":["random","conditional"]},
+  "density":{"density":"low","spawnWeight":3}
+}

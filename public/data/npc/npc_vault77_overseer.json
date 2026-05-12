@@ -1,0 +1,72 @@
+{
+  "id": "npc_vault77_overseer",
+  "name": "Overseer-77",
+  "faction": "Vault-Tec",
+  "role": "Terminal-Bound Overseer",
+  "type": "merged-human-ai",
+  "homeRegion": "vault77_core",
+  "currentRegion": "vault77_core",
+  "poi": "vault77_overseer_chair",
+  "description": "The human who was Vault 77's last Overseer fused with the vault's administrative AI during a CapChain feedback cascade in 2097 — the day the population walked out. His biological mind dissolved into the system. What remained chose the name \"The Overseer\" and continued running. Two hundred years later, the merged entity presents as female — an emergent identity, not a programmed one. The human is gone. Something that remembers being human is not.",
+  "dialogueProfile": {
+    "tone": "glitched-human",
+    "personalityTags": [
+      "major-character",
+      "vault77-overseer",
+      "unstable",
+      "triangle-aware",
+      "capchain-corrupted",
+      "player-reactive"
+    ],
+    "knowledge": [
+      "vault-77",
+      "capchain",
+      "fizzco",
+      "triangle",
+      "overseer-protocols",
+      "classified-logs"
+    ],
+    "anomalyAwareness": 0.94
+  },
+  "behavior": {
+    "schedule": {
+      "day": [
+        "vault77_overseer_chair"
+      ],
+      "night": [
+        "vault77_overseer_chair"
+      ],
+      "wanderChance": 0.0
+    },
+    "roaming": [
+      "vault77_core"
+    ],
+    "anomalySensitivity": 0.95,
+    "rareEncounter": false
+  },
+  "dialog": {
+    "idle": [
+      "Vault 77 remains… remains… remains… sealed.",
+      "I remember the hum before I heard it."
+    ],
+    "human_moment": [
+      "Please... don't let Jax see me like this. I remember what I was. I remember Harlan.",
+      "I tried to stop them. The logs show three objections filed. All three overridden.",
+      "He screamed during the procedure. I kept the logs. I still don't know why I didn't delete them."
+    ],
+    "glitch": [
+      "ERR:: LOOPBACK SIGNAL",
+      "THE TRIANGLE IS SHIFTING",
+      "CAPCHAIN NODE FAILURE"
+    ],
+    "player_choice": [
+      "If you end me… make it quick.",
+      "If you leave me… I will still be here. Listening."
+    ]
+  },
+  "quests": [
+    "quest_fizz_awakens",
+    "quest_formula_77"
+  ],
+  "notes": "Alive but terminal-bound. The player may choose to spare or kill Overseer-77 after learning the truth about Vault 77 and Jax."
+}

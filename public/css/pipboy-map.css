@@ -1,0 +1,537 @@
+/* ============================================================================
+   FALLOUT-STYLE MAP STYLING
+   Mix of Fallout 1 (isometric green CRT) & New Vegas (world map)
+   ============================================================================ */
+
+/* Map Container - Green CRT glow - FILLS PANEL */
+.pipboy-map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  background: #0a120a;
+  border: 2px solid #00ff41;
+  box-shadow: 
+    inset 0 0 20px rgba(0, 255, 65, 0.3),
+    0 0 30px rgba(0, 255, 65, 0.2);
+  filter: contrast(1.05) brightness(1.0);
+}
+
+/* Leaflet tile layer — single-pass filter for GPU compositing (green/amber Pip-Boy tint).
+   Previously a second filter was applied per-tile in pipboy.css causing double-rendering.
+   will-change:transform promotes the pane to its own compositor layer so pinch-zoom
+   is handled on the GPU without triggering software re-rasterisation each frame. */
+.leaflet-tile-pane {
+  filter:
+    sepia(0.2)
+    hue-rotate(90deg)
+    saturate(0.55)
+    contrast(1.2)
+    brightness(0.9);
+  opacity: 0.95;
+  will-change: transform;
+}
+
+/* POI Markers - Fallout style with contained glow (no bleed) */
+.poi-marker {
+  opacity: 0.95;
+}
+
+/* POI Marker SVG icons - ensure visibility and proper sizing */
+.poi-marker img,
+.poi-marker svg {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  min-height: 32px;
+  /* SVGs now have native Pocket-Boy green (#00ff41) - add subtle glow for visibility */
+  filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
+}
+
+/* Contained glow wrapper for POI markers */
+.leaflet-marker-icon.poi-marker {
+  background: radial-gradient(circle, rgba(0, 255, 65, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  padding: 4px;
+}
+
+/* Player marker — L.divIcon wrapper; Leaflet controls positioning via its
+   own transform, so we never touch transform on this element. */
+.player-marker {
+  z-index: 1000 !important;
+  width: 40px !important;
+  height: 40px !important;
+  background: transparent !important;
+  border: none !important;
+  overflow: visible !important;
+}
+
+/* Directional arrow image — rotates independently of the wrapper.
+   CSS transition gives smooth interpolation between heading updates. */
+.player-marker-arrow {
+  display: block;
+  width: 40px;
+  height: 40px;
+  transform-origin: center center;
+  transition: transform 0.25s ease-out;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 204, 0.65));
+}
+
+/* Fallout 1 style grid overlay */
+.pipboy-map::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 19px,
+      rgba(0, 255, 65, 0.03) 19px,
+      rgba(0, 255, 65, 0.03) 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 19px,
+      rgba(0, 255, 65, 0.03) 19px,
+      rgba(0, 255, 65, 0.03) 20px
+    );
+  pointer-events: none;
+  z-index: 400;
+}
+
+/* Scan line effect (Fallout 1 CRT terminals) */
+.pipboy-map::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 255, 65, 0.03) 0%,
+    transparent 50%,
+    rgba(0, 255, 65, 0.03) 100%
+  );
+  background-size: 100% 4px;
+  animation: scan-line 12s linear infinite;
+  pointer-events: none;
+  z-index: 450;
+  opacity: 0.5;
+}
+
+@keyframes scan-line {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 500px; }
+}
+
+/* Leaflet popups - Fallout terminal style */
+.leaflet-popup-content-wrapper {
+  background: rgba(0, 0, 0, 0.95) !important;
+  color: #00ff41 !important;
+  border: 2px solid #00ff41 !important;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 255, 65, 0.2),
+    0 0 20px rgba(0, 255, 65, 0.3) !important;
+  font-family: 'VT323', 'Courier New', monospace !important;
+  font-size: 16px !important;
+  text-shadow: 0 0 5px #00ff41;
+  padding: 8px !important;
+}
+
+.leaflet-popup-content {
+  margin: 8px !important;
+}
+
+.leaflet-popup-tip {
+  background: #000 !important;
+  border: 1px solid #00ff41 !important;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3) !important;
+}
+
+.leaflet-popup-close-button {
+  color: #00ff41 !important;
+  font-size: 24px !important;
+  font-weight: bold !important;
+  text-shadow: 0 0 5px #00ff41;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #ffaa00 !important;
+  text-shadow: 0 0 8px #ffaa00;
+}
+
+/* Roads/highways - like New Vegas map (no animation, clean lines) */
+.pipboy-road {
+  stroke: #00ff41 !important;
+  stroke-width: 2 !important;
+  opacity: 0.75 !important;
+}
+
+/* Quest markers - golden glow like New Vegas (contained) */
+.quest-marker {
+  z-index: 900 !important;
+  width: 36px !important;
+  height: 36px !important;
+  background: radial-gradient(circle, rgba(255, 170, 0, 0.2) 0%, transparent 60%);
+  border-radius: 50%;
+}
+
+.quest-marker img,
+.quest-marker svg {
+  /* Quest markers - golden/amber glow */
+  filter: drop-shadow(0 0 3px rgba(255, 170, 0, 0.9)) brightness(1.1) saturate(1.2) hue-rotate(-50deg);
+}
+
+/* Radiation zones - green hazard (no animation, subtle fill) */
+.radiation-zone {
+  fill: rgba(0, 255, 65, 0.08) !important;
+  stroke: #00ff41 !important;
+  stroke-width: 1.5 !important;
+  stroke-opacity: 0.6 !important;
+}
+
+/* Faction territories - color-coded like New Vegas rep system */
+.faction-overlay {
+  stroke-width: 3 !important;
+  stroke-opacity: 0.8 !important;
+  fill-opacity: 0.1 !important;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.faction-ncr { stroke: #d4a000 !important; fill: #d4a000 !important; }
+.faction-legion { stroke: #d40000 !important; fill: #d40000 !important; }
+.faction-bos { stroke: #0080ff !important; fill: #0080ff !important; }
+.faction-house { stroke: #ffffff !important; fill: #ffffff !important; }
+
+/* Fog of War - unexplored areas darkened */
+.fog-reveal {
+  mix-blend-mode: destination-out;
+}
+
+/* Compass widget (#pipboyCompass) – styled inline by compass.js */
+
+/* Map controls - Pocket-Boy button style */
+.leaflet-control-zoom a {
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: #00ff41 !important;
+  border: 2px solid #00ff41 !important;
+  box-shadow: 
+    inset 0 0 5px rgba(0, 255, 65, 0.2),
+    0 0 10px rgba(0, 255, 65, 0.2) !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  text-shadow: 0 0 5px #00ff41;
+}
+
+.leaflet-control-zoom a:hover {
+  background: rgba(0, 255, 65, 0.2) !important;
+  color: #ffaa00 !important;
+  border-color: #ffaa00 !important;
+  text-shadow: 0 0 8px #ffaa00;
+}
+
+/* Weather overlay effects */
+.weather-overlay {
+  pointer-events: none;
+  z-index: 400;
+}
+
+.weather-radstorm {
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 255, 65, 0.1),
+    rgba(0, 255, 65, 0.03),
+    transparent
+  );
+  animation: rad-storm 6s ease-in-out infinite;
+  opacity: 0.4;
+}
+
+@keyframes rad-storm {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
+
+/* Discovery banner - New Vegas style notification */
+.discovery-banner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.95);
+  color: #ffaa00;
+  border: 3px solid #ffaa00;
+  padding: 20px 40px;
+  font-family: 'VT323', monospace;
+  font-size: 24px;
+  text-align: center;
+  box-shadow: 
+    inset 0 0 20px rgba(255, 170, 0, 0.3),
+    0 0 30px rgba(255, 170, 0, 0.5);
+  text-shadow: 0 0 10px #ffaa00;
+  z-index: 1000;
+  animation: discovery-fade 3s ease-out forwards;
+}
+
+@keyframes discovery-fade {
+  0% { 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  20%, 80% { 
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% { 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+/* Player trail - breadcrumb dots like Pocket-Boy */
+.player-trail-dot {
+  width: 6px;
+  height: 6px;
+  background: #00d4ff;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+/* Loot scanner pulse effect - disabled by default, enable via JS when needed */
+.loot-scanner-pulse {
+  position: absolute;
+  border: 1px solid #00ff41;
+  border-radius: 50%;
+  animation: scanner-pulse 3s ease-out;
+  pointer-events: none;
+  z-index: 450;
+  opacity: 0.6;
+}
+
+@keyframes scanner-pulse {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.6;
+  }
+  100% {
+    width: 150px;
+    height: 150px;
+    opacity: 0;
+  }
+}
+
+/* Map status text - terminal style (no flicker) */
+.map-status {
+  color: #00ff41 !important;
+  font-family: 'VT323', monospace !important;
+}
+
+/* ============================================================================
+   PIPBOY MARKER DOTS (for locations)
+   ============================================================================ */
+
+.pipboy-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.pipboy-marker-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00ff41;
+  border: 2px solid rgba(0, 255, 65, 0.6);
+}
+
+.pipboy-marker-dot.epic {
+  background: #d900ff;
+  border-color: rgba(217, 0, 255, 0.6);
+}
+
+.pipboy-marker-dot.legendary {
+  background: #ffaa00;
+  border-color: rgba(255, 170, 0, 0.6);
+}
+
+.pipboy-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* ============================================================================
+   LEAFLET MARKER FIXES - Ensure proper sizing
+   ============================================================================ */
+
+.leaflet-marker-icon {
+  background: transparent;
+  border: none;
+}
+
+.leaflet-marker-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Ensure all SVG icons are visible on dark background */
+.leaflet-marker-icon img[src$=".svg"] {
+  /* SVGs now have native Pocket-Boy green - just add subtle glow */
+  filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
+}
+
+/* ============================================================================
+   POI LABEL TOOLTIPS - Persistent location names
+   ============================================================================ */
+
+.poi-label-tooltip {
+  background: rgba(0, 0, 0, 0.85) !important;
+  border: 1px solid #00ff41 !important;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.3) !important;
+  padding: 2px 6px !important;
+  white-space: nowrap;
+}
+
+.poi-label-tooltip::before {
+  border-top-color: #00ff41 !important;
+}
+
+/* Discovered location labels - permanent and styled */
+.poi-label-discovered {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 1px solid #00ff41 !important;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5) !important;
+}
+
+/* Rarity-based POI marker styling - enhanced glow effects for different rarities */
+.poi-marker-common img {
+  /* Standard green glow */
+  filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.8));
+}
+
+.poi-marker-rare img {
+  /* Blue-cyan glow for rare */
+  filter: drop-shadow(0 0 3px rgba(0, 200, 255, 0.9)) hue-rotate(-30deg);
+}
+
+.poi-marker-epic img {
+  /* Purple glow for epic */
+  filter: drop-shadow(0 0 4px rgba(180, 0, 255, 0.9)) hue-rotate(250deg);
+}
+
+.poi-marker-legendary img {
+  /* Golden glow for legendary */
+  filter: drop-shadow(0 0 5px rgba(255, 170, 0, 1)) hue-rotate(-50deg) brightness(1.2);
+}
+
+/* ============================================================================
+   MAP CONTROLS - Exploration mode toggle
+   ============================================================================ */
+
+/* Map Controls - Positioned left corner, matching GPS badge style */
+.map-controls {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 2002;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Explore Map Button - Uniform with GPS badge */
+.map-control-btn {
+  /* Match GPS badge styling */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid #00ff41;
+  background: rgba(0, 0, 0, 0.85);
+  font-size: 11px;
+  color: #8fef7a;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+  font-family: 'VT323', 'Courier New', monospace;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  /* Prevent 300ms tap delay on mobile */
+  touch-action: manipulation;
+  /* Minimum touch target for accessibility */
+  min-height: 36px;
+  min-width: 44px;
+}
+
+.map-control-btn:hover {
+  background: rgba(0, 255, 65, 0.15);
+  color: #00ff41;
+  border-color: #00ff41;
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.6);
+}
+
+/* Exploration mode active state - blue tint like GPS tracking */
+.map-control-btn.exploration-active {
+  background: rgba(0, 100, 200, 0.3);
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+}
+
+.map-control-btn.exploration-active:hover {
+  background: rgba(0, 212, 255, 0.25);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.7);
+}
+
+/* Explore dot - matches GPS accuracy dot style */
+.explore-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00ff41;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+/* Dot color when exploration mode is active */
+.map-control-btn.exploration-active .explore-dot {
+  background: #00d4ff;
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.8);
+}
+
+/* ============================================================================
+   LEAFLET ZOOM CONTROLS — Pip-Boy styled, touch-friendly
+   Base styles already in .leaflet-control-zoom a above.
+   These rules ensure the +/− buttons meet 48 px minimum tap target on touch
+   devices (Apple HIG / Material Design recommendation).
+   ============================================================================ */
+
+/* Touch devices: boost to 48 px minimum to hit the target comfortably */
+@media (hover: none) and (pointer: coarse) {
+  .leaflet-control-zoom a {
+    width: 48px !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    font-size: 24px !important;
+    min-height: 48px;
+  }
+}
+
+/* Position the zoom control (top-right) so it doesn't overlap the explore/expand
+   buttons (bottom-left) or the GPS badge (bottom-right) */
+.leaflet-top.leaflet-right {
+  top: 10px;
+  right: 10px;
+}

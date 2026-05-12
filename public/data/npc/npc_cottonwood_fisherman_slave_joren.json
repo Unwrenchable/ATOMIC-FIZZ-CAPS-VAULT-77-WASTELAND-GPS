@@ -1,0 +1,14 @@
+{
+  "id": "npc_cottonwood_fisherman_slave_joren",
+  "name": "Joren",
+  "faction": "enslaved",
+  "role": "Fisherman Slave",
+  "personality": "Resigned, quiet, watches everything.",
+  "description": "Joren fishes the Colorado River for the Legion. He’s seen things floating downstream that shouldn’t exist.",
+  "questHooks": [
+    "Pulled a humming cap from the river.",
+    "Saw a Legionary dragged underwater by something.",
+    "Knows a hidden inlet beneath the cliffs."
+  ],
+  "poi": "cottonwood_cove_fnv"
+}

@@ -1,0 +1,997 @@
+[
+  {
+    "id": "vault77_sidearm",
+    "name": "Vault 77 Security Sidearm",
+    "type": "weapon",
+    "category": "pistol",
+    "damage": 22,
+    "ammoType": "ammo_9mm",
+    "weight": 3.2,
+    "value": 55,
+    "description": "Standard‑issue sidearm carried by Vault 77 security personnel."
+  },
+  {
+    "id": "desert_reclaimer",
+    "name": "Desert Reclaimer",
+    "type": "weapon",
+    "category": "rifle",
+    "damage": 34,
+    "ammoType": "ammo_556",
+    "weight": 7.8,
+    "value": 120,
+    "description": "A scavenger‑rebuilt rifle favored by Mojave drifters."
+  },
+  {
+    "id": "rusted_handcannon",
+    "name": "Rusted Handcannon",
+    "type": "weapon",
+    "category": "pistol",
+    "damage": 28,
+    "ammoType": "ammo_44",
+    "weight": 4.1,
+    "value": 65,
+    "description": "A heavy, improvised pistol built from scrap and stubbornness."
+  },
+  {
+    "id": "pru_resonance_emitter",
+    "name": "PRU Resonance Emitter",
+    "type": "weapon",
+    "category": "energy",
+    "damage": 30,
+    "ammoType": "ammo_ecell",
+    "weight": 5.0,
+    "value": 140,
+    "description": "A prototype weapon tuned to the Humming One’s resonance field."
+  },
+  {
+    "id": "signal_lance",
+    "name": "Signal Lance",
+    "type": "weapon",
+    "category": "energy",
+    "damage": 42,
+    "ammoType": "ammo_plasma",
+    "weight": 6.4,
+    "value": 180,
+    "description": "A PRU‑grade plasma tool repurposed into a devastating energy spear."
+  },
+  {
+    "id": "jax_reinforced_gloves",
+    "name": "Jax’s Reinforced Gloves",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 18,
+    "weight": 1.2,
+    "value": 45,
+    "description": "Weighted gloves used by Jax in both martial arts and pool‑hall brawls."
+  },
+  {
+    "id": "pool_cue_spear",
+    "name": "Pool Cue Spear",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 24,
+    "weight": 3.0,
+    "value": 25,
+    "description": "A broken pool cue sharpened into a surprisingly effective spear."
+  },
+  {
+    "id": "cueball_sling",
+    "name": "Cueball Sling",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 16,
+    "weight": 1.0,
+    "value": 20,
+    "description": "A leather sling designed to launch cueballs with painful accuracy."
+  },
+  {
+    "id": "fizz_spark_wrench",
+    "name": "Fizz‑Spark Wrench",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 20,
+    "weight": 2.8,
+    "value": 60,
+    "description": "An Atomic Fizz promotional wrench modified with a shock coil."
+  },
+  {
+    "id": "fizz_bottle_blade",
+    "name": "Fizz Bottle Blade",
+    "type": "weapon",
+    "category": "melee",
+    "damage": 14,
+    "weight": 1.5,
+    "value": 18,
+    "description": "A shattered Fizz bottle fused into a jagged cutting tool."
+  },
+  {
+    "id": "vault77_jumpsuit",
+    "name": "Vault 77 Jumpsuit",
+    "type": "armor",
+    "slot": "chest",
+    "armor": 5,
+    "weight": 2,
+    "value": 15,
+    "description": "Standard-issue blue and yellow jumpsuit worn by Vault 77 residents. Provides minimal protection but is surprisingly comfortable."
+  },
+  {
+    "id": "vault77_security_armor",
+    "name": "Vault 77 Security Armor",
+    "type": "armor",
+    "slot": "chest",
+    "armor": 18,
+    "weight": 12,
+    "value": 90,
+    "description": "Reinforced chest armor issued to Vault 77 security staff."
+  },
+  {
+    "id": "pru_hazard_suit",
+    "name": "PRU Hazard Suit",
+    "type": "armor",
+    "slot": "chest",
+    "armor": 14,
+    "weight": 9,
+    "value": 110,
+    "description": "A protective suit designed for anomaly-exposed environments."
+  },
+  {
+    "id": "vegas_scavenger_leathers",
+    "name": "Vegas Scavenger Leathers",
+    "type": "armor",
+    "slot": "chest",
+    "armor": 10,
+    "weight": 7,
+    "value": 45,
+    "description": "Light armor pieced together from casino backroom scraps."
+  },
+  {
+    "id": "vault77_helmet",
+    "name": "Vault 77 Security Helmet",
+    "type": "armor",
+    "slot": "head",
+    "armor": 8,
+    "weight": 3,
+    "value": 40,
+    "description": "Standard-issue Vault 77 security helmet. Protects the noggin from debris and deathclaw claws alike."
+  },
+  {
+    "id": "scavenger_goggles",
+    "name": "Scavenger Goggles",
+    "type": "armor",
+    "slot": "head",
+    "armor": 4,
+    "weight": 0.5,
+    "value": 20,
+    "description": "Jury-rigged goggles cobbled from pre-war safety equipment. Scratched lenses included."
+  },
+  {
+    "id": "combat_helmet",
+    "name": "Combat Helmet",
+    "type": "armor",
+    "slot": "head",
+    "armor": 12,
+    "weight": 4,
+    "value": 75,
+    "description": "Military-grade helmet recovered from a ruined NCR outpost."
+  },
+  {
+    "id": "leather_arm_guards",
+    "name": "Leather Arm Guards",
+    "type": "armor",
+    "slot": "arms",
+    "armor": 4,
+    "weight": 1.5,
+    "value": 18,
+    "description": "Strips of brahmin leather wrapped around the forearms. Better than nothing."
+  },
+  {
+    "id": "metal_arm_plates",
+    "name": "Metal Arm Plates",
+    "type": "armor",
+    "slot": "arms",
+    "armor": 9,
+    "weight": 4,
+    "value": 55,
+    "description": "Salvaged sheet metal bolted to old arm-guards. Rattles, but holds."
+  },
+  {
+    "id": "vault_arm_wraps",
+    "name": "Vault-Tec Arm Wraps",
+    "type": "armor",
+    "slot": "arms",
+    "armor": 6,
+    "weight": 2,
+    "value": 30,
+    "description": "Reinforced jumpsuit sleeves re-purposed as arm protection."
+  },
+  {
+    "id": "leather_leg_guards",
+    "name": "Leather Leg Guards",
+    "type": "armor",
+    "slot": "legs",
+    "armor": 4,
+    "weight": 2,
+    "value": 18,
+    "description": "Brahmin leather strapped around the shins. Keeps the rad-roaches off."
+  },
+  {
+    "id": "metal_shin_plates",
+    "name": "Metal Shin Plates",
+    "type": "armor",
+    "slot": "legs",
+    "armor": 9,
+    "weight": 5,
+    "value": 55,
+    "description": "Welded scrap metal shin-guards worn by veteran wasteland fighters."
+  },
+  {
+    "id": "vault_leg_wraps",
+    "name": "Vault-Tec Leg Wraps",
+    "type": "armor",
+    "slot": "legs",
+    "armor": 6,
+    "weight": 2.5,
+    "value": 30,
+    "description": "Repurposed jumpsuit leg panels worn for extra protection."
+  },
+  {
+    "id": "ammo_9mm",
+    "name": "9mm Rounds",
+    "type": "ammo",
+    "weight": 0.01,
+    "value": 1
+  },
+  {
+    "id": "ammo_556",
+    "name": "5.56mm Rounds",
+    "type": "ammo",
+    "weight": 0.01,
+    "value": 1
+  },
+  {
+    "id": "ammo_44",
+    "name": ".44 Rounds",
+    "type": "ammo",
+    "weight": 0.01,
+    "value": 2
+  },
+  {
+    "id": "ammo_ecell",
+    "name": "Energy Cells",
+    "type": "ammo",
+    "weight": 0.02,
+    "value": 3
+  },
+  {
+    "id": "ammo_plasma",
+    "name": "Plasma Cartridges",
+    "type": "ammo",
+    "weight": 0.03,
+    "value": 4
+  },
+  {
+    "id": "stimpak",
+    "name": "Stimpak",
+    "type": "consumable",
+    "heal": 30,
+    "weight": 0.1,
+    "value": 75
+  },
+  {
+    "id": "radaway",
+    "name": "RadAway",
+    "type": "consumable",
+    "heal": 0,
+    "weight": 0.2,
+    "value": 60
+  },
+  {
+    "id": "dirty_water",
+    "name": "Dirty Water",
+    "type": "consumable",
+    "heal": 5,
+    "weight": 0.5,
+    "value": 5
+  },
+  {
+    "id": "bobby_pin",
+    "name": "Bobby Pin",
+    "type": "tool",
+    "durability": 3,
+    "weight": 0.01,
+    "value": 1
+  },
+  {
+    "id": "wrench",
+    "name": "Wrench",
+    "type": "tool",
+    "durability": 25,
+    "weight": 2.0,
+    "value": 10
+  },
+  {
+    "id": "geiger_counter",
+    "name": "Geiger Counter",
+    "type": "tool",
+    "durability": 40,
+    "weight": 3.0,
+    "value": 35
+  },
+  {
+    "id": "scrap_metal",
+    "name": "Scrap Metal",
+    "type": "junk",
+    "weight": 0.5,
+    "value": 2
+  },
+  {
+    "id": "adhesive",
+    "name": "Adhesive",
+    "type": "junk",
+    "weight": 0.1,
+    "value": 4
+  },
+  {
+    "id": "circuit_board",
+    "name": "Circuit Board",
+    "type": "junk",
+    "weight": 0.3,
+    "value": 12
+  },
+  {
+    "id": "pru_log_01",
+    "name": "PRU Log: Initial Signal",
+    "type": "holotape",
+    "weight": 0,
+    "value": 0
+  },
+  {
+    "id": "map_fragment",
+    "name": "Map Fragment",
+    "type": "note",
+    "weight": 0,
+    "value": 0
+  },
+  {
+    "id": "vault_keycard",
+    "name": "Vault Keycard",
+    "type": "key",
+    "weight": 0,
+    "value": 0
+  },
+  {
+    "id": "humming_resonator",
+    "name": "Humming Resonator",
+    "type": "quest",
+    "weight": 0,
+    "value": 0
+  },
+  {
+    "id": "region_unlock_token",
+    "name": "Region Unlock Token",
+    "type": "logic",
+    "weight": 0,
+    "value": 0
+  },
+  {
+    "id": "synth_recall_chip",
+    "name": "Synth Recall Chip",
+    "type": "questItem",
+    "weight": 0.1,
+    "value": 0,
+    "description": "A neural relay chip etched with a unit designation: DLRS-7 // INSTITUTE BEHAVIORAL CONSTRUCT // LOOP CYCLE: 4,218,332. The serial number has not been filed off — whoever hid this wanted it to be found."
+  },
+  {
+    "id": "institute_override_key",
+    "name": "Institute Override Key",
+    "type": "questItem",
+    "weight": 0.3,
+    "value": 180,
+    "description": "A compact device capable of transmitting a null-signal on Institute behavioral lock frequencies. Override keys were issued exclusively to Wardens — the field enforcers tasked with maintaining synthetic human subjects. This one is scratched, well-used, and smells faintly of a campfire that burned out a long time ago."
+  },
+  {
+    "id": "behavioral_lock_data",
+    "name": "Behavioral Lock Data — CONSTRUCT Manifest",
+    "type": "questItem",
+    "weight": 0.1,
+    "value": 0,
+    "description": "A data holotape recovered from the Institute cache at coordinates 47-NORTH. Contains the full CONSTRUCT program manifest: forty-seven synthetic humans deployed across the wasteland before the war, each running a behavioral loop, each unaware of their nature. Most are listed as 'decommissioned'. Seven are listed as 'status unknown'."
+  },
+  {
+    "id": "wasteland_compass",
+    "name": "Wasteland Compass",
+    "type": "tool",
+    "weight": 0.2,
+    "value": 45,
+    "description": "A battered pre-war compass, still accurate. The face is worn but the needle is steady. On the back, scratched in careful letters: 'Go north. — D'"
+  },
+  {
+    "id": "geofence_atomic_museum_badge",
+    "name": "Atomic Museum Holotag",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "atomic_museum_las_vegas",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A commemorative holotag issued by the Atomic Testing Museum's terminal to verified on-site visitors. Serial numbered. Non-transferable. The pre-war Museum of Technology called these 'certificates of witness' — proof you stood where history was made."
+  },
+  {
+    "id": "geofence_trinity_trinitite",
+    "name": "Trinity Trinitite Shard",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "trinity_site",
+    "weight": 0.2,
+    "value": 0,
+    "tradeable": false,
+    "rads": 1,
+    "description": "Green glass formed when the desert sand fused at the first nuclear detonation, July 16, 1945. This shard was found at the exact coordinates where the world changed. It emits 1 rad/hour — low enough to carry, high enough to remember. There is nowhere else on Earth this could have been found."
+  },
+  {
+    "id": "geofence_greenbrier_vault_key",
+    "name": "Project Greek Island Vault Access Card",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "greenbrier_bunker",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A Congressional bunker access card — one of the cards that would have admitted a Senator or Representative to the underground facility beneath the Greenbrier resort in the event of nuclear war. Decommissioned in 1992 when a journalist revealed the bunker's existence. The bunker was never used. Whether that is luck or failure depends on your politics."
+  },
+  {
+    "id": "geofence_cheyenne_signal_tape",
+    "name": "NORAD Emergency Broadcast Tape — CONDITION ZEBRA",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "cheyenne_mountain",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A data tape recovered near the Cheyenne Mountain facility. CONDITION ZEBRA was the alert status for 'enemy nuclear strike confirmed, decision period zero.' The contents of this tape have been classified for over seventy years. The label is handwritten. The handwriting is steady."
+  },
+  {
+    "id": "geofence_titan_launch_key",
+    "name": "Titan II Launch Authorization Key",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "titan_missile_museum",
+    "weight": 0.2,
+    "value": 0,
+    "tradeable": false,
+    "description": "One of two keys required to authorize a Titan II ICBM launch. Both keys had to be turned simultaneously by two separate crew members in adjacent stations, specifically designed so that no single person could launch alone. You only have one. The other one is still out there."
+  },
+  {
+    "id": "geofence_minuteman_ops_manual",
+    "name": "Minuteman III Launch Sequence Manual",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "minuteman_missile_site",
+    "weight": 0.3,
+    "value": 0,
+    "tradeable": false,
+    "description": "A laminated launch procedure manual for the Minuteman III ICBM system, recovered from the Delta-09 launch facility. Every page has been redacted by the Air Force except the last. The last page reads: IN THE EVENT OF LAUNCH, PRAY."
+  },
+  {
+    "id": "geofence_manhattan_project_pin",
+    "name": "Manhattan Project Site Y Lapel Pin",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "los_alamos_museum",
+    "weight": 0.05,
+    "value": 0,
+    "tradeable": false,
+    "description": "A reproduction of the identification pins worn by Manhattan Project scientists at Los Alamos — Site Y. Without this pin you couldn't move between restricted zones. With it, you could walk past a guard into any building where the world was being redesigned. The original wearers knew what they were building. They built it anyway."
+  },
+  {
+    "id": "geofence_b_reactor_fuel_rod",
+    "name": "B Reactor Fuel Rod Casing",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "b_reactor_hanford",
+    "weight": 0.5,
+    "value": 0,
+    "tradeable": false,
+    "description": "A decommissioned aluminum fuel rod casing from the world's first full-scale nuclear reactor — B Reactor, Hanford Site. Empty and safe. But it processed uranium that became the plutonium core of the first nuclear weapon ever detonated. It's warm to the touch. Probably just the sun."
+  },
+  {
+    "id": "geofence_nts_dosimeter",
+    "name": "Nevada Test Site Radiation Dosimeter",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "nevada_test_site_visitor",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "rads": 0,
+    "description": "A film badge dosimeter assigned to a Nevada Test Site technician, registration date redacted. The film has been developed. The result is blacked out — not redacted, just... overexposed. The badge is registered to a name that was classified in 1963 and remains so. The badge number, however, is still visible: NTS-928."
+  },
+  {
+    "id": "geofence_smithsonian_holotape",
+    "name": "Smithsonian Pre-War Archive Holotape",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "smithsonian_air_space",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A Smithsonian Institution audio holotape — a docent recording explaining the Enola Gay exhibit, recorded sometime before the war. The docent describes the aircraft's mission in measured, careful language, the kind used by someone aware of the weight of the subject. She has no way of knowing that the aircraft behind her represents a category of weapon that will eventually be used one final time."
+  },
+  {
+    "id": "geofence_airforce_mission_patch",
+    "name": "509th Composite Group Mission Patch",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "wright_patterson_afb_museum",
+    "weight": 0.05,
+    "value": 0,
+    "tradeable": false,
+    "description": "A mission patch from the 509th Composite Group — the only World War II unit authorized to drop nuclear weapons. The patch carries a date on the reverse. It is a date you recognize. There is a line between history and catastrophe, and this patch sat at that line. One patch per mission. The patch count is higher than the official record."
+  },
+  {
+    "id": "geofence_bethesda_vault_tec_id",
+    "name": "Vault-Tec Employee ID — Design Division",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "fallout_shelter_gaming_pilgrimage",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A Vault-Tec employee identification badge, Design Division, issued at the company's pre-war headquarters. The photo slot has a placeholder image — a yellow smiley face. The name reads: OVERSEER CANDIDATE. The expiration date is: UNTIL FURTHER NOTICE. The back reads: Welcome to Vault-Tec. Don't ask about the experiment parameters."
+  },
+  {
+    "id": "geofence_reactor_access_badge",
+    "name": "Nuclear Power Plant Contractor Badge",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "diablo_canyon_nuclear_plant",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "A contractor access badge from a coastal nuclear facility — VISITOR, ESCORTED ACCESS ONLY. The 'escorted' part has been scratched out with a ballpoint pen and replaced with 'hah.' The facility is on a fault line. The reactor is still running. The badge doesn't mention either fact."
+  },
+  {
+    "id": "geofence_roswell_alien_fragment",
+    "name": "Roswell Anomalous Alloy Fragment",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "roswell_museum",
+    "weight": 0.3,
+    "value": 0,
+    "tradeable": false,
+    "description": "A fragment of metallic alloy, composition unknown, recovered near Roswell, NM. It is slightly lighter than it should be for its volume. It is slightly warmer than ambient temperature at all times. Your Pocket-Boy cannot identify the material. Your Pocket-Boy is not programmed for this material. No one was."
+  },
+  {
+    "id": "geofence_area51_clearance_chip",
+    "name": "Enclave Beyond-Black Security Clearance Chip",
+    "type": "collector",
+    "geoLocked": true,
+    "geoLocation": "area_51_perimeter",
+    "weight": 0.1,
+    "value": 0,
+    "tradeable": false,
+    "description": "An Enclave-era security chip recovered near the Nevada Test and Training Range perimeter. Clearance level: BEYOND BLACK. Access granted to: REDACTED. Authorized by: REDACTED. The data stored on this chip has been overwritten seven times. The eighth overwrite is what you found. It still carries a ghost of something in the memory substrate. Your Pocket-Boy reads it as a single word: RUN."
+  },
+  {
+    "id": "serum_adrenal_reaction",
+    "name": "Adrenal Reaction Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 800,
+    "description": "A concentrated hormonal activator in a pre-war needle. Guaranteed adrenal mutation on injection.",
+    "applies_mutation": "mutation_adrenal_reaction",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_bird_bones",
+    "name": "Bird Bones Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 400,
+    "description": "Skeletal density reducer. Side effects: hollow feeling, tendency to look at heights.",
+    "applies_mutation": "mutation_bird_bones",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_carnivore",
+    "name": "Carnivore Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 350,
+    "description": "Digestive enzyme replacement. Best injected before a meal rather than after.",
+    "applies_mutation": "mutation_carnivore",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_chameleon",
+    "name": "Chameleon Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 1200,
+    "description": "Extremely rare pigmentation activator. The syringe changes color as you hold it. That's not a good sign.",
+    "applies_mutation": "mutation_chameleon",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_electrically_charged",
+    "name": "Electrically Charged Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 600,
+    "description": "Static charge activator. Comes with complementary rubber gloves that will definitely not help.",
+    "applies_mutation": "mutation_electrically_charged",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_empath",
+    "name": "Empath Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 550,
+    "description": "Neural sensitizer. Users report feeling everything more intensely. Everything. Including their companion's stubbed toe.",
+    "applies_mutation": "mutation_empath",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_eagle_eyes",
+    "name": "Eagle Eyes Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 600,
+    "description": "Ocular enhancement serum. May cause temporary double vision, then permanent single vision across very long distances.",
+    "applies_mutation": "mutation_eagle_eyes",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_grounded",
+    "name": "Grounded Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 600,
+    "description": "Earth-charge conductor. Safe to inject during a thunderstorm. Not recommended.",
+    "applies_mutation": "mutation_grounded",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_herbivore",
+    "name": "Herbivore Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 350,
+    "description": "Enzymatic inverter. Comes with a small packet of mixed greens from the old world. They're still technically food.",
+    "applies_mutation": "mutation_herbivore",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_herd_mentality",
+    "name": "Herd Mentality Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 400,
+    "description": "Social amplifier. Best results when injected in company. Worse results when you're alone at 3am wondering what the point is.",
+    "applies_mutation": "mutation_herd_mentality",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_marsupial",
+    "name": "Marsupial Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 450,
+    "description": "Structural redistribution compound. Warning: urge to carry everything in a pouch is a known side effect.",
+    "applies_mutation": "mutation_marsupial",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_plague_walker",
+    "name": "Plague Walker Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 900,
+    "description": "Bacterial colonization agent. Do not inject near friends. Actually, don't inject near anyone.",
+    "applies_mutation": "mutation_plague_walker",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_scaly_skin",
+    "name": "Scaly Skin Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 550,
+    "description": "Dermal hardener. The scales start small. They get less small over several days.",
+    "applies_mutation": "mutation_scaly_skin",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_speed_demon",
+    "name": "Speed Demon Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 500,
+    "description": "Metabolic accelerator. Do not inject and then try to have a slow breakfast. You won't manage it.",
+    "applies_mutation": "mutation_speed_demon",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_talons",
+    "name": "Talons Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 400,
+    "description": "Keratin stimulator. Typing this label was the last easy thing the writer did.",
+    "applies_mutation": "mutation_talons",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_twisted_muscles",
+    "name": "Twisted Muscles Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 650,
+    "description": "Fiber-density maximizer. Expect to hear uncomfortable sounds for 24 hours post-injection.",
+    "applies_mutation": "mutation_twisted_muscles",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_unstable_isotope",
+    "name": "Unstable Isotope Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 750,
+    "description": "Radioactive cell activator. Comes in a lead-lined container for a reason.",
+    "applies_mutation": "mutation_unstable_isotope",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_healing_factor",
+    "name": "Healing Factor Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 1000,
+    "description": "Cellular regeneration activator. Rare, effective, and slightly unnerving to watch work.",
+    "applies_mutation": "mutation_healing_factor",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_glass_cannon",
+    "name": "Glass Cannon Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 950,
+    "description": "Offensive amplifier. Maximum aggression. Minimum self-preservation. Some might call this unwise.",
+    "applies_mutation": "mutation_glass_cannon",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_rad_sponge",
+    "name": "Rad Sponge Serum",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 900,
+    "description": "Radiation processing activator. The syringe itself is mildly radioactive. This tracks.",
+    "applies_mutation": "mutation_rad_sponge",
+    "removes_mutation": false,
+    "stackable": true
+  },
+  {
+    "id": "serum_suppressant",
+    "name": "Mutation Suppressant",
+    "type": "serum",
+    "weight": 0.1,
+    "value": 1500,
+    "description": "Removes one mutation at random from your active stack. Developed by Vault-Tec. Counterintuitively, this was the ethical part of the program.",
+    "applies_mutation": null,
+    "removes_mutation": true,
+    "stackable": true
+  },
+  {
+    "id": "keycard_nuclear_alpha",
+    "name": "Nuclear Keycard — Alpha",
+    "type": "keycard",
+    "weight": 0.1,
+    "value": 2000,
+    "tradeable": true,
+    "description": "A three-inch metal card with embedded authentication chip. Designed to survive nuclear blast within 500m and still function. Still warm from where someone tried to hold onto it.",
+    "stackable": false
+  },
+  {
+    "id": "keycard_nuclear_bravo",
+    "name": "Nuclear Keycard — Bravo",
+    "type": "keycard",
+    "weight": 0.1,
+    "value": 2000,
+    "tradeable": true,
+    "description": "Military authentication key, Brotherhood of Steel manufacture. Heavy encryption, biometric secondary lock that's been bypassed with what appears to be a paperclip.",
+    "stackable": false
+  },
+  {
+    "id": "keycard_nuclear_charlie",
+    "name": "Nuclear Keycard — Charlie",
+    "type": "keycard",
+    "weight": 0.1,
+    "value": 2000,
+    "tradeable": true,
+    "description": "Enclave-manufactured authentication key. The Enclave seal is embossed on the front. The back says, in very small print: 'Property of the Enclave. If found, please destroy America responsibly.'",
+    "stackable": false
+  },
+  {
+    "id": "launch_code_fragment",
+    "name": "Launch Code Fragment",
+    "type": "questItem",
+    "weight": 0.0,
+    "value": 0,
+    "tradeable": false,
+    "description": "A 2-character alphanumeric fragment of the current week's nuclear launch code. Worthless alone. With the other 3 pieces, it authorizes the end of someone's day.",
+    "stackable": false
+  },
+  {
+    "id": "flux_violet",
+    "name": "Violet Flux",
+    "type": "crafting_material",
+    "weight": 0.1,
+    "value": 300,
+    "description": "Irradiated casino carpet fibers fused by nuclear heat. Only harvestable during an active nuke zone. Crafting: radiation weapon mods, glowing armor paint.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "flux_cobalt",
+    "name": "Cobalt Flux",
+    "type": "crafting_material",
+    "weight": 0.1,
+    "value": 300,
+    "description": "Irradiated desert sand compacted by blast pressure into blue-glowing granules. Only harvestable during nuke zone. Crafting: energy weapon power cells, radiation-enhanced ammunition.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "flux_yellowcake",
+    "name": "Yellowcake Flux",
+    "type": "crafting_material",
+    "weight": 0.2,
+    "value": 350,
+    "description": "Uranium compound irradiated from Vault-Tec storage. Only available during nuke zone. Crafting: nuclear keycards (partial component), experimental armor plating.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "flux_crimson",
+    "name": "Crimson Flux",
+    "type": "crafting_material",
+    "weight": 0.1,
+    "value": 300,
+    "description": "Colorado River water crystallized by nuclear blast. Only during nuke zone. Crafting: water weapons, contamination grenades.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "irradiated_glass",
+    "name": "Irradiated Casino Glass",
+    "type": "crafting_material",
+    "weight": 0.3,
+    "value": 150,
+    "description": "Fused glass from casino windows, still faintly warm. Nuke zone only. Crafting: glowing bottles, irradiated lens mods.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "scorched_flowers",
+    "name": "Scorched Blast Blossom",
+    "type": "crafting_material",
+    "weight": 0.05,
+    "value": 200,
+    "description": "Desert wildflowers that only bloom in nuclear aftermath. Nuke zone only. Crafting: nuclear stimpaks, mutation catalysts.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "vault77_keycard",
+    "name": "Vault 77 Keycard",
+    "type": "questItem",
+    "weight": 0.1,
+    "value": 0,
+    "description": "A worn security card bearing the Vault-Tec 77 emblem. Opens restricted sublevel doors inside the vault."
+  },
+  {
+    "id": "molten_concrete",
+    "name": "Molten Concrete Shard",
+    "type": "crafting_material",
+    "weight": 1.0,
+    "value": 100,
+    "description": "Dam concrete fused at nuclear temperatures. Nuke zone only. Crafting: heavy weapon attachments, fortification materials.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "irradiated_polymer",
+    "name": "Irradiated Polymer",
+    "type": "crafting_material",
+    "weight": 0.2,
+    "value": 250,
+    "description": "Vault-Tec composite material irradiated to structural enhancement. Nuke zone only. Crafting: powered armor upgrades.",
+    "nuke_zone_only": true
+  },
+  {
+    "id": "nuclear_stimpak",
+    "name": "Nuclear Stimpak",
+    "type": "consumable",
+    "weight": 0.3,
+    "value": 800,
+    "description": "A stimpak synthesized with irradiated plant compounds. Heals 150 HP over 10 seconds but also delivers 25 rads. Worth it. Probably. Craftable from Scorched Blast Blossom + standard stimpak components.",
+    "nuke_zone_only": false
+  },
+  {
+    "id": "dudes_rug",
+    "name": "The Dude's Rug",
+    "type": "questItem",
+    "weight": 5.0,
+    "value": 200,
+    "description": "A pre-war Nuka-Cola bottle-patterned area rug in surprisingly good condition. It really ties the shelter together. Property of Jeffrey Lebronski, known locally as The Dude."
+  },
+  {
+    "id": "tears_rain_module",
+    "name": "ROY-8 Memory Module",
+    "type": "questItem",
+    "weight": 0.1,
+    "value": 0,
+    "description": "A compressed neural log encoded by a rogue Institute Synth. Requires a terminal with a neural port to play. Contents unknown until decoded. Handle carefully — this is someone's memory."
+  },
+  {
+    "id": "the_last_cookbook",
+    "name": "Whitfield's Guide to Eating After the End",
+    "type": "questItem",
+    "weight": 2.5,
+    "value": 500,
+    "description": "A handwritten pre-war cookbook compiled by librarian Constance Whitfield in 2076. Growing guides, preservation techniques, emergency nutrition from any available source. The last known copy. Carried across three territories by a blind man. Do not lose this."
+  },
+  {
+    "id": "propaganda_pamphlet",
+    "name": "Red Star Propaganda Pamphlet",
+    "type": "questItem",
+    "category": "document",
+    "weight": 0.1,
+    "value": 5,
+    "description": "A water-damaged pamphlet extolling the virtues of the Communist Automation Directive. The back lists a radio frequency hand-stamped in red ink: 66.6 MHz."
+  },
+  {
+    "id": "red_star_keycard",
+    "name": "Red Star Vault Keycard",
+    "type": "questItem",
+    "category": "keycard",
+    "weight": 0.1,
+    "value": 0,
+    "description": "A heavy steel keycard embossed with a five-pointed star and the Cyrillic letters for VAULT ZERO. The magnetic stripe is still active."
+  },
+  {
+    "id": "commissar_badge",
+    "name": "Commissar Designation Badge",
+    "type": "questItem",
+    "category": "artifact",
+    "weight": 0.5,
+    "value": 120,
+    "description": "Torn from the chassis of the Vault Zero Commissar-Bot. Identifies the bearer as a cleared operative of the Communist Automation Directive. Mostly useless now. Still feels heavy."
+  },
+  {
+    "id": "soviet_pulse_rifle",
+    "name": "Soviet Pulse Rifle (MK-9)",
+    "type": "weapon",
+    "category": "rifle",
+    "damage": 42,
+    "ammoType": "ammo_ecell",
+    "weight": 8.5,
+    "value": 340,
+    "description": "Pre-war Soviet energy rifle salvaged from Vault Zero. Fires superheated plasma at 1200 rounds per minute. The instruction manual is in Russian. The trigger still works."
+  }
+]

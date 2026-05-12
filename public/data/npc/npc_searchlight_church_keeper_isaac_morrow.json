@@ -1,0 +1,16 @@
+{
+  "id": "npc_searchlight_church_keeper_isaac_morrow",
+  "name": "Isaac Morrow",
+  "faction": "searchlight_survivors",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Church Keeper",
+  "personality": "Soft-spoken, haunted, deeply spiritual.",
+  "description": "Isaac tends the ruined church, believing it’s the only place in Searchlight where the dead still listen.",
+  "questHooks": [
+    "Says someone has been leaving offerings at the altar.",
+    "Heard a hum beneath the church floorboards.",
+    "Claims the radiation 'whispers' when the wind dies."
+  ],
+  "poi": "searchlight_church_fnv"
+}

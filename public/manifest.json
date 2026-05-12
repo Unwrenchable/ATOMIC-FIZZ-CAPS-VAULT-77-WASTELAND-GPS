@@ -1,0 +1,61 @@
+{
+  "name": "Atomic Fizz Caps - Wasteland GPS",
+  "short_name": "Fizz Caps",
+  "description": "Pocket-Boy 3000 Wasteland GPS - A Fallout-themed geo-game with Solana wallet integration. Explore, scavenge, trade NFTs, and earn FIZZ tokens in the post-apocalyptic Mojave.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050705",
+  "theme_color": "#00ff41",
+  "orientation": "any",
+  "scope": "/",
+  "id": "/",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment", "finance"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Wallet",
+      "short_name": "Wallet",
+      "description": "Open Atomic Fizz Wallet",
+      "url": "/wallet/index.html",
+      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Exchange",
+      "short_name": "Exchange",
+      "description": "Scavenger's Exchange",
+      "url": "/exchange.html",
+      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+fizz",
+      "url": "/wallet/index.html?action=%s"
+    }
+  ],
+  "share_target": {
+    "action": "/wallet/index.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

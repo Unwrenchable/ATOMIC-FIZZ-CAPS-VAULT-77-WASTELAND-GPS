@@ -1,0 +1,16 @@
+{
+  "id": "npc_drylake_cinderwalker",
+  "name": "Cinder-Walker",
+  "faction": "desert_wanderers",
+  "homeRegion": "dry-lake-edge",
+  "currentRegion": "dry-lake-edge",
+  "role": "Nomad",
+  "personality": "Quiet, intense, strangely serene.",
+  "description": "Walks barefoot on hot sand without flinching. Says the desert chose him.",
+  "questHooks": [
+    "Claims he saw a vault door half-buried in the dunes.",
+    "Mentions a low hum that only happens at sunset.",
+    "Says someone has been following him without leaving tracks."
+  ],
+  "poi": "dry_lake_edge_scorch_path"
+}

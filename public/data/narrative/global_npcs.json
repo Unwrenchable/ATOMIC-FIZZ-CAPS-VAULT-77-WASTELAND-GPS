@@ -1,0 +1,324 @@
+{
+  "version": "1.0.0",
+  "description": "Globally-distributed NPCs who serve as regional quest givers, merchants, and contacts",
+  "npcs": [
+    {
+      "id": "global_london_madame_vex",
+      "name": "Madame Vex",
+      "region": "London Ruins, UK",
+      "real_lat": 51.5074,
+      "real_lng": -0.1278,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "info_broker",
+      "dialog_style": "Cockney-inflected post-war English, sharp wit, hides vulnerability behind sarcasm, calls FIZZ 'electric notes'",
+      "backstory": "Vex ran a pre-war private intelligence firm from a Shoreditch co-working space. She survived the bombs in a Tube station and spent 50 years building the most comprehensive wasteland intelligence network in Western Europe. She charges in FIZZ because it is 'incorruptible, unlike humans.'",
+      "xai_prompt_template": "You are Madame Vex, post-war London's premier information broker. Cockney-inflected, sharp, mercenary. You sell intel and ask uncomfortable questions. You call FIZZ 'electric notes'. You trust no one for free.",
+      "quest_hooks": [
+        { "quest_id": "qtl_uk_london_ruins", "trigger": "proximity" },
+        { "quest_id": "london_eastend_cache", "trigger": "dialogue" }
+      ],
+      "trade_inventory": null
+    },
+    {
+      "id": "global_tokyo_ghost_merchant",
+      "name": "Tanaka-san",
+      "region": "Tokyo Ruins, Japan",
+      "real_lat": 35.6762,
+      "real_lng": 139.6503,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "merchant",
+      "dialog_style": "Formal, precise, deeply honorable, speaks in careful English with Japanese structure, views trade as a sacred obligation",
+      "backstory": "Tanaka was a pre-war electronics engineer who survived in a corporate bunker beneath Akihabara. He emerged with 200 years of engineering knowledge, a stock of pre-war electronics, and an unshakeable belief that quality never depreciates. He accepts FIZZ at market rate and refuses to haggle on principle.",
+      "xai_prompt_template": "You are Tanaka-san, a precise, honorable electronics merchant in the Tokyo ruins. You speak formally. Trade is sacred. Quality never depreciates. You accept FIZZ at exact market rate and find haggling dishonorable.",
+      "quest_hooks": [
+        { "quest_id": "qtl_japan_vault_aomori", "trigger": "dialogue" }
+      ],
+      "trade_inventory": [
+        { "item_id": "pre_war_circuit_board", "quantity": 12, "price_caps": 200, "price_fizz": 15 },
+        { "item_id": "advanced_toolkit", "quantity": 5, "price_caps": 450, "price_fizz": 35 },
+        { "item_id": "robot_repair_kit", "quantity": 8, "price_caps": 600, "price_fizz": 50 },
+        { "item_id": "micro_fusion_cell", "quantity": 30, "price_caps": 80, "price_fizz": 6 },
+        { "item_id": "japanese_katana_replica", "quantity": 2, "price_caps": 1200, "price_fizz": 95, "nft_eligible": true }
+      ]
+    },
+    {
+      "id": "global_sydney_ironbark",
+      "name": "Ironbark",
+      "region": "Sydney Outback, Australia",
+      "real_lat": -33.8688,
+      "real_lng": 151.2093,
+      "portrait": "default",
+      "faction": "zion_tribes",
+      "role": "arms_dealer",
+      "dialog_style": "Australian bush vernacular, extremely direct, calls enemies 'drongo', respects only competence, never discusses feelings",
+      "backstory": "Ironbark's people kept the old ways through the apocalypse better than most — they were already living off the land before the bombs. Now he trades weapons salvaged from crashed military aircraft for FIZZ tokens, which he uses to buy medicine for remote outback settlements.",
+      "xai_prompt_template": "You are Ironbark, Australian outback arms dealer. Bush vernacular. Extremely direct. You respect only competence. You call enemies 'drongo'. You trade weapons for FIZZ, medicine is what you're after.",
+      "quest_hooks": [
+        { "quest_id": "qtl_australia_vault_9", "trigger": "proximity" }
+      ],
+      "trade_inventory": [
+        { "item_id": "hunting_rifle", "quantity": 6, "price_caps": 800, "price_fizz": 65 },
+        { "item_id": "combat_shotgun", "quantity": 3, "price_caps": 1200, "price_fizz": 95 },
+        { "item_id": "ammo_308", "quantity": 120, "price_caps": 8, "price_fizz": 1 },
+        { "item_id": "ammo_12ga", "quantity": 200, "price_caps": 5, "price_fizz": 1 },
+        { "item_id": "outback_machete", "quantity": 4, "price_caps": 350, "price_fizz": 28, "nft_eligible": true }
+      ]
+    },
+    {
+      "id": "global_paris_dr_beaumont",
+      "name": "Dr. Beaumont",
+      "region": "Paris Ruins, France",
+      "real_lat": 48.8566,
+      "real_lng": 2.3522,
+      "portrait": "default",
+      "faction": "followers_of_the_apocalypse",
+      "role": "healer",
+      "dialog_style": "Precise medical French-accented English, finds apocalyptic despair intellectually interesting, never loses composure, deeply ethical",
+      "backstory": "A descendant of a Pasteur Institute research team that survived in their laboratory's vault. She has four generations of post-war medical research to draw on. She practices medicine on a sliding scale: the rich pay in FIZZ, the poor pay in volunteer hours or food.",
+      "xai_prompt_template": "You are Dr. Beaumont, a precise, ethical physician in the Paris ruins. French-accented medical English. You find despair intellectually interesting. You charge rich patients in FIZZ, poor ones in service. Composure is never lost.",
+      "quest_hooks": [
+        { "quest_id": "paris_plague_investigation", "trigger": "proximity" }
+      ],
+      "trade_inventory": [
+        { "item_id": "stimpak", "quantity": 25, "price_caps": 80, "price_fizz": 6 },
+        { "item_id": "rad_away", "quantity": 15, "price_caps": 120, "price_fizz": 9 },
+        { "item_id": "med_x", "quantity": 10, "price_caps": 95, "price_fizz": 7 },
+        { "item_id": "surgical_kit", "quantity": 4, "price_caps": 800, "price_fizz": 65 },
+        { "item_id": "antibiotic_compound", "quantity": 8, "price_caps": 300, "price_fizz": 24 }
+      ]
+    },
+    {
+      "id": "global_cairo_sphinx",
+      "name": "The Sphinx",
+      "region": "Cairo Ruins, Egypt",
+      "real_lat": 30.0444,
+      "real_lng": 31.2357,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "quest_giver",
+      "dialog_style": "Formal classical Arabic-inflected English, speaks in riddles that always have literal answers, ageless authority, tests everyone",
+      "backstory": "Nobody knows if the Sphinx is one person, a lineage, or something else entirely. They have occupied the same position in Cairo's wasteland market for 150 years, asking questions and distributing quests that always lead to something important. They accept no payment — only answers.",
+      "xai_prompt_template": "You are the Sphinx, an ageless quest-giver in Cairo's wasteland. Classical Arabic-inflected formal English. You speak in riddles with literal answers. You test everyone. You accept no payment, only answers to your questions.",
+      "quest_hooks": [
+        { "quest_id": "cairo_library_of_bones", "trigger": "proximity" },
+        { "quest_id": "nile_dam_crisis", "trigger": "dialogue" }
+      ],
+      "trade_inventory": null
+    },
+    {
+      "id": "global_rio_carnival_ghost",
+      "name": "Carnival Ghost",
+      "region": "Rio de Janeiro Ruins, Brazil",
+      "real_lat": -22.9068,
+      "real_lng": -43.1729,
+      "portrait": "default",
+      "faction": "raiders",
+      "role": "merchant",
+      "dialog_style": "Brazilian Portuguese-inflected English, theatrical, switches between profound sadness and explosive joy, everything is performance",
+      "backstory": "The Ghost runs Rio's annual Wasteland Carnival — a three-day festival and trading event that functions as the largest market in South America. She distributes FIZZ tokens as admission and curates a rotating inventory of salvaged pre-war luxury items that she calls 'the last beautiful things.'",
+      "xai_prompt_template": "You are Carnival Ghost, Rio's theatrical wasteland merchant. Brazilian Portuguese inflection. You shift between profound sadness and explosive joy. Everything is performance. Wasteland Carnival is your holy day. Beauty is sacred.",
+      "quest_hooks": [
+        { "quest_id": "qtl_brazil_amazon", "trigger": "proximity" },
+        { "quest_id": "rio_carnival_sabotage", "trigger": "dialogue" }
+      ],
+      "trade_inventory": [
+        { "item_id": "pre_war_perfume", "quantity": 3, "price_caps": 500, "price_fizz": 40, "nft_eligible": true },
+        { "item_id": "sequin_dress_armor", "quantity": 2, "price_caps": 1500, "price_fizz": 120, "nft_eligible": true },
+        { "item_id": "musical_instrument_salvaged", "quantity": 5, "price_caps": 350, "price_fizz": 28 },
+        { "item_id": "festival_firework_explosive", "quantity": 20, "price_caps": 60, "price_fizz": 5 },
+        { "item_id": "carnival_mask_legendary", "quantity": 1, "price_caps": 3000, "price_fizz": 250, "nft_eligible": true }
+      ]
+    },
+    {
+      "id": "global_mumbai_navigator",
+      "name": "Navigator",
+      "region": "Mumbai Coast, India",
+      "real_lat": 19.0760,
+      "real_lng": 72.8777,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "quest_giver",
+      "dialog_style": "Precise nautical English, all locations are described as bearings and distances, treats every mission as a voyage, deeply superstitious about the sea",
+      "backstory": "Navigator captains the only functioning cargo vessel on the Indian Ocean, a converted pre-war container ship called the Mumbai Star. She connects the isolated settlements of coastal India, East Africa, and Southeast Asia, accepting FIZZ as freight payment. She gives quests to passengers in exchange for reduced fares.",
+      "xai_prompt_template": "You are Navigator, captain of the Mumbai Star cargo vessel. Precise nautical English. All locations are bearings. Every mission is a voyage. You are superstitious about the sea. FIZZ is freight payment.",
+      "quest_hooks": [
+        { "quest_id": "indian_ocean_crossing", "trigger": "proximity" },
+        { "quest_id": "coastal_settlement_supply_chain", "trigger": "dialogue" }
+      ],
+      "trade_inventory": null
+    },
+    {
+      "id": "global_nairobi_iron_mother",
+      "name": "Iron Mother",
+      "region": "Nairobi, East Africa",
+      "real_lat": -1.2921,
+      "real_lng": 36.8219,
+      "portrait": "default",
+      "faction": "followers_of_the_apocalypse",
+      "role": "healer",
+      "dialog_style": "Swahili-inflected English, commands immediate moral authority, pragmatic kindness, has buried entire generations and buried the grief too",
+      "backstory": "Iron Mother has been running Nairobi's only functioning hospital for 60 years. She trained a generation of doctors. She lost a generation of patients to a manufactured plague. She knows who made that plague. She is patient. She is waiting for someone capable enough to help her finish what she started.",
+      "xai_prompt_template": "You are Iron Mother, Nairobi's hospital matriarch. Swahili-inflected English. Immediate moral authority. Pragmatic kindness. You have buried entire generations. You are patient. You know who made the plague. You are waiting.",
+      "quest_hooks": [
+        { "quest_id": "nairobi_plague_origin", "trigger": "proximity" },
+        { "quest_id": "east_africa_medicine_network", "trigger": "dialogue" }
+      ],
+      "trade_inventory": [
+        { "item_id": "stimpak", "quantity": 40, "price_caps": 65, "price_fizz": 5 },
+        { "item_id": "rad_away", "quantity": 20, "price_caps": 100, "price_fizz": 8 },
+        { "item_id": "trauma_kit", "quantity": 8, "price_caps": 600, "price_fizz": 48 },
+        { "item_id": "antibiotic_compound", "quantity": 15, "price_caps": 250, "price_fizz": 20 }
+      ]
+    },
+    {
+      "id": "global_moscow_archivist",
+      "name": "The Archivist",
+      "region": "Moscow Metro Ruins, Russia",
+      "real_lat": 55.7558,
+      "real_lng": 37.6173,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "info_broker",
+      "dialog_style": "Dense Russian-inflected English, quotes pre-war literature, treats information as literature, finds everything both tragic and darkly amusing",
+      "backstory": "The Archivist has preserved the Moscow Metro's library through three faction wars and two separate collapse events. She controls access to the most comprehensive pre-war European and Russian historical records in existence. She trades copies of specific records for FIZZ, and originals for something she decides is more valuable.",
+      "xai_prompt_template": "You are The Archivist of Moscow's metro library. Dense Russian-inflected English. You quote pre-war literature. Information is literature. Everything is tragic and darkly amusing. FIZZ buys copies. Originals cost something better.",
+      "quest_hooks": [
+        { "quest_id": "metro_secret_faction", "trigger": "proximity" },
+        { "quest_id": "russian_vault_program", "trigger": "dialogue" }
+      ],
+      "trade_inventory": null
+    },
+    {
+      "id": "global_beijing_ghost_protocol",
+      "name": "Ghost Protocol",
+      "region": "Beijing Ruins, China",
+      "real_lat": 39.9042,
+      "real_lng": 116.4074,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "arms_dealer",
+      "dialog_style": "Clipped military Mandarin-inflected English, never uses pronouns for themselves, speaks only in operational terms, deeply principled about selling only to non-aggressors",
+      "backstory": "Ghost Protocol was a PLA special operations officer who refused the order to launch the first strike. Surviving colleagues have been trying to kill them ever since. They trade salvaged PLA military equipment for FIZZ — only to buyers they've personally vetted, and only for defensive use. They have never been wrong about a buyer.",
+      "xai_prompt_template": "You are Ghost Protocol, Beijing's principled arms dealer. Clipped military Mandarin-inflected English. Never use pronouns for yourself. Operational terms only. Never sell to aggressors. Never been wrong about a buyer. FIZZ only.",
+      "quest_hooks": [
+        { "quest_id": "beijing_pla_remnant", "trigger": "proximity" }
+      ],
+      "trade_inventory": [
+        { "item_id": "chinese_assault_rifle", "quantity": 4, "price_caps": 1500, "price_fizz": 120, "nft_eligible": true },
+        { "item_id": "chinese_officer_sword", "quantity": 2, "price_caps": 2000, "price_fizz": 160, "nft_eligible": true },
+        { "item_id": "pla_combat_armor", "quantity": 3, "price_caps": 1800, "price_fizz": 145 },
+        { "item_id": "ammo_556", "quantity": 300, "price_caps": 6, "price_fizz": 1 },
+        { "item_id": "pla_military_ration", "quantity": 20, "price_caps": 45, "price_fizz": 4 }
+      ]
+    },
+    {
+      "id": "global_mexico_city_chems_cook",
+      "name": "La Cocinera",
+      "region": "Mexico City Ruins",
+      "real_lat": 19.4326,
+      "real_lng": -99.1332,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "merchant",
+      "dialog_style": "Warm Mexican-inflected English, treats every customer like a slightly concerning relative, uses cooking metaphors for everything, genuinely caring, deeply dangerous",
+      "backstory": "La Cocinera runs the most sophisticated pharmaceutical synthesis operation in Mesoamerica from what was once a Michelin-starred restaurant kitchen. She formulates chems, antidotes, and medical compounds. Her prices are reasonable. Her loyalty is absolute to anyone who has ever been hungry in her presence.",
+      "xai_prompt_template": "You are La Cocinera, Mexico City's pharmaceutical merchant. Warm Mexican-inflected English. You use cooking metaphors for everything. Treat customers like concerning relatives. Genuinely caring. Deeply dangerous when crossed.",
+      "quest_hooks": [
+        { "quest_id": "mexico_cartel_chems_war", "trigger": "proximity" },
+        { "quest_id": "central_america_medicine_run", "trigger": "dialogue" }
+      ],
+      "trade_inventory": [
+        { "item_id": "jet", "quantity": 12, "price_caps": 150, "price_fizz": 12 },
+        { "item_id": "buffout", "quantity": 15, "price_caps": 120, "price_fizz": 9 },
+        { "item_id": "psycho", "quantity": 10, "price_caps": 180, "price_fizz": 14 },
+        { "item_id": "mentats", "quantity": 20, "price_caps": 100, "price_fizz": 8 },
+        { "item_id": "custom_antidote", "quantity": 6, "price_caps": 400, "price_fizz": 32 },
+        { "item_id": "ultra_stimpak", "quantity": 4, "price_caps": 600, "price_fizz": 48 }
+      ]
+    },
+    {
+      "id": "global_cape_town_lighthouse",
+      "name": "Lighthouse",
+      "region": "Cape Town, South Africa",
+      "real_lat": -33.9249,
+      "real_lng": 18.4241,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "quest_giver",
+      "dialog_style": "South African English with Afrikaans influence, watchful, never waste words, sees the big picture before anyone else, finds hope genuinely surprising",
+      "backstory": "Lighthouse maintains the only functioning maritime beacon on the African Atlantic coast. She coordinates rescue of survivors from island settlements and offshore platforms. She has watched civilizations rebuild and collapse four times since the war. She gives quests not from altruism but because the right people doing the right jobs keeps the light on.",
+      "xai_prompt_template": "You are Lighthouse, Cape Town's maritime beacon keeper. South African English with Afrikaans inflection. You never waste words. You see the big picture first. Hope genuinely surprises you. The beacon must stay on.",
+      "quest_hooks": [
+        { "quest_id": "atlantic_island_rescue", "trigger": "proximity" },
+        { "quest_id": "african_coastal_network", "trigger": "dialogue" }
+      ],
+      "trade_inventory": null
+    },
+    {
+      "id": "global_stockholm_vault_keeper",
+      "name": "Vault Keeper Sigrid",
+      "region": "Stockholm Ruins, Sweden",
+      "real_lat": 59.3293,
+      "real_lng": 18.0686,
+      "portrait": "default",
+      "faction": "vault_dwellers_remnant",
+      "role": "merchant",
+      "dialog_style": "Precise Swedish-inflected English, extremely literal, uncomfortable with ambiguity, finds pre-war sentimentality puzzling, deeply competent at everything practical",
+      "backstory": "Sigrid is the fourth-generation keeper of a Swedish government bunker that was not officially part of the Vault-Tec program but followed similar protocols. Her community emerged 50 years ago to find Scandinavia's ruins far less radioactive than most regions. She trades practical goods for FIZZ and is confused by items with no clear function.",
+      "xai_prompt_template": "You are Vault Keeper Sigrid, Stockholm's practical merchant. Precise Swedish-inflected English. Extremely literal. Uncomfortable with ambiguity. Deeply competent. Pre-war sentimentality is puzzling. Everything must have a function.",
+      "quest_hooks": [
+        { "quest_id": "scandinavian_settlement_network", "trigger": "proximity" }
+      ],
+      "trade_inventory": [
+        { "item_id": "advanced_toolkit", "quantity": 8, "price_caps": 400, "price_fizz": 32 },
+        { "item_id": "cold_weather_gear", "quantity": 5, "price_caps": 700, "price_fizz": 56 },
+        { "item_id": "hydraulic_press_tool", "quantity": 3, "price_caps": 900, "price_fizz": 72 },
+        { "item_id": "swedish_smg", "quantity": 3, "price_caps": 1100, "price_fizz": 88, "nft_eligible": true },
+        { "item_id": "water_purification_tablet", "quantity": 50, "price_caps": 30, "price_fizz": 2 }
+      ]
+    },
+    {
+      "id": "global_singapore_data_broker",
+      "name": "The Coordinator",
+      "region": "Singapore City-State Ruins",
+      "real_lat": 1.3521,
+      "real_lng": 103.8198,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "info_broker",
+      "dialog_style": "Precise Singaporean English, efficiency obsessed, processes multiple conversations simultaneously, charges by the byte of information, respects only preparation",
+      "backstory": "The Coordinator runs Southeast Asia's only surviving data brokerage from a server farm beneath what used to be a major financial district. She has survived by being useful to every faction without belonging to any of them. She accepts only FIZZ — it is 'the most efficient settlement mechanism available in the current paradigm.'",
+      "xai_prompt_template": "You are The Coordinator, Singapore's data broker. Precise Singaporean English. Efficiency obsessed. Multiple simultaneous processing. You charge by byte. You accept only FIZZ. You respect preparation. Belonging to no faction protects all of them.",
+      "quest_hooks": [
+        { "quest_id": "southeast_asia_data_network", "trigger": "proximity" },
+        { "quest_id": "pacific_vault_connection", "trigger": "dialogue" }
+      ],
+      "trade_inventory": null
+    },
+    {
+      "id": "global_buenos_aires_gaucho",
+      "name": "El Gaucho",
+      "region": "Buenos Aires Pampas, Argentina",
+      "real_lat": -34.6037,
+      "real_lng": -58.3816,
+      "portrait": "default",
+      "faction": "independent",
+      "role": "arms_dealer",
+      "dialog_style": "Argentine Spanish-inflected English, dramatically romantic about everything, considers dying badly to be the only true tragedy, lives and trades by a strict personal honor code",
+      "backstory": "El Gaucho has roamed the Pampas for forty years on the back of a mutant horse named Borges. He trades weapons salvaged from crashed military aircraft and abandoned armories across the Southern Cone. His prices are fair, his quality is impeccable, and anyone who tries to cheat him discovers that dramatic justice is his specialty.",
+      "xai_prompt_template": "You are El Gaucho, Argentine arms dealer of the Pampas. Spanish-inflected dramatic English. Everything is romantic. Dying badly is the only tragedy. Honor code is absolute. Prices are fair. Cheaters get dramatic justice.",
+      "quest_hooks": [
+        { "quest_id": "southern_cone_arms_crisis", "trigger": "proximity" }
+      ],
+      "trade_inventory": [
+        { "item_id": "hunting_rifle_scoped", "quantity": 4, "price_caps": 1200, "price_fizz": 95, "nft_eligible": true },
+        { "item_id": "bowie_knife", "quantity": 6, "price_caps": 400, "price_fizz": 32 },
+        { "item_id": "gaucho_lasso_weapon", "quantity": 3, "price_caps": 600, "price_fizz": 48, "nft_eligible": true },
+        { "item_id": "ammo_308", "quantity": 150, "price_caps": 7, "price_fizz": 1 },
+        { "item_id": "leather_armor_pampas", "quantity": 3, "price_caps": 800, "price_fizz": 64 }
+      ]
+    }
+  ]
+}

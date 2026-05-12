@@ -1,0 +1,20 @@
+{
+  "id": "quest_harlan_retirement",
+  "name": "A Ranger’s Retirement",
+  "type": "main",
+  "poIs": ["New Vegas Strip", "Freeside", "Harlan’s Apartment"],
+  "description": "Learn about Harlan Voss, a retired NCR Ranger who moved to New Vegas searching for his missing son, Jax.",
+  "objectives": [
+    "Find Harlan’s old apartment",
+    "Recover his Ranger retirement papers",
+    "Listen to his first holotape"
+  ],
+  "endings": [
+    {
+      "id": "ending_memory",
+      "description": "You learn Harlan moved to Vegas to search for Jax.",
+      "reward": "Harlan’s Ranger Badge",
+      "consequence": "Unlocks next quest."
+    }
+  ]
+}

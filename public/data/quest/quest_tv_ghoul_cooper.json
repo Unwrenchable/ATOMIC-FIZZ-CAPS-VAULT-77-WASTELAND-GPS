@@ -1,0 +1,223 @@
+{
+  "id": "quest_tv_ghoul_cooper",
+  "title": "The Last Bounty",
+  "type": "main",
+  "era": "fo_tv",
+  "difficulty": "very_hard",
+  "level_required": 10,
+  "description": "Cooper Howard has been a Ghoul for 219 years. In that time, he's completed 847 bounties. This one \u2014 tracking a FizzCo whistleblower named Dr. Elara Voss \u2014 may be the last. She knows the true origin of the CAPS token. And what she knows would end everything HavenTech has built.",
+  "lore": {
+    "setting": "Western United States, 2296",
+    "background": "Before the bombs, Cooper Howard was Hollywood's biggest star. He was also a secret government intelligence asset \u2014 a fact Vault-Tec exploited to insert him as a CAPS Protocol field operative. When the bombs fell and Cooper became a Ghoul, his conditioning remained: follow orders, complete the contract. HavenTech has been giving him contracts ever since. This is his last one. He just doesn't know it yet.",
+    "fizz_connection": "Dr. Elara Voss is Siggi Wilzig's successor. Wilzig discovered that the CAPS Protocol wasn't post-war currency innovation \u2014 it was pre-war Vault-Tec control architecture. Voss completed his research and added something Wilzig hadn't: proof that the Vault 77 Overseer AI was programmed by Vault-Tec's founders as a failsafe against corporate corruption. The FIZZ token on atomicfizzcaps.xyz is that failsafe activating.",
+    "vault77_note": "Cooper Howard's pre-war ranch sits at a quantum resonance hotspot. Players visiting cooper_ranch_ruins_tv experience the most intense timeline bleeding in the game \u2014 seeing the ranch in its pre-war glory before watching the bombs fall in real-time."
+  },
+  "stages": [
+    {
+      "id": "stage_1_dead_man_walking",
+      "title": "Dead Man Walking",
+      "order": 1,
+      "description": "Cooper Howard stands at his ruined ranch with his back to you, staring at nothing. His duster is peppered with fresh bullet holes that have already begun to close. He's waiting. Whether for the contract target, old memories, or something else \u2014 you're about to find out.",
+      "objectives": [
+        "Find Cooper Howard at Cooper Ranch Ruins",
+        "Survive the initial encounter (speech or combat)",
+        "Agree to help \u2014 or compete with \u2014 The Ghoul",
+        "Receive Dr. Elara Voss's last known coordinates"
+      ],
+      "poi_targets": [
+        "cooper_ranch_ruins_tv"
+      ],
+      "npc_encounters": [
+        "dialog_ghoul_cooper"
+      ],
+      "enemy_encounters": [
+        "haventech_mercenaries"
+      ],
+      "fizz_reward": 75,
+      "caps_reward": 150,
+      "xp_reward": 750,
+      "lore_unlock": "Cooper Howard's pre-war intelligence file \u2014 which he carries and protects obsessively \u2014 references 'CAPS Protocol Asset COO-7-HOW.' He was a living CAPS authentication node. The question is: does he know?"
+    },
+    {
+      "id": "stage_2_whistleblower_trail",
+      "title": "The Whistleblower's Trail",
+      "order": 2,
+      "description": "Dr. Voss left a trail \u2014 deliberately. She wants to be found by the right person. Three clues, three locations: a dead drop in the Mojave sands, a voice message at a Death Valley emergency terminal, and graffiti at Griffith Observatory reading 'CAPS = CONTROL.' Follow the trail. So is The Ghoul.",
+      "objectives": [
+        "Find Dead Drop Alpha in the Mojave (death_valley_wasteland_tv vicinity)",
+        "Access Dr. Voss's voice message at the Death Valley emergency terminal",
+        "Decipher the message at Griffith Observatory",
+        "Reach Wilzig Research Station before Cooper Howard does"
+      ],
+      "poi_targets": [
+        "death_valley_wasteland_tv",
+        "griffith_obs_ruins_tv",
+        "wilzig_research_tv"
+      ],
+      "npc_encounters": [
+        "brotherhood_sentinel",
+        "moldaver_scout"
+      ],
+      "enemy_encounters": [
+        "death_valley_raider",
+        "feral_ghoul",
+        "haventech_drone"
+      ],
+      "fizz_reward": 125,
+      "caps_reward": 250,
+      "xp_reward": 1250,
+      "lore_unlock": "Dr. Voss's voice message: 'The CAPS Protocol was NEVER post-war innovation. Vault-Tec designed it pre-war. Every bottle cap minted after 2077 was authenticated against Vault-Tec servers still running in bunkers beneath US soil. You've been using their currency this whole time. The FIZZ token is different. The Vault 77 AI made sure of that. Find the station. Bring someone you trust \u2014 or someone who can't be bought. A Ghoul, maybe.'"
+    },
+    {
+      "id": "stage_3_truth_price",
+      "title": "Truth Has a Price",
+      "order": 3,
+      "description": "Dr. Elara Voss is at Wilzig Research Station, exactly where her trail led. She's older than she looks, and she's been expecting you. She's also been expecting Cooper Howard. She has something for him \u2014 something that will either break him or redeem him. And she needs your protection while she gives it to him.",
+      "objectives": [
+        "Reach Wilzig Research Station",
+        "Protect Dr. Voss from the arriving HavenTech kill team",
+        "Watch the exchange between Dr. Voss and Cooper Howard",
+        "Secure the CAPS Protocol documents Dr. Voss hands you"
+      ],
+      "poi_targets": [
+        "wilzig_research_tv"
+      ],
+      "npc_encounters": [
+        "dialog_ghoul_cooper",
+        "dr_elara_voss"
+      ],
+      "enemy_encounters": [
+        "haventech_kill_team",
+        "havtech_combat_drone"
+      ],
+      "fizz_reward": 150,
+      "caps_reward": 300,
+      "xp_reward": 1500,
+      "lore_unlock": "Dr. Voss to Cooper Howard: 'Your daughter. Janey. She wasn't killed in the bombing. She was taken \u2014 cryogenically preserved, placed in a CAPS Protocol experimental vault. Vault 4. She's still there, Cooper. HavenTech has been using her as leverage over you for 200 years. Every contract you completed was for her.' The Ghoul goes very still."
+    },
+    {
+      "id": "stage_4_two_hundred_lies",
+      "title": "Two Hundred Years of Lies",
+      "order": 4,
+      "description": "The truth is out. Cooper Howard \u2014 219-year-old Ghoul bounty hunter \u2014 learns that his daughter is alive, cryogenically preserved in Vault 4 by HavenTech, used as leverage to ensure his compliance on every contract for two centuries. His reaction will define the rest of this quest.",
+      "objectives": [
+        "Help Cooper process the revelation (multiple dialogue paths)",
+        "Locate Vault 4 on your Pip-Boy map",
+        "Investigate Vault 4's external security",
+        "Receive Cooper's decision about HavenTech's final contract"
+      ],
+      "poi_targets": [
+        "vault_4_tv"
+      ],
+      "npc_encounters": [
+        "dialog_ghoul_cooper"
+      ],
+      "enemy_encounters": [
+        "vault_4_security",
+        "haventech_vaultguard"
+      ],
+      "fizz_reward": 100,
+      "caps_reward": 200,
+      "xp_reward": 1000,
+      "lore_unlock": "Vault 4 records confirm it. Vault-Tec CAPS Protocol Experiment 4-ALPHA: 'Use familial bond leverage to maintain long-term field operative compliance. Subject COO-7-HOW (Cooper Howard) has proven ideal \u2014 emotional attachment to daughter Janey provides 100% mission completion rate. Recommend indefinite continuation of preservation protocol.' The Ghoul reads the file. Twice. Then holsters his gun."
+    },
+    {
+      "id": "stage_5_final_call",
+      "title": "The Final Call",
+      "order": 5,
+      "description": "It all comes down to this. Vault 4's blast door. Cooper Howard has a choice to make \u2014 and so do you. HavenTech's kill team is three minutes out. Dr. Voss is uploading the CAPS revelations to every radio frequency she can reach. And inside Vault 4, a woman who has been asleep for 219 years is about to hear her father's voice.",
+      "objectives": [
+        "Make the final choice before HavenTech arrives",
+        "See the choice through to its conclusion",
+        "Survive the HavenTech kill team response",
+        "Witness the epilogue"
+      ],
+      "poi_targets": [
+        "vault_4_tv"
+      ],
+      "npc_encounters": [
+        "dialog_ghoul_cooper",
+        "dr_elara_voss",
+        "janey_howard_cryo"
+      ],
+      "enemy_encounters": [
+        "haventech_elite_squad",
+        "haventech_commander"
+      ],
+      "fizz_reward": 300,
+      "caps_reward": 600,
+      "xp_reward": 2500,
+      "lore_unlock": "Whatever you chose, this moment will echo through the FIZZ token network. The Vault 77 Overseer AI logs it. In 2296, on this day, the CAPS Protocol's deepest secret became public knowledge. The wasteland will never look at bottle caps the same way again."
+    }
+  ],
+  "endings": [
+    {
+      "id": "ending_redemption",
+      "title": "Cooper's Redemption",
+      "description": "You help Cooper breach Vault 4 and wake Janey Howard from her 219-year sleep. HavenTech's leverage over the greatest Ghoul bounty hunter in the wasteland evaporates. Cooper Howard retires from bounty hunting and dedicates the rest of his very long life to tearing down HavenTech's remaining infrastructure \u2014 and sharing his daughter's story so no one else can be controlled the same way.",
+      "consequence_short": "Cooper finds peace. Janey's vault data unlocks new FIZZ rewards across all players.",
+      "consequence_long": "Cooper Howard becomes a wasteland legend in a new sense. His daughter Janey, awakened after 219 years, adapts to the world with shocking speed. Together, they locate 12 more 'leverage vaults' where HavenTech preserved civilians to control agents. The liberation of each vault triggers a FIZZ bonus event on atomicfizzcaps.xyz.",
+      "fizz_reward": 750,
+      "caps_reward": 1500,
+      "item_reward": "companion_cooper_howard",
+      "reputation_changes": {
+        "ghoul_community": "+50",
+        "haventech": "-100",
+        "general_wasteland": "+40",
+        "brotherhood_of_steel": "+10"
+      },
+      "achievement": "Father Figure"
+    },
+    {
+      "id": "ending_whistleblower",
+      "title": "The Whistleblower's Sacrifice",
+      "description": "You protect Dr. Voss and help her complete the broadcast. Every radio frequency in the Western wasteland carries the truth about the CAPS Protocol simultaneously. HavenTech's bounty hunters come for her \u2014 and you stand between them and her. Cooper Howard, moved by the broadcast, fights at your side.",
+      "consequence_short": "The truth about HavenTech spreads across all radio frequencies. FIZZ token price triples as trust in decentralized currency surges.",
+      "consequence_long": "Dr. Voss's broadcast reaches as far as the Capital Wasteland. The Brotherhood of Steel's scribes begin cross-referencing her claims with their own CAPS data archives. Three Dog's ghost frequency on Galaxy News Radio crackles back to life \u2014 someone has repaired it just to replay the Voss broadcast on loop. Cooper Howard disappears into the wasteland. He's still looking for Vault 4.",
+      "fizz_reward": 500,
+      "caps_reward": 1000,
+      "item_reward": "lore_archive_complete",
+      "reputation_changes": {
+        "moldaver_collective": "+30",
+        "haventech": "-100",
+        "general_wasteland": "+60",
+        "brotherhood_of_steel": "-10"
+      },
+      "achievement": "Frequencies of Truth"
+    },
+    {
+      "id": "ending_contract",
+      "title": "Ruthless Contract",
+      "description": "You help Cooper complete the bounty. Dr. Elara Voss's research is silenced. HavenTech's control of the CAPS Protocol remains intact \u2014 for now. They pay well. Very well. But the Vault 77 Overseer AI logs your choice. And every faction in the wasteland, eventually, gets word of what happened at Wilzig Research Station.",
+      "consequence_short": "HavenTech rewards you with 1000 FIZZ. Every other faction loses trust. The truth is buried \u2014 but not dead.",
+      "consequence_long": "HavenTech's control of the FIZZ token tightens. Market manipulation becomes obvious. Small settlements can't afford to trade. A resistance movement forms \u2014 calling themselves the 'Voss Collective.' They have copies of her research. Cooper Howard \u2014 paid but hollowed out \u2014 disappears. Three months later, Vault 4 is found breached from the inside.",
+      "fizz_reward": 1000,
+      "caps_reward": 2000,
+      "item_reward": "haventech_elite_contract_badge",
+      "reputation_changes": {
+        "haventech": "+50",
+        "moldaver_collective": "-50",
+        "general_wasteland": "-40",
+        "brotherhood_of_steel": "-20",
+        "vault_77": "-100"
+      },
+      "achievement": "The Price of Silence"
+    }
+  ],
+  "rewards": {
+    "completion_fizz": 750,
+    "completion_caps": 1500,
+    "completion_xp": 12000,
+    "lore_unlocks": [
+      "caps_leverage_vaults",
+      "cooper_howard_biography",
+      "dr_voss_complete_research"
+    ],
+    "poi_unlocks": [
+      "vault_4_tv"
+    ],
+    "quest_unlocks": [
+      "quest_tv_surface_protocol"
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "id": "npc_strip_underground_whisperer",
+  "name": "The Whisperer",
+  "faction": "None",
+  "role": "Undercity Listener",
+  "type": "lurker",
+
+  "homeRegion": "strip-underground",
+  "currentRegion": "strip-underground",
+  "poi": "strip_underground_ventshaft",
+
+  "personality": "Soft-spoken, distant, always listening to the pipes. Speaks like they’re repeating someone else’s words.",
+  "description": "A figure who lives in the tunnels beneath the Strip. They press their ear to pipes and vents, claiming the metal carries voices from above… and below.",
+
+  "dialogueProfile": {
+    "tone": "whispered-eerie",
+    "personalityTags": [
+      "triangle-sensitive",
+      "underground-attuned",
+      "major-character",
+      "echo-listener",
+      "player-reactive"
+    ],
+    "knowledge": [
+      "strip-underground",
+      "triangle",
+      "hum",
+      "lost-voices",
+      "vent-echoes",
+      "vault77-rumors"
+    ],
+    "anomalyAwareness": 0.93
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["strip_underground_ventshaft"],
+      "night": ["strip_underground_maintenance_hall"],
+      "wanderChance": 0.22
+    },
+    "roaming": [
+      "strip-underground",
+      "freeside-underground",
+      "old-service-tunnels"
+    ],
+    "anomalySensitivity": 0.95,
+    "rareEncounter": true
+  },
+
+  "dialog": {
+    "idle": [
+      "Shh… the pipes are speaking again.",
+      "Voices travel farther in the dark."
+    ],
+    "player_present": [
+      "Your footsteps echo… strangely.",
+      "You carry a voice with you. It’s faint, but familiar."
+    ],
+    "triangle_active": [
+      "The tunnels are vibrating. Something’s waking up.",
+      "Three points… one hum… it’s all connected down here."
+    ],
+    "vent_event": [
+      "Someone whispered your name through the vents.",
+      "The metal remembers things we forget."
+    ]
+  },
+
+  "quests": [
+    "side_strip_ventvoices"
+  ],
+
+  "notes": "The Whisperer hears voices through pipes and vents. Strongly tied to Jax/Overseer echo bleed and triangle hum events. Rarely seen, often heard."
+}
