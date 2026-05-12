@@ -7,7 +7,7 @@ router.get("/", (req, res) => {
   res.sendFile(file, (err) => {
     if (err) {
       console.error("[api/scavenger] sendFile error:", err);
-      res.status(500).json({ error: "Scavenger not available" });
+      res.status(500).json({ ok: false, error: "Scavenger not available" });
     }
   });
 });

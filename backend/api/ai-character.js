@@ -263,13 +263,13 @@ function setupAICharacterRoutes(app) {
       const concept = await grokService.generateCharacterConcept(options);
 
       res.json({
-        success: true,
+        ok: true,
         concept: concept
       });
     } catch (error) {
       console.error('AI character concept generation error:', error);
       res.status(500).json({
-        success: false,
+        ok: false,
         error: 'Failed to generate character concept',
         fallback: grokService.getFallbackConcept(req.body || {})
       });
@@ -283,13 +283,13 @@ function setupAICharacterRoutes(app) {
       const names = await grokService.generateNames(options);
 
       res.json({
-        success: true,
+        ok: true,
         names: names
       });
     } catch (error) {
       console.error('AI name generation error:', error);
       res.status(500).json({
-        success: false,
+        ok: false,
         error: 'Failed to generate names',
         names: grokService.getFallbackNames(req.body || {})
       });
