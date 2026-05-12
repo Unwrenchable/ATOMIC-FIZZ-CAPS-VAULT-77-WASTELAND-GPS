@@ -217,6 +217,29 @@ body::after {
 }
 
 /* ============================================================
+   CRT CONTAINER CLASS (applied to #fizzfun-app)
+   ============================================================ */
+.crt {
+  position: relative;
+}
+
+/* Subtle flicker on the whole container — feels like an old terminal */
+.crt {
+  animation: crt-flicker 10s step-start infinite;
+}
+
+@keyframes crt-flicker {
+  0%   { opacity: 1; }
+  93%  { opacity: 1; }
+  93.5%{ opacity: 0.92; }
+  94%  { opacity: 1; }
+  97%  { opacity: 1; }
+  97.3%{ opacity: 0.95; }
+  97.6%{ opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* ============================================================
    MAIN APP CONTAINER
    ============================================================ */
 #fizzfun-app {
@@ -312,6 +335,41 @@ body::after {
   margin-top: 1rem;
   line-height: 1.6;
 }
+
+/* Vault-Tec certification stamp beneath the tagline */
+.vault-cert {
+  display: inline-block;
+  margin-top: 1.2rem;
+  padding: 0.4rem 1.2rem;
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  color: var(--vault-gold-dim);
+  border: 1px solid var(--vault-gold-dim);
+  border-radius: 0.3rem;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 6px rgba(204, 153, 0, 0.5);
+  background: rgba(204, 153, 0, 0.06);
+  opacity: 0.8;
+}
+
+/* Hazard-stripe bar below the header — Fallout warning aesthetic */
+#fizzfun-header::after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--fizz-orange) 0px,
+    var(--fizz-orange) 12px,
+    var(--pipboy-black) 12px,
+    var(--pipboy-black) 20px
+  );
+  opacity: 0.6;
+}
+
 
 /* ============================================================
    NAVIGATION
