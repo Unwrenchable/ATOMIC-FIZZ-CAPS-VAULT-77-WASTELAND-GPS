@@ -64,7 +64,7 @@ router.get("/", (req, res) => {
   res.sendFile(file, (err) => {
     if (err) {
       console.error("[api/quests] sendFile error:", err);
-      res.status(500).json({ error: "Quests not available" });
+      res.status(500).json({ ok: false, error: "Quests not available" });
     }
   });
 });
