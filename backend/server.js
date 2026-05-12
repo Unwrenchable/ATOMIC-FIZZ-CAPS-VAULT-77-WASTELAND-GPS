@@ -368,6 +368,9 @@ safeMount("/api/buy-stimpak", api("buy-stimpak"));
 // Overseer AI proxy (Hugging Face / OpenAI compatible)
 safeMount("/api/overseer", api("overseer-proxy"));
 
+// Live worldstate (NPCs, quests, active events)
+safeMount("/api/worldstate", api("worldstate"));
+
 // AI Character Generation (Grok AI)
 safeMount("/api/ai-character", api("ai-character"));
 

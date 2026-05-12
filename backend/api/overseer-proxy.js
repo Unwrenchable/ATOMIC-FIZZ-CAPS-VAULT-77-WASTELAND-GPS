@@ -38,10 +38,28 @@ router.post('/ask', authMiddleware, async (req, res) => {
   if (rawPrompt.length > MAX_PROMPT_LENGTH) {
     return res.status(400).json({ error: 'prompt_too_long', maxLength: MAX_PROMPT_LENGTH });
   }
-  const prompt = rawPrompt.trim();
-  if (!prompt) {
+  const rawTrimmed = rawPrompt.trim();
+  if (!rawTrimmed) {
     return res.status(400).json({ error: 'empty_prompt' });
   }
+
+  // Pull live worldstate from server memory (active NPCs, quests, player stats)
+  // and build a Vault-77 character-aware prompt for the Overseer AI.
+  const worldstate = req.app.get('worldstate') || {};
+  const worldstateSection = Object.keys(worldstate).length
+    ? `\n### VAULT-77 WORLDSTATE\n${JSON.stringify(worldstate, null, 2)}\n`
+    : '';
+
+  const prompt = `You are the Overseer AI of Vault 77.
+You speak in a gritty Fallout tone and always stay in character.
+${worldstateSection}
+### PLAYER INPUT
+"${rawTrimmed}"
+
+### INSTRUCTIONS
+- Maintain Fallout / Vault-Tec tone at all times.
+- Reference active worldstate data when relevant.
+- Keep responses concise (under 200 words).`;
 
   const xaiKey  = process.env.XAI_API_KEY || '';
   const aiKey   = process.env.AI_API_KEY  || '';
