@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_commonwealth_prime_015",
+  "type": "side_quest",
+  "name": "Lenn Nova",
+  "region": "commonwealth",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_commonwealth_prime_015_dialog",
+  "lootPool": "npc_sidequest_commonwealth_prime_015_loot",
+  "questHooks": [
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.31,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

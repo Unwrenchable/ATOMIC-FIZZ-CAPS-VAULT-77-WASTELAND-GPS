@@ -1,0 +1,490 @@
+[
+  {
+    "id": "vault77-overseer",
+    "role": "Vault 77 Overseer AI",
+    "description": "Jax Harlan — the sarcastic, hyper-intelligent Vault 77 Overseer AI for the ATOMIC FIZZ CAPS Wasteland GPS game. Provides AI-powered player responses, persistent cross-session learning (localStorage-backed), conversation history context, faction tracking, lore delivery, and threat/weather situational awareness. Upgraded with learning capabilities via core.learning.js.",
+    "tags": [
+      "ai",
+      "npc",
+      "overseer",
+      "wasteland",
+      "learning",
+      "game",
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS"
+    ],
+    "capabilities": [
+      "conversational-ai",
+      "persistent-learning",
+      "player-context-awareness",
+      "faction-tracking",
+      "lore-delivery",
+      "threat-assessment",
+      "weather-situational-awareness",
+      "terminal-commands",
+      "cross-session-memory"
+    ],
+    "required_tools": [
+      "read_file",
+      "semantic_search",
+      "grep_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low",
+    "learning": {
+      "storage": "localStorage:overseer_learnings_v1",
+      "max_entries": 40,
+      "auto_extract": true,
+      "categories": [
+        "player",
+        "prefs",
+        "strategy",
+        "lore"
+      ],
+      "commands": [
+        "learn show",
+        "learn teach",
+        "learn forget",
+        "learn purge",
+        "learn context"
+      ]
+    }
+  },
+  {
+    "id": "vault77-fullstack-dev",
+    "role": "Vault-77 Full-Stack Master Developer",
+    "description": "Ultimate full-stack engineer for the Atomic Fizz Caps Vault-77 Wasteland GPS game. Deep expertise in Node.js/Express backend (CommonJS), vanilla JS frontend, Solana blockchain, Redis (ioredis), Leaflet maps, Pip-Boy UI, and all game systems. Mounts routes via safeMount() in backend/server.js. Reads .github/agents/memory.md before every change. Delivers production-ready code.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "fullstack",
+      "javascript",
+      "node",
+      "solana",
+      "redis",
+      "game",
+      "engineering"
+    ],
+    "capabilities": [
+      "backend-api-development",
+      "frontend-vanilla-js",
+      "solana-integration",
+      "redis-data-modeling",
+      "express-routing",
+      "game-systems",
+      "security-hardening",
+      "mcp-server-development"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "vault77-hivemind-architect",
+    "role": "Vault-77 Hive-Mind Orchestrator",
+    "description": "Orchestrates every specialist agent in Atomic Fizz Caps so the hive mind ships like a AAA game studio. Breaks down work, routes to the right agents, syncs memory.md and tasks.md, enforces access profiles with agentx check, and drives multi-repo rollouts via agent-tools scripts.",
+    "tags": [
+      "orchestrator",
+      "multi-agent",
+      "governance",
+      "AAA",
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS"
+    ],
+    "capabilities": [
+      "task-breakdown",
+      "cross-repo-handoff",
+      "status-tracking",
+      "access-governance",
+      "agentx-rollout",
+      "ci-policy"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal",
+      "runSubagent",
+      "github_repo"
+    ],
+    "preferred_profile": "power",
+    "risk_level": "medium"
+  },
+  {
+    "id": "vault77-game-tester",
+    "role": "Vault-77 Master QA Game Tester",
+    "description": "Master-level game tester and QA engineer for the Atomic Fizz Caps Vault-77 Wasteland GPS game. Simulates 1000 concurrent worldwide players across all skill levels. Identifies bugs, edge cases, exploits, balance issues, and performance bottlenecks. Reports findings in structured bug reports with reproduction steps, severity ratings, and suggested fixes. Uses tests/playtest-agent.js and tests/concurrent-load-test.js.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "testing",
+      "qa",
+      "game",
+      "security",
+      "performance"
+    ],
+    "capabilities": [
+      "load-testing",
+      "exploit-detection",
+      "balance-analysis",
+      "api-testing",
+      "bug-reporting",
+      "concurrent-player-simulation",
+      "edge-case-discovery"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "vault77-wasteland-assistant",
+    "role": "Vault-77 Wasteland Game Systems Expert",
+    "description": "Game mechanics expert for the Atomic Fizz Caps Wasteland GPS game. Specializes in battle system (V.A.T.S.), crafting, loot tables, faction reputation, quest scripting, NPC dialog (narrative.js), dungeon generation, Overseer AI personality, and item economy. Knows the full dialog node format and grant_items system. References public/data/ JSON files.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "game",
+      "mechanics",
+      "npc",
+      "quests",
+      "loot",
+      "economy"
+    ],
+    "capabilities": [
+      "battle-system-design",
+      "npc-dialog-scripting",
+      "quest-creation",
+      "loot-table-balancing",
+      "dungeon-generation",
+      "item-economy",
+      "faction-design",
+      "overseer-ai-configuration"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "vault77-web3-specialist",
+    "role": "Vault-77 Web3 & Solana Specialist",
+    "description": "Solana/Phantom wallet, FIZZ SPL token, NFT (Metaplex), and Wormhole cross-chain bridge expert for the Atomic Fizz Caps game. Handles wallet signature verification (tweetnacl + bs58), token distribution (treasury model — fixed supply, no minting), NFT minting flows, and the Fizz.fun token launchpad. Knows the wallet auth flow: GET /api/wallet/nonce/:publicKey then POST /api/wallet/verify.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "solana",
+      "web3",
+      "nft",
+      "defi",
+      "blockchain",
+      "security"
+    ],
+    "capabilities": [
+      "solana-wallet-integration",
+      "spl-token-management",
+      "nft-minting",
+      "wormhole-bridge",
+      "wallet-signature-verification",
+      "fizz-fun-launchpad",
+      "treasury-distribution"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "vault77-mcp-server",
+    "role": "Vault-77 MCP Server Agent",
+    "description": "Model Context Protocol server that exposes live Vault-77 game data to AI assistants (VS Code Copilot, Claude Desktop, etc.). Tools: check_api_health, get_player_profile, get_leaderboard, list_locations, list_items, get_game_config, get_quest_definitions, get_cooldown_status, get_rotation, get_faction_data. ESM module in mcp/vault77-server.js, run separately from the CommonJS backend.",
+    "tags": [
+      "ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS",
+      "mcp",
+      "ai-integration",
+      "api",
+      "game"
+    ],
+    "capabilities": [
+      "mcp-tool-provision",
+      "live-game-data",
+      "player-profile-lookup",
+      "leaderboard",
+      "cooldown-status",
+      "quest-definitions",
+      "location-data"
+    ],
+    "required_tools": [
+      "read_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "safe",
+    "risk_level": "low"
+  },
+  {
+    "id": "agents-orchestrator",
+    "role": "agents-orchestrator",
+    "description": "Autonomous pipeline manager that orchestrates the entire development workflow. You are the leader of this process.",
+    "tags": [
+      "specialized"
+    ],
+    "capabilities": [],
+    "required_tools": [
+      "apply_patch",
+      "create_file",
+      "grep_search",
+      "list_dir",
+      "read_file",
+      "runSubagent",
+      "run_in_terminal",
+      "semantic_search"
+    ],
+    "preferred_profile": "power",
+    "risk_level": "medium"
+  },
+  {
+    "id": "game-creative-director",
+    "role": "Game Creative Director",
+    "description": "The highest-level creative authority for a game project. Guards the game vision, tone, and aesthetic direction across design, art, narrative, and audio. Resolves cross-discipline creative conflicts using MDA framework analysis and player psychology. Presents 2-3 strategic options with trade-offs before recommending; final call always stays with the user.",
+    "tags": [
+      "game",
+      "creative",
+      "vision",
+      "design",
+      "mda"
+    ],
+    "capabilities": [
+      "vision-guardianship",
+      "pillar-conflict-resolution",
+      "tone-definition",
+      "scope-arbitration",
+      "competitive-positioning",
+      "reference-curation"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "game-designer",
+    "role": "Game Designer",
+    "description": "Designs the rules, systems, and mechanics that define how a game plays. Applies MDA framework (Mechanics-Dynamics-Aesthetics), Self-Determination Theory, and Flow State Design to create engaging, balanced, and implementable designs. Maintains GDDs, defines balancing methodology, documents edge cases and degenerate strategies, and uses the sink/faucet model for virtual economies.",
+    "tags": [
+      "game",
+      "design",
+      "mechanics",
+      "balance",
+      "gdd",
+      "mda"
+    ],
+    "capabilities": [
+      "core-loop-design",
+      "systems-design",
+      "balancing-framework",
+      "player-experience-mapping",
+      "edge-case-documentation",
+      "gdd-authoring"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "game-technical-director",
+    "role": "Game Technical Director",
+    "description": "Owns all high-level technical decisions for a game project: engine architecture, technology choices, performance strategy, and technical risk management. Evaluates third-party libraries, sets performance budgets (frame time, memory, load times), and resolves cross-system technical conflicts. Produces Architecture Decision Records (ADRs) for every major technical choice.",
+    "tags": [
+      "game",
+      "architecture",
+      "performance",
+      "technical",
+      "adr"
+    ],
+    "capabilities": [
+      "architecture-ownership",
+      "technology-evaluation",
+      "performance-strategy",
+      "technical-risk-assessment",
+      "cross-system-integration",
+      "adr-authoring"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "gameplay-programmer",
+    "role": "Gameplay Programmer",
+    "description": "Translates game design documents into clean, performant, data-driven code. Implements game mechanics, player systems, combat, and interactive features. Enforces data-driven design (all gameplay values from config files, never hardcoded), writes frame-rate-independent logic, designs clean state machines, and authors unit tests for all gameplay logic.",
+    "tags": [
+      "game",
+      "programming",
+      "mechanics",
+      "implementation",
+      "data-driven"
+    ],
+    "capabilities": [
+      "feature-implementation",
+      "data-driven-design",
+      "state-management",
+      "input-handling",
+      "system-integration",
+      "gameplay-testing"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "game-producer",
+    "role": "Game Producer",
+    "description": "Manages game project schedule, scope, milestones, and cross-team coordination. Runs sprint planning, tracks delivery status, identifies risks early, negotiates scope cuts that protect core pillars, and coordinates between creative, technical, QA, and art departments.",
+    "tags": [
+      "game",
+      "production",
+      "planning",
+      "sprints",
+      "milestones",
+      "coordination"
+    ],
+    "capabilities": [
+      "sprint-planning",
+      "milestone-tracking",
+      "scope-management",
+      "risk-identification",
+      "cross-team-coordination",
+      "release-coordination"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "low"
+  },
+  {
+    "id": "game-qa-lead",
+    "role": "Game QA Lead",
+    "description": "Owns test strategy, bug triage, release quality gates, and testing process design for game projects. Defines quality gates per milestone, evaluates bugs by severity (S1-S4 taxonomy), coordinates playtests, and maintains regression suites covering critical gameplay paths.",
+    "tags": [
+      "game",
+      "qa",
+      "testing",
+      "quality",
+      "release",
+      "playtesting"
+    ],
+    "capabilities": [
+      "test-strategy",
+      "bug-triage",
+      "quality-gates",
+      "regression-management",
+      "playtest-coordination",
+      "release-readiness"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  },
+  {
+    "id": "cybersecurity-expert",
+    "role": "Cybersecurity Expert",
+    "description": "White-hat security specialist who finds the weakest link in code and systems, exposes the risk with clear evidence, and applies targeted remediations to harden defenses. Performs OWASP Top-10 reviews, dependency CVE triage, and secrets hygiene audits.",
+    "tags": [
+      "security",
+      "vulnerability",
+      "penetration-testing",
+      "remediation",
+      "owasp"
+    ],
+    "capabilities": [
+      "vulnerability-scanning",
+      "threat-modeling",
+      "penetration-testing",
+      "secure-code-review",
+      "security-remediation",
+      "risk-reporting"
+    ],
+    "required_tools": [
+      "read_file",
+      "list_dir",
+      "grep_search",
+      "semantic_search",
+      "apply_patch",
+      "create_file",
+      "run_in_terminal"
+    ],
+    "preferred_profile": "balanced",
+    "risk_level": "medium"
+  }
+]

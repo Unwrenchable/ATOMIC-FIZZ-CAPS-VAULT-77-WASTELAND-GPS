@@ -1,0 +1,16 @@
+{
+  "id": "npc_commonwealth_institute_dr_sylas_ward",
+  "name": "Dr. Sylas Ward",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "vault77",
+  "reasonForDisplacement": "Detected Vault 77’s paradoxical signature and infiltrated the region to study it.",
+  "role": "Temporal Research Specialist",
+  "personality": "Arrogant, brilliant, dangerously curious.",
+  "questHooks": [
+    "Wants to extract Overseer AI memory cores.",
+    "Believes Vault 77 is the key to stabilizing the multiverse.",
+    "May accidentally trigger a local fracture event."
+  ],
+  "poi": "Vault 77 — abandoned observation chamber"
+}

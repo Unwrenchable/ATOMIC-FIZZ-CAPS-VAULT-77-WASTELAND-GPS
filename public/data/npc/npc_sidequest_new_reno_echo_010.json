@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_new_reno_echo_010",
+  "type": "side_quest",
+  "name": "Lenn Rook",
+  "region": "new_reno",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_new_reno_echo_010_dialog",
+  "lootPool": "npc_sidequest_new_reno_echo_010_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "timeline_warning_02",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.66,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

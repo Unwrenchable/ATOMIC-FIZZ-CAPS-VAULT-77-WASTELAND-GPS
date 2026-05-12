@@ -1,0 +1,25 @@
+{
+  "id": "npc_sidequest_travelers_fractured_013",
+  "type": "side_quest",
+  "name": "Lio Hale",
+  "region": "new_reno",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_travelers_fractured_013_dialog",
+  "lootPool": "npc_sidequest_travelers_fractured_013_loot",
+  "questHooks": [
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks.",
+  "originRegion": "new_reno",
+  "destinationRegion": "vegas_outskirts",
+  "travelPath": [
+    "new_reno",
+    "vegas_outskirts"
+  ]
+}

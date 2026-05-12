@@ -1,0 +1,23 @@
+{
+  "id": "npc_nv_razorjack",
+  "name": "Razor-Jack",
+  "region": "New Vegas Strip",
+  "type": "Gang Enforcer",
+  "dialog": {
+    "idle": [
+      "Vegas ain’t safe. Not for you. Not for anyone.",
+      "You walk like someone who’s seen the Divide."
+    ],
+    "friendly": [
+      "You got guts. I respect that.",
+      "If you need backup, whistle. I’ll hear it."
+    ],
+    "hostile": [
+      "You crossed the wrong guy.",
+      "Strip’s gonna eat you alive."
+    ]
+  },
+  "quests": ["side_nv_gangpressure"],
+  "faction": "Strip Gangs",
+  "notes": "Can become a companion or a recurring enemy depending on choices."
+}

@@ -1,0 +1,16 @@
+{
+  "id": "npc_boulder_city_medic_talan_reeves",
+  "name": "Corporal Talan Reeves",
+  "faction": "ncr",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "NCR Combat Medic",
+  "personality": "Calm under pressure, exhausted, quietly compassionate.",
+  "description": "Reeves patches up NCR troopers and civilians alike. He’s seen the worst of the Mojave and still believes people can do better.",
+  "questHooks": [
+    "Needs medical supplies scavenged from the ruins.",
+    "Says a patient came in with a cap embedded in their armor.",
+    "Reports hearing a hum through the medical tent’s metal frame."
+  ],
+  "poi": "boulder_city_hotel_fnv"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "npc_freeside_guard_01",
+  "name": "Makeshift Guard",
+  "archetype": "vegas_outskirts_local",
+  "behaviorPattern": "static_local",
+  "spawnPool": ["freeside_south"],
+  "uniquePerWorld": false
+}

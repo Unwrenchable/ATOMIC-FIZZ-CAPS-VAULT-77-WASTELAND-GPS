@@ -1,0 +1,16 @@
+{
+  "id": "npc_freeside_bottlecap_prophet",
+  "name": "Bottlecap Prophet",
+  "faction": "freeside_locals",
+  "homeRegion": "freeside-east",
+  "currentRegion": "freeside-east",
+  "role": "Street Oracle",
+  "personality": "Cryptic, theatrical, strangely accurate.",
+  "description": "Predicts the future by flipping bottle caps. Claims the caps choose their own fate.",
+  "questHooks": [
+    "Says a cap he flipped landed on its edge and stayed there.",
+    "Warns that 'the road will swallow a traveler soon'.",
+    "Claims someone is cursed with 'reverse luck'."
+  ],
+  "poi": "freeside_east_gate"
+}

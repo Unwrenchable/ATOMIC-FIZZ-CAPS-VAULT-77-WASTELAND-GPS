@@ -1,0 +1,34 @@
+{
+  "echoEvents": [
+    {
+      "id": "echo_map_flicker",
+      "type": "visual",
+      "icon": "echo_flicker",
+      "duration": 2000,
+      "chance": 0.03,
+      "regions": ["*"],
+      "overseerMessage": "Echo signature detected nearby.",
+      "jaxLine": "Someone passed through here… recently."
+    },
+    {
+      "id": "echo_static_blip",
+      "type": "visual",
+      "icon": "static_blip",
+      "duration": 1500,
+      "chance": 0.02,
+      "regions": ["vegas", "freeside", "strip"],
+      "overseerMessage": "Short‑range interference detected.",
+      "jaxLine": "Did you see that? Thought I saw a silhouette."
+    },
+    {
+      "id": "echo_trail_glow",
+      "type": "visual",
+      "icon": "trail_glow",
+      "duration": 3000,
+      "chance": 0.01,
+      "regions": ["highway_95", "dry_lake", "red_rock"],
+      "overseerMessage": "Residual movement trace logged.",
+      "jaxLine": "Trail’s still warm… someone was here."
+    }
+  ]
+}

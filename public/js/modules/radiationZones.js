@@ -1,0 +1,126 @@
+// radiationZones.js
+// ------------------------------------------------------------
+// Atomic Fizz Caps – Radiation Zone Overlay
+// Visual green haze over high-radiation regions
+// ------------------------------------------------------------
+
+(function () {
+  if (!window.Game) window.Game = {};
+  if (!Game.modules) Game.modules = {};
+
+  const radZones = {
+    layer: null,
+    loaded: false,
+
+    async init() {
+      const worldmap = Game.modules.worldmap;
+      if (!worldmap || !worldmap.map) {
+        console.warn("radiationZones: worldmap not ready");
+        return;
+      }
+
+      // Create pane BELOW fog (420) but ABOVE faction borders (350) and encounter heat (400)
+      const pane = worldmap.map.createPane("radZonePane");
+      pane.style.zIndex = 410;
+      pane.style.pointerEvents = "none";
+
+      this.layer = L.geoJSON([], {
+        pane: "radZonePane",
+        style: () => ({
+          color: "#00ff41",
+          weight: 1,
+          opacity: 0.4,
+          fillColor: "#00ff41",
+          fillOpacity: 0.15,
+          className: "rad-zone"
+        })
+      }).addTo(worldmap.map);
+
+      this.injectStyles();
+      await this.loadZones();
+
+      console.log("radiationZones: initialized");
+    },
+
+    injectStyles() {
+      const style = document.createElement("style");
+      style.textContent = `
+        .rad-zone {
+          animation: radPulse 4s infinite ease-in-out;
+        }
+
+        @keyframes radPulse {
+          0% { fill-opacity: 0.10; }
+          50% { fill-opacity: 0.20; }
+          100% { fill-opacity: 0.10; }
+        }
+      `;
+      document.head.appendChild(style);
+    },
+
+    async loadZones() {
+      try {
+        const res = await fetch("/data/radiation_zones.json");
+        if (!res.ok) {
+          console.warn('radiationZones: failed to fetch radiation_zones.json', res.status);
+          return;
+        }
+        const json = await res.json();
+
+        if (!json || !Array.isArray(json.zones)) {
+          console.warn("radiationZones: invalid radiation_zones.json");
+          return;
+        }
+
+        json.zones.forEach(zone => {
+          try {
+            if (!zone || !zone.coords) return;
+
+            // If coords are an object with lat/lng or an array, normalize
+            let coords = zone.coords;
+            if (!Array.isArray(coords) && coords.center && coords.radius) {
+              // simple circle representation
+              const lat = coords.center[0];
+              const lng = coords.center[1];
+              const radius = coords.radius;
+              const circle = L.circle([lat, lng], { radius }).addTo(this.layer);
+              return;
+            }
+
+            const geo = {
+              type: "Feature",
+              properties: zone.properties || {},
+              geometry: {
+                type: "Polygon",
+                coordinates: [coords]
+              }
+            };
+
+            this.layer.addData(geo);
+          } catch (e) {
+            console.warn('radiationZones: failed to add zone', e && e.message ? e.message : e);
+          }
+        });
+
+        this.loaded = true;
+      } catch (e) {
+        console.error("radiationZones: failed to load radiation_zones.json", e);
+      }
+    }
+  };
+
+  Game.modules.radiationZones = radZones;
+
+  // Wait for map-ready event to ensure the map pane exists before creating overlays
+  window.addEventListener("map-ready", () => {
+    // Small delay to ensure map is fully initialized
+    setTimeout(() => {
+      try {
+        radZones.init();
+      } catch (e) {
+        console.error("radiationZones: init failed", e);
+      }
+    }, 600);
+  });
+})();
+

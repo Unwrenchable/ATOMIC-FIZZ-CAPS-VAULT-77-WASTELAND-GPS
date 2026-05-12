@@ -1,0 +1,92 @@
+{
+  "leather_armor": {
+    "name": "Leather Armor",
+    "tier": "uncommon",
+    "description": "A full set of hand-stitched leather armor. Wasteland standard issue.",
+    "pieces": ["head", "chest", "arm_l", "arm_r", "leg_l", "leg_r"],
+    "pieceIds": {
+      "head":  "leather_armor_head",
+      "chest": "leather_armor_chest",
+      "arm_l": "leather_armor_arm_l",
+      "arm_r": "leather_armor_arm_r",
+      "leg_l": "leather_armor_leg_l",
+      "leg_r": "leather_armor_leg_r"
+    },
+    "assembledId": "leather_armor_full",
+    "assembleRecipeId": "assemble_leather_armor",
+    "requiresLevel": 5,
+    "fullSetBonus": {
+      "ballisticResist": 8,
+      "radResist": 2,
+      "capsValue": 210
+    }
+  },
+  "combat_armor": {
+    "name": "Combat Armor",
+    "tier": "rare",
+    "description": "Full military-grade combat armor. Covers head-to-toe with ballistic ceramic.",
+    "pieces": ["head", "chest", "arm_l", "arm_r", "leg_l", "leg_r"],
+    "pieceIds": {
+      "head":  "combat_armor_head",
+      "chest": "combat_armor_chest",
+      "arm_l": "combat_armor_arm_l",
+      "arm_r": "combat_armor_arm_r",
+      "leg_l": "combat_armor_leg_l",
+      "leg_r": "combat_armor_leg_r"
+    },
+    "assembledId": "combat_armor_full",
+    "assembleRecipeId": "assemble_combat_armor",
+    "requiresLevel": 15,
+    "fullSetBonus": {
+      "ballisticResist": 22,
+      "radResist": 5,
+      "damageResist": 5,
+      "capsValue": 600
+    }
+  },
+  "t45_power_armor": {
+    "name": "T-45 Power Armor",
+    "tier": "epic",
+    "description": "Early pre-war power armor. A full set grants immense ballistic and radiation protection.",
+    "pieces": ["head", "chest", "arm_l", "arm_r", "leg_l", "leg_r"],
+    "pieceIds": {
+      "head":  "t45_pa_head",
+      "chest": "t45_pa_chest",
+      "arm_l": "t45_pa_arm_l",
+      "arm_r": "t45_pa_arm_r",
+      "leg_l": "t45_pa_leg_l",
+      "leg_r": "t45_pa_leg_r"
+    },
+    "assembledId": "t45_power_armor_full",
+    "assembleRecipeId": "assemble_t45_power_armor",
+    "requiresLevel": 25,
+    "fullSetBonus": {
+      "ballisticResist": 55,
+      "radResist": 30,
+      "damageResist": 10,
+      "capsValue": 2500
+    }
+  },
+  "t51b_power_armor": {
+    "name": "T-51b Power Armor",
+    "tier": "legendary",
+    "description": "The pinnacle of pre-war power armor technology. Assembling a full set is the dream of every wastelander.",
+    "pieces": ["head", "chest", "arm_l", "arm_r", "leg_l", "leg_r"],
+    "pieceIds": {
+      "head":  "t51b_pa_head",
+      "chest": "t51b_pa_chest",
+      "arm_l": "t51b_pa_arm_l",
+      "arm_r": "t51b_pa_arm_r",
+      "leg_l": "t51b_pa_leg_l",
+      "leg_r": "t51b_pa_leg_r"
+    },
+    "assembledId": "t51b_power_armor_full",
+    "assembleRecipeId": "assemble_t51b_power_armor",
+    "requiresLevel": 30,
+    "fullSetBonus": {
+      "ballisticResist": 90,
+      "radResist": 60,
+      "capsValue": 7500
+    }
+  }
+}

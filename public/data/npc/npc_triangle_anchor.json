@@ -1,0 +1,72 @@
+{
+  "id": "npc_triangle_anchor",
+  "name": "The Anchor",
+  "faction": "None",
+  "role": "Resonance Point",
+  "type": "anomaly-core",
+
+  "homeRegion": "triangle-center",
+  "currentRegion": "triangle-center",
+  "poi": "triangle_center_faultline",
+
+  "personality": "Detached, calm, speaks like they’re halfway in a dream.",
+  "description": "A person who stands at the geometric center of the triangle. Their presence stabilizes — or destabilizes — the anomaly. They feel every hum, every echo, every shift.",
+
+  "dialogueProfile": {
+    "tone": "calm-resonant",
+    "personalityTags": [
+      "triangle-core",
+      "major-character",
+      "anomaly-sensitive",
+      "player-reactive",
+      "rare-encounter"
+    ],
+    "knowledge": [
+      "triangle",
+      "hum",
+      "vault77",
+      "dry-lake",
+      "strip-underground",
+      "188-overpass"
+    ],
+    "anomalyAwareness": 1.0
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["triangle_center_faultline"],
+      "night": ["triangle_center_faultline"],
+      "wanderChance": 0.0
+    },
+    "roaming": [
+      "triangle-center"
+    ],
+    "anomalySensitivity": 1.0,
+    "rareEncounter": true
+  },
+
+  "dialog": {
+    "idle": [
+      "The world bends here.",
+      "I hear all three points breathing."
+    ],
+    "player_present": [
+      "You carry echoes from the edges.",
+      "Your steps shift the geometry."
+    ],
+    "triangle_active": [
+      "It’s aligning… or breaking.",
+      "Three points… one truth… not yet revealed."
+    ],
+    "resonance_event": [
+      "The hum is inside my bones.",
+      "Something is trying to speak through the pattern."
+    ]
+  },
+
+  "quests": [
+    "main_triangle_alignment"
+  ],
+
+  "notes": "The Anchor is the keystone NPC for the triangle anomaly. They feel all three points simultaneously. Never reveals the truth directly."
+}

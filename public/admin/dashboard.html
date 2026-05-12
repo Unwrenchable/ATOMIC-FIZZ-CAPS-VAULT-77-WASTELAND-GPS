@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard • Atomic Fizz Caps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+
+<body>
+  <div id="adminWrapper">
+
+    <aside id="adminSidebar">
+      <h2>ADMIN</h2>
+
+      <nav>
+        <button class="nav-btn" data-panel="panel-home">Home</button>
+        <button class="nav-btn" data-panel="panel-players">Players</button>
+        <button class="nav-btn" data-panel="panel-world">World</button>
+        <button class="nav-btn" data-panel="panel-debug">Debug</button>
+        <button class="nav-btn" data-panel="panel-jax">Jax Monitor</button>
+        <button id="adminLogoutBtn" class="nav-btn danger">Logout</button>
+      </nav>
+    </aside>
+
+    <main id="adminMain">
+
+      <!-- HOME -->
+      <section id="panel-home" class="panel active">
+        <h1>Welcome, Administrator</h1>
+        <p>Select a tool from the left to begin.</p>
+      </section>
+
+      <!-- PLAYERS -->
+      <section id="panel-players" class="panel">
+        <h1>Player Tools</h1>
+
+        <div class="player-search">
+          <label>Wallet Address</label>
+          <input id="adminPlayerWallet" type="text" placeholder="Enter wallet address" />
+          <button id="adminPlayerSearchBtn">Search</button>
+          <div id="adminPlayerSearchStatus"></div>
+        </div>
+
+        <div id="adminPlayerDetails" class="player-details" style="display:none;">
+          <h2 id="adminPlayerName"></h2>
+          <p><strong>Wallet:</strong> <span id="adminPlayerWalletLabel"></span></p>
+
+          <p><strong>Level:</strong> <input id="adminPlayerLevel" type="number" min="1" /></p>
+          <p><strong>XP:</strong> <input id="adminPlayerXP" type="number" min="0" /></p>
+          <p><strong>Caps:</strong> <input id="adminPlayerCaps" type="number" min="0" /></p>
+
+          <h3>SPECIAL</h3>
+          <div class="special-grid">
+            <label>S: <input id="adminSpecialS" type="number" /></label>
+            <label>P: <input id="adminSpecialP" type="number" /></label>
+            <label>E: <input id="adminSpecialE" type="number" /></label>
+            <label>C: <input id="adminSpecialC" type="number" /></label>
+            <label>I: <input id="adminSpecialI" type="number" /></label>
+            <label>A: <input id="adminSpecialA" type="number" /></label>
+            <label>L: <input id="adminSpecialL" type="number" /></label>
+          </div>
+
+          <p>
+            <label>
+              <input id="adminUnlockedTerminal" type="checkbox" />
+              Terminal Unlocked
+            </label>
+          </p>
+
+          <div class="player-actions">
+            <button id="adminPlayerSaveBtn">Save Changes</button>
+            <button id="adminPlayerResetBtn" class="danger">Reset Profile</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- WORLD -->
+      <section id="panel-world" class="panel">
+  <h1>World Tools</h1>
+
+  <h2>Mintables</h2>
+
+  <button id="mintablesLoadBtn">Load Mintables</button>
+  <button id="mintablesSaveBtn">Save Changes</button>
+
+  <div id="mintablesStatus"></div>
+
+  <table id="mintablesTable" class="mintables-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Rarity</th>
+        <th>Caps</th>
+        <th>Enabled</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>Add New Mintable</h3>
+  <input id="newMintName" placeholder="Name" />
+  <input id="newMintRarity" placeholder="Rarity" />
+  <input id="newMintCaps" type="number" placeholder="Caps" />
+  <button id="addMintableBtn">Add</button>
+</section>
+
+
+      <!-- DEBUG -->
+      <section id="panel-debug" class="panel">
+        <h1>Debug Tools</h1>
+
+        <h2>⚔ Battle Tester</h2>
+        <p>Spawn a test combat encounter immediately (bypasses encounter roll).</p>
+        <label>Enemy Name: <input id="debugEnemyName" type="text" value="Wasteland Raider" /></label><br/><br/>
+        <label>Enemy HP: <input id="debugEnemyHp" type="number" value="30" min="1" /></label><br/><br/>
+        <label>Enemy Damage: <input id="debugEnemyDmg" type="number" value="8" min="1" /></label><br/><br/>
+        <button id="debugSpawnBattleBtn">🔫 SPAWN BATTLE</button>
+        <div id="debugBattleStatus" style="margin-top:8px; color:#0f0;"></div>
+
+        <hr style="border-color:#333; margin:20px 0;" />
+
+        <h2>🎲 Encounter Rate</h2>
+        <p>Adjust the world-tick encounter chance (persists until page reload).</p>
+        <label>Chance per tick:
+          <input id="debugEncounterRate" type="range" min="0" max="100" value="55" style="width:120px;" />
+          <span id="debugEncounterRateVal">55%</span>
+        </label><br/><br/>
+        <button id="debugApplyRateBtn">Apply</button>
+        <div id="debugRateStatus" style="margin-top:8px; color:#0f0;"></div>
+
+        <hr style="border-color:#333; margin:20px 0;" />
+
+        <h2>📡 Offline / Storage</h2>
+        <button id="debugClearStorageBtn" class="danger">🗑 Clear Player LocalStorage</button>
+        <div id="debugStorageStatus" style="margin-top:8px;"></div>
+      </section>
+
+      <!-- JAX MONITOR -->
+      <section id="panel-jax" class="panel">
+        <h1>Jax Monitoring</h1>
+        <p>Anomaly reports, world health, system diagnostics (coming next layers).</p>
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

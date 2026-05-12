@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_runner_02",
+  "name": "Debt Dodger",
+  "archetype": "highway_drifter",
+  "dialogPool": [
+    "Owe the wrong folks. Don’t make my mistake.",
+    "If you hear footsteps behind you—run."
+  ],
+  "spawnPool": ["strip_service_corridors"],
+  "uniquePerWorld": false
+}

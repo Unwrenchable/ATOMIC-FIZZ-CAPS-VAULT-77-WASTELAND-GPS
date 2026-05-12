@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_commonwealth_fractured_024",
+  "type": "side_quest",
+  "name": "Daro Rhea",
+  "region": "commonwealth",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_commonwealth_fractured_024_dialog",
+  "lootPool": "npc_sidequest_commonwealth_fractured_024_loot",
+  "questHooks": [
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.72,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

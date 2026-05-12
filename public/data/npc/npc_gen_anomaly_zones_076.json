@@ -1,0 +1,21 @@
+{
+  "id": "npc_gen_anomaly_zones_076",
+  "name": "Echo Wanderer",
+  "archetype": "timeline_echo_wanderer",
+  "spawnPool": [
+    "triangle_center",
+    "dry_lake_cracks",
+    "vault77_perimeter"
+  ],
+  "behaviorPattern": "anomaly_wander",
+  "lootPool": [
+    "echo_fragment"
+  ],
+  "dialogPool": [
+    "…you’ve walked this path before…",
+    "…time folds strangely around this place…",
+    "…not your first time here…"
+  ],
+  "factionTag": "legion_adjacent",
+  "timelineVariants": []
+}

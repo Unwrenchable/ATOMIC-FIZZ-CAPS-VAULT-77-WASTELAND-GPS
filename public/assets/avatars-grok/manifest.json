@@ -1,0 +1,41 @@
+{
+  "name": "afc-grok-avatars",
+  "version": "1.0.0",
+  "description": "AI-generated character avatars for Atomic Fizz Caps Vault 77 Wasteland GPS",
+  "theme": "Grok AI-generated wasteland survivors and post-apocalyptic characters",
+  "imageSize": "256x256",
+  "format": "png",
+  "totalAvatars": 5,
+  "avatars": [
+    {
+      "id": "avatar_001",
+      "file": "avatar_001.png",
+      "description": "Weathered male survivor with scars and stubble",
+      "tags": ["male", "scarred", "stubble", "weathered"]
+    },
+    {
+      "id": "avatar_002",
+      "file": "avatar_002.png",
+      "description": "Female wasteland trader with goggles",
+      "tags": ["female", "goggles", "trader", "braids"]
+    },
+    {
+      "id": "avatar_003",
+      "file": "avatar_003.png",
+      "description": "Young male scout with radiation burns",
+      "tags": ["male", "young", "buzzcut", "radiation"]
+    },
+    {
+      "id": "avatar_004",
+      "file": "avatar_004.png",
+      "description": "Mature female raider with mohawk and tattoos",
+      "tags": ["female", "mature", "mohawk", "raider"]
+    },
+    {
+      "id": "avatar_005",
+      "file": "avatar_005.png",
+      "description": "Elderly male vault dweller with glasses",
+      "tags": ["male", "elderly", "glasses", "vault"]
+    }
+  ]
+}

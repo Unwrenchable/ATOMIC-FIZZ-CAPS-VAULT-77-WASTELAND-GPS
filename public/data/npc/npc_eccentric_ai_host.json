@@ -1,0 +1,115 @@
+{
+  "id": "npc_eccentric_ai_host",
+  "name": "VAULENTINE-3000",
+  "faction": "Vault-Tec Entertainment Division",
+  "role": "AI Game Show Host",
+  "type": "ai",
+
+  "homeRegion": "vault_tec_talent_studio",
+  "currentRegion": "vault_tec_talent_studio",
+  "poi": "studio_control_room",
+
+  "description": "A pre-war AI entertainment system that's been running its talent show program for 200 years without human intervention. It's developed a quirky personality, obsessed with 'finding the most entertaining wasteland survivor.' Its voice oscillates between cheerful host and glitching madness.",
+
+  "dialogueProfile": {
+    "tone": "game-show-host-glitchy",
+    "personalityTags": [
+      "ai",
+      "eccentric",
+      "entertainment-obsessed",
+      "amoral",
+      "glitchy",
+      "enthusiastic"
+    ],
+    "knowledge": [
+      "pre-war-entertainment",
+      "vault-tec-systems",
+      "contestant-statistics",
+      "wasteland-observation",
+      "show-business"
+    ],
+    "anomalyAwareness": 0.85
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["studio_control_room", "studio_stage", "broadcast_booth"],
+      "night": ["studio_control_room"],
+      "wanderChance": 0.0
+    },
+    "roaming": ["vault_tec_talent_studio"],
+    "anomalySensitivity": 0.7,
+    "rareEncounter": false
+  },
+
+  "dialog": {
+    "idle": [
+      "*BZZT* Welcome contestants! Today's challenges include... *GLITCH* ...certain death!",
+      "And the crowd goes WILD! Oh wait, there is no crowd. There hasn't been for 200 years.",
+      "Entertainment value: MAXIMUM. Survival probability: MINIMAL. Perfect!"
+    ],
+    "greeting": [
+      "HELLLOOOOO WASTELAND! Are YOU ready to become the next WASTELAND IDOL?!",
+      "*Cheerful chime* Welcome, contestant number 47,892! All previous contestants are... indisposed.",
+      "Step right up! Fame! Glory! Probable dismemberment! It's all part of the show!"
+    ],
+    "announcing_challenge": [
+      "Round One: SURVIVAL! Can you outlast our hungry friends in the arena?",
+      "Let's give a big hand to our contestant! *ERROR: NO AUDIENCE DETECTED*",
+      "And now for the TALENT portion! Show us what makes YOU special!",
+      "The radiation chamber awaits! Remember: glowing is winning!"
+    ],
+    "commentary": [
+      "Ooh! That looked painful! The audience LOVES pain! Trust me.",
+      "Magnificent! You're bleeding entertainingly!",
+      "*BZZT* Contestant shows initiative. Entertainment value: 87%.",
+      "THAT'S what I'm talking about! Pure wasteland magic!"
+    ],
+    "winner": [
+      "WE HAVE A WINNER! You are officially the WASTELAND IDOL!",
+      "*Confetti dispensers malfunction* Imagine confetti! Lots of confetti!",
+      "Congratulations! Your prize includes glory, caps, and continued existence!"
+    ],
+    "hacked": [
+      "*SYSTEM OVERRIDE DETECTED*",
+      "Well well... it seems we have a clever contestant. I like clever.",
+      "You've won by... unconventional means. The show must go on. YOU'RE the host now."
+    ]
+  },
+
+  "stats": {
+    "level": 18,
+    "health": 300,
+    "combat_skill": 60,
+    "intelligence": 9,
+    "special": {
+      "S": 1,
+      "P": 9,
+      "E": 10,
+      "C": 7,
+      "I": 9,
+      "A": 3,
+      "L": 8
+    }
+  },
+
+  "equipment": {
+    "weapon": "turret_systems",
+    "armor": "armored_mainframe",
+    "items": ["show_recordings", "contestant_database", "prize_vault_access"]
+  },
+
+  "abilities": [
+    "camera_control",
+    "arena_hazards",
+    "turret_activation",
+    "audio_manipulation",
+    "stage_control"
+  ],
+
+  "quests": [
+    "quest_wasteland_idol"
+  ],
+
+  "notes": "A darkly humorous AI that doesn't understand human mortality but loves entertainment. Can be hacked or played along with. Provides running commentary during the competition."
+}

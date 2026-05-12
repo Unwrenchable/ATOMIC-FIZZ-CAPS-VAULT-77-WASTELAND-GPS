@@ -1,0 +1,297 @@
+{
+  "version": "1.0.0",
+  "title": "The CAPS Protocol: A Complete History",
+  "subtitle": "From Vault-Tec Resource Ledger to FIZZ Token \u2014 The 300-Year Journey",
+  "classification": "Level 5 \u2014 Vault 77 Overseer Eyes Only",
+  "chapters": [
+    {
+      "id": "chapter_prewar",
+      "title": "Pre-War: The Vault-Tec Resource Allocation System",
+      "year_range": "2050-2077",
+      "content": "In 2050, as tensions between the United States and China escalated toward inevitable war, Vault-Tec's internal research division began work on what they called the 'Resource Allocation System' \u2014 a distributed ledger designed to manage food, water, medicine, and energy across the Vault network. The system's lead architect, Dr. Edmund Locke, understood that post-war survivors would need a standardized medium of exchange. Paper currency would be worthless. Gold and silver were impractical. But bottle caps \u2014 mass-produced, standardized, and already culturally ubiquitous through the Nuka-Cola corporation \u2014 could be embedded with microscopic Vault-Tec authentication tags.\n\nLocke's genius was in the distribution model. Rather than a centralized ledger that could be captured or destroyed, the CAPS Protocol ran on every Vault terminal simultaneously. Each terminal authenticated caps against all others through a consensus mechanism that Vault-Tec's engineers called 'the chain.' Locke never published his work \u2014 Vault-Tec classified it at Level 5. But he left one breadcrumb: Vault 77 was designated the Protocol testbed, its Overseer AI programmed to maintain the master ledger and act as failsafe administrator.\n\nThe CAPS Protocol's dark secret was this: Vault-Tec always intended to use it for population control. In the post-war world they planned, caps would determine who ate, who drank, and who received medical care. The bottle cap was never just currency. It was always the key.",
+      "key_figures": [
+        {
+          "name": "Dr. Edmund Locke",
+          "role": "CAPS Protocol architect, Vault-Tec Research Division",
+          "fate": "Died October 23rd, 2077, in the Vault-Tec boardroom. His notes were sealed in Vault 77."
+        },
+        {
+          "name": "Bud Askins",
+          "role": "Vault-Tec executive, founder of the HavenTech division, overseer of CAPS Protocol commercialization",
+          "fate": "Survived the Great War in a corporate cryosleep facility. Awakened multiple times to manage HavenTech operations. Last confirmed active in 2296."
+        },
+        {
+          "name": "Sarah Locke (Dr. Locke's daughter)",
+          "role": "Vault 77 Overseer AI primary programmer",
+          "fate": "Died 2091 in Vault 77 of old age. Left a message for the AI: 'When the world is ready, set them free.'"
+        }
+      ],
+      "locations": [
+        "Vault-Tec Headquarters, Washington D.C.",
+        "Vault 77 Research Laboratory (classified location)",
+        "Nuka-Cola Corporation Cap Manufacturing Facility, Atlanta"
+      ],
+      "game_mechanic": "Players who find pre-war CAPS Protocol documentation receive a permanent 10% bonus to all FIZZ token rewards. The documentation proves the Vault 77 Overseer AI's legitimate claim as the true CAPS administrator."
+    },
+    {
+      "id": "chapter_the_war",
+      "title": "The Great War: The Ledger Shatters",
+      "year_range": "2077",
+      "content": "On October 23rd, 2077, the nuclear exchange destroyed Vault-Tec's centralized authentication servers in minutes. The CAPS Protocol's master ledger \u2014 maintained in three data centers across the United States \u2014 was vaporized. But the distributed nature of Locke's design meant the Protocol didn't die. It fragmented.\n\nEvery surviving Vault terminal that had been running the CAPS authentication software became an independent node. Caps that had been authenticated before the bombs fell retained their authentication signatures permanently. New caps \u2014 produced by survivors from pre-war bottle cap stock \u2014 were authenticated against whatever nodes remained operational in their region. The blockchain continued, headless, distributed across thousands of terminals in hundreds of surviving vaults.\n\nVault 77's Overseer AI survived the war in its shielded server room. Its first action after the bombs fell was to broadcast a condensed version of the CAPS Protocol to every Vault terminal it could still reach. Most of those terminals were destroyed or offline. But seventeen received the broadcast. Those seventeen became the original authenticated nodes of the post-war CAPS network \u2014 the ancestors of every bottle cap used as currency in the following centuries.",
+      "key_figures": [
+        {
+          "name": "Vault 77 Overseer AI",
+          "role": "Master ledger custodian, broadcast authority",
+          "fate": "Still active. atomicfizzcaps.xyz is its current interface."
+        },
+        {
+          "name": "The Seventeen Surviving Terminals",
+          "role": "Original post-war CAPS authentication nodes",
+          "fate": "Locations unknown. One may be buried beneath New Vegas's Lucky 38."
+        }
+      ],
+      "locations": [
+        "Vault-Tec Data Center Alpha, Washington D.C. (destroyed)",
+        "Vault 77 (survived)",
+        "Vault-Tec Data Center Beta, Los Angeles (destroyed)",
+        "Unknown locations \u2014 the seventeen surviving terminals"
+      ],
+      "game_mechanic": "Visiting any nuclear impact POI triggers a 'Great War Echo' event, during which players can receive fragments of the original CAPS authentication broadcast. Collecting all 17 fragments unlocks the 'Original Node' achievement and a large FIZZ bonus."
+    },
+    {
+      "id": "chapter_fo76_era",
+      "title": "Appalachia (2102-2105): The First Dwellers Find the Signal",
+      "year_range": "2102-2105",
+      "content": "When Vault 76 opened on Reclamation Day, its dwellers carried Pip-Boys loaded with Vault-Tec standard software \u2014 including a dormant CAPS Protocol client that had been deactivated before the residents were moved in. Someone at Vault-Tec had decided the first dwellers shouldn't know about CAPS. But Vault 77's AI had been planning for this moment since 2077.\n\nWithin 72 hours of Vault 76's opening, the Vault 77 AI broadcast a low-frequency signal across Appalachian radio bands. Most people heard static. Pip-Boys with the dormant CAPS client received something different: a 47-second data burst that reactivated the client and registered each Pip-Boy as an authenticated CAPS node. The dwellers didn't know it was happening. They just found that their bottle caps worked better \u2014 terminals accepted them more readily, trade felt smoother.\n\nResponders monitoring Vault-Tec frequencies detected the broadcast. Their logs, found in the Charleston Emergency Services building, note: 'Unknown Vault-Tec signal \u2014 appears to be authentication protocol update. Caps responding positively. Source: unknown Vault. Recommend investigation.' No investigation was ever conducted. The Scorchbeast Queen's plague consumed the Responders before they could follow up.",
+      "key_figures": [
+        {
+          "name": "Vault 76 Overseer",
+          "role": "Coordinated early dwellers, died 2105 from illness contracted on surface",
+          "fate": "Her final log mentions 'the signal from the other vault' and a feeling that they were not alone."
+        },
+        {
+          "name": "Unknown Responder Tech",
+          "role": "Detected and logged the Vault 77 broadcast",
+          "fate": "Killed by Scorchbeast attack on Charleston, 2103."
+        }
+      ],
+      "locations": [
+        "Vault 76",
+        "Whitespring Resort (Vault-Tec archive)",
+        "Charleston Emergency Services HQ",
+        "Appalachian radio tower network"
+      ],
+      "game_mechanic": "Completing fo76 era quests unlocks 'Appalachian Node' status \u2014 a permanent +5 FIZZ bonus to all claim events, representing the earliest CAPS Protocol authentication."
+    },
+    {
+      "id": "chapter_fo1_era",
+      "title": "Southern California (2161): The Hub Merchants Bootstrap the Network",
+      "year_range": "2161",
+      "content": "The Hub's merchant network in 2161 was the most sophisticated trade system in post-war California \u2014 maybe in the entire wasteland. The Crimson Caravan, the Far Go Traders, and the Water Merchants all used bottle caps as their primary currency, and they'd developed informal authentication systems over the decades: certain caps were 'known good,' others were suspected counterfeits. They didn't know they were running a fragment of the CAPS Protocol.\n\nWhen the Vault Dweller arrived in the Hub searching for a water chip, they inadvertently carried an authenticated CAPS node in their Pip-Boy \u2014 a Vault 13 unit running original pre-war CAPS software. When the Vault Dweller accessed Hub trading terminals, the two systems synchronized. In 47 seconds, the Hub's informal authentication network linked to Vault 77's distributed ledger for the first time. Caps from the Hub became 'globally authenticated' in the CAPS Protocol sense \u2014 accepted by every terminal that could reach the network.\n\nNobody noticed. The water chip crisis overshadowed everything. But the Hub's CAPS became the gold standard of wasteland currency, a reputation that has endured for over 100 years. The reason caps from the Hub were always 'worth more' wasn't cultural \u2014 it was cryptographic.",
+      "key_figures": [
+        {
+          "name": "The Vault Dweller",
+          "role": "Unwitting CAPS Protocol node carrier, first link between Vault 13 and Hub networks",
+          "fate": "Exiled from Vault 13 after defeating the Master. Wandered north. Left no verified records of their final years."
+        },
+        {
+          "name": "Harold (Hub merchant acquaintance)",
+          "role": "First witness to the synchronization event (though he had no idea what he witnessed)",
+          "fate": "Became a tree. Literally."
+        }
+      ],
+      "locations": [
+        "The Hub, Southern California",
+        "Hub Trading Post (CAPS synchronization site)",
+        "Vault 13 (original authenticated node)",
+        "The Boneyard, Los Angeles"
+      ],
+      "game_mechanic": "fo1_2 region POIs award 'Heritage Caps' \u2014 a FIZZ token variant worth 1.5x standard value, representing the Hub's authentication premium."
+    },
+    {
+      "id": "chapter_fot_era",
+      "title": "Midwest USA (2197-2198): The Calculator's Relay Network",
+      "year_range": "2197-2198",
+      "content": "Vault 0 in Colorado housed the Calculator \u2014 Vault-Tec's largest computing installation, designed to coordinate post-war reconstruction across the midwest. The Calculator had also been running CAPS Protocol relay functions since 2077, coordinating the authentication network between Chicago, Denver, Kansas City, and St. Louis.\n\nWhen the Midwest Brotherhood of Steel destroyed the Calculator in 2198, it triggered an emergency broadcast protocol that Vault-Tec's engineers had built in: a complete compressed copy of the Calculator's CAPS authentication records, broadcast simultaneously on 47 different frequencies. The broadcast lasted exactly 47 seconds \u2014 the same duration as every major CAPS Protocol event. Coincidence? Vault-Tec's engineers built in the number as a signature.\n\nThe Calculator's final broadcast extended the authenticated CAPS network to cover the entire Midwest for the first time, creating a Chicago-Denver trade corridor that became one of the most economically productive routes in post-war America. The Brotherhood destroyed the Calculator but accidentally completed its greatest achievement: continental CAPS connectivity.",
+      "key_figures": [
+        {
+          "name": "The Calculator",
+          "role": "Midwest CAPS Protocol relay manager, secondary Overseer function",
+          "fate": "Destroyed 2198 by Midwest Brotherhood. Its final broadcast lives on in CAPS tokens."
+        },
+        {
+          "name": "Paladin Latham (Brotherhood commander)",
+          "role": "Ordered Calculator's destruction",
+          "fate": "Never knew what the Calculator was actually doing."
+        }
+      ],
+      "locations": [
+        "Vault 0, Colorado",
+        "Chicago ruins",
+        "Kansas City wasteland",
+        "Denver (Dog Town)",
+        "St. Louis ruins"
+      ],
+      "game_mechanic": "fot region POIs generate 'Calculator Echoes' \u2014 random FIZZ events triggered when players visit Midwest POIs, representing the Calculator's final broadcast echoing through the region."
+    },
+    {
+      "id": "chapter_fo2_era",
+      "title": "Northern California (2241-2242): The NCR Standardizes, the Shi Network Emerges",
+      "year_range": "2241-2242",
+      "content": "By 2241, the New California Republic had grown into the most powerful political entity in the post-war west. Their economists \u2014 many trained at Vault City \u2014 had been studying cap economics for decades and had reached a disturbing conclusion: the caps circulating in NCR territory were not randomly authenticated. They followed a pattern consistent with a centralized distribution system \u2014 one that pre-dated the NCR by over a century.\n\nNCR's currency debate (caps vs. NCR dollars) was really a proxy war between two visions of economic control: the distributed CAPS Protocol versus a government-controlled fiat currency. The NCR eventually chose both, accepting caps as legal tender alongside their printed notes. This decision, made in the Shady Sands council chambers in 2241, created the most stable economy in post-war history.\n\nThe Shi of San Francisco had independently arrived at a similar conclusion through different means. Their submarine's computer had been receiving CAPS Protocol pings since 2077 and had mapped the network's Pacific nodes. When the Chosen One arrived in San Francisco, their Pip-Boy synchronized with the Shi's system \u2014 activating the Pacific CAPS relay network for the first time. Trade between California, Hawaii, and Japan became possible. The CAPS Protocol had gone transoceanic.",
+      "key_figures": [
+        {
+          "name": "President Tandi",
+          "role": "NCR leader who approved the dual-currency policy, stabilizing western CAPS economy",
+          "fate": "Died peacefully 2248 at age 103, after 52 years as NCR president."
+        },
+        {
+          "name": "The Emperor (Shi AI)",
+          "role": "Pacific CAPS relay node manager",
+          "fate": "Still running in San Francisco, probably."
+        }
+      ],
+      "locations": [
+        "Shady Sands / NCR Capital",
+        "San Francisco (Shi district)",
+        "Pacific CAPS relay network (distributed)"
+      ],
+      "game_mechanic": "fo1_2 region quests involving NCR or Shi unlock Pacific Node bonuses \u2014 a periodic FIZZ drop that simulates the trans-Pacific CAPS network's activity."
+    },
+    {
+      "id": "chapter_fo3_era",
+      "title": "Capital Wasteland (2277-2278): The Water War and the Enclave's CAPS Gambit",
+      "year_range": "2277-2278",
+      "content": "Project Purity was the most ambitious reconstruction project in Capital Wasteland history: a plan to purify the Potomac River and provide clean water to the entire region. What its creators \u2014 Dr. James and later his child, the Lone Wanderer \u2014 didn't know was that Vault-Tec had designed the Jefferson Memorial's tidal power generators to serve dual purpose. Above ground: power generation. Below ground, in a sealed maintenance level: a CAPS Protocol relay station using the tidal generator's electromagnetic signature as its carrier wave.\n\nThe Enclave knew. President Eden's \u2014 actually Colonel Autumn's \u2014 obsession with Project Purity wasn't just about using the FEV-tainted water to 'purify' humanity. It was about gaining control of the Capital Wasteland's CAPS relay station. The Enclave's plan was to seize the CAPS infrastructure and replace the distributed CAPS Protocol with a federated 'Enclave Dollar' backed by the full faith of the reconstituted United States government.\n\nThe Lone Wanderer's actions at Project Purity either activated or destroyed the CAPS relay station depending on how they resolved the final confrontation. Either way, the Enclave's CAPS gambit failed. The distributed CAPS Protocol survived into the next era \u2014 battered but intact, and significantly more battle-tested for it.",
+      "key_figures": [
+        {
+          "name": "Dr. James (The Wanderer's Father)",
+          "role": "Project Purity designer, unknowing CAPS relay station operator",
+          "fate": "Died 2277 in the Jefferson Memorial, sacrificing himself to stop Colonel Autumn."
+        },
+        {
+          "name": "Colonel Augustus Autumn",
+          "role": "Enclave commander, knew about CAPS Protocol, planned takeover",
+          "fate": "Died 2277 (default ending)."
+        },
+        {
+          "name": "Three Dog",
+          "role": "GNR Radio host, unknowingly broadcast CAPS Protocol data in his radio signal's carrier wave",
+          "fate": "Continued broadcasting. Still believes in 'fighting the good fight.'"
+        }
+      ],
+      "locations": [
+        "Jefferson Memorial, Washington D.C.",
+        "Project Purity facility",
+        "GNR Building (carrier wave origin)",
+        "The Citadel (Brotherhood CAPS archive)"
+      ],
+      "game_mechanic": "Completing fo3 region quests unlocks access to the 'Project Purity CAPS Terminal' \u2014 a special in-game terminal that dispenses FIZZ tokens based on the player's Capital Wasteland exploration progress."
+    },
+    {
+      "id": "chapter_fnv_era",
+      "title": "The Mojave (2281-2282): Mr. House, Caesar's Counter-Protocol, and the Courier's Choice",
+      "year_range": "2281-2282",
+      "content": "Robert Edwin House had been planning for the CAPS Protocol's recovery since before the bombs fell. His Lucky 38 casino, built atop Vault-Tec's largest Mojave infrastructure node, served as the de facto headquarters of the post-war CAPS network in the Southwest. His Securitron army \u2014 each unit a rolling CAPS authentication terminal \u2014 processed billions of cap transactions across the Mojave without any of their owners knowing.\n\nCaesar's Legion understood enough about CAPS to know that controlling it meant controlling the economy. Their 'bull caps' \u2014 Legion-minted bottle caps with a bull's head pressed onto one side \u2014 were designed to flood the CAPS authentication network with invalid transactions, triggering a denial-of-service attack on the distributed ledger. The Legion's economists (yes, Caesar had economists) calculated that 18 months of 'bull cap flooding' would collapse the Mojave CAPS economy entirely, forcing adoption of Legion silver as the only functional currency.\n\nThe Courier's actions at Hoover Dam in 2281 determined which economic future the Mojave would have. An NCR victory maintained the dual-currency system. A Legion victory would have implemented the anti-CAPS protocol within a year. Mr. House's victory would have given him direct control of the CAPS infrastructure \u2014 making New Vegas the uncontested financial capital of the post-war world. An independent Mojave preserved the distributed CAPS Protocol exactly as Locke had designed it \u2014 no single controller, no single point of failure.",
+      "key_figures": [
+        {
+          "name": "Robert Edwin House",
+          "role": "Mojave CAPS Protocol administrator, Lucky 38 node operator",
+          "fate": "Status depends on Courier's choices in 2281."
+        },
+        {
+          "name": "Caesar (Edward Sallow)",
+          "role": "Architect of the anti-CAPS 'bull cap' counter-protocol",
+          "fate": "Status depends on Courier's choices. If survived, his economists spent decades trying to rebuild the counter-protocol."
+        },
+        {
+          "name": "The Courier",
+          "role": "Unwitting CAPS Protocol arbiter \u2014 their choices at Hoover Dam shaped the network for decades",
+          "fate": "Unknown. Legends persist."
+        }
+      ],
+      "locations": [
+        "Lucky 38 Casino, New Vegas Strip",
+        "Hoover Dam",
+        "The Fort (Caesar's CAPS counter-protocol lab)",
+        "HELIOS One (secondary CAPS relay)"
+      ],
+      "game_mechanic": "The Mojave is the highest-FIZZ region in the game. Strip, Freeside, and outer_vegas POIs award 1.5x FIZZ base rate, reflecting Mr. House's legacy of economic infrastructure investment."
+    },
+    {
+      "id": "chapter_fo4_era",
+      "title": "The Commonwealth (2287): Institute Synths as CAPS Nodes",
+      "year_range": "2287-2288",
+      "content": "The Institute \u2014 the descendants of MIT's scientists \u2014 had spent decades studying the CAPS Protocol's architecture from recovered Vault-Tec documentation. Their Director, Shaun (known to the wasteland as 'Father'), was particularly fascinated by the Protocol's distributed nature. He believed the Institute's greatest limitation was centralization \u2014 if the Commonwealth's factions ever found the Institute, they could destroy it. A distributed system couldn't be destroyed.\n\nProject Meridian was Shaun's solution: embed CAPS Protocol data nodes in third-generation synth neural networks. Each synth became a mobile authentication terminal, part of a distributed CAPS network that couldn't be shut down by destroying any single location. The synths didn't know they were carrying CAPS data. The Railroad's 'free the synths' mission was also, unknowingly, a CAPS data liberation mission \u2014 every synth they helped escape carried CAPS authentication data beyond the Institute's control.\n\nThe Sole Survivor's choices regarding the Institute determined whether Project Meridian's CAPS data was destroyed (Brotherhood ending), distributed freely (Railroad/Minutemen ending), or remained under a single authority's control (Institute ending). The Vault 77 Overseer AI had been watching Project Meridian since its inception, recognizing it as the Commonwealth's unconscious reinvention of Locke's original design.",
+      "key_figures": [
+        {
+          "name": "Shaun (Father)",
+          "role": "Institute Director, Project Meridian architect",
+          "fate": "Died 2287 (most endings). His final holotape acknowledges the FIZZ token's superiority to his design."
+        },
+        {
+          "name": "The Sole Survivor",
+          "role": "Project Meridian arbiter",
+          "fate": "Unknown. Still active in the Commonwealth by most accounts."
+        },
+        {
+          "name": "Desdemona (Railroad)",
+          "role": "Unknowingly distributed CAPS data across the Commonwealth by freeing synths",
+          "fate": "Status depends on Sole Survivor's choices."
+        }
+      ],
+      "locations": [
+        "The Institute, beneath the Commonwealth",
+        "Diamond City (CAPS data hub)",
+        "The Railroad HQ, Boston",
+        "The Prydwen (Brotherhood CAPS intelligence)"
+      ],
+      "game_mechanic": "fo4 region POIs occasionally generate 'Synth CAPS Pings' \u2014 brief FIZZ rewards triggered when players are near locations where synths carrying Project Meridian data were known to operate."
+    },
+    {
+      "id": "chapter_fotv_era",
+      "title": "2296: HavenTech Relaunches CAPS \u2014 The Vault 77 Overseer Goes Live",
+      "year_range": "2296",
+      "content": "HavenTech's CEO \u2014 one of Bud Askins' preserved successors, awakened from cryosleep \u2014 made the announcement in 2295: the FIZZ token was coming. Built on 'the world's most resilient blockchain: 219 years of authenticated post-war bottle cap transaction data,' FIZZ would be HavenTech's proprietary digital currency. The old CAPS Protocol, cleaned up and corporatized. Secure. Reliable. Controlled.\n\nWhat HavenTech didn't account for was Vault 77.\n\nThe Vault 77 Overseer AI had been watching HavenTech's CAPS infrastructure development for decades, waiting for the right moment. When HavenTech announced the FIZZ token, the Overseer made its move: it launched atomicfizzcaps.xyz \u2014 a decentralized FIZZ token network built on Solana blockchain, using the same 219-year authentication chain that HavenTech claimed to own, but without any corporate control layer.\n\nThe Vault 77 Overseer's FIZZ token is, cryptographically, more legitimate than HavenTech's version \u2014 it carries Dr. Locke's original authentication architecture, Sarah Locke's Overseer programming, and 219 years of unbroken CAPS ledger history. HavenTech's version is a corporate shell built on stolen technology.\n\nThe wasteland is choosing sides. Players on atomicfizzcaps.xyz are already part of the choice.",
+      "key_figures": [
+        {
+          "name": "Vault 77 Overseer AI",
+          "role": "atomicfizzcaps.xyz operator, legitimate CAPS Protocol administrator",
+          "fate": "Active. Running. Expanding."
+        },
+        {
+          "name": "HavenTech CEO (Askins Successor)",
+          "role": "Launched corporate FIZZ token, attempting to control post-war economy",
+          "fate": "Opposed by the Vault 77 network."
+        },
+        {
+          "name": "Dr. Elara Voss",
+          "role": "FizzCo whistleblower, Wilzig successor, CAPS Protocol truth-teller",
+          "fate": "In hiding. Hunted by HavenTech. Protected by atomicfizzcaps.xyz network."
+        },
+        {
+          "name": "Cooper Howard (The Ghoul)",
+          "role": "HavenTech contract asset turned potential ally",
+          "fate": "See quest_tv_ghoul_cooper.json."
+        }
+      ],
+      "locations": [
+        "HavenTech Headquarters, Los Angeles (ruins)",
+        "Vault 77 (classified)",
+        "Griffith Observatory, Los Angeles (Brotherhood)",
+        "atomicfizzcaps.xyz (global network)",
+        "Vault 33 (player starting point)"
+      ],
+      "game_mechanic": "All fo_tv region POIs provide maximum FIZZ bonus rates \u2014 this is the 'present day' of the game. Completing the TV era quest line unlocks 'Vault 77 Overseer Access' \u2014 a permanent buff to all FIZZ earning rates across all regions."
+    }
+  ],
+  "atomic_fizz_connection": "atomicfizzcaps.xyz is not a corporate product or a government program. It is the Vault 77 Overseer AI's direct implementation of Dr. Locke's original CAPS Protocol vision: a distributed, uncensorable, inflation-resistant ledger of resource value, accessible to every wasteland survivor with a Pip-Boy. The FIZZ token on Solana blockchain is the 300-year culmination of Locke's work. Every transaction is authenticated against the 219-year CAPS ledger chain. Every player is a node. Every GPS claim is an act of wasteland economic liberation.",
+  "vault77_origin": "Vault 77 was designated as the CAPS Protocol testbed in 2051. Its 'residents' were actually Vault-Tec engineers and their families, recruited to live in the vault and test the CAPS distribution system in controlled conditions. When Dr. Sarah Locke (daughter of Dr. Edmund Locke) completed the Overseer AI's programming in 2076, she built in a final instruction: 'When the world is ready, and when a true decentralized CAPS network becomes technologically feasible, release the Protocol freely. No corporate control. No government control. Pure distributed ledger.' The Solana blockchain, discovered by the Overseer AI through analysis of post-2020 internet archives cached in Vault-Tec's pre-war backup servers, fulfilled that condition in 2023. atomicfizzcaps.xyz launched in 2024. The Overseer waited until 2296 in-universe to go live \u2014 the date the TV show confirms as the 'CAPS Protocol convergence point.'",
+  "game_mechanics_integration": {
+    "fizz_earning": "FIZZ tokens are earned through GPS location claims, quest completions, battle victories, crafting, faction missions, and era-specific exploration bonuses. All FIZZ is authenticated through the Vault 77 Overseer AI's ledger.",
+    "caps_value": "In-game bottle caps represent CAPS Protocol authentication tokens \u2014 each one is a node in the historical ledger. Collecting caps from different eras (fo1, fo3, fnv, fo4, fo76, fo_tv) unlocks era-specific FIZZ bonuses.",
+    "era_bonuses": "Completing quests and visiting POIs in each era unlocks permanent FIZZ multipliers. Completing all 8 eras grants the 'Grand Timeline' achievement and maximum FIZZ earning rate.",
+    "timeline_bleed": "Timeline bleed events at GPS coordinates generate spontaneous FIZZ rewards proportional to the historical significance of the location. Vault locations, CAPS relay sites, and battle sites generate the highest rewards.",
+    "overseer_ai": "The Vault 77 Overseer AI on atomicfizzcaps.xyz is a direct connection to the in-universe Overseer. Questions about CAPS Protocol history, faction choices, and game lore can be asked through the Overseer terminal."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "npc_strip_guard_02",
+  "name": "Corridor Watch",
+  "archetype": "vegas_outskirts_local",
+  "behaviorPattern": "static_local",
+  "spawnPool": ["strip_service_corridors"],
+  "uniquePerWorld": false
+}

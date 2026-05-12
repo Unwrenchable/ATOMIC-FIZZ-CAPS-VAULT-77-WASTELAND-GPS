@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime-shadow_009",
+  "type": "side_quest",
+  "name": "Hale Haler",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime-shadow_009_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime-shadow_009_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "region_story_01",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.73,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

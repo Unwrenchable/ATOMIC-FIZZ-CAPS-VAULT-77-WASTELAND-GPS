@@ -1,0 +1,16 @@
+{
+  "id": "npc_hiddenvalley_quiet_monk",
+  "name": "The Quiet Monk",
+  "faction": "wanderers",
+  "homeRegion": "unknown",
+  "currentRegion": "hidden-valley-east",
+  "role": "Meditative Hermit",
+  "personality": "Silent, peaceful, unsettlingly aware.",
+  "description": "Meditates in dust storms. Claims silence reveals truths noise hides.",
+  "questHooks": [
+    "Says he felt a hum beneath the sand.",
+    "Mentions a vault door he saw in a vision.",
+    "Claims someone is 'listening from below'."
+  ],
+  "poi": "hidden_valley_east_dust_circle"
+}

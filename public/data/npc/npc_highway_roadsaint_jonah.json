@@ -1,0 +1,16 @@
+{
+  "id": "npc_highway_roadsaint_jonah",
+  "name": "Road-Saint Jonah",
+  "faction": "caravan_folk",
+  "homeRegion": "old-highway-route",
+  "currentRegion": "old-highway-route",
+  "role": "Caravan Blesser",
+  "personality": "Warm, eccentric, ritualistic.",
+  "description": "Blesses caravans with bottle caps. Says the road remembers kindness and repays it.",
+  "questHooks": [
+    "Mentions a traveler who walked the highway humming.",
+    "Says a cap he blessed rolled uphill.",
+    "Knows of a caravan that vanished without a trace."
+  ],
+  "poi": "old_highway_route_checkpoint"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_capital_wasteland_fractured_014",
+  "type": "side_quest",
+  "name": "Ash Dax",
+  "region": "capital_wasteland",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_capital_wasteland_fractured_014_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_fractured_014_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

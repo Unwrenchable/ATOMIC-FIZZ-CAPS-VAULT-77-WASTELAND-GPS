@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_capital_wasteland_echo_011",
+  "type": "side_quest",
+  "name": "Lira Kael",
+  "region": "capital_wasteland",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_capital_wasteland_echo_011_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_echo_011_loot",
+  "questHooks": [
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.86,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

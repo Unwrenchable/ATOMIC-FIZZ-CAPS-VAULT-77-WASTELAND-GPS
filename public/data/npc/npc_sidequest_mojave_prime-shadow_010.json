@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_mojave_prime-shadow_010",
+  "type": "side_quest",
+  "name": "Ren Sylas",
+  "region": "mojave",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_mojave_prime-shadow_010_dialog",
+  "lootPool": "npc_sidequest_mojave_prime-shadow_010_loot",
+  "questHooks": [
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.35,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

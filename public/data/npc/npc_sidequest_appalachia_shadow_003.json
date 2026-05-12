@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_appalachia_shadow_003",
+  "type": "side_quest",
+  "name": "Lio Nina",
+  "region": "appalachia",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_appalachia_shadow_003_dialog",
+  "lootPool": "npc_sidequest_appalachia_shadow_003_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "region_story_02",
+    "vegas_rumor_01"
+  ],
+  "anomalyAwareness": 0.76,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

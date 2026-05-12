@@ -1,0 +1,49 @@
+{
+  "id": "east_africa_medicine_network",
+  "name": "The Medicine Network",
+  "type": "global",
+  "region": "East_Africa",
+  "npc_giver": "global_nairobi_iron_mother",
+  "description": "Iron Mother has been building a network of medical caches across East Africa for emergency use. Three cache points need to be established and stocked before the next raider season. Physical on-site work required.",
+  "gps_requirement": {
+    "region": "East Africa",
+    "real_lat": -3.0000,
+    "real_lng": 38.0000,
+    "radius_km": 500
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Establish Cache Point Alpha — Mombasa Coast",
+      "description": "Travel to the old Mombasa coast and establish the first medical cache point. Iron Mother's supply crate will need to be secured in a location accessible to the nearby settlement.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -4.0435, "lng": 39.6682},
+      "radius_m": 1000,
+      "actions": ["set_flag:cache_alpha_established", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Establish Cache Point Beta — Dar es Salaam Ruins",
+      "description": "Head south along the coast to the Dar es Salaam ruins. The second cache must be hidden but findable by anyone using Iron Mother's distribution codes.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -6.7924, "lng": 39.2083},
+      "radius_m": 1000,
+      "actions": ["set_flag:cache_beta_established", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Establish Cache Point Gamma — Kilimanjaro Foothills",
+      "description": "The third cache is inland, in the foothills of old Kilimanjaro. The altitude makes it secure from flooding and raiders who don't know the mountain routes.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -3.0674, "lng": 37.3556},
+      "radius_m": 2000,
+      "actions": ["complete_quest:true", "set_flag:medicine_network_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 350,
+    "caps": 150,
+    "fizz": 25,
+    "items": ["item_iron_mother_network_token"]
+  }
+}

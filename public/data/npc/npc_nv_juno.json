@@ -1,0 +1,14 @@
+{
+  "id": "npc_nv_juno",
+  "name": "Juno the Prophet",
+  "region": "Freeside",
+  "type": "Street Prophet",
+  "dialog": [
+    "Vegas is the center. Everything bends toward it.",
+    "I saw a storm in the Divide… and it saw me back.",
+    "The CapChain hums beneath our feet."
+  ],
+  "quests": ["quest_nv_convergence_signs"],
+  "faction": "Independent",
+  "notes": "First NPC to explicitly reference the Convergence."
+}

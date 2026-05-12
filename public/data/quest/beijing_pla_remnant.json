@@ -1,0 +1,45 @@
+{
+  "id": "beijing_pla_remnant",
+  "name": "Last Orders",
+  "type": "global",
+  "region": "Beijing_China",
+  "npc_giver": "global_beijing_ghost_protocol",
+  "description": "A PLA remnant unit has been discovered operating in the Beijing ruins, following 200-year-old orders they've never been able to stand down. Ghost Protocol needs you to go in and find a way to stand them down peacefully — or decisively.",
+  "gps_requirement": {
+    "region": "Beijing, China",
+    "real_lat": 39.9042,
+    "real_lng": 116.4074,
+    "radius_km": 80
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Enter the Beijing Ruins",
+      "description": "Navigate into the Beijing ruins where Ghost Protocol has located the PLA remnant unit's operating perimeter. Approach carefully — they treat anyone in their zone as hostile by default.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 39.9042, "lng": 116.4074},
+      "radius_m": 1000,
+      "actions": ["set_flag:beijing_ruins_entered", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Locate the Remnant Unit",
+      "description": "Find the PLA remnant unit's command post within the ruins. Ghost Protocol believes their commanding officer — or whoever is acting in that role — is the key to standing them down.",
+      "trigger": "player_reaches_area:pla_command_post",
+      "actions": ["set_flag:pla_unit_located", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Negotiate or Confront",
+      "description": "Present the case for standing down. The remnant unit has been following orders for two hundred years — show them the orders are no longer valid, or stop them from continuing to act on them.",
+      "trigger": "player_complete_objective:pla_standdown",
+      "actions": ["spawn:item_pla_remnant_unit_orders", "complete_quest:true", "set_flag:pla_remnant_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 450,
+    "caps": 200,
+    "fizz": 35,
+    "items": ["item_pla_remnant_unit_orders"]
+  }
+}

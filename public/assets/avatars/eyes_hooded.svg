@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="lidShadow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9a8a7a" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#9a8a7a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M83 116c0-4 7-8 17-8s17 4 17 8c0 4-7 8-17 8s-17-4-17-8z" fill="#ffffff"/>
+  <path d="M139 116c0-4 7-8 17-8s17 4 17 8c0 4-7 8-17 8s-17-4-17-8z" fill="#ffffff"/>
+  <ellipse cx="100" cy="110" rx="17" ry="8" fill="url(#lidShadow)"/>
+  <ellipse cx="156" cy="110" rx="17" ry="8" fill="url(#lidShadow)"/>
+  <path d="M83 113c3-4 8-7 17-7s14 3 17 7" fill="none" stroke="#6a5a4a" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M139 113c3-4 8-7 17-7s14 3 17 7" fill="none" stroke="#6a5a4a" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="100" cy="116" r="6" fill="#3a2a1a"/>
+  <circle cx="156" cy="116" r="6" fill="#3a2a1a"/>
+  <circle cx="100" cy="116" r="2.5" fill="#000000"/>
+  <circle cx="156" cy="116" r="2.5" fill="#000000"/>
+  <circle cx="102" cy="114" r="1.5" fill="#ffffff" opacity="0.9"/>
+  <circle cx="158" cy="114" r="1.5" fill="#ffffff" opacity="0.9"/>
+</svg>

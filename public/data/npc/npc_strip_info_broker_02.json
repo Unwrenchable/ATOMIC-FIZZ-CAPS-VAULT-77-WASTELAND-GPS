@@ -1,0 +1,11 @@
+{
+  "id": "npc_strip_info_broker_02",
+  "name": "Ear-to-the-Ground",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "You want rumors? I got rumors.",
+    "Something’s shifting under the Strip. Literally."
+  ],
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": true
+}

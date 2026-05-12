@@ -1,0 +1,16 @@
+{
+  "id": "npc_188_drifter_kael_rowan",
+  "name": "Kael Rowan",
+  "faction": "wanderers",
+  "homeRegion": "unknown",
+  "currentRegion": "mojave",
+  "role": "Drifter",
+  "personality": "Quiet, observant, keeps to himself.",
+  "description": "Kael passes through 188 often but never stays long. He watches the road like he’s waiting for someone.",
+  "questHooks": [
+    "Claims the Humming One can be heard from the overpass.",
+    "Carries a strange cap he refuses to trade.",
+    "Says the quarry is 'waking up'."
+  ],
+  "poi": "188_trading_post_fnv"
+}

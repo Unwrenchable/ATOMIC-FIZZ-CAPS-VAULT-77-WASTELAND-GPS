@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_new_reno_fractured_004",
+  "type": "side_quest",
+  "name": "Ren Rook",
+  "region": "new_reno",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_new_reno_fractured_004_dialog",
+  "lootPool": "npc_sidequest_new_reno_fractured_004_loot",
+  "questHooks": [
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.4,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

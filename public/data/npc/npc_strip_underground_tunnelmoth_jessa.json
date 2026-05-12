@@ -1,0 +1,16 @@
+{
+  "id": "npc_strip_underground_tunnelmoth_jessa",
+  "name": "Tunnel-Moth Jessa",
+  "faction": "underground_scavs",
+  "homeRegion": "strip-underground",
+  "currentRegion": "strip-underground",
+  "role": "Scavenger",
+  "personality": "Skittish, gentle, oddly wise.",
+  "description": "Lives in the dark and collects glowing insects. Says they warn her when danger comes.",
+  "questHooks": [
+    "Says the tunnels 'shift' at night.",
+    "Claims a glowing insect led her to a hidden vault door.",
+    "Mentions hearing humming beneath the power lines."
+  ],
+  "poi": "strip_underground_lower_tunnels"
+}

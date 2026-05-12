@@ -1,0 +1,55 @@
+{
+  "id": "dialog_jax_body",
+  "npc": "Jax — The Empty Shell",
+  "portrait": "jax_body",
+  "title": "What Was Left Behind",
+  "description": "A ghoul that moves differently from the others. Not feral, not cognizant — something in between. It pauses in wrong places. It turns toward relay towers like a compass. There is nothing readable in its eyes.",
+  "backstory": "What remains of Jax Harlan's physical form after Project J-77 extracted his consciousness. The body survived the procedure. Higher cognitive function did not. It has been running on brainstem instinct and forty-seven years of muscle memory — moving toward familiar places, flinching at familiar voices, reaching for a version of itself that is no longer there to receive the signal.",
+  "mood": "hollow",
+  "personality": [
+    "Broken",
+    "Instinctual",
+    "Lost"
+  ],
+  "entries": {
+    "body_wander_01": {
+      "type": "ambient",
+      "text": "It's moving again. Slow. Northeast, toward the relay tower line. Like it remembers where it's supposed to be, even if it can't remember why."
+    },
+    "body_react_voice_01": {
+      "type": "reaction",
+      "trigger": "jax_signal_active",
+      "text": "The ghoul stops.\n\nSomething in the Pocket-Boy's static resolves — a voice, partial, broken.\n\nThe body turns toward it.\n\nOne hand raises, slightly, like the beginning of a gesture. Then lowers again."
+    },
+    "body_react_voice_02": {
+      "type": "reaction",
+      "trigger": "overseer_signal_active",
+      "text": "The voice from the terminal reaches it.\n\nThe ghoul's head tilts. Just slightly. The way someone tilts their head when they hear their name in a crowd and aren't sure they heard it right."
+    },
+    "body_react_lena": {
+      "type": "reaction",
+      "trigger": "lena_present",
+      "text": "Lena says his name quietly.\n\nThe body does not respond with recognition. But it does not move away, either.\n\nIt stays."
+    },
+    "body_calm_01": {
+      "type": "ambient",
+      "text": "It sits against the relay tower pylon like something that belongs there. For a moment it looks almost at rest."
+    },
+    "body_sync_warning": {
+      "type": "system_warning",
+      "text": "Neural resonance detected. The body is responding to the signal. Proceed carefully — the outcome is unknown."
+    },
+    "body_ending_peace": {
+      "type": "ending",
+      "text": "The body stills. No distress. No final movement toward the tower. Something that was running for forty-seven years simply stops.\n\nThe signal goes quiet too."
+    },
+    "body_ending_wander": {
+      "type": "ending",
+      "text": "It keeps walking. North, as it always does. The body that was Jax Harlan disappears into the wasteland, moving toward something it will never find.\n\nThe mind stays in the towers.\n\nTwo halves, permanently divided."
+    },
+    "body_ending_sync": {
+      "type": "ending",
+      "text": "The body shudders.\n\nThe signal from the relay tower spikes.\n\nAnd then — something that should not be possible begins to happen.\n\nThe eyes focus."
+    }
+  }
+}

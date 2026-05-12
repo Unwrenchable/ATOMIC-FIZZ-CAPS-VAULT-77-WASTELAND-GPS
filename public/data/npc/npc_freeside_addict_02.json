@@ -1,0 +1,11 @@
+{
+  "id": "npc_freeside_addict_02",
+  "name": "Lost Addict",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "I walked down this street twice… but it wasn’t the same street.",
+    "Time’s broken here."
+  ],
+  "spawnPool": ["freeside_south"],
+  "uniquePerWorld": false
+}

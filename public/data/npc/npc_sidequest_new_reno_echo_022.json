@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_new_reno_echo_022",
+  "type": "side_quest",
+  "name": "Lio Kael",
+  "region": "new_reno",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_new_reno_echo_022_dialog",
+  "lootPool": "npc_sidequest_new_reno_echo_022_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "fizzcaps_clue_03",
+    "timeline_warning_01"
+  ],
+  "anomalyAwareness": 0.49,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

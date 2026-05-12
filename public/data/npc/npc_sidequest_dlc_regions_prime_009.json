@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime_009",
+  "type": "side_quest",
+  "name": "Joren Lio",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_dlc_regions_prime_009_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime_009_loot",
+  "questHooks": [
+    "vegas_rumor_01"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

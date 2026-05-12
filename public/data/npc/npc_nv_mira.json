@@ -1,0 +1,14 @@
+{
+  "id": "npc_nv_mira",
+  "name": "Mira the Mirage",
+  "region": "Lucky 38",
+  "type": "Lounge Host",
+  "dialog": [
+    "Everyone comes through the Lucky 38 eventually.",
+    "The Pitt’s smog? Smells like money to me.",
+    "You’ve got that ‘Vault 77 glow’. Don’t worry, it’s cute."
+  ],
+  "quests": ["side_nv_lucky38gossip"],
+  "faction": "Lucky 38",
+  "notes": "Knows gossip from all regions; hints at Convergence."
+}

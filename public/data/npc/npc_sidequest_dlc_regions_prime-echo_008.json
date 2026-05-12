@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime-echo_008",
+  "type": "side_quest",
+  "name": "Kade Sylas",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_dlc_regions_prime-echo_008_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime-echo_008_loot",
+  "questHooks": [
+    "region_story_02",
+    "vegas_rumor_03",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.51,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

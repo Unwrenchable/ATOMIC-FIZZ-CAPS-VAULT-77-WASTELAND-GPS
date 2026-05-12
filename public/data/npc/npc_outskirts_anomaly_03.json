@@ -1,0 +1,6 @@
+{
+  "id": "npc_outskirts_anomaly_03",
+  "archetype": "timeline_echo_wanderer",
+  "spawnPool": ["freeside_border"],
+  "timelineVariants": ["fractured"]
+}

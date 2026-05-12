@@ -1,0 +1,14 @@
+{
+  "id": "repair_kit",
+  "name": "Repair Kit",
+  "ingredients": [
+    { "id": "scrap_metal", "qty": 5 },
+    { "id": "cloth", "qty": 2 }
+  ],
+  "tokenCost": 0.05,
+  "output": { "id": "repair_kit", "qty": 1 },
+  "cooldownSeconds": 60,
+  "requiresLevel": 1,
+  "maxPerDay": 10,
+  "sourceFile": "recipes.json"
+}

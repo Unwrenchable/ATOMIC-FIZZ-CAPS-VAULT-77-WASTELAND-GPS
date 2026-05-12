@@ -1,0 +1,242 @@
+[
+  {
+    "id": "bos_lost_hills",
+    "name": "Brotherhood of Steel — Lost Hills",
+    "shortName": "BoS West",
+    "description": "The original Brotherhood chapter from California. Isolationist, tech‑focused, and deeply traditional.",
+    "alignment": "Lawful Neutral",
+    "color": "#3b6ea5",
+    "emblem": "Sword & Gears",
+    "basePOIs": ["Lost Hills Bunker", "Shady Sands Ruins"],
+    "leader": "Elder Maxson II",
+    "reputationLevels": ["Vilified", "Hated", "Neutral", "Accepted", "Liked", "Idolized"],
+    "perks": {
+      "Liked": "Energy weapon access",
+      "Idolized": "T-51b Power Armor variant"
+    },
+    "enemies": ["enclave_west", "raiders_cutthroats"],
+    "allies": ["followers_apocalypse"]
+  },
+  {
+    "id": "bos_lyons",
+    "name": "Brotherhood of Steel — Lyons Chapter",
+    "shortName": "BoS DC",
+    "description": "The humanitarian East Coast chapter that broke from traditional doctrine to protect the Capital Wasteland.",
+    "alignment": "Good",
+    "color": "#4f8cc9",
+    "emblem": "Sword & Gears",
+    "basePOIs": ["Citadel", "GNR Plaza"],
+    "leader": "Elder Lyons",
+    "reputationLevels": ["Vilified", "Shunned", "Neutral", "Accepted", "Liked", "Idolized"],
+    "perks": {
+      "Liked": "Laser rifle proficiency",
+      "Idolized": "Lyon's Pride support"
+    },
+    "enemies": ["supermutants_dc", "enclave_east"],
+    "allies": ["reilly_rangers", "citadel_scientists"]
+  },
+  {
+    "id": "bos_maxson",
+    "name": "Brotherhood of Steel — Maxson Chapter",
+    "shortName": "BoS East",
+    "description": "Militaristic, expansionist Brotherhood chapter from the Commonwealth. Seeks total technological control.",
+    "alignment": "Lawful",
+    "color": "#2f4f6f",
+    "emblem": "Sword & Gears",
+    "basePOIs": ["Prydwen", "Cambridge Police Station"],
+    "leader": "Elder Maxson",
+    "reputationLevels": ["Vilified", "Hated", "Neutral", "Accepted", "Liked", "Idolized"],
+    "perks": {
+      "Liked": "Vertibird transport",
+      "Idolized": "Prototype power armor access"
+    },
+    "enemies": ["institute", "railroad", "supermutants_commonwealth"],
+    "allies": ["gunners"]
+  },
+  {
+    "id": "enclave_west",
+    "name": "Enclave — West Coast",
+    "shortName": "Enclave West",
+    "description": "Remnants of the pre‑war U.S. government. Ruthless, technologically advanced, and obsessed with purity.",
+    "alignment": "Lawful Evil",
+    "color": "#000080",
+    "emblem": "Eagle",
+    "basePOIs": ["Navarro", "Oil Rig Ruins"],
+    "leader": "President Richardson (AI Echo)",
+    "reputationLevels": ["Vilified", "Hated", "Neutral", "Accepted"],
+    "perks": {
+      "Accepted": "Access to advanced energy weapons"
+    },
+    "enemies": ["bos_lost_hills", "ncr"],
+    "allies": []
+  },
+  {
+    "id": "enclave_east",
+    "name": "Enclave — East Coast",
+    "shortName": "Enclave East",
+    "description": "The Raven Rock Enclave cell. Militaristic, authoritarian, and heavily armed.",
+    "alignment": "Evil",
+    "color": "#001f3f",
+    "emblem": "Eagle",
+    "basePOIs": ["Raven Rock", "Adams AFB"],
+    "leader": "Colonel Autumn (Echo)",
+    "reputationLevels": ["Vilified", "Hated", "Neutral"],
+    "perks": {},
+    "enemies": ["bos_lyons", "reilly_rangers"],
+    "allies": []
+  },
+  {
+    "id": "institute",
+    "name": "The Institute",
+    "shortName": "Institute",
+    "description": "Secretive underground technocracy beneath the Commonwealth. Masters of robotics and synthetic life.",
+    "alignment": "Neutral",
+    "color": "#ffffff",
+    "emblem": "CIT Seal",
+    "basePOIs": ["Institute HQ", "CIT Ruins"],
+    "leader": "Father",
+    "reputationLevels": ["Vilified", "Shunned", "Neutral", "Accepted", "Allied"],
+    "perks": {
+      "Accepted": "Synth relay access",
+      "Allied": "Gen-3 synth companion"
+    },
+    "enemies": ["railroad", "bos_maxson"],
+    "allies": ["gunners"]
+  },
+  {
+    "id": "railroad",
+    "name": "The Railroad",
+    "shortName": "Railroad",
+    "description": "Underground liberation network dedicated to freeing synths from the Institute.",
+    "alignment": "Good",
+    "color": "#c0c0c0",
+    "emblem": "Rail Spike",
+    "basePOIs": ["Old North Church", "Safehouses"],
+    "leader": "Desdemona",
+    "reputationLevels": ["Vilified", "Neutral", "Accepted", "Allied"],
+    "perks": {
+      "Allied": "Ballistic weave"
+    },
+    "enemies": ["institute", "bos_maxson"],
+    "allies": ["minutemen"]
+  },
+  {
+    "id": "minutemen",
+    "name": "Commonwealth Minutemen",
+    "shortName": "Minutemen",
+    "description": "Decentralized militia dedicated to protecting settlements across the Commonwealth.",
+    "alignment": "Good",
+    "color": "#6495ed",
+    "emblem": "Militia Hat",
+    "basePOIs": ["Castle", "Sanctuary Hills"],
+    "leader": "General (Player Echo)",
+    "reputationLevels": ["Neutral", "Accepted", "Liked", "Idolized"],
+    "perks": {
+      "Liked": "Artillery support",
+      "Idolized": "Settlement network bonus"
+    },
+    "enemies": ["gunners"],
+    "allies": ["railroad"]
+  },
+  {
+    "id": "responders",
+    "name": "Responders",
+    "shortName": "Responders",
+    "description": "Volunteer emergency service organization from Appalachia. Focused on rescue, medicine, and rebuilding.",
+    "alignment": "Good",
+    "color": "#1e90ff",
+    "emblem": "Responder Shield",
+    "basePOIs": ["Charleston Fire Department", "Morgantown Airport"],
+    "leader": "Responder Leadership Council (Echo)",
+    "reputationLevels": ["Neutral", "Accepted", "Liked", "Idolized"],
+    "perks": {
+      "Liked": "Medical supply access",
+      "Idolized": "Responder gear"
+    },
+    "enemies": ["blood_eagles"],
+    "allies": ["free_states"]
+  },
+  {
+    "id": "free_states",
+    "name": "Free States",
+    "shortName": "Free States",
+    "description": "Survivalist faction from Appalachia. Anti‑government, pro‑independence, bunker‑based.",
+    "alignment": "Neutral",
+    "color": "#556b2f",
+    "emblem": "Bunker Door",
+    "basePOIs": ["Harper's Ferry", "Free States Bunkers"],
+    "leader": "Abbie (Echo)",
+    "reputationLevels": ["Neutral", "Accepted", "Liked"],
+    "perks": {
+      "Liked": "Survival bonuses"
+    },
+    "enemies": ["raiders_cutthroats"],
+    "allies": ["responders"]
+  },
+  {
+    "id": "raiders_cutthroats",
+    "name": "Raiders — Cutthroats",
+    "shortName": "Cutthroats",
+    "description": "One of Appalachia’s brutal raider clans. Violent, chaotic, and territorial.",
+    "alignment": "Chaotic Evil",
+    "color": "#8b0000",
+    "emblem": "Skull",
+    "basePOIs": ["Pleasant Valley Ski Resort"],
+    "leader": "Duchess (Echo)",
+    "reputationLevels": ["Vilified", "Hated"],
+    "perks": {},
+    "enemies": ["responders", "free_states"],
+    "allies": []
+  },
+  {
+    "id": "shi",
+    "name": "Shi",
+    "shortName": "Shi",
+    "description": "Technologically advanced San Francisco faction descended from pre‑war Chinese scientists.",
+    "alignment": "Neutral",
+    "color": "#ff0000",
+    "emblem": "Dragon",
+    "basePOIs": ["San Francisco Ruins"],
+    "leader": "Shi Emperor (Echo)",
+    "reputationLevels": ["Neutral", "Accepted", "Liked"],
+    "perks": {
+      "Liked": "Shi energy weapons"
+    },
+    "enemies": ["enclave_west"],
+    "allies": ["vault_city"]
+  },
+  {
+    "id": "vault_city",
+    "name": "Vault City",
+    "shortName": "Vault City",
+    "description": "Hyper‑bureaucratic, isolationist city built around Vault 8. Advanced medicine and tech.",
+    "alignment": "Lawful Neutral",
+    "color": "#32cd32",
+    "emblem": "Vault Door",
+    "basePOIs": ["Vault City"],
+    "leader": "First Citizen (Echo)",
+    "reputationLevels": ["Vilified", "Neutral", "Accepted"],
+    "perks": {
+      "Accepted": "Medical bonuses"
+    },
+    "enemies": ["new_reno"],
+    "allies": ["shi"]
+  },
+  {
+    "id": "new_reno",
+    "name": "New Reno Families",
+    "shortName": "New Reno",
+    "description": "Crime families controlling the ruins of Reno. Drugs, gambling, and corruption.",
+    "alignment": "Chaotic",
+    "color": "#daa520",
+    "emblem": "Playing Cards",
+    "basePOIs": ["New Reno"],
+    "leader": "Bishop Family (Echo)",
+    "reputationLevels": ["Vilified", "Neutral", "Accepted"],
+    "perks": {
+      "Accepted": "Casino bonuses"
+    },
+    "enemies": ["vault_city"],
+    "allies": []
+  }
+]

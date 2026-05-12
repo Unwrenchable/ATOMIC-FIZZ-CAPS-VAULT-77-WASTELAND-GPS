@@ -1,0 +1,16 @@
+{
+  "id": "npc_sloan_supply_runner_milo_grant",
+  "name": "Milo Grant",
+  "faction": "sloan_miners",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Supply Runner",
+  "personality": "Fast-talking, nervous, always ready to bolt.",
+  "description": "Milo runs supplies between Sloan and the 188 Trading Post. He’s had too many close calls with deathclaws.",
+  "questHooks": [
+    "Needs an escort through a dangerous stretch of road.",
+    "Saw a deathclaw carrying something metallic.",
+    "Claims he found a warm egg near the quarry entrance."
+  ],
+  "poi": "sloan_station_fnv"
+}

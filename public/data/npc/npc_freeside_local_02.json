@@ -1,0 +1,6 @@
+{
+  "id": "npc_freeside_local_02",
+  "archetype": "vegas_outskirts_local",
+  "spawnPool": ["freeside_south"],
+  "uniquePerWorld": false
+}

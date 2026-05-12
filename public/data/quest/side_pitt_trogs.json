@@ -1,0 +1,11 @@
+{
+  "id": "side_pitt_trogs",
+  "name": "Trog Behavior",
+  "type": "side",
+  "poIs": ["Smog Tunnels", "Trog Nest"],
+  "description": "Study Trog behavior patterns.",
+  "objectives": [
+    "Observe Trog nest",
+    "Report findings to the Trog Whisperer"
+  ]
+}

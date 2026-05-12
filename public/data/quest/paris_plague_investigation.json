@@ -1,0 +1,52 @@
+{
+  "id": "paris_plague_investigation",
+  "name": "The Pasteur Protocol",
+  "type": "global",
+  "region": "Paris_Ruins_France",
+  "npc_giver": "global_paris_dr_beaumont",
+  "description": "Dr. Beaumont has traced a radiation-laced plague moving through surviving communities to a pre-war pharmaceutical laboratory near what used to be Rue de Rivoli. Someone synthesized it. Someone released it deliberately.",
+  "gps_requirement": {
+    "region": "Paris, France",
+    "real_lat": 48.8606,
+    "real_lng": 2.3376,
+    "radius_km": 50
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Reach the Rue de Rivoli Laboratory",
+      "description": "Navigate the Paris ruins to the pre-war pharmaceutical laboratory near what was once Rue de Rivoli. Radiation levels in the area are elevated.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 48.8606, "lng": 2.3376},
+      "radius_m": 500,
+      "actions": ["set_flag:paris_lab_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Investigate the Laboratory",
+      "description": "Search the abandoned pharmaceutical lab for evidence of the plague's synthesis. Dr. Beaumont needs production records, culture logs, and any documentation of who authorized the work.",
+      "trigger": "player_search_area",
+      "actions": ["spawn:item_paris_lab_production_logs", "spawn:item_pathogen_sample_sealed", "set_flag:paris_lab_investigated", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Identify the Pathogen Origin",
+      "description": "The production logs point to a specific project designation. Cross-reference with Dr. Beaumont's research notes to identify who authorized the synthesis.",
+      "trigger": "player_use:item_paris_lab_production_logs",
+      "actions": ["set_flag:paris_origin_identified", "unlock_stage:4"]
+    },
+    {
+      "id": 4,
+      "name": "Confront the Source",
+      "description": "The origin points to someone still operating in the Paris ruins. Find them and neutralize the remaining plague stockpile.",
+      "trigger": "player_confront_target",
+      "actions": ["spawn:item_plague_antidote_formula", "complete_quest:true", "set_flag:pasteur_protocol_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 450,
+    "caps": 200,
+    "fizz": 35,
+    "items": ["item_plague_antidote_formula"]
+  }
+}

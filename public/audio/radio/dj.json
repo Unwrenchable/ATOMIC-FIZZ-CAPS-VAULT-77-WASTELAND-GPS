@@ -1,0 +1,14 @@
+{
+  "name": "Fizzmaster Rex",
+  "voice": "smooth, warm, charismatic, slightly mysterious",
+  "clips": {
+    "intros": [
+      "/audio/radio/dj/intro_1.mp3",
+      "/audio/radio/dj/intro_2.mp3"
+    ],
+    "outros": [
+      "/audio/radio/dj/outro_1.mp3",
+      "/audio/radio/dj/outro_2.mp3"
+    ]
+  }
+}

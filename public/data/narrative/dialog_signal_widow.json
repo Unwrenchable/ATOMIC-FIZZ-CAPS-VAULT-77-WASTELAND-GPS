@@ -1,0 +1,95 @@
+{
+  "id": "dialog_signal_widow",
+  "npc": "The Signal Widow",
+  "portrait": "signal_widow",
+  "title": "The Listener",
+  "description": "She sits at the edge of the ridge with a broken radio in her lap, her back to the world, her face to the horizon. The radio hasn't worked in years. She turns the dial anyway. The wasteland wind moves through her hair and she listens to something you cannot hear.",
+  "backstory": "No one knows her name. The traders who pass Mojave Ridge call her the Signal Widow and leave her alone, which is what she seems to want. She came here twelve years ago and hasn't left. She hears things in the frequencies — fragments, echoes, half-words — that she can't explain and can't stop listening for. She doesn't know what she hears is the distributed signal of Jax Voss bleeding through the relay tower network. She only knows that whatever it is, it sounds like someone who is very far away and very much trying to come home.",
+  "intro": {
+    "id": "signal_widow_intro",
+    "conditions": ["!flag:met_signal_widow"],
+    "set_flags": ["met_signal_widow"],
+    "video_speech": "Shh. I almost had it. It comes through clearest in the evening. Just... sit a moment. Please.",
+    "text": "She holds up one hand without turning around.<br><br>\"Shh.\"<br><br>A long moment passes. The wind moves. Something in the broken radio crackles — a sound that shouldn't be possible, from a radio that can't work.<br><br>She exhales slowly, then turns to look at you. Her eyes are tired in the way of someone who hasn't been sleeping because they're afraid to miss something.<br><br>\"It fades when people talk. Sit a moment. It might come back.\"",
+    "responses": [
+      {"text": "[Question] What exactly are you listening for?", "tone": "question", "next": "widow_what_she_hears"},
+      {"text": "[Friendly] I can wait. Take all the time you need.", "tone": "kind", "next": "widow_gentle_response"},
+      {"text": "[Sarcastic] A broken radio picking up signals. That's... new.", "tone": "sarcastic", "next": "widow_sarcastic_response"},
+      {"text": "[Direct] I've heard about the signal you pick up. I think I know what it is.", "tone": "direct", "next": "widow_quest_frequency"}
+    ]
+  },
+  "knowledge_nodes": [
+    {
+      "id": "widow_what_she_hears",
+      "conditions": ["!flag:widow_explained_signal"],
+      "text": "She turns the dead dial. The crackle returns, faint and impossible.<br><br>\"It's not words, exactly. More like... the shape of words. The feeling of a voice trying to reach something.\"<br><br>She looks at the dial.<br><br>\"It started faint. A year ago it was stronger. Lately it's been coming in almost clear, and then breaking apart again.\"<br><br>\"I think someone is looking for something. I think they've been looking for a very long time.\"",
+      "set_flags": ["widow_explained_signal"]
+    },
+    {
+      "id": "widow_vault77_knowledge",
+      "conditions": ["flag:met_jax", "!flag:widow_vault77_mentioned"],
+      "text": "She goes very still.<br><br>\"Vault 77.\" She says it like a frequency she's tried to tune before.<br><br>\"The signal gets stronger when the wind comes from the northeast. And the relay towers are northeast.\"<br><br>Her hands tighten on the radio. \"You're telling me... the signal is a person?\"",
+      "set_flags": ["widow_vault77_mentioned"]
+    },
+    {
+      "id": "widow_gentle_response",
+      "conditions": ["!flag:widow_kindness_received"],
+      "text": "She looks at you for a moment, and something in her expression softens to something it probably hasn't been in a while.<br><br>\"Thank you.\"<br><br>A pause. \"Most people ask me what I'm doing here. Then they stop asking and start pitying. You didn't do either.\"",
+      "set_flags": ["widow_kindness_received"]
+    },
+    {
+      "id": "widow_sarcastic_response",
+      "conditions": ["!flag:widow_sarcasm_response"],
+      "text": "She doesn't seem hurt. She's heard this before.<br><br>\"A working radio doesn't pick up what I hear.\"<br><br>She turns the dial. The crackle flares for a moment — almost a voice, almost words, gone.<br><br>\"Explain that.\"",
+      "set_flags": ["widow_sarcasm_response"]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "widow_signal_stronger",
+      "conditions": ["flag:jax_signal_active", "!flag:widow_signal_peaked"],
+      "text": "She stands up so fast she nearly drops the radio.<br><br>\"It's — right now — it's coming through —\"<br><br>She holds the radio up toward the relay tower direction with both hands, eyes closed.<br><br>The crackle resolves, just barely, into something that might be a voice. Then it's gone.<br><br>\"It was saying something.\" Her voice has gone very quiet. \"Almost. It was almost saying something.\"",
+      "set_flags": ["widow_signal_peaked"]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "widow_quest_frequency",
+      "conditions": ["!flag:sq_signal_widow_frequency_taken"],
+      "text": "She looks at you for a long time.<br><br>\"If you know what it is...\" She swallows. \"Then maybe you know how to find it. Or amplify it. I've been trying with this—\" She holds up the broken radio. \"—and it's not enough.\"<br><br>\"There are relay towers east along the ridge. I've never been able to get close enough. Raiders. Rubble. My own—\" A pause. \"I never let myself get close enough.\"<br><br>\"Would you?\"",
+      "offers_quest": "sq_signal_widow_frequency",
+      "set_flags": ["sq_signal_widow_frequency_taken"],
+      "video_speech": "The relay towers east of here. I've never been able to reach them. Would you go, and find what I've been hearing?"
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "widow_listening",
+      "keywords": ["listen", "hear", "radio", "frequency", "signal"],
+      "text": "\"Most people stopped listening after the bombs. Too much silence after too much noise.\"<br><br>\"I started listening more. I couldn't help it.\"<br><br>She turns the broken dial. \"I keep hearing something that tells me I was right to.\""
+    },
+    {
+      "id": "widow_grief",
+      "keywords": ["husband", "family", "alone", "widow", "lost"],
+      "text": "She doesn't answer right away.<br><br>\"I lost someone before I came here. A long time ago.\"<br><br>\"The signal doesn't sound like him. But it sounds like... someone who needs to be found. I think I understand that.\"",
+      "video_speech": "The signal doesn't sound like him. But it sounds like someone who needs to be found."
+    },
+    {
+      "id": "widow_mojave",
+      "keywords": ["mojave", "ridge", "desert", "wasteland"],
+      "text": "\"It's quiet on the ridge.\"<br><br>She looks out at the desert. \"Quiet enough to hear things.\""
+    },
+    {
+      "id": "widow_relay_towers",
+      "keywords": ["relay", "tower", "vault 77", "transmission"],
+      "text": "\"The signal is strongest when I face the towers.\"<br><br>\"I've always known that. I never let myself go close enough to find out why.\"<br><br>She looks down at her hands. \"Maybe I was afraid of what I'd hear if it got loud enough to understand.\""
+    }
+  ],
+  "fallback": {
+    "id": "signal_widow_fallback",
+    "text": "\"Shh. I'm listening.\"",
+    "video_speech": "Shh. It might come back."
+  },
+  "mood": "melancholic",
+  "personality": ["Soft", "Grieving", "Quietly hopeful"]
+}

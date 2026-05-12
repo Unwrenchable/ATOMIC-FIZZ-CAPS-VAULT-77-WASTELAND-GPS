@@ -1,0 +1,16 @@
+{
+  "id": "npc_freeside_razorkid_finn",
+  "name": "Razor-Kid Finn",
+  "faction": "freeside_locals",
+  "homeRegion": "freeside-east",
+  "currentRegion": "freeside-east",
+  "role": "Street Tough",
+  "personality": "Cocky, restless, always humming.",
+  "description": "A teenager who sharpens knives on the sidewalk and hums old-world jingles.",
+  "questHooks": [
+    "Says he saw someone hiding weapons under the old bridge.",
+    "Knows a shortcut through the alleys that even gangs avoid.",
+    "Claims a knife he found 'vibrates' when danger is near."
+  ],
+  "poi": "freeside_east_backstreets"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "npc_goodsprings_drifter_jack_renner",
+  "name": "Jack Renner",
+  "faction": "powder_gangers",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Powder Ganger Drifter",
+  "personality": "Cocky, reckless, thinks Goodsprings owes him something.",
+  "description": "Jack escaped from NCR custody and wants to use Goodsprings as a hideout. The town wants him gone.",
+  "questHooks": [
+    "Threatens the town unless someone helps him.",
+    "Claims he stole something from NCR that 'buzzes' when he sleeps.",
+    "Knows a Powder Ganger cell near Primm planning something big."
+  ],
+  "poi": "goodsprings_saloon_fnv"
+}

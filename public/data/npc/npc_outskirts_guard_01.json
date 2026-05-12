@@ -1,0 +1,8 @@
+{
+  "id": "npc_outskirts_guard_01",
+  "name": "Makeshift Guard",
+  "archetype": "vegas_outskirts_local",
+  "behaviorPattern": "static_local",
+  "spawnPool": ["freeside_border"],
+  "uniquePerWorld": false
+}

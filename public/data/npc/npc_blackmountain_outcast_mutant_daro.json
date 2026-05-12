@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_outcast_mutant_daro",
+  "name": "Daro",
+  "faction": "black_mountain",
+  "role": "Outcast",
+  "personality": "Quiet, thoughtful, disliked by others.",
+  "description": "Daro questions Gorath’s leadership and keeps to himself. Other mutants see him as weak.",
+  "questHooks": [
+    "Wants to leave Black Mountain safely.",
+    "Knows a hidden path through the cliffs.",
+    "Saw something buried near the tower."
+  ],
+  "poi": "black_mountain_fnv"
+}

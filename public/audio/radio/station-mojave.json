@@ -1,0 +1,19 @@
+{
+  "stationName": "Mojave Nights",
+  "dj": {
+    "name": "Ranger Nova",
+    "style": "cool, steady, midnight patrol",
+    "introLines": [
+      "Mojave nights are quiet, so let's keep the airwaves warm.",
+      "Stay sharp out there. The dark has eyes."
+    ]
+  },
+  "ads": [
+    "Mojave Water — distilled, tested, and approved by veteran rangers.",
+    "Need a lantern that lasts? Grab a Glowstick XL from the trading post."
+  ],
+  "interstitials": [
+    "Keep your boots dry. The sand hides what it wants.",
+    "More tunes incoming — keep your radio tuned."
+  ]
+}

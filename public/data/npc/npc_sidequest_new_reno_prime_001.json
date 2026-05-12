@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_new_reno_prime_001",
+  "type": "side_quest",
+  "name": "Vera Joren",
+  "region": "new_reno",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_new_reno_prime_001_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime_001_loot",
+  "questHooks": [
+    "anomaly_investigation_02",
+    "fizzcaps_clue_02",
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.47,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

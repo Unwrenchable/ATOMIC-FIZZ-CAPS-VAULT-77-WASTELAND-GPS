@@ -1,0 +1,45 @@
+{
+  "id": "qtl_brazil_amazon",
+  "name": "Deep Amazon Expedition",
+  "type": "global",
+  "region": "Amazon_Brazil",
+  "npc_giver": "global_rio_carnival_ghost",
+  "description": "The Carnival Ghost coordinates trade across South America, but deep Amazon settlements have gone silent. She needs a scout to go in and find out what happened before she sends the next trade caravan.",
+  "gps_requirement": {
+    "region": "Amazon Basin, Brazil",
+    "real_lat": -3.4653,
+    "real_lng": -62.2159,
+    "radius_km": 150
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Enter the Amazon",
+      "description": "Strike northwest from Rio into the deep Amazon basin. The Carnival Ghost's last known contact with the silent settlements was three months ago.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": -3.4653, "lng": -62.2159},
+      "radius_m": 5000,
+      "actions": ["set_flag:amazon_entered", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Find the Silent Settlements",
+      "description": "Locate the three settlements that have stopped responding to the Carnival Ghost's traders. The jungle has reclaimed much of the old trail network.",
+      "trigger": "player_reaches_area:amazon_settlement_zone",
+      "actions": ["set_flag:amazon_settlements_found", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Determine What Happened",
+      "description": "Investigate the settlements — survivors, evidence, or absence — and return a full report to the Carnival Ghost before the next trade caravan departs.",
+      "trigger": "player_investigate_area",
+      "actions": ["spawn:item_amazon_expedition_report", "complete_quest:true", "set_flag:amazon_expedition_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 350,
+    "caps": 200,
+    "fizz": 25,
+    "items": ["item_amazon_expedition_report"]
+  }
+}

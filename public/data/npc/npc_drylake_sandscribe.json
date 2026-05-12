@@ -1,0 +1,72 @@
+{
+  "id": "npc_drylake_sandscribe",
+  "name": "The Sand-Scribe",
+  "faction": "None",
+  "role": "Pattern Maker",
+  "type": "anomaly-adjacent",
+
+  "homeRegion": "dry-lake",
+  "currentRegion": "dry-lake",
+  "poi": "dry_lake_basin_center",
+
+  "personality": "Quiet, focused, trance-like. Speaks rarely, and only in fragments.",
+  "description": "A lone figure who kneels in the dust of the Dry Lake, drawing geometric patterns that match triangle hum events. Their symbols shift when no one is looking.",
+
+  "dialogueProfile": {
+    "tone": "soft-distant",
+    "personalityTags": [
+      "triangle-sensitive",
+      "pattern-maker",
+      "major-character",
+      "cryptic",
+      "player-reactive"
+    ],
+    "knowledge": [
+      "triangle",
+      "dry-lake",
+      "hum-patterns",
+      "lost-geometry",
+      "shifting-symbols"
+    ],
+    "anomalyAwareness": 0.97
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["dry_lake_basin_center"],
+      "night": ["dry_lake_basin_center"],
+      "wanderChance": 0.03
+    },
+    "roaming": [
+      "dry-lake",
+      "dry-lake-ridge"
+    ],
+    "anomalySensitivity": 0.98,
+    "rareEncounter": false
+  },
+
+  "dialog": {
+    "idle": [
+      "The dust remembers shapes the world forgets.",
+      "Every line leads somewhere… even if we can’t follow."
+    ],
+    "player_present": [
+      "Your shadow bends the pattern. Interesting.",
+      "Don’t step there. That line isn’t finished."
+    ],
+    "triangle_active": [
+      "It’s shifting again. Hold still.",
+      "Three points… three echoes… three truths."
+    ],
+    "pattern_event": [
+      "The lakebed is humming. The symbols respond.",
+      "Something beneath the dust is waking up."
+    ]
+  },
+
+  "quests": [
+    "side_drylake_patterns"
+  ],
+
+  "notes": "The Sand-Scribe draws triangle-aligned patterns in the dust. Their symbols subtly change during hum events. They never reveal the meaning directly."
+}

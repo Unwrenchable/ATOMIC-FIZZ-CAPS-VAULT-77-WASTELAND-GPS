@@ -1,0 +1,11 @@
+{
+  "id": "side_nv_lucky38gossip",
+  "name": "Lucky 38 Gossip Network",
+  "type": "side",
+  "poIs": ["Lucky 38"],
+  "description": "Gather intel from Strip VIPs.",
+  "objectives": [
+    "Speak to 3 VIPs",
+    "Return gossip to Mira"
+  ]
+}

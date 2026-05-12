@@ -1,0 +1,178 @@
+{
+  "id": "dialog_stilgar",
+  "npc": "Stilgar",
+  "portrait": "default",
+  "title": "Leader of the Sand-Walkers",
+  "description": "Dialog nodes for Stilgar — leader of a desert survival collective who calls themselves the Fremen of the Mojave. They have adapted to the irradiated desert so completely that they barely register on Geiger counters, move in total silence across open sand, and harvest moisture from the air with a method nobody outside their group understands. Stilgar speaks with absolute economy of words and treats the wasteland not as a danger to be survived but as a home to be understood. He is suspicious of outsiders and deeply patient with everything else.",
+  "backstory": "Leader of the Sand-Walkers — a tribe built around the philosophy that the wasteland is not ruins to be endured but a desert to be read. Stilgar's people came from a pre-war community of Dune scholars who took their texts seriously enough to build an entire culture around them. He does not waste water. He does not waste words. He has kept his people alive through three faction wars, two radstorms, and one incident with a deathclaw that no one in the tribe will discuss.",
+  "intro": {
+    "id": "stilgar_intro",
+    "conditions": [
+      "!flag:met_stilgar"
+    ],
+    "text": "You are loud.<br><br>Your boots make sound on the sand at forty meters. Your Pocket-Boy emits interference at sixty. We heard you coming from the ridge.<br><br>You are not from the deep desert. This is obvious and not an insult.<br><br>I am Stilgar. We are the Fremen of the Mojave. We live in the desert, not beside it. We do not fight the wasteland. We do not hide from it. We have learned to read it the way you read a map.<br><br>You have something in your pack that is reacting to the mineral deposits south of here. I would like to know what it is, and why you are carrying it.",
+    "set_flags": [
+      "met_stilgar"
+    ],
+    "video_speech": "You are loud. Your boots make sound on the sand at forty meters. You are not from the deep desert. That is not an insult. Yet."
+  },
+  "knowledge_nodes": [
+    {
+      "id": "stilgar_knows_rex",
+      "conditions": [
+        "flag:met_rex",
+        "!flag:stilgar_comment_rex"
+      ],
+      "text": "The Captain at the Dam knows the desert as a border. A boundary to defend.<br><br>We know it as a living system. His patrols stop at the concrete. Ours continue into the deep waste, where there are no patrols and no law and everything that is not adapted has already died.<br><br>He is effective. He is not free.",
+      "set_flags": [
+        "stilgar_comment_rex"
+      ]
+    },
+    {
+      "id": "stilgar_knows_arnie",
+      "conditions": [
+        "flag:met_arnie",
+        "!flag:stilgar_comment_arnie"
+      ],
+      "text": "The big fighter tracking the machine.<br><br>He came through our territory three weeks ago. He asked about the Prototype. We told him what the desert told us — direction and time, not destination.<br><br>He is strong. He is not patient. In the deep desert, patience is the more useful quality.",
+      "set_flags": [
+        "stilgar_comment_arnie"
+      ]
+    },
+    {
+      "id": "stilgar_knows_mara",
+      "conditions": [
+        "flag:met_mara",
+        "!flag:stilgar_comment_mara"
+      ],
+      "text": "The Rad-Witch. We have spoken.<br><br>She understands that radiation is not death. It is transformation. Her language for it is different from ours, but the understanding is the same.<br><br>We trade knowledge with her. She teaches us about mutation vectors. We teach her how to read ground-level rad gradients without instruments. Both of us profit.",
+      "set_flags": [
+        "stilgar_comment_mara"
+      ]
+    },
+    {
+      "id": "stilgar_knows_doc",
+      "conditions": [
+        "flag:met_doc",
+        "!flag:stilgar_comment_doc"
+      ],
+      "text": "The one with the blue cabinet.<br><br>He appeared in the deep desert three months ago. No tracks leading to his location. The cabinet was simply there. He was inside, making tea.<br><br>He spoke to me for an hour about time as a 'navigable medium.' Our shamans have a different word for this. The concept is not new to us.<br><br>He was surprised that we were not surprised. I was unsurprised that he was surprised.",
+      "set_flags": [
+        "stilgar_comment_doc"
+      ]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "stilgar_player_rads",
+      "conditions": [
+        "stat:rads>=200",
+        "!flag:stilgar_treated_rads"
+      ],
+      "text": "Your radiation levels are above adaptation threshold but below critical. You have been moving through gradient zones without compensation.<br><br>Our people carry an extract — desert spice processed through three filtration cycles. It slows rad absorption and accelerates recovery. It will taste like nothing you recognize. This is expected.<br><br>Drink it.",
+      "grant_items": [
+        {
+          "id": "radaway",
+          "name": "RadAway",
+          "type": "aid",
+          "quantity": 2
+        }
+      ],
+      "set_flags": [
+        "stilgar_treated_rads"
+      ]
+    },
+    {
+      "id": "stilgar_player_boots",
+      "conditions": [
+        "stat:hp>=70",
+        "!flag:stilgar_taught_walking"
+      ],
+      "text": "You are in good health. But your footfall is still wrong for the terrain.<br><br>Watch how I stand. Weight distributed. No heel-strike on sand. Listen for vibration, not silence — silence here is rarely good.<br><br>This will not make you one of us. But it will help you live longer.",
+      "set_flags": [
+        "stilgar_taught_walking"
+      ]
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "stilgar_offer_spice_run",
+      "conditions": [
+        "!flag:sq_stilgar_spice_run_taken"
+      ],
+      "text": "There is a substance we harvest in the deep zones. Our people call it the spice — in older tongues, the word meant 'life-extending compound.' Chem runners call it Mentajuice. The NCR's chemists have no name for it because they have not found it yet.<br><br>A caravan was taken three days ago carrying six months of our processed stock. Raiders. Thirty of them, based at a pre-war mining facility twelve kilometers southeast.<br><br>We do not fight large groups. We move. We persist. We outlast.<br><br>But this cannot wait for outlasting.<br><br>Help us recover the spice and we will pay in knowledge — not caps. What we know about the deep desert is worth more than anything you can carry.",
+      "offers_quest": "sq_stilgar_spice_run",
+      "set_flags": [
+        "sq_stilgar_spice_run_taken"
+      ],
+      "video_speech": "We harvest a substance from the deep irradiated zones. Valuable. Someone is disrupting our runners. We need an outsider."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "stilgar_spice",
+      "keywords": [
+        "spice",
+        "chem",
+        "drug",
+        "mentajuice",
+        "compound"
+      ],
+      "text": "The spice is not a drug. That is the first misunderstanding we correct with outsiders.<br><br>It is a filtration byproduct of deep-zone radiation — organisms that have adapted to convert ambient radiation into cellular compounds. We process it further. The result extends life, sharpens cognition, and dramatically reduces radiation toxicity.<br><br>The spice must flow. That is not metaphor. That is supply chain management."
+    },
+    {
+      "id": "stilgar_desert",
+      "keywords": [
+        "desert",
+        "sand",
+        "heat",
+        "wasteland",
+        "terrain"
+      ],
+      "text": "The desert is not hostile. It is honest.<br><br>Everything it does, it does openly. The heat, the radiation, the lack of water — none of it is hidden. Compare this to cities, to factions, to politics.<br><br>The desert will kill you clearly. Most other things will kill you while pretending to help."
+    },
+    {
+      "id": "stilgar_fremen",
+      "keywords": [
+        "fremen",
+        "group",
+        "people",
+        "tribe",
+        "collective"
+      ],
+      "text": "We began as scattered survivors. Different shelters, different regions.<br><br>What united us was not ideology. Not faction. Not blood. It was adaptation. We all independently chose to learn the desert rather than fight it.<br><br>When we found each other, we recognized the teaching in each other's movement. That was enough."
+    },
+    {
+      "id": "stilgar_water",
+      "keywords": [
+        "water",
+        "drink",
+        "thirst",
+        "supply",
+        "moisture"
+      ],
+      "text": "Water is the premium currency in the deep desert. Not caps. Not ammo. Water.<br><br>We extract it from air, from certain plants, from processed organism tissue. Our suits — salvaged vault suits heavily modified — have water recovery systems that take back sixty percent of moisture lost to respiration.<br><br>Wasting water is, among our people, the closest thing we have to a serious crime."
+    },
+    {
+      "id": "stilgar_outsider",
+      "keywords": [
+        "trust",
+        "outsider",
+        "stranger",
+        "welcome"
+      ],
+      "text": "We do not trust outsiders quickly. This is not cruelty. It is calibration.<br><br>The wasteland sends many kinds of people. We have learned to read them the way we read terrain. Your pressure points. Your load distribution. Whether your eyes move to exits before they move to faces.<br><br>You have not given me reason to distrust you. That is the beginning."
+    }
+  ],
+  "fallback": {
+    "id": "stilgar_fallback",
+    "text": "The desert is listening.<br><br>Come back when you have something worth saying to it.",
+    "video_speech": "The desert is listening. Come back when you have something worth saying to it."
+  },
+  "mood": "neutral",
+  "personality": [
+    "Stoic",
+    "Wise",
+    "Protective"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "npc_nipton_mayor_victor_hale",
+  "name": "Victor Hale",
+  "faction": "nipton",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Mayor of Nipton",
+  "personality": "Greasy charm, gambler’s optimism, always one deal away from salvation.",
+  "description": "Victor Hale runs Nipton like a casino without walls. He’s always making promises he can’t keep, always betting the town’s future on the next big score.",
+  "questHooks": [
+    "Made a deal with a dangerous group and now wants out.",
+    "Says someone left a strange cap on his desk — still warm.",
+    "Claims he heard a low hum coming from the trading post basement."
+  ],
+  "poi": "nipton_hall_fnv"
+}

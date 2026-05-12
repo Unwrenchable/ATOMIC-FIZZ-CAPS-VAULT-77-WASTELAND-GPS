@@ -1,0 +1,13 @@
+{
+  "id": "npc_pitt_ironjaw_marn",
+  "name": "Ironjaw Marn",
+  "region": "The Pitt",
+  "type": "Scavenger Foreman",
+  "dialog": [
+    "Steel keeps the Pitt alive. And kills us just as fast.",
+    "You look fresh. Don’t breathe too deep."
+  ],
+  "quests": ["quest_pitt_steelwake"],
+  "faction": "Pitt Scavvers",
+  "notes": "Knows the old steel tunnels better than anyone."
+}

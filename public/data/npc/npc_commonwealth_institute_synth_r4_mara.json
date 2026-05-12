@@ -1,0 +1,16 @@
+{
+  "id": "npc_commonwealth_institute_synth_r4_mara",
+  "name": "R4-Mara",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "zion",
+  "reasonForDisplacement": "Timeline fracture during a relay malfunction scattered her into Zion.",
+  "role": "Rogue Synth",
+  "personality": "Curious, fearful, slowly developing independence.",
+  "questHooks": [
+    "Seeks protection from Courser X7-92.",
+    "Wants to understand tribal spirituality.",
+    "Carries corrupted Institute data logs."
+  ],
+  "poi": "Zion — Spiritwalker caves"
+}

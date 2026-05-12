@@ -1,0 +1,14 @@
+{
+  "id": "npc_jacobstown_cook_marla_koal",
+  "name": "Marla Koal",
+  "faction": "jacobstown",
+  "role": "Cook",
+  "personality": "Warm, humorous, motherly toward everyone.",
+  "description": "Marla cooks for Jacobstown and keeps morale high. She believes good food can heal old wounds.",
+  "questHooks": [
+    "Needs ingredients from a dangerous area.",
+    "Wants to host a peace dinner with outsiders.",
+    "Heard something rummaging near the food stores."
+  ],
+  "poi": "jacobstown_fnv"
+}

@@ -1,0 +1,147 @@
+{
+  "vegas_strip_core": [
+    "vault77",
+    "fizzco_tech",
+    "fizzco_robotics",
+    "fizzco_accounting",
+    "overseer_ai",
+    "strip_informants",
+    "understrip_tunnelers",
+    "capchain_remnants",
+    "harlan_followers"
+  ],
+
+  "mojave": [
+    "ncr",
+    "caesar_legion",
+    "mr_house",
+    "three_families",
+    "kings",
+    "followers_apocalypse",
+    "great_khans",
+    "boomers",
+    "powder_gangers",
+    "independent"
+  ],
+
+  "hoover_dam": [
+    "ncr",
+    "caesar_legion",
+    "remnants_enclave_west"
+  ],
+
+  "hidden_valley": [
+    "brotherhood_steel"
+  ],
+
+  "nellis_region": [
+    "boomers"
+  ],
+
+  "capital_wasteland": [
+    "bos_lyons",
+    "bos_outcasts",
+    "enclave_east",
+    "talon_company",
+    "reilly_rangers",
+    "supermutants_dc"
+  ],
+
+  "commonwealth": [
+    "institute",
+    "railroad",
+    "minutemen",
+    "bos_maxson",
+    "gunners",
+    "atom_cats",
+    "triggermen",
+    "children_atom_commonwealth"
+  ],
+
+  "appalachia": [
+    "responders",
+    "free_states",
+    "raiders_cutthroats",
+    "raiders_diehards",
+    "raiders_blackwater",
+    "settlers_foundation",
+    "blood_eagles",
+    "mothman_cult",
+    "enclave_whitespring",
+    "bos_appalachia"
+  ],
+
+  "west_coast": [
+    "bos_lost_hills",
+    "enclave_west",
+    "shi",
+    "vault_city",
+    "new_reno",
+    "khans_original"
+  ],
+
+  "divide": [
+    "echo_hunters",
+    "ulysses_remnants"
+  ],
+
+  "pitt": [
+    "ironjaw_clan",
+    "trog_variants",
+    "slave_factions"
+  ],
+
+  "zion": [
+    "spiritwalkers",
+    "zion_tribals"
+  ],
+
+  "sierra_madre": [
+    "casino_ai",
+    "ghost_people"
+  ],
+
+  "big_mt": [
+    "think_tank",
+    "roboscorpions",
+    "trauma_harnesses",
+    "fizzco_crosstech"
+  ],
+
+  "area51": [
+    "silent_division",
+    "black_budget_units",
+    "stealth_prototypes"
+  ],
+
+  "yucca_mountain": [
+    "doe_remnants",
+    "nuclear_prototype_custodians"
+  ],
+
+  "prisons": [
+    "warden_last_line",
+    "prison_gangs",
+    "security_ai"
+  ],
+
+  "nuclear_facilities": [
+    "atomic_custodians",
+    "reactor_anomalies",
+    "fizzco_radiation_ops"
+  ],
+
+  "military_bases": [
+    "rogue_units",
+    "lost_platoons",
+    "prewar_bunker_networks"
+  ],
+
+  "player_local": [
+    "local_survivors",
+    "local_scavengers",
+    "local_ruins",
+    "local_anomalies",
+    "local_fizzco_nodes"
+  ]
+}

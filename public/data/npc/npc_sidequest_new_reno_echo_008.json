@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_new_reno_echo_008",
+  "type": "side_quest",
+  "name": "Sylas Hale",
+  "region": "new_reno",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_new_reno_echo_008_dialog",
+  "lootPool": "npc_sidequest_new_reno_echo_008_loot",
+  "questHooks": [
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.67,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

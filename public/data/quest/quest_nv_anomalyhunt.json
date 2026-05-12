@@ -1,0 +1,26 @@
+{
+  "id": "quest_nv_anomalyhunt",
+  "name": "Anomaly Hunt",
+  "type": "main",
+  "poIs": ["Under-Strip Tunnels"],
+  "description": "Track and neutralize a dangerous anomaly beneath the Strip.",
+  "objectives": [
+    "Meet the Signal Hunter",
+    "Follow the anomaly trail",
+    "Defeat the corrupted FizzCo guardian"
+  ],
+  "endings": [
+    {
+      "id": "ending_destroy",
+      "description": "You destroy the anomaly.",
+      "reward": "Anomaly Core",
+      "consequence": "Under-Strip becomes safer."
+    },
+    {
+      "id": "ending_capture",
+      "description": "You capture the anomaly.",
+      "reward": "FizzCo Prototype Device",
+      "consequence": "FizzCo becomes aware of you."
+    }
+  ]
+}

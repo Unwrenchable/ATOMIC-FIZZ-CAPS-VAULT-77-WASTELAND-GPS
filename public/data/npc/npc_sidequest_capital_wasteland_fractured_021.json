@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_capital_wasteland_fractured_021",
+  "type": "side_quest",
+  "name": "Nina Rhea",
+  "region": "capital_wasteland",
+  "timelines": [
+    "fractured"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_capital_wasteland_fractured_021_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_fractured_021_loot",
+  "questHooks": [
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.35,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

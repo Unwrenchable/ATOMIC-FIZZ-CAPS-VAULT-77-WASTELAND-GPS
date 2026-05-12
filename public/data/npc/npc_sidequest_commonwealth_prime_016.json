@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_commonwealth_prime_016",
+  "type": "side_quest",
+  "name": "Nina Nova",
+  "region": "commonwealth",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_commonwealth_prime_016_dialog",
+  "lootPool": "npc_sidequest_commonwealth_prime_016_loot",
+  "questHooks": [
+    "region_story_01",
+    "fizzcaps_clue_01",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.87,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

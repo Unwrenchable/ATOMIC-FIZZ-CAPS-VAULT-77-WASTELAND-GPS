@@ -1,0 +1,11 @@
+{
+  "id": "npc_freeside_kid_02",
+  "name": "Runner Kid",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Saw a man vanish behind a wall!",
+    "Bet you can’t catch me!"
+  ],
+  "spawnPool": ["freeside_backstreets"],
+  "uniquePerWorld": false
+}

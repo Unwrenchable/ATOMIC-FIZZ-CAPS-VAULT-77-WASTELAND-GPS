@@ -1,0 +1,94 @@
+{
+  "advanced_kit": {
+    "id": "advanced_kit",
+    "name": "Advanced Kit",
+    "ingredients": [
+      {
+        "id": "turret_part",
+        "qty": 2
+      },
+      {
+        "id": "rare_alloy",
+        "qty": 1
+      }
+    ],
+    "tokenCost": 1,
+    "output": {
+      "id": "advanced_kit",
+      "qty": 1
+    },
+    "cooldownSeconds": 1800,
+    "requiresLevel": 5,
+    "maxPerDay": 1,
+    "sourceFile": "recipes.json"
+  },
+  "repair_kit": {
+    "id": "repair_kit",
+    "name": "Repair Kit",
+    "ingredients": [
+      {
+        "id": "scrap_metal",
+        "qty": 5
+      },
+      {
+        "id": "cloth",
+        "qty": 2
+      }
+    ],
+    "tokenCost": 0.05,
+    "output": {
+      "id": "repair_kit",
+      "qty": 1
+    },
+    "cooldownSeconds": 60,
+    "requiresLevel": 1,
+    "maxPerDay": 10,
+    "sourceFile": "recipes.json"
+  },
+  "stimpak": {
+    "id": "stimpak",
+    "name": "Stimpak",
+    "ingredients": [
+      {
+        "id": "herb",
+        "qty": 3
+      },
+      {
+        "id": "chem_vial",
+        "qty": 1
+      }
+    ],
+    "tokenCost": 0,
+    "output": {
+      "id": "stimpak",
+      "qty": 1
+    },
+    "cooldownSeconds": 30,
+    "requiresLevel": 1,
+    "maxPerDay": 20,
+    "sourceFile": "recipes.json"
+  },
+  "turret_part": {
+    "id": "turret_part",
+    "name": "Turret Part",
+    "ingredients": [
+      {
+        "id": "scrap_metal",
+        "qty": 12
+      },
+      {
+        "id": "circuit",
+        "qty": 2
+      }
+    ],
+    "tokenCost": 0.25,
+    "output": {
+      "id": "turret_part",
+      "qty": 1
+    },
+    "cooldownSeconds": 300,
+    "requiresLevel": 3,
+    "maxPerDay": 3,
+    "sourceFile": "recipes.json"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "id": "npc_mad_scientist",
+  "name": "Dr. Helena Vance",
+  "faction": "Independent",
+  "role": "Ghoul Researcher / Former Vault-Tec Scientist",
+  "type": "human",
+
+  "homeRegion": "abandoned_asylum",
+  "currentRegion": "abandoned_asylum",
+  "poi": "asylum_laboratory",
+
+  "description": "A brilliant but morally compromised scientist obsessed with finding a cure for feral Ghouls. She genuinely believes she's doing good work, rationalizing the suffering she causes as 'necessary for the greater good.' Her lab coat is stained with questionable substances.",
+
+  "dialogueProfile": {
+    "tone": "clinical-detached",
+    "personalityTags": [
+      "scientist",
+      "morally-ambiguous",
+      "obsessed",
+      "brilliant",
+      "detached",
+      "rationalizin g"
+    ],
+    "knowledge": [
+      "ghoul-biology",
+      "fev-research",
+      "medical-science",
+      "experimental-procedures",
+      "vault-tec-methods"
+    ],
+    "anomalyAwareness": 0.6
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["asylum_laboratory", "test_chambers", "specimen_storage"],
+      "night": ["asylum_laboratory"],
+      "wanderChance": 0.05
+    },
+    "roaming": ["abandoned_asylum"],
+    "anomalySensitivity": 0.4,
+    "rareEncounter": false
+  },
+
+  "dialog": {
+    "idle": [
+      "Subject 47 showed promise today. Minimal screaming.",
+      "The serum needs more refinement. More subjects required.",
+      "Science requires sacrifice. They just don't understand."
+    ],
+    "greeting": [
+      "Oh, a visitor. Are you here to volunteer for testing?",
+      "Welcome to my laboratory. I'm on the verge of a breakthrough."
+    ],
+    "justification": [
+      "Every great medical discovery required human trials. This is no different.",
+      "Those people were dying anyway. At least their suffering serves a purpose.",
+      "Do you know how many Ghouls this cure could save? The math is simple.",
+      "I'm not a monster. I'm a scientist. There's a difference."
+    ],
+    "confrontation": [
+      "You don't understand the complexity of this research!",
+      "Who are you to judge? Have YOU saved anyone?",
+      "This work is too important to stop now!"
+    ],
+    "desperate": [
+      "Please... years of research... you can't just destroy it...",
+      "Think of all the feral Ghouls who could be saved!",
+      "I can make this worth your while. Caps? Weapons? Anything!"
+    ]
+  },
+
+  "stats": {
+    "level": 16,
+    "health": 150,
+    "combat_skill": 40,
+    "science": 95,
+    "medicine": 90,
+    "intelligence": 9,
+    "special": {
+      "S": 3,
+      "P": 6,
+      "E": 5,
+      "C": 5,
+      "I": 9,
+      "A": 4,
+      "L": 4
+    }
+  },
+
+  "equipment": {
+    "weapon": "laser_pistol",
+    "armor": "scientist_coat",
+    "items": ["experimental_serum", "research_notes", "test_subjects_log"]
+  },
+
+  "quests": [
+    "quest_feral_salvation"
+  ],
+
+  "notes": "Represents the dangerous intersection of good intentions and horrific methods. Can be killed, convinced to stop, or supported depending on player choice."
+}

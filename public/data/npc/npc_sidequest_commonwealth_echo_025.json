@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_commonwealth_echo_025",
+  "type": "side_quest",
+  "name": "Hale Lira",
+  "region": "commonwealth",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_commonwealth_echo_025_dialog",
+  "lootPool": "npc_sidequest_commonwealth_echo_025_loot",
+  "questHooks": [
+    "fizzcaps_clue_02",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.86,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

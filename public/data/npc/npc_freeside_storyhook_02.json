@@ -1,0 +1,11 @@
+{
+  "id": "npc_freeside_storyhook_02",
+  "name": "Broken Gambler",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Lost everything… but I saw something strange in the alley.",
+    "A man walked through a door that wasn’t there."
+  ],
+  "spawnPool": ["freeside_south"],
+  "uniquePerWorld": true
+}

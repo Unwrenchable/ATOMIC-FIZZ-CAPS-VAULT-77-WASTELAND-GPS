@@ -1,0 +1,12 @@
+{
+  "ads": [
+    {
+      "text": "Thirsty? Tired? Mildly irradiated? Grab an Atomic Fizz Cap!",
+      "file": "/audio/radio/dj/ad_1.mp3"
+    },
+    {
+      "text": "Need a trim? Need a shave? Come on down to Wasteland Barbers!",
+      "file": "/audio/radio/dj/ad_2.mp3"
+    }
+  ]
+}

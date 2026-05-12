@@ -1,0 +1,1232 @@
+{
+  "version": "2.0.0",
+  "description": "Atomic Fizz Caps loot drop tables v2 \u2014 rebalanced weights, full CAPS economy, Fallout-authentic items, crypto-layer NFTs",
+  "meta": {
+    "nft_drop_base_chance": 0.01,
+    "legendary_base_chance": 0.025,
+    "epic_base_chance": 0.06,
+    "rare_base_chance": 0.15,
+    "uncommon_base_chance": 0.3,
+    "common_base_chance": 0.45,
+    "level_scaling_factor": 0.001
+  },
+  "tiers": {
+    "common": [
+      {
+        "id": "scrap_metal",
+        "name": "Scrap Metal",
+        "type": "junk",
+        "weight": 3.0,
+        "capsValue": 2,
+        "tradeable": true,
+        "description": "Twisted hunks of pre-war steel. Useful for repairs.",
+        "nft_eligible": false
+      },
+      {
+        "id": "cloth_rags",
+        "name": "Cloth Rags",
+        "type": "junk",
+        "weight": 2.0,
+        "capsValue": 1,
+        "tradeable": true,
+        "description": "Tattered fabric scraps. Every wastelander needs some.",
+        "nft_eligible": false
+      },
+      {
+        "id": "dirty_water",
+        "name": "Dirty Water",
+        "type": "consumable",
+        "weight": 2.5,
+        "capsValue": 3,
+        "tradeable": true,
+        "description": "Irradiated water from a cracked pipe. Drink at your own risk. +1 RAD.",
+        "nft_eligible": false
+      },
+      {
+        "id": "prewar_food_can",
+        "name": "Pre-War Food Can",
+        "type": "consumable",
+        "weight": 2.5,
+        "capsValue": 5,
+        "tradeable": true,
+        "description": "200-year-old canned mystery meat. Still edible. Somehow.",
+        "nft_eligible": false
+      },
+      {
+        "id": "duct_tape",
+        "name": "Duct Tape",
+        "type": "junk",
+        "weight": 2.0,
+        "capsValue": 3,
+        "tradeable": true,
+        "description": "The glue holding the wasteland together. Literally.",
+        "nft_eligible": false
+      },
+      {
+        "id": "wood_planks",
+        "name": "Wood Planks",
+        "type": "junk",
+        "weight": 2.0,
+        "capsValue": 2,
+        "tradeable": true,
+        "description": "Rough-cut lumber. Good for building and burning.",
+        "nft_eligible": false
+      },
+      {
+        "id": "glass_bottle",
+        "name": "Glass Bottle",
+        "type": "junk",
+        "weight": 1.5,
+        "capsValue": 1,
+        "tradeable": true,
+        "description": "Empty and slightly irradiated. Fill it with something.",
+        "nft_eligible": false
+      },
+      {
+        "id": "bobby_pin",
+        "name": "Bobby Pin",
+        "type": "tool",
+        "weight": 2.0,
+        "capsValue": 3,
+        "tradeable": true,
+        "description": "The wastelander's universal key. Breaks often.",
+        "nft_eligible": false
+      },
+      {
+        "id": "tin_can",
+        "name": "Tin Can",
+        "type": "junk",
+        "weight": 2.0,
+        "capsValue": 1,
+        "tradeable": true,
+        "description": "A bent tin can. Useful for tripwire alarms or stews.",
+        "nft_eligible": false
+      },
+      {
+        "id": "cigarette_carton",
+        "name": "Cigarette Carton",
+        "type": "junk",
+        "weight": 1.5,
+        "capsValue": 8,
+        "tradeable": true,
+        "description": "Smokes are currency in most settlements.",
+        "nft_eligible": false
+      },
+      {
+        "id": "wonderglue",
+        "name": "Wonderglue",
+        "type": "junk",
+        "weight": 1.5,
+        "capsValue": 5,
+        "tradeable": true,
+        "description": "Industrial adhesive. Fixes weapons, armor, and mistakes.",
+        "nft_eligible": false
+      },
+      {
+        "id": "bottle_caps_loose",
+        "name": "Bottle Caps (Loose)",
+        "type": "currency",
+        "weight": 2.5,
+        "capsValue": 15,
+        "tradeable": true,
+        "capsMin": 5,
+        "capsMax": 25,
+        "description": "A handful of bent bottle caps \u2014 the currency of the wasteland.",
+        "nft_eligible": false
+      }
+    ],
+    "uncommon": [
+      {
+        "id": "stimpak",
+        "name": "Stimpak",
+        "type": "consumable",
+        "weight": 2.0,
+        "capsValue": 25,
+        "tradeable": true,
+        "description": "Auto-inject healing compound. Standard wasteland medicine.",
+        "nft_eligible": true
+      },
+      {
+        "id": "radaway",
+        "name": "RadAway",
+        "type": "consumable",
+        "weight": 2.0,
+        "capsValue": 20,
+        "tradeable": true,
+        "description": "IV drip that flushes radiation. Tastes like regret.",
+        "nft_eligible": true
+      },
+      {
+        "id": "rad_x",
+        "name": "Rad-X",
+        "type": "consumable",
+        "weight": 1.5,
+        "capsValue": 15,
+        "tradeable": true,
+        "description": "Prophylactic radiation blocker. Pop before entering a hot zone.",
+        "nft_eligible": true
+      },
+      {
+        "id": "mentats",
+        "name": "Mentats",
+        "type": "consumable",
+        "weight": 1.5,
+        "capsValue": 20,
+        "tradeable": true,
+        "description": "Brain-enhancing chems. +INT for a limited time.",
+        "nft_eligible": true
+      },
+      {
+        "id": "buffout",
+        "name": "Buffout",
+        "type": "consumable",
+        "weight": 1.5,
+        "capsValue": 20,
+        "tradeable": true,
+        "description": "Muscle-boosting chem. +STR, +END. Highly addictive.",
+        "nft_eligible": true
+      },
+      {
+        "id": "jet",
+        "name": "Jet",
+        "type": "consumable",
+        "weight": 1.5,
+        "capsValue": 18,
+        "tradeable": true,
+        "description": "Methamphetamine derivative. Slows perceived time. Very addictive.",
+        "nft_eligible": true
+      },
+      {
+        "id": "ammo_38_x20",
+        "name": ".38 Rounds (\u00d720)",
+        "type": "ammo",
+        "weight": 2.0,
+        "capsValue": 8,
+        "tradeable": true,
+        "description": "Standard .38 caliber rounds. Common in the wasteland.",
+        "nft_eligible": true
+      },
+      {
+        "id": "ammo_9mm_x20",
+        "name": "9mm Rounds (\u00d720)",
+        "type": "ammo",
+        "weight": 2.0,
+        "capsValue": 10,
+        "tradeable": true,
+        "description": "9mm pistol rounds. Widespread and reliable.",
+        "nft_eligible": true
+      },
+      {
+        "id": "ammo_308_x10",
+        "name": ".308 Rounds (\u00d710)",
+        "type": "ammo",
+        "weight": 1.5,
+        "capsValue": 15,
+        "tradeable": true,
+        "description": "Rifle-caliber rounds. Good for hunting man and beast.",
+        "nft_eligible": true
+      },
+      {
+        "id": "pipe_pistol",
+        "name": "Pipe Pistol",
+        "type": "weapon",
+        "weight": 2.0,
+        "capsValue": 40,
+        "tradeable": true,
+        "description": "A crude handmade sidearm. Unreliable, but it shoots.",
+        "nft_eligible": true
+      },
+      {
+        "id": "leather_armor_head",
+        "name": "Leather Armor Helmet",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "head",
+        "weight": 0.8,
+        "capsValue": 35,
+        "tradeable": true,
+        "description": "Padded leather headgear. Smells like the wasteland.",
+        "nft_eligible": true
+      },
+      {
+        "id": "leather_armor_chest",
+        "name": "Leather Armor Chest Piece",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "chest",
+        "weight": 0.8,
+        "capsValue": 35,
+        "tradeable": true,
+        "description": "Padded leather torso guard. Better than rags.",
+        "nft_eligible": true
+      },
+      {
+        "id": "leather_armor_arm_l",
+        "name": "Leather Armor Left Arm",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "arm_l",
+        "weight": 0.6,
+        "capsValue": 28,
+        "tradeable": true,
+        "description": "Left arm bracer, hand-stitched leather.",
+        "nft_eligible": true
+      },
+      {
+        "id": "leather_armor_arm_r",
+        "name": "Leather Armor Right Arm",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "arm_r",
+        "weight": 0.6,
+        "capsValue": 28,
+        "tradeable": true,
+        "description": "Right arm bracer, hand-stitched leather.",
+        "nft_eligible": true
+      },
+      {
+        "id": "leather_armor_leg_l",
+        "name": "Leather Armor Left Leg",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "leg_l",
+        "weight": 0.7,
+        "capsValue": 28,
+        "tradeable": true,
+        "description": "Leather leg guard, left side. Keeps the radscorpion stingers at bay.",
+        "nft_eligible": true
+      },
+      {
+        "id": "leather_armor_leg_r",
+        "name": "Leather Armor Right Leg",
+        "type": "armor",
+        "armorSet": "leather_armor",
+        "slot": "leg_r",
+        "weight": 0.7,
+        "capsValue": 28,
+        "tradeable": true,
+        "description": "Leather leg guard, right side. Worn but functional.",
+        "nft_eligible": true
+      },
+      {
+        "id": "combat_knife",
+        "name": "Combat Knife",
+        "type": "weapon",
+        "weight": 1.5,
+        "capsValue": 35,
+        "tradeable": true,
+        "description": "Military-issue blade. Silent and deadly up close.",
+        "nft_eligible": true
+      },
+      {
+        "id": "lockpick_kit",
+        "name": "Lockpick Kit",
+        "type": "tool",
+        "weight": 1.5,
+        "capsValue": 30,
+        "tradeable": true,
+        "description": "Tension wrench and picks. Opens what shouldn't be opened.",
+        "nft_eligible": true
+      },
+      {
+        "id": "wasteland_medkit",
+        "name": "Wasteland Medkit",
+        "type": "medical",
+        "weight": 1.5,
+        "capsValue": 45,
+        "tradeable": true,
+        "description": "Bandages, antiseptic, and shrapnel tweezers. Field-assembled.",
+        "nft_eligible": true
+      },
+      {
+        "id": "prewar_money",
+        "name": "Pre-War Money",
+        "type": "currency",
+        "weight": 1.5,
+        "capsValue": 12,
+        "tradeable": true,
+        "description": "Worthless paper dollars. Valued by collectors.",
+        "nft_eligible": true
+      }
+    ],
+    "rare": [
+      {
+        "id": "laser_pistol",
+        "name": "Laser Pistol",
+        "type": "weapon",
+        "weight": 2.0,
+        "capsValue": 150,
+        "tradeable": true,
+        "description": "Pre-war energy sidearm. Burns clean holes through enemies.",
+        "nft_eligible": true
+      },
+      {
+        "id": "combat_armor_head",
+        "name": "Combat Armor Helmet",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "head",
+        "weight": 0.5,
+        "capsValue": 100,
+        "tradeable": true,
+        "description": "Military ballistic helmet. Rated for small arms.",
+        "nft_eligible": true
+      },
+      {
+        "id": "combat_armor_chest",
+        "name": "Combat Armor Chest Plate",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "chest",
+        "weight": 0.5,
+        "capsValue": 100,
+        "tradeable": true,
+        "description": "Military-grade torso protection. Favored by veteran mercs.",
+        "nft_eligible": true
+      },
+      {
+        "id": "combat_armor_arm_l",
+        "name": "Combat Armor Left Arm",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "arm_l",
+        "weight": 0.4,
+        "capsValue": 80,
+        "tradeable": true,
+        "description": "Left arm combat plating with ceramic inserts.",
+        "nft_eligible": true
+      },
+      {
+        "id": "combat_armor_arm_r",
+        "name": "Combat Armor Right Arm",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "arm_r",
+        "weight": 0.4,
+        "capsValue": 80,
+        "tradeable": true,
+        "description": "Right arm combat plating. Slight laser scoring.",
+        "nft_eligible": true
+      },
+      {
+        "id": "combat_armor_leg_l",
+        "name": "Combat Armor Left Leg",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "leg_l",
+        "weight": 0.4,
+        "capsValue": 80,
+        "tradeable": true,
+        "description": "Left leg combat greave. Pre-war military surplus.",
+        "nft_eligible": true
+      },
+      {
+        "id": "combat_armor_leg_r",
+        "name": "Combat Armor Right Leg",
+        "type": "armor",
+        "armorSet": "combat_armor",
+        "slot": "leg_r",
+        "weight": 0.4,
+        "capsValue": 80,
+        "tradeable": true,
+        "description": "Right leg combat greave. Still holds a polish.",
+        "nft_eligible": true
+      },
+      {
+        "id": "scoped_hunting_rifle",
+        "name": "Scoped Hunting Rifle",
+        "type": "weapon",
+        "weight": 2.0,
+        "capsValue": 175,
+        "tradeable": true,
+        "description": "Long-range precision rifle. Deadly in the right hands.",
+        "nft_eligible": true
+      },
+      {
+        "id": "military_assault_rifle",
+        "name": "Military Assault Rifle",
+        "type": "weapon",
+        "weight": 2.0,
+        "capsValue": 220,
+        "tradeable": true,
+        "description": "Full-auto .308 battle rifle. Pre-war military issue.",
+        "nft_eligible": true
+      },
+      {
+        "id": "ultra_stimpak",
+        "name": "Ultra Stimpak",
+        "type": "consumable",
+        "weight": 1.5,
+        "capsValue": 75,
+        "tradeable": true,
+        "description": "High-potency healing compound. Fixes critical wounds fast.",
+        "nft_eligible": true
+      },
+      {
+        "id": "stealth_boy",
+        "name": "Stealth Boy",
+        "type": "consumable",
+        "weight": 1.0,
+        "capsValue": 120,
+        "tradeable": true,
+        "description": "Personal radar-stealth device. Limited charge.",
+        "nft_eligible": true
+      },
+      {
+        "id": "plasma_grenade_x3",
+        "name": "Plasma Grenade (\u00d73)",
+        "type": "ammo",
+        "weight": 1.0,
+        "capsValue": 90,
+        "tradeable": true,
+        "description": "Three plasma grenades. Dissolves organic matter efficiently.",
+        "nft_eligible": true
+      },
+      {
+        "id": "prewar_circuit_board",
+        "name": "Pre-War Circuit Board",
+        "type": "component",
+        "weight": 1.5,
+        "capsValue": 80,
+        "tradeable": true,
+        "description": "Intact pre-war electronics. Required for advanced crafting.",
+        "nft_eligible": true
+      },
+      {
+        "id": "advanced_surgical_kit",
+        "name": "Advanced Surgical Kit",
+        "type": "medical",
+        "weight": 1.5,
+        "capsValue": 110,
+        "tradeable": true,
+        "description": "Sterile surgical tools. For when a Stimpak just won't cut it.",
+        "nft_eligible": true
+      },
+      {
+        "id": "fusion_cell_x12",
+        "name": "Fusion Cell (\u00d712)",
+        "type": "ammo",
+        "weight": 2.0,
+        "capsValue": 60,
+        "tradeable": true,
+        "description": "Energy cell for laser weapons. Pre-war standard issue.",
+        "nft_eligible": true
+      },
+      {
+        "id": "ammo_556_x30",
+        "name": "5.56mm Rounds (\u00d730)",
+        "type": "ammo",
+        "weight": 2.0,
+        "capsValue": 45,
+        "tradeable": true,
+        "description": "Assault rifle ammunition. Common in military caches.",
+        "nft_eligible": true
+      },
+      {
+        "id": "psycho",
+        "name": "Psycho",
+        "type": "consumable",
+        "weight": 1.0,
+        "capsValue": 65,
+        "tradeable": true,
+        "description": "Rage-inducing combat chem. +DMG, +DR, very addictive.",
+        "nft_eligible": true
+      },
+      {
+        "id": "caps_stash",
+        "name": "Caps Stash",
+        "type": "currency",
+        "weight": 2.0,
+        "capsValue": 100,
+        "tradeable": false,
+        "capsMin": 50,
+        "capsMax": 150,
+        "description": "A stash of bottle caps hidden by a wastelander who didn't come back.",
+        "nft_eligible": true
+      },
+      {
+        "id": "reflex_sight",
+        "name": "Reflex Sight (Energy)",
+        "type": "weapon_mod",
+        "weight": 1.0,
+        "capsValue": 95,
+        "tradeable": true,
+        "description": "Holographic sight compatible with energy weapons.",
+        "nft_eligible": true
+      },
+      {
+        "id": "milgrade_duct_tape",
+        "name": "Military-Grade Duct Tape",
+        "type": "junk",
+        "weight": 1.5,
+        "capsValue": 55,
+        "tradeable": true,
+        "description": "Industrial-spec adhesive. Far superior to civilian tape.",
+        "nft_eligible": true
+      }
+    ],
+    "epic": [
+      {
+        "id": "plasma_rifle",
+        "name": "Plasma Rifle",
+        "type": "weapon",
+        "weight": 2.0,
+        "capsValue": 500,
+        "tradeable": true,
+        "description": "Military energy rifle firing superheated plasma bolts. Melts everything.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t45_pa_head",
+        "name": "T-45 Power Armor Helmet",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "head",
+        "weight": 0.5,
+        "capsValue": 300,
+        "tradeable": true,
+        "description": "Early power armor helmet. Rad shielding and HUD display.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t45_pa_chest",
+        "name": "T-45 Power Armor Torso",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "chest",
+        "weight": 0.5,
+        "capsValue": 300,
+        "tradeable": true,
+        "description": "T-45 torso frame, pre-war military issue.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t45_pa_arm_l",
+        "name": "T-45 Power Armor Left Arm",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "arm_l",
+        "weight": 0.4,
+        "capsValue": 240,
+        "tradeable": true,
+        "description": "Left arm actuator assembly. Hydraulics intact.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t45_pa_arm_r",
+        "name": "T-45 Power Armor Right Arm",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "arm_r",
+        "weight": 0.4,
+        "capsValue": 240,
+        "tradeable": true,
+        "description": "Right arm actuator assembly. Grip servos functional.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t45_pa_leg_l",
+        "name": "T-45 Power Armor Left Leg",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "leg_l",
+        "weight": 0.4,
+        "capsValue": 240,
+        "tradeable": true,
+        "description": "Left leg actuator. Minor dents from pre-war combat.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t45_pa_leg_r",
+        "name": "T-45 Power Armor Right Leg",
+        "type": "armor",
+        "armorSet": "t45_power_armor",
+        "slot": "leg_r",
+        "weight": 0.4,
+        "capsValue": 240,
+        "tradeable": true,
+        "description": "Right leg actuator. Servo needs minor calibration.",
+        "nft_eligible": true
+      },
+      {
+        "id": "gauss_rifle",
+        "name": "Gauss Rifle",
+        "type": "weapon",
+        "weight": 2.0,
+        "capsValue": 650,
+        "tradeable": true,
+        "description": "Electromagnetic coilgun. Fires accelerated projectiles at devastating velocity.",
+        "nft_eligible": true
+      },
+      {
+        "id": "anti_materiel_rifle",
+        "name": "Anti-Materiel Rifle",
+        "type": "weapon",
+        "weight": 1.5,
+        "capsValue": 750,
+        "tradeable": true,
+        "description": "Heavy .50 caliber rifle designed to destroy vehicles. And people.",
+        "nft_eligible": true
+      },
+      {
+        "id": "railroad_coat",
+        "name": "Railroad Coat (Legendary)",
+        "type": "armor",
+        "weight": 1.5,
+        "capsValue": 450,
+        "tradeable": true,
+        "description": "Ballistic weave-lined duster. Railroad operative gear.",
+        "slot": "full",
+        "armorSet": null,
+        "nft_eligible": true
+      },
+      {
+        "id": "ballistic_weave_schematic",
+        "name": "Ballistic Weave Schematic",
+        "type": "schematic",
+        "weight": 1.0,
+        "capsValue": 350,
+        "tradeable": true,
+        "description": "Technical blueprint for weaving ballistic fiber into clothing.",
+        "nft_eligible": true
+      },
+      {
+        "id": "military_fusion_core",
+        "name": "Military Fusion Core",
+        "type": "ammo",
+        "weight": 2.0,
+        "capsValue": 200,
+        "tradeable": true,
+        "description": "High-capacity fusion core for power armor. Rare and valuable.",
+        "nft_eligible": true
+      },
+      {
+        "id": "x_cell",
+        "name": "X-Cell",
+        "type": "consumable",
+        "weight": 1.0,
+        "capsValue": 180,
+        "tradeable": true,
+        "description": "Powerful all-stats chem. Extremely addictive. Black market only.",
+        "nft_eligible": true
+      },
+      {
+        "id": "nuka_cola_quantum",
+        "name": "Nuka-Cola Quantum",
+        "type": "consumable",
+        "weight": 1.5,
+        "capsValue": 250,
+        "tradeable": true,
+        "description": "Glowing blue Nuka-Cola variant. Radioactive and delicious.",
+        "nft_eligible": true
+      },
+      {
+        "id": "caps_voucher",
+        "name": "CAPS Voucher",
+        "type": "currency",
+        "weight": 1.5,
+        "capsValue": 350,
+        "tradeable": false,
+        "capsMin": 200,
+        "capsMax": 500,
+        "onChain": true,
+        "description": "An authenticated in-game CAPS voucher. Redeemable for real on-chain CAPS.",
+        "nft_eligible": true
+      }
+    ],
+    "legendary": [
+      {
+        "id": "fat_man",
+        "name": "Fat Man",
+        "type": "weapon",
+        "weight": 1.5,
+        "capsValue": 2500,
+        "tradeable": true,
+        "description": "Shoulder-mounted mini nuclear catapult. The wasteland's ultimate statement piece.",
+        "nft_eligible": true
+      },
+      {
+        "id": "grognaks_axe",
+        "name": "Grognak's Axe",
+        "type": "weapon",
+        "weight": 1.5,
+        "capsValue": 1800,
+        "tradeable": true,
+        "description": "Legendary two-handed axe from the comics. Deals massive bleed damage.",
+        "nft_eligible": true
+      },
+      {
+        "id": "prototype_gauss_pistol",
+        "name": "Prototype Gauss Pistol",
+        "type": "weapon",
+        "weight": 1.5,
+        "capsValue": 2200,
+        "tradeable": true,
+        "description": "Pre-war experimental coilgun sidearm. One of a kind.",
+        "nft_eligible": true
+      },
+      {
+        "id": "lucky_magnum",
+        "name": "Lucky Magnum",
+        "type": "weapon",
+        "weight": 1.5,
+        "capsValue": 1600,
+        "tradeable": true,
+        "description": "A legendary .44 with impossibly high critical hit odds.",
+        "nft_eligible": true
+      },
+      {
+        "id": "overseers_legendary_coat",
+        "name": "Overseer's Legendary Coat",
+        "type": "armor",
+        "weight": 1.5,
+        "capsValue": 2000,
+        "tradeable": true,
+        "description": "Vault-Tec Overseer formal wear. Max ballistic and rad protection.",
+        "slot": "full",
+        "armorSet": null,
+        "nft_eligible": true
+      },
+      {
+        "id": "t51b_pa_head",
+        "name": "T-51b Power Armor Helmet",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "head",
+        "weight": 0.4,
+        "capsValue": 500,
+        "tradeable": true,
+        "description": "Peak pre-war power armor helmet. Sealed rad filter.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t51b_pa_chest",
+        "name": "T-51b Power Armor Torso",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "chest",
+        "weight": 0.4,
+        "capsValue": 500,
+        "tradeable": true,
+        "description": "T-51b torso. Enclave-grade ballistic ceramic plating.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t51b_pa_arm_l",
+        "name": "T-51b Power Armor Left Arm",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "arm_l",
+        "weight": 0.3,
+        "capsValue": 400,
+        "tradeable": true,
+        "description": "Left arm assembly. Still hums with servo power.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t51b_pa_arm_r",
+        "name": "T-51b Power Armor Right Arm",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "arm_r",
+        "weight": 0.3,
+        "capsValue": 400,
+        "tradeable": true,
+        "description": "Right arm assembly. Gatling mount compatible.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t51b_pa_leg_l",
+        "name": "T-51b Power Armor Left Leg",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "leg_l",
+        "weight": 0.3,
+        "capsValue": 400,
+        "tradeable": true,
+        "description": "Left leg assembly. Hydraulics mint condition.",
+        "nft_eligible": true
+      },
+      {
+        "id": "t51b_pa_leg_r",
+        "name": "T-51b Power Armor Right Leg",
+        "type": "armor",
+        "armorSet": "t51b_power_armor",
+        "slot": "leg_r",
+        "weight": 0.3,
+        "capsValue": 400,
+        "tradeable": true,
+        "description": "Right leg assembly. Final piece of a legend.",
+        "nft_eligible": true
+      },
+      {
+        "id": "alien_blaster",
+        "name": "Alien Blaster",
+        "type": "weapon",
+        "weight": 1.0,
+        "capsValue": 3500,
+        "tradeable": true,
+        "description": "Extraterrestrial sidearm firing alien power cells. Extremely rare.",
+        "nft_eligible": true
+      },
+      {
+        "id": "proto_fizz_auth_chip",
+        "name": "Proto-FIZZ Authentication Chip",
+        "type": "quest_item",
+        "weight": 0.8,
+        "capsValue": 5000,
+        "tradeable": false,
+        "description": "Vault-Tec prototype authentication chip. Opens sealed FIZZ vaults.",
+        "nft_eligible": true
+      },
+      {
+        "id": "legendary_caps_cache",
+        "name": "Legendary CAPS Cache",
+        "type": "currency",
+        "weight": 1.0,
+        "capsValue": 1000,
+        "tradeable": false,
+        "capsMin": 500,
+        "capsMax": 1500,
+        "onChain": true,
+        "description": "A legendary hoard of bottle caps. The find of a lifetime.",
+        "nft_eligible": true
+      }
+    ],
+    "nft_items": [
+      {
+        "id": "fizz_genesis_token",
+        "name": "FIZZ Genesis Token",
+        "type": "nft_item",
+        "weight": 0.8,
+        "capsValue": 0,
+        "onChain": true,
+        "mintable": true,
+        "edition": "legendary",
+        "tradeable": true,
+        "description": "One of the first FIZZ tokens ever minted. Legendary status on-chain.",
+        "nft_eligible": true
+      },
+      {
+        "id": "vault77_overseer_badge",
+        "name": "Vault 77 Overseer Badge",
+        "type": "nft_item",
+        "weight": 2.0,
+        "capsValue": 0,
+        "onChain": true,
+        "mintable": true,
+        "edition": "rare",
+        "tradeable": true,
+        "description": "Official Vault 77 Overseer credential. Rare authority NFT.",
+        "nft_eligible": true
+      },
+      {
+        "id": "wasteland_explorer_sigil",
+        "name": "Wasteland Explorer Sigil",
+        "type": "nft_item",
+        "weight": 2.0,
+        "capsValue": 0,
+        "onChain": true,
+        "mintable": true,
+        "edition": "rare",
+        "tradeable": true,
+        "description": "Sigil awarded to explorers who reach remote GPS POIs. Rare.",
+        "nft_eligible": true
+      },
+      {
+        "id": "faction_war_veteran_token",
+        "name": "Faction War Veteran Token",
+        "type": "nft_item",
+        "weight": 1.5,
+        "capsValue": 0,
+        "onChain": true,
+        "mintable": true,
+        "edition": "epic",
+        "tradeable": true,
+        "description": "Commemorates surviving faction PvP battles. Epic tier NFT.",
+        "nft_eligible": true
+      },
+      {
+        "id": "vaulttec_collectible_card",
+        "name": "Vault-Tec Collectible Card",
+        "type": "nft_item",
+        "weight": 2.5,
+        "capsValue": 50,
+        "onChain": true,
+        "mintable": true,
+        "edition": "uncommon",
+        "tradeable": true,
+        "description": "Vault-Tec promotional card NFT. Collectible, redeemable for CAPS.",
+        "nft_eligible": true
+      },
+      {
+        "id": "wasteland_map_fragment",
+        "name": "Wasteland Map Fragment",
+        "type": "nft_item",
+        "weight": 2.0,
+        "capsValue": 75,
+        "onChain": true,
+        "mintable": true,
+        "edition": "rare",
+        "tradeable": true,
+        "craftable": true,
+        "description": "A fragment of a larger wasteland map NFT. Combine 4 to reveal a secret POI.",
+        "nft_eligible": true
+      },
+      {
+        "id": "caps_chip_onchain",
+        "name": "CAPS Chip (On-Chain)",
+        "type": "nft_item",
+        "weight": 3.0,
+        "capsValue": 100,
+        "onChain": true,
+        "mintable": true,
+        "edition": "uncommon",
+        "tradeable": true,
+        "description": "On-chain token representing 100 CAPS. Redeemable at any settlement.",
+        "nft_eligible": true
+      },
+      {
+        "id": "prototype_id_token",
+        "name": "Prototype ID Token",
+        "type": "nft_item",
+        "weight": 0.5,
+        "capsValue": 0,
+        "onChain": true,
+        "mintable": true,
+        "edition": "mythic",
+        "tradeable": true,
+        "unique": true,
+        "description": "Mythic-tier identity token. Only one exists per Vault in the game world.",
+        "nft_eligible": true
+      }
+    ]
+  },
+  "faction_specific_loot": {
+    "brotherhood_of_steel": {
+      "common_additions": [
+        "fusion_cell",
+        "laser_pistol"
+      ],
+      "rare_drops": [
+        "brotherhood_holotape",
+        "t45_power_armor_helm"
+      ],
+      "legendary_exclusive": [
+        "t51b_power_armor_full"
+      ],
+      "drop_note": "Brotherhood soldiers carry energy weapons and power armor components"
+    },
+    "ncr": {
+      "common_additions": [
+        "ammo_556",
+        "ammo_308"
+      ],
+      "rare_drops": [
+        "ncr_ranger_armor",
+        "combat_armor_chest"
+      ],
+      "legendary_exclusive": [
+        "anti_materiel_rifle"
+      ],
+      "drop_note": "NCR soldiers are well-armed with conventional ballistic weapons"
+    },
+    "raiders": {
+      "common_additions": [
+        "ammo_38",
+        "pipe_pistol"
+      ],
+      "rare_drops": [
+        "spiked_knuckles",
+        "raider_armor_heavy"
+      ],
+      "legendary_exclusive": [],
+      "drop_note": "Raiders carry improvised weapons and scavenged armor"
+    },
+    "institute": {
+      "common_additions": [
+        "fusion_cell"
+      ],
+      "rare_drops": [
+        "synth_component",
+        "institute_laser_pistol"
+      ],
+      "legendary_exclusive": [
+        "prototype_gauss_pistol"
+      ],
+      "drop_note": "Institute synths carry advanced technology rarely seen in the wasteland"
+    },
+    "railroad": {
+      "common_additions": [
+        "stealth_boy"
+      ],
+      "rare_drops": [
+        "ballistic_weave_schematic"
+      ],
+      "legendary_exclusive": [
+        "railroad_armor_legendary"
+      ],
+      "drop_note": "Railroad agents specialize in stealth and mobility"
+    },
+    "children_of_atom": {
+      "common_additions": [
+        "glowing_one_gland",
+        "irradiated_mushroom"
+      ],
+      "rare_drops": [
+        "gamma_gun",
+        "atom_glory_robe"
+      ],
+      "legendary_exclusive": [],
+      "drop_note": "Children of Atom carry radiation weapons and religious artifacts"
+    },
+    "gunners": {
+      "common_additions": [
+        "ammo_556",
+        "frag_grenade"
+      ],
+      "rare_drops": [
+        "combat_armor_chest",
+        "assault_rifle_military"
+      ],
+      "legendary_exclusive": [
+        "gauss_rifle"
+      ],
+      "drop_note": "Gunners are professional mercenaries with military-grade equipment"
+    },
+    "enclave": {
+      "common_additions": [
+        "plasma_cartridge",
+        "advanced_power_cell"
+      ],
+      "rare_drops": [
+        "enclave_power_armor_piece",
+        "plasma_rifle"
+      ],
+      "legendary_exclusive": [
+        "alien_blaster"
+      ],
+      "drop_note": "Enclave soldiers carry the most advanced technology available"
+    },
+    "super_mutants": {
+      "common_additions": [
+        "ammo_308",
+        "buffout"
+      ],
+      "rare_drops": [
+        "minigun_damaged",
+        "super_sledge_dented"
+      ],
+      "legendary_exclusive": [
+        "fatman_launcher"
+      ],
+      "drop_note": "Super Mutants favor heavy weapons and rarely use armor"
+    }
+  },
+  "timeline_specific_loot": {
+    "fallout_1": {
+      "era_items": [
+        "laser_pistol",
+        "plasma_pistol_worn",
+        "combat_armor_early"
+      ],
+      "era_flavor": "First-generation post-war technology. Crude but functional.",
+      "tech_level": "early"
+    },
+    "fallout_2": {
+      "era_items": [
+        "advanced_power_armor_mkii",
+        "turbo_plasma_rifle"
+      ],
+      "era_flavor": "Mature wasteland technology. Two generations of improvisation.",
+      "tech_level": "mid"
+    },
+    "fallout_new_vegas": {
+      "era_items": [
+        "anti_materiel_rifle",
+        "lucky_magnum",
+        "x_cell"
+      ],
+      "era_flavor": "Mojave-specific technology. Diverse, well-maintained, NCR-influenced.",
+      "tech_level": "mature"
+    },
+    "fallout_3": {
+      "era_items": [
+        "combat_shotgun",
+        "scoped_44_magnum",
+        "deathclaw_gauntlet"
+      ],
+      "era_flavor": "Capital Wasteland salvage. Rough but creative.",
+      "tech_level": "mid"
+    },
+    "fallout_4": {
+      "era_items": [
+        "plasma_rifle",
+        "t45_power_armor_helm",
+        "ballistic_weave_schematic"
+      ],
+      "era_flavor": "Commonwealth technology. Institute-influenced innovation.",
+      "tech_level": "advanced"
+    },
+    "fallout_76": {
+      "era_items": [
+        "handmade_rifle",
+        "black_powder_pistol",
+        "super_sledge_dented"
+      ],
+      "era_flavor": "Early wasteland tech. The first survivors made do with very little.",
+      "tech_level": "early"
+    },
+    "fallout_tactics": {
+      "era_items": [
+        "mp5_smg_salvaged",
+        "nightvision_goggles",
+        "combat_armor_heavy"
+      ],
+      "era_flavor": "Midwest Brotherhood salvage. Military surplus emphasis.",
+      "tech_level": "mid"
+    }
+  },
+  "progression_unlocks": {
+    "perk_energy_weapons": {
+      "name": "Energy Weapons Mastery",
+      "description": "All energy weapons deal 20% more damage",
+      "triggered_by": "plasma_rifle"
+    },
+    "perk_ballistic_weave": {
+      "name": "Ballistic Weave",
+      "description": "Can apply ballistic weave to clothing and outfits",
+      "triggered_by": "ballistic_weave_schematic"
+    },
+    "quest_prototype_origins": {
+      "name": "Prototype Origins",
+      "description": "Unlocks the Prototype Origins quest chain",
+      "triggered_by": "prototype_gauss_pistol"
+    },
+    "quest_overseer_legacy": {
+      "name": "The Overseer's Legacy",
+      "description": "Unlocks the full Overseer Legacy quest line",
+      "triggered_by": "overseer_long_coat_legendary"
+    },
+    "quest_crash_site_roswell": {
+      "name": "The Roswell Incident",
+      "description": "Unlocks the Alien Crash Site investigation quest",
+      "triggered_by": "alien_blaster"
+    },
+    "quest_gauss_mastery": {
+      "name": "Gauss Mastery",
+      "description": "Unlocks the Gauss Rifle mastery perk tree",
+      "triggered_by": "gauss_rifle"
+    },
+    "achievement_50_pois": {
+      "name": "Wasteland Explorer",
+      "description": "Awarded for claiming 50 unique GPS POI locations",
+      "triggered_by": "wasteland_explorer_sigil"
+    },
+    "achievement_100_raids": {
+      "name": "Faction War Veteran",
+      "description": "Awarded for surviving 100 faction raid encounters",
+      "triggered_by": "faction_war_veteran_token"
+    }
+  }
+}

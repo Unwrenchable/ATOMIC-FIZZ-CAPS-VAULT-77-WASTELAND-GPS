@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_dlc_regions_prime-echo_002",
+  "type": "side_quest",
+  "name": "Nina Rhea",
+  "region": "dlc_regions",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_dlc_regions_prime-echo_002_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_prime-echo_002_loot",
+  "questHooks": [
+    "region_story_02"
+  ],
+  "anomalyAwareness": 0.5,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

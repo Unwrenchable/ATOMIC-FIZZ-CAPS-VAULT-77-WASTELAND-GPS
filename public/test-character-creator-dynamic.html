@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Creator Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; margin: 5px; }
+        .portrait-container { display: inline-block; margin: 10px; text-align: center; }
+        .portrait { width: 120px; height: 120px; border: 2px solid #333; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Character Creator Dynamic Portrait Test</h1>
+
+    <div class="test-section">
+        <h2>Test Dynamic Portrait Generation</h2>
+        <button onclick="testBasicPortrait()">Generate Basic Portrait</button>
+        <button onclick="testCustomizedPortrait()">Generate Customized Portrait</button>
+        <button onclick="testRandomPortrait()">Generate Random Portrait</button>
+
+        <div class="portrait-container">
+            <div id="portrait" class="portrait">Click a button to generate</div>
+            <div id="portrait-info"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Available SVG Assets</h2>
+        <div id="assets-list">Loading...</div>
+    </div>
+
+    <script type="module">
+        // Import the character creator
+        import CharacterCreator from './js/modules/character-creator.js';
+
+        window.CharacterCreator = CharacterCreator;
+
+        // Initialize
+        async function init() {
+            await CharacterCreator.init();
+            console.log('Character Creator initialized');
+
+            // List available assets
+            listAvailableAssets();
+        }
+
+        // Test basic portrait
+        async function testBasicPortrait() {
+            const appearance = CharacterCreator.getAppearance();
+            const svg = await CharacterCreator.generatePortraitSVG(appearance, 120);
+            document.getElementById('portrait').innerHTML = svg;
+            document.getElementById('portrait-info').innerHTML = `
+                <strong>Basic Appearance:</strong><br>
+                Gender: ${appearance.gender}<br>
+                Face Shape: ${appearance.faceShape}<br>
+                Hair Style: ${appearance.hairStyle}
+            `;
+        }
+
+        // Test customized portrait
+        async function testCustomizedPortrait() {
+            const customAppearance = {
+                gender: 'male',
+                race: 'human',
+                skinTone: 'medium',
+                faceShape: 'round',
+                hairStyle: 'mohawk',
+                hairColor: 'black',
+                eyeShape: 'round',
+                eyeColor: 'blue',
+                noseType: 'straight',
+                mouthType: 'full',
+                scar: 'none',
+                marking: 'none',
+                accessory: 'none',
+                name: 'Test Survivor'
+            };
+
+            console.log('Generating customized portrait...', customAppearance);
+            const svg = await CharacterCreator.generatePortraitSVG(customAppearance, 120);
+            document.getElementById('portrait').innerHTML = svg;
+            document.getElementById('portrait-info').innerHTML = `
+                <strong>Customized Appearance:</strong><br>
+                Name: ${customAppearance.name}<br>
+                Gender: ${customAppearance.gender}<br>
+                Face Shape: ${customAppearance.faceShape}<br>
+                Hair: ${customAppearance.hairStyle} (${customAppearance.hairColor})<br>
+                Eyes: ${customAppearance.eyeShape} (${customAppearance.eyeColor})<br>
+                Skin: ${customAppearance.skinTone}
+            `;
+
+            // Save SVG for inspection
+            const blob = new Blob([svg], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'test-portrait.svg';
+            link.textContent = 'Download SVG';
+            link.style.marginLeft = '10px';
+            document.getElementById('portrait-info').appendChild(link);
+        }
+
+            const svg = await CharacterCreator.generatePortraitSVG(customAppearance, 120);
+            document.getElementById('portrait').innerHTML = svg;
+            document.getElementById('portrait-info').innerHTML = `
+                <strong>Customized Appearance:</strong><br>
+                Gender: ${customAppearance.gender}<br>
+                Face Shape: ${customAppearance.faceShape}<br>
+                Hair: ${customAppearance.hairStyle} (${customAppearance.hairColor})<br>
+                Eyes: ${customAppearance.eyeShape} (${customAppearance.eyeColor})
+            `;
+        }
+
+        // Test random portrait
+        async function testRandomPortrait() {
+            CharacterCreator.randomize();
+            const appearance = CharacterCreator.getAppearance();
+            const svg = await CharacterCreator.generatePortraitSVG(appearance, 120);
+            document.getElementById('portrait').innerHTML = svg;
+            document.getElementById('portrait-info').innerHTML = `
+                <strong>Random Appearance:</strong><br>
+                Gender: ${appearance.gender}<br>
+                Face Shape: ${appearance.faceShape}<br>
+                Hair: ${appearance.hairStyle} (${appearance.hairColor})<br>
+                Eyes: ${appearance.eyeShape} (${appearance.eyeColor})
+            `;
+        }
+
+        // List available assets
+        async function listAvailableAssets() {
+            try {
+                const response = await fetch('/assets/avatars/manifest.json');
+                const manifest = await response.json();
+
+                let html = '<h3>Available Components:</h3>';
+                for (const [layer, files] of Object.entries(manifest.parts)) {
+                    html += `<strong>${layer}:</strong> ${files.length} options<br>`;
+                }
+
+                document.getElementById('assets-list').innerHTML = html;
+            } catch (error) {
+                document.getElementById('assets-list').innerHTML = 'Error loading manifest: ' + error.message;
+            }
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">/workspaces/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS/test-character-creator-dynamic.html

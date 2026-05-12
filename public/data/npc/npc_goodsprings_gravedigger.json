@@ -1,0 +1,16 @@
+{
+  "id": "npc_goodsprings_gravedigger",
+  "name": "Old Gravedigger",
+  "faction": "None",
+  "role": "Caretaker",
+  "type": "civilian",
+  "homeRegion": "goodsprings",
+  "currentRegion": "goodsprings",
+  "poi": "goodsprings_cemetery",
+  "dialog": {
+    "idle": [
+      "Ground’s hard today. Makes the work slow.",
+      "Everyone ends up here eventually."
+    ]
+  }
+}

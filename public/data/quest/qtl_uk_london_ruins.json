@@ -1,0 +1,45 @@
+{
+  "id": "qtl_uk_london_ruins",
+  "name": "London Calling",
+  "type": "global",
+  "region": "London_Ruins_UK",
+  "npc_giver": "global_london_madame_vex",
+  "description": "Madame Vex has intelligence on a Vault-Tec substation buried beneath the old City of London financial district. The data inside could expose pre-war corporation ties to the bombs. She needs someone physically on-site to pull the cache.",
+  "gps_requirement": {
+    "region": "London, United Kingdom",
+    "real_lat": 51.5074,
+    "real_lng": -0.1278,
+    "radius_km": 50
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Reach the City of London",
+      "description": "Travel to the old financial district in the heart of London ruins.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 51.5155, "lng": -0.0922},
+      "radius_m": 500,
+      "actions": ["set_flag:london_calling_site_reached", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Locate the Vault-Tec Substation",
+      "description": "Search the ruins of the old financial district for the concealed Vault-Tec substation entrance. Madame Vex's coordinates put it beneath what was once a bank.",
+      "trigger": "player_search_area",
+      "actions": ["spawn:item_vaultec_substation_key", "set_flag:london_substation_found", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Extract the Data Cache",
+      "description": "Access the substation terminal and extract the pre-war corporate data cache. Return to Madame Vex with the findings.",
+      "trigger": "player_use:item_vaultec_substation_key",
+      "actions": ["spawn:item_london_vault_data", "spawn:item_electric_notes", "complete_quest:true", "set_flag:london_calling_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 400,
+    "caps": 300,
+    "fizz": 25,
+    "items": ["item_london_vault_data", "item_electric_notes"]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_supermutant_guard_brakk",
+  "name": "Brakk",
+  "faction": "black_mountain",
+  "role": "Guard",
+  "personality": "Loud, simple, loyal to Gorath.",
+  "description": "Brakk guards the entrance to Black Mountain. He enjoys smashing things and yelling at outsiders.",
+  "questHooks": [
+    "Saw someone sneaking near the tower.",
+    "Found claw marks on the generator.",
+    "Claims the rocks 'move' at night."
+  ],
+  "poi": "black_mountain_fnv"
+}

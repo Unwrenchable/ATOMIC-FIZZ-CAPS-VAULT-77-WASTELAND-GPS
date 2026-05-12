@@ -1,0 +1,16 @@
+{
+  "id": "npc_novac_motel_clerk_harlan_moss",
+  "name": "Harlan Moss",
+  "faction": "novac",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Motel Clerk",
+  "personality": "Polite but distant, always watching the road.",
+  "description": "Harlan runs the front desk at the Novac Motel. He keeps track of every traveler who comes through — and every one who doesn’t leave.",
+  "questHooks": [
+    "Mentions a guest who vanished without checking out.",
+    "Says someone has been leaving strange caps outside Room 12.",
+    "Heard a low hum coming from the motel’s old generator."
+  ],
+  "poi": "novac_motel_fnv"
+}

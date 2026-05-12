@@ -1,0 +1,1094 @@
+/* ============================================================
+   FIZZ.FUN TOKEN LAUNCHPAD — STANDALONE VERSION
+   Vault-Tec Certified Token Launch Terminal
+   With Full Pocket-Boy CRT Effects & Radioactive Glow
+   ============================================================ */
+
+/* ============================================================
+   ROOT VARIABLES — WASTELAND COLOR PALETTE
+   ============================================================ */
+:root {
+  /* Pocket-Boy Green Spectrum */
+  --pipboy-green: #00ff66;
+  --pipboy-green-bright: #00ff88;
+  --pipboy-green-dim: #00cc55;
+  --pipboy-green-dark: #009944;
+  --pipboy-green-darker: #006633;
+  
+  /* Background Layers */
+  --pipboy-black: #0a0f0a;
+  --pipboy-bg: #0d120d;
+  --pipboy-panel: rgba(0, 30, 10, 0.85);
+  --pipboy-panel-dark: rgba(0, 15, 5, 0.95);
+  
+  /* Vault-Tec Gold Accent */
+  --vault-gold: #ffcc00;
+  --vault-gold-dim: #cc9900;
+  --vault-gold-bright: #ffdd33;
+  
+  /* Radioactive Fizz Orange */
+  --fizz-orange: #ff9933;
+  --fizz-orange-dim: #cc7722;
+  --fizz-orange-bright: #ffaa44;
+  
+  /* Danger Red (Radiation Warning) */
+  --rad-red: #ff3333;
+  --rad-red-dim: #cc2222;
+  
+  /* Success Blue (Water Chip Approved) */
+  --vault-blue: #00d4ff;
+  --vault-blue-dim: #00a8cc;
+  
+  /* CRT Effects */
+  --scanline-opacity: 0.08;
+  --glow-radius: 20px;
+  
+  /* Typography */
+  --pipboy-font: "VT323", "Courier New", monospace;
+  
+  /* Safe Area Insets for PWA */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  
+  /* Static Noise Texture */
+  --noise-texture: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=');
+}
+
+/* ============================================================
+   GLOBAL RESET & BASE
+   ============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%; /* 10px base for rem calculations */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--pipboy-black);
+  color: var(--pipboy-green);
+  font-family: var(--pipboy-font);
+  font-size: clamp(1.6rem, 2vw, 2rem);
+  line-height: 1.5;
+  padding: clamp(1rem, 2vw, 2rem);
+  padding-top: max(var(--safe-top), clamp(1rem, 2vw, 2rem));
+  padding-bottom: max(var(--safe-bottom), clamp(1rem, 2vw, 2rem));
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  
+  /* Base text glow */
+  text-shadow: 0 0 4px rgba(0, 255, 102, 0.6);
+  
+  /* Radial background gradient */
+  background: radial-gradient(
+    ellipse at center,
+    #1a2a1a 0%,
+    #0d120d 40%,
+    #050805 80%,
+    #000000 100%
+  );
+  
+  /* Base ambient pulse animation */
+  animation: ambient-pulse 8s ease-in-out infinite;
+}
+
+@keyframes ambient-pulse {
+  0%, 100% {
+    background-position: center;
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.05);
+  }
+}
+
+/* ============================================================
+   CRT SCANLINES OVERLAY
+   ============================================================ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 102, 0.03) 0px,
+    rgba(0, 255, 102, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.6;
+  animation: scanline-drift 8s linear infinite;
+}
+
+@keyframes scanline-drift {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+/* ============================================================
+   CRT RADIAL GLOW OVERLAY
+   ============================================================ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 153, 51, 0.15) 0%,
+    rgba(255, 153, 51, 0.05) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 9998;
+  animation: crt-glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes crt-glow-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* ============================================================
+   BOOT OVERLAY — VAULT-TEC STARTUP SEQUENCE
+   ============================================================ */
+#boot-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  z-index: 99999;
+}
+
+.boot-logo {
+  font-size: clamp(8rem, 15vw, 15rem);
+  filter: drop-shadow(0 0 30px var(--fizz-orange));
+  animation: logo-pulse 2s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px var(--fizz-orange));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 40px var(--fizz-orange-bright));
+    transform: scale(1.02);
+  }
+}
+
+.boot-line {
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  color: var(--fizz-orange);
+  text-shadow: 0 0 8px var(--fizz-orange);
+  animation: terminal-blink 1.5s infinite;
+}
+
+@keyframes terminal-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.3; }
+}
+
+@keyframes boot-fadeout {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================================
+   CRT CONTAINER CLASS (applied to #fizzfun-app)
+   ============================================================ */
+.crt {
+  position: relative;
+}
+
+/* Subtle flicker on the whole container — feels like an old terminal */
+.crt {
+  animation: crt-flicker 10s step-start infinite;
+}
+
+@keyframes crt-flicker {
+  0%   { opacity: 1; }
+  93%  { opacity: 1; }
+  93.5%{ opacity: 0.92; }
+  94%  { opacity: 1; }
+  97%  { opacity: 1; }
+  97.3%{ opacity: 0.95; }
+  97.6%{ opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* ============================================================
+   MAIN APP CONTAINER
+   ============================================================ */
+#fizzfun-app {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+#fizzfun-header {
+  text-align: center;
+  padding: clamp(2rem, 4vw, 4rem) clamp(1rem, 2vw, 2rem);
+  margin-bottom: clamp(2rem, 3vw, 3rem);
+  background: var(--pipboy-panel);
+  border: 3px solid var(--fizz-orange);
+  border-radius: 1rem;
+  box-shadow: 
+    0 0 30px rgba(255, 153, 51, 0.4),
+    inset 0 0 30px rgba(255, 153, 51, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+#fizzfun-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--noise-texture);
+  opacity: 0.4;
+  pointer-events: none;
+  animation: noise-flicker 0.3s infinite;
+}
+
+@keyframes noise-flicker {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2%, 2%); }
+  50% { transform: translate(2%, -2%); }
+  75% { transform: translate(-2%, -2%); }
+  100% { transform: translate(0, 0); }
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.logo-icon {
+  font-size: clamp(4rem, 8vw, 6rem);
+  filter: drop-shadow(0 0 20px var(--fizz-orange));
+  animation: rocket-pulse 3s ease-in-out infinite;
+}
+
+@keyframes rocket-pulse {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+}
+
+#fizzfun-header h1 {
+  font-size: clamp(4rem, 8vw, 8rem);
+  color: var(--fizz-orange-bright);
+  text-shadow: 
+    0 0 20px var(--fizz-orange),
+    0 0 40px var(--fizz-orange-dim);
+  letter-spacing: 0.5rem;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: clamp(2rem, 3vw, 3rem);
+  color: var(--vault-gold);
+  text-shadow: 0 0 10px var(--vault-gold-dim);
+}
+
+.tagline {
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  color: var(--pipboy-green-dim);
+  margin-top: 1rem;
+  line-height: 1.6;
+}
+
+/* Vault-Tec certification stamp beneath the tagline */
+.vault-cert {
+  display: inline-block;
+  margin-top: 1.2rem;
+  padding: 0.4rem 1.2rem;
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  color: var(--vault-gold-dim);
+  border: 1px solid var(--vault-gold-dim);
+  border-radius: 0.3rem;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 6px rgba(204, 153, 0, 0.5);
+  background: rgba(204, 153, 0, 0.06);
+  opacity: 0.8;
+}
+
+/* Hazard-stripe bar below the header — Fallout warning aesthetic */
+#fizzfun-header::after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--fizz-orange) 0px,
+    var(--fizz-orange) 12px,
+    var(--pipboy-black) 12px,
+    var(--pipboy-black) 20px
+  );
+  opacity: 0.6;
+}
+
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.quick-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: clamp(2rem, 3vw, 3rem);
+  padding: 0 clamp(1rem, 2vw, 2rem);
+}
+
+.nav-btn {
+  padding: 1rem 2rem;
+  font-size: clamp(1.6rem, 2vw, 1.8rem);
+  font-family: var(--pipboy-font);
+  background: var(--pipboy-panel);
+  border: 2px solid var(--pipboy-green);
+  color: var(--pipboy-green);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px rgba(0, 255, 102, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+  display: inline-block;
+  text-align: center;
+}
+
+.nav-btn:hover {
+  background: var(--pipboy-green);
+  color: var(--pipboy-black);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.6);
+  transform: translateY(-2px);
+}
+
+.nav-btn.btn-primary {
+  border-color: var(--fizz-orange);
+  color: var(--fizz-orange);
+  box-shadow: 0 0 10px rgba(255, 153, 51, 0.3);
+}
+
+.nav-btn.btn-primary:hover {
+  background: var(--fizz-orange);
+  color: var(--pipboy-black);
+  box-shadow: 0 0 20px rgba(255, 153, 51, 0.6);
+}
+
+/* ============================================================
+   WALLET STATUS
+   ============================================================ */
+.status-card {
+  background: var(--pipboy-panel);
+  border: 2px solid var(--pipboy-green);
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  margin-bottom: clamp(2rem, 3vw, 3rem);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.status-dot {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.status-dot.connected {
+  background: var(--pipboy-green);
+  box-shadow: 0 0 10px var(--pipboy-green);
+}
+
+.status-dot.disconnected {
+  background: var(--rad-red);
+  box-shadow: 0 0 10px var(--rad-red);
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+/* ============================================================
+   TOAST NOTIFICATIONS
+   ============================================================ */
+#toast-container {
+  position: fixed;
+  top: clamp(1rem, 2vw, 2rem);
+  right: clamp(1rem, 2vw, 2rem);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+}
+
+.toast {
+  padding: 1.5rem;
+  background: var(--pipboy-panel);
+  border: 2px solid var(--pipboy-green);
+  border-radius: 0.6rem;
+  box-shadow: 0 0 30px rgba(0, 255, 102, 0.5);
+  animation: toast-slide-in 0.5s ease;
+  font-size: 1.6rem;
+  color: var(--pipboy-green);
+}
+
+@keyframes toast-slide-in {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.removing {
+  animation: toast-slide-out 0.3s ease forwards;
+}
+
+@keyframes toast-slide-out {
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+.toast.success {
+  border-color: var(--vault-blue);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+}
+
+.toast.error {
+  border-color: var(--rad-red);
+  box-shadow: 0 0 30px rgba(255, 51, 51, 0.5);
+}
+
+.toast.warning {
+  border-color: var(--vault-gold);
+  box-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+#fizzfun-content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 3vw, 3rem);
+}
+
+/* ============================================================
+   CARD COMPONENTS
+   ============================================================ */
+.card {
+  background: var(--pipboy-panel);
+  border: 3px solid var(--pipboy-green);
+  border-radius: 1rem;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 102, 0.3),
+    inset 0 0 20px rgba(0, 255, 102, 0.05);
+  overflow: hidden;
+  position: relative;
+  animation: card-glow 4s ease-in-out infinite;
+}
+
+@keyframes card-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(0, 255, 102, 0.3),
+      inset 0 0 20px rgba(0, 255, 102, 0.05);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(0, 255, 102, 0.4),
+      inset 0 0 30px rgba(0, 255, 102, 0.08);
+  }
+}
+
+.fizz-section {
+  border-color: var(--fizz-orange);
+  box-shadow: 
+    0 0 20px rgba(255, 153, 51, 0.3),
+    inset 0 0 20px rgba(255, 153, 51, 0.05);
+}
+
+.static-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--noise-texture);
+  opacity: 0.15;
+  pointer-events: none;
+  animation: noise-flicker 0.3s infinite;
+}
+
+.card-header {
+  background: rgba(0, 255, 102, 0.1);
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid var(--pipboy-green);
+  font-size: clamp(2rem, 3vw, 2.4rem);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.fizz-section .card-header {
+  background: rgba(255, 153, 51, 0.1);
+  border-bottom-color: var(--fizz-orange);
+}
+
+.card-icon {
+  font-size: clamp(2.4rem, 4vw, 3rem);
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.card-body {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   DATA ROWS
+   ============================================================ */
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.2);
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.data-row:last-child {
+  border-bottom: none;
+}
+
+.data-label {
+  color: var(--pipboy-green-dim);
+  font-size: clamp(1.4rem, 2vw, 1.6rem);
+}
+
+.data-value {
+  color: var(--pipboy-green-bright);
+  font-weight: bold;
+  font-size: clamp(1.6rem, 2vw, 1.8rem);
+  text-shadow: 0 0 10px rgba(0, 255, 102, 0.6);
+}
+
+.balance-value {
+  color: var(--vault-gold);
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+}
+
+/* ============================================================
+   TIER BADGES
+   ============================================================ */
+.tier-badge {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: clamp(1.4rem, 2vw, 1.6rem);
+  text-shadow: 0 0 10px currentColor;
+}
+
+.tier-badge.free {
+  background: rgba(128, 128, 128, 0.2);
+  border: 2px solid #888;
+  color: #aaa;
+}
+
+.tier-badge.common {
+  background: rgba(0, 255, 102, 0.2);
+  border: 2px solid var(--pipboy-green);
+  color: var(--pipboy-green-bright);
+}
+
+.tier-badge.rare {
+  background: rgba(0, 212, 255, 0.2);
+  border: 2px solid var(--vault-blue);
+  color: var(--vault-blue);
+}
+
+.tier-badge.legendary {
+  background: rgba(255, 204, 0, 0.2);
+  border: 2px solid var(--vault-gold);
+  color: var(--vault-gold-bright);
+}
+
+/* ============================================================
+   CONTROL BAR
+   ============================================================ */
+.control-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  padding: 1rem 2rem;
+  font-size: clamp(1.6rem, 2vw, 1.8rem);
+  font-family: var(--pipboy-font);
+  background: var(--pipboy-panel);
+  border: 2px solid var(--pipboy-green);
+  color: var(--pipboy-green);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px rgba(0, 255, 102, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+.btn:hover {
+  background: var(--pipboy-green);
+  color: var(--pipboy-black);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  border-color: var(--pipboy-green-dim);
+  color: var(--pipboy-green-dim);
+}
+
+.btn-primary {
+  border-color: var(--fizz-orange);
+  color: var(--fizz-orange);
+  box-shadow: 0 0 10px rgba(255, 153, 51, 0.3);
+}
+
+.btn-primary:hover {
+  background: var(--fizz-orange);
+  color: var(--pipboy-black);
+  box-shadow: 0 0 20px rgba(255, 153, 51, 0.6);
+}
+
+.btn-buy {
+  border-color: var(--vault-blue);
+  color: var(--vault-blue);
+  flex: 1;
+}
+
+.btn-buy:hover,
+.btn-buy.active {
+  background: var(--vault-blue);
+  color: var(--pipboy-black);
+}
+
+.btn-sell {
+  border-color: var(--rad-red);
+  color: var(--rad-red);
+  flex: 1;
+}
+
+.btn-sell:hover,
+.btn-sell.active {
+  background: var(--rad-red);
+  color: var(--pipboy-black);
+}
+
+.btn-block {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.btn-special {
+  width: 100%;
+  padding: 1.5rem;
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  border-color: var(--vault-gold);
+  color: var(--vault-gold);
+  box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+}
+
+.btn-special:hover {
+  background: var(--vault-gold);
+  color: var(--pipboy-black);
+  box-shadow: 0 0 30px rgba(255, 204, 0, 0.6);
+}
+
+/* ============================================================
+   TOKEN GRID
+   ============================================================ */
+.token-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: clamp(1.5rem, 2vw, 2rem);
+  margin-top: 2rem;
+}
+
+.token-card {
+  background: var(--pipboy-panel-dark);
+  border: 2px solid var(--pipboy-green-dark);
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+}
+
+.token-card:hover {
+  border-color: var(--pipboy-green);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+  transform: translateY(-5px);
+}
+
+.token-symbol {
+  font-size: clamp(2.4rem, 4vw, 3rem);
+  font-weight: bold;
+  color: var(--fizz-orange-bright);
+  text-shadow: 0 0 15px var(--fizz-orange);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.token-name {
+  font-size: clamp(1.6rem, 2vw, 1.8rem);
+  color: var(--pipboy-green);
+  margin-bottom: 1.5rem;
+}
+
+.token-stats {
+  margin-bottom: 1.5rem;
+}
+
+.token-stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: clamp(1.4rem, 1.8vw, 1.6rem);
+  border-bottom: 1px solid rgba(0, 255, 102, 0.1);
+}
+
+.token-stat-row:last-child {
+  border-bottom: none;
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress-bar {
+  position: relative;
+  height: 3rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--pipboy-green-dark);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    var(--pipboy-green-dark) 0%, 
+    var(--pipboy-green) 50%, 
+    var(--pipboy-green-bright) 100%);
+  transition: width 0.5s ease;
+  box-shadow: 0 0 20px var(--pipboy-green);
+  animation: progress-pulse 2s ease-in-out infinite;
+}
+
+@keyframes progress-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+.progress-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+  font-weight: bold;
+  color: var(--pipboy-green-bright);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  z-index: 1;
+}
+
+/* ============================================================
+   TRADE CONTROLS
+   ============================================================ */
+.trade-controls {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.token-details {
+  background: var(--pipboy-panel-dark);
+  border: 2px solid var(--pipboy-green-dark);
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* ============================================================
+   INPUT GROUPS
+   ============================================================ */
+.input-group {
+  margin-bottom: 2rem;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 0.8rem;
+  color: var(--pipboy-green-dim);
+  font-size: clamp(1.4rem, 2vw, 1.6rem);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+.input-field {
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  font-size: clamp(1.6rem, 2vw, 1.8rem);
+  font-family: var(--pipboy-font);
+  background: var(--pipboy-panel-dark);
+  border: 2px solid var(--pipboy-green-dark);
+  color: var(--pipboy-green);
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--pipboy-green);
+  box-shadow: 
+    inset 0 0 10px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(0, 255, 102, 0.3);
+}
+
+.input-field::placeholder {
+  color: var(--pipboy-green-darker);
+  opacity: 0.6;
+}
+
+/* ============================================================
+   QUOTE DISPLAY
+   ============================================================ */
+.quote-display {
+  background: var(--pipboy-panel-dark);
+  border: 2px solid var(--vault-blue);
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+/* ============================================================
+   STATUS MESSAGE
+   ============================================================ */
+.status-message {
+  margin-top: 1rem;
+  text-align: center;
+  min-height: 2rem;
+}
+
+/* ============================================================
+   ACTION SECTION
+   ============================================================ */
+.action-section {
+  margin: clamp(2rem, 3vw, 3rem) 0;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  text-align: center;
+  padding: clamp(2rem, 3vw, 3rem);
+  margin-top: clamp(3rem, 5vw, 5rem);
+  border-top: 2px solid var(--pipboy-green-dark);
+  color: var(--pipboy-green-dim);
+}
+
+.site-footer p {
+  margin: 0.5rem 0;
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.mono {
+  font-family: var(--pipboy-font);
+}
+
+.small {
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+}
+
+.muted {
+  color: var(--pipboy-green-dim);
+  opacity: 0.7;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 102, 0.1) 25%,
+    rgba(0, 255, 102, 0.2) 50%,
+    rgba(0, 255, 102, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+@media (max-width: 768px) {
+  .token-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .control-bar {
+    flex-direction: column;
+  }
+  
+  .control-bar .btn {
+    width: 100%;
+  }
+  
+  .logo-section {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  #fizzfun-header h1 {
+    font-size: clamp(3rem, 10vw, 5rem);
+  }
+  
+  #toast-container {
+    left: clamp(1rem, 2vw, 2rem);
+    right: clamp(1rem, 2vw, 2rem);
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .data-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .trade-controls {
+    flex-direction: column;
+  }
+  
+  .quick-nav {
+    flex-direction: column;
+  }
+  
+  .nav-btn {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  body {
+    background: #000;
+  }
+  
+  .card {
+    border-width: 4px;
+  }
+  
+  .btn {
+    border-width: 3px;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--pipboy-green);
+  outline-offset: 3px;
+}

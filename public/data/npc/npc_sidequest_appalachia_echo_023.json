@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_appalachia_echo_023",
+  "type": "side_quest",
+  "name": "Joren Mara",
+  "region": "appalachia",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_appalachia_echo_023_dialog",
+  "lootPool": "npc_sidequest_appalachia_echo_023_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "anomaly_investigation_02"
+  ],
+  "anomalyAwareness": 0.81,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!--
+    WASTELAND SURVIVOR: Matted, wild, disheveled post-apoc hair.
+    Asymmetric silhouette. Jagged irregular edges. Random strands sticking
+    out. No shine (matte, dirty look). Two-tone matted patches.
+  -->
+  <defs>
+    <linearGradient id="wst_grad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%"   stop-color="#8A5A38"/>
+      <stop offset="60%"  stop-color="#5A3520"/>
+      <stop offset="100%" stop-color="#2A1208"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Messy sticking-out wisps — drawn first behind main cap -->
+  <!-- Left wild strands -->
+  <path d="M 64,92  Q 36,74  30,54"
+        fill="none" stroke="#5A3520" stroke-width="4"
+        stroke-linecap="round"/>
+  <path d="M 68,78  Q 45,55  48,36"
+        fill="none" stroke="#6A4228" stroke-width="3"
+        stroke-linecap="round"/>
+  <path d="M 78,62  Q 62,38  70,20"
+        fill="none" stroke="#5A3520" stroke-width="2.5"
+        stroke-linecap="round"/>
+  <!-- Right wild strands -->
+  <path d="M 192,88 Q 218,72 228,52"
+        fill="none" stroke="#5A3520" stroke-width="3.5"
+        stroke-linecap="round"/>
+  <path d="M 180,65 Q 200,46  194,26"
+        fill="none" stroke="#6A4228" stroke-width="2.5"
+        stroke-linecap="round"/>
+  <!-- Top center wisp -->
+  <path d="M 118,34 Q 110,16 118,6"
+        fill="none" stroke="#6A4228" stroke-width="3"
+        stroke-linecap="round"/>
+  <path d="M 140,38 Q 152,22 146,8"
+        fill="none" stroke="#5A3520" stroke-width="2"
+        stroke-linecap="round"/>
+
+  <!-- Main cap: jagged, irregular, asymmetric path -->
+  <!--
+    Left side is messier and droopier than right.
+    Multiple jags and bumps in the outline.
+  -->
+  <path d="
+    M 56,106
+    Q 44,76   60,52
+    Q 72,36   90,28
+    Q 108,20  96,16
+    Q 100,10  110,12
+    Q 118,8   114,22
+    Q 120,18  124,28
+    Q 128,22  132,28
+    Q 138,20  142,26
+    Q 140,14  148,10
+    Q 158,8   154,20
+    Q 162,16  162,28
+    Q 168,18  176,26
+    Q 188,30  198,46
+    Q 212,64  200,104
+    Q 182,92  150,88
+    Q 128,85  110,88
+    Q 85,92   56,106
+    Z"
+    fill="url(#wst_grad)"/>
+
+  <!-- Matted dark patches (dirty, clumped hair) -->
+  <path d="M 78,64  Q 96,56  118,55"
+        fill="none" stroke="#3D2010" stroke-width="5"
+        stroke-linecap="round" opacity="0.35"/>
+  <path d="M 145,58 Q 165,55 182,64"
+        fill="none" stroke="#3D2010" stroke-width="4"
+        stroke-linecap="round" opacity="0.30"/>
+  <path d="M 88,82  Q 110,76 135,77"
+        fill="none" stroke="#3D2010" stroke-width="5"
+        stroke-linecap="round" opacity="0.28"/>
+
+  <!-- Dull highlight (no shine, just faint light-catch) -->
+  <path d="M 96,46 Q 116,37 136,40"
+        fill="none" stroke="#9A6A40" stroke-width="3"
+        stroke-linecap="round" opacity="0.28"/>
+
+  <!-- Hairline edge — irregular and jagged -->
+  <path d="M 56,106 Q 72,96 100,90 Q 128,87 156,91 Q 180,95 200,104"
+        fill="none" stroke="#3D2010" stroke-width="2"
+        stroke-linecap="round" opacity="0.48"/>
+
+  <!-- Surface clump / mat texture lines -->
+  <g fill="none" stroke="#3D2010" stroke-width="1.4"
+     stroke-linecap="round" opacity="0.30">
+    <path d="M 70,70 Q 82,62 96,60"/>
+    <path d="M 160,62 Q 174,60 186,68"/>
+    <path d="M 90,88 Q 112,82 130,82"/>
+    <path d="M 148,84 Q 166,82 178,88"/>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+{
+  "id": "npc_jacobstown_hunter_bram_koal",
+  "name": "Bram Koal",
+  "faction": "jacobstown",
+  "role": "Hunter",
+  "personality": "Stoic, reliable, protective.",
+  "description": "Bram hunts for Jacobstown’s food supply. He knows the surrounding wilderness better than anyone.",
+  "questHooks": [
+    "Needs help tracking a dangerous predator.",
+    "Found signs of trespassers near the cliffs.",
+    "Worries about shrinking wildlife populations."
+  ],
+  "poi": "jacobstown_fnv"
+}

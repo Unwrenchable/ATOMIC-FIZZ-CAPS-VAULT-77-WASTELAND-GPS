@@ -1,0 +1,16 @@
+{
+  "id": "npc_primm_powder_ganger_luke_darrow",
+  "name": "Luke Darrow",
+  "faction": "powder_gangers",
+  "homeRegion": "mojave",
+  "currentRegion": "mojave",
+  "role": "Powder Ganger Lieutenant",
+  "personality": "Cruel, opportunistic, thinks Primm is easy prey.",
+  "description": "Luke leads a small Powder Ganger cell hiding in the ruins around Primm. He’s planning something big.",
+  "questHooks": [
+    "Wants to take over Primm and use it as a base.",
+    "Carries a strange cap he claims 'buzzes' when he gets angry.",
+    "Knows about a hidden NCR stash near the highway."
+  ],
+  "poi": "primm_schoolhouse_fnv"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "quest_anch_frozen_signal",
+  "name": "Frozen Signal",
+  "type": "regional",
+  "poIs": ["poi_anch_relay", "poi_anch_bunker"],
+  "description": "Track a repeating distress signal trapped in a time loop.",
+  "objectives": [
+    "Locate the frozen relay tower",
+    "Decode the looping distress call",
+    "Confront the source in the old bunker"
+  ],
+  "endings": {
+    "free_hale": "You break Hale’s loop. His echo fades peacefully.",
+    "bind_hale": "You anchor Hale to your timeline. He becomes a companion."
+  }
+}

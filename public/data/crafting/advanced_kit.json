@@ -1,0 +1,14 @@
+{
+  "id": "advanced_kit",
+  "name": "Advanced Kit",
+  "ingredients": [
+    { "id": "turret_part", "qty": 2 },
+    { "id": "rare_alloy", "qty": 1 }
+  ],
+  "tokenCost": 1,
+  "output": { "id": "advanced_kit", "qty": 1 },
+  "cooldownSeconds": 1800,
+  "requiresLevel": 5,
+  "maxPerDay": 1,
+  "sourceFile": "recipes.json"
+}

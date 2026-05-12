@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_mojave_echo_010",
+  "type": "side_quest",
+  "name": "Lira Nina",
+  "region": "mojave",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_mojave_echo_010_dialog",
+  "lootPool": "npc_sidequest_mojave_echo_010_loot",
+  "questHooks": [
+    "region_story_02",
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.62,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

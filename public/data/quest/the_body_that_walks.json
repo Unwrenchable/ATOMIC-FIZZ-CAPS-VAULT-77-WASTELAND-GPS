@@ -1,0 +1,123 @@
+{
+  "id": "quest_jax_bodywalks",
+  "name": "The Body That Walks",
+  "type": "main",
+  "region": "Mojave",
+  "description": "Follow a mysterious bio-signal that matches Jax's DNA and confront the truth of his ghoulified body.",
+  "stages": [
+    {
+      "id": 0,
+      "name": "Signal Detected",
+      "description": "The Overseer detects a bio-signature identical to Jax's DNA.",
+      "trigger": "player_terminal_overseer",
+      "actions": [
+        "overseer_glitch=true",
+        "set_marker:mojave_signal_source"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Harlan Joins",
+      "description": "Harlan recognizes the signal and insists on joining the search.",
+      "trigger": "player_exit_terminal",
+      "conditions": ["npc_harlan_alive=true"],
+      "actions": [
+        "npc_harlan_follow=true",
+        "dialogue:harlan_join"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Track the Signal",
+      "description": "Follow the Overseer's coordinates across the Mojave.",
+      "trigger": "player_reaches:mojave_signal_source",
+      "actions": [
+        "spawn:ghoul_jax_body",
+        "dialogue:overseer_panic"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Confront the Body",
+      "description": "Approach the ghoul body that resembles Jax.",
+      "trigger": "player_near:ghoul_jax_body",
+      "actions": [
+        "dialogue:harlan_reveal",
+        "dialogue:overseer_breakdown",
+        "enable_choice:true"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Ending A - Mercy",
+      "description": "End the suffering of Jax's ghoul body.",
+      "trigger": "player_choice:A",
+      "actions": [
+        "kill:ghoul_jax_body",
+        "dialogue:harlan_mercy",
+        "dialogue:overseer_stabilize",
+        "set_flag:jax_body_state=dead",
+        "set_flag:overseer_identity=stable",
+        "set_flag:harlan_state=peace",
+        "complete_quest:true"
+      ]
+    },
+    {
+      "id": 41,
+      "name": "Ending B - Wander",
+      "description": "Let Jax's ghoul body wander the Mojave.",
+      "trigger": "player_choice:B",
+      "actions": [
+        "ai_wander:ghoul_jax_body",
+        "dialogue:harlan_wander",
+        "dialogue:overseer_fragmented",
+        "set_flag:jax_body_state=wander",
+        "set_flag:overseer_identity=unstable",
+        "set_flag:harlan_state=quiet",
+        "enable_random_encounter:ghoul_jax_body",
+        "complete_quest:true"
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Ending C - Save",
+      "description": "Attempt to stabilize Jax's ghoul body.",
+      "trigger": "player_choice:C",
+      "actions": [
+        "dialogue:echo_analysis",
+        "dialogue:rhea_support",
+        "apply_effect:ghoul_jax_body=stabilized",
+        "dialogue:ghoul_body_moment",
+        "dialogue:harlan_hope",
+        "dialogue:overseer_conflicted",
+        "set_flag:jax_body_state=stabilized",
+        "set_flag:overseer_identity=dual",
+        "set_flag:harlan_state=protective",
+        "unlock_quest:quest_jax_reunification",
+        "complete_quest:true"
+      ]
+    }
+  ],
+  "flags": {
+    "overseer_glitch": false,
+    "jax_body_state": "unknown",
+    "overseer_identity": "fragmented",
+    "harlan_state": "searching"
+  },
+  "npcs": {
+    "ghoul_jax_body": {
+      "spawn": "mojave_signal_source",
+      "ai": "passive",
+      "wander_radius": 0
+    },
+    "npc_harlan": {
+      "alive": true,
+      "follow": false
+    }
+  },
+  "rewards": {
+    "ending_A": ["perk_rangers_legacy", "item_harlan_badge"],
+    "ending_B": ["perk_haunted_mind"],
+    "ending_C": ["perk_dual_soul", "unlock_dlc_jax_reunion"]
+  }
+}

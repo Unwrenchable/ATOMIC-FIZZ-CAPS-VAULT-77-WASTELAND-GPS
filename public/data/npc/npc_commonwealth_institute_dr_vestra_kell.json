@@ -1,0 +1,21 @@
+{
+  "id": "npc_commonwealth_institute_dr_vestra_kell",
+  "name": "Dr. Vestra Kell",
+  "faction": "institute",
+  "homeRegion": "commonwealth",
+  "currentRegion": "new_reno",
+  "reasonForDisplacement": "Sent to investigate why Atomic Fizz Caps appear in multiple timelines simultaneously.",
+  "role": "Quantum Economist",
+  "personality": "Sharp, sarcastic, fascinated by wasteland economies.",
+  "questHooks": [
+    "Wants samples of caps from different regions to compare quantum signatures.",
+    "Believes FizzCo created a blockchain-like system that spans timelines.",
+    "Warns that counterfeit caps could destabilize reality."
+  ],
+  "lore": {
+    "heardHummingOne": false,
+    "atomicFizzRumors": "Believes the caps are 'quantum receipts' from a collapsed timeline economy.",
+    "fizzCoTheory": "FizzCo accidentally created a cross-reality ledger."
+  },
+  "poi": "New Reno — backroom of a casino vault"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "npc_zion_riverwalker",
+  "name": "River-Walker",
+  "region": "Zion",
+  "type": "Tribal Guide",
+  "dialog": [
+    "The canyon breathes. Listen.",
+    "Strange lights dance at night. Not stars."
+  ],
+  "quests": ["quest_zion_spirittrail"],
+  "faction": "Sorrows",
+  "notes": "Knows the canyon’s hidden paths."
+}

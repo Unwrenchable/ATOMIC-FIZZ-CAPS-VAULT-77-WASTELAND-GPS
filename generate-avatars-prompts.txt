@@ -1,0 +1,71 @@
+# Fallout-Style Avatar Generation Prompts
+# Use these prompts with Midjourney, DALL-E, or Stable Diffusion
+
+## Base Character Prompts (256x256, realistic, Fallout aesthetic)
+
+### Male Survivors
+**Weathered Male Survivor (avatar_001.png):**
+"A weathered male wasteland survivor in his 40s, rugged face with scars and stubble, wearing remnants of a vault suit, dirty blonde hair, piercing blue eyes, post-apocalyptic grit, realistic portrait, Fallout style, high detail, 256x256 --ar 1:1 --v 6"
+
+**Young Male Scout (avatar_003.png):**
+"Young male wasteland scout in his 20s, buzzcut brown hair, radiation burn scars on face, wearing pre-war leather jacket, determined expression, realistic portrait, Fallout universe, authentic wasteland survivor, 256x256 --ar 1:1 --v 6"
+
+**Elderly Male Vault Dweller (avatar_005.png):**
+"Elderly male vault dweller in his 60s, gray hair and beard, wearing cracked glasses and lab coat, worried expression, realistic portrait, Fallout vault aesthetic, post-apocalyptic scientist, 256x256 --ar 1:1 --v 6"
+
+### Female Survivors
+**Female Wasteland Trader (avatar_002.png):**
+"Middle-aged female wasteland trader in her 30s, braided dark hair, wearing goggles on head, leather armor with trader patches, confident expression, realistic portrait, Fallout caravan merchant, authentic wasteland survivor, 256x256 --ar 1:1 --v 6"
+
+**Mature Female Raider (avatar_004.png):**
+"Mature female raider in her 50s, mohawk hairstyle dyed red, facial tattoos, wearing power armor shoulder pieces, fierce expression, realistic portrait, Fallout raider aesthetic, post-apocalyptic warrior, 256x256 --ar 1:1 --v 6"
+
+## Overlay Assets (Transparent PNGs, 256x256)
+
+### Scars & Wounds
+**Radiation Burns:**
+"Close-up facial radiation burns overlay, glowing green veins, Fallout style, transparent background, 256x256 --ar 1:1 --v 6"
+
+**Knife Scar:**
+"Realistic facial knife scar overlay, healed wound across cheek, Fallout wasteland injury, transparent background, 256x256 --ar 1:1 --v 6"
+
+**Bullet Wound:**
+"Realistic bullet wound scar overlay on face, Fallout combat injury, transparent background, 256x256 --ar 1:1 --v 6"
+
+### Accessories
+**Goggles:**
+"Wasteland goggles overlay, Fallout-style eyewear, transparent background, 256x256 --ar 1:1 --v 6"
+
+**Bandana:**
+"Wasteland bandana face covering overlay, Fallout raider style, transparent background, 256x256 --ar 1:1 --v 6"
+
+**Eye Patch:**
+"Pirate-style eye patch overlay, Fallout wasteland accessory, transparent background, 256x256 --ar 1:1 --v 6"
+
+## Generation Tips
+
+1. **Style Consistency:**
+   - Use "Fallout" or "post-apocalyptic" in every prompt
+   - Specify "realistic portrait" for human-like appearance
+   - Include "wasteland survivor" for authentic grit
+
+2. **Technical Specs:**
+   - Always use --ar 1:1 for square format
+   - Generate at 256x256 or higher, then resize
+   - For overlays: specify "transparent background"
+
+3. **Character Variety:**
+   - Mix ages: young (20s), middle-aged (30s-40s), mature (50s+)
+   - Include diverse ethnicities and features
+   - Add unique identifying traits (scars, tattoos, hair styles)
+
+4. **Fallout Authenticity:**
+   - Weathered/dirty appearance
+   - Practical wasteland clothing
+   - Expressions showing survival experience
+   - Avoid cartoonish or anime styles
+
+## File Naming Convention
+- Base avatars: avatar_001.png through avatar_100.png
+- Scars: scar_radiation.png, scar_knife.png, scar_bullet.png
+- Accessories: accessory_goggles.png, accessory_bandana.png, accessory_eyepatch.png

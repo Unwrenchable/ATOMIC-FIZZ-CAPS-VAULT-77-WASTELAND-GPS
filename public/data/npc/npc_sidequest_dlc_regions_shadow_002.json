@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_dlc_regions_shadow_002",
+  "type": "side_quest",
+  "name": "Ren Jett",
+  "region": "dlc_regions",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_dlc_regions_shadow_002_dialog",
+  "lootPool": "npc_sidequest_dlc_regions_shadow_002_loot",
+  "questHooks": [
+    "timeline_warning_02",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

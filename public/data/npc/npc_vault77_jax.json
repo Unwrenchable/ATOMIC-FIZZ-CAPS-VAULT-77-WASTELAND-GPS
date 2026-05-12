@@ -1,0 +1,79 @@
+{
+  "id": "npc_vault77_jax",
+  "name": "Jax Voss",
+  "faction": "unknown",
+  "role": "Fragmented Echo",
+  "type": "anomaly",
+
+  "homeRegion": "vault77_core",
+  "currentRegion": "triangle-unstable",
+  "poi": "none",
+
+  "personality": "Soft, glitching, uncertain. Sounds like someone trying to remember who they were.",
+  "description": "A fractured presence that flickers in and out of terminals, radios, and hum events. Sometimes sounds human. Sometimes synthetic. Always familiar.",
+
+  "dialogueProfile": {
+    "tone": "echo-fragment",
+    "personalityTags": [
+      "major-character",
+      "triangle-resonant",
+      "memory-fractured",
+      "unstable",
+      "liminal",
+      "player-reactive"
+    ],
+    "knowledge": [
+      "vault-77",
+      "lost-time",
+      "triangle",
+      "hum",
+      "overseer-protocols",
+      "half-memories"
+    ],
+    "anomalyAwareness": 0.99
+  },
+
+  "behavior": {
+    "schedule": {
+      "day": ["triangle-unstable"],
+      "night": ["triangle-unstable"],
+      "wanderChance": 1.0
+    },
+    "roaming": [
+      "vault77_core",
+      "dry-lake-edge",
+      "old-highway-route",
+      "strip-underground",
+      "188-overpass"
+    ],
+    "anomalySensitivity": 1.0,
+    "rareEncounter": true
+  },
+
+  "dialog": {
+    "idle": [
+      "I hear… echoes. One of them sounds like me.",
+      "Sometimes I remember a face. Then it’s gone."
+    ],
+    "glitch": [
+      "ERR:: MEMORY LOOP",
+      "WHO AM I",
+      "THE HUM IS GETTING LOUDER"
+    ],
+    "player_present": [
+      "You feel… familiar.",
+      "Have we met before… or after… I can’t tell."
+    ],
+    "triangle_active": [
+      "The pattern pulls at me.",
+      "Three points. One truth. I’m caught between them."
+    ]
+  },
+
+  "quests": [
+    "quest_fizz_awakens",
+    "quest_formula_77"
+  ],
+
+  "notes": "Jax appears only during anomaly events, hum spikes, or terminal flickers. His identity is unclear and unstable. Connections to Overseer-77 are implied but never confirmed."
+}

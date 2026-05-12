@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_echo_009",
+  "type": "side_quest",
+  "name": "Lio Lenn",
+  "region": "capital_wasteland",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_capital_wasteland_echo_009_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_echo_009_loot",
+  "questHooks": [
+    "region_story_02",
+    "region_story_01",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.64,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

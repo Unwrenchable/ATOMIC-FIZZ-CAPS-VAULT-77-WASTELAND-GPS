@@ -1,0 +1,67 @@
+{
+  "id": "quest_sq_arnie_ill_be_back",
+  "name": "I'll Be Back",
+  "type": "side",
+  "triggerNpc": "arnie",
+  "description": "Arnold 'Dutch' Black is hunting a pre-war Vault-Tec autonomous combat prototype — Unit Seven — that has been attacking settlements along the Mojave corridor for weeks. He needs a scout who can move quietly while he follows with maximum impact. The machine does not feel pain. It does not negotiate. Neither does Arnold.",
+  "lore": "Vault-Tec Autonomous Combat Chassis, designation Unit Seven, was a prototype designed in 2058 for perimeter defense of critical installations. It was never officially deployed — the war came first. Somehow, Unit Seven survived the bombs, the decades, and every ad-hoc militia that tried to destroy it. It has been sighted in Searchlight, Boulder City, Nelson, and along Route 93. It appears to be following a patrol route written 170 years ago that no longer corresponds to anything that exists. The locations it 'defends' are rubble. The enemies it engages are civilians.",
+  "objectives": [
+    {
+      "id": "meet_arnie",
+      "description": "Meet Arnold Black",
+      "requires": { "flag": "met_arnie" },
+      "reward": { "xp": 10 }
+    },
+    {
+      "id": "track_unit_seven",
+      "description": "Scout Black Mountain transmitter array for signs of Unit Seven",
+      "requires": { "flag": "sq_arnie_ill_be_back_taken" },
+      "reward": { "xp": 40 }
+    },
+    {
+      "id": "locate_patrol_route",
+      "description": "Piece together Unit Seven's patrol route from attack site evidence",
+      "reward": { "xp": 50 }
+    },
+    {
+      "id": "set_the_trap",
+      "description": "Coordinate with Arnold to set an ambush at Unit Seven's next predicted location",
+      "reward": { "xp": 60 }
+    },
+    {
+      "id": "disable_unit_seven",
+      "description": "Disable or destroy Vault-Tec Prototype Unit Seven",
+      "reward": { "xp": 100, "item": "unit_seven_core" }
+    },
+    {
+      "id": "report_to_arnie",
+      "description": "Report back to Arnold Black",
+      "reward": { "xp": 40, "caps": 100 }
+    }
+  ],
+  "rewards": {
+    "xp": 300,
+    "caps": 100,
+    "items": ["unit_seven_core"]
+  },
+  "endings": [
+    {
+      "id": "ending_destroyed",
+      "description": "Unit Seven is destroyed. Arnold says nothing for a long moment, then: 'Good. Now let's go.' You have no idea where. You follow anyway.",
+      "reward": "Unit Seven Core (crafting material) + 100 Caps",
+      "consequence": "The settlements along Route 93 report no further machine attacks. Arnold is sighted heading east."
+    },
+    {
+      "id": "ending_reprogrammed",
+      "description": "You manage to access Unit Seven's core and redirect its patrol route toward a genuine threat — a Legion raider camp. It marches away without looking back.",
+      "reward": "Unit Seven Core + 150 Caps + Arnold's grudging respect ('Not the worst plan.')",
+      "consequence": "Reports come in three weeks later of a Legion camp being systematically dismantled by a relentless metal figure. Unit Seven has found a new mission."
+    },
+    {
+      "id": "ending_lost",
+      "description": "Unit Seven escaped the ambush. Arnold says only 'I'll be back,' and disappears north.",
+      "reward": "50 Caps (consolation)",
+      "consequence": "Unit Seven is sighted two weeks later near Novac. The cycle continues."
+    }
+  ]
+}

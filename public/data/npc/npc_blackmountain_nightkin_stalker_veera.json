@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_nightkin_stalker_veera",
+  "name": "Veera",
+  "faction": "nightkin",
+  "role": "Stalker / Scout",
+  "personality": "Quiet, twitchy, unpredictable.",
+  "description": "Veera stalks the mountain’s perimeter, watching for threats only she can see.",
+  "questHooks": [
+    "Claims someone is watching Black Mountain.",
+    "Saw lights moving near the cliffs.",
+    "Heard whispers in the static."
+  ],
+  "poi": "black_mountain_fnv"
+}

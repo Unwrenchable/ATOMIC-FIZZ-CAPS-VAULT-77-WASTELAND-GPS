@@ -1,0 +1,276 @@
+{
+  "id": "q_fo1_hub_caravan_war",
+  "name": "The Hub Caravan War",
+  "description": "Three competing merchant houses in The Hub each secretly hired you simultaneously to steal a Proto-FIZZ authentication chip — a pre-war Vault-Tec relic that grants economic dominion over the wasteland's ancient resource allocation network. The chip is buried with a long-dead courier beneath the ruins of Barstow. The merchants smile at you across their respective counters, none knowing the others made the same deal.",
+  "type": "main",
+  "era": "2161",
+  "region": "hub_echo",
+  "subregion": "fo1_timeline_barstow",
+  "giver": "npc_hub_water_merchant_boss",
+  "gps_anchor": {
+    "lat": 34.8958,
+    "lng": -116.9693,
+    "real_world": "Barstow, CA",
+    "in_game": "The Hub Ruins"
+  },
+  "start_conditions": {
+    "min_level": 5,
+    "location": "hub_barstow_ruins"
+  },
+  "npc_links": [
+    "npc_hub_water_merchant_boss",
+    "npc_crimson_caravan_boss",
+    "npc_far_go_trader_boss",
+    "npc_pre_war_courier_ghost"
+  ],
+  "map_markers": [
+    {
+      "id": "marker_hub_merchant_row",
+      "poi": "hub_barstow_ruins",
+      "stage": "hire_triple"
+    },
+    {
+      "id": "marker_courier_grave",
+      "poi": "hub_barstow_ruins",
+      "stage": "locate_courier_grave"
+    },
+    {
+      "id": "marker_dig_site",
+      "poi": "hub_barstow_ruins",
+      "stage": "retrieve_proto_fizz_chip"
+    },
+    {
+      "id": "marker_vault_tec_terminal",
+      "poi": "hub_barstow_ruins",
+      "stage": "discover_vault_tec_fronts"
+    },
+    {
+      "id": "marker_final_choice",
+      "poi": "hub_barstow_ruins",
+      "stage": "make_final_choice"
+    }
+  ],
+  "objectives": [
+    {
+      "id": "hire_triple",
+      "desc": "Accept all three merchant contracts simultaneously without alerting any faction to the others' involvement.",
+      "npc": "npc_hub_water_merchant_boss",
+      "npc_links": [
+        "npc_hub_water_merchant_boss",
+        "npc_crimson_caravan_boss",
+        "npc_far_go_trader_boss"
+      ],
+      "dialogue": "dialog_hub_triple_hire.json"
+    },
+    {
+      "id": "locate_courier_grave",
+      "desc": "Find the buried pre-war courier's grave using the map anomaly signal pulsing beneath the ruins.",
+      "poi": "hub_barstow_ruins",
+      "dialogue": "dialog_courier_grave_discovery.json"
+    },
+    {
+      "id": "retrieve_proto_fizz_chip",
+      "desc": "Excavate and retrieve the Proto-FIZZ authentication chip from the courier's remains.",
+      "poi": "hub_barstow_ruins",
+      "items_found": [
+        "proto_fizz_authentication_chip",
+        "courier_manifest_holotape",
+        "vault_tec_sealed_letter"
+      ],
+      "dialogue": "dialog_chip_retrieval.json"
+    },
+    {
+      "id": "discover_vault_tec_fronts",
+      "desc": "Investigate merchant ledgers and crumbling terminal records to uncover that all three merchant houses are Vault-Tec remnant fronts.",
+      "poi": "hub_barstow_ruins",
+      "evidence": [
+        "water_merchants_vault_tec_charter",
+        "crimson_caravan_shadow_ledger",
+        "far_go_traders_encrypted_deed"
+      ],
+      "dialogue": "dialog_vault_tec_revelation.json"
+    },
+    {
+      "id": "make_final_choice",
+      "desc": "The chip is yours. Three corporations and a dead ideology want it. Decide the fate of the wasteland's economic future.",
+      "npc": "npc_pre_war_courier_ghost",
+      "choices": [
+        "give_water_merchants",
+        "give_crimson_caravan",
+        "give_far_go_traders",
+        "destroy_chip"
+      ],
+      "dialogue": "dialog_final_choice_hub.json"
+    }
+  ],
+  "stages": [
+    {
+      "id": 0,
+      "objective": "hire_triple",
+      "desc": "Play all three sides. Smile at each boss. Cash the advance caps. None of them know."
+    },
+    {
+      "id": 1,
+      "objective": "locate_courier_grave",
+      "desc": "Something pulses beneath the ruins of Barstow — a pre-war signal from deep underground. Follow it."
+    },
+    {
+      "id": 2,
+      "objective": "retrieve_proto_fizz_chip",
+      "desc": "The courier has been waiting two centuries. Their cargo is now yours."
+    },
+    {
+      "id": 3,
+      "objective": "discover_vault_tec_fronts",
+      "desc": "The ledgers don't lie. Every merchant house is a ghost wearing Vault-Tec's face."
+    },
+    {
+      "id": 4,
+      "objective": "make_final_choice",
+      "desc": "One chip. Four futures. Choose."
+    },
+    {
+      "id": 5,
+      "objective": "complete",
+      "desc": "The Hub Caravan War ends — not with gunfire, but with a decision that echoes into 2241."
+    }
+  ],
+  "choices": {
+    "give_water_merchants": {
+      "desc": "Give the Proto-FIZZ chip to the Water Merchants. Water access improves, but Vault-Tec's corporate ghost gains economic power.",
+      "requirements": {
+        "charisma": 6
+      },
+      "consequences": {
+        "faction_rep": {
+          "water_merchants": 100,
+          "crimson_caravan": -60,
+          "far_go_traders": -60,
+          "vault_tec_remnants": 40
+        },
+        "rewards": {
+          "xp": 800,
+          "caps": 600,
+          "fizz": 15,
+          "items": [
+            "water_merchants_medallion",
+            "hub_water_ration_x10"
+          ]
+        },
+        "unlock": [
+          "hub_water_routes",
+          "fo2_ncr_water_quest"
+        ],
+        "karma": -100,
+        "outcome": "The Vault-Tec ghost wins through commerce. Water flows, but at a price the Hub won't feel for a generation."
+      }
+    },
+    "give_crimson_caravan": {
+      "desc": "Give the chip to the Crimson Caravan. Trade routes multiply and profits surge, but Vault-Tec's influence hides in shipping manifests.",
+      "requirements": {
+        "barter": 60
+      },
+      "consequences": {
+        "faction_rep": {
+          "crimson_caravan": 100,
+          "water_merchants": -60,
+          "far_go_traders": -40,
+          "vault_tec_remnants": 20
+        },
+        "rewards": {
+          "xp": 800,
+          "caps": 800,
+          "fizz": 20,
+          "items": [
+            "crimson_caravan_pass",
+            "caravan_shotgun"
+          ]
+        },
+        "unlock": [
+          "mojave_trade_routes",
+          "fo2_ncr_trade_quest"
+        ],
+        "karma": 0,
+        "outcome": "Trade routes multiply. The Caravan grows powerful. Vault-Tec's influence hides in ledgers and shipping manifests."
+      }
+    },
+    "give_far_go_traders": {
+      "desc": "Give the chip to the Far Go Traders. Their maverick style scatters the chip's power across exploration licenses, fracturing Vault-Tec's grip.",
+      "requirements": {
+        "luck": 7
+      },
+      "consequences": {
+        "faction_rep": {
+          "far_go_traders": 100,
+          "water_merchants": -40,
+          "crimson_caravan": -40,
+          "vault_tec_remnants": -20
+        },
+        "rewards": {
+          "xp": 900,
+          "caps": 500,
+          "fizz": 30,
+          "items": [
+            "far_go_explorer_badge",
+            "scouting_map_southwest"
+          ]
+        },
+        "unlock": [
+          "outer_wasteland_access",
+          "fo2_exploration_quest"
+        ],
+        "karma": 100,
+        "outcome": "The maverick traders scatter the chip's power across exploration licenses. Vault-Tec's control fractures into the wind."
+      }
+    },
+    "destroy_chip": {
+      "desc": "Destroy the Proto-FIZZ chip. No corporation inherits Vault-Tec's backdoor into the wasteland economy. Everyone loses. Everyone is free.",
+      "requirements": {
+        "intelligence": 7
+      },
+      "consequences": {
+        "faction_rep": {
+          "water_merchants": -40,
+          "crimson_caravan": -40,
+          "far_go_traders": -40,
+          "vault_tec_remnants": -100,
+          "wasteland_independents": 80
+        },
+        "rewards": {
+          "xp": 1200,
+          "caps": 200,
+          "fizz": 50,
+          "items": [
+            "freedom_from_chains_perk_token"
+          ]
+        },
+        "unlock": [
+          "vault_tec_remnant_hunt",
+          "fo2_free_wasteland_quest"
+        ],
+        "karma": 300,
+        "outcome": "The chip is gone. The merchants rage. But no corporation will ever control the CAPS network through that backdoor again. The wasteland owes you one."
+      }
+    }
+  },
+  "rewards": {
+    "xp": 900,
+    "caps": 500
+  },
+  "factions": {
+    "affected": [
+      "Water_Merchants",
+      "Crimson_Caravan",
+      "Far_Go_Traders",
+      "Vault_Tec_Remnants",
+      "Hub_Civilians"
+    ]
+  },
+  "next_quests": [
+    "quest_fo2_ncr_founding",
+    "quest_hub_water_wars_aftermath"
+  ],
+  "era_note": "This quest echoes from 2161. Its consequences alter NCR formation in 2241 — different chip choices unlock different FO2 era quest variants.",
+  "fizz_lore": "The Proto-FIZZ chip contains Vault-Tec's original CAPS validation algorithm — the cryptographic ancestor of every FIZZ token in the wasteland. Whoever held it held the keys to economic reality.",
+  "notes": "Hub triple-contract deception quest. All three faction bosses are Vault-Tec shells — the real twist. The chip outcome branches into FO2 era quests with different starting context and NPC attitudes."
+}

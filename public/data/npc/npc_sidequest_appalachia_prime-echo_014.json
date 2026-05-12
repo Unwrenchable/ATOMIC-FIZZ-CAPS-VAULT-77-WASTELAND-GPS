@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_appalachia_prime-echo_014",
+  "type": "side_quest",
+  "name": "Marla Vera",
+  "region": "appalachia",
+  "timelines": [
+    "prime",
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_appalachia_prime-echo_014_dialog",
+  "lootPool": "npc_sidequest_appalachia_prime-echo_014_loot",
+  "questHooks": [
+    "fizzcaps_clue_03"
+  ],
+  "anomalyAwareness": 0.78,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

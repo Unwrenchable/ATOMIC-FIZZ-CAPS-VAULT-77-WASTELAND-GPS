@@ -1,0 +1,11 @@
+{
+  "id": "npc_freeside_kid_01",
+  "name": "Street Kid",
+  "archetype": "vegas_outskirts_local",
+  "dialogPool": [
+    "Got any food?",
+    "You look strong. Wanna trade?"
+  ],
+  "spawnPool": ["freeside_north"],
+  "uniquePerWorld": false
+}

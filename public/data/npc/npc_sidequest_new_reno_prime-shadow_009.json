@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_new_reno_prime-shadow_009",
+  "type": "side_quest",
+  "name": "Marla Kael",
+  "region": "new_reno",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_new_reno_prime-shadow_009_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime-shadow_009_loot",
+  "questHooks": [
+    "fizzcaps_clue_03",
+    "timeline_warning_02",
+    "anomaly_investigation_01"
+  ],
+  "anomalyAwareness": 0.52,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

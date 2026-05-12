@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_new_reno_prime_011",
+  "type": "side_quest",
+  "name": "Ren Lira",
+  "region": "new_reno",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_new_reno_prime_011_dialog",
+  "lootPool": "npc_sidequest_new_reno_prime_011_loot",
+  "questHooks": [
+    "region_story_01"
+  ],
+  "anomalyAwareness": 0.39,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,16 @@
+{
+  "id": "npc_industrial_unit47",
+  "name": "Unit-47",
+  "faction": "rogue_robots",
+  "homeRegion": "industrial-belt",
+  "currentRegion": "industrial-belt",
+  "role": "Malfunctioning Mr. Handy",
+  "personality": "Poetic, glitchy, oddly gentle.",
+  "description": "A half-broken Mr. Handy that recites poetry about rust and decay.",
+  "questHooks": [
+    "Recites a poem about 'a vault with no door'.",
+    "Claims to have seen a man 'made of humming light'.",
+    "Knows where old schematics are buried under scrap."
+  ],
+  "poi": "industrial_belt_scrap_heap"
+}

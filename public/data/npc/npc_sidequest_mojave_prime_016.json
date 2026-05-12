@@ -1,0 +1,20 @@
+{
+  "id": "npc_sidequest_mojave_prime_016",
+  "type": "side_quest",
+  "name": "Mira Dax",
+  "region": "mojave",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_traveler",
+  "behaviorPattern": "fizzcaps_informer",
+  "dialogPool": "npc_sidequest_mojave_prime_016_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_016_loot",
+  "questHooks": [
+    "timeline_warning_01",
+    "fizzcaps_clue_01"
+  ],
+  "anomalyAwareness": 0.58,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

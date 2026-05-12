@@ -1,0 +1,49 @@
+{
+  "id": "coastal_settlement_supply_chain",
+  "name": "The Supply Chain",
+  "type": "global",
+  "region": "Indian_Subcontinent_Coast",
+  "npc_giver": "global_mumbai_navigator",
+  "description": "Three coastal settlements from Karachi to Colombo have requested medical supplies. The Navigator has the cargo. She needs crew who can handle raiders on the approaches to each settlement.",
+  "gps_requirement": {
+    "region": "Indian Subcontinent Coast",
+    "real_lat": 15.0000,
+    "real_lng": 72.0000,
+    "radius_km": 300
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Deliver to Karachi Settlement",
+      "description": "The first delivery stop is outside the old Karachi port. Raiders have set up on the coastal road — deal with them before the Navigator's cargo can reach the settlement.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 24.8607, "lng": 67.0011},
+      "radius_m": 1500,
+      "actions": ["spawn:enemy_coastal_raiders_karachi", "set_flag:supply_karachi_delivered", "unlock_stage:2"]
+    },
+    {
+      "id": 2,
+      "name": "Deliver to Goa Settlement",
+      "description": "The second stop is a settlement in the old Goa coastal zone. A different raider band has been taxing supply ships in the harbor approach.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 15.2993, "lng": 74.1240},
+      "radius_m": 1500,
+      "actions": ["spawn:enemy_coastal_raiders_goa", "set_flag:supply_goa_delivered", "unlock_stage:3"]
+    },
+    {
+      "id": 3,
+      "name": "Deliver to Colombo Settlement",
+      "description": "Final delivery to the Colombo settlement on the Sri Lanka coast. The Navigator's most important contact waits here.",
+      "trigger": "player_reaches_gps",
+      "gps": {"lat": 6.9271, "lng": 79.8612},
+      "radius_m": 1500,
+      "actions": ["spawn:enemy_coastal_raiders_colombo", "complete_quest:true", "set_flag:supply_chain_complete"]
+    }
+  ],
+  "rewards": {
+    "xp": 300,
+    "caps": 200,
+    "fizz": 20,
+    "items": ["item_navigator_letter_of_transit"]
+  }
+}

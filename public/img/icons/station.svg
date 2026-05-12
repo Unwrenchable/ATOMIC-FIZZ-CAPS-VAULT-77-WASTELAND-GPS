@@ -1,0 +1,39 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Train body -->
+  <path d="
+    M8 5
+    H16
+    C17.5 5 18 6 18 7.5
+    V14
+    H6
+    V7.5
+    C6 6 6.5 5 8 5
+    Z
+  " fill="#00ff41"/>
+
+  <!-- Windows cutout -->
+  <rect x="9" y="7" width="6" height="2.2" fill="#0a1a0a"/>
+
+  <!-- Headlights cutout -->
+  <circle cx="10" cy="12" r="1" fill="#0a1a0a"/>
+  <circle cx="14" cy="12" r="1" fill="#0a1a0a"/>
+
+  <!-- Tracks -->
+  <path d="
+    M7 16
+    L5 19
+    H7.5
+    L9 16
+    Z
+  " fill="#00ff41"/>
+
+  <path d="
+    M17 16
+    L19 19
+    H16.5
+    L15 16
+    Z
+  " fill="#00ff41"/>
+
+</svg>

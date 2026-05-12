@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <!-- Eye white gradient -->
+    <radialGradient id="eyeWhite" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#f5f5f5"/>
+      <stop offset="100%" stop-color="#e8e8e8"/>
+    </radialGradient>
+    <!-- Iris gradient for depth -->
+    <radialGradient id="irisGrad" cx="35%" cy="35%">
+      <stop offset="0%" stop-color="#5a4a3a"/>
+      <stop offset="30%" stop-color="#3a2a1a"/>
+      <stop offset="70%" stop-color="#2a1a0a"/>
+      <stop offset="100%" stop-color="#1a0a00"/>
+    </radialGradient>
+    <!-- Pupil -->
+    <radialGradient id="pupilGrad" cx="40%" cy="40%">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- LEFT EYE -->
+  <!-- Eye socket shadow -->
+  <ellipse cx="100" cy="118" rx="18" ry="13" fill="#9a8a7a" opacity="0.15"/>
+  
+  <!-- Eye white with slight almond shape -->
+  <path d="M83 118c0-5 7-9 17-9s17 4 17 9c0 5-7 9-17 9s-17-4-17-9z" fill="url(#eyeWhite)"/>
+  
+  <!-- Upper eyelid -->
+  <path d="M83 116c3-4 8-7 17-7s14 3 17 7" fill="none" stroke="#6a5a4a" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Lower eyelid -->
+  <path d="M85 120c3 3 7 5 15 5s12-2 15-5" fill="none" stroke="#8a7a6a" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Iris with detail -->
+  <circle cx="100" cy="118" r="7" fill="url(#irisGrad)"/>
+  
+  <!-- Iris texture lines -->
+  <g opacity="0.4" stroke="#4a3a2a" stroke-width="0.5">
+    <path d="M98 113l2 5M102 113l-2 5M95 117l5 1M100 121l2-3"/>
+  </g>
+  
+  <!-- Pupil -->
+  <circle cx="100" cy="118" r="3" fill="url(#pupilGrad)"/>
+  
+  <!-- Catchlight (life in the eyes) -->
+  <circle cx="102" cy="116" r="1.5" fill="#ffffff" opacity="0.9"/>
+  <circle cx="99" cy="119" r="0.8" fill="#ffffff" opacity="0.6"/>
+  
+  <!-- RIGHT EYE -->
+  <!-- Eye socket shadow -->
+  <ellipse cx="156" cy="118" rx="18" ry="13" fill="#9a8a7a" opacity="0.15"/>
+  
+  <!-- Eye white with slight almond shape -->
+  <path d="M139 118c0-5 7-9 17-9s17 4 17 9c0 5-7 9-17 9s-17-4-17-9z" fill="url(#eyeWhite)"/>
+  
+  <!-- Upper eyelid -->
+  <path d="M139 116c3-4 8-7 17-7s14 3 17 7" fill="none" stroke="#6a5a4a" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Lower eyelid -->
+  <path d="M141 120c3 3 7 5 15 5s12-2 15-5" fill="none" stroke="#8a7a6a" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Iris with detail -->
+  <circle cx="156" cy="118" r="7" fill="url(#irisGrad)"/>
+  
+  <!-- Iris texture lines -->
+  <g opacity="0.4" stroke="#4a3a2a" stroke-width="0.5">
+    <path d="M154 113l2 5M158 113l-2 5M151 117l5 1M156 121l2-3"/>
+  </g>
+  
+  <!-- Pupil -->
+  <circle cx="156" cy="118" r="3" fill="url(#pupilGrad)"/>
+  
+  <!-- Catchlight -->
+  <circle cx="158" cy="116" r="1.5" fill="#ffffff" opacity="0.9"/>
+  <circle cx="155" cy="119" r="0.8" fill="#ffffff" opacity="0.6"/>
+  
+  <!-- Tear ducts -->
+  <circle cx="83" cy="119" r="1.5" fill="#d8a898" opacity="0.5"/>
+  <circle cx="173" cy="119" r="1.5" fill="#d8a898" opacity="0.5"/>
+</svg>

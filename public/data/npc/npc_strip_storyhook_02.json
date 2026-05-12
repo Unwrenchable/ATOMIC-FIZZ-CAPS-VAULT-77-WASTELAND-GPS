@@ -1,0 +1,12 @@
+{
+  "id": "npc_strip_storyhook_02",
+  "name": "The Whispering Man",
+  "archetype": "timeline_echo_wanderer",
+  "timelineVariants": ["echo", "shadow"],
+  "dialogPool": [
+    "…you’re late…",
+    "…this alley wasn’t here yesterday…"
+  ],
+  "spawnPool": ["strip_underground"],
+  "uniquePerWorld": true
+}

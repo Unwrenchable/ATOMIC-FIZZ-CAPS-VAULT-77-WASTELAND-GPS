@@ -1,0 +1,13 @@
+{
+  "id": "npc_divide_courier_echo",
+  "name": "Courier Echo",
+  "region": "The Divide",
+  "type": "Temporal Fragment",
+  "dialog": [
+    "You walk the same road I did… or will.",
+    "The Divide remembers every step you take."
+  ],
+  "quests": ["quest_divide_faultline"],
+  "faction": "None",
+  "notes": "A fractured echo of a future or past courier."
+}

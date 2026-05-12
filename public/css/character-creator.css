@@ -1,0 +1,2337 @@
+/* ============================================================
+   CHARACTER CREATOR CSS - FALLOUT 4 STYLE
+   (Oswald font loaded via <link> in index.html)
+   ============================================================ */
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+
+.character-creator-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* smooth momentum scroll on iOS */
+  overscroll-behavior: contain;      /* prevent scroll chaining to background */
+  font-family: "Consolas", "Courier New", monospace;
+  color: #00ff41;
+}
+
+.character-creator-overlay.hidden {
+  display: none;
+}
+
+/* CRT phosphor scanline overlay — subtle horizontal lines */
+.character-creator-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.055) 0px,
+    rgba(0, 0, 0, 0.055) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Vignette — dark radial edges for CRT monitor feel */
+.character-creator-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.65) 100%);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.character-creator-container {
+  width: 100%;
+  max-width: 1200px;
+  background: rgba(5, 15, 5, 0.95);
+  border: 2px solid #00ff41;
+  border-radius: 8px;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 65, 0.3),
+    inset 0 0 20px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.cc-header {
+  background: linear-gradient(to right, #001a04 0%, #000d02 50%, #001a04 100%);
+  padding: 14px 20px;
+  border-top: 3px solid #ffcc00;
+  border-bottom: 2px solid rgba(0, 255, 65, 0.6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Left group: seal + title stacked */
+.cc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Vault-Tec Cog Seal — CSS-only circular badge */
+.cc-vault-seal {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid #ffcc00;
+  background: rgba(255, 204, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(255,204,0,0.5), 0 0 40px rgba(255,204,0,0.2), inset 0 0 15px rgba(0,0,0,0.7);
+  position: relative;
+  flex-shrink: 0;
+  outline: 3px dashed rgba(255, 204, 0, 0.30);
+  outline-offset: 5px;
+}
+
+.cc-seal-number {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffcc00;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.8);
+  letter-spacing: 0.05em;
+}
+
+/* Vault-Tec amber info strip below header */
+.cc-vault-bar {
+  background: rgba(255, 204, 0, 0.07);
+  border-bottom: 1px solid rgba(255, 204, 0, 0.20);
+  padding: 5px 24px;
+  font-size: 10px;
+  color: #cc9900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-variant: small-caps;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+}
+
+.cc-title {
+  font-size: 26px;
+  font-weight: 700;
+  font-family: 'Oswald', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #ffcc00;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.7), 0 0 20px rgba(255, 204, 0, 0.3);
+}
+
+.cc-subtitle {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.cc-close-btn {
+  background: transparent;
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-close-btn:hover {
+  background: rgba(255, 68, 68, 0.2);
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.4);
+}
+
+/* ============================================================
+   CONTENT LAYOUT
+   ============================================================ */
+
+.cc-content {
+  display: flex;
+  flex: 1;
+  min-height: 500px;
+  overflow: hidden;
+}
+
+.cc-left-column {
+  flex: 0 0 320px;
+  background: rgba(0, 30, 10, 0.9);
+  padding: 20px;
+  border-right: 1px solid rgba(0, 255, 65, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.cc-right-column {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   AVATAR SECTION
+   ============================================================ */
+
+.cc-avatar-section {
+  margin-bottom: 20px;
+}
+
+.cc-avatar-preview {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #00ff41;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  margin: 0 auto 10px auto;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-avatar-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.cc-avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cc-avatar-preview:hover .cc-avatar-overlay {
+  opacity: 1;
+}
+
+.cc-avatar-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cc-avatar-controls button {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-avatar-controls button:hover {
+  background: rgba(0, 255, 65, 0.2);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+/* ============================================================
+   BASIC INFO
+   ============================================================ */
+
+.cc-basic-info h3 {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-name-input {
+  margin-bottom: 15px;
+}
+
+.cc-name-input label {
+  display: block;
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-name-input input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.cc-basic-selects {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cc-select-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-select-group label {
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-select-group select {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 6px;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+
+.cc-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+}
+
+.cc-tab {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  color: #00ff41;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+  margin-right: 2px;
+}
+
+.cc-tab.active {
+  background: rgba(0, 255, 65, 0.2);
+  border-bottom-color: #00ff41;
+}
+
+.cc-tab:hover {
+  background: rgba(0, 255, 65, 0.15);
+}
+
+/* ============================================================
+   TAB CONTENT
+   ============================================================ */
+
+.cc-tab-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.cc-tab-panel {
+  display: none;
+}
+
+.cc-tab-panel.active {
+  display: block;
+}
+
+.cc-tab-panel h3 {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   APPEARANCE GRID
+   ============================================================ */
+
+.cc-appearance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.cc-appearance-category {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.cc-appearance-category h4 {
+  color: #00ff41;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-appearance-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.cc-appearance-option {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cc-appearance-option.selected {
+  background: rgba(0, 255, 65, 0.3);
+  border-color: #00ff41;
+}
+
+.cc-appearance-option:hover {
+  background: rgba(0, 255, 65, 0.2);
+}
+
+/* ============================================================
+   PERKS
+   ============================================================ */
+
+.cc-perks-info {
+  margin-bottom: 15px;
+}
+
+.cc-perks-info p {
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.cc-perks-requirements {
+  color: #ffcc00;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.cc-perks-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px;
+}
+
+.cc-perk-item {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.cc-perk-item h4 {
+  color: #ffcc00;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.cc-perk-item p {
+  color: #00ff41;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.cc-perk-requirements {
+  color: #ffaa00;
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+
+.cc-perk-select {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   SPECIAL STATS
+   ============================================================ */
+
+.cc-special-stats h3 {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-special-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.cc-special-stat {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.cc-special-stat h4 {
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-special-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.cc-special-btn {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.cc-special-btn:hover {
+  background: rgba(0, 255, 65, 0.2);
+}
+
+.cc-special-value {
+  color: #ffcc00;
+  font-size: 16px;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+}
+
+.cc-points-remaining {
+  text-align: center;
+  color: #00ff41;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+/* ============================================================
+   EVOLUTION
+   ============================================================ */
+
+.cc-evolution-section h3 {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-evolution-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 12px;
+}
+
+.cc-evolution-info div {
+  color: #00ff41;
+}
+
+.cc-evolution-commands {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.cc-evolution-command {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.cc-evolution-command h4 {
+  color: #ffcc00;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.cc-evolution-command p {
+  color: #00ff41;
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+
+.cc-evolution-apply {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.cc-footer {
+  background: rgba(0, 10, 5, 0.9);
+  padding: 15px 20px;
+  border-top: 1px solid rgba(0, 255, 65, 0.3);
+  display: flex;
+  justify-content: center;
+}
+
+.cc-save-btn {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-save-btn:hover {
+  background: rgba(0, 255, 65, 0.2);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+}
+
+/* ============================================================
+   MAIN CONTENT AREA
+   ============================================================ */
+
+.cc-main {
+  display: flex;
+  min-height: 500px;
+  max-height: calc(100vh - 200px);
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .cc-main {
+    flex-direction: column;
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* Let the overlay handle all scrolling — no nested scroll traps */
+  .cc-options-panel {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .cc-options-content {
+    overflow: visible;
+    max-height: none;
+    padding-right: 0;
+  }
+}
+
+/* ============================================================
+   PREVIEW PANEL (LEFT SIDE)
+   ============================================================ */
+
+.cc-preview-panel {
+  flex: 0 0 320px;
+  background: radial-gradient(circle at center, rgba(0, 30, 10, 0.9) 0%, rgba(0, 10, 5, 0.95) 100%);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+@media (max-width: 768px) {
+  .cc-preview-panel {
+    flex: 0 0 auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+  }
+}
+
+.cc-preview-title {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+/* Character Portrait Canvas */
+.cc-portrait-container {
+  width: 240px;
+  height: 300px;
+  border: 2px solid #3dff5c;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 30px rgba(0,0,0,0.9),
+    0 0 20px rgba(0,255,65,0.25),
+    0 0 40px rgba(0,255,65,0.1);
+}
+
+/* Top-left corner bracket accent */
+.cc-portrait-container::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -2px;
+  width: 20px; height: 20px;
+  border-top: 3px solid #ffcc00;
+  border-left: 3px solid #ffcc00;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* CRT scanline overlay for portrait */
+.cc-portrait-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 1px, transparent 2px);
+  background-size: 100% 3px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Scan-line texture overlay (inserted via JS) */
+.cc-scan-line-portrait {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.03) 2px,
+    rgba(0, 255, 65, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Inner dashed amber outline frame */
+.cc-portrait-frame {
+  position: absolute;
+  inset: 0;
+  outline: 2px dashed rgba(255, 204, 0, 0.3);
+  outline-offset: -8px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cc-portrait-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Portrait SVG display */
+.cc-portrait-svg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-portrait-svg svg {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* Character name display */
+.cc-preview-name {
+  margin-top: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+  text-align: center;
+}
+
+.cc-preview-stats {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.7;
+  text-align: center;
+}
+
+/* Pocket-Boy dweller label below portrait */
+.cc-pip-label {
+  margin-top: 8px;
+  font-size: 9px;
+  color: #00aa2a;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+  opacity: 0.75;
+  text-align: center;
+}
+
+/* Vault assignment block in preview panel */
+.cc-vault-assignment {
+  margin-top: 10px;
+  padding: 8px 6px 4px;
+  border-top: 1px solid rgba(0, 255, 65, 0.18);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cc-va-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  padding: 0 2px;
+}
+
+.cc-va-label {
+  color: #006622;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cc-va-val {
+  color: #00ff41;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 10px;
+}
+
+/* Randomize button */
+.cc-randomize-btn {
+  margin-top: 20px;
+  background: transparent;
+  border: 1px solid #ffaa00;
+  color: #ffaa00;
+  padding: 10px 24px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-randomize-btn:hover {
+  background: rgba(255, 170, 0, 0.2);
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.4);
+}
+
+/* ============================================================
+   OPTIONS PANEL (RIGHT SIDE)
+   ============================================================ */
+
+.cc-options-panel {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0; /* allows flex child to shrink below its content size */
+}
+
+/* Category tabs */
+.cc-category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+  margin-bottom: 16px;
+}
+
+.cc-tab {
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(0,180,60,0.3);
+  border-bottom: 2px solid transparent;
+  color: #00ff41;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: all 0.2s ease;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.cc-tab:hover {
+  background: rgba(0, 255, 65, 0.15);
+  border-color: rgba(0, 255, 65, 0.7);
+}
+
+.cc-tab.active {
+  background: rgba(0,255,65,0.15);
+  border-color: rgba(0,255,65,0.6);
+  border-bottom: 2px solid #ffcc00;
+  color: #00ff41;
+  font-family: 'Oswald', 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  box-shadow: 0 0 8px rgba(0,255,65,0.2);
+}
+
+/* Options content area */
+.cc-options-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  min-height: 0;
+}
+
+/* Option category section */
+.cc-category-section {
+  display: none;
+}
+
+.cc-category-section.active {
+  display: block;
+}
+
+.cc-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Oswald', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+/* Section hint text — Fallout-flavored guidance under each section title */
+.cc-section-hint {
+  font-size: 11px;
+  color: #008822;
+  letter-spacing: 0.06em;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+/* Option group */
+.cc-option-group {
+  margin-bottom: 20px;
+}
+
+.cc-option-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+/* Grid of selectable options */
+.cc-option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.cc-option-grid.large {
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+
+.cc-option-item {
+  background: rgba(0, 8, 0, 0.7);
+  border: 1px solid rgba(0, 180, 60, 0.25);
+  border-left: 2px solid rgba(0, 255, 65, 0.4);
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 12px;
+  color: #9fe88d;
+}
+
+.cc-option-item:hover {
+  background: rgba(0, 20, 0, 0.85);
+  border-left-color: #ffcc00;
+  border-color: rgba(0, 180, 60, 0.4);
+}
+
+.cc-option-item.selected {
+  background: rgba(0, 255, 65, 0.12);
+  border-left-color: #00ff41;
+  border-color: rgba(0, 255, 65, 0.5);
+  color: #00ff41;
+}
+
+.cc-option-item .option-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.cc-option-item .option-name {
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+/* Color swatch grid */
+.cc-color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 6px;
+}
+
+.cc-color-swatch {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(0, 255, 65, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.cc-color-swatch:hover {
+  transform: scale(1.1);
+  border-color: rgba(0, 255, 65, 0.7);
+}
+
+.cc-color-swatch.selected {
+  border-color: #00ff41;
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.5);
+}
+
+.cc-color-swatch.selected::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+}
+
+.cc-color-swatch.rare {
+  animation: rare-pulse 2s ease-in-out infinite;
+}
+
+@keyframes rare-pulse {
+  0%, 100% { box-shadow: 0 0 5px currentColor; }
+  50% { box-shadow: 0 0 15px currentColor; }
+}
+
+/* Slider controls */
+.cc-slider-group {
+  margin-bottom: 16px;
+}
+
+.cc-slider-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.cc-slider-value {
+  color: #ffaa00;
+}
+
+.cc-slider {
+  width: 100%;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  border-radius: 4px;
+  outline: none;
+}
+
+.cc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #00ff41;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.cc-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #00ff41;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  border: none;
+}
+
+/* Name input */
+.cc-name-input {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 65, 0.4);
+  color: #00ff41;
+  font-family: inherit;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.cc-name-input:focus {
+  border-color: #00ff41;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+}
+
+.cc-name-input::placeholder {
+  color: rgba(0, 255, 65, 0.4);
+}
+
+/* ============================================================
+   FOOTER (CONFIRM BUTTONS)
+   ============================================================ */
+
+.cc-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(0, 255, 65, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 20, 10, 0.8);
+}
+
+.cc-footer-left {
+  display: flex;
+  gap: 12px;
+}
+
+.cc-reset-btn {
+  background: transparent;
+  border: 1px solid #888;
+  color: #888;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.cc-reset-btn:hover {
+  border-color: #aaa;
+  color: #aaa;
+}
+
+.cc-confirm-btn {
+  background: linear-gradient(135deg, #003300 0%, #001a00 100%);
+  border: 2px solid #00ff41;
+  color: #00ff41;
+  padding: 14px 40px;
+  cursor: pointer;
+  font-family: 'Oswald', 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 20px rgba(0,255,65,0.3), inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+.cc-confirm-btn:hover {
+  background: linear-gradient(135deg, #004400 0%, #002200 100%);
+  border-color: #3dff5c;
+  box-shadow: 0 0 30px rgba(0,255,65,0.6), inset 0 0 10px rgba(0,0,0,0.3);
+  transform: none;
+}
+
+@keyframes vault-enter-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 204, 0, 0.3); }
+  50%       { box-shadow: 0 0 20px rgba(255, 204, 0, 0.6); }
+}
+
+/* ============================================================
+   PRESET CARDS
+   ============================================================ */
+
+.cc-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cc-preset-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.cc-preset-card:hover {
+  background: rgba(0, 255, 65, 0.1);
+  border-color: rgba(0, 255, 65, 0.6);
+  transform: translateY(-2px);
+}
+
+.cc-preset-portrait {
+  width: 100%;
+  height: 120px;
+  background: rgba(0, 20, 10, 0.8);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.cc-preset-name {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.cc-preset-desc {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+
+.cc-options-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.cc-options-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.cc-options-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 65, 0.4);
+  border-radius: 4px;
+}
+
+.cc-options-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 65, 0.6);
+}
+
+/* Amber scrollbar thumb when on SPECIAL / Background / Traits tabs */
+.cc-special-content::-webkit-scrollbar-thumb,
+.cc-background-content::-webkit-scrollbar-thumb,
+.cc-traits-content::-webkit-scrollbar-thumb {
+  background: #886600;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================ */
+
+@media (max-width: 600px) {
+  /* Full-bleed overlay — no padding eaten by safe areas */
+  .character-creator-overlay {
+    padding: 0;
+  }
+
+  .character-creator-container {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    min-height: 100vh;   /* fallback for older browsers */
+    min-height: 100dvh;  /* dynamic viewport height for mobile with toolbars */
+    overflow: visible;   /* let the overlay handle all scrolling */
+  }
+
+  /* Nova-7 floating panel becomes a slim inline banner on mobile —
+     the absolute-positioned version would block form controls */
+  .nova-guide-panel {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid rgba(0, 255, 65, 0.3);
+    border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+    box-shadow: none;
+    padding: 6px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    z-index: 5;
+  }
+
+  .nova-guide-header {
+    flex-shrink: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  /* ── Compact header ─────────────────────────────────── */
+  .cc-header {
+    padding: 8px 12px;
+    gap: 8px;
+    flex-direction: row; /* keep row, just tighter */
+    text-align: left;
+  }
+
+  .cc-vault-seal {
+    width: 38px;
+    height: 38px;
+    outline-offset: 3px;
+  }
+
+  .cc-seal-number {
+    font-size: 14px;
+  }
+
+  .cc-title {
+    font-size: 14px;
+    letter-spacing: 0.12em;
+  }
+
+  .cc-subtitle {
+    display: none;
+  }
+
+  .cc-vault-bar {
+    font-size: 8px;
+    padding: 3px 12px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── Compact 2-column preview panel ─────────────────── */
+  .cc-preview-panel {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    grid-template-rows: auto auto auto 1fr;
+    align-items: start;
+    gap: 4px 12px;
+    padding: 12px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+  }
+
+  .cc-preview-title {
+    display: none;
+  }
+
+  .cc-portrait-container {
+    grid-column: 1;
+    grid-row: 1 / 5;
+    width: 90px !important;
+    height: 115px !important;
+    margin: 0;
+    align-self: center;
+  }
+
+  .cc-pip-label {
+    display: none;
+  }
+
+  .cc-preview-name {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
+    font-size: 14px;
+    text-align: left;
+    align-self: start;
+  }
+
+  .cc-preview-stats {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0;
+    text-align: left;
+  }
+
+  .cc-vault-assignment {
+    display: none;
+  }
+
+  .cc-randomize-btn {
+    grid-column: 2;
+    grid-row: 3 / 5;
+    margin-top: 4px;
+    padding: 9px 12px;
+    font-size: 12px;
+    width: 100%;
+    align-self: start;
+  }
+
+  /* ── Options panel ───────────────────────────────────── */
+  .cc-options-panel {
+    padding: 10px 10px 0;
+  }
+
+  /* Horizontally scrollable tabs — no wrap, no cut-off */
+  .cc-category-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 8px;
+    justify-content: flex-start;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .cc-category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cc-tab {
+    flex-shrink: 0;
+    padding: 7px 10px;
+    font-size: 9px;
+    white-space: nowrap;
+  }
+
+  /* ── Sticky footer so ENTER VAULT is always reachable ── */
+  .cc-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: rgba(5, 15, 5, 0.98);
+    border-top: 2px solid rgba(0, 255, 65, 0.4);
+    padding: 10px 12px;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .cc-footer-left {
+    flex: 1;
+    justify-content: flex-start;
+  }
+
+  .cc-reset-btn {
+    font-size: 10px;
+    padding: 8px 10px;
+  }
+
+  .cc-confirm-btn {
+    flex: 2;
+    padding: 10px 16px;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+  }
+}
+
+/* ============================================================
+   ANIMATION EFFECTS
+   ============================================================ */
+
+@keyframes cc-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.character-creator-container {
+  animation: cc-fade-in 0.3s ease-out, phosphor-burn 8s ease-in-out 0.3s infinite;
+  will-change: opacity;
+}
+
+@keyframes phosphor-burn {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.97; }
+}
+
+/* Terminal flicker effect for header */
+.cc-title {
+  animation: terminal-flicker 4s ease-in-out infinite;
+}
+
+@keyframes terminal-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  95% { opacity: 0.9; }
+  96% { opacity: 1; }
+}
+
+/* Selection glow animation */
+.cc-option-item.selected {
+  animation: selection-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes selection-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 65, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(0, 255, 65, 0.5); }
+}
+
+/* Vault entry flash — white screen burst before closing */
+@keyframes vault-flash {
+  0%   { background: rgba(0, 0, 0, 0.95); }
+  18%  { background: rgba(255, 255, 255, 0.65); }
+  100% { background: rgba(0, 0, 0, 0.95); }
+}
+
+.cc-entering-vault {
+  animation: vault-flash 0.4s ease-out forwards !important;
+}
+
+/* ============================================================
+   S.P.E.C.I.A.L. TAB STYLES
+   ============================================================ */
+
+.cc-special-content,
+.cc-background-content,
+.cc-traits-content {
+  padding: 10px 0;
+}
+
+/* Points banner */
+.cc-special-points-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(0,255,65,0.08);
+  border: 1px solid #00ff41;
+  border-radius: 4px;
+  margin-bottom: 14px;
+  font-family: 'Courier New', monospace;
+}
+
+.cc-sp-label {
+  color: #00aa2a;
+  font-size: clamp(11px,1.5vw,13px);
+  letter-spacing: 0.08em;
+}
+
+.cc-sp-value {
+  color: #00ff41;
+  font-size: clamp(18px,2.5vw,22px);
+  font-weight: bold;
+  min-width: 2ch;
+  text-align: center;
+}
+
+/* Individual stat rows */
+.cc-special-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.cc-special-row {
+  display: grid;
+  grid-template-columns: 50px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px;
+  background: linear-gradient(135deg, rgba(0,30,0,0.9) 0%, rgba(0,15,0,0.95) 100%);
+  border: 1px solid rgba(0,180,60,0.35);
+  border-left: 3px solid #00ff41;
+  border-radius: 4px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+/* Vault Boy bobblehead SVG icon */
+.cc-sp-vaultboy {
+  display: block;
+  width: 46px;
+  height: 55px;
+  flex-shrink: 0;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.7));
+  transition: opacity 0.2s, filter 0.2s;
+}
+
+.cc-special-row:hover .cc-sp-vaultboy {
+  opacity: 1;
+  filter: drop-shadow(0 0 5px rgba(255,204,0,0.55));
+}
+
+/* SPECIAL stat amber progress bar */
+.cc-sp-bar {
+  height: 3px;
+  background: rgba(0,255,65,0.1);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.cc-sp-bar-fill {
+  height: 100%;
+  background: #ffcc00;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* "You're SPECIAL!" intro banner */
+.cc-special-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  background: rgba(255, 204, 0, 0.04);
+  border: 1px solid rgba(255, 204, 0, 0.2);
+  border-left: 3px solid rgba(255, 204, 0, 0.5);
+  border-radius: 4px;
+}
+
+/* Book cover "You're SPECIAL!" tile */
+.cc-si-book-cover {
+  flex-shrink: 0;
+  width: 46px;
+  min-height: 54px;
+  background: linear-gradient(160deg, #ffd700 0%, #cc9900 100%);
+  border: 2px solid #aa7700;
+  border-radius: 3px 5px 5px 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 3px;
+  gap: 1px;
+  box-shadow: -2px 2px 5px rgba(0,0,0,0.6), inset 1px 0 4px rgba(255,255,255,0.15);
+  position: relative;
+}
+
+.cc-si-book-cover::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: #8a6000;
+  border-radius: 3px 0 0 3px;
+}
+
+.cc-si-book-title {
+  font-family: 'Oswald', 'Courier New', monospace;
+  font-size: 7px;
+  font-weight: 700;
+  color: #1a0a00;
+  text-align: center;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.cc-si-book-special {
+  font-family: 'Oswald', 'Courier New', monospace;
+  font-size: 6px;
+  font-weight: 700;
+  color: #1a0a00;
+  text-align: center;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.cc-si-text {
+  font-size: 11px;
+  color: #cc9900;
+  font-style: italic;
+  font-family: 'Courier New', monospace;
+  line-height: 1.5;
+}
+
+.cc-special-row:hover {
+  border-left-color: #ffcc00;
+  border-color: rgba(255,204,0,0.5);
+  background: linear-gradient(135deg, rgba(10,30,0,0.95) 0%, rgba(5,20,0,0.98) 100%);
+}
+
+.cc-sp-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.cc-sp-abbr {
+  color: #00ff41;
+  font-size: clamp(12px,1.8vw,15px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+}
+
+.cc-sp-name {
+  color: #00cc33;
+  font-size: clamp(10px,1.4vw,12px);
+  font-family: 'Courier New', monospace;
+}
+
+.cc-sp-desc {
+  color: #008822;
+  font-size: clamp(9px,1.2vw,11px);
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* +/- controls */
+.cc-sp-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-sp-btn {
+  width: 28px;
+  height: 28px;
+  background: #001a00;
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cc-sp-btn:hover:not(:disabled) {
+  background: #00ff41;
+  color: #001a00;
+}
+
+.cc-sp-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.cc-sp-num {
+  color: #00ff41;
+  font-size: clamp(14px,2vw,18px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  min-width: 2ch;
+  text-align: center;
+}
+
+/* Dot bar — diamond-shaped pips */
+.cc-sp-dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.cc-sp-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 0;
+  border: 1px solid #004d00;
+  background: rgba(0,50,0,0.5);
+  flex-shrink: 0;
+  transform: rotate(45deg);
+}
+
+.cc-sp-dot.filled {
+  background: #ffcc00;
+  border-color: #ffaa00;
+  box-shadow: 0 0 6px rgba(255,204,0,0.6);
+}
+
+/* Derived stats preview */
+.cc-derived-stats {
+  padding: 12px;
+  background: rgba(0,10,0,0.7);
+  border: 1px solid #003300;
+  border-radius: 4px;
+}
+
+.cc-derived-title {
+  color: #00aa2a;
+  font-size: clamp(10px,1.3vw,12px);
+  font-family: 'Oswald', 'Courier New', monospace;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-align: center;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.cc-derived-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.cc-derived-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px;
+  background: rgba(0,255,65,0.04);
+  border: 1px solid #002200;
+  border-radius: 3px;
+}
+
+.cc-derived-label {
+  color: #008822;
+  font-size: clamp(8px,1.1vw,10px);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.07em;
+  text-align: center;
+}
+
+.cc-derived-val {
+  color: #00ff41;
+  font-size: clamp(14px,1.8vw,16px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================================
+   BACKGROUND TAB STYLES
+   ============================================================ */
+
+.cc-bg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Shared amber left-border accent for selectable cards */
+.cc-bg-card:hover,
+.cc-bg-card.selected,
+.cc-trait-card:hover,
+.cc-trait-card.selected {
+  border-left: 4px solid #ffcc00;
+}
+
+.cc-bg-card {
+  padding: 14px 16px;
+  background: rgba(0,8,0,0.75);
+  border: 1px solid rgba(0,180,60,0.3);
+  border-left: 4px solid rgba(0,255,65,0.5);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cc-bg-card:hover {
+  background: rgba(0,15,0,0.9);
+  border-color: rgba(0,180,60,0.4);
+}
+
+.cc-bg-card.selected {
+  border-color: rgba(0,255,65,0.5);
+  background: rgba(0,30,0,0.9);
+  box-shadow: inset 0 0 20px rgba(0,255,65,0.05);
+}
+
+.cc-bg-card.selected .cc-bg-name::before {
+  content: "► ";
+  color: #ffcc00;
+}
+
+.cc-bg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cc-bg-name {
+  color: #00ff41;
+  font-size: clamp(12px,1.7vw,14px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.cc-bg-desc {
+  color: #00aa2a;
+  font-size: clamp(10px,1.3vw,12px);
+  font-family: 'Courier New', monospace;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.cc-bg-flavor {
+  color: #007722;
+  font-size: clamp(9px,1.2vw,11px);
+  font-family: 'Courier New', monospace;
+  font-style: italic;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #002200;
+  line-height: 1.4;
+}
+
+.cc-bg-mods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* SPECIAL modifier tags (shared across background + traits) */
+.cc-mod-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: clamp(9px,1.2vw,11px);
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+}
+
+.cc-mod-pos {
+  background: rgba(0,200,0,0.15);
+  color: #00ff41;
+  border: 1px solid #00aa2a;
+}
+
+.cc-mod-neg {
+  background: rgba(200,0,0,0.15);
+  color: #ff4444;
+  border: 1px solid #aa2222;
+}
+
+/* ============================================================
+   TRAITS TAB STYLES
+   ============================================================ */
+
+.cc-traits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cc-trait-card {
+  padding: 14px 16px;
+  background: rgba(0,8,0,0.75);
+  border: 1px solid rgba(0,180,60,0.3);
+  border-left: 4px solid rgba(0,255,65,0.5);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cc-trait-card:hover {
+  background: rgba(0,15,0,0.9);
+  border-color: rgba(0,180,60,0.4);
+}
+
+.cc-trait-card.selected {
+  border-color: rgba(0,255,65,0.5);
+  background: rgba(0,30,0,0.9);
+  box-shadow: inset 0 0 20px rgba(0,255,65,0.05);
+}
+
+.cc-trait-card.selected .cc-trait-name::before {
+  content: "► ";
+  color: #ffcc00;
+}
+
+.cc-trait-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.cc-trait-name {
+  color: #00ff41;
+  font-size: clamp(12px,1.7vw,14px);
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.cc-trait-badge {
+  background: #00ff41;
+  color: #001a00;
+  font-size: clamp(9px,1.1vw,11px);
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+}
+
+.cc-trait-desc {
+  color: #00aa2a;
+  font-size: clamp(10px,1.3vw,12px);
+  font-family: 'Courier New', monospace;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.cc-trait-effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+/* Responsive: on small screens collapse dots to fewer */
+@media (max-width: 600px) {
+  .cc-special-row {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .cc-sp-dots {
+    grid-column: 1 / -1;
+  }
+  .cc-sp-dot {
+    width: 8px;
+    height: 8px;
+    /* transform already set in base rule; only size changes here */
+  }
+  .cc-derived-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Tighter option grids on phone screens */
+  .cc-option-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 6px;
+  }
+
+  .cc-option-grid.large {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+
+  .cc-option-item {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+
+  .cc-option-item .option-icon {
+    font-size: 20px;
+    margin-bottom: 3px;
+  }
+
+  /* Name input slightly smaller */
+  .cc-name-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* ============================================================
+   IMAGE UPLOAD STYLES
+   ============================================================ */
+
+.cc-upload-section {
+  padding: 15px;
+  text-align: center;
+}
+
+.cc-upload-dropzone {
+  border: 2px dashed rgba(0, 255, 65, 0.4);
+  border-radius: 8px;
+  padding: 40px 20px;
+  background: rgba(0, 255, 65, 0.02);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.cc-upload-dropzone:hover,
+.cc-upload-dropzone.drag-over {
+  border-color: #00ff41;
+  background: rgba(0, 255, 65, 0.08);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+}
+
+.cc-upload-dropzone::before {
+  content: "📷";
+  font-size: 48px;
+  display: block;
+  margin-bottom: 10px;
+  opacity: 0.6;
+}
+
+.cc-upload-dropzone p {
+  margin: 10px 0 0 0;
+  font-size: 14px;
+  color: #00aa2a;
+}
+
+.cc-upload-dropzone .cc-upload-hint {
+  font-size: 12px;
+  color: #008822;
+  margin-top: 8px;
+}
+
+.cc-upload-preview {
+  display: none;
+  margin-bottom: 20px;
+}
+
+.cc-uploaded-image {
+  max-width: 200px;
+  max-height: 200px;
+  border: 2px solid #00ff41;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+}
+
+.cc-upload-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.cc-upload-btn {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.cc-upload-btn:hover {
+  background: rgba(0, 255, 65, 0.2);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.cc-upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cc-analysis-results {
+  display: none;
+  background: rgba(0, 255, 65, 0.05);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.cc-analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.cc-analysis-item {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.cc-analysis-label {
+  color: #00ff41;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cc-analysis-value {
+  color: #00aa2a;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.cc-color-palette {
+  display: flex;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.cc-color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cc-apply-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.cc-apply-btn {
+  background: rgba(0, 255, 65, 0.2);
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.cc-apply-btn:hover {
+  background: rgba(0, 255, 65, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+}
+
+.cc-customize-btn {
+  background: rgba(255, 165, 0, 0.2);
+  border: 1px solid #ffa500;
+  color: #ffa500;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.cc-customize-btn:hover {
+  background: rgba(255, 165, 0, 0.3);
+  box-shadow: 0 0 15px rgba(255, 165, 0, 0.4);
+}
+
+/* Hide file input */
+#ccImageInput {
+  display: none;
+}
+
+/* ============================================================
+   STATS PANEL CHARACTER CUSTOMIZATION
+   ============================================================ */
+
+.character-appearance-preview {
+  background: rgba(0, 20, 10, 0.6);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #00ff41;
+  margin-bottom: 10px;
+  min-height: 40px;
+  text-align: center;
+}
+
+.character-perks-list {
+  min-height: 60px;
+}
+
+.character-perk {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 6px 10px;
+  margin: 4px 0;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #00ff41;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.no-perks {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+}

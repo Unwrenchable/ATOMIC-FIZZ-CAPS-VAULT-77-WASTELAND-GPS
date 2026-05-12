@@ -1,0 +1,11 @@
+{
+  "id": "npc_outskirts_storyhook_01",
+  "name": "Lost Courier",
+  "archetype": "highway_drifter",
+  "dialogPool": [
+    "Got a delivery I never finished… maybe you can.",
+    "Package went missing near the old billboard."
+  ],
+  "spawnPool": ["vegas_outskirts_south"],
+  "uniquePerWorld": true
+}

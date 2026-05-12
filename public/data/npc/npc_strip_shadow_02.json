@@ -1,0 +1,7 @@
+{
+  "id": "npc_strip_shadow_02",
+  "archetype": "timeline_echo_wanderer",
+  "timelineVariants": ["shadow"],
+  "spawnPool": ["strip_backalleys"],
+  "uniquePerWorld": false
+}

@@ -1,0 +1,22 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime-shadow_006",
+  "type": "side_quest",
+  "name": "Vera Rook",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime",
+    "shadow"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime-shadow_006_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime-shadow_006_loot",
+  "questHooks": [
+    "vegas_rumor_01",
+    "timeline_warning_01",
+    "fizzcaps_clue_02"
+  ],
+  "anomalyAwareness": 0.42,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

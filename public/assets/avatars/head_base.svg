@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <!-- Main skin gradient with more depth -->
+    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0d8b8"/>
+      <stop offset="40%" stop-color="#e8cca8"/>
+      <stop offset="75%" stop-color="#d8b890"/>
+      <stop offset="100%" stop-color="#c8a080"/>
+    </linearGradient>
+    <!-- Shadow gradient for depth -->
+    <radialGradient id="shadowGrad" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.2"/>
+    </radialGradient>
+    <!-- Highlight for dimension -->
+    <radialGradient id="highlight" cx="35%" cy="25%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Base head shape with more anatomical accuracy -->
+  <ellipse cx="128" cy="135" rx="72" ry="90" fill="url(#skinGrad)" stroke="#8a7060" stroke-width="1.5"/>
+  
+  <!-- Skull structure - forehead -->
+  <ellipse cx="128" cy="85" rx="65" ry="42" fill="url(#highlight)" opacity="0.4"/>
+  
+  <!-- Cheekbone definition -->
+  <ellipse cx="90" cy="130" rx="15" ry="20" fill="#c8a888" opacity="0.3"/>
+  <ellipse cx="166" cy="130" rx="15" ry="20" fill="#c8a888" opacity="0.3"/>
+  
+  <!-- Jaw shadow for depth -->
+  <path d="M75 160c10 20 25 40 53 45c28-5 43-25 53-45" fill="url(#shadowGrad)" opacity="0.5"/>
+  
+  <!-- Jawline definition -->
+  <path d="M70 150c8 18 20 35 35 45c8 5 18 8 23 8c5 0 15-3 23-8c15-10 27-27 35-45" 
+        fill="none" stroke="#9a8070" stroke-width="1.5" opacity="0.6" stroke-linecap="round"/>
+  
+  <!-- Chin definition -->
+  <ellipse cx="128" cy="200" rx="20" ry="12" fill="#c8a888" opacity="0.25"/>
+  
+  <!-- Neck with muscle structure -->
+  <path d="M88 195c2 8 8 20 18 28c8 6 14 8 22 8c8 0 14-2 22-8c10-8 16-20 18-28" 
+        fill="#d8b890" stroke="#8a7060" stroke-width="1.5"/>
+  
+  <!-- Sternocleidomastoid muscles (neck detail) -->
+  <path d="M95 200c5 12 12 20 18 25" fill="none" stroke="#b89878" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+  <path d="M161 200c-5 12-12 20-18 25" fill="none" stroke="#b89878" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+  
+  <!-- Adam's apple suggestion -->
+  <ellipse cx="128" cy="215" rx="6" ry="8" fill="#b89878" opacity="0.3"/>
+  
+  <!-- Subtle weathering/texture for wasteland look -->
+  <circle cx="108" cy="145" r="1.5" fill="#a89070" opacity="0.3"/>
+  <circle cx="148" cy="152" r="1.5" fill="#a89070" opacity="0.3"/>
+  <circle cx="118" cy="168" r="1" fill="#a89070" opacity="0.25"/>
+</svg>

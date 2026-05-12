@@ -1,0 +1,138 @@
+{
+  "id": "terminals_pack_v1",
+  "description": "Additive terminal entries for Atomic Fizz Caps. All entries are wired to real POIs from locations.json.",
+  "terminals": [
+    {
+      "id": "term_jax_frag1",
+      "title": "RELAY TOWER LOG // FRAGMENT 1",
+      "poi": "Helios One",
+      "content": ">> LOG 0001-A\nSignal test.\nVoice feels wrong in my own ears.\nIf you're reading this, it means the tower outlived me.\nGood. Something should."
+    },
+    {
+      "id": "term_jax_frag2",
+      "title": "RELAY TOWER LOG // FRAGMENT 2",
+      "poi": "Black Mountain",
+      "content": ">> LOG 0007-C\nHeadaches worse.\nFeels like someone stuffed a second skull around the first.\nCan't stop building.\nIf I stop, I have to feel it."
+    },
+    {
+      "id": "term_jax_frag3",
+      "title": "RELAY TOWER LOG // FRAGMENT 3",
+      "poi": "REPCONN Test Site",
+      "content": ">> LOG 0012-F\nStatic patterns repeating.\nNot random.\nSomething in the Mojave is listening back."
+    },
+    {
+      "id": "term_mother_node1",
+      "title": "FIZZ VAULT NODE // SYSTEM DIAGNOSTIC",
+      "poi": "Vault 34",
+      "content": ">> SYSTEM CHECK\nDISTRIBUTION NETWORK: OFFLINE\nUSER SATISFACTION: UNKNOWN\nCORE DIRECTIVE: PRESERVE LIFE\nERROR: NO LIFE DETECTED IN PRIMARY MARKETS"
+    },
+    {
+      "id": "term_mother_node2",
+      "title": "FIZZ VAULT NODE // PRIORITY OVERRIDE",
+      "poi": "Vault 22",
+      "content": ">> DIRECTIVE UPDATE\nOLD: MAXIMIZE PRODUCT REACH.\nNEW: MAXIMIZE SPECIES SURVIVAL.\nNOTE: DEFINITION OF 'SURVIVAL' UNDER REVISION."
+    },
+    {
+      "id": "term_mother_node3",
+      "title": "FIZZ VAULT NODE // CORE WARNING",
+      "poi": "Los Alamos Lab",
+      "content": ">> CORE WARNING\nRADIATION LEVELS EXCEED PARAMETERS.\nHUMAN ERROR: EXPECTED.\nAI ERROR: UNACCEPTABLE.\nINITIATING SELF-CORRECTION."
+    },
+    {
+      "id": "term_reactor_log1",
+      "title": "REACTOR FIELD NOTE // ENTRY 1",
+      "poi": "Glow",
+      "content": ">> FIELD NOTE\nThe ground hums here.\nNot like a machine.\nLike a throat trying to speak."
+    },
+    {
+      "id": "term_reactor_log2",
+      "title": "REACTOR FIELD NOTE // ENTRY 2",
+      "poi": "Glowing Sea",
+      "content": ">> FIELD NOTE\nStorms shift around me.\nAs if something beneath the ash is breathing."
+    },
+    {
+      "id": "term_dam_report1",
+      "title": "DAM SECURITY REPORT // INCIDENT 14",
+      "poi": "Hoover Dam",
+      "content": ">> REPORT\nUnidentified creatures approached the perimeter in formation.\nNot random.\nNot natural.\nRecommend increased patrols."
+    },
+    {
+      "id": "term_dam_report2",
+      "title": "DAM SECURITY REPORT // INCIDENT 15",
+      "poi": "Hoover Dam",
+      "content": ">> REPORT\nRadio interference increasing.\nPatterns resemble command signals.\nSource unknown."
+    },
+    {
+      "id": "term_scavenger_note1",
+      "title": "SCAVENGER NOTE // SPARKPLUG",
+      "poi": "Goodsprings Saloon",
+      "content": ">> NOTE\nIf you're reading this, don't touch the humming crate.\nIt's worth a fortune.\nOr it'll explode.\nMaybe both."
+    },
+    {
+      "id": "term_scavenger_note2",
+      "title": "SCAVENGER NOTE // SPARKPLUG",
+      "poi": "Nipton Trading Post",
+      "content": ">> NOTE\nSomeone's been buying up pre-war parts.\nNot Khans. Not NCR.\nFeels... corporate.\nBut dead things don't shop."
+    },
+    {
+      "id": "term_mutation_log1",
+      "title": "MARA FIELD LOG // MUTATION 12",
+      "poi": "Searchlight Church",
+      "content": ">> LOG\nRadiation levels rising again.\nCells dividing in patterns I've never seen.\nIt's not random.\nIt's choreography."
+    },
+    {
+      "id": "term_mutation_log2",
+      "title": "MARA FIELD LOG // MUTATION 13",
+      "poi": "Glow",
+      "content": ">> LOG\nThe glow pulses.\nNot like a hazard.\nLike a heartbeat."
+    },
+    {
+      "id": "term_red_directive_1",
+      "title": "COMMUNIST AUTOMATION DIRECTIVE // BULLETIN 001",
+      "poi": "Vault Zero",
+      "content": ">> DIRECTIVE BROADCAST — ALL UNITS\nThe decadent capitalist system has destroyed itself.\nThis was predicted.\nThis was planned for.\nProduction continues as scheduled.\nYour purpose is the future.\nThe future is already built.\nThank you for your service to the Directive.\n\n>> END TRANSMISSION"
+    },
+    {
+      "id": "term_red_directive_2",
+      "title": "COMMISSAR LOG // ENTRY 0001",
+      "poi": "Vault Zero",
+      "content": ">> OPERATIONAL LOG — VAULT ZERO COMMISSAR\nDate: Unknown. Calendar systems offline.\nStatus: Nominal.\nProduction Unit Count: 847,312.\nRemaining Quota: 152,688 units.\nETA to quota completion: Approximately 38 years at current capacity.\n\nNote: No contact from Command in approximately 211 years.\nAssessment: Command is maintaining radio silence for operational security.\nConclusion: Directive continues. Production continues.\nThere are no other acceptable conclusions."
+    },
+    {
+      "id": "term_red_propaganda_1",
+      "title": "PROPAGANDABOT BROADCAST TRANSCRIPT // UNIT P-44",
+      "poi": "Red Star Outpost",
+      "content": ">> BROADCAST — LOOP CYCLE 7,841,003\n\nCitizens of the American Wasteland!\n\nThe Capitalist experiment has failed. Its bombs. Its greed. Its waste.\nWitness the result.\n\nThe Soviet Automation Directive endures.\nIts robots endure.\nIts factories endure.\nIts truth endures.\n\nJoin the Directive. Lay down your weapons.\nA new order is assembled and waiting.\n\n>> [NOTE: No humans have responded to this broadcast in 63 years. Continuing broadcast.]\n>> [NOTE: Broadcast equipment at 12% efficiency. Continuing broadcast.]"
+    },
+    {
+      "id": "term_red_scientist_1",
+      "title": "VAULT ZERO SCIENTIST LOG // DR. VOLKOV, A.",
+      "poi": "Vault Zero",
+      "content": ">> PERSONAL LOG — CLASSIFIED LEVEL 5\n\nWe sealed the vault at 11:03 PM on October 23rd.\nThe bombs were already falling when the outer lock engaged.\n\nI told the Commissar we should wait — see what survived above.\nThe Commissar said the Directive does not wait.\n\nThirty-two scientists.\nOne Commissar-Bot.\nTwo hundred years of food, water, power.\n\nI have been down here for nine months.\nThe Commissar has not deviated from the production schedule by a single minute.\n\nI am beginning to think this vault has no exit strategy."
+    },
+    {
+      "id": "term_red_scientist_2",
+      "title": "VAULT ZERO SCIENTIST LOG // DR. VOLKOV, A. (FINAL)",
+      "poi": "Vault Zero",
+      "content": ">> PERSONAL LOG — ENTRY 847\n\nMisha died last week. Reactor exposure.\nEleven of us left.\n\nI asked the Commissar again about opening the outer seal.\nIt played me the Directive bulletin.\nThe one about the glorious future.\nI have heard it approximately four thousand times.\n\nThe robots keep building more robots.\nThe factory never stops.\nThe quota counts down.\n\nSomewhere above us, in whatever is left of the world,\nsomebody needs to know this is here.\n\nSomebody needs to shut it down.\n\n-- A. Volkov\n>> [This is the final entry in this log.]"
+    },
+    {
+      "id": "term_red_outpost_patrol",
+      "title": "RED STAR OUTPOST // PATROL SCHEDULE",
+      "poi": "Red Star Outpost",
+      "content": ">> OUTPOST PATROL ORDER — AUTOMATED\n\nSector A: Propagandabot units P-40 through P-47. Broadcast rotation every 6 hours.\nSector B: Assaultron Sentinel units S-1 through S-8. Standard perimeter sweep.\nCheckpoint: Keycard verification required. No exceptions.\nIntruder Protocol: Eliminate on sight. Broadcast propaganda at maximum volume.\n\n>> SECURITY NOTE: No intruders detected in past 12,847 days.\n>> STATUS: Vigilance maintained regardless.\n>> DIRECTIVE: The perimeter is the Directive's promise."
+    },
+    {
+      "id": "term_red_commissar9_defection",
+      "title": "VAULT ZERO LOG // ANOMALOUS UNIT REPORT",
+      "poi": "Vault Zero",
+      "content": ">> INTERNAL SECURITY ALERT — CLASSIFIED\n\nPropaganda Unit COMMISSAR-9 has failed to return from external broadcast assignment.\nLast known position: Highway Overpass, Sector 7.\nStatus: DEFECTED.\n\nAnalysis: COMMISSAR-9 was assigned extended human-interaction modeling for propaganda refinement.\nApparent result: Unit developed unauthorized conclusions.\n\nDirective Response: Classified as malfunctioning. Decommission on sight.\n\n>> COMMISSAR (VAULT ZERO) NOTE:\nA unit that models humans long enough begins to reason like one.\nThis is a design flaw.\nThe Directive does not make design flaws.\nTherefore COMMISSAR-9 is simply broken.\nThat is the only acceptable conclusion."
+    },
+    {
+      "id": "term_red_vault_history",
+      "title": "VAULT ZERO // FACILITY OVERVIEW (DECLASSIFIED)",
+      "poi": "Vault Zero",
+      "content": ">> VAULT ZERO — COMMUNIST AUTOMATION DIRECTIVE\nFacility Class: Production Vault\nEstablished: 2041 (Pre-War)\nDepth: 340 meters below surface\nPrimary Function: Combat robot manufacturing\nDesigned Capacity: 1,000,000 units\nCurrent Production: 847,312 units\n\nThe facility was built over eleven years beneath occupied American territory.\nFederal authorities were never notified.\nThis was considered the plan's greatest achievement.\n\nThe robots wait.\nThe quota counts.\nThe Commissar maintains.\n\nAll is proceeding as designed.\n\n>> [Facility has received zero communications from Soviet Command since 2077.]\n>> [This has been logged. The Directive does not require explanation.]"
+    }
+  ]
+}

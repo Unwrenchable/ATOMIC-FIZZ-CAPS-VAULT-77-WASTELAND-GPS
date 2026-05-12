@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!--
+    PONYTAIL: Hair pulled back tight to skull. Perfectly smooth cap with
+    a broad shine stripe. A distinct tapered ponytail hangs down the back
+    with a visible hair-tie/scrunchie band.
+  -->
+  <defs>
+    <linearGradient id="pt_capGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#9A6A40"/>
+      <stop offset="100%" stop-color="#5A3220"/>
+    </linearGradient>
+    <linearGradient id="pt_tailGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#7A4A28"/>
+      <stop offset="100%" stop-color="#3A1A08"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ponytail body — hangs behind/below head center -->
+  <path d="
+    M 114,140
+    Q 108,165  110,195
+    Q 112,220  118,240
+    Q 122,252  128,254
+    Q 134,252  138,240
+    Q 144,220  146,195
+    Q 148,165  142,140
+    Z"
+    fill="url(#pt_tailGrad)"/>
+
+  <!-- Hair-tie / scrunchie band -->
+  <rect x="112" y="137" width="32" height="9" rx="4"
+        fill="#3D2010" opacity="0.85"/>
+  <!-- Band highlight -->
+  <rect x="112" y="137" width="32" height="4" rx="2"
+        fill="#7A4A28" opacity="0.45"/>
+
+  <!-- Strand lines on ponytail (subtle) -->
+  <g fill="none" stroke="#3D2010" stroke-width="1.2"
+     stroke-linecap="round" opacity="0.42">
+    <path d="M 122,148 Q 118,180 120,215"/>
+    <path d="M 128,148 Q 128,182 128,218"/>
+    <path d="M 134,148 Q 138,180 136,215"/>
+  </g>
+  <!-- Ponytail tip taper -->
+  <path d="M 114,235 Q 121,252 128,254 Q 135,252 142,235"
+        fill="#3A1A08" opacity="0.6"/>
+
+  <!-- Back-of-head hair panel (connects cap to ponytail) -->
+  <path d="
+    M 64,97
+    Q 50,118  50,148
+    Q 50,162  56,172
+    Q 62,163  64,148
+    Q 66,128  70,112
+    Z"
+    fill="#4A2810" opacity="0.6"/>
+  <path d="
+    M 192,97
+    Q 206,118  206,148
+    Q 206,162  200,172
+    Q 194,163  192,148
+    Q 190,128  186,112
+    Z"
+    fill="#4A2810" opacity="0.6"/>
+
+  <!-- Main top cap — smooth, flat, swept-back look -->
+  <path d="
+    M 62,97
+    Q 50,64  70,46
+    Q 96,30  128,28
+    Q 160,30  186,46
+    Q 206,64  194,97
+    Q 172,85  128,82
+    Q 84,85   62,97
+    Z"
+    fill="url(#pt_capGrad)"/>
+
+  <!-- Wide shine stripe — pulled-back hair catches the light -->
+  <path d="M 78,52 Q 103,40 128,38 Q 153,40 178,52"
+        fill="none" stroke="#C08855" stroke-width="5"
+        stroke-linecap="round" opacity="0.50"/>
+  <path d="M 90,56 Q 109,47 128,45 Q 147,47 166,56"
+        fill="none" stroke="#D4A870" stroke-width="2"
+        stroke-linecap="round" opacity="0.30"/>
+
+  <!-- Back-sweep lines show hair drawn tight -->
+  <g fill="none" stroke="#3D2010" stroke-width="1"
+     stroke-linecap="round" opacity="0.28">
+    <path d="M 66,62  Q 97,54  128,52 Q 159,54 190,62"/>
+    <path d="M 64,75  Q 96,67  128,65 Q 160,67 192,75"/>
+    <path d="M 62,87  Q 95,79  128,77 Q 161,79 194,87"/>
+  </g>
+
+  <!-- Hairline shadow edge -->
+  <path d="M 62,97 Q 84,88 128,85 Q 172,88 194,97"
+        fill="none" stroke="#3D2010" stroke-width="2"
+        stroke-linecap="round" opacity="0.50"/>
+</svg>

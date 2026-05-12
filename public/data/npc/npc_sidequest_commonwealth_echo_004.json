@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_commonwealth_echo_004",
+  "type": "side_quest",
+  "name": "Rhea Mira",
+  "region": "commonwealth",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_region_legend",
+  "behaviorPattern": "vegas_bound",
+  "dialogPool": "npc_sidequest_commonwealth_echo_004_dialog",
+  "lootPool": "npc_sidequest_commonwealth_echo_004_loot",
+  "questHooks": [
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_prime_023",
+  "type": "side_quest",
+  "name": "Marla Sylas",
+  "region": "mojave",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_informer",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_mojave_prime_023_dialog",
+  "lootPool": "npc_sidequest_mojave_prime_023_loot",
+  "questHooks": [
+    "fizzcaps_clue_01",
+    "anomaly_investigation_01",
+    "vegas_rumor_02"
+  ],
+  "anomalyAwareness": 0.71,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

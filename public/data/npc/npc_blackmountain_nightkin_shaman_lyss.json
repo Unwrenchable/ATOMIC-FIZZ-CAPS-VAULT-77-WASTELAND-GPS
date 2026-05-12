@@ -1,0 +1,14 @@
+{
+  "id": "npc_blackmountain_nightkin_shaman_lyss",
+  "name": "Lyss",
+  "faction": "nightkin",
+  "role": "Shaman / Mystic",
+  "personality": "Calm, eerie, speaks in riddles.",
+  "description": "Lyss interprets visions and hallucinations as spiritual messages. Some Nightkin believe her. Others fear her.",
+  "questHooks": [
+    "Says the mountain is 'awake'.",
+    "Believes a Nightkin is possessed.",
+    "Knows a ritual to calm unstable minds."
+  ],
+  "poi": "black_mountain_fnv"
+}

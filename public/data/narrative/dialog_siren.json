@@ -1,0 +1,327 @@
+{
+  "id": "dialog_siren",
+  "npc": "Siren",
+  "portrait": "siren",
+  "title": "Signal Runner",
+  "description": "A voice through static. She found you before you even knew you were lost.",
+  "backstory": "Siren never explains where she broadcasts from. She never has a face — only a voice, a frequency, and an uncanny ability to find people who are lost in every way the wasteland can make you lost. Before the bombs she was an emergency dispatch operator. After the bombs she decided that was still the job. The frequency has never gone dead. She has never explained how. She fields the calls.",
+  "intro": {
+    "id": "siren_intro",
+    "conditions": [
+      "!flag:siren_intro_seen"
+    ],
+    "set_flags": [
+      "siren_intro_seen"
+    ],
+    "video_speech": "You're awake. Good. I'm Siren — I track displaced survivors. Let's get you moving.",
+    "text": "...\n...\n\n[Your Pocket-Boy crackles. The static resolves into a voice.]\n\n\"You're awake. Good. We were getting worried.\"\n\nCalm. Certain. Tinged with something that sounds like relief.\n\n\"My name is Siren. I'm a Signal Runner — I track displaced consciousnesses across the wasteland. Yours lit up like a flare in the dark the moment you opened your eyes.\"\n\n\"You're alive. You're oriented. That's step one. Now let's get you moving.\"",
+    "responses": [
+      {
+        "text": "[Question] Who are you? How are you reaching me?",
+        "tone": "question",
+        "next": "node_who_is_siren"
+      },
+      {
+        "text": "[Friendly] That's... oddly comforting. What do I do?",
+        "tone": "kind",
+        "next": "node_what_to_do"
+      },
+      {
+        "text": "[Sarcastic] 'Displaced consciousness.' Sure. Completely normal.",
+        "tone": "sarcastic",
+        "next": "node_sarcastic_response"
+      },
+      {
+        "text": "[Direct] Skip the introduction. What do I need to do right now?",
+        "tone": "direct",
+        "next": "node_what_to_do"
+      }
+    ]
+  },
+  "nodes": {
+    "node_who_is_siren": {
+      "id": "node_who_is_siren",
+      "text": "\"Signal Runner. Think of it as... wasteland search and rescue, for people who ended up where they weren't supposed to be.\"\n\nA brief burst of static.\n\n\"I'm remote. Broadcasting through a relay tower somewhere north of your position. I can hear your Pocket-Boy's ping from here — your model's got a stronger signal than most.\"\n\n\"I've been tracking anomalies in this sector for six months. You're the clearest signal I've picked up. Which either means you're important, or something went very wrong.\"\n\n\"Possibly both.\"",
+      "responses": [
+        {
+          "text": "[Question] What kind of anomalies? What's happening out there?",
+          "tone": "question",
+          "next": "node_about_anomalies"
+        },
+        {
+          "text": "[Friendly] I'll take 'important'. What should I do?",
+          "tone": "kind",
+          "next": "node_what_to_do"
+        },
+        {
+          "text": "[Direct] I need information, not history. What's the priority?",
+          "tone": "direct",
+          "next": "node_what_to_do"
+        }
+      ]
+    },
+    "node_about_anomalies": {
+      "id": "node_about_anomalies",
+      "text": "\"Timeline fractures. Consciousness displacement. People waking up somewhere — or somewhen — they don't belong.\"\n\nAnother crackle of static.\n\n\"The Overseer — Vault 77's AI — has been broadcasting recovery protocols. I've been responding to the ones it can't reach in person.\"\n\n\"Whatever put you here, I don't know yet. But the wasteland doesn't give you time to figure it out before it tries to kill you.\"\n\n\"So. Orientation first.\"",
+      "responses": [
+        {
+          "text": "Understood. Walk me through it.",
+          "tone": "neutral",
+          "next": "node_what_to_do"
+        }
+      ]
+    },
+    "node_sarcastic_response": {
+      "id": "node_sarcastic_response",
+      "text": "*a sound that might be a short laugh*\n\n\"You adjust fast. That's good.\"\n\nThe static settles.\n\n\"I know it sounds like nonsense. It mostly is. The important part: you're awake, you're in one piece, and I've got a line on your position.\"\n\n\"We can unpack the rest later — after you're not standing in the open with no situational awareness.\"",
+      "responses": [
+        {
+          "text": "[Sarcastic] Fine. Situational awareness. What does that look like?",
+          "tone": "sarcastic",
+          "next": "node_what_to_do"
+        },
+        {
+          "text": "Alright. Talk me through it.",
+          "tone": "neutral",
+          "next": "node_what_to_do"
+        }
+      ]
+    },
+    "node_what_to_do": {
+      "id": "node_what_to_do",
+      "offers_quest": "wake_up",
+      "set_flags": [
+        "siren_gave_orientation"
+      ],
+      "text": "\"Four things. Do them in order.\"\n\n\"One: open your inventory. Confirm your gear made it. You should have a jumpsuit on — that's standard issue. The rest should be there.\"\n\n\"Two: equip your sidearm. A courier named Pip is en route with your weapon and supplies — she'll find you. When she arrives, check in with her.\"\n\n\"Three: tune your Pocket-Boy radio to Atomic Fizz. DJ Struggle broadcasts local intel — raider movements, rad spikes, safe zones. Survival information.\"\n\n\"Four: check your map. Know where you are before you move.\"\n\n\"That's the job. Ready?\"",
+      "responses": [
+        {
+          "text": "[Friendly] Yeah. Ready. What about this courier?",
+          "tone": "kind",
+          "next": "node_about_courier"
+        },
+        {
+          "text": "[Question] What happens after I do all that?",
+          "tone": "question",
+          "next": "node_what_happens_after"
+        },
+        {
+          "text": "[Direct] I'm already moving.",
+          "tone": "direct",
+          "next": "node_farewell_direct"
+        },
+        {
+          "text": "[Sarcastic] You make it sound simple. Nothing out here is simple.",
+          "tone": "sarcastic",
+          "next": "node_sarcastic_simple"
+        }
+      ]
+    },
+    "node_about_courier": {
+      "id": "node_about_courier",
+      "text": "\"Pip. Freelance courier, NCR-adjacent. Good at finding people who don't want to be found.\"\n\nA short pause.\n\n\"She's been running deliveries for Vault-Tec Operations — what's left of it. You're on her list.\"\n\n\"She'll have your sidearm, some ammunition, a few stimpaks. Standard orientation kit.\"\n\n\"When she shows up, don't startle her. She's cautious. They all are, after a while out here.\"\n\n\"Her arrival's your cue to get your inventory sorted and your weapon ready.\"",
+      "responses": [
+        {
+          "text": "Got it. Anything else I should know?",
+          "tone": "neutral",
+          "next": "node_additional_intel"
+        },
+        {
+          "text": "[Direct] I'll watch for her. Thanks, Siren.",
+          "tone": "direct",
+          "next": "node_farewell_kind"
+        }
+      ]
+    },
+    "node_what_happens_after": {
+      "id": "node_what_happens_after",
+      "text": "\"After?\"\n\nA pause. Like she's deciding how much to say.\n\n\"The wasteland opens up. Locations unlock. Faction zones, Atomic Fizz claim points, anomaly sites.\"\n\n\"There are others out there — signals like yours. People who woke up wrong and are trying to figure out where they belong.\"\n\n\"And then there's Vault 77. But that's... not a conversation for right now.\"\n\n\"Get oriented first. The bigger picture comes later.\"",
+      "responses": [
+        {
+          "text": "[Question] Vault 77? What about it?",
+          "tone": "question",
+          "next": "node_about_vault77"
+        },
+        {
+          "text": "One step at a time. Understood.",
+          "tone": "neutral",
+          "next": "node_farewell_kind"
+        }
+      ]
+    },
+    "node_about_vault77": {
+      "id": "node_about_vault77",
+      "text": "\"...You're persistent. Fine.\"\n\n\"Vault 77 is still broadcasting. Automated systems — or something using them. The Overseer AI is operational, fragmented across relay towers.\"\n\n\"There are people trying to reach it. Some want answers. Some want to exploit it.\"\n\n\"You're connected to it somehow. I don't know how yet. But your signal matches the Overseer's recovery protocols almost exactly.\"\n\n\"That's not an accident.\"\n\n\"But first: inventory, sidearm, radio, map. Then we talk about Vault 77.\"",
+      "responses": [
+        {
+          "text": "Understood. Starting now.",
+          "tone": "neutral",
+          "next": "node_farewell_kind"
+        }
+      ]
+    },
+    "node_sarcastic_simple": {
+      "id": "node_sarcastic_simple",
+      "text": "\"You're right. It's not.\"\n\nNo argument. No false reassurance.\n\n\"The four steps are just the minimum viable survival package. After that it gets complicated fast.\"\n\n\"But you've got to start somewhere. And you're still alive, which puts you ahead of a lot of people who woke up in the same situation.\"\n\n\"Move. Think. Adapt. In that order.\"",
+      "responses": [
+        {
+          "text": "Sound advice. Moving out.",
+          "tone": "neutral",
+          "next": "node_farewell_direct"
+        }
+      ]
+    },
+    "node_additional_intel": {
+      "id": "node_additional_intel",
+      "text": "\"The Atomic Fizz locations on your map — bottle cap icons — those are relatively safe approach points. Pre-arranged neutral zones.\"\n\n\"The faction borders shift. Raiders don't respect lines on a map.\"\n\n\"Keep your rads low. RadAway is worth more than caps in most situations.\"\n\n\"And if you hear something that sounds like it's coming from underground — move away from it. Don't investigate. Not yet.\"",
+      "responses": [
+        {
+          "text": "[Question] What's underground?",
+          "tone": "question",
+          "next": "node_underground_hint"
+        },
+        {
+          "text": "Noted. Thanks for the briefing.",
+          "tone": "kind",
+          "next": "node_farewell_kind"
+        }
+      ]
+    },
+    "node_underground_hint": {
+      "id": "node_underground_hint",
+      "text": "\"...That's not a question for this frequency.\"\n\nThe static thickens briefly.\n\n\"Something the wasteland doesn't understand yet. Something Vault-Tec left running that shouldn't be.\"\n\n\"Get your bearings first. Then we'll talk about what's underneath.\"\n\n\"Siren out — for now. I'll be on this channel.\"",
+      "responses": [
+        {
+          "text": "Copy that.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
+    },
+    "node_farewell_kind": {
+      "id": "node_farewell_kind",
+      "set_flags": [
+        "siren_farewell_seen"
+      ],
+      "text": "\"Good. You've got this.\"\n\nA beat of static.\n\n\"I'll be monitoring your signal. If you go dark, I'll notice.\"\n\n\"That's not a threat — it's a promise. You're not alone out here.\"\n\n\"Siren out.\"",
+      "end": true
+    },
+    "node_farewell_direct": {
+      "id": "node_farewell_direct",
+      "set_flags": [
+        "siren_farewell_seen"
+      ],
+      "text": "\"Good. Don't waste time.\"\n\n\"I'll be on this frequency. Signal me if you run into trouble you can't handle.\"\n\n\"Siren out.\"",
+      "end": true
+    }
+  },
+  "quest_nodes": [
+    {
+      "id": "siren_quest_active",
+      "conditions": [
+        "flag:siren_intro_seen",
+        "!flag:wake_up_complete"
+      ],
+      "text": "\"Still working through it?\"\n\nThe static is lighter now — she's closer to a tower, maybe.\n\n\"Inventory, sidearm, radio, map. In that order. The courier — Pip — should have found you by now with your weapon.\"\n\n\"Don't get distracted. The wasteland rewards focus.\"",
+      "responses": [
+        {
+          "text": "[Question] Any updates on threats nearby?",
+          "tone": "question",
+          "next_inline": "Nothing flagged in your immediate sector. Raider activity to the north. Stay south for now."
+        },
+        {
+          "text": "On it.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
+    },
+    {
+      "id": "siren_quest_complete",
+      "conditions": [
+        "flag:wake_up_complete"
+      ],
+      "text": "\"Four objectives. Done.\"\n\nSomething in her voice shifts — not warm exactly, but less guarded.\n\n\"You adapted faster than most. That matters out here.\"\n\n\"The map's going to start filling in as you explore. Faction zones, anomaly sites, Atomic Fizz locations.\"\n\n\"Keep your signal clean. I'll be watching for you.\"",
+      "responses": [
+        {
+          "text": "[Question] What's next? Where should I go?",
+          "tone": "question",
+          "next_inline": "Explore. The wasteland opens up when you move. Start with the marked locations on your map — they're safer than the open terrain."
+        },
+        {
+          "text": "[Friendly] Thanks, Siren. For all of it.",
+          "tone": "kind",
+          "next_inline": "...Don't thank me yet. The orientation was the easy part. Stay sharp."
+        },
+        {
+          "text": "Understood. Moving on.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
+    }
+  ],
+  "emotional_nodes": [
+    {
+      "id": "siren_high_rads",
+      "conditions": [
+        "stat:rads>=150",
+        "!flag:siren_warned_rads"
+      ],
+      "set_flags": [
+        "siren_warned_rads"
+      ],
+      "text": "\"Your Pocket-Boy's reading elevated radiation. That's not a stat you let climb.\"\n\n\"RadAway — use it. Radiation damage is cumulative and it affects your judgment before you realize it's happening.\"\n\n\"I've watched people walk into firefights with 400 rads because they thought they felt fine.\"\n\n\"They didn't.\"",
+      "responses": [
+        {
+          "text": "Understood. Treating it now.",
+          "tone": "neutral",
+          "end": true
+        }
+      ]
+    }
+  ],
+  "knowledge_nodes": [
+    {
+      "id": "siren_about_fizz",
+      "conditions": [
+        "flag:siren_intro_seen",
+        "!flag:siren_explained_fizz"
+      ],
+      "set_flags": [
+        "siren_explained_fizz"
+      ],
+      "text": "\"The Atomic Fizz network — you're going to hear that term a lot.\"\n\n\"Pre-war soda brand. Post-war it became something else: a claim system. GPS coordinates, bottle cap locations, resource nodes.\"\n\n\"It's part economy, part territory map. The FIZZ token runs through it — think of it as a ledger of who controls what.\"\n\n\"It matters because the people who play the game well eat. The people who ignore it tend to be the ones I pick up signals from after the fact.\"",
+      "responses": [
+        {
+          "text": "I'll learn the system.",
+          "tone": "neutral",
+          "end": true
+        },
+        {
+          "text": "[Question] Is this connected to Vault 77?",
+          "tone": "question",
+          "next_inline": "Everything out here is connected to Vault 77, one way or another. That's the problem."
+        }
+      ]
+    }
+  ],
+  "fallback": {
+    "id": "siren_fallback",
+    "video_speech": "Signal's clear on my end. Don't forget: inventory, sidearm, radio, map.",
+    "text": "\"Signal's clear on my end. You need something, I'm listening.\"\n\nA brief crackle.\n\n\"Don't forget: inventory, sidearm, radio, map. And keep your rads down.\"",
+    "responses": [
+      {
+        "text": "Copy.",
+        "tone": "neutral",
+        "end": true
+      }
+    ]
+  },
+  "mood": "neutral",
+  "personality": [
+    "Precise",
+    "Cautious",
+    "Reliable"
+  ]
+}

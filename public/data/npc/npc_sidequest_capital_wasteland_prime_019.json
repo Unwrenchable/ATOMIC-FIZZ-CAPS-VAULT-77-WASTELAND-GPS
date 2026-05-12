@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_capital_wasteland_prime_019",
+  "type": "side_quest",
+  "name": "Daro Marla",
+  "region": "capital_wasteland",
+  "timelines": [
+    "prime"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "quest_seeker",
+  "dialogPool": "npc_sidequest_capital_wasteland_prime_019_dialog",
+  "lootPool": "npc_sidequest_capital_wasteland_prime_019_loot",
+  "questHooks": [
+    "vegas_rumor_02",
+    "fizzcaps_clue_01",
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.65,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

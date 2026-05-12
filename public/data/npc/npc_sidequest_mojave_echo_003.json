@@ -1,0 +1,19 @@
+{
+  "id": "npc_sidequest_mojave_echo_003",
+  "type": "side_quest",
+  "name": "Tessa Ash",
+  "region": "mojave",
+  "timelines": [
+    "echo"
+  ],
+  "archetype": "sidequest_fizzcaps_contact",
+  "behaviorPattern": "timeline_observer",
+  "dialogPool": "npc_sidequest_mojave_echo_003_dialog",
+  "lootPool": "npc_sidequest_mojave_echo_003_loot",
+  "questHooks": [
+    "vegas_rumor_03"
+  ],
+  "anomalyAwareness": 0.62,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}

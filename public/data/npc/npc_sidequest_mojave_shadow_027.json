@@ -1,0 +1,21 @@
+{
+  "id": "npc_sidequest_mojave_shadow_027",
+  "type": "side_quest",
+  "name": "Sylas Ash",
+  "region": "mojave",
+  "timelines": [
+    "shadow"
+  ],
+  "archetype": "sidequest_anomaly_researcher",
+  "behaviorPattern": "anomaly_sensitive",
+  "dialogPool": "npc_sidequest_mojave_shadow_027_dialog",
+  "lootPool": "npc_sidequest_mojave_shadow_027_loot",
+  "questHooks": [
+    "anomaly_investigation_01",
+    "fizzcaps_clue_03",
+    "timeline_warning_02"
+  ],
+  "anomalyAwareness": 0.85,
+  "factionTag": "neutral",
+  "notes": "Generated side‑quest NPC with region, timeline, and quest hooks."
+}
