@@ -24,6 +24,39 @@ const playerLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+function updateWorldstate(app, player, nearbyNPCs, activeQuests) {
+  const existing = app.get("worldstate") || {};
+
+  app.set("worldstate", {
+    ...existing,
+    player: {
+      id: player.id,
+      name: player.name,
+      hp: player.hp,
+      caps: player.caps,
+      location: player.location,
+      faction: player.faction,
+      radiation: player.radiation
+    },
+    npcs: (nearbyNPCs || []).map(npc => ({
+      id: npc.id,
+      name: npc.name,
+      faction: npc.faction,
+      hostility: npc.hostility,
+      distance: npc.distance,
+      mood: npc.mood,
+      dialoguePreview: npc.dialoguePreview || null
+    })),
+    quests: (activeQuests || []).map(q => ({
+      id: q.id,
+      title: q.title,
+      stage: q.stage,
+      objective: q.objective,
+      status: q.status
+    })),
+    lastUpdate: Date.now()
+  });
+}
 
 // ------------------------------------------------------------
 // Redis helpers

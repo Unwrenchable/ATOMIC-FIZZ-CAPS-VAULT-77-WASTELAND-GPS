@@ -62,11 +62,7 @@
       this.attachFaction(Terminal, Engines.Faction);
       this.attachThreat(Terminal, Engines.Threat);
       this.attachWeather(Terminal, Engines.Weather);
-
-      // Patch commands + events
-      this.extendCommands(Terminal);
-      this.extendGameEvents(Terminal, Engines);
-
+      
       console.log("[Overseer] Brain online.");
       overseerSay("Overseer AI online.");
     },
@@ -193,7 +189,7 @@
     // COMMAND EXTENSIONS
     // -------------------------------------------------------------------------
     extendCommands(Terminal) {
-      const original = Terminal.handleInput.bind(Terminal);
+      Overseer.extendCommands({});
 
       Terminal.handleInput = async function (raw) {
         const line = raw.trim().toLowerCase();
@@ -212,7 +208,6 @@
           await Terminal.say();
           return;
         }
-
         await original(raw);
       };
     },
@@ -221,8 +216,7 @@
     // GAME EVENT REACTIONS
     // -------------------------------------------------------------------------
     extendGameEvents(Terminal, Engines) {
-      const original = Terminal.handleGameEvent.bind(Terminal);
-
+      
       Terminal.handleGameEvent = async function (data) {
         const type = data.type || "";
         const payload = data.payload || {};
