@@ -10,6 +10,12 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
+    "gen:locations": "node generate_locations.js",
+    "gen:npcs": "node generate_npcs.js",
+    "gen:npcs:sidequest": "node generate_sidequest_npcs.js",
+    "gen:world": "node generate_world.js",
+    "gen:world:integrate": "node integrate_world.js",
+    "verify:hf": "node verify-hf-api-usage.js",
     "worker:mint": "node workers/mint_worker_stream.js",
     "worker:mint:list": "node workers/mint_worker.js",
     "lint": "eslint .",
