@@ -24,7 +24,7 @@
 |------|---------|
 | `public/js/modules/npc_signal_runner.js` | ✓ FO4 integration<br>✓ Tree conversion<br>✓ AI improvements |
 | `public/js/overseer/core.personality.js` | ✓ Placeholder detection |
-| `test-npc-dialogue-system.html` | ✓ NEW test suite |
+| `legacy/test-npc-dialogue-system.html` | ✓ NEW test suite |
 | `NPC_BEHAVIOR_FIXES.md` | ✓ Full documentation |
 
 ---

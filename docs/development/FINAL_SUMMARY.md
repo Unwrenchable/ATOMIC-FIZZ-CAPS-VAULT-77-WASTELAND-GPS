@@ -44,7 +44,7 @@
 
 #### Files Created:
 - ✅ Enhanced `public/wallet/wallet.css`
-- ✅ `test-wallet-styles.html` - Interactive showcase
+- ✅ `legacy/test-wallet-styles.html` - Interactive showcase
 - ✅ `WALLET_EPIC_ENHANCEMENT.md` - Full documentation
 - ✅ `MISSION_COMPLETE.md` - Mission summary
 
@@ -81,7 +81,7 @@
 
 #### Files Created:
 - ✅ 23 enhanced SVG assets in `public/assets/avatars/`
-- ✅ `test-epic-characters.html` - Visual preview with examples
+- ✅ `legacy/test-epic-characters.html` - Visual preview with examples
 - ✅ `scripts/enhance-avatar-assets.js` - Batch enhancement tool
 - ✅ `EPIC_CHARACTER_SYSTEM_UPGRADE.md` - Full technical documentation
 - ✅ `BEFORE_AFTER_COMPARISON.md` - Visual comparison guide
@@ -130,11 +130,11 @@
 ### New Documentation (7):
 - `WALLET_EPIC_ENHANCEMENT.md` - Wallet upgrade guide
 - `MISSION_COMPLETE.md` - Wallet mission summary
-- `test-wallet-styles.html` - Wallet interactive showcase
+- `legacy/test-wallet-styles.html` - Wallet interactive showcase
 - `EPIC_CHARACTER_SYSTEM_UPGRADE.md` - Character system guide
 - `BEFORE_AFTER_COMPARISON.md` - Visual comparisons
 - `MISSION_COMPLETE_CHARACTER_UPGRADE.md` - Character mission summary
-- `test-epic-characters.html` - Character preview page
+- `legacy/test-epic-characters.html` - Character preview page
 - `scripts/enhance-avatar-assets.js` - Enhancement tool
 - `FINAL_SUMMARY.md` - This document
 
@@ -148,7 +148,7 @@
 open public/wallet/index.html
 
 # Or view the showcase
-open test-wallet-styles.html
+open legacy/test-wallet-styles.html
 ```
 
 **What to look for:**
@@ -161,7 +161,7 @@ open test-wallet-styles.html
 ### 2. Test Character Visuals
 ```bash
 # Open character preview
-open test-epic-characters.html
+open legacy/test-epic-characters.html
 
 # Or view in-game
 # Navigate to character creator in the main game

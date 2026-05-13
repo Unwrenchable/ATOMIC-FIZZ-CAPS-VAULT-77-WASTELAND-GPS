@@ -14,10 +14,10 @@ export default [
       "**/*.min.js",
       // ESM-only files that cannot be parsed with sourceType:"commonjs"
       "eslint.config.mjs",
-      "create-degauss.js",
       "mcp/**",
       "public/scripts/**",
       "public/js/overseer/index.js",
+      "legacy/**",
       // Service worker (browser-SW globals not wired below)
       "public/sw.js",
       // Offline / scaffolding scripts that are not part of the game runtime
@@ -26,8 +26,6 @@ export default [
       "generate_sidequest_npcs.js",
       "generate_world.js",
       "integrate_world.js",
-      "test-quest-persistence.js",
-      "test-scrap-fuse.js",
       "verify-hf-api-usage.js",
       "workers/**",
     ],

@@ -101,7 +101,7 @@ This ensures:
 
 ## TESTING TOOLS PROVIDED
 
-### Test Page: `test-quest-system.html` ✅
+### Test Page: `legacy/test-quest-system.html` ✅
 Comprehensive diagnostic tool for quest system:
 
 1. **Test Quest State Persistence** - Verifies localStorage saves
@@ -164,7 +164,7 @@ The fixes maintain full compatibility with backend sync:
 ## ROLLOUT INSTRUCTIONS
 
 1. ✅ Code changes committed to `public/js/modules/quests.js`
-2. ✅ Test page created at `test-quest-system.html`
+2. ✅ Test page created at `legacy/test-quest-system.html`
 3. ⚠️ RECOMMENDATION: Clear test data before production:
    ```javascript
    // Players should clear old broken state:
@@ -200,5 +200,5 @@ The fixes maintain full compatibility with backend sync:
 
 ---
 
-**For Technical Support:** See `test-quest-system.html` for diagnostic tools  
+**For Technical Support:** See `legacy/test-quest-system.html` for diagnostic tools  
 **For Bug Reports:** Check browser console for `[quests]` log messages

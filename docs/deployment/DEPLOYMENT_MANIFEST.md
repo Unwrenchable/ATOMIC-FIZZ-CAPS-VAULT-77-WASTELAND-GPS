@@ -72,7 +72,7 @@ Per Vault-Tec Protocol 77-A, two critical malfunctions in the Pip-Boy map system
   - Eliminated inline HTML duplication
 ```
 
-#### 3. `test-map-fixes.html` (NEW, 223 lines)
+#### 3. `legacy/test-map-fixes.html` (NEW, 223 lines)
 ```javascript
 ✅ Standalone test page
 ✅ Tests icon fallback mechanism
@@ -176,7 +176,7 @@ function getValidIcon(iconKey) {
 
 ## TESTING VERIFICATION
 
-### Automated Tests (test-map-fixes.html)
+### Automated Tests (legacy/test-map-fixes.html)
 
 #### Test 1: Icon Fallback System
 ```
@@ -219,7 +219,7 @@ Result: 8/8 mapping tests passed
 - [ ] Zoom in on map to view POI markers
 - [ ] Verify all markers show SVG icons (no blue pins)
 - [ ] Check Network tab for 404 errors (should be none)
-- [ ] Open test-map-fixes.html page
+- [ ] Open legacy/test-map-fixes.html page
 - [ ] Verify all automated tests pass
 
 ---
@@ -273,7 +273,7 @@ Total Impact: <10ms worst case
    - Check application loads without errors
    - Test explore button functionality
    - Verify POI markers display correctly
-   - Run test-map-fixes.html page
+   - Run legacy/test-map-fixes.html page
 
 4. **Monitor for Issues**
    - Watch browser console for errors
