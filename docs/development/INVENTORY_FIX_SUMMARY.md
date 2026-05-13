@@ -20,13 +20,13 @@
 ### Run Tests
 ```bash
 # All three tests should pass
-node test-inventory-persistence.js
-node test-getInventory-method.js
-node test-inventory-integration.js
+node legacy/test-inventory-persistence.js
+node legacy/test-getInventory-method.js
+node legacy/test-inventory-integration.js
 ```
 
 ### Manual Browser Test
-Open `test-inventory-visual.html` in a browser:
+Open `legacy/test-inventory-visual.html` in a browser:
 1. Click "Add Test Items"
 2. Click "Equip Weapon" and "Equip Armor"
 3. Click "Reload Page" - items should persist ✅

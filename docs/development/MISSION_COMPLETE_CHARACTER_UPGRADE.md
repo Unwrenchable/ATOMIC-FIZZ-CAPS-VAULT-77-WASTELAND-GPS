@@ -134,7 +134,7 @@ public/assets/avatars/
 #### New Files (4 files)
 ```
 ├── scripts/enhance-avatar-assets.js (batch enhancement tool)
-├── test-epic-characters.html (preview page)
+├── legacy/test-epic-characters.html (preview page)
 ├── EPIC_CHARACTER_SYSTEM_UPGRADE.md (full docs)
 └── BEFORE_AFTER_COMPARISON.md (visual guide)
 ```
@@ -171,7 +171,7 @@ public/assets/avatars/
 ## 🧪 TESTING & VERIFICATION
 
 ### Test Page Created
-**File:** `test-epic-characters.html`
+**File:** `legacy/test-epic-characters.html`
 
 Features:
 - 6 example wasteland survivors showcase
@@ -357,7 +357,7 @@ The character visual system has exceeded mission parameters. Assets are no longe
 4. Plan additional features if desired
 
 ### For the Developer
-- **Test page:** Open `test-epic-characters.html` locally
+- **Test page:** Open `legacy/test-epic-characters.html` locally
 - **Documentation:** Read `EPIC_CHARACTER_SYSTEM_UPGRADE.md`
 - **Comparisons:** Review `BEFORE_AFTER_COMPARISON.md`
 - **Enhancement tool:** `scripts/enhance-avatar-assets.js`

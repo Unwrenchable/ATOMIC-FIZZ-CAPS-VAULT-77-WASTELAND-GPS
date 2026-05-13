@@ -136,9 +136,9 @@ if (!Game.player.equipped) {
 | Backend sync | ✅ PASS | Only updates caps/xp/level, not inventory |
 
 **Test Files:**
-- `test-inventory-persistence.js` - Basic persistence tests
-- `test-getInventory-method.js` - New method verification
-- `test-inventory-integration.js` - Full integration tests
+- `legacy/test-inventory-persistence.js` - Basic persistence tests
+- `legacy/test-getInventory-method.js` - New method verification
+- `legacy/test-inventory-integration.js` - Full integration tests
 
 ---
 
@@ -233,13 +233,13 @@ Run these to verify fixes:
 
 ```bash
 # Basic persistence test
-node test-inventory-persistence.js
+node legacy/test-inventory-persistence.js
 
 # New getInventory() method test
-node test-getInventory-method.js
+node legacy/test-getInventory-method.js
 
 # Full integration test
-node test-inventory-integration.js
+node legacy/test-inventory-integration.js
 ```
 
 All tests should show: **✅ ALL TESTS PASSED**
@@ -269,9 +269,9 @@ All objectives achieved:
 3. `public/js/game/equip-actions.js` - Fixed auto-load conflict, added null checks
 
 **Test Files Created:**
-- `test-inventory-persistence.js`
-- `test-getInventory-method.js`
-- `test-inventory-integration.js`
+- `legacy/test-inventory-persistence.js`
+- `legacy/test-getInventory-method.js`
+- `legacy/test-inventory-integration.js`
 
 ---
 

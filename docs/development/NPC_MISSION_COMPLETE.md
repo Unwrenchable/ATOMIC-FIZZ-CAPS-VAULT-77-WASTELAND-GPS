@@ -50,7 +50,7 @@
 |------|---------------|---------|
 | `public/js/modules/npc_signal_runner.js` | +130, -32 | Core fixes + new functions |
 | `public/js/overseer/core.personality.js` | +1, -1 | API key validation |
-| `test-npc-dialogue-system.html` | +379 NEW | Test suite |
+| `legacy/test-npc-dialogue-system.html` | +379 NEW | Test suite |
 | `NPC_BEHAVIOR_FIXES.md` | +356 NEW | Full documentation |
 | `NPC_FIXES_QUICK_REF.md` | +120 NEW | Quick reference |
 
@@ -66,7 +66,7 @@
 - ✅ CodeQL security scan: PASS (0 alerts)
 
 ### Manual Testing Available
-- Test suite deployed: `test-npc-dialogue-system.html`
+- Test suite deployed: `legacy/test-npc-dialogue-system.html`
 - Tests 5 critical system components
 - Provides visual status indicators
 - Interactive dialogue progression test
@@ -197,7 +197,7 @@ Next Node → Repeat until End
 ### Available Docs
 1. **NPC_BEHAVIOR_FIXES.md** - Complete technical documentation
 2. **NPC_FIXES_QUICK_REF.md** - Quick reference card
-3. **test-npc-dialogue-system.html** - Interactive test suite
+3. **legacy/test-npc-dialogue-system.html** - Interactive test suite
 4. **This file** - Mission summary
 
 ### Integration Guides
@@ -287,7 +287,7 @@ Next Node → Repeat until End
 ## 📞 SUPPORT
 
 ### If Issues Occur
-1. Check `test-npc-dialogue-system.html` status
+1. Check `legacy/test-npc-dialogue-system.html` status
 2. Review browser console for errors
 3. Verify FO4Dialogue loaded before SignalRunner
 4. Check API key configuration (if using AI)

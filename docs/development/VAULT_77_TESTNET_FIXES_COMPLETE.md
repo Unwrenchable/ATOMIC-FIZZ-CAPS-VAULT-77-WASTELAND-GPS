@@ -116,22 +116,22 @@
 
 ### Automated Test Suites Created
 1. **Map POI System**
-   - `test-poi-fixes.html` - Interactive map testing with live statistics
+   - `legacy/test-poi-fixes.html` - Interactive map testing with live statistics
    - Tests: Cache hits, marker persistence, duplicate detection, validation
 
 2. **Quest System**
-   - `test-quest-system.html` - Browser-based diagnostic tool
-   - `test-quest-persistence.js` - Node.js integration tests (6 tests)
+   - `legacy/test-quest-system.html` - Browser-based diagnostic tool
+   - `legacy/test-quest-persistence.js` - Node.js integration tests (6 tests)
    - Tests: State persistence, objective tracking, reward distribution
 
 3. **Inventory System**
-   - `test-inventory-persistence.js` - Basic persistence tests (7 tests)
-   - `test-getInventory-method.js` - API method tests (5 tests)
-   - `test-inventory-integration.js` - Comprehensive integration (10 tests)
-   - `test-inventory-visual.html` - Visual browser test with reload simulation
+   - `legacy/test-inventory-persistence.js` - Basic persistence tests (7 tests)
+   - `legacy/test-getInventory-method.js` - API method tests (5 tests)
+   - `legacy/test-inventory-integration.js` - Comprehensive integration (10 tests)
+   - `legacy/test-inventory-visual.html` - Visual browser test with reload simulation
 
 4. **NPC System**
-   - `test-npc-dialogue-system.html` - Comprehensive dialogue testing (18 checks)
+   - `legacy/test-npc-dialogue-system.html` - Comprehensive dialogue testing (18 checks)
    - Tests: FO4 integration, tree progression, AI generation, state machine
 
 ### All Tests: PASSING ✅
@@ -344,47 +344,47 @@ While not part of this fix, these could be added later:
 **Maps not loading?**
 - Check console for "poiMarkersCache" logs
 - Verify `public/data/poi.json` is accessible
-- Test with `test-poi-fixes.html`
+- Test with `legacy/test-poi-fixes.html`
 
 **Quests not saving?**
 - Check localStorage for `afc_quest_state`
 - Verify console for "Quest state saved" logs
-- Test with `test-quest-system.html`
+- Test with `legacy/test-quest-system.html`
 
 **Items disappearing?**
 - Check localStorage for `afc_unified_player_state_v2`
 - Verify PlayerState.getInventory() returns array
-- Test with `test-inventory-visual.html`
+- Test with `legacy/test-inventory-visual.html`
 
 **NPCs not talking?**
 - Check console for FO4Dialogue initialization
 - Verify Signal Runner conversion logs
-- Test with `test-npc-dialogue-system.html`
+- Test with `legacy/test-npc-dialogue-system.html`
 
 ### Test Suites Location
 All test files are in the repository root:
-- `test-poi-fixes.html`
-- `test-quest-system.html`
-- `test-quest-persistence.js`
-- `test-inventory-persistence.js`
-- `test-getInventory-method.js`
-- `test-inventory-integration.js`
-- `test-inventory-visual.html`
-- `test-npc-dialogue-system.html`
+- `legacy/test-poi-fixes.html`
+- `legacy/test-quest-system.html`
+- `legacy/test-quest-persistence.js`
+- `legacy/test-inventory-persistence.js`
+- `legacy/test-getInventory-method.js`
+- `legacy/test-inventory-integration.js`
+- `legacy/test-inventory-visual.html`
+- `legacy/test-npc-dialogue-system.html`
 
 ### Running Tests
 ```bash
 # Browser tests - open in browser
-open test-poi-fixes.html
-open test-quest-system.html
-open test-inventory-visual.html
-open test-npc-dialogue-system.html
+open legacy/test-poi-fixes.html
+open legacy/test-quest-system.html
+open legacy/test-inventory-visual.html
+open legacy/test-npc-dialogue-system.html
 
 # Node.js tests - run in terminal
-node test-quest-persistence.js
-node test-inventory-persistence.js
-node test-getInventory-method.js
-node test-inventory-integration.js
+node legacy/test-quest-persistence.js
+node legacy/test-inventory-persistence.js
+node legacy/test-getInventory-method.js
+node legacy/test-inventory-integration.js
 ```
 
 ---

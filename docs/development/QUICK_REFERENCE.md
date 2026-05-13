@@ -12,7 +12,7 @@
 
 ## New Files
 
-- 📄 `test-map-fixes.html` - Automated test page
+- 📄 `legacy/test-map-fixes.html` - Automated test page
 - 📄 `DEPLOYMENT_MANIFEST.md` - Complete deployment guide
 - 📄 `MAP_FIXES_SUMMARY.md` - Technical documentation
 - 📄 `TESTING_INSTRUCTIONS.md` - Testing procedures
@@ -21,7 +21,7 @@
 
 ```bash
 # Open in browser
-open test-map-fixes.html
+open legacy/test-map-fixes.html
 ```
 
 ## Expected Console Output
