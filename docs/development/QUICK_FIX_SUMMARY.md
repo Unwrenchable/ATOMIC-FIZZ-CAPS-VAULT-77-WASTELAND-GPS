@@ -26,7 +26,7 @@ POI markers on the map were glitching: vanishing, flickering, and appearing in w
 ## Files Changed
 - ✏️ `public/js/modules/worldmap.js` - Core marker caching logic
 - ✏️ `public/data/poi.json` - Fixed duplicate Vault 96 ID
-- ➕ `test-poi-fixes.html` - Comprehensive test suite
+- ➕ `legacy/test-poi-fixes.html` - Comprehensive test suite
 - ➕ `POI_GLITCH_FIXES.md` - Detailed documentation
 
 ## Testing

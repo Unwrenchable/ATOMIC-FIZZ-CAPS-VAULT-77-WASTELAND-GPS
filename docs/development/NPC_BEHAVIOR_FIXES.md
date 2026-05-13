@@ -154,7 +154,7 @@ if (!HF_API_KEY ||
 ## 🧪 TESTING
 
 ### Test Suite Created
-**File**: `test-npc-dialogue-system.html`
+**File**: `legacy/test-npc-dialogue-system.html`
 
 **Tests Include**:
 1. ✓ HF API configuration check
@@ -273,7 +273,7 @@ curl http://localhost:3000/api/config/frontend
    - Added placeholder value detection
    - Improved API key validation
 
-3. **`test-npc-dialogue-system.html`** *(NEW)*
+3. **`legacy/test-npc-dialogue-system.html`** *(NEW)*
    - Comprehensive test suite
    - Visual status indicators
    - Interactive testing

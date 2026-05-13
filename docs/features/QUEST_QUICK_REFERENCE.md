@@ -50,7 +50,7 @@ open http://localhost:3000/test-quest-system.html
 
 ### Integration Test (Node.js)
 ```bash
-node test-quest-persistence.js
+node legacy/test-quest-persistence.js
 ```
 
 ## Common Issues

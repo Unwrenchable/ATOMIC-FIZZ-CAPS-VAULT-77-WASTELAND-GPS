@@ -167,7 +167,7 @@ The default model is `mistralai/Mixtral-8x7B-Instruct-v0.1`, but you can use:
 npm start
 
 # 2. Run test script
-node test-overseer-bot.js
+node legacy/test-overseer-bot.js
 
 # 3. Open in browser
 open http://localhost:3000/overseer.html
@@ -322,7 +322,7 @@ const res = await fetch('/api/overseer-ai/speak', {
 
 ### Test Script Output
 
-Run `node test-overseer-bot.js` to see:
+Run `node legacy/test-overseer-bot.js` to see:
 - ✅ Backend API status
 - ✅ Config endpoint validation
 - ✅ HF API key configuration check
@@ -389,7 +389,7 @@ Overseer: "The Mojave Wasteland. Where dreams come to die, and so do you if you'
 ### Need Help?
 
 1. **Check logs**: Browser console + backend console
-2. **Run test script**: `node test-overseer-bot.js`
+2. **Run test script**: `node legacy/test-overseer-bot.js`
 3. **Verify config**: Check `.env` file has HF_API_KEY
 4. **Review docs**: See `ENVIRONMENT_VARIABLES.md`
 

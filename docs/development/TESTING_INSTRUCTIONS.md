@@ -167,7 +167,7 @@ If you encounter problems:
 # Check if files exist
 ls -la public/img/icons/poi.svg
 ls -la public/js/modules/worldmap.js
-ls -la test-map-fixes.html
+ls -la legacy/test-map-fixes.html
 
 # Check for syntax errors
 node -c public/js/modules/worldmap.js
@@ -179,6 +179,6 @@ git diff HEAD~1 public/js/modules/worldmap.js
 
 ---
 
-**📟 OVERSEER NOTE:** The test page (`test-map-fixes.html`) is the fastest way to verify all fixes are working correctly. If it passes, the production code should work fine.
+**📟 OVERSEER NOTE:** The test page (`legacy/test-map-fixes.html`) is the fastest way to verify all fixes are working correctly. If it passes, the production code should work fine.
 
 Stay safe out there, Vault Dweller. ☢️

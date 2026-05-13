@@ -153,7 +153,7 @@
     "compositing": "Layer SVGs in order specified by layerOrder array",
     "colorization": "Apply fill/stroke colors via CSS or inline styles",
     "scaling": "Maintain 256x256 viewBox for best results",
-    "testing": "Open /test-epic-characters.html to preview enhanced assets",
+    "testing": "Open /legacy/test-epic-characters.html to preview enhanced assets",
     "integration": "Works seamlessly with existing character-creator.js system"
   },
   "license": "CC0 or original - created for Atomic Fizz Caps Vault 77 project",

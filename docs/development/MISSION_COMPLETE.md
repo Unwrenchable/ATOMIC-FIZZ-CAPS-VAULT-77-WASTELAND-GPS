@@ -52,7 +52,7 @@
 - ✅ `public/wallet/wallet.css` (1,918 lines - complete overhaul)
 
 ### New Files
-- ✅ `test-wallet-styles.html` (interactive showcase)
+- ✅ `legacy/test-wallet-styles.html` (interactive showcase)
 - ✅ `WALLET_EPIC_ENHANCEMENT.md` (full documentation)
 - ✅ `public/wallet/wallet.css.backup` (original preserved)
 
@@ -177,7 +177,7 @@
    - Component examples
    - Technical specifications
 
-2. **test-wallet-styles.html**
+2. **legacy/test-wallet-styles.html**
    - Interactive showcase
    - All components visible
    - Hover/focus demonstrations
@@ -377,7 +377,7 @@ Easing:  ease, ease-in-out, steps()
 open public/wallet/index.html
 
 # View showcase
-open test-wallet-styles.html
+open legacy/test-wallet-styles.html
 ```
 
 ### How to Modify

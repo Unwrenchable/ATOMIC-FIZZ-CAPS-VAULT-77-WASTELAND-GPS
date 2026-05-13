@@ -200,7 +200,7 @@ When loading `http://localhost:3000/overseer.html`:
 
 ### Automated Test Script
 
-**Script**: `test-overseer-bot.js`
+**Script**: `legacy/test-overseer-bot.js`
 
 **Results**:
 - ✅ Backend API responding
@@ -356,7 +356,7 @@ This is the **correct behavior** per the code design.
    - Security considerations
    - Debugging guide
 
-2. **`test-overseer-bot.js`** (6.5 KB)
+2. **`legacy/test-overseer-bot.js`** (6.5 KB)
    - Automated test script
    - Backend API validation
    - Configuration verification

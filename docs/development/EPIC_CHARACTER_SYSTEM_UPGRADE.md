@@ -268,7 +268,7 @@ The enhanced assets strike the perfect balance:
 ## 🧪 TESTING
 
 ### Test Page
-Open `test-epic-characters.html` to:
+Open `legacy/test-epic-characters.html` to:
 - View example wasteland survivors
 - Browse all 77 enhanced assets by category
 - See character composition in action
@@ -315,7 +315,7 @@ Open `test-epic-characters.html` to:
 ### New Files Created
 ```
 ✅ scripts/enhance-avatar-assets.js
-✅ test-epic-characters.html
+✅ legacy/test-epic-characters.html
 ✅ EPIC_CHARACTER_SYSTEM_UPGRADE.md (this file)
 ```
 

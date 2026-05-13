@@ -68,7 +68,7 @@ loadQuestState()  // Lines ~762-780
 
 ## 🧪 TESTING RESULTS
 
-### Integration Test: `test-quest-persistence.js`
+### Integration Test: `legacy/test-quest-persistence.js`
 ```
 📟 TEST SUMMARY
 ===============
@@ -83,7 +83,7 @@ loadQuestState()  // Lines ~762-780
 ✅ ALL TESTS PASSED - Quest system is OPERATIONAL
 ```
 
-### Browser Test Tool: `test-quest-system.html`
+### Browser Test Tool: `legacy/test-quest-system.html`
 Comprehensive diagnostic UI with 5 test categories:
 1. Quest State Persistence Check
 2. Quest Completion Flow Test
@@ -117,8 +117,8 @@ Quest state → ✅ Persisted immediately after every change
 | File | Changes | Lines Modified |
 |------|---------|----------------|
 | `public/js/modules/quests.js` | Added persistence functions, fixed syntax error | ~80 lines |
-| `test-quest-system.html` | NEW - Browser diagnostic tool | +400 lines |
-| `test-quest-persistence.js` | NEW - Node.js integration test | +200 lines |
+| `legacy/test-quest-system.html` | NEW - Browser diagnostic tool | +400 lines |
+| `legacy/test-quest-persistence.js` | NEW - Node.js integration test | +200 lines |
 | `QUEST_SYSTEM_FIXES.md` | NEW - Technical documentation | +250 lines |
 
 ---
@@ -271,11 +271,11 @@ Quest state → ✅ Persisted immediately after every change
 
 ### For Developers
 - `QUEST_SYSTEM_FIXES.md` - Detailed technical documentation
-- `test-quest-persistence.js` - Integration test with examples
+- `legacy/test-quest-persistence.js` - Integration test with examples
 - Inline code comments added to all modified functions
 
 ### For QA/Testing
-- `test-quest-system.html` - Interactive browser test suite
+- `legacy/test-quest-system.html` - Interactive browser test suite
 - Console logging: All quest operations log to `[quests]` prefix
 
 ### For Players

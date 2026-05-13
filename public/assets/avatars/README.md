@@ -94,7 +94,7 @@ svgElement.querySelector('path').setAttribute('fill', '#3b2b24');
 See `/docs/CHARACTER_CREATOR_ASSETS.md` for comprehensive documentation.
 
 ### Testing
-Open `/test-character-assets.html` in browser to preview all assets.
+Open `/legacy/test-character-assets.html` in browser to preview all assets.
 
 ## 🎮 Race-Specific Assets
 
