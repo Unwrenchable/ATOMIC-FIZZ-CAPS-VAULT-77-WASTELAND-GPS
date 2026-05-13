@@ -44,7 +44,7 @@
 
   // Log configuration for debugging
   console.log('[Config] Frontend:', hostname);
-  console.log('[Config] Backend API:', window.API_BASE || '(same origin)');
+  console.log('[Config] Backend API:', window.API_BASE || 'https://api.atomicfizzcaps.xyz)');
   console.log('[Config] Solana RPC:', window.SOLANA_RPC);
   console.log('[Config] Mode: Split architecture (Vercel + Render, relative API paths)');
 })();
