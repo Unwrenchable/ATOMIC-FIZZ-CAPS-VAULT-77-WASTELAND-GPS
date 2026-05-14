@@ -28,7 +28,8 @@
 <script>
 setInterval(async () => {
   try {
-    const res = await fetch("/api/worldstate");
+    const apiBase = (window.API_BASE || "https://api.atomicfizzcaps.xyz").replace(/\/+$/, "");
+    const res = await fetch(`${apiBase}/api/worldstate`);
     const data = await res.json();
     if (data.ok && window.Overseer) {
       Overseer.updateWorldstate(data.worldstate);
