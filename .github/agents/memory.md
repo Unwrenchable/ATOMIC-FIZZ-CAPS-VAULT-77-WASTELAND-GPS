@@ -123,6 +123,12 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-05-14] CORS + preview domains + absolute API routing
+- **What**: Updated CORS wildcard hostname matching in `backend/server.js` so `https://*.vercel.app` and similar patterns can match nested preview host labels (for example, `atomic-fizz-caps-zj3obwe9g-vault777.vercel.app`) while still restricting wildcard segments to valid hostname characters.
+- **What**: Added a frontend fetch shim in `public/js/config.js` that rewrites relative `/api/*` requests to `${window.API_BASE}/api/*` so legacy modules no longer hit the Vercel origin by mistake.
+- **What**: Updated `public/overseer.html` worldstate polling to call `${API_BASE}/api/worldstate` explicitly.
+- **Verified**: Diagnostics clean in `backend/server.js`, `public/js/config.js`, and `public/overseer.html`.
+
 ### [2026-04-28] Pip-Boy panel render system — two tiers exist
 - **What**: Fixed `public/js/pipboy.js` to use the full-featured module renderers instead of the legacy main.js stubs.
   - ITEMS tab: now calls `Game.ui.renderInventory()` (inventory-ui.js — category tabs + paperdoll) with fallback to `window.renderInventoryPanel()`

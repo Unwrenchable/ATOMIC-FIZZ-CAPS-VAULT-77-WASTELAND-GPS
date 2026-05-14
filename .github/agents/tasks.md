@@ -45,6 +45,13 @@ _No active tasks. The wasteland is quiet — for now._
 
 ## Completed Tasks
 
+### [2026-05-14] Task: Fix CORS preview origin and force backend API routing
+- **Agent**: copilot
+- **Files**: `backend/server.js`, `public/js/config.js`, `public/overseer.html`, `.github/agents/memory.md`, `.github/agents/tasks.md`
+- **Status**: `complete`
+- **What**: Updated CORS wildcard origin matching to allow nested Vercel preview host labels, added a global frontend fetch shim to rewrite relative `/api/*` calls to `window.API_BASE`, and switched Overseer worldstate polling to explicit `${API_BASE}/api/worldstate`.
+- **Verified**: Diagnostics show no errors in edited runtime files. Relative frontend `/api/*` callsites now route to backend through fetch rewrite logic.
+
 ### [2026-05-06] Task: Normalize health endpoint response shape
 - **Agent**: copilot
 - **Files**: `backend/server.js`
