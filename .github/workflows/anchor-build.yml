@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -41,6 +41,4 @@ jobs:
           echo "{}" > /home/runner/.config/solana/id.json
 
       - name: Build Anchor Program
-        working-directory: apps/backend
         run: anchor build --provider.cluster devnet
-

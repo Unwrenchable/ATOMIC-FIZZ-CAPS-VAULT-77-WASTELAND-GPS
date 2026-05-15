@@ -13,7 +13,7 @@ jobs:
       ANCHOR_WALLET: /home/runner/.config/solana/id.json
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -38,14 +38,13 @@ jobs:
           echo "${{ secrets.SOLANA_KEYPAIR }}" > ~/.config/solana/id.json
 
       - name: Build Program
-        working-directory: apps/backend
         run: anchor build --provider.cluster devnet
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: fizzcaps_onchain-artifacts
           path: |
-            apps/backend/target/deploy/*.so
-            apps/backend/target/idl/*.json
-            apps/backend/Anchor.toml
+            target/deploy/*.so
+            target/idl/*.json
+            Anchor.toml
