@@ -45,6 +45,13 @@ _No active tasks. The wasteland is quiet — for now._
 
 ## Completed Tasks
 
+### [2026-05-15] Task: Restore self-hosted Overseer brain
+- **Agent**: copilot
+- **Files**: `backend/api/overseer-proxy.js`, `backend/api/frontend-config.js`, `backend/realai/local-overseer.js`, `.env.example`, `.github/agents/tasks.md`, `.github/agents/memory.md`
+- **Status**: `complete`
+- **What**: Added a backend-local RealAI Overseer brain, made `/api/overseer/ask` local-first with optional cloud fallback via `OVERSEER_REALAI_MODE`, aligned frontend status/config to advertise the self-hosted relay by default, and blocked `.env*` files from the local repo manifest scan.
+- **Verified**: `node --check backend/realai/local-overseer.js` plus matching checks for `backend/api/overseer-proxy.js` and `backend/api/frontend-config.js`; `Set-Location backend; node -e "... /api/overseer/ask ..."` returning `{ "ok": true, "fallback": false, "source": "local-realai", "mode": "local", ... }`; and the same probe with `OVERSEER_REALAI_MODE=auto` returning `{ ..., "mode": "auto" }`.
+
 ### [2026-05-15] Task: Fix Overseer ask gateway crash
 - **Agent**: copilot
 - **Files**: `backend/api/overseer-proxy.js`, `render.yaml`, `.github/agents/tasks.md`, `.github/agents/memory.md`

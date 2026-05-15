@@ -1,12 +1,16 @@
-// backend/api/overseer-proxy.js — HF/OpenAI/xAI Grok-aware Overseer AI proxy
+// backend/api/overseer-proxy.js — local-first Overseer AI proxy with optional cloud fallback
 const express = require('express');
 const router = express.Router();
 const grok = require('../lib/grok');
+const { generateLocalOverseerReply } = require('../realai/local-overseer');
 
 const MAX_PROMPT_LENGTH = 2000;
 const IDENTITY_QUERY_REGEX = /who are you|what are you|your name|identify yourself|who is jax|are you jax|who am i talking to/i;
 const HELP_QUERY_REGEX = /\bhelp\b|\bwhat can you do\b|\bcommands?\b|\bhow do i\b/;
 const STATUS_QUERY_REGEX = /\bstatus\b|\bworldstate\b|\bonline\b|\buplink\b|\bsignal\b/;
+const REALAI_MODE_LOCAL = 'local';
+const REALAI_MODE_AUTO = 'auto';
+const REALAI_MODE_CLOUD = 'cloud';
 
 function normalizeOutput(json) {
   if (!json) return '';
@@ -73,23 +77,64 @@ function getRepoSnapshotEntries(value) {
   return Array.isArray(value) ? value : [];
 }
 
+function getRealAiMode() {
+  const normalized = String(
+    process.env.OVERSEER_REALAI_MODE || process.env.REALAI_MODE || REALAI_MODE_LOCAL
+  )
+    .trim()
+    .toLowerCase();
+
+  if (
+    normalized === REALAI_MODE_AUTO ||
+    normalized === REALAI_MODE_CLOUD ||
+    normalized === REALAI_MODE_LOCAL
+  ) {
+    return normalized;
+  }
+
+  return REALAI_MODE_LOCAL;
+}
+
+function respondWithLocalRealAi(res, rawPrompt, worldstate, repoSnapshot, mode) {
+  const text = generateLocalOverseerReply({ rawPrompt, worldstate, repoSnapshot });
+  return res.json({
+    ok: true,
+    fallback: false,
+    source: 'local-realai',
+    mode,
+    text
+  });
+}
+
 router.post('/ask', async (req, res) => {
   const rawPrompt = (req.body && req.body.prompt) || '';
 
   if (typeof rawPrompt !== 'string') {
-    return res.status(400).json({ error: 'invalid_prompt' });
+    return res.status(400).json({ ok: false, error: 'invalid_prompt' });
   }
   if (rawPrompt.length > MAX_PROMPT_LENGTH) {
-    return res.status(400).json({ error: 'prompt_too_long', maxLength: MAX_PROMPT_LENGTH });
+    return res.status(400).json({ ok: false, error: 'prompt_too_long', maxLength: MAX_PROMPT_LENGTH });
   }
   if (!rawPrompt.trim()) {
-    return res.status(400).json({ error: 'empty_prompt' });
+    return res.status(400).json({ ok: false, error: 'empty_prompt' });
   }
 
   try {
     // Pull worldstate from server memory (NPCs, quests, player stats, etc.)
     const worldstate = req.app.get('worldstate') || {};
     const repoSnapshot = getRepoSnapshotEntries(req.app.get('repoSnapshot'));
+    const realAiMode = getRealAiMode();
+
+    if (realAiMode !== REALAI_MODE_CLOUD) {
+      try {
+        return respondWithLocalRealAi(res, rawPrompt, worldstate, repoSnapshot, realAiMode);
+      } catch (localErr) {
+        console.error('[overseer-proxy] local RealAI generation failed', localErr);
+        if (realAiMode === REALAI_MODE_LOCAL) {
+          return respondWithFallback(res, rawPrompt, 'local_realai_failed');
+        }
+      }
+    }
 
     // FINAL WORLDSTATE-AWARE PROMPT
     const prompt = `
@@ -126,7 +171,11 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
     const useHF = !useGrok && (aiKey.startsWith('hf_') || proxyUrl.includes('huggingface.co'));
 
     if (!useGrok && !aiKey && !hasCustomProxy) {
-      return respondWithFallback(res, rawPrompt, 'missing_model_credentials');
+      return respondWithFallback(
+        res,
+        rawPrompt,
+        realAiMode === REALAI_MODE_CLOUD ? 'missing_model_credentials' : 'cloud_credentials_missing_after_local_fail'
+      );
     }
 
     if (useGrok) {
@@ -138,7 +187,7 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
         });
 
         if (typeof text === 'string' && text.trim()) {
-          return res.json({ ok: true, text: text.trim(), source: 'grok' });
+          return res.json({ ok: true, text: text.trim(), source: 'grok', mode: REALAI_MODE_CLOUD });
         }
 
         console.warn('[overseer-proxy] grok returned empty text');
@@ -170,7 +219,7 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
         return respondWithFallback(res, rawPrompt, 'empty_hf_response');
       }
 
-      return res.json({ ok: true, text, source: 'huggingface' });
+      return res.json({ ok: true, text, source: 'huggingface', mode: REALAI_MODE_CLOUD });
     } else {
       const openaiUrl = proxyUrl || 'https://api.openai.com/v1/chat/completions';
       const body = { model: model || 'gpt-4o-mini', messages: [{ role: 'user', content: prompt }], max_tokens: 800 };
@@ -195,7 +244,12 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
         return respondWithFallback(res, rawPrompt, 'empty_openai_response');
       }
 
-      return res.json({ ok: true, text, source: hasCustomProxy ? 'custom-proxy' : 'openai' });
+      return res.json({
+        ok: true,
+        text,
+        source: hasCustomProxy ? 'custom-proxy' : 'openai',
+        mode: REALAI_MODE_CLOUD
+      });
     }
   } catch (err) {
     console.error('[overseer-proxy] error', err);
