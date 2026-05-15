@@ -54,6 +54,11 @@ jobs:
           else
             PROGRAM_ID=$(sed -nE 's/^\s*fizzcaps_onchain\s*=\s*"([^"]+)".*$/\1/p' Anchor.toml | head -n1)
           fi
+          if [ -z "$PROGRAM_ID" ]; then
+            echo "Unable to resolve fizzcaps_onchain program ID from build artifacts or Anchor.toml."
+            echo "program_id=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           echo "program_id=$PROGRAM_ID" >> "$GITHUB_OUTPUT"
 
       - name: Upload IDL

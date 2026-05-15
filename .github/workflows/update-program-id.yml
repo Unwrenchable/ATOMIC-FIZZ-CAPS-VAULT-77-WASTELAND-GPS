@@ -22,7 +22,7 @@ jobs:
             exit 0
           fi
           PROGRAM_ID=$(grep -o '"[A-Za-z0-9]\{32,44\}"' target/deploy/fizzcaps_onchain-keypair.json | tr -d '"')
-          echo "program_id=$PROGRAM_ID" >> $GITHUB_OUTPUT
+          echo "program_id=$PROGRAM_ID" >> "$GITHUB_OUTPUT"
 
       - name: Update Anchor.toml
         if: steps.pid.outputs.program_id != ''
