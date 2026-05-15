@@ -25,6 +25,7 @@
   const npcSpawnModule = {
     npcs: [],
     loaded: false,
+    enrichmentManifest: null,
     spawnChance: 0.3, // 30% chance of NPC encounter at matching location
 
     async init() {
@@ -47,14 +48,17 @@
           return;
         }
 
+        const enrichmentManifest = await this.loadEnrichmentManifest();
+
         for (const npcFile of index) {
+          if (npcFile === 'enrichment.generated.json') continue;
           try {
             const res = await fetch(`/data/npc/${npcFile}`);
             if (!res.ok) {
               console.warn(`[npcSpawn] failed to fetch ${npcFile}: ${res.status}`);
               continue;
             }
-            const npc = await res.json();
+            const npc = this.applyEnrichment(await res.json(), enrichmentManifest);
             if (npc && npc.id) {
               this.npcs.push(npc);
               // register NPC in global registry for portrait/swap usage
@@ -92,6 +96,90 @@
       } catch (err) {
         console.error("[npcSpawn] Failed to load NPC index:", err.message);
       }
+    },
+
+    async loadEnrichmentManifest() {
+      if (this.enrichmentManifest !== null) {
+        return this.enrichmentManifest;
+      }
+
+      try {
+        const response = await fetch('/data/npc/enrichment.generated.json');
+        if (!response.ok) {
+          this.enrichmentManifest = {};
+          return this.enrichmentManifest;
+        }
+
+        const json = await response.json();
+        this.enrichmentManifest = json && json.npcs && typeof json.npcs === 'object'
+          ? json.npcs
+          : {};
+      } catch (error) {
+        console.warn('[npcSpawn] failed to load enrichment manifest:', error && error.message ? error.message : error);
+        this.enrichmentManifest = {};
+      }
+
+      return this.enrichmentManifest;
+    },
+
+    applyEnrichment(npc, manifest) {
+      if (!npc || !npc.id) {
+        return npc;
+      }
+
+      const overlay = manifest && manifest[npc.id];
+      if (!overlay || typeof overlay !== 'object') {
+        return npc;
+      }
+
+      return this.deepMerge(npc, overlay);
+    },
+
+    deepMerge(base, overlay) {
+      if (!overlay || typeof overlay !== 'object' || Array.isArray(overlay)) {
+        return overlay;
+      }
+
+      const result = {
+        ...(base && typeof base === 'object' ? base : {})
+      };
+
+      Object.keys(overlay).forEach((key) => {
+        const value = overlay[key];
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          result[key] = this.deepMerge(result[key], value);
+          return;
+        }
+        result[key] = Array.isArray(value) ? value.slice() : value;
+      });
+
+      return result;
+    },
+
+    extractDialogLines(npc) {
+      if (!npc) return [];
+
+      const lines = [];
+
+      if (Array.isArray(npc.dialogPool)) {
+        lines.push(...npc.dialogPool);
+      }
+
+      if (Array.isArray(npc.dialog)) {
+        lines.push(...npc.dialog);
+      } else if (npc.dialog && typeof npc.dialog === 'object') {
+        if (Array.isArray(npc.dialog.idle)) {
+          lines.push(...npc.dialog.idle);
+        }
+        if (Array.isArray(npc.dialog.approach)) {
+          lines.push(...npc.dialog.approach);
+        }
+        if (Array.isArray(npc.dialog.gossip)) {
+          lines.push(...npc.dialog.gossip);
+        }
+      }
+
+      return lines.filter(line => typeof line === 'string' && line.trim());
     },
 
     // Get current spawn chance based on time of day (higher at night)
@@ -173,8 +261,7 @@
 
     // Fallback: show NPC dialog directly
     showNPCDialog(npc) {
-      // Handle both 'dialog' and 'dialogPool' structures
-      const dialogArray = npc.dialogPool || npc.dialog || [];
+      const dialogArray = this.extractDialogLines(npc);
       const dialog = dialogArray.length > 0
         ? dialogArray[secureRandIndex(dialogArray.length)]
         : "...";

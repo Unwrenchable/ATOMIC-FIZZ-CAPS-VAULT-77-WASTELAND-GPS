@@ -6,11 +6,17 @@ This document defines the single supported content-generation path for this repo
 
 Run from repository root:
 
-- `npm run gen:locations`
-- `npm run gen:npcs`
 - `npm run gen:npcs:sidequest`
 - `npm run gen:world`
 - `npm run gen:world:integrate`
+
+## Official RealAI Utility Commands
+
+Run from repository root:
+
+- `npm run realai:gen:locations`
+- `npm run realai:gen:npcs`
+- `npm run realai:gen:lore`
 
 Validation helper:
 
@@ -20,15 +26,25 @@ Validation helper:
 
 The canonical generator flow is the top-level script family:
 
-- `generate_locations.js`
-- `generate_npcs.js`
 - `generate_sidequest_npcs.js`
 - `generate_world.js`
 - `integrate_world.js`
 
 ## Non-Canonical Scripts
 
-`scripts/realai/*` is not part of the release or deployment pipeline. Treat those scripts as experimental utilities unless they are explicitly promoted and wired into package scripts.
+Most `scripts/realai/*` files remain experimental utilities. The promoted exceptions are:
+
+- `scripts/realai/generate-locations.js`
+- `scripts/realai/generate-npcs.js`
+- `scripts/realai/generate-lore.js`
+
+Those files are wired into `package.json` as the official RealAI utility commands above.
+
+For gameplay code, use the structured RealAI APIs instead of calling `realai(prompt)` directly:
+
+- `scripts/realai/generate-npc.js`
+- `scripts/realai/dialogue-engine.js`
+- `scripts/realai/quest-generator.js`
 
 ## Promotion Rule
 
