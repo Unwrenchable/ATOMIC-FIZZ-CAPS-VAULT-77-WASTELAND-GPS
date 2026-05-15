@@ -9,7 +9,7 @@
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'wasm-unsafe-eval';
+    script-src 'self' https://cdn.jsdelivr.net 'wasm-unsafe-eval';
     connect-src 'self' https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://api.atomicfizzcaps.xyz https://api-inference.huggingface.co https://api.mainnet-beta.solana.com https://api.devnet.solana.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
     worker-src 'self' blob:;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
@@ -25,21 +25,6 @@
   <!-- Pocket-Boy / Overseer Terminal Theme -->
   <link rel="stylesheet" href="/css/terminal.css" />
 </head>
-
-<script>
-setInterval(async () => {
-  try {
-    const apiBase = (window.API_BASE || "https://api.atomicfizzcaps.xyz").replace(/\/+$/, "");
-    const res = await fetch(`${apiBase}/api/worldstate`);
-    const data = await res.json();
-    if (data.ok && window.Overseer) {
-      Overseer.updateWorldstate(data.worldstate);
-    }
-  } catch (err) {
-    console.error("[worldstate poll]", err);
-  }
-}, 2000);
-</script>
 
 <body>
 
@@ -88,13 +73,14 @@ setInterval(async () => {
 
     <!-- Close link -->
     <div style="margin-top:18px; text-align:right;">
-      <button class="terminal-button" onclick="window.close()">CLOSE TERMINAL</button>
+      <button id="close-terminal" class="terminal-button">CLOSE TERMINAL</button>
     </div>
 
   </div>
 
   <!-- API config for backend calls -->
   <script src="/js/config.js"></script>
+  <script src="/js/overseer/worldstate-poll.js"></script>
 
   <!-- Local WebLLM brain -->
   <script src="/js/overseer/overseer-brain.js"></script>
