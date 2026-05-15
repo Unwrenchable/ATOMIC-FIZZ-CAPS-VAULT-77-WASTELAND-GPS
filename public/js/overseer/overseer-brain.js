@@ -44,7 +44,7 @@
           if (typeof progressCallback === "function") {
             progressCallback({ progress: safeProgress, report: report });
           } else {
-            console.log("[Overseer] Loading: " + safeProgress + "%");
+            console.log(`[Overseer] Loading: ${safeProgress}%`);
           }
         }
       });
@@ -105,7 +105,7 @@
       const worldContext = JSON.stringify(worldstate).slice(0, MAX_WORLDSTATE_CONTEXT_CHARS);
       contextHistory.push({
         role: "assistant",
-        content: "Current world telemetry snapshot: " + worldContext
+        content: `Current world telemetry snapshot: ${worldContext}`
       });
     }
     return talkToOverseer(text, contextHistory);
