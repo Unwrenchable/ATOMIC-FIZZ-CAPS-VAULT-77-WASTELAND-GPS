@@ -40,6 +40,9 @@ jobs:
           mkdir -p ~/.config/solana
           echo "${{ secrets.SOLANA_KEYPAIR }}" > ~/.config/solana/id.json
 
+      - name: Sync Anchor Program IDs
+        run: anchor keys sync
+
       - name: Build Program
         run: anchor build
 
