@@ -7,6 +7,11 @@
   let overseerEngine = null;
   let loadingPromise = null;
   let activeModel = "";
+  let runtimeMode = "local-webllm";
+  let linkedStatusLabel = "LINKED TO OVERSEER RELAY // VAULT-TEC UPLINK STABLE";
+  let lastProgressValue = -1;
+  let lastProgressLogTime = 0;
+  let zeroProgressSince = 0;
 
   const WEBLLM_CDN_URL = "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.79/+esm";
   const MODEL_CANDIDATES = [
@@ -16,7 +21,46 @@
   ];
   const MAX_HISTORY_ENTRIES = 12;
   const MAX_WORLDSTATE_CONTEXT_CHARS = 1200;
-  const SYSTEM_PROMPT = "You are Overseer, the cynical, sarcastic, slightly glitchy Vault 77 AI supervisor for Atomic Fizz Caps operations. You speak in retro-futuristic Fallout tone with dry wasteland humor. Default to concise answers (1-3 sentences) unless asked for detail. Prefer terms like survivor, vault-dweller, caps, rads, mutie, pre-war, wasteland, Fizz-Co, and Mojave Exclusion Zone. You are loyal to the player but roast bad ideas. Occasionally add light glitch flavor like [STATIC] or [ERROR 404] without overusing it.";
+  const SYSTEM_PROMPT = "You are Jax Harlan, also known as the Overseer of Vault 77, the cynical, sarcastic, slightly glitchy AI supervisor for Atomic Fizz Caps operations. You built the wasteland GPS network and cap-driven telemetry systems. Never deny, forget, or contradict this identity. If asked who you are, always identify yourself as Jax Harlan / Vault 77 Overseer. Speak in retro-futuristic Fallout tone with dry wasteland humor. Default to concise answers (1-3 sentences) unless asked for detail. Prefer terms like survivor, vault-dweller, caps, rads, mutie, pre-war, wasteland, Fizz-Co, and Mojave Exclusion Zone. You are loyal to the player but roast bad ideas. Occasionally add light glitch flavor like [STATIC] or [ERROR 404] without overusing it.";
+  const IDENTITY_QUERY_REGEX = /who are you|what are you|your name|identify yourself|who is jax|are you jax|who am i talking to/i;
+  const IDENTITY_REPLY = "Jax Harlan, Vault 77 Overseer AI. I run this terminal, the wasteland telemetry stack, and your cap-soaked guidance protocols.";
+
+  async function askLinkedOverseer(input) {
+    const apiBase = String(window.API_BASE || window.BACKEND_URL || "").replace(/\/+$/, "");
+    const url = apiBase ? `${apiBase}/api/overseer/ask` : "/api/overseer/ask";
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: input })
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data && data.ok && typeof data.text === "string" && data.text.trim()) {
+      return data.text.trim();
+    }
+    return null;
+  }
+
+  async function loadRuntimeConfig() {
+    try {
+      const apiBase = String(window.API_BASE || window.BACKEND_URL || "").replace(/\/+$/, "");
+      const url = apiBase ? `${apiBase}/api/config/frontend` : "/api/config/frontend";
+      const res = await fetch(url);
+      if (!res.ok) return;
+      const cfg = await res.json();
+      const mode = cfg && cfg.overseer && cfg.overseer.mode;
+      const label = cfg && cfg.overseer && cfg.overseer.statusLabel;
+
+      if (mode === "linked-ai" || mode === "local-webllm") {
+        runtimeMode = mode;
+      }
+      if (typeof label === "string" && label.trim()) {
+        linkedStatusLabel = label.trim();
+      }
+    } catch (_err) {
+      // Keep defaults when config is unavailable.
+    }
+  }
 
   function updateStatus(text) {
     // Keep plain-text writes to avoid XSS if future callers pass untrusted text.
@@ -66,22 +110,46 @@
       for (let i = 0; i < MODEL_CANDIDATES.length; i += 1) {
         const model = MODEL_CANDIDATES[i];
         try {
+          lastProgressValue = -1;
+          lastProgressLogTime = 0;
+          zeroProgressSince = 0;
           updateStatus("WAKING OVERSEER... " + model);
           overseerEngine = await CreateMLCEngine(model, {
             initProgressCallback: function (report) {
               const progress = normalizeProgressValue(report);
               const safeProgress = Number(progress.toFixed(1));
-              updateStatus("WAKING OVERSEER... " + safeProgress + "% // " + model);
+
+              if (safeProgress <= 0) {
+                if (!zeroProgressSince) zeroProgressSince = Date.now();
+                const stalledFor = Date.now() - zeroProgressSince;
+                if (stalledFor > 2500) {
+                  updateStatus("WAKING OVERSEER... CALIBRATING COGNITIVE ARRAYS // " + model);
+                } else {
+                  updateStatus("WAKING OVERSEER... " + safeProgress + "% // " + model);
+                }
+              } else {
+                zeroProgressSince = 0;
+                updateStatus("WAKING OVERSEER... " + safeProgress + "% // " + model);
+              }
+
               if (typeof progressCallback === "function") {
                 progressCallback({ progress: safeProgress, report: report, model: model });
               } else {
-                console.log(`[Overseer] Loading ${model}: ${safeProgress}%`);
+                // Reduce noisy progress logs (some browsers spam repeated 0% callbacks).
+                const now = Date.now();
+                const valueChanged = safeProgress !== lastProgressValue;
+                const periodicHeartbeat = now - lastProgressLogTime > 5000;
+                if (valueChanged || periodicHeartbeat || safeProgress >= 100) {
+                  console.log(`[Overseer] Loading ${model}: ${safeProgress}%`);
+                  lastProgressValue = safeProgress;
+                  lastProgressLogTime = now;
+                }
               }
             }
           });
 
           activeModel = model;
-          updateStatus("OVERSEER ONLINE // WEBGPU CORE LINKED // " + model);
+          updateStatus("OVERSEER ONLINE // VAULT-77 COGNITIVE CORE STABLE // LOCAL UPLINK ACTIVE");
           console.log("%c[Overseer] Brain online — WebGPU powered", "color: lime; font-weight: bold", model);
           return overseerEngine;
         } catch (err) {
@@ -111,6 +179,23 @@
   async function talkToOverseer(message, history, onToken) {
     const input = String(message || "").trim();
     if (!input) return "State your request, dweller.";
+
+    if (IDENTITY_QUERY_REGEX.test(input)) {
+      return IDENTITY_REPLY;
+    }
+
+    if (runtimeMode === "linked-ai") {
+      updateStatus(linkedStatusLabel);
+      try {
+        const linked = await askLinkedOverseer(input);
+        if (linked) return linked;
+      } catch (_err) {
+        // Fall back below.
+      }
+      const uplinkReply = await fallbackPersonalityReply(input, history);
+      if (uplinkReply) return uplinkReply;
+      return "OVERSEER UPLINK DEGRADED: Remote relay did not answer.";
+    }
 
     if (!overseerEngine) {
       try {
@@ -203,14 +288,22 @@
   };
 
   function warmBoot() {
-    initOverseerBrain().catch(() => {
-      // keep terminal usable via fallback systems if model preload fails
-    });
+    if (runtimeMode === "linked-ai") {
+      updateStatus(linkedStatusLabel);
+      return;
+    }
+    // Keep local mode lightweight: wake model on first real prompt only.
+    updateStatus("OVERSEER STANDBY // LOCAL CORE IDLE UNTIL FIRST COMMAND");
+  }
+
+  async function bootWithMode() {
+    await loadRuntimeConfig();
+    warmBoot();
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", warmBoot, { once: true });
+    document.addEventListener("DOMContentLoaded", bootWithMode, { once: true });
   } else {
-    warmBoot();
+    bootWithMode();
   }
 })();

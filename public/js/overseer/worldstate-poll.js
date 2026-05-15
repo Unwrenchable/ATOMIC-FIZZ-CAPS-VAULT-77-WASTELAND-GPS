@@ -4,6 +4,13 @@
 (function () {
   "use strict";
 
+  const ACTIVE_POLL_MS = 5000;
+  const HIDDEN_POLL_MS = 20000;
+  const FAILURE_BACKOFF_MS = 30000;
+  let pollTimer = null;
+  let consecutiveFailures = 0;
+  let lastErrorLogAt = 0;
+
   function wireCloseButton() {
     const closeButton = document.getElementById("close-terminal");
     if (!closeButton) return;
@@ -20,14 +27,38 @@
       if (data && data.ok && window.overseer && typeof window.overseer.updateWorldstate === "function") {
         window.overseer.updateWorldstate(data.worldstate);
       }
+      consecutiveFailures = 0;
     } catch (err) {
-      console.error("[worldstate poll]", err);
+      consecutiveFailures += 1;
+      const now = Date.now();
+      if (now - lastErrorLogAt > 15000) {
+        console.error("[worldstate poll]", err);
+        lastErrorLogAt = now;
+      }
     }
+  }
+
+  function nextDelayMs() {
+    if (consecutiveFailures > 0) return FAILURE_BACKOFF_MS;
+    return document.hidden ? HIDDEN_POLL_MS : ACTIVE_POLL_MS;
+  }
+
+  function queueNextPoll() {
+    if (pollTimer) clearTimeout(pollTimer);
+    pollTimer = setTimeout(async function () {
+      await pollWorldstate();
+      queueNextPoll();
+    }, nextDelayMs());
   }
 
   function startWorldstatePolling() {
     wireCloseButton();
-    setInterval(pollWorldstate, 2000);
+    pollWorldstate().finally(queueNextPoll);
+    document.addEventListener("visibilitychange", queueNextPoll);
+    window.addEventListener("beforeunload", function () {
+      if (pollTimer) clearTimeout(pollTimer);
+      pollTimer = null;
+    });
   }
 
   if (document.readyState === "loading") {
