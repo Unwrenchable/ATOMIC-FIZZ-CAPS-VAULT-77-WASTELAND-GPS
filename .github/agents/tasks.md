@@ -45,6 +45,20 @@ _No active tasks. The wasteland is quiet — for now._
 
 ## Completed Tasks
 
+### [2026-05-15] Task: Restore repo lint/test execution
+- **Agent**: copilot
+- **Files**: `tests/package.json`, `eslint.config.mjs`, `public/js/modules/ai-character-creator.js`, `public/js/modules/hacking.js`, `.github/agents/tasks.md`, `.github/agents/memory.md`
+- **Status**: `complete`
+- **What**: Restored `npm test` under the repo's root ESM package mode by making the `tests/` folder CommonJS, cleaned stray markup corruption from two frontend modules, and narrowed ESLint to the supported runtime surface so repo linting runs without parser crashes.
+- **Verified**: `npm run lint` exiting with warnings only and `npm test` reporting `104 passed, 0 failed`.
+
+### [2026-05-15] Task: Persist Overseer player context
+- **Agent**: copilot
+- **Files**: `backend/api/overseer-proxy.js`, `backend/realai/local-overseer.js`, `backend/realai/overseer-context.js`, `public/js/overseer/overseer-brain.js`, `public/js/overseer/core.personality.js`, `.github/agents/tasks.md`, `.github/agents/memory.md`
+- **Status**: `complete`
+- **What**: Added wallet-aware Overseer context so the linked-ai relay now receives recent conversation, frontend memory snapshots, and learned player facts, persists the merged context server-side, and feeds that data back into the backend-local RealAI reply engine.
+- **Verified**: `node --check backend/realai/overseer-context.js` plus matching checks for `backend/api/overseer-proxy.js`, `backend/realai/local-overseer.js`, `public/js/overseer/overseer-brain.js`, and `public/js/overseer/core.personality.js`; and `Set-Location backend; node -e "... /api/overseer/ask ..."` returning `{ "ok": true, "fallback": false, "source": "local-realai", "mode": "local", ... }` with learned player context in the reply.
+
 ### [2026-05-15] Task: Restore self-hosted Overseer brain
 - **Agent**: copilot
 - **Files**: `backend/api/overseer-proxy.js`, `backend/api/frontend-config.js`, `backend/realai/local-overseer.js`, `.env.example`, `.github/agents/tasks.md`, `.github/agents/memory.md`

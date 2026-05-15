@@ -207,7 +207,7 @@ Names should feel authentic to the Fallout setting - practical, memorable, and f
 
       for (const line of lines) {
         // Look for numbered lists or bullet points
-        const match = line.match(/^[\d\-\*\•]\s*(.+)$/);
+        const match = line.match(/^[\d*•-]\s*(.+)$/);
         if (match) {
           const name = match[1].trim();
           if (name.length > 0 && name.length < 50) {
@@ -515,5 +515,4 @@ Names should feel authentic to the Fallout setting - practical, memorable, and f
     AICharacterCreator.init();
   }
 
-})();</content>
-<parameter name="filePath">/workspaces/ATOMIC-FIZZ-CAPS-VAULT-77-WASTELAND-GPS/public/js/modules/ai-character-creator.js
+})();

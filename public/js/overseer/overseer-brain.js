@@ -33,13 +33,52 @@
   const IDENTITY_QUERY_REGEX = /who are you|what are you|your name|identify yourself|who is jax|are you jax|who am i talking to/i;
   const IDENTITY_REPLY = "Jax Harlan, Vault 77 Overseer AI. I run this terminal, the wasteland telemetry stack, and your cap-soaked guidance protocols.";
 
-  async function requestLinkedOverseer(input) {
+  function getOverseerHeaders() {
+    const headers = { "Content-Type": "application/json" };
+    const sessionId = localStorage.getItem("sessionId") || "";
+    if (sessionId) {
+      headers.Authorization = `Bearer ${sessionId}`;
+    }
+    return headers;
+  }
+
+  function normalizeRelayHistory(history) {
+    return Array.isArray(history)
+      ? history
+          .filter((entry) => entry && (entry.role === "user" || entry.role === "assistant"))
+          .map((entry) => ({
+            role: entry.role,
+            content: String(entry.content || "").replace(/\s+/g, " ").trim().slice(0, 280)
+          }))
+          .filter((entry) => entry.content)
+          .slice(-MAX_HISTORY_ENTRIES)
+      : [];
+  }
+
+  function getRelaySnapshots() {
+    const memorySnapshot = window.overseerMemoryApi && typeof window.overseerMemoryApi.snapshot === "function"
+      ? window.overseerMemoryApi.snapshot()
+      : null;
+    const learningSnapshot = window.overseerLearning && typeof window.overseerLearning.snapshot === "function"
+      ? window.overseerLearning.snapshot()
+      : null;
+
+    return { memorySnapshot, learningSnapshot };
+  }
+
+  async function requestLinkedOverseer(input, history) {
     const apiBase = String(window.API_BASE || window.BACKEND_URL || "").replace(/\/+$/, "");
     const url = apiBase ? `${apiBase}/api/overseer/ask` : "/api/overseer/ask";
+    const snapshots = getRelaySnapshots();
     const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: input })
+      headers: getOverseerHeaders(),
+      body: JSON.stringify({
+        prompt: input,
+        conversationHistory: normalizeRelayHistory(history),
+        memorySnapshot: snapshots.memorySnapshot,
+        learningSnapshot: snapshots.learningSnapshot
+      })
     });
 
     if (!res.ok) {
@@ -61,7 +100,7 @@
       linkedProbeTimer = null;
       if (Date.now() < linkedCircuitOpenUntil) {
         try {
-          const probe = await requestLinkedOverseer("status");
+          const probe = await requestLinkedOverseer("status", []);
           if (probe) {
             linkedCircuitOpenUntil = 0;
             linkedBackoffUntil = 0;
@@ -93,7 +132,7 @@
     updateStatus("OVERSEER RELAY DEGRADED // FALLING BACK TO LOCAL PERSONALITY CORE");
   }
 
-  async function askLinkedOverseer(input) {
+  async function askLinkedOverseer(input, history) {
     if (Date.now() < linkedCircuitOpenUntil) {
       return null;
     }
@@ -103,7 +142,7 @@
     }
 
     try {
-      const text = await requestLinkedOverseer(input);
+      const text = await requestLinkedOverseer(input, history);
       linkedFailureStreak = 0;
       linkedBackoffUntil = 0;
       linkedCircuitOpenUntil = 0;
@@ -262,7 +301,7 @@
     if (runtimeMode === "linked-ai") {
       updateStatus(linkedStatusLabel);
       try {
-        const linked = await askLinkedOverseer(input);
+        const linked = await askLinkedOverseer(input, history);
         if (linked) return linked;
       } catch (_err) {
         // Fall back below.

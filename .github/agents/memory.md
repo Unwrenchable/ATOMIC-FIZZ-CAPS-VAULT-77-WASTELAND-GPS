@@ -123,6 +123,16 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-05-15] Security tests now run from a CommonJS-scoped `tests/` folder
+- **What**: The repo keeps root `"type": "module"` in `package.json`, but `tests/package.json` now sets `"type": "commonjs"` so `tests/security.test.js` can continue using `require(...)` without renaming the file.
+- **Why**: This preserves the existing test suite and root package mode at the same time, which keeps `npm test` working without forcing a broader module-system migration.
+- **Verified**: `npm test` → `104 passed, 0 failed`.
+
+### [2026-05-15] Linked Overseer relay now persists per-wallet memory and chat context
+- **What**: `backend/api/overseer-proxy.js` now accepts authenticated `conversationHistory`, `memorySnapshot`, and `learningSnapshot` payloads from the browser, merges them with per-wallet state in `backend/realai/overseer-context.js`, and passes the resulting player context into `backend/realai/local-overseer.js`.
+- **Why**: Permanent Overseer use needed more than a stateless endpoint. Persisting recent chat plus player-learned facts gives the self-hosted relay continuity across sessions while still keeping all requests inside the game backend.
+- **Verified**: `node --check backend/realai/overseer-context.js` and a local authenticated `POST /api/overseer/ask` probe returning a `local-realai` reply that included the player's remembered goal and playstyle.
+
 ### [2026-05-15] Overseer now defaults to a backend-local RealAI brain
 - **What**: `backend/api/overseer-proxy.js` now uses `backend/realai/local-overseer.js` as the default reply engine, controlled by `OVERSEER_REALAI_MODE` (`local` default, `auto`, or `cloud`), and only reaches external providers when cloud mode is explicitly enabled or chosen as a fallback.
 - **Why**: The live backend needed a self-hosted Overseer path that keeps `/api/overseer/ask` functional without third-party model credentials, while still leaving an escape hatch for cloud providers later.
