@@ -209,6 +209,56 @@ function buildWorldSummary(worldstate) {
   };
 }
 
+function findLearnedFact(learnedFacts, key) {
+  const entries = Array.isArray(learnedFacts) ? learnedFacts : [];
+  const match = entries.find((entry) => entry && entry.key === key && entry.value);
+  return normalizeText(match && match.value, 72);
+}
+
+function buildPlayerSummary(worldstate, playerContext) {
+  const data = safeObject(worldstate);
+  const worldPlayer = safeObject(data.player);
+  const profile = safeObject(playerContext && playerContext.profile);
+  const memory = safeObject(playerContext && playerContext.memory);
+  const learnedFacts = Array.isArray(playerContext && playerContext.learnedFacts)
+    ? playerContext.learnedFacts
+    : [];
+  const worldSummary = buildWorldSummary(worldstate);
+
+  return {
+    ...worldSummary,
+    playerName: normalizeText(worldSummary.playerName || profile.name || ''),
+    playerFaction: normalizeText(worldSummary.playerFaction || profile.faction || ''),
+    playerCaps: worldSummary.playerCaps !== null ? worldSummary.playerCaps : (
+      Number.isFinite(Number(profile.caps)) ? Number(profile.caps) : null
+    ),
+    playerHp: worldSummary.playerHp !== null ? worldSummary.playerHp : (
+      Number.isFinite(Number(profile.hp)) ? Number(profile.hp) : null
+    ),
+    playerLocation: normalizeText(worldSummary.playerLocation || profile.location || ''),
+    playerLevel: Number.isFinite(Number(profile.level)) ? Number(profile.level) : null,
+    playerXp: Number.isFinite(Number(profile.xp)) ? Number(profile.xp) : null,
+    playerRadiation: Number.isFinite(Number(worldPlayer.radiation || profile.radiation))
+      ? Number(worldPlayer.radiation || profile.radiation)
+      : null,
+    claimedPoiCount: Number.isFinite(Number(profile.claimedCount)) ? Number(profile.claimedCount) : null,
+    questCount: Math.max(
+      worldSummary.questCount,
+      Object.keys(safeObject(profile.quests)).length,
+      Object.keys(safeObject(memory.questStates)).length,
+      Number.isFinite(Number(profile.activeQuestCount)) ? Number(profile.activeQuestCount) : 0
+    ),
+    rememberedRegionCount: Array.isArray(memory.regionsVisited) ? memory.regionsVisited.length : 0,
+    rememberedPoiCount: Array.isArray(memory.poisDiscovered) ? memory.poisDiscovered.length : 0,
+    learnedFactCount: learnedFacts.length,
+    recentConversationCount: Array.isArray(playerContext && playerContext.recentConversation)
+      ? playerContext.recentConversation.length
+      : 0,
+    currentGoal: findLearnedFact(learnedFacts, 'current_goal'),
+    playstyle: findLearnedFact(learnedFacts, 'playstyle')
+  };
+}
+
 function trimReply(text) {
   return normalizeText(text).slice(0, MAX_REPLY_CHARS);
 }
@@ -226,6 +276,9 @@ function buildTelemetryLine(summary, seed) {
     }
     if (summary.playerHp !== null) {
       dossier.push(`hp ${summary.playerHp}`);
+    }
+    if (summary.playerLevel !== null) {
+      dossier.push(`level ${summary.playerLevel}`);
     }
     if (summary.playerLocation) {
       dossier.push(`last seen near ${summary.playerLocation}`);
@@ -262,6 +315,35 @@ function buildTelemetryLine(summary, seed) {
   }
 
   return `Telemetry reads ${formatList(fragments, 3)}.`;
+}
+
+function buildMemoryLine(summary) {
+  const fragments = [];
+
+  if (summary.currentGoal) {
+    fragments.push(`goal ${summary.currentGoal}`);
+  }
+  if (summary.playstyle) {
+    fragments.push(`playstyle ${summary.playstyle}`);
+  }
+  if (summary.learnedFactCount > 0) {
+    fragments.push(`${summary.learnedFactCount} learned player fact${summary.learnedFactCount === 1 ? '' : 's'}`);
+  }
+  if (summary.rememberedRegionCount > 0) {
+    fragments.push(`${summary.rememberedRegionCount} region mark${summary.rememberedRegionCount === 1 ? '' : 's'} in memory`);
+  }
+  if (summary.rememberedPoiCount > 0) {
+    fragments.push(`${summary.rememberedPoiCount} poi breadcrumb${summary.rememberedPoiCount === 1 ? '' : 's'}`);
+  }
+  if (summary.recentConversationCount > 0) {
+    fragments.push(`${summary.recentConversationCount} recent exchange${summary.recentConversationCount === 1 ? '' : 's'} cached`);
+  }
+
+  if (fragments.length === 0) {
+    return '';
+  }
+
+  return `Memory core holds ${formatList(fragments, 2)}.`;
 }
 
 function buildRepoLine(summary, prompt, seed) {
@@ -335,7 +417,15 @@ function buildActionLine(rawPrompt, worldSummary, repoSummary, seed) {
 
   if (PLAYER_QUERY_REGEX.test(prompt)) {
     if (worldSummary.playerName) {
-      return `Player dossier is readable for ${worldSummary.playerName}. The vault still has a scent trail to follow.`;
+      const additions = [];
+      if (worldSummary.currentGoal) {
+        additions.push(`goal still points at ${worldSummary.currentGoal}`);
+      }
+      if (worldSummary.playstyle) {
+        additions.push(`playstyle reads ${worldSummary.playstyle}`);
+      }
+      const suffix = additions.length ? ` ${additions.join('. ')}.` : '';
+      return `Player dossier is readable for ${worldSummary.playerName}.${suffix}`.trim();
     }
     return 'Player telemetry has not synced into this bunker yet. The dossier drawer is still empty.';
   }
@@ -368,7 +458,7 @@ function buildActionLine(rawPrompt, worldSummary, repoSummary, seed) {
 function generateLocalOverseerReply(options = {}) {
   const rawPrompt = normalizeText(options.rawPrompt || options.prompt || '');
   const loweredPrompt = rawPrompt.toLowerCase();
-  const worldSummary = buildWorldSummary(options.worldstate);
+  const worldSummary = buildPlayerSummary(options.worldstate, options.playerContext);
   const repoSummary = buildRepoSummary(options.repoSnapshot);
   const seed = `${rawPrompt}|${worldSummary.playerName}|${repoSummary.totalFiles}`;
 
@@ -394,14 +484,15 @@ function generateLocalOverseerReply(options = {}) {
     'Overseer relay locked and breathing.'
   ]);
   const telemetryLine = buildTelemetryLine(worldSummary, `${seed}:telemetry`);
+  const memoryLine = buildMemoryLine(worldSummary);
   const repoLine = buildRepoLine(repoSummary, loweredPrompt, `${seed}:repo`);
   const actionLine = buildActionLine(rawPrompt, worldSummary, repoSummary, `${seed}:action`);
 
   if (STATUS_QUERY_REGEX.test(loweredPrompt)) {
-    return trimReply(`${intro} Self-hosted RealAI core online. ${telemetryLine} ${repoLine}`);
+    return trimReply(`${intro} Self-hosted RealAI core online. ${telemetryLine} ${memoryLine} ${repoLine}`);
   }
 
-  return trimReply(`${intro} ${actionLine} ${telemetryLine} ${repoLine}`);
+  return trimReply(`${intro} ${actionLine} ${telemetryLine} ${memoryLine} ${repoLine}`);
 }
 
 module.exports = {

@@ -233,7 +233,49 @@
   // -------------------------------------------------------------
   // AI REQUEST — routes through backend proxy (key stays server-side)
   // -------------------------------------------------------------
-  async function askAI(prompt) {
+  function buildOverseerHeaders() {
+    var headers = { "Content-Type": "application/json" };
+    try {
+      var sessionId = localStorage.getItem("sessionId") || "";
+      if (sessionId) {
+        headers.Authorization = "Bearer " + sessionId;
+      }
+    } catch (_err) {}
+    return headers;
+  }
+
+  function buildOverseerPayload(prompt, conversationHistory) {
+    var history = Array.isArray(conversationHistory)
+      ? conversationHistory
+          .filter(function (entry) {
+            return entry && (entry.role === "user" || entry.role === "assistant");
+          })
+          .map(function (entry) {
+            return {
+              role: entry.role,
+              content: String(entry.content || "").replace(/\s+/g, " ").trim().slice(0, 280)
+            };
+          })
+          .filter(function (entry) { return entry.content; })
+          .slice(-HISTORY_CONTEXT_SIZE)
+      : [];
+
+    var memorySnapshot = window.overseerMemoryApi && typeof window.overseerMemoryApi.snapshot === "function"
+      ? window.overseerMemoryApi.snapshot()
+      : null;
+    var learningSnapshot = window.overseerLearning && typeof window.overseerLearning.snapshot === "function"
+      ? window.overseerLearning.snapshot()
+      : null;
+
+    return {
+      prompt: prompt,
+      conversationHistory: history,
+      memorySnapshot: memorySnapshot,
+      learningSnapshot: learningSnapshot
+    };
+  }
+
+  async function askAI(prompt, conversationHistory) {
     try {
       await loadConfig();
 
@@ -242,8 +284,8 @@
 
       var res = await fetch(proxyUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: prompt })
+        headers: buildOverseerHeaders(),
+        body: JSON.stringify(buildOverseerPayload(prompt, conversationHistory))
       });
 
       if (!res.ok) {
@@ -429,7 +471,7 @@
       "Jax:"
     ].filter(Boolean).join("\n").trim();
 
-    var ai = await askAI(promptParts);
+    var ai = await askAI(promptParts, conversationHistory);
     if (ai) return ai;
 
     return fallbackLine();
