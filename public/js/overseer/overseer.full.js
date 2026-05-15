@@ -43,27 +43,14 @@
   window.overseer = Overseer;
   
   if (typeof window.overseerBrain === "undefined") {
-  console.warn("[Overseer] overseerBrain missing — wiring to backend proxy /api/overseer");
-  window.overseerBrain = async (worldstate, text) => {
-    try {
-      const res = await fetch("/api/overseer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          worldstate: worldstate || {},
-          input: text
-        })
-      });
-
-      const data = await res.json().catch(() => null);
-      if (!data) return "No response from Overseer backend.";
-      return data.reply || data.text || data.message || "Overseer responded, but I couldn't parse the message.";
-    } catch (err) {
-      console.error("[Overseer] backend proxy error", err);
-      return "AI LINK FAILURE: Could not reach Overseer backend.";
-    }
-  };
-}
+    console.warn("[Overseer] overseerBrain missing — wiring minimal fallback.");
+    window.overseerBrain = async (_worldstate, text) => {
+      if (typeof window.talkToOverseer === "function") {
+        return window.talkToOverseer(text || "", []);
+      }
+      return "AI LINK FAILURE: Overseer cognitive core unavailable.";
+    };
+  }
 
 
   // ========= LIMITS / SAFETY =========
@@ -127,6 +114,12 @@
     chat.appendChild(div);
     scrollToBottom();
     limitMessages();
+  }
+
+  function secureJitterMs(base, spread) {
+    var arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    return base + (arr[0] % spread);
   }
 
   // ========= Typing Indicator =========
@@ -224,7 +217,7 @@
       addTimeout(() => {
         addMessage(canned, "overseer");
         pushHistory("assistant", canned);
-      }, 300 + Math.random() * 500);
+      }, secureJitterMs(300, 500));
       return;
     }
 
@@ -232,7 +225,7 @@
     (async () => {
       const typing = showTyping();
       try {
-        const reply = await overseerBrain(state.worldstate || {}, text);
+        const reply = await window.overseerBrain(state.worldstate || {}, text);
         removeTyping(typing);
         if (reply) {
           addMessage(reply, "overseer");
