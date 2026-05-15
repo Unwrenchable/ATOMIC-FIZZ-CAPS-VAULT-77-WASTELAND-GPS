@@ -123,6 +123,32 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-05-15] Overseer now defaults to a backend-local RealAI brain
+- **What**: `backend/api/overseer-proxy.js` now uses `backend/realai/local-overseer.js` as the default reply engine, controlled by `OVERSEER_REALAI_MODE` (`local` default, `auto`, or `cloud`), and only reaches external providers when cloud mode is explicitly enabled or chosen as a fallback.
+- **Why**: The live backend needed a self-hosted Overseer path that keeps `/api/overseer/ask` functional without third-party model credentials, while still leaving an escape hatch for cloud providers later.
+- **Verified**: `node --check backend/realai/local-overseer.js`, `node --check backend/api/overseer-proxy.js`, and `Set-Location backend; node -e "... /api/overseer/ask ..."` returning `{ ok: true, fallback: false, source: "local-realai", mode: "local" }`.
+
+### [2026-05-15] Frontend Overseer status now advertises the self-hosted relay
+- **What**: `backend/api/frontend-config.js` still defaults the browser to `linked-ai`, but the default status label now reports `LINKED TO SELF-HOSTED OVERSEER RELAY // LOCAL REALAI CORE ACTIVE` unless `OVERSEER_MODE=local-webllm` or cloud mode is explicitly selected.
+- **Why**: The Overseer terminal was still presenting itself like a cloud uplink even after the backend moved local-first, which made the runtime mode confusing during rollout and troubleshooting.
+- **Verified**: `Set-Location backend; node -e "... /api/config/frontend ..."` returning `{\"overseer\":{\"mode\":\"linked-ai\",\"statusLabel\":\"LINKED TO SELF-HOSTED OVERSEER RELAY // LOCAL REALAI CORE ACTIVE\"}}`.
+
+### [2026-05-15] Overseer prompt context must guard non-array repoSnapshot app state
+- **What**: `backend/api/overseer-proxy.js` must treat `req.app.get("repoSnapshot")` as optional and only call `.slice()` when it is actually an array, because `backend/server.js` currently stores the mounted repo-snapshot router there instead of a precomputed file list.
+- **Why**: `/api/overseer/ask` builds its prompt before calling any upstream AI provider. If it assumes `repoSnapshot` is always an array, the route can throw before fallback logic runs and collapse into a gateway error instead of returning JSON.
+- **Verified**: `node --check backend/api/overseer-proxy.js` and local `POST http://127.0.0.1:3000/api/overseer/ask` returning `{ ok: true, fallback: true, ... }` with the current `server.js` wiring.
+
+### [2026-05-15] Overseer proxy must answer with fallback text on upstream failure
+- **What**: `backend/api/overseer-proxy.js` now returns `{ ok: true, fallback: true, source: "fallback", reason, text }` when model credentials are missing, when Grok/OpenAI/Hugging Face return an empty payload, or when an upstream request fails.
+- **Why**: The agent-network rules require a preserved Overseer fallback path; returning a fallback reply keeps the terminal responsive instead of surfacing a dead-end proxy failure whenever the AI uplink is degraded.
+- **Verified**: `node --check backend/api/overseer-proxy.js`.
+
+### [2026-05-14] RealAI utilities now default to OpenAI cloud mode
+- **What**: `scripts/realai/realai-client.js` now calls `https://api.openai.com/v1/chat/completions` by default, reads `OPENAI_API_KEY` / `OPENAI_MODEL` (with `AI_API_KEY` / `AI_MODEL` fallback), and maps legacy local aliases like `local`, `realai-overseer`, and `llama-3.2-1b` onto the configured cloud model.
+- **What**: `lib/realai.js` and `backend/tools/realai.js` now reuse that shared client instead of separate localhost-only RealAI endpoints, and `backend/api/overseer-proxy.js` also honors `OPENAI_API_KEY` / `OPENAI_MODEL`.
+- **Why**: This removes the old localhost RealAI daemon assumption and lets local scripts plus the existing backend proxy share the same cloud-backed env configuration.
+- **Verified**: `node --input-type=module -e "import('./scripts/realai/realai-client.js').then(() => console.log('scripts realai ok'))"` and matching import checks for `lib/realai.js` / `backend/tools/realai.js`.
+
 ### [2026-05-14] CORS + preview domains + absolute API routing
 - **What**: Updated CORS wildcard hostname matching in `backend/server.js` so `https://*.vercel.app` and similar patterns can match nested preview host labels (for example, `atomic-fizz-caps-zj3obwe9g-vault777.vercel.app`) while still restricting wildcard segments to valid hostname characters.
 - **What**: Added a frontend fetch shim in `public/js/config.js` that rewrites relative `/api/*` requests to `${window.API_BASE}/api/*` so legacy modules no longer hit the Vercel origin by mistake.
