@@ -1,0 +1,44 @@
+name: Anchor Build
+
+on:
+  push:
+    branches: [ main, realaiproject ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ANCHOR_PROVIDER_URL: https://api.devnet.solana.com
+      ANCHOR_WALLET: /home/runner/.config/solana/id.json
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Solana CLI
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+          export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
+          solana --version
+
+      - name: Install Anchor
+        run: |
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked
+          avm install latest
+          avm use latest
+          anchor --version
+
+      - name: Setup Solana Wallet
+        run: |
+          mkdir -p /home/runner/.config/solana
+          echo "{}" > /home/runner/.config/solana/id.json
+
+      - name: Build Anchor Program
+        working-directory: apps/backend
+        run: |
+          anchor build --provider.cluster devnet
