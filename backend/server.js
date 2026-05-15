@@ -178,6 +178,11 @@ app.use(
         connectSrc: [
           "'self'",
           "https://unpkg.com",
+          "https://huggingface.co",
+          "https://*.huggingface.co",
+          "https://hf.co",
+          "https://*.hf.co",
+          "https://raw.githubusercontent.com",
           "https://server.arcgisonline.com",
           "https://*.arcgisonline.com",
           "https://*.tile.openstreetmap.org",
