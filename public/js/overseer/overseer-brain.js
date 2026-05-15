@@ -12,6 +12,14 @@
   let lastProgressValue = -1;
   let lastProgressLogTime = 0;
   let zeroProgressSince = 0;
+  let linkedBackoffUntil = 0;
+  let linkedFailureStreak = 0;
+  let linkedCircuitOpenUntil = 0;
+  let linkedProbeTimer = null;
+
+  const LINKED_FAIL_GATE_THRESHOLD = 3;
+  const LINKED_FAIL_GATE_MS = 3 * 60 * 1000;
+  const LINKED_PROBE_INTERVAL_MS = 45 * 1000;
 
   const WEBLLM_CDN_URL = "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.79/+esm";
   const MODEL_CANDIDATES = [
@@ -25,7 +33,7 @@
   const IDENTITY_QUERY_REGEX = /who are you|what are you|your name|identify yourself|who is jax|are you jax|who am i talking to/i;
   const IDENTITY_REPLY = "Jax Harlan, Vault 77 Overseer AI. I run this terminal, the wasteland telemetry stack, and your cap-soaked guidance protocols.";
 
-  async function askLinkedOverseer(input) {
+  async function requestLinkedOverseer(input) {
     const apiBase = String(window.API_BASE || window.BACKEND_URL || "").replace(/\/+$/, "");
     const url = apiBase ? `${apiBase}/api/overseer/ask` : "/api/overseer/ask";
     const res = await fetch(url, {
@@ -33,12 +41,79 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: input })
     });
-    if (!res.ok) return null;
+
+    if (!res.ok) {
+      const err = new Error("linked_uplink_http_error");
+      err.status = res.status;
+      throw err;
+    }
+
     const data = await res.json();
     if (data && data.ok && typeof data.text === "string" && data.text.trim()) {
       return data.text.trim();
     }
     return null;
+  }
+
+  function scheduleLinkedProbe() {
+    if (linkedProbeTimer) return;
+    linkedProbeTimer = setTimeout(async function () {
+      linkedProbeTimer = null;
+      if (Date.now() < linkedCircuitOpenUntil) {
+        try {
+          const probe = await requestLinkedOverseer("status");
+          if (probe) {
+            linkedCircuitOpenUntil = 0;
+            linkedBackoffUntil = 0;
+            linkedFailureStreak = 0;
+            updateStatus(linkedStatusLabel);
+            return;
+          }
+        } catch (_err) {
+          // Keep gate open and try again later.
+        }
+        scheduleLinkedProbe();
+      }
+    }, LINKED_PROBE_INTERVAL_MS);
+  }
+
+  function noteLinkedFailure(statusCode) {
+    linkedFailureStreak += 1;
+    const backoff = Math.min(60000, 15000 * linkedFailureStreak);
+    linkedBackoffUntil = Date.now() + backoff;
+
+    const isGatewayStyleFailure = statusCode === 502 || statusCode === 503 || statusCode === 504 || statusCode === 0;
+    if (isGatewayStyleFailure && linkedFailureStreak >= LINKED_FAIL_GATE_THRESHOLD) {
+      linkedCircuitOpenUntil = Date.now() + LINKED_FAIL_GATE_MS;
+      updateStatus("OVERSEER RELAY OFFLINE // FALLBACK CORE ACTIVE // AUTO-RETRY ENGAGED");
+      scheduleLinkedProbe();
+      return;
+    }
+
+    updateStatus("OVERSEER RELAY DEGRADED // FALLING BACK TO LOCAL PERSONALITY CORE");
+  }
+
+  async function askLinkedOverseer(input) {
+    if (Date.now() < linkedCircuitOpenUntil) {
+      return null;
+    }
+
+    if (Date.now() < linkedBackoffUntil) {
+      return null;
+    }
+
+    try {
+      const text = await requestLinkedOverseer(input);
+      linkedFailureStreak = 0;
+      linkedBackoffUntil = 0;
+      linkedCircuitOpenUntil = 0;
+      if (text) return text;
+      noteLinkedFailure(0);
+      return null;
+    } catch (err) {
+      noteLinkedFailure((err && err.status) || 0);
+      return null;
+    }
   }
 
   async function loadRuntimeConfig() {
