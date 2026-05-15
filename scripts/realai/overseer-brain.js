@@ -21,5 +21,5 @@ ${JSON.stringify(worldstate, null, 2)}
 - Keep responses short, atmospheric, and immersive.
 `;
 
-  return await realai(prompt, "local");
+  return await realai(prompt);
 }
