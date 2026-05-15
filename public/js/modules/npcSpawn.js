@@ -22,30 +22,10 @@
     return Math.floor((arr[0] / 0x100000000) * max);
   }
 
-  function isObject(value) {
-    return value && typeof value === 'object' && !Array.isArray(value);
-  }
-
-  function deepMerge(base, overlay) {
-    if (Array.isArray(overlay)) {
-      return overlay.slice();
-    }
-
-    if (!isObject(overlay)) {
-      return overlay;
-    }
-
-    const output = isObject(base) ? { ...base } : {};
-    Object.keys(overlay).forEach((key) => {
-      output[key] = deepMerge(output[key], overlay[key]);
-    });
-
-    return output;
-  }
-
   const npcSpawnModule = {
     npcs: [],
     loaded: false,
+    enrichmentManifest: null,
     spawnChance: 0.3, // 30% chance of NPC encounter at matching location
 
     async init() {
@@ -56,7 +36,6 @@
 
     async loadNPCs() {
       try {
-        const enrichment = await this.loadEnrichmentManifest();
         const idxRes = await fetch("/data/npc/index.json");
         if (!idxRes.ok) {
           console.warn('[npcSpawn] index.json not available', idxRes.status);
@@ -69,6 +48,8 @@
           return;
         }
 
+        const enrichmentManifest = await this.loadEnrichmentManifest();
+
         for (const npcFile of index) {
           if (npcFile === 'enrichment.generated.json') continue;
           try {
@@ -77,7 +58,7 @@
               console.warn(`[npcSpawn] failed to fetch ${npcFile}: ${res.status}`);
               continue;
             }
-            const npc = this.applyEnrichment(await res.json(), enrichment);
+            const npc = this.applyEnrichment(await res.json(), enrichmentManifest);
             if (npc && npc.id) {
               this.npcs.push(npc);
               // register NPC in global registry for portrait/swap usage
@@ -118,57 +99,87 @@
     },
 
     async loadEnrichmentManifest() {
-      try {
-        const res = await fetch('/data/npc/enrichment.generated.json');
-        if (!res.ok) return null;
-
-        const manifest = await res.json();
-        if (!manifest || !isObject(manifest.npcs)) return null;
-        return manifest;
-      } catch (error) {
-        console.warn('[npcSpawn] enrichment manifest unavailable:', error && error.message ? error.message : error);
-        return null;
+      if (this.enrichmentManifest !== null) {
+        return this.enrichmentManifest;
       }
+
+      try {
+        const response = await fetch('/data/npc/enrichment.generated.json');
+        if (!response.ok) {
+          this.enrichmentManifest = {};
+          return this.enrichmentManifest;
+        }
+
+        const json = await response.json();
+        this.enrichmentManifest = json && json.npcs && typeof json.npcs === 'object'
+          ? json.npcs
+          : {};
+      } catch (error) {
+        console.warn('[npcSpawn] failed to load enrichment manifest:', error && error.message ? error.message : error);
+        this.enrichmentManifest = {};
+      }
+
+      return this.enrichmentManifest;
     },
 
     applyEnrichment(npc, manifest) {
-      if (!npc || !npc.id || !manifest || !isObject(manifest.npcs)) {
+      if (!npc || !npc.id) {
         return npc;
       }
 
-      const overlay = manifest.npcs[npc.id];
-      if (!isObject(overlay)) {
+      const overlay = manifest && manifest[npc.id];
+      if (!overlay || typeof overlay !== 'object') {
         return npc;
       }
 
-      return deepMerge(npc, overlay);
+      return this.deepMerge(npc, overlay);
+    },
+
+    deepMerge(base, overlay) {
+      if (!overlay || typeof overlay !== 'object' || Array.isArray(overlay)) {
+        return overlay;
+      }
+
+      const result = {
+        ...(base && typeof base === 'object' ? base : {})
+      };
+
+      Object.keys(overlay).forEach((key) => {
+        const value = overlay[key];
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          result[key] = this.deepMerge(result[key], value);
+          return;
+        }
+        result[key] = Array.isArray(value) ? value.slice() : value;
+      });
+
+      return result;
     },
 
     extractDialogLines(npc) {
       if (!npc) return [];
 
+      const lines = [];
+
       if (Array.isArray(npc.dialogPool)) {
-        return npc.dialogPool.filter((line) => typeof line === 'string' && line.trim());
+        lines.push(...npc.dialogPool);
       }
 
       if (Array.isArray(npc.dialog)) {
-        return npc.dialog.filter((line) => typeof line === 'string' && line.trim());
-      }
-
-      if (isObject(npc.dialog)) {
-        const preferred = Array.isArray(npc.dialog.idle)
-          ? npc.dialog.idle
-          : Object.values(npc.dialog).find((entry) => Array.isArray(entry));
-
-        if (Array.isArray(preferred)) {
-          return preferred.filter((line) => typeof line === 'string' && line.trim());
+        lines.push(...npc.dialog);
+      } else if (npc.dialog && typeof npc.dialog === 'object') {
+        if (Array.isArray(npc.dialog.idle)) {
+          lines.push(...npc.dialog.idle);
         }
-
-        const firstString = Object.values(npc.dialog).find((entry) => typeof entry === 'string' && entry.trim());
-        return firstString ? [firstString] : [];
+        if (Array.isArray(npc.dialog.approach)) {
+          lines.push(...npc.dialog.approach);
+        }
+        if (Array.isArray(npc.dialog.gossip)) {
+          lines.push(...npc.dialog.gossip);
+        }
       }
 
-      return [];
+      return lines.filter(line => typeof line === 'string' && line.trim());
     },
 
     // Get current spawn chance based on time of day (higher at night)
