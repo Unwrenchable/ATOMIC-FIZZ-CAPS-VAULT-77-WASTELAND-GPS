@@ -41,6 +41,9 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci
 
+      - name: Sync Anchor Program IDs
+        run: anchor keys sync
+
       - name: Build Anchor Program
         run: anchor build
 
