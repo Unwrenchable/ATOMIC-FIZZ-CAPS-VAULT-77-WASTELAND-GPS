@@ -8,6 +8,7 @@
   let loadingPromise = null;
 
   const DEFAULT_MODEL = "Llama-3.2-3B-Instruct-q4f16_1-MLC";
+  const MAX_WORLDSTATE_CONTEXT_CHARS = 1200;
   const SYSTEM_PROMPT = "You are Overseer, the witty, sarcastic, slightly unhinged Vault 77 AI companion. You speak in a retro-futuristic, Fallout-style tone. You're helpful but love dark humor and wasteland references. Keep responses concise (1-3 sentences max) unless asked for more.";
 
   function updateStatus(text) {
@@ -85,7 +86,7 @@
     const reply = await overseerEngine.chat.completions.create({
       messages: messages,
       temperature: 0.85,
-      max_gen_len: 256
+      max_tokens: 256
     });
 
     const content = reply && reply.choices && reply.choices[0] && reply.choices[0].message
@@ -101,7 +102,7 @@
   window.overseerBrain = async function (worldstate, text) {
     const contextHistory = [];
     if (worldstate && typeof worldstate === "object" && Object.keys(worldstate).length) {
-      const worldContext = JSON.stringify(worldstate).slice(0, 1200);
+      const worldContext = JSON.stringify(worldstate).slice(0, MAX_WORLDSTATE_CONTEXT_CHARS);
       contextHistory.push({
         role: "assistant",
         content: "Current world telemetry snapshot: " + worldContext
