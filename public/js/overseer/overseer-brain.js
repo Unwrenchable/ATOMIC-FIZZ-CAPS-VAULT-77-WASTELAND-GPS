@@ -7,7 +7,9 @@
   let overseerEngine = null;
   let loadingPromise = null;
 
+  const WEBLLM_CDN_URL = "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.79/+esm";
   const DEFAULT_MODEL = "Llama-3.2-3B-Instruct-q4f16_1-MLC";
+  const MAX_HISTORY_ENTRIES = 12;
   const MAX_WORLDSTATE_CONTEXT_CHARS = 1200;
   const SYSTEM_PROMPT = "You are Overseer, the witty, sarcastic, slightly unhinged Vault 77 AI companion. You speak in a retro-futuristic, Fallout-style tone. You're helpful but love dark humor and wasteland references. Keep responses concise (1-3 sentences max) unless asked for more.";
 
@@ -35,7 +37,7 @@
     if (loadingPromise) return loadingPromise;
 
     loadingPromise = (async () => {
-      const { CreateMLCEngine } = await import("https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@latest/+esm");
+      const { CreateMLCEngine } = await import(WEBLLM_CDN_URL);
 
       overseerEngine = await CreateMLCEngine(DEFAULT_MODEL, {
         initProgressCallback: function (report) {
@@ -81,7 +83,7 @@
     const safeHistory = Array.isArray(history)
       ? history
           .filter((entry) => entry && (entry.role === "user" || entry.role === "assistant"))
-          .slice(-12)
+          .slice(-MAX_HISTORY_ENTRIES)
       : [];
 
     const messages = [{ role: "system", content: SYSTEM_PROMPT }]
@@ -107,7 +109,11 @@
   window.overseerBrain = async function (worldstate, text) {
     const contextHistory = [];
     if (worldstate && typeof worldstate === "object" && Object.keys(worldstate).length) {
-      const worldContext = JSON.stringify(worldstate).slice(0, MAX_WORLDSTATE_CONTEXT_CHARS);
+      const worldContext = Object.keys(worldstate)
+        .slice(0, 10)
+        .map((k) => `${k}=${String(worldstate[k]).slice(0, 96)}`)
+        .join(" | ")
+        .slice(0, MAX_WORLDSTATE_CONTEXT_CHARS);
       contextHistory.push({
         role: "assistant",
         content: `Current world telemetry snapshot: ${worldContext}`
