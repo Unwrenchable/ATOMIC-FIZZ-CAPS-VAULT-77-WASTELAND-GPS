@@ -10,7 +10,7 @@ function _secureChoice(arr) {
   return arr[idx[0] % arr.length];
 }
 
-window.overseerHandlers = {
+window.overseerHandlers = Object.assign(window.overseerHandlers || {}, {
 
   start() {
     // Cancel any in-flight timers from a previous /start call
@@ -287,4 +287,4 @@ window.overseerHandlers = {
     overseerSay("");
     overseerSay(" VAULT-BOY APPROVES!");
   }
-};
+});

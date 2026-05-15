@@ -1,4 +1,5 @@
 # Exported from Render on 2026-05-13T05:24:36Z
+# Render redeploy trigger after self-hosted Overseer rollout.
 version: "1"
 projects:
 - name: AtomicFizzCaps
@@ -56,13 +57,14 @@ projects:
       - key: XP_SECRET
         sync: false
       region: virginia
-      buildCommand: pip install e .
-      startCommand: python -m realai.api_server
-      healthCheckPath: /health
+      buildCommand: npm install
+      startCommand: npm start
+      healthCheckPath: /api/health
       domains:
       - api.atomicfizzcaps.xyz
       autoDeployTrigger: commit
       buildFilter:
         paths:
-        - server.js
+        - backend/**
+        - render.yaml
       rootDir: backend
