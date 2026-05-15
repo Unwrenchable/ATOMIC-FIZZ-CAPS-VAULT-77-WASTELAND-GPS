@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const grok = require('../lib/grok');
 const { generateLocalOverseerReply } = require('../realai/local-overseer');
+const { resolveOverseerContext, saveOverseerContext } = require('../realai/overseer-context');
 
 const MAX_PROMPT_LENGTH = 2000;
 const IDENTITY_QUERY_REGEX = /who are you|what are you|your name|identify yourself|who is jax|are you jax|who am i talking to/i;
@@ -50,13 +51,15 @@ function buildFallbackText(rawPrompt, reason) {
   return `Jax Harlan here. The long-range Overseer uplink is degraded (${reason}), so you are getting the fallback core instead of the full wasteland brain. Ask again in a minute, smoothskin.`;
 }
 
-function respondWithFallback(res, rawPrompt, reason) {
+async function respondWithFallback(res, rawPrompt, reason, overseerContext) {
+  const text = buildFallbackText(rawPrompt, reason);
+  await saveOverseerContext(overseerContext, text);
   return res.json({
     ok: true,
     fallback: true,
     source: 'fallback',
     reason,
-    text: buildFallbackText(rawPrompt, reason)
+    text
   });
 }
 
@@ -95,8 +98,23 @@ function getRealAiMode() {
   return REALAI_MODE_LOCAL;
 }
 
-function respondWithLocalRealAi(res, rawPrompt, worldstate, repoSnapshot, mode) {
-  const text = generateLocalOverseerReply({ rawPrompt, worldstate, repoSnapshot });
+async function safeResolveOverseerContext(req) {
+  try {
+    return await resolveOverseerContext(req, req.body || {});
+  } catch (error) {
+    console.error('[overseer-proxy] context resolution failed', error);
+    return null;
+  }
+}
+
+async function respondWithLocalRealAi(res, rawPrompt, worldstate, repoSnapshot, mode, overseerContext) {
+  const text = generateLocalOverseerReply({
+    rawPrompt,
+    worldstate,
+    repoSnapshot,
+    playerContext: overseerContext
+  });
+  await saveOverseerContext(overseerContext, text);
   return res.json({
     ok: true,
     fallback: false,
@@ -124,14 +142,22 @@ router.post('/ask', async (req, res) => {
     const worldstate = req.app.get('worldstate') || {};
     const repoSnapshot = getRepoSnapshotEntries(req.app.get('repoSnapshot'));
     const realAiMode = getRealAiMode();
+    const overseerContext = await safeResolveOverseerContext(req);
 
     if (realAiMode !== REALAI_MODE_CLOUD) {
       try {
-        return respondWithLocalRealAi(res, rawPrompt, worldstate, repoSnapshot, realAiMode);
+        return await respondWithLocalRealAi(
+          res,
+          rawPrompt,
+          worldstate,
+          repoSnapshot,
+          realAiMode,
+          overseerContext
+        );
       } catch (localErr) {
         console.error('[overseer-proxy] local RealAI generation failed', localErr);
         if (realAiMode === REALAI_MODE_LOCAL) {
-          return respondWithFallback(res, rawPrompt, 'local_realai_failed');
+          return await respondWithFallback(res, rawPrompt, 'local_realai_failed', overseerContext);
         }
       }
     }
@@ -171,10 +197,11 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
     const useHF = !useGrok && (aiKey.startsWith('hf_') || proxyUrl.includes('huggingface.co'));
 
     if (!useGrok && !aiKey && !hasCustomProxy) {
-      return respondWithFallback(
+      return await respondWithFallback(
         res,
         rawPrompt,
-        realAiMode === REALAI_MODE_CLOUD ? 'missing_model_credentials' : 'cloud_credentials_missing_after_local_fail'
+        realAiMode === REALAI_MODE_CLOUD ? 'missing_model_credentials' : 'cloud_credentials_missing_after_local_fail',
+        overseerContext
       );
     }
 
@@ -187,14 +214,15 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
         });
 
         if (typeof text === 'string' && text.trim()) {
+          await saveOverseerContext(overseerContext, text.trim());
           return res.json({ ok: true, text: text.trim(), source: 'grok', mode: REALAI_MODE_CLOUD });
         }
 
         console.warn('[overseer-proxy] grok returned empty text');
-        return respondWithFallback(res, rawPrompt, 'empty_grok_response');
+        return await respondWithFallback(res, rawPrompt, 'empty_grok_response', overseerContext);
       } catch (err) {
         console.error('[overseer-proxy] grok request failed', err);
-        return respondWithFallback(res, rawPrompt, 'grok_request_failed');
+        return await respondWithFallback(res, rawPrompt, 'grok_request_failed', overseerContext);
       }
     } else if (useHF) {
       const hfUrl = proxyUrl || `https://api-inference.huggingface.co/models/${model || 'gpt2'}`;
@@ -211,14 +239,15 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
 
       if (!r.ok) {
         console.warn('[overseer-proxy] hugging face upstream error', r.status, text.slice(0, 200));
-        return respondWithFallback(res, rawPrompt, `hf_http_${r.status}`);
+        return await respondWithFallback(res, rawPrompt, `hf_http_${r.status}`, overseerContext);
       }
 
       if (!text) {
         console.warn('[overseer-proxy] hugging face returned empty payload');
-        return respondWithFallback(res, rawPrompt, 'empty_hf_response');
+        return await respondWithFallback(res, rawPrompt, 'empty_hf_response', overseerContext);
       }
 
+      await saveOverseerContext(overseerContext, text);
       return res.json({ ok: true, text, source: 'huggingface', mode: REALAI_MODE_CLOUD });
     } else {
       const openaiUrl = proxyUrl || 'https://api.openai.com/v1/chat/completions';
@@ -236,14 +265,15 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
 
       if (!r.ok) {
         console.warn('[overseer-proxy] openai-compatible upstream error', r.status, text.slice(0, 200));
-        return respondWithFallback(res, rawPrompt, `openai_http_${r.status}`);
+        return await respondWithFallback(res, rawPrompt, `openai_http_${r.status}`, overseerContext);
       }
 
       if (!text) {
         console.warn('[overseer-proxy] openai-compatible upstream returned empty payload');
-        return respondWithFallback(res, rawPrompt, 'empty_openai_response');
+        return await respondWithFallback(res, rawPrompt, 'empty_openai_response', overseerContext);
       }
 
+      await saveOverseerContext(overseerContext, text);
       return res.json({
         ok: true,
         text,
@@ -253,7 +283,8 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
     }
   } catch (err) {
     console.error('[overseer-proxy] error', err);
-    return respondWithFallback(res, rawPrompt, 'overseer_proxy_failed');
+    const overseerContext = await safeResolveOverseerContext(req);
+    return respondWithFallback(res, rawPrompt, 'overseer_proxy_failed', overseerContext);
   }
 });
 
