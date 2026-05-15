@@ -51,4 +51,4 @@ This is a **Fallout-themed GPS crypto geo-game**, **not** a DEX/swap protocol.
 - Do not introduce secrets into code.
 - Do not weaken auth/signature checks.
 - Do not break lore tone or Pip-Boy UI identity.
-- Do not propose backend ESM or frontend framework migration unless explicitly requested.
+- Do not propose backend ESM or frontend framework migration unless explicitly requested. 
