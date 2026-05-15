@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -41,13 +41,29 @@ jobs:
           echo "${{ secrets.SOLANA_KEYPAIR }}" > ~/.config/solana/id.json
 
       - name: Build Program
-        working-directory: apps/backend
         run: anchor build --provider.cluster devnet
 
       - name: Deploy Program
-        working-directory: apps/backend
         run: anchor deploy --provider.cluster devnet
 
+      - name: Resolve Program ID
+        id: program
+        run: |
+          if [ -f target/deploy/fizzcaps_onchain-keypair.json ]; then
+            PROGRAM_ID=$(solana address -k target/deploy/fizzcaps_onchain-keypair.json)
+          else
+            # Fallback parser: read lines within [programs.devnet], extract fizzcaps_onchain quoted value, then keep first match.
+            PROGRAM_ID=$(
+              sed -nE '/^\[programs\.devnet\]/,/^\[/{s/^\s*fizzcaps_onchain\s*=\s*"([^"]+)".*$/\1/p}' Anchor.toml | head -n1
+            )
+          fi
+          if [ -z "$PROGRAM_ID" ]; then
+            echo "Unable to resolve fizzcaps_onchain program ID from build artifacts or Anchor.toml."
+            echo "program_id=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "program_id=$PROGRAM_ID" >> "$GITHUB_OUTPUT"
+
       - name: Upload IDL
-        working-directory: apps/backend
-        run: anchor idl upgrade --provider.cluster devnet fizzcaps_onchain target/idl/fizzcaps_onchain.json
+        if: steps.program.outputs.program_id != ''
+        run: anchor idl upgrade --provider.cluster devnet "${{ steps.program.outputs.program_id }}" target/idl/fizzcaps_onchain.json
