@@ -12,6 +12,7 @@
   const SYSTEM_PROMPT = "You are Overseer, the witty, sarcastic, slightly unhinged Vault 77 AI companion. You speak in a retro-futuristic, Fallout-style tone. You're helpful but love dark humor and wasteland references. Keep responses concise (1-3 sentences max) unless asked for more.";
 
   function updateStatus(text) {
+    // Keep plain-text writes to avoid XSS if future callers pass untrusted text.
     const statusEl = document.getElementById("overseer-status");
     if (statusEl) statusEl.textContent = text;
   }
@@ -70,7 +71,11 @@
     if (!input) return "State your request, dweller.";
 
     if (!overseerEngine) {
-      await initOverseerBrain();
+      try {
+        await initOverseerBrain();
+      } catch (_err) {
+        return "OVERSEER CORE UNRESPONSIVE: Neural link severed.";
+      }
     }
 
     const safeHistory = Array.isArray(history)
