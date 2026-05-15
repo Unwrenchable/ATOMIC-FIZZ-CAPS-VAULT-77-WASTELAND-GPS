@@ -28,7 +28,15 @@ jobs:
       - name: Update Anchor.toml
         if: steps.pid.outputs.program_id != ''
         run: |
-          sed -i "s/fizzcaps_onchain = \".*\"/fizzcaps_onchain = \"${{ steps.pid.outputs.program_id }}\"/g" Anchor.toml
+          awk -v pid="${{ steps.pid.outputs.program_id }}" '
+            BEGIN { in_devnet = 0 }
+            /^\[programs\.devnet\]/ { in_devnet = 1; print; next }
+            /^\[/ && in_devnet { in_devnet = 0 }
+            in_devnet && /^\s*fizzcaps_onchain\s*=/ {
+              sub(/"[^"]*"/, "\"" pid "\"")
+            }
+            { print }
+          ' Anchor.toml > Anchor.toml.tmp && mv Anchor.toml.tmp Anchor.toml
 
       - name: Commit Changes
         if: steps.pid.outputs.program_id != ''

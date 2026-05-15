@@ -52,6 +52,7 @@ jobs:
           if [ -f target/deploy/fizzcaps_onchain-keypair.json ]; then
             PROGRAM_ID=$(solana address -k target/deploy/fizzcaps_onchain-keypair.json)
           else
+            # Fallback parser: read lines within [programs.devnet], extract fizzcaps_onchain quoted value, then keep first match.
             PROGRAM_ID=$(
               sed -nE '/^\[programs\.devnet\]/,/^\[/{s/^\s*fizzcaps_onchain\s*=\s*"([^"]+)".*$/\1/p}' Anchor.toml | head -n1
             )
