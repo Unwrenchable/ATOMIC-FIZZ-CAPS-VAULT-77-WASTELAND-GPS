@@ -42,5 +42,5 @@ jobs:
 
       - name: Build Anchor Program
         working-directory: apps/backend
-        run: |
-          anchor build --provider.cluster devnet
+        run: anchor build --provider.cluster devnet
+
