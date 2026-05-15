@@ -1,0 +1,53 @@
+name: Deploy to Devnet
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      ANCHOR_PROVIDER_URL: https://api.devnet.solana.com
+      ANCHOR_WALLET: /home/runner/.config/solana/id.json
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Solana CLI (CI-safe)
+        run: |
+          SOLANA_VERSION="v1.18.18"
+          curl -L "https://github.com/solana-labs/solana/releases/download/$SOLANA_VERSION/solana-release-x86_64-unknown-linux-gnu.tar.bz2" -o solana.tar.bz2
+          tar -xjf solana.tar.bz2
+          sudo mv solana-release/bin/* /usr/local/bin/
+          solana --version
+
+      - name: Install Anchor
+        run: |
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked
+          avm install latest
+          avm use latest
+          anchor --version
+
+      - name: Setup Wallet
+        run: |
+          mkdir -p ~/.config/solana
+          echo "${{ secrets.SOLANA_KEYPAIR }}" > ~/.config/solana/id.json
+
+      - name: Build Program
+        working-directory: apps/backend
+        run: anchor build --provider.cluster devnet
+
+      - name: Deploy Program
+        working-directory: apps/backend
+        run: anchor deploy --provider.cluster devnet
+
+      - name: Upload IDL
+        working-directory: apps/backend
+        run: anchor idl upgrade --provider.cluster devnet fizzcaps_onchain target/idl/fizzcaps_onchain.json
