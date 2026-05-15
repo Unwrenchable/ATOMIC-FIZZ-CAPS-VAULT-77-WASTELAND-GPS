@@ -123,6 +123,16 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-05-15] Overseer now defaults to a backend-local RealAI brain
+- **What**: `backend/api/overseer-proxy.js` now uses `backend/realai/local-overseer.js` as the default reply engine, controlled by `OVERSEER_REALAI_MODE` (`local` default, `auto`, or `cloud`), and only reaches external providers when cloud mode is explicitly enabled or chosen as a fallback.
+- **Why**: The live backend needed a self-hosted Overseer path that keeps `/api/overseer/ask` functional without third-party model credentials, while still leaving an escape hatch for cloud providers later.
+- **Verified**: `node --check backend/realai/local-overseer.js`, `node --check backend/api/overseer-proxy.js`, and `Set-Location backend; node -e "... /api/overseer/ask ..."` returning `{ ok: true, fallback: false, source: "local-realai", mode: "local" }`.
+
+### [2026-05-15] Frontend Overseer status now advertises the self-hosted relay
+- **What**: `backend/api/frontend-config.js` still defaults the browser to `linked-ai`, but the default status label now reports `LINKED TO SELF-HOSTED OVERSEER RELAY // LOCAL REALAI CORE ACTIVE` unless `OVERSEER_MODE=local-webllm` or cloud mode is explicitly selected.
+- **Why**: The Overseer terminal was still presenting itself like a cloud uplink even after the backend moved local-first, which made the runtime mode confusing during rollout and troubleshooting.
+- **Verified**: `Set-Location backend; node -e "... /api/config/frontend ..."` returning `{\"overseer\":{\"mode\":\"linked-ai\",\"statusLabel\":\"LINKED TO SELF-HOSTED OVERSEER RELAY // LOCAL REALAI CORE ACTIVE\"}}`.
+
 ### [2026-05-15] Overseer prompt context must guard non-array repoSnapshot app state
 - **What**: `backend/api/overseer-proxy.js` must treat `req.app.get("repoSnapshot")` as optional and only call `.slice()` when it is actually an array, because `backend/server.js` currently stores the mounted repo-snapshot router there instead of a precomputed file list.
 - **Why**: `/api/overseer/ask` builds its prompt before calling any upstream AI provider. If it assumes `repoSnapshot` is always an array, the route can throw before fallback logic runs and collapse into a gateway error instead of returning JSON.
