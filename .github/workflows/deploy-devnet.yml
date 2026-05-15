@@ -52,7 +52,9 @@ jobs:
           if [ -f target/deploy/fizzcaps_onchain-keypair.json ]; then
             PROGRAM_ID=$(solana address -k target/deploy/fizzcaps_onchain-keypair.json)
           else
-            PROGRAM_ID=$(sed -nE 's/^\s*fizzcaps_onchain\s*=\s*"([^"]+)".*$/\1/p' Anchor.toml | head -n1)
+            PROGRAM_ID=$(
+              sed -nE '/^\[programs\.devnet\]/,/^\[/{s/^\s*fizzcaps_onchain\s*=\s*"([^"]+)".*$/\1/p}' Anchor.toml | head -n1
+            )
           fi
           if [ -z "$PROGRAM_ID" ]; then
             echo "Unable to resolve fizzcaps_onchain program ID from build artifacts or Anchor.toml."
