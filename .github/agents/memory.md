@@ -123,6 +123,11 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-05-15] `/api/ai-character/*` now runs on the self-hosted Overseer context
+- **What**: `backend/api/ai-character.js` now uses `backend/realai/overseer-creator.js` plus `resolveOverseerContext()` instead of browser-side Grok plumbing, so concept, name, and NPC dossier generation all inherit the authenticated player's stored Overseer conversation and learned facts.
+- **Why**: The old character creator AI path was a dead browser-side Grok stub (`process.env`, `https.request`) that could not work in the live frontend. Moving generation behind the backend-local Overseer keeps creation in-house and lets the base character established in terminal chat feed the actual game UI.
+- **Verified**: `node --check backend/realai/overseer-creator.js`, `node --check backend/api/ai-character.js`, and a local Express probe returning structured JSON from `/api/ai-character/generate-concept` and `/api/ai-character/generate-npc`.
+
 ### [2026-05-15] Security tests now run from a CommonJS-scoped `tests/` folder
 - **What**: The repo keeps root `"type": "module"` in `package.json`, but `tests/package.json` now sets `"type": "commonjs"` so `tests/security.test.js` can continue using `require(...)` without renaming the file.
 - **Why**: This preserves the existing test suite and root package mode at the same time, which keeps `npm test` working without forcing a broader module-system migration.
