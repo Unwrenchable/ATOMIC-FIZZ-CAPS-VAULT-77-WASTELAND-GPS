@@ -113,6 +113,10 @@ jobs:
           avm install latest
           avm use latest
 
+      - name: Sync Anchor program IDs
+        if: steps.filter.outputs.solana == 'true'
+        run: anchor keys sync
+
       - name: Build Anchor program
         if: steps.filter.outputs.solana == 'true'
         run: anchor build
