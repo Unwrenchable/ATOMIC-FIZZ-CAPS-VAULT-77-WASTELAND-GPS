@@ -1,7 +1,6 @@
 // backend/api/overseer-proxy.js — HF/OpenAI/xAI Grok-aware Overseer AI proxy
 const express = require('express');
 const router = express.Router();
-const { authMiddleware } = require('../lib/auth');
 const grok = require('../lib/grok');
 
 const MAX_PROMPT_LENGTH = 2000;
@@ -21,7 +20,7 @@ function normalizeOutput(json) {
   return JSON.stringify(json);
 }
 
-router.post('/ask', authMiddleware, async (req, res) => {
+router.post('/ask', async (req, res) => {
   // Pull worldstate from server memory (NPCs, quests, player stats, etc.)
   const worldstate = req.app.get("worldstate") || {};
   const repoSnapshot = req.app.get("repoSnapshot") || [];
@@ -66,11 +65,12 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
   const aiKey   = process.env.AI_API_KEY  || '';
   const proxyUrl = process.env.AI_PROXY_URL || '';
   const model    = process.env.AI_MODEL || '';
+  const hasCustomProxy = proxyUrl.length > 0;
 
   const useGrok = xaiKey.length > 0;
   const useHF   = !useGrok && (aiKey.startsWith('hf_') || proxyUrl.includes('huggingface.co'));
 
-  if (!useGrok && !aiKey) {
+  if (!useGrok && !aiKey && !hasCustomProxy) {
     return res.status(400).json({ error: 'missing_api_key' });
   }
 
@@ -84,9 +84,11 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
       return res.json({ ok: true, text });
     } else if (useHF) {
       const hfUrl = proxyUrl || `https://api-inference.huggingface.co/models/${model || 'gpt2'}`;
+      const headers = { 'Content-Type': 'application/json' };
+      if (aiKey) headers.Authorization = `Bearer ${aiKey}`;
       const r = await fetch(hfUrl, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${aiKey}`, 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ inputs: prompt })
       });
       const json = await r.json();
@@ -95,9 +97,11 @@ ${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
     } else {
       const openaiUrl = proxyUrl || 'https://api.openai.com/v1/chat/completions';
       const body = { model: model || 'gpt-4o-mini', messages: [{ role: 'user', content: prompt }], max_tokens: 800 };
+      const headers = { 'Content-Type': 'application/json' };
+      if (aiKey) headers.Authorization = `Bearer ${aiKey}`;
       const r = await fetch(openaiUrl, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${aiKey}`, 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(body)
       });
       const json = await r.json();

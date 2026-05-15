@@ -178,6 +178,7 @@ app.use(
         connectSrc: [
           "'self'",
           "https://unpkg.com",
+          "https://cdn.jsdelivr.net",
           "https://huggingface.co",
           "https://*.huggingface.co",
           "https://hf.co",
