@@ -116,6 +116,31 @@
     limitMessages();
   }
 
+  function startStreamingMessage(sender) {
+    if (!chat) return null;
+    const div = document.createElement("div");
+    div.className = "message " + (sender || "overseer");
+    div.textContent = "";
+    chat.appendChild(div);
+    scrollToBottom();
+    limitMessages();
+
+    return {
+      append(token) {
+        if (!token) return;
+        div.textContent += token;
+        scrollToBottom();
+      },
+      finish() {
+        const finalText = String(div.textContent || "").trim();
+        if (!finalText) {
+          div.textContent = "Signal lost in the static. Try again.";
+        }
+        return String(div.textContent || "");
+      }
+    };
+  }
+
   function secureJitterMs(base, spread) {
     var arr = new Uint32Array(1);
     crypto.getRandomValues(arr);
@@ -225,8 +250,26 @@
     (async () => {
       const typing = showTyping();
       try {
-        const reply = await window.overseerBrain(state.worldstate || {}, text);
+        let streamed = null;
+        const supportStreaming = typeof window.talkToOverseer === "function";
+        if (supportStreaming) {
+          streamed = startStreamingMessage("overseer");
+        }
+
+        const reply = supportStreaming
+          ? await window.talkToOverseer(text, state.conversationHistory || [], function (token) {
+              if (streamed) streamed.append(token);
+            })
+          : await window.overseerBrain(state.worldstate || {}, text);
+
         removeTyping(typing);
+
+        if (streamed) {
+          const finalStream = streamed.finish();
+          pushHistory("assistant", finalStream);
+          return;
+        }
+
         if (reply) {
           addMessage(reply, "overseer");
           pushHistory("assistant", reply);
