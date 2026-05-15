@@ -40,5 +40,8 @@ jobs:
           mkdir -p /home/runner/.config/solana
           echo "{}" > /home/runner/.config/solana/id.json
 
+      - name: Sync Anchor Program IDs
+        run: anchor keys sync
+
       - name: Build Anchor Program
         run: anchor build
