@@ -2,7 +2,7 @@
 seeds = false
 skip-lint = false
 
-# Program IDs — update mainnet-beta once mainnet deployment is completed.
+# Program IDs — update mainnet once mainnet deployment is completed.
 # The same ID is used for localnet/devnet because this is the current devnet
 # deployment.  Localnet builds may regenerate a fresh keypair via `anchor deploy`.
 [programs.localnet]
@@ -11,7 +11,7 @@ fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
 [programs.devnet]
 fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
 
-[programs.mainnet-beta]
+[programs.mainnet]
 fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
 
 [registry]
