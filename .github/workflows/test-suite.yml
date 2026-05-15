@@ -42,7 +42,7 @@ jobs:
         run: npm ci
 
       - name: Build Anchor Program
-        run: anchor build --provider.cluster devnet
+        run: anchor build
 
       - name: Run Security Test Suite
         run: npm test

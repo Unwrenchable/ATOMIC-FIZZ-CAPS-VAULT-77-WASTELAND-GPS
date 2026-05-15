@@ -41,10 +41,10 @@ jobs:
           echo "${{ secrets.SOLANA_KEYPAIR }}" > ~/.config/solana/id.json
 
       - name: Build Program
-        run: anchor build --provider.cluster devnet
+        run: anchor build
 
       - name: Deploy Program
-        run: anchor deploy --provider.cluster devnet
+        run: anchor deploy
 
       - name: Resolve Program ID
         id: program
@@ -66,4 +66,4 @@ jobs:
 
       - name: Upload IDL
         if: steps.program.outputs.program_id != ''
-        run: anchor idl upgrade --provider.cluster devnet "${{ steps.program.outputs.program_id }}" target/idl/fizzcaps_onchain.json
+        run: anchor idl upgrade "${{ steps.program.outputs.program_id }}" target/idl/fizzcaps_onchain.json
