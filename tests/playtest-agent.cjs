@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// tests/playtest-agent.js
+// tests/playtest-agent.cjs
 // -----------------------------------------------------------------------
 // Atomic Fizz Caps – Automated Playtest Agent
 // -----------------------------------------------------------------------
@@ -8,7 +8,7 @@
 // and prints a human-readable summary to stdout.
 //
 // Usage:
-//   node tests/playtest-agent.js [--base-url <url>]
+//   node tests/playtest-agent.cjs [--base-url <url>]
 //
 // Defaults to http://localhost:3000 if no base URL is supplied.
 // Does NOT require jest, mocha, or any test framework.
