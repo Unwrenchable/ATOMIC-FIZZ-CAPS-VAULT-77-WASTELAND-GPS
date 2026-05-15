@@ -9,8 +9,9 @@
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline';
-    connect-src 'self' https://api.atomicfizzcaps.xyz https://api-inference.huggingface.co https://api.mainnet-beta.solana.com https://api.devnet.solana.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
+    script-src 'self' https://cdn.jsdelivr.net 'wasm-unsafe-eval';
+    connect-src 'self' https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://hf.co https://*.hf.co https://raw.githubusercontent.com https://api.atomicfizzcaps.xyz https://api-inference.huggingface.co https://api.mainnet-beta.solana.com https://api.devnet.solana.com wss://api.mainnet-beta.solana.com wss://api.devnet.solana.com;
+    worker-src 'self' blob:;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     img-src 'self' data: https: blob:;
     font-src 'self' https://fonts.gstatic.com data:;
@@ -25,21 +26,6 @@
   <link rel="stylesheet" href="/css/terminal.css" />
 </head>
 
-<script>
-setInterval(async () => {
-  try {
-    const apiBase = (window.API_BASE || "https://api.atomicfizzcaps.xyz").replace(/\/+$/, "");
-    const res = await fetch(`${apiBase}/api/worldstate`);
-    const data = await res.json();
-    if (data.ok && window.Overseer) {
-      Overseer.updateWorldstate(data.worldstate);
-    }
-  } catch (err) {
-    console.error("[worldstate poll]", err);
-  }
-}, 2000);
-</script>
-
 <body>
 
   <!-- MAIN TERMINAL WRAPPER -->
@@ -51,9 +37,9 @@ setInterval(async () => {
     </div>
 
     <!-- System line -->
-    <div class="terminal-output terminal-system">
-      SIGNAL STRENGTH: WEAK // LINKED TO POCKET-BOY 3000<br/>
-      TYPE "STATUS", "LOCATION", "SCAN", "INVENTORY", "ZONES", OR MESSAGE VBOT DIRECTLY.
+    <div id="overseer-status" class="terminal-output terminal-system">
+      VAULT-TEC BACKEND NODE: V77-OVR // CHANNEL INTEGRITY: DEGRADED<br/>
+      COMMANDS: HELP | STATUS | LOCATION | SCAN | INVENTORY | ZONES | QUEST | MEMORY
     </div>
 
     <!-- Chat / log area -->
@@ -66,7 +52,7 @@ setInterval(async () => {
         id="input"
         type="text"
         class="terminal-input"
-        placeholder="TYPE COMMAND OR MESSAGE..."
+        placeholder="ENTER COMMAND // PRESS SEND TO EXECUTE"
         autocomplete="off"
         autocorrect="off"
         autocapitalize="off"
@@ -74,7 +60,7 @@ setInterval(async () => {
         inputmode="text"
         enterkeyhint="send"
       />
-      <button id="send" class="terminal-button">SEND</button>
+      <button id="send" class="terminal-button">EXEC</button>
     </div>
 
     <!-- Optional mini-game / Red Menace controls -->
@@ -87,13 +73,17 @@ setInterval(async () => {
 
     <!-- Close link -->
     <div style="margin-top:18px; text-align:right;">
-      <button class="terminal-button" onclick="window.close()">CLOSE TERMINAL</button>
+      <button id="close-terminal" class="terminal-button">CLOSE TERMINAL</button>
     </div>
 
   </div>
 
   <!-- API config for backend calls -->
   <script src="/js/config.js"></script>
+  <script src="/js/overseer/worldstate-poll.js"></script>
+
+  <!-- Local WebLLM brain -->
+  <script src="/js/overseer/overseer-brain.js"></script>
 
   <!-- Terminal Engine (handles rendering / input wiring) -->
   <script src="/js/overseer/overseer.full.js"></script>

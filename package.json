@@ -4,6 +4,7 @@
   "description": "Atomic Fizz Caps - Wasteland GPS Geo-Game powered by Solana",
   "main": "backend/server.js",
   "type": "module",
+  "packageManager": "npm@10",
   "engines": {
     "node": "20.x"
   },
@@ -23,7 +24,7 @@
     "test": "node tests/security.test.js",
     "test:load": "node tests/concurrent-load-test.js",
     "test:load:full": "node tests/concurrent-load-test.js --players 1000 --batch-size 50",
-    "test:playtest": "node tests/playtest-agent.js",
+    "test:playtest": "node tests/playtest-agent.cjs",
     "mcp:install": "cd mcp && npm install",
     "mcp:start": "node mcp/vault77-server.js"
   },
