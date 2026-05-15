@@ -11,26 +11,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Extract Program ID
         id: pid
         run: |
-          PROGRAM_ID=$(grep -o '"[A-Za-z0-9]\{32,44\}"' apps/backend/target/deploy/fizzcaps_onchain-keypair.json | tr -d '"')
+          if [ ! -f target/deploy/fizzcaps_onchain-keypair.json ]; then
+            echo "Program keypair not found at target/deploy/fizzcaps_onchain-keypair.json; skipping update."
+            echo "program_id=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          PROGRAM_ID=$(grep -o '"[A-Za-z0-9]\{32,44\}"' target/deploy/fizzcaps_onchain-keypair.json | tr -d '"')
           echo "program_id=$PROGRAM_ID" >> $GITHUB_OUTPUT
 
       - name: Update Anchor.toml
+        if: steps.pid.outputs.program_id != ''
         run: |
-          sed -i "s/fizzcaps_onchain = \".*\"/fizzcaps_onchain = \"${{ steps.pid.outputs.program_id }}\"/g" apps/backend/Anchor.toml
-
-      - name: Update TS Client
-        run: |
-          sed -i "s/export const PROGRAM_ID = \".*\"/export const PROGRAM_ID = \"${{ steps.pid.outputs.program_id }}\"/g" apps/backend/ts/programId.ts
+          sed -i "s/fizzcaps_onchain = \".*\"/fizzcaps_onchain = \"${{ steps.pid.outputs.program_id }}\"/g" Anchor.toml
 
       - name: Commit Changes
+        if: steps.pid.outputs.program_id != ''
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add .
+          git add Anchor.toml
           git commit -m "Auto-update program ID to ${{ steps.pid.outputs.program_id }}" || echo "No changes"
           git push
