@@ -45,6 +45,13 @@ _No active tasks. The wasteland is quiet — for now._
 
 ## Completed Tasks
 
+### [2026-05-15] Task: Rewire character and NPC generation to Overseer
+- **Agent**: copilot
+- **Files**: `backend/api/ai-character.js`, `backend/realai/overseer-creator.js`, `public/js/modules/ai-character-creator.js`, `.github/agents/tasks.md`, `.github/agents/memory.md`
+- **Status**: `complete`
+- **What**: Replaced the broken browser-side Grok helper with a backend-local Overseer generator that seeds character concepts, name rosters, and NPC dossiers from stored Overseer chat/context, then wired the live character creator overlay to call those endpoints and apply the generated appearance/name hints directly in the Pip-Boy UI.
+- **Verified**: `node --check backend/realai/overseer-creator.js`, `node --check backend/api/ai-character.js`, `node --check public/js/modules/ai-character-creator.js`, a local Express probe hitting `/api/ai-character/generate-concept` and `/api/ai-character/generate-npc`, plus `npm run lint` and `npm test`.
+
 ### [2026-05-15] Task: Restore repo lint/test execution
 - **Agent**: copilot
 - **Files**: `tests/package.json`, `eslint.config.mjs`, `public/js/modules/ai-character-creator.js`, `public/js/modules/hacking.js`, `.github/agents/tasks.md`, `.github/agents/memory.md`
