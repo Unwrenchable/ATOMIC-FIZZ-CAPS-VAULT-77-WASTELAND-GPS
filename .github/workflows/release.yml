@@ -23,7 +23,9 @@ jobs:
           SOLANA_VERSION="v1.18.18"
           curl -L "https://github.com/solana-labs/solana/releases/download/$SOLANA_VERSION/solana-release-x86_64-unknown-linux-gnu.tar.bz2" -o solana.tar.bz2
           tar -xjf solana.tar.bz2
-          sudo mv solana-release/bin/* /usr/local/bin/
+          sudo mv solana-release /usr/local/solana-release
+          echo "/usr/local/solana-release/bin" >> "$GITHUB_PATH"
+          export PATH="/usr/local/solana-release/bin:$PATH"
           solana --version
 
       - name: Install Anchor
@@ -41,7 +43,7 @@ jobs:
         run: anchor keys sync
 
       - name: Build Program
-        run: anchor build --provider.cluster devnet
+        run: anchor build
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
