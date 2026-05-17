@@ -125,12 +125,12 @@ module.exports = function (redisClient) {
   });
 
   // STUBS: wire these to your on-chain code
-  async function ownsRecalibrationToken(wallet) {
+  async function ownsRecalibrationToken(_wallet) {
     // TODO: check chain for Vault‑Tec Recalibration Token NFT
     return false;
   }
 
-  async function burnRecalibrationToken(wallet) {
+  async function burnRecalibrationToken(_wallet) {
     // TODO: burn 1 token and confirm
     return false;
   }

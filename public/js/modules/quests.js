@@ -837,7 +837,7 @@
     },
 
     // Launch Saitama learning tutorial: fetch lore and show modal/tutorial steps
-    async startLearningQuest(questId) {
+    async startLearningQuest(_questId) {
       try {
         const res = await fetch('/api/quests-store/lore/saitama');
         if (!res.ok) return;

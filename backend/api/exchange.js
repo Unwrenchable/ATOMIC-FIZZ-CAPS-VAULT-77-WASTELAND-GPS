@@ -23,7 +23,7 @@ const rateLimit = require("express-rate-limit");
 const router = express.Router();
 
 const { authMiddleware } = require("../lib/auth");
-const { getJSON, setJSON, sadd, srem, smembers, del, multi, key } = require("../lib/redis");
+const { getJSON, setJSON, sadd, srem, smembers, multi, key } = require("../lib/redis");
 
 // ------------------------------------------------------------
 // Constants

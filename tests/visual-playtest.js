@@ -130,10 +130,6 @@ const DUNGEONS = [
 ];
 
 // ── Utility ────────────────────────────────────────────────────
-function ts() {
-  return new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-}
-
 async function shot(page, label) {
   const file = path.join(OUT_DIR, `${label}.png`);
   await page.screenshot({ path: file, fullPage: false });
@@ -220,8 +216,14 @@ async function dismissBootScreen(page) {
         el.style.display = 'none';
       }
     });
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    document.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    var KeyboardCtor = window.KeyboardEvent;
+    var MouseCtor = window.MouseEvent;
+    if (typeof KeyboardCtor === 'function') {
+      document.dispatchEvent(new KeyboardCtor('keydown', { key: 'Enter', bubbles: true }));
+    }
+    if (typeof MouseCtor === 'function') {
+      document.dispatchEvent(new MouseCtor('click', { bubbles: true }));
+    }
   });
   // Wait briefly for dynamically-created overlays (newGameOverlay) to appear, then nuke them
   await page.waitForTimeout(150);

@@ -190,6 +190,9 @@
     // -------------------------------------------------------------------------
     extendCommands(Terminal) {
       Overseer.extendCommands({});
+      const original = typeof Terminal.handleInput === "function"
+        ? Terminal.handleInput.bind(Terminal)
+        : async () => {};
 
       Terminal.handleInput = async function (raw) {
         const line = raw.trim().toLowerCase();
@@ -216,6 +219,9 @@
     // GAME EVENT REACTIONS
     // -------------------------------------------------------------------------
     extendGameEvents(Terminal, Engines) {
+      const original = typeof Terminal.handleGameEvent === "function"
+        ? Terminal.handleGameEvent.bind(Terminal)
+        : async () => {};
       
       Terminal.handleGameEvent = async function (data) {
         const type = data.type || "";

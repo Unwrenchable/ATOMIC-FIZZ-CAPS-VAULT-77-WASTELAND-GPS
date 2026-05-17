@@ -22,10 +22,10 @@ class GrokOnlyAvatarGenerator {
   }
 
   async checkAvailableModels() {
-    return new Promise((resolve, reject) => {
-      const options = {
-        hostname: 'api.x.ai',
-        port: 443,
+    return new Promise((resolve, _reject) => {
+        const options = {
+          hostname: 'api.x.ai',
+          port: 443,
         path: '/v1/models',
         method: 'GET',
         headers: {
@@ -141,7 +141,7 @@ class GrokOnlyAvatarGenerator {
     return fallbacks[characterType] || `A ${characterType} in the Fallout universe, weathered by years of post-apocalyptic survival with distinctive features that tell their story of life in the wasteland.`;
   }
 
-  async generateASCIIArt(characterConcept) {
+  async generateASCIIArt(_characterConcept) {
     // Skip ASCII art since we have image models
     console.log('🎭 Skipping ASCII art (using image generation instead)');
     return 'ASCII art not needed - using image generation';
@@ -272,7 +272,7 @@ Make this character look like they belong in the Fallout universe with realistic
   }
 
   async downloadImage(imageUrl, outputPath) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const file = fs.createWriteStream(outputPath);
 
       https.get(imageUrl, (response) => {
@@ -335,7 +335,7 @@ Make this character look like they belong in the Fallout universe with realistic
           const fallbackSvg = this.getFallbackSVG(characterType);
           const svgPath = path.join(this.outputDir, `avatar_${avatarNum}.svg`);
           fs.writeFileSync(svgPath, fallbackSvg);
-          const pngSuccess = await this.convertSVGToPNG(fallbackSvg, imagePath);
+            const _pngSuccess = await this.convertSVGToPNG(fallbackSvg, imagePath);
           console.log(`✅ Avatar ${avatarNum} complete! (Fallback SVG + PNG)`);
         }
       } catch (error) {
@@ -345,7 +345,7 @@ Make this character look like they belong in the Fallout universe with realistic
         const svgPath = path.join(this.outputDir, `avatar_${avatarNum}.svg`);
         fs.writeFileSync(svgPath, fallbackSvg);
         const pngPath = path.join(this.outputDir, `avatar_${avatarNum}.png`);
-        const pngSuccess = await this.convertSVGToPNG(fallbackSvg, pngPath);
+          const _pngSuccess = await this.convertSVGToPNG(fallbackSvg, pngPath);
         console.log(`✅ Avatar ${avatarNum} complete! (Fallback SVG + PNG)`);
       }
     }

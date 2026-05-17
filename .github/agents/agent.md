@@ -22,10 +22,10 @@ or DEX-related context from other sources.
 /
 ├── backend/               # Node.js 20 + Express 4 API server
 │   ├── server.js          # Main entry point
-│   ├── routes/            # API route modules (CommonJS)
+│   ├── api/               # API route modules (CommonJS, primary location)
+│   ├── routes/            # Legacy routes area (do not add new API files)
 │   ├── lib/               # Shared utilities (redis, walletVerify, loot, etc.)
 │   ├── middleware/        # Express middleware (auth, adminAuth)
-│   ├── api/               # Additional API modules
 │   ├── data/              # Static data files
 │   └── tools/             # Backend tools
 ├── public/                # Vanilla HTML/CSS/JS frontend (Vercel CDN)
@@ -90,8 +90,22 @@ npm start          # node backend/server.js  (production)
 npm run dev        # nodemon backend/server.js  (development, auto-reload)
 npm run lint       # eslint .
 npm run format     # prettier --write .
-npm test           # (no tests yet — placeholder)
+npm test           # node tests/security.test.js
+npm run test:load  # concurrent load test
+npm run test:playtest
 ```
+
+For broader test procedures and manual verification flows, see [docs/development/TESTING_GUIDE.md](../../docs/development/TESTING_GUIDE.md).
+
+---
+
+## Package Manager & Lockfile Policy
+
+- Package manager is **npm** (`packageManager: npm@10`).
+- This repo intentionally contains two npm lockfiles: [package-lock.json](../../package-lock.json) and [backend/package-lock.json](../../backend/package-lock.json).
+- Do not add or commit `yarn.lock`, `pnpm-lock.yaml`, or Bun lockfiles.
+- If editors show a "multiple lockfiles" warning while `npm.packageManager` is `auto`, keep npm as the only package manager and treat the warning as expected for this nested workspace layout.
+- Do not remove either npm lockfile without explicit user approval.
 
 ---
 

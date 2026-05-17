@@ -125,14 +125,15 @@
 
       this._absoluteHandler = absoluteHandler;
       this._orientationHandler = genericHandler;
+      const DeviceOrientationCtor = window.DeviceOrientationEvent;
 
       // iOS 13+ requires an explicit permission grant triggered by a user gesture.
       if (
-        typeof DeviceOrientationEvent !== "undefined" &&
-        typeof DeviceOrientationEvent.requestPermission === "function"
+        typeof DeviceOrientationCtor !== "undefined" &&
+        typeof DeviceOrientationCtor.requestPermission === "function"
       ) {
         const requestOnGesture = () => {
-          DeviceOrientationEvent.requestPermission()
+          DeviceOrientationCtor.requestPermission()
             .then((permission) => {
               if (permission === "granted") {
                 window.addEventListener("deviceorientationabsolute", absoluteHandler, { passive: true });
@@ -151,7 +152,7 @@
         // unregisters the other listener.
         document.addEventListener("touchstart", requestOnGesture);
         document.addEventListener("click", requestOnGesture);
-      } else if (typeof DeviceOrientationEvent !== "undefined") {
+      } else if (typeof DeviceOrientationCtor !== "undefined") {
         // Non-iOS: start listening immediately.
         window.addEventListener("deviceorientationabsolute", absoluteHandler, { passive: true });
         window.addEventListener("deviceorientation", genericHandler, { passive: true });

@@ -436,7 +436,7 @@
       }
 
       // Durability decay for weapon after successful hit
-      if (hit && res.weapon && res.weapon.slot) {
+      if (res.weapon && res.weapon.slot) {
         if (Game.modules?.PlayerState?.decayDurability) {
           Game.modules.PlayerState.decayDurability(res.weapon.slot, 1);
         }

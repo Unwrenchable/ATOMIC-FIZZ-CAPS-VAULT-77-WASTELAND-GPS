@@ -443,7 +443,7 @@
     // Audio Handling
     // ------------------------------------------------------------
 
-    _setSourceAndPlay(file, isEvent) {
+    _setSourceAndPlay(file, _isEvent) {
       const station = this.currentStation;
       if (!station) return;
 

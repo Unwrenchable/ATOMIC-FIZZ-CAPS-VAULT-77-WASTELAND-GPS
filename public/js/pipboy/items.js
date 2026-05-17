@@ -25,6 +25,7 @@ async function loadItemsWithNFTs(wallet) {
 
   return [...baseItems, ...mappedNFTs];
 }
+window.loadItemsWithNFTs = loadItemsWithNFTs;
 if (item.type === "nft") {
   html += `
     <div class="item nft-item">

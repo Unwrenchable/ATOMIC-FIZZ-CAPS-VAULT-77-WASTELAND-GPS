@@ -69,10 +69,21 @@ npm start        # Production: node backend/server.js
 npm run dev      # Dev: nodemon backend/server.js
 npm run lint     # ESLint
 npm run format   # Prettier
-npm test         # (no tests configured yet — exits 0)
+npm test         # Security regression tests (tests/security.test.js)
+npm run test:load
+npm run test:playtest
 ```
 
 `REDIS_URL` must use `redis://` or `rediss://` protocol.
+
+## Package Manager & Lockfiles
+
+- Use **npm only** in this repository.
+- Expected lockfiles are `package-lock.json` and `backend/package-lock.json`.
+- Do not add `yarn.lock`, `pnpm-lock.yaml`, or Bun lockfiles.
+- Run npm commands from the repository root unless a change is intentionally backend-only.
+- If VS Code warns about multiple lockfiles while `npm.packageManager` is `auto`, treat this as a workspace-structure warning (root + nested backend package), not a yarn/pnpm migration signal.
+- Do not delete either npm lockfile unless the user explicitly asks for a package-structure cleanup.
 
 ---
 

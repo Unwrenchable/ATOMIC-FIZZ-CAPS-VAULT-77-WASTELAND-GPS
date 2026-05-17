@@ -65,7 +65,7 @@ const playerSaveBtn = document.getElementById("adminPlayerSaveBtn");
 const playerResetBtn = document.getElementById("adminPlayerResetBtn");
 
 let currentPlayerWallet = null;
-_currentPlayerProfile = null; // reserved for admin profile display
+let _currentPlayerProfile = null; // reserved for admin profile display
 
 // --- SECURE ADMIN FETCH WRAPPER ---
 async function adminFetch(path, options = {}) {
@@ -100,7 +100,7 @@ async function searchPlayer() {
     }
 
     currentPlayerWallet = json.wallet;
-    currentPlayerProfile = json.profile;
+    _currentPlayerProfile = json.profile;
 
     playerSearchStatus.textContent = "Player loaded.";
     populatePlayerEditor(json.wallet, json.profile);
@@ -166,7 +166,7 @@ async function savePlayerChanges() {
       return;
     }
 
-    currentPlayerProfile = json.profile;
+    _currentPlayerProfile = json.profile;
     populatePlayerEditor(json.wallet, json.profile);
     playerSearchStatus.textContent = "Saved.";
   } catch (err) {
@@ -193,7 +193,7 @@ async function resetPlayerProfile() {
       return;
     }
 
-    currentPlayerProfile = json.profile;
+    _currentPlayerProfile = json.profile;
     populatePlayerEditor(json.wallet, json.profile);
     playerSearchStatus.textContent = "Profile reset.";
   } catch (err) {

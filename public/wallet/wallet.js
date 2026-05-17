@@ -582,7 +582,7 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
 
   let partnerTokens = [];
   let chains = [];
-  let currentWalletPublicKey = null;
+  let _currentWalletPublicKey = null;
 
   // ------------------------------------------------------------
   // LOAD PARTNER TOKENS
@@ -1207,7 +1207,7 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
   // ------------------------------------------------------------
   // PERK CHECKS
   // ------------------------------------------------------------
-  function evaluatePerks(pubkey) {
+  function evaluatePerks(_pubkey) {
     if (!window.partnerTokens || !window.chains) return;
 
     const perks = window.FIZZ_PERKS;

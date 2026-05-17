@@ -23,7 +23,7 @@ function secureRandInt(min, max) {
   return min + Math.floor(secureRand() * (max - min + 1));
 }
 
-function secureChoice(arr) {
+function _secureChoice(arr) {
   return arr[secureRandInt(0, arr.length - 1)];
 }
 
@@ -165,7 +165,7 @@ function simulatePlayerDay(player, day) {
 
         // Voucher issuance
         if (secureRand() < CONFIG.VOUCHER_ISSUE_RATE) {
-          const voucherId = `v_${player.id}_${day}_${s}`;
+          const _voucherId = `v_${player.id}_${day}_${s}`;
           player.vouchersIssued++;
 
           // Simulate potential double-redemption attempt (exploit scenario)
@@ -284,7 +284,6 @@ function analyze(players, dailyTotals) {
   const issues = [];
 
   function check(condition, label, value, threshold, unit = "") {
-    const status = condition ? "PASS" : "FAIL";
     const icon = condition ? "✓" : "✗";
     console.log(`  ${icon}  ${label}: ${typeof value === "number" ? value.toLocaleString() : value}${unit} (threshold: ${threshold}${unit})`);
     if (condition) passed++;

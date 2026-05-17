@@ -27,7 +27,7 @@ const rateLimit = require("express-rate-limit");
 const { Connection, PublicKey, Transaction: _Transaction } = require("@solana/web3.js");
 const { Program: _Program, AnchorProvider: _AnchorProvider, BN: _BN } = require("@coral-xyz/anchor");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
-const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
+const { requireAdmin: _requireAdmin, adminRateLimiter: _adminRateLimiter } = require("../middleware/adminAuth");
 
 // SEC-008 FIX: Rate limiters for Fizz.fun endpoints (previously had none)
 const fizzReadLimiter = rateLimit({

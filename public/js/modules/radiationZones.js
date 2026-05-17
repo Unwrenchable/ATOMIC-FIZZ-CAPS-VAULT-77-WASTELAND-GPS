@@ -83,7 +83,7 @@
               const lat = coords.center[0];
               const lng = coords.center[1];
               const radius = coords.radius;
-              const circle = L.circle([lat, lng], { radius }).addTo(this.layer);
+              L.circle([lat, lng], { radius }).addTo(this.layer);
               return;
             }
 
