@@ -8,7 +8,7 @@
   if (!window.Game) window.Game = {};
   if (!Game.modules) Game.modules = {};
 
-  function escapeHtml(str) {
+  function _escapeHtml(str) {
     const d = document.createElement("div");
     d.textContent = String(str == null ? "" : str);
     return d.innerHTML;
@@ -120,7 +120,7 @@
       pinsContainer.innerHTML = '';
 
       // Render pins
-      this.pins.forEach((pin, index) => {
+      this.pins.forEach((pin, _index) => {
         const pinEl = document.createElement('div');
         pinEl.className = `pin ${pin.set ? 'set' : ''}`;
         pinEl.style.transform = `rotate(${pin.position}deg)`;

@@ -24,7 +24,7 @@ const playerLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-function updateWorldstate(app, player, nearbyNPCs, activeQuests) {
+function _updateWorldstate(app, player, nearbyNPCs, activeQuests) {
   const existing = app.get("worldstate") || {};
 
   app.set("worldstate", {

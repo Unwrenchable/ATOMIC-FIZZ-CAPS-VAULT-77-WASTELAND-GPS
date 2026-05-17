@@ -55,7 +55,7 @@
     },
 
     // Get default shop data if none provided
-    getDefaultShopData(npcId) {
+    getDefaultShopData(_npcId) {
       // Default shop inventory - could be loaded from NPC data
       return {
         inventory: [
@@ -329,7 +329,7 @@
     },
 
     // Sell item
-    sellItem(itemId, price, quantity) {
+    sellItem(itemId, price, _quantity) {
       // Confirm sale
       const item = this.getItemData(itemId);
       if (!confirm(`Sell ${item.name} for ${price} caps?`)) {
