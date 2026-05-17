@@ -66,6 +66,8 @@
     0: "Stranger", 1: "Acquaintance", 2: "Associate",
     3: "Ally", 4: "Trusted Companion", 5: "Sworn Companion", 6: "Legend Bond"
   };
+  const LS_ROSTER = "afc_companions_roster_v1";
+  const LS_CATALOG = "afc_companions_catalog_v1";
   const RARITY_COLORS = {
     common: "#aaaaaa", uncommon: "#00ff41",
     rare: "#4488ff", epic: "#cc44ff", legendary: "#ffd700"
@@ -302,7 +304,7 @@
   }
 
   // Recruit companion for combat
-  async function recruitCombatCompanion(npcId) {
+  async function _recruitCombatCompanion(npcId) {
     if (!canRecruitCombat(npcId)) return null;
 
     const npc = RECRUITABLE_NPCS.find(n => n.id === npcId);
@@ -341,7 +343,7 @@
           const companion = roster[companionId];
           if (companion.inventory) {
             // Note: In real implementation, would need to sync with player inventory
-            companion.inventory.forEach(item => {
+            companion.inventory.forEach(_item => {
               // Add to player inventory logic here
             });
           }
@@ -357,7 +359,7 @@
   }
 
   // Set companion command
-  function setCompanionCommand(companionId, command, target = null) {
+  function _setCompanionCommand(companionId, command, target = null) {
     if (!COMBAT_COMMANDS.includes(command)) return false;
 
     const roster = getRoster();
@@ -371,7 +373,7 @@
   }
 
   // Transfer item to companion
-  function giveItemToCompanion(companionId, itemId) {
+  function _giveItemToCompanion(companionId, itemId) {
     const roster = getRoster();
     if (!roster[companionId] || !roster[companionId].inventory) return false;
 
@@ -383,7 +385,7 @@
   }
 
   // Take item from companion
-  function takeItemFromCompanion(companionId, itemId) {
+  function _takeItemFromCompanion(companionId, itemId) {
     const roster = getRoster();
     if (!roster[companionId] || !roster[companionId].inventory) return false;
 
@@ -397,7 +399,7 @@
   }
 
   // Update loyalty based on player actions
-  function updateLoyalty(companionId, change) {
+  function _updateLoyalty(companionId, change) {
     const roster = getRoster();
     if (roster[companionId]) {
       roster[companionId].loyalty = Math.max(0, Math.min(100, (roster[companionId].loyalty || 50) + change));
@@ -418,12 +420,12 @@
   function getActiveCombatCompanions() {
     const roster = getRoster();
     return Object.entries(roster)
-      .filter(([id, entry]) => entry.recruited && entry.status === 'active')
+      .filter(([_id, entry]) => entry.recruited && entry.status === 'active')
       .map(([id, entry]) => ({ id, ...entry }));
   }
 
   // Process companion combat turns
-  function processCombatTurn() {
+  function _processCombatTurn() {
     const companions = getActiveCombatCompanions();
     companions.forEach(companion => {
       if (companion.combatStats.hp <= 0) return;

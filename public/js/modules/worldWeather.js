@@ -42,9 +42,9 @@
   };
 
   // Time system constants
-  const REAL_MINUTES_PER_GAME_DAY = 24; // 24 minutes real time = 24 hours game time
-  const GAME_HOURS_PER_REAL_MINUTE = 1; // 1 real minute = 1 game hour
-  const GAME_MINUTES_PER_REAL_SECOND = 1; // 1 real second = 1 game minute (for smooth updates)
+  const _REAL_MINUTES_PER_GAME_DAY = 24; // 24 minutes real time = 24 hours game time
+  const _GAME_HOURS_PER_REAL_MINUTE = 1; // 1 real minute = 1 game hour
+  const _GAME_MINUTES_PER_REAL_SECOND = 1; // 1 real second = 1 game minute (for smooth updates)
 
   // Initialize weather and time state
   function ensureWeather(worldState) {

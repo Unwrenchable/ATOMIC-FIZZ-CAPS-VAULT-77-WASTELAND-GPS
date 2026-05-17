@@ -7,7 +7,7 @@
 
 const https = require('https');
 const fs = require('fs');
-const path = require('path');
+const _path = require('path');
 
 class GrokAvatarGenerator {
   constructor(apiKey) {
@@ -15,7 +15,7 @@ class GrokAvatarGenerator {
     this.baseUrl = 'https://api.x.ai/v1';
   }
 
-  async makeGrokRequest(prompt, maxTokens = 1000) {
+  async makeGrokRequest(prompt, _maxTokens = 1000) {
     return new Promise((resolve, reject) => {
       const postData = JSON.stringify({
         messages: [

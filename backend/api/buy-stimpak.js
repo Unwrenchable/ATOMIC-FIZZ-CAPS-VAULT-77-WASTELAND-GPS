@@ -14,13 +14,13 @@
 
 "use strict";
 
-const crypto = require("crypto");
+const _crypto = require("crypto");
 const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
-const { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction } = require("@solana/web3.js");
+const { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction: _sendAndConfirmTransaction } = require("@solana/web3.js");
 const { getAssociatedTokenAddress, createBurnInstruction, getTokenAccountBalance } = require("@solana/spl-token");
 const { authMiddleware } = require("../lib/auth");
-const { redis, key } = require("../lib/redis");
+const { redis: _redis, key: _key } = require("../lib/redis");
 
 // ------------------------------------------------------------------
 // Constants
@@ -126,7 +126,7 @@ router.post("/", authMiddleware, buyLimiter, async (req, res) => {
     const serializedTx = tx.serialize({ requireAllSignatures: false }).toString('base64');
 
     // Simulate txId for now; in production, frontend submits and returns real signature
-    const signature = `prepared-${Date.now()}`;
+    const _signature = `prepared-${Date.now()}`;
 
     console.log(`[buy-stimpak] wallet=${wallet.slice(0, 8)}... tier=${tier} prepared burn tx for ${tierData.burnCost} caps`);
 

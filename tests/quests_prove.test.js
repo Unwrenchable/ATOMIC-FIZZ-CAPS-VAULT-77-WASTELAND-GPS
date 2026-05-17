@@ -1,6 +1,5 @@
 const fetch = require('node-fetch');
 const assert = require('assert');
-const { redis, key } = require('../backend/lib/redis');
 const BASE = process.env.BACKEND_URL || 'http://localhost:3000';
 
 (async () => {

@@ -129,7 +129,7 @@ function httpRequest(method, urlStr, body, extraHeaders = {}) {
 
 function get(urlPath, headers)        { return httpRequest('GET',    BASE_URL + urlPath, null, headers); }
 function post(urlPath, body, headers) { return httpRequest('POST',   BASE_URL + urlPath, body, headers); }
-function del(urlPath, body, headers)  { return httpRequest('DELETE', BASE_URL + urlPath, body, headers); }
+function _del(urlPath, body, headers)  { return httpRequest('DELETE', BASE_URL + urlPath, body, headers); }
 
 // -----------------------------------------------------------------------
 // Deterministic mock wallet generator (NOT real keys)
@@ -336,7 +336,7 @@ async function testQuests(ctx) {
   return r;
 }
 
-async function testMintables(ctx) {
+async function testMintables(_ctx) {
   const r = await get('/api/mintables');
   trackRequest(r, 'mintables');
   return r;
@@ -731,7 +731,7 @@ async function testSettings(ctx) {
   return r;
 }
 
-async function testRotation(ctx) {
+async function testRotation(_ctx) {
   const r = await get('/api/rotation');
   trackRequest(r, 'rotation');
   return r;

@@ -70,7 +70,7 @@
     return id;
   }
 
-  function cleanup() {
+  function _cleanup() {
     activeTimeouts.forEach(id => clearTimeout(id));
     activeTimeouts.clear();
   }
@@ -219,7 +219,7 @@
   }
 
   // ========= Lightweight Command Router =========
-  function generateResponse(normalized, raw) {
+  function generateResponse(normalized, _raw) {
     const has = (token) => normalized.includes(token);
     const hasBreakMend = (has("break") || has("broken")) && has("mend");
     const asksPassphrase = has("passphrase") || has("pass phrase") || has("phrase");
