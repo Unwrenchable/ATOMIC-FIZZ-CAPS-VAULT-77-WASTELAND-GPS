@@ -6,6 +6,45 @@ Welcome, Vault Dwellers! This guide will help you deploy and test the Atomic Fiz
 
 ---
 
+## ☢️ DEVNET WALLET SETUP
+
+### Deployer / Treasury Keypair
+
+The active devnet deployer is the F1ZZ vanity wallet:
+
+```
+F1ZZtas4odhUyW1CytEzSjYr3DsQ8ymNimoeVpHGkw4L
+```
+
+**GitHub Actions secret** (`SOLANA_KEYPAIR`)  
+The `deploy-devnet` workflow writes this secret to `~/.config/solana/id.json`.
+Update it whenever you rotate the deployer keypair:
+
+1. Open your keypair JSON file (the `[…]` byte-array): `cat ~/.config/solana/id.json`
+2. Go to **GitHub → Settings → Secrets → Actions**
+3. Set / update `SOLANA_KEYPAIR` to the full JSON array contents
+
+### Create the CAPS Mint (vanity key)
+
+```bash
+# Grind a keypair whose address starts with "CAPS" (no --outfile flag)
+solana-keygen grind --starts-with CAPS:1
+# Output: saved to CAPS<rest_of_address>.json
+
+# Confirm address
+solana address -k CAPS<rest_of_address>.json
+
+# Create the SPL token on devnet (9 decimals = 1 billion × 10⁹ lamports)
+spl-token create-token --decimals 9 CAPS<rest_of_address>.json
+
+# Set CAPS_MINT in .env to the printed token mint address
+```
+
+> **Note:** `solana-keygen grind` does **not** accept `--outfile`.  
+> The keypair is written to `<address>.json` in the current directory automatically.
+
+---
+
 ## 🚀 QUICK START (Public Testing)
 
 ### 1. Install Dependencies
