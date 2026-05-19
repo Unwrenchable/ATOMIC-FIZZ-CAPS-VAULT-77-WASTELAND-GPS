@@ -33,17 +33,30 @@ jobs:
       - name: Install Anchor
         run: |
           cargo install --git https://github.com/coral-xyz/anchor avm --locked
-          avm install latest
-          avm use latest
+          avm install 0.32.1
+          avm use 0.32.1
           anchor --version
 
       - name: Setup Solana Wallet
         run: |
           mkdir -p /home/runner/.config/solana
-          echo "{}" > /home/runner/.config/solana/id.json
+          export PATH="/usr/local/solana-release/bin:$PATH"
+          solana-keygen new --no-bip39-passphrase -o /home/runner/.config/solana/id.json
+
+      - name: Verify Solana build tooling
+        run: |
+          export PATH="/usr/local/solana-release/bin:$PATH"
+          solana --version
+          rustup show
+          which cargo-build-sbf || true
+          cargo-build-sbf --version || true
 
       - name: Sync Anchor Program IDs
-        run: anchor keys sync
+        run: |
+          export PATH="/usr/local/solana-release/bin:$PATH"
+          anchor keys sync
 
       - name: Build Anchor Program
-        run: anchor build
+        run: |
+          export PATH="/usr/local/solana-release/bin:$PATH"
+          anchor build
