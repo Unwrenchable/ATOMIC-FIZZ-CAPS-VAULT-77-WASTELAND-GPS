@@ -1,0 +1,27 @@
+[package]
+name = "fizzcaps_onchain"
+version = "0.1.0"
+description = "Atomic Fizz Caps — $CAPS token + real-world loot NFT claims + Fizz.fun bonding curve launchpad"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "fizzcaps_onchain"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+
+# Optional developer features
+custom-heap    = []
+custom-panic   = []
+anchor-debug   = []
+no-log-ix-name = []
+
+[dependencies]
+anchor-lang = { version = "0.32", features = ["init-if-needed"] }
+anchor-spl = "0.32"
+mpl-token-metadata = "5.1.1"

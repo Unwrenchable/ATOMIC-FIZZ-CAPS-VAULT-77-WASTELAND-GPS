@@ -44,14 +44,14 @@
   "author": "Unwrenchable",
   "license": "MIT",
   "dependencies": {
+    "@metaplex-foundation/js": "^0.20.1",
     "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
-    "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.98.4",
     "bs58": "^6.0.0",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
-    "express": "^4.22.1",
+    "express": "^4.22.2",
     "express-rate-limit": "^7.4.0",
     "express-validator": "^7.2.0",
     "helmet": "^8.0.0",
@@ -66,12 +66,15 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",
-    "@types/node": "^20.0.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^20.19.41",
     "eslint": "^9.39.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-node": "^11.1.0",
     "nodemon": "^3.1.14",
     "playwright": "^1.59.1",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
   }
 }
