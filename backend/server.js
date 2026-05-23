@@ -374,6 +374,7 @@ safeMount("/api/quest-endings", api("quest-endings"));
 
 // Survival reward claims
 safeMount("/api/claim-survival", api("claim-survival"));
+safeMount("/api/event/player-survived", api("player-survived"));
 
 // Buy Stimpak with CAPS burn
 safeMount("/api/buy-stimpak", api("buy-stimpak"));
