@@ -41,9 +41,15 @@ work or reporting a bug. Paste the JSON block in the relevant task entry.
 
 _No active tasks. The wasteland is quiet — for now._
 
----
 
 ## Completed Tasks
+
+### [2026-05-19] Task: Add RealAI survival reward integration spike
+- **Agent**: copilot
+- **Files**: `.github/agents/tasks.md`, `backend/api/player-survived.js`, `backend/lib/solana-rewards.js`, `backend/realai/survival-reward.js`, `backend/lib/nft-minting.js`, `backend/server.js`, `.env.example`, `backend/.env.example`, `.github/agents/memory.md`
+- **Status**: `complete`
+- **What**: Added a secure backend-local integration path that turns a survival event into a RealAI reward plan, on-chain CAPS distribution, NFT mint queue handoff, and Overseer narration while reusing the existing NFT worker.
+- **Verified**: `node -e "require('./backend/lib/solana-rewards.js'); console.log('solana-rewards ok')"` and `node -e "require('./backend/realai/survival-reward.js'); require('./backend/api/player-survived.js'); require('./backend/lib/nft-minting.js'); require('./backend/lib/solana-rewards.js'); console.log('survival route stack ok')"`.
 
 ### [2026-05-15] Task: Rewire character and NPC generation to Overseer
 - **Agent**: copilot

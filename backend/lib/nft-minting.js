@@ -84,7 +84,7 @@ function normalizeLocationHint(value) {
 function getServerSigner() {
   if (cachedSigner !== undefined) return cachedSigner;
 
-  const keypairPath = process.env.SERVER_KEYPAIR_PATH;
+  const keypairPath = process.env.REALAI_SIGNER_PATH || process.env.SERVER_KEYPAIR_PATH;
   if (keypairPath) {
     const secret = JSON.parse(fs.readFileSync(keypairPath, "utf8"));
     cachedSigner = Keypair.fromSecretKey(Uint8Array.from(secret));
@@ -211,11 +211,12 @@ async function resolveMetadataUri(metadataJson, jobId) {
 }
 
 function buildCollection() {
-  if (!process.env.METAPLEX_COLLECTION_ADDRESS) return null;
+  const collectionAddress = process.env.CAPS_COLLECTION_MINT || process.env.METAPLEX_COLLECTION_ADDRESS;
+  if (!collectionAddress) return null;
   try {
     return {
       verified: false,
-      key: new PublicKey(process.env.METAPLEX_COLLECTION_ADDRESS),
+      key: new PublicKey(collectionAddress),
     };
   } catch {
     return null;
