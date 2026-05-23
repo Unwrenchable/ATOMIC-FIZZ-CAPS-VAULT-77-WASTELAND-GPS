@@ -123,6 +123,16 @@ _(Things that tripped up a developer or AI assistant)_
 
 _(Confirmed by agent runs — newest first)_
 
+### [2026-05-19] RealAI survival spike now has a secure backend event path
+- **What**: Added `POST /api/event/player-survived` with `backend/lib/solana-rewards.js` and `backend/realai/survival-reward.js` so an authenticated survival event can generate a RealAI reward plan, transfer on-chain CAPS from the configured signer treasury ATA, queue an NFT reward into the existing mint worker, and emit Overseer-style narration in one response.
+- **Why**: The repo already had survival claims, local Overseer voice, and worker-backed NFT minting, but it lacked the orchestration slice that turns a real event into on-chain CAPS distribution plus narrated reward output.
+- **Verified**: `node -e "require('./backend/lib/solana-rewards.js'); console.log('solana-rewards ok')"` and `node -e "require('./backend/realai/survival-reward.js'); require('./backend/api/player-survived.js'); require('./backend/lib/nft-minting.js'); require('./backend/lib/solana-rewards.js'); console.log('survival route stack ok')"`.
+
+### [2026-05-19] NFT minting now accepts RealAI signer path and CAPS collection env naming
+- **What**: `backend/lib/nft-minting.js` now honors `REALAI_SIGNER_PATH` alongside `SERVER_KEYPAIR_PATH`, and accepts `CAPS_COLLECTION_MINT` as the collection address fallback before `METAPLEX_COLLECTION_ADDRESS`.
+- **Why**: The Solana integration spike uses a dedicated agent signer path and user-facing collection mint naming; without those aliases the existing mint worker would require duplicate env configuration.
+- **Verified**: `node -e "require('./backend/api/player-survived.js'); require('./backend/lib/nft-minting.js'); console.log('survival route stack ok')"`.
+
 ### [2026-05-15] `/api/ai-character/*` now runs on the self-hosted Overseer context
 - **What**: `backend/api/ai-character.js` now uses `backend/realai/overseer-creator.js` plus `resolveOverseerContext()` instead of browser-side Grok plumbing, so concept, name, and NPC dossier generation all inherit the authenticated player's stored Overseer conversation and learned facts.
 - **Why**: The old character creator AI path was a dead browser-side Grok stub (`process.env`, `https.request`) that could not work in the live frontend. Moving generation behind the backend-local Overseer keeps creation in-house and lets the base character established in terminal chat feed the actual game UI.
