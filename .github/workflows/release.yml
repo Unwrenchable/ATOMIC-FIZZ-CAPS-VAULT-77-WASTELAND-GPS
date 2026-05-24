@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   release:
+    if: ${{ secrets.SOLANA_KEYPAIR != '' }}
     runs-on: ubuntu-latest
 
     env:

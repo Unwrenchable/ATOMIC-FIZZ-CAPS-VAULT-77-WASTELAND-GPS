@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   update-id:
@@ -24,6 +25,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: deploy-artifacts
+          if-no-artifact-found: ignore
 
       - name: Install Solana CLI (Anchor-compatible)
         run: |
