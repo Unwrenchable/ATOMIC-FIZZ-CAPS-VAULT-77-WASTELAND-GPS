@@ -31,6 +31,13 @@ const BASE_URL = process.argv.includes('--base-url')
 const REPORT_PATH = process.env.PLAYTEST_REPORT_PATH
   || path.join(os.tmpdir(), 'playtest-report.json');
 
+const PLAYTEST_PROFILE = {
+  build: 'Baseline Vault Dweller',
+  player_level: 1,
+  gear: ['Pipe Pistol', 'Vault Suit', '2 Stimpaks'],
+  meta: ['baseline', 'connectivity', 'auth-check'],
+};
+
 // Network timeout in milliseconds for each API check.
 const REQUEST_TIMEOUT_MS = 10_000;
 
@@ -90,6 +97,7 @@ function post(path, body, headers) { return request('POST', BASE_URL + path, bod
 const report = {
   started_at      : new Date().toISOString(),
   base_url        : BASE_URL,
+  player_profile  : PLAYTEST_PROFILE,
   passed_checks   : [],
   failed_checks   : [],
   warnings        : [],
@@ -567,6 +575,10 @@ async function run() {
   console.log(`  ✅ Passed : ${report.total_passed}`);
   console.log(`  ❌ Failed : ${report.total_failed}`);
   console.log(`  ⚠️  Warnings: ${report.total_warned}`);
+  console.log(`  Build     : ${report.player_profile.build}`);
+  console.log(`  Level     : ${report.player_profile.player_level}`);
+  console.log(`  Gear      : ${report.player_profile.gear.join(', ')}`);
+  console.log(`  Meta      : ${report.player_profile.meta.join(', ')}`);
   if (report.recommendations.length > 0) {
     console.log('\n  Recommendations:');
     report.recommendations.forEach((r, i) => console.log(`  ${i + 1}. ${r}`));
