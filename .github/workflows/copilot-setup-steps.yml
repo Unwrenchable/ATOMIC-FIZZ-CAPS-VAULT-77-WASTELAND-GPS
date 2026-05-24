@@ -1,0 +1,62 @@
+name: Copilot Setup Steps
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Ensure Git HTTPS helpers are available
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          exec_path="$(git --exec-path || true)"
+          if [ -n "${exec_path}" ] && [ -x "${exec_path}/git-remote-https" ] && [ -x "${exec_path}/git-remote-http" ]; then
+            echo "Git HTTPS helpers already available at ${exec_path}"
+            exit 0
+          fi
+
+          helper_dir=""
+          for candidate in \
+            "/snap/copilot-cli/current/usr/lib/git-core" \
+            "/snap/copilot-cli/39/usr/lib/git-core" \
+            "/usr/lib/git-core"
+          do
+            if [ -x "${candidate}/git-remote-https" ] && [ -x "${candidate}/git-remote-http" ]; then
+              helper_dir="${candidate}"
+              break
+            fi
+          done
+
+          if [ -z "${helper_dir}" ]; then
+            echo "::warning::No git-remote-https helper directory found in known locations."
+            exit 0
+          fi
+
+          mkdir -p "${HOME}/.local/bin"
+          cat > "${HOME}/.local/bin/git-remote-https" <<'EOF'
+          #!/usr/bin/env bash
+          exec "${GIT_HELPER_DIR}/git-remote-https" "$@"
+          EOF
+          cat > "${HOME}/.local/bin/git-remote-http" <<'EOF'
+          #!/usr/bin/env bash
+          exec "${GIT_HELPER_DIR}/git-remote-http" "$@"
+          EOF
+          sed -i "1i GIT_HELPER_DIR='${helper_dir}'" "${HOME}/.local/bin/git-remote-https" "${HOME}/.local/bin/git-remote-http"
+          chmod +x "${HOME}/.local/bin/git-remote-https" "${HOME}/.local/bin/git-remote-http"
+
+          echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+          echo "GIT_EXEC_PATH=${helper_dir}" >> "$GITHUB_ENV"
+          echo "Configured Git helper dir: ${helper_dir}"
