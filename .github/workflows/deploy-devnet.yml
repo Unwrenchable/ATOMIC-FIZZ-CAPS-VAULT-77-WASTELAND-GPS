@@ -3,7 +3,7 @@ name: Deploy to Devnet
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
@@ -19,17 +19,25 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.85.1
 
-      - name: Install Solana CLI
+      - name: Install Solana CLI (Anchor-compatible)
         run: |
           sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.0/install)"
           echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
 
+      - name: Verify Solana Installation
+        run: |
+          solana --version
+          command -v agave-install
+
       - name: Install Anchor
         run: |
-          cargo install --git https://github.com/coral-xyz/anchor avm --locked
-          avm install latest
-          avm use latest
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          avm install 0.32.1
+          avm use 0.32.1
           anchor --version
 
       - name: Setup Wallet
@@ -46,13 +54,22 @@ jobs:
       - name: Deploy Program
         run: anchor deploy
 
+      - name: Upload Deploy Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: fizzcaps_onchain-artifacts
+          path: |
+            target/deploy/*.so
+            target/deploy/*-keypair.json
+            target/idl/*.json
+            Anchor.toml
+
       - name: Resolve Program ID
         id: program
         run: |
           if [ -f target/deploy/fizzcaps_onchain-keypair.json ]; then
             PROGRAM_ID=$(solana address -k target/deploy/fizzcaps_onchain-keypair.json)
           else
-            # Fallback parser: read lines within [programs.devnet], extract fizzcaps_onchain quoted value, then keep first match.
             PROGRAM_ID=$(
               sed -nE '/^\[programs\.devnet\]/,/^\[/{s/^\s*fizzcaps_onchain\s*=\s*"([^"]+)".*$/\1/p}' Anchor.toml | head -n1
             )

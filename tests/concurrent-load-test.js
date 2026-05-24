@@ -58,6 +58,60 @@ const ARCHETYPES = [
 ];
 
 // -----------------------------------------------------------------------
+const BUILD_PROFILES = {
+  newbie: {
+    name: 'Scrap Runner',
+    style: 'starter scavenger',
+    level: 1,
+    gear: ['Pipe Pistol', 'Vault Suit', '2 Stimpaks'],
+    meta: ['low-gear', 'tutorial-safe', 'map-explorer'],
+  },
+  veteran: {
+    name: 'Power Armor Gunner',
+    style: 'frontline tank',
+    level: 24,
+    gear: ['Assault Rifle', 'Combat Armor Chest', 'Combat Helmet', 'Stimpak'],
+    meta: ['tank', 'heavy-armor', 'midgame'],
+  },
+  exploiter: {
+    name: 'Glitch Gremlin',
+    style: 'exploit hunter',
+    level: 18,
+    gear: ['Knife', 'Debug Loadout', 'Null Ammo'],
+    meta: ['idor', 'race-condition', 'fuzzing'],
+  },
+  speedrunner: {
+    name: 'Courier Rush',
+    style: 'cooldown racer',
+    level: 14,
+    gear: ['10mm Pistol', 'Light Armor', 'Stimpak'],
+    meta: ['burst', 'low-latency', 'cooldown'],
+  },
+  collector: {
+    name: 'Museum Curator',
+    style: 'loot maximizer',
+    level: 16,
+    gear: ['Laser Musket', 'Expanded Pack', 'Scrap Toolkit'],
+    meta: ['inventory', 'nft', 'loot-focus'],
+  },
+  raider: {
+    name: 'Blood Raider',
+    style: 'melee pressure',
+    level: 22,
+    gear: ['Combat Shotgun', 'Raider Armor', 'Molotovs'],
+    meta: ['pvp', 'battle', 'high-risk'],
+  },
+};
+
+function getBuildProfile(archetype) {
+  return BUILD_PROFILES[archetype] || {
+    name: `${archetype} build`,
+    style: 'unknown',
+    level: 1,
+    gear: [],
+    meta: [],
+  };
+}
 // GPS coordinate pools — worldwide distribution
 // -----------------------------------------------------------------------
 const WORLD_COORDS = [
@@ -129,7 +183,7 @@ function httpRequest(method, urlStr, body, extraHeaders = {}) {
 
 function get(urlPath, headers)        { return httpRequest('GET',    BASE_URL + urlPath, null, headers); }
 function post(urlPath, body, headers) { return httpRequest('POST',   BASE_URL + urlPath, body, headers); }
-function _del(urlPath, body, headers)  { return httpRequest('DELETE', BASE_URL + urlPath, body, headers); }
+function del(urlPath, body, headers)  { return httpRequest('DELETE', BASE_URL + urlPath, body, headers); }
 
 // -----------------------------------------------------------------------
 // Deterministic mock wallet generator (NOT real keys)
@@ -144,6 +198,7 @@ function mockWallet(seed) {
 // -----------------------------------------------------------------------
 const bugs = [];
 const perfSamples = [];
+const sessionSamples = [];
 let totalRequests = 0;
 let totalErrors   = 0;
 let totalTimeouts = 0;
@@ -336,7 +391,7 @@ async function testQuests(ctx) {
   return r;
 }
 
-async function testMintables(_ctx) {
+async function testMintables(ctx) {
   const r = await get('/api/mintables');
   trackRequest(r, 'mintables');
   return r;
@@ -731,7 +786,7 @@ async function testSettings(ctx) {
   return r;
 }
 
-async function testRotation(_ctx) {
+async function testRotation(ctx) {
   const r = await get('/api/rotation');
   trackRequest(r, 'rotation');
   return r;
@@ -910,11 +965,25 @@ async function runPlayerSession(playerId) {
   const archetype = ARCHETYPES[playerId % ARCHETYPES.length];
   const coord     = WORLD_COORDS[playerId % WORLD_COORDS.length];
   const wallet    = mockWallet(playerId);
+  const buildProfile = getBuildProfile(archetype);
   // Simulate a fake session token (real auth would need wallet signing)
   const fakeSessionId = crypto.createHash('sha256').update(wallet + ':session').digest('hex');
   const authHeader = { Authorization: `Bearer ${fakeSessionId}` };
 
-  const ctx = { id: playerId, archetype, coord, wallet, authHeader };
+  const ctx = {
+    id: playerId,
+    archetype,
+    coord,
+    wallet,
+    authHeader,
+    build: buildProfile,
+    playerLevel: buildProfile.level,
+    gear: buildProfile.gear,
+    meta: buildProfile.meta,
+  };
+
+  const sessionStartedAt = Date.now();
+  let sessionStatus = 'ok';
 
   try {
     // All archetypes run these core checks
@@ -960,6 +1029,7 @@ async function runPlayerSession(playerId) {
     await testDoubleSpendCaps(ctx);
     await testSqlInjection(ctx);
   } catch (err) {
+    sessionStatus = 'error';
     // Swallow individual player errors to keep the batch running
     recordBug({
       id: `player_session_crash_${playerId}`,
@@ -971,6 +1041,19 @@ async function runPlayerSession(playerId) {
       reproSteps: [`Run player session for archetype "${archetype}" (id=${playerId})`],
       suggestedFix: 'Investigate server-side exception; ensure all endpoints have try/catch and return proper error responses.',
       evidence: err.message,
+    });
+  } finally {
+    sessionSamples.push({
+      playerId,
+      archetype,
+      wallet,
+      buildName: buildProfile.name,
+      buildStyle: buildProfile.style,
+      playerLevel: buildProfile.level,
+      gear: buildProfile.gear,
+      meta: buildProfile.meta,
+      durationMs: Date.now() - sessionStartedAt,
+      status: sessionStatus,
     });
   }
 }
@@ -1026,10 +1109,62 @@ function analysePerformance() {
   return perfReport;
 }
 
+function analyseBuildPerformance() {
+  const byBuild = {};
+  for (const sample of sessionSamples) {
+    const key = sample.buildName;
+    if (!byBuild[key]) {
+      byBuild[key] = {
+        buildName: sample.buildName,
+        buildStyle: sample.buildStyle,
+        playerLevel: sample.playerLevel,
+        gear: sample.gear,
+        meta: sample.meta,
+        sessions: [],
+        statuses: {},
+      };
+    }
+    byBuild[key].sessions.push(sample.durationMs);
+    byBuild[key].statuses[sample.status] = (byBuild[key].statuses[sample.status] || 0) + 1;
+  }
+
+  return Object.values(byBuild)
+    .map((entry) => {
+      const samples = entry.sessions.slice().sort((a, b) => a - b);
+      const avg = Math.round(samples.reduce((sum, value) => sum + value, 0) / samples.length);
+      const p95 = samples[Math.floor(samples.length * 0.95)] || 0;
+      const min = samples[0] || 0;
+      const max = samples[samples.length - 1] || 0;
+      const bugCount = bugs.reduce((count, bug) => {
+        if (bug.affectedBuilds && bug.affectedBuilds.includes(entry.buildName)) return count + 1;
+        return count;
+      }, 0);
+      const failureCount = entry.statuses.error || 0;
+      const successCount = entry.statuses.ok || 0;
+      const successRate = Math.round((successCount / Math.max(1, entry.sessions.length)) * 100);
+      return {
+        buildName: entry.buildName,
+        buildStyle: entry.buildStyle,
+        playerLevel: entry.playerLevel,
+        gear: entry.gear,
+        meta: entry.meta,
+        sampleCount: entry.sessions.length,
+        avgMs: avg,
+        p95Ms: p95,
+        minMs: min,
+        maxMs: max,
+        bugCount,
+        successRate,
+        failureCount,
+      };
+    })
+    .sort((a, b) => (a.avgMs - b.avgMs) || (a.bugCount - b.bugCount) || (b.successRate - a.successRate));
+}
+
 // -----------------------------------------------------------------------
 // Bug report formatter
 // -----------------------------------------------------------------------
-function generateBugReport(perfReport) {
+function generateBugReport(perfReport, buildReport) {
   const sorted = bugs.slice().sort((a, b) =>
     (SEVERITIES[b.severity] || 0) - (SEVERITIES[a.severity] || 0)
   );
@@ -1048,6 +1183,13 @@ function generateBugReport(perfReport) {
     medium           : bugs.filter(b => b.severity === 'medium').length,
     low              : bugs.filter(b => b.severity === 'low').length,
     performance      : perfReport,
+    build_profiles   : BUILD_PROFILES,
+    build_rankings   : buildReport,
+    build_summary    : {
+      best  : buildReport[0] || null,
+      worst : buildReport[buildReport.length - 1] || null,
+    },
+    player_build_samples: sessionSamples,
     findings         : sorted,
   };
 
@@ -1087,6 +1229,14 @@ function printReport(report) {
       if (bug.occurrences > 1) console.log(`      Seen    : ${bug.occurrences}x`);
       console.log();
     }
+  }
+
+  if (report.build_rankings && report.build_rankings.length > 0) {
+    console.log('  ── BUILD PERFORMANCE (best → worst) ─────────────────────────\n');
+    for (const b of report.build_rankings) {
+      console.log(`  🧪 ${b.buildName.padEnd(22)} lvl=${String(b.playerLevel).padEnd(3)} avg=${String(b.avgMs).padStart(4)}ms  p95=${String(b.p95Ms).padStart(4)}ms  bugs=${String(b.bugCount).padStart(3)}  gear=${b.gear.join(', ')}  meta=${b.meta.join(', ')}`);
+    }
+    console.log();
   }
 
   if (report.performance && report.performance.length > 0) {
@@ -1131,7 +1281,8 @@ async function main() {
   console.log(`\n  ✅ All player sessions complete in ${elapsed}s`);
 
   const perfReport = analysePerformance();
-  const report = generateBugReport(perfReport);
+  const buildReport = analyseBuildPerformance();
+  const report = generateBugReport(perfReport, buildReport);
 
   try {
     fs.writeFileSync(REPORT_PATH, JSON.stringify(report, null, 2), 'utf8');

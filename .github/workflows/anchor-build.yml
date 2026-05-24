@@ -2,7 +2,7 @@ name: Anchor Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
 
 jobs:
@@ -18,16 +18,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@nightly
 
-      - name: Install Solana CLI
+      - name: Install Solana CLI (Anchor-compatible)
         run: |
           sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.0/install)"
           echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
 
+      - name: Verify Solana Installation
+        run: |
+          solana --version
+          command -v agave-install
+
       - name: Install Anchor
         run: |
-          cargo install --git https://github.com/coral-xyz/anchor avm --locked
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
           avm install 0.32.1
           avm use 0.32.1
           anchor --version
