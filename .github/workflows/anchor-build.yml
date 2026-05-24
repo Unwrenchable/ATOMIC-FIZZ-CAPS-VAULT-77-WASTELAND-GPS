@@ -3,7 +3,30 @@ name: Anchor Build
 on:
   push:
     branches: [main]
+    paths:
+      - .github/workflows/anchor-build.yml
+      - Anchor.toml
+      - Cargo.toml
+      - Cargo.lock
+      - rust-toolchain.toml
+      - programs/**
+      - solana/**
+      - tests/burn_test.js
   pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/anchor-build.yml
+      - Anchor.toml
+      - Cargo.toml
+      - Cargo.lock
+      - rust-toolchain.toml
+      - programs/**
+      - solana/**
+      - tests/burn_test.js
+
+concurrency:
+  group: anchor-build-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -47,14 +70,14 @@ jobs:
       - name: Setup Solana Wallet
         run: |
           mkdir -p /home/runner/.config/solana
-          solana-keygen new --no-bip39-passphrase -o /home/runner/.config/solana/id.json
+          solana-keygen new --force --no-bip39-passphrase -o /home/runner/.config/solana/id.json
 
       - name: Verify Solana build tooling
         run: |
           solana --version
           rustup show
-          which cargo-build-sbf || true
-          cargo-build-sbf --version || true
+          command -v cargo-build-sbf
+          cargo-build-sbf --version
 
       - name: Sync Anchor Program IDs
         run: anchor keys sync
