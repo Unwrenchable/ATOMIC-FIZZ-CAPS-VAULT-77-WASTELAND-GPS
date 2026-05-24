@@ -238,6 +238,9 @@ This document provides a comprehensive alphabetical reference of all environment
 - **Required**: Yes
 - **Description**: Solana RPC endpoint URL
 - **Example**: `https://api.devnet.solana.com` (devnet) or `https://api.mainnet-beta.solana.com` (mainnet)
+- **Note**: Use `SOLANA_RPC` as the canonical env var. Some older routes still
+  fall back to `SOLANA_RPC_URL`, but backend health/config checks expect
+  `SOLANA_RPC`.
 
 ### STRICT_REPLAY_PROTECTION
 - **Type**: Boolean

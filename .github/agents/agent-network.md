@@ -1,3 +1,10 @@
+---
+name: Agent Network
+description: >
+  Coordination protocol for repository agents, including shared-memory rules,
+  security requirements, task ownership, and communication conventions.
+---
+
 # ☢️ Atomic Fizz Caps — Agent Network Protocol
 
 > **Classification: INTERNAL — VAULT 77 EYES ONLY**

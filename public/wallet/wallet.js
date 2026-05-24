@@ -449,6 +449,26 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     }
   }
 
+  function getWalletAdapter() {
+    return window.web3Wallet && typeof window.web3Wallet.connect === "function"
+      ? window.web3Wallet
+      : null;
+  }
+
+  async function syncWalletUi(address, walletType) {
+    if (!address) return;
+    window.PLAYER_WALLET = address;
+    await refreshOnChain(address);
+    renderWastelandStats();
+    renderNFTs();
+
+    const addrEl = document.getElementById("afw-address");
+    if (addrEl) {
+      const suffix = walletType ? ` (${walletType})` : "";
+      addrEl.textContent = `WALLET: ${address.slice(0, 6)}...${address.slice(-4)}${suffix}`;
+    }
+  }
+
   // ------------------------------------------------------------
   // INIT WALLET APP
   // ------------------------------------------------------------
@@ -475,6 +495,15 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     if (connectBtn) {
       connectBtn.addEventListener("click", async () => {
         try {
+          const adapter = getWalletAdapter();
+          if (adapter) {
+            const success = await adapter.connect("phantom");
+            if (success) {
+              await syncWalletUi(adapter.getWalletAddress(), adapter.getWalletType());
+              return;
+            }
+          }
+
           if (typeof window.connectWallet === "function") {
             await window.connectWallet();
           }
@@ -495,16 +524,22 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     // Local wallet mode
     if (localBtn) {
       localBtn.addEventListener("click", async () => {
+        const adapter = getWalletAdapter();
+        if (adapter) {
+          const success = await adapter.connect("integrated");
+          if (success) {
+            await syncWalletUi(adapter.getWalletAddress(), adapter.getWalletType());
+            return;
+          }
+        }
+
         let pubkey = loadLocalWallet();
         if (!pubkey) {
           pubkey = generateLocalKeypair();
           saveLocalWallet(pubkey);
           alert("New Atomic Fizz local wallet created.");
         }
-        window.PLAYER_WALLET = pubkey;
-        await refreshOnChain(pubkey);
-        renderWastelandStats();
-        renderNFTs();
+        await syncWalletUi(pubkey, "local");
       });
     }
 
@@ -525,6 +560,14 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
           return;
         }
 
+        const walletType = window.web3Wallet && window.web3Wallet.getWalletType
+          ? window.web3Wallet.getWalletType()
+          : null;
+        if (walletType === "integrated") {
+          status.textContent = "Local Fizz wallet is display-only. Use Phantom for real transfers.";
+          return;
+        }
+
         const amount = parseFloat(amtStr);
         if (!Number.isFinite(amount) || amount <= 0) {
           status.textContent = "Enter a valid positive amount.";
@@ -536,6 +579,10 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
         try {
           const base = (window.BACKEND_URL || window.location.origin).replace(/\/+$/, "");
           const sessionId = localStorage.getItem("sessionId") || "";
+          if (!sessionId) {
+            status.textContent = "Reconnect with Phantom to establish a vault session first.";
+            return;
+          }
           const res = await fetch(`${base}/api/transfer-fizz`, {
             method: "POST",
             headers: {
@@ -561,9 +608,27 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
       });
     }
 
-    if (window.PLAYER_WALLET) {
+    const adapter = getWalletAdapter();
+    if (adapter && adapter.isConnected && adapter.isConnected()) {
+      syncWalletUi(adapter.getWalletAddress(), adapter.getWalletType());
+    } else if (window.PLAYER_WALLET) {
       refreshOnChain(window.PLAYER_WALLET);
     }
+
+    window.addEventListener("web3WalletStateChanged", async (event) => {
+      const detail = event && event.detail ? event.detail : {};
+      const addrEl = document.getElementById("afw-address");
+      if (detail.connected && detail.address) {
+        await syncWalletUi(detail.address, detail.type);
+        if (addrEl) addrEl.style.color = "var(--vault-gold)";
+      } else {
+        window.PLAYER_WALLET = null;
+        if (addrEl) {
+          addrEl.textContent = "WALLET: DISCONNECTED";
+          addrEl.style.color = "";
+        }
+      }
+    });
 
     renderWastelandStats();
     renderNFTs();
@@ -571,7 +636,13 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     safeLog("[AFW] Wallet app initialized");
   }
 
-  window.addEventListener("DOMContentLoaded", initWallet);
+  window.refreshOnChain = refreshOnChain;
+  window.initWallet = initWallet;
+  window.addEventListener("DOMContentLoaded", () => {
+    if (typeof window.initWallet === "function") {
+      window.initWallet();
+    }
+  });
 })();
 // ------------------------------------------------------------
 // MULTICHAIN + PARTNER TOKEN EXPANSION (CHUNK 3)

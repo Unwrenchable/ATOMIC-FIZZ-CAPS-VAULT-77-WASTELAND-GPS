@@ -22,7 +22,7 @@
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://vercel.live 'unsafe-inline' 'unsafe-eval';
-    connect-src 'self' https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://*.solana.com wss://*.solana.com https://atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz;
+    connect-src 'self' https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://*.solana.com wss://*.solana.com https://atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://api.phantom.app https://*.phantom.app https://wallet.phantom.app;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com data:;
     img-src 'self' data: https: blob:;
@@ -242,6 +242,9 @@
   </div>
 
   <!-- Scripts -->
+  <script src="/js/lib/bs58.js"></script>
+  <script src="/js/authClient.js"></script>
+  <script src="/js/modules/web3-wallet-adapter.js"></script>
   <script src="/fizzfun/fizzfun.js"></script>
 </body>
 </html>

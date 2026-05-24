@@ -1,3 +1,10 @@
+---
+name: Task Queue
+description: >
+  Shared task queue and event log for repository agents to coordinate active
+  work, avoid collisions, and record completed tasks.
+---
+
 # ☢️ ATOMIC FIZZ CAPS — Agent Task Queue
 
 > **Vault-Tec Classification: UNCLASSIFIED / ALL AGENTS**
@@ -44,6 +51,41 @@ _No active tasks. The wasteland is quiet — for now._
 ---
 
 ## Completed Tasks
+
+### [2026-05-24] Task: Repair wallet and fizz.fun wallet wiring
+- **Agent**: copilot
+- **Files**: `public/wallet/index.html`, `public/wallet/wallet.js`, `public/fizzfun/index.html`, `public/fizzfun/fizzfun.js`, `public/js/modules/web3-wallet-adapter.js`, `backend/api/fizz-fun.js`
+- **Status**: `complete`
+- **What**: Wired the standalone wallet and fizz.fun pages onto the shared wallet adapter/auth stack instead of the duplicate legacy click handlers, restored persisted local-wallet sessions, stopped the adapter from attempting impossible backend auth for the demo integrated wallet, exposed the wallet page init/refresh hooks so later wallet.js chunks actually patch the live bootstrap, and fixed `backend/api/fizz-fun.js` to use the older CommonJS SPL-token ATA helper shape that matches the repo's pinned package versions.
+- **Verified**: `node --check public/wallet/wallet.js`, `node --check public/fizzfun/fizzfun.js`, `node --check public/js/modules/web3-wallet-adapter.js`, `node --check backend/api/fizz-fun.js`, `node -e "require('./backend/api/fizz-fun.js'); console.log('fizz-fun route ok')"`, `npm test`, and `npm run lint` (warnings only).
+
+### [2026-05-24] Task: Replace mock NFT exchange with escrow marketplace flow
+- **Agent**: copilot
+- **Files**: `backend/api/exchange.js`, `backend/lib/nft-marketplace.js`, `public/exchange.html`, `public/js/exchange.js`
+- **Status**: `complete`
+- **What**: Reworked the Scavenger Exchange NFT path into a real escrow-backed marketplace: the backend now prepares seller NFT escrow transactions and buyer FIZZ payment transactions, verifies both on-chain signatures, settles the NFT + FIZZ payout from server escrow, and the exchange page now uses authenticated wallet-backed `player-nfts` data plus the two-step prepare/confirm flow instead of mock NFTs and manual payment messaging.
+- **Verified**: `node --check backend/lib/nft-marketplace.js`, `node --check backend/api/exchange.js`, `node --check public/js/exchange.js`, `node -e "require('./backend/api/exchange.js'); console.log('exchange route ok')"`, `npm test` (`104 passed, 0 failed`), and `npm run lint` (warnings only).
+
+### [2026-05-24] Task: Correct mainnet env guidance
+- **Agent**: copilot
+- **Files**: `.env.mainnet`, `docs/setup/ENVIRONMENT_VARIABLES.md`, `.github/agents/tasks.md`
+- **Status**: `complete`
+- **What**: Updated the mainnet env template to use `SOLANA_RPC` as the canonical RPC variable instead of `SOLANA_RPC_URL`, added `TOKEN_MINT` alongside `CAPS_MINT`, and documented that backend health/config checks key off `SOLANA_RPC` even though some older routes still fall back to `SOLANA_RPC_URL`.
+- **Verified**: Readback of `.env.mainnet` and `docs/setup/ENVIRONMENT_VARIABLES.md` shows the corrected `SOLANA_RPC` guidance and the matching `TOKEN_MINT` entry for CAPS/Fizz.fun deployment.
+
+### [2026-05-24] Task: Repair player profile contract and frontend regressions
+- **Agent**: copilot
+- **Files**: `backend/api/player.js`, `public/index.html`, `public/js/modules/battles.js`, `public/js/modules/companions.js`, `public/js/overseer/overseer.js`, `public/js/main.js`, `.github/agents/tasks.md`
+- **Status**: `complete`
+- **What**: Enforced auth on `GET /api/player`, normalized player-profile responses to include both the legacy flat fields and the canonical `profile` envelope, updated the HUD wallet panel to read either shape safely, and cleared the QA-reported frontend runtime breaks caused by undefined `hit`, `original`, `API_BASE`/local-storage companion keys, and `locCountEl`.
+- **Verified**: `npm test` reporting `104 passed, 0 failed`, `npm run lint` exiting with warnings only, and an isolated backend boot on port `3100` returning `401 {"ok":false,"error":"Missing session"}` for unauthenticated `GET /api/player` while mounting `/api/mint-item`, `/api/player`, `/api/buy-stimpak`, and `/api/fizz-fun`.
+
+### [2026-05-24] Task: Restore workflow and launch-audit alignment
+- **Agent**: copilot
+- **Files**: `tests/security.test.js`, `.github/workflows/ci.yml`, `.github/workflows/anchor-build.yml`, `.github/workflows/deploy-devnet.yml`, `.github/workflows/test-suite.yml`, `.github/workflows/release.yml`, `.github/workflows/update-program-id.yml`, `docs/MCP_SETUP.md`, `.github/agents/tasks.md`
+- **Status**: `complete`
+- **What**: Fixed the stale Solana audit test path so the security suite targets the real `programs/fizzcaps_onchain` crate again, restored the missing Anchor/devnet/release workflow files into the local repo, aligned Solana CI to install Anchor-compatible Agave 2.3.0 before `avm` 0.32.1, wired deploy artifacts into program-ID auto-update, and refreshed the MCP setup doc so it matches the actual configured server set.
+- **Verified**: `node --check mcp/vault77-server.js`, `npm test` reporting `104 passed, 0 failed`, `npm run lint` exiting with warnings only, and Python `yaml.safe_load` successfully parsing every file in `.github/workflows/`.
 
 ### [2026-05-15] Task: Rewire character and NPC generation to Overseer
 - **Agent**: copilot

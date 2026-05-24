@@ -950,8 +950,8 @@ test("BUG-037: game loop ENCOUNTER_CHANCE is at most 0.15 (production-appropriat
 });
 
 test("SEC-AUDIT-001: Solana program lib.rs uses u128 for bonding curve arithmetic (not raw u64 multiply)", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // u128 cast must be present for the constant-product k = virtualSol * tokenReserve
   // Virtual SOL (30e9) * token_reserve (800e15) = 2.4e28 > u64::MAX → panic without u128
   assert.ok(
@@ -966,8 +966,8 @@ test("SEC-AUDIT-001: Solana program lib.rs uses u128 for bonding curve arithmeti
 });
 
 test("SEC-AUDIT-002: Solana program ClaimLoot server_key is constrained to config.server_key", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // server_key must be address-constrained so attackers can't supply their own keypair
   assert.ok(
     src.includes("config.server_key"),
@@ -976,8 +976,8 @@ test("SEC-AUDIT-002: Solana program ClaimLoot server_key is constrained to confi
 });
 
 test("SEC-AUDIT-003: Solana program FizzBondingCurve struct includes graduated_at field", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // graduated_at must exist in the struct definition (was missing, causing compile error)
   assert.ok(
     src.includes("graduated_at"),
@@ -999,8 +999,8 @@ test("SEC-AUDIT-003: Solana program FizzBondingCurve struct includes graduated_a
 });
 
 test("SEC-AUDIT-004: Solana program FizzBuyTokens curve_token_vault has associated_token constraint", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // curve_token_vault in FizzBuyTokens must be constrained to bonding_curve's ATA
   assert.ok(
     src.includes("associated_token::authority = bonding_curve"),
@@ -1009,13 +1009,13 @@ test("SEC-AUDIT-004: Solana program FizzBuyTokens curve_token_vault has associat
 });
 
 test("SEC-AUDIT-005: Solana program FizzSellTokens treasury is constrained to config.treasury", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // FizzSellTokens must include config and constrain treasury address
   // Previously config was missing and treasury had no address constraint
   assert.ok(
-    src.includes("InvalidTreasury"),
-    "lib.rs FizzSellTokens treasury must be constrained with InvalidTreasury error to prevent fee redirection"
+    src.includes("address = config.treasury"),
+    "lib.rs FizzSellTokens treasury must be constrained to config.treasury to prevent fee redirection"
   );
 });
 
@@ -1029,8 +1029,8 @@ test("SEC-AUDIT-006: loot-voucher.js validates GPS proximity before signing vouc
 });
 
 test("SEC-AUDIT-008: Solana program claim_loot validates voucher timestamp freshness", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // VoucherExpired error must be defined and used
   assert.ok(
     src.includes("VoucherExpired"),

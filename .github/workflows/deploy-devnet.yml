@@ -1,0 +1,81 @@
+name: Deploy to Devnet
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      ANCHOR_PROVIDER_URL: https://api.devnet.solana.com
+      ANCHOR_WALLET: /home/runner/.config/solana/id.json
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Solana CLI (Anchor-compatible)
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.0/install)"
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
+          solana --version
+          command -v agave-install
+
+      - name: Install Anchor
+        run: |
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          avm install 0.32.1
+          avm use 0.32.1
+          anchor --version
+
+      - name: Setup Wallet
+        run: |
+          mkdir -p ~/.config/solana
+          echo "${{ secrets.SOLANA_KEYPAIR }}" > ~/.config/solana/id.json
+
+      - name: Sync Anchor Program IDs
+        run: anchor keys sync
+
+      - name: Build Program
+        run: anchor build
+
+      - name: Deploy Program
+        run: anchor deploy
+
+      - name: Upload Deploy Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: fizzcaps_onchain-artifacts
+          path: |
+            target/deploy/*.so
+            target/deploy/*-keypair.json
+            target/idl/*.json
+            Anchor.toml
+
+      - name: Resolve Program ID
+        id: program
+        run: |
+          if [ -f target/deploy/fizzcaps_onchain-keypair.json ]; then
+            PROGRAM_ID=$(solana address -k target/deploy/fizzcaps_onchain-keypair.json)
+          else
+            PROGRAM_ID=$(
+              sed -nE '/^\[programs\.devnet\]/,/^\[/{s/^\s*fizzcaps_onchain\s*=\s*"([^"]+)".*$/\1/p}' Anchor.toml | head -n1
+            )
+          fi
+          if [ -z "$PROGRAM_ID" ]; then
+            echo "Unable to resolve fizzcaps_onchain program ID from build artifacts or Anchor.toml."
+            echo "program_id=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "program_id=$PROGRAM_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Upload IDL
+        if: steps.program.outputs.program_id != ''
+        run: anchor idl upgrade "${{ steps.program.outputs.program_id }}" target/idl/fizzcaps_onchain.json

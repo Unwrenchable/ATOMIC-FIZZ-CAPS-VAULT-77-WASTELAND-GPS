@@ -1,0 +1,59 @@
+name: Test Suite
+
+on:
+  pull_request:
+  push:
+    branches: [main, realaiproject]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      ANCHOR_PROVIDER_URL: https://api.devnet.solana.com
+      ANCHOR_WALLET: /home/runner/.config/solana/id.json
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Solana CLI (Anchor-compatible)
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.0/install)"
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
+          solana --version
+          command -v agave-install
+
+      - name: Install Anchor
+        run: |
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          avm install 0.32.1
+          avm use 0.32.1
+          anchor --version
+
+      - name: Setup Wallet
+        run: |
+          mkdir -p /home/runner/.config/solana
+          solana-keygen new --no-bip39-passphrase -o /home/runner/.config/solana/id.json
+
+      - name: Verify Solana build tooling
+        run: |
+          solana --version
+          rustup show
+          which cargo-build-sbf || true
+          cargo-build-sbf --version || true
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Sync Anchor Program IDs
+        run: anchor keys sync
+
+      - name: Build Anchor Program
+        run: anchor build
+
+      - name: Run Security Test Suite
+        run: npm test

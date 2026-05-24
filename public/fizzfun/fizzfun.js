@@ -39,6 +39,12 @@
     }
   }
 
+  function getWalletAdapter() {
+    return window.web3Wallet && typeof window.web3Wallet.connect === "function"
+      ? window.web3Wallet
+      : null;
+  }
+
   // ------------------------------------------------------------
   // TOAST NOTIFICATIONS
   // ------------------------------------------------------------
@@ -85,31 +91,54 @@
   const WalletManager = {
     isConnected: false,
     address: null,
+    walletType: null,
 
-    async connectPhantom() {
-      try {
-        if (window.solana && window.solana.isPhantom) {
-          const response = await window.solana.connect();
-          this.address = response.publicKey.toString();
-          this.isConnected = true;
-          this.updateUI();
-          showToast("Phantom vault link established!", "success");
-          FizzFun.onWalletConnect(this.address);
-          return this.address;
-        } else {
-          showToast("Phantom not detected. Install it, wastelander.", "error");
-          window.open("https://phantom.app/", "_blank");
-        }
-      } catch (err) {
-        safeWarn("[Wallet] Phantom connection failed:", err);
-        showToast("Failed to link Phantom vault", "error");
+    applyConnection(address, walletType) {
+      this.address = address || null;
+      this.walletType = walletType || null;
+      this.isConnected = !!address;
+      this.updateUI();
+      if (this.isConnected) {
+        window.PLAYER_WALLET = this.address;
+        FizzFun.onWalletConnect(this.address);
+      } else {
+        window.PLAYER_WALLET = null;
       }
     },
 
-    disconnect() {
-      this.isConnected = false;
-      this.address = null;
-      this.updateUI();
+    async connectWallet() {
+      try {
+        const adapter = getWalletAdapter();
+        if (adapter) {
+          const success = await adapter.connect();
+          if (success) {
+            this.applyConnection(adapter.getWalletAddress(), adapter.getWalletType());
+            showToast(`${adapter.getWalletType()} vault link established!`, "success");
+            return this.address;
+          }
+        }
+
+        if (window.solana && window.solana.isPhantom) {
+          const response = await window.solana.connect();
+          this.applyConnection(response.publicKey.toString(), "phantom");
+          showToast("Phantom vault link established!", "success");
+          return this.address;
+        }
+
+        showToast("No Solana wallet detected. Use Phantom or the local Fizz wallet.", "error");
+        window.open("https://phantom.app/", "_blank");
+      } catch (err) {
+        safeWarn("[Wallet] Wallet connection failed:", err);
+        showToast("Failed to link wallet vault", "error");
+      }
+    },
+
+    async disconnect() {
+      const adapter = getWalletAdapter();
+      if (adapter && adapter.isConnected && adapter.isConnected()) {
+        await adapter.disconnect();
+      }
+      this.applyConnection(null, null);
       showToast("Vault link severed", "warning");
     },
 
@@ -124,7 +153,8 @@
           statusDot.className = "status-dot connected";
         }
         if (addressEl) {
-          addressEl.textContent = `VAULT LINK: ${shortAddr}`;
+          const typeLabel = this.walletType ? ` (${String(this.walletType).toUpperCase()})` : "";
+          addressEl.textContent = `VAULT LINK: ${shortAddr}${typeLabel}`;
         }
         if (connectBtn) {
           connectBtn.textContent = "\u26a1 SEVER LINK";
@@ -139,8 +169,19 @@
         }
         if (connectBtn) {
           connectBtn.textContent = "\u26a1 LINK WALLET";
-          connectBtn.onclick = () => this.connectPhantom();
+          connectBtn.onclick = () => this.connectWallet();
         }
+      }
+    },
+
+    initFromExistingConnection() {
+      const adapter = getWalletAdapter();
+      if (adapter && adapter.isConnected && adapter.isConnected()) {
+        this.applyConnection(adapter.getWalletAddress(), adapter.getWalletType());
+        return;
+      }
+      if (window.solana && window.solana.isPhantom && window.solana.publicKey) {
+        this.applyConnection(window.solana.publicKey.toString(), "phantom");
       }
     }
   };
@@ -605,13 +646,14 @@
       });
     }
 
-    // Connect wallet button
-    const connectBtn = document.getElementById("connect-wallet-btn");
-    if (connectBtn) {
-      connectBtn.addEventListener("click", () => {
-        WalletManager.connectPhantom();
-      });
-    }
+    window.addEventListener("web3WalletStateChanged", (event) => {
+      const detail = event && event.detail ? event.detail : {};
+      if (detail.connected && detail.address) {
+        WalletManager.applyConnection(detail.address, detail.type);
+      } else {
+        WalletManager.applyConnection(null, null);
+      }
+    });
   }
 
   // ------------------------------------------------------------
@@ -624,6 +666,7 @@
     initBootSequence();
     
     // Initialize wallet UI
+    WalletManager.initFromExistingConnection();
     WalletManager.updateUI();
     
     // Initialize event listeners

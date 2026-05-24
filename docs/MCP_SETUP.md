@@ -17,13 +17,18 @@ Desktop, Cursor) plugs into any MCP server.
 
 ## Servers Configured in This Repo
 
-Three MCP servers are defined in [`.mcp.json`](../.mcp.json) at the repo root:
+Several MCP servers are defined in [`.mcp.json`](../.mcp.json) at the repo root:
 
 | Server | What it provides |
 |---|---|
 | **`vault77-game`** | Live game data: players, locations, items, quests, config, leaderboard |
 | **`github`** | GitHub repo: issues, PRs, commits, code search |
 | **`filesystem`** | Read-only access to `backend/`, `public/`, `docs/`, `mcp/` |
+| **`redis`** | Redis inspection and key/value access |
+| **`cloudflare`** | Cloudflare account tooling |
+| **`solana`** | Solana RPC / chain tooling |
+| **`render`** | Render deployment tooling |
+| **`vercel`** | Vercel deployment tooling |
 
 ---
 

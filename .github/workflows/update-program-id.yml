@@ -1,0 +1,66 @@
+name: Auto Update Program ID
+
+on:
+  workflow_run:
+    workflows: ["Deploy to Devnet"]
+    types:
+      - completed
+
+jobs:
+  update-id:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download deploy artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: fizzcaps_onchain-artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: deploy-artifacts
+
+      - name: Install Solana CLI (Anchor-compatible)
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.0/install)"
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
+          solana --version
+
+      - name: Extract Program ID
+        id: pid
+        run: |
+          KEYPAIR_PATH="deploy-artifacts/target/deploy/fizzcaps_onchain-keypair.json"
+          if [ ! -f "$KEYPAIR_PATH" ]; then
+            echo "Program keypair not found at $KEYPAIR_PATH; skipping update."
+            echo "::warning::Program keypair artifact not found; skipping auto-update"
+            echo "program_id=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          PROGRAM_ID=$(solana address -k "$KEYPAIR_PATH")
+          echo "program_id=$PROGRAM_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Update Anchor.toml
+        if: steps.pid.outputs.program_id != ''
+        run: |
+          awk -v pid="${{ steps.pid.outputs.program_id }}" '
+            BEGIN { in_devnet = 0 }
+            /^\[programs\.devnet\]/ { in_devnet = 1; print; next }
+            /^\[/ && in_devnet { in_devnet = 0 }
+            in_devnet && /^\s*fizzcaps_onchain\s*=/ {
+              sub(/"[^"]*"/, "\"" pid "\"")
+            }
+            { print }
+          ' Anchor.toml > Anchor.toml.tmp && mv Anchor.toml.tmp Anchor.toml
+
+      - name: Commit Changes
+        if: steps.pid.outputs.program_id != ''
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add Anchor.toml
+          git diff --cached --quiet && exit 0
+          git commit -m "Auto-update program ID to ${{ steps.pid.outputs.program_id }}"
+          git push

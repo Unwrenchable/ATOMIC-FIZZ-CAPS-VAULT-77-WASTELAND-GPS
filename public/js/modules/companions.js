@@ -13,6 +13,10 @@
   if (!window.Game) window.Game = {};
   if (!window.Game.modules) window.Game.modules = {};
 
+  const API_BASE = window.API_BASE || "https://api.atomicfizzcaps.xyz";
+  const LS_ROSTER = "afw_companions_roster";
+  const LS_CATALOG = "afw_companions_catalog";
+
   // ----------------------------------------------------------
   // Combat and Command System (BUG-212)
   // ----------------------------------------------------------

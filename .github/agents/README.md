@@ -1,3 +1,11 @@
+---
+name: Agent README
+description: >
+  Top-level orientation and context pack for AI agents working on the Atomic
+  Fizz Caps repository. Read first for project identity, architecture, and
+  high-level guidance.
+---
+
 # ☢️ ATOMIC FIZZ CAPS — Agent Context Pack
 
 > **Vault-Tec Classification: UNCLASSIFIED / ALL AGENTS**

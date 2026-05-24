@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-fizzcaps_onchain = "5bhhmQTNNMGZdCnEBwKASCryF5g9cUbboeQJ7gEXuXMH"
+fizzcaps_onchain = "DETVnjSWAoDtANfs3xse2c4DEryGsWuS6bsxL3oU2bgn"
 
 [registry]
 url = "https://api.apr.dev"

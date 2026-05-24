@@ -91,6 +91,20 @@ async function saveProfile(wallet, profile) {
   }
 }
 
+function buildProfileResponse(wallet, profile) {
+  const safeProfile = profile || {};
+  const items = Array.isArray(safeProfile.inventory) ? safeProfile.inventory : [];
+  const nfts = Array.isArray(safeProfile.nfts) ? safeProfile.nfts : [];
+  return {
+    ok: true,
+    wallet,
+    profile: safeProfile,
+    ...safeProfile,
+    items,
+    nfts,
+  };
+}
+
 // ------------------------------------------------------------
 // POST /api/player/create
 // ------------------------------------------------------------
@@ -102,7 +116,7 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
     const { name, special: incomingSpecial, background, traits } = req.body;
     const existing = await loadProfile(wallet);
     if (existing) {
-      return res.json({ ok: true, profile: existing });
+      return res.json(buildProfileResponse(wallet, existing));
     }
 
     // ----------------------------------------------------------
@@ -205,7 +219,7 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
     };
 
     await saveProfile(wallet, profile);
-    return res.json({ ok: true, profile });
+    return res.json(buildProfileResponse(wallet, profile));
   } catch (err) {
     console.error("[player] create error:", err);
     return res.status(500).json({ ok: false, error: "Failed to create profile" });
@@ -215,7 +229,7 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
 // ------------------------------------------------------------
 // GET /api/player (authenticated - get current player's profile)
 // ------------------------------------------------------------
-router.get("/", playerLimiter, async (req, res) => {
+router.get("/", authMiddleware, playerLimiter, async (req, res) => {
   try {
     // Check if user is authenticated
     if (!req.player || !req.player.wallet) {
@@ -229,7 +243,7 @@ router.get("/", playerLimiter, async (req, res) => {
       return res.status(404).json({ ok: false, error: "Profile not found. Please create a character first." });
     }
 
-    return res.json({ ok: true, profile });
+    return res.json(buildProfileResponse(wallet, profile));
   } catch (err) {
     console.error("[player] load current profile error:", err);
     return res.status(500).json({ ok: false, error: "Failed to load profile" });
@@ -252,7 +266,7 @@ router.get("/:wallet", playerLimiter, async (req, res) => {
       return res.status(404).json({ ok: false, error: "not found" });
     }
 
-    return res.json({ ok: true, profile });
+    return res.json(buildProfileResponse(wallet, profile));
   } catch (err) {
     console.error("[player] load error:", err);
     return res.status(500).json({ ok: false, error: "Failed to load profile" });
@@ -301,7 +315,7 @@ router.post("/special/update", authMiddleware, playerLimiter, async (req, res) =
     profile.special = sanitizedSpecial;
     await saveProfile(wallet, profile);
 
-    return res.json({ ok: true, profile });
+    return res.json(buildProfileResponse(wallet, profile));
   } catch (err) {
     console.error("[player] special update error:", err);
     return res.status(500).json({ ok: false, error: "Failed to update SPECIAL" });
@@ -324,7 +338,7 @@ router.post("/terminal/unlock", authMiddleware, playerLimiter, async (req, res) 
     profile.unlockedTerminal = true;
     await saveProfile(wallet, profile);
 
-    return res.json({ ok: true, profile });
+    return res.json(buildProfileResponse(wallet, profile));
   } catch (err) {
     console.error("[player] terminal unlock error:", err);
     return res.status(500).json({ ok: false, error: "Failed to unlock terminal" });
@@ -356,7 +370,7 @@ router.post("/respec", authMiddleware, playerLimiter, async (req, res) => {
     profile.special = { ...DEFAULT_SPECIAL };
     await saveProfile(wallet, profile);
 
-    return res.json({ ok: true, profile });
+    return res.json(buildProfileResponse(wallet, profile));
   } catch (err) {
     console.error("[player] respec error:", err);
     return res.status(500).json({ ok: false, error: "Failed to respec SPECIAL" });

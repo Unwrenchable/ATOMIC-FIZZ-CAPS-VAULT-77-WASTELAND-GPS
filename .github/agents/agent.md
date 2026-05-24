@@ -1,3 +1,10 @@
+---
+name: Agent Guide
+description: >
+  Core repository guidance for AI agents covering project structure,
+  toolchain, conventions, deployment, and key engineering constraints.
+---
+
 # ☢️ ATOMIC FIZZ CAPS — Agent Guidance
 
 Use this file to orient yourself before suggesting changes to the

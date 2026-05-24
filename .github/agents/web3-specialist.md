@@ -1,3 +1,11 @@
+---
+name: Web3 Specialist
+description: >
+  Solana and Web3 specialist for Atomic Fizz Caps, covering wallet flows,
+  SPL tokens, NFT tooling, bridge integration, and secure on-chain gameplay
+  interactions.
+---
+
 # ☢️ Web3 / Solana Specialist Agent
 
 ## Role

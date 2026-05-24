@@ -807,14 +807,21 @@
                 const apiUrl = (window.API_BASE || "") + "/api/player";
                 const res = await auth.authedFetch(apiUrl, { method: "GET" });
                 const json = await safeJson(res);
+                const profile = json.profile || json;
+                const items = Array.isArray(profile.inventory)
+                  ? profile.inventory
+                  : (Array.isArray(json.items) ? json.items : []);
+                const nfts = Array.isArray(profile.nfts)
+                  ? profile.nfts
+                  : (Array.isArray(json.nfts) ? json.nfts : []);
 
                 document.getElementById("stat-wallet").textContent = wallet;
-                document.getElementById("stat-caps").textContent = json.caps || 0;
+                document.getElementById("stat-caps").textContent = profile.caps || 0;
                 document.getElementById("fizzWalletAddress").textContent = wallet;
-                document.getElementById("fizzWalletCaps").textContent = json.caps || 0;
-                document.getElementById("fizzWalletXP").textContent = json.xp || 0;
-                document.getElementById("fizzWalletItems").textContent = (json.items && json.items.length) || 0;
-                document.getElementById("fizzWalletNFTs").textContent = (json.nfts && json.nfts.length) || 0;
+                document.getElementById("fizzWalletCaps").textContent = profile.caps || 0;
+                document.getElementById("fizzWalletXP").textContent = profile.xp || 0;
+                document.getElementById("fizzWalletItems").textContent = items.length;
+                document.getElementById("fizzWalletNFTs").textContent = nfts.length;
               } else {
                 hudAddress.textContent = "WALLET: DISCONNECTED";
                 if (hudBtn) hudBtn.style.display = "inline-block";

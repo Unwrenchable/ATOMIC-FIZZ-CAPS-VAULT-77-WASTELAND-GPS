@@ -62,6 +62,8 @@
       this.attachFaction(Terminal, Engines.Faction);
       this.attachThreat(Terminal, Engines.Threat);
       this.attachWeather(Terminal, Engines.Weather);
+      this.extendCommands(Terminal);
+      this.extendGameEvents(Terminal, Engines);
       
       console.log("[Overseer] Brain online.");
       overseerSay("Overseer AI online.");
@@ -189,7 +191,11 @@
     // COMMAND EXTENSIONS
     // -------------------------------------------------------------------------
     extendCommands(Terminal) {
-      Overseer.extendCommands({});
+      window.Overseer?.extendCommands?.({});
+      const originalHandleInput =
+        typeof Terminal.handleInput === "function"
+          ? Terminal.handleInput.bind(Terminal)
+          : async () => {};
 
       Terminal.handleInput = async function (raw) {
         const line = raw.trim().toLowerCase();
@@ -208,7 +214,7 @@
           await Terminal.say();
           return;
         }
-        await original(raw);
+        await originalHandleInput(raw);
       };
     },
 
@@ -216,7 +222,11 @@
     // GAME EVENT REACTIONS
     // -------------------------------------------------------------------------
     extendGameEvents(Terminal, Engines) {
-      
+      const originalHandleGameEvent =
+        typeof Terminal.handleGameEvent === "function"
+          ? Terminal.handleGameEvent.bind(Terminal)
+          : async () => {};
+
       Terminal.handleGameEvent = async function (data) {
         const type = data.type || "";
         const payload = data.payload || {};
@@ -267,7 +277,7 @@
           if (region.includes("basin")) await Terminal.loreComment("survivor_notes");
         }
 
-        await original(data);
+        await originalHandleGameEvent(data);
       };
     }
   };

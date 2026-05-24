@@ -21,7 +21,7 @@
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'self' https://cdn.jsdelivr.net https://unpkg.com 'unsafe-inline';
-    connect-src 'self' https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://*.solana.com wss://*.solana.com https://atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz;
+    connect-src 'self' https://api.mainnet-beta.solana.com https://api.devnet.solana.com https://*.solana.com wss://*.solana.com https://atomicfizzcaps.xyz https://api.atomicfizzcaps.xyz https://api.phantom.app https://*.phantom.app https://wallet.phantom.app;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com data:;
     img-src 'self' data: https: blob:;
@@ -691,90 +691,10 @@
 
 <!-- SCRIPTS -->
 <script src="/js/main.js"></script>
+<script src="/js/lib/bs58.js"></script>
+<script src="/js/authClient.js"></script>
 <script src="/js/modules/web3-wallet-adapter.js"></script>
 <script src="wallet.js"></script>
-
-<!-- Wallet Integration Script -->
-<script>
-(function() {
-  'use strict';
-  
-  // Wait for web3Wallet to be available
-  function initWalletIntegration() {
-    if (typeof window.web3Wallet === 'undefined') {
-      setTimeout(initWalletIntegration, 100);
-      return;
-    }
-    
-    // Wire web3-wallet-adapter to wallet UI
-    const connectBtn = document.getElementById('afw-connect');
-    const localBtn = document.getElementById('afw-local');
-    
-    if (connectBtn) {
-      connectBtn.addEventListener('click', async () => {
-        try {
-          const success = await window.web3Wallet.connect('phantom');
-          if (success && window.refreshOnChain) {
-            await window.refreshOnChain(window.web3Wallet.getWalletAddress());
-          }
-        } catch (err) {
-          console.error('[Wallet] Phantom connect failed:', err);
-        }
-      });
-    }
-    
-    if (localBtn) {
-      localBtn.addEventListener('click', async () => {
-        try {
-          const success = await window.web3Wallet.connect('integrated');
-          if (success && window.refreshOnChain) {
-            await window.refreshOnChain(window.web3Wallet.getWalletAddress());
-          }
-        } catch (err) {
-          console.error('[Wallet] Integrated wallet connect failed:', err);
-        }
-      });
-    }
-    
-    // Listen for wallet state changes
-    window.addEventListener('web3WalletStateChanged', (e) => {
-      const { connected, address, type } = e.detail;
-      const addrEl = document.getElementById('afw-address');
-      
-      if (addrEl) {
-        if (connected && address) {
-          addrEl.textContent = `WALLET: ${address.slice(0, 6)}...${address.slice(-4)} (${type})`;
-          addrEl.style.color = 'var(--vault-gold)';
-        } else {
-          addrEl.textContent = 'WALLET: DISCONNECTED';
-          addrEl.style.color = '';
-        }
-      }
-      
-      // Update global PLAYER_WALLET for compatibility
-      window.PLAYER_WALLET = connected ? address : null;
-    });
-    
-    // Check for existing connection
-    if (window.web3Wallet.isConnected()) {
-      const addr = window.web3Wallet.getWalletAddress();
-      window.PLAYER_WALLET = addr;
-      if (window.refreshOnChain) {
-        window.refreshOnChain(addr);
-      }
-    }
-    
-    console.log('[Wallet] Integration initialized');
-  }
-  
-  // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initWalletIntegration);
-  } else {
-    initWalletIntegration();
-  }
-})();
-</script>
 
 </body>
 </html>

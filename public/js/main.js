@@ -1768,6 +1768,7 @@
       attachMapReference();
       initUI();
 
+      const locCountEl = document.getElementById("locations-count");
       if (locCountEl) locCountEl.textContent = window.DATA.locations.length;
 
       // Render local inventory + quests + HUD

@@ -26,7 +26,7 @@ const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
 const { Connection, PublicKey, Transaction: _Transaction } = require("@solana/web3.js");
 const { Program: _Program, AnchorProvider: _AnchorProvider, BN: _BN } = require("@coral-xyz/anchor");
-const { getAssociatedTokenAddress } = require("@solana/spl-token");
+const { Token, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } = require("@solana/spl-token");
 const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
 
 // SEC-008 FIX: Rate limiters for Fizz.fun endpoints (previously had none)
@@ -372,7 +372,12 @@ router.get("/stats", requireConfig, fizzReadLimiter, async (req, res) => {
 async function getCapsBalance(wallet) {
     try {
         const connection = new Connection(process.env.SOLANA_RPC || process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com");
-        const ata = await getAssociatedTokenAddress(CAPS_MINT, wallet);
+        const ata = await Token.getAssociatedTokenAddress(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            CAPS_MINT,
+            wallet
+        );
         const balance = await connection.getTokenAccountBalance(ata);
         return parseInt(balance.value.amount);
     } catch (err) {

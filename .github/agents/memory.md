@@ -1,3 +1,10 @@
+---
+name: Agent Memory
+description: >
+  Shared repository memory for verified facts, conventions, commands, and
+  gotchas that AI agents should read before making changes.
+---
+
 # ☢️ ATOMIC FIZZ CAPS — Agent Memory
 
 > **WARNING — NO SECRETS ALLOWED.**
@@ -122,6 +129,16 @@ _(Things that tripped up a developer or AI assistant)_
 ## Verified Facts from Agent Sessions
 
 _(Confirmed by agent runs — newest first)_
+
+### [2026-05-24] Wallet and fizz.fun now depend on the shared web3 adapter bootstrap
+- **What**: `public/wallet/index.html` and `public/fizzfun/index.html` now load `bs58`, `AuthClient`, and `public/js/modules/web3-wallet-adapter.js`, while `public/wallet/wallet.js` exposes `window.initWallet` / `window.refreshOnChain` before its later patch-chunks run, and `public/fizzfun/fizzfun.js` now uses the adapter's connection state instead of a Phantom-only inline flow.
+- **Why**: The standalone wallet/fizz.fun pages had drifted into duplicate connection logic that did not share auth state, did not restore the local demo wallet correctly, and left the wallet page's later chunk patches disconnected from the actual bootstrap path.
+- **Verified**: `node --check public/wallet/wallet.js`, `node --check public/fizzfun/fizzfun.js`, `node --check public/js/modules/web3-wallet-adapter.js`, plus repo-wide `npm test` / `npm run lint`.
+
+### [2026-05-24] Exchange NFT sales now use escrow + on-chain settlement
+- **What**: `backend/api/exchange.js` and `backend/lib/nft-marketplace.js` now implement a two-step NFT marketplace flow: seller listing calls `/post-nft/prepare` to get an escrow transfer transaction, confirms with `/post-nft/confirm`, buyer calls `/buy-trade` to get a FIZZ transfer transaction into escrow, then `/buy-trade/confirm` verifies the payment signature and atomically releases the NFT to the buyer while paying the seller from escrow.
+- **Why**: The old exchange only reserved NFT listings and told players to manually pay. Moving both NFT custody and FIZZ settlement on-chain makes the in-game marketplace a real tradable economy path instead of placeholder UX.
+- **Verified**: `node --check backend/lib/nft-marketplace.js`, `node --check backend/api/exchange.js`, `node --check public/js/exchange.js`, `node -e "require('./backend/api/exchange.js'); console.log('exchange route ok')"`, and repo-wide `npm test` / `npm run lint`.
 
 ### [2026-05-15] `/api/ai-character/*` now runs on the self-hosted Overseer context
 - **What**: `backend/api/ai-character.js` now uses `backend/realai/overseer-creator.js` plus `resolveOverseerContext()` instead of browser-side Grok plumbing, so concept, name, and NPC dossier generation all inherit the authenticated player's stored Overseer conversation and learned facts.

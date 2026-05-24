@@ -1,3 +1,10 @@
+---
+name: Bootstrap Guide
+description: >
+  Local setup and bootstrap instructions for running the Atomic Fizz Caps
+  project, including backend, frontend, and optional Solana tooling steps.
+---
+
 # ☢️ ATOMIC FIZZ CAPS — Local Bootstrap Guide
 
 Follow these steps to run the Atomic Fizz Caps Vault-77 Wasteland GPS game

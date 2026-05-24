@@ -12,7 +12,7 @@
     "@coral-xyz/anchor": "^0.32.0",
     "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
     "@solana/spl-token": "^0.1.8",
-    "@solana/web3.js": "^1.98.4",
+    "@solana/web3.js": "1.91.8",
     "bcrypt": "^6.0.0",
     "body-parser": "^1.20.2",
     "bs58": "^6.0.0",
@@ -25,8 +25,9 @@
     "ioredis": "^5.4.1",
     "node-fetch": "^2.7.0",
     "redis": "^4.6.13",
+    "rpc-websockets": "7.11.0",
     "tweetnacl": "^1.0.3",
-    "uuid": "^14.0.0"
+    "uuid": "8.3.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

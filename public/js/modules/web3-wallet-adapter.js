@@ -77,6 +77,27 @@
   // 3000ms chosen based on testing - typically injects within 100-500ms but allowing
   // extra time for slower devices/connections while keeping user wait reasonable
   const PHANTOM_PROVIDER_TIMEOUT = 3000;
+  const INTEGRATED_WALLET_STORAGE_KEY = "afw_local_wallet_v2";
+
+  function createIntegratedWalletProvider(publicKey) {
+    return {
+      publicKey,
+      sign: async (message) => {
+        console.warn('[web3-wallet] Local wallet signing is for demo only. Use Phantom for real transactions.');
+        if (!message) throw new Error('Message required for signing');
+        const encoder = new TextEncoder();
+        const payload = message instanceof Uint8Array ? message : encoder.encode(String(message));
+        const combined = new Uint8Array(payload.length + publicKey.length);
+        combined.set(payload, 0);
+        combined.set(encoder.encode(publicKey), payload.length);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
+        return new Uint8Array(hashBuffer);
+      },
+      type: 'integrated',
+      toString: () => publicKey,
+      isLocalWallet: true,
+    };
+  }
 
   /**
    * Wait for Phantom provider to be injected into the page.
@@ -659,6 +680,28 @@
     },
 
     async checkExistingConnection() {
+      try {
+        if (!window.wallet || !window.wallet.publicKey) {
+          const encoded = localStorage.getItem(INTEGRATED_WALLET_STORAGE_KEY);
+          if (encoded) {
+            const restoredPublicKey = atob(encoded);
+            if (securityUtils.isValidIntegratedAddress(restoredPublicKey)) {
+              const restoredWallet = createIntegratedWalletProvider(restoredPublicKey);
+              window.wallet = {
+                publicKey: {
+                  toString: () => restoredPublicKey,
+                  toBase58: () => restoredPublicKey,
+                },
+                sign: restoredWallet.sign,
+                isLocalWallet: true,
+              };
+            }
+          }
+        }
+      } catch (restoreErr) {
+        console.warn('[web3-wallet] Could not restore integrated wallet from storage:', restoreErr);
+      }
+
       // Check integrated wallet first
       if (window.wallet && window.wallet.publicKey) {
         this.connected = true;
@@ -977,7 +1020,7 @@
 
         // Perform backend authentication if enabled (only for Solana wallets for now)
         if (this.authEnabled && this.authInstance && this.provider && 
-            (walletType === 'phantom' || walletType === 'solflare' || walletType === 'integrated')) {
+            (walletType === 'phantom' || walletType === 'solflare')) {
           try {
             console.log('[web3-wallet] Performing backend authentication...');
             // Create a wallet object that wraps the provider's signMessage method
@@ -1106,7 +1149,7 @@
         // Save only the public key to localStorage
         // SECURITY: Private keys are NEVER stored in localStorage per audit guidelines
         // Private key remains only in memory during the session
-        const LOCAL_WALLET_KEY = "afw_local_wallet_v2"; // v2 for enhanced security
+        const LOCAL_WALLET_KEY = INTEGRATED_WALLET_STORAGE_KEY; // v2 for enhanced security
         
         // Encrypt the reference before storing (basic obfuscation)
         const encodedPubKey = btoa(publicKey);
@@ -1116,30 +1159,18 @@
         // Note: This is a LOCAL wallet for testing/demo purposes only
         // For real transactions, users should connect Phantom or other secure wallets
         const wallet = {
-          publicKey,
-          // Signing is mocked for local wallet - real signing requires proper keypair
-          sign: async (message) => {
-            console.warn('[web3-wallet] Local wallet signing is for demo only. Use Phantom for real transactions.');
-            if (!message) throw new Error('Message required for signing');
-            // This creates a deterministic hash, NOT a real signature
-            // Real implementation would use tweetnacl or @solana/web3.js
-            const encoder = new TextEncoder();
-            const data = encoder.encode(message + publicKey);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-          },
-          type: 'integrated',
+          ...createIntegratedWalletProvider(publicKey),
           generated: Date.now(),
-          toString: () => publicKey,
-          isLocalWallet: true // Flag to indicate this is a demo wallet
         };
 
         // Update global wallet reference (without exposing private key)
         if (!window.wallet) {
           window.wallet = {};
         }
-        window.wallet.publicKey = { toString: () => publicKey };
+        window.wallet.publicKey = {
+          toString: () => publicKey,
+          toBase58: () => publicKey,
+        };
         window.wallet.sign = wallet.sign;
         window.wallet.isLocalWallet = true;
 

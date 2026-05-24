@@ -10,7 +10,7 @@ use mpl_token_metadata::{
     ID as METADATA_PROGRAM_ID,
 };
 
-declare_id!("5bhhmQTNNMGZdCnEBwKASCryF5g9cUbboeQJ7gEXuXMH");
+declare_id!("DETVnjSWAoDtANfs3xse2c4DEryGsWuS6bsxL3oU2bgn");
 
 // ============ SEEDS ============
 const CAPS_MINT_SEEDS: &[u8] = b"caps-mint";
@@ -533,6 +533,49 @@ pub mod fizzcaps_onchain {
 
         Ok(())
     }
+
+    // ==================== CROSS-CHAIN BURN ====================
+    pub fn burn_for_crosschain(
+        ctx: Context<BurnForCrossChain>,
+        amount: u64,
+        target_chain: String,
+        target_address: String,
+    ) -> Result<()> {
+        require!(amount > 0, FizzError::ZeroAmount);
+        require!(target_chain.len() <= 32, FizzError::NameTooLong);
+        require!(target_address.len() <= 128, FizzError::UriTooLong);
+
+        burn(
+            CpiContext::new(
+                ctx.accounts.token_program.to_account_info(),
+                Burn {
+                    mint: ctx.accounts.mint.to_account_info(),
+                    from: ctx.accounts.token_account.to_account_info(),
+                    authority: ctx.accounts.burner.to_account_info(),
+                },
+            ),
+            amount,
+        )?;
+
+        let config = &mut ctx.accounts.config;
+        config.total_caps_burned = config
+            .total_caps_burned
+            .checked_add(amount)
+            .ok_or(FizzError::ArithmeticOverflow)?;
+
+        emit!(CrossChainBurnEvent {
+            burner: ctx.accounts.burner.key(),
+            mint: ctx.accounts.mint.key(),
+            amount,
+            target_chain: target_chain.clone(),
+            target_address: target_address.clone(),
+            nonce: Clock::get()?.unix_timestamp as u64,
+            timestamp: Clock::get()?.unix_timestamp,
+        });
+
+        msg!("🔥 Cross-chain burn: {} tokens → {}:{}", amount, target_chain, target_address);
+        Ok(())
+    }
 }
 
 // ============ HELPER FUNCTIONS ============
@@ -1036,6 +1079,40 @@ pub struct FizzTokenGraduated {
     pub creator: Pubkey,
     pub sol_raised: u64,
     pub creator_bonus: u64,
+}
+
+// ============ CROSS-CHAIN BURN ============
+
+#[event]
+pub struct CrossChainBurnEvent {
+    pub burner: Pubkey,
+    pub mint: Pubkey,
+    pub amount: u64,
+    pub target_chain: String,
+    pub target_address: String,
+    pub nonce: u64,
+    pub timestamp: i64,
+}
+
+#[derive(Accounts)]
+pub struct BurnForCrossChain<'info> {
+    #[account(mut)]
+    pub burner: Signer<'info>,
+
+    #[account(mut)]
+    pub mint: Account<'info, Mint>,
+
+    #[account(
+        mut,
+        associated_token::mint = mint,
+        associated_token::authority = burner,
+    )]
+    pub token_account: Account<'info, TokenAccount>,
+
+    #[account(mut, seeds = [FIZZ_CONFIG_SEEDS], bump = config.bump)]
+    pub config: Account<'info, FizzConfig>,
+
+    pub token_program: Program<'info, Token>,
 }
 
 // ============ ERRORS ============
