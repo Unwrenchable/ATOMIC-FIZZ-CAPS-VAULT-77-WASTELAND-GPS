@@ -101,8 +101,8 @@ jobs:
       - name: Install Solana CLI
         if: steps.filter.outputs.solana == 'true'
         run: |
-          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
-          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+          sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.0/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
 
       - name: Install Anchor CLI (cached via cargo)
         if: steps.filter.outputs.solana == 'true'
