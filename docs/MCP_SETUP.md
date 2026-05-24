@@ -46,8 +46,19 @@ development, override with:
 # .env or your shell rc
 export VAULT77_API_URL=http://localhost:3000   # local backend
 export VAULT77_API_KEY=your-admin-password     # for privileged tools
-export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx   # for the github MCP server
+export GITHUB_TOKEN=<your-github-pat>          # for the github MCP server
 ```
+
+If you want to authenticate GitHub CLI with the same token in that shell:
+
+```bash
+test -n "$GITHUB_TOKEN" || echo "GITHUB_TOKEN is empty"
+printf '%s' "$GITHUB_TOKEN" | gh auth login --hostname github.com --with-token
+gh auth status
+```
+
+If `gh auth login --with-token` opens a one-time device code page instead, your
+`GITHUB_TOKEN` is usually empty in that shell session.
 
 ### 3 — Open the repo in VS Code
 
