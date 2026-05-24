@@ -55,5 +55,16 @@
   "engines": {
     "node": "20.x"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "overrides": {
+    "aptos": "1.21.0",
+    "axios": "1.12.2",
+    "bn.js": "5.2.3",
+    "form-data": "4.0.4",
+    "jayson": {
+      "uuid": "14.0.0"
+    },
+    "qs": "6.15.2",
+    "ws": "8.21.0"
+  }
 }
