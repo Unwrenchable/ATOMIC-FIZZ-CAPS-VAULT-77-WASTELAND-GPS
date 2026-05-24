@@ -6,18 +6,17 @@ on:
     types:
       - completed
 
+permissions:
+  contents: write
+
 jobs:
   update-id:
-<<<<<<< HEAD
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-=======
->>>>>>> sync/main-reconcile-20260524-081701
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-<<<<<<< HEAD
       - name: Download deploy artifacts
         uses: actions/download-artifact@v4
         with:
@@ -44,18 +43,6 @@ jobs:
             exit 0
           fi
           PROGRAM_ID=$(solana address -k "$KEYPAIR_PATH")
-=======
-      - name: Extract Program ID
-        id: pid
-        run: |
-          if [ ! -f target/deploy/fizzcaps_onchain-keypair.json ]; then
-            echo "Program keypair not found at target/deploy/fizzcaps_onchain-keypair.json; skipping update."
-            echo "::warning::Program keypair not found; skipping auto-update"
-            echo "program_id=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          PROGRAM_ID=$(grep -o '"[A-Za-z0-9]\{32,44\}"' target/deploy/fizzcaps_onchain-keypair.json | tr -d '"')
->>>>>>> sync/main-reconcile-20260524-081701
           echo "program_id=$PROGRAM_ID" >> "$GITHUB_OUTPUT"
 
       - name: Update Anchor.toml
@@ -77,10 +64,6 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add Anchor.toml
-<<<<<<< HEAD
           git diff --cached --quiet && exit 0
           git commit -m "Auto-update program ID to ${{ steps.pid.outputs.program_id }}"
-=======
-          git commit -m "Auto-update program ID to ${{ steps.pid.outputs.program_id }}" || echo "No changes"
->>>>>>> sync/main-reconcile-20260524-081701
           git push
