@@ -1,25 +1,23 @@
+[toolchain]
+
 [features]
-seeds = false
+resolution = true
 skip-lint = false
 
-# Program IDs — update mainnet once mainnet deployment is completed.
-# The same ID is used for localnet/devnet because this is the current devnet
-# deployment.  Localnet builds may regenerate a fresh keypair via `anchor deploy`.
-[programs.localnet]
-fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
-
 [programs.devnet]
+fizzcaps_onchain = "GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc"
+
+[programs.localnet]
 fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
 
 [programs.mainnet]
 fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
-
-[registry]
-url = "https://api.apr.dev"
 
 [provider]
 cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "yarn install && yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+test = "node tests/test.js"
+
+[hooks]

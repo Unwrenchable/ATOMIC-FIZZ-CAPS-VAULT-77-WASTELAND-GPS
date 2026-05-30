@@ -1999,18 +1999,52 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
         showToast("Please enter a valid amount", "warning");
         return;
       }
-      
-      showToast("Trade execution coming soon! On-chain integration in progress.", "warning");
-      // TODO [HIGH PRIORITY - Phase 2]: Implement on-chain trade execution
-      // Timeline: After Solana program deployment to devnet
-      // Steps:
-      // 1. Get connected wallet (Phantom or local)
-      // 2. Build transaction using Fizz.fun program
-      // 3. Call appropriate instruction (buy_token or sell_token)
-      // 4. Sign transaction with wallet
-      // 5. Send and confirm transaction
-      // 6. Update UI with transaction status
-      // 7. Refresh token data and user balances
+
+      if (!window.FizzFunOnChain) {
+        showToast("Fizz.fun on-chain helpers are still loading.", "error");
+        return;
+      }
+
+      const walletAddress = window.PLAYER_WALLET || window.web3Wallet?.getWalletAddress();
+      const statusEl = document.getElementById("fizz-trade-status");
+      if (statusEl) statusEl.textContent = "Building trade transaction...";
+
+      (async () => {
+        try {
+          const apiBase = window.BACKEND_URL || window.API_BASE || "";
+          const quoteUrl =
+            this.currentAction === "buy"
+              ? `${apiBase}/api/fizz-fun/quote/buy?mint=${this.selectedToken.mint}&solAmount=${amount}`
+              : `${apiBase}/api/fizz-fun/quote/sell?mint=${this.selectedToken.mint}&tokenAmount=${amount}`;
+          const quoteRes = await fetch(quoteUrl);
+          if (!quoteRes.ok) {
+            throw new Error(`Quote failed (${quoteRes.status})`);
+          }
+          const quote = await quoteRes.json();
+          const minOut =
+            this.currentAction === "buy"
+              ? Number(quote.tokensOut || 0) * 0.99
+              : Number(quote.solOut || 0) * 0.99;
+
+          const { transaction } = await window.FizzFunOnChain.buildTradeTransaction({
+            walletAddress,
+            mintAddress: this.selectedToken.mint,
+            direction: this.currentAction,
+            amount,
+            minOut,
+          });
+          if (statusEl) statusEl.textContent = "Signing transaction...";
+          const signature = await window.FizzFunOnChain.signAndSendTransaction(transaction);
+          if (statusEl) statusEl.textContent = `Trade submitted: ${signature}`;
+          showToast(`Trade submitted: ${signature.slice(0, 8)}...`, "success");
+          await this.selectToken(this.selectedToken.mint);
+          await this.loadStats();
+        } catch (err) {
+          safeWarn("[Fizz.fun] Trade failed:", err);
+          showToast(`Trade failed: ${err.message}`, "error");
+          if (statusEl) statusEl.textContent = `Error: ${err.message}`;
+        }
+      })();
     },
 
     async launchToken() {
@@ -2028,25 +2062,28 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
         return;
       }
 
+      if (!window.FizzFunOnChain) {
+        showToast("Fizz.fun on-chain helpers are still loading.", "error");
+        return;
+      }
+
       if (statusEl) statusEl.textContent = "Launching token...";
 
       try {
-        showToast("Token launch coming soon! On-chain integration needed.", "warning");
-        // TODO [HIGH PRIORITY - Phase 2]: Implement on-chain token launch
-        // Timeline: After Solana program deployment to devnet
-        // Dependencies: Requires CAPS token deployed and program authority setup
-        // Steps:
-        // 1. Get connected wallet and verify CAPS balance
-        // 2. Build create_token transaction with program
-        // 3. Include name, symbol, uri parameters
-        // 4. Burn required CAPS fee (tier-based)
-        // 5. Sign transaction with wallet
-        // 6. Send and confirm transaction
-        // 7. Get new token mint address from logs
-        // 8. Refresh token list to show new token
-        // 9. Clear form and show success message
-        
-        if (statusEl) statusEl.textContent = "Feature coming soon!";
+        const walletAddress = window.PLAYER_WALLET || window.web3Wallet?.getWalletAddress();
+        const { transaction, mintPubkey } = await window.FizzFunOnChain.buildLaunchTransaction({
+          walletAddress,
+          name,
+          symbol,
+          uri,
+          launchType: "CapsStandard",
+        });
+        if (statusEl) statusEl.textContent = "Signing launch transaction...";
+        const signature = await window.FizzFunOnChain.signAndSendTransaction(transaction);
+        if (statusEl) statusEl.textContent = `Launched mint ${mintPubkey} (${signature.slice(0, 8)}...)`;
+        showToast(`Token launched: ${mintPubkey.slice(0, 8)}...`, "success");
+        await this.fetchTokens();
+        await this.loadStats();
       } catch (err) {
         safeWarn("[Fizz.fun] Launch failed:", err);
         showToast("Launch failed", "error");

@@ -30,6 +30,10 @@ router.get("/", (req, res) => {
       mode: safeMode,
       statusLabel,
     },
+    capsMint: process.env.CAPS_MINT || process.env.TOKEN_MINT || "",
+    treasuryWallet: process.env.TREASURY_WALLET || "",
+    fizzFunProgramId: process.env.FIZZ_FUN_PROGRAM_ID || "GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc",
+    solanaRpc: process.env.SOLANA_RPC_URL || process.env.SOLANA_RPC || "https://api.devnet.solana.com",
   };
 
   res.json(config);
