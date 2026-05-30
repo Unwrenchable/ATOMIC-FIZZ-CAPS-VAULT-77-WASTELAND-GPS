@@ -1,138 +1,91 @@
-# ============================
-# Atomic Fizz Caps – Git Ignore
-# ============================
-
-# --- Node Backend ---
-node_modules/
-mcp/node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-lock.yaml
-
-# Environment variables
+# ========================
+# Environment & Secrets
+# ========================
 .env
 .env.local
 .env.*.local
+.env.mainnet
 .env.testnet
+.env.development
+.env.production
+keys/
+*.pem
+*.key
+*.json.key
+realai_treasury*.json
 
-# Build output
-dist/
-build/
-.next/
-out/
-
-# Logs
-logs/
-*.log
-*.out
-*.err
-
-# --- Solana / Anchor Program ---
-target/
-**/target/
-*.so
-*.a
-*.rlib
-*.d
-*.o
-
-# Anchor IDL + build artifacts
-*.json.old
-*.idl.json
-*.ts.old
-
-# Cargo
-Cargo.lock
-.cargo/
-rustfmt.toml
-
-# SBPF / Solana build junk
-**/sbpf-solana-solana/
-**/.fingerprint/
-**/deps/
+# ========================
+# Dependencies
+# ========================
+node_modules/
+**/node_modules/
+**/dist/
 **/build/
 
-# --- Redis ---
-dump.rdb
-*.rdb
-*.aof
+# ========================
+# Solana / Anchor / Rust
+# ========================
+**/target/
+**/.anchor/
+**/Anchor.lock
+**/id.json
+**/*.so
 
-# --- Codespaces / VSCode / Visual Studio ---
-.vscode/
-.history/
-*.code-workspace
-.vs/
-
-# --- OS / Editor Junk ---
+# ========================
+# Logs & Runtime
+# ========================
+*.log
+logs/
+*.pid
+*.seed
 .DS_Store
-Thumbs.db
+
+# ========================
+# Editor & IDE
+# ========================
+.vscode/
+.idea/
 *.swp
 *.swo
-
-# --- Frontend / Pip-Boy ---
-public/*.map
-public/*.tmp
-public/*.cache
-public/.DS_Store
-
-# Ignore generated map tiles or test files
-public/data/map/test
-public/data/map/pois/empty
-
-# --- Render / Deployment ---
-# render.yaml - Now tracked for proper deployment configuration
-.render/
-
-# --- Game UI (Next.js) ---
-game-ui/.next/
-game-ui/node_modules/
-game-ui/.turbo/
-game-ui/.vercel/
-
-# --- Backup & Temporary Files ---
-*.patch
-*.bak
-*.backup
-*.old
-*.tmp
 *~
-test/
-tool/
-data-archive/
 
-# --- Legacy / Unused Code ---
-*legacy*
-*archive*
-*experimental*
+# ========================
+# OS
+# ========================
+Thumbs.db
+ehthumbs.db
 
-# --- Grok-generated output files (do not commit) ---
-generated_npcs_grok.json
-test_videos_output.json
+# ========================
+# Build & Cache
+# ========================
+.cache/
+.next/
+out/
+*.tsbuildinfo
+*.env.local
+coverage/
+.nyc_output/
 
-# --- Generated / runtime avatar images (served from CDN or object store) ---
-public/img/generated/
-public/img/avatars/generated/
-public/data/generated/
+# ========================
+# Temporary / Test Files
+# ========================
+temp/
+tmp/
+*.tmp
+test-results/
+playwright-report/
 
-# --- Runtime world-generation dumps (recreated by generate_world.js) ---
-public/data/world_locations.generated.json
-public/data/world_expansion.generated.json
+# ========================
+# Specific to your project
+# ========================
+atomic_fizz_players/target/
+backend/dist/
+public/vendor/*.min.js
+scripts/**/*.json
+wallet/private-key.json
 
-# --- Root-level dev/test/generator scripts (not for production serving) ---
-# These files live at the repo root for developer use only.
-/test-*.html
-/test-*.js
-/generate_*.js
-/generate-*.js
-/create-*.js
-/verify-*.js
-/merge-*.js
-/integrate_*.js
-
-# --- Pre-baked NPC videos ---
-# Small sets (e.g. one NPC ~50MB): commit MP4s and Vercel CDN serves them automatically.
-# Large sets (all NPCs ~1GB+): host on Cloudflare R2/S3 and update paths in npc-videos.json.
-# Uncomment the lines below to exclude MP4s from git if using external hosting:
-# public/videos/npc/*.mp4
-# public/videos/npc/*.webm
+# Ignore large files
+*.vhdx
+*.mp4
+*.mov
+*.avi
