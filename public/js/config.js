@@ -27,10 +27,12 @@
     window.API_BASE = 'http://localhost:3000';
     // Use devnet for local development
     window.SOLANA_RPC = 'https://api.devnet.solana.com';
+    window.FIZZ_FUN_PROGRAM_ID = 'GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc';
   } else {
   // Read backend URL from injected global (set in index.html or env.js)
   window.API_BASE = window.__BACKEND_URL__ || 'https://api.atomicfizzcaps.xyz';
   window.SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
+  window.FIZZ_FUN_PROGRAM_ID = window.__FIZZ_FUN_PROGRAM_ID__ || 'GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc';
 }
 
 
@@ -43,6 +45,23 @@
   console.log('[Config] Backend API:', window.API_BASE || 'https://api.atomicfizzcaps.xyz');
   console.log('[Config] Solana RPC:', window.SOLANA_RPC);
   console.log('[Config] Mode: Split architecture (Vercel + Render, absolute backend API paths)');
+
+  if (!window.__AF_FIZZ_CONFIG_PROMISE__) {
+    const base = String(window.API_BASE || '').replace(/\/+$/, '');
+    window.__AF_FIZZ_CONFIG_PROMISE__ = fetch(`${base}/api/config/frontend`)
+      .then((res) => res.ok ? res.json() : null)
+      .then((cfg) => {
+        if (!cfg) return null;
+        if (cfg.capsMint) window.CAPS_MINT = cfg.capsMint;
+        if (cfg.treasuryWallet) window.TREASURY_WALLET = cfg.treasuryWallet;
+        if (cfg.fizzFunProgramId) window.FIZZ_FUN_PROGRAM_ID = cfg.fizzFunProgramId;
+        if (cfg.solanaRpc && (isLocalhost || isCodespace)) {
+          window.SOLANA_RPC = cfg.solanaRpc;
+        }
+        return cfg;
+      })
+      .catch(() => null);
+  }
 
   // Ensure legacy relative `/api/*` calls hit the backend API directly.
   if (!window.__AF_API_FETCH_PATCHED__) {

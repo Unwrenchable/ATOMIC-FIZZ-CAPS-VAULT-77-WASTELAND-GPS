@@ -1,8 +1,7 @@
 [workspace]
 resolver = "2"
-members = [
-    "programs/*",
-]
+members = ["programs/fizzcaps_onchain"]
+
 
 [profile.release]
 overflow-checks = true

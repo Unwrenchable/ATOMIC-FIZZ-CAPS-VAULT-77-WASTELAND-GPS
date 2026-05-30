@@ -24,8 +24,7 @@
 
 const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
-const { Connection, PublicKey, Transaction: _Transaction } = require("@solana/web3.js");
-const { Program: _Program, AnchorProvider: _AnchorProvider, BN: _BN } = require("@coral-xyz/anchor");
+const { Connection, PublicKey } = require("@solana/web3.js");
 const { getAssociatedTokenAddress } = require("@solana/spl-token");
 const { requireAdmin: _requireAdmin, adminRateLimiter: _adminRateLimiter } = require("../middleware/adminAuth");
 
@@ -47,11 +46,8 @@ const fizzWriteLimiter = rateLimit({
 });
 
 // Configuration
-// Fizz.fun uses a unified ecosystem design:
-//   FIZZ_FUN_PROGRAM_ID defaults to CAPS_MINT / TOKEN_MINT when not explicitly set.
-// This means you only need ONE address configured (your CAPS SPL token mint) and
-// Fizz.fun will automatically operate under that same identifier.
-// Set FIZZ_FUN_PROGRAM_ID explicitly only if you deploy a separate on-chain program.
+// Devnet defaults to the deployed program in Anchor.toml.
+const DEFAULT_FIZZ_FUN_PROGRAM_ID = "GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc";
 function requirePublicKey(envName, ...fallbackEnvNames) {
   const value = [envName, ...fallbackEnvNames].map(n => process.env[n]).find(Boolean);
   if (!value) {
@@ -61,22 +57,19 @@ function requirePublicKey(envName, ...fallbackEnvNames) {
   return new PublicKey(value);
 }
 
-let FIZZ_FUN_PROGRAM_ID = null, CAPS_MINT = null, TREASURY = null;
+let FIZZ_FUN_PROGRAM_ID = new PublicKey(
+  process.env.FIZZ_FUN_PROGRAM_ID || DEFAULT_FIZZ_FUN_PROGRAM_ID
+);
+let CAPS_MINT = null, TREASURY = null;
 try {
   // Resolve CAPS_MINT first — it is required and anchors the whole ecosystem.
   CAPS_MINT = requirePublicKey("CAPS_MINT", "TOKEN_MINT");
   TREASURY = requirePublicKey("TREASURY_WALLET");
-  // FIZZ_FUN_PROGRAM_ID defaults to the already-validated CAPS_MINT PublicKey,
-  // unifying the ecosystem under one address.
-  // Set FIZZ_FUN_PROGRAM_ID explicitly only for a separate on-chain program.
-  FIZZ_FUN_PROGRAM_ID = process.env.FIZZ_FUN_PROGRAM_ID
-    ? new PublicKey(process.env.FIZZ_FUN_PROGRAM_ID)
-    : CAPS_MINT;
 } catch (err) {
   if (process.env.NODE_ENV === "production") {
     // In production, missing Solana config is a fatal error — log clearly so ops can act.
     console.error("[fizz-fun] FATAL: Solana addresses not configured:", err.message);
-    console.error("[fizz-fun] Set CAPS_MINT (and TREASURY_WALLET) then restart.");
+    console.error("[fizz-fun] Set CAPS_MINT, TREASURY_WALLET, and FIZZ_FUN_PROGRAM_ID then restart.");
   } else {
     console.warn("[fizz-fun] Solana addresses not configured:", err.message);
     console.warn("[fizz-fun] Fizz.fun routes will return 503 until env vars are set.");
@@ -89,6 +82,117 @@ const TOTAL_SUPPLY = 1_000_000_000_000_000_000; // 1B with 9 decimals
 const CURVE_SUPPLY = 800_000_000_000_000_000; // 800M
 const GRADUATION_SOL = 85_000_000_000; // 85 SOL
 const FEE_BPS = 100; // 1%
+const BONDING_CURVE_DATA_SIZE = 8 + 32 + 32 + 32 + 32 + 8 + 8 + 8 + 8 + 8 + 1 + 1 + 1;
+const CONFIG_DATA_SIZE = 8 + 32 + 32 + 32 + 32 + 8 + 8 + 8 + 8 + 1;
+const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
+
+function getSolanaRpc() {
+  return process.env.SOLANA_RPC_URL || process.env.SOLANA_RPC || "https://api.devnet.solana.com";
+}
+
+function readPubkey(buf, offset) {
+  return new PublicKey(buf.subarray(offset, offset + 32));
+}
+
+function readU64(buf, offset) {
+  return Number(buf.readBigUInt64LE(offset));
+}
+
+function readI64(buf, offset) {
+  return Number(buf.readBigInt64LE(offset));
+}
+
+function decodeLaunchType(raw) {
+  switch (raw) {
+    case 0: return "CapsStandard";
+    case 1: return "CapsVeteran";
+    case 2: return "AdminUSDC";
+    case 3: return "AdminFree";
+    default: return "CapsStandard";
+  }
+}
+
+function decodeBondingCurve(accountInfo) {
+  if (!accountInfo || !accountInfo.data || accountInfo.data.length < BONDING_CURVE_DATA_SIZE) {
+    return null;
+  }
+  const data = accountInfo.data;
+  let offset = 8;
+  const authority = readPubkey(data, offset); offset += 32;
+  const tokenMint = readPubkey(data, offset); offset += 32;
+  const tokenVault = readPubkey(data, offset); offset += 32;
+  const solVault = readPubkey(data, offset); offset += 32;
+  const totalSupply = readU64(data, offset); offset += 8;
+  const lpReserve = readU64(data, offset); offset += 8;
+  const tokenReserve = readU64(data, offset); offset += 8;
+  const solReserve = readU64(data, offset); offset += 8;
+  const graduatedAt = readI64(data, offset); offset += 8;
+  const launchType = decodeLaunchType(data.readUInt8(offset)); offset += 1;
+  const bump = data.readUInt8(offset);
+  return {
+    authority: authority.toBase58(),
+    tokenMint: tokenMint.toBase58(),
+    tokenVault: tokenVault.toBase58(),
+    solVault: solVault.toBase58(),
+    totalSupply,
+    lpReserve,
+    tokenReserve,
+    tokenReserveRaw: String(tokenReserve),
+    solReserve,
+    graduated: graduatedAt > 0,
+    graduatedAt: graduatedAt > 0 ? graduatedAt : null,
+    createdAt: 0,
+    launchType,
+    bump,
+  };
+}
+
+function decodeFizzConfig(accountInfo) {
+  if (!accountInfo || !accountInfo.data || accountInfo.data.length < CONFIG_DATA_SIZE) {
+    return null;
+  }
+  const data = accountInfo.data;
+  let offset = 8;
+  const authority = readPubkey(data, offset); offset += 32;
+  const treasury = readPubkey(data, offset); offset += 32;
+  const capsMint = readPubkey(data, offset); offset += 32;
+  const serverKey = readPubkey(data, offset); offset += 32;
+  const totalTokensLaunched = readU64(data, offset); offset += 8;
+  const totalVolumeSol = readU64(data, offset); offset += 8;
+  const totalCapsBurned = readU64(data, offset); offset += 8;
+  const adminUsdcLaunches = readU64(data, offset); offset += 8;
+  const bump = data.readUInt8(offset);
+  return {
+    authority: authority.toBase58(),
+    treasury: treasury.toBase58(),
+    capsMint: capsMint.toBase58(),
+    serverKey: serverKey.toBase58(),
+    totalTokensLaunched,
+    totalVolumeSol,
+    totalCapsBurned,
+    adminUsdcLaunches,
+    bump,
+  };
+}
+
+function decodeMetadata(accountInfo) {
+  if (!accountInfo || !accountInfo.data || accountInfo.data.length < 100) {
+    return null;
+  }
+  const data = accountInfo.data;
+  let offset = 1 + 32 + 32;
+  const readString = () => {
+    const len = data.readUInt32LE(offset);
+    offset += 4;
+    const value = data.toString("utf8", offset, offset + len).replace(/\0+$/g, "");
+    offset += len;
+    return value;
+  };
+  const name = readString();
+  const symbol = readString();
+  const uri = readString();
+  return { name, symbol, uri };
+}
 
 const { authMiddleware } = require('../lib/auth');
 
@@ -371,7 +475,7 @@ router.get("/stats", requireConfig, fizzReadLimiter, async (req, res) => {
  */
 async function getCapsBalance(wallet) {
     try {
-        const connection = new Connection(process.env.SOLANA_RPC || process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com");
+        const connection = new Connection(getSolanaRpc(), "confirmed");
         const ata = await getAssociatedTokenAddress(CAPS_MINT, wallet);
         const balance = await connection.getTokenAccountBalance(ata);
         return parseInt(balance.value.amount);
@@ -429,9 +533,40 @@ function calculatePriceImpact(amount, reserve) {
  * Fetch all tokens (placeholder - use indexer in production)
  */
 async function fetchAllTokens() {
-    // In production: query from indexer or getProgramAccounts
-    // For now, return empty array
-    return [];
+    try {
+        const connection = new Connection(getSolanaRpc(), "confirmed");
+        const accounts = await connection.getProgramAccounts(FIZZ_FUN_PROGRAM_ID, {
+            filters: [{ dataSize: BONDING_CURVE_DATA_SIZE }],
+        });
+        return await Promise.all(accounts.map(async ({ pubkey, account }) => {
+                const decoded = decodeBondingCurve(account);
+                if (!decoded) return null;
+                const [metadataPda] = PublicKey.findProgramAddressSync(
+                    [Buffer.from("metadata"), TOKEN_METADATA_PROGRAM_ID.toBuffer(), new PublicKey(decoded.tokenMint).toBuffer()],
+                    TOKEN_METADATA_PROGRAM_ID
+                );
+                const metadataInfo = await connection.getAccountInfo(metadataPda);
+                const metadata = decodeMetadata(metadataInfo);
+                return {
+                    mint: decoded.tokenMint,
+                    creator: decoded.authority,
+                    name: metadata?.name || "Token",
+                    symbol: metadata?.symbol || "TKN",
+                    uri: metadata?.uri || "",
+                    solReserve: decoded.solReserve,
+                    tokenReserve: decoded.tokenReserve,
+                    graduated: decoded.graduated,
+                    graduatedAt: decoded.graduatedAt,
+                    createdAt: decoded.createdAt,
+                    launchType: decoded.launchType,
+                    bondCurve: pubkey.toBase58(),
+                    metadataPda: metadataPda.toBase58(),
+                };
+            })).then((rows) => rows.filter(Boolean));
+    } catch (err) {
+        console.error("[fizz-fun] fetchAllTokens error:", err);
+        return [];
+    }
 }
 
 /**
@@ -439,29 +574,38 @@ async function fetchAllTokens() {
  */
 async function fetchTokenDetails(mint) {
     try {
-        const connection = new Connection(process.env.SOLANA_RPC || process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com");
-        
-        // Derive bonding curve PDA
+        const connection = new Connection(getSolanaRpc(), "confirmed");
         const [bondingCurve] = PublicKey.findProgramAddressSync(
-            [Buffer.from("bonding_curve"), mint.toBuffer()],
+            [Buffer.from("fizz-curve"), mint.toBuffer()],
             FIZZ_FUN_PROGRAM_ID
         );
-        
         const accountInfo = await connection.getAccountInfo(bondingCurve);
         if (!accountInfo) return null;
-        
-        // Decode account data (simplified - use IDL in production)
-        // For now, return mock data
+        const decoded = decodeBondingCurve(accountInfo);
+        if (!decoded) return null;
+        const [metadataPda] = PublicKey.findProgramAddressSync(
+            [Buffer.from("metadata"), TOKEN_METADATA_PROGRAM_ID.toBuffer(), mint.toBuffer()],
+            TOKEN_METADATA_PROGRAM_ID
+        );
+        const metadataInfo = await connection.getAccountInfo(metadataPda);
+        const metadata = decodeMetadata(metadataInfo);
         return {
             mint: mint.toBase58(),
-            creator: "...",
-            name: "Token",
-            symbol: "TKN",
-            solReserve: 0,
-            tokenReserve: CURVE_SUPPLY,
-            graduated: false,
-            createdAt: Date.now() / 1000,
-            launchType: "CapsStandard"
+            creator: decoded.authority,
+            name: metadata?.name || "Token",
+            symbol: metadata?.symbol || "TKN",
+            uri: metadata?.uri || "",
+            solReserve: decoded.solReserve,
+            tokenReserve: decoded.tokenReserve,
+            tokenReserveRaw: decoded.tokenReserveRaw,
+            lpReserve: decoded.lpReserve,
+            totalSupply: decoded.totalSupply,
+            graduated: decoded.graduated,
+            graduatedAt: decoded.graduatedAt,
+            createdAt: decoded.createdAt,
+            launchType: decoded.launchType,
+            bondCurve: bondingCurve.toBase58(),
+            metadataPda: metadataPda.toBase58(),
         };
     } catch (err) {
         console.error("[fizz-fun] Fetch token error:", err);
@@ -473,13 +617,32 @@ async function fetchTokenDetails(mint) {
  * Fetch protocol stats
  */
 async function fetchProtocolStats() {
-    // In production: fetch from config PDA
-    return {
-        totalTokensLaunched: 0,
-        totalVolumeSol: 0,
-        totalCapsBurned: 0,
-        adminUsdcLaunches: 0
-    };
+    try {
+        const connection = new Connection(getSolanaRpc(), "confirmed");
+        const [configPda] = PublicKey.findProgramAddressSync(
+            [Buffer.from("fizz-config")],
+            FIZZ_FUN_PROGRAM_ID
+        );
+        const accountInfo = await connection.getAccountInfo(configPda);
+        const decoded = decodeFizzConfig(accountInfo);
+        if (!decoded) {
+            return {
+                totalTokensLaunched: 0,
+                totalVolumeSol: 0,
+                totalCapsBurned: 0,
+                adminUsdcLaunches: 0,
+            };
+        }
+        return decoded;
+    } catch (err) {
+        console.error("[fizz-fun] fetchProtocolStats error:", err);
+        return {
+            totalTokensLaunched: 0,
+            totalVolumeSol: 0,
+            totalCapsBurned: 0,
+            adminUsdcLaunches: 0,
+        };
+    }
 }
 
 module.exports = router;
