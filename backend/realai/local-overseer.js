@@ -168,7 +168,7 @@ function buildRepoSummary(repoSnapshot) {
   return {
     totalFiles: files.length,
     hasBackend: files.some((file) => file.startsWith('backend/')),
-    hasFrontend: files.some((file) => file.startsWith('public/')),
+    hasFrontend: files.some((file) => file.startsWith('frontend/')),
     hasRealAiScripts: files.some((file) => file.startsWith('scripts/realai/')),
     hasSystems: files.some((file) => file.startsWith('systems/')),
     hasOverseerProxy: files.includes('backend/api/overseer-proxy.js'),
@@ -353,7 +353,7 @@ function buildRepoLine(summary, prompt, seed) {
     repoParts.push('Node/Express guts in backend/');
   }
   if (summary.hasFrontend) {
-    repoParts.push('vanilla client gear in public/');
+    repoParts.push('vanilla client gear in frontend/');
   }
   if (summary.hasRealAiScripts) {
     repoParts.push('RealAI rigs in scripts/realai/');

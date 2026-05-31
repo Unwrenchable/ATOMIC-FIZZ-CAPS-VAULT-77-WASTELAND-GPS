@@ -23,7 +23,7 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 // ------------------------------------------------------------
 // STATIC FRONTEND ROOT
 // ------------------------------------------------------------
-const FRONTEND_DIR = path.join(__dirname, "..", "public");
+const FRONTEND_DIR = path.join(__dirname, '../frontend')
 console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 
 // ------------------------------------------------------------
@@ -374,7 +374,7 @@ safeMount("/api/quest-endings", api("quest-endings"));
 
 // Survival reward claims
 safeMount("/api/claim-survival", api("claim-survival"));
-safeMount("/api/event/player-survived", api("player-survived"));
+safeMount("/api/player-survived", api("player-survived"));
 
 // Buy Stimpak with CAPS burn
 safeMount("/api/buy-stimpak", api("buy-stimpak"));
@@ -428,7 +428,7 @@ safeMount("/api/wallet", path.join(__dirname, "routes", "wallet"));
 
 // ------------------------------------------------------------
 // GENERIC STATIC JSON PROXY (fallback for /api/<name>)
-// If you have `public/data/settings.json`, `public/data/scavenger.json`, etc.
+// If you have `frontend/data/settings.json`, `frontend/data/scavenger.json`, etc.
 // This will handle them automatically if no route is more specific.
 // ------------------------------------------------------------
 app.use("/api", (req, res, next) => {
@@ -567,7 +567,7 @@ app.get("/api/admin/health-detailed", async (req, res) => {
 // ------------------------------------------------------------
 // ADMIN PANEL STATIC SERVING (all environments)
 // ------------------------------------------------------------
-// The admin panel lives in public/admin/ and is served directly from
+// The admin panel lives in frontend/admin/ and is served directly from
 // the backend at /admin (i.e. api.atomicfizzcaps.xyz/admin).
 // Serving it here (not via Vercel) means:
 //   1. All relative API calls in admin.js/dashboard.js (e.g. /api/admin/login)
