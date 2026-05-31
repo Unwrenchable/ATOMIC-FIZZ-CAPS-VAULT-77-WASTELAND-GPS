@@ -20,7 +20,7 @@ const {
   createCreateMetadataAccountV3Instruction,
 } = require("@metaplex-foundation/mpl-token-metadata");
 
-const MINTABLES_PATH = path.join(__dirname, "../../public/data/mintables.json");
+const MINTABLES_PATH = path.join(__dirname, "../../frontend/data/mintables.json");
 const DEFAULT_RPC =
   process.env.SOLANA_RPC ||
   process.env.SOLANA_RPC_URL ||

@@ -125,7 +125,7 @@ function generateAvatarId() {
 
 // Save avatar description to manifest
 function saveAvatarToManifest(description, avatarId) {
-  const manifestPath = path.join(__dirname, '../../../public/assets/avatars-grok/manifest.json');
+  const manifestPath = path.join(__dirname, '../../../assets/avatars-grok/manifest.json');
 
   try {
     let manifest = { avatars: [], totalAvatars: 0 };

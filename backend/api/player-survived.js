@@ -1,10 +1,10 @@
 "use strict";
 
+const { treasury, connection } = require("../solana/actions");
 const crypto = require("crypto");
 const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
 const { body, validationResult } = require("express-validator");
-
 const { authMiddleware } = require("../lib/auth");
 const { redis, key } = require("../lib/redis");
 const { awardXp } = require("../lib/xp");
