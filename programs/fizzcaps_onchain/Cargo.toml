@@ -26,3 +26,4 @@ no-log-ix-name = []
 anchor-lang = { version = "0.32", features = ["init-if-needed"] }
 anchor-spl = "0.32"
 mpl-token-metadata = "5.1.1"
+solana-sdk-ids = "2"
