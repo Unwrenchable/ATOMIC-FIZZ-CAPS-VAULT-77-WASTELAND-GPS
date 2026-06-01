@@ -1,14 +1,17 @@
 use anchor_lang::prelude::*;
+use anchor_lang::solana_program::{
+    program::invoke,
+    system_instruction,
+    sysvar::instructions as ix_sysvar,
+};
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token::{self, burn, Burn, Mint, MintTo, Token, TokenAccount, Transfer},
+    token::{self, burn, close_account, Burn, CloseAccount, Mint, MintTo, Token, TokenAccount, Transfer},
 };
 use mpl_token_metadata::{
     instructions::CreateV1CpiBuilder,
     types::{Collection, TokenStandard},
 };
-use anchor_lang::solana_program::{program::invoke, system_instruction};
-use std::convert::TryFrom;
 
 declare_id!("GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc");
 
@@ -56,6 +59,24 @@ fn launch_fee_for(launch_type: LaunchType) -> u64 {
         LaunchType::CapsVeteran => CAPS_VETERAN_FEE,
         LaunchType::CapsStandard => CAPS_LAUNCH_FEE,
         LaunchType::AdminUSDC | LaunchType::AdminFree => 0,
+    }
+}
+
+// ============ LOOT RARITY ============
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq)]
+pub enum LootRarity {
+    Common,
+    Uncommon,
+    Rare,
+    Legendary,
+}
+
+impl LootRarity {
+    /// Returns true for rarities that should be minted as compressed NFTs
+    /// (Common and Uncommon) to minimise per-claim rent cost.
+    pub fn is_compressed(&self) -> bool {
+        matches!(self, Self::Common | Self::Uncommon)
     }
 }
 
@@ -136,6 +157,11 @@ pub mod fizzcaps_onchain {
     // ============ LOOT CLAIM ============
 
     pub fn claim_loot(ctx: Context<ClaimLoot>, voucher: LootVoucher) -> Result<()> {
+        // Rare and Legendary are minted as standard Metaplex NFTs here.
+        // Common and Uncommon (is_compressed) are reserved for cNFT support
+        // in a future upgrade; reject them now to avoid stranding compressed state.
+        require!(!voucher.rarity.is_compressed(), ErrorCode::UseCompressedClaim);
+
         let fee_amount = 100 * 10u64.pow(9);
 
         // Voucher TTL
@@ -534,6 +560,96 @@ pub mod fizzcaps_onchain {
         );
         Ok(())
     }
+
+    // ============ CLOSE INSTRUCTIONS ============
+
+    /// Close a graduated bonding curve and reclaim all rent.
+    /// Burns any unsold tokens, drains accumulated SOL to treasury,
+    /// closes the token vault ATA, and closes the bonding-curve PDA.
+    /// Requires: bonding_curve.graduated_at != 0.
+    pub fn fizz_close_curve(ctx: Context<FizzCloseCurve>) -> Result<()> {
+        let bonding_curve = &ctx.accounts.bonding_curve;
+        require!(bonding_curve.graduated_at != 0, ErrorCode::CurveNotGraduated);
+
+        let mint_key = ctx.accounts.mint.key();
+        let signer_seeds: &[&[&[u8]]] = &[&[
+            FIZZ_CURVE_SEEDS,
+            mint_key.as_ref(),
+            &[bonding_curve.bump],
+        ]];
+
+        // Burn any tokens remaining in the vault (unsold at graduation)
+        let vault_amount = ctx.accounts.token_vault.amount;
+        if vault_amount > 0 {
+            token::burn(
+                CpiContext::new_with_signer(
+                    ctx.accounts.token_program.to_account_info(),
+                    Burn {
+                        mint: ctx.accounts.mint.to_account_info(),
+                        from: ctx.accounts.token_vault.to_account_info(),
+                        authority: ctx.accounts.bonding_curve.to_account_info(),
+                    },
+                    signer_seeds,
+                ),
+                vault_amount,
+            )?;
+        }
+
+        // Close the token vault ATA — rent returned to authority
+        close_account(CpiContext::new_with_signer(
+            ctx.accounts.token_program.to_account_info(),
+            CloseAccount {
+                account: ctx.accounts.token_vault.to_account_info(),
+                destination: ctx.accounts.authority.to_account_info(),
+                authority: ctx.accounts.bonding_curve.to_account_info(),
+            },
+            signer_seeds,
+        ))?;
+
+        // Drain the entire SOL vault to treasury (trading proceeds + rent)
+        let vault_lamports = ctx.accounts.sol_vault.to_account_info().lamports();
+        if vault_lamports > 0 {
+            **ctx.accounts.sol_vault.to_account_info().try_borrow_mut_lamports()? -= vault_lamports;
+            **ctx.accounts.treasury.to_account_info().try_borrow_mut_lamports()? += vault_lamports;
+        }
+
+        msg!(
+            "Curve {} closed: {} tokens burned, {} lamports drained to treasury.",
+            ctx.accounts.mint.key(),
+            vault_amount,
+            vault_lamports
+        );
+        // bonding_curve is closed by Anchor's `close = authority` constraint
+        Ok(())
+    }
+
+    /// Close an inactive admin record PDA and reclaim its rent.
+    /// Requires: admin_record.is_active == false.
+    pub fn fizz_close_admin(ctx: Context<FizzCloseAdmin>) -> Result<()> {
+        require!(!ctx.accounts.admin_record.is_active, ErrorCode::AdminStillActive);
+        msg!("Admin record {} closed.", ctx.accounts.admin_record.admin);
+        // admin_record closed by Anchor's `close = authority` constraint
+        Ok(())
+    }
+
+    /// Close a zero-balance loot ATA and return its rent (~0.002 SOL) to the player.
+    pub fn close_loot_ata(ctx: Context<CloseLootAta>) -> Result<()> {
+        require!(ctx.accounts.player_loot_ata.amount == 0, ErrorCode::LootAtaNotEmpty);
+        close_account(CpiContext::new(
+            ctx.accounts.token_program.to_account_info(),
+            CloseAccount {
+                account: ctx.accounts.player_loot_ata.to_account_info(),
+                destination: ctx.accounts.player.to_account_info(),
+                authority: ctx.accounts.player.to_account_info(),
+            },
+        ))?;
+        msg!(
+            "Loot ATA for mint {} closed, rent returned to {}.",
+            ctx.accounts.loot_mint.key(),
+            ctx.accounts.player.key()
+        );
+        Ok(())
+    }
 }
 
 // ============ STRUCTS, ACCOUNTS, HELPERS, ERRORS ============
@@ -544,18 +660,76 @@ pub struct LootVoucher {
     pub latitude: f64,
     pub longitude: f64,
     pub location_hint: String,
+    pub rarity: LootRarity,
     pub timestamp: i64,
     pub server_signature: Vec<u8>,
 }
 
-// Stubbed verifier – compiles and runs, but does not enforce signatures.
-// Replace with real Ed25519 verification if you want strict checks.
+/// Verify that the instruction immediately preceding the current one in the
+/// transaction is an Ed25519 native-program precheck whose first signature
+/// matches `server_pubkey`, `message`, and `signature`.
+///
+/// Clients must prepend an Ed25519Program.createInstructionWithPublicKey (or
+/// equivalent) instruction to the transaction before calling any instruction
+/// that invokes this function.
 fn verify_ed25519_signature(
-    _instructions_sysvar: &AccountInfo,
-    _server_pubkey: &[u8; 32],
-    _message: &[u8],
-    _signature: &Vec<u8>,
+    instructions_sysvar: &AccountInfo,
+    server_pubkey: &[u8; 32],
+    message: &[u8],
+    signature: &[u8],
 ) -> Result<()> {
+    // The Ed25519 native program's well-known address (fixed on all clusters)
+    let ed25519_id = solana_sdk_ids::ed25519_program::id();
+
+    let current_idx =
+        ix_sysvar::load_current_index_checked(instructions_sysvar)
+            .map_err(|_| error!(ErrorCode::MissingEd25519Precheck))? as usize;
+    require!(current_idx > 0, ErrorCode::MissingEd25519Precheck);
+
+    let ed25519_ix =
+        ix_sysvar::load_instruction_at_checked(current_idx - 1, instructions_sysvar)
+            .map_err(|_| error!(ErrorCode::MissingEd25519Precheck))?;
+    require!(ed25519_ix.program_id == ed25519_id, ErrorCode::MissingEd25519Precheck);
+
+    // Ed25519 instruction data layout:
+    //   [0]      num_signatures (u8)
+    //   [1]      padding (u8)
+    //   For each signature i (header at 2 + i*14):
+    //     [+0..1]  sig_offset (u16 LE)      — offset of 64-byte signature in this data blob
+    //     [+2..3]  sig_ix_index (u16 LE)    — 0xFFFF = same instruction
+    //     [+4..5]  pubkey_offset (u16 LE)   — offset of 32-byte public key
+    //     [+6..7]  pubkey_ix_index (u16 LE)
+    //     [+8..9]  msg_offset (u16 LE)      — offset of message bytes
+    //     [+10..11] msg_len (u16 LE)
+    //     [+12..13] msg_ix_index (u16 LE)
+    let data = &ed25519_ix.data;
+    // Minimum size: 2-byte header + 14-byte sig header
+    require!(data.len() >= 16, ErrorCode::InvalidEd25519Instruction);
+
+    let num_sigs = data[0] as usize;
+    require!(num_sigs >= 1, ErrorCode::InvalidEd25519Instruction);
+
+    // Read the first signature's header fields (at byte offset 2)
+    let sig_offset    = u16::from_le_bytes([data[2],  data[3]])  as usize;
+    let pubkey_offset = u16::from_le_bytes([data[6],  data[7]])  as usize;
+    let msg_offset    = u16::from_le_bytes([data[10], data[11]]) as usize;
+    let msg_len       = u16::from_le_bytes([data[12], data[13]]) as usize;
+
+    require!(
+        data.len() >= sig_offset.saturating_add(64)
+            && data.len() >= pubkey_offset.saturating_add(32)
+            && data.len() >= msg_offset.saturating_add(msg_len),
+        ErrorCode::InvalidEd25519Instruction
+    );
+
+    let ix_sig    = &data[sig_offset..sig_offset + 64];
+    let ix_pubkey = &data[pubkey_offset..pubkey_offset + 32];
+    let ix_msg    = &data[msg_offset..msg_offset + msg_len];
+
+    require!(ix_pubkey == server_pubkey.as_ref(), ErrorCode::InvalidServerKey);
+    require!(ix_msg == message, ErrorCode::InvalidVoucherMessage);
+    require!(ix_sig == signature, ErrorCode::InvalidVoucherSignature);
+
     Ok(())
 }
 
@@ -856,6 +1030,98 @@ pub struct FizzSellTokens<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
+// ============ CLOSE ACCOUNT STRUCTS ============
+
+#[derive(Accounts)]
+pub struct FizzCloseCurve<'info> {
+    #[account(mut, has_one = authority)]
+    pub config: Account<'info, FizzConfig>,
+
+    #[account(mut)]
+    pub authority: Signer<'info>,
+
+    /// Graduated bonding-curve PDA. Anchor's `close` constraint returns its
+    /// rent to `authority` after the instruction handler returns.
+    #[account(
+        mut,
+        close = authority,
+        seeds = [FIZZ_CURVE_SEEDS, mint.key().as_ref()],
+        bump = bonding_curve.bump,
+        constraint = bonding_curve.graduated_at != 0 @ ErrorCode::CurveNotGraduated,
+    )]
+    pub bonding_curve: Account<'info, FizzBondingCurve>,
+
+    #[account(address = bonding_curve.token_mint)]
+    pub mint: Account<'info, Mint>,
+
+    /// Token vault ATA controlled by the bonding-curve PDA.
+    #[account(
+        mut,
+        associated_token::mint = mint,
+        associated_token::authority = bonding_curve,
+    )]
+    pub token_vault: Account<'info, TokenAccount>,
+
+    /// SOL vault PDA — all lamports (trading proceeds + rent) are drained to treasury.
+    #[account(
+        mut,
+        seeds = [FIZZ_SOL_VAULT_SEEDS, mint.key().as_ref()],
+        bump,
+    )]
+    /// CHECK: Program-owned SOL vault PDA; seeds enforce the address.
+    pub sol_vault: UncheckedAccount<'info>,
+
+    #[account(mut, address = config.treasury)]
+    /// CHECK: Treasury wallet that receives the drained SOL.
+    pub treasury: UncheckedAccount<'info>,
+
+    pub token_program: Program<'info, Token>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct FizzCloseAdmin<'info> {
+    #[account(mut, has_one = authority)]
+    pub config: Account<'info, FizzConfig>,
+
+    #[account(mut)]
+    pub authority: Signer<'info>,
+
+    /// CHECK: The admin wallet whose record is being closed.
+    pub admin: UncheckedAccount<'info>,
+
+    /// Inactive admin-record PDA. Anchor's `close` returns rent to `authority`.
+    #[account(
+        mut,
+        close = authority,
+        seeds = [FIZZ_ADMIN_SEEDS, admin.key().as_ref()],
+        bump = admin_record.bump,
+        constraint = !admin_record.is_active @ ErrorCode::AdminStillActive,
+    )]
+    pub admin_record: Account<'info, FizzAdminRecord>,
+
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct CloseLootAta<'info> {
+    #[account(mut)]
+    pub player: Signer<'info>,
+
+    pub loot_mint: Account<'info, Mint>,
+
+    /// Zero-balance loot ATA owned by the player.
+    #[account(
+        mut,
+        associated_token::mint = loot_mint,
+        associated_token::authority = player,
+        constraint = player_loot_ata.amount == 0 @ ErrorCode::LootAtaNotEmpty,
+    )]
+    pub player_loot_ata: Account<'info, TokenAccount>,
+
+    pub token_program: Program<'info, Token>,
+}
+
 #[error_code]
 pub enum ErrorCode {
     #[msg("Name too long")]
@@ -880,4 +1146,25 @@ pub enum ErrorCode {
     InsufficientCaps,
     #[msg("Slippage exceeded")]
     SlippageExceeded,
+    // ── Close instructions ──────────────────────────────────────────────────
+    #[msg("Bonding curve has not graduated yet")]
+    CurveNotGraduated,
+    #[msg("Admin record is still active; deactivate it before closing")]
+    AdminStillActive,
+    #[msg("Loot ATA must have a zero balance before closing")]
+    LootAtaNotEmpty,
+    // ── Rarity routing ──────────────────────────────────────────────────────
+    #[msg("Common and Uncommon loot: cNFT support coming in a future upgrade")]
+    UseCompressedClaim,
+    // ── Ed25519 signature verification ──────────────────────────────────────
+    #[msg("Transaction must include an Ed25519 precheck instruction")]
+    MissingEd25519Precheck,
+    #[msg("Ed25519 precheck instruction data is malformed")]
+    InvalidEd25519Instruction,
+    #[msg("Ed25519 public key does not match server key")]
+    InvalidServerKey,
+    #[msg("Ed25519 message does not match voucher data")]
+    InvalidVoucherMessage,
+    #[msg("Ed25519 signature does not match voucher signature field")]
+    InvalidVoucherSignature,
 }
