@@ -23,7 +23,7 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 // ------------------------------------------------------------
 // STATIC FRONTEND ROOT
 // ------------------------------------------------------------
-const FRONTEND_DIR = path.join(__dirname, '../frontend')
+const FRONTEND_DIR = path.resolve(__dirname, '../frontend')
 console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 
 // ------------------------------------------------------------

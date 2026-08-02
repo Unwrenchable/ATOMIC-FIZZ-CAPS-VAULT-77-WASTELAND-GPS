@@ -12,13 +12,17 @@ router.get("/", (req, res) => {
   )
     .trim()
     .toLowerCase();
+
+  const REALAI_API_BASE = (process.env.REALAI_API_BASE || process.env.REALAI_PROVIDER_URL || '').replace(/\/+$/, '');
   const safeMode = overseerMode === "linked-ai" ? "linked-ai" : "local-webllm";
   const defaultStatusLabel =
     safeMode === "local-webllm"
       ? "OVERSEER STANDBY // BROWSER-LOCAL WEBLLM CORE READY"
       : realAiMode === "cloud"
         ? "LINKED TO OVERSEER RELAY // CLOUD UPLINK STABLE"
-        : "LINKED TO SELF-HOSTED OVERSEER RELAY // LOCAL REALAI CORE ACTIVE";
+        : REALAI_API_BASE || realAiMode === "local" || realAiMode === "auto"
+          ? "JAX HARLAN // SELF-HOSTED REALAI CORE (BUILD + PLAYER MODE)"
+          : "LINKED TO SELF-HOSTED OVERSEER RELAY // LOCAL REALAI CORE ACTIVE";
   const statusLabel = process.env.OVERSEER_STATUS_LABEL || defaultStatusLabel;
 
   // Only expose configuration that is safe for the frontend.
