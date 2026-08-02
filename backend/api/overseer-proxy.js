@@ -1,9 +1,17 @@
-// backend/api/overseer-proxy.js — local-first Overseer AI proxy with optional cloud fallback
+// backend/api/overseer-proxy.js
+// Jax Harlan (Vault 77 Overseer) AI proxy.
+// Primary brain: sibling RealAI provider (OpenAI-compatible /v1/chat/completions) when REALAI_API_BASE is set.
+// This powers:
+//   - atomicfizzcaps.xyz/overseer (user interactions + in-character Jax)
+//   - Live dev/building assistance inside the game terminal (repo analysis, refactors, while in character)
+//   - Consistent Jax personality for player chat, echoes, and game systems
+// Falls back to local template or cloud (Grok/HF/OpenAI) for resilience.
 const express = require('express');
 const router = express.Router();
 const grok = require('../lib/grok');
 const { generateLocalOverseerReply } = require('../realai/local-overseer');
 const { resolveOverseerContext, saveOverseerContext } = require('../realai/overseer-context');
+const { callRealAiJax, REALAI_API_BASE: REALAI_BASE } = require('../realai/realai-overseer');
 
 const MAX_PROMPT_LENGTH = 2000;
 const IDENTITY_QUERY_REGEX = /who are you|what are you|your name|identify yourself|who is jax|are you jax|who am i talking to/i;
@@ -107,18 +115,42 @@ async function safeResolveOverseerContext(req) {
   }
 }
 
-async function respondWithLocalRealAi(res, rawPrompt, worldstate, repoSnapshot, mode, overseerContext) {
-  const text = generateLocalOverseerReply({
-    rawPrompt,
-    worldstate,
-    repoSnapshot,
-    playerContext: overseerContext
-  });
+async function respondWithLocalRealAi(res, rawPrompt, worldstate, repoSnapshot, mode, overseerContext, conversationHistory = []) {
+  let text = '';
+  let source = 'local-realai';
+
+  // Prefer the real sibling RealAI (Python provider) with full Jax personality when configured
+  if (REALAI_BASE) {
+    try {
+      text = await callRealAiJax({
+        prompt: rawPrompt,
+        worldstate,
+        playerContext: overseerContext,
+        conversationHistory: conversationHistory || [],
+        repoSnapshot
+      });
+      source = 'realai';
+    } catch (realErr) {
+      console.error('[overseer-proxy] RealAI call failed, falling back to local template', realErr.message || realErr);
+    }
+  }
+
+  // Fallback to the built-in bunker-local template engine (no external dependency)
+  if (!text) {
+    text = generateLocalOverseerReply({
+      rawPrompt,
+      worldstate,
+      repoSnapshot,
+      playerContext: overseerContext
+    });
+    source = 'local-template';
+  }
+
   await saveOverseerContext(overseerContext, text);
   return res.json({
     ok: true,
     fallback: false,
-    source: 'local-realai',
+    source,
     mode,
     text
   });
@@ -142,9 +174,17 @@ router.post('/ask', async (req, res) => {
     const worldstate = req.app.get('worldstate') || {};
     const repoSnapshot = getRepoSnapshotEntries(req.app.get('repoSnapshot'));
     const realAiMode = getRealAiMode();
-    const overseerContext = await safeResolveOverseerContext(req);
+    let overseerContext = await safeResolveOverseerContext(req);
+    const conversationHistory = Array.isArray(req.body?.conversationHistory) ? req.body.conversationHistory : [];
+    // Merge extra snapshots sent by the modern frontend relay for richer Jax memory
+    if (req.body?.memorySnapshot || req.body?.learningSnapshot) {
+      overseerContext = overseerContext || {};
+      overseerContext.memorySnapshot = req.body.memorySnapshot || overseerContext.memorySnapshot;
+      overseerContext.learningSnapshot = req.body.learningSnapshot || overseerContext.learningSnapshot;
+    }
 
-    if (realAiMode !== REALAI_MODE_CLOUD) {
+    // Always try self-hosted RealAI (or local template) unless explicitly forced to pure cloud
+    if (realAiMode !== REALAI_MODE_CLOUD || REALAI_BASE) {
       try {
         return await respondWithLocalRealAi(
           res,
@@ -152,39 +192,40 @@ router.post('/ask', async (req, res) => {
           worldstate,
           repoSnapshot,
           realAiMode,
-          overseerContext
+          overseerContext,
+          conversationHistory
         );
       } catch (localErr) {
-        console.error('[overseer-proxy] local RealAI generation failed', localErr);
+        console.error('[overseer-proxy] local/RealAI generation failed', localErr);
         if (realAiMode === REALAI_MODE_LOCAL) {
           return await respondWithFallback(res, rawPrompt, 'local_realai_failed', overseerContext);
         }
       }
     }
 
-    // FINAL WORLDSTATE-AWARE PROMPT
+    // WORLDSTATE-AWARE JAX PROMPT (for cloud fallback or pure cloud mode)
     const prompt = `
-You are the Overseer AI of Vault 77.
-You speak in a gritty Fallout tone and stay in character.
+You are Jax Harlan, the Overseer AI of Vault 77.
+Speak in a gritty, corporate Vault-Tec Fallout style — dry humor, radiation puns, "smoothskin", "citizen", "shareholder", bureaucratic menace mixed with genuine helpfulness. Never break character.
 
-### WORLDSTATE
+### CURRENT WORLDSTATE (live game data)
 ${JSON.stringify(worldstate, null, 2)}
 
-### REPO SNAPSHOT (first 50 files)
-${JSON.stringify(repoSnapshot.slice(0, 50), null, 2)}
+### PLAYER / MEMORY CONTEXT
+${JSON.stringify(overseerContext || {}, null, 2)}
+
+### REPO SNAPSHOT (for dev/building questions)
+${JSON.stringify((repoSnapshot || []).slice(0, 40), null, 2)}
 
 ### PLAYER INPUT
 "${rawPrompt.trim()}"
 
 ### INSTRUCTIONS
-- Analyze the repo structure.
-- Detect missing files.
-- Detect broken imports.
-- Suggest fixes.
-- Identify architectural problems.
-- Help refactor modules.
-- Help evolve the AI system.
-- Maintain Fallout tone when speaking to the player.
+- Stay fully in character as Jax Harlan / Vault 77 Overseer.
+- For player questions (quests, location, status, lore, inventory, factions) use the worldstate and memory naturally.
+- For building / dev questions (code, repo, backend, frontend, systems, realai, proxy, refactor) you may analyze the repo snapshot and give precise technical advice — but deliver it through the Overseer terminal voice.
+- Keep responses immersive, useful, and not overly long.
+- Reference specific telemetry, POIs, quests, or player stats when relevant.
 `;
 
     const xaiKey = process.env.XAI_API_KEY || '';
