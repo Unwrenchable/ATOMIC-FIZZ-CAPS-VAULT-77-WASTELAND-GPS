@@ -437,6 +437,16 @@
       );
 
       this._setSourceAndPlay(file, true);
+
+      // RadioDJ voice — Fizzmaster Rex (wasteland radio personality)
+      // Speaks a quip on djIntro events for atmosphere (uses Web Speech API with radio flavor).
+      // Complements the audio clips. Part of mainnet / product release polish + RealAI voice work.
+      if (type === "djIntro" && typeof window.speakAsFizzmasterRex === "function") {
+        const q = (typeof window.getFizzmasterRexQuip === "function")
+          ? window.getFizzmasterRexQuip()
+          : "Wasteland radio's live. Keep your eyes on the signal and your caps in your pocket.";
+        window.speakAsFizzmasterRex(q);
+      }
     }
 
     // ------------------------------------------------------------
@@ -702,6 +712,56 @@
   // ============================================================
 
   window.AtomicFizzRadioPlayer = AtomicFizzRadioPlayer;
+
+  // ============================================================
+  // Fizzmaster Rex — Radio DJ Voice (for wasteland radio atmosphere)
+  // Added/enhanced for product release + RealAI self-wire "radio/DJ voice" item.
+  // Uses browser SpeechSynthesis with radio-like settings (low pitch, slightly fast, slight distortion via rate).
+  // Call window.speakAsFizzmasterRex("text") from anywhere (e.g. on events, struggle quips, NPC radio).
+  // ============================================================
+  const DJ_QUIPS = [
+    "Another day in the wasteland, smoothskin. Stay sharp or stay dead.",
+    "You call that a hack? I've seen radroaches do better terminal work.",
+    "Caps don't grow on bloatflies, kid. Get out there and earn 'em.",
+    "Radiation's up, prices are up, and your inventory looks light. Fix that.",
+    "Konami code won't save you out here. But a good radio signal might.",
+    "Vault 77 calling all wastelands... if you can hear this, you're already too late for easy living.",
+    "Buy low, sell high, and never trust a smiling ghoul with a briefcase.",
+    "The signal's strong tonight. Just like the rads. Keep moving.",
+  ];
+
+  window.speakAsFizzmasterRex = function(text) {
+    if (!('speechSynthesis' in window)) {
+      console.log("[Radio DJ] SpeechSynthesis not available — quip:", text);
+      return;
+    }
+    try {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.pitch = 0.85;   // lower, gravelly radio voice
+      utter.rate = 1.08;    // slightly fast, urgent wasteland DJ
+      utter.volume = 0.75;
+      // Prefer a deeper voice if available
+      const voices = speechSynthesis.getVoices();
+      const preferred = voices.find(v => /male|deep|en-US/i.test(v.name + v.voiceURI)) || voices[0];
+      if (preferred) utter.voice = preferred;
+      speechSynthesis.cancel(); // avoid overlap
+      speechSynthesis.speak(utter);
+      console.log("[Fizzmaster Rex]:", text);
+    } catch (e) {
+      console.warn("[Radio DJ] speakAsFizzmasterRex failed:", e);
+    }
+  };
+
+  // Expose quip getter for other systems (struggle, NPC radio, etc.)
+  window.getFizzmasterRexQuip = function() {
+    return DJ_QUIPS[Math.floor(Math.random() * DJ_QUIPS.length)];
+  };
+
+  // Optional: wire a struggle quip trigger (used by some modules)
+  window.triggerFizzmasterRexStruggle = function() {
+    const q = window.getFizzmasterRexQuip();
+    if (q) window.speakAsFizzmasterRex(q);
+  };
 
   window.addEventListener("pipboyReady", () => {
     // ⚠️ SINGLETON PROTECTION: Prevent multiple radio player instances

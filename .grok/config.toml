@@ -1,0 +1,78 @@
+# Project-scoped Grok MCP configuration for Atomic Fizz Caps / Vault-77 Wasteland GPS.
+# This makes the same powerful tools available to Grok that other MCP hosts get via .mcp.json.
+# Grok will auto-discover these when your cwd is inside this repo (or subdir).
+# Higher priority than user global config for servers defined here.
+
+# Run `grok mcp list` or use /mcps in TUI to inspect after changes.
+# For the custom vault77-game server, first: npm run mcp:install (or cd mcp && npm install)
+
+[mcp_servers.vault77-game]
+command = "node"
+args = ["mcp/vault77-server.js"]
+env = { VAULT77_API_URL = "${VAULT77_API_URL:-https://api.atomicfizzcaps.xyz}", VAULT77_API_KEY = "${VAULT77_API_KEY:-}" }
+startup_timeout_sec = 15
+description = "Live game data: players, locations, items, quests, config, leaderboard, worldstate. Use this heavily during development."
+
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github@2025.4.8"]
+env = { GITHUB_PERSONAL_ACCESS_TOKEN = "${GITHUB_TOKEN}" }
+description = "GitHub repo tools: issues, PRs, commits, code search, etc."
+
+[mcp_servers.filesystem]
+command = "npx"
+args = [
+  "-y",
+  "@modelcontextprotocol/server-filesystem@2026.1.14",
+  "${workspaceFolder}/backend",
+  "${workspaceFolder}/frontend",
+  "${workspaceFolder}/docs",
+  "${workspaceFolder}/mcp",
+  "${workspaceFolder}/scripts",
+  "${workspaceFolder}/systems",
+  "${workspaceFolder}/programs"
+]
+startup_timeout_sec = 12
+description = "Read/write scoped to the important source areas of the wasteland game."
+
+[mcp_servers.redis]
+command = "npx"
+args = ["-y", "@redis/mcp-server"]
+env = { REDIS_URL = "${REDIS_URL:-redis://localhost:6379}" }
+description = "Redis tools for cache, world state, cooldowns, etc."
+
+[mcp_servers.solana]
+command = "npx"
+args = ["-y", "@sendaifun/solana-mcp-server"]
+env = { RPC_URL = "${SOLANA_RPC:-https://api.devnet.solana.com}" }
+description = "Solana on-chain tools. Perfect companion to the Anchor/Cargo programs and minting workers."
+
+[mcp_servers.render]
+command = "npx"
+args = ["-y", "render-mcp"]
+env = { RENDER_API_KEY = "${RENDER_API_KEY:-}" }
+description = "Render.com deployment and service management (backend is often here)."
+
+[mcp_servers.vercel]
+command = "npx"
+args = ["-y", "@vercel/mcp-adapter"]
+env = { VERCEL_TOKEN = "${VERCEL_TOKEN:-}" }
+description = "Vercel deployment (frontend, some static assets)."
+
+# Optional / advanced - uncomment when you have the tokens / accounts
+# [mcp_servers.cloudflare]
+# command = "npx"
+# args = ["-y", "@cloudflare/mcp-server-cloudflare"]
+# env = { CLOUDFLARE_API_TOKEN = "${CLOUDFLARE_API_TOKEN:-}", CLOUDFLARE_ACCOUNT_ID = "${R2_ACCOUNT_ID:-}" }
+
+# You can add more (Postgres if you use it, Puppeteer for E2E map testing, etc.)
+# Per-tool timeouts example:
+# tool_timeouts = { slow_op = 180 }
+
+# Reminder: the custom vault77-game server must be installed:
+#   npm run mcp:install
+# Or: cd mcp && npm install
+
+# After editing this file, in a Grok session in this repo you can:
+#   /mcps   (or Ctrl+L) to toggle/inspect
+# Or use the built-in search_tool + use_tool to discover and call e.g. vault77-game__* tools.

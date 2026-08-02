@@ -12,8 +12,17 @@ Run from repository root:
 
 ## Official RealAI Utility Commands
 
+Requires canonical provider running (`C:\Users\tsmit\realai`):
+
+```powershell
+py -3.14 -m realai.provider   # http://127.0.0.1:8001
+```
+
+Set `REALAI_API_BASE=http://127.0.0.1:8001` in `.env` (see `.env.example`). Character portraits/personas: `POST /v1/characters` with style `fallout-meme` or `solana-game`, or UI at `http://localhost:3000/characters` when the RealAI frontend is up (use a different port for this game's backend if both run locally).
+
 Run from repository root:
 
+- `npm run realai:ping`
 - `npm run realai:gen:locations`
 - `npm run realai:gen:npcs`
 - `npm run realai:gen:lore`

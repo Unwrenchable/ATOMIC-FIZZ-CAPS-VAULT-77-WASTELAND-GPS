@@ -14,6 +14,7 @@
     "gen:npcs:sidequest": "node generate_sidequest_npcs.js",
     "gen:world": "node generate_world.js",
     "gen:world:integrate": "node integrate_world.js",
+    "realai:ping": "node scripts/realai/realai-client.js ping",
     "realai:gen:npcs": "node scripts/realai/generate-npcs.js",
     "realai:gen:locations": "node scripts/realai/generate-locations.js",
     "realai:gen:lore": "node scripts/realai/generate-lore.js",

@@ -14,7 +14,9 @@ fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
 fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
 
 [provider]
-cluster = "devnet"
+# cluster = "devnet"   # for local/dev testing
+cluster = "mainnet-beta"  # PRODUCTION / product release default. Use `anchor deploy --provider.cluster mainnet-beta` (or mainnet for some tooling)
+# IMPORTANT: After real mainnet deploy, verify the program ID in [programs.mainnet] matches the on-chain one.
 wallet = "~/.config/solana/id.json"
 
 [scripts]

@@ -9,7 +9,7 @@ const DEFAULT_PLAYER_LEVEL = 1;
 let LOOT_DATA = null;
 function getLootData() {
   if (LOOT_DATA) return LOOT_DATA;
-  const filePath = path.resolve(__dirname, "../../public/data/items/loot_tables.json");
+  const filePath = path.resolve(__dirname, "../../frontend/data/items/loot_tables.json");
   try {
     LOOT_DATA = JSON.parse(fs.readFileSync(filePath, "utf8"));
   } catch (err) {
