@@ -89,3 +89,17 @@ wallet/private-key.json
 *.mp4
 *.mov
 *.avi
+
+# Large generated content
+frontend/data/npc/
+frontend/data/npc_generator/
+assets/avatars-raster/
+assets/portraits-realai/
+data-root/npcs/
+
+# Build artifacts
+**/target/
+**/dist/
+**/build/
+node_modules/
+

@@ -1,6 +1,6 @@
 // backend/api/narrative.js — Narrative content API
-// Serves static JSON narrative files from public/data/narrative/ so the
-// NarrativeAPI client (public/js/narrativeClient.js) has working endpoints.
+// Serves static JSON narrative files from frontend/data/narrative/ so the
+// NarrativeAPI client (frontend/js/narrativeClient.js) has working endpoints.
 //
 // Routes:
 //   GET /api/narrative/main           → narrative_main.json
@@ -36,7 +36,7 @@ const DATA_DIR = path.join(__dirname, '..', '..', 'public', 'data');
 const mainStory = loadJson(path.join(NARRATIVE_DIR, 'narrative_main.json'));
 const terminals = loadJson(path.join(NARRATIVE_DIR, 'terminals.json'));
 const encounters = loadJson(path.join(NARRATIVE_DIR, 'encounters.json'));
-// collectibles.json lives in public/data/ (not the narrative subdirectory)
+// collectibles.json lives in frontend/data/ (not the narrative subdirectory)
 const collectibles = loadJson(path.join(DATA_DIR, 'collectibles.json'));
 
 // Build an index of available dialog keys at startup.

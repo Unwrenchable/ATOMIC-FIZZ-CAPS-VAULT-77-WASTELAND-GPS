@@ -49,6 +49,21 @@ export VAULT77_API_KEY=your-admin-password     # for privileged tools
 export GITHUB_TOKEN=<your-github-pat>          # for the github MCP server
 ```
 
+### Grok (xAI) Native Support
+This repo includes `.grok/config.toml` (project-scoped) that wires the same
+MCP servers (vault77-game, solana, filesystem scoped, render, vercel, redis, github...)
+directly into Grok sessions when your working directory is inside this repo.
+
+- Use `/mcps` or Ctrl+L in the Grok TUI to inspect/toggle them.
+- The built-in `search_tool` + `use_tool` let Grok call e.g. `vault77-game__*` tools.
+- Project skills in `.grok/skills/` (wasteland-*, use-vault77-mcp, playtest-debug, solana-dev, etc.)
+  and `AGENTS.md` are automatically loaded for highly context-aware assistance.
+- The sibling `realai` repo has matching `.grok/` setup + cross-repo skills.
+
+See also `AGENTS.md` (root) and `.grok/config.toml` for the exact MCP definitions and usage guidance.
+Grok will also respect the existing `.mcp.json` via compatibility layers in some cases, but the native
+`.grok/config.toml` is preferred for full feature parity (timeouts, env expansion, per-repo enable/disable).
+
 If you want to authenticate GitHub CLI with the same token in that shell:
 
 ```bash

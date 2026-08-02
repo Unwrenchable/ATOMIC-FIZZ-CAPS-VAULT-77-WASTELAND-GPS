@@ -1,0 +1,131 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "name": "Atomic Fizz - Vault 77 (root)"
+    },
+    {
+      "path": "backend",
+      "name": "Backend (Node/API/Overseer)"
+    },
+    {
+      "path": "frontend",
+      "name": "Frontend (Leaflet map, assets, JS UI)"
+    },
+    {
+      "path": "mcp",
+      "name": "MCP Server (vault77-game + others)"
+    },
+    {
+      "path": "programs/fizzcaps_onchain",
+      "name": "Solana Programs (Anchor/Rust)"
+    },
+    {
+      "path": "scripts",
+      "name": "Scripts (gens, realai, workers, tests)"
+    },
+    {
+      "path": "docs",
+      "name": "Docs (all categories + development logs)"
+    },
+    {
+      "path": "tests",
+      "name": "Tests (playtest, security, load, visual)"
+    },
+    {
+      "path": "../realai",
+      "name": "RealAI (sibling - AI core/provider)"
+    }
+  ],
+  "settings": {
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "eslint.workingDirectories": [
+      "backend",
+      "mcp",
+      "tests",
+      "scripts"
+    ],
+
+    "terminal.integrated.env.windows": {
+      "VAULT77_API_URL": "http://localhost:3000"
+    },
+
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/*.log": true,
+      "**/dist": true,
+      "**/.cache": true
+    },
+
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/tests/screenshots": true
+    },
+
+    // Highlight the important MCP and generation entry points
+    "files.associations": {
+      "*.js": "javascript",
+      "Anchor.toml": "toml",
+      ".mcp.json": "json"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "ms-azuretools.vscode-docker",
+      "rust-lang.rust-analyzer",
+      "tamasfe.even-better-toml",
+      "ms-vscode.vscode-typescript-next"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Fizz: MCP Install",
+        "type": "shell",
+        "command": "npm run mcp:install",
+        "group": "build"
+      },
+      {
+        "label": "Fizz: Dev Backend (nodemon)",
+        "type": "shell",
+        "command": "npm run dev",
+        "group": "build",
+        "isBackground": true
+      },
+      {
+        "label": "Fizz: Run RealAI Gens (requires sibling provider)",
+        "type": "shell",
+        "command": "npm run realai:ping && npm run realai:gen:npcs && npm run realai:gen:locations",
+        "group": "test"
+      },
+      {
+        "label": "Fizz: Full Playtest",
+        "type": "shell",
+        "command": "npm run test:playtest",
+        "group": "test"
+      },
+      {
+        "label": "Fizz: Security + Load Smoke",
+        "type": "shell",
+        "command": "npm test && npm run test:load",
+        "group": "test"
+      },
+      {
+        "label": "Fizz: Anchor Build (Solana)",
+        "type": "shell",
+        "command": "anchor build",
+        "group": "build"
+      },
+      {
+        "label": "Fizz: Start RealAI Provider (sibling)",
+        "type": "shell",
+        "command": "cd ../realai; $env:PYTHONPATH='src'; python -m realai.provider",
+        "group": "build",
+        "isBackground": true
+      }
+    ]
+  }
+}

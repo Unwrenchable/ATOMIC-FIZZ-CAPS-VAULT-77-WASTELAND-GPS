@@ -148,7 +148,7 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
     // Validate background (string from known list, or null)
     // We accept any short alphanumeric+underscore string — full
     // validation of IDs against the data file is not done server-
-    // side here (it lives in public/data) but we sanitise strictly.
+    // side here (it lives in frontend/data) but we sanitise strictly.
     // ----------------------------------------------------------
     let chosenBackground = null;
     if (typeof background === "string" && /^[a-z0-9_]{1,64}$/.test(background)) {
