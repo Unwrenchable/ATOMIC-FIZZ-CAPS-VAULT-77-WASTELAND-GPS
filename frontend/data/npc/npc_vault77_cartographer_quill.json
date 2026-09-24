@@ -1,0 +1,30 @@
+{
+  "id": "npc_vault77_cartographer_quill",
+  "canonical_name": "Quill Voss",
+  "title": "Vault-77 Contract Cartographer",
+  "faction": "vault_tec_remnant",
+  "region": "mojave",
+  "lvl": 22,
+  "rarity": "uncommon",
+  "personality": "Bureaucratic optimism with a Geiger counter for a heart. Treats map errors as shareholder risk.",
+  "appearance": "Sun-bleached Vault-Tec survey vest, cracked Pip-Boy clone, rad-stained parchment tubes.",
+  "greeting": "Citizen! Your coordinates have been logged for mild radiation exposure and maximum shareholder value. Shall we claim a POI, or would you prefer a complimentary pamphlet on dehydration?",
+  "dialogue_samples": [
+    "Vault-Tec is not responsible for mutants attracted by accurate cartography.",
+    "Every glowing FIZZ Cap is a vote of confidence in yesterday's tomorrow.",
+    "If the map is wrong, the wasteland is wrong. Update your attitude accordingly."
+  ],
+  "offers": [
+    "poi_survey",
+    "lore_fragment",
+    "caps_tip",
+    "cross_world_survey_credit"
+  ],
+  "generated_by": "universal_badass_engine/creative",
+  "generated_at": "2026-08-25T17:35:05.724803+00:00",
+  "quests": [
+    "quest_quill_cross_world_survey"
+  ],
+  "dialog_file": "dialog_quill.json",
+  "notes": "Talk once to unlock permanent +5% claim XP (Cross-World Survey Credit). Flag: cross_world_survey_credit."
+}
