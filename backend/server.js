@@ -13,6 +13,11 @@ const cors = require("cors");
 const compression = require("compression");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
+const { sanitizeSolanaEnv } = require("./lib/data-paths");
+
+// Fix deploy-panel typos (e.g. https//:api.devnet.solana.com) before any
+// Solana-dependent modules are required.
+sanitizeSolanaEnv();
 
 const app = express();
 app.set("trust proxy", 1);
