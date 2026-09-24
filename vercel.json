@@ -4,7 +4,7 @@
   "devCommand": null,
   "installCommand": null,
   "framework": null,
-  "outputDirectory": "public",
+  "outputDirectory": "frontend",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
