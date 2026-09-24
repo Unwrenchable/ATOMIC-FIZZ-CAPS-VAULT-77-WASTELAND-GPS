@@ -39,6 +39,16 @@
     }
   }
 
+  function escapeHtml(str) {
+    if (window.escapeHtml) return window.escapeHtml(str);
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   // ------------------------------------------------------------
   // TOAST NOTIFICATIONS
   // ------------------------------------------------------------
@@ -242,17 +252,17 @@
           : "0.000000000";
         
         return `
-          <div class="token-card" data-mint="${token.mint}">
-            <div class="token-symbol">${token.symbol || "TKN"}</div>
-            <div class="token-name">${token.name || "Token"}</div>
+          <div class="token-card" data-mint="${escapeHtml(token.mint)}">
+            <div class="token-symbol">${escapeHtml(token.symbol || "TKN")}</div>
+            <div class="token-name">${escapeHtml(token.name || "Token")}</div>
             <div class="token-stats">
               <div class="token-stat-row">
                 <span>Price:</span>
-                <span>${price} SOL</span>
+                <span>${escapeHtml(price)} SOL</span>
               </div>
               <div class="token-stat-row">
                 <span>Reserve:</span>
-                <span>${(token.solReserve / 1e9).toFixed(2)} SOL</span>
+                <span>${escapeHtml((token.solReserve / 1e9).toFixed(2))} SOL</span>
               </div>
               <div class="token-stat-row">
                 <span>Status:</span>
@@ -260,8 +270,8 @@
               </div>
             </div>
             <div class="progress-bar">
-              <div class="progress-fill" style="width: ${progress}%"></div>
-              <div class="progress-text">${progress.toFixed(1)}% to Graduation</div>
+              <div class="progress-fill" style="width: ${Number(progress) || 0}%"></div>
+              <div class="progress-text">${escapeHtml(progress.toFixed(1))}% to Graduation</div>
             </div>
           </div>
         `;
@@ -305,25 +315,28 @@
       const symbolEl = document.getElementById("fizz-selected-symbol");
       const infoEl = document.getElementById("fizz-selected-info");
 
-      if (symbolEl) symbolEl.textContent = token.symbol;
+      if (symbolEl) symbolEl.textContent = token.symbol == null ? "" : String(token.symbol);
       if (infoEl) {
+        const progressPct = Number(token.graduationProgress);
         infoEl.innerHTML = `
           <div class="token-details">
             <div class="data-row">
               <span class="data-label">NAME:</span>
-              <span class="data-value">${token.name}</span>
+              <span class="data-value">${escapeHtml(token.name)}</span>
             </div>
             <div class="data-row">
               <span class="data-label">PRICE:</span>
-              <span class="data-value">${token.priceFormatted}</span>
+              <span class="data-value">${escapeHtml(token.priceFormatted)}</span>
             </div>
             <div class="data-row">
               <span class="data-label">MARKET CAP:</span>
-              <span class="data-value">${token.marketCapFormatted}</span>
+              <span class="data-value">${escapeHtml(token.marketCapFormatted)}</span>
             </div>
             <div class="data-row">
               <span class="data-label">PROGRESS:</span>
-              <span class="data-value">${token.graduationProgress.toFixed(1)}%</span>
+              <span class="data-value">${escapeHtml(
+                Number.isFinite(progressPct) ? progressPct.toFixed(1) : "0.0"
+              )}%</span>
             </div>
             <div class="data-row">
               <span class="data-label">STATUS:</span>
@@ -378,50 +391,51 @@
 
       quoteEl.style.display = "block";
       
+      const symbol = escapeHtml(this.selectedToken && this.selectedToken.symbol);
       if (this.currentAction === "buy") {
         quoteEl.innerHTML = `
           <div class="data-row">
             <span>You Pay:</span>
-            <span>${quote.solAmount} SOL</span>
+            <span>${escapeHtml(quote.solAmount)} SOL</span>
           </div>
           <div class="data-row">
             <span>Fee (1%):</span>
-            <span>${quote.fee.toFixed(6)} SOL</span>
+            <span>${escapeHtml(Number(quote.fee).toFixed(6))} SOL</span>
           </div>
           <div class="data-row">
             <span>You Receive:</span>
-            <span class="balance-value">${quote.tokensOut.toFixed(2)} ${this.selectedToken.symbol}</span>
+            <span class="balance-value">${escapeHtml(Number(quote.tokensOut).toFixed(2))} ${symbol}</span>
           </div>
           <div class="data-row">
             <span>Price Impact:</span>
-            <span>${quote.priceImpact.toFixed(2)}%</span>
+            <span>${escapeHtml(Number(quote.priceImpact).toFixed(2))}%</span>
           </div>
           <div class="data-row">
             <span>New Price:</span>
-            <span>${(quote.newPrice * 1e9).toFixed(9)} SOL</span>
+            <span>${escapeHtml((Number(quote.newPrice) * 1e9).toFixed(9))} SOL</span>
           </div>
         `;
       } else {
         quoteEl.innerHTML = `
           <div class="data-row">
             <span>You Sell:</span>
-            <span>${quote.tokenAmount} ${this.selectedToken.symbol}</span>
+            <span>${escapeHtml(quote.tokenAmount)} ${symbol}</span>
           </div>
           <div class="data-row">
             <span>Gross Return:</span>
-            <span>${quote.solOutGross.toFixed(6)} SOL</span>
+            <span>${escapeHtml(Number(quote.solOutGross).toFixed(6))} SOL</span>
           </div>
           <div class="data-row">
             <span>Fee (1%):</span>
-            <span>${quote.fee.toFixed(6)} SOL</span>
+            <span>${escapeHtml(Number(quote.fee).toFixed(6))} SOL</span>
           </div>
           <div class="data-row">
             <span>You Receive:</span>
-            <span class="balance-value">${quote.solOut.toFixed(6)} SOL</span>
+            <span class="balance-value">${escapeHtml(Number(quote.solOut).toFixed(6))} SOL</span>
           </div>
           <div class="data-row">
             <span>Price Impact:</span>
-            <span>${quote.priceImpact.toFixed(2)}%</span>
+            <span>${escapeHtml(Number(quote.priceImpact).toFixed(2))}%</span>
           </div>
         `;
       }
