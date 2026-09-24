@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "description": "Single source of truth for NPC identity across Atomic Fizz Caps. Maps canonical names to dialog files, NPC data files, regions, and quest associations.",
   "generated": "2025",
-  "total_entries": 799,
+  "total_entries": 800,
   "npcs": [
     {
       "id": "dialog_arnie",
@@ -128,7 +128,7 @@
     },
     {
       "id": "dialog_jax_body",
-      "canonical_name": "Jax — The Empty Shell",
+      "canonical_name": "Jax \u2014 The Empty Shell",
       "title": "What Was Left Behind",
       "dialog_file": "dialog_jax_body.json",
       "npc_file": null,
@@ -243,7 +243,7 @@
     },
     {
       "id": "dialog_courier",
-      "canonical_name": "Pip — Wasteland Courier",
+      "canonical_name": "Pip \u2014 Wasteland Courier",
       "title": "Courier",
       "dialog_file": "dialog_courier.json",
       "npc_file": null,
@@ -722,7 +722,7 @@
     },
     {
       "id": "npc_strip_storyhook_01",
-      "canonical_name": "Back‑Alley Broker",
+      "canonical_name": "Back\u2011Alley Broker",
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_strip_storyhook_01.json",
@@ -7356,6 +7356,15 @@
       "dialog_file": null,
       "npc_file": "npc_vault77_survivor_fo_new.json",
       "region": "Unknown",
+      "quest_ids": []
+    },
+    {
+      "id": "npc_vault77_cartographer_quill",
+      "canonical_name": "Quill Voss",
+      "title": "Vault-77 Contract Cartographer",
+      "dialog_file": null,
+      "npc_file": "npc_vault77_cartographer_quill.json",
+      "region": "mojave",
       "quest_ids": []
     }
   ]

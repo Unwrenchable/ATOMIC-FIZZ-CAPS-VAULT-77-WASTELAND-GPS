@@ -1,0 +1,17 @@
+{
+  "id": "ui_omniverse_banner_copy",
+  "surface": "discovery_banner_secondary",
+  "strings": {
+    "label": "COORDINATES VALIDATED",
+    "sublabel": "Vault-Tec Omniverse Survey // mild rad optional",
+    "toast_claim_ready": "POI locked. Shareholder value inbound.",
+    "toast_locations_healed": "Location lattice restored. Wander freely, citizen."
+  },
+  "css_hint": {
+    "color": "#00ff41",
+    "border": "1px solid #00ff41",
+    "fontFamily": "VT323, monospace"
+  },
+  "generated_by": "universal_badass_engine/creative",
+  "generated_at": "2026-08-25T17:35:05.724803+00:00"
+}

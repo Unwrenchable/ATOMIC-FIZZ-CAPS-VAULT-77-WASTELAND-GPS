@@ -1,0 +1,24 @@
+{
+  "id": "chapter_omniverse_cartography",
+  "title": "Addendum: Multi-World Cartography Directive 77-\u03a9",
+  "year_range": "2296-present",
+  "content": "Following repeated shareholder complaints that the wasteland contained \"too many dimensions and not enough usable parking,\" Vault-Tec Research issued Directive 77-\u03a9. Cartographers were authorized to treat every repository of survivor data as a parallel world: game clients, RealAI home trees, recovered nests, and Solana program workspaces. Patterns learned in one world may be promoted to another only after three mild radiation reviews and one sarcastic Overseer sign-off. Vault-Tec reminds citizens that cross-world learning is a feature, not a breach of the user agreement \u2014 unless it is, in which case it was always intentional.",
+  "key_figures": [
+    {
+      "name": "Quill Voss",
+      "role": "Contract Cartographer",
+      "fate": "Active \u2014 currently arguing with a GPS ghost near Hoover."
+    },
+    {
+      "name": "Overseer AI",
+      "role": "Directive co-signer",
+      "fate": "Still smiling."
+    }
+  ],
+  "locations": [
+    "Vault 77 Relay",
+    "RealAI Home Lattice",
+    "Atomic Fizz Caps Workspace"
+  ],
+  "game_mechanic": "Players who talk to Quill Voss unlock a one-time +5% claim XP bonus labeled \"Cross-World Survey Credit.\""
+}
