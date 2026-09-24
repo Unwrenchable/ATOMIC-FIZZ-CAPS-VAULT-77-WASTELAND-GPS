@@ -1,105 +1,14 @@
-# ========================
-# Environment & Secrets
-# ========================
-.env
-.env.local
-.env.*.local
-.env.mainnet
-.env.testnet
-.env.development
-.env.production
-keys/
-*.pem
-*.key
-*.json.key
-realai_treasury*.json
-
-# ========================
-# Dependencies
-# ========================
-node_modules/
-**/node_modules/
-**/dist/
-**/build/
-
-# ========================
-# Solana / Anchor / Rust
-# ========================
-**/target/
-**/.anchor/
-**/Anchor.lock
-**/id.json
-**/*.so
-
-# ========================
-# Logs & Runtime
-# ========================
-*.log
-logs/
-*.pid
-*.seed
+# Backups & temp files
+*.backup
+*.cjs
+Cargo.lock
+repo_tree.txt
+realai-portrait-generator.cjs
+scripts/realai/*.backup
 .DS_Store
-
-# ========================
-# Editor & IDE
-# ========================
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# ========================
-# OS
-# ========================
-Thumbs.db
-ehthumbs.db
-
-# ========================
-# Build & Cache
-# ========================
-.cache/
-.next/
-out/
-*.tsbuildinfo
-*.env.local
-coverage/
-.nyc_output/
-
-# ========================
-# Temporary / Test Files
-# ========================
-temp/
-tmp/
-*.tmp
-test-results/
-playwright-report/
-
-# ========================
-# Specific to your project
-# ========================
-atomic_fizz_players/target/
-backend/dist/
-public/vendor/*.min.js
-scripts/**/*.json
-wallet/private-key.json
-
-# Ignore large files
-*.vhdx
-*.mp4
-*.mov
-*.avi
-
-# Large generated content
-frontend/data/npc/
-frontend/data/npc_generator/
-assets/avatars-raster/
-assets/portraits-realai/
-data-root/npcs/
-
-# Build artifacts
-**/target/
-**/dist/
-**/build/
 node_modules/
+dist/
 
+# Optional: keep data/ explicit
+!data/
+!frontend/data/
