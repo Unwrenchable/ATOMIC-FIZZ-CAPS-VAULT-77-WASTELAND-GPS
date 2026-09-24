@@ -195,6 +195,7 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
       claimed: [],
       quests: {},
       unlockedTerminal: false,
+      flags: {},
       battleWins: 0,
       survival: {
         radiation: 0,
@@ -305,6 +306,48 @@ router.post("/special/update", authMiddleware, playerLimiter, async (req, res) =
   } catch (err) {
     console.error("[player] special update error:", err);
     return res.status(500).json({ ok: false, error: "Failed to update SPECIAL" });
+  }
+});
+
+
+// ------------------------------------------------------------
+// POST /api/player/unlock-survey-credit
+// Quill Voss / Directive 77-Omega: durable one-time unlock of
+// Cross-World Survey Credit (permanent +5% location-claim XP).
+// Idempotent. Allowlisted to this flag only — not a generic flag writer.
+// ------------------------------------------------------------
+router.post("/unlock-survey-credit", authMiddleware, playerLimiter, async (req, res) => {
+  try {
+    const wallet = req.player.wallet;
+    const profile = await loadProfile(wallet);
+    if (!profile) return res.status(404).json({ ok: false, error: "not found" });
+
+    profile.flags = profile.flags && typeof profile.flags === "object" ? profile.flags : {};
+    if (profile.flags.cross_world_survey_credit) {
+      return res.json({
+        ok: true,
+        already: true,
+        unlocked: true,
+        flag: "cross_world_survey_credit",
+        flags: profile.flags
+      });
+    }
+
+    profile.flags.cross_world_survey_credit = true;
+    profile.flags.met_quill = true;
+    await saveProfile(wallet, profile);
+
+    console.log("[player] Cross-World Survey Credit unlocked for", wallet.slice(0, 8));
+    return res.json({
+      ok: true,
+      already: false,
+      unlocked: true,
+      flag: "cross_world_survey_credit",
+      flags: profile.flags
+    });
+  } catch (err) {
+    console.error("[player] unlock-survey-credit error:", err);
+    return res.status(500).json({ ok: false, error: "Failed to unlock survey credit" });
   }
 });
 
