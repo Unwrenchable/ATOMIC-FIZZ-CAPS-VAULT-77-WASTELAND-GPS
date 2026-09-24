@@ -14,6 +14,7 @@ const crypto = require("crypto");
 const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
 const { applyXpToProfile } = require("../lib/xp");
+const { resolveDataFile } = require("../lib/data-paths");
 
 // Cryptographically-secure random integer in [min, max)
 function secureRandInt(min, max) {
@@ -23,23 +24,24 @@ function secureRandInt(min, max) {
 // Load locations data for distance validation and rewards.
 // Primary source: poi.json (642+ grouped POIs rendered on the map).
 // Supplement: locations.json (hand-curated entries with custom claimRadius win on ID conflict).
+// Canonical path is frontend/data/; public/data/ remains a legacy fallback.
 let LOCATIONS = [];
 try {
   // 1. Load and flatten the full poi.json (grouped object → flat array)
-  const poiFile = path.join(__dirname, "..", "..", "public", "data", "poi.json");
+  const poiFile = resolveDataFile("poi.json");
   if (fs.existsSync(poiFile)) {
     const poiRaw = JSON.parse(fs.readFileSync(poiFile, "utf8"));
     const flat = Array.isArray(poiRaw)
       ? poiRaw
       : Object.values(poiRaw).filter(Array.isArray).flat();
     LOCATIONS = flat.filter(p => p && p.id && p.lat != null && p.lng != null);
-    console.log(`[location-claim] Loaded ${LOCATIONS.length} locations from poi.json`);
+    console.log(`[location-claim] Loaded ${LOCATIONS.length} locations from ${poiFile}`);
   } else {
     console.error("[location-claim] poi.json not found — falling back to locations.json only");
   }
 
   // 2. Merge hand-curated locations.json (override matching IDs so custom claimRadius is preserved)
-  const locFile = path.join(__dirname, "..", "..", "public", "data", "locations.json");
+  const locFile = resolveDataFile("locations.json");
   if (fs.existsSync(locFile)) {
     const manual = JSON.parse(fs.readFileSync(locFile, "utf8"));
     if (Array.isArray(manual) && manual.length > 0) {
@@ -49,7 +51,7 @@ try {
       manual.forEach(l => {
         if (l && l.id && !LOCATIONS.find(e => e.id === l.id)) LOCATIONS.push(l);
       });
-      console.log(`[location-claim] Merged ${manual.length} hand-curated entries from locations.json`);
+      console.log(`[location-claim] Merged ${manual.length} hand-curated entries from ${locFile}`);
     }
   }
 } catch (e) {

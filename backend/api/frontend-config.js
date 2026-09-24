@@ -4,6 +4,9 @@
 
 const express = require("express");
 const router = express.Router();
+const { normalizeSolanaRpc } = require("../lib/data-paths");
+
+const DEFAULT_SOLANA_RPC = "https://api.devnet.solana.com";
 
 router.get("/", (req, res) => {
   const overseerMode = String(process.env.OVERSEER_MODE || "linked-ai").trim().toLowerCase();
@@ -37,10 +40,13 @@ router.get("/", (req, res) => {
     capsMint: process.env.CAPS_MINT || process.env.TOKEN_MINT || "",
     treasuryWallet: process.env.TREASURY_WALLET || "",
     fizzFunProgramId: process.env.FIZZ_FUN_PROGRAM_ID || "GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc",
-    solanaRpc: process.env.SOLANA_RPC_URL || process.env.SOLANA_RPC || "https://api.devnet.solana.com",
+    solanaRpc: normalizeSolanaRpc(
+      process.env.SOLANA_RPC_URL || process.env.SOLANA_RPC || DEFAULT_SOLANA_RPC
+    ),
   };
 
   res.json(config);
 });
 
 module.exports = router;
+module.exports.normalizeSolanaRpc = normalizeSolanaRpc;

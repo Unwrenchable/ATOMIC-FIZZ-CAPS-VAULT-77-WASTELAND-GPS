@@ -1,16 +1,23 @@
 // backend/lib/locations.js
 const fs = require("fs").promises;
-const path = require("path");
+const { dataCandidates } = require("./data-paths");
 
 async function list() {
-  const filePath = path.join(__dirname, "..", "public", "data", "locations.json");
-  try {
-    const raw = await fs.readFile(filePath, "utf8");
-    return JSON.parse(raw);
-  } catch (err) {
-    console.warn("[lib/locations] failed to read static file, returning empty array", err && err.message ? err.message : err);
-    return [];
+  let lastErr = null;
+  for (const filePath of dataCandidates("locations.json")) {
+    try {
+      const raw = await fs.readFile(filePath, "utf8");
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (err) {
+      lastErr = err;
+    }
   }
+  console.warn(
+    "[lib/locations] failed to read static file, returning empty array",
+    lastErr && lastErr.message ? lastErr.message : lastErr
+  );
+  return [];
 }
 
 module.exports = { list };
