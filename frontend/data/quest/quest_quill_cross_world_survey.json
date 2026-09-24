@@ -1,0 +1,51 @@
+{
+  "id": "quest_quill_cross_world_survey",
+  "name": "Cross-World Survey Credit",
+  "type": "side",
+  "triggerNpc": "quill",
+  "description": "Talk to Quill Voss to unlock Cross-World Survey Credit — permanent +5% location-claim XP under Directive 77-Omega.",
+  "lore": "Quill stamps Survey Credit after one verified conversation. Unlock is one-time; +5% claim XP is permanent thereafter.",
+  "unlock_flags": [
+    "cross_world_survey_credit",
+    "met_quill"
+  ],
+  "objectives": [
+    {
+      "id": "talk_to_quill",
+      "description": "Speak with Quill Voss and receive Cross-World Survey Credit",
+      "requires": {
+        "flag": "met_quill"
+      },
+      "reward": {
+        "xp": 15
+      }
+    },
+    {
+      "id": "credit_unlocked",
+      "description": "Confirm Survey Credit stamp (permanent +5% claim XP)",
+      "requires": {
+        "flag": "cross_world_survey_credit"
+      },
+      "reward": {
+        "xp": 25
+      }
+    }
+  ],
+  "rewards": {
+    "xp": 40,
+    "caps": 0,
+    "items": [],
+    "flags": [
+      "cross_world_survey_credit",
+      "quest_quill_cross_world_survey_complete"
+    ]
+  },
+  "endings": [
+    {
+      "id": "ending_stamped",
+      "description": "Quill stamps Survey Credit. Claims grant +5% XP permanently.",
+      "reward": "Cross-World Survey Credit (permanent +5% claim XP)",
+      "consequence": "player.flags.cross_world_survey_credit set; location-claim applies bonus."
+    }
+  ]
+}

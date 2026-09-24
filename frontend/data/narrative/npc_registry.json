@@ -7362,10 +7362,12 @@
       "id": "npc_vault77_cartographer_quill",
       "canonical_name": "Quill Voss",
       "title": "Vault-77 Contract Cartographer",
-      "dialog_file": null,
+      "dialog_file": "dialog_quill.json",
       "npc_file": "npc_vault77_cartographer_quill.json",
       "region": "mojave",
-      "quest_ids": []
+      "quest_ids": [
+        "quest_quill_cross_world_survey"
+      ]
     }
   ]
 }

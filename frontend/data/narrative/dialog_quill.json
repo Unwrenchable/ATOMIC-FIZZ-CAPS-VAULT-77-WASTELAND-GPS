@@ -1,0 +1,150 @@
+{
+  "id": "dialog_quill",
+  "npc": "Quill Voss",
+  "portrait": "quill_voss",
+  "title": "Vault-77 Contract Cartographer",
+  "description": "A sun-bleached Vault-Tec survey vest, cracked Pip-Boy clone, and rad-stained parchment tubes. Quill treats map errors as shareholder risk and complimentary pamphlets as soft power.",
+  "backstory": "Quill Voss holds Vault-Tec Research Directive 77-Omega authorization to treat every survivor dataset as a parallel world. He argues with GPS ghosts near Hoover, stamps Survey Credit forms in triplicate, and insists accurate cartography is never responsible for the mutants it attracts.",
+  "intro": {
+    "id": "quill_intro",
+    "conditions": [
+      "!flag:met_quill"
+    ],
+    "set_flags": [
+      "met_quill",
+      "cross_world_survey_credit",
+      "quest_quill_cross_world_survey_taken"
+    ],
+    "offers_quest": "quest_quill_cross_world_survey",
+    "video_speech": "Citizen! Your coordinates are logged. Cross-World Survey Credit is hereby unlocked — a modest five percent claim XP improvement for services rendered to Omniverse cartography.",
+    "text": "He taps a cracked Pip-Boy clone and produces a triplicate form that smells faintly of toner and mild radiation.<br><br>\"Citizen! Your coordinates have been logged for mild radiation exposure and maximum shareholder value.\"<br><br>\"Directive 77-Omega authorizes Cross-World Survey Credit. Talk once, unlock permanently: plus five percent claim XP on every surveyed claim thereafter.\"<br><br>He stamps the form with bureaucratic triumph.<br><br>\"Vault-Tec reminds you that cross-world learning is a feature, not a breach of the user agreement — unless it is, in which case it was always intentional.\"",
+    "responses": [
+      {
+        "text": "[Question] What exactly is Cross-World Survey Credit?",
+        "tone": "question",
+        "next": "quill_explain_credit"
+      },
+      {
+        "text": "[Friendly] Appreciate the paperwork. The wasteland needs maps.",
+        "tone": "kind",
+        "next": "quill_maps_praise"
+      },
+      {
+        "text": "[Sarcastic] Plus five percent? Vault-Tec really splurged.",
+        "tone": "sarcastic",
+        "next": "quill_sarcastic_credit"
+      },
+      {
+        "text": "[Direct] Stamp it. I have POIs to claim.",
+        "tone": "direct",
+        "next": "quill_credit_confirmed"
+      }
+    ]
+  },
+  "knowledge_nodes": [
+    {
+      "id": "quill_explain_credit",
+      "conditions": [
+        "flag:met_quill",
+        "!flag:quill_credit_explained"
+      ],
+      "set_flags": [
+        "quill_credit_explained"
+      ],
+      "text": "\"Cross-World Survey Credit is a one-time unlock.\" He taps the stamped form.<br><br>\"Once issued, every location claim thereafter receives a five percent XP surplus — labeled clearly for auditors and mildly radioactive for verisimilitude.\"<br><br>\"It is not consumable. Vault-Tec does not do refunds.\""
+    },
+    {
+      "id": "quill_maps_praise",
+      "conditions": [
+        "flag:met_quill",
+        "!flag:quill_maps_praised"
+      ],
+      "set_flags": [
+        "quill_maps_praised"
+      ],
+      "text": "He straightens slightly.<br><br>\"Accuracy is patriotism. Every glowing FIZZ Cap is a vote of confidence in yesterday's tomorrow.\"<br><br>\"If the map is wrong, the wasteland is wrong. Update your attitude accordingly.\""
+    },
+    {
+      "id": "quill_sarcastic_credit",
+      "conditions": [
+        "flag:met_quill",
+        "!flag:quill_sarcasm_noted"
+      ],
+      "set_flags": [
+        "quill_sarcasm_noted"
+      ],
+      "text": "\"Five percent is the maximum authorized under Directive 77-Omega without a second Overseer smile.\"<br><br>He does not smile.<br><br>\"You are welcome.\""
+    },
+    {
+      "id": "quill_credit_confirmed",
+      "conditions": [
+        "flag:met_quill",
+        "!flag:quill_credit_ack"
+      ],
+      "set_flags": [
+        "quill_credit_ack"
+      ],
+      "text": "\"Credit active. Go claim something before the GPS ghost files a grievance.\""
+    },
+    {
+      "id": "quill_knows_jax",
+      "conditions": [
+        "flag:met_jax",
+        "!flag:quill_comment_jax"
+      ],
+      "set_flags": [
+        "quill_comment_jax"
+      ],
+      "text": "\"Jax Voss. Related by surname and by Vault-Tec paperwork I am not cleared to discuss.\"<br><br>\"If you see him flickering in a relay, tell him the maps still remember his routes.\""
+    }
+  ],
+  "quest_nodes": [
+    {
+      "id": "quill_quest_survey",
+      "conditions": [
+        "flag:met_quill",
+        "!flag:quest_quill_cross_world_survey_complete"
+      ],
+      "set_flags": [
+        "quest_quill_cross_world_survey_taken"
+      ],
+      "offers_quest": "quest_quill_cross_world_survey",
+      "text": "\"Your Survey Credit form is already stamped. Consider the quest paperwork closed the moment you spoke to me — Vault-Tec efficiency.\"<br><br>\"Claim POIs. Collect the surplus. Do not sue us about mutants.\"",
+      "video_speech": "Survey Credit is stamped. Claim POIs. Collect the surplus."
+    }
+  ],
+  "wildcards": [
+    {
+      "id": "quill_map",
+      "keywords": [
+        "map",
+        "cartography",
+        "survey",
+        "poi",
+        "gps"
+      ],
+      "text": "\"Every glowing FIZZ Cap is a vote of confidence in yesterday's tomorrow.\"<br><br>\"Vault-Tec is not responsible for mutants attracted by accurate cartography.\""
+    },
+    {
+      "id": "quill_directive",
+      "keywords": [
+        "directive",
+        "omniverse",
+        "77",
+        "credit"
+      ],
+      "text": "\"Directive 77-Omega. Three mild radiation reviews. One sarcastic Overseer sign-off. Then patterns may be promoted across worlds.\""
+    }
+  ],
+  "fallback": {
+    "id": "quill_fallback",
+    "text": "\"Coordinates noted. Pamphlet?\" He offers a dehydration pamphlet you did not ask for.",
+    "video_speech": "Coordinates noted. Pamphlet optional."
+  },
+  "mood": "bureaucratic",
+  "personality": [
+    "Bureaucratic optimism",
+    "Shareholder-aware",
+    "Geiger-hearted"
+  ]
+}

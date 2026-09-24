@@ -266,6 +266,9 @@
       // Handle flags
       if (node.set_flags && Game.flags) {
         node.set_flags.forEach(flag => Game.flags.set(flag, true));
+        if (node.set_flags.includes("cross_world_survey_credit") && Game.modules?.ApiClient?.request) {
+          Game.modules.ApiClient.request("/api/player/unlock-survey-credit", { method: "POST", body: "{}" }).catch(() => {});
+        }
       }
 
       // Handle quest offers

@@ -76,9 +76,44 @@
     },
 
     // Persist narrative flags to sessionStorage so they survive page reload
+    
+    // Durable unlock for Quill Voss Cross-World Survey Credit.
+    // Narrative flags are session-local; claim XP is server-side, so mirror the
+    // allowlisted flag to Redis via POST /api/player/unlock-survey-credit.
+    _syncDurableSurveyCredit(flags) {
+      const list = Array.isArray(flags) ? flags : [];
+      if (!list.includes("cross_world_survey_credit")) return;
+      try {
+        if (window.Game && Game.modules && Game.modules.ApiClient && typeof Game.modules.ApiClient.request === "function") {
+          Game.modules.ApiClient.request("/api/player/unlock-survey-credit", { method: "POST", body: "{}" })
+            .then((result) => {
+              if (result && result.ok) {
+                console.log("[narrative] Cross-World Survey Credit synced to profile", result.data || result);
+              } else {
+                console.warn("[narrative] Survey Credit unlock failed", result && (result.error || result));
+              }
+            })
+            .catch((err) => console.warn("[narrative] Survey Credit unlock error", err && err.message));
+          return;
+        }
+        const base = (window.API_BASE || window.BACKEND_URL || "").replace(/\/+$/, "");
+        const sessionId = localStorage.getItem("sessionId");
+        const headers = { "Content-Type": "application/json", "Accept": "application/json" };
+        if (sessionId) headers["Authorization"] = "Bearer " + sessionId;
+        fetch(base + "/api/player/unlock-survey-credit", { method: "POST", headers, body: "{}" })
+          .catch((err) => console.warn("[narrative] Survey Credit unlock fetch error", err && err.message));
+      } catch (err) {
+        console.warn("[narrative] Survey Credit unlock skipped", err && err.message);
+      }
+    },
+
     _saveFlags() {
       try {
         sessionStorage.setItem("nrr_flags", JSON.stringify(STATE.flags));
+        if (STATE.flags && STATE.flags.cross_world_survey_credit && !this._surveyCreditSynced) {
+          this._surveyCreditSynced = true;
+          this._syncDurableSurveyCredit(["cross_world_survey_credit"]);
+        }
       } catch (_) {}
     },
 

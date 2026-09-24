@@ -445,6 +445,14 @@
    * @param {string} locationId - Location ID
    * @param {Object} coords - Player coordinates { lat, lng }
    */
+
+  async function unlockSurveyCredit() {
+    return apiRequest("/api/player/unlock-survey-credit", {
+      method: "POST",
+      body: JSON.stringify({})
+    });
+  }
+
   async function claimLocation(wallet, locationId, coords) {
     const result = await apiRequest("/api/location-claim/claim", {
       method: "POST",
@@ -619,6 +627,7 @@
 
     // Location
     claimLocation,
+    unlockSurveyCredit,
 
     // Data
     loadGameData
