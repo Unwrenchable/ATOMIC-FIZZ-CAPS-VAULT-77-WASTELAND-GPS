@@ -302,6 +302,7 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
     // BUG-007 FIX: profile update is a non-atomic read-modify-write.
     // Use a per-wallet profile lock so concurrent claims on different POIs
     // don't overwrite each other's reward writes.
+    let surveyCreditApplied = false;
     const profileLockKey = `profile:lock:${wallet}`;
     const lockResult = await redis.set(profileLockKey, "1", { NX: true, EX: 10 });
     if (!lockResult) {
@@ -331,6 +332,19 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
 
     // BUG-008 FIX: enforce inventory size limit — prevent unbounded growth
     const MAX_INVENTORY_SIZE = 200;
+
+    // Cross-World Survey Credit (Quill Voss): permanent +5% claim XP after first talk.
+    // Durable flag lives on Redis profile.flags.cross_world_survey_credit (set via
+    // POST /api/player/unlock-survey-credit when dialogue sets the narrative flag).
+    surveyCreditApplied = false;
+    const hasSurveyCredit = !!(player.flags && player.flags.cross_world_survey_credit);
+    if (hasSurveyCredit && typeof rewards.xp === "number" && rewards.xp > 0) {
+      const boosted = Math.max(1, Math.floor(rewards.xp * 1.05));
+      if (boosted !== rewards.xp) {
+        rewards.xp = boosted;
+        surveyCreditApplied = true;
+      }
+    }
 
     // Award XP and caps — use shared applyXpToProfile() for consistent level-up logic
     player.caps = (player.caps || 0) + rewards.caps;
@@ -379,7 +393,7 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
 
     // Note: cooldown was already set atomically via NX above; no second SET needed.
 
-    console.log(`[location-claim] ${wallet.slice(0, 8)} claimed ${locId}: +${rewards.xp}XP, +${rewards.caps} caps, ${rewards.items.length} items`);
+    console.log(`[location-claim] ${wallet.slice(0, 8)} claimed ${locId}: +${rewards.xp}XP, +${rewards.caps} caps, ${rewards.items.length} items` + (surveyCreditApplied ? " [Cross-World Survey Credit +5%]" : ""));
 
     return res.json({
       ok: true,
@@ -387,7 +401,8 @@ router.post("/claim", authMiddleware, claimLimiter, async (req, res) => {
       rewards: {
         xp: rewards.xp,
         caps: rewards.caps,
-        items: rewards.items
+        items: rewards.items,
+        surveyCreditApplied: !!surveyCreditApplied
       },
       player: {
         xp: savedPlayer.xp,
