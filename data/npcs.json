@@ -1,0 +1,14 @@
+[
+  {
+    "id": "npc_rusty_jack",
+    "name": "Rusty Jack",
+    "role": "Caravan Guard",
+    "faction": "Fizzway Traders",
+    "traits": ["gruff", "paranoid", "loyal"],
+    "visual": {
+      "gender": "male",
+      "age": "50s",
+      "notable": ["scarred face", "cybernetic eye", "worn leather duster", "Pip-Boy 2000"]
+    }
+  }
+]
