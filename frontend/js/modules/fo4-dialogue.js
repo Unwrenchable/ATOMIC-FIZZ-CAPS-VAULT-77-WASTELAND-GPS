@@ -950,7 +950,7 @@
 
       const popup = document.createElement('div');
       popup.className = `fo4-affinity-popup ${amount < 0 ? 'negative' : ''}`;
-      popup.innerHTML = `<div class="fo4-affinity-text">${text}</div>`;
+      popup.innerHTML = `<div class="fo4-affinity-text">${escapeHtml(text)}</div>`;
 
       this._affinityPopup = popup;
       document.body.appendChild(popup);

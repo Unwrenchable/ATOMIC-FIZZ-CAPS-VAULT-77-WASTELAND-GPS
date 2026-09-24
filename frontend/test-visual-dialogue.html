@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Atomic Fizz - NPC Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.4.0/pixi.min.js"></script>
+    <style>
+        body { margin:0; background:#000; text-align:center; color:#77ffaa; }
+        button { padding:20px 50px; font-size:22px; margin:20px; background:#1a2a1a; border:4px solid #77ffaa; color:#77ffaa; cursor:pointer; }
+        #container { width:1280px; height:720px; border:5px solid #55ff99; margin:20px auto; background:#0a0f1a; position:relative; }
+    </style>
+</head>
+<body>
+    <h2>🔥 Atomic Fizz - NPC Dialogue Test (Stable Version)</h2>
+    <button onclick="loadNPC()">Load Rusty Jack</button>
+    <button onclick="loadNPC2()">Load Scarred Trader</button>
+    <div id="container"></div>
+
+    <script>
+        function loadNPC() {
+            const container = document.getElementById('container');
+            container.innerHTML = '';
+
+            const app = new PIXI.Application({ width: 1280, height: 720, backgroundColor: 0x0a0f1a });
+            container.appendChild(app.view);
+
+            // Green Pip-Boy frame
+            const frame = new PIXI.Graphics();
+            frame.beginFill(0x112211);
+            frame.lineStyle(12, 0x55ff99);
+            frame.drawRoundedRect(340, 60, 620, 620, 30);
+            app.stage.addChild(frame);
+
+            const text = new PIXI.Text("RUSTY JACK\nCaravan Guard\n\n[ Portrait will go here ]", {
+                fontFamily: "Courier New", fontSize: 42, fill: "#77ffaa", align: "center"
+            });
+            text.x = 650;
+            text.y = 280;
+            text.anchor.set(0.5);
+            app.stage.addChild(text);
+
+            console.log("✅ Stable frame loaded");
+        }
+
+        function loadNPC2() {
+            alert("This would load a different NPC (Scarred Trader, etc.)\n\nWe can now build the real portrait system.");
+        }
+    </script>
+</body>
+</html>
