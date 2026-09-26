@@ -8,10 +8,10 @@
 
   This script never creates, writes, or embeds a private key.
 */
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const {
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import {
   Connection,
   Keypair,
   LAMPORTS_PER_SOL,
@@ -19,7 +19,7 @@ const {
   SystemProgram,
   Transaction,
   sendAndConfirmTransaction
-} = require('@solana/web3.js');
+} from '@solana/web3.js';
 
 (async () => {
   try {
