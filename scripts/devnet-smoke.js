@@ -1,10 +1,12 @@
 /*
   scripts/devnet-smoke.js
-  - Creates keypair file if missing (uses the secret you provided)
+  - Requires an existing keypair file (KEYPAIR_PATH or ~/.config/solana/id.json)
   - Requests a 2 SOL airdrop on devnet
   - Verifies the program account exists
   - Submits a harmless 0-lamport transaction to the program
   - Prints structured output and exits with nonzero on failure
+
+  This script never creates, writes, or embeds a private key.
 */
 const fs = require('fs');
 const os = require('os');
@@ -29,13 +31,11 @@ const {
     }
     const kpPath = process.env.KEYPAIR_PATH || path.join(os.homedir(), '.config', 'solana', 'id.json');
 
-    // If keypair missing, write the secret you provided (replace array if needed)
     if (!fs.existsSync(kpPath)) {
-      const secret = [254,79,234,24,201,200,182,28,131,85,146,80,125,5,22,98,34,212,129,174,20,143,27,169,16,1,48,117,152,130,160,5,239,40,20,92,60,83,144,20,176,175,95,74,94,25,230,125,98,228,4,139,216,217,205,92,126,238,142,150,163,189,122,152];
-      fs.mkdirSync(path.dirname(kpPath), { recursive: true });
-      fs.writeFileSync(kpPath, JSON.stringify(secret));
-      fs.chmodSync(kpPath, 0o600);
-      console.log('Wrote keypair to', kpPath);
+      console.error('ERROR: Keypair file not found at', kpPath);
+      console.error('Set KEYPAIR_PATH to a Solana keypair JSON file, or create ~/.config/solana/id.json (for example: solana-keygen new --outfile ~/.config/solana/id.json).');
+      console.error('This smoke test does not create or embed a private key.');
+      process.exit(1);
     }
 
     const conn = new Connection(rpc, 'confirmed');
