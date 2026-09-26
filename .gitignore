@@ -1,13 +1,9 @@
 # ========================
 # Environment & Secrets
 # ========================
-.env
-.env.local
-.env.*.local
-.env.mainnet
-.env.testnet
-.env.development
-.env.production
+.env*
+!.env.example
+!**/.env.example
 keys/
 *.pem
 *.key
@@ -29,6 +25,9 @@ node_modules/
 **/.anchor/
 **/Anchor.lock
 **/id.json
+id.json
+**/*-keypair.json
+**/target/deploy/*.json
 **/*.so
 
 # ========================
