@@ -1625,8 +1625,8 @@
   transition: border-color 0.2s, background 0.2s;
 }
 
-/* Fizz Kid bobblehead SVG icon */
-.cc-sp-vaultboy {
+/* Stat medallion SVG icon */
+.cc-sp-icon {
   display: block;
   width: 46px;
   height: 55px;
@@ -1636,9 +1636,9 @@
   transition: opacity 0.2s, filter 0.2s;
 }
 
-.cc-special-row:hover .cc-sp-vaultboy {
+.cc-special-row:hover .cc-sp-icon {
   opacity: 1;
-  filter: drop-shadow(0 0 5px rgba(255,204,0,0.55));
+  filter: drop-shadow(0 0 5px rgba(196,150,90,0.55));
 }
 
 /* VITALS stat amber progress bar */
