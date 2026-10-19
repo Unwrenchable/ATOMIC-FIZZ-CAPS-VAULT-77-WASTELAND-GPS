@@ -1,10 +1,22 @@
 {
-  "name": "afc-avatar-pack-svg-v3-epic",
-  "version": "3.0.0",
+  "name": "afc-avatar-pack-svg-v4",
+  "version": "4.0.0-draft",
   "description": "EPIC enhanced SVG layered avatar pack for Atomic Fizz Caps Vault 77. Detailed wasteland aesthetic with authentic wasteland styling, anatomically accurate features, and immersive post-apocalyptic details.",
   "theme": "Post-apocalyptic wasteland-style wasteland survivor - EPIC edition",
   "viewBox": "0 0 256 256",
-  "layerOrder": ["head", "eyes", "nose", "mouth", "hair", "facialHair", "scars", "markings", "accessories", "shirt"],
+  "layerOrder": [
+    "head",
+    "eyes",
+    "nose",
+    "mouth",
+    "hair",
+    "hat",
+    "facialHair",
+    "scars",
+    "markings",
+    "accessories",
+    "shirt"
+  ],
   "parts": {
     "head": [
       "head_base.svg",
@@ -53,6 +65,11 @@
       "hair_slickedback.svg",
       "hair_wasteland.svg"
     ],
+    "hat": [
+      "hat_workcap.svg",
+      "hat_wide_brim.svg",
+      "hat_beanie.svg"
+    ],
     "facialHair": [
       "beard_stubble.svg",
       "beard_goatee.svg",
@@ -80,7 +97,7 @@
       "marking_moles.svg",
       "marking_radiation_burns.svg",
       "marking_circuitry.svg",
-      "marking_tattoo_vault.svg",
+      "marking_tattoo_cap.svg",
       "marking_tattoo_faction.svg"
     ],
     "accessories": [
@@ -104,9 +121,14 @@
       "shirt_wasteland_gear.svg"
     ]
   },
-  "totalAssets": 77,
+  "totalAssets": 80,
   "features": {
-    "colorizable": ["hair", "facialHair", "eyes", "skin"],
+    "colorizable": [
+      "hair",
+      "facialHair",
+      "eyes",
+      "skin"
+    ],
     "layered": true,
     "transparent": true,
     "optimized": true,
@@ -138,6 +160,18 @@
         "Maintained performance: all assets under 5KB, total ~340KB"
       ],
       "impact": "Transforms character system from basic to EPIC - immersive and authentic wasteland aesthetic"
+    },
+    "v4.0.0": {
+      "date": "2026-10-19",
+      "changes": [
+        "Gritty semi-real redraw of all layers (adult proportions, grime/dust/stubble noise, frayed fabric, warm desaturated grade)",
+        "Bust geometry fixed: chin ~y194 above a visible neck; garment necklines y>=198",
+        "Per-file id prefixes (no collisions when composed)",
+        "hair_bald is an empty layer",
+        "New hat layer (3 files)",
+        "marking_tattoo_vault replaced by original marking_tattoo_cap (old filename kept as alias)",
+        "shirt_vault_suit is now an olive work coat (IP scrub)"
+      ]
     }
   },
   "styleGuide": {
@@ -160,5 +194,8 @@
   "notes": "EPIC v3.0 release: Complete asset library overhaul for wasteland survivor character creation. All SVGs feature detailed shading, anatomical accuracy, and authentic wasteland aesthetic. Includes race-specific options (ghoul burns, synth circuitry, vault tattoos) with realistic detail. Perfect for immersive wasteland gameplay without breaking the fourth wall.",
   "overseerApproved": true,
   "radiationLevel": "Safe for viewing",
-  "vaultTecCompliant": true
+  "ipScrubbed": true,
+  "aliases": {
+    "marking_tattoo_vault.svg": "marking_tattoo_cap.svg"
+  }
 }

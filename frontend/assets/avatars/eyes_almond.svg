@@ -1,82 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <defs>
-    <!-- Eye white gradient -->
-    <radialGradient id="eyeWhite" cx="50%" cy="50%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="70%" stop-color="#f5f5f5"/>
-      <stop offset="100%" stop-color="#e8e8e8"/>
-    </radialGradient>
-    <!-- Iris gradient for depth -->
-    <radialGradient id="irisGrad" cx="35%" cy="35%">
-      <stop offset="0%" stop-color="#5a4a3a"/>
-      <stop offset="30%" stop-color="#3a2a1a"/>
-      <stop offset="70%" stop-color="#2a1a0a"/>
-      <stop offset="100%" stop-color="#1a0a00"/>
-    </radialGradient>
-    <!-- Pupil -->
-    <radialGradient id="pupilGrad" cx="40%" cy="40%">
-      <stop offset="0%" stop-color="#1a1a1a"/>
-      <stop offset="100%" stop-color="#000000"/>
-    </radialGradient>
-  </defs>
-  
-  <!-- LEFT EYE -->
-  <!-- Eye socket shadow -->
-  <ellipse cx="100" cy="118" rx="18" ry="13" fill="#9a8a7a" opacity="0.15"/>
-  
-  <!-- Eye white with slight almond shape -->
-  <path d="M83 118c0-5 7-9 17-9s17 4 17 9c0 5-7 9-17 9s-17-4-17-9z" fill="url(#eyeWhite)"/>
-  
-  <!-- Upper eyelid -->
-  <path d="M83 116c3-4 8-7 17-7s14 3 17 7" fill="none" stroke="#6a5a4a" stroke-width="2" stroke-linecap="round"/>
-  
-  <!-- Lower eyelid -->
-  <path d="M85 120c3 3 7 5 15 5s12-2 15-5" fill="none" stroke="#8a7a6a" stroke-width="1.5" stroke-linecap="round"/>
-  
-  <!-- Iris with detail -->
-  <circle cx="100" cy="118" r="7" fill="url(#irisGrad)"/>
-  
-  <!-- Iris texture lines -->
-  <g opacity="0.4" stroke="#4a3a2a" stroke-width="0.5">
-    <path d="M98 113l2 5M102 113l-2 5M95 117l5 1M100 121l2-3"/>
+  <!-- Eyes + brows: Almond, lifted outer corners, brown. Original Atomic Fizz art, v4 draft. -->
+  <defs><filter id="eyesalmond-b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.8"/></filter><filter id="eyesalmond-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter><filter id="eyesalmond-b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter><filter id="eyesalmond-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><filter id="eyesalmond-grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" seed="11"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .14  0 0 0 0 .08  1.6 0 0 0 -.62"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesalmond-dust" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="5"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .5  5 0 0 0 -3.1"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesalmond-pores" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .1  2.2 0 0 0 -.95"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesalmond-stub" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="1" seed="9"/><feColorMatrix values="0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  6 0 0 0 -3.3"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesalmond-paint" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".55"/></filter><filter id="eyesalmond-brush" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".012 .2" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .92  0 0 0 0 .8  0 0 0 0 .62  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesalmond-brushd" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".2 .014" numOctaves="3" seed="13"/><feColorMatrix values="0 0 0 0 .12  0 0 0 0 .08  0 0 0 0 .05  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>
+  <g filter="url(#eyesalmond-paint)">
+<ellipse cx="100" cy="114" rx="17" ry="8" fill="#3a2418" opacity="0.2" filter="url(#eyesalmond-b4)"/><ellipse cx="157" cy="114" rx="17" ry="8" fill="#3a2418" opacity="0.30000000000000004" filter="url(#eyesalmond-b4)"/>  <g>
+    <path d="M112 118.8 C105.4 113.25 93.4 113.06 88 115.5 C94.0 120.85 106.0 120.66 112 118.8Z" fill="#c4b29a"/>
+    <clipPath id="eyesalmond-c0"><path d="M112 118.8 C105.4 113.25 93.4 113.06 88 115.5 C94.0 120.85 106.0 120.66 112 118.8Z"/></clipPath>
+    <g clip-path="url(#eyesalmond-c0)">
+      <circle cx="99.4" cy="118.6" r="4.52" fill="#4a3420"/>
+      <circle cx="99.4" cy="118.6" r="4.52" fill="none" stroke="#120c08" stroke-width=".9" opacity=".7"/>
+      <circle cx="99.4" cy="118.6" r="1.292" fill="#0c0806"/>
+      <path d="M112 118.8 C105.4 113.25 93.4 113.06 88 115.5" stroke="#1c120c" stroke-width="5" fill="none" opacity=".6" filter="url(#eyesalmond-b2)" transform="translate(0 2.2)"/>
+      <circle cx="98.4" cy="116.6" r=".8" fill="#e8dcc8" opacity=".55"/>
+    </g>
+    <path d="M112 118.8 C105.4 113.25 93.4 113.06 88 115.5" stroke="#1a100a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M111 112.0 C103.6 107.68 92.8 107.87 86.8 112.46" stroke="#4a2c1e" stroke-width="1.2" fill="none" opacity=".6" filter="url(#eyesalmond-b1)"/>
+    <path d="M88 115.5 C94.0 120.85 106.0 120.66 112 118.8" stroke="#6a4232" stroke-width=".9" fill="none" opacity=".6"/>
+    <path d="M111 124.3 C103.6 126.8 94.0 126.8 88 118.92" stroke="#3e2619" stroke-width="1.2" fill="none" opacity="0.4" filter="url(#eyesalmond-b1)"/>
+  </g>  <g>
+    <path d="M145 119.39999999999999 C151.6 113.85 163.6 113.66 169 116.1 C163.0 121.44999999999999 151.0 121.25999999999999 145 119.39999999999999Z" fill="#c4b29a"/>
+    <clipPath id="eyesalmond-c1"><path d="M145 119.39999999999999 C151.6 113.85 163.6 113.66 169 116.1 C163.0 121.44999999999999 151.0 121.25999999999999 145 119.39999999999999Z"/></clipPath>
+    <g clip-path="url(#eyesalmond-c1)">
+      <circle cx="157.6" cy="119.19999999999999" r="4.52" fill="#4a3420"/>
+      <circle cx="157.6" cy="119.19999999999999" r="4.52" fill="none" stroke="#120c08" stroke-width=".9" opacity=".7"/>
+      <circle cx="157.6" cy="119.19999999999999" r="1.292" fill="#0c0806"/>
+      <path d="M145 119.39999999999999 C151.6 113.85 163.6 113.66 169 116.1" stroke="#1c120c" stroke-width="5" fill="none" opacity=".6" filter="url(#eyesalmond-b2)" transform="translate(0 2.2)"/>
+      <circle cx="155.4" cy="117.19999999999999" r=".8" fill="#e8dcc8" opacity=".55"/>
+    </g>
+    <path d="M145 119.39999999999999 C151.6 113.85 163.6 113.66 169 116.1" stroke="#1a100a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M146 112.6 C153.4 108.28 164.2 108.47 170.2 113.05999999999999" stroke="#4a2c1e" stroke-width="1.2" fill="none" opacity=".6" filter="url(#eyesalmond-b1)"/>
+    <path d="M169 116.1 C163.0 121.44999999999999 151.0 121.25999999999999 145 119.39999999999999" stroke="#6a4232" stroke-width=".9" fill="none" opacity=".6"/>
+    <path d="M146 124.89999999999999 C153.4 127.39999999999999 163.0 127.39999999999999 169 119.52" stroke="#3e2619" stroke-width="1.2" fill="none" opacity="0.4" filter="url(#eyesalmond-b1)"/>
+  </g><path d="M114 104.0 C104 98.0 90 97.2 82 102.75" stroke="#2e1f15" stroke-width="5" fill="none" opacity=".35" filter="url(#eyesalmond-b2)"/><path d="M114.0 105.7 l-4.4 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.65" stroke-linecap="round"/><path d="M113.0 105.2 l-4.1 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.56" stroke-linecap="round"/><path d="M112.1 104.3 l-2.9 -1.5" stroke="#24170f" stroke-width=".8" opacity="0.61" stroke-linecap="round"/><path d="M111.1 104.4 l-3.5 -1.7" stroke="#24170f" stroke-width=".8" opacity="0.50" stroke-linecap="round"/><path d="M110.1 104.5 l-3.2 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.66" stroke-linecap="round"/><path d="M109.2 103.0 l-2.7 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.58" stroke-linecap="round"/><path d="M108.2 104.8 l-4.4 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.87" stroke-linecap="round"/><path d="M107.2 103.2 l-3.8 -1.9" stroke="#24170f" stroke-width=".8" opacity="0.73" stroke-linecap="round"/><path d="M106.2 103.0 l-2.9 -1.1" stroke="#24170f" stroke-width=".8" opacity="0.71" stroke-linecap="round"/><path d="M105.3 102.7 l-4.3 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.78" stroke-linecap="round"/><path d="M104.3 103.9 l-4.0 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.68" stroke-linecap="round"/><path d="M103.3 101.9 l-2.8 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.63" stroke-linecap="round"/><path d="M102.4 102.4 l-4.1 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.88" stroke-linecap="round"/><path d="M101.4 102.6 l-2.5 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.68" stroke-linecap="round"/><path d="M100.4 103.4 l-2.7 -1.1" stroke="#24170f" stroke-width=".8" opacity="0.81" stroke-linecap="round"/><path d="M99.5 102.3 l-3.7 -1.9" stroke="#24170f" stroke-width=".8" opacity="0.84" stroke-linecap="round"/><path d="M98.5 101.8 l-2.5 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.69" stroke-linecap="round"/><path d="M97.5 101.3 l-3.4 -1.5" stroke="#24170f" stroke-width=".8" opacity="0.72" stroke-linecap="round"/><path d="M96.5 102.9 l-3.7 -1.6" stroke="#24170f" stroke-width=".8" opacity="0.60" stroke-linecap="round"/><path d="M95.6 102.9 l-4.4 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.55" stroke-linecap="round"/><path d="M94.6 102.8 l-3.4 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.72" stroke-linecap="round"/><path d="M93.6 102.3 l-4.1 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.87" stroke-linecap="round"/><path d="M92.7 101.3 l-2.8 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.58" stroke-linecap="round"/><path d="M91.7 102.8 l-4.2 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.89" stroke-linecap="round"/><path d="M90.7 101.3 l-4.3 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.86" stroke-linecap="round"/><path d="M89.8 101.3 l-3.8 -1.5" stroke="#24170f" stroke-width=".8" opacity="0.57" stroke-linecap="round"/><path d="M88.8 102.9 l-4.4 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.89" stroke-linecap="round"/><path d="M87.8 102.2 l-2.6 -2.2" stroke="#24170f" stroke-width=".8" opacity="0.84" stroke-linecap="round"/><path d="M86.8 102.7 l-3.1 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.51" stroke-linecap="round"/><path d="M85.9 103.7 l-4.2 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.82" stroke-linecap="round"/><path d="M84.9 103.3 l-3.2 -2.2" stroke="#24170f" stroke-width=".8" opacity="0.76" stroke-linecap="round"/><path d="M83.9 104.0 l-3.7 -2.2" stroke="#24170f" stroke-width=".8" opacity="0.59" stroke-linecap="round"/><path d="M83.0 103.8 l-2.6 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.71" stroke-linecap="round"/><path d="M82.0 105.2 l-4.1 -1.1" stroke="#24170f" stroke-width=".8" opacity="0.69" stroke-linecap="round"/><path d="M142 104.0 C152 98.0 166 97.2 174 103.05" stroke="#2e1f15" stroke-width="5" fill="none" opacity=".35" filter="url(#eyesalmond-b2)"/><path d="M142.0 105.7 l4.4 -1.9" stroke="#24170f" stroke-width=".8" opacity="0.58" stroke-linecap="round"/><path d="M143.0 105.6 l3.3 -2.2" stroke="#24170f" stroke-width=".8" opacity="0.59" stroke-linecap="round"/><path d="M143.9 103.7 l2.7 -1.6" stroke="#24170f" stroke-width=".8" opacity="0.59" stroke-linecap="round"/><path d="M144.9 104.9 l3.4 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.60" stroke-linecap="round"/><path d="M145.9 104.5 l3.1 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.65" stroke-linecap="round"/><path d="M146.8 104.2 l4.2 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.61" stroke-linecap="round"/><path d="M147.8 103.3 l3.1 -2.4" stroke="#24170f" stroke-width=".8" opacity="0.66" stroke-linecap="round"/><path d="M148.8 104.5 l3.7 -1.9" stroke="#24170f" stroke-width=".8" opacity="0.59" stroke-linecap="round"/><path d="M149.8 104.3 l3.5 -1.5" stroke="#24170f" stroke-width=".8" opacity="0.55" stroke-linecap="round"/><path d="M150.7 102.4 l2.8 -1.5" stroke="#24170f" stroke-width=".8" opacity="0.76" stroke-linecap="round"/><path d="M151.7 101.7 l3.5 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.84" stroke-linecap="round"/><path d="M152.7 102.8 l3.3 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.59" stroke-linecap="round"/><path d="M153.6 103.1 l4.0 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.56" stroke-linecap="round"/><path d="M154.6 101.9 l4.1 -1.6" stroke="#24170f" stroke-width=".8" opacity="0.54" stroke-linecap="round"/><path d="M155.6 103.0 l3.2 -1.6" stroke="#24170f" stroke-width=".8" opacity="0.64" stroke-linecap="round"/><path d="M156.5 103.3 l3.2 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.50" stroke-linecap="round"/><path d="M157.5 102.0 l3.6 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.57" stroke-linecap="round"/><path d="M158.5 101.4 l3.5 -1.1" stroke="#24170f" stroke-width=".8" opacity="0.69" stroke-linecap="round"/><path d="M159.5 102.3 l3.2 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.81" stroke-linecap="round"/><path d="M160.4 102.9 l4.4 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.73" stroke-linecap="round"/><path d="M161.4 101.4 l4.5 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.74" stroke-linecap="round"/><path d="M162.4 101.6 l4.4 -1.5" stroke="#24170f" stroke-width=".8" opacity="0.63" stroke-linecap="round"/><path d="M163.3 102.7 l3.0 -1.1" stroke="#24170f" stroke-width=".8" opacity="0.84" stroke-linecap="round"/><path d="M164.3 102.3 l2.7 -1.6" stroke="#24170f" stroke-width=".8" opacity="0.66" stroke-linecap="round"/><path d="M165.3 103.5 l4.3 -1.7" stroke="#24170f" stroke-width=".8" opacity="0.80" stroke-linecap="round"/><path d="M166.2 101.8 l3.6 -1.0" stroke="#24170f" stroke-width=".8" opacity="0.75" stroke-linecap="round"/><path d="M167.2 103.5 l3.1 -2.4" stroke="#24170f" stroke-width=".8" opacity="0.57" stroke-linecap="round"/><path d="M168.2 103.8 l3.2 -1.7" stroke="#24170f" stroke-width=".8" opacity="0.71" stroke-linecap="round"/><path d="M169.2 102.7 l4.2 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.68" stroke-linecap="round"/><path d="M170.1 104.3 l4.5 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.61" stroke-linecap="round"/><path d="M171.1 105.0 l4.2 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.63" stroke-linecap="round"/><path d="M172.1 104.1 l4.2 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.65" stroke-linecap="round"/><path d="M173.0 104.9 l3.5 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.74" stroke-linecap="round"/><path d="M174.0 103.8 l4.0 -2.2" stroke="#24170f" stroke-width=".8" opacity="0.79" stroke-linecap="round"/>
   </g>
-  
-  <!-- Pupil -->
-  <circle cx="100" cy="118" r="3" fill="url(#pupilGrad)"/>
-  
-  <!-- Catchlight (life in the eyes) -->
-  <circle cx="102" cy="116" r="1.5" fill="#ffffff" opacity="0.9"/>
-  <circle cx="99" cy="119" r="0.8" fill="#ffffff" opacity="0.6"/>
-  
-  <!-- RIGHT EYE -->
-  <!-- Eye socket shadow -->
-  <ellipse cx="156" cy="118" rx="18" ry="13" fill="#9a8a7a" opacity="0.15"/>
-  
-  <!-- Eye white with slight almond shape -->
-  <path d="M139 118c0-5 7-9 17-9s17 4 17 9c0 5-7 9-17 9s-17-4-17-9z" fill="url(#eyeWhite)"/>
-  
-  <!-- Upper eyelid -->
-  <path d="M139 116c3-4 8-7 17-7s14 3 17 7" fill="none" stroke="#6a5a4a" stroke-width="2" stroke-linecap="round"/>
-  
-  <!-- Lower eyelid -->
-  <path d="M141 120c3 3 7 5 15 5s12-2 15-5" fill="none" stroke="#8a7a6a" stroke-width="1.5" stroke-linecap="round"/>
-  
-  <!-- Iris with detail -->
-  <circle cx="156" cy="118" r="7" fill="url(#irisGrad)"/>
-  
-  <!-- Iris texture lines -->
-  <g opacity="0.4" stroke="#4a3a2a" stroke-width="0.5">
-    <path d="M154 113l2 5M158 113l-2 5M151 117l5 1M156 121l2-3"/>
-  </g>
-  
-  <!-- Pupil -->
-  <circle cx="156" cy="118" r="3" fill="url(#pupilGrad)"/>
-  
-  <!-- Catchlight -->
-  <circle cx="158" cy="116" r="1.5" fill="#ffffff" opacity="0.9"/>
-  <circle cx="155" cy="119" r="0.8" fill="#ffffff" opacity="0.6"/>
-  
-  <!-- Tear ducts -->
-  <circle cx="83" cy="119" r="1.5" fill="#d8a898" opacity="0.5"/>
-  <circle cx="173" cy="119" r="1.5" fill="#d8a898" opacity="0.5"/>
 </svg>

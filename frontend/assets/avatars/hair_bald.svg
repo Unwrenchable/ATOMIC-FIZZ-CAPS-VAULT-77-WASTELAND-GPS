@@ -1,3 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <!-- Bald: fully transparent, no hair -->
+  <!-- Hair: bald (empty layer). Original Atomic Fizz art, v4 draft. -->
+  <defs></defs>
+  <!-- intentionally empty: bald shows the head layer -->
 </svg>
