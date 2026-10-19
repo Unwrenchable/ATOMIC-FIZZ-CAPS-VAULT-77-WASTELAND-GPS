@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_tessa",
   "name": "Switchblade Tessa",
-  "region": "New Vegas Strip",
+  "region": "Neon Reach Strip",
   "type": "Street Fixer",
   "dialog": [
     "Vegas runs on favors, not caps.",

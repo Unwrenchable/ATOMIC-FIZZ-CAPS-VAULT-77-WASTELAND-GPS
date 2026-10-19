@@ -1,7 +1,7 @@
 {
   "id": "q_fo2_ncr_founding",
   "name": "The Republic's Price",
-  "description": "The New California Republic is being born, and history is being written — or rewritten. Ancient CAPS token transaction records from the Hub merchant wars prove Shady Sands' economic supremacy, but they also contain irrefutable evidence of Vault-Tec's secret involvement in funding what would become the NCR. A glitching echo of the Chosen One needs a wastelander — you — to recover these records from the ruins near Vault City before an Enclave mobile shredding unit turns two centuries of economic truth into ash.",
+  "description": "The Frontier Compact is being born, and history is being written — or rewritten. Ancient CAPS token transaction records from the Hub merchant wars prove Shady Sands' economic supremacy, but they also contain irrefutable evidence of FizzTec's secret involvement in funding what would become the Frontier Compact. A glitching echo of the Chosen One needs a wastelander — you — to recover these records from the ruins near Vault City before an Directorate mobile shredding unit turns two centuries of economic truth into ash.",
   "type": "main",
   "era": "2241",
   "region": "northern_california_echo",
@@ -34,7 +34,7 @@
       "from_quest": "q_fo1_hub_caravan_war",
       "choice": "give_crimson_caravan",
       "bonus": "caravan_route_intel",
-      "bonus_desc": "Crimson Caravan contacts near the Enclave outpost are willing to look the other way."
+      "bonus_desc": "Crimson Caravan contacts near the Directorate outpost are willing to look the other way."
     },
     {
       "from_quest": "q_fo1_hub_caravan_war",
@@ -86,7 +86,7 @@
     },
     {
       "id": "infiltrate_enclave_outpost",
-      "desc": "The Enclave has deployed a mobile shredding unit to destroy the CAPS archive records. Sneak past their perimeter or fight through it — either way, the shredder must be stopped.",
+      "desc": "The Directorate has deployed a mobile shredding unit to destroy the CAPS archive records. Sneak past their perimeter or fight through it — either way, the shredder must be stopped.",
       "poi": "redding_enclave_mobile_base",
       "approaches": [
         "stealth_bypass",
@@ -97,7 +97,7 @@
     },
     {
       "id": "recover_caps_records",
-      "desc": "Retrieve the complete CAPS transaction archive before the Enclave shredding cycle completes. Every holotape and encrypted datapad counts.",
+      "desc": "Retrieve the complete CAPS transaction archive before the Directorate shredding cycle completes. Every holotape and encrypted datapad counts.",
       "poi": "redding_enclave_mobile_base",
       "items_needed": [
         "caps_transaction_archive_vol1",
@@ -108,14 +108,14 @@
     },
     {
       "id": "read_the_evidence",
-      "desc": "Decrypt and review what the records actually contain. The truth about the NCR's economic foundations is encoded in two hundred years of transaction data.",
+      "desc": "Decrypt and review what the records actually contain. The truth about the Frontier Compact's economic foundations is encoded in two hundred years of transaction data.",
       "lore_unlock": "ncr_vault_tec_seed_funding",
-      "lore_desc": "The NCR's economic foundation was seeded by Vault-Tec shadow investment routed through the Hub's three merchant houses. Shady Sands did not rise on its own — it rose on pre-war corporate planning.",
+      "lore_desc": "The Frontier Compact's economic foundation was seeded by FizzTec shadow investment routed through the Hub's three merchant houses. Shady Sands did not rise on its own — it rose on pre-war corporate planning.",
       "dialogue": "dialog_evidence_review.json"
     },
     {
       "id": "make_final_choice",
-      "desc": "You hold the truth about the Republic. The NCR wants it buried, the Followers want it published, and the black market will pay handsomely for silence. Choose.",
+      "desc": "You hold the truth about the Republic. The Frontier Compact wants it buried, the Followers want it published, and the black market will pay handsomely for silence. Choose.",
       "npc": "npc_chosen_one_echo",
       "choices": [
         "help_ncr_suppress",
@@ -134,7 +134,7 @@
     {
       "id": 1,
       "objective": "infiltrate_enclave_outpost",
-      "desc": "The Enclave doesn't preserve history — they delete it. The shredder is running. Move."
+      "desc": "The Directorate doesn't preserve history — they delete it. The shredder is running. Move."
     },
     {
       "id": 2,
@@ -144,7 +144,7 @@
     {
       "id": 3,
       "objective": "read_the_evidence",
-      "desc": "The decryption is done. The truth sits in your Pip-Boy's data buffer, patient and devastating."
+      "desc": "The decryption is done. The truth sits in your Pocket-Boy's data buffer, patient and devastating."
     },
     {
       "id": 4,
@@ -159,7 +159,7 @@
   ],
   "choices": {
     "help_ncr_suppress": {
-      "desc": "Help the NCR suppress the Vault-Tec evidence. The Republic needs stability more than it needs the truth. Bury the records, protect the founding myth.",
+      "desc": "Help the Frontier Compact suppress the FizzTec evidence. The Republic needs stability more than it needs the truth. Bury the records, protect the founding myth.",
       "requirements": {
         "speech": 65,
         "reputation": "ncr_friendly"
@@ -184,7 +184,7 @@
           "quest_ncr_border_expansion"
         ],
         "karma": -50,
-        "outcome": "The Republic stands. History is rewritten. Stability purchased with silence. The CAPS network flows through NCR trade agreements for decades to come."
+        "outcome": "The Republic stands. History is rewritten. Stability purchased with silence. The CAPS network flows through Frontier Compact trade agreements for decades to come."
       }
     },
     "expose_vault_tec": {
@@ -215,7 +215,7 @@
           "quest_fo3_purified_truth"
         ],
         "karma": 200,
-        "outcome": "The truth burns bright and brief. NCR is shaken but survives. The CAPS network's Vault-Tec origins become wasteland legend — and fuel for every anti-establishment faction for a century."
+        "outcome": "The truth burns bright and brief. Frontier Compact is shaken but survives. The CAPS network's FizzTec origins become wasteland legend — and fuel for every anti-establishment faction for a century."
       }
     },
     "steal_for_caps": {
@@ -254,7 +254,7 @@
   },
   "factions": {
     "affected": [
-      "NCR",
+      "Frontier Compact",
       "Followers_of_Apocalypse",
       "Vault_Tec_Remnants",
       "Enclave_Mobile_Unit",
@@ -266,6 +266,6 @@
     "quest_ncr_border_expansion"
   ],
   "era_note": "2241-2242. The fractured timeline brings this moment into contact with the present. The Chosen One's echo appears because the timeline is unstable at these GPS coordinates.",
-  "fizz_lore": "The CAPS transaction records prove the wasteland economy was seeded by Vault-Tec — every cap ever traded carries the ghost of pre-war corporate planning. The NCR's stability literally runs on Vault-Tec's posthumous accounting.",
+  "fizz_lore": "The CAPS transaction records prove the wasteland economy was seeded by FizzTec — every cap ever traded carries the ghost of pre-war corporate planning. The Frontier Compact's stability literally runs on FizzTec's posthumous accounting.",
   "notes": "Sequel to q_fo1_hub_caravan_war. The chip outcome from FO1 era alters NPC attitudes and bonus intel available in this quest. Chosen One echo system requires timeline fracture mechanic to be active at GPS coordinates."
 }

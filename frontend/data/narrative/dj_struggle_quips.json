@@ -24,7 +24,7 @@
     {
       "id": "hack_fail_vault_tec",
       "triggers_after": 5,
-      "quip": "Vault-Tec security is no joke, wastelander. Keep at it - persistence beats passwords every time.",
+      "quip": "FizzTec security is no joke, wastelander. Keep at it - persistence beats passwords every time.",
       "tone": "encouraging"
     }
   ],
@@ -33,13 +33,13 @@
     {
       "id": "low_hp_1",
       "condition": "hp <= 25%",
-      "quip": "To whoever's bleeding out near Black Mountain... might want to use that Stimpak. Just a suggestion from your friendly neighborhood DJ.",
+      "quip": "To whoever's bleeding out near Black Mountain... might want to use that FizzPak. Just a suggestion from your friendly neighborhood DJ.",
       "tone": "urgent"
     },
     {
       "id": "low_hp_2",
       "condition": "hp <= 15%",
-      "quip": "I'm getting reports of someone looking like they lost a fight with a Deathclaw. If that's you... well, it's been nice knowing you. Kidding! Find cover!",
+      "quip": "I'm getting reports of someone looking like they lost a fight with a Radtalon. If that's you... well, it's been nice knowing you. Kidding! Find cover!",
       "tone": "dark_humor"
     },
     {

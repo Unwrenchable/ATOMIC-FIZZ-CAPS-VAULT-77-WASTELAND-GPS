@@ -20,7 +20,7 @@
   const DEFAULT_STATE = {
     // Inventory: full item objects (not just IDs)
     inventory: [],
-    // Equipped items by slot — Fallout-style named slots
+    // Equipped items by slot — wasteland-style named slots
     equipped: {
       weapon: null,    // right-hand weapon
       head: null,      // helmet / hat
@@ -47,7 +47,7 @@
     xp: 0,
     caps: 0,
     karma: 0,
-    // SPECIAL stats — default 5 in each attribute (Fallout standard mid-point)
+    // VITALS stats — default 5 in each attribute (wasteland standard mid-point)
     // S=Strength, P=Perception, E=Endurance, C=Charisma, I=Intelligence, A=Agility, L=Luck
     special: { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 },
     // Survival stats
@@ -151,7 +151,7 @@
         if (!Array.isArray(_state.questsCompleted)) _state.questsCompleted = [];
         if (!Array.isArray(_state.visitedLocations)) _state.visitedLocations = [];
         if (!Array.isArray(_state.perks)) _state.perks = [];
-        // Ensure equipped object has all Fallout-style slots (migrate old "armor" → "chest")
+        // Ensure equipped object has all wasteland-style slots (migrate old "armor" → "chest")
         const EQ_DEFAULTS = { weapon: null, head: null, chest: null, arms: null, legs: null, aid: null, accessory: null };
         if (!_state.equipped || typeof _state.equipped !== "object") {
           _state.equipped = { ...EQ_DEFAULTS };
@@ -166,13 +166,13 @@
             if (!(k in _state.equipped)) _state.equipped[k] = null;
           });
         }
-        // Ensure SPECIAL object exists with defaults for any missing keys
+        // Ensure VITALS object exists with defaults for any missing keys
         if (!_state.special || typeof _state.special !== 'object') {
           _state.special = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
         } else {
-          const SPECIAL_DEFAULTS = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
-          Object.keys(SPECIAL_DEFAULTS).forEach(k => {
-            if (typeof _state.special[k] !== 'number') _state.special[k] = SPECIAL_DEFAULTS[k];
+          const VITALS_DEFAULTS = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
+          Object.keys(VITALS_DEFAULTS).forEach(k => {
+            if (typeof _state.special[k] !== 'number') _state.special[k] = VITALS_DEFAULTS[k];
           });
         }
         // Ensure survival object exists with defaults
@@ -600,7 +600,7 @@
       return false;
     }
 
-    // Determine slot based on item type and slot field (Fallout-style)
+    // Determine slot based on item type and slot field (wasteland-style)
     let slot;
     if (item.type === "weapon") slot = "weapon";
     else if (item.type === "armor") slot = item.slot || "chest"; // use item.slot (head/chest/arms/legs)
@@ -735,7 +735,7 @@
     // BUG-047 FIX: cap at MAX_CAPS to match backend/lib/caps.js limit.
     // Previously there was no ceiling, so rapid reward farming or DevTools
     // manipulation could push the client-side balance beyond 999,999,999,
-    // causing display overflows in the Pip-Boy UI and potential bypass of
+    // causing display overflows in the Pocket-Boy UI and potential bypass of
     // client-side affordability gates.
     const MAX_CAPS = 999_999_999;
     _state.caps = Math.max(0, Math.min(_state.caps + amount, MAX_CAPS));
@@ -954,7 +954,7 @@
   }
 
   /**
-   * Get effective SPECIAL stats, reduced by hunger/thirst and withdrawal
+   * Get effective VITALS stats, reduced by hunger/thirst and withdrawal
    * @returns {Object} Effective special stats
    */
   function getEffectiveSpecial() {
@@ -964,7 +964,7 @@
     const hunger = _state.survival.hunger;
     const thirst = _state.survival.thirst;
     
-    // Hunger/thirst reduce SPECIAL stats
+    // Hunger/thirst reduce VITALS stats
     // At 0 hunger/thirst, -50% reduction
     const hungerPenalty = Math.max(0, (100 - hunger) / 200); // 0 to 0.5
     const thirstPenalty = Math.max(0, (100 - thirst) / 200); // 0 to 0.5
@@ -987,10 +987,10 @@
   }
 
   /**
-   * Apply background modifiers to SPECIAL (capped 1–10 each)
-   * @param {Object} base - Base SPECIAL from player allocation
+   * Apply background modifiers to VITALS (capped 1–10 each)
+   * @param {Object} base - Base VITALS from player allocation
    * @param {Object} bgModifiers - specialModifiers object from backgrounds.json
-   * @returns {Object} Modified SPECIAL
+   * @returns {Object} Modified VITALS
    */
   function applyBackgroundModifiers(base, bgModifiers) {
     if (!bgModifiers) return { ...base };
@@ -1069,16 +1069,16 @@
   }
 
   /**
-   * Use RadAway to reduce radiation
+   * Use GlowFlush to reduce radiation
    * @param {number} amount - Amount to reduce (default 100)
    */
-  function useRadAway(amount = 100) {
+  function useGlowFlush(amount = 100) {
     if (!_state || !_state.survival) return false;
     _state.survival.radiation = Math.max(0, _state.survival.radiation - amount);
     _dirty = true;
     saveToStorage();
     triggerSurvivalUpdate();
-    console.log(`[PlayerState] Used RadAway, radiation reduced by ${amount}`);
+    console.log(`[PlayerState] Used GlowFlush, radiation reduced by ${amount}`);
     return true;
   }
 
@@ -1097,14 +1097,14 @@
     // Handle different consumable types
     if (item.type === 'consumable') {
       if (item.tags && item.tags.includes('healing')) {
-        // Healing items (stimpak)
+        // Healing items (FizzPak)
         const healAmount = item.heal || 20;
         if (_state.hp !== undefined) {
           _state.hp = Math.min(_state.maxHp || 100, _state.hp + healAmount);
         }
         console.log(`[PlayerState] Used ${item.name}, healed ${healAmount} HP`);
       } else if (item.tags && item.tags.includes('radiation')) {
-        // Radiation items (radaway, radx)
+        // Radiation items (GlowFlush, radx)
         const radAmount = item.id === 'radaway' ? 100 : (item.id === 'radx' ? 50 : 0);
         if (radAmount > 0) {
           _state.survival.radiation = Math.max(0, _state.survival.radiation - radAmount);
@@ -1314,7 +1314,7 @@
     load: loadFromStorage,
     // Survival functions
     getSurvival: function () { return _state ? { ..._state.survival } : { radiation: 0, hunger: 100, thirst: 100, lastUpdated: Date.now() }; },
-    useRadAway,
+    useGlowFlush,
     consumeFood,
     consumeWater,
     updateSurvival,

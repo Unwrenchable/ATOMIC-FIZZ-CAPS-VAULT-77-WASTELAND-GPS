@@ -19,7 +19,7 @@
     "ammoType": "ammo_556",
     "weight": 7.8,
     "value": 120,
-    "description": "A scavenger‑rebuilt rifle favored by Mojave drifters."
+    "description": "A scavenger‑rebuilt rifle favored by Cinder Basin drifters."
   },
   {
     "id": "rusted_handcannon",
@@ -112,7 +112,7 @@
     "armor": 5,
     "weight": 2,
     "value": 15,
-    "description": "Standard-issue blue and yellow jumpsuit worn by Vault 77 residents. Provides minimal protection but is surprisingly comfortable."
+    "description": "Standard-issue amber and charcoal jumpsuit worn by Vault 77 residents. Provides minimal protection but is surprisingly comfortable."
   },
   {
     "id": "vault77_security_armor",
@@ -152,7 +152,7 @@
     "armor": 8,
     "weight": 3,
     "value": 40,
-    "description": "Standard-issue Vault 77 security helmet. Protects the noggin from debris and deathclaw claws alike."
+    "description": "Standard-issue Vault 77 security helmet. Protects the noggin from debris and Radtalon claws alike."
   },
   {
     "id": "scavenger_goggles",
@@ -172,7 +172,7 @@
     "armor": 12,
     "weight": 4,
     "value": 75,
-    "description": "Military-grade helmet recovered from a ruined NCR outpost."
+    "description": "Military-grade helmet recovered from a ruined Frontier Compact outpost."
   },
   {
     "id": "leather_arm_guards",
@@ -196,7 +196,7 @@
   },
   {
     "id": "vault_arm_wraps",
-    "name": "Vault-Tec Arm Wraps",
+    "name": "FizzTec Arm Wraps",
     "type": "armor",
     "slot": "arms",
     "armor": 6,
@@ -226,7 +226,7 @@
   },
   {
     "id": "vault_leg_wraps",
-    "name": "Vault-Tec Leg Wraps",
+    "name": "FizzTec Leg Wraps",
     "type": "armor",
     "slot": "legs",
     "armor": 6,
@@ -271,7 +271,7 @@
   },
   {
     "id": "stimpak",
-    "name": "Stimpak",
+    "name": "FizzPak",
     "type": "consumable",
     "heal": 30,
     "weight": 0.1,
@@ -279,7 +279,7 @@
   },
   {
     "id": "radaway",
-    "name": "RadAway",
+    "name": "GlowFlush",
     "type": "consumable",
     "heal": 0,
     "weight": 0.2,
@@ -530,14 +530,14 @@
   },
   {
     "id": "geofence_bethesda_vault_tec_id",
-    "name": "Vault-Tec Employee ID — Design Division",
+    "name": "FizzTec Employee ID — Design Division",
     "type": "collector",
     "geoLocked": true,
     "geoLocation": "fallout_shelter_gaming_pilgrimage",
     "weight": 0.1,
     "value": 0,
     "tradeable": false,
-    "description": "A Vault-Tec employee identification badge, Design Division, issued at the company's pre-war headquarters. The photo slot has a placeholder image — a yellow smiley face. The name reads: OVERSEER CANDIDATE. The expiration date is: UNTIL FURTHER NOTICE. The back reads: Welcome to Vault-Tec. Don't ask about the experiment parameters."
+    "description": "A FizzTec employee identification badge, Design Division, issued at the company's pre-war headquarters. The photo slot has a placeholder image — a yellow smiley face. The name reads: OVERSEER CANDIDATE. The expiration date is: UNTIL FURTHER NOTICE. The back reads: Welcome to FizzTec. Don't ask about the experiment parameters."
   },
   {
     "id": "geofence_reactor_access_badge",
@@ -563,14 +563,14 @@
   },
   {
     "id": "geofence_area51_clearance_chip",
-    "name": "Enclave Beyond-Black Security Clearance Chip",
+    "name": "Directorate Beyond-Black Security Clearance Chip",
     "type": "collector",
     "geoLocked": true,
     "geoLocation": "area_51_perimeter",
     "weight": 0.1,
     "value": 0,
     "tradeable": false,
-    "description": "An Enclave-era security chip recovered near the Nevada Test and Training Range perimeter. Clearance level: BEYOND BLACK. Access granted to: REDACTED. Authorized by: REDACTED. The data stored on this chip has been overwritten seven times. The eighth overwrite is what you found. It still carries a ghost of something in the memory substrate. Your Pocket-Boy reads it as a single word: RUN."
+    "description": "An Directorate-era security chip recovered near the Nevada Test and Training Range perimeter. Clearance level: BEYOND BLACK. Access granted to: REDACTED. Authorized by: REDACTED. The data stored on this chip has been overwritten seven times. The eighth overwrite is what you found. It still carries a ghost of something in the memory substrate. Your Pocket-Boy reads it as a single word: RUN."
   },
   {
     "id": "serum_adrenal_reaction",
@@ -798,7 +798,7 @@
     "type": "serum",
     "weight": 0.1,
     "value": 1500,
-    "description": "Removes one mutation at random from your active stack. Developed by Vault-Tec. Counterintuitively, this was the ethical part of the program.",
+    "description": "Removes one mutation at random from your active stack. Developed by FizzTec. Counterintuitively, this was the ethical part of the program.",
     "applies_mutation": null,
     "removes_mutation": true,
     "stackable": true
@@ -820,7 +820,7 @@
     "weight": 0.1,
     "value": 2000,
     "tradeable": true,
-    "description": "Military authentication key, Brotherhood of Steel manufacture. Heavy encryption, biometric secondary lock that's been bypassed with what appears to be a paperclip.",
+    "description": "Military authentication key, Coil Covenant manufacture. Heavy encryption, biometric secondary lock that's been bypassed with what appears to be a paperclip.",
     "stackable": false
   },
   {
@@ -830,7 +830,7 @@
     "weight": 0.1,
     "value": 2000,
     "tradeable": true,
-    "description": "Enclave-manufactured authentication key. The Enclave seal is embossed on the front. The back says, in very small print: 'Property of the Enclave. If found, please destroy America responsibly.'",
+    "description": "Directorate-manufactured authentication key. The Directorate seal is embossed on the front. The back says, in very small print: 'Property of the Directorate. If found, please destroy America responsibly.'",
     "stackable": false
   },
   {
@@ -867,7 +867,7 @@
     "type": "crafting_material",
     "weight": 0.2,
     "value": 350,
-    "description": "Uranium compound irradiated from Vault-Tec storage. Only available during nuke zone. Crafting: nuclear keycards (partial component), experimental armor plating.",
+    "description": "Uranium compound irradiated from FizzTec storage. Only available during nuke zone. Crafting: nuclear keycards (partial component), experimental armor plating.",
     "nuke_zone_only": true
   },
   {
@@ -894,7 +894,7 @@
     "type": "crafting_material",
     "weight": 0.05,
     "value": 200,
-    "description": "Desert wildflowers that only bloom in nuclear aftermath. Nuke zone only. Crafting: nuclear stimpaks, mutation catalysts.",
+    "description": "Desert wildflowers that only bloom in nuclear aftermath. Nuke zone only. Crafting: nuclear FizzPaks, mutation catalysts.",
     "nuke_zone_only": true
   },
   {
@@ -903,7 +903,7 @@
     "type": "questItem",
     "weight": 0.1,
     "value": 0,
-    "description": "A worn security card bearing the Vault-Tec 77 emblem. Opens restricted sublevel doors inside the vault."
+    "description": "A worn security card bearing the FizzTec 77 emblem. Opens restricted sublevel doors inside the vault."
   },
   {
     "id": "molten_concrete",
@@ -920,16 +920,16 @@
     "type": "crafting_material",
     "weight": 0.2,
     "value": 250,
-    "description": "Vault-Tec composite material irradiated to structural enhancement. Nuke zone only. Crafting: powered armor upgrades.",
+    "description": "FizzTec composite material irradiated to structural enhancement. Nuke zone only. Crafting: powered armor upgrades.",
     "nuke_zone_only": true
   },
   {
     "id": "nuclear_stimpak",
-    "name": "Nuclear Stimpak",
+    "name": "Nuclear FizzPak",
     "type": "consumable",
     "weight": 0.3,
     "value": 800,
-    "description": "A stimpak synthesized with irradiated plant compounds. Heals 150 HP over 10 seconds but also delivers 25 rads. Worth it. Probably. Craftable from Scorched Blast Blossom + standard stimpak components.",
+    "description": "A FizzPak synthesized with irradiated plant compounds. Heals 150 HP over 10 seconds but also delivers 25 rads. Worth it. Probably. Craftable from Scorched Blast Blossom + standard FizzPak components.",
     "nuke_zone_only": false
   },
   {
@@ -938,7 +938,7 @@
     "type": "questItem",
     "weight": 5.0,
     "value": 200,
-    "description": "A pre-war Nuka-Cola bottle-patterned area rug in surprisingly good condition. It really ties the shelter together. Property of Jeffrey Lebronski, known locally as The Dude."
+    "description": "A pre-war Atomic Fizz bottle-patterned area rug in surprisingly good condition. It really ties the shelter together. Property of Jeffrey Lebronski, known locally as The Dude."
   },
   {
     "id": "tears_rain_module",

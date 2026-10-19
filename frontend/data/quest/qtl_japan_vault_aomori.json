@@ -4,7 +4,7 @@
   "type": "global",
   "region": "Aomori_Japan",
   "npc_giver": "global_tokyo_ghost_merchant",
-  "description": "A Vault-Tec parallel project ran in northern Japan under the designation Aomori Protocol. Tanaka-san has located the vault entrance near old Aomori. The electronics inside would be worth more than a year's trading — but the vault appears to still be sealed.",
+  "description": "A FizzTec parallel project ran in northern Japan under the designation Aomori Protocol. Tanaka-san has located the vault entrance near old Aomori. The electronics inside would be worth more than a year's trading — but the vault appears to still be sealed.",
   "gps_requirement": {
     "region": "Aomori Prefecture, Japan",
     "real_lat": 40.8244,
@@ -24,7 +24,7 @@
     {
       "id": 2,
       "name": "Locate the Sealed Vault Entrance",
-      "description": "Search the mountainside above old Aomori for the Vault-Tec installation entrance. Tanaka-san's map coordinates are approximate — the entrance was deliberately disguised.",
+      "description": "Search the mountainside above old Aomori for the FizzTec installation entrance. Tanaka-san's map coordinates are approximate — the entrance was deliberately disguised.",
       "trigger": "player_search_area",
       "actions": ["spawn:item_aomori_vault_exterior_log", "set_flag:aomori_vault_found", "unlock_stage:3"]
     },

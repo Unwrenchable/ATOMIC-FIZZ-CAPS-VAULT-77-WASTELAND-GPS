@@ -1,5 +1,5 @@
 /* ============================================================
-   CHARACTER CREATOR CSS - FALLOUT 4 STYLE
+   CHARACTER CREATOR CSS - TERMINAL STYLE
    (Oswald font loaded via <link> in index.html)
    ============================================================ */
 
@@ -89,7 +89,7 @@
   gap: 16px;
 }
 
-/* Vault-Tec Cog Seal — CSS-only circular badge */
+/* FizzTec Cog Seal — CSS-only circular badge */
 .cc-vault-seal {
   width: 60px;
   height: 60px;
@@ -115,7 +115,7 @@
   letter-spacing: 0.05em;
 }
 
-/* Vault-Tec amber info strip below header */
+/* FizzTec amber info strip below header */
 .cc-vault-bar {
   background: rgba(255, 204, 0, 0.07);
   border-bottom: 1px solid rgba(255, 204, 0, 0.20);
@@ -498,7 +498,7 @@
 }
 
 /* ============================================================
-   SPECIAL STATS
+   VITALS STATS
    ============================================================ */
 
 .cc-special-stats h3 {
@@ -973,7 +973,7 @@
   border-bottom: 1px solid rgba(0, 255, 65, 0.2);
 }
 
-/* Section hint text — Fallout-flavored guidance under each section title */
+/* Section hint text — wasteland-flavored guidance under each section title */
 .cc-section-hint {
   font-size: 11px;
   color: #008822;
@@ -1299,7 +1299,7 @@
   background: rgba(0, 255, 65, 0.6);
 }
 
-/* Amber scrollbar thumb when on SPECIAL / Background / Traits tabs */
+/* Amber scrollbar thumb when on VITALS / Background / Traits tabs */
 .cc-special-content::-webkit-scrollbar-thumb,
 .cc-background-content::-webkit-scrollbar-thumb,
 .cc-traits-content::-webkit-scrollbar-thumb {
@@ -1568,7 +1568,7 @@
 }
 
 /* ============================================================
-   S.P.E.C.I.A.L. TAB STYLES
+   V.I.T.A.L.S. TAB STYLES
    ============================================================ */
 
 .cc-special-content,
@@ -1625,7 +1625,7 @@
   transition: border-color 0.2s, background 0.2s;
 }
 
-/* Vault Boy bobblehead SVG icon */
+/* Fizz Kid bobblehead SVG icon */
 .cc-sp-vaultboy {
   display: block;
   width: 46px;
@@ -1641,7 +1641,7 @@
   filter: drop-shadow(0 0 5px rgba(255,204,0,0.55));
 }
 
-/* SPECIAL stat amber progress bar */
+/* VITALS stat amber progress bar */
 .cc-sp-bar {
   height: 3px;
   background: rgba(0,255,65,0.1);
@@ -1657,7 +1657,7 @@
   transition: width 0.3s ease;
 }
 
-/* "You're SPECIAL!" intro banner */
+/* "You're VITAL!" intro banner */
 .cc-special-intro {
   display: flex;
   align-items: flex-start;
@@ -1670,7 +1670,7 @@
   border-radius: 4px;
 }
 
-/* Book cover "You're SPECIAL!" tile */
+/* Book cover "You're VITAL!" tile */
 .cc-si-book-cover {
   flex-shrink: 0;
   width: 46px;
@@ -1968,7 +1968,7 @@
   gap: 4px;
 }
 
-/* SPECIAL modifier tags (shared across background + traits) */
+/* VITALS modifier tags (shared across background + traits) */
 .cc-mod-tag {
   display: inline-block;
   padding: 2px 6px;

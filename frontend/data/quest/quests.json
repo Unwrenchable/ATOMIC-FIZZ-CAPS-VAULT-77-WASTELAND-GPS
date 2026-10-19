@@ -3,17 +3,17 @@
     "id": "quest_echoes_dam",
     "name": "Echoes of the Dam",
     "type": "main",
-    "poIs": ["Hoover Dam", "Lucky 38", "Helios One"],
-    "description": "Restore power to the Mojave by reactivating Hoover Dam’s turbines.",
+    "poIs": ["Hoover Dam", "The Spire", "Helios One"],
+    "description": "Restore power to the Cinder Basin by reactivating Hoover Dam’s turbines.",
     "objectives": [
       "Secure Hoover Dam control room",
       "Retrieve missing turbine parts from Helios One",
-      "Negotiate with factions at Lucky 38"
+      "Negotiate with factions at The Spire"
     ],
     "endings": [
       {
         "id": "ending_settlers",
-        "description": "You hand control of the Dam to Mojave settlers.",
+        "description": "You hand control of the Dam to Cinder Basin settlers.",
         "reward": "Advanced Combat Armor",
         "consequence": "Settlers thrive, factions lose influence."
       },
@@ -27,7 +27,7 @@
         "id": "ending_sabotage",
         "description": "You sabotage the turbines, leaving the Dam offline.",
         "reward": "Caps payout",
-        "consequence": "No one controls the power, chaos spreads across the Mojave."
+        "consequence": "No one controls the power, chaos spreads across the Cinder Basin."
       }
     ]
   },
@@ -36,7 +36,7 @@
     "name": "The Vault Experiment",
     "type": "main",
     "poIs": ["Vault 3", "Vault 19", "Vault 22", "Vault 87"],
-    "description": "Investigate Mojave Vaults to uncover the truth about Vault-Tec’s experiments.",
+    "description": "Investigate Cinder Basin Vaults to uncover the truth about FizzTec’s experiments.",
     "objectives": [
       "Search Vault 3 for experiment logs",
       "Recover data from Vault 19",
@@ -46,15 +46,15 @@
     "endings": [
       {
         "id": "ending_expose",
-        "description": "You expose Vault-Tec’s crimes to the Mojave.",
-        "reward": "Vault-Tec Experimental Device",
+        "description": "You expose FizzTec’s crimes to the Cinder Basin.",
+        "reward": "FizzTec Experimental Device",
         "consequence": "Public outrage weakens corporate remnants."
       },
       {
         "id": "ending_coverup",
-        "description": "You sell the data to a Mojave faction.",
+        "description": "You sell the data to a Cinder Basin faction.",
         "reward": "Caps + faction favor",
-        "consequence": "Vault-Tec secrets remain hidden."
+        "consequence": "FizzTec secrets remain hidden."
       },
       {
         "id": "ending_destroy",
@@ -69,7 +69,7 @@
     "name": "The Nuclear Trail",
     "type": "main",
     "poIs": ["Nevada Test Site", "Yucca Mountain", "Helios One", "Trinity Site"],
-    "description": "Track down missing nuclear prototypes scattered across Mojave test facilities.",
+    "description": "Track down missing nuclear prototypes scattered across Cinder Basin test facilities.",
     "objectives": [
       "Recover prototype armor at Yucca Mountain",
       "Secure Tesla Cannon at Nevada Test Site",
@@ -81,7 +81,7 @@
         "id": "ending_destroy",
         "description": "You destroy the prototypes.",
         "reward": "Caps payout",
-        "consequence": "The Mojave is spared from nuclear escalation."
+        "consequence": "The Cinder Basin is spared from nuclear escalation."
       },
       {
         "id": "ending_sell",
@@ -92,8 +92,8 @@
       {
         "id": "ending_keep",
         "description": "You keep the prototypes for yourself.",
-        "reward": "Prototype X-01 Power Armor",
-        "consequence": "You become a feared figure in the Mojave."
+        "reward": "Prototype X-01 Reactor Harness",
+        "consequence": "You become a feared figure in the Cinder Basin."
       }
     ]
   },
@@ -101,12 +101,12 @@
     "id": "quest_strip_shadows",
     "name": "Shadows of the Strip",
     "type": "main",
-    "poIs": ["Ultra-Luxe Casino", "Gomorrah Casino", "Lucky 38"],
+    "poIs": ["Ultra-Luxe Casino", "Gomorrah Casino", "The Spire"],
     "description": "Uncover corruption and secrets hidden within the Strip casinos.",
     "objectives": [
       "Investigate Ultra-Luxe backrooms",
       "Retrieve smuggled weapons from Gomorrah",
-      "Confront casino bosses at Lucky 38"
+      "Confront casino bosses at The Spire"
     ],
     "endings": [
       {
@@ -125,16 +125,16 @@
         "id": "ending_destroy",
         "description": "You burn the Strip down.",
         "reward": "Legendary artifact",
-        "consequence": "Chaos reigns in New Vegas."
+        "consequence": "Chaos reigns in Neon Reach."
       }
     ]
   },
   {
     "id": "quest_ncr_push",
-    "name": "NCR Final Push",
+    "name": "Frontier Compact Final Push",
     "type": "main",
     "poIs": ["Camp Forlorn Hope", "Bitter Springs", "Hoover Dam"],
-    "description": "Lead NCR forces in a decisive assault against Legion strongholds.",
+    "description": "Lead Frontier Compact forces in a decisive assault against Legion strongholds.",
     "objectives": [
       "Rally demoralized troops at Forlorn Hope",
       "Aid refugees at Bitter Springs",
@@ -143,8 +143,8 @@
     "endings": [
       {
         "id": "ending_ncr_victory",
-        "description": "NCR wins the Mojave.",
-        "reward": "NCR Ranger Combat Armor",
+        "description": "Frontier Compact wins the Cinder Basin.",
+        "reward": "Frontier Compact Ranger Combat Armor",
         "consequence": "Republic law spreads, tribes displaced."
       },
       {
@@ -155,9 +155,9 @@
       },
       {
         "id": "ending_legion_breakthrough",
-        "description": "Legion overruns NCR lines.",
+        "description": "Legion overruns Frontier Compact lines.",
         "reward": "Legion Favor",
-        "consequence": "NCR retreats, Caesar claims victory."
+        "consequence": "Frontier Compact retreats, Caesar claims victory."
       }
     ]
   },
@@ -166,7 +166,7 @@
     "name": "Brotherhood Purge",
     "type": "main",
     "poIs": ["Hidden Valley Bunker", "HELIOS One", "REPCONN HQ"],
-    "description": "Aid or oppose the Brotherhood of Steel in their tech reclamation crusade.",
+    "description": "Aid or oppose the Coil Covenant in their tech reclamation crusade.",
     "objectives": [
       "Infiltrate Hidden Valley bunker",
       "Redirect power at HELIOS One",
@@ -176,7 +176,7 @@
       {
         "id": "ending_bos_dominance",
         "description": "BoS hoards all tech.",
-        "reward": "T-51b Power Armor",
+        "reward": "T-51b Reactor Harness",
         "consequence": "Wasteland tech stagnates."
       },
       {
@@ -213,7 +213,7 @@
       },
       {
         "id": "ending_ncr_merge",
-        "description": "Khans join NCR.",
+        "description": "Khans join Frontier Compact.",
         "reward": "Scout Gear",
         "consequence": "Tribes assimilated."
       },
@@ -252,7 +252,7 @@
       {
         "id": "ending_boomer_destruction",
         "description": "Sabotage the plane.",
-        "reward": "Caps from NCR",
+        "reward": "Caps from Frontier Compact",
         "consequence": "Boomers grounded forever."
       }
     ]
@@ -294,7 +294,7 @@
     "name": "Legion Revolt",
     "type": "main",
     "poIs": ["Cottonwood Cove", "Nelson", "Fortification Hill"],
-    "description": "Incite or crush a slave uprising in Caesar's Legion.",
+    "description": "Incite or crush a slave uprising in Red Cohort.",
     "objectives": [
       "Arm slaves at Cottonwood Cove",
       "Sabotage Nelson crucifixion",
@@ -325,7 +325,7 @@
     "id": "quest_powder_uprising",
     "name": "Powder Uprising",
     "type": "main",
-    "poIs": ["NCR Correctional Facility", "Primm", "Vault 19"],
+    "poIs": ["Frontier Compact Correctional Facility", "Primm", "Vault 19"],
     "description": "Lead the Powder Gangers to power or destruction.",
     "objectives": [
       "Break out NCRCF prisoners",
@@ -347,7 +347,7 @@
       },
       {
         "id": "ending_ganger_annihilation",
-        "description": "NCR wipes them out.",
+        "description": "Frontier Compact wipes them out.",
         "reward": "Trooper Armor",
         "consequence": "Highways safe."
       }
@@ -380,7 +380,7 @@
       {
         "id": "ending_society_exposure",
         "description": "Expose to public.",
-        "reward": "Caps from NCR",
+        "reward": "Caps from Frontier Compact",
         "consequence": "Ultra-Luxe ruined."
       }
     ]
@@ -390,29 +390,29 @@
     "name": "Kings' Gambit",
     "type": "main",
     "poIs": ["Freeside", "King's School of Impersonation", "The Tops"],
-    "description": "Broker peace or war between the Kings and NCR in Freeside.",
+    "description": "Broker peace or war between the Kings and Frontier Compact in Freeside.",
     "objectives": [
       "Meet the King in his school",
       "Resolve Pacer's aggression",
-      "Negotiate at NCR embassy"
+      "Negotiate at Frontier Compact embassy"
     ],
     "endings": [
       {
         "id": "ending_kings_peace",
-        "description": "Kings and NCR coexist.",
+        "description": "Kings and Frontier Compact coexist.",
         "reward": "Elvis Jacket",
         "consequence": "Freeside stabilizes."
       },
       {
         "id": "ending_kings_war",
-        "description": "Kings fight NCR.",
+        "description": "Kings fight Frontier Compact.",
         "reward": "Grease Gun",
         "consequence": "Freeside in chaos."
       },
       {
         "id": "ending_kings_absorb",
-        "description": "Kings join NCR.",
-        "reward": "NCR MP Armor",
+        "description": "Kings join Frontier Compact.",
+        "reward": "Frontier Compact MP Armor",
         "consequence": "Freeside annexed."
       }
     ]
@@ -422,7 +422,7 @@
     "name": "Remnants' Power",
     "type": "main",
     "poIs": ["Remnants Bunker", "Ranger Station Foxtrot", "Camp Golf"],
-    "description": "Awaken Enclave remnants for one final mission.",
+    "description": "Awaken Directorate remnants for one final mission.",
     "objectives": [
       "Find bunker entrance",
       "Recruit veterans",
@@ -432,20 +432,20 @@
       {
         "id": "ending_enclave_strike",
         "description": "Remnants aid your faction.",
-        "reward": "Enclave Power Armor",
+        "reward": "Directorate Reactor Harness",
         "consequence": "Decisive air strike."
       },
       {
         "id": "ending_remnants_retire",
         "description": "Let them rest.",
         "reward": "Remnants Helmet",
-        "consequence": "Enclave fades."
+        "consequence": "Directorate fades."
       },
       {
         "id": "ending_remnants_betrayal",
-        "description": "Turn them over to NCR.",
-        "reward": "Caps + NCR Favor",
-        "consequence": "Enclave imprisoned."
+        "description": "Turn them over to Frontier Compact.",
+        "reward": "Caps + Frontier Compact Favor",
+        "consequence": "Directorate imprisoned."
       }
     ]
   },
@@ -496,7 +496,7 @@
       {
         "id": "ending_mutant_peace",
         "description": "Unite mutants.",
-        "reward": "Super Mutant Ally",
+        "reward": "Glowborn Ally",
         "consequence": "Jacobstown alliance."
       },
       {
@@ -517,8 +517,8 @@
     "id": "side_ghost_town_gunfight",
     "name": "Ghost Town Gunfight",
     "type": "side",
-    "poIs": ["Goodsprings", "Goodsprings Cemetery"],
-    "description": "Help Goodsprings defend against Powder Gangers.",
+    "poIs": ["Dustwell", "Dustwell Cemetery"],
+    "description": "Help Dustwell defend against Powder Gangers.",
     "objectives": [
       "Rally townsfolk",
       "Set traps at cemetery"
@@ -528,7 +528,7 @@
     "id": "side_three_card_bounty",
     "name": "Three-Card Bounty",
     "type": "side",
-    "poIs": ["Primm", "Mojave Outpost"],
+    "poIs": ["Primm", "Cinder Basin Outpost"],
     "description": "Hunt escaped convicts.",
     "objectives": [
       "Track targets",
@@ -572,7 +572,7 @@
     "id": "side_radio_repair",
     "name": "Radio Repair",
     "type": "side",
-    "poIs": ["Goodsprings", "Primm"],
+    "poIs": ["Dustwell", "Primm"],
     "description": "Fix settler's radio.",
     "objectives": [
       "Find parts",
@@ -619,7 +619,7 @@
     "poIs": ["The Thorn", "Various burrows"],
     "description": "Collect creature eggs.",
     "objectives": [
-      "Hunt radscorpion, cazador, deathclaw eggs"
+      "Hunt glowsting, cazador, Radtalon eggs"
     ]
   },
   {
@@ -647,7 +647,7 @@
     "id": "side_heartache_number",
     "name": "Heartache by the Number",
     "type": "side",
-    "poIs": ["Mojave Outpost", "Cassidy Caravan wreckage"],
+    "poIs": ["Cinder Basin Outpost", "Cassidy Caravan wreckage"],
     "description": "Help Cass avenge her caravan.",
     "objectives": [
       "Track attackers",
@@ -691,7 +691,7 @@
     "id": "side_high_times",
     "name": "High Times",
     "type": "side",
-    "poIs": ["Westside", "New Vegas Medical Clinic"],
+    "poIs": ["Westside", "Neon Reach Medical Clinic"],
     "description": "Cure addicts.",
     "objectives": [
       "Treat Hoff and Ronte"
@@ -724,7 +724,7 @@
     "name": "I Put a Spell on You",
     "type": "side",
     "poIs": ["Camp McCarran"],
-    "description": "Find NCR spy.",
+    "description": "Find Frontier Compact spy.",
     "objectives": [
       "Investigate monorail sabotage"
     ]
@@ -736,12 +736,12 @@
     "poIs": ["Primm"],
     "description": "Install new sheriff.",
     "objectives": [
-      "Choose NCR, robot, or outlaw leader"
+      "Choose Frontier Compact, robot, or outlaw leader"
     ]
   },
   {
     "id": "side_sunset_stars",
-    "name": "Sunset Sarsaparilla Star",
+    "name": "Dustpop Star",
     "type": "side",
     "poIs": ["Sunset HQ", "Various locations"],
     "description": "Collect 50 star caps.",
@@ -773,12 +773,12 @@
     "id": "quest_fizz_awakens",
     "name": "The Fizz Awakens",
     "type": "main",
-    "poIs": ["Vault 77", "Lucky 38 Sub-Basement", "FizzCo Research Annex"],
+    "poIs": ["Vault 77", "The Spire Sub-Basement", "FizzCo Research Annex"],
     "description": "Investigate the sudden reactivation of pre-war FizzCo systems beneath the Strip.",
     "objectives": [
       "Enter Vault 77 through the collapsed Strip tunnels",
       "Recover the Robot Relic Core",
-      "Access the hidden subsystem beneath Lucky 38"
+      "Access the hidden subsystem beneath The Spire"
     ],
     "endings": [
       {
@@ -805,7 +805,7 @@
     "id": "quest_platinum_cap",
     "name": "The Platinum Cap",
     "type": "main",
-    "poIs": ["FizzCo Executive Vault", "Vault 77 Robotics Bay", "Lucky 38"],
+    "poIs": ["FizzCo Executive Vault", "Vault 77 Robotics Bay", "The Spire"],
     "description": "Assemble the legendary Platinum Cap, an upgrade key capable of rewriting the wasteland economy.",
     "objectives": [
       "Recover the empty Platinum Cap Shell",
@@ -849,13 +849,13 @@
         "id": "ending_perfect_fizz",
         "description": "You perfect the Atomic Fizz formula.",
         "reward": "Unlimited Atomic Fizz Crafting",
-        "consequence": "You become the Mojave’s most valuable chemist."
+        "consequence": "You become the Cinder Basin’s most valuable chemist."
       },
       {
         "id": "ending_mutated_fizz",
         "description": "You create a mutated version.",
         "reward": "Mutant Fizz Brew",
-        "consequence": "Side effects spread through the Mojave."
+        "consequence": "Side effects spread through the Cinder Basin."
       },
       {
         "id": "ending_fail",
@@ -869,12 +869,12 @@
     "id": "side_robot_remembered",
     "name": "The Robot That Remembered",
     "type": "side",
-    "poIs": ["Vault 77 Robotics Bay", "Westside", "Lucky 38"],
+    "poIs": ["Vault 77 Robotics Bay", "Westside", "The Spire"],
     "description": "Help a damaged FizzCo courier robot recover its lost memory routines.",
     "objectives": [
       "Install the Robot Relic Core",
       "Retrieve memory logs from Westside",
-      "Upload restored routines at Lucky 38"
+      "Upload restored routines at The Spire"
     ]
   },
   {
@@ -893,7 +893,7 @@
     "id": "side_oldworld_conversion",
     "name": "Old-World Conversion",
     "type": "side",
-    "poIs": ["FizzCo Accounting Vault", "Lucky 38 Sub-Basement"],
+    "poIs": ["FizzCo Accounting Vault", "The Spire Sub-Basement"],
     "description": "Convert old-world currency into Atomic Fizz Caps using a pre-war conversion module.",
     "objectives": [
       "Recover Old-World Currency Bag",

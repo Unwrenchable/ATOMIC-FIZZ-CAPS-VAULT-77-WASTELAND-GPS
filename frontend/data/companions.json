@@ -42,7 +42,7 @@
         "mint_cost_caps": 3000,
         "traits": ["caravan_guard", "alcohol_tolerance", "sharp_shooter"]
       },
-      "lore": "The Harlan family ran the Mojave's most reliable caravan route for three generations. Cassidy is the last of them."
+      "lore": "The Harlan family ran the Cinder Basin's most reliable caravan route for three generations. Cassidy is the last of them."
     },
     {
       "id": "companion_rex_jr",
@@ -97,11 +97,11 @@
         "refuse_treatment": -1,
         "attack_civilians": -3
       },
-      "recruit_dialogue": "You look terrible. That's not an insult, it's a medical observation. I've got stimpaks, antibiotics, and a field surgery kit that's seen worse. Are you going to let me help you, or are you going to bleed onto my shoes?",
+      "recruit_dialogue": "You look terrible. That's not an insult, it's a medical observation. I've got FizzPaks, antibiotics, and a field surgery kit that's seen worse. Are you going to let me help you, or are you going to bleed onto my shoes?",
       "active_perk": {
         "id": "perk_field_surgery",
         "name": "Field Surgery",
-        "description": "Stimpaks heal 25% more HP. Once per day, Doc Razor will stabilize you from 0 HP (survival mode only). -5% move speed (waiting for her to pack her kit).",
+        "description": "FizzPaks heal 25% more HP. Once per day, Doc Razor will stabilize you from 0 HP (survival mode only). -5% move speed (waiting for her to pack her kit).",
         "effects": { "stimpak_heal_bonus": 0.25, "death_save_daily": true, "move_speed_penalty": -0.05 }
       },
       "trade_role": {
@@ -111,7 +111,7 @@
         "markup": 0.05,
         "discount": 0.2
       },
-      "passive_hindrance": "Will occasionally use your RadAway if your rads are above 200 (she considers it a liability).",
+      "passive_hindrance": "Will occasionally use your GlowFlush if your rads are above 200 (she considers it a liability).",
       "nft_metadata": {
         "collection": "Wasteland Companions",
         "tier": "rare",
@@ -119,7 +119,7 @@
         "mint_cost_caps": 3500,
         "traits": ["medic", "surgeon", "chem_expertise"]
       },
-      "lore": "Nobody knows her real name. 'Razor' comes from her suture technique — the fastest clean cut in the Mojave."
+      "lore": "Nobody knows her real name. 'Razor' comes from her suture technique — the fastest clean cut in the Cinder Basin."
     },
     {
       "id": "companion_ironside",
@@ -160,17 +160,17 @@
         "mint_cost_caps": 2000,
         "traits": ["arms_dealer", "quartermaster", "weapons_expert"]
       },
-      "lore": "Brotherhood of Steel doesn't officially acknowledge Ironside. Ironside doesn't officially acknowledge Brotherhood of Steel. It works out."
+      "lore": "Coil Covenant doesn't officially acknowledge Ironside. Ironside doesn't officially acknowledge Coil Covenant. It works out."
     },
     {
       "id": "companion_glitch",
       "name": "GLITCH",
-      "title": "The Malfunctioning Protectron",
+      "title": "The Malfunctioning Warden-Bot",
       "role": "muscle",
       "archetype": "robot_companion",
       "portrait": "glitch",
       "rarity": "epic",
-      "description": "A Protectron unit running on corrupted Poseidon Oil firmware and sheer stubbornness. Its threat-assessment module identifies roughly 40% of non-hostile targets as hostile and roughly 60% of hostile targets as 'petroleum inspection personnel.' Endearingly dangerous.",
+      "description": "A Warden-Bot unit running on corrupted Poseidon Oil firmware and sheer stubbornness. Its threat-assessment module identifies roughly 40% of non-hostile targets as hostile and roughly 60% of hostile targets as 'petroleum inspection personnel.' Endearingly dangerous.",
       "voice": "Monotone bureaucratic alerts. THREAT DETECTED. INITIATING FRIENDLY GREETING PROTOCOL. HAVE A NICE DAY. YOU ARE UNDER ARREST.",
       "trust_requirement": 5,
       "trust_actions": {
@@ -343,7 +343,7 @@
         "mint_cost_caps": 2500,
         "traits": ["mutant", "feline", "rad_touched", "lucky"]
       },
-      "lore": "Radcat has outlived four vaults, two settlements, and one very surprised Deathclaw. The Deathclaw was not happy about it either."
+      "lore": "Radcat has outlived four vaults, two settlements, and one very surprised Radtalon. The Radtalon was not happy about it either."
     },
     {
       "id": "companion_mabel",

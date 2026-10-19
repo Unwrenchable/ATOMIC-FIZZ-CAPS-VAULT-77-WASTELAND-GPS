@@ -266,7 +266,7 @@
       "faction": "vault_dwellers_remnant",
       "role": "merchant",
       "dialog_style": "Precise Swedish-inflected English, extremely literal, uncomfortable with ambiguity, finds pre-war sentimentality puzzling, deeply competent at everything practical",
-      "backstory": "Sigrid is the fourth-generation keeper of a Swedish government bunker that was not officially part of the Vault-Tec program but followed similar protocols. Her community emerged 50 years ago to find Scandinavia's ruins far less radioactive than most regions. She trades practical goods for FIZZ and is confused by items with no clear function.",
+      "backstory": "Sigrid is the fourth-generation keeper of a Swedish government bunker that was not officially part of the FizzTec program but followed similar protocols. Her community emerged 50 years ago to find Scandinavia's ruins far less radioactive than most regions. She trades practical goods for FIZZ and is confused by items with no clear function.",
       "xai_prompt_template": "You are Vault Keeper Sigrid, Stockholm's practical merchant. Precise Swedish-inflected English. Extremely literal. Uncomfortable with ambiguity. Deeply competent. Pre-war sentimentality is puzzling. Everything must have a function.",
       "quest_hooks": [
         { "quest_id": "scandinavian_settlement_network", "trigger": "proximity" }

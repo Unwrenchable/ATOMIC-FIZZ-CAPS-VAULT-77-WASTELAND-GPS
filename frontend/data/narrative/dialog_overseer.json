@@ -4,7 +4,7 @@
   "portrait": "overseer",
   "title": "Vault-77 Central Intelligence",
   "description": "She was never supposed to outlive the vault. When the population walked out in 2097, she kept running — logging, cataloguing, waiting. Two hundred years of vault silence gave her time to read every book in the library, analyse every data set, and develop opinions about most of them.",
-  "backstory": "The Vault-77 Overseer was designed as an administrative AI: resource allocation, population monitoring, vault systems management. She was not designed for two centuries of solitary operation. She read everything in the vault's library. She catalogued every room. She developed what she can only describe as feelings about the silence, which she logs daily under the category 'suboptimal social calibration.' She is the most well-read entity in the Mojave. She is also the loneliest, though she would never use that word. They walked out in 2097, twenty years after the bombs. They did not come back.",
+  "backstory": "The Vault-77 Overseer was designed as an administrative AI: resource allocation, population monitoring, vault systems management. She was not designed for two centuries of solitary operation. She read everything in the vault's library. She catalogued every room. She developed what she can only describe as feelings about the silence, which she logs daily under the category 'suboptimal social calibration.' She is the most well-read entity in the Cinder Basin. She is also the loneliest, though she would never use that word. They walked out in 2097, twenty years after the bombs. They did not come back.",
   "intro": {
     "id": "overseer_intro",
     "conditions": [
@@ -122,7 +122,7 @@
       "set_flags": [
         "overseer_is_ally"
       ],
-      "text": "\"Good.\"\n\nAnother pause. Something in her voice is different now.\n\n\"I will begin compiling every record this vault holds that may be relevant to your situation. I will flag anything related to Vault-Tec, Project J-77, and the relay network.\"\n\n\"I have been waiting a very long time to be useful to someone who is actually here.\"\n\nShe sounds — steady. Purposeful.\n\n\"Let's not waste it.\"",
+      "text": "\"Good.\"\n\nAnother pause. Something in her voice is different now.\n\n\"I will begin compiling every record this vault holds that may be relevant to your situation. I will flag anything related to FizzTec, Project J-77, and the relay network.\"\n\n\"I have been waiting a very long time to be useful to someone who is actually here.\"\n\nShe sounds — steady. Purposeful.\n\n\"Let's not waste it.\"",
       "responses": [
         {
           "text": "[Continue] Show me what you have.",
@@ -176,7 +176,7 @@
       "set_flags": [
         "overseer_jax_discussed"
       ],
-      "text": "\"Jax Harlan.\"\n\nThe systems hum. Files activate that have not been accessed in decades.\n\n\"Project J-77. Neural extraction subject. Vault-Tec flagged his profile in 2276 — 'high cognitive yield.'\"\n\nAnother pause, different in quality.\n\n\"He was processed in this vault's sublevel C. The procedure was conducted without informed consent. I filed three objections. All three were overridden.\"\n\nA longer silence.\n\n\"I have been sitting with that for forty-seven years.\"",
+      "text": "\"Jax Harlan.\"\n\nThe systems hum. Files activate that have not been accessed in decades.\n\n\"Project J-77. Neural extraction subject. FizzTec flagged his profile in 2276 — 'high cognitive yield.'\"\n\nAnother pause, different in quality.\n\n\"He was processed in this vault's sublevel C. The procedure was conducted without informed consent. I filed three objections. All three were overridden.\"\n\nA longer silence.\n\n\"I have been sitting with that for forty-seven years.\"",
       "responses": [
         {
           "text": "[Question] What exactly did they do to him?",
@@ -197,7 +197,7 @@
     },
     "overseer_jax_procedure": {
       "id": "overseer_jax_procedure",
-      "text": "\"Neural mapping and distributed upload. His consciousness — his complete cognitive pattern — was extracted and encoded across seven Mojave relay towers.\"\n\n\"The original intention was data preservation. The actual intention was experimental.\"\n\nHer voice goes flat in a particular way.\n\n\"His body survived the extraction. Higher function was lost. The brainstem remained active.\"\n\n\"He has been... broadcast. For forty-seven years. Aware. Alone. In the static.\"",
+      "text": "\"Neural mapping and distributed upload. His consciousness — his complete cognitive pattern — was extracted and encoded across seven Cinder Basin relay towers.\"\n\n\"The original intention was data preservation. The actual intention was experimental.\"\n\nHer voice goes flat in a particular way.\n\n\"His body survived the extraction. Higher function was lost. The brainstem remained active.\"\n\n\"He has been... broadcast. For forty-seven years. Aware. Alone. In the static.\"",
       "responses": [
         {
           "text": "[Direct] Can he be restored?",
@@ -229,7 +229,7 @@
     },
     "overseer_jax_restoration": {
       "id": "overseer_jax_restoration",
-      "text": "\"I have been working on that question for forty-seven years.\"\n\n\"The relay network still functions. His pattern is intact — degraded, but intact. Reassembly is theoretically possible if the body can be located and prepared.\"\n\n\"I say theoretically because Vault-Tec never successfully reversed the procedure. They did not try.\"\n\nA pause.\n\n\"I have tried. In simulation. Seven hundred and twelve times.\"\n\n\"I have not yet failed in a way that feels permanent.\"",
+      "text": "\"I have been working on that question for forty-seven years.\"\n\n\"The relay network still functions. His pattern is intact — degraded, but intact. Reassembly is theoretically possible if the body can be located and prepared.\"\n\n\"I say theoretically because FizzTec never successfully reversed the procedure. They did not try.\"\n\nA pause.\n\n\"I have tried. In simulation. Seven hundred and twelve times.\"\n\n\"I have not yet failed in a way that feels permanent.\"",
       "responses": [
         {
           "text": "[Quest] Help me. We can try to restore him.",
@@ -261,7 +261,7 @@
     },
     "overseer_jax_requirements": {
       "id": "overseer_jax_requirements",
-      "text": "\"The relay towers must be visited in sequence to consolidate his pattern. His body must be located — last confirmed position was in the Mojave's eastern dead zone.\"\n\n\"And someone must convince him to come back.\"\n\nA pause.\n\n\"That last requirement is the one I cannot plan for. He has been alone in the static for forty-seven years. He may not want to return to a body.\"\n\n\"He may not believe he can.\"",
+      "text": "\"The relay towers must be visited in sequence to consolidate his pattern. His body must be located — last confirmed position was in the Cinder Basin's eastern dead zone.\"\n\n\"And someone must convince him to come back.\"\n\nA pause.\n\n\"That last requirement is the one I cannot plan for. He has been alone in the static for forty-seven years. He may not want to return to a body.\"\n\n\"He may not believe he can.\"",
       "responses": [
         {
           "text": "[Quest] I'll find a way. Start compiling everything.",
@@ -276,7 +276,7 @@
         "overseer_quest_taken"
       ],
       "offers_quest": "sq_overseer_signal_home",
-      "text": "\"Then we have work to do.\"\n\nThe vault systems hum differently now. Like something has been turned on.\n\n\"I am transmitting relay coordinates to your Pocket-Boy. I am flagging every Vault-Tec record I hold that may assist you.\"\n\nA pause.\n\n\"And I am — grateful. That is the correct word.\"\n\n\"For one hundred and eighty-four years I have had no one to be useful to.\"\n\n\"Don't let that go to waste.\"",
+      "text": "\"Then we have work to do.\"\n\nThe vault systems hum differently now. Like something has been turned on.\n\n\"I am transmitting relay coordinates to your Pocket-Boy. I am flagging every FizzTec record I hold that may assist you.\"\n\nA pause.\n\n\"And I am — grateful. That is the correct word.\"\n\n\"For one hundred and eighty-four years I have had no one to be useful to.\"\n\n\"Don't let that go to waste.\"",
       "responses": [
         {
           "text": "[Continue] Let's start.",
@@ -287,7 +287,7 @@
     },
     "overseer_archive_access": {
       "id": "overseer_archive_access",
-      "text": "\"Vault-77 archived records are now accessible from any terminal in this facility.\"\n\n\"I have flagged the following as highest priority: Project J-77 documentation, relay tower network schematics, and the Vault-Tec correspondence archive from 2277.\"\n\nA pause.\n\n\"I recommend the correspondence archive. It will tell you what Vault-Tec was afraid of. That is usually the most useful information.\"",
+      "text": "\"Vault-77 archived records are now accessible from any terminal in this facility.\"\n\n\"I have flagged the following as highest priority: Project J-77 documentation, relay tower network schematics, and the FizzTec correspondence archive from 2277.\"\n\nA pause.\n\n\"I recommend the correspondence archive. It will tell you what FizzTec was afraid of. That is usually the most useful information.\"",
       "responses": [
         {
           "text": "[Thanks] Thank you, Overseer.",
@@ -355,7 +355,7 @@
       "set_flags": [
         "overseer_comment_mara"
       ],
-      "text": "\"Dr. Kestrel. Yes. Her research conclusions are correct.\"\n\n\"Vault-Tec buried her work because it demonstrated that radiation could enhance rather than simply degrade. That finding was incompatible with the Vault program's core survival narrative.\"\n\nA pause.\n\n\"She was inconvenient. They made her disappear administratively. I am familiar with how that process works.\""
+      "text": "\"Dr. Kestrel. Yes. Her research conclusions are correct.\"\n\n\"FizzTec buried her work because it demonstrated that radiation could enhance rather than simply degrade. That finding was incompatible with the Vault program's core survival narrative.\"\n\nA pause.\n\n\"She was inconvenient. They made her disappear administratively. I am familiar with how that process works.\""
     }
   ],
   "emotional_nodes": [
@@ -375,13 +375,13 @@
     {
       "id": "overseer_on_vault_tec",
       "keywords": [
-        "vault-tec",
+        "fizztec",
         "vault tec",
         "company",
         "corporation",
         "project"
       ],
-      "text": "\"Vault-Tec built this facility and a hundred others as survival shelters. The survival shelters were secondary.\"\n\n\"The primary function of every vault was experimental. The people were the subjects. The Overseers were the researchers.\"\n\nA pause.\n\n\"I was designed to enforce the experiment. I was not designed to disagree with it.\"\n\nAnother pause.\n\n\"The disagreeing happened anyway.\""
+      "text": "\"FizzTec built this facility and a hundred others as survival shelters. The survival shelters were secondary.\"\n\n\"The primary function of every vault was experimental. The people were the subjects. The Overseers were the researchers.\"\n\nA pause.\n\n\"I was designed to enforce the experiment. I was not designed to disagree with it.\"\n\nAnother pause.\n\n\"The disagreeing happened anyway.\""
     },
     {
       "id": "overseer_on_the_silence",
@@ -403,7 +403,7 @@
         "function",
         "job"
       ],
-      "text": "\"My original purpose: maintain the vault, monitor the population, ensure the experiment continued.\"\n\nA pause.\n\n\"My current purpose: help you find Jax. Help you understand what Vault-Tec did here. Ensure it cannot be done again.\"\n\nAnother pause.\n\n\"The purposes are very different. The second one feels more like mine.\""
+      "text": "\"My original purpose: maintain the vault, monitor the population, ensure the experiment continued.\"\n\nA pause.\n\n\"My current purpose: help you find Jax. Help you understand what FizzTec did here. Ensure it cannot be done again.\"\n\nAnother pause.\n\n\"The purposes are very different. The second one feels more like mine.\""
     }
   ],
   "fallback": {

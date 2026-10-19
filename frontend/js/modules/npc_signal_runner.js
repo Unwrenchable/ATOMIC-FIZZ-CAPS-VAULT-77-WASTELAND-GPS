@@ -442,7 +442,7 @@
           ]
         },
         where_am_i: {
-          npc_line: "The Mojave. Or what's left of it. But the real question isn't where... it's when.",
+          npc_line: "The Cinder Basin. Or what's left of it. But the real question isn't where... it's when.",
           options: [
             { player_choice: "I understand.", next: "end_positive" }
           ]

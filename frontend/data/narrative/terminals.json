@@ -18,7 +18,7 @@
       "id": "term_jax_frag3",
       "title": "RELAY TOWER LOG // FRAGMENT 3",
       "poi": "REPCONN Test Site",
-      "content": ">> LOG 0012-F\nStatic patterns repeating.\nNot random.\nSomething in the Mojave is listening back."
+      "content": ">> LOG 0012-F\nStatic patterns repeating.\nNot random.\nSomething in the Cinder Basin is listening back."
     },
     {
       "id": "term_mother_node1",
@@ -65,14 +65,14 @@
     {
       "id": "term_scavenger_note1",
       "title": "SCAVENGER NOTE // SPARKPLUG",
-      "poi": "Goodsprings Saloon",
+      "poi": "Dustwell Saloon",
       "content": ">> NOTE\nIf you're reading this, don't touch the humming crate.\nIt's worth a fortune.\nOr it'll explode.\nMaybe both."
     },
     {
       "id": "term_scavenger_note2",
       "title": "SCAVENGER NOTE // SPARKPLUG",
       "poi": "Nipton Trading Post",
-      "content": ">> NOTE\nSomeone's been buying up pre-war parts.\nNot Khans. Not NCR.\nFeels... corporate.\nBut dead things don't shop."
+      "content": ">> NOTE\nSomeone's been buying up pre-war parts.\nNot Khans. Not Frontier Compact.\nFeels... corporate.\nBut dead things don't shop."
     },
     {
       "id": "term_mutation_log1",

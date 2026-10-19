@@ -44,15 +44,15 @@
       'font-family: monospace'
     ].join(';');
 
-    console.log('%c☢️ VAULT-TEC SECURITY ALERT ☢️', warningStyle);
+    console.log('%c☢️ FIZZTEC SECURITY ALERT ☢️', warningStyle);
     console.log('%c⚠️ UNAUTHORIZED ACCESS DETECTED', infoStyle);
     console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', messageStyle);
-    console.log('%cThis application is protected by Vault-Tec security protocols.', messageStyle);
+    console.log('%cThis application is protected by FizzTec security protocols.', messageStyle);
     console.log('%cAny attempt to reverse-engineer, decompile, or extract', messageStyle);
     console.log('%cconfidential data is logged and may result in termination.', messageStyle);
     console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', messageStyle);
     console.log('%c"Your cooperation is appreciated, Vault Dweller."', infoStyle);
-    console.log('%c                    - Vault-Tec Corporation', messageStyle);
+    console.log('%c                    - FizzTec Corporation', messageStyle);
   }
 
   // ============================================================

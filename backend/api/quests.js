@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const { redis, key } = require("../lib/redis");
+const { resolveDataFile, resolveDataDir } = require("../lib/data-paths");
 const { authMiddleware } = require("../lib/auth");
 const { applyXpToProfile, MAX_LEVEL: _MAX_LEVEL } = require("../lib/xp");
 
@@ -11,7 +12,7 @@ const { applyXpToProfile, MAX_LEVEL: _MAX_LEVEL } = require("../lib/xp");
 // Quest rewards must come from server-defined data, not from the client.
 // BUG-015 FIX: Validate questId against known quest IDs.
 // -----------------------------------------------------------------------
-const QUEST_DATA_DIR = path.join(__dirname, "..", "..", "public", "data", "quest");
+const QUEST_DATA_DIR = resolveDataDir("quest");
 const QUEST_MAP = new Map(); // questId -> quest definition
 
 (function loadQuestData() {
@@ -33,7 +34,7 @@ const QUEST_MAP = new Map(); // questId -> quest definition
       }
     }
     // Also load top-level quests.json (array format)
-    const topLevel = path.join(__dirname, "..", "..", "public", "data", "quests.json");
+    const topLevel = resolveDataFile("quests.json");
     if (fs.existsSync(topLevel)) {
       const arr = JSON.parse(fs.readFileSync(topLevel, "utf8"));
       if (Array.isArray(arr)) {
@@ -60,11 +61,18 @@ const MAX_INVENTORY_SIZE = 200;
 
 // GET /api/quests - Return quests.json data
 router.get("/", (req, res) => {
-  const file = path.join(__dirname, "..", "..", "public", "data", "quests.json");
-  res.sendFile(file, (err) => {
+  // public/data/quests.json does not exist. Live file is frontend/data/quests.json.
+  // The old sendFile path 500'd and the client fell back to static /data JSON.
+  const file = resolveDataFile("quests.json");
+  if (!fs.existsSync(file)) {
+    console.error("[api/quests] missing quests.json, last candidate:", file);
+    return res.status(500).json({ ok: false, error: "Quests not available" });
+  }
+  res.type("application/json");
+  return res.sendFile(file, (err) => {
     if (err) {
       console.error("[api/quests] sendFile error:", err);
-      res.status(500).json({ ok: false, error: "Quests not available" });
+      if (!res.headersSent) res.status(500).json({ ok: false, error: "Quests not available" });
     }
   });
 });

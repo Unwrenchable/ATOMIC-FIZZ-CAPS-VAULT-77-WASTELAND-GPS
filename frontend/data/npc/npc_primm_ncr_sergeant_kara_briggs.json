@@ -4,13 +4,13 @@
   "faction": "ncr",
   "homeRegion": "mojave",
   "currentRegion": "mojave",
-  "role": "NCR Sergeant",
+  "role": "Frontier Compact Sergeant",
   "personality": "Disciplined, frustrated, stuck between orders and reality.",
-  "description": "Sergeant Briggs commands the NCR detachment near Primm. She’s under strict orders not to intervene unless absolutely necessary.",
+  "description": "Sergeant Briggs commands the Frontier Compact detachment near Primm. She’s under strict orders not to intervene unless absolutely necessary.",
   "questHooks": [
     "Needs intel on Powder Ganger movements.",
     "Worries about strange radio interference near Primm.",
-    "Says NCR scouts reported a faint hum coming from the rollercoaster."
+    "Says Frontier Compact scouts reported a faint hum coming from the rollercoaster."
   ],
   "poi": "ncr_base_fnv"
 }

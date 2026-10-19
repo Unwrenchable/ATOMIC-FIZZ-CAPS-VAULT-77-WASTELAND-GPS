@@ -6,7 +6,7 @@
   "currentRegion": "mojave",
   "role": "Scavenger / Treasure Finder",
   "personality": "Sweet, exhausted, endlessly helpful, sees value in everything and everyone.",
-  "description": "Jaymie is a kind-hearted Mojave scavenger who believes nothing is ever truly trash. She survives by finding beauty and usefulness in what others throw away. Her generosity is legendary — and often exploited.",
+  "description": "Jaymie is a kind-hearted Cinder Basin scavenger who believes nothing is ever truly trash. She survives by finding beauty and usefulness in what others throw away. Her generosity is legendary — and often exploited.",
   "traits": [
     "Hard-working but drained",
     "Optimistic to a fault",
@@ -31,5 +31,5 @@
     "She hides the fact that she sometimes sleeps outside because there's no room left inside.",
     "She once found a strange FizzCo device but traded it for food before realizing its value."
   ],
-  "poi": "Mojave Outskirts — Jaymie's Shack (a leaning structure held together by hope and scrap)"
+  "poi": "Cinder Basin Outskirts — Jaymie's Shack (a leaning structure held together by hope and scrap)"
 }

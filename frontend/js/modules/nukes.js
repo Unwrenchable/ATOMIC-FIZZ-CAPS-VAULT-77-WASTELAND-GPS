@@ -158,7 +158,7 @@
     const frags  = keycardData.fragments || [];
     const canLaunch = keycardData.canLaunch;
 
-    let html = `<div style="font-size:10px;opacity:0.6;margin-bottom:6px;">// VAULT-TEC NUCLEAR LAUNCH TERMINAL //</div>`;
+    let html = `<div style="font-size:10px;opacity:0.6;margin-bottom:6px;">// FIZZTEC NUCLEAR LAUNCH TERMINAL //</div>`;
     html += `<div style="font-size:18px;font-weight:bold;margin-bottom:12px;color:#ff4400;">☢ LAUNCH AUTHORIZATION SYSTEM</div>`;
 
     html += `<div style="font-size:12px;margin-bottom:8px;">KEYCARDS: ${escapeHtml(kc.length)}/3 required</div>`;
@@ -317,7 +317,7 @@
         html += `<div class="nuke-zone-card">`;
         html += `<div class="nuke-zone-name">☢ ${escapeHtml(z.name)}</div>`;
         html += `<div class="nuke-zone-timer">⏱ ${escapeHtml(mins)} minutes remaining</div>`;
-        html += `<div class="nuke-zone-loot">Unique loot active. High radiation — bring RadAway.</div>`;
+        html += `<div class="nuke-zone-loot">Unique loot active. High radiation — bring GlowFlush.</div>`;
         html += `</div>`;
       }
     }

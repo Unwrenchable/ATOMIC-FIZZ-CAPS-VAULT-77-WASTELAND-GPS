@@ -55,8 +55,8 @@ const retro = [
   "RetroCore Facility", "Sunset Fusion Plant", "Echelon Node",
   "Quantum Depot", "Radion Research Wing", "Helios Array",
   // New retro additions
-  "Nuka-World Adjacent", "Vim Pop Factory", "Sunset Sarsaparilla Depot",
-  "RobCo Service Center", "General Atomics Plaza", "Vault-Tec Regional HQ",
+  "Fizz Fair Adjacent", "Vim Pop Factory", "Dustpop Depot",
+  "FizzCo Service Center", "Helio Dynamics Plaza", "Vault-Tec Regional HQ",
   "Mass Fusion Auxiliary", "Poseidon Energy Sub-Station", "Super-Duper Mart Hub"
 ];
 
@@ -88,7 +88,7 @@ const wild = [
   "Feral Expanse", "Blightlands", "Crimson Thicket", "Wastestalker Grounds",
   "Gamma Marsh", "Verdigris Hollow",
   // New wild additions
-  "Deathclaw Promontory", "Yao Guai Caves", "Mirelurk Spawning Pool",
+  "Deathclaw Promontory", "Yao Guai Caves", "Brineclaw Spawning Pool",
   "Radscorpion Burrow", "Cazador Hive", "Bloatfly Breeding Grounds",
   "Supermutant Stronghold", "Feral Ghoul Metro"
 ];
@@ -97,7 +97,7 @@ const wild = [
 const memeLocations = [
   // Classic Fallout memes
   "Patrolling Mojave Rest Stop", "Nuclear Winter Resort",
-  "The Tunnel Snakes' Clubhouse", "Gary Vault Annex",
+  "The Culvert Vipers' Clubhouse", "Gary Vault Annex",
   "Benny's Bad Luck Casino", "Fisto's Workshop",
   
   // Internet culture meets wasteland
@@ -315,15 +315,15 @@ const memeLoreSnippets = [
   "Locals say this place is cursed. Visitors say it's just Ohio.",
   "Someone spray-painted 'THE GAME WAS RIGGED FROM THE START' on the entrance. They weren't wrong.",
   "A pre-war sign still reads 'YOU ARE HERE' with an arrow pointing at a crater.",
-  "Tunnel Snakes allegedly ruled here once. Nobody knows what that means anymore.",
+  "Culvert Vipers allegedly ruled here once. Nobody knows what that means anymore.",
   "Legend has it a wanderer once took a rad to the knee here. They don't wander anymore.",
   "The terminal here only displays one message: 'War. War never changes.'",
-  "Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+  "Scavengers found a cache of Dustpop star caps here. The curse continues.",
   "A skeleton sits at a desk, hand on mouse, forever waiting for the game to load.",
   "Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
   "Pre-war records suggest this was a Deez Caps distribution center. Nobody knows what those are.",
   "A sign outside warns: 'BEWARE OF DOUG.' No Doug has ever been found.",
-  "The vending machines here only dispense existential dread. And Nuka-Cola.",
+  "The vending machines here only dispense existential dread. And Atomic Fizz.",
   "Patrolling this area almost makes you wish for a nuclear winter. Wait.",
   "Someone carved 'SAVE BEFORE ENTERING' into the wall. Ominous.",
   "A holotape found here is just 10 hours of someone saying 'bruh' repeatedly."

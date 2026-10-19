@@ -21,7 +21,7 @@
       },
       {
         id: "mojave_nights",
-        name: "Mojave Nights",
+        name: "Cinder Nights",
         frequency: 97.3,
         playlistUrl: "/audio/radio/playlist-mojave.json",
         stationUrl: "/audio/radio/station-mojave.json"

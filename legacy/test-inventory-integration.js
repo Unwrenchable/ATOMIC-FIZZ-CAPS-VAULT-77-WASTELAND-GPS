@@ -172,7 +172,7 @@ console.error('✓ Equipped items survive reload');
 console.error('\nTest 7: Testing zone change (adding more items)...');
 const zoneItem = {
   id: 'nuka_cola',
-  name: 'Nuka-Cola',
+  name: 'Atomic Fizz',
   type: 'consumable',
   stackable: true
 };

@@ -91,6 +91,6 @@ See `backend/docs/ADMIN_PASSWORD_HASHING.md` for complete documentation.
 
 ---
 
-📟 **Vault-Tec Tip**: Run tests after any changes to verify everything works!
+📟 **FizzTec Tip**: Run tests after any changes to verify everything works!
 
 ☢️ Stay safe out there, Vault Dweller.

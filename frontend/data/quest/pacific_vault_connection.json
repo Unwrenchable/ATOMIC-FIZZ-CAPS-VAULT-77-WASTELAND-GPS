@@ -4,7 +4,7 @@
   "type": "global",
   "region": "Pacific_Ocean",
   "npc_giver": "global_singapore_data_broker",
-  "description": "The Coordinator has been intercepting fragments of a Vault-Tec signal from somewhere in the Pacific. It matches no known vault coordinates. She needs someone to triangulate the source by physically visiting three Pacific island waypoints.",
+  "description": "The Coordinator has been intercepting fragments of a FizzTec signal from somewhere in the Pacific. It matches no known vault coordinates. She needs someone to triangulate the source by physically visiting three Pacific island waypoints.",
   "gps_requirement": {
     "region": "Pacific Ocean",
     "real_lat": 10.0000,

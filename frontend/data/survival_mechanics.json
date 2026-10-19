@@ -145,25 +145,25 @@
     },
     {
       "id": "sugar_bombs",
-      "name": "Sugar Bombs",
+      "name": "Atom Flakes",
       "type": "food",
       "effects": { "hunger": -20, "agility": 1, "duration": 300 }
     },
     {
       "id": "radaway",
-      "name": "RadAway",
+      "name": "GlowFlush",
       "type": "chem",
       "effects": { "radiation": -300 }
     },
     {
       "id": "rad_x",
-      "name": "Rad-X",
+      "name": "GlowTab",
       "type": "chem",
       "effects": { "rad_resistance": 50, "duration": 600 }
     },
     {
       "id": "stimpak",
-      "name": "Stimpak",
+      "name": "FizzPak",
       "type": "medical",
       "effects": { "hp": 50 }
     }

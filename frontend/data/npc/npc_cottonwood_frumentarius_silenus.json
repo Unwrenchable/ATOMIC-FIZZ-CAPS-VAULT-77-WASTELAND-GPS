@@ -4,10 +4,10 @@
   "faction": "caesar_legion",
   "role": "Frumentarius",
   "personality": "Quiet, calculating, dangerous.",
-  "description": "Silenus blends into the Mojave like a shadow. He gathers intelligence and eliminates threats before they grow.",
+  "description": "Silenus blends into the Cinder Basin like a shadow. He gathers intelligence and eliminates threats before they grow.",
   "questHooks": [
     "Wants help tracking a runaway slave.",
-    "Says NCR scouts are using coded signals.",
+    "Says Frontier Compact scouts are using coded signals.",
     "Carries a strange cap he believes is cursed."
   ],
   "poi": "cottonwood_cove_fnv"

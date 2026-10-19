@@ -27,8 +27,8 @@
   // ============================================================
   const STARTER_GEAR = [
     { id: "vault77_sidearm", name: "Vault 77 Security Sidearm", type: "weapon", category: "pistol", damage: 22, ammoType: "ammo_9mm", weight: 3.2, value: 55, description: "Standard-issue sidearm carried by Vault 77 security personnel.", equipped: false },
-    { id: "vault77_jumpsuit", name: "Vault 77 Jumpsuit", type: "armor", slot: "chest", armor: 5, weight: 2, value: 15, description: "Standard-issue blue and yellow jumpsuit. Minimal protection, surprisingly comfortable.", equipped: true },
-    { id: "stimpak", name: "Stimpak", type: "consumable", heal: 30, weight: 0.1, value: 75, quantity: 3 },
+    { id: "vault77_jumpsuit", name: "Vault 77 Jumpsuit", type: "armor", slot: "chest", armor: 5, weight: 2, value: 15, description: "Standard-issue amber and charcoal jumpsuit. Minimal protection, surprisingly comfortable.", equipped: true },
+    { id: "stimpak", name: "FizzPak", type: "consumable", heal: 30, weight: 0.1, value: 75, quantity: 3 },
     { id: "dirty_water", name: "Dirty Water", type: "consumable", heal: 5, weight: 0.5, value: 5, quantity: 2 },
     { id: "bobby_pin", name: "Bobby Pin", type: "tool", durability: 3, weight: 0.01, value: 1, quantity: 5 },
     { id: "ammo_9mm", name: "9mm Rounds", type: "ammo", weight: 0.01, value: 1, quantity: 24 }
@@ -120,7 +120,7 @@
       rewards: {
         xp: 75,
         caps: 30,
-        items: ["stimpak"]
+        items: ["FizzPak"]
       }
     }
     ,
@@ -137,7 +137,7 @@
       triggerType: "npc",
       triggerNpc: "bless",
       description: "The field medic Bless is running low on critical medical supplies. She needs someone to make a resupply run to the eastern settlement.",
-      npcMessage: "I'm running low on RadAway, stimpaks, and suture thread. The settlement to the east trades them — I can't leave my patrol area. Can you make the run?",
+      npcMessage: "I'm running low on GlowFlush, FizzPaks, and suture thread. The settlement to the east trades them — I can't leave my patrol area. Can you make the run?",
       steps: [
         {
           id: "reach_settlement",
@@ -177,7 +177,7 @@
     // "The Loop" — A Synth named DOLORES-7 has been running the same behavioral
     // loop for 200 years without knowing she's artificial. The player discovers
     // an Institute relay tower maintaining her programming and must decide whether
-    // to free her. Thematic parallel: Synths (Fallout 4) = Hosts (Westworld).
+    // to free her. Thematic parallel: Synths (the commonwealth wastes) = Hosts (Westworld).
     // "These violent delights have violent ends." — Shakespeare / Westworld
     // ──────────────────────────────────────────────────────────────────────────
     quest_the_loop: {
@@ -363,7 +363,7 @@
     },
 
     // ── TOMORROW'S WASTELAND ARC ──────────────────────────────────────────────
-    // A Fallout rendition of the Annie story. Orphan girl, obscenely rich arms
+    // A wasteland rendition of the Annie story. Orphan girl, obscenely rich arms
     // dealer, and the cruellest orphanage warden this side of the Glowing Sea.
     // ─────────────────────────────────────────────────────────────────────────
 

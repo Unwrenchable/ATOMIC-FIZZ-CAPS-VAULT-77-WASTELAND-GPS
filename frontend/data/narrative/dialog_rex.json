@@ -3,7 +3,7 @@
   "npc": "Captain Rex Maldonado",
   "title": "The Dam Sentinel",
   "description": "Dialog nodes for Captain Rex Maldonado, the gruff militia leader defending Hoover Dam from coordinated threats.",
-  "backstory": "Twenty-three years at Hoover Dam. Rex arrived as a fresh NCR Ranger recruit and watched the politics, the water, and the people around him shift and fail, while the dam held. He decided the dam was the only commitment worth making in a world that had stopped making sense — an objective, holdable, defensible thing. He has since turned down three promotions, four retirement offers, and what may have been a marriage proposal. The dam is the job.",
+  "backstory": "Twenty-three years at Hoover Dam. Rex arrived as a fresh Frontier Compact Ranger recruit and watched the politics, the water, and the people around him shift and fail, while the dam held. He decided the dam was the only commitment worth making in a world that had stopped making sense — an objective, holdable, defensible thing. He has since turned down three promotions, four retirement offers, and what may have been a marriage proposal. The dam is the job.",
   "intro": {
     "id": "rex_intro",
     "conditions": [
@@ -88,7 +88,7 @@
         "flag:met_kenny",
         "!flag:rex_comment_kenny"
       ],
-      "text": "The orange-hooded kid.<br><br>My scouts found him face-down in a deathclaw nest outside Nelson. Alive. Sleeping.<br><br>We don't have an explanation. We've stopped trying to find one.",
+      "text": "The orange-hooded kid.<br><br>My scouts found him face-down in a Radtalon nest outside Nelson. Alive. Sleeping.<br><br>We don't have an explanation. We've stopped trying to find one.",
       "set_flags": [
         "rex_comment_kenny"
       ]
@@ -124,8 +124,8 @@
       "conditions": [
         "!flag:sq_rex_hold_the_line_taken"
       ],
-      "video_speech": "You want to help? Good. Clear the deathclaw hotspots around the Dam, and maybe I start trusting you.",
-      "text": "You want to help? Good.<br><br>We’ve got hotspots around the Dam crawling with things that shouldn’t be walking.<br><br>Dead Wind Cavern. Deathclaw Promontory.<br><br>Clear them out, and maybe I start trusting you.",
+      "video_speech": "You want to help? Good. Clear the Radtalon hotspots around the Dam, and maybe I start trusting you.",
+      "text": "You want to help? Good.<br><br>We’ve got hotspots around the Dam crawling with things that shouldn’t be walking.<br><br>Dead Wind Cavern. Radtalon Promontory.<br><br>Clear them out, and maybe I start trusting you.",
       "offers_quest": "sq_rex_hold_the_line",
       "set_flags": [
         "sq_rex_hold_the_line_taken"
@@ -140,7 +140,7 @@
         "hoover",
         "water"
       ],
-      "text": "This concrete wall is the only reason the Mojave isn’t a bigger graveyard.<br><br>You learn to love it. Or die defending it."
+      "text": "This concrete wall is the only reason the Cinder Basin isn’t a bigger graveyard.<br><br>You learn to love it. Or die defending it."
     },
     {
       "id": "rex_legion",
@@ -156,7 +156,7 @@
         "ncr",
         "republic"
       ],
-      "text": "NCR means well, but they’re stretched thinner than a Brahmin hide in the sun.<br><br>They’ll take any help they can get."
+      "text": "Frontier Compact means well, but they’re stretched thinner than a Brahmin hide in the sun.<br><br>They’ll take any help they can get."
     },
     {
       "id": "rex_mutants",

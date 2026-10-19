@@ -17,7 +17,7 @@
   const REGIONS = {
     mojave_core: {
       id: "mojave_core",
-      name: "Mojave Core",
+      name: "Cinder Basin Core",
       personality: "dusty",
       threat: 0.4,
       anomalyLevel: 0.1,

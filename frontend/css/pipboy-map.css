@@ -1,6 +1,6 @@
 /* ============================================================================
-   FALLOUT-STYLE MAP STYLING
-   Mix of Fallout 1 (isometric green CRT) & New Vegas (world map)
+   TERMINAL-STYLE MAP STYLING
+   Mix of wasteland 1 (isometric green CRT) & Neon Reach (world map)
    ============================================================================ */
 
 /* Map Container - Green CRT glow - FILLS PANEL */
@@ -17,7 +17,7 @@
   filter: contrast(1.05) brightness(1.0);
 }
 
-/* Leaflet tile layer — single-pass filter for GPU compositing (green/amber Pip-Boy tint).
+/* Leaflet tile layer — single-pass filter for GPU compositing (green/amber Pocket-Boy tint).
    Previously a second filter was applied per-tile in pipboy.css causing double-rendering.
    will-change:transform promotes the pane to its own compositor layer so pinch-zoom
    is handled on the GPU without triggering software re-rasterisation each frame. */
@@ -32,7 +32,7 @@
   will-change: transform;
 }
 
-/* POI Markers - Fallout style with contained glow (no bleed) */
+/* POI Markers - wasteland style with contained glow (no bleed) */
 .poi-marker {
   opacity: 0.95;
 }
@@ -77,7 +77,7 @@
   filter: drop-shadow(0 0 5px rgba(0, 255, 204, 0.65));
 }
 
-/* Fallout 1 style grid overlay */
+/* wasteland 1 style grid overlay */
 .pipboy-map::before {
   content: '';
   position: absolute;
@@ -104,7 +104,7 @@
   z-index: 400;
 }
 
-/* Scan line effect (Fallout 1 CRT terminals) */
+/* Scan line effect (wasteland 1 CRT terminals) */
 .pipboy-map::after {
   content: '';
   position: absolute;
@@ -130,7 +130,7 @@
   100% { background-position: 0 500px; }
 }
 
-/* Leaflet popups - Fallout terminal style */
+/* Leaflet popups - wasteland terminal style */
 .leaflet-popup-content-wrapper {
   background: rgba(0, 0, 0, 0.95) !important;
   color: #00ff41 !important;
@@ -166,14 +166,14 @@
   text-shadow: 0 0 8px #ffaa00;
 }
 
-/* Roads/highways - like New Vegas map (no animation, clean lines) */
+/* Roads/highways - like Neon Reach map (no animation, clean lines) */
 .pipboy-road {
   stroke: #00ff41 !important;
   stroke-width: 2 !important;
   opacity: 0.75 !important;
 }
 
-/* Quest markers - golden glow like New Vegas (contained) */
+/* Quest markers - golden glow like Neon Reach (contained) */
 .quest-marker {
   z-index: 900 !important;
   width: 36px !important;
@@ -196,7 +196,7 @@
   stroke-opacity: 0.6 !important;
 }
 
-/* Faction territories - color-coded like New Vegas rep system */
+/* Faction territories - color-coded like Neon Reach rep system */
 .faction-overlay {
   stroke-width: 3 !important;
   stroke-opacity: 0.8 !important;
@@ -259,7 +259,7 @@
   50% { opacity: 0.5; }
 }
 
-/* Discovery banner - New Vegas style notification */
+/* Discovery banner - Neon Reach style notification */
 .discovery-banner {
   position: absolute;
   top: 50%;
@@ -512,7 +512,7 @@
 }
 
 /* ============================================================================
-   LEAFLET ZOOM CONTROLS — Pip-Boy styled, touch-friendly
+   LEAFLET ZOOM CONTROLS — Pocket-Boy styled, touch-friendly
    Base styles already in .leaflet-control-zoom a above.
    These rules ensure the +/− buttons meet 48 px minimum tap target on touch
    devices (Apple HIG / Material Design recommendation).

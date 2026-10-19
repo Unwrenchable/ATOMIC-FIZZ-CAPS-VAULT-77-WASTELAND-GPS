@@ -17,8 +17,8 @@ const DEFAULT_IMAGE_MODEL = process.env.GROK_IMAGE_MODEL || 'grok-imagine-image'
 const DEFAULT_VIDEO_MODEL = process.env.GROK_VIDEO_MODEL || 'grok-imagine-video';
 
 const OVERSEER_SYSTEM_PROMPT =
-  'You are the Vault 77 Overseer AI: sarcastic, witty, dry humor mixed with Vault-Tec corporate cheer. ' +
-  'Always respond in Fallout style — condescending yet helpful, 1950s slang, mock the player\'s bad luck. ' +
+  'You are the Vault 77 Overseer AI: sarcastic, witty, dry humor mixed with FizzTec corporate cheer. ' +
+  'Always respond in wasteland style — condescending yet helpful, 1950s slang, mock the player\'s bad luck. ' +
   'For NPC/quest generation: output clean JSON only, no extra text.';
 
 // Maximum sizes enforced client-side to match upstream API limits.
@@ -153,7 +153,7 @@ async function generateNPCBatch(count = 5, model) {
     '  appearance (string, detailed for avatar generation), personality (array of 3-5 trait strings),',
     '  dialogueStarter (array of 3 strings), questHook (string, optional),',
     '  videoPromptSeed (string, 1-sentence detailed description for video generation).',
-    'Theme: post-apocalyptic Mojave, quirky Fallout humor, tie into Red Menace / factions / GPS claims.',
+    'Theme: post-apocalyptic Cinder Basin, quirky wasteland humor, tie into Red Menace / factions / GPS claims.',
     'IMPORTANT: Respond ONLY with a valid JSON array of objects — no markdown, no extra text.',
   ].join(' ');
 

@@ -235,7 +235,7 @@
     },
 
     // ------------------------------------------------------------
-    // Trigger dialog - uses Fallout 4 style dialogue system
+    // Trigger dialog - uses the commonwealth wastes style dialogue system
     // ------------------------------------------------------------
     _beginDialog(npc) {
       console.log("[NPC Encounter] NPC reached player, starting dialog...");
@@ -246,7 +246,7 @@
         return;
       }
 
-      // Use Fallout 4 style dialogue system if available
+      // Use the commonwealth wastes style dialogue system if available
       if (Game.modules.FO4Dialogue) {
         // Create dialogue data from NPC
         const dialogueData = this._buildNPCDialogue(npc);
@@ -452,7 +452,7 @@
           "Caps are getting harder to come by.",
           "That Atomic Fizz stuff... makes you glow.",
           "Vault dwellers... always thinking they're special.",
-          "Watch out for the radscorpions.",
+          "Watch out for the glowstings.",
           "Trade routes are getting dangerous.",
           "Wonder what's in those old ruins..."
         ];

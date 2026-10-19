@@ -1,8 +1,8 @@
 {
   "name": "afc-avatar-pack-svg-v3-epic",
   "version": "3.0.0",
-  "description": "EPIC enhanced SVG layered avatar pack for Atomic Fizz Caps Vault 77. Detailed wasteland aesthetic with authentic Fallout styling, anatomically accurate features, and immersive post-apocalyptic details.",
-  "theme": "Post-apocalyptic Fallout-style wasteland survivor - EPIC edition",
+  "description": "EPIC enhanced SVG layered avatar pack for Atomic Fizz Caps Vault 77. Detailed wasteland aesthetic with authentic wasteland styling, anatomically accurate features, and immersive post-apocalyptic details.",
+  "theme": "Post-apocalyptic wasteland-style wasteland survivor - EPIC edition",
   "viewBox": "0 0 256 256",
   "layerOrder": ["head", "eyes", "nose", "mouth", "hair", "facialHair", "scars", "markings", "accessories", "shirt"],
   "parts": {
@@ -137,7 +137,7 @@
         "Added weathering, scratches, and wasteland survivor details throughout",
         "Maintained performance: all assets under 5KB, total ~340KB"
       ],
-      "impact": "Transforms character system from basic to EPIC - immersive and authentic Fallout aesthetic"
+      "impact": "Transforms character system from basic to EPIC - immersive and authentic wasteland aesthetic"
     }
   },
   "styleGuide": {
@@ -147,7 +147,7 @@
     "weathering": "Battle scars, rust, scratches, and post-apocalyptic wear",
     "fileSize": "Optimized for web performance (average 3-4KB per asset)",
     "compatibility": "Modern browsers, SVG 1.1+",
-    "aesthetic": "Fallout-inspired wasteland survivor - stylized but realistic"
+    "aesthetic": "wasteland-inspired wasteland survivor - stylized but realistic"
   },
   "usage": {
     "compositing": "Layer SVGs in order specified by layerOrder array",
@@ -157,7 +157,7 @@
     "integration": "Works seamlessly with existing character-creator.js system"
   },
   "license": "CC0 or original - created for Atomic Fizz Caps Vault 77 project",
-  "notes": "EPIC v3.0 release: Complete asset library overhaul for wasteland survivor character creation. All SVGs feature detailed shading, anatomical accuracy, and authentic Fallout aesthetic. Includes race-specific options (ghoul burns, synth circuitry, vault tattoos) with realistic detail. Perfect for immersive wasteland gameplay without breaking the fourth wall.",
+  "notes": "EPIC v3.0 release: Complete asset library overhaul for wasteland survivor character creation. All SVGs feature detailed shading, anatomical accuracy, and authentic wasteland aesthetic. Includes race-specific options (ghoul burns, synth circuitry, vault tattoos) with realistic detail. Perfect for immersive wasteland gameplay without breaking the fourth wall.",
   "overseerApproved": true,
   "radiationLevel": "Safe for viewing",
   "vaultTecCompliant": true

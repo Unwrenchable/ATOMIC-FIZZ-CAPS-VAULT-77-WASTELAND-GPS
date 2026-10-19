@@ -1,8 +1,8 @@
 {
   "name": "afc-avatar-pack-raster-fallout-authentic",
   "version": "1.0.0",
-  "description": "Realistic Fallout-style raster avatar pack for Atomic Fizz Caps Vault 77. Human-like wasteland survivors with authentic post-apocalyptic grit and meme charm.",
-  "theme": "Authentic Fallout wasteland survivor portraits - human-like with meme appeal",
+  "description": "Realistic wasteland-style raster avatar pack for Atomic Fizz Caps Vault 77. Human-like wasteland survivors with authentic post-apocalyptic grit and meme charm.",
+  "theme": "Authentic wasteland survivor portraits - human-like with meme appeal",
   "imageSize": "256x256",
   "format": "png",
   "totalAvatars": 100,

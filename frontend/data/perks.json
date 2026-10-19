@@ -343,8 +343,8 @@
     {
       "id": "vans",
       "name": "V.A.N.S.",
-      "description": "Vault-Tec Assisted Navigation System highlights the path to your target.",
-      "flavor": "\"Vault-Tec made navigation idiot-proof. The idiots keep finding new ways to get lost.\"",
+      "description": "FizzTec Assisted Navigation System highlights the path to your target.",
+      "flavor": "\"FizzTec made navigation idiot-proof. The idiots keep finding new ways to get lost.\"",
       "required_special": {
         "stat": "I",
         "min": 1
@@ -357,7 +357,7 @@
     {
       "id": "medic",
       "name": "Medic",
-      "description": "Stimpaks and RadAway restore more lost health and radiation.",
+      "description": "FizzPaks and GlowFlush restore more lost health and radiation.",
       "flavor": "\"First do no harm. Then do a lot of harm. Then fix it.\"",
       "required_special": {
         "stat": "I",
@@ -599,7 +599,7 @@
     {
       "id": "gifted",
       "name": "Gifted",
-      "description": "+1 to all SPECIAL attributes. Perk bonuses are -10% effective \u2014 raw talent edges out training.",
+      "description": "+1 to all VITALS attributes. Perk bonuses are -10% effective \u2014 raw talent edges out training.",
       "flavor": "\"Natural ability is a gift. Training is a choice. You chose birth.\"",
       "effects": {
         "S": 1,

@@ -1,7 +1,7 @@
 // public/js/modules/dungeon.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps – Dungeon Interior System
-// Procedurally generated dungeon rooms with Fallout 1/2 aesthetic
+// Procedurally generated dungeon rooms with wasteland 1/2 aesthetic
 // ASCII tile map, lockpick, terminal hack, keycard doors, loot & battles
 //
 // Exposes: Game.modules.dungeon
@@ -99,7 +99,7 @@
     vault: {
       wallChar:   "█",
       floorChar:  "░",
-      label:      "Vault-Tec Facility",
+      label:      "FizzTec Facility",
       bgColor:    "#001a33",
       wallColor:  "#0055a0",
       floorColor: "#003366",
@@ -255,8 +255,8 @@
     security_bot:      "Vault Security Bot",
     vault_ghoul:       "Vault Dweller Ghoul",
     overseer_mk2:      "Overseer MK-II",
-    enclave_soldier:   "Enclave Trooper",
-    deathclaw_alpha:   "Deathclaw Alpha",
+    enclave_soldier:   "Directorate Trooper",
+    deathclaw_alpha:   "Radtalon Alpha",
     sentry_bot:        "Sentry Bot",
     raider:            "Raider",
     raider_psycho:     "Raider Psycho",
@@ -291,20 +291,20 @@
   // NOTE: caps values are fixed baselines. caps_stash gets a crypto-random
   // bonus added at loot-generation time (inside _populateRoom).
   const LOOT_DEFS = {
-    stimpak:           { name: "Stimpak",               caps: 30,  type: "consumable" },
-    rad_away:          { name: "RadAway",                caps: 25,  type: "consumable" },
+    stimpak:           { name: "FizzPak",               caps: 30,  type: "consumable" },
+    rad_away:          { name: "GlowFlush",                caps: 25,  type: "consumable" },
     caps_stash:        { name: "Caps Stash",             caps: 20,  type: "caps",    variable: true },
-    vault_suit:        { name: "Vault-Tec Jumpsuit",     caps: 45,  type: "armor" },
+    vault_suit:        { name: "FizzTec Jumpsuit",     caps: 45,  type: "armor" },
     fusion_cell:       { name: "Fusion Cell",            caps: 15,  type: "ammo" },
     laser_rifle:       { name: "Laser Rifle",            caps: 90,  type: "weapon" },
-    power_armor_piece: { name: "Power Armor Piece",      caps: 120, type: "armor" },
+    power_armor_piece: { name: "Reactor Harness Piece",      caps: 120, type: "armor" },
     military_rations:  { name: "Military Rations",       caps: 20,  type: "consumable" },
     fusion_core:       { name: "Fusion Core",            caps: 80,  type: "misc" },
     frag_grenade:      { name: "Frag Grenade",           caps: 40,  type: "weapon" },
     pipe_gun:          { name: "Pipe Gun",               caps: 35,  type: "weapon" },
     leather_armor:     { name: "Leather Armor",          caps: 50,  type: "armor" },
     chems_stash:       { name: "Chems Stash",            caps: 55,  type: "misc" },
-    nuka_cola:         { name: "Nuka-Cola",              caps: 10,  type: "consumable" },
+    nuka_cola:         { name: "Atomic Fizz",              caps: 10,  type: "consumable" },
     pre_war_money:     { name: "Pre-War Money",          caps: 60,  type: "misc" },
     scrap_metal:       { name: "Scrap Metal",            caps: 5,   type: "misc" },
     wonderglue:        { name: "Wonderglue",             caps: 8,   type: "misc" },
@@ -326,7 +326,7 @@
 
   // Terminal hacking flavour text
   const HACK_PROMPTS = [
-    ">>> RobCo Industries Terminal v2.2.0.3 — WELCOME <<<",
+    ">>> FizzCo Industries Terminal v2.2.0.3 — WELCOME <<<",
     ">>> ROBCO INDUSTRIES (TM) UNIFIED OPERATING SYSTEM <<<",
     ">>> PASSWORD REQUIRED. PLEASE ENTER PASSWORD. <<<",
   ];
@@ -416,7 +416,7 @@
     {
       name: "zigzag",
       label: "THE ZIGZAG",
-      description: "Snakes through the ruin like a radscorpion trail. Less venomous. Barely.",
+      description: "Snakes through the ruin like a glowsting trail. Less venomous. Barely.",
       positions: [
         { row: 0, col: 0 },
         { row: 0, col: 1 },
@@ -938,7 +938,7 @@
               <div class="dungeon-room-info" id="dungeon-room-info"></div>
               <div class="dungeon-actions" id="dungeon-actions"></div>
               <div class="dungeon-log" id="dungeon-log">
-                <div class="dungeon-log-title">≡ VAULT-TEC LOG ≡</div>
+                <div class="dungeon-log-title">≡ FIZZTEC LOG ≡</div>
                 <div id="dungeon-log-entries"></div>
               </div>
             </div>
@@ -1584,7 +1584,7 @@
         if (data && data.ok && typeof data.caps === "number") {
           if (this.gs && this.gs.player) {
             // BUG-047 FIX: cap client-side caps at MAX_CAPS to match backend limit
-            // and prevent Pip-Boy display overflow.
+            // and prevent Pocket-Boy display overflow.
             const MAX_CAPS = 999_999_999;
             this.gs.player.caps = Math.min((this.gs.player.caps || 0) + data.caps, MAX_CAPS);
           }
@@ -1617,7 +1617,7 @@
         "The fluorescent lights flicker in a pattern that seems almost... intentional.",
         "Pre-war graffiti reads: 'REMEMBER SHADY SANDS'. Someone misses home.",
         "A holotape lies in the corner, but it's too corrupted to play.",
-        "The smell of stale Nuka-Cola lingers. Decades-old syrup.",
+        "The smell of stale Atomic Fizz lingers. Decades-old syrup.",
         "Emergency lighting casts everything in a bloody red hue.",
         "The silence here is the loudest thing you've heard all day.",
       ];

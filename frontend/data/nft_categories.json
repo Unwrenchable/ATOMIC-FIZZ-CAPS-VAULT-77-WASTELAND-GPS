@@ -12,8 +12,8 @@
       "items": [
         {
           "nft_id": "rebuild_special_token",
-          "name": "Vault-Tec SPECIAL Respec Token",
-          "description": "One-time use token that allows complete rebuild of your SPECIAL stats. Extremely rare Vault-Tec technology.",
+          "name": "FizzTec VITALS Respec Token",
+          "description": "One-time use token that allows complete rebuild of your VITALS stats. Extremely rare FizzTec technology.",
           "rarity": "legendary",
           "supply": "limited",
           "max_mints": 1000,
@@ -23,11 +23,11 @@
           "consumable": true,
           "effects": {
             "action": "respec_special",
-            "description": "Reset all SPECIAL points and redistribute them",
+            "description": "Reset all VITALS points and redistribute them",
             "requirements": ["level_5_minimum"],
             "cooldown_hours": 168
           },
-          "lore": "Pre-War Vault-Tec engineers created these devices to help Vault Dwellers adapt to experimental conditions. Only a handful survived the apocalypse.",
+          "lore": "Pre-War FizzTec engineers created these devices to help Vault Dwellers adapt to experimental conditions. Only a handful survived the apocalypse.",
           "image_placeholder": "vault_tec_holotape_gold.png",
           "merchant_availability": {
             "scavenger_exchange": true,
@@ -109,7 +109,7 @@
         },
         {
           "nft_id": "plasma_caster_blueprint",
-          "name": "Enclave Plasma Caster Plans",
+          "name": "Directorate Plasma Caster Plans",
           "description": "Unlock ability to craft Plasma Casters",
           "rarity": "epic",
           "supply": "limited",
@@ -129,13 +129,13 @@
     
     {
       "category_id": "power_armor",
-      "name": "Power Armor Frames",
+      "name": "Reactor Harness Frames",
       "description": "Mintable power armor sets with unique skins",
       "icon": "🤖",
       "items": [
         {
           "nft_id": "t60_custom_paint",
-          "name": "Brotherhood of Steel Custom T-60",
+          "name": "Coil Covenant Custom T-60",
           "description": "Full T-60 power armor with exclusive Brotherhood paint scheme",
           "rarity": "epic",
           "supply": "limited",
@@ -166,7 +166,7 @@
       "items": [
         {
           "nft_id": "mr_handy_companion",
-          "name": "Codsworth-Class Mr. Handy",
+          "name": "Codsworth-Class Servo-Unit",
           "description": "Personal robot companion with British accent",
           "rarity": "rare",
           "supply": "unlimited",
@@ -254,8 +254,8 @@
       "items": [
         {
           "nft_id": "lucky_38_penthouse",
-          "name": "Lucky 38 Penthouse Suite",
-          "description": "Exclusive player housing in New Vegas",
+          "name": "The Spire Penthouse Suite",
+          "description": "Exclusive player housing in Neon Reach",
           "rarity": "legendary",
           "supply": "limited",
           "max_mints": 38,
@@ -281,7 +281,7 @@
   "minting_mechanics": {
     "currencies": {
       "caps": {
-        "name": "Bottle Caps",
+        "name": "Atomic Fizz Caps",
         "description": "Standard wasteland currency"
       },
       "fizz": {
@@ -325,9 +325,9 @@
   
   "rebuild_special_integration": {
     "button_behavior": {
-      "default_state": "Shows 'REBUILD SPECIAL (REQUIRES TOKEN)'",
+      "default_state": "Shows 'REBUILD VITALS (REQUIRES TOKEN)'",
       "check_wallet": "On click, checks connected wallet for rebuild_special_token NFT",
-      "if_has_token": "Button enabled, shows 'REBUILD SPECIAL (1 TOKEN AVAILABLE)'",
+      "if_has_token": "Button enabled, shows 'REBUILD VITALS (1 TOKEN AVAILABLE)'",
       "if_no_token": "Opens Scavenger Exchange to purchase/mint section",
       "after_use": "Token consumed (burned or marked as used), cooldown starts"
     },
@@ -339,9 +339,9 @@
     },
     
     "respec_process": {
-      "1_confirm": "Are you sure? This will reset all SPECIAL points.",
+      "1_confirm": "Are you sure? This will reset all VITALS points.",
       "2_consume_token": "Token consumed from wallet or inventory",
-      "3_reset_stats": "All SPECIAL points returned to unallocated pool",
+      "3_reset_stats": "All VITALS points returned to unallocated pool",
       "4_redistribute": "Player reallocates points as desired",
       "5_cooldown": "Cannot respec again for 7 days (168 hours)"
     }

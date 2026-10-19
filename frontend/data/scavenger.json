@@ -19,9 +19,9 @@
   {
     "id": "trade-001",
     "owner": "WastelanderX42",
-    "title": "50 Stimpaks (Bulk)",
+    "title": "50 FizzPaks (Bulk)",
     "description": "Fresh from the clinic, no rads. Quick trade, first come first serve.",
-    "image": "https://via.placeholder.com/320x180/00ff41/000000?text=Stimpaks",
+    "image": "https://via.placeholder.com/320x180/00ff41/000000?text=FizzPaks",
     "tokenUri": null,
     "metadata": {
       "rarity": "common",
@@ -51,10 +51,10 @@
   },
   {
     "id": "trade-003",
-    "owner": "RadAwayQueen",
-    "title": "100 RadAway + 5 Cloth",
+    "owner": "GlowFlushQueen",
+    "title": "100 GlowFlush + 5 Cloth",
     "description": "Bulk radiation protection – perfect for deep wasteland runs.",
-    "image": "https://via.placeholder.com/320x180/ff6600/000000?text=RadAway",
+    "image": "https://via.placeholder.com/320x180/ff6600/000000?text=GlowFlush",
     "tokenUri": null,
     "metadata": {
       "rarity": "common",

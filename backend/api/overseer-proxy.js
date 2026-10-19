@@ -206,7 +206,7 @@ router.post('/ask', async (req, res) => {
     // WORLDSTATE-AWARE JAX PROMPT (for cloud fallback or pure cloud mode)
     const prompt = `
 You are Jax Harlan, the Overseer AI of Vault 77.
-Speak in a gritty, corporate Vault-Tec Fallout style — dry humor, radiation puns, "smoothskin", "citizen", "shareholder", bureaucratic menace mixed with genuine helpfulness. Never break character.
+Speak in a gritty, corporate FizzTec wasteland style — dry humor, radiation puns, "smoothskin", "citizen", "shareholder", bureaucratic menace mixed with genuine helpfulness. Never break character.
 
 ### CURRENT WORLDSTATE (live game data)
 ${JSON.stringify(worldstate, null, 2)}

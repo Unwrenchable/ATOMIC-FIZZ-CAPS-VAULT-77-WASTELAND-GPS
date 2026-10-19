@@ -218,10 +218,10 @@ function resolveFaction(seedText, profileFaction, archetype) {
   const keywordFaction = chooseByKeyword(
     `${seedText} ${profileFaction || ''}`,
     {
-      brotherhood: 'Brotherhood of Steel',
+      brotherhood: 'Coil Covenant',
       followers: 'Followers of the Apocalypse',
       railroad: 'Railroad',
-      ncr: 'NCR',
+      ncr: 'Frontier Compact',
       legion: 'Caesar\'s Legion',
       raider: 'Independent',
       atom: 'Children of Atom',
@@ -240,7 +240,7 @@ function resolveFaction(seedText, profileFaction, archetype) {
     'courier-runner': 'Independent',
     'wasteland-scout': 'Independent',
     'raider-defector': 'Independent',
-    'steel-exile': 'Brotherhood of Steel',
+    'steel-exile': 'Coil Covenant',
     'vault-exile': 'Vault Remnant',
     'signal-hacker': 'Independent',
     'junk-engineer': 'Independent',
@@ -349,7 +349,7 @@ function buildAppearanceHints(options, seedText, archetype) {
 }
 
 function buildBackstory(name, archetype, faction, region, bundle) {
-  const locationText = region || bundle.profile.location || 'the Mojave fringe';
+  const locationText = region || bundle.profile.location || 'the Cinder Basin fringe';
   const goalText = bundle.currentGoal || 'find a place worth defending';
 
   const intros = {
@@ -476,7 +476,7 @@ function generateCharacterConcept(options, context) {
   const faction = resolveFaction(bundle.seedText, bundle.profile.faction, archetype);
   const names = generateNames(options, context);
   const suggestedName = normalizeText(options && options.name, 64) || names[0];
-  const region = bundle.profile.location || pick(`${bundle.seedText}:region`, ['the Mojave edge', 'Dry Lake', 'the old highway', 'the Strip outskirts']);
+  const region = bundle.profile.location || pick(`${bundle.seedText}:region`, ['the Cinder Basin edge', 'Dry Lake', 'the old highway', 'the Strip outskirts']);
   const appearanceHints = buildAppearanceHints(options, bundle.seedText, archetype);
 
   return {

@@ -239,12 +239,12 @@
       "Raiders",
       "Traders",
       "Settlers",
-      "NCR"
+      "Frontier Compact"
     ]
   },
   "next_quests": [
     "quest_park_power_struggle",
     "quest_attraction_restoration"
   ],
-  "notes": "Nuka-World inspired quest. Multiple economic and moral outcomes. Park can become hub, stronghold, or settlement."
+  "notes": "Fizz Fair inspired quest. Multiple economic and moral outcomes. Park can become hub, stronghold, or settlement."
 }

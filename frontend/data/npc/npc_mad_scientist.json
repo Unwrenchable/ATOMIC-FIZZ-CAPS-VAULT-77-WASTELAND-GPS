@@ -2,7 +2,7 @@
   "id": "npc_mad_scientist",
   "name": "Dr. Helena Vance",
   "faction": "Independent",
-  "role": "Ghoul Researcher / Former Vault-Tec Scientist",
+  "role": "Ghoul Researcher / Former FizzTec Scientist",
   "type": "human",
 
   "homeRegion": "abandoned_asylum",
@@ -26,7 +26,7 @@
       "fev-research",
       "medical-science",
       "experimental-procedures",
-      "vault-tec-methods"
+      "fizztec-methods"
     ],
     "anomalyAwareness": 0.6
   },

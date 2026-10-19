@@ -247,7 +247,7 @@ Make this character look like they belong in the Fallout universe with realistic
       <ellipse cx="128" cy="110" rx="15" ry="8" fill="#000"/>
       <path d="M80 140 Q128 180 176 140 L176 200 L80 200 Z" fill="${color.clothes}"/>
       <circle cx="128" cy="70" r="25" fill="${color.hair}"/>
-      <text x="128" y="240" text-anchor="middle" fill="#0F0" font-size="12">FALLOUT</text>
+      <text x="128" y="240" text-anchor="middle" fill="#0F0" font-size="12">WASTELAND</text>
     </svg>`;
   }
 

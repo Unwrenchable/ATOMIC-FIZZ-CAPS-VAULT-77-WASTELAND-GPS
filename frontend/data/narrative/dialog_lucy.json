@@ -2,8 +2,8 @@
   "id": "dialog_lucy",
   "npc": "Lucy \"Sparkplug\" Vance",
   "title": "The Scavenger Queen",
-  "description": "Dialog nodes for Lucy Vance, the fast-talking scavenger queen who trades junk, secrets, and favors across the Mojave.",
-  "backstory": "Grew up in the Vegas Strip's underground service corridors, learning to fix everything that kept the towers running. Left at nineteen when it became clear the towers would never pay her what she was worth. Spent the decade after building the Mojave's most reliable scavenging network. She can identify any pre-war machine by the sound it makes when it's dying. She says that's her most valuable skill. She's right.",
+  "description": "Dialog nodes for Lucy Vance, the fast-talking scavenger queen who trades junk, secrets, and favors across the Cinder Basin.",
+  "backstory": "Grew up in the Vegas Strip's underground service corridors, learning to fix everything that kept the towers running. Left at nineteen when it became clear the towers would never pay her what she was worth. Spent the decade after building the Cinder Basin's most reliable scavenging network. She can identify any pre-war machine by the sound it makes when it's dying. She says that's her most valuable skill. She's right.",
   "intro": {
     "id": "lucy_intro",
     "conditions": [
@@ -66,7 +66,7 @@
         "flag:met_loxley",
         "!flag:lucy_comment_loxley"
       ],
-      "text": "Oh, the hat man. Robin Hood of the Mojave, he calls himself.<br><br>I've got a deal with him — he skips my stock, I skip his name when the Dam asks.<br><br>He's good for business. Indirectly.",
+      "text": "Oh, the hat man. Robin Hood of the Cinder Basin, he calls himself.<br><br>I've got a deal with him — he skips my stock, I skip his name when the Dam asks.<br><br>He's good for business. Indirectly.",
       "set_flags": [
         "lucy_comment_loxley"
       ]
@@ -88,7 +88,7 @@
         "flag:met_kenny",
         "!flag:lucy_comment_kenny"
       ],
-      "text": "Oh, Kenny. The hood kid.<br><br>He traded me a handful of pre-war coins for a stimpak. Coins were worthless. Stimpak cost me twelve caps.<br><br>Then he got eaten by a fire ant on the way out the door. Came back the next morning for his change.<br><br>I gave him the change.",
+      "text": "Oh, Kenny. The hood kid.<br><br>He traded me a handful of pre-war coins for a FizzPak. Coins were worthless. FizzPak cost me twelve caps.<br><br>Then he got eaten by a fire ant on the way out the door. Came back the next morning for his change.<br><br>I gave him the change.",
       "set_flags": [
         "lucy_comment_kenny"
       ]
@@ -124,7 +124,7 @@
       "conditions": [
         "!flag:sq_lucy_queen_of_junk_taken"
       ],
-      "text": "Someone lifted a crate of my good stuff.<br><br>Pre-war parts. The kind that still hum when you touch them.<br><br>You track it down — Goodsprings, Nipton, Freeside — and we both walk away richer.",
+      "text": "Someone lifted a crate of my good stuff.<br><br>Pre-war parts. The kind that still hum when you touch them.<br><br>You track it down — Dustwell, Nipton, Freeside — and we both walk away richer.",
       "offers_quest": "sq_lucy_queen_of_junk",
       "set_flags": [
         "sq_lucy_queen_of_junk_taken"
@@ -151,7 +151,7 @@
         "scrap",
         "parts"
       ],
-      "text": "Junk is just treasure that hasn’t met the right idiot yet.<br><br>And trust me, the Mojave is full of idiots."
+      "text": "Junk is just treasure that hasn’t met the right idiot yet.<br><br>And trust me, the Cinder Basin is full of idiots."
     },
     {
       "id": "lucy_strip",

@@ -12,7 +12,7 @@ const { redis, key } = require("../lib/redis");
 const { authMiddleware } = require("../lib/auth");
 const { checkNFTOwnership } = require("../lib/nfts");
 
-const DEFAULT_SPECIAL = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
+const DEFAULT_VITALS = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
 
 // ------------------------------------------------------------
 // Per-route limiter (player profile is sensitive state)
@@ -106,23 +106,23 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
     }
 
     // ----------------------------------------------------------
-    // Validate and sanitise SPECIAL allocation
+    // Validate and sanitise VITALS allocation
     // Rules: each stat must be 1–10, total points ≤ 28 (7 base + 21 spend)
     // ----------------------------------------------------------
-    const SPECIAL_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
+    const VITALS_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
     // Max total = 7 minimum (1 each) + 21 allocation points.
     // Individual stat cap of 10 is enforced per-stat in the loop below (line 83-84)
     // before the sum check, so {S:1,...,L:22} is rejected by the per-stat guard first.
-    const MAX_SPECIAL_TOTAL = 28;
+    const MAX_VITALS_TOTAL = 28;
 
-    let chosenSpecial = { ...DEFAULT_SPECIAL };
+    let chosenSpecial = { ...DEFAULT_VITALS };
 
     if (incomingSpecial && typeof incomingSpecial === "object") {
       let valid = true;
       let total = 0;
       const candidate = {};
 
-      for (const stat of SPECIAL_KEYS) {
+      for (const stat of VITALS_KEYS) {
         const raw = incomingSpecial[stat];
         if (raw === undefined || raw === null) {
           candidate[stat] = 1; // default min if stat absent
@@ -136,10 +136,10 @@ router.post("/create", authMiddleware, playerLimiter, async (req, res) => {
         total += candidate[stat];
       }
 
-      if (valid && total <= MAX_SPECIAL_TOTAL) {
+      if (valid && total <= MAX_VITALS_TOTAL) {
         chosenSpecial = candidate;
       } else {
-        console.log("[player] create: incoming SPECIAL invalid (total=%d, valid=%s), using default", total, valid);
+        console.log("[player] create: incoming VITALS invalid (total=%d, valid=%s), using default", total, valid);
         // Silently fall back — don't error the player out of creation
       }
     }
@@ -263,8 +263,8 @@ router.get("/:wallet", playerLimiter, async (req, res) => {
 // ------------------------------------------------------------
 // POST /api/player/special/update
 // BUG FIX: Added authMiddleware so only the authenticated player can update
-// their own SPECIAL stats.  Previously any caller could overwrite any wallet's
-// SPECIAL by supplying an arbitrary wallet address in the request body.
+// their own VITALS stats.  Previously any caller could overwrite any wallet's
+// VITALS by supplying an arbitrary wallet address in the request body.
 // ------------------------------------------------------------
 router.post("/special/update", authMiddleware, playerLimiter, async (req, res) => {
   try {
@@ -276,13 +276,13 @@ router.post("/special/update", authMiddleware, playerLimiter, async (req, res) =
       return res.status(400).json({ ok: false, error: "Invalid special object" });
     }
 
-    // Validate each SPECIAL stat is in [1, 10] range
-    const SPECIAL_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
-    for (const stat of SPECIAL_KEYS) {
+    // Validate each VITALS stat is in [1, 10] range
+    const VITALS_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
+    for (const stat of VITALS_KEYS) {
       const val = special[stat];
       if (val !== undefined) {
         if (typeof val !== "number" || !Number.isFinite(val) || val < 1 || val > 10) {
-          return res.status(400).json({ ok: false, error: `Invalid SPECIAL value for ${stat}` });
+          return res.status(400).json({ ok: false, error: `Invalid VITALS value for ${stat}` });
         }
       }
     }
@@ -290,9 +290,9 @@ router.post("/special/update", authMiddleware, playerLimiter, async (req, res) =
     const profile = await loadProfile(wallet);
     if (!profile) return res.status(404).json({ ok: false, error: "not found" });
 
-    // Only update recognised SPECIAL keys to avoid arbitrary property injection
+    // Only update recognised VITALS keys to avoid arbitrary property injection
     const sanitizedSpecial = {};
-    SPECIAL_KEYS.forEach(k => {
+    VITALS_KEYS.forEach(k => {
       const raw = special[k];
       const val = typeof raw === "number"
         ? Math.min(10, Math.max(1, Math.floor(raw)))
@@ -305,7 +305,7 @@ router.post("/special/update", authMiddleware, playerLimiter, async (req, res) =
     return res.json({ ok: true, profile });
   } catch (err) {
     console.error("[player] special update error:", err);
-    return res.status(500).json({ ok: false, error: "Failed to update SPECIAL" });
+    return res.status(500).json({ ok: false, error: "Failed to update VITALS" });
   }
 });
 
@@ -396,13 +396,13 @@ router.post("/respec", authMiddleware, playerLimiter, async (req, res) => {
       return res.status(403).json({ ok: false, error: "no recalibration token" });
     }
 
-    profile.special = { ...DEFAULT_SPECIAL };
+    profile.special = { ...DEFAULT_VITALS };
     await saveProfile(wallet, profile);
 
     return res.json({ ok: true, profile });
   } catch (err) {
     console.error("[player] respec error:", err);
-    return res.status(500).json({ ok: false, error: "Failed to respec SPECIAL" });
+    return res.status(500).json({ ok: false, error: "Failed to respec VITALS" });
   }
 });
 

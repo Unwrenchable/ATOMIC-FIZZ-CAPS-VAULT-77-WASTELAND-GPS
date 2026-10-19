@@ -1,6 +1,6 @@
 // character-creator.js
 // ============================================================
-// Player Character Creator - Fallout 4 Style
+// Player Character Creator - the commonwealth wastes Style
 // Allows players to customize their character's appearance
 // and generates SVG-based portraits for both players and NPCs
 // ============================================================
@@ -50,8 +50,8 @@
     return String(val);
   }
 
-  // SPECIAL stat metadata
-  const SPECIAL_STATS = [
+  // VITALS stat metadata
+  const VITALS_STATS = [
     { key: 'S', label: 'Strength',     abbr: 'STR', desc: 'Melee damage, carry weight' },
     { key: 'P', label: 'Perception',   abbr: 'PER', desc: 'Attack accuracy, environmental awareness' },
     { key: 'E', label: 'Endurance',    abbr: 'END', desc: 'Max HP, radiation resistance' },
@@ -61,12 +61,12 @@
     { key: 'L', label: 'Luck',         abbr: 'LCK', desc: 'Critical hit chance, random events' }
   ];
 
-  const SPECIAL_TOTAL_POINTS = 21;
-  const SPECIAL_MIN = 1;
-  const SPECIAL_MAX = 10;
+  const VITALS_TOTAL_POINTS = 21;
+  const VITALS_MIN = 1;
+  const VITALS_MAX = 10;
 
   // ============================================================
-  // VAULT BOY BOBBLEHEAD SVGS — unique pose per S.P.E.C.I.A.L. stat
+  // VAULT BOY BOBBLEHEAD SVGS — unique pose per V.I.T.A.L.S. stat
   // Each uses viewBox="0 0 50 60" (50×60 logical units, rendered via CSS width/height).
   // Colors: suit #FFD700, skin #FFC48C, hair #4A3728, outline stroke #2a1a0a
   // ============================================================
@@ -255,9 +255,9 @@
         currentAppearance = { ...appearanceOptions.defaultAppearance };
         currentAppearance.name = "Wanderer";
 
-        // Initialise SPECIAL allocation (each stat starts at 1, 21 points to spend)
+        // Initialise VITALS allocation (each stat starts at 1, 21 points to spend)
         currentAppearance.special       = { S:1, P:1, E:1, C:1, I:1, A:1, L:1 };
-        currentAppearance.specialPoints = SPECIAL_TOTAL_POINTS;
+        currentAppearance.specialPoints = VITALS_TOTAL_POINTS;
         currentAppearance.background    = null;
         currentAppearance.selectedTraits = [];
 
@@ -286,10 +286,10 @@
 
       if (existingAppearance) {
         currentAppearance = { ...existingAppearance };
-        // Ensure SPECIAL fields are present for legacy saved appearances
+        // Ensure VITALS fields are present for legacy saved appearances
         if (!currentAppearance.special) {
           currentAppearance.special       = { S:1, P:1, E:1, C:1, I:1, A:1, L:1 };
-          currentAppearance.specialPoints = SPECIAL_TOTAL_POINTS;
+          currentAppearance.specialPoints = VITALS_TOTAL_POINTS;
         }
         if (!currentAppearance.background)      currentAppearance.background = null;
         if (!currentAppearance.selectedTraits)  currentAppearance.selectedTraits = [];
@@ -312,7 +312,7 @@
 
       // Nova-7 greeting on open
       this._novaGuide.show(
-        "Welcome to Vault-Tec Personnel Assignment. I am NOVA-7, your character assignment AI. " +
+        "Welcome to FizzTec Personnel Assignment. I am NOVA-7, your character assignment AI. " +
         "Please complete all sections. Failure to do so will be noted in your permanent file."
       );
 
@@ -569,7 +569,7 @@
     },
 
     // ============================================================
-    // NOVA-7 GUIDE — Vault-Tec AI companion for character creator
+    // NOVA-7 GUIDE — FizzTec AI companion for character creator
     // ============================================================
     _novaGuide: {
       panel: null,
@@ -635,12 +635,12 @@
               <div class="cc-vault-seal" aria-hidden="true"><span class="cc-seal-number">77</span></div>
               <div>
                 <div class="cc-title">CHARACTER CREATION</div>
-                <div class="cc-subtitle">VAULT-TEC PERSONNEL FILE · UNIT #<span id="ccVaultUnit">???</span></div>
+                <div class="cc-subtitle">FIZZTEC PERSONNEL FILE · UNIT #<span id="ccVaultUnit">???</span></div>
               </div>
             </div>
             <button class="cc-close-btn" id="ccCloseBtn">✕ ABORT</button>
           </div>
-          <div class="cc-vault-bar">VAULT-TEC CORPORATION · VAULT 77 · PERSONNEL ASSIGNMENT TERMINAL · YEAR 2277</div>
+          <div class="cc-vault-bar">FIZZTEC CORPORATION · VAULT 77 · PERSONNEL ASSIGNMENT TERMINAL · YEAR 2277</div>
 
           <!-- Onboarding instruction strip -->
           <div class="cc-onboarding-strip" id="ccOnboardingStrip" style="
@@ -691,7 +691,7 @@
                 <button class="cc-tab" data-category="eyes">04 EYES</button>
                 <button class="cc-tab" data-category="details">05 DETAILS</button>
                 <button class="cc-tab" data-category="extras">06 EXTRAS</button>
-                <button class="cc-tab" data-category="special">07 S.P.E.C.I.A.L.</button>
+                <button class="cc-tab" data-category="special">07 V.I.T.A.L.S.</button>
                 <button class="cc-tab" data-category="background">08 BACKGROUND</button>
                 <button class="cc-tab" data-category="traits">09 TRAITS</button>
               </div>
@@ -829,10 +829,10 @@
                   </div>
                 </div>
 
-                <!-- S.P.E.C.I.A.L. Section -->
+                <!-- V.I.T.A.L.S. Section -->
                 <div class="cc-category-section" data-category="special">
-                  <div class="cc-section-title">S.P.E.C.I.A.L. ATTRIBUTES</div>
-                  <div class="cc-section-hint">You have 21 points to distribute across 7 attributes. Minimum 1 per attribute, maximum 10. These affect combat, dialogue options, and crafting. You can rebalance at a Vault-Tec terminal later — costs caps.</div>
+                  <div class="cc-section-title">V.I.T.A.L.S. ATTRIBUTES</div>
+                  <div class="cc-section-hint">You have 21 points to distribute across 7 attributes. Minimum 1 per attribute, maximum 10. These affect combat, dialogue options, and crafting. You can rebalance at a FizzTec terminal later — costs caps.</div>
                   <div id="ccSpecialContent" class="cc-special-content"></div>
                 </div>
 
@@ -846,7 +846,7 @@
                 <!-- Traits Section -->
                 <div class="cc-category-section" data-category="traits">
                   <div class="cc-section-title">CHARACTER TRAITS <span style="font-size:0.75em;opacity:0.7;">(SELECT UP TO 2)</span></div>
-                  <div class="cc-section-hint">Traits are double-edged. Every benefit comes with a drawback. Vault-Tec calls this "balanced incentive design." Survivors call it "the wasteland tax."</div>
+                  <div class="cc-section-hint">Traits are double-edged. Every benefit comes with a drawback. FizzTec calls this "balanced incentive design." Survivors call it "the wasteland tax."</div>
                   <div id="ccTraitsContent" class="cc-traits-content"></div>
                 </div>
               </div>
@@ -900,12 +900,12 @@
       document.getElementById('ccConfirmBtn').addEventListener('click', () => {
         currentAppearance.name = document.getElementById('ccNameInput').value || "Wanderer";
 
-        // Validate all S.P.E.C.I.A.L. points have been allocated before allowing confirm
+        // Validate all V.I.T.A.L.S. points have been allocated before allowing confirm
         const sp = currentAppearance.special || {};
-        const used = SPECIAL_STATS.reduce((acc, s) => acc + ((sp[s.key] || 1) - 1), 0);
-        const remaining = SPECIAL_TOTAL_POINTS - used;
+        const used = VITALS_STATS.reduce((acc, s) => acc + ((sp[s.key] || 1) - 1), 0);
+        const remaining = VITALS_TOTAL_POINTS - used;
         if (remaining > 0) {
-          alert(`You have ${remaining} unspent S.P.E.C.I.A.L. point${remaining > 1 ? 's' : ''}. Allocate all points before entering the Vault.`);
+          alert(`You have ${remaining} unspent V.I.T.A.L.S. point${remaining > 1 ? 's' : ''}. Allocate all points before entering the Vault.`);
           return;
         }
         
@@ -920,7 +920,7 @@
           this.onSaveCallback(currentAppearance);
         }
         
-        // Dispatch event with full character data including SPECIAL, background, traits
+        // Dispatch event with full character data including VITALS, background, traits
         window.dispatchEvent(new CustomEvent('characterCreated', { 
           detail: {
             appearance:     currentAppearance,
@@ -974,7 +974,7 @@
             eyes:       '▶ STEP 04 — Eye shape and color. Small details, big personality.',
             details:    '▶ STEP 05 — Optional scars and markings. The wasteland leaves marks.',
             extras:     '▶ STEP 06 — Accessories and voice type. Affects NPC first impressions.',
-            special:    '▶ STEP 07 — S.P.E.C.I.A.L. attributes. 21 points across 7 stats. Min 1, max 10.',
+            special:    '▶ STEP 07 — V.I.T.A.L.S. attributes. 21 points across 7 stats. Min 1, max 10.',
             background: '▶ STEP 08 — Origin background. Grants starting bonuses and faction modifiers.',
             traits:     '▶ STEP 09 — Character traits (up to 2). Every benefit has a drawback. Choose carefully.',
           };
@@ -1147,7 +1147,7 @@
     },
 
     // ============================================================
-    // RENDER S.P.E.C.I.A.L. TAB
+    // RENDER V.I.T.A.L.S. TAB
     // ============================================================
     _renderSpecialTab() {
       const container = document.getElementById('ccSpecialContent');
@@ -1155,19 +1155,19 @@
 
       const sp   = currentAppearance.special;
       const _pts  = currentAppearance.specialPoints;
-      const used = SPECIAL_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
-      const remaining = SPECIAL_TOTAL_POINTS - used;
+      const used = VITALS_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
+      const remaining = VITALS_TOTAL_POINTS - used;
       currentAppearance.specialPoints = remaining;
 
-      // Build derived stats (using base SPECIAL only — background applied on save)
+      // Build derived stats (using base VITALS only — background applied on save)
       const derived = this._calcDerived(sp);
 
-      // Vault Boy bobblehead icon — look up per-stat SVG from VAULT_BOY_SVGS
+      // Fizz Kid bobblehead icon — look up per-stat SVG from VAULT_BOY_SVGS
 
       let html = `
         <div class="cc-special-intro">
-          <div class="cc-si-book-cover" aria-hidden="true"><div class="cc-si-book-title">YOU'RE</div><div class="cc-si-book-special">S.P.E.C.I.A.L.!</div></div>
-          <span class="cc-si-text">"Every human being is born with <strong>S.P.E.C.I.A.L.</strong> attributes. These core values define your every action in the wasteland."</span>
+          <div class="cc-si-book-cover" aria-hidden="true"><div class="cc-si-book-title">YOU'RE</div><div class="cc-si-book-special">V.I.T.A.L.S.!</div></div>
+          <span class="cc-si-text">"Every human being is born with <strong>V.I.T.A.L.S.</strong> attributes. These core values define your every action in the wasteland."</span>
         </div>
         <div class="cc-special-points-banner">
           <span class="cc-sp-label">POINTS REMAINING:</span>
@@ -1176,7 +1176,7 @@
         <div class="cc-special-rows" id="ccSpecialRows">
       `;
 
-      SPECIAL_STATS.forEach(stat => {
+      VITALS_STATS.forEach(stat => {
         const val   = sp[stat.key];
         const dots  = Array.from({length: 10}, (_, i) => `<span class="cc-sp-dot${i < val ? ' filled' : ''}"></span>`).join('');
         html += `
@@ -1189,9 +1189,9 @@
               <div class="cc-sp-bar"><div class="cc-sp-bar-fill" id="ccSpBar${escapeHtml(stat.key)}" style="width:${val * 10}%"></div></div>
             </div>
             <div class="cc-sp-controls">
-              <button class="cc-sp-btn cc-sp-minus" data-stat="${escapeHtml(stat.key)}" ${val <= SPECIAL_MIN ? 'disabled' : ''}>−</button>
+              <button class="cc-sp-btn cc-sp-minus" data-stat="${escapeHtml(stat.key)}" ${val <= VITALS_MIN ? 'disabled' : ''}>−</button>
               <span class="cc-sp-num" id="ccSp${escapeHtml(stat.key)}">${val}</span>
-              <button class="cc-sp-btn cc-sp-plus" data-stat="${escapeHtml(stat.key)}" ${val >= SPECIAL_MAX || remaining <= 0 ? 'disabled' : ''}>+</button>
+              <button class="cc-sp-btn cc-sp-plus" data-stat="${escapeHtml(stat.key)}" ${val >= VITALS_MAX || remaining <= 0 ? 'disabled' : ''}>+</button>
             </div>
             <div class="cc-sp-dots" id="ccSpDots${escapeHtml(stat.key)}">${dots}</div>
           </div>
@@ -1226,20 +1226,20 @@
       });
     },
 
-    // Adjust a single SPECIAL stat by delta (+1 or -1)
+    // Adjust a single VITALS stat by delta (+1 or -1)
     _adjustSpecial(statKey, delta) {
       const sp  = currentAppearance.special;
       const cur = sp[statKey];
-      const used = SPECIAL_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
-      const remaining = SPECIAL_TOTAL_POINTS - used;
+      const used = VITALS_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
+      const remaining = VITALS_TOTAL_POINTS - used;
 
       const newVal = cur + delta;
-      if (newVal < SPECIAL_MIN || newVal > SPECIAL_MAX) return;
+      if (newVal < VITALS_MIN || newVal > VITALS_MAX) return;
       if (delta > 0 && remaining <= 0) return;
 
       sp[statKey] = newVal;
-      const newUsed = SPECIAL_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
-      const newRemaining = SPECIAL_TOTAL_POINTS - newUsed;
+      const newUsed = VITALS_STATS.reduce((acc, s) => acc + (sp[s.key] - 1), 0);
+      const newRemaining = VITALS_TOTAL_POINTS - newUsed;
       currentAppearance.specialPoints = newRemaining;
 
       // Partial re-render (update only changed elements, not full re-render)
@@ -1254,12 +1254,12 @@
       if (ptsBanner) ptsBanner.textContent = newRemaining;
 
       // Update button states for all stats
-      SPECIAL_STATS.forEach(s => {
+      VITALS_STATS.forEach(s => {
         const v    = sp[s.key];
         const minB = document.querySelector(`.cc-sp-minus[data-stat="${s.key}"]`);
         const maxB = document.querySelector(`.cc-sp-plus[data-stat="${s.key}"]`);
-        if (minB) minB.disabled = (v <= SPECIAL_MIN);
-        if (maxB) maxB.disabled = (v >= SPECIAL_MAX || newRemaining <= 0);
+        if (minB) minB.disabled = (v <= VITALS_MIN);
+        if (maxB) maxB.disabled = (v >= VITALS_MAX || newRemaining <= 0);
       });
 
       // Update derived stats preview
@@ -1272,34 +1272,34 @@
       set('ccDerRR',     derived.radResistance + '%');
       set('ccDerCC',     derived.critChance + '%');
 
-      // Nova comment on SPECIAL allocation (debounced)
+      // Nova comment on VITALS allocation (debounced)
       clearTimeout(this._novaSpecialTimer);
       this._novaSpecialTimer = setTimeout(() => {
         // High values for key stats trigger specific Nova commentary
         if (statKey === 'S' && newVal >= 7) {
-          this._novaGuide.show("Structural integrity confirmed. You will break things. Vault-Tec is fine with this.");
+          this._novaGuide.show("Structural integrity confirmed. You will break things. FizzTec is fine with this.");
         } else if (statKey === 'I' && newVal >= 7) {
           this._novaGuide.show("Intellectual profile noted. Try not to outsmart the Overseer. Again.");
         } else if (statKey === 'C' && newVal >= 7) {
           this._novaGuide.show("Social aptitude flagged. Please use your powers for authorized negotiations only.");
         } else if (statKey === 'P' && newVal >= 7) {
-          this._novaGuide.show("Perception elevated. Vault-Tec recommends not pointing that out to other dwellers.");
+          this._novaGuide.show("Perception elevated. FizzTec recommends not pointing that out to other dwellers.");
         } else if (statKey === 'E' && newVal >= 7) {
           this._novaGuide.show("Endurance profile: above average. Radiation damage still applies. Just slower.");
         } else if (statKey === 'A' && newVal >= 7) {
           this._novaGuide.show("Agility confirmed exceptional. Please do not use this to skip orientation.");
         } else if (statKey === 'L' && newVal >= 7) {
-          this._novaGuide.show("Luck stat flagged. Vault-Tec does not endorse luck as a survival strategy. And yet.");
+          this._novaGuide.show("Luck stat flagged. FizzTec does not endorse luck as a survival strategy. And yet.");
         } else {
-          const allEqual = SPECIAL_STATS.every(s => sp[s.key] === sp[SPECIAL_STATS[0].key]);
+          const allEqual = VITALS_STATS.every(s => sp[s.key] === sp[VITALS_STATS[0].key]);
           if (allEqual) {
-            this._novaGuide.show("Balanced allocation noted. Vault-Tec describes this as 'adequately mediocre.' Congratulations.");
+            this._novaGuide.show("Balanced allocation noted. FizzTec describes this as 'adequately mediocre.' Congratulations.");
           }
         }
       }, 600);
     },
 
-    // Calculate derived stats from a SPECIAL object
+    // Calculate derived stats from a VITALS object
     _calcDerived(sp) {
       return {
         maxHP:        90 + (sp.E * 10),
@@ -1322,7 +1322,7 @@
       backgroundsData.forEach(bg => {
         const isSelected = currentAppearance.background === bg.id;
 
-        // Build SPECIAL modifier tags (green for +, red for -)
+        // Build VITALS modifier tags (green for +, red for -)
         let modTags = '';
         if (bg.specialModifiers) {
           Object.entries(bg.specialModifiers).forEach(([stat, val]) => {
@@ -1357,7 +1357,7 @@
             const selectedBg = backgroundsData.find(b => b.id === currentAppearance.background);
             if (selectedBg) {
               this._novaGuide.show(
-                escapeHtml(selectedBg.name) + ": A solid history. Vault-Tec endorses your survival probability at [REDACTED]%."
+                escapeHtml(selectedBg.name) + ": A solid history. FizzTec endorses your survival probability at [REDACTED]%."
               );
             }
           }
@@ -1378,11 +1378,11 @@
       perksData.traits.forEach(trait => {
         const isSelected = selected.includes(trait.id);
 
-        // Categorise effects: SPECIAL bonuses vs other effects
+        // Categorise effects: VITALS bonuses vs other effects
         let effectTags = '';
-        const SPECIAL_KEYS = ['S','P','E','C','I','A','L'];
+        const VITALS_KEYS = ['S','P','E','C','I','A','L'];
         Object.entries(trait.effects || {}).forEach(([key, val]) => {
-          if (SPECIAL_KEYS.includes(key)) {
+          if (VITALS_KEYS.includes(key)) {
             const sign  = val > 0 ? '+' : '';
             const color = val > 0 ? 'cc-mod-pos' : 'cc-mod-neg';
             effectTags += `<span class="cc-mod-tag ${color}">${escapeHtml(key)}${sign}${val}</span>`;
@@ -1430,7 +1430,7 @@
           // Nova comment on trait selection
           if (sel.length > 0) {
             this._novaGuide.show(
-              "Trait acquisition confirmed. Side effects are not Vault-Tec's legal responsibility."
+              "Trait acquisition confirmed. Side effects are not FizzTec's legal responsibility."
             );
           }
         });

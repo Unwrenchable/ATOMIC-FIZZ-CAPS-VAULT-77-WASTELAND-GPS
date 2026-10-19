@@ -595,7 +595,7 @@
           stopTalking();
           if (onDone) onDone();
         }
-      }, 22); // ms per character — Fallout NV pace
+      }, 22); // ms per character — wasteland NV pace
     },
 
     // ============================================================
@@ -726,14 +726,14 @@
     },
 
     // ============================================================
-    // RENDER PLAYER CHOICE BUTTONS (Fallout NV dialogue wheel list)
+    // RENDER PLAYER CHOICE BUTTONS (wasteland NV dialogue wheel list)
     // ============================================================
     _renderChoices(container, node, dialog) {
       if (!container) return;
 
       const responses = node.responses || [];
 
-      // Tone colour palette matching Fallout NV
+      // Tone colour palette matching wasteland NV
       const toneColors = {
         question:  "#7fd4f5",  // blue — curiosity
         kind:      "#a0e890",  // green — warmth

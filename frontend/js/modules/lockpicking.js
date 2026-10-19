@@ -1,7 +1,7 @@
 // lockpicking.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps – Advanced Lockpicking Minigame
-// Fallout-style lockpicking with tension meter and pick angle
+// wasteland-style lockpicking with tension meter and pick angle
 // ------------------------------------------------------------
 
 (function () {

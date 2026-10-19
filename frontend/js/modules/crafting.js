@@ -20,14 +20,23 @@
       const recipes = Game.modules.recipes;
       if (!recipes || !recipes.loaded) return false;
       const recipe = recipes.getById(recipeId);
-      if (!recipe) return false;
+      if (!recipe || !Array.isArray(recipe.inputs)) return false;
 
       // Assume recipe.inputs = [{ id, type, amount }]
       return recipe.inputs.every(req => this.hasIngredient(req));
     },
 
+    _inventory() {
+      if (!this.gs) this.gs = window.gameState || window.DATA || {};
+      if (!this.gs.inventory) {
+        const ps = Game.modules?.PlayerState?.getState?.();
+        this.gs.inventory = (ps && ps.inventory) || window.PLAYER?.inventory || [];
+      }
+      return this.gs.inventory;
+    },
+
     hasIngredient(req) {
-      const inv = this.gs.inventory;
+      const inv = this._inventory();
       if (!inv) return false;
 
       // Handle both flat array (player-state.js) and legacy category-object structure
@@ -50,7 +59,8 @@
     },
 
     consumeIngredient(req) {
-      const inv = this.gs.inventory;
+      const inv = this._inventory();
+      if (!inv) return;
       let toRemove = req.amount || 1;
 
       // Handle flat-array inventory (PlayerState canonical format)

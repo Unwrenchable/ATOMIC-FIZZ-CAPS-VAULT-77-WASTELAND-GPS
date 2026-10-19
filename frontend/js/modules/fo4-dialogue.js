@@ -1,6 +1,6 @@
 // fo4-dialogue.js
 // ============================================================
-// Fallout 4 Style Dialogue System
+// the commonwealth wastes Style Dialogue System
 // Cinematic dialogue with character portraits and branching options
 // ============================================================
 
@@ -407,7 +407,7 @@
     },
 
     // ============================================================
-    // SHOW WHEEL LAYOUT RESPONSES (Fallout 4 Diamond)
+    // SHOW WHEEL LAYOUT RESPONSES (the commonwealth wastes Diamond)
     // ============================================================
     _showWheelResponses(responses) {
       const responseArea = this.overlayEl.querySelector('.fo4-response-area');

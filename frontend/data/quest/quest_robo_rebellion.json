@@ -1,7 +1,7 @@
 {
   "id": "q_robo_rebellion",
   "name": "The Robo-Rebellion",
-  "description": "Securitrons and Protectrons in the industrial zone are ignoring their owners and converging on a central factory. Something is broadcasting orders — find the signal and decide whether to silence it.",
+  "description": "Securitrons and Warden-Bots in the industrial zone are ignoring their owners and converging on a central factory. Something is broadcasting orders — find the signal and decide whether to silence it.",
   "type": "main",
   "region": "industrial_wasteland",
   "subregion": "robot_territory",
@@ -36,7 +36,7 @@
     },
     {
       "id": "meet_robots",
-      "desc": "Negotiate with the Mister Gutsy militia leader.",
+      "desc": "Negotiate with the Servo-Sentry militia leader.",
       "npc": "npc_mister_gutsy_leader",
       "dialogue": "dialog_gutsy_leader.json"
     },

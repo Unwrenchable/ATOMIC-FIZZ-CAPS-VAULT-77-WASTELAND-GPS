@@ -125,14 +125,14 @@
       ]
     },
     "where_am_i": {
-      "npc_line": "The Mojave. Or what's left of it. But the real question isn't where... it's when.",
+      "npc_line": "The Cinder Basin. Or what's left of it. But the real question isn't where... it's when.",
       "options": [
         {
           "player_choice": "When? What do you mean?",
           "next": "timeline_explanation"
         },
         {
-          "player_choice": "The Mojave? As in Nevada?",
+          "player_choice": "The Cinder Basin? As in Nevada?",
           "next": "mojave_confirmation"
         },
         {

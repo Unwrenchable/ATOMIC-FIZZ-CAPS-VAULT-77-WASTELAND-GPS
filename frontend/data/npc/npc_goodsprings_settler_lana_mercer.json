@@ -5,8 +5,8 @@
   "homeRegion": "mojave",
   "currentRegion": "mojave",
   "role": "Settler / Gardener",
-  "personality": "Soft-spoken, hopeful, tries to keep Goodsprings alive.",
-  "description": "Lana tends a small garden behind the saloon. She believes Goodsprings can thrive again if people stop fighting long enough to help each other.",
+  "personality": "Soft-spoken, hopeful, tries to keep Dustwell alive.",
+  "description": "Lana tends a small garden behind the saloon. She believes Dustwell can thrive again if people stop fighting long enough to help each other.",
   "questHooks": [
     "Needs help clearing pests from her garden.",
     "Found a metal shard in her soil that vibrates faintly.",

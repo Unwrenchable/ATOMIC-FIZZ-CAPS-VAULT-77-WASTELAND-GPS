@@ -62,7 +62,7 @@
   <text x="95" y="194" font-family="monospace" font-size="9" font-weight="bold" 
         text-anchor="middle" fill="#2a5a98">77</text>
   
-  <!-- Vault-Tec logo suggestion (simplified gear) -->
+  <!-- FizzTec logo suggestion (simplified gear) -->
   <g opacity="0.3" stroke="#1a4a88" stroke-width="0.8" fill="none">
     <circle cx="95" cy="190" r="8"/>
     <path d="M87 190h16M95 182v16"/>

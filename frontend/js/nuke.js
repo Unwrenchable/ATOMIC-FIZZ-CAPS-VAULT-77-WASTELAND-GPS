@@ -320,7 +320,7 @@
               • Insufficient fusion cores<br>
               • Network connectivity issues<br>
               • Invalid items selected<br><br>
-              <em>Please try again or contact Vault-Tec support.</em>
+              <em>Please try again or contact FizzTec support.</em>
             </div>
             <div style="text-align:center; margin-top:20px;">
               <button class="buy-btn sol-btn" onclick="location.reload()">

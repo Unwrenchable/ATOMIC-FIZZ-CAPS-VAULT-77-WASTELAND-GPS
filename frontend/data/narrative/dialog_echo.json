@@ -12,15 +12,15 @@
     },
     "echo_about_harlan": {
       "type": "spoken",
-      "text": "Harlan Voss. NCR Ranger. His medical records show chronic radiation exposure and long-term stress markers."
+      "text": "Harlan Voss. Frontier Compact Ranger. His medical records show chronic radiation exposure and long-term stress markers."
     },
     "echo_about_jax": {
       "type": "spoken",
-      "text": "Jax Voss. Subject J-77. Vault-Tec flagged him as 'high cognitive yield'. That never means anything good."
+      "text": "Jax Voss. Subject J-77. FizzTec flagged him as 'high cognitive yield'. That never means anything good."
     },
     "echo_analysis_keyfragment": {
       "type": "spoken",
-      "text": "This key fragment is Vault-Tec issue. Sublevel access. Restricted. They were hiding something down there."
+      "text": "This key fragment is FizzTec issue. Sublevel access. Restricted. They were hiding something down there."
     },
     "echo_analysis_logs": {
       "type": "spoken",
@@ -60,7 +60,7 @@
     },
     "echo_aftermath": {
       "type": "spoken",
-      "text": "Vault-Tec wanted to prove consciousness could be relocated. They succeeded. Horrifically."
+      "text": "FizzTec wanted to prove consciousness could be relocated. They succeeded. Horrifically."
     }
   },
   "mood": "neutral",

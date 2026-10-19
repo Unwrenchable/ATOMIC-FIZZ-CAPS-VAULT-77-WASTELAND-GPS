@@ -1,6 +1,6 @@
 /* ============================================================
    FIZZ.FUN TOKEN LAUNCHPAD — STANDALONE VERSION
-   Vault-Tec Certified Token Launch Terminal
+   FizzTec Certified Token Launch Terminal
    With Full Pocket-Boy CRT Effects & Radioactive Glow
    ============================================================ */
 
@@ -21,7 +21,7 @@
   --pipboy-panel: rgba(0, 30, 10, 0.85);
   --pipboy-panel-dark: rgba(0, 15, 5, 0.95);
   
-  /* Vault-Tec Gold Accent */
+  /* FizzTec Gold Accent */
   --vault-gold: #ffcc00;
   --vault-gold-dim: #cc9900;
   --vault-gold-bright: #ffdd33;
@@ -161,7 +161,7 @@ body::after {
 }
 
 /* ============================================================
-   BOOT OVERLAY — VAULT-TEC STARTUP SEQUENCE
+   BOOT OVERLAY — FIZZTEC STARTUP SEQUENCE
    ============================================================ */
 #boot-overlay {
   position: fixed;
@@ -336,7 +336,7 @@ body::after {
   line-height: 1.6;
 }
 
-/* Vault-Tec certification stamp beneath the tagline */
+/* FizzTec certification stamp beneath the tagline */
 .vault-cert {
   display: inline-block;
   margin-top: 1.2rem;
@@ -351,7 +351,7 @@ body::after {
   opacity: 0.8;
 }
 
-/* Hazard-stripe bar below the header — Fallout warning aesthetic */
+/* Hazard-stripe bar below the header — wasteland warning aesthetic */
 #fizzfun-header::after {
   content: "";
   display: block;

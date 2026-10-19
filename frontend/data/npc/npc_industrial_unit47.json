@@ -4,9 +4,9 @@
   "faction": "rogue_robots",
   "homeRegion": "industrial-belt",
   "currentRegion": "industrial-belt",
-  "role": "Malfunctioning Mr. Handy",
+  "role": "Malfunctioning Servo-Unit",
   "personality": "Poetic, glitchy, oddly gentle.",
-  "description": "A half-broken Mr. Handy that recites poetry about rust and decay.",
+  "description": "A half-broken Servo-Unit that recites poetry about rust and decay.",
   "questHooks": [
     "Recites a poem about 'a vault with no door'.",
     "Claims to have seen a man 'made of humming light'.",

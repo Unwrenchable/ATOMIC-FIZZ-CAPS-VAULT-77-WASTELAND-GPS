@@ -9,7 +9,7 @@ Place your DragonBones exported files here. Example file names expected by loade
 
 You can export from DragonBones and drop files under public/assets/dragonbones/demo/
 
-## Upgrading Demo Assets - Free Fallout-Style Resources
+## Upgrading Demo Assets - Free wasteland-Style Resources
 
 Looking to upgrade from the demo placeholder assets? Here are recommended free resources
 for post-apocalyptic/wasteland themed character assets:

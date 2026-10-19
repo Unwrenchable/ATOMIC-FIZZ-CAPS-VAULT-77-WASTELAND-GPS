@@ -187,7 +187,7 @@ const NAME_FRAGMENTS = [
   "Jora","Nexa","Tallis","Vorn","Syla","Rav","Kerrin","Dessa",
   "Maro","Vex","Rylas","Kova","Jalen",
 
-  // === FALLOUT AUTHENTIC NAMES ===
+  // === WASTELAND AUTHENTIC NAMES ===
   // Gritty wasteland survivors
   "Butch","Dogmeat","Boone","Cass","Rex","ED-E","Raul",
   "Arcade","Veronica","Sunny","Trudy","Doc","Chet","Ringo",
@@ -229,9 +229,9 @@ const MEME_SUFFIXES = [
   "who Has Seen Things", "the Wandering", "the Radiated",
   "the Unreliable Narrator", "the Suspiciously Friendly",
   "the Definitely Not a Synth", "the Former Vault Dweller",
-  "the Has-Too-Many-Caps", "the Caps-Poor", "the Nuka-Addicted",
-  "the Jet-Enthusiast", "the Sunset Sarsaparilla Collector",
-  "the Tunnel Snake", "the Patrolling Mojave Survivor"
+  "the Has-Too-Many-Caps", "the Caps-Poor", "the Fizz-Addicted",
+  "the Jet-Enthusiast", "the Dustpop Collector",
+  "the Culvert Viper", "the Patrolling Mojave Survivor"
 ];
 
 // ------------------------------------------------------------
@@ -540,10 +540,10 @@ const MEME_DIALOG = [
   "That's lowkey the most sus thing I've heard since the bombs dropped.",
   "Caps? In THIS economy?",
   "This is fine. *surrounded by radroaches*",
-  "POV: You just found a Nuka-Cola Quantum.",
+  "POV: You just found a Atomic Fizz Quantum.",
   "Nobody: ... Me: *hoards every item in existence*",
   "They don't think it be like it is, but it do.",
-  "Sir, this is a Sunset Sarsaparilla.",
+  "Sir, this is a Dustpop.",
   
   // Self-aware NPC humor
   "Sometimes I feel like I'm just waiting for a player to talk to me.",

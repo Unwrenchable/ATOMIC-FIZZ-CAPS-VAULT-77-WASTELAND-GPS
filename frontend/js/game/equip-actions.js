@@ -50,7 +50,7 @@ Game.equipItem = function (itemOrId) {
     Game.player.equipped = {};
   }
   
-  // Determine slot based on item type and slot field (Fallout-style)
+  // Determine slot based on item type and slot field (wasteland-style)
   let slot = "accessory";
   if (item.type === "weapon") slot = "weapon";
   else if (item.type === "armor") slot = item.slot || "chest"; // head/chest/arms/legs

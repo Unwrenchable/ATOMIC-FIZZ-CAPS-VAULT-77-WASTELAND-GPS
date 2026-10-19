@@ -4,11 +4,11 @@
   "faction": "ncr_ghouls",
   "homeRegion": "mojave",
   "currentRegion": "mojave",
-  "role": "NCR Ghoul Survivor",
+  "role": "Frontier Compact Ghoul Survivor",
   "personality": "Disciplined, bitter, clinging to duty long after it mattered.",
   "description": "Sergeant Vex survived the radiation event that wiped out Camp Searchlight. She refuses to abandon her post, even as her body decays.",
   "questHooks": [
-    "Wants help recovering NCR dog tags from the ruins.",
+    "Wants help recovering Frontier Compact dog tags from the ruins.",
     "Says the church bells ring at night with no one inside.",
     "Found a strange cap fused into a melted helmet."
   ],
