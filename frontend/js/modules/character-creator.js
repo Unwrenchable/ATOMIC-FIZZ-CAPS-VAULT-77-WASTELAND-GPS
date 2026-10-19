@@ -1066,8 +1066,8 @@
 
       let html = `
         <div class="cc-special-intro">
-          <div class="cc-si-book-cover" aria-hidden="true"><div class="cc-si-book-title">YOU'RE</div><div class="cc-si-book-special">V.I.T.A.L.S.!</div></div>
-          <span class="cc-si-text">"Every human being is born with <strong>V.I.T.A.L.S.</strong> attributes. These core values define your every action in the wasteland."</span>
+          <div class="cc-si-book-cover" aria-hidden="true"><div class="cc-si-book-title">SURVIVOR'S</div><div class="cc-si-book-special">TALLY</div></div>
+          <span class="cc-si-text">"Out here you get measured seven ways: your <strong>V.I.T.A.L.S.</strong>. Spend your points on whatever keeps you breathing. The wasteland collects on the rest."</span>
         </div>
         <div class="cc-special-points-banner">
           <span class="cc-sp-label">POINTS REMAINING:</span>

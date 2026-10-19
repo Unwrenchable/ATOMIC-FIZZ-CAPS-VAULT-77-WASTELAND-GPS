@@ -186,7 +186,7 @@
           const H = this.app ? this.app.view.height : 300;
 
           // Compose SVG using existing avatar composer
-          const parts = { head: 'head_base.svg', eyes: 'eyes_set1.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' };
+          const parts = { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' };
           const dataUrl = await Game.Avatar.compose(parts);
 
           // Outer wrapper — positioned over the Pixi canvas

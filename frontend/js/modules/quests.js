@@ -1633,7 +1633,7 @@
   // Simple avatar composer utilities (low-footprint SVG layering)
   Game.Avatar = {
     assetsPath: '/assets/avatars/',
-    async compose(parts = { head: 'head_base.svg', eyes: 'eyes_set1.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' }) {
+    async compose(parts = { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' }) {
       // Load SVG fragments and combine into a single SVG element
       const fragPromises = Object.keys(parts).map(async key => {
         const url = this.assetsPath + parts[key];

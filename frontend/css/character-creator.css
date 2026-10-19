@@ -1675,8 +1675,8 @@
   flex-shrink: 0;
   width: 46px;
   min-height: 54px;
-  background: linear-gradient(160deg, #ffd700 0%, #cc9900 100%);
-  border: 2px solid #aa7700;
+  background: linear-gradient(160deg, #8a5a36 0%, #5a3820 100%);
+  border: 2px solid #3a2414;
   border-radius: 3px 5px 5px 3px;
   display: flex;
   flex-direction: column;
@@ -1695,7 +1695,7 @@
   top: 0;
   width: 3px;
   height: 100%;
-  background: #8a6000;
+  background: #2e1c10;
   border-radius: 3px 0 0 3px;
 }
 
@@ -1703,7 +1703,7 @@
   font-family: 'Oswald', 'Courier New', monospace;
   font-size: 7px;
   font-weight: 700;
-  color: #1a0a00;
+  color: #e2d4ae;
   text-align: center;
   letter-spacing: 0.05em;
   line-height: 1.3;
@@ -1714,7 +1714,7 @@
   font-family: 'Oswald', 'Courier New', monospace;
   font-size: 6px;
   font-weight: 700;
-  color: #1a0a00;
+  color: #e2d4ae;
   text-align: center;
   letter-spacing: 0.02em;
   line-height: 1.2;
