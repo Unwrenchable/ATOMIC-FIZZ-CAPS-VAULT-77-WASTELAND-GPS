@@ -1006,24 +1006,24 @@
     // ============================================================
     // Per-NPC avatar part presets (head/eyes/hair/shirt from avatar SVG system)
     _NPC_PARTS: {
-      siren:   { head: "head_round.svg",  eyes: "eyes_almond.svg",   hair: "hair_long.svg",      shirt: "shirt_wasteland_gear.svg" },
-      courier: { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
-      pip:     { head: "head_oblong.svg", eyes: "eyes_round.svg",    hair: "hair_ponytail.svg",  shirt: "shirt_vault_suit.svg"     },
-      dolores: { head: "head_round.svg",  eyes: "eyes_downturned.svg", hair: "hair_medium.svg",  shirt: "shirt_wasteland_gear.svg" },
-      dude:    { head: "head_round.svg",  eyes: "eyes_set1.svg",     hair: "hair_medium.svg",    shirt: "shirt_wasteland_gear.svg" },
-      roy8:    { head: "head_square.svg", eyes: "eyes_almond.svg",   hair: "hair_short.svg",     shirt: "shirt_vault_suit.svg"     },
-      eli:     { head: "head_base.svg",   eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
-      loxley:  { head: "head_base.svg",   eyes: "eyes_almond.svg",   hair: "hair_medium.svg",    shirt: "shirt_wasteland_gear.svg" },
-      arnie:   { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
-      kenny:   { head: "head_round.svg",  eyes: "eyes_round.svg",    hair: "hair_short.svg",     shirt: "shirt_vault_suit.svg"     },
-      barney:  { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
-      bats:    { head: "head_square.svg", eyes: "eyes_deepset.svg",  hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
-      doc:     { head: "head_oblong.svg", eyes: "eyes_almond.svg",   hair: "hair_medium.svg",    shirt: "shirt_jacket.svg"         },
-      erich:   { head: "head_base.svg",   eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_wasteland_gear.svg" },
-      stilgar: { head: "head_square.svg", eyes: "eyes_almond.svg",   hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
-      padre:   { head: "head_round.svg",  eyes: "eyes_downturned.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
-      bless:   { head: "head_round.svg",  eyes: "eyes_almond.svg",   hair: "hair_medium.svg",    shirt: "shirt_jacket.svg"         },
-      default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
+      siren:   { head: "head_round.svg",  eyes: "eyes_almond.svg",   nose: "nose_narrow.svg", mouth: "mouth_full.svg", hair: "hair_long.svg",      shirt: "shirt_wasteland_gear.svg" },
+      courier: { head: "head_square.svg", eyes: "eyes_deepset.svg",  nose: "nose_straight.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
+      pip:     { head: "head_oblong.svg", eyes: "eyes_round.svg",    nose: "nose_snub.svg", mouth: "mouth_small.svg", hair: "hair_ponytail.svg",  shirt: "shirt_vault_suit.svg"     },
+      dolores: { head: "head_round.svg",  eyes: "eyes_downturned.svg", nose: "nose_button.svg", mouth: "mouth_small.svg", hair: "hair_medium.svg",  shirt: "shirt_wasteland_gear.svg" },
+      dude:    { head: "head_round.svg",  eyes: "eyes_set1.svg",     nose: "nose_wide.svg", mouth: "mouth_wide.svg", hair: "hair_medium.svg",    shirt: "shirt_wasteland_gear.svg" },
+      roy8:    { head: "head_square.svg", eyes: "eyes_almond.svg",   nose: "nose_straight.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_vault_suit.svg"     },
+      eli:     { head: "head_base.svg",   eyes: "eyes_downturned.svg", nose: "nose_narrow.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
+      loxley:  { head: "head_base.svg",   eyes: "eyes_almond.svg",   nose: "nose_aquiline.svg", mouth: "mouth_thin.svg", hair: "hair_medium.svg",    shirt: "shirt_wasteland_gear.svg" },
+      arnie:   { head: "head_square.svg", eyes: "eyes_deepset.svg",  nose: "nose_wide.svg", mouth: "mouth_wide.svg", hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
+      kenny:   { head: "head_round.svg",  eyes: "eyes_round.svg",    nose: "nose_snub.svg", mouth: "mouth_small.svg", hair: "hair_short.svg",     shirt: "shirt_vault_suit.svg"     },
+      barney:  { head: "head_square.svg", eyes: "eyes_deepset.svg",  nose: "nose_roman.svg", mouth: "mouth_wide.svg", hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
+      bats:    { head: "head_square.svg", eyes: "eyes_deepset.svg",  nose: "nose_aquiline.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
+      doc:     { head: "head_oblong.svg", eyes: "eyes_almond.svg",   nose: "nose_roman.svg", mouth: "mouth_thin.svg", hair: "hair_medium.svg",    shirt: "shirt_jacket.svg"         },
+      erich:   { head: "head_base.svg",   eyes: "eyes_downturned.svg", nose: "nose_aquiline.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",   shirt: "shirt_wasteland_gear.svg" },
+      stilgar: { head: "head_square.svg", eyes: "eyes_almond.svg",   nose: "nose_roman.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
+      padre:   { head: "head_round.svg",  eyes: "eyes_downturned.svg", nose: "nose_wide.svg", mouth: "mouth_full.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
+      bless:   { head: "head_round.svg",  eyes: "eyes_almond.svg",   nose: "nose_button.svg", mouth: "mouth_heartshaped.svg", hair: "hair_medium.svg",    shirt: "shirt_jacket.svg"         },
+      default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     nose: "nose_straight.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
     },
 
     async _loadNPCPortrait(dialog) {
@@ -1075,15 +1075,15 @@
 
           // Blink rect (covers eye zone, normally height=0)
           const eyeRect = document.createElementNS(ns, "rect");
-          eyeRect.setAttribute("x", "18%");
-          eyeRect.setAttribute("y", "32%");
-          eyeRect.setAttribute("width", "64%");
+          eyeRect.setAttribute("x", "31%");
+          eyeRect.setAttribute("y", "41%");
+          eyeRect.setAttribute("width", "38%");
           eyeRect.setAttribute("height", "0");
           eyeRect.setAttribute("rx", "4");
           eyeRect.setAttribute("fill", "rgba(10,16,10,0.92)");
           const blinkAnim = document.createElementNS(ns, "animate");
           blinkAnim.setAttribute("attributeName", "height");
-          blinkAnim.setAttribute("values", "0;10%;0");
+          blinkAnim.setAttribute("values", "0;9%;0");
           blinkAnim.setAttribute("dur", "0.12s");
           blinkAnim.setAttribute("begin", "indefinite");
           blinkAnim.id = "nrrBlinkAnim_" + portraitId;
@@ -1092,9 +1092,9 @@
 
           // Mouth rect (lip-sync — toggles while talking)
           const mouthRect = document.createElementNS(ns, "rect");
-          mouthRect.setAttribute("x", "30%");
-          mouthRect.setAttribute("y", "62%");
-          mouthRect.setAttribute("width", "40%");
+          mouthRect.setAttribute("x", "41%");
+          mouthRect.setAttribute("y", "65%");
+          mouthRect.setAttribute("width", "18%");
           mouthRect.setAttribute("height", "1");
           mouthRect.setAttribute("rx", "4");
           mouthRect.setAttribute("fill", "rgba(18,10,8,0.80)");
