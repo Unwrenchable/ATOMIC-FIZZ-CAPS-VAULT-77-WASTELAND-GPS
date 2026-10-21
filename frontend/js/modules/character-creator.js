@@ -1077,7 +1077,7 @@
       `;
 
       VITALS_STATS.forEach(stat => {
-        const val   = sp[stat.key];
+        const val   = Math.max(0, Math.min(10, Number(sp[stat.key]) || 0));
         const dots  = Array.from({length: 10}, (_, i) => `<span class="cc-sp-dot${i < val ? ' filled' : ''}"></span>`).join('');
         html += `
           <div class="cc-special-row" data-stat="${escapeHtml(stat.key)}">
@@ -1086,11 +1086,11 @@
               <span class="cc-sp-abbr">${escapeHtml(stat.abbr)}</span>
               <span class="cc-sp-name">${escapeHtml(stat.label)}</span>
               <span class="cc-sp-desc">${escapeHtml(stat.desc)}</span>
-              <div class="cc-sp-bar"><div class="cc-sp-bar-fill" id="ccSpBar${escapeHtml(stat.key)}" style="width:${val * 10}%"></div></div>
+              <div class="cc-sp-bar"><div class="cc-sp-bar-fill" id="ccSpBar${escapeHtml(stat.key)}" style="width:${escapeHtml(val * 10)}%"></div></div>
             </div>
             <div class="cc-sp-controls">
               <button class="cc-sp-btn cc-sp-minus" data-stat="${escapeHtml(stat.key)}" ${val <= VITALS_MIN ? 'disabled' : ''}>−</button>
-              <span class="cc-sp-num" id="ccSp${escapeHtml(stat.key)}">${val}</span>
+              <span class="cc-sp-num" id="ccSp${escapeHtml(stat.key)}">${escapeHtml(val)}</span>
               <button class="cc-sp-btn cc-sp-plus" data-stat="${escapeHtml(stat.key)}" ${val >= VITALS_MAX || remaining <= 0 ? 'disabled' : ''}>+</button>
             </div>
             <div class="cc-sp-dots" id="ccSpDots${escapeHtml(stat.key)}">${dots}</div>
@@ -1105,11 +1105,11 @@
         <div class="cc-derived-stats">
           <div class="cc-derived-title">── DERIVED STATISTICS ──</div>
           <div class="cc-derived-grid" id="ccDerivedGrid">
-            <div class="cc-derived-item"><span class="cc-derived-label">MAX HP</span><span class="cc-derived-val" id="ccDerMaxHP">${escapeHtml(derived.maxHP)}</span></div>
-            <div class="cc-derived-item"><span class="cc-derived-label">ACTION POINTS</span><span class="cc-derived-val" id="ccDerAP">${escapeHtml(derived.actionPoints)}</span></div>
-            <div class="cc-derived-item"><span class="cc-derived-label">CARRY WEIGHT</span><span class="cc-derived-val" id="ccDerCW">${escapeHtml(derived.carryWeight)}</span></div>
-            <div class="cc-derived-item"><span class="cc-derived-label">RAD RESISTANCE</span><span class="cc-derived-val" id="ccDerRR">${escapeHtml(derived.radResistance)}%</span></div>
-            <div class="cc-derived-item"><span class="cc-derived-label">CRIT CHANCE</span><span class="cc-derived-val" id="ccDerCC">${escapeHtml(derived.critChance)}%</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">MAX HP</span><span class="cc-derived-val" id="ccDerMaxHP">${escapeHtml(Number(derived.maxHP) || 0)}</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">ACTION POINTS</span><span class="cc-derived-val" id="ccDerAP">${escapeHtml(Number(derived.actionPoints) || 0)}</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">CARRY WEIGHT</span><span class="cc-derived-val" id="ccDerCW">${escapeHtml(Number(derived.carryWeight) || 0)}</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">RAD RESISTANCE</span><span class="cc-derived-val" id="ccDerRR">${escapeHtml(Number(derived.radResistance) || 0)}%</span></div>
+            <div class="cc-derived-item"><span class="cc-derived-label">CRIT CHANCE</span><span class="cc-derived-val" id="ccDerCC">${escapeHtml(Number(derived.critChance) || 0)}%</span></div>
           </div>
         </div>
       `;
