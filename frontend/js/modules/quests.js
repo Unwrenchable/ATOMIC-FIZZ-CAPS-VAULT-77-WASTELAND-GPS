@@ -1633,7 +1633,45 @@
   // Simple avatar composer utilities (low-footprint SVG layering)
   Game.Avatar = {
     assetsPath: '/assets/avatars/',
+    // Painted head set (assets/avatars/painted/). Hair, facial hair, hat and clothing are baked into
+    // the painting, so those layers are skipped; eyes/nose/mouth are skipped unless parts.paintedFace.
+    // Vector heads (head_*.svg at the root) remain the fallback set.
+    PAINTED_SKIP: ['hair', 'facialHair', 'hat', 'shirt'],
+    PAINTED_FACE: ['eyes', 'nose', 'mouth'],
+    // NPCs whose look matches a painted head (used by npc-portraits / dragonbones fallbacks)
+    PAINTED_NPC: {
+      erich: 'painted/head_oblong.svg', padre: 'painted/head_square.svg', stilgar: 'painted/head_base.svg',
+      dolores: 'painted/head_diamond.svg', lena: 'painted/head_heart.svg', mara: 'painted/head_round.svg',
+      harlan: 'painted/head_base.svg'
+    },
+    // talk-overlay top (percent of portrait height) measured per painted head; vector heads use 65%
+    PAINTED_MOUTH_Y: { head_base: '75%', head_round: '70.3%', head_square: '75%', head_heart: '69.1%', head_oblong: '73.8%', head_diamond: '73.8%' },
+    mouthY(parts) {
+      if (!this.isPainted(parts)) return '65%';
+      const key = parts.head.replace('painted/', '').replace('.svg', '');
+      return this.PAINTED_MOUTH_Y[key] || '73%';
+    },
+    isPainted(parts) {
+      return !!(parts && typeof parts.head === 'string' && parts.head.indexOf('painted/') === 0);
+    },
+    partsFor(npcId, fallback) {
+      const head = this.PAINTED_NPC[String(npcId || '').toLowerCase()];
+      return head ? { head } : fallback;
+    },
+    resolveParts(parts) {
+      const out = {};
+      const painted = this.isPainted(parts);
+      Object.keys(parts || {}).forEach(key => {
+        const val = parts[key];
+        if (typeof val !== 'string' || !val) return;                  // flags like paintedFace
+        if (painted && this.PAINTED_SKIP.includes(key)) return;
+        if (painted && this.PAINTED_FACE.includes(key) && !parts.paintedFace) return;
+        out[key] = val;
+      });
+      return out;
+    },
     async compose(parts = { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' }) {
+      parts = this.resolveParts(parts);
       // Load SVG fragments and combine into a single SVG element
       const fragPromises = Object.keys(parts).map(async key => {
         const url = this.assetsPath + parts[key];
@@ -1643,7 +1681,7 @@
         return text.replace(/^\s*<\?xml[^>]*>\s*/,'');
       });
       const fragments = await Promise.all(fragPromises);
-      const svg = `<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">${fragments.join('')}</svg>`;
+      const svg = `<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256" height="256" viewBox="0 0 256 256">${fragments.join('')}</svg>`;
       return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
     }
   };

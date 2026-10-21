@@ -1,6 +1,6 @@
 {
   "name": "afc-avatar-pack-svg-v4",
-  "version": "4.0.0-draft",
+  "version": "4.1.0-draft",
   "description": "EPIC enhanced SVG layered avatar pack for Atomic Fizz Caps Vault 77. Detailed wasteland aesthetic with authentic wasteland styling, anatomically accurate features, and immersive post-apocalyptic details.",
   "theme": "Post-apocalyptic wasteland-style wasteland survivor - EPIC edition",
   "viewBox": "0 0 256 256",
@@ -121,7 +121,7 @@
       "shirt_wasteland_gear.svg"
     ]
   },
-  "totalAssets": 80,
+  "totalAssets": 86,
   "features": {
     "colorizable": [
       "hair",
@@ -172,6 +172,12 @@
         "marking_tattoo_vault replaced by original marking_tattoo_cap (old filename kept as alias)",
         "shirt_vault_suit is now an olive work coat (IP scrub)"
       ]
+    },
+    "v4.1.0": {
+      "date": "2026-10-21",
+      "changes": [
+        "Painted head set (6) selectable via parts.head = \"painted/head_*.svg\"; composer skips baked-in layers"
+      ]
     }
   },
   "styleGuide": {
@@ -197,5 +203,51 @@
   "ipScrubbed": true,
   "aliases": {
     "marking_tattoo_vault.svg": "marking_tattoo_cap.svg"
+  },
+  "paintedHeads": {
+    "path": "painted/",
+    "files": [
+      "painted/head_base.svg",
+      "painted/head_round.svg",
+      "painted/head_square.svg",
+      "painted/head_heart.svg",
+      "painted/head_oblong.svg",
+      "painted/head_diamond.svg"
+    ],
+    "fallback": "vector head_*.svg set at the root",
+    "skipLayers": [
+      "hair",
+      "facialHair",
+      "hat",
+      "shirt"
+    ],
+    "optionalFaceLayers": [
+      "eyes",
+      "nose",
+      "mouth"
+    ],
+    "optionalFaceFlag": "paintedFace",
+    "anchors": {
+      "eyes": "y118 (centred x128)",
+      "mouthTalkOverlayY": {
+        "head_base": "75%",
+        "head_round": "70.3%",
+        "head_square": "75%",
+        "head_heart": "69.1%",
+        "head_oblong": "73.8%",
+        "head_diamond": "73.8%"
+      },
+      "note": "blink overlay unchanged"
+    },
+    "source": "local SDXL-Turbo (DirectML) base images, aligned and cropped; no external APIs",
+    "npcAssignments": {
+      "erich": "head_oblong",
+      "padre": "head_square",
+      "stilgar": "head_base",
+      "harlan": "head_base",
+      "dolores": "head_diamond",
+      "lena": "head_heart",
+      "mara": "head_round"
+    }
   }
 }

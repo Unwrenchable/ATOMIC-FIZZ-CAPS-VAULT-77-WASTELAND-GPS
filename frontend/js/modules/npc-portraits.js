@@ -19,7 +19,7 @@
       console.warn('[NPCPortraits] Game.Avatar not ready, skipping preload for', npc.id);
       return null;
     }
-    const parts = npc.parts || { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' };
+    const parts = npc.parts || (Game.Avatar.partsFor ? Game.Avatar.partsFor(npc.id, { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' }) : { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' });
     const url = await Game.Avatar.compose(parts);
     cache.set(npc.id, { type: 'svg', url });
     return url;
@@ -70,7 +70,7 @@
             console.warn('[NPCPortraits] Game.Avatar not ready for fallback SVG');
             return null;
           }
-          const parts = npc.parts || { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' };
+          const parts = npc.parts || (Game.Avatar.partsFor ? Game.Avatar.partsFor(npc.id, { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' }) : { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' });
           const svgUrl = await Game.Avatar.compose(parts);
           const app = Game.modules.Dragon.app;
           if (!app) await Game.modules.Dragon.init('dragonbonesStage');

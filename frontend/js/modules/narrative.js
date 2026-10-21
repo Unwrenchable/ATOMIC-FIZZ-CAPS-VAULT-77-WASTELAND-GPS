@@ -1009,7 +1009,7 @@
       siren:   { head: "head_round.svg",  eyes: "eyes_almond.svg",   nose: "nose_narrow.svg", mouth: "mouth_full.svg", hair: "hair_long.svg",      shirt: "shirt_wasteland_gear.svg" },
       courier: { head: "head_square.svg", eyes: "eyes_deepset.svg",  nose: "nose_straight.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
       pip:     { head: "head_oblong.svg", eyes: "eyes_round.svg",    nose: "nose_snub.svg", mouth: "mouth_small.svg", hair: "hair_ponytail.svg",  shirt: "shirt_vault_suit.svg"     },
-      dolores: { head: "head_round.svg",  eyes: "eyes_downturned.svg", nose: "nose_button.svg", mouth: "mouth_small.svg", hair: "hair_medium.svg",  shirt: "shirt_wasteland_gear.svg" },
+      dolores: { head: "painted/head_diamond.svg" },
       dude:    { head: "head_round.svg",  eyes: "eyes_set1.svg",     nose: "nose_wide.svg", mouth: "mouth_wide.svg", hair: "hair_medium.svg",    shirt: "shirt_wasteland_gear.svg" },
       roy8:    { head: "head_square.svg", eyes: "eyes_almond.svg",   nose: "nose_straight.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_vault_suit.svg"     },
       eli:     { head: "head_base.svg",   eyes: "eyes_downturned.svg", nose: "nose_narrow.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
@@ -1019,9 +1019,12 @@
       barney:  { head: "head_square.svg", eyes: "eyes_deepset.svg",  nose: "nose_roman.svg", mouth: "mouth_wide.svg", hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
       bats:    { head: "head_square.svg", eyes: "eyes_deepset.svg",  nose: "nose_aquiline.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         },
       doc:     { head: "head_oblong.svg", eyes: "eyes_almond.svg",   nose: "nose_roman.svg", mouth: "mouth_thin.svg", hair: "hair_medium.svg",    shirt: "shirt_jacket.svg"         },
-      erich:   { head: "head_base.svg",   eyes: "eyes_downturned.svg", nose: "nose_aquiline.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",   shirt: "shirt_wasteland_gear.svg" },
-      stilgar: { head: "head_square.svg", eyes: "eyes_almond.svg",   nose: "nose_roman.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_wasteland_gear.svg" },
-      padre:   { head: "head_round.svg",  eyes: "eyes_downturned.svg", nose: "nose_wide.svg", mouth: "mouth_full.svg", hair: "hair_short.svg",   shirt: "shirt_jacket.svg"         },
+      erich:   { head: "painted/head_oblong.svg" },
+      stilgar: { head: "painted/head_base.svg" },
+      padre:   { head: "painted/head_square.svg" },
+      lena:    { head: "painted/head_heart.svg" },
+      mara:    { head: "painted/head_round.svg" },
+      harlan:  { head: "painted/head_base.svg" },
       bless:   { head: "head_round.svg",  eyes: "eyes_almond.svg",   nose: "nose_button.svg", mouth: "mouth_heartshaped.svg", hair: "hair_medium.svg",    shirt: "shirt_jacket.svg"         },
       default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     nose: "nose_straight.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
     },
@@ -1093,7 +1096,8 @@
           // Mouth rect (lip-sync — toggles while talking)
           const mouthRect = document.createElementNS(ns, "rect");
           mouthRect.setAttribute("x", "41%");
-          mouthRect.setAttribute("y", "65%");
+          // painted heads keep eyes at y118 but each mouth sits lower; Game.Avatar.mouthY has the per-head value
+          mouthRect.setAttribute("y", (window.Game?.Avatar?.mouthY ? Game.Avatar.mouthY(parts) : "65%"));
           mouthRect.setAttribute("width", "18%");
           mouthRect.setAttribute("height", "1");
           mouthRect.setAttribute("rx", "4");
