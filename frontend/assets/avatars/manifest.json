@@ -248,6 +248,29 @@
       "dolores": "head_diamond",
       "lena": "head_heart",
       "mara": "head_round"
-    }
+    },
+    "npcHeads": [
+      "painted/npc_arnie.svg",
+      "painted/npc_barney.svg",
+      "painted/npc_bats.svg",
+      "painted/npc_commissar.svg",
+      "painted/npc_courier.svg",
+      "painted/npc_doc.svg",
+      "painted/npc_dude.svg",
+      "painted/npc_echo.svg",
+      "painted/npc_eli.svg",
+      "painted/npc_jax.svg",
+      "painted/npc_kenny.svg",
+      "painted/npc_loxley.svg",
+      "painted/npc_lucy.svg",
+      "painted/npc_mother.svg",
+      "painted/npc_overseer.svg",
+      "painted/npc_phaltron.svg",
+      "painted/npc_rex.svg",
+      "painted/npc_rhea.svg",
+      "painted/npc_roy8.svg",
+      "painted/npc_siren.svg"
+    ],
+    "npcHeadsNote": "Unique painted head per NPC, img2img (local SDXL-Turbo) from each NPC's intro video still; JPEG q80 384px in a 256 frame, eyes x128 y118; talk-overlay Y per head in Game.Avatar.PAINTED_MOUTH_Y"
   }
 }

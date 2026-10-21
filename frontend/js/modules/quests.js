@@ -1642,10 +1642,20 @@
     PAINTED_NPC: {
       erich: 'painted/head_oblong.svg', padre: 'painted/head_square.svg', stilgar: 'painted/head_base.svg',
       dolores: 'painted/head_diamond.svg', lena: 'painted/head_heart.svg', mara: 'painted/head_round.svg',
-      harlan: 'painted/head_base.svg'
+      harlan: 'painted/head_base.svg',
+      // unique per-NPC heads (img2img from each NPC intro video still)
+      arnie: 'painted/npc_arnie.svg', barney: 'painted/npc_barney.svg', bats: 'painted/npc_bats.svg', commissar: 'painted/npc_commissar.svg', courier: 'painted/npc_courier.svg',
+      doc: 'painted/npc_doc.svg', dude: 'painted/npc_dude.svg', echo: 'painted/npc_echo.svg', eli: 'painted/npc_eli.svg', jax: 'painted/npc_jax.svg',
+      kenny: 'painted/npc_kenny.svg', loxley: 'painted/npc_loxley.svg', lucy: 'painted/npc_lucy.svg', mother: 'painted/npc_mother.svg', overseer: 'painted/npc_overseer.svg',
+      phaltron: 'painted/npc_phaltron.svg', rex: 'painted/npc_rex.svg', rhea: 'painted/npc_rhea.svg', roy8: 'painted/npc_roy8.svg', siren: 'painted/npc_siren.svg'
     },
     // talk-overlay top (percent of portrait height) measured per painted head; vector heads use 65%
-    PAINTED_MOUTH_Y: { head_base: '75%', head_round: '70.3%', head_square: '75%', head_heart: '69.1%', head_oblong: '73.8%', head_diamond: '73.8%' },
+    PAINTED_MOUTH_Y: { head_base: '75%', head_round: '70.3%', head_square: '75%', head_heart: '69.1%', head_oblong: '73.8%', head_diamond: '73.8%',
+      npc_arnie: '71.0%', npc_barney: '67.3%', npc_bats: '81.3%', npc_commissar: '63.2%', npc_courier: '72.9%',
+      npc_doc: '73.4%', npc_dude: '76.6%', npc_echo: '75.2%', npc_eli: '78.9%', npc_jax: '68.2%',
+      npc_kenny: '67.9%', npc_loxley: '76.1%', npc_lucy: '68.2%', npc_mother: '66.6%', npc_overseer: '72.2%',
+      npc_phaltron: '63.3%', npc_rex: '69.5%', npc_rhea: '70.4%', npc_roy8: '70.7%', npc_siren: '60.9%'
+    },
     mouthY(parts) {
       if (!this.isPainted(parts)) return '65%';
       const key = parts.head.replace('painted/', '').replace('.svg', '');
