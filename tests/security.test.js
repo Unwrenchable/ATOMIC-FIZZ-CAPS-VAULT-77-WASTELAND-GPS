@@ -183,13 +183,13 @@ for (const relPath of BACKEND_CRITICAL_FILES) {
 console.log("\n[5] Frontend game modules — no Math.random() in critical code");
 
 const FRONTEND_CRITICAL_FILES = [
-  "public/js/modules/dragonbones-npc.js",
-  "public/js/modules/npc-portraits.js",
-  "public/js/modules/struggle-quips.js",
-  "public/js/world/loot.js",
-  "public/js/world/encounters.js",
-  "public/js/modules/npcEncounter.js",
-  "public/js/modules/enemyScaling.js",
+  "frontend/js/modules/dragonbones-npc.js",
+  "frontend/js/modules/npc-portraits.js",
+  "frontend/js/modules/struggle-quips.js",
+  "frontend/js/world/loot.js",
+  "frontend/js/world/encounters.js",
+  "frontend/js/modules/npcEncounter.js",
+  "frontend/js/modules/enemyScaling.js",
 ];
 
 for (const relPath of FRONTEND_CRITICAL_FILES) {
@@ -289,8 +289,8 @@ for (const { file, adminOnly } of IDOR_FILES) {
 console.log("\n[8] Overseer XSS prevention");
 
 test("overseer.full.js escapes player input before inserting into DOM", () => {
-  const src = readFile("public/js/overseer/overseer.full.js");
-  assert.ok(src, "public/js/overseer/overseer.full.js must exist");
+  const src = readFile("frontend/js/overseer/overseer.full.js");
+  assert.ok(src, "frontend/js/overseer/overseer.full.js must exist");
   // escapeHtml must be defined
   assert.ok(src.includes("function escapeHtml"), "escapeHtml must be defined");
   // Player message must be escaped before addMessage
@@ -301,8 +301,8 @@ test("overseer.full.js escapes player input before inserting into DOM", () => {
 });
 
 test("overseer.full.js defines a secure RNG helper", () => {
-  const src = readFile("public/js/overseer/overseer.full.js");
-  assert.ok(src, "public/js/overseer/overseer.full.js must exist");
+  const src = readFile("frontend/js/overseer/overseer.full.js");
+  assert.ok(src, "frontend/js/overseer/overseer.full.js must exist");
   assert.ok(
     src.includes("getRandomValues") || src.includes("_secureRandom"),
     "overseer.full.js must use CSPRNG for game randomness"
@@ -407,8 +407,8 @@ test("BUG-009: quests-store QUESTS_KEY uses bare string (no double-prefix)", () 
 });
 
 test("BUG-010: no Math.random() in overseer handlers", () => {
-  const src = readFile("public/js/overseer/handlers.js");
-  assert.ok(src, "public/js/overseer/handlers.js must exist");
+  const src = readFile("frontend/js/overseer/handlers.js");
+  assert.ok(src, "frontend/js/overseer/handlers.js must exist");
   // Strip single-line comments before searching for Math.random() usage
   const codeOnly = src.split('\n').filter(line => !line.trim().startsWith('//') && !line.trim().startsWith('*')).join('\n');
   assert.ok(
@@ -437,8 +437,8 @@ test("BUG-015: quest accept validates questId against known quest data", () => {
 
 test("BUG-017: no Math.random() in mini-game files", () => {
   const files = [
-    "public/js/overseer/game.tictactoe.js",
-    "public/js/overseer/game.redmenace.js",
+    "frontend/js/overseer/game.tictactoe.js",
+    "frontend/js/overseer/game.redmenace.js",
   ];
   for (const f of files) {
     const src = readFile(f);
@@ -451,8 +451,8 @@ test("BUG-017: no Math.random() in mini-game files", () => {
 });
 
 test("BUG-018: battle WIN disables buttons before clearing state", () => {
-  const src = readFile("public/js/modules/battles.js");
-  assert.ok(src, "public/js/modules/battles.js must exist");
+  const src = readFile("frontend/js/modules/battles.js");
+  assert.ok(src, "frontend/js/modules/battles.js must exist");
   // The attackBtn.disabled = true line must appear BEFORE this.state = null in the WIN branch
   const winIdx = src.indexOf('end === "WIN"');
   assert.ok(winIdx !== -1, "battles.js must have a WIN check");
@@ -465,8 +465,8 @@ test("BUG-018: battle WIN disables buttons before clearing state", () => {
 });
 
 test("BUG-019: VATS exits when all targets eliminated during shot execution", () => {
-  const src = readFile("public/js/modules/vats.js");
-  assert.ok(src, "public/js/modules/vats.js must exist");
+  const src = readFile("frontend/js/modules/vats.js");
+  assert.ok(src, "frontend/js/modules/vats.js must exist");
   assert.ok(
     src.includes("VATS.targets.length === 0") && src.includes("exitVATS()"),
     "vats.js must call exitVATS() when all targets are eliminated to prevent blank VATS overlay"
@@ -474,8 +474,8 @@ test("BUG-019: VATS exits when all targets eliminated during shot execution", ()
 });
 
 test("BUG-020: crafting.js _craft() is internal; craft() no longer public", () => {
-  const src = readFile("public/js/modules/crafting.js");
-  assert.ok(src, "public/js/modules/crafting.js must exist");
+  const src = readFile("frontend/js/modules/crafting.js");
+  assert.ok(src, "frontend/js/modules/crafting.js must exist");
   assert.ok(
     src.includes("_craft(recipeId)"),
     "crafting.js must rename craft() to _craft() to prevent direct console bypass of server validation"
@@ -540,8 +540,8 @@ test("NEW-004: quest-secrets.js requires authMiddleware (BUG-004 fix)", () => {
 });
 
 test("NEW-005: fo4-dialogue.js escapes npcName in affinity popup (BUG-005 fix)", () => {
-  const src = readFile("public/js/modules/fo4-dialogue.js");
-  assert.ok(src, "public/js/modules/fo4-dialogue.js must exist");
+  const src = readFile("frontend/js/modules/fo4-dialogue.js");
+  assert.ok(src, "frontend/js/modules/fo4-dialogue.js must exist");
   // escapeHtml must be called on npcName before inserting into the affinity popup
   assert.ok(
     src.includes("escapeHtml(npcName") || src.includes("safeName = escapeHtml("),
@@ -550,8 +550,8 @@ test("NEW-005: fo4-dialogue.js escapes npcName in affinity popup (BUG-005 fix)",
 });
 
 test("NEW-006: enemyScaling.js elite tier uses else-if (BUG-006 fix)", () => {
-  const src = readFile("public/js/modules/enemyScaling.js");
-  assert.ok(src, "public/js/modules/enemyScaling.js must exist");
+  const src = readFile("frontend/js/modules/enemyScaling.js");
+  assert.ok(src, "frontend/js/modules/enemyScaling.js must exist");
   // Tier-2 check (< 0.03) must be the first branch, Tier-1 (< 0.10) the else-if
   // so they don't double-stack (+11 vs intended +7)
   const tier2Idx = src.indexOf("eliteRoll < 0.03");
@@ -567,8 +567,8 @@ test("NEW-006: enemyScaling.js elite tier uses else-if (BUG-006 fix)", () => {
 });
 
 test("NEW-007: vats.js refunds AP for queued shots on cancel (BUG-011 fix)", () => {
-  const src = readFile("public/js/modules/vats.js");
-  assert.ok(src, "public/js/modules/vats.js must exist");
+  const src = readFile("frontend/js/modules/vats.js");
+  assert.ok(src, "frontend/js/modules/vats.js must exist");
   // exitVATS must refund AP before clearing queuedShots
   assert.ok(
     src.includes("VATS.actionPoints + shot.apCost") ||
@@ -659,8 +659,8 @@ test("NEW-015: npc-context.js does not leak raw error details (SEC-009 fix)", ()
 });
 
 test("BUG-021: dungeon.js _connectRooms call site uses declared variable names (not _roomW/_roomH/_gap)", () => {
-  const src = readFile("public/js/modules/dungeon.js");
-  assert.ok(src, "public/js/modules/dungeon.js must exist");
+  const src = readFile("frontend/js/modules/dungeon.js");
+  assert.ok(src, "frontend/js/modules/dungeon.js must exist");
   // The _connectRooms function signature uses _roomW/_roomH/_gap as intentionally-unused
   // parameter names (convention). The bug was at the CALL site which passed undeclared
   // _roomW/_roomH/_gap instead of the declared constants roomW/roomH/gap.
@@ -671,8 +671,8 @@ test("BUG-021: dungeon.js _connectRooms call site uses declared variable names (
 });
 
 test("BUG-022: dungeon.js hub template has no disconnected island room", () => {
-  const src = readFile("public/js/modules/dungeon.js");
-  assert.ok(src, "public/js/modules/dungeon.js must exist");
+  const src = readFile("frontend/js/modules/dungeon.js");
+  assert.ok(src, "frontend/js/modules/dungeon.js must exist");
   // The old bug placed a room at (2,2) in the hub template which had no adjacent neighbours
   // and was permanently unreachable. It should be replaced with (1,2) which connects to
   // (0,2) and (1,1).
@@ -685,8 +685,8 @@ test("BUG-022: dungeon.js hub template has no disconnected island room", () => {
 });
 
 test("BUG-023: crafting.js consumeIngredient handles flat-array inventory (PlayerState format)", () => {
-  const src = readFile("public/js/modules/crafting.js");
-  assert.ok(src, "public/js/modules/crafting.js must exist");
+  const src = readFile("frontend/js/modules/crafting.js");
+  assert.ok(src, "frontend/js/modules/crafting.js must exist");
   assert.ok(
     // Match Array.isArray(inv) specifically within the consumeIngredient method body
     // to avoid false positives from other Array.isArray calls elsewhere in the file
@@ -697,8 +697,8 @@ test("BUG-023: crafting.js consumeIngredient handles flat-array inventory (Playe
 });
 
 test("BUG-024: quests.js item rewards awarded locally (client authoritative for items)", () => {
-  const src = readFile("public/js/modules/quests.js");
-  assert.ok(src, "public/js/modules/quests.js must exist");
+  const src = readFile("frontend/js/modules/quests.js");
+  assert.ok(src, "frontend/js/modules/quests.js must exist");
   assert.ok(
     !src.includes("!backendAppliedRewards && r.items"),
     "quests.js must not gate item rewards on backendAppliedRewards — client is authoritative for items"
@@ -710,8 +710,8 @@ test("BUG-024: quests.js item rewards awarded locally (client authoritative for 
 });
 
 test("BUG-025: player-state.js awardCaps guards against NaN (isFinite check)", () => {
-  const src = readFile("public/js/game/player-state.js");
-  assert.ok(src, "public/js/game/player-state.js must exist");
+  const src = readFile("frontend/js/game/player-state.js");
+  assert.ok(src, "frontend/js/game/player-state.js must exist");
   assert.ok(
     src.includes("Number.isFinite(amount)"),
     "player-state.js awardCaps must use Number.isFinite to reject NaN — typeof NaN === 'number' passes naive guard"
@@ -719,8 +719,8 @@ test("BUG-025: player-state.js awardCaps guards against NaN (isFinite check)", (
 });
 
 test("BUG-026: player-state.js awardXP enforces MAX_LEVEL cap in frontend", () => {
-  const src = readFile("public/js/game/player-state.js");
-  assert.ok(src, "public/js/game/player-state.js must exist");
+  const src = readFile("frontend/js/game/player-state.js");
+  assert.ok(src, "frontend/js/game/player-state.js must exist");
   assert.ok(
     src.includes("_state.level < MAX_LEVEL"),
     "player-state.js awardXP must enforce MAX_LEVEL cap to prevent level > 100 in frontend"
@@ -728,8 +728,8 @@ test("BUG-026: player-state.js awardXP enforces MAX_LEVEL cap in frontend", () =
 });
 
 test("BUG-027: player-state.js addItem enforces MAX_INVENTORY_SIZE (200) cap", () => {
-  const src = readFile("public/js/game/player-state.js");
-  assert.ok(src, "public/js/game/player-state.js must exist");
+  const src = readFile("frontend/js/game/player-state.js");
+  assert.ok(src, "frontend/js/game/player-state.js must exist");
   assert.ok(
     src.includes("MAX_INVENTORY_SIZE"),
     "player-state.js addItem must enforce inventory size cap to prevent unbounded localStorage growth"
@@ -750,8 +750,8 @@ test("BUG-028: location-claim.js claimRadius 0 uses typeof check (not falsy ||)"
 });
 
 test("BUG-029: npcEncounter.js ambient comments use two independent random values", () => {
-  const src = readFile("public/js/modules/npcEncounter.js");
-  assert.ok(src, "public/js/modules/npcEncounter.js must exist");
+  const src = readFile("frontend/js/modules/npcEncounter.js");
+  assert.ok(src, "frontend/js/modules/npcEncounter.js must exist");
   assert.ok(
     src.includes("Uint32Array(2)"),
     "npcEncounter.js ambient comment must generate 2 independent random values — using same value for gate+index biases toward last 2 comments"
@@ -841,8 +841,8 @@ test("SEC-WALLET-005: wallet.js nonce is deleted BEFORE session is created (redu
 });
 
 test("SEC-WALLET-006: nuke.js does not store wallet in localStorage (security hardening)", () => {
-  const src = readFile("public/js/nuke.js");
-  assert.ok(src, "public/js/nuke.js must exist");
+  const src = readFile("frontend/js/nuke.js");
+  assert.ok(src, "frontend/js/nuke.js must exist");
   assert.ok(
     !src.includes("fizz_wallet_address"),
     "nuke.js must not read stale 'fizz_wallet_address' localStorage key"
@@ -894,8 +894,8 @@ test("BUG-033: dungeon.js /clear uses atomic NX set (no TOCTOU double-clear)", (
 });
 
 test("BUG-034: battles.js enemyAttack() returns early if active enemy is already dead", () => {
-  const src = readFile("public/js/modules/battles.js");
-  assert.ok(src, "public/js/modules/battles.js must exist");
+  const src = readFile("frontend/js/modules/battles.js");
+  assert.ok(src, "frontend/js/modules/battles.js must exist");
   // Must guard against dead enemy attacking — prevents LOSE-on-WIN state flip
   assert.ok(
     src.includes("ENEMY_DEAD") || src.match(/enemyHp\[idx\]\s*<=\s*0/),
@@ -937,11 +937,11 @@ test("BUG-036: loot-voucher.js does NOT return legacy flat serverSignature field
 });
 
 test("BUG-037: game loop ENCOUNTER_CHANCE is at most 0.15 (production-appropriate, not 0.55)", () => {
-  const src = readFile("public/js/game/loop.js");
-  assert.ok(src, "public/js/game/loop.js must exist");
+  const src = readFile("frontend/js/game/loop.js");
+  assert.ok(src, "frontend/js/game/loop.js must exist");
   // Extract the constant value and ensure it's not the 0.55 test value
   const match = src.match(/const\s+ENCOUNTER_CHANCE\s*=\s*([\d.]+)/);
-  assert.ok(match, "public/js/game/loop.js must define ENCOUNTER_CHANCE constant");
+  assert.ok(match, "frontend/js/game/loop.js must define ENCOUNTER_CHANCE constant");
   const rate = parseFloat(match[1]);
   assert.ok(
     rate <= 0.15,
@@ -950,8 +950,8 @@ test("BUG-037: game loop ENCOUNTER_CHANCE is at most 0.15 (production-appropriat
 });
 
 test("SEC-AUDIT-001: Solana program lib.rs uses u128 for bonding curve arithmetic (not raw u64 multiply)", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // u128 cast must be present for the constant-product k = virtualSol * tokenReserve
   // Virtual SOL (30e9) * token_reserve (800e15) = 2.4e28 > u64::MAX → panic without u128
   assert.ok(
@@ -966,8 +966,8 @@ test("SEC-AUDIT-001: Solana program lib.rs uses u128 for bonding curve arithmeti
 });
 
 test("SEC-AUDIT-002: Solana program ClaimLoot server_key is constrained to config.server_key", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // server_key must be address-constrained so attackers can't supply their own keypair
   assert.ok(
     src.includes("config.server_key"),
@@ -976,8 +976,8 @@ test("SEC-AUDIT-002: Solana program ClaimLoot server_key is constrained to confi
 });
 
 test("SEC-AUDIT-003: Solana program FizzBondingCurve struct includes graduated_at field", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // graduated_at must exist in the struct definition (was missing, causing compile error)
   assert.ok(
     src.includes("graduated_at"),
@@ -999,8 +999,8 @@ test("SEC-AUDIT-003: Solana program FizzBondingCurve struct includes graduated_a
 });
 
 test("SEC-AUDIT-004: Solana program FizzBuyTokens curve_token_vault has associated_token constraint", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // curve_token_vault in FizzBuyTokens must be constrained to bonding_curve's ATA
   assert.ok(
     src.includes("associated_token::authority = bonding_curve"),
@@ -1009,8 +1009,8 @@ test("SEC-AUDIT-004: Solana program FizzBuyTokens curve_token_vault has associat
 });
 
 test("SEC-AUDIT-005: Solana program FizzSellTokens treasury is constrained to config.treasury", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // FizzSellTokens must include config and constrain treasury address
   // Previously config was missing and treasury had no address constraint
   assert.ok(
@@ -1029,8 +1029,8 @@ test("SEC-AUDIT-006: loot-voucher.js validates GPS proximity before signing vouc
 });
 
 test("SEC-AUDIT-008: Solana program claim_loot validates voucher timestamp freshness", () => {
-  const src = readFile("programs/fizzcaps-onchain/src/lib.rs");
-  assert.ok(src, "programs/fizzcaps-onchain/src/lib.rs must exist");
+  const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
   // VoucherExpired error must be defined and used
   assert.ok(
     src.includes("VoucherExpired"),
@@ -1133,8 +1133,8 @@ test("BUG-046: caps.js GET /:wallet has rate limiter (prevents bulk enumeration)
 });
 
 test("BUG-047: player-state.js awardCaps enforces MAX_CAPS ceiling (999_999_999)", () => {
-  const src = readFile("public/js/game/player-state.js");
-  assert.ok(src, "public/js/game/player-state.js must exist");
+  const src = readFile("frontend/js/game/player-state.js");
+  assert.ok(src, "frontend/js/game/player-state.js must exist");
   assert.ok(
     src.includes("MAX_CAPS") && src.includes("999_999_999"),
     "player-state.js awardCaps must enforce MAX_CAPS = 999_999_999 ceiling to match backend"
@@ -1146,8 +1146,8 @@ test("BUG-047: player-state.js awardCaps enforces MAX_CAPS ceiling (999_999_999)
 });
 
 test("BUG-047: dungeon.js client-side caps assignment enforces MAX_CAPS ceiling", () => {
-  const src = readFile("public/js/modules/dungeon.js");
-  assert.ok(src, "public/js/modules/dungeon.js must exist");
+  const src = readFile("frontend/js/modules/dungeon.js");
+  assert.ok(src, "frontend/js/modules/dungeon.js must exist");
   assert.ok(
     src.includes("MAX_CAPS") && src.includes("Math.min("),
     "dungeon.js must apply Math.min(..., MAX_CAPS) when updating player.caps from API response"
