@@ -150,7 +150,9 @@
 
       // Play live stream audio
       if (type === 'direct' || type === 'custom') {
-        this.audioElement.src = url;
+        const safeUrl = this.safeStreamUrl(url);
+        if (!safeUrl) { console.warn('[live-radio] Rejected stream URL (http/https only)'); return; }
+        this.audioElement.src = safeUrl;
         this.audioElement.play().catch(e => {
           console.error("[live-radio] Autoplay failed:", e);
           this.showPlayButton();
@@ -218,8 +220,8 @@
           <span class="live-text">LIVE</span>
         </div>
         <div class="live-info">
-          <div class="live-host">${host}</div>
-          <div class="live-title">${title}</div>
+          <div class="live-host">${this.escapeHtml(host)}</div>
+          <div class="live-title">${this.escapeHtml(title)}</div>
         </div>
         <button id="rex-live-tune-in" class="pipboy-button-small">
           TUNE IN
@@ -430,13 +432,13 @@
         const channel = url.split('/').pop();
         const domain = window.location.hostname;
         embed.src = this.config.twitch.embedUrl
-          .replace('{CHANNEL}', channel)
-          .replace('{DOMAIN}', domain);
+          .replace('{CHANNEL}', encodeURIComponent(channel))
+          .replace('{DOMAIN}', encodeURIComponent(domain));
       } else if (type === 'youtube') {
         const videoId = this.extractYouTubeId(url);
         const _domain = window.location.hostname;
         embed.src = this.config.youtube.embedUrl
-          .replace('{VIDEO_ID}', videoId);
+          .replace('{VIDEO_ID}', encodeURIComponent(videoId || ''));
       }
 
       embed.style.display = 'block';
@@ -649,6 +651,15 @@
           this.audioElement.play();
         }
       }, 5000);
+    },
+
+    safeStreamUrl(url) {
+      try {
+        const u = new URL(String(url), window.location.href);
+        return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : null;
+      } catch (_e) {
+        return null;
+      }
     },
 
     escapeHtml(text) {
