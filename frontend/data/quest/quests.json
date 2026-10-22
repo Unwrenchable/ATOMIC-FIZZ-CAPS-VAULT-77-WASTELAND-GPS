@@ -35,13 +35,13 @@
     "id": "quest_vault_experiment",
     "name": "The Vault Experiment",
     "type": "main",
-    "poIs": ["Vault 3", "Vault 19", "Vault 22", "Vault 87"],
+    "poIs": ["Vault 9", "Vault 29", "Vault 82", "Vault 78"],
     "description": "Investigate Cinder Basin Vaults to uncover the truth about FizzTec’s experiments.",
     "objectives": [
-      "Search Vault 3 for experiment logs",
-      "Recover data from Vault 19",
-      "Defeat mutated creatures in Vault 22",
-      "Confront overseer AI in Vault 87"
+      "Search Vault 9 for experiment logs",
+      "Recover data from Vault 29",
+      "Defeat mutated creatures in Vault 82",
+      "Confront overseer AI in Vault 78"
     ],
     "endings": [
       {
@@ -92,7 +92,7 @@
       {
         "id": "ending_keep",
         "description": "You keep the prototypes for yourself.",
-        "reward": "Prototype X-01 Reactor Harness",
+        "reward": "Prototype Mk-X Reactor Harness",
         "consequence": "You become a feared figure in the Cinder Basin."
       }
     ]
@@ -101,11 +101,11 @@
     "id": "quest_strip_shadows",
     "name": "Shadows of the Strip",
     "type": "main",
-    "poIs": ["Ultra-Luxe Casino", "Gomorrah Casino", "The Spire"],
+    "poIs": ["Velvet Luxe Casino", "Sodom Lounge Casino", "The Spire"],
     "description": "Uncover corruption and secrets hidden within the Strip casinos.",
     "objectives": [
-      "Investigate Ultra-Luxe backrooms",
-      "Retrieve smuggled weapons from Gomorrah",
+      "Investigate Velvet Luxe backrooms",
+      "Retrieve smuggled weapons from Sodom Lounge",
       "Confront casino bosses at The Spire"
     ],
     "endings": [
@@ -157,7 +157,7 @@
         "id": "ending_legion_breakthrough",
         "description": "Legion overruns Frontier Compact lines.",
         "reward": "Legion Favor",
-        "consequence": "Frontier Compact retreats, Caesar claims victory."
+        "consequence": "Frontier Compact retreats, the Imperator claims victory."
       }
     ]
   },
@@ -165,18 +165,18 @@
     "id": "quest_bos_purge",
     "name": "Brotherhood Purge",
     "type": "main",
-    "poIs": ["Hidden Valley Bunker", "HELIOS One", "REPCONN HQ"],
+    "poIs": ["Hidden Valley Bunker", "HELIOS One", "SkyRocket Co. HQ"],
     "description": "Aid or oppose the Coil Covenant in their tech reclamation crusade.",
     "objectives": [
       "Infiltrate Hidden Valley bunker",
       "Redirect power at HELIOS One",
-      "Recover rocket tech from REPCONN"
+      "Recover rocket tech from SkyRocket Co."
     ],
     "endings": [
       {
         "id": "ending_bos_dominance",
         "description": "BoS hoards all tech.",
-        "reward": "T-51b Reactor Harness",
+        "reward": "Mk-5 Reactor Harness",
         "consequence": "Wasteland tech stagnates."
       },
       {
@@ -233,7 +233,7 @@
     "description": "Help the Boomers achieve flight once more.",
     "objectives": [
       "Raise the B-29 from Lake Mead",
-      "Secure parts from REPCONN",
+      "Secure parts from SkyRocket Co.",
       "Launch the bomber"
     ],
     "endings": [
@@ -310,7 +310,7 @@
       {
         "id": "ending_legion_crush",
         "description": "Revolt brutally suppressed.",
-        "reward": "Caesar's Favor",
+        "reward": "the Imperator's Favor",
         "consequence": "Legion stronger."
       },
       {
@@ -325,12 +325,12 @@
     "id": "quest_powder_uprising",
     "name": "Powder Uprising",
     "type": "main",
-    "poIs": ["Frontier Compact Correctional Facility", "Primm", "Vault 19"],
+    "poIs": ["Frontier Compact Correctional Facility", "Primm", "Vault 29"],
     "description": "Lead the Powder Gangers to power or destruction.",
     "objectives": [
       "Break out NCRCF prisoners",
       "Raid Primm for supplies",
-      "Claim Vault 19 as base"
+      "Claim Vault 29 as base"
     ],
     "endings": [
       {
@@ -357,11 +357,11 @@
     "id": "quest_white_glove",
     "name": "White Glove Feast",
     "type": "main",
-    "poIs": ["Ultra-Luxe Casino", "Gomorrah", "The Tops"],
+    "poIs": ["Velvet Luxe Casino", "Sodom Lounge", "The Tops"],
     "description": "Uncover the White Glove Society's darkest secrets.",
     "objectives": [
-      "Investigate Ultra-Luxe kitchen",
-      "Track meat sources to Gomorrah",
+      "Investigate Velvet Luxe kitchen",
+      "Track meat sources to Sodom Lounge",
       "Confront society at masked ball"
     ],
     "endings": [
@@ -381,7 +381,7 @@
         "id": "ending_society_exposure",
         "description": "Expose to public.",
         "reward": "Caps from Frontier Compact",
-        "consequence": "Ultra-Luxe ruined."
+        "consequence": "Velvet Luxe ruined."
       }
     ]
   },
@@ -389,8 +389,8 @@
     "id": "quest_kings_gambit",
     "name": "Kings' Gambit",
     "type": "main",
-    "poIs": ["Freeside", "King's School of Impersonation", "The Tops"],
-    "description": "Broker peace or war between the Kings and Frontier Compact in Freeside.",
+    "poIs": ["Outskirt Row", "King's School of Impersonation", "The Tops"],
+    "description": "Broker peace or war between the Kings and Frontier Compact in Outskirt Row.",
     "objectives": [
       "Meet the King in his school",
       "Resolve Pacer's aggression",
@@ -401,19 +401,19 @@
         "id": "ending_kings_peace",
         "description": "Kings and Frontier Compact coexist.",
         "reward": "Elvis Jacket",
-        "consequence": "Freeside stabilizes."
+        "consequence": "Outskirt Row stabilizes."
       },
       {
         "id": "ending_kings_war",
         "description": "Kings fight Frontier Compact.",
         "reward": "Grease Gun",
-        "consequence": "Freeside in chaos."
+        "consequence": "Outskirt Row in chaos."
       },
       {
         "id": "ending_kings_absorb",
         "description": "Kings join Frontier Compact.",
         "reward": "Frontier Compact MP Armor",
-        "consequence": "Freeside annexed."
+        "consequence": "Outskirt Row annexed."
       }
     ]
   },
@@ -485,7 +485,7 @@
     "id": "quest_black_mountain",
     "name": "Black Mountain",
     "type": "main",
-    "poIs": ["Black Mountain", "Jacobstown", "REPCONN Test Site"],
+    "poIs": ["Black Mountain", "Jacobstown", "SkyRocket Co. Test Site"],
     "description": "Resolve the super mutant/nightkin conflict at Black Mountain.",
     "objectives": [
       "Contact Tabitha",
@@ -539,7 +539,7 @@
     "id": "side_buried_treasure",
     "name": "Buried Treasure",
     "type": "side",
-    "poIs": ["Novac", "REPCONN Test Site"],
+    "poIs": ["Saurville", "SkyRocket Co. Test Site"],
     "description": "Follow clues to hidden cache.",
     "objectives": [
       "Find holotape",
@@ -583,10 +583,10 @@
     "id": "side_fiend_heads",
     "name": "Fiend Heads",
     "type": "side",
-    "poIs": ["Vault 3", "Westside"],
+    "poIs": ["Vault 9", "Westside"],
     "description": "Collect fiend bounties.",
     "objectives": [
-      "Clear Vault 3 leaders",
+      "Clear Vault 9 leaders",
       "Return heads"
     ]
   },
@@ -594,10 +594,10 @@
     "id": "side_nightkin_hunt",
     "name": "Nightkin Hunt",
     "type": "side",
-    "poIs": ["Black Mountain", "REPCONN HQ"],
+    "poIs": ["Black Mountain", "SkyRocket Co. HQ"],
     "description": "Deal with stealthy nightkin.",
     "objectives": [
-      "Track to REPCONN",
+      "Track to SkyRocket Co.",
       "Eliminate leader"
     ]
   },
@@ -605,7 +605,7 @@
     "id": "side_aba_daba",
     "name": "Aba Daba Honeymoon",
     "type": "side",
-    "poIs": ["Red Rock Drug Lab", "Crimson Caravan"],
+    "poIs": ["Red Rock Drug Lab", "Scarlet Caravan"],
     "description": "Run chems for Khans.",
     "objectives": [
       "Deliver packages",
@@ -626,7 +626,7 @@
     "id": "side_ed_e_love",
     "name": "ED-E My Love",
     "type": "side",
-    "poIs": ["Primm", "Novac", "Hidden Valley"],
+    "poIs": ["Primm", "Saurville", "Hidden Valley"],
     "description": "Upgrade broken eyebot.",
     "objectives": [
       "Trigger upgrades at locations"
@@ -636,7 +636,7 @@
     "id": "side_gi_blues",
     "name": "G.I. Blues",
     "type": "side",
-    "poIs": ["Freeside", "Atomic Wrangler"],
+    "poIs": ["Outskirt Row", "Rad Rustler"],
     "description": "Solve Kings' troubles.",
     "objectives": [
       "Investigate attacks",
@@ -669,7 +669,7 @@
     "id": "side_come_fly",
     "name": "Come Fly With Me",
     "type": "side",
-    "poIs": ["REPCONN HQ", "Novac"],
+    "poIs": ["SkyRocket Co. HQ", "Saurville"],
     "description": "Launch ghouls into space.",
     "objectives": [
       "Clear nightkin",
@@ -680,7 +680,7 @@
     "id": "side_beyond_beef",
     "name": "Beyond the Beef",
     "type": "side",
-    "poIs": ["Ultra-Luxe"],
+    "poIs": ["Velvet Luxe"],
     "description": "Solve missing person case.",
     "objectives": [
       "Investigate disappearance",
@@ -723,7 +723,7 @@
     "id": "side_put_spell",
     "name": "I Put a Spell on You",
     "type": "side",
-    "poIs": ["Camp McCarran"],
+    "poIs": ["Camp Halloran"],
     "description": "Find Frontier Compact spy.",
     "objectives": [
       "Investigate monorail sabotage"
@@ -763,7 +763,7 @@
     "id": "side_wheel_fortune",
     "name": "Wheel of Fortune",
     "type": "side",
-    "poIs": ["Aerotech Office Park", "Novac"],
+    "poIs": ["Aerotech Office Park", "Saurville"],
     "description": "Help stranded travelers.",
     "objectives": [
       "Repair vehicles"

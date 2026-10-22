@@ -2,7 +2,7 @@
   "id": "quest_harlan_retirement",
   "name": "A Ranger’s Retirement",
   "type": "main",
-  "poIs": ["Neon Reach Strip", "Freeside", "Harlan’s Apartment"],
+  "poIs": ["Neon Reach Strip", "Outskirt Row", "Harlan’s Apartment"],
   "description": "Learn about Harlan Voss, a retired Frontier Compact Ranger who moved to Neon Reach searching for his missing son, Jax.",
   "objectives": [
     "Find Harlan’s old apartment",

@@ -7,12 +7,12 @@
     "alignment": "Lawful Neutral",
     "color": "#3b6ea5",
     "emblem": "Sword & Gears",
-    "basePOIs": ["Lost Hills Bunker", "Shady Sands Ruins"],
+    "basePOIs": ["Lost Hills Bunker", "Dustwater Ruins"],
     "leader": "Elder Maxson II",
     "reputationLevels": ["Vilified", "Hated", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
       "Liked": "Energy weapon access",
-      "Idolized": "T-51b Reactor Harness variant"
+      "Idolized": "Mk-5 Reactor Harness variant"
     },
     "enemies": ["enclave_west", "raiders_cutthroats"],
     "allies": ["followers_apocalypse"]
@@ -39,7 +39,7 @@
     "id": "bos_maxson",
     "name": "Coil Covenant — Maxson Chapter",
     "shortName": "BoS East",
-    "description": "Militaristic, expansionist Brotherhood chapter from the Commonwealth. Seeks total technological control.",
+    "description": "Militaristic, expansionist Brotherhood chapter from the Bay Reaches. Seeks total technological control.",
     "alignment": "Lawful",
     "color": "#2f4f6f",
     "emblem": "Sword & Gears",
@@ -89,7 +89,7 @@
     "id": "institute",
     "name": "The Institute",
     "shortName": "Institute",
-    "description": "Secretive underground technocracy beneath the Commonwealth. Masters of robotics and synthetic life.",
+    "description": "Secretive underground technocracy beneath the Bay Reaches. Masters of robotics and synthetic life.",
     "alignment": "Neutral",
     "color": "#ffffff",
     "emblem": "CIT Seal",
@@ -122,13 +122,13 @@
   },
   {
     "id": "minutemen",
-    "name": "Commonwealth Settlement Watch",
+    "name": "Bay Reaches Settlement Watch",
     "shortName": "Settlement Watch",
-    "description": "Decentralized militia dedicated to protecting settlements across the Commonwealth.",
+    "description": "Decentralized militia dedicated to protecting settlements across the Bay Reaches.",
     "alignment": "Good",
     "color": "#6495ed",
     "emblem": "Militia Hat",
-    "basePOIs": ["Castle", "Sanctuary Hills"],
+    "basePOIs": ["Castle", "Refuge Hills"],
     "leader": "General (Player Echo)",
     "reputationLevels": ["Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
@@ -209,7 +209,7 @@
     "id": "vault_city",
     "name": "Vault City",
     "shortName": "Vault City",
-    "description": "Hyper‑bureaucratic, isolationist city built around Vault 8. Advanced medicine and tech.",
+    "description": "Hyper‑bureaucratic, isolationist city built around Vault 18. Advanced medicine and tech.",
     "alignment": "Lawful Neutral",
     "color": "#32cd32",
     "emblem": "Vault Door",

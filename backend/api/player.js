@@ -5,6 +5,7 @@
 // ------------------------------------------------------------
 
 const express = require("express");
+const { checkUpdateTotal } = require("./vitals-rules");
 const rateLimit = require("express-rate-limit");
 const router = express.Router();
 
@@ -299,6 +300,11 @@ router.post("/special/update", authMiddleware, playerLimiter, async (req, res) =
         : (profile.special?.[k] ?? 5);
       sanitizedSpecial[k] = val;
     });
+    // Point-budget check: same 28-point cap as /create, so a client cannot max every stat.
+    const budget = checkUpdateTotal(sanitizedSpecial, profile.special);
+    if (!budget.ok) {
+      return res.status(400).json({ ok: false, error: `VITALS total ${budget.total} exceeds ${budget.allowed}` });
+    }
     profile.special = sanitizedSpecial;
     await saveProfile(wallet, profile);
 

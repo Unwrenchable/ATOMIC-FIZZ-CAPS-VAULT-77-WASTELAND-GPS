@@ -2,9 +2,9 @@
   "id": "dialog_mira_vale",
   "npc": "Mira Vale",
   "portrait": "mira_vale",
-  "title": "The Freeside Medic",
+  "title": "The Outskirt Row Medic",
   "description": "A compact woman in a patched-up field coat, hands perpetually stained with iodine and grime. She does not look up when you enter. Her workspace — a repurposed desk littered with medical supplies — is organized with the precision of someone who has learned that chaos costs lives.",
-  "backstory": "Mira Vale came up through the Followers of the Apocalypse's outer circuit before she decided ideology was a luxury the injured couldn't afford. She set up her clinic in Freeside independently, trading services for caps, supplies, and the occasional piece of information. She has patched up Jax Voss more times than she cares to count, and each time she pretended it was professional obligation. She keeps a tally on a scrap of paper in her coat pocket. She never lets anyone see it.",
+  "backstory": "Mira Vale came up through the Followers of the Apocalypse's outer circuit before she decided ideology was a luxury the injured couldn't afford. She set up her clinic in Outskirt Row independently, trading services for caps, supplies, and the occasional piece of information. She has patched up Jax Voss more times than she cares to count, and each time she pretended it was professional obligation. She keeps a tally on a scrap of paper in her coat pocket. She never lets anyone see it.",
   "intro": {
     "id": "mira_vale_intro",
     "conditions": ["!flag:met_mira_vale"],
@@ -13,7 +13,7 @@
     "text": "She doesn't look up from the suture she's tying.<br><br>\"Sit down before you bleed on my floor. I just cleaned that.\"<br><br>A pause. She cuts the thread, sets the needle aside, finally looks at you.<br><br>\"Mira Vale. I fix things. If you're here for conversation, you've got the wrong address.\"",
     "responses": [
       {"text": "[Question] You know someone named Jax Voss?", "tone": "question", "next": "mira_knows_jax"},
-      {"text": "[Friendly] You do good work. This clinic's kept Freeside alive.", "tone": "kind", "next": "mira_clinic_compliment"},
+      {"text": "[Friendly] You do good work. This clinic's kept Outskirt Row alive.", "tone": "kind", "next": "mira_clinic_compliment"},
       {"text": "[Sarcastic] Charming bedside manner. You run a masterclass?", "tone": "sarcastic", "next": "mira_sarcastic_manner"},
       {"text": "[Direct] I need medical supplies and I need them fast.", "tone": "direct", "next": "mira_quest_medrun"}
     ]
@@ -34,7 +34,7 @@
     {
       "id": "mira_clinic_compliment",
       "conditions": ["!flag:mira_clinic_praised"],
-      "text": "She stops. Looks at you sideways.<br><br>\"You don't have to say things like that.\"<br><br>A pause. Something softens very briefly in her jaw.<br><br>\"But... the water filtration broke last month and half of Freeside still came through the door. So. I suppose it is something.\"",
+      "text": "She stops. Looks at you sideways.<br><br>\"You don't have to say things like that.\"<br><br>A pause. Something softens very briefly in her jaw.<br><br>\"But... the water filtration broke last month and half of Outskirt Row still came through the door. So. I suppose it is something.\"",
       "set_flags": ["mira_clinic_praised"]
     },
     {
@@ -62,7 +62,7 @@
     {
       "id": "mira_quest_medrun",
       "conditions": ["!flag:side_nv_medrun_taken"],
-      "text": "\"I need supplies.\" She crosses her arms. \"So does everyone else. The problem is the road through the East Freeside corridor — two raider camps set up on the only route to the caravan depot.\"<br><br>\"I've got three patients who'll die without what's on that run. You look capable. You interested?\"",
+      "text": "\"I need supplies.\" She crosses her arms. \"So does everyone else. The problem is the road through the East Outskirt Row corridor — two raider camps set up on the only route to the caravan depot.\"<br><br>\"I've got three patients who'll die without what's on that run. You look capable. You interested?\"",
       "offers_quest": "side_nv_medrun",
       "set_flags": ["side_nv_medrun_taken"],
       "video_speech": "I need a courier who won't get shot. The road's raider-held and my patients can't wait."

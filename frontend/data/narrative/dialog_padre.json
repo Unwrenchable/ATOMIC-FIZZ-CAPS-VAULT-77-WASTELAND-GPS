@@ -23,7 +23,7 @@
         "flag:met_rex",
         "!flag:padre_comment_rex"
       ],
-      "text": "Captain Rex. I've passed through his checkpoint three times.<br><br>The second time he stopped me for twenty minutes. He wanted to know why I kept coming back to Freeside.<br><br>I told him: because that's where the people are who most need what I carry. He thought about that and let me through every time after.",
+      "text": "Captain Rex. I've passed through his checkpoint three times.<br><br>The second time he stopped me for twenty minutes. He wanted to know why I kept coming back to Outskirt Row.<br><br>I told him: because that's where the people are who most need what I carry. He thought about that and let me through every time after.",
       "set_flags": [
         "padre_comment_rex"
       ]

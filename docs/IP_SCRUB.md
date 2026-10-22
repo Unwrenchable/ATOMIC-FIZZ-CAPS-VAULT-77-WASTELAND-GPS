@@ -73,3 +73,29 @@ Not flagged: `frontend/img/icons/pipboy-grid.svg` (plain grid), phosphor raster 
 ## B.L.A.S.T.E.D. (2026-10-22)
 Player-facing stat labels are now B.L.A.S.T.E.D. (Brawn, Lookout, Absorb, Swagger, Tinker, Escape, Dumb Luck). Internal keys S/P/E/C/I/A/L are kept for saves, the backend and battle math. Source of labels: frontend/js/game/vitals.js.
 
+
+## Second pass (2026-10-22)
+
+Display names (case-sensitive, URLs untouched). Item ids stay, per the policy above (saves, minted metadata).
+
+| Former | Atomic Fizz | | Former | Atomic Fizz |
+| --- | --- | --- | --- | --- |
+| Cooper Howard / Cooper | Cutter Hale / Cutter | | Vault 13 / 111 / 76 / 87 | Vault 31 / 47 / 67 / 78 |
+| Vault 3 / 8 / 11 / 15 / 19 / 21 / 22 / 34 / 81 / 95 | Vault 9 / 18 / 41 / 51 / 29 / 12 / 82 / 43 / 18-B / 59 | | Commonwealth | Bay Reaches |
+| NCR (leftovers) | Frontier Compact | | McCarran | Halloran |
+| Megaton | Craterhold | | Novac | Saurville |
+| T-51 / X-01 | Mk-5 / Mk-X | | Dunwich | Grimwick |
+| Far Harbor | Fogmoor | | Diamond City | Stadium Hollow |
+| the Pitt | the Scrapforge | | Sole Survivor | Last Sleeper |
+| Mr. House | Mr. Manor | | Shady Sands | Dustwater |
+| Boneyard / Necropolis / Junktown | Ossuary Yard / Grave City / Scraptown | | Rivet City / Goodneighbor | Bolt Harbor / Kindly Row |
+| Sanctuary Hills | Refuge Hills | | Caesar | the Imperator |
+| Liberty Prime / Three Dog / Galaxy News | Freedom Titan / Two Hound / Starlight News | | Nick Valentine / Dogmeat / Codsworth | Rick Vallance / Scraps / Butlerbot |
+| Preston Garvey / Paladin Danse | Prescott Garrow / Paladin Varr | | Big MT / Mothership Zeta | Big Crater / Starship Omega |
+| Lone Wanderer | Lone Drifter | | Freeside | Outskirt Row |
+| REPCONN / Ultra-Luxe / Gomorrah | SkyRocket Co. / Velvet Luxe / Sodom Lounge | | Atomic Wrangler / Crimson Caravan | Rad Rustler / Scarlet Caravan |
+| Fallout N (game titles) | the First/Frontier/Capital/Neon/Bay/Hill Country saga | | | |
+
+Renamed ids + files (aliases kept): `ghoul_cooper`→`cutter_hale`, `vault_dweller_echo`→`vault_sleeper_echo`, `sole_survivor_echo`→`last_sleeper_echo`, the four `npc_*_ncr_*` files→`*_compact_*`, `quest_fo2_ncr_founding`→`quest_fo2_compact_founding`, `quest_timeline_ncr_minutemen`→`quest_timeline_compact_watch`, `quest_tv_ghoul_cooper`→`quest_tv_cutter_hale`. `narrative.js` maps the old dialog ids; `player-state.js` migrates saved quest ids. Raster pack manifest renamed to `afc-avatar-pack-raster-wasteland`, `vault_tec` tags → `fizztec`.
+
+Left on purpose: real places (Nipton, Primm, Hoover Dam, Zion, Point Lookout, Appalachia, Searchlight, Boulder City), generic words (Institute, Railroad, Legion, bare "Brotherhood", ghoul), item ids such as `mcCarran_trooper_armor` / `t51_power_armor`, the `ncr` map-icon key, `fallout_pois.json` filename, and `game: "fo3"` tags. R2 video URLs keep their old filenames. `tests/game.ip.part.js` guards the list.

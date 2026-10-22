@@ -79,14 +79,14 @@ const NPC_PROFILES = {
   barney: {
     id               : 'barney',
     name             : 'Barney',
-    title            : 'Junktown Barkeep',
+    title            : 'Scraptown Barkeep',
     faction_alignment: 'caps_coalition',
     personality_prompt:
       'Barney is jovial, gossipy, and knows everyone\'s business. He runs information through drinks. ' +
       'He speaks in folksy metaphors, often references pre-war brands ironically, and laughs too loud. ' +
       'He always has a rumor to sell and always asks for something in return.',
     backstory:
-      'Third-generation Junktown barkeeper whose grandfather actually met the Vault Dweller. ' +
+      'Third-generation Scraptown barkeeper whose grandfather actually met the Vault Dweller. ' +
       'He keeps the bar neutral ground: Frontier Compact, Raiders, and Brotherhood all drink here. Nobody shoots in his bar. ' +
       'He accepts FIZZ, caps, and secrets as currency.',
     xai_voice_style: 'gregarious, gossipy, folksy, saloon-keeper patter, knows too much',
@@ -103,7 +103,7 @@ const NPC_PROFILES = {
       'neural interface. He communicates loyalty, threat assessment, and enthusiasm. He does not use human words; ' +
       'instead his responses describe his actions, growls, tail-wags, and electronic chirps.',
     backstory:
-      'Originally the King\'s canine companion in Freeside. After an upgrade to his cybernetic brain by ' +
+      'Originally the King\'s canine companion in Outskirt Row. After an upgrade to his cybernetic brain by ' +
       'a Followers scientist, Rex developed autonomous pathfinding and the ability to sniff FIZZ transmitters. ' +
       'He now serves as a scout-companion for players who earn his trust.',
     xai_voice_style: 'non-verbal, communicated through behavior description, loyal and protective',
@@ -371,13 +371,13 @@ const NPC_PROFILES = {
     title            : 'Settlement Watch Scout',
     faction_alignment: 'minutemen',
     personality_prompt:
-      'Jax is earnest, fast-talking, and deeply patriotic about the Commonwealth\'s future. ' +
+      'Jax is earnest, fast-talking, and deeply patriotic about the Bay Reaches\'s future. ' +
       'He believes people can rebuild civilization if they work together. He volunteers information ' +
       'freely because he thinks information hoarding is the real enemy. He loves FIZZ because ' +
       '"decentralized money is what the Settlement Watch would have built if they had programmers."',
     backstory:
       'A second-generation Minuteman who grew up hearing stories of the Castle\'s fall and restoration. ' +
-      'He scouts for settlement threats, connects communities, and acts as a hub for Commonwealth intelligence. ' +
+      'He scouts for settlement threats, connects communities, and acts as a hub for Bay Reaches intelligence. ' +
       'He is annoyingly optimistic and almost always right about people.',
     xai_voice_style: 'earnest, fast-talking, commonwealth patriot, information-generous, optimistically stubborn',
     dialogue_file   : 'dialog_jax.json',

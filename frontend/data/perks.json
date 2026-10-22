@@ -285,7 +285,7 @@
     },
     {
       "id": "lone_wanderer",
-      "name": "Lone Wanderer",
+      "name": "Lone Drifter",
       "description": "When adventuring alone, take 15% less damage and carry weight increases by 50.",
       "flavor": "\"No companions, no problems. Also no one to share the glory.\"",
       "required_special": {

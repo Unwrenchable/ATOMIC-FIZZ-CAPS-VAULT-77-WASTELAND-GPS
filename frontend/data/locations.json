@@ -2730,7 +2730,7 @@
   },
   {
     "id": "dunwich_borers_deep_north_america_120",
-    "name": "Dunwich Borers Deep",
+    "name": "Grimwick Borers Deep",
     "lat": 29.223316,
     "lng": -155.274207,
     "lvl": 66,
@@ -2738,7 +2738,7 @@
     "biome": "desert",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "Dunwich Borers Deep. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Grimwick Borers Deep. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -4043,7 +4043,7 @@
   },
   {
     "id": "dunwich_borers_deep_north_america_178",
-    "name": "Dunwich Borers Deep",
+    "name": "Grimwick Borers Deep",
     "lat": 33.448671,
     "lng": -68.682076,
     "lvl": 56,
@@ -4051,7 +4051,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Dunwich Borers Deep. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Grimwick Borers Deep. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -4881,7 +4881,7 @@
   },
   {
     "id": "dunwich_borers_deep_north_america_215",
-    "name": "Dunwich Borers Deep",
+    "name": "Grimwick Borers Deep",
     "lat": 65.32512,
     "lng": -69.252038,
     "lvl": 28,
@@ -4889,7 +4889,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Dunwich Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Grimwick Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -8832,7 +8832,7 @@
   },
   {
     "id": "dunwich_borers_deep_europe_71",
-    "name": "Dunwich Borers Deep",
+    "name": "Grimwick Borers Deep",
     "lat": 63.959297,
     "lng": -0.856301,
     "lvl": 23,
@@ -8840,7 +8840,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Dunwich Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Grimwick Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -13023,7 +13023,7 @@
   },
   {
     "id": "dunwich_borers_deep_asia_37",
-    "name": "Dunwich Borers Deep",
+    "name": "Grimwick Borers Deep",
     "lat": 65.737987,
     "lng": 128.473649,
     "lvl": 33,
@@ -13031,7 +13031,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Dunwich Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Someone spray-painted 'THE GAME WAS RIGGED FROM THE START' on the entrance. They weren't wrong.",
+    "lore": "Grimwick Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Someone spray-painted 'THE GAME WAS RIGGED FROM THE START' on the entrance. They weren't wrong.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -13252,7 +13252,7 @@
   },
   {
     "id": "dunwich_borers_deep_asia_47",
-    "name": "Dunwich Borers Deep",
+    "name": "Grimwick Borers Deep",
     "lat": 53.446905,
     "lng": 52.278686,
     "lvl": 65,
@@ -13260,7 +13260,7 @@
     "biome": "mountain",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Dunwich Borers Deep. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Grimwick Borers Deep. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -14964,7 +14964,7 @@
   },
   {
     "id": "dunwich_borers_deep_asia_123",
-    "name": "Dunwich Borers Deep",
+    "name": "Grimwick Borers Deep",
     "lat": 61.918095,
     "lng": 135.657592,
     "lvl": 6,
@@ -14972,7 +14972,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Dunwich Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Grimwick Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -16178,7 +16178,7 @@
   },
   {
     "id": "dunwich_borers_deep_asia_177",
-    "name": "Dunwich Borers Deep",
+    "name": "Grimwick Borers Deep",
     "lat": 60.90264,
     "lng": 46.168025,
     "lvl": 41,
@@ -16186,7 +16186,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Dunwich Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Grimwick Borers Deep. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -21968,7 +21968,7 @@
   },
   {
     "id": "dunwich_borers_deep_australia_33",
-    "name": "Dunwich Borers Deep",
+    "name": "Grimwick Borers Deep",
     "lat": -41.371161,
     "lng": 135.576323,
     "lvl": 71,
@@ -21976,7 +21976,7 @@
     "biome": "desert",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Dunwich Borers Deep. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Grimwick Borers Deep. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 220,
     "loot": {
       "items": [

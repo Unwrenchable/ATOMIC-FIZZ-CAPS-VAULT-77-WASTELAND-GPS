@@ -204,10 +204,10 @@
     {
       "id": "dialog_mira_vale",
       "canonical_name": "Mira Vale",
-      "title": "The Freeside Medic",
+      "title": "The Outskirt Row Medic",
       "dialog_file": "dialog_mira_vale.json",
       "npc_file": "npc_nv_mira_vale.json",
-      "region": "Freeside",
+      "region": "Outskirt Row",
       "quest_ids": [
         "side_nv_medrun"
       ]
@@ -706,7 +706,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_pitt_bronn.json",
-      "region": "The Pitt",
+      "region": "The Scrapforge",
       "quest_ids": [
         "quest_pitt_ironlung"
       ]
@@ -1459,7 +1459,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_doc_halley.json",
-      "region": "Freeside",
+      "region": "Outskirt Row",
       "quest_ids": [
         "side_nv_medrun"
       ]
@@ -1801,11 +1801,11 @@
       "quest_ids": []
     },
     {
-      "id": "npc_sloan_ncr_engineer_tomas_redding",
+      "id": "npc_sloan_compact_engineer_tomas_redding",
       "canonical_name": "Engineer Tomas Redding",
       "title": null,
       "dialog_file": null,
-      "npc_file": "npc_sloan_ncr_engineer_tomas_redding.json",
+      "npc_file": "npc_sloan_compact_engineer_tomas_redding.json",
       "region": "mojave",
       "quest_ids": []
     },
@@ -2233,7 +2233,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_pitt_ironjaw_marn.json",
-      "region": "The Pitt",
+      "region": "The Scrapforge",
       "quest_ids": [
         "quest_pitt_steelwake"
       ]
@@ -2595,7 +2595,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_juno.json",
-      "region": "Freeside",
+      "region": "Outskirt Row",
       "quest_ids": [
         "quest_nv_convergence_signs"
       ]
@@ -3177,11 +3177,11 @@
       "quest_ids": []
     },
     {
-      "id": "npc_boulder_ncr_lieutenant_arden_cross",
+      "id": "npc_boulder_compact_lieutenant_arden_cross",
       "canonical_name": "Lieutenant Arden Cross",
       "title": null,
       "dialog_file": null,
-      "npc_file": "npc_boulder_ncr_lieutenant_arden_cross.json",
+      "npc_file": "npc_boulder_compact_lieutenant_arden_cross.json",
       "region": "mojave",
       "quest_ids": []
     },
@@ -5169,7 +5169,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_rhea_sparks.json",
-      "region": "Freeside",
+      "region": "Outskirt Row",
       "quest_ids": [
         "side_nv_rheafix"
       ]
@@ -5308,7 +5308,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_rook.json",
-      "region": "Freeside",
+      "region": "Outskirt Row",
       "quest_ids": [
         "side_nv_striprumors",
         "quest_nv_convergence_signs"
@@ -5704,11 +5704,11 @@
       ]
     },
     {
-      "id": "npc_primm_ncr_sergeant_kara_briggs",
+      "id": "npc_primm_compact_sergeant_kara_briggs",
       "canonical_name": "Sergeant Kara Briggs",
       "title": null,
       "dialog_file": null,
-      "npc_file": "npc_primm_ncr_sergeant_kara_briggs.json",
+      "npc_file": "npc_primm_compact_sergeant_kara_briggs.json",
       "region": "mojave",
       "quest_ids": []
     },
@@ -5846,7 +5846,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_pitt_mara.json",
-      "region": "The Pitt",
+      "region": "The Scrapforge",
       "quest_ids": [
         "side_pitt_medicine"
       ]
@@ -6565,7 +6565,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_pitt_trogwhisperer.json",
-      "region": "The Pitt",
+      "region": "The Scrapforge",
       "quest_ids": [
         "side_pitt_trogs"
       ]
@@ -6607,11 +6607,11 @@
       "quest_ids": []
     },
     {
-      "id": "npc_188_ncr_trooper_darin_moss",
+      "id": "npc_188_compact_trooper_darin_moss",
       "canonical_name": "Trooper Darin Moss",
       "title": null,
       "dialog_file": null,
-      "npc_file": "npc_188_ncr_trooper_darin_moss.json",
+      "npc_file": "npc_188_compact_trooper_darin_moss.json",
       "region": "mojave",
       "quest_ids": []
     },

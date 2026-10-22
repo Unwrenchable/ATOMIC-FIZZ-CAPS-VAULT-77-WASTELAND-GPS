@@ -289,7 +289,7 @@
         "leave_message": "I can't be part of this anymore. Goodbye."
       },
       {
-        "companion_type": "Neutral companions (Nick Valentine, Hancock)",
+        "companion_type": "Neutral companions (Rick Vallance, Hancock)",
         "karma_tolerance": "Bad to Very Good",
         "warning_threshold": "Evil or Very Evil",
         "leave_threshold": "Very Evil sustained for 10+ actions",

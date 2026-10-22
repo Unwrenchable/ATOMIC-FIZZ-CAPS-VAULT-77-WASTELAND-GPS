@@ -15,7 +15,7 @@
       "id": "col_fizz_memo_1",
       "type": "corp_memo",
       "title": "INTERNAL MEMO // FIZZ VAULT PILOT",
-      "poi": "Vault 34",
+      "poi": "Vault 43",
       "content": "Team,\nFocus groups LOVE the idea of 'emergency refreshment shelters.'\nDo not use the word 'bunker' in public materials.\nLegal says it sounds 'too honest.'"
     },
 
@@ -31,7 +31,7 @@
       "id": "col_pitt_scrap_note",
       "type": "artifact_note",
       "title": "FORGEMASTER NOTE // THE PITT",
-      "poi": "The Pitt",
+      "poi": "The Scrapforge",
       "content": "The furnaces burn hotter every day.\nSomeone keeps sending us blueprints with no signatures.\nFeels like a trap.\nBut the metal sings."
     },
 
@@ -87,7 +87,7 @@
       "id": "col_dunwich_tome_page",
       "type": "lore_page",
       "title": "DUNWICH BUILDING // TOME FRAGMENT",
-      "poi": "Dunwich Building",
+      "poi": "Grimwick Building",
       "content": "The walls whisper.\nThe floors breathe.\nThe shadows remember."
     },
 
@@ -104,7 +104,7 @@
       "type": "research_log",
       "title": "YUCCA MOUNTAIN // PROTOTYPE LOG",
       "poi": "Yucca Mountain",
-      "content": "Prototype X-01 frame unstable.\nEnergy feedback loop detected.\nRecommend shutdown.\nOverride received: CONTINUE."
+      "content": "Prototype Mk-X frame unstable.\nEnergy feedback loop detected.\nRecommend shutdown.\nOverride received: CONTINUE."
     },
 
     {

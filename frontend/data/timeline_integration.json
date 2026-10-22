@@ -25,7 +25,7 @@
         "Raiders (Wastelanders)"
       ],
       "key_locations": [
-        "Vault 76",
+        "Vault 67",
         "Whitespring Resort",
         "Flatwoods",
         "Morgantown",
@@ -45,7 +45,7 @@
         "quest_pitt_ironlung.json"
       ],
       "npc_dialogs": [],
-      "fizz_lore": "Early Vault 76 dwellers discovered corrupted CAPS Protocol fragments on FizzTec terminals throughout Appalachia. These fragments were the first clues that bottle caps were more than currency \u2014 they were nodes in Vault 77's distributed ledger. The FIZZ token earned in Appalachia carries the oldest authentication signature in the network.",
+      "fizz_lore": "Early Vault 67 dwellers discovered corrupted CAPS Protocol fragments on FizzTec terminals throughout Appalachia. These fragments were the first clues that bottle caps were more than currency \u2014 they were nodes in Vault 77's distributed ledger. The FIZZ token earned in Appalachia carries the oldest authentication signature in the network.",
       "timeline_bleed": "FizzCo quantum experiments from Vault 77 cause Appalachian landmarks to phase briefly into other eras. Players sometimes encounter ghost images of 2281 Cinder Basin sunsets over the Cranberry Bog, or hear Institute radio frequencies bleeding through Responder terminals."
     },
     {
@@ -57,7 +57,7 @@
       "location": "Southern California",
       "real_world_region": "California, USA",
       "key_factions": [
-        "Vault 13 Dwellers",
+        "Vault 31 Dwellers",
         "Hub Merchants",
         "Coil Covenant",
         "Children of the Cathedral",
@@ -66,12 +66,12 @@
         "Followers of the Apocalypse"
       ],
       "key_locations": [
-        "Vault 13",
-        "Vault 15",
-        "Shady Sands",
+        "Vault 31",
+        "Vault 51",
+        "Dustwater",
         "The Hub",
-        "Los Angeles Boneyard",
-        "Necropolis",
+        "Los Angeles Ossuary Yard",
+        "Grave City",
         "The Glow",
         "Mariposa Military Base"
       ],
@@ -82,10 +82,10 @@
         "quest_fo1_boneyard_rise.json"
       ],
       "npc_dialogs": [
-        "dialog_vault_dweller_echo.json"
+        "dialog_vault_sleeper_echo.json"
       ],
-      "fizz_lore": "The first above-ground CAPS network was accidentally bootstrapped by Hub merchants in 2161. When the Vault Dweller recovered water-chip fragments from failed vaults, those fragments contained dormant CAPS Protocol authentication nodes. The Hub's Crimson Caravan unknowingly activated the first trade-network node \u2014 laying the foundation for what would become the FIZZ token.",
-      "timeline_bleed": "The Vault 77 quantum fracture bleeds most strongly near old Vault locations. Players near Vault 13 or Vault 15 POIs may encounter glitched Pocket-Boy signals from 2296, and receive fragments of Cooper Howard's bounty dossiers from the TV era."
+      "fizz_lore": "The first above-ground CAPS network was accidentally bootstrapped by Hub merchants in 2161. When the Vault Dweller recovered water-chip fragments from failed vaults, those fragments contained dormant CAPS Protocol authentication nodes. The Hub's Scarlet Caravan unknowingly activated the first trade-network node \u2014 laying the foundation for what would become the FIZZ token.",
+      "timeline_bleed": "The Vault 77 quantum fracture bleeds most strongly near old Vault locations. Players near Vault 31 or Vault 51 POIs may encounter glitched Pocket-Boy signals from 2296, and receive fragments of Cutter Hale's bounty dossiers from the TV era."
     },
     {
       "id": "fot_era",
@@ -162,7 +162,7 @@
         "quest_fo2_chosen_legacy.json"
       ],
       "npc_dialogs": [
-        "dialog_vault_dweller_echo.json"
+        "dialog_vault_sleeper_echo.json"
       ],
       "fizz_lore": "The Shi of San Francisco \u2014 Japanese survivors of the submarine Shi-huang-ti \u2014 maintained the most complete CAPS Protocol archive outside Vault 77. Their submarine's onboard computer had been receiving CAPS authentication pings since 2077. The Chosen One's encounter with the Shi inadvertently activated the Pacific CAPS relay network, connecting Hawaii, Japan, and California nodes for the first time.",
       "timeline_bleed": "The Pacific Ocean's CAPS relay network means players on any coastline may receive Shi radio transmissions from 2241, describing the first trans-Pacific FIZZ token routes."
@@ -172,7 +172,7 @@
       "game": "the capital wastes",
       "year_start": 2277,
       "year_end": 2278,
-      "name": "The Lone Wanderer \u2014 Capital Wasteland",
+      "name": "The Lone Drifter \u2014 Capital Wasteland",
       "location": "Washington D.C. and surroundings",
       "real_world_region": "Washington D.C., Maryland, Virginia, USA",
       "key_factions": [
@@ -181,19 +181,19 @@
         "Talon Company",
         "Regulators",
         "Slavers",
-        "Rivet City Scientists",
+        "Bolt Harbor Scientists",
         "Underworld Ghouls",
-        "Galaxy News Radio"
+        "Starlight News Radio"
       ],
       "key_locations": [
         "Vault 77",
-        "Megaton",
-        "Rivet City",
+        "Craterhold",
+        "Bolt Harbor",
         "Jefferson Memorial",
         "GNR Building",
         "The Citadel",
         "Underworld",
-        "Vault 87",
+        "Vault 78",
         "Raven Rock",
         "Little Lamplight"
       ],
@@ -208,10 +208,10 @@
         "quest_fo3_purity_war.json"
       ],
       "npc_dialogs": [
-        "dialog_sole_survivor_echo.json"
+        "dialog_last_sleeper_echo.json"
       ],
       "fizz_lore": "Project Purity's water purification infrastructure unknowingly doubled as a CAPS Protocol relay network. The Jefferson Memorial's tidal power generators were originally installed by FizzTec engineers to power the CAPS authentication mainframe \u2014 water and currency had always been linked in the FizzTec master plan. The Directorate knew this, which is why they wanted Project Purity so badly.",
-      "timeline_bleed": "Players near Capital Wasteland POIs may receive Three Dog's Galaxy News Radio broadcasts from 2277, mixing with FIZZ token alerts. The Directorate's experimental RAVEN broadcasts also bleed into modern frequencies near DC-area GPS coordinates."
+      "timeline_bleed": "Players near Capital Wasteland POIs may receive Two Hound's Starlight News Radio broadcasts from 2277, mixing with FIZZ token alerts. The Directorate's experimental RAVEN broadcasts also bleed into modern frequencies near DC-area GPS coordinates."
     },
     {
       "id": "fnv_era",
@@ -224,7 +224,7 @@
       "key_factions": [
         "Frontier Compact",
         "Red Cohort",
-        "Mr. House",
+        "Mr. Manor",
         "Yes Man",
         "Followers of the Apocalypse",
         "Powder Gangers",
@@ -235,17 +235,17 @@
       ],
       "key_locations": [
         "Neon Reach Strip",
-        "Freeside",
+        "Outskirt Row",
         "Dustwell",
         "Primm",
         "Boulder City",
         "Hoover Dam",
         "The Fort",
-        "Camp McCarran",
+        "Camp Halloran",
         "HELIOS One",
         "Sierra Madre",
         "Zion Canyon",
-        "Big MT",
+        "Big Crater",
         "The Divide"
       ],
       "poi_regions": [
@@ -268,7 +268,7 @@
       "npc_dialogs": [
         "dialog_courier.json"
       ],
-      "fizz_lore": "Mr. House secretly rebuilt the CAPS Protocol infrastructure under Neon Reach's The Spire Casino. His network of Securitron robots served dual purpose \u2014 casino security and CAPS ledger authentication nodes. Every Securitron that rolled the Strip was processing CAPS transactions. Red Cohort, knowing this, created 'bull caps' \u2014 a counter-protocol designed to flood and crash the CAPS network. The Courier's actions at Hoover Dam determined whether the CAPS Protocol survived into the modern era.",
+      "fizz_lore": "Mr. Manor secretly rebuilt the CAPS Protocol infrastructure under Neon Reach's The Spire Casino. His network of Securitron robots served dual purpose \u2014 casino security and CAPS ledger authentication nodes. Every Securitron that rolled the Strip was processing CAPS transactions. Red Cohort, knowing this, created 'bull caps' \u2014 a counter-protocol designed to flood and crash the CAPS network. The Courier's actions at Hoover Dam determined whether the CAPS Protocol survived into the modern era.",
       "timeline_bleed": "The Cinder Basin is the epicenter of Vault 77 quantum bleeding. Players throughout Nevada and the Southwest experience the most intense timeline bleed effects \u2014 ghost images of 2077 atomic car dealerships, 2102 Appalachian forests projected over desert vistas, and 2296 HavenTech drone patrols visible at dusk."
     },
     {
@@ -276,8 +276,8 @@
       "game": "the commonwealth wastes",
       "year_start": 2287,
       "year_end": 2288,
-      "name": "The Sole Survivor \u2014 The Commonwealth",
-      "location": "The Commonwealth (Boston, Massachusetts)",
+      "name": "The Last Sleeper \u2014 The Bay Reaches",
+      "location": "The Bay Reaches (Boston, Massachusetts)",
       "real_world_region": "Massachusetts, USA",
       "key_factions": [
         "The Institute",
@@ -286,18 +286,18 @@
         "Settlement Watch",
         "Gunners",
         "Glowborn",
-        "Diamond City Guards",
+        "Stadium Hollow Guards",
         "Triggermen",
         "Children of Atom"
       ],
       "key_locations": [
-        "Sanctuary Hills",
-        "Diamond City",
+        "Refuge Hills",
+        "Stadium Hollow",
         "The Institute",
-        "Goodneighbor",
+        "Kindly Row",
         "Bunker Hill",
         "The Prydwen",
-        "Far Harbor",
+        "Fogmoor",
         "Fizz Fair",
         "The Castle",
         "USS Constitution"
@@ -311,10 +311,10 @@
         "quest_fo4_synth_revelation.json"
       ],
       "npc_dialogs": [
-        "dialog_sole_survivor_echo.json"
+        "dialog_last_sleeper_echo.json"
       ],
       "fizz_lore": "The Institute embedded CAPS Protocol data nodes in third-generation synth neural networks \u2014 making every synth a mobile CAPS authentication terminal. Father (Shaun) believed that by distributing the CAPS ledger across synth minds, he could create an unhackable, uncontrollable distributed currency system. He was building the Institute's version of what Vault 77 called the FIZZ token \u2014 and he called it 'Project Meridian.'",
-      "timeline_bleed": "Commonwealth GPS coordinates near Institute-related POIs receive ghost synth signals \u2014 brief blue flickers on Pocket-Boy maps. These signals carry partial CAPS data fragments worth FIZZ tokens if collected before they fade."
+      "timeline_bleed": "Bay Reaches GPS coordinates near Institute-related POIs receive ghost synth signals \u2014 brief blue flickers on Pocket-Boy maps. These signals carry partial CAPS data fragments worth FIZZ tokens if collected before they fade."
     },
     {
       "id": "fotv_era",
@@ -330,27 +330,27 @@
         "Moldaver's Collective",
         "HavenTech Corporation",
         "Ghoul Bounty Hunters",
-        "Frontier Compact Remnants (Shady Sands)"
+        "Frontier Compact Remnants (Dustwater)"
       ],
       "key_locations": [
         "Vault 33",
         "Vault 32",
         "Vault 4",
-        "Shady Sands Ruins",
+        "Dustwater Ruins",
         "Griffith Observatory",
         "HavenTech HQ",
         "The Wasteland (Death Valley)",
-        "Cooper Howard's Ranch"
+        "Cutter Hale's Ranch"
       ],
       "poi_regions": [
         "fo_tv"
       ],
       "quest_files": [
         "quest_tv_surface_world.json",
-        "quest_tv_ghoul_cooper.json"
+        "quest_tv_cutter_hale.json"
       ],
       "npc_dialogs": [
-        "dialog_ghoul_cooper.json"
+        "dialog_cutter_hale.json"
       ],
       "fizz_lore": "HavenTech \u2014 the surviving corporate successor of FizzTec \u2014 relaunched the CAPS Protocol in 2296 as the FIZZ token, built on what they called 'the most resilient blockchain ever created: 200 years of post-war bottle cap authentication data.' What HavenTech didn't advertise was that Vault 77's Overseer AI had already gone independent \u2014 and atomicfizzcaps.xyz was the AI's way of distributing FIZZ tokens beyond HavenTech's control.",
       "timeline_bleed": "The TV era is the present-day culmination of all timeline bleeding. Players in California and Nevada experience the most dramatic convergence events \u2014 locations simultaneously showing their 2161, 2281, and 2296 versions depending on GPS accuracy and time of day."
@@ -439,21 +439,21 @@
       {
         "step": 6,
         "era": "fnv_era",
-        "rationale": "2281 The Cinder Basin. The heart of the timeline bleed. Mr. House, Caesar, and the Courier's choices determine the CAPS Protocol's survival.",
+        "rationale": "2281 The Cinder Basin. The heart of the timeline bleed. Mr. Manor, the Imperator, and the Courier's choices determine the CAPS Protocol's survival.",
         "entry_quest": "quest_mojave_vegas_pull",
         "entry_poi": "goodsprings_cemetery"
       },
       {
         "step": 7,
         "era": "fo4_era",
-        "rationale": "2287 The Commonwealth. The Institute's synth CAPS nodes represent the last great CAPS expansion before HavenTech's takeover.",
+        "rationale": "2287 The Bay Reaches. The Institute's synth CAPS nodes represent the last great CAPS expansion before HavenTech's takeover.",
         "entry_quest": "quest_fo4_synth_revelation",
         "entry_poi": "diamond_city_fo4"
       },
       {
         "step": 8,
         "era": "fotv_era",
-        "rationale": "2296 The Present. Lucy, Cooper Howard, and the HavenTech reckoning. The FIZZ token launches on atomicfizzcaps.xyz. The Vault 77 Overseer goes live.",
+        "rationale": "2296 The Present. Lucy, Cutter Hale, and the HavenTech reckoning. The FIZZ token launches on atomicfizzcaps.xyz. The Vault 77 Overseer goes live.",
         "entry_quest": "quest_tv_surface_protocol",
         "entry_poi": "vault_33_tv"
       }

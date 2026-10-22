@@ -4,7 +4,7 @@
   "type": "main_quest",
   "difficulty": "legendary",
   "level_required": 1,
-  "description": "Reality itself has shattered. The Cinder Basin exists simultaneously with the Commonwealth, Capital Wasteland, and Appalachia. All eras of the wasteland coexist in impossible harmony. You must discover why - and whether to preserve or destroy this fractured world.",
+  "description": "Reality itself has shattered. The Cinder Basin exists simultaneously with the Bay Reaches, Capital Wasteland, and Appalachia. All eras of the wasteland coexist in impossible harmony. You must discover why - and whether to preserve or destroy this fractured world.",
   
   "lore": {
     "summary": "A mysterious convergence has merged all wasteland timelines into a single reality. Pre-war experiments, the Institute's teleportation tech, and FizzCo's quantum resonance devices have created a temporal nexus centered in the Cinder Basin. Players can now experience quests from 2161 (FO1), 2241 (FO2), 2277 (FO3), 2281 (FO:NV), 2287 (FO4), and 2102-2103 (FO76) all at once.",
@@ -21,7 +21,7 @@
         {
           "id": "obj1_investigate_signals",
           "text": "Investigate temporal anomalies at 3 locations",
-          "locations": ["Helios One", "Commonwealth ruins", "Capital Wasteland relay"]
+          "locations": ["Helios One", "Bay Reaches ruins", "Capital Wasteland relay"]
         },
         {
           "id": "obj2_meet_harlan",
@@ -51,7 +51,7 @@
             "President Kimball (Frontier Compact)",
             "Father (Institute)",
             "Colonel Autumn (Directorate)",
-            "Caesar's Legate"
+            "the Imperator's Legate"
           ]
         },
         {
@@ -145,7 +145,7 @@
         },
         "ending_amplify": {
           "name": "Chaos Unbound",
-          "description": "You shattered reality even further. Now timelines bleed into each other constantly. Radtalons from FO1 appear in FO4's Commonwealth. Pre-war America flickers in and out of existence. Total beautiful chaos.",
+          "description": "You shattered reality even further. Now timelines bleed into each other constantly. Radtalons from FO1 appear in FO4's Bay Reaches. Pre-war America flickers in and out of existence. Total beautiful chaos.",
           "gameplay_impact": "Random timeline events trigger constantly, maximum content chaos",
           "xp": 7000,
           "title": "Reality Breaker",

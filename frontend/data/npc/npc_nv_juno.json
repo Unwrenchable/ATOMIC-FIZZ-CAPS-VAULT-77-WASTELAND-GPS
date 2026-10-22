@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_juno",
   "name": "Juno the Prophet",
-  "region": "Freeside",
+  "region": "Outskirt Row",
   "type": "Street Prophet",
   "dialog": [
     "Vegas is the center. Everything bends toward it.",

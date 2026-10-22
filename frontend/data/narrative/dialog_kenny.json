@@ -93,7 +93,7 @@
         "!flag:sq_kenny_escort_taken"
       ],
       "video_speech": "Mmpf-mmrph mph mfgh mrrph! Mmrph! Mfph?",
-      "text": "Mmpf-mmrph mph mfgh mrrph!<br><br>(He unfolds a piece of paper. It's a hand-drawn map — surprisingly detailed — showing a route from here to Neon Reach, via Boulder City and Novac. He points to a spot marked with a small orange hood drawing.)<br><br>Mmrph! Mph mffm mmpf mrrph!<br><br>(He mimes walking, then falling, then getting back up, then falling again. Then he points at you with a questioning look. Will you escort him?)<br><br>Mfph?",
+      "text": "Mmpf-mmrph mph mfgh mrrph!<br><br>(He unfolds a piece of paper. It's a hand-drawn map — surprisingly detailed — showing a route from here to Neon Reach, via Boulder City and Saurville. He points to a spot marked with a small orange hood drawing.)<br><br>Mmrph! Mph mffm mmpf mrrph!<br><br>(He mimes walking, then falling, then getting back up, then falling again. Then he points at you with a questioning look. Will you escort him?)<br><br>Mfph?",
       "offers_quest": "sq_kenny_escort",
       "set_flags": [
         "sq_kenny_escort_taken"

@@ -148,13 +148,13 @@
     },
     {
       "id": "enc_freeside_market_whisper",
-      "poi": "Freeside Market",
+      "poi": "Outskirt Row Market",
       "trigger": "first_visit",
       "dialog": "A merchant whispers: \"Someone’s buying up pre-war tech. Paying in caps and silence.\""
     },
     {
       "id": "enc_freeside_market_deal",
-      "poi": "Freeside Market",
+      "poi": "Outskirt Row Market",
       "trigger": "repeat_visit",
       "dialog": "The merchant offers a deal: a rare Pocket-Boy mod for 200 CAPS."
     }

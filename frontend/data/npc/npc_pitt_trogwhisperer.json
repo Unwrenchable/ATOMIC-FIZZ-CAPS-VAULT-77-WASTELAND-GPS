@@ -1,7 +1,7 @@
 {
   "id": "npc_pitt_trogwhisperer",
   "name": "Trog Whisperer",
-  "region": "The Pitt",
+  "region": "The Scrapforge",
   "type": "Mutant",
   "dialog": [
     "They listen to me. Sometimes.",

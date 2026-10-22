@@ -20,12 +20,12 @@
     "npc_ncr_general_monroe"
   ],
 
-  "description": "The Frontier Compact's expansion into timeline-displaced Commonwealth territories threatens the Settlement Watch's grassroots democracy. Two visions of the future clash.",
+  "description": "The Frontier Compact's expansion into timeline-displaced Bay Reaches territories threatens the Settlement Watch's grassroots democracy. Two visions of the future clash.",
 
   "objectives": [
     {
       "id": "witness_collision",
-      "desc": "Witness the Frontier Compact's arrival in Commonwealth territory.",
+      "desc": "Witness the Frontier Compact's arrival in Bay Reaches territory.",
       "event": "timeline_merge_commonwealth"
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "id": "final_decision",
-      "desc": "Choose which form of democracy will rule the Commonwealth.",
+      "desc": "Choose which form of democracy will rule the Bay Reaches.",
       "choices": [
         "support_ncr",
         "support_minutemen",
@@ -60,13 +60,13 @@
     { "id": 1, "objective": "meet_factions", "desc": "Two democracies, one territory." },
     { "id": 2, "objective": "attend_summit", "desc": "Diplomacy or war?" },
     { "id": 3, "objective": "investigate_sabotage", "desc": "Someone wants war." },
-    { "id": 4, "objective": "final_decision", "desc": "Shape the Commonwealth's future." },
+    { "id": 4, "objective": "final_decision", "desc": "Shape the Bay Reaches's future." },
     { "id": 5, "objective": "complete", "desc": "Democracy wins... or loses." }
   ],
 
   "faction_positions": {
     "ncr": {
-      "argument": "We have experience governing large territories. The Commonwealth needs structure, not militias.",
+      "argument": "We have experience governing large territories. The Bay Reaches needs structure, not militias.",
       "offer": "Protection, trade networks, legal system, taxes",
       "threat": "Annexation by force if necessary"
     },
@@ -79,13 +79,13 @@
 
   "choices": {
     "support_ncr": {
-      "desc": "Support Frontier Compact annexation of the Commonwealth.",
+      "desc": "Support Frontier Compact annexation of the Bay Reaches.",
       "requirements": { "reputation_ncr": 50 },
       "consequences": {
         "faction_rep": { "ncr": 150, "minutemen": -150, "settlers": -80 },
         "rewards": { "xp": 1200, "caps": 1000, "items": ["ncr_ambassador_badge", "ranger_armor_mk2"] },
         "regional_change": "commonwealth_becomes_ncr_territory",
-        "outcome": "Frontier Compact flag flies over Commonwealth. Order imposed. Settlement Watch disband. Some become insurgents. Progress with a heavy hand."
+        "outcome": "Frontier Compact flag flies over Bay Reaches. Order imposed. Settlement Watch disband. Some become insurgents. Progress with a heavy hand."
       }
     },
     "support_minutemen": {
@@ -95,7 +95,7 @@
         "faction_rep": { "minutemen": 150, "ncr": -150, "settlers": 100 },
         "rewards": { "xp": 1200, "caps": 800, "items": ["general_rank", "minutemen_legendary_weapon"] },
         "regional_change": "commonwealth_independent",
-        "outcome": "Settlement Watch triumph. Commonwealth stays free. Frontier Compact retreats. But without structure, challenges remain."
+        "outcome": "Settlement Watch triumph. Bay Reaches stays free. Frontier Compact retreats. But without structure, challenges remain."
       }
     },
     "broker_compromise": {
@@ -106,7 +106,7 @@
         "rewards": { "xp": 1500, "caps": 1200, "items": ["peacemaker_medal", "federation_charter", "dual_citizenship"] },
         "regional_change": "commonwealth_federation",
         "unlock": ["federation_government", "hybrid_military"],
-        "outcome": "Historic compromise. Commonwealth Federation formed. Local autonomy under Frontier Compact protection. Both sides win and lose."
+        "outcome": "Historic compromise. Bay Reaches Federation formed. Local autonomy under Frontier Compact protection. Both sides win and lose."
       }
     },
     "chaos_option": {
@@ -130,7 +130,7 @@
     "affected": ["Frontier Compact", "Settlement Watch", "Settlers", "Raiders", "Brotherhood"]
   },
 
-  "regional_impact": "Major - determines government structure of timeline-merged Commonwealth",
+  "regional_impact": "Major - determines government structure of timeline-merged Bay Reaches",
 
   "next_quests": [
     "quest_federation_crisis",

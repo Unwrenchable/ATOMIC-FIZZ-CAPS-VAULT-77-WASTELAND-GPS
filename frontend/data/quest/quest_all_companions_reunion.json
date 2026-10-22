@@ -6,33 +6,33 @@
   "level_required": 5,
   "tone": "Light-hearted fan service quest",
 
-  "premise": "In the fractured timeline, ALL wasteland companions from every game exist simultaneously. Dogmeat (all versions), Boone, Veronica, Nick Valentine, Paladin Danse, Hancock, Piper, MacCready, Cait, Curie, Deacon, Preston Garvey, and dozens more. They've decided to throw a party. You're invited.",
+  "premise": "In the fractured timeline, ALL wasteland companions from every game exist simultaneously. Scraps (all versions), Boone, Veronica, Rick Vallance, Paladin Varr, Hancock, Piper, MacCready, Cait, Curie, Deacon, Prescott Garrow, and dozens more. They've decided to throw a party. You're invited.",
 
-  "description": "The most ridiculous quest in the game. Every beloved companion character from FO1, FO2, FO3, FO:NV, FO4, and FO76 gathering for a wasteland mixer. Expect chaos, romance subplots, philosophical debates, drinking contests, and four different Dogmeats playing together.",
+  "description": "The most ridiculous quest in the game. Every beloved companion character from FO1, FO2, FO3, FO:NV, FO4, and FO76 gathering for a wasteland mixer. Expect chaos, romance subplots, philosophical debates, drinking contests, and four different Scrapss playing together.",
 
   "stages": [
     {
       "id": "stage1_the_invitation",
       "name": "You're Invited",
-      "description": "Nick Valentine (FO4 synth detective) and Veronica (FO:NV Brotherhood scribe) have organized a companion reunion. They're inviting every companion who ever traveled with a wasteland hero.",
+      "description": "Rick Vallance (FO4 synth detective) and Veronica (FO:NV Brotherhood scribe) have organized a companion reunion. They're inviting every companion who ever traveled with a wasteland hero.",
       "guest_list": [
-        "Dogmeat x4 (FO1, FO3, FO4, FO76 versions)",
+        "Scraps x4 (FO1, FO3, FO4, FO76 versions)",
         "Marcus (FO2/FO:NV super mutant)",
         "Fawkes (FO3 super mutant)",
         "Strong (FO4 super mutant)",
         "Boone (FO:NV sniper)",
         "Arcade Gannon (FO:NV Directorate doctor)",
         "Cass (FO:NV whiskey-soaked caravan trader)",
-        "Nick Valentine (FO4 synth detective)",
+        "Rick Vallance (FO4 synth detective)",
         "Hancock (FO4 ghoul mayor)",
         "Piper (FO4 reporter)",
         "Curie (FO4 robot turned synth)",
-        "Paladin Danse (FO4 Brotherhood, secretly synth)",
+        "Paladin Varr (FO4 Brotherhood, secretly synth)",
         "MacCready (FO3 Little Lamplight mayor, FO4 merc)",
-        "Preston Garvey (FO4 Settlement Watch)",
+        "Prescott Garrow (FO4 Settlement Watch)",
         "Deacon (FO4 Railroad spy)",
         "Cait (FO4 cage fighter)",
-        "Codsworth (FO4 robot butler)",
+        "Butlerbot (FO4 robot butler)",
         "Many more..."
       ],
       "objectives": [
@@ -48,15 +48,15 @@
       "events": [
         {
           "event": "MacCready Recognition",
-          "description": "Lone Wanderer's MacCready (FO3, age 10) meets Sole Survivor's MacCready (FO4, age 22). Time is weird. They're both confused."
+          "description": "Lone Drifter's MacCready (FO3, age 10) meets Last Sleeper's MacCready (FO4, age 22). Time is weird. They're both confused."
         },
         {
-          "event": "Dogmeat Meetup",
-          "description": "Four Dogmeats playing poker. They're all good dogs."
+          "event": "Scraps Meetup",
+          "description": "Four Scrapss playing poker. They're all good dogs."
         },
         {
           "event": "Synth Solidarity",
-          "description": "Nick Valentine, Curie, and Danse discuss synth rights while Arcade Gannon (anti-Directorate) awkwardly listens."
+          "description": "Rick Vallance, Curie, and Danse discuss synth rights while Arcade Gannon (anti-Directorate) awkwardly listens."
         },
         {
           "event": "Drinking Contest",
@@ -72,7 +72,7 @@
         },
         {
           "event": "Tech Talk",
-          "description": "Veronica (FO:NV) geeks out with Curie (FO4) about technology while Codsworth serves tea."
+          "description": "Veronica (FO:NV) geeks out with Curie (FO4) about technology while Butlerbot serves tea."
         },
         {
           "event": "The Newspaper",
@@ -84,10 +84,10 @@
         }
       ],
       "mini_quests": [
-        {"name": "Play poker with the Dogmeats"},
-        {"name": "Wing-man for Preston Garvey hitting on Piper"},
+        {"name": "Play poker with the Scrapss"},
+        {"name": "Wing-man for Prescott Garrow hitting on Piper"},
         {"name": "Help Deacon tell outrageous lies to everyone"},
-        {"name": "Get Nick Valentine to dance (impossible, but funny)"},
+        {"name": "Get Rick Vallance to dance (impossible, but funny)"},
         {"name": "Stop Hancock from convincing everyone to try chems"}
       ]
     },

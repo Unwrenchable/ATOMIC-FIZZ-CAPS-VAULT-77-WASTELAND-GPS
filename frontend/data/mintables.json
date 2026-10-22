@@ -67,9 +67,9 @@
   {
     "id": "mcCarran_trooper_armor",
     "slot": "chest",
-    "name": "McCarran Trooper Armor",
+    "name": "Halloran Trooper Armor",
     "rarity": "rare",
-    "spawnPOI": "McCarran Airport",
+    "spawnPOI": "Halloran Airport",
     "levelRequirement": 12,
     "type": "armor",
     "priceCAPS": 450,
@@ -108,9 +108,9 @@
   {
     "id": "megaton_security_armor",
     "slot": "chest",
-    "name": "Megaton Security Armor",
+    "name": "Craterhold Security Armor",
     "rarity": "rare",
-    "spawnPOI": "Megaton",
+    "spawnPOI": "Craterhold",
     "levelRequirement": 8,
     "type": "armor",
     "priceCAPS": 380,
@@ -149,9 +149,9 @@
   {
     "id": "novac_patrol_vest",
     "slot": "chest",
-    "name": "Novac Patrol Vest",
+    "name": "Saurville Patrol Vest",
     "rarity": "rare",
-    "spawnPOI": "Novac Motel",
+    "spawnPOI": "Saurville Motel",
     "levelRequirement": 5,
     "type": "armor",
     "priceCAPS": 320,
@@ -188,7 +188,7 @@
     "slot": "chest",
     "name": "Reinforced Vault Suit",
     "rarity": "rare",
-    "spawnPOI": "Vault 13",
+    "spawnPOI": "Vault 31",
     "levelRequirement": 15,
     "type": "armor",
     "priceCAPS": 420,
@@ -425,7 +425,7 @@
     "id": "scout_carbine",
     "name": "Scout Carbine",
     "rarity": "rare",
-    "spawnPOI": "Camp McCarran",
+    "spawnPOI": "Camp Halloran",
     "levelRequirement": 14,
     "type": "weapon",
     "priceCAPS": 460,
@@ -482,7 +482,7 @@
     "id": "service_rifle",
     "name": "Service Rifle",
     "rarity": "rare",
-    "spawnPOI": "Camp McCarran",
+    "spawnPOI": "Camp Halloran",
     "levelRequirement": 12,
     "type": "weapon",
     "priceCAPS": 440,
@@ -1059,7 +1059,7 @@
     "id": "trail_carbine",
     "name": "Trail Carbine",
     "rarity": "epic",
-    "spawnPOI": "Novac Motel",
+    "spawnPOI": "Saurville Motel",
     "levelRequirement": 21,
     "type": "weapon",
     "priceCAPS": 1550,
@@ -1255,7 +1255,7 @@
     "id": "ancient_vault_tablet",
     "name": "Ancient Vault Tablet",
     "rarity": "legendary",
-    "spawnPOI": "Vault 13",
+    "spawnPOI": "Vault 31",
     "levelRequirement": 32,
     "type": "lore",
     "priceCAPS": 1400,
@@ -1771,7 +1771,7 @@
     "id": "vault_poster",
     "name": "FizzTec Safety Poster",
     "rarity": "rare",
-    "spawnPOI": "Vault 13",
+    "spawnPOI": "Vault 31",
     "levelRequirement": 15,
     "type": "lore",
     "priceCAPS": 250,
@@ -1856,7 +1856,7 @@
     "id": "ancient_vault_tablet",
     "name": "Ancient Vault Tablet",
     "rarity": "legendary",
-    "spawnPOI": "Vault 13",
+    "spawnPOI": "Vault 31",
     "levelRequirement": 32,
     "type": "lore",
     "priceCAPS": 1400,
@@ -2029,7 +2029,7 @@
     "id": "cooked_gecko_meat",
     "name": "Cooked Gecko Meat",
     "rarity": "common",
-    "spawnPOI": "Freeside Market",
+    "spawnPOI": "Outskirt Row Market",
     "levelRequirement": 2,
     "type": "consumable",
     "priceCAPS": 25
@@ -2060,7 +2060,7 @@
     "slot": "head",
     "name": "Cowboy Hat",
     "rarity": "common",
-    "spawnPOI": "Shady Sands",
+    "spawnPOI": "Dustwater",
     "levelRequirement": 2,
     "type": "armor",
     "priceCAPS": 35
@@ -2068,9 +2068,9 @@
   {
     "id": "vault_111_jumpsuit",
     "slot": "chest",
-    "name": "Vault 111 Jumpsuit",
+    "name": "Vault 47 Jumpsuit",
     "rarity": "common",
-    "spawnPOI": "Vault 111",
+    "spawnPOI": "Vault 47",
     "levelRequirement": 1,
     "type": "armor",
     "priceCAPS": 40
@@ -2139,7 +2139,7 @@
     "slot": "chest",
     "name": "Scavenger Vest",
     "rarity": "common",
-    "spawnPOI": "Shady Sands",
+    "spawnPOI": "Dustwater",
     "levelRequirement": 2,
     "type": "armor",
     "priceCAPS": 30
@@ -2149,7 +2149,7 @@
     "slot": "chest",
     "name": "Tattered Cloth Robe",
     "rarity": "common",
-    "spawnPOI": "Vault 111",
+    "spawnPOI": "Vault 47",
     "levelRequirement": 1,
     "type": "armor",
     "priceCAPS": 25
@@ -2204,7 +2204,7 @@
     "id": "broken_toy",
     "name": "Broken Toy Car",
     "rarity": "common",
-    "spawnPOI": "Freeside Market",
+    "spawnPOI": "Outskirt Row Market",
     "levelRequirement": 2,
     "type": "junk",
     "priceCAPS": 15
@@ -2213,7 +2213,7 @@
     "id": "old_magazine",
     "name": "Old Survivalist Magazine",
     "rarity": "common",
-    "spawnPOI": "Vault 111",
+    "spawnPOI": "Vault 47",
     "levelRequirement": 1,
     "type": "lore",
     "priceCAPS": 20
@@ -2222,7 +2222,7 @@
     "id": "iguana_bits",
     "name": "Iguana Bits",
     "rarity": "common",
-    "spawnPOI": "Freeside Market",
+    "spawnPOI": "Outskirt Row Market",
     "levelRequirement": 2,
     "type": "consumable",
     "priceCAPS": 18
@@ -2231,7 +2231,7 @@
     "id": "snack_cakes",
     "name": "Fancy Snack Cakes",
     "rarity": "common",
-    "spawnPOI": "Diamond City",
+    "spawnPOI": "Stadium Hollow",
     "levelRequirement": 15,
     "type": "consumable",
     "priceCAPS": 35
@@ -2250,7 +2250,7 @@
     "slot": "legs",
     "name": "Cowboy Boots",
     "rarity": "common",
-    "spawnPOI": "Shady Sands",
+    "spawnPOI": "Dustwater",
     "levelRequirement": 2,
     "type": "armor",
     "priceCAPS": 40
@@ -2287,7 +2287,7 @@
     "slot": "arms",
     "name": "Cloth Gloves",
     "rarity": "common",
-    "spawnPOI": "Vault 111",
+    "spawnPOI": "Vault 47",
     "levelRequirement": 1,
     "type": "armor",
     "priceCAPS": 20
@@ -2305,7 +2305,7 @@
     "id": "stimpak",
     "name": "FizzPak",
     "rarity": "rare",
-    "spawnPOI": "Novac Motel",
+    "spawnPOI": "Saurville Motel",
     "levelRequirement": 5,
     "type": "consumable",
     "priceCAPS": 180
@@ -2323,7 +2323,7 @@
     "id": "shotgun",
     "name": "12-Gauge Shotgun",
     "rarity": "rare",
-    "spawnPOI": "Megaton",
+    "spawnPOI": "Craterhold",
     "levelRequirement": 8,
     "type": "weapon",
     "priceCAPS": 450,
@@ -2345,7 +2345,7 @@
     "slot": "chest",
     "name": "Metal Armor",
     "rarity": "rare",
-    "spawnPOI": "Vault 19",
+    "spawnPOI": "Vault 29",
     "levelRequirement": 18,
     "type": "armor",
     "priceCAPS": 520
@@ -2354,7 +2354,7 @@
     "id": "doctor_bag",
     "name": "Doctor\u2019s Bag",
     "rarity": "rare",
-    "spawnPOI": "Megaton",
+    "spawnPOI": "Craterhold",
     "levelRequirement": 8,
     "type": "consumable",
     "priceCAPS": 260
@@ -2363,7 +2363,7 @@
     "id": "mutfruit",
     "name": "Mutfruit",
     "rarity": "rare",
-    "spawnPOI": "Shady Sands",
+    "spawnPOI": "Dustwater",
     "levelRequirement": 8,
     "type": "consumable",
     "priceCAPS": 120
@@ -2402,9 +2402,9 @@
   {
     "id": "vault3_jumpsuit",
     "slot": "chest",
-    "name": "Vault 3 Jumpsuit",
+    "name": "Vault 9 Jumpsuit",
     "rarity": "rare",
-    "spawnPOI": "Vault 3",
+    "spawnPOI": "Vault 9",
     "levelRequirement": 15,
     "type": "armor",
     "priceCAPS": 380
@@ -2412,9 +2412,9 @@
   {
     "id": "vault19_jumpsuit",
     "slot": "chest",
-    "name": "Vault 19 Jumpsuit",
+    "name": "Vault 29 Jumpsuit",
     "rarity": "rare",
-    "spawnPOI": "Vault 19",
+    "spawnPOI": "Vault 29",
     "levelRequirement": 18,
     "type": "armor",
     "priceCAPS": 420
@@ -2422,9 +2422,9 @@
   {
     "id": "farharbor_coat",
     "slot": "chest",
-    "name": "Far Harbor Raincoat",
+    "name": "Fogmoor Raincoat",
     "rarity": "rare",
-    "spawnPOI": "Far Harbor",
+    "spawnPOI": "Fogmoor",
     "levelRequirement": 33,
     "type": "armor",
     "priceCAPS": 650
@@ -2440,9 +2440,9 @@
   },
   {
     "id": "diamond_city_ticket",
-    "name": "Diamond City Baseball Ticket",
+    "name": "Stadium Hollow Baseball Ticket",
     "rarity": "rare",
-    "spawnPOI": "Diamond City",
+    "spawnPOI": "Stadium Hollow",
     "levelRequirement": 15,
     "type": "lore",
     "priceCAPS": 280
@@ -2478,7 +2478,7 @@
     "id": "vault_pamphlet",
     "name": "FizzTec Pamphlet",
     "rarity": "rare",
-    "spawnPOI": "Vault 13",
+    "spawnPOI": "Vault 31",
     "levelRequirement": 15,
     "type": "lore",
     "priceCAPS": 260
@@ -2507,9 +2507,9 @@
   {
     "id": "t51_power_armor",
     "slot": "chest", "covers": ["arms", "legs"],
-    "name": "T-51 Reactor Harness",
+    "name": "Mk-5 Reactor Harness",
     "rarity": "epic",
-    "spawnPOI": "Vault 34",
+    "spawnPOI": "Vault 43",
     "levelRequirement": 20,
     "type": "armor",
     "priceCAPS": 3500,
@@ -2560,7 +2560,7 @@
     "id": "plasma_rifle",
     "name": "Plasma Rifle",
     "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
+    "spawnPOI": "SkyRocket Co. Test Site",
     "levelRequirement": 18,
     "type": "weapon",
     "priceCAPS": 2400
@@ -2570,7 +2570,7 @@
     "slot": "chest",
     "name": "Elite Riot Gear",
     "rarity": "epic",
-    "spawnPOI": "Vault 22",
+    "spawnPOI": "Vault 82",
     "levelRequirement": 32,
     "type": "armor",
     "priceCAPS": 3200
@@ -2579,7 +2579,7 @@
     "id": "flamer",
     "name": "Flamer",
     "rarity": "epic",
-    "spawnPOI": "Ultra-Luxe Casino",
+    "spawnPOI": "Velvet Luxe Casino",
     "levelRequirement": 20,
     "type": "weapon",
     "priceCAPS": 2300
@@ -2588,7 +2588,7 @@
     "id": "chainsaw",
     "name": "Chainsaw",
     "rarity": "epic",
-    "spawnPOI": "Gomorrah Casino",
+    "spawnPOI": "Sodom Lounge Casino",
     "levelRequirement": 22,
     "type": "weapon",
     "priceCAPS": 2300
@@ -2607,7 +2607,7 @@
     "slot": "chest",
     "name": "Hazmat Suit",
     "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
+    "spawnPOI": "SkyRocket Co. Test Site",
     "levelRequirement": 18,
     "type": "armor",
     "priceCAPS": 2000
@@ -2627,7 +2627,7 @@
     "slot": "accessory",
     "name": "Riot Shield",
     "rarity": "epic",
-    "spawnPOI": "Vault 22",
+    "spawnPOI": "Vault 82",
     "levelRequirement": 20,
     "type": "armor",
     "priceCAPS": 2100
@@ -2653,9 +2653,9 @@
   {
     "id": "diamondcity_baseball_armor",
     "slot": "chest",
-    "name": "Diamond City Baseball Armor",
+    "name": "Stadium Hollow Baseball Armor",
     "rarity": "epic",
-    "spawnPOI": "Diamond City",
+    "spawnPOI": "Stadium Hollow",
     "levelRequirement": 15,
     "type": "armor",
     "priceCAPS": 2300
@@ -2664,7 +2664,7 @@
     "id": "experiment_log",
     "name": "Vault Experiment Log",
     "rarity": "epic",
-    "spawnPOI": "Vault 22",
+    "spawnPOI": "Vault 82",
     "levelRequirement": 32,
     "type": "lore",
     "priceCAPS": 1500
@@ -2683,7 +2683,7 @@
     "slot": "head",
     "name": "Riot Helmet",
     "rarity": "epic",
-    "spawnPOI": "Vault 22",
+    "spawnPOI": "Vault 82",
     "levelRequirement": 20,
     "type": "armor",
     "priceCAPS": 2000
@@ -2702,7 +2702,7 @@
     "slot": "chest",
     "name": "Reinforced Metal Armor",
     "rarity": "epic",
-    "spawnPOI": "Vault 19",
+    "spawnPOI": "Vault 29",
     "levelRequirement": 25,
     "type": "armor",
     "priceCAPS": 2600
@@ -2711,7 +2711,7 @@
     "id": "prototype_shotgun",
     "name": "Prototype Shotgun",
     "rarity": "epic",
-    "spawnPOI": "Megaton",
+    "spawnPOI": "Craterhold",
     "levelRequirement": 20,
     "type": "weapon",
     "priceCAPS": 2500
@@ -2721,7 +2721,7 @@
     "slot": "arms",
     "name": "Riot Gloves",
     "rarity": "epic",
-    "spawnPOI": "Vault 22",
+    "spawnPOI": "Vault 82",
     "levelRequirement": 20,
     "type": "armor",
     "priceCAPS": 1900
@@ -2730,7 +2730,7 @@
     "id": "prototype_plasma_rifle",
     "name": "Prototype Plasma Rifle",
     "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
+    "spawnPOI": "SkyRocket Co. Test Site",
     "levelRequirement": 22,
     "type": "weapon",
     "priceCAPS": 2700
@@ -2740,7 +2740,7 @@
     "slot": "legs",
     "name": "Riot Boots",
     "rarity": "epic",
-    "spawnPOI": "Vault 22",
+    "spawnPOI": "Vault 82",
     "levelRequirement": 20,
     "type": "armor",
     "priceCAPS": 1900
@@ -2759,7 +2759,7 @@
     "slot": "arms",
     "name": "Hazmat Gloves",
     "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
+    "spawnPOI": "SkyRocket Co. Test Site",
     "levelRequirement": 18,
     "type": "armor",
     "priceCAPS": 1800
@@ -2769,7 +2769,7 @@
     "slot": "legs",
     "name": "Hazmat Boots",
     "rarity": "epic",
-    "spawnPOI": "REPCONN Test Site",
+    "spawnPOI": "SkyRocket Co. Test Site",
     "levelRequirement": 18,
     "type": "armor",
     "priceCAPS": 1800
@@ -2800,7 +2800,7 @@
     "slot": "head",
     "name": "Riot Mask",
     "rarity": "epic",
-    "spawnPOI": "Vault 22",
+    "spawnPOI": "Vault 82",
     "levelRequirement": 20,
     "type": "armor",
     "priceCAPS": 1900
@@ -2809,7 +2809,7 @@
     "id": "alien_blaster",
     "name": "Alien Blaster",
     "rarity": "legendary",
-    "spawnPOI": "Mothership Zeta",
+    "spawnPOI": "Starship Omega",
     "levelRequirement": 99,
     "type": "weapon",
     "priceCAPS": 18000,
@@ -2868,7 +2868,7 @@
   {
     "id": "prototype_x01",
     "slot": "chest", "covers": ["arms", "legs"],
-    "name": "Prototype X-01 Reactor Harness",
+    "name": "Prototype Mk-X Reactor Harness",
     "rarity": "legendary",
     "spawnPOI": "Yucca Mountain",
     "levelRequirement": 50,
@@ -2969,7 +2969,7 @@
     "id": "vault_tech_experiment",
     "name": "FizzTec Experimental Device",
     "rarity": "legendary",
-    "spawnPOI": "Vault 87",
+    "spawnPOI": "Vault 78",
     "levelRequirement": 30,
     "type": "artifact",
     "priceCAPS": 15000
@@ -3026,9 +3026,9 @@
   {
     "id": "dunwich_mask",
     "slot": "head",
-    "name": "Dunwich Mask of Madness",
+    "name": "Grimwick Mask of Madness",
     "rarity": "legendary",
-    "spawnPOI": "Dunwich Building",
+    "spawnPOI": "Grimwick Building",
     "levelRequirement": 40,
     "type": "armor",
     "priceCAPS": 17000
@@ -3036,9 +3036,9 @@
   {
     "id": "pitt_forge_armor",
     "slot": "chest",
-    "name": "Pitt Forgemaster Armor",
+    "name": "Scrapforge Forgemaster Armor",
     "rarity": "legendary",
-    "spawnPOI": "The Pitt",
+    "spawnPOI": "The Scrapforge",
     "levelRequirement": 40,
     "type": "armor",
     "priceCAPS": 17000
@@ -3047,7 +3047,7 @@
     "id": "pitt_scrap",
     "name": "Forged Scrap Ingot",
     "rarity": "legendary",
-    "spawnPOI": "The Pitt",
+    "spawnPOI": "The Scrapforge",
     "levelRequirement": 40,
     "type": "artifact",
     "priceCAPS": 15000
@@ -3072,9 +3072,9 @@
   },
   {
     "id": "dunwich_tome",
-    "name": "Dunwich Cult Tome",
+    "name": "Grimwick Cult Tome",
     "rarity": "legendary",
-    "spawnPOI": "Dunwich Building",
+    "spawnPOI": "Grimwick Building",
     "levelRequirement": 40,
     "type": "lore",
     "priceCAPS": 15000
@@ -3127,7 +3127,7 @@
     "id": "vault_tech_core",
     "name": "FizzTec Core Prototype",
     "rarity": "legendary",
-    "spawnPOI": "Vault 87",
+    "spawnPOI": "Vault 78",
     "levelRequirement": 30,
     "type": "artifact",
     "priceCAPS": 15500

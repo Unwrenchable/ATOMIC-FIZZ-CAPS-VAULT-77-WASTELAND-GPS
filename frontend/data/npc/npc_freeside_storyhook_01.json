@@ -4,7 +4,7 @@
   "archetype": "vegas_outskirts_local",
   "dialogPool": [
     "My daughter vanished near the old clinic.",
-    "People disappear in Freeside. Please… help me."
+    "People disappear in Outskirt Row. Please… help me."
   ],
   "spawnPool": ["freeside_north"],
   "uniquePerWorld": true

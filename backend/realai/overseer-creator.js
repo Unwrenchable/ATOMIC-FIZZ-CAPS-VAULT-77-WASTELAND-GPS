@@ -222,7 +222,7 @@ function resolveFaction(seedText, profileFaction, archetype) {
       followers: 'Followers of the Apocalypse',
       railroad: 'Railroad',
       ncr: 'Frontier Compact',
-      legion: 'Caesar\'s Legion',
+      legion: 'the Imperator\'s Legion',
       raider: 'Independent',
       atom: 'Children of Atom',
       vault: 'Vault Remnant'
