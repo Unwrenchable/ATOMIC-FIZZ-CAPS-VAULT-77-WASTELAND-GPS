@@ -14,19 +14,19 @@ metadata:
 Avatars are a huge part of the identity and "real AI" feel of the game (Pocket-Boy wrist UI showing living NPCs).
 
 ## Main Workflows
-- Direct Grok + HF: `grok-avatars.js`, `grok-only-avatars.js`, `integrate-grok-avatars.sh`, `enhance-avatar-assets.js`, `validate-avatars.sh`.
+- Direct Grok + HF: `legacy/avatar-pipeline/grok-avatars.js`, `legacy/avatar-pipeline/grok-only-avatars.js`, `legacy/avatar-pipeline/integrate-grok-avatars.sh`, `enhance-avatar-assets.js`, `legacy/avatar-pipeline/validate-avatars.sh`.
 - Via RealAI provider: `POST /v1/characters` (style fallout-meme or solana-game) from the sibling realai UI or scripts. See `realai:gen:*` and CANONICAL_GENERATOR_WORKFLOW.
 - Video: `scripts/test_video_generation.js`, `/api/npc/video/generate`, prebake scripts.
-- Post-process + integrate: `integrate-avatars.sh`, copy into `frontend/assets/`, `frontend/img/`, data JSONs, map markers.
+- Post-process + integrate: `legacy/avatar-pipeline/integrate-avatars.sh`, copy into `frontend/assets/`, `frontend/img/`, data JSONs, map markers.
 
 ## Guides (read before starting)
-- `GROK_AVATAR_GUIDE.md`
-- `GROK_ONLY_AVATAR_SYSTEM.md`
-- `AI_AVATAR_GENERATION_GUIDE.md`
-- `AVATAR_GENERATION_WORKFLOW.md`
-- `AVATAR_SYSTEM_README.md`
+- `legacy/avatar-pipeline/GROK_AVATAR_GUIDE.md`
+- `legacy/avatar-pipeline/GROK_ONLY_AVATAR_SYSTEM.md`
+- `legacy/avatar-pipeline/AI_AVATAR_GENERATION_GUIDE.md`
+- `legacy/avatar-pipeline/AVATAR_GENERATION_WORKFLOW.md`
+- `legacy/avatar-pipeline/AVATAR_SYSTEM_README.md`
 - `frontend/CHARACTER_ASSETS_QUICKSTART.md` etc. in docs/features/
-- `validate-avatars.sh` and `integrate-avatars.sh` for the mechanical steps.
+- `legacy/avatar-pipeline/validate-avatars.sh` and `legacy/avatar-pipeline/integrate-avatars.sh` for the mechanical steps.
 
 ## Recommended Steps
 1. Decide source: prefer RealAI structured characters when possible (consistent with quests/lore), fall back to direct Grok Imagine for pure visuals or when volume/speed matters.

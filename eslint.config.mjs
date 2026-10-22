@@ -32,7 +32,7 @@ export default [
       "generate_sidequest_npcs.js",
       "generate_world.js",
       "integrate_world.js",
-      "verify-hf-api-usage.js",
+      "legacy/avatar-pipeline/verify-hf-api-usage.js",
       "scripts/**",
       "systems/**",
       "workers/**",

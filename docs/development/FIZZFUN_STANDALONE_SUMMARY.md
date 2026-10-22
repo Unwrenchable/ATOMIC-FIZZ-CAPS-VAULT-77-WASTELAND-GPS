@@ -85,7 +85,7 @@ The fizz.fun token launchpad is now a **completely separate, standalone page** t
 / (root)
 ├── FIZZ_FUN_STANDALONE_DEPLOYMENT.md  # Deployment guide (10KB)
 ├── FIZZ_FUN_FINAL_REPORT.md           # Mission report (15KB)
-├── FIZZ_FUN_CHANGES_SUMMARY.txt       # Changes list (9KB)
+├── docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt       # Changes list (9KB)
 ├── QUICK_SUMMARY.md                   # Quick reference (5KB)
 ├── DOCUMENTATION_INDEX.md             # Doc navigation (4KB)
 └── FIZZFUN_STANDALONE_SUMMARY.md      # This file

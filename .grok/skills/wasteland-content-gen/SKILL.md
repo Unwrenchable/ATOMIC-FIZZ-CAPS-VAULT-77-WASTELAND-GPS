@@ -56,7 +56,7 @@ See `package.json`, `docs/development/CANONICAL_GENERATOR_WORKFLOW.md`, `docs/se
 8. Commit the generated data + any script/prompt changes. Update lore docs.
 
 ## Avatar / Visual Pipeline
-See `GROK_AVATAR_GUIDE.md`, `AVATAR_GENERATION_WORKFLOW.md`, `AI_AVATAR_GENERATION_GUIDE.md`, `validate-avatars.sh`, `integrate-avatars.sh`.
+See `legacy/avatar-pipeline/GROK_AVATAR_GUIDE.md`, `legacy/avatar-pipeline/AVATAR_GENERATION_WORKFLOW.md`, `legacy/avatar-pipeline/AI_AVATAR_GENERATION_GUIDE.md`, `legacy/avatar-pipeline/validate-avatars.sh`, `legacy/avatar-pipeline/integrate-avatars.sh`.
 Often still uses direct Grok Imagine + HF + post-processing scripts.
 Coordinate with `realai-game-integration` when portraits/personas should come through RealAI `/v1/characters`.
 

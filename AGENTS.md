@@ -59,8 +59,8 @@ npm run test:load:full
 anchor build
 # deploy to devnet etc. (see docs/deployment/)
 
-# Avatars / Grok direct (see GROK_AVATAR_GUIDE.md etc.)
-node grok-avatars.js ...
+# Avatars / Grok direct (see legacy/avatar-pipeline/GROK_AVATAR_GUIDE.md etc.)
+node legacy/avatar-pipeline/grok-avatars.js ...
 node scripts/enhance-avatar-assets.js
 ```
 

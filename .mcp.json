@@ -24,7 +24,7 @@
         "-y",
         "@modelcontextprotocol/server-filesystem@2026.1.14",
         "${workspaceFolder}/backend",
-        "${workspaceFolder}/public",
+        "${workspaceFolder}/frontend",
         "${workspaceFolder}/docs",
         "${workspaceFolder}/mcp"
       ]
