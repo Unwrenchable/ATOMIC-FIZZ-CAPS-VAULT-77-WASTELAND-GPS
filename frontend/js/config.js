@@ -21,17 +21,25 @@
   // Local development environments
   const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
   const isCodespace = hostname.endsWith('.github.dev') || hostname.endsWith('.preview.app.github.dev');
+  // Vercel preview deployments (*.vercel.app) are test builds: use devnet RPC.
+  // Production (atomicfizzcaps.xyz) keeps mainnet.
+  const isPreview = hostname.endsWith('.vercel.app');
+  const DEVNET_RPC = 'https://api.devnet.solana.com';
+  const MAINNET_RPC = 'https://api.mainnet-beta.solana.com';
+  const isDevLike = isLocalhost || isCodespace || isPreview;
+  // Default RPC for modules that fall back when window.SOLANA_RPC is unset.
+  window.__AF_DEFAULT_RPC__ = isDevLike ? DEVNET_RPC : MAINNET_RPC;
 
   if (isLocalhost || isCodespace) {
     // Local dev or GitHub Codespaces: point to local backend
     window.API_BASE = 'http://localhost:3000';
     // Use devnet for local development
-    window.SOLANA_RPC = 'https://api.devnet.solana.com';
+    window.SOLANA_RPC = DEVNET_RPC;
     window.FIZZ_FUN_PROGRAM_ID = 'GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc';
   } else {
   // Read backend URL from injected global (set in index.html or env.js)
   window.API_BASE = window.__BACKEND_URL__ || 'https://api.atomicfizzcaps.xyz';
-  window.SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
+  window.SOLANA_RPC = window.__SOLANA_RPC__ || (isPreview ? DEVNET_RPC : MAINNET_RPC);
   window.FIZZ_FUN_PROGRAM_ID = window.__FIZZ_FUN_PROGRAM_ID__ || 'GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc';
 }
 
