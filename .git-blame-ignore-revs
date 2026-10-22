@@ -1,0 +1,5 @@
+# Commits ignored by git blame. GitHub reads this file automatically; locally run:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# 2026-05-30 'Add new feature and fix bugs': line-ending rewrite of ~1880 files (only 26 real content changes)
+2bd9874ab81227d6273dd99934d18b325ea6d285
