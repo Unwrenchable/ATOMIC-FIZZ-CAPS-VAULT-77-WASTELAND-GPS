@@ -105,7 +105,7 @@ Root Directory: ./
 ### 2.3 Deploy
 
 Click **"Deploy"** - Vercel will:
-- Serve static files from `public/` directory
+- Serve static files from `frontend/` directory
 - Configure CDN and SSL automatically
 - Frontend will point to `https://api.atomicfizzcaps.xyz`
 
@@ -184,7 +184,7 @@ The frontend automatically detects localhost and points to `http://localhost:300
 ## Key Files
 
 - `vercel.json` - Vercel configuration (static hosting only)
-- `public/js/config.js` - API endpoint configuration
+- `frontend/js/config.js` - API endpoint configuration
 - `backend/server.js` - Express backend (standalone server)
 - `.vercelignore` - Excludes backend from Vercel deployment
 - `docs/deployment/RENDER_VERCEL_DEPLOYMENT_GUIDE.md` - Detailed guide

@@ -17,7 +17,7 @@ Tone for all generated content (NPC dialogue, lore, quest text, Overseer respons
 ---
 
 ## Architecture Overview (2026)
-- **Frontend**: Mostly vanilla JS + Leaflet (custom wasteland map, fog of war, POI claiming, radio, V.A.T.S. battles, inventory, wallet). `frontend/` (or public/? see tree). Static-ish but served, with service worker.
+- **Frontend**: Mostly vanilla JS + Leaflet (custom wasteland map, fog of war, POI claiming, radio, V.A.T.S. battles, inventory, wallet). `frontend/` (public/ is a legacy name; it no longer exists). Static-ish but served, with service worker.
 - **Backend**: Node.js (ESM), Express-style in `backend/server.js`, heavy route modules in `backend/api/`, business logic in `backend/lib/`, `systems/`, `server/`.
   - Real-time elements, Redis for some state/scripts, KMS signing, Solana rewards/minting.
   - AI layer: Overseer, NPC dialogue, narrative, quests via **RealAI provider** (sibling repo) + direct Grok fallbacks.

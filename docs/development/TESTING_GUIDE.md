@@ -339,7 +339,7 @@ console.log("Static duration:", window._radioPlayer.config.staticDuration);
 **Priority:** MEDIUM
 
 **Steps:**
-1. Load `public/data/poi.json`
+1. Load `frontend/data/poi.json`
 2. Search for `putters_horizon_ridge`
 3. Verify all fields intact
 
