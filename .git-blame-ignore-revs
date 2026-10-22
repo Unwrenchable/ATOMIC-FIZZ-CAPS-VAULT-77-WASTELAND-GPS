@@ -3,3 +3,6 @@
 
 # 2026-05-30 'Add new feature and fix bugs': line-ending rewrite of ~1880 files (only 26 real content changes)
 2bd9874ab81227d6273dd99934d18b325ea6d285
+
+# 2026-10-22 renormalize to LF per .gitattributes (no content changes)
+3b89929e27aaa8f0d6ebbc1e98d3f952491ae7d1
