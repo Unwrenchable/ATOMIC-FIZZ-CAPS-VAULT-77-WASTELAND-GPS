@@ -692,7 +692,7 @@
       const enc = st.encounter;
       const r = await this._post("/api/encounter/battle/start", {
         encounterId: enc.id || null,
-        enemies: enc.enemies.map(e => ({ id: e.id, hp: e.hp, damage: e.damage, level: e.level })),
+        enemies: enc.enemies.map(e => ({ id: e.id, type: e.type, hp: e.hp, damage: e.damage, level: e.level })),
         rewards: enc.rewards || {},
       });
       if (r && r.ok && r.data.battleId && this.state === st) { st.battleId = r.data.battleId; this._persist(); }

@@ -121,15 +121,98 @@ test("signed-in WIN applies only server-approved rewards", async () => {
 
 test("server rules: caps from enemy HP, clamp requests, reject replays / too-fast / wrong wallet", () => {
   const R = require(path.join(ROOT, "backend/encounters/battle-rewards.js"));
-  const enemies = R.sanitizeEnemies([{ id: "x", hp: 99999 }, { id: "y", hp: 40 }]);
-  assert.strictEqual(enemies[0].hp, R.LIMITS.MAX_ENEMY_HP);
-  const cap = R.rewardCap(R.sanitizeEnemies([{ id: "a", hp: 40 }]));
+  const enemies = R.sanitizeEnemies([{ id: "x", hp: 99999 }, { id: "raider", hp: 1 }]);
+  assert.strictEqual(enemies[0].hp, R.DEFAULT_ENEMY.hp, "unknown enemy gets server default, not client hp");
+  assert.strictEqual(enemies[1].hp, R.ENEMY_STATS.raider.hp, "known enemy gets server hp");
+  const cap = R.rewardCap(R.sanitizeEnemies([{ id: "raider" }]));
   const ok = R.approveRewards({ xp: 1e9, caps: 1e9, items: ["stimpak", "<script>", "a", "b", "c"] }, cap);
-  assert.ok(ok.xp <= cap.xp && ok.caps <= cap.caps && ok.items.length <= 3 && !ok.items.includes("<script>"));
+  assert.ok(ok.xp === cap.xp && ok.caps === cap.caps && ok.items.length <= 3 && !ok.items.includes("<script>"));
   const battle = { wallet: "W", cap, startedAt: 0, resolved: false };
   assert.ok(R.checkResolve(battle, { wallet: "W", result: "WIN", turns: 2, now: 5000 }).ok);
   assert.ok(!R.checkResolve(battle, { wallet: "X", result: "WIN", turns: 2, now: 5000 }).ok);
   assert.ok(!R.checkResolve(battle, { wallet: "W", result: "WIN", turns: 2, now: 10 }).ok, "too fast");
   assert.ok(!R.checkResolve({ ...battle, resolved: true }, { wallet: "W", result: "WIN", turns: 2, now: 5000 }).ok);
   assert.ok(!R.checkResolve(battle, { wallet: "W", result: "WIN", turns: 0, now: 5000 }).ok, "too few turns");
+});
+
+// ---- server reward hardening (PR #322 follow-up) ----
+function fakeRedis() {
+  const kv = new Map(), hashes = new Map();
+  const tick = () => new Promise((r) => setImmediate(r)); // force interleaving like a real network
+  const redis = {
+    async get(k) { await tick(); return kv.has(k) ? kv.get(k) : null; },
+    async set(k, v, o) { await tick(); if (o && o.NX && kv.has(k)) return null; kv.set(k, v); return "OK"; },
+    async del(k) { await tick(); return kv.delete(k) ? 1 : 0; },
+    async incr(k) { await tick(); const v = Number(kv.get(k) || 0) + 1; kv.set(k, String(v)); return v; },
+    async expire() { return 1; },
+    async hget(k, f) { await tick(); const h = hashes.get(k); return h && h.has(f) ? h.get(f) : null; },
+    async hset(k, f, v) { await tick(); const h = hashes.get(k) || new Map(); h.set(f, String(v)); hashes.set(k, h); return 1; },
+    async hincrby(k, f, d) { await tick(); const h = hashes.get(k) || new Map(); const v = Number(h.get(f) || 0) + d; h.set(f, String(v)); hashes.set(k, h); return v; },
+  };
+  const key = (k) => "afw:" + k;
+  const getJSON = async (k) => { const v = await redis.get(k); return v ? JSON.parse(v) : null; };
+  const setJSON = async (k, v) => redis.set(k, JSON.stringify(v));
+  return { redis, key, getJSON, setJSON, hashes };
+}
+async function seedBattle(store, R, enemiesFromClient, wallet = "W") {
+  const enemies = R.sanitizeEnemies(enemiesFromClient);
+  const cap = R.rewardCap(enemies);
+  const approved = R.approveRewards({ xp: 1e9, caps: 1e9 }, cap);
+  const id = "b".repeat(24);
+  await store.setJSON(`battle:${id}`, { wallet, enemies, cap, approved, startedAt: 0, resolved: false });
+  await store.redis.hset(store.key(`player:${wallet}`), "profile", JSON.stringify({ xp: 0, caps: 0 }));
+  return { id, cap, approved };
+}
+
+test("concurrent double-resolve pays exactly once", async () => {
+  const R = require(path.join(ROOT, "backend/encounters/battle-rewards.js"));
+  const { resolveBattle } = require(path.join(ROOT, "backend/encounters/battle-resolve.js"));
+  const store = fakeRedis();
+  const { id, approved } = await seedBattle(store, R, [{ id: "raider" }, { id: "raider" }]);
+  const req = { wallet: "W", battleId: id, result: "WIN", turns: 5, now: 60000 };
+  const outs = await Promise.all(Array.from({ length: 8 }, () => resolveBattle(store, req)));
+  assert.strictEqual(outs.filter((o) => o.status === 200).length, 1);
+  assert.ok(outs.filter((o) => o.status !== 200).every((o) => o.status === 409));
+  const prof = JSON.parse(await store.redis.hget(store.key("player:W"), "profile"));
+  assert.deepStrictEqual({ xp: prof.xp, caps: prof.caps }, { xp: approved.xp, caps: approved.caps });
+  assert.strictEqual(await store.redis.hget(store.key("player:W"), "battleWins"), "1");
+});
+
+test("concurrent resolves of different battles don't lose profile credits", async () => {
+  const R = require(path.join(ROOT, "backend/encounters/battle-rewards.js"));
+  const { resolveBattle } = require(path.join(ROOT, "backend/encounters/battle-resolve.js"));
+  const store = fakeRedis();
+  await store.redis.hset(store.key("player:W"), "profile", JSON.stringify({ xp: 0, caps: 0 }));
+  const enemies = R.sanitizeEnemies([{ id: "raider" }]);
+  const cap = R.rewardCap(enemies);
+  const ids = ["c", "d", "e", "f"].map((ch) => ch.repeat(24));
+  for (const id of ids) await store.setJSON(`battle:${id}`, { wallet: "W", enemies, cap, approved: R.approveRewards({}, cap), startedAt: 0, resolved: false });
+  const outs = await Promise.all(ids.map((battleId) => resolveBattle(store, { wallet: "W", battleId, result: "WIN", turns: 5, now: 60000 })));
+  assert.ok(outs.every((o) => o.status === 200));
+  const prof = JSON.parse(await store.redis.hget(store.key("player:W"), "profile"));
+  assert.deepStrictEqual({ xp: prof.xp, caps: prof.caps }, { xp: cap.xp * 4, caps: cap.caps * 4 });
+});
+
+test("tampered client enemy stats/rewards don't raise the payout", () => {
+  const R = require(path.join(ROOT, "backend/encounters/battle-rewards.js"));
+  const honest = R.rewardCap(R.sanitizeEnemies([{ id: "radroach", hp: 10, level: 1 }]));
+  const tampered = R.rewardCap(R.sanitizeEnemies([{ id: "radroach", hp: 400, level: 50 }]));
+  assert.deepStrictEqual(tampered, honest);
+  const fake = R.rewardCap(R.sanitizeEnemies(Array.from({ length: 6 }, () => ({ id: "made_up_boss", hp: 400, level: 50 }))));
+  assert.ok(fake.xp <= 6 * R.DEFAULT_ENEMY.hp * R.LIMITS.XP_PER_HP && fake.caps <= 6 * R.DEFAULT_ENEMY.hp * R.LIMITS.CAPS_PER_HP);
+  assert.strictEqual(R.approveRewards({ xp: 1e9, caps: 1e9 }, honest).caps, honest.caps);
+  assert.strictEqual(R.enemyType({ id: "Raider 2" }), "raider");
+  assert.strictEqual(R.enemyType({ id: "rat0" }), "rat");
+});
+
+test("daily rewarded-win cap is a sane config constant", async () => {
+  const R = require(path.join(ROOT, "backend/encounters/battle-rewards.js"));
+  const { resolveBattle } = require(path.join(ROOT, "backend/encounters/battle-resolve.js"));
+  assert.ok(R.LIMITS.DAILY_WINS <= 30);
+  const store = fakeRedis();
+  await store.redis.set(store.key(`battle:wins:W:${new Date(60000).toISOString().slice(0, 10)}`), String(R.LIMITS.DAILY_WINS));
+  const { id } = await seedBattle(store, R, [{ id: "raider" }]);
+  const out = await resolveBattle(store, { wallet: "W", battleId: id, result: "WIN", turns: 5, now: 60000 });
+  assert.strictEqual(out.status, 200);
+  assert.ok(out.body.rewards.capped && out.body.rewards.caps === 0);
 });

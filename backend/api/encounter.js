@@ -7,6 +7,7 @@ const { handleEncounterCheck } = require("../encounters/controller");
 const { authMiddleware } = require("../lib/auth");
 const { redis, key, getJSON, setJSON } = require("../lib/redis");
 const R = require("../encounters/battle-rewards");
+const { resolveBattle } = require("../encounters/battle-resolve");
 
 const router = express.Router();
 
@@ -54,32 +55,15 @@ router.post("/battle/start", authMiddleware, battleLimiter, async (req, res) => 
 router.post("/battle/resolve", authMiddleware, battleLimiter, async (req, res) => {
   try {
     const wallet = req.player.wallet;
-    const battleId = String((req.body && req.body.battleId) || "");
-    if (!/^[a-f0-9]{24}$/.test(battleId)) return res.status(400).json({ ok: false, error: "bad battleId" });
-    const battle = await getJSON(`battle:${battleId}`);
-    const verdict = R.checkResolve(battle, { wallet, result: req.body && req.body.result, turns: req.body && req.body.turns, now: Date.now() });
-    if (!verdict.ok) return res.status(verdict.error === "unknown battle" ? 404 : 409).json({ ok: false, error: verdict.error });
-
-    // one-shot: mark resolved before crediting
-    battle.resolved = true;
-    await setJSON(`battle:${battleId}`, battle, { EX: R.LIMITS.TTL_SEC });
-
-    const day = new Date().toISOString().slice(0, 10);
-    const dailyKey = key(`battle:wins:${wallet}:${day}`);
-    const wins = await redis.incr(dailyKey);
-    if (wins === 1) await redis.expire(dailyKey, 26 * 3600);
-    const rewards = wins > R.LIMITS.DAILY_WINS ? { xp: 0, caps: 0, items: [], capped: true } : battle.approved;
-
-    const playerKey = key(`player:${wallet}`);
-    const raw = await redis.hget(playerKey, "profile");
-    if (raw && (rewards.xp || rewards.caps)) {
-      const profile = JSON.parse(raw);
-      profile.xp = (profile.xp || 0) + rewards.xp;
-      profile.caps = Math.min(999999999, (profile.caps || 0) + rewards.caps);
-      await redis.hset(playerKey, "profile", JSON.stringify(profile));
-    }
-    await redis.hincrby(playerKey, "battleWins", 1);
-    return res.json({ ok: true, rewards });
+    const body = req.body || {};
+    const out = await resolveBattle({ redis, key, getJSON, setJSON }, {
+      wallet,
+      battleId: String(body.battleId || ""),
+      result: body.result,
+      turns: body.turns,
+      now: Date.now(),
+    });
+    return res.status(out.status).json(out.body);
   } catch (err) {
     console.error("[encounter] battle/resolve error:", err);
     return res.status(500).json({ ok: false, error: "Battle resolve failed" });
