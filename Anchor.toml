@@ -14,12 +14,13 @@ fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
 fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
 
 [provider]
-# cluster = "devnet"   # for local/dev testing
-cluster = "mainnet"  # PRODUCTION default. Anchor accepts localnet|devnet|testnet|mainnet or a URL ("mainnet-beta" fails to parse).
-# IMPORTANT: After real mainnet deploy, verify the program ID in [programs.mainnet] matches the on-chain one.
+# Default is devnet so builds, keys sync, tests and deploys never hit mainnet by accident.
+cluster = "devnet"
+# Mainnet deploys must be explicit: anchor deploy --provider.cluster mainnet ([programs.mainnet] is kept for that).
+# After any mainnet deploy, verify the on-chain program ID matches [programs.mainnet].
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "node tests/test.js"
+test = "npm test"
 
 [hooks]

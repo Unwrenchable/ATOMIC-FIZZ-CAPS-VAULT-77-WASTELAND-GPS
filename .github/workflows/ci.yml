@@ -127,5 +127,5 @@ jobs:
         if: steps.filter.outputs.solana == 'true'
         run: anchor build
 
-      # Anchor.toml provider is mainnet and its test script (tests/test.js) no longer exists,
-      # so 'anchor test' would try a mainnet deploy. JS tests run in the Node job instead.
+      # No on-chain test suite exists yet; JS tests run in the Node job. Re-add 'anchor test'
+      # (localnet, solana-test-validator, airdropped key) once program tests are written.

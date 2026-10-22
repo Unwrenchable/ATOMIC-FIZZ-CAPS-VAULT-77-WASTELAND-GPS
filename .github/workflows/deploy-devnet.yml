@@ -44,7 +44,7 @@ jobs:
         run: anchor build
 
       - name: Deploy Program
-        run: anchor deploy
+        run: anchor deploy --provider.cluster devnet
 
       - name: Resolve Program ID
         id: program
@@ -66,4 +66,4 @@ jobs:
 
       - name: Upload IDL
         if: steps.program.outputs.program_id != ''
-        run: anchor idl upgrade "${{ steps.program.outputs.program_id }}" target/idl/fizzcaps_onchain.json
+        run: anchor idl upgrade "${{ steps.program.outputs.program_id }}" target/idl/fizzcaps_onchain.json --provider.cluster devnet
