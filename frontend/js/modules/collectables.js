@@ -39,7 +39,7 @@
     },
 
     // --------------------------------------------------------
-    // Apply bonuses (like Fallout magazines)
+    // Apply bonuses (like wasteland magazines)
     // --------------------------------------------------------
     applyCollectibleEffects(item) {
       if (!item.tags) return;

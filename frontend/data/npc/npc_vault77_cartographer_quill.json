@@ -7,10 +7,10 @@
   "lvl": 22,
   "rarity": "uncommon",
   "personality": "Bureaucratic optimism with a Geiger counter for a heart. Treats map errors as shareholder risk.",
-  "appearance": "Sun-bleached Vault-Tec survey vest, cracked Pip-Boy clone, rad-stained parchment tubes.",
+  "appearance": "Sun-bleached FizzTec survey vest, cracked Pocket-Boy clone, rad-stained parchment tubes.",
   "greeting": "Citizen! Your coordinates have been logged for mild radiation exposure and maximum shareholder value. Shall we claim a POI, or would you prefer a complimentary pamphlet on dehydration?",
   "dialogue_samples": [
-    "Vault-Tec is not responsible for mutants attracted by accurate cartography.",
+    "FizzTec is not responsible for mutants attracted by accurate cartography.",
     "Every glowing FIZZ Cap is a vote of confidence in yesterday's tomorrow.",
     "If the map is wrong, the wasteland is wrong. Update your attitude accordingly."
   ],

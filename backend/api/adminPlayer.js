@@ -10,7 +10,7 @@ const { requireAdmin, adminRateLimiter } = require("../middleware/adminAuth");
 router.use(adminRateLimiter);
 router.use(requireAdmin);
 
-const DEFAULT_SPECIAL = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
+const DEFAULT_VITALS = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
 
 async function loadProfile(wallet) {
   try {
@@ -72,13 +72,13 @@ router.post("/update", async (req, res) => {
       if (typeof updates.unlockedTerminal === "boolean") profile.unlockedTerminal = updates.unlockedTerminal;
       if (updates.special && typeof updates.special === "object") {
         profile.special = {
-          S: Number(updates.special.S ?? profile.special.S ?? DEFAULT_SPECIAL.S),
-          P: Number(updates.special.P ?? profile.special.P ?? DEFAULT_SPECIAL.P),
-          E: Number(updates.special.E ?? profile.special.E ?? DEFAULT_SPECIAL.E),
-          C: Number(updates.special.C ?? profile.special.C ?? DEFAULT_SPECIAL.C),
-          I: Number(updates.special.I ?? profile.special.I ?? DEFAULT_SPECIAL.I),
-          A: Number(updates.special.A ?? profile.special.A ?? DEFAULT_SPECIAL.A),
-          L: Number(updates.special.L ?? profile.special.L ?? DEFAULT_SPECIAL.L),
+          S: Number(updates.special.S ?? profile.special.S ?? DEFAULT_VITALS.S),
+          P: Number(updates.special.P ?? profile.special.P ?? DEFAULT_VITALS.P),
+          E: Number(updates.special.E ?? profile.special.E ?? DEFAULT_VITALS.E),
+          C: Number(updates.special.C ?? profile.special.C ?? DEFAULT_VITALS.C),
+          I: Number(updates.special.I ?? profile.special.I ?? DEFAULT_VITALS.I),
+          A: Number(updates.special.A ?? profile.special.A ?? DEFAULT_VITALS.A),
+          L: Number(updates.special.L ?? profile.special.L ?? DEFAULT_VITALS.L),
         };
       }
     }
@@ -107,7 +107,7 @@ router.post("/reset", async (req, res) => {
 
     const resetProfile = {
       name: "WANDERER",
-      special: { ...DEFAULT_SPECIAL },
+      special: { ...DEFAULT_VITALS },
       level: 1,
       xp: 0,
       caps: 0,

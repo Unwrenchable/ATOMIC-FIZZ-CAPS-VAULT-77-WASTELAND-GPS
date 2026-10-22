@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // scripts/test_video_generation.js
-// Quickly generate 2-3 short Fallout-themed test videos via the xAI API.
+// Quickly generate 2-3 short wasteland test videos via the xAI API.
 // No NPC batch generation — uses hard-coded prompts for a fast sanity check.
 //
 // Usage:
@@ -39,27 +39,27 @@ const RESOLUTION = process.env.GROK_VIDEO_RESOLUTION           || '720p';
 const COUNT      = Math.max(1, Math.min(parseInt(process.env.TEST_VIDEO_COUNT || '2', 10), 3));
 const DELAY_MS   = parseInt(process.env.GROK_VIDEO_DELAY_MS    || '1200', 10);
 
-// Hard-coded Fallout-themed prompts for a self-contained smoke test.
+// Hard-coded wasteland prompts for a self-contained smoke test.
 // Each covers a different NPC archetype so you can spot-check variety.
 const TEST_PROMPTS = [
   {
     label: 'Trader at collapsed highway market',
     prompt:
-      'Fallout retro animated style, 5-second clip: a weathered caravan trader in a battered leather duster ' +
-      'stands at a makeshift market stall on a collapsed highway overpass, haggling over scrap metal and Nuka-Cola. ' +
+      'wasteland retro animated style, 5-second clip: a weathered caravan trader in a battered leather duster ' +
+      'stands at a makeshift market stall on a collapsed highway overpass, haggling over scrap metal and Atomic Fizz. ' +
       'Wasteland backdrop, radiation haze, warm golden sunset, gritty 1950s filter, Pocket-Boy green HUD overlay.',
   },
   {
-    label: 'Vault-Tec propaganda broadcast',
+    label: 'FizzTec propaganda broadcast',
     prompt:
-      'Fallout retro animated style, 5-second clip: a cheerful 1950s Vault-Tec announcer in a pristine blue jumpsuit ' +
+      'wasteland retro animated style, 5-second clip: a cheerful 1950s FizzTec announcer in a pristine blue jumpsuit ' +
       'gestures at a glowing holographic poster of Vault 77. Retro TV static overlay, warm amber studio lights, ' +
       'exaggerated corporate optimism clashing with visible wasteland ruins through a cracked window.',
   },
   {
-    label: 'Super Mutant warlord monologue',
+    label: 'Glowborn warlord monologue',
     prompt:
-      'Fallout retro animated style, 5-second clip: a massive green Super Mutant warlord pounds his chest ' +
+      'wasteland retro animated style, 5-second clip: a massive green Glowborn warlord pounds his chest ' +
       'atop a ruined skyscraper, yelling at a crowd of raiders below. Stormy sky, lightning strikes, ' +
       'radioactive green glow around him, gritty post-apocalyptic atmosphere, Pocket-Boy green tint.',
   },

@@ -33,7 +33,7 @@
         // Check for existing wallet connection
         this.checkWalletConnection();
         
-        // Initialize REBUILD SPECIAL button
+        // Initialize REBUILD VITALS button
         this.initRebuildSpecialButton();
       } catch (e) {
         console.error("[nft-integration] Error initializing NFT system:", e);
@@ -221,7 +221,7 @@
     initRebuildSpecialButton() {
       const btn = document.getElementById("respecBtn");
       if (!btn) {
-        console.log("[nft-integration] REBUILD SPECIAL button not found (may not be on current screen)");
+        console.log("[nft-integration] REBUILD VITALS button not found (may not be on current screen)");
         return;
       }
 
@@ -244,13 +244,13 @@
       const tokenCount = this.getNFTCount("rebuild_special_token");
 
       if (hasToken) {
-        btn.textContent = `REBUILD SPECIAL (${tokenCount} TOKEN${tokenCount !== 1 ? 'S' : ''} AVAILABLE)`;
+        btn.textContent = `REBUILD VITALS (${tokenCount} TOKEN${tokenCount !== 1 ? 'S' : ''} AVAILABLE)`;
         btn.classList.remove("disabled");
         btn.disabled = false;
         btn.style.opacity = "1";
         btn.style.cursor = "pointer";
       } else {
-        btn.textContent = "REBUILD SPECIAL (REQUIRES TOKEN)";
+        btn.textContent = "REBUILD VITALS (REQUIRES TOKEN)";
         btn.classList.add("disabled");
         btn.style.opacity = "0.6";
         btn.style.cursor = "not-allowed";
@@ -263,7 +263,7 @@
       if (!hasToken) {
         // No token - open Scavenger Exchange to purchase
         const purchase = confirm(
-          "REBUILD SPECIAL requires a Vault-Tec Respec Token.\n\n" +
+          "REBUILD VITALS requires a FizzTec Respec Token.\n\n" +
           "Purchase options:\n" +
           "• Buy from merchant: 8,000 caps (consumable only)\n" +
           "• Mint as NFT: 5,000 caps + 500 Fizz (tradeable)\n\n" +
@@ -284,12 +284,12 @@
       }
 
       const confirmRespec = confirm(
-        "⚠️ REBUILD SPECIAL ⚠️\n\n" +
+        "⚠️ REBUILD VITALS ⚠️\n\n" +
         "This will:\n" +
-        "• Reset all your SPECIAL points\n" +
+        "• Reset all your VITALS points\n" +
         "• Consume 1 Respec Token from your wallet\n" +
         "• Start a 7-day cooldown\n\n" +
-        "Current SPECIAL:\n" +
+        "Current VITALS:\n" +
         `S: ${player.special?.strength || 1}\n` +
         `P: ${player.special?.perception || 1}\n` +
         `E: ${player.special?.endurance || 1}\n` +
@@ -311,7 +311,7 @@
         return;
       }
 
-      // Reset SPECIAL (implementation depends on your SPECIAL system)
+      // Reset VITALS (implementation depends on your VITALS system)
       if (window.Game.modules.special && window.Game.modules.special.resetPoints) {
         Game.modules.special.resetPoints();
       } else {
@@ -333,8 +333,8 @@
       player.respecCooldownUntil = Date.now() + (7 * 24 * 60 * 60 * 1000); // 7 days
 
       alert(
-        "✅ SPECIAL REBUILD COMPLETE\n\n" +
-        "Your SPECIAL points have been reset.\n" +
+        "✅ VITALS REBUILD COMPLETE\n\n" +
+        "Your VITALS points have been reset.\n" +
         "You now have unallocated points to redistribute.\n\n" +
         "Cooldown: 7 days"
       );
@@ -342,7 +342,7 @@
       // Refresh UI
       this.updateRebuildSpecialButton();
       
-      // Trigger any SPECIAL UI updates
+      // Trigger any VITALS UI updates
       if (window.Game.modules.special && window.Game.modules.special.refreshUI) {
         Game.modules.special.refreshUI();
       }
@@ -368,7 +368,7 @@
       }
 
       const choice = prompt(
-        "VAULT-TEC SPECIAL RESPEC TOKEN\n\n" +
+        "FIZZTEC VITALS RESPEC TOKEN\n\n" +
         `Your caps: ${player.caps || 0}\n` +
         `Your Fizz: ${player.fizzTokens || 0}\n\n` +
         "Purchase options:\n" +

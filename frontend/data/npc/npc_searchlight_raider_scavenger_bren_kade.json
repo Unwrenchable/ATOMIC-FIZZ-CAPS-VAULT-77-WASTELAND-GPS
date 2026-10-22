@@ -6,7 +6,7 @@
   "currentRegion": "mojave",
   "role": "Raider Scavenger",
   "personality": "Reckless, greedy, thinks radiation is just 'spicy air'.",
-  "description": "Bren scavenges Searchlight for anything valuable. He’s convinced the NCR left something important behind.",
+  "description": "Bren scavenges Searchlight for anything valuable. He’s convinced the Frontier Compact left something important behind.",
   "questHooks": [
     "Claims he found a crate marked 'FizzCo Experimental'.",
     "Saw a ghoul carrying a glowing cap.",

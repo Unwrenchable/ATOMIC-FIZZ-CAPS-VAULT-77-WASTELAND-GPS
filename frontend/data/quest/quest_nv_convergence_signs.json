@@ -2,7 +2,7 @@
   "id": "quest_nv_convergence_signs",
   "name": "Signs of the Convergence",
   "type": "main",
-  "poIs": ["Freeside", "New Vegas Strip", "Lucky 38"],
+  "poIs": ["Freeside", "Neon Reach Strip", "The Spire"],
   "description": "Investigate strange omens pointing toward the Vegas Convergence.",
   "objectives": [
     "Hear Juno’s prophecy",

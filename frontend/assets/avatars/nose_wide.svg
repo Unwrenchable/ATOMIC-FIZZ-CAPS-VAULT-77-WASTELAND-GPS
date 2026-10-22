@@ -1,6 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <ellipse cx="128" cy="125" rx="12" ry="16" fill="#8b7355" opacity="0.6"/>
-  <ellipse cx="128" cy="138" rx="10" ry="6" fill="#8b7355" opacity="0.5"/>
-  <ellipse cx="118" cy="140" rx="3.5" ry="4" fill="#6b5345" opacity="0.5"/>
-  <ellipse cx="138" cy="140" rx="3.5" ry="4" fill="#6b5345" opacity="0.5"/>
+  <!-- Nose: Broad wings and bridge. Original Atomic Fizz art, v4 draft. -->
+  <defs><filter id="nosewide-b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.8"/></filter><filter id="nosewide-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter><filter id="nosewide-b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter><filter id="nosewide-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><filter id="nosewide-grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" seed="11"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .14  0 0 0 0 .08  1.6 0 0 0 -.62"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="nosewide-dust" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="5"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .5  5 0 0 0 -3.1"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="nosewide-pores" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .1  2.2 0 0 0 -.95"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="nosewide-stub" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="1" seed="9"/><feColorMatrix values="0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  6 0 0 0 -3.3"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="nosewide-paint" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".55"/></filter><filter id="nosewide-brush" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".012 .2" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .92  0 0 0 0 .8  0 0 0 0 .62  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="nosewide-brushd" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".2 .014" numOctaves="3" seed="13"/><feColorMatrix values="0 0 0 0 .12  0 0 0 0 .08  0 0 0 0 .05  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>
+  <g filter="url(#nosewide-paint)">
+  <path d="M134.0 112 C134 126 136 140 138 151" stroke="#3a2418" stroke-width="10" fill="none" opacity=".35" filter="url(#nosewide-b2)"/>
+  <path d="M123.0 116 C124.0 130 124 142 125 149" stroke="#d8b090" stroke-width="6.0" fill="none" opacity=".22" filter="url(#nosewide-b2)"/>
+  <path d="M112 158 C110 151 116 147 118 149" stroke="#4a2c1e" stroke-width="1.5" fill="none" opacity=".7" stroke-linecap="round"/>
+  <path d="M144 158 C146 151 140 147 138 149" stroke="#3a2016" stroke-width="1.7" fill="none" opacity=".8" stroke-linecap="round"/>
+  <path d="M113 158 C124 162 120 160 128 160 C136 160 132 162 143 158" stroke="#3a2016" stroke-width="1.2" fill="none" opacity=".6"/>
+  <ellipse cx="120.8" cy="158.5" rx="3.84" ry="1.6" fill="#1e120c" opacity=".85"/>
+  <ellipse cx="135.2" cy="158.5" rx="3.84" ry="1.6" fill="#1e120c" opacity=".9"/>
+  <ellipse cx="126" cy="154" rx="6.4" ry="3.2" fill="#d9b290" opacity=".3" filter="url(#nosewide-b1)"/>
+  <ellipse cx="130" cy="164" rx="18" ry="3" fill="#2a1810" opacity=".45" filter="url(#nosewide-b2)"/>
+  
+  </g>
 </svg>

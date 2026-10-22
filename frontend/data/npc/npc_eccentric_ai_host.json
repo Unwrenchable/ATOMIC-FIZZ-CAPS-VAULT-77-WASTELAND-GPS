@@ -1,7 +1,7 @@
 {
   "id": "npc_eccentric_ai_host",
   "name": "VAULENTINE-3000",
-  "faction": "Vault-Tec Entertainment Division",
+  "faction": "FizzTec Entertainment Division",
   "role": "AI Game Show Host",
   "type": "ai",
 
@@ -23,7 +23,7 @@
     ],
     "knowledge": [
       "pre-war-entertainment",
-      "vault-tec-systems",
+      "fizztec-systems",
       "contestant-statistics",
       "wasteland-observation",
       "show-business"

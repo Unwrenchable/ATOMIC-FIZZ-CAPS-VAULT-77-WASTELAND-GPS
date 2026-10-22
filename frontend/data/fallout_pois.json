@@ -86,7 +86,7 @@
     },
     {
       "id": "lucky_38_fnv",
-      "name": "Lucky 38",
+      "name": "The Spire",
       "lat": 36.17,
       "lng": -115.1422,
       "lvl": 20,
@@ -134,7 +134,7 @@
     },
     {
       "id": "new_vegas_strip_fnv",
-      "name": "New Vegas Strip",
+      "name": "Neon Reach Strip",
       "lat": 36.11274,
       "lng": -115.174301,
       "lvl": 10,
@@ -356,7 +356,7 @@
   "mojave_towns": [
     {
       "id": "goodsprings_saloon_fnv",
-      "name": "Goodsprings Saloon",
+      "name": "Dustwell Saloon",
       "lat": 35.8324,
       "lng": -115.432,
       "lvl": 1,
@@ -538,7 +538,7 @@
     },
     {
       "id": "sarsaparilla_hq_fnv",
-      "name": "Sunset Sarsaparilla HQ",
+      "name": "Dustpop HQ",
       "lat": 36,
       "lng": -115.2,
       "lvl": 10,
@@ -624,7 +624,7 @@
   "fnv_factions": [
     {
       "id": "ncr_capital_fnv",
-      "name": "NCR Capital (Vegas HQ)",
+      "name": "Frontier Compact Capital (Vegas HQ)",
       "lat": 36.1699,
       "lng": -115.1398,
       "lvl": 30,
@@ -636,7 +636,7 @@
     },
     {
       "id": "ncr_base_fnv",
-      "name": "NCR Base",
+      "name": "Frontier Compact Base",
       "lat": 36.1699,
       "lng": -115.1398,
       "lvl": 15,
@@ -648,7 +648,7 @@
     },
     {
       "id": "brotherhood_bunker_fnv",
-      "name": "Brotherhood of Steel Bunker",
+      "name": "Coil Covenant Bunker",
       "lat": 34.0522,
       "lng": -118.2437,
       "lvl": 30,
@@ -696,7 +696,7 @@
     },
     {
       "id": "new_california_republic_fnv",
-      "name": "New California Republic Embassy",
+      "name": "Frontier Compact Embassy",
       "lat": 36.1699,
       "lng": -115.1398,
       "lvl": 25,
@@ -770,7 +770,7 @@
     },
     {
       "id": "deathclaw_promontory_fnv",
-      "name": "Deathclaw Promontory",
+      "name": "Radtalon Promontory",
       "lat": 36.1,
       "lng": -114.9,
       "lvl": 45,
@@ -1560,7 +1560,7 @@
     },
     {
       "id": "vault_101_fo3",
-      "name": "Vault 101",
+      "name": "Bunker Kettle",
       "lat": 38.99,
       "lng": -77.02,
       "lvl": 5,
@@ -1680,7 +1680,7 @@
     },
     {
       "id": "robco_facility_fo3",
-      "name": "RobCo Facility",
+      "name": "FizzCo Facility",
       "lat": 38.875,
       "lng": -77.06,
       "lvl": 14,
@@ -1728,7 +1728,7 @@
     },
     {
       "id": "nuka_cola_plant_fo3",
-      "name": "Nuka-Cola Plant",
+      "name": "Atomic Fizz Plant",
       "lat": 38.89,
       "lng": -76.99,
       "lvl": 15,
@@ -2040,7 +2040,7 @@
     },
     {
       "id": "deathclaw_sanctuary_fo3",
-      "name": "Deathclaw Sanctuary",
+      "name": "Radtalon Sanctuary",
       "lat": 39.25,
       "lng": -77.45,
       "lvl": 24,
@@ -2136,7 +2136,7 @@
     },
     {
       "id": "yagut_caves_fo3",
-      "name": "Yao Guai Tunnels",
+      "name": "Ashbear Tunnels",
       "lat": 39,
       "lng": -77.32,
       "lvl": 18,
@@ -2690,7 +2690,7 @@
     },
     {
       "id": "nuka_world_fo4",
-      "name": "Nuka-World",
+      "name": "Fizz Fair",
       "lat": 42.3,
       "lng": -72.9,
       "lvl": 30,
@@ -3186,7 +3186,7 @@
     },
     {
       "id": "oil_rig_reactor_fo2",
-      "name": "Enclave Oil Rig Reactor",
+      "name": "Directorate Oil Rig Reactor",
       "lat": 36,
       "lng": -130,
       "lvl": 40,
@@ -3414,7 +3414,7 @@
     },
     {
       "id": "new_california_republic_fo2",
-      "name": "NCR (Shady Sands Expanded)",
+      "name": "Frontier Compact (Shady Sands Expanded)",
       "lat": 36.8,
       "lng": -116.95,
       "lvl": 20,
@@ -3438,7 +3438,7 @@
     },
     {
       "id": "navarro_fo2",
-      "name": "Navarro Enclave Base",
+      "name": "Navarro Directorate Base",
       "lat": 38,
       "lng": -121.5,
       "lvl": 30,
@@ -3450,7 +3450,7 @@
     },
     {
       "id": "oil_rig_fo2",
-      "name": "Enclave Oil Rig",
+      "name": "Directorate Oil Rig",
       "lat": 36,
       "lng": -130,
       "lvl": 40,
@@ -3970,7 +3970,7 @@
     },
     {
       "id": "vault_tec_hq_bos",
-      "name": "Vault-Tec HQ",
+      "name": "FizzTec HQ",
       "lat": 34,
       "lng": -118.25,
       "lvl": 30,
@@ -3982,7 +3982,7 @@
     },
     {
       "id": "vault_tec_reactor_bos",
-      "name": "Vault-Tec Reactor Core",
+      "name": "FizzTec Reactor Core",
       "lat": 34.001,
       "lng": -118.251,
       "lvl": 32,
@@ -4906,7 +4906,7 @@
     },
     {
       "id": "old_olney_bs_fo3",
-      "name": "Old Olney (Enclave Patrols)",
+      "name": "Old Olney (Directorate Patrols)",
       "lat": 39.2,
       "lng": -77.35,
       "lvl": 28,
@@ -5174,7 +5174,7 @@
   "fo4_nuka_world": [
     {
       "id": "nuka_world_transit_center_fo4",
-      "name": "Nuka\u2011World Transit Center",
+      "name": "Fizz\u2011World Transit Center",
       "lat": 42.18,
       "lng": -71.9,
       "lvl": 20,
@@ -5186,7 +5186,7 @@
     },
     {
       "id": "nuka_world_gate_fo4",
-      "name": "Nuka\u2011World Gate",
+      "name": "Fizz\u2011World Gate",
       "lat": 42.181,
       "lng": -71.901,
       "lvl": 22,
@@ -5198,7 +5198,7 @@
     },
     {
       "id": "nuka_town_usa_fo4",
-      "name": "Nuka\u2011Town USA",
+      "name": "Fizz\u2011Town USA",
       "lat": 42.182,
       "lng": -71.902,
       "lvl": 25,
@@ -5210,7 +5210,7 @@
     },
     {
       "id": "market_fo4",
-      "name": "Nuka\u2011Town Market",
+      "name": "Fizz\u2011Town Market",
       "lat": 42.1825,
       "lng": -71.9025,
       "lvl": 25,
@@ -5258,7 +5258,7 @@
     },
     {
       "id": "robco_battlezone_fo4",
-      "name": "RobCo Battlezone",
+      "name": "FizzCo Battlezone",
       "lat": 42.186,
       "lng": -71.906,
       "lvl": 34,
@@ -5366,7 +5366,7 @@
     },
     {
       "id": "nuka_cola_bottling_fo4",
-      "name": "Nuka\u2011Cola Bottling Plant",
+      "name": "Fizz\u2011Cola Bottling Plant",
       "lat": 42.194,
       "lng": -71.914,
       "lvl": 30,
@@ -5378,7 +5378,7 @@
     },
     {
       "id": "nuka_cola_rivers_fo4",
-      "name": "Nuka\u2011Cola Rivers",
+      "name": "Fizz\u2011Cola Rivers",
       "lat": 42.1945,
       "lng": -71.9145,
       "lvl": 28,
@@ -5390,7 +5390,7 @@
     },
     {
       "id": "nuka_power_plant_fo4",
-      "name": "Nuka\u2011World Power Plant",
+      "name": "Fizz\u2011World Power Plant",
       "lat": 42.196,
       "lng": -71.916,
       "lvl": 35,
@@ -5414,7 +5414,7 @@
     },
     {
       "id": "nuka_red_rocket_fo4",
-      "name": "Nuka\u2011World Red Rocket",
+      "name": "Fizz\u2011World Red Rocket",
       "lat": 42.198,
       "lng": -71.918,
       "lvl": 20,
@@ -5426,7 +5426,7 @@
     },
     {
       "id": "nuka_scrapyard_fo4",
-      "name": "Nuka Scrapyard",
+      "name": "Fizz Scrapyard",
       "lat": 42.1985,
       "lng": -71.9185,
       "lvl": 22,
@@ -7658,7 +7658,7 @@
     },
     {
       "id": "nw_bottling_plant_lower_works_fo4",
-      "name": "Nuka\u2011Cola Bottling Lower Works",
+      "name": "Fizz\u2011Cola Bottling Lower Works",
       "lat": 42.195,
       "lng": -71.915,
       "lvl": 31,
@@ -7670,7 +7670,7 @@
     },
     {
       "id": "nw_bottling_plant_flavor_lab_fo4",
-      "name": "Nuka\u2011Cola Flavor Lab",
+      "name": "Fizz\u2011Cola Flavor Lab",
       "lat": 42.1955,
       "lng": -71.9155,
       "lvl": 33,
@@ -7682,7 +7682,7 @@
     },
     {
       "id": "nw_power_plant_aux_reactor_fo4",
-      "name": "Nuka\u2011World Auxiliary Reactor",
+      "name": "Fizz\u2011World Auxiliary Reactor",
       "lat": 42.197,
       "lng": -71.917,
       "lvl": 36,
@@ -7694,7 +7694,7 @@
     },
     {
       "id": "nw_power_plant_cooling_tower_fo4",
-      "name": "Nuka\u2011World Cooling Tower",
+      "name": "Fizz\u2011World Cooling Tower",
       "lat": 42.1975,
       "lng": -71.9175,
       "lvl": 34,
@@ -7706,7 +7706,7 @@
     },
     {
       "id": "nw_red_rocket_underground_fo4",
-      "name": "Nuka\u2011Red Rocket Underground",
+      "name": "Fizz\u2011Red Rocket Underground",
       "lat": 42.199,
       "lng": -71.919,
       "lvl": 23,

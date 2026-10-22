@@ -3,7 +3,7 @@
   "surface": "discovery_banner_secondary",
   "strings": {
     "label": "COORDINATES VALIDATED",
-    "sublabel": "Vault-Tec Omniverse Survey // mild rad optional",
+    "sublabel": "FizzTec Omniverse Survey // mild rad optional",
     "toast_claim_ready": "POI locked. Shareholder value inbound.",
     "toast_locations_healed": "Location lattice restored. Wander freely, citizen."
   },

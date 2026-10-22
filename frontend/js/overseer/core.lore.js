@@ -108,7 +108,7 @@
       },
       {
         id: "enc_02",
-        title: "Classified Enclave Burst",
+        title: "Classified Directorate Burst",
         body: [
           "ENCLAVE PRIORITY CHANNEL 9",
           "Asset retrieval incomplete.",
@@ -124,7 +124,7 @@
         title: "???",
         body: [
           "You shouldn't have found this.",
-          "The Mojave remembers.",
+          "The Cinder Basin remembers.",
           "The Basin hungers.",
           "Vault 77 was never meant to open.",
         ],

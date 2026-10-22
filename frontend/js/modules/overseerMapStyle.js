@@ -1,5 +1,5 @@
 // overseerMapStyle.js
-// Fallout-style map style engine for Atomic Fizz Caps
+// wasteland-style map style engine for Atomic Fizz Caps
 (function () {
   "use strict";
 

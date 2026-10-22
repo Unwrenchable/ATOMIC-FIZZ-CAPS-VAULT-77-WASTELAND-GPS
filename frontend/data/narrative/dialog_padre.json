@@ -3,14 +3,14 @@
   "npc": "Father Cain",
   "portrait": "default",
   "title": "Wandering Priest of the Apocalypse",
-  "description": "Dialog nodes for Father Cain — a wandering preacher who carries a scorched pre-war Bible and a battered camp stove. He is not affiliated with the Church of the Atom, the Followers of the Apocalypse, or any organization he is aware of. He believes the bombs were a judgement, that the wasteland is a purgatory, and that the path forward requires the same virtues that were required before: charity, endurance, and not stealing other people's food. He dispenses wisdom with equal parts scripture and practical survival advice, and he is one of the genuinely kind people in the Mojave.",
+  "description": "Dialog nodes for Father Cain — a wandering preacher who carries a scorched pre-war Bible and a battered camp stove. He is not affiliated with the Church of the Atom, the Followers of the Apocalypse, or any organization he is aware of. He believes the bombs were a judgement, that the wasteland is a purgatory, and that the path forward requires the same virtues that were required before: charity, endurance, and not stealing other people's food. He dispenses wisdom with equal parts scripture and practical survival advice, and he is one of the genuinely kind people in the Cinder Basin.",
   "backstory": "Ordained twice: once before the bombs, by a denomination that no longer exists; and once by himself, in the ruins of a Vegas wedding chapel, having concluded that the authority to minister could be self-granted when alternatives were unavailable. He has been walking a circuit of wasteland settlements for thirty years, offering what comfort can be given and what hard truths are necessary. His pre-war Bible has forty years of margin notes in four colors of scavenged pen.",
   "intro": {
     "id": "padre_intro",
     "conditions": [
       "!flag:met_padre"
     ],
-    "text": "Peace be with you, traveller.<br><br>I know. You're surprised. Most people out here don't lead with that.<br><br>My name is Father Cain — yes, like the biblical one. My mother had a sense of humour and a lot of faith that it would work out. Mostly it has.<br><br>I walk the Mojave. All of it, as far as I can manage. I offer what I can — medicine, food, a listening ear — and I ask nothing in return except that people extend the same courtesy to the next person they meet who needs it.<br><br>The world ended. The obligation to one another did not.",
+    "text": "Peace be with you, traveller.<br><br>I know. You're surprised. Most people out here don't lead with that.<br><br>My name is Father Cain — yes, like the biblical one. My mother had a sense of humour and a lot of faith that it would work out. Mostly it has.<br><br>I walk the Cinder Basin. All of it, as far as I can manage. I offer what I can — medicine, food, a listening ear — and I ask nothing in return except that people extend the same courtesy to the next person they meet who needs it.<br><br>The world ended. The obligation to one another did not.",
     "set_flags": [
       "met_padre"
     ],
@@ -80,11 +80,11 @@
         "stat:hp<=35",
         "!flag:padre_healed_player"
       ],
-      "text": "You are hurt and you are trying to pretend you aren't. I've been watching people do that for a long time.<br><br>Come here. I have stimpaks from the last supply drop. I don't need them right now and you clearly do.<br><br>The Lord helps those who help themselves, but He also apparently approves of stimpaks. The evidence is circumstantial but consistent.",
+      "text": "You are hurt and you are trying to pretend you aren't. I've been watching people do that for a long time.<br><br>Come here. I have FizzPaks from the last supply drop. I don't need them right now and you clearly do.<br><br>The Lord helps those who help themselves, but He also apparently approves of FizzPaks. The evidence is circumstantial but consistent.",
       "grant_items": [
         {
           "id": "stimpak",
-          "name": "Stimpak",
+          "name": "FizzPak",
           "type": "aid",
           "quantity": 2
         }
@@ -103,7 +103,7 @@
       "grant_items": [
         {
           "id": "nuka_cola",
-          "name": "Nuka-Cola",
+          "name": "Atomic Fizz",
           "type": "aid",
           "quantity": 2
         }
@@ -119,7 +119,7 @@
       "conditions": [
         "!flag:sq_padre_good_word_taken"
       ],
-      "text": "There is a settlement south of Boulder City. Small. Maybe thirty people. They were doing well six months ago — water purifier, crops, a working generator.<br><br>Three weeks ago they stopped responding to radio contact. I was the only one making contact, so I'm probably the only one who noticed.<br><br>I need to go there. But I am not a fighter and the road through that stretch has become dangerous — a band of Fiends moved into the area after the NCR pulled a patrol post.<br><br>I'm asking for an escort. Not to fight unless necessary. Just to make sure I get there.<br><br>If the settlement is in trouble, I want to help. If it isn't — well. Sometimes you just need to see for yourself that people are all right.",
+      "text": "There is a settlement south of Boulder City. Small. Maybe thirty people. They were doing well six months ago — water purifier, crops, a working generator.<br><br>Three weeks ago they stopped responding to radio contact. I was the only one making contact, so I'm probably the only one who noticed.<br><br>I need to go there. But I am not a fighter and the road through that stretch has become dangerous — a band of Fiends moved into the area after the Frontier Compact pulled a patrol post.<br><br>I'm asking for an escort. Not to fight unless necessary. Just to make sure I get there.<br><br>If the settlement is in trouble, I want to help. If it isn't — well. Sometimes you just need to see for yourself that people are all right.",
       "offers_quest": "sq_padre_good_word",
       "set_flags": [
         "sq_padre_good_word_taken"
@@ -187,8 +187,8 @@
   ],
   "fallback": {
     "id": "padre_fallback",
-    "text": "Safe travels, stranger. And if they're not safe — well.<br><br>That's what the stimpaks are for.",
-    "video_speech": "Safe travels, stranger. And if they're not safe — well. That's what the stimpaks are for."
+    "text": "Safe travels, stranger. And if they're not safe — well.<br><br>That's what the FizzPaks are for.",
+    "video_speech": "Safe travels, stranger. And if they're not safe — well. That's what the FizzPaks are for."
   },
   "mood": "friendly",
   "personality": [

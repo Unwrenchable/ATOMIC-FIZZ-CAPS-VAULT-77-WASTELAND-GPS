@@ -3,8 +3,8 @@
   "npc": "NAN HANNIGAN",
   "portrait": "hannigan",
   "title": "Iron Nan of Hannigan's House",
-  "description": "A heavyset woman in her fifties, hair the color of dirty dishwater pinned into a knot that's fighting a losing battle against gravity. She wears a licensed trader's vest over pre-war work clothes, both stained with Nuka-Moonshine rings and the residue of a life lived at the intersection of commerce and cruelty. She's looking at you the way she looks at everything: calculating what it's worth.",
-  "backstory": "Nan Hannigan's grandmother built Hannigan's House from a collapsed Nuka-Cola bottling plant in 2145. Nan inherited the building, the still, and the ledger book recording every debt owed to every Hannigan since. She doesn't forget. She doesn't forgive debts. She doesn't sleep more than four hours a night, which she maintains is all any businesswoman needs. The NCR tried to regulate Hannigan's House twice. Both times she showed them the ledger. Both times they left.",
+  "description": "A heavyset woman in her fifties, hair the color of dirty dishwater pinned into a knot that's fighting a losing battle against gravity. She wears a licensed trader's vest over pre-war work clothes, both stained with Fizz-Moonshine rings and the residue of a life lived at the intersection of commerce and cruelty. She's looking at you the way she looks at everything: calculating what it's worth.",
+  "backstory": "Nan Hannigan's grandmother built Hannigan's House from a collapsed Atomic Fizz bottling plant in 2145. Nan inherited the building, the still, and the ledger book recording every debt owed to every Hannigan since. She doesn't forget. She doesn't forgive debts. She doesn't sleep more than four hours a night, which she maintains is all any businesswoman needs. The Frontier Compact tried to regulate Hannigan's House twice. Both times she showed them the ledger. Both times they left.",
   "personality": [
     "Sharp",
     "Mercenary",
@@ -20,7 +20,7 @@
       "hannigan_tracked"
     ],
     "video_speech": "Well, look at that. A visitor. You're either lost or you've got business. Which is it, stranger?",
-    "text": "You smell her before you see her — Nuka-Moonshine and old cigarette smoke and the particular scent of someone who has decided that bathing is optional when you own the only water purifier in your establishment.\n\nShe's heavyset, maybe fifty-something, with the kind of face that was probably pleasant twenty years and a lot of bad decisions ago. Now it's set into the permanent expression of a woman doing math — specifically, calculating what everything is worth and whether she can get more.\n\nShe's sitting at a table covered in ledger books, a bottle of Nuka-Moonshine within easy reach, her licensed trader's vest covered in official-looking pins that she is absolutely wearing because they make her look legitimate.\n\nWhen she sees you, she doesn't react with surprise. She reacts with assessment.\n\n\"Well, look at that.\" Her voice has the particular lilt of someone who learned to be charming and has since weaponized it. \"A visitor. You're either lost or you've got business.\"\n\nShe smiles. It doesn't quite reach her eyes, but it's a very professional smile.\n\n\"Which is it, stranger?\"",
+    "text": "You smell her before you see her — Fizz-Moonshine and old cigarette smoke and the particular scent of someone who has decided that bathing is optional when you own the only water purifier in your establishment.\n\nShe's heavyset, maybe fifty-something, with the kind of face that was probably pleasant twenty years and a lot of bad decisions ago. Now it's set into the permanent expression of a woman doing math — specifically, calculating what everything is worth and whether she can get more.\n\nShe's sitting at a table covered in ledger books, a bottle of Fizz-Moonshine within easy reach, her licensed trader's vest covered in official-looking pins that she is absolutely wearing because they make her look legitimate.\n\nWhen she sees you, she doesn't react with surprise. She reacts with assessment.\n\n\"Well, look at that.\" Her voice has the particular lilt of someone who learned to be charming and has since weaponized it. \"A visitor. You're either lost or you've got business.\"\n\nShe smiles. It doesn't quite reach her eyes, but it's a very professional smile.\n\n\"Which is it, stranger?\"",
     "responses": [
       {
         "text": "[Question] I'm looking for information about this orphanage. What happens here?",
@@ -47,7 +47,7 @@
   "nodes": {
     "node_orphanage_pitch": {
       "id": "node_orphanage_pitch",
-      "text": "\"This orphanage?\" She spreads her hands with the expansive warmth of a traveling preacher. \"Hannigan's House is a licensed care facility for displaced minors. Operating under full settlement trade authority with an active caretaker certification.\"\n\nShe taps one of the pins on her vest. It does, indeed, say 'Licensed Caretaker.'\n\n\"We take in kids who've got nowhere else to go. Feed them. Keep them safe. In return — because nothing in the wasteland is free, stranger, and teaching kids that early is the best lesson there is — they do some light work. Scavenging, mostly. Good skills. Practical skills.\"\n\nShe pours herself a glass of Nuka-Moonshine without offering you any.\n\n\"It's a good operation. The kids are lucky to have it.\"",
+      "text": "\"This orphanage?\" She spreads her hands with the expansive warmth of a traveling preacher. \"Hannigan's House is a licensed care facility for displaced minors. Operating under full settlement trade authority with an active caretaker certification.\"\n\nShe taps one of the pins on her vest. It does, indeed, say 'Licensed Caretaker.'\n\n\"We take in kids who've got nowhere else to go. Feed them. Keep them safe. In return — because nothing in the wasteland is free, stranger, and teaching kids that early is the best lesson there is — they do some light work. Scavenging, mostly. Good skills. Practical skills.\"\n\nShe pours herself a glass of Fizz-Moonshine without offering you any.\n\n\"It's a good operation. The kids are lucky to have it.\"",
       "responses": [
         {
           "text": "[Question] Light work. How light? What are the rations like?",
@@ -84,10 +84,10 @@
     },
     "node_what_story": {
       "id": "node_what_story",
-      "text": "She refills her glass. Carefully. Takes a sip.\n\n\"Oh, the usual.\" She waves a hand. \"Girl gets ideas above her station. Talks a good tale about how mean old Nan is exploiting the poor orphans. Leaves out the part where I've been feeding twelve children and housing them for four years, at my own expense, because it's the right thing to do.\"\n\nShe leans forward.\n\n\"Leaves out the part where the 'work' is teaching survival skills. And the part where Ember — bright girl, I'll give her that, too bright for her own good — decided the other kids were better off following her into the ruins than staying in a facility with walls and a functioning latrine.\"\n\nA hard look through the professional warmth.\n\n\"She's got eleven kids hiding in the wasteland, stranger. How long until one of them gets eaten by a radscorpion?\"",
+      "text": "She refills her glass. Carefully. Takes a sip.\n\n\"Oh, the usual.\" She waves a hand. \"Girl gets ideas above her station. Talks a good tale about how mean old Nan is exploiting the poor orphans. Leaves out the part where I've been feeding twelve children and housing them for four years, at my own expense, because it's the right thing to do.\"\n\nShe leans forward.\n\n\"Leaves out the part where the 'work' is teaching survival skills. And the part where Ember — bright girl, I'll give her that, too bright for her own good — decided the other kids were better off following her into the ruins than staying in a facility with walls and a functioning latrine.\"\n\nA hard look through the professional warmth.\n\n\"She's got eleven kids hiding in the wasteland, stranger. How long until one of them gets eaten by a glowsting?\"",
       "responses": [
         {
-          "text": "[Direct] They're safer from radscorpions than from you. That's the calculation she made.",
+          "text": "[Direct] They're safer from glowstings than from you. That's the calculation she made.",
           "tone": "direct",
           "next": "node_confronted_directly"
         },
@@ -338,7 +338,7 @@
     },
     "node_the_ultimatum": {
       "id": "node_the_ultimatum",
-      "text": "She stares at you for a long moment.\n\n\"You're telling me what to do in my own facility.\"\n\nShe picks up the Nuka-Moonshine. Sets it back down.\n\n\"That's not how this works, stranger. That's not how any of this works.\"\n\nShe's cold now. Not angry — anger would be more comfortable. This is calculated.\n\n\"You want the children. They're legally mine. You want me to stop the operation. I have a license. You want me to drop the warrant. I filed it legally.\"\n\nShe tilts her head.\n\n\"What, precisely, are you offering in exchange for any of those things? Because 'I'm telling you to' is not a currency I accept.\"",
+      "text": "She stares at you for a long moment.\n\n\"You're telling me what to do in my own facility.\"\n\nShe picks up the Fizz-Moonshine. Sets it back down.\n\n\"That's not how this works, stranger. That's not how any of this works.\"\n\nShe's cold now. Not angry — anger would be more comfortable. This is calculated.\n\n\"You want the children. They're legally mine. You want me to stop the operation. I have a license. You want me to drop the warrant. I filed it legally.\"\n\nShe tilts her head.\n\n\"What, precisely, are you offering in exchange for any of those things? Because 'I'm telling you to' is not a currency I accept.\"",
       "responses": [
         {
           "text": "[Direct] Warren B. Capston is what I'm offering.",
@@ -354,7 +354,7 @@
     },
     "node_farewell_deal": {
       "id": "node_farewell_deal",
-      "text": "She calls the guard again. Four children, the same ones, filed out quickly — looking relieved and carefully not showing it in case it got taken back.\n\nYou don't watch Hannigan. But you can feel her watching you.\n\nAt the door:\n\n\"Tell Capston this was a business disagreement. Not a criminal matter.\"\n\nHer voice is controlled. Professional.\n\n\"And tell that girl — tell Ember — that she got lucky. Clever isn't the same as safe. The wasteland makes that distinction eventually.\"\n\nYou take the children and you leave.\n\nBehind you, you hear the sound of Nuka-Moonshine being poured — and then the clink of a ledger being opened. Because Nan Hannigan is already working on the next operation.\n\nThe wasteland doesn't run out of children who need somewhere to go. And she will always have a facility waiting.",
+      "text": "She calls the guard again. Four children, the same ones, filed out quickly — looking relieved and carefully not showing it in case it got taken back.\n\nYou don't watch Hannigan. But you can feel her watching you.\n\nAt the door:\n\n\"Tell Capston this was a business disagreement. Not a criminal matter.\"\n\nHer voice is controlled. Professional.\n\n\"And tell that girl — tell Ember — that she got lucky. Clever isn't the same as safe. The wasteland makes that distinction eventually.\"\n\nYou take the children and you leave.\n\nBehind you, you hear the sound of Fizz-Moonshine being poured — and then the clink of a ledger being opened. Because Nan Hannigan is already working on the next operation.\n\nThe wasteland doesn't run out of children who need somewhere to go. And she will always have a facility waiting.",
       "end": true
     },
     "node_farewell_bribed": {

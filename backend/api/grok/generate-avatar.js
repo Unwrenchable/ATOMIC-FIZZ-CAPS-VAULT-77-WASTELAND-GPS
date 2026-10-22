@@ -1,7 +1,7 @@
 // backend/api/grok/generate-avatar.js
 // -----------------------------------------------------------------------
 // Atomic Fizz Caps – Grok Avatar Generation API
-// POST /api/grok/generate-avatar → Generate Fallout-style avatar via xAI Grok
+// POST /api/grok/generate-avatar → Generate wasteland-style avatar via xAI Grok
 // -----------------------------------------------------------------------
 'use strict';
 
@@ -47,9 +47,9 @@ function validateAvatarRequest(body) {
 // Make request to xAI Grok API
 async function makeGrokRequest(prompt) {
   return new Promise((resolve, reject) => {
-    const systemPrompt = `You are a Fallout wasteland avatar generator. Create detailed, vivid descriptions of survivors in the Fallout universe. Focus on post-apocalyptic aesthetics, radiation damage, wasteland attire, cybernetic enhancements, and gritty survival gear. Keep descriptions under 200 words.`;
+    const systemPrompt = `You are a wasteland avatar generator. Create detailed, vivid descriptions of survivors in the wasteland universe. Focus on post-apocalyptic aesthetics, radiation damage, wasteland attire, cybernetic enhancements, and gritty survival gear. Keep descriptions under 200 words.`;
 
-    const userPrompt = `Generate a detailed description for a Fallout wasteland survivor avatar based on this prompt: "${prompt}". Include appearance, clothing, gear, and any mutations or cybernetics. Make it authentic to the Fallout aesthetic.`;
+    const userPrompt = `Generate a detailed description for a wasteland survivor avatar based on this prompt: "${prompt}". Include appearance, clothing, gear, and any mutations or cybernetics. Make it authentic to the wasteland aesthetic.`;
 
     const postData = JSON.stringify({
       messages: [

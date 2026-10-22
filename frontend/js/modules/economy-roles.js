@@ -70,7 +70,7 @@
       lore        : 'Every life you save is a defiance of the bomb. You\'ve made it personal.',
       unlockLevel : 3,
       perks       : [
-        { id: 'triage_expert',    name: 'Triage Expert',    description: 'Heal 40% more HP with stimpaks and medical items.' },
+        { id: 'triage_expert',    name: 'Triage Expert',    description: 'Heal 40% more HP with FizzPaks and medical items.' },
         { id: 'chem_efficiency',  name: 'Chem Efficiency',  description: 'Medical chems last 50% longer. Addiction chance halved.' },
         { id: 'field_surgery',    name: 'Field Surgery',    description: 'Remove crippled limb debuffs in the field without a clinic.' },
         { id: 'doctor_discount',  name: 'Doctor\'s Discount', description: 'Medical item purchase prices reduced by 25%.' },

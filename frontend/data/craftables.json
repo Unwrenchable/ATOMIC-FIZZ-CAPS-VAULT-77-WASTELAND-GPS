@@ -47,7 +47,7 @@
   },
   "stimpak": {
     "id": "stimpak",
-    "name": "Stimpak",
+    "name": "FizzPak",
     "ingredients": [
       {
         "id": "herb",

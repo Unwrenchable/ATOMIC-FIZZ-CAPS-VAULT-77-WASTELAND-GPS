@@ -11,7 +11,7 @@ const Game = window.Game;
   let markers = {};
 
   // ============================================================
-  // ICON FALLBACK MAPPING (Enhanced for Fallout authenticity)
+  // ICON FALLBACK MAPPING (Enhanced for wasteland authenticity)
   // Maps iconKey values that don't have SVG files to existing icons
   // ============================================================
   const ICON_FALLBACK_MAP = {

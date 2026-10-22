@@ -1,58 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <defs>
-    <!-- Main skin gradient with more depth -->
-    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f0d8b8"/>
-      <stop offset="40%" stop-color="#e8cca8"/>
-      <stop offset="75%" stop-color="#d8b890"/>
-      <stop offset="100%" stop-color="#c8a080"/>
-    </linearGradient>
-    <!-- Shadow gradient for depth -->
-    <radialGradient id="shadowGrad" cx="50%" cy="50%">
-      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.2"/>
-    </radialGradient>
-    <!-- Highlight for dimension -->
-    <radialGradient id="highlight" cx="35%" cy="25%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/>
-      <stop offset="60%" stop-color="#ffffff" stop-opacity="0.1"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  
-  <!-- Base head shape with more anatomical accuracy -->
-  <ellipse cx="128" cy="135" rx="72" ry="90" fill="url(#skinGrad)" stroke="#8a7060" stroke-width="1.5"/>
-  
-  <!-- Skull structure - forehead -->
-  <ellipse cx="128" cy="85" rx="65" ry="42" fill="url(#highlight)" opacity="0.4"/>
-  
-  <!-- Cheekbone definition -->
-  <ellipse cx="90" cy="130" rx="15" ry="20" fill="#c8a888" opacity="0.3"/>
-  <ellipse cx="166" cy="130" rx="15" ry="20" fill="#c8a888" opacity="0.3"/>
-  
-  <!-- Jaw shadow for depth -->
-  <path d="M75 160c10 20 25 40 53 45c28-5 43-25 53-45" fill="url(#shadowGrad)" opacity="0.5"/>
-  
-  <!-- Jawline definition -->
-  <path d="M70 150c8 18 20 35 35 45c8 5 18 8 23 8c5 0 15-3 23-8c15-10 27-27 35-45" 
-        fill="none" stroke="#9a8070" stroke-width="1.5" opacity="0.6" stroke-linecap="round"/>
-  
-  <!-- Chin definition -->
-  <ellipse cx="128" cy="200" rx="20" ry="12" fill="#c8a888" opacity="0.25"/>
-  
-  <!-- Neck with muscle structure -->
-  <path d="M88 195c2 8 8 20 18 28c8 6 14 8 22 8c8 0 14-2 22-8c10-8 16-20 18-28" 
-        fill="#d8b890" stroke="#8a7060" stroke-width="1.5"/>
-  
-  <!-- Sternocleidomastoid muscles (neck detail) -->
-  <path d="M95 200c5 12 12 20 18 25" fill="none" stroke="#b89878" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
-  <path d="M161 200c-5 12-12 20-18 25" fill="none" stroke="#b89878" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
-  
-  <!-- Adam's apple suggestion -->
-  <ellipse cx="128" cy="215" rx="6" ry="8" fill="#b89878" opacity="0.3"/>
-  
-  <!-- Subtle weathering/texture for wasteland look -->
-  <circle cx="108" cy="145" r="1.5" fill="#a89070" opacity="0.3"/>
-  <circle cx="148" cy="152" r="1.5" fill="#a89070" opacity="0.3"/>
-  <circle cx="118" cy="168" r="1" fill="#a89070" opacity="0.25"/>
+  <!-- Head: ~35, balanced, defined jaw. Original Atomic Fizz art, v4 draft. -->
+  <defs><filter id="headbase-b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.8"/></filter><filter id="headbase-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter><filter id="headbase-b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter><filter id="headbase-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><filter id="headbase-grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" seed="11"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .14  0 0 0 0 .08  1.6 0 0 0 -.62"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headbase-dust" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="5"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .5  5 0 0 0 -3.1"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headbase-pores" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .1  2.2 0 0 0 -.95"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headbase-stub" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="1" seed="9"/><feColorMatrix values="0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  6 0 0 0 -3.3"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headbase-paint" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".55"/></filter><filter id="headbase-brush" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".012 .2" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .92  0 0 0 0 .8  0 0 0 0 .62  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headbase-brushd" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".2 .014" numOctaves="3" seed="13"/><feColorMatrix values="0 0 0 0 .12  0 0 0 0 .08  0 0 0 0 .05  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><linearGradient id="headbase-sk" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="#c19874"/><stop offset=".55" stop-color="#9c7058"/><stop offset="1" stop-color="#6e4e3c"/></linearGradient><clipPath id="headbase-f"><path d="M128 36 C163.0 36 180 52 180 84 L183 124 C182 140 179 152 175 172 L144.0 191 Q128 195 113 192 L83 170 C79 152 76 140 75 124 L78 84 C78 52 93.0 36 128 36Z"/></clipPath><clipPath id="headbase-n"><path d="M107 150 L149 150 C149 188 152 206 164 228 L92 228 C104 206 107 188 107 150Z"/></clipPath></defs>
+  <g filter="url(#headbase-paint)">
+  <path d="M107 150 L149 150 C149 188 152 206 164 228 L92 228 C104 206 107 188 107 150Z" fill="#9c7058"/>
+  <g clip-path="url(#headbase-n)">
+    <path d="M128 150 L149 150 C149 188 152 206 164 228 L128 228Z" fill="#6e4e3c" opacity=".7" filter="url(#headbase-b2)"/>
+    <ellipse cx="130" cy="193" rx="44" ry="13" fill="#41281d" opacity=".85" filter="url(#headbase-b4)"/>
+    <path d="M112 196 C116 208 120 216 126 222" stroke="#41281d" stroke-width="3" fill="none" opacity="0.45" filter="url(#headbase-b2)"/>
+    
+    <g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headbase-grime)" opacity="0.55"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headbase-pores)" opacity="0.5"/></g><g transform="rotate(80 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#headbase-brushd)" opacity="0.25"/></g>
+  </g>
+  <path d="M72 112 C63 112 62 138 73 149.4 L77 130Z" fill="#9c7058"/>
+  <path d="M70 118 C66 124 67 136 72 142" stroke="#41281d" stroke-width="2" fill="none" opacity=".6" filter="url(#headbase-b1)"/>
+  <path d="M184 112 C193 112 194 138 183 149.4 L179 130Z" fill="#6e4e3c"/>
+  <path d="M186 118 C190 124 189 136 184 142" stroke="#41281d" stroke-width="2" fill="none" opacity=".7" filter="url(#headbase-b1)"/>
+  <path d="M128 36 C163.0 36 180 52 180 84 L183 124 C182 140 179 152 175 172 L144.0 191 Q128 195 113 192 L83 170 C79 152 76 140 75 124 L78 84 C78 52 93.0 36 128 36Z" fill="url(#headbase-sk)"/>
+  <g clip-path="url(#headbase-f)">
+    <path d="M138 40 C168.0 44 182 70 182 96 L185 130 L177 174 L143 193 L138 193 C146 178 154 160 154 140 C156 120 152 96 146 70 Z" fill="#41281d" opacity=".55" filter="url(#headbase-b4)"/>
+    <!-- brow ridge (strength varies per head) -->
+    <path d="M80 104 C96 96.5 112 99.0 124 106 M132 106 C146 99.0 162 96.5 178 104" stroke="#c19874" stroke-width="5.0" fill="none" opacity="0.33" filter="url(#headbase-b2)"/>
+    <path d="M84 108.5 C98 104.5 112 106.5 122 110.5 M134 110.5 C146 106.5 160 104.5 174 108.5" stroke="#41281d" stroke-width="4.0" fill="none" opacity="0.35" filter="url(#headbase-b2)"/>
+    <ellipse cx="100" cy="118" rx="17" ry="9" fill="#41281d" opacity="0.53" filter="url(#headbase-b4)"/>
+    <ellipse cx="157" cy="118" rx="17" ry="9" fill="#41281d" opacity="0.62" filter="url(#headbase-b4)"/>
+    <!-- nose bridge: width per head -->
+    <path d="M124 108 L122.6 150" stroke="#c19874" stroke-width="4.9" opacity=".28" filter="url(#headbase-b2)"/>
+    <path d="M135.1 110 C138.1 128 140.1 142 141.1 156" stroke="#41281d" stroke-width="7.0" fill="none" opacity=".32" filter="url(#headbase-b4)"/>
+    <!-- cheekbones and hollows -->
+    <path d="M79 128 C91 124 103 128 106 136" stroke="#c19874" stroke-width="5" fill="none" opacity=".32" filter="url(#headbase-b2)"/>
+    <path d="M81 140 C89 152 99 158 110 162" stroke="#41281d" stroke-width="7.8" fill="none" opacity="0.28" filter="url(#headbase-b4)"/>
+    <path d="M175 140 C167 152 157 158 146 162" stroke="#41281d" stroke-width="7.8" fill="none" opacity="0.37" filter="url(#headbase-b4)"/>
+    <!-- nasolabial folds, chin, jaw line -->
+    <path d="M115 156 C110 164 110 172 113 180" stroke="#41281d" stroke-width="2.3" fill="none" opacity="0.46" filter="url(#headbase-b1)"/>
+    <path d="M142 156 C147 164 147 172 144 180" stroke="#41281d" stroke-width="2.5" fill="none" opacity="0.51" filter="url(#headbase-b1)"/>
+    <path d="M118 184 C124 181 132 181 138 184" stroke="#41281d" stroke-width="3" fill="none" opacity=".45" filter="url(#headbase-b2)"/>
+    <ellipse cx="124" cy="185" rx="10" ry="5" fill="#c19874" opacity=".3" filter="url(#headbase-b2)"/>
+    <path d="M83 170 L113 191 Q128 195 143 191 L175 172" stroke="#41281d" stroke-width="4" fill="none" opacity=".6" filter="url(#headbase-b2)"/>
+    <path d="M100 65.17915947443386 C112 62.17915947443386 144 62.17915947443386 156 65.17915947443386" stroke="#41281d" stroke-width="0.9" fill="none" opacity="0.27" filter="url(#headbase-b1)" stroke-linecap="round"/><path d="M98 72.55466162286359 C112 69.55466162286359 144 69.55466162286359 158 72.55466162286359" stroke="#41281d" stroke-width="0.9" fill="none" opacity="0.27" filter="url(#headbase-b1)" stroke-linecap="round"/><path d="M96 80.16835900234176 C112 77.16835900234176 144 77.16835900234176 160 80.16835900234176" stroke="#41281d" stroke-width="0.9" fill="none" opacity="0.27" filter="url(#headbase-b1)" stroke-linecap="round"/><path d="M82 116 l-7 -2.0" stroke="#41281d" stroke-width="0.7" fill="none" opacity="0.34" filter="url(#headbase-b1)" stroke-linecap="round"/><path d="M82 120 l-7 0.5" stroke="#41281d" stroke-width="0.7" fill="none" opacity="0.34" filter="url(#headbase-b1)" stroke-linecap="round"/><path d="M174 116 l7 -2.0" stroke="#41281d" stroke-width="0.7" fill="none" opacity="0.34" filter="url(#headbase-b1)" stroke-linecap="round"/><path d="M174 120 l7 0.5" stroke="#41281d" stroke-width="0.7" fill="none" opacity="0.34" filter="url(#headbase-b1)" stroke-linecap="round"/><path d="M88 131 C96 137 106 137 113 132 M143 132 C150 137 160 137 168 131" stroke="#41281d" stroke-width="1.1" fill="none" opacity="0.29" filter="url(#headbase-b1)" stroke-linecap="round"/>
+    <!-- painterly overlays: warm grade, brush streaks light+dark, grime, pores, dust -->
+    <rect width="256" height="256" fill="#6b5a44" opacity=".14"/>
+    <g transform="rotate(-32 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#headbase-brush)" opacity="0.16"/></g><g transform="rotate(28 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#headbase-brushd)" opacity="0.28"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headbase-grime)" opacity="0.7"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headbase-pores)" opacity="0.55"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headbase-dust)" opacity="0.3"/></g>
+  </g>
+  <path d="M128 36 C163.0 36 180 52 180 84 L183 124 C182 140 179 152 175 172 L144.0 191 Q128 195 113 192 L83 170 C79 152 76 140 75 124 L78 84 C78 52 93.0 36 128 36Z" fill="none" stroke="#41281d" stroke-width="2.4" opacity=".45" filter="url(#headbase-b1)"/>
+  </g>
 </svg>

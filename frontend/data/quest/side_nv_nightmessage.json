@@ -2,7 +2,7 @@
   "id": "side_nv_nightmessage",
   "name": "Night Message",
   "type": "side",
-  "poIs": ["New Vegas Strip"],
+  "poIs": ["Neon Reach Strip"],
   "description": "Meet the Night Courier and deliver a message across the Strip.",
   "objectives": [
     "Find the Night Courier (only at night)",

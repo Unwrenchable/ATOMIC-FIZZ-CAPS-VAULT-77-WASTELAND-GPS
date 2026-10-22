@@ -2,7 +2,7 @@
   "id": "side_nv_gangpressure",
   "name": "Gang Pressure",
   "type": "side",
-  "poIs": ["New Vegas Strip", "Freeside"],
+  "poIs": ["Neon Reach Strip", "Freeside"],
   "description": "Razor-Jack pressures you to help his gang control a Strip block.",
   "objectives": [
     "Meet Razor-Jack",

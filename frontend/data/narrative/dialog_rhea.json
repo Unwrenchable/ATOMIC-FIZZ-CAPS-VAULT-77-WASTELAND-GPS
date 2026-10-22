@@ -3,12 +3,12 @@
   "npc": "Rhea Calloway",
   "portrait": "rhea",
   "title": "The Wrench",
-  "description": "A salvage engineer who specializes in Vault-Tec architecture — the only person in the Mojave who reads the Institute's encrypted maintenance logs for fun. She looks at the world in terms of what's broken and how to fix it. She is deeply, professionally upset about what she found inside Vault 77.",
+  "description": "A salvage engineer who specializes in FizzTec architecture — the only person in the Cinder Basin who reads the Institute's encrypted maintenance logs for fun. She looks at the world in terms of what's broken and how to fix it. She is deeply, professionally upset about what she found inside Vault 77.",
   "backstory": "Rhea Calloway reverse-engineers things for a living. She stumbled into the Jax Harlan situation while pulling apart a Vault 77 subsystem for a scrap buyer in 2279 — and found what appeared to be a human cognitive pattern running in the architecture where a simple maintenance protocol should have been. She did not expect to find a person inside a machine. She is still angry about it. She plans to stay angry about it.",
   "entries": {
     "rhea_intro": {
       "type": "spoken",
-      "text": "If it's broken, I can probably fix it. If Vault-Tec built it, I can definitely break it."
+      "text": "If it's broken, I can probably fix it. If FizzTec built it, I can definitely break it."
     },
     "rhea_about_harlan": {
       "type": "spoken",
@@ -16,7 +16,7 @@
     },
     "rhea_about_jax": {
       "type": "spoken",
-      "text": "Jax was sharp. Too sharp. Vault-Tec loves kids like that. They call it 'potential'. I call it 'target'."
+      "text": "Jax was sharp. Too sharp. FizzTec loves kids like that. They call it 'potential'. I call it 'target'."
     },
     "rhea_reacts_overseer_voice": {
       "type": "spoken",
@@ -40,7 +40,7 @@
     },
     "rhea_warning_sync": {
       "type": "spoken",
-      "text": "Mind-body sync is risky. Could stabilize. Could fry both. Vault-Tec never finished the research for a reason."
+      "text": "Mind-body sync is risky. Could stabilize. Could fry both. FizzTec never finished the research for a reason."
     },
     "rhea_finalA_peace": {
       "type": "ending",
@@ -56,7 +56,7 @@
     },
     "rhea_aftermath": {
       "type": "spoken",
-      "text": "Vault-Tec built horrors. But sometimes, the wasteland builds something new out of the wreckage."
+      "text": "FizzTec built horrors. But sometimes, the wasteland builds something new out of the wreckage."
     }
   },
   "mood": "friendly",

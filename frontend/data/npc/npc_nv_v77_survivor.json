@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_v77_survivor",
   "name": "Echo Survivor",
-  "faction": "Vault-Tec",
+  "faction": "FizzTec",
   "role": "Vault 77 Escapee",
 
   "homeRegion": "strip-underground",

@@ -4,9 +4,9 @@
   "faction": "caesar_legion",
   "role": "Centurion",
   "personality": "Cold, disciplined, unwavering in loyalty.",
-  "description": "Varrus commands Cottonwood Cove with iron precision. He believes the Mojave is weak and ripe for conquest.",
+  "description": "Varrus commands Cottonwood Cove with iron precision. He believes the Cinder Basin is weak and ripe for conquest.",
   "questHooks": [
-    "Wants intel on NCR troop movements near Searchlight.",
+    "Wants intel on Frontier Compact troop movements near Searchlight.",
     "Says the river carries 'omens' at night — humming stones.",
     "Believes someone is sabotaging Legion supply caches."
   ],

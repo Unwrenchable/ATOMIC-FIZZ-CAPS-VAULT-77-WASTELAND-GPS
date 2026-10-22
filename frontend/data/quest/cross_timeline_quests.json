@@ -1,11 +1,11 @@
 {
   "version": "1.0.0",
-  "description": "Cross-timeline GPS quests spanning all Fallout games, tied to real-world coordinates",
+  "description": "Cross-timeline GPS quests spanning all wasteland games, tied to real-world coordinates",
   "quests": [
     {
       "quest_id": "qtl_boneyard_brotherhood",
       "name": "Ashes of the Boneyard",
-      "description": "Brotherhood of Steel paladins have quarantined a pre-war research facility beneath the ruins of the old Los Angeles basin. They found something — a FIZZ token prototype minted before the bombs fell. They want it destroyed. Someone else wants it very, very badly.",
+      "description": "Coil Covenant paladins have quarantined a pre-war research facility beneath the ruins of the old Los Angeles basin. They found something — a FIZZ token prototype minted before the bombs fell. They want it destroyed. Someone else wants it very, very badly.",
       "region": "The Boneyard (Los Angeles)",
       "timeline": "fallout_1",
       "real_lat": 34.0522,
@@ -52,7 +52,7 @@
         "commissar",
         "doc"
       ],
-      "narrative_hook": "The pre-war researchers built a distributed ledger system for Vault-Tec resource allocation. The Proto-FIZZ Chip is a master authentication key. With it, someone could claim ownership of every Vault's remaining resource reserves.",
+      "narrative_hook": "The pre-war researchers built a distributed ledger system for FizzTec resource allocation. The Proto-FIZZ Chip is a master authentication key. With it, someone could claim ownership of every Vault's remaining resource reserves.",
       "trigger_radius_meters": 1000
     },
     {
@@ -105,7 +105,7 @@
     {
       "quest_id": "qtl_shady_sands_ncr",
       "name": "The Founding Lie",
-      "description": "A ghoul archivist in Shady Sands claims to have holotapes proving that the NCR's founding charter was forged — the original settlement was a Vault-Tec experiment, not a free community. The NCR Commissar wants the tapes destroyed. The archivist wants them broadcast. And someone just tried to kill them both.",
+      "description": "A ghoul archivist in Shady Sands claims to have holotapes proving that the Frontier Compact's founding charter was forged — the original settlement was a FizzTec experiment, not a free community. The Frontier Compact Commissar wants the tapes destroyed. The archivist wants them broadcast. And someone just tried to kill them both.",
       "region": "Shady Sands (Sacramento area)",
       "timeline": "fallout_2",
       "real_lat": 38.5816,
@@ -119,7 +119,7 @@
         },
         {
           "id": "sands_2",
-          "text": "Authenticate the holotapes using a Vault-Tec terminal in the ruins",
+          "text": "Authenticate the holotapes using a FizzTec terminal in the ruins",
           "type": "hack"
         },
         {
@@ -218,7 +218,7 @@
         },
         {
           "id": "reno_3",
-          "text": "Choose: expose the operation (to the Bishops or NCR), destroy the array, or exploit it yourself",
+          "text": "Choose: expose the operation (to the Bishops or Frontier Compact), destroy the array, or exploit it yourself",
           "type": "decision"
         },
         {
@@ -247,7 +247,7 @@
       "quest_id": "qtl_new_vegas_strip",
       "name": "Vegas Never Sleeps",
       "description": "Mr. House's securitrons are malfunctioning — someone has infected their network with a virus that makes them pay out FIZZ tokens to anyone within a 10-meter radius. Vegas is descending into ecstatic chaos. House wants the virus's author found and brought to him. Alive if possible.",
-      "region": "New Vegas (Las Vegas)",
+      "region": "Neon Reach (Las Vegas)",
       "timeline": "fallout_new_vegas",
       "real_lat": 36.1699,
       "real_lng": -115.1398,
@@ -255,7 +255,7 @@
       "objectives": [
         {
           "id": "vegas_1",
-          "text": "Navigate the FIZZ-paying securitron riot to reach the Lucky 38",
+          "text": "Navigate the FIZZ-paying securitron riot to reach the The Spire",
           "type": "navigate"
         },
         {
@@ -340,7 +340,7 @@
     {
       "quest_id": "qtl_old_world_blues",
       "name": "The Big Empty Frequency",
-      "description": "Big MT's Think Tank has been broadcasting encrypted FIZZ mining instructions on pre-war radio frequencies. Every broken radio in the Mojave is now a FIZZ miner draining its battery. The Think Tank wants test subjects to retrieve the 'optimization data.' The Courier's brain has strong feelings about this.",
+      "description": "Big MT's Think Tank has been broadcasting encrypted FIZZ mining instructions on pre-war radio frequencies. Every broken radio in the Cinder Basin is now a FIZZ miner draining its battery. The Think Tank wants test subjects to retrieve the 'optimization data.' The Courier's brain has strong feelings about this.",
       "region": "Old World Blues (New Mexico desert)",
       "timeline": "fallout_new_vegas_old_world_blues",
       "real_lat": 33,
@@ -387,7 +387,7 @@
     {
       "quest_id": "qtl_rivet_city",
       "name": "The Capital Ledger",
-      "description": "Rivet City's science team has found a functioning pre-war Federal Reserve server in the Jefferson Memorial's subbasement. It contains every pre-war financial transaction ever made — including the identities of everyone who funded Vault-Tec. The Brotherhood wants it. The Enclave wants it more.",
+      "description": "Rivet City's science team has found a functioning pre-war Federal Reserve server in the Jefferson Memorial's subbasement. It contains every pre-war financial transaction ever made — including the identities of everyone who funded FizzTec. The Brotherhood wants it. The Directorate wants it more.",
       "region": "Rivet City (Washington DC)",
       "timeline": "fallout_3",
       "real_lat": 38.8744,
@@ -406,7 +406,7 @@
         },
         {
           "id": "rivet_3",
-          "text": "Extract the Federal Reserve data core before Brotherhood AND Enclave arrive",
+          "text": "Extract the Federal Reserve data core before Brotherhood AND Directorate arrive",
           "type": "stealth"
         },
         {
@@ -428,7 +428,7 @@
         "erich",
         "commissar"
       ],
-      "narrative_hook": "One name on the Vault-Tec funder list is still alive. Very, very alive. And they have been funding the Institute.",
+      "narrative_hook": "One name on the FizzTec funder list is still alive. Very, very alive. And they have been funding the Institute.",
       "trigger_radius_meters": 1000
     },
     {
@@ -528,7 +528,7 @@
     {
       "quest_id": "qtl_appalachia_vault76",
       "name": "Reclamation Day Protocol",
-      "description": "Vault 76's ATLAS system has come online broadcasting a Reclamation Day mission: retrieve a missing Overseer's FIZZ wallet seed phrase, distributed across five holotapes hidden at Fallout-era Appalachian landmarks. The Scorched have learned what the holotapes contain and are being directed by something intelligent.",
+      "description": "Vault 76's ATLAS system has come online broadcasting a Reclamation Day mission: retrieve a missing Overseer's FIZZ wallet seed phrase, distributed across five holotapes hidden at wasteland-era Appalachian landmarks. The Scorched have learned what the holotapes contain and are being directed by something intelligent.",
       "region": "Appalachia / Vault 76 (West Virginia)",
       "timeline": "fallout_76",
       "real_lat": 38.3,
@@ -670,8 +670,8 @@
     {
       "quest_id": "qtl_nuka_world",
       "name": "The Park After Dark",
-      "description": "Nuka-World's Raider gangs have discovered that certain Nuka-Cola Quantum bottles contain pre-war Nuka-Cola Corp authentication codes that function as FIZZ token minting licenses. Three gang leaders are now at war over a single Quantum stockpile. The Overboss position is vacant.",
-      "region": "Nuka-World (Six Flags area)",
+      "description": "Fizz Fair's Raider gangs have discovered that certain Atomic Fizz Quantum bottles contain pre-war Atomic Fizz Corp authentication codes that function as FIZZ token minting licenses. Three gang leaders are now at war over a single Quantum stockpile. The Overboss position is vacant.",
+      "region": "Fizz Fair (Six Flags area)",
       "timeline": "fallout_4_nuka_world",
       "real_lat": 42.0848,
       "real_lng": -71.4973,
@@ -689,7 +689,7 @@
         },
         {
           "id": "nuka_3",
-          "text": "Secure the Quantum stockpile in Nuka-Cola Bottling Plant before the losing gangs regroup",
+          "text": "Secure the Quantum stockpile in Atomic Fizz Bottling Plant before the losing gangs regroup",
           "type": "stealth"
         },
         {
@@ -711,14 +711,14 @@
         "bats",
         "arnie"
       ],
-      "narrative_hook": "The Nuka-Cola Corp minting licenses can generate 10,000 FIZZ tokens per year, permanently. Dolores has been trying to buy them from the gangs for three years. She will match any offer. And undercut it.",
+      "narrative_hook": "The Atomic Fizz Corp minting licenses can generate 10,000 FIZZ tokens per year, permanently. Dolores has been trying to buy them from the gangs for three years. She will match any offer. And undercut it.",
       "trigger_radius_meters": 1000
     },
     {
       "quest_id": "qtl_chicago_tactics",
       "name": "The Midwest Brotherhood Gambit",
-      "description": "Chicago's Midwest Brotherhood of Steel faction has been secretly operating a FIZZ node using captured Skynet AI processing power. Their Calculator-era robots are mining cryptocurrency while ostensibly guarding the city. A Reaver faction has discovered the scheme and wants a cut. Or they'll expose it to Elder Maxson.",
-      "region": "Chicago (Fallout Tactics)",
+      "description": "Chicago's Midwest Coil Covenant faction has been secretly operating a FIZZ node using captured Skynet AI processing power. Their Calculator-era robots are mining cryptocurrency while ostensibly guarding the city. A Reaver faction has discovered the scheme and wants a cut. Or they'll expose it to Elder Maxson.",
+      "region": "Chicago (wasteland Tactics)",
       "timeline": "fallout_tactics",
       "real_lat": 41.8527,
       "real_lng": -87.6534,
@@ -811,7 +811,7 @@
     {
       "quest_id": "qtl_australia_vault_9",
       "name": "Vault 9 Downunder",
-      "description": "Vault-Tec built a single Vault in Australia — Vault 9 — as an experiment in 'cultural quarantine.' Its survivors rebuilt a thriving settlement but they're being pressured by a Chinese-PLA remnant faction who want the Vault's FIZZ token reserve for 'historical reparations.' The Vault Dwellers just want to be left alone.",
+      "description": "FizzTec built a single Vault in Australia — Vault 9 — as an experiment in 'cultural quarantine.' Its survivors rebuilt a thriving settlement but they're being pressured by a Chinese-PLA remnant faction who want the Vault's FIZZ token reserve for 'historical reparations.' The Vault Dwellers just want to be left alone.",
       "region": "Australian Outback (Vault 9 region)",
       "timeline": "fallout_original_lore",
       "real_lat": -25.2744,
@@ -905,7 +905,7 @@
     {
       "quest_id": "qtl_japan_vault_aomori",
       "name": "The Rising Vault",
-      "description": "Vault-Tec's Pacific branch built Vault Aomori beneath the Japanese coast, staffed with American and Japanese survivors. After 200 years, the two communities have developed entirely distinct post-war cultures that coexist uneasily. An outside FIZZ arbitration is needed to resolve a resource dispute — and prevent the vault from splitting in two.",
+      "description": "FizzTec's Pacific branch built Vault Aomori beneath the Japanese coast, staffed with American and Japanese survivors. After 200 years, the two communities have developed entirely distinct post-war cultures that coexist uneasily. An outside FIZZ arbitration is needed to resolve a resource dispute — and prevent the vault from splitting in two.",
       "region": "Aomori Prefecture (Japan)",
       "timeline": "fallout_original_lore",
       "real_lat": 40.8244,

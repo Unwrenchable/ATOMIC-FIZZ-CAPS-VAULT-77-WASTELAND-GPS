@@ -1,10 +1,22 @@
 {
-  "name": "afc-avatar-pack-svg-v3-epic",
-  "version": "3.0.0",
-  "description": "EPIC enhanced SVG layered avatar pack for Atomic Fizz Caps Vault 77. Detailed wasteland aesthetic with authentic Fallout styling, anatomically accurate features, and immersive post-apocalyptic details.",
-  "theme": "Post-apocalyptic Fallout-style wasteland survivor - EPIC edition",
+  "name": "afc-avatar-pack-svg-v4",
+  "version": "4.1.0-draft",
+  "description": "EPIC enhanced SVG layered avatar pack for Atomic Fizz Caps Vault 77. Detailed wasteland aesthetic with authentic wasteland styling, anatomically accurate features, and immersive post-apocalyptic details.",
+  "theme": "Post-apocalyptic wasteland-style wasteland survivor - EPIC edition",
   "viewBox": "0 0 256 256",
-  "layerOrder": ["head", "eyes", "nose", "mouth", "hair", "facialHair", "scars", "markings", "accessories", "shirt"],
+  "layerOrder": [
+    "head",
+    "eyes",
+    "nose",
+    "mouth",
+    "hair",
+    "hat",
+    "facialHair",
+    "scars",
+    "markings",
+    "accessories",
+    "shirt"
+  ],
   "parts": {
     "head": [
       "head_base.svg",
@@ -53,6 +65,11 @@
       "hair_slickedback.svg",
       "hair_wasteland.svg"
     ],
+    "hat": [
+      "hat_workcap.svg",
+      "hat_wide_brim.svg",
+      "hat_beanie.svg"
+    ],
     "facialHair": [
       "beard_stubble.svg",
       "beard_goatee.svg",
@@ -80,7 +97,7 @@
       "marking_moles.svg",
       "marking_radiation_burns.svg",
       "marking_circuitry.svg",
-      "marking_tattoo_vault.svg",
+      "marking_tattoo_cap.svg",
       "marking_tattoo_faction.svg"
     ],
     "accessories": [
@@ -104,9 +121,14 @@
       "shirt_wasteland_gear.svg"
     ]
   },
-  "totalAssets": 77,
+  "totalAssets": 86,
   "features": {
-    "colorizable": ["hair", "facialHair", "eyes", "skin"],
+    "colorizable": [
+      "hair",
+      "facialHair",
+      "eyes",
+      "skin"
+    ],
     "layered": true,
     "transparent": true,
     "optimized": true,
@@ -137,7 +159,25 @@
         "Added weathering, scratches, and wasteland survivor details throughout",
         "Maintained performance: all assets under 5KB, total ~340KB"
       ],
-      "impact": "Transforms character system from basic to EPIC - immersive and authentic Fallout aesthetic"
+      "impact": "Transforms character system from basic to EPIC - immersive and authentic wasteland aesthetic"
+    },
+    "v4.0.0": {
+      "date": "2026-10-19",
+      "changes": [
+        "Gritty semi-real redraw of all layers (adult proportions, grime/dust/stubble noise, frayed fabric, warm desaturated grade)",
+        "Bust geometry fixed: chin ~y194 above a visible neck; garment necklines y>=198",
+        "Per-file id prefixes (no collisions when composed)",
+        "hair_bald is an empty layer",
+        "New hat layer (3 files)",
+        "marking_tattoo_vault replaced by original marking_tattoo_cap (old filename kept as alias)",
+        "shirt_vault_suit is now an olive work coat (IP scrub)"
+      ]
+    },
+    "v4.1.0": {
+      "date": "2026-10-21",
+      "changes": [
+        "Painted head set (6) selectable via parts.head = \"painted/head_*.svg\"; composer skips baked-in layers"
+      ]
     }
   },
   "styleGuide": {
@@ -147,7 +187,7 @@
     "weathering": "Battle scars, rust, scratches, and post-apocalyptic wear",
     "fileSize": "Optimized for web performance (average 3-4KB per asset)",
     "compatibility": "Modern browsers, SVG 1.1+",
-    "aesthetic": "Fallout-inspired wasteland survivor - stylized but realistic"
+    "aesthetic": "wasteland-inspired wasteland survivor - stylized but realistic"
   },
   "usage": {
     "compositing": "Layer SVGs in order specified by layerOrder array",
@@ -157,8 +197,80 @@
     "integration": "Works seamlessly with existing character-creator.js system"
   },
   "license": "CC0 or original - created for Atomic Fizz Caps Vault 77 project",
-  "notes": "EPIC v3.0 release: Complete asset library overhaul for wasteland survivor character creation. All SVGs feature detailed shading, anatomical accuracy, and authentic Fallout aesthetic. Includes race-specific options (ghoul burns, synth circuitry, vault tattoos) with realistic detail. Perfect for immersive wasteland gameplay without breaking the fourth wall.",
+  "notes": "EPIC v3.0 release: Complete asset library overhaul for wasteland survivor character creation. All SVGs feature detailed shading, anatomical accuracy, and authentic wasteland aesthetic. Includes race-specific options (ghoul burns, synth circuitry, vault tattoos) with realistic detail. Perfect for immersive wasteland gameplay without breaking the fourth wall.",
   "overseerApproved": true,
   "radiationLevel": "Safe for viewing",
-  "vaultTecCompliant": true
+  "ipScrubbed": true,
+  "aliases": {
+    "marking_tattoo_vault.svg": "marking_tattoo_cap.svg"
+  },
+  "paintedHeads": {
+    "path": "painted/",
+    "files": [
+      "painted/head_base.svg",
+      "painted/head_round.svg",
+      "painted/head_square.svg",
+      "painted/head_heart.svg",
+      "painted/head_oblong.svg",
+      "painted/head_diamond.svg"
+    ],
+    "fallback": "vector head_*.svg set at the root",
+    "skipLayers": [
+      "hair",
+      "facialHair",
+      "hat",
+      "shirt"
+    ],
+    "optionalFaceLayers": [
+      "eyes",
+      "nose",
+      "mouth"
+    ],
+    "optionalFaceFlag": "paintedFace",
+    "anchors": {
+      "eyes": "y118 (centred x128)",
+      "mouthTalkOverlayY": {
+        "head_base": "75%",
+        "head_round": "70.3%",
+        "head_square": "75%",
+        "head_heart": "69.1%",
+        "head_oblong": "73.8%",
+        "head_diamond": "73.8%"
+      },
+      "note": "blink overlay unchanged"
+    },
+    "source": "local SDXL-Turbo (DirectML) base images, aligned and cropped; no external APIs",
+    "npcAssignments": {
+      "erich": "head_oblong",
+      "padre": "head_square",
+      "stilgar": "head_base",
+      "harlan": "head_base",
+      "dolores": "head_diamond",
+      "lena": "head_heart",
+      "mara": "head_round"
+    },
+    "npcHeads": [
+      "painted/npc_arnie.svg",
+      "painted/npc_barney.svg",
+      "painted/npc_bats.svg",
+      "painted/npc_commissar.svg",
+      "painted/npc_courier.svg",
+      "painted/npc_doc.svg",
+      "painted/npc_dude.svg",
+      "painted/npc_echo.svg",
+      "painted/npc_eli.svg",
+      "painted/npc_jax.svg",
+      "painted/npc_kenny.svg",
+      "painted/npc_loxley.svg",
+      "painted/npc_lucy.svg",
+      "painted/npc_mother.svg",
+      "painted/npc_overseer.svg",
+      "painted/npc_phaltron.svg",
+      "painted/npc_rex.svg",
+      "painted/npc_rhea.svg",
+      "painted/npc_roy8.svg",
+      "painted/npc_siren.svg"
+    ],
+    "npcHeadsNote": "Unique painted head per NPC, img2img (local SDXL-Turbo) from each NPC's intro video still; JPEG q80 384px in a 256 frame, eyes x128 y118; talk-overlay Y per head in Game.Avatar.PAINTED_MOUTH_Y"
+  }
 }

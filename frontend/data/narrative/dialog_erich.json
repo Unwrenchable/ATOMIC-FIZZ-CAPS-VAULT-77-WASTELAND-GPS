@@ -3,18 +3,18 @@
   "npc": "Erich",
   "portrait": "default",
   "title": "The Soldier Who Refused to Forget",
-  "description": "Dialog nodes for Erich — one of the oldest ghouls in the Mojave, so old that his memories predate the Great War by more than a century. Exposed to early pre-war radiation experiments, he has spent two hundred years unable to die and unable to forget. He fought in a different war, in a different century, in the mud and wire of trenches that the bombs have since erased. He does not hate. He does not glory. He simply remembers, and what he remembers has made him very quiet about very loud things.",
-  "backstory": "German soldier, active 1942. Erich Hartmann stepped through what appeared to be a storage room door in a Berlin bunker and emerged into the Mojave wasteland thirty-three years after a war he never saw end. Whether Germany won or lost, he has decided, is something he doesn't need to know. He has been maintaining the same bolt-action rifle since 1942. He has been trying to understand where he is ever since. Some questions, he has concluded, cannot be answered. Duty can be.",
+  "description": "Dialog nodes for Erich — one of the oldest ghouls in the Cinder Basin, so old that his memories predate the Great War by more than a century. Exposed to early pre-war radiation experiments, he has spent two hundred years unable to die and unable to forget. He fought in a different war, in a different century, in the mud and wire of trenches that the bombs have since erased. He does not hate. He does not glory. He simply remembers, and what he remembers has made him very quiet about very loud things.",
+  "backstory": "German soldier, active 1942. Erich Hartmann stepped through what appeared to be a storage room door in a Berlin bunker and emerged into the Cinder Basin wasteland thirty-three years after a war he never saw end. Whether Germany won or lost, he has decided, is something he doesn't need to know. He has been maintaining the same bolt-action rifle since 1942. He has been trying to understand where he is ever since. Some questions, he has concluded, cannot be answered. Duty can be.",
   "intro": {
     "id": "erich_intro",
     "conditions": [
       "!flag:met_erich"
     ],
-    "text": "Sit down, if you want.<br><br>I don't chase off company. Haven't for a long time.<br><br>My name is Erich. I've been in the Mojave since... well, since there was a Mojave worth naming. Before that I was somewhere else. A long time ago in a war that nobody left alive remembers except me.<br><br>I outlived that war. I outlived the peace that followed. I outlived the next war, and the next. And then the bombs fell in 2077 and I outlived that too.<br><br>Sit. I'll tell you what I know about surviving things that were supposed to kill everyone.",
+    "text": "Sit down, if you want.<br><br>I don't chase off company. Haven't for a long time.<br><br>My name is Erich. I've been in the Cinder Basin since... well, since there was a Cinder Basin worth naming. Before that I was somewhere else. A long time ago in a war that nobody left alive remembers except me.<br><br>I outlived that war. I outlived the peace that followed. I outlived the next war, and the next. And then the bombs fell in 2077 and I outlived that too.<br><br>Sit. I'll tell you what I know about surviving things that were supposed to kill everyone.",
     "set_flags": [
       "met_erich"
     ],
-    "video_speech": "Sit down, if you want. My name is Erich. I've been in the Mojave since there was a Mojave worth naming. Before that, I was in a different war."
+    "video_speech": "Sit down, if you want. My name is Erich. I've been in the Cinder Basin since there was a Cinder Basin worth naming. Before that, I was in a different war."
   },
   "knowledge_nodes": [
     {
@@ -69,7 +69,7 @@
         "stat:rads>=100",
         "!flag:erich_rad_warning"
       ],
-      "text": "Your rads are showing. I can see it in the way you hold yourself.<br><br>I was the first generation exposed to heavy radiation, back when no one knew what it would do. They called us the 'radiation volunteers.' We didn't volunteer.<br><br>What it did to me was... this. Two centuries of this. Take the RadAway. Don't become what I became by accident.",
+      "text": "Your rads are showing. I can see it in the way you hold yourself.<br><br>I was the first generation exposed to heavy radiation, back when no one knew what it would do. They called us the 'radiation volunteers.' We didn't volunteer.<br><br>What it did to me was... this. Two centuries of this. Take the GlowFlush. Don't become what I became by accident.",
       "set_flags": [
         "erich_rad_warning"
       ]

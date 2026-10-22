@@ -20,17 +20,17 @@
     "npc_ncr_general_monroe"
   ],
 
-  "description": "The NCR's expansion into timeline-displaced Commonwealth territories threatens the Minutemen's grassroots democracy. Two visions of the future clash.",
+  "description": "The Frontier Compact's expansion into timeline-displaced Commonwealth territories threatens the Settlement Watch's grassroots democracy. Two visions of the future clash.",
 
   "objectives": [
     {
       "id": "witness_collision",
-      "desc": "Witness the NCR's arrival in Commonwealth territory.",
+      "desc": "Witness the Frontier Compact's arrival in Commonwealth territory.",
       "event": "timeline_merge_commonwealth"
     },
     {
       "id": "meet_factions",
-      "desc": "Meet representatives from both the NCR and Minutemen.",
+      "desc": "Meet representatives from both the Frontier Compact and Settlement Watch.",
       "npcs": ["npc_ncr_senator_crane", "npc_minutemen_general"]
     },
     {
@@ -79,23 +79,23 @@
 
   "choices": {
     "support_ncr": {
-      "desc": "Support NCR annexation of the Commonwealth.",
+      "desc": "Support Frontier Compact annexation of the Commonwealth.",
       "requirements": { "reputation_ncr": 50 },
       "consequences": {
         "faction_rep": { "ncr": 150, "minutemen": -150, "settlers": -80 },
         "rewards": { "xp": 1200, "caps": 1000, "items": ["ncr_ambassador_badge", "ranger_armor_mk2"] },
         "regional_change": "commonwealth_becomes_ncr_territory",
-        "outcome": "NCR flag flies over Commonwealth. Order imposed. Minutemen disband. Some become insurgents. Progress with a heavy hand."
+        "outcome": "Frontier Compact flag flies over Commonwealth. Order imposed. Settlement Watch disband. Some become insurgents. Progress with a heavy hand."
       }
     },
     "support_minutemen": {
-      "desc": "Support Minutemen independence and repel the NCR.",
+      "desc": "Support Settlement Watch independence and repel the Frontier Compact.",
       "requirements": { "reputation_minutemen": 50 },
       "consequences": {
         "faction_rep": { "minutemen": 150, "ncr": -150, "settlers": 100 },
         "rewards": { "xp": 1200, "caps": 800, "items": ["general_rank", "minutemen_legendary_weapon"] },
         "regional_change": "commonwealth_independent",
-        "outcome": "Minutemen triumph. Commonwealth stays free. NCR retreats. But without structure, challenges remain."
+        "outcome": "Settlement Watch triumph. Commonwealth stays free. Frontier Compact retreats. But without structure, challenges remain."
       }
     },
     "broker_compromise": {
@@ -106,7 +106,7 @@
         "rewards": { "xp": 1500, "caps": 1200, "items": ["peacemaker_medal", "federation_charter", "dual_citizenship"] },
         "regional_change": "commonwealth_federation",
         "unlock": ["federation_government", "hybrid_military"],
-        "outcome": "Historic compromise. Commonwealth Federation formed. Local autonomy under NCR protection. Both sides win and lose."
+        "outcome": "Historic compromise. Commonwealth Federation formed. Local autonomy under Frontier Compact protection. Both sides win and lose."
       }
     },
     "chaos_option": {
@@ -127,7 +127,7 @@
   },
 
   "factions": {
-    "affected": ["NCR", "Minutemen", "Settlers", "Raiders", "Brotherhood"]
+    "affected": ["Frontier Compact", "Settlement Watch", "Settlers", "Raiders", "Brotherhood"]
   },
 
   "regional_impact": "Major - determines government structure of timeline-merged Commonwealth",

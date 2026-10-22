@@ -52,13 +52,13 @@
     },
     {
       "id": "enc_deathclaw_promontory_shadow",
-      "poi": "Deathclaw Promontory",
+      "poi": "Radtalon Promontory",
       "trigger": "first_visit",
       "dialog": "A shadow crosses the ridge — too large, too fast. You are not alone."
     },
     {
       "id": "enc_deathclaw_promontory_ambush",
-      "poi": "Deathclaw Promontory",
+      "poi": "Radtalon Promontory",
       "trigger": "repeat_visit",
       "dialog": "The rocks shift. Something is stalking you from above."
     },
@@ -124,13 +124,13 @@
     },
     {
       "id": "enc_goodsprings_saloon_note",
-      "poi": "Goodsprings Saloon",
+      "poi": "Dustwell Saloon",
       "trigger": "first_visit",
       "dialog": "A scrap of paper sits on the bar: \"DON'T TOUCH THE HUMMING CRATE — SPARKPLUG\"."
     },
     {
       "id": "enc_goodsprings_saloon_rumor",
-      "poi": "Goodsprings Saloon",
+      "poi": "Dustwell Saloon",
       "trigger": "repeat_visit",
       "dialog": "A drunk mutters about a hidden stash under the floorboards — might be worth a look."
     },

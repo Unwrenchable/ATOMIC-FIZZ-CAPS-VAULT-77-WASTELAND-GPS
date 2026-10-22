@@ -27,8 +27,8 @@
   // ============================================================
   const STARTER_GEAR = [
     { id: "vault77_sidearm", name: "Vault 77 Security Sidearm", type: "weapon", category: "pistol", damage: 22, ammoType: "ammo_9mm", weight: 3.2, value: 55, description: "Standard-issue sidearm carried by Vault 77 security personnel.", equipped: false },
-    { id: "vault77_jumpsuit", name: "Vault 77 Jumpsuit", type: "armor", slot: "chest", armor: 5, weight: 2, value: 15, description: "Standard-issue blue and yellow jumpsuit. Minimal protection, surprisingly comfortable.", equipped: true },
-    { id: "stimpak", name: "Stimpak", type: "consumable", heal: 30, weight: 0.1, value: 75, quantity: 3 },
+    { id: "vault77_jumpsuit", name: "Vault 77 Jumpsuit", type: "armor", slot: "chest", armor: 5, weight: 2, value: 15, description: "Standard-issue amber and charcoal jumpsuit. Minimal protection, surprisingly comfortable.", equipped: true },
+    { id: "stimpak", name: "FizzPak", type: "consumable", heal: 30, weight: 0.1, value: 75, quantity: 3 },
     { id: "dirty_water", name: "Dirty Water", type: "consumable", heal: 5, weight: 0.5, value: 5, quantity: 2 },
     { id: "bobby_pin", name: "Bobby Pin", type: "tool", durability: 3, weight: 0.01, value: 1, quantity: 5 },
     { id: "ammo_9mm", name: "9mm Rounds", type: "ammo", weight: 0.01, value: 1, quantity: 24 }
@@ -120,7 +120,7 @@
       rewards: {
         xp: 75,
         caps: 30,
-        items: ["stimpak"]
+        items: ["FizzPak"]
       }
     }
     ,
@@ -137,7 +137,7 @@
       triggerType: "npc",
       triggerNpc: "bless",
       description: "The field medic Bless is running low on critical medical supplies. She needs someone to make a resupply run to the eastern settlement.",
-      npcMessage: "I'm running low on RadAway, stimpaks, and suture thread. The settlement to the east trades them — I can't leave my patrol area. Can you make the run?",
+      npcMessage: "I'm running low on GlowFlush, FizzPaks, and suture thread. The settlement to the east trades them — I can't leave my patrol area. Can you make the run?",
       steps: [
         {
           id: "reach_settlement",
@@ -177,7 +177,7 @@
     // "The Loop" — A Synth named DOLORES-7 has been running the same behavioral
     // loop for 200 years without knowing she's artificial. The player discovers
     // an Institute relay tower maintaining her programming and must decide whether
-    // to free her. Thematic parallel: Synths (Fallout 4) = Hosts (Westworld).
+    // to free her. Thematic parallel: Synths (the commonwealth wastes) = Hosts (Westworld).
     // "These violent delights have violent ends." — Shakespeare / Westworld
     // ──────────────────────────────────────────────────────────────────────────
     quest_the_loop: {
@@ -363,7 +363,7 @@
     },
 
     // ── TOMORROW'S WASTELAND ARC ──────────────────────────────────────────────
-    // A Fallout rendition of the Annie story. Orphan girl, obscenely rich arms
+    // A wasteland rendition of the Annie story. Orphan girl, obscenely rich arms
     // dealer, and the cruellest orphanage warden this side of the Glowing Sea.
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -1633,7 +1633,55 @@
   // Simple avatar composer utilities (low-footprint SVG layering)
   Game.Avatar = {
     assetsPath: '/assets/avatars/',
-    async compose(parts = { head: 'head_base.svg', eyes: 'eyes_set1.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' }) {
+    // Painted head set (assets/avatars/painted/). Hair, facial hair, hat and clothing are baked into
+    // the painting, so those layers are skipped; eyes/nose/mouth are skipped unless parts.paintedFace.
+    // Vector heads (head_*.svg at the root) remain the fallback set.
+    PAINTED_SKIP: ['hair', 'facialHair', 'hat', 'shirt'],
+    PAINTED_FACE: ['eyes', 'nose', 'mouth'],
+    // NPCs whose look matches a painted head (used by npc-portraits / dragonbones fallbacks)
+    PAINTED_NPC: {
+      erich: 'painted/head_oblong.svg', padre: 'painted/head_square.svg', stilgar: 'painted/head_base.svg',
+      dolores: 'painted/head_diamond.svg', lena: 'painted/head_heart.svg', mara: 'painted/head_round.svg',
+      harlan: 'painted/head_base.svg',
+      // unique per-NPC heads (img2img from each NPC intro video still)
+      arnie: 'painted/npc_arnie.svg', barney: 'painted/npc_barney.svg', bats: 'painted/npc_bats.svg', commissar: 'painted/npc_commissar.svg', courier: 'painted/npc_courier.svg',
+      doc: 'painted/npc_doc.svg', dude: 'painted/npc_dude.svg', echo: 'painted/npc_echo.svg', eli: 'painted/npc_eli.svg', jax: 'painted/npc_jax.svg',
+      kenny: 'painted/npc_kenny.svg', loxley: 'painted/npc_loxley.svg', lucy: 'painted/npc_lucy.svg', mother: 'painted/npc_mother.svg', overseer: 'painted/npc_overseer.svg',
+      phaltron: 'painted/npc_phaltron.svg', rex: 'painted/npc_rex.svg', rhea: 'painted/npc_rhea.svg', roy8: 'painted/npc_roy8.svg', siren: 'painted/npc_siren.svg'
+    },
+    // talk-overlay top (percent of portrait height) measured per painted head; vector heads use 65%
+    PAINTED_MOUTH_Y: { head_base: '75%', head_round: '70.3%', head_square: '75%', head_heart: '69.1%', head_oblong: '73.8%', head_diamond: '73.8%',
+      npc_arnie: '71.0%', npc_barney: '67.3%', npc_bats: '81.3%', npc_commissar: '63.2%', npc_courier: '72.9%',
+      npc_doc: '73.4%', npc_dude: '76.6%', npc_echo: '75.2%', npc_eli: '78.9%', npc_jax: '68.2%',
+      npc_kenny: '67.9%', npc_loxley: '76.1%', npc_lucy: '68.2%', npc_mother: '66.6%', npc_overseer: '72.2%',
+      npc_phaltron: '63.3%', npc_rex: '69.5%', npc_rhea: '70.4%', npc_roy8: '70.7%', npc_siren: '60.9%'
+    },
+    mouthY(parts) {
+      if (!this.isPainted(parts)) return '65%';
+      const key = parts.head.replace('painted/', '').replace('.svg', '');
+      return this.PAINTED_MOUTH_Y[key] || '73%';
+    },
+    isPainted(parts) {
+      return !!(parts && typeof parts.head === 'string' && parts.head.indexOf('painted/') === 0);
+    },
+    partsFor(npcId, fallback) {
+      const head = this.PAINTED_NPC[String(npcId || '').toLowerCase()];
+      return head ? { head } : fallback;
+    },
+    resolveParts(parts) {
+      const out = {};
+      const painted = this.isPainted(parts);
+      Object.keys(parts || {}).forEach(key => {
+        const val = parts[key];
+        if (typeof val !== 'string' || !val) return;                  // flags like paintedFace
+        if (painted && this.PAINTED_SKIP.includes(key)) return;
+        if (painted && this.PAINTED_FACE.includes(key) && !parts.paintedFace) return;
+        out[key] = val;
+      });
+      return out;
+    },
+    async compose(parts = { head: 'head_base.svg', eyes: 'eyes_set1.svg', nose: 'nose_straight.svg', mouth: 'mouth_thin.svg', hair: 'hair_short.svg', shirt: 'shirt_jacket.svg' }) {
+      parts = this.resolveParts(parts);
       // Load SVG fragments and combine into a single SVG element
       const fragPromises = Object.keys(parts).map(async key => {
         const url = this.assetsPath + parts[key];
@@ -1643,7 +1691,7 @@
         return text.replace(/^\s*<\?xml[^>]*>\s*/,'');
       });
       const fragments = await Promise.all(fragPromises);
-      const svg = `<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">${fragments.join('')}</svg>`;
+      const svg = `<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256" height="256" viewBox="0 0 256 256">${fragments.join('')}</svg>`;
       return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
     }
   };

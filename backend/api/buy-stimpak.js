@@ -1,6 +1,6 @@
 // backend/api/buy-stimpak.js
 // ------------------------------------------------------------
-// Atomic Fizz Caps – Buy Stimpak Endpoint
+// Atomic Fizz Caps – Buy FizzPak Endpoint
 // Mounted at /api/buy-stimpak
 //
 // Route:
@@ -8,7 +8,7 @@
 //     Body: { tier: "common" | "rare" | "epic" | "legendary" }
 //     Requires: auth
 //
-// Burns CAPS from player's wallet and mints a Stimpak NFT.
+// Burns CAPS from player's wallet and mints a FizzPak NFT.
 // Tiers have different burn costs and effects.
 // ------------------------------------------------------------
 
@@ -63,7 +63,7 @@ const STIMPAK_TIERS = {
 const buyLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 5,
-  message: { ok: false, error: "Too many Stimpak purchases. Rest, Courier." },
+  message: { ok: false, error: "Too many FizzPak purchases. Rest, Courier." },
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -92,7 +92,7 @@ router.post("/", authMiddleware, buyLimiter, async (req, res) => {
     try {
       solanaConfig = getSolanaConfig();
     } catch (cfgErr) {
-      return res.status(503).json({ ok: false, error: "Stimpak vending machine offline. Check back later." });
+      return res.status(503).json({ ok: false, error: "FizzPak vending machine offline. Check back later." });
     }
     const { CAPS_MINT: capsMint } = solanaConfig;
 
@@ -138,7 +138,7 @@ router.post("/", authMiddleware, buyLimiter, async (req, res) => {
       repairRate: tierData.repairRate,
       cooldownSeconds: tierData.cooldown,
       serializedTx,
-      message: `Stimpak ${tier} transaction prepared. Sign and submit to complete purchase.`,
+      message: `FizzPak ${tier} transaction prepared. Sign and submit to complete purchase.`,
     });
   } catch (err) {
     console.error("[buy-stimpak] error:", err);

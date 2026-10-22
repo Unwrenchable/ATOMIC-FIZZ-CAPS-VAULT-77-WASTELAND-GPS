@@ -2,18 +2,18 @@
   "id": "dialog_jax",
   "npc": "Jax Voss",
   "title": "The Fragmented Signal",
-  "description": "Modular dialog nodes for Jax Voss, the fragmented mechanic whose consciousness echoes through Mojave relay towers.",
-  "backstory": "Born 2261 to NCR Ranger Harlan Voss, died in 2277, didn't stay dead. Jax Voss was a brilliant mechanic who took a Vault-Tec contractor job to pay for his father's mounting medical bills — and Vault-Tec had other plans for someone of his 'high cognitive yield.' Project J-77 extracted his neural map under the pretext of 'personality archiving' and distributed his consciousness across the Mojave relay tower network. His body lived on as a hollow ghoul. His mind lived on in the static. He's been both, and neither, ever since.",
+  "description": "Modular dialog nodes for Jax Voss, the fragmented mechanic whose consciousness echoes through Cinder Basin relay towers.",
+  "backstory": "Born 2261 to Frontier Compact Ranger Harlan Voss, died in 2277, didn't stay dead. Jax Voss was a brilliant mechanic who took a FizzTec contractor job to pay for his father's mounting medical bills — and FizzTec had other plans for someone of his 'high cognitive yield.' Project J-77 extracted his neural map under the pretext of 'personality archiving' and distributed his consciousness across the Cinder Basin relay tower network. His body lived on as a hollow ghoul. His mind lived on in the static. He's been both, and neither, ever since.",
   "intro": {
     "id": "jax_intro",
     "conditions": [
       "!flag:met_jax"
     ],
-    "text": "Static... *crackle*... you again?<br><br>No. First time for you, isn't it.<br><br>Name's Jax Harlan. Or what's left of him.<br><br>The Mojave's loud, but the quiet parts are worse.",
+    "text": "Static... *crackle*... you again?<br><br>No. First time for you, isn't it.<br><br>Name's Jax Harlan. Or what's left of him.<br><br>The Cinder Basin's loud, but the quiet parts are worse.",
     "set_flags": [
       "met_jax"
     ],
-    "video_speech": "Name's Jax Harlan. Or what's left of him. The Mojave's loud, but the quiet parts are worse."
+    "video_speech": "Name's Jax Harlan. Or what's left of him. The Cinder Basin's loud, but the quiet parts are worse."
   },
   "knowledge_nodes": [
     {
@@ -44,7 +44,7 @@
         "flag:met_rex",
         "!flag:jax_comment_rex"
       ],
-      "text": "Rex still guarding Hoover Dam like it's the last beating heart in the Mojave.<br><br>Maybe it is.",
+      "text": "Rex still guarding Hoover Dam like it's the last beating heart in the Cinder Basin.<br><br>Maybe it is.",
       "set_flags": [
         "jax_comment_rex"
       ]
@@ -101,7 +101,7 @@
         "stat:hp<=30",
         "!flag:jax_warned_hp"
       ],
-      "text": "You're bleeding into the dirt, kid.<br><br>Patch up before the Mojave finishes what it started.",
+      "text": "You're bleeding into the dirt, kid.<br><br>Patch up before the Cinder Basin finishes what it started.",
       "set_flags": [
         "jax_warned_hp"
       ]
@@ -118,7 +118,7 @@
       "set_flags": [
         "sq_jax_echoes_static_taken"
       ],
-      "video_speech": "Pieces of me are scattered in old towers across the Mojave — memories that won't stay dead. Help me bring them back."
+      "video_speech": "Pieces of me are scattered in old towers across the Cinder Basin — memories that won't stay dead. Help me bring them back."
     }
   ],
   "wildcards": [

@@ -3,7 +3,7 @@
   "npc": "Nova Lane",
   "portrait": "nova_lane",
   "title": "The Performer",
-  "description": "All sequins and confidence, perched at the corner of the Lucky 38's lower bar like she owns the establishment — and considering how much she knows about the people who do, perhaps she does. Her smile arrives a half-second before she decides it should.",
+  "description": "All sequins and confidence, perched at the corner of the The Spire's lower bar like she owns the establishment — and considering how much she knows about the people who do, perhaps she does. Her smile arrives a half-second before she decides it should.",
   "backstory": "Nova Lane came to the Strip from somewhere she doesn't discuss, trailing a performing career and a very useful habit of being underestimated. VIPs talk freely around entertainers. Cabinet-level figures, caravan bosses, FizzCo board proxies — they all assume performance is all she has. Nova Lane has seventeen years of assembled secrets and the discipline never to spend them cheaply. She passes what matters to people she trusts. She trusts very few people. She finds Jax Voss interesting, which for her is a significant thing.",
   "intro": {
     "id": "nova_lane_intro",
@@ -88,7 +88,7 @@
     {
       "id": "nova_fizzco_general",
       "keywords": ["fizzco", "fizz", "corporation", "board"],
-      "text": "\"FizzCo's board thinks they run the Mojave.\"<br><br>She takes a long sip. \"They're right, mostly. 'Mostly' is where the interesting things live.\""
+      "text": "\"FizzCo's board thinks they run the Cinder Basin.\"<br><br>She takes a long sip. \"They're right, mostly. 'Mostly' is where the interesting things live.\""
     }
   ],
   "fallback": {

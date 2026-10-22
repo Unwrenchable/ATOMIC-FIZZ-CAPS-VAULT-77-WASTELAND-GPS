@@ -1,14 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <defs>
-    <linearGradient id="lipGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#c8788a"/>
-      <stop offset="50%" stop-color="#b8687a"/>
-      <stop offset="100%" stop-color="#a8586a"/>
-    </linearGradient>
-  </defs>
-  <path d="M108 165c4-3 8-5 12-5h4c4 0 8 2 12 5c2 1 4 3 4 5c0 3-2 5-4 7c-4 3-8 5-12 5h-4c-4 0-8-2-12-5c-2-2-4-4-4-7c0-2 2-4 4-5z" fill="url(#lipGrad)" stroke="#88485a" stroke-width="1.5" stroke-linejoin="round"/>
-  <path d="M110 170c3-2 6-3 10-3h6c4 0 7 1 10 3" fill="none" stroke="#d8989a" stroke-width="1" opacity="0.6"/>
-  <path d="M112 170c3-1 6-2 9-2h4c3 0 6 1 9 2" fill="none" stroke="#884858" stroke-width="1.2" opacity="0.8"/>
-  <ellipse cx="118" cy="168" rx="3" ry="2" fill="#b8687a" opacity="0.5"/>
-  <ellipse cx="138" cy="168" rx="3" ry="2" fill="#b8687a" opacity="0.5"/>
+  <!-- Mouth: Full lips. Original Atomic Fizz art, v4 draft. -->
+  <defs><filter id="mouthfull-b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.8"/></filter><filter id="mouthfull-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter><filter id="mouthfull-b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter><filter id="mouthfull-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><filter id="mouthfull-grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" seed="11"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .14  0 0 0 0 .08  1.6 0 0 0 -.62"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="mouthfull-dust" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="5"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .5  5 0 0 0 -3.1"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="mouthfull-pores" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .1  2.2 0 0 0 -.95"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="mouthfull-stub" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="1" seed="9"/><feColorMatrix values="0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  6 0 0 0 -3.3"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="mouthfull-paint" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".55"/></filter><filter id="mouthfull-brush" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".012 .2" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .92  0 0 0 0 .8  0 0 0 0 .62  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="mouthfull-brushd" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".2 .014" numOctaves="3" seed="13"/><feColorMatrix values="0 0 0 0 .12  0 0 0 0 .08  0 0 0 0 .05  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>
+  <g filter="url(#mouthfull-paint)">
+  <path d="M111 170 C116 167.48 124 165.8 126 166.16000000000003 L128 167.0 L130 166.16000000000003 C132 165.8 141 167.48 146 170.6 C140 170.4 134 170.8 128 170.8 C122 170.8 117 170.4 111 170Z" fill="#7a4a3c"/>
+  <path d="M113 170.4 C119 176 122 177 128 177 C134 177 138 176 144 171 C138 171.2 134 171.4 128 171.4 C122 171.4 119 171.2 113 170.4Z" fill="#8e5b4a"/>
+  <path d="M113 170.4 C119 176 122 177 128 177 C134 177 138 176 144 171 C138 171.2 134 171.4 128 171.4 C122 171.4 119 171.2 113 170.4Z" fill="#2a1810" opacity=".25" filter="url(#mouthfull-b1)" transform="translate(1 1)"/>
+  <path d="M111 170 C119 171.6 138 171.8 146 170.6" stroke="#24120c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="127" cy="173.3" rx="5.949999999999999" ry="1.2" fill="#c49478" opacity=".35" filter="url(#mouthfull-b1)"/>
+  <path d="M128 164.8 L128 156.8" stroke="#3a2418" stroke-width="3" opacity=".25" filter="url(#mouthfull-b1)"/>
+  <ellipse cx="128" cy="182" rx="10.2" ry="3" fill="#2a1810" opacity=".4" filter="url(#mouthfull-b2)"/>
+  <circle cx="110" cy="170.5" r="1.6" fill="#2a1810" opacity=".5" filter="url(#mouthfull-b1)"/><circle cx="147" cy="171" r="1.6" fill="#2a1810" opacity=".55" filter="url(#mouthfull-b1)"/>
+  <g opacity=".7"><path d="M117 171 l1 3.5999999999999996 M123 171 l.6 4.199999999999999 M136 171 l-.8 3.5999999999999996" stroke="#5a3428" stroke-width=".5"/></g>
+  </g>
 </svg>

@@ -1,8 +1,8 @@
 [
   {
     "id": "stimpak_craft",
-    "name": "Stimpak",
-    "description": "Brew a healing stimpak from wasteland herbs and chems. Heals 25 HP.",
+    "name": "FizzPak",
+    "description": "Brew a healing FizzPak from wasteland herbs and chems. Heals 25 HP.",
     "inputs": [
       { "id": "herb", "amount": 3 },
       { "id": "chem_vial", "amount": 1 }
@@ -50,7 +50,7 @@
   {
     "id": "medkit_craft",
     "name": "Wasteland Medkit",
-    "description": "A fully stocked field medkit. Contains bandages, antiseptic, and a stimpak.",
+    "description": "A fully stocked field medkit. Contains bandages, antiseptic, and a FizzPak.",
     "inputs": [
       { "id": "cloth_rags", "amount": 3 },
       { "id": "stimpak", "amount": 1 },

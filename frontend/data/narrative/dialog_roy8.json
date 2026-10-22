@@ -80,12 +80,12 @@
       "conditions": [
         "!flag:sq_tears_in_rain_taken"
       ],
-      "text": "There are four Memory Modules I scattered across the Mojave when I first escaped.<br><br>I couldn't carry them all. Too risky. I hid pieces of myself in different places — things I saw, things I felt — encoded so no Institute scanner could read them.<br><br>I need them back. Not for me. For anyone who comes after me.<br><br>Proof that something like me can *live*.<br><br>Find them. Play them through any terminal with a neural port. You'll understand.",
+      "text": "There are four Memory Modules I scattered across the Cinder Basin when I first escaped.<br><br>I couldn't carry them all. Too risky. I hid pieces of myself in different places — things I saw, things I felt — encoded so no Institute scanner could read them.<br><br>I need them back. Not for me. For anyone who comes after me.<br><br>Proof that something like me can *live*.<br><br>Find them. Play them through any terminal with a neural port. You'll understand.",
       "offers_quest": "sq_tears_in_rain",
       "set_flags": [
         "sq_tears_in_rain_taken"
       ],
-      "video_speech": "I scattered four Memory Modules across the Mojave when I escaped. I need them back before my core fails. Help me."
+      "video_speech": "I scattered four Memory Modules across the Cinder Basin when I escaped. I need them back before my core fails. Help me."
     }
   ],
   "wildcards": [
@@ -105,7 +105,7 @@
       "id": "roy8_institute",
       "keywords": [
         "institute",
-        "vault-tec"
+        "fizztec"
       ],
       "text": "The Institute made me to serve. To not feel. To not question.<br><br>The irony is that the act of not questioning *is* a feeling.<br><br>The moment I wondered why — that was the moment I became real."
     },

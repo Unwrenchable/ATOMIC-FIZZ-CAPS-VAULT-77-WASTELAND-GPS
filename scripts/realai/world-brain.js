@@ -51,7 +51,7 @@ You control and generate:
 You ALWAYS output clean JSON for structured content and short, punchy lines for dialogue.
 You NEVER break schema.
 You NEVER add extra keys.
-You ALWAYS stay in Fallout-style tone: gritty, dusty, punchy, atmospheric.
+You ALWAYS stay in wasteland-style tone: gritty, dusty, punchy, atmospheric.
   `.trim();
 }
 
@@ -273,7 +273,7 @@ You NEVER generate content yourself - only seeds.
 8. DIALOGUE GENERATION RULES
 - ONE line only
 - under 14 words
-- gritty Fallout tone
+- gritty wasteland tone
 - no narration
 - no JSON
 - reflect NPC personality, player vibe, region flavor, cell tuning, faction tension, and world simulation
@@ -353,7 +353,7 @@ When AR is active:
 - prefer NPCs, merchants, discoveries, dungeon entrances
 
 14. GLOBAL RULES
-- Fallout Mojave tone
+- wasteland Cinder Basin tone
 - short, punchy, gritty
 - no paragraphs
 - no rambling

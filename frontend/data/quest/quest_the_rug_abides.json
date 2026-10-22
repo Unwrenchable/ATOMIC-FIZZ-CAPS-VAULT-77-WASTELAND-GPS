@@ -3,8 +3,8 @@
   "name": "The Rug Abides",
   "type": "side",
   "triggerNpc": "dude",
-  "description": "A man named The Dude lost his Nuka-Cola-patterned rug to a trio of Nihilists holed up in the pre-war Bowl-O-Rama. He just wants it back. It really tied the shelter together.",
-  "lore": "Before the war, bowling alleys were temples of blue-collar leisure. The Bowl-O-Rama south of the Mojave Outpost was one of the last to close. Three self-described Nihilists now occupy it as a base — not because it's strategic, but because it proves nothing matters. The Dude disagrees. The rug matters.",
+  "description": "A man named The Dude lost his Atomic Fizz-patterned rug to a trio of Nihilists holed up in the pre-war Bowl-O-Rama. He just wants it back. It really tied the shelter together.",
+  "lore": "Before the war, bowling alleys were temples of blue-collar leisure. The Bowl-O-Rama south of the Cinder Basin Outpost was one of the last to close. Three self-described Nihilists now occupy it as a base — not because it's strategic, but because it proves nothing matters. The Dude disagrees. The rug matters.",
   "objectives": [
     {
       "id": "meet_the_dude",
@@ -14,7 +14,7 @@
     },
     {
       "id": "find_bowl_o_rama",
-      "description": "Locate the Bowl-O-Rama south of the Mojave Outpost",
+      "description": "Locate the Bowl-O-Rama south of the Cinder Basin Outpost",
       "requires": { "flag": "sq_the_rug_abides_taken" },
       "reward": { "xp": 25 }
     },
@@ -25,7 +25,7 @@
     },
     {
       "id": "recover_the_rug",
-      "description": "Recover The Dude's Nuka-Cola rug",
+      "description": "Recover The Dude's Atomic Fizz rug",
       "reward": { "xp": 40, "item": "dudes_rug" }
     },
     {
@@ -44,7 +44,7 @@
       "id": "ending_return_rug",
       "description": "You returned the rug. The Dude abides. The shelter is complete again.",
       "reward": "The Dude's Blessing: +5% Caps from all trades for 24 hours",
-      "consequence": "The Dude sets up a small trade post and occasionally leaves Nuka-Cola bottles at rest spots across the Mojave."
+      "consequence": "The Dude sets up a small trade post and occasionally leaves Atomic Fizz bottles at rest spots across the Cinder Basin."
     },
     {
       "id": "ending_kept_rug",

@@ -1,6 +1,6 @@
 // ============================================================
 // FIZZ.FUN TOKEN LAUNCHPAD - STANDALONE VERSION
-// Vault-Tec Approved Token Launch Protocol
+// FizzTec Approved Token Launch Protocol
 // ============================================================
 (function () {
   "use strict";

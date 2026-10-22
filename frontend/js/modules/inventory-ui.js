@@ -1,4 +1,4 @@
-// inventory-ui.js — Pocket-Boy ITEMS panel with category tabs + Fallout-style EQUIP screen
+// inventory-ui.js — Pocket-Boy ITEMS panel with category tabs + wasteland-style EQUIP screen
 
 window.Game = window.Game || {};
 Game.ui = Game.ui || {};
@@ -15,7 +15,7 @@ function escapeHtml(str) { // eslint-disable-line no-unused-vars
     .replace(/'/g, '&#39;');
 }
 
-// Fallout-style equipment slots displayed in the EQUIP tab (paperdoll order)
+// wasteland-style equipment slots displayed in the EQUIP tab (paperdoll order)
 const EQUIP_SLOTS = [
   { key: "weapon", label: "WEAPON", icon: "🔫" },
   { key: "head",   label: "HEAD",   icon: "⛑" },
@@ -92,7 +92,7 @@ Game.ui.renderInventory = function () {
   // Default view: EQUIP screen
   renderEquipScreen();
 
-  // ── EQUIP SCREEN (Fallout paperdoll) ──────────────────────────
+  // ── EQUIP SCREEN (wasteland paperdoll) ──────────────────────────
   function renderEquipScreen() {
     body.innerHTML = "";
 

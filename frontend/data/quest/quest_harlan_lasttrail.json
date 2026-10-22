@@ -2,7 +2,7 @@
   "id": "quest_harlan_lasttrail",
   "name": "The Ranger's Last Trail",
   "type": "main",
-  "region": "Mojave",
+  "region": "Cinder Basin",
   "description": "You retrace Harlan Voss's final journey before he became a ghoul. His trail leads into the deep desert, where the truth about Jax's fate begins to surface.",
   "triggers": [
     "unlock_from:quest_harlan_beforebombs",
@@ -14,7 +14,7 @@
     {
       "id": 0,
       "name": "The Final Trail",
-      "description": "You've uncovered the Vault-Tec connection. Now you follow Harlan's last known path into the Mojave.",
+      "description": "You've uncovered the FizzTec connection. Now you follow Harlan's last known path into the Cinder Basin.",
       "trigger": "auto",
       "actions": [
         "dialogue:overseer_lasttrail_intro",

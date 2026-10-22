@@ -3,7 +3,7 @@ import { realai } from "./realai-client.js";
 
 export async function main() {
   const prompt = `
-Generate 5 advanced Fallout-style NPCs.
+Generate 5 advanced wasteland-style NPCs.
 Each NPC must include:
 - Name
 - Faction

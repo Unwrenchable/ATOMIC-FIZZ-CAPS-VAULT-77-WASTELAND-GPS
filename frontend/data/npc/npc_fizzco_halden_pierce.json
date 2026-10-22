@@ -1,7 +1,7 @@
 {
   "id": "npc_fizzco_halden_pierce",
   "name": "Dr. Halden Pierce",
-  "region": "Mojave",
+  "region": "Cinder Basin",
   "type": "Bio-Lum Researcher",
   "dialog": [
     "The glowing creatures aren’t accidents. They’re prototypes.",

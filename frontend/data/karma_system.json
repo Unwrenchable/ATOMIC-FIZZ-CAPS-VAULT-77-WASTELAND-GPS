@@ -20,7 +20,7 @@
         "Exclusive raider boss questlines",
         "Slaver operations",
         "Legion Praetorian missions",
-        "Enclave genocide contracts"
+        "Directorate genocide contracts"
       ]
     },
     {
@@ -29,7 +29,7 @@
       "title": "Scourge",
       "description": "You're known for cruelty and selfishness across the wasteland.",
       "consequences": [
-        "NCR, Minutemen, Railroad questlines closed",
+        "Frontier Compact, Settlement Watch, Railroad questlines closed",
         "Good companions leave if karma drops further",
         "Settlement access restricted",
         "Bounty hunters track you"
@@ -81,7 +81,7 @@
         "Evil companions may leave"
       ],
       "unlocks": [
-        "Minutemen advanced quests",
+        "Settlement Watch advanced quests",
         "Settlement leader missions",
         "Protective detail contracts"
       ]
@@ -181,12 +181,12 @@
         "message": "The Institute requires... control. Prove you can be disciplined."
       },
       {
-        "questline": "NCR General Path",
+        "questline": "Frontier Compact General Path",
         "locked_if_karma": "Evil or worse",
-        "reason": "NCR cannot promote known war criminals",
+        "reason": "Frontier Compact cannot promote known war criminals",
         "realignment_possible": true,
         "realignment_threshold": "Neutral or better",
-        "message": "The NCR demands you atone for your crimes before advancement."
+        "message": "The Frontier Compact demands you atone for your crimes before advancement."
       },
       {
         "questline": "Railroad Heavy",
@@ -207,7 +207,7 @@
         "realignment_description": "Rescue 20 ghouls from persecution to earn forgiveness"
       },
       {
-        "questline": "Super Mutant Alliance",
+        "questline": "Glowborn Alliance",
         "locked_if": "player sided against mutants",
         "lock_message": "Super mutants remember betrayal. Forever.",
         "realignment_quest": "Prove Your Worth",

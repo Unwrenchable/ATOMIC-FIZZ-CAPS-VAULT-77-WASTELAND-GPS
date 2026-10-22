@@ -2,7 +2,7 @@
   "id": "quest_harlan_lastsigns",
   "name": "The Last Signs of Jax",
   "type": "main",
-  "region": "Mojave",
+  "region": "Cinder Basin",
   "description": "Following Harlan's trail, you search for the last known signs of Jax before the bombs fell.",
   "triggers": [
     "unlock_from:quest_harlan_echoes",
@@ -15,7 +15,7 @@
     {
       "id": 0,
       "name": "Harlan's Trail Continues",
-      "description": "You've uncovered more clues about Jax's disappearance. Harlan's trail leads deeper into the Mojave.",
+      "description": "You've uncovered more clues about Jax's disappearance. Harlan's trail leads deeper into the Cinder Basin.",
       "trigger": "auto",
       "actions": [
         "dialogue:overseer_lastsigns_intro",

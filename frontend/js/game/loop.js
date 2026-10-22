@@ -237,7 +237,7 @@
           rewards: encounter.loot || {}
         });
 
-        // Switch Pip-Boy to the COMBAT panel so the player sees the battle UI
+        // Switch Pocket-Boy to the COMBAT panel so the player sees the battle UI
         if (window.Game && typeof window.Game.pipboy?.setActivePanel === 'function') {
           window.Game.pipboy.setActivePanel('battle');
         }

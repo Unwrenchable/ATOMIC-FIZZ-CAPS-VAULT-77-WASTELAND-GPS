@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ☢️ VAULT-TEC ADMIN PASSWORD HASH GENERATOR
+ * ☢️ FIZZTEC ADMIN PASSWORD HASH GENERATOR
  * 
  * Generate a secure bcrypt hash for an admin password.
  * 
@@ -30,7 +30,7 @@ async function generateHash(password) {
   try {
     const hash = await bcrypt.hash(password, SALT_ROUNDS);
     
-    console.log('\n📟 VAULT-TEC SECURITY PROTOCOL 77-A');
+    console.log('\n📟 FIZZTEC SECURITY PROTOCOL 77-A');
     console.log('=====================================');
     console.log('✅ Password hash generated successfully!\n');
     console.log('🔐 Bcrypt Hash:');
@@ -100,7 +100,7 @@ async function promptPassword() {
 }
 
 async function main() {
-  console.log('📟 VAULT-TEC ADMIN PASSWORD HASH GENERATOR');
+  console.log('📟 FIZZTEC ADMIN PASSWORD HASH GENERATOR');
   console.log('==========================================\n');
 
   let password;

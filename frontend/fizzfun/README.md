@@ -193,7 +193,7 @@ For issues or questions:
 
 Built with:
 - Atomic Fizz Caps GPS Game
-- Vault-Tec Approved Engineering
+- FizzTec Approved Engineering
 - Wasteland Survivor Tested
 
 **Stay safe out there, Vault Dweller. ☢️**

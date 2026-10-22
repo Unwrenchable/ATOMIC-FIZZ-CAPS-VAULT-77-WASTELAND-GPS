@@ -2,11 +2,11 @@
   "id": "side_nv_dealerfavor",
   "name": "Dealer’s Favor",
   "type": "side",
-  "poIs": ["New Vegas Strip"],
+  "poIs": ["Neon Reach Strip"],
   "description": "Help Dealer Dex settle a quiet dispute with a Strip VIP.",
   "objectives": [
     "Speak with Dex",
-    "Find the VIP in Lucky 38",
+    "Find the VIP in The Spire",
     "Resolve the dispute peacefully or violently"
   ],
   "endings": [

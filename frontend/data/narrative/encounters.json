@@ -52,13 +52,13 @@
     },
     {
       "id": "enc_deathclaw_promontory_shadow",
-      "poi": "Deathclaw Promontory",
+      "poi": "Radtalon Promontory",
       "trigger": "first_visit",
       "dialog": "A shadow crosses the ridge \u2014 too large, too fast. You are not alone."
     },
     {
       "id": "enc_deathclaw_promontory_ambush",
-      "poi": "Deathclaw Promontory",
+      "poi": "Radtalon Promontory",
       "trigger": "repeat_visit",
       "dialog": "The rocks shift. Something is stalking you from above."
     },
@@ -124,13 +124,13 @@
     },
     {
       "id": "enc_goodsprings_saloon_note",
-      "poi": "Goodsprings Saloon",
+      "poi": "Dustwell Saloon",
       "trigger": "first_visit",
       "dialog": "A scrap of paper sits on the bar: \"DON'T TOUCH THE HUMMING CRATE \u2014 SPARKPLUG\"."
     },
     {
       "id": "enc_goodsprings_saloon_rumor",
-      "poi": "Goodsprings Saloon",
+      "poi": "Dustwell Saloon",
       "trigger": "repeat_visit",
       "dialog": "A drunk mutters about a hidden stash under the floorboards \u2014 might be worth a look."
     },
@@ -195,7 +195,7 @@
     },
     {
       "id": "enc_elvis_goodsprings",
-      "poi": "Goodsprings",
+      "poi": "Dustwell",
       "trigger": "first_visit",
       "dialog": "A settler at the well gestures toward the southern hills. \"Saw him again last night. White jumpsuit. Sequins catching the moonlight. Just standing there on the ridge, real quiet.\" She pauses. \"I know how it sounds. But it wasn't a ghoul. Ghouls don't have sideburns like that.\""
     },
@@ -213,7 +213,7 @@
     },
     {
       "id": "enc_elvis_strip_gate",
-      "poi": "New Vegas Strip",
+      "poi": "Neon Reach Strip",
       "trigger": "first_visit",
       "dialog": "A securitron pauses its patrol at the Strip gate and swivels toward you. \"Query: Have you observed an individual approximately 1.9 meters tall, white sequined suit, hair product above regulatory quantity?\" It waits. \"No reason. He is simply on the watch list. Positive watch list. Mr. House's request.\""
     },
@@ -227,25 +227,25 @@
       "id": "enc_dev_terminal_cain",
       "poi": "Hoover Dam",
       "trigger": "first_visit",
-      "dialog": "A dusty terminal in the control room shows an old personnel file: CAIN, T. - VAULT-TEC SYSTEMS ARCHITECT - STATUS: RESIGNED - NOTE: 'The experiment parameters are ethically problematic and I refuse to continue. I'm building something better.' The resignation date is 2073. The file was never archived."
+      "dialog": "A dusty terminal in the control room shows an old personnel file: CAIN, T. - FIZZTEC SYSTEMS ARCHITECT - STATUS: RESIGNED - NOTE: 'The experiment parameters are ethically problematic and I refuse to continue. I'm building something better.' The resignation date is 2073. The file was never archived."
     },
     {
       "id": "enc_dev_terminal_boyarsky",
-      "poi": "Lucky 38",
+      "poi": "The Spire",
       "trigger": "first_visit",
-      "dialog": "Behind a broken panel in the Lucky 38's penthouse archive, you find a framed design sketch \u2014 hand-drawn, pre-war \u2014 labeled 'WASTELAND AESTHETIC PROPOSAL v.1' by 'L. BOYARSKY, ART DIRECTION'. It depicts a man in a Pocket-Boy watching a nuclear mushroom cloud. The expression on the man's face is complicated. The sketch is beautiful."
+      "dialog": "Behind a broken panel in the The Spire's penthouse archive, you find a framed design sketch \u2014 hand-drawn, pre-war \u2014 labeled 'WASTELAND AESTHETIC PROPOSAL v.1' by 'L. BOYARSKY, ART DIRECTION'. It depicts a man in a Pocket-Boy watching a nuclear mushroom cloud. The expression on the man's face is complicated. The sketch is beautiful."
     },
     {
       "id": "enc_dev_note_avellone",
       "poi": "Vault 22",
       "trigger": "first_visit",
-      "dialog": "Folded inside a dead scientist's notebook: a handwritten letter signed 'C. Avellone, Narrative Division, Vault-Tec.' It reads: 'If someone reads this after everything ends \u2014 the story was always about the people. Not the bombs. Not the vaults. Not the factions. The people make the story. I hope someone out there is still telling them.'"
+      "dialog": "Folded inside a dead scientist's notebook: a handwritten letter signed 'C. Avellone, Narrative Division, FizzTec.' It reads: 'If someone reads this after everything ends \u2014 the story was always about the people. Not the bombs. Not the vaults. Not the factions. The people make the story. I hope someone out there is still telling them.'"
     },
     {
       "id": "enc_dev_holotape_urquhart",
       "poi": "Black Mountain",
       "trigger": "first_visit",
-      "dialog": "A pre-war holotape in a rusted broadcaster's booth, labeled 'FEARGUS URQUHART - VAULT-TEC EXECUTIVE MEMO, 2075'. The playback is partially corrupted, but audible: '...the vaults are not just shelters. They are a canvas. If we do this right, whatever comes out of them in a hundred years will be something new. Something... interesting. I'm genuinely excited to see what happens.' Static. End of recording."
+      "dialog": "A pre-war holotape in a rusted broadcaster's booth, labeled 'FEARGUS URQUHART - FIZZTEC EXECUTIVE MEMO, 2075'. The playback is partially corrupted, but audible: '...the vaults are not just shelters. They are a canvas. If we do this right, whatever comes out of them in a hundred years will be something new. Something... interesting. I'm genuinely excited to see what happens.' Static. End of recording."
     },
     {
       "id": "enc_dev_plaque_taylor",
@@ -265,14 +265,14 @@
       "poi": "Freeside Market",
       "trigger": "repeat_visit",
       "npc": "padre",
-      "dialog": "A man in tattered robes sits on an overturned crate beside the market, distributing something from a pack. He notices you. 'Water and stimpaks, no charge. Sit if you need to.' He means it."
+      "dialog": "A man in tattered robes sits on an overturned crate beside the market, distributing something from a pack. He notices you. 'Water and FizzPaks, no charge. Sit if you need to.' He means it."
     },
     {
       "id": "enc_doc_cabinet",
       "poi": "Nipton Trading Post",
       "trigger": "first_visit",
       "npc": "doc",
-      "dialog": "An unmistakably blue cabinet stands beside the trading post \u2014 battered, pre-war, painted in a shade that doesn't quite match anything else in the Mojave palette. A brass plate on the door reads: POLICE PUBLIC CALL BOX. The door is ajar. From inside comes the sound of someone making tea."
+      "dialog": "An unmistakably blue cabinet stands beside the trading post \u2014 battered, pre-war, painted in a shade that doesn't quite match anything else in the Cinder Basin palette. A brass plate on the door reads: POLICE PUBLIC CALL BOX. The door is ajar. From inside comes the sound of someone making tea."
     },
     {
       "id": "enc_stilgar_deep_sand",

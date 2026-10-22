@@ -154,7 +154,7 @@ Rules:
 - NPC appearance must be visually distinct but simple enough for lightweight graphics.
 - Animation profiles must be readable and easy to map to simple animations.
 - Interaction profiles must directly affect how the player perceives the NPC.
-- NPCs must feel like they belong in a Fallout-style Mojave wasteland.
+- NPCs must feel like they belong in a wasteland-style Cinder Basin wasteland.
 - NPCs must reflect player style, region, faction influence, cell tuning, and world simulation state.
 - If AR context is present, make the NPC readable in 2-3 seconds.
 - "id" must be lowercase kebab-case.

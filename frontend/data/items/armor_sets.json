@@ -45,7 +45,7 @@
     }
   },
   "t45_power_armor": {
-    "name": "T-45 Power Armor",
+    "name": "T-45 Reactor Harness",
     "tier": "epic",
     "description": "Early pre-war power armor. A full set grants immense ballistic and radiation protection.",
     "pieces": ["head", "chest", "arm_l", "arm_r", "leg_l", "leg_r"],
@@ -68,7 +68,7 @@
     }
   },
   "t51b_power_armor": {
-    "name": "T-51b Power Armor",
+    "name": "T-51b Reactor Harness",
     "tier": "legendary",
     "description": "The pinnacle of pre-war power armor technology. Assembling a full set is the dream of every wastelander.",
     "pieces": ["head", "chest", "arm_l", "arm_r", "leg_l", "leg_r"],

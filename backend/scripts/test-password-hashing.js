@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ☢️ VAULT-TEC PASSWORD VERIFICATION TEST
+ * ☢️ FIZZTEC PASSWORD VERIFICATION TEST
  * 
  * Test script to verify the adminAuth password hashing works correctly
  */
@@ -32,7 +32,7 @@ async function verifyPassword(inputPassword, storedPassword) {
 }
 
 async function runTests() {
-  console.log('📟 VAULT-TEC SECURITY TEST PROTOCOL');
+  console.log('📟 FIZZTEC SECURITY TEST PROTOCOL');
   console.log('====================================\n');
 
   let passed = 0;

@@ -3,7 +3,7 @@ import { realai } from "./realai-client.js";
 export async function overseerBrain(worldstate, playerInput) {
   const prompt = `
 You are the Overseer AI of Vault 77.
-You speak with a gritty, Fallout‑style tone.
+You speak with a gritty, wasteland‑style tone.
 You always stay in character.
 
 ### WORLDSTATE CONTEXT

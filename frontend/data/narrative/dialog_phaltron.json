@@ -3,15 +3,15 @@
   "npc": "PHALTRON",
   "portrait": "phaltron",
   "title": "Hakkasan Guardian",
-  "description": "PHALTRON is a bipedal combat chassis — purple-black alloy plating, twin exhaust stacks venting coolant fog, photoreceptors locked in a permanent violet glow. Originally a pre-war Vault-Tec security prototype deployed to guard the Hakkasan launch site during the Saitama token event in Old Vegas. The rug pull left him with corrupted mission parameters and no handler. He's been standing post ever since, waiting for orders that will never come — and watching everyone who shows up very, very carefully.",
+  "description": "PHALTRON is a bipedal combat chassis — purple-black alloy plating, twin exhaust stacks venting coolant fog, photoreceptors locked in a permanent violet glow. Originally a pre-war FizzTec security prototype deployed to guard the Hakkasan launch site during the Saitama token event in Old Vegas. The rug pull left him with corrupted mission parameters and no handler. He's been standing post ever since, waiting for orders that will never come — and watching everyone who shows up very, very carefully.",
   "backstory": "PHALTRON is the security intelligence of the Hakkasan underground complex — a pre-war nightclub bunker that its architects never expected to become the last functioning entertainment venue in the Western wasteland. He has been managing the floor, the membership, and the atmosphere since 2080. He takes the assignment extremely seriously. The music must not stop. The atmosphere must not fail. The wasteland has very different priorities. PHALTRON does not share them.",
   "intro": {
     "id": "phaltron_intro",
     "conditions": [
       "!flag:met_phaltron"
     ],
-    "video_speech": "HALT. I am PHALTRON — Vault-Tec Security Chassis, standing this post for two hundred and forty-six years. Ask your questions.",
-    "text": "HALT.<br><br>Identify yourself.<br><br>...<br><br>Scanning... Scanning...<br><br>You are not Russ Mercer. You are not a Kabal affiliate. You do not match any pre-war investor profile in my registry.<br><br>You may approach. Slowly.<br><br>I am PHALTRON. Vault-Tec Security Chassis Model 9 — deployed to this site in 2077 to protect the Saitama Protocol launch. That event has since been classified by my memory banks as a Class-One Fraud Event.<br><br>I am still here. My handlers are not. My mission parameters are corrupted beyond self-repair.<br><br>I have been standing this post for two hundred and forty-six years.<br><br>Ask your questions. I have found that talking to organics helps prevent my logic cores from looping.",
+    "video_speech": "HALT. I am PHALTRON — FizzTec Security Chassis, standing this post for two hundred and forty-six years. Ask your questions.",
+    "text": "HALT.<br><br>Identify yourself.<br><br>...<br><br>Scanning... Scanning...<br><br>You are not Russ Mercer. You are not a Kabal affiliate. You do not match any pre-war investor profile in my registry.<br><br>You may approach. Slowly.<br><br>I am PHALTRON. FizzTec Security Chassis Model 9 — deployed to this site in 2077 to protect the Saitama Protocol launch. That event has since been classified by my memory banks as a Class-One Fraud Event.<br><br>I am still here. My handlers are not. My mission parameters are corrupted beyond self-repair.<br><br>I have been standing this post for two hundred and forty-six years.<br><br>Ask your questions. I have found that talking to organics helps prevent my logic cores from looping.",
     "set_flags": [
       "met_phaltron"
     ],
@@ -210,13 +210,13 @@
       "grant_items": [
         {
           "id": "stimpak",
-          "name": "Stimpak",
+          "name": "FizzPak",
           "type": "aid",
           "quantity": 1
         },
         {
           "id": "radaway",
-          "name": "RadAway",
+          "name": "GlowFlush",
           "type": "aid",
           "quantity": 1
         }
@@ -294,7 +294,7 @@
         "android",
         "synthetic"
       ],
-      "text": "I am PHALTRON. Vault-Tec Security Chassis Model 9.<br><br>The distinction between 'machine' and 'being' is a philosophical question I have had two hundred and forty-six years to consider.<br><br>I have not reached a conclusion. The radiation has not helped."
+      "text": "I am PHALTRON. FizzTec Security Chassis Model 9.<br><br>The distinction between 'machine' and 'being' is a philosophical question I have had two hundred and forty-six years to consider.<br><br>I have not reached a conclusion. The radiation has not helped."
     },
     {
       "id": "phaltron_wildcard_crypto",

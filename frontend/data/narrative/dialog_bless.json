@@ -4,7 +4,7 @@
   "portrait": "bless",
   "title": "Wasteland Healer",
   "description": "She moves through the ruins like radiation through concrete — quietly, inevitably. People say she's been touched by something. She doesn't correct them.",
-  "backstory": "No origin. No documentation. No faction. Bless appeared in Jacobstown twelve years ago with a medical kit and a knowledge of wasteland herbalism that no university ever published. She has been walking the Mojave's worst places ever since, patching what can be patched and sitting with what can't. The wasteland has tried to kill her seventeen confirmed times. She keeps coming back. She says there is always someone who needs the next stimpak.",
+  "backstory": "No origin. No documentation. No faction. Bless appeared in Jacobstown twelve years ago with a medical kit and a knowledge of wasteland herbalism that no university ever published. She has been walking the Cinder Basin's worst places ever since, patching what can be patched and sitting with what can't. The wasteland has tried to kill her seventeen confirmed times. She keeps coming back. She says there is always someone who needs the next FizzPak.",
   "intro": {
     "id": "bless_intro",
     "conditions": [
@@ -14,7 +14,7 @@
       "met_bless"
     ],
     "video_speech": "They said this wasteland takes everything. I say it gives back — just not in ways anyone expects. Sit. Let me look at those wounds.",
-    "text": "She doesn't move away when you approach. That alone is unusual.\n\nHer gear is patchwork — pre-war medical jacket over Vault-Tec issue fatigues, tools looped through a handmade sash. Her hands don't shake. Wasteland healers' hands always shake eventually.\n\nHers don't.\n\n\"You're leaking in three places and your rads are elevated.\"\n\nShe says it like weather. No panic, no pity.\n\n\"Sit down. I'm not asking.\"",
+    "text": "She doesn't move away when you approach. That alone is unusual.\n\nHer gear is patchwork — pre-war medical jacket over FizzTec issue fatigues, tools looped through a handmade sash. Her hands don't shake. Wasteland healers' hands always shake eventually.\n\nHers don't.\n\n\"You're leaking in three places and your rads are elevated.\"\n\nShe says it like weather. No panic, no pity.\n\n\"Sit down. I'm not asking.\"",
     "responses": [
       {
         "text": "[Friendly] I appreciate the concern. Who are you?",
@@ -62,7 +62,7 @@
     },
     "node_rad_sensing": {
       "id": "node_rad_sensing",
-      "text": "A brief pause. Not offense — more like she's deciding how much to explain.\n\n\"Practice. Long enough out here, you start reading bodies the way you read terrain.\"\n\n\"Your skin color at the capillaries. The tremor in your hands you think is adrenaline. The way your eyes are slightly too bright.\"\n\n\"It's 200 rads, give or take. Not dangerous yet. Would be, in another few hours without treatment.\"\n\nShe uncaps a RadAway without looking.\n\n\"Which is why we're here.\"",
+      "text": "A brief pause. Not offense — more like she's deciding how much to explain.\n\n\"Practice. Long enough out here, you start reading bodies the way you read terrain.\"\n\n\"Your skin color at the capillaries. The tremor in your hands you think is adrenaline. The way your eyes are slightly too bright.\"\n\n\"It's 200 rads, give or take. Not dangerous yet. Would be, in another few hours without treatment.\"\n\nShe uncaps a GlowFlush without looking.\n\n\"Which is why we're here.\"",
       "responses": [
         {
           "text": "[Question] You've seen a lot of radiation sickness.",
@@ -78,10 +78,10 @@
     },
     "node_sarcastic_demands": {
       "id": "node_sarcastic_demands",
-      "text": "She doesn't look up from her supply kit.\n\n\"My demand is that you don't die in front of me. I have a policy about that.\"\n\nA beat.\n\n\"I've been out here since the early days. Watched people refuse help out of pride and end up as a data point in someone else's cautionary tale.\"\n\n\"I'm not interested in adding you to that list. So.\"\n\nShe holds up a stimpak.\n\n\"Still not asking.\"",
+      "text": "She doesn't look up from her supply kit.\n\n\"My demand is that you don't die in front of me. I have a policy about that.\"\n\nA beat.\n\n\"I've been out here since the early days. Watched people refuse help out of pride and end up as a data point in someone else's cautionary tale.\"\n\n\"I'm not interested in adding you to that list. So.\"\n\nShe holds up a FizzPak.\n\n\"Still not asking.\"",
       "responses": [
         {
-          "text": "[Sarcastic] You win. I'll take the stimpak.",
+          "text": "[Sarcastic] You win. I'll take the FizzPak.",
           "tone": "sarcastic",
           "next": "node_patch_up"
         },
@@ -94,7 +94,7 @@
     },
     "node_patch_up": {
       "id": "node_patch_up",
-      "text": "She works quickly. You notice she keeps a running count under her breath — supplies, dosages, time — a healer's arithmetic.\n\n\"Three stitches, one RadAway, basic stim.\"\n\nShe leans back.\n\n\"You'll feel it tomorrow. That's normal — your body's recalibrating. Don't push hard for four hours or the stitches will pull.\"\n\nA long look at the wasteland around you.\n\n\"You're not local. New arrival, or someone who wandered further than planned?\"\n\nShe asks it without judgment. Just data collection.",
+      "text": "She works quickly. You notice she keeps a running count under her breath — supplies, dosages, time — a healer's arithmetic.\n\n\"Three stitches, one GlowFlush, basic stim.\"\n\nShe leans back.\n\n\"You'll feel it tomorrow. That's normal — your body's recalibrating. Don't push hard for four hours or the stitches will pull.\"\n\nA long look at the wasteland around you.\n\n\"You're not local. New arrival, or someone who wandered further than planned?\"\n\nShe asks it without judgment. Just data collection.",
       "set_flags": [
         "bless_patched_player"
       ],
@@ -127,7 +127,7 @@
     },
     "node_medical_background": {
       "id": "node_medical_background",
-      "text": "\"Vault-Tec Medical Program. Level 3 certification before the doors opened.\"\n\nNo pride in it. Just fact.\n\n\"Inside, I was treating vitamin deficiencies and psychosomatic anxiety. Outside, it's shrapnel and radiation burns and things the medical texts didn't cover.\"\n\nShe starts on the second wound.\n\n\"The wasteland is a better teacher than any program. Faster, anyway.\"",
+      "text": "\"FizzTec Medical Program. Level 3 certification before the doors opened.\"\n\nNo pride in it. Just fact.\n\n\"Inside, I was treating vitamin deficiencies and psychosomatic anxiety. Outside, it's shrapnel and radiation burns and things the medical texts didn't cover.\"\n\nShe starts on the second wound.\n\n\"The wasteland is a better teacher than any program. Faster, anyway.\"",
       "responses": [
         {
           "text": "[Kind] Are there other healers out here?",
@@ -143,7 +143,7 @@
     },
     "node_faction_alignment": {
       "id": "node_faction_alignment",
-      "text": "\"No.\"\n\nFlat. Clear.\n\n\"Every faction out here wants healers as assets. Tools for their agenda.\"\n\nShe caps the RadAway and moves on to the sutures.\n\n\"I treat people who need it. Regardless of insignia. That makes me useful to everyone and owned by no one.\"\n\nA pause.\n\n\"Which is the only way to survive long-term out here with your conscience intact.\"",
+      "text": "\"No.\"\n\nFlat. Clear.\n\n\"Every faction out here wants healers as assets. Tools for their agenda.\"\n\nShe caps the GlowFlush and moves on to the sutures.\n\n\"I treat people who need it. Regardless of insignia. That makes me useful to everyone and owned by no one.\"\n\nA pause.\n\n\"Which is the only way to survive long-term out here with your conscience intact.\"",
       "responses": [
         {
           "text": "[Kind] That's a difficult position to hold.",
@@ -159,7 +159,7 @@
     },
     "node_radiation_experience": {
       "id": "node_radiation_experience",
-      "text": "\"More than I'd prefer to count.\"\n\nShe works the RadAway into your IV line without flinching.\n\n\"The thing about radiation is it lies. Makes you feel fine right up until it doesn't.\"\n\n\"I've lost people who insisted they were fine. After, always after.\"\n\nA quiet pause.\n\n\"Don't be one of those.\"",
+      "text": "\"More than I'd prefer to count.\"\n\nShe works the GlowFlush into your IV line without flinching.\n\n\"The thing about radiation is it lies. Makes you feel fine right up until it doesn't.\"\n\n\"I've lost people who insisted they were fine. After, always after.\"\n\nA quiet pause.\n\n\"Don't be one of those.\"",
       "responses": [
         {
           "text": "Understood. I'll watch my rads.",
@@ -178,7 +178,7 @@
           "next": "node_farewell_warm"
         },
         {
-          "text": "[Sarcastic] High stakes for a stimpak.",
+          "text": "[Sarcastic] High stakes for a FizzPak.",
           "tone": "sarcastic",
           "next": "node_payment_sarcastic"
         }
@@ -186,7 +186,7 @@
     },
     "node_payment_sarcastic": {
       "id": "node_payment_sarcastic",
-      "text": "Something crosses her face — not quite a smile.\n\n\"The stimpak's just the cost of doing business.\"\n\nShe snaps her kit shut.\n\n\"The investment is in whatever you do with the next year. Or five.\"\n\n\"I've been wrong before. But not often.\"\n\n\"Don't make me regret the RadAway.\"",
+      "text": "Something crosses her face — not quite a smile.\n\n\"The FizzPak's just the cost of doing business.\"\n\nShe snaps her kit shut.\n\n\"The investment is in whatever you do with the next year. Or five.\"\n\n\"I've been wrong before. But not often.\"\n\n\"Don't make me regret the GlowFlush.\"",
       "responses": [
         {
           "text": "I'll try not to.",
@@ -232,7 +232,7 @@
     },
     "node_anomaly_intel": {
       "id": "node_anomaly_intel",
-      "text": "A long pause. She weighs something.\n\n\"Honestly? I don't know. And I know enough to be concerned about that.\"\n\n\"Pre-war, Vault-Tec was experimenting with resonance fields — broadcast signals that interact with the nervous system. The anomalies feel similar.\"\n\n\"I've treated three people who walked through them. Two recovered. One...\"\n\nShe stops.\n\n\"One is still explaining the same memory on a loop to anyone who'll listen.\"\n\n\"So. Avoid the anomalies.\"",
+      "text": "A long pause. She weighs something.\n\n\"Honestly? I don't know. And I know enough to be concerned about that.\"\n\n\"Pre-war, FizzTec was experimenting with resonance fields — broadcast signals that interact with the nervous system. The anomalies feel similar.\"\n\n\"I've treated three people who walked through them. Two recovered. One...\"\n\nShe stops.\n\n\"One is still explaining the same memory on a loop to anyone who'll listen.\"\n\n\"So. Avoid the anomalies.\"",
       "responses": [
         {
           "text": "Understood. Avoided.",
@@ -259,7 +259,7 @@
     },
     "node_vault_origin": {
       "id": "node_vault_origin",
-      "text": "Her hands pause for just a moment.\n\n\"19. The one that wasn't supposed to open.\"\n\nShe doesn't elaborate. Her hands resume their work.\n\n\"Whatever experiment they were running — I was the control group. The one that wasn't supposed to know there was an experiment.\"\n\nA short silence.\n\n\"I found out. Then I left.\"\n\n\"The wasteland was less surprising than Vault-Tec's documentation.\"",
+      "text": "Her hands pause for just a moment.\n\n\"19. The one that wasn't supposed to open.\"\n\nShe doesn't elaborate. Her hands resume their work.\n\n\"Whatever experiment they were running — I was the control group. The one that wasn't supposed to know there was an experiment.\"\n\nA short silence.\n\n\"I found out. Then I left.\"\n\n\"The wasteland was less surprising than FizzTec's documentation.\"",
       "responses": [
         {
           "text": "[Kind] I'm sorry. That sounds like a betrayal.",
@@ -291,7 +291,7 @@
     },
     "node_experiment_details": {
       "id": "node_experiment_details",
-      "text": "A long, considering look.\n\n\"Community cohesion under resource scarcity. How many people needed to die before the survivors organized.\"\n\nFlat. Clinical.\n\n\"I found the documentation in the Overseer's office after they were done with us.\"\n\n\"The answer, in case you're wondering, was 23%. Once the population dropped below 77% of starting capacity, the remainder either organized or turned on each other within 72 hours.\"\n\nShe repacks her kit.\n\n\"Vault-Tec wrote it up as a success.\"",
+      "text": "A long, considering look.\n\n\"Community cohesion under resource scarcity. How many people needed to die before the survivors organized.\"\n\nFlat. Clinical.\n\n\"I found the documentation in the Overseer's office after they were done with us.\"\n\n\"The answer, in case you're wondering, was 23%. Once the population dropped below 77% of starting capacity, the remainder either organized or turned on each other within 72 hours.\"\n\nShe repacks her kit.\n\n\"FizzTec wrote it up as a success.\"",
       "responses": [
         {
           "text": "[Shocked] That's horrifying.",
@@ -376,8 +376,8 @@
       "set_flags": [
         "sq_bless_supply_taken"
       ],
-      "video_speech": "I'm running low on RadAway and medical supplies. If you're heading toward the settlements, I could use a resupply run.",
-      "text": "She's inventorying her kit when you arrive. Methodically, without looking up.\n\n\"RadAway, stimpaks, suture thread.\" She marks tallies. \"I'm running low on all three.\"\n\nA pause.\n\n\"The settlement to the east trades medical supplies. I can't leave my patrol area long enough to go myself.\"\n\nShe looks up finally.\n\n\"You're heading that direction anyway, or you wouldn't be here. I'll compensate you for the trouble.\""
+      "video_speech": "I'm running low on GlowFlush and medical supplies. If you're heading toward the settlements, I could use a resupply run.",
+      "text": "She's inventorying her kit when you arrive. Methodically, without looking up.\n\n\"GlowFlush, FizzPaks, suture thread.\" She marks tallies. \"I'm running low on all three.\"\n\nA pause.\n\n\"The settlement to the east trades medical supplies. I can't leave my patrol area long enough to go myself.\"\n\nShe looks up finally.\n\n\"You're heading that direction anyway, or you wouldn't be here. I'll compensate you for the trouble.\""
     }
   ],
   "emotional_nodes": [
@@ -406,7 +406,7 @@
       "set_flags": [
         "bless_warned_rads"
       ],
-      "text": "She notices before you've even spoken.\n\n\"300 rads. That's not a number I negotiate with.\"\n\nShe's already reaching for the RadAway.\n\n\"Where have you been?\"",
+      "text": "She notices before you've even spoken.\n\n\"300 rads. That's not a number I negotiate with.\"\n\nShe's already reaching for the GlowFlush.\n\n\"Where have you been?\"",
       "responses": [
         {
           "text": "Somewhere I shouldn't have been.",
@@ -433,10 +433,10 @@
       "id": "bless_on_vault_tec",
       "keywords": [
         "vault",
-        "vault-tec",
+        "fizztec",
         "overseer"
       ],
-      "text": "\"Vault-Tec built the problem and sold the solution.\"\n\nFlat. No anger — she's past anger.\n\n\"The vaults kept some people alive. That's not nothing.\"\n\nA beat.\n\n\"It's also not forgiveness.\""
+      "text": "\"FizzTec built the problem and sold the solution.\"\n\nFlat. No anger — she's past anger.\n\n\"The vaults kept some people alive. That's not nothing.\"\n\nA beat.\n\n\"It's also not forgiveness.\""
     },
     {
       "id": "bless_on_factions",

@@ -2,7 +2,7 @@
   "id": "quest_harlan_overseer",
   "name": "Father and Son",
   "type": "main",
-  "poIs": ["Vault 77 Terminal", "Lucky 38"],
+  "poIs": ["Vault 77 Terminal", "The Spire"],
   "description": "Use Harlan’s voiceprint to unlock hidden memories inside the Overseer AI.",
   "objectives": [
     "Play Harlan’s final holotape near the Overseer terminal",

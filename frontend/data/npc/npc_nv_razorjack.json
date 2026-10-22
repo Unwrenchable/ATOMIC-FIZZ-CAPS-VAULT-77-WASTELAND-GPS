@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_razorjack",
   "name": "Razor-Jack",
-  "region": "New Vegas Strip",
+  "region": "Neon Reach Strip",
   "type": "Gang Enforcer",
   "dialog": {
     "idle": [

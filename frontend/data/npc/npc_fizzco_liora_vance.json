@@ -1,7 +1,7 @@
 {
   "id": "npc_fizzco_liora_vance",
   "name": "Dr. Liora Vance",
-  "region": "Mojave",
+  "region": "Cinder Basin",
   "type": "FizzCo Scientist",
   "dialog": [
     "FizzCo didn’t just make soda. We made history. And mistakes.",

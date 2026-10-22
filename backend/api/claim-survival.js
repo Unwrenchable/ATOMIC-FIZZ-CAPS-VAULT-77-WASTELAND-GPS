@@ -137,7 +137,7 @@ router.post("/", authMiddleware, claimLimiter, async (req, res) => {
     let gearDrop = null;
     if (crypto.randomInt(0, 100) < dropChance * 100) {
       // Random gear: weapons or armor
-      const gearTypes = ['Power Armor T-51b', 'Combat Rifle', '10mm Pistol', 'Leather Armor'];
+      const gearTypes = ['Reactor Harness T-51b', 'Combat Rifle', '10mm Pistol', 'Leather Armor'];
       const randomGear = gearTypes[crypto.randomInt(0, gearTypes.length)];
       gearDrop = { name: randomGear, tier: 'common' }; // Simplified
       // TODO: Mint NFT for gear

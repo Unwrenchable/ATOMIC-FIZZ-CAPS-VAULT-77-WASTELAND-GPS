@@ -2,7 +2,7 @@
 window.Pipboy = window.Pipboy || {};
 
 (function () {
-  const SPECIAL_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
+  const VITALS_KEYS = ["S", "P", "E", "C", "I", "A", "L"];
 
   async function apiGetProfile(wallet) {
     const res = await fetch(`${window.API_BASE}/api/player/${wallet}`);
@@ -46,7 +46,7 @@ window.Pipboy = window.Pipboy || {};
     if (lvlEl) lvlEl.textContent = profile.level || 1;
 
     const special = profile.special || {};
-    SPECIAL_KEYS.forEach((k) => {
+    VITALS_KEYS.forEach((k) => {
       const value = special[k] ?? 5;
 
       const valEl = document.getElementById(`special-${k}`);
@@ -98,7 +98,7 @@ window.Pipboy = window.Pipboy || {};
 
     if (
       !confirm(
-        "Burn a Vault‑Tec Recalibration Token to rebuild SPECIAL?\nThis action cannot be undone."
+        "Burn a FizzTec Recalibration Token to rebuild VITALS?\nThis action cannot be undone."
       )
     )
       return;
@@ -113,7 +113,7 @@ window.Pipboy = window.Pipboy || {};
         return;
       }
 
-      if (statusEl) statusEl.textContent = "SPECIAL reset.";
+      if (statusEl) statusEl.textContent = "VITALS reset.";
       renderSpecial(data.profile);
       window.Pipboy.currentProfile = data.profile;
     } catch (err) {

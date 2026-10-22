@@ -2,38 +2,38 @@
   "faction_roads": [
     {
       "road_id": "na_i15",
-      "faction": "NCR",
+      "faction": "Frontier Compact",
       "condition": "maintained",
       "hazards": ["patrols", "checkpoints"],
-      "notes": "Primary NCR supply artery between SoCal and Mojave."
+      "notes": "Primary Frontier Compact supply artery between SoCal and Cinder Basin."
     },
     {
       "road_id": "na_i95",
-      "faction": "Brotherhood of Steel",
+      "faction": "Coil Covenant",
       "condition": "restricted",
       "hazards": ["scanners", "sentry_drones"],
       "notes": "Brotherhood controls key bunkers along the East Coast corridor."
     },
     {
       "road_id": "na_i80",
-      "faction": "Enclave Remnants",
+      "faction": "Directorate Remnants",
       "condition": "degraded",
       "hazards": ["radioactive_hotspots", "black_ops_activity"],
-      "notes": "Sparse but strategic Enclave presence along abandoned military depots."
+      "notes": "Sparse but strategic Directorate presence along abandoned military depots."
     },
     {
       "road_id": "na_us93",
       "faction": "Independent Wastelanders",
       "condition": "rough",
       "hazards": ["raiders", "ambush_points"],
-      "notes": "Vital Mojave route with scattered settlements and raider threats."
+      "notes": "Vital Cinder Basin route with scattered settlements and raider threats."
     },
     {
       "road_id": "na_us95",
       "faction": "Raider Clans",
       "condition": "broken",
       "hazards": ["roadblocks", "trap_fields"],
-      "notes": "High raider activity between Searchlight and the Mojave outskirts."
+      "notes": "High raider activity between Searchlight and the Cinder Basin outskirts."
     },
     {
       "road_id": "na_nv160",
@@ -59,7 +59,7 @@
     },
     {
       "road_id": "eu_e35",
-      "faction": "Brotherhood of Steel (Euro Chapter)",
+      "faction": "Coil Covenant (Euro Chapter)",
       "condition": "restricted",
       "hazards": ["tech_scanners"],
       "notes": "Euro Brotherhood controls key choke points along this route."

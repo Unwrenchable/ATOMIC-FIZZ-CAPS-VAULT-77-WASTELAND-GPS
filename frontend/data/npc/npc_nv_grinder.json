@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_grinder",
   "name": "Grinder",
-  "region": "New Vegas Strip",
+  "region": "Neon Reach Strip",
   "type": "Arena Pit Boss",
   "dialog": {
     "idle": [

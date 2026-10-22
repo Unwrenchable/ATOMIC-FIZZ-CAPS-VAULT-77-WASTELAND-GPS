@@ -17,7 +17,7 @@
 
 const express = require("express");
 const crypto = require("crypto");
-const path = require("path");
+const { resolveDataFile } = require("../lib/data-paths");
 const fs = require("fs");
 const rateLimit = require("express-rate-limit");
 const router = express.Router();
@@ -75,7 +75,7 @@ function sanitizeText(str, maxLen) {
 /** Load seed listings from scavenger.json (shown when Redis has no live trades). */
 function loadSeedTrades() {
   try {
-    const seedPath = path.join(__dirname, "..", "..", "public", "data", "scavenger.json");
+    const seedPath = resolveDataFile("scavenger.json");
     const raw = fs.readFileSync(seedPath, "utf8");
     return JSON.parse(raw);
   } catch {
