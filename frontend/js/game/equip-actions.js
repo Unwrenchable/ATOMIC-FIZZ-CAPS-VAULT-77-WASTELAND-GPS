@@ -53,9 +53,9 @@ Game.equipItem = function (itemOrId) {
   // Determine slot based on item type and slot field (wasteland-style)
   let slot = "accessory";
   if (item.type === "weapon") slot = "weapon";
-  else if (item.type === "armor") slot = item.slot || "chest"; // head/chest/arms/legs
-  else if (item.type === "consumable") slot = "aid";
-  else if (item.slot) slot = item.slot;
+  else if (Game.Slots && Game.Slots.slotFor(item)) slot = Game.Slots.slotFor(item);
+  else if (item.type === "consumable") return false; // consumables are used, not equipped
+  else if (item.type === "armor") slot = "chest";
 
   Game.player.equipped[slot] = item;
 
@@ -90,6 +90,7 @@ Game.equipItem = function (itemOrId) {
  */
 Game.unequipItem = function(slot) {
   if (!slot) return false;
+  if (Game.modules?.PlayerState?.unequipItem) return Game.modules.PlayerState.unequipItem(slot);
   
   // Ensure equipped object exists
   if (!Game.player.equipped) {
@@ -132,6 +133,8 @@ Game.getEquipped = function(slot) {
  * Load equipped items from localStorage on startup
  */
 Game.loadEquippedItems = function() {
+  // PlayerState owns equipment and migrates afc_equipped_items itself (see migrateEquipped).
+  if (Game.modules?.PlayerState) return;
   try {
     const saved = localStorage.getItem("afc_equipped_items");
     if (saved) {

@@ -206,7 +206,7 @@ Game.ui.renderInventory = function () {
       let statsText;
       let isEquipped = false;
       let itemSlot;
-      const canEquip = (item.type === "weapon" || item.type === "armor" || item.type === "consumable");
+      const canEquip = (item.type === "weapon" || item.type === "armor") && !item.broken;
 
       if (item.type === "weapon") {
         statsText = "DMG: " + (item.damage != null ? item.damage : "N/A") +
@@ -214,10 +214,11 @@ Game.ui.renderInventory = function () {
         isEquipped = !!(equipped.weapon && equipped.weapon.id === item.id);
       } else if (item.type === "armor") {
         // Use item.slot (head/chest/arms/legs) for the correct equipment slot
-        itemSlot = item.slot || "chest";
+        const itemSlots = (Game.Slots ? Game.Slots.slotsFor(item) : [item.slot || "chest"]);
+        itemSlot = itemSlots[0] || "chest";
         statsText = "DR: " + (item.armor != null ? item.armor : "N/A") +
-                    " \u2022 SLOT: " + itemSlot.toUpperCase();
-        isEquipped = !!(equipped[itemSlot] && equipped[itemSlot].id === item.id);
+                    " \u2022 SLOT: " + itemSlots.join("+").toUpperCase();
+        isEquipped = itemSlots.some(function(sl) { return equipped[sl] && equipped[sl].id === item.id; });
       } else if (item.type === "consumable") {
         let addictionText = "";
         if (item.tags && item.tags.includes("chem")) {
@@ -228,7 +229,7 @@ Game.ui.renderInventory = function () {
           if (level >= 20) addictionText += " [WITHDRAWAL]";
         }
         statsText = (item.heal ? "HEAL: +" + item.heal + " HP" : (item.description ? item.description.slice(0, 30) : "")) + addictionText;
-        isEquipped = !!(equipped.aid && equipped.aid.id === item.id);
+        isEquipped = false; // consumables are used, not equipped
       } else {
         // BUG FIX: use nullish coalescing so that a quantity of 0 is preserved
         // (not silently promoted to 1 by the || operator treating 0 as falsy).
@@ -255,10 +256,8 @@ Game.ui.renderInventory = function () {
         btn.textContent = isEquipped ? "UNEQUIP" : "EQUIP";
         btn.addEventListener("click", function() {
           if (btn.classList.contains("unequip-btn")) {
-            const slot = item.type === "weapon" ? "weapon"
-                       : item.type === "consumable" ? "aid"
-                       : (item.slot || "chest");
-            if (Game.modules?.PlayerState?.unequipItem) Game.modules.PlayerState.unequipItem(slot);
+            const slot = item.type === "weapon" ? "weapon" : itemSlot;
+            if (Game.modules?.PlayerState?.unequipItem) Game.modules.PlayerState.unequipItem(item);
             else if (Game.unequipItem) Game.unequipItem(slot);
           } else {
             if (Game.modules?.PlayerState?.equipItem) Game.modules.PlayerState.equipItem(item);

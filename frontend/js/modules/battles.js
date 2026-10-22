@@ -477,10 +477,8 @@
       }
 
       // Durability decay for weapon after successful hit
-      if (res.weapon && res.weapon.slot) {
-        if (Game.modules?.PlayerState?.decayDurability) {
-          Game.modules.PlayerState.decayDurability(res.weapon.slot, 1);
-        }
+      if (res.weapon && Game.modules?.PlayerState?.decayDurability) {
+        Game.modules.PlayerState.decayDurability("weapon", 1);
       }
 
       this.updateUI();
@@ -522,11 +520,14 @@
       const playerEquipped = this.gs.player.equipped || {};
       let totalArmor = 0;
       let bestArmorItem = null;
+      let bestArmorSlot = null;
+      const seenArmor = new Set();
       ARMOR_SLOTS.forEach(s => {
-        const a = playerEquipped[s] || psEquipped[s];
-        if (a && typeof a.armor === "number") {
+        const a = psEquipped[s] || playerEquipped[s];
+        if (a && typeof a.armor === "number" && !seenArmor.has(a.id)) {
+          seenArmor.add(a.id); // a full-body suit counts once
           totalArmor += a.armor;
-          if (!bestArmorItem || a.armor > (bestArmorItem.armor || 0)) bestArmorItem = a;
+          if (!bestArmorItem || a.armor > (bestArmorItem.armor || 0)) { bestArmorItem = a; bestArmorSlot = s; }
         }
       });
       if (totalArmor > 0) {
@@ -546,10 +547,8 @@
       if (this.gs.player.hp < 0) this.gs.player.hp = 0;
 
       // Durability decay for armor after taking damage
-      if (dmg > 0 && bestArmorItem && bestArmorItem.slot) {
-        if (Game.modules?.PlayerState?.decayDurability) {
-          Game.modules.PlayerState.decayDurability(bestArmorItem.slot, 1);
-        }
+      if (dmg > 0 && bestArmorSlot && Game.modules?.PlayerState?.decayDurability) {
+        Game.modules.PlayerState.decayDurability(bestArmorSlot, 1);
       }
 
       // Weather radiation effects

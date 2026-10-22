@@ -10,11 +10,10 @@ function withVitals(initial) {
   const special = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5, ...(initial || {}) };
   const calls = { set: [], update: [] };
   ctx.Game = {
-    modules: {},
-    PlayerState: {
+    modules: { PlayerState: {
       getBaseSpecial: () => ({ ...special }),
       setSpecial: (k, v) => { calls.set.push([k, v]); special[k] = v; },
-    },
+    } },
     ApiClient: { updateSpecial: async (w, sp) => { calls.update.push([w, sp]); return { ok: true }; } },
   };
   load(ctx, "js/game/vitals.js");

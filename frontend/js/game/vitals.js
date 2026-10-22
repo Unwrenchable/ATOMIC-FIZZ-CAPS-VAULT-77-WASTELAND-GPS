@@ -34,7 +34,7 @@
     return !sp || KEYS.every((k) => (sp[k] == null ? 5 : sp[k]) === 5);
   }
 
-  function ps() { return root.Game && root.Game.PlayerState; }
+  function ps() { const G = root.Game || {}; return (G.modules && G.modules.PlayerState) || G.PlayerState; }
 
   function get() {
     const P = ps();
@@ -114,7 +114,31 @@
         fill.style.width = `${v * 10}%`;
       }
     });
+    renderGear(d);
     renderPortrait(d);
+  }
+
+  // STAT: equipped weapon + armor, with per-item durability
+  function renderGear(d) {
+    const box = d.getElementById("stat-gear");
+    const P = ps();
+    if (!box || !P || typeof P.getEquipped !== "function") return;
+    const eq = P.getEquipped() || {};
+    const rows = [["WEAPON", "weapon"], ["HEAD", "head"], ["CHEST", "chest"], ["ARMS", "arms"], ["LEGS", "legs"], ["ACCESSORY", "accessory"]];
+    box.textContent = "";
+    rows.forEach(([label, slot]) => {
+      const it = eq[slot];
+      const row = d.createElement("div");
+      row.className = "panel-row";
+      const l = d.createElement("span"); l.className = "label"; l.textContent = label;
+      const v = d.createElement("span"); v.className = "value"; v.id = `stat-gear-${slot}`;
+      if (it) {
+        const extra = slot === "weapon" ? (it.damage != null ? ` DMG ${it.damage}` : "") : (it.armor != null ? ` DR ${it.armor}` : "");
+        const dur = typeof it.durability === "number" ? ` (${it.durability}%)` : "";
+        v.textContent = `${it.name || it.id}${extra}${dur}`;
+      } else v.textContent = slot === "weapon" ? "FISTS" : "—";
+      row.appendChild(l); row.appendChild(v); box.appendChild(row);
+    });
   }
 
   let _portraitKey = null;
@@ -151,6 +175,7 @@
       if (sp) apply(sp); else render();
     });
     root.addEventListener("statsUpdated", () => render());
+    root.addEventListener("inventoryUpdated", () => render());
     root.addEventListener("gameInitialized", () => render());
   }
   if (root.document && root.document.addEventListener) {

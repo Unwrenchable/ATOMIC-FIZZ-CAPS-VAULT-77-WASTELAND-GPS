@@ -98,6 +98,7 @@
     if (_survivalTimer) { clearInterval(_survivalTimer); _survivalTimer = null; }
 
     loadFromStorage();
+    if (_persistMigrations) { _persistMigrations = false; saveToStorage(); }
     
     // Sync Game.player references
     syncGamePlayerReferences();
@@ -166,6 +167,10 @@
             if (!(k in _state.equipped)) _state.equipped[k] = null;
           });
         }
+        // persist migrations right away: the legacy store is consumed here
+        migrateEquipped(_state);
+        _dirty = true;
+        _persistMigrations = true;
         // Ensure VITALS object exists with defaults for any missing keys
         if (!_state.special || typeof _state.special !== 'object') {
           _state.special = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
@@ -303,6 +308,7 @@
   /**
    * Save player state to localStorage
    */
+  let _persistMigrations = false;
   function saveToStorage() {
     if (!_state) return;
     
@@ -416,20 +422,88 @@
     }
   }
 
+  function _slotsFor(item) {
+    if (window.Game && Game.Slots) return Game.Slots.slotsFor(item);
+    if (!item) return [];
+    if (item.type === "weapon") return ["weapon"];
+    if (item.type === "armor") return [item.slot || "chest"];
+    return [];
+  }
+
+  /**
+   * Equipment migration (one store): normalize slot names, fold the legacy
+   * afc_equipped_items store from equip-actions.js into PlayerState without
+   * losing items, drop consumables from equip slots, and seed per-item durability.
+   */
+  function migrateEquipped(state) {
+    if (!state) return state;
+    const eq = state.equipped = state.equipped || {};
+    const canon = { weapon: null, head: null, chest: null, arms: null, legs: null, aid: null, accessory: null };
+    const out = { ...canon };
+    const place = (item, fromSlot) => {
+      if (!item || typeof item !== "object" || !item.id) return;
+      let slots = _slotsFor(item);
+      if (!slots.length && fromSlot === "accessory") slots = ["accessory"];
+      slots.forEach(sl => { if (sl in out && !out[sl]) out[sl] = item; });
+    };
+    Object.keys(eq).forEach(k => place(eq[k], k));
+    try {
+      const legacyRaw = typeof localStorage !== "undefined" && localStorage.getItem("afc_equipped_items");
+      if (legacyRaw) {
+        const legacy = JSON.parse(legacyRaw) || {};
+        const invIds = new Set((state.inventory || []).map(i => i.id));
+        Object.keys(legacy).forEach(k => {
+          const it = legacy[k];
+          // only keep legacy-equipped items the player still owns (sold items stay sold)
+          if (it && invIds.has(it.id)) place((state.inventory || []).find(i => i.id === it.id) || it, k);
+        });
+        localStorage.removeItem("afc_equipped_items");
+      }
+    } catch (_) { /* corrupt legacy store: ignore */ }
+    // equipped items must reference the inventory instance (so wear and sales stay in sync)
+    const inv = state.inventory || [];
+    Object.keys(out).forEach(sl => {
+      const it = out[sl];
+      if (!it) return;
+      const owned = inv.find(i => i.id === it.id);
+      out[sl] = owned || null;
+    });
+    out.aid = null;
+    state.equipped = out;
+    state.durability = state.durability || {};
+    ["weapon", "head", "chest", "arms", "legs"].forEach(sl => {
+      const it = out[sl];
+      if (it && typeof it.durability !== "number") {
+        it.durability = typeof state.durability[sl] === "number" ? state.durability[sl] : 100;
+      }
+      state.durability[sl] = it ? it.durability : 100;
+    });
+    return state;
+  }
+
   /**
    * Decay durability of equipped items on use
    * @param {string} slot - Equipment slot (weapon, head, chest, arms, legs)
    * @param {number} amount - Amount to decay (default 5)
    */
   function decayDurability(slot, amount = 5) {
-    if (!_state.durability || !_state.durability[slot]) return;
-    _state.durability[slot] = Math.max(0, _state.durability[slot] - amount);
+    if (!_state) return;
+    slot = (window.Game && Game.Slots && Game.Slots.normalizeSlotName(slot)) || slot;
+    const item = _state.equipped && _state.equipped[slot];
+    if (!item) return;
+    _state.durability = _state.durability || {};
+    const cur = typeof item.durability === "number" ? item.durability
+              : (typeof _state.durability[slot] === "number" ? _state.durability[slot] : 100);
+    const next = Math.max(0, cur - amount);
+    item.durability = next; // per-item: travels with the item, not the slot
+    _slotsFor(item).forEach(sl => { if (_state.equipped[sl] === item) _state.durability[sl] = next; });
     _dirty = true;
-    console.log(`[PlayerState] ${slot} durability decayed by ${amount} to ${_state.durability[slot]}`);
-    if (_state.durability[slot] <= 0) {
-      // Item breaks
+    if (next <= 0) {
+      item.broken = true;
       unequipItem(slot);
-      console.log(`[PlayerState] ${slot} item broke!`);
+      console.log(`[PlayerState] ${item.name} broke!`);
+    } else {
+      saveToStorage();
     }
   }
 
@@ -439,8 +513,10 @@
    * @param {number} amount - Amount to repair (default 25)
    */
   function repairDurability(slot, amount = 25) {
-    if (!_state.durability || !_state.durability[slot]) return;
+    const item = _state && _state.equipped && _state.equipped[slot];
+    if (!_state.durability || typeof _state.durability[slot] !== "number") return;
     _state.durability[slot] = Math.min(100, _state.durability[slot] + amount);
+    if (item) { item.durability = _state.durability[slot]; item.broken = false; }
     _dirty = true;
     console.log(`[PlayerState] ${slot} durability repaired by ${amount} to ${_state.durability[slot]}`);
   }
@@ -538,10 +614,11 @@
       _state.inventory.splice(idx, 1);
       console.log(`[PlayerState] Removed ${item.name}`);
       
-      // Unequip if this was equipped
+      // Unequip if this was equipped (every slot the item covers)
       Object.keys(_state.equipped).forEach(slot => {
         if (_state.equipped[slot]?.id === itemId) {
           _state.equipped[slot] = null;
+          if (_state.durability && slot in _state.durability) _state.durability[slot] = 100;
         }
       });
     }
@@ -605,24 +682,41 @@
       return false;
     }
 
-    // Determine slot based on item type and slot field (wasteland-style)
-    let slot;
-    if (item.type === "weapon") slot = "weapon";
-    else if (item.type === "armor") slot = item.slot || "chest"; // use item.slot (head/chest/arms/legs)
-    else if (item.type === "consumable") slot = "aid";
-    else if (item.slot) slot = item.slot;
-    else slot = "accessory";
-
-    _state.equipped[slot] = item;
+    // Consumables are used, not equipped
+    if (item.type === "consumable" || item.type === "aid") {
+      return typeof useItem === "function" ? useItem(item) : false;
+    }
+    if (item.broken || item.durability === 0) {
+      console.warn("[PlayerState] Cannot equip broken item:", item.name);
+      return false;
+    }
+    // Must own it: equip the inventory instance, never a detached copy
+    const owned = _state.inventory.find(i => i.id === item.id);
+    if (!owned) {
+      console.warn("[PlayerState] Cannot equip - not in inventory:", item.name);
+      return false;
+    }
+    const slots = _slotsFor(owned);
+    if (!slots.length) {
+      console.warn("[PlayerState] Item has no equip slot:", owned.name);
+      return false;
+    }
+    // Clear anything currently in the target slots (a full-body suit evicts all its slots' items)
+    slots.forEach(sl => { const prev = _state.equipped[sl]; if (prev && prev !== owned) _clearItem(prev); });
+    if (typeof owned.durability !== "number") owned.durability = 100;
+    _state.durability = _state.durability || {};
+    slots.forEach(sl => { _state.equipped[sl] = owned; _state.durability[sl] = owned.durability; });
+    const slot = slots[0];
     _dirty = true;
     saveToStorage();
+    syncGamePlayerReferences();
     
     // Quest hook: only fire equip_weapon when a weapon is actually equipped
     if (slot === "weapon" && Game.modules?.quests?.completeObjective) {
       Game.modules.quests.completeObjective("wake_up", "equip_weapon");
     }
     
-    console.log(`[PlayerState] Equipped ${item.name} in ${slot} slot`);
+    console.log(`[PlayerState] Equipped ${owned.name} in ${slots.join("+")}`);
     triggerInventoryUpdate();
     
     return true;
@@ -632,16 +726,28 @@
    * Unequip an item from a slot
    * @param {string} slot - Slot to clear (weapon, head, chest, arms, legs, aid, accessory)
    */
-  function unequipItem(slot) {
-    if (!slot || !_state) return false;
-    if (!_state.equipped[slot]) return false;
+  function _clearItem(item) {
+    Object.keys(_state.equipped).forEach(sl => {
+      if (_state.equipped[sl] && _state.equipped[sl].id === item.id) _state.equipped[sl] = null;
+    });
+  }
 
-    const item = _state.equipped[slot];
-    _state.equipped[slot] = null;
+  function unequipItem(slotOrItem) {
+    if (!slotOrItem || !_state) return false;
+    let item;
+    if (typeof slotOrItem === "object") {
+      item = Object.values(_state.equipped).find(e => e && e.id === slotOrItem.id);
+    } else {
+      const slot = (window.Game && Game.Slots && Game.Slots.normalizeSlotName(slotOrItem)) || slotOrItem;
+      item = _state.equipped[slot];
+    }
+    if (!item) return false;
+    _clearItem(item);
     _dirty = true;
     saveToStorage();
+    syncGamePlayerReferences();
 
-    console.log(`[PlayerState] Unequipped ${item.name} from ${slot} slot`);
+    console.log(`[PlayerState] Unequipped ${item.name}`);
     triggerInventoryUpdate();
     return true;
   }
@@ -1333,7 +1439,9 @@
     // Durability functions
     decayDurability,
     repairDurability,
-    getDurability: function () { return _state ? { ..._state.durability } : {}; }
+    getDurability: function () { return _state ? { ..._state.durability } : {}; },
+    getEquipped: function () { return _state ? { ..._state.equipped } : {}; },
+    _migrateEquipped: migrateEquipped
 
   };
   // Expose globally
