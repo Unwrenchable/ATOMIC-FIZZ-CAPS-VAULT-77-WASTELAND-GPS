@@ -650,6 +650,13 @@
         if (!res.success) return { action, res };
         let end = this.checkBattleEnd();
         if (end === "WIN") {
+          // Lock the battle buttons before the state is cleared so a late FLEE click cannot hit a null state.
+          const attackBtn = typeof document !== "undefined" ? document.getElementById("battleAttackBtn") : null;
+          if (attackBtn) attackBtn.disabled = true;
+          ["battlePunchBtn", "battleFleeBtn", "battleSneakBtn"].forEach(id => {
+            const b = typeof document !== "undefined" ? document.getElementById(id) : null;
+            if (b) b.disabled = true;
+          });
           const rewards = await this.resolveWin();
           return { action, res, end, rewards };
         }
@@ -707,6 +714,7 @@
       }
       if (!applied) { this.applyRewards(encounter); applied = { ...(encounter.rewards || {}), local: true }; }
       this._end('WIN');
+      this.state = null; // _end clears it too; explicit so nothing after WIN can reuse it
       return applied;
     },
 
