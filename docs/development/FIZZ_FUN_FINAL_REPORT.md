@@ -211,7 +211,7 @@ git add public/fizzfun/
 git add public/wallet/index.html
 git add public/wallet/wallet.css
 git add FIZZ_FUN_STANDALONE_DEPLOYMENT.md
-git add FIZZ_FUN_CHANGES_SUMMARY.txt
+git add docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt
 git add public/test-fizzfun-standalone.html
 git commit -m "Create standalone Fizz.fun token launchpad page
 

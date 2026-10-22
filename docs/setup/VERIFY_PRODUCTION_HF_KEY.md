@@ -10,21 +10,21 @@ Since you mentioned you updated the HF_API_KEY and created a new one separate fr
 
 ```bash
 # Test your production instance
-BACKEND_URL=https://your-app-name.onrender.com node verify-hf-api-usage.js
+BACKEND_URL=https://your-app-name.onrender.com node legacy/avatar-pipeline/verify-hf-api-usage.js
 ```
 
 ### If Deployed on Vercel
 
 ```bash
 # Test your production instance
-BACKEND_URL=https://your-app.vercel.app node verify-hf-api-usage.js
+BACKEND_URL=https://your-app.vercel.app node legacy/avatar-pipeline/verify-hf-api-usage.js
 ```
 
 ### If Deployed Elsewhere
 
 ```bash
 # Replace with your actual URL
-BACKEND_URL=https://atomicfizzcaps.xyz node verify-hf-api-usage.js
+BACKEND_URL=https://atomicfizzcaps.xyz node legacy/avatar-pipeline/verify-hf-api-usage.js
 ```
 
 ---
@@ -266,7 +266,7 @@ Overseer AI online.
 1. **Verify your production deployment** using the steps above
 2. **Run the verification script** on your deployed URL:
    ```bash
-   BACKEND_URL=https://your-app.com node verify-hf-api-usage.js
+   BACKEND_URL=https://your-app.com node legacy/avatar-pipeline/verify-hf-api-usage.js
    ```
 
 3. **Share the output** so I can confirm the key is working

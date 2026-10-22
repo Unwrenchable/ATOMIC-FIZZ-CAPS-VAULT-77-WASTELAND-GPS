@@ -449,7 +449,7 @@ To verify your current setup:
 
 ```bash
 # Check this repo
-BACKEND_URL=https://your-atomic-fizz-caps-backend.com node verify-hf-api-usage.js
+BACKEND_URL=https://your-atomic-fizz-caps-backend.com node legacy/avatar-pipeline/verify-hf-api-usage.js
 
 # Check Twitter bot (if it has similar endpoint)
 curl https://your-twitter-bot.com/health

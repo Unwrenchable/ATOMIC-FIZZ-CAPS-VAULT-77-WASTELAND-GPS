@@ -18,7 +18,7 @@
     "realai:gen:npcs": "node scripts/realai/generate-npcs.js",
     "realai:gen:locations": "node scripts/realai/generate-locations.js",
     "realai:gen:lore": "node scripts/realai/generate-lore.js",
-    "verify:hf": "node verify-hf-api-usage.js",
+    "verify:hf": "node legacy/avatar-pipeline/verify-hf-api-usage.js",
     "worker:mint": "node workers/mint_worker_stream.js",
     "worker:mint:list": "node workers/mint_worker.js",
     "lint": "eslint .",
