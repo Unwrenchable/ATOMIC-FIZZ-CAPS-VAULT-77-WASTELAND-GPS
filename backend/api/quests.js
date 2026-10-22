@@ -5,6 +5,7 @@ const router = express.Router();
 const { redis, key } = require("../lib/redis");
 const { resolveDataFile, resolveDataDir } = require("../lib/data-paths");
 const { authMiddleware } = require("../lib/auth");
+const { catalogReadLimiter } = require("../lib/rate-limits");
 const { applyXpToProfile, MAX_LEVEL: _MAX_LEVEL } = require("../lib/xp");
 
 // -----------------------------------------------------------------------
@@ -60,7 +61,7 @@ const MAX_INVENTORY_SIZE = 200;
 // MAX_LEVEL is imported from lib/xp (shared constant — BUG-014 FIX)
 
 // GET /api/quests - Return quests.json data
-router.get("/", (req, res) => {
+router.get("/", catalogReadLimiter, (req, res) => {
   // public/data/quests.json does not exist. Live file is frontend/data/quests.json.
   // The old sendFile path 500'd and the client fell back to static /data JSON.
   const file = resolveDataFile("quests.json");
