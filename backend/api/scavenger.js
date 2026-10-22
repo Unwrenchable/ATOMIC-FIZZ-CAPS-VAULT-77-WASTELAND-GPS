@@ -2,10 +2,11 @@ const express = require("express");
 const fs = require("fs");
 const router = express.Router();
 const { resolveDataFile } = require("../lib/data-paths");
+const { catalogReadLimiter } = require("../lib/rate-limits");
 
 // Canonical catalog is frontend/data/scavenger.json.
 // public/data/ is a legacy path that is not in this repo, so sendFile 500'd.
-router.get("/", (req, res) => {
+router.get("/", catalogReadLimiter, (req, res) => {
   const file = resolveDataFile("scavenger.json");
   if (!fs.existsSync(file)) {
     console.error("[api/scavenger] missing scavenger.json, last candidate:", file);
