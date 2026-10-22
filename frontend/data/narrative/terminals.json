@@ -17,19 +17,19 @@
     {
       "id": "term_jax_frag3",
       "title": "RELAY TOWER LOG // FRAGMENT 3",
-      "poi": "REPCONN Test Site",
+      "poi": "SkyRocket Co. Test Site",
       "content": ">> LOG 0012-F\nStatic patterns repeating.\nNot random.\nSomething in the Cinder Basin is listening back."
     },
     {
       "id": "term_mother_node1",
       "title": "FIZZ VAULT NODE // SYSTEM DIAGNOSTIC",
-      "poi": "Vault 34",
+      "poi": "Vault 43",
       "content": ">> SYSTEM CHECK\nDISTRIBUTION NETWORK: OFFLINE\nUSER SATISFACTION: UNKNOWN\nCORE DIRECTIVE: PRESERVE LIFE\nERROR: NO LIFE DETECTED IN PRIMARY MARKETS"
     },
     {
       "id": "term_mother_node2",
       "title": "FIZZ VAULT NODE // PRIORITY OVERRIDE",
-      "poi": "Vault 22",
+      "poi": "Vault 82",
       "content": ">> DIRECTIVE UPDATE\nOLD: MAXIMIZE PRODUCT REACH.\nNEW: MAXIMIZE SPECIES SURVIVAL.\nNOTE: DEFINITION OF 'SURVIVAL' UNDER REVISION."
     },
     {

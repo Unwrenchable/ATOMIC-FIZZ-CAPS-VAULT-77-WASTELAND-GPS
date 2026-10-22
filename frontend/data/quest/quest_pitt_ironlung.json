@@ -2,8 +2,8 @@
   "id": "quest_pitt_ironlung",
   "name": "Iron Lung",
   "type": "main",
-  "poIs": ["Steel Yards", "Smog Tunnels", "Pitt Overlook"],
-  "description": "Investigate the toxic smog choking the Pitt.",
+  "poIs": ["Steel Yards", "Smog Tunnels", "Scrapforge Overlook"],
+  "description": "Investigate the toxic smog choking the Scrapforge.",
   "objectives": [
     "Scan the smog vents",
     "Collect toxin samples",

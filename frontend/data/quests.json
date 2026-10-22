@@ -40,17 +40,17 @@
     "name": "The Vault Experiment",
     "type": "main",
     "poIs": [
-      "Vault 3",
-      "Vault 19",
-      "Vault 22",
-      "Vault 87"
+      "Vault 9",
+      "Vault 29",
+      "Vault 82",
+      "Vault 78"
     ],
     "description": "Investigate Cinder Basin Vaults to uncover the truth about FizzTec\u2019s experiments.",
     "objectives": [
-      "Search Vault 3 for experiment logs",
-      "Recover data from Vault 19",
-      "Defeat mutated creatures in Vault 22",
-      "Confront overseer AI in Vault 87"
+      "Search Vault 9 for experiment logs",
+      "Recover data from Vault 29",
+      "Defeat mutated creatures in Vault 82",
+      "Confront overseer AI in Vault 78"
     ],
     "endings": [
       {
@@ -106,7 +106,7 @@
       {
         "id": "ending_keep",
         "description": "You keep the prototypes for yourself.",
-        "reward": "Prototype X-01 Reactor Harness",
+        "reward": "Prototype Mk-X Reactor Harness",
         "consequence": "You become a feared figure in the Cinder Basin."
       }
     ]
@@ -116,14 +116,14 @@
     "name": "Shadows of the Strip",
     "type": "main",
     "poIs": [
-      "Ultra-Luxe Casino",
-      "Gomorrah Casino",
+      "Velvet Luxe Casino",
+      "Sodom Lounge Casino",
       "The Spire"
     ],
     "description": "Uncover corruption and secrets hidden within the Strip casinos.",
     "objectives": [
-      "Investigate Ultra-Luxe backrooms",
-      "Retrieve smuggled weapons from Gomorrah",
+      "Investigate Velvet Luxe backrooms",
+      "Retrieve smuggled weapons from Sodom Lounge",
       "Confront casino bosses at The Spire"
     ],
     "endings": [
@@ -179,7 +179,7 @@
         "id": "ending_legion_breakthrough",
         "description": "Legion overruns Frontier Compact lines.",
         "reward": "Legion Favor",
-        "consequence": "Frontier Compact retreats, Caesar claims victory."
+        "consequence": "Frontier Compact retreats, the Imperator claims victory."
       }
     ]
   },
@@ -190,19 +190,19 @@
     "poIs": [
       "Hidden Valley Bunker",
       "HELIOS One",
-      "REPCONN HQ"
+      "SkyRocket Co. HQ"
     ],
     "description": "Aid or oppose the Coil Covenant in their tech reclamation crusade.",
     "objectives": [
       "Infiltrate Hidden Valley bunker",
       "Redirect power at HELIOS One",
-      "Recover rocket tech from REPCONN"
+      "Recover rocket tech from SkyRocket Co."
     ],
     "endings": [
       {
         "id": "ending_bos_dominance",
         "description": "BoS hoards all tech.",
-        "reward": "T-51b Reactor Harness",
+        "reward": "Mk-5 Reactor Harness",
         "consequence": "Wasteland tech stagnates."
       },
       {
@@ -267,7 +267,7 @@
     "description": "Help the Boomers achieve flight once more.",
     "objectives": [
       "Raise the B-29 from Lake Mead",
-      "Secure parts from REPCONN",
+      "Secure parts from SkyRocket Co.",
       "Launch the bomber"
     ],
     "endings": [
@@ -352,7 +352,7 @@
       {
         "id": "ending_legion_crush",
         "description": "Revolt brutally suppressed.",
-        "reward": "Caesar's Favor",
+        "reward": "the Imperator's Favor",
         "consequence": "Legion stronger."
       },
       {
@@ -370,13 +370,13 @@
     "poIs": [
       "Frontier Compact Correctional Facility",
       "Primm",
-      "Vault 19"
+      "Vault 29"
     ],
     "description": "Lead the Powder Gangers to power or destruction.",
     "objectives": [
       "Break out NCRCF prisoners",
       "Raid Primm for supplies",
-      "Claim Vault 19 as base"
+      "Claim Vault 29 as base"
     ],
     "endings": [
       {
@@ -404,14 +404,14 @@
     "name": "White Glove Feast",
     "type": "main",
     "poIs": [
-      "Ultra-Luxe Casino",
-      "Gomorrah",
+      "Velvet Luxe Casino",
+      "Sodom Lounge",
       "The Tops"
     ],
     "description": "Uncover the White Glove Society's darkest secrets.",
     "objectives": [
-      "Investigate Ultra-Luxe kitchen",
-      "Track meat sources to Gomorrah",
+      "Investigate Velvet Luxe kitchen",
+      "Track meat sources to Sodom Lounge",
       "Confront society at masked ball"
     ],
     "endings": [
@@ -431,7 +431,7 @@
         "id": "ending_society_exposure",
         "description": "Expose to public.",
         "reward": "Caps from Frontier Compact",
-        "consequence": "Ultra-Luxe ruined."
+        "consequence": "Velvet Luxe ruined."
       }
     ]
   },
@@ -440,11 +440,11 @@
     "name": "Kings' Gambit",
     "type": "main",
     "poIs": [
-      "Freeside",
+      "Outskirt Row",
       "King's School of Impersonation",
       "The Tops"
     ],
-    "description": "Broker peace or war between the Kings and Frontier Compact in Freeside.",
+    "description": "Broker peace or war between the Kings and Frontier Compact in Outskirt Row.",
     "objectives": [
       "Meet the King in his school",
       "Resolve Pacer's aggression",
@@ -455,19 +455,19 @@
         "id": "ending_kings_peace",
         "description": "Kings and Frontier Compact coexist.",
         "reward": "Elvis Jacket",
-        "consequence": "Freeside stabilizes."
+        "consequence": "Outskirt Row stabilizes."
       },
       {
         "id": "ending_kings_war",
         "description": "Kings fight Frontier Compact.",
         "reward": "Grease Gun",
-        "consequence": "Freeside in chaos."
+        "consequence": "Outskirt Row in chaos."
       },
       {
         "id": "ending_kings_absorb",
         "description": "Kings join Frontier Compact.",
         "reward": "Frontier Compact MP Armor",
-        "consequence": "Freeside annexed."
+        "consequence": "Outskirt Row annexed."
       }
     ]
   },
@@ -550,7 +550,7 @@
     "poIs": [
       "Black Mountain",
       "Jacobstown",
-      "REPCONN Test Site"
+      "SkyRocket Co. Test Site"
     ],
     "description": "Resolve the super mutant/nightkin conflict at Black Mountain.",
     "objectives": [
@@ -612,8 +612,8 @@
     "name": "Buried Treasure",
     "type": "side",
     "poIs": [
-      "Novac",
-      "REPCONN Test Site"
+      "Saurville",
+      "SkyRocket Co. Test Site"
     ],
     "description": "Follow clues to hidden cache.",
     "objectives": [
@@ -668,12 +668,12 @@
     "name": "Fiend Heads",
     "type": "side",
     "poIs": [
-      "Vault 3",
+      "Vault 9",
       "Westside"
     ],
     "description": "Collect fiend bounties.",
     "objectives": [
-      "Clear Vault 3 leaders",
+      "Clear Vault 9 leaders",
       "Return heads"
     ]
   },
@@ -683,11 +683,11 @@
     "type": "side",
     "poIs": [
       "Black Mountain",
-      "REPCONN HQ"
+      "SkyRocket Co. HQ"
     ],
     "description": "Deal with stealthy nightkin.",
     "objectives": [
-      "Track to REPCONN",
+      "Track to SkyRocket Co.",
       "Eliminate leader"
     ]
   },
@@ -697,7 +697,7 @@
     "type": "side",
     "poIs": [
       "Red Rock Drug Lab",
-      "Crimson Caravan"
+      "Scarlet Caravan"
     ],
     "description": "Run chems for Khans.",
     "objectives": [
@@ -724,7 +724,7 @@
     "type": "side",
     "poIs": [
       "Primm",
-      "Novac",
+      "Saurville",
       "Hidden Valley"
     ],
     "description": "Upgrade broken eyebot.",
@@ -737,8 +737,8 @@
     "name": "G.I. Blues",
     "type": "side",
     "poIs": [
-      "Freeside",
-      "Atomic Wrangler"
+      "Outskirt Row",
+      "Rad Rustler"
     ],
     "description": "Solve Kings' troubles.",
     "objectives": [
@@ -778,8 +778,8 @@
     "name": "Come Fly With Me",
     "type": "side",
     "poIs": [
-      "REPCONN HQ",
-      "Novac"
+      "SkyRocket Co. HQ",
+      "Saurville"
     ],
     "description": "Launch ghouls into space.",
     "objectives": [
@@ -792,7 +792,7 @@
     "name": "Beyond the Beef",
     "type": "side",
     "poIs": [
-      "Ultra-Luxe"
+      "Velvet Luxe"
     ],
     "description": "Solve missing person case.",
     "objectives": [
@@ -845,7 +845,7 @@
     "name": "I Put a Spell on You",
     "type": "side",
     "poIs": [
-      "Camp McCarran"
+      "Camp Halloran"
     ],
     "description": "Find Frontier Compact spy.",
     "objectives": [
@@ -895,7 +895,7 @@
     "type": "side",
     "poIs": [
       "Aerotech Office Park",
-      "Novac"
+      "Saurville"
     ],
     "description": "Help stranded travelers.",
     "objectives": [
@@ -1103,7 +1103,7 @@
     "objectives": [
       "Exit Vault 33 and establish GPS bearing",
       "Find Siggi Wilzig's Research Station",
-      "Investigate Shady Sands Ruins for HavenTech evidence",
+      "Investigate Dustwater Ruins for HavenTech evidence",
       "Infiltrate HavenTech Headquarters Ruins",
       "Decide the fate of the CAPS Protocol"
     ],
@@ -1115,7 +1115,7 @@
       "npc"
     ],
     "start_location": "vault_33_tv",
-    "npc_giver": "dialog_ghoul_cooper",
+    "npc_giver": "dialog_cutter_hale",
     "prerequisites": [],
     "next_quests": [
       "quest_tv_ghoul_hunt"
@@ -1154,13 +1154,13 @@
       "griffith_obs_ruins_tv",
       "wilzig_research_tv"
     ],
-    "description": "Cooper Howard \u2014 The Ghoul \u2014 has been hunting a FizzCo whistleblower for two centuries. Follow his trail across the Western wasteland and uncover the truth about the CAPS origin.",
+    "description": "Cutter Hale \u2014 The Ghoul \u2014 has been hunting a FizzCo whistleblower for two centuries. Follow his trail across the Western wasteland and uncover the truth about the CAPS origin.",
     "objectives": [
-      "Find Cooper Howard at his ranch ruins",
+      "Find Cutter Hale at his ranch ruins",
       "Track Dr. Elara Voss across three wasteland locations",
       "Discover the whistleblower's truth about CAPS",
       "Confront HavenTech's bounty system",
-      "Make the final call: Cooper's target or the truth?"
+      "Make the final call: Cutter's target or the truth?"
     ],
     "fizz_reward": 750,
     "caps_reward": 1500,
@@ -1170,15 +1170,15 @@
       "npc"
     ],
     "start_location": "cooper_ranch_ruins_tv",
-    "npc_giver": "dialog_ghoul_cooper",
+    "npc_giver": "dialog_cutter_hale",
     "prerequisites": [],
     "next_quests": [],
     "endings": [
       {
         "id": "ending_redemption",
-        "description": "Help Cooper find his daughter's vault.",
-        "reward": "750 FIZZ + Cooper Howard Companion",
-        "consequence": "Cooper finds peace. His daughter's vault data unlocks new FIZZ rewards."
+        "description": "Help Cutter find his daughter's vault.",
+        "reward": "750 FIZZ + Cutter Hale Companion",
+        "consequence": "Cutter finds peace. His daughter's vault data unlocks new FIZZ rewards."
       },
       {
         "id": "ending_whistleblower",
@@ -1196,7 +1196,7 @@
   },
   {
     "id": "quest_fo1_boneyard_rise",
-    "name": "The Boneyard Rises",
+    "name": "The Ossuary Yard Rises",
     "type": "main",
     "era": "fo1",
     "year": 2161,
@@ -1207,10 +1207,10 @@
       "los_angeles_boneyard_fo1",
       "vault_13_fo1"
     ],
-    "description": "In 2161 Southern California, the Master's Army marches and the Hub's merchant network teeters on collapse. A pre-war CAPS relay node \u2014 the first \u2014 was buried beneath the Boneyard. Find it before the Children of the Cathedral do.",
+    "description": "In 2161 Southern California, the Master's Army marches and the Hub's merchant network teeters on collapse. A pre-war CAPS relay node \u2014 the first \u2014 was buried beneath the Ossuary Yard. Find it before the Children of the Cathedral do.",
     "objectives": [
       "Speak with Hub merchants about the old CAPS relay",
-      "Infiltrate the Boneyard's underground tunnels",
+      "Infiltrate the Ossuary Yard's underground tunnels",
       "Recover the FizzTec CAPS Node Alpha",
       "Decide whether to activate or destroy the node"
     ],
@@ -1222,7 +1222,7 @@
       "lore"
     ],
     "start_location": "the_hub_fo1",
-    "npc_giver": "dialog_vault_dweller_echo",
+    "npc_giver": "dialog_vault_sleeper_echo",
     "prerequisites": [],
     "next_quests": [],
     "endings": [
@@ -1275,7 +1275,7 @@
       "lore"
     ],
     "start_location": "arroyo_fo2",
-    "npc_giver": "dialog_vault_dweller_echo",
+    "npc_giver": "dialog_vault_sleeper_echo",
     "prerequisites": [
       "quest_fo1_boneyard_rise"
     ],
@@ -1330,7 +1330,7 @@
       "lore"
     ],
     "start_location": "rivet_city_fo3",
-    "npc_giver": "dialog_sole_survivor_echo",
+    "npc_giver": "dialog_last_sleeper_echo",
     "prerequisites": [],
     "next_quests": [],
     "endings": [
@@ -1370,7 +1370,7 @@
     ],
     "description": "The Institute has been embedding CAPS Protocol tracking nodes in synth neural networks \u2014 every synth is a walking CAPS terminal. The Railroad wants to free the synths. The Brotherhood wants to destroy them. You want the CAPS data they carry.",
     "objectives": [
-      "Investigate CAPS node anomalies in Diamond City",
+      "Investigate CAPS node anomalies in Stadium Hollow",
       "Infiltrate Institute CAPS research division",
       "Choose: Railroad liberation, Brotherhood purge, or independent extraction",
       "Extract or broadcast the synth-carried CAPS data"
@@ -1383,7 +1383,7 @@
       "npc"
     ],
     "start_location": "diamond_city_fo4",
-    "npc_giver": "dialog_sole_survivor_echo",
+    "npc_giver": "dialog_last_sleeper_echo",
     "prerequisites": [],
     "next_quests": [],
     "endings": [
@@ -1403,7 +1403,7 @@
         "id": "ending_minutemen",
         "description": "Use Settlement Watch to neutralize the Institute peacefully. CAPS data distributed to settlements.",
         "reward": "550 FIZZ + Settlement Watch General's Coat",
-        "consequence": "Commonwealth settles rebuild with CAPS infrastructure. Hope spreads."
+        "consequence": "Bay Reaches settles rebuild with CAPS infrastructure. Hope spreads."
       }
     ]
   },
@@ -1421,9 +1421,9 @@
       "morgantown_fo76",
       "watoga_fo76"
     ],
-    "description": "Reclamation Day. Vault 76 opens. Among the standard survival gear, your Pocket-Boy is receiving a strange signal \u2014 fragmented CAPS Protocol data from Vault 77. Someone is trying to warn you about what you'll find on the surface. And what finds you first.",
+    "description": "Reclamation Day. Vault 67 opens. Among the standard survival gear, your Pocket-Boy is receiving a strange signal \u2014 fragmented CAPS Protocol data from Vault 77. Someone is trying to warn you about what you'll find on the surface. And what finds you first.",
     "objectives": [
-      "Exit Vault 76 and triangulate the CAPS signal",
+      "Exit Vault 67 and triangulate the CAPS signal",
       "Investigate Flatwoods for Responder CAPS terminal",
       "Secure the Whitespring's FizzTec archive room",
       "Decode the Vault 77 transmission at Morgantown Airport",
@@ -1437,7 +1437,7 @@
       "beacon"
     ],
     "start_location": "vault_76_fo76",
-    "npc_giver": "dialog_vault_dweller_echo",
+    "npc_giver": "dialog_vault_sleeper_echo",
     "prerequisites": [],
     "next_quests": [
       "quest_fo3_purity_war"

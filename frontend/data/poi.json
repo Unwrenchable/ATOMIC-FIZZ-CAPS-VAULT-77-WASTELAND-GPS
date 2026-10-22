@@ -38,7 +38,7 @@
     },
     {
       "id": "gomorrah_fnv",
-      "name": "Gomorrah",
+      "name": "Sodom Lounge",
       "lat": 36.168,
       "lng": -115.141,
       "lvl": 12,
@@ -50,7 +50,7 @@
     },
     {
       "id": "ultra_luxe_fnv",
-      "name": "Ultra-Luxe",
+      "name": "Velvet Luxe",
       "lat": 36.165,
       "lng": -115.139,
       "lvl": 12,
@@ -74,7 +74,7 @@
     },
     {
       "id": "vault_21_hotel_fnv",
-      "name": "Vault 21 Hotel",
+      "name": "Vault 12 Hotel",
       "lat": 36.1675,
       "lng": -115.1408,
       "lvl": 8,
@@ -110,7 +110,7 @@
     },
     {
       "id": "gomorrah_casino_fnv",
-      "name": "Gomorrah Casino",
+      "name": "Sodom Lounge Casino",
       "lat": 36.11,
       "lng": -115.172,
       "lvl": 10,
@@ -122,7 +122,7 @@
     },
     {
       "id": "ultra_luxe_casino_fnv",
-      "name": "Ultra-Luxe Casino",
+      "name": "Velvet Luxe Casino",
       "lat": 36.0972,
       "lng": -115.1787,
       "lvl": 11,
@@ -148,7 +148,7 @@
   "freeside": [
     {
       "id": "freeside_market_fnv",
-      "name": "Freeside Market",
+      "name": "Outskirt Row Market",
       "lat": 36.170719,
       "lng": -115.143929,
       "lvl": 5,
@@ -172,7 +172,7 @@
     },
     {
       "id": "atomic_wrangler_fnv",
-      "name": "Atomic Wrangler",
+      "name": "Rad Rustler",
       "lat": 36.1499,
       "lng": -115.1383,
       "lvl": 8,
@@ -344,7 +344,7 @@
     },
     {
       "id": "novac_motel_fnv",
-      "name": "Novac Motel",
+      "name": "Saurville Motel",
       "lat": 35.0525,
       "lng": -114.8247,
       "lvl": 5,
@@ -430,7 +430,7 @@
     },
     {
       "id": "repconn_test_site_fnv",
-      "name": "REPCONN Test Site",
+      "name": "SkyRocket Co. Test Site",
       "lat": 36.036,
       "lng": -115.088,
       "lvl": 12,
@@ -442,7 +442,7 @@
     },
     {
       "id": "repconn_headquarters_fnv",
-      "name": "REPCONN Headquarters",
+      "name": "SkyRocket Co. Headquarters",
       "lat": 36.05,
       "lng": -115.1,
       "lvl": 13,
@@ -672,7 +672,7 @@
     },
     {
       "id": "camp_mccarran_fnv",
-      "name": "Camp McCarran",
+      "name": "Camp Halloran",
       "lat": 36.0801,
       "lng": -115.1522,
       "lvl": 8,
@@ -806,7 +806,7 @@
     },
     {
       "id": "vault_34_fnv",
-      "name": "Vault 34",
+      "name": "Vault 43",
       "lat": 36.175,
       "lng": -114.75,
       "lvl": 20,
@@ -818,7 +818,7 @@
     },
     {
       "id": "vault_22_fnv",
-      "name": "Vault 22",
+      "name": "Vault 82",
       "lat": 36.14,
       "lng": -115.15,
       "lvl": 32,
@@ -830,7 +830,7 @@
     },
     {
       "id": "vault_3_fnv",
-      "name": "Vault 3",
+      "name": "Vault 9",
       "lat": 36.2,
       "lng": -115.8,
       "lvl": 25,
@@ -842,7 +842,7 @@
     },
     {
       "id": "vault_19_fnv",
-      "name": "Vault 19",
+      "name": "Vault 29",
       "lat": 36.1,
       "lng": -115.9,
       "lvl": 22,
@@ -1124,7 +1124,7 @@
   "fnv_owb": [
     {
       "id": "big_mt_crater_fnv",
-      "name": "Big MT Crater",
+      "name": "Big Crater Crater",
       "lat": 36.9,
       "lng": -116.05,
       "lvl": 30,
@@ -1208,7 +1208,7 @@
     },
     {
       "id": "big_mt_central_facility_fnv",
-      "name": "Big MT Central Facility",
+      "name": "Big Crater Central Facility",
       "lat": 36.907,
       "lng": -116.043,
       "lvl": 33,
@@ -1392,7 +1392,7 @@
     },
     {
       "id": "megaton_fo3",
-      "name": "Megaton",
+      "name": "Craterhold",
       "lat": 38.91,
       "lng": -77.02,
       "lvl": 8,
@@ -1404,7 +1404,7 @@
     },
     {
       "id": "rivet_city_fo3",
-      "name": "Rivet City",
+      "name": "Bolt Harbor",
       "lat": 38.8719,
       "lng": -77,
       "lvl": 12,
@@ -1560,7 +1560,7 @@
     },
     {
       "id": "vault_87_fo3",
-      "name": "Vault 87",
+      "name": "Vault 78",
       "lat": 39.07,
       "lng": -77.28,
       "lvl": 22,
@@ -1596,7 +1596,7 @@
     },
     {
       "id": "galaxy_news_radio_fo3",
-      "name": "Galaxy News Radio",
+      "name": "Starlight News Radio",
       "lat": 38.9105,
       "lng": -77.045,
       "lvl": 15,
@@ -2016,7 +2016,7 @@
     },
     {
       "id": "yogis_tunnels_fo3",
-      "name": "Dunwich Building",
+      "name": "Grimwick Building",
       "lat": 38.82,
       "lng": -77.35,
       "lvl": 20,
@@ -2102,7 +2102,7 @@
   "fo4": [
     {
       "id": "sanctuary_fo4",
-      "name": "Sanctuary Hills",
+      "name": "Refuge Hills",
       "lat": 42.462,
       "lng": -71.204,
       "lvl": 1,
@@ -2222,7 +2222,7 @@
     },
     {
       "id": "vault_111_fo4",
-      "name": "Vault 111",
+      "name": "Vault 47",
       "lat": 42.463,
       "lng": -71.205,
       "lvl": 1,
@@ -2234,7 +2234,7 @@
     },
     {
       "id": "vault_81_fo4",
-      "name": "Vault 81",
+      "name": "Vault 18-B",
       "lat": 42.35,
       "lng": -71.12,
       "lvl": 18,
@@ -2246,7 +2246,7 @@
     },
     {
       "id": "vault_95_fo4",
-      "name": "Vault 95",
+      "name": "Vault 59",
       "lat": 42.2,
       "lng": -71.35,
       "lvl": 25,
@@ -2282,7 +2282,7 @@
     },
     {
       "id": "diamond_city_fo4",
-      "name": "Diamond City",
+      "name": "Stadium Hollow",
       "lat": 42.346,
       "lng": -71.082,
       "lvl": 15,
@@ -2294,7 +2294,7 @@
     },
     {
       "id": "goodneighbor_fo4",
-      "name": "Goodneighbor",
+      "name": "Kindly Row",
       "lat": 42.355,
       "lng": -71.065,
       "lvl": 18,
@@ -2632,7 +2632,7 @@
   "fo76": [
     {
       "id": "vault_76_fo76",
-      "name": "Vault 76",
+      "name": "Vault 67",
       "lat": 39,
       "lng": -79,
       "lvl": 1,
@@ -3126,7 +3126,7 @@
     },
     {
       "id": "shady_sands_fo1",
-      "name": "Shady Sands",
+      "name": "Dustwater",
       "lat": 36.8,
       "lng": -116.95,
       "lvl": 5,
@@ -3150,7 +3150,7 @@
     },
     {
       "id": "necropolis_fo1",
-      "name": "Necropolis",
+      "name": "Grave City",
       "lat": 34.1,
       "lng": -118.2,
       "lvl": 12,
@@ -3162,7 +3162,7 @@
     },
     {
       "id": "boneyard_fo1",
-      "name": "The Boneyard",
+      "name": "The Ossuary Yard",
       "lat": 34,
       "lng": -118.25,
       "lvl": 14,
@@ -3210,7 +3210,7 @@
     },
     {
       "id": "vault_13_fo1",
-      "name": "Vault 13",
+      "name": "Vault 31",
       "lat": 36.9,
       "lng": -116.9,
       "lvl": 1,
@@ -3222,7 +3222,7 @@
     },
     {
       "id": "vault_15_fo1",
-      "name": "Vault 15",
+      "name": "Vault 51",
       "lat": 36.85,
       "lng": -116.92,
       "lvl": 8,
@@ -3342,7 +3342,7 @@
     },
     {
       "id": "new_california_republic_fo2",
-      "name": "Frontier Compact (Shady Sands Expanded)",
+      "name": "Frontier Compact (Dustwater Expanded)",
       "lat": 36.8,
       "lng": -116.95,
       "lvl": 20,
@@ -4350,7 +4350,7 @@
   "fo3_pitt": [
     {
       "id": "the_pitt_gate_fo3",
-      "name": "The Pitt Gate",
+      "name": "The Scrapforge Gate",
       "lat": 40.44,
       "lng": -79.995,
       "lvl": 15,
@@ -4434,7 +4434,7 @@
     },
     {
       "id": "the_pitt_underground_fo3",
-      "name": "The Pitt Underground",
+      "name": "The Scrapforge Underground",
       "lat": 40.447,
       "lng": -80.002,
       "lvl": 23,
@@ -4494,7 +4494,7 @@
     },
     {
       "id": "the_pitt_fo3",
-      "name": "The Pitt",
+      "name": "The Scrapforge",
       "lat": 40.4406,
       "lng": -79.9959,
       "lvl": 40,
@@ -4836,7 +4836,7 @@
   "fo4_far_harbor": [
     {
       "id": "far_harbor_docks_fo4",
-      "name": "Far Harbor Docks",
+      "name": "Fogmoor Docks",
       "lat": 44.3,
       "lng": -68.3,
       "lvl": 20,
@@ -4848,7 +4848,7 @@
     },
     {
       "id": "far_harbor_town_fo4",
-      "name": "Far Harbor",
+      "name": "Fogmoor",
       "lat": 44.301,
       "lng": -68.301,
       "lvl": 22,
@@ -5938,7 +5938,7 @@
   "fo76_pitt": [
     {
       "id": "the_pitt_vertibird_pad_fo76",
-      "name": "Vertibird Landing Pad (The Pitt)",
+      "name": "Vertibird Landing Pad (The Scrapforge)",
       "lat": 40.44,
       "lng": -79.995,
       "lvl": 50,
@@ -5998,7 +5998,7 @@
     },
     {
       "id": "the_pitt_peninsula_fo76",
-      "name": "The Pitt Peninsula",
+      "name": "The Scrapforge Peninsula",
       "lat": 40.444,
       "lng": -79.999,
       "lvl": 54,
@@ -6094,7 +6094,7 @@
     },
     {
       "id": "the_pitt_overlook_fo76",
-      "name": "The Pitt Overlook",
+      "name": "The Scrapforge Overlook",
       "lat": 40.45,
       "lng": -80.005,
       "lvl": 50,
@@ -6508,7 +6508,7 @@
   "fo76_pitt_bonus_expanded": [
     {
       "id": "pitt_rail_tunnels_fo76",
-      "name": "Pitt Rail Tunnels",
+      "name": "Scrapforge Rail Tunnels",
       "lat": 40.451,
       "lng": -80.006,
       "lvl": 54,

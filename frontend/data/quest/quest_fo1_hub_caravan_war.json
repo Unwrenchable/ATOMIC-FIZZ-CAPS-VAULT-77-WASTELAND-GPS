@@ -166,7 +166,7 @@
       }
     },
     "give_crimson_caravan": {
-      "desc": "Give the chip to the Crimson Caravan. Trade routes multiply and profits surge, but FizzTec's influence hides in shipping manifests.",
+      "desc": "Give the chip to the Scarlet Caravan. Trade routes multiply and profits surge, but FizzTec's influence hides in shipping manifests.",
       "requirements": {
         "barter": 60
       },
@@ -267,7 +267,7 @@
     ]
   },
   "next_quests": [
-    "quest_fo2_ncr_founding",
+    "quest_fo2_compact_founding",
     "quest_hub_water_wars_aftermath"
   ],
   "era_note": "This quest echoes from 2161. Its consequences alter Frontier Compact formation in 2241 — different chip choices unlock different FO2 era quest variants.",

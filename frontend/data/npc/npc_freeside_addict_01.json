@@ -4,7 +4,7 @@
   "archetype": "vegas_outskirts_local",
   "dialogPool": [
     "Walls… moving… can’t stop seeing it…",
-    "Freeside’s cursed. You know it too."
+    "Outskirt Row’s cursed. You know it too."
   ],
   "spawnPool": ["freeside_backstreets"],
   "uniquePerWorld": false

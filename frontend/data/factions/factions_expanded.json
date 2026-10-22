@@ -6,7 +6,7 @@
       "short_name": "Frontier Compact",
       "description": "The largest post-war civilization, seeking to restore democracy.",
       "ideology": "Democracy, Law and Order, Expansion",
-      "headquarters": { "name": "Shady Sands", "lat": 36.5, "lng": -116.5 },
+      "headquarters": { "name": "Dustwater", "lat": 36.5, "lng": -116.5 },
       "reputation_levels": {
         "vilified": { "min": -1000, "label": "Vilified", "hostile": true },
         "hated": { "min": -500, "label": "Hated", "hostile": true },
@@ -68,7 +68,7 @@
     },
     {
       "id": "mr_house",
-      "name": "Mr. House / Neon Reach",
+      "name": "Mr. Manor / Neon Reach",
       "short_name": "House",
       "description": "The enigmatic ruler of Neon Reach, a pre-war genius with plans for the future.",
       "ideology": "Autocracy, Capitalism, Progress through Control",
@@ -89,7 +89,7 @@
       "id": "minutemen",
       "name": "The Settlement Watch",
       "short_name": "Settlement Watch",
-      "description": "Commonwealth militia dedicated to protecting settlements.",
+      "description": "Bay Reaches militia dedicated to protecting settlements.",
       "ideology": "Community Defense, Democracy, Self-Reliance",
       "headquarters": { "name": "The Castle", "lat": 42.3, "lng": -71.0 },
       "reputation_levels": {

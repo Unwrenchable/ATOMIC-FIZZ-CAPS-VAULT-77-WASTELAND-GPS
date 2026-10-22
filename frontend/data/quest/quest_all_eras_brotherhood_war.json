@@ -21,7 +21,7 @@
       "era": "the commonwealth wastes (2287)",
       "leader": "Elder Arthur Maxson",
       "philosophy": "Purge synths, control technology, military discipline",
-      "base": "Commonwealth sector (Prydwen docked nearby)",
+      "base": "Bay Reaches sector (Prydwen docked nearby)",
       "strength": "Military power, airship, vertibirds",
       "weakness": "Authoritarian, hated by Institute and Railroad"
     },
@@ -85,7 +85,7 @@
       "description": "Each Brotherhood chapter wants to prove their philosophy is superior. They've agreed to a 'field test' - you'll accompany each chapter on a mission and judge their effectiveness.",
       "missions": {
         "lyons_mission": {
-          "name": "Protect Megaton",
+          "name": "Protect Craterhold",
           "objective": "Help Lyons' BoS defend a settlement from raiders",
           "philosophy_test": "Do they protect civilians or prioritize tech?",
           "success_metric": "Civilian casualties vs tech secured"
@@ -185,14 +185,14 @@
   "cross_timeline_references": {
     "fo1_fo2_callbacks": "Western Elder mentions the Mariposa disaster and Master's defeat",
     "fo3_callbacks": "Lyons references Project Purity and fighting super mutants in DC",
-    "fo4_callbacks": "Maxson talks about the Institute threat and Liberty Prime",
+    "fo4_callbacks": "Maxson talks about the Institute threat and Freedom Titan",
     "fo76_callbacks": "Rahmani discusses Appalachia's scorched plague and rebuilding"
   },
 
   "rewards": {
     "xp_range": "3000-5000 depending on outcome",
     "unique_rewards": [
-      "T-51 Reactor Harness (FO1 era)",
+      "Mk-5 Reactor Harness (FO1 era)",
       "T-60 Reactor Harness (FO4 era)",
       "T-65 Reactor Harness (FO76 era)",
       "Access to all Brotherhood tech vendors",

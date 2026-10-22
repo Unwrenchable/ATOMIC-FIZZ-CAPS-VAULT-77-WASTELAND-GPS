@@ -62,10 +62,10 @@
       "id": "chapter_fo76_era",
       "title": "Appalachia (2102-2105): The First Dwellers Find the Signal",
       "year_range": "2102-2105",
-      "content": "When Vault 76 opened on Reclamation Day, its dwellers carried Pocket-Boys loaded with FizzTec standard software \u2014 including a dormant CAPS Protocol client that had been deactivated before the residents were moved in. Someone at FizzTec had decided the first dwellers shouldn't know about CAPS. But Vault 77's AI had been planning for this moment since 2077.\n\nWithin 72 hours of Vault 76's opening, the Vault 77 AI broadcast a low-frequency signal across Appalachian radio bands. Most people heard static. Pocket-Boys with the dormant CAPS client received something different: a 47-second data burst that reactivated the client and registered each Pocket-Boy as an authenticated CAPS node. The dwellers didn't know it was happening. They just found that their bottle caps worked better \u2014 terminals accepted them more readily, trade felt smoother.\n\nResponders monitoring FizzTec frequencies detected the broadcast. Their logs, found in the Charleston Emergency Services building, note: 'Unknown FizzTec signal \u2014 appears to be authentication protocol update. Caps responding positively. Source: unknown Vault. Recommend investigation.' No investigation was ever conducted. The Scorchbeast Queen's plague consumed the Responders before they could follow up.",
+      "content": "When Vault 67 opened on Reclamation Day, its dwellers carried Pocket-Boys loaded with FizzTec standard software \u2014 including a dormant CAPS Protocol client that had been deactivated before the residents were moved in. Someone at FizzTec had decided the first dwellers shouldn't know about CAPS. But Vault 77's AI had been planning for this moment since 2077.\n\nWithin 72 hours of Vault 67's opening, the Vault 77 AI broadcast a low-frequency signal across Appalachian radio bands. Most people heard static. Pocket-Boys with the dormant CAPS client received something different: a 47-second data burst that reactivated the client and registered each Pocket-Boy as an authenticated CAPS node. The dwellers didn't know it was happening. They just found that their bottle caps worked better \u2014 terminals accepted them more readily, trade felt smoother.\n\nResponders monitoring FizzTec frequencies detected the broadcast. Their logs, found in the Charleston Emergency Services building, note: 'Unknown FizzTec signal \u2014 appears to be authentication protocol update. Caps responding positively. Source: unknown Vault. Recommend investigation.' No investigation was ever conducted. The Scorchbeast Queen's plague consumed the Responders before they could follow up.",
       "key_figures": [
         {
-          "name": "Vault 76 Overseer",
+          "name": "Vault 67 Overseer",
           "role": "Coordinated early dwellers, died 2105 from illness contracted on surface",
           "fate": "Her final log mentions 'the signal from the other vault' and a feeling that they were not alone."
         },
@@ -76,7 +76,7 @@
         }
       ],
       "locations": [
-        "Vault 76",
+        "Vault 67",
         "Whitespring Resort (FizzTec archive)",
         "Charleston Emergency Services HQ",
         "Appalachian radio tower network"
@@ -87,12 +87,12 @@
       "id": "chapter_fo1_era",
       "title": "Southern California (2161): The Hub Merchants Bootstrap the Network",
       "year_range": "2161",
-      "content": "The Hub's merchant network in 2161 was the most sophisticated trade system in post-war California \u2014 maybe in the entire wasteland. The Crimson Caravan, the Far Go Traders, and the Water Merchants all used bottle caps as their primary currency, and they'd developed informal authentication systems over the decades: certain caps were 'known good,' others were suspected counterfeits. They didn't know they were running a fragment of the CAPS Protocol.\n\nWhen the Vault Dweller arrived in the Hub searching for a water chip, they inadvertently carried an authenticated CAPS node in their Pocket-Boy \u2014 a Vault 13 unit running original pre-war CAPS software. When the Vault Dweller accessed Hub trading terminals, the two systems synchronized. In 47 seconds, the Hub's informal authentication network linked to Vault 77's distributed ledger for the first time. Caps from the Hub became 'globally authenticated' in the CAPS Protocol sense \u2014 accepted by every terminal that could reach the network.\n\nNobody noticed. The water chip crisis overshadowed everything. But the Hub's CAPS became the gold standard of wasteland currency, a reputation that has endured for over 100 years. The reason caps from the Hub were always 'worth more' wasn't cultural \u2014 it was cryptographic.",
+      "content": "The Hub's merchant network in 2161 was the most sophisticated trade system in post-war California \u2014 maybe in the entire wasteland. The Scarlet Caravan, the Far Go Traders, and the Water Merchants all used bottle caps as their primary currency, and they'd developed informal authentication systems over the decades: certain caps were 'known good,' others were suspected counterfeits. They didn't know they were running a fragment of the CAPS Protocol.\n\nWhen the Vault Dweller arrived in the Hub searching for a water chip, they inadvertently carried an authenticated CAPS node in their Pocket-Boy \u2014 a Vault 31 unit running original pre-war CAPS software. When the Vault Dweller accessed Hub trading terminals, the two systems synchronized. In 47 seconds, the Hub's informal authentication network linked to Vault 77's distributed ledger for the first time. Caps from the Hub became 'globally authenticated' in the CAPS Protocol sense \u2014 accepted by every terminal that could reach the network.\n\nNobody noticed. The water chip crisis overshadowed everything. But the Hub's CAPS became the gold standard of wasteland currency, a reputation that has endured for over 100 years. The reason caps from the Hub were always 'worth more' wasn't cultural \u2014 it was cryptographic.",
       "key_figures": [
         {
           "name": "The Vault Dweller",
-          "role": "Unwitting CAPS Protocol node carrier, first link between Vault 13 and Hub networks",
-          "fate": "Exiled from Vault 13 after defeating the Master. Wandered north. Left no verified records of their final years."
+          "role": "Unwitting CAPS Protocol node carrier, first link between Vault 31 and Hub networks",
+          "fate": "Exiled from Vault 31 after defeating the Master. Wandered north. Left no verified records of their final years."
         },
         {
           "name": "Harold (Hub merchant acquaintance)",
@@ -103,8 +103,8 @@
       "locations": [
         "The Hub, Southern California",
         "Hub Trading Post (CAPS synchronization site)",
-        "Vault 13 (original authenticated node)",
-        "The Boneyard, Los Angeles"
+        "Vault 31 (original authenticated node)",
+        "The Ossuary Yard, Los Angeles"
       ],
       "game_mechanic": "fo1_2 region POIs award 'Heritage Caps' \u2014 a FIZZ token variant worth 1.5x standard value, representing the Hub's authentication premium."
     },
@@ -138,7 +138,7 @@
       "id": "chapter_fo2_era",
       "title": "Northern California (2241-2242): The Frontier Compact Standardizes, the Shi Network Emerges",
       "year_range": "2241-2242",
-      "content": "By 2241, the Frontier Compact had grown into the most powerful political entity in the post-war west. Their economists \u2014 many trained at Vault City \u2014 had been studying cap economics for decades and had reached a disturbing conclusion: the caps circulating in Frontier Compact territory were not randomly authenticated. They followed a pattern consistent with a centralized distribution system \u2014 one that pre-dated the Frontier Compact by over a century.\n\nNCR's currency debate (caps vs. Frontier Compact dollars) was really a proxy war between two visions of economic control: the distributed CAPS Protocol versus a government-controlled fiat currency. The Frontier Compact eventually chose both, accepting caps as legal tender alongside their printed notes. This decision, made in the Shady Sands council chambers in 2241, created the most stable economy in post-war history.\n\nThe Shi of San Francisco had independently arrived at a similar conclusion through different means. Their submarine's computer had been receiving CAPS Protocol pings since 2077 and had mapped the network's Pacific nodes. When the Chosen One arrived in San Francisco, their Pocket-Boy synchronized with the Shi's system \u2014 activating the Pacific CAPS relay network for the first time. Trade between California, Hawaii, and Japan became possible. The CAPS Protocol had gone transoceanic.",
+      "content": "By 2241, the Frontier Compact had grown into the most powerful political entity in the post-war west. Their economists \u2014 many trained at Vault City \u2014 had been studying cap economics for decades and had reached a disturbing conclusion: the caps circulating in Frontier Compact territory were not randomly authenticated. They followed a pattern consistent with a centralized distribution system \u2014 one that pre-dated the Frontier Compact by over a century.\n\nNCR's currency debate (caps vs. Frontier Compact dollars) was really a proxy war between two visions of economic control: the distributed CAPS Protocol versus a government-controlled fiat currency. The Frontier Compact eventually chose both, accepting caps as legal tender alongside their printed notes. This decision, made in the Dustwater council chambers in 2241, created the most stable economy in post-war history.\n\nThe Shi of San Francisco had independently arrived at a similar conclusion through different means. Their submarine's computer had been receiving CAPS Protocol pings since 2077 and had mapped the network's Pacific nodes. When the Chosen One arrived in San Francisco, their Pocket-Boy synchronized with the Shi's system \u2014 activating the Pacific CAPS relay network for the first time. Trade between California, Hawaii, and Japan became possible. The CAPS Protocol had gone transoceanic.",
       "key_figures": [
         {
           "name": "President Tandi",
@@ -152,7 +152,7 @@
         }
       ],
       "locations": [
-        "Shady Sands / Frontier Compact Capital",
+        "Dustwater / Frontier Compact Capital",
         "San Francisco (Shi district)",
         "Pacific CAPS relay network (distributed)"
       ],
@@ -162,7 +162,7 @@
       "id": "chapter_fo3_era",
       "title": "Capital Wasteland (2277-2278): The Water War and the Directorate's CAPS Gambit",
       "year_range": "2277-2278",
-      "content": "Project Purity was the most ambitious reconstruction project in Capital Wasteland history: a plan to purify the Potomac River and provide clean water to the entire region. What its creators \u2014 Dr. James and later his child, the Lone Wanderer \u2014 didn't know was that FizzTec had designed the Jefferson Memorial's tidal power generators to serve dual purpose. Above ground: power generation. Below ground, in a sealed maintenance level: a CAPS Protocol relay station using the tidal generator's electromagnetic signature as its carrier wave.\n\nThe Directorate knew. President Eden's \u2014 actually Colonel Autumn's \u2014 obsession with Project Purity wasn't just about using the FEV-tainted water to 'purify' humanity. It was about gaining control of the Capital Wasteland's CAPS relay station. The Directorate's plan was to seize the CAPS infrastructure and replace the distributed CAPS Protocol with a federated 'Directorate Dollar' backed by the full faith of the reconstituted United States government.\n\nThe Lone Wanderer's actions at Project Purity either activated or destroyed the CAPS relay station depending on how they resolved the final confrontation. Either way, the Directorate's CAPS gambit failed. The distributed CAPS Protocol survived into the next era \u2014 battered but intact, and significantly more battle-tested for it.",
+      "content": "Project Purity was the most ambitious reconstruction project in Capital Wasteland history: a plan to purify the Potomac River and provide clean water to the entire region. What its creators \u2014 Dr. James and later his child, the Lone Drifter \u2014 didn't know was that FizzTec had designed the Jefferson Memorial's tidal power generators to serve dual purpose. Above ground: power generation. Below ground, in a sealed maintenance level: a CAPS Protocol relay station using the tidal generator's electromagnetic signature as its carrier wave.\n\nThe Directorate knew. President Eden's \u2014 actually Colonel Autumn's \u2014 obsession with Project Purity wasn't just about using the FEV-tainted water to 'purify' humanity. It was about gaining control of the Capital Wasteland's CAPS relay station. The Directorate's plan was to seize the CAPS infrastructure and replace the distributed CAPS Protocol with a federated 'Directorate Dollar' backed by the full faith of the reconstituted United States government.\n\nThe Lone Drifter's actions at Project Purity either activated or destroyed the CAPS relay station depending on how they resolved the final confrontation. Either way, the Directorate's CAPS gambit failed. The distributed CAPS Protocol survived into the next era \u2014 battered but intact, and significantly more battle-tested for it.",
       "key_figures": [
         {
           "name": "Dr. James (The Wanderer's Father)",
@@ -175,7 +175,7 @@
           "fate": "Died 2277 (default ending)."
         },
         {
-          "name": "Three Dog",
+          "name": "Two Hound",
           "role": "GNR Radio host, unknowingly broadcast CAPS Protocol data in his radio signal's carrier wave",
           "fate": "Continued broadcasting. Still believes in 'fighting the good fight.'"
         }
@@ -190,9 +190,9 @@
     },
     {
       "id": "chapter_fnv_era",
-      "title": "The Cinder Basin (2281-2282): Mr. House, Caesar's Counter-Protocol, and the Courier's Choice",
+      "title": "The Cinder Basin (2281-2282): Mr. Manor, the Imperator's Counter-Protocol, and the Courier's Choice",
       "year_range": "2281-2282",
-      "content": "Robert Edwin House had been planning for the CAPS Protocol's recovery since before the bombs fell. His The Spire casino, built atop FizzTec's largest Cinder Basin infrastructure node, served as the de facto headquarters of the post-war CAPS network in the Southwest. His Securitron army \u2014 each unit a rolling CAPS authentication terminal \u2014 processed billions of cap transactions across the Cinder Basin without any of their owners knowing.\n\nRed Cohort understood enough about CAPS to know that controlling it meant controlling the economy. Their 'bull caps' \u2014 Legion-minted bottle caps with a bull's head pressed onto one side \u2014 were designed to flood the CAPS authentication network with invalid transactions, triggering a denial-of-service attack on the distributed ledger. The Legion's economists (yes, Caesar had economists) calculated that 18 months of 'bull cap flooding' would collapse the Cinder Basin CAPS economy entirely, forcing adoption of Legion silver as the only functional currency.\n\nThe Courier's actions at Hoover Dam in 2281 determined which economic future the Cinder Basin would have. An Frontier Compact victory maintained the dual-currency system. A Legion victory would have implemented the anti-CAPS protocol within a year. Mr. House's victory would have given him direct control of the CAPS infrastructure \u2014 making Neon Reach the uncontested financial capital of the post-war world. An independent Cinder Basin preserved the distributed CAPS Protocol exactly as Locke had designed it \u2014 no single controller, no single point of failure.",
+      "content": "Robert Edwin House had been planning for the CAPS Protocol's recovery since before the bombs fell. His The Spire casino, built atop FizzTec's largest Cinder Basin infrastructure node, served as the de facto headquarters of the post-war CAPS network in the Southwest. His Securitron army \u2014 each unit a rolling CAPS authentication terminal \u2014 processed billions of cap transactions across the Cinder Basin without any of their owners knowing.\n\nRed Cohort understood enough about CAPS to know that controlling it meant controlling the economy. Their 'bull caps' \u2014 Legion-minted bottle caps with a bull's head pressed onto one side \u2014 were designed to flood the CAPS authentication network with invalid transactions, triggering a denial-of-service attack on the distributed ledger. The Legion's economists (yes, the Imperator had economists) calculated that 18 months of 'bull cap flooding' would collapse the Cinder Basin CAPS economy entirely, forcing adoption of Legion silver as the only functional currency.\n\nThe Courier's actions at Hoover Dam in 2281 determined which economic future the Cinder Basin would have. An Frontier Compact victory maintained the dual-currency system. A Legion victory would have implemented the anti-CAPS protocol within a year. Mr. Manor's victory would have given him direct control of the CAPS infrastructure \u2014 making Neon Reach the uncontested financial capital of the post-war world. An independent Cinder Basin preserved the distributed CAPS Protocol exactly as Locke had designed it \u2014 no single controller, no single point of failure.",
       "key_figures": [
         {
           "name": "Robert Edwin House",
@@ -200,7 +200,7 @@
           "fate": "Status depends on Courier's choices in 2281."
         },
         {
-          "name": "Caesar (Edward Sallow)",
+          "name": "the Imperator (Edward Sallow)",
           "role": "Architect of the anti-CAPS 'bull cap' counter-protocol",
           "fate": "Status depends on Courier's choices. If survived, his economists spent decades trying to rebuild the counter-protocol."
         },
@@ -213,16 +213,16 @@
       "locations": [
         "The Spire Casino, Neon Reach Strip",
         "Hoover Dam",
-        "The Fort (Caesar's CAPS counter-protocol lab)",
+        "The Fort (the Imperator's CAPS counter-protocol lab)",
         "HELIOS One (secondary CAPS relay)"
       ],
-      "game_mechanic": "The Cinder Basin is the highest-FIZZ region in the game. Strip, Freeside, and outer_vegas POIs award 1.5x FIZZ base rate, reflecting Mr. House's legacy of economic infrastructure investment."
+      "game_mechanic": "The Cinder Basin is the highest-FIZZ region in the game. Strip, Outskirt Row, and outer_vegas POIs award 1.5x FIZZ base rate, reflecting Mr. Manor's legacy of economic infrastructure investment."
     },
     {
       "id": "chapter_fo4_era",
-      "title": "The Commonwealth (2287): Institute Synths as CAPS Nodes",
+      "title": "The Bay Reaches (2287): Institute Synths as CAPS Nodes",
       "year_range": "2287-2288",
-      "content": "The Institute \u2014 the descendants of MIT's scientists \u2014 had spent decades studying the CAPS Protocol's architecture from recovered FizzTec documentation. Their Director, Shaun (known to the wasteland as 'Father'), was particularly fascinated by the Protocol's distributed nature. He believed the Institute's greatest limitation was centralization \u2014 if the Commonwealth's factions ever found the Institute, they could destroy it. A distributed system couldn't be destroyed.\n\nProject Meridian was Shaun's solution: embed CAPS Protocol data nodes in third-generation synth neural networks. Each synth became a mobile authentication terminal, part of a distributed CAPS network that couldn't be shut down by destroying any single location. The synths didn't know they were carrying CAPS data. The Railroad's 'free the synths' mission was also, unknowingly, a CAPS data liberation mission \u2014 every synth they helped escape carried CAPS authentication data beyond the Institute's control.\n\nThe Sole Survivor's choices regarding the Institute determined whether Project Meridian's CAPS data was destroyed (Brotherhood ending), distributed freely (Railroad/Settlement Watch ending), or remained under a single authority's control (Institute ending). The Vault 77 Overseer AI had been watching Project Meridian since its inception, recognizing it as the Commonwealth's unconscious reinvention of Locke's original design.",
+      "content": "The Institute \u2014 the descendants of MIT's scientists \u2014 had spent decades studying the CAPS Protocol's architecture from recovered FizzTec documentation. Their Director, Shaun (known to the wasteland as 'Father'), was particularly fascinated by the Protocol's distributed nature. He believed the Institute's greatest limitation was centralization \u2014 if the Bay Reaches's factions ever found the Institute, they could destroy it. A distributed system couldn't be destroyed.\n\nProject Meridian was Shaun's solution: embed CAPS Protocol data nodes in third-generation synth neural networks. Each synth became a mobile authentication terminal, part of a distributed CAPS network that couldn't be shut down by destroying any single location. The synths didn't know they were carrying CAPS data. The Railroad's 'free the synths' mission was also, unknowingly, a CAPS data liberation mission \u2014 every synth they helped escape carried CAPS authentication data beyond the Institute's control.\n\nThe Last Sleeper's choices regarding the Institute determined whether Project Meridian's CAPS data was destroyed (Brotherhood ending), distributed freely (Railroad/Settlement Watch ending), or remained under a single authority's control (Institute ending). The Vault 77 Overseer AI had been watching Project Meridian since its inception, recognizing it as the Bay Reaches's unconscious reinvention of Locke's original design.",
       "key_figures": [
         {
           "name": "Shaun (Father)",
@@ -230,19 +230,19 @@
           "fate": "Died 2287 (most endings). His final holotape acknowledges the FIZZ token's superiority to his design."
         },
         {
-          "name": "The Sole Survivor",
+          "name": "The Last Sleeper",
           "role": "Project Meridian arbiter",
-          "fate": "Unknown. Still active in the Commonwealth by most accounts."
+          "fate": "Unknown. Still active in the Bay Reaches by most accounts."
         },
         {
           "name": "Desdemona (Railroad)",
-          "role": "Unknowingly distributed CAPS data across the Commonwealth by freeing synths",
-          "fate": "Status depends on Sole Survivor's choices."
+          "role": "Unknowingly distributed CAPS data across the Bay Reaches by freeing synths",
+          "fate": "Status depends on Last Sleeper's choices."
         }
       ],
       "locations": [
-        "The Institute, beneath the Commonwealth",
-        "Diamond City (CAPS data hub)",
+        "The Institute, beneath the Bay Reaches",
+        "Stadium Hollow (CAPS data hub)",
         "The Railroad HQ, Boston",
         "The Prydwen (Brotherhood CAPS intelligence)"
       ],
@@ -270,9 +270,9 @@
           "fate": "In hiding. Hunted by HavenTech. Protected by atomicfizzcaps.xyz network."
         },
         {
-          "name": "Cooper Howard (The Ghoul)",
+          "name": "Cutter Hale (The Ghoul)",
           "role": "HavenTech contract asset turned potential ally",
-          "fate": "See quest_tv_ghoul_cooper.json."
+          "fate": "See quest_tv_cutter_hale.json."
         }
       ],
       "locations": [

@@ -1,12 +1,12 @@
 {
   "id": "npc_nv_doc_halley",
   "name": "Doc Halley",
-  "region": "Freeside",
+  "region": "Outskirt Row",
   "type": "Combat Medic",
   "dialog": {
     "idle": [
       "Patch you up for a price.",
-      "Freeside’s bleeding again. Nothing new."
+      "Outskirt Row’s bleeding again. Nothing new."
     ],
     "after_battle": [
       "You look like you lost a fight with a Radtalon.",
@@ -18,6 +18,6 @@
     ]
   },
   "quests": ["side_nv_medrun"],
-  "faction": "Freeside",
+  "faction": "Outskirt Row",
   "notes": "Provides healing, chems, and survival quests."
 }

@@ -150,6 +150,12 @@
         if (!Array.isArray(_state.inventory)) _state.inventory = [];
         if (!Array.isArray(_state.questsActive)) _state.questsActive = [];
         if (!Array.isArray(_state.questsCompleted)) _state.questsCompleted = [];
+        // IP pass renames: keep in-progress / completed quests under their new ids
+        const QUEST_RENAMES = { quest_tv_ghoul_cooper: "quest_tv_cutter_hale", quest_fo2_ncr_founding: "quest_fo2_compact_founding", quest_timeline_ncr_minutemen: "quest_timeline_compact_watch" };
+        const _rq = q => (typeof q === "string" && QUEST_RENAMES[q]) ? QUEST_RENAMES[q]
+                       : (q && typeof q === "object" && QUEST_RENAMES[q.id]) ? { ...q, id: QUEST_RENAMES[q.id] } : q;
+        _state.questsActive = _state.questsActive.map(_rq);
+        _state.questsCompleted = _state.questsCompleted.map(_rq);
         if (!Array.isArray(_state.visitedLocations)) _state.visitedLocations = [];
         if (!Array.isArray(_state.perks)) _state.perks = [];
         // Ensure equipped object has all wasteland-style slots (migrate old "armor" → "chest")

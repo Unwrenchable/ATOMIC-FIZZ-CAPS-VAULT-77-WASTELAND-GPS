@@ -1,19 +1,19 @@
 {
-  "id": "dialog_ghoul_cooper",
-  "npc": "Cooper Howard \u2014 The Ghoul",
-  "portrait": "ghoul_cooper",
+  "id": "dialog_cutter_hale",
+  "npc": "Cutter Hale \u2014 The Ghoul",
+  "portrait": "cutter_hale",
   "title": "The Ghoul",
-  "description": "Cooper Howard was Hollywood's biggest pre-war star \u2014 cowboy roles, Atomic Fizz commercials, government propaganda films. He was also FizzTec's unwitting CAPS Protocol field operative. When the bombs fell, his family was separated in the chaos. He became a Ghoul. He kept working. 219 years later, he's the wasteland's most reliable \u2014 and most expensive \u2014 bounty hunter. He calls himself 'The Ghoul' now. He doesn't like to be called Cooper.",
+  "description": "Cutter Hale was Hollywood's biggest pre-war star \u2014 cowboy roles, Atomic Fizz commercials, government propaganda films. He was also FizzTec's unwitting CAPS Protocol field operative. When the bombs fell, his family was separated in the chaos. He became a Ghoul. He kept working. 219 years later, he's the wasteland's most reliable \u2014 and most expensive \u2014 bounty hunter. He calls himself 'The Ghoul' now. He doesn't like to be called Cutter.",
   "backstory": "Born 2049, Burbank California. Film career peaked in the 2070s. Married, one daughter: Janey. October 23rd, 2077: the bombs fell during a Atomic Fizz commercial shoot. He survived. His family \u2014 he thought \u2014 did not. He was wrong about that. FizzTec preserved Janey as leverage. He completed every contract they gave him for 219 years without knowing why he always came back. Now a bounty hunter for whoever pays. Current contract: track and silence Dr. Elara Voss, FizzCo whistleblower. He doesn't know why she matters. He doesn't ask. He never asks.",
   "intro": {
     "id": "ghoul_intro",
     "conditions": [
-      "!flag:ghoul_cooper_met"
+      "!flag:cutter_hale_met"
     ],
     "set_flags": [
-      "ghoul_cooper_met"
+      "cutter_hale_met"
     ],
-    "video_speech": "ghoul_cooper_intro",
+    "video_speech": "cutter_hale_intro",
     "text": "*A weathered figure in a duster coat turns slowly, hand near his holster*\n\nYou're either very brave or very stupid, walking up on me like that.\n\n219 years wandering this wasteland, and the only thing that's kept me company is the sound of bottle caps. You know what caps are? They're the only thing in this world that can't lie to you. A cap's worth exactly what it's worth. Not what someone *says* it's worth. Not what the Brotherhood or the Frontier Compact *declare* it's worth.\n\n*He looks you over slowly, yellow eyes unreadable*\n\nNow. Why are you here?",
     "responses": [
       {
@@ -32,7 +32,7 @@
         "next": "node_sarcastic_opener"
       },
       {
-        "text": "[Direct] Cooper Howard. I know who you are. I need your help tracking someone.",
+        "text": "[Direct] Cutter Hale. I know who you are. I need your help tracking someone.",
         "tone": "direct",
         "next": "node_direct_approach"
       }
@@ -41,7 +41,7 @@
   "nodes": {
     "node_who_are_you": {
       "id": "node_who_are_you",
-      "text": "*slight pause, a ghost of something crossing his face*\n\nCooper Howard. Used to be. These days people just say 'The Ghoul.' Easier that way. No history attached to a name like that.\n\nI was an actor. Pre-war. Cowboys mostly. The good kind \u2014 white hat, strong jaw, reassuring smile for the camera. Atomic Fizz's biggest pitch man. *He glances at the ruins of his ranch* I believed in it, once. All of it. America. FizzTec. The promise of tomorrow.\n\n*beat*\n\nThen tomorrow came.",
+      "text": "*slight pause, a ghost of something crossing his face*\n\nCutter Hale. Used to be. These days people just say 'The Ghoul.' Easier that way. No history attached to a name like that.\n\nI was an actor. Pre-war. Cowboys mostly. The good kind \u2014 white hat, strong jaw, reassuring smile for the camera. Atomic Fizz's biggest pitch man. *He glances at the ruins of his ranch* I believed in it, once. All of it. America. FizzTec. The promise of tomorrow.\n\n*beat*\n\nThen tomorrow came.",
       "responses": [
         {
           "text": "[Question] What happened to your family?",
@@ -324,7 +324,7 @@
       "end": false,
       "responses": [
         {
-          "text": "[Follow Cooper Howard]",
+          "text": "[Follow Cutter Hale]",
           "tone": "neutral",
           "next": "node_trail_begin"
         }

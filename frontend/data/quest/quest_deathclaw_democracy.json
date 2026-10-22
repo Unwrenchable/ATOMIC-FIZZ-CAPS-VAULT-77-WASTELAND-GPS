@@ -4,7 +4,7 @@
   "type": "creature_evolution",
   "difficulty": "medium",
   "level_required": 12,
-  "fractured_timeline_context": "Radtalons from FO1's intelligent talking Radtalons (Vault 13), FO3's feral ones, FO4's nest-protecting mothers, and FO76's cryptid variants all exist at once. One group is intelligent. The others are not. Conflict ensues.",
+  "fractured_timeline_context": "Radtalons from FO1's intelligent talking Radtalons (Vault 31), FO3's feral ones, FO4's nest-protecting mothers, and FO76's cryptid variants all exist at once. One group is intelligent. The others are not. Conflict ensues.",
   "premise": "Goris (FO2 intelligent Radtalon companion) survives in this timeline. He's discovered that some FO1-era Radtalons retained intelligence while others devolved. He wants to restore intelligence to ALL Radtalons. Humanity is... not thrilled.",
   "stages": [
     {
@@ -43,7 +43,7 @@
         "brotherhood": "Want to exterminate them all",
         "institute": "Want to study them",
         "legion": "Want to enslave them as war beasts",
-        "minutemen": "Willing to negotiate (Preston Garvey is surprisingly progressive)"
+        "minutemen": "Willing to negotiate (Prescott Garrow is surprisingly progressive)"
       }
     },
     {

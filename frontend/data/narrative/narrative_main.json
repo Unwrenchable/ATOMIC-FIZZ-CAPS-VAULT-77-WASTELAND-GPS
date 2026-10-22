@@ -15,7 +15,7 @@
           "label": "Triangulate the Static",
           "locations": [
             "Helios One",
-            "REPCONN Test Site",
+            "SkyRocket Co. Test Site",
             "Black Mountain"
           ]
         },
@@ -112,7 +112,7 @@
         {
           "id": "ms_a5_obj1",
           "type": "visit_location",
-          "location": "Vault 34"
+          "location": "Vault 43"
         },
         {
           "id": "ms_a5_obj2",
@@ -191,7 +191,7 @@
           "locations": [
             "Helios One",
             "Black Mountain",
-            "REPCONN Test Site"
+            "SkyRocket Co. Test Site"
           ]
         }
       ],
@@ -253,7 +253,7 @@
           "locations": [
             "Dustwell Saloon",
             "Nipton Trading Post",
-            "Freeside Market"
+            "Outskirt Row Market"
           ]
         }
       ],
@@ -272,8 +272,8 @@
           "id": "sq_mother_obj1",
           "type": "visit_locations",
           "locations": [
-            "Vault 34",
-            "Vault 22"
+            "Vault 43",
+            "Vault 82"
           ]
         }
       ],

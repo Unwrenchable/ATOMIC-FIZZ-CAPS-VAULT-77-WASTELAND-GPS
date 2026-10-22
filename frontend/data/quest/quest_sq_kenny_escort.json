@@ -3,8 +3,8 @@
   "name": "Oh My God, They Killed Kenny",
   "type": "side",
   "triggerNpc": "kenny",
-  "description": "Kenny has drawn a surprisingly competent hand-drawn map of a route from the Cinder Basin Outpost to Neon Reach via Boulder City and Novac. He wants your help getting there. He has survived the journey four times previously. You have no idea how. The route takes three days on foot through three separate zones of active rad-wildlife, raider camps, and one stretch of highway that is statistically the most dangerous in the Cinder Basin. Kenny seems excited about this.",
-  "lore": "Kenny has been found alive in places that should have been fatal — under a glowsting, inside a collapsed building, floating face-down in the Colorado (he was apparently napping) — so many times that the phrase 'They killed Kenny!' has become something of a dark jest among the Cinder Basin wanderers who know of him. He always comes back. Medics in Novac have treated him six times. They have named a suturing technique after him. They are not proud of this.",
+  "description": "Kenny has drawn a surprisingly competent hand-drawn map of a route from the Cinder Basin Outpost to Neon Reach via Boulder City and Saurville. He wants your help getting there. He has survived the journey four times previously. You have no idea how. The route takes three days on foot through three separate zones of active rad-wildlife, raider camps, and one stretch of highway that is statistically the most dangerous in the Cinder Basin. Kenny seems excited about this.",
+  "lore": "Kenny has been found alive in places that should have been fatal — under a glowsting, inside a collapsed building, floating face-down in the Colorado (he was apparently napping) — so many times that the phrase 'They killed Kenny!' has become something of a dark jest among the Cinder Basin wanderers who know of him. He always comes back. Medics in Saurville have treated him six times. They have named a suturing technique after him. They are not proud of this.",
   "objectives": [
     {
       "id": "meet_kenny",
@@ -25,7 +25,7 @@
     },
     {
       "id": "novac",
-      "description": "Reach Novac — where the medics will inevitably treat Kenny for something he encountered along the way",
+      "description": "Reach Saurville — where the medics will inevitably treat Kenny for something he encountered along the way",
       "reward": { "xp": 50 }
     },
     {
@@ -42,15 +42,15 @@
   "endings": [
     {
       "id": "ending_success",
-      "description": "Kenny arrives in Neon Reach alive. He gives you a small piece of his orange hood — singed but intact — and says something that sounds grateful. You nod. He disappears into Freeside. A week later you hear he got into a dispute with a Freeside gang, died, and came back the next morning.",
+      "description": "Kenny arrives in Neon Reach alive. He gives you a small piece of his orange hood — singed but intact — and says something that sounds grateful. You nod. He disappears into Outskirt Row. A week later you hear he got into a dispute with a Outskirt Row gang, died, and came back the next morning.",
       "reward": "Kenny's Lucky Hood Scrap (unique luck-boosting accessory) + 60 Caps",
-      "consequence": "Neon Reach locals begin telling stories about the immortal orange-hooded wanderer. Freeside gang morale drops slightly."
+      "consequence": "Neon Reach locals begin telling stories about the immortal orange-hooded wanderer. Outskirt Row gang morale drops slightly."
     },
     {
       "id": "ending_kenny_died_en_route",
       "description": "Kenny died en route. You said the words — 'Oh my God, they killed Kenny! You bastards!' — because it seemed like the thing to do. He showed up in Neon Reach two days later anyway, slightly confused about how he got there.",
       "reward": "40 Caps + a strange sense that death is more flexible than you thought",
-      "consequence": "Kenny settles in Neon Reach. The medics in Novac claim he still owes them three sutures. He does not appear to be aware of this."
+      "consequence": "Kenny settles in Neon Reach. The medics in Saurville claim he still owes them three sutures. He does not appear to be aware of this."
     },
     {
       "id": "ending_abandoned",

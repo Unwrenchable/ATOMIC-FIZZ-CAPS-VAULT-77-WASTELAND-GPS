@@ -148,13 +148,13 @@
     },
     {
       "id": "enc_freeside_market_whisper",
-      "poi": "Freeside Market",
+      "poi": "Outskirt Row Market",
       "trigger": "first_visit",
       "dialog": "A merchant whispers: \"Someone\u2019s buying up pre-war tech. Paying in caps and silence.\""
     },
     {
       "id": "enc_freeside_market_deal",
-      "poi": "Freeside Market",
+      "poi": "Outskirt Row Market",
       "trigger": "repeat_visit",
       "dialog": "The merchant offers a deal: a rare Pocket-Boy mod for 200 CAPS."
     },
@@ -201,13 +201,13 @@
     },
     {
       "id": "enc_elvis_novac",
-      "poi": "Novac",
+      "poi": "Saurville",
       "trigger": "first_visit",
       "dialog": "A handwritten note is pinned to the dino's tail: \"KING SIGHTING - 3 NIGHTS IN A ROW - SOUTHEAST RIDGE - HE WAVED - I WAVED BACK - SIGNED, DEFINITELY NOT CRAZY\""
     },
     {
       "id": "enc_elvis_freeside",
-      "poi": "Freeside Market",
+      "poi": "Outskirt Row Market",
       "trigger": "first_visit",
       "dialog": "The busker on the corner is playing something old and slow on a battered guitar. He stops when you approach. \"You seen the King around? Not the Kings. The King. White suit. Black hair. Voice like warm gravel and whiskey.\" He looks south. \"He comes through sometimes. Listens for a while. Tips better than anyone.\""
     },
@@ -215,7 +215,7 @@
       "id": "enc_elvis_strip_gate",
       "poi": "Neon Reach Strip",
       "trigger": "first_visit",
-      "dialog": "A securitron pauses its patrol at the Strip gate and swivels toward you. \"Query: Have you observed an individual approximately 1.9 meters tall, white sequined suit, hair product above regulatory quantity?\" It waits. \"No reason. He is simply on the watch list. Positive watch list. Mr. House's request.\""
+      "dialog": "A securitron pauses its patrol at the Strip gate and swivels toward you. \"Query: Have you observed an individual approximately 1.9 meters tall, white sequined suit, hair product above regulatory quantity?\" It waits. \"No reason. He is simply on the watch list. Positive watch list. Mr. Manor's request.\""
     },
     {
       "id": "enc_elvis_boulder_city",
@@ -237,7 +237,7 @@
     },
     {
       "id": "enc_dev_note_avellone",
-      "poi": "Vault 22",
+      "poi": "Vault 82",
       "trigger": "first_visit",
       "dialog": "Folded inside a dead scientist's notebook: a handwritten letter signed 'C. Avellone, Narrative Division, FizzTec.' It reads: 'If someone reads this after everything ends \u2014 the story was always about the people. Not the bombs. Not the vaults. Not the factions. The people make the story. I hope someone out there is still telling them.'"
     },
@@ -262,7 +262,7 @@
     },
     {
       "id": "enc_padre_mojave",
-      "poi": "Freeside Market",
+      "poi": "Outskirt Row Market",
       "trigger": "repeat_visit",
       "npc": "padre",
       "dialog": "A man in tattered robes sits on an overturned crate beside the market, distributing something from a pack. He notices you. 'Water and FizzPaks, no charge. Sit if you need to.' He means it."

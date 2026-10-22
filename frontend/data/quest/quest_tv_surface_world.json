@@ -42,7 +42,7 @@
       "id": "stage_2_ghoul_trail",
       "title": "The Ghoul's Trail",
       "order": 2,
-      "description": "The CAPS signal leads toward the Cinder Basin, but the trail is marked by something else: gunshot wounds and bounty parchments. The Ghoul \u2014 Cooper Howard, pre-war movie star and 219-year-old bounty hunter \u2014 is following the same signal. Find Siggi Wilzig's Research Station before he does.",
+      "description": "The CAPS signal leads toward the Cinder Basin, but the trail is marked by something else: gunshot wounds and bounty parchments. The Ghoul \u2014 Cutter Hale, pre-war movie star and 219-year-old bounty hunter \u2014 is following the same signal. Find Siggi Wilzig's Research Station before he does.",
       "objectives": [
         "Travel to Wilzig Research Station",
         "Search the terminals for CAPS Protocol documentation",
@@ -54,7 +54,7 @@
         "death_valley_wasteland_tv"
       ],
       "npc_encounters": [
-        "dialog_ghoul_cooper"
+        "dialog_cutter_hale"
       ],
       "enemy_encounters": [
         "ghoul_bounty_hunter",
@@ -69,9 +69,9 @@
       "id": "stage_3_dead_city",
       "title": "Dead City Rising",
       "order": 3,
-      "description": "Shady Sands. The Frontier Compact's proud capital. Now a radioactive crater. Someone nuked it \u2014 and the CAPS Protocol ledger stored here was the most complete record of post-war economic history. What little remains is buried in the ruins, guarded by irradiated Frontier Compact remnant soldiers who don't know their nation is gone.",
+      "description": "Dustwater. The Frontier Compact's proud capital. Now a radioactive crater. Someone nuked it \u2014 and the CAPS Protocol ledger stored here was the most complete record of post-war economic history. What little remains is buried in the ruins, guarded by irradiated Frontier Compact remnant soldiers who don't know their nation is gone.",
       "objectives": [
-        "Navigate to Shady Sands Ruins",
+        "Navigate to Dustwater Ruins",
         "Find the Frontier Compact CAPS Terminal in the ruins",
         "Recover the partial CAPS ledger backup",
         "Determine who ordered the nuclear strike"
@@ -90,7 +90,7 @@
       "fizz_reward": 150,
       "caps_reward": 300,
       "xp_reward": 1500,
-      "lore_unlock": "A recovered HavenTech internal memo confirms it: HavenTech ordered the Shady Sands strike to destroy the Frontier Compact's independent CAPS ledger. With the Frontier Compact gone, HavenTech's FIZZ token would be the only recognized post-war currency on the West Coast."
+      "lore_unlock": "A recovered HavenTech internal memo confirms it: HavenTech ordered the Dustwater strike to destroy the Frontier Compact's independent CAPS ledger. With the Frontier Compact gone, HavenTech's FIZZ token would be the only recognized post-war currency on the West Coast."
     },
     {
       "id": "stage_4_fizzcro_reckoning",

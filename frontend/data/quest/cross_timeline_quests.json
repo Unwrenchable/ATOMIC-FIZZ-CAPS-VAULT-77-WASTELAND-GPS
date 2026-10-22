@@ -4,9 +4,9 @@
   "quests": [
     {
       "quest_id": "qtl_boneyard_brotherhood",
-      "name": "Ashes of the Boneyard",
+      "name": "Ashes of the Ossuary Yard",
       "description": "Coil Covenant paladins have quarantined a pre-war research facility beneath the ruins of the old Los Angeles basin. They found something — a FIZZ token prototype minted before the bombs fell. They want it destroyed. Someone else wants it very, very badly.",
-      "region": "The Boneyard (Los Angeles)",
+      "region": "The Ossuary Yard (Los Angeles)",
       "timeline": "fallout_1",
       "real_lat": 34.0522,
       "real_lng": -118.2437,
@@ -105,8 +105,8 @@
     {
       "quest_id": "qtl_shady_sands_ncr",
       "name": "The Founding Lie",
-      "description": "A ghoul archivist in Shady Sands claims to have holotapes proving that the Frontier Compact's founding charter was forged — the original settlement was a FizzTec experiment, not a free community. The Frontier Compact Commissar wants the tapes destroyed. The archivist wants them broadcast. And someone just tried to kill them both.",
-      "region": "Shady Sands (Sacramento area)",
+      "description": "A ghoul archivist in Dustwater claims to have holotapes proving that the Frontier Compact's founding charter was forged — the original settlement was a FizzTec experiment, not a free community. The Frontier Compact Commissar wants the tapes destroyed. The archivist wants them broadcast. And someone just tried to kill them both.",
+      "region": "Dustwater (Sacramento area)",
       "timeline": "fallout_2",
       "real_lat": 38.5816,
       "real_lng": -121.4944,
@@ -146,7 +146,7 @@
         "commissar",
         "harlan"
       ],
-      "narrative_hook": "Harlan the ghoul was there when Shady Sands was founded. He's one of three living witnesses. The other two are already dead.",
+      "narrative_hook": "Harlan the ghoul was there when Dustwater was founded. He's one of three living witnesses. The other two are already dead.",
       "trigger_radius_meters": 1000
     },
     {
@@ -246,7 +246,7 @@
     {
       "quest_id": "qtl_new_vegas_strip",
       "name": "Vegas Never Sleeps",
-      "description": "Mr. House's securitrons are malfunctioning — someone has infected their network with a virus that makes them pay out FIZZ tokens to anyone within a 10-meter radius. Vegas is descending into ecstatic chaos. House wants the virus's author found and brought to him. Alive if possible.",
+      "description": "Mr. Manor's securitrons are malfunctioning — someone has infected their network with a virus that makes them pay out FIZZ tokens to anyone within a 10-meter radius. Vegas is descending into ecstatic chaos. House wants the virus's author found and brought to him. Alive if possible.",
       "region": "Neon Reach (Las Vegas)",
       "timeline": "fallout_new_vegas",
       "real_lat": 36.1699,
@@ -340,7 +340,7 @@
     {
       "quest_id": "qtl_old_world_blues",
       "name": "The Big Empty Frequency",
-      "description": "Big MT's Think Tank has been broadcasting encrypted FIZZ mining instructions on pre-war radio frequencies. Every broken radio in the Cinder Basin is now a FIZZ miner draining its battery. The Think Tank wants test subjects to retrieve the 'optimization data.' The Courier's brain has strong feelings about this.",
+      "description": "Big Crater's Think Tank has been broadcasting encrypted FIZZ mining instructions on pre-war radio frequencies. Every broken radio in the Cinder Basin is now a FIZZ miner draining its battery. The Think Tank wants test subjects to retrieve the 'optimization data.' The Courier's brain has strong feelings about this.",
       "region": "Old World Blues (New Mexico desert)",
       "timeline": "fallout_new_vegas_old_world_blues",
       "real_lat": 33,
@@ -387,8 +387,8 @@
     {
       "quest_id": "qtl_rivet_city",
       "name": "The Capital Ledger",
-      "description": "Rivet City's science team has found a functioning pre-war Federal Reserve server in the Jefferson Memorial's subbasement. It contains every pre-war financial transaction ever made — including the identities of everyone who funded FizzTec. The Brotherhood wants it. The Directorate wants it more.",
-      "region": "Rivet City (Washington DC)",
+      "description": "Bolt Harbor's science team has found a functioning pre-war Federal Reserve server in the Jefferson Memorial's subbasement. It contains every pre-war financial transaction ever made — including the identities of everyone who funded FizzTec. The Brotherhood wants it. The Directorate wants it more.",
+      "region": "Bolt Harbor (Washington DC)",
       "timeline": "fallout_3",
       "real_lat": 38.8744,
       "real_lng": -77.0197,
@@ -396,7 +396,7 @@
       "objectives": [
         {
           "id": "rivet_1",
-          "text": "Book passage to Rivet City and meet Dr. Madison Li's contact",
+          "text": "Book passage to Bolt Harbor and meet Dr. Madison Li's contact",
           "type": "navigate"
         },
         {
@@ -434,8 +434,8 @@
     {
       "quest_id": "qtl_the_pitt_steel",
       "name": "Iron in the Blood",
-      "description": "The Pitt's mill is now producing FIZZ-stamped steel ingots — physical tokens that can be redeemed for FIZZ on the blockchain. The slaves who produce them receive none of the proceeds. A former Ashur lieutenant has a plan to change that, if someone can help her forge the access codes.",
-      "region": "The Pitt (Pittsburgh)",
+      "description": "The Scrapforge's mill is now producing FIZZ-stamped steel ingots — physical tokens that can be redeemed for FIZZ on the blockchain. The slaves who produce them receive none of the proceeds. A former Ashur lieutenant has a plan to change that, if someone can help her forge the access codes.",
+      "region": "The Scrapforge (Pittsburgh)",
       "timeline": "fallout_3_the_pitt",
       "real_lat": 40.4406,
       "real_lng": -79.9959,
@@ -443,7 +443,7 @@
       "objectives": [
         {
           "id": "pitt_1",
-          "text": "Infiltrate The Pitt by posing as a slave caravan arrival",
+          "text": "Infiltrate The Scrapforge by posing as a slave caravan arrival",
           "type": "social"
         },
         {
@@ -528,8 +528,8 @@
     {
       "quest_id": "qtl_appalachia_vault76",
       "name": "Reclamation Day Protocol",
-      "description": "Vault 76's ATLAS system has come online broadcasting a Reclamation Day mission: retrieve a missing Overseer's FIZZ wallet seed phrase, distributed across five holotapes hidden at wasteland-era Appalachian landmarks. The Scorched have learned what the holotapes contain and are being directed by something intelligent.",
-      "region": "Appalachia / Vault 76 (West Virginia)",
+      "description": "Vault 67's ATLAS system has come online broadcasting a Reclamation Day mission: retrieve a missing Overseer's FIZZ wallet seed phrase, distributed across five holotapes hidden at wasteland-era Appalachian landmarks. The Scorched have learned what the holotapes contain and are being directed by something intelligent.",
+      "region": "Appalachia / Vault 67 (West Virginia)",
       "timeline": "fallout_76",
       "real_lat": 38.3,
       "real_lng": -80.4,
@@ -548,7 +548,7 @@
         },
         {
           "id": "app_3",
-          "text": "Survive the Scorchbeast attack on Vault 76's entrance",
+          "text": "Survive the Scorchbeast attack on Vault 67's entrance",
           "type": "battle"
         },
         {
@@ -623,8 +623,8 @@
     {
       "quest_id": "qtl_diamond_city",
       "name": "The Green Monster's Secret",
-      "description": "Diamond City's market is the Commonwealth's largest FIZZ trading hub. But someone has been manipulating the exchange rate by releasing Feral Ghouls into the market district during peak trading hours, causing panic sells. The mayor knows. The mayor is in on it.",
-      "region": "Diamond City (Fenway Park)",
+      "description": "Stadium Hollow's market is the Bay Reaches's largest FIZZ trading hub. But someone has been manipulating the exchange rate by releasing Feral Ghouls into the market district during peak trading hours, causing panic sells. The mayor knows. The mayor is in on it.",
+      "region": "Stadium Hollow (Fenway Park)",
       "timeline": "fallout_4",
       "real_lat": 42.3467,
       "real_lng": -71.0972,
@@ -642,7 +642,7 @@
         },
         {
           "id": "dc_3",
-          "text": "Expose the market manipulation scheme to Diamond City Radio",
+          "text": "Expose the market manipulation scheme to Stadium Hollow Radio",
           "type": "social"
         },
         {
@@ -664,7 +664,7 @@
         "barney",
         "bats"
       ],
-      "narrative_hook": "McDonough has been shorting FIZZ before each Ghoul release. He's made 40,000 FIZZ in six months. The Institute helped him set up the scheme. They want Diamond City's market infrastructure intact when they take over.",
+      "narrative_hook": "McDonough has been shorting FIZZ before each Ghoul release. He's made 40,000 FIZZ in six months. The Institute helped him set up the scheme. They want Stadium Hollow's market infrastructure intact when they take over.",
       "trigger_radius_meters": 1000
     },
     {

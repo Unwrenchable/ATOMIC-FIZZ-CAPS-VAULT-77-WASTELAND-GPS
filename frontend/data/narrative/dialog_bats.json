@@ -3,8 +3,8 @@
   "npc": "The Bat",
   "portrait": "bats",
   "title": "The Dark Wanderer",
-  "description": "Dialog nodes for The Bat — a grim, caped vigilante who has appointed himself protector of Freeside's lower districts. He wears salvaged black combat armor shaped into something resembling pre-war theatrical costume, speaks in a deliberate rasp, and has an unsettling commitment to the dramatic. His real name is unknown. He has filed no paperwork. Freeside's residents find him terrifying and reassuring in almost equal measure.",
-  "backstory": "Nobody knows his real name. Freeside records show a 'B. Wayne' who registered as a licensed trader in 2267, paid his fees on time for eight months, and then disappeared from every official document. What appeared in his place haunted Freeside's lower districts, appearing at the scenes of crimes in hand-shaped salvaged combat armor. He doesn't talk about what happened before. He talks about justice — which, in the wasteland, is rarer and more valuable than clean water.",
+  "description": "Dialog nodes for The Bat — a grim, caped vigilante who has appointed himself protector of Outskirt Row's lower districts. He wears salvaged black combat armor shaped into something resembling pre-war theatrical costume, speaks in a deliberate rasp, and has an unsettling commitment to the dramatic. His real name is unknown. He has filed no paperwork. Outskirt Row's residents find him terrifying and reassuring in almost equal measure.",
+  "backstory": "Nobody knows his real name. Outskirt Row records show a 'B. Wayne' who registered as a licensed trader in 2267, paid his fees on time for eight months, and then disappeared from every official document. What appeared in his place haunted Outskirt Row's lower districts, appearing at the scenes of crimes in hand-shaped salvaged combat armor. He doesn't talk about what happened before. He talks about justice — which, in the wasteland, is rarer and more valuable than clean water.",
   "intro": {
     "id": "bats_intro",
     "conditions": [
@@ -100,12 +100,12 @@
       "conditions": [
         "!flag:sq_bats_the_long_night_taken"
       ],
-      "text": "There is a man. Goes by Grigg. Pre-war banking family — at least, their descendants. He has spent the last six months buying up debt in Freeside. Every squatter owes him something.<br><br>When the debt is fully consolidated, he will own every structure south of the Strip Gate. He won't use violence. He won't have to.<br><br>I need evidence. Financial records. Correspondence. Something that proves the acquisition isn't legal under even the Frontier Compact's loose property statutes.<br><br>His operation runs out of the old Paradise Falls records building. Guarded. But not well — he thinks no one cares about paperwork enough to steal it.<br><br>Prove him wrong.",
+      "text": "There is a man. Goes by Grigg. Pre-war banking family — at least, their descendants. He has spent the last six months buying up debt in Outskirt Row. Every squatter owes him something.<br><br>When the debt is fully consolidated, he will own every structure south of the Strip Gate. He won't use violence. He won't have to.<br><br>I need evidence. Financial records. Correspondence. Something that proves the acquisition isn't legal under even the Frontier Compact's loose property statutes.<br><br>His operation runs out of the old Paradise Falls records building. Guarded. But not well — he thinks no one cares about paperwork enough to steal it.<br><br>Prove him wrong.",
       "offers_quest": "sq_bats_the_long_night",
       "set_flags": [
         "sq_bats_the_long_night_taken"
       ],
-      "video_speech": "There is a man named Grigg using his inheritance to run Freeside's most dangerous loan operation. I need someone who can move in daylight."
+      "video_speech": "There is a man named Grigg using his inheritance to run Outskirt Row's most dangerous loan operation. I need someone who can move in daylight."
     }
   ],
   "wildcards": [

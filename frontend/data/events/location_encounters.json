@@ -107,15 +107,15 @@
           "probability": 0.05,
           "type": "npc_rare",
           "description": "The Ghoul is watching you from a ruined billboard. He doesn't approach. But he nods \u2014 once \u2014 before disappearing back into the shadows.",
-          "npc": "dialog_ghoul_cooper",
+          "npc": "dialog_cutter_hale",
           "fizz_reward": 100,
-          "unlocks": "ghoul_cooper_met_passive"
+          "unlocks": "cutter_hale_met_passive"
         },
         {
           "id": "timeline_bleed_tv_1977",
           "probability": 0.03,
           "type": "timeline_bleed",
-          "description": "For 77 seconds, you can see the pre-war version of this location overlaid on the ruins \u2014 clean, gleaming, full of people who don't know what's coming. A man in a cowboy hat waves from a Atomic Fizz billboard. Cooper Howard. 2077.",
+          "description": "For 77 seconds, you can see the pre-war version of this location overlaid on the ruins \u2014 clean, gleaming, full of people who don't know what's coming. A man in a cowboy hat waves from a Atomic Fizz billboard. Cutter Hale. 2077.",
           "fizz_reward": 200,
           "achievement": "Ghost of the Old World"
         },
@@ -181,7 +181,7 @@
         {
           "weight": 35,
           "type": "audio",
-          "description": "Three Dog's voice crackles from a distant radio: 'Keep fighting the good fight, DC!' The signal is 200 years old and still broadcasting.",
+          "description": "Two Hound's voice crackles from a distant radio: 'Keep fighting the good fight, DC!' The signal is 200 years old and still broadcasting.",
           "fizz_reward": 0
         },
         {
@@ -268,7 +268,7 @@
           "id": "galaxy_signal_burst",
           "probability": 0.1,
           "type": "lore",
-          "description": "Three Dog's GNR broadcast cuts through on your Pocket-Boy: 'And if you're a new kind of wasteland wanderer picking up this signal in the future \u2014 yes, we knew about the CAPS Protocol. We just couldn't prove it. Yet.'",
+          "description": "Two Hound's GNR broadcast cuts through on your Pocket-Boy: 'And if you're a new kind of wasteland wanderer picking up this signal in the future \u2014 yes, we knew about the CAPS Protocol. We just couldn't prove it. Yet.'",
           "fizz_reward": 40,
           "grant": "gnr_special_broadcast"
         }
@@ -286,7 +286,7 @@
           "id": "lone_wanderer_echo",
           "probability": 0.03,
           "type": "npc_rare",
-          "description": "A holographic Pocket-Boy readout shows the ghost-trail of the Lone Wanderer from 2277 \u2014 you can see their path across the Capital Wasteland. Following it leads to a buried CAPS cache.",
+          "description": "A holographic Pocket-Boy readout shows the ghost-trail of the Lone Drifter from 2277 \u2014 you can see their path across the Capital Wasteland. Following it leads to a buried CAPS cache.",
           "fizz_reward": 175,
           "grant": "lone_wanderer_trail"
         },
@@ -294,7 +294,7 @@
           "id": "liberty_prime_fragment",
           "probability": 0.02,
           "type": "encounter_unique",
-          "description": "A chunk of Liberty Prime's armor lies half-buried. It's still broadcasting: 'DEMOCRACY IS NON-NEGOTIABLE. CAPS PROTOCOL LIBERATION IN PROGRESS.' The Liberty Prime team apparently added a few non-standard subroutines.",
+          "description": "A chunk of Freedom Titan's armor lies half-buried. It's still broadcasting: 'DEMOCRACY IS NON-NEGOTIABLE. CAPS PROTOCOL LIBERATION IN PROGRESS.' The Freedom Titan team apparently added a few non-standard subroutines.",
           "fizz_reward": 200,
           "loot": [
             "liberty_prime_armor_fragment",
@@ -344,7 +344,7 @@
       ]
     },
     "fo4": {
-      "region_name": "The Commonwealth \u2014 Boston (2287)",
+      "region_name": "The Bay Reaches \u2014 Boston (2287)",
       "ambient": [
         {
           "weight": 30,
@@ -355,7 +355,7 @@
         {
           "weight": 25,
           "type": "audio",
-          "description": "Diamond City Radio plays from somewhere in the ruins. Travis Miles' nervous voice fades in and out: '...and remember, Diamond City: your caps are always worth exactly what Diamond City says they're worth. Right?'",
+          "description": "Stadium Hollow Radio plays from somewhere in the ruins. Travis Miles' nervous voice fades in and out: '...and remember, Stadium Hollow: your caps are always worth exactly what Stadium Hollow says they're worth. Right?'",
           "fizz_reward": 0
         },
         {
@@ -519,7 +519,7 @@
         {
           "weight": 25,
           "type": "terminal",
-          "description": "A Responder terminal at this location contains a last message: 'Found old FizzTec CAPS terminal in basement. The data inside... it's not just currency records. Someone call Vault 76.' Nobody called. Nobody could.",
+          "description": "A Responder terminal at this location contains a last message: 'Found old FizzTec CAPS terminal in basement. The data inside... it's not just currency records. Someone call Vault 67.' Nobody called. Nobody could.",
           "fizz_reward": 20
         },
         {
@@ -606,7 +606,7 @@
           "id": "vault76_overseer_echo",
           "probability": 0.04,
           "type": "npc_rare",
-          "description": "The Vault 76 Overseer's final log plays from a hidden speaker: 'We're not ready. None of us are. But the CAPS Protocol signal from Vault 77... it's still out there. Someone in the future is going to need to find it. I'm leaving this beacon for them.'",
+          "description": "The Vault 67 Overseer's final log plays from a hidden speaker: 'We're not ready. None of us are. But the CAPS Protocol signal from Vault 77... it's still out there. Someone in the future is going to need to find it. I'm leaving this beacon for them.'",
           "fizz_reward": 200,
           "grant": "vault76_overseer_beacon"
         },
@@ -623,7 +623,7 @@
           "id": "first_dweller_memory",
           "probability": 0.03,
           "type": "timeline_bleed",
-          "description": "For 77 seconds, you experience Reclamation Day through the eyes of Vault 76's first dwellers \u2014 stumbling into Appalachian sunshine, clutching their Pocket-Boys, CAPS in their pockets from vault vending machines. The CAPS they carried were already Vault 77 authenticated.",
+          "description": "For 77 seconds, you experience Reclamation Day through the eyes of Vault 67's first dwellers \u2014 stumbling into Appalachian sunshine, clutching their Pocket-Boys, CAPS in their pockets from vault vending machines. The CAPS they carried were already Vault 77 authenticated.",
           "fizz_reward": 250,
           "achievement": "Reclamation Day Memory"
         }
@@ -681,19 +681,19 @@
         {
           "weight": 25,
           "type": "house_network",
-          "description": "A Securitron rolls past on its patrol route, cameras scanning. For a moment, it pauses at your position \u2014 Mr. House's network has flagged your FIZZ token activity. Then it moves on.",
+          "description": "A Securitron rolls past on its patrol route, cameras scanning. For a moment, it pauses at your position \u2014 Mr. Manor's network has flagged your FIZZ token activity. Then it moves on.",
           "fizz_reward": 10
         },
         {
           "weight": 20,
           "type": "terminal",
-          "description": "An Frontier Compact tactical terminal displays 2281 data on CAPS flow through the Cinder Basin. Someone has annotated the margins in pencil: 'These aren't Frontier Compact caps \u2014 they're Mr. House's. He's running the whole economy.'",
+          "description": "An Frontier Compact tactical terminal displays 2281 data on CAPS flow through the Cinder Basin. Someone has annotated the margins in pencil: 'These aren't Frontier Compact caps \u2014 they're Mr. Manor's. He's running the whole economy.'",
           "fizz_reward": 15
         },
         {
           "weight": 15,
           "type": "legion_counter",
-          "description": "A Legion 'bull cap' has been nailed to a post \u2014 Caesar's counter-currency, meant to destabilize the CAPS economy. Carved on the back: 'FIAT CURRENCY. TRUE CURRENCY LIVES IN ROMAN SILVER.'",
+          "description": "A Legion 'bull cap' has been nailed to a post \u2014 the Imperator's counter-currency, meant to destabilize the CAPS economy. Carved on the back: 'FIAT CURRENCY. TRUE CURRENCY LIVES IN ROMAN SILVER.'",
           "fizz_reward": 5
         },
         {
@@ -762,7 +762,7 @@
           "id": "house_securitron_fnv",
           "probability": 0.2,
           "type": "npc",
-          "description": "A Mark II Securitron approaches. Mr. House's face fills the screen: 'Your FIZZ token activity has been noted. I find it... architecturally similar to my own systems. We should discuss the The Spire's role in the CAPS Protocol.'",
+          "description": "A Mark II Securitron approaches. Mr. Manor's face fills the screen: 'Your FIZZ token activity has been noted. I find it... architecturally similar to my own systems. We should discuss the The Spire's role in the CAPS Protocol.'",
           "npc": "mr_house_securitron",
           "fizz_reward": 50,
           "lore_unlock": "house_caps_connection"
@@ -781,7 +781,7 @@
           "id": "big_mt_signal_fnv",
           "probability": 0.03,
           "type": "timeline_bleed",
-          "description": "Big MT's broadcast cuts across all frequencies: 'SINISTER SERAPH CAPS ACQUISITION PROTOCOL \u2014 INITIATING\u2014' then silence. For 77 seconds, the Old World Blues scientists' CAPS experiments become visible as a spectral overlay.",
+          "description": "Big Crater's broadcast cuts across all frequencies: 'SINISTER SERAPH CAPS ACQUISITION PROTOCOL \u2014 INITIATING\u2014' then silence. For 77 seconds, the Old World Blues scientists' CAPS experiments become visible as a spectral overlay.",
           "fizz_reward": 200,
           "achievement": "Big Empty Caps"
         },
@@ -859,13 +859,13 @@
         {
           "weight": 15,
           "type": "vault_echo",
-          "description": "Your Pocket-Boy receives a burst transmission from a dormant vault: 'WATER CHIP REQUEST \u2014 CRITICAL \u2014 VAULT 13 \u2014 PLEASE RESPOND.' The message is from 2161. No one responded then. No one can now.",
+          "description": "Your Pocket-Boy receives a burst transmission from a dormant vault: 'WATER CHIP REQUEST \u2014 CRITICAL \u2014 VAULT 31 \u2014 PLEASE RESPOND.' The message is from 2161. No one responded then. No one can now.",
           "fizz_reward": 0
         },
         {
           "weight": 5,
           "type": "item_spawn",
-          "description": "A Hub merchant caravan supply box lies half-buried. Inside: pre-war Crimson Caravan trading tokens \u2014 the precursor to standardized CAPS. They still authenticate on FIZZ terminals.",
+          "description": "A Hub merchant caravan supply box lies half-buried. Inside: pre-war Scarlet Caravan trading tokens \u2014 the precursor to standardized CAPS. They still authenticate on FIZZ terminals.",
           "fizz_reward": 25
         }
       ],
@@ -940,13 +940,13 @@
       ],
       "rare_events": [
         {
-          "id": "vault_dweller_echo_fo1",
+          "id": "vault_sleeper_echo_fo1",
           "probability": 0.04,
           "type": "npc_rare",
           "description": "The Vault Dweller Echo appears at this location \u2014 a fragmented memory of the original hero from 2161. They're confused about the timeline but certain about one thing: 'The caps in the Hub \u2014 they weren't just money. I saw the authentication marks. Someone in a vault made them.'",
-          "npc": "dialog_vault_dweller_echo",
+          "npc": "dialog_vault_sleeper_echo",
           "fizz_reward": 200,
-          "unlocks": "vault_dweller_echo_met"
+          "unlocks": "vault_sleeper_echo_met"
         },
         {
           "id": "mariposa_echo_fo1",

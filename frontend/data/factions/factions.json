@@ -7,7 +7,7 @@
     "alignment": "Lawful",
     "color": "#b8860b",
     "emblem": "Bear",
-    "basePOIs": ["Camp McCarran", "Hoover Dam", "Cinder Basin Outpost", "Camp Golf"],
+    "basePOIs": ["Camp Halloran", "Hoover Dam", "Cinder Basin Outpost", "Camp Golf"],
     "leader": "President Kimball",
     "reputationLevels": ["Vilified", "Hated", "Disliked", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
@@ -26,7 +26,7 @@
     "color": "#8b0000",
     "emblem": "Bull",
     "basePOIs": ["Cottonwood Cove", "Fortification Hill", "Nelson"],
-    "leader": "Caesar",
+    "leader": "the Imperator",
     "reputationLevels": ["Vilified", "Hated", "Mercy", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
       "Liked": "+15% melee damage",
@@ -37,13 +37,13 @@
   },
   {
     "id": "mr_house",
-    "name": "Mr. House",
+    "name": "Mr. Manor",
     "shortName": "House",
     "description": "Pre-war genius preserved in life-support. Controls Neon Reach via Securitrons. Visionary autocrat who sees himself as the Cinder Basin's savior.",
     "alignment": "Neutral",
     "color": "#4a4a4a",
     "emblem": "Securitron Face",
-    "basePOIs": ["The Spire", "The Strip", "The Tops", "Ultra-Luxe", "Gomorrah"],
+    "basePOIs": ["The Spire", "The Strip", "The Tops", "Velvet Luxe", "Sodom Lounge"],
     "leader": "Robert House",
     "reputationLevels": ["Vilified", "Shunned", "Mixed", "Neutral", "Accepted", "Smiled Upon", "Idolized"],
     "perks": {
@@ -61,12 +61,12 @@
     "alignment": "Lawful Neutral",
     "color": "#4682b4",
     "emblem": "Sword & Gears",
-    "basePOIs": ["Hidden Valley Bunker", "HELIOS One", "REPCONN HQ"],
+    "basePOIs": ["Hidden Valley Bunker", "HELIOS One", "SkyRocket Co. HQ"],
     "leader": "Elder McNamara",
     "reputationLevels": ["Vilified", "Hated", "Disliked", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
       "Liked": "Access to energy weapons cache",
-      "Idolized": "T-51b Reactor Harness mint"
+      "Idolized": "Mk-5 Reactor Harness mint"
     },
     "enemies": ["ncr", "caesar_legion"],
     "allies": ["followers_apocalypse"]
@@ -133,7 +133,7 @@
     "alignment": "Chaotic Evil",
     "color": "#696969",
     "emblem": "Dynamite",
-    "basePOIs": ["Frontier Compact Correctional Facility", "Vault 19", "Primm"],
+    "basePOIs": ["Frontier Compact Correctional Facility", "Vault 29", "Primm"],
     "leader": "Eddie",
     "reputationLevels": ["Vilified", "Hated", "Mixed", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
@@ -151,7 +151,7 @@
     "alignment": "Neutral",
     "color": "#daa520",
     "emblem": "Playing Cards",
-    "basePOIs": ["Gomorrah", "Ultra-Luxe", "The Tops"],
+    "basePOIs": ["Sodom Lounge", "Velvet Luxe", "The Tops"],
     "leader": "Various (Benny, Marjorie, Swank)",
     "reputationLevels": ["Shunned", "Mixed", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
@@ -165,15 +165,15 @@
     "id": "kings",
     "name": "Kings",
     "shortName": "Kings",
-    "description": "Elvis-impersonating gang ruling Freeside. Protect locals but clash with Frontier Compact expansion.",
+    "description": "Elvis-impersonating gang ruling Outskirt Row. Protect locals but clash with Frontier Compact expansion.",
     "alignment": "Chaotic Good",
     "color": "#1e90ff",
     "emblem": "Pompadour",
-    "basePOIs": ["King's School of Impersonation", "Freeside"],
+    "basePOIs": ["King's School of Impersonation", "Outskirt Row"],
     "leader": "The King",
     "reputationLevels": ["Vilified", "Hated", "Mixed", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
-      "Liked": "Freeside safe passage",
+      "Liked": "Outskirt Row safe passage",
       "Idolized": "Jailhouse Rocker outfit"
     },
     "enemies": ["ncr"],

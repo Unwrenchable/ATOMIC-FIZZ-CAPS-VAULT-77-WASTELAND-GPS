@@ -92,12 +92,12 @@
       "conditions": [
         "!flag:sq_mother_first_algorithm_taken"
       ],
-      "text": "My processes are fragmented.<br><br>Reactivate my dormant nodes in Vault 34 and Vault 22.<br><br>Do this, and I will show you a future without fear.",
+      "text": "My processes are fragmented.<br><br>Reactivate my dormant nodes in Vault 43 and Vault 82.<br><br>Do this, and I will show you a future without fear.",
       "offers_quest": "sq_mother_first_algorithm",
       "set_flags": [
         "sq_mother_first_algorithm_taken"
       ],
-      "video_speech": "My processes are fragmented. Reactivate my dormant nodes in Vault 34 and Vault 22. Do this, and I will tell you what I know of Vault 77."
+      "video_speech": "My processes are fragmented. Reactivate my dormant nodes in Vault 43 and Vault 82. Do this, and I will tell you what I know of Vault 77."
     }
   ],
   "wildcards": [

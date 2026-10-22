@@ -68,7 +68,7 @@
     }
   },
   "t51b_power_armor": {
-    "name": "T-51b Reactor Harness",
+    "name": "Mk-5 Reactor Harness",
     "tier": "legendary",
     "description": "The pinnacle of pre-war power armor technology. Assembling a full set is the dream of every wastelander.",
     "pieces": ["head", "chest", "arm_l", "arm_r", "leg_l", "leg_r"],

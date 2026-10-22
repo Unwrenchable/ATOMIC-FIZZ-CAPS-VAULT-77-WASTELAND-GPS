@@ -1,12 +1,12 @@
 {
   "id": "npc_nv_rook",
   "name": "Rook",
-  "region": "Freeside",
+  "region": "Outskirt Row",
   "type": "Info Broker",
   "dialog": {
     "idle": [
       "Information’s cheap. Truth costs extra.",
-      "Vegas pulls stories from everywhere — Zion, the Divide, the Pitt."
+      "Vegas pulls stories from everywhere — Zion, the Divide, the Scrapforge."
     ],
     "player_has_rumors": [
       "You’ve been collecting rumors. Good. Keep going.",

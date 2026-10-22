@@ -147,12 +147,19 @@
       if (!npcId) return null;
 
       // If they pass "dialog_rex" already, use it as-is
+      const RENAMED = { dialog_ghoul_cooper: "dialog_cutter_hale", dialog_vault_dweller_echo: "dialog_vault_sleeper_echo", dialog_sole_survivor_echo: "dialog_last_sleeper_echo" };
+      if (RENAMED[npcId]) return RENAMED[npcId];
       if (npcId.startsWith("dialog_")) return npcId;
 
       // Explicit NPC id → dialog file mappings for NPCs whose data file id
       // differs from the dialog filename (e.g. npc_signal_runner → dialog_siren)
       const NPC_DIALOG_MAP = {
         "npc_signal_runner": "dialog_siren",
+        // IP pass renames: old ids from saves/links resolve to the new dialogs
+        "ghoul_cooper":       "dialog_cutter_hale",
+        "dialog_ghoul_cooper": "dialog_cutter_hale",
+        "vault_dweller_echo": "dialog_vault_sleeper_echo",
+        "sole_survivor_echo": "dialog_last_sleeper_echo",
         "signal_runner":     "dialog_siren",
         "siren":             "dialog_siren",
         "pip":               "dialog_courier",

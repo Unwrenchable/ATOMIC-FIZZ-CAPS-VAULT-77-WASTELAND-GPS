@@ -1,7 +1,7 @@
 {
   "id": "npc_pitt_mara",
   "name": "Soot-Sister Mara",
-  "region": "The Pitt",
+  "region": "The Scrapforge",
   "type": "Medic",
   "dialog": [
     "The sickness spreads faster every week.",

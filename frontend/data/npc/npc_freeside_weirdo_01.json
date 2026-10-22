@@ -4,7 +4,7 @@
   "archetype": "vegas_outskirts_local",
   "dialogPool": [
     "The Strip’s shadow stretches across timelines.",
-    "Freeside is the hinge of the world."
+    "Outskirt Row is the hinge of the world."
   ],
   "spawnPool": ["freeside_backstreets"],
   "uniquePerWorld": true

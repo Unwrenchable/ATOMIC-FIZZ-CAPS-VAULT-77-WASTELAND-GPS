@@ -10,8 +10,8 @@
     "conditions": [
       "!flag:met_loxley"
     ],
-    "video_speech": "Hail! I am Loxley — wealth redistribution specialist. The Crimson Caravan grows fat while the squatter camps starve. The maths are simple.",
-    "text": "Hail, good traveller! I am Loxley — Robin of Loxley, if you prefer the full verse of it.<br><br>Some call us thieves. We prefer 'wealth redistribution specialists.'<br><br>The Crimson Caravan passes through this stretch twice a month. Fat shipments. Brahmin-bowed under the weight of it. And the folk in the squatter camps along the Cinder Basin? Starving.<br><br>The maths are simple. Even the post-apocalypse can do the maths.",
+    "video_speech": "Hail! I am Loxley — wealth redistribution specialist. The Scarlet Caravan grows fat while the squatter camps starve. The maths are simple.",
+    "text": "Hail, good traveller! I am Loxley — Robin of Loxley, if you prefer the full verse of it.<br><br>Some call us thieves. We prefer 'wealth redistribution specialists.'<br><br>The Scarlet Caravan passes through this stretch twice a month. Fat shipments. Brahmin-bowed under the weight of it. And the folk in the squatter camps along the Cinder Basin? Starving.<br><br>The maths are simple. Even the post-apocalypse can do the maths.",
     "set_flags": [
       "met_loxley"
     ]
@@ -111,8 +111,8 @@
       "conditions": [
         "!flag:sq_loxley_rob_the_rich_taken"
       ],
-      "video_speech": "A Crimson Caravan shipment hits Nipton Road in two days — medical supplies meant for a hoarder named Harwick. Help us redirect it to those who actually need it.",
-      "text": "A Crimson Caravan shipment is coming through Nipton Road in two days' time.<br><br>Medical supplies, grain, water chips. Enough for three settlements. All of it bound for a fortified estate outside of Primm — a man named Harwick who charges triple for anything he doesn't simply hoard.<br><br>I need someone who can ride point. My Merry Men are... enthusiastic, but subtlety is not their shield.<br><br>Help us stop the caravan, separate the goods, and see them to Freeside and the squatter camps along Route 15. No killing unless they shoot first.<br><br>Harwick will be furious. I find I sleep very well despite that.",
+      "video_speech": "A Scarlet Caravan shipment hits Nipton Road in two days — medical supplies meant for a hoarder named Harwick. Help us redirect it to those who actually need it.",
+      "text": "A Scarlet Caravan shipment is coming through Nipton Road in two days' time.<br><br>Medical supplies, grain, water chips. Enough for three settlements. All of it bound for a fortified estate outside of Primm — a man named Harwick who charges triple for anything he doesn't simply hoard.<br><br>I need someone who can ride point. My Merry Men are... enthusiastic, but subtlety is not their shield.<br><br>Help us stop the caravan, separate the goods, and see them to Outskirt Row and the squatter camps along Route 15. No killing unless they shoot first.<br><br>Harwick will be furious. I find I sleep very well despite that.",
       "offers_quest": "sq_loxley_rob_the_rich",
       "set_flags": [
         "sq_loxley_rob_the_rich_taken"
@@ -173,7 +173,7 @@
         "outfit",
         "fashion"
       ],
-      "text": "The hat is non-negotiable.<br><br>It has survived two Radtalon attacks, a radstorm, and a casino bouncer in Freeside.<br><br>The hat stays."
+      "text": "The hat is non-negotiable.<br><br>It has survived two Radtalon attacks, a radstorm, and a casino bouncer in Outskirt Row.<br><br>The hat stays."
     },
     {
       "id": "loxley_caravan",
@@ -183,7 +183,7 @@
         "trade",
         "merchant"
       ],
-      "text": "Crimson Caravan prices their water at four caps the bottle in a drought.<br><br>In a settlement with twelve children and a broken well.<br><br>I find their redistribution ethic unconvincing."
+      "text": "Scarlet Caravan prices their water at four caps the bottle in a drought.<br><br>In a settlement with twelve children and a broken well.<br><br>I find their redistribution ethic unconvincing."
     }
   ],
   "fallback": {

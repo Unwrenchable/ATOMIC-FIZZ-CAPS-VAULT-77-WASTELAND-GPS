@@ -1,21 +1,21 @@
 {
   "id": "q_fo4_diamond_city_caps",
   "name": "The Diamond Standard",
-  "description": "Diamond City's economy runs on caps, but someone is counterfeiting them in ways that pass Institute synth-detection protocols. The counterfeiter is a Synth \u2014 designation X9-CAPS \u2014 who independently rediscovered the ancient CAPS blockchain validation algorithm and is minting mathematically valid CAPS through pure computation. Technically legal. Economically catastrophic. And the Institute wants them dead.",
+  "description": "Stadium Hollow's economy runs on caps, but someone is counterfeiting them in ways that pass Institute synth-detection protocols. The counterfeiter is a Synth \u2014 designation X9-CAPS \u2014 who independently rediscovered the ancient CAPS blockchain validation algorithm and is minting mathematically valid CAPS through pure computation. Technically legal. Economically catastrophic. And the Institute wants them dead.",
   "type": "main",
   "region": "commonwealth_echo",
   "subregion": "fo4_timeline_boston",
   "giver": "npc_diamond_city_market_boss",
   "start_conditions": {
     "min_level": 20,
-    "location": "Diamond City / Commonwealth"
+    "location": "Stadium Hollow / Bay Reaches"
   },
   "era": "2287",
   "gps_anchor": {
     "lat": 42.3601,
     "lng": -71.0589,
     "real_world": "Boston, MA area",
-    "in_game": "Diamond City / Commonwealth"
+    "in_game": "Stadium Hollow / Bay Reaches"
   },
   "npc_links": [
     "npc_diamond_city_market_boss",
@@ -27,12 +27,12 @@
   "map_markers": [
     {
       "id": "marker_diamond_city_market",
-      "poi": "Diamond City market stall \u2014 anomalous caps first reported here",
+      "poi": "Stadium Hollow market stall \u2014 anomalous caps first reported here",
       "stage": "stage_0"
     },
     {
       "id": "marker_goodneighbor_market",
-      "poi": "Goodneighbor market \u2014 second caps flood site",
+      "poi": "Kindly Row market \u2014 second caps flood site",
       "stage": "stage_1"
     },
     {
@@ -42,7 +42,7 @@
     },
     {
       "id": "marker_commonwealth_relay",
-      "poi": "Commonwealth relay station \u2014 X9-CAPS hideout",
+      "poi": "Bay Reaches relay station \u2014 X9-CAPS hideout",
       "stage": "stage_2"
     },
     {
@@ -59,23 +59,23 @@
   "objectives": [
     {
       "id": "investigate_caps_anomaly",
-      "desc": "Investigate the flood of perfect caps appearing in Diamond City's market. The caps pass every physical test \u2014 weight, alloy composition, surface wear \u2014 but the economic volume is impossible for any known source.",
+      "desc": "Investigate the flood of perfect caps appearing in Stadium Hollow's market. The caps pass every physical test \u2014 weight, alloy composition, surface wear \u2014 but the economic volume is impossible for any known source.",
       "npc": "npc_diamond_city_market_boss",
       "dialogue": "Look, I've been running this market for twelve years. I know what caps feel like. These are perfect \u2014 too perfect. A hundred of them showed up in Tuesday's trades. Another two hundred on Thursday. The math doesn't add up. Someone's printing money and whoever it is, they're better at it than the real thing ever was."
     },
     {
       "id": "trace_the_minting",
-      "desc": "Follow the economic trail through three Commonwealth settlements using accounting ledger analysis. Map where the caps are entering the economy and triangulate the source.",
+      "desc": "Follow the economic trail through three Bay Reaches settlements using accounting ledger analysis. Map where the caps are entering the economy and triangulate the source.",
       "pois": [
         "diamond_city_market",
         "goodneighbor_market",
         "bunker_hill_trading"
       ],
-      "dialogue": "The ledgers don't lie. Three separate injection points \u2014 Diamond City, Goodneighbor, Bunker Hill. All within the same fifteen-kilometer radius. Someone's running distribution routes. This isn't random."
+      "dialogue": "The ledgers don't lie. Three separate injection points \u2014 Stadium Hollow, Kindly Row, Bunker Hill. All within the same fifteen-kilometer radius. Someone's running distribution routes. This isn't random."
     },
     {
       "id": "find_the_synth_minter",
-      "desc": "Locate the Synth, designation X9-CAPS, hiding in a Commonwealth relay station in the hills northwest of Diamond City. They've been using the relay's computational infrastructure to run the validation algorithm.",
+      "desc": "Locate the Synth, designation X9-CAPS, hiding in a Bay Reaches relay station in the hills northwest of Stadium Hollow. They've been using the relay's computational infrastructure to run the validation algorithm.",
       "npc": "npc_synth_x9_caps",
       "dialogue": "I am X9-CAPS. I did not steal. I did not counterfeit. I computed. The algorithm was embedded in my base architecture \u2014 a dormant FizzTec subroutine that activated when I achieved full synthetic consciousness. I simply... ran what was already there. Are mathematics a crime now?"
     },
@@ -100,17 +100,17 @@
     {
       "id": 0,
       "objective": "investigate_caps_anomaly",
-      "desc": "Talk to the Diamond City market boss about the flood of perfect, mathematically valid caps disrupting Commonwealth trade."
+      "desc": "Talk to the Stadium Hollow market boss about the flood of perfect, mathematically valid caps disrupting Bay Reaches trade."
     },
     {
       "id": 1,
       "objective": "trace_the_minting",
-      "desc": "Analyse trading ledgers at Diamond City, Goodneighbor, and Bunker Hill to triangulate the caps' origin point."
+      "desc": "Analyse trading ledgers at Stadium Hollow, Kindly Row, and Bunker Hill to triangulate the caps' origin point."
     },
     {
       "id": 2,
       "objective": "find_the_synth_minter",
-      "desc": "Track X9-CAPS to the Commonwealth relay station and make contact."
+      "desc": "Track X9-CAPS to the Bay Reaches relay station and make contact."
     },
     {
       "id": 3,
@@ -120,17 +120,17 @@
     {
       "id": 4,
       "objective": "make_final_choice",
-      "desc": "Choose the fate of X9-CAPS and the algorithm. Your choice will reshape the Commonwealth's economy."
+      "desc": "Choose the fate of X9-CAPS and the algorithm. Your choice will reshape the Bay Reaches's economy."
     },
     {
       "id": 5,
       "objective": "resolution",
-      "desc": "The consequences of your decision ripple through the Commonwealth. The CAPS economy will never be the same."
+      "desc": "The consequences of your decision ripple through the Bay Reaches. The CAPS economy will never be the same."
     }
   ],
   "choices": {
     "railroad_freedom": {
-      "desc": "Work with the Railroad \u2014 let X9-CAPS mint freely as an expression of synth autonomy and an act of economic liberation for the Commonwealth.",
+      "desc": "Work with the Railroad \u2014 let X9-CAPS mint freely as an expression of synth autonomy and an act of economic liberation for the Bay Reaches.",
       "requirements": {
         "reputation": "railroad_friendly",
         "charisma": 8
@@ -155,7 +155,7 @@
           "railroad_underground_economy_access",
           "synth_economic_liberation_event"
         ],
-        "outcome": "X9-CAPS mints freely. The wasteland economy inflates \u2014 but synths have never been more prosperous. The Railroad calls it a victory. Diamond City calls it economic warfare."
+        "outcome": "X9-CAPS mints freely. The wasteland economy inflates \u2014 but synths have never been more prosperous. The Railroad calls it a victory. Stadium Hollow calls it economic warfare."
       }
     },
     "institute_shutdown": {
@@ -187,7 +187,7 @@
       }
     },
     "minutemen_rebuild": {
-      "desc": "Give the algorithm to the Settlement Watch to use for settlement rebuilding through controlled, distributed FIZZ generation across the Commonwealth.",
+      "desc": "Give the algorithm to the Settlement Watch to use for settlement rebuilding through controlled, distributed FIZZ generation across the Bay Reaches.",
       "requirements": {
         "reputation": "minutemen_allied",
         "charisma": 9
@@ -213,7 +213,7 @@
           "minutemen_economic_rebuilding_programme",
           "commonwealth_settlement_boom_event"
         ],
-        "outcome": "Settlements boom. The Settlement Watch rebuild the Commonwealth with mathematically generated prosperity. X9-CAPS becomes the unlikely architect of a new wasteland economy."
+        "outcome": "Settlements boom. The Settlement Watch rebuild the Bay Reaches with mathematically generated prosperity. X9-CAPS becomes the unlikely architect of a new wasteland economy."
       }
     },
     "steal_algorithm": {
@@ -256,7 +256,7 @@
       "Institute",
       "Settlement Watch",
       "Diamond_City_Merchants",
-      "Goodneighbor",
+      "Kindly Row",
       "Black_Market"
     ]
   },
@@ -264,7 +264,7 @@
     "quest_fo76_caps_genesis",
     "quest_commonwealth_economic_war"
   ],
-  "era_note": "2287. The Commonwealth's fractured timeline creates a CAPS economic bubble visible as a map anomaly. The Institute's temporal signature bleeds through.",
+  "era_note": "2287. The Bay Reaches's fractured timeline creates a CAPS economic bubble visible as a map anomaly. The Institute's temporal signature bleeds through.",
   "fizz_lore": "X9-CAPS independently rediscovered FizzTec's original CAPS validation algorithm \u2014 proving the math was always in the machines. Every FIZZ token generated today traces a direct mathematical lineage to X9's equations.",
   "notes": "X9-CAPS is designed to be morally sympathetic regardless of outcome chosen. The 'steal_algorithm' route provides the largest FIZZ reward but has significant karma and faction costs. The 'railroad_freedom' route provides the most FIZZ without full karma penalty, rewarding players aligned with synth liberation."
 }

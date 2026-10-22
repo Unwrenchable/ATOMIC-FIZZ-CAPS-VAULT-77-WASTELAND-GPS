@@ -1,7 +1,7 @@
 {
   "id": "q_fo2_ncr_founding",
   "name": "The Republic's Price",
-  "description": "The Frontier Compact is being born, and history is being written — or rewritten. Ancient CAPS token transaction records from the Hub merchant wars prove Shady Sands' economic supremacy, but they also contain irrefutable evidence of FizzTec's secret involvement in funding what would become the Frontier Compact. A glitching echo of the Chosen One needs a wastelander — you — to recover these records from the ruins near Vault City before an Directorate mobile shredding unit turns two centuries of economic truth into ash.",
+  "description": "The Frontier Compact is being born, and history is being written — or rewritten. Ancient CAPS token transaction records from the Hub merchant wars prove Dustwater' economic supremacy, but they also contain irrefutable evidence of FizzTec's secret involvement in funding what would become the Frontier Compact. A glitching echo of the Chosen One needs a wastelander — you — to recover these records from the ruins near Vault City before an Directorate mobile shredding unit turns two centuries of economic truth into ash.",
   "type": "main",
   "era": "2241",
   "region": "northern_california_echo",
@@ -34,7 +34,7 @@
       "from_quest": "q_fo1_hub_caravan_war",
       "choice": "give_crimson_caravan",
       "bonus": "caravan_route_intel",
-      "bonus_desc": "Crimson Caravan contacts near the Directorate outpost are willing to look the other way."
+      "bonus_desc": "Scarlet Caravan contacts near the Directorate outpost are willing to look the other way."
     },
     {
       "from_quest": "q_fo1_hub_caravan_war",
@@ -110,7 +110,7 @@
       "id": "read_the_evidence",
       "desc": "Decrypt and review what the records actually contain. The truth about the Frontier Compact's economic foundations is encoded in two hundred years of transaction data.",
       "lore_unlock": "ncr_vault_tec_seed_funding",
-      "lore_desc": "The Frontier Compact's economic foundation was seeded by FizzTec shadow investment routed through the Hub's three merchant houses. Shady Sands did not rise on its own — it rose on pre-war corporate planning.",
+      "lore_desc": "The Frontier Compact's economic foundation was seeded by FizzTec shadow investment routed through the Hub's three merchant houses. Dustwater did not rise on its own — it rose on pre-war corporate planning.",
       "dialogue": "dialog_evidence_review.json"
     },
     {

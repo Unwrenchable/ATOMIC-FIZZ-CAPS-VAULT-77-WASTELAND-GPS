@@ -48,7 +48,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "Cooper Howard \u2014 The Ghoul \u2014 has been hunting this vault for decades. What's inside is more personal than any bounty. Vault 4 was a CAPS Protocol experimental facility, and something \u2014 or someone \u2014 from his pre-war life is still in there.",
+      "description": "Cutter Hale \u2014 The Ghoul \u2014 has been hunting this vault for decades. What's inside is more personal than any bounty. Vault 4 was a CAPS Protocol experimental facility, and something \u2014 or someone \u2014 from his pre-war life is still in there.",
       "quest_hooks": [
         "quest_tv_ghoul_hunt"
       ],
@@ -57,7 +57,7 @@
     },
     {
       "id": "shady_sands_ruins_tv",
-      "name": "Shady Sands Ruins \u2014 Frontier Compact Capital (Nuked)",
+      "name": "Dustwater Ruins \u2014 Frontier Compact Capital (Nuked)",
       "lat": 34.1083,
       "lng": -117.2898,
       "lvl": 20,
@@ -66,7 +66,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "Once the proud capital of the Frontier Compact, Shady Sands is a radioactive crater. Someone \u2014 HavenTech? FizzTec? \u2014 nuked it, erasing 200 years of post-war civilization-building in seconds. The CAPS Protocol data stored here was the most complete ledger in existence.",
+      "description": "Once the proud capital of the Frontier Compact, Dustwater is a radioactive crater. Someone \u2014 HavenTech? FizzTec? \u2014 nuked it, erasing 200 years of post-war civilization-building in seconds. The CAPS Protocol data stored here was the most complete ledger in existence.",
       "quest_hooks": [
         "quest_tv_surface_protocol"
       ],
@@ -147,7 +147,7 @@
     },
     {
       "id": "cooper_ranch_ruins_tv",
-      "name": "Cooper Howard's Ranch \u2014 Pre-War Ruins",
+      "name": "Cutter Hale's Ranch \u2014 Pre-War Ruins",
       "lat": 36.174,
       "lng": -115.135,
       "lvl": 15,
@@ -156,7 +156,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "The ruins of Cooper Howard's pre-war ranch. Before the bombs, this was a working cattle ranch and film set. On October 22nd, 2077, Cooper Howard was filming a Atomic Fizz commercial here when his daughter called to warn him about the vaults. Now The Ghoul returns here sometimes, to remember.",
+      "description": "The ruins of Cutter Hale's pre-war ranch. Before the bombs, this was a working cattle ranch and film set. On October 22nd, 2077, Cutter Hale was filming a Atomic Fizz commercial here when his daughter called to warn him about the vaults. Now The Ghoul returns here sometimes, to remember.",
       "quest_hooks": [
         "quest_tv_ghoul_hunt"
       ],

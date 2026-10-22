@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_mira_vale",
   "name": "Mira Vale",
-  "region": "Freeside",
+  "region": "Outskirt Row",
   "type": "Medic",
   "dialog": {
     "idle": [
@@ -10,6 +10,6 @@
     ]
   },
   "quests": ["side_nv_medrun"],
-  "faction": "Freeside",
+  "faction": "Outskirt Row",
   "notes": "Cares about Jax but won’t admit it."
 }

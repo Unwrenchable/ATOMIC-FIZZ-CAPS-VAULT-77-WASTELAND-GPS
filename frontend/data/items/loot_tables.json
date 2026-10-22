@@ -789,7 +789,7 @@
       },
       {
         "id": "t51b_pa_head",
-        "name": "T-51b Reactor Harness Helmet",
+        "name": "Mk-5 Reactor Harness Helmet",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "head",
@@ -801,19 +801,19 @@
       },
       {
         "id": "t51b_pa_chest",
-        "name": "T-51b Reactor Harness Torso",
+        "name": "Mk-5 Reactor Harness Torso",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "chest",
         "weight": 0.4,
         "capsValue": 500,
         "tradeable": true,
-        "description": "T-51b torso. Directorate-grade ballistic ceramic plating.",
+        "description": "Mk-5 torso. Directorate-grade ballistic ceramic plating.",
         "nft_eligible": true
       },
       {
         "id": "t51b_pa_arm_l",
-        "name": "T-51b Reactor Harness Left Arm",
+        "name": "Mk-5 Reactor Harness Left Arm",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "arms",
@@ -825,7 +825,7 @@
       },
       {
         "id": "t51b_pa_arm_r",
-        "name": "T-51b Reactor Harness Right Arm",
+        "name": "Mk-5 Reactor Harness Right Arm",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "arms",
@@ -837,7 +837,7 @@
       },
       {
         "id": "t51b_pa_leg_l",
-        "name": "T-51b Reactor Harness Left Leg",
+        "name": "Mk-5 Reactor Harness Left Leg",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "legs",
@@ -849,7 +849,7 @@
       },
       {
         "id": "t51b_pa_leg_r",
-        "name": "T-51b Reactor Harness Right Leg",
+        "name": "Mk-5 Reactor Harness Right Leg",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "legs",
@@ -1165,7 +1165,7 @@
         "t45_power_armor_helm",
         "ballistic_weave_schematic"
       ],
-      "era_flavor": "Commonwealth technology. Institute-influenced innovation.",
+      "era_flavor": "Bay Reaches technology. Institute-influenced innovation.",
       "tech_level": "advanced"
     },
     "fallout_76": {

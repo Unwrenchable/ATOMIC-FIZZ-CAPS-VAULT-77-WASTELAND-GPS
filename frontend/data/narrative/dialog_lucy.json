@@ -125,7 +125,7 @@
       "conditions": [
         "!flag:sq_lucy_queen_of_junk_taken"
       ],
-      "text": "Someone lifted a crate of my good stuff.<br><br>Pre-war parts. The kind that still hum when you touch them.<br><br>You track it down — Dustwell, Nipton, Freeside — and we both walk away richer.",
+      "text": "Someone lifted a crate of my good stuff.<br><br>Pre-war parts. The kind that still hum when you touch them.<br><br>You track it down — Dustwell, Nipton, Outskirt Row — and we both walk away richer.",
       "offers_quest": "sq_lucy_queen_of_junk",
       "set_flags": [
         "sq_lucy_queen_of_junk_taken"

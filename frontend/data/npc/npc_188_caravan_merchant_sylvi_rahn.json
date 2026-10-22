@@ -6,7 +6,7 @@
   "currentRegion": "mojave",
   "role": "Caravan Merchant",
   "personality": "Friendly, sharp-tongued, always negotiating.",
-  "description": "Sylvi runs a caravan route between Novac, 188, and the Strip. She hears every rumor before it hits the radio.",
+  "description": "Sylvi runs a caravan route between Saurville, 188, and the Strip. She hears every rumor before it hits the radio.",
   "questHooks": [
     "Says a caravan vanished near Quarry Junction.",
     "Heard Frontier Compact is hiding something under HELIOS One.",
