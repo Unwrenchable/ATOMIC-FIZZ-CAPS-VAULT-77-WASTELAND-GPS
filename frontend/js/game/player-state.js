@@ -212,6 +212,7 @@
       console.error("[PlayerState] Failed to load:", e);
       _state = { ...DEFAULT_STATE };
     }
+  }
 
   /**
    * Merge data from legacy storage keys
