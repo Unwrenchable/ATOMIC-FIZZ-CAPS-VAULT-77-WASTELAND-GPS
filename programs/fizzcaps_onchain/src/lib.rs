@@ -72,17 +72,17 @@ fn calculate_buy_return(
         .checked_sub(fee)
         .ok_or(ErrorCode::ArithmeticOverflow)?;
 
-    let virtual_sol = u128::from(sol_reserve)
-        .checked_add(u128::from(VIRTUAL_SOL))
+    let virtual_sol = (sol_reserve as u128)
+        .checked_add(VIRTUAL_SOL as u128)
         .ok_or(ErrorCode::ArithmeticOverflow)?;
-    let reserve = u128::from(token_reserve);
+    let reserve = token_reserve as u128;
     let k = virtual_sol
         .checked_mul(reserve)
         .ok_or(ErrorCode::ArithmeticOverflow)?;
     let new_sol = virtual_sol
-        .checked_add(u128::from(sol_after_fee))
+        .checked_add(sol_after_fee as u128)
         .ok_or(ErrorCode::ArithmeticOverflow)?;
-    let new_tokens = k / new_sol;
+    let new_tokens = k.checked_div(new_sol).ok_or(ErrorCode::ArithmeticOverflow)?;
     let tokens_out = reserve
         .checked_sub(new_tokens)
         .ok_or(ErrorCode::ArithmeticOverflow)?;
@@ -99,23 +99,23 @@ fn calculate_sell_return(
     sol_reserve: u64,
     token_reserve: u64,
 ) -> Result<(u64, u64, u64)> {
-    let virtual_sol = u128::from(sol_reserve)
-        .checked_add(u128::from(VIRTUAL_SOL))
+    let virtual_sol = (sol_reserve as u128)
+        .checked_add(VIRTUAL_SOL as u128)
         .ok_or(ErrorCode::ArithmeticOverflow)?;
-    let reserve = u128::from(token_reserve);
+    let reserve = token_reserve as u128;
     let k = virtual_sol
         .checked_mul(reserve)
         .ok_or(ErrorCode::ArithmeticOverflow)?;
     let new_tokens = reserve
-        .checked_add(u128::from(token_amount))
+        .checked_add(token_amount as u128)
         .ok_or(ErrorCode::ArithmeticOverflow)?;
-    let new_sol = k / new_tokens;
+    let new_sol = k.checked_div(new_tokens).ok_or(ErrorCode::ArithmeticOverflow)?;
     let sol_out_gross = virtual_sol
         .checked_sub(new_sol)
         .ok_or(ErrorCode::ArithmeticOverflow)?;
-    let capped = sol_out_gross.min(u128::from(sol_reserve));
+    let capped = sol_out_gross.min(sol_reserve as u128);
     let fee = capped
-        .checked_mul(u128::from(FEE_BPS))
+        .checked_mul(FEE_BPS as u128)
         .and_then(|n| n.checked_div(10_000))
         .ok_or(ErrorCode::ArithmeticOverflow)?;
     let sol_out = capped
@@ -448,7 +448,7 @@ pub mod fizzcaps_onchain {
         {
             ctx.accounts.bonding_curve.graduated_at = Clock::get()?.unix_timestamp;
             msg!(
-                "Fizz.fun token {} graduated at {}",
+                "Fizz.fun token {} graduated! at {}",
                 ctx.accounts.bonding_curve.token_mint,
                 ctx.accounts.bonding_curve.graduated_at
             );
@@ -796,7 +796,8 @@ pub struct FizzBuyTokens<'info> {
     /// CHECK: Program-owned SOL vault PDA for the curve; address is derived from seeds.
     pub sol_vault: UncheckedAccount<'info>,
 
-    #[account(address = config.treasury)]
+    // SEC-AUDIT-005: treasury must be the configured one (and writable: it receives the fee lamports)
+    #[account(mut, address = config.treasury @ ErrorCode::InvalidTreasury)]
     /// CHECK: Treasury wallet receives fees.
     pub treasury: UncheckedAccount<'info>,
 
@@ -846,7 +847,8 @@ pub struct FizzSellTokens<'info> {
     /// CHECK: Program-owned SOL vault PDA for the curve; address is derived from seeds.
     pub sol_vault: UncheckedAccount<'info>,
 
-    #[account(address = config.treasury)]
+    // SEC-AUDIT-005: treasury must be the configured one (and writable: it receives the fee lamports)
+    #[account(mut, address = config.treasury @ ErrorCode::InvalidTreasury)]
     /// CHECK: Treasury wallet receives fees.
     pub treasury: UncheckedAccount<'info>,
 
@@ -874,6 +876,8 @@ pub enum ErrorCode {
     InvalidTradeAmount,
     #[msg("Bonding curve has graduated")]
     BondingCurveGraduated,
+    #[msg("Treasury does not match config.treasury")]
+    InvalidTreasury,
     #[msg("Insufficient liquidity")]
     InsufficientLiquidity,
     #[msg("Insufficient CAPS balance")]

@@ -83,7 +83,7 @@ const ONE_PER_NPC   = process.env.ONE_PER_NPC === '1';
 // Set ALL_NODES=1 to generate every dialog branch node.
 const KEY_NODES_ONLY = process.env.ALL_NODES !== '1';
 // MAX_SPEECH_WORDS: fallback word cap for extracted dialog text (when video_speech is absent).
-// 22 words ≈ 110 WPM (Fallout-paced delivery) × 8 seconds, with room for pauses.
+// 22 words ≈ 110 WPM (wasteland-paced delivery) × 8 seconds, with room for pauses.
 // Hand-written video_speech values are best kept under 15 words for clean single-breath clips.
 const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '22', 10);
 const INCLUDE_ENDGAME_NPCS = process.env.INCLUDE_ENDGAME_NPCS === '1';
@@ -242,7 +242,7 @@ function pickVoiceProfile(npcKey) {
     'voice: fast-talking scavenger, nervous edge',
     'voice: charismatic trader patter, sly and smooth',
     'voice: stern elder tone, deliberate and low',
-    'voice: cheerful but eerie vault-tec cadence',
+    'voice: cheerful but eerie fizztec cadence',
     'voice: rough outlaw drawl, dry sarcasm',
   ];
   var hash = 0;
@@ -317,7 +317,7 @@ function collectNodes(npcId, dialog) {
 }
 
 /**
- * Build a Fallout-themed video prompt for a specific dialog node.
+ * Build a wasteland video prompt for a specific dialog node.
  * @param {string} npcId
  * @param {object} dialog
  * @param {string} nodeId
@@ -341,7 +341,7 @@ function buildNodePrompt(npcId, dialog, nodeId, nodeText, videoSpeech) {
   var voiceProfile = pickVoiceProfile(npcKey);
 
   return (
-    `Fallout post-apocalyptic wasteland style, ${DURATION}-second cinematic clip. ` +
+    `wasteland post-apocalyptic wasteland style, ${DURATION}-second cinematic clip. ` +
     `NPC named ${name}. Appearance: ${portrait}. ` +
     `Identity lock: character_id=${npcKey}; keep the exact same person across all scenes with this character_id ` +
     `(same face structure, hair/facial hair, age, skin tone, body type, signature clothing and accessories). ` +

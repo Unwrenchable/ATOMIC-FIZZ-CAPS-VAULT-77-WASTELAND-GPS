@@ -9,7 +9,7 @@
   "description": "Mason is the last functioning deputy in Primm after the town’s troubles. He’s exhausted, but he refuses to abandon the people who stayed.",
   "questHooks": [
     "Needs help dealing with escaped convicts hiding near the rollercoaster.",
-    "Mentions NCR is stretched thin and won’t commit more troops.",
+    "Mentions Frontier Compact is stretched thin and won’t commit more troops.",
     "Heard a strange hum coming from the old rollercoaster machinery at night."
   ],
   "poi": "primm_rollercoaster_fnv"

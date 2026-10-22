@@ -1,17 +1,17 @@
 {
   "version": "1.0",
-  "description": "Fallout 76-inspired nuke silo system for Atomic Fizz Caps. Players collect nuclear keycards by completing quests and finding them in the world. Once a player has 3 keycards AND has decrypted the launch code (an 8-character alphanumeric code distributed in pieces across the map), they can launch a tactical nuke at any GPS-defined zone. Nuke zones persist for 3 hours and grant access to unique mutated loot, crafting materials, and boss encounters unavailable elsewhere.",
+  "description": "Appalachia wastes-inspired nuke silo system for Atomic Fizz Caps. Players collect nuclear keycards by completing quests and finding them in the world. Once a player has 3 keycards AND has decrypted the launch code (an 8-character alphanumeric code distributed in pieces across the map), they can launch a tactical nuke at any GPS-defined zone. Nuke zones persist for 3 hours and grant access to unique mutated loot, crafting materials, and boss encounters unavailable elsewhere.",
   "mechanic_overview": {
     "keycard_collection": "Nuclear keycards are rare drops from high-level enemies, quest rewards, and geo-fence locations. Each keycard is single-use per launch.",
     "launch_codes": "An 8-character launch code is generated weekly. Fragments (2-char pieces) are distributed across 4 locations. Players must collect all 4 fragments and combine them.",
     "launch_sequence": "Requires: 3 keycards + complete 8-char code + reaching a silo terminal in-game (GPS location). Launch targets a GPS zone of player's choice.",
-    "nuke_zone_effects": "Active nuke zone (3 hours): unique boss spawns, mutated loot, high radiation, accessible only to players with RadAway and adequate radiation resistance.",
+    "nuke_zone_effects": "Active nuke zone (3 hours): unique boss spawns, mutated loot, high radiation, accessible only to players with GlowFlush and adequate radiation resistance.",
     "keycard_note": "Keycards do not stack — each is a unique item. Spending 3 launches a nuke. Keycards can be traded between players."
   },
   "silos": [
     {
       "id": "silo_alpha",
-      "name": "Vault-Tec Silo Alpha",
+      "name": "FizzTec Silo Alpha",
       "codename": "THE MONUMENT",
       "lat": 36.2500,
       "lng": -115.0000,
@@ -33,13 +33,13 @@
     },
     {
       "id": "silo_charlie",
-      "name": "Enclave Installation Charlie",
+      "name": "Directorate Installation Charlie",
       "codename": "THE NEEDLE",
       "lat": 35.9000,
       "lng": -115.5000,
       "radiusMeters": 100,
-      "description": "A thin, reinforced launch shaft sunk into Mojave bedrock. Enclave tech, post-war construction — someone built this after the bombs fell using salvaged pre-war components. The targeting system uses satellite link that somehow still functions.",
-      "terminal_lore": "ENCLAVE CONTINUITY INSTALLATION CHARLIE. PRIORITY: AMERICA FIRST, LAST, ALWAYS. Launch authorization requires three senior Enclave officers. There are no senior Enclave officers remaining. System has defaulted to civilian authorization protocol. God help us all.",
+      "description": "A thin, reinforced launch shaft sunk into Cinder Basin bedrock. Directorate tech, post-war construction — someone built this after the bombs fell using salvaged pre-war components. The targeting system uses satellite link that somehow still functions.",
+      "terminal_lore": "ENCLAVE CONTINUITY INSTALLATION CHARLIE. PRIORITY: AMERICA FIRST, LAST, ALWAYS. Launch authorization requires three senior Directorate officers. There are no senior Directorate officers remaining. System has defaulted to civilian authorization protocol. God help us all.",
       "faction_claim": "enclave_remnants"
     }
   ],
@@ -88,8 +88,8 @@
       "unique_bosses": [
         {
           "id": "boss_scorched_queen_beta",
-          "name": "Scorched Radscorpion Queen",
-          "description": "An Emperor Radscorpion variant that absorbed the full blast. Now she's radioactive, territorial, and the size of a small building.",
+          "name": "Scorched Glowsting Queen",
+          "description": "An Emperor Glowsting variant that absorbed the full blast. Now she's radioactive, territorial, and the size of a small building.",
           "loot_table": ["scorched_queen_carapace", "nuke_zone_venom_gland", "royal_stinger"],
           "spawn_chance": 0.6
         }
@@ -97,7 +97,7 @@
       "unique_loot": ["scorched_desert_glass", "nuke_flower_seeds", "mutated_yucca_fruit", "scorched_earth_soil"],
       "mutated_crafting_materials": [
         { "id": "flux_cobalt", "name": "Cobalt Flux", "description": "Irradiated desert sand compacted by blast pressure into blue-glowing granules. Crafting: energy weapon power cells, radiation-enhanced ammunition." },
-        { "id": "scorched_flowers", "name": "Scorched Blast Blossom", "description": "Desert wildflowers that only bloom in nuclear aftermath. Crafting: nuclear stimpaks (heal + rads), mutation catalysts." }
+        { "id": "scorched_flowers", "name": "Scorched Blast Blossom", "description": "Desert wildflowers that only bloom in nuclear aftermath. Crafting: nuclear FizzPaks (heal + rads), mutation catalysts." }
       ]
     },
     {
@@ -107,7 +107,7 @@
       "center_lat": 36.0000,
       "center_lng": -114.9000,
       "radius_km": 2.0,
-      "description": "The cluster of Vault-Tec installations north of the city. Nuking this zone activates ancient automated defense systems and shakes loose pre-war tech that's been sealed since 2077.",
+      "description": "The cluster of FizzTec installations north of the city. Nuking this zone activates ancient automated defense systems and shakes loose pre-war tech that's been sealed since 2077.",
       "active_effects": {
         "radiation_rads_per_minute": 12,
         "enemy_health_multiplier": 1.8,
@@ -117,15 +117,15 @@
         {
           "id": "boss_rogue_overseer_bot",
           "name": "Irradiated Overseer Mk. III",
-          "description": "A prototype Vault-Tec Overseer robot that was sealed in the complex and activated by the blast. It has opinions about your vault assignment.",
+          "description": "A prototype FizzTec Overseer robot that was sealed in the complex and activated by the blast. It has opinions about your vault assignment.",
           "loot_table": ["vault_tec_override_chip", "overseer_mk3_core", "classified_experiment_data"],
           "spawn_chance": 0.5
         }
       ],
       "unique_loot": ["vault_tec_test_kit", "irradiated_experiment_notes", "pre_war_data_core", "sealed_vault_food"],
       "mutated_crafting_materials": [
-        { "id": "flux_yellowcake", "name": "Yellowcake Flux", "description": "Uranium compound extracted from Vault-Tec's experimental storage. Crafting: nuclear keycards (partial), experimental armor plating." },
-        { "id": "irradiated_polymer", "name": "Irradiated Polymer", "description": "Vault-Tec composite material irradiated to structural enhancement. Crafting: powered armor upgrades, radiation-sealed containers." }
+        { "id": "flux_yellowcake", "name": "Yellowcake Flux", "description": "Uranium compound extracted from FizzTec's experimental storage. Crafting: nuclear keycards (partial), experimental armor plating." },
+        { "id": "irradiated_polymer", "name": "Irradiated Polymer", "description": "FizzTec composite material irradiated to structural enhancement. Crafting: powered armor upgrades, radiation-sealed containers." }
       ]
     },
     {
@@ -144,8 +144,8 @@
       "unique_bosses": [
         {
           "id": "boss_molten_deathclaw",
-          "name": "Molten Deathclaw Alpha",
-          "description": "A Deathclaw that was at the dam when it was nuked. The radiation didn't kill it. The radiation made it considerably worse.",
+          "name": "Molten Radtalon Alpha",
+          "description": "A Radtalon that was at the dam when it was nuked. The radiation didn't kill it. The radiation made it considerably worse.",
           "loot_table": ["molten_deathclaw_claw", "irradiated_dam_core", "fused_concrete_shard"],
           "spawn_chance": 0.7
         }
@@ -177,7 +177,7 @@
       "value": 2000,
       "tradeable": true,
       "silo": "silo_bravo",
-      "description": "Military authentication key, Brotherhood of Steel manufacture. Heavy encryption, biometric secondary lock that's been bypassed with what appears to be a paperclip.",
+      "description": "Military authentication key, Coil Covenant manufacture. Heavy encryption, biometric secondary lock that's been bypassed with what appears to be a paperclip.",
       "acquisition": ["brotherhood_quest", "high_level_enemy_drop", "nuke_zone_loot"]
     },
     {
@@ -188,7 +188,7 @@
       "value": 2000,
       "tradeable": true,
       "silo": "silo_charlie",
-      "description": "Enclave-manufactured authentication key. The Enclave seal is embossed on the front. The back says, in very small print: 'Property of the Enclave. If found, please destroy America responsibly.'",
+      "description": "Directorate-manufactured authentication key. The Directorate seal is embossed on the front. The back says, in very small print: 'Property of the Directorate. If found, please destroy America responsibly.'",
       "acquisition": ["enclave_quest", "ancient_wonders_reward", "high_level_enemy_drop"]
     },
     {

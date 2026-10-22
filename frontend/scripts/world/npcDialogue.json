@@ -51,7 +51,7 @@ export const npcDialogue = {
       : null;
 
     return `
-You are speaking as NPC "${name}" in a post-nuclear Mojave wasteland.
+You are speaking as NPC "${name}" in a post-nuclear Cinder Basin wasteland.
 
 NPC PROFILE:
 - Role: ${role}

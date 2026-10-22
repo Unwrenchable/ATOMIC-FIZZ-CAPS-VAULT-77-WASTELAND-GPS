@@ -16,7 +16,7 @@
     },
     "lena_about_jax": {
       "type": "spoken",
-      "text": "Jax was a good kid. Too smart for his own good. Vault-Tec sniffed that out quick."
+      "text": "Jax was a good kid. Too smart for his own good. FizzTec sniffed that out quick."
     },
     "lena_warning_vault77": {
       "type": "spoken",
@@ -32,7 +32,7 @@
     },
     "lena_anger_vaulttec": {
       "type": "spoken",
-      "text": "Vault-Tec didn't just ruin lives. They carved people up and called it progress."
+      "text": "FizzTec didn't just ruin lives. They carved people up and called it progress."
     },
     "lena_seeing_body": {
       "type": "spoken",

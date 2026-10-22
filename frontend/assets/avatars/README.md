@@ -31,7 +31,7 @@ This directory contains **77 SVG assets** for the Atomic Fizz Caps Vault 77 char
 ### Color Palette
 - Earthy, post-apocalyptic tones
 - Muted browns, grays, and greens
-- Vault-Tec blue (#2e5a8a) for vault suits
+- FizzTec blue (#2e5a8a) for vault suits
 - Synth glow blue (#00d4ff) for tech
 - Natural skin tones (#e8d2b0 to #5c4033)
 

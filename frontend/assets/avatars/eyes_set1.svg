@@ -1,101 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <defs>
-    <!-- Eye white: subtle yellowish sclera -->
-    <radialGradient id="eyeWhite" cx="42%" cy="38%">
-      <stop offset="0%"   stop-color="#fffff5"/>
-      <stop offset="55%"  stop-color="#f5f2e0"/>
-      <stop offset="85%"  stop-color="#e8e0c8"/>
-      <stop offset="100%" stop-color="#d8d0b8"/>
-    </radialGradient>
-    <!-- Iris: multi-ring colored limbal -->
-    <radialGradient id="irisGrad" cx="35%" cy="30%">
-      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.35"/>
-      <stop offset="22%"  stop-color="#7a8a5a"/>
-      <stop offset="55%"  stop-color="#4a5a3a"/>
-      <stop offset="78%"  stop-color="#2a3a1e"/>
-      <stop offset="100%" stop-color="#111a08"/>
-    </radialGradient>
-    <!-- Pupil depth -->
-    <radialGradient id="pupilGrad" cx="38%" cy="32%">
-      <stop offset="0%"   stop-color="#2a2a2a"/>
-      <stop offset="100%" stop-color="#000000"/>
-    </radialGradient>
-    <!-- Subtle socket shadow -->
-    <radialGradient id="socketL" cx="50%" cy="50%">
-      <stop offset="0%"   stop-color="rgba(0,0,0,0.18)"/>
-      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
-    </radialGradient>
-    <radialGradient id="socketR" cx="50%" cy="50%">
-      <stop offset="0%"   stop-color="rgba(0,0,0,0.18)"/>
-      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
-    </radialGradient>
-  </defs>
-
-  <!-- ═══════════════ LEFT EYE ═══════════════ -->
-  <!-- Socket shadow -->
-  <ellipse cx="100" cy="118" rx="22" ry="16" fill="url(#socketL)"/>
-
-  <!-- Eye white — almond path -->
-  <path d="M82,118 Q83,110 100,109 Q117,110 118,118 Q117,126 100,127 Q83,126 82,118 Z" fill="url(#eyeWhite)"/>
-
-  <!-- Upper eyelid skin crease -->
-  <path d="M82,118 Q91,108 100,107 Q109,108 118,118"
-        fill="none" stroke="#8a7060" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
-
-  <!-- Iris -->
-  <circle cx="100" cy="118" r="8" fill="url(#irisGrad)"/>
-  <!-- Limbal ring -->
-  <circle cx="100" cy="118" r="8" fill="none" stroke="#0e1a06" stroke-width="1.8" opacity="0.75"/>
-
-  <!-- Pupil -->
-  <circle cx="100" cy="118" r="3.8" fill="url(#pupilGrad)"/>
-
-  <!-- Catchlight — large specular -->
-  <circle cx="103" cy="115"  r="2.1" fill="#ffffff" opacity="0.92"/>
-  <!-- Catchlight — small fill -->
-  <circle cx="97.5" cy="120.5" r="1.0" fill="#ffffff" opacity="0.50"/>
-
-  <!-- Upper lash line -->
-  <path d="M82,118 Q91,106 100,105 Q109,106 118,118"
-        fill="none" stroke="#181210" stroke-width="2.2" stroke-linecap="round" opacity="0.88"/>
-  <!-- Lower lash line -->
-  <path d="M84,120 Q100,128 116,120"
-        fill="none" stroke="#2a2018" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
-
-  <!-- Tear duct -->
-  <ellipse cx="82" cy="119" rx="3" ry="2.2" fill="#d89890" opacity="0.45"/>
-
-  <!-- ═══════════════ RIGHT EYE ═══════════════ -->
-  <!-- Socket shadow -->
-  <ellipse cx="156" cy="118" rx="22" ry="16" fill="url(#socketR)"/>
-
-  <!-- Eye white — almond path -->
-  <path d="M138,118 Q139,110 156,109 Q173,110 174,118 Q173,126 156,127 Q139,126 138,118 Z" fill="url(#eyeWhite)"/>
-
-  <!-- Upper eyelid skin crease -->
-  <path d="M138,118 Q147,108 156,107 Q165,108 174,118"
-        fill="none" stroke="#8a7060" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
-
-  <!-- Iris -->
-  <circle cx="156" cy="118" r="8" fill="url(#irisGrad)"/>
-  <!-- Limbal ring -->
-  <circle cx="156" cy="118" r="8" fill="none" stroke="#0e1a06" stroke-width="1.8" opacity="0.75"/>
-
-  <!-- Pupil -->
-  <circle cx="156" cy="118" r="3.8" fill="url(#pupilGrad)"/>
-
-  <!-- Catchlight — large specular -->
-  <circle cx="159" cy="115"  r="2.1" fill="#ffffff" opacity="0.92"/>
-  <!-- Catchlight — small fill -->
-  <circle cx="153.5" cy="120.5" r="1.0" fill="#ffffff" opacity="0.50"/>
-
-  <!-- Upper lash line -->
-  <path d="M138,118 Q147,106 156,105 Q165,106 174,118"
-        fill="none" stroke="#181210" stroke-width="2.2" stroke-linecap="round" opacity="0.88"/>
-  <!-- Lower lash line -->
-  <path d="M140,120 Q156,128 172,120"
-        fill="none" stroke="#2a2018" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
-
-  <!-- Tear duct -->
-  <ellipse cx="174" cy="119" rx="3" ry="2.2" fill="#d89890" opacity="0.45"/>
+  <!-- Eyes + brows: Default: narrowed, weathered hazel. Original Atomic Fizz art, v4 draft. -->
+  <defs><filter id="eyesset1-b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.8"/></filter><filter id="eyesset1-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter><filter id="eyesset1-b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter><filter id="eyesset1-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><filter id="eyesset1-grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" seed="11"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .14  0 0 0 0 .08  1.6 0 0 0 -.62"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesset1-dust" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="5"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .5  5 0 0 0 -3.1"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesset1-pores" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .1  2.2 0 0 0 -.95"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesset1-stub" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="1" seed="9"/><feColorMatrix values="0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  6 0 0 0 -3.3"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesset1-paint" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".55"/></filter><filter id="eyesset1-brush" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".012 .2" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .92  0 0 0 0 .8  0 0 0 0 .62  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="eyesset1-brushd" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".2 .014" numOctaves="3" seed="13"/><feColorMatrix values="0 0 0 0 .12  0 0 0 0 .08  0 0 0 0 .05  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>
+  <g filter="url(#eyesset1-paint)">
+<ellipse cx="100" cy="114" rx="17" ry="8" fill="#3a2418" opacity="0.25" filter="url(#eyesset1-b4)"/><ellipse cx="157" cy="114" rx="17" ry="8" fill="#3a2418" opacity="0.35" filter="url(#eyesset1-b4)"/>  <g>
+    <path d="M111 118.8 C104.95 112.5 93.95 112.28 89 117.5 C94.5 121.3 105.5 121.08 111 118.8Z" fill="#c4b29a"/>
+    <clipPath id="eyesset1-c0"><path d="M111 118.8 C104.95 112.5 93.95 112.28 89 117.5 C94.5 121.3 105.5 121.08 111 118.8Z"/></clipPath>
+    <g clip-path="url(#eyesset1-c0)">
+      <circle cx="99.4" cy="118.6" r="5.0600000000000005" fill="#4e5838"/>
+      <circle cx="99.4" cy="118.6" r="5.0600000000000005" fill="none" stroke="#120c08" stroke-width=".9" opacity=".7"/>
+      <circle cx="99.4" cy="118.6" r="1.4960000000000002" fill="#0c0806"/>
+      <path d="M111 118.8 C104.95 112.5 93.95 112.28 89 117.5" stroke="#1c120c" stroke-width="5" fill="none" opacity=".6" filter="url(#eyesset1-b2)" transform="translate(0 2.2)"/>
+      <circle cx="98.4" cy="116.6" r=".8" fill="#e8dcc8" opacity=".55"/>
+    </g>
+    <path d="M111 118.8 C104.95 112.5 93.95 112.28 89 117.5" stroke="#1a100a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M110 110.8 C103.3 105.84 93.4 106.06 87.9 113.98" stroke="#4a2c1e" stroke-width="1.2" fill="none" opacity=".6" filter="url(#eyesset1-b1)"/>
+    <path d="M89 117.5 C94.5 121.3 105.5 121.08 111 118.8" stroke="#6a4232" stroke-width=".9" fill="none" opacity=".6"/>
+    <path d="M110 124.9 C103.3 127.4 94.5 127.4 89 121.46" stroke="#3e2619" stroke-width="1.2" fill="none" opacity="0.5" filter="url(#eyesset1-b1)"/>
+  </g>  <g>
+    <path d="M146 119.39999999999999 C152.05 113.1 163.05 112.88 168 118.1 C162.5 121.89999999999999 151.5 121.67999999999999 146 119.39999999999999Z" fill="#c4b29a"/>
+    <clipPath id="eyesset1-c1"><path d="M146 119.39999999999999 C152.05 113.1 163.05 112.88 168 118.1 C162.5 121.89999999999999 151.5 121.67999999999999 146 119.39999999999999Z"/></clipPath>
+    <g clip-path="url(#eyesset1-c1)">
+      <circle cx="157.6" cy="119.19999999999999" r="5.0600000000000005" fill="#4e5838"/>
+      <circle cx="157.6" cy="119.19999999999999" r="5.0600000000000005" fill="none" stroke="#120c08" stroke-width=".9" opacity=".7"/>
+      <circle cx="157.6" cy="119.19999999999999" r="1.4960000000000002" fill="#0c0806"/>
+      <path d="M146 119.39999999999999 C152.05 113.1 163.05 112.88 168 118.1" stroke="#1c120c" stroke-width="5" fill="none" opacity=".6" filter="url(#eyesset1-b2)" transform="translate(0 2.2)"/>
+      <circle cx="155.4" cy="117.19999999999999" r=".8" fill="#e8dcc8" opacity=".55"/>
+    </g>
+    <path d="M146 119.39999999999999 C152.05 113.1 163.05 112.88 168 118.1" stroke="#1a100a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M147 111.39999999999999 C153.7 106.44 163.6 106.66 169.1 114.58" stroke="#4a2c1e" stroke-width="1.2" fill="none" opacity=".6" filter="url(#eyesset1-b1)"/>
+    <path d="M168 118.1 C162.5 121.89999999999999 151.5 121.67999999999999 146 119.39999999999999" stroke="#6a4232" stroke-width=".9" fill="none" opacity=".6"/>
+    <path d="M147 125.5 C153.7 128.0 162.5 128.0 168 122.05999999999999" stroke="#3e2619" stroke-width="1.2" fill="none" opacity="0.5" filter="url(#eyesset1-b1)"/>
+  </g><path d="M114 103.75 C104 97.75 90 97.0 82 103.75" stroke="#2e1f15" stroke-width="5" fill="none" opacity=".35" filter="url(#eyesset1-b2)"/><path d="M114.0 105.0 l-3.1 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.89" stroke-linecap="round"/><path d="M113.0 103.9 l-4.1 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.56" stroke-linecap="round"/><path d="M112.1 105.7 l-4.3 -1.9" stroke="#24170f" stroke-width=".8" opacity="0.76" stroke-linecap="round"/><path d="M111.1 105.4 l-3.2 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.64" stroke-linecap="round"/><path d="M110.1 103.1 l-3.5 -1.9" stroke="#24170f" stroke-width=".8" opacity="0.65" stroke-linecap="round"/><path d="M109.2 103.0 l-4.3 -1.6" stroke="#24170f" stroke-width=".8" opacity="0.51" stroke-linecap="round"/><path d="M108.2 102.7 l-3.6 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.69" stroke-linecap="round"/><path d="M107.2 102.1 l-4.3 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.85" stroke-linecap="round"/><path d="M106.2 102.1 l-4.2 -1.0" stroke="#24170f" stroke-width=".8" opacity="0.77" stroke-linecap="round"/><path d="M105.3 102.8 l-3.8 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.81" stroke-linecap="round"/><path d="M104.3 103.3 l-3.9 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.64" stroke-linecap="round"/><path d="M103.3 102.7 l-3.5 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.86" stroke-linecap="round"/><path d="M102.4 101.5 l-2.5 -1.5" stroke="#24170f" stroke-width=".8" opacity="0.66" stroke-linecap="round"/><path d="M101.4 101.7 l-3.1 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.50" stroke-linecap="round"/><path d="M100.4 101.3 l-2.7 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.57" stroke-linecap="round"/><path d="M99.5 101.1 l-3.3 -2.2" stroke="#24170f" stroke-width=".8" opacity="0.61" stroke-linecap="round"/><path d="M98.5 102.6 l-4.3 -1.1" stroke="#24170f" stroke-width=".8" opacity="0.87" stroke-linecap="round"/><path d="M97.5 102.1 l-4.0 -2.4" stroke="#24170f" stroke-width=".8" opacity="0.68" stroke-linecap="round"/><path d="M96.5 101.0 l-4.5 -1.7" stroke="#24170f" stroke-width=".8" opacity="0.76" stroke-linecap="round"/><path d="M95.6 102.7 l-3.3 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.68" stroke-linecap="round"/><path d="M94.6 101.4 l-3.2 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.65" stroke-linecap="round"/><path d="M93.6 103.2 l-3.6 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.60" stroke-linecap="round"/><path d="M92.7 103.4 l-4.2 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.64" stroke-linecap="round"/><path d="M91.7 102.8 l-4.0 -1.9" stroke="#24170f" stroke-width=".8" opacity="0.52" stroke-linecap="round"/><path d="M90.7 102.8 l-2.8 -2.2" stroke="#24170f" stroke-width=".8" opacity="0.50" stroke-linecap="round"/><path d="M89.8 102.4 l-4.2 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.86" stroke-linecap="round"/><path d="M88.8 102.9 l-4.0 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.59" stroke-linecap="round"/><path d="M87.8 104.4 l-3.6 -1.7" stroke="#24170f" stroke-width=".8" opacity="0.55" stroke-linecap="round"/><path d="M86.8 103.2 l-3.2 -1.1" stroke="#24170f" stroke-width=".8" opacity="0.80" stroke-linecap="round"/><path d="M85.9 104.6 l-2.9 -1.6" stroke="#24170f" stroke-width=".8" opacity="0.75" stroke-linecap="round"/><path d="M84.9 103.6 l-4.3 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.74" stroke-linecap="round"/><path d="M83.9 104.2 l-4.2 -1.1" stroke="#24170f" stroke-width=".8" opacity="0.65" stroke-linecap="round"/><path d="M83.0 104.8 l-4.4 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.52" stroke-linecap="round"/><path d="M82.0 105.2 l-3.6 -1.7" stroke="#24170f" stroke-width=".8" opacity="0.54" stroke-linecap="round"/><path d="M142 103.75 C152 97.75 166 97.0 174 104.05" stroke="#2e1f15" stroke-width="5" fill="none" opacity=".35" filter="url(#eyesset1-b2)"/><path d="M142.0 105.9 l2.8 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.78" stroke-linecap="round"/><path d="M143.0 104.2 l2.9 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.75" stroke-linecap="round"/><path d="M143.9 104.4 l3.7 -1.7" stroke="#24170f" stroke-width=".8" opacity="0.76" stroke-linecap="round"/><path d="M144.9 105.1 l3.5 -1.1" stroke="#24170f" stroke-width=".8" opacity="0.68" stroke-linecap="round"/><path d="M145.9 104.2 l2.7 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.57" stroke-linecap="round"/><path d="M146.8 103.4 l3.4 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.58" stroke-linecap="round"/><path d="M147.8 104.4 l3.0 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.61" stroke-linecap="round"/><path d="M148.8 103.7 l3.4 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.64" stroke-linecap="round"/><path d="M149.8 104.1 l4.4 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.52" stroke-linecap="round"/><path d="M150.7 104.0 l3.5 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.60" stroke-linecap="round"/><path d="M151.7 103.3 l4.1 -1.7" stroke="#24170f" stroke-width=".8" opacity="0.68" stroke-linecap="round"/><path d="M152.7 101.4 l3.5 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.61" stroke-linecap="round"/><path d="M153.6 102.8 l3.0 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.67" stroke-linecap="round"/><path d="M154.6 103.4 l4.4 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.60" stroke-linecap="round"/><path d="M155.6 101.9 l4.1 -1.3" stroke="#24170f" stroke-width=".8" opacity="0.79" stroke-linecap="round"/><path d="M156.5 101.3 l3.1 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.82" stroke-linecap="round"/><path d="M157.5 102.7 l2.8 -2.2" stroke="#24170f" stroke-width=".8" opacity="0.67" stroke-linecap="round"/><path d="M158.5 101.6 l3.0 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.84" stroke-linecap="round"/><path d="M159.5 102.1 l2.6 -1.0" stroke="#24170f" stroke-width=".8" opacity="0.60" stroke-linecap="round"/><path d="M160.4 101.9 l4.4 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.68" stroke-linecap="round"/><path d="M161.4 102.9 l2.9 -2.2" stroke="#24170f" stroke-width=".8" opacity="0.71" stroke-linecap="round"/><path d="M162.4 103.0 l2.9 -1.5" stroke="#24170f" stroke-width=".8" opacity="0.76" stroke-linecap="round"/><path d="M163.3 102.4 l3.5 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.86" stroke-linecap="round"/><path d="M164.3 102.3 l3.7 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.61" stroke-linecap="round"/><path d="M165.3 103.3 l3.6 -1.2" stroke="#24170f" stroke-width=".8" opacity="0.59" stroke-linecap="round"/><path d="M166.2 103.5 l3.6 -1.4" stroke="#24170f" stroke-width=".8" opacity="0.71" stroke-linecap="round"/><path d="M167.2 103.7 l3.3 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.64" stroke-linecap="round"/><path d="M168.2 103.5 l3.1 -1.5" stroke="#24170f" stroke-width=".8" opacity="0.68" stroke-linecap="round"/><path d="M169.2 103.6 l2.5 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.50" stroke-linecap="round"/><path d="M170.1 105.2 l3.2 -2.0" stroke="#24170f" stroke-width=".8" opacity="0.77" stroke-linecap="round"/><path d="M171.1 103.3 l3.3 -2.3" stroke="#24170f" stroke-width=".8" opacity="0.62" stroke-linecap="round"/><path d="M172.1 105.1 l2.9 -1.6" stroke="#24170f" stroke-width=".8" opacity="0.88" stroke-linecap="round"/><path d="M173.0 104.3 l3.4 -1.8" stroke="#24170f" stroke-width=".8" opacity="0.73" stroke-linecap="round"/><path d="M174.0 106.7 l3.2 -2.1" stroke="#24170f" stroke-width=".8" opacity="0.76" stroke-linecap="round"/>
+  </g>
 </svg>

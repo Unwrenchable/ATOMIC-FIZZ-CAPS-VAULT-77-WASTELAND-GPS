@@ -462,7 +462,7 @@
     // Off-chain/local items (mintables, quest rewards, etc.)
     if (!PLAYER.inventory.length) {
       parts.push(
-        "<p>No items yet — explore the Mojave and claim some caps.</p>"
+        "<p>No items yet — explore the Cinder Basin and claim some caps.</p>"
       );
     } else {
       const entries = PLAYER.inventory
@@ -523,7 +523,7 @@
 
     if (!parts.length) {
       panel.innerHTML =
-        "<p>No items yet — explore the Mojave and claim some caps.</p>";
+        "<p>No items yet — explore the Cinder Basin and claim some caps.</p>";
     } else {
       panel.innerHTML = parts.join("");
     }
@@ -954,18 +954,26 @@
         craftingSection.id = "exchangeCraftingSection";
         exchangeContent.appendChild(craftingSection);
       }
-      const recipes = (Game.modules.recipes && Game.modules.recipes.listAll && Game.modules.recipes.listAll()) || [];
+      const recipesMod = Game.modules && Game.modules.recipes;
+      if (recipesMod && !recipesMod.loaded && !recipesMod._loadStarted && typeof recipesMod.init === "function") {
+        recipesMod._loadStarted = true;
+        recipesMod.init().then(() => {
+          if (recipesMod.loaded) renderExchangeCraftingSection();
+        }).catch(() => {});
+      }
+      const recipes = (recipesMod && recipesMod.listAll && recipesMod.listAll()) || [];
       if (!recipes.length) {
         craftingSection.innerHTML = '<div class="panel-divider"></div><h3>Crafting Recipes</h3><p>No recipes available.</p>';
       } else {
         let html = '<div class="panel-divider"></div><h3>Crafting Recipes</h3>';
         html += '<ul style="list-style:none;padding:0;">';
         recipes.forEach(r => {
+          const inputs = Array.isArray(r.inputs) ? r.inputs : [];
           html += `<li style="margin-bottom:12px;border-bottom:1px solid #222;padding-bottom:8px;">
             <strong>${escapeHtml(r.name || r.id)}</strong><br/>
             <span style='font-size:12px;opacity:0.7;'>${escapeHtml(r.description || '')}</span><br/>
             <span>Requires: </span>
-            ${r.inputs.map(inp => `${escapeHtml(String(inp.amount))}x ${escapeHtml(inp.id)}`).join(', ')}<br/>
+            ${inputs.map(inp => `${escapeHtml(String(inp.amount))}x ${escapeHtml(inp.id)}`).join(', ') || 'nothing'}<br/>
             <button class="pipboy-button-small" data-craft="${escapeHtml(r.id)}">Craft</button>
           </li>`;
         });
@@ -1240,7 +1248,7 @@
   const STARTER_PACK_ITEMS = [
     {
       id: "stimpak",
-      name: "Stimpak",
+      name: "FizzPak",
       type: "aid",
       effect: "heal",
       healAmt: 25,
@@ -1251,7 +1259,7 @@
     },
     {
       id: "radaway",
-      name: "RadAway",
+      name: "GlowFlush",
       type: "aid",
       effect: "radflush",
       rarity: "common",
@@ -1312,7 +1320,7 @@
     toast.innerHTML = [
       "✦ STARTER PACK RECEIVED ✦",
       '<div class="toast-items">',
-      "2× Stimpak | 1× RadAway | Rusty 10mm Pistol<br/>",
+      "2× FizzPak | 1× GlowFlush | Rusty 10mm Pistol<br/>",
       "50 CAPS | 10 XP",
       "</div>"
     ].join("");
@@ -1568,25 +1576,25 @@
 
   const DEMO_SHOP_ITEMS = [
     {
-      id: "stimpak",
-      name: "Stimpak",
+      id: "FizzPak",
+      name: "FizzPak",
       cost: 20,
       description: "Heals 25 HP. Essential for wasteland survival.",
-      item: { id: "stimpak", name: "Stimpak", type: "aid", effect: "heal", healAmt: 25, rarity: "common", quantity: 1, weight: 0.5 }
+      item: { id: "FizzPak", name: "FizzPak", type: "aid", effect: "heal", healAmt: 25, rarity: "common", quantity: 1, weight: 0.5 }
     },
     {
-      id: "radaway",
-      name: "RadAway",
+      id: "GlowFlush",
+      name: "GlowFlush",
       cost: 30,
       description: "Flushes radiation. Use after entering hot zones.",
-      item: { id: "radaway", name: "RadAway", type: "aid", effect: "radflush", rarity: "common", quantity: 1, weight: 0.5 }
+      item: { id: "GlowFlush", name: "GlowFlush", type: "aid", effect: "radflush", rarity: "common", quantity: 1, weight: 0.5 }
     },
     {
       id: "nuka_cola",
-      name: "Nuka-Cola",
+      name: "Atomic Fizz",
       cost: 10,
       description: "Classic pre-war soft drink. Restores 10 HP and 5 AP.",
-      item: { id: "nuka_cola", name: "Nuka-Cola", type: "aid", effect: "heal", healAmt: 10, rarity: "common", quantity: 1, weight: 0.5 }
+      item: { id: "nuka_cola", name: "Atomic Fizz", type: "aid", effect: "heal", healAmt: 10, rarity: "common", quantity: 1, weight: 0.5 }
     },
     {
       id: "bobby_pin",
@@ -1738,6 +1746,39 @@
         await Game.modules.mintables.init();
       }
 
+      // Recipes were registered but never initialized, so the exchange panel
+      // always rendered "No recipes available."
+      if (
+        window.Game &&
+        Game.modules &&
+        Game.modules.recipes &&
+        typeof Game.modules.recipes.init === "function"
+      ) {
+        await Game.modules.recipes.init();
+      }
+
+      if (
+        window.Game &&
+        Game.modules &&
+        Game.modules.crafting &&
+        typeof Game.modules.crafting.init === "function"
+      ) {
+        Game.modules.crafting.init(window.gameState || window.DATA);
+      }
+
+      // Battle init was never called, so world encounters hit updateUI with gs === null.
+      if (
+        window.Game &&
+        Game.modules &&
+        Game.modules.battle &&
+        typeof Game.modules.battle.init === "function"
+      ) {
+        const gs = (window.gameState && typeof window.gameState === "object") ? window.gameState : {};
+        if (!gs.player) gs.player = PLAYER;
+        Game.modules.battle.init(gs);
+        window.gameState = gs;
+      }
+
       // Initialize NPC spawn system if present
       if (
         window.Game &&
@@ -1840,13 +1881,13 @@
   function updateStatDisplay() {
     console.log('[Stats] Updating stat display');
 
-    // Update SPECIAL stats bars
+    // Update VITALS stats bars
     const specialStats = ['S', 'P', 'E', 'C', 'I', 'A', 'L'];
     specialStats.forEach(stat => {
       const valueEl = document.getElementById(`special-${stat}`);
       const barEl = document.querySelector(`[data-special-key="${stat}"]`);
 
-      // Get current character SPECIAL values (from character creator or defaults)
+      // Get current character VITALS values (from character creator or defaults)
       let statValue = 5; // default
       if (window.Game?.modules?.CharacterCreator) {
         const cc = window.Game.modules.CharacterCreator;

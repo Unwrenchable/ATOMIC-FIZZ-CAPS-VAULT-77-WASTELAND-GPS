@@ -2,7 +2,7 @@
   "id": "quest_jax_bodywalks",
   "name": "The Body That Walks",
   "type": "main",
-  "region": "Mojave",
+  "region": "Cinder Basin",
   "description": "Follow a mysterious bio-signal that matches Jax's DNA and confront the truth of his ghoulified body.",
   "stages": [
     {
@@ -29,7 +29,7 @@
     {
       "id": 20,
       "name": "Track the Signal",
-      "description": "Follow the Overseer's coordinates across the Mojave.",
+      "description": "Follow the Overseer's coordinates across the Cinder Basin.",
       "trigger": "player_reaches:mojave_signal_source",
       "actions": [
         "spawn:ghoul_jax_body",
@@ -65,7 +65,7 @@
     {
       "id": 41,
       "name": "Ending B - Wander",
-      "description": "Let Jax's ghoul body wander the Mojave.",
+      "description": "Let Jax's ghoul body wander the Cinder Basin.",
       "trigger": "player_choice:B",
       "actions": [
         "ai_wander:ghoul_jax_body",

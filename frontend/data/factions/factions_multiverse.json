@@ -1,7 +1,7 @@
 [
   {
     "id": "bos_lost_hills",
-    "name": "Brotherhood of Steel — Lost Hills",
+    "name": "Coil Covenant — Lost Hills",
     "shortName": "BoS West",
     "description": "The original Brotherhood chapter from California. Isolationist, tech‑focused, and deeply traditional.",
     "alignment": "Lawful Neutral",
@@ -12,14 +12,14 @@
     "reputationLevels": ["Vilified", "Hated", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
       "Liked": "Energy weapon access",
-      "Idolized": "T-51b Power Armor variant"
+      "Idolized": "T-51b Reactor Harness variant"
     },
     "enemies": ["enclave_west", "raiders_cutthroats"],
     "allies": ["followers_apocalypse"]
   },
   {
     "id": "bos_lyons",
-    "name": "Brotherhood of Steel — Lyons Chapter",
+    "name": "Coil Covenant — Lyons Chapter",
     "shortName": "BoS DC",
     "description": "The humanitarian East Coast chapter that broke from traditional doctrine to protect the Capital Wasteland.",
     "alignment": "Good",
@@ -37,7 +37,7 @@
   },
   {
     "id": "bos_maxson",
-    "name": "Brotherhood of Steel — Maxson Chapter",
+    "name": "Coil Covenant — Maxson Chapter",
     "shortName": "BoS East",
     "description": "Militaristic, expansionist Brotherhood chapter from the Commonwealth. Seeks total technological control.",
     "alignment": "Lawful",
@@ -55,8 +55,8 @@
   },
   {
     "id": "enclave_west",
-    "name": "Enclave — West Coast",
-    "shortName": "Enclave West",
+    "name": "Directorate — West Coast",
+    "shortName": "Directorate West",
     "description": "Remnants of the pre‑war U.S. government. Ruthless, technologically advanced, and obsessed with purity.",
     "alignment": "Lawful Evil",
     "color": "#000080",
@@ -72,9 +72,9 @@
   },
   {
     "id": "enclave_east",
-    "name": "Enclave — East Coast",
-    "shortName": "Enclave East",
-    "description": "The Raven Rock Enclave cell. Militaristic, authoritarian, and heavily armed.",
+    "name": "Directorate — East Coast",
+    "shortName": "Directorate East",
+    "description": "The Raven Rock Directorate cell. Militaristic, authoritarian, and heavily armed.",
     "alignment": "Evil",
     "color": "#001f3f",
     "emblem": "Eagle",
@@ -122,8 +122,8 @@
   },
   {
     "id": "minutemen",
-    "name": "Commonwealth Minutemen",
-    "shortName": "Minutemen",
+    "name": "Commonwealth Settlement Watch",
+    "shortName": "Settlement Watch",
     "description": "Decentralized militia dedicated to protecting settlements across the Commonwealth.",
     "alignment": "Good",
     "color": "#6495ed",

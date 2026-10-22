@@ -15,7 +15,7 @@ fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
 
 [provider]
 # cluster = "devnet"   # for local/dev testing
-cluster = "mainnet-beta"  # PRODUCTION / product release default. Use `anchor deploy --provider.cluster mainnet-beta` (or mainnet for some tooling)
+cluster = "mainnet"  # PRODUCTION default. Anchor accepts localnet|devnet|testnet|mainnet or a URL ("mainnet-beta" fails to parse).
 # IMPORTANT: After real mainnet deploy, verify the program ID in [programs.mainnet] matches the on-chain one.
 wallet = "~/.config/solana/id.json"
 

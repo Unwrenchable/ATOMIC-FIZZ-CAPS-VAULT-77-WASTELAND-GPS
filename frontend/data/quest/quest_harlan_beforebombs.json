@@ -2,8 +2,8 @@
   "id": "quest_harlan_beforebombs",
   "name": "Before the Bombs",
   "type": "main",
-  "region": "Mojave",
-  "description": "You uncover the truth about Jax's disappearance before the Great War. Harlan's trail leads to a hidden Vault-Tec facility.",
+  "region": "Cinder Basin",
+  "description": "You uncover the truth about Jax's disappearance before the Great War. Harlan's trail leads to a hidden FizzTec facility.",
   "triggers": [
     "unlock_from:quest_harlan_lastsigns",
     "player_pickup:vault77_keyfragment",
@@ -13,8 +13,8 @@
   "stages": [
     {
       "id": 0,
-      "name": "The Vault-Tec Connection",
-      "description": "You've found a Vault-Tec key fragment tied to Jax's disappearance.",
+      "name": "The FizzTec Connection",
+      "description": "You've found a FizzTec key fragment tied to Jax's disappearance.",
       "trigger": "auto",
       "actions": [
         "dialogue:overseer_beforebombs_intro",
@@ -36,7 +36,7 @@
     {
       "id": 20,
       "name": "Search the Surface Facility",
-      "description": "Search the abandoned Vault-Tec surface facility for clues.",
+      "description": "Search the abandoned FizzTec surface facility for clues.",
       "trigger": "player_search:poi_vault77_surface",
       "actions": [
         "spawn:item_vault77_log01",
@@ -47,7 +47,7 @@
     },
     {
       "id": 30,
-      "name": "Read the Vault-Tec Logs",
+      "name": "Read the FizzTec Logs",
       "description": "Read the logs to learn what happened to Jax before the bombs fell.",
       "trigger": [
         "player_use:item_vault77_log01",

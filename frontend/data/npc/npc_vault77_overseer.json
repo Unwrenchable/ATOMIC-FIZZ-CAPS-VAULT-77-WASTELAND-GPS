@@ -1,7 +1,7 @@
 {
   "id": "npc_vault77_overseer",
   "name": "Overseer-77",
-  "faction": "Vault-Tec",
+  "faction": "FizzTec",
   "role": "Terminal-Bound Overseer",
   "type": "merged-human-ai",
   "homeRegion": "vault77_core",

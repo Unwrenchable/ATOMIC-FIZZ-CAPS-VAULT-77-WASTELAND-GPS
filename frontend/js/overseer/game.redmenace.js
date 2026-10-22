@@ -1,6 +1,6 @@
 /**
  * RED MENACE - Classic Arcade Game
- * A Fallout-inspired space shooter mini-game for the Overseer terminal
+ * A wasteland-inspired space shooter mini-game for the Overseer terminal
  * 
  * Controls:
  * - LEFT/RIGHT: Move ship

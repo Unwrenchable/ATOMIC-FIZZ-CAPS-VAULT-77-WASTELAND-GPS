@@ -6,9 +6,9 @@
   "currentRegion": "strip",
   "reasonForDisplacement": "Volunteered to study pre-war robotics after detecting anomalous Securitron firmware signatures.",
   "role": "Robotics Field Technician",
-  "personality": "Nervous, brilliant, easily overwhelmed by Mojave chaos.",
+  "personality": "Nervous, brilliant, easily overwhelmed by Cinder Basin chaos.",
   "questHooks": [
-    "Wants access to Lucky 38 terminal nodes.",
+    "Wants access to The Spire terminal nodes.",
     "Can upgrade a Securitron if given Institute components.",
     "Fears being hunted by Gunners hired by a rival Institute scientist."
   ],

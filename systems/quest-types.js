@@ -4,5 +4,5 @@ export const QuestTypes = Object.freeze({
   hunt: ["raider scout", "mutant beast", "feral ghoul"],
   escort: ["merchant caravan", "scavenger", "vault tech"],
   investigate: ["strange noise", "missing patrol", "odd lights"],
-  sabotage: ["raider camp", "NCR outpost", "power relay"]
+  sabotage: ["raider camp", "Frontier Compact outpost", "power relay"]
 });

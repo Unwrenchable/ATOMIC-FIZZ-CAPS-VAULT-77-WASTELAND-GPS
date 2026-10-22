@@ -1,7 +1,7 @@
 {
   "id": "q_vault_experiment_cult",
   "name": "The Vault Experiment Gone Wrong",
-  "description": "A Mojave vault's experiment was never meant to end. The inhabitants have reinterpreted their isolation as religion, and outsiders as heretics. Break the cycle — or join it.",
+  "description": "A Cinder Basin vault's experiment was never meant to end. The inhabitants have reinterpreted their isolation as religion, and outsiders as heretics. Break the cycle — or join it.",
   "type": "main",
   "region": "mojave_wasteland",
   "subregion": "hidden_vault",
@@ -37,7 +37,7 @@
     },
     {
       "id": "investigate_experiment",
-      "desc": "Uncover records of the Vault-Tec experiment.",
+      "desc": "Uncover records of the FizzTec experiment.",
       "poi": "vault_88_overseer_terminal"
     },
     {
@@ -166,7 +166,7 @@
   },
   "factions": {
     "affected": [
-      "Vault-Tec",
+      "FizzTec",
       "Settlers",
       "Raiders"
     ]
@@ -175,5 +175,5 @@
     "quest_vault_reconstruction",
     "quest_cult_revenge"
   ],
-  "notes": "A morally complex quest about freedom, control, and the lingering effects of Vault-Tec's experiments."
+  "notes": "A morally complex quest about freedom, control, and the lingering effects of FizzTec's experiments."
 }

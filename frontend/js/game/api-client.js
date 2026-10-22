@@ -148,9 +148,9 @@
   }
 
   /**
-   * Update player SPECIAL stats
+   * Update player VITALS stats
    * @param {string} wallet - Player wallet address
-   * @param {Object} special - SPECIAL stats object
+   * @param {Object} special - VITALS stats object
    */
   async function updateSpecial(wallet, special) {
     const result = await apiRequest("/api/player/special/update", {
@@ -159,7 +159,7 @@
     });
 
     if (!result.ok) {
-      showError(`Failed to update SPECIAL: ${result.error}`);
+      showError(`Failed to update VITALS: ${result.error}`);
     }
 
     return result;

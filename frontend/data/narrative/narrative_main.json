@@ -7,7 +7,7 @@
     {
       "id": "ms_act1_static_awakens",
       "name": "Act I: Static Awakens",
-      "summary": "Strange transmissions from Jax Harlan begin echoing across the Mojave. He claims something beneath the wasteland is waking up.",
+      "summary": "Strange transmissions from Jax Harlan begin echoing across the Cinder Basin. He claims something beneath the wasteland is waking up.",
       "objectives": [
         {
           "id": "ms_a1_obj1",
@@ -30,7 +30,7 @@
     {
       "id": "ms_act2_living_glow",
       "name": "Act II: The Living Glow",
-      "summary": "Dr. Mara Kestrel believes the radiation spikes across the Mojave are not natural. Something is broadcasting through irradiated zones.",
+      "summary": "Dr. Mara Kestrel believes the radiation spikes across the Cinder Basin are not natural. Something is broadcasting through irradiated zones.",
       "prerequisites": [
         "ms_act1_complete"
       ],
@@ -70,7 +70,7 @@
           "id": "ms_a3_obj2",
           "type": "clear_danger_zones",
           "locations": [
-            "Deathclaw Promontory",
+            "Radtalon Promontory",
             "Dead Wind Cavern"
           ]
         }
@@ -231,7 +231,7 @@
           "id": "sq_rex_obj1",
           "type": "clear_danger_zones",
           "locations": [
-            "Deathclaw Promontory",
+            "Radtalon Promontory",
             "Dead Wind Cavern"
           ]
         }
@@ -251,7 +251,7 @@
           "id": "sq_lucy_obj1",
           "type": "visit_locations",
           "locations": [
-            "Goodsprings Saloon",
+            "Dustwell Saloon",
             "Nipton Trading Post",
             "Freeside Market"
           ]
@@ -285,14 +285,14 @@
       "id": "sq_the_rug_abides",
       "name": "The Rug Abides",
       "giver": "dude",
-      "summary": "Help Jeffrey 'The Dude' Lebronski recover his Nuka-Cola rug from a trio of Nihilists at the Bowl-O-Rama.",
+      "summary": "Help Jeffrey 'The Dude' Lebronski recover his Atomic Fizz rug from a trio of Nihilists at the Bowl-O-Rama.",
       "objectives": [
         {
           "id": "sq_rug_obj1",
           "type": "visit_locations",
           "locations": [
             "Bowl-O-Rama",
-            "Mojave Outpost"
+            "Cinder Basin Outpost"
           ]
         }
       ],
@@ -315,7 +315,7 @@
           "locations": [
             "Sierra Madre Ruins",
             "Hoover Dam East",
-            "Goodsprings",
+            "Dustwell",
             "Searchlight Church"
           ]
         }

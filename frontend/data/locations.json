@@ -358,7 +358,7 @@
   },
   {
     "id": "yao_guai_caves_north_america_16",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 60.596295,
     "lng": -147.115646,
     "lvl": 51,
@@ -366,7 +366,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "vault",
-    "lore": "Yao Guai Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "Ashbear Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -382,7 +382,7 @@
   },
   {
     "id": "yao_guai_caves_north_america_17",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 54.273841,
     "lng": -51.995651,
     "lvl": 3,
@@ -390,7 +390,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Yao Guai Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Ashbear Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 60,
     "loot": {
       "items": [
@@ -471,7 +471,7 @@
   },
   {
     "id": "nuka_world_adjacent_north_america_21",
-    "name": "Nuka-World Adjacent",
+    "name": "Fizz Fair Adjacent",
     "lat": 45.502419,
     "lng": -108.668358,
     "lvl": 55,
@@ -479,7 +479,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Nuka-World Adjacent. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Fizz Fair Adjacent. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -502,7 +502,7 @@
     "biome": "temperate_forest",
     "faction": "iron_wastes_militia",
     "type": "vault",
-    "lore": "Shattered Metro. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls. The vending machines here only dispense existential dread. And Nuka-Cola.",
+    "lore": "Shattered Metro. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls. The vending machines here only dispense existential dread. And Atomic Fizz.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -656,7 +656,7 @@
   },
   {
     "id": "deathclaw_alley_north_america_29",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 34.392963,
     "lng": -114.81688,
     "lvl": 15,
@@ -664,7 +664,7 @@
     "biome": "temperate_forest",
     "faction": "iron_wastes_militia",
     "type": "megastructure",
-    "lore": "Deathclaw Alley. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. The structure dominates the horizon, a monument to pre-war ambition and post-war regret.",
+    "lore": "Radtalon Alley. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. The structure dominates the horizon, a monument to pre-war ambition and post-war regret.",
     "triggerRadius": 260,
     "loot": {
       "items": [
@@ -679,7 +679,7 @@
   },
   {
     "id": "general_atomics_plaza_north_america_30",
-    "name": "General Atomics Plaza",
+    "name": "Helio Dynamics Plaza",
     "lat": 58.110635,
     "lng": -133.016282,
     "lvl": 96,
@@ -687,7 +687,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "General Atomics Plaza. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Someone carved 'SAVE BEFORE ENTERING' into the wall. Ominous.",
+    "lore": "Helio Dynamics Plaza. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Someone carved 'SAVE BEFORE ENTERING' into the wall. Ominous.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -768,7 +768,7 @@
   },
   {
     "id": "radscorpion_burrow_north_america_34",
-    "name": "Radscorpion Burrow",
+    "name": "Glowsting Burrow",
     "lat": 29.208526,
     "lng": -57.759031,
     "lvl": 83,
@@ -776,7 +776,7 @@
     "biome": "desert",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Radscorpion Burrow. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Someone carved 'SAVE BEFORE ENTERING' into the wall. Ominous.",
+    "lore": "Glowsting Burrow. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Someone carved 'SAVE BEFORE ENTERING' into the wall. Ominous.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -909,7 +909,7 @@
   },
   {
     "id": "the_tunnel_snakes_clubhouse_north_america_40",
-    "name": "The Tunnel Snakes' Clubhouse",
+    "name": "The Culvert Vipers' Clubhouse",
     "lat": 51.542476,
     "lng": -64.787392,
     "lvl": 87,
@@ -917,7 +917,7 @@
     "biome": "temperate_forest",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "The Tunnel Snakes' Clubhouse. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "The Culvert Vipers' Clubhouse. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -1043,7 +1043,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_north_america_46",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": 37.142112,
     "lng": -92.827132,
     "lvl": 56,
@@ -1051,7 +1051,7 @@
     "biome": "temperate_forest",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell. A holotape found here is just 10 hours of someone saying 'bruh' repeatedly.",
+    "lore": "Brineclaw Spawning Pool. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell. A holotape found here is just 10 hours of someone saying 'bruh' repeatedly.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -1487,7 +1487,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Continental Hub. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
+    "lore": "Continental Hub. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Graffiti here reads: 'Frontier Compact? Legion? Nah, we vibin.' The author is presumed deceased.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -1502,7 +1502,7 @@
   },
   {
     "id": "robco_service_center_north_america_66",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 15.764168,
     "lng": -113.185409,
     "lvl": 29,
@@ -1510,7 +1510,7 @@
     "biome": "desert",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "RobCo Service Center. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "FizzCo Service Center. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -1524,7 +1524,7 @@
   },
   {
     "id": "general_atomics_plaza_north_america_67",
-    "name": "General Atomics Plaza",
+    "name": "Helio Dynamics Plaza",
     "lat": 63.943203,
     "lng": -102.039709,
     "lvl": 67,
@@ -1532,7 +1532,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "General Atomics Plaza. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Helio Dynamics Plaza. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -1838,7 +1838,7 @@
   },
   {
     "id": "yao_guai_caves_north_america_81",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 28.097911,
     "lng": -146.545882,
     "lvl": 39,
@@ -1846,7 +1846,7 @@
     "biome": "desert",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "Yao Guai Caves. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. A holotape found here is just 10 hours of someone saying 'bruh' repeatedly.",
+    "lore": "Ashbear Caves. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. A holotape found here is just 10 hours of someone saying 'bruh' repeatedly.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -2203,7 +2203,7 @@
   },
   {
     "id": "general_atomics_plaza_north_america_97",
-    "name": "General Atomics Plaza",
+    "name": "Helio Dynamics Plaza",
     "lat": 22.559871,
     "lng": -169.202635,
     "lvl": 33,
@@ -2211,7 +2211,7 @@
     "biome": "desert",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "General Atomics Plaza. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Helio Dynamics Plaza. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -2387,7 +2387,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_north_america_105",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 54.331573,
     "lng": -137.460337,
     "lvl": 52,
@@ -2395,7 +2395,7 @@
     "biome": "urban_ruins",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Dustpop Depot. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -2410,7 +2410,7 @@
   },
   {
     "id": "yao_guai_caves_north_america_106",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 48.669925,
     "lng": -88.453256,
     "lvl": 19,
@@ -2418,7 +2418,7 @@
     "biome": "temperate_forest",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Yao Guai Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Ashbear Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -2612,7 +2612,7 @@
   },
   {
     "id": "radscorpion_burrow_north_america_115",
-    "name": "Radscorpion Burrow",
+    "name": "Glowsting Burrow",
     "lat": 39.725038,
     "lng": -54.848629,
     "lvl": 91,
@@ -2620,7 +2620,7 @@
     "biome": "urban_ruins",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "Radscorpion Burrow. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Glowsting Burrow. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -2660,7 +2660,7 @@
   },
   {
     "id": "vault_tec_regional_hq_north_america_117",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 30.986024,
     "lng": -109.964307,
     "lvl": 42,
@@ -2668,7 +2668,7 @@
     "biome": "temperate_forest",
     "faction": "hollow_choir",
     "type": "vault",
-    "lore": "Vault-Tec Regional HQ. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "FizzTec Regional HQ. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -2683,7 +2683,7 @@
   },
   {
     "id": "yao_guai_caves_north_america_118",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 47.38009,
     "lng": -87.426018,
     "lvl": 10,
@@ -2691,7 +2691,7 @@
     "biome": "temperate_forest",
     "faction": "free_scavs",
     "type": "vault",
-    "lore": "Yao Guai Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "Ashbear Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -2777,7 +2777,7 @@
   },
   {
     "id": "deathclaw_alley_north_america_122",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 44.163067,
     "lng": -163.101687,
     "lvl": 38,
@@ -2785,7 +2785,7 @@
     "biome": "temperate_forest",
     "faction": "hollow_choir",
     "type": "vault",
-    "lore": "Deathclaw Alley. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "Radtalon Alley. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -2823,7 +2823,7 @@
   },
   {
     "id": "robco_service_center_north_america_124",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 61.805038,
     "lng": -155.920599,
     "lvl": 48,
@@ -2831,7 +2831,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "RobCo Service Center. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "FizzCo Service Center. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -3143,7 +3143,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_north_america_138",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 63.668543,
     "lng": -71.080269,
     "lvl": 75,
@@ -3151,7 +3151,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Dustpop Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -3198,7 +3198,7 @@
     "biome": "temperate_forest",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Exclusion Zone. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Exclusion Zone. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -3374,7 +3374,7 @@
   },
   {
     "id": "vault_tec_regional_hq_north_america_148",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 34.468955,
     "lng": -148.666001,
     "lvl": 18,
@@ -3382,7 +3382,7 @@
     "biome": "urban_ruins",
     "faction": "dustwalkers",
     "type": "megastructure",
-    "lore": "Vault-Tec Regional HQ. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets. The structure dominates the horizon, a monument to pre-war ambition and post-war regret. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "FizzTec Regional HQ. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets. The structure dominates the horizon, a monument to pre-war ambition and post-war regret. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 260,
     "loot": {
       "items": [
@@ -3420,7 +3420,7 @@
   },
   {
     "id": "yao_guai_caves_north_america_150",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 46.287866,
     "lng": -130.750465,
     "lvl": 33,
@@ -3428,7 +3428,7 @@
     "biome": "temperate_forest",
     "faction": "hollow_choir",
     "type": "vault",
-    "lore": "Yao Guai Caves. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "Ashbear Caves. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -3532,7 +3532,7 @@
   },
   {
     "id": "minutemen_checkpoint_north_america_155",
-    "name": "Minutemen Checkpoint",
+    "name": "Settlement Watch Checkpoint",
     "lat": 17.952465,
     "lng": -72.847757,
     "lvl": 66,
@@ -3540,7 +3540,7 @@
     "biome": "desert",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Minutemen Checkpoint. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Legend has it a wanderer once took a rad to the knee here. They don't wander anymore.",
+    "lore": "Settlement Watch Checkpoint. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Legend has it a wanderer once took a rad to the knee here. They don't wander anymore.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -3666,7 +3666,7 @@
   },
   {
     "id": "vault_tec_regional_hq_north_america_161",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 48.054159,
     "lng": -160.75809,
     "lvl": 19,
@@ -3674,7 +3674,7 @@
     "biome": "temperate_forest",
     "faction": "free_scavs",
     "type": "vault",
-    "lore": "Vault-Tec Regional HQ. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "FizzTec Regional HQ. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -3710,7 +3710,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_north_america_163",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": 56.25142,
     "lng": -132.757546,
     "lvl": 83,
@@ -3718,7 +3718,7 @@
     "biome": "urban_ruins",
     "faction": "crater_syndicate",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Brineclaw Spawning Pool. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -3799,7 +3799,7 @@
   },
   {
     "id": "ncr_forward_base_north_america_167",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 68.939482,
     "lng": -64.503459,
     "lvl": 71,
@@ -3807,7 +3807,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "NCR Forward Base. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Frontier Compact Forward Base. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -3864,7 +3864,7 @@
   },
   {
     "id": "yao_guai_caves_north_america_170",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 36.308957,
     "lng": -100.207128,
     "lvl": 81,
@@ -3872,7 +3872,7 @@
     "biome": "temperate_forest",
     "faction": "hollow_choir",
     "type": "normal",
-    "lore": "Yao Guai Caves. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Ashbear Caves. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -4223,7 +4223,7 @@
   },
   {
     "id": "deathclaw_alley_north_america_186",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 24.979014,
     "lng": -150.350416,
     "lvl": 70,
@@ -4231,7 +4231,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Deathclaw Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Radtalon Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -4416,7 +4416,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Spectral Shores. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell. Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
+    "lore": "Spectral Shores. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell. Graffiti here reads: 'Frontier Compact? Legion? Nah, we vibin.' The author is presumed deceased.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -4520,7 +4520,7 @@
   },
   {
     "id": "yao_guai_caves_north_america_199",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 58.342429,
     "lng": -167.700261,
     "lvl": 52,
@@ -4528,7 +4528,7 @@
     "biome": "urban_ruins",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Yao Guai Caves. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Ashbear Caves. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -4765,7 +4765,7 @@
   },
   {
     "id": "vault_tec_regional_hq_north_america_210",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 68.414002,
     "lng": -165.529748,
     "lvl": 82,
@@ -4773,7 +4773,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Vault-Tec Regional HQ. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "FizzTec Regional HQ. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -5015,7 +5015,7 @@
   },
   {
     "id": "ncr_forward_base_north_america_221",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 20.601433,
     "lng": -87.051806,
     "lvl": 25,
@@ -5023,7 +5023,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "NCR Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Frontier Compact Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -5079,7 +5079,7 @@
   },
   {
     "id": "deathclaw_alley_north_america_224",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 64.904714,
     "lng": -133.367846,
     "lvl": 72,
@@ -5087,7 +5087,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Deathclaw Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Radtalon Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -5190,7 +5190,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_north_america_229",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 55.498719,
     "lng": -91.291003,
     "lvl": 82,
@@ -5198,7 +5198,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Dustpop Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -5322,7 +5322,7 @@
   },
   {
     "id": "deathclaw_alley_north_america_235",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 61.24729,
     "lng": -117.129324,
     "lvl": 52,
@@ -5330,7 +5330,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Deathclaw Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Radtalon Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -5505,7 +5505,7 @@
   },
   {
     "id": "robco_service_center_north_america_243",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 20.458819,
     "lng": -159.617067,
     "lvl": 47,
@@ -5513,7 +5513,7 @@
     "biome": "desert",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "RobCo Service Center. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "FizzCo Service Center. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -5957,7 +5957,7 @@
   },
   {
     "id": "ncr_forward_base_north_america_263",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 19.648134,
     "lng": -163.339672,
     "lvl": 82,
@@ -5965,7 +5965,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "NCR Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Frontier Compact Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -6069,7 +6069,7 @@
   },
   {
     "id": "patrolling_mojave_rest_stop_north_america_268",
-    "name": "Patrolling Mojave Rest Stop",
+    "name": "Patrolling Cinder Basin Rest Stop",
     "lat": 53.871585,
     "lng": -73.149445,
     "lvl": 2,
@@ -6077,7 +6077,7 @@
     "biome": "temperate_forest",
     "faction": "hollow_choir",
     "type": "normal",
-    "lore": "Patrolling Mojave Rest Stop. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. The terminal here only displays one message: 'War. War never changes.'",
+    "lore": "Patrolling Cinder Basin Rest Stop. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. The terminal here only displays one message: 'War. War never changes.'",
     "triggerRadius": 60,
     "loot": {
       "items": [
@@ -6142,7 +6142,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Screaming Savannah. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. The vending machines here only dispense existential dread. And Nuka-Cola.",
+    "lore": "Screaming Savannah. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. The vending machines here only dispense existential dread. And Atomic Fizz.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -6157,7 +6157,7 @@
   },
   {
     "id": "enclave_remnant_post_north_america_272",
-    "name": "Enclave Remnant Post",
+    "name": "Directorate Remnant Post",
     "lat": 51.768808,
     "lng": -127.249549,
     "lvl": 55,
@@ -6165,7 +6165,7 @@
     "biome": "temperate_forest",
     "faction": "hollow_choir",
     "type": "normal",
-    "lore": "Enclave Remnant Post. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Directorate Remnant Post. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -6180,7 +6180,7 @@
   },
   {
     "id": "general_atomics_plaza_north_america_273",
-    "name": "General Atomics Plaza",
+    "name": "Helio Dynamics Plaza",
     "lat": 30.071524,
     "lng": -55.943869,
     "lvl": 18,
@@ -6188,7 +6188,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "General Atomics Plaza. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Helio Dynamics Plaza. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -6380,7 +6380,7 @@
   },
   {
     "id": "robco_service_center_north_america_282",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 28.156969,
     "lng": -57.222803,
     "lvl": 40,
@@ -6388,7 +6388,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "RobCo Service Center. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "FizzCo Service Center. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -6604,7 +6604,7 @@
   },
   {
     "id": "minutemen_checkpoint_north_america_292",
-    "name": "Minutemen Checkpoint",
+    "name": "Settlement Watch Checkpoint",
     "lat": 36.506106,
     "lng": -147.253013,
     "lvl": 81,
@@ -6612,7 +6612,7 @@
     "biome": "urban_ruins",
     "faction": "crater_syndicate",
     "type": "normal",
-    "lore": "Minutemen Checkpoint. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Settlement Watch Checkpoint. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -6628,7 +6628,7 @@
   },
   {
     "id": "ncr_forward_base_north_america_293",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 18.822003,
     "lng": -93.645806,
     "lvl": 26,
@@ -6636,7 +6636,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "NCR Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Frontier Compact Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -6827,7 +6827,7 @@
   },
   {
     "id": "general_atomics_plaza_north_america_302",
-    "name": "General Atomics Plaza",
+    "name": "Helio Dynamics Plaza",
     "lat": 56.27957,
     "lng": -154.415259,
     "lvl": 35,
@@ -6835,7 +6835,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "megastructure",
-    "lore": "General Atomics Plaza. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell. The structure dominates the horizon, a monument to pre-war ambition and post-war regret. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Helio Dynamics Plaza. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell. The structure dominates the horizon, a monument to pre-war ambition and post-war regret. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 260,
     "loot": {
       "items": [
@@ -7352,7 +7352,7 @@
     "biome": "urban_ruins",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "Forward Operating Dome. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Forward Operating Dome. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -7614,7 +7614,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_europe_17",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 52.417041,
     "lng": 25.668531,
     "lvl": 31,
@@ -7622,7 +7622,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "vault",
-    "lore": "Sunset Sarsaparilla Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls. The terminal here only displays one message: 'War. War never changes.'",
+    "lore": "Dustpop Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls. The terminal here only displays one message: 'War. War never changes.'",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -8081,7 +8081,7 @@
     "biome": "temperate_forest",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Nightfall Basin. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Tunnel Snakes allegedly ruled here once. Nobody knows what that means anymore.",
+    "lore": "Nightfall Basin. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Culvert Vipers allegedly ruled here once. Nobody knows what that means anymore.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -8164,7 +8164,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_europe_41",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": 61.207667,
     "lng": 20.753956,
     "lvl": 72,
@@ -8172,7 +8172,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Brineclaw Spawning Pool. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -8187,7 +8187,7 @@
   },
   {
     "id": "nuka_world_adjacent_europe_42",
-    "name": "Nuka-World Adjacent",
+    "name": "Fizz Fair Adjacent",
     "lat": 54.708179,
     "lng": 31.831176,
     "lvl": 28,
@@ -8195,7 +8195,7 @@
     "biome": "temperate_forest",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Nuka-World Adjacent. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Fizz Fair Adjacent. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -8282,7 +8282,7 @@
     "biome": "urban_ruins",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "Sunset Fusion Plant. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets. The vending machines here only dispense existential dread. And Nuka-Cola.",
+    "lore": "Sunset Fusion Plant. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets. The vending machines here only dispense existential dread. And Atomic Fizz.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -8318,7 +8318,7 @@
   },
   {
     "id": "ncr_forward_base_europe_48",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 35.945111,
     "lng": 5.11498,
     "lvl": 12,
@@ -8326,7 +8326,7 @@
     "biome": "urban_ruins",
     "faction": "crater_syndicate",
     "type": "normal",
-    "lore": "NCR Forward Base. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Frontier Compact Forward Base. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -8520,7 +8520,7 @@
   },
   {
     "id": "ncr_forward_base_europe_57",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 57.788843,
     "lng": 34.991088,
     "lvl": 92,
@@ -8528,7 +8528,7 @@
     "biome": "urban_ruins",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "NCR Forward Base. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Frontier Compact Forward Base. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -8589,7 +8589,7 @@
   },
   {
     "id": "radscorpion_burrow_europe_60",
-    "name": "Radscorpion Burrow",
+    "name": "Glowsting Burrow",
     "lat": 41.672879,
     "lng": 10.911101,
     "lvl": 10,
@@ -8597,7 +8597,7 @@
     "biome": "temperate_forest",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Radscorpion Burrow. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Glowsting Burrow. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -8653,7 +8653,7 @@
   },
   {
     "id": "robco_service_center_europe_63",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 36.754713,
     "lng": 20.154736,
     "lvl": 41,
@@ -8661,7 +8661,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "RobCo Service Center. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "FizzCo Service Center. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -8963,7 +8963,7 @@
   },
   {
     "id": "patrolling_mojave_rest_stop_europe_77",
-    "name": "Patrolling Mojave Rest Stop",
+    "name": "Patrolling Cinder Basin Rest Stop",
     "lat": 54.467291,
     "lng": -2.695685,
     "lvl": 80,
@@ -8971,7 +8971,7 @@
     "biome": "urban_ruins",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Patrolling Mojave Rest Stop. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Patrolling Cinder Basin Rest Stop. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -9062,7 +9062,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Atomic Works. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Atomic Works. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -9187,7 +9187,7 @@
   },
   {
     "id": "general_atomics_plaza_europe_87",
-    "name": "General Atomics Plaza",
+    "name": "Helio Dynamics Plaza",
     "lat": 38.376837,
     "lng": 33.630791,
     "lvl": 94,
@@ -9195,7 +9195,7 @@
     "biome": "urban_ruins",
     "faction": "crater_syndicate",
     "type": "normal",
-    "lore": "General Atomics Plaza. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets. Someone carved 'SAVE BEFORE ENTERING' into the wall. Ominous.",
+    "lore": "Helio Dynamics Plaza. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets. Someone carved 'SAVE BEFORE ENTERING' into the wall. Ominous.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -9211,7 +9211,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_europe_88",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 58.468901,
     "lng": 29.65724,
     "lvl": 17,
@@ -9219,7 +9219,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Dustpop Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -9308,7 +9308,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Blightlands. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. Tunnel Snakes allegedly ruled here once. Nobody knows what that means anymore.",
+    "lore": "Blightlands. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. Culvert Vipers allegedly ruled here once. Nobody knows what that means anymore.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -9541,7 +9541,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_europe_103",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 58.458971,
     "lng": 29.444082,
     "lvl": 2,
@@ -9549,7 +9549,7 @@
     "biome": "urban_ruins",
     "faction": "crater_syndicate",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Dustpop Depot. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 60,
     "loot": {
       "items": [
@@ -9685,7 +9685,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Echoing Steppe. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. The vending machines here only dispense existential dread. And Nuka-Cola.",
+    "lore": "Echoing Steppe. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. The vending machines here only dispense existential dread. And Atomic Fizz.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -9700,7 +9700,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_europe_110",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 52.666878,
     "lng": 26.955718,
     "lvl": 23,
@@ -9708,7 +9708,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Dustpop Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -9835,7 +9835,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_europe_116",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 43.626052,
     "lng": 39.789819,
     "lvl": 74,
@@ -9843,7 +9843,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Dustpop Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -9889,7 +9889,7 @@
     "biome": "temperate_forest",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Rad Pocket Delta. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Rad Pocket Delta. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -10039,7 +10039,7 @@
   },
   {
     "id": "deathclaw_promontory_europe_125",
-    "name": "Deathclaw Promontory",
+    "name": "Radtalon Promontory",
     "lat": 67.593952,
     "lng": 15.760198,
     "lvl": 46,
@@ -10047,7 +10047,7 @@
     "biome": "tundra",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Deathclaw Promontory. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Radtalon Promontory. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -10108,7 +10108,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_europe_128",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 45.764418,
     "lng": 21.344058,
     "lvl": 64,
@@ -10116,7 +10116,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Dustpop Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -10153,7 +10153,7 @@
   },
   {
     "id": "enclave_remnant_post_europe_130",
-    "name": "Enclave Remnant Post",
+    "name": "Directorate Remnant Post",
     "lat": 61.572153,
     "lng": 19.784076,
     "lvl": 72,
@@ -10161,7 +10161,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Enclave Remnant Post. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Directorate Remnant Post. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -10221,7 +10221,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_europe_133",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": 50.706381,
     "lng": 20.957462,
     "lvl": 63,
@@ -10229,7 +10229,7 @@
     "biome": "urban_ruins",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Brineclaw Spawning Pool. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -10244,7 +10244,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_europe_134",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 64.61917,
     "lng": 29.572774,
     "lvl": 3,
@@ -10252,7 +10252,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "megastructure",
-    "lore": "Sunset Sarsaparilla Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. The structure dominates the horizon, a monument to pre-war ambition and post-war regret.",
+    "lore": "Dustpop Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. The structure dominates the horizon, a monument to pre-war ambition and post-war regret.",
     "triggerRadius": 260,
     "loot": {
       "items": [
@@ -10402,7 +10402,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_europe_141",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": 45.323818,
     "lng": 26.623539,
     "lvl": 55,
@@ -10410,7 +10410,7 @@
     "biome": "urban_ruins",
     "faction": "crater_syndicate",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Brineclaw Spawning Pool. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -10540,7 +10540,7 @@
   },
   {
     "id": "minutemen_checkpoint_europe_147",
-    "name": "Minutemen Checkpoint",
+    "name": "Settlement Watch Checkpoint",
     "lat": 54.500015,
     "lng": 31.484091,
     "lvl": 18,
@@ -10548,7 +10548,7 @@
     "biome": "temperate_forest",
     "faction": "hollow_choir",
     "type": "normal",
-    "lore": "Minutemen Checkpoint. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Settlement Watch Checkpoint. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -10583,7 +10583,7 @@
   },
   {
     "id": "vault_tec_regional_hq_europe_149",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 35.298141,
     "lng": 9.061367,
     "lvl": 24,
@@ -10591,7 +10591,7 @@
     "biome": "urban_ruins",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Vault-Tec Regional HQ. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "FizzTec Regional HQ. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -10808,7 +10808,7 @@
   },
   {
     "id": "vault_tec_regional_hq_europe_159",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 61.27718,
     "lng": 35.405483,
     "lvl": 45,
@@ -10816,7 +10816,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Vault-Tec Regional HQ. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
+    "lore": "FizzTec Regional HQ. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. Graffiti here reads: 'Frontier Compact? Legion? Nah, we vibin.' The author is presumed deceased.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -10853,7 +10853,7 @@
   },
   {
     "id": "enclave_remnant_post_europe_161",
-    "name": "Enclave Remnant Post",
+    "name": "Directorate Remnant Post",
     "lat": 42.321605,
     "lng": 8.130812,
     "lvl": 79,
@@ -10861,7 +10861,7 @@
     "biome": "temperate_forest",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Enclave Remnant Post. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Directorate Remnant Post. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -10898,7 +10898,7 @@
   },
   {
     "id": "enclave_remnant_post_europe_163",
-    "name": "Enclave Remnant Post",
+    "name": "Directorate Remnant Post",
     "lat": 40.079677,
     "lng": 27.752124,
     "lvl": 80,
@@ -10906,7 +10906,7 @@
     "biome": "urban_ruins",
     "faction": "crater_syndicate",
     "type": "normal",
-    "lore": "Enclave Remnant Post. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets. A skeleton sits at a desk, hand on mouse, forever waiting for the game to load.",
+    "lore": "Directorate Remnant Post. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets. A skeleton sits at a desk, hand on mouse, forever waiting for the game to load.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -10922,7 +10922,7 @@
   },
   {
     "id": "minutemen_checkpoint_europe_164",
-    "name": "Minutemen Checkpoint",
+    "name": "Settlement Watch Checkpoint",
     "lat": 58.075397,
     "lng": 38.060397,
     "lvl": 41,
@@ -10930,7 +10930,7 @@
     "biome": "temperate_forest",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Minutemen Checkpoint. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell. Someone spray-painted 'THE GAME WAS RIGGED FROM THE START' on the entrance. They weren't wrong.",
+    "lore": "Settlement Watch Checkpoint. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell. Someone spray-painted 'THE GAME WAS RIGGED FROM THE START' on the entrance. They weren't wrong.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -11153,7 +11153,7 @@
     "biome": "tundra",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Silo Complex. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
+    "lore": "Silo Complex. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Wind claws through broken structures, carrying the taste of metal and distant storms. Graffiti here reads: 'Frontier Compact? Legion? Nah, we vibin.' The author is presumed deceased.",
     "triggerRadius": 60,
     "loot": {
       "items": [
@@ -11276,7 +11276,7 @@
   },
   {
     "id": "vault_tec_regional_hq_europe_180",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 58.114765,
     "lng": 27.763368,
     "lvl": 63,
@@ -11284,7 +11284,7 @@
     "biome": "urban_ruins",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Vault-Tec Regional HQ. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "FizzTec Regional HQ. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -11400,7 +11400,7 @@
     "biome": "temperate_forest",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "The Backrooms Entry Point. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "The Backrooms Entry Point. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -11468,7 +11468,7 @@
     "biome": "temperate_forest",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "POV You Found Loot Memorial. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
+    "lore": "POV You Found Loot Memorial. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. Graffiti here reads: 'Frontier Compact? Legion? Nah, we vibin.' The author is presumed deceased.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -11574,7 +11574,7 @@
   },
   {
     "id": "robco_service_center_europe_193",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 44.076791,
     "lng": 12.67997,
     "lvl": 38,
@@ -11582,7 +11582,7 @@
     "biome": "urban_ruins",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "RobCo Service Center. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "FizzCo Service Center. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -11686,7 +11686,7 @@
   },
   {
     "id": "robco_service_center_europe_198",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 43.01388,
     "lng": 6.477298,
     "lvl": 76,
@@ -11694,7 +11694,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "RobCo Service Center. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Someone spray-painted 'THE GAME WAS RIGGED FROM THE START' on the entrance. They weren't wrong.",
+    "lore": "FizzCo Service Center. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Someone spray-painted 'THE GAME WAS RIGGED FROM THE START' on the entrance. They weren't wrong.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -11934,7 +11934,7 @@
   },
   {
     "id": "robco_service_center_europe_209",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 60.100535,
     "lng": 14.816254,
     "lvl": 41,
@@ -11942,7 +11942,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "vault",
-    "lore": "RobCo Service Center. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "FizzCo Service Center. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -11980,7 +11980,7 @@
   },
   {
     "id": "enclave_remnant_post_europe_211",
-    "name": "Enclave Remnant Post",
+    "name": "Directorate Remnant Post",
     "lat": 37.063735,
     "lng": 35.235503,
     "lvl": 91,
@@ -11988,7 +11988,7 @@
     "biome": "temperate_forest",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Enclave Remnant Post. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Directorate Remnant Post. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -12093,7 +12093,7 @@
   },
   {
     "id": "the_tunnel_snakes_clubhouse_europe_216",
-    "name": "The Tunnel Snakes' Clubhouse",
+    "name": "The Culvert Vipers' Clubhouse",
     "lat": 49.162459,
     "lng": 9.415242,
     "lvl": 19,
@@ -12101,7 +12101,7 @@
     "biome": "urban_ruins",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "The Tunnel Snakes' Clubhouse. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "The Culvert Vipers' Clubhouse. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -12159,7 +12159,7 @@
   },
   {
     "id": "yao_guai_caves_europe_219",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 69.082487,
     "lng": -8.316316,
     "lvl": 24,
@@ -12167,7 +12167,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Yao Guai Caves. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Ashbear Caves. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -12558,7 +12558,7 @@
   },
   {
     "id": "yao_guai_caves_asia_17",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 20.254842,
     "lng": 116.199536,
     "lvl": 78,
@@ -12566,7 +12566,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Yao Guai Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Ashbear Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -12764,7 +12764,7 @@
   },
   {
     "id": "radscorpion_burrow_asia_26",
-    "name": "Radscorpion Burrow",
+    "name": "Glowsting Burrow",
     "lat": 19.071217,
     "lng": 123.299556,
     "lvl": 81,
@@ -12772,7 +12772,7 @@
     "biome": "temperate_forest",
     "faction": "hollow_choir",
     "type": "vault",
-    "lore": "Radscorpion Burrow. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "Glowsting Burrow. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -13146,7 +13146,7 @@
     "biome": "mountain",
     "faction": "hollow_choir",
     "type": "normal",
-    "lore": "Screaming Savannah. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Thin air makes every step a wager; echoes carry further than they should. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Screaming Savannah. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Thin air makes every step a wager; echoes carry further than they should. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -13160,7 +13160,7 @@
   },
   {
     "id": "deathclaw_promontory_asia_43",
-    "name": "Deathclaw Promontory",
+    "name": "Radtalon Promontory",
     "lat": 35.040292,
     "lng": 67.746193,
     "lvl": 48,
@@ -13168,7 +13168,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "vault",
-    "lore": "Deathclaw Promontory. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "Radtalon Promontory. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -13320,7 +13320,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_asia_50",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 54.065439,
     "lng": 134.993782,
     "lvl": 23,
@@ -13328,7 +13328,7 @@
     "biome": "temperate_forest",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
+    "lore": "Dustpop Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell. Graffiti here reads: 'Frontier Compact? Legion? Nah, we vibin.' The author is presumed deceased.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -13385,7 +13385,7 @@
   },
   {
     "id": "yao_guai_caves_asia_53",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 29.964034,
     "lng": 40.896285,
     "lvl": 57,
@@ -13393,7 +13393,7 @@
     "biome": "urban_ruins",
     "faction": "crater_syndicate",
     "type": "normal",
-    "lore": "Yao Guai Caves. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Ashbear Caves. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -13452,7 +13452,7 @@
   },
   {
     "id": "ncr_forward_base_asia_56",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 19.83799,
     "lng": 46.252046,
     "lvl": 99,
@@ -13460,7 +13460,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "boss",
-    "lore": "NCR Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Few walk away from this place; those who do return with tales that don’t quite make sense.",
+    "lore": "Frontier Compact Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Few walk away from this place; those who do return with tales that don’t quite make sense.",
     "triggerRadius": 240,
     "loot": {
       "items": [
@@ -13635,7 +13635,7 @@
   },
   {
     "id": "ncr_forward_base_asia_64",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 58.767877,
     "lng": 41.087953,
     "lvl": 48,
@@ -13643,7 +13643,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "NCR Forward Base. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Frontier Compact Forward Base. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -13903,7 +13903,7 @@
   },
   {
     "id": "radscorpion_burrow_asia_76",
-    "name": "Radscorpion Burrow",
+    "name": "Glowsting Burrow",
     "lat": 9.228739,
     "lng": 53.368461,
     "lvl": 83,
@@ -13911,7 +13911,7 @@
     "biome": "temperate_forest",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Radscorpion Burrow. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Glowsting Burrow. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -14040,7 +14040,7 @@
   },
   {
     "id": "minutemen_checkpoint_asia_82",
-    "name": "Minutemen Checkpoint",
+    "name": "Settlement Watch Checkpoint",
     "lat": 46.874894,
     "lng": 89.431962,
     "lvl": 44,
@@ -14048,7 +14048,7 @@
     "biome": "mountain",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Minutemen Checkpoint. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Settlement Watch Checkpoint. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -14244,7 +14244,7 @@
   },
   {
     "id": "deathclaw_promontory_asia_91",
-    "name": "Deathclaw Promontory",
+    "name": "Radtalon Promontory",
     "lat": 61.076697,
     "lng": 116.494183,
     "lvl": 34,
@@ -14252,7 +14252,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Deathclaw Promontory. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Radtalon Promontory. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -14588,7 +14588,7 @@
     "biome": "urban_ruins",
     "faction": "crater_syndicate",
     "type": "normal",
-    "lore": "Listening Post. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets. The vending machines here only dispense existential dread. And Nuka-Cola.",
+    "lore": "Listening Post. The Syndicate carved a black market out of this ruin, trading in relics too dangerous for most to touch. Tower skeletons lean against each other, windows blown out like empty eye sockets. The vending machines here only dispense existential dread. And Atomic Fizz.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -14781,7 +14781,7 @@
   },
   {
     "id": "deathclaw_alley_asia_115",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 25.575965,
     "lng": 45.106091,
     "lvl": 93,
@@ -14789,7 +14789,7 @@
     "biome": "mountain",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Deathclaw Alley. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Radtalon Alley. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -15082,7 +15082,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "vault",
-    "lore": "Wastestalker Grounds. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls. Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
+    "lore": "Wastestalker Grounds. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls. Graffiti here reads: 'Frontier Compact? Legion? Nah, we vibin.' The author is presumed deceased.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -15141,7 +15141,7 @@
   },
   {
     "id": "patrolling_mojave_rest_stop_asia_131",
-    "name": "Patrolling Mojave Rest Stop",
+    "name": "Patrolling Cinder Basin Rest Stop",
     "lat": 51.11118,
     "lng": 85.614523,
     "lvl": 72,
@@ -15149,7 +15149,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Patrolling Mojave Rest Stop. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Patrolling Cinder Basin Rest Stop. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -15367,7 +15367,7 @@
   },
   {
     "id": "vault_tec_regional_hq_asia_141",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 19.20404,
     "lng": 107.139872,
     "lvl": 30,
@@ -15375,7 +15375,7 @@
     "biome": "desert",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Vault-Tec Regional HQ. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "FizzTec Regional HQ. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -15389,7 +15389,7 @@
   },
   {
     "id": "deathclaw_alley_asia_142",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 13.97398,
     "lng": 125.845124,
     "lvl": 9,
@@ -15397,7 +15397,7 @@
     "biome": "mountain",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Deathclaw Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Radtalon Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -15410,7 +15410,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_asia_143",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": 5.027851,
     "lng": 118.68402,
     "lvl": 2,
@@ -15418,7 +15418,7 @@
     "biome": "desert",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Brineclaw Spawning Pool. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 60,
     "loot": {
       "items": [
@@ -15431,7 +15431,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_asia_144",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 63.954494,
     "lng": 93.561334,
     "lvl": 66,
@@ -15439,7 +15439,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Dustpop Depot. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -15595,7 +15595,7 @@
   },
   {
     "id": "vault_tec_regional_hq_asia_151",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 63.638189,
     "lng": 74.388683,
     "lvl": 10,
@@ -15603,7 +15603,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Vault-Tec Regional HQ. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "FizzTec Regional HQ. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -15616,7 +15616,7 @@
   },
   {
     "id": "deathclaw_alley_asia_152",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 40.445455,
     "lng": 107.25448,
     "lvl": 32,
@@ -15624,7 +15624,7 @@
     "biome": "mountain",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Deathclaw Alley. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Radtalon Alley. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -15667,7 +15667,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Ashen Quarter. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Graffiti here reads: 'NCR? Legion? Nah, we vibin.' The author is presumed deceased.",
+    "lore": "Ashen Quarter. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Graffiti here reads: 'Frontier Compact? Legion? Nah, we vibin.' The author is presumed deceased.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -15682,7 +15682,7 @@
   },
   {
     "id": "vault_tec_regional_hq_asia_155",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": 56.634257,
     "lng": 143.140512,
     "lvl": 48,
@@ -15690,7 +15690,7 @@
     "biome": "temperate_forest",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Vault-Tec Regional HQ. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "FizzTec Regional HQ. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -15798,7 +15798,7 @@
   },
   {
     "id": "enclave_remnant_post_asia_160",
-    "name": "Enclave Remnant Post",
+    "name": "Directorate Remnant Post",
     "lat": 61.183731,
     "lng": 130.492395,
     "lvl": 28,
@@ -15806,7 +15806,7 @@
     "biome": "tundra",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Enclave Remnant Post. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
+    "lore": "Directorate Remnant Post. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. Wind claws through broken structures, carrying the taste of metal and distant storms.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -15912,7 +15912,7 @@
   },
   {
     "id": "deathclaw_promontory_asia_165",
-    "name": "Deathclaw Promontory",
+    "name": "Radtalon Promontory",
     "lat": 42.7146,
     "lng": 59.957431,
     "lvl": 28,
@@ -15920,7 +15920,7 @@
     "biome": "mountain",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Deathclaw Promontory. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Radtalon Promontory. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -15934,7 +15934,7 @@
   },
   {
     "id": "robco_service_center_asia_166",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 37.423882,
     "lng": 87.453032,
     "lvl": 38,
@@ -15942,7 +15942,7 @@
     "biome": "mountain",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "RobCo Service Center. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "FizzCo Service Center. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -15956,7 +15956,7 @@
   },
   {
     "id": "general_atomics_plaza_asia_167",
-    "name": "General Atomics Plaza",
+    "name": "Helio Dynamics Plaza",
     "lat": 10.430645,
     "lng": 81.458572,
     "lvl": 56,
@@ -15964,7 +15964,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "General Atomics Plaza. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
+    "lore": "Helio Dynamics Plaza. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -16000,7 +16000,7 @@
   },
   {
     "id": "nuka_world_adjacent_asia_169",
-    "name": "Nuka-World Adjacent",
+    "name": "Fizz Fair Adjacent",
     "lat": 5.894885,
     "lng": 109.772176,
     "lvl": 26,
@@ -16008,7 +16008,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Nuka-World Adjacent. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Fizz Fair Adjacent. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -16044,7 +16044,7 @@
   },
   {
     "id": "enclave_remnant_post_asia_171",
-    "name": "Enclave Remnant Post",
+    "name": "Directorate Remnant Post",
     "lat": 20.294468,
     "lng": 119.26953,
     "lvl": 17,
@@ -16052,7 +16052,7 @@
     "biome": "desert",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "Enclave Remnant Post. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Directorate Remnant Post. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -16224,7 +16224,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_asia_179",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": 50.574056,
     "lng": 145.918034,
     "lvl": 51,
@@ -16232,7 +16232,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Brineclaw Spawning Pool. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -16268,7 +16268,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_asia_181",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 24.477253,
     "lng": 53.617244,
     "lvl": 95,
@@ -16276,7 +16276,7 @@
     "biome": "desert",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Dustpop Depot. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -16300,7 +16300,7 @@
     "biome": "temperate_forest",
     "faction": "iron_wastes_militia",
     "type": "megastructure",
-    "lore": "Echoing Steppe. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. The structure dominates the horizon, a monument to pre-war ambition and post-war regret. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Echoing Steppe. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell. The structure dominates the horizon, a monument to pre-war ambition and post-war regret. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 260,
     "loot": {
       "items": [
@@ -16502,7 +16502,7 @@
   },
   {
     "id": "yao_guai_caves_asia_191",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": 58.754704,
     "lng": 46.736559,
     "lvl": 38,
@@ -16510,7 +16510,7 @@
     "biome": "mountain",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Yao Guai Caves. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Ashbear Caves. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -16636,7 +16636,7 @@
   },
   {
     "id": "the_tunnel_snakes_clubhouse_asia_197",
-    "name": "The Tunnel Snakes' Clubhouse",
+    "name": "The Culvert Vipers' Clubhouse",
     "lat": 40.355729,
     "lng": 84.991905,
     "lvl": 63,
@@ -16644,7 +16644,7 @@
     "biome": "mountain",
     "faction": "hollow_choir",
     "type": "normal",
-    "lore": "The Tunnel Snakes' Clubhouse. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "The Culvert Vipers' Clubhouse. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -16771,7 +16771,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_asia_203",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": 12.135258,
     "lng": 132.157457,
     "lvl": 15,
@@ -16779,7 +16779,7 @@
     "biome": "temperate_forest",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Brineclaw Spawning Pool. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -16840,7 +16840,7 @@
   },
   {
     "id": "ncr_forward_base_asia_206",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 10.728756,
     "lng": 106.950726,
     "lvl": 42,
@@ -16848,7 +16848,7 @@
     "biome": "mountain",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "NCR Forward Base. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Frontier Compact Forward Base. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -16904,7 +16904,7 @@
   },
   {
     "id": "robco_service_center_asia_209",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 22.098857,
     "lng": 142.321278,
     "lvl": 77,
@@ -16912,7 +16912,7 @@
     "biome": "temperate_forest",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "RobCo Service Center. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell. A skeleton sits at a desk, hand on mouse, forever waiting for the game to load.",
+    "lore": "FizzCo Service Center. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell. A skeleton sits at a desk, hand on mouse, forever waiting for the game to load.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -17063,7 +17063,7 @@
   },
   {
     "id": "robco_service_center_asia_216",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 20.952932,
     "lng": 86.843384,
     "lvl": 34,
@@ -17071,7 +17071,7 @@
     "biome": "mountain",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "RobCo Service Center. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "FizzCo Service Center. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -17333,7 +17333,7 @@
   },
   {
     "id": "ncr_forward_base_south_america_8",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 6.681231,
     "lng": -64.489214,
     "lvl": 97,
@@ -17341,7 +17341,7 @@
     "biome": "jungle",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "NCR Forward Base. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. The growth here is too fast, too hungry, feeding on more than just water and sun.",
+    "lore": "Frontier Compact Forward Base. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. The growth here is too fast, too hungry, feeding on more than just water and sun.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -17357,7 +17357,7 @@
   },
   {
     "id": "deathclaw_alley_south_america_9",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": -36.708636,
     "lng": -38.525216,
     "lvl": 86,
@@ -17365,7 +17365,7 @@
     "biome": "mountain",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Deathclaw Alley. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Radtalon Alley. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -17448,7 +17448,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_south_america_13",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": -8.334918,
     "lng": -51.784853,
     "lvl": 85,
@@ -17456,7 +17456,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Dustpop Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -17583,7 +17583,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_south_america_19",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": -45.369548,
     "lng": -36.089865,
     "lvl": 12,
@@ -17591,7 +17591,7 @@
     "biome": "mountain",
     "faction": "iron_wastes_militia",
     "type": "vault",
-    "lore": "Sunset Sarsaparilla Depot. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "Dustpop Depot. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Thin air makes every step a wager; echoes carry further than they should. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -17679,7 +17679,7 @@
     "biome": "jungle",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Essential NPC Safehouse. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. The growth here is too fast, too hungry, feeding on more than just water and sun. Tunnel Snakes allegedly ruled here once. Nobody knows what that means anymore.",
+    "lore": "Essential NPC Safehouse. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. The growth here is too fast, too hungry, feeding on more than just water and sun. Culvert Vipers allegedly ruled here once. Nobody knows what that means anymore.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -18146,7 +18146,7 @@
   },
   {
     "id": "deathclaw_alley_south_america_44",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": -39.33798,
     "lng": -41.456955,
     "lvl": 76,
@@ -18154,7 +18154,7 @@
     "biome": "mountain",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Deathclaw Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Radtalon Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -18439,7 +18439,7 @@
   },
   {
     "id": "ncr_forward_base_south_america_57",
-    "name": "NCR Forward Base",
+    "name": "Frontier Compact Forward Base",
     "lat": 4.428427,
     "lng": -75.776645,
     "lvl": 67,
@@ -18447,7 +18447,7 @@
     "biome": "jungle",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "NCR Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. The growth here is too fast, too hungry, feeding on more than just water and sun.",
+    "lore": "Frontier Compact Forward Base. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. The growth here is too fast, too hungry, feeding on more than just water and sun.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -18552,7 +18552,7 @@
   },
   {
     "id": "yao_guai_caves_south_america_62",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": -51.716386,
     "lng": -63.030282,
     "lvl": 87,
@@ -18560,7 +18560,7 @@
     "biome": "mountain",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Yao Guai Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Ashbear Caves. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -18755,7 +18755,7 @@
   },
   {
     "id": "vault_tec_regional_hq_south_america_71",
-    "name": "Vault-Tec Regional HQ",
+    "name": "FizzTec Regional HQ",
     "lat": -28.357701,
     "lng": -61.234966,
     "lvl": 41,
@@ -18763,7 +18763,7 @@
     "biome": "urban_ruins",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Vault-Tec Regional HQ. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Tunnel Snakes allegedly ruled here once. Nobody knows what that means anymore.",
+    "lore": "FizzTec Regional HQ. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Tower skeletons lean against each other, windows blown out like empty eye sockets. Culvert Vipers allegedly ruled here once. Nobody knows what that means anymore.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -18799,7 +18799,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_south_america_73",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 7.554353,
     "lng": -36.076597,
     "lvl": 16,
@@ -18807,7 +18807,7 @@
     "biome": "jungle",
     "faction": "feral_broods",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Feral broods nest here, drawn to something in the soil that twists bone and thought alike. The growth here is too fast, too hungry, feeding on more than just water and sun.",
+    "lore": "Dustpop Depot. Feral broods nest here, drawn to something in the soil that twists bone and thought alike. The growth here is too fast, too hungry, feeding on more than just water and sun.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -18886,7 +18886,7 @@
   },
   {
     "id": "yao_guai_caves_south_america_77",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": -11.937634,
     "lng": -50.167079,
     "lvl": 39,
@@ -18894,7 +18894,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Yao Guai Caves. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Ashbear Caves. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -19243,7 +19243,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_south_america_93",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": -37.082546,
     "lng": -52.703966,
     "lvl": 66,
@@ -19251,7 +19251,7 @@
     "biome": "mountain",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
+    "lore": "Dustpop Depot. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Thin air makes every step a wager; echoes carry further than they should.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -19288,7 +19288,7 @@
   },
   {
     "id": "sunset_sarsaparilla_depot_south_america_95",
-    "name": "Sunset Sarsaparilla Depot",
+    "name": "Dustpop Depot",
     "lat": 14.141462,
     "lng": -69.793635,
     "lvl": 78,
@@ -19296,7 +19296,7 @@
     "biome": "jungle",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Sunset Sarsaparilla Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. The growth here is too fast, too hungry, feeding on more than just water and sun. Pre-war records suggest this was a Deez Caps distribution center. Nobody knows what those are.",
+    "lore": "Dustpop Depot. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. The growth here is too fast, too hungry, feeding on more than just water and sun. Pre-war records suggest this was a Deez Caps distribution center. Nobody knows what those are.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -19611,7 +19611,7 @@
     "biome": "desert",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Touch Grass Sanctuary. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Touch Grass Sanctuary. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -19878,7 +19878,7 @@
   },
   {
     "id": "deathclaw_alley_africa_21",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 30.57285,
     "lng": 40.13466,
     "lvl": 25,
@@ -19886,7 +19886,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Deathclaw Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Radtalon Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -20108,7 +20108,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Blightlands. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Tunnel Snakes allegedly ruled here once. Nobody knows what that means anymore.",
+    "lore": "Blightlands. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate. Culvert Vipers allegedly ruled here once. Nobody knows what that means anymore.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -20152,7 +20152,7 @@
     "biome": "temperate_forest",
     "faction": "hollow_choir",
     "type": "normal",
-    "lore": "Recon Outpost. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Recon Outpost. Followers of the Hollow Choir gather here, listening for whispers in the static of the old world. Green has grown over the old scars, but the roots remember where the fire fell. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -20352,7 +20352,7 @@
   },
   {
     "id": "robco_service_center_africa_42",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": 18.099647,
     "lng": 3.362861,
     "lvl": 53,
@@ -20360,7 +20360,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "RobCo Service Center. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "FizzCo Service Center. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -20510,7 +20510,7 @@
   },
   {
     "id": "deathclaw_alley_africa_49",
-    "name": "Deathclaw Alley",
+    "name": "Radtalon Alley",
     "lat": 15.379324,
     "lng": 27.006555,
     "lvl": 21,
@@ -20518,7 +20518,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Deathclaw Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Radtalon Alley. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 120,
     "loot": {
       "items": [
@@ -20531,7 +20531,7 @@
   },
   {
     "id": "robco_service_center_africa_50",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": -34.791386,
     "lng": 11.309268,
     "lvl": 74,
@@ -20539,7 +20539,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "vault",
-    "lore": "RobCo Service Center. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
+    "lore": "FizzCo Service Center. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell. Rumors say a sealed vault lies beneath, its experiment long since slipped the controls.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -20555,7 +20555,7 @@
   },
   {
     "id": "nuka_world_adjacent_africa_51",
-    "name": "Nuka-World Adjacent",
+    "name": "Fizz Fair Adjacent",
     "lat": 34.946103,
     "lng": -8.455056,
     "lvl": 55,
@@ -20563,7 +20563,7 @@
     "biome": "temperate_forest",
     "faction": "iron_wastes_militia",
     "type": "normal",
-    "lore": "Nuka-World Adjacent. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Fizz Fair Adjacent. A disciplined remnant force claims this site, enforcing order with pre-war doctrine and salvaged firepower. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -20783,7 +20783,7 @@
   },
   {
     "id": "nuka_world_adjacent_africa_61",
-    "name": "Nuka-World Adjacent",
+    "name": "Fizz Fair Adjacent",
     "lat": 16.484384,
     "lng": -9.84693,
     "lvl": 89,
@@ -20791,7 +20791,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Nuka-World Adjacent. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Fizz Fair Adjacent. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -20920,7 +20920,7 @@
   },
   {
     "id": "yao_guai_caves_africa_67",
-    "name": "Yao Guai Caves",
+    "name": "Ashbear Caves",
     "lat": -34.339468,
     "lng": -17.828691,
     "lvl": 9,
@@ -20928,7 +20928,7 @@
     "biome": "desert",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "Yao Guai Caves. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Ashbear Caves. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -21079,7 +21079,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_africa_74",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": -11.049508,
     "lng": 12.116937,
     "lvl": 65,
@@ -21087,7 +21087,7 @@
     "biome": "jungle",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. The growth here is too fast, too hungry, feeding on more than just water and sun.",
+    "lore": "Brineclaw Spawning Pool. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. The growth here is too fast, too hungry, feeding on more than just water and sun.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -21146,7 +21146,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_africa_77",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": 20.763147,
     "lng": -9.275394,
     "lvl": 59,
@@ -21154,7 +21154,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Brineclaw Spawning Pool. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -21219,7 +21219,7 @@
   },
   {
     "id": "general_atomics_plaza_australia_0",
-    "name": "General Atomics Plaza",
+    "name": "Helio Dynamics Plaza",
     "lat": -10.808541,
     "lng": 150.418362,
     "lvl": 75,
@@ -21227,7 +21227,7 @@
     "biome": "desert",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "General Atomics Plaza. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Helio Dynamics Plaza. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -21377,7 +21377,7 @@
   },
   {
     "id": "radscorpion_burrow_australia_7",
-    "name": "Radscorpion Burrow",
+    "name": "Glowsting Burrow",
     "lat": -30.064359,
     "lng": 125.003537,
     "lvl": 89,
@@ -21385,7 +21385,7 @@
     "biome": "temperate_forest",
     "faction": "fizzco_remnants",
     "type": "normal",
-    "lore": "Radscorpion Burrow. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Glowsting Burrow. FizzCo ran clandestine experiments here long after the first sirens. Some of their tech still hums beneath the dust. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -21741,7 +21741,7 @@
   },
   {
     "id": "radscorpion_burrow_australia_23",
-    "name": "Radscorpion Burrow",
+    "name": "Glowsting Burrow",
     "lat": -30.015268,
     "lng": 138.709416,
     "lvl": 51,
@@ -21749,7 +21749,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Radscorpion Burrow. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Glowsting Burrow. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -21786,7 +21786,7 @@
   },
   {
     "id": "robco_service_center_australia_25",
-    "name": "RobCo Service Center",
+    "name": "FizzCo Service Center",
     "lat": -16.986015,
     "lng": 132.936261,
     "lvl": 66,
@@ -21794,7 +21794,7 @@
     "biome": "desert",
     "faction": "dustwalkers",
     "type": "normal",
-    "lore": "RobCo Service Center. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "FizzCo Service Center. Raiders on jury-rigged vehicles sweep in and out, leaving scorched tracks and hurried graves. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -21880,7 +21880,7 @@
   },
   {
     "id": "general_atomics_plaza_australia_29",
-    "name": "General Atomics Plaza",
+    "name": "Helio Dynamics Plaza",
     "lat": -34.059476,
     "lng": 154.706563,
     "lvl": 34,
@@ -21888,7 +21888,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "General Atomics Plaza. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Helio Dynamics Plaza. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -22059,7 +22059,7 @@
   },
   {
     "id": "enclave_remnant_post_australia_37",
-    "name": "Enclave Remnant Post",
+    "name": "Directorate Remnant Post",
     "lat": -44.353931,
     "lng": 111.464447,
     "lvl": 34,
@@ -22067,7 +22067,7 @@
     "biome": "desert",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Enclave Remnant Post. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
+    "lore": "Directorate Remnant Post. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. Endless grit has sanded down steel and stone alike, leaving only the stubborn and the desperate.",
     "triggerRadius": 150,
     "loot": {
       "items": [
@@ -22102,7 +22102,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_australia_39",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": -43.290551,
     "lng": 135.465457,
     "lvl": 66,
@@ -22110,7 +22110,7 @@
     "biome": "temperate_forest",
     "faction": "radborne_tribes",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
+    "lore": "Brineclaw Spawning Pool. Radborne wanderers etched their history into the walls here, their skin glowing faintly in the dark. Green has grown over the old scars, but the roots remember where the fire fell.",
     "triggerRadius": 190,
     "loot": {
       "items": [
@@ -22394,7 +22394,7 @@
   },
   {
     "id": "deathclaw_promontory_antarctica_12",
-    "name": "Deathclaw Promontory",
+    "name": "Radtalon Promontory",
     "lat": -68.432744,
     "lng": -24.592282,
     "lvl": 11,
@@ -22402,7 +22402,7 @@
     "biome": "arctic",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Deathclaw Promontory. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. The ice groans underfoot, swallowing older footprints and the wreckage they once marked.",
+    "lore": "Radtalon Promontory. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. The ice groans underfoot, swallowing older footprints and the wreckage they once marked.",
     "triggerRadius": 90,
     "loot": {
       "items": [
@@ -22439,7 +22439,7 @@
   },
   {
     "id": "mirelurk_spawning_pool_antarctica_14",
-    "name": "Mirelurk Spawning Pool",
+    "name": "Brineclaw Spawning Pool",
     "lat": -76.417511,
     "lng": 160.108702,
     "lvl": 84,
@@ -22447,7 +22447,7 @@
     "biome": "arctic",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Mirelurk Spawning Pool. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. The ice groans underfoot, swallowing older footprints and the wreckage they once marked.",
+    "lore": "Brineclaw Spawning Pool. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. The ice groans underfoot, swallowing older footprints and the wreckage they once marked.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -22494,7 +22494,7 @@
     "biome": "arctic",
     "faction": "deepwatch",
     "type": "normal",
-    "lore": "Nightfall Basin. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. The ice groans underfoot, swallowing older footprints and the wreckage they once marked. Scavengers found a cache of Sunset Sarsaparilla star caps here. The curse continues.",
+    "lore": "Nightfall Basin. Deepwatch scouts use this as a last warm light against the endless cold and the things that prowl in it. The ice groans underfoot, swallowing older footprints and the wreckage they once marked. Scavengers found a cache of Dustpop star caps here. The curse continues.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -22510,7 +22510,7 @@
   },
   {
     "id": "nuka_world_adjacent_antarctica_17",
-    "name": "Nuka-World Adjacent",
+    "name": "Fizz Fair Adjacent",
     "lat": -85.916802,
     "lng": -93.907889,
     "lvl": 71,
@@ -22518,7 +22518,7 @@
     "biome": "arctic",
     "faction": "free_scavs",
     "type": "normal",
-    "lore": "Nuka-World Adjacent. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. The ice groans underfoot, swallowing older footprints and the wreckage they once marked. The vending machines here only dispense existential dread. And Nuka-Cola.",
+    "lore": "Fizz Fair Adjacent. Independent scavvers drift through in loose bands, trading rumors for cartridges and stories for scraps. The ice groans underfoot, swallowing older footprints and the wreckage they once marked. The vending machines here only dispense existential dread. And Atomic Fizz.",
     "triggerRadius": 220,
     "loot": {
       "items": [
@@ -22608,7 +22608,7 @@
     "biome": "desert",
     "faction": "communist_directive",
     "type": "communist_vault",
-    "lore": "The Communist Automation Directive's crown jewel. A robot factory sealed beneath the Mojave since 2041, still running, still building, still waiting for orders from a government that no longer exists.",
+    "lore": "The Communist Automation Directive's crown jewel. A robot factory sealed beneath the Cinder Basin since 2041, still running, still building, still waiting for orders from a government that no longer exists.",
     "triggerRadius": 220,
     "loot": {
       "items": [

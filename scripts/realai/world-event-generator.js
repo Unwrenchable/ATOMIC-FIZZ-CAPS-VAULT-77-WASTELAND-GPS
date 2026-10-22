@@ -200,7 +200,7 @@ ${JSON.stringify(worldState, null, 2)}
 ${buildWorldBrainContextBlock(seed)}
 
 RULES:
-- Fallout Mojave tone.
+- wasteland Cinder Basin tone.
 - Short, punchy, gritty.
 - No paragraphs.
 - No extra keys.

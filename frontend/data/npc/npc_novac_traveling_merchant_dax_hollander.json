@@ -6,7 +6,7 @@
   "currentRegion": "mojave",
   "role": "Traveling Merchant",
   "personality": "Friendly, talkative, always has a story.",
-  "description": "Dax stops in Novac between long caravan runs. He hears rumors from every corner of the Mojave.",
+  "description": "Dax stops in Novac between long caravan runs. He hears rumors from every corner of the Cinder Basin.",
   "questHooks": [
     "Says a caravan vanished near Boulder City.",
     "Claims someone is paying good caps for old tech.",

@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "description": "Atomic Fizz Caps loot drop tables v2 \u2014 rebalanced weights, full CAPS economy, Fallout-authentic items, crypto-layer NFTs",
+  "description": "Atomic Fizz Caps loot drop tables v2 \u2014 rebalanced weights, full CAPS economy, wasteland-authentic items, crypto-layer NFTs",
   "meta": {
     "nft_drop_base_chance": 0.01,
     "legendary_base_chance": 0.025,
@@ -124,7 +124,7 @@
       },
       {
         "id": "bottle_caps_loose",
-        "name": "Bottle Caps (Loose)",
+        "name": "Atomic Fizz Caps (Loose)",
         "type": "currency",
         "weight": 2.5,
         "capsValue": 15,
@@ -138,7 +138,7 @@
     "uncommon": [
       {
         "id": "stimpak",
-        "name": "Stimpak",
+        "name": "FizzPak",
         "type": "consumable",
         "weight": 2.0,
         "capsValue": 25,
@@ -148,7 +148,7 @@
       },
       {
         "id": "radaway",
-        "name": "RadAway",
+        "name": "GlowFlush",
         "type": "consumable",
         "weight": 2.0,
         "capsValue": 20,
@@ -158,7 +158,7 @@
       },
       {
         "id": "rad_x",
-        "name": "Rad-X",
+        "name": "GlowTab",
         "type": "consumable",
         "weight": 1.5,
         "capsValue": 15,
@@ -293,7 +293,7 @@
         "weight": 0.7,
         "capsValue": 28,
         "tradeable": true,
-        "description": "Leather leg guard, left side. Keeps the radscorpion stingers at bay.",
+        "description": "Leather leg guard, left side. Keeps the glowsting stingers at bay.",
         "nft_eligible": true
       },
       {
@@ -454,7 +454,7 @@
       },
       {
         "id": "ultra_stimpak",
-        "name": "Ultra Stimpak",
+        "name": "Ultra FizzPak",
         "type": "consumable",
         "weight": 1.5,
         "capsValue": 75,
@@ -499,7 +499,7 @@
         "weight": 1.5,
         "capsValue": 110,
         "tradeable": true,
-        "description": "Sterile surgical tools. For when a Stimpak just won't cut it.",
+        "description": "Sterile surgical tools. For when a FizzPak just won't cut it.",
         "nft_eligible": true
       },
       {
@@ -578,7 +578,7 @@
       },
       {
         "id": "t45_pa_head",
-        "name": "T-45 Power Armor Helmet",
+        "name": "T-45 Reactor Harness Helmet",
         "type": "armor",
         "armorSet": "t45_power_armor",
         "slot": "head",
@@ -590,7 +590,7 @@
       },
       {
         "id": "t45_pa_chest",
-        "name": "T-45 Power Armor Torso",
+        "name": "T-45 Reactor Harness Torso",
         "type": "armor",
         "armorSet": "t45_power_armor",
         "slot": "chest",
@@ -602,7 +602,7 @@
       },
       {
         "id": "t45_pa_arm_l",
-        "name": "T-45 Power Armor Left Arm",
+        "name": "T-45 Reactor Harness Left Arm",
         "type": "armor",
         "armorSet": "t45_power_armor",
         "slot": "arm_l",
@@ -614,7 +614,7 @@
       },
       {
         "id": "t45_pa_arm_r",
-        "name": "T-45 Power Armor Right Arm",
+        "name": "T-45 Reactor Harness Right Arm",
         "type": "armor",
         "armorSet": "t45_power_armor",
         "slot": "arm_r",
@@ -626,7 +626,7 @@
       },
       {
         "id": "t45_pa_leg_l",
-        "name": "T-45 Power Armor Left Leg",
+        "name": "T-45 Reactor Harness Left Leg",
         "type": "armor",
         "armorSet": "t45_power_armor",
         "slot": "leg_l",
@@ -638,7 +638,7 @@
       },
       {
         "id": "t45_pa_leg_r",
-        "name": "T-45 Power Armor Right Leg",
+        "name": "T-45 Reactor Harness Right Leg",
         "type": "armor",
         "armorSet": "t45_power_armor",
         "slot": "leg_r",
@@ -712,12 +712,12 @@
       },
       {
         "id": "nuka_cola_quantum",
-        "name": "Nuka-Cola Quantum",
+        "name": "Atomic Fizz Quantum",
         "type": "consumable",
         "weight": 1.5,
         "capsValue": 250,
         "tradeable": true,
-        "description": "Glowing blue Nuka-Cola variant. Radioactive and delicious.",
+        "description": "Glowing blue Atomic Fizz variant. Radioactive and delicious.",
         "nft_eligible": true
       },
       {
@@ -782,14 +782,14 @@
         "weight": 1.5,
         "capsValue": 2000,
         "tradeable": true,
-        "description": "Vault-Tec Overseer formal wear. Max ballistic and rad protection.",
+        "description": "FizzTec Overseer formal wear. Max ballistic and rad protection.",
         "slot": "full",
         "armorSet": null,
         "nft_eligible": true
       },
       {
         "id": "t51b_pa_head",
-        "name": "T-51b Power Armor Helmet",
+        "name": "T-51b Reactor Harness Helmet",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "head",
@@ -801,19 +801,19 @@
       },
       {
         "id": "t51b_pa_chest",
-        "name": "T-51b Power Armor Torso",
+        "name": "T-51b Reactor Harness Torso",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "chest",
         "weight": 0.4,
         "capsValue": 500,
         "tradeable": true,
-        "description": "T-51b torso. Enclave-grade ballistic ceramic plating.",
+        "description": "T-51b torso. Directorate-grade ballistic ceramic plating.",
         "nft_eligible": true
       },
       {
         "id": "t51b_pa_arm_l",
-        "name": "T-51b Power Armor Left Arm",
+        "name": "T-51b Reactor Harness Left Arm",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "arm_l",
@@ -825,7 +825,7 @@
       },
       {
         "id": "t51b_pa_arm_r",
-        "name": "T-51b Power Armor Right Arm",
+        "name": "T-51b Reactor Harness Right Arm",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "arm_r",
@@ -837,7 +837,7 @@
       },
       {
         "id": "t51b_pa_leg_l",
-        "name": "T-51b Power Armor Left Leg",
+        "name": "T-51b Reactor Harness Left Leg",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "leg_l",
@@ -849,7 +849,7 @@
       },
       {
         "id": "t51b_pa_leg_r",
-        "name": "T-51b Power Armor Right Leg",
+        "name": "T-51b Reactor Harness Right Leg",
         "type": "armor",
         "armorSet": "t51b_power_armor",
         "slot": "leg_r",
@@ -876,7 +876,7 @@
         "weight": 0.8,
         "capsValue": 5000,
         "tradeable": false,
-        "description": "Vault-Tec prototype authentication chip. Opens sealed FIZZ vaults.",
+        "description": "FizzTec prototype authentication chip. Opens sealed FIZZ vaults.",
         "nft_eligible": true
       },
       {
@@ -948,7 +948,7 @@
       },
       {
         "id": "vaulttec_collectible_card",
-        "name": "Vault-Tec Collectible Card",
+        "name": "FizzTec Collectible Card",
         "type": "nft_item",
         "weight": 2.5,
         "capsValue": 50,
@@ -956,7 +956,7 @@
         "mintable": true,
         "edition": "uncommon",
         "tradeable": true,
-        "description": "Vault-Tec promotional card NFT. Collectible, redeemable for CAPS.",
+        "description": "FizzTec promotional card NFT. Collectible, redeemable for CAPS.",
         "nft_eligible": true
       },
       {
@@ -1029,7 +1029,7 @@
       "legendary_exclusive": [
         "anti_materiel_rifle"
       ],
-      "drop_note": "NCR soldiers are well-armed with conventional ballistic weapons"
+      "drop_note": "Frontier Compact soldiers are well-armed with conventional ballistic weapons"
     },
     "raiders": {
       "common_additions": [
@@ -1106,7 +1106,7 @@
       "legendary_exclusive": [
         "alien_blaster"
       ],
-      "drop_note": "Enclave soldiers carry the most advanced technology available"
+      "drop_note": "Directorate soldiers carry the most advanced technology available"
     },
     "super_mutants": {
       "common_additions": [
@@ -1120,7 +1120,7 @@
       "legendary_exclusive": [
         "fatman_launcher"
       ],
-      "drop_note": "Super Mutants favor heavy weapons and rarely use armor"
+      "drop_note": "Glowborn favor heavy weapons and rarely use armor"
     }
   },
   "timeline_specific_loot": {
@@ -1147,7 +1147,7 @@
         "lucky_magnum",
         "x_cell"
       ],
-      "era_flavor": "Mojave-specific technology. Diverse, well-maintained, NCR-influenced.",
+      "era_flavor": "Cinder Basin-specific technology. Diverse, well-maintained, Frontier Compact-influenced.",
       "tech_level": "mature"
     },
     "fallout_3": {

@@ -4,7 +4,7 @@
   "portrait": "arnie",
   "title": "The Last Vault Enforcer",
   "description": "Dialog nodes for Arnold Black, known as Dutch — a colossal Vault-bred fighter who broke out of Vault 9 after drawing the short straw on the wasteland survey team. His vocabulary is blunt, his grip is crushing, and his pre-war sensibilities run toward action and very loud impact. His brother Barney stayed behind, allegedly to become something of a barbarian.",
-  "backstory": "Born as Vault 9's heaviest recorded infant, Arnold Black spent forty years as the vault's de facto enforcer, mediator, and the reason the exit corridor needed reinforcing. His father's collection of pre-war action figures — chrome bodybuilders, muscled screen heroes — became his philosophical library. He left the vault when Vault-Tec Prototype Unit Seven destroyed Searchlight Station and killed twelve people he'd sworn to protect. He has not stopped moving since.",
+  "backstory": "Born as Vault 9's heaviest recorded infant, Arnold Black spent forty years as the vault's de facto enforcer, mediator, and the reason the exit corridor needed reinforcing. His father's collection of pre-war action figures — chrome bodybuilders, muscled screen heroes — became his philosophical library. He left the vault when FizzTec Prototype Unit Seven destroyed Searchlight Station and killed twelve people he'd sworn to protect. He has not stopped moving since.",
   "intro": {
     "id": "arnie_intro",
     "conditions": [
@@ -67,7 +67,7 @@
         "flag:met_kenny",
         "!flag:arnie_comment_kenny"
       ],
-      "text": "The small one who keeps nearly dying.<br><br>He got hit by a radscorpion tail, fell off a cliff, and was struck by lightning in a radstorm.<br><br>All in one afternoon. He was back the next morning. I find this disturbing and also impressive.",
+      "text": "The small one who keeps nearly dying.<br><br>He got hit by a glowsting tail, fell off a cliff, and was struck by lightning in a radstorm.<br><br>All in one afternoon. He was back the next morning. I find this disturbing and also impressive.",
       "set_flags": [
         "arnie_comment_kenny"
       ]
@@ -84,7 +84,7 @@
       "grant_items": [
         {
           "id": "stimpak",
-          "name": "Stimpak",
+          "name": "FizzPak",
           "type": "aid",
           "quantity": 2
         }
@@ -112,7 +112,7 @@
         "!flag:sq_arnie_ill_be_back_taken"
       ],
       "video_speech": "I'm tracking a pre-war combat prototype — autonomous, self-repairing, still killing. I need eyes. Help me find it.",
-      "text": "Vault-Tec Prototype Unit Seven. Pre-war autonomous combat chassis. Active since 2058. Self-repairing. Never confirmed destroyed.<br><br>Three weeks ago it hit Searchlight Station. Two weeks ago it appeared outside Boulder City. Last week — a water caravan on Route 93. Gone. Thirty people.<br><br>I have tracked it as far as the Black Mountain transmitter array. But it does not stay in one place.<br><br>I need eyes while I chase it down. You move quietly. I do not.<br><br>Help me find the machine. I will handle the rest.<br><br>It will not see me coming. And if it does — I will be back.",
+      "text": "FizzTec Prototype Unit Seven. Pre-war autonomous combat chassis. Active since 2058. Self-repairing. Never confirmed destroyed.<br><br>Three weeks ago it hit Searchlight Station. Two weeks ago it appeared outside Boulder City. Last week — a water caravan on Route 93. Gone. Thirty people.<br><br>I have tracked it as far as the Black Mountain transmitter array. But it does not stay in one place.<br><br>I need eyes while I chase it down. You move quietly. I do not.<br><br>Help me find the machine. I will handle the rest.<br><br>It will not see me coming. And if it does — I will be back.",
       "offers_quest": "sq_arnie_ill_be_back",
       "set_flags": [
         "sq_arnie_ill_be_back_taken"

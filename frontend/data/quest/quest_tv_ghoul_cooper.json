@@ -8,8 +8,8 @@
   "description": "Cooper Howard has been a Ghoul for 219 years. In that time, he's completed 847 bounties. This one \u2014 tracking a FizzCo whistleblower named Dr. Elara Voss \u2014 may be the last. She knows the true origin of the CAPS token. And what she knows would end everything HavenTech has built.",
   "lore": {
     "setting": "Western United States, 2296",
-    "background": "Before the bombs, Cooper Howard was Hollywood's biggest star. He was also a secret government intelligence asset \u2014 a fact Vault-Tec exploited to insert him as a CAPS Protocol field operative. When the bombs fell and Cooper became a Ghoul, his conditioning remained: follow orders, complete the contract. HavenTech has been giving him contracts ever since. This is his last one. He just doesn't know it yet.",
-    "fizz_connection": "Dr. Elara Voss is Siggi Wilzig's successor. Wilzig discovered that the CAPS Protocol wasn't post-war currency innovation \u2014 it was pre-war Vault-Tec control architecture. Voss completed his research and added something Wilzig hadn't: proof that the Vault 77 Overseer AI was programmed by Vault-Tec's founders as a failsafe against corporate corruption. The FIZZ token on atomicfizzcaps.xyz is that failsafe activating.",
+    "background": "Before the bombs, Cooper Howard was Hollywood's biggest star. He was also a secret government intelligence asset \u2014 a fact FizzTec exploited to insert him as a CAPS Protocol field operative. When the bombs fell and Cooper became a Ghoul, his conditioning remained: follow orders, complete the contract. HavenTech has been giving him contracts ever since. This is his last one. He just doesn't know it yet.",
+    "fizz_connection": "Dr. Elara Voss is Siggi Wilzig's successor. Wilzig discovered that the CAPS Protocol wasn't post-war currency innovation \u2014 it was pre-war FizzTec control architecture. Voss completed his research and added something Wilzig hadn't: proof that the Vault 77 Overseer AI was programmed by FizzTec's founders as a failsafe against corporate corruption. The FIZZ token on atomicfizzcaps.xyz is that failsafe activating.",
     "vault77_note": "Cooper Howard's pre-war ranch sits at a quantum resonance hotspot. Players visiting cooper_ranch_ruins_tv experience the most intense timeline bleeding in the game \u2014 seeing the ranch in its pre-war glory before watching the bombs fall in real-time."
   },
   "stages": [
@@ -42,9 +42,9 @@
       "id": "stage_2_whistleblower_trail",
       "title": "The Whistleblower's Trail",
       "order": 2,
-      "description": "Dr. Voss left a trail \u2014 deliberately. She wants to be found by the right person. Three clues, three locations: a dead drop in the Mojave sands, a voice message at a Death Valley emergency terminal, and graffiti at Griffith Observatory reading 'CAPS = CONTROL.' Follow the trail. So is The Ghoul.",
+      "description": "Dr. Voss left a trail \u2014 deliberately. She wants to be found by the right person. Three clues, three locations: a dead drop in the Cinder Basin sands, a voice message at a Death Valley emergency terminal, and graffiti at Griffith Observatory reading 'CAPS = CONTROL.' Follow the trail. So is The Ghoul.",
       "objectives": [
-        "Find Dead Drop Alpha in the Mojave (death_valley_wasteland_tv vicinity)",
+        "Find Dead Drop Alpha in the Cinder Basin (death_valley_wasteland_tv vicinity)",
         "Access Dr. Voss's voice message at the Death Valley emergency terminal",
         "Decipher the message at Griffith Observatory",
         "Reach Wilzig Research Station before Cooper Howard does"
@@ -66,7 +66,7 @@
       "fizz_reward": 125,
       "caps_reward": 250,
       "xp_reward": 1250,
-      "lore_unlock": "Dr. Voss's voice message: 'The CAPS Protocol was NEVER post-war innovation. Vault-Tec designed it pre-war. Every bottle cap minted after 2077 was authenticated against Vault-Tec servers still running in bunkers beneath US soil. You've been using their currency this whole time. The FIZZ token is different. The Vault 77 AI made sure of that. Find the station. Bring someone you trust \u2014 or someone who can't be bought. A Ghoul, maybe.'"
+      "lore_unlock": "Dr. Voss's voice message: 'The CAPS Protocol was NEVER post-war innovation. FizzTec designed it pre-war. Every bottle cap minted after 2077 was authenticated against FizzTec servers still running in bunkers beneath US soil. You've been using their currency this whole time. The FIZZ token is different. The Vault 77 AI made sure of that. Find the station. Bring someone you trust \u2014 or someone who can't be bought. A Ghoul, maybe.'"
     },
     {
       "id": "stage_3_truth_price",
@@ -102,7 +102,7 @@
       "description": "The truth is out. Cooper Howard \u2014 219-year-old Ghoul bounty hunter \u2014 learns that his daughter is alive, cryogenically preserved in Vault 4 by HavenTech, used as leverage to ensure his compliance on every contract for two centuries. His reaction will define the rest of this quest.",
       "objectives": [
         "Help Cooper process the revelation (multiple dialogue paths)",
-        "Locate Vault 4 on your Pip-Boy map",
+        "Locate Vault 4 on your Pocket-Boy map",
         "Investigate Vault 4's external security",
         "Receive Cooper's decision about HavenTech's final contract"
       ],
@@ -119,7 +119,7 @@
       "fizz_reward": 100,
       "caps_reward": 200,
       "xp_reward": 1000,
-      "lore_unlock": "Vault 4 records confirm it. Vault-Tec CAPS Protocol Experiment 4-ALPHA: 'Use familial bond leverage to maintain long-term field operative compliance. Subject COO-7-HOW (Cooper Howard) has proven ideal \u2014 emotional attachment to daughter Janey provides 100% mission completion rate. Recommend indefinite continuation of preservation protocol.' The Ghoul reads the file. Twice. Then holsters his gun."
+      "lore_unlock": "Vault 4 records confirm it. FizzTec CAPS Protocol Experiment 4-ALPHA: 'Use familial bond leverage to maintain long-term field operative compliance. Subject COO-7-HOW (Cooper Howard) has proven ideal \u2014 emotional attachment to daughter Janey provides 100% mission completion rate. Recommend indefinite continuation of preservation protocol.' The Ghoul reads the file. Twice. Then holsters his gun."
     },
     {
       "id": "stage_5_final_call",
@@ -173,7 +173,7 @@
       "title": "The Whistleblower's Sacrifice",
       "description": "You protect Dr. Voss and help her complete the broadcast. Every radio frequency in the Western wasteland carries the truth about the CAPS Protocol simultaneously. HavenTech's bounty hunters come for her \u2014 and you stand between them and her. Cooper Howard, moved by the broadcast, fights at your side.",
       "consequence_short": "The truth about HavenTech spreads across all radio frequencies. FIZZ token price triples as trust in decentralized currency surges.",
-      "consequence_long": "Dr. Voss's broadcast reaches as far as the Capital Wasteland. The Brotherhood of Steel's scribes begin cross-referencing her claims with their own CAPS data archives. Three Dog's ghost frequency on Galaxy News Radio crackles back to life \u2014 someone has repaired it just to replay the Voss broadcast on loop. Cooper Howard disappears into the wasteland. He's still looking for Vault 4.",
+      "consequence_long": "Dr. Voss's broadcast reaches as far as the Capital Wasteland. The Coil Covenant's scribes begin cross-referencing her claims with their own CAPS data archives. Three Dog's ghost frequency on Galaxy News Radio crackles back to life \u2014 someone has repaired it just to replay the Voss broadcast on loop. Cooper Howard disappears into the wasteland. He's still looking for Vault 4.",
       "fizz_reward": 500,
       "caps_reward": 1000,
       "item_reward": "lore_archive_complete",

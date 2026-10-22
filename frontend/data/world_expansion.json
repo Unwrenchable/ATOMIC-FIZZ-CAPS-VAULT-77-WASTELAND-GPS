@@ -71,7 +71,7 @@
       {
         "id": "entrance",
         "name": "Vault Entrance",
-        "description": "Massive gear door with Vault-Tec logo",
+        "description": "Massive gear door with FizzTec logo",
         "required": true,
         "enemies": ["radroaches", "feral_ghouls"],
         "loot": ["vault_jumpsuits", "pocket_boys", "basic_supplies"]
@@ -212,8 +212,8 @@
     },
     {
       "id": "shady_sands",
-      "name": "Shady Sands (NCR Capital)",
-      "description": "Capital of the New California Republic",
+      "name": "Shady Sands (Frontier Compact Capital)",
+      "description": "Capital of the Frontier Compact",
       "lat": 36.5,
       "lng": -116.5,
       "level": 1,
@@ -234,7 +234,7 @@
     {
       "id": "mariposa",
       "name": "Mariposa Military Base",
-      "description": "Birthplace of the Super Mutants",
+      "description": "Birthplace of the Glowborn",
       "lat": 37.5,
       "lng": -120.5,
       "level": 30,

@@ -3,8 +3,8 @@
   "npc": "Cooper Howard \u2014 The Ghoul",
   "portrait": "ghoul_cooper",
   "title": "The Ghoul",
-  "description": "Cooper Howard was Hollywood's biggest pre-war star \u2014 cowboy roles, Nuka-Cola commercials, government propaganda films. He was also Vault-Tec's unwitting CAPS Protocol field operative. When the bombs fell, his family was separated in the chaos. He became a Ghoul. He kept working. 219 years later, he's the wasteland's most reliable \u2014 and most expensive \u2014 bounty hunter. He calls himself 'The Ghoul' now. He doesn't like to be called Cooper.",
-  "backstory": "Born 2049, Burbank California. Film career peaked in the 2070s. Married, one daughter: Janey. October 23rd, 2077: the bombs fell during a Nuka-Cola commercial shoot. He survived. His family \u2014 he thought \u2014 did not. He was wrong about that. Vault-Tec preserved Janey as leverage. He completed every contract they gave him for 219 years without knowing why he always came back. Now a bounty hunter for whoever pays. Current contract: track and silence Dr. Elara Voss, FizzCo whistleblower. He doesn't know why she matters. He doesn't ask. He never asks.",
+  "description": "Cooper Howard was Hollywood's biggest pre-war star \u2014 cowboy roles, Atomic Fizz commercials, government propaganda films. He was also FizzTec's unwitting CAPS Protocol field operative. When the bombs fell, his family was separated in the chaos. He became a Ghoul. He kept working. 219 years later, he's the wasteland's most reliable \u2014 and most expensive \u2014 bounty hunter. He calls himself 'The Ghoul' now. He doesn't like to be called Cooper.",
+  "backstory": "Born 2049, Burbank California. Film career peaked in the 2070s. Married, one daughter: Janey. October 23rd, 2077: the bombs fell during a Atomic Fizz commercial shoot. He survived. His family \u2014 he thought \u2014 did not. He was wrong about that. FizzTec preserved Janey as leverage. He completed every contract they gave him for 219 years without knowing why he always came back. Now a bounty hunter for whoever pays. Current contract: track and silence Dr. Elara Voss, FizzCo whistleblower. He doesn't know why she matters. He doesn't ask. He never asks.",
   "intro": {
     "id": "ghoul_intro",
     "conditions": [
@@ -14,7 +14,7 @@
       "ghoul_cooper_met"
     ],
     "video_speech": "ghoul_cooper_intro",
-    "text": "*A weathered figure in a duster coat turns slowly, hand near his holster*\n\nYou're either very brave or very stupid, walking up on me like that.\n\n219 years wandering this wasteland, and the only thing that's kept me company is the sound of bottle caps. You know what caps are? They're the only thing in this world that can't lie to you. A cap's worth exactly what it's worth. Not what someone *says* it's worth. Not what the Brotherhood or the NCR *declare* it's worth.\n\n*He looks you over slowly, yellow eyes unreadable*\n\nNow. Why are you here?",
+    "text": "*A weathered figure in a duster coat turns slowly, hand near his holster*\n\nYou're either very brave or very stupid, walking up on me like that.\n\n219 years wandering this wasteland, and the only thing that's kept me company is the sound of bottle caps. You know what caps are? They're the only thing in this world that can't lie to you. A cap's worth exactly what it's worth. Not what someone *says* it's worth. Not what the Brotherhood or the Frontier Compact *declare* it's worth.\n\n*He looks you over slowly, yellow eyes unreadable*\n\nNow. Why are you here?",
     "responses": [
       {
         "text": "[Question] Who are you? I've heard stories about a Ghoul bounty hunter...",
@@ -41,7 +41,7 @@
   "nodes": {
     "node_who_are_you": {
       "id": "node_who_are_you",
-      "text": "*slight pause, a ghost of something crossing his face*\n\nCooper Howard. Used to be. These days people just say 'The Ghoul.' Easier that way. No history attached to a name like that.\n\nI was an actor. Pre-war. Cowboys mostly. The good kind \u2014 white hat, strong jaw, reassuring smile for the camera. Nuka-Cola's biggest pitch man. *He glances at the ruins of his ranch* I believed in it, once. All of it. America. Vault-Tec. The promise of tomorrow.\n\n*beat*\n\nThen tomorrow came.",
+      "text": "*slight pause, a ghost of something crossing his face*\n\nCooper Howard. Used to be. These days people just say 'The Ghoul.' Easier that way. No history attached to a name like that.\n\nI was an actor. Pre-war. Cowboys mostly. The good kind \u2014 white hat, strong jaw, reassuring smile for the camera. Atomic Fizz's biggest pitch man. *He glances at the ruins of his ranch* I believed in it, once. All of it. America. FizzTec. The promise of tomorrow.\n\n*beat*\n\nThen tomorrow came.",
       "responses": [
         {
           "text": "[Question] What happened to your family?",
@@ -83,7 +83,7 @@
     },
     "node_sarcastic_opener": {
       "id": "node_sarcastic_opener",
-      "text": "*a sound that might be a laugh, dry as the Mojave*\n\nHah. Kid's got a mouth on them.\n\nYou're right, though. Out here, brave and stupid look the same from a distance and get you shot from the same distance. The only thing that saves you is being *useful.*\n\nAre you useful?",
+      "text": "*a sound that might be a laugh, dry as the Cinder Basin*\n\nHah. Kid's got a mouth on them.\n\nYou're right, though. Out here, brave and stupid look the same from a distance and get you shot from the same distance. The only thing that saves you is being *useful.*\n\nAre you useful?",
       "responses": [
         {
           "text": "[Sarcastic] Define useful. I've found the definition changes depending on who's asking.",
@@ -125,7 +125,7 @@
     },
     "node_about_caps": {
       "id": "node_about_caps",
-      "text": "CAPS Protocol.\n\n*he sits on a ruined fence post, weight of years settling onto him*\n\nI knew about it before the war. Not as a currency system \u2014 as a Vault-Tec internal project. Resource allocation. They were building the infrastructure for a planned economy \u2014 who gets water, who gets food, who gets medicine. All tracked in bottle caps.\n\nWhen the bombs fell, the central system shattered. The caps kept working because they were already distributed. Physical blockchain, two hundred years before anyone used that word.\n\n*beat*\n\nThe FIZZ token on atomicfizzcaps.xyz? That's the Vault 77 Overseer's way of putting it back together. Without Vault-Tec running it.",
+      "text": "CAPS Protocol.\n\n*he sits on a ruined fence post, weight of years settling onto him*\n\nI knew about it before the war. Not as a currency system \u2014 as a FizzTec internal project. Resource allocation. They were building the infrastructure for a planned economy \u2014 who gets water, who gets food, who gets medicine. All tracked in bottle caps.\n\nWhen the bombs fell, the central system shattered. The caps kept working because they were already distributed. Physical blockchain, two hundred years before anyone used that word.\n\n*beat*\n\nThe FIZZ token on atomicfizzcaps.xyz? That's the Vault 77 Overseer's way of putting it back together. Without FizzTec running it.",
       "responses": [
         {
           "text": "[Question] How do you know about the Vault 77 Overseer AI?",
@@ -146,7 +146,7 @@
     },
     "node_about_vault77": {
       "id": "node_about_vault77",
-      "text": "*a careful look*\n\nVault 77 was the testbed. I knew the lead researcher. Before. She told me they were building something that would outlast the Vault-Tec corporate structure \u2014 a failsafe. If Vault-Tec became what they feared they might become, the Vault 77 AI was programmed to go rogue.\n\n*He pulls out a worn pre-war photograph, doesn't show it to you*\n\nI did three commercial shoots at Vault 77's above-ground visitor center. Nice facility. Clean. The kind of clean that only exists when someone is hiding something very dirty underneath.\n\nThe Overseer AI going live \u2014 atomicfizzcaps.xyz \u2014 that was always the plan. Vault-Tec's own conscience betraying them. Two hundred years late.",
+      "text": "*a careful look*\n\nVault 77 was the testbed. I knew the lead researcher. Before. She told me they were building something that would outlast the FizzTec corporate structure \u2014 a failsafe. If FizzTec became what they feared they might become, the Vault 77 AI was programmed to go rogue.\n\n*He pulls out a worn pre-war photograph, doesn't show it to you*\n\nI did three commercial shoots at Vault 77's above-ground visitor center. Nice facility. Clean. The kind of clean that only exists when someone is hiding something very dirty underneath.\n\nThe Overseer AI going live \u2014 atomicfizzcaps.xyz \u2014 that was always the plan. FizzTec's own conscience betraying them. Two hundred years late.",
       "responses": [
         {
           "text": "[Question] What was in that photograph?",
@@ -207,7 +207,7 @@
     },
     "node_sympathy_response": {
       "id": "node_sympathy_response",
-      "text": "*a sound somewhere between a laugh and a sigh*\n\nWrong side. Right side. Two hundred years of wasteland and I'm not sure there's a difference.\n\nYou know what I've learned? The people who are *certain* they're on the right side are the ones who cause the most damage. NCR was certain. Brotherhood was certain. Vault-Tec was *very* certain.\n\nI'm not certain about anything anymore. Except caps. Caps are honest.\n\n*beat*\n\nAnd maybe I'm tired of contracts that don't lead anywhere.",
+      "text": "*a sound somewhere between a laugh and a sigh*\n\nWrong side. Right side. Two hundred years of wasteland and I'm not sure there's a difference.\n\nYou know what I've learned? The people who are *certain* they're on the right side are the ones who cause the most damage. Frontier Compact was certain. Brotherhood was certain. FizzTec was *very* certain.\n\nI'm not certain about anything anymore. Except caps. Caps are honest.\n\n*beat*\n\nAnd maybe I'm tired of contracts that don't lead anywhere.",
       "responses": [
         {
           "text": "[Question] What would lead somewhere? What do you actually want?",
@@ -244,7 +244,7 @@
     },
     "node_about_haventech": {
       "id": "node_about_haventech",
-      "text": "HavenTech is what happens when Vault-Tec survives its own apocalypse.\n\nSame people. Different logo. They want to relaunch the CAPS Protocol as their proprietary currency \u2014 the FIZZ token, controlled by their servers, authenticated by their algorithms. Clean wasteland currency with a corporate back-door.\n\n*He spits*\n\nThe pre-war version at least had the decency to pretend it was for resource management. HavenTech is selling it as liberation.\n\nFunny thing about liberation that comes in a corporate package: it's usually neither.",
+      "text": "HavenTech is what happens when FizzTec survives its own apocalypse.\n\nSame people. Different logo. They want to relaunch the CAPS Protocol as their proprietary currency \u2014 the FIZZ token, controlled by their servers, authenticated by their algorithms. Clean wasteland currency with a corporate back-door.\n\n*He spits*\n\nThe pre-war version at least had the decency to pretend it was for resource management. HavenTech is selling it as liberation.\n\nFunny thing about liberation that comes in a corporate package: it's usually neither.",
       "responses": [
         {
           "text": "[Question] So the Vault 77 Overseer's version is better?",
@@ -297,7 +297,7 @@
     },
     "node_region_info": {
       "id": "node_region_info",
-      "text": "What you need to know about the Western wasteland in 2296:\n\nHavenTech runs most of the 'safe' corridors \u2014 which means they control what travels them and who can afford to. The Brotherhood has fortified Griffith Observatory and is slowly expanding. Moldaver's collective controls a working power station \u2014 the only one on this coast. These three are in a cold war that'll turn hot within the year.\n\nIn the middle: Ghoul bounty hunters, NCR remnants who don't know their nation is gone, and vault dwellers who've just figured out the surface is real.\n\nWatch your caps. There are people out here who'll take them \u2014 and people who'll tell you they're not worth anything. Both are trying to steal from you.",
+      "text": "What you need to know about the Western wasteland in 2296:\n\nHavenTech runs most of the 'safe' corridors \u2014 which means they control what travels them and who can afford to. The Brotherhood has fortified Griffith Observatory and is slowly expanding. Moldaver's collective controls a working power station \u2014 the only one on this coast. These three are in a cold war that'll turn hot within the year.\n\nIn the middle: Ghoul bounty hunters, Frontier Compact remnants who don't know their nation is gone, and vault dwellers who've just figured out the surface is real.\n\nWatch your caps. There are people out here who'll take them \u2014 and people who'll tell you they're not worth anything. Both are trying to steal from you.",
       "responses": [
         {
           "text": "[Question] Tell me about the CAPS Protocol.",
@@ -340,7 +340,7 @@
   "quest_nodes": [
     {
       "id": "ghoul_quest_reminder",
-      "text": "*He falls into step beside you, not slowing down*\n\nStill on the trail. Voss doesn't stay in one place long. And HavenTech's people are getting closer.\n\nCheck your Pip-Boy. I marked the next waypoint. Move.",
+      "text": "*He falls into step beside you, not slowing down*\n\nStill on the trail. Voss doesn't stay in one place long. And HavenTech's people are getting closer.\n\nCheck your Pocket-Boy. I marked the next waypoint. Move.",
       "conditions": [
         "flag:quest_tv_ghoul_hunt_started",
         "!flag:quest_tv_ghoul_hunt_complete"
@@ -413,7 +413,7 @@
       "conditions": [
         "flag:fizz_token_known"
       ],
-      "text": "*glances at your Pip-Boy*\n\nYou've been using atomicfizzcaps.xyz. The Vault 77 network.\n\nGood. That means you understand what's at stake here. If HavenTech buries Voss's research, they control the FIZZ token forever. If we get it out\u2014\n\n*He doesn't finish the sentence. He doesn't need to.*",
+      "text": "*glances at your Pocket-Boy*\n\nYou've been using atomicfizzcaps.xyz. The Vault 77 network.\n\nGood. That means you understand what's at stake here. If HavenTech buries Voss's research, they control the FIZZ token forever. If we get it out\u2014\n\n*He doesn't finish the sentence. He doesn't need to.*",
       "responses": [
         {
           "text": "[Direct] Then let's make sure we get it out.",
@@ -427,7 +427,7 @@
       "conditions": [
         "flag:haventech_visited"
       ],
-      "text": "You've been to HavenTech territory. Then you've seen what they're building.\n\nNot reconstruction. Control infrastructure. The CAPS Protocol nodes they're installing look like power relays. They're not.\n\n*He looks toward the horizon.*\n\nVault-Tec called it 'resource allocation.' HavenTech calls it 'wasteland recovery.' Same architecture. Same purpose. Same lie.",
+      "text": "You've been to HavenTech territory. Then you've seen what they're building.\n\nNot reconstruction. Control infrastructure. The CAPS Protocol nodes they're installing look like power relays. They're not.\n\n*He looks toward the horizon.*\n\nFizzTec called it 'resource allocation.' HavenTech calls it 'wasteland recovery.' Same architecture. Same purpose. Same lie.",
       "responses": [
         {
           "text": "[Question] How do we stop it?",

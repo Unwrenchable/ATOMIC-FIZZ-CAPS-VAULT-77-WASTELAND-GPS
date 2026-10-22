@@ -36,7 +36,7 @@
         "catchphrase": "Stay atomic, wastelanders."
       },
       {
-        "name": "Midnight in the Mojave",
+        "name": "Midnight in the Cinder Basin",
         "schedule": "Late night",
         "format": "Slow jams, lore readings, call-ins",
         "catchphrase": "The wasteland never sleeps, and neither do we."
@@ -69,7 +69,7 @@
     "name": "Atomic Fizz Radio",
     "frequency": "77.7 MHz (The Lucky Sevens)",
     "tagline": "The Voice of the Wasteland",
-    "coverage": "Entire Mojave Desert + surrounding regions",
+    "coverage": "Entire Cinder Basin Desert + surrounding regions",
     "signal_strength": "Strongest signal in the wasteland - reaches everywhere",
     "studio_location": "Unknown (heavily protected secret)",
     "equipment": "Pre-war broadcast equipment, FizzCo modified transmitter, backup generators, massive music library"
@@ -98,7 +98,7 @@
     "live_announcements": [
       "🔴 We're going LIVE, people! That's right, yours truly is on the air in real-time. Chat is open - talk to me!",
       "Special live broadcast tonight! Taking requests, answering questions, and who knows what else. Join me!",
-      "LIVE from an undisclosed location in the Mojave... it's showtime, wastelanders!",
+      "LIVE from an undisclosed location in the Cinder Basin... it's showtime, wastelanders!",
       "You're listening to a LIVE broadcast. This is happening RIGHT NOW. How exciting is that?"
     ],
     "sign_offs": [
@@ -113,7 +113,7 @@
       "Ever wonder how I've been broadcasting for so long? So do I, sometimes.",
       "There are secrets in the wasteland, friends. Secrets even I don't fully understand.",
       "The static... sometimes I swear I hear voices in the static. Old voices. Pre-war voices.",
-      "Location? Nice try, NCR. Nice try, Legion. I'm everywhere and nowhere."
+      "Location? Nice try, Frontier Compact. Nice try, Legion. I'm everywhere and nowhere."
     ]
   },
   "interactions": {
@@ -170,7 +170,7 @@
     }
   },
   "voice_acting_notes": {
-    "style": "Think 'Three Dog' from Fallout 3 meets 'Mr. New Vegas' from New Vegas",
+    "style": "Think 'Three Dog' from the capital wastes meets 'Mr. Neon Reach' from Neon Reach",
     "inspiration": "Smooth jazz radio DJ + wasteland survivor",
     "emotion": "Warm but weathered, hopeful but realistic, entertaining but grounded",
     "delivery": "Conversational, like talking to a friend over the radio at 2 AM"

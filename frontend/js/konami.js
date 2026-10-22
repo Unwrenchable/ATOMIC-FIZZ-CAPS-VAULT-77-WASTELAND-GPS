@@ -1,4 +1,4 @@
-// public/js/konami.js - Vault-Tec Interactive Entertainment System
+// public/js/konami.js - FizzTec Interactive Entertainment System
 // Module: V77-IES Protocol Handler
 (function() {
   'use strict';

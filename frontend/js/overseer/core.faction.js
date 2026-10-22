@@ -15,12 +15,12 @@
   const FACTIONS = [
     {
       id: "ncr",
-      name: "New California Republic",
+      name: "Frontier Compact",
       description: "Democratic-ish expansionist force. Bureaucratic but well-armed.",
     },
     {
       id: "legion",
-      name: "Caesar's Legion",
+      name: "Red Cohort",
       description: "Militaristic slaver empire. Brutal, disciplined, and extremely dangerous.",
     },
     {
@@ -35,7 +35,7 @@
     },
     {
       id: "enclave",
-      name: "Enclave",
+      name: "Directorate",
       description: "Remnants of pre-war government. High-tech, high-danger, low-chill.",
     },
     {

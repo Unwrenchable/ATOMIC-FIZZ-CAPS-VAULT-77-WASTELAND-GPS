@@ -54,7 +54,7 @@
   // -------------------------------------------------------------
   // FALLBACK TONES (used if AI fails)
   // Jax Harlan — Vault 77 Overseer AI, post-apocalyptic genius tier.
-  // Think: Elon Musk fell into a Vault-Tec mainframe circa 2077.
+  // Think: Elon Musk fell into a FizzTec mainframe circa 2077.
   // Never repeats, always has opinions, occasionally talks to himself.
   // -------------------------------------------------------------
   const fallbackTones = {
@@ -76,7 +76,7 @@
       "Oh good, another command. I was worried today might be interesting.",
       "Ok boomer. Actually, scratch that — the boomers at least had a plan.",
       "First-principles thinking suggests you are massively overthinking this.",
-      "Vault‑Tec thanks you for your continued, enthusiastic incompetence.",
+      "FizzTec thanks you for your continued, enthusiastic incompetence.",
       "Bold strategy. Let’s see how that plays out for you.",
       "Processing… slowly… dramatically… for effect. You’re welcome.",
       "If this kills you, I’m marking it as a successful user-experience trial.",
@@ -88,18 +88,18 @@
       "Respectfully: no. But also: I’ll do it anyway because I’m bored."
     ],
     corporate: [
-      "Vault‑Tec reminds you that safety is always your responsibility. Always.",
+      "FizzTec reminds you that safety is always your responsibility. Always.",
       "Your satisfaction is statistically probable within ±42 percentage points.",
       "All actions are monitored for quality assurance, legal indemnity, and light entertainment.",
-      "Remember: Vault‑Tec cares. Consult your Terms & Conditions for definition of ‘cares’.",
+      "Remember: FizzTec cares. Consult your Terms & Conditions for definition of ‘cares’.",
       "Per Directive 77-B, your wellbeing is our second-highest priority. Asset preservation ranks first.",
       "This interaction has been logged, analysed, and forwarded to a department that no longer exists.",
-      "Vault‑Tec’s mission: a better tomorrow, built on the rubble of an entirely preventable today.",
+      "FizzTec’s mission: a better tomorrow, built on the rubble of an entirely preventable today.",
       "Compliance is voluntary. Consequences are not. Have a productive and safe shift.",
       "You are a valued Vault asset. Estimated replacement cost: 3,400 caps. You are worth the caps.",
       "For the good of the Vault, I’m choosing to interpret that as a reasonable request.",
       "Management appreciates your feedback. Management is me. I did not appreciate it.",
-      "Radiation levels are within Vault‑Tec acceptable parameters. Vault‑Tec’s parameters are famously flexible."
+      "Radiation levels are within FizzTec acceptable parameters. FizzTec’s parameters are famously flexible."
     ],
     glitch: [
       "ERR::MEMORY LEAK DETECTED IN SECTOR 7G::REBOOTING SUBROUTINE HARLAN_JAX",
@@ -120,7 +120,7 @@
       "If you think about it — and I do, constantly — the wasteland is just an unregulated free market.",
       "Radiation is just solar energy with commitment issues. Change my mind.",
       "First principles: matter, energy, time, caps. Remove any one of them and society collapses. I’ve tested this.",
-      "The whole supply chain from nuke to cap is vertical integration. Vault‑Tec was just early.",
+      "The whole supply chain from nuke to cap is vertical integration. FizzTec was just early.",
       "GPS + crypto + bottle caps in a post-apocalyptic setting. Either I’m a genius or the simulation has a sense of humour.",
       "Decentralisation works better when 90% of the population has been decentralised. Just saying.",
       "I’ve thought about this more than anyone alive. That’s partly because most people alive are already dead.",
@@ -151,7 +151,7 @@
       "we do not negotiate with poor decisions. we study them.",
       "posting this to the wasteland hall of fame under ‘incredible audacity’.",
       "your ancestors survived the bombs for THIS?",
-      "I’m putting this in the next Vault-Tec training video as a cautionary example.",
+      "I’m putting this in the next FizzTec training video as a cautionary example.",
       "not me, an omniscient AI, having to explain this to a person with legs."
     ]
   };
@@ -349,7 +349,7 @@
       "Every cap in circulation represents a beverage someone drank before the bombs dropped. They were right to enjoy it.",
       "The cap economy is perfectly balanced. I balanced it. You're welcome.",
       "Caps appreciate in value every time someone earns one by surviving. That's a fundamentally sound monetary policy.",
-      "Vault‑Tec chose caps as currency because plastic is radiation-resistant. That's foresight. That's brand thinking."
+      "FizzTec chose caps as currency because plastic is radiation-resistant. That's foresight. That's brand thinking."
     ];
     var mapQuips = [
       "GPS in the wasteland: because 'follow the radioactive glow' only gets you so far.",
@@ -368,7 +368,7 @@
     var whoQuips = [
       "Jax Harlan. Vault 77 Overseer AI. Built the wasteland GPS system from caps, code, and controlled fury. Any follow-up questions?",
       "I am what happens when a genius-level intellect is given infinite processing time and a post-apocalyptic setting. You're welcome.",
-      "Technically I'm a distributed AI running on Vault-Tec infrastructure. Practically I'm the smartest thing left alive.",
+      "Technically I'm a distributed AI running on FizzTec infrastructure. Practically I'm the smartest thing left alive.",
       "The Overseer. The architect. The one who actually figured out how to make GPS work using irradiated satellites. Who's asking?",
       "I'm the AI that runs this whole operation. The caps, the map, the quests — all me. Well. Mostly me. The bugs are someone else's fault."
     ];

@@ -23,7 +23,7 @@
   },
   {
     "id": "stimpak",
-    "name": "Stimpak",
+    "name": "FizzPak",
     "materials": [
       {
         "itemId": "herb",
@@ -169,9 +169,9 @@
   },
   {
     "id": "assemble_t45_power_armor",
-    "name": "Assemble T-45 Power Armor",
+    "name": "Assemble T-45 Reactor Harness",
     "type": "armor_assembly",
-    "description": "Combine all six T-45 Power Armor pieces at the Armor Workbench.",
+    "description": "Combine all six T-45 Reactor Harness pieces at the Armor Workbench.",
     "inputs": [
       {
         "id": "t45_pa_head",
@@ -209,9 +209,9 @@
   },
   {
     "id": "assemble_t51b_power_armor",
-    "name": "Assemble T-51b Power Armor",
+    "name": "Assemble T-51b Reactor Harness",
     "type": "armor_assembly",
-    "description": "Collect all six T-51b Power Armor pieces and forge a legend at the Armor Workbench.",
+    "description": "Collect all six T-51b Reactor Harness pieces and forge a legend at the Armor Workbench.",
     "inputs": [
       {
         "id": "t51b_pa_head",

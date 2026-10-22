@@ -18,13 +18,10 @@
     state: null,
 
     init(gameState) {
-      this.gs = gameState;
+      this.gs = gameState || this.gs || null;
       this.state = null;
-      // Ensure player has an hp field (not initialized elsewhere)
-      if (this.gs && this.gs.player && typeof this.gs.player.hp !== "number") {
-        this.gs.player.hp = 100;
-        this.gs.player.maxHp = 100;
-      }
+      // World encounters can call start() before init(); always have a player.
+      this._ensureGameState();
       // Set up death overlay respawn button
       const respawnBtn = document.getElementById('respawnBtn');
       if (respawnBtn) {
@@ -39,13 +36,53 @@
       }
     },
 
+    // Bind a game-state object and a player record before any UI or combat read.
+    // Encounter ticks call start() -> updateUI() even when init() never ran,
+    // which previously threw "Cannot read properties of null (reading 'player')".
+    _ensureGameState() {
+      if (!this.gs || typeof this.gs !== "object") {
+        this.gs = (typeof window !== "undefined" && window.gameState) || {};
+      }
+      if (!this.gs.player || typeof this.gs.player !== "object") {
+        const ps = (typeof Game !== "undefined" && Game.modules?.PlayerState?.getState?.()) || null;
+        const legacy =
+          (typeof window !== "undefined" && (window.PLAYER || window.Game?.player)) || null;
+        // Reuse the live player record so HP and caps mutations stick.
+        if (legacy && typeof legacy === "object") {
+          this.gs.player = legacy;
+        } else if (ps && typeof ps === "object") {
+          this.gs.player = ps;
+        } else {
+          this.gs.player = {
+            hp: 100,
+            maxHp: 100,
+            caps: 0,
+            xp: 0,
+            equipped: {},
+            special: { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 }
+          };
+        }
+      }
+      const player = this.gs.player;
+      if (typeof player.hp !== "number") player.hp = 100;
+      if (typeof player.maxHp !== "number") player.maxHp = 100;
+      if (!player.equipped || typeof player.equipped !== "object") player.equipped = {};
+      if (!player.special) {
+        player.special = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
+      }
+      return this.gs;
+    },
+
     // --------------------------------------------------------
     // Shared respawn logic: restore 30% HP, 10% caps penalty
     // --------------------------------------------------------
     _applyRespawnPenalty() {
-      this.gs.player.hp = Math.max(1, Math.ceil((this.gs.player.maxHp || 100) * 0.3));
-      if (this.gs.player.caps > 0) {
-        this.gs.player.caps = Math.floor((this.gs.player.caps || 0) * 0.9);
+      this._ensureGameState();
+      const player = this.gs && this.gs.player;
+      if (!player) return;
+      player.hp = Math.max(1, Math.ceil((player.maxHp || 100) * 0.3));
+      if (player.caps > 0) {
+        player.caps = Math.floor((player.caps || 0) * 0.9);
       }
     },
 
@@ -167,6 +204,10 @@
     // Create a new battle state from an encounter
     // --------------------------------------------------------
     start(encounter) {
+      // Encounter loop calls start() before battle.init(). Build gs.player
+      // first so updateUI can read vitals without throwing.
+      this._ensureGameState();
+
       // BUG FIX: validate that encounter and its enemies exist before accessing
       // encounter.enemies[0]. Previously would throw TypeError if enemies was
       // undefined or an empty array.
@@ -203,7 +244,7 @@
     },
 
     // --------------------------------------------------------
-    // Get player SPECIAL stats (reads from PlayerState or fallback)
+    // Get player VITALS stats (reads from PlayerState or fallback)
     // --------------------------------------------------------
     _getSpecial() {
       if (Game.modules?.PlayerState?.getSpecial) {
@@ -616,9 +657,20 @@
       const container = document.getElementById("tab-battle");
       if (!container) return;
 
+      this._ensureGameState();
+      const player = this.gs && this.gs.player;
+      if (!player) {
+        container.innerHTML = `
+          <div class="battle-idle">
+            <div class="battle-idle-note">Combat systems offline. Citizen vitals unavailable.</div>
+          </div>
+        `;
+        return;
+      }
+
       if (!this.state) {
         // No active battle - show player readiness stats
-        const equipped = this.gs.player.equipped || {};
+        const equipped = player.equipped || {};
         const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);
         // Aggregate armor across all body slots for UI display
         const psEq = Game.modules?.PlayerState?.getState?.()?.equipped || {};
@@ -629,9 +681,9 @@
           ? `${armorPieces.map(a => escapeHtml(a.name)).join(", ")} (AR: ${totalArmorRating})`
           : "<em>None equipped</em>";
         const special = this._getSpecial();
-        const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;
-        const maxHp = (typeof this.gs.player.maxHp === 'number') ? this.gs.player.maxHp : 100;
-        const hpPct = Math.max(0, Math.min(100, Math.round(hp / maxHp * 100)));
+        const hp = (typeof player.hp === 'number') ? player.hp : 100;
+        const maxHp = (typeof player.maxHp === 'number') ? player.maxHp : 100;
+        const hpPct = Math.max(0, Math.min(100, Math.round(hp / (maxHp || 1) * 100)));
 
         container.innerHTML = `
           <div class="battle-idle">
@@ -666,7 +718,7 @@
         return;
       }
       const special = this._getSpecial();
-      const equipped = this.gs.player.equipped || {};
+      const equipped = player.equipped || {};
       const weapon = equipped.weapon || (Game.modules?.PlayerState?.getState?.()?.equipped?.weapon);
       // Aggregate armor across all body slots
       const psEq2 = Game.modules?.PlayerState?.getState?.()?.equipped || {};
@@ -676,9 +728,9 @@
       const _activeArmorLabel = activeArmorPieces.length
         ? `${activeArmorPieces.map(a => escapeHtml(a.name)).join(", ")} (AR: ${activeTotalAR})`
         : "<em>None</em>";
-      const hp = (typeof this.gs.player.hp === 'number') ? this.gs.player.hp : 100;
-      const maxHp = (typeof this.gs.player.maxHp === 'number') ? this.gs.player.maxHp : 100;
-      const hpPct = Math.max(0, Math.min(100, Math.round(hp / maxHp * 100)));
+      const hp = (typeof player.hp === 'number') ? player.hp : 100;
+      const maxHp = (typeof player.maxHp === 'number') ? player.maxHp : 100;
+      const hpPct = Math.max(0, Math.min(100, Math.round(hp / (maxHp || 1) * 100)));
       // BUG-001 FIX: use activeIdx not hardcoded 0
       const activeEnemyHp = this.state.enemyHp[activeIdx];
       const enemyHpPct = Math.max(0, Math.min(100, Math.round(activeEnemyHp / (enemy.hp || 20) * 100)));

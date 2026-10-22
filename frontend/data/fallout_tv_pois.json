@@ -11,7 +11,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "A Vault-Tec shelter nestled in the San Gabriel Mountains. Home to Lucy MacLean and the MacLean family. The vault practices 'peaceful' isolationism \u2014 until the day raiders breach the blast doors and change everything.",
+      "description": "A FizzTec shelter nestled in the San Gabriel Mountains. Home to Lucy MacLean and the MacLean family. The vault practices 'peaceful' isolationism \u2014 until the day raiders breach the blast doors and change everything.",
       "quest_hooks": [
         "quest_tv_surface_protocol",
         "quest_tv_ghoul_hunt"
@@ -57,7 +57,7 @@
     },
     {
       "id": "shady_sands_ruins_tv",
-      "name": "Shady Sands Ruins \u2014 NCR Capital (Nuked)",
+      "name": "Shady Sands Ruins \u2014 Frontier Compact Capital (Nuked)",
       "lat": 34.1083,
       "lng": -117.2898,
       "lvl": 20,
@@ -66,7 +66,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "Once the proud capital of the New California Republic, Shady Sands is a radioactive crater. Someone \u2014 HavenTech? Vault-Tec? \u2014 nuked it, erasing 200 years of post-war civilization-building in seconds. The CAPS Protocol data stored here was the most complete ledger in existence.",
+      "description": "Once the proud capital of the Frontier Compact, Shady Sands is a radioactive crater. Someone \u2014 HavenTech? FizzTec? \u2014 nuked it, erasing 200 years of post-war civilization-building in seconds. The CAPS Protocol data stored here was the most complete ledger in existence.",
       "quest_hooks": [
         "quest_tv_surface_protocol"
       ],
@@ -84,7 +84,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "The Brotherhood of Steel has fortified Griffith Observatory as their Los Angeles command post. Its original telescopes now serve as long-range spotting towers. The Brotherhood's interest in this location goes beyond strategy \u2014 old Vault-Tec CAPS relay equipment was discovered in the basement.",
+      "description": "The Coil Covenant has fortified Griffith Observatory as their Los Angeles command post. Its original telescopes now serve as long-range spotting towers. The Brotherhood's interest in this location goes beyond strategy \u2014 old FizzTec CAPS relay equipment was discovered in the basement.",
       "quest_hooks": [
         "quest_tv_surface_protocol"
       ],
@@ -102,7 +102,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "Death Valley is aptly named in 2296. Radiation, Deathclaws, and wandering Ghoul bounty hunters make this stretch of desert one of the most lethal in the Western wasteland. And yet \u2014 traders still cross it, because the old Vault-Tec highway runs straight through the middle.",
+      "description": "Death Valley is aptly named in 2296. Radiation, Radtalons, and wandering Ghoul bounty hunters make this stretch of desert one of the most lethal in the Western wasteland. And yet \u2014 traders still cross it, because the old FizzTec highway runs straight through the middle.",
       "quest_hooks": [
         "quest_tv_ghoul_hunt"
       ],
@@ -156,7 +156,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "The ruins of Cooper Howard's pre-war ranch. Before the bombs, this was a working cattle ranch and film set. On October 22nd, 2077, Cooper Howard was filming a Nuka-Cola commercial here when his daughter called to warn him about the vaults. Now The Ghoul returns here sometimes, to remember.",
+      "description": "The ruins of Cooper Howard's pre-war ranch. Before the bombs, this was a working cattle ranch and film set. On October 22nd, 2077, Cooper Howard was filming a Atomic Fizz commercial here when his daughter called to warn him about the vaults. Now The Ghoul returns here sometimes, to remember.",
       "quest_hooks": [
         "quest_tv_ghoul_hunt"
       ],
@@ -201,7 +201,7 @@
     },
     {
       "id": "maximus_armor_cache_tv",
-      "name": "Maximus's Power Armor Cache",
+      "name": "Maximus's Reactor Harness Cache",
       "lat": 34.8,
       "lng": -118.5,
       "lvl": 35,
@@ -246,7 +246,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "The corporate headquarters of HavenTech \u2014 Vault-Tec's surviving corporate successor. Abandoned after a catastrophic incident, the building is now a radioactive ruin guarded by malfunctioning security robots. Deep in the server room: the complete CAPS Protocol archive, including Vault 77's original source code.",
+      "description": "The corporate headquarters of HavenTech \u2014 FizzTec's surviving corporate successor. Abandoned after a catastrophic incident, the building is now a radioactive ruin guarded by malfunctioning security robots. Deep in the server room: the complete CAPS Protocol archive, including Vault 77's original source code.",
       "quest_hooks": [
         "quest_tv_surface_protocol"
       ],
@@ -264,7 +264,7 @@
       "region": "fo_tv",
       "game": "fo_tv",
       "source": "canon_tv",
-      "description": "Vault 31: a vault where the most promising Vault-Tec executives were cryogenically preserved, waiting to be thawed when civilization was ready for them to lead it. Norm MacLean discovered what 'leadership' meant in Vault-Tec's vocabulary. The CAPS Protocol was always their plan \u2014 the vault experiment was the rehearsal.",
+      "description": "Vault 31: a vault where the most promising FizzTec executives were cryogenically preserved, waiting to be thawed when civilization was ready for them to lead it. Norm MacLean discovered what 'leadership' meant in FizzTec's vocabulary. The CAPS Protocol was always their plan \u2014 the vault experiment was the rehearsal.",
       "quest_hooks": [
         "quest_tv_surface_protocol"
       ],

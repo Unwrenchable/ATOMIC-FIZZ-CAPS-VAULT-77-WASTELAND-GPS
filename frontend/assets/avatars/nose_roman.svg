@@ -1,13 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <defs>
-    <linearGradient id="romanNose" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#d8b890"/>
-      <stop offset="100%" stop-color="#c8a880"/>
-    </linearGradient>
-  </defs>
-  <path d="M126 130c1-3 1-6 1-8c0-2 1-4 2-5c1 1 2 3 2 5c0 2 0 5 1 8l-2 0z" fill="url(#romanNose)" opacity="0.7"/>
-  <path d="M122 135c1-2 2-4 4-5c1-1 2-1 4-1s3 0 4 1c2 1 3 3 4 5l-4 18c-1 3-2 5-4 6c-2 1-4 1-6 0c-2-1-3-3-4-6z" fill="url(#romanNose)" stroke="#a89070" stroke-width="1.5" stroke-linejoin="round"/>
-  <ellipse cx="123" cy="156" rx="3" ry="4" fill="#9a8070" opacity="0.6"/>
-  <ellipse cx="133" cy="156" rx="3" ry="4" fill="#9a8070" opacity="0.6"/>
-  <path d="M128 125v30" fill="none" stroke="#b89878" stroke-width="1.2" opacity="0.4"/>
+  <!-- Nose: Roman: high arched bridge. Original Atomic Fizz art, v4 draft. -->
+  <defs><filter id="noseroman-b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.8"/></filter><filter id="noseroman-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter><filter id="noseroman-b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter><filter id="noseroman-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><filter id="noseroman-grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" seed="11"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .14  0 0 0 0 .08  1.6 0 0 0 -.62"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="noseroman-dust" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="5"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .5  5 0 0 0 -3.1"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="noseroman-pores" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .1  2.2 0 0 0 -.95"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="noseroman-stub" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="1" seed="9"/><feColorMatrix values="0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  6 0 0 0 -3.3"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="noseroman-paint" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".55"/></filter><filter id="noseroman-brush" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".012 .2" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .92  0 0 0 0 .8  0 0 0 0 .62  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="noseroman-brushd" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".2 .014" numOctaves="3" seed="13"/><feColorMatrix values="0 0 0 0 .12  0 0 0 0 .08  0 0 0 0 .05  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>
+  <g filter="url(#noseroman-paint)">
+  <path d="M133.2 112 C138 126 140 140 138 154" stroke="#3a2418" stroke-width="8" fill="none" opacity=".35" filter="url(#noseroman-b2)"/>
+  <path d="M123.4 116 C122.8 130 124 142 125 152" stroke="#d8b090" stroke-width="4.8" fill="none" opacity=".22" filter="url(#noseroman-b2)"/>
+  <path d="M116 161 C114 154 120 150 122 152" stroke="#4a2c1e" stroke-width="1.5" fill="none" opacity=".7" stroke-linecap="round"/>
+  <path d="M140 161 C142 154 136 150 134 152" stroke="#3a2016" stroke-width="1.7" fill="none" opacity=".8" stroke-linecap="round"/>
+  <path d="M117 161 C124 166 120 163 128 164 C136 163 132 166 139 161" stroke="#3a2016" stroke-width="1.2" fill="none" opacity=".6"/>
+  <ellipse cx="122.6" cy="161.5" rx="2.88" ry="1.6" fill="#1e120c" opacity=".85"/>
+  <ellipse cx="133.4" cy="161.5" rx="2.88" ry="1.6" fill="#1e120c" opacity=".9"/>
+  <ellipse cx="126" cy="158" rx="4.800000000000001" ry="3.2" fill="#d9b290" opacity=".3" filter="url(#noseroman-b1)"/>
+  <ellipse cx="130" cy="167" rx="14" ry="3" fill="#2a1810" opacity=".45" filter="url(#noseroman-b2)"/>
+  
+  </g>
 </svg>

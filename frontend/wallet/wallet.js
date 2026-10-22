@@ -135,7 +135,7 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
     if (!itemsEl) return;
 
     if (!PLAYER.inventory.length) {
-      itemsEl.innerHTML = `<p class="muted">No items yet — explore the Mojave.</p>`;
+      itemsEl.innerHTML = `<p class="muted">No items yet — explore the Cinder Basin.</p>`;
       return;
     }
 
@@ -1534,7 +1534,7 @@ window.safeWarn = function(...args) { try { console.warn(...args); } catch (e) {
 
     if (perks.bonk_raiders && !q.bonk_raid_intro) {
       q.bonk_raid_intro = true;
-      triggerQuestEvent("BONK_RAID_INTRO", "BONK Raiders spotted near the Mojave Outskirts.");
+      triggerQuestEvent("BONK_RAID_INTRO", "BONK Raiders spotted near the Cinder Basin Outskirts.");
     }
 
     if (perks.shiba_nomads && !q.shiba_caravan_intro) {

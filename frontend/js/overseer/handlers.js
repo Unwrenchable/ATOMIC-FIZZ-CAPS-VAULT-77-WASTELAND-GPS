@@ -110,7 +110,7 @@ window.overseerHandlers = Object.assign(window.overseerHandlers || {}, {
   redmenace() {
     if (window.redMenace) {
       overseerSay("> LOADING RED MENACE ARCADE SYSTEM...");
-      overseerSay("> COPYRIGHT 2077 VAULT-TEC ENTERTAINMENT DIVISION");
+      overseerSay("> COPYRIGHT 2077 FIZZTEC ENTERTAINMENT DIVISION");
       overseerSay("> CONTROLS: USE BUTTONS BELOW");
       overseerSay("> OBJECTIVE: DESTROY ALL COMMUNIST INVADERS!");
       setTimeout(() => {
@@ -166,7 +166,7 @@ window.overseerHandlers = Object.assign(window.overseerHandlers || {}, {
       "How many raiders does it take to change a lightbulb? None. They prefer the dark.",
       "What's a super mutant's favorite game? SMASH BROTHERS.",
       "Why don't ghouls ever get lonely? They're always in DE-COMPOSING company!",
-      "What do you call a deathclaw with no teeth? A GUMMY BEAR... still terrifying.",
+      "What do you call a Radtalon with no teeth? A GUMMY BEAR... still terrifying.",
       "Why was the Pocket-Boy so popular? It had ALL the apps... before the apocalypse.",
       "What's a robot's favorite type of music? HEAVY METAL... literally.",
       "How do you know if a synth is lying? Their PROGRAMMING SHOWS.",
@@ -209,7 +209,7 @@ window.overseerHandlers = Object.assign(window.overseerHandlers || {}, {
       },
       {
         q: "What beverage is Atomic Fizz Caps named after?",
-        a: "Nuka-Cola",
+        a: "Atomic Fizz",
         hint: "It's bubbly, radioactive, and delicious"
       },
       {
@@ -219,18 +219,18 @@ window.overseerHandlers = Object.assign(window.overseerHandlers || {}, {
       },
       {
         q: "What company made the Pocket-Boy?",
-        a: "RobCo Industries",
-        hint: "They also made Protectrons"
+        a: "FizzCo Industries",
+        hint: "They also made Warden-Bots"
       },
       {
         q: "What is the main currency in the wasteland?",
-        a: "Bottle Caps",
+        a: "Atomic Fizz Caps",
         hint: "You're collecting them right now"
       }
     ];
     
     const question = _secureChoice(questions);
-    overseerSay("> FALLOUT LORE TRIVIA:");
+    overseerSay("> WASTELAND LORE TRIVIA:");
     overseerSay("> " + question.q);
     overseerSay("> TYPE YOUR ANSWER OR 'hint' FOR A CLUE");
     
@@ -258,7 +258,7 @@ window.overseerHandlers = Object.assign(window.overseerHandlers || {}, {
     const guess = text.toLowerCase().trim();
 
     if (guess.includes(correct) || correct.includes(guess)) {
-      overseerSay("> CORRECT! YOU KNOW YOUR FALLOUT LORE.");
+      overseerSay("> CORRECT! YOU KNOW YOUR WASTELAND LORE.");
       overseerSay("> THE ANSWER WAS: " + window.overseerTrivia.current.a);
       window.overseerTrivia.current = null;
     } else {
@@ -274,7 +274,7 @@ window.overseerHandlers = Object.assign(window.overseerHandlers || {}, {
     overseerSay("> OTHER ENTERTAINMENT:");
     overseerSay("> - jokes: Wasteland humor");
     overseerSay("> - fortune: Consult the oracle");
-    overseerSay("> - trivia: Test your Fallout knowledge");
+    overseerSay("> - trivia: Test your wasteland knowledge");
   },
 
   ascii() {

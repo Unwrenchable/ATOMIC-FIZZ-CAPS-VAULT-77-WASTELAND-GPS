@@ -31,7 +31,7 @@ const _Game = window.Game;
         return { id: playerLoc.regionId, name: playerLoc.name || "Unknown" };
       }
       // Priority 3: Default fallback region
-      return { id: "mojave_core", name: "Mojave Core" };
+      return { id: "mojave_core", name: "Cinder Basin Core" };
     },
 
     getNearbyPOIs: function (radius) {
@@ -83,7 +83,7 @@ const _Game = window.Game;
   _Game.inventory = _Game.inventory || [
     // "10mm Pistol",
     // "Vault 77 Jumpsuit",
-    // "Stimpak"
+    // "FizzPak"
   ];
 
   _Game.quests = _Game.quests || {

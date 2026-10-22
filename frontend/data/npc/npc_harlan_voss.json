@@ -1,8 +1,8 @@
 {
   "id": "npc_jax_harlan_voss",
   "name": "Harlan Voss",
-  "type": "Retired NCR Ranger",
-  "faction": "NCR (Retired)",
+  "type": "Retired Frontier Compact Ranger",
+  "faction": "Frontier Compact (Retired)",
   "homeRegion": "mojave-outskirts",
   "currentRegion": "mojave-outskirts",
   "poi": "overpass_echo_point",
@@ -48,16 +48,16 @@
       "Jax… that boy always ran toward danger. Must’ve gotten that from me."
     ],
     "serious": [
-      "The NCR thinks they own the Mojave. They don’t. Nobody does.",
+      "The Frontier Compact thinks they own the Cinder Basin. They don’t. Nobody does.",
       "FizzCo’s experiments… I saw things during my service I was ordered to forget."
     ],
     "emotional": [
       "Jax, if you’re hearing this… I failed you. I failed your mother.",
-      "I left the NCR to protect my family. Turns out the danger followed anyway."
+      "I left the Frontier Compact to protect my family. Turns out the danger followed anyway."
     ],
     "ranger_memory": [
       "The Rangers taught me to track storms, men, and lies.",
-      "Vault 77 wasn’t on any NCR map. That scared me more than anything."
+      "Vault 77 wasn’t on any Frontier Compact map. That scared me more than anything."
     ]
   },
 
@@ -66,5 +66,5 @@
     "quest_nv_convergence_signs"
   ],
 
-  "notes": "Decorated NCR Ranger veteran; left the service after uncovering classified FizzCo/Vault-Tec operations."
+  "notes": "Decorated Frontier Compact Ranger veteran; left the service after uncovering classified FizzCo/FizzTec operations."
 }

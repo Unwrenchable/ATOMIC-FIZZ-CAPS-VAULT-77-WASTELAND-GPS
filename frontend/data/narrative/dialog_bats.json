@@ -67,7 +67,7 @@
         "flag:met_dude",
         "!flag:bats_comment_dude"
       ],
-      "text": "The Dude. Lebronski.<br><br>He asked me once if I wanted some Nuka-Cola while I was doing surveillance from a rooftop. I declined. He said 'suit yourself' and left.<br><br>He is one of the few people who doesn't try to make me explain myself. I find that restful.",
+      "text": "The Dude. Lebronski.<br><br>He asked me once if I wanted some Atomic Fizz while I was doing surveillance from a rooftop. I declined. He said 'suit yourself' and left.<br><br>He is one of the few people who doesn't try to make me explain myself. I find that restful.",
       "set_flags": [
         "bats_comment_dude"
       ]
@@ -84,7 +84,7 @@
       "grant_items": [
         {
           "id": "stimpak",
-          "name": "Stimpak",
+          "name": "FizzPak",
           "type": "aid",
           "quantity": 2
         }
@@ -100,7 +100,7 @@
       "conditions": [
         "!flag:sq_bats_the_long_night_taken"
       ],
-      "text": "There is a man. Goes by Grigg. Pre-war banking family — at least, their descendants. He has spent the last six months buying up debt in Freeside. Every squatter owes him something.<br><br>When the debt is fully consolidated, he will own every structure south of the Strip Gate. He won't use violence. He won't have to.<br><br>I need evidence. Financial records. Correspondence. Something that proves the acquisition isn't legal under even the NCR's loose property statutes.<br><br>His operation runs out of the old Paradise Falls records building. Guarded. But not well — he thinks no one cares about paperwork enough to steal it.<br><br>Prove him wrong.",
+      "text": "There is a man. Goes by Grigg. Pre-war banking family — at least, their descendants. He has spent the last six months buying up debt in Freeside. Every squatter owes him something.<br><br>When the debt is fully consolidated, he will own every structure south of the Strip Gate. He won't use violence. He won't have to.<br><br>I need evidence. Financial records. Correspondence. Something that proves the acquisition isn't legal under even the Frontier Compact's loose property statutes.<br><br>His operation runs out of the old Paradise Falls records building. Guarded. But not well — he thinks no one cares about paperwork enough to steal it.<br><br>Prove him wrong.",
       "offers_quest": "sq_bats_the_long_night",
       "set_flags": [
         "sq_bats_the_long_night_taken"
@@ -129,7 +129,7 @@
         "mission",
         "cause"
       ],
-      "text": "Because someone has to.<br><br>The Kings are stretched thin. The NCR doesn't come this far south after dark. The Kings of the Strip don't care what happens below the Gate.<br><br>I have the skills. I have the time. I have the cape, which is frankly underrated as a tactical asset in low-light conditions.<br><br>So. Someone has to."
+      "text": "Because someone has to.<br><br>The Kings are stretched thin. The Frontier Compact doesn't come this far south after dark. The Kings of the Strip don't care what happens below the Gate.<br><br>I have the skills. I have the time. I have the cape, which is frankly underrated as a tactical asset in low-light conditions.<br><br>So. Someone has to."
     },
     {
       "id": "bats_costume",
@@ -164,7 +164,7 @@
         "order",
         "crime"
       ],
-      "text": "There are three kinds of law in the wasteland.<br><br>The kind with paper and courts, which the NCR has at the Dam and almost nowhere else. The kind with guns, which everyone has. And the kind that exists because someone decided it should.<br><br>I operate in the third category. It has the best coverage."
+      "text": "There are three kinds of law in the wasteland.<br><br>The kind with paper and courts, which the Frontier Compact has at the Dam and almost nowhere else. The kind with guns, which everyone has. And the kind that exists because someone decided it should.<br><br>I operate in the third category. It has the best coverage."
     }
   ],
   "fallback": {

@@ -6,9 +6,9 @@
   "currentRegion": "mojave",
   "role": "Legion Scout",
   "personality": "Calm, disciplined, speaks with quiet menace.",
-  "description": "Varro watches Nipton from the shadows, studying the town’s weaknesses. He believes the Mojave is full of soft places waiting to be cut open.",
+  "description": "Varro watches Nipton from the shadows, studying the town’s weaknesses. He believes the Cinder Basin is full of soft places waiting to be cut open.",
   "questHooks": [
-    "Wants information about NCR patrols near Primm.",
+    "Wants information about Frontier Compact patrols near Primm.",
     "Says the town is 'marked' by something older than the Legion.",
     "Carries a strange cap he claims is a bad omen."
   ],

@@ -3,7 +3,7 @@
 // Atomic Fizz Caps — Real-World Geo-fence Reward System
 // Mounted at /api/geofence
 //
-// Players physically visit real-world Fallout-adjacent locations
+// Players physically visit real-world wasteland-adjacent locations
 // (nuclear museums, missile silos, Trinity Site, etc.) and receive
 // unique, geo-locked collector items that cannot be obtained any
 // other way. One claim per location per wallet, ever.

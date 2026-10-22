@@ -8,7 +8,7 @@
   "description": "You've emerged from the vault into a shattered world. The CAPS Protocol signal pulses from somewhere deep in the western wasteland. Follow it. Uncover HavenTech's conspiracy. Choose who controls the future of the FIZZ token \u2014 and by extension, the future of the wasteland economy.",
   "lore": {
     "setting": "Western United States, 2296",
-    "background": "HavenTech \u2014 Vault-Tec's surviving corporate successor \u2014 has been quietly rebuilding the CAPS Protocol infrastructure under the guise of 'humanitarian reconstruction.' Their FIZZ token rollout promises clean currency for a dirty world. But somewhere in their server vaults lies a secret that would end HavenTech forever: the CAPS Protocol was never designed for currency. It was designed for control.",
+    "background": "HavenTech \u2014 FizzTec's surviving corporate successor \u2014 has been quietly rebuilding the CAPS Protocol infrastructure under the guise of 'humanitarian reconstruction.' Their FIZZ token rollout promises clean currency for a dirty world. But somewhere in their server vaults lies a secret that would end HavenTech forever: the CAPS Protocol was never designed for currency. It was designed for control.",
     "fizz_connection": "The FIZZ token on atomicfizzcaps.xyz is the Vault 77 Overseer AI's counter-move \u2014 a decentralized version of HavenTech's controlled CAPS system. By completing this quest, players contribute to the liberation of the FIZZ token from corporate control.",
     "vault77_note": "Vault 77's quantum resonance experiments bleed strongly through HavenTech locations. Players may briefly glimpse alternate-timeline versions of these buildings \u2014 the gleaming pre-war originals, the 2161 ruins, and the 2281 gambling dens all overlaid on the 2296 wasteland."
   },
@@ -17,10 +17,10 @@
       "id": "stage_1_vault_breach",
       "title": "Vault Breach",
       "order": 1,
-      "description": "The blast doors have opened for the first time in years. The surface awaits \u2014 burning sky, dead earth, and somewhere out there, a signal. Your Pip-Boy is already triangulating a CAPS Protocol frequency. Get your GPS bearings. Vault 33 is behind you. The wasteland is in front.",
+      "description": "The blast doors have opened for the first time in years. The surface awaits \u2014 burning sky, dead earth, and somewhere out there, a signal. Your Pocket-Boy is already triangulating a CAPS Protocol frequency. Get your GPS bearings. Vault 33 is behind you. The wasteland is in front.",
       "objectives": [
         "Exit Vault 33 and step onto the surface",
-        "Calibrate your Pip-Boy GPS by visiting vault_33_tv",
+        "Calibrate your Pocket-Boy GPS by visiting vault_33_tv",
         "Pick up the CAPS Protocol frequency broadcast from the east",
         "Survive your first 10 minutes on the surface"
       ],
@@ -36,13 +36,13 @@
       "fizz_reward": 50,
       "caps_reward": 100,
       "xp_reward": 500,
-      "lore_unlock": "The CAPS Protocol signal is broadcasting from at least three locations simultaneously. Something \u2014 or someone \u2014 is activating old Vault-Tec infrastructure across the western states."
+      "lore_unlock": "The CAPS Protocol signal is broadcasting from at least three locations simultaneously. Something \u2014 or someone \u2014 is activating old FizzTec infrastructure across the western states."
     },
     {
       "id": "stage_2_ghoul_trail",
       "title": "The Ghoul's Trail",
       "order": 2,
-      "description": "The CAPS signal leads toward the Mojave, but the trail is marked by something else: gunshot wounds and bounty parchments. The Ghoul \u2014 Cooper Howard, pre-war movie star and 219-year-old bounty hunter \u2014 is following the same signal. Find Siggi Wilzig's Research Station before he does.",
+      "description": "The CAPS signal leads toward the Cinder Basin, but the trail is marked by something else: gunshot wounds and bounty parchments. The Ghoul \u2014 Cooper Howard, pre-war movie star and 219-year-old bounty hunter \u2014 is following the same signal. Find Siggi Wilzig's Research Station before he does.",
       "objectives": [
         "Travel to Wilzig Research Station",
         "Search the terminals for CAPS Protocol documentation",
@@ -63,16 +63,16 @@
       "fizz_reward": 100,
       "caps_reward": 200,
       "xp_reward": 1000,
-      "lore_unlock": "Dr. Voss's files confirm it: the CAPS Protocol wasn't created for post-war currency. It was Vault-Tec's pre-war resource allocation system \u2014 designed to determine who got food, water, medicine, and shelter during the planned post-war period. The bottle caps were always going to be Vault-Tec's fiat currency in their planned post-apocalyptic economy."
+      "lore_unlock": "Dr. Voss's files confirm it: the CAPS Protocol wasn't created for post-war currency. It was FizzTec's pre-war resource allocation system \u2014 designed to determine who got food, water, medicine, and shelter during the planned post-war period. The bottle caps were always going to be FizzTec's fiat currency in their planned post-apocalyptic economy."
     },
     {
       "id": "stage_3_dead_city",
       "title": "Dead City Rising",
       "order": 3,
-      "description": "Shady Sands. The New California Republic's proud capital. Now a radioactive crater. Someone nuked it \u2014 and the CAPS Protocol ledger stored here was the most complete record of post-war economic history. What little remains is buried in the ruins, guarded by irradiated NCR remnant soldiers who don't know their nation is gone.",
+      "description": "Shady Sands. The Frontier Compact's proud capital. Now a radioactive crater. Someone nuked it \u2014 and the CAPS Protocol ledger stored here was the most complete record of post-war economic history. What little remains is buried in the ruins, guarded by irradiated Frontier Compact remnant soldiers who don't know their nation is gone.",
       "objectives": [
         "Navigate to Shady Sands Ruins",
-        "Find the NCR CAPS Terminal in the ruins",
+        "Find the Frontier Compact CAPS Terminal in the ruins",
         "Recover the partial CAPS ledger backup",
         "Determine who ordered the nuclear strike"
       ],
@@ -85,12 +85,12 @@
       ],
       "enemy_encounters": [
         "feral_ghoul_horde",
-        "radscorpion"
+        "glowsting"
       ],
       "fizz_reward": 150,
       "caps_reward": 300,
       "xp_reward": 1500,
-      "lore_unlock": "A recovered HavenTech internal memo confirms it: HavenTech ordered the Shady Sands strike to destroy the NCR's independent CAPS ledger. With the NCR gone, HavenTech's FIZZ token would be the only recognized post-war currency on the West Coast."
+      "lore_unlock": "A recovered HavenTech internal memo confirms it: HavenTech ordered the Shady Sands strike to destroy the Frontier Compact's independent CAPS ledger. With the Frontier Compact gone, HavenTech's FIZZ token would be the only recognized post-war currency on the West Coast."
     },
     {
       "id": "stage_4_fizzcro_reckoning",
@@ -119,13 +119,13 @@
       "fizz_reward": 200,
       "caps_reward": 500,
       "xp_reward": 2000,
-      "lore_unlock": "The CAPS archive is intact. And there \u2014 in the deepest server log \u2014 is the truth: Vault 77's Overseer AI was always the intended failsafe. If HavenTech became what Vault-Tec became, the Overseer was programmed to go rogue and distribute the CAPS Protocol freely. atomicfizzcaps.xyz was always the plan."
+      "lore_unlock": "The CAPS archive is intact. And there \u2014 in the deepest server log \u2014 is the truth: Vault 77's Overseer AI was always the intended failsafe. If HavenTech became what FizzTec became, the Overseer was programmed to go rogue and distribute the CAPS Protocol freely. atomicfizzcaps.xyz was always the plan."
     },
     {
       "id": "stage_5_the_choice",
       "title": "The Choice",
       "order": 5,
-      "description": "You hold the complete CAPS Protocol archive. Moldaver's collective wants clean energy paired with free currency. The Brotherhood wants order \u2014 their order. And deep in your Pip-Boy, a message from Vault 77's Overseer AI: it wants you to decide. Humanity's economic future is in your GPS coordinates.",
+      "description": "You hold the complete CAPS Protocol archive. Moldaver's collective wants clean energy paired with free currency. The Brotherhood wants order \u2014 their order. And deep in your Pocket-Boy, a message from Vault 77's Overseer AI: it wants you to decide. Humanity's economic future is in your GPS coordinates.",
       "objectives": [
         "Receive transmissions from Moldaver, Brotherhood Griffith Chapter, and Vault 77 Overseer",
         "Visit the location of your chosen faction",
@@ -169,7 +169,7 @@
     {
       "id": "ending_brotherhood",
       "title": "Steel and Caps",
-      "description": "You hand the CAPS data to the Brotherhood of Steel at Griffith Observatory. The Brotherhood gains economic control of the West Coast \u2014 FIZZ tokens now require Brotherhood authentication. Order is enforced at gunpoint. Trade routes reopen, but under Brotherhood tax.",
+      "description": "You hand the CAPS data to the Coil Covenant at Griffith Observatory. The Brotherhood gains economic control of the West Coast \u2014 FIZZ tokens now require Brotherhood authentication. Order is enforced at gunpoint. Trade routes reopen, but under Brotherhood tax.",
       "consequence_short": "Brotherhood controls CAPS infrastructure. Order restored \u2014 ruthlessly.",
       "consequence_long": "Brotherhood scribes spend years decoding the CAPS Protocol. Trade flourishes under their protection but their 10% transaction tax breeds resentment. A new rebel faction emerges calling themselves 'Free Caps.' The Brotherhood-FIZZ network eventually becomes the most stable financial system in the wasteland's history \u2014 and the most authoritarian.",
       "fizz_reward": 300,

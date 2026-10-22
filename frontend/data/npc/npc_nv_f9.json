@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_f9",
   "name": "FizzCo Replicant F-9",
-  "region": "New Vegas Strip",
+  "region": "Neon Reach Strip",
   "type": "Android",
   "dialog": [
     "FizzCo directive… corrupted.",

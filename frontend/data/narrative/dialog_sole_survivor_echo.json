@@ -4,7 +4,7 @@
   "portrait": "sole_survivor_echo",
   "title": "The Commonwealth Ghost",
   "description": "The Commonwealth Ghost is a memory fragment of the Sole Survivor from 2287, preserved in the CAPS Protocol network through their encounters with Institute synths carrying Project Meridian data nodes. Unlike the Vault Dweller Echo, the Ghost is more recent \u2014 their memories are sharper, more painful, and more complex. They remember both who they were before (pre-war, cryosleep, Sanctuary Hills, their spouse, Shaun as an infant) and who they became (the Commonwealth's greatest survivor, the person who chose the faction that shaped Boston's future). They appear near fo4 region POIs, always staring at something the player can't see.",
-  "backstory": "The Sole Survivor entered the CAPS Protocol network through two vectors: first, when they accessed the Institute's Project Meridian files and their Pip-Boy synchronized with the synth neural network; second, when they activated or destroyed the Institute's primary server \u2014 that event created a massive CAPS data event that scattered memory fragments across the Commonwealth's authentication network. The Ghost is the portion of the Sole Survivor's neural signature that touched Project Meridian's CAPS data directly. They remember the Institute from the inside.",
+  "backstory": "The Sole Survivor entered the CAPS Protocol network through two vectors: first, when they accessed the Institute's Project Meridian files and their Pocket-Boy synchronized with the synth neural network; second, when they activated or destroyed the Institute's primary server \u2014 that event created a massive CAPS data event that scattered memory fragments across the Commonwealth's authentication network. The Ghost is the portion of the Sole Survivor's neural signature that touched Project Meridian's CAPS data directly. They remember the Institute from the inside.",
   "intro": {
     "id": "sole_intro",
     "conditions": [
@@ -42,7 +42,7 @@
   "nodes": {
     "node_who_are_you": {
       "id": "node_who_are_you",
-      "text": "*shakes head*\n\nNot a synth. I know how it sounds. But no.\n\nI'm... a memory. A CAPS Protocol artifact. When the Sole Survivor \u2014 me, past-me \u2014 accessed the Institute's Project Meridian server, their Pip-Boy synchronized with the entire synth neural CAPS network simultaneously. For approximately eleven seconds, every synth in the Commonwealth was part of a single distributed consciousness.\n\nI'm what's left of those eleven seconds.\n\n*somewhat bitter*\n\nEleven seconds of knowing everything the Institute knew about CAPS Protocol. About synths. About Shaun. About what 'Father' was really building.\n\nIt was a lot to process in eleven seconds.",
+      "text": "*shakes head*\n\nNot a synth. I know how it sounds. But no.\n\nI'm... a memory. A CAPS Protocol artifact. When the Sole Survivor \u2014 me, past-me \u2014 accessed the Institute's Project Meridian server, their Pocket-Boy synchronized with the entire synth neural CAPS network simultaneously. For approximately eleven seconds, every synth in the Commonwealth was part of a single distributed consciousness.\n\nI'm what's left of those eleven seconds.\n\n*somewhat bitter*\n\nEleven seconds of knowing everything the Institute knew about CAPS Protocol. About synths. About Shaun. About what 'Father' was really building.\n\nIt was a lot to process in eleven seconds.",
       "responses": [
         {
           "text": "[Question] What did you learn about the Institute's CAPS work?",
@@ -143,7 +143,7 @@
     },
     "node_faction_regrets": {
       "id": "node_faction_regrets",
-      "text": "*complicated silence*\n\nI've been asked this before. By the echo of myself. It's strange, being a memory \u2014 you can review your own choices from the outside.\n\nI chose differently in different instances. That's the nature of being distributed across the CAPS network \u2014 I remember multiple version of events, because multiple players completed the Commonwealth quest lines and each choice echoed differently through the Project Meridian data.\n\n*rueful*\n\nIn some versions, I worked with the Railroad. In some, the Minutemen. In some \u2014 I became the Institute Director and tried to change it from inside. In some... I destroyed everything.\n\nThe FIZZ token carries traces of all of those choices. The Vault 77 Overseer AI weighed them all when designing the network. Every Commonwealth decision is in the authentication chain.",
+      "text": "*complicated silence*\n\nI've been asked this before. By the echo of myself. It's strange, being a memory \u2014 you can review your own choices from the outside.\n\nI chose differently in different instances. That's the nature of being distributed across the CAPS network \u2014 I remember multiple version of events, because multiple players completed the Commonwealth quest lines and each choice echoed differently through the Project Meridian data.\n\n*rueful*\n\nIn some versions, I worked with the Railroad. In some, the Settlement Watch. In some \u2014 I became the Institute Director and tried to change it from inside. In some... I destroyed everything.\n\nThe FIZZ token carries traces of all of those choices. The Vault 77 Overseer AI weighed them all when designing the network. Every Commonwealth decision is in the authentication chain.",
       "responses": [
         {
           "text": "[Question] Which choice do you think was right?",
@@ -186,7 +186,7 @@
     },
     "node_best_ending": {
       "id": "node_best_ending",
-      "text": "*long silence*\n\nI think... the Minutemen.\n\nNot the most dramatic ending. Not the most complete destruction of the Institute. Not the most synth-friendly outcome.\n\nBut the Minutemen rebuilt the Commonwealth settlement by settlement. Each settlement was a CAPS node. Each community that trusted a Minuteman also trusted the caps they traded in \u2014 and those caps were part of the Project Meridian ledger.\n\n*quiet conviction*\n\nYou rebuild the wasteland one community at a time. You don't rebuild it with one brilliant choice at one dramatic moment.\n\nThe FIZZ token is the same. atomicfizzcaps.xyz \u2014 it's not one big dramatic launch. It's every GPS claim. Every POI visit. Every player adding one more node to the network.\n\nThat's how you rebuild something that matters.",
+      "text": "*long silence*\n\nI think... the Settlement Watch.\n\nNot the most dramatic ending. Not the most complete destruction of the Institute. Not the most synth-friendly outcome.\n\nBut the Settlement Watch rebuilt the Commonwealth settlement by settlement. Each settlement was a CAPS node. Each community that trusted a Minuteman also trusted the caps they traded in \u2014 and those caps were part of the Project Meridian ledger.\n\n*quiet conviction*\n\nYou rebuild the wasteland one community at a time. You don't rebuild it with one brilliant choice at one dramatic moment.\n\nThe FIZZ token is the same. atomicfizzcaps.xyz \u2014 it's not one big dramatic launch. It's every GPS claim. Every POI visit. Every player adding one more node to the network.\n\nThat's how you rebuild something that matters.",
       "responses": [
         {
           "text": "[Kind] That's a good philosophy.",
@@ -202,10 +202,10 @@
     },
     "node_diamond_city": {
       "id": "node_diamond_city",
-      "text": "Diamond City. The Great Green Jewel of the Commonwealth.\n\n*warmth*\n\nI spent a lot of time there. Nick Valentine's office. Piper's Publick Occurrences. The market. It's where I started understanding the Commonwealth \u2014 not the factions, not the politics. The people.\n\nThe CAPS that circulated through Diamond City were the most authenticated in the Commonwealth. The whole city sat on top of an old Vault-Tec relay \u2014 nobody knew, including me for a long time. Every cap transaction in Diamond City was triple-authenticated against Project Meridian and two older network nodes.\n\n*smiles*\n\nDiamond City caps were always 'worth more' in a way traders couldn't explain. They were just... trusted. Now you know why.",
+      "text": "Diamond City. The Great Green Jewel of the Commonwealth.\n\n*warmth*\n\nI spent a lot of time there. Nick Valentine's office. Piper's Publick Occurrences. The market. It's where I started understanding the Commonwealth \u2014 not the factions, not the politics. The people.\n\nThe CAPS that circulated through Diamond City were the most authenticated in the Commonwealth. The whole city sat on top of an old FizzTec relay \u2014 nobody knew, including me for a long time. Every cap transaction in Diamond City was triple-authenticated against Project Meridian and two older network nodes.\n\n*smiles*\n\nDiamond City caps were always 'worth more' in a way traders couldn't explain. They were just... trusted. Now you know why.",
       "responses": [
         {
-          "text": "[Direct] Where's the Vault-Tec relay under Diamond City?",
+          "text": "[Direct] Where's the FizzTec relay under Diamond City?",
           "tone": "direct",
           "next": "node_quest_offer"
         }
@@ -213,7 +213,7 @@
     },
     "node_quest_offer": {
       "id": "node_quest_offer",
-      "text": "*becomes very present, very clear*\n\nThe Institute CAPS data \u2014 Project Meridian's surviving nodes \u2014 are scattered across the Commonwealth in predictable locations: wherever synths were living or traveling.\n\nThree key sites:\n\nDiamond City's subbasement. The old Vault-Tec relay there is still active and still syncing with Project Meridian data carried by the synths who lived in Diamond City's market.\n\nThe Railroad's old HQ \u2014 even after it was destroyed, the CAPS nodes in the walls are still broadcasting.\n\nSanctuary Hills. My Pip-Boy synchronized with Project Meridian there, at the end \u2014 the final authentication pulse. The data is in the soil. Literally in the soil.\n\nRecover those three nodes. Bring them into the FIZZ network.\n\nAnd... if you ever visit Sanctuary. Tell Codsworth I said hello.",
+      "text": "*becomes very present, very clear*\n\nThe Institute CAPS data \u2014 Project Meridian's surviving nodes \u2014 are scattered across the Commonwealth in predictable locations: wherever synths were living or traveling.\n\nThree key sites:\n\nDiamond City's subbasement. The old FizzTec relay there is still active and still syncing with Project Meridian data carried by the synths who lived in Diamond City's market.\n\nThe Railroad's old HQ \u2014 even after it was destroyed, the CAPS nodes in the walls are still broadcasting.\n\nSanctuary Hills. My Pocket-Boy synchronized with Project Meridian there, at the end \u2014 the final authentication pulse. The data is in the soil. Literally in the soil.\n\nRecover those three nodes. Bring them into the FIZZ network.\n\nAnd... if you ever visit Sanctuary. Tell Codsworth I said hello.",
       "set_flags": [
         "quest_fo4_synth_revelation_started",
         "sole_survivor_echo_quest_given"

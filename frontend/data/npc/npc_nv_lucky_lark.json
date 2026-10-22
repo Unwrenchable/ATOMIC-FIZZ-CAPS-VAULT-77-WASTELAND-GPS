@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_lucky_lark",
   "name": "Lucky Lark",
-  "region": "New Vegas Strip",
+  "region": "Neon Reach Strip",
   "type": "Street Performer",
   "dialog": {
     "idle": [

@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_silas_reed",
   "name": "Silas Reed",
-  "region": "New Vegas Strip",
+  "region": "Neon Reach Strip",
   "type": "Strategist / Fixer",
   "dialog": {
     "idle": [

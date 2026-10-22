@@ -1,7 +1,7 @@
 {
   "id": "q_fo1_hub_caravan_war",
   "name": "The Hub Caravan War",
-  "description": "Three competing merchant houses in The Hub each secretly hired you simultaneously to steal a Proto-FIZZ authentication chip — a pre-war Vault-Tec relic that grants economic dominion over the wasteland's ancient resource allocation network. The chip is buried with a long-dead courier beneath the ruins of Barstow. The merchants smile at you across their respective counters, none knowing the others made the same deal.",
+  "description": "Three competing merchant houses in The Hub each secretly hired you simultaneously to steal a Proto-FIZZ authentication chip — a pre-war FizzTec relic that grants economic dominion over the wasteland's ancient resource allocation network. The chip is buried with a long-dead courier beneath the ruins of Barstow. The merchants smile at you across their respective counters, none knowing the others made the same deal.",
   "type": "main",
   "era": "2161",
   "region": "hub_echo",
@@ -81,7 +81,7 @@
     },
     {
       "id": "discover_vault_tec_fronts",
-      "desc": "Investigate merchant ledgers and crumbling terminal records to uncover that all three merchant houses are Vault-Tec remnant fronts.",
+      "desc": "Investigate merchant ledgers and crumbling terminal records to uncover that all three merchant houses are FizzTec remnant fronts.",
       "poi": "hub_barstow_ruins",
       "evidence": [
         "water_merchants_vault_tec_charter",
@@ -122,7 +122,7 @@
     {
       "id": 3,
       "objective": "discover_vault_tec_fronts",
-      "desc": "The ledgers don't lie. Every merchant house is a ghost wearing Vault-Tec's face."
+      "desc": "The ledgers don't lie. Every merchant house is a ghost wearing FizzTec's face."
     },
     {
       "id": 4,
@@ -137,7 +137,7 @@
   ],
   "choices": {
     "give_water_merchants": {
-      "desc": "Give the Proto-FIZZ chip to the Water Merchants. Water access improves, but Vault-Tec's corporate ghost gains economic power.",
+      "desc": "Give the Proto-FIZZ chip to the Water Merchants. Water access improves, but FizzTec's corporate ghost gains economic power.",
       "requirements": {
         "charisma": 6
       },
@@ -162,11 +162,11 @@
           "fo2_ncr_water_quest"
         ],
         "karma": -100,
-        "outcome": "The Vault-Tec ghost wins through commerce. Water flows, but at a price the Hub won't feel for a generation."
+        "outcome": "The FizzTec ghost wins through commerce. Water flows, but at a price the Hub won't feel for a generation."
       }
     },
     "give_crimson_caravan": {
-      "desc": "Give the chip to the Crimson Caravan. Trade routes multiply and profits surge, but Vault-Tec's influence hides in shipping manifests.",
+      "desc": "Give the chip to the Crimson Caravan. Trade routes multiply and profits surge, but FizzTec's influence hides in shipping manifests.",
       "requirements": {
         "barter": 60
       },
@@ -191,11 +191,11 @@
           "fo2_ncr_trade_quest"
         ],
         "karma": 0,
-        "outcome": "Trade routes multiply. The Caravan grows powerful. Vault-Tec's influence hides in ledgers and shipping manifests."
+        "outcome": "Trade routes multiply. The Caravan grows powerful. FizzTec's influence hides in ledgers and shipping manifests."
       }
     },
     "give_far_go_traders": {
-      "desc": "Give the chip to the Far Go Traders. Their maverick style scatters the chip's power across exploration licenses, fracturing Vault-Tec's grip.",
+      "desc": "Give the chip to the Far Go Traders. Their maverick style scatters the chip's power across exploration licenses, fracturing FizzTec's grip.",
       "requirements": {
         "luck": 7
       },
@@ -220,11 +220,11 @@
           "fo2_exploration_quest"
         ],
         "karma": 100,
-        "outcome": "The maverick traders scatter the chip's power across exploration licenses. Vault-Tec's control fractures into the wind."
+        "outcome": "The maverick traders scatter the chip's power across exploration licenses. FizzTec's control fractures into the wind."
       }
     },
     "destroy_chip": {
-      "desc": "Destroy the Proto-FIZZ chip. No corporation inherits Vault-Tec's backdoor into the wasteland economy. Everyone loses. Everyone is free.",
+      "desc": "Destroy the Proto-FIZZ chip. No corporation inherits FizzTec's backdoor into the wasteland economy. Everyone loses. Everyone is free.",
       "requirements": {
         "intelligence": 7
       },
@@ -270,7 +270,7 @@
     "quest_fo2_ncr_founding",
     "quest_hub_water_wars_aftermath"
   ],
-  "era_note": "This quest echoes from 2161. Its consequences alter NCR formation in 2241 — different chip choices unlock different FO2 era quest variants.",
-  "fizz_lore": "The Proto-FIZZ chip contains Vault-Tec's original CAPS validation algorithm — the cryptographic ancestor of every FIZZ token in the wasteland. Whoever held it held the keys to economic reality.",
-  "notes": "Hub triple-contract deception quest. All three faction bosses are Vault-Tec shells — the real twist. The chip outcome branches into FO2 era quests with different starting context and NPC attitudes."
+  "era_note": "This quest echoes from 2161. Its consequences alter Frontier Compact formation in 2241 — different chip choices unlock different FO2 era quest variants.",
+  "fizz_lore": "The Proto-FIZZ chip contains FizzTec's original CAPS validation algorithm — the cryptographic ancestor of every FIZZ token in the wasteland. Whoever held it held the keys to economic reality.",
+  "notes": "Hub triple-contract deception quest. All three faction bosses are FizzTec shells — the real twist. The chip outcome branches into FO2 era quests with different starting context and NPC attitudes."
 }

@@ -76,7 +76,7 @@
         try {
           Game.modules.worldmap.onOpen();
         } catch (e) {
-          console.warn("[PipBoy] worldmap.onOpen failed:", e);
+          console.warn("[Pocket-Boy] worldmap.onOpen failed:", e);
         }
       }
 
@@ -88,7 +88,7 @@
         // Check both window.map and Game.modules.worldmap.map
         const mapInstance = window.map || (Game.modules?.worldmap?.map);
         if (mapInstance && typeof mapInstance.invalidateSize === "function") {
-          console.log(`[PipBoy] invalidating map size after panel switch`);
+          console.log(`[Pocket-Boy] invalidating map size after panel switch`);
           mapInstance.invalidateSize(true);
         }
       }
@@ -111,7 +111,7 @@
           window.renderInventoryPanel();
         }
       } catch (e) {
-        console.warn("[PipBoy] renderInventory failed:", e);
+        console.warn("[Pocket-Boy] renderInventory failed:", e);
       }
     }
 
@@ -122,7 +122,7 @@
         try {
           Game.modules.CharacterCreator.init().then(() => {
             Game.modules.CharacterCreator._initialized = true;
-            console.log("[PipBoy] Character creator initialized on STATS tab open");
+            console.log("[Pocket-Boy] Character creator initialized on STATS tab open");
             // Update stats display after initialization
             if (window.updateStatDisplay) {
               window.updateStatDisplay();
@@ -130,10 +130,10 @@
             // Render character portrait
             renderCharacterPortrait();
           }).catch(err => {
-            console.warn("[PipBoy] Character creator initialization failed:", err);
+            console.warn("[Pocket-Boy] Character creator initialization failed:", err);
           });
         } catch (e) {
-          console.warn("[PipBoy] Character creator init call failed:", e);
+          console.warn("[Pocket-Boy] Character creator init call failed:", e);
         }
       } else {
         // Update stats display every time STATS tab is opened (after initialization)
@@ -156,7 +156,7 @@
           window.renderQuestsPanel();
         }
       } catch (e) {
-        console.warn("[PipBoy] renderQuest failed:", e);
+        console.warn("[Pocket-Boy] renderQuest failed:", e);
       }
     }
 
@@ -166,9 +166,9 @@
         if (window.renderExchangeClaimSection) window.renderExchangeClaimSection();
         if (window.renderExchangeCraftingSection) window.renderExchangeCraftingSection();
         if (window.renderDemoExchange) window.renderDemoExchange();
-        console.log("[PipBoy] Exchange panel initialized");
+        console.log("[Pocket-Boy] Exchange panel initialized");
       } catch (e) {
-        console.warn("[PipBoy] Exchange panel initialization failed:", e);
+        console.warn("[Pocket-Boy] Exchange panel initialization failed:", e);
       }
     }
 
@@ -292,7 +292,7 @@
     if (typeof window.claimMintables === "function") {
       window.claimMintables();
     } else {
-      console.warn("[PipBoy] claimMintables() not defined yet");
+      console.warn("[Pocket-Boy] claimMintables() not defined yet");
     }
   }
 
@@ -321,7 +321,7 @@
           connectWalletStat.classList.add("connected");
         }
       } catch (e) {
-        console.warn("[PipBoy] Game.connectWallet failed:", e);
+        console.warn("[Pocket-Boy] Game.connectWallet failed:", e);
         alert("Wallet connect failed.");
       }
       return;
@@ -330,7 +330,7 @@
     if (typeof window.connectWallet === "function") {
       window.connectWallet();
     } else {
-      console.warn("[PipBoy] No wallet connect function available.");
+      console.warn("[Pocket-Boy] No wallet connect function available.");
       alert("Wallet system offline.");
     }
   }

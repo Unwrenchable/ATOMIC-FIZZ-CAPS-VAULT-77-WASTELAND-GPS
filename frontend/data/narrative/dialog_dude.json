@@ -3,7 +3,7 @@
   "npc": "Jeffrey \"The Dude\" Lebronski",
   "portrait": "dude",
   "title": "The Abiding Wanderer",
-  "description": "Dialog nodes for Jeffrey 'The Dude' Lebronski, a permanently-mellowed drifter who just wants his Nuka-Cola-branded rug back. It really tied the shelter together.",
+  "description": "Dialog nodes for Jeffrey 'The Dude' Lebronski, a permanently-mellowed drifter who just wants his Atomic Fizz-branded rug back. It really tied the shelter together.",
   "backstory": "Jeffrey Lebronski managed a pre-war bowling alley in the city that became Freeside, and survived the apocalypse in a storm drain with a bowling ball, a bathrobe, and a bottle of pre-war White Russian mix. Two centuries of wasteland have not dislodged his fundamental conviction about abiding. His friends call him The Dude. The wasteland calls him impossible to rattle. Both observations are accurate. The bowling ball is somewhere under Route 93. He knows exactly where.",
   "intro": {
     "id": "dude_intro",
@@ -11,7 +11,7 @@
       "!flag:met_dude"
     ],
     "video_speech": "Hey, hey — whoa. Take it easy, man. Name's Lebronski. The Dude'll do. You haven't seen my rug around here, have you?",
-    "text": "Hey, hey — whoa.<br><br>Take it easy, man. Take it easy.<br><br>Name's Lebronski. Jeffrey Lebronski. But The Dude'll do. Or His Dudeness, or Duder, or El Duderino, if you're not into the whole brevity thing.<br><br>You haven't seen a rug around here, have you? Tan. Pre-war. Had a Nuka-Cola bottle pattern on it. It really tied the shelter together.",
+    "text": "Hey, hey — whoa.<br><br>Take it easy, man. Take it easy.<br><br>Name's Lebronski. Jeffrey Lebronski. But The Dude'll do. Or His Dudeness, or Duder, or El Duderino, if you're not into the whole brevity thing.<br><br>You haven't seen a rug around here, have you? Tan. Pre-war. Had a Atomic Fizz bottle pattern on it. It really tied the shelter together.",
     "set_flags": [
       "met_dude"
     ]
@@ -89,7 +89,7 @@
         "flag:met_kenny",
         "!flag:dude_comment_kenny"
       ],
-      "text": "Oh, the little orange-hooded dude?<br><br>Man, he got eaten by a giant radscorpion right in front of me. Right *in front of me*, man.<br><br>He was back the next afternoon. Still waving. Still orange.<br><br>The Dude abides. But that dude *really* abides.",
+      "text": "Oh, the little orange-hooded dude?<br><br>Man, he got eaten by a giant glowsting right in front of me. Right *in front of me*, man.<br><br>He was back the next afternoon. Still waving. Still orange.<br><br>The Dude abides. But that dude *really* abides.",
       "set_flags": [
         "dude_comment_kenny"
       ]
@@ -113,7 +113,7 @@
         "stat:rads>=200",
         "!flag:dude_comment_rads"
       ],
-      "text": "Man, you are *glowing*.<br><br>I've had some wild nights but that is something else.<br><br>Have a Nuka-Cola. It helps. Probably.",
+      "text": "Man, you are *glowing*.<br><br>I've had some wild nights but that is something else.<br><br>Have a Atomic Fizz. It helps. Probably.",
       "set_flags": [
         "dude_comment_rads"
       ]
@@ -171,7 +171,7 @@
         "carpet",
         "shelter"
       ],
-      "text": "That rug... it really tied the shelter together.<br><br>Pre-war Nuka-Cola bottle pattern. Soft pile. Probably the last one in the Mojave.<br><br>The Nihilists don't even *want* it. They just took it."
+      "text": "That rug... it really tied the shelter together.<br><br>Pre-war Atomic Fizz bottle pattern. Soft pile. Probably the last one in the Cinder Basin.<br><br>The Nihilists don't even *want* it. They just took it."
     },
     {
       "id": "dude_wasteland",

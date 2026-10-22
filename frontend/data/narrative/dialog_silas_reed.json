@@ -4,7 +4,7 @@
   "portrait": "silas_reed",
   "title": "The Strategist",
   "description": "A lean man who occupies space differently than most people do — too still, too aware of every exit. He sits with his back to the wall and his hands on the table where you can see them. It's not reassurance. It's discipline.",
-  "backstory": "Silas Reed was an NCR intelligence analyst before the NCR stopped being a structure worth working inside. He's been operating independently on the Strip for nine years, advising factions without joining them and selling strategic analysis to anyone with the patience to use it properly. He has been watching what he calls the Convergence arc — fractures in the timeline near Vault 77 that he believes aren't random. He understands what they mean. He's waiting for someone to believe him.",
+  "backstory": "Silas Reed was an Frontier Compact intelligence analyst before the Frontier Compact stopped being a structure worth working inside. He's been operating independently on the Strip for nine years, advising factions without joining them and selling strategic analysis to anyone with the patience to use it properly. He has been watching what he calls the Convergence arc — fractures in the timeline near Vault 77 that he believes aren't random. He understands what they mean. He's waiting for someone to believe him.",
   "intro": {
     "id": "silas_reed_intro",
     "conditions": ["!flag:met_silas_reed"],
@@ -76,9 +76,9 @@
     },
     {
       "id": "silas_vault",
-      "keywords": ["vault", "vault 77", "vault-tec"],
-      "text": "\"Vault-Tec didn't build vaults. They built instruments.\"<br><br>\"Vault 77 was a specific kind of instrument. I've spent three years trying to understand exactly what it was meant to measure.\"<br><br>\"I think I know. I hope I'm wrong.\"",
-      "video_speech": "Vault-Tec didn't build vaults. They built instruments. Vault 77 was a specific one."
+      "keywords": ["vault", "vault 77", "fizztec"],
+      "text": "\"FizzTec didn't build vaults. They built instruments.\"<br><br>\"Vault 77 was a specific kind of instrument. I've spent three years trying to understand exactly what it was meant to measure.\"<br><br>\"I think I know. I hope I'm wrong.\"",
+      "video_speech": "FizzTec didn't build vaults. They built instruments. Vault 77 was a specific one."
     },
     {
       "id": "silas_convergence_general",
@@ -89,7 +89,7 @@
     {
       "id": "silas_ncr",
       "keywords": ["ncr", "ranger", "republic"],
-      "text": "\"I worked for the NCR long enough to understand what it was.\"<br><br>\"A structure that believed order was more important than accuracy. I decided accuracy was more valuable.\"<br><br>\"We parted ways professionally.\""
+      "text": "\"I worked for the Frontier Compact long enough to understand what it was.\"<br><br>\"A structure that believed order was more important than accuracy. I decided accuracy was more valuable.\"<br><br>\"We parted ways professionally.\""
     }
   ],
   "fallback": {

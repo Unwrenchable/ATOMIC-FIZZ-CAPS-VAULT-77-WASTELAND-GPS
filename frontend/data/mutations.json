@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "description": "Fallout 76-inspired mutation system for Atomic Fizz Caps. Mutations are permanent (or semi-permanent) stat changes caused by radiation exposure or serum injection. Each mutation has a benefit AND a drawback — there are no pure upgrades. Serums apply a specific mutation reliably; raw radiation exposure applies a random one.",
+  "description": "Appalachia wastes-inspired mutation system for Atomic Fizz Caps. Mutations are permanent (or semi-permanent) stat changes caused by radiation exposure or serum injection. Each mutation has a benefit AND a drawback — there are no pure upgrades. Serums apply a specific mutation reliably; raw radiation exposure applies a random one.",
   "mechanic_note": "Mutations stack up to 5 active at once. Removing a mutation requires a Mutation Suppressant serum or visiting a decontamination shower at a settlement. Some mutations conflict with each other. The Starched Genes perk (from leveling) makes mutations permanent and prevents new ones from overwriting.",
   "mutations": [
     {
@@ -172,8 +172,8 @@
       "id": "mutation_herd_mentality",
       "name": "Herd Mentality",
       "description": "Your social brain has rewired to draw strength from proximity to others.",
-      "benefit": "+2 to all SPECIAL stats while grouped with companions or other players in the same zone.",
-      "drawback": "-2 to all SPECIAL stats when alone. Solo play becomes systematically harder.",
+      "benefit": "+2 to all VITALS stats while grouped with companions or other players in the same zone.",
+      "drawback": "-2 to all VITALS stats when alone. Solo play becomes systematically harder.",
       "effects": {
         "grouped_special_bonus": 2,
         "solo_special_penalty": -2
@@ -318,8 +318,8 @@
       "id": "mutation_healing_factor",
       "name": "Healing Factor",
       "description": "Your cellular regeneration rate has increased dramatically.",
-      "benefit": "Regenerate 2 HP per minute passively. Stimpaks act faster (2 second use time). Resting heals +50% more HP.",
-      "drawback": "Chems and stimpaks are 55% less effective (your body metabolizes them too fast). Radiation resistance -25.",
+      "benefit": "Regenerate 2 HP per minute passively. FizzPaks act faster (2 second use time). Resting heals +50% more HP.",
+      "drawback": "Chems and FizzPaks are 55% less effective (your body metabolizes them too fast). Radiation resistance -25.",
       "effects": {
         "hp_regen_per_minute": 2,
         "stimpak_use_time_seconds": 2,
@@ -390,7 +390,7 @@
     { "id": "serum_healing_factor",      "name": "Healing Factor Serum",      "applies": "mutation_healing_factor",      "type": "serum", "weight": 0.1, "value": 1000, "description": "Cellular regeneration activator. Rare, effective, and slightly unnerving to watch work." },
     { "id": "serum_glass_cannon",        "name": "Glass Cannon Serum",        "applies": "mutation_glass_cannon",        "type": "serum", "weight": 0.1, "value": 950,  "description": "Offensive amplifier. Maximum aggression. Minimum self-preservation. Some might call this unwise." },
     { "id": "serum_rad_sponge",          "name": "Rad Sponge Serum",          "applies": "mutation_rad_sponge",          "type": "serum", "weight": 0.1, "value": 900,  "description": "Radiation processing activator. The syringe itself is mildly radioactive. This tracks." },
-    { "id": "serum_suppressant",         "name": "Mutation Suppressant",      "applies": null,                           "type": "serum", "weight": 0.1, "value": 1500, "description": "Removes one mutation at random from your active stack. Developed by Vault-Tec. Counterintuitively, this was the ethical part of the program.", "removes_mutation": true }
+    { "id": "serum_suppressant",         "name": "Mutation Suppressant",      "applies": null,                           "type": "serum", "weight": 0.1, "value": 1500, "description": "Removes one mutation at random from your active stack. Developed by FizzTec. Counterintuitively, this was the ethical part of the program.", "removes_mutation": true }
   ],
   "radiation_exposure_rules": {
     "threshold_for_random_mutation": 300,

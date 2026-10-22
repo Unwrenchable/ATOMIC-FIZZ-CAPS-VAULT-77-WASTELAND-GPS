@@ -661,7 +661,7 @@ input[type="reset"]:hover {
 }
 
 /* ============================================================
-   NPC DIALOGUE STYLES - FALLOUT-STYLE
+   NPC DIALOGUE STYLES - TERMINAL-STYLE
    ============================================================ */
 
 .dialog-body {
@@ -1081,7 +1081,7 @@ input[type="reset"]:hover {
 .unequip-btn:hover { background: rgba(255,170,0,0.12); }
 
 /* ============================================================
-   EQUIP SCREEN (Fallout paperdoll)
+   EQUIP SCREEN (wasteland paperdoll)
    ============================================================ */
 .equip-screen-header {
   padding: 8px 10px 4px;

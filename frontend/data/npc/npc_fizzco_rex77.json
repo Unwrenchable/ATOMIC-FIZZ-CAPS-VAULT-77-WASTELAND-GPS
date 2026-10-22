@@ -1,7 +1,7 @@
 {
   "id": "npc_fizzco_rex77",
   "name": "REX-77",
-  "region": "Mojave",
+  "region": "Cinder Basin",
   "type": "Courier Robot",
   "dialog": [
     "ERROR: Memory sectors corrupted.",

@@ -597,7 +597,7 @@
     "id": "elite_vault_suit",
     "name": "Elite Vault Suit",
     "rarity": "epic",
-    "spawnPOI": "Vault 101",
+    "spawnPOI": "Vault 77",
     "levelRequirement": 22,
     "type": "armor",
     "priceCAPS": 1100,
@@ -1270,7 +1270,7 @@
   },
   {
     "id": "deathclaw_horn",
-    "name": "Deathclaw Horn",
+    "name": "Radtalon Horn",
     "rarity": "legendary",
     "spawnPOI": "Quarry Junction",
     "levelRequirement": 34,
@@ -1584,7 +1584,7 @@
     "id": "overseers_judgment",
     "name": "Overseer\u2019s Judgment",
     "rarity": "legendary",
-    "spawnPOI": "Vault 101",
+    "spawnPOI": "Vault 77",
     "levelRequirement": 38,
     "type": "weapon",
     "priceCAPS": 3600,
@@ -1658,7 +1658,7 @@
     "id": "sunburst_cannon",
     "name": "Sunburst Cannon",
     "rarity": "legendary",
-    "spawnPOI": "Nuka-World",
+    "spawnPOI": "Fizz Fair",
     "levelRequirement": 40,
     "type": "weapon",
     "priceCAPS": 4000,
@@ -1758,7 +1758,7 @@
   },
   {
     "id": "vault_poster",
-    "name": "Vault-Tec Safety Poster",
+    "name": "FizzTec Safety Poster",
     "rarity": "rare",
     "spawnPOI": "Vault 13",
     "levelRequirement": 15,
@@ -1979,7 +1979,7 @@
     "id": "scrap_metal",
     "name": "Scrap Metal",
     "rarity": "common",
-    "spawnPOI": "Goodsprings Saloon",
+    "spawnPOI": "Dustwell Saloon",
     "levelRequirement": 1,
     "type": "junk",
     "priceCAPS": 10
@@ -2009,7 +2009,7 @@
     "id": "dirty_water",
     "name": "Dirty Water",
     "rarity": "common",
-    "spawnPOI": "Vault 101",
+    "spawnPOI": "Vault 77",
     "levelRequirement": 1,
     "type": "consumable",
     "priceCAPS": 15
@@ -2105,7 +2105,7 @@
     "id": "leather_jacket",
     "name": "Leather Jacket",
     "rarity": "common",
-    "spawnPOI": "Goodsprings Saloon",
+    "spawnPOI": "Dustwell Saloon",
     "levelRequirement": 1,
     "type": "armor",
     "priceCAPS": 35
@@ -2148,9 +2148,9 @@
   },
   {
     "id": "casino_chip",
-    "name": "Lucky 38 Casino Chip",
+    "name": "The Spire Casino Chip",
     "rarity": "common",
-    "spawnPOI": "Lucky 38",
+    "spawnPOI": "The Spire",
     "levelRequirement": 1,
     "type": "cosmetic",
     "priceCAPS": 15
@@ -2159,16 +2159,16 @@
     "id": "rusted_spoon",
     "name": "Rusted Spoon",
     "rarity": "common",
-    "spawnPOI": "Goodsprings Saloon",
+    "spawnPOI": "Dustwell Saloon",
     "levelRequirement": 1,
     "type": "junk",
     "priceCAPS": 5
   },
   {
     "id": "nuka_cap",
-    "name": "Nuka-Cola Bottle Cap",
+    "name": "Atomic Fizz Bottle Cap",
     "rarity": "common",
-    "spawnPOI": "Nuka-World",
+    "spawnPOI": "Fizz Fair",
     "levelRequirement": 1,
     "type": "junk",
     "priceCAPS": 10
@@ -2177,7 +2177,7 @@
     "id": "rusted_wrench",
     "name": "Rusted Wrench",
     "rarity": "common",
-    "spawnPOI": "Goodsprings Saloon",
+    "spawnPOI": "Dustwell Saloon",
     "levelRequirement": 1,
     "type": "junk",
     "priceCAPS": 12
@@ -2222,7 +2222,7 @@
     "id": "sarsaparilla_bottle",
     "name": "Sarsaparilla Bottle",
     "rarity": "common",
-    "spawnPOI": "New Vegas Strip",
+    "spawnPOI": "Neon Reach Strip",
     "levelRequirement": 10,
     "type": "consumable",
     "priceCAPS": 25
@@ -2240,7 +2240,7 @@
     "id": "rusted_pan",
     "name": "Rusted Pan",
     "rarity": "common",
-    "spawnPOI": "Goodsprings Saloon",
+    "spawnPOI": "Dustwell Saloon",
     "levelRequirement": 1,
     "type": "junk",
     "priceCAPS": 10
@@ -2283,7 +2283,7 @@
   },
   {
     "id": "stimpak",
-    "name": "Stimpak",
+    "name": "FizzPak",
     "rarity": "rare",
     "spawnPOI": "Novac Motel",
     "levelRequirement": 5,
@@ -2292,7 +2292,7 @@
   },
   {
     "id": "radaway",
-    "name": "RadAway",
+    "name": "GlowFlush",
     "rarity": "rare",
     "spawnPOI": "Searchlight Church",
     "levelRequirement": 10,
@@ -2433,9 +2433,9 @@
   },
   {
     "id": "casino_token",
-    "name": "Lucky 38 Drink Token",
+    "name": "The Spire Drink Token",
     "rarity": "rare",
-    "spawnPOI": "Lucky 38",
+    "spawnPOI": "The Spire",
     "levelRequirement": 15,
     "type": "cosmetic",
     "priceCAPS": 240
@@ -2451,7 +2451,7 @@
   },
   {
     "id": "vault_pamphlet",
-    "name": "Vault-Tec Pamphlet",
+    "name": "FizzTec Pamphlet",
     "rarity": "rare",
     "spawnPOI": "Vault 13",
     "levelRequirement": 15,
@@ -2481,7 +2481,7 @@
   },
   {
     "id": "t51_power_armor",
-    "name": "T-51 Power Armor",
+    "name": "T-51 Reactor Harness",
     "rarity": "epic",
     "spawnPOI": "Vault 34",
     "levelRequirement": 20,
@@ -2588,7 +2588,7 @@
     "id": "casino_guard_uniform",
     "name": "Casino Guard Uniform",
     "rarity": "epic",
-    "spawnPOI": "Lucky 38",
+    "spawnPOI": "The Spire",
     "levelRequirement": 18,
     "type": "armor",
     "priceCAPS": 1900
@@ -2792,7 +2792,7 @@
     "id": "fatman",
     "name": "Fat Man Mini-Nuke Launcher",
     "rarity": "legendary",
-    "spawnPOI": "Deathclaw Promontory",
+    "spawnPOI": "Radtalon Promontory",
     "levelRequirement": 45,
     "type": "weapon",
     "priceCAPS": 20000,
@@ -2811,9 +2811,9 @@
   },
   {
     "id": "nuka_quantum",
-    "name": "Nuka-Cola Quantum",
+    "name": "Atomic Fizz Quantum",
     "rarity": "legendary",
-    "spawnPOI": "Nuka-World",
+    "spawnPOI": "Fizz Fair",
     "levelRequirement": 30,
     "type": "consumable",
     "priceCAPS": 9000
@@ -2829,7 +2829,7 @@
   },
   {
     "id": "prototype_x01",
-    "name": "Prototype X-01 Power Armor",
+    "name": "Prototype X-01 Reactor Harness",
     "rarity": "legendary",
     "spawnPOI": "Yucca Mountain",
     "levelRequirement": 50,
@@ -2928,7 +2928,7 @@
   },
   {
     "id": "vault_tech_experiment",
-    "name": "Vault-Tec Experimental Device",
+    "name": "FizzTec Experimental Device",
     "rarity": "legendary",
     "spawnPOI": "Vault 87",
     "levelRequirement": 30,
@@ -2946,7 +2946,7 @@
   },
   {
     "id": "deathclaw_hide_armor",
-    "name": "Deathclaw Hide Armor",
+    "name": "Radtalon Hide Armor",
     "rarity": "legendary",
     "spawnPOI": "Dead Wind Cavern",
     "levelRequirement": 40,
@@ -3083,7 +3083,7 @@
   },
   {
     "id": "vault_tech_core",
-    "name": "Vault-Tec Core Prototype",
+    "name": "FizzTec Core Prototype",
     "rarity": "legendary",
     "spawnPOI": "Vault 87",
     "levelRequirement": 30,

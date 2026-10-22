@@ -6,10 +6,10 @@
   "currentRegion": "mojave",
   "role": "Supply Runner",
   "personality": "Fast-talking, nervous, always ready to bolt.",
-  "description": "Milo runs supplies between Sloan and the 188 Trading Post. He’s had too many close calls with deathclaws.",
+  "description": "Milo runs supplies between Sloan and the 188 Trading Post. He’s had too many close calls with Radtalons.",
   "questHooks": [
     "Needs an escort through a dangerous stretch of road.",
-    "Saw a deathclaw carrying something metallic.",
+    "Saw a Radtalon carrying something metallic.",
     "Claims he found a warm egg near the quarry entrance."
   ],
   "poi": "sloan_station_fnv"

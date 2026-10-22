@@ -87,7 +87,7 @@ REGION FLAVOR:
 ${buildWorldBrainContextBlock(worldBrainSeed)}
 
 RULES:
-- Fallout Mojave tone.
+- wasteland Cinder Basin tone.
 - Short, punchy, gritty.
 - Under 14 words.
 - Reflect NPC personality, background, faction, attitude, cell tuning, and world simulation state.
