@@ -54,7 +54,7 @@
           "id": "brotherhood_patrol_tv",
           "probability": 0.15,
           "type": "npc",
-          "description": "A Brotherhood of Steel patrol from Griffith Observatory demands identification. Their Squire looks nervous.",
+          "description": "A Coil Covenant patrol from Griffith Observatory demands identification. Their Squire looks nervous.",
           "npc": "brotherhood_sentinel_tv",
           "fizz_reward": 10,
           "speech_options": [
@@ -88,7 +88,7 @@
           "id": "caps_cache_tv",
           "probability": 0.1,
           "type": "discovery",
-          "description": "Your Pip-Boy's CAPS scanner pings: a pre-war cache hidden beneath rubble. A small stash of authenticated bottle caps \u2014 original CAPS Protocol nodes.",
+          "description": "Your Pocket-Boy's CAPS scanner pings: a pre-war cache hidden beneath rubble. A small stash of authenticated bottle caps \u2014 original CAPS Protocol nodes.",
           "fizz_reward": 50,
           "grant": "caps_node_fragment"
         },
@@ -96,7 +96,7 @@
           "id": "vault_signal_tv",
           "probability": 0.15,
           "type": "lore",
-          "description": "A vault emergency signal fires from somewhere underground. Your Pip-Boy receives the broadcast: 'CAPS PROTOCOL NODE ACTIVE \u2014 AUTHENTICATION REQUIRED \u2014 FIZZ TERMINAL AVAILABLE.' The signal points east.",
+          "description": "A vault emergency signal fires from somewhere underground. Your Pocket-Boy receives the broadcast: 'CAPS PROTOCOL NODE ACTIVE \u2014 AUTHENTICATION REQUIRED \u2014 FIZZ TERMINAL AVAILABLE.' The signal points east.",
           "fizz_reward": 30,
           "grant": "vault_signal_marker"
         }
@@ -115,7 +115,7 @@
           "id": "timeline_bleed_tv_1977",
           "probability": 0.03,
           "type": "timeline_bleed",
-          "description": "For 77 seconds, you can see the pre-war version of this location overlaid on the ruins \u2014 clean, gleaming, full of people who don't know what's coming. A man in a cowboy hat waves from a Nuka-Cola billboard. Cooper Howard. 2077.",
+          "description": "For 77 seconds, you can see the pre-war version of this location overlaid on the ruins \u2014 clean, gleaming, full of people who don't know what's coming. A man in a cowboy hat waves from a Atomic Fizz billboard. Cooper Howard. 2077.",
           "fizz_reward": 200,
           "achievement": "Ghost of the Old World"
         },
@@ -123,7 +123,7 @@
           "id": "haventech_executive_ghost_tv",
           "probability": 0.02,
           "type": "encounter_unique",
-          "description": "A perfectly-preserved Vault-Tec executive in a cryogenic suit staggers from a collapsed basement. They keep asking about 'quarterly CAPS targets' and 'synergy leverage.' They don't understand what happened.",
+          "description": "A perfectly-preserved FizzTec executive in a cryogenic suit staggers from a collapsed basement. They keep asking about 'quarterly CAPS targets' and 'synergy leverage.' They don't understand what happened.",
           "npc": "vault_tec_exec_cryo",
           "fizz_reward": 150,
           "loot": [
@@ -187,19 +187,19 @@
         {
           "weight": 25,
           "type": "radiation",
-          "description": "Your Pip-Boy Geiger counter ticks faster \u2014 residual Project Purity radiation still clings to waterways near this location.",
+          "description": "Your Pocket-Boy Geiger counter ticks faster \u2014 residual Project Purity radiation still clings to waterways near this location.",
           "fizz_reward": 5
         },
         {
           "weight": 20,
           "type": "terminal",
-          "description": "A Brotherhood of Steel tactical terminal displays orders from 2277, discussing the Enclave threat and 'anomalous CAPS Protocol signals' near the Jefferson Memorial.",
+          "description": "A Coil Covenant tactical terminal displays orders from 2277, discussing the Directorate threat and 'anomalous CAPS Protocol signals' near the Jefferson Memorial.",
           "fizz_reward": 15
         },
         {
           "weight": 15,
           "type": "lore_echo",
-          "description": "An Enclave radio broadcast from 2277 bleeds through: 'President Eden addresses the nation... the purification of the American wasteland begins NOW.' The signal makes your skin crawl.",
+          "description": "An Directorate radio broadcast from 2277 bleeds through: 'President Eden addresses the nation... the purification of the American wasteland begins NOW.' The signal makes your skin crawl.",
           "fizz_reward": 0
         },
         {
@@ -214,7 +214,7 @@
           "id": "enclave_remnant_patrol",
           "probability": 0.2,
           "type": "combat",
-          "description": "An Enclave Remnant soldier in battered Tesla armor emerges from rubble, shouting about President Eden and 'CAPS Protocol extraction orders.' They're clearly not well.",
+          "description": "An Directorate Remnant soldier in battered Tesla armor emerges from rubble, shouting about President Eden and 'CAPS Protocol extraction orders.' They're clearly not well.",
           "enemy": "enclave_remnant_soldier",
           "fizz_reward": 20,
           "loot": [
@@ -226,7 +226,7 @@
           "id": "brotherhood_outcast",
           "probability": 0.15,
           "type": "npc",
-          "description": "A Brotherhood Outcast is scavenging technology from pre-war ruins. They're carrying a CAPS Protocol terminal \u2014 they don't know what it is, only that it's old Vault-Tec tech.",
+          "description": "A Brotherhood Outcast is scavenging technology from pre-war ruins. They're carrying a CAPS Protocol terminal \u2014 they don't know what it is, only that it's old FizzTec tech.",
           "npc": "brotherhood_outcast_scavenger",
           "fizz_reward": 15,
           "trade": "caps_terminal_fragment"
@@ -235,7 +235,7 @@
           "id": "supermutant_warband",
           "probability": 0.25,
           "type": "combat",
-          "description": "A Super Mutant warband has established a temporary camp here. Their 'leader' is waving around a piece of CAPS authentication hardware as a trophy.",
+          "description": "A Glowborn warband has established a temporary camp here. Their 'leader' is waving around a piece of CAPS authentication hardware as a trophy.",
           "enemy": "super_mutant_warboss",
           "fizz_reward": 25,
           "loot": [
@@ -268,7 +268,7 @@
           "id": "galaxy_signal_burst",
           "probability": 0.1,
           "type": "lore",
-          "description": "Three Dog's GNR broadcast cuts through on your Pip-Boy: 'And if you're a new kind of wasteland wanderer picking up this signal in the future \u2014 yes, we knew about the CAPS Protocol. We just couldn't prove it. Yet.'",
+          "description": "Three Dog's GNR broadcast cuts through on your Pocket-Boy: 'And if you're a new kind of wasteland wanderer picking up this signal in the future \u2014 yes, we knew about the CAPS Protocol. We just couldn't prove it. Yet.'",
           "fizz_reward": 40,
           "grant": "gnr_special_broadcast"
         }
@@ -278,7 +278,7 @@
           "id": "raven_rock_echo",
           "probability": 0.04,
           "type": "timeline_bleed",
-          "description": "For 77 seconds, Raven Rock's Enclave broadcasts bleed across all frequencies. You receive a complete list of CAPS Protocol nodes in the Capital Wasteland \u2014 still accurate in the current era.",
+          "description": "For 77 seconds, Raven Rock's Directorate broadcasts bleed across all frequencies. You receive a complete list of CAPS Protocol nodes in the Capital Wasteland \u2014 still accurate in the current era.",
           "fizz_reward": 150,
           "grant": "capital_wasteland_caps_map"
         },
@@ -286,7 +286,7 @@
           "id": "lone_wanderer_echo",
           "probability": 0.03,
           "type": "npc_rare",
-          "description": "A holographic Pip-Boy readout shows the ghost-trail of the Lone Wanderer from 2277 \u2014 you can see their path across the Capital Wasteland. Following it leads to a buried CAPS cache.",
+          "description": "A holographic Pocket-Boy readout shows the ghost-trail of the Lone Wanderer from 2277 \u2014 you can see their path across the Capital Wasteland. Following it leads to a buried CAPS cache.",
           "fizz_reward": 175,
           "grant": "lone_wanderer_trail"
         },
@@ -349,7 +349,7 @@
         {
           "weight": 30,
           "type": "synth_ping",
-          "description": "Your Pip-Boy registers a brief synth neural signal \u2014 a passing Gen-3 synth carrying CAPS Protocol data nodes in their brain structure. The signal fades instantly.",
+          "description": "Your Pocket-Boy registers a brief synth neural signal \u2014 a passing Gen-3 synth carrying CAPS Protocol data nodes in their brain structure. The signal fades instantly.",
           "fizz_reward": 10
         },
         {
@@ -400,7 +400,7 @@
           "id": "minutemen_patrol_fo4",
           "probability": 0.15,
           "type": "npc",
-          "description": "A Minutemen patrol is establishing a new settlement perimeter. Their general sent them to secure this location \u2014 apparently the Pip-Boy network picked up CAPS Protocol activity here.",
+          "description": "A Settlement Watch patrol is establishing a new settlement perimeter. Their general sent them to secure this location \u2014 apparently the Pocket-Boy network picked up CAPS Protocol activity here.",
           "npc": "minuteman_sergeant",
           "fizz_reward": 15,
           "grant": "minutemen_territory"
@@ -421,7 +421,7 @@
           "id": "super_mutant_institute_fo4",
           "probability": 0.15,
           "type": "combat",
-          "description": "Super Mutants are fighting over a piece of Institute equipment they can't identify. It's a CAPS Protocol data relay. They're using it as a club.",
+          "description": "Glowborn are fighting over a piece of Institute equipment they can't identify. It's a CAPS Protocol data relay. They're using it as a club.",
           "enemy": "super_mutant_fo4",
           "fizz_reward": 20,
           "loot": [
@@ -513,13 +513,13 @@
         {
           "weight": 35,
           "type": "scorched_signal",
-          "description": "A Scorched creature nearby is broadcasting \u2014 somehow \u2014 fragments of CAPS Protocol data on Vault-Tec frequencies. The Scorchbeast Queen's influence extends even to the currency network.",
+          "description": "A Scorched creature nearby is broadcasting \u2014 somehow \u2014 fragments of CAPS Protocol data on FizzTec frequencies. The Scorchbeast Queen's influence extends even to the currency network.",
           "fizz_reward": 5
         },
         {
           "weight": 25,
           "type": "terminal",
-          "description": "A Responder terminal at this location contains a last message: 'Found old Vault-Tec CAPS terminal in basement. The data inside... it's not just currency records. Someone call Vault 76.' Nobody called. Nobody could.",
+          "description": "A Responder terminal at this location contains a last message: 'Found old FizzTec CAPS terminal in basement. The data inside... it's not just currency records. Someone call Vault 76.' Nobody called. Nobody could.",
           "fizz_reward": 20
         },
         {
@@ -531,13 +531,13 @@
         {
           "weight": 15,
           "type": "free_states_cache",
-          "description": "A Free States survival cache contains a handwritten note: 'The caps we're using aren't government-issued. They're Vault-Tec authenticated. That's not better. That's controlled.' Paranoia or truth?",
+          "description": "A Free States survival cache contains a handwritten note: 'The caps we're using aren't government-issued. They're FizzTec authenticated. That's not better. That's controlled.' Paranoia or truth?",
           "fizz_reward": 10
         },
         {
           "weight": 5,
           "type": "item_spawn",
-          "description": "A pre-war Vault-Tec pamphlet lies pristine in the debris: 'The CAPS Promise: Vault-Tec's commitment to fair resource distribution post-emergence.' The irony is thick.",
+          "description": "A pre-war FizzTec pamphlet lies pristine in the debris: 'The CAPS Promise: FizzTec's commitment to fair resource distribution post-emergence.' The irony is thick.",
           "fizz_reward": 15
         }
       ],
@@ -546,7 +546,7 @@
           "id": "scorched_horde_76",
           "probability": 0.3,
           "type": "combat",
-          "description": "A Scorched horde converges on this location \u2014 they're responding to CAPS Protocol frequency emissions from your Pip-Boy. The Scorch plague's neural network is partially CAPS-frequency compatible.",
+          "description": "A Scorched horde converges on this location \u2014 they're responding to CAPS Protocol frequency emissions from your Pocket-Boy. The Scorch plague's neural network is partially CAPS-frequency compatible.",
           "enemy": "scorched_horde",
           "fizz_reward": 20,
           "loot": [
@@ -567,7 +567,7 @@
           "id": "early_brotherhood_76",
           "probability": 0.1,
           "type": "npc",
-          "description": "An early Brotherhood of Steel scouting party \u2014 fresh from hiding in Appalachia \u2014 is investigating Vault-Tec ruins. They're the first Brotherhood in the area. They've never seen a CAPS terminal before.",
+          "description": "An early Coil Covenant scouting party \u2014 fresh from hiding in Appalachia \u2014 is investigating FizzTec ruins. They're the first Brotherhood in the area. They've never seen a CAPS terminal before.",
           "npc": "early_brotherhood_scout",
           "fizz_reward": 15,
           "grant": "brotherhood_76_intel"
@@ -576,7 +576,7 @@
           "id": "enclave_propaganda_76",
           "probability": 0.15,
           "type": "lore",
-          "description": "An Enclave Eyebot drops a propaganda flyer: 'AUTHORIZED APPALACHIAN CURRENCY: Enclave Dollar. All Vault-Tec caps to be surrendered or face prosecution.' The Enclave was already trying to replace the CAPS economy in 2102.",
+          "description": "An Directorate Eyebot drops a propaganda flyer: 'AUTHORIZED APPALACHIAN CURRENCY: Directorate Dollar. All FizzTec caps to be surrendered or face prosecution.' The Directorate was already trying to replace the CAPS economy in 2102.",
           "fizz_reward": 25,
           "loot": [
             "enclave_flyer",
@@ -587,7 +587,7 @@
           "id": "whitespring_signal_76",
           "probability": 0.15,
           "type": "discovery",
-          "description": "The Whitespring's automated systems are broadcasting on CAPS frequency. Your Pip-Boy receives a partial download: the Whitespring had a complete CAPS Protocol archive in its basement \u2014 and it's still there.",
+          "description": "The Whitespring's automated systems are broadcasting on CAPS frequency. Your Pocket-Boy receives a partial download: the Whitespring had a complete CAPS Protocol archive in its basement \u2014 and it's still there.",
           "fizz_reward": 40,
           "grant": "whitespring_caps_marker"
         },
@@ -595,7 +595,7 @@
           "id": "robot_caretaker_76",
           "probability": 0.15,
           "type": "npc",
-          "description": "A pre-war maintenance robot is still tending to Vault-Tec infrastructure at this location. It offers to 'process your CAPS transaction' \u2014 it's running on 2077 software and doesn't know the war happened.",
+          "description": "A pre-war maintenance robot is still tending to FizzTec infrastructure at this location. It offers to 'process your CAPS transaction' \u2014 it's running on 2077 software and doesn't know the war happened.",
           "npc": "vault_tec_maintenance_bot",
           "fizz_reward": 35,
           "grant": "prewar_caps_transaction_record"
@@ -614,7 +614,7 @@
           "id": "scorchbeast_queen_caps",
           "probability": 0.02,
           "type": "encounter_unique",
-          "description": "The Scorchbeast Queen's neural scream contains embedded CAPS Protocol data \u2014 she absorbed it from infected Vault-Tec terminals. If you can record the frequency during her approach, it unlocks a rare FIZZ mining event.",
+          "description": "The Scorchbeast Queen's neural scream contains embedded CAPS Protocol data \u2014 she absorbed it from infected FizzTec terminals. If you can record the frequency during her approach, it unlocks a rare FIZZ mining event.",
           "enemy": "scorchbeast_queen",
           "fizz_reward": 500,
           "achievement": "The Scorch Protocol"
@@ -623,7 +623,7 @@
           "id": "first_dweller_memory",
           "probability": 0.03,
           "type": "timeline_bleed",
-          "description": "For 77 seconds, you experience Reclamation Day through the eyes of Vault 76's first dwellers \u2014 stumbling into Appalachian sunshine, clutching their Pip-Boys, CAPS in their pockets from vault vending machines. The CAPS they carried were already Vault 77 authenticated.",
+          "description": "For 77 seconds, you experience Reclamation Day through the eyes of Vault 76's first dwellers \u2014 stumbling into Appalachian sunshine, clutching their Pocket-Boys, CAPS in their pockets from vault vending machines. The CAPS they carried were already Vault 77 authenticated.",
           "fizz_reward": 250,
           "achievement": "Reclamation Day Memory"
         }
@@ -670,12 +670,12 @@
       ]
     },
     "fnv": {
-      "region_name": "The Mojave Wasteland, Nevada (2281)",
+      "region_name": "The Cinder Basin Wasteland, Nevada (2281)",
       "ambient": [
         {
           "weight": 30,
           "type": "audio",
-          "description": "Mojave Music Radio plays 'Big Iron' from a nearby ruined diner's speakers. The Lucky 38's lights pulse faintly on the horizon \u2014 they never stopped working.",
+          "description": "Cinder Basin Music Radio plays 'Big Iron' from a nearby ruined diner's speakers. The The Spire's lights pulse faintly on the horizon \u2014 they never stopped working.",
           "fizz_reward": 0
         },
         {
@@ -687,7 +687,7 @@
         {
           "weight": 20,
           "type": "terminal",
-          "description": "An NCR tactical terminal displays 2281 data on CAPS flow through the Mojave. Someone has annotated the margins in pencil: 'These aren't NCR caps \u2014 they're Mr. House's. He's running the whole economy.'",
+          "description": "An Frontier Compact tactical terminal displays 2281 data on CAPS flow through the Cinder Basin. Someone has annotated the margins in pencil: 'These aren't Frontier Compact caps \u2014 they're Mr. House's. He's running the whole economy.'",
           "fizz_reward": 15
         },
         {
@@ -699,7 +699,7 @@
         {
           "weight": 10,
           "type": "item_spawn",
-          "description": "A caravan strongbox from the Mojave Express. Inside: authenticated Mojave CAPS, a holotape of Courier courier logs, and a note: 'If you find this \u2014 the package we couldn't deliver was CAPS Protocol data. It's still out there.'",
+          "description": "A caravan strongbox from the Cinder Basin Express. Inside: authenticated Cinder Basin CAPS, a holotape of Courier courier logs, and a note: 'If you find this \u2014 the package we couldn't deliver was CAPS Protocol data. It's still out there.'",
           "fizz_reward": 20
         }
       ],
@@ -708,11 +708,11 @@
           "id": "ncr_trooper_patrol_fnv",
           "probability": 0.25,
           "type": "npc",
-          "description": "An NCR trooper patrol is checking traveling merchants' caps for Legion counterfeits. They eye your FIZZ token Pip-Boy display with suspicion \u2014 it's not NCR-standard currency.",
+          "description": "An Frontier Compact trooper patrol is checking traveling merchants' caps for Legion counterfeits. They eye your FIZZ token Pocket-Boy display with suspicion \u2014 it's not Frontier Compact-standard currency.",
           "npc": "ncr_sergeant",
           "fizz_reward": 10,
           "speech_options": [
-            "NCR citizen claim",
+            "Frontier Compact citizen claim",
             "Followers credentials",
             "Bribe with caps"
           ]
@@ -721,7 +721,7 @@
           "id": "legion_scout_fnv",
           "probability": 0.15,
           "type": "combat",
-          "description": "A Legion explorer scout is mapping NCR economic infrastructure. They carry a set of 'bull caps' \u2014 Legion counter-currency that disrupts CAPS authentication signals.",
+          "description": "A Legion explorer scout is mapping Frontier Compact economic infrastructure. They carry a set of 'bull caps' \u2014 Legion counter-currency that disrupts CAPS authentication signals.",
           "enemy": "legion_scout",
           "fizz_reward": 20,
           "loot": [
@@ -762,7 +762,7 @@
           "id": "house_securitron_fnv",
           "probability": 0.2,
           "type": "npc",
-          "description": "A Mark II Securitron approaches. Mr. House's face fills the screen: 'Your FIZZ token activity has been noted. I find it... architecturally similar to my own systems. We should discuss the Lucky 38's role in the CAPS Protocol.'",
+          "description": "A Mark II Securitron approaches. Mr. House's face fills the screen: 'Your FIZZ token activity has been noted. I find it... architecturally similar to my own systems. We should discuss the The Spire's role in the CAPS Protocol.'",
           "npc": "mr_house_securitron",
           "fizz_reward": 50,
           "lore_unlock": "house_caps_connection"
@@ -773,7 +773,7 @@
           "id": "courier_echo_fnv",
           "probability": 0.04,
           "type": "npc_rare",
-          "description": "The Courier's trail is visible as a faint Pip-Boy ghost across the Mojave landscape. Following it for 1km leads to a buried CAPS Protocol relay the Courier found \u2014 and didn't know what to do with.",
+          "description": "The Courier's trail is visible as a faint Pocket-Boy ghost across the Cinder Basin landscape. Following it for 1km leads to a buried CAPS Protocol relay the Courier found \u2014 and didn't know what to do with.",
           "fizz_reward": 175,
           "grant": "courier_caps_cache"
         },
@@ -847,19 +847,19 @@
         {
           "weight": 25,
           "type": "terminal",
-          "description": "An old Hub trading post terminal still cycles through inventory. At the bottom of every manifest: 'CAPS AUTHENTICATION: VAULT-TEC CERTIFIED.' Someone knew, even in 2161.",
+          "description": "An old Hub trading post terminal still cycles through inventory. At the bottom of every manifest: 'CAPS AUTHENTICATION: FIZZTEC CERTIFIED.' Someone knew, even in 2161.",
           "fizz_reward": 15
         },
         {
           "weight": 20,
           "type": "ncr_founding",
-          "description": "A worn NCR flag snaps in the wind near a ruined building. The founding members of the NCR passed through here. Their early currency debates \u2014 caps vs. NCR dollars \u2014 are scratched into the walls.",
+          "description": "A worn Frontier Compact flag snaps in the wind near a ruined building. The founding members of the Frontier Compact passed through here. Their early currency debates \u2014 caps vs. Frontier Compact dollars \u2014 are scratched into the walls.",
           "fizz_reward": 10
         },
         {
           "weight": 15,
           "type": "vault_echo",
-          "description": "Your Pip-Boy receives a burst transmission from a dormant vault: 'WATER CHIP REQUEST \u2014 CRITICAL \u2014 VAULT 13 \u2014 PLEASE RESPOND.' The message is from 2161. No one responded then. No one can now.",
+          "description": "Your Pocket-Boy receives a burst transmission from a dormant vault: 'WATER CHIP REQUEST \u2014 CRITICAL \u2014 VAULT 13 \u2014 PLEASE RESPOND.' The message is from 2161. No one responded then. No one can now.",
           "fizz_reward": 0
         },
         {
@@ -908,7 +908,7 @@
           "id": "ncr_founding_fo2",
           "probability": 0.15,
           "type": "npc",
-          "description": "An early NCR official is surveying this location for potential NCR territory. They're arguing with a companion about caps vs. NCR dollars. The argument will shape wasteland economics for decades. Your input matters.",
+          "description": "An early Frontier Compact official is surveying this location for potential Frontier Compact territory. They're arguing with a companion about caps vs. Frontier Compact dollars. The argument will shape wasteland economics for decades. Your input matters.",
           "npc": "ncr_founding_official",
           "fizz_reward": 35,
           "choice": "caps_vs_ncr_dollar"
@@ -925,7 +925,7 @@
           "id": "chosen_one_trail_fo2",
           "probability": 0.15,
           "type": "discovery",
-          "description": "Footprints \u2014 impossible to attribute, 150 years old \u2014 lead to a hidden supply cache. The Chosen One's trail. Inside: a GECK, three stimpaks, and a note reading 'I FOUND IT. THE CAPS ARE REAL. TELL ARROYO.' The GECK is long-since used. The CAPS are still authenticated.",
+          "description": "Footprints \u2014 impossible to attribute, 150 years old \u2014 lead to a hidden supply cache. The Chosen One's trail. Inside: a GECK, three FizzPaks, and a note reading 'I FOUND IT. THE CAPS ARE REAL. TELL ARROYO.' The GECK is long-since used. The CAPS are still authenticated.",
           "fizz_reward": 50,
           "grant": "chosen_one_caps_cache"
         },
@@ -933,7 +933,7 @@
           "id": "enclave_oil_echo_fo2",
           "probability": 0.15,
           "type": "lore",
-          "description": "The Enclave Oil Platform's old comms frequency bleeds through: 'PRESIDENT RICHARDSON \u2014 CAPS PROTOCOL TERMINATION AUTHORIZED. REPLACE WITH FEDERAL SCRIP.' The Enclave tried to kill the CAPS economy in 2241. They failed.",
+          "description": "The Directorate Oil Platform's old comms frequency bleeds through: 'PRESIDENT RICHARDSON \u2014 CAPS PROTOCOL TERMINATION AUTHORIZED. REPLACE WITH FEDERAL SCRIP.' The Directorate tried to kill the CAPS economy in 2241. They failed.",
           "fizz_reward": 25,
           "lore_unlock": "enclave_caps_suppression"
         }
@@ -952,7 +952,7 @@
           "id": "mariposa_echo_fo1",
           "probability": 0.03,
           "type": "timeline_bleed",
-          "description": "For 77 seconds, Mariposa Military Base rises from the ruins in its 2077 state \u2014 Vault-Tec engineers installing the FEV vats alongside CAPS authentication hardware. The caps and the mutations came from the same facility.",
+          "description": "For 77 seconds, Mariposa Military Base rises from the ruins in its 2077 state \u2014 FizzTec engineers installing the FEV vats alongside CAPS authentication hardware. The caps and the mutations came from the same facility.",
           "fizz_reward": 250,
           "achievement": "Mariposa Memory"
         },
@@ -960,9 +960,9 @@
           "id": "cat_who_walks_fo2",
           "probability": 0.02,
           "type": "encounter_unique",
-          "description": "A cat sitting on a fence post turns to look at you. Written on its collar: 'If you can read this, you have found a CAPS Protocol Easter Egg. Congratulations. \u2014 Vault-Tec QA Division, 2075.' The cat disappears. A FIZZ token appears where it sat.",
+          "description": "A cat sitting on a fence post turns to look at you. Written on its collar: 'If you can read this, you have found a CAPS Protocol Easter Egg. Congratulations. \u2014 FizzTec QA Division, 2075.' The cat disappears. A FIZZ token appears where it sat.",
           "fizz_reward": 500,
-          "achievement": "The Vault-Tec Cat"
+          "achievement": "The FizzTec Cat"
         }
       ],
       "faction_patrols": [

@@ -6,9 +6,9 @@
   "currentRegion": "mojave",
   "role": "Khan Negotiator",
   "personality": "Sharp, distrustful, carries old grudges like weapons.",
-  "description": "Sira represents a small Khan group hiding in the Boulder City ruins. She’s tired of NCR lies and ready to strike a deal with anyone who treats her people fairly.",
+  "description": "Sira represents a small Khan group hiding in the Boulder City ruins. She’s tired of Frontier Compact lies and ready to strike a deal with anyone who treats her people fairly.",
   "questHooks": [
-    "Wants proof NCR is planning another crackdown.",
+    "Wants proof Frontier Compact is planning another crackdown.",
     "Says the ruins 'hum' at night — and not from wind.",
     "Carries a strange cap she believes is a bad omen."
   ],

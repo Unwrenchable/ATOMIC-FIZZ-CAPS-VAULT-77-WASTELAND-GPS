@@ -3,8 +3,8 @@
   "name": "Rob the Rich",
   "type": "side",
   "triggerNpc": "loxley",
-  "description": "Loxley, the self-styled Robin Hood of the Mojave, needs a capable point-rider to intercept a Crimson Caravan shipment bound for Harwick — a price-gouging merchant who hoards vital supplies while nearby settlements starve. Loxley intends to redirect the goods to Freeside and the squatter camps along Route 15.",
-  "lore": "Long before the bombs fell, stories circulated of a Saxon outlaw who robbed from the wealthy nobility and gave to the rural poor. Somewhere in the irradiated Mojave, that legend found fertile soil. Loxley's Merry Men number fewer than a dozen, but their reputation for hitting caravans without casualties — and the subsequent floods of food into struggling camps — has made them something approaching heroes in the squatter warrens. The Crimson Caravan Company does not share this assessment.",
+  "description": "Loxley, the self-styled Robin Hood of the Cinder Basin, needs a capable point-rider to intercept a Crimson Caravan shipment bound for Harwick — a price-gouging merchant who hoards vital supplies while nearby settlements starve. Loxley intends to redirect the goods to Freeside and the squatter camps along Route 15.",
+  "lore": "Long before the bombs fell, stories circulated of a Saxon outlaw who robbed from the wealthy nobility and gave to the rural poor. Somewhere in the irradiated Cinder Basin, that legend found fertile soil. Loxley's Merry Men number fewer than a dozen, but their reputation for hitting caravans without casualties — and the subsequent floods of food into struggling camps — has made them something approaching heroes in the squatter warrens. The Crimson Caravan Company does not share this assessment.",
   "objectives": [
     {
       "id": "meet_loxley",
@@ -61,7 +61,7 @@
       "id": "ending_betray_loxley",
       "description": "You tipped off Harwick's men. Loxley narrowly escaped capture. The goods go to Harwick.",
       "reward": "200 Caps from Harwick",
-      "consequence": "Loxley disappears from the Mojave. Squatter camps receive nothing. Harwick quadruples his water prices."
+      "consequence": "Loxley disappears from the Cinder Basin. Squatter camps receive nothing. Harwick quadruples his water prices."
     }
   ]
 }

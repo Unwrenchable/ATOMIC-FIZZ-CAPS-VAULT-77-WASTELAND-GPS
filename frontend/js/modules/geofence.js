@@ -1,7 +1,7 @@
 // public/js/modules/geofence.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps — Real-World Geo-fence System (Frontend)
-// Checks player GPS position against Fallout pilgrimage sites.
+// Checks player GPS position against wasteland pilgrimage sites.
 // When the player is physically at a real-world location they
 // receive a unique geo-locked collector item.
 //

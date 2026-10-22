@@ -6,7 +6,7 @@
   "level_required": 5,
   "tone": "Light-hearted fan service quest",
 
-  "premise": "In the fractured timeline, ALL Fallout companions from every game exist simultaneously. Dogmeat (all versions), Boone, Veronica, Nick Valentine, Paladin Danse, Hancock, Piper, MacCready, Cait, Curie, Deacon, Preston Garvey, and dozens more. They've decided to throw a party. You're invited.",
+  "premise": "In the fractured timeline, ALL wasteland companions from every game exist simultaneously. Dogmeat (all versions), Boone, Veronica, Nick Valentine, Paladin Danse, Hancock, Piper, MacCready, Cait, Curie, Deacon, Preston Garvey, and dozens more. They've decided to throw a party. You're invited.",
 
   "description": "The most ridiculous quest in the game. Every beloved companion character from FO1, FO2, FO3, FO:NV, FO4, and FO76 gathering for a wasteland mixer. Expect chaos, romance subplots, philosophical debates, drinking contests, and four different Dogmeats playing together.",
 
@@ -21,7 +21,7 @@
         "Fawkes (FO3 super mutant)",
         "Strong (FO4 super mutant)",
         "Boone (FO:NV sniper)",
-        "Arcade Gannon (FO:NV Enclave doctor)",
+        "Arcade Gannon (FO:NV Directorate doctor)",
         "Cass (FO:NV whiskey-soaked caravan trader)",
         "Nick Valentine (FO4 synth detective)",
         "Hancock (FO4 ghoul mayor)",
@@ -29,15 +29,15 @@
         "Curie (FO4 robot turned synth)",
         "Paladin Danse (FO4 Brotherhood, secretly synth)",
         "MacCready (FO3 Little Lamplight mayor, FO4 merc)",
-        "Preston Garvey (FO4 Minutemen)",
+        "Preston Garvey (FO4 Settlement Watch)",
         "Deacon (FO4 Railroad spy)",
         "Cait (FO4 cage fighter)",
         "Codsworth (FO4 robot butler)",
         "Many more..."
       ],
       "objectives": [
-        {"text": "Help set up the party at Lucky 38 penthouse"},
-        {"text": "Gather supplies: 50 Nuka-Cola, 20 bottles whiskey, food"},
+        {"text": "Help set up the party at The Spire penthouse"},
+        {"text": "Gather supplies: 50 Atomic Fizz, 20 bottles whiskey, food"},
         {"text": "Invite Jax Voss, Harlan Voss, Jaymie, and Denton (your world's NPCs)"}
       ]
     },
@@ -56,7 +56,7 @@
         },
         {
           "event": "Synth Solidarity",
-          "description": "Nick Valentine, Curie, and Danse discuss synth rights while Arcade Gannon (anti-Enclave) awkwardly listens."
+          "description": "Nick Valentine, Curie, and Danse discuss synth rights while Arcade Gannon (anti-Directorate) awkwardly listens."
         },
         {
           "event": "Drinking Contest",
@@ -108,7 +108,7 @@
     "ending_legendary_party": {
       "name": "The Night to Remember",
       "description": "Best party in wasteland history. All companions remember you fondly. Unlocks unique companion recruitment options.",
-      "reward": "Can recruit companions from ANY Fallout game"
+      "reward": "Can recruit companions from ANY wasteland game"
     },
     "ending_disaster": {
       "name": "The Night to Forget",
@@ -117,14 +117,14 @@
     }
   },
 
-  "meta_commentary": "This quest exists purely because timelines are fractured. It celebrates EVERY Fallout game's companions in one absurd, joyful gathering. Canon doesn't matter. Fun does.",
+  "meta_commentary": "This quest exists purely because timelines are fractured. It celebrates EVERY wasteland game's companions in one absurd, joyful gathering. Canon doesn't matter. Fun does.",
 
   "rewards": {
     "xp": 1000,
     "caps": 1000,
     "unique_items": [
       "Group Photo of All Companions (lore item)",
-      "Lucky 38 Party Invitation (collectible)",
+      "The Spire Party Invitation (collectible)",
       "Hancock's Flask (legendary alcohol container)",
       "Piper's Special Edition Newspaper"
     ],

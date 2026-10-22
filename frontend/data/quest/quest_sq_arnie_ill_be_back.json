@@ -3,8 +3,8 @@
   "name": "I'll Be Back",
   "type": "side",
   "triggerNpc": "arnie",
-  "description": "Arnold 'Dutch' Black is hunting a pre-war Vault-Tec autonomous combat prototype — Unit Seven — that has been attacking settlements along the Mojave corridor for weeks. He needs a scout who can move quietly while he follows with maximum impact. The machine does not feel pain. It does not negotiate. Neither does Arnold.",
-  "lore": "Vault-Tec Autonomous Combat Chassis, designation Unit Seven, was a prototype designed in 2058 for perimeter defense of critical installations. It was never officially deployed — the war came first. Somehow, Unit Seven survived the bombs, the decades, and every ad-hoc militia that tried to destroy it. It has been sighted in Searchlight, Boulder City, Nelson, and along Route 93. It appears to be following a patrol route written 170 years ago that no longer corresponds to anything that exists. The locations it 'defends' are rubble. The enemies it engages are civilians.",
+  "description": "Arnold 'Dutch' Black is hunting a pre-war FizzTec autonomous combat prototype — Unit Seven — that has been attacking settlements along the Cinder Basin corridor for weeks. He needs a scout who can move quietly while he follows with maximum impact. The machine does not feel pain. It does not negotiate. Neither does Arnold.",
+  "lore": "FizzTec Autonomous Combat Chassis, designation Unit Seven, was a prototype designed in 2058 for perimeter defense of critical installations. It was never officially deployed — the war came first. Somehow, Unit Seven survived the bombs, the decades, and every ad-hoc militia that tried to destroy it. It has been sighted in Searchlight, Boulder City, Nelson, and along Route 93. It appears to be following a patrol route written 170 years ago that no longer corresponds to anything that exists. The locations it 'defends' are rubble. The enemies it engages are civilians.",
   "objectives": [
     {
       "id": "meet_arnie",
@@ -30,7 +30,7 @@
     },
     {
       "id": "disable_unit_seven",
-      "description": "Disable or destroy Vault-Tec Prototype Unit Seven",
+      "description": "Disable or destroy FizzTec Prototype Unit Seven",
       "reward": { "xp": 100, "item": "unit_seven_core" }
     },
     {

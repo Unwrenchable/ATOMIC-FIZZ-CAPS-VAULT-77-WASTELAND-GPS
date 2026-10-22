@@ -1,11 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <defs>
-    <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#e8d2b0"/>
-      <stop offset="1" stop-color="#d8b78f"/>
-    </linearGradient>
-  </defs>
-  <rect width="100%" height="100%" fill="transparent"/>
-  <path d="M128 55c-35 0-60 15-68 40-6 18-4 42 8 60 14 22 38 38 60 38s46-16 60-38c12-18 14-42 8-60-8-25-33-40-68-40z" fill="url(#g4)" stroke="#73604a" stroke-width="2"/>
-  <path d="M80 190c18 12 60 12 96 0" fill="none" stroke="#5a4633" stroke-width="3" stroke-linecap="round"/>
+  <!-- Head: ~30, wide brow, narrow pointed chin. Original Atomic Fizz art, v4 draft. -->
+  <defs><filter id="headheart-b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.8"/></filter><filter id="headheart-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter><filter id="headheart-b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter><filter id="headheart-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><filter id="headheart-grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" seed="11"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .14  0 0 0 0 .08  1.6 0 0 0 -.62"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headheart-dust" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="5"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .5  5 0 0 0 -3.1"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headheart-pores" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .1  2.2 0 0 0 -.95"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headheart-stub" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="1" seed="9"/><feColorMatrix values="0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  6 0 0 0 -3.3"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headheart-paint" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".55"/></filter><filter id="headheart-brush" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".012 .2" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .92  0 0 0 0 .8  0 0 0 0 .62  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headheart-brushd" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".2 .014" numOctaves="3" seed="13"/><feColorMatrix values="0 0 0 0 .12  0 0 0 0 .08  0 0 0 0 .05  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><linearGradient id="headheart-sk" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="#b28a70"/><stop offset=".55" stop-color="#8e644e"/><stop offset="1" stop-color="#644334"/></linearGradient><clipPath id="headheart-f"><path d="M128 36 C167.2 36 186 52 186 84 L182 124 C181 140 170 152 166 166 L139.0 189 Q128 193 118 190 L92 164 C88 152 77 140 76 124 L72 84 C72 52 88.80000000000001 36 128 36Z"/></clipPath><clipPath id="headheart-n"><path d="M107 150 L149 150 C149 188 152 206 164 228 L92 228 C104 206 107 188 107 150Z"/></clipPath></defs>
+  <g filter="url(#headheart-paint)">
+  <path d="M107 150 L149 150 C149 188 152 206 164 228 L92 228 C104 206 107 188 107 150Z" fill="#8e644e"/>
+  <g clip-path="url(#headheart-n)">
+    <path d="M128 150 L149 150 C149 188 152 206 164 228 L128 228Z" fill="#644334" opacity=".7" filter="url(#headheart-b2)"/>
+    <ellipse cx="130" cy="191" rx="44" ry="13" fill="#3c261c" opacity=".85" filter="url(#headheart-b4)"/>
+    <path d="M112 196 C116 208 120 216 126 222" stroke="#3c261c" stroke-width="3" fill="none" opacity="0.42" filter="url(#headheart-b2)"/>
+    
+    <g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headheart-grime)" opacity="0.55"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headheart-pores)" opacity="0.5"/></g><g transform="rotate(80 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#headheart-brushd)" opacity="0.25"/></g>
+  </g>
+  <path d="M73 112 C64 112 63 138 74 148.88 L78 130Z" fill="#8e644e"/>
+  <path d="M71 118 C67 124 68 136 73 142" stroke="#3c261c" stroke-width="2" fill="none" opacity=".6" filter="url(#headheart-b1)"/>
+  <path d="M183 112 C192 112 193 138 182 148.88 L178 130Z" fill="#644334"/>
+  <path d="M185 118 C189 124 188 136 183 142" stroke="#3c261c" stroke-width="2" fill="none" opacity=".7" filter="url(#headheart-b1)"/>
+  <path d="M128 36 C167.2 36 186 52 186 84 L182 124 C181 140 170 152 166 166 L139.0 189 Q128 193 118 190 L92 164 C88 152 77 140 76 124 L72 84 C72 52 88.80000000000001 36 128 36Z" fill="url(#headheart-sk)"/>
+  <g clip-path="url(#headheart-f)">
+    <path d="M138 40 C172.8 44 188 70 188 96 L184 130 L168 168 L138 191 L138 191 C146 178 154 160 154 140 C156 120 152 96 146 70 Z" fill="#3c261c" opacity=".55" filter="url(#headheart-b4)"/>
+    <!-- brow ridge (strength varies per head) -->
+    <path d="M80 104 C96 97.1 112 99.4 124 106 M132 106 C146 99.4 162 97.1 178 104" stroke="#b28a70" stroke-width="4.2" fill="none" opacity="0.28" filter="url(#headheart-b2)"/>
+    <path d="M84 108.3 C98 104.3 112 106.3 122 110.3 M134 110.3 C146 106.3 160 104.3 174 108.3" stroke="#3c261c" stroke-width="3.2" fill="none" opacity="0.27" filter="url(#headheart-b2)"/>
+    <ellipse cx="100" cy="118" rx="17" ry="9" fill="#3c261c" opacity="0.48" filter="url(#headheart-b4)"/>
+    <ellipse cx="157" cy="118" rx="17" ry="9" fill="#3c261c" opacity="0.57" filter="url(#headheart-b4)"/>
+    <!-- nose bridge: width per head -->
+    <path d="M124 108 L122.9 150" stroke="#b28a70" stroke-width="3.8" opacity=".28" filter="url(#headheart-b2)"/>
+    <path d="M134.65 110 C137.65 128 139.65 142 140.65 156" stroke="#3c261c" stroke-width="5.5" fill="none" opacity=".32" filter="url(#headheart-b4)"/>
+    <!-- cheekbones and hollows -->
+    <path d="M80 128 C92 124 104 128 106 136" stroke="#b28a70" stroke-width="5" fill="none" opacity=".32" filter="url(#headheart-b2)"/>
+    <path d="M82 140 C90 152 100 158 110 162" stroke="#3c261c" stroke-width="7.2" fill="none" opacity="0.25" filter="url(#headheart-b4)"/>
+    <path d="M174 140 C166 152 156 158 146 162" stroke="#3c261c" stroke-width="7.2" fill="none" opacity="0.33" filter="url(#headheart-b4)"/>
+    <!-- nasolabial folds, chin, jaw line -->
+    <path d="M115 156 C110 164 110 172 113 180" stroke="#3c261c" stroke-width="2.0" fill="none" opacity="0.40" filter="url(#headheart-b1)"/>
+    <path d="M142 156 C147 164 147 172 144 180" stroke="#3c261c" stroke-width="2.2" fill="none" opacity="0.45" filter="url(#headheart-b1)"/>
+    <path d="M118 184 C124 181 132 181 138 184" stroke="#3c261c" stroke-width="3" fill="none" opacity=".45" filter="url(#headheart-b2)"/>
+    <ellipse cx="124" cy="183" rx="10" ry="5" fill="#b28a70" opacity=".3" filter="url(#headheart-b2)"/>
+    <path d="M92 164 L118 189 Q128 193 138 189 L166 166" stroke="#3c261c" stroke-width="4" fill="none" opacity=".6" filter="url(#headheart-b2)"/>
+    <path d="M100 66.29646692177626 C112 63.29646692177626 144 63.29646692177626 156 66.29646692177626" stroke="#3c261c" stroke-width="0.9" fill="none" opacity="0.23" filter="url(#headheart-b1)" stroke-linecap="round"/><path d="M98 72.49829605991694 C112 69.49829605991694 144 69.49829605991694 158 72.49829605991694" stroke="#3c261c" stroke-width="0.9" fill="none" opacity="0.23" filter="url(#headheart-b1)" stroke-linecap="round"/><path d="M82 116 l-7 -2.0" stroke="#3c261c" stroke-width="0.7" fill="none" opacity="0.29" filter="url(#headheart-b1)" stroke-linecap="round"/><path d="M174 116 l7 -2.0" stroke="#3c261c" stroke-width="0.7" fill="none" opacity="0.29" filter="url(#headheart-b1)" stroke-linecap="round"/><path d="M88 131 C96 137 106 137 113 132 M143 132 C150 137 160 137 168 131" stroke="#3c261c" stroke-width="1.1" fill="none" opacity="0.24" filter="url(#headheart-b1)" stroke-linecap="round"/>
+    <!-- painterly overlays: warm grade, brush streaks light+dark, grime, pores, dust -->
+    <rect width="256" height="256" fill="#6b5a44" opacity=".14"/>
+    <g transform="rotate(-32 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#headheart-brush)" opacity="0.16"/></g><g transform="rotate(28 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#headheart-brushd)" opacity="0.28"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headheart-grime)" opacity="0.7"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headheart-pores)" opacity="0.55"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headheart-dust)" opacity="0.3"/></g>
+  </g>
+  <path d="M128 36 C167.2 36 186 52 186 84 L182 124 C181 140 170 152 166 166 L139.0 189 Q128 193 118 190 L92 164 C88 152 77 140 76 124 L72 84 C72 52 88.80000000000001 36 128 36Z" fill="none" stroke="#3c261c" stroke-width="2.4" opacity=".45" filter="url(#headheart-b1)"/>
+  </g>
 </svg>

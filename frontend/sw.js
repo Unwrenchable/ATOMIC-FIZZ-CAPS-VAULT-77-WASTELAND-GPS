@@ -221,7 +221,7 @@ self.addEventListener('notificationclick', (event) => {
 // ------------------------------------------------------------
 // Network status broadcasting
 // Notifies all open game tabs when connectivity changes so the
-// Pip-Boy HUD can show an "OFFLINE" / "ONLINE" banner.
+// Pocket-Boy HUD can show an "OFFLINE" / "ONLINE" banner.
 // ------------------------------------------------------------
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'CHECK_NETWORK') {

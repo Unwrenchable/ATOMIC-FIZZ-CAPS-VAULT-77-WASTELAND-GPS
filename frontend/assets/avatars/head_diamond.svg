@@ -1,11 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <defs>
-    <linearGradient id="g6" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#e8d2b0"/>
-      <stop offset="1" stop-color="#d8b78f"/>
-    </linearGradient>
-  </defs>
-  <rect width="100%" height="100%" fill="transparent"/>
-  <path d="M128 50c-25 0-45 12-52 30-5 14-4 32 2 48 8 20 22 38 38 48 8 5 18 8 24 8s16-3 24-8c16-10 30-28 38-48 6-16 7-34 2-48-7-18-27-30-52-30-8 0-16 0-24 0z" fill="url(#g6)" stroke="#73604a" stroke-width="2"/>
-  <path d="M85 190c18 10 50 10 86 0" fill="none" stroke="#5a4633" stroke-width="3" stroke-linecap="round"/>
+  <!-- Head: ~50, narrow brow, blade cheekbones. Original Atomic Fizz art, v4 draft. -->
+  <defs><filter id="headdiamond-b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.8"/></filter><filter id="headdiamond-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter><filter id="headdiamond-b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter><filter id="headdiamond-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><filter id="headdiamond-grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" seed="11"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .14  0 0 0 0 .08  1.6 0 0 0 -.62"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headdiamond-dust" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="5"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .5  5 0 0 0 -3.1"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headdiamond-pores" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .1  2.2 0 0 0 -.95"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headdiamond-stub" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="1" seed="9"/><feColorMatrix values="0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  6 0 0 0 -3.3"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headdiamond-paint" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".55"/></filter><filter id="headdiamond-brush" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".012 .2" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .92  0 0 0 0 .8  0 0 0 0 .62  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="headdiamond-brushd" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".2 .014" numOctaves="3" seed="13"/><feColorMatrix values="0 0 0 0 .12  0 0 0 0 .08  0 0 0 0 .05  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><linearGradient id="headdiamond-sk" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="#7e5a40"/><stop offset=".55" stop-color="#60432e"/><stop offset="1" stop-color="#432e20"/></linearGradient><clipPath id="headdiamond-f"><path d="M128 36 C157.4 36 172 52 172 84 L188 124 C187 140 172 152 168 170 L141.0 192 Q128 196 116 193 L90 168 C86 152 71 140 70 124 L86 84 C86 52 98.6 36 128 36Z"/></clipPath><clipPath id="headdiamond-n"><path d="M107 150 L149 150 C149 188 152 206 164 228 L92 228 C104 206 107 188 107 150Z"/></clipPath></defs>
+  <g filter="url(#headdiamond-paint)">
+  <path d="M107 150 L149 150 C149 188 152 206 164 228 L92 228 C104 206 107 188 107 150Z" fill="#60432e"/>
+  <g clip-path="url(#headdiamond-n)">
+    <path d="M128 150 L149 150 C149 188 152 206 164 228 L128 228Z" fill="#432e20" opacity=".7" filter="url(#headdiamond-b2)"/>
+    <ellipse cx="130" cy="194" rx="44" ry="13" fill="#24170e" opacity=".85" filter="url(#headdiamond-b4)"/>
+    <path d="M112 196 C116 208 120 216 126 222" stroke="#24170e" stroke-width="3" fill="none" opacity="0.53" filter="url(#headdiamond-b2)"/>
+    
+    <g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headdiamond-grime)" opacity="0.55"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headdiamond-pores)" opacity="0.5"/></g><g transform="rotate(80 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#headdiamond-brushd)" opacity="0.25"/></g>
+  </g>
+  <path d="M67 112 C58 112 57 138 68 150.4 L72 130Z" fill="#60432e"/>
+  <path d="M65 118 C61 124 62 136 67 142" stroke="#24170e" stroke-width="2" fill="none" opacity=".6" filter="url(#headdiamond-b1)"/>
+  <path d="M189 112 C198 112 199 138 188 150.4 L184 130Z" fill="#432e20"/>
+  <path d="M191 118 C195 124 194 136 189 142" stroke="#24170e" stroke-width="2" fill="none" opacity=".7" filter="url(#headdiamond-b1)"/>
+  <path d="M128 36 C157.4 36 172 52 172 84 L188 124 C187 140 172 152 168 170 L141.0 192 Q128 196 116 193 L90 168 C86 152 71 140 70 124 L86 84 C86 52 98.6 36 128 36Z" fill="url(#headdiamond-sk)"/>
+  <g clip-path="url(#headdiamond-f)">
+    <path d="M138 40 C161.6 44 174 70 174 96 L190 130 L170 172 L140 194 L138 194 C146 178 154 160 154 140 C156 120 152 96 146 70 Z" fill="#24170e" opacity=".55" filter="url(#headdiamond-b4)"/>
+    <!-- brow ridge (strength varies per head) -->
+    <path d="M80 104 C96 95.75 112 98.5 124 106 M132 106 C146 98.5 162 95.75 178 104" stroke="#7e5a40" stroke-width="6.0" fill="none" opacity="0.39" filter="url(#headdiamond-b2)"/>
+    <path d="M84 108.75 C98 104.75 112 106.75 122 110.75 M134 110.75 C146 106.75 160 104.75 174 108.75" stroke="#24170e" stroke-width="5.0" fill="none" opacity="0.45" filter="url(#headdiamond-b2)"/>
+    <ellipse cx="100" cy="118" rx="17" ry="9" fill="#24170e" opacity="0.59" filter="url(#headdiamond-b4)"/>
+    <ellipse cx="157" cy="118" rx="17" ry="9" fill="#24170e" opacity="0.69" filter="url(#headdiamond-b4)"/>
+    <!-- nose bridge: width per head -->
+    <path d="M124 108 L122.4 150" stroke="#7e5a40" stroke-width="5.6" opacity=".28" filter="url(#headdiamond-b2)"/>
+    <path d="M135.4 110 C138.4 128 140.4 142 141.4 156" stroke="#24170e" stroke-width="8.0" fill="none" opacity=".32" filter="url(#headdiamond-b4)"/>
+    <!-- cheekbones and hollows -->
+    <path d="M74 128 C86 124 98 128 106 136" stroke="#7e5a40" stroke-width="5" fill="none" opacity=".32" filter="url(#headdiamond-b2)"/>
+    <path d="M76 140 C84 152 94 158 110 162" stroke="#24170e" stroke-width="9.6" fill="none" opacity="0.39" filter="url(#headdiamond-b4)"/>
+    <path d="M180 140 C172 152 162 158 146 162" stroke="#24170e" stroke-width="9.6" fill="none" opacity="0.49" filter="url(#headdiamond-b4)"/>
+    <!-- nasolabial folds, chin, jaw line -->
+    <path d="M115 156 C110 164 110 172 113 180" stroke="#24170e" stroke-width="2.8" fill="none" opacity="0.57" filter="url(#headdiamond-b1)"/>
+    <path d="M142 156 C147 164 147 172 144 180" stroke="#24170e" stroke-width="3.0" fill="none" opacity="0.62" filter="url(#headdiamond-b1)"/>
+    <path d="M118 184 C124 181 132 181 138 184" stroke="#24170e" stroke-width="3" fill="none" opacity=".45" filter="url(#headdiamond-b2)"/>
+    <ellipse cx="124" cy="186" rx="10" ry="5" fill="#7e5a40" opacity=".3" filter="url(#headdiamond-b2)"/>
+    <path d="M90 168 L116 192 Q128 196 140 192 L168 170" stroke="#24170e" stroke-width="4" fill="none" opacity=".6" filter="url(#headdiamond-b2)"/>
+    <path d="M100 66.07712945953179 C112 63.07712945953179 144 63.07712945953179 156 66.07712945953179" stroke="#24170e" stroke-width="0.9" fill="none" opacity="0.36" filter="url(#headdiamond-b1)" stroke-linecap="round"/><path d="M98 72.88507720068498 C112 69.88507720068498 144 69.88507720068498 158 72.88507720068498" stroke="#24170e" stroke-width="0.9" fill="none" opacity="0.36" filter="url(#headdiamond-b1)" stroke-linecap="round"/><path d="M96 79.49225235542367 C112 76.49225235542367 144 76.49225235542367 160 79.49225235542367" stroke="#24170e" stroke-width="0.9" fill="none" opacity="0.36" filter="url(#headdiamond-b1)" stroke-linecap="round"/><path d="M82 116 l-7 -2.0" stroke="#24170e" stroke-width="0.7" fill="none" opacity="0.44" filter="url(#headdiamond-b1)" stroke-linecap="round"/><path d="M82 120 l-7 0.5" stroke="#24170e" stroke-width="0.7" fill="none" opacity="0.44" filter="url(#headdiamond-b1)" stroke-linecap="round"/><path d="M174 116 l7 -2.0" stroke="#24170e" stroke-width="0.7" fill="none" opacity="0.44" filter="url(#headdiamond-b1)" stroke-linecap="round"/><path d="M174 120 l7 0.5" stroke="#24170e" stroke-width="0.7" fill="none" opacity="0.44" filter="url(#headdiamond-b1)" stroke-linecap="round"/><path d="M88 131 C96 137 106 137 113 132 M143 132 C150 137 160 137 168 131" stroke="#24170e" stroke-width="1.1" fill="none" opacity="0.39" filter="url(#headdiamond-b1)" stroke-linecap="round"/>
+    <!-- painterly overlays: warm grade, brush streaks light+dark, grime, pores, dust -->
+    <rect width="256" height="256" fill="#6b5a44" opacity=".14"/>
+    <g transform="rotate(-32 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#headdiamond-brush)" opacity="0.16"/></g><g transform="rotate(28 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#headdiamond-brushd)" opacity="0.28"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headdiamond-grime)" opacity="0.7"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headdiamond-pores)" opacity="0.55"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#headdiamond-dust)" opacity="0.3"/></g>
+  </g>
+  <path d="M128 36 C157.4 36 172 52 172 84 L188 124 C187 140 172 152 168 170 L141.0 192 Q128 196 116 193 L90 168 C86 152 71 140 70 124 L86 84 C86 52 98.6 36 128 36Z" fill="none" stroke="#24170e" stroke-width="2.4" opacity=".45" filter="url(#headdiamond-b1)"/>
+  </g>
 </svg>

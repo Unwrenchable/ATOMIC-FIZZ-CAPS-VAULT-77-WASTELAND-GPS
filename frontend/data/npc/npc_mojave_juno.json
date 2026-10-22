@@ -1,7 +1,7 @@
 {
   "id": "npc_mojave_juno",
   "name": "Dustwalker Juno",
-  "region": "Mojave",
+  "region": "Cinder Basin",
   "type": "Wasteland Guide",
   "dialog": [
     "Vegas pulls at everyone. Even the dead.",

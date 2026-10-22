@@ -1,120 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <defs>
-    <!-- Armor metal gradient -->
-    <linearGradient id="metalArmor" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6a5a4a"/>
-      <stop offset="40%" stop-color="#5a4a3a"/>
-      <stop offset="60%" stop-color="#4a3a2a"/>
-      <stop offset="100%" stop-color="#3a2a1a"/>
-    </linearGradient>
-    <!-- Leather/padding gradient -->
-    <linearGradient id="leatherPad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#5a4433"/>
-      <stop offset="100%" stop-color="#4a3423"/>
-    </linearGradient>
-    <!-- Metal shine -->
-    <linearGradient id="metalShine" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#808080" stop-opacity="0"/>
-      <stop offset="50%" stop-color="#b0b0b0" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#808080" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-  
-  <!-- Main armor chest piece -->
-  <path d="M64 195c8-16 24-28 44-32c6-1 12-2 20-2c8 0 14 1 20 2c20 4 36 16 44 32v35H64v-35z" 
-        fill="url(#metalArmor)" stroke="#2a1a0a" stroke-width="2"/>
-  
-  <!-- Shoulder pauldrons (armor plates) -->
-  <ellipse cx="85" cy="175" rx="18" ry="22" fill="url(#metalArmor)" stroke="#2a1a0a" stroke-width="1.8"/>
-  <ellipse cx="171" cy="175" rx="18" ry="22" fill="url(#metalArmor)" stroke="#2a1a0a" stroke-width="1.8"/>
-  
-  <!-- Pauldron rivets -->
-  <g fill="#3a2a1a" opacity="0.8">
-    <circle cx="82" cy="168" r="2"/>
-    <circle cx="88" cy="168" r="2"/>
-    <circle cx="82" cy="182" r="2"/>
-    <circle cx="88" cy="182" r="2"/>
-    <circle cx="168" cy="168" r="2"/>
-    <circle cx="174" cy="168" r="2"/>
-    <circle cx="168" cy="182" r="2"/>
-    <circle cx="174" cy="182" r="2"/>
+  <!-- Garment: Scavenged leather pauldrons, dented riveted plate, rust bloom. Original Atomic Fizz art, v4 draft. -->
+  <defs><filter id="shirtarmor-b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.8"/></filter><filter id="shirtarmor-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter><filter id="shirtarmor-b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter><filter id="shirtarmor-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><filter id="shirtarmor-grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" seed="11"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .14  0 0 0 0 .08  1.6 0 0 0 -.62"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="shirtarmor-dust" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="5"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .5  5 0 0 0 -3.1"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="shirtarmor-pores" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .1  2.2 0 0 0 -.95"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="shirtarmor-stub" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="1" seed="9"/><feColorMatrix values="0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  6 0 0 0 -3.3"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="shirtarmor-paint" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".55"/></filter><filter id="shirtarmor-brush" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".012 .2" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .92  0 0 0 0 .8  0 0 0 0 .62  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><filter id="shirtarmor-brushd" filterUnits="userSpaceOnUse" x="-70" y="-70" width="396" height="396"><feTurbulence type="fractalNoise" baseFrequency=".2 .014" numOctaves="3" seed="13"/><feColorMatrix values="0 0 0 0 .12  0 0 0 0 .08  0 0 0 0 .05  1.5 0 0 0 -.66"/><feComposite in2="SourceGraphic" operator="in"/></filter><linearGradient id="shirtarmor-g" x1=".1" y1="0" x2=".9" y2="1"><stop offset="0" stop-color="#5a4a38"/><stop offset=".5" stop-color="#3e3226"/><stop offset="1" stop-color="#221a12"/></linearGradient><clipPath id="shirtarmor-body"><path d="M18 256 C20 230 36 214 64 206 L104 198 C110 212 118 222 128 225 C138 222 146 212 152 198 L192 206 C220 214 236 230 238 256Z"/></clipPath></defs>
+  <g filter="url(#shirtarmor-paint)">
+  <path d="M18 256 C20 230 36 214 64 206 L104 198 C110 212 118 222 128 225 C138 222 146 212 152 198 L192 206 C220 214 236 230 238 256Z" fill="url(#shirtarmor-g)"/>
+  <g clip-path="url(#shirtarmor-body)">
+    <path d="M18 256 C22 232 40 218 70 210 L66 256Z" fill="#000" opacity=".25" filter="url(#shirtarmor-b8)"/>
+    <path d="M238 256 C232 230 214 216 180 210 L176 256Z" fill="#000" opacity=".55" filter="url(#shirtarmor-b8)"/>
+    <ellipse cx="128" cy="232" rx="36" ry="10" fill="#000" opacity=".4" filter="url(#shirtarmor-b4)"/>
+    <path d="M60 236 C70 226 84 220 96 222 M164 226 C176 224 190 230 200 240" stroke="#000" stroke-width="3" fill="none" opacity=".35" filter="url(#shirtarmor-b2)"/>
+<path d="M104 198 C110 212 118 222 128 225 C138 222 146 212 152 198 L156 200 C150 220 140 230 128 232 C116 230 106 220 100 200Z" fill="#3a2e22"/><path d="M30 236 C40 214 62 206 84 206 L92 232 C70 234 50 240 34 256Z" fill="#6e4a2e" stroke="#2a1a10" stroke-width="1.5"/><path d="M226 236 C216 214 194 206 172 206 L164 232 C186 234 206 240 222 256Z" fill="#54361e" stroke="#2a1a10" stroke-width="1.5"/><path d="M100 232 C118 238 138 238 156 232 L160 256 H96Z" fill="#5e5242" stroke="#2a2016" stroke-width="1.5"/><path d="M108 240 l14 4 M140 246 l10 -4 M52 230 l12 -6" stroke="#a89878" stroke-width=".8" opacity=".5"/><g fill="#8a7448"><circle cx="40" cy="240" r="1.8"/><circle cx="80" cy="214" r="1.8"/><circle cx="216" cy="240" r="1.8"/><circle cx="176" cy="214" r="1.8"/><circle cx="104" cy="244" r="1.8"/><circle cx="152" cy="244" r="1.8"/></g><ellipse cx="140" cy="248" rx="9" ry="4" fill="#5a2a14" opacity=".45" filter="url(#shirtarmor-b2)"/>
+    <g transform="rotate(-20 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#shirtarmor-brush)" opacity="0.18"/></g><g transform="rotate(20 128 128)"><rect x="-70" y="-70" width="396" height="396" fill="#000" filter="url(#shirtarmor-brushd)" opacity="0.3"/></g>
+    <rect width="256" height="256" fill="#5a4a34" opacity=".15"/>
+    <g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#shirtarmor-grime)" opacity="0.55"/></g><g><rect x="0" y="0" width="256" height="256" fill="#000" filter="url(#shirtarmor-dust)" opacity="0.3"/></g>
   </g>
-  
-  <!-- Leather straps -->
-  <path d="M90 170c6 2 16 4 24 5" fill="none" stroke="url(#leatherPad)" stroke-width="4" stroke-linecap="round"/>
-  <path d="M166 170c-6 2-16 4-24 5" fill="none" stroke="url(#leatherPad)" stroke-width="4" stroke-linecap="round"/>
-  
-  <!-- Strap buckles -->
-  <rect x="112" y="168" width="8" height="6" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="1" rx="1"/>
-  <rect x="136" y="168" width="8" height="6" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="1" rx="1"/>
-  
-  <!-- Chest plate segments (overlapping armor) -->
-  <path d="M80 190c12-8 28-12 48-12c20 0 36 4 48 12" 
-        fill="url(#metalArmor)" stroke="#1a0a00" stroke-width="1.5" opacity="0.9"/>
-  
-  <path d="M85 200c10-6 24-10 43-10c19 0 33 4 43 10" 
-        fill="url(#metalArmor)" stroke="#1a0a00" stroke-width="1.5" opacity="0.85"/>
-  
-  <path d="M90 210c8-4 20-6 38-6c18 0 30 2 38 6" 
-        fill="url(#metalArmor)" stroke="#1a0a00" stroke-width="1.5" opacity="0.8"/>
-  
-  <!-- Rivets on chest plates -->
-  <g fill="#2a2a2a" opacity="0.7">
-    <circle cx="85" cy="192" r="1.5"/>
-    <circle cx="128" cy="190" r="1.5"/>
-    <circle cx="171" cy="192" r="1.5"/>
-    <circle cx="90" cy="202" r="1.5"/>
-    <circle cx="128" cy="200" r="1.5"/>
-    <circle cx="166" cy="202" r="1.5"/>
-    <circle cx="95" cy="212" r="1.5"/>
-    <circle cx="128" cy="210" r="1.5"/>
-    <circle cx="161" cy="212" r="1.5"/>
-  </g>
-  
-  <!-- Metal shine/reflections -->
-  <g opacity="0.4" stroke="url(#metalShine)" stroke-width="2" fill="none" stroke-linecap="round">
-    <path d="M75 188c15-6 32-9 53-9c21 0 38 3 53 9"/>
-    <path d="M80 198c13-5 28-7 48-7c20 0 35 2 48 7"/>
-  </g>
-  
-  <!-- Battle damage - dents and scratches -->
-  <g opacity="0.5" stroke="#2a1a0a" stroke-width="1.5" fill="none" stroke-linecap="round">
-    <path d="M95 185c3 2 6 3 9 3"/>
-    <path d="M152 187c-3 1-6 2-9 2"/>
-    <path d="M115 205l8 4"/>
-    <path d="M141 208l-7 3"/>
-  </g>
-  
-  <!-- Scratches on armor -->
-  <g opacity="0.3" stroke="#6a5a4a" stroke-width="0.8" fill="none" stroke-linecap="round">
-    <path d="M100 195l12 8"/>
-    <path d="M145 197l-10 6"/>
-    <path d="M110 215l8 5"/>
-  </g>
-  
-  <!-- Center chest reinforcement plate -->
-  <rect x="118" y="195" width="20" height="25" fill="url(#metalArmor)" 
-        stroke="#1a0a00" stroke-width="1.5" rx="2" opacity="0.9"/>
-  
-  <!-- Reinforcement plate rivets -->
-  <circle cx="123" cy="200" r="1.5" fill="#2a2a2a"/>
-  <circle cx="133" cy="200" r="1.5" fill="#2a2a2a"/>
-  <circle cx="123" cy="215" r="1.5" fill="#2a2a2a"/>
-  <circle cx="133" cy="215" r="1.5" fill="#2a2a2a"/>
-  
-  <!-- Belt/waist armor -->
-  <path d="M70 220c15-2 35-3 58-3c23 0 43 1 58 3" 
-        stroke="url(#leatherPad)" stroke-width="5" stroke-linecap="round"/>
-  
-  <!-- Belt buckle (metal) -->
-  <rect x="120" y="217" width="16" height="8" fill="#4a4a4a" stroke="#2a2a2a" stroke-width="1" rx="2"/>
-  <circle cx="128" cy="221" r="2" fill="#2a2a2a"/>
-  
-  <!-- Weathering and rust spots -->
-  <g opacity="0.3" fill="#6a4a3a">
-    <ellipse cx="92" cy="194" rx="3" ry="2"/>
-    <ellipse cx="165" cy="198" rx="2.5" ry="2"/>
-    <ellipse cx="105" cy="212" rx="2" ry="1.5"/>
-    <ellipse cx="148" cy="215" rx="3" ry="2"/>
+  <path d="M66.0 206.0 l-0.9 -1.7" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M67.6 205.8 l-0.0 -3.6" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M69.2 205.6 l1.1 -3.4" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M70.8 205.4 l-0.2 -3.5" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M72.4 205.2 l-0.7 -1.7" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M74.0 205.0 l1.1 -3.2" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M75.6 204.8 l1.5 -3.3" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M77.2 204.6 l1.4 -3.9" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M78.8 204.4 l-0.6 -1.8" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M80.4 204.2 l1.1 -3.6" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M82.0 204.0 l1.5 -1.6" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M83.6 203.8 l1.3 -2.7" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M85.2 203.6 l-1.3 -3.1" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M86.8 203.4 l-1.1 -2.4" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M88.4 203.2 l1.1 -1.9" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M90.0 203.0 l0.7 -2.3" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M91.6 202.8 l1.4 -3.0" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M93.2 202.6 l-0.0 -1.6" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M94.8 202.4 l-0.9 -3.1" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M96.4 202.2 l-1.4 -2.2" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M158.0 200.0 l0.1 -3.5" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M159.6 200.3 l-0.7 -3.9" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M161.2 200.6 l-0.8 -4.0" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M162.8 200.9 l1.0 -2.2" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M164.4 201.2 l0.8 -2.8" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M166.0 201.5 l0.1 -2.3" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M167.6 201.8 l-1.2 -1.8" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M169.2 202.1 l-1.5 -2.3" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M170.8 202.4 l1.3 -4.0" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M172.4 202.7 l-0.5 -3.6" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M174.0 203.0 l0.7 -2.6" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M175.6 203.3 l-1.2 -1.8" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M177.2 203.6 l-0.3 -4.0" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M178.8 203.9 l0.9 -3.6" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M180.4 204.2 l1.1 -3.1" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M182.0 204.5 l-1.0 -1.6" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M183.6 204.8 l-0.5 -2.2" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M185.2 205.1 l1.2 -3.7" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M186.8 205.4 l1.3 -3.2" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/><path d="M188.4 205.7 l-0.1 -3.6" stroke="#d8c8a0" stroke-width=".5" opacity=".45"/>
+  <path d="M18 256 C20 230 36 214 64 206 L104 198" fill="none" stroke="#e0c890" stroke-width="1" opacity=".22"/>
   </g>
 </svg>

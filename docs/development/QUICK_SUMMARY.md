@@ -17,7 +17,7 @@ Successfully created a standalone Fizz.fun token launchpad page. Ready for produ
 ### New Files
 - **FIZZ_FUN_STANDALONE_DEPLOYMENT.md** - Deployment guide
 - **FIZZ_FUN_FINAL_REPORT.md** - Complete report
-- **FIZZ_FUN_CHANGES_SUMMARY.txt** - Detailed changes
+- **docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt** - Detailed changes
 - **test-fizzfun-standalone.html** - Test page
 
 ### Modified Files

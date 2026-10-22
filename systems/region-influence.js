@@ -1,7 +1,7 @@
 const REGIONS = {
-  "Mojave Outskirts": {
+  "Cinder Basin Outskirts": {
     palette: "dust brown",
-    factions: ["NCR", "Scavengers"],
+    factions: ["Frontier Compact", "Scavengers"],
     vibe: "dry, tense"
   },
   "Vault 77": {
@@ -26,7 +26,7 @@ export function buildRegionInfluence(regionName) {
 
 export function regionDialogueFlavor(regionName) {
   const flavors = {
-    "Mojave Outskirts": "dust storms, NCR patrols, thirsty travelers",
+    "Cinder Basin Outskirts": "dust storms, Frontier Compact patrols, thirsty travelers",
     "Vault 77": "vault politics, recycled air, claustrophobic tension",
     "Ruined Vegas Strip": "raiders, neon ruins, broken dreams"
   };
@@ -36,7 +36,7 @@ export function regionDialogueFlavor(regionName) {
 
 export function regionQuestFlavor(regionName) {
   const flavors = {
-    "Mojave Outskirts": "dust storms, raiders, NCR patrols, thirsty travelers",
+    "Cinder Basin Outskirts": "dust storms, raiders, Frontier Compact patrols, thirsty travelers",
     "Vault 77": "vault politics, malfunctioning systems, missing dwellers",
     "Ruined Vegas Strip": "gang fights, neon ruins, broken tech"
   };

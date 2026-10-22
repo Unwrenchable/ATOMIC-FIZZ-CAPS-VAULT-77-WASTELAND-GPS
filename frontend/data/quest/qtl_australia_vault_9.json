@@ -4,7 +4,7 @@
   "type": "global",
   "region": "Central_Australia",
   "npc_giver": "global_sydney_ironbark",
-  "description": "Ironbark has located what appears to be the southern hemisphere's only Vault-Tec installation near Alice Springs. The vault may still be sealed, or its inhabitants may have already emerged. Either way, it's worth checking.",
+  "description": "Ironbark has located what appears to be the southern hemisphere's only FizzTec installation near Alice Springs. The vault may still be sealed, or its inhabitants may have already emerged. Either way, it's worth checking.",
   "gps_requirement": {
     "region": "Northern Territory, Australia",
     "real_lat": -23.6980,

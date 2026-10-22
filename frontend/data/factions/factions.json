@@ -1,25 +1,25 @@
 [
   {
     "id": "ncr",
-    "name": "New California Republic",
-    "shortName": "NCR",
-    "description": "Democratic republic expanding from California. Brings law, taxes, and bureaucracy to the Mojave. Struggles with overextension and corruption.",
+    "name": "Frontier Compact",
+    "shortName": "Frontier Compact",
+    "description": "Democratic republic expanding from California. Brings law, taxes, and bureaucracy to the Cinder Basin. Struggles with overextension and corruption.",
     "alignment": "Lawful",
     "color": "#b8860b",
     "emblem": "Bear",
-    "basePOIs": ["Camp McCarran", "Hoover Dam", "Mojave Outpost", "Camp Golf"],
+    "basePOIs": ["Camp McCarran", "Hoover Dam", "Cinder Basin Outpost", "Camp Golf"],
     "leader": "President Kimball",
     "reputationLevels": ["Vilified", "Hated", "Disliked", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
       "Liked": "+10% damage vs Legion",
-      "Idolized": "NCR Ranger Combat Armor mint"
+      "Idolized": "Frontier Compact Ranger Combat Armor mint"
     },
     "enemies": ["caesar_legion", "powder_gangers"],
     "allies": ["followers_apocalypse", "boomers"]
   },
   {
     "id": "caesar_legion",
-    "name": "Caesar's Legion",
+    "name": "Red Cohort",
     "shortName": "Legion",
     "description": "Totalitarian slaver army modeled after Roman Empire. Disciplined, brutal, and anti-tech. Seeks to conquer and 'civilize' the wasteland.",
     "alignment": "Lawful Evil",
@@ -39,11 +39,11 @@
     "id": "mr_house",
     "name": "Mr. House",
     "shortName": "House",
-    "description": "Pre-war genius preserved in life-support. Controls New Vegas via Securitrons. Visionary autocrat who sees himself as the Mojave's savior.",
+    "description": "Pre-war genius preserved in life-support. Controls Neon Reach via Securitrons. Visionary autocrat who sees himself as the Cinder Basin's savior.",
     "alignment": "Neutral",
     "color": "#4a4a4a",
     "emblem": "Securitron Face",
-    "basePOIs": ["Lucky 38", "The Strip", "The Tops", "Ultra-Luxe", "Gomorrah"],
+    "basePOIs": ["The Spire", "The Strip", "The Tops", "Ultra-Luxe", "Gomorrah"],
     "leader": "Robert House",
     "reputationLevels": ["Vilified", "Shunned", "Mixed", "Neutral", "Accepted", "Smiled Upon", "Idolized"],
     "perks": {
@@ -55,9 +55,9 @@
   },
   {
     "id": "brotherhood_steel",
-    "name": "Brotherhood of Steel",
+    "name": "Coil Covenant",
     "shortName": "BoS",
-    "description": "Techno-religious knights hoarding pre-war tech. Isolated, xenophobic, but unmatched in power armor. Hidden in Mojave bunkers.",
+    "description": "Techno-religious knights hoarding pre-war tech. Isolated, xenophobic, but unmatched in power armor. Hidden in Cinder Basin bunkers.",
     "alignment": "Lawful Neutral",
     "color": "#4682b4",
     "emblem": "Sword & Gears",
@@ -66,7 +66,7 @@
     "reputationLevels": ["Vilified", "Hated", "Disliked", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
       "Liked": "Access to energy weapons cache",
-      "Idolized": "T-51b Power Armor mint"
+      "Idolized": "T-51b Reactor Harness mint"
     },
     "enemies": ["ncr", "caesar_legion"],
     "allies": ["followers_apocalypse"]
@@ -133,7 +133,7 @@
     "alignment": "Chaotic Evil",
     "color": "#696969",
     "emblem": "Dynamite",
-    "basePOIs": ["NCR Correctional Facility", "Vault 19", "Primm"],
+    "basePOIs": ["Frontier Compact Correctional Facility", "Vault 19", "Primm"],
     "leader": "Eddie",
     "reputationLevels": ["Vilified", "Hated", "Mixed", "Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {
@@ -165,7 +165,7 @@
     "id": "kings",
     "name": "Kings",
     "shortName": "Kings",
-    "description": "Elvis-impersonating gang ruling Freeside. Protect locals but clash with NCR expansion.",
+    "description": "Elvis-impersonating gang ruling Freeside. Protect locals but clash with Frontier Compact expansion.",
     "alignment": "Chaotic Good",
     "color": "#1e90ff",
     "emblem": "Pompadour",
@@ -183,11 +183,11 @@
     "id": "independent",
     "name": "Independent Vegas",
     "shortName": "Independent",
-    "description": "No major faction controls New Vegas. Supported by Yes Man and player choices. Anarchy or freedom?",
+    "description": "No major faction controls Neon Reach. Supported by Yes Man and player choices. Anarchy or freedom?",
     "alignment": "Chaotic Neutral",
     "color": "#9370db",
     "emblem": "Yes Man Face",
-    "basePOIs": ["Lucky 38", "The Strip"],
+    "basePOIs": ["The Spire", "The Strip"],
     "leader": "You (the player)",
     "reputationLevels": ["Neutral", "Accepted", "Liked", "Idolized"],
     "perks": {

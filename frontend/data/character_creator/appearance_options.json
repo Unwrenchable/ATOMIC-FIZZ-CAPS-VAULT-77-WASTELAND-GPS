@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "Character appearance customization options - Fallout 4 style",
+  "description": "Character appearance customization options - the commonwealth wastes style",
 
   "genders": [
     { "id": "male", "name": "Male", "icon": "👨" },
@@ -136,7 +136,7 @@
     { "id": "moles", "name": "Beauty Marks" },
     { "id": "radiation_burns", "name": "Radiation Burns", "raceRestrict": "ghoul" },
     { "id": "circuitry", "name": "Visible Circuitry", "raceRestrict": "synth" },
-    { "id": "tattoo_vault", "name": "Vault-Tec Tattoo" },
+    { "id": "tattoo_vault", "name": "FizzTec Tattoo" },
     { "id": "tattoo_faction", "name": "Faction Tattoo" }
   ],
 

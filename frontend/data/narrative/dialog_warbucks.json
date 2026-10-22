@@ -21,7 +21,7 @@
       "warmcaps_mansion_found"
     ],
     "video_speech": "You're not on the schedule. GRACY tells me you mentioned Hannigan's House. That bought you ninety seconds. Start talking.",
-    "text": "The compound is everything she said it would be — reinforced perimeter, guards at measured intervals, pre-war aesthetics retrofitted with wasteland pragmatism. Someone with money and taste and enough cynicism about both to make them work together.\n\nThe man himself is waiting in the entrance hall. Standing, not seated. That tells you something.\n\nBarrel-chested. Bald. The corporate armor is pre-war executive-grade — the kind with integrated climate control and a Vault-Tec logo that has been carefully, deliberately removed. He holds a data-pad in one hand and reads it while you enter, which could be rudeness or power play or both.\n\nHe doesn't look up immediately.\n\n\"GRACY says you mentioned Hannigan's House.\" His voice is a low rumble, measured as caps on a scale. \"That bought you time. Most visitors don't know that name.\"\n\nHe sets the data-pad down. Now he looks at you.\n\n\"Ninety seconds. Start talking.\"",
+    "text": "The compound is everything she said it would be — reinforced perimeter, guards at measured intervals, pre-war aesthetics retrofitted with wasteland pragmatism. Someone with money and taste and enough cynicism about both to make them work together.\n\nThe man himself is waiting in the entrance hall. Standing, not seated. That tells you something.\n\nBarrel-chested. Bald. The corporate armor is pre-war executive-grade — the kind with integrated climate control and a FizzTec logo that has been carefully, deliberately removed. He holds a data-pad in one hand and reads it while you enter, which could be rudeness or power play or both.\n\nHe doesn't look up immediately.\n\n\"GRACY says you mentioned Hannigan's House.\" His voice is a low rumble, measured as caps on a scale. \"That bought you time. Most visitors don't know that name.\"\n\nHe sets the data-pad down. Now he looks at you.\n\n\"Ninety seconds. Start talking.\"",
     "responses": [
       {
         "text": "[Direct] There's a girl named Ember. She organized twelve orphans out of a labor camp. She needs your help.",
@@ -125,7 +125,7 @@
     },
     "node_soft_spot": {
       "id": "node_soft_spot",
-      "text": "He looks at you for a very long moment.\n\n\"What I want —\" He stops. Recalibrates. \"What I want is an efficiently functioning trade region that isn't being distorted by fraud and exploitation.\"\n\nAnother pause.\n\n\"I also —\"\n\nHe turns away slightly. A tell so small you almost miss it.\n\n\"I was in Vault-Tec arms division. We designed the weapons. We sold the contracts. We—\" He stops. \"What we did and what it produced is a record I carry and cannot put down.\"\n\nHe turns back. His face has rearranged itself back to corporate neutral. But the edges are different.\n\n\"There are twelve children hiding in ruins east of the trade post. That is a number I can do something about. I prefer doing something to not doing something.\" A breath. \"That is my answer.\"",
+      "text": "He looks at you for a very long moment.\n\n\"What I want —\" He stops. Recalibrates. \"What I want is an efficiently functioning trade region that isn't being distorted by fraud and exploitation.\"\n\nAnother pause.\n\n\"I also —\"\n\nHe turns away slightly. A tell so small you almost miss it.\n\n\"I was in FizzTec arms division. We designed the weapons. We sold the contracts. We—\" He stops. \"What we did and what it produced is a record I carry and cannot put down.\"\n\nHe turns back. His face has rearranged itself back to corporate neutral. But the edges are different.\n\n\"There are twelve children hiding in ruins east of the trade post. That is a number I can do something about. I prefer doing something to not doing something.\" A breath. \"That is my answer.\"",
       "set_flags": [
         "warmcaps_agreed_to_help"
       ],
@@ -209,7 +209,7 @@
     },
     "node_ember_future": {
       "id": "node_ember_future",
-      "text": "\"The girl runs a group of twelve through three weeks in the open wasteland and her first request is for a structured plan rather than improvised action.\" He doesn't phrase it as a compliment. He phrases it as an observation about an asset. \"She's wasted in an orphanage.\"\n\nHe straightens.\n\n\"The children get proper care — I will fund the facility's operational costs. Proper food. Medical supplies. Education if we can find staff who survived with enough brain cells to teach with.\"\n\nA pause.\n\n\"Ember specifically — that is her decision. I don't draft children into my operation. I don't employ them. But if she is still looking for her parents through Vault-Tec registry databases when she's eighteen and capable of operating independently, there are records in my archive that might be useful to her.\"\n\nFlat. Practical. Also, somehow, everything.\n\n\"One thing at a time.\"",
+      "text": "\"The girl runs a group of twelve through three weeks in the open wasteland and her first request is for a structured plan rather than improvised action.\" He doesn't phrase it as a compliment. He phrases it as an observation about an asset. \"She's wasted in an orphanage.\"\n\nHe straightens.\n\n\"The children get proper care — I will fund the facility's operational costs. Proper food. Medical supplies. Education if we can find staff who survived with enough brain cells to teach with.\"\n\nA pause.\n\n\"Ember specifically — that is her decision. I don't draft children into my operation. I don't employ them. But if she is still looking for her parents through FizzTec registry databases when she's eighteen and capable of operating independently, there are records in my archive that might be useful to her.\"\n\nFlat. Practical. Also, somehow, everything.\n\n\"One thing at a time.\"",
       "set_flags": [
         "warmcaps_agreed_to_help"
       ],
@@ -247,7 +247,7 @@
           "next": "node_gracy_runs_it"
         },
         {
-          "text": "[Question] What about your past — Vault-Tec?",
+          "text": "[Question] What about your past — FizzTec?",
           "tone": "question",
           "next": "node_vault_tec_past"
         }
@@ -282,7 +282,7 @@
     },
     "node_vault_tec_past": {
       "id": "node_vault_tec_past",
-      "text": "The compound goes quiet in a way that has nothing to do with sound.\n\n\"Vault-Tec arms division. VP of Contractor Relations from 2068 to 2077.\" He says it like reading a citation. Flat and precise. \"I sold weapons contracts to the government, managed supplier relations, and contributed to a supply chain that put functioning ordnance into the hands of soldiers on three continents.\"\n\nHe walks to the window.\n\n\"In 2077, those contracts were fulfilled in ways that were not anticipated in the original scope of work.\" A very long pause. \"I was in Vault 99 when the bombs fell. I had access because of my position. Most of the people in my supply chain did not.\"\n\nHe turns back.\n\n\"I built what I built here because it was something I could build that wasn't weapons. Caps can be exchanged for medicine, for food, for labor toward something constructive.\" A pause. \"I am aware that this does not balance the ledger. I keep building anyway.\"",
+      "text": "The compound goes quiet in a way that has nothing to do with sound.\n\n\"FizzTec arms division. VP of Contractor Relations from 2068 to 2077.\" He says it like reading a citation. Flat and precise. \"I sold weapons contracts to the government, managed supplier relations, and contributed to a supply chain that put functioning ordnance into the hands of soldiers on three continents.\"\n\nHe walks to the window.\n\n\"In 2077, those contracts were fulfilled in ways that were not anticipated in the original scope of work.\" A very long pause. \"I was in Vault 99 when the bombs fell. I had access because of my position. Most of the people in my supply chain did not.\"\n\nHe turns back.\n\n\"I built what I built here because it was something I could build that wasn't weapons. Caps can be exchanged for medicine, for food, for labor toward something constructive.\" A pause. \"I am aware that this does not balance the ledger. I keep building anyway.\"",
       "responses": [
         {
           "text": "[Friendly] That's more honesty than most people offer.",
@@ -320,7 +320,7 @@
     },
     "node_after_hannigan": {
       "id": "node_after_hannigan",
-      "text": "\"The orphanage license is transferable under trade law — such as trade law exists out here. I'll file the administrative transfer to a non-predatory operator.\"\n\nHe is already thinking logistics.\n\n\"The children are not cargo. I want to be precise about that. The settlement north of Hannigan's House has a medical supply agreement with my caravan — I'll extend that to include orphanage support as part of the route contract. Food, medicine, basic supplies on a quarterly cycle.\"\n\nHe pauses.\n\n\"They also need an adult who is not drunk on Nuka-Moonshine and using them as labor. Finding that person is a secondary problem. One item at a time.\"",
+      "text": "\"The orphanage license is transferable under trade law — such as trade law exists out here. I'll file the administrative transfer to a non-predatory operator.\"\n\nHe is already thinking logistics.\n\n\"The children are not cargo. I want to be precise about that. The settlement north of Hannigan's House has a medical supply agreement with my caravan — I'll extend that to include orphanage support as part of the route contract. Food, medicine, basic supplies on a quarterly cycle.\"\n\nHe pauses.\n\n\"They also need an adult who is not drunk on Fizz-Moonshine and using them as labor. Finding that person is a secondary problem. One item at a time.\"",
       "responses": [
         {
           "text": "[Friendly] You've thought this through.",

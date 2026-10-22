@@ -765,7 +765,7 @@
                 });
                 const marker = L.marker([poi.lat, poi.lng], { icon: iconDiv });
                 marker._pipboyData = poi; // Store POI data on marker
-                // Enhanced popup with Fallout-style info
+                // Enhanced popup with wasteland-style info
                 const rarityColor = {
                   common: '#00ff41',
                   rare: '#00d4ff',
@@ -961,7 +961,7 @@
       return this.explorationMode;
     },
 
-    // Toggle expand-map mode — hides the Pip-Boy header and tabs to give the
+    // Toggle expand-map mode — hides the Pocket-Boy header and tabs to give the
     // map more vertical space on small screens.  The pipboy-crt element receives
     // the .map-expanded class; CSS handles the rest.
     toggleExpandMap() {
@@ -1319,7 +1319,7 @@
 
     filterDiscoveredLocations(locations) {
       return locations.filter(loc => {
-        // Always show canon locations (Fallout lore)
+        // Always show canon locations (wasteland lore)
         if (loc.source === "canon" || loc.source === "canon_tv") {
           return true;
         }

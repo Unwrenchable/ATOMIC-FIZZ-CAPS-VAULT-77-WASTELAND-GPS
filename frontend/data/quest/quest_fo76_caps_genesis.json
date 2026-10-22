@@ -80,14 +80,14 @@
     },
     {
       "id": "understand_genesis",
-      "desc": "Read the full Genesis Protocol document. The Overseer was a Vault-Tec engineer who embedded the CAPS cryptographic seed into Vault 76's design from day one. Reclamation Day was also the day the CAPS network went live.",
-      "dialogue": "[GENESIS PROTOCOL \u2014 CLASSIFIED VAULT-TEC DOCUMENT] Project designation: GENESIS. The Vault 76 facility serves dual purpose: civilian reclamation platform and CAPS network genesis node. Reclamation Day trigger activates Seed Hash Alpha-77. All subsequent CAPS validation derives from this origination event. Duration: permanent. Authorization: Overseer Level Omega."
+      "desc": "Read the full Genesis Protocol document. The Overseer was a FizzTec engineer who embedded the CAPS cryptographic seed into Vault 76's design from day one. Reclamation Day was also the day the CAPS network went live.",
+      "dialogue": "[GENESIS PROTOCOL \u2014 CLASSIFIED FIZZTEC DOCUMENT] Project designation: GENESIS. The Vault 76 facility serves dual purpose: civilian reclamation platform and CAPS network genesis node. Reclamation Day trigger activates Seed Hash Alpha-77. All subsequent CAPS validation derives from this origination event. Duration: permanent. Authorization: Overseer Level Omega."
     },
     {
       "id": "first_transaction",
       "desc": "Perform the first official post-war CAPS transaction at the marked GPS memorial location \u2014 a symbolic trade with fellow Vault 76 dweller Marco. History begins here.",
       "npc": "npc_vault76_dweller_marco",
-      "dialogue": "Ha! You want to do a trade? Sure \u2014 I've got Nuka-Cola Quantum, you've got... whatever's in that bag. Deal. Wait \u2014 why does this feel important? Why does this feel like... the first time? Marco pauses. His eyes go briefly distant \u2014 0.3 seconds. The network registered it."
+      "dialogue": "Ha! You want to do a trade? Sure \u2014 I've got Atomic Fizz Quantum, you've got... whatever's in that bag. Deal. Wait \u2014 why does this feel important? Why does this feel like... the first time? Marco pauses. His eyes go briefly distant \u2014 0.3 seconds. The network registered it."
     },
     {
       "id": "make_final_choice",
@@ -184,7 +184,7 @@
       }
     },
     "appalachian_brotherhood": {
-      "desc": "Give the seed to the Appalachian Brotherhood of Steel for ordered, military-grade control of the CAPS genesis infrastructure.",
+      "desc": "Give the seed to the Appalachian Coil Covenant for ordered, military-grade control of the CAPS genesis infrastructure.",
       "requirements": {
         "reputation": "brotherhood_friendly",
         "intelligence": 8
@@ -258,6 +258,6 @@
     "quest_world_quest_chain"
   ],
   "era_note": "2102-2103. Reclamation Day. The fractured timeline's most ancient wound. This is where it all begins. Every CAPS quest in every era flows from this single Flatwoods church.",
-  "fizz_lore": "The Genesis Protocol is the Ur-document of wasteland crypto-economics. The Vault 76 Overseer embedded Vault-Tec's CAPS algorithm as both a survival tool and a philosophical statement: even after civilization falls, economic trust networks will rebuild first. FIZZ tokens are the 200-year evolution of this seed.",
+  "fizz_lore": "The Genesis Protocol is the Ur-document of wasteland crypto-economics. The Vault 76 Overseer embedded FizzTec's CAPS algorithm as both a survival tool and a philosophical statement: even after civilization falls, economic trust networks will rebuild first. FIZZ tokens are the 200-year evolution of this seed.",
   "notes": "This is the chronological origin quest for all CAPS/FIZZ lore. min_level 1 \u2014 any dweller can find it on Reclamation Day. The 'send_to_vault77' choice is the canonical outcome for the Atomic Fizz Caps narrative and provides the largest FIZZ reward (150). The 0.3-second blank-eye detail during the first transaction mirrors the computational node behaviour introduced in quest_fo3_purified_truth \u2014 an intentional cross-era lore echo."
 }

@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_nina_volt",
   "name": "Nina Volt",
-  "region": "New Vegas Strip",
+  "region": "Neon Reach Strip",
   "type": "FizzCo Technician",
   "dialog": {
     "idle": [

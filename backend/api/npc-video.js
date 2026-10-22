@@ -1,5 +1,5 @@
 // backend/api/npc-video.js — xAI Grok NPC video generation proxy
-// Generates short Fallout-themed NPC videos via xAI API with Redis caching.
+// Generates short wasteland NPC videos via xAI API with Redis caching.
 'use strict';
 
 const crypto = require('crypto');
@@ -18,7 +18,7 @@ const MAX_NPC_NAME_LENGTH = 60;
 const MAX_DIALOG_TEXT_LENGTH = 800;
 const PROMPT_DIALOG_TRUNCATE = 150;
 // MAX_SPEECH_WORDS: fallback word cap for extracted dialog text (when video_speech is absent).
-// 22 words ≈ 110 WPM (measured Fallout-style delivery) × 8 seconds, leaving room for pauses.
+// 22 words ≈ 110 WPM (measured wasteland-style delivery) × 8 seconds, leaving room for pauses.
 // Keep hand-written video_speech under 15 words for the best single-breath delivery.
 const MAX_SPEECH_WORDS = parseInt(process.env.NPC_VIDEO_MAX_WORDS || '22', 10);
 const POLL_INTERVAL_MS = 5000;
@@ -138,7 +138,7 @@ function pickVoiceProfile(npcId) {
     'voice: fast-talking scavenger, nervous edge',
     'voice: charismatic trader patter, sly and smooth',
     'voice: stern elder tone, deliberate and low',
-    'voice: cheerful but eerie vault-tec cadence',
+    'voice: cheerful but eerie fizztec cadence',
     'voice: rough outlaw drawl, dry sarcasm',
   ];
   let hash = 0;
@@ -153,7 +153,7 @@ function isValidNpcId(id) {
 }
 
 // ----------------------------------------------------------------
-// Build the Fallout-themed prompt
+// Build the wasteland prompt
 // ----------------------------------------------------------------
 function buildPrompt(npcId, npcName, portrait, dialogText, videoSpeech) {
   const safeNpcId   = sanitiseForPrompt(npcId, 80).toLowerCase();
@@ -171,7 +171,7 @@ function buildPrompt(npcId, npcName, portrait, dialogText, videoSpeech) {
     `(same face structure, hair/facial hair, age, skin tone, body type, signature outfit and accessories), ` +
     `never redesign or swap actor identity, ` +
     `${voiceProfile}; keep this exact voice profile for character_id=${safeNpcId} in every scene, ` +
-    `speaking in post-apocalyptic Fallout style, delivering this complete line: "${safeDialog}", ` +
+    `speaking in post-apocalyptic wasteland style, delivering this complete line: "${safeDialog}", ` +
     `must complete the full sentence before the clip ends — no trailing words cut off — ` +
     `fit delivery naturally within 8 seconds at a measured wasteland pace, ` +
     `8 seconds, retro Pocket-Boy green tint, moody lighting`

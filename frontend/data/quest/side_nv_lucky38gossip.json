@@ -1,8 +1,8 @@
 {
   "id": "side_nv_lucky38gossip",
-  "name": "Lucky 38 Gossip Network",
+  "name": "The Spire Gossip Network",
   "type": "side",
-  "poIs": ["Lucky 38"],
+  "poIs": ["The Spire"],
   "description": "Gather intel from Strip VIPs.",
   "objectives": [
     "Speak to 3 VIPs",

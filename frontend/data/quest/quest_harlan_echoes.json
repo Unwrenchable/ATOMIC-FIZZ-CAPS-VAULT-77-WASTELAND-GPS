@@ -2,8 +2,8 @@
   "id": "quest_harlan_echoes",
   "name": "Echoes of a Ranger",
   "type": "main",
-  "region": "Mojave",
-  "description": "You discover clues left behind by NCR Ranger Harlan Voss. His trail hints at the disappearance of his son, Jax.",
+  "region": "Cinder Basin",
+  "description": "You discover clues left behind by Frontier Compact Ranger Harlan Voss. His trail hints at the disappearance of his son, Jax.",
   "triggers": [
     "player_pickup:holotape_voss01",
     "player_pickup:ranger_badge_fragment",
@@ -19,7 +19,7 @@
     {
       "id": 0,
       "name": "A Ranger's Echo",
-      "description": "You've found something connected to NCR Ranger Harlan Voss.",
+      "description": "You've found something connected to Frontier Compact Ranger Harlan Voss.",
       "trigger": "auto",
       "actions": [
         "dialogue:overseer_detect_harlan",

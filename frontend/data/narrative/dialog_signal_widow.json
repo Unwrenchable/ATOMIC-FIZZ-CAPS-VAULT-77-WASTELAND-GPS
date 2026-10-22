@@ -4,7 +4,7 @@
   "portrait": "signal_widow",
   "title": "The Listener",
   "description": "She sits at the edge of the ridge with a broken radio in her lap, her back to the world, her face to the horizon. The radio hasn't worked in years. She turns the dial anyway. The wasteland wind moves through her hair and she listens to something you cannot hear.",
-  "backstory": "No one knows her name. The traders who pass Mojave Ridge call her the Signal Widow and leave her alone, which is what she seems to want. She came here twelve years ago and hasn't left. She hears things in the frequencies — fragments, echoes, half-words — that she can't explain and can't stop listening for. She doesn't know what she hears is the distributed signal of Jax Voss bleeding through the relay tower network. She only knows that whatever it is, it sounds like someone who is very far away and very much trying to come home.",
+  "backstory": "No one knows her name. The traders who pass Cinder Basin Ridge call her the Signal Widow and leave her alone, which is what she seems to want. She came here twelve years ago and hasn't left. She hears things in the frequencies — fragments, echoes, half-words — that she can't explain and can't stop listening for. She doesn't know what she hears is the distributed signal of Jax Voss bleeding through the relay tower network. She only knows that whatever it is, it sounds like someone who is very far away and very much trying to come home.",
   "intro": {
     "id": "signal_widow_intro",
     "conditions": ["!flag:met_signal_widow"],

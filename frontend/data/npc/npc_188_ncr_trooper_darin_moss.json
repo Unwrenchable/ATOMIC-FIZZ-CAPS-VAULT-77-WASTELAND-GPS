@@ -4,12 +4,12 @@
   "faction": "ncr",
   "homeRegion": "mojave",
   "currentRegion": "mojave",
-  "role": "NCR Trooper",
+  "role": "Frontier Compact Trooper",
   "personality": "Young, eager, slightly in over his head.",
-  "description": "Darin is stationed at 188 to keep the roads safe. He’s still learning what 'safe' means in the Mojave.",
+  "description": "Darin is stationed at 188 to keep the roads safe. He’s still learning what 'safe' means in the Cinder Basin.",
   "questHooks": [
     "Reports strange radio interference near Sloan.",
-    "Says NCR scouts saw something glowing in the quarry.",
+    "Says Frontier Compact scouts saw something glowing in the quarry.",
     "Wants help tracking Powder Gangers moving north."
   ],
   "poi": "188_trading_post_fnv"

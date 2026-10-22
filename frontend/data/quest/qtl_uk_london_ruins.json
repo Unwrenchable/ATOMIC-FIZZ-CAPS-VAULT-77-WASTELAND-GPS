@@ -4,7 +4,7 @@
   "type": "global",
   "region": "London_Ruins_UK",
   "npc_giver": "global_london_madame_vex",
-  "description": "Madame Vex has intelligence on a Vault-Tec substation buried beneath the old City of London financial district. The data inside could expose pre-war corporation ties to the bombs. She needs someone physically on-site to pull the cache.",
+  "description": "Madame Vex has intelligence on a FizzTec substation buried beneath the old City of London financial district. The data inside could expose pre-war corporation ties to the bombs. She needs someone physically on-site to pull the cache.",
   "gps_requirement": {
     "region": "London, United Kingdom",
     "real_lat": 51.5074,
@@ -23,8 +23,8 @@
     },
     {
       "id": 2,
-      "name": "Locate the Vault-Tec Substation",
-      "description": "Search the ruins of the old financial district for the concealed Vault-Tec substation entrance. Madame Vex's coordinates put it beneath what was once a bank.",
+      "name": "Locate the FizzTec Substation",
+      "description": "Search the ruins of the old financial district for the concealed FizzTec substation entrance. Madame Vex's coordinates put it beneath what was once a bank.",
       "trigger": "player_search_area",
       "actions": ["spawn:item_vaultec_substation_key", "set_flag:london_substation_found", "unlock_stage:3"]
     },

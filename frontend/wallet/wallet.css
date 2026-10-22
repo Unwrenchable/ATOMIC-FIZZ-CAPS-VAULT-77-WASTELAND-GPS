@@ -1,6 +1,6 @@
 /* ============================================================
    ATOMIC FIZZ CAPS WALLET — EPIC WASTELAND EDITION
-   Vault-Tec Certified Terminal Interface
+   FizzTec Certified Terminal Interface
    With Full Pocket-Boy CRT Effects, Radioactive Glow, & Animations
    ============================================================ */
 
@@ -21,7 +21,7 @@
   --pipboy-panel: rgba(0, 30, 10, 0.85);
   --pipboy-panel-dark: rgba(0, 15, 5, 0.95);
   
-  /* Vault-Tec Gold Accent */
+  /* FizzTec Gold Accent */
   --vault-gold: #ffcc00;
   --vault-gold-dim: #cc9900;
   --vault-gold-bright: #ffdd33;
@@ -169,7 +169,7 @@ body::after {
 }
 
 /* ============================================================
-   BOOT OVERLAY — VAULT-TEC STARTUP SEQUENCE
+   BOOT OVERLAY — FIZZTEC STARTUP SEQUENCE
    ============================================================ */
 #boot-overlay {
   position: fixed;
@@ -337,7 +337,7 @@ body::after {
   transition: all 0.3s ease;
 }
 
-/* Corner decorations - Vault-Tec style */
+/* Corner decorations - FizzTec style */
 .wallet-card::before,
 .wallet-card::after {
   content: "";
@@ -521,7 +521,7 @@ body::after {
 }
 
 /* ============================================================
-   BUTTONS — EPIC VAULT-TEC TERMINALS
+   BUTTONS — EPIC FIZZTEC TERMINALS
    ============================================================ */
 .btn,
 button:not(.modal-close):not(.wallet-tab) {
@@ -1339,7 +1339,7 @@ textarea:focus {
 }
 
 /* ============================================================
-   PRINT STYLES — VAULT-TEC REPORT FORMAT
+   PRINT STYLES — FIZZTEC REPORT FORMAT
    ============================================================ */
 @media print {
   body {
@@ -1369,7 +1369,7 @@ textarea:focus {
 
 /* ============================================================
    END OF EPIC WASTELAND WALLET STYLES
-   Per Vault-Tec Regulations, Section 77-B
+   Per FizzTec Regulations, Section 77-B
    ============================================================ */
 
 /* === ACCESSIBILITY: REDUCED MOTION === */

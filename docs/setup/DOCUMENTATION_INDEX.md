@@ -41,7 +41,7 @@ This index provides quick access to all documentation files created for the Fizz
 - Troubleshooting guide
 - **Read this before deploying**
 
-#### 4. **FIZZ_FUN_CHANGES_SUMMARY.txt**
+#### 4. **docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt**
 **Complete changes list**
 - Every file created/modified
 - Line-by-line changes
@@ -84,7 +84,7 @@ This index provides quick access to all documentation files created for the Fizz
 ├── QUICK_SUMMARY.md                    ← Start here
 ├── FIZZ_FUN_FINAL_REPORT.md           ← Full details
 ├── FIZZ_FUN_STANDALONE_DEPLOYMENT.md  ← Deployment guide
-├── FIZZ_FUN_CHANGES_SUMMARY.txt       ← All changes
+├── docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt       ← All changes
 ├── DOCUMENTATION_INDEX.md             ← This file
 │
 └── public/
@@ -108,7 +108,7 @@ This index provides quick access to all documentation files created for the Fizz
 → Read **FIZZ_FUN_STANDALONE_DEPLOYMENT.md** (10 min)
 
 ### "I'm reviewing the code"
-→ Read **FIZZ_FUN_CHANGES_SUMMARY.txt** (15 min)
+→ Read **docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt** (15 min)
 
 ### "I'm maintaining/developing features"
 → Read **public/fizzfun/README.md** (10 min)
@@ -129,7 +129,7 @@ This index provides quick access to all documentation files created for the Fizz
 
 ### For Developers:
 1. QUICK_SUMMARY.md
-2. FIZZ_FUN_CHANGES_SUMMARY.txt
+2. docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt
 3. public/fizzfun/README.md
 4. public/test-fizzfun-standalone.html (open in browser)
 
@@ -139,7 +139,7 @@ This index provides quick access to all documentation files created for the Fizz
 3. FIZZ_FUN_FINAL_REPORT.md (deployment section)
 
 ### For Code Reviewers:
-1. FIZZ_FUN_CHANGES_SUMMARY.txt
+1. docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt
 2. View actual code in /public/fizzfun/
 3. FIZZ_FUN_FINAL_REPORT.md (quality section)
 
@@ -184,7 +184,7 @@ This index provides quick access to all documentation files created for the Fizz
 - Contains detailed deployment steps
 
 ### For Understanding Changes:
-- Check **FIZZ_FUN_CHANGES_SUMMARY.txt**
+- Check **docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt**
 - Line-by-line breakdown
 
 ---
@@ -200,7 +200,7 @@ This index provides quick access to all documentation files created for the Fizz
 → See FIZZ_FUN_STANDALONE_DEPLOYMENT.md
 
 **Changes Made:**
-→ See FIZZ_FUN_CHANGES_SUMMARY.txt
+→ See docs/archive/FIZZ_FUN_CHANGES_SUMMARY.txt
 
 **Quality/Testing:**
 → See FIZZ_FUN_FINAL_REPORT.md

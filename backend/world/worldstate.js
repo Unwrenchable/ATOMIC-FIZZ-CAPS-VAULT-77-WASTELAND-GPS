@@ -3,9 +3,9 @@
 const { getJSON } = require("../lib/redis");
 
 const REGION_DEFAULTS = {
-  "Mojave Outskirts": {
+  "Cinder Basin Outskirts": {
     factions: {
-      primary: ["NCR", "Scavengers"],
+      primary: ["Frontier Compact", "Scavengers"],
       influence: "medium"
     },
     weather: "clear",

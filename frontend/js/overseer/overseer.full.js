@@ -275,7 +275,7 @@
         "[PROJECT J-77 // REDACTED DOSSIER]",
         "Subject: JAX HARLAN // STATUS: PARTIAL HUMAN RECORD, FULL MACHINE MEMORY.",
         "Directive: Preserve the Overseer, even if the man does not survive the protocol.",
-        "Who signed it? Vault-Tec burned that page."
+        "Who signed it? FizzTec burned that page."
       ].join("\n");
     }
 

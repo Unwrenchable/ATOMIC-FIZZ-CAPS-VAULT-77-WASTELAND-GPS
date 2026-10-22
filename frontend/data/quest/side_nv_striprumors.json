@@ -2,8 +2,8 @@
   "id": "side_nv_striprumors",
   "name": "Strip Rumors",
   "type": "side",
-  "poIs": ["New Vegas Strip"],
-  "description": "Collect and verify rumors from across the Mojave and beyond.",
+  "poIs": ["Neon Reach Strip"],
+  "description": "Collect and verify rumors from across the Cinder Basin and beyond.",
   "objectives": [
     "Hear 3 rumors from Tessa",
     "Verify one rumor in the field",

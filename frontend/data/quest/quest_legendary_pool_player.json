@@ -4,7 +4,7 @@
   "type": "main",
   "triggerType": "location",
   "triggerLocation": "griffs_billiards",
-  "description": "Track down the legendary pool player known only as 'The King' by following clues across the Mojave's ruined pool halls.",
+  "description": "Track down the legendary pool player known only as 'The King' by following clues across the Cinder Basin's ruined pool halls.",
   "lore": "Before the bombs fell, there was a pool player so skilled that people called him 'The King'. He vanished during the Great War, but legends say he left behind his prized cue and the secrets of his technique scattered across what remains of Vegas.",
   "poIs": [
     "griffs_billiards",
@@ -42,7 +42,7 @@
     },
     {
       "id": "training_grounds",
-      "description": "Search the New Vegas Cue Club where The King trained champions",
+      "description": "Search the Neon Reach Cue Club where The King trained champions",
       "location": "vegas_cue_club",
       "reward": { "xp": 30 }
     },
@@ -69,12 +69,12 @@
       "id": "ending_inherit_legacy",
       "description": "You claim The King's legacy and become the new champion of the wasteland.",
       "reward": "Legacy of The King (Legendary Cue)",
-      "consequence": "Pool hall survivors across the Mojave recognize you as The King's heir."
+      "consequence": "Pool hall survivors across the Cinder Basin recognize you as The King's heir."
     },
     {
       "id": "ending_preserve_legend",
       "description": "You leave the cue where it belongs, preserving The King's legend for future generations.",
-      "reward": "Reputation boost with Mojave locals",
+      "reward": "Reputation boost with Cinder Basin locals",
       "consequence": "The legend of The King continues to inspire wastelanders."
     },
     {

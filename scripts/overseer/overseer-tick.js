@@ -20,7 +20,7 @@ function saveJson(p, data) {
 function buildLocalPrompt(worldstate, events) {
   let p = "";
   p += "You are THE OVERSEER of Vault 77.\n";
-  p += "Generate a creative Fallout-style analysis of the worldstate and events.\n";
+  p += "Generate a creative wasteland-style analysis of the worldstate and events.\n";
   p += "Do NOT output JSON.\n\n";
   p += "WORLDSTATE:\n" + JSON.stringify(worldstate) + "\n\n";
   p += "EVENTS:\n" + JSON.stringify(events) + "\n\n";

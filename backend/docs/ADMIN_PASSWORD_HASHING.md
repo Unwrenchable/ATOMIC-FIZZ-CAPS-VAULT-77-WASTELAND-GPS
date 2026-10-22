@@ -49,7 +49,7 @@ node scripts/generate-admin-hash.js "YourSecurePassword123!"
 
 ### Example Output
 ```
-📟 VAULT-TEC SECURITY PROTOCOL 77-A
+📟 FIZZTEC SECURITY PROTOCOL 77-A
 =====================================
 ✅ Password hash generated successfully!
 
@@ -130,7 +130,7 @@ node scripts/test-password-hashing.js
 
 Expected output:
 ```
-📟 VAULT-TEC SECURITY TEST PROTOCOL
+📟 FIZZTEC SECURITY TEST PROTOCOL
 ====================================
 
 Test 1: Plain text password verification
@@ -247,7 +247,7 @@ The admin authentication system includes multiple security measures:
 
 ---
 
-**📟 VAULT-TEC SECURITY REMINDER:**
+**📟 FIZZTEC SECURITY REMINDER:**
 > "Security is everyone's responsibility in the wasteland. Keep your passwords secure, Vault Dweller!"
 
 ☢️ Stay safe out there.

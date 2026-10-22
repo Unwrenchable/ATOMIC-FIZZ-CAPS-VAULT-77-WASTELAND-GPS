@@ -47,7 +47,7 @@
     },
 
     "mojave_fringe": {
-      "name": "Mojave Fringe",
+      "name": "Cinder Basin Fringe",
       "personality": "dusty",
       "encounters": {
         "raiders": 0.2,
@@ -63,7 +63,7 @@
       "weatherBias": "heatwave",
       "anomalyLevel": 0.1,
       "overseerLines": [
-        "Welcome to the Mojave Fringe. Try not to melt.",
+        "Welcome to the Cinder Basin Fringe. Try not to melt.",
         "Travelers pass through here often. Keep your caps ready.",
         "Heat signatures rising. Drink water. Or don’t. I’m not your doctor."
       ]

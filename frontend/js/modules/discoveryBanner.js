@@ -1,7 +1,7 @@
 // discoveryBanner.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps – POI Discovery Banner
-// Shows a Fallout-style "LOCATION DISCOVERED" popup
+// Shows a wasteland-style "LOCATION DISCOVERED" popup
 // Also enables permanent labels on discovered locations
 // ------------------------------------------------------------
 

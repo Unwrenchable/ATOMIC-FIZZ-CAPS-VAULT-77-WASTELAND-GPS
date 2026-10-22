@@ -8,7 +8,7 @@
  * This script enhances all 77 character SVG assets with:
  * - Detailed gradients and shading
  * - Realistic textures and weathering
- * - Fallout-themed post-apocalyptic details
+ * - wasteland post-apocalyptic details
  * - Better anatomical accuracy
  * - Depth and dimension
  */
@@ -18,7 +18,7 @@ const path = require('path');
 
 const ASSETS_DIR = path.join(__dirname, '../public/assets/avatars');
 
-// Enhanced SVG templates with Fallout wasteland aesthetic
+// Enhanced SVG templates with wasteland aesthetic
 const enhancedAssets = {
   // ====================
   // ADDITIONAL HEAD SHAPES

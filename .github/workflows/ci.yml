@@ -110,8 +110,14 @@ jobs:
           if ! command -v avm &> /dev/null; then
             cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
           fi
-          avm install latest
-          avm use latest
+          avm install 0.32.1
+          avm use 0.32.1
+
+      - name: Create throwaway CI wallet (build only, never funded)
+        if: steps.filter.outputs.solana == 'true'
+        run: |
+          mkdir -p ~/.config/solana
+          solana-keygen new --no-bip39-passphrase --silent -o ~/.config/solana/id.json
 
       - name: Sync Anchor program IDs
         if: steps.filter.outputs.solana == 'true'
@@ -121,6 +127,5 @@ jobs:
         if: steps.filter.outputs.solana == 'true'
         run: anchor build
 
-      - name: Run Anchor tests
-        if: steps.filter.outputs.solana == 'true'
-        run: anchor test --skip-local-validator
+      # Anchor.toml provider is mainnet and its test script (tests/test.js) no longer exists,
+      # so 'anchor test' would try a mainnet deploy. JS tests run in the Node job instead.

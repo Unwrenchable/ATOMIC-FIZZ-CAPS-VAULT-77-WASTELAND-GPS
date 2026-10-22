@@ -1,7 +1,7 @@
 {
   "id": "npc_nv_nova_lane",
   "name": "Nova Lane",
-  "region": "New Vegas Strip",
+  "region": "Neon Reach Strip",
   "type": "Performer / Informant",
   "dialog": {
     "idle": [
@@ -10,6 +10,6 @@
     ]
   },
   "quests": ["side_nv_novasecrets"],
-  "faction": "Lucky 38",
+  "faction": "The Spire",
   "notes": "Knows secrets from VIPs; helps uncover FizzCo plots."
 }

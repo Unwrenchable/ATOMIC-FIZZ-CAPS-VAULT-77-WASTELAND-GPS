@@ -1,7 +1,7 @@
 {
   "id": "npc_jax_lena_cross",
   "name": "Lena Cross",
-  "region": "New Vegas Strip",
+  "region": "Neon Reach Strip",
   "type": "Runner / Courier / Hacker",
   "dialog": {
     "idle": [

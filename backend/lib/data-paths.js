@@ -21,6 +21,23 @@ function resolveDataFile(relPath) {
   return dataCandidates(relPath)[0];
 }
 
+function resolveDataDir(relDir) {
+  const clean = String(relDir || "").replace(/^[/\\]+/, "");
+  const candidates = [
+    path.join(ROOT, "frontend", "data", clean),
+    path.join(ROOT, "public", "data", clean),
+    path.join(ROOT, "backend", "public", "data", clean),
+  ];
+  for (const dir of candidates) {
+    try {
+      if (fs.existsSync(dir) && fs.statSync(dir).isDirectory()) return dir;
+    } catch (_) {
+      /* try the next layout */
+    }
+  }
+  return candidates[0];
+}
+
 function readJsonData(relPath, fallback = null) {
   const file = resolveDataFile(relPath);
   try {
@@ -61,6 +78,7 @@ module.exports = {
   ROOT,
   dataCandidates,
   resolveDataFile,
+  resolveDataDir,
   readJsonData,
   normalizeSolanaRpc,
   sanitizeSolanaEnv,

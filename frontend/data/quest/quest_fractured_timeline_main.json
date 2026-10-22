@@ -4,19 +4,19 @@
   "type": "main_quest",
   "difficulty": "legendary",
   "level_required": 1,
-  "description": "Reality itself has shattered. The Mojave exists simultaneously with the Commonwealth, Capital Wasteland, and Appalachia. All eras of the wasteland coexist in impossible harmony. You must discover why - and whether to preserve or destroy this fractured world.",
+  "description": "Reality itself has shattered. The Cinder Basin exists simultaneously with the Commonwealth, Capital Wasteland, and Appalachia. All eras of the wasteland coexist in impossible harmony. You must discover why - and whether to preserve or destroy this fractured world.",
   
   "lore": {
-    "summary": "A mysterious convergence has merged all Fallout timelines into a single reality. Pre-war experiments, the Institute's teleportation tech, and FizzCo's quantum resonance devices have created a temporal nexus centered in the Mojave. Players can now experience quests from 2161 (FO1), 2241 (FO2), 2277 (FO3), 2281 (FO:NV), 2287 (FO4), and 2102-2103 (FO76) all at once.",
+    "summary": "A mysterious convergence has merged all wasteland timelines into a single reality. Pre-war experiments, the Institute's teleportation tech, and FizzCo's quantum resonance devices have created a temporal nexus centered in the Cinder Basin. Players can now experience quests from 2161 (FO1), 2241 (FO2), 2277 (FO3), 2281 (FO:NV), 2287 (FO4), and 2102-2103 (FO76) all at once.",
     "canonWarning": "This is an alternate reality fan experience. Timeline inconsistencies are intentional and part of the game's unique design.",
-    "fracturedRealityExplanation": "In this world, the Master's army marches while the Institute hunts synths. Caesar's Legion raids while the Enclave rebuilds. Brotherhood chapters from all eras coexist. Time is broken, and that's the point."
+    "fracturedRealityExplanation": "In this world, the Master's army marches while the Institute hunts synths. Red Cohort raids while the Directorate rebuilds. Brotherhood chapters from all eras coexist. Time is broken, and that's the point."
   },
 
   "stages": [
     {
       "id": "stage1_awakening",
       "name": "Reality Fractures",
-      "description": "Strange occurrences across the wasteland: NCR soldiers report seeing Brotherhood airships that shouldn't exist, Institute synths appearing in pre-war ruins, and radio signals from multiple time periods broadcasting simultaneously.",
+      "description": "Strange occurrences across the wasteland: Frontier Compact soldiers report seeing Brotherhood airships that shouldn't exist, Institute synths appearing in pre-war ruins, and radio signals from multiple time periods broadcasting simultaneously.",
       "objectives": [
         {
           "id": "obj1_investigate_signals",
@@ -48,9 +48,9 @@
             "Elder Lyons (FO3 BoS)",
             "Elder Maxson (FO4 BoS)", 
             "Paladin Rahmani (FO76 BoS)",
-            "President Kimball (NCR)",
+            "President Kimball (Frontier Compact)",
             "Father (Institute)",
-            "Colonel Autumn (Enclave)",
+            "Colonel Autumn (Directorate)",
             "Caesar's Legate"
           ]
         },
@@ -108,30 +108,30 @@
     {
       "id": "stage4_final_choice",
       "name": "Reality's Decision",
-      "description": "You've learned the truth. The fractured timeline was created by a combination of FizzCo experiments, Institute teleportation, and Vault-Tec's secret temporal research. Now you must choose the fate of this impossible world.",
+      "description": "You've learned the truth. The fractured timeline was created by a combination of FizzCo experiments, Institute teleportation, and FizzTec's secret temporal research. Now you must choose the fate of this impossible world.",
       "objectives": [
         {
           "id": "obj1_final_choice",
           "text": "Make your final decision",
           "choices_explained": {
             "preserve": "Keep the fractured timeline intact. All eras coexist forever. Players can experience content from FO1, FO2, FO3, FO:NV, FO4, and FO76 simultaneously.",
-            "collapse": "Collapse the timeline back to a single era. Choose which Fallout timeline becomes 'real'.",
+            "collapse": "Collapse the timeline back to a single era. Choose which wasteland timeline becomes 'real'.",
             "stabilize": "Use Jax Voss and the Triangle to stabilize the fracture, creating permanent bridges between eras that players can traverse.",
-            "amplify": "Break reality further. Create NEW timeline branches with content that never existed in any Fallout game."
+            "amplify": "Break reality further. Create NEW timeline branches with content that never existed in any wasteland game."
           }
         }
       ],
       "endings": {
         "ending_preserve": {
           "name": "The Eternal Fracture",
-          "description": "You chose to preserve the fractured timeline. Now, wasteland residents from all eras coexist. The Master's super mutants fight alongside FO4 mutants. The Enclave from FO2 debates with FO3's Enclave. Players experience the ultimate Fallout mashup.",
+          "description": "You chose to preserve the fractured timeline. Now, wasteland residents from all eras coexist. The Master's super mutants fight alongside FO4 mutants. The Directorate from FO2 debates with FO3's Directorate. Players experience the ultimate wasteland mashup.",
           "gameplay_impact": "All timeline-specific quests remain available forever",
           "xp": 5000,
           "title": "Reality Keeper"
         },
         "ending_collapse": {
           "name": "The Great Reset",
-          "description": "You collapsed the timelines back to a single era. Reality returned to normal, but countless people and possibilities were erased. Only one Fallout timeline remains.",
+          "description": "You collapsed the timelines back to a single era. Reality returned to normal, but countless people and possibilities were erased. Only one wasteland timeline remains.",
           "gameplay_impact": "Player chooses which game's timeline becomes canon for their playthrough",
           "xp": 4000,
           "title": "Timeline Reaper"
@@ -145,7 +145,7 @@
         },
         "ending_amplify": {
           "name": "Chaos Unbound",
-          "description": "You shattered reality even further. Now timelines bleed into each other constantly. Deathclaws from FO1 appear in FO4's Commonwealth. Pre-war America flickers in and out of existence. Total beautiful chaos.",
+          "description": "You shattered reality even further. Now timelines bleed into each other constantly. Radtalons from FO1 appear in FO4's Commonwealth. Pre-war America flickers in and out of existence. Total beautiful chaos.",
           "gameplay_impact": "Random timeline events trigger constantly, maximum content chaos",
           "xp": 7000,
           "title": "Reality Breaker",

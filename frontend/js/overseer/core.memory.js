@@ -101,7 +101,7 @@
 
     if (sub === "pois") {
       if (!snap.poisDiscovered.length) {
-        overseerSay("No points of interest discovered. Mojave remains disappointingly unexplored.");
+        overseerSay("No points of interest discovered. Cinder Basin remains disappointingly unexplored.");
         return;
       }
       overseerSay("Points of interest discovered:");
@@ -112,7 +112,7 @@
     if (sub === "quests") {
       const entries = Object.entries(snap.questStates);
       if (!entries.length) {
-        overseerSay("No quests tracked yet. Vault-Tec narrative department weeps silently.");
+        overseerSay("No quests tracked yet. FizzTec narrative department weeps silently.");
         return;
       }
       overseerSay("Tracked quest states:");
@@ -136,7 +136,7 @@
     const sub = args[0].toLowerCase();
 
     if (sub === "override") {
-      overseerSay("Administrative override acknowledged. Vault-Tec frowns upon unauthorized empowerment.");
+      overseerSay("Administrative override acknowledged. FizzTec frowns upon unauthorized empowerment.");
       if (window.overseerPersonality && typeof window.overseerPersonality.speak === "function") {
         const line = await window.overseerPersonality.speak("admin override");
         overseerSay(line);

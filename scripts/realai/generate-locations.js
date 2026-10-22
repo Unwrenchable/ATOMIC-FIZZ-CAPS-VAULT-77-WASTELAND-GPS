@@ -3,7 +3,7 @@ import { realai } from "./realai-client.js";
 
 export async function main() {
   const prompt = `
-Generate 10 Fallout-style wasteland locations.
+Generate 10 wasteland-style wasteland locations.
 Each location must include:
 - Name
 - Region

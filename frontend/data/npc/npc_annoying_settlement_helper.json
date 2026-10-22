@@ -8,7 +8,7 @@
   "appearance": {
     "race": "Human",
     "age": 35,
-    "clothing": "Colonial duster (suspiciously similar to Minutemen outfit)",
+    "clothing": "Colonial duster (suspiciously similar to Settlement Watch outfit)",
     "hat": "Tricorn hat (worn backwards)",
     "weapon": "Laser musket (jams frequently)",
     "distinctive_features": "Overly earnest smile, clipboard permanently attached to hand"
@@ -113,9 +113,9 @@
         "last_words": "ANOTHER SETTLEMEEEEENT!"
       },
       {
-        "method": "Fed to deathclaw",
-        "description": "Deathclaw also finds him annoying, kills him faster than usual",
-        "last_words": "Wait, can I mark this deathclaw cave as a settlement?"
+        "method": "Fed to Radtalon",
+        "description": "Radtalon also finds him annoying, kills him faster than usual",
+        "last_words": "Wait, can I mark this Radtalon cave as a settlement?"
       }
     ],
     
@@ -187,7 +187,7 @@
   },
   
   "meta_commentary": {
-    "purpose": "Cathartic revenge for everyone who played Fallout 4",
+    "purpose": "Cathartic revenge for everyone who played the commonwealth wastes",
     "difference_from_preston": "You can ACTUALLY kill this one",
     "player_satisfaction": "Extremely high",
     "developer_note": "We heard your pain. This one is for you."
@@ -201,6 +201,6 @@
     "spared_garrison": "Saint of the Wasteland - Spared Garrison through entire game (0.1% of players)",
     "completed_all_quests": "Glutton for Punishment - Did every single one of his quests before killing him",
     "killed_him_immediately": "Speed Run - Killed Garrison within 5 minutes of meeting him",
-    "creative_kill": "Artistic Justice - Killed Garrison in creative way (fed to deathclaw, etc.)"
+    "creative_kill": "Artistic Justice - Killed Garrison in creative way (fed to Radtalon, etc.)"
   }
 }

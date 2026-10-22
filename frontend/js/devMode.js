@@ -145,10 +145,10 @@
     logDev("Radiation flushed");
   }
 
-  function giveStimpak() {
+  function giveFizzPak() {
     const item = {
-      id: "stimpak",
-      name: "Stimpak",
+      id: "FizzPak",
+      name: "FizzPak",
       type: "aid",
       effect: "heal",
       healAmt: 25,
@@ -170,7 +170,7 @@
     if (window.Game && typeof window.Game.ui?.renderInventory === "function") {
       window.Game.ui.renderInventory();
     }
-    logDev("Stimpak added to inventory");
+    logDev("FizzPak added to inventory");
   }
 
   function resetProgress() {
@@ -257,7 +257,7 @@
         <button class="dev-btn" data-action="healFull">Heal Full</button>
         <button class="dev-btn" data-action="radiate">Radiate +50%</button>
         <button class="dev-btn" data-action="flushRad">Flush Rad</button>
-        <button class="dev-btn" data-action="stimpak">Give Stimpak</button>
+        <button class="dev-btn" data-action="FizzPak">Give FizzPak</button>
         <button class="dev-btn" data-action="glitch">Toggle Glitch</button>
         <button class="dev-btn" data-action="reset" style="grid-column:1/-1;color:#ff4444;border-color:#ff4444;">⚠ Reset Progress</button>
       </div>
@@ -302,7 +302,7 @@
           case "healFull": healFull(); break;
           case "radiate":  radiatePlayer(50); break;
           case "flushRad": flushRad(); break;
-          case "stimpak":  giveStimpak(); break;
+          case "stimpak":  giveFizzPak(); break;
           case "glitch":   toggleGlitch(); break;
           case "reset":    resetProgress(); break;
         }

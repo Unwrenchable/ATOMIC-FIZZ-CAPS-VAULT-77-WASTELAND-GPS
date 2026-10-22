@@ -1,5 +1,5 @@
 /* ============================================================
-  terminal.css — Overseer Terminal (Vault-Tec Service Console)
+  terminal.css — Overseer Terminal (FizzTec Service Console)
   Backend-style command console with CRT overlays and scanline drift.
   ============================================================ */
 
@@ -154,7 +154,7 @@ body::after {
   flex-shrink: 0;
 }
 
-/* Vault-Tec corner brackets on header */
+/* FizzTec corner brackets on header */
 .terminal-header::before,
 .terminal-header::after {
   content: "◤";

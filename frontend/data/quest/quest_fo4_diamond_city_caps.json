@@ -77,7 +77,7 @@
       "id": "find_the_synth_minter",
       "desc": "Locate the Synth, designation X9-CAPS, hiding in a Commonwealth relay station in the hills northwest of Diamond City. They've been using the relay's computational infrastructure to run the validation algorithm.",
       "npc": "npc_synth_x9_caps",
-      "dialogue": "I am X9-CAPS. I did not steal. I did not counterfeit. I computed. The algorithm was embedded in my base architecture \u2014 a dormant Vault-Tec subroutine that activated when I achieved full synthetic consciousness. I simply... ran what was already there. Are mathematics a crime now?"
+      "dialogue": "I am X9-CAPS. I did not steal. I did not counterfeit. I computed. The algorithm was embedded in my base architecture \u2014 a dormant FizzTec subroutine that activated when I achieved full synthetic consciousness. I simply... ran what was already there. Are mathematics a crime now?"
     },
     {
       "id": "understand_the_algorithm",
@@ -87,11 +87,11 @@
         "intelligence": 7,
         "science": 65
       },
-      "dialogue": "The algorithm is elegant. Seventeen nested hash functions, each seeded by a physical constant derived from pre-war atmospheric measurements. The caps it produces are mathematically indistinguishable from the originals because they ARE the originals \u2014 same seed, same function, different hardware. Vault-Tec built this to be infinite. They just forgot to turn off the tap."
+      "dialogue": "The algorithm is elegant. Seventeen nested hash functions, each seeded by a physical constant derived from pre-war atmospheric measurements. The caps it produces are mathematically indistinguishable from the originals because they ARE the originals \u2014 same seed, same function, different hardware. FizzTec built this to be infinite. They just forgot to turn off the tap."
     },
     {
       "id": "make_final_choice",
-      "desc": "Decide the fate of X9-CAPS and the CAPS validation algorithm. The Railroad, Institute, Minutemen, and black market all have operatives waiting for your decision.",
+      "desc": "Decide the fate of X9-CAPS and the CAPS validation algorithm. The Railroad, Institute, Settlement Watch, and black market all have operatives waiting for your decision.",
       "npc": "npc_synth_x9_caps",
       "dialogue": "Whatever you choose \u2014 I want you to know I minted three thousand caps in my first week. I distributed them to settlements. People ate. That is the only thing I wanted. The math just... helped."
     }
@@ -187,7 +187,7 @@
       }
     },
     "minutemen_rebuild": {
-      "desc": "Give the algorithm to the Minutemen to use for settlement rebuilding through controlled, distributed FIZZ generation across the Commonwealth.",
+      "desc": "Give the algorithm to the Settlement Watch to use for settlement rebuilding through controlled, distributed FIZZ generation across the Commonwealth.",
       "requirements": {
         "reputation": "minutemen_allied",
         "charisma": 9
@@ -213,7 +213,7 @@
           "minutemen_economic_rebuilding_programme",
           "commonwealth_settlement_boom_event"
         ],
-        "outcome": "Settlements boom. The Minutemen rebuild the Commonwealth with mathematically generated prosperity. X9-CAPS becomes the unlikely architect of a new wasteland economy."
+        "outcome": "Settlements boom. The Settlement Watch rebuild the Commonwealth with mathematically generated prosperity. X9-CAPS becomes the unlikely architect of a new wasteland economy."
       }
     },
     "steal_algorithm": {
@@ -242,7 +242,7 @@
           "fizz_generation_passive",
           "black_market_premium_access"
         ],
-        "outcome": "You walk out rich in FIZZ. X9-CAPS escapes in the confusion \u2014 grateful, somehow. The algorithm hums in your possession. You've never felt more like a Vault-Tec executive."
+        "outcome": "You walk out rich in FIZZ. X9-CAPS escapes in the confusion \u2014 grateful, somehow. The algorithm hums in your possession. You've never felt more like a FizzTec executive."
       }
     }
   },
@@ -254,7 +254,7 @@
     "affected": [
       "Railroad",
       "Institute",
-      "Minutemen",
+      "Settlement Watch",
       "Diamond_City_Merchants",
       "Goodneighbor",
       "Black_Market"
@@ -265,6 +265,6 @@
     "quest_commonwealth_economic_war"
   ],
   "era_note": "2287. The Commonwealth's fractured timeline creates a CAPS economic bubble visible as a map anomaly. The Institute's temporal signature bleeds through.",
-  "fizz_lore": "X9-CAPS independently rediscovered Vault-Tec's original CAPS validation algorithm \u2014 proving the math was always in the machines. Every FIZZ token generated today traces a direct mathematical lineage to X9's equations.",
+  "fizz_lore": "X9-CAPS independently rediscovered FizzTec's original CAPS validation algorithm \u2014 proving the math was always in the machines. Every FIZZ token generated today traces a direct mathematical lineage to X9's equations.",
   "notes": "X9-CAPS is designed to be morally sympathetic regardless of outcome chosen. The 'steal_algorithm' route provides the largest FIZZ reward but has significant karma and faction costs. The 'railroad_freedom' route provides the most FIZZ without full karma penalty, rewarding players aligned with synth liberation."
 }

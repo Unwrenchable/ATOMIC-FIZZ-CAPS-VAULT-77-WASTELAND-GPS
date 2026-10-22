@@ -118,7 +118,7 @@
   }
 
   /**
-   * Show a non-blocking Pip-Boy styled confirmation dialog.
+   * Show a non-blocking Pocket-Boy styled confirmation dialog.
    * Returns a Promise that resolves to true (OK) or false (Cancel).
    * Falls back to native confirm() if DOM is not available.
    *
@@ -822,7 +822,7 @@
           ">
             <div style="text-align:center;margin-bottom:18px;">
               <div style="color:#00ff41;font-size:18px;letter-spacing:0.15em;font-weight:bold;">⬡ CONNECT WALLET ⬡</div>
-              <div style="color:#008822;font-size:11px;letter-spacing:0.1em;margin-top:4px;">VAULT-TEC AUTHENTICATION TERMINAL</div>
+              <div style="color:#008822;font-size:11px;letter-spacing:0.1em;margin-top:4px;">FIZZTEC AUTHENTICATION TERMINAL</div>
             </div>
             <div id="walletOptionsList">${walletRows}</div>
             <button id="walletSelectorCancel" style="

@@ -119,7 +119,7 @@
       }
     },
     "side_with_ncr": {
-      "desc": "Side with the NCR for order and stability.",
+      "desc": "Side with the Frontier Compact for order and stability.",
       "requirements": {
         "reputation_ncr": 30
       },
@@ -137,11 +137,11 @@
             "ranger_armor"
           ]
         },
-        "outcome": "The NCR controls the factory. Caps are regulated. You gain favor with the Republic."
+        "outcome": "The Frontier Compact controls the factory. Caps are regulated. You gain favor with the Republic."
       }
     },
     "side_with_legion": {
-      "desc": "Help Caesar's Legion secure the factory.",
+      "desc": "Help Red Cohort secure the factory.",
       "requirements": {
         "reputation_legion": 30
       },
@@ -217,7 +217,7 @@
   },
   "factions": {
     "affected": [
-      "NCR",
+      "Frontier Compact",
       "Legion",
       "Raiders",
       "Settlers",

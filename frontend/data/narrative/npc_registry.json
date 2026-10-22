@@ -168,7 +168,7 @@
       "title": "The Strip Runner",
       "dialog_file": "dialog_lena_cross.json",
       "npc_file": "npc_jax_lena_cross.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "quest_nv_convergence_signs",
         "side_jax_lostsignal"
@@ -227,7 +227,7 @@
       "title": "The Performer",
       "dialog_file": "dialog_nova_lane.json",
       "npc_file": "npc_nv_nova_lane.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "side_nv_novasecrets"
       ]
@@ -283,7 +283,7 @@
       "title": "The Strategist",
       "dialog_file": "dialog_silas_reed.json",
       "npc_file": "npc_nv_silas_reed.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "quest_nv_convergence_signs"
       ]
@@ -1412,7 +1412,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_dealer_dex.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "side_nv_dealerfavor"
       ]
@@ -1479,7 +1479,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_fizzco_halden_pierce.json",
-      "region": "Mojave",
+      "region": "Cinder Basin",
       "quest_ids": [
         "side_glow_dark",
         "quest_formula_77"
@@ -1511,7 +1511,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_fizzco_liora_vance.json",
-      "region": "Mojave",
+      "region": "Cinder Basin",
       "quest_ids": [
         "quest_fizz_awakens",
         "quest_formula_77"
@@ -1721,7 +1721,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_mojave_juno.json",
-      "region": "Mojave",
+      "region": "Cinder Basin",
       "quest_ids": [
         "quest_mojave_vegas_pull"
       ]
@@ -1889,7 +1889,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_r3.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "side_nv_robotdelivery"
       ]
@@ -1911,7 +1911,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_f9.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "quest_nv_replicant"
       ]
@@ -2003,7 +2003,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_grinder.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "side_nv_arena"
       ]
@@ -3632,7 +3632,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_lucky_lark.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "side_nv_larkrumors"
       ]
@@ -4277,7 +4277,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_mira.json",
-      "region": "Lucky 38",
+      "region": "The Spire",
       "quest_ids": [
         "side_nv_lucky38gossip"
       ]
@@ -4459,7 +4459,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_nina_volt.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "quest_nv_powerlines"
       ]
@@ -4858,7 +4858,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_fizzco_rex77.json",
-      "region": "Mojave",
+      "region": "Cinder Basin",
       "quest_ids": [
         "side_robot_remembered",
         "quest_platinum_cap"
@@ -4870,7 +4870,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_razorjack.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "side_nv_gangpressure"
       ]
@@ -5887,7 +5887,7 @@
       "title": null,
       "dialog_file": null,
       "npc_file": "npc_nv_tessa.json",
-      "region": "New Vegas Strip",
+      "region": "Neon Reach Strip",
       "quest_ids": [
         "side_nv_favors",
         "side_nv_striprumors"

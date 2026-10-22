@@ -381,7 +381,7 @@ safeMount("/api/quest-endings", api("quest-endings"));
 safeMount("/api/claim-survival", api("claim-survival"));
 safeMount("/api/player-survived", api("player-survived"));
 
-// Buy Stimpak with CAPS burn
+// Buy FizzPak with CAPS burn
 safeMount("/api/buy-stimpak", api("buy-stimpak"));
 
 // Overseer AI proxy (Hugging Face / OpenAI compatible)

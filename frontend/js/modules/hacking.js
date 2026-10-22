@@ -1,7 +1,7 @@
 // public/js/modules/hacking.js
 // ------------------------------------------------------------
 // Atomic Fizz Caps – Terminal Hacking Minigame
-// Fallout-style password guessing with likeness hints
+// wasteland-style password guessing with likeness hints
 //
 // Exposes: Game.modules.hacking
 // ------------------------------------------------------------
@@ -82,14 +82,14 @@
   // Terminal hacking flavour text
   // ----------------------------------------------------------
   const HACK_PROMPTS = [
-    ">>> RobCo Industries Terminal v2.2.0.3 — WELCOME <<<",
+    ">>> FizzCo Industries Terminal v2.2.0.3 — WELCOME <<<",
     ">>> ROBCO INDUSTRIES (TM) UNIFIED OPERATING SYSTEM <<<",
     ">>> PASSWORD REQUIRED. PLEASE ENTER PASSWORD. <<<",
-    ">>> VAULT-TEC SECURITY PROTOCOL ACTIVE <<<",
+    ">>> FIZZTEC SECURITY PROTOCOL ACTIVE <<<",
     ">>> ENCLAVE DEFENSE NETWORK — ACCESS RESTRICTED <<<",
     ">>> BROTHERHOOD OF STEEL TERMINAL INTERFACE <<<",
     ">>> INSTITUTE MAINFRAME — AUTHORIZATION REQUIRED <<<",
-    ">>> NCR COMMAND CONSOLE — CLEARANCE NEEDED <<<",
+    ">>> FRONTIER COMMAND CONSOLE — CLEARANCE NEEDED <<<",
     ">>> CAESAR'S LEGION DATABASE — PASSWORD PROTECTED <<<",
     ">>> BOS PALADIN TERMINAL — HOLOTAG REQUIRED <<<"
   ];

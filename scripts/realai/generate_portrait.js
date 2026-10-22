@@ -1,7 +1,7 @@
 import realAI from "./realai-client.js";
 
 async function generateNPCPortrait(npc) {
-  const prompt = `${npc.name}, ${npc.visual.gender} ${npc.visual.age} ${npc.role}, ${npc.visual.notable.join(", ")}, Fallout wasteland portrait, bust-up, stylized concept art, neon green CRT glow, thick outlines, gritty shading, subtle scanlines, Pip-Boy color palette, rugged clothing, dust and scratches, centered composition, 4:5 aspect ratio, not photorealistic`;
+  const prompt = `${npc.name}, ${npc.visual.gender} ${npc.visual.age} ${npc.role}, ${npc.visual.notable.join(", ")}, wasteland portrait, bust-up, stylized concept art, neon green CRT glow, thick outlines, gritty shading, subtle scanlines, Pocket-Boy color palette, rugged clothing, dust and scratches, centered composition, 4:5 aspect ratio, not photorealistic`;
 
   console.log("Generating portrait for:", npc.name);
   console.log("Prompt:", prompt);

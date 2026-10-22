@@ -19,7 +19,7 @@
     },
     {
       "id": "survive_ambush",
-      "description": "Protect Eli from hunters at the old highway rest stop — they believe the book is a Vault-Tec code",
+      "description": "Protect Eli from hunters at the old highway rest stop — they believe the book is a FizzTec code",
       "reward": { "xp": 60 }
     },
     {
@@ -56,7 +56,7 @@
       "id": "ending_stolen",
       "description": "The hunters succeeded. The book is gone. Eli doesn't rage — he sits down and starts reciting from memory.",
       "reward": "None — but Eli's oral recitation, if recorded, becomes a rare holotape collectible",
-      "consequence": "The hunters sell the book to a collector in New Vegas who never reads it. Eli's voice spreads further than the pages ever would have."
+      "consequence": "The hunters sell the book to a collector in Neon Reach who never reads it. Eli's voice spreads further than the pages ever would have."
     }
   ]
 }

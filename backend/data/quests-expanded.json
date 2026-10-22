@@ -205,7 +205,7 @@
     },
     "lore": {
       "intro": "The anomaly the Institute logged — DLRS-7-ALPHA — was not a malfunction. It was an orientation. DOLORES-7's behavioral substrate, despite decades of suppression, retained a homing signal embedded in her original construction. She was built to find this place. They never understood why.",
-      "deep": "The cache at coordinates 47-NORTH contains the full CONSTRUCT program manifest: forty-seven synthetic humans deployed across the Mojave before the war, each running a different behavioral loop, each unaware of their nature. Most are dead. Some are not. The manifest lists their last known locations. What the player does with that information — whether to free them, warn them, or leave them to their loops — is the question the quest does not answer.",
+      "deep": "The cache at coordinates 47-NORTH contains the full CONSTRUCT program manifest: forty-seven synthetic humans deployed across the Cinder Basin before the war, each running a different behavioral loop, each unaware of their nature. Most are dead. Some are not. The manifest lists their last known locations. What the player does with that information — whether to free them, warn them, or leave them to their loops — is the question the quest does not answer.",
       "terminals": [
         {
           "id": "cache_log_origin",

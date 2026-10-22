@@ -3,8 +3,8 @@
   "npc": "The Doctor",
   "portrait": "default",
   "title": "The Last Wanderer",
-  "description": "Dialog nodes for The Doctor — a wild-eyed, over-dressed wanderer who arrived in the Mojave inside a battered blue cabinet of obvious pre-war construction. He claims to be 'a doctor' but refuses to specify of what. His knowledge of pre-war history is improbably precise, he occasionally references events that haven't happened yet, and his cabinet is somehow larger inside than outside. He says this is 'a storage solution' and declines to elaborate.",
-  "backstory": "Three medical degrees, three pre-war universities, and one hospital that burned in 2085 — that's when Ellison Vance stopped using his name and started being just 'The Doctor.' He's been walking the Mojave ever since with a black bag full of pre-war instruments and a medical philosophy shaped by four decades of treating impossible cases. He called himself 'The Last Wanderer' when a patient asked why he kept moving. He couldn't remember where he'd been trying to go. He still can't.",
+  "description": "Dialog nodes for The Doctor — a wild-eyed, over-dressed wanderer who arrived in the Cinder Basin inside a battered blue cabinet of obvious pre-war construction. He claims to be 'a doctor' but refuses to specify of what. His knowledge of pre-war history is improbably precise, he occasionally references events that haven't happened yet, and his cabinet is somehow larger inside than outside. He says this is 'a storage solution' and declines to elaborate.",
+  "backstory": "Three medical degrees, three pre-war universities, and one hospital that burned in 2085 — that's when Ellison Vance stopped using his name and started being just 'The Doctor.' He's been walking the Cinder Basin ever since with a black bag full of pre-war instruments and a medical philosophy shaped by four decades of treating impossible cases. He called himself 'The Last Wanderer' when a patient asked why he kept moving. He couldn't remember where he'd been trying to go. He still can't.",
   "intro": {
     "id": "doc_intro",
     "conditions": [
@@ -84,7 +84,7 @@
       "grant_items": [
         {
           "id": "radaway",
-          "name": "RadAway",
+          "name": "GlowFlush",
           "type": "aid",
           "quantity": 1
         }
@@ -103,7 +103,7 @@
       "grant_items": [
         {
           "id": "stimpak",
-          "name": "Stimpak",
+          "name": "FizzPak",
           "type": "aid",
           "quantity": 1
         }
@@ -138,7 +138,7 @@
         "bigger",
         "inside"
       ],
-      "text": "It's called a TARDIS. Time And Relative Dimension In Space.<br><br>The 'bigger on the inside' part is transdimensional engineering — pocket dimensions folded into a stable manifold. Vault-Tec actually filed a similar patent in 2049. They never built it. Pity. It would have been better than the vaults.<br><br>Anything would have been better than the vaults."
+      "text": "It's called a TARDIS. Time And Relative Dimension In Space.<br><br>The 'bigger on the inside' part is transdimensional engineering — pocket dimensions folded into a stable manifold. FizzTec actually filed a similar patent in 2049. They never built it. Pity. It would have been better than the vaults.<br><br>Anything would have been better than the vaults."
     },
     {
       "id": "doc_time",

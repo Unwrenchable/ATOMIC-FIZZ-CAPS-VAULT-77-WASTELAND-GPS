@@ -1,6 +1,6 @@
 {
   "id": "stimpak",
-  "name": "Stimpak",
+  "name": "FizzPak",
   "ingredients": [
     { "id": "herb", "qty": 3 },
     { "id": "chem_vial", "qty": 1 }

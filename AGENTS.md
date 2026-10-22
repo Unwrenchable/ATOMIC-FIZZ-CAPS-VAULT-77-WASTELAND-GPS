@@ -7,17 +7,17 @@ Higher priority than generic advice or other agent context files.
 ---
 
 ## The Pitch (memorize the voice)
-Post-nuclear capitalism meets real GPS scavenging. Survivors walk the Mojave (or your local irradiated equivalent), claim real-world POIs for glowing Atomic Fizz Caps (FIZZ token on Solana), battle mutants, craft, level up, and chat with the **Overseer AI**. Everything is dripping with Vault-Tec corporate doublespeak, dark humor, radiation puns, and "the future of yesterday."
+Post-nuclear capitalism meets real GPS scavenging. Survivors walk the Cinder Basin (or your local irradiated equivalent), claim real-world POIs for glowing Atomic Fizz Caps (FIZZ token on Solana), battle mutants, craft, level up, and chat with the **Overseer AI**. Everything is dripping with FizzTec corporate doublespeak, dark humor, radiation puns, and "the future of yesterday."
 
 Tone for all generated content (NPC dialogue, lore, quest text, Overseer responses, commit messages that touch game text):
 - Bureaucratic, upbeat, slightly menacing corporate voice.
-- Heavy use of ☢️ , "citizen", "shareholder", "Vault-Tec is not responsible for...", "mild radiation poisoning as a feature".
-- Fallout + meme + Solana degen energy.
+- Heavy use of ☢️ , "citizen", "shareholder", "FizzTec is not responsible for...", "mild radiation poisoning as a feature".
+- wasteland + meme + Solana degen energy.
 
 ---
 
 ## Architecture Overview (2026)
-- **Frontend**: Mostly vanilla JS + Leaflet (custom Fallout map, fog of war, POI claiming, radio, V.A.T.S. battles, inventory, wallet). `frontend/` (or public/? see tree). Static-ish but served, with service worker.
+- **Frontend**: Mostly vanilla JS + Leaflet (custom wasteland map, fog of war, POI claiming, radio, V.A.T.S. battles, inventory, wallet). `frontend/` (or public/? see tree). Static-ish but served, with service worker.
 - **Backend**: Node.js (ESM), Express-style in `backend/server.js`, heavy route modules in `backend/api/`, business logic in `backend/lib/`, `systems/`, `server/`.
   - Real-time elements, Redis for some state/scripts, KMS signing, Solana rewards/minting.
   - AI layer: Overseer, NPC dialogue, narrative, quests via **RealAI provider** (sibling repo) + direct Grok fallbacks.
@@ -59,8 +59,8 @@ npm run test:load:full
 anchor build
 # deploy to devnet etc. (see docs/deployment/)
 
-# Avatars / Grok direct (see GROK_AVATAR_GUIDE.md etc.)
-node grok-avatars.js ...
+# Avatars / Grok direct (see legacy/avatar-pipeline/GROK_AVATAR_GUIDE.md etc.)
+node legacy/avatar-pipeline/grok-avatars.js ...
 node scripts/enhance-avatar-assets.js
 ```
 
@@ -76,7 +76,7 @@ See `package.json` scripts, `docs/development/CANONICAL_GENERATOR_WORKFLOW.md`, 
 
 ## Development Rules
 1. **Content generation**: Use the canonical RealAI scripts first. Only fall back to raw Grok or HF when the provider doesn't support the style yet. Update both repos when schemas change.
-2. **Tone & Lore**: All player-facing text, NPC lines, quest descriptions, Overseer replies, item flavor must pass the "Vault-Tec press release" filter. Use the extended lore in `backend/data/lore-*.json`.
+2. **Tone & Lore**: All player-facing text, NPC lines, quest descriptions, Overseer replies, item flavor must pass the "FizzTec press release" filter. Use the extended lore in `backend/data/lore-*.json`.
 3. **MCP superpower**: When an AI (Grok included) is working here, prefer calling the `vault77-game` MCP tools (via search_tool / use_tool) to inspect live players, locations, quests, worldstate instead of guessing from static files. Same for solana MCP for on-chain state.
 4. **RealAI first for game AI**: Route Overseer, character gen, quest gen, narrative through the sibling RealAI provider. Keep direct Grok calls for image/video/creative where the structured provider doesn't fit.
 5. **Backend changes**: Add routes in `backend/api/`, logic in `backend/lib/` or `systems/`. Update OpenAPI-ish if present. Test with `test-all-endpoints.sh` or the playtest agent.

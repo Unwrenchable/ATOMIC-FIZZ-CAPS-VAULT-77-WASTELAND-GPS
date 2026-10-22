@@ -30,22 +30,22 @@ const ENCOUNTERS = {
     ]
   },
   rad_scorpion: {
-    name: 'Radscorpion Attack',
+    name: 'Glowsting Attack',
     enemies: [
-      { id: 'radscorpion', name: 'Radscorpion', hp: 65, damage: 12, level: 4 }
+      { id: 'glowsting', name: 'Glowsting', hp: 65, damage: 12, level: 4 }
     ]
   },
   supermutant_patrol: {
-    name: 'Super Mutant Patrol',
+    name: 'Glowborn Patrol',
     enemies: [
-      { id: 'supermutant',       name: 'Super Mutant',       hp: 120, damage: 20, level: 8 },
+      { id: 'supermutant',       name: 'Glowborn',       hp: 120, damage: 20, level: 8 },
       { id: 'supermutant_hound', name: 'Mutant Hound',        hp: 45,  damage: 10, level: 6 }
     ]
   },
   deathclaw: {
-    name: 'Deathclaw Encounter',
+    name: 'Radtalon Encounter',
     enemies: [
-      { id: 'deathclaw', name: 'Deathclaw', hp: 250, damage: 45, level: 15 }
+      { id: 'deathclaw', name: 'Radtalon', hp: 250, damage: 45, level: 15 }
     ]
   },
   ghoul_horde: {
@@ -265,7 +265,7 @@ async function shotElement(page, selector, label) {
   return file;
 }
 
-// ── Activate a Pip-Boy panel and screenshot ────────────────────
+// ── Activate a Pocket-Boy panel and screenshot ────────────────────
 async function openPanel(page, panelId) {
   await page.evaluate((id) => {
     document.querySelectorAll('.pipboy-panel').forEach(el => {
@@ -617,7 +617,7 @@ async function clearOverlays(page) {
 //  MAIN
 // ═══════════════════════════════════════════════════════════════
 (async () => {
-  console.log('\n☢ WastelandQA Visual Playtest — Vault-Tec QA Division\n');
+  console.log('\n☢ WastelandQA Visual Playtest — FizzTec QA Division\n');
   console.log(`   Output directory: ${OUT_DIR}\n`);
 
   const browser = await chromium.launch({
@@ -626,7 +626,7 @@ async function clearOverlays(page) {
   });
 
   const context = await browser.newContext({
-    viewport: { width: 430, height: 760 },  // Mobile-first — Pip-Boy frame
+    viewport: { width: 430, height: 760 },  // Mobile-first — Pocket-Boy frame
     deviceScaleFactor: 2
   });
 
@@ -646,8 +646,8 @@ async function clearOverlays(page) {
     await shot(page, '01_game_loaded_map');
     console.log('  ✓ Game page loaded\n');
 
-    // ── 2. Pip-Boy panels ─────────────────────────────────────
-    console.log('Phase 2: Pip-Boy panel screenshots...');
+    // ── 2. Pocket-Boy panels ─────────────────────────────────────
+    console.log('Phase 2: Pocket-Boy panel screenshots...');
     const panels = ['panel-stat', 'panel-items', 'panel-quests', 'panel-exchange', 'panel-battle'];
     const panelLabels = ['stat', 'items', 'quests', 'exchange', 'battle_idle'];
     for (let i = 0; i < panels.length; i++) {
@@ -706,7 +706,7 @@ async function clearOverlays(page) {
     await injectBattle(page, PLAYER_LOADOUTS.fresh_vault_dweller, ENCOUNTERS.raider_ambush);
     await shotElement(page, '#panel-battle', '05a_battle_active_raider_ambush');
 
-    // Veteran vs Deathclaw
+    // Veteran vs Radtalon
     await bootstrapGame(page, PLAYER_LOADOUTS.combat_veteran);
     await dismissBootScreen(page); await openPanel(page, 'panel-battle');
     await injectBattle(page, PLAYER_LOADOUTS.combat_veteran, ENCOUNTERS.deathclaw);
@@ -724,7 +724,7 @@ async function clearOverlays(page) {
     await injectBattle(page, PLAYER_LOADOUTS.combat_veteran, ENCOUNTERS.supermutant_patrol);
     await shotElement(page, '#panel-battle', '05d_battle_active_supermutants');
 
-    // Radscorpion mid-fight (player took hits)
+    // Glowsting mid-fight (player took hits)
     await bootstrapGame(page, PLAYER_LOADOUTS.fresh_vault_dweller);
     await dismissBootScreen(page); await openPanel(page, 'panel-battle');
     await injectBattleAfterAttack(page, PLAYER_LOADOUTS.fresh_vault_dweller, ENCOUNTERS.rad_scorpion, 18, 10);

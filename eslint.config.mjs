@@ -11,6 +11,8 @@ export default [
       "public/vendor/**",
       "public/js/leaflet.js",
       "public/js/leaflet-fix.js",
+      "frontend/js/leaflet.js",
+      "frontend/js/leaflet-fix.js",
       "agents/**",
       "**/*.min.js",
       // ESM-only files that cannot be parsed with sourceType:"commonjs"
@@ -30,7 +32,7 @@ export default [
       "generate_sidequest_npcs.js",
       "generate_world.js",
       "integrate_world.js",
-      "verify-hf-api-usage.js",
+      "legacy/avatar-pipeline/verify-hf-api-usage.js",
       "scripts/**",
       "systems/**",
       "workers/**",
@@ -163,5 +165,16 @@ export default [
       // in the codebase (e.g. try { el.focus() } catch(e) {}).
       "no-empty": ["error", { "allowEmptyCatch": true }],
     },
+  },
+
+  // ES-module browser files (use import/export)
+  {
+    files: [
+      "frontend/js/overseer/index.js",
+      "frontend/js/overseer/realai-brain.js",
+      "frontend/scripts/world/npcController.js",
+      "ai/agents/overseer.js",
+    ],
+    languageOptions: { sourceType: "module" },
   },
 ];

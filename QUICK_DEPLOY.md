@@ -214,5 +214,5 @@ The frontend automatically detects localhost and points to `http://localhost:300
 ## Support
 
 - **Detailed Deployment**: See `docs/deployment/RENDER_VERCEL_DEPLOYMENT_GUIDE.md`
-- **Rollback Context**: See `ROLLBACK_SUMMARY.md`
+- **Rollback Context**: See `docs/archive/ROLLBACK_SUMMARY.md`
 - **Architecture Docs**: See `docs/deployment/DEPLOYMENT.md`
