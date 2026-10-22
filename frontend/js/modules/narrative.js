@@ -1029,6 +1029,25 @@
       default: { head: "head_base.svg",   eyes: "eyes_set1.svg",     nose: "nose_straight.svg", mouth: "mouth_thin.svg", hair: "hair_short.svg",     shirt: "shirt_jacket.svg"         }
     },
 
+    // Painted heads (Game.Avatar.PAINTED_NPC via partsFor) win over the legacy vector presets.
+    // Lookup order: portrait field, then the dialog id (dialog_<npc>), then _NPC_PARTS, then default.
+    _resolvePortraitParts(dialog, dialogId) {
+      const portraitId = String((dialog && dialog.portrait) || "").toLowerCase();
+      const dialogKey = String(dialogId || "").toLowerCase().replace(/^dialog_/, "");
+      const keys = [portraitId, dialogKey].filter(k => k && k !== "default");
+      const avatar = (typeof window !== "undefined" && window.Game && window.Game.Avatar) || null;
+      if (avatar && typeof avatar.partsFor === "function") {
+        for (const k of keys) {
+          const painted = avatar.partsFor(k, null);
+          if (painted) return painted;
+        }
+      }
+      for (const k of keys) {
+        if (this._NPC_PARTS[k]) return this._NPC_PARTS[k];
+      }
+      return this._NPC_PARTS.default;
+    },
+
     async _loadNPCPortrait(dialog) {
       const container = document.getElementById("dialogPortraitContainer");
       if (!container) return;
@@ -1040,8 +1059,7 @@
       this._currentNPCPortrait = null;
       container.innerHTML = '<span style="font-size:48px;opacity:0.4;">⏳</span>';
 
-      const portraitId = (dialog.portrait || "").toLowerCase();
-      const parts = this._NPC_PARTS[portraitId] || this._NPC_PARTS.default;
+      const parts = this._resolvePortraitParts(dialog, this.currentDialogId);
 
       // Build an animated SMIL portrait using the avatar SVG system + SMIL overlays.
       // This gives us NPC-specific appearance (correct hair/eyes/shirt) plus
