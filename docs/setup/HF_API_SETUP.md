@@ -161,7 +161,7 @@ This is **intentional** and allows the bot to work even without the API key!
 
 ### Change the AI Model
 
-Edit `/public/js/overseer/core.personality.js`:
+Edit `/frontend/js/overseer/core.personality.js`:
 
 ```javascript
 // Around line 8-10
@@ -176,7 +176,7 @@ const DEFAULT_MODEL = "mistralai/Mixtral-8x7B-Instruct-v0.1";
 
 ### Adjust Response Style
 
-The personality system sends context with each request. Edit the prompt in `/public/js/overseer/core.personality.js`:
+The personality system sends context with each request. Edit the prompt in `/frontend/js/overseer/core.personality.js`:
 
 ```javascript
 // Around line 40-50
