@@ -69,3 +69,7 @@ These still depict Fallout-specific art. They were left on disk on purpose.
 | `frontend/img/icons/vault.svg` | Winged gear with a radiation trefoil. Green, not blue/yellow, but the mark is the Vault-Tec logo silhouette. |
 
 Not flagged: `frontend/img/icons/pipboy-grid.svg` (plain grid), phosphor raster portraits under `frontend/assets/avatars-raster/`, `frontend/favicon.png`, and `frontend/wallet/branding/logo.png` (Atomic Fizz bottle).
+
+## B.L.A.S.T.E.D. (2026-10-22)
+Player-facing stat labels are now B.L.A.S.T.E.D. (Brawn, Lookout, Absorb, Swagger, Tinker, Escape, Dumb Luck). Internal keys S/P/E/C/I/A/L are kept for saves, the backend and battle math. Source of labels: frontend/js/game/vitals.js.
+

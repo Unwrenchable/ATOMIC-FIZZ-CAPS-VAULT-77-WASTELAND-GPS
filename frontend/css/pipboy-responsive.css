@@ -274,6 +274,14 @@ body {
   height: clamp(1.4rem, 2vw, 2rem);
 }
 
+/* B.L.A.S.T.E.D. rows: track is fixed width, the fill child carries the value */
+.special-row { display: flex; flex-wrap: wrap; align-items: center; }
+.special-bar { position: relative; flex: 1 1 auto; min-width: 4rem; background: rgba(0,255,65,0.12); overflow: hidden; }
+.special-fill { position: absolute; left: 0; top: 0; bottom: 0; background: #00ff41; transition: width .15s; }
+.special-line { flex-basis: 100%; font-size: 0.75em; opacity: 0.7; padding-left: clamp(2rem, 3vw, 3rem); }
+.character-portrait-img { width: 128px; height: 128px; display: block; margin: 4px auto; image-rendering: auto; }
+.cc-unspent-warn { color: #ffb000; border: 1px solid #ffb000; padding: 6px 8px; margin: 6px 0; font-size: 0.9em; }
+
 /* ============================================================
    MOBILE SPECIFIC (phones and small tablets)
    ============================================================ */

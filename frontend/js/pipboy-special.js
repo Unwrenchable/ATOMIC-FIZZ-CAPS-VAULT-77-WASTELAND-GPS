@@ -19,17 +19,25 @@ window.Pipboy = window.Pipboy || {};
         "Content-Type": "application/json",
         ...(sessionId ? { Authorization: `Bearer ${sessionId}` } : {}),
       },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, special: currentSpecial() }),
     });
     const data = await res.json();
     if (!data.ok) throw new Error("create failed");
     return data.profile;
   }
 
+  function currentSpecial() {
+    return window.Game && Game.Vitals ? Game.Vitals.get() : undefined;
+  }
+
   async function apiRespec(wallet) {
+    const sessionId = localStorage.getItem("sessionId") || "";
     const res = await fetch(`${window.API_BASE}/api/player/respec`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(sessionId ? { Authorization: `Bearer ${sessionId}` } : {}),
+      },
       body: JSON.stringify({ wallet }),
     });
     const data = await res.json();
@@ -45,6 +53,11 @@ window.Pipboy = window.Pipboy || {};
     const lvlEl = document.getElementById("stat-level");
     if (lvlEl) lvlEl.textContent = profile.level || 1;
 
+    // One renderer: Game.Vitals (PlayerState is the source of truth).
+    if (window.Game && Game.Vitals) {
+      Game.Vitals.adoptProfile(profile);
+      return;
+    }
     const special = profile.special || {};
     VITALS_KEYS.forEach((k) => {
       const value = special[k] ?? 5;
@@ -92,13 +105,13 @@ window.Pipboy = window.Pipboy || {};
   async function handleRespec(wallet) {
     const statusEl = document.getElementById("respecStatus");
     if (!wallet) {
-      if (statusEl) statusEl.textContent = "Connect wallet first.";
+      if (statusEl) statusEl.textContent = "Sign in first.";
       return;
     }
 
     if (
       !confirm(
-        "Burn a FizzTec Recalibration Token to rebuild VITALS?\nThis action cannot be undone."
+        "Burn a FizzTec Recalibration Token to rebuild B.L.A.S.T.E.D.?\nThis action cannot be undone."
       )
     )
       return;
@@ -113,8 +126,10 @@ window.Pipboy = window.Pipboy || {};
         return;
       }
 
-      if (statusEl) statusEl.textContent = "VITALS reset.";
-      renderSpecial(data.profile);
+      if (statusEl) statusEl.textContent = "B.L.A.S.T.E.D. reset.";
+      if (window.Game && Game.Vitals && data.profile && data.profile.special) {
+        Game.Vitals.apply(data.profile.special, { push: false });
+      } else renderSpecial(data.profile);
       window.Pipboy.currentProfile = data.profile;
     } catch (err) {
       console.error("[Pipboy] respec error", err);
