@@ -1,6 +1,7 @@
 [
   {
     "id": "combat_armor",
+    "slot": "chest",
     "name": "Combat Armor",
     "rarity": "rare",
     "spawnPOI": "Jacobstown",
@@ -65,6 +66,7 @@
   },
   {
     "id": "mcCarran_trooper_armor",
+    "slot": "chest",
     "name": "McCarran Trooper Armor",
     "rarity": "rare",
     "spawnPOI": "McCarran Airport",
@@ -105,6 +107,7 @@
   },
   {
     "id": "megaton_security_armor",
+    "slot": "chest",
     "name": "Megaton Security Armor",
     "rarity": "rare",
     "spawnPOI": "Megaton",
@@ -145,6 +148,7 @@
   },
   {
     "id": "novac_patrol_vest",
+    "slot": "chest",
     "name": "Novac Patrol Vest",
     "rarity": "rare",
     "spawnPOI": "Novac Motel",
@@ -181,6 +185,7 @@
   },
   {
     "id": "reinforced_vault_suit",
+    "slot": "chest",
     "name": "Reinforced Vault Suit",
     "rarity": "rare",
     "spawnPOI": "Vault 13",
@@ -221,6 +226,7 @@
   },
   {
     "id": "searchlight_guard_uniform",
+    "slot": "chest",
     "name": "Searchlight Guard Uniform",
     "rarity": "rare",
     "spawnPOI": "Searchlight Church",
@@ -531,6 +537,7 @@
   },
   {
     "id": "advanced_combat_armor",
+    "slot": "chest",
     "name": "Advanced Combat Armor",
     "rarity": "epic",
     "spawnPOI": "Hidden Valley Bunker",
@@ -595,6 +602,7 @@
   },
   {
     "id": "elite_vault_suit",
+    "slot": "chest",
     "name": "Elite Vault Suit",
     "rarity": "epic",
     "spawnPOI": "Vault 77",
@@ -651,6 +659,7 @@
   },
   {
     "id": "riot_gear",
+    "slot": "chest",
     "name": "Riot Gear",
     "rarity": "epic",
     "spawnPOI": "Camp Searchlight",
@@ -1118,6 +1127,7 @@
   },
   {
     "id": "phoenix_plate",
+    "slot": "chest",
     "name": "Phoenix Plate",
     "rarity": "legendary",
     "spawnPOI": "Black Mountain",
@@ -1182,6 +1192,7 @@
   },
   {
     "id": "warden_exosuit",
+    "slot": "chest", "covers": ["arms", "legs"],
     "name": "Warden Exosuit",
     "rarity": "legendary",
     "spawnPOI": "Hidden Valley Bunker",
@@ -2046,6 +2057,7 @@
   },
   {
     "id": "cowboy_hat",
+    "slot": "head",
     "name": "Cowboy Hat",
     "rarity": "common",
     "spawnPOI": "Shady Sands",
@@ -2055,6 +2067,7 @@
   },
   {
     "id": "vault_111_jumpsuit",
+    "slot": "chest",
     "name": "Vault 111 Jumpsuit",
     "rarity": "common",
     "spawnPOI": "Vault 111",
@@ -2103,6 +2116,7 @@
   },
   {
     "id": "leather_jacket",
+    "slot": "chest",
     "name": "Leather Jacket",
     "rarity": "common",
     "spawnPOI": "Dustwell Saloon",
@@ -2112,6 +2126,7 @@
   },
   {
     "id": "dust_mask",
+    "slot": "head",
     "name": "Dust Mask",
     "rarity": "common",
     "spawnPOI": "Nipton Trading Post",
@@ -2121,6 +2136,7 @@
   },
   {
     "id": "scavenger_vest",
+    "slot": "chest",
     "name": "Scavenger Vest",
     "rarity": "common",
     "spawnPOI": "Shady Sands",
@@ -2130,6 +2146,7 @@
   },
   {
     "id": "cloth_robe",
+    "slot": "chest",
     "name": "Tattered Cloth Robe",
     "rarity": "common",
     "spawnPOI": "Vault 111",
@@ -2139,6 +2156,7 @@
   },
   {
     "id": "makeshift_shield",
+    "slot": "accessory",
     "name": "Makeshift Shield",
     "rarity": "common",
     "spawnPOI": "Primm Rollercoaster",
@@ -2229,6 +2247,7 @@
   },
   {
     "id": "cowboy_boots",
+    "slot": "legs",
     "name": "Cowboy Boots",
     "rarity": "common",
     "spawnPOI": "Shady Sands",
@@ -2265,6 +2284,7 @@
   },
   {
     "id": "cloth_gloves",
+    "slot": "arms",
     "name": "Cloth Gloves",
     "rarity": "common",
     "spawnPOI": "Vault 111",
@@ -2322,6 +2342,7 @@
   },
   {
     "id": "metal_armor",
+    "slot": "chest",
     "name": "Metal Armor",
     "rarity": "rare",
     "spawnPOI": "Vault 19",
@@ -2358,6 +2379,7 @@
   },
   {
     "id": "raider_spike_armor",
+    "slot": "chest",
     "name": "Raider Spike Armor",
     "rarity": "rare",
     "spawnPOI": "Cottonwood Cove",
@@ -2379,6 +2401,7 @@
   },
   {
     "id": "vault3_jumpsuit",
+    "slot": "chest",
     "name": "Vault 3 Jumpsuit",
     "rarity": "rare",
     "spawnPOI": "Vault 3",
@@ -2388,6 +2411,7 @@
   },
   {
     "id": "vault19_jumpsuit",
+    "slot": "chest",
     "name": "Vault 19 Jumpsuit",
     "rarity": "rare",
     "spawnPOI": "Vault 19",
@@ -2397,6 +2421,7 @@
   },
   {
     "id": "farharbor_coat",
+    "slot": "chest",
     "name": "Far Harbor Raincoat",
     "rarity": "rare",
     "spawnPOI": "Far Harbor",
@@ -2481,6 +2506,7 @@
   },
   {
     "id": "t51_power_armor",
+    "slot": "chest", "covers": ["arms", "legs"],
     "name": "T-51 Reactor Harness",
     "rarity": "epic",
     "spawnPOI": "Vault 34",
@@ -2541,6 +2567,7 @@
   },
   {
     "id": "riot_gear_elite",
+    "slot": "chest",
     "name": "Elite Riot Gear",
     "rarity": "epic",
     "spawnPOI": "Vault 22",
@@ -2577,6 +2604,7 @@
   },
   {
     "id": "hazmat_suit",
+    "slot": "chest",
     "name": "Hazmat Suit",
     "rarity": "epic",
     "spawnPOI": "REPCONN Test Site",
@@ -2586,6 +2614,7 @@
   },
   {
     "id": "casino_guard_uniform",
+    "slot": "chest",
     "name": "Casino Guard Uniform",
     "rarity": "epic",
     "spawnPOI": "The Spire",
@@ -2595,6 +2624,7 @@
   },
   {
     "id": "riot_shield",
+    "slot": "accessory",
     "name": "Riot Shield",
     "rarity": "epic",
     "spawnPOI": "Vault 22",
@@ -2622,6 +2652,7 @@
   },
   {
     "id": "diamondcity_baseball_armor",
+    "slot": "chest",
     "name": "Diamond City Baseball Armor",
     "rarity": "epic",
     "spawnPOI": "Diamond City",
@@ -2649,6 +2680,7 @@
   },
   {
     "id": "riot_helmet",
+    "slot": "head",
     "name": "Riot Helmet",
     "rarity": "epic",
     "spawnPOI": "Vault 22",
@@ -2667,6 +2699,7 @@
   },
   {
     "id": "reinforced_metal_armor",
+    "slot": "chest",
     "name": "Reinforced Metal Armor",
     "rarity": "epic",
     "spawnPOI": "Vault 19",
@@ -2685,6 +2718,7 @@
   },
   {
     "id": "riot_gloves",
+    "slot": "arms",
     "name": "Riot Gloves",
     "rarity": "epic",
     "spawnPOI": "Vault 22",
@@ -2703,6 +2737,7 @@
   },
   {
     "id": "riot_boots",
+    "slot": "legs",
     "name": "Riot Boots",
     "rarity": "epic",
     "spawnPOI": "Vault 22",
@@ -2721,6 +2756,7 @@
   },
   {
     "id": "hazmat_gloves",
+    "slot": "arms",
     "name": "Hazmat Gloves",
     "rarity": "epic",
     "spawnPOI": "REPCONN Test Site",
@@ -2730,6 +2766,7 @@
   },
   {
     "id": "hazmat_boots",
+    "slot": "legs",
     "name": "Hazmat Boots",
     "rarity": "epic",
     "spawnPOI": "REPCONN Test Site",
@@ -2760,6 +2797,7 @@
   },
   {
     "id": "riot_mask",
+    "slot": "head",
     "name": "Riot Mask",
     "rarity": "epic",
     "spawnPOI": "Vault 22",
@@ -2829,6 +2867,7 @@
   },
   {
     "id": "prototype_x01",
+    "slot": "chest", "covers": ["arms", "legs"],
     "name": "Prototype X-01 Reactor Harness",
     "rarity": "legendary",
     "spawnPOI": "Yucca Mountain",
@@ -2946,6 +2985,7 @@
   },
   {
     "id": "deathclaw_hide_armor",
+    "slot": "chest",
     "name": "Radtalon Hide Armor",
     "rarity": "legendary",
     "spawnPOI": "Dead Wind Cavern",
@@ -2985,6 +3025,7 @@
   },
   {
     "id": "dunwich_mask",
+    "slot": "head",
     "name": "Dunwich Mask of Madness",
     "rarity": "legendary",
     "spawnPOI": "Dunwich Building",
@@ -2994,6 +3035,7 @@
   },
   {
     "id": "pitt_forge_armor",
+    "slot": "chest",
     "name": "Pitt Forgemaster Armor",
     "rarity": "legendary",
     "spawnPOI": "The Pitt",
