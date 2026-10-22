@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // scripts/prebake_npc_videos.js
 // Pre-generates NPC videos using xAI once, uploads them to Cloudflare R2,
-// and writes a static manifest (public/data/npc-videos.json).
+// and writes a static manifest (frontend/data/npc-videos.json).
 //
 // Players get instant video from R2 CDN — zero per-player API cost.
 // R2 free tier: 10GB storage, free egress. Handles 1.4GB of all NPC videos.
@@ -45,8 +45,8 @@
 //      R2_BUCKET_NAME, R2_PUBLIC_URL to your .env
 //
 // Output:
-//   public/videos/npc/<npcId>_<nodeId>.mp4  — local cache (optional)
-//   public/data/npc-videos.json             — manifest with R2 URLs
+//   frontend/videos/npc/<npcId>_<nodeId>.mp4  — local cache (optional)
+//   frontend/data/npc-videos.json             — manifest with R2 URLs
 
 'use strict';
 
@@ -60,10 +60,10 @@ const { generateVideo } = require('../backend/lib/grok');
 // -----------------------------------------------------------------------
 // Paths
 // -----------------------------------------------------------------------
-const DIALOG_DIR    = path.resolve(__dirname, '../public/data/narrative');
-const VIDEO_OUT_DIR = path.resolve(__dirname, '../public/videos/npc');
-const MANIFEST_PATH = path.resolve(__dirname, '../public/data/npc-videos.json');
-const LORE_OVERRIDES_PATH = path.resolve(__dirname, '../public/data/narrative/npc_video_lore_overrides.json');
+const DIALOG_DIR    = path.resolve(__dirname, '../frontend/data/narrative');
+const VIDEO_OUT_DIR = path.resolve(__dirname, '../frontend/videos/npc');
+const MANIFEST_PATH = path.resolve(__dirname, '../frontend/data/npc-videos.json');
+const LORE_OVERRIDES_PATH = path.resolve(__dirname, '../frontend/data/narrative/npc_video_lore_overrides.json');
 
 // -----------------------------------------------------------------------
 // Config
@@ -651,7 +651,7 @@ async function main() {
 
   if (USE_R2) {
     console.log('   ✅  Videos are live on Cloudflare R2. Deploy the manifest:');
-    console.log('   git add public/data/npc-videos.json');
+    console.log('   git add frontend/data/npc-videos.json');
     console.log('   git commit -m "chore: update NPC video manifest"');
     console.log('   git push  →  done. Players get videos instantly.');
   } else {

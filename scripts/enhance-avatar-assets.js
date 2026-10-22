@@ -16,7 +16,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ASSETS_DIR = path.join(__dirname, '../public/assets/avatars');
+const ASSETS_DIR = path.join(__dirname, '../frontend/assets/avatars');
 
 // Enhanced SVG templates with wasteland aesthetic
 const enhancedAssets = {
