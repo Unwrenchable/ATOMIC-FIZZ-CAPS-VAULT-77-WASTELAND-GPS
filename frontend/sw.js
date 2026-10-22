@@ -3,7 +3,7 @@
 //
 // CACHE_VERSION: bump this string on every production deploy to invalidate
 // stale assets for all returning users.  Format: v{semver}-{YYYYMMDD}
-const CACHE_VERSION = 'v1.1.0-20260403';
+const CACHE_VERSION = 'v1.2.0-20261022a';
 const CACHE_NAME = `atomic-fizz-caps-${CACHE_VERSION}`;
 const OFFLINE_URL = '/';
 
