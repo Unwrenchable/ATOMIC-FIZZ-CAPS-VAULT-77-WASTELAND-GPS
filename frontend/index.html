@@ -102,6 +102,7 @@
     <script src="/js/modules/bridge-portal.js" defer></script>
     
     <!-- Pocket-Boy VITALS system -->
+    <script src="/js/game/vitals.js" defer></script>
     <script src="/js/pipboy-special.js" defer></script>
     <script src="/js/modules/nft-integration.js" defer></script>
 
@@ -347,20 +348,20 @@
                     <div class="panel-divider"></div>
 
                     <!-- VITALS -->
-                    <div class="panel-header" style="margin-top:10px;">VITALS</div>
+                    <div class="panel-header" style="margin-top:10px;">B.L.A.S.T.E.D.</div>
 
                     <div id="specialBlock">
-                      <div class="special-row"><span class="special-label">S</span><span class="special-bar" data-special-key="S"></span><span class="special-value" id="special-S">5</span></div>
-                      <div class="special-row"><span class="special-label">P</span><span class="special-bar" data-special-key="P"></span><span class="special-value" id="special-P">5</span></div>
-                      <div class="special-row"><span class="special-label">E</span><span class="special-bar" data-special-key="E"></span><span class="special-value" id="special-E">5</span></div>
-                      <div class="special-row"><span class="special-label">C</span><span class="special-bar" data-special-key="C"></span><span class="special-value" id="special-C">5</span></div>
-                      <div class="special-row"><span class="special-label">I</span><span class="special-bar" data-special-key="I"></span><span class="special-value" id="special-I">5</span></div>
-                      <div class="special-row"><span class="special-label">A</span><span class="special-bar" data-special-key="A"></span><span class="special-value" id="special-A">5</span></div>
-                      <div class="special-row"><span class="special-label">L</span><span class="special-bar" data-special-key="L"></span><span class="special-value" id="special-L">5</span></div>
+                      <div class="special-row" title="Brawn: Hit harder, haul more junk."><span class="special-label">B</span><span class="special-bar" data-special-key="S"></span><span class="special-value" id="special-S">5</span><span class="special-line" id="special-line-S">Brawn — Hit harder, haul more junk.</span></div>
+                      <div class="special-row" title="Lookout: Aim true, spot loot and ambushes first."><span class="special-label">L</span><span class="special-bar" data-special-key="P"></span><span class="special-value" id="special-P">5</span><span class="special-line" id="special-line-P">Lookout — Aim true, spot loot and ambushes first.</span></div>
+                      <div class="special-row" title="Absorb: Soak hits and rads."><span class="special-label">A</span><span class="special-bar" data-special-key="E"></span><span class="special-value" id="special-E">5</span><span class="special-line" id="special-line-E">Absorb — Soak hits and rads.</span></div>
+                      <div class="special-row" title="Swagger: Cheaper deals, loyal companions, smooth talk."><span class="special-label">S</span><span class="special-bar" data-special-key="C"></span><span class="special-value" id="special-C">5</span><span class="special-line" id="special-line-C">Swagger — Cheaper deals, loyal companions, smooth talk.</span></div>
+                      <div class="special-row" title="Tinker: Craft, hack, learn faster."><span class="special-label">T</span><span class="special-bar" data-special-key="I"></span><span class="special-value" id="special-I">5</span><span class="special-line" id="special-line-I">Tinker — Craft, hack, learn faster.</span></div>
+                      <div class="special-row" title="Escape: Move fast, sneak quiet, bail out of fights."><span class="special-label">E</span><span class="special-bar" data-special-key="A"></span><span class="special-value" id="special-A">5</span><span class="special-line" id="special-line-A">Escape — Move fast, sneak quiet, bail out of fights.</span></div>
+                      <div class="special-row" title="Dumb Luck: Crits, jackpots, weird stuff."><span class="special-label">D</span><span class="special-bar" data-special-key="L"></span><span class="special-value" id="special-L">5</span><span class="special-line" id="special-line-L">Dumb Luck — Crits, jackpots, weird stuff.</span></div>
                     </div>
 
                     <div id="respecRow" style="margin-top:10px;">
-                      <button id="respecBtn" class="pipboy-button">REBUILD VITALS (REQUIRES TOKEN)</button>
+                      <button id="respecBtn" class="pipboy-button">REBUILD B.L.A.S.T.E.D. (REQUIRES TOKEN)</button>
                       <div id="respecStatus"></div>
                     </div>
 

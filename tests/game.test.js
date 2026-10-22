@@ -138,7 +138,7 @@ test("every painted NPC's dialogue resolves to its painted head", () => {
 test("sw.js CACHE_VERSION is not the stale April value", () => {
   const sw = fs.readFileSync(path.join(FE, "sw.js"), "utf8");
   const v = /CACHE_VERSION = '([^']+)'/.exec(sw)[1];
-  assert.notStrictEqual(v, "v1.1.0-20260403");
+  assert.ok(!["v1.1.0-20260403", "v1.2.0-20261022a"].includes(v), "bump CACHE_VERSION when assets/data change");
 });
 
 if (require.main === module) {

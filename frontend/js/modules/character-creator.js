@@ -51,14 +51,15 @@
   }
 
   // VITALS stat metadata
+  // B.L.A.S.T.E.D. — internal keys stay S/P/E/C/I/A/L; `icon` picks the medallion art.
   const VITALS_STATS = [
-    { key: 'S', label: 'Strength',     abbr: 'STR', desc: 'Melee damage, carry weight' },
-    { key: 'P', label: 'Perception',   abbr: 'PER', desc: 'Attack accuracy, environmental awareness' },
-    { key: 'E', label: 'Endurance',    abbr: 'END', desc: 'Max HP, radiation resistance' },
-    { key: 'C', label: 'Charisma',     abbr: 'CHR', desc: 'Prices, companion morale, speech checks' },
-    { key: 'I', label: 'Intelligence', abbr: 'INT', desc: 'Crafting, hacking, XP gain' },
-    { key: 'A', label: 'Agility',      abbr: 'AGI', desc: 'Action points, sneaking, reload speed' },
-    { key: 'L', label: 'Luck',         abbr: 'LCK', desc: 'Critical hit chance, random events' }
+    { key: 'S', label: 'Brawn',     abbr: 'B', icon: 'STR', desc: 'Hit harder, haul more junk.' },
+    { key: 'P', label: 'Lookout',   abbr: 'L', icon: 'PER', desc: 'Aim true, spot loot and ambushes first.' },
+    { key: 'E', label: 'Absorb',    abbr: 'A', icon: 'END', desc: 'Soak hits and rads.' },
+    { key: 'C', label: 'Swagger',   abbr: 'S', icon: 'CHR', desc: 'Cheaper deals, loyal companions, smooth talk.' },
+    { key: 'I', label: 'Tinker',    abbr: 'T', icon: 'INT', desc: 'Craft, hack, learn faster.' },
+    { key: 'A', label: 'Escape',    abbr: 'E', icon: 'AGI', desc: 'Move fast, sneak quiet, bail out of fights.' },
+    { key: 'L', label: 'Dumb Luck', abbr: 'D', icon: 'LCK', desc: 'Crits, jackpots, weird stuff.' }
   ];
 
   const VITALS_TOTAL_POINTS = 21;
@@ -66,7 +67,7 @@
   const VITALS_MAX = 10;
 
   // ============================================================
-  // STAT MEDALLION ICONS - one original bottle-cap medallion per V.I.T.A.L.S. stat
+  // STAT MEDALLION ICONS - one original bottle-cap medallion per B.L.A.S.T.E.D. stat
   // viewBox="0 0 50 60". Gritty Atomic Fizz palette: rust rim, olive face, cream crimp,
   // dark ink glyph, grime noise. Ids are prefixed per stat (inline SVGs share one document).
   // ============================================================
@@ -591,7 +592,7 @@
                 <button class="cc-tab" data-category="eyes">04 EYES</button>
                 <button class="cc-tab" data-category="details">05 DETAILS</button>
                 <button class="cc-tab" data-category="extras">06 EXTRAS</button>
-                <button class="cc-tab" data-category="special">07 V.I.T.A.L.S.</button>
+                <button class="cc-tab" data-category="special">07 B.L.A.S.T.E.D.</button>
                 <button class="cc-tab" data-category="background">08 BACKGROUND</button>
                 <button class="cc-tab" data-category="traits">09 TRAITS</button>
               </div>
@@ -729,9 +730,9 @@
                   </div>
                 </div>
 
-                <!-- V.I.T.A.L.S. Section -->
+                <!-- B.L.A.S.T.E.D. Section -->
                 <div class="cc-category-section" data-category="special">
-                  <div class="cc-section-title">V.I.T.A.L.S. ATTRIBUTES</div>
+                  <div class="cc-section-title">B.L.A.S.T.E.D. ATTRIBUTES</div>
                   <div class="cc-section-hint">You have 21 points to distribute across 7 attributes. Minimum 1 per attribute, maximum 10. These affect combat, dialogue options, and crafting. You can rebalance at a FizzTec terminal later — costs caps.</div>
                   <div id="ccSpecialContent" class="cc-special-content"></div>
                 </div>
@@ -800,15 +801,29 @@
       document.getElementById('ccConfirmBtn').addEventListener('click', () => {
         currentAppearance.name = document.getElementById('ccNameInput').value || "Wanderer";
 
-        // Validate all V.I.T.A.L.S. points have been allocated before allowing confirm
+        // Validate all B.L.A.S.T.E.D. points have been allocated before allowing confirm
         const sp = currentAppearance.special || {};
         const used = VITALS_STATS.reduce((acc, s) => acc + ((sp[s.key] || 1) - 1), 0);
         const remaining = VITALS_TOTAL_POINTS - used;
         if (remaining > 0) {
-          alert(`You have ${remaining} unspent V.I.T.A.L.S. point${remaining > 1 ? 's' : ''}. Allocate all points before entering the Vault.`);
+          const msg = `You have ${remaining} unspent B.L.A.S.T.E.D. point${remaining > 1 ? 's' : ''}. Allocate all points before entering the Vault.`;
+          let warn = document.getElementById('ccUnspentWarn');
+          const btn = document.getElementById('ccConfirmBtn');
+          if (!warn && btn && btn.parentNode) {
+            warn = document.createElement('div');
+            warn.id = 'ccUnspentWarn';
+            warn.className = 'cc-unspent-warn';
+            warn.setAttribute('role', 'alert');
+            btn.parentNode.insertBefore(warn, btn);
+          }
+          if (warn) warn.textContent = msg;
+          if (typeof this._switchCategory === 'function') { try { this._switchCategory('special'); } catch (_) {} }
           return;
         }
         
+        const warnEl = document.getElementById('ccUnspentWarn');
+        if (warnEl) warnEl.remove();
+        // Single source of truth: PlayerState (+ backend via Game.Vitals on characterCreated)
         // Save to localStorage using base64 encoding for data integrity
         // This stores only cosmetic game preferences (avatar visual settings)
         const appearanceData = JSON.stringify(currentAppearance);
@@ -874,7 +889,7 @@
             eyes:       '▶ STEP 04 — Eye shape and color. Small details, big personality.',
             details:    '▶ STEP 05 — Optional scars and markings. The wasteland leaves marks.',
             extras:     '▶ STEP 06 — Accessories and voice type. Affects NPC first impressions.',
-            special:    '▶ STEP 07 — V.I.T.A.L.S. attributes. 21 points across 7 stats. Min 1, max 10.',
+            special:    '▶ STEP 07 — B.L.A.S.T.E.D. attributes. 21 points across 7 stats. Min 1, max 10.',
             background: '▶ STEP 08 — Origin background. Grants starting bonuses and faction modifiers.',
             traits:     '▶ STEP 09 — Character traits (up to 2). Every benefit has a drawback. Choose carefully.',
           };
@@ -1047,7 +1062,7 @@
     },
 
     // ============================================================
-    // RENDER V.I.T.A.L.S. TAB
+    // RENDER B.L.A.S.T.E.D. TAB
     // ============================================================
     _renderSpecialTab() {
       const container = document.getElementById('ccSpecialContent');
@@ -1067,7 +1082,7 @@
       let html = `
         <div class="cc-special-intro">
           <div class="cc-si-book-cover" aria-hidden="true"><div class="cc-si-book-title">SURVIVOR'S</div><div class="cc-si-book-special">TALLY</div></div>
-          <span class="cc-si-text">"Out here you get measured seven ways: your <strong>V.I.T.A.L.S.</strong>. Spend your points on whatever keeps you breathing. The wasteland collects on the rest."</span>
+          <span class="cc-si-text">"Out here you get measured seven ways: your <strong>B.L.A.S.T.E.D.</strong>. Spend your points on whatever keeps you breathing. The wasteland collects on the rest."</span>
         </div>
         <div class="cc-special-points-banner">
           <span class="cc-sp-label">POINTS REMAINING:</span>
@@ -1081,7 +1096,7 @@
         const dots  = Array.from({length: 10}, (_, i) => `<span class="cc-sp-dot${i < val ? ' filled' : ''}"></span>`).join('');
         html += `
           <div class="cc-special-row" data-stat="${escapeHtml(stat.key)}">
-            ${STAT_ICON_SVGS[stat.abbr] || ''}
+            ${STAT_ICON_SVGS[stat.icon] || ''}
             <div class="cc-sp-meta">
               <span class="cc-sp-abbr">${escapeHtml(stat.abbr)}</span>
               <span class="cc-sp-name">${escapeHtml(stat.label)}</span>
@@ -1152,6 +1167,9 @@
         `<span class="cc-sp-dot${i < newVal ? ' filled' : ''}"></span>`).join('');
       if (barEl)  barEl.style.width = `${newVal * 10}%`;
       if (ptsBanner) ptsBanner.textContent = newRemaining;
+      const cBtn = document.getElementById('ccConfirmBtn');
+      if (cBtn) cBtn.textContent = newRemaining > 0 ? `► ENTER VAULT (${newRemaining} PT${newRemaining > 1 ? 'S' : ''} LEFT)` : '► ENTER VAULT';
+      if (newRemaining <= 0) { const w = document.getElementById('ccUnspentWarn'); if (w) w.remove(); }
 
       // Update button states for all stats
       VITALS_STATS.forEach(s => {

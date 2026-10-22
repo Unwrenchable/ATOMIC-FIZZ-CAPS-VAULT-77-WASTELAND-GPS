@@ -1881,35 +1881,8 @@
   function updateStatDisplay() {
     console.log('[Stats] Updating stat display');
 
-    // Update VITALS stats bars
-    const specialStats = ['S', 'P', 'E', 'C', 'I', 'A', 'L'];
-    specialStats.forEach(stat => {
-      const valueEl = document.getElementById(`special-${stat}`);
-      const barEl = document.querySelector(`[data-special-key="${stat}"]`);
-
-      // Get current character VITALS values (from character creator or defaults)
-      let statValue = 5; // default
-      if (window.Game?.modules?.CharacterCreator) {
-        const cc = window.Game.modules.CharacterCreator;
-        // Try to get appearance from character creator
-        let appearance = null;
-        if (typeof cc.loadSavedAppearance === 'function') {
-          appearance = cc.loadSavedAppearance();
-        }
-        if (!appearance && typeof cc.getAppearance === 'function') {
-          appearance = cc.getAppearance();
-        }
-        if (appearance?.special && appearance.special[stat]) {
-          statValue = appearance.special[stat];
-        }
-      }
-
-      if (valueEl) valueEl.textContent = statValue;
-      if (barEl) {
-        // Update the visual bar (assuming CSS handles the styling)
-        barEl.style.width = `${(statValue / 10) * 100}%`;
-      }
-    });
+    // B.L.A.S.T.E.D. bars + portrait: single renderer reading PlayerState
+    if (window.Game?.Vitals) window.Game.Vitals.render();
 
     // Update perks display if available
     const perksContainer = document.getElementById('character-perks-list');
@@ -1932,31 +1905,6 @@
         }).join('');
       } else {
         perksContainer.innerHTML = '<div class="no-perks">No perks selected</div>';
-      }
-    }
-
-    // Update character appearance preview if available
-    const appearancePreview = document.getElementById('character-appearance-preview');
-    if (appearancePreview && window.Game?.modules?.CharacterCreator) {
-      const cc = window.Game.modules.CharacterCreator;
-      let appearance = null;
-      if (typeof cc.loadSavedAppearance === 'function') {
-        appearance = cc.loadSavedAppearance();
-      }
-      if (!appearance && typeof cc.getAppearance === 'function') {
-        appearance = cc.getAppearance();
-      }
-
-      if (appearance) {
-        let previewText = [];
-        if (appearance.hairStyle) previewText.push(`Hair: ${appearance.hairStyle}`);
-        if (appearance.hairColor) previewText.push(`Hair Color: ${appearance.hairColor}`);
-        if (appearance.eyeColor) previewText.push(`Eyes: ${appearance.eyeColor}`);
-        if (appearance.skinTone) previewText.push(`Skin: ${appearance.skinTone}`);
-        if (appearance.faceShape) previewText.push(`Face: ${appearance.faceShape}`);
-        appearancePreview.innerHTML = previewText.length > 0 ?
-          previewText.join('<br>') :
-          'Default appearance';
       }
     }
 

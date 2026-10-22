@@ -175,6 +175,10 @@
             if (typeof _state.special[k] !== 'number') _state.special[k] = VITALS_DEFAULTS[k];
           });
         }
+        // B.L.A.S.T.E.D. save migration (v2): pull creator stats into the single store
+        if (window.Game && Game.Vitals && typeof Game.Vitals.migrateState === 'function') {
+          Game.Vitals.migrateState(_state, localStorage);
+        }
         // Ensure survival object exists with defaults
         if (!_state.survival || typeof _state.survival !== 'object') {
           _state.survival = { radiation: 0, hunger: 100, thirst: 100, lastUpdated: Date.now() };
@@ -1286,6 +1290,7 @@
     syncWithBackend,
     receiveItemFromNPC,
     getSpecial: function () { return getEffectiveSpecial(); },
+    getBaseSpecial: function () { return _state && _state.special ? { ..._state.special } : { S:5,P:5,E:5,C:5,I:5,A:5,L:5 }; },
     getKarma: function () { return _state ? _state.karma || 0 : 0; },
     modifyKarma: function (delta) {
       if (!_state) return;
@@ -1299,10 +1304,12 @@
     setSpecial: function (key, value) {
       if (!_state || !_state.special) return;
       if (typeof value !== 'number') return;
+      if (!['S','P','E','C','I','A','L'].includes(key)) return;
       _state.special[key] = Math.max(1, Math.min(10, Math.round(value)));
       _dirty = true;
       syncGamePlayerReferences();
       saveToStorage();
+      triggerStatsUpdate();
     },
     getPerks,
     addPerk,
