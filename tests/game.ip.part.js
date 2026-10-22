@@ -6,7 +6,7 @@ const { test, sandbox, load, json, FE, ROOT, assert } = require("./game.test.js"
 
 const BANNED = [/Cooper Howard/, /\bVault (13|111|76|87)\b/, /Commonwealth/, /\bNCR\b/, /New California Republic/, /McCarran/, /Megaton/,
   /Novac/, /\bT-51/, /\bX-01\b/, /Dunwich/, /Far Harbor/, /Diamond City/, /\bthe Pitt\b/, /Sole Survivor/, /Brotherhood of Steel/,
-  /Vault-Tec/i, /Nuka-Cola/, /Pip-Boy/, /Shady Sands/, /Freeside/, /Rivet City/, /Mr\. House/, /\bFallout\b(?![_\-])/];
+  /Vault-Tec/i, /Nuka-Cola/, /Pip-Boy/, /Shady Sands/, /Freeside/, /Rivet City/, /Mr\. House/, /\bFallout\b(?![_-])/];
 
 function walk(dir, out) {
   for (const f of fs.readdirSync(dir)) {
