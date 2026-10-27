@@ -340,10 +340,11 @@ Once you have your KMS key ARN, add it to your `.env` file:
 ```bash
 # AWS KMS Configuration
 AWS_REGION=us-west-2
-KMS_SIGNING_KEY_ID=arn:aws:kms:us-west-2:123456789012:key/abcd1234-ef56-7890-abcd-ef1234567890
-KMS_SIGNING_ALGORITHM=ECDSA_SHA_256  # For ECC_SECG_P256K1 (recommended)
-# OR
-# KMS_SIGNING_ALGORITHM=ED25519_SHA_512  # For ECC_NIST_EDWARDS25519 (newer)
+# On-chain loot vouchers require Ed25519, one key id per cluster.
+# The unsuffixed KMS_SIGNING_KEY_ID is ignored for voucher v1.
+KMS_SIGNING_ALGORITHM=ED25519_SHA_512
+# KMS_SIGNING_KEY_ID_DEVNET=arn:aws:kms:us-west-2:123456789012:key/devnet-only
+# KMS_SIGNING_KEY_ID_MAINNET=arn:aws:kms:us-west-2:123456789012:key/mainnet-only
 ```
 
 **AWS Credentials** (one of these methods):

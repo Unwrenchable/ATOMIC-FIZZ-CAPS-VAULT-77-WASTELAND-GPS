@@ -150,21 +150,37 @@ This document provides a comprehensive alphabetical reference of all environment
 
 ### KMS_SIGNING_ALGORITHM
 - **Type**: String
-- **Required**: No (only if using AWS KMS)
-- **Default**: `ECDSA_SHA_256` (for ECC_SECG_P256K1 keys, most compatible)
-- **Description**: AWS KMS signing algorithm to use with your key
-- **Options**:
-  - `ECDSA_SHA_256` - For ECC_SECG_P256K1 keys (recommended - most compatible)
-  - `ED25519_SHA_512` - For ECC_NIST_EDWARDS25519 keys (newer, faster, requires recent AWS SDK)
-- **Example**: `ECDSA_SHA_256`
-- **Note**: Must match your KMS key spec. See [docs/AWS_KMS_SETUP.md](docs/AWS_KMS_SETUP.md) for details
+- **Required**: Yes when KMS signs on-chain vouchers
+- **Default**: `ED25519_SHA_512`
+- **Description**: AWS KMS signing algorithm. On-chain loot vouchers reject anything except Ed25519.
+- **Example**: `ED25519_SHA_512`
+- **Note**: Must be an `ECC_NIST_EDWARDS25519` key. See [docs/setup/AWS_KMS_SETUP.md](AWS_KMS_SETUP.md).
 
-### KMS_SIGNING_KEY_ID
+### KMS_SIGNING_KEY_ID_DEVNET / _LOCALNET / _MAINNET
 - **Type**: String
-- **Required**: No (only if using AWS KMS)
-- **Description**: AWS KMS key ARN for signing operations
+- **Required**: One of these, or the matching `SERVER_SECRET_KEY_*`, for the active cluster
+- **Description**: Per-cluster KMS key ARN. The unsuffixed `KMS_SIGNING_KEY_ID` is ignored for voucher v1. The same ARN must not be configured for two clusters.
 - **Example**: `arn:aws:kms:us-west-2:123456789012:key/abcd-efgh`
-- **Setup Guide**: See [docs/AWS_KMS_SETUP.md](docs/AWS_KMS_SETUP.md) for complete instructions on creating and retrieving your KMS key ARN
+
+### SOLANA_CLUSTER
+- **Type**: String
+- **Required**: Yes (`devnet`, `mainnet-beta`, or `localnet`)
+- **Description**: Selects the voucher domain tag, the server key env name, and the pinned program id.
+
+### FIZZCAPS_PROGRAM_ID
+- **Type**: String
+- **Required**: Yes. Must equal the pinned id for `SOLANA_CLUSTER`.
+- **Description**: Devnet `GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc`. Localnet `HnWTnCKuKhJa6cXj4ZocW2D8Jtf4f5QFb6f6UnkF27FB`. Mainnet `DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP`.
+
+### SERVER_SECRET_KEY_DEVNET / _LOCALNET / _MAINNET
+- **Type**: Base58 64-byte Ed25519 secret
+- **Required**: When that cluster is not using KMS
+- **Description**: Per-cluster local signer. Legacy `SERVER_SECRET_KEY` is ignored for voucher v1.
+
+### VOUCHER_TTL_SECONDS
+- **Type**: Integer
+- **Default / hard cap**: 300
+- **Description**: Voucher lifetime. Values above 300 are clamped. The on-chain program rejects a longer window.
 
 ### LOOT_COOLDOWN_SECONDS
 - **Type**: Integer

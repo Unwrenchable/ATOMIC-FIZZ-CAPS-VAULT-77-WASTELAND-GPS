@@ -1,4 +1,8 @@
 name: API smoke test
+
+permissions:
+  contents: read
+
 on:
   push:
     branches:

@@ -706,6 +706,8 @@ dependencies = [
  "anchor-lang",
  "anchor-spl",
  "mpl-token-metadata",
+ "solana-sdk-ids",
+ "solana-sha256-hasher",
 ]
 
 [[package]]

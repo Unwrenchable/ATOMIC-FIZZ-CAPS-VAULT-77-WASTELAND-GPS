@@ -8,7 +8,7 @@ skip-lint = false
 fizzcaps_onchain = "GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc"
 
 [programs.localnet]
-fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
+fizzcaps_onchain = "HnWTnCKuKhJa6cXj4ZocW2D8Jtf4f5QFb6f6UnkF27FB"
 
 [programs.mainnet]
 fizzcaps_onchain = "DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP"
@@ -21,6 +21,11 @@ cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "npm test"
+test = "cd anchor-tests && npx ts-mocha -p ./tsconfig.json -t 1000000 'tests/**/*.ts'"
+test-root = "npm test"
+
+[[test.genesis]]
+address = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+program = "anchor-tests/fixtures/mpl_token_metadata.so"
 
 [hooks]

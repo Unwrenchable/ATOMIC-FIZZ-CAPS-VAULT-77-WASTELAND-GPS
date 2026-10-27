@@ -46,22 +46,48 @@ function createInMemoryClient() {
     return typeof v === "string" ? v : JSON.stringify(v);
   }
 
+  function purgeIfExpired(key) {
+    const exp = expiry.get(key);
+    if (exp == null || exp > Date.now()) return false;
+    store.delete(key);
+    hashes.delete(key);
+    sets.delete(key);
+    lists.delete(key);
+    expiry.delete(key);
+    return true;
+  }
+
+  function stringAlive(key) {
+    purgeIfExpired(key);
+    return store.has(key);
+  }
+
   return {
     isFallback: true,
     async get(key) {
-      return store.has(key) ? store.get(key) : null;
+      return stringAlive(key) ? store.get(key) : null;
+    },
+    async getdel(key) {
+      if (!stringAlive(key)) return null;
+      const value = store.get(key);
+      store.delete(key);
+      expiry.delete(key);
+      return value;
     },
     async set(key, value, opts) {
       const val = toStr(value);
-      // BUG FIX: honour NX option (set only if Not eXists) for replay protection
-      if (opts && opts.NX && store.has(key)) {
-        return null; // NX: key already exists, do not overwrite
+      // Honour NX (set only if not exists). Drop expired keys first so a TTL
+      // that the timer has not fired yet does not block the next SET NX.
+      if (opts && opts.NX && stringAlive(key)) {
+        return null;
       }
       store.set(key, val);
       if (opts && opts.EX) {
         const ttlMs = Number(opts.EX) * 1000;
         expiry.set(key, Date.now() + ttlMs);
-        setTimeout(() => { store.delete(key); expiry.delete(key); }, ttlMs);
+        // unref: expiry is also checked on read. A live timer must not pin
+        // the process (tests, one-shot scripts) for the full TTL.
+        setTimeout(() => { store.delete(key); expiry.delete(key); }, ttlMs).unref();
       }
       return "OK";
     },
@@ -142,7 +168,7 @@ function createInMemoryClient() {
         hashes.delete(key);
         sets.delete(key);
         expiry.delete(key);
-      }, ttlMs);
+      }, ttlMs).unref();
       return 1;
     },
     async ttl(key) {
@@ -446,6 +472,17 @@ async function set(k, v, opts) {
     handleRedisError(err, 'set');
   }
 }
+async function getdel(k) {
+  try {
+    const c = await ensureClient();
+    const full = key(k);
+    if (c.isFallback) return c.getdel(full);
+    if (typeof c.getDel === "function") return c.getDel(full);
+    return c.sendCommand(["GETDEL", full]);
+  } catch (err) {
+    handleRedisError(err, "getdel");
+  }
+}
 async function del(k) {
   try {
     const c = await ensureClient();
@@ -640,6 +677,7 @@ module.exports = {
   // top-level methods (so require('./redis') returns an object with get/set/hget/hset etc.)
   get,
   set,
+  getdel,
   del,
   incr,
   decr,
@@ -674,6 +712,7 @@ const redisWrapper = {
   // lower-case
   get,
   set,
+  getdel,
   del,
   incr,
   decr,

@@ -49,6 +49,9 @@ async function updateLocation(player, lat, lng) {
 // ------------------------------------------------------------
 
 /**
+ * NOT for on-chain vouchers. Legacy redeem pipe format only.
+ * On-chain claims use backend/lib/voucherV1.js (169-byte LootVoucherV1).
+ *
  * Serialize a voucher object to a deterministic byte buffer for signing/verification.
  * Fields are joined with "|" to avoid ambiguity across fields.
  *

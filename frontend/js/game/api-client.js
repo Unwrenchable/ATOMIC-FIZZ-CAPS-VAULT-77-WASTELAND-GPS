@@ -385,9 +385,14 @@
   /**
    * Get loot voucher
    */
-  async function getLootVoucher() {
+  async function getLootVoucher(latitude, longitude, locationHint) {
     const result = await apiRequest("/api/loot-voucher", {
-      method: "POST"
+      method: "POST",
+      body: JSON.stringify({
+        latitude,
+        longitude,
+        locationHint
+      })
     });
 
     if (!result.ok) {
