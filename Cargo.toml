@@ -1,6 +1,8 @@
 [workspace]
 resolver = "2"
 members = ["programs/fizzcaps_onchain"]
+# Own lockfile. solana-program-test must not be resolved by cargo-build-sbf.
+exclude = ["programs/claim-loot-local-test"]
 
 
 [profile.release]

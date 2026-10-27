@@ -3,7 +3,7 @@
 //
 // CACHE_VERSION: bump this string on every production deploy to invalidate
 // stale assets for all returning users.  Format: v{semver}-{YYYYMMDD}
-const CACHE_VERSION = 'v1.2.4-20261022e';
+const CACHE_VERSION = 'v1.2.5-20261027a';
 const CACHE_NAME = `atomic-fizz-caps-${CACHE_VERSION}`;
 const OFFLINE_URL = '/';
 
@@ -49,6 +49,7 @@ const PRECACHE_ASSETS = [
   '/js/modules/factions.js',
   '/js/modules/mintables.js',
   '/js/modules/web3-wallet-adapter.js',
+  '/js/modules/claim-loot-onchain.js',
   '/js/modules/live-radio-streaming.js',
   '/js/modules/vats.js',
 

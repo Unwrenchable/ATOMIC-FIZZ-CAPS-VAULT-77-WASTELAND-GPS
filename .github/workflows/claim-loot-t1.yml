@@ -1,0 +1,78 @@
+name: claim-loot-t1
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Required merge gate for the loot-claim Metaplex order and freeze-authority
+# constraints. GitHub branch protection cannot be edited from this repo's
+# automation token; an admin must mark the job name `claim-loot-t1` required.
+
+jobs:
+  claim-loot-t1:
+    name: claim-loot-t1
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      ANCHOR_WALLET: /home/runner/.config/solana/id.json
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install anchor-tests dependencies
+        working-directory: anchor-tests
+        run: npm install
+
+      - name: Install Solana CLI
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.0/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
+
+      - name: Install Anchor CLI
+        run: |
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          avm install 0.32.1
+          avm use 0.32.1
+          anchor --version
+
+      - name: declare_id matches Anchor.toml
+        run: node scripts/check-cluster-ids.js
+
+      - name: Host voucher tests
+        run: cargo test -p fizzcaps_onchain --features localnet --lib voucher::
+
+      - name: Cluster feature gate
+        run: bash scripts/check-cluster-features.sh
+
+      - name: Wallet for the local validator
+        run: |
+          mkdir -p ~/.config/solana
+          solana-keygen new --no-bip39-passphrase --silent -o ~/.config/solana/id.json
+
+      - name: Dump Metaplex token-metadata
+        run: |
+          mkdir -p anchor-tests/fixtures
+          solana program dump -u m metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s anchor-tests/fixtures/mpl_token_metadata.so
+
+      - name: Build program for localnet
+        run: anchor build --provider.cluster localnet -- --features localnet
+
+      - name: T1 and claim_loot integration tests
+        run: anchor test --skip-build --skip-lint
+
+      - name: solana-program-test happy path, replay, wrong signer, missing Ed25519
+        run: cargo test --manifest-path programs/claim-loot-local-test/Cargo.toml -- --nocapture

@@ -1,5 +1,8 @@
 name: CI
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]
@@ -28,10 +31,10 @@ jobs:
       !startsWith(github.event.pull_request.title, 'chore(solana)')
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '20'
           # Cache node_modules keyed on package-lock.json so installs are
@@ -64,11 +67,11 @@ jobs:
     # Path filter: only trigger when Solana-related files change
     # (uses paths-filter action to avoid running Rust builds on every JS commit)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Check for Solana-related changes
         id: filter
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3
         with:
           filters: |
             solana:
@@ -81,14 +84,14 @@ jobs:
 
       - name: Set up Rust toolchain (with incremental build cache)
         if: steps.filter.outputs.solana == 'true'
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
 
       # Cache the Cargo registry + build artefacts.
       # Key includes Cargo.lock so it busts when dependencies change but
       # reuses the cache across identical lockfiles (most PRs).
       - name: Cache Rust / Cargo artefacts
         if: steps.filter.outputs.solana == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: |
             ~/.cargo/registry
@@ -119,13 +122,16 @@ jobs:
           mkdir -p ~/.config/solana
           solana-keygen new --no-bip39-passphrase --silent -o ~/.config/solana/id.json
 
-      - name: Sync Anchor program IDs
+      - name: Check declare_id matches Anchor.toml
         if: steps.filter.outputs.solana == 'true'
-        run: anchor keys sync
+        run: node scripts/check-cluster-ids.js
 
-      - name: Build Anchor program
+      - name: Check exactly one cluster feature
         if: steps.filter.outputs.solana == 'true'
-        run: anchor build
+        run: bash scripts/check-cluster-features.sh
 
-      # No on-chain test suite exists yet; JS tests run in the Node job. Re-add 'anchor test'
-      # (localnet, solana-test-validator, airdropped key) once program tests are written.
+      - name: Build Anchor program (devnet id, no keys sync)
+        if: steps.filter.outputs.solana == 'true'
+        run: anchor build --provider.cluster devnet -- --features devnet
+
+      # Localnet claim tests, including the Metaplex T1 gate, run in claim-loot-t1.yml.

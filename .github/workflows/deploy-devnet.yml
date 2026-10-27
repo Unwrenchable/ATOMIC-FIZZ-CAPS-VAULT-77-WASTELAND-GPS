@@ -2,8 +2,6 @@ name: Deploy to Devnet
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
 
 permissions:
   contents: read
@@ -11,6 +9,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: devnet-deploy
 
     env:
       ANCHOR_PROVIDER_URL: https://api.devnet.solana.com
@@ -18,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
 
       - name: Install Solana CLI
         run: |
@@ -40,11 +39,11 @@ jobs:
           mkdir -p ~/.config/solana
           echo "${{ secrets.SOLANA_KEYPAIR }}" > ~/.config/solana/id.json
 
-      - name: Sync Anchor Program IDs
-        run: anchor keys sync
+      - name: Check declare_id matches Anchor.toml
+        run: node scripts/check-cluster-ids.js
 
       - name: Build Program
-        run: anchor build
+        run: anchor build --provider.cluster devnet -- --features devnet
 
       - name: Deploy Program
         run: anchor deploy --provider.cluster devnet

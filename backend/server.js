@@ -35,53 +35,44 @@ console.log("[server] FRONTEND_DIR:", FRONTEND_DIR);
 // CORE MIDDLEWARE
 // ------------------------------------------------------------
 
-// --- CORS setup (safe, env-driven) ---
-// Includes all deployment environments: main domains, Vercel previews, and Render hosting
-// Critical production domains are ALWAYS allowed to prevent accidental lockout
+// Explicit origins only. Wildcard preview hosts are not allowed.
+// A missing Origin is accepted in development (curl, same-process tests)
+// and rejected in production.
 const criticalOrigins = [
   "https://www.atomicfizzcaps.xyz",
   "https://atomicfizzcaps.xyz"
 ];
 
-// Always included regardless of FRONTEND_ORIGIN env var (required for Vercel preview and Render deployments)
-const permanentPatterns = [
-  "https://*.vercel.app",
-  "https://*.onrender.com"
-];
-
-const defaultOrigins = [
-  "http://localhost:3000",
-  ...permanentPatterns
-];
-
-// Merge critical origins with env-configured or default origins
-const envOrigins = process.env.FRONTEND_ORIGIN 
-  ? process.env.FRONTEND_ORIGIN.split(/\s*,\s*/).map(s => s.trim()).filter(Boolean)
-  : defaultOrigins;
-
-// Combine critical origins, permanent patterns, and environment origins, removing duplicates
-const allowedOrigins = [...new Set([...criticalOrigins, ...permanentPatterns, ...envOrigins])];
-
-function wildcardToRegex(pattern) {
-  const escaped = pattern
-    .replace(/^https?:\/\//, '')
-    .replace(/\\/g, '\\\\')
-    .replace(/\./g, '\\.')
-    // SECURITY FIX: wildcard labels only allow valid hostname chars and can span nested labels for preview URLs.
-    .replace(/\*/g, '[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*');
-  return new RegExp('^https?:\\/\\/' + escaped + '(\\:\\d+)?$');
+function explicitOrigin(raw) {
+  if (!raw || raw.includes("*")) return null;
+  let url;
+  try {
+    url = new URL(raw);
+  } catch {
+    return null;
+  }
+  const local = url.hostname === "localhost" || url.hostname === "127.0.0.1";
+  if (url.protocol === "https:" || (NODE_ENV !== "production" && url.protocol === "http:" && local)) {
+    return url.origin;
+  }
+  return null;
 }
+
+const devOrigins = NODE_ENV === "production" ? [] : ["http://localhost:3000", "http://127.0.0.1:3000"];
+const envOrigins = (process.env.FRONTEND_ORIGIN || "")
+  .split(/\s*,\s*/)
+  .map((s) => explicitOrigin(s.trim()))
+  .filter(Boolean);
+const allowedOrigins = [...new Set([...criticalOrigins, ...devOrigins, ...envOrigins])];
 
 const corsOptions = {
   origin: function(origin, callback) {
-    if (!origin) return callback(null, true); // server-side/curl requests
-    const ok = allowedOrigins.some(pattern => {
-      if (pattern.includes('*')) {
-        return wildcardToRegex(pattern).test(origin);
-      }
-      return origin === pattern;
-    });
-    if (ok) return callback(null, true);
+    if (!origin) {
+      if (NODE_ENV !== "production") return callback(null, true);
+      console.warn("[server] CORS blocked missing Origin");
+      return callback(new Error("CORS not allowed"), false);
+    }
+    if (allowedOrigins.includes(origin)) return callback(null, true);
     console.warn('[server] CORS blocked origin:', origin);
     return callback(new Error('CORS not allowed'), false);
   },
@@ -277,22 +268,33 @@ if (NODE_ENV !== "production") {
 // ------------------------------------------------------------
 // SAFE MOUNT HELPER
 // ------------------------------------------------------------
-function safeMount(mountPath, requirePath) {
+function safeMount(mountPath, requirePath, options = {}) {
   try {
     const mod = require(requirePath);
     const router = (mod && (mod.router || mod.default)) || mod;
     if (!router) {
-      console.warn(
-        `[server] skipping ${requirePath} — module exported undefined`
-      );
-      return;
+      const message = `[server] ${requirePath} exported undefined`;
+      if (options.fatal) {
+        console.error(message);
+        process.exit(1);
+      }
+      console.warn(`[server] skipping ${requirePath} — module exported undefined`);
+      return null;
     }
     app.use(mountPath, router);
     console.log(`[server] mounted ${requirePath} at ${mountPath}`);
+    return mod;
   } catch (err) {
+    if (options.fatal) {
+      console.error(
+        `[server] fatal: ${requirePath} failed to load: ${err && err.message}`
+      );
+      process.exit(1);
+    }
     console.warn(
       `[server] skipping ${requirePath} — failed to load: ${err && err.message}`
     );
+    return null;
   }
 }
 
@@ -328,7 +330,8 @@ safeMount("/api/narrative", api("narrative"));
 safeMount("/api/worldstate", api("worldstate"));
 
 // Core API endpoints
-safeMount("/api/loot-voucher", api("loot-voucher"));
+const lootVoucherModule = safeMount("/api/loot-voucher", api("loot-voucher"), { fatal: true });
+safeMount("/api/claim-voucher", api("claim-voucher"));
 safeMount("/api/mintables", api("mintables"));  // Your mintables router - serves mintables.json
 // Minimal dev-only mint endpoint (mounted here so frontend claim flow works)
 safeMount("/api/mint-item", api("mint-item"));
@@ -657,11 +660,25 @@ app.use((err, req, res, next) => {
 // ------------------------------------------------------------
 // Only start the server if not running as a Vercel serverless function
 if (process.env.VERCEL !== '1' && require.main === module) {
-  app.listen(PORT, () => {
-    console.log(
-      `Atomic Fizz Caps backend running on port ${PORT} (env=${NODE_ENV})`
-    );
-  });
+  const pending =
+    lootVoucherModule && lootVoucherModule.ready
+      ? lootVoucherModule.ready
+      : Promise.resolve();
+  pending
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(
+          `Atomic Fizz Caps backend running on port ${PORT} (env=${NODE_ENV})`
+        );
+      });
+    })
+    .catch((err) => {
+      console.error(
+        "[server] voucher startup self-check failed:",
+        err && err.message ? err.message : err
+      );
+      process.exit(1);
+    });
 }
 
 module.exports = app;
