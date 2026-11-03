@@ -102,3 +102,10 @@ data-root/npcs/
 **/build/
 node_modules/
 
+
+# Secrets - never commit (2026-11-03)
+.env.mainnet
+.env.testnet
+.env.local
+test-ledger/
+**/*keypair*.json
