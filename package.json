@@ -23,7 +23,7 @@
     "worker:mint:list": "node workers/mint_worker.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "node tests/security.test.js && node tests/game.test.js",
+    "test": "node tests/security.test.js && node tests/game.test.js && node --test backend/tests/*.test.js",
     "test:load": "node tests/concurrent-load-test.js",
     "test:load:full": "node tests/concurrent-load-test.js --players 1000 --batch-size 50",
     "test:playtest": "node tests/playtest-agent.cjs",

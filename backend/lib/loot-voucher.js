@@ -1,4 +1,5 @@
 // backend/lib/loot-voucher.js
+// Legacy pipe-format helper. On-chain vouchers are issued by backend/api/loot-voucher.js.
 const nacl = require("tweetnacl");
 const { decode: bs58decode } = require("./safe-base58");
 const serializeVoucherMessage = require("./gps").serializeVoucherMessage;

@@ -1,16 +1,41 @@
 // backend/lib/kmsSigner.js
-const { KMSClient, SignCommand, GetPublicKeyCommand } = require("@aws-sdk/client-kms");
+// On-chain vouchers need Ed25519. The AWS SDK is loaded only when a caller
+// actually signs, so unit tests can inject a fake client without the package.
 const { encode: bs58encode } = require("./safe-base58");
 
 const REGION = process.env.AWS_REGION || "us-west-2";
-const DEFAULT_SIGNING_ALG = process.env.KMS_SIGNING_ALGORITHM || "ECDSA_SHA_256";
-const KMS_KEY_ID = process.env.KMS_SIGNING_KEY_ID || null;
 
-if (!KMS_KEY_ID) {
-  console.warn("[kmsSigner] KMS_SIGNING_KEY_ID not set. KMS signing disabled. Using local signing instead (FREE). See docs/LOCAL_SIGNING_SETUP.md");
+let sdkOverride = null;
+let clientOverride = null;
+let clientMemo = null;
+
+function signingAlgorithm() {
+  return process.env.KMS_SIGNING_ALGORITHM || "ED25519_SHA_512";
 }
 
-const client = new KMSClient({ region: REGION, maxAttempts: 3 });
+function setKmsSdkForTests(sdk) {
+  sdkOverride = sdk;
+  clientMemo = null;
+}
+
+function setClientForTests(client) {
+  clientOverride = client;
+}
+
+function loadSdk() {
+  if (sdkOverride) return sdkOverride;
+  // Lazy: @aws-sdk/client-kms is not a hard dependency of the test suite.
+  return require("@aws-sdk/client-kms");
+}
+
+function getClient() {
+  if (clientOverride) return clientOverride;
+  if (!clientMemo) {
+    const { KMSClient } = loadSdk();
+    clientMemo = new KMSClient({ region: REGION, maxAttempts: 3 });
+  }
+  return clientMemo;
+}
 
 async function retry(fn, attempts = 3, delayMs = 200) {
   let lastErr;
@@ -26,21 +51,22 @@ async function retry(fn, attempts = 3, delayMs = 200) {
 }
 
 /**
- * signMessageWithKms
- * - messageBuffer: Buffer
- * - keyId: optional KMS key id/arn; falls back to KMS_KEY_ID
- * Returns: { keyIdUsed, signatureBase58, signatureBytes: Buffer }
+ * Sign a raw message. Do not log `messageBuffer` or the signature.
+ * Returns { keyIdUsed, signatureBase58, signatureBytes }.
  */
 async function signMessageWithKms(messageBuffer, keyId = null) {
   if (!messageBuffer || !Buffer.isBuffer(messageBuffer)) {
     throw new Error("messageBuffer must be a Buffer");
   }
-  const useKey = keyId || KMS_KEY_ID;
-  if (!useKey) throw new Error("No KMS key configured (KMS_SIGNING_KEY_ID missing)");
+  const useKey = keyId || process.env.KMS_SIGNING_KEY_ID || null;
+  if (!useKey) throw new Error("No KMS key configured");
 
-  const signingAlg = DEFAULT_SIGNING_ALG;
-  if (!signingAlg) throw new Error("KMS_SIGNING_ALGORITHM not configured");
+  const signingAlg = signingAlgorithm();
+  if (signingAlg !== "ED25519_SHA_512") {
+    throw new Error("KMS_SIGNING_ALGORITHM must be ED25519_SHA_512 for on-chain vouchers");
+  }
 
+  const { SignCommand } = loadSdk();
   const cmd = new SignCommand({
     KeyId: useKey,
     Message: messageBuffer,
@@ -48,29 +74,42 @@ async function signMessageWithKms(messageBuffer, keyId = null) {
     SigningAlgorithm: signingAlg,
   });
 
-  const res = await retry(() => client.send(cmd), 3, 250);
+  const res = await retry(() => getClient().send(cmd), 3, 250);
   if (!res || !res.Signature) throw new Error("KMS did not return a signature");
 
   const sigBytes = Buffer.from(res.Signature);
-  const signatureBase58 = bs58encode(sigBytes);
-
-  return { keyIdUsed: useKey, signatureBase58, signatureBytes: sigBytes };
+  return { keyIdUsed: useKey, signatureBase58: bs58encode(sigBytes), signatureBytes: sigBytes };
 }
 
 /**
- * getPublicKeyFromKms
- * - keyId: KMS key id or ARN
- * Returns: { keyId, publicKeyBase58 (SPKI DER), algorithm }
+ * Ed25519 SPKI DER from KMS. The raw 32-byte key is the last 32 bytes.
+ * publicKeyBase58 is that raw key (what config.server_key must store).
  */
 async function getPublicKeyFromKms(keyId) {
   if (!keyId) throw new Error("keyId required");
+  const { GetPublicKeyCommand } = loadSdk();
   const cmd = new GetPublicKeyCommand({ KeyId: keyId });
-  const res = await retry(() => client.send(cmd), 3, 250);
+  const res = await retry(() => getClient().send(cmd), 3, 250);
   if (!res || !res.PublicKey) throw new Error("KMS did not return public key");
-  const pubDer = Buffer.from(res.PublicKey); // SPKI DER
-  const publicKeyBase58 = bs58encode(pubDer);
+  const pubDer = Buffer.from(res.PublicKey);
+  if (pubDer.length < 32) throw new Error("KMS public key is shorter than 32 bytes");
+  const raw = pubDer.subarray(pubDer.length - 32);
   const algorithm = res.SigningAlgorithms ? res.SigningAlgorithms.join(",") : null;
-  return { keyId, publicKeyBase58, algorithm };
+  if (algorithm && !algorithm.includes("ED25519")) {
+    throw new Error("KMS key is not an Ed25519 key");
+  }
+  return {
+    keyId,
+    publicKeyBase58: bs58encode(raw),
+    publicKeyDerBase58: bs58encode(pubDer),
+    algorithm,
+  };
 }
 
-module.exports = { signMessageWithKms, getPublicKeyFromKms };
+module.exports = {
+  signMessageWithKms,
+  getPublicKeyFromKms,
+  setKmsSdkForTests,
+  setClientForTests,
+  signingAlgorithm,
+};

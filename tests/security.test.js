@@ -915,10 +915,11 @@ test("BUG-035: loot-voucher.js does not hardcode lootId to 1n", () => {
 test("BUG-036: loot-voucher.js returns { voucher, signature } structure (not flat payload)", () => {
   const src = readFile("backend/api/loot-voucher.js");
   assert.ok(src, "backend/api/loot-voucher.js must exist");
-  // Must include voucherId and keyId so redeem-voucher.js can verify
+  // On-chain V1 returns voucherId plus serverPubkey. The legacy redeem path
+  // still speaks keyId; this issuer must not.
   assert.ok(
-    src.includes("voucherId") && src.includes("keyId"),
-    "loot-voucher.js must include voucherId and keyId in the voucher (required by redeem-voucher.js)"
+    src.includes("voucherId") && src.includes("serverPubkey"),
+    "loot-voucher.js must return voucherId and serverPubkey for the on-chain claim"
   );
   // Must return nested { voucher: {...}, signature: [...] } structure
   assert.ok(
@@ -967,12 +968,21 @@ test("SEC-AUDIT-001: Solana program lib.rs uses u128 for bonding curve arithmeti
 
 test("SEC-AUDIT-002: Solana program ClaimLoot server_key is constrained to config.server_key", () => {
   const src = readFile("programs/fizzcaps_onchain/src/lib.rs");
+  const voucher = readFile("programs/fizzcaps_onchain/src/voucher.rs");
   assert.ok(src, "programs/fizzcaps_onchain/src/lib.rs must exist");
-  // server_key must be address-constrained so attackers can't supply their own keypair
+  assert.ok(voucher, "voucher.rs must exist");
   assert.ok(
     src.includes("config.server_key"),
-    "lib.rs ClaimLoot.server_key must be constrained to config.server_key to prevent forged loot vouchers"
+    "claim_loot must verify against config.server_key, not a caller-supplied key"
   );
+  assert.ok(!src.includes("fn verify_ed25519_signature"), "the stub verifier must be gone");
+  assert.ok(voucher.includes("fn verify_voucher_ed25519"), "ed25519 sysvar verifier must exist");
+  assert.ok(
+    !src.includes("pub server_key: UncheckedAccount") || src.includes("pub fn fizz_init"),
+    "fizz_init may still receive the initial server key from the upgrade authority"
+  );
+  const claimBlock = src.slice(src.indexOf("pub struct ClaimLoot"), src.indexOf("pub struct FizzConfig"));
+  assert.ok(!claimBlock.includes("pub server_key"), "ClaimLoot must not take a caller-supplied server_key");
 });
 
 test("SEC-AUDIT-003: Solana program FizzBondingCurve struct includes graduated_at field", () => {
@@ -1064,16 +1074,16 @@ test("BUG-041: mint-item.js rolls back incr when limit exceeded", () => {
   );
 });
 
-test("BUG-042: loot-voucher.js includes caps in signed voucher (tiered rewards)", () => {
+test("BUG-042: on-chain loot voucher does not embed an off-chain caps reward", () => {
   const src = readFile("backend/api/loot-voucher.js");
   assert.ok(src, "backend/api/loot-voucher.js must exist");
   assert.ok(
-    src.includes("capsReward") && src.includes("caps: capsReward"),
-    "loot-voucher.js must calculate tiered CAPS reward and include it in the signed voucher"
+    src.includes("buildVoucherMessageV1") && src.includes("crypto.randomBytes(16)"),
+    "loot-voucher.js must sign the 169-byte V1 message and use a CSPRNG voucher id"
   );
   assert.ok(
-    src.includes("RARITY_CAPS") || src.includes("poiRarity"),
-    "loot-voucher.js must derive CAPS reward from POI rarity"
+    !src.includes("caps: capsReward"),
+    "the on-chain voucher must not carry an off-chain caps payout"
   );
 });
 

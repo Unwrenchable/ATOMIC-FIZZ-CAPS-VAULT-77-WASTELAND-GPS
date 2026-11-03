@@ -10,11 +10,17 @@ path = "src/lib.rs"
 crate-type = ["cdylib", "lib"]
 
 [features]
+# No default cluster. Exactly one of localnet/devnet/mainnet must be set
+# (compile_error! in lib.rs). `cargo test --features localnet`.
+# `anchor build -- --features devnet` adds devnet on top of an empty default.
 default = []
 cpi = ["no-entrypoint"]
 no-entrypoint = []
 no-idl = []
 idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+localnet = []
+devnet = []
+mainnet = []
 
 # Optional developer features
 custom-heap    = []
@@ -23,6 +29,8 @@ anchor-debug   = []
 no-log-ix-name = []
 
 [dependencies]
-anchor-lang = { version = "0.32", features = ["init-if-needed"] }
+anchor-lang = "0.32"
 anchor-spl = "0.32"
 mpl-token-metadata = "5.1.1"
+solana-sdk-ids = "2.2.1"
+solana-sha256-hasher = "2.3.0"

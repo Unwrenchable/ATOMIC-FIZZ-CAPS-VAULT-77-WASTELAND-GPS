@@ -1,0 +1,15 @@
+[package]
+name = "claim-loot-local-test"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "solana-program-test coverage for claim_loot. Outside the workspace so SBF builds do not pull the test runtime."
+
+[dependencies]
+bincode = "1.3.3"
+fizzcaps_onchain = { path = "../fizzcaps_onchain", features = ["localnet"] }
+solana-program-test = "2.3.13"
+solana-sdk = "2.3.1"
+spl-associated-token-account = "=7.0.0"
+spl-token = "=8.0.0"
+tokio = { version = "1.40", features = ["macros", "rt-multi-thread"] }

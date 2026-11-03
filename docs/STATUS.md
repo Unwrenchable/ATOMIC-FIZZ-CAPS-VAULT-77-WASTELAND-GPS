@@ -1,6 +1,6 @@
 # ☢️ ATOMIC FIZZ CAPS — Project Status & Mainnet Readiness
 
-> **Last Updated**: 2026-06-13 | **Version**: 1.0.3 | **Network**: Mainnet-beta ready (Anchor cluster default + active backend RPCs updated; on-chain program deploy pending; RealAI self-wire + 7B online for ongoing fixes)
+> **Last Updated**: 2026-10-27 | **Version**: 1.0.4-draft | **Network**: Not deployed. `claim_loot` voucher v1 is a draft security fix. Do not deploy until security signs off. See `docs/deployment/CLAIM_LOOT_VOUCHER_V1.md`. Mainnet upgrade authority must be the multisig before init.
 
 ---
 
@@ -153,7 +153,7 @@ The game has strong bones. Frontend gameplay loop is **functionally complete**. 
 **Status: Source complete, NOT deployed**
 
 - **969 lines** of Anchor 0.32 program code
-- **Hardcoded Program ID**: `DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP`
+- **Program ids**: devnet `GvTeKyGiFqtpJn2cJQxFb2iPVCYotvnMjMZKGAnPgZkc`, localnet `HnWTnCKuKhJa6cXj4ZocW2D8Jtf4f5QFb6f6UnkF27FB`, mainnet `DXxzKfZh6aJCff7sEusMU1E9w4ZDwgJkYGgKStRRGRyP`
 - Implemented features in source:
   - Loot claim with NFT minting via Metaplex
   - FIZZ.fun bonding curve launchpad (30 SOL virtual, 85 SOL graduation → Raydium)

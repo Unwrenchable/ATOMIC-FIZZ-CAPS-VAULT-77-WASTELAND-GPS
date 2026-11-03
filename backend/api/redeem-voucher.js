@@ -62,6 +62,14 @@ router.post("/", redeemLimiter, authMiddleware, async (req, res) => {
 
     if (!voucher || typeof voucher !== "object") return res.status(400).json({ error: "Missing voucher" });
 
+    // V1 is claimed on-chain. Accepting it here would mint CAPS for a voucher
+    // the program already burned a fee to honor.
+    if (voucher.v === 2 || Object.prototype.hasOwnProperty.call(voucher, "latE6")) {
+      return res.status(400).json({
+        error: "On-chain voucher. Use claim_loot. FizzTec will not double-pay this cache.",
+      });
+    }
+
     // Basic fields
     const { voucherId, keyId, timestamp, ttlSeconds } = voucher;
     if (!voucherId || !keyId || !timestamp) return res.status(400).json({ error: "Malformed voucher" });
